@@ -13,9 +13,9 @@
 		<property name="PaymentStatusesRequest" value="https://app.sageone.com/api/v1/payment_statuses" />	
 		<property name="RequestForDatesPart" value="from_date={0}&amp;to_date={1}" />		
 	</module>
-	<module id="SageUat">
-		<property name="OAuthIdentifier" value="dGnYPJjRVyc9AYjYAGXCQEoAi3YgWv63Hb6sALX7" />
-		<property name="OAuthSecret" value="K5Z0avZgezlKuO2d3wLVlL6MyCpz8zzl4lg6ldUp" />
+	<module id="SageQA">
+		<property name="OAuthIdentifier" value="fERMIRu9IrIXt54bAFhxfNM8HAoCRCp6V7TDAifH" />
+		<property name="OAuthSecret" value="DfKDelrywwHtdzloMiVS8XIhM3vmctXoENqsFBtV" />
 		<property name="OAuthAuthorizationEndpoint" value="https://app.sageone.com/oauth/authorize" />
 		<property name="OAuthTokenEndpoint" value="https://app.sageone.com/oauth/token" />
 		<property name="SalesInvoicesRequest" value="https://app.sageone.com/api/v1/sales_invoices" />
@@ -25,6 +25,18 @@
 		<property name="PaymentStatusesRequest" value="https://app.sageone.com/api/v1/payment_statuses" />		
 		<property name="RequestForDatesPart" value="from_date={0}&amp;to_date={1}" />				
 	</module>
+	<module id="SageUat">
+		<property name="OAuthIdentifier" value="TqQ2oSwvoHv6vWhttbD8OJqxRsk9eBziE0v0yYl9" />
+		<property name="OAuthSecret" value="ejjPWG0dK0EPq4mStM8dq9M5npkJ6A6KTbt3GlFK" />
+		<property name="OAuthAuthorizationEndpoint" value="https://app.sageone.com/oauth/authorize" />
+		<property name="OAuthTokenEndpoint" value="https://app.sageone.com/oauth/token" />
+		<property name="SalesInvoicesRequest" value="https://app.sageone.com/api/v1/sales_invoices" />
+		<property name="PurchaseInvoicesRequest" value="https://app.sageone.com/api/v1/purchase_invoices" />	
+		<property name="IncomesRequest" value="https://app.sageone.com/api/v1/incomes" />		
+		<property name="ExpendituresRequest" value="https://app.sageone.com/api/v1/expenditures" />
+		<property name="PaymentStatusesRequest" value="https://app.sageone.com/api/v1/payment_statuses" />		
+		<property name="RequestForDatesPart" value="from_date={0}&amp;to_date={1}" />				
+	</module>	
 	<module id="SageProd">
 		<property name="OAuthIdentifier" value="wxke93qG1Y7qGlUbTWSGtUgwpNizRaqRz6Vl9ueu" />
 		<property name="OAuthSecret" value="C2iVv3vOtrwpLoWmfW33nluqkiCVXUNfgYLNmuOL" />
