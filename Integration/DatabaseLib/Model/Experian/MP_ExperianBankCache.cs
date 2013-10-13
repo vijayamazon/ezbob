@@ -23,7 +23,7 @@ namespace EZBob.DatabaseLib.Model.Experian
             Map(x => x.Key, "KeyData");
             Map(x => x.Data).LazyLoad();
             Map(x => x.LastUpdateDate);
-            References(x => x.LogItem, "ServiceLogId").LazyLoad();
+            References(x => x.LogItem, "ServiceLogId").LazyLoad().Cascade.SaveUpdate();
         }
     }
 }
