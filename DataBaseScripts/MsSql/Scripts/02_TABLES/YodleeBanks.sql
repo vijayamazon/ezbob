@@ -11,6 +11,7 @@ CREATE TABLE [dbo].[YodleeBanks](
 	[ContentServiceId] [int] NOT NULL,
 	[ParentBank] [nvarchar](100) NOT NULL,
 	[Active] [bit] NOT NULL,
+	[Image] [bit] NOT NULL,
  CONSTRAINT [PK_YodleeBanks] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -20,4 +21,6 @@ GO
 ALTER TABLE [dbo].[YodleeBanks] ADD  DEFAULT ('abc') FOR [ParentBank]
 GO
 ALTER TABLE [dbo].[YodleeBanks] ADD  DEFAULT ((1)) FOR [Active]
+GO
+ALTER TABLE [dbo].[YodleeBanks] ADD  CONSTRAINT [DF_YodleeBanks_Image]  DEFAULT ((1)) FOR [Image]
 GO

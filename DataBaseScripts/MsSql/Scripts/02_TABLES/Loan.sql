@@ -43,13 +43,13 @@ CREATE TABLE [dbo].[Loan](
 	[AgreementModel] [nvarchar](max) NULL,
 	[InterestPaid] [decimal](18, 4) NULL,
 	[FeesPaid] [decimal](18, 4) NULL,
-	[ZohoId] [nvarchar](100) NULL,
 	[LastReportedCAISStatus] [nvarchar](50) NULL,
 	[LastReportedCAISStatusDate] [datetime] NULL,
 	[LoanTypeId] [int] NULL,
 	[Modified] [bit] NULL,
 	[LastRecalculation] [datetime] NULL,
 	[InterestDue] [decimal](18, 4) NULL,
+	[Is14DaysLate] [bit] NOT NULL,
  CONSTRAINT [PK_Loan] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -63,4 +63,6 @@ CREATE NONCLUSTERED INDEX [IX_LOAN_CustId] ON [dbo].[Loan]
 )WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) ON [PRIMARY]
 GO
 ALTER TABLE [dbo].[Loan] ADD  CONSTRAINT [DF_Loan_InterestRate]  DEFAULT ((0.06)) FOR [InterestRate]
+GO
+ALTER TABLE [dbo].[Loan] ADD  DEFAULT ((0)) FOR [Is14DaysLate]
 GO

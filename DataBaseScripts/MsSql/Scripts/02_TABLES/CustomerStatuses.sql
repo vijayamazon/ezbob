@@ -9,6 +9,7 @@ CREATE TABLE [dbo].[CustomerStatuses](
 	[Id] [int] NOT NULL,
 	[Name] [nvarchar](100) NULL,
 	[IsEnabled] [bit] NOT NULL,
+	[IsWarning] [bit] NOT NULL,
  CONSTRAINT [PK_CustomerStatuses] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -16,4 +17,6 @@ CREATE TABLE [dbo].[CustomerStatuses](
 ) ON [PRIMARY]
 GO
 ALTER TABLE [dbo].[CustomerStatuses] ADD  DEFAULT ((0)) FOR [IsEnabled]
+GO
+ALTER TABLE [dbo].[CustomerStatuses] ADD  DEFAULT ((0)) FOR [IsWarning]
 GO

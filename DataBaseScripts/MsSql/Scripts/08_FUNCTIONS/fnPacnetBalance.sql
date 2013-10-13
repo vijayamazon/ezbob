@@ -1,4 +1,4 @@
-﻿IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[fnPacnetBalance]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
+﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[fnPacnetBalance]') AND type in (N'FN', N'IF', N'TF', N'FS', N'FT'))
 DROP FUNCTION [dbo].[fnPacnetBalance]
 GO
 SET ANSI_NULLS ON

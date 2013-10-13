@@ -247,6 +247,12 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
+    <oName>ApprovalsWithoutAML</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\ApprovalsWithoutAML.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>AppStatus</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\AppStatus.sql</oFileName>
@@ -391,6 +397,18 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
+    <oName>FK_CompanyEmployeeCount_Customer</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_CompanyEmployeeCount_Customer.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>CompanyEmployeeCount</oName>
+    <oRank>3</oRank>
+    <oFileName>02_TABLES\CompanyEmployeeCount.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>ConfigurationVariables</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\ConfigurationVariables.sql</oFileName>
@@ -487,6 +505,12 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
+    <oName>CustomerReason</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\CustomerReason.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>FK_CustomerRelations_CRMActions</oName>
     <oRank>0</oRank>
     <oFileName>10_CONSTRAINTS\FK_CustomerRelations_CRMActions.sql</oFileName>
@@ -505,6 +529,30 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
+    <oName>FK_CustomerRequestedLoan_Customer</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_CustomerRequestedLoan_Customer.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_CustomerRequestedLoan_CustomerReason</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_CustomerRequestedLoan_CustomerReason.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_CustomerRequestedLoan_CustomerSourceOfRepayment</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_CustomerRequestedLoan_CustomerSourceOfRepayment.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>CustomerRequestedLoan</oName>
+    <oRank>3</oRank>
+    <oFileName>02_TABLES\CustomerRequestedLoan.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>CustomerScoringResult</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\CustomerScoringResult.sql</oFileName>
@@ -517,9 +565,21 @@
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
+    <oName>CustomerSourceOfRepayment</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\CustomerSourceOfRepayment.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>CustomerStatuses</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\CustomerStatuses.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>CustomerStatusHistory</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\CustomerStatusHistory.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
@@ -868,6 +928,18 @@
     <oName>LoanHistory</oName>
     <oRank>1</oRank>
     <oFileName>02_TABLES\LoanHistory.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_LoanInterestFreeze</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_LoanInterestFreeze.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>LoanInterestFreeze</oName>
+    <oRank>2</oRank>
+    <oFileName>02_TABLES\LoanInterestFreeze.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>
@@ -2062,6 +2134,12 @@
     <oName>MP_YodleeOrderItemBankTransaction</oName>
     <oRank>6</oRank>
     <oFileName>02_TABLES\MP_YodleeOrderItemBankTransaction.sql</oFileName>
+    <oType>UserTable</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>MP_YodleeSearchWords</oName>
+    <oRank>1</oRank>
+    <oFileName>02_TABLES\MP_YodleeSearchWords.sql</oFileName>
     <oType>UserTable</oType>
   </DependencyData>
   <DependencyData>

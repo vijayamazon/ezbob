@@ -69,7 +69,6 @@ CREATE TABLE [dbo].[Customer](
 	[EmailState] [nvarchar](100) NULL,
 	[IsTest] [bit] NULL,
 	[CurrentDebitCard] [int] NULL,
-	[ZohoId] [nvarchar](100) NULL,
 	[BankAccountType] [nvarchar](50) NULL,
 	[BankAccountValidationInvalidAttempts] [int] NULL,
 	[CollectionDescription] [nvarchar](50) NULL,
@@ -94,6 +93,11 @@ CREATE TABLE [dbo].[Customer](
 	[FraudStatus] [int] NULL,
 	[FinancialAccounts] [int] NOT NULL,
 	[IsWasLate] [bit] NULL,
+	[IsOffline] [bit] NOT NULL,
+	[PromoCode] [varchar](30) NULL,
+	[PropertyOwnedByCompany] [bit] NULL,
+	[YearsInCompany] [nvarchar](50) NULL,
+	[RentMonthsLeft] [nvarchar](50) NULL,
  CONSTRAINT [PK_Customer] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -156,4 +160,6 @@ GO
 ALTER TABLE [dbo].[Customer] ADD  CONSTRAINT [DF_Customer_AvoidAutomaticDescison]  DEFAULT ((0)) FOR [AvoidAutomaticDescison]
 GO
 ALTER TABLE [dbo].[Customer] ADD  CONSTRAINT [DF_Customer_FinancialAccounts]  DEFAULT ((0)) FOR [FinancialAccounts]
+GO
+ALTER TABLE [dbo].[Customer] ADD  CONSTRAINT [DF_Customer_IsOffline]  DEFAULT ((0)) FOR [IsOffline]
 GO

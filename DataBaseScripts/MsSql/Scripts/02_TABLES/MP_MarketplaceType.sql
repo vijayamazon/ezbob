@@ -11,6 +11,7 @@ CREATE TABLE [dbo].[MP_MarketplaceType](
 	[InternalId] [uniqueidentifier] NOT NULL,
 	[Description] [nvarchar](max) NULL,
 	[Active] [bit] NOT NULL,
+	[IsOffline] [bit] NOT NULL,
  CONSTRAINT [PK_MarketPlace] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -24,4 +25,6 @@ GO
 ALTER TABLE [dbo].[MP_MarketplaceType] ADD  CONSTRAINT [DF_MarketPlace_InternalId]  DEFAULT (newid()) FOR [InternalId]
 GO
 ALTER TABLE [dbo].[MP_MarketplaceType] ADD  DEFAULT ((1)) FOR [Active]
+GO
+ALTER TABLE [dbo].[MP_MarketplaceType] ADD  CONSTRAINT [DF_MarketplaceType_Offline]  DEFAULT ((0)) FOR [IsOffline]
 GO

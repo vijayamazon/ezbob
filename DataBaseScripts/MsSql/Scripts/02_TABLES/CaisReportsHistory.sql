@@ -8,7 +8,7 @@ GO
 CREATE TABLE [dbo].[CaisReportsHistory](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[Date] [datetime] NULL,
-	[FileName] [nvarchar](25) NULL,
+	[FileName] [nvarchar](300) NULL,
 	[Type] [int] NULL,
 	[OfItems] [int] NULL,
 	[GoodUsers] [int] NULL,

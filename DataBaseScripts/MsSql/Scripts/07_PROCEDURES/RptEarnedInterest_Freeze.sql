@@ -1,7 +1,10 @@
-IF OBJECT_ID('RptEarnedInterest_Freeze') IS NOT NULL
-	DROP PROCEDURE RptEarnedInterest_Freeze
+﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptEarnedInterest_Freeze]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[RptEarnedInterest_Freeze]
 GO
-
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE PROCEDURE RptEarnedInterest_Freeze
 AS
 SELECT

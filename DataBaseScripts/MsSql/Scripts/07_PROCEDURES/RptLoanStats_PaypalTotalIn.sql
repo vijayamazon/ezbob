@@ -1,7 +1,10 @@
-IF OBJECT_ID('RptLoanStats_PaypalTotalIn') IS NOT NULL
-	DROP PROCEDURE RptLoanStats_PaypalTotalIn
+﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptLoanStats_PaypalTotalIn]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[RptLoanStats_PaypalTotalIn]
 GO
-
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE PROCEDURE RptLoanStats_PaypalTotalIn
 AS
 SELECT

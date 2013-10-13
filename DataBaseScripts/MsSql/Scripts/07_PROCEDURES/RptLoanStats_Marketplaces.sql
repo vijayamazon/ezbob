@@ -1,7 +1,10 @@
-IF OBJECT_ID('RptLoanStats_Marketplaces') IS NOT NULL
-	DROP PROCEDURE RptLoanStats_Marketplaces
+﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptLoanStats_Marketplaces]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[RptLoanStats_Marketplaces]
 GO
-
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 CREATE PROCEDURE RptLoanStats_Marketplaces
 AS
 SELECT

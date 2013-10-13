@@ -12,6 +12,12 @@ CREATE TABLE [dbo].[Director](
 	[DateOfBirth] [datetime] NULL,
 	[Middle] [nvarchar](512) NULL,
 	[Surname] [nvarchar](512) NULL,
-	[Gender] [char](1) NULL
+	[Gender] [char](1) NULL,
+	[Email] [nvarchar](128) NOT NULL,
+	[Phone] [nvarchar](50) NOT NULL
 ) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[Director] ADD  CONSTRAINT [DF_Director_Email]  DEFAULT ('') FOR [Email]
+GO
+ALTER TABLE [dbo].[Director] ADD  CONSTRAINT [DF_Director_Phone]  DEFAULT ('') FOR [Phone]
 GO

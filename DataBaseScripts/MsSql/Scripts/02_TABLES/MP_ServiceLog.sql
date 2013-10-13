@@ -12,6 +12,7 @@ CREATE TABLE [dbo].[MP_ServiceLog](
 	[RequestData] [nvarchar](max) NULL,
 	[ResponseData] [nvarchar](max) NULL,
 	[CustomerId] [bigint] NULL,
+	[DirectorId] [int] NULL,
  CONSTRAINT [PK_MP_ServiceLog] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC

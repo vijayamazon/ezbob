@@ -169,6 +169,12 @@
     <oType>Constraint</oType>
   </DependencyData>
   <DependencyData>
+    <oName>FK_CompanyEmployeeCount_Customer</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_CompanyEmployeeCount_Customer.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>FK_Customer_CardInfo</oName>
     <oRank>0</oRank>
     <oFileName>10_CONSTRAINTS\FK_Customer_CardInfo.sql</oFileName>
@@ -220,6 +226,24 @@
     <oName>FK_CustomerRelations_CRMStatuses</oName>
     <oRank>0</oRank>
     <oFileName>10_CONSTRAINTS\FK_CustomerRelations_CRMStatuses.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_CustomerRequestedLoan_Customer</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_CustomerRequestedLoan_Customer.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_CustomerRequestedLoan_CustomerReason</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_CustomerRequestedLoan_CustomerReason.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_CustomerRequestedLoan_CustomerSourceOfRepayment</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_CustomerRequestedLoan_CustomerSourceOfRepayment.sql</oFileName>
     <oType>Constraint</oType>
   </DependencyData>
   <DependencyData>
@@ -310,6 +334,12 @@
     <oName>FK_LoanAgreement_LoanAgreementTemplate</oName>
     <oRank>0</oRank>
     <oFileName>10_CONSTRAINTS\FK_LoanAgreement_LoanAgreementTemplate.sql</oFileName>
+    <oType>Constraint</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>FK_LoanInterestFreeze</oName>
+    <oRank>0</oRank>
+    <oFileName>10_CONSTRAINTS\FK_LoanInterestFreeze.sql</oFileName>
     <oType>Constraint</oType>
   </DependencyData>
   <DependencyData>
@@ -2539,6 +2569,12 @@
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
+    <oName>RptDropReportUser</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\RptDropReportUser.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>RptEarnedInterest</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\RptEarnedInterest.sql</oFileName>
@@ -2548,6 +2584,12 @@
     <oName>RptEarnedInterest_ForPeriod</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\RptEarnedInterest_ForPeriod.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>RptEarnedInterest_Freeze</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\RptEarnedInterest_Freeze.sql</oFileName>
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
@@ -2608,6 +2650,30 @@
     <oName>RptLoansOverall</oName>
     <oRank>1</oRank>
     <oFileName>07_PROCEDURES\RptLoansOverall.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>RptLoanStats_CashRequests</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\RptLoanStats_CashRequests.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>RptLoanStats_CustomerPostcodes</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\RptLoanStats_CustomerPostcodes.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>RptLoanStats_Marketplaces</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\RptLoanStats_Marketplaces.sql</oFileName>
+    <oType>StoredProcedure</oType>
+  </DependencyData>
+  <DependencyData>
+    <oName>RptLoanStats_PaypalTotalIn</oName>
+    <oRank>1</oRank>
+    <oFileName>07_PROCEDURES\RptLoanStats_PaypalTotalIn.sql</oFileName>
     <oType>StoredProcedure</oType>
   </DependencyData>
   <DependencyData>
@@ -3646,12 +3712,6 @@
     <oName>udfLoanFeesAndCharges</oName>
     <oRank>1</oRank>
     <oFileName>08_FUNCTIONS\udfLoanFeesAndCharges.sql</oFileName>
-    <oType>UserDefinedFunction</oType>
-  </DependencyData>
-  <DependencyData>
-    <oName>udfLoanTransactionTimeStatus</oName>
-    <oRank>1</oRank>
-    <oFileName>08_FUNCTIONS\udfLoanTransactionTimeStatus.sql</oFileName>
     <oType>UserDefinedFunction</oType>
   </DependencyData>
   <DependencyData>
