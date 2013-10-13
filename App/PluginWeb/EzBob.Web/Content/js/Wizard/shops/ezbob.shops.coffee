@@ -124,6 +124,9 @@ class EzBob.StoreInfoView extends EzBob.StoreInfoBaseView
             if @stores[storeTypeName] and ((not @isOffline) or offlineMarketPlaces[storeTypeName])
                 @stores[storeTypeName].active = 1
 
+        if not @isOffline and @stores['HMRC']
+            @stores['HMRC'].active = 0
+
         @name = "shops"
         super()
 

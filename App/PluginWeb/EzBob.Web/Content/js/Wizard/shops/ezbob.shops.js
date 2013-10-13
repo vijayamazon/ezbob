@@ -192,6 +192,9 @@
           this.stores[storeTypeName].active = 1;
         }
       }
+      if (!this.isOffline && this.stores['HMRC']) {
+        this.stores['HMRC'].active = 0;
+      }
       this.name = "shops";
       return StoreInfoView.__super__.initialize.call(this);
     };
