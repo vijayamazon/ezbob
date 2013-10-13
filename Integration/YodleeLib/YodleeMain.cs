@@ -30,7 +30,7 @@
 			}
 			catch (Exception e)
 			{
-				Log.WarnFormat("Yodlee user '{0}' login failed: {1} ", userName, e.Message);
+				Log.WarnFormat("Yodlee user '{0}' pass {1} login failed: {2} ", userName, password, e);
 			}
 			return null;
 		}

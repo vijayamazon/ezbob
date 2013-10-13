@@ -128,8 +128,8 @@ namespace EzBob.Models.Marketplaces.Builders
 													 {
 														 transactionBaseType = transaction.transactionBaseType,
 														 transactionDate = (transaction.postDate ?? transaction.transactionDate).date,
-														 categoryName = _mpYodleeTransactionCategoriesRepository.GetYodleeTransactionCategoryByCategoryId(transaction.categoryId).Name,
-														 categoryType = _mpYodleeTransactionCategoriesRepository.GetYodleeTransactionCategoryByCategoryId(transaction.categoryId).Type,
+														 categoryName = _mpYodleeTransactionCategoriesRepository.GetYodleeTransactionCategoryByCategoryId(transaction.transactionCategoryId).Name,
+														 categoryType = _mpYodleeTransactionCategoriesRepository.GetYodleeTransactionCategoryByCategoryId(transaction.transactionCategoryId).Type,
 														 transactionAmount = transaction.transactionAmount.amount.HasValue ? _currencyConvertor.ConvertToBaseCurrency(
 															 transaction.transactionAmount.currencyCode,
 															 transaction.transactionAmount.amount.Value,

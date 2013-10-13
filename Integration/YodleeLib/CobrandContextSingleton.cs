@@ -3,6 +3,7 @@ namespace YodleeLib
 	using System;
 	using EzBob.Configuration;
 	using config;
+	using log4net;
 
 	public sealed class CobrandContextSingleton
 	{
@@ -13,6 +14,7 @@ namespace YodleeLib
 		DateTime created = DateTime.Now;
 		CobrandLoginService cobrandLoginService;
 		private static YodleeEnvConnectionConfig _config;
+		private static readonly ILog Log = LogManager.GetLogger(typeof(CobrandContextSingleton));
 
 		CobrandContextSingleton()
 		{
@@ -72,6 +74,8 @@ namespace YodleeLib
 					tncVersion,
 					true,
 					cobrandPasswordCredentials);
+
+				Log.DebugFormat("GetCobrandContext cobrand login successful");
 
 				created = DateTime.Now;
 				return cobrandContext;
