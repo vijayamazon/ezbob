@@ -88,7 +88,6 @@
         return BlockUi('off');
       });
       xhr.fail(function(jqXHR, textStatus, errorThrown) {
-        console.log(textStatus);
         return EzBob.App.trigger('error', 'PayPoint Account Saving Error');
       });
       xhr.done(function(res) {

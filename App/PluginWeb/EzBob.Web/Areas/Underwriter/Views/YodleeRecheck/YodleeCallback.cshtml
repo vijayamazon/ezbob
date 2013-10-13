@@ -12,15 +12,12 @@
     <script type="text/javascript">
         $(window).load(function () {
             $(function () {
-                console.log("callback");
                 if (querystring('oauth_error_code').length > 0) {
-                    console.log(querystring('oauth_error_code'));
                     //window.opener.YodleeAccountUpdatingError("Error occurred while trying to update yodlee");
                     alert('Error occurred while trying to update yodlee');
                     self.close();
 
                 } else {
-                    console.log("4", @Html.Raw(JsonConvert.SerializeObject(Model)));
                     alert('Yodlee updated ' + @Html.Raw(JsonConvert.SerializeObject(Model)));
                     //window.opener.YodleeAccountUpdated(@Html.Raw(JsonConvert.SerializeObject(Model)));
                     self.close();

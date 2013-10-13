@@ -1024,9 +1024,9 @@
                         @RawHeaderCell("Check history","","")
                     </thead>
                     <tbody>
-                        @EzForm.RawCellBold("#","Date insert","Score")
+                        @EzForm.RawCellBold("Id","Date insert","Score")
                         <% _.each(experianInfo.CheckHistorys, function(val, i){%>
-                        @RawCell("<%-i+1%>","<%-EzBob.formatDateTimeAsIs(val.Date)%>","<%-val.Score%>")
+                        @RawCell("<%-val.Id%>","<%-EzBob.formatDateTime(val.Date)%>","<%-val.Score%>")
                         <%})%>
                     </tbody>
                 </table>

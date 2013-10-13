@@ -1,6 +1,5 @@
 ﻿var EzBob = EzBob || {};
 
-
 EzBob.Underwriter = EzBob.Underwriter || {};
 
 EzBob.Underwriter.ExperianInfoModel = Backbone.Model.extend({
@@ -8,7 +7,6 @@ EzBob.Underwriter.ExperianInfoModel = Backbone.Model.extend({
     urlRoot: window.gRootPath + "Underwriter/CreditBureau/Index",
     async: false
 });
-
 
 EzBob.Underwriter.ExperianInfoView = Backbone.View.extend({
     initialize: function() {
@@ -32,17 +30,15 @@ EzBob.Underwriter.ExperianInfoView = Backbone.View.extend({
 
     CheckHistoryClicked: function(e) {
         var $el = $(e.currentTarget);
-        var dateTxt = $el.find("td:eq(1)").text();
-        var date = EzBob.parseDateTime(dateTxt);
-        console.log('date', date);
+        var id = $el.find("td:eq(0)").text();
         this.model.set({
-            "logDate": date,
+            "logId": id,
             "getFromLog": true
         }, {
             silent: true
         });
         BlockUi("on");
-        this.model.fetch({ data: { logDate: date, getFromLog: true } }).done(function() {
+        this.model.fetch({ data: { logId: id, getFromLog: true } }).done(function() {
             BlockUi("off");
         });
         this.render();

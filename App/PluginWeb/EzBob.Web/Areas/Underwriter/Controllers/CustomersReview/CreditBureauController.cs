@@ -52,10 +52,10 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         [Ajax]
         [HttpGet]
         [Transactional]
-        public JsonNetResult Index(int id, bool getFromLog = false, DateTime? logDate = null)
+        public JsonNetResult Index(int id, bool getFromLog = false, long? logId = null)
         {
             var customer = _customers.Get(id);
-            var model = _creditBureauModelBuilder.Create(customer, getFromLog, logDate);
+            var model = _creditBureauModelBuilder.Create(customer, getFromLog, logId);
             return this.JsonNet(model);
         }
 

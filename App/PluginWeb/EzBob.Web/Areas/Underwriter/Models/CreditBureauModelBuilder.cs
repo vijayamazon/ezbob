@@ -39,20 +39,20 @@ namespace EzBob.Web.Areas.Underwriter.Models
             _variablesRepository = variablesRepository;
         }
 
-        public CreditBureauModel Create(EZBob.DatabaseLib.Model.Database.Customer customer, bool getFromLog = false, DateTime? logDate = null)
+        public CreditBureauModel Create(EZBob.DatabaseLib.Model.Database.Customer customer, bool getFromLog = false, long? logId = null)
         {
-			Log.DebugFormat("CreditBureauModel Create customerid: {0} hist: {1} histDate: {2}", customer.Id, getFromLog, logDate);
+			Log.DebugFormat("CreditBureauModel Create customerid: {0} hist: {1} histId: {2}", customer.Id, getFromLog, logId);
             var model = new CreditBureauModel();
             var customerMainAddress = customer.AddressInfo.PersonalAddress.ToList().FirstOrDefault();
             try
             {
                 ConsumerServiceResult result;
-                GetConsumerInfo(customer, getFromLog, logDate, customerMainAddress, out result);
+                GetConsumerInfo(customer, getFromLog, logId, customerMainAddress, out result);
                 model = GenerateConsumerModel(customer.Id, result);
                 CreatePersonalDataModel(model, customer);
                 AppendAmlInfo(model.AmlInfo, customer, customerMainAddress);
                 AppendBavInfo(model.BavInfo, customer, customerMainAddress);
-                BuildEBusinessModel(customer, model, getFromLog, logDate);
+                BuildEBusinessModel(customer, model, getFromLog, logId);
                 BuildSummaryModel(model);
                 BuildHistoryModel(model, customer);
             }
@@ -65,20 +65,20 @@ namespace EzBob.Web.Areas.Underwriter.Models
         }
 
         private void GetConsumerInfo(EZBob.DatabaseLib.Model.Database.Customer customer,
-            bool getFromLog, DateTime? logDate, CustomerAddress customerMainAddress, out ConsumerServiceResult result)
+            bool getFromLog, long? logId, CustomerAddress customerMainAddress, out ConsumerServiceResult result)
         {
 
-            if (getFromLog && logDate.HasValue)
+            if (getFromLog && logId.HasValue)
             {
                 var dob = customer.PersonalInfo.DateOfBirth;
                 var logs =
                     _session.Query<MP_ServiceLog>()
                         .Where(x => x.Customer == customer && x.ServiceType == "Consumer Request")
                         .ToList();
-				var response = logs.FirstOrDefault(x => x.InsertDate.ToUniversalTime() == logDate.Value.ToUniversalTime());
+				var response = logs.FirstOrDefault(x => x.Id == logId.Value);
 				if (response == null)
 				{
-					Log.DebugFormat("GetConsumerInfo no service log is found for customer: {0} date: {1} existing dates are: {2}", customer.Id, logDate.Value.ToUniversalTime().ToString(CultureInfo.InvariantCulture), PrintDates(logs));
+					Log.DebugFormat("GetConsumerInfo no service log is found for customer: {0} id: {1} existing dates are: {2}", customer.Id, logId.Value, PrintDates(logs));
 					result = null;
 					return;
 				}
@@ -118,6 +118,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
                                       select new CheckHistoryModel
                                       {
                                           Date = s.InsertDate.ToUniversalTime(),
+										  Id = s.Id,
                                           Score = GetScoreFromXml(s.ResponseData)
                                       }).ToList();
 
@@ -623,7 +624,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
         }
 
 
-        private void BuildEBusinessModel(EZBob.DatabaseLib.Model.Database.Customer customer, CreditBureauModel model, bool getFromLog = false, DateTime? logDate = null)
+        private void BuildEBusinessModel(EZBob.DatabaseLib.Model.Database.Customer customer, CreditBureauModel model, bool getFromLog = false, long? logId = null)
         {
             var srv = new EBusinessService();
             switch (customer.PersonalInfo.TypeOfBusiness.Reduce())
@@ -634,7 +635,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
                         AppendLimitedInfo(model, limitedInfo);
                         model.BorrowerType = customer.PersonalInfo.TypeOfBusiness.ToString();
                         model.CompanyName = customer.LimitedInfo.LimitedCompanyName;
-                        model.directorsModels = GenerateDirectorsModels(customer, customer.LimitedInfo.Directors, getFromLog, logDate);
+                        model.directorsModels = GenerateDirectorsModels(customer, customer.LimitedInfo.Directors, getFromLog, logId);
                     }
                     break;
                 case TypeOfBusinessReduced.NonLimited:
@@ -643,7 +644,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
                         AppendNonLimitedInfo(model, nonLimitedInfo);
                         model.BorrowerType = customer.PersonalInfo.TypeOfBusiness.ToString();
                         model.CompanyName = customer.NonLimitedInfo.NonLimitedCompanyName;
-                        model.directorsModels = GenerateDirectorsModels(customer, customer.NonLimitedInfo.Directors, getFromLog, logDate);
+                        model.directorsModels = GenerateDirectorsModels(customer, customer.NonLimitedInfo.Directors, getFromLog, logId);
                     }
                     break;
             }
@@ -750,26 +751,29 @@ namespace EzBob.Web.Areas.Underwriter.Models
             return "-";
         }
 
-        public CreditBureauModel[] GenerateDirectorsModels(EZBob.DatabaseLib.Model.Database.Customer customer, IEnumerable<Director> directors, bool getFromLog = false, DateTime? logDate = null)
+        public CreditBureauModel[] GenerateDirectorsModels(EZBob.DatabaseLib.Model.Database.Customer customer, IEnumerable<Director> directors, bool getFromLog = false, long? logId = null)
         {
             var consumerSrv = new ConsumerService();
             var dirModelList = new List<CreditBureauModel>();
             foreach (var director in directors)
             {
                 ConsumerServiceResult result = null;
-                if (getFromLog && logDate != null)
+                if (getFromLog && logId.HasValue)
                 {
                     var directorCopy = director;
                     var logs =
                         _session.Query<MP_ServiceLog>()
                             .Where(x => x.Director.Id == directorCopy.Id && x.ServiceType == "Consumer Request")
                             .ToList();
-                    var logDateWithoutTime = logDate.Value.ToUniversalTime().Date;
-                    var response = logs.FirstOrDefault(x => x.InsertDate >= logDateWithoutTime && x.InsertDate < logDateWithoutTime.AddDays(1));
-                    var serializer = new XmlSerializer(typeof(OutputRoot));
+	                var date = _session.Query<MP_ServiceLog>().First(x => x.Id == logId).InsertDate.ToUniversalTime().Date;
+                    var response = logs.FirstOrDefault(x => x.InsertDate >= date && x.InsertDate < date.AddDays(1));
+                    
+					var serializer = new XmlSerializer(typeof(OutputRoot));
 
                     if (response != null)
                     {
+						Log.DebugFormat("No directors consumer requests where found in DB for director {1} {2} for date {0}", date, director.Name, director.Surname);
+						
                         using (TextReader sr = new StringReader(response.ResponseData))
                         {
                             var output = (OutputRoot)serializer.Deserialize(sr);
