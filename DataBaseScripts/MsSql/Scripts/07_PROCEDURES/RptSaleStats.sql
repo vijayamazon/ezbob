@@ -1,4 +1,4 @@
-﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptSaleStats]') AND type in (N'P', N'PC'))
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptSaleStats]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [dbo].[RptSaleStats]
 GO
 SET ANSI_NULLS ON
@@ -79,11 +79,6 @@ BEGIN
 			AND O.UnderwriterDecision = 'Approved'
 		LEFT JOIN Loan L
 			ON O.Id = L.RequestCashId
-			AND (
-				L.LoanAmount < O.ManagerApprovedSum
-				OR
-				L.LoanAmount IS NULL
-			)
 		LEFT JOIN #CRMFinal CR ON CR.CustomerId = O.IdCustomer
 	WHERE
 		@DateStart <= O.CreationDate AND O.CreationDate < @DateEnd
