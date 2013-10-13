@@ -1267,6 +1267,12 @@
     <oType>View</oType>
   </DependencyData>
   <DependencyData>
+    <oName>vw_collection</oName>
+    <oRank>1</oRank>
+    <oFileName>04_VIEWS\vw_collection.sql</oFileName>
+    <oType>View</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>vw_LoansAmountByDay</oName>
     <oRank>1</oRank>
     <oFileName>04_VIEWS\vw_LoansAmountByDay.sql</oFileName>
@@ -1285,21 +1291,15 @@
     <oType>View</oType>
   </DependencyData>
   <DependencyData>
+    <oName>vw_CollectionFinal</oName>
+    <oRank>2</oRank>
+    <oFileName>04_VIEWS\Rank_2\vw_CollectionFinal.sql</oFileName>
+    <oType>View</oType>
+  </DependencyData>
+  <DependencyData>
     <oName>vw_NotClose</oName>
     <oRank>2</oRank>
     <oFileName>04_VIEWS\Rank_2\vw_NotClose.sql</oFileName>
-    <oType>View</oType>
-  </DependencyData>
-  <DependencyData>
-    <oName>vw_collection</oName>
-    <oRank>3</oRank>
-    <oFileName>04_VIEWS\Rank_3\vw_collection.sql</oFileName>
-    <oType>View</oType>
-  </DependencyData>
-  <DependencyData>
-    <oName>vw_CollectionFinal</oName>
-    <oRank>4</oRank>
-    <oFileName>04_VIEWS\Rank_4\vw_CollectionFinal.sql</oFileName>
     <oType>View</oType>
   </DependencyData>
   <DependencyData>
