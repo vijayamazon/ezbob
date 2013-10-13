@@ -273,15 +273,18 @@ namespace EzBob.Web.Areas.Customer.Controllers
 				CustomerAddressType.PersonalAddress
 			);
 
-			MakeAddress(
-				otherPropertyAddress,
-				addressInfo.OtherPropertyAddress,
-				CustomerAddressType.OtherPropertyAddressPrev,
-				addressInfo.OtherPropertyAddress,
-				CustomerAddressType.OtherPropertyAddress
-			);
+	        if (otherPropertyAddress != null)
+	        {
+		        MakeAddress(
+			        otherPropertyAddress,
+			        addressInfo.OtherPropertyAddress,
+			        CustomerAddressType.OtherPropertyAddressPrev,
+			        addressInfo.OtherPropertyAddress,
+			        CustomerAddressType.OtherPropertyAddress
+			        );
+	        }
 
-            if (customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited)
+	        if (customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited)
             {
                 customer.LimitedInfo.LimitedBusinessPhone = businessPhone;
 
