@@ -10,7 +10,8 @@ AS
 SELECT l.Id AS loanID
 , l.CustomerId
 , l.Date AS StartDate
-, ISNULL(ISNULL(l.DateClosed, max(lt.PostDate)), l.Date) as DateClose
+, CASE WHEN cs.IsEnabled = 1 THEN ISNULL(l.DateClosed, 0)
+	ELSE ISNULL(ISNULL(max(csh.Timestamp), max(lt.PostDate)), l.Date) END AS DateClose
 , ISNULL(l.MaxDelinquencyDays, 0) as MaxDelinquencyDays
 , l.RepaymentsNum AS RepaymentPeriod
 , l.Balance AS CurrentBalance
@@ -39,9 +40,6 @@ SELECT l.Id AS loanID
 , convert(INT, cs.IsEnabled) AS CustomerStatusIsEnabled
 , c.MartialStatus
 , lo.ManualCaisFlag
-
-
-
 FROM         
 (
   SELECT 
@@ -56,11 +54,11 @@ FROM
  LEFT OUTER JOIN dbo.Loan AS l ON l.Id = LoanAmount.Id 
  LEFT OUTER JOIN MinLoanSchedule as ld ON ld.Id = LoanAmount.Id 
  LEFT OUTER JOIN dbo.Customer AS c ON c.Id = l.CustomerId 
---LEFT OUTER JOIN dbo.CustomerAddressRelation AS car ON car.customerId = c.Id 
 LEFT OUTER JOIN dbo.CustomerAddress AS ca ON ca.customerId = c.Id
 LEFT OUTER JOIN dbo.LoanOptions AS lo ON lo.LoanId = l.Id
 LEFT JOIN CustomerStatuses AS cs ON cs.Id = c.CollectionStatus
 LEFT OUTER JOIN dbo.LoanTransaction AS lt ON lt.LoanId = l.Id AND lt.Status='Done' AND lt.Type = 'PaypointTransaction'
+LEFT OUTER JOIN CustomerStatusHistory AS csh ON csh.CustomerId = c.Id
 WHERE c.IsTest <> 1 and 
  (
  ((c.TypeOfBusiness = 'PShip3P' OR c.TypeOfBusiness = 'SoleTrader') AND ca.addressType = 5) OR 
