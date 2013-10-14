@@ -174,7 +174,8 @@
 
 		"Fields": [
 			{ "SourcePath": "./SHLDNAME", "Targets": [{ "Name": "Description of Shareholder" }] },
-			{ "SourcePath": "./SHLDHOLDING", "Targets": [{ "Name": "Description of Shareholding", "Transformation": { "types": [ "shares" ] } }] }
+			{ "SourcePath": "./SHLDHOLDING", "Targets": [{ "Name": "Description of Shareholding", "Transformation": { "types": [ "shares" ] } }] },
+			{ "SourcePath": "./SHLDREGNUM", "Targets": [{ "Name": "Registered number of a limited company which is a shareholder" }] }
 		]
 	},
 	{

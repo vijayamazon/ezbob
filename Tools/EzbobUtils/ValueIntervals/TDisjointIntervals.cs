@@ -37,7 +37,7 @@ namespace Ezbob.ValueIntervals {
 
 		#region method Add
 
-		public virtual TDisjointIntervals<TFinite> Add(TInterval<TFinite> oInterval) {
+		public new virtual TDisjointIntervals<TFinite> Add(TInterval<TFinite> oInterval) {
 			if (oInterval == null)
 				return this;
 

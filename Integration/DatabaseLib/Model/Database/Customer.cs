@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Xml;
 using ApplicationMng.Model;
+using ApplicationMng.Repository;
 using EZBob.DatabaseLib.Model.Database.Loans;
 using EZBob.DatabaseLib.Model.Email;
 using EZBob.DatabaseLib.Repository;
@@ -535,30 +536,31 @@ namespace EZBob.DatabaseLib.Model.Database {
 	    public virtual Tuple<Dictionary<string, ParsedData>, ParsingResult, string> ParseExperian(string sParserConfiguration, string sServiceType = "E-SeriesLimitedData") {
 			var oLog = LogManager.GetLogger(typeof(Customer));
 
-			ServiceLogRepository oServiceLogRepository = ObjectFactory.GetInstance<ServiceLogRepository>();
-
-			IEnumerable<MP_ServiceLog> oServiceLogEntries =
-				oServiceLogRepository
-				.GetBuCustomer(this)
-				.Where(x => x.ServiceType == sServiceType)
-			;
-
-			if (!oServiceLogEntries.Any()) {
-				string sErrMsg = string.Format("No data found for Company Score tab with customer id = {0}", Id);
+			if (string.IsNullOrWhiteSpace(LimitedInfo.LimitedCompanyNumber)) {
+				string sErrMsg = string.Format("Customer with id = {0} has no limited company information.", Id);
 				oLog.Info(sErrMsg);
 				return new Tuple<Dictionary<string, ParsedData>, ParsingResult, string>(null, ParsingResult.NotFound, sErrMsg);
 			} // if
 
-			List<MP_ServiceLog> lst = oServiceLogEntries.ToList();
+			NHibernateRepositoryBase<MP_ExperianDataCache> repo =
+				ObjectFactory.GetInstance<NHibernateRepositoryBase<MP_ExperianDataCache>>();
 
-			lst.Sort((a, b) => a.InsertDate.CompareTo(b.InsertDate));
+			MP_ExperianDataCache oCachedValue = repo.GetAll().FirstOrDefault(
+				x => x.CompanyRefNumber == LimitedInfo.LimitedCompanyNumber
+			);
+
+			if (oCachedValue == null) {
+				string sErrMsg = string.Format("No data found for Company Score tab with customer id = {0}", Id);
+				oLog.Info(sErrMsg);
+				return new Tuple<Dictionary<string, ParsedData>, ParsingResult, string>(null, ParsingResult.NotFound, sErrMsg);
+			} // if
 
 			var parser = new Ezbob.ExperianParser.Parser(sParserConfiguration, new SafeILog(oLog));
 
 			var doc = new XmlDocument();
 
 			try {
-				doc.LoadXml(lst.Last().ResponseData);
+				doc.LoadXml(oCachedValue.JsonPacket);
 			}
 			catch (Exception e) {
 				string sErrMsg = string.Format("Failed to parse Experian response as XML for Company Score tab with customer id = {0}", Id);

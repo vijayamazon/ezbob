@@ -37,6 +37,7 @@ EzBob.Underwriter.CrossCheckView = Backbone.View.extend({
         var el = $(e.currentTarget),
             postcode = el.attr("data-postcode"),
             companyName = el.attr("data-company-name"),
+            companyLegalStatus = el.attr('data-company-legal-status')[0],
             that = this;
 
         if (el.hasClass("disabled")) {
@@ -46,7 +47,8 @@ EzBob.Underwriter.CrossCheckView = Backbone.View.extend({
         scrollTop();
         BlockUi("On");
 
-        $.get(window.gRootPath + "Account/CheckingCompany", { companyName: companyName, postcode: postcode }).success(function (reqData) {
+        $.get(window.gRootPath + "Account/CheckingCompany", { companyName: companyName, postcode: postcode, filter: companyLegalStatus })
+        .success(function (reqData) {
             if (reqData == undefined || reqData.success === false) {
                 EzBob.ShowMessage("Targeting service is not responding", "Error", null, "OK");
             } else {

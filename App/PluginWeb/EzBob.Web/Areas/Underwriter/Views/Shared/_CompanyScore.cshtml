@@ -179,7 +179,19 @@
 						var aryOutput = [];
 						var aryLast = null;
 
-						function Trend(a, b) { if (a < b) return 'positive-trend'; if (a > b) return 'negative-trend'; return 'stable-trend'; } // Trend
+						function GetTrend(a, b) {
+							a = parseInt(a);
+							b = parseInt(b);
+
+							var sTrend = 'stable-trend';
+
+							if (a < b)
+								sTrend = 'positive-trend';
+							else if (a > b)
+								sTrend = 'negative-trend';
+
+							return sTrend;
+						} // GetTrend
 
 						for (var j = 0; j < aryMonths.length; j++) {
 							var sKey = aryMonths[j] + ' Months';
@@ -202,7 +214,7 @@
 							};
 						
 							if (bHasCompany && bHasIndustry)
-								aryThis.company_to_industry_trend = Trend(aryThis.company, aryThis.industry);
+								aryThis.company_to_industry_trend = GetTrend(aryThis.company, aryThis.industry);
 
 							aryOutput.push(aryThis);
 
@@ -212,10 +224,10 @@
 							} // if
 
 							if (bHasCompany && aryLast.has_company)
-								aryThis.company_trend = Trend(aryThis.company, aryLast.company);
+								aryThis.company_trend = GetTrend(aryThis.company, aryLast.company);
 
 							if (bHasIndustry && aryLast.has_industry)
-								aryThis.industry_trend = Trend(aryThis.industry, aryLast.industry);
+								aryThis.industry_trend = GetTrend(aryThis.industry, aryLast.industry);
 						} // for
 
 						for (var j = aryOutput.length - 1; j >= 0; j--) {

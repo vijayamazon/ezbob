@@ -107,7 +107,8 @@ EzBob.YourInformationStepView = Backbone.View.extend({
             typeOfBussiness = dataForCompany.TypeOfBusiness,
             companyName = null,
             postcode = null,
-            that = this;
+            that = this,
+            sCompanyFilter = '';
         
         EzBob.App.trigger("wizard:progress", 100);
         
@@ -119,6 +120,7 @@ EzBob.YourInformationStepView = Backbone.View.extend({
             case "limited":
                 postcode = dataForCompany['LimitedCompanyAddress[0].Postcode'];
                 companyName = dataForCompany['LimitedCompanyName'];
+                sCompanyFilter = 'L';
                 break;
 
             case "pship":
@@ -126,13 +128,14 @@ EzBob.YourInformationStepView = Backbone.View.extend({
             case "soletrader":
                 postcode = dataForCompany['NonLimitedCompanyAddress[0].Postcode'];
                 companyName = dataForCompany['NonLimitedCompanyName'];
+                sCompanyFilter = 'N';
                 break;
 
             default:
         }
 
         if (typeOfBussiness != "Entrepreneur" && EzBob.Config.TargetsEnabled) {
-            var req = $.get(window.gRootPath + "Account/CheckingCompany", { companyName: companyName, postcode: postcode });
+            var req = $.get(window.gRootPath + "Account/CheckingCompany", { companyName: companyName, postcode: postcode, filter: sCompanyFilter });
             scrollTop();
             BlockUi("On");
 

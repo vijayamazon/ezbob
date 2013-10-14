@@ -533,12 +533,24 @@ namespace EzBob.Web.Controllers
 		[Ajax]
 		[HttpGet]
 		[Authorize(Roles = "Underwriter, Web")]
-		public JsonNetResult CheckingCompany(string postcode, string companyName)
+		public JsonNetResult CheckingCompany(string postcode, string companyName, string filter)
 		{
+			TargetResults.LegalStatus nFilter = TargetResults.LegalStatus.DontCare;
+
+			switch (filter.ToUpper()) {
+			case "L":
+				nFilter = TargetResults.LegalStatus.Limited;
+				break;
+
+			case "N":
+				nFilter = TargetResults.LegalStatus.NonLimited;
+				break;
+			} // switch
+
 			try
 			{
 				var service = new EBusinessService();
-				var result = service.TargetBusiness(companyName, postcode, _context.UserId);
+				var result = service.TargetBusiness(companyName, postcode, _context.UserId, nFilter);
 				return this.JsonNet(result.Targets);
 			}
 			catch (Exception e)

@@ -305,7 +305,8 @@
                            class="btn btn-mini pull-right" 
                            href="#" 
                            data-postcode="@postcode.Select(x => x.Postcode).FirstOrDefault()"
-                           data-company-name="@companyName">Recheck
+                           data-company-name="@companyName"
+                           data-company-legal-status="@Model.Customer.PersonalInfo.TypeOfBusiness.Reduce()">Recheck
                     </a>
                 </td>
             </tr>
