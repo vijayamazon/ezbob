@@ -6,8 +6,9 @@
     <NodeElement Name="Comparison" NodeId="Comparison16515789" />
     <NodeElement Name="Counter=NULL" NodeId="AssignmentB64570610" />
     <NodeElement Name="Get data from selected row" NodeId="GetRowDataNode28404202" />
-    <NodeElement Name="GetLateBy14DaysAndUpdate" NodeId="DataSourceBehavioral57257659" />
-    <NodeElement Name="Mail Node" NodeId="MailNode58133029" />
+    <NodeElement Name="GetLateBy14DaysAndUpdate" NodeId="DataSourceBehavioral50707408" />
+    <NodeElement Name="Mail to EZBOB" NodeId="MailNode58133029" />
+    <NodeElement Name="Mail to customer" NodeId="MailNode6528062" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct41389494" />
     <NodeElement Name="Read Next Row" NodeId="ReadNextNode32668979" />
     <NodeElement Name="SetLateBy14Days" NodeId="DataSourceNodeScalar32751897" />
@@ -59,13 +60,13 @@
       <AssemblyString />
       <DefaultPinName />
       <Description />
-      <DisplayName>Mail Node</DisplayName>
+      <DisplayName>Mail to EZBOB</DisplayName>
       <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;Late by 14 days.docxq2lfSkWtbRV+DF4UNfkpBw==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;Late by 14 days.docxq2lfSkWtbRV+DF4UNfkpBw==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject&gt;Please contact us immediately in order to make full payment on all outstanding debts&lt;/Subject&gt;&lt;/root&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>MailNode58133029</Name>
       <PointF>
-        <X>792.6701</X>
+        <X>900.7785</X>
         <Y>136</Y>
       </PointF>
       <SuperNodeName />
@@ -133,7 +134,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison16515789</Name>
       <PointF>
-        <X>807.5971</X>
+        <X>927.5971</X>
         <Y>236</Y>
       </PointF>
       <SuperNodeName />
@@ -223,7 +224,7 @@
       <DisplayName>GetLateBy14DaysAndUpdate</DisplayName>
       <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;
 &lt;NodeParameters xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;DataSourceName&gt;GetLateBy14DaysAndUpdatecnTb3RbxOziZNgRn2aJ5kg==&lt;/DataSourceName&gt;
+  &lt;DataSourceName&gt;GetLateBy14DaysAndUpdateqC60D8CYRGMfpi6pldlaBA==&lt;/DataSourceName&gt;
   &lt;DataSourceType&gt;ExternalDatabase&lt;/DataSourceType&gt;
   &lt;UseMultipleLayersForInput&gt;false&lt;/UseMultipleLayersForInput&gt;
   &lt;UseMultipleLayersForOutput&gt;false&lt;/UseMultipleLayersForOutput&gt;
@@ -372,19 +373,52 @@
       &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
       &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
     &lt;/DataSourceParam&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;Email&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;String&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;DataTypeString&gt;System.String&lt;/DataTypeString&gt;
+      &lt;DatasourceTypeString&gt;NVarChar&lt;/DatasourceTypeString&gt;
+      &lt;Direction&gt;Output&lt;/Direction&gt;
+      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
   &lt;/Fields&gt;
   &lt;FixIncorrectConstrainedValues&gt;false&lt;/FixIncorrectConstrainedValues&gt;
   &lt;KeyVariableType&gt;Numeric&lt;/KeyVariableType&gt;
 &lt;/NodeParameters&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>DataSourceBehavioral57257659</Name>
+      <Name>DataSourceBehavioral50707408</Name>
       <PointF>
         <X>223.849548</X>
         <Y>236</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeDataSource</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Mail to customer</DisplayName>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;Late by 14 days.docxq2lfSkWtbRV+DF4UNfkpBw==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;Late by 14 days.docxq2lfSkWtbRV+DF4UNfkpBw==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject&gt;Please contact us immediately in order to make full payment on all outstanding debts&lt;/Subject&gt;&lt;/root&gt;</InitialValue>
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>MailNode6528062</Name>
+      <PointF>
+        <X>756.6884</X>
+        <Y>136</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeMail</TypeName>
       <PrototypeName />
     </NodeDescriptor>
   </NodeDescriptors>
@@ -786,6 +820,42 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
+      <OwnerName>LateBy14Days</OwnerName>
+      <Name>Email</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>LateBy14Days</OwnerName>
+      <Name>EmailColumn</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>LateBy14Days</OwnerName>
+      <Name>EmptyCC</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
       <OwnerName>MailNode58133029</OwnerName>
       <Name>FirstName_Late by 14 days.docxq2lfSkWtbRV+DF4UNfkpBw==</Name>
       <TypeName />
@@ -1147,6 +1217,18 @@
     </VariableDescriptor>
     <VariableDescriptor>
       <OwnerName>GetRowDataNode28404202</OwnerName>
+      <Name>Email</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>GetRowDataNode28404202</OwnerName>
       <Name>LoanIdColumn</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
       <InitialValue>0</InitialValue>
@@ -1254,6 +1336,18 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
+      <OwnerName>GetRowDataNode28404202</OwnerName>
+      <Name>EmailColumn</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
       <OwnerName>Comparison16515789</OwnerName>
       <Name>Expression</Name>
       <TypeName>System.String</TypeName>
@@ -1350,7 +1444,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral57257659</OwnerName>
+      <OwnerName>DataSourceBehavioral50707408</OwnerName>
       <Name>LoanId</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
       <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
@@ -1362,7 +1456,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral57257659</OwnerName>
+      <OwnerName>DataSourceBehavioral50707408</OwnerName>
       <Name>Is14DaysLate</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
       <InitialValue>;WorkflowObjects.VariableColumnReferenceString;Is14DaysLate;True;False</InitialValue>
@@ -1374,7 +1468,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral57257659</OwnerName>
+      <OwnerName>DataSourceBehavioral50707408</OwnerName>
       <Name>SignDate</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
       <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
@@ -1386,7 +1480,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral57257659</OwnerName>
+      <OwnerName>DataSourceBehavioral50707408</OwnerName>
       <Name>FirstName</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
       <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
@@ -1398,7 +1492,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral57257659</OwnerName>
+      <OwnerName>DataSourceBehavioral50707408</OwnerName>
       <Name>LoanAmount</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
       <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
@@ -1410,7 +1504,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral57257659</OwnerName>
+      <OwnerName>DataSourceBehavioral50707408</OwnerName>
       <Name>Principal</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
       <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
@@ -1422,7 +1516,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral57257659</OwnerName>
+      <OwnerName>DataSourceBehavioral50707408</OwnerName>
       <Name>Interest</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
       <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
@@ -1434,7 +1528,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral57257659</OwnerName>
+      <OwnerName>DataSourceBehavioral50707408</OwnerName>
       <Name>Fees</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
       <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
@@ -1446,7 +1540,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral57257659</OwnerName>
+      <OwnerName>DataSourceBehavioral50707408</OwnerName>
       <Name>Total</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
       <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
@@ -1458,7 +1552,19 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral57257659</OwnerName>
+      <OwnerName>DataSourceBehavioral50707408</OwnerName>
+      <Name>Email</Name>
+      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
+      <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceBehavioral50707408</OwnerName>
       <Name>@OutputDataLayerName</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -1470,7 +1576,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral57257659</OwnerName>
+      <OwnerName>DataSourceBehavioral50707408</OwnerName>
       <Name>DataSourceName</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -1482,13 +1588,205 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral57257659</OwnerName>
+      <OwnerName>DataSourceBehavioral50707408</OwnerName>
       <Name>ScortoInternalErrorMessage</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
       <DefaultValue />
       <Description />
       <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode6528062</OwnerName>
+      <Name>FirstName_Late by 14 days.docxq2lfSkWtbRV+DF4UNfkpBw==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode6528062</OwnerName>
+      <Name>SignDate_Late by 14 days.docxq2lfSkWtbRV+DF4UNfkpBw==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode6528062</OwnerName>
+      <Name>LoanAmount_Late by 14 days.docxq2lfSkWtbRV+DF4UNfkpBw==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode6528062</OwnerName>
+      <Name>Principal_Late by 14 days.docxq2lfSkWtbRV+DF4UNfkpBw==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode6528062</OwnerName>
+      <Name>Interest_Late by 14 days.docxq2lfSkWtbRV+DF4UNfkpBw==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode6528062</OwnerName>
+      <Name>Fees_Late by 14 days.docxq2lfSkWtbRV+DF4UNfkpBw==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode6528062</OwnerName>
+      <Name>Total_Late by 14 days.docxq2lfSkWtbRV+DF4UNfkpBw==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode6528062</OwnerName>
+      <Name>Company_Late by 14 days.docxq2lfSkWtbRV+DF4UNfkpBw==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode6528062</OwnerName>
+      <Name>Description_Late by 14 days.docxq2lfSkWtbRV+DF4UNfkpBw==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode6528062</OwnerName>
+      <Name>MailAddress1_Late by 14 days.docxq2lfSkWtbRV+DF4UNfkpBw==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode6528062</OwnerName>
+      <Name>MailAddress2_Late by 14 days.docxq2lfSkWtbRV+DF4UNfkpBw==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode6528062</OwnerName>
+      <Name>MailAddress3_Late by 14 days.docxq2lfSkWtbRV+DF4UNfkpBw==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode6528062</OwnerName>
+      <Name>MailAddress4_Late by 14 days.docxq2lfSkWtbRV+DF4UNfkpBw==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode6528062</OwnerName>
+      <Name>AddressTo</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode6528062</OwnerName>
+      <Name>AddressCC</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode6528062</OwnerName>
+      <Name>Subject</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
       <IsOutput>true</IsOutput>
       <SignatureRequired>false</SignatureRequired>
       <IsNullable>false</IsNullable>
@@ -1515,9 +1813,9 @@
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>DataSourceBehavioral57257659</SourceNodeName>
+      <SourceNodeName>CreditProduct41389494</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>AssignmentB64570610</TargetNodeName>
+      <TargetNodeName>DataSourceBehavioral50707408</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -1565,7 +1863,7 @@
     <NodeConnectionDescriptor>
       <SourceNodeName>MailNode58133029</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>DataSourceNodeScalar32751897</TargetNodeName>
+      <TargetNodeName>MailNode6528062</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -1610,7 +1908,7 @@
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints>
         <PointF>
-          <X>860</X>
+          <X>980</X>
           <Y>340</Y>
         </PointF>
         <PointF>
@@ -1632,9 +1930,21 @@
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>CreditProduct41389494</SourceNodeName>
+      <SourceNodeName>DataSourceBehavioral50707408</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>DataSourceBehavioral57257659</TargetNodeName>
+      <TargetNodeName>AssignmentB64570610</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Next</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>MailNode6528062</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>DataSourceNodeScalar32751897</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -1720,31 +2030,31 @@
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
       <SourceVariableName>OutputDataLayerName</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral57257659</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral50707408</TargetVariableOwnerName>
       <TargetVariableName>@OutputDataLayerName</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
       <SourceVariableName>DataSourceName</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral57257659</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral50707408</TargetVariableOwnerName>
       <TargetVariableName>DataSourceName</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
       <SourceVariableName>LoanIdColumn</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral57257659</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral50707408</TargetVariableOwnerName>
       <TargetVariableName>LoanId</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
       <SourceVariableName>Is14DaysLateColumn</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral57257659</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral50707408</TargetVariableOwnerName>
       <TargetVariableName>Is14DaysLate</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
       <SourceVariableName>ScortoInternalErrorMessage</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral57257659</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral50707408</TargetVariableOwnerName>
       <TargetVariableName>ScortoInternalErrorMessage</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
@@ -1756,31 +2066,31 @@
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
       <SourceVariableName>LoanAmountColumn</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral57257659</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral50707408</TargetVariableOwnerName>
       <TargetVariableName>LoanAmount</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
       <SourceVariableName>PrincipalColumn</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral57257659</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral50707408</TargetVariableOwnerName>
       <TargetVariableName>Principal</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
       <SourceVariableName>InterestColumn</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral57257659</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral50707408</TargetVariableOwnerName>
       <TargetVariableName>Interest</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
       <SourceVariableName>FeesColumn</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral57257659</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral50707408</TargetVariableOwnerName>
       <TargetVariableName>Fees</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
       <SourceVariableName>TotalColumn</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral57257659</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral50707408</TargetVariableOwnerName>
       <TargetVariableName>Total</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
@@ -1816,7 +2126,7 @@
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
       <SourceVariableName>FirstNameColumn</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral57257659</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral50707408</TargetVariableOwnerName>
       <TargetVariableName>FirstName</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
@@ -1834,62 +2144,8 @@
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
       <SourceVariableName>SignDateColumn</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral57257659</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral50707408</TargetVariableOwnerName>
       <TargetVariableName>SignDate</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
-      <SourceVariableName>LoanId</SourceVariableName>
-      <TargetVariableOwnerName>GetRowDataNode28404202</TargetVariableOwnerName>
-      <TargetVariableName>LoanIdColumn</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
-      <SourceVariableName>Is14DaysLate</SourceVariableName>
-      <TargetVariableOwnerName>GetRowDataNode28404202</TargetVariableOwnerName>
-      <TargetVariableName>Is14DaysLateColumn</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
-      <SourceVariableName>LoanAmount</SourceVariableName>
-      <TargetVariableOwnerName>GetRowDataNode28404202</TargetVariableOwnerName>
-      <TargetVariableName>LoanAmountColumn</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
-      <SourceVariableName>Principal</SourceVariableName>
-      <TargetVariableOwnerName>GetRowDataNode28404202</TargetVariableOwnerName>
-      <TargetVariableName>PrincipalColumn</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
-      <SourceVariableName>Interest</SourceVariableName>
-      <TargetVariableOwnerName>GetRowDataNode28404202</TargetVariableOwnerName>
-      <TargetVariableName>InterestColumn</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
-      <SourceVariableName>Fees</SourceVariableName>
-      <TargetVariableOwnerName>GetRowDataNode28404202</TargetVariableOwnerName>
-      <TargetVariableName>FeesColumn</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
-      <SourceVariableName>Total</SourceVariableName>
-      <TargetVariableOwnerName>GetRowDataNode28404202</TargetVariableOwnerName>
-      <TargetVariableName>TotalColumn</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
-      <SourceVariableName>FirstName</SourceVariableName>
-      <TargetVariableOwnerName>GetRowDataNode28404202</TargetVariableOwnerName>
-      <TargetVariableName>FirstNameColumn</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
-      <SourceVariableName>SignDate</SourceVariableName>
-      <TargetVariableOwnerName>GetRowDataNode28404202</TargetVariableOwnerName>
-      <TargetVariableName>SignDateColumn</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
@@ -1987,6 +2243,174 @@
       <TargetVariableOwnerName>MailNode58133029</TargetVariableOwnerName>
       <TargetVariableName>MailAddress4_Late by 14 days.docxq2lfSkWtbRV+DF4UNfkpBw==</TargetVariableName>
     </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
+      <SourceVariableName>FirstName</SourceVariableName>
+      <TargetVariableOwnerName>MailNode6528062</TargetVariableOwnerName>
+      <TargetVariableName>FirstName_Late by 14 days.docxq2lfSkWtbRV+DF4UNfkpBw==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
+      <SourceVariableName>SignDate</SourceVariableName>
+      <TargetVariableOwnerName>MailNode6528062</TargetVariableOwnerName>
+      <TargetVariableName>SignDate_Late by 14 days.docxq2lfSkWtbRV+DF4UNfkpBw==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
+      <SourceVariableName>LoanAmount</SourceVariableName>
+      <TargetVariableOwnerName>MailNode6528062</TargetVariableOwnerName>
+      <TargetVariableName>LoanAmount_Late by 14 days.docxq2lfSkWtbRV+DF4UNfkpBw==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
+      <SourceVariableName>Principal</SourceVariableName>
+      <TargetVariableOwnerName>MailNode6528062</TargetVariableOwnerName>
+      <TargetVariableName>Principal_Late by 14 days.docxq2lfSkWtbRV+DF4UNfkpBw==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
+      <SourceVariableName>Interest</SourceVariableName>
+      <TargetVariableOwnerName>MailNode6528062</TargetVariableOwnerName>
+      <TargetVariableName>Interest_Late by 14 days.docxq2lfSkWtbRV+DF4UNfkpBw==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
+      <SourceVariableName>Fees</SourceVariableName>
+      <TargetVariableOwnerName>MailNode6528062</TargetVariableOwnerName>
+      <TargetVariableName>Fees_Late by 14 days.docxq2lfSkWtbRV+DF4UNfkpBw==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
+      <SourceVariableName>Total</SourceVariableName>
+      <TargetVariableOwnerName>MailNode6528062</TargetVariableOwnerName>
+      <TargetVariableName>Total_Late by 14 days.docxq2lfSkWtbRV+DF4UNfkpBw==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
+      <SourceVariableName>Company</SourceVariableName>
+      <TargetVariableOwnerName>MailNode6528062</TargetVariableOwnerName>
+      <TargetVariableName>Company_Late by 14 days.docxq2lfSkWtbRV+DF4UNfkpBw==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
+      <SourceVariableName>Description</SourceVariableName>
+      <TargetVariableOwnerName>MailNode6528062</TargetVariableOwnerName>
+      <TargetVariableName>Description_Late by 14 days.docxq2lfSkWtbRV+DF4UNfkpBw==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
+      <SourceVariableName>Subject</SourceVariableName>
+      <TargetVariableOwnerName>MailNode6528062</TargetVariableOwnerName>
+      <TargetVariableName>Subject</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
+      <SourceVariableName>MailAddress1</SourceVariableName>
+      <TargetVariableOwnerName>MailNode6528062</TargetVariableOwnerName>
+      <TargetVariableName>MailAddress1_Late by 14 days.docxq2lfSkWtbRV+DF4UNfkpBw==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
+      <SourceVariableName>MailAddress2</SourceVariableName>
+      <TargetVariableOwnerName>MailNode6528062</TargetVariableOwnerName>
+      <TargetVariableName>MailAddress2_Late by 14 days.docxq2lfSkWtbRV+DF4UNfkpBw==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
+      <SourceVariableName>MailAddress3</SourceVariableName>
+      <TargetVariableOwnerName>MailNode6528062</TargetVariableOwnerName>
+      <TargetVariableName>MailAddress3_Late by 14 days.docxq2lfSkWtbRV+DF4UNfkpBw==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
+      <SourceVariableName>MailAddress4</SourceVariableName>
+      <TargetVariableOwnerName>MailNode6528062</TargetVariableOwnerName>
+      <TargetVariableName>MailAddress4_Late by 14 days.docxq2lfSkWtbRV+DF4UNfkpBw==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
+      <SourceVariableName>EmailColumn</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceBehavioral50707408</TargetVariableOwnerName>
+      <TargetVariableName>Email</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
+      <SourceVariableName>EmailColumn</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode28404202</TargetVariableOwnerName>
+      <TargetVariableName>Email</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
+      <SourceVariableName>LoanId</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode28404202</TargetVariableOwnerName>
+      <TargetVariableName>LoanIdColumn</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
+      <SourceVariableName>Is14DaysLate</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode28404202</TargetVariableOwnerName>
+      <TargetVariableName>Is14DaysLateColumn</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
+      <SourceVariableName>LoanAmount</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode28404202</TargetVariableOwnerName>
+      <TargetVariableName>LoanAmountColumn</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
+      <SourceVariableName>Principal</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode28404202</TargetVariableOwnerName>
+      <TargetVariableName>PrincipalColumn</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
+      <SourceVariableName>Interest</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode28404202</TargetVariableOwnerName>
+      <TargetVariableName>InterestColumn</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
+      <SourceVariableName>Fees</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode28404202</TargetVariableOwnerName>
+      <TargetVariableName>FeesColumn</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
+      <SourceVariableName>Total</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode28404202</TargetVariableOwnerName>
+      <TargetVariableName>TotalColumn</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
+      <SourceVariableName>FirstName</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode28404202</TargetVariableOwnerName>
+      <TargetVariableName>FirstNameColumn</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
+      <SourceVariableName>SignDate</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode28404202</TargetVariableOwnerName>
+      <TargetVariableName>SignDateColumn</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
+      <SourceVariableName>Email</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode28404202</TargetVariableOwnerName>
+      <TargetVariableName>EmailColumn</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
+      <SourceVariableName>Email</SourceVariableName>
+      <TargetVariableOwnerName>MailNode6528062</TargetVariableOwnerName>
+      <TargetVariableName>AddressTo</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
+      <SourceVariableName>EmptyCC</SourceVariableName>
+      <TargetVariableOwnerName>MailNode6528062</TargetVariableOwnerName>
+      <TargetVariableName>AddressCC</TargetVariableName>
+    </VariableConnectionDescriptor>
   </VariableConnectionDescriptors>
   <SigningNodeDescriptors>
     <SigningNodeDescriptor>
@@ -2062,7 +2486,15 @@
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
-      <OwnerName>DataSourceBehavioral57257659</OwnerName>
+      <OwnerName>DataSourceBehavioral50707408</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>MailNode6528062</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
