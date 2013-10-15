@@ -432,6 +432,7 @@ namespace EzBob.Web.Infrastructure
                 .Add("~/Content/js/Profile/Settings/ezbob.profile.settingsPassword.js")
                 .Add("~/Content/js/Profile/Settings/ezbob.profile.settingsQuestion.js")
                 .Add("~/Content/js/Profile/ezbob.profile.Agreements.coffee")
+				.Add("~/Content/js/lib/jquery.colorbox-min.js")
                 .MvcRender("~/Content/js/min/profile_#.js");
         }
 

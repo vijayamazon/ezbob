@@ -196,7 +196,60 @@
 			Log.InfoFormat("Redirecting to yodlee: {0}", finalUrl);
 			return Redirect(finalUrl);
 		}
+		
+		[Transactional]
+		public ActionResult RefreshYodlee(string displayName = null)
+		{
+			var customer = _context.Customer;
+			var repository = new YodleeAccountsRepository(_session);
+			var yodleeAccount = repository.Search(customer.Id);
+
+			var yodleeMain = new YodleeMain();
+
+			var oEsi = new YodleeServiceInfo();
+
+			var yodlees = _session
+				.QueryOver<MP_CustomerMarketPlace>()
+				.Where(m => m.Customer.Id == customer.Id)
+				.JoinQueryOver(m => m.Marketplace)
+				.Where(m => m.InternalId == oEsi.InternalId)
+				.List();
+
+			if (yodlees.Count == 0)
+			{
+				return View(new { error = "Error Loanding Bank Accounts" });
+			}
+			
+			var lu = yodleeMain.LoginUser(yodleeAccount.Username, Encryptor.Decrypt(yodleeAccount.Password));
+			if (lu == null)
+			{
+				return View(new { error = "Error Loging to Yodlee Account" });
+			}
+
+			MP_CustomerMarketPlace umi = displayName == null ? yodlees[0] : yodlees.FirstOrDefault(y => y.DisplayName == displayName); //TODO Currently refreshes the first one
+			if (umi == null)
+			{
+				return View(new {error = "Account not found"});
+			}
+			var callback = Url.Action("RecheckYodleeCallback", "YodleeMarketPlaces", new { Area = "Customer" }, "https") + "/" + umi.Id;
+			string finalUrl = yodleeMain.GetEditAccountUrl(SerializeDataHelper.DeserializeType<YodleeSecurityInfo>(umi.SecurityData).ItemId, callback, yodleeAccount.Username, Encryptor.Decrypt(yodleeAccount.Password));
+			return Redirect(finalUrl);
+		}
+
+		public ActionResult RecheckYodleeCallback(int id, string oauth_token = "", string oauth_error_problem = "", string oauth_error_code = "")
+		{
+			if (!string.IsNullOrEmpty(oauth_error_problem) || !string.IsNullOrEmpty(oauth_error_code))
+			{
+				Log.ErrorFormat("Error updating yodlee mp id {0} oauth {3} {1} {2}", id, oauth_error_code, oauth_error_problem, oauth_token);
+				return View(new { error = "Error occured updating bank account" });
+			}
+
+			_appCreator.CustomerMarketPlaceAdded(_context.Customer, id);
+			return View(new {success = true});
+		}
 	}
+
+	
 
 	public class YodleeAccountModel
 	{

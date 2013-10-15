@@ -1,0 +1,18 @@
+﻿@using Newtonsoft.Json
+@model dynamic
+
+@{
+    ViewBag.Title = "Refresh Bank Account";
+}
+
+<h2>Refresh Bank Account</h2>
+
+@section Js
+{
+    <script type="text/javascript">
+        $(window).load(function () {
+            //var model = @Html.Raw(JsonConvert.SerializeObject(Model));
+            self.close();
+        });
+    </script>
+}

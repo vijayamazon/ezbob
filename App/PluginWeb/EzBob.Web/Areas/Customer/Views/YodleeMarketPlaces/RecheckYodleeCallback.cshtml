@@ -1,0 +1,34 @@
+﻿@using Newtonsoft.Json
+@model dynamic
+@{
+    ViewBag.Title = "Refresh Bank Account";
+}
+
+<h2>Refresh Bank Account</h2>
+
+@section Js
+{
+    <script type="text/javascript">
+        $(window).load(function () {
+        if (querystring('oauth_error_code').length > 0) {
+            //window.opener.YodleeAccountUpdatingError("Error occurred while trying to update yodlee");
+            alert('Error occurred while updating bank account');
+            self.close();
+
+        } else {
+            //alert('Yodlee updated ' + @Html.Raw(JsonConvert.SerializeObject(Model)));
+             //window.opener.YodleeAccountUpdated(@Html.Raw(JsonConvert.SerializeObject(Model)));
+             self.close();
+         }
+
+         function querystring(key) {
+             var re = new RegExp('(?:\\?|&)' + key + '=(.*?)(?=&|$)', 'gi');
+             var r = [], m;
+             while ((m = re.exec(document.location.search)) != null) {
+                 r.push(m[1]);
+             }
+             return r;
+         }
+        });
+    </script>
+}

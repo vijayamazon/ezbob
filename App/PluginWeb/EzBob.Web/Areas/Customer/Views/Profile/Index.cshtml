@@ -1,7 +1,6 @@
 ﻿@using EzBob.Web.Infrastructure
 @using StructureMap
 @model EzBob.Web.Models.WizardModel
-
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     var config = ObjectFactory.GetInstance<IEzBobConfiguration>();
@@ -17,7 +16,8 @@
     <div id="profile-main">
         <div class="clearfix">
             <div class="cart-logo @{ if (Model.Customer.Medal != null)
-                                     { @Model.Customer.Medal.ToLower()}}-cart"></div>
+                                     { @Model.Customer.Medal.ToLower()}}-cart">
+            </div>
             <div class="profile-headlines">
                 <div id="message-sign" class=""></div>
                 <h1 style="margin-top: -10px;">My Account</h1>
@@ -26,7 +26,7 @@
                     bool ebayPixelEnabled = config.EbayPixelEnabled;
                     if (ebayPixelEnabled)
                     {
-                        <img src="https://ad-emea.doubleclick.net/activity;dc_pixel_url=rmboom;rm=ezbobfinishedwizard;ord='<%- orddb %>'?" width="1" height="1" border="0" alt="" />
+                    <img src="https://ad-emea.doubleclick.net/activity;dc_pixel_url=rmboom;rm=ezbobfinishedwizard;ord='<%- orddb %>'?" width="1" height="1" border="0" alt="" />
                     }
                 }
                 <div class="proccessing-message"></div>
@@ -55,14 +55,14 @@
                 </div>
             </div>
         </div>
-    
+
         <div class="profile-widgets">
         </div>
     </div>
 }
 
 <script id="profile-main-template" type="text/template">
-	@ProfileMain()
+    @ProfileMain()
 </script>
 
 <div id="profile-content">
@@ -75,153 +75,146 @@
 @section Js
 {
     <script id="d-payEarly-template" type="text/template">
-            <h3>Loans</h3>
-            <dl>
-                <dt>
-                    Total Balance:
-                </dt>
-                <dd>
-                    <%-EzBob.formatPoundsNoDecimals(TotalBalance)%>
-                </dd>
-                <dt>
-                    Next Payment:
-                </dt>
-                <dd class="next-due-amount" >
-                    <%-EzBob.formatPounds(NextPayment)%> <i><%-EzBob.formatDate(NextPaymentDate)%></i>
-                </dd>
-            </dl>
-            <% var paymentSuffix = IsEarly ? "Early" : "Now" %>
+        <h3>Loans</h3>
+        <dl>
+            <dt>Total Balance:
+            </dt>
+            <dd><%-EzBob.formatPoundsNoDecimals(TotalBalance)%>
+            </dd>
+            <dt>Next Payment:
+            </dt>
+            <dd class="next-due-amount"><%-EzBob.formatPounds(NextPayment)%> <i><%-EzBob.formatDate(NextPaymentDate)%></i>
+            </dd>
+        </dl>
+        <% var paymentSuffix = IsEarly ? "Early" : "Now" %>
             <button class="button orange">Pay <%=paymentSuffix%></button>
     </script>
-    
+
     <script id="d-lateLoan-template" type="text/template">
-            <dl>
-                <dt>
-                    Total Balance:
-                </dt>
-                <dd>
-                    <%-EzBob.formatPoundsNoDecimals(TotalBalance)%>
-                </dd>
-                <dt style="line-height: 14px;">
-                    Amount Past Due:
-                </dt>
-                <dd style="color: red;" >
-                    <%-EzBob.formatPounds(TotalDue)%>
-                </dd>
-            </dl>
-            <button class="button orange pay-late">Pay Now</button>    
+        <dl>
+            <dt>Total Balance:
+            </dt>
+            <dd><%-EzBob.formatPoundsNoDecimals(TotalBalance)%>
+            </dd>
+            <dt style="line-height: 14px;">Amount Past Due:
+            </dt>
+            <dd style="color: red;"><%-EzBob.formatPounds(TotalDue)%>
+            </dd>
+        </dl>
+        <button class="button orange pay-late">Pay Now</button>
     </script>
-    
+
     <script id="d-getCash-template" type="text/template">
         <h3>Cash</h3>
         <dl>
-            <dt>
-                Available Credit:
+            <dt>Available Credit:
             </dt>
             <dd>
                 <span class="UpToTextBlock">Up to</span> <%-EzBob.formatPoundsNoDecimals(availableCredit)%>
             </dd>
-            <dt>
-                Offer Valid for:
+            <dt>Offer Valid for:
             </dt>
-            <dd class="offerValidFor">
-                <%-countDown%> hrs
+            <dd class="offerValidFor"><%-countDown%> hrs
             </dd>
         </dl>
-        
-        <button class="button orange get-cash" >Choose Amount</button>        
+
+        <button class="button orange get-cash">Choose Amount</button>
     </script>
-    
+
     <script id="d-getCash-template-late" type="text/template">
-            <dl>
-                <dt>
-                    Available Credit:
-                </dt>
-                <dd class="dashes">
-                    ---
-                </dd>
-                <dt>
-                    Offer Valid:
-                </dt>
-                <dd class="dashes">
-                    ---
-                </dd>
-            </dl>
-            <button 
-                rel="popover" 
-                data-content="To get more cash, please pay your minimum amount due." 
-                data-original-title="Get More Cash" 
-                class="button orange disabled get-cash"> Get More Cash
-            </button>
+        <dl>
+            <dt>Available Credit:
+            </dt>
+            <dd class="dashes">---
+            </dd>
+            <dt>Offer Valid:
+            </dt>
+            <dd class="dashes">---
+            </dd>
+        </dl>
+        <button
+            rel="popover"
+            data-content="To get more cash, please pay your minimum amount due."
+            data-original-title="Get More Cash"
+            class="button orange disabled get-cash">
+            Get More Cash
+        </button>
     </script>
-    
+
     <script id="d-getCash-template-apply" type="text/template">
         <h3>Cash</h3>
         <dl>
-            <dt>
-                Available Credit:
+            <dt>Available Credit:
             </dt>
-            <dd class="dashes">
-                ---
+            <dd class="dashes">---
             </dd>
-            <dt>
-                Offer Valid:
+            <dt>Offer Valid:
             </dt>
-            <dd class="dashes">
-                ---
+            <dd class="dashes">---
             </dd>
         </dl>
-        <button class="button orange apply-for-loan">Request Cash</button>
+        <button href="#" class="button orange apply-for-loan refresh_yodlee_help">Request Cash</button>
+
+        <div class="hide">
+            <div id="refresh_yodlee_help" class="help_window">
+                <h2>Refresh Bank Account</h2>
+                <p>
+                    Please click continue button below to refresh your bank account.
+                <br />
+                    You will be redirected, this will take around 30 seconds.
+                </p>
+                <br>
+                <div class="alignright" style="padding: 0 10px 0 0;">
+                    <a href="#" target="_blank" class="button orange pull-right" id="refreshYodleeBtn" onclick="$.colorbox.close();">Continue</a>
+                    <a href="#" class="button grey pull-right" id="cancelYodleeBtn" onclick="$.colorbox.close();">Cancel</a>
+                </div>
+                <div class="clear"></div>
+                <hr>
+                <div class="help_security"></div>
+            </div>
+        </div>
     </script>
 
     <script id="processing-message-template" type="text/template">
-        <h2 class="header-message <%-cls%>" ><%=Message%></h2>
+        <h2 class="header-message <%-cls%>"><%=Message%></h2>
     </script>
-    
+
     <script id="d-getCash-template-wait" type="text/template">
         <h3>Cash</h3>
         <dl>
-            <dt>
-                Available Credit:
+            <dt>Available Credit:
             </dt>
-            <dd style="font-weight: bold;font-size: 13px; text-align: center;">
-                Under Review
+            <dd style="font-weight: bold; font-size: 13px; text-align: center;">Under Review
             </dd>
-            <dt>
-                Offer Valid:
+            <dt>Offer Valid:
             </dt>
-            <dd class="dashes">
-                ---
+            <dd class="dashes">---
             </dd>
         </dl>
-        <button 
+        <button
             class="button orange disabled">
             Choose Amount
-        </button>    
+        </button>
     </script>
-        
+
     <script id="d-getCash-template-bad" type="text/template">
-            <h3>Cash</h3>
-            <dl>
-                <dt>
-                    Available Credit:
-                </dt>
-                <dd style="font-weight: bold;font-size: 13px;text-align: center;">
-                    None
-                </dd>
-                <dt>
-                    Offer Valid:
-                </dt>
-                <dd class="dashes">
-                    ---
-                </dd>
-            </dl>
-            <button 
-                class="button orange apply-for-loan disabled">
-                Choose Amount
-            </button>
+        <h3>Cash</h3>
+        <dl>
+            <dt>Available Credit:
+            </dt>
+            <dd style="font-weight: bold; font-size: 13px; text-align: center;">None
+            </dd>
+            <dt>Offer Valid:
+            </dt>
+            <dd class="dashes">---
+            </dd>
+        </dl>
+        <button
+            class="button orange apply-for-loan disabled">
+            Choose Amount
+        </button>
     </script>
-    
+
     <div class="modal" id="payEarly-modal" style="display: none;">
         <div class="modal-header">
             <button class="close" data-dismiss="modal">×</button>
@@ -234,13 +227,13 @@
             <a href="#" class="btn-back" data-dismiss="modal">Close</a>
         </div>
     </div>
-   
+
     <script id="sign-template" type="text/template">
         <div class="<%-color%>-sign pull-right">
             <a href="#"><%=text%></a>
         </div>
     </script>
-       
+
     <script id="sign-welcome-template" type="text/template">
         <div class="welcome-sign pull-right">
             <%=text%>
@@ -295,7 +288,7 @@
 
         });
     </script>
-    
+
     @BundleHelper.RenderProfileJs()
 
 
@@ -303,17 +296,17 @@
 
 @section head
 {
-    @if(taboolaPixelEnabled)
+    @if (taboolaPixelEnabled)
     {
         @TaboolaPixel()
     }
 }
 
-    @helper TaboolaPixel()
-    {
-        <script>
-            window._tfa = window._tfa || [];
-            _tfa.push({ notify: "action", name: " successful_ conversion" });
-        </script>
-        <script src="//cdn.taboola.com/libtrc/ezbobsc/tfa.js"></script>
-    }
+@helper TaboolaPixel()
+{
+    <script>
+        window._tfa = window._tfa || [];
+        _tfa.push({ notify: "action", name: " successful_ conversion" });
+    </script>
+    <script src="//cdn.taboola.com/libtrc/ezbobsc/tfa.js"></script>
+}

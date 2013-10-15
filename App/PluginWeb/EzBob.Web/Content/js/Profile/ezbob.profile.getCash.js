@@ -72,7 +72,13 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
         
         this.trigger('applyForLoan');
         $.post(window.gRootPath + "Customer/Profile/ApplyForALoan")
-            .done(function () {
+            .done(function (result) {
+                if (result.hasYodlee) {
+                    var url = "" + window.gRootPath +"Customer/YodleeMarketPlaces/RefreshYodlee";
+                    that.$el.find("#refreshYodleeBtn").attr("href", url);
+                    that.$el.find('.refresh_yodlee_help').colorbox({ href: "#refresh_yodlee_help", inline: true, transition: 'none', open: true });
+                    
+                }
                 that.customer.set('state', 'wait');
             });
     },

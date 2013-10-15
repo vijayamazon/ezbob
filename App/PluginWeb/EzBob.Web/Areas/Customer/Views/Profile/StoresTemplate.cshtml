@@ -1,14 +1,16 @@
 ﻿@model dynamic
-@helper StoresContent() {
-	<table class="table grey-table account-activity-table">
-		<thead>
-			<tr>
-				<th width="250">Account Type</th>
-				<th width="250">Account Name</th>
-				<th width="250">Status</th>
-			</tr>
-		</thead>
-		<tbody><%
+@helper StoresContent()
+{
+    <table class="table grey-table account-activity-table">
+        <thead>
+            <tr>
+                <th width="250">Account Type</th>
+                <th width="250">Account Name</th>
+                <th width="250">Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <%
 		(function () {
 			var aryCGAccounts = $.parseJSON($('div#cg-account-list').text());
 
@@ -18,22 +20,47 @@
 				var sSourceLabels = (oCG ? 'source-labels' : 'source_labels');
 
 				%><tr class="<%= (stores.length - 1 == i) ? 'last' : '' %>">
-					<td class="first">
-						<div class="<%= sSourceLabels + '_on ' + store.type %>"></div>
-					</td>
-					<td><%= store.displayName %></td>
-					<td class="last Live">LIVE</td>
-				</tr><%
+                    <td class="first">
+                        <div class="<%= sSourceLabels + '_on ' + store.type %>"></div>
+                    </td>
+                    <td><%= store.displayName %></td>
+                    <td class="last Live">LIVE 
+				          <%if(store.type == 'Yodlee') { %>
+                            <button class="button orange updateYodlee refresh_yodlee_help1" data-bank="<%= store.displayName %>">Update</button>
+                        <%}%>
+                    </td>
+                </tr>
+            <%
 			});
 		})();
-		%></tbody>
-	</table>
-	<div style="padding-left: 260px;">
-		<a href="#" style="margin-left: 80px;" class="btn-continue button orange add-store">Add Account</a><br />
-		<span style="padding-left: 90px;" class="add-stores-tip">Get more cash!</span>
-	</div>
+		%>
+        </tbody>
+    </table>
+    <div style="padding-left: 260px;">
+        <a href="#" style="margin-left: 80px;" class="btn-continue button orange add-store">Add Account</a><br />
+        <span style="padding-left: 90px;" class="add-stores-tip">Get more cash!</span>
+    </div>
+    
+    <div class="hide">
+        <div id="refresh_yodlee_help1" class="help_window">
+            <h2>Refresh Bank Account</h2>
+            <p>
+                Please click continue button below to refresh your bank account.
+                <br />
+                You will be redirected, this will take around 30 seconds.
+            </p>
+            <br>
+            <div class="alignright" style="padding: 0 10px 0 0;">
+                <a href="#" target="_blank" class="button orange pull-right" id="refreshYodleeBtn1" onclick="$.colorbox.close();">Continue</a>
+                <a href="#" class="button grey pull-right" id="cancelYodleeBtn1" onclick="$.colorbox.close();">Cancel</a>
+            </div>
+            <div class="clear"></div>
+            <hr>
+            <div class="help_security"></div>
+        </div>
+    </div>
 }
 
 <script id="stores-template" type="text/template">
-	@StoresContent()
+    @StoresContent()
 </script>

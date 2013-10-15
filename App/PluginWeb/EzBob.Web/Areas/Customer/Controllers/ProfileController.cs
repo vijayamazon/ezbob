@@ -90,24 +90,30 @@
                 return this.JsonNet(new {});
             }
 
-            customer.CreditResult = null;
+			customer.CreditResult = null;
 
-            customer.OfferStart = DateTime.UtcNow;
+			customer.OfferStart = DateTime.UtcNow;
 			int offerValidForHours = (int)configurationVariablesRepository.GetByNameAsDecimal("OfferValidForHours");
 			customer.OfferValidUntil = DateTime.UtcNow.AddHours(offerValidForHours);
 
-            customer.ApplyCount = customer.ApplyCount + 1;
+			customer.ApplyCount = customer.ApplyCount + 1;
 
-            var oldOffer = customer.LastCashRequest;
-            if (oldOffer != null && oldOffer.HasLoans)
-            {
-                _creator.RequestCashWithoutTakenLoan(customer, Url.Action("Index", "Profile", new{Area="Customer"}));
-            }
+			var oldOffer = customer.LastCashRequest;
+			if (oldOffer != null && oldOffer.HasLoans)
+			{
+				_creator.RequestCashWithoutTakenLoan(customer, Url.Action("Index", "Profile", new { Area = "Customer" }));
+			}
 
-            var cashRequest = _crBuilder.CreateCashRequest(customer);
+			var cashRequest = _crBuilder.CreateCashRequest(customer);
 
-            _crBuilder.ForceEvaluate(customer, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, false);
-            
+			_crBuilder.ForceEvaluate(customer, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, false);
+
+	        var yodlees = customer.GetYodleeAccounts().ToList();
+			if (yodlees.Any())
+			{
+				return this.JsonNet(new { hasYodlee = true });
+			}
+
             return this.JsonNet(new {});
         }
 

@@ -50,7 +50,8 @@ EzBob.Profile.StoresView = Backbone.View.extend({
 
     },
     events: {
-        'click .add-store': 'addStore'
+        'click .add-store': 'addStore',
+        'click .updateYodlee': 'updateYodleeClicked'
     },
     render: function () {
         this.storeInfoView.render();
@@ -73,6 +74,13 @@ EzBob.Profile.StoresView = Backbone.View.extend({
         this.content.html(this.template({ stores: this.storeInfoStepModel.getStores() }));
     },
 
+    updateYodleeClicked: function (el) {
+        var displayName = $(el.currentTarget).attr('data-bank');
+        var url = "" + window.gRootPath + "Customer/YodleeMarketPlaces/RefreshYodlee/?displayName=" + displayName;
+        
+        this.$el.find("#refreshYodleeBtn1").attr("href", url);
+        this.$el.find('.refresh_yodlee_help1').colorbox({ href: "#refresh_yodlee_help1", inline: true, transition: 'none', open: true });
+    },
     addStore: function () {
         this.content.hide();
         this.storeInfoView.$el.show();
