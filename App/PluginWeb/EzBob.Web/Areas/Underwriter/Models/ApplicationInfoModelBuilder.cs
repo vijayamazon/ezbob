@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Linq;
+	using Customer.Models;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
@@ -61,6 +62,8 @@
 
             model.CustomerId = customer.Id;
             model.IsTest = customer.IsTest;
+			model.IsOffline = customer.IsOffline;
+			model.HasYodlee = customer.GetYodleeAccounts().ToList().Any();
             model.IsAvoid = customer.IsAvoid;
             model.SystemDecision = customer.Status.ToString();
 

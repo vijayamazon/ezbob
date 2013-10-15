@@ -18,6 +18,7 @@ EzBob.Underwriter.FunctionsDialogView = Backbone.View.extend(
         buttonName = @getButtonName()
         @$el.find(".button-ok").val buttonName
         @ReasonField = @$el.find(".reason")
+        @YodleeReasonField = @$el.find(".yodleeReason")
         unless @showReasonField()
             @ReasonField.css "display", "none"
             @$el.find("h3").css "display", "none"
@@ -48,29 +49,43 @@ EzBob.Underwriter.FunctionsDialogView = Backbone.View.extend(
         "click .button-ok": "BtnOkClicked"
         "click .button-cancel": "BtnCancelClicked"
         "keydown textarea.reason": "TextAreaChanged"
+        "keydown textarea.yodleeReason": "TextAreaChanged"
 
-    ReasonFieldEmptyError: (isShow) ->
+    ReasonFieldEmptyError: (field, isShow) ->
         if isShow
-            @ReasonField.css "border", "1px solid red"
+            field.css "border", "1px solid red"
         else
-            @ReasonField.css "border", ""
+            field.css "border", ""
 
-    TextAreaChanged: ->
-        $(".button-ok").removeClass "disabled"    if @getType() isnt "Approved" or EzBob.isNullOrEmpty(@model.get("OfferedCreditLine")) or @model.get("OfferedCreditLine") isnt 0
-        @ReasonFieldEmptyError false
+    TextAreaChanged: (field) ->
+        $(".button-ok").removeClass "disabled" if @getType() isnt "Approved" or EzBob.isNullOrEmpty(@model.get("OfferedCreditLine")) or @model.get("OfferedCreditLine") isnt 0
+        @ReasonFieldEmptyError($(field.currentTarget), false)
 
     BtnOkClicked: (e) ->
         that = this
-        return false    if $(e.currentTarget).hasClass("disabled")
+        return false if $(e.currentTarget).hasClass("disabled")
         $(e.currentTarget).addClass "disabled"
+
+        req = false
         if @ReasonField.val() is "" and @showReasonField()
-            @ReasonFieldEmptyError true
-            return false
+            @ReasonFieldEmptyError(@ReasonField, true)
+            req = true
+
+        
+        if @YodleeReasonField.val() is "" and @NoYodlee
+            @ReasonFieldEmptyError(@YodleeReasonField, true)
+            req = true
+
+        return false if req
+
         data =
             id: @model.get("CustomerId")
             status: @type
 
-        data.reason = @ReasonField.val()    if @showReasonField()
+        data.reason = @ReasonField.val() if @showReasonField()
+        if @NoYodlee
+            data.reason += " " + @YodleeReasonField.val()
+
         req = $.post(window.gRootPath + "Underwriter/Customers/ChangeStatus", data)
         BlockUi "on"
         req.done (res) ->
@@ -148,6 +163,8 @@ EzBob.Underwriter.ApproveDialog = EzBob.Underwriter.FunctionsDialogView.extend(
         @$el.find(".button-ok").addClass "disabled"    if not @model.get("OfferedCreditLine") or @model.get("OfferedCreditLine") is 0
         @$el.find(".button-ok").addClass "disabled"    if @model.get("OfferExpired")
         @$el.find(".change-offer-details").attr 'disabled', 'disabled' if @model.get("IsLoanTypeSelectionAllowed") in [ 1, '1' ]
+        @NoYodlee = @model.get('IsOffline') and not @model.get('HasYodlee')
+        @$el.find("#noYodleeReasonDiv").toggleClass('hide', !@NoYodlee)
 
     renderDetails: ->
         details = _.template($("#approve-details").html(), @model.toJSON())

@@ -23,7 +23,11 @@
         public bool UseSetupFee { get; set; }
         public decimal SetupFee { get; set; }
         public bool IsTest { get; set; }
-        public bool IsAvoid { get; set; }
+
+		public bool IsOffline { get; set; }
+		public bool HasYodlee { get; set; }
+        
+		public bool IsAvoid { get; set; }
         public bool AllowSendingEmail { get; set; }
 
         public string LoanType { get; set; }

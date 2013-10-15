@@ -1,4 +1,4 @@
-(function() {
+﻿(function() {
   var root;
 
   root = typeof exports !== "undefined" && exports !== null ? exports : this;
@@ -20,11 +20,11 @@
     },
     render: function(id) {
       var buttonName;
-
       this.$el.html(this.template(this.model));
       buttonName = this.getButtonName();
       this.$el.find(".button-ok").val(buttonName);
       this.ReasonField = this.$el.find(".reason");
+      this.YodleeReasonField = this.$el.find(".yodleeReason");
       if (!this.showReasonField()) {
         this.ReasonField.css("display", "none");
         this.$el.find("h3").css("display", "none");
@@ -33,10 +33,10 @@
       this.$el.dialog({
         autoOpen: true,
         position: ["top", 60],
-        draggable: false,
+        draggable: true,
         title: "Are you sure?",
         modal: true,
-        resizable: false,
+        resizable: true,
         width: this.dlgWidth || 520,
         height: this.dlgHeight || 300,
         dialogClass: "functionsPopup",
@@ -54,31 +54,39 @@
     events: {
       "click .button-ok": "BtnOkClicked",
       "click .button-cancel": "BtnCancelClicked",
-      "keydown textarea.reason": "TextAreaChanged"
+      "keydown textarea.reason": "TextAreaChanged",
+      "keydown textarea.yodleeReason": "TextAreaChanged"
     },
-    ReasonFieldEmptyError: function(isShow) {
+    ReasonFieldEmptyError: function(field, isShow) {
       if (isShow) {
-        return this.ReasonField.css("border", "1px solid red");
+        return field.css("border", "1px solid red");
       } else {
-        return this.ReasonField.css("border", "");
+        return field.css("border", "");
       }
     },
-    TextAreaChanged: function() {
+    TextAreaChanged: function(field) {
       if (this.getType() !== "Approved" || EzBob.isNullOrEmpty(this.model.get("OfferedCreditLine")) || this.model.get("OfferedCreditLine") !== 0) {
         $(".button-ok").removeClass("disabled");
       }
-      return this.ReasonFieldEmptyError(false);
+      return this.ReasonFieldEmptyError($(field.currentTarget), false);
     },
     BtnOkClicked: function(e) {
       var data, req, that;
-
       that = this;
       if ($(e.currentTarget).hasClass("disabled")) {
         return false;
       }
       $(e.currentTarget).addClass("disabled");
+      req = false;
       if (this.ReasonField.val() === "" && this.showReasonField()) {
-        this.ReasonFieldEmptyError(true);
+        this.ReasonFieldEmptyError(this.ReasonField, true);
+        req = true;
+      }
+      if (this.YodleeReasonField.val() === "" && this.NoYodlee) {
+        this.ReasonFieldEmptyError(this.YodleeReasonField, true);
+        req = true;
+      }
+      if (req) {
         return false;
       }
       data = {
@@ -88,11 +96,14 @@
       if (this.showReasonField()) {
         data.reason = this.ReasonField.val();
       }
+      if (this.NoYodlee) {
+        data.reason += " " + this.YodleeReasonField.val();
+      }
       req = $.post(window.gRootPath + "Underwriter/Customers/ChangeStatus", data);
       BlockUi("on");
       req.done(function(res) {
         if (res.error) {
-          console.log(res.error);
+          EzBob.ShowMessage(res.error, "Error occured");
           that.$el.css("border", "1px solid red");
           return;
         }
@@ -172,7 +183,6 @@
     },
     onShow: function() {
       var _ref;
-
       this.renderDetails();
       this.renderSchedule();
       this.model.on("change", this.renderDetails, this);
@@ -183,12 +193,13 @@
         this.$el.find(".button-ok").addClass("disabled");
       }
       if ((_ref = this.model.get("IsLoanTypeSelectionAllowed")) === 1 || _ref === '1') {
-        return this.$el.find(".change-offer-details").attr('disabled', 'disabled');
+        this.$el.find(".change-offer-details").attr('disabled', 'disabled');
       }
+      this.NoYodlee = this.model.get('IsOffline') && !this.model.get('HasYodlee');
+      return this.$el.find("#noYodleeReasonDiv").toggleClass('hide', !this.NoYodlee);
     },
     renderDetails: function() {
       var details;
-
       details = _.template($("#approve-details").html(), this.model.toJSON());
       this.$el.find("#details").html(details);
       if (this.model.get("IsModified")) {
@@ -199,13 +210,11 @@
     },
     renderSchedule: function() {
       var that;
-
       that = this;
       return $.getJSON(window.gRootPath + "Underwriter/Schedule/Calculate", {
         id: this.model.get("CashRequestId")
       }).done(function(data) {
         var scheduleView;
-
         scheduleView = new EzBob.LoanScheduleView({
           el: that.$el.find(".loan-schedule"),
           schedule: data,
@@ -223,7 +232,6 @@
     dlgHeight: 750,
     onSaved: function() {
       var that;
-
       that = this;
       this.renderSchedule();
       return $.post(window.gRootPath + "Underwriter/ApplicationInfo/IsLoanTypeSelectionAllowed", {
@@ -235,7 +243,6 @@
     },
     changeLoanDetails: function() {
       var loan, that, xhr;
-
       that = this;
       loan = new EzBob.LoanModelTemplate({
         CashRequestId: this.model.get("CashRequestId"),
@@ -244,7 +251,6 @@
       xhr = loan.fetch();
       xhr.done(function() {
         var view;
-
         view = new EzBob.EditLoanView({
           model: loan
         });
@@ -255,13 +261,11 @@
     },
     exportToPdf: function(e) {
       var $el;
-
       $el = $(e.currentTarget);
       return $el.attr("href", window.gRootPath + "Underwriter/Schedule/Export?id=" + this.model.get("CashRequestId") + "&isExcel=false&isShowDetails=true&customerId=" + this.model.get("CustomerId"));
     },
     exportToExcel: function(e) {
       var $el;
-
       $el = $(e.currentTarget);
       return $el.attr("href", window.gRootPath + "Underwriter/Schedule/Export?id=" + this.model.get("CashRequestId") + "&isExcel=true&isShowDetails=true&customerId=" + this.model.get("CustomerId"));
     }
