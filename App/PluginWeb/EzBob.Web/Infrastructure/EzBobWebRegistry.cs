@@ -4,6 +4,7 @@ namespace EzBob.Web.Infrastructure
 {
 	using System.Web.Security;
 	using ApplicationMng.Model.Commands.Player;
+	using Code.Bank;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
@@ -117,6 +118,8 @@ namespace EzBob.Web.Infrastructure
             {
                 For<ISortCodeChecker>().Use<FakeSortCodeChecker>();
             }
+
+	        For<IYodleeAccountChecker>().Use<YodleeAccountChecker>();
 
             For<ILoanCreator>().Use<LoanCreator>();
             For<IAgreementsTemplatesProvider>().Use<AgreementsTemplatesProvider>();

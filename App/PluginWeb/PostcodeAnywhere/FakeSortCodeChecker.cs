@@ -1,11 +1,10 @@
-﻿using System;
-using EZBob.DatabaseLib.Model.Database;
+﻿using EZBob.DatabaseLib.Model.Database;
 
 namespace PostcodeAnywhere
 {
     public class FakeSortCodeChecker : ISortCodeChecker
     {
-        public CardInfo Check(Customer customer, string accountNumnber, string sortcode, string bankAccountType)
+        public CardInfo Check(Customer customer, string accountNumber, string sortcode, string bankAccountType)
         {
             return null;
         }
