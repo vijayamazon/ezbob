@@ -10,13 +10,37 @@ CREATE PROCEDURE GetLastStepCustomers
 	@DateEnd      DATETIME
 AS
 BEGIN
-	SELECT DISTINCT c.Name AS eMail, c.FirstName AS FirstName, c.Surname AS SurName, cr.ManagerApprovedSum AS MaxApproved 
-	FROM CashRequests cr, Customer c  
-	WHERE cr.UnderwriterDecision = 'Approved'
-	AND cr.IdCustomer = c.Id 
-	AND UnderwriterDecisionDate BETWEEN @DateStart AND @DateEnd
-	AND cr.Id IN (SELECT cr.Id FROM CashRequests cr EXCEPT SELECT l.RequestCashId FROM Loan l)
-	AND cr.ManagerApprovedSum IS NOT NULL 
-	AND c.IsTest = 0
+SELECT DISTINCT
+ c.Name AS eMail,
+ c.FirstName AS FirstName,
+ c.Surname AS SurName,
+ CASE WHEN cr.IdUnderwriter IS NOT NULL THEN cr.ManagerApprovedSum ELSE cr.SystemCalculatedSum END AS MaxApproved
+FROM
+ CashRequests cr
+ INNER JOIN Customer c ON cr.IdCustomer = c.Id AND c.IsTest = 0
+ LEFT JOIN (
+  SELECT DISTINCT
+   l.CustomerId
+  FROM
+   Loan l
+   INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
+  WHERE
+   CONVERT(DATE, l.Date) >= @DateStart
+ ) lt ON c.Id = lt.CustomerId
+WHERE
+ lt.CustomerId IS NULL
+ AND
+ (
+  (cr.IdUnderwriter IS NOT NULL AND cr.UnderwriterDecision = 'Approved')
+  OR
+  (cr.IdUnderwriter IS NULL AND cr.SystemDecision = 'Approve')
+ )
+ AND
+ (
+  (cr.IdUnderwriter IS NOT NULL AND CONVERT(DATE, cr.UnderwriterDecisionDate) = @DateStart)
+  OR
+  (cr.IdUnderwriter IS NULL AND CONVERT(DATE, cr.SystemDecisionDate) = @DateStart)
+ )
+
 END
 GO
