@@ -75,7 +75,7 @@ namespace FraudChecker
         {
             var customerAddresses = customer.AddressInfo.AllAddresses.ToList();
             var postcodes = customerAddresses.Select(a => a.Rawpostcode).ToList();
-
+			
             fraudDetections.AddRange(
                 from ca in _session.Query<CustomerAddress>().Where(address => postcodes.Contains(address.Rawpostcode))
                 where ca.Customer.IsTest == false || ca.Director.Customer.IsTest == false
@@ -245,17 +245,22 @@ namespace FraudChecker
             }
         }
 
+		private List<CustomerAddress> GetAddressesOfOtherCustomers(Customer customer)
+		{
+			var otherAddresses = _session.Query<CustomerAddress>().Where(x => (x.Customer.IsTest == false && x.Customer != customer) || (x.Director.Customer.IsTest == false && x.Director.Customer != customer)).ToList();
+			return otherAddresses;
+		}
+
         private void InternalAddressCheck(Customer customer, List<FraudDetection> fraudDetections)
         {
             //Address (any of home, business, directors, previous addresses)
             var customerAddresses = customer.AddressInfo.AllAddresses.ToList();
             var postcodes = customerAddresses.Select(a => a.Postcode).ToList();
-            var addresses = _session.Query<CustomerAddress>().Where(address => postcodes.Contains(address.Postcode)).Where(x => x.Customer.IsTest == false || x.Director.Customer.IsTest == false);
-
+            var addresses = GetAddressesOfOtherCustomers(customer).Where(address => postcodes.Contains(address.Postcode));
+			
             fraudDetections.AddRange(
                 from ca in customerAddresses
                 from a in addresses
-                where a.Customer != ca.Customer
                 where
                     ca.Line1 == a.Line1 && ca.Line2 == a.Line2 && ca.Line3 == a.Line3 && ca.Town == a.Town &&
                     ca.County == a.County
