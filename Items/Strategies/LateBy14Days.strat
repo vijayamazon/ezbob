@@ -7,8 +7,8 @@
     <NodeElement Name="Counter=NULL" NodeId="AssignmentB64570610" />
     <NodeElement Name="Get data from selected row" NodeId="GetRowDataNode28404202" />
     <NodeElement Name="GetLateBy14DaysAndUpdate" NodeId="DataSourceBehavioral50707408" />
-    <NodeElement Name="Mail to EZBOB" NodeId="MailNode58133029" />
     <NodeElement Name="Mail to customer" NodeId="MailNode6528062" />
+    <NodeElement Name="Mail to EZBOB" NodeId="MailNode58133029" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct41389494" />
     <NodeElement Name="Read Next Row" NodeId="ReadNextNode32668979" />
     <NodeElement Name="SetLateBy14Days" NodeId="DataSourceNodeScalar32751897" />
@@ -821,7 +821,7 @@
     </VariableDescriptor>
     <VariableDescriptor>
       <OwnerName>LateBy14Days</OwnerName>
-      <Name>Email</Name>
+      <Name>email</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
       <DefaultValue />
@@ -845,7 +845,7 @@
     </VariableDescriptor>
     <VariableDescriptor>
       <OwnerName>LateBy14Days</OwnerName>
-      <Name>EmptyCC</Name>
+      <Name>emailCC</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
       <DefaultValue />
@@ -1217,7 +1217,7 @@
     </VariableDescriptor>
     <VariableDescriptor>
       <OwnerName>GetRowDataNode28404202</OwnerName>
-      <Name>Email</Name>
+      <Name>email</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
       <DefaultValue />
@@ -2337,7 +2337,7 @@
       <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
       <SourceVariableName>EmailColumn</SourceVariableName>
       <TargetVariableOwnerName>GetRowDataNode28404202</TargetVariableOwnerName>
-      <TargetVariableName>Email</TargetVariableName>
+      <TargetVariableName>email</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
@@ -2395,19 +2395,19 @@
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
-      <SourceVariableName>Email</SourceVariableName>
+      <SourceVariableName>email</SourceVariableName>
       <TargetVariableOwnerName>GetRowDataNode28404202</TargetVariableOwnerName>
       <TargetVariableName>EmailColumn</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
-      <SourceVariableName>Email</SourceVariableName>
+      <SourceVariableName>email</SourceVariableName>
       <TargetVariableOwnerName>MailNode6528062</TargetVariableOwnerName>
       <TargetVariableName>AddressTo</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>LateBy14Days</SourceVariableOwnerName>
-      <SourceVariableName>EmptyCC</SourceVariableName>
+      <SourceVariableName>emailCC</SourceVariableName>
       <TargetVariableOwnerName>MailNode6528062</TargetVariableOwnerName>
       <TargetVariableName>AddressCC</TargetVariableName>
     </VariableConnectionDescriptor>
