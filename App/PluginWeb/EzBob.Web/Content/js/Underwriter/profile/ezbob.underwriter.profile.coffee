@@ -10,13 +10,11 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
         profileInfo = @$el.find(".profile-person-info")
         loanInfo = @$el.find(".profile-loan-info")
         summaryInfo = @$el.find("#profile-summary")
-        profileTabs = @$el.find("#profile-tabs")
         marketplaces = @$el.find("#marketplaces")
         experianInfo = @$el.find("#credit-bureau")
         paymentAccounts = @$el.find("#payment-accounts")
         loanhistorys = @$el.find("#loanhistorys")
         medalCalculations = @$el.find("#medal-calculator")
-        companyScore = @$el.find("#company-score")
         messages = @$el.find("#messages")
         apiChecks = @$el.find("#apiChecks")
         customerRelations = @$el.find("#customerRelations")
@@ -82,8 +80,12 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
 
         @companyScoreModel = new EzBob.Underwriter.CompanyScoreModel()
         @companyScoreView = new EzBob.Underwriter.CompanyScoreView(
-            el: companyScore,
+            el: that.$el.find('#company-score-list')
             model: @companyScoreModel
+        )
+
+        that.$el.find('a.company-score-tab').on('shown.bs.tab', (evt) ->
+            that.companyScoreView.showAccordion()
         )
 
         @messagesModel = new EzBob.Underwriter.MessageModel()
@@ -232,6 +234,9 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
         BlockUi "on"
         scrollTop()
         that = this
+
+        this.companyScoreView.hideAccordion()
+
         @customerId = id
         fullModel = new EzBob.Underwriter.CustomerFullModel(customerId: id, history: (EzBob.parseDate(history) ? history : null))
         fullModel.fetch().done =>

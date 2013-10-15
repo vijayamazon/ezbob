@@ -581,3 +581,5 @@ table.unlimited-width th, table.unlimited-width td { padding: 8px; }
 .unknown-as-experian-director { color: red; font-weight: bold; }
 
 .known-as-experian-director { color: #008000; font-weight: bold; }
+
+#company-score-list .ui-accordion-header { padding: 0.7em 2em; font-size: 1.2em; }

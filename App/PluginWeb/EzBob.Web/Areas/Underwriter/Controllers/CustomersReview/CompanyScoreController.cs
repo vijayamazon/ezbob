@@ -1,15 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using System.Xml;
-using EZBob.DatabaseLib.Model.Database;
+﻿using System.Web.Mvc;
 using EZBob.DatabaseLib.Model.Database.Repository;
 using EZBob.DatabaseLib.Repository;
-using EzBob.Configuration;
 using EzBob.Web.Infrastructure.csrf;
-using Ezbob.ExperianParser;
-using Ezbob.Logger;
 using EzBob.Web.Models;
 using Scorto.Web;
 using StructureMap;
@@ -33,8 +25,8 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview {
 		[ValidateJsonAntiForgeryToken]
 		public JsonNetResult Index(int id) {
 			var customer = m_oCustomerRepository.Get(id);
-		    var builder = new CompanyScoreModelBuilder();
-		    return this.JsonNet(builder.Create(customer));
+			var builder = new CompanyScoreModelBuilder();
+			return this.JsonNet(builder.Create(customer));
 		} // Index
 	} // CompanyScoreController
 } // namespace

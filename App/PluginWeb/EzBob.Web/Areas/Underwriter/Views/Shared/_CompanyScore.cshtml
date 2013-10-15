@@ -1,5 +1,5 @@
 ﻿<script id="company-score-template" type="text/template">
-<% (function(response, onAfterRender) {
+<% (function(response, onAfterRender, caption) {
 	function ExtractSortingOrder(sSortingInfo) {
 		if (!sSortingInfo)
 			return {};
@@ -82,8 +82,11 @@
 
 	// console.log('serialised:', response);
 
+	print('<h3>' + caption + ': ' + response.company_name + ' (' + response.company_ref_num + ')</h3><div>');
+
 	if (response.result != 'ok') {
 		print(response.result);
+		print('</div>');
 		return;
 	} // if
 
@@ -112,7 +115,7 @@
 			} // if
 
 			if (oMetaData.ID == 'DL41') {
-				%><table class="<%- sTableWidthClass %> table-striped blue-header table-bordered">
+				%><div class=tab-content><table class="<%- sTableWidthClass %> table-striped blue-header table-bordered">
 					<thead><tr><th colspan=4><%- i %></th></tr><tr><th></th><th>Company</th><th>Industry</th><th></th></thead>
 					<tbody><%
 						var aryCompany = {};
@@ -280,7 +283,7 @@
 						<td colspan=2 class=narrow-as-possible><%- sSupplierPaymentPattern || '' %></td>
 						<td></td>
 					</tr></tfoot><%
-				%></table><%
+				%></table></div><%
 			}
 			else if (oMetaData.ID == 'DL99') {
 				aryData.sort(function(a, b) {
@@ -410,7 +413,7 @@
 			else if (oMetaData.DisplayDirection == 'horizontal') {
 				var arySortOrder = OrderFieldsForSorting(aryData[0], oMetaData.Sorting);
 
-				%><table class="<%- sTableWidthClass %> table-striped blue-header table-bordered table-fixed">
+				%><div class=tab-content><table class="<%- sTableWidthClass %> table-striped blue-header table-bordered table-fixed">
 				<thead><tr><th colspan=<%= arySortOrder.length %>><%= i %></th></tr><tr><%
 				for (var j = 0; j < arySortOrder.length; j++) {
 					%><th><%- arySortOrder[j] %></th><%
@@ -428,12 +431,12 @@
 
 					print('</tr>');
 				} // for each group output
-				%></tbody></table><%
+				%></tbody></table></div><%
 			}
 			else {
 				var arySortOrder = OrderFieldsForSorting(aryData[0], oMetaData.Sorting);
 
-				%><table class="<%- sTableWidthClass %> table-striped blue-header">
+				%><div class=tab-content><table class="<%- sTableWidthClass %> table-striped blue-header">
 				<thead><tr><th colspan=2><%= i %></th></tr></thead>
 				<tbody><%
 				for (var j = 0; j < aryData.length; j++) {
@@ -444,10 +447,12 @@
 						%><tr><td class=narrow-as-possible><%- fld %></td><td><% DrawFormatted(obj[fld], fld, oMetaData.ID) %></td></tr><%
 					} // for each field
 				} // for each group output
-				%></tbody></table><%
+				%></tbody></table></div><%
 			}
 		} // if
 	} // for
-})(companyScoreData, onAfterRender);
+
+	print('</div>');
+})(companyScoreData, onAfterRender, caption);
 %>
 </script>

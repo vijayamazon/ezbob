@@ -1,6 +1,5 @@
 ﻿@model dynamic
-@helper ProfileTemplateMain()
-{
+<script id="profile-template-main" type="text/template">
     <div id="spl">
         <div class="left-underwriter-pane">
             <div class="profile-person-info">
@@ -20,7 +19,7 @@
                     <li><a href="#medal-calculator" data-toggle="tab">Medal calculator</a></li>
                     <li><a href="#loanhistorys" data-toggle="tab">Loan history</a></li>
                     <li><a href="#customer-info" data-toggle="tab">Customer info</a></li>
-                    <li><a href="#company-score" data-toggle="tab">Company score</a></li>
+                    <li><a href="#company-score" class="company-score-tab" data-toggle="tab">Company score</a></li>
                     <li><a href="#messages-tab" data-toggle="tab">Messages</a></li>
                     <li><a href="#apiChecks" data-toggle="tab">API checks log</a></li>
                     <li><a href="#customerRelations" data-toggle="tab">Customer relations</a></li>
@@ -34,7 +33,7 @@
                     <div class="tab-pane" id="medal-calculator"></div>
                     <div class="tab-pane" id="loanhistorys"></div>
                     <div class="tab-pane" id="customer-info"></div>
-                    <div class="tab-pane" id="company-score"></div>
+					<div class="tab-pane" id="company-score"><div id="company-score-list"></div></div>
                     <div class="tab-pane" id="messages-tab">
                         <div id="messages" class="clearfix"></div>
                         <div id="alert-docs"></div>
@@ -48,7 +47,7 @@
             </div>
         </div>
     </div>
-}
+</script>
 
 <script id="controls-button-template" type="text/template">
     <a class="btn back" href="#"><i class="icon-arrow-left" />Go back</a>
@@ -60,10 +59,6 @@
         <button class="btn" id="ApproveBtn"><i class="icon-ok-sign" />Approve</button>
         <button class="btn" id="EscalateBtn"><i class="icon-question-sign" />Escalate</button>
     </div>
-</script>
-
-<script id="profile-template-main" type="text/template">
-    @ProfileTemplateMain()
 </script>
 
 @{

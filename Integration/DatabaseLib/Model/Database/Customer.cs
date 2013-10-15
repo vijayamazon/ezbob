@@ -533,26 +533,26 @@ namespace EZBob.DatabaseLib.Model.Database {
 
 		public virtual IList<CustomerRequestedLoan> CustomerRequestedLoan { get; set; }
 
-	    public virtual Tuple<Dictionary<string, ParsedData>, ParsingResult, string> ParseExperian(string sParserConfiguration, string sServiceType = "E-SeriesLimitedData") {
+		public static ParseExperianResult ParseExperian(string sCompanyRefNum, string sCompanyName, string sParserConfiguration) {
 			var oLog = LogManager.GetLogger(typeof(Customer));
 
-			if (string.IsNullOrWhiteSpace(LimitedInfo.LimitedCompanyNumber)) {
-				string sErrMsg = string.Format("Customer with id = {0} has no limited company information.", Id);
+			if (string.IsNullOrWhiteSpace(sCompanyRefNum)) {
+				string sErrMsg = string.Format("Company ref num not specified.");
 				oLog.Info(sErrMsg);
-				return new Tuple<Dictionary<string, ParsedData>, ParsingResult, string>(null, ParsingResult.NotFound, sErrMsg);
+				return new ParseExperianResult(null, ParsingResult.NotFound, sErrMsg, null, null);
 			} // if
 
 			NHibernateRepositoryBase<MP_ExperianDataCache> repo =
 				ObjectFactory.GetInstance<NHibernateRepositoryBase<MP_ExperianDataCache>>();
 
 			MP_ExperianDataCache oCachedValue = repo.GetAll().FirstOrDefault(
-				x => x.CompanyRefNumber == LimitedInfo.LimitedCompanyNumber
+				x => x.CompanyRefNumber == sCompanyRefNum
 			);
 
 			if (oCachedValue == null) {
-				string sErrMsg = string.Format("No data found for Company Score tab with customer id = {0}", Id);
+				string sErrMsg = string.Format("No data found for Company with ref num = {0}", sCompanyRefNum);
 				oLog.Info(sErrMsg);
-				return new Tuple<Dictionary<string, ParsedData>, ParsingResult, string>(null, ParsingResult.NotFound, sErrMsg);
+				return new ParseExperianResult(null, ParsingResult.NotFound, sErrMsg, null, null);
 			} // if
 
 			var parser = new Ezbob.ExperianParser.Parser(sParserConfiguration, new SafeILog(oLog));
@@ -563,22 +563,43 @@ namespace EZBob.DatabaseLib.Model.Database {
 				doc.LoadXml(oCachedValue.JsonPacket);
 			}
 			catch (Exception e) {
-				string sErrMsg = string.Format("Failed to parse Experian response as XML for Company Score tab with customer id = {0}", Id);
+				string sErrMsg = string.Format("Failed to parse Experian data as XML for Company Score tab with company ref num = {0}", sCompanyRefNum);
 				oLog.Error(sErrMsg, e);
-				return new Tuple<Dictionary<string, ParsedData>, ParsingResult, string>(null, ParsingResult.Fail, sErrMsg);
+				return new ParseExperianResult(null, ParsingResult.Fail, sErrMsg, null, null);
 			} // try
 
 			try {
 				Dictionary<string, ParsedData> oParsed = parser.NamedParse(doc);
-				return new Tuple<Dictionary<string, ParsedData>, ParsingResult, string>(oParsed, ParsingResult.Ok, null);
+				return new ParseExperianResult(oParsed, ParsingResult.Ok, null, sCompanyRefNum, sCompanyName);
 			}
 			catch (Exception e) {
-				string sErrMsg = string.Format("Failed to extract Company Score tab data from Experian response with customer id = {0}", Id);
+				string sErrMsg = string.Format("Failed to extract Company Score tab data from Experian data with company ref num = {0}", sCompanyRefNum);
 				oLog.Error(sErrMsg, e);
-				return new Tuple<Dictionary<string, ParsedData>, ParsingResult, string>(null, ParsingResult.Fail, sErrMsg);
-			} // try	
+				return new ParseExperianResult(null, ParsingResult.Fail, sErrMsg, null, null);
+			} // try
+		} // ParseExperian
+
+		public virtual ParseExperianResult ParseExperian(string sParserConfiguration) {
+			return Customer.ParseExperian(LimitedInfo.LimitedCompanyNumber, LimitedInfo.LimitedCompanyName, sParserConfiguration);
 		} // ParseExperian
     }
+
+	public class ParseExperianResult : Tuple<Dictionary<string, ParsedData>, ParsingResult, string, string, string> {
+		public Dictionary<string, ParsedData> Dataset { get { return Item1; } } // Dataset
+		public ParsingResult ParsingResult { get { return Item2; } } // ParsingResult
+		public string ErrorMsg { get { return Item3; } } // ErrorMsg
+		public string CompanyRefNum { get { return Item4; } } // CompanyRefNum
+		public string CompanyName { get { return Item5; } } // CompanyName
+
+		public ParseExperianResult(
+			Dictionary<string, ParsedData> dataset,
+			ParsingResult parsingResult,
+			string errorMsg,
+			string companyRefNum,
+			string companyName
+		) : base(dataset, parsingResult, errorMsg, companyRefNum, companyName)
+		{} // constructor
+	} // class ParseExperianResult
 
     public class LimitedInfo
     {

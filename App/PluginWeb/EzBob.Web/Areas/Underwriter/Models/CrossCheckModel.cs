@@ -66,10 +66,10 @@ namespace EzBob.Web.Areas.Underwriter.Models
             CrossCheckStatus =new CrossCheckStatus();
 
 	        ExperianDirectors = null;
-			Tuple<Dictionary<string, ParsedData>, ParsingResult, string> oParseResult = customer.ParseExperian(DBConfigurationValues.Instance.DirectorInfoParserConfiguration);
+			ParseExperianResult oParseResult = customer.ParseExperian(DBConfigurationValues.Instance.DirectorInfoParserConfiguration);
 
-			if (oParseResult.Item2 == ParsingResult.Ok) {
-				foreach (var pair in oParseResult.Item1) {
+			if (oParseResult.ParsingResult == ParsingResult.Ok) {
+				foreach (var pair in oParseResult.Dataset) {
 					foreach (SortedDictionary<string, string> di in pair.Value.Data) {
 						string sFullName = DetailsToName(di["FirstName"], di["MidName1"], di["MidName2"], di["LastName"]);
 

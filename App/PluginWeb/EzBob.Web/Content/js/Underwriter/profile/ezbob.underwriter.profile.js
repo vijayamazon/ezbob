@@ -20,20 +20,18 @@
     };
 
     ProfileView.prototype.render = function() {
-      var alertPassed, apiChecks, companyScore, controlButtons, customerRelations, experianInfo, fraudDetection, loanInfo, loanhistorys, marketplaces, medalCalculations, messages, paymentAccounts, profileInfo, profileTabs, summaryInfo, that,
+      var alertPassed, apiChecks, controlButtons, customerRelations, experianInfo, fraudDetection, loanInfo, loanhistorys, marketplaces, medalCalculations, messages, paymentAccounts, profileInfo, summaryInfo, that,
         _this = this;
 
       this.$el.html(this.template());
       profileInfo = this.$el.find(".profile-person-info");
       loanInfo = this.$el.find(".profile-loan-info");
       summaryInfo = this.$el.find("#profile-summary");
-      profileTabs = this.$el.find("#profile-tabs");
       marketplaces = this.$el.find("#marketplaces");
       experianInfo = this.$el.find("#credit-bureau");
       paymentAccounts = this.$el.find("#payment-accounts");
       loanhistorys = this.$el.find("#loanhistorys");
       medalCalculations = this.$el.find("#medal-calculator");
-      companyScore = this.$el.find("#company-score");
       messages = this.$el.find("#messages");
       apiChecks = this.$el.find("#apiChecks");
       customerRelations = this.$el.find("#customerRelations");
@@ -99,8 +97,11 @@
       });
       this.companyScoreModel = new EzBob.Underwriter.CompanyScoreModel();
       this.companyScoreView = new EzBob.Underwriter.CompanyScoreView({
-        el: companyScore,
+        el: that.$el.find('#company-score-list'),
         model: this.companyScoreModel
+      });
+      that.$el.find('a.company-score-tab').on('shown.bs.tab', function(evt) {
+        return that.companyScoreView.showAccordion();
       });
       this.messagesModel = new EzBob.Underwriter.MessageModel();
       this.Message = new EzBob.Underwriter.Message({
@@ -320,6 +321,7 @@
       BlockUi("on");
       scrollTop();
       that = this;
+      this.companyScoreView.hideAccordion();
       this.customerId = id;
       fullModel = new EzBob.Underwriter.CustomerFullModel({
         customerId: id,

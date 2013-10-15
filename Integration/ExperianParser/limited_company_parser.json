@@ -5,7 +5,8 @@
 		"PathToParent": "./REQUEST/DL12",
 
 		"MetaData": {
-			"ID": "DL12"
+			"ID": "DL12",
+			"UnlimitedWidth": true
 		},
 
 		"Fields": [
@@ -68,6 +69,8 @@
 
 		"PathToParent": "./REQUEST/DL76",
 
+		"MetaData": { "UnlimitedWidth": true },
+
 		"Fields": [
 			{ "SourcePath": "./RISKSCORE", "Targets": [{ "Name": "Commercial Delphi Score" }] },
 			{ "SourcePath": "./STABILITYODDS", "Targets": [{ "Name": "Stability Odds" }] },
@@ -78,6 +81,8 @@
 		"Name": "Limited Company Commerical Delphi Credit Limit",
 
 		"PathToParent": "./REQUEST/DL78",
+
+		"MetaData": { "UnlimitedWidth": true },
 
 		"Fields": [
 			{ "SourcePath": "./CREDITLIMIT", "Targets": [{ "Name": "Commercial Delphi Credit Limit",
@@ -91,7 +96,8 @@
 		"PathToParent": "./REQUEST/DL15/PREVCOMPNAMES",
 
 		"MetaData": {
-			"DisplayDirection": "horizontal"
+			"DisplayDirection": "horizontal",
+			"UnlimitedWidth": true
 		},
 
 		"Fields": [
@@ -107,6 +113,8 @@
 		"Name": "Limited Company Details",
 
 		"PathToParent": "./REQUEST/DL13",
+
+		"MetaData": { "UnlimitedWidth": true },
 
 		"Fields": [
 			{
@@ -133,6 +141,8 @@
 
 		"PathToParent": "./REQUEST/DL17",
 
+		"MetaData": { "UnlimitedWidth": true },
+
 		"Fields": [
 			{ "SourcePath": "./BANKSORTCODE", "Targets": [{ "Name": "Bank Sortcode" }] },
 			{ "SourcePath": "./BANKNAME", "Targets": [{ "Name": "Bank Name" }] },
@@ -148,6 +158,8 @@
 		"Name": "Limited Company Ownership Details",
 
 		"PathToParent": "./REQUEST/DL23",
+
+		"MetaData": { "UnlimitedWidth": true },
 
 		"Fields": [
 			{
@@ -292,6 +304,8 @@
 
 		"PathToParent": "./REQUEST/DL42",
 
+		"MetaData": { "UnlimitedWidth": true },
+
 		"Fields": [
 			{ "SourcePath": "./TOTCURRDIRS", "Targets": [{ "Name": "Total Number of Current Directors" }] },
 			{ "SourcePath": "./CURRDIRSHIPSLAST12", "Targets": [{ "Name": "Number of Current Directorships Less Than 12 Months" }] },
@@ -303,6 +317,8 @@
 		"Name": "Limited Company CCJ Summary",
 
 		"PathToParent": "./REQUEST/DL26",
+
+		"MetaData": { "UnlimitedWidth": true },
 
 		"Fields": [
 			{ "SourcePath": "./AGEMOSTRECENTCCJ", "Targets": [{ "Name": "Age of Most Recent CCJ/Decree (Months)" }] },

@@ -158,9 +158,9 @@ if (m.CGData && m.CGData.VatReturn) {
 			<tr>
 				<th>Total Value Added</th><td></td><%
 				for (var i = nStartIdx; i < aryBusiness.length; i++) {
-					%><td class=r><%- EzBob.formatPoundsAsInt(aryBusiness[i].BoxData[5].amount) %></td><%
+					%><td class=r><%- EzBob.formatPoundsAsInt(aryBusiness[i].BoxData[6].amount - aryBusiness[i].BoxData[7].amount) %></td><%
 				} // for each relevant data item
-				%><td class=r><%- EzBob.formatPoundsAsInt(aryTotals[5]) %></td>
+				%><td class=r><%- EzBob.formatPoundsAsInt(aryTotals[6] - aryTotals[7]) %></td>
 				<td></td>
 			</tr>
 			<tr>
@@ -169,10 +169,10 @@ if (m.CGData && m.CGData.VatReturn) {
 					%><td class=r><%
 						var nRevenue = aryBusiness[i].BoxData[6].amount;
 						if (nRevenue)
-							print(EzBob.formatPercents(aryBusiness[i].BoxData[5].amount / nRevenue));
+							print(EzBob.formatPercents((nRevenue - aryBusiness[i].BoxData[7].amount) / nRevenue));
 					%></td><%
 				} // for each relevant data item
-				%><td class=r><%- aryTotals[6] ? EzBob.formatPercents(aryTotals[5] / aryTotals[6]) : '' %></td>
+				%><td class=r><%- aryTotals[6] ? EzBob.formatPercents((aryTotals[6] - aryTotals[7]) / aryTotals[6]) : '' %></td>
 				<td></td>
 			</tr>
 			<tr>

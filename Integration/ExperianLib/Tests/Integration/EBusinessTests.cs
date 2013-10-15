@@ -9,10 +9,23 @@ namespace ExperianLib.Tests.Integration {
 		[Ignore]
 		public void GetLimitedCompanyTest() {
 			var service = new EBusinessService();
-			const string refNum = "05860211";
-			var result = service.GetLimitedBusinessData(refNum, 1, false);
-			Debug.WriteLine("Limited business with ref number = {0} results: {1}", refNum,
-				JsonConvert.SerializeObject(result));
+
+			var aryRefNumbs = new[] {
+				"07841965",
+				"07915265",
+				"01776469",
+				"07051457",
+				"07852687",
+				"06025730",
+				"07197628",
+				"05860211"
+			};
+
+			foreach (string refNum in aryRefNumbs) {
+				var result = service.GetLimitedBusinessData(refNum, 1, false);
+				Debug.WriteLine("Limited business with ref number = {0} results: {1}", refNum,
+					JsonConvert.SerializeObject(result));
+			}
 		}
 
 		[Test]
