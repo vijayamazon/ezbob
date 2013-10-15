@@ -1,4 +1,4 @@
-﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptLoanStats_CashRequests]') AND type in (N'P', N'PC'))
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RptLoanStats_CashRequests]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [dbo].[RptLoanStats_CashRequests]
 GO
 SET ANSI_NULLS ON
@@ -40,26 +40,30 @@ SELECT
 	c.ResidentialStatus,
 	c.TypeOfBusiness,
 	c.ReferenceSource,
-	ISNULL(l.Id, 0) AS LoanID,
-	ISNULL(
-		CASE
-			WHEN mt.Description LIKE 'Non-cash.%' THEN 0
-			ELSE ISNULL(mt.Amount, l.LoanAmount)
-		END,
-		0
-	) AS LoanAmount,
-	ISNULL(l.Date, 'Jul 1 1976') AS LoanIssueDate,
-	ISNULL(l.AgreementModel, '{ "Term": 0 }') AS AgreementModel
+	ISNULL(lmt.LoanId, 0) AS LoanID,
+	ISNULL(lmt.LoanAmount, 0) AS LoanAmount,
+	ISNULL(lmt.Date, 'Jul 1 1976') AS LoanIssueDate,
+	ISNULL(lmt.AgreementModel, '{ "Term": 0 }') AS AgreementModel
 FROM
 	CashRequests r
 	INNER JOIN Customer c ON r.IdCustomer = c.Id AND c.IsTest = 0
 	INNER JOIN LoanType lt ON r.LoanTypeId = lt.Id
 	INNER JOIN DiscountPlan dp ON r.DiscountPlanId = dp.Id
-	LEFT JOIN Loan l ON r.Id = l.RequestCashId
-	LEFT JOIN LoanTransaction mt
-		ON l.Id = mt.LoanId
-		AND mt.Type = 'PacnetTransaction'
-		AND mt.Type = 'Done'
+	LEFT JOIN (
+		SELECT
+			l.Id AS LoanId,
+			l.RequestCashId,
+			ISNULL(ISNULL(mt.Amount, l.LoanAmount), 0) AS LoanAmount,
+			l.Date,
+			l.AgreementModel
+		FROM
+			Loan l
+			INNER JOIN LoanTransaction mt
+				ON l.Id = mt.LoanId
+				AND mt.Type = 'PacnetTransaction'
+				AND mt.Status = 'Done'
+				AND mt.Description NOT LIKE 'Non-cash.%'
+	) lmt ON r.Id = lmt.RequestCashId
 WHERE
 	(
 		(r.IdUnderwriter IS NOT NULL AND r.UnderwriterDecision = 'Approved')
