@@ -10,6 +10,7 @@ set p=%p%, Integration\Amazon\AmazonServiceLib\bin\Debug\AmazonServiceLib.dll
 set p=%p%, Integration\DatabaseLib\bin\Debug\DatabaseLib.dll
 set p=%p%, Integration\eBay\eBayServiceLib\bin\Debug\eBayServiceLib.dll
 set p=%p%, Integration\ExperianLib\bin\Debug\ExperianLib.dll
+set p=%p%, Integration\ExperianParser\bin\Debug\ExperianParser.dll
 set p=%p%, Integration\EzBob.Configuration\bin\Debug\EzBob.Configuration.dll
 rem set p=%p%, Integration\EzBob\bin\Debug\EzBob.dll
 set p=%p%, Integration\GuiNodeEzBobLib\bin\Debug\GuiNodeEzBobLib.dll
@@ -27,6 +28,7 @@ set p=%p%, Lib\Scorto.Core\DefaultSigningProvider.dll
 set p=%p%, Lib\Scorto.Core\Scorto.Maven.Mixed.dll
 set p=%p%, Lib\Scorto.Core\Scorto.Maven.Application.dll
 set p=%p%, Integration\DatabaseLib\bin\Debug\DatabaseLib.dll
+set p=%p%, Tools\EzbobUtils\Logger\bin\Debug\Logger.dll
 
 @echo:
 
