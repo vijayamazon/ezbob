@@ -8,5 +8,5 @@ set SCRIPT=%MY_PATH%incremental.sh
 
 set QUERIES_PATH=%MY_PATH%current
 
-"%BASH%" "%SCRIPT%" "%QUERIES_PATH%"
+%BASH% %SCRIPT% %QUERIES_PATH%
 

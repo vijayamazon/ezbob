@@ -1,4 +1,8 @@
-SCRIPTS_PATH=$1
+#!/bin/bash
+
+echo Incremental script started...
+
+SCRIPTS_PATH=${1}
 
 if [ ! -d "${SCRIPTS_PATH}" ]
 then
@@ -6,46 +10,51 @@ then
 	exit
 fi
 
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+DIR="$( cd "$( dirname "${0}" )" && pwd )"
 
 ISQL="${DIR}/osql.exe"
+
+HOSTNAME=`hostname | tr [:upper:] [:lower:]`
+CONF_FILE_NAME=${DIR}/${HOSTNAME}.conf
+
+echo Reading configuration from ${CONF_FILE_NAME}
 
 while read name val
 do
 	export ${name}=${val}
-done < "`hostname`.conf"
+done < ${CONF_FILE_NAME}
 
-if [ "x${HOST}" = "x" ]
+if [ "x${ODBC}" = "x" ]
 then
-	echo "Database host not specifed."
+	echo "Database ODBC source not specified."
 	exit
 fi
 
 if [ "x${DB}" = "x" ]
 then
-	echo "Database name not specifed."
+	echo "Database name not specified."
 	exit
 fi
 
 if [ "x${USER}" = "x" ]
 then
-	echo "Database user not specifed."
+	echo "Database user not specified."
 	exit
 fi
 
 if [ "x${PASS}" = "x" ]
 then
-	echo "Database password not specifed."
+	echo "Database password not specified."
 	exit
 fi
 
 if [ "x${ISQL}" = "x" ]
 then
-	echo "Query tool path not specifed."
+	echo "Query tool path not specified."
 	exit
 fi
 
-echo "Database:   ${DB} on ${HOST} as ${USER}"
+echo "Database:   ${DB} via ${ODBC} as ${USER}"
 echo "Query tool: ${ISQL}"
 echo "Source dir: ${SCRIPTS_PATH}"
 
@@ -57,7 +66,7 @@ do
 
 	echo "Running ${QUERY_FILE} ..."
 
-	"${ISQL}" -h-1 -n -m 11 -e -u -b -S ${HOST} -d ${DB} -U ${USER} -P ${PASS} -i ${SCRIPTS_PATH}/${QUERY_FILE} -o ${OUTPUT_FILE}
+	${ISQL} -h-1 -n -m 11 -e -u -b -D ${ODBC} -d ${DB} -U ${USER} -P ${PASS} -i ${SCRIPTS_PATH}/${QUERY_FILE} -o ${OUTPUT_FILE}
 
 	EXIT_CODE=$?
 
@@ -83,4 +92,7 @@ do
 
 	rm -f ${OUTPUT_FILE}
 done
+
+echo Incremental script complete.
+
 
