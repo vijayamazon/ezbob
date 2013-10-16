@@ -49,7 +49,7 @@ echo "Database:   ${DB} on ${HOST} as ${USER}"
 echo "Query tool: ${ISQL}"
 echo "Source dir: ${SCRIPTS_PATH}"
 
-OUTPUT_FILE=output.tmp.$$.txt
+OUTPUT_FILE=${DIR}/output.tmp.$$.txt
 
 for QUERY_FILE in `ls ${SCRIPTS_PATH}`
 do
