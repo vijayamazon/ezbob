@@ -78,7 +78,9 @@
 				(isGreetingMailSendViaMandrill && Templates[0].DisplayName == "Thanks for joining us.docx") ||
 				(isLateBy14DaysMailSendViaMandrill && Templates[0].DisplayName == "Late by 14 days.docx") ||
 				Templates[0].DisplayName == "Congratulations you are qualified.docx" ||
-				Templates[0].DisplayName == "Congratulations you are qualified - not first.docx")
+				Templates[0].DisplayName == "Congratulations you are qualified - not first.docx" ||
+				Templates[0].DisplayName == "Get cash - approval.docx" ||
+				Templates[0].DisplayName == "Get cash - approval - not first.docx")
             {
                 var variables = (iworkflow.VariableConnectionDescriptors.Where(
                     vc => vc.TargetVariableOwnerName == _ec.CurrentNodeName))
@@ -92,9 +94,9 @@
 					log.InfoFormat("Key:'{0}' Value:'{1}'", variable.Key, variable.Value);
 				}
 
-                NodeMailParams.Subject = variables.FirstOrDefault(x => x.Key == "EmailSubject" || x.Key == "Subject").Value ?? "Default Subject";
-                NodeMailParams.To = variables.FirstOrDefault(x => x.Key == "CP_AddressTo" ||x.Key == "email" ).Value;
-                NodeMailParams.CC = variables.FirstOrDefault(x => x.Key == "CP_AddressCC" || x.Key == "emailCC").Value;
+				NodeMailParams.Subject = variables.FirstOrDefault(x => x.Key == "EmailSubject" || x.Key.ToLower() == "subject").Value ?? "Default Subject";
+				NodeMailParams.To = variables.FirstOrDefault(x => x.Key == "CP_AddressTo" || x.Key.ToLower() == "email").Value;
+                NodeMailParams.CC = variables.FirstOrDefault(x => x.Key == "CP_AddressCC" || x.Key.ToLower() == "emailcc").Value;
 
                 var templateName = MailTemplateRelationRepository.GetByInternalName(Templates[0].DisplayName);
                 var sendStatus = Mail.Send(variables, NodeMailParams.To, templateName, NodeMailParams.Subject, NodeMailParams.CC);

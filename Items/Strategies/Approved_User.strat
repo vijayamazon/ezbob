@@ -5,12 +5,12 @@
   <Workspace Name="Approved_User">
     <NodeElement Name="Comparison" NodeId="Comparison19436966" />
     <NodeElement Name="Empty Name" NodeId="ConditionalAssignment14651901" />
-    <NodeElement Name="Mail Node" NodeId="MailNode11120998" />
-    <NodeElement Name="Mail Node" NodeId="MailNode9184076" />
-    <NodeElement Name="Mail Node" NodeId="MailNode42026257" />
     <NodeElement Name="Mail Node" NodeId="MailNode49090367" />
-    <NodeElement Name="Mail_addresses" NodeId="CreditProduct26390432" />
+    <NodeElement Name="Mail Node" NodeId="MailNode42026257" />
+    <NodeElement Name="Mail Node" NodeId="MailNode9184076" />
+    <NodeElement Name="Mail Node" NodeId="MailNode11120998" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct33630458" />
+    <NodeElement Name="Mail_addresses" NodeId="CreditProduct26390432" />
     <NodeElement Name="Multi-Assignment" NodeId="MultiAssignment24457787" />
     <NodeElement Name="Start Node" NodeId="StartNode3532547" />
     <NodeElement Name="Stop Node" NodeId="StopNode31792927" />
@@ -375,6 +375,18 @@
       <DefaultValue />
       <Description />
       <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Approved_User</OwnerName>
+      <Name>emailCC</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
       <IsOutput>false</IsOutput>
       <SignatureRequired>false</SignatureRequired>
       <IsNullable>false</IsNullable>
@@ -956,12 +968,6 @@
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
-      <SourceVariableName>AdressCC</SourceVariableName>
-      <TargetVariableOwnerName>MailNode9184076</TargetVariableOwnerName>
-      <TargetVariableName>AddressCC</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
       <SourceVariableName>Subject</SourceVariableName>
       <TargetVariableOwnerName>MailNode9184076</TargetVariableOwnerName>
       <TargetVariableName>Subject</TargetVariableName>
@@ -1070,12 +1076,6 @@
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
-      <SourceVariableName>AdressCC</SourceVariableName>
-      <TargetVariableOwnerName>MailNode42026257</TargetVariableOwnerName>
-      <TargetVariableName>AddressCC</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
       <SourceVariableName>Subject</SourceVariableName>
       <TargetVariableOwnerName>MailNode42026257</TargetVariableOwnerName>
       <TargetVariableName>Subject</TargetVariableName>
@@ -1106,21 +1106,33 @@
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
-      <SourceVariableName>AdressTo</SourceVariableName>
+      <SourceVariableName>Subject</SourceVariableName>
+      <TargetVariableOwnerName>MailNode49090367</TargetVariableOwnerName>
+      <TargetVariableName>Subject</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
+      <SourceVariableName>CP_AddressTo</SourceVariableName>
       <TargetVariableOwnerName>MailNode49090367</TargetVariableOwnerName>
       <TargetVariableName>AddressTo</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
-      <SourceVariableName>AdressCC</SourceVariableName>
+      <SourceVariableName>CP_AddressCC</SourceVariableName>
       <TargetVariableOwnerName>MailNode49090367</TargetVariableOwnerName>
       <TargetVariableName>AddressCC</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
-      <SourceVariableName>Subject</SourceVariableName>
-      <TargetVariableOwnerName>MailNode49090367</TargetVariableOwnerName>
-      <TargetVariableName>Subject</TargetVariableName>
+      <SourceVariableName>emailCC</SourceVariableName>
+      <TargetVariableOwnerName>MailNode42026257</TargetVariableOwnerName>
+      <TargetVariableName>AddressCC</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
+      <SourceVariableName>emailCC</SourceVariableName>
+      <TargetVariableOwnerName>MailNode9184076</TargetVariableOwnerName>
+      <TargetVariableName>AddressCC</TargetVariableName>
     </VariableConnectionDescriptor>
   </VariableConnectionDescriptors>
   <SigningNodeDescriptors>

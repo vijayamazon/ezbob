@@ -47,12 +47,16 @@ namespace EzBob.Web.Code.ApplicationCreator
 
         public void CashTransfered(User user, string firstName, decimal? cashAmount, decimal setUpFee)
         {
+			var customer = _session.Get<Customer>(user.Id);
+			bool isFirstLoan = customer.Loans.Count == 1;
+
             var strategyParameters = new[]
                                              {
                                                  new StrategyParameter("email", user.EMail),
                                                  new StrategyParameter("userId", user.Id),
                                                  new StrategyParameter("FirstName", firstName),
                                                  new StrategyParameter("CashAmount", cashAmount ),
+                                                 new StrategyParameter("IsFirstLoan", isFirstLoan),
                                                  new StrategyParameter("SetUpFee", setUpFee) 
                                              };
             CreateApplication(user, strategyParameters, _config.CashTransferedStrategyName);
