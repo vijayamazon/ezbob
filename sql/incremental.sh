@@ -6,7 +6,9 @@ then
 	exit
 fi
 
-ISQL="C:/Program Files/Microsoft SQL Server/110/Tools/Binn/osql.exe"
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+ISQL="${DIR}/osql.exe"
 
 while read name val
 do

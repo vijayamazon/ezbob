@@ -13,6 +13,7 @@ namespace ExperianLib.Tests.Integration {
 			var service = new EBusinessService();
 
 			var aryRefNumbs = new[] {
+				"07943908"/*,
 				"07841965",
 				"07915265",
 				"01776469",
@@ -20,7 +21,7 @@ namespace ExperianLib.Tests.Integration {
 				"07852687",
 				"06025730",
 				"07197628",
-				"05860211"
+				"05860211"*/
 			};
 
 			foreach (string refNum in aryRefNumbs) {
