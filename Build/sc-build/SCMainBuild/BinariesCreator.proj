@@ -37,9 +37,9 @@
 
 		<MultiCopy CopyFrom="$(Src)\sql\current\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\sql\current\" />
 		<MultiCopy CopyFrom="$(Src)\sql\Bash\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\sql\Bash\" />
-		<Copy SourceFiles="$(Src)\sql\*.conf" DestinationFolder="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\sql\" SkipUnchangedFiles="true" />
-		<Copy SourceFiles="$(Src)\sql\*.cmd" DestinationFolder="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\sql\" SkipUnchangedFiles="true" />
-		<Copy SourceFiles="$(Src)\sql\*.sh" DestinationFolder="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\sql\" SkipUnchangedFiles="true" />
+
+		<ItemGroup><SqlRelatedFiles Include="$(Src)\sql\*.*"/></ItemGroup>
+		<Copy SourceFiles="@(SqlRelatedFiles)" DestinationFolder="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\sql\" SkipUnchangedFiles="true" />
 
 		<MultiCopy CopyFrom="$(Src)\App\ezmanage\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\ezmanage\" />
 		
