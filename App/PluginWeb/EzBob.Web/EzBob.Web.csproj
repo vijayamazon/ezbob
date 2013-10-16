@@ -1164,6 +1164,7 @@
     <Content Include="Areas\Underwriter\Views\Shared\MarketPlacesHistory.cshtml" />
     <Content Include="Areas\Customer\Views\YodleeMarketPlaces\RefreshYodlee.cshtml" />
     <Content Include="Areas\Customer\Views\YodleeMarketPlaces\RecheckYodleeCallback.cshtml" />
+    <Content Include="Areas\Customer\Views\PacnetStatus\TradeTrackerConversion.cshtml" />
     <None Include="Content\js\login\ezbob.restorePassword.coffee" />
     <Content Include="Content\js\Profile\ezbob.profile.yourInfo.js">
       <DependentUpon>ezbob.profile.yourInfo.coffee</DependentUpon>

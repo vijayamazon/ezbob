@@ -4,6 +4,8 @@ using Newtonsoft.Json;
 using NUnit.Framework;
 
 namespace ExperianLib.Tests.Integration {
+	using System;
+
 	internal class EBusinessTests : BaseTest {
 		[Test]
 		[Ignore]
@@ -42,8 +44,9 @@ namespace ExperianLib.Tests.Integration {
 		[Ignore]
 		public void TargetingTest() {
 			var service = new EBusinessService();
-			var result = service.TargetBusiness("Horns", "", 1, TargetResults.LegalStatus.DontCare);
+			var result = service.TargetBusiness("ORANGE", "EC1V 4PW", 14219, TargetResults.LegalStatus.DontCare, "7852687");
 			Debug.WriteLine("Targeting results: " + JsonConvert.SerializeObject(result));
+			Console.WriteLine("{0}", JsonConvert.SerializeObject(result));
 		}
 	}
 }

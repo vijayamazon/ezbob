@@ -17,10 +17,10 @@ namespace ExperianLib.Ebusiness {
 			_config = ConfigurationRootBob.GetConfiguration().Experian;
 		} // constructor
 
-		public TargetResults TargetBusiness(string companyName, string postCode, int customerId, TargetResults.LegalStatus nFilter) {
+		public TargetResults TargetBusiness(string companyName, string postCode, int customerId, TargetResults.LegalStatus nFilter, string regNum = "") {
 			try {
 				companyName = HttpUtility.HtmlEncode(companyName);
-				string requestXml = GetResource("ExperianLib.Ebusiness.TargetBusiness.xml", companyName, postCode);
+				string requestXml = GetResource("ExperianLib.Ebusiness.TargetBusiness.xml", companyName, postCode, regNum);
 				var response = MakeRequest("POST", "application/xml", requestXml);
 				Utils.WriteLog(requestXml, response, "ESeriesTargeting", customerId);
 				return new TargetResults(response, nFilter);

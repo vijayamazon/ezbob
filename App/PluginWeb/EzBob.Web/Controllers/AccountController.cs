@@ -533,7 +533,7 @@ namespace EzBob.Web.Controllers
 		[Ajax]
 		[HttpGet]
 		[Authorize(Roles = "Underwriter, Web")]
-		public JsonNetResult CheckingCompany(string postcode, string companyName, string filter)
+		public JsonNetResult CheckingCompany(string postcode, string companyName, string filter, string refNum)
 		{
 			TargetResults.LegalStatus nFilter = TargetResults.LegalStatus.DontCare;
 
@@ -550,7 +550,7 @@ namespace EzBob.Web.Controllers
 			try
 			{
 				var service = new EBusinessService();
-				var result = service.TargetBusiness(companyName, postcode, _context.UserId, nFilter);
+				var result = service.TargetBusiness(companyName, postcode, _context.UserId, nFilter, refNum);
 				return this.JsonNet(result.Targets);
 			}
 			catch (Exception e)
