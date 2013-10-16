@@ -119,3 +119,5 @@ App/clients/Maven/PayPal.Base.dll
 App/clients/Maven/PayPal.Permissions.dll
 App/clients/Maven/TeraPeakServiceLib.dll
 packages/
+App/clients/Maven/ExperianParser.dll
+App/clients/Maven/Logger.dll
