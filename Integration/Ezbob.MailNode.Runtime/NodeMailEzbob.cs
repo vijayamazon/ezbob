@@ -76,7 +76,9 @@
 
             if (isMandrillEnable || 
 				(isGreetingMailSendViaMandrill && Templates[0].DisplayName == "Thanks for joining us.docx") ||
-				(isLateBy14DaysMailSendViaMandrill && Templates[0].DisplayName == "Late by 14 days.docx"))
+				(isLateBy14DaysMailSendViaMandrill && Templates[0].DisplayName == "Late by 14 days.docx") ||
+				Templates[0].DisplayName == "Congratulations you are qualified.docx" ||
+				Templates[0].DisplayName == "Congratulations you are qualified - not first.docx")
             {
                 var variables = (iworkflow.VariableConnectionDescriptors.Where(
                     vc => vc.TargetVariableOwnerName == _ec.CurrentNodeName))

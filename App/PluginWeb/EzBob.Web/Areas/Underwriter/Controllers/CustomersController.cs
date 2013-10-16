@@ -22,6 +22,7 @@
 	using Scorto.PluginWeb.Core.jqGrid;
 	using Scorto.Web;
 	using StructureMap;
+	using log4net;
 
 	public class CustomersController : Controller
 	{
@@ -535,12 +536,15 @@
 			return gridModel;
 		}
 
+		private static readonly ILog Log = LogManager.GetLogger(typeof(CustomersController));
+
 		[Transactional]
 		[HttpPost]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		public void ChangeStatus(int id, CreditResultStatus status, string reason)
 		{
+			Log.InfoFormat("zzz ChangeStatus");
 			var workplaceContext = ObjectFactory.GetInstance<IWorkplaceContext>();
 			var user = workplaceContext.User;
 			var customer = _customers.GetChecked(id);

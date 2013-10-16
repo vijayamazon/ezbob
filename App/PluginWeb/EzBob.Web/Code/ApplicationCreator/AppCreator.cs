@@ -215,6 +215,8 @@ namespace EzBob.Web.Code.ApplicationCreator
 
         public void ApprovedUser(User user, Customer customer, decimal? loanAmount)
         {
+			bool isNotFirstApproval = customer.DecisionHistory.Any(x => x.Action == DecisionActions.Approve);
+
             var strategyParameters = new[]
                                              {
                                                  new StrategyParameter("email", customer.Name ),
@@ -223,8 +225,10 @@ namespace EzBob.Web.Code.ApplicationCreator
                                                  new StrategyParameter("LoanAmount", loanAmount),
                                                  new StrategyParameter("ValidFor", (customer.OfferValidUntil - customer.OfferStart).Value.TotalHours),
                                                  new StrategyParameter("LoanType", customer.LastCashRequest.LoanType.Type),
+                                                 new StrategyParameter("IsFirstApproval", !isNotFirstApproval),
                                                  new StrategyParameter("InterestNumberOfMonths", Math.Floor(customer.LastCashRequest.RepaymentPeriod / 2.0))
                                              };
+
             CreateApplication(user, strategyParameters, _config.ApprovedUserStrategyName);
         }
 
