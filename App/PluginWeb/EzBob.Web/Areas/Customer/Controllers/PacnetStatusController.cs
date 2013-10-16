@@ -33,5 +33,10 @@
 
             return View("Index" );
         }
+
+		public ViewResult TradeTrackerConversion()
+		{
+			return View();
+		}
     }
 }

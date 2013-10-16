@@ -1259,8 +1259,6 @@ namespace EZBob.DatabaseLib
 					isPaperlessStmtOn = item.isPaperlessStmtOn,
 					isPaperlessStmtOnSpecified = item.isPaperlessStmtOnSpecified,
 					siteAccountStatusSpecified = item.siteAccountStatusSpecified,
-					siteAccountStatus = item.siteAccountStatus.ToString(),
-					accountClassification = item.accountClassification.ToString(),
 					created = item.created,
 					createdSpecified = item.createdSpecified,
 					nomineeName = item.nomineeName,
@@ -1438,26 +1436,15 @@ namespace EZBob.DatabaseLib
 			_CustomerMarketplaceRepository.Update(customerMarketPlace);
 		}
 
-		public void CalculateYodleeRunningBalance(IDatabaseCustomerMarketPlace dmp, string sourceId, AmountInfo currentBalance)
+		public void CalculateYodleeRunningBalance(MP_CustomerMarketPlace mp, string sourceId, AmountInfo currentBalance)
 		{
-			var mp = _session.Query<MP_CustomerMarketPlace>().FirstOrDefault(m => m.Id == dmp.Id);
-			if (mp == null)
-			{
-				return;
-			}
-			
 			var orderItemBankTransactions =
-				mp.YodleeOrders
-				  .SelectMany(yo => yo.OrderItems)
+				mp.YodleeOrders.SelectMany(yo => yo.OrderItems)
 				  .Where(oi => oi.srcElementId == sourceId)
 				  .SelectMany(oi => oi.OrderItemBankTransactions)
 				  .ToList();
-
-			var transactions = orderItemBankTransactions.OrderByDescending(x => (x.postDate ?? x.transactionDate).Value).ThenBy(x => x.bankTransactionId).ToList();
-			if (transactions.Count == 0)
-			{
-				return;
-			}
+			var transactions = orderItemBankTransactions.OrderByDescending(x => (x.postDate ?? x.transactionDate).Value).ToList();
+			if (transactions.Count == 0) return;
 
 			if (!transactions[0].runningBalance.HasValue)
 			{
@@ -1467,10 +1454,7 @@ namespace EZBob.DatabaseLib
 
 			for (int i = 1; i < transactions.Count; ++i)
 			{
-				if (transactions[i].runningBalance.HasValue)
-				{
-					continue;
-				}
+				if (transactions[i].runningBalance.HasValue) continue;
 
 				var amount = transactions[i].transactionAmount.HasValue
 							 ? _CurrencyConvertor.ConvertToBaseCurrency(
@@ -1489,8 +1473,6 @@ namespace EZBob.DatabaseLib
 
 				transactions[i].runningBalanceCurrency = currentBalance.CurrencyCode;
 			}
-
-			_session.Flush();
 		}
 
 		public YodleeOrderDictionary GetAllYodleeOrdersData(DateTime history, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
@@ -1502,8 +1484,7 @@ namespace EZBob.DatabaseLib
 			var mpYodleeOrder = customerMarketPlace.YodleeOrders.LastOrDefault(y => y.Created.Date <= history);
 			if (mpYodleeOrder != null)
 			{
-				var orderItems = mpYodleeOrder.OrderItems.Where(x=>x.isSeidMod.HasValue && x.isSeidMod.Value == 0);
-				//Not Retrieving Seid transactions as they seem to be duplicated data
+				var orderItems = mpYodleeOrder.OrderItems;
 				foreach (var item in orderItems)
 				{
 					var bankData = new BankData
@@ -1565,14 +1546,6 @@ namespace EZBob.DatabaseLib
 							straightBalance = new YMoney { amount = item.straightBalance, currencyCode = item.straightBalanceCurrency },
 							accountClassificationSpecified = item.accountClassificationSpecified,
 						};
-
-					if (item.currentBalance.HasValue)
-					{
-						CalculateYodleeRunningBalance(databaseCustomerMarketPlace, item.srcElementId,
-																		 _CurrencyConvertor.ConvertToBaseCurrency(
-																			 item.currentBalanceCurrency, item.currentBalance.Value,
-																			 item.asOfDate));
-					}
 
 					var bankTransactionsDataList = customerMarketPlace
 						.YodleeOrders
@@ -2593,6 +2566,16 @@ namespace EZBob.DatabaseLib
 		public IQueryable<MP_AmazonFeedback> GetAmazonFeedback()
 		{
 			return _session.Query<MP_AmazonFeedback>();
+		}
+
+		public IQueryable<MP_YodleeOrderItem> GetYodleeOrderItems()
+		{
+			return _session.Query<MP_YodleeOrderItem>();
+		}
+
+		public IQueryable<MP_YodleeOrderItemBankTransaction> GetYodleeOrderItemBankTransactions()
+		{
+			return _session.Query<MP_YodleeOrderItemBankTransaction>();
 		}
 
 		public EkmOrdersList GetAllEkmOrdersData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)

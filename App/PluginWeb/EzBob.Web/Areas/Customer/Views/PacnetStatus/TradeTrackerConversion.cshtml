@@ -1,0 +1,39 @@
+@model dynamic
+@{
+    //! TradeTracker Conversion-Tag.
+
+    // Define parameters.
+    string campaignID = Request.QueryString["campaignID"];
+    string productID = Request.QueryString["productID"];
+    string conversionType = Request.QueryString["conversionType"];
+    bool useHttps = Request.QueryString["https"] == "1";
+
+    // Get tracking data from the session created on the redirect-page.
+    string trackingData = Session["TT2_" + campaignID] != null ? Session["TT2_" + campaignID].ToString() : "";
+    string trackingType = "1";
+
+    // If tracking data is empty.
+    if (trackingData == "")
+    {
+        // Get tracking data from the cookie created on the redirect-page.
+        trackingData = Request.Cookies["TT2_" + campaignID] != null ? Request.Cookies["TT2_" + campaignID].Value.ToString() : "";
+        trackingType = "2";
+    }
+
+    // Set transaction information.
+    string transactionID = Request.QueryString["transactionID"]; // Transaction identifier.
+    string transactionAmount = Request.QueryString["transactionAmount"]; // Transaction amount.
+    string quantity = Request.QueryString["quantity"]; // Quantity (optional).
+    string email = Request.QueryString["email"]; // Customer e-mail address if available (optional).
+    string descriptionMerchant = Request.QueryString["descrMerchant"]; // Transaction details for merchants (optional).
+    string descriptionAffiliate = Request.QueryString["descrAffiliate"]; // Transaction details for affiliates (optional).
+
+    // Set track-back URL.
+    string trackBackURL = (useHttps ? "https" : "http") + "://" + (conversionType == "lead" ? "tl" : "ts") + ".tradetracker.net/?cid=" + campaignID + "&pid=" + productID + "&data=" + HttpUtility.UrlEncode(trackingData) + "&type=" + trackingType + "&tid=" + HttpUtility.UrlEncode(transactionID) + "&tam=" + HttpUtility.UrlEncode(transactionAmount) + "&qty=" + HttpUtility.UrlEncode(quantity) + "&eml=" + HttpUtility.UrlEncode(email) + "&descrMerchant=" + HttpUtility.UrlEncode(descriptionMerchant) + "&descrAffiliate=" + HttpUtility.UrlEncode(descriptionAffiliate);
+
+    // Register transaction.
+    Response.Status = "302 Moved Temporarily";
+    Response.AddHeader("Location", trackBackURL);
+}
+
+
