@@ -31,7 +31,7 @@ namespace ExperianLib.Ebusiness {
 			} // try
 		} // TargetBusiness
 
-		public LimitedResults GetLimitedBusinessData(string regNumber, int customerId, bool checkInCacheOnly) {
+		public LimitedResults GetLimitedBusinessData(string regNumber, int customerId, bool checkInCacheOnly = false) {
 			LimitedResults oRes = GetOneLimitedBusinessData(regNumber, customerId, checkInCacheOnly);
 
 			foreach (string sOwnerRegNum in oRes.Owners)
@@ -40,7 +40,7 @@ namespace ExperianLib.Ebusiness {
 			return oRes;
 		} // GetLimitedBusinessData
 
-		public LimitedResults GetOneLimitedBusinessData(string regNumber, int customerId, bool checkInCacheOnly) {
+		private LimitedResults GetOneLimitedBusinessData(string regNumber, int customerId, bool checkInCacheOnly) {
 			try {
 				string response = CheckCache(regNumber);
 
@@ -62,7 +62,7 @@ namespace ExperianLib.Ebusiness {
 			} // try
 		} // GetOneLimitedBusinessData
 
-		public NonLimitedResults GetNotLimitedBusinessData(string regNumber, int customerId, bool checkInCacheOnly) {
+		public NonLimitedResults GetNotLimitedBusinessData(string regNumber, int customerId, bool checkInCacheOnly = false) {
 			NonLimitedResults oRes = GetOneNotLimitedBusinessData(regNumber, customerId, checkInCacheOnly);
 
 			foreach (string sOwnerRegNum in oRes.Owners)
@@ -71,7 +71,7 @@ namespace ExperianLib.Ebusiness {
 			return oRes;
 		} // GetNotLimitedBusinessData
 
-		public NonLimitedResults GetOneNotLimitedBusinessData(string regNumber, int customerId, bool checkInCacheOnly) {
+		private NonLimitedResults GetOneNotLimitedBusinessData(string regNumber, int customerId, bool checkInCacheOnly) {
 			try {
 				var response = CheckCache(regNumber);
 
