@@ -20,10 +20,13 @@ namespace ExperianLib.Ebusiness {
 		public TargetResults TargetBusiness(string companyName, string postCode, int customerId, TargetResults.LegalStatus nFilter, string regNum = "") {
 			try {
 				companyName = HttpUtility.HtmlEncode(companyName);
-				string requestXml = GetResource("ExperianLib.Ebusiness.TargetBusiness.xml", companyName, postCode, regNum);
+				string isLimited = nFilter != TargetResults.LegalStatus.NonLimited ? "Y": "N";
+				string isNonLimited = nFilter != TargetResults.LegalStatus.Limited ? "Y": "N";
+
+				string requestXml = GetResource("ExperianLib.Ebusiness.TargetBusiness.xml", companyName, postCode, regNum, isNonLimited, isLimited );
 				var response = MakeRequest("POST", "application/xml", requestXml);
 				Utils.WriteLog(requestXml, response, "ESeriesTargeting", customerId);
-				return new TargetResults(response, nFilter);
+				return new TargetResults(response);
 			}
 			catch (Exception e) {
 				Log.Error(e);
@@ -32,6 +35,7 @@ namespace ExperianLib.Ebusiness {
 		} // TargetBusiness
 
 		public LimitedResults GetLimitedBusinessData(string regNumber, int customerId, bool checkInCacheOnly) {
+			Log.DebugFormat("Begin GetLimitedBusinessData {0} {1} {2}", regNumber, customerId, checkInCacheOnly);
 			LimitedResults oRes = GetOneLimitedBusinessData(regNumber, customerId, checkInCacheOnly);
 
 			foreach (string sOwnerRegNum in oRes.Owners)
