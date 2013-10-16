@@ -84,7 +84,6 @@ namespace EzBob.Models.Marketplaces.Builders
 
 			var model = new YodleeModel();
 			var banks = new List<YodleeBankModel>();
-			var dataBaseDataHelper = new DatabaseDataHelper(_session);
 			foreach (var bank in yodleeData.Data.Keys)
 			{
 				var yodleeBankModel = new YodleeBankModel
@@ -115,13 +114,7 @@ namespace EzBob.Models.Marketplaces.Builders
 							                      : (double?) null,
 					};
 				var transactions = new List<YodleeTransactionModel>();
-				if (bank.currentBalance.amount.HasValue)
-				{
-					dataBaseDataHelper.CalculateYodleeRunningBalance(mp,bank.srcElementId,
-																	 _currencyConvertor.ConvertToBaseCurrency(
-																		 bank.currentBalance.currencyCode, bank.currentBalance.amount.Value,
-																		 bank.asOfDate.date));
-				}
+				
 				foreach (var transaction in yodleeData.Data[bank])
 				{
 					var yodleeTransactionModel = new YodleeTransactionModel

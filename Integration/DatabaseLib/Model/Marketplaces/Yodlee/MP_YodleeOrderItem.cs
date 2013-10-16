@@ -66,7 +66,7 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.Yodlee
         public virtual string accountNicknameAtSrcSite { get; set; }
         public virtual long? isPaperlessStmtOn { get; set; }
         public virtual bool isPaperlessStmtOnSpecified { get; set; }
-        //public virtual SiteAccountStatus? siteAccountStatus { get; set; }
+        public virtual string siteAccountStatus { get; set; }
         public virtual bool siteAccountStatusSpecified { get; set; }
         public virtual long? created { get; set; }
         public virtual bool createdSpecified { get; set; }
@@ -84,9 +84,7 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.Yodlee
         public virtual string budgetBalanceCurrency { get; set; }
         public virtual double? straightBalance { get; set; }
         public virtual string straightBalanceCurrency { get; set; }
-        //public virtual AccountClassification? accountClassification { get; set; }
+        public virtual string accountClassification { get; set; }
         public virtual bool accountClassificationSpecified { get; set; }
-
-
     }
 }
