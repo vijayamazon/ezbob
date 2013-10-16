@@ -16,7 +16,7 @@ EzBob.App.addRegions({
 EzBob.Config = {
     CaptchaMode: 'off',
     WizardTopNaviagtionEnabled: false,
-    TargetsEnabled : false,
+    TargetsEnabled : true,
     GetCashSliderStep: 50,
     ShowChangePasswordPage: false,
     SessionTimeout: 6000,

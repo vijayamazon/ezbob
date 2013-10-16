@@ -53,6 +53,7 @@ EzBob.Underwriter.CompanyScoreView = Backbone.View.extend({
 
 		this.list = this.$el.accordion({
 			heightStyle: 'content',
+			collapsible: true,
 			active: this.activePanel
 		});
 	},

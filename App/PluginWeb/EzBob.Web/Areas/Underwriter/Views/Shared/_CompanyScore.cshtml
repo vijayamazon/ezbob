@@ -82,7 +82,14 @@
 
 	// console.log('serialised:', response);
 
-	print('<h3>' + caption + ': ' + response.company_name + ' (' + response.company_ref_num + ')</h3><div>');
+	var sCompanyCaption = '';
+
+	if (response.company_ref_num == null)
+		sCompanyCaption = '-- no data --';
+	else
+		sCompanyCaption = (response.company_name == null) ? response.company_ref_num : response.company_name + ' (' + response.company_ref_num + ')';
+
+	print('<h3>' + caption + ': ' + sCompanyCaption + '</h3><div>');
 
 	if (response.result != 'ok') {
 		print(response.result);

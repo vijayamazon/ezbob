@@ -580,7 +580,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 		} // ParseExperian
 
 		public virtual ParseExperianResult ParseExperian(string sParserConfiguration) {
-			return Customer.ParseExperian(LimitedInfo.LimitedCompanyNumber, LimitedInfo.LimitedCompanyName, sParserConfiguration);
+			return Customer.ParseExperian(LimitedInfo.LimitedRefNum, LimitedInfo.LimitedCompanyName, sParserConfiguration);
 		} // ParseExperian
     }
 
