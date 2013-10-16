@@ -1,5 +1,8 @@
+@using EzBob.Web.Areas.Customer.Controllers
+@using log4net
 @model dynamic
 @{
+    ILog log = LogManager.GetLogger(typeof(PacnetStatusController));
     //! TradeTracker Conversion-Tag.
 
     // Define parameters.
@@ -16,7 +19,7 @@
     if (trackingData == "")
     {
         // Get tracking data from the cookie created on the redirect-page.
-        trackingData = Request.Cookies["TT2_" + campaignID] != null ? Request.Cookies["TT2_" + campaignID].Value.ToString() : "";
+        trackingData = Request.Cookies["tt"] != null ? Request.Cookies["tt"].Value : "";
         trackingType = "2";
     }
 
@@ -31,6 +34,7 @@
     // Set track-back URL.
     string trackBackURL = (useHttps ? "https" : "http") + "://" + (conversionType == "lead" ? "tl" : "ts") + ".tradetracker.net/?cid=" + campaignID + "&pid=" + productID + "&data=" + HttpUtility.UrlEncode(trackingData) + "&type=" + trackingType + "&tid=" + HttpUtility.UrlEncode(transactionID) + "&tam=" + HttpUtility.UrlEncode(transactionAmount) + "&qty=" + HttpUtility.UrlEncode(quantity) + "&eml=" + HttpUtility.UrlEncode(email) + "&descrMerchant=" + HttpUtility.UrlEncode(descriptionMerchant) + "&descrAffiliate=" + HttpUtility.UrlEncode(descriptionAffiliate);
 
+    log.DebugFormat("TradeTrackerConversion url: {0}", trackBackURL);
     // Register transaction.
     Response.Status = "302 Moved Temporarily";
     Response.AddHeader("Location", trackBackURL);
