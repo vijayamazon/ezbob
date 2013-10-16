@@ -45,9 +45,9 @@ namespace ExperianLib.Tests.Integration {
 		[Ignore]
 		public void TargetingTest() {
 			var service = new EBusinessService();
-			var result = service.TargetBusiness("ORANGE", "EC1V 4PW", 14219, TargetResults.LegalStatus.DontCare, "7852687");
+			var result = service.TargetBusiness("ORANGE", "EC1V 4PW", 14219, TargetResults.LegalStatus.Limited, "7852687");
+			//var result = service.TargetBusiness("ORANGE", "EC1V 4PW", 14219, TargetResults.LegalStatus.NonLimited, "7852687");
 			Debug.WriteLine("Targeting results: " + JsonConvert.SerializeObject(result));
-			Console.WriteLine("{0}", JsonConvert.SerializeObject(result));
 		}
 	}
 }

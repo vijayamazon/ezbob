@@ -27,7 +27,7 @@ EzBob.BindingConverters.dateTime = (direction, value) ->
     else
         moment.utc(value, "DD/MM/YYYY").toDate()
 
-EzBob.BindingConverters.autonumerciFormat = (format) ->
+EzBob.BindingConverters.autonumericFormat = (format) ->
     return (direction, value) ->
         if direction == 'ModelToView'
             return EzBob.formatPoundsFormat(value, format)
@@ -37,14 +37,14 @@ EzBob.BindingConverters.autonumerciFormat = (format) ->
 EzBob.BindingConverters.percentsFormat = (direction, value) ->
         if direction == 'ModelToView'
             value = EzBob.BindingConverters.percents(direction, value)
-            result = EzBob.BindingConverters.autonumerciFormat(EzBob.percentFormat)(direction, value)
+            result = EzBob.BindingConverters.autonumericFormat(EzBob.percentFormat)(direction, value)
             return result
         else
-            value = EzBob.BindingConverters.autonumerciFormat(EzBob.percentFormat)(direction, value)
+            value = EzBob.BindingConverters.autonumericFormat(EzBob.percentFormat)(direction, value)
             result = EzBob.BindingConverters.percents(direction, value)
             return result
 
-EzBob.BindingConverters.moneyFormat = EzBob.BindingConverters.autonumerciFormat(EzBob.moneyFormat)
+EzBob.BindingConverters.moneyFormat = EzBob.BindingConverters.autonumericFormat(EzBob.moneyFormat)
 
 Backbone.Collection::safeFetch = ->
     

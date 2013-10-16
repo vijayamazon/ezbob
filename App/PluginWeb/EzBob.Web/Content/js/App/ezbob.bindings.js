@@ -1,4 +1,4 @@
-(function() {
+﻿(function() {
   var root;
 
   root = typeof exports !== "undefined" && exports !== null ? exports : this;
@@ -41,7 +41,7 @@
     }
   };
 
-  EzBob.BindingConverters.autonumerciFormat = function(format) {
+  EzBob.BindingConverters.autonumericFormat = function(format) {
     return function(direction, value) {
       if (direction === 'ModelToView') {
         return EzBob.formatPoundsFormat(value, format);
@@ -53,23 +53,21 @@
 
   EzBob.BindingConverters.percentsFormat = function(direction, value) {
     var result;
-
     if (direction === 'ModelToView') {
       value = EzBob.BindingConverters.percents(direction, value);
-      result = EzBob.BindingConverters.autonumerciFormat(EzBob.percentFormat)(direction, value);
+      result = EzBob.BindingConverters.autonumericFormat(EzBob.percentFormat)(direction, value);
       return result;
     } else {
-      value = EzBob.BindingConverters.autonumerciFormat(EzBob.percentFormat)(direction, value);
+      value = EzBob.BindingConverters.autonumericFormat(EzBob.percentFormat)(direction, value);
       result = EzBob.BindingConverters.percents(direction, value);
       return result;
     }
   };
 
-  EzBob.BindingConverters.moneyFormat = EzBob.BindingConverters.autonumerciFormat(EzBob.moneyFormat);
+  EzBob.BindingConverters.moneyFormat = EzBob.BindingConverters.autonumericFormat(EzBob.moneyFormat);
 
   Backbone.Collection.prototype.safeFetch = function() {
     var def, loggedIn;
-
     loggedIn = function() {
       return $('body').hasClass('auth');
     };
@@ -85,7 +83,6 @@
 
   Backbone.Model.prototype.safeFetch = function() {
     var def, loggedIn;
-
     loggedIn = function() {
       return $('body').hasClass('auth');
     };
