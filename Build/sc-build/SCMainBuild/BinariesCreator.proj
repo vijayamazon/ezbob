@@ -32,7 +32,15 @@
 		<MultiCopy CopyFrom="$(Src)\Lib\Publisher\Plug-ins\StrategySchedules\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(PublisherFolder)\"/>
 		<AppCopy CopyFrom="$(Src)\Tools\LogViewer\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\LogViewer\"/>
 		<AppCopy CopyFrom="$(Src)\Tools\EnvironmentConfigValidation\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\EnvironmentConfigValidation\"/>
-		<MultiCopy CopyFrom="$(Src)\Tools\IncrementalUpdate\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\IncrementalUpdate\"/>
+
+		<!-- <MultiCopy CopyFrom="$(Src)\Tools\IncrementalUpdate\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\IncrementalUpdate\"/> -->
+
+		<MultiCopy CopyFrom="$(Src)\sql\current\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\sql\current\" />
+		<MultiCopy CopyFrom="$(Src)\sql\Bash\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\sql\Bash\" />
+		<MultiCopy CopyFrom="$(Src)\sql\*.conf" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\sql\*.conf" />
+		<MultiCopy CopyFrom="$(Src)\sql\*.cmd" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\sql\*.cmd" />
+		<MultiCopy CopyFrom="$(Src)\sql\*.sh" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\sql\*.sh" />
+
 		<MultiCopy CopyFrom="$(Src)\App\ezmanage\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\ezmanage\" />
 		
 		<MultiCopy CopyFrom="$(Src)\Items\" CopyTo="$(BuildBin)\%(Edition.Identity)\Items\"/>
