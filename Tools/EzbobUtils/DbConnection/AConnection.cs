@@ -13,18 +13,6 @@ namespace Ezbob.Database {
 	public abstract class AConnection : SafeLog, IConnection, IDisposable {
 		#region public
 
-		#region IDisposable implementation
-
-		#region method Dispose
-
-		public void Dispose() {
-			// nothing to do here
-		} // Dispose
-
-		#endregion method Dispose
-
-		#endregion IDisposable implementation
-
 		#region IConnection implementation
 
 		#region method ExecuteScalar
@@ -79,8 +67,14 @@ namespace Ezbob.Database {
 		#region constructor
 
 		protected AConnection(ASafeLog log = null, string sConnectionString = null) : base(log) {
+			Env = new Ezbob.Context.Environment(log);
 			m_sConnectionString = sConnectionString;
 		} // constructor
+
+		protected AConnection(Ezbob.Context.Environment oEnv, ASafeLog log = null) : base(log) {
+			Env = oEnv;
+			m_sConnectionString = null;
+		} // Env
 
 		#endregion constructor
 
@@ -92,6 +86,12 @@ namespace Ezbob.Database {
 
 		#endregion abstract methods
 
+		#region property Env
+
+		protected virtual Ezbob.Context.Environment Env { get; private set; }
+
+		#endregion property Env
+
 		#region property ConnectionString
 
 		protected virtual string ConnectionString {
@@ -99,15 +99,13 @@ namespace Ezbob.Database {
 				if (m_sConnectionString != null)
 					return m_sConnectionString;
 
-				var env = new Ezbob.Context.Environment();
-
 				try {
-					m_sConnectionString = ConfigurationManager.ConnectionStrings[env.Context.ToLower()].ConnectionString;
+					m_sConnectionString = ConfigurationManager.ConnectionStrings[Env.Context.ToLower()].ConnectionString;
 				}
 				catch (Exception e) {
 					string sMsg = string.Format(
 						"Failed to load connection string from configuration file using name {0}",
-						env.Context.ToLower()
+						Env.Context.ToLower()
 					);
 
 					Error(sMsg + ": " + e.Message);

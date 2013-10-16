@@ -19,6 +19,11 @@ namespace Ezbob.Context {
 			Detect();
 		} // constructor
 
+		public Environment(Name nName, string sVariant = null, ASafeLog oLog = null) : base(oLog) {
+			Name = nName;
+			Variant = (sVariant ?? "").Trim();
+		} // constructor
+
 		#endregion constructor
 
 		#region property Name

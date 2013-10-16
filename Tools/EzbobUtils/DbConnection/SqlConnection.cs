@@ -16,6 +16,9 @@ namespace Ezbob.Database {
 		public SqlConnection(ASafeLog log = null, string sConnectionString = null) : base(log, sConnectionString) {
 		} // constructor
 
+		public SqlConnection(Ezbob.Context.Environment oEnv, ASafeLog log = null) : base(oEnv, log) {
+		} // constructor
+
 		#endregion constructor
 
 		#region method DateToString

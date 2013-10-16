@@ -5,7 +5,7 @@ using System.Text;
 namespace Ezbob.Logger {
 	#region class ASafeLog
 
-	public abstract class ASafeLog {
+	public abstract class ASafeLog : IDisposable {
 		#region public
 
 		#region method Say
@@ -94,6 +94,18 @@ namespace Ezbob.Logger {
 
 		#endregion method Fatal
 
+		#region IDisposable implementation
+
+		#region method Dispose
+
+		public virtual void Dispose() {
+			// nothing here
+		} // Dispose
+
+		#endregion method Dispose
+
+		#endregion IDisposable implementation
+
 		#endregion public
 
 		#region protected
@@ -109,7 +121,7 @@ namespace Ezbob.Logger {
 		#region property CurrentTime
 
 		protected virtual string CurrentTime {
-			get { return DateTime.Now.ToString("dd-MMM-yyyy hh:mm:ss.ffffff", CultureInfo.InvariantCulture); }
+			get { return DateTime.UtcNow.ToString("dd-MMM-yyyy HH:mm:ss.ffffff", CultureInfo.InvariantCulture); }
 		} // CurrentTime
 
 		#endregion property CurrentTime
