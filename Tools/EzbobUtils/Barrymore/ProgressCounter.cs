@@ -36,10 +36,12 @@ namespace Ezbob.Utils {
 		#region method Log
 
 		public void Log() {
-			if (m_nCounter == 0)
-				return;
-
-			Say(m_nSeverity, m_sFormat, m_n1k + m_nCounter);
+			if (m_nCounter == 0) {
+				if (m_n1k == 0)
+					Say(m_nSeverity, m_sFormat, 0);
+			}
+			else
+				Say(m_nSeverity, m_sFormat, m_n1k + m_nCounter);
 		} // Log
 
 		#endregion method Log

@@ -1,0 +1,61 @@
+﻿using System;
+using System.Data.Common;
+using System.Globalization;
+using Ezbob.Logger;
+
+namespace LoanScheduleTransactionBackFill {
+	#region class Schedule
+
+	class Schedule : SafeLog {
+		#region public
+
+		#region property Culture
+
+		public static CultureInfo Culture {
+			get {
+				if (ms_oCulture == null)
+					ms_oCulture = new CultureInfo("en-GB", false);
+
+				return ms_oCulture;
+			} // get
+		} // Culture
+
+		private static CultureInfo ms_oCulture;
+
+		#endregion property Culture
+
+		#region constructor
+
+		public Schedule(ASafeLog log = null) : base(log) {
+		} // constructor
+
+		public Schedule(DbDataReader row, ASafeLog log = null) : base(log) {
+			ID = Convert.ToInt32(row["ItemID"]);
+			Date = Convert.ToDateTime(row["ItemDate"]).Date;
+			Principal = Convert.ToDecimal(row["Principal"]);
+		} // constructor
+
+		public Schedule(ScheduleModel sm, ASafeLog log = null) : base(log) {
+			Date = sm.Date.Date;
+			Principal = sm.LoanRepayment;
+		} // constructor
+
+		#endregion constructor
+
+		public int ID { get; set; }
+		public DateTime Date { get; set; }
+		public decimal Principal { get; set; }
+
+		#region method ToString
+
+		public override string ToString() {
+			return string.Format("{0,7} on {1} p: {2,10}", ID, Date.ToString("MMM dd yyyy", Culture), Principal.ToString("C2", Culture));
+		} // ToString
+
+		#endregion method ToString
+
+		#endregion public
+	} // class Schedule
+
+	#endregion class Schedule
+} // namespace LoanScheduleTransactionBackFill

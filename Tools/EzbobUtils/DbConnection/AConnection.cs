@@ -10,7 +10,7 @@ using System.Configuration;
 using Ezbob.Logger;
 
 namespace Ezbob.Database {
-	public abstract class AConnection : SafeLog, IConnection, IDisposable {
+	public abstract class AConnection : SafeLog, IConnection {
 		#region public
 
 		#region IConnection implementation
@@ -55,6 +55,24 @@ namespace Ezbob.Database {
 		} // ExecuteNonQuery
 
 		#endregion method ExecuteNonQuery
+
+		#region method ForEachRow
+
+		public void ForEachRow(Func<DbDataReader, bool, ActionResult> oAction, string sQuery, params QueryParameter[] aryParams) {
+			if (ReferenceEquals(oAction, null))
+				throw new DbException("Callback action not specified in 'ForEachRow' call.");
+
+			ForEachRow(oAction, sQuery, CommandSpecies.Auto, aryParams);
+		} // ForEachRow
+
+		public void ForEachRow(Func<DbDataReader, bool, ActionResult> oAction, string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
+			if (ReferenceEquals(oAction, null))
+				throw new DbException("Callback action not specified in 'ForEachRow' call.");
+
+			Run(oAction, ExecMode.ForEachRow, nSpecies, sQuery, aryParams);
+		} // ForEachRow
+
+		#endregion method ForEachRow
 
 		public abstract string DateToString(DateTime oDate);
 
@@ -165,7 +183,8 @@ namespace Ezbob.Database {
 		protected enum ExecMode {
 			Scalar,
 			Reader,
-			NonQuery
+			NonQuery,
+			ForEachRow
 		} // Enum ExecMode
 
 		#endregion enum ExecMode
@@ -173,6 +192,13 @@ namespace Ezbob.Database {
 		#region method Run
 
 		protected virtual object Run(ExecMode nMode, CommandSpecies nSpecies, string spName, params QueryParameter[] aryParams) {
+			return Run(null, nMode, nSpecies, spName, aryParams);
+		} // Run
+
+		protected virtual object Run(Func<DbDataReader, bool, ActionResult> oAction, ExecMode nMode, CommandSpecies nSpecies, string spName, params QueryParameter[] aryParams) {
+			if ((nMode == ExecMode.ForEachRow) && ReferenceEquals(oAction, null))
+				throw new DbException("Callback action not specified in 'ForEachRow' call.");
+
 			var sb = new StringBuilder();
 
 			foreach (var prm in aryParams)
@@ -220,18 +246,52 @@ namespace Ezbob.Database {
 								PublishRunningTime(guid, sw);
 								return value;
 
-							case ExecMode.Reader:
+							case ExecMode.Reader: {
 								var oReader = command.ExecuteReader();
 								PublishRunningTime(guid, sw);
 								var dataTable = new DataTable();
 								dataTable.Load(oReader);
 								PublishRunningTime(guid, sw, "data loaded");
 								return dataTable;
+							} // ExecMode.Reader
 
-							case ExecMode.NonQuery:
+							case ExecMode.NonQuery: {
 								int nResult = command.ExecuteNonQuery();
 								PublishRunningTime(guid, sw, string.Format("- {0} row{1} affected", nResult, nResult == 1 ? "" : "s"));
 								return nResult;
+							} // ExecMode.NonQuery
+
+							case ExecMode.ForEachRow: {
+								var oReader = command.ExecuteReader();
+								PublishRunningTime(guid, sw);
+
+								bool bStop = false;
+
+								while (oReader.HasRows) {
+									bool bRowSetStart = true;
+
+									while (oReader.Read()) {
+										ActionResult nResult = oAction(oReader, bRowSetStart);
+
+										if (nResult == ActionResult.SkipCurrent)
+											break;
+
+										if (nResult == ActionResult.SkipAll) {
+											bStop = true;
+											break;
+										} // if
+
+										bRowSetStart = false;
+									} // while has rows in current set
+
+									if (bStop)
+										break;
+
+									oReader.NextResult();
+								} // while has row sets
+
+								return null;
+							} // ExecMode.ForEachRow
 
 							default:
 								throw new ArgumentOutOfRangeException("nMode");
@@ -263,4 +323,3 @@ namespace Ezbob.Database {
 		#endregion protected
 	} // AConnection
 } // namespace Ezbob.Database
-

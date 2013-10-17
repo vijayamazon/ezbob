@@ -18,10 +18,8 @@ namespace Ezbob.Logger {
 			else
 				OwnSay(nSeverity, format, parameters);
 
-			lock (typeof(ASafeLog)) {
-				if (m_oLog != null)
-					m_oLog.Say(nSeverity, format, parameters);
-			} // lock
+			if (m_oLog != null)
+				m_oLog.Say(nSeverity, format, parameters);
 		} // Say
 
 		public virtual void Say(Severity nSeverity, Exception ex, string format, params object[] parameters) {
@@ -30,10 +28,8 @@ namespace Ezbob.Logger {
 			else
 				OwnSay(nSeverity, ex, format, parameters);
 
-			lock (typeof(ASafeLog)) {
-				if (m_oLog != null)
-					m_oLog.Say(nSeverity, ex, format, parameters);
-			} // lock
+			if (m_oLog != null)
+				m_oLog.Say(nSeverity, ex, format, parameters);
 		} // Say
 
 		#endregion method Say

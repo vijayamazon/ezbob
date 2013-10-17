@@ -5,6 +5,6 @@ END
 
 IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='EnableAutomaticApproval')
 BEGIN
-	INSERT INTO ConfigurationVariables VALUES ('EnableAutomaticApproval', 0, 'if Enabled system will Approve customers automatically without any Underwriter actions')
+	INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('EnableAutomaticApproval', 0, 'if Enabled system will Approve customers automatically without any Underwriter actions')
 END
 GO

@@ -44,6 +44,8 @@ namespace Ezbob.Logger {
 				throw new LogException("Failed to open a log file " + sFileName, e);
 			} // try
 
+			m_oLock = new object();
+
 			NotifyStartStop("started");
 		} // constructor
 
@@ -71,21 +73,27 @@ namespace Ezbob.Logger {
 		#region method OwnSay
 
 		protected override void OwnSay(Severity nSeverity, string format, params object[] parameters) {
-			lock (typeof (FileLog)) {
+			lock (m_oLock) {
 				m_oLogFile.Write("{0} {1} ", CurrentTime, nSeverity.ToString());
 
 				m_oLogFile.WriteLine(format, parameters);
+
+				m_oLogFile.Flush();
 			} // lock
 		} // OwnSay
 
 		protected override void OwnSay(Severity nSeverity, Exception ex, string format, params object[] parameters) {
-			lock (typeof (FileLog)) {
+			lock (m_oLock) {
 				m_oLogFile.Write("{0} {1} ", CurrentTime, nSeverity.ToString());
 
 				m_oLogFile.WriteLine(format, parameters);
 
+				m_oLogFile.Flush();
+
 				m_oLogFile.Write("{0} {1} ", CurrentTime, nSeverity.ToString());
 				m_oLogFile.WriteLine(ExceptionToString(ex));
+
+				m_oLogFile.Flush();
 			} // lock
 		} // OwnSay
 
@@ -118,6 +126,7 @@ namespace Ezbob.Logger {
 		#region private
 
 		private StreamWriter m_oLogFile;
+		private readonly object m_oLock;
 
 		#endregion private
 	} // class FileLog
