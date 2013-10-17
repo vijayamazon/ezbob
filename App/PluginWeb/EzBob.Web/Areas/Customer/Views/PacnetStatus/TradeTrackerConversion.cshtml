@@ -19,7 +19,7 @@
     if (trackingData == "")
     {
         // Get tracking data from the cookie created on the redirect-page.
-        trackingData = Request.Cookies["tt"] != null ? Request.Cookies["tt"].Value : "";
+        trackingData = Request.Cookies["TT2_" + campaignID] != null ? Request.Cookies["TT2_" + campaignID].Value : "";
         trackingType = "2";
     }
 

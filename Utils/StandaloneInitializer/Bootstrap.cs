@@ -42,9 +42,9 @@ namespace StandaloneInitializer
 
     public class Bootstrap
     {
-        public static void Init()
+        public static void Init(string path = @"c:\ezbob\app\pluginweb\EzBob.Web\")
         {
-            EnvironmentConfigurationLoader.AppPathDummy = @"c:\ezbob\app\pluginweb\EzBob.Web\";
+            EnvironmentConfigurationLoader.AppPathDummy = path;
             NHibernateManager.FluentAssemblies.Add(typeof(ApplicationMng.Model.Application).Assembly);
             NHibernateManager.FluentAssemblies.Add(typeof(Customer).Assembly);
 

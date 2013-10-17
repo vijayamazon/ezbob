@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F851ADDC-B151-4CDE-8C83-AB0696B2E1EE}</ProjectGuid>
+    <ProjectGuid>{17958AB2-30B4-4600-BBA7-DF63853AB295}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ManualPacnetApp</RootNamespace>
-    <AssemblyName>ManualPacnetApp</AssemblyName>
+    <RootNamespace>ExperianStandAlone</RootNamespace>
+    <AssemblyName>ExperianStandAlone</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -35,57 +35,67 @@
   <ItemGroup>
     <Reference Include="FluentNHibernate, Version=1.3.0.722, Culture=neutral, PublicKeyToken=8aa435e3cb308880, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Lib\3rdparty\Nhibernate\FluentNHibernate.dll</HintPath>
+      <HintPath>..\..\Lib\3rdparty\Nhibernate\FluentNHibernate.dll</HintPath>
     </Reference>
     <Reference Include="HibernatingRhinos.Profiler.Appender.v4.0">
-      <HintPath>..\..\..\Lib\3rdparty\Nhibernate\HibernatingRhinos.Profiler.Appender.v4.0.dll</HintPath>
+      <HintPath>..\..\Lib\3rdparty\Nhibernate\HibernatingRhinos.Profiler.Appender.v4.0.dll</HintPath>
+    </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.4.0.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\3rdparty\HtmlAgilityPack\HtmlAgilityPack.dll</HintPath>
     </Reference>
     <Reference Include="Iesi.Collections, Version=1.0.1.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Lib\3rdparty\Nhibernate\Iesi.Collections.dll</HintPath>
+      <HintPath>..\..\Lib\3rdparty\Nhibernate\Iesi.Collections.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
+      <HintPath>..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.0.5.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\3rdparty\Json.NET\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate, Version=3.2.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Lib\3rdparty\Nhibernate\NHibernate.dll</HintPath>
+      <HintPath>..\..\Lib\3rdparty\Nhibernate\NHibernate.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate.Caches.EnyimMemcached">
-      <HintPath>..\..\..\Lib\3rdparty\Nhibernate\NHibernate.Caches.EnyimMemcached.dll</HintPath>
+    <Reference Include="NHibernate.Caches.EnyimMemcached, Version=3.1.0.4000, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\3rdparty\Nhibernate\NHibernate.Caches.EnyimMemcached.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate.Caches.SysCache2">
-      <HintPath>..\..\..\Lib\3rdparty\Nhibernate\NHibernate.Caches.SysCache2.dll</HintPath>
+    <Reference Include="NHibernate.Caches.SysCache2, Version=3.1.0.4000, Culture=neutral, PublicKeyToken=6876f2ea66c9f443, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\3rdparty\Nhibernate\NHibernate.Caches.SysCache2.dll</HintPath>
     </Reference>
     <Reference Include="Scorto.Configuration, Version=22.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Lib\Scorto.Core\Scorto.Configuration.dll</HintPath>
+      <HintPath>..\..\Lib\Scorto.Core\Scorto.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="Scorto.Configuration.Loader, Version=22.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Lib\Scorto.Core\Scorto.Configuration.Loader.dll</HintPath>
+      <HintPath>..\..\Lib\Scorto.Core\Scorto.Configuration.Loader.dll</HintPath>
     </Reference>
-    <Reference Include="Scorto.Configuration.Plugins">
-      <HintPath>..\..\..\Lib\Scorto.Core\Scorto.Configuration.Plugins.dll</HintPath>
+    <Reference Include="Scorto.Configuration.Plugins, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\Scorto.Core\Scorto.Configuration.Plugins.dll</HintPath>
     </Reference>
     <Reference Include="Scorto.NHibernate, Version=22.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Lib\Scorto.Core\Scorto.NHibernate.dll</HintPath>
+      <HintPath>..\..\Lib\Scorto.Core\Scorto.NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="Scorto.RegistryScanner, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Lib\Scorto.Core\Scorto.RegistryScanner.dll</HintPath>
+      <HintPath>..\..\Lib\Scorto.Core\Scorto.RegistryScanner.dll</HintPath>
     </Reference>
     <Reference Include="StructureMap, Version=2.6.3.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Lib\3rdparty\StructureMap\StructureMap.dll</HintPath>
+      <HintPath>..\..\Lib\3rdparty\StructureMap\StructureMap.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -94,34 +104,32 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Utils\StandaloneInitializer\StandaloneInitializer.csproj">
+    <ProjectReference Include="..\..\Utils\StandaloneInitializer\StandaloneInitializer.csproj">
       <Project>{3b719d9d-7d14-4499-8ee9-5fdfd604453a}</Project>
       <Name>StandaloneInitializer</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\CommonLib\CommonLib.csproj">
+    <ProjectReference Include="..\CommonLib\CommonLib.csproj">
       <Project>{aedbfbbd-ba7d-4582-afca-6ecf8af33c98}</Project>
       <Name>CommonLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\DatabaseLib\DatabaseLib.csproj">
+    <ProjectReference Include="..\DatabaseLib\DatabaseLib.csproj">
       <Project>{fa67314a-0560-41d4-bc19-6524663e9d0d}</Project>
       <Name>DatabaseLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\EzBob.Configuration\EzBob.Configuration.csproj">
+    <ProjectReference Include="..\ExperianLib\ExperianLib.csproj">
+      <Project>{d91f3fd0-9e1b-41ff-ae2e-67f051198f51}</Project>
+      <Name>ExperianLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EzBob.Configuration\EzBob.Configuration.csproj">
       <Project>{7d1f5cbe-9ff9-4170-862b-ab203d968ef5}</Project>
       <Name>EzBob.Configuration</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\EzBob\EzBob.csproj">
+    <ProjectReference Include="..\EzBob\EzBob.csproj">
       <Project>{cb5b04a6-76c2-43c4-9a8f-20ee2601cb11}</Project>
       <Name>EzBob</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\PaymentServices\PaymentServices.csproj">
-      <Project>{544a1fd5-76d3-4b73-97dd-0c7aa32f66c2}</Project>
-      <Name>PaymentServices</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
