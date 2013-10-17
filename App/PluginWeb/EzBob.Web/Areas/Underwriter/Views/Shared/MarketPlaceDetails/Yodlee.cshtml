@@ -186,6 +186,7 @@
                     <th>Category</th>
                     <th>Category Type</th>
                     <th>Description</th>
+                    <th>Tr Status</th>
                 </tr>
             </thead>
             <tbody>
@@ -204,13 +205,14 @@
                     <td><%-transaction.categoryName!=undefined ? transaction.categoryName : "-"%></td>
                     <td><%-transaction.categoryType!=undefined ? transaction.categoryType : "-"%></td>
                     <td><%-transaction.description!=undefined ? transaction.description : "-"%></td>
+                    <td><%-transaction.transactionStatus!=undefined ? transaction.transactionStatus : "-"%></td>
                 </tr>
                 <%});%>
                 <%});%>
             </tbody>
             <tfoot>
                 <tr>
-                    <th colspan="8">Total:</th>
+                    <th colspan="9">Total:</th>
                 </tr>
                 <tr class="hide">
                     <th><input type="text" name="search_acct" value="Search Acct #" class="search_init"></th>
@@ -221,9 +223,8 @@
                     <th><input type="text" name="search_category" value="Search Category" class="search_init"></th>
                     <th><input type="text" name="search_categorytype" value="Search Category Type" class="search_init"></th>
                     <th><input type="text" name="search_description" value="Search Description" class="search_init"></th>
-                    
+                    <th><input type="text" name="search_status" value="Search Status" class="search_init"></th>
                 </tr>
-
             </tfoot>
         </table>
     </div>

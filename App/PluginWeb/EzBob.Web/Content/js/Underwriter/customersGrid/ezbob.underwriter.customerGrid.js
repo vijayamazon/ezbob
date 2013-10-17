@@ -1,4 +1,4 @@
-(function() {
+﻿(function() {
   var root;
 
   root = typeof exports !== "undefined" && exports !== null ? exports : this;
@@ -9,7 +9,6 @@
 
   EzBob.Underwriter.customerGrid = function(settings) {
     var $div, $grid, checkbox, list, model, names, options, pagerId, url;
-
     settings.$el = $(settings.el);
     list = "#" + (settings.$el.find("table").attr("id") || "");
     pagerId = "#" + (settings.$el.find("div").attr("id") || "");
@@ -52,7 +51,6 @@
       },
       gridComplete: function() {
         var coloredCell;
-
         (settings.$el.find("[data-toggle='tooltip']")).tooltip();
         BlockUi("off", $(list));
         coloredCell = settings.$el.find(".coloredCell");
@@ -84,7 +82,6 @@
     });
     checkbox = $("<input type='checkbox'>Show test customers</input>").on("change", function() {
       var checkboxes, isTest;
-
       isTest = checkbox.is(":checked");
       EzBob.Config.isTest = isTest;
       checkboxes = $(".show-test-customers input");
@@ -97,7 +94,6 @@
     });
     checkbox.on("reload", function() {
       var isTest;
-
       isTest = checkbox.is(":checked");
       EzBob.Config.isTest = isTest;
       $(list).jqGrid("setGridParam", {
@@ -112,7 +108,6 @@
     $div.appendTo(settings.$el);
     return settings.$el.on("dblclick", "tr", function(ev) {
       var href;
-
       href = $(ev.currentTarget).find("a").first().attr("href");
       if (href) {
         window.location.href = href;
@@ -123,7 +118,6 @@
 
   $.fn.fmatter.profileWithTypeLink = function(cellval, opts) {
     var href, text;
-
     href = "#profile/" + (cellval.id || cellval) + "/" + (opts.gid.replace('-table', ''));
     text = cellval.text || cellval;
     return $.fn.fmatter.withScrollbar("<a class='profileLink' href='" + href + "'>" + text + "</a>");
@@ -131,23 +125,20 @@
 
   $.fn.fmatter.showMedalIcon = function(cellval) {
     var text;
-
     text = cellval.text || cellval;
     return "<i data-toggle='tooltip' title='" + text + "' class='" + (text.toLowerCase().replace(/\s/g, '')) + "'></i>";
   };
 
   $.fn.fmatter.showMPIcon = function(cellval, aryCGAccounts) {
     var className, text;
-
     text = cellval.text || cellval;
     className = text.replace(/\s|\d/g, '');
     className = aryCGAccounts[className] ? 'cgaccount' : className.toLowerCase();
-    return "<i data-toggle='tooltip' title='" + text + "' class='" + className + "'></i>";
+    return ("<i data-toggle='tooltip' title='" + text + "' class='" + className + "'></i>") + text[2];
   };
 
   $.fn.fmatter.showMPsIcon = function(cellval, opt) {
     var mps, retVal;
-
     if (!$.fn.fmatter.showMPsIcon.prototype.CGAccounts) {
       $.fn.fmatter.showMPsIcon.prototype.CGAccounts = $.parseJSON($('div#cg-account-list').text());
     }
@@ -162,7 +153,6 @@
 
   $.fn.fmatter.profileLink = function(cellval, opts) {
     var href, text;
-
     href = "#profile/" + (cellval.id || cellval);
     text = cellval.text || cellval;
     return $.fn.fmatter.withScrollbar("<a class='profileLink' href='" + href + "'>" + text + "</a>");
@@ -170,7 +160,6 @@
 
   $.fn.fmatter.datetimeNative = function(cellval, opts, row) {
     var date, q;
-
     if (!cellval) {
       return "";
     }
@@ -186,7 +175,6 @@
 
   $.fn.fmatter.dateNative = function(cellval, opts, row) {
     var date, q;
-
     if (!cellval) {
       return "";
     }
@@ -202,7 +190,6 @@
 
   $.fn.fmatter.CheckDateWithNow = function(cellval, opts, row) {
     var date, el, isPast;
-
     date = moment(cellval);
     isPast = moment(new Date) > date;
     el = $.fn.fmatter.dateNative(cellval, opts, row);
@@ -214,14 +201,12 @@
 
   $.fn.fmatter.withScrollbar = function(cellval) {
     var text;
-
     text = cellval.text || cellval;
     return "<div style='overflow: auto; width: auto'>" + text + "</div>";
   };
 
   $.fn.fmatter.ColorCell = function(cellval) {
     var color;
-
     color = cellval.text || cellval;
     return "<span class='coloredCell'>" + color + "</span>";
   };

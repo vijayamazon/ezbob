@@ -132,6 +132,7 @@ namespace EzBob.Models.Marketplaces.Builders
 															 transaction.runningBalance.currencyCode,
 															 transaction.runningBalance.amount.Value,
 															 transaction.postDate.date ?? transaction.transactionDate.date).Value : (double?)null,
+														 transactionStatus = transaction.transactionStatus
 													 };
 					transactions.Add(yodleeTransactionModel);
 				}

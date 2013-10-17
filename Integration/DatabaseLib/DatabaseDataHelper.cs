@@ -1310,6 +1310,7 @@ namespace EZBob.DatabaseLib
 							? item.straightBalance.currencyCode
 							: null,
 					accountClassificationSpecified = item.accountClassificationSpecified,
+					itemAccountId = item.itemAccountId
 				};
 
 

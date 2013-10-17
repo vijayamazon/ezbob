@@ -21,5 +21,6 @@ namespace EzBob.Models.Marketplaces
 		public double? transactionAmount { get; set; }
 		public string description { get; set; }
 		public double? runningBalance { get; set; }
+		public string transactionStatus { get; set; }
 	}
 }

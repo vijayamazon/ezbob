@@ -82,7 +82,7 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.Yodlee
 			Map(x => x.straightBalanceCurrency, "straightBalanceCurrency").Length(3).Nullable();
 			Map(x => x.accountClassification, "accountClassification").Nullable().Length(50);
 			Map(x => x.accountClassificationSpecified, "accountClassificationSpecified");
-
+			Map(x => x.itemAccountId, "itemAccountId");
 		}
 	}
 }

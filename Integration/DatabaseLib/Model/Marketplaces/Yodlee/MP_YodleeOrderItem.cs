@@ -86,5 +86,6 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.Yodlee
         public virtual string straightBalanceCurrency { get; set; }
         public virtual string accountClassification { get; set; }
         public virtual bool accountClassificationSpecified { get; set; }
+		public virtual long? itemAccountId { get; set; }
     }
 }

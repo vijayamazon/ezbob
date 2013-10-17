@@ -23,6 +23,10 @@ cd %publisherPath%
 publisher.exe --delete
 @echo:
 
+echo 2'. Copy TestData.xls from %testDataXlsPath% into "%publisherPath%"
+xcopy "%testDataXlsPath%" "%publisherPath%" /c /d /e /h /i /k /q /r /s /x /y
+@echo:
+
 ECHO  3'. Run publisher without parameters
 publisher.exe
 @echo:
