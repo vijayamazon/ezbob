@@ -1,12 +1,12 @@
 ﻿using System;
+using log4net.Config;
+using ExperianLib.Ebusiness;
+using Newtonsoft.Json;
+using StandaloneInitializer;
 
+[assembly: XmlConfigurator(ConfigFileExtension = "log4net", Watch = true)]
 namespace ExperianStandAlone
 {
-	using System.Diagnostics;
-	using ExperianLib.Ebusiness;
-	using Newtonsoft.Json;
-	using StandaloneInitializer;
-
 	class Program
 	{
 		static void Main(string[] args)
@@ -105,7 +105,8 @@ namespace ExperianStandAlone
 
 		public static void Init()
 		{
-			Bootstrap.Init("test");
+			string webpath = System.Configuration.ConfigurationManager.AppSettings.Get("webpath");
+			Bootstrap.Init(webpath);
 		}
 	}
 }
