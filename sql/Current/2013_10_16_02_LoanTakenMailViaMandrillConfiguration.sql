@@ -5,7 +5,7 @@ BEGIN
 END
 ELSE
 BEGIN
-	INSERT INTO MandrillTemplate (Name) VALUES ('Mandrill - Took Loan (1st loan)')
+	INSERT INTO MandrillTemplate VALUES ('Mandrill - Took Loan (1st loan)')
 	SELECT @TemplateId = Id FROM MandrillTemplate WHERE NAME = 'Mandrill - Took Loan (1st loan)'
 END
 
@@ -19,13 +19,13 @@ BEGIN
 END
 ELSE
 BEGIN
-	INSERT INTO MandrillTemplate (Name) VALUES ('Mandrill - Took Loan (not 1st loan)')
+	INSERT INTO MandrillTemplate VALUES ('Mandrill - Took Loan (not 1st loan)')
 	SELECT @TemplateId = Id FROM MandrillTemplate WHERE NAME = 'Mandrill - Took Loan (not 1st loan)'
 END
 
 IF NOT EXISTS (SELECT 1 FROM MailTemplateRelation WHERE InternalTemplateName = 'Get cash - approval - not first.docx')
 BEGIN
-	INSERT INTO MailTemplateRelation(InternalTemplateName, MandrillTemplateId) VALUES ('Get cash - approval - not first.docx', @TemplateId)
+	INSERT INTO MailTemplateRelation VALUES ('Get cash - approval - not first.docx', @TemplateId)
 END
 GO
 
