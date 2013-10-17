@@ -59,6 +59,8 @@
 					}
 				],
 				"Notes": [
+					"<strong>* Please notice that only Gold store subscribers and higher can link their Volusion store.</strong>",
+					"<br><br>",
 					"You need to enter the Encrypted Password for your Admin Area.",
 					"You can find your encrypted password in the Volusion API section of your store.",
 					"Volusion support direct number: 0800.520.0312.",
@@ -150,7 +152,10 @@
 						"ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
 					}
 				],
-				"Notes": [],
+				"Notes": [
+				"<strong>* Please notice that only ProTrader users (full merchant account) <br>can link their Play.com store.</strong>",
+					"<BR><BR>",
+				],
 				"OnBeforeLink": [ 
 					"var aryMatch = /^(http:\\/\\/|https:\\/\\/)?(www\\.)?play\\.com\\/stores\\/([^#\\?\\/]+)/.exec(accountModel.name);",
 					"if (aryMatch) accountModel.name = aryMatch[3];",
@@ -645,6 +650,91 @@
 				],
 				"SourceLabelOn": [
 					{ "Property": "background", "Value": "url(/Content/css/images/prestashop-logo.png) no-repeat 0 0" },
+					{ "Property": "background-position", "Value": "0px -40px" },
+					{ "Property": "width", "Value": "145px" }
+				]
+			},
+			"ErrorMessages": []
+		}
+	},
+	{
+		"Name":        "Bigcommerce",
+		"DisplayName": "Bigcommerce.com",
+		"Description": "Bigcommerce.com",
+		"InternalID":  "{A5FC4B43-EBB7-4C6B-BC23-3C162CB61996}",
+		"Behaviour":   "Default",
+
+		"HasExpenses": false,
+
+		"SecurityData": {
+			"Fields": [
+				{ "PropertyName": "Name",        "NodeName": "name",       "UniqueIDPosition": -8                  },
+				{ "PropertyName": "URL",		 "NodeName": "endpoint",   "UniqueIDPosition":  0                  },
+				{ "PropertyName": "Login",       "NodeName": "username",    "UniqueIDPosition":  1                  },
+				{ "PropertyName": "Password",    "NodeName": "apikey",     "UniqueIDPosition":  2                  },
+				{ "PropertyName": "LimitDays",   "NodeName": "limitDays",  "UniqueIDPosition": -8, "Default": "30" }				
+			],
+
+			"ToStringArguments": [
+				"{0} @ {1}", "Login", "Name"
+			]
+		},
+
+		"Aggregators": [
+			{ "FunctionTypeName": "NumOfOrders",          "ValueTypeName": "Integer", "ID": "{B60B03E0-AB11-4952-97BA-D6F751EF795D}" },
+			{ "FunctionTypeName": "TotalSumOfOrders",     "ValueTypeName": "Double",  "ID": "{BDF566A9-62D9-4D56-B219-C3A09B3D8DD7}" },
+			{ "FunctionTypeName": "AverageSumOfOrders",   "ValueTypeName": "Double",  "ID": "{B68A64A4-40DA-45D1-9F70-B9010A97C3E7}" },
+			{ "FunctionTypeName": "NumOfExpenses",        "ValueTypeName": "Integer", "ID": "{C94C7DED-4B3B-4598-8D6F-4C6D75D93BFA}" },
+			{ "FunctionTypeName": "TotalSumOfExpenses",   "ValueTypeName": "Double",  "ID": "{C960B241-D67F-453D-BF04-647A0B9C752B}" },
+			{ "FunctionTypeName": "AverageSumOfExpenses", "ValueTypeName": "Double",  "ID": "{C54B4BFD-B5E0-4D0A-8C4E-365EAEB3E584}" }
+		],
+
+		"ClientSide": {
+			"StoreInfoStepModelShops": "bigcommerceShops",
+			"SortPriority": 17,
+			"Ribbon": "",
+			"LinkForm": {
+				"Fields": [
+					{
+						"PropertyName": "Name",
+						"Type": "Text",
+						"Caption": "The name of Bigcommerce Shop",
+						"ValidationRules": { "required": true, "maxlength": 300 }
+					},
+					{
+						"PropertyName": "URL",
+						"Type": "Text",
+						"Caption": "The API path to access Bigcommerce account",
+						"ValidationRules": { "required": true, "url": true, "minlength": 2, "maxlength": 300 }
+					},
+					{
+						"PropertyName": "Login",
+						"Type": "Text",
+						"Caption": "The API user to access Bigcommerce account",
+						"ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
+					},
+					{
+						"PropertyName": "Password",
+						"Type": "Text",
+						"Caption": "The API token to access Bigcommerce account",
+						"ValidationRules": { "required": true, "minlength": 2, "maxlength": 300 }
+					}
+				],
+				"Notes": [],
+				"OnBeforeLink": [
+					"var aryMatch = /^(http[s]?:\\/\\/([^\\.]+)\\.mybigcommerce\\.com)(\\/api\\/v2\\/)?$/.exec(accountModel.url);",
+					"if (!aryMatch) return null;",
+					"accountModel.name = aryMatch[2];",
+					"accountModel.url = aryMatch[1];",
+					"return accountModel;"
+				],
+				"SourceLabel": [
+					{ "Property": "background", "Value": "url(/Content/css/images/bigcommerce-logo.png) no-repeat 0 0" },
+					{ "Property": "background-position", "Value": "0px 0px" },
+					{ "Property": "width", "Value": "145px" }
+				],
+				"SourceLabelOn": [
+					{ "Property": "background", "Value": "url(/Content/css/images/bigcommerce-logo.png) no-repeat 0 0" },
 					{ "Property": "background-position", "Value": "0px -40px" },
 					{ "Property": "width", "Value": "145px" }
 				]
