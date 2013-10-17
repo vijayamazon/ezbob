@@ -134,11 +134,18 @@
             _decisionHistory.LogAction(DecisionActions.Approve, comment, _session.Get<User>(1), customer);
         }
 
-        public int MarketplaceSeniority(int customerId)
-        {
-            var customer = _customers.Get(customerId);
-            return Convert.ToInt32((DateTime.UtcNow - _mpFacade.MarketplacesSeniority(customer)).TotalDays);
-        }
+		public int MarketplaceSeniority(int customerId)
+		{
+			var customer = _customers.Get(customerId);
+			return Convert.ToInt32((DateTime.UtcNow - _mpFacade.MarketplacesSeniority(customer)).TotalDays);
+		}
+
+		public int AutoApproveCheck(int customerId)
+		{
+			log.InfoFormat("Checking if auto approval should take place");
+			log.InfoFormat("Decided not to auto approve");
+			return 0;
+		}
 
         public void SaveCAISFile(string data, string name, string foldername, int type, int ofItems, int goodUsers, int defaults)
         {

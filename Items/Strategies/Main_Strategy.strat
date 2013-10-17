@@ -15,11 +15,14 @@
     <NodeElement Name="Apply auto decision" NodeId="Comparison10969802" />
     <NodeElement Name="Approve" NodeId="MultiAssignmentB56883622" />
     <NodeElement Name="Approve" NodeId="MultiAssignmentB21191429" />
+    <NodeElement Name="Approved" NodeId="MailNode63195744" />
     <NodeElement Name="Assignment" NodeId="AssignmentB6027880" />
     <NodeElement Name="Assignment" NodeId="AssignmentB53063620" />
     <NodeElement Name="Assignment" NodeId="AssignmentB18516706" />
     <NodeElement Name="Assignment" NodeId="AssignmentB35373479" />
     <NodeElement Name="Assignment" NodeId="AssignmentB60222939" />
+    <NodeElement Name="Auto approval enabled" NodeId="Comparison64033931" />
+    <NodeElement Name="Auto approve" NodeId="MultiAssignmentB50953566" />
     <NodeElement Name="AutoRejectReason" NodeId="AssignmentB7164506" />
     <NodeElement Name="AutoRejectReason" NodeId="AssignmentB50368676" />
     <NodeElement Name="AutoRejectReason" NodeId="AssignmentB56636209" />
@@ -31,6 +34,7 @@
     <NodeElement Name="BWA Only" NodeId="Comparison3771332" />
     <NodeElement Name="BWA Prev" NodeId="ScriptNode17518665" />
     <NodeElement Name="Cap Limit" NodeId="ConditionalAssignment17190527" />
+    <NodeElement Name="Check auto approval" NodeId="ScriptNode49860438" />
     <NodeElement Name="Check customer status" NodeId="Comparison43844694" />
     <NodeElement Name="Comparison" NodeId="Comparison11494874" />
     <NodeElement Name="Condition" NodeId="ConditionalAssignment30350780" />
@@ -75,9 +79,11 @@
     <NodeElement Name="GetPrevBWAResult" NodeId="DataSourceNodeScalar11105193" />
     <NodeElement Name="is AML Error" NodeId="Comparison45973618" />
     <NodeElement Name="is AML Error" NodeId="Comparison19021059" />
+    <NodeElement Name="Is auto approval" NodeId="Comparison27742648" />
     <NodeElement Name="Is Business" NodeId="Comparison39575399" />
     <NodeElement Name="is BWA Error" NodeId="Comparison42392236" />
     <NodeElement Name="is BWA Error" NodeId="Comparison20503483" />
+    <NodeElement Name="Is first loan" NodeId="Comparison320598" />
     <NodeElement Name="Is offline" NodeId="Comparison6735967" />
     <NodeElement Name="Is rejected (PayPal)" NodeId="Comparison49253056" />
     <NodeElement Name="Is Re-Rejected" NodeId="Comparison1955303" />
@@ -123,8 +129,7 @@
     <NodeElement Name="Read Next Row" NodeId="ReadNextNode41431323" />
     <NodeElement Name="Re-approval Old clients" NodeId="Comparison14297538" />
     <NodeElement Name="Re-approval Old clients" NodeId="Comparison12965330" />
-    <NodeElement Name="ReApproved" NodeId="MailNode11397432" />
-    <NodeElement Name="ReApproved" NodeId="MailNode55782176" />
+    <NodeElement Name="ReApproved" NodeId="MailNode27128344" />
     <NodeElement Name="Reject" NodeId="MailNode34630730" />
     <NodeElement Name="Reject" NodeId="MailNode61346438" />
     <NodeElement Name="Reject" NodeId="MailNode23448739" />
@@ -137,6 +142,7 @@
     <NodeElement Name="Segmentation" NodeId="Segmentation55175005" />
     <NodeElement Name="Seniority &lt; 300 days" NodeId="Comparison25377797" />
     <NodeElement Name="Seniority &lt; Reject_Minimal_Seniority" NodeId="Comparison16797371" />
+    <NodeElement Name="Should auto approved" NodeId="Comparison41489961" />
     <NodeElement Name="Start Node" NodeId="StartNode7786314" />
     <NodeElement Name="Stop Node" NodeId="StopNode2967967" />
     <NodeElement Name="StopNode" NodeId="StopNode55449228" />
@@ -144,10 +150,10 @@
     <NodeElement Name="Subject" NodeId="MultiAssignmentB52414126" />
     <NodeElement Name="Subject" NodeId="MultiAssignmentB25715171" />
     <NodeElement Name="Subject" NodeId="MultiAssignmentB40193221" />
-    <NodeElement Name="Subject" NodeId="MultiAssignmentB14992622" />
     <NodeElement Name="Subject" NodeId="MultiAssignmentB45682816" />
     <NodeElement Name="Subject" NodeId="MultiAssignmentB2167900" />
     <NodeElement Name="Subject" NodeId="MultiAssignmentB15481484" />
+    <NodeElement Name="Subject" NodeId="MultiAssignmentB17680651" />
     <NodeElement Name="Suspend" NodeId="SuspendNode493008" />
     <NodeElement Name="Time To Suspend " NodeId="CreditProduct31802733" />
     <NodeElement Name="Underwriter_Strarted" NodeId="Comparison15112947" />
@@ -2760,7 +2766,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison25377797</Name>
       <PointF>
-        <X>1368.81433</X>
+        <X>1288.81433</X>
         <Y>1876</Y>
       </PointF>
       <SuperNodeName />
@@ -2794,8 +2800,8 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison40532297</Name>
       <PointF>
-        <X>100.7531</X>
-        <Y>2196</Y>
+        <X>280.7531</X>
+        <Y>2236</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeComparer</TypeName>
@@ -2811,7 +2817,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison20625205</Name>
       <PointF>
-        <X>1530.90369</X>
+        <X>1450.90369</X>
         <Y>1956</Y>
       </PointF>
       <SuperNodeName />
@@ -2828,7 +2834,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison49253056</Name>
       <PointF>
-        <X>1391.336</X>
+        <X>1311.336</X>
         <Y>1776</Y>
       </PointF>
       <SuperNodeName />
@@ -3016,7 +3022,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>ConditionalAssignment30350780</Name>
       <PointF>
-        <X>1014.16858</X>
+        <X>934.1686</X>
         <Y>2076</Y>
       </PointF>
       <SuperNodeName />
@@ -3050,7 +3056,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>MultiAssignmentB11465061</Name>
       <PointF>
-        <X>1016</X>
+        <X>936</X>
         <Y>1656</Y>
       </PointF>
       <SuperNodeName />
@@ -3101,7 +3107,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison46140787</Name>
       <PointF>
-        <X>1168.58679</X>
+        <X>1088.58679</X>
         <Y>1676</Y>
       </PointF>
       <SuperNodeName />
@@ -3112,31 +3118,14 @@
       <AssemblyString />
       <DefaultPinName />
       <Description />
-      <DisplayName>Subject</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;assignments&gt;&lt;assignment&gt;Subject := "User was automatically Re-Approved"&lt;/assignment&gt;&lt;/assignments&gt;</InitialValue>
+      <DisplayName>Approved</DisplayName>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>MultiAssignmentB14992622</Name>
+      <Name>MailNode63195744</Name>
       <PointF>
-        <X>496</X>
-        <Y>2196</Y>
-      </PointF>
-      <SuperNodeName />
-      <TypeName>WorkflowObjects.NodeMultiAssignmentBehavioral</TypeName>
-      <PrototypeName />
-    </NodeDescriptor>
-    <NodeDescriptor Modification="">
-      <AssemblyString />
-      <DefaultPinName />
-      <Description />
-      <DisplayName>ReApproved</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
-      <IsBreakpointActive>false</IsBreakpointActive>
-      <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>MailNode11397432</Name>
-      <PointF>
-        <X>226.678635</X>
-        <Y>2316</Y>
+        <X>113.918869</X>
+        <Y>2556</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeMail</TypeName>
@@ -3154,23 +3143,6 @@
       <PointF>
         <X>616</X>
         <Y>1716</Y>
-      </PointF>
-      <SuperNodeName />
-      <TypeName>WorkflowObjects.NodeMail</TypeName>
-      <PrototypeName />
-    </NodeDescriptor>
-    <NodeDescriptor Modification="">
-      <AssemblyString />
-      <DefaultPinName />
-      <Description />
-      <DisplayName>ReApproved</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
-      <IsBreakpointActive>false</IsBreakpointActive>
-      <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>MailNode55782176</Name>
-      <PointF>
-        <X>606.67865</X>
-        <Y>2196</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeMail</TypeName>
@@ -3203,7 +3175,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>MultiAssignmentB5575003</Name>
       <PointF>
-        <X>1116</X>
+        <X>1036</X>
         <Y>1756</Y>
       </PointF>
       <SuperNodeName />
@@ -3220,7 +3192,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison15112947</Name>
       <PointF>
-        <X>985.5917</X>
+        <X>905.5917</X>
         <Y>1796</Y>
       </PointF>
       <SuperNodeName />
@@ -3237,7 +3209,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>MultiAssignmentB60578655</Name>
       <PointF>
-        <X>1116</X>
+        <X>1036</X>
         <Y>1956</Y>
       </PointF>
       <SuperNodeName />
@@ -3329,7 +3301,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>MultiAssignmentB65352434</Name>
       <PointF>
-        <X>1116</X>
+        <X>1036</X>
         <Y>1596</Y>
       </PointF>
       <SuperNodeName />
@@ -3346,7 +3318,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison12965330</Name>
       <PointF>
-        <X>1456.818</X>
+        <X>1376.818</X>
         <Y>2196</Y>
       </PointF>
       <SuperNodeName />
@@ -3380,7 +3352,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>MultiAssignmentB11807865</Name>
       <PointF>
-        <X>1196.95422</X>
+        <X>1116.95422</X>
         <Y>2176</Y>
       </PointF>
       <SuperNodeName />
@@ -3852,7 +3824,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>MultiAssignmentB21191429</Name>
       <PointF>
-        <X>1116</X>
+        <X>1036</X>
         <Y>2076</Y>
       </PointF>
       <SuperNodeName />
@@ -3869,7 +3841,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>MultiAssignmentB56883622</Name>
       <PointF>
-        <X>1216</X>
+        <X>1136</X>
         <Y>2036</Y>
       </PointF>
       <SuperNodeName />
@@ -3886,7 +3858,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison47544505</Name>
       <PointF>
-        <X>1484.40735</X>
+        <X>1404.40735</X>
         <Y>1756</Y>
       </PointF>
       <SuperNodeName />
@@ -3903,7 +3875,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison32263575</Name>
       <PointF>
-        <X>1460.88391</X>
+        <X>1380.88391</X>
         <Y>1836</Y>
       </PointF>
       <SuperNodeName />
@@ -3920,7 +3892,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison14297538</Name>
       <PointF>
-        <X>1499.29944</X>
+        <X>1419.29944</X>
         <Y>2096</Y>
       </PointF>
       <SuperNodeName />
@@ -3975,7 +3947,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison34450770</Name>
       <PointF>
-        <X>1240.753</X>
+        <X>1160.753</X>
         <Y>2096</Y>
       </PointF>
       <SuperNodeName />
@@ -3992,7 +3964,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison36836846</Name>
       <PointF>
-        <X>1665.36</X>
+        <X>1585.36</X>
         <Y>2016</Y>
       </PointF>
       <SuperNodeName />
@@ -4004,13 +3976,13 @@
       <DefaultPinName />
       <Description />
       <DisplayName>Subject</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;assignments&gt;&lt;assignment&gt;Subject := "User was automatically Re-Approved"&lt;/assignment&gt;&lt;/assignments&gt;</InitialValue>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;assignments&gt;&lt;assignment&gt;Subject := "User was automatically Re-Approved"&lt;/assignment&gt;&lt;assignment&gt;ApproveReApprove := "Re-Approved"&lt;/assignment&gt;&lt;/assignments&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>MultiAssignmentB25715171</Name>
       <PointF>
-        <X>136</X>
-        <Y>2316</Y>
+        <X>156</X>
+        <Y>2096</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeMultiAssignmentBehavioral</TypeName>
@@ -4026,7 +3998,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison37753964</Name>
       <PointF>
-        <X>1400.13123</X>
+        <X>1320.13123</X>
         <Y>2096</Y>
       </PointF>
       <SuperNodeName />
@@ -4115,7 +4087,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison54010330</Name>
       <PointF>
-        <X>1641.34656</X>
+        <X>1561.34656</X>
         <Y>1836</Y>
       </PointF>
       <SuperNodeName />
@@ -4395,7 +4367,7 @@
       <DefaultPinName />
       <Description />
       <DisplayName>No Auto decision</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;assignments&gt;&lt;assignment&gt;EnableAutomaticRejection := "0"&lt;/assignment&gt;&lt;assignment&gt;EnableAutomaticReApproval := "0"&lt;/assignment&gt;&lt;assignment&gt;EnableAutomaticReRejection := "0"&lt;/assignment&gt;&lt;assignment&gt;EnableAutomaticReRejectionNum := 0&lt;/assignment&gt;&lt;/assignments&gt;</InitialValue>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;assignments&gt;&lt;assignment&gt;EnableAutomaticRejection := "0"&lt;/assignment&gt;&lt;assignment&gt;EnableAutomaticReApproval := "0"&lt;/assignment&gt;&lt;assignment&gt;EnableAutomaticReRejection := "0"&lt;/assignment&gt;&lt;assignment&gt;EnableAutomaticReRejectionNum := 0&lt;/assignment&gt;&lt;assignment&gt;EnableAutomaticApproval := "0"&lt;/assignment&gt;&lt;/assignments&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>MultiAssignmentB33982084</Name>
@@ -4542,7 +4514,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison49692243</Name>
       <PointF>
-        <X>1556.91736</X>
+        <X>1476.91736</X>
         <Y>1856</Y>
       </PointF>
       <SuperNodeName />
@@ -4559,7 +4531,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>MultiAssignmentB7595036</Name>
       <PointF>
-        <X>1674.62585</X>
+        <X>1594.62585</X>
         <Y>1936</Y>
       </PointF>
       <SuperNodeName />
@@ -4981,7 +4953,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>AssignmentB56636209</Name>
       <PointF>
-        <X>1310.901</X>
+        <X>1230.901</X>
         <Y>1676</Y>
       </PointF>
       <SuperNodeName />
@@ -4998,7 +4970,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>AssignmentB50368676</Name>
       <PointF>
-        <X>1550.901</X>
+        <X>1470.901</X>
         <Y>1676</Y>
       </PointF>
       <SuperNodeName />
@@ -5015,7 +4987,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>AssignmentB15958447</Name>
       <PointF>
-        <X>1290.901</X>
+        <X>1210.901</X>
         <Y>1756</Y>
       </PointF>
       <SuperNodeName />
@@ -5032,7 +5004,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>AssignmentB7164506</Name>
       <PointF>
-        <X>1430.901</X>
+        <X>1350.901</X>
         <Y>1676</Y>
       </PointF>
       <SuperNodeName />
@@ -5049,7 +5021,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison16797371</Name>
       <PointF>
-        <X>1125.68713</X>
+        <X>1045.68713</X>
         <Y>1836</Y>
       </PointF>
       <SuperNodeName />
@@ -5066,7 +5038,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>AssignmentB55337852</Name>
       <PointF>
-        <X>1190.901</X>
+        <X>1110.901</X>
         <Y>1756</Y>
       </PointF>
       <SuperNodeName />
@@ -5229,6 +5201,23 @@
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeMultiAssignmentBehavioral</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Auto approval enabled</DisplayName>
+      <InitialValue />
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>Comparison64033931</Name>
+      <PointF>
+        <X>1681.55261</X>
+        <Y>2036</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeComparer</TypeName>
       <PrototypeName />
     </NodeDescriptor>
     <NodeDescriptor Modification="">
@@ -6429,7 +6418,7 @@
       <DefaultPinName />
       <Description />
       <DisplayName>Multi-Assignment</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;assignments&gt;&lt;assignment&gt;email := App_email&lt;/assignment&gt;&lt;/assignments&gt;</InitialValue>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;assignments&gt;&lt;assignment&gt;email := App_email&lt;/assignment&gt;&lt;assignment&gt;FirstName := App_FirstName&lt;/assignment&gt;&lt;assignment&gt;LoanAmount := LoanOffer_ReApprovalSum&lt;/assignment&gt;&lt;assignment&gt;ValidFor := LoanOffer_OfferValidHours&lt;/assignment&gt;&lt;/assignments&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>MultiAssignmentB67075950</Name>
@@ -6755,6 +6744,125 @@
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeDataSourceApplication</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Check auto approval</DisplayName>
+      <InitialValue />
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>ScriptNode49860438</Name>
+      <PointF>
+        <X>1666.31677</X>
+        <Y>2156</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeScript</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Should auto approved</DisplayName>
+      <InitialValue />
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>Comparison41489961</Name>
+      <PointF>
+        <X>1662.84436</X>
+        <Y>2296</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeComparer</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Auto approve</DisplayName>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;assignments&gt;&lt;assignment&gt;CreditResult := "Approved"&lt;/assignment&gt;&lt;assignment&gt;UserStatus := "Approved"&lt;/assignment&gt;&lt;assignment&gt;SystemDecision := "Approve"&lt;/assignment&gt;&lt;assignment&gt;FAQPage := "https://www.ezbob.com/Customer/HowItWorks#Faq"&lt;/assignment&gt;&lt;assignment&gt;LoanOffer_UnderwriterComment := "Auto Approval"&lt;/assignment&gt;&lt;assignment&gt;LoanOffer_OfferValidDays := (DAYSBETWEEN(LoanOffer_OfferValidUntil, LoanOffer_OfferStart))&lt;/assignment&gt;&lt;assignment&gt;App_ApplyForLoan := NULL&lt;/assignment&gt;&lt;assignment&gt;App_ValidFor := ADDDAYS(NOW(), LoanOffer_OfferValidDays)&lt;/assignment&gt;&lt;assignment&gt;IsAutoApproval := 1&lt;/assignment&gt;&lt;/assignments&gt;</InitialValue>
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>MultiAssignmentB50953566</Name>
+      <PointF>
+        <X>1344.54089</X>
+        <Y>2296</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeMultiAssignmentBehavioral</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Is auto approval</DisplayName>
+      <InitialValue />
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>Comparison27742648</Name>
+      <PointF>
+        <X>77.96672</X>
+        <Y>1636</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeComparer</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Subject</DisplayName>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;assignments&gt;&lt;assignment&gt;Subject := "User was automatically approved"&lt;/assignment&gt;&lt;assignment&gt;ApproveReApprove := "Approved"&lt;/assignment&gt;&lt;/assignments&gt;</InitialValue>
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>MultiAssignmentB17680651</Name>
+      <PointF>
+        <X>16</X>
+        <Y>2556</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeMultiAssignmentBehavioral</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Is first loan</DisplayName>
+      <InitialValue />
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>Comparison320598</Name>
+      <PointF>
+        <X>230.851974</X>
+        <Y>2556</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeComparer</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>ReApproved</DisplayName>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>MailNode27128344</Name>
+      <PointF>
+        <X>146.67865</X>
+        <Y>2236</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeMail</TypeName>
       <PrototypeName />
     </NodeDescriptor>
   </NodeDescriptors>
@@ -9632,6 +9740,78 @@
       <Name>EnableAutomaticApproval</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Main_Strategy</OwnerName>
+      <Name>AutoApproveAmount</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Main_Strategy</OwnerName>
+      <Name>IsAutoApproval</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Main_Strategy</OwnerName>
+      <Name>ApproveReApprove</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Main_Strategy</OwnerName>
+      <Name>FirstName</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Main_Strategy</OwnerName>
+      <Name>LoanAmount</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Main_Strategy</OwnerName>
+      <Name>ValidFor</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
       <DefaultValue />
       <Description />
       <IsInput>false</IsInput>
@@ -13030,8 +13210,8 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode11397432</OwnerName>
-      <Name>RegistrationDate_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</Name>
+      <OwnerName>MailNode63195744</OwnerName>
+      <Name>ApprovedReApproved_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -13042,8 +13222,8 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode11397432</OwnerName>
-      <Name>UserID_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</Name>
+      <OwnerName>MailNode63195744</OwnerName>
+      <Name>RegistrationDate_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -13054,8 +13234,8 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode11397432</OwnerName>
-      <Name>Name_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</Name>
+      <OwnerName>MailNode63195744</OwnerName>
+      <Name>UserID_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -13066,8 +13246,8 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode11397432</OwnerName>
-      <Name>FirstName_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</Name>
+      <OwnerName>MailNode63195744</OwnerName>
+      <Name>Name_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -13078,8 +13258,8 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode11397432</OwnerName>
-      <Name>Surname_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</Name>
+      <OwnerName>MailNode63195744</OwnerName>
+      <Name>FirstName_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -13090,8 +13270,8 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode11397432</OwnerName>
-      <Name>MP_Counter_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</Name>
+      <OwnerName>MailNode63195744</OwnerName>
+      <Name>Surname_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -13102,8 +13282,8 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode11397432</OwnerName>
-      <Name>MedalType_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</Name>
+      <OwnerName>MailNode63195744</OwnerName>
+      <Name>MP_Counter_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -13114,8 +13294,8 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode11397432</OwnerName>
-      <Name>SystemDecision_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</Name>
+      <OwnerName>MailNode63195744</OwnerName>
+      <Name>MedalType_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -13126,8 +13306,8 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode11397432</OwnerName>
-      <Name>ApprovalAmount_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</Name>
+      <OwnerName>MailNode63195744</OwnerName>
+      <Name>SystemDecision_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -13138,8 +13318,8 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode11397432</OwnerName>
-      <Name>RepaymentPeriod_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</Name>
+      <OwnerName>MailNode63195744</OwnerName>
+      <Name>ApprovalAmount_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -13150,8 +13330,8 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode11397432</OwnerName>
-      <Name>InterestRate_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</Name>
+      <OwnerName>MailNode63195744</OwnerName>
+      <Name>RepaymentPeriod_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -13162,8 +13342,8 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode11397432</OwnerName>
-      <Name>OfferValidUntil_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</Name>
+      <OwnerName>MailNode63195744</OwnerName>
+      <Name>InterestRate_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -13174,7 +13354,19 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode11397432</OwnerName>
+      <OwnerName>MailNode63195744</OwnerName>
+      <Name>OfferValidUntil_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode63195744</OwnerName>
       <Name>AddressTo</Name>
       <TypeName>System.String</TypeName>
       <InitialValue>0</InitialValue>
@@ -13186,7 +13378,7 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode11397432</OwnerName>
+      <OwnerName>MailNode63195744</OwnerName>
       <Name>AddressCC</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -13198,7 +13390,7 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode11397432</OwnerName>
+      <OwnerName>MailNode63195744</OwnerName>
       <Name>Subject</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -13331,186 +13523,6 @@ CompanyType = "SoleTrader"</InitialValue>
     </VariableDescriptor>
     <VariableDescriptor>
       <OwnerName>MailNode64643263</OwnerName>
-      <Name>Subject</Name>
-      <TypeName>System.String</TypeName>
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode55782176</OwnerName>
-      <Name>RegistrationDate_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</Name>
-      <TypeName />
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode55782176</OwnerName>
-      <Name>UserID_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</Name>
-      <TypeName />
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode55782176</OwnerName>
-      <Name>Name_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</Name>
-      <TypeName />
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode55782176</OwnerName>
-      <Name>FirstName_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</Name>
-      <TypeName />
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode55782176</OwnerName>
-      <Name>Surname_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</Name>
-      <TypeName />
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode55782176</OwnerName>
-      <Name>MP_Counter_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</Name>
-      <TypeName />
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode55782176</OwnerName>
-      <Name>MedalType_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</Name>
-      <TypeName />
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode55782176</OwnerName>
-      <Name>SystemDecision_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</Name>
-      <TypeName />
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode55782176</OwnerName>
-      <Name>ApprovalAmount_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</Name>
-      <TypeName />
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode55782176</OwnerName>
-      <Name>RepaymentPeriod_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</Name>
-      <TypeName />
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode55782176</OwnerName>
-      <Name>InterestRate_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</Name>
-      <TypeName />
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode55782176</OwnerName>
-      <Name>OfferValidUntil_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</Name>
-      <TypeName />
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode55782176</OwnerName>
-      <Name>AddressTo</Name>
-      <TypeName>System.String</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode55782176</OwnerName>
-      <Name>AddressCC</Name>
-      <TypeName>System.String</TypeName>
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode55782176</OwnerName>
       <Name>Subject</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -15752,6 +15764,30 @@ CompanyType = "SoleTrader"</InitialValue>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
+      <OwnerName>Comparison64033931</OwnerName>
+      <Name>Expression</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue>EnableAutomaticApproval = "1"</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison64033931</OwnerName>
+      <Name>Comparison64033931EnableAutomaticApproval</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
       <OwnerName>NestedStrategy60325173</OwnerName>
       <Name>ScoreResult</Name>
       <TypeName>System.Double</TypeName>
@@ -17307,6 +17343,258 @@ CompanyType = "SoleTrader"</InitialValue>
       <DefaultValue />
       <Description />
       <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison41489961</OwnerName>
+      <Name>Expression</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue>AutoApproveAmount != 0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison41489961</OwnerName>
+      <Name>Comparison41489961AutoApproveAmount</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison27742648</OwnerName>
+      <Name>Expression</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue>IsAutoApproval = 1</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison27742648</OwnerName>
+      <Name>Comparison27742648IsAutoApproval</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison320598</OwnerName>
+      <Name>Expression</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue>1=1</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode27128344</OwnerName>
+      <Name>ApprovedReApproved_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode27128344</OwnerName>
+      <Name>RegistrationDate_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode27128344</OwnerName>
+      <Name>UserID_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode27128344</OwnerName>
+      <Name>Name_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode27128344</OwnerName>
+      <Name>FirstName_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode27128344</OwnerName>
+      <Name>Surname_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode27128344</OwnerName>
+      <Name>MP_Counter_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode27128344</OwnerName>
+      <Name>MedalType_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode27128344</OwnerName>
+      <Name>SystemDecision_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode27128344</OwnerName>
+      <Name>ApprovalAmount_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode27128344</OwnerName>
+      <Name>RepaymentPeriod_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode27128344</OwnerName>
+      <Name>InterestRate_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode27128344</OwnerName>
+      <Name>OfferValidUntil_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode27128344</OwnerName>
+      <Name>AddressTo</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode27128344</OwnerName>
+      <Name>AddressCC</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode27128344</OwnerName>
+      <Name>Subject</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
       <IsOutput>true</IsOutput>
       <SignatureRequired>false</SignatureRequired>
       <IsNullable>false</IsNullable>
@@ -18960,33 +19248,16 @@ CompanyType = "SoleTrader"</InitialValue>
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>Comparison40532297</SourceNodeName>
-      <SourceNodeOutletName>Yes</SourceNodeOutletName>
-      <TargetNodeName>MultiAssignmentB25715171</TargetNodeName>
+      <SourceNodeName>MailNode27128344</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>Comparison40532297</TargetNodeName>
       <SuperNodeName />
-      <Caption>Yes</Caption>
+      <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
       <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
-      <DisplayColor>-16744448</DisplayColor>
+      <DisplayColor>-16776961</DisplayColor>
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints />
-    </NodeConnectionDescriptor>
-    <NodeConnectionDescriptor>
-      <SourceNodeName>Comparison40532297</SourceNodeName>
-      <SourceNodeOutletName>No</SourceNodeOutletName>
-      <TargetNodeName>MultiAssignmentB14992622</TargetNodeName>
-      <SuperNodeName />
-      <Caption>No</Caption>
-      <SignatureRequired>false</SignatureRequired>
-      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
-      <DisplayColor>-65536</DisplayColor>
-      <ShowSignature>false</ShowSignature>
-      <IntermediatePoints>
-        <PointF>
-          <X>200</X>
-          <Y>2220</Y>
-        </PointF>
-      </IntermediatePoints>
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
       <SourceNodeName>Comparison20625205</SourceNodeName>
@@ -19000,7 +19271,7 @@ CompanyType = "SoleTrader"</InitialValue>
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints>
         <PointF>
-          <X>1540</X>
+          <X>1460</X>
           <Y>1980</Y>
         </PointF>
       </IntermediatePoints>
@@ -19191,18 +19462,6 @@ CompanyType = "SoleTrader"</InitialValue>
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>MultiAssignmentB14992622</SourceNodeName>
-      <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>MailNode55782176</TargetNodeName>
-      <SuperNodeName />
-      <Caption>Next</Caption>
-      <SignatureRequired>false</SignatureRequired>
-      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
-      <DisplayColor>-16776961</DisplayColor>
-      <ShowSignature>false</ShowSignature>
-      <IntermediatePoints />
-    </NodeConnectionDescriptor>
-    <NodeConnectionDescriptor>
       <SourceNodeName>DataSourceNodeScalar15136387</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
       <TargetNodeName>Comparison66744080</TargetNodeName>
@@ -19249,19 +19508,19 @@ CompanyType = "SoleTrader"</InitialValue>
       </IntermediatePoints>
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>MailNode55782176</SourceNodeName>
-      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <SourceNodeName>Comparison40532297</SourceNodeName>
+      <SourceNodeOutletName>No</SourceNodeOutletName>
       <TargetNodeName>DataSourceNodeScalar58488964</TargetNodeName>
       <SuperNodeName />
-      <Caption>Next</Caption>
+      <Caption>No</Caption>
       <SignatureRequired>false</SignatureRequired>
       <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
-      <DisplayColor>-16776961</DisplayColor>
+      <DisplayColor>-65536</DisplayColor>
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints>
         <PointF>
-          <X>760</X>
-          <Y>2220</Y>
+          <X>820</X>
+          <Y>2240</Y>
         </PointF>
       </IntermediatePoints>
     </NodeConnectionDescriptor>
@@ -19824,7 +20083,7 @@ CompanyType = "SoleTrader"</InitialValue>
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints>
         <PointF>
-          <X>1460</X>
+          <X>1380</X>
           <Y>1980</Y>
         </PointF>
       </IntermediatePoints>
@@ -20003,34 +20262,39 @@ CompanyType = "SoleTrader"</InitialValue>
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints>
         <PointF>
-          <X>1720</X>
+          <X>1640</X>
           <Y>2220</Y>
         </PointF>
       </IntermediatePoints>
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>MultiAssignmentB25715171</SourceNodeName>
-      <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>MailNode11397432</TargetNodeName>
+      <SourceNodeName>Comparison40532297</SourceNodeName>
+      <SourceNodeOutletName>Yes</SourceNodeOutletName>
+      <TargetNodeName>MultiAssignmentB52414126</TargetNodeName>
       <SuperNodeName />
-      <Caption>Next</Caption>
+      <Caption>Yes</Caption>
       <SignatureRequired>false</SignatureRequired>
       <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
-      <DisplayColor>-16776961</DisplayColor>
+      <DisplayColor>-16744448</DisplayColor>
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>MailNode11397432</SourceNodeName>
+      <SourceNodeName>DataSourceNodeScalar52132201</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>MultiAssignmentB52414126</TargetNodeName>
+      <TargetNodeName>MultiAssignmentB25715171</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
       <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
       <DisplayColor>-16776961</DisplayColor>
       <ShowSignature>false</ShowSignature>
-      <IntermediatePoints />
+      <IntermediatePoints>
+        <PointF>
+          <X>180</X>
+          <Y>1780</Y>
+        </PointF>
+      </IntermediatePoints>
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
       <SourceNodeName>Segmentation55175005</SourceNodeName>
@@ -20069,7 +20333,7 @@ CompanyType = "SoleTrader"</InitialValue>
     <NodeConnectionDescriptor>
       <SourceNodeName>Segmentation55175005</SourceNodeName>
       <SourceNodeOutletName>Approved</SourceNodeOutletName>
-      <TargetNodeName>DataSourceNodeScalar52132201</TargetNodeName>
+      <TargetNodeName>Comparison27742648</TargetNodeName>
       <SuperNodeName />
       <Caption>Approved</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -20139,7 +20403,7 @@ CompanyType = "SoleTrader"</InitialValue>
     <NodeConnectionDescriptor>
       <SourceNodeName>ConditionalAssignment17190527</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>Comparison36836846</TargetNodeName>
+      <TargetNodeName>Comparison64033931</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -20405,21 +20669,16 @@ CompanyType = "SoleTrader"</InitialValue>
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>DataSourceNodeScalar52132201</SourceNodeName>
+      <SourceNodeName>MultiAssignmentB25715171</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>Comparison40532297</TargetNodeName>
+      <TargetNodeName>MailNode27128344</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
       <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
       <DisplayColor>-16776961</DisplayColor>
       <ShowSignature>false</ShowSignature>
-      <IntermediatePoints>
-        <PointF>
-          <X>120</X>
-          <Y>2220</Y>
-        </PointF>
-      </IntermediatePoints>
+      <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
       <SourceNodeName>DataSourceNodeScalar25636935</SourceNodeName>
@@ -20502,15 +20761,15 @@ CompanyType = "SoleTrader"</InitialValue>
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints>
         <PointF>
-          <X>1680</X>
+          <X>1600</X>
           <Y>1860</Y>
         </PointF>
         <PointF>
-          <X>1680</X>
+          <X>1600</X>
           <Y>1940</Y>
         </PointF>
         <PointF>
-          <X>1140</X>
+          <X>1060</X>
           <Y>1940</Y>
         </PointF>
       </IntermediatePoints>
@@ -20527,7 +20786,7 @@ CompanyType = "SoleTrader"</InitialValue>
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints>
         <PointF>
-          <X>1740</X>
+          <X>1660</X>
           <Y>1620</Y>
         </PointF>
       </IntermediatePoints>
@@ -20666,15 +20925,15 @@ CompanyType = "SoleTrader"</InitialValue>
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints>
         <PointF>
-          <X>1600</X>
+          <X>1520</X>
           <Y>1640</Y>
         </PointF>
         <PointF>
-          <X>1580</X>
+          <X>1500</X>
           <Y>1640</Y>
         </PointF>
         <PointF>
-          <X>1240</X>
+          <X>1160</X>
           <Y>1640</Y>
         </PointF>
       </IntermediatePoints>
@@ -20703,11 +20962,11 @@ CompanyType = "SoleTrader"</InitialValue>
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints>
         <PointF>
-          <X>1480</X>
+          <X>1400</X>
           <Y>1640</Y>
         </PointF>
         <PointF>
-          <X>1240</X>
+          <X>1160</X>
           <Y>1640</Y>
         </PointF>
       </IntermediatePoints>
@@ -20926,6 +21185,165 @@ CompanyType = "SoleTrader"</InitialValue>
       <SignatureRequired>false</SignatureRequired>
       <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
       <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>Comparison64033931</SourceNodeName>
+      <SourceNodeOutletName>Yes</SourceNodeOutletName>
+      <TargetNodeName>ScriptNode49860438</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Yes</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16744448</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>Comparison64033931</SourceNodeName>
+      <SourceNodeOutletName>No</SourceNodeOutletName>
+      <TargetNodeName>Comparison36836846</TargetNodeName>
+      <SuperNodeName />
+      <Caption>No</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-65536</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>ScriptNode49860438</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>Comparison41489961</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Next</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>Comparison41489961</SourceNodeName>
+      <SourceNodeOutletName>Yes</SourceNodeOutletName>
+      <TargetNodeName>MultiAssignmentB50953566</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Yes</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16744448</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>Comparison41489961</SourceNodeName>
+      <SourceNodeOutletName>No</SourceNodeOutletName>
+      <TargetNodeName>Comparison36836846</TargetNodeName>
+      <SuperNodeName />
+      <Caption>No</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-65536</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints>
+        <PointF>
+          <X>1620</X>
+          <Y>2300</Y>
+        </PointF>
+      </IntermediatePoints>
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>MultiAssignmentB50953566</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>ConditionalAssignment30350780</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Next</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints>
+        <PointF>
+          <X>960</X>
+          <Y>2320</Y>
+        </PointF>
+      </IntermediatePoints>
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>Comparison27742648</SourceNodeName>
+      <SourceNodeOutletName>Yes</SourceNodeOutletName>
+      <TargetNodeName>MultiAssignmentB17680651</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Yes</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16744448</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints>
+        <PointF>
+          <X>40</X>
+          <Y>1660</Y>
+        </PointF>
+      </IntermediatePoints>
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>Comparison27742648</SourceNodeName>
+      <SourceNodeOutletName>No</SourceNodeOutletName>
+      <TargetNodeName>DataSourceNodeScalar52132201</TargetNodeName>
+      <SuperNodeName />
+      <Caption>No</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-65536</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>MultiAssignmentB17680651</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>MailNode63195744</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Next</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>MailNode63195744</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>Comparison320598</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Next</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>Comparison320598</SourceNodeName>
+      <SourceNodeOutletName>Yes</SourceNodeOutletName>
+      <TargetNodeName>StopNode55449228</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Yes</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16744448</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>Comparison320598</SourceNodeName>
+      <SourceNodeOutletName>No</SourceNodeOutletName>
+      <TargetNodeName>StopNode55449228</TargetNodeName>
+      <SuperNodeName />
+      <Caption>No</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-65536</DisplayColor>
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints />
     </NodeConnectionDescriptor>
@@ -22811,90 +23229,6 @@ CompanyType = "SoleTrader"</InitialValue>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>EMailTo</SourceVariableName>
-      <TargetVariableOwnerName>MailNode55782176</TargetVariableOwnerName>
-      <TargetVariableName>AddressTo</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>EMailCC</SourceVariableName>
-      <TargetVariableOwnerName>MailNode55782176</TargetVariableOwnerName>
-      <TargetVariableName>AddressCC</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>Subject</SourceVariableName>
-      <TargetVariableOwnerName>MailNode55782176</TargetVariableOwnerName>
-      <TargetVariableName>Subject</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>CustomerId</SourceVariableName>
-      <TargetVariableOwnerName>MailNode55782176</TargetVariableOwnerName>
-      <TargetVariableName>UserID_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>LoanOffer_InterestRate</SourceVariableName>
-      <TargetVariableOwnerName>MailNode55782176</TargetVariableOwnerName>
-      <TargetVariableName>InterestRate_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>LoanOffer_RepaymentPeriod</SourceVariableName>
-      <TargetVariableOwnerName>MailNode55782176</TargetVariableOwnerName>
-      <TargetVariableName>RepaymentPeriod_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>App_RegistrationDate</SourceVariableName>
-      <TargetVariableOwnerName>MailNode55782176</TargetVariableOwnerName>
-      <TargetVariableName>RegistrationDate_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>App_email</SourceVariableName>
-      <TargetVariableOwnerName>MailNode55782176</TargetVariableOwnerName>
-      <TargetVariableName>Name_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>App_FirstName</SourceVariableName>
-      <TargetVariableOwnerName>MailNode55782176</TargetVariableOwnerName>
-      <TargetVariableName>FirstName_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>App_Surname</SourceVariableName>
-      <TargetVariableOwnerName>MailNode55782176</TargetVariableOwnerName>
-      <TargetVariableName>Surname_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>MedalType</SourceVariableName>
-      <TargetVariableOwnerName>MailNode55782176</TargetVariableOwnerName>
-      <TargetVariableName>MedalType_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>SystemDecision</SourceVariableName>
-      <TargetVariableOwnerName>MailNode55782176</TargetVariableOwnerName>
-      <TargetVariableName>SystemDecision_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>App_ValidFor</SourceVariableName>
-      <TargetVariableOwnerName>MailNode55782176</TargetVariableOwnerName>
-      <TargetVariableName>OfferValidUntil_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>LoanOffer_ReApprovalSum</SourceVariableName>
-      <TargetVariableOwnerName>MailNode55782176</TargetVariableOwnerName>
-      <TargetVariableName>ApprovalAmount_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>EzbobAccount</SourceVariableName>
       <TargetVariableOwnerName>MailNode16801866</TargetVariableOwnerName>
       <TargetVariableName>EzBob account_Unfortunately you have been unable to qualify.docxp57+eEl6wmaXile6mv3oXA==</TargetVariableName>
@@ -23442,12 +23776,6 @@ CompanyType = "SoleTrader"</InitialValue>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>AllMPsNum</SourceVariableName>
-      <TargetVariableOwnerName>MailNode55782176</TargetVariableOwnerName>
-      <TargetVariableName>MP_Counter_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>AllMPsNum</SourceVariableName>
       <TargetVariableOwnerName>MailNode64643263</TargetVariableOwnerName>
       <TargetVariableName>MP_Counter_User is waiting for decision.docxFNaDck+1nvFE/n4scOS92A==</TargetVariableName>
     </VariableConnectionDescriptor>
@@ -23546,96 +23874,6 @@ CompanyType = "SoleTrader"</InitialValue>
       <SourceVariableName>AvailableFunds</SourceVariableName>
       <TargetVariableOwnerName>Comparison37753964</TargetVariableOwnerName>
       <TargetVariableName>Comparison37753964AvailableFunds</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>EMailTo</SourceVariableName>
-      <TargetVariableOwnerName>MailNode11397432</TargetVariableOwnerName>
-      <TargetVariableName>AddressTo</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>EMailCC</SourceVariableName>
-      <TargetVariableOwnerName>MailNode11397432</TargetVariableOwnerName>
-      <TargetVariableName>AddressCC</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>Subject</SourceVariableName>
-      <TargetVariableOwnerName>MailNode11397432</TargetVariableOwnerName>
-      <TargetVariableName>Subject</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>CustomerId</SourceVariableName>
-      <TargetVariableOwnerName>MailNode11397432</TargetVariableOwnerName>
-      <TargetVariableName>UserID_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>LoanOffer_InterestRate</SourceVariableName>
-      <TargetVariableOwnerName>MailNode11397432</TargetVariableOwnerName>
-      <TargetVariableName>InterestRate_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>LoanOffer_RepaymentPeriod</SourceVariableName>
-      <TargetVariableOwnerName>MailNode11397432</TargetVariableOwnerName>
-      <TargetVariableName>RepaymentPeriod_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>App_RegistrationDate</SourceVariableName>
-      <TargetVariableOwnerName>MailNode11397432</TargetVariableOwnerName>
-      <TargetVariableName>RegistrationDate_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>App_email</SourceVariableName>
-      <TargetVariableOwnerName>MailNode11397432</TargetVariableOwnerName>
-      <TargetVariableName>Name_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>App_FirstName</SourceVariableName>
-      <TargetVariableOwnerName>MailNode11397432</TargetVariableOwnerName>
-      <TargetVariableName>FirstName_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>App_Surname</SourceVariableName>
-      <TargetVariableOwnerName>MailNode11397432</TargetVariableOwnerName>
-      <TargetVariableName>Surname_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>MedalType</SourceVariableName>
-      <TargetVariableOwnerName>MailNode11397432</TargetVariableOwnerName>
-      <TargetVariableName>MedalType_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>SystemDecision</SourceVariableName>
-      <TargetVariableOwnerName>MailNode11397432</TargetVariableOwnerName>
-      <TargetVariableName>SystemDecision_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>App_ValidFor</SourceVariableName>
-      <TargetVariableOwnerName>MailNode11397432</TargetVariableOwnerName>
-      <TargetVariableName>OfferValidUntil_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>LoanOffer_ReApprovalSum</SourceVariableName>
-      <TargetVariableOwnerName>MailNode11397432</TargetVariableOwnerName>
-      <TargetVariableName>ApprovalAmount_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>AllMPsNum</SourceVariableName>
-      <TargetVariableOwnerName>MailNode11397432</TargetVariableOwnerName>
-      <TargetVariableName>MP_Counter_User is re approved by the strategy.docx2p3VY9wIsSD6pGH9/41HzQ==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
@@ -24323,24 +24561,6 @@ CompanyType = "SoleTrader"</InitialValue>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>App_FirstName</SourceVariableName>
-      <TargetVariableOwnerName>MailNode40525883</TargetVariableOwnerName>
-      <TargetVariableName>FirstName_Congratulations you are qualified - not first.docxWc2jktENOzUaKvOn7IGIXw==</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>LoanOffer_ReApprovalSum</SourceVariableName>
-      <TargetVariableOwnerName>MailNode40525883</TargetVariableOwnerName>
-      <TargetVariableName>LoanAmount_Congratulations you are qualified - not first.docxWc2jktENOzUaKvOn7IGIXw==</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>LoanOffer_OfferValidHours</SourceVariableName>
-      <TargetVariableOwnerName>MailNode40525883</TargetVariableOwnerName>
-      <TargetVariableName>ValidForHours_Congratulations you are qualified - not first.docxWc2jktENOzUaKvOn7IGIXw==</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>DashboardPage</SourceVariableName>
       <TargetVariableOwnerName>MailNode40525883</TargetVariableOwnerName>
       <TargetVariableName>EzBob account_Congratulations you are qualified - not first.docxWc2jktENOzUaKvOn7IGIXw==</TargetVariableName>
@@ -24371,24 +24591,6 @@ CompanyType = "SoleTrader"</InitialValue>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>LoanOffer_OfferValidHours</SourceVariableName>
-      <TargetVariableOwnerName>MailNode3739106</TargetVariableOwnerName>
-      <TargetVariableName>ValidForHours_Congratulations you are qualified - not first.docxWc2jktENOzUaKvOn7IGIXw==</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>LoanOffer_ReApprovalSum</SourceVariableName>
-      <TargetVariableOwnerName>MailNode3739106</TargetVariableOwnerName>
-      <TargetVariableName>LoanAmount_Congratulations you are qualified - not first.docxWc2jktENOzUaKvOn7IGIXw==</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>App_FirstName</SourceVariableName>
-      <TargetVariableOwnerName>MailNode3739106</TargetVariableOwnerName>
-      <TargetVariableName>FirstName_Congratulations you are qualified - not first.docxWc2jktENOzUaKvOn7IGIXw==</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>email</SourceVariableName>
       <TargetVariableOwnerName>MailNode40525883</TargetVariableOwnerName>
       <TargetVariableName>AddressTo</TargetVariableName>
@@ -24410,6 +24612,252 @@ CompanyType = "SoleTrader"</InitialValue>
       <SourceVariableName>EnableAutomaticApproval</SourceVariableName>
       <TargetVariableOwnerName>DataSourceNodeScalar53367766</TargetVariableOwnerName>
       <TargetVariableName>EnableAutomaticApproval</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>EnableAutomaticApproval</SourceVariableName>
+      <TargetVariableOwnerName>Comparison64033931</TargetVariableOwnerName>
+      <TargetVariableName>Comparison64033931EnableAutomaticApproval</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>IsAutoApproval</SourceVariableName>
+      <TargetVariableOwnerName>Comparison27742648</TargetVariableOwnerName>
+      <TargetVariableName>Comparison27742648IsAutoApproval</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>EMailCC</SourceVariableName>
+      <TargetVariableOwnerName>MailNode27128344</TargetVariableOwnerName>
+      <TargetVariableName>AddressCC</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>EMailTo</SourceVariableName>
+      <TargetVariableOwnerName>MailNode27128344</TargetVariableOwnerName>
+      <TargetVariableName>AddressTo</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>LoanOffer_ReApprovalSum</SourceVariableName>
+      <TargetVariableOwnerName>MailNode27128344</TargetVariableOwnerName>
+      <TargetVariableName>ApprovalAmount_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ApproveReApprove</SourceVariableName>
+      <TargetVariableOwnerName>MailNode27128344</TargetVariableOwnerName>
+      <TargetVariableName>ApprovedReApproved_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>App_FirstName</SourceVariableName>
+      <TargetVariableOwnerName>MailNode27128344</TargetVariableOwnerName>
+      <TargetVariableName>FirstName_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>LoanOffer_InterestRate</SourceVariableName>
+      <TargetVariableOwnerName>MailNode27128344</TargetVariableOwnerName>
+      <TargetVariableName>InterestRate_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>MedalType</SourceVariableName>
+      <TargetVariableOwnerName>MailNode27128344</TargetVariableOwnerName>
+      <TargetVariableName>MedalType_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>AllMPsNum</SourceVariableName>
+      <TargetVariableOwnerName>MailNode27128344</TargetVariableOwnerName>
+      <TargetVariableName>MP_Counter_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>App_email</SourceVariableName>
+      <TargetVariableOwnerName>MailNode27128344</TargetVariableOwnerName>
+      <TargetVariableName>Name_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>App_ValidFor</SourceVariableName>
+      <TargetVariableOwnerName>MailNode27128344</TargetVariableOwnerName>
+      <TargetVariableName>OfferValidUntil_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>App_RegistrationDate</SourceVariableName>
+      <TargetVariableOwnerName>MailNode27128344</TargetVariableOwnerName>
+      <TargetVariableName>RegistrationDate_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>LoanOffer_RepaymentPeriod</SourceVariableName>
+      <TargetVariableOwnerName>MailNode27128344</TargetVariableOwnerName>
+      <TargetVariableName>RepaymentPeriod_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>Subject</SourceVariableName>
+      <TargetVariableOwnerName>MailNode27128344</TargetVariableOwnerName>
+      <TargetVariableName>Subject</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>App_Surname</SourceVariableName>
+      <TargetVariableOwnerName>MailNode27128344</TargetVariableOwnerName>
+      <TargetVariableName>Surname_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>SystemDecision</SourceVariableName>
+      <TargetVariableOwnerName>MailNode27128344</TargetVariableOwnerName>
+      <TargetVariableName>SystemDecision_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>CustomerId</SourceVariableName>
+      <TargetVariableOwnerName>MailNode27128344</TargetVariableOwnerName>
+      <TargetVariableName>UserID_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>EMailCC</SourceVariableName>
+      <TargetVariableOwnerName>MailNode63195744</TargetVariableOwnerName>
+      <TargetVariableName>AddressCC</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>EMailTo</SourceVariableName>
+      <TargetVariableOwnerName>MailNode63195744</TargetVariableOwnerName>
+      <TargetVariableName>AddressTo</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>LoanOffer_ReApprovalSum</SourceVariableName>
+      <TargetVariableOwnerName>MailNode63195744</TargetVariableOwnerName>
+      <TargetVariableName>ApprovalAmount_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ApproveReApprove</SourceVariableName>
+      <TargetVariableOwnerName>MailNode63195744</TargetVariableOwnerName>
+      <TargetVariableName>ApprovedReApproved_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>App_FirstName</SourceVariableName>
+      <TargetVariableOwnerName>MailNode63195744</TargetVariableOwnerName>
+      <TargetVariableName>FirstName_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>LoanOffer_InterestRate</SourceVariableName>
+      <TargetVariableOwnerName>MailNode63195744</TargetVariableOwnerName>
+      <TargetVariableName>InterestRate_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>MedalType</SourceVariableName>
+      <TargetVariableOwnerName>MailNode63195744</TargetVariableOwnerName>
+      <TargetVariableName>MedalType_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>AllMPsNum</SourceVariableName>
+      <TargetVariableOwnerName>MailNode63195744</TargetVariableOwnerName>
+      <TargetVariableName>MP_Counter_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>App_email</SourceVariableName>
+      <TargetVariableOwnerName>MailNode63195744</TargetVariableOwnerName>
+      <TargetVariableName>Name_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>App_ValidFor</SourceVariableName>
+      <TargetVariableOwnerName>MailNode63195744</TargetVariableOwnerName>
+      <TargetVariableName>OfferValidUntil_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>App_RegistrationDate</SourceVariableName>
+      <TargetVariableOwnerName>MailNode63195744</TargetVariableOwnerName>
+      <TargetVariableName>RegistrationDate_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>LoanOffer_RepaymentPeriod</SourceVariableName>
+      <TargetVariableOwnerName>MailNode63195744</TargetVariableOwnerName>
+      <TargetVariableName>RepaymentPeriod_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>Subject</SourceVariableName>
+      <TargetVariableOwnerName>MailNode63195744</TargetVariableOwnerName>
+      <TargetVariableName>Subject</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>App_Surname</SourceVariableName>
+      <TargetVariableOwnerName>MailNode63195744</TargetVariableOwnerName>
+      <TargetVariableName>Surname_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>SystemDecision</SourceVariableName>
+      <TargetVariableOwnerName>MailNode63195744</TargetVariableOwnerName>
+      <TargetVariableName>SystemDecision_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>CustomerId</SourceVariableName>
+      <TargetVariableOwnerName>MailNode63195744</TargetVariableOwnerName>
+      <TargetVariableName>UserID_User is approved or re-approved by the strategy.docxj+Ncv6rgop5Nl67zz9LOcA==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>AutoApproveAmount</SourceVariableName>
+      <TargetVariableOwnerName>Comparison41489961</TargetVariableOwnerName>
+      <TargetVariableName>Comparison41489961AutoApproveAmount</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>FirstName</SourceVariableName>
+      <TargetVariableOwnerName>MailNode40525883</TargetVariableOwnerName>
+      <TargetVariableName>FirstName_Congratulations you are qualified - not first.docxWc2jktENOzUaKvOn7IGIXw==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>LoanAmount</SourceVariableName>
+      <TargetVariableOwnerName>MailNode40525883</TargetVariableOwnerName>
+      <TargetVariableName>LoanAmount_Congratulations you are qualified - not first.docxWc2jktENOzUaKvOn7IGIXw==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ValidFor</SourceVariableName>
+      <TargetVariableOwnerName>MailNode40525883</TargetVariableOwnerName>
+      <TargetVariableName>ValidForHours_Congratulations you are qualified - not first.docxWc2jktENOzUaKvOn7IGIXw==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>FirstName</SourceVariableName>
+      <TargetVariableOwnerName>MailNode3739106</TargetVariableOwnerName>
+      <TargetVariableName>FirstName_Congratulations you are qualified - not first.docxWc2jktENOzUaKvOn7IGIXw==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>LoanAmount</SourceVariableName>
+      <TargetVariableOwnerName>MailNode3739106</TargetVariableOwnerName>
+      <TargetVariableName>LoanAmount_Congratulations you are qualified - not first.docxWc2jktENOzUaKvOn7IGIXw==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>ValidFor</SourceVariableName>
+      <TargetVariableOwnerName>MailNode3739106</TargetVariableOwnerName>
+      <TargetVariableName>ValidForHours_Congratulations you are qualified - not first.docxWc2jktENOzUaKvOn7IGIXw==</TargetVariableName>
     </VariableConnectionDescriptor>
   </VariableConnectionDescriptors>
   <SigningNodeDescriptors>
@@ -25062,15 +25510,7 @@ CompanyType = "SoleTrader"</InitialValue>
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
-      <OwnerName>MultiAssignmentB14992622</OwnerName>
-      <SigningVariables />
-      <CheckingVariables />
-      <VariablesWithoutSignature />
-      <SigningOutlets />
-      <SignatureRequired>false</SignatureRequired>
-    </SigningNodeDescriptor>
-    <SigningNodeDescriptor>
-      <OwnerName>MailNode11397432</OwnerName>
+      <OwnerName>MailNode63195744</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
@@ -25079,14 +25519,6 @@ CompanyType = "SoleTrader"</InitialValue>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
       <OwnerName>MailNode64643263</OwnerName>
-      <SigningVariables />
-      <CheckingVariables />
-      <VariablesWithoutSignature />
-      <SigningOutlets />
-      <SignatureRequired>false</SignatureRequired>
-    </SigningNodeDescriptor>
-    <SigningNodeDescriptor>
-      <OwnerName>MailNode55782176</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
@@ -25566,6 +25998,14 @@ CompanyType = "SoleTrader"</InitialValue>
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
+      <OwnerName>Comparison64033931</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
       <OwnerName>MultiAssignmentB4145419</OwnerName>
       <SigningVariables />
       <CheckingVariables />
@@ -25671,6 +26111,62 @@ CompanyType = "SoleTrader"</InitialValue>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
       <OwnerName>DataSourceNodeScalar53367766</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>ScriptNode49860438</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>Comparison41489961</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>MultiAssignmentB50953566</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>Comparison27742648</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>MultiAssignmentB17680651</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>Comparison320598</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>MailNode27128344</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
@@ -26187,6 +26683,17 @@ Reject_Defaults_MonthsNumNum = int(Reject_Defaults_MonthsNum);
 EnableAutomaticReRejectionNum = int(EnableAutomaticReRejection); 
 AutoRejectionException_CreditScoreNum =  int(AutoRejectionException_CreditScore);
 AutoRejectionException_AnualTurnoverNum = int(AutoRejectionException_AnualTurnover);</Script>
+      <ScriptType>IronPython</ScriptType>
+    </ScriptDescriptor>
+    <ScriptDescriptor>
+      <OwnerName>ScriptNode49860438</OwnerName>
+      <Script>from EzBob.Models import *
+
+
+api = StrategyHelper()
+
+AutoApproveAmount = api.AutoApproveCheck(CustomerId)
+</Script>
       <ScriptType>IronPython</ScriptType>
     </ScriptDescriptor>
   </ScriptDescriptors>
