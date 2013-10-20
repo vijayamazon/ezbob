@@ -17,7 +17,11 @@ WHERE
 	AND
 	t.Status = 'Done'
 	AND
-	t.PostDate < 'July 28 2013 06:54:06.807'
+	(
+		t.PostDate < 'July 28 2013 06:54:06.807'
+		OR
+		t.PostDate BETWEEN 'August 31 2013 23:20:43.047' AND 'September 15 2013 16:41:59.737'
+	)
 	AND
 	lst.Id IS NULL
 ORDER BY

@@ -29,6 +29,12 @@ namespace LoanScheduleTransactionBackFill {
 		public Schedule(ASafeLog log = null) : base(log) {
 		} // constructor
 
+		public Schedule(Schedule o) : this((ASafeLog)o) {
+			ID = o.ID;
+			Date = o.Date;
+			Principal = o.Principal;
+		} // constructor
+
 		public Schedule(DbDataReader row, ASafeLog log = null) : base(log) {
 			ID = Convert.ToInt32(row["ItemID"]);
 			Date = Convert.ToDateTime(row["ItemDate"]).Date;

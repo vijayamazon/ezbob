@@ -18,6 +18,11 @@ namespace LoanScheduleTransactionBackFill {
 			Fees = Convert.ToDecimal(row["Fees"]);
 		} // constructor
 
+		public Transaction(Transaction o) : base((Schedule)o) {
+			Interest = o.Interest;
+			Fees = o.Fees;
+		} // constructor
+
 		#endregion constructor
 
 		public decimal Interest { get; set; }

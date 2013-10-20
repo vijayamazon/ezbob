@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
 using System.Text;
+using Ezbob.Database;
 using Ezbob.Logger;
 using Newtonsoft.Json;
 
@@ -116,15 +117,131 @@ namespace LoanScheduleTransactionBackFill {
 			if ((WorkingSet.Count < 1) || (Transactions.Count < 1))
 				return;
 
+			Transaction[] aryTransactions = Transactions.ToArray();
 			Schedule[] aryWorkingSet = WorkingSet.ToArray();
-			int nCurInSet = 0;
+			int nCurSchedule = 0;
+			int nCurTransaction = 0;
 
-			foreach (Transaction trn in Transactions) {
-				Schedule oCurrent = aryWorkingSet[nCurInSet];
+			Transaction oCurTrn = null;
+			Schedule oCurSch = null;
+
+			for ( ; ; ) {
+				if (oCurTrn == null)
+					oCurTrn = new Transaction(aryTransactions[nCurTransaction]);
+
+				if (oCurSch == null)
+					oCurSch = new Schedule(aryWorkingSet[nCurSchedule]);
+
+				if ((oCurSch.Principal == 0) && (oCurTrn.Principal == 0)) {
+					ScheduleTransactions.Add(new ScheduleTransaction {
+						FeesDelta = -oCurTrn.Fees,
+						InterestDelta = -oCurTrn.Interest,
+						PrincipalDelta = 0,
+						Schedule = oCurSch,
+						Status = GetStatus(oCurSch, oCurTrn),
+						Transaction = oCurTrn
+					});
+
+					if ((nCurSchedule == aryWorkingSet.Length - 1) || (nCurTransaction == aryTransactions.Length - 1))
+						break;
+
+					oCurSch = null;
+					oCurTrn = null;
+
+					nCurSchedule++;
+					nCurTransaction++;
+
+					continue;
+				} // if both zeros
+
+				if (oCurSch.Principal < oCurTrn.Principal) {
+					ScheduleTransactions.Add(new ScheduleTransaction {
+						FeesDelta = -oCurTrn.Fees,
+						InterestDelta = -oCurTrn.Interest,
+						PrincipalDelta = -oCurSch.Principal,
+						Schedule = oCurSch,
+						Status = GetStatus(oCurSch, oCurTrn),
+						Transaction = oCurTrn
+					});
+
+					oCurTrn.Principal -= oCurSch.Principal;
+
+					if (nCurSchedule == aryWorkingSet.Length - 1)
+						break;
+
+					oCurSch = null;
+
+					nCurSchedule++;
+
+					continue;
+				} // if schedule less than transaction
+
+				if (oCurSch.Principal == oCurTrn.Principal) {
+					ScheduleTransactions.Add(new ScheduleTransaction {
+						FeesDelta = -oCurTrn.Fees,
+						InterestDelta = -oCurTrn.Interest,
+						PrincipalDelta = -oCurSch.Principal,
+						Schedule = oCurSch,
+						Status = GetStatus(oCurSch, oCurTrn),
+						Transaction = oCurTrn
+					});
+
+					if ((nCurSchedule == aryWorkingSet.Length - 1) || (nCurTransaction == aryTransactions.Length - 1))
+						break;
+
+					oCurSch = null;
+					oCurTrn = null;
+
+					nCurSchedule++;
+					nCurTransaction++;
+
+					continue;
+				} // if schedule equal to transaction
+
+				// if (oCurSch.Principal > oCurTrn.Principal) {
+
+				ScheduleTransactions.Add(new ScheduleTransaction {
+					FeesDelta = -oCurTrn.Fees,
+					InterestDelta = -oCurTrn.Interest,
+					PrincipalDelta = -oCurTrn.Principal,
+					Schedule = oCurSch,
+					Status = GetStatus(oCurSch, oCurTrn),
+					Transaction = oCurTrn
+				});
+
+				oCurSch.Principal -= oCurTrn.Principal;
+
+				if (nCurTransaction == aryTransactions.Length - 1)
+					break;
+
+				oCurTrn = null;
+
+				nCurTransaction++;
+
+				// } // if schedule greater than transaction
 			} // for each transaction
 		} // Calculate
 
+		private LoanScheduleStatus GetStatus(Schedule oSchedule, Transaction oTransaction) {
+			if (oTransaction.Date < oSchedule.Date)
+				return LoanScheduleStatus.PaidEarly;
+
+			if (oTransaction.Date == oSchedule.Date)
+				return LoanScheduleStatus.PaidOnTime;
+
+			return LoanScheduleStatus.Paid;
+		} // GetStatus
+
 		#endregion method Calculate
+
+		#region method Save
+
+		public void Save(AConnection oDB) {
+			foreach (ScheduleTransaction st in ScheduleTransactions)
+				st.Save(ID, oDB);
+		} // Save
+
+		#endregion method Save
 
 		#region property IsCountable
 
@@ -176,10 +293,6 @@ namespace LoanScheduleTransactionBackFill {
 
 			os.AppendFormat("Loan {0} - {1} - {2} - begin\n", ID, LoanType.ToString(), ScheduleState.ToString());
 
-			os.Append("\tTransactions:\n");
-
-			Transactions.ForEach(x => os.AppendFormat("\t\t{0}\n", x));
-
 			os.Append("\tPlanned schedule:\n");
 
 			Planned.ForEach(x => os.AppendFormat("\t\t{0}\n", x));
@@ -192,9 +305,23 @@ namespace LoanScheduleTransactionBackFill {
 
 			WorkingSet.ForEach(x => os.AppendFormat("\t\t{0}\n", x));
 
+			os.Append("\tTransactions:\n");
+
+			Transactions.ForEach(x => os.AppendFormat("\t\t{0}\n", x));
+
 			os.Append("\tSchedule-transactions:\n");
 
 			ScheduleTransactions.ForEach(x => os.AppendFormat("\t\t{0}\n", x));
+
+			var nExpected = WorkingSet.Sum(x => x.Principal);
+			var nActual = ScheduleTransactions.Sum(x => x.PrincipalDelta);
+
+			os.AppendFormat(
+				"\tTotal\n\t\t{0,10} + {1,10} = {2,10}\n",
+				nExpected.ToString("C2", Schedule.Culture),
+				nActual.ToString("C2", Schedule.Culture),
+				(nExpected + nActual).ToString("C2", Schedule.Culture)
+			);
 
 			os.AppendFormat("Loan {0} - end\n", ID);
 

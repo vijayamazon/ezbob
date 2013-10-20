@@ -16,7 +16,8 @@ namespace LoanScheduleTransactionBackFill {
 	class Program {
 		static void Main(string[] args) {
 			using (var oLog = new FileLog(oLog: new ConsoleLog())) {
-				var oEnv = new Ezbob.Context.Environment(Name.Production, oLog: oLog);
+				var oEnv = new Ezbob.Context.Environment(Name.Dev, "alexbo", oLog: oLog);
+				// var oEnv = new Ezbob.Context.Environment(Name.Production, oLog: oLog);
 
 				var oDB = new SqlConnection(oEnv, oLog);
 
@@ -78,6 +79,8 @@ namespace LoanScheduleTransactionBackFill {
 						oStateStat[l.ScheduleState]++;
 					else
 						oStateStat[l.ScheduleState] = 1;
+
+					l.Save(oDB);
 				} // for each loan
 
 				double nTotal = (double)oStateStat.Values.Sum();
