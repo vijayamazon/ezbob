@@ -12,6 +12,7 @@
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct30783125" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct6923783" />
     <NodeElement Name="Multi-Assignment" NodeId="MultiAssignment5236587" />
+    <NodeElement Name="Change subject" NodeId="MultiAssignment59672145" />
     <NodeElement Name="Start Node" NodeId="StartNode9644177" />
     <NodeElement Name="Stop Node" NodeId="StopNode19688733" />
   </Workspace>
@@ -207,6 +208,23 @@
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeMail</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Change subject</DisplayName>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;assignments&gt;&lt;assignment&gt;Subject := "Thank for choosing EZBOB as your funding partner"&lt;/assignment&gt;&lt;/assignments&gt;</InitialValue>
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>MultiAssignment59672145</Name>
+      <PointF>
+        <X>578.839539</X>
+        <Y>36</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeMultiAssignment</TypeName>
       <PrototypeName />
     </NodeDescriptor>
   </NodeDescriptors>
@@ -757,14 +775,19 @@
     <NodeConnectionDescriptor>
       <SourceNodeName>Comparison65993539</SourceNodeName>
       <SourceNodeOutletName>No</SourceNodeOutletName>
-      <TargetNodeName>MailNode64505759</TargetNodeName>
+      <TargetNodeName>MultiAssignment59672145</TargetNodeName>
       <SuperNodeName />
       <Caption>No</Caption>
       <SignatureRequired>false</SignatureRequired>
       <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
       <DisplayColor>-65536</DisplayColor>
       <ShowSignature>false</ShowSignature>
-      <IntermediatePoints />
+      <IntermediatePoints>
+        <PointF>
+          <X>520</X>
+          <Y>60</Y>
+        </PointF>
+      </IntermediatePoints>
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
       <SourceNodeName>MailNode64505759</SourceNodeName>
@@ -794,6 +817,18 @@
       <SourceNodeName>MailNode14925917</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
       <TargetNodeName>StopNode19688733</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Next</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>MultiAssignment59672145</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>MailNode64505759</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -1038,6 +1073,14 @@
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
       <OwnerName>MailNode14925917</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>MultiAssignment59672145</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
