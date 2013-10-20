@@ -1113,5 +1113,25 @@ namespace EzBob.Web.Areas.Underwriter
 				Data = x => x.PaymentDemenaor != PaymentdemeanorType.Ok ? "#ffdfdf" : ""
 			});
 		}
+
+		public static void CreateSegmentTypeColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
+		{
+			gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
+			{
+				Caption = "Segment Type",
+				Name = "SegmentType",
+				Index = "IsOffline",
+				Resizable = false,
+				Align = Align.Center,
+				Title = false,
+				Hidden = false,
+				Fixed = false,
+				Search = false,
+				Sortable = true,
+				Width = 95,
+				DataType = TypeCode.String,
+				Data = x => x.IsOffline ? "Offline" : "Online"
+			});
+		}
 	}
 }

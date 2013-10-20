@@ -366,6 +366,7 @@
 			GridHelpers.CreateManualyApprovedSum(gridModel);
 			GridHelpers.CreateOutstandingBalanceColumn(gridModel);
 			GridHelpers.CreatePaymentDemeanor(gridModel);
+			GridHelpers.CreateSegmentTypeColumn(gridModel);
 			return gridModel;
 		}
 
@@ -391,6 +392,7 @@
 			GridHelpers.CreateSageStatusColumn(gridModel);
 			GridHelpers.CreateWizardStepColumn(gridModel);
 			GridHelpers.CreatePaymentDemeanor(gridModel);
+			GridHelpers.CreateSegmentTypeColumn(gridModel);
 			return gridModel;
 		}
 
@@ -408,6 +410,7 @@
 			GridHelpers.CreateSystemCalculatedSum(gridModel);
 			GridHelpers.CreateOutstandingBalanceColumn(gridModel);
 			GridHelpers.CreatePaymentDemeanor(gridModel);
+			GridHelpers.CreateSegmentTypeColumn(gridModel);
 			return gridModel;
 		}
 
@@ -438,6 +441,7 @@
 			GridHelpers.CreateNumApprovals(gridModel);
 			GridHelpers.CreateNumRejections(gridModel);
 			GridHelpers.CreatePaymentDemeanor(gridModel);
+			GridHelpers.CreateSegmentTypeColumn(gridModel);
 			return gridModel;
 		}
 
@@ -457,6 +461,7 @@
 			GridHelpers.CreateNumApprovals(gridModel);
 			GridHelpers.CreateOutstandingBalanceColumn(gridModel);
 			GridHelpers.CreatePaymentDemeanor(gridModel);
+			GridHelpers.CreateSegmentTypeColumn(gridModel);
 			return gridModel;
 		}
 
@@ -470,6 +475,7 @@
 			GridHelpers.CreateDelinquencyColumn(gridModel);
 			GridHelpers.CreateLatestCRMstatus(gridModel);
 			GridHelpers.CreateLatestCRMComment(gridModel);
+			GridHelpers.CreateSegmentTypeColumn(gridModel);
 			return gridModel;
 		}
 
@@ -499,6 +505,7 @@
 			GridHelpers.CreateNextRepaymentDateColumn(gridModel);
 			GridHelpers.CreateStatusColumn(gridModel);
 			GridHelpers.CreatePaymentDemeanor(gridModel);
+			GridHelpers.CreateSegmentTypeColumn(gridModel);
 			return gridModel;
 		}
 
@@ -517,6 +524,7 @@
 			GridHelpers.CreateLatestCRMComment(gridModel);
 			GridHelpers.CreateAmountOfInteractions(gridModel);
 			GridHelpers.CreatePaymentDemeanor(gridModel);
+			GridHelpers.CreateSegmentTypeColumn(gridModel);
 			return gridModel;
 		}
 
@@ -533,6 +541,7 @@
 			GridHelpers.CreateLatestCRMComment(gridModel);
 			GridHelpers.CreateCollectionStatusColumn(gridModel);
 			GridHelpers.CreatePaymentDemeanor(gridModel);
+			GridHelpers.CreateSegmentTypeColumn(gridModel);
 			return gridModel;
 		}
 
