@@ -10,19 +10,13 @@ using Newtonsoft.Json;
 namespace LoanScheduleTransactionBackFill {
 	#region class Loan
 
-	enum ScheduleState {
-		Unknown,
-		Match,
-		SameCountDiffDates,
-		DiffCount
-	} // enum ScheduleState
-
 	class Loan : SafeLog {
 		#region public
 
 		#region constructor
 
 		public Loan(ASafeLog log = null) : base(log) {
+			DeclaredLoanAmount = 0;
 			Transactions = new List<Transaction>();
 			Planned = new List<Schedule>();
 			Actual = new List<Schedule>();
@@ -53,6 +47,8 @@ namespace LoanScheduleTransactionBackFill {
 
 			Transactions.Add(new Transaction(row, this));
 
+			DeclaredLoanAmount = Convert.ToDecimal(row["LoanAmount"]);
+
 			FillPlanned(row["AgreementModel"].ToString());
 		} // Loan
 
@@ -62,6 +58,7 @@ namespace LoanScheduleTransactionBackFill {
 
 		public int ID { get; set; }
 		public LoanType LoanType { get; set; }
+		public decimal DeclaredLoanAmount { get; set; }
 
 		public List<Transaction> Transactions { get; private set; }
 		public List<Schedule> Planned { get; private set; }
@@ -101,8 +98,7 @@ namespace LoanScheduleTransactionBackFill {
 			}
 			else {
 				ScheduleState = ScheduleState.DiffCount;
-
-				// TODO: do something in this case
+				BuildBadWorkingSet();
 			}// if
 		} // BuildWorkingSet
 
@@ -238,7 +234,7 @@ namespace LoanScheduleTransactionBackFill {
 
 		public void Save(AConnection oDB) {
 			foreach (ScheduleTransaction st in ScheduleTransactions)
-				st.Save(ID, oDB);
+				st.Save(ID, ScheduleState, oDB);
 		} // Save
 
 		#endregion method Save
@@ -246,16 +242,7 @@ namespace LoanScheduleTransactionBackFill {
 		#region property IsCountable
 
 		public bool IsCountable { get {
-			switch (ScheduleState) {
-			case ScheduleState.Match:
-			case ScheduleState.SameCountDiffDates:
-				return true;
-
-			// TODO: implement for all
-
-			default:
-				return false;
-			} // switch
+			return (ScheduleState != ScheduleState.Unknown);
 		}} // IsCountable
 
 		#endregion property IsCountable
@@ -291,25 +278,50 @@ namespace LoanScheduleTransactionBackFill {
 		public override string ToString() {
 			var os = new StringBuilder();
 
-			os.AppendFormat("Loan {0} - {1} - {2} - begin\n", ID, LoanType.ToString(), ScheduleState.ToString());
+			var nTransactionSum = Transactions.Sum(x => x.Principal);
 
-			os.Append("\tPlanned schedule:\n");
+			os.AppendFormat(
+				"Loan {0} ({3}) - {1} ({5}) - {2} - {4}paid - begin\n",
+				ID, LoanType.ToString(), ScheduleState.ToString(),
+				DeclaredLoanAmount.ToString("C2", Schedule.Culture),
+				nTransactionSum == DeclaredLoanAmount ? "" : "not ",
+				Actual.Count
+			);
+
+			os.AppendFormat("\tPlanned vs Actual: {0} - {1}\n", Planned.Count, Actual.Count);
+
+			os.AppendFormat("\tPlanned schedule ({0}):\n", Planned.Count);
 
 			Planned.ForEach(x => os.AppendFormat("\t\t{0}\n", x));
 
-			os.Append("\tActual schedule:\n");
+			os.AppendFormat("\t\t{0}\n", new string('-', 38));
+			os.AppendFormat("\t\t{0,27} {1,10}\n", " ", Planned.Sum(x => x.Principal).ToString("C2", Schedule.Culture));
+
+			os.AppendFormat("\tActual schedule ({0}):\n", Actual.Count);
 
 			Actual.ForEach(x => os.AppendFormat("\t\t{0}\n", x));
 
-			os.Append("\tWorking set:\n");
+			decimal nActualSum = Actual.Sum(x => x.Principal);
+
+			os.AppendFormat("\t\t{0}\n", new string('-', 38));
+			os.AppendFormat("\t\t{0,27} {1,10}\n", " ", nActualSum.ToString("C2", Schedule.Culture));
+
+			os.AppendFormat("\tWorking set ({0}):\n", WorkingSet.Count);
 
 			WorkingSet.ForEach(x => os.AppendFormat("\t\t{0}\n", x));
 
-			os.Append("\tTransactions:\n");
+			os.AppendFormat("\tTransactions ({0}):\n", Transactions.Count);
 
 			Transactions.ForEach(x => os.AppendFormat("\t\t{0}\n", x));
 
-			os.Append("\tSchedule-transactions:\n");
+			os.AppendFormat("\t\t{0}\n", new string('-', 38));
+			os.AppendFormat("\t\t{0,27} {1,10}\n", " ", nTransactionSum.ToString("C2", Schedule.Culture));
+			os.AppendFormat("\t\t{0,27} {1,10}\n", " ", (nActualSum + nTransactionSum).ToString("C2", Schedule.Culture));
+
+			if (nActualSum + nTransactionSum != DeclaredLoanAmount)
+				os.Append("\tGewalt!\n");
+
+			os.AppendFormat("\tSchedule-transactions ({0}):\n", ScheduleTransactions.Count);
 
 			ScheduleTransactions.ForEach(x => os.AppendFormat("\t\t{0}\n", x));
 
@@ -317,7 +329,7 @@ namespace LoanScheduleTransactionBackFill {
 			var nActual = ScheduleTransactions.Sum(x => x.PrincipalDelta);
 
 			os.AppendFormat(
-				"\tTotal\n\t\t{0,10} + {1,10} = {2,10}\n",
+				"\tTotal working set + schedule transactions\n\t\t{0,10} + {1,10} = {2,10}\n",
 				nExpected.ToString("C2", Schedule.Culture),
 				nActual.ToString("C2", Schedule.Culture),
 				(nExpected + nActual).ToString("C2", Schedule.Culture)
@@ -349,6 +361,65 @@ namespace LoanScheduleTransactionBackFill {
 		} // FillPlanned
 
 		#endregion method FillPlanned
+
+		#region method BuildBadWorkingSet
+
+		private void BuildBadWorkingSet() {
+			if (Actual.Count == 0)
+				return;
+
+			if (Planned.Count == 0) {
+				decimal nOther = Math.Floor(DeclaredLoanAmount / Actual.Count);
+				decimal nFirst = DeclaredLoanAmount - nOther * (Actual.Count - 1);
+
+				bool bFirst = true;
+
+				foreach (Schedule sh in Actual) {
+					WorkingSet.Add(new Schedule(sh) { Principal = bFirst ? nFirst : nOther });
+					bFirst = false;
+				} // for each
+
+				return;
+			} // if no planned
+
+			if (Transactions.Sum(x => x.Principal) == DeclaredLoanAmount) {
+				if (LoanType == LoanType.Standard) {
+					decimal nOther = Math.Floor(DeclaredLoanAmount / Actual.Count);
+					decimal nFirst = DeclaredLoanAmount - nOther * (Actual.Count - 1);
+
+					bool bFirst = true;
+
+					foreach (Schedule sh in Actual) {
+						WorkingSet.Add(new Schedule(sh) { Principal = bFirst ? nFirst : nOther });
+						bFirst = false;
+					} // for each
+
+					return;
+				} // if standard loan
+
+				if (LoanType == LoanType.Halfway) {
+					int nFirstHalf = Actual.Count / 2;
+					int nSecondHalf = Actual.Count - nFirstHalf;
+
+					for (int i = 0; i < nFirstHalf; i++)
+						WorkingSet.Add(new Schedule(Actual[i]) {Principal = 0});
+
+					decimal nOther = Math.Floor(DeclaredLoanAmount / nSecondHalf);
+					decimal nFirst = DeclaredLoanAmount - nOther * (nSecondHalf - 1);
+
+					bool bFirst = true;
+
+					for (int i = 0; i < nSecondHalf; i++) {
+						WorkingSet.Add(new Schedule(Actual[nFirstHalf + i]) { Principal = bFirst ? nFirst : nOther });
+						bFirst = false;
+					} // for each
+				} // if halfway loan
+
+				return;
+			} // if paid loan
+		} // BuildBadWorkingSet
+
+		#endregion method BuildBadWorkingSet
 
 		#endregion private
 	} // class Loan

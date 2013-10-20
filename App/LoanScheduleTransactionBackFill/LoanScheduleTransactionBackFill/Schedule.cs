@@ -33,15 +33,18 @@ namespace LoanScheduleTransactionBackFill {
 			ID = o.ID;
 			Date = o.Date;
 			Principal = o.Principal;
+			IsAlreadyProcessed = o.IsAlreadyProcessed;
 		} // constructor
 
 		public Schedule(DbDataReader row, ASafeLog log = null) : base(log) {
 			ID = Convert.ToInt32(row["ItemID"]);
 			Date = Convert.ToDateTime(row["ItemDate"]).Date;
 			Principal = Convert.ToDecimal(row["Principal"]);
+			IsAlreadyProcessed = row["ProcessedID"] != System.DBNull.Value;
 		} // constructor
 
 		public Schedule(ScheduleModel sm, ASafeLog log = null) : base(log) {
+			IsAlreadyProcessed = false;
 			Date = sm.Date.Date;
 			Principal = sm.LoanRepayment;
 		} // constructor
@@ -52,10 +55,16 @@ namespace LoanScheduleTransactionBackFill {
 		public DateTime Date { get; set; }
 		public decimal Principal { get; set; }
 
+		public bool IsAlreadyProcessed { get; set; }
+
 		#region method ToString
 
 		public override string ToString() {
-			return string.Format("{0,7} on {1} p: {2,10}", ID, Date.ToString("MMM dd yyyy", Culture), Principal.ToString("C2", Culture));
+			return string.Format(
+				"{3} {0,7} on {1} p: {2,10}",
+				ID, Date.ToString("MMM dd yyyy", Culture), Principal.ToString("C2", Culture),
+				IsAlreadyProcessed ? "v" : " "
+			);
 		} // ToString
 
 		#endregion method ToString

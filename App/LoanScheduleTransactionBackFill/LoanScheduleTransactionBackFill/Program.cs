@@ -16,8 +16,8 @@ namespace LoanScheduleTransactionBackFill {
 	class Program {
 		static void Main(string[] args) {
 			using (var oLog = new FileLog(oLog: new ConsoleLog())) {
-				var oEnv = new Ezbob.Context.Environment(Name.Dev, "alexbo", oLog: oLog);
-				// var oEnv = new Ezbob.Context.Environment(Name.Production, oLog: oLog);
+				// var oEnv = new Ezbob.Context.Environment(Name.Dev, "alexbo", oLog: oLog);
+				var oEnv = new Ezbob.Context.Environment(Name.Production, oLog: oLog);
 
 				var oDB = new SqlConnection(oEnv, oLog);
 
@@ -49,8 +49,10 @@ namespace LoanScheduleTransactionBackFill {
 					(oReader, bRowsetStart) => {
 						int nLoanID = Convert.ToInt32(oReader["LoanID"]);
 
-						if (oLoans.ContainsKey(nLoanID))
-							oLoans[nLoanID].Actual.Add(new Schedule(oReader, oLog));
+						if (oLoans.ContainsKey(nLoanID)) {
+							var oSh = new Schedule(oReader, oLog);
+							oLoans[nLoanID].Actual.Add(oSh);
+						} // if
 
 						oProgress++;
 
@@ -68,8 +70,8 @@ namespace LoanScheduleTransactionBackFill {
 				foreach (Loan l in oLoans.Values) {
 					l.BuildWorkingSet();
 
-					if (l.IsCountable && (l.TotalPrincipalPaid > l.LoanAmount))
-						oLog.Warn("Loan {0}: principal ({1}) is greater than loan amount ({2}).", l.ID, l.TotalPrincipalPaid, l.LoanAmount);
+					// if (l.IsCountable && (l.TotalPrincipalPaid > l.LoanAmount))
+						// oLog.Warn("Loan {0}: principal ({1}) is greater than loan amount ({2}).", l.ID, l.TotalPrincipalPaid, l.LoanAmount);
 
 					l.Calculate();
 
