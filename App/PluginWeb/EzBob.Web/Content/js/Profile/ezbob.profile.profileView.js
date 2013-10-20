@@ -164,6 +164,8 @@ EzBob.Profile.ProfileRouter = Backbone.Router.extend({
         this.accounts = new EzBob.Profile.PaymentAccountsView({ model: options });
 
         this.accountActivityView = new EzBob.Profile.AccountActivityView({ model: options });
+        
+        this.inviteFriendView = new EzBob.Profile.InviteFriendView({ model: options });
 
         //this.accountSummary = new EzBob.Profile.AccountSummaryView({ model: options });
 
@@ -179,7 +181,7 @@ EzBob.Profile.ProfileRouter = Backbone.Router.extend({
         this.widgets.AccountActivity = this.accountActivityView;
         this.widgets.Settings = this.accountSettingsView;
         this.widgets.YourDetails = this.YourDetails;
-
+        this.widgets.InviteFriend = this.inviteFriendView;
         _.each(this.widgets, function (w) {
             w.render().$el.hide().appendTo(that.profileWidgets);
         });
@@ -247,7 +249,8 @@ EzBob.Profile.ProfileRouter = Backbone.Router.extend({
         "GetCash": "getCash",
         "PayEarly/:id": "payEarly",
         "PayEarly": "payEarly",
-        "LoanDetails/:id": "loanDetails"
+        "LoanDetails/:id": "loanDetails",
+        "InviteFriend":"inviteFriend"
     },
     //    accountSummary: function () {
     //        this.activate("AccountSummary");
@@ -267,6 +270,9 @@ EzBob.Profile.ProfileRouter = Backbone.Router.extend({
     settings: function () {
         this.activate("Settings");
         this.marketing("Settings");
+    },
+    inviteFriend: function() {
+        this.activate("InviteFriend");
     },
     getCash: function () {
         EzBob.CT.recordEvent('ct:profile:getCash');

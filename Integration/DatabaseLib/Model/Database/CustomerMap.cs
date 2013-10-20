@@ -338,6 +338,13 @@ namespace EZBob.DatabaseLib.Model.Database {
 				.KeyColumn("CustomerId")
 				.Cascade.AllDeleteOrphan()
 				.Inverse();
+
+			HasMany(x => x.CustomerInviteFriend)
+				.AsBag()
+				.KeyColumn("CustomerId")
+				.Cascade.All()
+				.Inverse();
+
 			/*
 	        HasOne(x => x.CustomerRequestedLoan)
 		        .Cascade.SaveUpdate()

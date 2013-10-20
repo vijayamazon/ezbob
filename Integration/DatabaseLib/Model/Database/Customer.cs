@@ -532,6 +532,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual string PromoCode { get; set; }
 
 		public virtual IList<CustomerRequestedLoan> CustomerRequestedLoan { get; set; }
+		public virtual IList<CustomerInviteFriend> CustomerInviteFriend { get; set; }
 
 		public static ParseExperianResult ParseExperian(string sCompanyRefNum, string sCompanyName, string sParserConfiguration) {
 			var oLog = LogManager.GetLogger(typeof(Customer));

@@ -143,8 +143,6 @@
     background-color: #DCA613;
     height: 20px;
     margin-top: 8px;
-    margin-left: 16px;
-    margin-right: 16px;
 }
 
 .slider-ticks {
@@ -324,7 +322,7 @@ body .agreement-text {
 
 .profile-menu .nav {
     height: 36px;
-    width: 900px;
+    width: 950px;
 }
 
 .profile-menu .navbar-inner {
@@ -924,4 +922,9 @@ select.selectheight { height: 30px; }
 
 .editYourInfoForm .form_field_address_lookup{
     margin-left: 10px;
+}
+
+textarea.invite_friend {
+    width: 400px;
+    height: 100px;
 }

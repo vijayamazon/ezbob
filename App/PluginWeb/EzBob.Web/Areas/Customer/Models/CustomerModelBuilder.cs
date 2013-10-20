@@ -12,26 +12,35 @@ using PaymentServices.Calculators;
 
 namespace EzBob.Web.Areas.Customer.Models
 {
+	using System.Collections.Generic;
+
 	public class CustomerModelBuilder
-    {
-        private readonly ISecurityQuestionRepository _questions;
-        private readonly ICustomerRepository _customerRepository;
-        private readonly IUsersRepository _users;
+	{
+		private readonly ISecurityQuestionRepository _questions;
+		private readonly ICustomerRepository _customerRepository;
+		private readonly IUsersRepository _users;
 		private readonly LoanPaymentFacade _facade;
 		private readonly PaymentRolloverRepository _paymentRolloverRepository;
-        private ChangeLoanDetailsModelBuilder _changeLoanDetailsModelBuilder;
+		private readonly ChangeLoanDetailsModelBuilder _changeLoanDetailsModelBuilder;
+		private readonly ICustomerInviteFriendRepository _customerInviteFriendRepository;
 
-		public CustomerModelBuilder(ISecurityQuestionRepository questions, ICustomerRepository customerRepository, IUsersRepository users, PaymentRolloverRepository paymentRolloverRepository)
-        {
-            _questions = questions;
-            _customerRepository = customerRepository;
-            _users = users;
-            _paymentRolloverRepository = paymentRolloverRepository;
-            _facade = new LoanPaymentFacade();
-            _changeLoanDetailsModelBuilder = new ChangeLoanDetailsModelBuilder();
-        }
+		public CustomerModelBuilder(
+			ISecurityQuestionRepository questions, 
+			ICustomerRepository customerRepository, 
+			IUsersRepository users, 
+			PaymentRolloverRepository paymentRolloverRepository, 
+			ICustomerInviteFriendRepository customerInviteFriendRepository)
+		{
+			_questions = questions;
+			_customerRepository = customerRepository;
+			_users = users;
+			_paymentRolloverRepository = paymentRolloverRepository;
+			_customerInviteFriendRepository = customerInviteFriendRepository;
+			_facade = new LoanPaymentFacade();
+			_changeLoanDetailsModelBuilder = new ChangeLoanDetailsModelBuilder();
+		}
 
-        public CustomerModel BuildWizardModel(EZBob.DatabaseLib.Model.Database.Customer cus)
+		public CustomerModel BuildWizardModel(EZBob.DatabaseLib.Model.Database.Customer cus)
         {
             var customerModel = new CustomerModel() {loggedIn = cus != null, bankAccountAdded = false};
 
@@ -185,26 +194,42 @@ namespace EzBob.Web.Areas.Customer.Models
 	        customerModel.LoyaltyPoints = customer.LoyaltyPoints();
 	        customerModel.IsOffline = customer.IsOffline;
 
+			var inviteFriend = customer.CustomerInviteFriend.FirstOrDefault();
+			if (inviteFriend == null)
+			{
+				customer.CustomerInviteFriend = new List<CustomerInviteFriend>();
+				var customerInviteFriend = new CustomerInviteFriend(customer);
+				customer.CustomerInviteFriend.Add(customerInviteFriend);
+			}
+	        customerModel.InviteFriendSource = customer.CustomerInviteFriend.First().InviteFriendSource;
+			customerModel.InvitedFriends =
+				_customerInviteFriendRepository.GetAll()
+											   .Where(c => c.InvitedByFriendSource == customer.CustomerInviteFriend.First().InviteFriendSource)
+											   .Select(i => new InvitedFriend
+													   {
+														   FriendName = string.IsNullOrEmpty(i.Customer.PersonalInfo.Fullname) ? i.Customer.Name : i.Customer.PersonalInfo.Fullname,
+														   FriendTookALoan = (i.Customer.Loans.Any() ? "Yes" : "No")
+													   });
             return customerModel;
         }
 
-        private decimal GetRolloverPayValue(Loan loan)
-        {
-            var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow);
-            var state = payEarlyCalc.GetState();
+		private decimal GetRolloverPayValue(Loan loan)
+		{
+			var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow);
+			var state = payEarlyCalc.GetState();
 
-            return state.Fees + state.Interest;
-        }
+			return state.Fees + state.Interest;
+		}
 
-        private PayPointCardModel[] FillPayPointCards(EZBob.DatabaseLib.Model.Database.Customer customer)
-        {
-            //Add paypoint cards for old customers
-            if (!string.IsNullOrEmpty(customer.PayPointTransactionId) && !customer.PayPointCards.Any())
-            {
-                customer.TryAddPayPointCard(customer.PayPointTransactionId, customer.CreditCardNo, null, customer.PersonalInfo.Fullname);
-            }
+		private PayPointCardModel[] FillPayPointCards(EZBob.DatabaseLib.Model.Database.Customer customer)
+		{
+			//Add paypoint cards for old customers
+			if (!string.IsNullOrEmpty(customer.PayPointTransactionId) && !customer.PayPointCards.Any())
+			{
+				customer.TryAddPayPointCard(customer.PayPointTransactionId, customer.CreditCardNo, null, customer.PersonalInfo.Fullname);
+			}
 
-            return customer.PayPointCards.Select(PayPointCardModel.FromCard).OrderByDescending(x=>x.IsDefault).ToArray();
-        }
-    }
+			return customer.PayPointCards.Select(PayPointCardModel.FromCard).OrderByDescending(x => x.IsDefault).ToArray();
+		}
+	}
 }

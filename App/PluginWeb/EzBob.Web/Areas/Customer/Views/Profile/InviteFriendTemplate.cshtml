@@ -1,0 +1,67 @@
+﻿@using EzBob.Web.Areas.Customer.Models
+@model dynamic
+@{
+    var url = string.Format("{0}://{1}{2}?invite={3}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"), Model.Customer.InviteFriendSource);
+    var summary = "Get a Small Business Loan To Grow your Online Store";
+    var encodedSummary = Uri.EscapeUriString(summary);
+    var text = string.Format("{0} {1}Join Now {2}", summary, Environment.NewLine, @url);
+    var urlEncodedText = Uri.EscapeUriString(text);
+    var subject = Uri.EscapeUriString("Join Ezbob Loans");
+    var imageUrl = Uri.EscapeUriString("http://www.ezbob.com/wp-content/themes/ezbob/images/ezbob_logo.png");
+
+    var a = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Customer));
+    var customer = (CustomerModel) Model.Customer;
+
+}
+<script id="invite-friend-template" type="text/template">
+    @if (customer.InvitedFriends != null && customer.InvitedFriends.Any())
+    {
+        <div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Registered Friend</th>
+                        <th>Took a loan</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (InvitedFriend friend in Model.Customer.InvitedFriends)
+                    {
+                        <tr>
+                            <td class="first">@friend.FriendName</td>
+                            <td class="last">@friend.FriendTookALoan</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+
+    <div class="row-fluid">
+        <button class="button orange pull-right inviteFriendHelp">Invite A Friend</button>
+    </div>
+
+    <div class="hide">
+        <div id="inviteFriendHelp" class="help_window">
+            <h2>Invite Friend</h2>
+            <p>
+                Please copy the following text and paste in your email client 
+                <br />
+                or just press send button.
+            </p>
+            <br />
+            <textarea class="invite_friend">@text</textarea>
+            <div class="alignright" style="padding: 0 10px 0 0;">
+                <a href="mailto:?subject=@subject&body=@text" target="_blank" class="button orange pull-right" id="inviteFriendBtn" onclick="$.colorbox.close();">Send</a>
+                <a href="https://www.facebook.com/sharer/sharer.php?s=100&p[title]=@subject&p[summary]=@encodedSummary&p[url]=@urlEncodedText&p[images][0]=@imageUrl" class="button orange pull-right" target="_blank">Share on Facebook</a>
+                <a href="#" class="button grey pull-right" id="cancelInviteFriendBtn" onclick="$.colorbox.close();">Cancel</a>
+            </div>
+            <div class="clear"></div>
+            <hr>
+            <div class="help_security"></div>
+        </div>
+    </div>
+
+
+
+</script>

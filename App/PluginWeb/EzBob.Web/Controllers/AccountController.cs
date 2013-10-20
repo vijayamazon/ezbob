@@ -395,8 +395,8 @@ namespace EzBob.Web.Controllers
 						IsTest = isAutomaticTest,
 						IsOffline = false,
 						PromoCode = promoCode,
+						CustomerInviteFriend = new List<CustomerInviteFriend>()
 					};
-
 
 				var sourceref = Request.Cookies["sourceref"];
 				if (sourceref != null)
@@ -406,6 +406,16 @@ namespace EzBob.Web.Controllers
 					customer.ReferenceSource = sourceref.Value;
 				}
 
+				var customerInviteFriend = new CustomerInviteFriend(customer);
+				var inviteFriend = Request.Cookies["invite"];
+				if (inviteFriend != null)
+				{
+					var cookie = new HttpCookie("inviteFriend", "") { Expires = DateTime.Now.AddMonths(-1), HttpOnly = true, Secure = true };
+					Response.Cookies.Add(cookie);
+					customerInviteFriend.InvitedByFriendSource = inviteFriend.Value;
+				}
+
+				customer.CustomerInviteFriend.Add(customerInviteFriend);
 				var ezbobab = Request.Cookies["ezbobab"];
 				if (ezbobab != null)
 				{

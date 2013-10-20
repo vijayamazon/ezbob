@@ -112,9 +112,18 @@ namespace EzBob.Web.Areas.Customer.Models
 		public bool IsEarly { get; set; }
 
 		public CompanyEmployeeCountInfo CompanyEmployeeCountInfo { get; set; }
+
+		public string InviteFriendSource { get; set; }
+		public IEnumerable<InvitedFriend> InvitedFriends { get; set; }
     }
 
-    public class LimitedInfoMap
+	public class InvitedFriend
+	{
+		public string FriendName { get; set; }
+		public string FriendTookALoan { get; set; }
+	}
+
+	public class LimitedInfoMap
     {
         public string LimitedCompanyNumber { get; set; }
         public string LimitedCompanyName { get; set; }
