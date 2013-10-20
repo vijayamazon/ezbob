@@ -13,8 +13,8 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.Sage
 		
 		public virtual int SageId { get; set; }
 		public virtual int? StatusId { get; set; }
-		public virtual DateTime due_date { get; set; }
-		public virtual DateTime date { get; set; }
+		public virtual DateTime? due_date { get; set; }
+		public virtual DateTime? date { get; set; }
 		public virtual string void_reason { get; set; }
 		public virtual decimal outstanding_amount { get; set; }
 		public virtual decimal total_net_amount { get; set; }

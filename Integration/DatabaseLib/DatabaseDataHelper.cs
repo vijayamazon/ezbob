@@ -2774,7 +2774,7 @@ namespace EZBob.DatabaseLib
 			}
 
 			MP_FreeAgentInvoice item = order.Invoices.OrderBy(x => x.dated_on).AsQueryable().LastOrDefault();
-			DateTime latestExistingDate = item != null ? item.dated_on : order.Created;
+			DateTime latestExistingDate = item != null && item.dated_on.HasValue ? item.dated_on.Value : order.Created;
 
 			DateTime later = DateTime.UtcNow;
 			int monthDiff = 1;
@@ -2808,21 +2808,21 @@ namespace EZBob.DatabaseLib
 			MP_SageExpenditure lastExpenditure = request.Expenditures.OrderBy(x => x.date).AsQueryable().LastOrDefault();
 
 			DateTime latestDate = request.Created;
-			if (lastSalesInvoice != null && lastSalesInvoice.date > latestDate)
+			if (lastSalesInvoice != null && lastSalesInvoice.date.HasValue && lastSalesInvoice.date > latestDate)
 			{
-				latestDate = lastSalesInvoice.date;
+				latestDate = lastSalesInvoice.date.Value;
 			}
-			if (lastPurchaseInvoice != null && lastPurchaseInvoice.date > latestDate)
+			if (lastPurchaseInvoice != null && lastPurchaseInvoice.date.HasValue && lastPurchaseInvoice.date > latestDate)
 			{
-				latestDate = lastPurchaseInvoice.date;
+				latestDate = lastPurchaseInvoice.date.Value;
 			}
-			if (lastIncome != null && lastIncome.date > latestDate)
+			if (lastIncome != null && lastIncome.date.HasValue && lastIncome.date > latestDate)
 			{
-				latestDate = lastIncome.date;
+				latestDate = lastIncome.date.Value;
 			}
-			if (lastExpenditure != null && lastExpenditure.date > latestDate)
+			if (lastExpenditure != null && lastExpenditure.date.HasValue && lastExpenditure.date > latestDate)
 			{
-				latestDate = lastExpenditure.date;
+				latestDate = lastExpenditure.date.Value;
 			}
 
 			return latestDate.AddMonths(-1);
@@ -2839,8 +2839,8 @@ namespace EZBob.DatabaseLib
 			}
 
 			MP_FreeAgentExpense item = request.Expenses.OrderBy(x => x.dated_on).AsQueryable().LastOrDefault();
-			DateTime latestExistingDate = item != null ? item.dated_on : request.Created;
-			return latestExistingDate.AddMonths(-1);
+			DateTime? latestExistingDate = item != null ? item.dated_on : request.Created;
+			return latestExistingDate.HasValue ? latestExistingDate.Value.AddMonths(-1) : DateTime.UtcNow.AddYears(-1);
 		} // GetFreeAgentExpenseDeltaPeriod
 
 		public string GetPayPointDeltaPeriod(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)

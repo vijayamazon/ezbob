@@ -54,7 +54,7 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order
 		public string url { get; set; }
 		public string user { get; set; }
 		public string category { get; set; }
-		public DateTime dated_on { get; set; }
+		public DateTime? dated_on { get; set; }
 		public string currency { get; set; }
 		public decimal gross_value { get; set; }
 		public decimal native_gross_value { get; set; }
@@ -63,15 +63,15 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order
 		public decimal native_sales_tax_value { get; set; }
 		public string description { get; set; }
 		public decimal? manual_sales_tax_amount { get; set; }
-		public DateTime updated_at { get; set; }
-		public DateTime created_at { get; set; }
+		public DateTime? updated_at { get; set; }
+		public DateTime? created_at { get; set; }
 
 		public FreeAgentExpenseAttachment attachment { get; set; }
 		public FreeAgentExpenseCategory categoryItem { get; set; }
 
 		public override DateTime RecordTime
 		{
-			get { return dated_on; }
+			get { return dated_on.HasValue ? dated_on.Value : new DateTime(1900, 1, 1); }
 		}
 	}
 

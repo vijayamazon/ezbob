@@ -13,8 +13,8 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.FreeAgent
 
 		public virtual string url { get; set; }
 		public virtual string contact { get; set; }
-		public virtual DateTime dated_on { get; set; }
-		public virtual DateTime due_on { get; set; }
+		public virtual DateTime? dated_on { get; set; }
+		public virtual DateTime? due_on { get; set; }
 		public virtual string reference { get; set; }
 		public virtual string currency { get; set; }
 		public virtual decimal exchange_rate { get; set; }

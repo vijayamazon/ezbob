@@ -46,8 +46,8 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order
 	{
 		public int SageId { get; set; }
 		public int? status { get; set; }
-		public DateTime due_date { get; set; }
-		public DateTime date { get; set; }
+		public DateTime? due_date { get; set; }
+		public DateTime? date { get; set; }
 		public string void_reason { get; set; }
 		public decimal outstanding_amount { get; set; }
 		public decimal total_net_amount { get; set; }
@@ -67,7 +67,7 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order
 
 		public override DateTime RecordTime
 		{
-			get { return date; }
+			get { return date.HasValue ? date.Value : new DateTime(1900, 1, 1); }
 		}
 	}
 }

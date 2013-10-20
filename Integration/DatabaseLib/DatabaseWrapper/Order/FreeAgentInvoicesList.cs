@@ -41,8 +41,8 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order
 	{
 		public string url { get; set; }
 		public string contact { get; set; }
-		public DateTime dated_on { get; set; }
-		public DateTime due_on { get; set; }
+		public DateTime? dated_on { get; set; }
+		public DateTime? due_on { get; set; }
 		public string reference { get; set; }
 		public string currency { get; set; }
 		public decimal exchange_rate { get; set; }
@@ -59,7 +59,7 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order
 
 		public override DateTime RecordTime
 		{
-			get { return dated_on; }
+			get { return dated_on.HasValue ? dated_on.Value : new DateTime(1900, 1, 1); }
 		}
 	}
 

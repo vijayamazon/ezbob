@@ -17,8 +17,8 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.FreeAgent
 		public virtual string role { get; set; }
 		public virtual int permission_level { get; set; }
 		public virtual decimal opening_mileage { get; set; }
-		public virtual DateTime updated_at { get; set; }
-		public virtual DateTime created_at { get; set; }
+		public virtual DateTime? updated_at { get; set; }
+		public virtual DateTime? created_at { get; set; }
 	}
 
 	public interface IMP_FreeAgentUsersRepository : IRepository<MP_FreeAgentUsers>

@@ -9,7 +9,7 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.Sage
 		public virtual MP_SageRequest Request { get; set; }
 
 		public virtual int SageId { get; set; }
-		public virtual DateTime date { get; set; }
+		public virtual DateTime? date { get; set; }
 		public virtual DateTime? invoice_date { get; set; }
 		public virtual decimal amount { get; set; }
 		public virtual decimal tax_amount { get; set; }

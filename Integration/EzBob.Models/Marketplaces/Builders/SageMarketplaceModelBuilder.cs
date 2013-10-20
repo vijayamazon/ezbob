@@ -144,24 +144,24 @@ namespace EzBob.Models.Marketplaces.Builders
             }
             if (purchaseInvoices.Any())
             {
-                DateTime tmp = purchaseInvoices.Min();
-                if (result == null || result > tmp)
+                DateTime? tmp = purchaseInvoices.Min();
+                if (result == null || (tmp.HasValue && result.Value > tmp.Value))
                 {
                     result = tmp;
                 }
             }
             if (incomes.Any())
             {
-                DateTime tmp = incomes.Min();
-                if (result == null || result > tmp)
+                DateTime? tmp = incomes.Min();
+				if (result == null || (tmp.HasValue && result.Value > tmp.Value))
                 {
                     result = tmp;
                 }
             }
             if (expenditures.Any())
             {
-                DateTime tmp = expenditures.Min();
-                if (result == null || result > tmp)
+                DateTime? tmp = expenditures.Min();
+				if (result == null || (tmp.HasValue && result.Value > tmp.Value))
                 {
                     result = tmp;
                 }

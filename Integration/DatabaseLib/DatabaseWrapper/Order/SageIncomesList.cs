@@ -27,7 +27,7 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order
 	public class SageIncome : TimeDependentRangedDataBase
 	{
 		public int SageId { get; set; }
-		public DateTime date { get; set; }
+		public DateTime? date { get; set; }
 		public DateTime? invoice_date { get; set; }
 		public decimal amount { get; set; }
 		public decimal tax_amount { get; set; }
@@ -45,7 +45,7 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.Order
 
 		public override DateTime RecordTime
 		{
-			get { return date; }
+			get { return date.HasValue ? date.Value : new DateTime(1900, 1, 1); }
 		}
 	}
 }
