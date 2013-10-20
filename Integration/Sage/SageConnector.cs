@@ -125,7 +125,7 @@
 			{
 				var js = new JavaScriptSerializer();
 				var deserializedObject = ((PaginatedResults<TDeserialized>)js.Deserialize(cleanResponse, typeof(PaginatedResults<TDeserialized>)));
-				if (deserializedObject.resources == null && deserializedObject.diagnoses == null)
+				if (deserializedObject == null || (deserializedObject.resources == null && deserializedObject.diagnoses == null))
 				{
 					string errorMessage = string.Format("Error deserializing response:{0}", cleanResponse);
 					log.ErrorFormat(errorMessage);
@@ -192,7 +192,7 @@
 				{
 					var js = new JavaScriptSerializer();
 					var deserializedResponse = (AccessTokenContainer)js.Deserialize(response.Content, typeof(AccessTokenContainer));
-					if (deserializedResponse.access_token != null)
+					if (deserializedResponse != null && deserializedResponse.access_token != null)
 					{
 						return deserializedResponse;
 					}

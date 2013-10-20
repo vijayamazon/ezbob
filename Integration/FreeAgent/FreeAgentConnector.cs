@@ -30,7 +30,7 @@
 
 			var invoices = new List<FreeAgentInvoice>();
 			var deserializedResponse = ((InvoicesListHelper)js.Deserialize(response.Content, typeof(InvoicesListHelper)));
-			if (deserializedResponse.Invoices != null)
+			if (deserializedResponse != null && deserializedResponse.Invoices != null)
 			{
 				invoices.AddRange(deserializedResponse.Invoices);
 			}
@@ -54,7 +54,7 @@
 				response = client.Execute(request);
 
 				deserializedResponse = ((InvoicesListHelper)js.Deserialize(response.Content, typeof(InvoicesListHelper)));
-				if (deserializedResponse.Invoices != null)
+				if (deserializedResponse != null && deserializedResponse.Invoices != null)
 				{
 					invoices.AddRange(deserializedResponse.Invoices);
 				}
@@ -80,7 +80,7 @@
 			IRestResponse response = client.Execute(request);
 			var js = new JavaScriptSerializer();
 			var deserializedResponse = (FreeAgentCompanyList)js.Deserialize(response.Content, typeof(FreeAgentCompanyList));
-			if (deserializedResponse.Company != null)
+			if (deserializedResponse != null && deserializedResponse.Company != null)
 			{
 				return deserializedResponse.Company;
 			}
@@ -106,7 +106,7 @@
 			var js = new JavaScriptSerializer();
 			
 			var deserializedResponse = (FreeAgentUsersList)js.Deserialize(response.Content, typeof(FreeAgentUsersList));
-			if (deserializedResponse.Users != null)
+			if (deserializedResponse != null && deserializedResponse.Users != null)
 			{
 				return deserializedResponse.Users;
 			}
@@ -128,7 +128,7 @@
 			var js = new JavaScriptSerializer();
 			var expenses = new List<FreeAgentExpense>();
 			var deserializedResponse = (((ExpensesListHelper)js.Deserialize(response.Content, typeof(ExpensesListHelper))));
-			if (deserializedResponse.Expenses != null)
+			if (deserializedResponse != null && deserializedResponse.Expenses != null)
 			{
 				expenses.AddRange(deserializedResponse.Expenses);
 			}
@@ -146,7 +146,7 @@
 				response = client.Execute(request);
 
 				deserializedResponse = (ExpensesListHelper)js.Deserialize(response.Content, typeof(ExpensesListHelper));
-				if (deserializedResponse.Expenses != null)
+				if (deserializedResponse != null && deserializedResponse.Expenses != null)
 				{
 					expenses.AddRange(deserializedResponse.Expenses);
 				}
@@ -173,7 +173,7 @@
 			var js = new JavaScriptSerializer();
 
 			var deserializedResponse = (ExpenseCategoriesListHelper)js.Deserialize(response.Content, typeof(ExpenseCategoriesListHelper));
-			if (deserializedResponse.Category != null)
+			if (deserializedResponse != null && deserializedResponse.Category != null)
 			{
 				return deserializedResponse.Category;
 			}
@@ -232,7 +232,7 @@
 							var objText = reader.ReadToEnd();
 
 							var deserializedResponse = (AccessTokenContainer)js.Deserialize(objText, typeof(AccessTokenContainer));
-							if (deserializedResponse.access_token != null)
+							if (deserializedResponse != null && deserializedResponse.access_token != null)
 							{
 								return deserializedResponse;
 							}
@@ -270,7 +270,7 @@
 							var objText = reader.ReadToEnd();
 
 							var deserializedResponse = (AccessTokenContainer)js.Deserialize(objText, typeof(AccessTokenContainer));
-							if (deserializedResponse.access_token != null)
+							if (deserializedResponse != null && deserializedResponse.access_token != null)
 							{
 								deserializedResponse.refresh_token = refreshToken;
 								return deserializedResponse;
