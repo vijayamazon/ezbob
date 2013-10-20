@@ -5,7 +5,9 @@ using Nustache.Core;
 
 namespace EzBob.Web.Code.Agreements
 {
-    public class AgreementRenderer
+	using System;
+
+	public class AgreementRenderer
     {
 
         public byte[] RenderAgreementToPdf(string view, AgreementModel model)
@@ -18,6 +20,12 @@ namespace EzBob.Web.Code.Agreements
             var html = Render.StringToString(view, model);
             return html;
         }
+
+		public string AggrementToBase64String(string view, AgreementModel model)
+		{
+			byte[] pdfData = ConvertToPdf(RenderAgreement(view, model));
+			return Convert.ToBase64String(pdfData);
+		}
 
         public static byte[] ConvertToPdf(string htmlForConvert)
         {

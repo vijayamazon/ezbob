@@ -2,9 +2,11 @@
 
 namespace MailApi
 {
-    public interface IMail
+	using Model;
+
+	public interface IMail
     {
-        string Send(Dictionary<string,string> parameters, string to, string templateName, string subject = "", string cc = "");
+        string Send(Dictionary<string,string> parameters, string to, string templateName, string subject = "", string cc = "", List<attachment> attachments = null);
         /// <summary>
         /// Send message without template
         /// </summary>

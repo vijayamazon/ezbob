@@ -32,8 +32,9 @@ namespace MailApi.Model
         public IEnumerable<string> google_analytics_domains { get; set; }
         public string google_analytics_campaign { get; set; }
         public JsonObject metadata { get; set; }
-        public IEnumerable<attachment> attachments { get; set; }
+        public List<attachment> attachments { get; set; }
         public IEnumerable<image> images { get; set; }
         public string raw_message { get; set; }
+
     }
 }

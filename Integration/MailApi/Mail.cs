@@ -11,7 +11,7 @@ using log4net;
 
 namespace MailApi
 {
-    public class Mail: IMail
+	public class Mail: IMail
     {
         private readonly RestClient _client;
         private static readonly ILog Log = LogManager.GetLogger(typeof(Mail));
@@ -25,15 +25,16 @@ namespace MailApi
 
         public Mail(IMandrillConfig config = null)
         {
-            _config = config ?? ConfigurationRootBob.GetConfiguration().MandrillConfig;
+	        _config = config ?? ConfigurationRootBob.GetConfiguration().MandrillConfig;
             _client = new RestClient(BaseSecureUrl);
             _client.AddHandler("application/json", new JsonDeserializer());
         }
 
-        private EmailModel PrepareEmail(string templateName, string to, Dictionary<string, string> variables, string subject, string cc = "")
+        private EmailModel PrepareEmail(string templateName, string to, Dictionary<string, string> variables, string subject, string cc = "", List<attachment> attachments = null)
         {
             
             var toList = PrepareRecipients(to);
+
             var message = new EmailModel
             {
                 key = _config.Key,
@@ -42,8 +43,10 @@ namespace MailApi
                 {
                     to = toList,
                     subject = subject,
-                    bcc_address = cc
-                },
+                    bcc_address = cc,
+					attachments = attachments
+                }
+				
             };
 
             foreach (var var in variables)
@@ -86,8 +89,8 @@ namespace MailApi
             var request = new RestRequest(path, Method.POST) { RequestFormat = DataFormat.Json };
             request.AddBody(model);
             var response = _client.Post(request);
-
-            Log.InfoFormat("Mandrill service call.\n Request: \n {0} \n Response: \n {1}", request.Parameters[0], response.Content);
+			//Log.DebugFormat("Request: \n {0}", request.Parameters[0]);//to long because of attachments.
+            Log.InfoFormat("Mandrill service call.\n Response: \n {0}", response.Content);
 
             if (response.StatusCode == HttpStatusCode.InternalServerError)
             {
@@ -139,13 +142,13 @@ namespace MailApi
             return retVal["html"];
         }
         //----------------------------------------------------------------------------------
-        public string Send(Dictionary<string, string> parameters, string to, string templateName, string subject = "", string cc = "")
+        public string Send(Dictionary<string, string> parameters, string to, string templateName, string subject = "", string cc = "", List<attachment> attachments = null)
         {
-            var message = PrepareEmail(templateName, to, parameters, subject, cc);
+            var message = PrepareEmail(templateName, to, parameters, subject, cc, attachments);
             return Send(message, SendTemplatePath);
         }
 
-        public string GetRenderedTemplate(Dictionary<string, string> parameters, string templateName)
+		public string GetRenderedTemplate(Dictionary<string, string> parameters, string templateName)
         {
             return RenderTemplate(parameters, templateName);
         }
@@ -156,4 +159,6 @@ namespace MailApi
             return Send(message, SendPath);
         }
     }
+
+	
 }

@@ -9,21 +9,24 @@
 	using EzBob.Web.ApplicationCreator;
 	using EzBob.Web.Code;
 	using EzBob.Web.Code.Agreements;
+	using NHibernate;
 	using PaymentServices.PacNet;
 
     public class LoanCreatorNoChecks : LoanCreator
     {
-        private readonly EzContext _context;
+	    private readonly ISession _session;
+	    private readonly EzContext _context;
         private readonly ICustomerRepository _customerRepository;
         private readonly IUsersRepository _users;
 
         public LoanCreatorNoChecks(ILoanHistoryRepository loanHistoryRepository, IPacnetService pacnetService,
                                    IAppCreator appCreator, IAgreementsGenerator agreementsGenerator,
                                    EzContext context, ICustomerRepository customerRepository, IUsersRepository users,
-                                   LoanBuilder loanBuilder, AvailableFundsValidator validator)
-			: base(loanHistoryRepository, pacnetService, appCreator, agreementsGenerator, context, loanBuilder, validator)
+                                   LoanBuilder loanBuilder, AvailableFundsValidator validator, ISession session)
+			: base(loanHistoryRepository, pacnetService, appCreator, agreementsGenerator, context, loanBuilder, validator, session)
         {
-            _context = context;
+	        _session = session;
+	        _context = context;
             _customerRepository = customerRepository;
             _users = users;
         }

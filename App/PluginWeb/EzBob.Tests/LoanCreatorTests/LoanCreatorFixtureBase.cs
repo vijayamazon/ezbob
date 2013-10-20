@@ -32,7 +32,7 @@
             _loanDetailsModelBuilder = new ChangeLoanDetailsModelBuilder();
             _loanBuilder = new LoanBuilder(_loanDetailsModelBuilder);
 
-            _lc = new LoanCreator(loanHistoryRepository.Object, pacnetService.Object, appCreator.Object, agreementsGenerator.Object, context.Object, _loanBuilder, new AvailableFundsValidatorFake());
+            _lc = new LoanCreator(loanHistoryRepository.Object, pacnetService.Object, appCreator.Object, agreementsGenerator.Object, context.Object, _loanBuilder, new AvailableFundsValidatorFake(), null);
             SetUp();
         }
 

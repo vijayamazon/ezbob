@@ -5,7 +5,10 @@ using NUnit.Framework;
 
 namespace MailApi
 {
-    [TestFixture]
+	using System;
+	using Model;
+
+	[TestFixture]
     public class MailFixture
     {
         private Mail _mail;
@@ -22,6 +25,7 @@ namespace MailApi
             config.SetupGet(x => x.From).Returns("yulys@ezbob.com");
             _mail = new Mail(config.Object);
             _to = "yulys@ezbob.com";
+	        _to = "stasd+test@ezbob.com";
             _subject = "Thank you for registering with EZBOB!";
         }
 
@@ -35,7 +39,18 @@ namespace MailApi
                     {"ConfirmEmailAddress", "https://app.ezbob.com/confirm/90a9cd47-f84e-420e-820c-a1fc010fce11"}, 
                 };
 
-            var result = _mail.Send(vars, _to, "Greeting", "Thank you for registering with EZBOB!");
+
+			var attachments = new List<attachment>();
+			byte[] pdfdata = System.IO.File.ReadAllBytes(@"c:\dev\test.pdf");
+			string content = Convert.ToBase64String(pdfdata);
+			attachments.Add(new attachment
+			{
+				type = "application/pdf",
+				name = "test.pdf",
+				content = content
+			});
+
+            var result = _mail.Send(vars, _to, "Greeting", "Thank you for registering with EZBOB!","", attachments);
             Assert.That(result == "OK");
         }
 

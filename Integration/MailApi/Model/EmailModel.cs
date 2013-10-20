@@ -42,7 +42,7 @@ namespace MailApi.Model
         public string template_name { get; set; }
         public IEnumerable<template_content> template_content { get; set; }
         public EmailMessageModel message { get; set; }
-
+		
         public void AddGlobalVariable(string name, string content)
         {
             if (message.global_merge_vars == null)
@@ -57,6 +57,21 @@ namespace MailApi.Model
                 };
             message.global_merge_vars.Add(mv);
         }
+
+		public void AddAttachment(string mimeType, string fileName, string content)
+		{
+			if (message.attachments == null)
+			{
+				message.attachments = new List<attachment>();
+			}
+
+			message.attachments.Add(new attachment
+				{
+					type = mimeType,
+					name = fileName,
+					content = content
+				});
+		}
     }
 }
 

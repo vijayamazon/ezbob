@@ -5,12 +5,12 @@
   <Workspace Name="Cash_Transfered">
     <NodeElement Name="Comparison" NodeId="Comparison65993539" />
     <NodeElement Name="Empty Name" NodeId="ConditionalAssignment34547936" />
-    <NodeElement Name="Mail Node" NodeId="MailNode33407794" />
-    <NodeElement Name="Mail Node" NodeId="MailNode54575521" />
-    <NodeElement Name="Mail Node" NodeId="MailNode64505759" />
     <NodeElement Name="Mail Node" NodeId="MailNode14925917" />
-    <NodeElement Name="Mail_addresses" NodeId="CreditProduct6923783" />
+    <NodeElement Name="Mail Node" NodeId="MailNode64505759" />
+    <NodeElement Name="Mail Node" NodeId="MailNode54575521" />
+    <NodeElement Name="Mail Node" NodeId="MailNode33407794" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct30783125" />
+    <NodeElement Name="Mail_addresses" NodeId="CreditProduct6923783" />
     <NodeElement Name="Multi-Assignment" NodeId="MultiAssignment5236587" />
     <NodeElement Name="Start Node" NodeId="StartNode9644177" />
     <NodeElement Name="Stop Node" NodeId="StopNode19688733" />
@@ -61,7 +61,7 @@
       <DefaultPinName />
       <Description />
       <DisplayName>Multi-Assignment</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;assignments&gt;&lt;assignment&gt;Subject := "Welcome to the EZBOB family"&lt;/assignment&gt;&lt;assignment&gt;emailCC := ""&lt;/assignment&gt;&lt;assignment&gt;Amount := CashAmount&lt;/assignment&gt;&lt;/assignments&gt;</InitialValue>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;assignments&gt;&lt;assignment&gt;Subject := "Welcome to the EZBOB family"&lt;/assignment&gt;&lt;assignment&gt;emailCC := loanId&lt;/assignment&gt;&lt;assignment&gt;Amount := CashAmount&lt;/assignment&gt;&lt;/assignments&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>MultiAssignment5236587</Name>
@@ -340,6 +340,18 @@
       <Description />
       <IsInput>false</IsInput>
       <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Cash_Transfered</OwnerName>
+      <Name>loanId</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>true</IsOutput>
       <SignatureRequired>false</SignatureRequired>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>

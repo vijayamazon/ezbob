@@ -45,7 +45,7 @@ namespace EzBob.Web.Code.ApplicationCreator
             CreateApplication(user, strategyParameters, _config.GreetingStrategyName);
         }
 
-        public void CashTransfered(User user, string firstName, decimal? cashAmount, decimal setUpFee)
+        public void CashTransfered(User user, string firstName, decimal? cashAmount, decimal setUpFee, int loanId)
         {
 			var customer = _session.Get<Customer>(user.Id);
 			bool isFirstLoan = customer.Loans.Count == 1;
@@ -57,7 +57,8 @@ namespace EzBob.Web.Code.ApplicationCreator
                                                  new StrategyParameter("FirstName", firstName),
                                                  new StrategyParameter("CashAmount", cashAmount ),
                                                  new StrategyParameter("IsFirstLoan", isFirstLoan),
-                                                 new StrategyParameter("SetUpFee", setUpFee) 
+                                                 new StrategyParameter("SetUpFee", setUpFee), 
+												 new StrategyParameter("loanId", loanId)
                                              };
             CreateApplication(user, strategyParameters, _config.CashTransferedStrategyName);
         }

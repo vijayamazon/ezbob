@@ -7,6 +7,8 @@ using NHibernate;
 
 namespace EZBob.DatabaseLib.Model.Loans
 {
+	using System.Linq;
+
 	public class LoanAgreement
 	{
 		public LoanAgreement()
@@ -65,7 +67,7 @@ namespace EZBob.DatabaseLib.Model.Loans
 
 	public interface ILoanAgreementRepository : IRepository<LoanAgreement>
 	{
-
+		IQueryable<LoanAgreement> GetByLoanId(int loanId);
 	}
 
 	public class LoanAgreementRepository : NHibernateRepositoryBase<LoanAgreement>, ILoanAgreementRepository
@@ -73,6 +75,12 @@ namespace EZBob.DatabaseLib.Model.Loans
 		public LoanAgreementRepository(ISession session)
 			: base(session)
 		{
+			
+		}
+		
+		public IQueryable<LoanAgreement> GetByLoanId(int loanId)
+		{
+			return GetAll().Where(l => l.Loan.Id == loanId);
 		}
 	}
 

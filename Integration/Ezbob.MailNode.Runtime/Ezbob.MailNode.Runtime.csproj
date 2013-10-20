@@ -61,6 +61,10 @@
       <Project>{FA67314A-0560-41D4-BC19-6524663E9D0D}</Project>
       <Name>DatabaseLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\EzBob.Models\EzBob.Models.csproj">
+      <Project>{66411FF3-AA26-4B45-96D3-56E5E77BB544}</Project>
+      <Name>EzBob.Models</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MailApi\MailApi.csproj">
       <Project>{de254378-4cf8-400c-bcc4-a9af01550350}</Project>
       <Name>MailApi</Name>
@@ -95,6 +99,10 @@
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.0.5.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\3rdparty\Json.NET\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate, Version=3.2.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

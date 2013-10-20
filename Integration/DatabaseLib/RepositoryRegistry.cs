@@ -6,7 +6,9 @@ using StructureMap.Configuration.DSL;
 
 namespace EZBob.DatabaseLib
 {
-    public class RepositoryRegistry : Registry
+	using Model.Loans;
+
+	public class RepositoryRegistry : Registry
     {
         public RepositoryRegistry()
         {
@@ -14,6 +16,7 @@ namespace EZBob.DatabaseLib
             For<IConfigurationVariablesRepository>().Use<ConfigurationVariablesRepository>();
             For<IMailTemplateRelationRepository>().Use<MailTemplateRelationRepository>();
             For<IMandrillTemplateRepository>().Use<MandrillTemplateRepository>();
+			For<ILoanAgreementRepository>().Use<LoanAgreementRepository>();
         }
     }
 }

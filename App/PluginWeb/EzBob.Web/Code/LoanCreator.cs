@@ -6,6 +6,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
+	using NHibernate;
 	using Web.ApplicationCreator;
 	using Areas.Customer.Controllers;
 	using Areas.Customer.Controllers.Exceptions;
@@ -29,6 +30,7 @@
 		private readonly IEzbobWorkplaceContext _context;
 		private readonly LoanBuilder _loanBuilder;
 		private readonly AvailableFundsValidator _availableFundsValidator;
+		private readonly ISession _session;
 
 		private static readonly ILog Log = LogManager.GetLogger(typeof(LoanCreator));
 
@@ -39,7 +41,8 @@
 			IAgreementsGenerator agreementsGenerator,
 			IEzbobWorkplaceContext context,
 			LoanBuilder loanBuilder,
-			AvailableFundsValidator availableFundsValidator)
+			AvailableFundsValidator availableFundsValidator,
+			ISession session)
 		{
 			_loanHistoryRepository = loanHistoryRepository;
 			_pacnetService = pacnetService;
@@ -48,6 +51,7 @@
 			_context = context;
 			_loanBuilder = loanBuilder;
 			_availableFundsValidator = availableFundsValidator;
+			_session = session;
 		}
 
 		public Loan CreateLoan(Customer cus, decimal loanAmount, PayPointCard card, DateTime now)
@@ -117,12 +121,14 @@
 			cus.CreditSum = cus.CreditSum - loanAmount;
 
 			if (fee > 0) cus.SetupFee = fee;
+			
+			_agreementsGenerator.RenderAgreements(loan, true);
 
 			_loanHistoryRepository.Save(new LoanHistory(loan, now));
+			
+			_session.Flush();
 
-			_appCreator.CashTransfered(_context.User, cus.PersonalInfo.FirstName, transfered, fee);
-
-			_agreementsGenerator.RenderAgreements(loan, true);
+			_appCreator.CashTransfered(_context.User, cus.PersonalInfo.FirstName, transfered, fee, loan.Id);
 
 			return loan;
 		}

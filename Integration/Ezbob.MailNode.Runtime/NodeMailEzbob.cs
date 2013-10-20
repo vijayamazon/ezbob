@@ -1,6 +1,7 @@
 ﻿namespace WorkflowObjects
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Globalization;
 	using System.IO;
 	using System.Linq;
@@ -8,8 +9,13 @@
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
+	using EZBob.DatabaseLib.Model.Loans;
+	using EzBob.Web.Areas.Customer.Models;
+	using EzBob.Web.Code.Agreements;
 	using MailApi;
+	using MailApi.Model;
 	using NHibernate;
+	using Newtonsoft.Json;
 	using StructureMap.Attributes;
 	using ExportResult = Scorto.Export.Templates.ExportResult;
 	using log4net;
@@ -21,6 +27,11 @@
 
         [SetterProperty]
         public ISession Session { get; set; }
+
+		[SetterProperty]
+		public ILoanAgreementRepository LoanAgreementRepository { get; set; }
+
+		public AgreementRenderer AgreementRenderer;
 
         [SetterProperty]
         public IConfigurationVariablesRepository VariablesRepository { get; set; }
@@ -97,9 +108,15 @@
 				NodeMailParams.Subject = variables.FirstOrDefault(x => x.Key == "EmailSubject" || x.Key.ToLower() == "subject").Value ?? "Default Subject";
 				NodeMailParams.To = variables.FirstOrDefault(x => x.Key == "CP_AddressTo" || x.Key.ToLower() == "email").Value;
                 NodeMailParams.CC = variables.FirstOrDefault(x => x.Key == "CP_AddressCC" || x.Key.ToLower() == "emailcc").Value;
-
+	            
+				
+	            
+				Log.DebugFormat("NodeMailParams.CC {0}", NodeMailParams.CC);
+	            List<attachment> attachments = null;
+	            attachments = HandleAttachments();
+				
                 var templateName = MailTemplateRelationRepository.GetByInternalName(Templates[0].DisplayName);
-                var sendStatus = Mail.Send(variables, NodeMailParams.To, templateName, NodeMailParams.Subject, NodeMailParams.CC);
+                var sendStatus = Mail.Send(variables, NodeMailParams.To, templateName, NodeMailParams.Subject, NodeMailParams.CC, attachments);
                 var renderedHtml = Mail.GetRenderedTemplate(variables, templateName);
 
                 if (sendStatus == null || renderedHtml == null)
@@ -117,7 +134,7 @@
                         DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss", CultureInfo.InvariantCulture)),
                         FileType = 0,
                         BinaryBody = HtmlToDocxBinnary(renderedHtml),
-                        NodeName = iworkflow.CurrentNodeName
+                        NodeName = iworkflow.CurrentNodeName,
                     };
                 AddExportresult(exportResult);
                 return "Next";
@@ -126,7 +143,36 @@
 	        return base.Execute(iworkflow);
         }
 
-        private static byte[] HtmlToDocxBinnary(string html)
+		private List<attachment> HandleAttachments()
+		{
+			int loanId = 0;
+			List<attachment> attachments = null;
+			if (int.TryParse(NodeMailParams.CC, out loanId))
+			{
+				NodeMailParams.CC = "";
+				var loanAgreements = LoanAgreementRepository.GetByLoanId(loanId);
+				Log.DebugFormat("loanAgreements {0}", loanAgreements.Count());
+				attachments = new List<attachment>();
+				foreach (var loanAgreement in loanAgreements)
+				{
+					AgreementRenderer = new AgreementRenderer();
+					var content = AgreementRenderer.AggrementToBase64String(loanAgreement.TemplateRef.Template,
+					                                                        JsonConvert.DeserializeObject<AgreementModel>(
+						                                                        loanAgreement.Loan.AgreementModel));
+					var name = loanAgreement.ShortFilename();
+					Log.DebugFormat("Adding attachment {0} loanId {2} loanAgreementId {1}", name, loanAgreement.Id, loanId);
+					attachments.Add(new attachment
+						{
+							content = content,
+							name = name,
+							type = "application/pdf"
+						});
+				}
+			}
+			return attachments;
+		}
+
+		private static byte[] HtmlToDocxBinnary(string html)
         {
             var doc = new Document();
             var docBuilder = new DocumentBuilder(doc);
