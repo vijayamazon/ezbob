@@ -84,7 +84,7 @@ EzBob.Underwriter.FunctionsDialogView = Backbone.View.extend(
 
         data.reason = @ReasonField.val() if @showReasonField()
         if @NoYodlee
-            data.reason += " " + @YodleeReasonField.val()
+            data.reason += " | " + @YodleeReasonField.val()
 
         req = $.post(window.gRootPath + "Underwriter/Customers/ChangeStatus", data)
         BlockUi "on"
@@ -164,7 +164,8 @@ EzBob.Underwriter.ApproveDialog = EzBob.Underwriter.FunctionsDialogView.extend(
         @$el.find(".button-ok").addClass "disabled"    if @model.get("OfferExpired")
         @$el.find(".change-offer-details").attr 'disabled', 'disabled' if @model.get("IsLoanTypeSelectionAllowed") in [ 1, '1' ]
         @NoYodlee = @model.get('IsOffline') and not @model.get('HasYodlee')
-        @$el.find("#noYodleeReasonDiv").toggleClass('hide', !@NoYodlee)
+        @$el.find("#noYodleeReasonDiv").toggleClass('hide', !@NoYodlee).toggleClass('uwReason', @NoYodlee)
+
 
     renderDetails: ->
         details = _.template($("#approve-details").html(), @model.toJSON())
@@ -189,7 +190,7 @@ EzBob.Underwriter.ApproveDialog = EzBob.Underwriter.FunctionsDialogView.extend(
         "Approve"
 
     dlgWidth: 650
-    dlgHeight: 750
+    dlgHeight: 900
     onSaved: ->
         that = this
         @renderSchedule()

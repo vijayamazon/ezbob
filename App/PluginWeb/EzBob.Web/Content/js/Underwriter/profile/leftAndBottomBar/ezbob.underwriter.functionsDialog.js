@@ -97,7 +97,7 @@
         data.reason = this.ReasonField.val();
       }
       if (this.NoYodlee) {
-        data.reason += " " + this.YodleeReasonField.val();
+        data.reason += " | " + this.YodleeReasonField.val();
       }
       req = $.post(window.gRootPath + "Underwriter/Customers/ChangeStatus", data);
       BlockUi("on");
@@ -196,7 +196,7 @@
         this.$el.find(".change-offer-details").attr('disabled', 'disabled');
       }
       this.NoYodlee = this.model.get('IsOffline') && !this.model.get('HasYodlee');
-      return this.$el.find("#noYodleeReasonDiv").toggleClass('hide', !this.NoYodlee);
+      return this.$el.find("#noYodleeReasonDiv").toggleClass('hide', !this.NoYodlee).toggleClass('uwReason', this.NoYodlee);
     },
     renderDetails: function() {
       var details;
@@ -229,7 +229,7 @@
       return "Approve";
     },
     dlgWidth: 650,
-    dlgHeight: 750,
+    dlgHeight: 900,
     onSaved: function() {
       var that;
       that = this;

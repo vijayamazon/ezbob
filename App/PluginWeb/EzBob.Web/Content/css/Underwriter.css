@@ -1,8 +1,13 @@
 ﻿textarea.reason, textarea.yodleeReason {
-    width: 480px;
+    width: 290px;
     resize: none;
     height: 80px;
 }
+
+div.uwReason {
+    display: inline-block;
+}
+
 .underwriter-body 
 {
     padding: 10px;
