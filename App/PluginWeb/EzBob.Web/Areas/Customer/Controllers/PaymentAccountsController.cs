@@ -267,7 +267,7 @@
 			catch (YodleeAccountNotFoundException)
 			{
 				return
-					this.JsonNet(new { error = "Account number you entered doesn't match the bank account number you linked, you must use the same bank account you linked or go back and link another bank account that will match the bank account you want the funds to be transferred to." });
+					this.JsonNet(new { error = "Account number doesn't match your linked bank account. Please use the same bank account number you linked before or go back and link a bank account that match the account number you have entered." });
 			}
 		}
 	}
