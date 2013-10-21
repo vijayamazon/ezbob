@@ -41,29 +41,32 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td colspan="<%=count%>"><b>Income</b></td>
-                </tr>
+                
                 <%for(var cat in obj){%>
                 <% var style = '', isPound = true;
-                   if(cat[0] == '3' || cat[0] == '8') {style = 'font-style: italic;'; isPound = false; }
-                   if(cat[0] == '2' || cat[0] == '7' || cat[0] == 'a') {style = 'font-weight: bold;';} %>
+                   if(cat[0] == '5' || cat[0] == '9') {style = 'font-style: italic;'; isPound = false; }
+                   if(cat[0] == '0' || cat[0] == '1' || cat[0] == '2') {style = 'font-weight: bold;';} %>
                 <tr style="<%=style%>">
                     <td><%=cat.substr(1, cat.length-1)%></td>
                     <%for (var month in obj[cat]) { %>
-                    <td><%= obj[cat][month] == 0 ? '' : (isPound ? EzBob.formatPoundsAsInt(obj[cat][month]) : parseInt(obj[cat][month]))  %></td>
-                    <%}%>
+                    <%var css = "";
+                    if(cat[0] == '2' && obj[cat][month] < 0){ css='debit';}
+                    if(cat[0] == '2' && obj[cat][month] >= 0){ css='credit';}
+                    %>
+                    <td class="<%=css%>"><%= obj[cat][month] == 0 ? '' : (isPound ? EzBob.formatPoundsAsInt(obj[cat][month]) : parseInt(obj[cat][month]))  %></td>
+                    <%}/*for*/%>
                 </tr>
-                <%if(cat[0]=='4'){%>
+                <%if(cat[0]=='2'){%>
+                <tr>
+                    <td colspan="<%=count%>"><b>Income</b></td>
+                </tr>
+                <%}/*if*/%>
+                <%if(cat[0]=='6'){%>
                     <tr>
                         <td colspan="<%=count%>"><b>Expenses</b></td>
                     </tr>
-                <%}%>
-                <%if(cat[0]=='9'){%>
-                    <tr>
-                        <td colspan="<%=count%>"><b>Net Cash Flow</b></td>
-                    </tr>
-                <%}}%>
+                <%}/*if*/%>
+                <%}/*for*/%>
             </tbody>
         </table>
         <%} else { print('No data to show'); } })();%>

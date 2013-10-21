@@ -35,17 +35,21 @@
 		private const string AverageIncomeCat = "Average Income";
 		private const string AverageExpensesCat = "Average Expenses";
 		private const string NetCashFlowCat = "Net Cash Flow";
-		private const char Credit = '0';
-		private const char OtherCredit = '1';
-		private const char TotalCredit = '2';
-		private const char NumTransCredit = '3';
-		private const char AverageCredit = '4';
-		private const char Dedit = '5';
-		private const char OtherDedit = '6';
-		private const char TotalDedit = '7';
-		private const char NumTransDedit = '8';
-		private const char AverageDedit = '9';
-		private const char NetCashFlow = 'a';
+
+		private const char TotalCredit = '0';
+		private const char TotalDedit = '1';
+		private const char NetCashFlow = '2';
+
+		private const char Credit = '3';
+		private const char OtherCredit = '4';
+		private const char NumTransCredit = '5';
+		private const char AverageCredit = '6';
+		
+		private const char Dedit = '7';
+		private const char OtherDedit = '8';
+		private const char NumTransDedit = '9';
+		private const char AverageDedit = 'a';
+		
 
 		private readonly CurrencyConvertor _currencyConvertor;
 		private readonly IConfigurationVariablesRepository _configVariables;
