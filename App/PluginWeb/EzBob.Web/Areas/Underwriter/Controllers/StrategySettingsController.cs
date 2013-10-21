@@ -132,14 +132,14 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         [Transactional]
         public JsonNetResult AutomationApproval()
         {
-            var enableAutomaticApproval = _configurationVariablesRepository.GetByName("EnableAutomaticApproval");
+            var enableAutomaticReApproval = _configurationVariablesRepository.GetByName("EnableAutomaticReApproval");
             var maxCapHomeOwner = _configurationVariablesRepository.GetByName("MaxCapHomeOwner");
             var maxCapNotHomeOwner = _configurationVariablesRepository.GetByName("MaxCapNotHomeOwner");
 
             var sa = new
                 {
-                    EnableAutomaticApproval = enableAutomaticApproval.Value,
-                    EnableAutomaticApprovalDesc = enableAutomaticApproval.Description,
+                    EnableAutomaticReApproval = enableAutomaticReApproval.Value,
+                    EnableAutomaticReApprovalDesc = enableAutomaticReApproval.Description,
                     MaxCapHomeOwner = maxCapHomeOwner.Value,
                     MaxCapHomeOwnerDesc = maxCapHomeOwner.Description,
                     MaxCapNotHomeOwner = maxCapNotHomeOwner.Value,
@@ -153,12 +153,12 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         [HttpPost]
         [Transactional]
         public JsonNetResult AutomationApproval(
-                                                string EnableAutomaticApproval,
+                                                string EnableAutomaticReApproval,
                                                 string MaxCapHomeOwner,
                                                 string MaxCapNotHomeOwner
             )
         {
-            _configurationVariablesRepository.SetByName("EnableAutomaticApproval", EnableAutomaticApproval);
+            _configurationVariablesRepository.SetByName("EnableAutomaticReApproval", EnableAutomaticReApproval);
             _configurationVariablesRepository.SetByName("MaxCapHomeOwner", MaxCapHomeOwner);
             _configurationVariablesRepository.SetByName("MaxCapNotHomeOwner", MaxCapNotHomeOwner);
             return AutomationApproval();

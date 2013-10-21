@@ -1048,9 +1048,6 @@
     <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.automation.approval.js">
       <DependentUpon>ezbob.underwriter.StrategySettings.automation.approval.coffee</DependentUpon>
     </Content>
-    <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.automation.approval.min.js">
-      <DependentUpon>ezbob.underwriter.StrategySettings.automation.approval.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.automation.general.js">
       <DependentUpon>ezbob.underwriter.StrategySettings.automation.general.coffee</DependentUpon>
     </Content>
