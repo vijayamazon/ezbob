@@ -60,13 +60,13 @@ echo "Source dir: ${SCRIPTS_PATH}"
 
 OUTPUT_FILE=${DIR}/output.tmp.$$.txt
 
-for QUERY_FILE in `ls ${SCRIPTS_PATH}/*.sql`
+for QUERY_FILE in `ls ${SCRIPTS_PATH}`
 do
 	rm -f ${OUTPUT_FILE}
 
 	echo "Running ${QUERY_FILE} ..."
 
-	${ISQL} -h-1 -n -m 11 -e -u -b -D ${ODBC} -d ${DB} -U ${USER} -P ${PASS} -i ${QUERY_FILE} -o ${OUTPUT_FILE}
+	${ISQL} -h-1 -n -m 11 -e -u -b -D ${ODBC} -d ${DB} -U ${USER} -P ${PASS} -i ${SCRIPTS_PATH}/${QUERY_FILE} -o ${OUTPUT_FILE}
 
 	EXIT_CODE=$?
 
