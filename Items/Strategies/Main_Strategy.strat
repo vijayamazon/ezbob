@@ -27406,7 +27406,7 @@ AutoRejectionException_AnualTurnoverNum = int(AutoRejectionException_AnualTurnov
 
 api = StrategyHelper()
 
-AutoApproveAmount = api.AutoApproveCheck(CustomerId)
+AutoApproveAmount = api.AutoApproveCheck(CustomerId, LoanOffer_SystemCalculatedSum, MinExperianScore)
 </Script>
       <ScriptType>IronPython</ScriptType>
     </ScriptDescriptor>

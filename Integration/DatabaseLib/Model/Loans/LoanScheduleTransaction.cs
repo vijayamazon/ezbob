@@ -17,9 +17,12 @@ namespace EZBob.DatabaseLib.Model.Database.Loans {
 	} // class LoanScheduleTransaction {
 } // namespace EZBob.DatabaseLib.Model.Database.Loans
 
-namespace EZBob.DatabaseLib.Model.Database.Mapping {
-	public class LoanScheduleTransactionMap : ClassMap<Database.Loans.LoanScheduleTransaction> {
-		public LoanScheduleTransactionMap() {
+namespace EZBob.DatabaseLib.Model.Database.Mapping
+{
+	public class LoanScheduleTransactionMap : ClassMap<Database.Loans.LoanScheduleTransaction>
+	{
+		public LoanScheduleTransactionMap()
+		{
 			Id(x => x.Id).GeneratedBy.Native();
 			Cache.ReadWrite().Region("LongTerm").ReadWrite();
 			References(x => x.Loan, "LoanID");
@@ -33,3 +36,22 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping {
 		} // constructor
 	} // class LoanScheduleTransactionMap
 } // namespace EZBob.DatabaseLib.Model.Database.Mapping
+
+namespace EZBob.DatabaseLib.Model.Database.Repositories
+{
+	using ApplicationMng.Repository;
+	using NHibernate;
+
+	public interface ILoanScheduleTransactionRepository : IRepository<LoanScheduleTransaction>
+	{
+	}
+
+	public class LoanScheduleTransactionRepository : NHibernateRepositoryBase<LoanScheduleTransaction>, ILoanScheduleTransactionRepository
+	{
+
+		public LoanScheduleTransactionRepository(ISession session)
+			: base(session)
+		{
+		}
+	}
+} // namespace EZBob.DatabaseLib.Model.Database.Repositories

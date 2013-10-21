@@ -1,10 +1,12 @@
-﻿using System;
-using EZBob.DatabaseLib.Model.Database;
-using FluentNHibernate.Mapping;
-using NHibernate.Type;
-
-namespace EZBob.DatabaseLib.Model.Experian
+﻿namespace EZBob.DatabaseLib.Model.Experian
 {
+	using System;
+	using Database;
+	using FluentNHibernate.Mapping;
+	using NHibernate.Type;
+	using ApplicationMng.Repository;
+	using NHibernate;
+
 	public class ExperianDefaultAccount
 	{
 		public virtual int Id { get; set; }
@@ -32,6 +34,19 @@ namespace EZBob.DatabaseLib.Model.Experian
 			Map(x => x.CurrentDefBalance);
 			References(x => x.ServiceLog, "ServiceLogId");
 			References(x => x.Customer, "CustomerId");
+		}
+	}
+
+	public interface IExperianDefaultAccountRepository : IRepository<ExperianDefaultAccount>
+	{
+	}
+
+	public class ExperianDefaultAccountRepository : NHibernateRepositoryBase<ExperianDefaultAccount>, IExperianDefaultAccountRepository
+	{
+
+		public ExperianDefaultAccountRepository(ISession session)
+			: base(session)
+		{
 		}
 	}
 }

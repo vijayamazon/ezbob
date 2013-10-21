@@ -12,7 +12,7 @@ namespace EZBob.DatabaseLib.Repository
         public ServiceLogRepository(ISession session) : base(session)
         {
         }
-        public IEnumerable<MP_ServiceLog> GetBuCustomer(Customer customer)
+        public IEnumerable<MP_ServiceLog> GetByCustomer(Customer customer)
         {
             return GetAll().Where(x => x.Customer.Id == customer.Id).ToFuture();
         }
