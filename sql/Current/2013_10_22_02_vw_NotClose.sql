@@ -1,4 +1,4 @@
-﻿IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[dbo].[vw_NotClose]'))
+IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[dbo].[vw_NotClose]'))
 DROP VIEW [dbo].[vw_NotClose]
 GO
 SET ANSI_NULLS ON
