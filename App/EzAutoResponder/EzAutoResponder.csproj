@@ -65,9 +65,6 @@
     <Reference Include="MailBee.NET">
       <HintPath>..\..\Lib\3rdparty\MailBee\MailBee.NET.dll</HintPath>
     </Reference>
-    <Reference Include="Mailer">
-      <HintPath>..\..\Lib\Ezbob\Mailer.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.0.5.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\3rdparty\Json.NET\Newtonsoft.Json.dll</HintPath>
@@ -145,6 +142,10 @@
     <ProjectReference Include="..\..\Tools\EzbobUtils\Logger\Logger.csproj">
       <Project>{f92ca169-9532-4c4d-8d84-6f48ace5719c}</Project>
       <Name>Logger</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\Mailer\Mailer.csproj">
+      <Project>{68180204-5112-43af-9d83-e5cdd39f93a0}</Project>
+      <Name>Mailer</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
