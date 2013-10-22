@@ -206,7 +206,7 @@
 				}
 
 				// Reduce the system calculated amount by the already open amount
-				var outstandingLoans = loanRepository.ByCustomer(customerId).Where(l => l.Status != LoanStatus.PaidOff).ToList();
+				List<Loan> outstandingLoans = GetOutstandingLoans(customerId);
 				decimal outstandingPrincipal = outstandingLoans.Sum(loan => loan.Principal);
 				autoApprovedAmount -= (int)outstandingPrincipal;
 			}
@@ -425,11 +425,22 @@
 			return true;
 		}
 
+		private List<Loan> GetOutstandingLoans(int customerId)
+		{
+			return loanRepository.ByCustomer(customerId).Where(l => l.Status != LoanStatus.PaidOff).ToList();
+		}
+
+		public int GetOutstandingLoansNum(int customerId)
+		{
+			return GetOutstandingLoans(customerId).Count;
+		}
+
 		private bool CheckOutstandingLoans(int customerId)
 		{
 			int autoApproveMaxNumOfOutstandingLoans = configurationVariablesRepository.GetByNameAsInt("AutoApproveMaxNumOfOutstandingLoans");
 			int autoApproveMinRepaidPortion = configurationVariablesRepository.GetByNameAsInt("AutoApproveMinRepaidPortion");
-			var outstandingLoans = loanRepository.ByCustomer(customerId).Where(l => l.Status != LoanStatus.PaidOff).ToList();
+
+			List<Loan> outstandingLoans = GetOutstandingLoans(customerId);
 			if (outstandingLoans.Count > autoApproveMaxNumOfOutstandingLoans)
 			{
 				log.InfoFormat("No auto approval: No auto approval for customers with more than {0} outstanding loans. This customer has {1} outstanding loans.", autoApproveMaxNumOfOutstandingLoans, outstandingLoans.Count);
