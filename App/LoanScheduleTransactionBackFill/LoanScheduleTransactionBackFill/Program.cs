@@ -68,10 +68,13 @@ namespace LoanScheduleTransactionBackFill {
 				var oStateStat = new SortedDictionary<ScheduleState, int>();
 
 				foreach (Loan l in oLoans.Values) {
-					l.BuildWorkingSet();
+					if (!Loan.Step2.Contains(l.ID))
+						continue;
 
-					// if (l.IsCountable && (l.TotalPrincipalPaid > l.LoanAmount))
-						// oLog.Warn("Loan {0}: principal ({1}) is greater than loan amount ({2}).", l.ID, l.TotalPrincipalPaid, l.LoanAmount);
+					if (l.ProcessedTransactionCount == l.Transactions.Count)
+						continue;
+
+					l.BuildWorkingSet();
 
 					l.Calculate();
 

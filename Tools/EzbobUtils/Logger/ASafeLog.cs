@@ -122,6 +122,14 @@ namespace Ezbob.Logger {
 
 		#endregion property CurrentTime
 
+		#region method SayCurrentTimezone
+
+		protected virtual void SayCurrentTimezone() {
+			Msg("<- this is UTC time.");
+		} // SayCurrentTimezone
+
+		#endregion method SayCurrentTimezone
+
 		#region method ExceptionToString
 
 		protected virtual string ExceptionToString(Exception ex) {

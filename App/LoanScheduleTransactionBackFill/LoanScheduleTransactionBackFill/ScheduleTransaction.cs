@@ -24,7 +24,7 @@ namespace LoanScheduleTransactionBackFill {
 
 		#region property IsAlreadyProcessed
 
-		public bool IsAlreadyProcessed { get { return Schedule.IsAlreadyProcessed || Transaction.IsAlreadyProcessed; } }
+		public bool IsAlreadyProcessed { get { return (Schedule != null && Schedule.IsAlreadyProcessed) || Transaction.IsAlreadyProcessed; } }
 
 		#endregion property IsAlreadyProcessed
 
@@ -32,6 +32,10 @@ namespace LoanScheduleTransactionBackFill {
 
 		public void Save(int nLoanID, ScheduleState nStatus, AConnection oDB) {
 			if (IsAlreadyProcessed)
+				if (!Loan.Step2.Contains(nLoanID))
+					return;
+
+			if (!Loan.Step2.Contains(nLoanID))
 				return;
 
 			var os = new StringBuilder();
@@ -45,10 +49,10 @@ namespace LoanScheduleTransactionBackFill {
 				"INSERT INTO LoanScheduleTransaction" +
 					"(LoanID, ScheduleID, TransactionID, Date, PrincipalDelta, FeesDelta, InterestDelta, StatusBefore, StatusAfter)" +
 				"VALUES ({0}, {1}, {2}, '{3}', {4}, {5}, {6},'{7}','{7}')\n" +
-				"INSERT INTO LoanScheduleTransactionBackfilled (LoanScheduleTransactionID, IsBad) VALUES (@@IDENTITY, {8})", 
+				"INSERT INTO LoanScheduleTransactionBackfilled (LoanScheduleTransactionID, IsBad, Step) VALUES (@@IDENTITY, {8}, {9})", 
 				nLoanID, Schedule.ID, Transaction.ID,
 				Transaction.Date.ToString("MMMM dd yyyy HH:mm:ss", Schedule.Culture), 
-				PrincipalDelta, InterestDelta, FeesDelta, Status, nIsBad
+				PrincipalDelta, InterestDelta, FeesDelta, Status, nIsBad, 2
 			);
 
 			string sQuery = os.ToString();
@@ -65,7 +69,7 @@ namespace LoanScheduleTransactionBackFill {
 
 			os.AppendFormat(
 				"{3} Status: {0,10} Schedule: {1,7} Transaction: {2,7}",
-				Status, Schedule.ID, Transaction.ID,
+				Status, (Schedule == null ? "null" : Schedule.ID.ToString()), Transaction.ID,
 				IsAlreadyProcessed ? "v" : " "
 			);
 

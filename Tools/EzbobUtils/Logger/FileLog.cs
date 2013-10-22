@@ -47,6 +47,7 @@ namespace Ezbob.Logger {
 			m_oLock = new object();
 
 			NotifyStartStop("started");
+			SayCurrentTimezone();
 		} // constructor
 
 		#endregion constructor

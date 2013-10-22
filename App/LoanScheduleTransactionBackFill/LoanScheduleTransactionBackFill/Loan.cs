@@ -13,6 +13,29 @@ namespace LoanScheduleTransactionBackFill {
 	class Loan : SafeLog {
 		#region public
 
+		#region property Step2
+
+		public static SortedSet<int> Step2 { get {
+			if (ms_aryStep2 == null) {
+				var x = new int[] {
+					42, 47, 71, 102, 103, 140, 160, 219, 276, 294, 311, 322, 351, 356, 364, 368, 388,
+					397, 400, 401, 417, 444, 452, 463, 464, 466, 467, 471, 474, 505, 530, 540, 549,
+					554, 573, 630, 639, 663, 732, 772, 777, 856, 883, 980, 1044, 1076, 1217, 1237
+				};
+
+				ms_aryStep2 = new SortedSet<int>();
+
+				foreach (var y in x)
+					ms_aryStep2.Add(y);
+			} // if
+
+			return ms_aryStep2;
+		}} // Step2
+
+		private static SortedSet<int> ms_aryStep2;
+
+		#endregion property Step2
+
 		#region constructor
 
 		public Loan(ASafeLog log = null) : base(log) {
@@ -110,7 +133,30 @@ namespace LoanScheduleTransactionBackFill {
 			if (!IsCountable)
 				return;
 
-			if ((WorkingSet.Count < 1) || (Transactions.Count < 1))
+			if (Transactions.Count < 1)
+				return;
+
+			if (ProcessedTransactionCount < Transactions.Count) {
+				Schedule oSh = Actual.FirstOrDefault(sh => !sh.IsAlreadyProcessed) ?? Actual.First();
+
+				foreach (Transaction trn in Transactions) {
+					if (trn.IsAlreadyProcessed)
+						continue;
+
+					ScheduleTransactions.Add(new ScheduleTransaction {
+						FeesDelta = -trn.Fees,
+						InterestDelta = -trn.Interest,
+						PrincipalDelta = -trn.Principal,
+						Schedule = oSh,
+						Status = LoanScheduleStatus.Late,
+						Transaction = trn
+					});
+				} // for each transaction
+
+				return;
+			} // if
+
+			if (WorkingSet.Count < 1)
 				return;
 
 			Transaction[] aryTransactions = Transactions.ToArray();
@@ -260,35 +306,52 @@ namespace LoanScheduleTransactionBackFill {
 
 		#endregion property TotalPrincipalPaid
 
-		#region property LoanAmount
+		#region property RemainingPrincipal
 
-		public decimal LoanAmount { get {
-			if (!m_nLoanAmount.HasValue)
-				m_nLoanAmount = WorkingSet.Sum(s => s.Principal);
+		public decimal RemainingPrincipal { get {
+			if (!m_nRemainingPrincipal.HasValue)
+				m_nRemainingPrincipal = Actual.Sum(sh => sh.Principal);
 
-			return m_nLoanAmount.Value;
-		} } // LoanAmount
+			return m_nRemainingPrincipal.Value;
+		} } // RemainingPrincipal
 
-		private decimal? m_nLoanAmount;
+		private decimal? m_nRemainingPrincipal;
 
-		#endregion property LoanAmount
+		#endregion property RemainingPrincipal
+
+		#region property ProcessedTransactionCount
+
+		public int ProcessedTransactionCount { get {
+			if (!m_nProcessedTransactionCount.HasValue)
+				m_nProcessedTransactionCount = Transactions.Count(trn => trn.IsAlreadyProcessed);
+
+			return m_nProcessedTransactionCount.Value;
+		}} // ProcessedTransactionCount
+
+		private int? m_nProcessedTransactionCount;
+
+		#endregion property ProcessedTransactionCount
 
 		#region method ToString
 
 		public override string ToString() {
 			var os = new StringBuilder();
 
-			var nTransactionSum = Transactions.Sum(x => x.Principal);
-
 			os.AppendFormat(
-				"Loan {0} ({3}) - {1} ({5}) - {2} - {4}paid - begin\n",
+				"Summary for Loan {0} ({3}) - {1} ({5}) - {2} - {4}paid - begin\n",
 				ID, LoanType.ToString(), ScheduleState.ToString(),
 				DeclaredLoanAmount.ToString("C2", Schedule.Culture),
-				nTransactionSum == DeclaredLoanAmount ? "" : "not ",
+				TotalPrincipalPaid == DeclaredLoanAmount ? "" : "not ",
 				Actual.Count
 			);
 
 			os.AppendFormat("\tPlanned vs Actual: {0} - {1}\n", Planned.Count, Actual.Count);
+
+			os.AppendFormat(
+				"\tRemaining + Paid = Issued: {0} - {1} + {2} <=> {3}\n",
+				TotalPrincipalPaid + RemainingPrincipal == DeclaredLoanAmount ? "yes" : "no",
+				RemainingPrincipal, TotalPrincipalPaid, DeclaredLoanAmount
+			);
 
 			os.AppendFormat("\tPlanned schedule ({0}):\n", Planned.Count);
 
@@ -301,25 +364,19 @@ namespace LoanScheduleTransactionBackFill {
 
 			Actual.ForEach(x => os.AppendFormat("\t\t{0}\n", x));
 
-			decimal nActualSum = Actual.Sum(x => x.Principal);
-
 			os.AppendFormat("\t\t{0}\n", new string('-', 38));
-			os.AppendFormat("\t\t{0,27} {1,10}\n", " ", nActualSum.ToString("C2", Schedule.Culture));
+			os.AppendFormat("\t\t{0,27} {1,10}\n", " ", RemainingPrincipal.ToString("C2", Schedule.Culture));
 
 			os.AppendFormat("\tWorking set ({0}):\n", WorkingSet.Count);
 
 			WorkingSet.ForEach(x => os.AppendFormat("\t\t{0}\n", x));
 
-			os.AppendFormat("\tTransactions ({0}):\n", Transactions.Count);
+			os.AppendFormat("\tTransactions ({0} - {1}):\n", Transactions.Count, ProcessedTransactionCount);
 
 			Transactions.ForEach(x => os.AppendFormat("\t\t{0}\n", x));
 
 			os.AppendFormat("\t\t{0}\n", new string('-', 38));
-			os.AppendFormat("\t\t{0,27} {1,10}\n", " ", nTransactionSum.ToString("C2", Schedule.Culture));
-			os.AppendFormat("\t\t{0,27} {1,10}\n", " ", (nActualSum + nTransactionSum).ToString("C2", Schedule.Culture));
-
-			if (nActualSum + nTransactionSum != DeclaredLoanAmount)
-				os.Append("\tGewalt!\n");
+			os.AppendFormat("\t\t{0,27} {1,10}\n", " ", TotalPrincipalPaid.ToString("C2", Schedule.Culture));
 
 			os.AppendFormat("\tSchedule-transactions ({0}):\n", ScheduleTransactions.Count);
 
@@ -382,7 +439,7 @@ namespace LoanScheduleTransactionBackFill {
 				return;
 			} // if no planned
 
-			if (Transactions.Sum(x => x.Principal) == DeclaredLoanAmount) {
+			if (TotalPrincipalPaid == DeclaredLoanAmount) {
 				if (LoanType == LoanType.Standard) {
 					decimal nOther = Math.Floor(DeclaredLoanAmount / Actual.Count);
 					decimal nFirst = DeclaredLoanAmount - nOther * (Actual.Count - 1);
