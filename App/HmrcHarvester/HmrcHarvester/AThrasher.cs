@@ -8,11 +8,16 @@ namespace Ezbob.HmrcHarvester {
 	public abstract class AThrasher : SafeLog {
 		#region public
 
+		private const string PoundStr = "£";
+		private const char PoundChar = '£';
+
 		#region method ParseGBP
 
 		public static decimal ParseGBP(string sMoney) {
 			// Convert unicode pound sign to ascii.
-			string sValue = sMoney.Replace(Convert.ToChar(65533), Convert.ToChar(163));
+			string sValue = sMoney
+				.Replace(Convert.ToChar(65533), PoundChar)
+				.Replace("GBP", PoundStr);
 
 			return decimal.Parse(sValue, NumberStyles.Currency, Culture);
 		} // ParseGBP
