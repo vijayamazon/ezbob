@@ -8,7 +8,6 @@ class EzBob.StoreButtonView extends Backbone.Marionette.ItemView
         @name = options.name
         @logoText = options.logoText
         @shops = options.shops
-
         if @shops
             @shops.on("change reset sync", @render, this)
 
@@ -20,6 +19,7 @@ class EzBob.StoreButtonView extends Backbone.Marionette.ItemView
             logoText: @logoText
             shopClass: @shopClass
             shops: []
+            ribbon: @ribbon
             shopNames: ""
 
         if @shops

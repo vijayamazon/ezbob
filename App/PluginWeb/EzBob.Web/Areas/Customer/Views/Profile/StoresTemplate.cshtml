@@ -17,7 +17,7 @@
 			_.each(stores, function(store, i){
 				var oCG = aryCGAccounts[store.type];
 
-				var sSourceLabels = (oCG ? 'source-labels' : 'source_labels');
+				var sSourceLabels = 'source_labels';
 
 				%><tr class="<%= (stores.length - 1 == i) ? 'last' : '' %>">
                     <td class="first">

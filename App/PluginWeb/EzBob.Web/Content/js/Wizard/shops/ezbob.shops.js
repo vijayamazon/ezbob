@@ -1,5 +1,5 @@
-(function() {
-  var root, _ref,
+﻿(function() {
+  var root,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -8,11 +8,11 @@
   root.EzBob = root.EzBob || {};
 
   EzBob.StoreInfoView = (function(_super) {
+
     __extends(StoreInfoView, _super);
 
     function StoreInfoView() {
-      _ref = StoreInfoView.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return StoreInfoView.__super__.constructor.apply(this, arguments);
     }
 
     StoreInfoView.prototype.attributes = {
@@ -20,9 +20,8 @@
     };
 
     StoreInfoView.prototype.initialize = function() {
-      var acc, accountTypeName, aryCGAccounts, ignore, j, lc, offlineMarketPlaces, storeTypeName, vendorInfo, _i, _j, _len, _len1, _ref1, _ref2,
+      var acc, accountTypeName, aryCGAccounts, ignore, j, lc, storeTypeName, vendorInfo, _i, _len, _ref,
         _this = this;
-
       this.ebayStores = this.model.get("ebayStores");
       this.EbayButtonView = new EzBob.EbayButtonView({
         model: this.ebayStores
@@ -120,51 +119,35 @@
       this.stores = {
         "eBay": {
           view: this.EbayStoreView,
-          button: this.EbayButtonView,
-          active: 0,
-          priority: 0
+          button: this.EbayButtonView
         },
         "Amazon": {
           view: this.AmazonStoreInfoView,
-          button: this.AmazonButtonView,
-          active: 0,
-          priority: 1
+          button: this.AmazonButtonView
         },
         "paypal": {
           view: this.PayPalInfoView,
-          button: this.PayPalButtonView,
-          active: 0,
-          priority: 2
+          button: this.PayPalButtonView
         },
         "EKM": {
           view: this.EKMAccountInfoView,
-          button: this.ekmButtonView,
-          active: 0,
-          priority: 3
+          button: this.ekmButtonView
         },
         "PayPoint": {
           view: this.PayPointAccountInfoView,
-          button: this.PayPointButtonView,
-          active: 0,
-          priority: 5
+          button: this.PayPointButtonView
         },
         "Yodlee": {
           view: this.YodleeAccountInfoView,
-          button: this.YodleeButtonView,
-          active: 0,
-          priority: 7
+          button: this.YodleeButtonView
         },
         "FreeAgent": {
           view: this.FreeAgentAccountInfoView,
-          button: this.freeAgentButtonView,
-          active: 0,
-          priority: 8
+          button: this.freeAgentButtonView
         },
         "Sage": {
           view: this.sageAccountInfoView,
-          button: this.sageButtonView,
-          active: 0,
-          priority: 14
+          button: this.sageButtonView
         }
       };
       for (accountTypeName in aryCGAccounts) {
@@ -172,28 +155,21 @@
         lc = accountTypeName.toLowerCase();
         this.stores[accountTypeName] = {
           view: this[lc + 'AccountInfoView'],
-          button: this[lc + 'ButtonView'],
-          active: 0,
-          priority: vendorInfo.ClientSide.SortPriority
+          button: this[lc + 'ButtonView']
         };
       }
       this.isOffline = this.model.get('isOffline');
-      offlineMarketPlaces = {};
-      _ref1 = EzBob.Config.OfflineMarketPlaces;
-      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-        j = _ref1[_i];
-        offlineMarketPlaces[j] = j;
-      }
-      _ref2 = EzBob.Config.ActiveMarketPlaces;
-      for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
-        j = _ref2[_j];
-        storeTypeName = j === "Pay Pal" ? "paypal" : j;
-        if (this.stores[storeTypeName] && ((!this.isOffline) || offlineMarketPlaces[storeTypeName])) {
-          this.stores[storeTypeName].active = 1;
+      this.isProfile = this.model.get('isProfile');
+      _ref = EzBob.Config.MarketPlaces;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        j = _ref[_i];
+        storeTypeName = j.Name === "Pay Pal" ? "paypal" : j.Name;
+        if (this.stores[storeTypeName]) {
+          this.stores[storeTypeName].active = this.isProfile ? (this.isOffline ? j.ActiveDashboardOffline : j.ActiveDashboardOnline) : (this.isOffline ? j.ActiveWizardOffline : j.ActiveWizardOnline);
+          this.stores[storeTypeName].priority = this.isOffline ? j.PriorityOffline : j.PriorityOnline;
+          this.stores[storeTypeName].ribbon = j.Ribbon ? j.Ribbon : "";
+          this.stores[storeTypeName].button.ribbon = j.Ribbon ? j.Ribbon : "";
         }
-      }
-      if (!this.isOffline && this.stores['HMRC']) {
-        this.stores['HMRC'].active = 0;
       }
       this.name = "shops";
       return StoreInfoView.__super__.initialize.call(this);

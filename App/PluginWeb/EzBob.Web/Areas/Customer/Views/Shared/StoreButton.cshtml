@@ -7,12 +7,12 @@
 					<tbody>
 						<tr>
 							<td style="width: 187px;"><%
-								(function (shopClass, nShopCount) {
+								(function (shopClass, nShopCount, ribbon) {
 									var aryCGAccounts = $.parseJSON($('div#cg-account-list').text());
 
 									var oCG = aryCGAccounts[shopClass];
 								
-									var sSourceLabels = (oCG ? 'source-labels' : 'source_labels') + (nShopCount ? '_on' : '');
+									var sSourceLabels = 'source_labels' + (nShopCount ? '_on' : '');
 
 									switch (shopClass) {
 									case 'eBay':
@@ -25,19 +25,14 @@
 										%><a href="#<%- shopClass %>_help" class="source_no_help" onclick='EzBob.App.trigger("ct:storebase.shops.connect", "<%- shopClass %>")'><%
 										break;
 									} // switch
-
-									var sRibbon = '';
-
-									if (oCG)
-										sRibbon = oCG.ClientSide.Ribbon.toLowerCase();
-
-									if (sRibbon != '') {
-										sRibbon += '-ribbon';
+                                    var sRibbon = '';
+									if (ribbon && ribbon != '') {
+										sRibbon = ribbon + '-ribbon';
 										%><div class="<%= sSourceLabels %> <%= sRibbon %>"></div><%
 									} // if
 
 									%><div class="aligncenter <%= sSourceLabels %> <%- shopClass %>"><%- name %></div></a><%
-								})(shopClass, shops.length);
+								})(shopClass, shops.length, ribbon);
 							%></td>
 							<td style="vertical-align: middle;"><% if(shops.length) {%>
 									<div class="tooltipdiv" data-toggle="tooltip" data-placement="bottom" data-original-title="<%- shopNames %>">

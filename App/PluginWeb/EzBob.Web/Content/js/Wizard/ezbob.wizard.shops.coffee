@@ -7,6 +7,7 @@ class EzBob.StoreInfoStepModel extends EzBob.WizardStepModel
       ebayStores: new EzBob.EbayStoreModels(options.ebayMarketPlaces)
       amazonMarketplaces: new EzBob.AmazonStoreModels(options.amazonMarketPlaces)
       isOffline: options.isOffline
+      isProfile: options.isProfile
 
   getStores: ->
     stores = []

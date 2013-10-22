@@ -64,43 +64,27 @@ class EzBob.StoreInfoView extends EzBob.StoreInfoBaseView
             "eBay":
                 view: @EbayStoreView
                 button: @EbayButtonView
-                active: 0
-                priority: 0
             "Amazon":
                 view: @AmazonStoreInfoView
                 button: @AmazonButtonView
-                active: 0
-                priority: 1
             "paypal": 
                 view: @PayPalInfoView
                 button : @PayPalButtonView
-                active: 0
-                priority: 2
             "EKM":
                 view: @EKMAccountInfoView
                 button: @ekmButtonView
-                active: 0
-                priority: 3
             "PayPoint":
                 view: @PayPointAccountInfoView
                 button: @PayPointButtonView
-                active: 0
-                priority: 5
             "Yodlee":
                 view: @YodleeAccountInfoView
                 button: @YodleeButtonView
-                active: 0
-                priority: 7
             "FreeAgent":
                 view: @FreeAgentAccountInfoView
                 button: @freeAgentButtonView
-                active: 0
-                priority: 8
             "Sage":
                 view: @sageAccountInfoView
                 button: @sageButtonView
-                active: 0
-                priority: 14
 
         for accountTypeName, vendorInfo of aryCGAccounts
             lc = accountTypeName.toLowerCase()
@@ -108,24 +92,16 @@ class EzBob.StoreInfoView extends EzBob.StoreInfoBaseView
             @stores[accountTypeName] =
                 view: this[lc + 'AccountInfoView']
                 button: this[lc + 'ButtonView']
-                active: 0
-                priority: vendorInfo.ClientSide.SortPriority
 
         @isOffline = @model.get 'isOffline'
-
-        offlineMarketPlaces = {}
-
-        for j in EzBob.Config.OfflineMarketPlaces
-            offlineMarketPlaces[j] = j
-
-        for j in EzBob.Config.ActiveMarketPlaces
-            storeTypeName = if j == "Pay Pal" then "paypal" else j
-
-            if @stores[storeTypeName] and ((not @isOffline) or offlineMarketPlaces[storeTypeName])
-                @stores[storeTypeName].active = 1
-
-        if not @isOffline and @stores['HMRC']
-            @stores['HMRC'].active = 0
+        @isProfile = @model.get 'isProfile'
+        for j in EzBob.Config.MarketPlaces
+            storeTypeName = if j.Name == "Pay Pal" then "paypal" else j.Name
+            if @stores[storeTypeName]
+                @stores[storeTypeName].active = if @isProfile then (if @isOffline then j.ActiveDashboardOffline else j.ActiveDashboardOnline) else (if @isOffline then j.ActiveWizardOffline else j.ActiveWizardOnline)
+                @stores[storeTypeName].priority = if @isOffline then j.PriorityOffline else j.PriorityOnline
+                @stores[storeTypeName].ribbon = if j.Ribbon then j.Ribbon else ""
+                @stores[storeTypeName].button.ribbon = if j.Ribbon then j.Ribbon else ""
 
         @name = "shops"
         super()

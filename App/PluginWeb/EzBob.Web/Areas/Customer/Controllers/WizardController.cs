@@ -59,17 +59,9 @@ namespace EzBob.Web.Areas.Customer.Controllers
             ViewData["TargetsEnabled"] = _config.TargetsEnabled;
             ViewData["Config"] = _config;
 
-			ViewData["ActiveMarketPlaces"] = _session
+			ViewData["MarketPlaces"] = _session
 				.Query<MP_MarketplaceType>()
-				.Where(x => x.Active)
-				.Select(x => x.Name)
 				.ToArray();
-
-			ViewData["OfflineMarketPlaces"] = _session
-				.Query<MP_MarketplaceType>()
-				.Where(x => x.IsOffline)
-				.Select(x => x.Name)
-				.ToList();
 
             var wizardModel = _customerModelBuilder.BuildWizardModel(_context.Customer);
 

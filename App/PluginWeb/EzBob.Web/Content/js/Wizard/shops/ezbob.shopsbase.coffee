@@ -74,12 +74,6 @@ class EzBob.StoreInfoBaseView extends Backbone.View
 
             @$el.find('.importantnumber').text '£200,000'
 
-            _.each @stores, (s, sShopName) ->
-                switch sShopName
-                    when "HMRC" then s.priority = 1
-                    when "Yodlee" then s.priority = 2
-                    else s.priority += 4
-
         that = this
         accountsList = @storeList.find(".accounts-list")
 
