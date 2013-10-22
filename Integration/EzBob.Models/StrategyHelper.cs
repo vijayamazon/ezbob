@@ -16,7 +16,6 @@
 	using EZBob.DatabaseLib.Model.Experian;
 	using EZBob.DatabaseLib.Repository;
 	using CommonLib.TimePeriodLogic;
-	using ExperianLib;
 	using EzBobIntegration.Web_References.Consumer;
 	using Marketplaces;
 	using Web.Code;
@@ -172,8 +171,9 @@
 			var customer = _customers.Get(customerId);
 			int autoApproveMinAmount = configurationVariablesRepository.GetByNameAsInt("AutoApproveMinAmount");
 			int autoApproveMaxAmount = configurationVariablesRepository.GetByNameAsInt("AutoApproveMaxAmount");
+			int autoApprovedAmount = systemCalculatedAmount;
 
-			/*if (!CheckAMLResult(customer) ||
+			if (!CheckAMLResult(customer) ||
 				!CheckCustomerType(customer) ||
 				!CheckCustomerStatus(customer) ||
 				!CheckExperianScore(minExperianScore) ||
@@ -204,13 +204,13 @@
 				{
 					return 0;
 				}
-			}*/
 
-			int autoApprovedAmount = systemCalculatedAmount;
+				// Reduce the system calculated amount by the already open amount
+				var outstandingLoans = loanRepository.ByCustomer(customerId).Where(l => l.Status != LoanStatus.PaidOff).ToList();
+				decimal outstandingPrincipal = outstandingLoans.Sum(loan => loan.Principal);
+				autoApprovedAmount -= (int)outstandingPrincipal;
+			}
 
-			log.FatalFormat("ZZZ {0}", autoApprovedAmount);
-
-			// qqq - test that the offered amount is effected by outstanding loan - if not decrease it
 			if (autoApprovedAmount < autoApproveMinAmount || autoApprovedAmount > autoApproveMaxAmount)
 			{
 				log.InfoFormat("No auto approval: System calculated amount is not between {0}-{1} but is {2}", autoApproveMinAmount, autoApproveMaxAmount, autoApprovedAmount);
@@ -437,10 +437,10 @@
 			}
 
 			decimal loanAmount = 0, outstandingPrincipal = 0;
-			foreach (var x in outstandingLoans)
+			foreach (var loan in outstandingLoans)
 			{
-				loanAmount += x.LoanAmount;
-				outstandingPrincipal += x.Principal;
+				loanAmount += loan.LoanAmount;
+				outstandingPrincipal += loan.Principal;
 
 			}
 			if (outstandingPrincipal >= autoApproveMinRepaidPortion * loanAmount)
