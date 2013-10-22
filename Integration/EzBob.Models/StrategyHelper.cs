@@ -502,5 +502,38 @@
             var file = _caisReportsHistoryRepository.Get(id);
             return file != null ? ZipString.Unzip(file.FileData) : "";
         }
-    }
+
+		public void SendFirstOfMonthStatusMail()
+		{
+			bool firstOfMonthStatusMailEnabled = configurationVariablesRepository.GetByNameAsBool("FirstOfMonthStatusMailEnabled");
+
+			if (!firstOfMonthStatusMailEnabled)
+			{
+				log.InfoFormat("The first of month status mails are disabled");
+				return;
+			}
+
+			log.InfoFormat("Starting to send first of month status mails");
+			foreach (Customer customer in _customers.GetAll())
+			{
+				List<Loan> outstandingLoans = GetOutstandingLoans(customer.Id);
+				if (outstandingLoans.Count > 0)
+				{
+					log.InfoFormat("Customer {0} has {1} outstanding loans. Will send status mail to him", customer.Id, outstandingLoans.Count);
+					SendStatusMailToCustomer(customer, outstandingLoans);
+				}
+			}
+		}
+
+		private void SendStatusMailToCustomer(Customer customer, List<Loan> outstandingLoans)
+		{
+			// next repayment details (date, sum)
+
+			// create table with all loans that were closed last month
+
+			// create table with all outstanding loans
+
+			// send mail (copy to underwriter?)
+		}
+	}
 }
