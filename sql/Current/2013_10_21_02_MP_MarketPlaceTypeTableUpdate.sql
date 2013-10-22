@@ -51,6 +51,14 @@ BEGIN
 END
 GO
 
+IF NOT EXISTS (SELECT * FROM sys.columns WHERE Name = N'Ribbon' and Object_ID = Object_ID(N'MP_MarketplaceType'))
+BEGIN 
+	ALTER TABLE MP_MarketplaceType 
+	ADD Ribbon INT
+END 
+GO
+
+
 UPDATE dbo.MP_MarketplaceType
 SET ActiveWizardOnline = 1
 	, ActiveDashboardOnline = 1
