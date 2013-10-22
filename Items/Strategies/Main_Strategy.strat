@@ -56,6 +56,7 @@
     <NodeElement Name="Enable Automatic Re-Approval" NodeId="Comparison34450770" />
     <NodeElement Name="Enable Automatic Rejection" NodeId="Comparison46140787" />
     <NodeElement Name="Enough Money" NodeId="Comparison37753964" />
+    <NodeElement Name="Enough Money" NodeId="Comparison28326098" />
     <NodeElement Name="Errors Assignment" NodeId="MultiAssignmentB27841924" />
     <NodeElement Name="Experian Def Acc Reject" NodeId="Comparison49692243" />
     <NodeElement Name="Experian Def Acc Reject" NodeId="Comparison47544505" />
@@ -4112,7 +4113,7 @@
       <Name>ConditionalAssignment17190527</Name>
       <PointF>
         <X>1814.24646</X>
-        <Y>2016</Y>
+        <Y>2036</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeConditionalAssignment</TypeName>
@@ -5220,8 +5221,8 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison64033931</Name>
       <PointF>
-        <X>1681.55261</X>
-        <Y>2036</Y>
+        <X>1441.55261</X>
+        <Y>2316</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeComparer</TypeName>
@@ -6763,8 +6764,8 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>ScriptNode49860438</Name>
       <PointF>
-        <X>1666.31677</X>
-        <Y>2156</Y>
+        <X>1226.31677</X>
+        <Y>2316</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeScript</TypeName>
@@ -6780,8 +6781,8 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison41489961</Name>
       <PointF>
-        <X>1662.84436</X>
-        <Y>2296</Y>
+        <X>1082.84436</X>
+        <Y>2316</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeComparer</TypeName>
@@ -6797,8 +6798,8 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>MultiAssignmentB50953566</Name>
       <PointF>
-        <X>1344.54089</X>
-        <Y>2296</Y>
+        <X>924.540955</X>
+        <Y>2316</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeMultiAssignmentBehavioral</TypeName>
@@ -7047,6 +7048,23 @@
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeDataSourceApplication</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Enough Money</DisplayName>
+      <InitialValue />
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>Comparison28326098</Name>
+      <PointF>
+        <X>1000.13123</X>
+        <Y>2316</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeComparer</TypeName>
       <PrototypeName />
     </NodeDescriptor>
   </NodeDescriptors>
@@ -18047,6 +18065,42 @@ CompanyType = "SoleTrader"</InitialValue>
       <SignatureRequired>false</SignatureRequired>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison28326098</OwnerName>
+      <Name>Expression</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue>AvailableFunds &gt; AutoApproveAmount</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison28326098</OwnerName>
+      <Name>Comparison28326098AvailableFunds</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison28326098</OwnerName>
+      <Name>Comparison28326098AutoApproveAmount</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
   </VariableDescriptors>
   <VariableConstraintDescriptors>
     <VariableConstraintDescriptor>
@@ -20599,7 +20653,7 @@ CompanyType = "SoleTrader"</InitialValue>
     <NodeConnectionDescriptor>
       <SourceNodeName>Comparison14297538</SourceNodeName>
       <SourceNodeOutletName>No</SourceNodeOutletName>
-      <TargetNodeName>Comparison20625205</TargetNodeName>
+      <TargetNodeName>Comparison64033931</TargetNodeName>
       <SuperNodeName />
       <Caption>No</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -20851,7 +20905,7 @@ CompanyType = "SoleTrader"</InitialValue>
     <NodeConnectionDescriptor>
       <SourceNodeName>ConditionalAssignment17190527</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>Comparison64033931</TargetNodeName>
+      <TargetNodeName>Comparison36836846</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -21649,16 +21703,29 @@ CompanyType = "SoleTrader"</InitialValue>
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>Comparison64033931</SourceNodeName>
+      <SourceNodeName>Comparison41489961</SourceNodeName>
       <SourceNodeOutletName>No</SourceNodeOutletName>
-      <TargetNodeName>Comparison36836846</TargetNodeName>
+      <TargetNodeName>Comparison20625205</TargetNodeName>
       <SuperNodeName />
       <Caption>No</Caption>
       <SignatureRequired>false</SignatureRequired>
       <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
       <DisplayColor>-65536</DisplayColor>
       <ShowSignature>false</ShowSignature>
-      <IntermediatePoints />
+      <IntermediatePoints>
+        <PointF>
+          <X>1160</X>
+          <Y>2400</Y>
+        </PointF>
+        <PointF>
+          <X>1520</X>
+          <Y>2400</Y>
+        </PointF>
+        <PointF>
+          <X>1520</X>
+          <Y>2020</Y>
+        </PointF>
+      </IntermediatePoints>
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
       <SourceNodeName>ScriptNode49860438</SourceNodeName>
@@ -21675,7 +21742,7 @@ CompanyType = "SoleTrader"</InitialValue>
     <NodeConnectionDescriptor>
       <SourceNodeName>Comparison41489961</SourceNodeName>
       <SourceNodeOutletName>Yes</SourceNodeOutletName>
-      <TargetNodeName>MultiAssignmentB50953566</TargetNodeName>
+      <TargetNodeName>Comparison28326098</TargetNodeName>
       <SuperNodeName />
       <Caption>Yes</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -21685,9 +21752,9 @@ CompanyType = "SoleTrader"</InitialValue>
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>Comparison41489961</SourceNodeName>
+      <SourceNodeName>Comparison64033931</SourceNodeName>
       <SourceNodeOutletName>No</SourceNodeOutletName>
-      <TargetNodeName>Comparison36836846</TargetNodeName>
+      <TargetNodeName>Comparison20625205</TargetNodeName>
       <SuperNodeName />
       <Caption>No</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -21696,8 +21763,8 @@ CompanyType = "SoleTrader"</InitialValue>
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints>
         <PointF>
-          <X>1620</X>
-          <Y>2300</Y>
+          <X>1520</X>
+          <Y>2020</Y>
         </PointF>
       </IntermediatePoints>
     </NodeConnectionDescriptor>
@@ -21711,12 +21778,7 @@ CompanyType = "SoleTrader"</InitialValue>
       <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
       <DisplayColor>-16776961</DisplayColor>
       <ShowSignature>false</ShowSignature>
-      <IntermediatePoints>
-        <PointF>
-          <X>960</X>
-          <Y>2320</Y>
-        </PointF>
-      </IntermediatePoints>
+      <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
       <SourceNodeName>Comparison27742648</SourceNodeName>
@@ -21878,6 +21940,43 @@ CompanyType = "SoleTrader"</InitialValue>
       <DisplayColor>-16776961</DisplayColor>
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>Comparison28326098</SourceNodeName>
+      <SourceNodeOutletName>Yes</SourceNodeOutletName>
+      <TargetNodeName>MultiAssignmentB50953566</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Yes</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16744448</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>Comparison28326098</SourceNodeName>
+      <SourceNodeOutletName>No</SourceNodeOutletName>
+      <TargetNodeName>MultiAssignmentB60578655</TargetNodeName>
+      <SuperNodeName />
+      <Caption>No</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-65536</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints>
+        <PointF>
+          <X>1060</X>
+          <Y>2300</Y>
+        </PointF>
+        <PointF>
+          <X>1000</X>
+          <Y>2300</Y>
+        </PointF>
+        <PointF>
+          <X>1000</X>
+          <Y>1980</Y>
+        </PointF>
+      </IntermediatePoints>
     </NodeConnectionDescriptor>
   </NodeConnectionDescriptors>
   <VariableConnectionDescriptors>
@@ -25147,12 +25246,6 @@ CompanyType = "SoleTrader"</InitialValue>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
-      <SourceVariableName>EnableAutomaticApproval</SourceVariableName>
-      <TargetVariableOwnerName>Comparison64033931</TargetVariableOwnerName>
-      <TargetVariableName>Comparison64033931EnableAutomaticApproval</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
       <SourceVariableName>IsAutoApproval</SourceVariableName>
       <TargetVariableOwnerName>Comparison27742648</TargetVariableOwnerName>
       <TargetVariableName>Comparison27742648IsAutoApproval</TargetVariableName>
@@ -25516,6 +25609,24 @@ CompanyType = "SoleTrader"</InitialValue>
       <SourceVariableName>ScortoInternalErrorMessage</SourceVariableName>
       <TargetVariableOwnerName>DataSourceNodeScalar6574222</TargetVariableOwnerName>
       <TargetVariableName>ScortoInternalErrorMessage</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>EnableAutomaticApproval</SourceVariableName>
+      <TargetVariableOwnerName>Comparison64033931</TargetVariableOwnerName>
+      <TargetVariableName>Comparison64033931EnableAutomaticApproval</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>AvailableFunds</SourceVariableName>
+      <TargetVariableOwnerName>Comparison28326098</TargetVariableOwnerName>
+      <TargetVariableName>Comparison28326098AvailableFunds</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Main_Strategy</SourceVariableOwnerName>
+      <SourceVariableName>AutoApproveAmount</SourceVariableName>
+      <TargetVariableOwnerName>Comparison28326098</TargetVariableOwnerName>
+      <TargetVariableName>Comparison28326098AutoApproveAmount</TargetVariableName>
     </VariableConnectionDescriptor>
   </VariableConnectionDescriptors>
   <SigningNodeDescriptors>
@@ -26881,6 +26992,14 @@ CompanyType = "SoleTrader"</InitialValue>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
       <OwnerName>DataSourceNodeScalar6574222</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>Comparison28326098</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
