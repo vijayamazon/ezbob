@@ -41,6 +41,7 @@
     };
 
     SettingsApprovalView.prototype.bindings = {
+      EnableAutomaticApproval: "select[name='enableAutomaticApproval']",
       EnableAutomaticReApproval: "select[name='enableAutomaticReApproval']",
       MaxCapHomeOwner: "input[name='maxCapHomeOwner']",
       MaxCapNotHomeOwner: "input[name='maxCapNotHomeOwner']"
@@ -83,7 +84,7 @@
     SettingsApprovalView.prototype.onRender = function() {
       this.modelBinder.bind(this.model, this.el, this.bindings);
       if (!$("body").hasClass("role-manager")) {
-        this.$el.find(" select[name='enableAutomaticReApproval'],                        input[name='maxCapHomeOwner'],                        input[name='maxCapNotHomeOwner']").addClass("disabled").attr({
+        this.$el.find(" select[name='enableAutomaticApproval'],                        select[name='enableAutomaticReApproval'],                        input[name='maxCapHomeOwner'],                        input[name='maxCapNotHomeOwner']").addClass("disabled").attr({
           readonly: "readonly",
           disabled: "disabled"
         });

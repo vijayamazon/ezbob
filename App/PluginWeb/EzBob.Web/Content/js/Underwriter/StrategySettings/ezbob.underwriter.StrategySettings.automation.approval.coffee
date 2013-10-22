@@ -15,7 +15,8 @@ class EzBob.Underwriter.SettingsApprovalView extends Backbone.Marionette.ItemVie
         @
 
     bindings:
-        EnableAutomaticReApproval:                "select[name='enableAutomaticReApproval']"
+        EnableAutomaticApproval:                "select[name='enableAutomaticApproval']"
+        EnableAutomaticReApproval:              "select[name='enableAutomaticReApproval']"
         MaxCapHomeOwner:                        "input[name='maxCapHomeOwner']"
         MaxCapNotHomeOwner:                     "input[name='maxCapNotHomeOwner']"
 
@@ -42,7 +43,8 @@ class EzBob.Underwriter.SettingsApprovalView extends Backbone.Marionette.ItemVie
     onRender: ->
         @modelBinder.bind @model, @el, @bindings
         if !$("body").hasClass("role-manager") 
-            @$el.find(" select[name='enableAutomaticReApproval'],
+            @$el.find(" select[name='enableAutomaticApproval'],
+                        select[name='enableAutomaticReApproval'],
                         input[name='maxCapHomeOwner'],
                         input[name='maxCapNotHomeOwner']").addClass("disabled").attr({readonly:"readonly", disabled: "disabled"});
             @$el.find("button[name='SaveApprovalSettings'], button[name='CancelApprovalSettings']").hide();
