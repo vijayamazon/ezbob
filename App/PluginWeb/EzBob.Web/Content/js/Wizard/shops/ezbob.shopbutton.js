@@ -1,5 +1,5 @@
-(function() {
-  var root, _ref,
+﻿(function() {
+  var root,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -8,11 +8,11 @@
   root.EzBob = root.EzBob || {};
 
   EzBob.StoreButtonView = (function(_super) {
+
     __extends(StoreButtonView, _super);
 
     function StoreButtonView() {
-      _ref = StoreButtonView.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return StoreButtonView.__super__.constructor.apply(this, arguments);
     }
 
     StoreButtonView.prototype.template = "#store-button-template";
@@ -29,12 +29,12 @@
 
     StoreButtonView.prototype.serializeData = function() {
       var data;
-
       data = {
         name: this.name,
         logoText: this.logoText,
         shopClass: this.shopClass,
         shops: [],
+        ribbon: this.ribbon,
         shopNames: ""
       };
       if (this.shops) {

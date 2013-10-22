@@ -20,8 +20,6 @@ namespace Integration.ChannelGrabberConfig {
 		public ClientSide() {
 			StoreInfoStepModelShops = "";
 			LinkForm = new LinkForm();
-			SortPriority = 0;
-			Ribbon = string.Empty;
 			m_oErrorMessages = new SortedDictionary<string, string>();
 		} // constructor
 
@@ -31,8 +29,6 @@ namespace Integration.ChannelGrabberConfig {
 
 		public string StoreInfoStepModelShops { get; set; }
 		public LinkForm LinkForm { get; set; }
-		public int SortPriority { get; set; }
-		public string Ribbon { get; set; }
 		public List<ErrorMessage> ErrorMessages { get; set; }
 
 		#endregion properties
@@ -56,8 +52,6 @@ namespace Integration.ChannelGrabberConfig {
 			var x = new ClientSide {
 				StoreInfoStepModelShops = (string)this.StoreInfoStepModelShops.Clone(),
 				LinkForm = (LinkForm)this.LinkForm.Clone(),
-				SortPriority = this.SortPriority,
-				Ribbon = (string)this.Ribbon.Clone()
 			};
 
 			foreach (KeyValuePair<string, string> pair in m_oErrorMessages)

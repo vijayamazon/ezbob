@@ -1039,6 +1039,9 @@
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.loanInfo.js">
       <DependentUpon>ezbob.underwriter.loanInfo.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.LoanOptions.js">
+      <DependentUpon>ezbob.underwriter.LoanOptions.coffee</DependentUpon>
+    </Content>
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.manualPayment.js">
       <DependentUpon>ezbob.underwriter.manualPayment.coffee</DependentUpon>
     </Content>
@@ -1078,6 +1081,9 @@
     <Content Include="Content\js\Wizard\shops\ezbob.shopbutton.js">
       <DependentUpon>ezbob.shopbutton.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Wizard\shops\ezbob.shopbutton.min.js">
+      <DependentUpon>ezbob.shopbutton.coffee</DependentUpon>
+    </Content>
     <Content Include="Content\js\Wizard\shops\ezbob.shops.amazon.js">
       <DependentUpon>ezbob.shops.amazon.coffee</DependentUpon>
     </Content>
@@ -1106,6 +1112,9 @@
       <DependentUpon>ezbob.shops.freeagent.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Wizard\shops\ezbob.shops.js">
+      <DependentUpon>ezbob.shops.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.min.js">
       <DependentUpon>ezbob.shops.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Wizard\shops\ezbob.shops.sage.js">

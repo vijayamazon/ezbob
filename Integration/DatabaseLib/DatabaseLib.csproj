@@ -119,6 +119,7 @@
     <Compile Include="Model\Marketplaces\ChannelGrabber\MP_VatReturnEntry.cs" />
     <Compile Include="Model\Marketplaces\ChannelGrabber\MP_VatReturnEntryNameMap.cs" />
     <Compile Include="Model\Marketplaces\ChannelGrabber\MP_VatReturnEntryName.cs" />
+    <Compile Include="Model\Marketplaces\MP_MarketplaceGroup.cs" />
     <Compile Include="Model\Marketplaces\PayPal\MP_PayPalTransactionItem2.cs" />
     <Compile Include="Model\Marketplaces\PayPal\MP_PayPalTransactionItem2Map.cs" />
     <Compile Include="Model\Marketplaces\Yodlee\MP_YodleeSearchWords.cs" />
@@ -291,7 +292,6 @@
     <Compile Include="Model\Marketplaces\PayPoint\MP_PayPointOrderItem.cs" />
     <Compile Include="Model\Marketplaces\PayPoint\MP_PayPointOrderItemMap.cs" />
     <Compile Include="Model\Marketplaces\PayPoint\MP_PayPointOrderMap.cs" />
-    <Compile Include="Model\Plain\MarketPlaceModel.cs" />
     <Compile Include="Model\Database\OfferExpiredException.cs" />
     <Compile Include="Model\Database\PacnetPaypointServiceLog.cs" />
     <Compile Include="Model\Loans\ILoanScheduleRepository.cs" />
@@ -527,7 +527,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Model\Database\DailyReportExecute.hbm.xml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Model\Plain\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -53,19 +53,11 @@
             var wizardModel = new WizardModel() {Customer = _customerModelBuilder.BuildWizardModel(_context.Customer), Config = _config};
             ViewData["ShowChangePasswordPage"] = _context.User.IsPasswordRestored;
 
-            ViewData["ActiveMarketPlaces"] = _session
+            ViewData["MarketPlaces"] = _session
                 .Query<MP_MarketplaceType>()
-                .Where(x => x.Active)
-                .Select(x => x.Name)
                 .ToArray();
 
-            ViewData["OfflineMarketPlaces"] = _session
-                .Query<MP_MarketplaceType>()
-                .Where(x => x.IsOffline)
-                .Select(x => x.Name)
-                .ToList();
-
-            return View("Index", wizardModel);
+			return View("Index", wizardModel);
         }
         
         [Transactional]

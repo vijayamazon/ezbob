@@ -39,6 +39,11 @@ class EzBob.Underwriter.LoanOptionsView extends Backbone.Marionette.ItemView
         @$el.find('.cais-comment').html('<h5>'+curentFlag.ValidForRecordType+'</h5>' + curentFlag.Comment)
 
     changeAccountStatus:=>
+        tmp = $("#CaisAccountStatus option:selected").val()
+        if tmp == '8' 
+            $("#defaultExplanation").show()
+        else
+            $("#defaultExplanation").hide()
         @loanOptions.set('CaisAccountStatus', $("#CaisAccountStatus option:selected").val() ) 
 
     save: ->

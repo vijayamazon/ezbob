@@ -1,26 +1,30 @@
-﻿using System.Web.Mvc;
-using EZBob.DatabaseLib.Model;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Loans;
-using EZBob.DatabaseLib.Repository;
-using EzBob.Web.Areas.Underwriter.Models;
-using EzBob.Web.Infrastructure.csrf;
-using Scorto.Web;
-using StructureMap;
-
-namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
+﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
+	using System;
+	using System.Web.Mvc;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EZBob.DatabaseLib.Repository;
+	using Models;
+	using Infrastructure.csrf;
+	using Scorto.Web;
+	using StructureMap;
+
     public class LoanOptionsController : Controller
-    {
+	{
+		private readonly ICustomerStatusHistoryRepository customerStatusHistoryRepository;
+		private readonly CustomerStatusesRepository customerStatusesRepository;
         private readonly ILoanOptionsRepository _loanOptionsRepository;
         private readonly ILoanRepository _loanRepository;
         private readonly ICaisFlagRepository _caisFlagRepository;
 
-        public LoanOptionsController (ILoanOptionsRepository loanOptionsRepository, ILoanScheduleRepository loanScheduleRepository, ILoanRepository loanRepository)
+		public LoanOptionsController(ILoanOptionsRepository loanOptionsRepository, ILoanRepository loanRepository, ICustomerStatusHistoryRepository customerStatusHistoryRepository, CustomerStatusesRepository customerStatusesRepository)
         {
             _loanOptionsRepository = loanOptionsRepository;
             _loanRepository = loanRepository;
             _caisFlagRepository = ObjectFactory.GetInstance<CaisFlagRepository>();
+			this.customerStatusHistoryRepository = customerStatusHistoryRepository;
+			this.customerStatusesRepository = customerStatusesRepository;
         }
 
         [Ajax]
@@ -59,6 +63,54 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
                  options.ManulCaisFlag = "Calculated value";
 
              _loanOptionsRepository.SaveOrUpdate(options);
+
+			if (options.CaisAccountStatus == "8")
+			{
+				Customer customer = _loanRepository.Get(options.LoanId).Customer;
+				
+				// Update loan options
+				foreach (Loan loan in customer.Loans)
+				{
+					if (loan.Id == options.LoanId)
+					{
+						continue;
+					}
+
+					LoanOptions currentOptions = _loanOptionsRepository.GetByLoanId(loan.Id);
+					if (currentOptions == null)
+					{
+						currentOptions = new LoanOptions
+						{
+							LoanId = loan.Id,
+							AutoPayment = true,
+							ReductionFee = true,
+							LatePaymentNotification = true,
+							StopSendingEmails = true,
+							ManulCaisFlag = "Calculated value"
+						};
+					}
+
+					currentOptions.CaisAccountStatus = "8";
+					_loanOptionsRepository.SaveOrUpdate(currentOptions);
+				}
+
+				// Update customer status
+				int prevStatus = customer.CollectionStatus.CurrentStatus.Id;
+				customer.CollectionStatus.CurrentStatus = customerStatusesRepository.GetByName("Default");
+				customer.CollectionStatus.CollectionDescription = string.Format("Triggered via loan options:{0}", options.LoanId);
+
+				// Update status history table
+				var newEntry = new CustomerStatusHistory
+					{
+						Username = User.Identity.Name,
+						Timestamp = DateTime.UtcNow,
+						CustomerId = customer.Id,
+						PreviousStatus = prevStatus,
+						NewStatus = customer.CollectionStatus.CurrentStatus.Id
+					};
+				customerStatusHistoryRepository.SaveOrUpdate(newEntry);
+			}
+
              return this.JsonNet(new { });
          }
     }

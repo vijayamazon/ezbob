@@ -1,8 +1,8 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers
 {
-	using System;
 	using System.Linq;
 	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EZBob.DatabaseLib.Repository;
 	using EzBob.Models;
 	using ApplicationCreator;
 	using Infrastructure;
@@ -18,11 +18,13 @@
     {
         private readonly ICustomerRepository _customerRepository;
 	    private readonly CustomerStatusesRepository _customerStatusesRepository;
+	    private readonly LoanOptionsRepository loanOptionsRepository;
 
-        public CollectionStatusController(ICustomerRepository customerRepository, CustomerStatusesRepository customerStatusesRepository, IAppCreator appCreator, PayPointApi paypoint)
+        public CollectionStatusController(ICustomerRepository customerRepository, CustomerStatusesRepository customerStatusesRepository, LoanOptionsRepository loanOptionsRepository, IAppCreator appCreator, PayPointApi paypoint)
         {
             _customerRepository = customerRepository;
 	        _customerStatusesRepository = customerStatusesRepository;
+	        this.loanOptionsRepository = loanOptionsRepository;
         }
 
 		[Ajax]
@@ -72,6 +74,27 @@
 			if (customer.CollectionStatus.CurrentStatus.Name == "Default")
 	        {
 		        customer.CollectionStatus.CollectionDescription = collectionStatus.CollectionDescription;
+
+				// Update loan options
+				foreach (Loan loan in customer.Loans)
+				{
+					LoanOptions options = loanOptionsRepository.GetByLoanId(loan.Id);
+					if (options == null)
+					{
+						options = new LoanOptions
+							{
+								LoanId = loan.Id,
+								AutoPayment = true,
+								ReductionFee = true,
+								LatePaymentNotification = true,
+								StopSendingEmails = true,
+								ManulCaisFlag = "Calculated value"
+							};
+					}
+
+					options.CaisAccountStatus = "8";
+					loanOptionsRepository.SaveOrUpdate(options);
+				}
 	        }
 	        return this.JsonNet(new { });
         }

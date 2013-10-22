@@ -821,7 +821,7 @@ T6C7Spa3i/ltRwpQYWeYRRvJGkNUa12VLyTMdYRAAAAAvBLTqmDnMOt2M1IbVhi98uhE0pS2YC+WwInF
             </appender>
             <!-- Mail appender -->
             <appender name="MailAppenderWithSSL" type="Log4NetCustomAppenders.MailAppenderWithSSL,Log4NetCustomAppenders">
-                <to value="v.arnautov@scorto.com.ua,tisichenko@scorto.com.ua" />
+                <to value="uat@ezbob.com" />
                 <from value="ezbobdev@gmail.com" />
                 <subject value="${MailSubject}" />
                 <smtpHost value="smtp.gmail.com" />

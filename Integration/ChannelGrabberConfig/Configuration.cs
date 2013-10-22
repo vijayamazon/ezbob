@@ -116,11 +116,11 @@ namespace Integration.ChannelGrabberConfig {
 			var sb = new StringBuilder();
 
 			ForEachVendor(vi => {
-				sb.AppendFormat(".source-labels.{0}, .source-labels.{1} {{", vi.Name, vi.Name.ToLower());
+				sb.AppendFormat(".source_labels.{0}, .source_labels.{1} {{", vi.Name, vi.Name.ToLower());
 				vi.ClientSide.LinkForm.SourceLabel.ForEach( css => sb.Append(css.ToString()) );
 				sb.Append("}");
 
-				sb.AppendFormat(".source-labels_on.{0}, .source-labels_on.{1} {{", vi.Name, vi.Name.ToLower());
+				sb.AppendFormat(".source_labels_on.{0}, .source_labels_on.{1} {{", vi.Name, vi.Name.ToLower());
 				vi.ClientSide.LinkForm.SourceLabelOn.ForEach( css => sb.Append(css.ToString()) );
 				sb.Append("}");
 			});

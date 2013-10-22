@@ -2,8 +2,9 @@ using FluentNHibernate.Mapping;
 using Integration.ChannelGrabberConfig;
 
 namespace EZBob.DatabaseLib.Model.Database {
-    
-    public class MP_MarketplaceType 
+	using Marketplaces;
+
+	public class MP_MarketplaceType 
 	{
         public virtual int Id { get; set; }
         public virtual string Name { get; set; }
@@ -13,6 +14,15 @@ namespace EZBob.DatabaseLib.Model.Database {
         public virtual bool IsPaymentAccount { get { return false; } }
         public virtual int UWPriority { get { return 0; } }
 		public virtual bool IsOffline { get; set; }
+
+		public virtual bool ActiveWizardOnline { get; set; }
+		public virtual bool ActiveDashboardOnline { get; set; }
+		public virtual bool ActiveWizardOffline { get; set; }
+		public virtual bool ActiveDashboardOffline { get; set; }
+		public virtual int? PriorityOnline { get; set; }
+		public virtual int? PriorityOffline { get; set; }
+		public virtual MP_MarketplaceGroup Group { get; set; }
+		public virtual string Ribbon { get; set; }
 	}
 
     public class MP_MarketplaceTypeMap : ClassMap<MP_MarketplaceType>
@@ -29,6 +39,15 @@ namespace EZBob.DatabaseLib.Model.Database {
             Map(x => x.Description);
             Map(x => x.Active);
             Map(x => x.IsOffline);
+			Map(x => x.ActiveDashboardOffline);
+			Map(x => x.ActiveDashboardOnline);
+			Map(x => x.ActiveWizardOffline);
+			Map(x => x.ActiveWizardOnline);
+			Map(x => x.PriorityOffline).Nullable();
+			Map(x => x.PriorityOnline).Nullable();
+			Map(x => x.Ribbon).Length(50).Nullable();
+			References(x => x.Group, "GroupId");
+
             DiscriminateSubClassesOnColumn("").Formula(
 				"CASE Name " +
 				Integration.ChannelGrabberConfig.Configuration.Instance.GetMarketplaceDiscriminator() +

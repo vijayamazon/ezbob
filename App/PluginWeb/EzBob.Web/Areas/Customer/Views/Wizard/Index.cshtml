@@ -30,8 +30,7 @@
         
         EzBob.Config.SessionTimeout = @config.SessionTimeout;
         EzBob.Config.CaptchaMode = '@ViewData["CaptchaMode"]';
-        EzBob.Config.ActiveMarketPlaces = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewData["ActiveMarketPlaces"]));
-        EzBob.Config.OfflineMarketPlaces = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewData["OfflineMarketPlaces"]));
+        EzBob.Config.MarketPlaces = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewData["MarketPlaces"]));
         SetCaptchaMode();
         EzBob.Config.WizardTopNaviagtionEnabled = @config.WizardTopNaviagtionEnabled.ToString().ToLower(CultureInfo.InvariantCulture);
             EzBob.Config.TargetsEnabled = @if (ViewData["TargetsEnabled"] != null)

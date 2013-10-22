@@ -32,8 +32,6 @@
 
 		"ClientSide": {
 			"StoreInfoStepModelShops": "volusionShops",
-			"SortPriority": 4,
-			"Ribbon": "",
 			"LinkForm": {
 				"Fields": [
 					{
@@ -129,8 +127,6 @@
 
 		"ClientSide": {
 			"StoreInfoStepModelShops": "playShops",
-			"SortPriority": 6,
-			"Ribbon": "",
 			"LinkForm": {
 				"Fields": [
 					{
@@ -210,8 +206,6 @@
 
 		"ClientSide": {
 			"StoreInfoStepModelShops": "shopifyShops",
-			"SortPriority": 11,
-			"Ribbon": "",
 			"LinkForm": {
 				"Fields": [
 					{
@@ -285,8 +279,6 @@
 
 		"ClientSide": {
 			"StoreInfoStepModelShops": "xeroShops",
-			"SortPriority": 12,
-			"Ribbon": "",
 			"LinkForm": {
 				"Fields": [
 					{
@@ -375,8 +367,6 @@
 
 		"ClientSide": {
 			"StoreInfoStepModelShops": "kashflowShops",
-			"SortPriority": 13,
-			"Ribbon": "",
 			"LinkForm": {
 				"Fields": [
 					{
@@ -447,8 +437,6 @@
 
 		"ClientSide": {
 			"StoreInfoStepModelShops": "hmrcAccounts",
-			"SortPriority": 14,
-			"Ribbon": "",
 			"LinkForm": {
 				"Fields": [
 					{
@@ -528,8 +516,6 @@
 
 		"ClientSide": {
 			"StoreInfoStepModelShops": "magentoShops",
-			"SortPriority": 15,
-			"Ribbon": "",
 			"LinkForm": {
 				"Fields": [
 					{
@@ -612,8 +598,6 @@
 
 		"ClientSide": {
 			"StoreInfoStepModelShops": "prestashopShops",
-			"SortPriority": 16,
-			"Ribbon": "",
 			"LinkForm": {
 				"Fields": [
 					{
@@ -691,8 +675,6 @@
 
 		"ClientSide": {
 			"StoreInfoStepModelShops": "bigcommerceShops",
-			"SortPriority": 17,
-			"Ribbon": "",
 			"LinkForm": {
 				"Fields": [
 					{

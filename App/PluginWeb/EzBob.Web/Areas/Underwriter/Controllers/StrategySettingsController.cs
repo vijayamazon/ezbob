@@ -131,20 +131,23 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         [HttpGet]
         [Transactional]
         public JsonNetResult AutomationApproval()
-        {
-            var enableAutomaticReApproval = _configurationVariablesRepository.GetByName("EnableAutomaticReApproval");
+		{
+			var enableAutomaticApproval = _configurationVariablesRepository.GetByName("EnableAutomaticApproval");
+			var enableAutomaticReApproval = _configurationVariablesRepository.GetByName("EnableAutomaticReApproval");
             var maxCapHomeOwner = _configurationVariablesRepository.GetByName("MaxCapHomeOwner");
             var maxCapNotHomeOwner = _configurationVariablesRepository.GetByName("MaxCapNotHomeOwner");
 
-            var sa = new
-                {
-                    EnableAutomaticReApproval = enableAutomaticReApproval.Value,
-                    EnableAutomaticReApprovalDesc = enableAutomaticReApproval.Description,
-                    MaxCapHomeOwner = maxCapHomeOwner.Value,
-                    MaxCapHomeOwnerDesc = maxCapHomeOwner.Description,
-                    MaxCapNotHomeOwner = maxCapNotHomeOwner.Value,
-                    MaxCapNotHomeOwnerDesc = maxCapNotHomeOwner.Description
-                };
+	        var sa = new
+		        {
+			        EnableAutomaticApproval = enableAutomaticApproval.Value,
+			        EnableAutomaticApprovalDesc = enableAutomaticApproval.Description,
+			        EnableAutomaticReApproval = enableAutomaticReApproval.Value,
+			        EnableAutomaticReApprovalDesc = enableAutomaticReApproval.Description,
+			        MaxCapHomeOwner = maxCapHomeOwner.Value,
+			        MaxCapHomeOwnerDesc = maxCapHomeOwner.Description,
+			        MaxCapNotHomeOwner = maxCapNotHomeOwner.Value,
+			        MaxCapNotHomeOwnerDesc = maxCapNotHomeOwner.Description
+		        };
             return this.JsonNet(sa);
         }
 
@@ -152,13 +155,15 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         [ValidateJsonAntiForgeryToken]
         [HttpPost]
         [Transactional]
-        public JsonNetResult AutomationApproval(
-                                                string EnableAutomaticReApproval,
+		public JsonNetResult AutomationApproval(
+												string EnableAutomaticApproval,
+												string EnableAutomaticReApproval,
                                                 string MaxCapHomeOwner,
                                                 string MaxCapNotHomeOwner
             )
-        {
-            _configurationVariablesRepository.SetByName("EnableAutomaticReApproval", EnableAutomaticReApproval);
+		{
+			_configurationVariablesRepository.SetByName("EnableAutomaticApproval", EnableAutomaticApproval);
+			_configurationVariablesRepository.SetByName("EnableAutomaticReApproval", EnableAutomaticReApproval);
             _configurationVariablesRepository.SetByName("MaxCapHomeOwner", MaxCapHomeOwner);
             _configurationVariablesRepository.SetByName("MaxCapNotHomeOwner", MaxCapNotHomeOwner);
             return AutomationApproval();
