@@ -234,7 +234,7 @@
 					return this.JsonNet(new { error = "Invalid sort code" });
 				}
 
-				_sortCodeChecker.Check(customer, accountNumber, sortCode, BankAccountType);
+				var card = _sortCodeChecker.Check(customer, accountNumber, sortCode, BankAccountType);
 
 				_yodleeAccountChecker.Check(customer, accountNumber, sortCode, BankAccountType);
 
@@ -244,6 +244,8 @@
 						SortCode = sortCode,
 						Type = (BankAccountType)Enum.Parse(typeof(BankAccountType), BankAccountType)
 					};
+
+				customer.CurrentCard = card;
 				_customers.Update(customer);
 
 				return this.JsonNet(new { msg = "Well done! You've added your bank account!" });

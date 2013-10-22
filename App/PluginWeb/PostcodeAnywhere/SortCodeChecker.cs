@@ -33,9 +33,6 @@ namespace PostcodeAnywhere
                     throw;
                 }                
             }
-
-            customer.CurrentCard = card;
-
             return card;
         }
 
