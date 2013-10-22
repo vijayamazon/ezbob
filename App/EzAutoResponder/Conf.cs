@@ -32,7 +32,8 @@
 		public virtual Boolean AutoRespondWeekendConstraintEnabled { get; protected set; }
 		public virtual Boolean AutoRespondCountConstraintEnabled { get; protected set; }
 
-		public virtual string AutoRespondMandrillTemplate { get; protected set; }
+		public virtual string AutoRespondMandrillWeekendTemplate { get; protected set; }
+		public virtual string AutoRespondMandrillNightTemplate { get; protected set; }
 		public virtual string AutoRespondMandrillApiKey { get; protected set; }
 	} // class Conf
 	

@@ -213,7 +213,7 @@
 				};
 
 			_eventLog.WriteEntry("Autoresponding to " + msg.From.Email, EventLogEntryType.Information);
-			mandrill.Send(vars, msg.From.Email, _cfg.AutoRespondMandrillTemplate);
+			mandrill.Send(vars, msg.From.Email, IsWeekend(dateReceived) ? _cfg.AutoRespondMandrillWeekendTemplate : _cfg.AutoRespondMandrillNightTemplate);
 		}
 
 		private static bool IsExcludedMail(string from)
