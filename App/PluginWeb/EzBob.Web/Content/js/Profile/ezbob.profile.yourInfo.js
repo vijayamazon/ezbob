@@ -1,5 +1,5 @@
-﻿(function() {
-  var root,
+(function() {
+  var root, _ref, _ref1, _ref2, _ref3, _ref4, _ref5,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -10,17 +10,18 @@
   EzBob.Profile = EzBob.Profile || {};
 
   EzBob.Profile.YourInfoMainView = (function(_super) {
-
     __extends(YourInfoMainView, _super);
 
     function YourInfoMainView() {
-      return YourInfoMainView.__super__.constructor.apply(this, arguments);
+      _ref = YourInfoMainView.__super__.constructor.apply(this, arguments);
+      return _ref;
     }
 
     YourInfoMainView.prototype.template = "#your-info-template";
 
     YourInfoMainView.prototype.initialize = function() {
-      return this.isAddressValidation = true;
+      this.isAddressValidation = true;
+      return EzBob.App.on('dash-director-address-change', this.addressModelChange, this);
     };
 
     YourInfoMainView.prototype.events = {
@@ -53,16 +54,26 @@
     };
 
     YourInfoMainView.prototype.addressModelChange = function() {
-      var adress, typeOfBusinessName;
-      adress = this.model.get('PersonalAddress');
-      this.addressValidation(adress, '#PersonalAddress');
+      var address, directors, self, typeOfBusinessName;
+
+      address = this.model.get('PersonalAddress');
+      this.addressValidation(address, '#PersonalAddress');
       typeOfBusinessName = this.model.get('BusinessTypeReduced');
       if (typeOfBusinessName === "Limited") {
-        adress = this.model.get('LimitedCompanyAddress');
-        return this.addressValidation(adress, '#LimitedCompanyAddress');
+        address = this.model.get('LimitedCompanyAddress');
+        this.addressValidation(address, '#LimitedCompanyAddress');
       } else if (typeOfBusinessName === "NonLimited") {
-        adress = this.model.get('NonLimitedCompanyAddress');
-        return this.addressValidation(adress, '#NonLimitedAddress');
+        address = this.model.get('NonLimitedCompanyAddress');
+        this.addressValidation(address, '#NonLimitedAddress');
+      }
+      self = this;
+      if (this.model.get(typeOfBusinessName + 'Info')) {
+        directors = this.model.get(typeOfBusinessName + 'Info').Directors;
+        return _.each(directors, function(val) {
+          return _.each(val.DirectorAddress, function(add) {
+            return self.addressValidation(add, '.directorAddress' + val.Id + ' #DirectorAddress');
+          });
+        });
       }
     };
 
@@ -81,6 +92,7 @@
 
     YourInfoMainView.prototype.addAddressError = function(el) {
       var error;
+
       error = $('<label class="error" generated="true">This field is required</label>');
       return EzBob.Validation.errorPlacement(error, this.$el.find(el));
     };
@@ -90,14 +102,15 @@
     };
 
     YourInfoMainView.prototype.saveData = function() {
-      var action, data, directors, request, typeOfBusinessName, _ref,
+      var action, data, directors, request, typeOfBusinessName,
         _this = this;
+
       if (!this.validator.form() || !this.isAddressValidation) {
         EzBob.App.trigger("error", "You must fill in all of the fields.");
         return false;
       }
       typeOfBusinessName = this.model.get('BusinessTypeReduced') + "Info";
-      if ((_ref = this.model.get(typeOfBusinessName)) != null ? _ref.then : void 0) {
+      if (this.model.get(typeOfBusinessName)) {
         directors = this.model.get(typeOfBusinessName).Directors;
         _.each(directors, function(val) {
           return _.each(val.DirectorAddress, function(add) {
@@ -119,6 +132,7 @@
 
     YourInfoMainView.prototype.reload = function() {
       var _this = this;
+
       return this.model.fetch().done(function() {
         _this.render();
         scrollTop();
@@ -138,6 +152,7 @@
 
     YourInfoMainView.prototype.onRender = function() {
       var typeOfBusinessName;
+
       this.renderPersonal();
       typeOfBusinessName = this.model.get('BusinessTypeReduced');
       if (typeOfBusinessName === "Limited") {
@@ -154,6 +169,7 @@
 
     YourInfoMainView.prototype.renderPersonal = function() {
       var personalInfoView;
+
       personalInfoView = new EzBob.Profile.PersonalInfoView({
         model: this.model
       });
@@ -163,6 +179,7 @@
 
     YourInfoMainView.prototype.renderNonLimited = function() {
       var view;
+
       view = new EzBob.Profile.NonLimitedInfoView({
         model: this.model
       });
@@ -172,6 +189,7 @@
 
     YourInfoMainView.prototype.renderLimited = function() {
       var view;
+
       view = new EzBob.Profile.LimitedInfoView({
         model: this.model
       });
@@ -184,11 +202,11 @@
   })(Backbone.Marionette.Layout);
 
   EzBob.Profile.PersonalInfoView = (function(_super) {
-
     __extends(PersonalInfoView, _super);
 
     function PersonalInfoView() {
-      return PersonalInfoView.__super__.constructor.apply(this, arguments);
+      _ref1 = PersonalInfoView.__super__.constructor.apply(this, arguments);
+      return _ref1;
     }
 
     PersonalInfoView.prototype.template = "#personal-info-template";
@@ -200,6 +218,7 @@
 
     PersonalInfoView.prototype.onRender = function() {
       var address, otherAddress;
+
       address = new EzBob.AddressView({
         model: this.model.get('PersonalAddress'),
         name: "PersonalAddress",
@@ -226,11 +245,11 @@
   })(Backbone.Marionette.Layout);
 
   EzBob.Profile.NonLimitedInfoView = (function(_super) {
-
     __extends(NonLimitedInfoView, _super);
 
     function NonLimitedInfoView() {
-      return NonLimitedInfoView.__super__.constructor.apply(this, arguments);
+      _ref2 = NonLimitedInfoView.__super__.constructor.apply(this, arguments);
+      return _ref2;
     }
 
     NonLimitedInfoView.prototype.template = "#nonlimited-info-template";
@@ -242,6 +261,7 @@
 
     NonLimitedInfoView.prototype.onRender = function() {
       var address, directorView, directors;
+
       address = new EzBob.AddressView({
         model: this.model.get('NonLimitedCompanyAddress'),
         name: "NonLimitedCompanyAddress",
@@ -269,11 +289,11 @@
   })(Backbone.Marionette.Layout);
 
   EzBob.Profile.LimitedInfoView = (function(_super) {
-
     __extends(LimitedInfoView, _super);
 
     function LimitedInfoView() {
-      return LimitedInfoView.__super__.constructor.apply(this, arguments);
+      _ref3 = LimitedInfoView.__super__.constructor.apply(this, arguments);
+      return _ref3;
     }
 
     LimitedInfoView.prototype.template = "#limited-info-template";
@@ -285,6 +305,7 @@
 
     LimitedInfoView.prototype.onRender = function() {
       var address, directorView, directors;
+
       address = new EzBob.AddressView({
         model: this.model.get('LimitedCompanyAddress'),
         name: "LimitedCompanyAddress",
@@ -310,11 +331,11 @@
   })(Backbone.Marionette.Layout);
 
   EzBob.Profile.DirectorInfoView = (function(_super) {
-
     __extends(DirectorInfoView, _super);
 
     function DirectorInfoView() {
-      return DirectorInfoView.__super__.constructor.apply(this, arguments);
+      _ref4 = DirectorInfoView.__super__.constructor.apply(this, arguments);
+      return _ref4;
     }
 
     DirectorInfoView.prototype.template = '#director-info-template';
@@ -323,8 +344,13 @@
       directorAddress: '#DirectorAddress'
     };
 
+    DirectorInfoView.prototype.addressModelChange = function() {
+      return EzBob.App.trigger('dash-director-address-change');
+    };
+
     DirectorInfoView.prototype.onRender = function() {
       var address;
+
       address = new EzBob.AddressView({
         model: this.model.get('DirectorAddress'),
         name: "DirectorAddress[" + (this.model.get('Position')) + "]",
@@ -332,7 +358,9 @@
         isShowClear: true,
         directorId: this.model.get('Id')
       });
-      return this.directorAddress.show(address);
+      this.model.get('DirectorAddress').on("all", this.addressModelChange, this);
+      this.directorAddress.show(address);
+      return this.$el.find('.addressEdit').addClass('directorAddress' + this.model.get('Id'));
     };
 
     return DirectorInfoView;
@@ -340,11 +368,11 @@
   })(Backbone.Marionette.Layout);
 
   EzBob.Profile.DirectorCompositeView = (function(_super) {
-
     __extends(DirectorCompositeView, _super);
 
     function DirectorCompositeView() {
-      return DirectorCompositeView.__super__.constructor.apply(this, arguments);
+      _ref5 = DirectorCompositeView.__super__.constructor.apply(this, arguments);
+      return _ref5;
     }
 
     DirectorCompositeView.prototype.template = "#directors-info";

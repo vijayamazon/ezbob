@@ -7,6 +7,7 @@ class EzBob.Profile.YourInfoMainView extends Backbone.Marionette.Layout
     
     initialize: ->
         @isAddressValidation = true
+        EzBob.App.on 'dash-director-address-change', @addressModelChange, @
 
     events: 
         'click .edit-personal': 'editPersonalViewShow'
@@ -32,18 +33,26 @@ class EzBob.Profile.YourInfoMainView extends Backbone.Marionette.Layout
     editPersonalViewShow: ->
         @setInputReadOnly false
 
-     addressModelChange: ->
-        adress = @model.get 'PersonalAddress'
-        @addressValidation adress, '#PersonalAddress'
+    addressModelChange: ->
+        address = @model.get 'PersonalAddress'
+        @addressValidation address, '#PersonalAddress'
         typeOfBusinessName = @model.get 'BusinessTypeReduced'
 
         if typeOfBusinessName == "Limited"
-            adress = @model.get 'LimitedCompanyAddress'
-            @addressValidation adress, '#LimitedCompanyAddress'
+            address = @model.get 'LimitedCompanyAddress'
+            @addressValidation address, '#LimitedCompanyAddress'
 
         else if typeOfBusinessName == "NonLimited"
-            adress = @model.get 'NonLimitedCompanyAddress'
-            @addressValidation adress, '#NonLimitedAddress'
+            address = @model.get 'NonLimitedCompanyAddress'
+            @addressValidation address, '#NonLimitedAddress'
+
+        self = @
+
+        if @model.get(typeOfBusinessName + 'Info')
+            directors = @model.get(typeOfBusinessName + 'Info').Directors
+            _.each directors, (val) ->
+                _.each val.DirectorAddress, (add)->
+                    self.addressValidation add, '.directorAddress' + val.Id + ' #DirectorAddress'
 
     addressValidation: (address, element) -> 
         @isAddressValidation = address.length > 0
@@ -68,7 +77,8 @@ class EzBob.Profile.YourInfoMainView extends Backbone.Marionette.Layout
             return false;
 
         typeOfBusinessName = @model.get('BusinessTypeReduced') + "Info"
-        if @model.get(typeOfBusinessName)?. then
+
+        if @model.get(typeOfBusinessName)
             directors = @model.get(typeOfBusinessName).Directors;
             _.each directors, (val) ->
                 _.each val.DirectorAddress, (add)->
@@ -115,7 +125,6 @@ class EzBob.Profile.YourInfoMainView extends Backbone.Marionette.Layout
         @.$el.find('.cashInput').numericOnly(15);
         $("input.form_field_address_lookup").css "margin-left", "3px"
 
-    
     renderPersonal: ->
         personalInfoView = new EzBob.Profile.PersonalInfoView({ model: @model })
         @model.get('PersonalAddress').on "all", @addressModelChange, @
@@ -204,9 +213,14 @@ class EzBob.Profile.DirectorInfoView extends Backbone.Marionette.Layout
     regions: 
         directorAddress: '#DirectorAddress'
 
+    addressModelChange: ->
+        EzBob.App.trigger 'dash-director-address-change'
+
     onRender: ->
         address = new EzBob.AddressView({ model: @model.get('DirectorAddress'), name: "DirectorAddress[#{@model.get('Position')}]", max: 10, isShowClear:true, directorId: @model.get('Id') })
+        @model.get('DirectorAddress').on "all", @addressModelChange, @
         @directorAddress.show(address)
+        @$el.find('.addressEdit').addClass 'directorAddress' + @model.get 'Id'
 
 class EzBob.Profile.DirectorCompositeView extends Backbone.Marionette.CompositeView
     template: "#directors-info"
