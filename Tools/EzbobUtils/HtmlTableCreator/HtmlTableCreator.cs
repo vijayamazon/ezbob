@@ -94,7 +94,7 @@
                 body.Append(Consts.TableRowOpenTag);
                 foreach (PropertyInfo pi in propertyInfos)
                 {
-                    body.Append(Consts.TdHtmlStyle).Append(pi.GetValue(instance)).Append(Consts.TableDataCloseTag);
+                    body.Append(Consts.TdHtmlStyle).Append(pi.GetValue(instance, null)).Append(Consts.TableDataCloseTag);
                 }
                 body.Append(Consts.TableRowCloseTag);
             }

@@ -5,6 +5,7 @@
 	using System.Globalization;
 	using System.IO;
 	using System.Linq;
+	using System.Text;
 	using System.Xml.Serialization;
 	using ApplicationMng.Model;
 	using EZBob.DatabaseLib;
@@ -22,6 +23,8 @@
 	using NHibernate;
 	using StructureMap;
 	using log4net;
+	using MailApi;
+	using HtmlTableCreator;
 
 	public class StrategyHelper
 	{
@@ -312,7 +315,6 @@
 				return false;
 			}
 
-
 			int turnover3M = (int)GetTurnoverForPeriod(customerId, TimePeriodEnum.Month3);
 			if (turnover3M < autoApproveMinTurnover3M)
 			{
@@ -430,6 +432,15 @@
 			return loanRepository.ByCustomer(customerId).Where(l => l.Status != LoanStatus.PaidOff).ToList();
 		}
 
+		private List<Loan> GetLastMonthClosedLoans(int customerId)
+		{
+			DateTime now = DateTime.UtcNow;
+			DateTime startOfMonth = new DateTime(now.Year, now.Month, 1);
+			DateTime endOfLastMonth = startOfMonth.Subtract(TimeSpan.FromMilliseconds(1));
+			DateTime startOfLastMonth = new DateTime(endOfLastMonth.Year, endOfLastMonth.Month, 1);
+			return loanRepository.ByCustomer(customerId).Where(l => l.Status == LoanStatus.PaidOff && l.DateClosed.HasValue && l.DateClosed >= startOfLastMonth && l.DateClosed <= endOfLastMonth).ToList();
+		}
+
 		public int GetOutstandingLoansNum(int customerId)
 		{
 			return GetOutstandingLoans(customerId).Count;
@@ -506,6 +517,7 @@
 		public void SendFirstOfMonthStatusMail()
 		{
 			bool firstOfMonthStatusMailEnabled = configurationVariablesRepository.GetByNameAsBool("FirstOfMonthStatusMailEnabled");
+			string firstOfMonthStatusMailCopyTo = configurationVariablesRepository.GetByName("FirstOfMonthStatusMailCopyTo").Value;
 
 			if (!firstOfMonthStatusMailEnabled)
 			{
@@ -519,21 +531,136 @@
 				List<Loan> outstandingLoans = GetOutstandingLoans(customer.Id);
 				if (outstandingLoans.Count > 0)
 				{
+					List<Loan> closedLoans = GetLastMonthClosedLoans(customer.Id);
 					log.InfoFormat("Customer {0} has {1} outstanding loans. Will send status mail to him", customer.Id, outstandingLoans.Count);
-					SendStatusMailToCustomer(customer, outstandingLoans);
+					SendStatusMailToCustomer(customer, outstandingLoans, closedLoans, firstOfMonthStatusMailCopyTo);
 				}
 			}
 		}
 
-		private void SendStatusMailToCustomer(Customer customer, List<Loan> outstandingLoans)
+		private LoanStatusRow CreateLoanStatusRowFromTransaction(LoanTransaction loanTransaction)
 		{
-			// next repayment details (date, sum)
+			var currentRow = new LoanStatusRow
+			{
+				PostDate = loanTransaction.PostDate,
+				Description = loanTransaction.Description,
+				Fees = loanTransaction.Fees.ToString("N2", CultureInfo.InvariantCulture)
+			};
 
-			// create table with all loans that were closed last month
+			var pacnetTransaction = loanTransaction as PacnetTransaction;
+			if (pacnetTransaction == null)
+			{
+				var paypointTransaction = loanTransaction as PaypointTransaction;
+				if (paypointTransaction == null)
+				{
+					return null;
+				}
+				currentRow.Type = "Payment";
+				currentRow.Interest = paypointTransaction.Interest.ToString("N2", CultureInfo.InvariantCulture);
+				currentRow.Principal = paypointTransaction.LoanRepayment.ToString("N2", CultureInfo.InvariantCulture);
+				currentRow.Total = (paypointTransaction.LoanRepayment + paypointTransaction.Interest + loanTransaction.Fees).ToString("N2", CultureInfo.InvariantCulture);
+				currentRow.Status = paypointTransaction.Status.ToString();
+			}
+			else
+			{
+				currentRow.Type = "Loan";
+				currentRow.Interest = "0.00";
+				currentRow.Principal = "0.00";
+				currentRow.Total = "0.00";
+				currentRow.Status = pacnetTransaction.Status.ToString();
+			}
 
-			// create table with all outstanding loans
-
-			// send mail (copy to underwriter?)
+			return currentRow;
 		}
+
+		private void SendStatusMailToCustomer(Customer customer, List<Loan> outstandingLoans, List<Loan> closedLoans, string underwriterAddress)
+		{
+			var closedLoansSection = new StringBuilder();
+			if (closedLoans.Count > 0)
+			{
+				closedLoansSection.Append("Loans that were closed last month:<br>");
+				foreach (Loan closedLoan in closedLoans)
+				{
+					var rows = new List<LoanStatusRow>();
+					foreach (LoanTransaction loanTransaction in closedLoan.Transactions.Where(x => x.Status == LoanTransactionStatus.Done))
+					{
+						LoanStatusRow currentRow = CreateLoanStatusRowFromTransaction(loanTransaction);
+						if (currentRow != null)
+						{
+							rows.Add(currentRow);
+						}
+					}
+					string tableForLoan = HtmlTableCreator.CreateHtmlTableFromClass(rows.OrderBy(p => p.PostDate));
+					closedLoansSection.Append(tableForLoan).Append("<br>");
+				}
+				closedLoansSection.Append("<br><br>");
+			}
+
+			var outstandingLoansSection = new StringBuilder();
+			if (outstandingLoans.Count > 0)
+			{
+				outstandingLoansSection.Append("Loans that are outstanding:<br>");
+				foreach (Loan outstandingLoan in outstandingLoans)
+				{
+					var rows = new List<LoanStatusRow>();
+					foreach (LoanTransaction loanTransaction in outstandingLoan.Transactions.Where(lt => lt.Status == LoanTransactionStatus.Done))
+					{
+						LoanStatusRow currentRow = CreateLoanStatusRowFromTransaction(loanTransaction);
+						if (currentRow != null)
+						{
+							rows.Add(currentRow);
+						}
+					}
+
+					foreach (var loanSchedule in outstandingLoan.Schedule.Where(ls => ls.Status != LoanScheduleStatus.Paid && ls.Status != LoanScheduleStatus.PaidEarly && ls.Status != LoanScheduleStatus.AlmostPaid))
+					{
+						rows.Add(new LoanStatusRow { Type = "Schedule", PostDate = loanSchedule.Date, Description = string.Empty, Fees = loanSchedule.Fees.ToString("N2", CultureInfo.InvariantCulture), Interest = loanSchedule.Interest.ToString("N2", CultureInfo.InvariantCulture), Principal = loanSchedule.LoanRepayment.ToString("N2", CultureInfo.InvariantCulture), Status = loanSchedule.Status.ToString(), Total = (loanSchedule.LoanRepayment + loanSchedule.Interest + loanSchedule.Fees).ToString("N2", CultureInfo.InvariantCulture) });
+					}
+
+					string tableForLoan = HtmlTableCreator.CreateHtmlTableFromClass(rows.OrderBy(p => p.PostDate));
+					outstandingLoansSection.Append(tableForLoan).Append("<br>");
+				}
+			}
+
+			SendStatusMail(customer.Name, customer.PersonalInfo.FirstName, closedLoansSection.ToString(), outstandingLoansSection.ToString());
+			if (!string.IsNullOrEmpty(underwriterAddress))
+			{
+				SendStatusMail(underwriterAddress, customer.PersonalInfo.FirstName, closedLoansSection.ToString(), outstandingLoansSection.ToString());
+			}
+		}
+
+		private void SendStatusMail(string toAddress, string firstName, string closedLoansSection, string outstandingLoansSection)
+		{
+			string firstOfMonthStatusMailMandrillTemplateName = configurationVariablesRepository.GetByName("FirstOfMonthStatusMailMandrillTemplateName").Value;
+			var mail = ObjectFactory.GetInstance<IMail>();
+			var vars = new Dictionary<string, string>
+				{
+					{"FirstName", firstName},
+					{"ClosedLoansSection", closedLoansSection},
+					{"OutstandingLoansSection", outstandingLoansSection} 
+				};
+
+			var result = mail.Send(vars, toAddress, firstOfMonthStatusMailMandrillTemplateName);
+			if (result == "OK")
+			{
+				log.InfoFormat("Sent mail - {0}", firstOfMonthStatusMailMandrillTemplateName);
+			}
+			else
+			{
+				log.ErrorFormat("Failed sending alert mail - {0}. Result:{1}", result, firstOfMonthStatusMailMandrillTemplateName);
+			}
+		}
+	}
+
+	public class LoanStatusRow
+	{
+		public string Type { get; set; }
+		public DateTime PostDate { get; set; }
+		public string Principal { get; set; }
+		public string Interest { get; set; }
+		public string Fees { get; set; }
+		public string Total { get; set; }
+		public string Status { get; set; }
+		public string Description { get; set; }
 	}
 }
