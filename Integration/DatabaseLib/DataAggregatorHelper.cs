@@ -11,11 +11,11 @@ namespace EZBob.DatabaseLib
 
 	public static class DataAggregatorHelper
 	{
-		private static IWriteDataInfo<TEnum> CreateWriteDataValue<T, TItem, TEnum>( DataAggregatorBase<T, TItem, TEnum> aggregator, TEnum functionType, DateTime updatedDate )
+		private static IWriteDataInfo<TEnum> CreateWriteDataValue<T, TItem, TEnum>(DataAggregatorBase<T, TItem, TEnum> aggregator, TEnum functionType, DateTime updatedDate)
 			where T : ReceivedDataListTimeDependentInfo<TItem>
 			where TItem : class
 		{
-			return aggregator.GetData( functionType, updatedDate );
+			return aggregator.GetData(functionType, updatedDate);
 		}
 
 		public static IEnumerable<IWriteDataInfo<TEnum>> AggregateData<T, TItem, TEnum>(
@@ -30,18 +30,18 @@ namespace EZBob.DatabaseLib
 		{
 			var rez = new List<IWriteDataInfo<TEnum>>();
 
-		    if (timePeriodData == null) return rez;
+			if (timePeriodData == null) return rez;
 
-		    foreach (var valuePair in timePeriodData)
-		    {
-		        var allData = valuePair.Value as T;
+			foreach (var valuePair in timePeriodData)
+			{
+				var allData = valuePair.Value as T;
 
-		        DataAggregatorBase<T, TItem, TEnum> aggeregator = dataAggregatorFactory.CreateDataAggregator( allData, currencyConvertor );
-		        var list = funcList.Select(func => CreateWriteDataValue(aggeregator, func, updatedDate));
-		        rez.AddRange(list);
-		    }
-		    
-            return rez;
+				DataAggregatorBase<T, TItem, TEnum> aggeregator = dataAggregatorFactory.CreateDataAggregator(allData, currencyConvertor);
+				var list = funcList.Select(func => CreateWriteDataValue(aggeregator, func, updatedDate));
+				rez.AddRange(list);
+			}
+
+			return rez;
 		}
 
 		public static Dictionary<TimePeriodEnum, ReceivedDataListTimeDependentInfo<T>> GetOrdersForPeriods<T>(ReceivedDataListTimeMarketTimeDependentBase<T> orders, Func<DateTime, List<T>, ReceivedDataListTimeMarketTimeDependentBase<T>> createListFunc)
@@ -82,11 +82,34 @@ namespace EZBob.DatabaseLib
 			{
 				if (timestamp >= edges[period])
 				{
-					dict[period].Add(item);
-					return;
+					//Bug EZ-1092 Removing the month terapeak data Temporary for month all the rest for the rest (duplicated)
+					if (item is MixedReceivedDataItem)
+					{
+						var mixedItem = item as MixedReceivedDataItem;
+						if (mixedItem.Data is TeraPeakDatabaseSellerDataItem)
+						{
+							var teraPeakDatabaseSellerDataItem = mixedItem.Data as TeraPeakDatabaseSellerDataItem;
+							if (teraPeakDatabaseSellerDataItem.RangeMarker == RangeMarkerType.Temporary && period == TimePeriodEnum.Month)
+							{
+								dict[period].Add(item);
+								return;
+							}
+
+							if (teraPeakDatabaseSellerDataItem.RangeMarker != RangeMarkerType.Temporary && period != TimePeriodEnum.Month)
+							{
+								dict[period].Add(item);
+								return;
+							}
+						}
+					}
+					else
+					{
+						dict[period].Add(item);
+						return;
+					}
 				}
 			}
-			
+
 			dict[TimePeriodEnum.Lifetime].Add(item);
 		}
 
@@ -110,8 +133,10 @@ namespace EZBob.DatabaseLib
 			}
 
 			var earliestFilledTimePeriod = TimePeriodEnum.Month;
+			
 			foreach (var period in ordersByTimePeriod.Keys)
 			{
+
 				if (ordersByTimePeriod[period].Count > 0)
 				{
 					earliestFilledTimePeriod = period;
@@ -119,6 +144,7 @@ namespace EZBob.DatabaseLib
 			}
 
 			List<MixedReceivedDataItem> sumSoFar = null;
+			
 			foreach (var period in ordersByTimePeriod.Keys)
 			{
 				if (period <= earliestFilledTimePeriod)
@@ -128,6 +154,26 @@ namespace EZBob.DatabaseLib
 						ordersByTimePeriod[period].AddRange(sumSoFar);
 					}
 					sumSoFar = ordersByTimePeriod[period];
+				}
+			}
+
+			//Bug EZ-1092 Removing the month terapeak data (duplicated)
+			List<MixedReceivedDataItem> month = ordersByTimePeriod[TimePeriodEnum.Month];
+			MixedReceivedDataItem terapeakMonth = null;
+			foreach (var mixedReceivedDataItem in month)
+			{
+				if (mixedReceivedDataItem.Data is TeraPeakDatabaseSellerDataItem)
+				{
+					terapeakMonth = mixedReceivedDataItem;
+					break;
+				}
+			}
+
+			foreach (var period in ordersByTimePeriod.Keys)
+			{
+				if (period != TimePeriodEnum.Month)
+				{
+					ordersByTimePeriod[period].Remove(terapeakMonth);
 				}
 			}
 
@@ -173,7 +219,7 @@ namespace EZBob.DatabaseLib
 					{TimePeriodEnum.Lifetime, new List<T>()}
 				};
 		}
-		
+
 		private static Dictionary<TimePeriodEnum, List<T>> GetOrdersByTimePeriod<T>(ReceivedDataListTimeMarketTimeDependentBase<T> orders)
 			where T : TimeDependentRangedDataBase
 		{

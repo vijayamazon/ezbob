@@ -125,7 +125,7 @@ namespace EzBob.eBayLib
 			{
 				return 0;
 			}
-			return orders.Sum( o => o.Successful.HasValue? o.Successful.Value: 0 );
+			return orders.Sum(o => o.Transactions.HasValue ? o.Transactions.Value : 0);
 		}
 
 		private int GetTotalItemsOrdered( IEnumerable<TeraPeakDatabaseSellerDataItem> orders )
@@ -148,19 +148,22 @@ namespace EzBob.eBayLib
 
 		private int GetCancelledOrdersCount( IEnumerable<TeraPeakDatabaseSellerDataItem> orders )
 		{
-			if ( !orders.Any() )
-			{
-				return 0;
-			}
-			return orders.Sum( to =>
-			                   	{
-									if (!to.Successful.HasValue || !to.Transactions.HasValue)
-			                   		{
-			                   			return 0;
-			                   		}
+			//Wrong calculation : Successful is Number of closed listings that closed successfully in the result set. 
+			//                    Transactions is Number of transactions.
+			//if ( !orders.Any() )
+			//{
+			//	return 0;
+			//}
+			//return orders.Sum( to =>
+			//					{
+			//						if (!to.Successful.HasValue || !to.Transactions.HasValue)
+			//						{
+			//							return 0;
+			//						}
 
-									return to.Transactions.Value - to.Successful.Value;
-			                   	});
+			//						return to.Transactions.Value - to.Successful.Value;
+			//					});
+			return 0;
 		}
 		
 		
