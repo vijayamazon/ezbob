@@ -518,6 +518,7 @@
 		{
 			bool firstOfMonthStatusMailEnabled = configurationVariablesRepository.GetByNameAsBool("FirstOfMonthStatusMailEnabled");
 			string firstOfMonthStatusMailCopyTo = configurationVariablesRepository.GetByName("FirstOfMonthStatusMailCopyTo").Value;
+			bool firstOfMonthEnableCustomerMail = configurationVariablesRepository.GetByNameAsBool("FirstOfMonthEnableCustomerMail");
 
 			if (!firstOfMonthStatusMailEnabled)
 			{
@@ -533,7 +534,7 @@
 				{
 					List<Loan> closedLoans = GetLastMonthClosedLoans(customer.Id);
 					log.InfoFormat("Customer {0} has {1} outstanding loans. Will send status mail to him", customer.Id, outstandingLoans.Count);
-					SendStatusMailToCustomer(customer, outstandingLoans, closedLoans, firstOfMonthStatusMailCopyTo);
+					SendStatusMailToCustomer(customer, outstandingLoans, closedLoans, firstOfMonthStatusMailCopyTo, firstOfMonthEnableCustomerMail);
 				}
 			}
 		}
@@ -573,8 +574,9 @@
 			return currentRow;
 		}
 
-		private void SendStatusMailToCustomer(Customer customer, List<Loan> outstandingLoans, List<Loan> closedLoans, string underwriterAddress)
+		private void SendStatusMailToCustomer(Customer customer, List<Loan> outstandingLoans, List<Loan> closedLoans, string copyToAddress, bool shouldSendToCustomer)
 		{
+			log.InfoFormat("Preparing first of month mail for customer:{0}", customer.Id);
 			var closedLoansSection = new StringBuilder();
 			if (closedLoans.Count > 0)
 			{
@@ -622,10 +624,13 @@
 				}
 			}
 
-			SendStatusMail(customer.Name, customer.PersonalInfo.FirstName, closedLoansSection.ToString(), outstandingLoansSection.ToString());
-			if (!string.IsNullOrEmpty(underwriterAddress))
+			if (shouldSendToCustomer)
 			{
-				SendStatusMail(underwriterAddress, customer.PersonalInfo.FirstName, closedLoansSection.ToString(), outstandingLoansSection.ToString());
+				SendStatusMail(customer.Name, customer.PersonalInfo.FirstName, closedLoansSection.ToString(), outstandingLoansSection.ToString());
+			}
+			if (!string.IsNullOrEmpty(copyToAddress))
+			{
+				SendStatusMail(copyToAddress, customer.PersonalInfo.FirstName, closedLoansSection.ToString(), outstandingLoansSection.ToString());
 			}
 		}
 
@@ -633,6 +638,7 @@
 		{
 			string firstOfMonthStatusMailMandrillTemplateName = configurationVariablesRepository.GetByName("FirstOfMonthStatusMailMandrillTemplateName").Value;
 			var mail = ObjectFactory.GetInstance<IMail>();
+
 			var vars = new Dictionary<string, string>
 				{
 					{"FirstName", firstName},
