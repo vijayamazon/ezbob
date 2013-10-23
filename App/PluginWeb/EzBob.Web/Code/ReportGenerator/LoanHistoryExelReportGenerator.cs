@@ -61,7 +61,7 @@ namespace EzBob.Web.Code.ExelReportGenarator
             worksheet.Cells[row, 0].PutValue("Loan ref number");
             worksheet.Cells[row, 1].PutValue("Loan amount");
             worksheet.Cells[row, 2].PutValue("Repayments");
-            worksheet.Cells[row, 3].PutValue("Date Applyed	");
+            worksheet.Cells[row, 3].PutValue("Date Applied	");
             worksheet.Cells[row, 4].PutValue("Outstanding");
             worksheet.Cells[row, 5].PutValue("Status");
 
