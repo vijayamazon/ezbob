@@ -164,7 +164,7 @@
 						if (aryCGAccounts[sShopName].HasExpeneses || (aryCGAccounts[sShopName].Behaviour != 0))
 							return;
 
-					var sSourceLabels = 'source' + (aryCGAccounts[sShopName] ? '-' : '_') + 'labels_on';
+					var sSourceLabels = 'source_labels_on';
 					var showAsNew = !m.IsNew ? 'hidden-field' : '';
 					%>
 					<tr data-id="<%- m.Id %>" class="<%if(m.Disabled){print('disabled')}%>">
@@ -254,7 +254,7 @@
 					} // switch
 				}; // function ll
 
-				var sSourceLabels = 'source' + (aryCGAccounts[sShopName] ? '-' : '_') + 'labels_on';
+				var sSourceLabels = 'source_labels_on';
 				var showAsNew = !m.IsNew ? 'hidden-field' : '';
 				%>
 				<tr data-id="<%- m.Id %>" class="<%if(m.Disabled){print('disabled')}%>">

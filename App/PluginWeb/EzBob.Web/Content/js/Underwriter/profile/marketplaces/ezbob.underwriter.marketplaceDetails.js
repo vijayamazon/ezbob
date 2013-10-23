@@ -180,12 +180,12 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
         var minDay = cashModel.MinDateDict;
         var maxDay = cashModel.MaxDateDict;
 
-        var income = cashFlow["2Total Income"];
-        var expenses = cashFlow["7Total Expenses"];
-        var numOfTransactionsIncome = cashFlow["3Num Of Transactions"];
-        var numOfTransactionsExpenses = cashFlow["8Num Of Transactions"];
-        var averageIncome = cashFlow["4Average Income"];
-        var averageExpenses = cashFlow["9Average Expenses"];
+        var income = cashFlow["0Total Income"];
+        var expenses = cashFlow["1Total Expenses"];
+        var numOfTransactionsIncome = cashFlow["5Num Of Transactions"];
+        var numOfTransactionsExpenses = cashFlow["9Num Of Transactions"];
+        var averageIncome = cashFlow["6Average Income"];
+        var averageExpenses = cashFlow["aAverage Expenses"];
 
         var arrayOfData = [];
 
@@ -200,6 +200,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
                 ], i == '999999' ? 'Total' : minDay[i] + '-' + maxDay[i] + '/' + i.substring(4) + '/' + i.substring(0, 4)
             ]);
         }
+
         if (arrayOfData.length) {
             this.$el.find("#yodleeBarGraph").jqBarGraph({
                 data: arrayOfData,

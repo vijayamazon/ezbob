@@ -74,7 +74,7 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.Yodlee
             Map(x => x.calcRunningBalanceCurrency).Length(3);
             Map(x => x.category).Length(300);
             Map(x => x.link).Length(300);
-            Map(x => x.postDate).CustomType<UtcDateTimeType>().Nullable(); ;
+            Map(x => x.postDate).CustomType<UtcDateTimeType>().Nullable();
             Map(x => x.prevTransactionCategoryId).Nullable();
             Map(x => x.prevTransactionCategoryIdSpecified);
             Map(x => x.isBusinessExpense).Nullable();

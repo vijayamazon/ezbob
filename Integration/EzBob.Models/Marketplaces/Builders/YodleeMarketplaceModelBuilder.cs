@@ -120,7 +120,7 @@ namespace EzBob.Models.Marketplaces.Builders
 					var yodleeTransactionModel = new YodleeTransactionModel
 													 {
 														 transactionBaseType = transaction.transactionBaseType,
-														 transactionDate = (transaction.postDate ?? transaction.transactionDate).date,
+														 transactionDate = (transaction.postDate.date ?? transaction.transactionDate.date).Value,
 														 categoryName = _mpYodleeTransactionCategoriesRepository.GetYodleeTransactionCategoryByCategoryId(transaction.transactionCategoryId).Name,
 														 categoryType = _mpYodleeTransactionCategoriesRepository.GetYodleeTransactionCategoryByCategoryId(transaction.transactionCategoryId).Type,
 														 transactionAmount = transaction.transactionAmount.amount.HasValue ? _currencyConvertor.ConvertToBaseCurrency(
