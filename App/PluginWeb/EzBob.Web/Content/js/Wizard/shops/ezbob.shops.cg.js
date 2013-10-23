@@ -205,7 +205,7 @@
         height: 600,
         width: 600,
         modal: true,
-        title: 'Upload VAT Return Files',
+        title: 'Please upload the VAT returns',
         resizable: false,
         dialogClass: 'upload-files-dialog',
         closeOnEscape: false
