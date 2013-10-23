@@ -113,7 +113,7 @@ EzBob.Popup = Backbone.View.extend({
 		var request = $.getJSON(this.rootPath + "Postcode/GetAddressFromPostCode", { postCode: postCode });
 
 		request.done(function (data) {
-		    if (data.Success != undefined && (!data.Success || data.Recordcount == 0)) {
+			if (data.Success != undefined && (!data.Success || data.Recordcount == 0)) {
 				that.textArea.append($('<li></li>').val(0).html("Not found"));
 				return;
 			}
@@ -131,7 +131,7 @@ EzBob.Popup = Backbone.View.extend({
 		request.always(oDoAlways);
 	}
 });
-//-----------------------------------------------------------------------------
+
 EzBob.AddressView = Backbone.View.extend({
 	initialize: function (options) {
 		this.template = _.template($('#address-template').html());
@@ -144,7 +144,8 @@ EzBob.AddressView = Backbone.View.extend({
 	},
 
 	render: function () {
-	    var _this = this;
+		var self = this;
+
 		this.$el.html(this.template({ addresses: this.model.toJSON(), name: this.name }));
 		this.$el.find('.btn').toggle(this.max > this.model.length);
 		this.$el.find('.addAddressContainer').toggle(this.max > this.model.length);
@@ -158,16 +159,16 @@ EzBob.AddressView = Backbone.View.extend({
 			$(this).field_status({ required: bRequired, initial_status: sInitialStatus });
 		});
 
-		_.each(this.model.models, function(val) {
-		    val.set(
-		        {
-		            "director": _this.directorId,
-		            "customer": _this.customerId
-		        },
-		        {
-		            silent: true
-		        }
-		    );
+		_.each(this.model.models, function (val) {
+			val.set(
+				{
+					"director": self.directorId,
+					"customer": self.customerId
+				},
+				{
+					silent: true
+				}
+			);
 		});
 
 		return this;
