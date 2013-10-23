@@ -2,16 +2,15 @@
 @model dynamic
 @{
     var url = string.Format("{0}://{1}{2}?invite={3}", Request.Url.Scheme, Request.Url.Authority, Url.Content("~"), Model.Customer.InviteFriendSource);
-    var summary = "Get a Small Business Loan To Grow your Online Store";
-    var encodedSummary = Uri.EscapeUriString(summary);
+    const string summary = "Get a Small Business Loan To Grow your Online Store";
+    var encodedSummary = Uri.EscapeDataString(summary);
     var text = string.Format("{0} {1}Join Now {2}", summary, Environment.NewLine, @url);
-    var urlEncodedText = Uri.EscapeUriString(text);
-    var subject = Uri.EscapeUriString("Join Ezbob Loans");
-    var imageUrl = Uri.EscapeUriString("http://www.ezbob.com/wp-content/themes/ezbob/images/ezbob_logo.png");
-
+    string urlEncoded = Uri.EscapeDataString(url);
+    string subject = Uri.EscapeDataString("Join Ezbob Loans");
+    string imageUrl = Uri.EscapeDataString("http://www.ezbob.com/wp-content/themes/ezbob/images/ezbob_logo.png");
+    string utImageUrl = "http://www.ezbob.com/wp-content/themes/ezbob/images/youtube.jpg";
     var a = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Customer));
     var customer = (CustomerModel) Model.Customer;
-
 }
 <script id="invite-friend-template" type="text/template">
     @if (customer.InvitedFriends != null && customer.InvitedFriends.Any())
@@ -43,7 +42,7 @@
 
     <div class="hide">
         <div id="inviteFriendHelp" class="help_window">
-            <h2>Invite Friend</h2>
+            <h2>Invite A Friend</h2>
             <p>
                 Please copy the following text and paste in your email client 
                 <br />
@@ -53,8 +52,8 @@
             <textarea class="invite_friend">@text</textarea>
             <div class="alignright" style="padding: 0 10px 0 0;">
                 <a href="mailto:?subject=@subject&body=@text" target="_blank" class="button orange pull-right" id="inviteFriendBtn" onclick="$.colorbox.close();">Send</a>
-                <a href="https://www.facebook.com/sharer/sharer.php?s=100&p[title]=@subject&p[summary]=@encodedSummary&p[url]=@urlEncodedText&p[images][0]=@imageUrl" class="button orange pull-right" target="_blank">Share on Facebook</a>
-                <a href="#" class="button grey pull-right" id="cancelInviteFriendBtn" onclick="$.colorbox.close();">Cancel</a>
+                <a href="https://www.facebook.com/sharer/sharer.php?s=100&p[title]=@subject&p[summary]=@encodedSummary&p[url]=@urlEncoded&p[images][0]=@utImageUrl" class="button orange pull-right" target="_blank">Share on Facebook</a>
+                <button class="button grey pull-right" id="cancelInviteFriendBtn" onclick="$.colorbox.close();">Cancel</button>
             </div>
             <div class="clear"></div>
             <hr>
