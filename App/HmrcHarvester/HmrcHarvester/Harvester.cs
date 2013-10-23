@@ -745,10 +745,43 @@ namespace Ezbob.HmrcHarvester {
 
 			Hopper.Add(smd, oOutput.ToArray());
 
+			HtmlNode oTHead = doc.DocumentNode.SelectSingleNode("//*[@id=\"top\"]/div[3]/div[2]/div/div[2]/table[1]/thead");
+
+			if (oTHead == null) {
+				Info("RTI tax years table head not found.");
+				return;
+			} // if
+
+			HtmlNodeCollection oHeadRows = oTHead.SelectNodes("tr");
+
+			if ((oHeadRows == null) || (oHeadRows.Count != 1))
+				throw new HarvesterException("RTI tax years table head is empty.");
+
+			HtmlNodeCollection oHeadCells = oHeadRows[0].SelectNodes("th | td");
+
+			var aryExpectedColumnHeaders = new string[] {
+				"Date",
+				"Amount paid in period",
+				"Amount due in period",
+			};
+
+			if ((oHeadCells == null) || (oHeadCells.Count != aryExpectedColumnHeaders.Length))
+				throw new HarvesterException(string.Format("Failed to fetch RTI tax years: no cells in header row"));
+
+			for (int i = 0; i < aryExpectedColumnHeaders.Length; i++) {
+				if (!oHeadCells[i].InnerText.Trim().StartsWith(aryExpectedColumnHeaders[i])) {
+					Info(
+						"Not fetching RTI tax years: unexpected column {0} name: {1} (expected: {2})",
+						i, oHeadCells[i].InnerText, aryExpectedColumnHeaders[i]
+					);
+					return;
+				} // if
+			} // for
+
 			HtmlNode oTBody = doc.DocumentNode.SelectSingleNode("//*[@id=\"top\"]/div[3]/div[2]/div/div[2]/table[1]/tbody");
 
 			if (oTBody == null)
-				throw new HarvesterException("RTI tax years table not found.");
+				throw new HarvesterException("RTI tax years table body not found.");
 
 			HtmlNodeCollection oRows = oTBody.SelectNodes("tr");
 
