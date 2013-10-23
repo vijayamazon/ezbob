@@ -84,6 +84,10 @@
       <Project>{8ad07daa-3f09-4279-a390-17acde79b44f}</Project>
       <Name>ChannelGrabberConfig</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\CommonLib\CommonLib.csproj">
+      <Project>{aedbfbbd-ba7d-4582-afca-6ecf8af33c98}</Project>
+      <Name>CommonLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\DatabaseLib\DatabaseLib.csproj">
       <Project>{fa67314a-0560-41d4-bc19-6524663e9d0d}</Project>
       <Name>DatabaseLib</Name>

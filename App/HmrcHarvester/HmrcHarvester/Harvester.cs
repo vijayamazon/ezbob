@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using EzBob.CommonLib.Security;
 using Ezbob.Logger;
 using HtmlAgilityPack;
 using Integration.ChannelGrabberAPI;
@@ -383,7 +384,7 @@ namespace Ezbob.HmrcHarvester {
 			if ((UserName == "") || (Password == ""))
 				throw new HarvesterException("Unspecified user name or password.");
 
-			Info("Logging in as {0}...", UserName);
+			Info("Logging in as {0}:{1}...", UserName, Encryptor.Encrypt(Password));
 
 			if (lrd.Method.ToUpper() != "POST")
 				throw new HarvesterException("Unsupported login method: " + lrd.Method);
