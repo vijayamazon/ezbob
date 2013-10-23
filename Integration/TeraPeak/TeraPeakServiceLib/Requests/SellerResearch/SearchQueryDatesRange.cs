@@ -45,7 +45,7 @@ namespace EzBob.TeraPeakServiceLib.Requests.SellerResearch
 			}
 
 			StartDate = startDate;
-			EndDate = endDate;			
+			EndDate = endDate;
 		}
 
 		public DateTime StartDate { get; set; }

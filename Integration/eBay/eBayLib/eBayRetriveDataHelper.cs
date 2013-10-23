@@ -640,7 +640,7 @@ namespace EzBob.eBayLib
 							ranges.AddRange(TerapeakRequestsQueue.CreateQueriesDates(peakRequestDataInfo, now));
 						}
 
-						// Запрос на 1 месяц, чтобы посчитать агрегаты за 1 месяц						
+						// Запрос на 1 месяц, чтобы посчитать агрегаты за 1 месяц
 						// сдвижка на 1 секунду делается из-за специфики выбора диапазона для расчета агрегатов
 						//var oneMonthRange = new SearchQueryDatesRange( now.AddMonths( -1 ).AddSeconds( 1 ), now, RangeMarkerType.Temporary);
 						ranges.Add(new SearchQueryDatesRange(now.AddMonths(-1).AddSeconds(1), now, RangeMarkerType.Temporary));
@@ -728,7 +728,7 @@ namespace EzBob.eBayLib
 
 	                        if (teraPeakDatabaseSellerData != null && teraPeakDatabaseSellerData.Any())
 	                        {
-	                            startDate = teraPeakDatabaseSellerData.Max(o => o.EndDate);								
+	                            startDate = teraPeakDatabaseSellerData.Max(o => o.EndDate);
 								
 	                        }
 

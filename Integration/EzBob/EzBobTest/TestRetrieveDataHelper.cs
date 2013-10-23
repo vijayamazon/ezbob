@@ -124,8 +124,8 @@ namespace EzBobTest
         [Test]
         public void GetAnalysisValuesByCustomerMarketPlace()
         {
-            var data = RetrieveDataHelper.GetAnalysisValuesByCustomerMarketPlace(1648);
-
+			var data = RetrieveDataHelper.GetAnalysisValuesByCustomerMarketPlace(12235);
+			Console.WriteLine(data.Data.Count);
         }
 
         [Test]
@@ -138,7 +138,7 @@ namespace EzBobTest
 
 		[Test]
 		public void UpdateCustomerMarketplace() {
-			var umis = new[] { 9230 };
+			var umis = new[] { 12235 };
 
 			//umis.AsParallel().ForAll( UpdateCustomerMarketplace );
 

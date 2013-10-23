@@ -53,7 +53,7 @@ namespace EzBob.eBayLib
 					
 				case eBayDatabaseFunctionType.AverageSumOfOrder:
 
-					int shipedOrdersCount2 = (int)InternalCalculateAggregatorValue( eBayDatabaseFunctionType.NumOfOrders, orders );					
+					int shipedOrdersCount2 = (int)InternalCalculateAggregatorValue( eBayDatabaseFunctionType.NumOfOrders, orders );
 					double totalSum = (double)InternalCalculateAggregatorValue( eBayDatabaseFunctionType.TotalSumOfOrders, orders );
 					
 					var newValueAverageSum = shipedOrdersCount2 == 0 ? 0 : totalSum / shipedOrdersCount2;

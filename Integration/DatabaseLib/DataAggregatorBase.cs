@@ -36,6 +36,6 @@
 			return InternalCalculateAggregatorValue( type, data );
 		}
 
-		protected abstract object InternalCalculateAggregatorValue( TEnum type, IEnumerable<TItem> data );		
+		protected abstract object InternalCalculateAggregatorValue( TEnum type, IEnumerable<TItem> data );
 	}
 }
