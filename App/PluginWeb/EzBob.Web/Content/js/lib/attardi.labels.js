@@ -31,7 +31,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 				var def = input.attr('title');
 
 				var bIsEmpty = input.val() && (input.val() == input.attr('empty_value'));
-				
+
 				if (bIsEmpty || !input.val() || (input.val() == def)) {
 					input.prev('span').css('visibility', '');
 					if (def) {
@@ -51,11 +51,15 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 	$(document).on('cut keydown paste change', sSupportedControls, toggleLabel);
 
 	$(document).on('focusin focus', sSupportedControls, function () {
-		$(this).prev('span').addClass('active');
+		var self = $(this);
+		self.prev('span').addClass('active');
+		self.attardi_labels('toggle');
 	});
 
 	$(document).on('focusout blur', sSupportedControls, function () {
-		$(this).prev('span').removeClass('active');
+		var self = $(this);
+		self.prev('span').removeClass('active');
+		self.attardi_labels('toggle');
 	});
 
 	// set things up as soon as the DOM is ready
