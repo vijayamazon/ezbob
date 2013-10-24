@@ -1,10 +1,14 @@
 ﻿@using System.Globalization
+@using EzBob.Web.Areas.Customer.Models
 @using EzBob.Web.Infrastructure
+@using EzBob.Web.Models
 @model EzBob.Web.Areas.Customer.Models.CustomerModel
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Create an EZBOB account";
     var config = ViewData["Config"] as IEzBobConfiguration;
+    var customer = (CustomerModel)Model;
+    customer.IsProfile = false;
 }
 
 <div class="row-fluid wizard-wrapper">
@@ -45,7 +49,7 @@
         EzBob.Config.PasswordPolicyType = '@config.PasswordPolicyType.ToLower()';
 
         $(function () {
-            var options = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model));
+            var options = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(customer));
             options.el = $('#wizard');
         
             var customer = new EzBob.CustomerModel (options);

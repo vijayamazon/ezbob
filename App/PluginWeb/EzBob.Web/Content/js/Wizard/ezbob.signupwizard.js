@@ -97,7 +97,7 @@ EzBob.SignUpWizard = EzBob.Wizard.extend({
 			this.customer.set('IsOffline', true);
 
 		modelArgs.isOffline = this.customer.get('IsOffline');
-	    modelArgs.IsProfile = false;
+		modelArgs.isProfile = this.customer.get('IsProfile');
 		var storeInfoStepModel = new EzBob.StoreInfoStepModel(modelArgs);
 
 		var yourInformationStepModel = new EzBob.YourInformationStepModel();

@@ -1,10 +1,13 @@
-﻿@using EzBob.Web.Infrastructure
+﻿@using EzBob.Web.Areas.Customer.Models
+@using EzBob.Web.Infrastructure
 @using StructureMap
 @model EzBob.Web.Models.WizardModel
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     var config = ObjectFactory.GetInstance<IEzBobConfiguration>();
     bool taboolaPixelEnabled = config.TaboolaPixelEnabled;
+    var customer = (CustomerModel)Model.Customer;
+    customer.IsProfile = true;
 }
 
 @section css {
@@ -276,7 +279,8 @@
         EzBob.Config.SessionTimeout = @Model.Config.SessionTimeout;
 
         $(function () {
-            var options = new EzBob.CustomerModel (@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Customer)));
+            
+            var options = new EzBob.CustomerModel (@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(customer)));
             var profileView = new EzBob.Profile.ProfileView(options);
             profileView.render();
             

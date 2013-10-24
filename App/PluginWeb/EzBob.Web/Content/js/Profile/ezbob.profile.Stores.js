@@ -38,7 +38,7 @@ EzBob.Profile.StoresView = Backbone.View.extend({
 		} // for
 
 		modelArgs.isOffline = this.model.get('IsOffline');
-        modelArgs.IsProfile = true;
+		modelArgs.isProfile = this.model.get('IsProfile');
 		this.storeInfoStepModel = new EzBob.StoreInfoStepModel(modelArgs);
 
         this.storeInfoView = new EzBob.StoreInfoView({ model: this.storeInfoStepModel });
