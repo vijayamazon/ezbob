@@ -584,7 +584,7 @@
 				foreach (Loan closedLoan in closedLoans)
 				{
 					var rows = new List<LoanStatusRow>();
-					foreach (LoanTransaction loanTransaction in closedLoan.Transactions.Where(x => x.Status == LoanTransactionStatus.Done))
+					foreach (LoanTransaction loanTransaction in closedLoan.Transactions.Where(lt => lt.Status == LoanTransactionStatus.Done))
 					{
 						LoanStatusRow currentRow = CreateLoanStatusRowFromTransaction(loanTransaction);
 						if (currentRow != null)
@@ -614,7 +614,7 @@
 						}
 					}
 
-					foreach (var loanSchedule in outstandingLoan.Schedule.Where(ls => ls.Status != LoanScheduleStatus.Paid && ls.Status != LoanScheduleStatus.PaidEarly && ls.Status != LoanScheduleStatus.AlmostPaid))
+					foreach (var loanSchedule in outstandingLoan.Schedule.Where(ls => ls.Status != LoanScheduleStatus.Paid && ls.Status != LoanScheduleStatus.PaidEarly && ls.Status != LoanScheduleStatus.PaidOnTime))
 					{
 						rows.Add(new LoanStatusRow { Type = "Schedule", PostDate = loanSchedule.Date, Description = string.Empty, Fees = loanSchedule.Fees.ToString("N2", CultureInfo.InvariantCulture), Interest = loanSchedule.Interest.ToString("N2", CultureInfo.InvariantCulture), Principal = loanSchedule.LoanRepayment.ToString("N2", CultureInfo.InvariantCulture), Status = loanSchedule.Status.ToString(), Total = (loanSchedule.LoanRepayment + loanSchedule.Interest + loanSchedule.Fees).ToString("N2", CultureInfo.InvariantCulture) });
 					}
