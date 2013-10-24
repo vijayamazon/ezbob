@@ -4,7 +4,6 @@ root.EzBob = root.EzBob or {}
 class EzBob.EditLoanView extends Backbone.Marionette.ItemView
     template: "#loan_editor_template"
     scheduleTemplate: _.template($("#loan_editor_schedule_template").html())
-    freezeIntervalsTemplate: _.template($("#loan_editor_freeze_intervals_template").html())
 
     initialize: ->
         @bindTo @model, "change sync", @renderRegions, this
@@ -149,7 +148,7 @@ class EzBob.EditLoanView extends Backbone.Marionette.ItemView
         @ui.ok.toggleClass "disabled", @model.get("HasErrors")
 
     renderFreeze: ->
-        @ui.freezeEl.html(@freezeIntervalsTemplate(@serializeData()))
+        @ui.freezeEl.html(_.template($("#loan_editor_freeze_intervals_template").html())(@serializeData()))
 
     onAddFreezeInterval: ->
         sStart = @$el.find(".new-freeze-interval-start").val()
