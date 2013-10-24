@@ -67,12 +67,14 @@
 			if (options.CaisAccountStatus == "8")
 			{
 				Customer customer = _loanRepository.Get(options.LoanId).Customer;
+				Loan triggeringLoan = null;
 				
 				// Update loan options
 				foreach (Loan loan in customer.Loans)
 				{
 					if (loan.Id == options.LoanId)
 					{
+						triggeringLoan = loan;
 						continue;
 					}
 
@@ -97,7 +99,7 @@
 				// Update customer status
 				int prevStatus = customer.CollectionStatus.CurrentStatus.Id;
 				customer.CollectionStatus.CurrentStatus = customerStatusesRepository.GetByName("Default");
-				customer.CollectionStatus.CollectionDescription = string.Format("Triggered via loan options:{0}", options.LoanId);
+				customer.CollectionStatus.CollectionDescription = string.Format("Triggered via loan options:{0}", triggeringLoan != null ? triggeringLoan.RefNumber : "unknown");
 
 				// Update status history table
 				var newEntry = new CustomerStatusHistory
