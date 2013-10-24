@@ -7,9 +7,7 @@
     var text = string.Format("{0} {1}Join Now {2}", summary, Environment.NewLine, @url);
     string urlEncoded = Uri.EscapeDataString(url);
     string subject = Uri.EscapeDataString("Join Ezbob Loans");
-    string imageUrl = Uri.EscapeDataString("http://www.ezbob.com/wp-content/themes/ezbob/images/ezbob_logo.png");
-    string utImageUrl = "http://www.ezbob.com/wp-content/themes/ezbob/images/youtube.jpg";
-    var a = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.Customer));
+    string utImageUrl = "http://www.ezbob.com/wp-content/uploads/ezbob_logo.jpg";
     var customer = (CustomerModel) Model.Customer;
 }
 <script id="invite-friend-template" type="text/template">

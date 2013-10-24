@@ -91,5 +91,10 @@ namespace FraudChecker
                 Value = value ?? String.Empty
             };
         }
+
+	    public static IEnumerable<string> GetCustomerIps(Customer customer)
+	    {
+		    return customer.Session.Select(s => s.Ip);
+	    }
     }
 }

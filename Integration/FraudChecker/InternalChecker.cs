@@ -13,7 +13,9 @@ using StructureMap;
 
 namespace FraudChecker
 {
-    public class InternalChecker
+	using EZBob.DatabaseLib.Model;
+
+	public class InternalChecker
     {
 		private static readonly ILog Log = LogManager.GetLogger(typeof(InternalChecker));
         private readonly ISession _session;
@@ -47,6 +49,7 @@ namespace FraudChecker
                 InternalPhoneFromMpCheck(fraudDetections, customer);
                 InternalCompanyNameCheck(customer, fraudDetections, customerPortion);
                 InternalBankAccountCheck(fraudDetections, customerPortion, customer);
+				InternalIpCheck(fraudDetections, customerPortion, customer);
             }
             InternalDobLess21(customer, fraudDetections);
 
@@ -389,5 +392,22 @@ namespace FraudChecker
                                     "Customer First Name, Last Name, Middle Name",
                                     null, string.Format("{0}, {1}, {2}", firstName, lastName, middleName)));
         }
+
+		private void InternalIpCheck(List<FraudDetection> fraudDetections,
+								IEnumerable<Customer> customerPortion,
+								Customer customer)
+		{
+
+			var customerSession = customer.Session.FirstOrDefault();
+			if (customerSession == null)
+			{
+				return;
+			}
+
+			fraudDetections.AddRange(
+				from c in customerPortion
+				where c.Session.Select(s => s.Ip).ToList().Contains(customerSession.Ip)
+				select Helper.CreateDetection("Customer Ip", customer, c, "Customer Ip", null, string.Format("{0}", customerSession.Ip)));
+		}
     }
 }

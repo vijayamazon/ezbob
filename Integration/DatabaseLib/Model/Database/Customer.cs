@@ -344,7 +344,7 @@ namespace EZBob.DatabaseLib.Model.Database {
         public virtual CardInfo CurrentCard { get; set; }
 		public virtual string ABTesting { get; set; }
 		public virtual bool IsOffline { get; set; }
-
+		public virtual IList<CustomerSession> Session { get; set; }
         public virtual WizardStepType WizardStep { get; set; }
 
         public virtual CollectionStatus CollectionStatus

@@ -345,6 +345,12 @@ namespace EZBob.DatabaseLib.Model.Database {
 				.Cascade.All()
 				.Inverse();
 
+			HasMany(x => x.Session)
+				.AsBag()
+				.KeyColumn("CustomerId")
+				.Cascade.All()
+				.Inverse();
+
 			/*
 	        HasOne(x => x.CustomerRequestedLoan)
 		        .Cascade.SaveUpdate()

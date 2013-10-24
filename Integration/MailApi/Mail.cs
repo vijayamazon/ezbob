@@ -44,7 +44,9 @@ namespace MailApi
                     to = toList,
                     subject = subject,
                     bcc_address = cc,
-					attachments = attachments
+					attachments = attachments,
+					track_clicks = true,
+					track_opens = true
                 }
 				
             };
@@ -74,7 +76,9 @@ namespace MailApi
                     from_email = _config.From,
                     to = toList,
                     subject = subject,
-                    html = text
+                    html = text,
+					track_clicks = true,
+					track_opens = true
                 },
             };
         }
