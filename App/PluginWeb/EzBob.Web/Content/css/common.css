@@ -105,6 +105,8 @@ ul.storelist li span {
 .cg-link-account-form input[type="text"],
 .cg-link-account-form input[type="password"] { width: 400px; }
 
+.eu_explanation { width: 607px; margin-top: 20px; }
+
 .field-validation-error { display: block; font-weight: bold;}
 
 [name='addressInput'] { margin-top: 10px; }

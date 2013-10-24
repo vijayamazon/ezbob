@@ -34,6 +34,11 @@
 						<a href="#" class="button orange disabled pull-right connect-account">Link Account</a>
 						<a href="#" class="back button grey pull-right">Back</a>
 					</div>
+        
+                    @if (@vi.DisplayName == "HMRC")
+                    {
+                        <img class="eu_explanation" src="@Url.Content("~/Content/css/images/eu_explanation.png")"/>
+                    }
 				</div>
 			</div>
 

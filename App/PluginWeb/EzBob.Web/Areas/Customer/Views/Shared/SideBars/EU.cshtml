@@ -1,0 +1,27 @@
+﻿@using EZBob.DatabaseLib
+@using EZBob.DatabaseLib.Model
+@using EZBob.DatabaseLib.Model.Database
+@using EzBob.CommonLib
+@using EzBob.Configuration
+@using EzBob.Web.Models.Strings
+@using StructureMap
+@model dynamic
+@{
+    var oCfg = ObjectFactory.GetInstance<IConfigurationVariablesRepository>();
+    var bIsAuth = User.Identity.IsAuthenticated;
+    var marketingDefault = new HtmlString(DbStrings.MarketingDefault); 
+}
+
+<div>
+    <ul class="eu_icon">
+        <li>
+            <img src="@Url.Content("~/Content/css/images/eu.png")" />
+        </li>
+        <li class="textli">
+            <label class="upper">Authorized</label>
+            <br />
+            <label class="lower">By the EU</label>
+        </li>
+    </ul>
+    <hr/>
+</div>

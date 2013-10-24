@@ -176,13 +176,30 @@ ul.contact_icons li.telephone{ background-position: 0 0;}
 ul.contact_icons li.email{background-position: 0 -24px;}
 ul.contact_icons li.chat{ background-position: 0 -48px;}
 /*-- SSL security icons --*/
-ul.secure_icons{list-style:none; margin:0 0 20px 0; padding:0; overflow:hidden; width: 100%;}
+ul.secure_icons{list-style:none; margin:40px 0 20px 0; padding:0; overflow:hidden; width: 100%;}
 ul.secure_icons li{margin:0 0 10px 0; float:left;}
 ul.secure_icons li a{height:70px; display:block; text-indent: -9999px;}
+ul.secure_icons li.truste_seal{ width: 93px;}
 ul.secure_icons li.truste_seal a{width:142px; height: 70px; /*background:url(../img/logo-truste.png) no-repeat 0 0; */}
-ul.secure_icons li.verisign_seal{width:100px; height: 70px; background:url(images/verisign_seal.gif) no-repeat;}
-ul.secure_icons li a img{ display: inherit; border: none;}
+ul.secure_icons li.verisign_seal{background:url(images/verisign_seal.gif) no-repeat; background-size: 93px auto;}
+ul.secure_icons li a img{ display: inherit; border: none;width:93px;}
 ul.secure_icons li.truste_seal a img{ margin-top: 12px;}
+
+.security_header_style {
+    margin-left: 10px;
+    color: #0064d2;
+    font-size: 20px;
+}
+
+/*-- EU icon --*/
+ul.eu_icon{list-style:none; margin:130px 0 20px 0; padding:0; overflow:hidden;width: 100%;}
+ul.eu_icon li{margin:0 0 10px 0;float: left;}
+ul.eu_icon li img{ width: 110px; }
+ul.eu_icon li label{color: navy; font-size: 20px; }
+ul.eu_icon li.textli{ margin: 0 0 0 10px;}
+ul.eu_icon li label.upper{ margin: 10px 0 0 0;}
+ul.eu_icon li label.lower{ margin: -10px 0 10px 0;}
+
 /*-- featured in logos --*/
 ul.featured{ list-style:none; margin:0; padding:0; overflow:hidden;}
 ul.featured li{float:left; margin:0 20px 30px 0; font-size:20px; color:#c2c7cd;}
