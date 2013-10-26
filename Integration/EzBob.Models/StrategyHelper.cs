@@ -656,6 +656,35 @@
 				log.ErrorFormat("Failed sending alert mail - {0}. Result:{1}", result, firstOfMonthStatusMailMandrillTemplateName);
 			}
 		}
+
+		public void NotifyAutoApproveSilentMode(int customerId, int autoApproveAmount, string autoApproveSilentTemplateName, string autoApproveSilentToAddress)
+		{
+			try
+			{
+				log.InfoFormat("Sending silent auto approval mail for: customerId={0} autoApproveAmount={1} autoApproveSilentTemplateName={2} autoApproveSilentToAddress={3}", customerId, autoApproveAmount, autoApproveSilentTemplateName, autoApproveSilentToAddress);
+				var mail = ObjectFactory.GetInstance<IMail>();
+				var vars = new Dictionary<string, string>
+				{
+					{"customerId", customerId.ToString(CultureInfo.InvariantCulture)},
+					{"autoApproveAmount", autoApproveAmount.ToString(CultureInfo.InvariantCulture)}
+				};
+
+				var result = mail.Send(vars, autoApproveSilentToAddress, autoApproveSilentTemplateName);
+				if (result == "OK")
+				{
+					log.InfoFormat("Sent mail - silent auto approval");
+				}
+				else
+				{
+					log.ErrorFormat("Failed sending alert mail - silent auto approval. Result:{0}", result);
+				}
+			}
+			catch (Exception e)
+			{
+				log.ErrorFormat("Failed sending alert mail - silent auto approval. Exception:{0}", e);
+			}
+			
+		}
 	}
 
 	public class LoanStatusRow
