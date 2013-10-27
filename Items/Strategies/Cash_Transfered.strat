@@ -6,10 +6,10 @@
     <NodeElement Name="Change subject" NodeId="MultiAssignment59672145" />
     <NodeElement Name="Comparison" NodeId="Comparison65993539" />
     <NodeElement Name="Empty Name" NodeId="ConditionalAssignment34547936" />
-    <NodeElement Name="Mail Node" NodeId="MailNode33407794" />
-    <NodeElement Name="Mail Node" NodeId="MailNode54575521" />
-    <NodeElement Name="Mail Node" NodeId="MailNode64505759" />
-    <NodeElement Name="Mail Node" NodeId="MailNode14925917" />
+    <NodeElement Name="Mail Node" NodeId="MailNode28437806" />
+    <NodeElement Name="Mail Node" NodeId="MailNode54659014" />
+    <NodeElement Name="Mail Node" NodeId="MailNode25901669" />
+    <NodeElement Name="Mail Node" NodeId="MailNode25369996" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct6923783" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct30783125" />
     <NodeElement Name="Multi-Assignment" NodeId="MultiAssignment5236587" />
@@ -113,12 +113,12 @@
       <DefaultPinName />
       <Description />
       <DisplayName>Mail Node</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;Get cash - approval.docxodWMVbXU0OoAppATeIXidg==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;Get cash - approval.docxodWMVbXU0OoAppATeIXidg==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;Get cash - approval - not first.docxBHpZr/v/MI/FG9UPFoZBdw==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;Get cash - approval - not first.docxBHpZr/v/MI/FG9UPFoZBdw==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>MailNode33407794</Name>
+      <Name>MailNode54659014</Name>
       <PointF>
-        <X>332.670074</X>
+        <X>592.6701</X>
         <Y>156</Y>
       </PointF>
       <SuperNodeName />
@@ -130,12 +130,12 @@
       <DefaultPinName />
       <Description />
       <DisplayName>Mail Node</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;Get cash - approval.docxodWMVbXU0OoAppATeIXidg==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;Get cash - approval.docxodWMVbXU0OoAppATeIXidg==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;Get cash - approval - not first.docxBHpZr/v/MI/FG9UPFoZBdw==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;Get cash - approval - not first.docxBHpZr/v/MI/FG9UPFoZBdw==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>MailNode54575521</Name>
+      <Name>MailNode25369996</Name>
       <PointF>
-        <X>332.670074</X>
+        <X>592.6701</X>
         <Y>396</Y>
       </PointF>
       <SuperNodeName />
@@ -164,13 +164,13 @@
       <DefaultPinName />
       <Description />
       <DisplayName>Mail Node</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;Get cash - approval - not first.docxEr+xnCkhku1uKj+83t5LNQ==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;Get cash - approval - not first.docxEr+xnCkhku1uKj+83t5LNQ==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;Get cash - approval.docx5BQQSoP/rgk2gVCjUXLnuA==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;Get cash - approval.docx5BQQSoP/rgk2gVCjUXLnuA==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>MailNode64505759</Name>
+      <Name>MailNode25901669</Name>
       <PointF>
-        <X>592.6701</X>
-        <Y>156</Y>
+        <X>332.670074</X>
+        <Y>396</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeMail</TypeName>
@@ -197,23 +197,6 @@
       <AssemblyString />
       <DefaultPinName />
       <Description />
-      <DisplayName>Mail Node</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;Get cash - approval - not first.docxEr+xnCkhku1uKj+83t5LNQ==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;Get cash - approval - not first.docxEr+xnCkhku1uKj+83t5LNQ==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
-      <IsBreakpointActive>false</IsBreakpointActive>
-      <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>MailNode14925917</Name>
-      <PointF>
-        <X>592.6701</X>
-        <Y>396</Y>
-      </PointF>
-      <SuperNodeName />
-      <TypeName>WorkflowObjects.NodeMail</TypeName>
-      <PrototypeName />
-    </NodeDescriptor>
-    <NodeDescriptor Modification="">
-      <AssemblyString />
-      <DefaultPinName />
-      <Description />
       <DisplayName>Change subject</DisplayName>
       <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;assignments&gt;&lt;assignment&gt;Subject := "Thanks for choosing EZBOB as your funding partner"&lt;/assignment&gt;&lt;/assignments&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
@@ -225,6 +208,23 @@
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeMultiAssignment</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Mail Node</DisplayName>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;Get cash - approval.docx5BQQSoP/rgk2gVCjUXLnuA==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;Get cash - approval.docx5BQQSoP/rgk2gVCjUXLnuA==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>MailNode28437806</Name>
+      <PointF>
+        <X>332.670074</X>
+        <Y>156</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeMail</TypeName>
       <PrototypeName />
     </NodeDescriptor>
   </NodeDescriptors>
@@ -398,8 +398,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode33407794</OwnerName>
-      <Name>FirstName_Get cash - approval.docxodWMVbXU0OoAppATeIXidg==</Name>
+      <OwnerName>MailNode54659014</OwnerName>
+      <Name>FirstName_Get cash - approval - not first.docxBHpZr/v/MI/FG9UPFoZBdw==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -410,8 +410,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode33407794</OwnerName>
-      <Name>Amount_Get cash - approval.docxodWMVbXU0OoAppATeIXidg==</Name>
+      <OwnerName>MailNode54659014</OwnerName>
+      <Name>Amount_Get cash - approval - not first.docxBHpZr/v/MI/FG9UPFoZBdw==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -422,7 +422,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode33407794</OwnerName>
+      <OwnerName>MailNode54659014</OwnerName>
       <Name>AddressTo</Name>
       <TypeName>System.String</TypeName>
       <InitialValue>0</InitialValue>
@@ -434,7 +434,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode33407794</OwnerName>
+      <OwnerName>MailNode54659014</OwnerName>
       <Name>AddressCC</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -446,7 +446,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode33407794</OwnerName>
+      <OwnerName>MailNode54659014</OwnerName>
       <Name>Subject</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -458,8 +458,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode54575521</OwnerName>
-      <Name>FirstName_Get cash - approval.docxodWMVbXU0OoAppATeIXidg==</Name>
+      <OwnerName>MailNode25369996</OwnerName>
+      <Name>FirstName_Get cash - approval - not first.docxBHpZr/v/MI/FG9UPFoZBdw==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -470,8 +470,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode54575521</OwnerName>
-      <Name>Amount_Get cash - approval.docxodWMVbXU0OoAppATeIXidg==</Name>
+      <OwnerName>MailNode25369996</OwnerName>
+      <Name>Amount_Get cash - approval - not first.docxBHpZr/v/MI/FG9UPFoZBdw==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -482,7 +482,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode54575521</OwnerName>
+      <OwnerName>MailNode25369996</OwnerName>
       <Name>AddressTo</Name>
       <TypeName>System.String</TypeName>
       <InitialValue>0</InitialValue>
@@ -494,7 +494,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode54575521</OwnerName>
+      <OwnerName>MailNode25369996</OwnerName>
       <Name>AddressCC</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -506,7 +506,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode54575521</OwnerName>
+      <OwnerName>MailNode25369996</OwnerName>
       <Name>Subject</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -542,8 +542,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode64505759</OwnerName>
-      <Name>FirstName_Get cash - approval - not first.docxEr+xnCkhku1uKj+83t5LNQ==</Name>
+      <OwnerName>MailNode25901669</OwnerName>
+      <Name>FirstName_Get cash - approval.docx5BQQSoP/rgk2gVCjUXLnuA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -554,8 +554,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode64505759</OwnerName>
-      <Name>Amount_Get cash - approval - not first.docxEr+xnCkhku1uKj+83t5LNQ==</Name>
+      <OwnerName>MailNode25901669</OwnerName>
+      <Name>Amount_Get cash - approval.docx5BQQSoP/rgk2gVCjUXLnuA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -566,7 +566,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode64505759</OwnerName>
+      <OwnerName>MailNode25901669</OwnerName>
       <Name>AddressTo</Name>
       <TypeName>System.String</TypeName>
       <InitialValue>0</InitialValue>
@@ -578,7 +578,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode64505759</OwnerName>
+      <OwnerName>MailNode25901669</OwnerName>
       <Name>AddressCC</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -590,7 +590,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode64505759</OwnerName>
+      <OwnerName>MailNode25901669</OwnerName>
       <Name>Subject</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -626,8 +626,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode14925917</OwnerName>
-      <Name>FirstName_Get cash - approval - not first.docxEr+xnCkhku1uKj+83t5LNQ==</Name>
+      <OwnerName>MailNode28437806</OwnerName>
+      <Name>FirstName_Get cash - approval.docx5BQQSoP/rgk2gVCjUXLnuA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -638,8 +638,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode14925917</OwnerName>
-      <Name>Amount_Get cash - approval - not first.docxEr+xnCkhku1uKj+83t5LNQ==</Name>
+      <OwnerName>MailNode28437806</OwnerName>
+      <Name>Amount_Get cash - approval.docx5BQQSoP/rgk2gVCjUXLnuA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -650,7 +650,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode14925917</OwnerName>
+      <OwnerName>MailNode28437806</OwnerName>
       <Name>AddressTo</Name>
       <TypeName>System.String</TypeName>
       <InitialValue>0</InitialValue>
@@ -662,7 +662,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode14925917</OwnerName>
+      <OwnerName>MailNode28437806</OwnerName>
       <Name>AddressCC</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -674,7 +674,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode14925917</OwnerName>
+      <OwnerName>MailNode28437806</OwnerName>
       <Name>Subject</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -713,33 +713,33 @@
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>MailNode33407794</SourceNodeName>
-      <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>CreditProduct6923783</TargetNodeName>
+      <SourceNodeName>Comparison65993539</SourceNodeName>
+      <SourceNodeOutletName>Yes</SourceNodeOutletName>
+      <TargetNodeName>MailNode28437806</TargetNodeName>
       <SuperNodeName />
-      <Caption>Next</Caption>
+      <Caption>Yes</Caption>
       <SignatureRequired>false</SignatureRequired>
       <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
-      <DisplayColor>-16776961</DisplayColor>
-      <ShowSignature>false</ShowSignature>
-      <IntermediatePoints />
-    </NodeConnectionDescriptor>
-    <NodeConnectionDescriptor>
-      <SourceNodeName>MailNode54575521</SourceNodeName>
-      <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>StopNode19688733</TargetNodeName>
-      <SuperNodeName />
-      <Caption>Next</Caption>
-      <SignatureRequired>false</SignatureRequired>
-      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
-      <DisplayColor>-16776961</DisplayColor>
+      <DisplayColor>-16744448</DisplayColor>
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
       <SourceNodeName>CreditProduct6923783</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>MailNode54575521</TargetNodeName>
+      <TargetNodeName>MailNode25901669</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Next</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>MailNode25901669</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>StopNode19688733</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -761,14 +761,14 @@
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>Comparison65993539</SourceNodeName>
-      <SourceNodeOutletName>Yes</SourceNodeOutletName>
-      <TargetNodeName>MailNode33407794</TargetNodeName>
+      <SourceNodeName>MailNode28437806</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>CreditProduct6923783</TargetNodeName>
       <SuperNodeName />
-      <Caption>Yes</Caption>
+      <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
       <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
-      <DisplayColor>-16744448</DisplayColor>
+      <DisplayColor>-16776961</DisplayColor>
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints />
     </NodeConnectionDescriptor>
@@ -790,9 +790,9 @@
       </IntermediatePoints>
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>MailNode64505759</SourceNodeName>
+      <SourceNodeName>MultiAssignment59672145</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>CreditProduct30783125</TargetNodeName>
+      <TargetNodeName>MailNode54659014</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -802,19 +802,7 @@
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>CreditProduct30783125</SourceNodeName>
-      <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>MailNode14925917</TargetNodeName>
-      <SuperNodeName />
-      <Caption>Next</Caption>
-      <SignatureRequired>false</SignatureRequired>
-      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
-      <DisplayColor>-16776961</DisplayColor>
-      <ShowSignature>false</ShowSignature>
-      <IntermediatePoints />
-    </NodeConnectionDescriptor>
-    <NodeConnectionDescriptor>
-      <SourceNodeName>MailNode14925917</SourceNodeName>
+      <SourceNodeName>MailNode25369996</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
       <TargetNodeName>StopNode19688733</TargetNodeName>
       <SuperNodeName />
@@ -826,9 +814,21 @@
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>MultiAssignment59672145</SourceNodeName>
+      <SourceNodeName>CreditProduct30783125</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>MailNode64505759</TargetNodeName>
+      <TargetNodeName>MailNode25369996</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Next</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>MailNode54659014</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>CreditProduct30783125</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -854,73 +854,73 @@
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Cash_Transfered</SourceVariableOwnerName>
       <SourceVariableName>FirstName</SourceVariableName>
-      <TargetVariableOwnerName>MailNode33407794</TargetVariableOwnerName>
-      <TargetVariableName>FirstName_Get cash - approval.docxodWMVbXU0OoAppATeIXidg==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode28437806</TargetVariableOwnerName>
+      <TargetVariableName>FirstName_Get cash - approval.docx5BQQSoP/rgk2gVCjUXLnuA==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Cash_Transfered</SourceVariableOwnerName>
       <SourceVariableName>email</SourceVariableName>
-      <TargetVariableOwnerName>MailNode33407794</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode28437806</TargetVariableOwnerName>
       <TargetVariableName>AddressTo</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Cash_Transfered</SourceVariableOwnerName>
       <SourceVariableName>Subject</SourceVariableName>
-      <TargetVariableOwnerName>MailNode33407794</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode28437806</TargetVariableOwnerName>
       <TargetVariableName>Subject</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Cash_Transfered</SourceVariableOwnerName>
       <SourceVariableName>emailCC</SourceVariableName>
-      <TargetVariableOwnerName>MailNode33407794</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode28437806</TargetVariableOwnerName>
       <TargetVariableName>AddressCC</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Cash_Transfered</SourceVariableOwnerName>
       <SourceVariableName>FirstName</SourceVariableName>
-      <TargetVariableOwnerName>MailNode54575521</TargetVariableOwnerName>
-      <TargetVariableName>FirstName_Get cash - approval.docxodWMVbXU0OoAppATeIXidg==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode25901669</TargetVariableOwnerName>
+      <TargetVariableName>FirstName_Get cash - approval.docx5BQQSoP/rgk2gVCjUXLnuA==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Cash_Transfered</SourceVariableOwnerName>
       <SourceVariableName>Subject</SourceVariableName>
-      <TargetVariableOwnerName>MailNode54575521</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode25901669</TargetVariableOwnerName>
       <TargetVariableName>Subject</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Cash_Transfered</SourceVariableOwnerName>
       <SourceVariableName>CP_AddressTo</SourceVariableName>
-      <TargetVariableOwnerName>MailNode54575521</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode25901669</TargetVariableOwnerName>
       <TargetVariableName>AddressTo</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Cash_Transfered</SourceVariableOwnerName>
       <SourceVariableName>CP_AddressCC</SourceVariableName>
-      <TargetVariableOwnerName>MailNode54575521</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode25901669</TargetVariableOwnerName>
       <TargetVariableName>AddressCC</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Cash_Transfered</SourceVariableOwnerName>
       <SourceVariableName>FirstName</SourceVariableName>
-      <TargetVariableOwnerName>MailNode64505759</TargetVariableOwnerName>
-      <TargetVariableName>FirstName_Get cash - approval - not first.docxEr+xnCkhku1uKj+83t5LNQ==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode54659014</TargetVariableOwnerName>
+      <TargetVariableName>FirstName_Get cash - approval - not first.docxBHpZr/v/MI/FG9UPFoZBdw==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Cash_Transfered</SourceVariableOwnerName>
       <SourceVariableName>email</SourceVariableName>
-      <TargetVariableOwnerName>MailNode64505759</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode54659014</TargetVariableOwnerName>
       <TargetVariableName>AddressTo</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Cash_Transfered</SourceVariableOwnerName>
       <SourceVariableName>emailCC</SourceVariableName>
-      <TargetVariableOwnerName>MailNode64505759</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode54659014</TargetVariableOwnerName>
       <TargetVariableName>AddressCC</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Cash_Transfered</SourceVariableOwnerName>
       <SourceVariableName>Subject</SourceVariableName>
-      <TargetVariableOwnerName>MailNode64505759</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode54659014</TargetVariableOwnerName>
       <TargetVariableName>Subject</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
@@ -938,25 +938,25 @@
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Cash_Transfered</SourceVariableOwnerName>
       <SourceVariableName>FirstName</SourceVariableName>
-      <TargetVariableOwnerName>MailNode14925917</TargetVariableOwnerName>
-      <TargetVariableName>FirstName_Get cash - approval - not first.docxEr+xnCkhku1uKj+83t5LNQ==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode25369996</TargetVariableOwnerName>
+      <TargetVariableName>FirstName_Get cash - approval - not first.docxBHpZr/v/MI/FG9UPFoZBdw==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Cash_Transfered</SourceVariableOwnerName>
       <SourceVariableName>CP_AddressTo</SourceVariableName>
-      <TargetVariableOwnerName>MailNode14925917</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode25369996</TargetVariableOwnerName>
       <TargetVariableName>AddressTo</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Cash_Transfered</SourceVariableOwnerName>
       <SourceVariableName>CP_AddressCC</SourceVariableName>
-      <TargetVariableOwnerName>MailNode14925917</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode25369996</TargetVariableOwnerName>
       <TargetVariableName>AddressCC</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Cash_Transfered</SourceVariableOwnerName>
       <SourceVariableName>Subject</SourceVariableName>
-      <TargetVariableOwnerName>MailNode14925917</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode25369996</TargetVariableOwnerName>
       <TargetVariableName>Subject</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
@@ -968,26 +968,26 @@
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Cash_Transfered</SourceVariableOwnerName>
       <SourceVariableName>Amount</SourceVariableName>
-      <TargetVariableOwnerName>MailNode33407794</TargetVariableOwnerName>
-      <TargetVariableName>Amount_Get cash - approval.docxodWMVbXU0OoAppATeIXidg==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode28437806</TargetVariableOwnerName>
+      <TargetVariableName>Amount_Get cash - approval.docx5BQQSoP/rgk2gVCjUXLnuA==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Cash_Transfered</SourceVariableOwnerName>
       <SourceVariableName>Amount</SourceVariableName>
-      <TargetVariableOwnerName>MailNode64505759</TargetVariableOwnerName>
-      <TargetVariableName>Amount_Get cash - approval - not first.docxEr+xnCkhku1uKj+83t5LNQ==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode54659014</TargetVariableOwnerName>
+      <TargetVariableName>Amount_Get cash - approval - not first.docxBHpZr/v/MI/FG9UPFoZBdw==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Cash_Transfered</SourceVariableOwnerName>
       <SourceVariableName>Amount</SourceVariableName>
-      <TargetVariableOwnerName>MailNode14925917</TargetVariableOwnerName>
-      <TargetVariableName>Amount_Get cash - approval - not first.docxEr+xnCkhku1uKj+83t5LNQ==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode25369996</TargetVariableOwnerName>
+      <TargetVariableName>Amount_Get cash - approval - not first.docxBHpZr/v/MI/FG9UPFoZBdw==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Cash_Transfered</SourceVariableOwnerName>
       <SourceVariableName>Amount</SourceVariableName>
-      <TargetVariableOwnerName>MailNode54575521</TargetVariableOwnerName>
-      <TargetVariableName>Amount_Get cash - approval.docxodWMVbXU0OoAppATeIXidg==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode25901669</TargetVariableOwnerName>
+      <TargetVariableName>Amount_Get cash - approval.docx5BQQSoP/rgk2gVCjUXLnuA==</TargetVariableName>
     </VariableConnectionDescriptor>
   </VariableConnectionDescriptors>
   <SigningNodeDescriptors>
@@ -1032,7 +1032,7 @@
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
-      <OwnerName>MailNode33407794</OwnerName>
+      <OwnerName>MailNode54659014</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
@@ -1040,7 +1040,7 @@
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
-      <OwnerName>MailNode54575521</OwnerName>
+      <OwnerName>MailNode25369996</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
@@ -1056,7 +1056,7 @@
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
-      <OwnerName>MailNode64505759</OwnerName>
+      <OwnerName>MailNode25901669</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
@@ -1072,7 +1072,7 @@
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
-      <OwnerName>MailNode14925917</OwnerName>
+      <OwnerName>MultiAssignment59672145</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
@@ -1080,7 +1080,7 @@
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
-      <OwnerName>MultiAssignment59672145</OwnerName>
+      <OwnerName>MailNode28437806</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />

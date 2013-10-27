@@ -4,8 +4,8 @@
   <Description>Email to customer – early payment. Trigger - Customer makes an early payment via dashboard.</Description>
   <Workspace Name="PayEarly">
     <NodeElement Name="Empty Name" NodeId="ConditionalAssignment24812117" />
-    <NodeElement Name="Mail Node" NodeId="MailNode46070087" />
-    <NodeElement Name="Mail Node" NodeId="MailNode56700610" />
+    <NodeElement Name="Mail Node" NodeId="MailNode6065972" />
+    <NodeElement Name="Mail Node" NodeId="MailNode61633893" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct15478348" />
     <NodeElement Name="Multi-Assignment" NodeId="MultiAssignment48918703" />
     <NodeElement Name="Script" NodeId="ScriptNode4346952" />
@@ -109,27 +109,10 @@
       <DefaultPinName />
       <Description />
       <DisplayName>Mail Node</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;EZBOB payment early repayment confirmation.docxJPKTz25xu1z5nbH+tFr+QQ==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;EZBOB payment early repayment confirmation.docxJPKTz25xu1z5nbH+tFr+QQ==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;EZBOB payment early repayment confirmation.docxZjLVPbPbLX418Z9yFbr/lQ==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;EZBOB payment early repayment confirmation.docxZjLVPbPbLX418Z9yFbr/lQ==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>MailNode56700610</Name>
-      <PointF>
-        <X>472.670074</X>
-        <Y>196</Y>
-      </PointF>
-      <SuperNodeName />
-      <TypeName>WorkflowObjects.NodeMail</TypeName>
-      <PrototypeName />
-    </NodeDescriptor>
-    <NodeDescriptor Modification="">
-      <AssemblyString />
-      <DefaultPinName />
-      <Description />
-      <DisplayName>Mail Node</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;EZBOB payment early repayment confirmation.docxJPKTz25xu1z5nbH+tFr+QQ==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;EZBOB payment early repayment confirmation.docxJPKTz25xu1z5nbH+tFr+QQ==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
-      <IsBreakpointActive>false</IsBreakpointActive>
-      <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>MailNode46070087</Name>
+      <Name>MailNode61633893</Name>
       <PointF>
         <X>292.670074</X>
         <Y>316</Y>
@@ -153,6 +136,23 @@
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeScript</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Mail Node</DisplayName>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;EZBOB payment early repayment confirmation.docxZjLVPbPbLX418Z9yFbr/lQ==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;EZBOB payment early repayment confirmation.docxZjLVPbPbLX418Z9yFbr/lQ==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>MailNode6065972</Name>
+      <PointF>
+        <X>472.670074</X>
+        <Y>196</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeMail</TypeName>
       <PrototypeName />
     </NodeDescriptor>
   </NodeDescriptors>
@@ -326,8 +326,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode56700610</OwnerName>
-      <Name>FirstName_EZBOB payment early repayment confirmation.docxJPKTz25xu1z5nbH+tFr+QQ==</Name>
+      <OwnerName>MailNode61633893</OwnerName>
+      <Name>FirstName_EZBOB payment early repayment confirmation.docxZjLVPbPbLX418Z9yFbr/lQ==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -338,8 +338,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode56700610</OwnerName>
-      <Name>Amount_EZBOB payment early repayment confirmation.docxJPKTz25xu1z5nbH+tFr+QQ==</Name>
+      <OwnerName>MailNode61633893</OwnerName>
+      <Name>Amount_EZBOB payment early repayment confirmation.docxZjLVPbPbLX418Z9yFbr/lQ==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -350,8 +350,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode56700610</OwnerName>
-      <Name>Date_EZBOB payment early repayment confirmation.docxJPKTz25xu1z5nbH+tFr+QQ==</Name>
+      <OwnerName>MailNode61633893</OwnerName>
+      <Name>Date_EZBOB payment early repayment confirmation.docxZjLVPbPbLX418Z9yFbr/lQ==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -362,8 +362,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode56700610</OwnerName>
-      <Name>RefNum_EZBOB payment early repayment confirmation.docxJPKTz25xu1z5nbH+tFr+QQ==</Name>
+      <OwnerName>MailNode61633893</OwnerName>
+      <Name>RefNum_EZBOB payment early repayment confirmation.docxZjLVPbPbLX418Z9yFbr/lQ==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -374,7 +374,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode56700610</OwnerName>
+      <OwnerName>MailNode61633893</OwnerName>
       <Name>AddressTo</Name>
       <TypeName>System.String</TypeName>
       <InitialValue>0</InitialValue>
@@ -386,7 +386,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode56700610</OwnerName>
+      <OwnerName>MailNode61633893</OwnerName>
       <Name>AddressCC</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -398,7 +398,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode56700610</OwnerName>
+      <OwnerName>MailNode61633893</OwnerName>
       <Name>Subject</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -410,8 +410,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode46070087</OwnerName>
-      <Name>FirstName_EZBOB payment early repayment confirmation.docxJPKTz25xu1z5nbH+tFr+QQ==</Name>
+      <OwnerName>MailNode6065972</OwnerName>
+      <Name>FirstName_EZBOB payment early repayment confirmation.docxZjLVPbPbLX418Z9yFbr/lQ==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -422,8 +422,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode46070087</OwnerName>
-      <Name>Amount_EZBOB payment early repayment confirmation.docxJPKTz25xu1z5nbH+tFr+QQ==</Name>
+      <OwnerName>MailNode6065972</OwnerName>
+      <Name>Amount_EZBOB payment early repayment confirmation.docxZjLVPbPbLX418Z9yFbr/lQ==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -434,8 +434,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode46070087</OwnerName>
-      <Name>Date_EZBOB payment early repayment confirmation.docxJPKTz25xu1z5nbH+tFr+QQ==</Name>
+      <OwnerName>MailNode6065972</OwnerName>
+      <Name>Date_EZBOB payment early repayment confirmation.docxZjLVPbPbLX418Z9yFbr/lQ==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -446,8 +446,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode46070087</OwnerName>
-      <Name>RefNum_EZBOB payment early repayment confirmation.docxJPKTz25xu1z5nbH+tFr+QQ==</Name>
+      <OwnerName>MailNode6065972</OwnerName>
+      <Name>RefNum_EZBOB payment early repayment confirmation.docxZjLVPbPbLX418Z9yFbr/lQ==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -458,7 +458,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode46070087</OwnerName>
+      <OwnerName>MailNode6065972</OwnerName>
       <Name>AddressTo</Name>
       <TypeName>System.String</TypeName>
       <InitialValue>0</InitialValue>
@@ -470,7 +470,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode46070087</OwnerName>
+      <OwnerName>MailNode6065972</OwnerName>
       <Name>AddressCC</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -482,7 +482,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode46070087</OwnerName>
+      <OwnerName>MailNode6065972</OwnerName>
       <Name>Subject</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -521,9 +521,9 @@
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>MailNode56700610</SourceNodeName>
+      <SourceNodeName>ConditionalAssignment24812117</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>CreditProduct15478348</TargetNodeName>
+      <TargetNodeName>MailNode6065972</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -533,19 +533,7 @@
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>CreditProduct15478348</SourceNodeName>
-      <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>MailNode46070087</TargetNodeName>
-      <SuperNodeName />
-      <Caption>Next</Caption>
-      <SignatureRequired>false</SignatureRequired>
-      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
-      <DisplayColor>-16776961</DisplayColor>
-      <ShowSignature>false</ShowSignature>
-      <IntermediatePoints />
-    </NodeConnectionDescriptor>
-    <NodeConnectionDescriptor>
-      <SourceNodeName>MailNode46070087</SourceNodeName>
+      <SourceNodeName>MailNode61633893</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
       <TargetNodeName>StopNode39323473</TargetNodeName>
       <SuperNodeName />
@@ -557,9 +545,21 @@
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>ConditionalAssignment24812117</SourceNodeName>
+      <SourceNodeName>CreditProduct15478348</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>MailNode56700610</TargetNodeName>
+      <TargetNodeName>MailNode61633893</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Next</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>MailNode6065972</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>CreditProduct15478348</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -597,86 +597,86 @@
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>PayEarly</SourceVariableOwnerName>
       <SourceVariableName>FirstName</SourceVariableName>
-      <TargetVariableOwnerName>MailNode56700610</TargetVariableOwnerName>
-      <TargetVariableName>FirstName_EZBOB payment early repayment confirmation.docxJPKTz25xu1z5nbH+tFr+QQ==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode6065972</TargetVariableOwnerName>
+      <TargetVariableName>FirstName_EZBOB payment early repayment confirmation.docxZjLVPbPbLX418Z9yFbr/lQ==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>PayEarly</SourceVariableOwnerName>
       <SourceVariableName>Amount</SourceVariableName>
-      <TargetVariableOwnerName>MailNode56700610</TargetVariableOwnerName>
-      <TargetVariableName>Amount_EZBOB payment early repayment confirmation.docxJPKTz25xu1z5nbH+tFr+QQ==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode6065972</TargetVariableOwnerName>
+      <TargetVariableName>Amount_EZBOB payment early repayment confirmation.docxZjLVPbPbLX418Z9yFbr/lQ==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>PayEarly</SourceVariableOwnerName>
       <SourceVariableName>emailCC</SourceVariableName>
-      <TargetVariableOwnerName>MailNode56700610</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode6065972</TargetVariableOwnerName>
       <TargetVariableName>AddressCC</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>PayEarly</SourceVariableOwnerName>
       <SourceVariableName>Subject</SourceVariableName>
-      <TargetVariableOwnerName>MailNode56700610</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode6065972</TargetVariableOwnerName>
       <TargetVariableName>Subject</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>PayEarly</SourceVariableOwnerName>
       <SourceVariableName>email</SourceVariableName>
-      <TargetVariableOwnerName>MailNode56700610</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode6065972</TargetVariableOwnerName>
       <TargetVariableName>AddressTo</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>PayEarly</SourceVariableOwnerName>
       <SourceVariableName>FirstName</SourceVariableName>
-      <TargetVariableOwnerName>MailNode46070087</TargetVariableOwnerName>
-      <TargetVariableName>FirstName_EZBOB payment early repayment confirmation.docxJPKTz25xu1z5nbH+tFr+QQ==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode61633893</TargetVariableOwnerName>
+      <TargetVariableName>FirstName_EZBOB payment early repayment confirmation.docxZjLVPbPbLX418Z9yFbr/lQ==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>PayEarly</SourceVariableOwnerName>
       <SourceVariableName>Amount</SourceVariableName>
-      <TargetVariableOwnerName>MailNode46070087</TargetVariableOwnerName>
-      <TargetVariableName>Amount_EZBOB payment early repayment confirmation.docxJPKTz25xu1z5nbH+tFr+QQ==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode61633893</TargetVariableOwnerName>
+      <TargetVariableName>Amount_EZBOB payment early repayment confirmation.docxZjLVPbPbLX418Z9yFbr/lQ==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>PayEarly</SourceVariableOwnerName>
       <SourceVariableName>Subject</SourceVariableName>
-      <TargetVariableOwnerName>MailNode46070087</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode61633893</TargetVariableOwnerName>
       <TargetVariableName>Subject</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>PayEarly</SourceVariableOwnerName>
       <SourceVariableName>CP_AddressTo</SourceVariableName>
-      <TargetVariableOwnerName>MailNode46070087</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode61633893</TargetVariableOwnerName>
       <TargetVariableName>AddressTo</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>PayEarly</SourceVariableOwnerName>
       <SourceVariableName>CP_AddressCC</SourceVariableName>
-      <TargetVariableOwnerName>MailNode46070087</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode61633893</TargetVariableOwnerName>
       <TargetVariableName>AddressCC</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>PayEarly</SourceVariableOwnerName>
       <SourceVariableName>RefNum</SourceVariableName>
-      <TargetVariableOwnerName>MailNode46070087</TargetVariableOwnerName>
-      <TargetVariableName>RefNum_EZBOB payment early repayment confirmation.docxJPKTz25xu1z5nbH+tFr+QQ==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode61633893</TargetVariableOwnerName>
+      <TargetVariableName>RefNum_EZBOB payment early repayment confirmation.docxZjLVPbPbLX418Z9yFbr/lQ==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>PayEarly</SourceVariableOwnerName>
       <SourceVariableName>RefNum</SourceVariableName>
-      <TargetVariableOwnerName>MailNode56700610</TargetVariableOwnerName>
-      <TargetVariableName>RefNum_EZBOB payment early repayment confirmation.docxJPKTz25xu1z5nbH+tFr+QQ==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode6065972</TargetVariableOwnerName>
+      <TargetVariableName>RefNum_EZBOB payment early repayment confirmation.docxZjLVPbPbLX418Z9yFbr/lQ==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>PayEarly</SourceVariableOwnerName>
       <SourceVariableName>DateStr</SourceVariableName>
-      <TargetVariableOwnerName>MailNode56700610</TargetVariableOwnerName>
-      <TargetVariableName>Date_EZBOB payment early repayment confirmation.docxJPKTz25xu1z5nbH+tFr+QQ==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode6065972</TargetVariableOwnerName>
+      <TargetVariableName>Date_EZBOB payment early repayment confirmation.docxZjLVPbPbLX418Z9yFbr/lQ==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>PayEarly</SourceVariableOwnerName>
       <SourceVariableName>DateStr</SourceVariableName>
-      <TargetVariableOwnerName>MailNode46070087</TargetVariableOwnerName>
-      <TargetVariableName>Date_EZBOB payment early repayment confirmation.docxJPKTz25xu1z5nbH+tFr+QQ==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode61633893</TargetVariableOwnerName>
+      <TargetVariableName>Date_EZBOB payment early repayment confirmation.docxZjLVPbPbLX418Z9yFbr/lQ==</TargetVariableName>
     </VariableConnectionDescriptor>
   </VariableConnectionDescriptors>
   <SigningNodeDescriptors>
@@ -721,15 +721,7 @@
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
-      <OwnerName>MailNode56700610</OwnerName>
-      <SigningVariables />
-      <CheckingVariables />
-      <VariablesWithoutSignature />
-      <SigningOutlets />
-      <SignatureRequired>false</SignatureRequired>
-    </SigningNodeDescriptor>
-    <SigningNodeDescriptor>
-      <OwnerName>MailNode46070087</OwnerName>
+      <OwnerName>MailNode61633893</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
@@ -738,6 +730,14 @@
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
       <OwnerName>ScriptNode4346952</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>MailNode6065972</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />

@@ -4,8 +4,8 @@
   <Description>Email to customer – failed to create a debit card. Trigger - After 4 attempts, the client is filling his debit card with wrong details (adding debit card via dashboard)</Description>
   <Workspace Name="Get_Cash_Failed">
     <NodeElement Name="Empty Name" NodeId="ConditionalAssignment27662549" />
-    <NodeElement Name="Mail Node" NodeId="MailNode51145661" />
-    <NodeElement Name="Mail Node" NodeId="MailNode15672443" />
+    <NodeElement Name="Mail Node" NodeId="MailNode50490749" />
+    <NodeElement Name="Mail Node" NodeId="MailNode32922368" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct16128356" />
     <NodeElement Name="Multi-Assignment" NodeId="MultiAssignment5236587" />
     <NodeElement Name="Start Node" NodeId="StartNode9644177" />
@@ -90,23 +90,6 @@
       <AssemblyString />
       <DefaultPinName />
       <Description />
-      <DisplayName>Mail Node</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;Get cash - problem with the card.docxSAwgYYQtCUR0HJ3dvZVtAQ==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;Get cash - problem with the card.docxSAwgYYQtCUR0HJ3dvZVtAQ==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
-      <IsBreakpointActive>false</IsBreakpointActive>
-      <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>MailNode15672443</Name>
-      <PointF>
-        <X>312.670074</X>
-        <Y>256</Y>
-      </PointF>
-      <SuperNodeName />
-      <TypeName>WorkflowObjects.NodeMail</TypeName>
-      <PrototypeName />
-    </NodeDescriptor>
-    <NodeDescriptor Modification="">
-      <AssemblyString />
-      <DefaultPinName />
-      <Description />
       <DisplayName>Empty Name</DisplayName>
       <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;conditionalAssignments&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;FirstName = ""&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;FirstName := "Dear E-Retailer"&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;/conditionalAssignments&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
@@ -125,10 +108,27 @@
       <DefaultPinName />
       <Description />
       <DisplayName>Mail Node</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;Get cash - problem with the card.docxSAwgYYQtCUR0HJ3dvZVtAQ==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;Get cash - problem with the card.docxSAwgYYQtCUR0HJ3dvZVtAQ==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;Get cash - problem with the card.docxN0ij1ElNui9e1LBiigyWiA==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;Get cash - problem with the card.docxN0ij1ElNui9e1LBiigyWiA==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>MailNode51145661</Name>
+      <Name>MailNode32922368</Name>
+      <PointF>
+        <X>312.670074</X>
+        <Y>256</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeMail</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Mail Node</DisplayName>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;Get cash - problem with the card.docxN0ij1ElNui9e1LBiigyWiA==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;Get cash - problem with the card.docxN0ij1ElNui9e1LBiigyWiA==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>MailNode50490749</Name>
       <PointF>
         <X>472.670074</X>
         <Y>156</Y>
@@ -272,8 +272,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode15672443</OwnerName>
-      <Name>FirstName_Get cash - problem with the card.docxSAwgYYQtCUR0HJ3dvZVtAQ==</Name>
+      <OwnerName>MailNode32922368</OwnerName>
+      <Name>FirstName_Get cash - problem with the card.docxN0ij1ElNui9e1LBiigyWiA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -284,8 +284,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode15672443</OwnerName>
-      <Name>DashboardPage_Get cash - problem with the card.docxSAwgYYQtCUR0HJ3dvZVtAQ==</Name>
+      <OwnerName>MailNode32922368</OwnerName>
+      <Name>DashboardPage_Get cash - problem with the card.docxN0ij1ElNui9e1LBiigyWiA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -296,8 +296,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode15672443</OwnerName>
-      <Name>LiveChat_Get cash - problem with the card.docxSAwgYYQtCUR0HJ3dvZVtAQ==</Name>
+      <OwnerName>MailNode32922368</OwnerName>
+      <Name>LiveChat_Get cash - problem with the card.docxN0ij1ElNui9e1LBiigyWiA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -308,7 +308,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode15672443</OwnerName>
+      <OwnerName>MailNode32922368</OwnerName>
       <Name>AddressTo</Name>
       <TypeName>System.String</TypeName>
       <InitialValue>0</InitialValue>
@@ -320,7 +320,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode15672443</OwnerName>
+      <OwnerName>MailNode32922368</OwnerName>
       <Name>AddressCC</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -332,7 +332,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode15672443</OwnerName>
+      <OwnerName>MailNode32922368</OwnerName>
       <Name>Subject</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -344,8 +344,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode51145661</OwnerName>
-      <Name>FirstName_Get cash - problem with the card.docxSAwgYYQtCUR0HJ3dvZVtAQ==</Name>
+      <OwnerName>MailNode50490749</OwnerName>
+      <Name>FirstName_Get cash - problem with the card.docxN0ij1ElNui9e1LBiigyWiA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -356,8 +356,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode51145661</OwnerName>
-      <Name>DashboardPage_Get cash - problem with the card.docxSAwgYYQtCUR0HJ3dvZVtAQ==</Name>
+      <OwnerName>MailNode50490749</OwnerName>
+      <Name>DashboardPage_Get cash - problem with the card.docxN0ij1ElNui9e1LBiigyWiA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -368,8 +368,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode51145661</OwnerName>
-      <Name>LiveChat_Get cash - problem with the card.docxSAwgYYQtCUR0HJ3dvZVtAQ==</Name>
+      <OwnerName>MailNode50490749</OwnerName>
+      <Name>LiveChat_Get cash - problem with the card.docxN0ij1ElNui9e1LBiigyWiA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -380,7 +380,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode51145661</OwnerName>
+      <OwnerName>MailNode50490749</OwnerName>
       <Name>AddressTo</Name>
       <TypeName>System.String</TypeName>
       <InitialValue>0</InitialValue>
@@ -392,7 +392,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode51145661</OwnerName>
+      <OwnerName>MailNode50490749</OwnerName>
       <Name>AddressCC</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -404,7 +404,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode51145661</OwnerName>
+      <OwnerName>MailNode50490749</OwnerName>
       <Name>Subject</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -431,9 +431,9 @@
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>ConditionalAssignment27662549</SourceNodeName>
+      <SourceNodeName>MailNode50490749</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>MailNode51145661</TargetNodeName>
+      <TargetNodeName>CreditProduct16128356</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -455,7 +455,19 @@
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>MailNode15672443</SourceNodeName>
+      <SourceNodeName>CreditProduct16128356</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>MailNode32922368</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Next</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>MailNode32922368</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
       <TargetNodeName>StopNode19688733</TargetNodeName>
       <SuperNodeName />
@@ -467,21 +479,9 @@
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>CreditProduct16128356</SourceNodeName>
+      <SourceNodeName>ConditionalAssignment27662549</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>MailNode15672443</TargetNodeName>
-      <SuperNodeName />
-      <Caption>Next</Caption>
-      <SignatureRequired>false</SignatureRequired>
-      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
-      <DisplayColor>-16776961</DisplayColor>
-      <ShowSignature>false</ShowSignature>
-      <IntermediatePoints />
-    </NodeConnectionDescriptor>
-    <NodeConnectionDescriptor>
-      <SourceNodeName>MailNode51145661</SourceNodeName>
-      <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>CreditProduct16128356</TargetNodeName>
+      <TargetNodeName>MailNode50490749</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -507,74 +507,74 @@
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Get_Cash_Failed</SourceVariableOwnerName>
       <SourceVariableName>FirstName</SourceVariableName>
-      <TargetVariableOwnerName>MailNode51145661</TargetVariableOwnerName>
-      <TargetVariableName>FirstName_Get cash - problem with the card.docxSAwgYYQtCUR0HJ3dvZVtAQ==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode50490749</TargetVariableOwnerName>
+      <TargetVariableName>FirstName_Get cash - problem with the card.docxN0ij1ElNui9e1LBiigyWiA==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Get_Cash_Failed</SourceVariableOwnerName>
       <SourceVariableName>livechat</SourceVariableName>
-      <TargetVariableOwnerName>MailNode51145661</TargetVariableOwnerName>
-      <TargetVariableName>LiveChat_Get cash - problem with the card.docxSAwgYYQtCUR0HJ3dvZVtAQ==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode50490749</TargetVariableOwnerName>
+      <TargetVariableName>LiveChat_Get cash - problem with the card.docxN0ij1ElNui9e1LBiigyWiA==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Get_Cash_Failed</SourceVariableOwnerName>
       <SourceVariableName>email</SourceVariableName>
-      <TargetVariableOwnerName>MailNode51145661</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode50490749</TargetVariableOwnerName>
       <TargetVariableName>AddressTo</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Get_Cash_Failed</SourceVariableOwnerName>
       <SourceVariableName>emailCC</SourceVariableName>
-      <TargetVariableOwnerName>MailNode51145661</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode50490749</TargetVariableOwnerName>
       <TargetVariableName>AddressCC</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Get_Cash_Failed</SourceVariableOwnerName>
       <SourceVariableName>Subject</SourceVariableName>
-      <TargetVariableOwnerName>MailNode51145661</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode50490749</TargetVariableOwnerName>
       <TargetVariableName>Subject</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Get_Cash_Failed</SourceVariableOwnerName>
       <SourceVariableName>FirstName</SourceVariableName>
-      <TargetVariableOwnerName>MailNode15672443</TargetVariableOwnerName>
-      <TargetVariableName>FirstName_Get cash - problem with the card.docxSAwgYYQtCUR0HJ3dvZVtAQ==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode32922368</TargetVariableOwnerName>
+      <TargetVariableName>FirstName_Get cash - problem with the card.docxN0ij1ElNui9e1LBiigyWiA==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Get_Cash_Failed</SourceVariableOwnerName>
       <SourceVariableName>livechat</SourceVariableName>
-      <TargetVariableOwnerName>MailNode15672443</TargetVariableOwnerName>
-      <TargetVariableName>LiveChat_Get cash - problem with the card.docxSAwgYYQtCUR0HJ3dvZVtAQ==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode32922368</TargetVariableOwnerName>
+      <TargetVariableName>LiveChat_Get cash - problem with the card.docxN0ij1ElNui9e1LBiigyWiA==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Get_Cash_Failed</SourceVariableOwnerName>
       <SourceVariableName>Subject</SourceVariableName>
-      <TargetVariableOwnerName>MailNode15672443</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode32922368</TargetVariableOwnerName>
       <TargetVariableName>Subject</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Get_Cash_Failed</SourceVariableOwnerName>
       <SourceVariableName>CP_AddressTo</SourceVariableName>
-      <TargetVariableOwnerName>MailNode15672443</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode32922368</TargetVariableOwnerName>
       <TargetVariableName>AddressTo</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Get_Cash_Failed</SourceVariableOwnerName>
       <SourceVariableName>CP_AddressCC</SourceVariableName>
-      <TargetVariableOwnerName>MailNode15672443</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode32922368</TargetVariableOwnerName>
       <TargetVariableName>AddressCC</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Get_Cash_Failed</SourceVariableOwnerName>
       <SourceVariableName>DashboardPage</SourceVariableName>
-      <TargetVariableOwnerName>MailNode15672443</TargetVariableOwnerName>
-      <TargetVariableName>DashboardPage_Get cash - problem with the card.docxSAwgYYQtCUR0HJ3dvZVtAQ==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode32922368</TargetVariableOwnerName>
+      <TargetVariableName>DashboardPage_Get cash - problem with the card.docxN0ij1ElNui9e1LBiigyWiA==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Get_Cash_Failed</SourceVariableOwnerName>
       <SourceVariableName>DashboardPage</SourceVariableName>
-      <TargetVariableOwnerName>MailNode51145661</TargetVariableOwnerName>
-      <TargetVariableName>DashboardPage_Get cash - problem with the card.docxSAwgYYQtCUR0HJ3dvZVtAQ==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode50490749</TargetVariableOwnerName>
+      <TargetVariableName>DashboardPage_Get cash - problem with the card.docxN0ij1ElNui9e1LBiigyWiA==</TargetVariableName>
     </VariableConnectionDescriptor>
   </VariableConnectionDescriptors>
   <SigningNodeDescriptors>
@@ -611,14 +611,6 @@
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
-      <OwnerName>MailNode15672443</OwnerName>
-      <SigningVariables />
-      <CheckingVariables />
-      <VariablesWithoutSignature />
-      <SigningOutlets />
-      <SignatureRequired>false</SignatureRequired>
-    </SigningNodeDescriptor>
-    <SigningNodeDescriptor>
       <OwnerName>ConditionalAssignment27662549</OwnerName>
       <SigningVariables />
       <CheckingVariables />
@@ -627,7 +619,15 @@
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
-      <OwnerName>MailNode51145661</OwnerName>
+      <OwnerName>MailNode32922368</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>MailNode50490749</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />

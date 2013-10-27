@@ -3,8 +3,8 @@
   <Name>ConfirmationEmailStrategy</Name>
   <Description>Email to customer to verify his mail. Trigger - Email to customer to verify his mail</Description>
   <Workspace Name="ConfirmationEmailStrategy">
-    <NodeElement Name="Email" NodeId="MailNode39729007" />
-    <NodeElement Name="Email" NodeId="MailNode3175073" />
+    <NodeElement Name="Email" NodeId="MailNode20552036" />
+    <NodeElement Name="Email" NodeId="MailNode37673953" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct64292394" />
     <NodeElement Name="Multi-Assignment" NodeId="MultiAssignment28055495" />
     <NodeElement Name="Старт" NodeId="StartNode45854749" />
@@ -90,13 +90,13 @@
       <DefaultPinName />
       <Description />
       <DisplayName>Email</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;EmailConfirmation.docxyaDd0QSJwnmHUC2f861Baw==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;EmailConfirmation.docxyaDd0QSJwnmHUC2f861Baw==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;EmailConfirmation.docxax1xxsyL2IyOELUPkqv0BA==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;EmailConfirmation.docxax1xxsyL2IyOELUPkqv0BA==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>MailNode3175073</Name>
+      <Name>MailNode37673953</Name>
       <PointF>
-        <X>396</X>
-        <Y>156</Y>
+        <X>276</X>
+        <Y>256</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeMail</TypeName>
@@ -107,13 +107,13 @@
       <DefaultPinName />
       <Description />
       <DisplayName>Email</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;EmailConfirmation.docxyaDd0QSJwnmHUC2f861Baw==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;EmailConfirmation.docxyaDd0QSJwnmHUC2f861Baw==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;EmailConfirmation.docxax1xxsyL2IyOELUPkqv0BA==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;EmailConfirmation.docxax1xxsyL2IyOELUPkqv0BA==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>MailNode39729007</Name>
+      <Name>MailNode20552036</Name>
       <PointF>
-        <X>276</X>
-        <Y>256</Y>
+        <X>396</X>
+        <Y>156</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeMail</TypeName>
@@ -242,8 +242,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode3175073</OwnerName>
-      <Name>FirstName_EmailConfirmation.docxyaDd0QSJwnmHUC2f861Baw==</Name>
+      <OwnerName>MailNode37673953</OwnerName>
+      <Name>FirstName_EmailConfirmation.docxax1xxsyL2IyOELUPkqv0BA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -254,8 +254,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode3175073</OwnerName>
-      <Name>LastName_EmailConfirmation.docxyaDd0QSJwnmHUC2f861Baw==</Name>
+      <OwnerName>MailNode37673953</OwnerName>
+      <Name>LastName_EmailConfirmation.docxax1xxsyL2IyOELUPkqv0BA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -266,8 +266,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode3175073</OwnerName>
-      <Name>Email_EmailConfirmation.docxyaDd0QSJwnmHUC2f861Baw==</Name>
+      <OwnerName>MailNode37673953</OwnerName>
+      <Name>Email_EmailConfirmation.docxax1xxsyL2IyOELUPkqv0BA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -278,8 +278,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode3175073</OwnerName>
-      <Name>ConfirmEmailAddress_EmailConfirmation.docxyaDd0QSJwnmHUC2f861Baw==</Name>
+      <OwnerName>MailNode37673953</OwnerName>
+      <Name>ConfirmEmailAddress_EmailConfirmation.docxax1xxsyL2IyOELUPkqv0BA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -290,7 +290,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode3175073</OwnerName>
+      <OwnerName>MailNode37673953</OwnerName>
       <Name>AddressTo</Name>
       <TypeName>System.String</TypeName>
       <InitialValue>0</InitialValue>
@@ -302,7 +302,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode3175073</OwnerName>
+      <OwnerName>MailNode37673953</OwnerName>
       <Name>AddressCC</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -314,7 +314,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode3175073</OwnerName>
+      <OwnerName>MailNode37673953</OwnerName>
       <Name>Subject</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -326,8 +326,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode39729007</OwnerName>
-      <Name>FirstName_EmailConfirmation.docxyaDd0QSJwnmHUC2f861Baw==</Name>
+      <OwnerName>MailNode20552036</OwnerName>
+      <Name>FirstName_EmailConfirmation.docxax1xxsyL2IyOELUPkqv0BA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -338,8 +338,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode39729007</OwnerName>
-      <Name>LastName_EmailConfirmation.docxyaDd0QSJwnmHUC2f861Baw==</Name>
+      <OwnerName>MailNode20552036</OwnerName>
+      <Name>LastName_EmailConfirmation.docxax1xxsyL2IyOELUPkqv0BA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -350,8 +350,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode39729007</OwnerName>
-      <Name>Email_EmailConfirmation.docxyaDd0QSJwnmHUC2f861Baw==</Name>
+      <OwnerName>MailNode20552036</OwnerName>
+      <Name>Email_EmailConfirmation.docxax1xxsyL2IyOELUPkqv0BA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -362,8 +362,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode39729007</OwnerName>
-      <Name>ConfirmEmailAddress_EmailConfirmation.docxyaDd0QSJwnmHUC2f861Baw==</Name>
+      <OwnerName>MailNode20552036</OwnerName>
+      <Name>ConfirmEmailAddress_EmailConfirmation.docxax1xxsyL2IyOELUPkqv0BA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -374,7 +374,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode39729007</OwnerName>
+      <OwnerName>MailNode20552036</OwnerName>
       <Name>AddressTo</Name>
       <TypeName>System.String</TypeName>
       <InitialValue>0</InitialValue>
@@ -386,7 +386,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode39729007</OwnerName>
+      <OwnerName>MailNode20552036</OwnerName>
       <Name>AddressCC</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -398,7 +398,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode39729007</OwnerName>
+      <OwnerName>MailNode20552036</OwnerName>
       <Name>Subject</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -425,7 +425,19 @@
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>MailNode3175073</SourceNodeName>
+      <SourceNodeName>MultiAssignment28055495</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>MailNode20552036</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Next</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>MailNode20552036</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
       <TargetNodeName>CreditProduct64292394</TargetNodeName>
       <SuperNodeName />
@@ -437,33 +449,21 @@
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>MultiAssignment28055495</SourceNodeName>
-      <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>MailNode3175073</TargetNodeName>
-      <SuperNodeName />
-      <Caption>Next</Caption>
-      <SignatureRequired>false</SignatureRequired>
-      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
-      <DisplayColor>-16776961</DisplayColor>
-      <ShowSignature>false</ShowSignature>
-      <IntermediatePoints />
-    </NodeConnectionDescriptor>
-    <NodeConnectionDescriptor>
-      <SourceNodeName>MailNode39729007</SourceNodeName>
-      <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>StopNode10039559</TargetNodeName>
-      <SuperNodeName />
-      <Caption>Next</Caption>
-      <SignatureRequired>false</SignatureRequired>
-      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
-      <DisplayColor>-16776961</DisplayColor>
-      <ShowSignature>false</ShowSignature>
-      <IntermediatePoints />
-    </NodeConnectionDescriptor>
-    <NodeConnectionDescriptor>
       <SourceNodeName>CreditProduct64292394</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>MailNode39729007</TargetNodeName>
+      <TargetNodeName>MailNode37673953</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Next</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>MailNode37673953</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>StopNode10039559</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -489,85 +489,85 @@
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>ConfirmationEmailStrategy</SourceVariableOwnerName>
       <SourceVariableName>Subject</SourceVariableName>
-      <TargetVariableOwnerName>MailNode3175073</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode20552036</TargetVariableOwnerName>
       <TargetVariableName>Subject</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>ConfirmationEmailStrategy</SourceVariableOwnerName>
       <SourceVariableName>AdressCC</SourceVariableName>
-      <TargetVariableOwnerName>MailNode3175073</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode20552036</TargetVariableOwnerName>
       <TargetVariableName>AddressCC</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>ConfirmationEmailStrategy</SourceVariableOwnerName>
       <SourceVariableName>ConfirmEmailAddress</SourceVariableName>
-      <TargetVariableOwnerName>MailNode3175073</TargetVariableOwnerName>
-      <TargetVariableName>ConfirmEmailAddress_EmailConfirmation.docxyaDd0QSJwnmHUC2f861Baw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode20552036</TargetVariableOwnerName>
+      <TargetVariableName>ConfirmEmailAddress_EmailConfirmation.docxax1xxsyL2IyOELUPkqv0BA==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>ConfirmationEmailStrategy</SourceVariableOwnerName>
       <SourceVariableName>email</SourceVariableName>
-      <TargetVariableOwnerName>MailNode3175073</TargetVariableOwnerName>
-      <TargetVariableName>Email_EmailConfirmation.docxyaDd0QSJwnmHUC2f861Baw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode20552036</TargetVariableOwnerName>
+      <TargetVariableName>Email_EmailConfirmation.docxax1xxsyL2IyOELUPkqv0BA==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>ConfirmationEmailStrategy</SourceVariableOwnerName>
       <SourceVariableName>LastName</SourceVariableName>
-      <TargetVariableOwnerName>MailNode3175073</TargetVariableOwnerName>
-      <TargetVariableName>LastName_EmailConfirmation.docxyaDd0QSJwnmHUC2f861Baw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode20552036</TargetVariableOwnerName>
+      <TargetVariableName>LastName_EmailConfirmation.docxax1xxsyL2IyOELUPkqv0BA==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>ConfirmationEmailStrategy</SourceVariableOwnerName>
       <SourceVariableName>FirstName</SourceVariableName>
-      <TargetVariableOwnerName>MailNode3175073</TargetVariableOwnerName>
-      <TargetVariableName>FirstName_EmailConfirmation.docxyaDd0QSJwnmHUC2f861Baw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode20552036</TargetVariableOwnerName>
+      <TargetVariableName>FirstName_EmailConfirmation.docxax1xxsyL2IyOELUPkqv0BA==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>ConfirmationEmailStrategy</SourceVariableOwnerName>
       <SourceVariableName>email</SourceVariableName>
-      <TargetVariableOwnerName>MailNode3175073</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode20552036</TargetVariableOwnerName>
       <TargetVariableName>AddressTo</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>ConfirmationEmailStrategy</SourceVariableOwnerName>
       <SourceVariableName>Subject</SourceVariableName>
-      <TargetVariableOwnerName>MailNode39729007</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode37673953</TargetVariableOwnerName>
       <TargetVariableName>Subject</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>ConfirmationEmailStrategy</SourceVariableOwnerName>
       <SourceVariableName>ConfirmEmailAddress</SourceVariableName>
-      <TargetVariableOwnerName>MailNode39729007</TargetVariableOwnerName>
-      <TargetVariableName>ConfirmEmailAddress_EmailConfirmation.docxyaDd0QSJwnmHUC2f861Baw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode37673953</TargetVariableOwnerName>
+      <TargetVariableName>ConfirmEmailAddress_EmailConfirmation.docxax1xxsyL2IyOELUPkqv0BA==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>ConfirmationEmailStrategy</SourceVariableOwnerName>
       <SourceVariableName>email</SourceVariableName>
-      <TargetVariableOwnerName>MailNode39729007</TargetVariableOwnerName>
-      <TargetVariableName>Email_EmailConfirmation.docxyaDd0QSJwnmHUC2f861Baw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode37673953</TargetVariableOwnerName>
+      <TargetVariableName>Email_EmailConfirmation.docxax1xxsyL2IyOELUPkqv0BA==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>ConfirmationEmailStrategy</SourceVariableOwnerName>
       <SourceVariableName>LastName</SourceVariableName>
-      <TargetVariableOwnerName>MailNode39729007</TargetVariableOwnerName>
-      <TargetVariableName>LastName_EmailConfirmation.docxyaDd0QSJwnmHUC2f861Baw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode37673953</TargetVariableOwnerName>
+      <TargetVariableName>LastName_EmailConfirmation.docxax1xxsyL2IyOELUPkqv0BA==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>ConfirmationEmailStrategy</SourceVariableOwnerName>
       <SourceVariableName>FirstName</SourceVariableName>
-      <TargetVariableOwnerName>MailNode39729007</TargetVariableOwnerName>
-      <TargetVariableName>FirstName_EmailConfirmation.docxyaDd0QSJwnmHUC2f861Baw==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode37673953</TargetVariableOwnerName>
+      <TargetVariableName>FirstName_EmailConfirmation.docxax1xxsyL2IyOELUPkqv0BA==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>ConfirmationEmailStrategy</SourceVariableOwnerName>
       <SourceVariableName>CP_AddressTo</SourceVariableName>
-      <TargetVariableOwnerName>MailNode39729007</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode37673953</TargetVariableOwnerName>
       <TargetVariableName>AddressTo</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>ConfirmationEmailStrategy</SourceVariableOwnerName>
       <SourceVariableName>CP_AddressCC</SourceVariableName>
-      <TargetVariableOwnerName>MailNode39729007</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode37673953</TargetVariableOwnerName>
       <TargetVariableName>AddressCC</TargetVariableName>
     </VariableConnectionDescriptor>
   </VariableConnectionDescriptors>
@@ -605,7 +605,7 @@
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
-      <OwnerName>MailNode3175073</OwnerName>
+      <OwnerName>MailNode37673953</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
@@ -613,7 +613,7 @@
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
-      <OwnerName>MailNode39729007</OwnerName>
+      <OwnerName>MailNode20552036</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />

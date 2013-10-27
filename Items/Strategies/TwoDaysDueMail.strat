@@ -7,8 +7,8 @@
     <NodeElement Name="Counter=Null" NodeId="AssignmentB65950775" />
     <NodeElement Name="DateTime to Date" NodeId="ScriptNode36074726" />
     <NodeElement Name="DateTime to Date" NodeId="ScriptNode5014051" />
-    <NodeElement Name="Email" NodeId="MailNode65996383" />
-    <NodeElement Name="Email" NodeId="MailNode10942407" />
+    <NodeElement Name="Email" NodeId="MailNode19038982" />
+    <NodeElement Name="Email" NodeId="MailNode15178376" />
     <NodeElement Name="E-mail Subject" NodeId="MultiAssignmentB66986558" />
     <NodeElement Name="E-mail Subject" NodeId="MultiAssignmentB65508969" />
     <NodeElement Name="E-mailCC= &quot;&quot;" NodeId="MultiAssignmentB59768693" />
@@ -19,8 +19,8 @@
     <NodeElement Name="Get data from row" NodeId="GetRowDataNode34333880" />
     <NodeElement Name="GetCustomersForFiveDaysDueMail" NodeId="DataSourceBehavioral18229659" />
     <NodeElement Name="GetCustomersForTwoDaysDueMail" NodeId="DataSourceBehavioral11763380" />
-    <NodeElement Name="Mail Node" NodeId="MailNode63577720" />
-    <NodeElement Name="Mail Node" NodeId="MailNode26395149" />
+    <NodeElement Name="Mail Node" NodeId="MailNode10537607" />
+    <NodeElement Name="Mail Node" NodeId="MailNode31661987" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct49502375" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct46850779" />
     <NodeElement Name="Read next row" NodeId="ReadNextNode13123679" />
@@ -131,13 +131,13 @@
       <DefaultPinName />
       <Description />
       <DisplayName>Mail Node</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;your payment is due in 5 days.docxWdth4FH9Z2Az8SGq1e2cuQ==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;your payment is due in 5 days.docxWdth4FH9Z2Az8SGq1e2cuQ==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;your payment is due in 5 days.docxRIqRyXlM5hJvtEG/4YWXzQ==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;your payment is due in 5 days.docxRIqRyXlM5hJvtEG/4YWXzQ==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>MailNode26395149</Name>
+      <Name>MailNode31661987</Name>
       <PointF>
-        <X>432.670074</X>
-        <Y>736</Y>
+        <X>292.670074</X>
+        <Y>636</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeMail</TypeName>
@@ -199,13 +199,13 @@
       <DefaultPinName />
       <Description />
       <DisplayName>Email</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;Your account will be billed to schedule.docxmVjZIwEaEgf8KodnPFOZfA==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;Your account will be billed to schedule.docxmVjZIwEaEgf8KodnPFOZfA==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;Your account will be billed to schedule.docxE9TFLkLbYUCIGgI3oTBMoQ==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;Your account will be billed to schedule.docxE9TFLkLbYUCIGgI3oTBMoQ==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>MailNode65996383</Name>
+      <Name>MailNode15178376</Name>
       <PointF>
-        <X>856</X>
-        <Y>636</Y>
+        <X>996</X>
+        <Y>736</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeMail</TypeName>
@@ -604,29 +604,12 @@
       <DefaultPinName />
       <Description />
       <DisplayName>Email</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;Your account will be billed to schedule.docxmVjZIwEaEgf8KodnPFOZfA==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;Your account will be billed to schedule.docxmVjZIwEaEgf8KodnPFOZfA==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;Your account will be billed to schedule.docxE9TFLkLbYUCIGgI3oTBMoQ==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;Your account will be billed to schedule.docxE9TFLkLbYUCIGgI3oTBMoQ==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>MailNode10942407</Name>
+      <Name>MailNode19038982</Name>
       <PointF>
-        <X>996</X>
-        <Y>736</Y>
-      </PointF>
-      <SuperNodeName />
-      <TypeName>WorkflowObjects.NodeMail</TypeName>
-      <PrototypeName />
-    </NodeDescriptor>
-    <NodeDescriptor Modification="">
-      <AssemblyString />
-      <DefaultPinName />
-      <Description />
-      <DisplayName>Mail Node</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;your payment is due in 5 days.docxWdth4FH9Z2Az8SGq1e2cuQ==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;your payment is due in 5 days.docxWdth4FH9Z2Az8SGq1e2cuQ==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
-      <IsBreakpointActive>false</IsBreakpointActive>
-      <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>MailNode63577720</Name>
-      <PointF>
-        <X>292.670074</X>
+        <X>856</X>
         <Y>636</Y>
       </PointF>
       <SuperNodeName />
@@ -909,6 +892,23 @@
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeDataSource</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Mail Node</DisplayName>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;your payment is due in 5 days.docxRIqRyXlM5hJvtEG/4YWXzQ==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;your payment is due in 5 days.docxRIqRyXlM5hJvtEG/4YWXzQ==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>MailNode10537607</Name>
+      <PointF>
+        <X>432.670074</X>
+        <Y>736</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeMail</TypeName>
       <PrototypeName />
     </NodeDescriptor>
   </NodeDescriptors>
@@ -1406,8 +1406,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode26395149</OwnerName>
-      <Name>FirstName_your payment is due in 5 days.docxWdth4FH9Z2Az8SGq1e2cuQ==</Name>
+      <OwnerName>MailNode31661987</OwnerName>
+      <Name>FirstName_your payment is due in 5 days.docxRIqRyXlM5hJvtEG/4YWXzQ==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -1418,8 +1418,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode26395149</OwnerName>
-      <Name>Amount_your payment is due in 5 days.docxWdth4FH9Z2Az8SGq1e2cuQ==</Name>
+      <OwnerName>MailNode31661987</OwnerName>
+      <Name>Amount_your payment is due in 5 days.docxRIqRyXlM5hJvtEG/4YWXzQ==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -1430,8 +1430,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode26395149</OwnerName>
-      <Name>Date_your payment is due in 5 days.docxWdth4FH9Z2Az8SGq1e2cuQ==</Name>
+      <OwnerName>MailNode31661987</OwnerName>
+      <Name>Date_your payment is due in 5 days.docxRIqRyXlM5hJvtEG/4YWXzQ==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -1442,8 +1442,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode26395149</OwnerName>
-      <Name>DebitCard_your payment is due in 5 days.docxWdth4FH9Z2Az8SGq1e2cuQ==</Name>
+      <OwnerName>MailNode31661987</OwnerName>
+      <Name>DebitCard_your payment is due in 5 days.docxRIqRyXlM5hJvtEG/4YWXzQ==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -1454,7 +1454,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode26395149</OwnerName>
+      <OwnerName>MailNode31661987</OwnerName>
       <Name>AddressTo</Name>
       <TypeName>System.String</TypeName>
       <InitialValue>0</InitialValue>
@@ -1466,7 +1466,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode26395149</OwnerName>
+      <OwnerName>MailNode31661987</OwnerName>
       <Name>AddressCC</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -1478,7 +1478,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode26395149</OwnerName>
+      <OwnerName>MailNode31661987</OwnerName>
       <Name>Subject</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -1514,8 +1514,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode65996383</OwnerName>
-      <Name>FirstName_Your account will be billed to schedule.docxmVjZIwEaEgf8KodnPFOZfA==</Name>
+      <OwnerName>MailNode15178376</OwnerName>
+      <Name>FirstName_Your account will be billed to schedule.docxE9TFLkLbYUCIGgI3oTBMoQ==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -1526,8 +1526,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode65996383</OwnerName>
-      <Name>Amount_Your account will be billed to schedule.docxmVjZIwEaEgf8KodnPFOZfA==</Name>
+      <OwnerName>MailNode15178376</OwnerName>
+      <Name>Amount_Your account will be billed to schedule.docxE9TFLkLbYUCIGgI3oTBMoQ==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -1538,8 +1538,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode65996383</OwnerName>
-      <Name>Date_Your account will be billed to schedule.docxmVjZIwEaEgf8KodnPFOZfA==</Name>
+      <OwnerName>MailNode15178376</OwnerName>
+      <Name>Date_Your account will be billed to schedule.docxE9TFLkLbYUCIGgI3oTBMoQ==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -1550,8 +1550,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode65996383</OwnerName>
-      <Name>DebitCard_Your account will be billed to schedule.docxmVjZIwEaEgf8KodnPFOZfA==</Name>
+      <OwnerName>MailNode15178376</OwnerName>
+      <Name>DebitCard_Your account will be billed to schedule.docxE9TFLkLbYUCIGgI3oTBMoQ==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -1562,7 +1562,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode65996383</OwnerName>
+      <OwnerName>MailNode15178376</OwnerName>
       <Name>AddressTo</Name>
       <TypeName>System.String</TypeName>
       <InitialValue>0</InitialValue>
@@ -1574,7 +1574,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode65996383</OwnerName>
+      <OwnerName>MailNode15178376</OwnerName>
       <Name>AddressCC</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -1586,7 +1586,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode65996383</OwnerName>
+      <OwnerName>MailNode15178376</OwnerName>
       <Name>Subject</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -1946,8 +1946,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode10942407</OwnerName>
-      <Name>FirstName_Your account will be billed to schedule.docxmVjZIwEaEgf8KodnPFOZfA==</Name>
+      <OwnerName>MailNode19038982</OwnerName>
+      <Name>FirstName_Your account will be billed to schedule.docxE9TFLkLbYUCIGgI3oTBMoQ==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -1958,8 +1958,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode10942407</OwnerName>
-      <Name>Amount_Your account will be billed to schedule.docxmVjZIwEaEgf8KodnPFOZfA==</Name>
+      <OwnerName>MailNode19038982</OwnerName>
+      <Name>Amount_Your account will be billed to schedule.docxE9TFLkLbYUCIGgI3oTBMoQ==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -1970,8 +1970,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode10942407</OwnerName>
-      <Name>Date_Your account will be billed to schedule.docxmVjZIwEaEgf8KodnPFOZfA==</Name>
+      <OwnerName>MailNode19038982</OwnerName>
+      <Name>Date_Your account will be billed to schedule.docxE9TFLkLbYUCIGgI3oTBMoQ==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -1982,8 +1982,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode10942407</OwnerName>
-      <Name>DebitCard_Your account will be billed to schedule.docxmVjZIwEaEgf8KodnPFOZfA==</Name>
+      <OwnerName>MailNode19038982</OwnerName>
+      <Name>DebitCard_Your account will be billed to schedule.docxE9TFLkLbYUCIGgI3oTBMoQ==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -1994,7 +1994,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode10942407</OwnerName>
+      <OwnerName>MailNode19038982</OwnerName>
       <Name>AddressTo</Name>
       <TypeName>System.String</TypeName>
       <InitialValue>0</InitialValue>
@@ -2006,7 +2006,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode10942407</OwnerName>
+      <OwnerName>MailNode19038982</OwnerName>
       <Name>AddressCC</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -2018,91 +2018,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode10942407</OwnerName>
-      <Name>Subject</Name>
-      <TypeName>System.String</TypeName>
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode63577720</OwnerName>
-      <Name>FirstName_your payment is due in 5 days.docxWdth4FH9Z2Az8SGq1e2cuQ==</Name>
-      <TypeName />
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode63577720</OwnerName>
-      <Name>Amount_your payment is due in 5 days.docxWdth4FH9Z2Az8SGq1e2cuQ==</Name>
-      <TypeName />
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode63577720</OwnerName>
-      <Name>Date_your payment is due in 5 days.docxWdth4FH9Z2Az8SGq1e2cuQ==</Name>
-      <TypeName />
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode63577720</OwnerName>
-      <Name>DebitCard_your payment is due in 5 days.docxWdth4FH9Z2Az8SGq1e2cuQ==</Name>
-      <TypeName />
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode63577720</OwnerName>
-      <Name>AddressTo</Name>
-      <TypeName>System.String</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode63577720</OwnerName>
-      <Name>AddressCC</Name>
-      <TypeName>System.String</TypeName>
-      <InitialValue />
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>true</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>MailNode63577720</OwnerName>
+      <OwnerName>MailNode19038982</OwnerName>
       <Name>Subject</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -2349,6 +2265,90 @@
       <DefaultValue />
       <Description />
       <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode10537607</OwnerName>
+      <Name>FirstName_your payment is due in 5 days.docxRIqRyXlM5hJvtEG/4YWXzQ==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode10537607</OwnerName>
+      <Name>Amount_your payment is due in 5 days.docxRIqRyXlM5hJvtEG/4YWXzQ==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode10537607</OwnerName>
+      <Name>Date_your payment is due in 5 days.docxRIqRyXlM5hJvtEG/4YWXzQ==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode10537607</OwnerName>
+      <Name>DebitCard_your payment is due in 5 days.docxRIqRyXlM5hJvtEG/4YWXzQ==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode10537607</OwnerName>
+      <Name>AddressTo</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode10537607</OwnerName>
+      <Name>AddressCC</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode10537607</OwnerName>
+      <Name>Subject</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
       <IsOutput>true</IsOutput>
       <SignatureRequired>false</SignatureRequired>
       <IsNullable>false</IsNullable>
@@ -2447,21 +2447,21 @@
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>ScriptNode5014051</SourceNodeName>
-      <SourceNodeOutletName>Exception</SourceNodeOutletName>
-      <TargetNodeName>MailNode26395149</TargetNodeName>
+      <SourceNodeName>MailNode10537607</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>CreditProduct46850779</TargetNodeName>
       <SuperNodeName />
-      <Caption>Exception</Caption>
+      <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
       <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
-      <DisplayColor>-23296</DisplayColor>
+      <DisplayColor>-16776961</DisplayColor>
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>CreditProduct46850779</SourceNodeName>
+      <SourceNodeName>MailNode31661987</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>MailNode63577720</TargetNodeName>
+      <TargetNodeName>MultiAssignmentB12292580</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -2483,9 +2483,9 @@
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>MailNode63577720</SourceNodeName>
+      <SourceNodeName>CreditProduct46850779</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>MultiAssignmentB12292580</TargetNodeName>
+      <TargetNodeName>MailNode31661987</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -2496,13 +2496,13 @@
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
       <SourceNodeName>ScriptNode36074726</SourceNodeName>
-      <SourceNodeOutletName>Exception</SourceNodeOutletName>
-      <TargetNodeName>MailNode10942407</TargetNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>MailNode15178376</TargetNodeName>
       <SuperNodeName />
-      <Caption>Exception</Caption>
+      <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
       <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
-      <DisplayColor>-23296</DisplayColor>
+      <DisplayColor>-16776961</DisplayColor>
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints />
     </NodeConnectionDescriptor>
@@ -2533,7 +2533,7 @@
     <NodeConnectionDescriptor>
       <SourceNodeName>ScriptNode5014051</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>MailNode26395149</TargetNodeName>
+      <TargetNodeName>MailNode10537607</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -2567,7 +2567,7 @@
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>MailNode10942407</SourceNodeName>
+      <SourceNodeName>MailNode15178376</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
       <TargetNodeName>CreditProduct49502375</TargetNodeName>
       <SuperNodeName />
@@ -2591,9 +2591,9 @@
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>MailNode65996383</SourceNodeName>
+      <SourceNodeName>CreditProduct49502375</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>MultiAssignmentB56033070</TargetNodeName>
+      <TargetNodeName>MailNode19038982</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -2603,9 +2603,9 @@
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>CreditProduct49502375</SourceNodeName>
+      <SourceNodeName>MailNode19038982</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>MailNode65996383</TargetNodeName>
+      <TargetNodeName>MultiAssignmentB56033070</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -2676,13 +2676,13 @@
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
       <SourceNodeName>ScriptNode36074726</SourceNodeName>
-      <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>MailNode10942407</TargetNodeName>
+      <SourceNodeOutletName>Exception</SourceNodeOutletName>
+      <TargetNodeName>MailNode15178376</TargetNodeName>
       <SuperNodeName />
-      <Caption>Next</Caption>
+      <Caption>Exception</Caption>
       <SignatureRequired>false</SignatureRequired>
       <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
-      <DisplayColor>-16776961</DisplayColor>
+      <DisplayColor>-23296</DisplayColor>
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints />
     </NodeConnectionDescriptor>
@@ -2711,14 +2711,14 @@
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>MailNode26395149</SourceNodeName>
-      <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>CreditProduct46850779</TargetNodeName>
+      <SourceNodeName>ScriptNode5014051</SourceNodeName>
+      <SourceNodeOutletName>Exception</SourceNodeOutletName>
+      <TargetNodeName>MailNode10537607</TargetNodeName>
       <SuperNodeName />
-      <Caption>Next</Caption>
+      <Caption>Exception</Caption>
       <SignatureRequired>false</SignatureRequired>
       <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
-      <DisplayColor>-16776961</DisplayColor>
+      <DisplayColor>-23296</DisplayColor>
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints />
     </NodeConnectionDescriptor>
@@ -2871,86 +2871,86 @@
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>TwoDaysDueMail</SourceVariableOwnerName>
       <SourceVariableName>AmountDueScalar</SourceVariableName>
-      <TargetVariableOwnerName>MailNode10942407</TargetVariableOwnerName>
-      <TargetVariableName>Amount_Your account will be billed to schedule.docxmVjZIwEaEgf8KodnPFOZfA==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode15178376</TargetVariableOwnerName>
+      <TargetVariableName>Amount_Your account will be billed to schedule.docxE9TFLkLbYUCIGgI3oTBMoQ==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>TwoDaysDueMail</SourceVariableOwnerName>
       <SourceVariableName>CreditCardNoScalar</SourceVariableName>
-      <TargetVariableOwnerName>MailNode10942407</TargetVariableOwnerName>
-      <TargetVariableName>DebitCard_Your account will be billed to schedule.docxmVjZIwEaEgf8KodnPFOZfA==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode15178376</TargetVariableOwnerName>
+      <TargetVariableName>DebitCard_Your account will be billed to schedule.docxE9TFLkLbYUCIGgI3oTBMoQ==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>TwoDaysDueMail</SourceVariableOwnerName>
       <SourceVariableName>FirstNameScalar</SourceVariableName>
-      <TargetVariableOwnerName>MailNode10942407</TargetVariableOwnerName>
-      <TargetVariableName>FirstName_Your account will be billed to schedule.docxmVjZIwEaEgf8KodnPFOZfA==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode15178376</TargetVariableOwnerName>
+      <TargetVariableName>FirstName_Your account will be billed to schedule.docxE9TFLkLbYUCIGgI3oTBMoQ==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>TwoDaysDueMail</SourceVariableOwnerName>
       <SourceVariableName>EmailCC</SourceVariableName>
-      <TargetVariableOwnerName>MailNode10942407</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode15178376</TargetVariableOwnerName>
       <TargetVariableName>AddressCC</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>TwoDaysDueMail</SourceVariableOwnerName>
       <SourceVariableName>Subject</SourceVariableName>
-      <TargetVariableOwnerName>MailNode10942407</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode15178376</TargetVariableOwnerName>
       <TargetVariableName>Subject</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>TwoDaysDueMail</SourceVariableOwnerName>
       <SourceVariableName>EmailScalar</SourceVariableName>
-      <TargetVariableOwnerName>MailNode10942407</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode15178376</TargetVariableOwnerName>
       <TargetVariableName>AddressTo</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>TwoDaysDueMail</SourceVariableOwnerName>
       <SourceVariableName>ScheduledDateScalarStr</SourceVariableName>
-      <TargetVariableOwnerName>MailNode10942407</TargetVariableOwnerName>
-      <TargetVariableName>Date_Your account will be billed to schedule.docxmVjZIwEaEgf8KodnPFOZfA==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode15178376</TargetVariableOwnerName>
+      <TargetVariableName>Date_Your account will be billed to schedule.docxE9TFLkLbYUCIGgI3oTBMoQ==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>TwoDaysDueMail</SourceVariableOwnerName>
       <SourceVariableName>AmountDueScalar</SourceVariableName>
-      <TargetVariableOwnerName>MailNode65996383</TargetVariableOwnerName>
-      <TargetVariableName>Amount_Your account will be billed to schedule.docxmVjZIwEaEgf8KodnPFOZfA==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode19038982</TargetVariableOwnerName>
+      <TargetVariableName>Amount_Your account will be billed to schedule.docxE9TFLkLbYUCIGgI3oTBMoQ==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>TwoDaysDueMail</SourceVariableOwnerName>
       <SourceVariableName>CreditCardNoScalar</SourceVariableName>
-      <TargetVariableOwnerName>MailNode65996383</TargetVariableOwnerName>
-      <TargetVariableName>DebitCard_Your account will be billed to schedule.docxmVjZIwEaEgf8KodnPFOZfA==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode19038982</TargetVariableOwnerName>
+      <TargetVariableName>DebitCard_Your account will be billed to schedule.docxE9TFLkLbYUCIGgI3oTBMoQ==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>TwoDaysDueMail</SourceVariableOwnerName>
       <SourceVariableName>FirstNameScalar</SourceVariableName>
-      <TargetVariableOwnerName>MailNode65996383</TargetVariableOwnerName>
-      <TargetVariableName>FirstName_Your account will be billed to schedule.docxmVjZIwEaEgf8KodnPFOZfA==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode19038982</TargetVariableOwnerName>
+      <TargetVariableName>FirstName_Your account will be billed to schedule.docxE9TFLkLbYUCIGgI3oTBMoQ==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>TwoDaysDueMail</SourceVariableOwnerName>
       <SourceVariableName>EmailTo</SourceVariableName>
-      <TargetVariableOwnerName>MailNode65996383</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode19038982</TargetVariableOwnerName>
       <TargetVariableName>AddressTo</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>TwoDaysDueMail</SourceVariableOwnerName>
       <SourceVariableName>EmailCC</SourceVariableName>
-      <TargetVariableOwnerName>MailNode65996383</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode19038982</TargetVariableOwnerName>
       <TargetVariableName>AddressCC</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>TwoDaysDueMail</SourceVariableOwnerName>
       <SourceVariableName>Subject</SourceVariableName>
-      <TargetVariableOwnerName>MailNode65996383</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode19038982</TargetVariableOwnerName>
       <TargetVariableName>Subject</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>TwoDaysDueMail</SourceVariableOwnerName>
       <SourceVariableName>ScheduledDateScalarStr</SourceVariableName>
-      <TargetVariableOwnerName>MailNode65996383</TargetVariableOwnerName>
-      <TargetVariableName>Date_Your account will be billed to schedule.docxmVjZIwEaEgf8KodnPFOZfA==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode19038982</TargetVariableOwnerName>
+      <TargetVariableName>Date_Your account will be billed to schedule.docxE9TFLkLbYUCIGgI3oTBMoQ==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>TwoDaysDueMail</SourceVariableOwnerName>
@@ -3213,85 +3213,85 @@
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>TwoDaysDueMail</SourceVariableOwnerName>
       <SourceVariableName>EmailCC</SourceVariableName>
-      <TargetVariableOwnerName>MailNode26395149</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode10537607</TargetVariableOwnerName>
       <TargetVariableName>AddressCC</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>TwoDaysDueMail</SourceVariableOwnerName>
       <SourceVariableName>Subject</SourceVariableName>
-      <TargetVariableOwnerName>MailNode26395149</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode10537607</TargetVariableOwnerName>
       <TargetVariableName>Subject</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>TwoDaysDueMail</SourceVariableOwnerName>
       <SourceVariableName>FirstNameScalar</SourceVariableName>
-      <TargetVariableOwnerName>MailNode26395149</TargetVariableOwnerName>
-      <TargetVariableName>FirstName_your payment is due in 5 days.docxWdth4FH9Z2Az8SGq1e2cuQ==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode10537607</TargetVariableOwnerName>
+      <TargetVariableName>FirstName_your payment is due in 5 days.docxRIqRyXlM5hJvtEG/4YWXzQ==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>TwoDaysDueMail</SourceVariableOwnerName>
       <SourceVariableName>AmountDueScalar</SourceVariableName>
-      <TargetVariableOwnerName>MailNode26395149</TargetVariableOwnerName>
-      <TargetVariableName>Amount_your payment is due in 5 days.docxWdth4FH9Z2Az8SGq1e2cuQ==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode10537607</TargetVariableOwnerName>
+      <TargetVariableName>Amount_your payment is due in 5 days.docxRIqRyXlM5hJvtEG/4YWXzQ==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>TwoDaysDueMail</SourceVariableOwnerName>
       <SourceVariableName>ScheduledDateScalarStr</SourceVariableName>
-      <TargetVariableOwnerName>MailNode26395149</TargetVariableOwnerName>
-      <TargetVariableName>Date_your payment is due in 5 days.docxWdth4FH9Z2Az8SGq1e2cuQ==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode10537607</TargetVariableOwnerName>
+      <TargetVariableName>Date_your payment is due in 5 days.docxRIqRyXlM5hJvtEG/4YWXzQ==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>TwoDaysDueMail</SourceVariableOwnerName>
       <SourceVariableName>CreditCardNoScalar</SourceVariableName>
-      <TargetVariableOwnerName>MailNode26395149</TargetVariableOwnerName>
-      <TargetVariableName>DebitCard_your payment is due in 5 days.docxWdth4FH9Z2Az8SGq1e2cuQ==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode10537607</TargetVariableOwnerName>
+      <TargetVariableName>DebitCard_your payment is due in 5 days.docxRIqRyXlM5hJvtEG/4YWXzQ==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>TwoDaysDueMail</SourceVariableOwnerName>
       <SourceVariableName>EmailScalar</SourceVariableName>
-      <TargetVariableOwnerName>MailNode26395149</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode10537607</TargetVariableOwnerName>
       <TargetVariableName>AddressTo</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>TwoDaysDueMail</SourceVariableOwnerName>
       <SourceVariableName>EmailCC</SourceVariableName>
-      <TargetVariableOwnerName>MailNode63577720</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode31661987</TargetVariableOwnerName>
       <TargetVariableName>AddressCC</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>TwoDaysDueMail</SourceVariableOwnerName>
       <SourceVariableName>Subject</SourceVariableName>
-      <TargetVariableOwnerName>MailNode63577720</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode31661987</TargetVariableOwnerName>
       <TargetVariableName>Subject</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>TwoDaysDueMail</SourceVariableOwnerName>
       <SourceVariableName>FirstNameScalar</SourceVariableName>
-      <TargetVariableOwnerName>MailNode63577720</TargetVariableOwnerName>
-      <TargetVariableName>FirstName_your payment is due in 5 days.docxWdth4FH9Z2Az8SGq1e2cuQ==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode31661987</TargetVariableOwnerName>
+      <TargetVariableName>FirstName_your payment is due in 5 days.docxRIqRyXlM5hJvtEG/4YWXzQ==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>TwoDaysDueMail</SourceVariableOwnerName>
       <SourceVariableName>AmountDueScalar</SourceVariableName>
-      <TargetVariableOwnerName>MailNode63577720</TargetVariableOwnerName>
-      <TargetVariableName>Amount_your payment is due in 5 days.docxWdth4FH9Z2Az8SGq1e2cuQ==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode31661987</TargetVariableOwnerName>
+      <TargetVariableName>Amount_your payment is due in 5 days.docxRIqRyXlM5hJvtEG/4YWXzQ==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>TwoDaysDueMail</SourceVariableOwnerName>
       <SourceVariableName>ScheduledDateScalarStr</SourceVariableName>
-      <TargetVariableOwnerName>MailNode63577720</TargetVariableOwnerName>
-      <TargetVariableName>Date_your payment is due in 5 days.docxWdth4FH9Z2Az8SGq1e2cuQ==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode31661987</TargetVariableOwnerName>
+      <TargetVariableName>Date_your payment is due in 5 days.docxRIqRyXlM5hJvtEG/4YWXzQ==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>TwoDaysDueMail</SourceVariableOwnerName>
       <SourceVariableName>CreditCardNoScalar</SourceVariableName>
-      <TargetVariableOwnerName>MailNode63577720</TargetVariableOwnerName>
-      <TargetVariableName>DebitCard_your payment is due in 5 days.docxWdth4FH9Z2Az8SGq1e2cuQ==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode31661987</TargetVariableOwnerName>
+      <TargetVariableName>DebitCard_your payment is due in 5 days.docxRIqRyXlM5hJvtEG/4YWXzQ==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>TwoDaysDueMail</SourceVariableOwnerName>
       <SourceVariableName>EmailTo</SourceVariableName>
-      <TargetVariableOwnerName>MailNode63577720</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode31661987</TargetVariableOwnerName>
       <TargetVariableName>AddressTo</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
@@ -3367,7 +3367,7 @@
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
-      <OwnerName>MailNode26395149</OwnerName>
+      <OwnerName>MailNode31661987</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
@@ -3399,7 +3399,7 @@
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
-      <OwnerName>MailNode65996383</OwnerName>
+      <OwnerName>MailNode15178376</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
@@ -3535,15 +3535,7 @@
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
-      <OwnerName>MailNode10942407</OwnerName>
-      <SigningVariables />
-      <CheckingVariables />
-      <VariablesWithoutSignature />
-      <SigningOutlets />
-      <SignatureRequired>false</SignatureRequired>
-    </SigningNodeDescriptor>
-    <SigningNodeDescriptor>
-      <OwnerName>MailNode63577720</OwnerName>
+      <OwnerName>MailNode19038982</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
@@ -3560,6 +3552,14 @@
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
       <OwnerName>DataSourceBehavioral18229659</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>MailNode10537607</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />

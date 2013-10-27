@@ -3,7 +3,7 @@
   <Name>PayPointNameValidationFailed</Name>
   <Description>Email to us – personal info is different in ezbob\paypal. Trigger - Customer fills debit card in dashboard with information different than what we had before</Description>
   <Workspace Name="PayPointNameValidationFailed">
-    <NodeElement Name="Mail Node" NodeId="MailNode38717641" />
+    <NodeElement Name="Mail Node" NodeId="MailNode22104370" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct51042991" />
     <NodeElement Name="Multi-Assignment" NodeId="MultiAssignment28420017" />
     <NodeElement Name="Start Node" NodeId="StartNode13239568" />
@@ -89,10 +89,10 @@
       <DefaultPinName />
       <Description />
       <DisplayName>Mail Node</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;PayPointNameValidationFailed.docxr32+dfzOEUSbRcKXh9RhEg==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;PayPointNameValidationFailed.docxr32+dfzOEUSbRcKXh9RhEg==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;PayPointNameValidationFailed.docxZBe8dmc4sM5hhRGn0gT4TA==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;PayPointNameValidationFailed.docxZBe8dmc4sM5hhRGn0gT4TA==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>MailNode38717641</Name>
+      <Name>MailNode22104370</Name>
       <PointF>
         <X>292.670074</X>
         <Y>316</Y>
@@ -248,8 +248,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode38717641</OwnerName>
-      <Name>E-mail_PayPointNameValidationFailed.docxr32+dfzOEUSbRcKXh9RhEg==</Name>
+      <OwnerName>MailNode22104370</OwnerName>
+      <Name>E-mail_PayPointNameValidationFailed.docxZBe8dmc4sM5hhRGn0gT4TA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -260,8 +260,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode38717641</OwnerName>
-      <Name>UserId_PayPointNameValidationFailed.docxr32+dfzOEUSbRcKXh9RhEg==</Name>
+      <OwnerName>MailNode22104370</OwnerName>
+      <Name>UserId_PayPointNameValidationFailed.docxZBe8dmc4sM5hhRGn0gT4TA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -272,8 +272,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode38717641</OwnerName>
-      <Name>Name_PayPointNameValidationFailed.docxr32+dfzOEUSbRcKXh9RhEg==</Name>
+      <OwnerName>MailNode22104370</OwnerName>
+      <Name>Name_PayPointNameValidationFailed.docxZBe8dmc4sM5hhRGn0gT4TA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -284,8 +284,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode38717641</OwnerName>
-      <Name>Surname_PayPointNameValidationFailed.docxr32+dfzOEUSbRcKXh9RhEg==</Name>
+      <OwnerName>MailNode22104370</OwnerName>
+      <Name>Surname_PayPointNameValidationFailed.docxZBe8dmc4sM5hhRGn0gT4TA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -296,8 +296,8 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode38717641</OwnerName>
-      <Name>PayPointName_PayPointNameValidationFailed.docxr32+dfzOEUSbRcKXh9RhEg==</Name>
+      <OwnerName>MailNode22104370</OwnerName>
+      <Name>PayPointName_PayPointNameValidationFailed.docxZBe8dmc4sM5hhRGn0gT4TA==</Name>
       <TypeName />
       <InitialValue />
       <DefaultValue />
@@ -308,7 +308,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode38717641</OwnerName>
+      <OwnerName>MailNode22104370</OwnerName>
       <Name>AddressTo</Name>
       <TypeName>System.String</TypeName>
       <InitialValue>0</InitialValue>
@@ -320,7 +320,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode38717641</OwnerName>
+      <OwnerName>MailNode22104370</OwnerName>
       <Name>AddressCC</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -332,7 +332,7 @@
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>MailNode38717641</OwnerName>
+      <OwnerName>MailNode22104370</OwnerName>
       <Name>Subject</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -359,9 +359,9 @@
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>CreditProduct51042991</SourceNodeName>
+      <SourceNodeName>MailNode22104370</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>MailNode38717641</TargetNodeName>
+      <TargetNodeName>StopNode52047256</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -383,9 +383,9 @@
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>MailNode38717641</SourceNodeName>
+      <SourceNodeName>CreditProduct51042991</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>StopNode52047256</TargetNodeName>
+      <TargetNodeName>MailNode22104370</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -411,49 +411,49 @@
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>PayPointNameValidationFailed</SourceVariableOwnerName>
       <SourceVariableName>email</SourceVariableName>
-      <TargetVariableOwnerName>MailNode38717641</TargetVariableOwnerName>
-      <TargetVariableName>E-mail_PayPointNameValidationFailed.docxr32+dfzOEUSbRcKXh9RhEg==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode22104370</TargetVariableOwnerName>
+      <TargetVariableName>E-mail_PayPointNameValidationFailed.docxZBe8dmc4sM5hhRGn0gT4TA==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>PayPointNameValidationFailed</SourceVariableOwnerName>
       <SourceVariableName>userId</SourceVariableName>
-      <TargetVariableOwnerName>MailNode38717641</TargetVariableOwnerName>
-      <TargetVariableName>UserId_PayPointNameValidationFailed.docxr32+dfzOEUSbRcKXh9RhEg==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode22104370</TargetVariableOwnerName>
+      <TargetVariableName>UserId_PayPointNameValidationFailed.docxZBe8dmc4sM5hhRGn0gT4TA==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>PayPointNameValidationFailed</SourceVariableOwnerName>
       <SourceVariableName>name</SourceVariableName>
-      <TargetVariableOwnerName>MailNode38717641</TargetVariableOwnerName>
-      <TargetVariableName>Name_PayPointNameValidationFailed.docxr32+dfzOEUSbRcKXh9RhEg==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode22104370</TargetVariableOwnerName>
+      <TargetVariableName>Name_PayPointNameValidationFailed.docxZBe8dmc4sM5hhRGn0gT4TA==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>PayPointNameValidationFailed</SourceVariableOwnerName>
       <SourceVariableName>surname</SourceVariableName>
-      <TargetVariableOwnerName>MailNode38717641</TargetVariableOwnerName>
-      <TargetVariableName>Surname_PayPointNameValidationFailed.docxr32+dfzOEUSbRcKXh9RhEg==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode22104370</TargetVariableOwnerName>
+      <TargetVariableName>Surname_PayPointNameValidationFailed.docxZBe8dmc4sM5hhRGn0gT4TA==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>PayPointNameValidationFailed</SourceVariableOwnerName>
       <SourceVariableName>cardHodlerName</SourceVariableName>
-      <TargetVariableOwnerName>MailNode38717641</TargetVariableOwnerName>
-      <TargetVariableName>PayPointName_PayPointNameValidationFailed.docxr32+dfzOEUSbRcKXh9RhEg==</TargetVariableName>
+      <TargetVariableOwnerName>MailNode22104370</TargetVariableOwnerName>
+      <TargetVariableName>PayPointName_PayPointNameValidationFailed.docxZBe8dmc4sM5hhRGn0gT4TA==</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>PayPointNameValidationFailed</SourceVariableOwnerName>
       <SourceVariableName>CP_AddressTo</SourceVariableName>
-      <TargetVariableOwnerName>MailNode38717641</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode22104370</TargetVariableOwnerName>
       <TargetVariableName>AddressTo</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>PayPointNameValidationFailed</SourceVariableOwnerName>
       <SourceVariableName>CP_AddressCC</SourceVariableName>
-      <TargetVariableOwnerName>MailNode38717641</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode22104370</TargetVariableOwnerName>
       <TargetVariableName>AddressCC</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>PayPointNameValidationFailed</SourceVariableOwnerName>
       <SourceVariableName>Subject</SourceVariableName>
-      <TargetVariableOwnerName>MailNode38717641</TargetVariableOwnerName>
+      <TargetVariableOwnerName>MailNode22104370</TargetVariableOwnerName>
       <TargetVariableName>Subject</TargetVariableName>
     </VariableConnectionDescriptor>
   </VariableConnectionDescriptors>
@@ -491,7 +491,7 @@
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
-      <OwnerName>MailNode38717641</OwnerName>
+      <OwnerName>MailNode22104370</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
