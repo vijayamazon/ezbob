@@ -211,10 +211,6 @@ EzBob.YourInformationStepView = Backbone.View.extend({
 EzBob.ThankYouWizardPage = Backbone.View.extend({
     initialize: function () {
         this.template = $(_.template($("#lastWizardThankYouPage").html(), { ordty: ordty }));
-        if (!this.model.get('IsOffline'))
-            this.$el.find('.offline').remove();
-        else
-            this.$el.find('.notoffline').remove();
     },
     render: function () {
         $.getJSON(window.gRootPath + "Customer/Wizard/EarnedPointsStr").done(function(data) {
@@ -224,6 +220,12 @@ EzBob.ThankYouWizardPage = Backbone.View.extend({
 
         this.$el.html(this.template);
         $('.sidebarBox').find('li[rel]').setPopover('left');
+        
+        if (!this.model.get('IsOffline'))
+            this.$el.find('.offline').remove();
+        else
+            this.$el.find('.notoffline').remove();
+        
         return this;
     }
 });
