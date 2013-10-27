@@ -3,14 +3,23 @@
   <Name>Approved_User</Name>
   <Description>Email to customer – loan approved notification. Trigger - Underwriter approve button</Description>
   <Workspace Name="Approved_User">
-    <NodeElement Name="Comparison" NodeId="Comparison19436966" />
+    <NodeElement Name="Is first" NodeId="Comparison19436966" />
+    <NodeElement Name="Is offline" NodeId="Comparison6333933" />
     <NodeElement Name="Empty Name" NodeId="ConditionalAssignment14651901" />
-    <NodeElement Name="Mail Node" NodeId="MailNode1605556" />
-    <NodeElement Name="Mail Node" NodeId="MailNode47156901" />
-    <NodeElement Name="Mail Node" NodeId="MailNode10143804" />
+    <NodeElement Name="GetIsOffline" NodeId="DataSourceNodeScalar59874397" />
+    <NodeElement Name="Is first" NodeId="Comparison6926937" />
     <NodeElement Name="Mail Node" NodeId="MailNode19988723" />
-    <NodeElement Name="Mail_addresses" NodeId="CreditProduct33630458" />
+    <NodeElement Name="Mail Node" NodeId="MailNode10143804" />
+    <NodeElement Name="Mail Node" NodeId="MailNode47156901" />
+    <NodeElement Name="Mail Node" NodeId="MailNode1605556" />
+    <NodeElement Name="Mail Node" NodeId="MailNode24665974" />
+    <NodeElement Name="Mail Node" NodeId="MailNode50694374" />
+    <NodeElement Name="Mail Node" NodeId="MailNode44749040" />
+    <NodeElement Name="Mail Node" NodeId="MailNode14045707" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct26390432" />
+    <NodeElement Name="Mail_addresses" NodeId="CreditProduct33630458" />
+    <NodeElement Name="Mail_addresses" NodeId="CreditProduct19089245" />
+    <NodeElement Name="Mail_addresses" NodeId="CreditProduct58267878" />
     <NodeElement Name="Multi-Assignment" NodeId="MultiAssignment24457787" />
     <NodeElement Name="Start Node" NodeId="StartNode3532547" />
     <NodeElement Name="Stop Node" NodeId="StopNode31792927" />
@@ -49,8 +58,8 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>StopNode31792927</Name>
       <PointF>
-        <X>831.469666</X>
-        <Y>376</Y>
+        <X>971.469666</X>
+        <Y>576</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeStop</TypeName>
@@ -83,7 +92,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>CreditProduct26390432</Name>
       <PointF>
-        <X>458.45282</X>
+        <X>618.4528</X>
         <Y>456</Y>
       </PointF>
       <SuperNodeName />
@@ -117,7 +126,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>MailNode10143804</Name>
       <PointF>
-        <X>672.6701</X>
+        <X>832.6701</X>
         <Y>296</Y>
       </PointF>
       <SuperNodeName />
@@ -134,7 +143,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>MailNode19988723</Name>
       <PointF>
-        <X>672.6701</X>
+        <X>832.6701</X>
         <Y>456</Y>
       </PointF>
       <SuperNodeName />
@@ -145,13 +154,13 @@
       <AssemblyString />
       <DefaultPinName />
       <Description />
-      <DisplayName>Comparison</DisplayName>
+      <DisplayName>Is first</DisplayName>
       <InitialValue />
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>Comparison19436966</Name>
       <PointF>
-        <X>107.597107</X>
+        <X>276</X>
         <Y>376</Y>
       </PointF>
       <SuperNodeName />
@@ -168,7 +177,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>CreditProduct33630458</Name>
       <PointF>
-        <X>458.45282</X>
+        <X>618.4528</X>
         <Y>296</Y>
       </PointF>
       <SuperNodeName />
@@ -185,7 +194,7 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>MailNode47156901</Name>
       <PointF>
-        <X>292.670074</X>
+        <X>452.670074</X>
         <Y>456</Y>
       </PointF>
       <SuperNodeName />
@@ -202,8 +211,201 @@
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>MailNode1605556</Name>
       <PointF>
-        <X>292.6701</X>
+        <X>452.6701</X>
         <Y>296</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeMail</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName>Next</DefaultPinName>
+      <Description />
+      <DisplayName>GetIsOffline</DisplayName>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;NodeParameters xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;DataSourceName&gt;GetIsOfflineQkRFhLdS3K7LfChwBRAVdw==&lt;/DataSourceName&gt;
+  &lt;DataSourceType&gt;ExternalDatabase&lt;/DataSourceType&gt;
+  &lt;UseMultipleLayersForInput&gt;false&lt;/UseMultipleLayersForInput&gt;
+  &lt;UseMultipleLayersForOutput&gt;false&lt;/UseMultipleLayersForOutput&gt;
+  &lt;Fields&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;IsOffline&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;Number&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;DataTypeString&gt;System.Int32&lt;/DataTypeString&gt;
+      &lt;DatasourceTypeString&gt;Int&lt;/DatasourceTypeString&gt;
+      &lt;Direction&gt;Output&lt;/Direction&gt;
+      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;CustomerId&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;Number&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;Direction&gt;Input&lt;/Direction&gt;
+      &lt;IsColumnType&gt;false&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+  &lt;/Fields&gt;
+  &lt;FixIncorrectConstrainedValues&gt;false&lt;/FixIncorrectConstrainedValues&gt;
+  &lt;KeyVariableType&gt;Numeric&lt;/KeyVariableType&gt;
+&lt;/NodeParameters&gt;</InitialValue>
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>DataSourceNodeScalar59874397</Name>
+      <PointF>
+        <X>108.1906</X>
+        <Y>356</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeDataSourceApplication</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Is offline</DisplayName>
+      <InitialValue />
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>Comparison6333933</Name>
+      <PointF>
+        <X>116</X>
+        <Y>576</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeComparer</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Is first</DisplayName>
+      <InitialValue />
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>Comparison6926937</Name>
+      <PointF>
+        <X>276</X>
+        <Y>756</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeComparer</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Mail Node</DisplayName>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;Congratulations you are qualified - offline.docx/03OsdTBvYQq8VwjNUEzsw==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;Congratulations you are qualified - offline.docx/03OsdTBvYQq8VwjNUEzsw==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>MailNode24665974</Name>
+      <PointF>
+        <X>432.6701</X>
+        <Y>836</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeMail</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Mail Node</DisplayName>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;Congratulations you are qualified - offline.docx/03OsdTBvYQq8VwjNUEzsw==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;Congratulations you are qualified - offline.docx/03OsdTBvYQq8VwjNUEzsw==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>MailNode50694374</Name>
+      <PointF>
+        <X>832.6701</X>
+        <Y>836</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeMail</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Mail_addresses</DisplayName>
+      <InitialValue>Mail_addresses</InitialValue>
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>CreditProduct19089245</Name>
+      <PointF>
+        <X>618.4528</X>
+        <Y>676</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeCreditProduct</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Mail_addresses</DisplayName>
+      <InitialValue>Mail_addresses</InitialValue>
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>CreditProduct58267878</Name>
+      <PointF>
+        <X>618.4528</X>
+        <Y>836</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeCreditProduct</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Mail Node</DisplayName>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;Congratulations you are qualified - offline - not first.docx/03OsdTBvYQq8VwjNUEzsw==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;Congratulations you are qualified - offline - not first.docx/03OsdTBvYQq8VwjNUEzsw==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>MailNode44749040</Name>
+      <PointF>
+        <X>432.6701</X>
+        <Y>676</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeMail</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Mail Node</DisplayName>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;root&gt;&lt;DataLinks&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataLinks"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataLinks&gt;&lt;DataParameters&gt;&lt;xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata"&gt;&lt;xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true"&gt;&lt;xs:complexType&gt;&lt;xs:choice minOccurs="0" maxOccurs="unbounded"&gt;&lt;xs:element name="DataParameters"&gt;&lt;xs:complexType&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:choice&gt;&lt;/xs:complexType&gt;&lt;/xs:element&gt;&lt;/xs:schema&gt;&lt;diffgr:diffgram xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:diffgr="urn:schemas-microsoft-com:xml-diffgram-v1" /&gt;&lt;/DataParameters&gt;&lt;Templates&gt;&lt;string&gt;Congratulations you are qualified - offline - not first.docx/03OsdTBvYQq8VwjNUEzsw==&lt;/string&gt;&lt;/Templates&gt;&lt;DefaultTemplate&gt;Congratulations you are qualified - offline - not first.docx/03OsdTBvYQq8VwjNUEzsw==&lt;/DefaultTemplate&gt;&lt;AccountName&gt;EZBob mailer&lt;/AccountName&gt;&lt;To /&gt;&lt;CC /&gt;&lt;Subject /&gt;&lt;/root&gt;</InitialValue>
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>MailNode14045707</Name>
+      <PointF>
+        <X>832.6701</X>
+        <Y>676</Y>
       </PointF>
       <SuperNodeName />
       <TypeName>WorkflowObjects.NodeMail</TypeName>
@@ -384,6 +586,42 @@
       <Name>emailCC</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Approved_User</OwnerName>
+      <Name>DataSourceName</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Approved_User</OwnerName>
+      <Name>ScortoInternalErrorMessage</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Approved_User</OwnerName>
+      <Name>IsOffline</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
       <DefaultValue />
       <Description />
       <IsInput>false</IsInput>
@@ -799,6 +1037,486 @@
       <SignatureRequired>false</SignatureRequired>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar59874397</OwnerName>
+      <Name>IsOffline</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar59874397</OwnerName>
+      <Name>CustomerId</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar59874397</OwnerName>
+      <Name>DataSourceName</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description>Variable for setting name of Data Source that will be used in current node</Description>
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar59874397</OwnerName>
+      <Name>ScortoInternalErrorMessage</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison6333933</OwnerName>
+      <Name>Expression</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue>IsOffline = 1</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison6333933</OwnerName>
+      <Name>Comparison6333933IsOffline</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison6926937</OwnerName>
+      <Name>Expression</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue>IsFirstApproval = 1</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison6926937</OwnerName>
+      <Name>Comparison19436966IsFirstApproval</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode24665974</OwnerName>
+      <Name>FirstName_Congratulations you are qualified - offline.docx/03OsdTBvYQq8VwjNUEzsw==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode24665974</OwnerName>
+      <Name>LoanAmount_Congratulations you are qualified - offline.docx/03OsdTBvYQq8VwjNUEzsw==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode24665974</OwnerName>
+      <Name>EzBob account_Congratulations you are qualified - offline.docx/03OsdTBvYQq8VwjNUEzsw==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode24665974</OwnerName>
+      <Name>ValidForHours_Congratulations you are qualified - offline.docx/03OsdTBvYQq8VwjNUEzsw==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode24665974</OwnerName>
+      <Name>AddressTo</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode24665974</OwnerName>
+      <Name>AddressCC</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode24665974</OwnerName>
+      <Name>Subject</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode50694374</OwnerName>
+      <Name>FirstName_Congratulations you are qualified - offline.docx/03OsdTBvYQq8VwjNUEzsw==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode50694374</OwnerName>
+      <Name>LoanAmount_Congratulations you are qualified - offline.docx/03OsdTBvYQq8VwjNUEzsw==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode50694374</OwnerName>
+      <Name>EzBob account_Congratulations you are qualified - offline.docx/03OsdTBvYQq8VwjNUEzsw==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode50694374</OwnerName>
+      <Name>ValidForHours_Congratulations you are qualified - offline.docx/03OsdTBvYQq8VwjNUEzsw==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode50694374</OwnerName>
+      <Name>AddressTo</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode50694374</OwnerName>
+      <Name>AddressCC</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode50694374</OwnerName>
+      <Name>Subject</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>CreditProduct19089245</OwnerName>
+      <Name>CP_AddressTo</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue>a.kaydash@scorto.com.ua; tisichenko@scorto.com.ua; v.arnautov@scorto.com.ua</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>CreditProduct19089245</OwnerName>
+      <Name>CP_AddressCC</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>CreditProduct58267878</OwnerName>
+      <Name>CP_AddressTo</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue>a.kaydash@scorto.com.ua; tisichenko@scorto.com.ua; v.arnautov@scorto.com.ua</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>CreditProduct58267878</OwnerName>
+      <Name>CP_AddressCC</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode44749040</OwnerName>
+      <Name>FirstName_Congratulations you are qualified - offline - not first.docx/03OsdTBvYQq8VwjNUEzsw==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode44749040</OwnerName>
+      <Name>LoanAmount_Congratulations you are qualified - offline - not first.docx/03OsdTBvYQq8VwjNUEzsw==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode44749040</OwnerName>
+      <Name>EzBob account_Congratulations you are qualified - offline - not first.docx/03OsdTBvYQq8VwjNUEzsw==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode44749040</OwnerName>
+      <Name>ValidForHours_Congratulations you are qualified - offline - not first.docx/03OsdTBvYQq8VwjNUEzsw==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode44749040</OwnerName>
+      <Name>AddressTo</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode44749040</OwnerName>
+      <Name>AddressCC</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode44749040</OwnerName>
+      <Name>Subject</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode14045707</OwnerName>
+      <Name>FirstName_Congratulations you are qualified - offline - not first.docx/03OsdTBvYQq8VwjNUEzsw==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode14045707</OwnerName>
+      <Name>LoanAmount_Congratulations you are qualified - offline - not first.docx/03OsdTBvYQq8VwjNUEzsw==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode14045707</OwnerName>
+      <Name>EzBob account_Congratulations you are qualified - offline - not first.docx/03OsdTBvYQq8VwjNUEzsw==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode14045707</OwnerName>
+      <Name>ValidForHours_Congratulations you are qualified - offline - not first.docx/03OsdTBvYQq8VwjNUEzsw==</Name>
+      <TypeName />
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode14045707</OwnerName>
+      <Name>AddressTo</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode14045707</OwnerName>
+      <Name>AddressCC</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>MailNode14045707</OwnerName>
+      <Name>Subject</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
   </VariableDescriptors>
   <VariableConstraintDescriptors />
   <NodeConnectionDescriptors>
@@ -877,7 +1595,7 @@
     <NodeConnectionDescriptor>
       <SourceNodeName>ConditionalAssignment14651901</SourceNodeName>
       <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>Comparison19436966</TargetNodeName>
+      <TargetNodeName>DataSourceNodeScalar59874397</TargetNodeName>
       <SuperNodeName />
       <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
@@ -931,6 +1649,138 @@
       <SignatureRequired>false</SignatureRequired>
       <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
       <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>DataSourceNodeScalar59874397</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>Comparison6333933</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Next</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>Comparison6333933</SourceNodeName>
+      <SourceNodeOutletName>Yes</SourceNodeOutletName>
+      <TargetNodeName>Comparison6926937</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Yes</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16744448</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>Comparison6333933</SourceNodeName>
+      <SourceNodeOutletName>No</SourceNodeOutletName>
+      <TargetNodeName>Comparison19436966</TargetNodeName>
+      <SuperNodeName />
+      <Caption>No</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-65536</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>MailNode50694374</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>StopNode31792927</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Next</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>MailNode14045707</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>StopNode31792927</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Next</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>CreditProduct58267878</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>MailNode50694374</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Next</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>CreditProduct19089245</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>MailNode14045707</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Next</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>MailNode44749040</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>CreditProduct19089245</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Next</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>MailNode24665974</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>CreditProduct58267878</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Next</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>Comparison6926937</SourceNodeName>
+      <SourceNodeOutletName>Yes</SourceNodeOutletName>
+      <TargetNodeName>MailNode24665974</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Yes</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16744448</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>Comparison6926937</SourceNodeName>
+      <SourceNodeOutletName>No</SourceNodeOutletName>
+      <TargetNodeName>MailNode44749040</TargetNodeName>
+      <SuperNodeName />
+      <Caption>No</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-65536</DisplayColor>
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints />
     </NodeConnectionDescriptor>
@@ -1028,12 +1878,6 @@
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
-      <SourceVariableName>IsFirstApproval</SourceVariableName>
-      <TargetVariableOwnerName>Comparison19436966</TargetVariableOwnerName>
-      <TargetVariableName>Comparison19436966IsFirstApproval</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
       <SourceVariableName>CP_AddressTo</SourceVariableName>
       <TargetVariableOwnerName>CreditProduct33630458</TargetVariableOwnerName>
       <TargetVariableName>CP_AddressTo</TargetVariableName>
@@ -1134,6 +1978,240 @@
       <TargetVariableOwnerName>MailNode47156901</TargetVariableOwnerName>
       <TargetVariableName>AddressCC</TargetVariableName>
     </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
+      <SourceVariableName>IsFirstApproval</SourceVariableName>
+      <TargetVariableOwnerName>Comparison19436966</TargetVariableOwnerName>
+      <TargetVariableName>Comparison19436966IsFirstApproval</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
+      <SourceVariableName>userId</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar59874397</TargetVariableOwnerName>
+      <TargetVariableName>CustomerId</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
+      <SourceVariableName>DataSourceName</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar59874397</TargetVariableOwnerName>
+      <TargetVariableName>DataSourceName</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
+      <SourceVariableName>ScortoInternalErrorMessage</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar59874397</TargetVariableOwnerName>
+      <TargetVariableName>ScortoInternalErrorMessage</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
+      <SourceVariableName>IsOffline</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar59874397</TargetVariableOwnerName>
+      <TargetVariableName>IsOffline</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
+      <SourceVariableName>IsOffline</SourceVariableName>
+      <TargetVariableOwnerName>Comparison6333933</TargetVariableOwnerName>
+      <TargetVariableName>Comparison6333933IsOffline</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
+      <SourceVariableName>IsFirstApproval</SourceVariableName>
+      <TargetVariableOwnerName>Comparison6926937</TargetVariableOwnerName>
+      <TargetVariableName>Comparison19436966IsFirstApproval</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
+      <SourceVariableName>CP_AddressTo</SourceVariableName>
+      <TargetVariableOwnerName>CreditProduct19089245</TargetVariableOwnerName>
+      <TargetVariableName>CP_AddressTo</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
+      <SourceVariableName>CP_AddressCC</SourceVariableName>
+      <TargetVariableOwnerName>CreditProduct19089245</TargetVariableOwnerName>
+      <TargetVariableName>CP_AddressCC</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
+      <SourceVariableName>CP_AddressTo</SourceVariableName>
+      <TargetVariableOwnerName>CreditProduct58267878</TargetVariableOwnerName>
+      <TargetVariableName>CP_AddressTo</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
+      <SourceVariableName>CP_AddressCC</SourceVariableName>
+      <TargetVariableOwnerName>CreditProduct58267878</TargetVariableOwnerName>
+      <TargetVariableName>CP_AddressCC</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
+      <SourceVariableName>FirstName</SourceVariableName>
+      <TargetVariableOwnerName>MailNode44749040</TargetVariableOwnerName>
+      <TargetVariableName>FirstName_Congratulations you are qualified - offline - not first.docx/03OsdTBvYQq8VwjNUEzsw==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
+      <SourceVariableName>LoanAmount</SourceVariableName>
+      <TargetVariableOwnerName>MailNode44749040</TargetVariableOwnerName>
+      <TargetVariableName>LoanAmount_Congratulations you are qualified - offline - not first.docx/03OsdTBvYQq8VwjNUEzsw==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
+      <SourceVariableName>DashboardPage</SourceVariableName>
+      <TargetVariableOwnerName>MailNode44749040</TargetVariableOwnerName>
+      <TargetVariableName>EzBob account_Congratulations you are qualified - offline - not first.docx/03OsdTBvYQq8VwjNUEzsw==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
+      <SourceVariableName>ValidFor</SourceVariableName>
+      <TargetVariableOwnerName>MailNode44749040</TargetVariableOwnerName>
+      <TargetVariableName>ValidForHours_Congratulations you are qualified - offline - not first.docx/03OsdTBvYQq8VwjNUEzsw==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
+      <SourceVariableName>email</SourceVariableName>
+      <TargetVariableOwnerName>MailNode44749040</TargetVariableOwnerName>
+      <TargetVariableName>AddressTo</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
+      <SourceVariableName>AdressCC</SourceVariableName>
+      <TargetVariableOwnerName>MailNode44749040</TargetVariableOwnerName>
+      <TargetVariableName>AddressCC</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
+      <SourceVariableName>Subject</SourceVariableName>
+      <TargetVariableOwnerName>MailNode44749040</TargetVariableOwnerName>
+      <TargetVariableName>Subject</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
+      <SourceVariableName>FirstName</SourceVariableName>
+      <TargetVariableOwnerName>MailNode24665974</TargetVariableOwnerName>
+      <TargetVariableName>FirstName_Congratulations you are qualified - offline.docx/03OsdTBvYQq8VwjNUEzsw==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
+      <SourceVariableName>LoanAmount</SourceVariableName>
+      <TargetVariableOwnerName>MailNode24665974</TargetVariableOwnerName>
+      <TargetVariableName>LoanAmount_Congratulations you are qualified - offline.docx/03OsdTBvYQq8VwjNUEzsw==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
+      <SourceVariableName>DashboardPage</SourceVariableName>
+      <TargetVariableOwnerName>MailNode24665974</TargetVariableOwnerName>
+      <TargetVariableName>EzBob account_Congratulations you are qualified - offline.docx/03OsdTBvYQq8VwjNUEzsw==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
+      <SourceVariableName>ValidFor</SourceVariableName>
+      <TargetVariableOwnerName>MailNode24665974</TargetVariableOwnerName>
+      <TargetVariableName>ValidForHours_Congratulations you are qualified - offline.docx/03OsdTBvYQq8VwjNUEzsw==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
+      <SourceVariableName>email</SourceVariableName>
+      <TargetVariableOwnerName>MailNode24665974</TargetVariableOwnerName>
+      <TargetVariableName>AddressTo</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
+      <SourceVariableName>AdressCC</SourceVariableName>
+      <TargetVariableOwnerName>MailNode24665974</TargetVariableOwnerName>
+      <TargetVariableName>AddressCC</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
+      <SourceVariableName>Subject</SourceVariableName>
+      <TargetVariableOwnerName>MailNode24665974</TargetVariableOwnerName>
+      <TargetVariableName>Subject</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
+      <SourceVariableName>FirstName</SourceVariableName>
+      <TargetVariableOwnerName>MailNode14045707</TargetVariableOwnerName>
+      <TargetVariableName>FirstName_Congratulations you are qualified - offline - not first.docx/03OsdTBvYQq8VwjNUEzsw==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
+      <SourceVariableName>LoanAmount</SourceVariableName>
+      <TargetVariableOwnerName>MailNode14045707</TargetVariableOwnerName>
+      <TargetVariableName>LoanAmount_Congratulations you are qualified - offline - not first.docx/03OsdTBvYQq8VwjNUEzsw==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
+      <SourceVariableName>DashboardPage</SourceVariableName>
+      <TargetVariableOwnerName>MailNode14045707</TargetVariableOwnerName>
+      <TargetVariableName>EzBob account_Congratulations you are qualified - offline - not first.docx/03OsdTBvYQq8VwjNUEzsw==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
+      <SourceVariableName>ValidFor</SourceVariableName>
+      <TargetVariableOwnerName>MailNode14045707</TargetVariableOwnerName>
+      <TargetVariableName>ValidForHours_Congratulations you are qualified - offline - not first.docx/03OsdTBvYQq8VwjNUEzsw==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
+      <SourceVariableName>CP_AddressTo</SourceVariableName>
+      <TargetVariableOwnerName>MailNode14045707</TargetVariableOwnerName>
+      <TargetVariableName>AddressTo</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
+      <SourceVariableName>CP_AddressCC</SourceVariableName>
+      <TargetVariableOwnerName>MailNode14045707</TargetVariableOwnerName>
+      <TargetVariableName>AddressCC</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
+      <SourceVariableName>Subject</SourceVariableName>
+      <TargetVariableOwnerName>MailNode14045707</TargetVariableOwnerName>
+      <TargetVariableName>Subject</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
+      <SourceVariableName>FirstName</SourceVariableName>
+      <TargetVariableOwnerName>MailNode50694374</TargetVariableOwnerName>
+      <TargetVariableName>FirstName_Congratulations you are qualified - offline.docx/03OsdTBvYQq8VwjNUEzsw==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
+      <SourceVariableName>LoanAmount</SourceVariableName>
+      <TargetVariableOwnerName>MailNode50694374</TargetVariableOwnerName>
+      <TargetVariableName>LoanAmount_Congratulations you are qualified - offline.docx/03OsdTBvYQq8VwjNUEzsw==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
+      <SourceVariableName>DashboardPage</SourceVariableName>
+      <TargetVariableOwnerName>MailNode50694374</TargetVariableOwnerName>
+      <TargetVariableName>EzBob account_Congratulations you are qualified - offline.docx/03OsdTBvYQq8VwjNUEzsw==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
+      <SourceVariableName>ValidFor</SourceVariableName>
+      <TargetVariableOwnerName>MailNode50694374</TargetVariableOwnerName>
+      <TargetVariableName>ValidForHours_Congratulations you are qualified - offline.docx/03OsdTBvYQq8VwjNUEzsw==</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
+      <SourceVariableName>CP_AddressTo</SourceVariableName>
+      <TargetVariableOwnerName>MailNode50694374</TargetVariableOwnerName>
+      <TargetVariableName>AddressTo</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
+      <SourceVariableName>CP_AddressCC</SourceVariableName>
+      <TargetVariableOwnerName>MailNode50694374</TargetVariableOwnerName>
+      <TargetVariableName>AddressCC</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Approved_User</SourceVariableOwnerName>
+      <SourceVariableName>Subject</SourceVariableName>
+      <TargetVariableOwnerName>MailNode50694374</TargetVariableOwnerName>
+      <TargetVariableName>Subject</TargetVariableName>
+    </VariableConnectionDescriptor>
   </VariableConnectionDescriptors>
   <SigningNodeDescriptors>
     <SigningNodeDescriptor>
@@ -1218,6 +2296,78 @@
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
       <OwnerName>MailNode1605556</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>DataSourceNodeScalar59874397</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>Comparison6333933</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>Comparison6926937</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>MailNode24665974</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>MailNode50694374</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>CreditProduct19089245</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>CreditProduct58267878</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>MailNode44749040</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>MailNode14045707</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />

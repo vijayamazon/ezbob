@@ -90,6 +90,8 @@
 				(isLateBy14DaysMailSendViaMandrill && Templates[0].DisplayName == "Late by 14 days.docx") ||
 				Templates[0].DisplayName == "Congratulations you are qualified.docx" ||
 				Templates[0].DisplayName == "Congratulations you are qualified - not first.docx" ||
+				Templates[0].DisplayName == "Congratulations you are qualified - offline.docx" ||
+				Templates[0].DisplayName == "Congratulations you are qualified - offline - not first.docx" ||
 				Templates[0].DisplayName == "Get cash - approval.docx" ||
 				Templates[0].DisplayName == "Get cash - approval - not first.docx")
             {
