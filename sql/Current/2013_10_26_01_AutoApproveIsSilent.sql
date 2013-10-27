@@ -12,7 +12,5 @@ IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='AutoApproveSilen
 BEGIN
 	INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('AutoApproveSilentToAddress', 'yulys@ezbob.com', 'Address for silent mode of auto approval')
 END
-, 
-
 
 GO
