@@ -642,6 +642,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public bool? PropertyOwnedByCompany { get; set; }
 		public string YearsInCompany { get; set; }
 		public string RentMonthsLeft { get; set; }
+		public double TotalMonthlySalary { get; set; }
 	}
 
     public class PersonalInfo

@@ -120,9 +120,8 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
         this.model.get('PrevPersonAddresses').on("all", this.PrevModelChange, this);
         this.model.get('PersonalAddress').on("all", this.PersonalAddressModelChange, this);
         this.model.get('OtherPropertyAddress').on("all", this.OtherPropertyAddressModelChange, this);
-        this.$el.find("#WebSiteTurnOver").moneyFormat();
-        this.$el.find("#OverallTurnOver").moneyFormat();
-
+        this.$el.find(".cashInput").moneyFormat();
+        
         if (!this.model.get('IsOffline'))
             this.$el.find('.offline').remove();
         this.inputChanged();

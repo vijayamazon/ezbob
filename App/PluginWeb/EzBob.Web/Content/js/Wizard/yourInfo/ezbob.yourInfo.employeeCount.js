@@ -6,6 +6,7 @@ EzBob.EmployeeCountView = Backbone.View.extend({
 		this.model = options.model;
 		this.parentView = options.parentView;
 		this.onChangeCallback = options.onchange;
+	    this.prefix = options.prefix;
 	}, // initialize
 
 	events: {
@@ -28,9 +29,17 @@ EzBob.EmployeeCountView = Backbone.View.extend({
 		"keyup    #EmployeeCountChange": "deltaChanged",
 		"focusout #EmployeeCountChange": "deltaChanged",
 		"click    #EmployeeCountChange": "deltaChanged",
+		
+		"change   #TotalMonthlySalary": "deltaChanged",
+		"keyup    #TotalMonthlySalary": "deltaChanged",
+		"focusout #TotalMonthlySalary": "deltaChanged",
+		"click    #TotalMonthlySalary": "deltaChanged",
+		"focus    #TotalMonthlySalary": "focused",
 	}, // events
-
-	deltaChanged: function() {
+    focused:function(el) {
+        $(el).change();
+    },
+	deltaChanged: function (el) {
 		this.onChangeCallback.call(this.parentView);
 	}, // deltaChanged
 
@@ -176,14 +185,15 @@ EzBob.EmployeeCountView = Backbone.View.extend({
 	}, // getVal
 
 	render: function () {
-		this.$el.html(this.template());
+	    console.log('prefix', this.prefix);
+	    this.$el.html(this.template({ prefix: this.prefix }));
 
 		var oFieldStatusIcons = this.$el.find('IMG.field_status');
 		oFieldStatusIcons.filter('.required').field_status({ required: true });
 		oFieldStatusIcons.not('.required').field_status({ required: false });
 
 		this.$el.find('.numeric').numericOnly();
-
+		this.$el.find('.cashInput').moneyFormat();
 		return this;
 	} // render
 }); // EzBob.EmployeeCountView

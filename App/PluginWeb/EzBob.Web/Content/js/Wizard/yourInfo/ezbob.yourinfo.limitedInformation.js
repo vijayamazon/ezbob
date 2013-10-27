@@ -63,7 +63,9 @@ EzBob.LimitedInformationView = EzBob.YourInformationStepViewBase.extend({
             this.employeeCountView = new EzBob.EmployeeCountView({
                 model: this.model,
                 parentView: self,
-                onchange: self.setContinueStatus
+                onchange: self.setContinueStatus,
+                validator: self.validator,
+                prefix: "Limited"
             });
             this.employeeCountView.render().$el.appendTo(this.$el.find('.employee-count'));
         }
@@ -72,7 +74,6 @@ EzBob.LimitedInformationView = EzBob.YourInformationStepViewBase.extend({
             this.employeeCountView = null;
         } // if
 
-        this.$el.find(".cashInput").cashEdit();
         this.$el.find(".addressCaption").hide();
 
         var oFieldStatusIcons = this.$el.find('IMG.field_status');

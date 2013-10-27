@@ -20,6 +20,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual int TopEarningEmployeeCount { get; set; }
 		public virtual int BottomEarningEmployeeCount { get; set; }
 		public virtual int EmployeeCountChange { get; set; }
+		public virtual double TotalMonthlySalary { get; set; }
 	} // class CompanyEmployeeCount
 
 	#endregion class CompanyEmployeeCount
@@ -39,12 +40,14 @@ namespace EZBob.DatabaseLib.Model.Database {
 			EmployeeCount              = cec.EmployeeCount;
 			EmployeeCountChange        = cec.EmployeeCountChange;
 			TopEarningEmployeeCount    = cec.TopEarningEmployeeCount;
+			TotalMonthlySalary         = cec.TotalMonthlySalary;
 		} // constructor
 
 		public int EmployeeCount { get; set; }
 		public int TopEarningEmployeeCount { get; set; }
 		public int BottomEarningEmployeeCount { get; set; }
 		public int EmployeeCountChange { get; set; }
+		public double TotalMonthlySalary { get; set; }
 		public DateTime Created { get; set; }
 	} // class CompanyEmployeeCountInfo 
 

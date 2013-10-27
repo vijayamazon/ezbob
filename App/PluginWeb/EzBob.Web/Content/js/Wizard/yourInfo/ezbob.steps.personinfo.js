@@ -186,6 +186,7 @@ EzBob.YourInformationStepView = Backbone.View.extend({
         var that = this;
         _.find(data, function (d) { return d.name == "OverallTurnOver"; }).value = this.$el.find("#OverallTurnOver").autoNumericGet();
         _.find(data, function (d) { return d.name == "WebSiteTurnOver"; }).value = this.$el.find("#WebSiteTurnOver").autoNumericGet();
+        _.find(data, function (d) { return d.name == "TotalMonthlySalary"; }).value = this.$el.find("#TotalMonthlySalary").autoNumericGet();
         var request = $.post(action, data);
         request.success(function (res) {
             if (res.error) {

@@ -979,10 +979,12 @@ EzBob.validateLimitedCompanyDetailForm = function (el) {
             PropertyOwnedByCompany: { required: true },
             YearsInCompany: { required: true },
             RentMonthsLeft: { required: true },
+            TotalMonthlySalary: { required: true, defaultInvalidPounds: true, regex: "^(?!£ 0.00$)" },
         },
         messages: {
             LimitedBusinessPhone: { regex: "Please enter a valid UK number" },
-            LimitedCompanyNumber: { regex: "Please enter a valid company number" }
+            LimitedCompanyNumber: { regex: "Please enter a valid company number" },
+            TotalMonthlySalary: { defaultInvalidPounds: "This field is required", regex: "This field is required" },
         },
         errorPlacement: EzBob.Validation.errorPlacement,
         unhighlight: EzBob.Validation.unhighlightFS,
@@ -1003,9 +1005,11 @@ EzBob.validateNonLimitedCompanyDetailForm = function (el) {
             PropertyOwnedByCompany: { required: true },
             YearsInCompany: { required: true },
             RentMonthsLeft: { required: true },
+            TotalMonthlySalary: { required: true, defaultInvalidPounds: true, regex: "^(?!£ 0.00$)" },
         },
         messages: {
             NonLimitedBusinessPhone: { regex: "Please enter a valid UK number" },
+            TotalMonthlySalary: { defaultInvalidPounds: "This field is required", regex: "This field is required" },
         },
 
         errorPlacement: EzBob.Validation.errorPlacement,

@@ -14,6 +14,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 			Map(x => x.TopEarningEmployeeCount);
 			Map(x => x.BottomEarningEmployeeCount);
 			Map(x => x.EmployeeCountChange);
+			Map(x => x.TotalMonthlySalary);
 		} // constructor
 	} // class CompanyEmployeeCountMap
 } // namespace

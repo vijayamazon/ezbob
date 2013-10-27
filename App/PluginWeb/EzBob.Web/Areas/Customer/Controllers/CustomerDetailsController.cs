@@ -91,7 +91,8 @@ namespace EzBob.Web.Areas.Customer.Controllers
 					Customer = customer,
 					EmployeeCount = companyEmployeeCountInfo.EmployeeCount,
 					EmployeeCountChange = companyEmployeeCountInfo.EmployeeCountChange,
-					TopEarningEmployeeCount = companyEmployeeCountInfo.TopEarningEmployeeCount
+					TopEarningEmployeeCount = companyEmployeeCountInfo.TopEarningEmployeeCount,
+					TotalMonthlySalary = companyAdditionalInfo.TotalMonthlySalary
 				});
 			} // if
 
