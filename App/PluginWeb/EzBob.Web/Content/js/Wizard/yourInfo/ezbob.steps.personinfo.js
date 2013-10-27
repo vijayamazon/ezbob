@@ -19,7 +19,7 @@ EzBob.YourInformationStepView = Backbone.View.extend({
             limited: EzBob.LimitedInformationView,
             soletrader: EzBob.NonLimitedInformationView
         };
-        this.thankYouPage = new EzBob.ThankYouWizardPage();
+        this.thankYouPage = new EzBob.ThankYouWizardPage({ model: this.model });
         this.thankYouPage.$el.appendTo(this.$el);
 
         this.on('ready', function () {
@@ -211,6 +211,10 @@ EzBob.YourInformationStepView = Backbone.View.extend({
 EzBob.ThankYouWizardPage = Backbone.View.extend({
     initialize: function () {
         this.template = $(_.template($("#lastWizardThankYouPage").html(), { ordty: ordty }));
+        if (!this.model.get('IsOffline'))
+            this.$el.find('.offline').remove();
+        else
+            this.$el.find('.notoffline').remove();
     },
     render: function () {
         $.getJSON(window.gRootPath + "Customer/Wizard/EarnedPointsStr").done(function(data) {
