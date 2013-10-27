@@ -30,16 +30,13 @@ EzBob.EmployeeCountView = Backbone.View.extend({
 		"focusout #EmployeeCountChange": "deltaChanged",
 		"click    #EmployeeCountChange": "deltaChanged",
 		
-		"change   #TotalMonthlySalary": "deltaChanged",
-		"keyup    #TotalMonthlySalary": "deltaChanged",
-		"focusout #TotalMonthlySalary": "deltaChanged",
-		"click    #TotalMonthlySalary": "deltaChanged",
-		"focus    #TotalMonthlySalary": "focused",
+		"change   #MonthlySalary": "deltaChanged",
+		"keyup    #MonthlySalary": "deltaChanged",
+		"focusout #MonthlySalary": "deltaChanged",
+		"click    #MonthlySalary": "deltaChanged",
+		
 	}, // events
-    focused:function(el) {
-        $(el).change();
-    },
-	deltaChanged: function (el) {
+    deltaChanged: function (el) {
 		this.onChangeCallback.call(this.parentView);
 	}, // deltaChanged
 
