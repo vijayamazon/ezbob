@@ -3,7 +3,7 @@
 <p>
     This agreement is between:</p>
 <p>
-    Orange Money Limited (“We”, “Us”, “Our”, “the Creditor”) of 145-157, St John Street,
+    Orange Money Ltd (“We”, “Us”, “Our”, “the Creditor”) of 145-157, St John Street,
     London, EC1V 4PW, and</p>
 <p >
     {{Customer.CustomerPersonalInfo.Fullname}} (“You, “Your”, “the Borrower”)
@@ -33,8 +33,13 @@
 
 <p  style="text-align: justify" >Total Amount to be repaid  {{TotalAmount}}</p>
 
-<p  style="text-align: justify" >APR {{APR}} %</p>
-<p  style="text-align: justify" >Interest Rate {{InterestRatePerYearFormatted}} % per annum</p>
+<p  style="text-align: justify;" >Total Loan APR: {{APR}}%</p>
+
+<p  style="text-align: justify" >Interest Rate</p>
+            {{#FormattedSchedules}}
+            <p  style="text-align: justify; margin-left: 30px;" > MONTH {{Iterration}}: Rate of interest {{InterestRate}}% per month. Fixed </p>
+            {{/FormattedSchedules}}
+
 
 <p  style="text-align: justify" >
     Repayments under this Agreement will be collected on the scheduled repayment dates
@@ -42,7 +47,7 @@
     payment is not available for collection by us in full on the scheduled repayment
     date a fee of £40.00 will be charged on each scheduled repayment date where the
     entire scheduled payment is not received by us (“missed payment fee”) and will be
-    added you your outstanding balance, and interest will continue to be applied to
+    added you your outstanding balance, and interest (at the applicable rate) will continue to be applied to
     the total outstanding credit balance. See Clause 12 for more information.
 </p>
 <p  style="text-align: justify" >
@@ -82,7 +87,7 @@
 <p  style="text-align: justify" >
     Also if you do not repay your loan in full and on time we will continue to charge
     interest on the outstanding credit balance. The rate of interest will be the same
-    as shown above. Interest after default is calculated daily and applied to the outstanding
+    as shown above (for the final month). Interest after default is calculated daily and applied to the outstanding
     balance every 30 days (or when the outstanding balance is repaid in full if earlier).
 </p>
 <p  style="text-align: justify" >
@@ -171,7 +176,7 @@
     <dt><b>Application</b></dt>
     <dd><p  style="text-align: justify; margin-left: 30px;" >
         1. These Terms and Conditions will apply to the Fixed Sum Loan Agreement entered
-        into by you with Orange Money Limited trading as EZbob, EZbob.com and orangemoney.co.uk,
+        into by you with Orange Money Ltd trading as EZbob, EZbob.com and orangemoney.co.uk,
         whose registered office address 145-157 St John Street, London EC1V 4PW, company
         number 7852687.
     </p></dd>
@@ -262,7 +267,7 @@
     <dd><p  style="text-align: justify; margin-left: 30px;" >
         12. Prompt payment is essential. If you are late in paying, you will pay us interest
         on the amount due from when it is due until it is actually received by us (credited
-        to our account) at the rate of interest shown above. Please also see Clauses 20
+        to our account) at the applicable rate of interest shown above. Please also see Clauses 20
         and 21 below concerning late payments charges. Therefore, in the event your payment
         is not immediate (i.e. real time) and consequently payment does not reach our bank
         for a further few days, interest will continue to accrue at the above rate until
@@ -473,7 +478,7 @@
 <dl>
     <dt><b>Complaints and Dispute Resolution</b> </dt>
     <dd><p  style="text-align: justify; margin-left: 30px;" >
-        35. If you want to make a complaint about Orange Money Limited you can email <a href="mailto:support@ezbob.com">support@ezbob.com</a>,
+        35. If you want to make a complaint about Orange Money Ltd you can email <a href="mailto:support@ezbob.com">support@ezbob.com</a>,
         with brief details of your complaint and your account number. Our Customer Service
         staff will acknowledge your complaint by email within 5 working days. We will try
         to sort out your complaint quickly once you have contacted us. If we cannot do this,
@@ -640,6 +645,26 @@
         and is valid until varied in accordance with these Terms and Conditions. We are
         an online lending service providing short term loans. The basis upon which the Loan
         is supplied to you is set out in this Agreement.</p></dd>
-    <dd><p  style="text-align: justify; margin-left: 30px;" >
+    <dd><p style="text-align: justify; margin-left: 30px;" >
         61. All communications with you will be in English.</p></dd>
+    <dd><p style="text-align: justify; margin-left: 30px;" >
+        62. Some of our loans benefit from a guarantee issued under the 'European Progress
+        Microfinance Facility' established by the European Union. If you were informed during
+        your loan application process that this loan benefits from that guarantee program, 
+        the following provisions will apply: The counter party acknowledges that the European
+        Investment Fund ("EIF"), the agents of EIF, the European Court of Auditors (the "ECA"),
+        the Commission and the agents of the Commission including OLAF (the "Agents") shall 
+        have the right to carry out controls and to request information in respect of this agreement
+        and its execution. The counter party shall permit inspections by EIF, the agents of EIF, the ECA,
+        the Commission and the Agents of its business operations, books and records. As these controls 
+        may include on the spot controls of the counter party, the counter party shall permit access to 
+        its premises to EIF, the agents of EIF, the ECA, the Commission and the Agents during normal 
+        business hours. If any deficiencies in the maintenance of records are identified by EIF, agents of EIF,
+        the ECA, the Commission and/or the Agents, EIF, agents of EIF, the Borrower undertakes to promptly, 
+        and in any event no later than three (3) months after being informed of such deficiencies, comply with 
+        the instructions given by EIF, agents of EIF, the ECA, the Commission and/or the Agents and provide any 
+        additional information reasonably requested by EIF, agents of EIF, the ECA, the Commission and/or the Agents.
+        For a period of five years following the expiry or termination of this Agreement, the Borrower hereby 
+        undertakes to keep all documents relating to this Agreement, and shall make these documents available 
+        for inspection by EIF, the ECA, the Commission and/or the Agents.</p></dd>
 </dl>
