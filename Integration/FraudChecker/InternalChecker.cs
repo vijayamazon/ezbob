@@ -407,7 +407,7 @@ namespace FraudChecker
 			fraudDetections.AddRange(
 				from c in customerPortion
 				where c.Session.Select(s => s.Ip).ToList().Contains(customerSession.Ip)
-				select Helper.CreateDetection("Customer Ip", customer, c, "Customer Ip", null, string.Format("{0}", customerSession.Ip)));
+				select Helper.CreateDetection("Customer IP", customer, c, "Customer IP", null, string.Format("{0}", customerSession.Ip)));
 		}
     }
 }

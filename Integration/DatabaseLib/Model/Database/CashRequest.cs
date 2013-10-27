@@ -26,6 +26,10 @@ namespace EZBob.DatabaseLib.Model.Database
         public virtual Medal? MedalType { get; set; }
         public virtual string EscalationReason { get; set; }
         public virtual string UnderwriterComment { get; set; }
+		
+		public virtual DateTime? OfferStart { get; set; }
+		public virtual DateTime? OfferValidUntil { get; set; }
+
         public virtual decimal InterestRate
         {
             get { return _interestRate; }

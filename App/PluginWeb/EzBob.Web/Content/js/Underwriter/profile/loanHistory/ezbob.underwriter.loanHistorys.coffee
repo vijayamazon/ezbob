@@ -85,3 +85,4 @@ class EzBob.Underwriter.LoanHistoryView extends Backbone.Marionette.View
             view = new EzBob.LoanScheduleViewDlg schedule: data, isShowGift: false, isShowExportBlock:true, offerId:offerId, customerId:@model.customerId
             EzBob.App.jqmodal.show view
         false
+

@@ -57,6 +57,9 @@
                 model.LoanType = loanType.Name;
                 model.LoanTypeId = loanType.Id;
 
+				cr.OfferStart = cr.OfferStart ?? customer.OfferStart;
+				cr.OfferValidUntil = cr.OfferValidUntil ?? customer.OfferValidUntil;
+
                 model.RepaymentPerion = _repaymentCalculator.ReCalculateRepaymentPeriod(cr);
             }
 
@@ -77,8 +80,8 @@
             model.AvaliableAmount = customer.CreditSum ?? 0M;
 			model.OfferExpired = customer.OfferValidUntil <= DateTime.UtcNow;
 
-			model.StartingFromDate = FormattingUtils.FormatDateToString(customer.OfferStart);
-			model.OfferValidateUntil = FormattingUtils.FormatDateToString(customer.OfferValidUntil);
+			model.StartingFromDate = FormattingUtils.FormatDateToString(cr.OfferStart);
+			model.OfferValidateUntil = FormattingUtils.FormatDateToString(cr.OfferValidUntil);
 
 			var balance = _funds.GetBalance();
 			var manualBalance = _manualFunds.GetBalance();

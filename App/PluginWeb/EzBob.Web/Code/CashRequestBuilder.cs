@@ -51,7 +51,9 @@ namespace EzBob.Web.Code
                                       RepaymentPeriod = loanType.RepaymentPeriod,
 									  UseSetupFee = configurationVariables.GetByNameAsBool("SetupFeeEnabled"),
                                       DiscountPlan = discount,
-									  IsLoanTypeSelectionAllowed = 1
+									  IsLoanTypeSelectionAllowed = 1,
+									  OfferValidUntil = DateTime.UtcNow.AddDays(1),
+									  OfferStart = DateTime.UtcNow,
                                   };
 
             customer.CashRequests.Add(cashRequest);

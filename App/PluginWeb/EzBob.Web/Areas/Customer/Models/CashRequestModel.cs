@@ -25,8 +25,8 @@ namespace EzBob.Web.Areas.Customer.Models
                                c.ManagerApprovedSum.HasValue
                                    ? (decimal) c.ManagerApprovedSum.Value
                                    : 0,
-                           StartDate = c.CreationDate,
-                           EndDate = c.Customer.OfferValidUntil,
+                           StartDate = c.OfferStart,
+                           EndDate = c.OfferValidUntil,
                            Comments = c.UnderwriterComment,
                            InterestRate = c.InterestRate,
                            SetupFee = c.UseSetupFee,

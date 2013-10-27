@@ -327,6 +327,7 @@
 	        cust.OfferValidUntil = dt;
             var cr = cust.LastCashRequest;
             cr.LoanTemplate = null;
+	        cr.OfferValidUntil = dt;
         }
 
         [HttpPost]
@@ -348,8 +349,11 @@
 
             var cr = cust.LastCashRequest;
 	        cust.OfferStart = dt;
-			cust.OfferValidUntil = dt.AddHours(offerValidForHours);
+			var offerValidUntil = dt.AddHours(offerValidForHours);
+	        cust.OfferValidUntil = offerValidUntil;
             cr.LoanTemplate = null;
+	        cr.OfferStart = dt;
+	        cr.OfferValidUntil = offerValidUntil;
         }
 
 
@@ -372,7 +376,8 @@
             _crBuilder.ForceEvaluate(customer, (NewCreditLineOption) newCreditLineOption, false);
 
             customer.CreditResult = null;
-
+			customer.OfferStart = cashRequest.OfferStart;
+			customer.OfferValidUntil = cashRequest.OfferValidUntil;
             return this.JsonNet(new { Message = "The evaluation has been started. Please refresh this application after a while..." });
         }
 
@@ -388,7 +393,8 @@
             cr.ManagerApprovedSum = amount;
             cr.InterestRate = interestRate;
             cr.RepaymentPeriod = repaymentPeriod;
-
+			cr.OfferStart = FormattingUtils.ParseDateWithCurrentTime(offerStart);
+			cr.OfferValidUntil = FormattingUtils.ParseDateWithCurrentTime(offerValidUntil);
 
             cr.UseSetupFee = useSetupFee;
             cr.EmailSendingBanned = !allowSendingEmail;
@@ -397,8 +403,8 @@
             cr.DiscountPlan = _discounts.Get(discountPlan);
 
 			Customer c = cr.Customer;
-            c.OfferStart = FormattingUtils.ParseDateWithCurrentTime(offerStart);
-            c.OfferValidUntil = FormattingUtils.ParseDateWithCurrentTime(offerValidUntil);
+			c.OfferStart = cr.OfferStart;
+			c.OfferValidUntil = cr.OfferValidUntil;
        
             return this.JsonNet(true);
         }

@@ -2,7 +2,9 @@
 
 namespace EZBob.DatabaseLib.Model.Database
 {
-    public sealed class CashRequestMap : ClassMap<CashRequest> 
+	using NHibernate.Type;
+
+	public sealed class CashRequestMap : ClassMap<CashRequest> 
     {
         public CashRequestMap()
         {
@@ -32,6 +34,8 @@ namespace EZBob.DatabaseLib.Model.Database
             Map(x => x.LoanTemplate).CustomType("StringClob");
             Map(x => x.IsLoanTypeSelectionAllowed);
             References(x => x.DiscountPlan, "DiscountPlanId");
+			Map(x => x.OfferStart).CustomType<UtcDateTimeType>();
+			Map(x => x.OfferValidUntil).CustomType<UtcDateTimeType>();
         }
     }
 }
