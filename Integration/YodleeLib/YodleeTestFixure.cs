@@ -1,6 +1,7 @@
 ﻿namespace YodleeLib
 {
 	using System;
+	using System.Collections.Generic;
 	using System.IO;
 	using System.Linq;
 	using System.Xml;
@@ -47,8 +48,8 @@
 			// halifax "EZBOB+2012@ezbob.com", Encryptor.Decrypt("D61Ggo7aGrQTD/ZNsnqUfteq4mlqW00xAG1yL8wpfBA="  10321216 WBkLy450 
 			// dag "EZBOB+2014@ezbob.com", Encryptor.Decrypt("sykuYcJcd+ShmykTY/pi0qBpRJK0a9HBiiw9NN0Dgjg="
 			// mfa "EZBOB+2013@ezbob.com", Encryptor.Decrypt("qcw25++Ggp8/yi4bNkeB2Q64ABGU5YL+r7DPAZDrkkE="
-			var pass = Encryptor.Decrypt("VmLkF2xNXAeuLAv/hWbh5iD2as2PgvyStMNEoUaoD0s=");
-			long itemId = m.GetItemId("EZBOB+2012@ezbob.com", Encryptor.Decrypt("D61Ggo7aGrQTD/ZNsnqUfteq4mlqW00xAG1yL8wpfBA="),null, out dName, out csId);
+			var pass = Encryptor.Decrypt("SH24xKutqoIefQ9oz2gjD9rITakU29ZXQpGA9SY8UMw=");
+			long itemId = m.GetItemId("EZBOB+311@ezbob.com", pass, null, out dName, out csId);
 			Console.WriteLine("{0} {1}", dName, itemId);
 			Assert.That(itemId != -1);
 			return itemId;
@@ -69,6 +70,25 @@
 		{
 			var m = new YodleeMain();
 			m.RemoveItem(test_get_itemId());
+		}
+
+		[Test]
+		[Ignore]
+		public void test_get_data_for_item()
+		{
+			var m = new YodleeMain();
+			var pass = Encryptor.Decrypt("SH24xKutqoIefQ9oz2gjD9rITakU29ZXQpGA9SY8UMw=");
+			m.LoginUser("EZBOB+311@ezbob.com", pass);
+			GetBankData g = new GetBankData();
+			string s1;
+			string err;
+			Dictionary<BankData, List<BankTransactionData>> data;
+			//var itemId = test_get_itemId();
+			long itemId = 10403741;
+			g.GetBankDataForItem(m.UserContext, itemId, out s1, out err, out data);
+
+			Console.WriteLine("info {0}, errors:{1}, count of data:{2}",s1, err, data.Keys.Count);
+			
 		}
 	}
 }

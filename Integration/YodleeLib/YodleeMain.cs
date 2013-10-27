@@ -203,10 +203,10 @@
 				Log.InfoFormat("No items were found for the user '{0}'", username);
 				return null;
 			}
-
+			
 			foreach (ItemSummary item in oa)
 			{
-				if(customerItems.Contains(item.itemId)){ continue; }
+				if(customerItems != null && customerItems.Contains(item.itemId)){ continue; }
 				Log.DebugFormat("item {0} {1} added {2} status {3}", item.itemId, item.itemDisplayName, item.refreshInfo.itemCreateDate, item.refreshInfo.statusCode);
 				if (item.refreshInfo.statusCode == 801)
 				{
@@ -231,7 +231,6 @@
 				else
 				{
 					Log.WarnFormat("Item status code is not '0' but '{0}' for user {1}", item.refreshInfo.statusCode, username);
-					return null;
 				}
 			}
 			return null;
