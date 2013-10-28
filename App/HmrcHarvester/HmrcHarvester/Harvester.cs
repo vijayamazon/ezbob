@@ -180,9 +180,9 @@ namespace Ezbob.HmrcHarvester {
 		/// <param name="bValidateCredentialsOnly">true to validate credentials only, false to login and download data.</param>
 		/// <param name="nCustomerMarketplaceID">Customer marketplace id for fetching backdoor data.</param>
 		public virtual void Run(bool bValidateCredentialsOnly, int nCustomerMarketplaceID) {
-			try {
-				Debug("Harvester run mode: {0}.", bValidateCredentialsOnly ? "validate credentials only" : "login and download data");
+			Debug("Harvester run mode: {0}.", bValidateCredentialsOnly ? "validate credentials only" : "login and download data");
 
+			try {
 				if (!bValidateCredentialsOnly) {
 					Hopper oBackdoorData = FetchBackdoorData(nCustomerMarketplaceID, this);
 
@@ -192,20 +192,31 @@ namespace Ezbob.HmrcHarvester {
 						return;
 					} // if
 				} // if
+			}
+			catch (Exception e) {
+				throw new ApiException(e.Message, e);
+			} // try
 
+			try {
 				if (!IsLoggedIn)
 					Login(GetLoginRequestDetails(GetPage("")));
+			}
+			catch (Exception e) {
+				throw new ApiException(e.Message, e);
+			} // try
 
+			if (!IsLoggedIn)
+				throw new ApiException("Not logged in.");
+
+			if (bValidateCredentialsOnly) {
+				Debug("Harvester running is complete.");
+				return;
+			} // if
+
+			try {
 				string sUserVatID = GetUserVatID();
 
 				Debug("Harvester has validated login credentials.");
-
-				IsLoggedIn = true;
-
-				if (bValidateCredentialsOnly) {
-					Debug("Harvester running is complete.");
-					return;
-				} // if
 
 				Debug("Harvester starts downloading data.");
 
@@ -346,7 +357,10 @@ namespace Ezbob.HmrcHarvester {
 
 				HtmlDocument doc = GetPage("/home/services");
 
-				HtmlNode oLink = doc.DocumentNode.SelectSingleNode("//a[@id=\"LinkAccessVAT\"]");
+				HtmlNode oLink =
+					doc.DocumentNode.SelectSingleNode("//a[@id=\"LinkAccessVAT\"]")
+					??
+					doc.DocumentNode.SelectSingleNode("//a[@id=\"LinkAccessVATMakeVATReturn\"]");
 
 				if (oLink == null)
 					throw new HarvesterException("Access VAT services link not found.");
@@ -395,11 +409,48 @@ namespace Ezbob.HmrcHarvester {
 
 			HttpResponseMessage response = Session.PostAsync(lrd.Url, new FormUrlEncodedContent(oData)).Result;
 
-			Debug("Validating response code...");
+			Debug("Validating response code for user name {0}...", UserName);
 
 			response.EnsureSuccessStatusCode();
 
-			Info("Logged in as {0}.", UserName);
+			Info("Response code for user name {0} validated.", UserName);
+
+			try {
+				string sResponse = response.Content.ReadAsStringAsync().Result;
+
+				var doc = new HtmlDocument();
+				doc.LoadHtml(sResponse);
+
+				HtmlNode oTitle = doc.DocumentNode.SelectSingleNode("/html/head/title");
+
+				if (oTitle == null) {
+					Error("No title in login response:");
+					Debug("{0}", sResponse);
+					throw new HarvesterException("No title in login response.");
+				} // if
+
+				switch (oTitle.InnerText.Trim()) {
+				case "HMRC: Security message":
+					IsLoggedIn = true;
+					Info("User {0} logged in successfully.", UserName);
+					break;
+
+				case "HMRC: Login":
+					IsLoggedIn = false;
+					Warn("Not logged in: invalid user name or password.");
+					Debug("{0}", sResponse);
+					throw new HarvesterException("Invalid user name or password.");
+
+				default:
+					IsLoggedIn = false;
+					Error("Not logged in because of unexpeced page title in login response: {0}", oTitle.InnerText);
+					Debug("{0}", sResponse);
+					throw new HarvesterException("Unexpected title in login response.");
+				} // switch
+			}
+			catch (Exception e) {
+				throw new HarvesterException("Failed to log in", e);
+			} // try
 		} // Login
 
 		#endregion method Login
@@ -725,6 +776,11 @@ namespace Ezbob.HmrcHarvester {
 		#region method FetchRtiTaxYears
 
 		private void FetchRtiTaxYears() {
+			if (string.IsNullOrWhiteSpace(TaxOfficeNumber)) {
+				Debug("Not fetching RTI Tax Years: Tax Office number is empty.");
+				return;
+			} // if
+
 			Debug("Fetching RTI Tax Years started...");
 
 			HtmlDocument doc = GetPage("/paye/org/" + TaxOfficeNumber + "/account");

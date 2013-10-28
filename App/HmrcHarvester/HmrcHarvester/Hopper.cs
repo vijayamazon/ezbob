@@ -82,6 +82,12 @@ namespace Ezbob.HmrcHarvester {
 			if (action == null)
 				return;
 
+			if (!Files.ContainsKey(dt))
+				return;
+
+			if (!Files[dt].ContainsKey(ft))
+				return;
+
 			foreach (KeyValuePair<string, byte[]> f in Files[dt][ft])
 				action(dt, ft, f.Key, f.Value);
 		} // ForEachFile
