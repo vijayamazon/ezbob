@@ -37,9 +37,6 @@
     <Reference Include="Aspose.Words">
       <HintPath>..\..\Lib\3rdparty\Aspose\Aspose.Words.dll</HintPath>
     </Reference>
-    <Reference Include="HtmlTableCreator">
-      <HintPath>..\..\Tools\EzbobUtils\Dlls\HtmlTableCreator.dll</HintPath>
-    </Reference>
     <Reference Include="Iesi.Collections">
       <HintPath>..\..\Lib\3rdparty\Nhibernate\Iesi.Collections.dll</HintPath>
     </Reference>
@@ -91,6 +88,7 @@
     <Compile Include="Agreements\AgreementsTemplatesProvider.cs" />
     <Compile Include="ChangeLoanDetailsModelBuilder.cs" />
     <Compile Include="ConfigurationVariableModel.cs" />
+    <Compile Include="FirstOfMonthStatusStrategyHelper.cs" />
     <Compile Include="CustomerExtensions.cs" />
     <Compile Include="CustomerModel.cs" />
     <Compile Include="DecisionHistoryModel.cs" />

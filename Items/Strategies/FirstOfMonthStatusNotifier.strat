@@ -125,7 +125,7 @@
     <ScriptDescriptor>
       <OwnerName>ScriptNode39091991</OwnerName>
       <Script>from EzBob.Models import *
-api = StrategyHelper()
+api = FirstOfMonthStatusStrategyHelper()
 api.SendFirstOfMonthStatusMail()</Script>
       <ScriptType>IronPython</ScriptType>
     </ScriptDescriptor>
