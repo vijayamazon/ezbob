@@ -1,5 +1,8 @@
 ﻿@model dynamic
 <script id="loan-schedule-template" type="text/template">
+<% (function() {
+	var bAtLeastOneExceeds = false; %>
+
 	<div class="simple-well clearfix apply-for-loan-total-block">
 		<div class="formula">
 			<div class="total">Loan: <span class="gelt"><%-EzBob.formatPounds(totalPrincipal)%></span></div>
@@ -27,12 +30,21 @@
 			</tr>
 		</thead>
 		<tbody>
-			<%_.each(schedule, function(line, i){%>
-				<tr>
+			<% _.each(schedule, function(line, i){
+				var bExceeds = false;
+
+				if (isShowExceedMaxInterestForSource && (MaxInterestForSource != -1)) {
+					if (line.InterestRate > MaxInterestForSource) {
+						bExceeds = true;
+						bAtLeastOneExceeds = true;
+					} // if
+				} // if
+
+				%><tr>
 					<td><%-EzBob.formatDateHumanFull(line.Date)%></td>
 					<td><%-EzBob.formatPounds(line.LoanRepayment)%></td>
 					<td><%-EzBob.formatPounds(line.Interest)%></td>
-					<td><%-EzBob.formatPercents1(line.InterestRate)%></td>
+					<td<% if (bExceeds) { print(' class=red title="Interest rate for this month exceeds max rate for loan source."'); } %>><%-EzBob.formatPercents1(line.InterestRate)%></td>
 
 					<td style="text-align: center"><%
 						var fee = setupFee > 0 && i == 0 ? setupFee : 0;
@@ -60,6 +72,7 @@
 		Repayment period: <b><%- RepaymentPerion %></b><br />
 		Interest rate: <b><%- EzBob.formatPercents(InterestRate) %></b><br />
 		Loan type: <b><%- LoanType %></b><br>
+		Loan source: <b><%- LoanSourceName %></b><br>
 		<br>
 	</div>
 
@@ -67,4 +80,9 @@
 	<a href="#" class="pull-right print-link excel-link">Export to Excel</a>
 	<a href="#" style="margin-right: 20px;" class="pull-right pdf-link">Export to PDF</a>
 	<% } %>
+	
+	<% if (bAtLeastOneExceeds) { %>
+	<h3 class="red at-least-one-exceeds-max-rate-for-source">Interest for at least one month exceeds max interest for this loan source.</h3>
+	<% } %>
+<% })(); %>
 </script>

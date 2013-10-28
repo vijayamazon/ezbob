@@ -2,6 +2,7 @@
 using System.Linq;
 using ApplicationMng.Repository;
 using EZBob.DatabaseLib.Model.Database;
+using EZBob.DatabaseLib.Model.Database.Loans;
 using EZBob.DatabaseLib.Model.Loans;
 using EzBob.Web.ApplicationCreator;
 using EzBob.Web.Infrastructure;
@@ -19,6 +20,7 @@ namespace EzBob.Web.Code
         private readonly IUsersRepository _users;
 		private readonly IEzBobConfiguration _config;
 		private readonly IConfigurationVariablesRepository configurationVariables;
+		private readonly ILoanSourceRepository _loanSources;
 
         public CashRequestBuilder(
                                     ILoanTypeRepository loanTypes, 
@@ -26,7 +28,8 @@ namespace EzBob.Web.Code
                                     IAppCreator creator,
                                     IUsersRepository users,
                                     IEzBobConfiguration config,
-									IConfigurationVariablesRepository configurationVariables
+									IConfigurationVariablesRepository configurationVariables,
+			ILoanSourceRepository loanSources
             )
         {
             _loanTypes = loanTypes;
@@ -35,31 +38,32 @@ namespace EzBob.Web.Code
             _users = users;
             _config = config;
 	        this.configurationVariables = configurationVariables;
+	        _loanSources = loanSources;
         }
 
-        public CashRequest CreateCashRequest(Customer customer)
-        {
-            var loanType = _loanTypes.GetDefault();
-            var discount = _discounts.GetDefault();
+		public CashRequest CreateCashRequest(Customer customer) {
+			var loanType = _loanTypes.GetDefault();
+			var loanSource = _loanSources.GetDefault();
 
-            var cashRequest = new CashRequest
-                                  {
-                                      CreationDate = DateTime.UtcNow,
-                                      Customer = customer,
-                                      InterestRate = 0.06M,
-                                      LoanType = loanType,
-                                      RepaymentPeriod = loanType.RepaymentPeriod,
-									  UseSetupFee = configurationVariables.GetByNameAsBool("SetupFeeEnabled"),
-                                      DiscountPlan = discount,
-									  IsLoanTypeSelectionAllowed = 1,
-									  OfferValidUntil = DateTime.UtcNow.AddDays(1),
-									  OfferStart = DateTime.UtcNow,
-                                  };
+			var cashRequest = new CashRequest {
+				CreationDate = DateTime.UtcNow,
+				Customer = customer,
+				InterestRate = 0.06M,
+				LoanType = loanType,
+				RepaymentPeriod = loanSource.DefaultRepaymentPeriod ?? loanType.RepaymentPeriod,
+				UseSetupFee = configurationVariables.GetByNameAsBool("SetupFeeEnabled"),
+				DiscountPlan = _discounts.GetDefault(),
+				IsLoanTypeSelectionAllowed = 1,
+				OfferValidUntil = DateTime.UtcNow.AddDays(1),
+				OfferStart = DateTime.UtcNow,
+				LoanSource = loanSource,
+				IsCustomerRepaymentPeriodSelectionAllowed = loanSource.IsCustomerRepaymentPeriodSelectionAllowed
+			};
 
-            customer.CashRequests.Add(cashRequest);
+			customer.CashRequests.Add(cashRequest);
 
-            return cashRequest;
-        }
+			return cashRequest;
+		}
 
         public void ForceEvaluate(Customer customer, NewCreditLineOption newCreditLineOption, bool isUnderwriterForced)
         {

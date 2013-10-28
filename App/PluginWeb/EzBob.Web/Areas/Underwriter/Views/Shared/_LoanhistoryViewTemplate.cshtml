@@ -40,6 +40,7 @@
                 <th>Type</th>
                 <th>DiscountPlan</th>
                 <th>Status</th>
+                <th>Source</th>
             </tr>
         </thead>
         <tbody>
@@ -68,6 +69,7 @@
                 <td><%- loan.LoanType %></td>
                 <td><%- loan.DiscountPlan %></td>
                 <td><%- loan.StatusDescription %></td>
+                <td><%- loan.LoanSourceName %></td>
             </tr>
             <%
             sumLoanAmount +=!isNaN(loan.LoanAmount)?loan.LoanAmount:0 ;
@@ -85,7 +87,7 @@
                 <td colspan="2"></td>
                 <td><%- EzBob.formatPounds(sumBalance) %></td>
                 <td><%- EzBob.formatPounds(sumPrincipal) %></td>
-                <td colspan="3"></td>
+                <td colspan="4"></td>
             </tr>
         </tfoot>
     </table>
@@ -110,6 +112,7 @@
                 <th>Discount Plan</th>
                 <th>Repayment Period</th>
                 <th>Type</th>
+                <th>Source</th>
                 <th>Comments</th>
                 
             </tr>
@@ -138,6 +141,7 @@
         <td><%- offer.DiscountPlan %></td>
         <td><%- offer.RepaymentPeriod %></td>
         <td><%- offer.LoanType %></td>
+        <td><%- offer.LoanSourceName %></td>
         <td><%- offer.Comments %></td>
     </tr>
 }
@@ -147,8 +151,8 @@
         <td><%- offer.UnderwriterDecision %></td>
         <td class="centered"></td>
         <td><%- EzBob.formatDateHumanFull(offer.StartDate) %></td>
-        <td colspan="7"></td>
-        
+        <td colspan="8"></td>
+
         <td><%- offer.Comments %></td>
     </tr>
 }

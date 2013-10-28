@@ -1,5 +1,6 @@
 ﻿using System;
 using ApplicationMng.Repository;
+using EZBob.DatabaseLib.Model.Database.Loans;
 using EZBob.DatabaseLib.Model.Loans;
 using NHibernate;
 
@@ -74,6 +75,10 @@ namespace EZBob.DatabaseLib.Model.Database
         public virtual int IsLoanTypeSelectionAllowed { get; set; }
 
         public virtual DiscountPlan DiscountPlan { get; set; }
+
+		public virtual LoanSource LoanSource { get; set; }
+
+		public virtual bool IsCustomerRepaymentPeriodSelectionAllowed { get; set; }
     }
 
     public interface ICashRequestRepository : IRepository<CashRequest>

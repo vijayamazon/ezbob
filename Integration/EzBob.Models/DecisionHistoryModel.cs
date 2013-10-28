@@ -35,7 +35,8 @@ namespace EzBob.Web.Areas.Underwriter.Models
                                                Date = item.Date,
                                                UnderwriterName = item.Underwriter.FullName,
                                                LoanType = item.LoanType.Name,
-                                               DiscountPlan = GetDiscountPlanName(item)
+                                               DiscountPlan = GetDiscountPlanName(item),
+											   LoanSourceName = GetLoanSourceName(item)
                                            };
             if (item.CashRequest != null)
             {
@@ -50,10 +51,19 @@ namespace EzBob.Web.Areas.Underwriter.Models
 
         public string DiscountPlan { get; set; }
 
+
         private static string GetDiscountPlanName(DecisionHistory item)
         {
             if (item.CashRequest == null || item.CashRequest.DiscountPlan == null) return "";
             return item.CashRequest.DiscountPlan.Name;
+        }
+
+		public string LoanSourceName { get; set; }
+
+        private static string GetLoanSourceName(DecisionHistory item)
+        {
+            if (item.CashRequest == null || item.CashRequest.LoanSource == null) return "";
+            return item.CashRequest.LoanSource.Name;
         }
     }
 }

@@ -182,6 +182,7 @@ EzBob.Underwriter.ApproveDialog = EzBob.Underwriter.FunctionsDialogView.extend(
                 schedule: data
                 isShowGift: false
                 isShowExportBlock:false
+                isShowExceedMaxInterestForSource: true
             )
             scheduleView.render()
             that.$el.find("#loan-schedule .simple-well").hide()

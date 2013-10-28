@@ -53,6 +53,8 @@
 
 		public bool IsEarly { get; set; }
 
+		public string LoanSourceName { get; set; }
+
         public static LoanModel FromLoan(Loan loan, ILoanRepaymentScheduleCalculator calculator, ILoanRepaymentScheduleCalculator calculatorForNow = null)
         {
             var nowState = calculatorForNow != null ? calculatorForNow.GetState() : new LoanScheduleItem();
@@ -111,6 +113,7 @@
             if (loan.CashRequest!= null)
             {
                 loanModel.DiscountPlan = loan.CashRequest.DiscountPlan.Name;
+	            loanModel.LoanSourceName = loan.CashRequest.LoanSource.Name;
             }
             return loanModel;
         }

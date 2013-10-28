@@ -16,6 +16,7 @@ namespace EzBob.Web.Areas.Customer.Models
         public string UnderwriterDecision { get; set; }
         public string LoanType { get; set; }
         public string DiscountPlan { get; set; }
+		public string LoanSourceName { get; set; }
 
         public static CashRequestModel Create(CashRequest c)
         {
@@ -34,7 +35,8 @@ namespace EzBob.Web.Areas.Customer.Models
                            RepaymentPeriod = c.RepaymentPeriod,
                            UnderwriterDecision = c.UnderwriterDecision == null ? null : c.UnderwriterDecision.Value.ToString(),
                            LoanType = c.LoanType != null ? c.LoanType.Name : string.Empty,
-                           DiscountPlan = c.DiscountPlan == null ? "" : c.DiscountPlan.Name
+                           DiscountPlan = c.DiscountPlan == null ? "" : c.DiscountPlan.Name,
+						   LoanSourceName = c.LoanSource == null ? "" : c.LoanSource.Name
                        };
         }
     }

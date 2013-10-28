@@ -57,6 +57,7 @@ namespace EzBob.Web.Infrastructure
         string EmailUnderReviewStrategyName { get; }
         int SessionTimeout { get; }
 		// string ChannelGrabberConfigPath { get; }
+		bool SkipServiceOnNewCreditLine { get; }
 		int PacnetBalanceMaxManualChange { get; }
 		int PacnetBalanceWeekendLimit { get; }
 		int PacnetBalanceWeekdayLimit { get; }
@@ -132,6 +133,17 @@ namespace EzBob.Web.Infrastructure
         public string EmailUnderReviewStrategyName { get { return GetValueWithDefault<string>("EmailUnderReviewStrategyName", "Email Under review"); } }
 
         // public string ChannelGrabberConfigPath { get { return this.GetValueWithDefault<string>("ChannelGrabberConfigPath", ""); } }
+
+		public bool SkipServiceOnNewCreditLine {
+			get {
+				try {
+					return GetValueWithDefault<bool>("SkipServiceOnNewCreditLine", "false");
+				}
+				catch (System.Exception) {
+					return false;
+				}
+			} // get
+		} // SkipServiceOnNewCreditLine
 
         public bool WizardTopNaviagtionEnabled
         {

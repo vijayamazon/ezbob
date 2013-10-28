@@ -29,6 +29,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         'click [name="loanType"]'                           : 'loanType'
         'click [name="isLoanTypeSelectionAllowed"]'         : 'isLoanTypeSelectionAllowed'
         'click [name="discountPlan"]'                       : 'discountPlan'
+        'click [name="loanSource"]'                         : 'loanSource'
 
     editOfferValidUntilDate: ->
         d = new EzBob.Dialogs.DateEdit(
@@ -240,6 +241,52 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         d.on( "done", => @model.fetch())
         return
 
+    loanSource: ->
+        d = new EzBob.Dialogs.ComboEdit
+            model: @model
+            propertyName: "LoanSourceID"
+            title: "Loan source"
+            comboValues: _.map(@model.get('LoanSources'), (ls) -> { value: ls.Id, text: ls.Name })
+            postValueName: "LoanSourceID"
+            url: "Underwriter/ApplicationInfo/LoanSource"
+            data: {id: @model.get("CashRequestId")}
+        d.render()
+        d.on( "done", => @model.fetch() )
+        return
+
+    validateInterestVsSource: ->
+        nMaxInterest = EzBob.loanSourceMaxInterest @model.toJSON()
+
+        if nMaxInterest == -1
+            return
+
+        @$el.find('.interest-exceeds-max-by-loan-source').toggleClass 'hide', @model.get('InterestRate') <= nMaxInterest
+
+        @$el.find('.discount-exceeds-max-by-loan-source').addClass 'hide'
+
+        sPercentList = @model.get 'DiscountPlanPercents'
+
+        if sPercentList == ''
+            return
+
+        nBaseRate = @model.get 'InterestRate'
+
+        aryPercentList = sPercentList.split ','
+
+        for pct in aryPercentList
+            if pct[0] == '('
+                pct = pct.substr 1
+
+            nPct = parseFloat pct
+
+            nChange = 100.0 + nPct
+
+            nRate = nBaseRate * nChange / 100.0
+
+            if nRate > nMaxInterest
+                @$el.find('.discount-exceeds-max-by-loan-source').removeClass 'hide'
+                break
+
     discountPlan: ->
         d = new EzBob.Dialogs.ComboEdit
             model: @model
@@ -278,7 +325,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
 
     serializeData: ->
         m: @model.toJSON()
-    
+
     onRender: ->
         @$el.find(".tltp").tooltip()
         @$el.find(".tltp-left").tooltip({placement: "left"})
@@ -289,6 +336,15 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
             @$el.find('button[name=isLoanTypeSelectionAllowed]').attr('disabled', 'disabled')
         else
             @$el.find('button[name=isLoanTypeSelectionAllowed]').removeAttr('disabled')
+
+        @validateInterestVsSource()
+
+        nDefaultRepaymentPeriod = EzBob.loanSourceDefaultRepaymentPeriod @model.toJSON()
+
+        if nDefaultRepaymentPeriod == -1
+            @$el.find('button[name=repaymentPeriodChangeButton]').removeAttr 'disabled'
+        else
+            @$el.find('button[name=repaymentPeriodChangeButton]').attr 'disabled', 'disabled'
 
     changeCreditResult: ->
         @model.fetch()

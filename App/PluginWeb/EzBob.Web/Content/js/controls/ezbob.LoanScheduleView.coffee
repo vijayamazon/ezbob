@@ -19,6 +19,9 @@ class EzBob.LoanScheduleView extends Backbone.Marionette.ItemView
             RepaymentPerion:@options.schedule.Details.RepaymentPeriod
             InterestRate:@options.schedule.Details.InterestRate
             LoanType:@options.schedule.Details.LoanType
+            isShowExceedMaxInterestForSource: @options.isShowExceedMaxInterestForSource
+            MaxInterestForSource: @options.schedule.MaxInterestForSource
+            LoanSourceName: @options.schedule.LoanSourceName
         }
 
 

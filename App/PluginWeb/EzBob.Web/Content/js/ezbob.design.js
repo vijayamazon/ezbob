@@ -748,6 +748,39 @@ EzBob.formatLoanType = function (loanTypeSelection, loanType) {
     return loanType;
 }; // formatLoanType
 
+EzBob.formatLoanSource = function(model) {
+	for (var i = 0; i < model.LoanSources.length; i++) {
+		var oSrc = model.LoanSources[i];
+
+		if (oSrc.Id == model.LoanSourceID)
+			return oSrc.Name;
+	} // for
+
+	return model.LoanSourceID;
+}; // formatLoanSource
+
+EzBob.loanSourceMaxInterest = function(model) {
+	for (var i = 0; i < model.LoanSources.length; i++) {
+		var oSrc = model.LoanSources[i];
+
+		if (oSrc.Id == model.LoanSourceID)
+			return oSrc.MaxInterest;
+	} // for
+
+	return -1;
+}; // loanSourceMaxInterest
+
+EzBob.loanSourceDefaultRepaymentPeriod = function(model) {
+	for (var i = 0; i < model.LoanSources.length; i++) {
+		var oSrc = model.LoanSources[i];
+
+		if (oSrc.Id == model.LoanSourceID)
+			return oSrc.DefaultRepaymentPeriod;
+	} // for
+
+	return -1;
+}; // loanSourceDefaultRepaymentPeriod
+
 EzBob.formatLoanTypeSelection = function (num) {
     switch (num) {
         case 0:

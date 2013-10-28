@@ -29,6 +29,8 @@
         public decimal LoanAmount { get; set; }
         public AgreementModel Agreement { get; set; }
         public LoanOfferDetails Details { get; set; }
+		public decimal? MaxInterestForSource { get; set; }
+		public string LoanSourceName { get; set; }
 
         private static readonly RepaymentCalculator _repaymentCalculator = new RepaymentCalculator();
 
@@ -61,7 +63,9 @@
                             LoanType = cr.LoanType.Name,
                             IsModified = !string.IsNullOrEmpty(cr.LoanTemplate),
                             Date = loan.Date
-                        }
+                        },
+                    MaxInterestForSource = loan.LoanSource == null ? null : loan.LoanSource.MaxInterest,
+					LoanSourceName = loan.LoanSource == null ? "" : loan.LoanSource.Name
                 };
 
             return offer;

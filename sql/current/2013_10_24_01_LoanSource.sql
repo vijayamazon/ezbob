@@ -11,6 +11,8 @@ BEGIN
 		CONSTRAINT CHK_LoanSource_MaxInterest CHECK (MaxInterest IS NULL OR MaxInterest > 0)
 	)
 
+	CREATE UNIQUE INDEX IDX_LoanSource_Name ON LoanSource(LoanSourceName)
+
 	INSERT INTO LoanSource (LoanSourceID, LoanSourceName, MaxInterest) VALUES
 		(1, 'Standard', NULL),
 		(2, 'EU', 0.02)

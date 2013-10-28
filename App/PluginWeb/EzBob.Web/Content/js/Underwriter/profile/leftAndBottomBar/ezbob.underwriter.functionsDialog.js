@@ -219,7 +219,8 @@
           el: that.$el.find(".loan-schedule"),
           schedule: data,
           isShowGift: false,
-          isShowExportBlock: false
+          isShowExportBlock: false,
+          isShowExceedMaxInterestForSource: true
         });
         scheduleView.render();
         return that.$el.find("#loan-schedule .simple-well").hide();

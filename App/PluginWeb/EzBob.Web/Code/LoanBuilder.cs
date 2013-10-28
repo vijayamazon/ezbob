@@ -37,6 +37,7 @@ namespace EzBob.Web.Code
 
             var loan = new Loan() {LoanAmount = amount, Date = now, LoanType = cr.LoanType, CashRequest = cr, SetupFee = setupFee};
             calculator.Calculate(amount, loan, loan.Date, interestOnlyTerm);
+	        loan.LoanSource = cr.LoanSource;
             return loan;
         }
 
@@ -52,6 +53,7 @@ namespace EzBob.Web.Code
 
             var c = new LoanRepaymentScheduleCalculator(loan, now);
             c.GetState();
+	        loan.LoanSource = cr.LoanSource;
             return loan;
         }
 

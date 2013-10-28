@@ -427,22 +427,20 @@
                             <th> Use SetupFee </th>
                             <th> Discount Plan </th>
                             <th> Customer Selection </th>
+                            <th> Loan Source </th>
                             <th> Underwriter </th>
                             <th> Comment </th>
+                            <th> ID </th>
                         </tr>
                     </thead>
                     <tbody>
                         <%_.each(m.DecisionHistory, function(d){%>
                         <tr>
+                                <td><%- d.Action %></td>
+                                <td><%- EzBob.formatDate(d.Date) %></td>
                             <% if (d.Action == "Reject") {%>
-                                <td><%- d.Action %></td>
-                                <td><%- EzBob.formatDate(d.Date) %></td>
-                                <td colspan="7"></td>
-                                <td><%- d.UnderwriterName %></td>
-                                <td><%- d.Comment %></td>
+                                <td colspan="8"></td>
                             <%} else {%>
-                                <td><%- d.Action %></td>
-                                <td><%- EzBob.formatDate(d.Date) %></td>
                                 <td><%- EzBob.formatPounds(d.ApprovedSum) %></td>
                                 <td><%- EzBob.formatPercents(d.InterestRate) %></td>
                                 <td><%- d.RepaymentPeriod %></td>
@@ -450,9 +448,11 @@
                                 <td><%- d.UseSetupFee %></td>
                                 <td><%- d.DiscountPlan %></td>
                                 <td><%- EzBob.formatLoanTypeSelection(d.IsLoanTypeSelectionAllowed) %></td>
+                                <td><%- d.LoanSourceName %></td>
+                            <%}%>
                                 <td><%- d.UnderwriterName %></td>
                                 <td><%- d.Comment %></td>
-                            <%}%>
+                                <td><%- d.Id %></td>
                         </tr>
                         <%});%>
                     </tbody>

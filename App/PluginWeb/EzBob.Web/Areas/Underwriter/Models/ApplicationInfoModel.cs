@@ -1,4 +1,6 @@
-﻿namespace EzBob.Web.Areas.Underwriter.Models
+﻿using EZBob.DatabaseLib.Model.Database.Loans;
+
+namespace EzBob.Web.Areas.Underwriter.Models
 {
     public class ApplicationInfoModel
     {
@@ -49,6 +51,9 @@
         public string DiscountPlan { get; set; }
         public string DiscountPlanPercents { get; set; }
         public int DiscountPlanId { get; set; }
+
+		public LoanSourceModel[] LoanSources { get; set; }
+		public int LoanSourceID { get; set; }
 
 		public string AMLResult { get; set; }
 		public bool SkipPopupForApprovalWithoutAML { get; set; }

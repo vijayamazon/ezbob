@@ -18,6 +18,7 @@
     LoanScheduleView.prototype.template = "#loan-schedule-template";
 
     LoanScheduleView.prototype.serializeData = function() {
+      console.log('options are', this.options);
       return {
         schedule: this.options.schedule.Schedule,
         apr: this.options.schedule.Apr,
@@ -27,7 +28,14 @@
         totalInterest: this.options.schedule.TotalInterest,
         totalPrincipal: this.options.schedule.TotalPrincipal,
         isShowGift: this.options.isShowGift,
-        isShowExportBlock: this.options.isShowExportBlock
+        isShowExportBlock: this.options.isShowExportBlock,
+        OfferedCreditLine: this.options.schedule.Details.OfferedCreditLine,
+        RepaymentPerion: this.options.schedule.Details.RepaymentPeriod,
+        InterestRate: this.options.schedule.Details.InterestRate,
+        LoanType: this.options.schedule.Details.LoanType,
+        isShowExceedMaxInterestForSource: this.options.isShowExceedMaxInterestForSource,
+        MaxInterestForSource: this.options.schedule.MaxInterestForSource,
+        LoanSourceName: this.options.schedule.LoanSourceName
       };
     };
 

@@ -1,4 +1,6 @@
-﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
+﻿using EZBob.DatabaseLib.Model.Database.Loans;
+
+namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
 	using System;
 	using System.Web.Mvc;
@@ -32,23 +34,27 @@
 		private readonly IApprovalsWithoutAMLRepository approvalsWithoutAMLRepository;
 		private readonly IConfigurationVariablesRepository configurationVariablesRepository;
 		private readonly ICustomerStatusHistoryRepository customerStatusHistoryRepository;
+		private readonly ILoanSourceRepository _loanSources;
 
         private static readonly ILog Log = LogManager.GetLogger(typeof (ApplicationInfoController));
 
-		public ApplicationInfoController(ICustomerRepository customerRepository,
-										 ICustomerStatusesRepository customerStatusesRepository,
-		                                 ICashRequestsRepository cashRequestsRepository,
-		                                 IApplicationRepository applications,
-		                                 IEzBobConfiguration config,
-		                                 ILoanTypeRepository loanTypes,
-		                                 LoanLimit limit,
-		                                 IDiscountPlanRepository discounts,
-		                                 CashRequestBuilder crBuilder,
-		                                 ApplicationInfoModelBuilder infoModelBuilder,
-		                                 IPacNetManualBalanceRepository pacNetManualBalanceRepository,
-										 IApprovalsWithoutAMLRepository approvalsWithoutAMLRepository,
-										 IConfigurationVariablesRepository configurationVariablesRepository,
-										 ICustomerStatusHistoryRepository customerStatusHistoryRepository)
+		public ApplicationInfoController(
+			ICustomerRepository customerRepository,
+			ICustomerStatusesRepository customerStatusesRepository,
+			ICashRequestsRepository cashRequestsRepository,
+			IApplicationRepository applications,
+			IEzBobConfiguration config,
+			ILoanTypeRepository loanTypes,
+			LoanLimit limit,
+			IDiscountPlanRepository discounts,
+			CashRequestBuilder crBuilder,
+			ApplicationInfoModelBuilder infoModelBuilder,
+			IPacNetManualBalanceRepository pacNetManualBalanceRepository,
+			IApprovalsWithoutAMLRepository approvalsWithoutAMLRepository,
+			IConfigurationVariablesRepository configurationVariablesRepository,
+			ICustomerStatusHistoryRepository customerStatusHistoryRepository,
+			ILoanSourceRepository loanSources
+		)
 		{
 			_customerRepository = customerRepository;
 			_cashRequestsRepository = cashRequestsRepository;
@@ -64,6 +70,7 @@
 			this.approvalsWithoutAMLRepository = approvalsWithoutAMLRepository;
 			this.configurationVariablesRepository = configurationVariablesRepository;
 			this.customerStatusHistoryRepository = customerStatusHistoryRepository;
+			_loanSources = loanSources;
 		}
 
 		[Ajax]
@@ -204,6 +211,25 @@
             //Log.DebugFormat("CashRequest({0}).Discount = {1}", id, cr.DiscountPlan.Name);
             return this.JsonNet(new {});
         }
+
+		[HttpPost]
+		[Ajax]
+		[Transactional]
+		public JsonNetResult LoanSource(long id, int LoanSourceID) {
+			var cr = _cashRequestsRepository.Get(id);
+			cr.LoanSource = _loanSources.Get(LoanSourceID);
+
+			if (cr.LoanSource == null)
+				cr.IsCustomerRepaymentPeriodSelectionAllowed = true;
+			else {
+				cr.IsCustomerRepaymentPeriodSelectionAllowed = cr.LoanSource.IsCustomerRepaymentPeriodSelectionAllowed;
+
+				if (cr.LoanSource.DefaultRepaymentPeriod.HasValue)
+					cr.RepaymentPeriod = cr.LoanSource.DefaultRepaymentPeriod.Value;
+			} // if
+
+			return this.JsonNet(new { });
+		} // LoanSource
 
         [HttpPost]
         [Transactional]
@@ -364,11 +390,13 @@
         [Permission(Name = "NewCreditLineButton")]
         public JsonNetResult RunNewCreditLine(int Id, int newCreditLineOption)
         {
-            var anyApps = _applications.StratagyIsRunning(Id, _config.ScoringResultStrategyName);
-            if (anyApps)
-                return this.JsonNet(new { Message = "The evaluation strategy is already running. Please wait..." });
+	        if (!_config.SkipServiceOnNewCreditLine) {
+		        var anyApps = _applications.StratagyIsRunning(Id, _config.ScoringResultStrategyName);
+		        if (anyApps)
+			        return this.JsonNet(new {Message = "The evaluation strategy is already running. Please wait..."});
+	        }
 
-            var customer = _customerRepository.Get(Id);
+	        var customer = _customerRepository.Get(Id);
 
             var cashRequest = _crBuilder.CreateCashRequest(customer);
             cashRequest.LoanType = _loanTypes.GetDefault();

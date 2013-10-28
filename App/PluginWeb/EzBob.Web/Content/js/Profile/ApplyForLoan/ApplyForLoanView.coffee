@@ -82,6 +82,7 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
       schedule: schedule
       isShowGift: false
       isShowExportBlock:false
+      isShowExceedMaxInterestForSource: false
     )
     scheduleView.render()
     @createAgreementView schedule.Agreement

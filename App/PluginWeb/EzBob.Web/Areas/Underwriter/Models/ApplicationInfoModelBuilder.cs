@@ -1,4 +1,6 @@
-﻿namespace EzBob.Web.Areas.Underwriter.Models
+﻿using EZBob.DatabaseLib.Model.Database.Loans;
+
+namespace EzBob.Web.Areas.Underwriter.Models
 {
 	using System;
 	using System.Linq;
@@ -22,6 +24,7 @@
 		private readonly IApprovalsWithoutAMLRepository approvalsWithoutAMLRepository;
 		private readonly IConfigurationVariablesRepository configurationVariablesRepository;
 		private static readonly IEzBobConfiguration config = ObjectFactory.GetInstance<IEzBobConfiguration>();
+		private readonly ILoanSourceRepository _loanSources;
 
 		public ApplicationInfoModelBuilder(
 			IPacNetBalanceRepository funds,
@@ -29,7 +32,9 @@
 			IApprovalsWithoutAMLRepository approvalsWithoutAMLRepository,
             IDiscountPlanRepository discounts,
 			ILoanTypeRepository loanTypes, 
-			IConfigurationVariablesRepository configurationVariablesRepository)
+			IConfigurationVariablesRepository configurationVariablesRepository,
+			ILoanSourceRepository loanSources
+		)
 		{
 			_funds = funds;
 			_manualFunds = manualFunds;
@@ -37,6 +42,7 @@
             _loanTypes = loanTypes;
 			this.approvalsWithoutAMLRepository = approvalsWithoutAMLRepository;
 			this.configurationVariablesRepository = configurationVariablesRepository;
+			_loanSources = loanSources;
 		}
 
 		public void InitApplicationInfo(ApplicationInfoModel model, Customer customer, CashRequest cr)
@@ -113,6 +119,9 @@
             model.DiscountPlan = discountPlan.Name;
             model.DiscountPlanPercents = discountPlan.Discounts.Any(d => d != 0) ? string.Format("({0})", discountPlan.ValuesStr) : "";
             model.DiscountPlanId = discountPlan.Id;
+
+			model.LoanSources = _loanSources.GetAll().Select(ls => LoanSourceModel.Create(ls)).ToArray();
+			model.LoanSourceID = (cr.LoanSource ?? _loanSources.GetDefault()).ID;
 
             model.Reason = cr.UnderwriterComment;
 

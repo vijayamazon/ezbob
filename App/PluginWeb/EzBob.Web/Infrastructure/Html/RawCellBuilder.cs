@@ -1,4 +1,5 @@
-﻿using System.Web.Mvc;
+﻿using System.Text;
+using System.Web.Mvc;
 
 namespace EzBob.Web.Infrastructure.Html
 {
@@ -8,6 +9,17 @@ namespace EzBob.Web.Infrastructure.Html
         private string _value;
         private string _buttonName;
         private string _tooltip;
+	    private StringBuilder _rawTail;
+
+		public RawCellBuilder() {
+			_rawTail = new StringBuilder();
+		}
+
+		public RawCellBuilder AddRawTail(string sHtml) {
+			if (!string.IsNullOrWhiteSpace(sHtml))
+				_rawTail.Append(sHtml);
+			return this;
+		}
 
         public MvcHtmlString Render()
         {
@@ -15,7 +27,7 @@ namespace EzBob.Web.Infrastructure.Html
             var td1 = CreateLeftTd();
             var td2 = CreateRightTd();
             row.InnerHtml += td1.ToString();
-            row.InnerHtml += td2.ToString();
+	        row.InnerHtml += td2.ToString();
             return MvcHtmlString.Create(row.ToString());
         }
 
@@ -56,6 +68,7 @@ namespace EzBob.Web.Infrastructure.Html
             td.InnerHtml += _value;
             AddTooltip(td);
             AddButton(td);
+            td.InnerHtml += _rawTail.ToString();
             return td;
         }
 
