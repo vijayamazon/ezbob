@@ -108,17 +108,13 @@
 				}
 
 				NodeMailParams.Subject = variables.FirstOrDefault(x => x.Key == "EmailSubject" || x.Key.ToLower() == "subject").Value ?? "Default Subject";
-				NodeMailParams.To = variables.FirstOrDefault(x => x.Key == "CP_AddressTo" || x.Key.ToLower() == "email").Value;
+				NodeMailParams.To = variables.FirstOrDefault(x => x.Key == "CP_AddressTo" || x.Key.ToLower() == "email" || x.Key.ToLower() == "emailto" || x.Key.ToLower() == "emailscalar" || x.Key.ToLower() == "app_email").Value;
                 NodeMailParams.CC = variables.FirstOrDefault(x => x.Key == "CP_AddressCC" || x.Key.ToLower() == "emailcc").Value;
-	            
-				
-	            
-				Log.DebugFormat("NodeMailParams.CC {0}", NodeMailParams.CC);
-	            List<attachment> attachments = null;
-	            attachments = HandleAttachments();
-				
-                var templateName = MailTemplateRelationRepository.GetByInternalName(Templates[0].DisplayName);
-                var sendStatus = Mail.Send(variables, NodeMailParams.To, templateName, NodeMailParams.Subject, NodeMailParams.CC, attachments);
+
+	            List<attachment> attachments = HandleAttachments();
+
+				var templateName = MailTemplateRelationRepository.GetByInternalName(Templates[0].DisplayName);
+				var sendStatus = Mail.Send(variables, NodeMailParams.To, templateName, NodeMailParams.Subject, NodeMailParams.CC, attachments);
                 var renderedHtml = Mail.GetRenderedTemplate(variables, templateName);
 
                 if (sendStatus == null || renderedHtml == null)
