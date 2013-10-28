@@ -11,6 +11,12 @@ class EzBob.EditLoanView extends Backbone.Marionette.ItemView
 
     serializeData: ->
         data = @model.toJSON()
+        console.log 'serialised data ist', data
+
+        e = new Error('dummy')
+        stack = e.stack.replace(/^[^\(]+?[\n$]/gm, '').replace(/^\s+at\s+/gm, '').replace(/^Object.<anonymous>\s*\(/gm, '{anonymous}()@').split('\n')
+        console.log(stack)
+
         data.editItemIndex = @editItemIndex
         return data
 
@@ -117,7 +123,7 @@ class EzBob.EditLoanView extends Backbone.Marionette.ItemView
         closed = () ->
             row.removeClass("editing")
             @editItemIndex = -1
-            @renderSchedule()
+            @renderSchedule(@serializeData())
 
         view.on "close", closed, this
         @showEditView(view)
@@ -140,15 +146,16 @@ class EzBob.EditLoanView extends Backbone.Marionette.ItemView
         @renderRegions()
 
     renderRegions: ->
-        @renderSchedule()
-        @renderFreeze()
+        data = @serializeData()
+        @renderSchedule(data)
+        @renderFreeze(data)
 
-    renderSchedule: ->
-        @ui.scheduleEl.html(@scheduleTemplate(@serializeData()))
+    renderSchedule: (data) ->
+        @ui.scheduleEl.html(@scheduleTemplate(data))
         @ui.ok.toggleClass "disabled", @model.get("HasErrors")
 
-    renderFreeze: ->
-        @ui.freezeEl.html(_.template($("#loan_editor_freeze_intervals_template").html())(@serializeData()))
+    renderFreeze: (data) ->
+        @ui.freezeEl.html(_.template($("#loan_editor_freeze_intervals_template").html())(data))
 
     onAddFreezeInterval: ->
         sStart = @$el.find(".new-freeze-interval-start").val()

@@ -18,8 +18,8 @@
     LoanScheduleView.prototype.template = "#loan-schedule-template";
 
     LoanScheduleView.prototype.serializeData = function() {
-      console.log('options are', this.options);
-      return {
+      var data;
+      data = {
         schedule: this.options.schedule.Schedule,
         apr: this.options.schedule.Apr,
         setupFee: this.options.schedule.SetupFee,
@@ -37,6 +37,10 @@
         MaxInterestForSource: this.options.schedule.MaxInterestForSource,
         LoanSourceName: this.options.schedule.LoanSourceName
       };
+      if (data.MaxInterestForSource === null) {
+        data.MaxInterestForSource = -1;
+      }
+      return data;
     };
 
     return LoanScheduleView;

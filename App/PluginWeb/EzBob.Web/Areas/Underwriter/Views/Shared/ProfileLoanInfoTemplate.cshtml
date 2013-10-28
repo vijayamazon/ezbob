@@ -153,20 +153,20 @@
 			@RawCell("Offer expired", "<%- m.OfferExpired ? 'Yes': 'No'%>")
 			*@
 
-			<%if(m.Editable){%>
+			<%if (m.Editable) { %>
 				@RawCellWithButtonNear(
 					"Interest Rate",
 					"<%- EzBob.formatPercents(m.InterestRate) %>",
 					"interestRateChangeButton",
 					sRawHtmlUnder: "<div class=\"hide red interest-exceeds-max-by-loan-source\">Interest rate exceeds max rate for this loan source.</div>"
 				)
-			<%} else{%>
+			<%} else {%>
 				@EzTable.RawCellWithRawHtmlUnder(
 					Html,
 					"Interest Rate",
 					"<%- EzBob.formatPercents(m.InterestRate) %>",
 					sRawHtmlUnder: "<div class=\"hide red interest-exceeds-max-by-loan-source\">Interest rate exceeds max rate for this loan source.</div>"
-					 )
+					)
 			<%}%>
 	
 			<%if(m.Editable){%>
@@ -196,16 +196,16 @@
 			<%}%>
 			
 			@{
-				var oDiscountPlanCell =
-					EzHtml.RawCell("Discount plan:", "<%= m.DiscountPlan %>")
-						.Tooltip("<%= m.DiscountPlanPercents %>")
-						.AddRawTail("<div class=\"hide red discount-exceeds-max-by-loan-source\">Interest rate for at least one month exceeds max rate for this loan source.</div>");
+				var oDiscountPlanCell = EzHtml
+					.RawCell("Discount plan:", "<%= m.DiscountPlan %>")
+					.Tooltip("<%= m.DiscountPlanPercents %>")
+					.AddRawTail("<div class=\"hide red discount-exceeds-max-by-loan-source\">Interest rate for at least one month exceeds max rate for this loan source.</div>");
 			}
-			
-			<% if (m.Editable) { %>
-				@oDiscountPlanCell.Button("discountPlan").Render()
-			<% } else { %>
+
+			<% if (!m.Editable) { %>
 				@oDiscountPlanCell.Render()
+			<% } else { %>
+				@oDiscountPlanCell.Button("discountPlan").Render()
 			<% } %>
 			
 			<%if(m.Editable){%>

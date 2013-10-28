@@ -182,11 +182,10 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             catch (Exception e)
             {
                 model.Errors.Add(e.Message);
+                return model;
             }
 
-            model = _loanModelBuilder.BuildModel(loan);
-
-            return model;
+            return _loanModelBuilder.BuildModel(loan);
         }
     }
 }

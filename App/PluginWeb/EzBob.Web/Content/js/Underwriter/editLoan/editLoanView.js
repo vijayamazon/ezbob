@@ -25,8 +25,12 @@
     };
 
     EditLoanView.prototype.serializeData = function() {
-      var data;
+      var data, e, stack;
       data = this.model.toJSON();
+      console.log('serialised data ist', data);
+      e = new Error('dummy');
+      stack = e.stack.replace(/^[^\(]+?[\n$]/gm, '').replace(/^\s+at\s+/gm, '').replace(/^Object.<anonymous>\s*\(/gm, '{anonymous}()@').split('\n');
+      console.log(stack);
       data.editItemIndex = this.editItemIndex;
       return data;
     };
@@ -150,7 +154,7 @@
       closed = function() {
         row.removeClass("editing");
         this.editItemIndex = -1;
-        return this.renderSchedule();
+        return this.renderSchedule(this.serializeData());
       };
       view.on("close", closed, this);
       return this.showEditView(view);
@@ -185,17 +189,19 @@
     };
 
     EditLoanView.prototype.renderRegions = function() {
-      this.renderSchedule();
-      return this.renderFreeze();
+      var data;
+      data = this.serializeData();
+      this.renderSchedule(data);
+      return this.renderFreeze(data);
     };
 
-    EditLoanView.prototype.renderSchedule = function() {
-      this.ui.scheduleEl.html(this.scheduleTemplate(this.serializeData()));
+    EditLoanView.prototype.renderSchedule = function(data) {
+      this.ui.scheduleEl.html(this.scheduleTemplate(data));
       return this.ui.ok.toggleClass("disabled", this.model.get("HasErrors"));
     };
 
-    EditLoanView.prototype.renderFreeze = function() {
-      return this.ui.freezeEl.html(_.template($("#loan_editor_freeze_intervals_template").html())(this.serializeData()));
+    EditLoanView.prototype.renderFreeze = function(data) {
+      return this.ui.freezeEl.html(_.template($("#loan_editor_freeze_intervals_template").html())(data));
     };
 
     EditLoanView.prototype.onAddFreezeInterval = function() {

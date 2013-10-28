@@ -5,7 +5,7 @@ class EzBob.LoanScheduleView extends Backbone.Marionette.ItemView
     template: "#loan-schedule-template"
 
     serializeData: ->
-        return {
+        data = {
             schedule: @options.schedule.Schedule
             apr: @options.schedule.Apr
             setupFee: @options.schedule.SetupFee
@@ -24,6 +24,10 @@ class EzBob.LoanScheduleView extends Backbone.Marionette.ItemView
             LoanSourceName: @options.schedule.LoanSourceName
         }
 
+        if data.MaxInterestForSource is null
+            data.MaxInterestForSource = -1
+
+        return data
 
 class EzBob.LoanScheduleViewDlg extends EzBob.LoanScheduleView
 
