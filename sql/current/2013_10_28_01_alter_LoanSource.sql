@@ -7,6 +7,6 @@ BEGIN
 	ALTER TABLE CashRequests ADD
 		IsCustomerRepaymentPeriodSelectionAllowed BIT NOT NULL CONSTRAINT DF_CashRequests_Icrpsa DEFAULT (1)
 END
-
+GO 
 UPDATE LoanSource SET DefaultRepaymentPeriod = 12, IsCustomerRepaymentPeriodSelectionAllowed = 0 WHERE LoanSourceName = 'EU'
 GO

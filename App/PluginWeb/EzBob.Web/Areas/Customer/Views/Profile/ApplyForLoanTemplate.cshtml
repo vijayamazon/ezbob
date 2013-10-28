@@ -21,6 +21,11 @@
         <div class="agreement">
         </div>
     </div>
+    
+}
+
+@helper ButtonsTemplate()
+{
     <a class="btn-continue button orange pull-right submit <%if (!agree) {%>disabled<%}%>" href="url">Continue</a>
     <a href="#" class="btn-back button grey pull-right">Back</a>
 }
@@ -29,6 +34,8 @@
 
 <script id="apply-forloan-template" type="text/template">
     @ApplyForLoanTemplate()
+    @EuLoanTemplate()
+    @ButtonsTemplate()
 </script>
 
 <script id="consumers-agreement-template" type="text/template">
@@ -116,4 +123,30 @@
         <a href="#" class="pull-right print print-link">Print</a>
         <a href="#" style="margin-right: 20px;" class="pull-right download pdf-link">Download</a>
     </div>  
+}
+
+@helper EuLoanTemplate()
+{
+    <div class="eu-agreement-section">
+        <div class="overview loan-agreement simple-well clearfix">
+            <div class="eu-agreement-header">
+                <h3 class="eu-agreement-header-text">Your loan will be included in the EU program, please confirm:</h3>
+                <div class="eu-agreement-image"></div>
+            </div>
+            <ol>
+                <li>I Employ less than 10 persons.</li>
+                <li>Annual turnover is less then 1.5M Pounds.</li>
+                <li>Autonomous enterprise – no other enterprise owns more than 25% of the borrower, I do not own more than 25% in another enterprise.</li>
+                <li>Loan is for business purposes.</li>
+                <li>Not involved in the following sectors: arms production and trading; human cloning; tobacco; gambling.</li>
+            </ol>
+            
+        </div>
+        <div class="controls">
+            <label class="checkbox">
+                <input type="checkbox" id="EuAgreementTerms" name="EuAgreementTerms" class="euAgreementTermsRead"/>
+                I agree to the EU program terms
+            </label>
+        </div>
+    </div>
 }

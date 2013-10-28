@@ -117,6 +117,7 @@ namespace EzBob.Web.Areas.Customer.Models
 
 		public string InviteFriendSource { get; set; }
 		public IEnumerable<InvitedFriend> InvitedFriends { get; set; }
+		public bool IsLastApprovedLoanSourceEu { get; set; }
     }
 
 	public class SimpleMarketPlaceModel

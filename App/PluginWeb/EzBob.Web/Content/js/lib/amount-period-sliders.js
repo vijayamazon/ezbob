@@ -61,7 +61,6 @@ function InitAmountPeriodSliders(options)
 			create: function() {
 				window.setTimeout(
 					function() {
-						console.log(sAreaName, oDefinitions);
 						if (oDefinitions.hide)
 							$('.' + sAreaName + '-area', oParent).hide();
 

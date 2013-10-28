@@ -928,3 +928,22 @@ textarea.invite_friend {
     width: 400px;
     height: 100px;
 }
+
+.eu-agreement-header {
+    display: inline-block;
+    width: 100%;
+}
+.eu-agreement-header-text {
+    float: left;
+}
+.eu-agreement-image {
+    height: 70px;
+    width: 100px;
+    display: block;
+    background-image: url(../css/images/eu.png);
+    -moz-background-size: contain;
+    -o-background-size: contain;
+    -webkit-background-size: contain;
+    background-size: contain;
+    float: right;
+}

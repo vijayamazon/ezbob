@@ -79,7 +79,7 @@ namespace EzBob.Web.Areas.Customer.Models
 
 			customerModel.LastApprovedLoanTypeID = customer.LastCashRequest != null ? customer.LastCashRequest.LoanType.Id : 0;
 			customerModel.LastApprovedRepaymentPeriod = customer.LastCashRequest != null ? customer.LastCashRequest.RepaymentPeriod : 0;
-
+			customerModel.IsLastApprovedLoanSourceEu = customer.LastCashRequest != null && customer.LastCashRequest.LoanSource.Name == "EU";
             customerModel.Medal = customer.Medal.HasValue ? customer.Medal.ToString() : "";
 
             customerModel.CreditSum = customer.CreditSum;

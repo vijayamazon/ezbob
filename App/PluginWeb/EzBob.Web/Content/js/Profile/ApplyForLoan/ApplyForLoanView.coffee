@@ -29,11 +29,13 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
       return
 
     @model.on "change:neededCash", @neededCashChanged, this
+    @isLoanSourceEU = options.model.get "isLoanSourceEU"
 
   events:
     "click .submit": "submit"
     "change .preAgreementTermsRead": "showSubmit"
     "change .agreementTermsRead": "showSubmit"
+    "change .euAgreementTermsRead": "showSubmit"
     "click .download": "download"
     "click .print": "print"
 
@@ -54,18 +56,21 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
   showSubmit: ->
     readPreAgreement = $(".preAgreementTermsRead").is(":checked")
     readAgreement = $(".agreementTermsRead").is(":checked")
-    read = (readAgreement is true and readPreAgreement is true)
+    readEUAgreement = not @isLoanSourceEU or ( @isLoanSourceEU and $("#EuAgreementTerms").is(":checked") )
+    read = (readAgreement is true and readPreAgreement is true and readEUAgreement is true)
     @model.set "agree", read
     @$el.find(".submit").toggleClass "disabled", not read
     @$el.find("#getChashContinueBtn").toggleClass "disabled", not read
 
   recalculateSchedule: (args) ->
     val = args.value
-    # unless args.reloadSelectedOnly is true
-      # $.getJSON("#{window.gRootPath}Customer/Schedule/CalculateAll?amount=#{parseInt(val)}").done (data) =>
-        # for loanKey, offer of data
-          # $('#loan-type-' + loanKey + ' .Interest').text EzBob.formatPounds offer.TotalInterest
-          # $('#loan-type-' + loanKey + ' .Total').text EzBob.formatPounds offer.Total
+    ###
+    unless args.reloadSelectedOnly is true
+    $.getJSON("#{window.gRootPath}Customer/Schedule/CalculateAll?amount=#{parseInt(val)}").done (data) =>
+    for loanKey, offer of data
+    $('#loan-type-' + loanKey + ' .Interest').text EzBob.formatPounds offer.TotalInterest
+    $('#loan-type-' + loanKey + ' .Total').text EzBob.formatPounds offer.Total
+    ###
 
     BlockUi "on", @$el.find('#block-loan-schedule')
     BlockUi "on", @$el.find('#block-agreement')
@@ -96,13 +101,16 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
     if @fixed
         @$(".cash-question").hide()
 
-    if not (@isLoanTypeSelectionAllowed in [ 1, '1' ])
+    if not (@isLoanTypeSelectionAllowed in [ 1, '1' ]) or @isLoanSourceEU
         @$('.duration-select-allowed').hide()
+
+    if not @isLoanSourceEU
+        @$('.eu-agreement-section').hide()
 
     InitAmountPeriodSliders {
         container: @$('#loan-sliders'),
         amount: { min: @model.get('minCash'), max: @model.get('maxCash'), start: @model.get('maxCash'), step: 100 },
-        period: { min: 3, max: 12, start: @model.get('repaymentPeriod'), step: 1, hide: not (@isLoanTypeSelectionAllowed in [ 1, '1' ]) },
+        period: { min: 3, max: 12, start: @model.get('repaymentPeriod'), step: 1, hide: not (@isLoanTypeSelectionAllowed in [ 1, '1' ]) or @isLoanSourceEU },
         callback: (ignored, sEvent) => @loanSelectionChanged() if sEvent is 'change'
     }
 
@@ -126,6 +134,7 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
     @model.set "repaymentPeriod", @currentRepaymentPeriod
     return false  if creditSum > max or creditSum < min
     return false  if not $(".preAgreementTermsRead").is(":checked") or not $(".agreementTermsRead").is(":checked")
+    return false if @isLoanSourceEU and not $("#EuAgreementTerms").is(":checked")
     @trigger ("submit")
     return false
 

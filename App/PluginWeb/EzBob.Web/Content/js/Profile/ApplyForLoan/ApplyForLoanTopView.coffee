@@ -20,6 +20,7 @@ class EzBob.Profile.ApplyForLoanTopView extends Backbone.Marionette.ItemView
           OfferStart: @customer.get("OfferStart")
           loanType: @customer.get("LastApprovedLoanTypeID")
           repaymentPeriod: @customer.get("LastApprovedRepaymentPeriod")
+          isLoanSourceEU: @customer.get("IsLastApprovedLoanSourceEu")
         )
 
         @states = 

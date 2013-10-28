@@ -14,6 +14,7 @@ class EzBob.Profile.ApplyForLoanModel extends Backbone.Model
     OfferValidMintes: 0
     loanType: 0
     repaymentPeriod: 0
+    isLoanSourceEU: false
 
   validate: (attrs) ->
     unless typeof attrs.neededCash is "undefined"
@@ -30,6 +31,7 @@ class EzBob.Profile.ApplyForLoanModel extends Backbone.Model
       minCash: (if @get("maxCash") > EzBob.Config.MinLoan then EzBob.Config.MinLoan else EzBob.Config.XMinLoan)
       loanType: @get("loanType")
       repaymentPeriod: @get("repaymentPeriod")
+      isLoanSourceEU: @get("isLoanSourceEU")
 
   buildUrl: ->
     @set "url", "GetCash/GetTransactionId?loan_amount=#{@get('neededCash')}&loanType=#{@get('loanType')}&repaymentPeriod=#{@get('repaymentPeriod')}"
