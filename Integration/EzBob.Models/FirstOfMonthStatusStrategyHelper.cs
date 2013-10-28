@@ -275,7 +275,7 @@
 
 		private string CreateHtmlTableFromClass(IEnumerable<LoanStatusRow> listOfInstances)
 		{
-			var headers = new List<string> {"Type", "Total", "Date", "Status", "Principal", "Interest", "Fees", "Description"};
+			var headers = new List<string> { "Type", "Date", "Status", "Principal", "Interest", "Fees", "Total", "Description" };
 			
 			var body = new StringBuilder();
 			foreach (LoanStatusRow instance in listOfInstances)
@@ -284,12 +284,12 @@
 				bool isLate = instance.Status == "Late";
 				bool isDone = instance.Status == "Done" || instance.Status == "Paid" || instance.Status == "PaidOnTime" || instance.Status == "PaidEarly";
 				AddTd(body, false, isLate, isDone, instance.Type);
-				AddTd(body, true, isLate, isDone, instance.Total);
 				AddTd(body, false, isLate, isDone, instance.PostDate.ToString("dd-MMM-yyyy"));
 				AddTd(body, false, isLate, isDone, instance.Status);
 				AddTd(body, true, isLate, isDone, instance.Principal);
 				AddTd(body, true, isLate, isDone, instance.Interest);
 				AddTd(body, true, isLate, isDone, instance.Fees);
+				AddTd(body, true, isLate, isDone, instance.Total);
 				AddTd(body, false, isLate, isDone, instance.Description);
 
 				body.Append("</tr>");
