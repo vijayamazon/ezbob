@@ -1774,26 +1774,37 @@ namespace EZBob.DatabaseLib
 
 			if (data.Count != 0)
 			{
-				data.ForEach(
-					dataItem =>
-					{
-						var mpTransactionItem = new MP_PayPalTransactionItem2
+				foreach (var dataItem in data)
+				{
+					var mpTransactionItem = new MP_PayPalTransactionItem2
 						{
 							Transaction = mpTransaction,
 							Created = dataItem.Created,
-							Currency = _CurrencyRateRepository.GetCurrencyOrCreate(dataItem.FeeAmount.CurrencyCode ?? dataItem.GrossAmount.CurrencyCode ?? dataItem.NetAmount.CurrencyCode),
-							FeeAmount = _CurrencyConvertor.ConvertToBaseCurrency(dataItem.FeeAmount, dataItem.Created).Value,
-							GrossAmount = _CurrencyConvertor.ConvertToBaseCurrency(dataItem.GrossAmount, dataItem.Created).Value,
-							NetAmount = _CurrencyConvertor.ConvertToBaseCurrency(dataItem.NetAmount, dataItem.Created).Value,
+							Currency = _CurrencyRateRepository.GetCurrencyOrCreate(
+								(dataItem.FeeAmount != null && dataItem.FeeAmount.CurrencyCode != null)
+									? dataItem.FeeAmount.CurrencyCode
+									: ((dataItem.GrossAmount != null && dataItem.GrossAmount.CurrencyCode != null)
+										   ? dataItem.GrossAmount.CurrencyCode
+										   : ((dataItem.NetAmount != null && dataItem.NetAmount.CurrencyCode != null)
+											      ? dataItem.NetAmount.CurrencyCode
+											      : "GBP"))),
+							FeeAmount =
+								_CurrencyConvertor.ConvertToBaseCurrency(
+									dataItem.FeeAmount ?? new AmountInfo {CurrencyCode = "GBP", Value = 0}, dataItem.Created).Value,
+							GrossAmount =
+								_CurrencyConvertor.ConvertToBaseCurrency(
+									dataItem.GrossAmount ?? new AmountInfo {CurrencyCode = "GBP", Value = 0}, dataItem.Created).Value,
+							NetAmount =
+								_CurrencyConvertor.ConvertToBaseCurrency(
+									dataItem.NetAmount ?? new AmountInfo {CurrencyCode = "GBP", Value = 0}, dataItem.Created).Value,
 							TimeZone = dataItem.Timezone,
 							Status = dataItem.Status,
 							Type = dataItem.Type,
 							PayPalTransactionId = dataItem.TransactionId
 						};
 
-						mpTransaction.TransactionItems.Add(mpTransactionItem);
-					}
-					);
+					mpTransaction.TransactionItems.Add(mpTransactionItem);
+				}
 			}
 
 			customerMarketPlace.PayPalTransactions.Add(mpTransaction);
