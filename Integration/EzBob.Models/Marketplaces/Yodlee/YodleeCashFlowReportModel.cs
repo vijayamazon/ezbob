@@ -3,26 +3,14 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model;
-	using Scorto.NHibernate.Repository;
 	using NHibernate;
-
-	[Serializable]
-	public class RunningBalance
-	{
-		public DateTime Date { get; set; }
-		public double Balance { get; set; }
-	}
-
+	
 	public class YodleeCashFlowReportModel
 	{
 		public SortedDictionary<string/*type,name*/, SortedDictionary<int/*yearmonth*/, double/*amount*/>> YodleeCashFlowReportModelDict { get; set; }
 		public SortedDictionary<int/*yearmonth*/, int/*minday*/ > MinDateDict { get; set; }
 		public SortedDictionary<int/*yearmonth*/, int/*maxday*/> MaxDateDict { get; set; }
-		public SortedDictionary<int/*yearmonth*/, RunningBalance> LowRunningBalanceDict { get; set; }
-		public SortedDictionary<int/*yearmonth*/, RunningBalance> HighRunningBalanceDict { get; set; }
-		public SortedDictionary<DateTime, double> RunningBalanceDict { get; set; }
 		public double MonthInPayments = 0;
 		public double BankFrame = 0;
 		public DateTime AsOfDate;
@@ -51,17 +39,12 @@
 		private const char AverageDedit = 'a';
 		
 
-		private readonly CurrencyConvertor _currencyConvertor;
 		private readonly IConfigurationVariablesRepository _configVariables;
 		public YodleeCashFlowReportModel(ISession session)
 		{
 			YodleeCashFlowReportModelDict = new SortedDictionary<string, SortedDictionary<int, double>>();
-			LowRunningBalanceDict = new SortedDictionary<int, RunningBalance>();
-			HighRunningBalanceDict = new SortedDictionary<int, RunningBalance>();
-			RunningBalanceDict = new SortedDictionary<DateTime, double>();
 			MinDateDict = new SortedDictionary<int, int>();
 			MaxDateDict = new SortedDictionary<int, int>();
-			_currencyConvertor = new CurrencyConvertor(new CurrencyRateRepository(session));
 			_configVariables = new ConfigurationVariablesRepository(session);
 		}
 
@@ -80,8 +63,6 @@
 			Add(cat, amount, yearmonth);
 			UpdateMinMaxDay(yearmonth, date);
 			Add(cat, amount, TotalColumn);
-
-			AddRunningBalance(yearmonth, runningBalance, date);
 
 			//Calc Total Row
 			Add(baseType == "credit"
@@ -103,40 +84,6 @@
 			if (date >= monthAgo)
 			{
 				MonthInPayments += amount;
-			}
-		}
-
-		private void AddRunningBalance(int yearmonth, double runningBalance, DateTime date)
-		{
-			if (!LowRunningBalanceDict.ContainsKey(yearmonth))
-			{
-				LowRunningBalanceDict[yearmonth] = new RunningBalance { Date = date, Balance = runningBalance };
-			}
-			else
-			{
-				if (LowRunningBalanceDict[yearmonth].Balance > runningBalance)
-				{
-					LowRunningBalanceDict[yearmonth].Balance = runningBalance;
-					LowRunningBalanceDict[yearmonth].Date = date;
-				}
-			}
-
-			if (!HighRunningBalanceDict.ContainsKey(yearmonth))
-			{
-				HighRunningBalanceDict[yearmonth] = new RunningBalance { Date = date, Balance = runningBalance };
-			}
-			else
-			{
-				if (HighRunningBalanceDict[yearmonth].Balance < runningBalance)
-				{
-					HighRunningBalanceDict[yearmonth].Balance = runningBalance;
-					HighRunningBalanceDict[yearmonth].Date = date;
-				}
-			}
-
-			if (!RunningBalanceDict.ContainsKey(date.Date))
-			{
-				RunningBalanceDict[date.Date] = runningBalance;
 			}
 		}
 

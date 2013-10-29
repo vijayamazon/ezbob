@@ -142,15 +142,18 @@ namespace EzBob.Models.Marketplaces.Builders
 			}
 			model.banks = banks;
 			YodleeSearchWordsModel yodleeSearchWordsModel;
-			model.CashFlowReportModel = CreateYodleeCashFlowModel(model, mp.Customer.PersonalInfo.Surname, out yodleeSearchWordsModel);
+			YodleeRunningBalanceModel yodleeRunningBalanceModel;
+			model.CashFlowReportModel = CreateYodleeCashFlowModel(model, mp.Customer.PersonalInfo.Surname, out yodleeSearchWordsModel, out yodleeRunningBalanceModel);
 			model.SearchWordsModel = yodleeSearchWordsModel;
+			model.RunningBalanceModel = yodleeRunningBalanceModel;
 			return model;
 		}
 
-		private YodleeCashFlowReportModel CreateYodleeCashFlowModel(YodleeModel model, string customerSurName, out YodleeSearchWordsModel yodleeSearchWordsModel)
+		private YodleeCashFlowReportModel CreateYodleeCashFlowModel(YodleeModel model, string customerSurName, out YodleeSearchWordsModel yodleeSearchWordsModel, out YodleeRunningBalanceModel yodleeRunningBalanceModel)
 		{
 			var yodleeCashFlowReportModel = new YodleeCashFlowReportModel(_session);
 			yodleeSearchWordsModel = new YodleeSearchWordsModel(_session, customerSurName);
+			yodleeRunningBalanceModel = new YodleeRunningBalanceModel();
 			foreach (var bank in model.banks)
 			{
 				if (bank.overdraftProtection.HasValue)
@@ -160,18 +163,20 @@ namespace EzBob.Models.Marketplaces.Builders
 				{
 					yodleeCashFlowReportModel.BankFrame += (bank.currentBalance.Value - bank.availableBalance.Value);
 				}
-				yodleeCashFlowReportModel.AsOfDate = bank.asOfDate.HasValue ? bank.asOfDate.Value : new DateTime(1900,1,1);
-
+				yodleeCashFlowReportModel.AsOfDate = bank.asOfDate.HasValue ? bank.asOfDate.Value : new DateTime(1900, 1, 1);
+				yodleeRunningBalanceModel.AsOfDate = bank.asOfDate.HasValue ? bank.asOfDate.Value : new DateTime(1900, 1, 1);
+				yodleeRunningBalanceModel.AccountCurrentBalanceDict[bank.accountNumber] = bank.currentBalance.HasValue? bank.currentBalance.Value : 0;
 				foreach (var transaction in bank.transactions)
 				{
 					yodleeCashFlowReportModel.Add(transaction);
 					yodleeSearchWordsModel.Add(transaction);
+					yodleeRunningBalanceModel.Add(transaction, bank.accountNumber);
 				}
 			}
 
 			yodleeCashFlowReportModel.AddMissingAndSort();
 			yodleeSearchWordsModel.AddMissing();
-
+			yodleeRunningBalanceModel.CalculateMergedRunningBalace();
 			return yodleeCashFlowReportModel;
 		}
 

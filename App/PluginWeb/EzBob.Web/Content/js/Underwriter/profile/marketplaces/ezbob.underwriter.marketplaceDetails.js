@@ -178,10 +178,11 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
     },
     yodleeShowGraph: function () {
         var cashModel = this.shop.get("Yodlee").CashFlowReportModel;
+        var runningBalanceModel = this.shop.get("Yodlee").RunningBalanceModel;
         var cashFlow = cashModel.YodleeCashFlowReportModelDict;
-        var lowRunningBalance = cashModel.LowRunningBalanceDict;
-        var highRunningBalance = cashModel.HighRunningBalanceDict;
-        var runningBalance = cashModel.RunningBalanceDict;
+        var lowRunningBalance = runningBalanceModel.LowRunningBalanceDict;
+        var highRunningBalance = runningBalanceModel.HighRunningBalanceDict;
+        var runningBalance = runningBalanceModel.MergedDailyRunningBalanceDict;
         var bankFrame = cashModel.BankFrame;
         var formatedBankFrame = EzBob.formatPoundsAsInt(bankFrame);
         $.jqplot.config.enablePlugins = true;
