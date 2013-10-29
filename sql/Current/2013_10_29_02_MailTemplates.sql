@@ -1,4 +1,10 @@
-DELETE FROM MandrillTemplate WHERE NAME='LateBy14Days'
+IF EXISTS (SELECT 1 FROM MandrillTemplate WHERE NAME='LateBy14Days')
+BEGIN
+	DECLARE @GreetingTemplateId INT
+	SELECT @GreetingTemplateId = Id FROM MandrillTemplate WHERE NAME='Greeting'
+	UPDATE MailTemplateRelation SET MandrillTemplateId=@GreetingTemplateId
+	DELETE FROM MandrillTemplate WHERE NAME='LateBy14Days'
+END
 GO
 
 UPDATE MailTemplateRelation SET InternalTemplateName = 'User is approved or re-approved by the strategy.docx' WHERE InternalTemplateName = 'User is re approved by the strategy.docx'
