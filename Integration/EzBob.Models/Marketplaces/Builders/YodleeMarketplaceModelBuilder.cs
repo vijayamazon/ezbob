@@ -132,7 +132,8 @@ namespace EzBob.Models.Marketplaces.Builders
 															 transaction.runningBalance.currencyCode,
 															 transaction.runningBalance.amount.Value,
 															 transaction.postDate.date ?? transaction.transactionDate.date).Value : (double?)null,
-														 transactionStatus = transaction.transactionStatus
+														 transactionStatus = transaction.transactionStatus,
+														 bankTransactionId = transaction.bankTransactionId,
 													 };
 					transactions.Add(yodleeTransactionModel);
 				}
@@ -157,8 +158,7 @@ namespace EzBob.Models.Marketplaces.Builders
 					yodleeCashFlowReportModel.BankFrame -= bank.overdraftProtection.Value;
 				}else if (bank.availableBalance.HasValue && bank.currentBalance.HasValue)
 				{
-					yodleeCashFlowReportModel.BankFrame -= (bank.currentBalance.Value - bank.availableBalance.Value);
-
+					yodleeCashFlowReportModel.BankFrame += (bank.currentBalance.Value - bank.availableBalance.Value);
 				}
 				yodleeCashFlowReportModel.AsOfDate = bank.asOfDate.HasValue ? bank.asOfDate.Value : new DateTime(1900,1,1);
 

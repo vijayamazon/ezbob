@@ -12,6 +12,7 @@ namespace EzBob.Models.Marketplaces
 			transactionAmount = null;
 			description = "-";
 			runningBalance = null;
+			bankTransactionId = null;
 		}
 
 		public string transactionBaseType { get; set; }
@@ -22,5 +23,6 @@ namespace EzBob.Models.Marketplaces
 		public string description { get; set; }
 		public double? runningBalance { get; set; }
 		public string transactionStatus { get; set; }
+		public long? bankTransactionId { get; set; }
 	}
 }

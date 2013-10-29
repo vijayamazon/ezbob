@@ -1454,16 +1454,22 @@ namespace EZBob.DatabaseLib
 				  .SelectMany(oi => oi.OrderItemBankTransactions)
 				  .ToList();
 
-			var transactions = orderItemBankTransactions.OrderByDescending(x => (x.postDate ?? x.transactionDate).Value).ThenBy(x => x.bankTransactionId).ToList();
+			var transactions = orderItemBankTransactions.OrderByDescending(x => (x.postDate ?? x.transactionDate).Value).ToList();//.ThenBy(x => x.bankTransactionId).ToList();
 			if (transactions.Count == 0)
 			{
 				return;
 			}
-
+			DateTime currDate;
+			int currIndex = 0;
 			if (!transactions[0].runningBalance.HasValue)
 			{
 				transactions[0].runningBalance = currentBalance.Value;
 				transactions[0].runningBalanceCurrency = currentBalance.CurrencyCode;
+				currDate = (transactions[0].postDate ?? transactions[0].transactionDate).Value;
+			}
+			else
+			{
+				return;
 			}
 
 			for (int i = 1; i < transactions.Count; ++i)
@@ -1489,6 +1495,17 @@ namespace EZBob.DatabaseLib
 				}
 
 				transactions[i].runningBalanceCurrency = currentBalance.CurrencyCode;
+
+				var newDate = (transactions[i].postDate ?? transactions[i].transactionDate).Value;
+				if (newDate.Date != currDate.Date)
+				{
+					for (int j = currIndex; j < i; j++)
+					{
+						transactions[j].runningBalance = transactions[i-1].runningBalance;
+					}
+					currDate = (transactions[i].postDate ?? transactions[i].transactionDate).Value;
+					currIndex = i;
+				}
 			}
 
 			_session.Flush();

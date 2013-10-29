@@ -39,6 +39,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
 
         this.$el.html(this.template(data));
         this.$el.find('a[data-bug-type]').tooltip({ title: 'Report bug' });
+        this.$el.find('i[data-yodlee-calculated]').tooltip({ title: 'Calculated Field' });
 
         if (this.shop.get('Name') == 'Yodlee') {
             this.renderYodlee();
