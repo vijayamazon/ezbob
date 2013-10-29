@@ -15,8 +15,8 @@ GO
 
 IF EXISTS (SELECT 1 FROM MailTemplateRelation WHERE InternalTemplateName='LateChargeAddCollection.docx')
 BEGIN
-	DELETE FROM MandrillTemplate WHERE NAME = 'Mandrill - Late fee was added (collection)'
 	DELETE FROM MailTemplateRelation WHERE InternalTemplateName='LateChargeAddCollection.docx'
+	DELETE FROM MandrillTemplate WHERE NAME = 'Mandrill - Late fee was added (collection)'
 END
 GO
 
