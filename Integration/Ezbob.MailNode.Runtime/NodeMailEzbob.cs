@@ -95,11 +95,21 @@
 				Templates[0].DisplayName == "Get cash - approval.docx" ||
 				Templates[0].DisplayName == "Get cash - approval - not first.docx")
             {
-                var variables = (iworkflow.VariableConnectionDescriptors.Where(
-                    vc => vc.TargetVariableOwnerName == _ec.CurrentNodeName))
-                    .ToLookup(k => k.SourceVariableName, k => Convert.ToString(_ec[k.SourceVariableName]))
-                    .Distinct()
-                    .ToDictionary(k => k.Key, v => v.First());
+				var variables = new Dictionary<string, string>();
+				foreach (VariableConnectionDescriptor variable in iworkflow.VariableConnectionDescriptors.Where(vc => vc.TargetVariableOwnerName == _ec.CurrentNodeName))
+				{
+						log.InfoFormat("qqq Key={0} SourceVariableName={1} SourceVariableOwnerName={2} TargetVariableName={3} TargetVariableOwnerName={4} _ec[SourceVariableName]={5}",
+						variable.Key, variable.SourceVariableName, variable.SourceVariableOwnerName, variable.TargetVariableName, variable.TargetVariableOwnerName, _ec[variable.SourceVariableName]);
+						if (!variables.ContainsKey(variable.SourceVariableName))
+					{
+						variables.Add(variable.SourceVariableName, Convert.ToString(_ec[variable.SourceVariableName]));
+					}
+					string firstPartOfTarget = variable.TargetVariableName.Split(new [] { '_' })[0];
+					if (!variables.ContainsKey(firstPartOfTarget))
+					{
+						variables.Add(firstPartOfTarget, Convert.ToString(_ec[variable.SourceVariableName]));
+					}
+				}
 
 				log.InfoFormat("Going to send template:'{0}' via Mandrill. Will use the following variables:", Templates[0].DisplayName);
 				foreach (var variable in variables)
@@ -143,7 +153,7 @@
 
 		private List<attachment> HandleAttachments()
 		{
-			int loanId = 0;
+			int loanId;
 			List<attachment> attachments = null;
 			if (int.TryParse(NodeMailParams.CC, out loanId))
 			{
