@@ -1,15 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using ApplicationMng.Repository;
-using EZBob.DatabaseLib.Model.Loans;
-using Iesi.Collections.Generic;
-using NHibernate;
-using NHibernate.Criterion;
-using NHibernate.Type;
+﻿namespace EZBob.DatabaseLib.Model.Database.Loans 
+{
+	using log4net;
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Text;
+	using ApplicationMng.Repository;
+	using Model.Loans;
+	using Iesi.Collections.Generic;
+	using NHibernate;
+	using NHibernate.Criterion;
+	using NHibernate.Type;
 
-namespace EZBob.DatabaseLib.Model.Database.Loans {
 	#region enum PaymentStatus
 
 	public enum PaymentStatus {
@@ -24,7 +26,10 @@ namespace EZBob.DatabaseLib.Model.Database.Loans {
 
 	#region class Loan
 
-	public class Loan {
+	public class Loan
+	{
+		private static readonly ILog log = LogManager.GetLogger(typeof(Loan));
+
 		#region properties
 
 		public virtual int Id { get; set; }
@@ -380,7 +385,23 @@ namespace EZBob.DatabaseLib.Model.Database.Loans {
 				s => s.Status == LoanScheduleStatus.PaidOnTime ||
 					 s.Status == LoanScheduleStatus.Paid ||
 					 s.Status == LoanScheduleStatus.PaidEarly
-				)) {
+				))
+			{
+				if (Id != 0)
+				{
+					var scheduledPaymentStatuses = new StringBuilder();
+					foreach (var ls in Schedule)
+					{
+						if (scheduledPaymentStatuses.ToString() != string.Empty)
+						{
+							scheduledPaymentStatuses.Append(" ");
+						}
+						scheduledPaymentStatuses.Append("(Id=").Append(ls.Id).Append(" Status=").Append(ls.Status).Append(")");
+					}
+
+					log.InfoFormat("Marking loan {0} as 'PaidOff'. Loan balance:{1}. Schedule payments statuses:{2}", Id, Balance, scheduledPaymentStatuses);
+				}
+
 				Status = LoanStatus.PaidOff;
 				DateClosed = date;
 				return;
