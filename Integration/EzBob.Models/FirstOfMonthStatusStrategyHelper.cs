@@ -32,14 +32,19 @@
 			string firstOfMonthStatusMailCopyTo = configurationVariablesRepository.GetByName("FirstOfMonthStatusMailCopyTo").Value;
 			bool firstOfMonthEnableCustomerMail = configurationVariablesRepository.GetByNameAsBool("FirstOfMonthEnableCustomerMail");
 
-			if (!firstOfMonthStatusMailEnabled)
+			var customersToWorkOn = new List<Customer>();
+			
+			if (firstOfMonthStatusMailEnabled)
 			{
-				log.InfoFormat("The first of month status mails are disabled");
-				return;
+				customersToWorkOn.AddRange(_customers.GetAll().Where(c => !c.IsTest && c.CollectionStatus.CurrentStatus.IsEnabled && (!c.MonthlyStatusEnabled.HasValue || c.MonthlyStatusEnabled.Value)));
+			}
+			else
+			{
+				customersToWorkOn.AddRange(_customers.GetAll().Where(c => !c.IsTest && c.CollectionStatus.CurrentStatus.IsEnabled && c.MonthlyStatusEnabled.HasValue && c.MonthlyStatusEnabled.Value));
 			}
 
 			log.InfoFormat("Starting to send first of month status mails");
-			foreach (Customer customer in _customers.GetAll().Where(c => !c.IsTest && c.CollectionStatus.CurrentStatus.IsEnabled))
+			foreach (Customer customer in customersToWorkOn)
 			{
 				List<Loan> outstandingLoans = strategyHelper.GetOutstandingLoans(customer.Id);
 				if (outstandingLoans.Count > 0)

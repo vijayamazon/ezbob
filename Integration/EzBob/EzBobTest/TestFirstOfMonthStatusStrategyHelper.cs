@@ -85,7 +85,7 @@ namespace EzBobTest
 		[Test]
 		public void testFirstOfMonthMail()
 		{
-			FirstOfMonthStatusStrategyHelper sa = new FirstOfMonthStatusStrategyHelper();
+			var sa = new FirstOfMonthStatusStrategyHelper();
 			sa.SendFirstOfMonthStatusMail();
 		}
 	}

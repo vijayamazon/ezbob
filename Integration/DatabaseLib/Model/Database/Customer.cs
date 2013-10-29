@@ -530,6 +530,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 		} // LastLoyaltyProgramActionDate
 
 		public virtual string PromoCode { get; set; }
+		public virtual bool? MonthlyStatusEnabled { get; set; }
 
 		public virtual IList<CustomerRequestedLoan> CustomerRequestedLoan { get; set; }
 		public virtual IList<CustomerInviteFriend> CustomerInviteFriend { get; set; }

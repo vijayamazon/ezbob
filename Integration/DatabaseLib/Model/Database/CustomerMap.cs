@@ -331,7 +331,7 @@ namespace EZBob.DatabaseLib.Model.Database {
                 .Not.Update();
 
 			Map(x => x.PromoCode);
-
+			Map(x => x.MonthlyStatusEnabled);
 
 			HasMany(x => x.CustomerRequestedLoan)
 				.AsBag()
