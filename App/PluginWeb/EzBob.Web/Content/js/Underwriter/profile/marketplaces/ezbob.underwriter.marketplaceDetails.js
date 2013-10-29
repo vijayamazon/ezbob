@@ -175,53 +175,10 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
         this.$el.find("div.dataTables_filter input").focus(function() {
             that.$el.find(".YodleeTransactionsTable tfoot input").val("").keyup();
         });
-
-        var cashModel = this.shop.get("Yodlee").CashFlowReportModel;
-        var cashFlow = cashModel.YodleeCashFlowReportModelDict;
-        var minDay = cashModel.MinDateDict;
-        var maxDay = cashModel.MaxDateDict;
-
-        var income = cashFlow["0Total Income"];
-        var expenses = cashFlow["1Total Expenses"];
-        var numOfTransactionsIncome = cashFlow["5Num Of Transactions"];
-        var numOfTransactionsExpenses = cashFlow["9Num Of Transactions"];
-        var averageIncome = cashFlow["6Average Income"];
-        var averageExpenses = cashFlow["aAverage Expenses"];
-
-        var arrayOfData = [];
-
-        for (var i in income) {
-            if (!income.hasOwnProperty(i)) continue;
-            if (i == '999999') continue; //skipping total
-            arrayOfData.push(
-            [
-                [
-                    [parseInt(expenses[i], 10), parseInt(averageExpenses[i], 10), parseInt(numOfTransactionsExpenses[i], 10)],
-                    [parseInt(income[i], 10), parseInt(averageIncome[i], 10), parseInt(numOfTransactionsIncome[i], 10)]
-                ], i == '999999' ? 'Total' : minDay[i] + '-' + maxDay[i] + '/' + i.substring(4) + '/' + i.substring(0, 4)
-            ]);
-        }
-
-        if (arrayOfData.length) {
-            this.$el.find("#yodleeBarGraph").jqBarGraph({
-                data: arrayOfData,
-                colors: ['#FF0000', '#008000'],
-                legends: ['Expenses', 'Income'],
-                legend: true,
-                width: 800,
-                //color: '#ffffff',
-                type: 'multi',
-                postfix: '£',
-                title: '<h3>Cash Flow<br /><small>monthly income/expenses as of date ' + EzBob.formatDate(new Date(Date.parse(cashModel.AsOfDate))) + '</small></h3>',
-                showValues: true,
-                showValuesColor: "#000000",
-            });
-
-            this.$el.find("#yodleeBarGraph").css({ height: '340px' });
-        }
     },
     yodleeShowGraph: function () {
         var cashModel = this.shop.get("Yodlee").CashFlowReportModel;
+        var cashFlow = cashModel.YodleeCashFlowReportModelDict;
         var lowRunningBalance = cashModel.LowRunningBalanceDict;
         var highRunningBalance = cashModel.HighRunningBalanceDict;
         var runningBalance = cashModel.RunningBalanceDict;
@@ -333,6 +290,9 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
                     },
                     markerOptions: {
                         lineWidth: 2,
+                    },
+                    pointLabels: {
+                        show: false
                     }
                 },
                 //canvasOverlay: {
@@ -356,6 +316,100 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
             });
             
             $('.jqplot-highlighter-tooltip').addClass('ui-corner-all');
+            //////////////////////////////////////////////////////////////////////////////////////////
+            var minDay = cashModel.MinDateDict;
+            var maxDay = cashModel.MaxDateDict;
+
+            var income = cashFlow["0Total Income"];
+            var expenses = cashFlow["1Total Expenses"];
+            var numOfTransactionsIncome = cashFlow["5Num Of Transactions"];
+            var numOfTransactionsExpenses = cashFlow["9Num Of Transactions"];
+            var averageIncome = cashFlow["6Average Income"];
+            var averageExpenses = cashFlow["aAverage Expenses"];
+
+            var ticks = [];
+            var incomeBar = [];
+            var expensesBar = [];
+            var incomeLabels = [];
+            var expensesLabels = [];
+            
+            for (var i in income) {
+                if (!income.hasOwnProperty(i)) continue;
+                if (i == '999999') continue; //skipping total
+
+                ticks.push(i == '999999' ? 'Total' : minDay[i] + '-' + maxDay[i] + '/' + i.substring(4) + '/' + i.substring(0, 4));
+                incomeBar.push(parseInt(income[i], 10));
+                expensesBar.push(parseInt(expenses[i], 10));
+                incomeLabels.push("<p class='yodlee-cashflow-graph-labels'>" + EzBob.formatPoundsAsInt(income[i], 10) + "<br>av: " + EzBob.formatPoundsAsInt(averageIncome[i], 10) + "<br>tr#: " + parseInt(numOfTransactionsIncome[i], 10) + "</p>");
+                expensesLabels.push("<p class='yodlee-cashflow-graph-labels'>" + EzBob.formatPoundsAsInt(expenses[i], 10) + "<br>av: " + EzBob.formatPoundsAsInt(averageExpenses[i], 10) + "<br>tr#: " + parseInt(numOfTransactionsExpenses[i], 10) + "</p>");
+            }
+
+            this.IncomeExpensesBarGraph = $.jqplot('yodleeBarGraph', [expensesBar, incomeBar], {
+                seriesDefaults: {
+                    renderer: $.jqplot.BarRenderer,
+                    trendline: {
+                        show: false
+                    }
+                },
+                seriesColors: ['#FF0000', '#008000'],
+                series: [
+                    {
+                        label: 'Expenses',
+                        pointLabels: {
+                            show: true,
+                            labels: expensesLabels,
+                            escapeHTML: false,
+                            location: 'n',
+                            ypadding: -8
+                        }
+                    },
+                    {
+                        label: 'Income',
+                        pointLabels: {
+                            show: true,
+                            labels: incomeLabels,
+                            escapeHTML: false,
+                            location: 'n',
+                            ypadding: -8
+                        }
+                    }
+                ],
+                legend: {
+                    show: true,
+                    placement: 'outsideGrid'
+                },
+                axes: {
+                    xaxis: {
+                        renderer: $.jqplot.CategoryAxisRenderer,
+                        ticks: ticks
+                    },
+                    yaxis: {
+                        pad: 1.05,
+                        tickOptions: {
+                            formatString: "%'d £"
+                        },
+                    }
+                },
+                grid: {
+                    drawBorder: false,
+                    shadow: false,
+                    background: 'rgba(0,0,0,0)'
+                },
+                highlighter: {
+                    show: false,
+                },
+                cursor: {
+                    show: false,
+                },
+            });
+            /*
+            $('#yodleeBarGraph').bind('jqplotDataHighlight',
+                    function (ev, seriesIndex, pointIndex, data) {
+                        console.log(ev, seriesIndex, pointIndex, data);
+                        $('#yodleeBarInfo').html(data[1]);
+                    }
+                );
+            */
         }
     },
     replotYodleeGraphClicked: function () {

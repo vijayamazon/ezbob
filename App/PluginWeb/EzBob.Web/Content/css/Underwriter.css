@@ -143,6 +143,12 @@ tr.yodleeSearchWordsRow td{
     cursor: pointer !important;
 }
 
+p.yodlee-cashflow-graph-labels {
+    line-height: 90%;
+    color: black;
+    font-size: larger;
+}
+
 .nav-tabs { border-bottom: 1px solid #DDDDDD; }
 
 .reportTableHeader {

@@ -216,7 +216,7 @@
 
 			<% if (m.Editable) { %>
 				@RawCellWithButtonNear("Loan Source:", "<%- EzBob.formatLoanSource(m) %>", "loanSource")
-			<% } else { console.log('the m is', m); %>
+			<% } else { %>
 				@RawCell("Loan Source:", "<%- EzBob.formatLoanSource(m) %>")
 			<% } %>
 

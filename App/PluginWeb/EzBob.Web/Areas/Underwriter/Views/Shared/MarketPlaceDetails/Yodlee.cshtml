@@ -126,15 +126,23 @@
 {
     <div class="tab-pane" id="yodleetab2">
         <%(function() { if (y.CashFlowReportModel && y.CashFlowReportModel.YodleeCashFlowReportModelDict) { %>
-        <div id="yodleeBarGraph" class="well" style="width: 800px; height: 300px;"></div>
+        <h3 style="width: 800px; text-align: center;">Cash Flow<br />
+            <small>monthly as of date <%=EzBob.formatDate(new Date(Date.parse(y.CashFlowReportModel.AsOfDate)))%></small>
+        </h3>
+        <div class="well" style="width: 800px; height: 300px; position: relative;">
+            <div id="yodleeBarGraph" class="jqplot-target" style="width: 800px; height: 300px; position: relative;"></div>
+        </div>
         <hr />
-
         <h3 style="width: 800px; text-align: center;">High/Low Running Balance<br />
-            <small>monthly as of date <%=EzBob.formatDate(new Date(Date.parse(y.CashFlowReportModel.AsOfDate)))%></small></h3>
+            <small>monthly as of date <%=EzBob.formatDate(new Date(Date.parse(y.CashFlowReportModel.AsOfDate)))%></small>
+        </h3>
         <div class="well" style="width: 800px; height: 300px; position: relative;">
             <button class="yodleeReplotGraph btn btn-mini" style="right: 0px; top: 0px; position: absolute;" title="Replot"><i class="icon-refresh"></i></button>
             <div id="yodleeRunningBalanceChart" class="jqplot-target" style="width: 800px; height: 300px; position: relative;"></div>
         </div>
+        
+        <br/>
+        
         <%} else {print('No data to show charts');} })();%>
     </div>
 }

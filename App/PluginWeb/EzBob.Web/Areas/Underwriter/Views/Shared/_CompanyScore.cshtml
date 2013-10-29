@@ -410,8 +410,17 @@
 							tooltipLocation: 'n',
 							tooltipOffset: 0,
 							tooltipAxes: 'y',
-							showMarker: true
-						}
+							showMarker: false
+						},
+                        seriesDefaults: {
+                            trendline: {
+                                show: false
+                            },
+                            pointLabels: {
+                                show: false,
+                            }
+                        },
+                        
 					}); // jqplot
 	
 					$('#' + sDivChartID).appendTo('#' + sParentDivChartID);

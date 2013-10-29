@@ -874,7 +874,6 @@
     <Content Include="Content\js\lib\highcharts\makeChart.js" />
     <Content Include="Content\js\lib\html5shiv.js" />
     <Content Include="Content\js\lib\attardi.labels.js" />
-    <Content Include="Content\js\lib\jqBarGraph.1.1.js" />
     <Content Include="Content\js\lib\jqplot\jquery.jqplot.js" />
     <Content Include="Content\js\lib\jqplot\plugins\jqplot.barRenderer.js" />
     <Content Include="Content\js\lib\jqplot\plugins\jqplot.BezierCurveRenderer.js" />
