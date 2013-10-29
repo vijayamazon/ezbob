@@ -1,4 +1,8 @@
+DELETE FROM MandrillTemplate WHERE NAME='LateBy14Days'
+GO
+
 UPDATE MailTemplateRelation SET InternalTemplateName = 'User is approved or re-approved by the strategy.docx' WHERE InternalTemplateName = 'User is re approved by the strategy.docx'
+GO
 
 IF NOT EXISTS (SELECT 1 FROM MailTemplateRelation WHERE InternalTemplateName='Get cash - problem with bank account.docx')
 BEGIN
