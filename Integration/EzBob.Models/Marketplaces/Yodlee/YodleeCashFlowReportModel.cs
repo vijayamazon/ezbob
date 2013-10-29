@@ -5,7 +5,6 @@
 	using System.Linq;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model;
-	using EZBob.DatabaseLib.Model.Marketplaces.Yodlee;
 	using Scorto.NHibernate.Repository;
 	using NHibernate;
 
@@ -23,6 +22,7 @@
 		public SortedDictionary<int/*yearmonth*/, int/*maxday*/> MaxDateDict { get; set; }
 		public SortedDictionary<int/*yearmonth*/, RunningBalance> LowRunningBalanceDict { get; set; }
 		public SortedDictionary<int/*yearmonth*/, RunningBalance> HighRunningBalanceDict { get; set; }
+		public SortedDictionary<DateTime, double> RunningBalanceDict { get; set; }
 		public double MonthInPayments = 0;
 		public double BankFrame = 0;
 		public DateTime AsOfDate;
@@ -58,6 +58,7 @@
 			YodleeCashFlowReportModelDict = new SortedDictionary<string, SortedDictionary<int, double>>();
 			LowRunningBalanceDict = new SortedDictionary<int, RunningBalance>();
 			HighRunningBalanceDict = new SortedDictionary<int, RunningBalance>();
+			RunningBalanceDict = new SortedDictionary<DateTime, double>();
 			MinDateDict = new SortedDictionary<int, int>();
 			MaxDateDict = new SortedDictionary<int, int>();
 			_currencyConvertor = new CurrencyConvertor(new CurrencyRateRepository(session));
@@ -72,7 +73,7 @@
 			var baseType = transaction.transactionBaseType;
 			var date = transaction.transactionDate;
 			var cat = string.Format("{1}{0}", catName, baseType == "credit" ? Credit : Dedit);
-			var yearmonth = date.HasValue ? date.Value.Year * 100 + date.Value.Month : 0;
+			var yearmonth = date.Year * 100 + date.Month;
 
 			var runningBalance = transaction.runningBalance.HasValue ? transaction.runningBalance.Value: 0;
 
@@ -80,7 +81,7 @@
 			UpdateMinMaxDay(yearmonth, date);
 			Add(cat, amount, TotalColumn);
 
-			AddRunningBalance(yearmonth, runningBalance, date.HasValue ? date.Value : new DateTime());
+			AddRunningBalance(yearmonth, runningBalance, date);
 
 			//Calc Total Row
 			Add(baseType == "credit"
@@ -99,7 +100,7 @@
 					: string.Format("{0}{1}", NumTransDedit, NumOfTransactionsCat), 1, TotalColumn);
 
 			var monthAgo = DateTime.Today.AddMonths(-1);
-			if (date.HasValue && date.Value >= monthAgo)
+			if (date >= monthAgo)
 			{
 				MonthInPayments += amount;
 			}
@@ -131,6 +132,11 @@
 					HighRunningBalanceDict[yearmonth].Balance = runningBalance;
 					HighRunningBalanceDict[yearmonth].Date = date;
 				}
+			}
+
+			if (!RunningBalanceDict.ContainsKey(date.Date))
+			{
+				RunningBalanceDict[date.Date] = runningBalance;
 			}
 		}
 

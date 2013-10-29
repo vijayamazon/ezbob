@@ -224,21 +224,31 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
         var cashModel = this.shop.get("Yodlee").CashFlowReportModel;
         var lowRunningBalance = cashModel.LowRunningBalanceDict;
         var highRunningBalance = cashModel.HighRunningBalanceDict;
+        var runningBalance = cashModel.RunningBalanceDict;
         var bankFrame = cashModel.BankFrame;
         var formatedBankFrame = EzBob.formatPoundsAsInt(bankFrame);
         $.jqplot.config.enablePlugins = true;
 
         var lowBalanceLine = [];
         var highBalanceLine = [];
+        var runningBalanceLine = [];
+        var bankFrameLine = [];
         for (var monthYear1 in lowRunningBalance) {
             lowBalanceLine.push([new Date(Date.parse(lowRunningBalance[monthYear1].Date)), parseInt(lowRunningBalance[monthYear1].Balance, 10)]);
         }
 
         for (var monthYear2 in highRunningBalance) {
             highBalanceLine.push([new Date(Date.parse(highRunningBalance[monthYear2].Date)), parseInt(highRunningBalance[monthYear2].Balance, 10)]);
+            
+        } 
+        
+        for (var date in runningBalance) {
+            runningBalanceLine.push([new Date(Date.parse(date)), parseInt(runningBalance[date], 10)]);
+            bankFrameLine.push([new Date(Date.parse(date)), parseInt(bankFrame, 10)]);
         }
+        
         if (lowBalanceLine.length && highBalanceLine.length) {
-            this.runningBalancePlot = $.jqplot('yodleeRunningBalanceChart', [highBalanceLine, lowBalanceLine], {
+            this.runningBalancePlot = $.jqplot('yodleeRunningBalanceChart', [highBalanceLine, lowBalanceLine, runningBalanceLine, bankFrameLine], {
                 animateReplot: true,
                 drawIfHidden: true,
                 cursor: {
@@ -247,8 +257,31 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
                     looseZoom: true,
                     showTooltip: true
                 },
-                seriesColors: ['#008000', '#FF0000'],
-                series: [{ label: 'High' }, { label: 'Low' }],
+                seriesColors: ['#008000', '#FF0000', '#A9A9A9', '#000000'],
+                series: [
+                    { label: 'High' },
+                    { label: 'Low' },
+                    {
+                        label: 'Running Balance ' + formatedBankFrame,
+                        trendline: {
+                            show:false
+                        },
+                        markerOptions: {
+                            show: false,
+                            lineWidth: 1,
+                        }
+                    },
+                    {
+                        label: "Credit Limit",
+                        trendline: {
+                            show: false
+                        },
+                        markerOptions: {
+                            show: false,
+                            lineWidth: 1,
+                        }
+                    }
+                ],
                 axes: {
                     xaxis: {
                         renderer: $.jqplot.DateAxisRenderer,
@@ -267,7 +300,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
                         tickOptions: {
                             formatString: "%'d £"
                         },
-                        rendererOptions: { forceTickAt0: true }
+                        rendererOptions: { forceTickAt0: true, forceFit: true }
                     }
                 },
                 highlighter: {
@@ -297,26 +330,29 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
                         rendererOptions: {
                             smooth: true
                         }
+                    },
+                    markerOptions: {
+                        lineWidth: 2,
                     }
                 },
-                canvasOverlay: {
-                    show: true,
-                    objects: [
-                      {
-                          horizontalLine: {
-                              name: 'bankFrame',
-                              y: bankFrame,
-                              lineWidth: 3,
-                              color: '#000000',
-                              shadow: false,
-                              lineCap: 'butt',
-                              xOffset: 0,
-                              showTooltip: true,
-                              tooltipFormatString: 'Credit Limit ' + formatedBankFrame
-                          }
-                      }
-                    ]
-                }
+                //canvasOverlay: {
+                //    show: true,
+                //    objects: [
+                //      {
+                //          horizontalLine: {
+                //              name: 'bankFrame',
+                //              y: bankFrame,
+                //              lineWidth: 3,
+                //              color: '#000000',
+                //              shadow: false,
+                //              lineCap: 'butt',
+                //              xOffset: 0,
+                //              showTooltip: true,
+                //              tooltipFormatString: 'Credit Limit ' + formatedBankFrame,
+                //          }
+                //      }
+                //    ]
+                //}
             });
             
             $('.jqplot-highlighter-tooltip').addClass('ui-corner-all');

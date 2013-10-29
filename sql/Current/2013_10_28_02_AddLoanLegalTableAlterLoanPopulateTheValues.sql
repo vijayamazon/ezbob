@@ -36,9 +36,6 @@ END
 GO 
 UPDATE Loan SET LoanLegalId = (SELECT Id FROM LoanLegal WHERE Loan.Id = LoanId) WHERE LoanLegalId IS NULL
 GO
-IF EXISTS (SELECT * FROM syscolumns WHERE id = OBJECT_ID('LoanLegal') AND name = 'LoanId')
-BEGIN
-	ALTER TABLE LoanLegal DROP COLUMN LoanId
-END
-GO 
+
+
 

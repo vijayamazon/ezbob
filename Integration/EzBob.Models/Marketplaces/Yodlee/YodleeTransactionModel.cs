@@ -6,7 +6,7 @@ namespace EzBob.Models.Marketplaces
 		public YodleeTransactionModel()
 		{
 			transactionBaseType = "-";
-			transactionDate = null;
+			transactionDate = new DateTime();
 			categoryName = "-";
 			categoryType = "-";
 			transactionAmount = null;
@@ -16,7 +16,7 @@ namespace EzBob.Models.Marketplaces
 		}
 
 		public string transactionBaseType { get; set; }
-		public DateTime? transactionDate { get; set; }
+		public DateTime transactionDate { get; set; }
 		public string categoryName { get; set; }
 		public string categoryType { get; set; }
 		public double? transactionAmount { get; set; }
