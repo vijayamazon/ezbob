@@ -2,6 +2,7 @@
 
 namespace EZBob.DatabaseLib.Model.Database
 {
+	using Loans;
 	using NHibernate.Type;
 
 	public sealed class CashRequestMap : ClassMap<CashRequest> 
@@ -38,6 +39,11 @@ namespace EZBob.DatabaseLib.Model.Database
             Map(x => x.OfferValidUntil).CustomType<UtcDateTimeType>();
             References(x => x.LoanSource, "LoanSourceID");
             Map(x => x.IsCustomerRepaymentPeriodSelectionAllowed);
+	        HasMany(x => x.LoanLegals)
+		        .AsBag()
+		        .KeyColumn("CashRequestsId")
+		        .Cascade.All()
+		        .Inverse();
         }
     }
 }

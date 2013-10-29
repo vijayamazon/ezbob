@@ -6,7 +6,9 @@ using NHibernate;
 
 namespace EZBob.DatabaseLib.Model.Database
 {
-    public class CashRequest
+	using System.Collections.Generic;
+
+	public class CashRequest
     {
         private int _repaymentPeriod = 3;
         private decimal _interestRate = 0.06M;
@@ -79,6 +81,8 @@ namespace EZBob.DatabaseLib.Model.Database
 		public virtual LoanSource LoanSource { get; set; }
 
 		public virtual bool IsCustomerRepaymentPeriodSelectionAllowed { get; set; }
+
+		public virtual IList<LoanLegal> LoanLegals { get; set; }
     }
 
     public interface ICashRequestRepository : IRepository<CashRequest>

@@ -317,6 +317,8 @@ namespace EZBob.DatabaseLib.Model.Database.Loans {
 
 		#endregion property LoanSource
 
+		public virtual int? LoanLegalId { get; set; }
+
 		#endregion properties
 
 		#region methods

@@ -20,11 +20,11 @@ namespace EZBob.DatabaseLib.Model.Database {
 	} // enum Medal
 
 	public enum TypeOfBusiness {
-		Entrepreneur = 0,
-		LLP = 1,
-		PShip3P = 2,
-		PShip = 3,
-		SoleTrader = 4,
-		Limited = 5
+		Entrepreneur = 0, //consumer
+		LLP = 1,          //company
+		PShip3P = 2,      //consumer
+		PShip = 3,        //company
+		SoleTrader = 4,   //consumer
+		Limited = 5       //company
 	} // enum TypeOfBusiness
 } // namespace

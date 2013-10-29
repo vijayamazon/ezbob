@@ -51,6 +51,11 @@ class EzBob.Profile.ApplyForLoanTopView extends Backbone.Marionette.ItemView
         return view
 
     amountSelected: ->
+        BlockUi "on"
+        xhr = $.post "#{window.gRootPath}Customer/GetCash/LoanLegalSigned"
+        xhr.always ->
+            BlockUi "off"
+        
         if not @customer.get("bankAccountAdded")
             @model.set "state", "bank"
             return

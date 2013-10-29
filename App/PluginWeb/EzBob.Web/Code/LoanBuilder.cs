@@ -9,7 +9,7 @@ namespace EzBob.Web.Code
 {
     public class LoanBuilder
     {
-        private ChangeLoanDetailsModelBuilder _builder;
+        private readonly ChangeLoanDetailsModelBuilder _builder;
 
         public LoanBuilder(ChangeLoanDetailsModelBuilder builder)
         {
@@ -34,8 +34,16 @@ namespace EzBob.Web.Code
             }
 
             var calculator = new LoanScheduleCalculator {Interest = cr.InterestRate, Term = cr.RepaymentPeriod};
-
-            var loan = new Loan() {LoanAmount = amount, Date = now, LoanType = cr.LoanType, CashRequest = cr, SetupFee = setupFee};
+	        var loanLegal = cr.LoanLegals.LastOrDefault();
+	        var loan = new Loan
+		        {
+			        LoanAmount = amount,
+			        Date = now,
+			        LoanType = cr.LoanType,
+			        CashRequest = cr,
+			        SetupFee = setupFee,
+					LoanLegalId = loanLegal == null ? (int?) null : loanLegal.Id
+		        };
             calculator.Calculate(amount, loan, loan.Date, interestOnlyTerm);
 	        loan.LoanSource = cr.LoanSource;
             return loan;

@@ -94,6 +94,7 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping {
 			Map(x => x.InterestDue);
 			Map(x => x.LastRecalculation);
 			References(x => x.LoanSource, "LoanSourceID");
+			Map(x => x.LoanLegalId);
 		} // constructor
 	} // class LoanMap
 

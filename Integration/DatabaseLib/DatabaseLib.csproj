@@ -95,6 +95,7 @@
     <Compile Include="Model\Database\Customer\CustomerSourceOfRepayment.cs" />
     <Compile Include="Model\Database\customer_enums.cs" />
     <Compile Include="Model\Database\TestCustomer.cs" />
+    <Compile Include="Model\Loans\LoanLegal.cs" />
     <Compile Include="Model\Loans\LoanMap.cs" />
     <Compile Include="Model\Loans\LoanSource.cs" />
     <Compile Include="Model\Loans\LoanInterestFreeze.cs" />

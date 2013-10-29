@@ -92,6 +92,12 @@
     };
 
     ApplyForLoanTopView.prototype.amountSelected = function() {
+      var xhr;
+      BlockUi("on");
+      xhr = $.post("" + window.gRootPath + "Customer/GetCash/LoanLegalSigned");
+      xhr.always(function() {
+        return BlockUi("off");
+      });
       if (!this.customer.get("bankAccountAdded")) {
         this.model.set("state", "bank");
         return;
