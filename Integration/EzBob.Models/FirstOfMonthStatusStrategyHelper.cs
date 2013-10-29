@@ -150,7 +150,7 @@
 			summarySection.Append(loanSummaryTotalRow);
 			summarySection.Append(loanSummaryRows);
 
-			return "Loans summary:<br>" + CreateHtmlTable(summarySection.ToString(), summaryHeaders.ToArray()) + "<br>";
+			return "Loans summary:<br>" + CreateHtmlTable(summarySection.ToString(), summaryHeaders.ToArray());
 		}
 
 		private void SendStatusMailToCustomer(Customer customer, List<Loan> outstandingLoans, List<Loan> closedLoans,
@@ -177,32 +177,36 @@
 
 		private string GenerateHeaderSection(Customer customer, List<Loan> outstandingLoans)
 		{
-			string s = "general header + contact us details";
-			bool isLate = outstandingLoans.Any(x => x.Status == LoanStatus.Late);
-			
+			bool isLate = outstandingLoans.Any(l => l.Status == LoanStatus.Late);
+			if (isLate)
+			{
+				return "Here is the status of your account and we see that you are late for a payment. Please deal with this today or contact us at <a href=\"mailto:customercare@ezbob.com\" target=\"_self\">customercare@ezbob.com</a><";
+			}
+
 			decimal outstandingPrincipal = outstandingLoans.Sum(x => x.Principal);
 			decimal approvedSum = customer.LastCashRequest.ApprovedSum();
 			if (approvedSum > 2*outstandingPrincipal)
 			{
-				//can get more money
+				return "Here is the status of your account and we see that you can get more funding with us today. If you \"click for cash\" you can see what we can offer you.";
 			}
 
-			if (isLate)
-			{
-				//is late
-			}
-
-			return s;
+			return "Here is the status of your account with us as of today...";
 		}
 
 		private string GenerateOutstandingLoansSection(List<Loan> outstandingLoans)
 		{
+			bool isFirst = true;
 			var outstandingLoansSection = new StringBuilder();
 			if (outstandingLoans.Count > 0)
 			{
 				outstandingLoansSection.Append("Loans that are outstanding:<br>");
 				foreach (Loan outstandingLoan in outstandingLoans)
 				{
+					if (!isFirst)
+					{
+						outstandingLoansSection.Append("<br>");
+					}
+					isFirst = false;
 					var rows = new List<LoanStatusRow>();
 					foreach (
 						LoanTransaction loanTransaction in
@@ -238,7 +242,7 @@
 					}
 
 					string tableForLoan = CreateHtmlTableFromClass(rows.OrderBy(p => p.PostDate));
-					outstandingLoansSection.Append(tableForLoan).Append("<br>");
+					outstandingLoansSection.Append(tableForLoan);
 				}
 			}
 			return outstandingLoansSection.ToString();
@@ -246,15 +250,20 @@
 
 		private string GenerateClosedLoansSection(List<Loan> closedLoans)
 		{
+			bool isFirst = true;
 			var closedLoansSection = new StringBuilder();
 			if (closedLoans.Count > 0)
 			{
 				closedLoansSection.Append("Loans that were closed last month:<br>");
 				foreach (Loan closedLoan in closedLoans)
 				{
+					if (!isFirst)
+					{
+						closedLoansSection.Append("<br>");
+					}
+					isFirst = false;
 					var rows = new List<LoanStatusRow>();
-					foreach (
-						LoanTransaction loanTransaction in closedLoan.Transactions.Where(lt => lt.Status == LoanTransactionStatus.Done))
+					foreach (LoanTransaction loanTransaction in closedLoan.Transactions.Where(lt => lt.Status == LoanTransactionStatus.Done))
 					{
 						LoanStatusRow currentRow = CreateLoanStatusRowFromTransaction(loanTransaction);
 						if (currentRow != null)
@@ -263,9 +272,8 @@
 						}
 					}
 					string tableForLoan = CreateHtmlTableFromClass(rows.OrderBy(p => p.PostDate));
-					closedLoansSection.Append(tableForLoan).Append("<br>");
+					closedLoansSection.Append(tableForLoan);
 				}
-				closedLoansSection.Append("<br><br>");
 			}
 			return closedLoansSection.ToString();
 		}
