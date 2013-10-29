@@ -76,7 +76,7 @@ namespace EzBob.Web.Infrastructure
         public virtual string PayPointNameValidationFailedStrategyName { get { return GetValueWithDefault<string>("PayPointNameValidationFailedStrategyName", "PayPointNameValidationFailed"); } }
         public virtual string RestorePasswordStrategyName { get { return GetValueWithDefault<string>("RestorePasswordStrategyName", "RestorePassword"); } }
         public virtual string ChangePasswordStrategyName { get { return GetValueWithDefault<string>("ChangePasswordStrategyName", "ChangePassword"); } }
-        public virtual string ThreeInvalidAttemptsStrategyName { get { return GetValueWithDefault<string>("ThreeInvalidAttemptsStrategyName", "ThreeInvalidAttempt"); } }
+		public virtual string ThreeInvalidAttemptsStrategyName { get { return GetValueWithDefault<string>("ThreeInvalidAttemptsStrategyName", "Three_Invalid_Attempts_Password"); } }
         public virtual string ApprovedUserStrategyName { get { return GetValueWithDefault<string>("ApprovedUserStrategyName", "Approved_User"); } }
         public virtual string RejectUserStrategyName { get { return GetValueWithDefault<string>("RejectUserStrategyName", "Rejected_User"); } }
         public virtual string MoreAMLInformationStrategyName { get { return GetValueWithDefault<string>("MoreAMLInformationStrategyName", "More_AML_Information"); } }

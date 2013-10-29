@@ -65,14 +65,16 @@ namespace EzBob.Web.Code.ApplicationCreator
 
         public void ThreeInvalidAttempts(User user, string firstName, string password)
         {
+			var customer = _session.Get<Customer>(user.Id);
+
             var strategyParameters = new[]
                                              {
                                                  new StrategyParameter("userId", user.Id),
                                                  new StrategyParameter("email", user.EMail),
-                                                 new StrategyParameter("FirstName", firstName),
+                                                 new StrategyParameter("FirstName", customer.PersonalInfo.FirstName),
                                                  new StrategyParameter("Password", password)
                                              };
-            CreateApplication(user, strategyParameters, _config.RestorePasswordStrategyName);
+            CreateApplication(user, strategyParameters, _config.ThreeInvalidAttemptsStrategyName);
         }
 
         public void PasswordChanged(User user, string firstName, string password)
