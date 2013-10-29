@@ -4,6 +4,13 @@ GO
 UPDATE MailTemplateRelation SET InternalTemplateName = 'User is approved or re-approved by the strategy.docx' WHERE InternalTemplateName = 'User is re approved by the strategy.docx'
 GO
 
+IF EXISTS (SELECT 1 FROM MailTemplateRelation WHERE InternalTemplateName='LateChargeAddCollection.docx')
+BEGIN
+	DELETE FROM MandrillTemplate WHERE NAME = 'Mandrill - Late fee was added (collection)'
+	DELETE FROM MailTemplateRelation WHERE InternalTemplateName='LateChargeAddCollection.docx'
+END
+GO
+
 IF NOT EXISTS (SELECT 1 FROM MailTemplateRelation WHERE InternalTemplateName='Get cash - problem with bank account.docx')
 BEGIN
 	INSERT INTO MailTemplateRelation (InternalTemplateName, MandrillTemplateId) VALUES ('Get cash - problem with bank account.docx', 1)
@@ -84,13 +91,6 @@ IF NOT EXISTS (SELECT 1 FROM MandrillTemplate WHERE NAME='Mandrill - Late fee wa
 BEGIN
 	INSERT INTO MandrillTemplate (NAME) VALUES ('Mandrill - Late fee was added (7D late)')
 	UPDATE MailTemplateRelation SET MandrillTemplateId = @@IDENTITY WHERE InternalTemplateName='LateChargeAdd.docx'
-END
-GO
-
-IF NOT EXISTS (SELECT 1 FROM MandrillTemplate WHERE NAME='Mandrill - Late fee was added (collection)')
-BEGIN
-	INSERT INTO MandrillTemplate (NAME) VALUES ('Mandrill - Late fee was added (collection)')
-	UPDATE MailTemplateRelation SET MandrillTemplateId = @@IDENTITY WHERE InternalTemplateName='LateChargeAddCollection.docx'
 END
 GO
 
