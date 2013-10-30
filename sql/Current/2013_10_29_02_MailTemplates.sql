@@ -1,4 +1,4 @@
-DELETE FROM MailTemplateRelation WHERE Name = 'Pay early and save.docx'
+DELETE FROM MailTemplateRelation WHERE InternalTemplateName = 'Pay early and save.docx'
 GO
 
 IF EXISTS (SELECT 1 FROM MandrillTemplate WHERE NAME='LateBy14Days')
