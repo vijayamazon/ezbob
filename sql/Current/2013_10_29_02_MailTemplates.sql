@@ -3,9 +3,10 @@ GO
 
 IF EXISTS (SELECT 1 FROM MandrillTemplate WHERE NAME='LateBy14Days')
 BEGIN
-	DECLARE @GreetingTemplateId INT
+	DECLARE @GreetingTemplateId INT, @OldLateId INT
 	SELECT @GreetingTemplateId = Id FROM MandrillTemplate WHERE NAME='Greeting'
-	UPDATE MailTemplateRelation SET MandrillTemplateId=@GreetingTemplateId
+	SELECT @OldLateId = Id FROM MandrillTemplate WHERE NAME='LateBy14Days'
+	UPDATE MailTemplateRelation SET MandrillTemplateId=@GreetingTemplateId WHERE MailTemplateRelation WHERE MandrillTemplateId = @OldLateId
 	DELETE FROM MandrillTemplate WHERE NAME='LateBy14Days'
 END
 GO
