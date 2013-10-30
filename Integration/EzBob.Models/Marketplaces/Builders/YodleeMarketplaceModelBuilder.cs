@@ -158,13 +158,17 @@ namespace EzBob.Models.Marketplaces.Builders
 			{
 				if (bank.overdraftProtection.HasValue)
 				{
-					yodleeCashFlowReportModel.BankFrame -= bank.overdraftProtection.Value;
+					yodleeRunningBalanceModel.BankFrame -= bank.overdraftProtection.Value;
 				}else if (bank.availableBalance.HasValue && bank.currentBalance.HasValue)
 				{
-					yodleeCashFlowReportModel.BankFrame += (bank.currentBalance.Value - bank.availableBalance.Value);
+					yodleeRunningBalanceModel.BankFrame += (bank.currentBalance.Value - bank.availableBalance.Value);
 				}
-				yodleeCashFlowReportModel.AsOfDate = bank.asOfDate.HasValue ? bank.asOfDate.Value : new DateTime(1900, 1, 1);
-				yodleeRunningBalanceModel.AsOfDate = bank.asOfDate.HasValue ? bank.asOfDate.Value : new DateTime(1900, 1, 1);
+
+				if (bank.asOfDate.HasValue)
+				{
+					yodleeCashFlowReportModel.AsOfDate = bank.asOfDate.Value;
+					yodleeRunningBalanceModel.AsOfDate = bank.asOfDate.Value;
+				}
 				yodleeRunningBalanceModel.AccountCurrentBalanceDict[bank.accountNumber] = bank.currentBalance.HasValue? bank.currentBalance.Value : 0;
 				foreach (var transaction in bank.transactions)
 				{

@@ -183,7 +183,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
         var lowRunningBalance = runningBalanceModel.LowRunningBalanceDict;
         var highRunningBalance = runningBalanceModel.HighRunningBalanceDict;
         var runningBalance = runningBalanceModel.MergedDailyRunningBalanceDict;
-        var bankFrame = cashModel.BankFrame;
+        var bankFrame = runningBalanceModel.BankFrame;
         var formatedBankFrame = EzBob.formatPoundsAsInt(bankFrame);
         $.jqplot.config.enablePlugins = true;
 

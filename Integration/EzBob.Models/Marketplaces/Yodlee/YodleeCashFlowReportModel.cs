@@ -12,7 +12,6 @@
 		public SortedDictionary<int/*yearmonth*/, int/*minday*/ > MinDateDict { get; set; }
 		public SortedDictionary<int/*yearmonth*/, int/*maxday*/> MaxDateDict { get; set; }
 		public double MonthInPayments = 0;
-		public double BankFrame = 0;
 		public DateTime AsOfDate;
 		private const int TotalColumn = 999999;
 		private const string OtherIncomeCat = "Other Income";
