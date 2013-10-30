@@ -106,6 +106,12 @@
 			@RawCellWithButtonNear("Test User:", "<%= IsTest ? 'Yes' : 'No' %>", "isTestEditButton")
 			@RawCellWithButtonNear("Manual Decision:", "<%= IsAvoid ? 'Yes' : 'No' %>", "avoidAutomaticDecisionButton")
 			@RawCellWithButtonNear("Fraud Check Status:", "<%= FraudCheckStatus %>", "changeFraudStatusManualy", "<%- FraudHighlightCss %>")
+            <tr>
+		        <td class="<%= PromoCodeCss %>">Promo Code:</td>
+		        <td class="<%= PromoCodeCss %>">
+			        <span><%= PromoCode %></span>
+		        </td>
+	        </tr>
 		</tbody>
 	</table>
 </script>

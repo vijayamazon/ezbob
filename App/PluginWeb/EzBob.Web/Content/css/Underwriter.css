@@ -502,6 +502,11 @@ span.active {
   font-weight: bold;
 }
 
+.table td.promo_code {
+  color: blue;
+  font-weight: bold;
+}
+
 .couple_buttons {
     margin-left: 3px;
 }

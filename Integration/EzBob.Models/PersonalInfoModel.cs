@@ -36,6 +36,8 @@
 		public int FraudCheckStatusId { get; set; }
 		public string FraudHighlightCss { get; set; }
 		public bool IsWarning { get; set; }
+		public string PromoCode { get; set; }
+		public string PromoCodeCss { get; set; }
 
         public PersonalInfoModel()
         {
@@ -57,7 +59,14 @@
 			{
 				FraudHighlightCss = "red_cell";
 			}
-            if (customer.PersonalInfo != null)
+
+			PromoCode = customer.PromoCode;
+	        if (!string.IsNullOrEmpty(PromoCode))
+	        {
+		        PromoCodeCss = "promo_code";
+	        }
+
+	        if (customer.PersonalInfo != null)
             {
                 Name = customer.PersonalInfo.Fullname;
                 MobilePhone = customer.PersonalInfo.MobilePhone;
