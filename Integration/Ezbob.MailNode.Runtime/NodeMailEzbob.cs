@@ -98,16 +98,26 @@
 				var variables = new Dictionary<string, string>();
 				foreach (VariableConnectionDescriptor variable in iworkflow.VariableConnectionDescriptors.Where(vc => vc.TargetVariableOwnerName == _ec.CurrentNodeName))
 				{
-						log.InfoFormat("qqq Key={0} SourceVariableName={1} SourceVariableOwnerName={2} TargetVariableName={3} TargetVariableOwnerName={4} _ec[SourceVariableName]={5}",
-						variable.Key, variable.SourceVariableName, variable.SourceVariableOwnerName, variable.TargetVariableName, variable.TargetVariableOwnerName, _ec[variable.SourceVariableName]);
-						if (!variables.ContainsKey(variable.SourceVariableName))
+					if (!variables.ContainsKey(variable.SourceVariableName))
 					{
 						variables.Add(variable.SourceVariableName, Convert.ToString(_ec[variable.SourceVariableName]));
 					}
-					string firstPartOfTarget = variable.TargetVariableName.Split(new [] { '_' })[0];
-					if (!variables.ContainsKey(firstPartOfTarget))
+					string target;
+					if (variable.TargetVariableName.ToLower() == "mp_counter" ||
+					    variable.TargetVariableName.ToLower() == "updatecmp_error" || 
+						variable.TargetVariableName.ToLower() == "cp_addressto" ||
+					    variable.TargetVariableName.ToLower() == "cp_addresscc")
 					{
-						variables.Add(firstPartOfTarget, Convert.ToString(_ec[variable.SourceVariableName]));
+						target = variable.TargetVariableName;
+					}
+					else
+					{
+						target = variable.TargetVariableName.Split(new[] { '_' })[0];
+					}
+
+					if (!variables.ContainsKey(target))
+					{
+						variables.Add(target, Convert.ToString(_ec[variable.SourceVariableName]));
 					}
 				}
 
