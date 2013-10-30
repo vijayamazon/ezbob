@@ -345,7 +345,12 @@ BEGIN
 END
 GO
 
-
+IF NOT EXISTS (SELECT 1 FROM MandrillTemplate WHERE NAME='Mandrill - Received Full Repayment')
+BEGIN
+	INSERT INTO MandrillTemplate (NAME) VALUES ('Mandrill - Received Full Repayment')
+	UPDATE MailTemplateRelation SET MandrillTemplateId = @@IDENTITY WHERE InternalTemplateName='fullrepayment.docx'
+END
+GO
 
 
 
