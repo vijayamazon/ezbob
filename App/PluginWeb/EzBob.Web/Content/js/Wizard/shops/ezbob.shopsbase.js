@@ -84,7 +84,7 @@
     };
 
     StoreInfoBaseView.prototype.render = function() {
-      var accountsList, hasEbay, hasFilledShops, hasHmrc, hasOnlyYodleeAndFreeAgentAndSage, hasOtherThanYodleeAndFreeAgentAndSage, hasPaypal, shop, shopInfo, shopName, sortedShopsByNumOfShops, sortedShopsByPriority, that, _i, _len, _ref1;
+      var accountsList, hasEbay, hasFilledShops, hasHmrc, hasPaypal, shop, sortedShopsByNumOfShops, sortedShopsByPriority, that, _i, _len;
 
       $.colorbox.close();
       hasHmrc = this.stores.HMRC.button.model.length > 0;
@@ -97,16 +97,6 @@
           })).append(' account data').append('<br />').append('to be approved for a loan.');
         }
         this.$el.find('.importantnumber').text('£200,000');
-        _.each(this.stores, function(s, sShopName) {
-          switch (sShopName) {
-            case "HMRC":
-              return s.priority = 1;
-            case "Yodlee":
-              return s.priority = 2;
-            default:
-              return s.priority += 4;
-          }
-        });
       }
       that = this;
       accountsList = this.storeList.find(".accounts-list");
@@ -119,26 +109,12 @@
       hasFilledShops = sortedShopsByNumOfShops[0].button.model.length > 0;
       hasEbay = this.stores.eBay.button.model.length > 0;
       hasPaypal = this.stores.paypal.button.model.length > 0;
-      hasOtherThanYodleeAndFreeAgentAndSage = false;
-      _ref1 = this.stores;
-      for (shopName in _ref1) {
-        shopInfo = _ref1[shopName];
-        if (shopName === 'Yodlee' || shopName === 'FreeAgent' || shopName === 'Sage') {
-          continue;
-        }
-        if (shopInfo.button.model.length > 0) {
-          hasOtherThanYodleeAndFreeAgentAndSage = true;
-          break;
-        }
-      }
-      hasOnlyYodleeAndFreeAgentAndSage = (this.stores.Yodlee.button.model.length > 0 || this.stores.FreeAgent.button.model.length > 0 || this.stores.Sage.button.model.length > 0) && !hasOtherThanYodleeAndFreeAgentAndSage;
       this.$el.find(".eBayPaypalRule").toggleClass("hide", !hasEbay || hasPaypal);
       if (this.isOffline) {
         this.$el.find('.next').toggleClass('disabled', !hasHmrc);
         this.$el.find('.AddMoreRule').toggleClass('hide', !hasFilledShops || hasHmrc);
       } else {
-        this.$el.find(".next").toggleClass("disabled", !hasFilledShops || hasOnlyYodleeAndFreeAgentAndSage || (hasEbay && !hasPaypal));
-        this.$el.find(".AddMoreRule").toggleClass("hide", !hasOnlyYodleeAndFreeAgentAndSage);
+        this.$el.find(".next").toggleClass("disabled", !hasFilledShops || (hasEbay && !hasPaypal));
       }
       for (_i = 0, _len = sortedShopsByNumOfShops.length; _i < _len; _i++) {
         shop = sortedShopsByNumOfShops[_i];
