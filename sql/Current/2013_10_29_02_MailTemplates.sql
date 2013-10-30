@@ -320,24 +320,28 @@ BEGIN
 	UPDATE MailTemplateRelation SET MandrillTemplateId = @@IDENTITY WHERE InternalTemplateName='fullrepayment.docx'
 END
 GO
+
 IF NOT EXISTS (SELECT 1 FROM MandrillTemplate WHERE NAME='Mandrill - Took Loan (not 1st loan)')
 BEGIN
 	INSERT INTO MandrillTemplate (NAME) VALUES ('Mandrill - Took Loan (not 1st loan)')
 	UPDATE MailTemplateRelation SET MandrillTemplateId = @@IDENTITY WHERE InternalTemplateName='Get cash - approval - not first.docx'
 END
 GO
+
 IF NOT EXISTS (SELECT 1 FROM MandrillTemplate WHERE NAME='Mandrill - Took Loan (1st loan)')
 BEGIN
 	INSERT INTO MandrillTemplate (NAME) VALUES ('Mandrill - Took Loan (1st loan)')
 	UPDATE MailTemplateRelation SET MandrillTemplateId = @@IDENTITY WHERE InternalTemplateName='Get cash - approval.docx'
 END
 GO
+
 IF NOT EXISTS (SELECT 1 FROM MandrillTemplate WHERE NAME='Mandrill - 2 days notice')
 BEGIN
 	INSERT INTO MandrillTemplate (NAME) VALUES ('Mandrill - 2 days notice')
 	UPDATE MailTemplateRelation SET MandrillTemplateId = @@IDENTITY WHERE InternalTemplateName='Your account will be billed to schedule.docx'
 END
 GO
+
 IF NOT EXISTS (SELECT 1 FROM MandrillTemplate WHERE NAME='Mandrill - 5 days notice')
 BEGIN
 	INSERT INTO MandrillTemplate (NAME) VALUES ('Mandrill - 5 days notice')
@@ -345,6 +349,12 @@ BEGIN
 END
 GO
 
+IF NOT EXISTS (SELECT 1 FROM MandrillTemplate WHERE NAME='Mandrill - Received Full Repayment')
+BEGIN
+	INSERT INTO MandrillTemplate (NAME) VALUES ('Mandrill - Received Full Repayment')
+	UPDATE MailTemplateRelation SET MandrillTemplateId = @@IDENTITY WHERE InternalTemplateName='fullrepayment.docx'
+END
+GO
 
 
 
