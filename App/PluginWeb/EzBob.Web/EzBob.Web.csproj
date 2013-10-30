@@ -1009,6 +1009,9 @@
     <Content Include="Content\js\Underwriter\editLoan\editLoanView.min.js">
       <DependentUpon>editLoanView.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.goToCustomer.js">
+      <DependentUpon>ezbob.underwriter.goToCustomer.coffee</DependentUpon>
+    </Content>
     <Content Include="Content\js\Underwriter\profile\companyScore\ezbob.underwriter.companyScore.js" />
     <Content Include="Content\js\Underwriter\profile\CustomerRelations\ezbob.underwriter.AddCustomerRelationsEntry.js">
       <DependentUpon>ezbob.underwriter.AddCustomerRelationsEntry.coffee</DependentUpon>

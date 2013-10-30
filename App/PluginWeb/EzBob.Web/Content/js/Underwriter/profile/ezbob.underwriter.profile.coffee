@@ -127,6 +127,12 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
         "click #SuspendBtn": "SuspendBtnClick"
         "click #ReturnBtn": "ReturnBtnClick"
 
+    recordRecentCustomers: (id) ->        
+        xhr = $.post "#{gRootPath}Underwriter/Customers/SetRecentCustomer", { id: id }
+        xhr.done (recentCustomersModel)->
+            localStorage.setItem('RecentCustomersIds', recentCustomersModel.Ids)
+            localStorage.setItem('RecentCustomersNames', recentCustomersModel.Names)
+
     checkCustomerAvailability: (model) ->
         data = model.toJSON()
         if data.success is false
@@ -275,6 +281,7 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
             @summaryInfoModel.trigger "sync"
 
             @checkCustomerAvailability @summaryInfoModel
+            @recordRecentCustomers(id)
             
             EzBob.UpdateBugsIcons fullModel.get("Bugs")
             

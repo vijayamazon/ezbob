@@ -50,9 +50,10 @@
 		private readonly Dictionary<int, string> statusIndex2Name;
 		private readonly int defaultIndex = -1;
 		private readonly int legalIndex = -1;
-	    private CustomerStatusesRepository _customerStatusesRepository;
+		private readonly CustomerStatusesRepository _customerStatusesRepository;
+		private readonly UnderwriterRecentCustomersRepository underwriterRecentCustomersRepository;
 
-	    public ViewResult Index()
+		public ViewResult Index()
 		{
 			var grids = new LoansGrids
 			{
@@ -131,7 +132,7 @@
 			}
 
 			grids.MpTypes = _mpType.GetAll().ToList();
-		    grids.CollectionStatuses = _customerStatusesRepository.GetAll().ToList();
+			grids.CollectionStatuses = _customerStatusesRepository.GetAll().ToList();
 			return View(grids);
 		}
 
@@ -142,8 +143,12 @@
 			IAppCreator appCreator,
 			IEzBobConfiguration config,
 			IDecisionHistoryRepository historyRepository,
-			IWorkplaceContext context, LoanLimit limit, GridModel<Customer> pending,
-			GridModel<Customer> loans, MarketPlaceRepository mpType)
+			IWorkplaceContext context,
+			LoanLimit limit,
+			GridModel<Customer> pending,
+			GridModel<Customer> loans,
+			MarketPlaceRepository mpType,
+			UnderwriterRecentCustomersRepository underwriterRecentCustomersRepository)
 		{
 			_session = session;
 			_customers = customers;
@@ -169,14 +174,14 @@
 			_gridRegisteredCustomers = CreateColumnsRegisteredCustomers();
 			_gridRegisteredCustomers.GetColumnByIndex("Id").Formatter = "profileWithTypeLink";
 
-            _customerStatusesRepository = customerStatusesRepository;
+			_customerStatusesRepository = customerStatusesRepository;
 
 			if (statusIndex2Name == null)
 			{
 				statusIndex2Name = new Dictionary<int, string>();
 
-			    
-			    foreach (CustomerStatuses status in _customerStatusesRepository.GetAll().ToList())
+
+				foreach (CustomerStatuses status in _customerStatusesRepository.GetAll().ToList())
 				{
 					statusIndex2Name.Add(status.Id, status.Name);
 					if (status.Name == "Default")
@@ -189,6 +194,8 @@
 					}
 				}
 			}
+
+			this.underwriterRecentCustomersRepository = underwriterRecentCustomersRepository;
 		}
 
 		[ValidateJsonAntiForgeryToken]
@@ -629,6 +636,36 @@
 			if (customer == null) return this.JsonNet(new { State = CustomerState.NotFound.ToString() });
 			if (customer.WizardStep != WizardStepType.AllStep) return this.JsonNet(new { State = CustomerState.NotSuccesfullyRegistred.ToString() });
 			return this.JsonNet(new { State = CustomerState.Ok.ToString() });
+		}
+
+		[HttpPost]
+		[Ajax]
+		public JsonNetResult SetRecentCustomer(int id)
+		{
+			underwriterRecentCustomersRepository.Add(id, User.Identity.Name);
+			return GetRecentCustomers();
+		}
+
+		[HttpGet]
+		[Ajax]
+		public JsonNetResult GetRecentCustomers()
+		{
+			string underwriter = User.Identity.Name;
+			var recentCustomersIds = new List<int>();
+			var recentCustomersNames = new List<string>();
+
+			var recentCustomers = underwriterRecentCustomersRepository.GetAll().Where(e => e.UserName == underwriter).OrderByDescending(e=>e.Id);
+			
+			foreach (var recentCustomer in recentCustomers)
+			{
+				var customer = _customers.TryGet(recentCustomer.CustomerId);
+				if (customer != null)
+				{
+					recentCustomersIds.Add(recentCustomer.CustomerId);
+					recentCustomersNames.Add(string.Format("{0} ({1}) [{2}]", customer.PersonalInfo.Fullname, recentCustomer.CustomerId, customer.Name));
+				}
+			}
+			return this.JsonNet(new { Ids = recentCustomersIds, Names = recentCustomersNames });
 		}
 
 		[HttpGet]

@@ -2,6 +2,9 @@
 root.EzBob = root.EzBob or {}
 EzBob.Underwriter = EzBob.Underwriter || {};
 
+class EzBob.Underwriter.RecentCustomersModel extends Backbone.Model
+    url: window.gRootPath + "Underwriter/Customers/GetRecentCustomers"
+
 class EzBob.Underwriter.goToCustomerId extends Backbone.Marionette.ItemView
     initialize: ->
         Mousetrap.bind "ctrl+g"
@@ -11,8 +14,18 @@ class EzBob.Underwriter.goToCustomerId extends Backbone.Marionette.ItemView
         @on "NotFound", @notFound
 
     template: ->
+        RecentCustomersIds = localStorage.getItem('RecentCustomersIds').split(",")
+        RecentCustomersNames = localStorage.getItem('RecentCustomersNames').split(",")
+        allOptions = ''
+        counter = 0
+        for customer in RecentCustomersIds
+            allOptions += '<option value="' + customer + '">' + RecentCustomersNames[counter] + '</option>'
+            counter++
+
         el = $("<div id='go-to-template'/>").html("
             <input type='text' class='goto-customerId' autocomplete='off'/>
+            <br/>
+            <select id='recentCustomers'class='selectheight'>" + allOptions + "</select>
             <br/>
             <div class='error-place' style='color:red'></div>")
         $('body').append el
@@ -20,10 +33,11 @@ class EzBob.Underwriter.goToCustomerId extends Backbone.Marionette.ItemView
 
     ui:
         "input"      : ".goto-customerId"
+        "select"     : "#recentCustomers"
         "template"   : "#go-to-template"
         "errorPlace" : ".error-place"
         
-    onRender: ->
+    onRender: ->            
         @dialog = EzBob.ShowMessage( @ui.template, "Customer ID?",( => @okTrigger()), "OK", null, "Cancel" )
         @ui.input.on "keydown", (e)=>@keydowned(e)
         @okBtn = $(".ok-button")
@@ -37,8 +51,11 @@ class EzBob.Underwriter.goToCustomerId extends Backbone.Marionette.ItemView
         unless IsInt(val, true)
             val = val.substring(0, val.indexOf(','))
         unless IsInt(val, true)
-            @addError "Incorrect input"
-            return false
+            selectVal = @ui.select.val()
+            unless IsInt(selectVal, true)
+                @addError "Incorrect input"
+                return false
+            val = selectVal
         @checkCustomer(val)
         return false
 

@@ -248,11 +248,18 @@
             if (window.location.hash != "") {
                 $('a[href="' + window.location.hash + '"]').tab('show');
             }
-
-            var a = new EzBob.Underwriter.goToCustomerId();
-            a.on("ok", function(id) {
-                profileView.router.navigate("profile/" + id, { trigger: true, replace: true });
+            
+            var recentCustomersModel = new EzBob.Underwriter.RecentCustomersModel();
+            recentCustomersModel.fetch().done(function() {
+                localStorage.setItem('RecentCustomersIds', recentCustomersModel.get('Ids'));
+                localStorage.setItem('RecentCustomersNames', recentCustomersModel.get('Names'));
+                
+                var a = new EzBob.Underwriter.goToCustomerId();
+                a.on("ok", function(id) {
+                    profileView.router.navigate("profile/" + id, { trigger: true, replace: true });
+                });
             });
+            
 
             $("#liClient > a").on("click", function() {
                 a.render();

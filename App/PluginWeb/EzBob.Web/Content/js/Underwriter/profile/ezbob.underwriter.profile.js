@@ -144,6 +144,18 @@
       "click #ReturnBtn": "ReturnBtnClick"
     };
 
+    ProfileView.prototype.recordRecentCustomers = function(id) {
+      var xhr;
+
+      xhr = $.post("" + gRootPath + "Underwriter/Customers/SetRecentCustomer", {
+        id: id
+      });
+      return xhr.done(function(recentCustomersModel) {
+        localStorage.setItem('RecentCustomersIds', recentCustomersModel.Ids);
+        return localStorage.setItem('RecentCustomersNames', recentCustomersModel.Names);
+      });
+    };
+
     ProfileView.prototype.checkCustomerAvailability = function(model) {
       var data;
 
@@ -385,6 +397,7 @@
         });
         _this.summaryInfoModel.trigger("sync");
         _this.checkCustomerAvailability(_this.summaryInfoModel);
+        _this.recordRecentCustomers(id);
         EzBob.UpdateBugsIcons(fullModel.get("Bugs"));
         if (that.$el.find(".vsplitbar").length === 0) {
           $("#spl").splitter({
