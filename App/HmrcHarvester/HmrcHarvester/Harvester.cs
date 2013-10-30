@@ -398,16 +398,31 @@ namespace Ezbob.HmrcHarvester {
 			if ((UserName == "") || (Password == ""))
 				throw new HarvesterException("Unspecified user name or password.");
 
-			Info("Logging in as {0}:{1}...", UserName, Encryptor.Encrypt(Password));
+			string sPassword = Password;
+			const int nMaxPasswordLength = 12;
+
+			if (sPassword.Length > nMaxPasswordLength) {
+				Warn("Supplied password ({0}) is too long, truncating to {1} characters.", Encryptor.Encrypt(Password), nMaxPasswordLength);
+				sPassword = sPassword.Substring(0, nMaxPasswordLength);
+			} // if
+
+			Info("Login URL: {0}", lrd.Url);
+			Info("Logging in as {0}:{1}...", UserName, Encryptor.Encrypt(sPassword));
 
 			if (lrd.Method.ToUpper() != "POST")
 				throw new HarvesterException("Unsupported login method: " + lrd.Method);
 
 			var oData = new Dictionary<string, string>();
 			oData[lrd.UserNameField] = UserName;
-			oData[lrd.PasswordField] = Password;
+			oData[lrd.PasswordField] = sPassword;
 
-			HttpResponseMessage response = Session.PostAsync(lrd.Url, new FormUrlEncodedContent(oData)).Result;
+			var fuec = new FormUrlEncodedContent(oData);
+
+			foreach (KeyValuePair<string, IEnumerable<string>> h in fuec.Headers)
+				foreach (string sHeaderValue in h.Value)
+					Debug("Header - {0}: {1}", h.Key, sHeaderValue);
+
+			HttpResponseMessage response = Session.PostAsync(lrd.Url, fuec).Result;
 
 			Debug("Validating response code for user name {0}...", UserName);
 
@@ -742,8 +757,10 @@ namespace Ezbob.HmrcHarvester {
 
 			HtmlNodeCollection oDataLists = doc.DocumentNode.SelectNodes(sBaseXPath);
 
-			if (oDataLists == null)
-				throw new HarvesterException("No suitable location for Tax Office Number found.");
+			if (oDataLists == null) {
+				Warn("No suitable location for Tax Office Number found.");
+				return;
+			} // if
 
 			foreach (HtmlNode oDL in oDataLists) {
 				HtmlNode oDT = oDL.SelectSingleNode("./dt");
@@ -768,7 +785,7 @@ namespace Ezbob.HmrcHarvester {
 				return;
 			} // for each data list
 
-			throw new HarvesterException("Tax Office Number location not found.");
+			Warn("Tax Office Number location not found.");
 		} // ExtractTaxOfficeNumber
 
 		#endregion method ExtractTaxOfficeNumber
