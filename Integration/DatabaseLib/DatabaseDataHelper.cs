@@ -1,3 +1,6 @@
+using System.Collections;
+using System.Data;
+
 namespace EZBob.DatabaseLib
 {
 	#region using
@@ -2613,6 +2616,70 @@ namespace EZBob.DatabaseLib
 		{
 			return _session.Query<MP_AnalyisisFunctionValue>();
 		}
+
+		private class AnalysisFunctionData {
+			public Guid fid { get; private set; }
+			public Guid fpid { get ; private set ; }
+			public string value { get ; private set ; }
+			public DateTime afDate { get ; private set ; }
+
+			public AnalysisFunctionData(IDataReader oReader) {
+				fid = new Guid(oReader["fid"].ToString());
+				fpid = new Guid(oReader["fpid"].ToString());
+				value = oReader["value"].ToString();
+				afDate = System.Convert.ToDateTime(oReader["updatingstart"]);
+			} // constructor
+		} // class AnalysisFunctionData
+
+		public Dictionary<DateTime, List<IAnalysisDataParameterInfo>> GetAnalyisisFunctions(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
+			IDbCommand cmd = _session.Connection.CreateCommand();
+			cmd.CommandText = "GetFunctionAnalysisValuesByCustomerMarketPlace";
+			cmd.CommandType = CommandType.StoredProcedure;
+
+			var param = cmd.CreateParameter();
+			param.ParameterName = "@MpID";
+			param.Value = databaseCustomerMarketPlace.Id;
+
+			cmd.Parameters.Add(param);
+
+			_session.Transaction.Enlist(cmd);
+
+			var lst = new List<AnalysisFunctionData>();
+
+			try {
+				IDataReader oReader = cmd.ExecuteReader();
+
+				if (oReader != null) {
+					while (oReader.Read())
+						lst.Add(new AnalysisFunctionData(oReader));
+
+					oReader.Dispose();
+				} // if readers is not null
+			}
+			catch (Exception e) {
+				_Log.Error(string.Format("Failed to GetAnalyisisFunctions(for mp {0})", databaseCustomerMarketPlace.Id), e);
+			} // try
+
+			cmd.Dispose();
+
+			var oResult = new Dictionary<DateTime, List<IAnalysisDataParameterInfo>>();
+
+			foreach (var afd in lst) {
+				List<IAnalysisDataParameterInfo> paramsList;
+
+				if (!oResult.TryGetValue(afd.afDate, out paramsList)) {
+					paramsList = new List<IAnalysisDataParameterInfo>();
+					oResult.Add(afd.afDate, paramsList);
+				} // if
+
+				IDatabaseFunction oFunc = databaseCustomerMarketPlace.Marketplace.GetDatabaseFunctionById(afd.fid);
+				ITimePeriod oTimePeriod = TimePeriodFactory.CreateById(afd.fpid);
+
+				paramsList.Add(new AnalysisFunctionDataParameterInfo(oFunc, oTimePeriod, afd.value));
+			} // while
+
+			return oResult;
+		} // GetAnalyisisFunctions
 
 		public IQueryable<MP_EbayFeedback> GetEbayFeedback()
 		{

@@ -28,7 +28,7 @@ namespace EZBob.DatabaseLib.Common
 
 		private IAnalysisDataInfo GetAnalysisValuesByCustomerMarketPlace(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
 		{
-			var rez = new AnalysisDataInfo(databaseCustomerMarketPlace, GetFunctionAnalysisValuesByCustomerMarketPlace(databaseCustomerMarketPlace));
+			var rez = new AnalysisDataInfo(databaseCustomerMarketPlace, Helper.GetAnalyisisFunctions(databaseCustomerMarketPlace));
 
 			AddAnalysisValues(databaseCustomerMarketPlace, rez);
 
@@ -123,51 +123,6 @@ namespace EZBob.DatabaseLib.Common
 			return marketPlaces;
 		}
 
-		private IEnumerable<KeyValuePair<DateTime, List<IAnalysisDataParameterInfo>>> GetFunctionAnalysisValuesByCustomerMarketPlace(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
-		{
-		    var functions = from f in Helper.GetAnalyisisFunctions()
-		                    where f.HistoryRecord.UpdatingStart != null && f.HistoryRecord.UpdatingEnd != null
-							where f.CustomerMarketPlace.Id == databaseCustomerMarketPlace.Id
-                            where f.AnalyisisFunction != null
-                            where f.AnalysisFunctionTimePeriod != null
-		                    select new
-		                        {
-		                            fid = f.AnalyisisFunction.InternalId,
-		                            fpid = f.AnalysisFunctionTimePeriod.InternalId,
-		                            val = f.Value,
-		                            date = f.HistoryRecord.UpdatingStart.Value
-		                        };
-
-		    var fl = functions.ToList();
-
-            if (!fl.Any())
-		    {
-		        return null;
-		    }
-
-		    var rez = new Dictionary<DateTime, List<IAnalysisDataParameterInfo>>();
-		    foreach (var f in fl)
-		    {
-                //should functions be grouped by date ?
-		        DateTime afDate = f.date;
-		        List<IAnalysisDataParameterInfo> paramsList;
-		        if (!rez.TryGetValue(afDate, out paramsList))
-		        {
-		            paramsList = new List<IAnalysisDataParameterInfo>();
-		            rez.Add(afDate, paramsList);
-		        }
-
-		        paramsList.Add(new AnalysisFunctionDataParameterInfo
-		                           (
-										databaseCustomerMarketPlace.Marketplace.GetDatabaseFunctionById(f.fid),
-		                                TimePeriodFactory.CreateById(f.fpid),
-		                                f.val
-		                           )
-		            );
-		    }
-
-            return rez;
-		}
 	}
 
 }
