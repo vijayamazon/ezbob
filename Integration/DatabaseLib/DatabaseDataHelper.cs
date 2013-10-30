@@ -2612,10 +2612,9 @@ namespace EZBob.DatabaseLib
 			Debug.WriteLine(message);
 		}
 
-		public IQueryable<MP_AnalyisisFunctionValue> GetAnalyisisFunctions()
-		{
-			return _session.Query<MP_AnalyisisFunctionValue>();
-		}
+		#region method GetAnalyisisfunctions
+
+		#region class AnalysisFunctionData
 
 		private class AnalysisFunctionData {
 			public Guid fid { get; private set; }
@@ -2630,6 +2629,8 @@ namespace EZBob.DatabaseLib
 				afDate = System.Convert.ToDateTime(oReader["updatingstart"]);
 			} // constructor
 		} // class AnalysisFunctionData
+
+		#endregion class AnalysisFunctionData
 
 		public Dictionary<DateTime, List<IAnalysisDataParameterInfo>> GetAnalyisisFunctions(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
 			IDbCommand cmd = _session.Connection.CreateCommand();
@@ -2680,6 +2681,8 @@ namespace EZBob.DatabaseLib
 
 			return oResult;
 		} // GetAnalyisisFunctions
+
+		#endregion method GetAnalyisisfunctions
 
 		public IQueryable<MP_EbayFeedback> GetEbayFeedback()
 		{
