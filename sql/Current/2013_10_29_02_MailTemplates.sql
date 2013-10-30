@@ -258,9 +258,9 @@ BEGIN
 END
 GO
 
-IF NOT EXISTS (SELECT 1 FROM MandrillTemplate WHERE NAME='Mandrill - User is approved or re-approved by the strategy')
+IF NOT EXISTS (SELECT 1 FROM MandrillTemplate WHERE NAME='Mandrill - User is approved or re-approved')
 BEGIN
-	INSERT INTO MandrillTemplate (NAME) VALUES ('Mandrill - User is approved or re-approved by the strategy')
+	INSERT INTO MandrillTemplate (NAME) VALUES ('Mandrill - User is approved or re-approved')
 	UPDATE MailTemplateRelation SET MandrillTemplateId = @@IDENTITY WHERE InternalTemplateName='User is approved or re-approved by the strategy.docx'
 END
 GO
