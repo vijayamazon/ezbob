@@ -6,7 +6,7 @@ BEGIN
 	DECLARE @GreetingTemplateId INT, @OldLateId INT
 	SELECT @GreetingTemplateId = Id FROM MandrillTemplate WHERE NAME='Greeting'
 	SELECT @OldLateId = Id FROM MandrillTemplate WHERE NAME='LateBy14Days'
-	UPDATE MailTemplateRelation SET MandrillTemplateId=@GreetingTemplateId WHERE MailTemplateRelation WHERE MandrillTemplateId = @OldLateId
+	UPDATE MailTemplateRelation SET MandrillTemplateId=@GreetingTemplateId WHERE MandrillTemplateId = @OldLateId
 	DELETE FROM MandrillTemplate WHERE NAME='LateBy14Days'
 END
 GO
