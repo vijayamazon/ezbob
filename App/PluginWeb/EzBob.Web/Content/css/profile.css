@@ -929,6 +929,12 @@ textarea.invite_friend {
     height: 100px;
 }
 
+.invite_friend_buttons {
+    position: absolute;
+    right: 0;
+    top: 69px;
+}
+
 .eu-agreement-header {
     display: inline-block;
     width: 100%;
@@ -946,4 +952,12 @@ textarea.invite_friend {
     -webkit-background-size: contain;
     background-size: contain;
     float: right;
+}
+.fb-icon {
+    background-image: url(../css/images/facebook-icon.png);
+    width: 64px;
+    height: 64px;
+    position: absolute;
+    top: 0;
+    right: 3px;
 }

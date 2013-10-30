@@ -477,6 +477,7 @@
     <Content Include="Content\css\images\eu.png" />
     <Content Include="Content\css\images\eu_explanation.png" />
     <Content Include="Content\css\images\ezbob_logo.png" />
+    <Content Include="Content\css\images\facebook-icon.png" />
     <Content Include="Content\css\images\fail.png" />
     <Content Include="Content\css\images\favicon114x114.png" />
     <Content Include="Content\css\images\favicon57x57.png" />
@@ -1001,6 +1002,9 @@
       <DependentUpon>ezbob.underwriter.CAIS.caisManage.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Underwriter\customersGrid\ezbob.underwriter.customerGrid.js">
+      <DependentUpon>ezbob.underwriter.customerGrid.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\customersGrid\ezbob.underwriter.customerGrid.min.js">
       <DependentUpon>ezbob.underwriter.customerGrid.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Underwriter\customersGrid\ezbob.underwriter.ProfilePopupView.js">
