@@ -127,11 +127,11 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
         "click #SuspendBtn": "SuspendBtnClick"
         "click #ReturnBtn": "ReturnBtnClick"
 
-    recordRecentCustomers: (id) ->        
+    recordRecentCustomers: (id) ->
         xhr = $.post "#{gRootPath}Underwriter/Customers/SetRecentCustomer", { id: id }
         xhr.done (recentCustomersModel)->
-            localStorage.setItem('RecentCustomersIds', recentCustomersModel.Ids)
-            localStorage.setItem('RecentCustomersNames', recentCustomersModel.Names)
+            localStorage.setItem('RecentCustomers', JSON.stringify(recentCustomersModel.RecentCustomers))
+            localStorage.setItem('RecentCustomersOrder', recentCustomersModel.RecentCustomersOrder)
 
     checkCustomerAvailability: (model) ->
         data = model.toJSON()

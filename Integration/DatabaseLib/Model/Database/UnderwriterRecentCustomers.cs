@@ -19,9 +19,13 @@ namespace EZBob.DatabaseLib.Model.Database
 
 	public class UnderwriterRecentCustomersRepository : NHibernateRepositoryBase<UnderwriterRecentCustomers>, IUnderwriterRecentCustomersRepository
 	{
+		private readonly int numOfCustomersToKeep;
+
 		public UnderwriterRecentCustomersRepository(ISession session)
 			: base(session)
 		{
+			var configurationVariablesRepository = new ConfigurationVariablesRepository(session);
+			numOfCustomersToKeep = configurationVariablesRepository.GetByNameAsInt("RecentCustomersToKeep");
 		}
 
 		public void Add(int customerId, string userName)
@@ -33,17 +37,9 @@ namespace EZBob.DatabaseLib.Model.Database
 			}
 
 			var currentRecent = GetAll().Where(r => r.UserName == userName).OrderBy(r => r.Id);
-			if (currentRecent.Count() == 5) // TODO: move to config
+			while (currentRecent.Count() >= numOfCustomersToKeep)
 			{
-				int counter = 0;
-				foreach (var customer in currentRecent)
-				{
-					counter++;
-					if (counter == 5)
-					{
-						Delete(customer);
-					}
-				}
+				Delete(currentRecent.First());
 			}
 
 			var newUnderwriterRecentCustomers = new UnderwriterRecentCustomers {CustomerId = customerId, UserName = userName};

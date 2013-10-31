@@ -251,9 +251,8 @@
             
             var recentCustomersModel = new EzBob.Underwriter.RecentCustomersModel();
             recentCustomersModel.fetch().done(function() {
-                localStorage.setItem('RecentCustomersIds', recentCustomersModel.get('Ids'));
-                localStorage.setItem('RecentCustomersNames', recentCustomersModel.get('Names'));
-                
+                localStorage.setItem("RecentCustomers", JSON.stringify(recentCustomersModel.get('RecentCustomers')));
+                localStorage.setItem("RecentCustomersOrder", recentCustomersModel.get('RecentCustomersOrder'));
                 var a = new EzBob.Underwriter.goToCustomerId();
                 a.on("ok", function(id) {
                     profileView.router.navigate("profile/" + id, { trigger: true, replace: true });
