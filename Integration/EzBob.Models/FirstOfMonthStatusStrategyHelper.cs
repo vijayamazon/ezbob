@@ -118,9 +118,9 @@
 
 				AddTd(loanSummaryRows, true, false, false, l.RefNumber);
 				AddTd(loanSummaryRows, false, false, false, l.Date.ToString("dd-MMM-yyyy"));
-				AddTd(loanSummaryRows, true, false, false, l.Balance.ToString(CultureInfo.InvariantCulture));
-				AddTd(loanSummaryRows, true, false, false, l.Principal.ToString(CultureInfo.InvariantCulture));
-				AddTd(loanSummaryRows, true, false, false, l.NextRepayment.ToString(CultureInfo.InvariantCulture));
+				AddTd(loanSummaryRows, true, false, false, FormatNumberWithDash(l.Balance));
+				AddTd(loanSummaryRows, true, false, false, FormatNumberWithDash(l.Principal));
+				AddTd(loanSummaryRows, true, false, false, FormatNumberWithDash(l.NextRepayment));
 				AddTd(loanSummaryRows, false, false, false, nextSchedulePaymentDate == null ? "-" : nextSchedulePaymentDate.Date.ToString("dd-MMM-yyyy"));
 				
 				loanSummaryRows.Append("</tr>");
@@ -139,9 +139,9 @@
 
 			AddTd(loanSummaryRows, false, false, false, "Total");
 			AddTd(loanSummaryRows, false, false, false, "-");
-			AddTd(loanSummaryRows, true, false, false, totalBalance.ToString(CultureInfo.InvariantCulture));
-			AddTd(loanSummaryRows, true, false, false, totalPrincipal.ToString(CultureInfo.InvariantCulture));
-			AddTd(loanSummaryRows, true, false, false, totalNextRepayment.ToString(CultureInfo.InvariantCulture));
+			AddTd(loanSummaryRows, true, false, false, FormatNumberWithDash(totalBalance));
+			AddTd(loanSummaryRows, true, false, false, FormatNumberWithDash(totalPrincipal));
+			AddTd(loanSummaryRows, true, false, false, FormatNumberWithDash(totalNextRepayment));
 			AddTd(loanSummaryRows, false, false, false, totalNextSchedulePaymentDate != null
 										   ? totalNextSchedulePaymentDate.Value.ToString("dd-MMM-yyyy")
 										   : "-");
@@ -183,7 +183,7 @@
 				return "Here is the status of your account and we see that you are late for a payment. Please deal with this today or contact us at <a href=\"mailto:customercare@ezbob.com\" target=\"_self\">customercare@ezbob.com</a><";
 			}
 
-			decimal outstandingPrincipal = outstandingLoans.Sum(x => x.Principal);
+			decimal outstandingPrincipal = outstandingLoans.Sum(l => l.Principal);
 			decimal approvedSum = customer.LastCashRequest.ApprovedSum();
 			if (approvedSum > 2*outstandingPrincipal)
 			{
@@ -231,13 +231,11 @@
 								Type = "Schedule",
 								PostDate = loanSchedule.Date,
 								Description = string.Empty,
-								Fees = loanSchedule.Fees.ToString("N2", CultureInfo.InvariantCulture),
-								Interest = loanSchedule.Interest.ToString("N2", CultureInfo.InvariantCulture),
-								Principal = loanSchedule.LoanRepayment.ToString("N2", CultureInfo.InvariantCulture),
+								Fees = FormatNumberWithDash(loanSchedule.Fees),
+								Interest = FormatNumberWithDash(loanSchedule.Interest),
+								Principal = FormatNumberWithDash(loanSchedule.LoanRepayment),
 								Status = loanSchedule.Status.ToString(),
-								Total =
-									(loanSchedule.LoanRepayment + loanSchedule.Interest + loanSchedule.Fees).ToString("N2",
-									                                                                                  CultureInfo.InvariantCulture)
+								Total = FormatNumberWithDash(loanSchedule.LoanRepayment + loanSchedule.Interest + loanSchedule.Fees)
 							});
 					}
 
@@ -345,34 +343,6 @@
 			else
 			{
 				log.ErrorFormat("Failed sending alert mail - {0}. Result:{1}", result, firstOfMonthStatusMailMandrillTemplateName);
-			}
-		}
-
-		public void NotifyAutoApproveSilentMode(int customerId, int autoApproveAmount, string autoApproveSilentTemplateName, string autoApproveSilentToAddress)
-		{
-			try
-			{
-				log.InfoFormat("Sending silent auto approval mail for: customerId={0} autoApproveAmount={1} autoApproveSilentTemplateName={2} autoApproveSilentToAddress={3}", customerId, autoApproveAmount, autoApproveSilentTemplateName, autoApproveSilentToAddress);
-				var mail = ObjectFactory.GetInstance<IMail>();
-				var vars = new Dictionary<string, string>
-				{
-					{"customerId", customerId.ToString(CultureInfo.InvariantCulture)},
-					{"autoApproveAmount", autoApproveAmount.ToString(CultureInfo.InvariantCulture)}
-				};
-
-				var result = mail.Send(vars, autoApproveSilentToAddress, autoApproveSilentTemplateName);
-				if (result == "OK")
-				{
-					log.InfoFormat("Sent mail - silent auto approval");
-				}
-				else
-				{
-					log.ErrorFormat("Failed sending alert mail - silent auto approval. Result:{0}", result);
-				}
-			}
-			catch (Exception e)
-			{
-				log.ErrorFormat("Failed sending alert mail - silent auto approval. Exception:{0}", e);
 			}
 		}
 	}
