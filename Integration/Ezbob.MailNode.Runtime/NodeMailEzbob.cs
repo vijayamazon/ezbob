@@ -103,12 +103,13 @@
 						variables.Add(variable.SourceVariableName, Convert.ToString(_ec[variable.SourceVariableName]));
 					}
 					string target;
-					if (variable.TargetVariableName.ToLower() == "mp_counter" ||
-					    variable.TargetVariableName.ToLower() == "updatecmp_error" || 
-						variable.TargetVariableName.ToLower() == "cp_addressto" ||
-					    variable.TargetVariableName.ToLower() == "cp_addresscc")
+					if (variable.TargetVariableName.ToLower().StartsWith("mp_counter") ||
+						variable.TargetVariableName.ToLower().StartsWith("updatecmp_error") ||
+						variable.TargetVariableName.ToLower().StartsWith("cp_addressto") ||
+						variable.TargetVariableName.ToLower().StartsWith("cp_addresscc"))
 					{
-						target = variable.TargetVariableName;
+						string[] parts = variable.TargetVariableName.Split('_');
+						target = parts[0] + "_" + parts[1];
 					}
 					else
 					{
