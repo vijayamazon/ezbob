@@ -221,7 +221,14 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         return
 
     LoanTypeSelectionAllowedChanged: =>
-        if @model.get('IsLoanTypeSelectionAllowed') in [ 1, '1' ]
+        loanSourceId = this.model.get('LoanSourceID')
+        loanSources = this.model.get('LoanSources')
+        isCustomerRepaymentPeriodSelectionAllowed = true
+        for loanSource in loanSources
+            if loanSource.Id == loanSourceId
+                isCustomerRepaymentPeriodSelectionAllowed = loanSource.IsCustomerRepaymentPeriodSelectionAllowed
+
+        if !isCustomerRepaymentPeriodSelectionAllowed || @model.get('IsLoanTypeSelectionAllowed') in [ 1, '1' ]
             @$el.find('button[name=loanType], button[name=repaymentPeriodChangeButton]').attr('disabled', 'disabled')
             if @model.get('LoanTypeId') != 1
                 @model.set 'LoanTypeId', 1
