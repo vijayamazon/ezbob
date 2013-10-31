@@ -105,7 +105,7 @@ $.fn.fmatter.showMPIcon = (cellval, aryCGAccounts) ->
     text = cellval.text or cellval
     className = text.replace(/\s|\d/g,'')
     className = if aryCGAccounts[className] then 'cgaccount' else className.toLowerCase()
-    "<i data-toggle='tooltip' title='#{text}' class='#{className}'></i>" + text[2] 
+    "<i data-toggle='tooltip' title='#{text}' class='#{className}'></i>" # + text[2] 
 
 $.fn.fmatter.showMPsIcon = (cellval, opt) ->
     if not $.fn.fmatter.showMPsIcon.prototype.CGAccounts

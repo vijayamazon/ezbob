@@ -35,6 +35,7 @@
 <script id="apply-forloan-template" type="text/template">
     @ApplyForLoanTemplate()
     @EuLoanTemplate()
+    @AgreementCheckBoxes()
     @ButtonsTemplate()
 </script>
 
@@ -64,16 +65,6 @@
             </div>
         </div>
         @PrintDownload()
-    </div>
-    <div class="controls">
-        <label class="checkbox">
-            <input type="checkbox" id="termsRead" class="preAgreementTermsRead" name="termsRead" />
-            I have read and agree to the pre-agreement terms
-        </label>
-        <label class="checkbox">
-            <input type="checkbox" id="termsRead" class="agreementTermsRead" name="termsRead" />
-            I have read and agree to the agreement terms
-        </label>
     </div>
 }
 
@@ -105,16 +96,6 @@
         </div>
         @PrintDownload()
     </div>
-    <div class="controls">
-        <label class="checkbox">
-            <input type="checkbox" id="termsRead" class="preAgreementTermsRead" name="termsRead" />
-            I have read and agree to the agreement terms
-        </label>
-        <label class="checkbox">
-            <input type="checkbox" id="termsRead" class="agreementTermsRead" name="termsRead" />
-            I have read and agree to the guaranty terms
-        </label>
-    </div>
 }
 
 @helper PrintDownload()
@@ -124,7 +105,23 @@
         <a href="#" style="margin-right: 20px;" class="pull-right download pdf-link">Download</a>
     </div>  
 }
-
+@helper AgreementCheckBoxes()
+{
+    <div class="controls">
+        <label class="checkbox">
+            <input type="checkbox" id="termsRead" class="preAgreementTermsRead" name="termsRead" />
+            I have read and agree to the agreement terms
+        </label>
+        <label class="checkbox">
+            <input type="checkbox" id="termsRead" class="agreementTermsRead" name="termsRead" />
+            I have read and agree to the guaranty terms
+        </label>
+        <label class="checkbox eu-agreement-section">
+            <input type="checkbox" id="EuAgreementTerms" name="EuAgreementTerms" class="euAgreementTermsRead" />
+            I agree to the EU program terms
+        </label>
+    </div>
+}
 @helper EuLoanTemplate()
 {
     <div class="eu-agreement-section">
@@ -140,13 +137,8 @@
                 <li>Loan is for business purposes.</li>
                 <li>Not involved in the following sectors: arms production and trading; human cloning; tobacco; gambling.</li>
             </ol>
-            
+
         </div>
-        <div class="controls">
-            <label class="checkbox">
-                <input type="checkbox" id="EuAgreementTerms" name="EuAgreementTerms" class="euAgreementTermsRead"/>
-                I agree to the EU program terms
-            </label>
-        </div>
+
     </div>
 }

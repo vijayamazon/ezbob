@@ -134,7 +134,7 @@
     text = cellval.text || cellval;
     className = text.replace(/\s|\d/g, '');
     className = aryCGAccounts[className] ? 'cgaccount' : className.toLowerCase();
-    return ("<i data-toggle='tooltip' title='" + text + "' class='" + className + "'></i>") + text[2];
+    return "<i data-toggle='tooltip' title='" + text + "' class='" + className + "'></i>";
   };
 
   $.fn.fmatter.showMPsIcon = function(cellval, opt) {
