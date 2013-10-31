@@ -1,4 +1,4 @@
-﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[UpdateCashRequestsReApproval]') AND type in (N'P', N'PC'))
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[UpdateCashRequestsReApproval]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [dbo].[UpdateCashRequestsReApproval]
 GO
 SET ANSI_NULLS ON

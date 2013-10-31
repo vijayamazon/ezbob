@@ -93,6 +93,7 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
     @createAgreementView schedule.Agreement
 
   neededCashChanged: (reloadSelectedOnly) ->
+    @$el.find('.preAgreementTermsRead, .agreementTermsRead, .euAgreementTermsRead').prop 'checked', false
     value = @model.get("neededCash")
     @ui.submit.attr "href", @model.get("url")
     @recalculateThrottled value: value, reloadSelectedOnly: reloadSelectedOnly
