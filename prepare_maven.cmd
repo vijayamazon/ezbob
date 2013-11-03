@@ -33,9 +33,3 @@ set p=%p%, Tools\EzbobUtils\Logger\bin\Debug\Logger.dll
 @echo:
 
 for %%f in ( %p%) do xcopy /s/y %%f "%mavenPath%" 
-
-@echo:
-
-cd %mavenPath%
-Maven.exe
-cd ..\..\..
