@@ -19,6 +19,8 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         
         this.on('ready', this.ready, this);
         this.model.on('change:loggedIn', this.render, this);
+
+	    this.showOfflineHelp = true;
     },
     events: {
         'click :submit': 'submit',
@@ -32,7 +34,9 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         this.form = this.$el.find('.signup');
         this.validator = EzBob.validateSignUpForm(this.form);
 
-        if (this.model.get('loggedIn')) {
+        var isLoggedIn = this.model.get('loggedIn');
+
+        if (isLoggedIn) {
             this.setReadOnly();
             this.trigger('ready');
             this.trigger('next');
@@ -45,8 +49,15 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         this.inputChanged();
 
         fixSelectValidate(this.$el.find('select'));
-        
-        return this;
+
+        if (this.showOfflineHelp && !isLoggedIn && (EzBob.getCookie('isoffline') == 'yes')) {
+            this.showOfflineHelp = false;
+
+            var oDialog = this.$el.find('#offline_help');
+            var x = $.colorbox({ inline: true, transition: 'none', open: true, href: oDialog });
+        } // if
+
+	    return this;
     },
     inputChanged: function (evt) {
         this.setFieldStatusNotRequired(evt,'promoCode');

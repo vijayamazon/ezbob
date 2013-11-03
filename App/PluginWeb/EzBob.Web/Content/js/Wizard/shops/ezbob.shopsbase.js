@@ -1,5 +1,5 @@
-(function() {
-  var root, _ref,
+﻿(function() {
+  var root,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -8,18 +8,17 @@
   root.EzBob = root.EzBob || {};
 
   EzBob.StoreInfoBaseView = (function(_super) {
+
     __extends(StoreInfoBaseView, _super);
 
     function StoreInfoBaseView() {
-      _ref = StoreInfoBaseView.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return StoreInfoBaseView.__super__.constructor.apply(this, arguments);
     }
 
     StoreInfoBaseView.prototype.isOffline = false;
 
     StoreInfoBaseView.prototype.initialize = function() {
-      var name, ordpi, store, _ref1;
-
+      var name, ordpi, store, _ref;
       if (typeof ordpi === 'undefined') {
         ordpi = Math.random() * 10000000000000000;
       }
@@ -27,9 +26,9 @@
         ordpi: ordpi
       }));
       this.isReady = false;
-      _ref1 = this.stores;
-      for (name in _ref1) {
-        store = _ref1[name];
+      _ref = this.stores;
+      for (name in _ref) {
+        store = _ref[name];
         store.button.on("selected", this.connect, this);
         store.view.on("completed", _.bind(this.completed, this, store.button.name));
         store.view.on("back", this.back, this);
@@ -85,7 +84,7 @@
 
     StoreInfoBaseView.prototype.render = function() {
       var accountsList, hasEbay, hasFilledShops, hasHmrc, hasPaypal, shop, sortedShopsByNumOfShops, sortedShopsByPriority, that, _i, _len;
-
+      console.log('shopbase.render close colorbox');
       $.colorbox.close();
       hasHmrc = this.stores.HMRC.button.model.length > 0;
       if (this.isOffline) {
@@ -141,7 +140,6 @@
 
     StoreInfoBaseView.prototype.connect = function(storeName) {
       var storeView;
-
       EzBob.CT.recordEvent("ct:storebase." + this.name + ".connect", storeName);
       this.$el.find(">div").hide();
       storeView = this.stores[storeName].view;
@@ -155,7 +153,7 @@
 
     StoreInfoBaseView.prototype.setFocus = function(storeName) {
       var aryCGAccounts;
-
+      console.log('shopbase.setFocus close colorbox');
       $.colorbox.close();
       switch (storeName) {
         case "EKM":
@@ -172,7 +170,6 @@
 
     StoreInfoBaseView.prototype.setDocumentTitle = function(view) {
       var title;
-
       title = view.getDocumentTitle();
       if (title) {
         return $(document).attr("title", "Step 2: " + title + " | EZBOB");

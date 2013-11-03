@@ -36,7 +36,8 @@ EzBob.PayPalInfoView = Backbone.View.extend({
         window.PayPalAdded = function (result) {
             if (result) {
                 EzBob.App.trigger('info', 'Congratulations. PayPal account was added successfully.');
-            } 
+			} 
+			$.colorbox.close();
             that.trigger('completed');
             that.trigger('ready');
             that.trigger('back');
@@ -44,6 +45,7 @@ EzBob.PayPalInfoView = Backbone.View.extend({
 
         window.PayPalAddingError = function (msg) {
             EzBob.App.trigger('error', msg);
+			$.colorbox.close();
             that.trigger('completed');
             that.trigger('back');
         };

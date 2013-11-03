@@ -490,6 +490,7 @@
     <Content Include="Content\css\images\help\help_ebay.jpg" />
     <Content Include="Content\css\images\help\help_ekm.jpg" />
     <Content Include="Content\css\images\help\help_freeagent.jpg" />
+    <Content Include="Content\css\images\help\help_offline_wizard.png" />
     <Content Include="Content\css\images\help\help_paypal.jpg" />
     <Content Include="Content\css\images\help\help_sage.jpg" />
     <Content Include="Content\css\images\help\help_security.png" />
