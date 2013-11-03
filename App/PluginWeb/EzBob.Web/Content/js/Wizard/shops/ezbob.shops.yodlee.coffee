@@ -36,11 +36,13 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
             else
                 EzBob.App.trigger('info', 'Congratulations. Bank account was added successfully.');
             
+            $.colorbox.close()
             that.trigger('completed');
             that.trigger('ready');
             that.trigger('back');
 
         window.YodleeAccountAddingError = (msg) ->
+            $.colorbox.close()
             EzBob.App.trigger('error', msg)
             that.trigger('back')
 
@@ -100,8 +102,6 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
 
     render: ->
         super()
-        $.colorbox.close()
-        
         return @
 
     serializeData: ->

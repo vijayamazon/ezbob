@@ -73,11 +73,13 @@
         } else {
           EzBob.App.trigger('info', 'Congratulations. Bank account was added successfully.');
         }
+        $.colorbox.close();
         that.trigger('completed');
         that.trigger('ready');
         return that.trigger('back');
       };
       window.YodleeAccountAddingError = function(msg) {
+        $.colorbox.close();
         EzBob.App.trigger('error', msg);
         return that.trigger('back');
       };
@@ -150,7 +152,6 @@
 
     YodleeAccountInfoView.prototype.render = function() {
       YodleeAccountInfoView.__super__.render.call(this);
-      $.colorbox.close();
       return this;
     };
 

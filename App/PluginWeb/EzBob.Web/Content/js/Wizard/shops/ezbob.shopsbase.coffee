@@ -54,8 +54,6 @@ class EzBob.StoreInfoBaseView extends Backbone.View
         @render()
 
     render: ->
-        $.colorbox.close()
-
         hasHmrc = @stores.HMRC.button.model.length > 0
 
         if @isOffline

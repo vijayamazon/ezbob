@@ -1096,6 +1096,10 @@ input[type="color"],
     /*TODO provide real image*/
 }
 
+.help_offline {
+    background: url(images/help/help_offline_wizard.png) no-repeat center center;
+}
+
 .help_security {
     background: url(images/help/help_security.png) no-repeat center center;
     width: 759px;
