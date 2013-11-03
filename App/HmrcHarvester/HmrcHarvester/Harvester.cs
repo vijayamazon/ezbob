@@ -395,42 +395,42 @@ namespace Ezbob.HmrcHarvester {
 		/// </summary>
 		/// <param name="lrd">Login form details.</param>
 		private void Login(LoginRequestDetails lrd) {
-			if ((UserName == "") || (Password == ""))
-				throw new HarvesterException("Unspecified user name or password.");
-
-			string sPassword = Password;
-			const int nMaxPasswordLength = 12;
-
-			if (sPassword.Length > nMaxPasswordLength) {
-				Warn("Supplied password ({0}) is too long, truncating to {1} characters.", Encryptor.Encrypt(Password), nMaxPasswordLength);
-				sPassword = sPassword.Substring(0, nMaxPasswordLength);
-			} // if
-
-			Info("Login URL: {0}", lrd.Url);
-			Info("Logging in as {0}:{1}...", UserName, Encryptor.Encrypt(sPassword));
-
-			if (lrd.Method.ToUpper() != "POST")
-				throw new HarvesterException("Unsupported login method: " + lrd.Method);
-
-			var oData = new Dictionary<string, string>();
-			oData[lrd.UserNameField] = UserName;
-			oData[lrd.PasswordField] = sPassword;
-
-			var fuec = new FormUrlEncodedContent(oData);
-
-			foreach (KeyValuePair<string, IEnumerable<string>> h in fuec.Headers)
-				foreach (string sHeaderValue in h.Value)
-					Debug("Header - {0}: {1}", h.Key, sHeaderValue);
-
-			HttpResponseMessage response = Session.PostAsync(lrd.Url, fuec).Result;
-
-			Debug("Validating response code for user name {0}...", UserName);
-
-			response.EnsureSuccessStatusCode();
-
-			Info("Response code for user name {0} validated.", UserName);
-
 			try {
+				if ((UserName == "") || (Password == ""))
+					throw new ClientHarvesterException("Unspecified user name or password.");
+
+				string sPassword = Password;
+				const int nMaxPasswordLength = 12;
+
+				if (sPassword.Length > nMaxPasswordLength) {
+					Warn("Supplied password ({0}) is too long, truncating to {1} characters.", Encryptor.Encrypt(Password), nMaxPasswordLength);
+					sPassword = sPassword.Substring(0, nMaxPasswordLength);
+				} // if
+
+				Info("Login URL: {0}", lrd.Url);
+				Info("Logging in as {0}:{1}...", UserName, Encryptor.Encrypt(sPassword));
+
+				if (lrd.Method.ToUpper() != "POST")
+					throw new HarvesterException("Unsupported login method: " + lrd.Method);
+
+				var oData = new Dictionary<string, string>();
+				oData[lrd.UserNameField] = UserName;
+				oData[lrd.PasswordField] = sPassword;
+
+				var fuec = new FormUrlEncodedContent(oData);
+
+				foreach (KeyValuePair<string, IEnumerable<string>> h in fuec.Headers)
+					foreach (string sHeaderValue in h.Value)
+						Debug("Header - {0}: {1}", h.Key, sHeaderValue);
+
+				HttpResponseMessage response = Session.PostAsync(lrd.Url, fuec).Result;
+
+				Debug("Validating response code for user name {0}...", UserName);
+
+				response.EnsureSuccessStatusCode();
+
+				Info("Response code for user name {0} validated.", UserName);
+
 				string sResponse = response.Content.ReadAsStringAsync().Result;
 
 				var doc = new HtmlDocument();
@@ -450,11 +450,17 @@ namespace Ezbob.HmrcHarvester {
 					Info("User {0} logged in successfully.", UserName);
 					break;
 
+				case "HMRC: Error":
+					IsLoggedIn = false;
+					Warn("Not logged in: HMRC site error.");
+					Debug("{0}", sResponse);
+					throw new ClientHarvesterException("HMRC system is unavailable, please try again later.");
+
 				case "HMRC: Login":
 					IsLoggedIn = false;
 					Warn("Not logged in: invalid user name or password.");
 					Debug("{0}", sResponse);
-					throw new HarvesterException("Invalid user name or password.");
+					throw new ClientHarvesterException("Invalid user name or password.");
 
 				default:
 					IsLoggedIn = false;
@@ -463,8 +469,11 @@ namespace Ezbob.HmrcHarvester {
 					throw new HarvesterException("Unexpected title in login response.");
 				} // switch
 			}
+			catch (ClientHarvesterException) {
+				throw;
+			}
 			catch (Exception e) {
-				throw new HarvesterException("Failed to log in", e);
+				throw new HarvesterException("Failed to log in: " + e.Message, e);
 			} // try
 		} // Login
 
