@@ -129,8 +129,32 @@
 				}
 
 				NodeMailParams.Subject = variables.FirstOrDefault(x => x.Key == "EmailSubject" || x.Key.ToLower() == "subject").Value ?? "Default Subject";
-				NodeMailParams.To = variables.FirstOrDefault(x => x.Key == "CP_AddressTo" || x.Key.ToLower() == "email" || x.Key.ToLower() == "emailto" || x.Key.ToLower() == "emailscalar" || x.Key.ToLower() == "app_email").Value;
-                NodeMailParams.CC = variables.FirstOrDefault(x => x.Key == "CP_AddressCC" || x.Key.ToLower() == "emailcc").Value;
+				
+				NodeMailParams.To = variables.FirstOrDefault(x => x.Key == "CP_AddressTo").Value;
+	            if (string.IsNullOrEmpty(NodeMailParams.To))
+	            {
+		            NodeMailParams.To = variables.FirstOrDefault(x => x.Key.ToLower() == "email").Value;
+		            if (string.IsNullOrEmpty(NodeMailParams.To))
+		            {
+			            NodeMailParams.To = variables.FirstOrDefault(x => x.Key.ToLower() == "emailto").Value;
+			            if (string.IsNullOrEmpty(NodeMailParams.To))
+			            {
+				            NodeMailParams.To = variables.FirstOrDefault(x => x.Key.ToLower() == "emailscalar").Value;
+				            if (string.IsNullOrEmpty(NodeMailParams.To))
+				            {
+					            NodeMailParams.To = variables.FirstOrDefault(x => x.Key.ToLower() == "app_email").Value;
+				            }
+			            }
+		            }
+	            }
+
+	            NodeMailParams.CC = variables.FirstOrDefault(x => x.Key == "CP_AddressCC").Value;
+	            if (string.IsNullOrEmpty(NodeMailParams.CC))
+	            {
+		            NodeMailParams.CC = variables.FirstOrDefault(x => x.Key.ToLower() == "emailcc").Value;
+	            }
+
+	            log.InfoFormat("Will send mandrill mail to:'{0}' cc:'{1}' with subject:'{2}'", NodeMailParams.To, NodeMailParams.CC, NodeMailParams.Subject);
 
 	            List<attachment> attachments = HandleAttachments();
 
