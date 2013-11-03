@@ -60,7 +60,7 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
 		switch(this.$el.find('#ResidentialStatus').val()) {
 		case 'Home owner':
 			this.$el.find('#OwnOtherPropertyQuestion').text('Do you own other property?');
-			oCombo.find('option[value="Yes"]').text('Yes, I own other property.');
+			oCombo.find('option[value="Yes"]').text('Yes, I own another property.');
 			oCombo.find('option[value="No"]').text('No, I don\'t own other property.');
 			break;
 
