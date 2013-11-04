@@ -304,7 +304,7 @@ namespace com.yodlee.sampleapps
 				//		throw new Exception(string.Format("Wrong type of id {0} available values are: y/c", type));
 				//}
 
-				Console.Write("Enter Id");
+				Console.Write("Enter YodleeAccount Id: ");
 				string id = Console.ReadLine();
 
 				var log = new LegacyLog();
