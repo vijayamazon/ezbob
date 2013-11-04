@@ -256,14 +256,12 @@
                 a.on("ok", function(id) {
                     profileView.router.navigate("profile/" + id, { trigger: true, replace: true });
                 });
-            });
-            
 
-            $("#liClient > a").on("click", function() {
-                a.render();
-                return false;
+                $("#liClient > a").on("click", function() {
+                    a.render();
+                    return false;
+                });
             });
-
         });
 
     @if (Model.Escalated != null)
