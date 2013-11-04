@@ -50,7 +50,7 @@
         customer = recentCustomers[_i];
         allOptions += '<option value="' + customer.Item1 + '">' + customer.Item2 + '</option>';
       }
-      el = $("<div id='go-to-template'/>").html("            <input type='text' class='goto-customerId' autocomplete='off'/>            <br/>            <select id='recentCustomers'class='selectheight'>" + allOptions + "</select>            <br/>            <div class='error-place' style='color:red'></div>");
+      el = $("<div id='go-to-template'/>").html("            <input type='text' class='goto-customerId' autocomplete='off'/>            <br/>            <label>Recent customers:</label>            <select id='recentCustomers'class='selectheight'>" + allOptions + "</select>            <br/>            <div class='error-place' style='color:red'></div>");
       $('body').append(el);
       return el;
     };

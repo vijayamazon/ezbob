@@ -659,7 +659,7 @@
 				var customer = _customers.TryGet(recentCustomer.CustomerId);
 				if (customer != null)
 				{
-					recentCustomersMap.Add(new System.Tuple<int, string>(recentCustomer.CustomerId, string.Format("{0} ({1}) [{2}]", customer.PersonalInfo.Fullname, recentCustomer.CustomerId, customer.Name)));
+					recentCustomersMap.Add(new System.Tuple<int, string>(recentCustomer.CustomerId, string.Format("{0}, {1}, {2}", recentCustomer.CustomerId, customer.PersonalInfo.Fullname, customer.Name)));
 				}
 			}
 			return this.JsonNet(new { RecentCustomers = recentCustomersMap });
