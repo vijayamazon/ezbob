@@ -1,4 +1,4 @@
-﻿IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE Name = N'MandatoryOnline' and Object_ID = Object_ID(N'MP_MarketplaceType'))
+IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE Name = N'MandatoryOnline' and Object_ID = Object_ID(N'MP_MarketplaceType'))
 BEGIN 
 	ALTER TABLE MP_MarketplaceType ADD MandatoryOnline BIT
 END 
