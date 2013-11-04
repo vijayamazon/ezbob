@@ -155,6 +155,7 @@
                 <tr>
                     <th>Account Name</th>
                     <th>Account Number</th>
+                    <th>Account Type</th>
                     <th>Current Balance</th>
                     <th>Available Balance</th>
                     <th>Account Holder</th>
@@ -169,6 +170,7 @@
                         <tr class="yodleeAccountsRow">
                             <td><%-bank.accountName!=undefined ? bank.accountName : "-"%></td>
                             <td><%-bank.accountNumber!=undefined ? bank.accountNumber : "-"%></td>
+                            <td><%-bank.accountType!=undefined ? bank.accountType : "-"%></td>
                             <td><%-bank.currentBalance!=undefined ? GBPValues(bank.currentBalance, true) : "-"%></td>
                             <td><%-bank.availableBalance!=undefined ? GBPValues(bank.availableBalance, true) : "-"%></td>
                             <td><%-bank.accountHolder!=undefined ? bank.accountHolder : "-"%></td>

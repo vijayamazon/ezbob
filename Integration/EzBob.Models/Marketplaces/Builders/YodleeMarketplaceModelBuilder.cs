@@ -91,6 +91,7 @@ namespace EzBob.Models.Marketplaces.Builders
 						isDeleted = bank.isDeleted != 0,
 						accountNumber = bank.accountNumber,
 						accountHolder = bank.accountHolder,
+						accountType = bank.acctType,
 						availableBalance = bank.availableBalance.amount.HasValue
 							                   ? _currencyConvertor.ConvertToBaseCurrency(
 								                   bank.availableBalance.currencyCode,

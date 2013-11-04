@@ -9,6 +9,7 @@
 		{
 			accountName = "-";
 			accountNumber = "-";
+			accountType = "-";
 			accountHolder = "-";
 			currentBalance = null;
 			availableBalance = null;
@@ -19,6 +20,7 @@
 		}
 		public string accountName { get; set; }
 		public string accountNumber { get; set; }
+		public string accountType { get; set; }
 		public string accountHolder { get; set; }
 		public double? currentBalance { get; set; }
 		public double? availableBalance { get; set; }
