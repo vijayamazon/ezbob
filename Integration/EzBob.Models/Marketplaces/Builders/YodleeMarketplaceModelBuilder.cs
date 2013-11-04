@@ -157,12 +157,9 @@ namespace EzBob.Models.Marketplaces.Builders
 			yodleeRunningBalanceModel = new YodleeRunningBalanceModel();
 			foreach (var bank in model.banks)
 			{
-				if (bank.overdraftProtection.HasValue)
+				if (bank.overdraftProtection.HasValue && bank.transactions.Any())
 				{
 					yodleeRunningBalanceModel.BankFrame -= bank.overdraftProtection.Value;
-				}else if (bank.availableBalance.HasValue && bank.currentBalance.HasValue)
-				{
-					yodleeRunningBalanceModel.BankFrame += (bank.currentBalance.Value - bank.availableBalance.Value);
 				}
 
 				if (bank.asOfDate.HasValue)
