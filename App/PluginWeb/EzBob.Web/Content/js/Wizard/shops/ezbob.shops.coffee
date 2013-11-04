@@ -102,6 +102,7 @@ class EzBob.StoreInfoView extends EzBob.StoreInfoBaseView
                 @stores[storeTypeName].priority = if @isOffline then j.PriorityOffline else j.PriorityOnline
                 @stores[storeTypeName].ribbon = if j.Ribbon then j.Ribbon else ""
                 @stores[storeTypeName].button.ribbon = if j.Ribbon then j.Ribbon else ""
+                @stores[storeTypeName].mandatory = if @isOffline then j.MandatoryOffline else j.MandatoryOnline
 
         @name = "shops"
         super()

@@ -1,5 +1,5 @@
-﻿(function() {
-  var root,
+(function() {
+  var root, _ref,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -8,11 +8,11 @@
   root.EzBob = root.EzBob || {};
 
   EzBob.StoreInfoView = (function(_super) {
-
     __extends(StoreInfoView, _super);
 
     function StoreInfoView() {
-      return StoreInfoView.__super__.constructor.apply(this, arguments);
+      _ref = StoreInfoView.__super__.constructor.apply(this, arguments);
+      return _ref;
     }
 
     StoreInfoView.prototype.attributes = {
@@ -20,8 +20,9 @@
     };
 
     StoreInfoView.prototype.initialize = function() {
-      var acc, accountTypeName, aryCGAccounts, ignore, j, lc, storeTypeName, vendorInfo, _i, _len, _ref,
+      var acc, accountTypeName, aryCGAccounts, ignore, j, lc, storeTypeName, vendorInfo, _i, _len, _ref1,
         _this = this;
+
       this.ebayStores = this.model.get("ebayStores");
       this.EbayButtonView = new EzBob.EbayButtonView({
         model: this.ebayStores
@@ -160,15 +161,16 @@
       }
       this.isOffline = this.model.get('isOffline');
       this.isProfile = this.model.get('isProfile');
-      _ref = EzBob.Config.MarketPlaces;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        j = _ref[_i];
+      _ref1 = EzBob.Config.MarketPlaces;
+      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+        j = _ref1[_i];
         storeTypeName = j.Name === "Pay Pal" ? "paypal" : j.Name;
         if (this.stores[storeTypeName]) {
           this.stores[storeTypeName].active = this.isProfile ? (this.isOffline ? j.ActiveDashboardOffline : j.ActiveDashboardOnline) : (this.isOffline ? j.ActiveWizardOffline : j.ActiveWizardOnline);
           this.stores[storeTypeName].priority = this.isOffline ? j.PriorityOffline : j.PriorityOnline;
           this.stores[storeTypeName].ribbon = j.Ribbon ? j.Ribbon : "";
           this.stores[storeTypeName].button.ribbon = j.Ribbon ? j.Ribbon : "";
+          this.stores[storeTypeName].mandatory = this.isOffline ? j.MandatoryOffline : j.MandatoryOnline;
         }
       }
       this.name = "shops";

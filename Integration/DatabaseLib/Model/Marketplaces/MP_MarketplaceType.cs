@@ -23,6 +23,8 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual int? PriorityOffline { get; set; }
 		public virtual MP_MarketplaceGroup Group { get; set; }
 		public virtual string Ribbon { get; set; }
+		public virtual bool MandatoryOnline { get; set; }
+		public virtual bool MandatoryOffline { get; set; }
 	}
 
     public class MP_MarketplaceTypeMap : ClassMap<MP_MarketplaceType>
@@ -46,6 +48,8 @@ namespace EZBob.DatabaseLib.Model.Database {
 			Map(x => x.PriorityOffline).Nullable();
 			Map(x => x.PriorityOnline).Nullable();
 			Map(x => x.Ribbon).Length(50).Nullable();
+			Map(x => x.MandatoryOnline);
+			Map(x => x.MandatoryOffline);
 			References(x => x.Group, "GroupId");
 
             DiscriminateSubClassesOnColumn("").Formula(
