@@ -43,7 +43,6 @@
 			For<IBugRepository>().Use<BugRepository>();
 			For<ICustomerStatusesRepository>().Use<CustomerStatusesRepository>();
 			For<IApprovalsWithoutAMLRepository>().Use<ApprovalsWithoutAMLRepository>();
-			For<IUnderwriterRecentCustomersRepository>().Use<UnderwriterRecentCustomersRepository>();
 		}
 	}
 }

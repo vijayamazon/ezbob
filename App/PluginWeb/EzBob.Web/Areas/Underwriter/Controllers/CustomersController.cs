@@ -147,7 +147,7 @@
 			GridModel<Customer> pending,
 			GridModel<Customer> loans,
 			MarketPlaceRepository mpType,
-			IUnderwriterRecentCustomersRepository underwriterRecentCustomersRepository)
+			UnderwriterRecentCustomersRepository underwriterRecentCustomersRepository)
 		{
 			_session = session;
 			_customers = customers;
