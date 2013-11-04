@@ -22,7 +22,6 @@
 	using Scorto.PluginWeb.Core.jqGrid;
 	using Scorto.Web;
 	using StructureMap;
-	using log4net;
 
 	public class CustomersController : Controller
 	{
@@ -51,7 +50,7 @@
 		private readonly int defaultIndex = -1;
 		private readonly int legalIndex = -1;
 		private readonly CustomerStatusesRepository _customerStatusesRepository;
-		private readonly UnderwriterRecentCustomersRepository underwriterRecentCustomersRepository;
+		private readonly IUnderwriterRecentCustomersRepository underwriterRecentCustomersRepository;
 
 		public ViewResult Index()
 		{
@@ -148,7 +147,7 @@
 			GridModel<Customer> pending,
 			GridModel<Customer> loans,
 			MarketPlaceRepository mpType,
-			UnderwriterRecentCustomersRepository underwriterRecentCustomersRepository)
+			IUnderwriterRecentCustomersRepository underwriterRecentCustomersRepository)
 		{
 			_session = session;
 			_customers = customers;
