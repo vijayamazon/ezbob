@@ -1,4 +1,4 @@
-﻿DECLARE @DefaultConstraint SYSNAME,
+DECLARE @DefaultConstraint SYSNAME,
 	@DropStmt NVARCHAR(500)
 
 SELECT @DefaultConstraint = dc.name
