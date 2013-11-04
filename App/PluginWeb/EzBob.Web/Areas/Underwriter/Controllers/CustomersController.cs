@@ -651,21 +651,19 @@
 		public JsonNetResult GetRecentCustomers()
 		{
 			string underwriter = User.Identity.Name;
-			var recentCustomersMap = new Dictionary<int, string>();
+			var recentCustomersMap = new List<System.Tuple<int, string>>();
 
 			var recentCustomers = underwriterRecentCustomersRepository.GetAll().Where(e => e.UserName == underwriter).OrderByDescending(e=>e.Id);
 			
-			var recentCustomersOrder = new List<int>();
 			foreach (var recentCustomer in recentCustomers)
 			{
 				var customer = _customers.TryGet(recentCustomer.CustomerId);
 				if (customer != null)
 				{
-					recentCustomersOrder.Add(recentCustomer.CustomerId);
-					recentCustomersMap.Add(recentCustomer.CustomerId, string.Format("{0} ({1}) [{2}]", customer.PersonalInfo.Fullname, recentCustomer.CustomerId, customer.Name));
+					recentCustomersMap.Add(new System.Tuple<int, string>(recentCustomer.CustomerId, string.Format("{0} ({1}) [{2}]", customer.PersonalInfo.Fullname, recentCustomer.CustomerId, customer.Name)));
 				}
 			}
-			return this.JsonNet(new { RecentCustomers = recentCustomersMap, RecentCustomersOrder = recentCustomersOrder });
+			return this.JsonNet(new { RecentCustomers = recentCustomersMap });
 		}
 
 		[HttpGet]

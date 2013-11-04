@@ -151,8 +151,7 @@
         id: id
       });
       return xhr.done(function(recentCustomersModel) {
-        localStorage.setItem('RecentCustomers', JSON.stringify(recentCustomersModel.RecentCustomers));
-        return localStorage.setItem('RecentCustomersOrder', recentCustomersModel.RecentCustomersOrder);
+        return localStorage.setItem('RecentCustomers', JSON.stringify(recentCustomersModel.RecentCustomers));
       });
     };
 

@@ -131,7 +131,6 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
         xhr = $.post "#{gRootPath}Underwriter/Customers/SetRecentCustomer", { id: id }
         xhr.done (recentCustomersModel)->
             localStorage.setItem('RecentCustomers', JSON.stringify(recentCustomersModel.RecentCustomers))
-            localStorage.setItem('RecentCustomersOrder', recentCustomersModel.RecentCustomersOrder)
 
     checkCustomerAvailability: (model) ->
         data = model.toJSON()

@@ -15,12 +15,9 @@ class EzBob.Underwriter.goToCustomerId extends Backbone.Marionette.ItemView
 
     template: ->
         recentCustomers = JSON.parse(localStorage.getItem('RecentCustomers'))
-        recentCustomersOrder = localStorage.getItem('RecentCustomersOrder').split(',')
         allOptions = ''
-        counter = 0
-        for customerId in recentCustomersOrder
-            allOptions += '<option value="' + customerId + '">' + recentCustomers[customerId] + '</option>'
-            counter++
+        for customer in recentCustomers
+            allOptions += '<option value="' + customer.Item1 + '">' + customer.Item2 + '</option>'
 
         el = $("<div id='go-to-template'/>").html("
             <input type='text' class='goto-customerId' autocomplete='off'/>

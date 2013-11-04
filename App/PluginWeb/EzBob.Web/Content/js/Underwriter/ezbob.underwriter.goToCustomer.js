@@ -42,16 +42,13 @@
     };
 
     goToCustomerId.prototype.template = function() {
-      var allOptions, counter, customerId, el, recentCustomers, recentCustomersOrder, _i, _len;
+      var allOptions, customer, el, recentCustomers, _i, _len;
 
       recentCustomers = JSON.parse(localStorage.getItem('RecentCustomers'));
-      recentCustomersOrder = localStorage.getItem('RecentCustomersOrder').split(',');
       allOptions = '';
-      counter = 0;
-      for (_i = 0, _len = recentCustomersOrder.length; _i < _len; _i++) {
-        customerId = recentCustomersOrder[_i];
-        allOptions += '<option value="' + customerId + '">' + recentCustomers[customerId] + '</option>';
-        counter++;
+      for (_i = 0, _len = recentCustomers.length; _i < _len; _i++) {
+        customer = recentCustomers[_i];
+        allOptions += '<option value="' + customer.Item1 + '">' + customer.Item2 + '</option>';
       }
       el = $("<div id='go-to-template'/>").html("            <input type='text' class='goto-customerId' autocomplete='off'/>            <br/>            <select id='recentCustomers'class='selectheight'>" + allOptions + "</select>            <br/>            <div class='error-place' style='color:red'></div>");
       $('body').append(el);
