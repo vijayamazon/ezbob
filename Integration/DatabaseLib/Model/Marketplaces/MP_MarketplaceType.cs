@@ -10,11 +10,8 @@ namespace EZBob.DatabaseLib.Model.Database {
         public virtual string Name { get; set; }
         public virtual System.Guid InternalId { get; set; }
         public virtual string Description { get; set; }
-		public virtual bool Active { get; set; }
         public virtual bool IsPaymentAccount { get { return false; } }
         public virtual int UWPriority { get { return 0; } }
-		public virtual bool IsOffline { get; set; }
-
 		public virtual bool ActiveWizardOnline { get; set; }
 		public virtual bool ActiveDashboardOnline { get; set; }
 		public virtual bool ActiveWizardOffline { get; set; }
@@ -39,8 +36,6 @@ namespace EZBob.DatabaseLib.Model.Database {
             Map(x => x.Name).Column("Name").Not.Nullable().Length(255);
             Map(x => x.InternalId).Not.Nullable();
             Map(x => x.Description);
-            Map(x => x.Active);
-            Map(x => x.IsOffline);
 			Map(x => x.ActiveDashboardOffline);
 			Map(x => x.ActiveDashboardOnline);
 			Map(x => x.ActiveWizardOffline);

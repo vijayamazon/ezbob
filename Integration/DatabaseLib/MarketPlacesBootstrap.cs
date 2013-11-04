@@ -63,8 +63,7 @@ namespace EZBob.DatabaseLib
             {
                 InternalId = databaseMarketPlace.InternalId,
                 Description = databaseMarketPlace.Description,
-                Name = databaseMarketPlace.DisplayName,
-                Active = true
+                Name = databaseMarketPlace.DisplayName
             };
             
             _marketPlaceRepository.Save(marketPlace);
