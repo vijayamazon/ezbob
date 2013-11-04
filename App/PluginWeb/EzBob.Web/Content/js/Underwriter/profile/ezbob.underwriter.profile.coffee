@@ -55,6 +55,7 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
             el: loanInfo
             model: @loanInfoModel
             personalInfo: @personalInfoModel
+            parentView: @
         )
 
         @summaryInfoModel = new EzBob.Underwriter.SummaryInfoModel()
@@ -378,3 +379,9 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
 
     updateAlerts: ->
         @alertsModel.fetch()
+
+    clearDecisionNotes: ->
+        @$el.find('#DecisionNotes').empty()
+
+    appendDecisionNote: (oNote) ->
+        @$el.find('#DecisionNotes').append oNote

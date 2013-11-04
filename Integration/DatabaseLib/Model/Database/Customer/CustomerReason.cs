@@ -10,6 +10,7 @@ namespace EZBob.DatabaseLib.Model.Database
 	{
 		public virtual int Id { get; set; }
 		public virtual string Reason { get; set; }
+		public virtual int? ReasonType { get; set; }
 	}
 }
 
@@ -22,6 +23,7 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping
 			Table("CustomerReason");
 			Id(x => x.Id);
 			Map(x => x.Reason).Length(50);
+			Map(x => x.ReasonType);
 		}
 	}
 }

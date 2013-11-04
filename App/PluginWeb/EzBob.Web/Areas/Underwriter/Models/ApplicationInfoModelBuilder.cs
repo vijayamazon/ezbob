@@ -1,4 +1,6 @@
-﻿using EZBob.DatabaseLib.Model.Database.Loans;
+﻿using System.Collections.Generic;
+using System.Text;
+using EZBob.DatabaseLib.Model.Database.Loans;
 
 namespace EzBob.Web.Areas.Underwriter.Models
 {
@@ -120,8 +122,8 @@ namespace EzBob.Web.Areas.Underwriter.Models
             model.DiscountPlanPercents = discountPlan.Discounts.Any(d => d != 0) ? string.Format("({0})", discountPlan.ValuesStr) : "";
             model.DiscountPlanId = discountPlan.Id;
 
-			model.LoanSources = _loanSources.GetAll().Select(ls => LoanSourceModel.Create(ls)).ToArray();
-			model.LoanSourceID = (cr.LoanSource ?? _loanSources.GetDefault()).ID;
+			model.AllLoanSources = _loanSources.GetAll().Select(ls => new LoanSourceModel(ls)).ToArray();
+			model.LoanSource = new LoanSourceModel(cr.LoanSource ?? _loanSources.GetDefault());
 
             model.Reason = cr.UnderwriterComment;
 
@@ -130,6 +132,33 @@ namespace EzBob.Web.Areas.Underwriter.Models
             
 			model.AMLResult = customer.AMLResult;
 			model.SkipPopupForApprovalWithoutAML = approvalsWithoutAMLRepository.ShouldSkipById(customer.Id);
-        }
+
+			model.EmployeeCount = customer.CompanyEmployeeCount.OrderBy(x => x.Created).LastOrDefault().EmployeeCount;
+			model.AnnualTurnover = cr.AnnualTurnover;
+
+			CustomerRequestedLoan oRequest = customer.CustomerRequestedLoan.OrderBy(x => x.Created).LastOrDefault();
+
+			if ((oRequest == null) || (oRequest.CustomerReason == null)) {
+				model.CustomerReasonType = -1;
+				model.CustomerReason = "";
+			}
+			else {
+				model.CustomerReasonType = oRequest.CustomerReason.ReasonType ?? -1;
+
+				var os = new StringBuilder();
+
+				if (!string.IsNullOrWhiteSpace(oRequest.CustomerReason.Reason))
+					os.Append(oRequest.CustomerReason.Reason.Trim());
+
+				if (!string.IsNullOrWhiteSpace(oRequest.OtherReason)) {
+					if (!string.IsNullOrWhiteSpace(oRequest.CustomerReason.Reason))
+						os.Append(": ");
+
+					os.Append(oRequest.OtherReason.Trim());
+				} // if
+
+				model.CustomerReason = os.ToString().Trim();
+			} // if
+		} // InitApplicationInfo
 	}
 }

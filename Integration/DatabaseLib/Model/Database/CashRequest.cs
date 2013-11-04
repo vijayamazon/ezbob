@@ -83,6 +83,8 @@ namespace EZBob.DatabaseLib.Model.Database
 		public virtual bool IsCustomerRepaymentPeriodSelectionAllowed { get; set; }
 
 		public virtual IList<LoanLegal> LoanLegals { get; set; }
+
+		public virtual int AnnualTurnover { get; set; }
     }
 
     public interface ICashRequestRepository : IRepository<CashRequest>

@@ -13,6 +13,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         EzBob.App.vent.on 'newCreditLine:done', @showCreditLineDialog, this
         EzBob.App.vent.on 'newCreditLine:error', @showErrorDialog, this
         EzBob.App.vent.on 'newCreditLine:pass', @showNothing, this
+        @parentView = options.parentView
 
     events:
         "click [name='startingDateChangeButton']"           : "editStartingDate"
@@ -221,12 +222,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         return
 
     LoanTypeSelectionAllowedChanged: =>
-        loanSourceId = this.model.get('LoanSourceID')
-        loanSources = this.model.get('LoanSources')
-        isCustomerRepaymentPeriodSelectionAllowed = true
-        for loanSource in loanSources
-            if loanSource.Id == loanSourceId
-                isCustomerRepaymentPeriodSelectionAllowed = loanSource.IsCustomerRepaymentPeriodSelectionAllowed
+        isCustomerRepaymentPeriodSelectionAllowed = @model.get('LoanSource').IsCustomerRepaymentPeriodSelectionAllowed
 
         if !isCustomerRepaymentPeriodSelectionAllowed || @model.get('IsLoanTypeSelectionAllowed') in [ 1, '1' ]
             @$el.find('button[name=loanType], button[name=repaymentPeriodChangeButton]').attr('disabled', 'disabled')
@@ -251,9 +247,9 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
     loanSource: ->
         d = new EzBob.Dialogs.ComboEdit
             model: @model
-            propertyName: "LoanSourceID"
+            propertyName: "LoanSource.LoanSourceID"
             title: "Loan source"
-            comboValues: _.map(@model.get('LoanSources'), (ls) -> { value: ls.Id, text: ls.Name })
+            comboValues: _.map(@model.get('AllLoanSources'), (ls) -> { value: ls.Id, text: ls.Name })
             postValueName: "LoanSourceID"
             url: "Underwriter/ApplicationInfo/LoanSource"
             data: {id: @model.get("CashRequestId")}
@@ -261,9 +257,41 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         d.on( "done", => @model.fetch() )
         return
 
-    validateInterestVsSource: ->
-        nMaxInterest = EzBob.loanSourceMaxInterest @model.toJSON()
+    validateLoanSourceRelated: ->
+        loanSourceModel = @model.get 'LoanSource'
 
+        @validateInterestVsSource loanSourceModel.MaxInterest
+
+        if loanSourceModel.DefaultRepaymentPeriod == -1
+            @$el.find('button[name=repaymentPeriodChangeButton]').removeAttr 'disabled'
+        else
+            @$el.find('button[name=repaymentPeriodChangeButton]').attr 'disabled', 'disabled'
+
+        @parentView.clearDecisionNotes()
+
+        if loanSourceModel.MaxEmployeeCount != -1
+            nEmployeeCount = @model.get 'EmployeeCount'
+
+            if nEmployeeCount >= 0 and nEmployeeCount > loanSourceModel.MaxEmployeeCount
+                @parentView.appendDecisionNote '<div class=red>Employee count (' + nEmployeeCount + ') is greater than max employee count (' + loanSourceModel.MaxEmployeeCount + ') for this loan source.</div>'
+        # end if max employee count
+
+        if loanSourceModel.MaxAnnualTurnover != -1
+            nAnnualTurnover = @model.get 'AnnualTurnover'
+
+            if nAnnualTurnover >= 0 and nAnnualTurnover > loanSourceModel.MaxAnnualTurnover
+                @parentView.appendDecisionNote '<div class=red>Annual turnover (' + EzBob.formatPoundsNoDecimals(nAnnualTurnover) + ') is greater than max annual turnover (' + EzBob.formatPoundsNoDecimals(loanSourceModel.MaxAnnualTurnover) + ') for this loan source.</div>'
+        # end if max employee count
+
+        if loanSourceModel.AlertOnCustomerReasonType != -1
+            nCustomerReasonType = @model.get 'CustomerReasonType'
+
+            if loanSourceModel.AlertOnCustomerReasonType == nCustomerReasonType
+                @parentView.appendDecisionNote '<div class=red>Please note customer reason: "' + @model.get('CustomerReason') + '".</div>'
+        # end if alert on customer reason type
+    # end of validateSourceRelated
+
+    validateInterestVsSource: (nMaxInterest) ->
         if nMaxInterest == -1
             return
 
@@ -293,6 +321,9 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
             if nRate > nMaxInterest
                 @$el.find('.discount-exceeds-max-by-loan-source').removeClass 'hide'
                 break
+            # end if
+        # end for
+    # end of validateInterestVsSource
 
     discountPlan: ->
         d = new EzBob.Dialogs.ComboEdit
@@ -344,14 +375,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         else
             @$el.find('button[name=isLoanTypeSelectionAllowed]').removeAttr('disabled')
 
-        @validateInterestVsSource()
-
-        nDefaultRepaymentPeriod = EzBob.loanSourceDefaultRepaymentPeriod @model.toJSON()
-
-        if nDefaultRepaymentPeriod == -1
-            @$el.find('button[name=repaymentPeriodChangeButton]').removeAttr 'disabled'
-        else
-            @$el.find('button[name=repaymentPeriodChangeButton]').attr 'disabled', 'disabled'
+        @validateLoanSourceRelated()
 
     changeCreditResult: ->
         @model.fetch()

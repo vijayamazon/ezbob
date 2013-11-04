@@ -52,10 +52,15 @@ namespace EzBob.Web.Areas.Underwriter.Models
         public string DiscountPlanPercents { get; set; }
         public int DiscountPlanId { get; set; }
 
-		public LoanSourceModel[] LoanSources { get; set; }
-		public int LoanSourceID { get; set; }
+		public LoanSourceModel LoanSource { get; set; }
+		public LoanSourceModel[] AllLoanSources { get; set; }
 
 		public string AMLResult { get; set; }
 		public bool SkipPopupForApprovalWithoutAML { get; set; }
+
+		public int EmployeeCount { get; set; }
+		public decimal AnnualTurnover { get; set; }
+		public int CustomerReasonType { get; set; }
+		public string CustomerReason { get; set; }
     }
 }

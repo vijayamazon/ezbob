@@ -601,3 +601,5 @@ table.unlimited-width th, table.unlimited-width td { padding: 8px; }
 #company-score-list .ui-accordion-header { padding: 0.7em 2em; font-size: 1.2em; }
 
 .default-customer-status-warning { color: red; }
+
+div#DecisionNotes { text-align: right; font-weight: bold; }

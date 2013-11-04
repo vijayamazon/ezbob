@@ -44,6 +44,7 @@ namespace EZBob.DatabaseLib.Model.Database
 		        .KeyColumn("CashRequestsId")
 		        .Cascade.All()
 		        .Inverse();
+	        Map(x => x.AnnualTurnover, "AnualTurnover");
         }
     }
 }
