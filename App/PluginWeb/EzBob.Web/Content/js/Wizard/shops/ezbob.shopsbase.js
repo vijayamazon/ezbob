@@ -18,8 +18,15 @@
     StoreInfoBaseView.prototype.isOffline = false;
 
     StoreInfoBaseView.prototype.initialize = function() {
-      var name, ordpi, store, _ref1;
+      var name, ordpi, store, that, _ref1;
 
+      this.allowFinishOnlineWizardWithoutMarketplaces = false;
+      this.allowFinishOfflineWizardWithoutMarketplaces = false;
+      that = this;
+      $.getJSON("" + window.gRootPath + "Customer/Wizard/GetConfigurations").done(function(res) {
+        that.allowFinishOnlineWizardWithoutMarketplaces = res.allowFinishOnlineWizardWithoutMarketplaces;
+        return that.allowFinishOfflineWizardWithoutMarketplaces = res.allowFinishOfflineWizardWithoutMarketplaces;
+      });
       if (typeof ordpi === 'undefined') {
         ordpi = Math.random() * 10000000000000000;
       }
@@ -118,11 +125,11 @@
         }
       }
       if (this.isOffline) {
-        canContinue = hasHmrc && foundAllMandatories;
+        canContinue = (hasHmrc && foundAllMandatories) || this.allowFinishOfflineWizardWithoutMarketplaces;
         this.$el.find('.next').toggleClass('disabled', !canContinue);
         this.$el.find('.AddMoreRule').toggleClass('hide', !hasFilledShops || canContinue);
       } else {
-        canContinue = hasFilledShops && (!hasEbay || (hasEbay && hasPayPal)) && foundAllMandatories;
+        canContinue = (hasFilledShops && (!hasEbay || (hasEbay && hasPayPal)) && foundAllMandatories) || this.allowFinishOnlineWizardWithoutMarketplaces;
         this.$el.find(".next").toggleClass("disabled", !canContinue);
         this.$el.find('.AddMoreRule').toggleClass('hide', !hasFilledShops || canContinue);
       }

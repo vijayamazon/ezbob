@@ -1,20 +1,20 @@
-﻿using System.Linq;
-using System.Web.Mvc;
-using ApplicationMng.Repository;
-using EZBob.DatabaseLib;
-using EZBob.DatabaseLib.Model.Database;
-using EzBob.CommonLib;
-using EzBob.Web.Areas.Customer.Models;
-using EzBob.Web.Infrastructure;
-using EzBob.Web.Infrastructure.Filters;
-using EzBob.Web.Infrastructure.csrf;
-using Scorto.Web;
-using StructureMap;
-using NHibernate;
-using NHibernate.Linq;
-
-namespace EzBob.Web.Areas.Customer.Controllers
+﻿namespace EzBob.Web.Areas.Customer.Controllers
 {
+	using System.Linq;
+	using System.Web.Mvc;
+	using ApplicationMng.Repository;
+	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Model.Database;
+	using CommonLib;
+	using Models;
+	using Infrastructure;
+	using Infrastructure.Filters;
+	using Infrastructure.csrf;
+	using Scorto.Web;
+	using StructureMap;
+	using NHibernate;
+	using NHibernate.Linq;
+	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 
 	public class WizardController : Controller
@@ -26,6 +26,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
 		private readonly ISession _session;
 		private readonly ICustomerReasonRepository _reasons;
 		private readonly ICustomerSourceOfRepaymentRepository _sourcesOfRepayment;
+		private readonly ConfigurationVariablesRepository configurationVariablesRepository;
 
         //-------------------------------------------------------------------
         public WizardController(
@@ -35,7 +36,8 @@ namespace EzBob.Web.Areas.Customer.Controllers
 			IEzBobConfiguration config,
 			ISession session, 
 			ICustomerReasonRepository customerReasonRepository, 
-			ICustomerSourceOfRepaymentRepository customerSourceOfRepaymentRepository)
+			ICustomerSourceOfRepaymentRepository customerSourceOfRepaymentRepository,
+			ConfigurationVariablesRepository configurationVariablesRepository)
         {
             _context = context;
             _questions = questions;
@@ -44,6 +46,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
 			_session = session;
 	        _reasons = customerReasonRepository;
 	        _sourcesOfRepayment = customerSourceOfRepaymentRepository;
+	        this.configurationVariablesRepository = configurationVariablesRepository;
         }
 
         //-------------------------------------------------------------------
@@ -74,7 +77,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
 		[Transactional]
 		public JsonNetResult EarnedPointsStr() {
 			var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
-			EZBob.DatabaseLib.Model.Database.Customer oCustomer = oDBHelper == null ? null : oDBHelper.FindCustomerByEmail(User.Identity.Name.Trim());
+			Customer oCustomer = oDBHelper == null ? null : oDBHelper.FindCustomerByEmail(User.Identity.Name.Trim());
 			string sPoints = "";
 
 			if (oCustomer != null)
@@ -83,5 +86,19 @@ namespace EzBob.Web.Areas.Customer.Controllers
 			return this.JsonNet(new { EarnedPointsStr = sPoints });
 		} // EarnedPointsStr
 
+		
+
+		[Ajax]
+		[HttpGet]
+		[ValidateJsonAntiForgeryToken]
+		[Transactional]
+		public JsonNetResult GetConfigurations()
+		{
+			bool allowFinishOnlineWizardWithoutMarketplaces = configurationVariablesRepository.GetByNameAsBool("AllowFinishOnlineWizardWithoutMarketplaces"); 
+			bool allowFinishOfflineWizardWithoutMarketplaces = configurationVariablesRepository.GetByNameAsBool("AllowFinishOfflineWizardWithoutMarketplaces");
+
+			return this.JsonNet(new { allowFinishOnlineWizardWithoutMarketplaces, allowFinishOfflineWizardWithoutMarketplaces });
+		}
+		
     }
 }

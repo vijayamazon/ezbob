@@ -5,6 +5,13 @@ class EzBob.StoreInfoBaseView extends Backbone.View
     isOffline: false
 
     initialize: ->
+        @allowFinishOnlineWizardWithoutMarketplaces = false
+        @allowFinishOfflineWizardWithoutMarketplaces = false
+        that = this
+        $.getJSON("#{window.gRootPath}Customer/Wizard/GetConfigurations").done (res) ->
+            that.allowFinishOnlineWizardWithoutMarketplaces = res.allowFinishOnlineWizardWithoutMarketplaces
+            that.allowFinishOfflineWizardWithoutMarketplaces = res.allowFinishOfflineWizardWithoutMarketplaces
+
         if typeof ordpi is 'undefined'
             ordpi = Math.random() * 10000000000000000
         @storeList = $(_.template($("#store-info").html(), {ordpi : ordpi}))
@@ -91,12 +98,11 @@ class EzBob.StoreInfoBaseView extends Backbone.View
                 foundAllMandatories = false
 
         if @isOffline
-            canContinue = hasHmrc and foundAllMandatories
+            canContinue = (hasHmrc and foundAllMandatories) or @allowFinishOfflineWizardWithoutMarketplaces
             @$el.find('.next').toggleClass 'disabled', !canContinue
             @$el.find('.AddMoreRule').toggleClass 'hide', !hasFilledShops or canContinue
         else
-            #canContinue = !(!hasFilledShops or (hasEbay and not hasPaypal) or not foundAllMandatories)
-            canContinue = hasFilledShops and (!hasEbay or (hasEbay and hasPayPal)) and foundAllMandatories
+            canContinue = (hasFilledShops and (!hasEbay or (hasEbay and hasPayPal)) and foundAllMandatories) or @allowFinishOnlineWizardWithoutMarketplaces
             @$el.find(".next").toggleClass "disabled", !canContinue
             @$el.find('.AddMoreRule').toggleClass 'hide', !hasFilledShops or canContinue
 
@@ -105,7 +111,6 @@ class EzBob.StoreInfoBaseView extends Backbone.View
             shop.view.render().$el.hide().appendTo that.$el
 
         @storeList.appendTo @$el
-        #that.ready() if @stores["bank-account"].button.model.get("bankAccountAdded") if @stores["bank-account"]?
 
         this
 
