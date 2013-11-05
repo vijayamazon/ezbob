@@ -5,6 +5,13 @@ class EzBob.StoreInfoBaseView extends Backbone.View
     isOffline: false
 
     initialize: ->
+        @allowFinishOnlineWizardWithoutMarketplaces = false
+        @allowFinishOfflineWizardWithoutMarketplaces = false
+        that = this
+        $.getJSON("#{window.gRootPath}Customer/Wizard/GetConfigurations").done (res) ->
+            that.allowFinishOnlineWizardWithoutMarketplaces = res.allowFinishOnlineWizardWithoutMarketplaces
+            that.allowFinishOfflineWizardWithoutMarketplaces = res.allowFinishOfflineWizardWithoutMarketplaces
+
         if typeof ordpi is 'undefined'
             ordpi = Math.random() * 10000000000000000
         @storeList = $(_.template($("#store-info").html(), {ordpi : ordpi}))
@@ -86,10 +93,12 @@ class EzBob.StoreInfoBaseView extends Backbone.View
         @$el.find(".eBayPaypalRule").toggleClass("hide", not hasEbay or hasPaypal)
 
         if @isOffline
-            @$el.find('.next').toggleClass 'disabled', not hasHmrc
+            canContinue = hasHmrc or @allowFinishOfflineWizardWithoutMarketplaces
+            @$el.find('.next').toggleClass 'disabled', !canContinue
             @$el.find('.AddMoreRule').toggleClass 'hide', !hasFilledShops or hasHmrc
         else
-            @$el.find(".next").toggleClass "disabled", !hasFilledShops or (hasEbay and not hasPaypal)
+            canContinue = (hasFilledShops and (!hasEbay or (hasEbay and hasPayPal)) and foundAllMandatories) or @allowFinishOnlineWizardWithoutMarketplaces
+            @$el.find(".next").toggleClass "disabled", !canContinue
 
         for shop in sortedShopsByNumOfShops when shop.active 
             shop.button.render().$el.appendTo accountsList

@@ -1,5 +1,5 @@
-﻿(function() {
-  var root,
+(function() {
+  var root, _ref,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -8,17 +8,25 @@
   root.EzBob = root.EzBob || {};
 
   EzBob.StoreInfoBaseView = (function(_super) {
-
     __extends(StoreInfoBaseView, _super);
 
     function StoreInfoBaseView() {
-      return StoreInfoBaseView.__super__.constructor.apply(this, arguments);
+      _ref = StoreInfoBaseView.__super__.constructor.apply(this, arguments);
+      return _ref;
     }
 
     StoreInfoBaseView.prototype.isOffline = false;
 
     StoreInfoBaseView.prototype.initialize = function() {
-      var name, ordpi, store, _ref;
+      var name, ordpi, store, that, _ref1;
+
+      this.allowFinishOnlineWizardWithoutMarketplaces = false;
+      this.allowFinishOfflineWizardWithoutMarketplaces = false;
+      that = this;
+      $.getJSON("" + window.gRootPath + "Customer/Wizard/GetConfigurations").done(function(res) {
+        that.allowFinishOnlineWizardWithoutMarketplaces = res.allowFinishOnlineWizardWithoutMarketplaces;
+        return that.allowFinishOfflineWizardWithoutMarketplaces = res.allowFinishOfflineWizardWithoutMarketplaces;
+      });
       if (typeof ordpi === 'undefined') {
         ordpi = Math.random() * 10000000000000000;
       }
@@ -26,9 +34,9 @@
         ordpi: ordpi
       }));
       this.isReady = false;
-      _ref = this.stores;
-      for (name in _ref) {
-        store = _ref[name];
+      _ref1 = this.stores;
+      for (name in _ref1) {
+        store = _ref1[name];
         store.button.on("selected", this.connect, this);
         store.view.on("completed", _.bind(this.completed, this, store.button.name));
         store.view.on("back", this.back, this);
@@ -83,9 +91,8 @@
     };
 
     StoreInfoBaseView.prototype.render = function() {
-      var accountsList, hasEbay, hasFilledShops, hasHmrc, hasPaypal, shop, sortedShopsByNumOfShops, sortedShopsByPriority, that, _i, _len;
-      console.log('shopbase.render close colorbox');
-      $.colorbox.close();
+      var accountsList, canContinue, hasEbay, hasFilledShops, hasHmrc, hasPaypal, shop, sortedShopsByNumOfShops, sortedShopsByPriority, that, _i, _len;
+
       hasHmrc = this.stores.HMRC.button.model.length > 0;
       if (this.isOffline) {
         if (hasHmrc) {
@@ -110,10 +117,12 @@
       hasPaypal = this.stores.paypal.button.model.length > 0;
       this.$el.find(".eBayPaypalRule").toggleClass("hide", !hasEbay || hasPaypal);
       if (this.isOffline) {
-        this.$el.find('.next').toggleClass('disabled', !hasHmrc);
+        canContinue = hasHmrc || this.allowFinishOfflineWizardWithoutMarketplaces;
+        this.$el.find('.next').toggleClass('disabled', !canContinue);
         this.$el.find('.AddMoreRule').toggleClass('hide', !hasFilledShops || hasHmrc);
       } else {
-        this.$el.find(".next").toggleClass("disabled", !hasFilledShops || (hasEbay && !hasPaypal));
+        canContinue = (hasFilledShops && (!hasEbay || (hasEbay && hasPayPal)) && foundAllMandatories) || this.allowFinishOnlineWizardWithoutMarketplaces;
+        this.$el.find(".next").toggleClass("disabled", !canContinue);
       }
       for (_i = 0, _len = sortedShopsByNumOfShops.length; _i < _len; _i++) {
         shop = sortedShopsByNumOfShops[_i];
@@ -140,6 +149,7 @@
 
     StoreInfoBaseView.prototype.connect = function(storeName) {
       var storeView;
+
       EzBob.CT.recordEvent("ct:storebase." + this.name + ".connect", storeName);
       this.$el.find(">div").hide();
       storeView = this.stores[storeName].view;
@@ -153,7 +163,7 @@
 
     StoreInfoBaseView.prototype.setFocus = function(storeName) {
       var aryCGAccounts;
-      console.log('shopbase.setFocus close colorbox');
+
       $.colorbox.close();
       switch (storeName) {
         case "EKM":
@@ -170,6 +180,7 @@
 
     StoreInfoBaseView.prototype.setDocumentTitle = function(view) {
       var title;
+
       title = view.getDocumentTitle();
       if (title) {
         return $(document).attr("title", "Step 2: " + title + " | EZBOB");
