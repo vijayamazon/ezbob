@@ -99,9 +99,9 @@ namespace TestApp {
 		private static void TestEarnedInterest(AConnection oDB, ASafeLog log) {
 			var ea = new EarnedInterest(
 				oDB,
-				EarnedInterest.WorkingMode.ForPeriod,
-				new DateTime(2013, 9, 29),
-				new DateTime(2014, 8, 1),
+				EarnedInterest.WorkingMode.ByIssuedLoans,
+				new DateTime(2013, 3, 7),
+				new DateTime(2013, 3, 8),
 				log
 			) {
 				VerboseLogging = true
