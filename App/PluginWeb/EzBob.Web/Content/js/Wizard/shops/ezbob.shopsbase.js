@@ -25,7 +25,8 @@
       that = this;
       $.getJSON("" + window.gRootPath + "Customer/Wizard/GetConfigurations").done(function(res) {
         that.allowFinishOnlineWizardWithoutMarketplaces = res.allowFinishOnlineWizardWithoutMarketplaces;
-        return that.allowFinishOfflineWizardWithoutMarketplaces = res.allowFinishOfflineWizardWithoutMarketplaces;
+        that.allowFinishOfflineWizardWithoutMarketplaces = res.allowFinishOfflineWizardWithoutMarketplaces;
+        return that.continueEnabledChanged();
       });
       if (typeof ordpi === 'undefined') {
         ordpi = Math.random() * 10000000000000000;
@@ -91,7 +92,7 @@
     };
 
     StoreInfoBaseView.prototype.render = function() {
-      var accountsList, canContinue, hasEbay, hasFilledShops, hasHmrc, hasPaypal, shop, sortedShopsByNumOfShops, sortedShopsByPriority, that, _i, _len;
+      var accountsList, hasEbay, hasFilledShops, hasHmrc, hasPaypal, shop, sortedShopsByNumOfShops, sortedShopsByPriority, that, _i, _len;
 
       hasHmrc = this.stores.HMRC.button.model.length > 0;
       if (this.isOffline) {
@@ -116,14 +117,7 @@
       hasEbay = this.stores.eBay.button.model.length > 0;
       hasPaypal = this.stores.paypal.button.model.length > 0;
       this.$el.find(".eBayPaypalRule").toggleClass("hide", !hasEbay || hasPaypal);
-      if (this.isOffline) {
-        canContinue = hasHmrc || this.allowFinishOfflineWizardWithoutMarketplaces;
-        this.$el.find('.next').toggleClass('disabled', !canContinue);
-        this.$el.find('.AddMoreRule').toggleClass('hide', !hasFilledShops || hasHmrc);
-      } else {
-        canContinue = (hasFilledShops && (!hasEbay || (hasEbay && hasPayPal)) && foundAllMandatories) || this.allowFinishOnlineWizardWithoutMarketplaces;
-        this.$el.find(".next").toggleClass("disabled", !canContinue);
-      }
+      this.continueEnabledChanged();
       for (_i = 0, _len = sortedShopsByNumOfShops.length; _i < _len; _i++) {
         shop = sortedShopsByNumOfShops[_i];
         if (!shop.active) {
@@ -134,6 +128,27 @@
       }
       this.storeList.appendTo(this.$el);
       return this;
+    };
+
+    StoreInfoBaseView.prototype.continueEnabledChanged = function() {
+      var canContinue, hasFilledShops, hasHmrc, sortedShopsByNumOfShops, sortedShopsByPriority;
+
+      sortedShopsByPriority = _.sortBy(this.stores, function(s) {
+        return s.priority;
+      });
+      sortedShopsByNumOfShops = _.sortBy(sortedShopsByPriority, function(s) {
+        return -s.button.model.length;
+      });
+      hasFilledShops = sortedShopsByNumOfShops[0].button.model.length > 0;
+      if (this.isOffline) {
+        hasHmrc = this.stores.HMRC.button.model.length > 0;
+        canContinue = hasHmrc || this.allowFinishOfflineWizardWithoutMarketplaces;
+        this.$el.find('.next').toggleClass('disabled', !canContinue);
+        return this.$el.find('.AddMoreRule').toggleClass('hide', !hasFilledShops || hasHmrc);
+      } else {
+        canContinue = (hasFilledShops && (!hasEbay || (hasEbay && hasPayPal))) || this.allowFinishOnlineWizardWithoutMarketplaces;
+        return this.$el.find(".next").toggleClass("disabled", !canContinue);
+      }
     };
 
     StoreInfoBaseView.prototype.events = {
