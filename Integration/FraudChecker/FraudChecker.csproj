@@ -61,7 +61,6 @@
     <Compile Include="FraudDetectionModel.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="InternalChecker.cs" />
-    <Compile Include="MpPhone.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

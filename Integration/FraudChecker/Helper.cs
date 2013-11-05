@@ -58,11 +58,11 @@ namespace FraudChecker
             var typeOfBussiness = customer.PersonalInfo.TypeOfBusiness.Reduce();
             if (typeOfBussiness != TypeOfBusinessReduced.Personal)
             {
-				if (typeOfBussiness == TypeOfBusinessReduced.Limited && !string.IsNullOrEmpty(customer.LimitedInfo.LimitedBusinessPhone))
+                if (typeOfBussiness == TypeOfBusinessReduced.Limited)
                 {
                     retVal.Add("LimitedBusinessPhone", customer.LimitedInfo.LimitedBusinessPhone);
                 }
-				else if (typeOfBussiness == TypeOfBusinessReduced.NonLimited && !string.IsNullOrEmpty(customer.NonLimitedInfo.NonLimitedBusinessPhone))
+                else
                 {
                     retVal.Add("NonLimitedBusinessPhone", customer.NonLimitedInfo.NonLimitedBusinessPhone);
                 }
@@ -95,18 +95,6 @@ namespace FraudChecker
 	    public static IEnumerable<string> GetCustomerIps(Customer customer)
 	    {
 		    return customer.Session.Select(s => s.Ip);
-	    }
-
-	    public static void AddValue(Dictionary<Customer, List<MpPhone>> mpPhoneDetections, Customer cd, string mpType, string phone)
-	    {
-			if (!mpPhoneDetections.ContainsKey(cd))
-			{
-				mpPhoneDetections[cd] = new List<MpPhone> {new MpPhone {MpType = mpType, Phone = phone}};
-			}
-			else
-			{
-				mpPhoneDetections[cd].Add(new MpPhone { MpType = mpType, Phone = phone });
-			}
 	    }
     }
 }

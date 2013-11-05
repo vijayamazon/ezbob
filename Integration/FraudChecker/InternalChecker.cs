@@ -49,7 +49,7 @@ namespace FraudChecker
 				InternalFirstMiddleLastNameCheck(customer, customerPortion, fraudDetections, true);
 				InternalLastNameDobCheck(fraudDetections, customerPortion, customer);
 				InternalPhoneCheck(fraudDetections, customerPortion, customer);
-				InternalPhoneFromMpCheck(fraudDetections,customerPortion, customer);
+				InternalPhoneFromMpCheck(fraudDetections, customer);
 				InternalCompanyNameCheck(customer, fraudDetections, customerPortion);
 				InternalBankAccountCheck(fraudDetections, customerPortion, customer);
 				InternalIpCheck(fraudDetections, customerPortion, customer);
@@ -95,7 +95,7 @@ namespace FraudChecker
 		}
 
 
-		private void InternalPhoneFromMpCheck(ICollection<FraudDetection> fraudDetections,IEnumerable<Customer> customerPortion, Customer customer)
+		private void InternalPhoneFromMpCheck(ICollection<FraudDetection> fraudDetections, Customer customer)
 		{
 			//check from customer marketplaces info
 			var customerPhones = new Dictionary<string, string>();
@@ -108,76 +108,57 @@ namespace FraudChecker
 						var ebaUserData = mp.EbayUserData.FirstOrDefault();
 						if (ebaUserData != null)
 						{
-							if (ebaUserData.RegistrationAddress != null && !string.IsNullOrEmpty(ebaUserData.RegistrationAddress.Phone))
-							{
-								customerPhones.Add("Ebay phone", ebaUserData.RegistrationAddress.Phone.Replace(" ", ""));
-							}
-								
-							if (ebaUserData.RegistrationAddress != null && !string.IsNullOrEmpty(ebaUserData.RegistrationAddress.Phone2))
-							{
-								customerPhones.Add("Ebay phone 2", ebaUserData.RegistrationAddress.Phone2.Replace(" ", ""));
-							}
+							if (ebaUserData.RegistrationAddress != null)
+								customerPhones.Add("Ebay phone", ebaUserData.RegistrationAddress.Phone);
+							if (ebaUserData.RegistrationAddress != null)
+								customerPhones.Add("Ebay phone 2", ebaUserData.RegistrationAddress.Phone2);
 						}
 						break;
 					case "Pay Pal":
-						if (mp.PersonalInfo != null && !string.IsNullOrEmpty(mp.PersonalInfo.Phone))
-						{
-							customerPhones.Add("PayPal phone", mp.PersonalInfo.Phone.Replace(" ", ""));
-						}
+						if (mp.PersonalInfo != null) customerPhones.Add("PayPal phone", mp.PersonalInfo.Phone);
 						break;
 				}
 			}
-			var phonesArray = customerPhones.Values.Distinct().ToArray();
+			var phonesArray = customerPhones.Values.ToArray();
 
-			var mpPhoneDetections = new Dictionary<Customer, List<MpPhone>>();
-			foreach (var cd in customerPortion)
+			var customerMpDetections =
+				from mp in _session.Query<MP_CustomerMarketPlace>().Fetch(mp => mp.PersonalInfo)
+				where mp.Customer.IsTest == false
+				where mp.Customer != customer
+				//Get phone's from ebay and paypal
+				where (mp.EbayUserData.All(e => e != null) &&
+					   mp.EbayUserData.Any(x =>
+						  phonesArray.Contains(x.RegistrationAddress.Phone) ||
+						  phonesArray.Contains(x.RegistrationAddress.Phone2)))
+						  ||
+					  ((mp.PersonalInfo != null && mp.PersonalInfo.Phone != null && mp.PersonalInfo.Phone != "0") &&
+					   phonesArray.Contains(mp.PersonalInfo.Phone))
+				select mp;
+
+			foreach (var mpDetection in customerMpDetections)
 			{
-				if(cd == customer) continue;
-				foreach (var mp in cd.CustomerMarketPlaces)
+				foreach (var customerPhone in customerPhones)
 				{
-					if (mp.PersonalInfo != null && !string.IsNullOrEmpty(mp.PersonalInfo.Phone))
+					var phone = customerPhone.Value;
+					if (mpDetection.PersonalInfo.Phone == phone)
 					{
-						Helper.AddValue(mpPhoneDetections, cd, "Pay Pal", mp.PersonalInfo.Phone.Replace(" ", ""));
-						
+						fraudDetections.Add(Helper.CreateDetection("Paypal Phone", customer, mpDetection.Customer,
+															customerPhone.Key, null, phone));
 					}
 
-					if (mp.EbayUserData != null)
+					var ebayUserData = mpDetection.EbayUserData;
+					if (ebayUserData.Any() &&
+						ebayUserData.Last().RegistrationAddress.Phone == phone)
 					{
-						foreach (var ebay in mp.EbayUserData)
-						{
-							if (ebay.RegistrationAddress != null)
-							{
-								if (!string.IsNullOrEmpty(ebay.RegistrationAddress.Phone))
-								{
-									Helper.AddValue(mpPhoneDetections, cd, "Ebay Phone1", ebay.RegistrationAddress.Phone.Replace(" ", ""));
-								}
-
-								if (!string.IsNullOrEmpty(ebay.RegistrationAddress.Phone2))
-								{
-									Helper.AddValue(mpPhoneDetections, cd, "Ebay Phone2", ebay.RegistrationAddress.Phone2.Replace(" ", ""));
-								}
-							}
-						}
+						fraudDetections.Add(Helper.CreateDetection("Ebay Phone", customer, mpDetection.Customer,
+															customerPhone.Key, null, phone));
 					}
-					
-				}
-			}
-
-			foreach (var kvp in mpPhoneDetections)
-			{
-				var cd = kvp.Key;
-				List<MpPhone> lst = kvp.Value;
-				foreach (var mpPhone in lst)
-				{
-					foreach (var customerPhone in customerPhones)
+					if (ebayUserData.Any() &&
+						ebayUserData.Last().RegistrationAddress.Phone2 == phone)
 					{
-						var phone = customerPhone.Value;
-						if (mpPhone.Phone == phone)
-						{
-							fraudDetections.Add(Helper.CreateDetection(mpPhone.MpType, customer, cd,
-							                                           customerPhone.Key, null, phone));
-						}
-					}	
+						fraudDetections.Add(Helper.CreateDetection("Ebay Phone2", customer, mpDetection.Customer,
+															customerPhone.Key, null, phone));
+					}
 				}
 			}
 		}

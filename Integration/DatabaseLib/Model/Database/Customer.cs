@@ -147,8 +147,8 @@ namespace EZBob.DatabaseLib.Model.Database {
         public BankAccountType Type { get; set; }
     }
 
-    public class Customer : IEqualityComparer<Customer>
-    {
+    public class Customer
+	{
         
         public Customer() 
 		{
@@ -584,15 +584,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual ParseExperianResult ParseExperian(string sParserConfiguration) {
 			return Customer.ParseExperian(LimitedInfo.LimitedRefNum, LimitedInfo.LimitedCompanyName, sParserConfiguration);
 		} // ParseExperian
-	    public virtual bool Equals(Customer x, Customer y)
-	    {
-		    return x.Id == y.Id;
-	    }
-
-	    public virtual int GetHashCode(Customer obj)
-	    {
-		    return obj.Id.GetHashCode();
-	    }
     }
 
 	public class ParseExperianResult : Tuple<Dictionary<string, ParsedData>, ParsingResult, string, string, string> {
