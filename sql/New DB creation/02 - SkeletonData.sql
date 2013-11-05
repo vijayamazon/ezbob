@@ -30887,3 +30887,127 @@ VALUES
 	)
 GO
 
+INSERT INTO dbo.Security_User
+	(
+	UserName
+	, FullName
+	, Password
+	, CreationDate
+	, IsDeleted
+	, EMail
+	, CreateUserId
+	, DeletionDate
+	, DeleteUserId
+	, BranchId
+	, PassSetTime
+	, LoginFailedCount
+	, DisableDate
+	, LastBadLogin
+	, PassExpPeriod
+	, ForcePassChange
+	, DisablePassChange
+	, DeleteId
+	, CertificateThumbprint
+	, DomainUserName
+	, SecurityQuestion1Id
+	, SecurityAnswer1
+	, IsPasswordRestored
+	)
+VALUES
+	(
+	'underwriter1'
+	, 'Underwriter1'
+	, 'R828Ux4okgcNdbdSRmCHS7vN6kU='
+	, '2007-01-19 16:22:08'
+	, 0
+	, NULL
+	, NULL
+	, NULL
+	, NULL
+	, 1
+	, '2013-02-22 16:57:39'
+	, 0
+	, NULL
+	, NULL
+	, NULL
+	, NULL
+	, NULL
+	, NULL
+	, NULL
+	, NULL
+	, NULL
+	, NULL
+	, 0
+	)
+GO
+
+INSERT INTO dbo.Security_User
+	(
+	UserName
+	, FullName
+	, Password
+	, CreationDate
+	, IsDeleted
+	, EMail
+	, CreateUserId
+	, DeletionDate
+	, DeleteUserId
+	, BranchId
+	, PassSetTime
+	, LoginFailedCount
+	, DisableDate
+	, LastBadLogin
+	, PassExpPeriod
+	, ForcePassChange
+	, DisablePassChange
+	, DeleteId
+	, CertificateThumbprint
+	, DomainUserName
+	, SecurityQuestion1Id
+	, SecurityAnswer1
+	, IsPasswordRestored
+	)
+VALUES
+	(
+	'manager'
+	, 'manager'
+	, 'SACt6LyFPGLIGtJ+8UiuAtBkiLo='
+	, '2013-02-25 16:31:31'
+	, 0
+	, ''
+	, NULL
+	, NULL
+	, NULL
+	, 0
+	, '2013-02-25 16:31:31'
+	, NULL
+	, NULL
+	, NULL
+	, NULL
+	, NULL
+	, NULL
+	, NULL
+	, NULL
+	, NULL
+	, NULL
+	, NULL
+	, 0
+	)
+GO
+
+DECLARE @SecurityUserId INT, @SuperUserRoleId INT
+
+SELECT @SecurityUserId = UserId FROM Security_User WHERE UserName='underwriter1'
+SELECT @SuperUserRoleId = RoleId FROM Security_Role WHERE Name='Web'
+INSERT Security_UserRoleRelation VALUES (@SecurityUserId, @SuperUserRoleId)
+SELECT @SuperUserRoleId = RoleId FROM Security_Role WHERE Name='Underwriter'
+INSERT Security_UserRoleRelation VALUES (@SecurityUserId, @SuperUserRoleId)
+
+
+SELECT @SecurityUserId = UserId FROM Security_User WHERE UserName='manager'
+SELECT @SuperUserRoleId = RoleId FROM Security_Role WHERE Name='Web'
+INSERT Security_UserRoleRelation VALUES (@SecurityUserId, @SuperUserRoleId)
+SELECT @SuperUserRoleId = RoleId FROM Security_Role WHERE Name='manager'
+INSERT Security_UserRoleRelation VALUES (@SecurityUserId, @SuperUserRoleId)
+
+GO
