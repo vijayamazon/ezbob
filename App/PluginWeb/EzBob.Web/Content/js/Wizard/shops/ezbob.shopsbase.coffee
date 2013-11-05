@@ -5,12 +5,8 @@ class EzBob.StoreInfoBaseView extends Backbone.View
     isOffline: false
 
     initialize: ->
-        @allowFinishOnlineWizardWithoutMarketplaces = false
-        @allowFinishOfflineWizardWithoutMarketplaces = false
-        that = this
-        $.getJSON("#{window.gRootPath}Customer/Wizard/GetConfigurations").done (res) ->
-            that.allowFinishOnlineWizardWithoutMarketplaces = res.allowFinishOnlineWizardWithoutMarketplaces
-            that.allowFinishOfflineWizardWithoutMarketplaces = res.allowFinishOfflineWizardWithoutMarketplaces
+        @allowFinishOnlineWizardWithoutMarketplaces = $('#allowFinishWizardWithoutMarketplaces').attr('online').toLowerCase() == 'true'
+        @allowFinishOfflineWizardWithoutMarketplaces = $('#allowFinishWizardWithoutMarketplaces').attr('offline').toLowerCase() == 'true'
 
         if typeof ordpi is 'undefined'
             ordpi = Math.random() * 10000000000000000

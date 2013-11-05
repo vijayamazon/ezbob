@@ -1,4 +1,6 @@
 ﻿@using System.Globalization
+@using EZBob.DatabaseLib
+@using EzBob.CommonLib
 @using EzBob.Web.Infrastructure
 @using EzBob.Web.Infrastructure.csrf
 @using Integration.ChannelGrabberConfig
@@ -9,6 +11,9 @@
     var config = ObjectFactory.GetInstance<IEzBobConfiguration>();
     var showGetSatisfaction = controller == "Wizard" && config.GetSatisfactionEnabled;
     var authCookie = Request.IsAuthenticated ? "auth" : "";
+
+	var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
+	var configVars = oDBHelper.ConfigurationVariables;
 }
 <!DOCTYPE html>
 <html>
@@ -121,5 +126,9 @@
     <div style="display: none;" class="hide" id="cg-account-model-template">@JsonConvert.SerializeObject(new Integration.ChannelGrabberFrontend.AccountModel())</div>
     <div style="display: none;" class="hide" id="cg-account-list">@JsonConvert.SerializeObject(Configuration.Instance.Vendors)</div>
     <div style="display: none;" class="hide" id="current-server-time-zone">@DateTimeOffset.Now.ToString("zzz", CultureInfo.InvariantCulture)</div>
+	<div style="display: none;" class="hide" id="allowFinishWizardWithoutMarketplaces"
+		online="@configVars.GetByNameAsBool("AllowFinishOnlineWizardWithoutMarketplaces")"
+		offline="@configVars.GetByNameAsBool("AllowFinishOfflineWizardWithoutMarketplaces")"
+	></div>
 </body>
 </html>
