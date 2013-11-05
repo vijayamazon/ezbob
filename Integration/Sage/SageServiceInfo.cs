@@ -19,5 +19,10 @@
         {
 			get { return "Sage"; }
         }
+
+		public bool IsPaymentAccount
+		{
+			get { return true; }
+		}
     }
 }

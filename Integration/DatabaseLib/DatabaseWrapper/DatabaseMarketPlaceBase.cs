@@ -31,6 +31,11 @@ namespace EZBob.DatabaseLib.DatabaseWrapper
 			get { return _MarketplaceSeriveInfo.Description; }
 		}
 
+		public bool IsPaymentAccount
+		{
+			get { return _MarketplaceSeriveInfo.IsPaymentAccount; }
+		}
+
 	    public abstract IEnumerable<IDatabaseFunction> DatabaseFunctionList { get; }
 
 	    public abstract IMarketplaceRetrieveDataHelper GetRetrieveDataHelper(DatabaseDataHelper helper);

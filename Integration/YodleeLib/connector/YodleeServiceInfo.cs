@@ -20,5 +20,10 @@
             get { return "Yodlee Bank Account"; }
         }
 
+		public bool IsPaymentAccount
+		{
+			get { return true; }
+		}
+
     }
 }

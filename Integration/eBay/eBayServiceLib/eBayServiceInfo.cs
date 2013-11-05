@@ -19,5 +19,10 @@ namespace EzBob.eBayServiceLib
 		{
 			get { return "eBay Market Place"; }
 		}
+
+		public bool IsPaymentAccount
+		{
+			get { return false; }
+		}
 	}
 }

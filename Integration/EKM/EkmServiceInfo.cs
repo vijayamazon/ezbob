@@ -20,5 +20,10 @@ namespace EKM
             get { return "EKM Powershop"; }
         }
 
+	    public bool IsPaymentAccount
+	    {
+			get { return false; }
+	    }
+
     }
 }

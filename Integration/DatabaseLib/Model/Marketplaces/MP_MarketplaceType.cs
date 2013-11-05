@@ -10,7 +10,7 @@ namespace EZBob.DatabaseLib.Model.Database {
         public virtual string Name { get; set; }
         public virtual System.Guid InternalId { get; set; }
         public virtual string Description { get; set; }
-        public virtual bool IsPaymentAccount { get { return false; } }
+		public virtual bool IsPaymentAccount { get; set; }
         public virtual int UWPriority { get { return 0; } }
 		public virtual bool ActiveWizardOnline { get; set; }
 		public virtual bool ActiveDashboardOnline { get; set; }
@@ -45,6 +45,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 			Map(x => x.Ribbon).Length(50).Nullable();
 			Map(x => x.MandatoryOnline);
 			Map(x => x.MandatoryOffline);
+	        Map(x => x.IsPaymentAccount);
 			References(x => x.Group, "GroupId");
 
             DiscriminateSubClassesOnColumn("").Formula(
@@ -83,7 +84,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 
     public class PayPalMarketPlaceType : MP_MarketplaceType
     {
-        public override bool IsPaymentAccount { get { return true; } }
         public override int UWPriority { get { return 1; } }
     }
 
@@ -110,7 +110,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 
 	public class FreeAgentMarketPlaceType : MP_MarketplaceType
 	{
-		public override bool IsPaymentAccount { get { return true; } }
 		public override int UWPriority { get { return 4; } }
 	}
 
@@ -124,7 +123,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 
 	public class SageMarketPlaceType : MP_MarketplaceType
 	{
-		public override bool IsPaymentAccount { get { return true; } }
 		public override int UWPriority { get { return 14; } }
 	}
 
@@ -138,7 +136,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 
     public class PayPointMarketPlaceType : MP_MarketplaceType
     {
-        public override bool IsPaymentAccount { get { return true; } }
         public override int UWPriority { get { return 2; } }
     }
 
@@ -152,7 +149,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 
     public class YodleeMarketPlaceType : MP_MarketplaceType
     {
-        public override bool IsPaymentAccount { get { return true; } }
         public override int UWPriority { get { return 3; } }
     }
 
@@ -166,11 +162,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 
 	public class ChannelGrabberMarketPlaceType : MP_MarketplaceType {
 		public override int UWPriority { get { return 4; } } // UWPriority
-
-		public override bool IsPaymentAccount { get {
-			VendorInfo vi = Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(this.Name);
-			return vi.HasExpenses;
-		} } // IsPaymentAccount
 	} // class ChannelGrabberMarketPlaceType
 
 	public class ChannelGrabberMarketPlaceTypeMap : SubclassMap<ChannelGrabberMarketPlaceType> {

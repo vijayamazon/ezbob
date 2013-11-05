@@ -23,5 +23,10 @@ namespace EzBob.AmazonServiceLib
 			get { return "Amazon Market Place"; }
 		}
 
+		public bool IsPaymentAccount
+		{
+			get { return false; }
+		}
+
 	}
 }

@@ -31,7 +31,7 @@ namespace Integration.ChannelGrabberConfig {
 		public string Description { get; set; }
 		public string InternalID { get; set; }
 		public bool HasExpenses { get; set; }
-
+		public bool IsPaymentAccount { get; set; }
 		public Behaviour Behaviour { get; set; }
 
 		public SecurityData SecurityData { get; set; }

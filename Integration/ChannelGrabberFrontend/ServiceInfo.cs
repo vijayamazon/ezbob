@@ -26,6 +26,8 @@ namespace Integration.ChannelGrabberFrontend {
 				ClientSide = (ClientSide)vi.ClientSide.Clone();
 
 				SetGuid(new Guid(vi.Guid().ToString()));
+				IsPaymentAccount = vi.HasExpenses;
+
 			} // if
 		} // constructor
 	} // ServiceInfo

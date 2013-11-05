@@ -19,5 +19,10 @@
         {
 			get { return "FreeAgent"; }
         }
+
+		public bool IsPaymentAccount
+		{
+			get { return true; }
+		}
     }
 }

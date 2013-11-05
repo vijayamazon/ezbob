@@ -7,5 +7,6 @@ namespace EzBob.CommonLib
 		string DisplayName { get; }
 		Guid InternalId { get; }
 		string Description { get; }
+		bool IsPaymentAccount { get; }
 	}
 }

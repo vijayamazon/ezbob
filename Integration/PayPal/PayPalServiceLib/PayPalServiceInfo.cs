@@ -19,5 +19,10 @@ namespace EzBob.PayPalServiceLib
 		{
 			get { return "Pay Pal"; }
 		}
+
+		public bool IsPaymentAccount
+		{
+			get { return true; }
+		}
 	}
 }
