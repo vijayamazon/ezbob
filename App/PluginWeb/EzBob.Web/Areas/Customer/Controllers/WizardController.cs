@@ -14,7 +14,6 @@
 	using StructureMap;
 	using NHibernate;
 	using NHibernate.Linq;
-	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 
 	public class WizardController : Controller
@@ -26,7 +25,6 @@
 		private readonly ISession _session;
 		private readonly ICustomerReasonRepository _reasons;
 		private readonly ICustomerSourceOfRepaymentRepository _sourcesOfRepayment;
-		private readonly ConfigurationVariablesRepository configurationVariablesRepository;
 
         //-------------------------------------------------------------------
         public WizardController(
@@ -36,8 +34,7 @@
 			IEzBobConfiguration config,
 			ISession session, 
 			ICustomerReasonRepository customerReasonRepository, 
-			ICustomerSourceOfRepaymentRepository customerSourceOfRepaymentRepository,
-			ConfigurationVariablesRepository configurationVariablesRepository)
+			ICustomerSourceOfRepaymentRepository customerSourceOfRepaymentRepository)
         {
             _context = context;
             _questions = questions;
@@ -46,7 +43,6 @@
 			_session = session;
 	        _reasons = customerReasonRepository;
 	        _sourcesOfRepayment = customerSourceOfRepaymentRepository;
-	        this.configurationVariablesRepository = configurationVariablesRepository;
         }
 
         //-------------------------------------------------------------------
@@ -85,20 +81,5 @@
 
 			return this.JsonNet(new { EarnedPointsStr = sPoints });
 		} // EarnedPointsStr
-
-		
-
-		[Ajax]
-		[HttpGet]
-		[ValidateJsonAntiForgeryToken]
-		[Transactional]
-		public JsonNetResult GetConfigurations()
-		{
-			bool allowFinishOnlineWizardWithoutMarketplaces = configurationVariablesRepository.GetByNameAsBool("AllowFinishOnlineWizardWithoutMarketplaces"); 
-			bool allowFinishOfflineWizardWithoutMarketplaces = configurationVariablesRepository.GetByNameAsBool("AllowFinishOfflineWizardWithoutMarketplaces");
-
-			return this.JsonNet(new { allowFinishOnlineWizardWithoutMarketplaces, allowFinishOfflineWizardWithoutMarketplaces });
-		}
-		
     }
 }

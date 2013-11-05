@@ -5,13 +5,8 @@ class EzBob.StoreInfoBaseView extends Backbone.View
     isOffline: false
 
     initialize: ->
-        @allowFinishOnlineWizardWithoutMarketplaces = false
-        @allowFinishOfflineWizardWithoutMarketplaces = false
-        that = this
-        $.getJSON("#{window.gRootPath}Customer/Wizard/GetConfigurations").done (res) ->
-            that.allowFinishOnlineWizardWithoutMarketplaces = res.allowFinishOnlineWizardWithoutMarketplaces
-            that.allowFinishOfflineWizardWithoutMarketplaces = res.allowFinishOfflineWizardWithoutMarketplaces
-            that.continueEnabledChanged()
+        @allowFinishOnlineWizardWithoutMarketplaces = $('#allowFinishWizardWithoutMarketplaces').attr('online').toLowerCase() == 'true'
+        @allowFinishOfflineWizardWithoutMarketplaces = $('#allowFinishWizardWithoutMarketplaces').attr('offline').toLowerCase() == 'true'
 
         if typeof ordpi is 'undefined'
             ordpi = Math.random() * 10000000000000000
@@ -93,7 +88,13 @@ class EzBob.StoreInfoBaseView extends Backbone.View
 
         @$el.find(".eBayPaypalRule").toggleClass("hide", not hasEbay or hasPaypal)
 
-        this.continueEnabledChanged()
+        if @isOffline            
+            canContinue = hasHmrc or @allowFinishOfflineWizardWithoutMarketplaces
+            @$el.find('.next').toggleClass 'disabled', !canContinue
+            @$el.find('.AddMoreRule').toggleClass 'hide', !hasFilledShops or hasHmrc
+        else
+            canContinue = (hasFilledShops and (!hasEbay or (hasEbay and hasPayPal))) or @allowFinishOnlineWizardWithoutMarketplaces
+            @$el.find(".next").toggleClass "disabled", !canContinue
 
         for shop in sortedShopsByNumOfShops when shop.active 
             shop.button.render().$el.appendTo accountsList
@@ -103,20 +104,6 @@ class EzBob.StoreInfoBaseView extends Backbone.View
         #that.ready() if @stores["bank-account"].button.model.get("bankAccountAdded") if @stores["bank-account"]?
 
         this
-        
-    continueEnabledChanged: ->
-        sortedShopsByPriority = _.sortBy(@stores, (s) -> s.priority)
-        sortedShopsByNumOfShops = _.sortBy(sortedShopsByPriority, (s) -> -s.button.model.length)
-        hasFilledShops = sortedShopsByNumOfShops[0].button.model.length > 0
-
-        if @isOffline            
-            hasHmrc = @stores.HMRC.button.model.length > 0
-            canContinue = hasHmrc or @allowFinishOfflineWizardWithoutMarketplaces
-            @$el.find('.next').toggleClass 'disabled', !canContinue
-            @$el.find('.AddMoreRule').toggleClass 'hide', !hasFilledShops or hasHmrc
-        else
-            canContinue = (hasFilledShops and (!hasEbay or (hasEbay and hasPayPal))) or @allowFinishOnlineWizardWithoutMarketplaces
-            @$el.find(".next").toggleClass "disabled", !canContinue
 
     events:
         "click a.connect-store": "close"
