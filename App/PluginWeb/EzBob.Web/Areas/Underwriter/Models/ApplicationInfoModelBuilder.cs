@@ -133,7 +133,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 			model.AMLResult = customer.AMLResult;
 			model.SkipPopupForApprovalWithoutAML = approvalsWithoutAMLRepository.ShouldSkipById(customer.Id);
 
-			model.EmployeeCount = customer.CompanyEmployeeCount.OrderBy(x => x.Created).LastOrDefault().EmployeeCount;
+			model.EmployeeCount = (customer.CompanyEmployeeCount.OrderBy(x => x.Created).LastOrDefault() ?? new CompanyEmployeeCount()).EmployeeCount;
 			model.AnnualTurnover = cr.AnnualTurnover;
 
 			CustomerRequestedLoan oRequest = customer.CustomerRequestedLoan.OrderBy(x => x.Created).LastOrDefault();
