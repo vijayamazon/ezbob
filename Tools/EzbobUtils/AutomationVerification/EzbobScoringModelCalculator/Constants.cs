@@ -2,7 +2,7 @@
 {
 	public static class Constants
 	{
-		#region Weight
+		#region Weight Constants
 		public static double ExperianFirstRepaymentPassedWeight = 0.32;
 		public static double ExperianFirstRepaymentNotPassedWeight = 0.40;
 
@@ -32,8 +32,7 @@
 		public static double EzbobPreviousEarlyPaymentsFirstRepaymentPassedWeight = 0.03;
 		public static double EzbobPreviousEarlyPaymentsFirstRepaymentNotPassedWeight = 0;
 		
-		#endregion Weight
-
+		#endregion Weight 
 
 	}
 }

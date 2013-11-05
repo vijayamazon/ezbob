@@ -6,16 +6,10 @@ using System.Threading.Tasks;
 
 namespace CommonLib
 {
-	public enum TimePeriodEnum
+	public class MarketPlace
 	{
-		Month,
-		Month3,
-		Month6,
-		Year,
-		Month15,
-		Month18,
-		Year2,
-		Lifetime,
-		Zero
+		public int Id { get; set; }
+		public string Name { get; set; }
+		public string Type { get; set; }
 	}
 }

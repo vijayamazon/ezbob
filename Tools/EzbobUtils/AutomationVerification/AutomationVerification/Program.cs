@@ -10,6 +10,8 @@ namespace AutomationVerification
 	{
 		static void Main(string[] args)
 		{
+			var aj = new AutoRejection.AutoRejectionCalculator();
+			Console.WriteLine(aj.IsAutoRejected(4998));
 		}
 	}
 }
