@@ -3,14 +3,14 @@
 	using System;
 	using System.Collections.Generic;
 	using NHibernate;
-	
+
 	[Serializable]
 	public class RunningBalance
 	{
 		public double Balance { get; set; }
 		public DateTime Date { get; set; }
 	}
-	
+
 	public class YodleeRunningBalanceModel
 	{
 		public SortedDictionary<int/*yearmonth*/, RunningBalance> LowRunningBalanceDict { get; set; }
@@ -21,7 +21,7 @@
 		public DateTime AsOfDate;
 		private DateTime _firstTrans;
 		private DateTime _lastTrans;
-		public SortedDictionary<string/*accountNum*/, double/*currentBalance*/> AccountCurrentBalanceDict{get;set;}
+		public SortedDictionary<string/*accountNum*/, double/*currentBalance*/> AccountCurrentBalanceDict { get; set; }
 		public YodleeRunningBalanceModel()
 		{
 			LowRunningBalanceDict = new SortedDictionary<int, RunningBalance>();
@@ -36,7 +36,7 @@
 		public void Add(YodleeTransactionModel transaction, string accountNum)
 		{
 			var date = transaction.transactionDate;
-			var runningBalance = transaction.runningBalance.HasValue ? transaction.runningBalance.Value: 0;
+			var runningBalance = transaction.runningBalance.HasValue ? transaction.runningBalance.Value : 0;
 
 			AddRunningBalance(runningBalance, date, accountNum);
 
@@ -76,9 +76,10 @@
 			CalculateMergedData();
 			CalculateMinMaxMonthlyRunningBalance();
 		}
-		
+
 		private void CalculateMissingDated()
 		{
+			_lastTrans = AsOfDate > _lastTrans ? AsOfDate.Date : _lastTrans;
 			if (!RunningBalanceDict.ContainsKey(_lastTrans.Date))
 			{
 				var rbd = new Dictionary<string, double>();
@@ -88,7 +89,7 @@
 				}
 				RunningBalanceDict[_lastTrans.Date] = rbd;
 			}
-			_lastTrans = AsOfDate.AddDays(-1);
+			_lastTrans = _lastTrans.AddDays(-1);
 			while (_firstTrans <= _lastTrans)
 			{
 				if (!RunningBalanceDict.ContainsKey(_lastTrans.Date))
