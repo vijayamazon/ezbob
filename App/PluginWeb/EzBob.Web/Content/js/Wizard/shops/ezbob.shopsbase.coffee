@@ -93,7 +93,7 @@ class EzBob.StoreInfoBaseView extends Backbone.View
             @$el.find('.next').toggleClass 'disabled', !canContinue
             @$el.find('.AddMoreRule').toggleClass 'hide', !hasFilledShops or hasHmrc
         else
-            canContinue = (hasFilledShops and (!hasEbay or (hasEbay and hasPayPal))) or @allowFinishOnlineWizardWithoutMarketplaces
+            canContinue = (hasFilledShops and (!hasEbay or (hasEbay and hasPaypal))) or @allowFinishOnlineWizardWithoutMarketplaces
             @$el.find(".next").toggleClass "disabled", !canContinue
 
         for shop in sortedShopsByNumOfShops when shop.active 
