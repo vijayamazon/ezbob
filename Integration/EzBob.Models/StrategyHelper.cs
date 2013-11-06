@@ -466,7 +466,7 @@
 			}
 			if (outstandingPrincipal >= autoApproveMinRepaidPortion * loanAmount)
 			{
-				log.InfoFormat("No auto approval: No auto approval for customers that didn't repay at least {0} of their original principal. This customer has repaid {1}", autoApproveMinRepaidPortion, outstandingPrincipal / loanAmount);
+				log.InfoFormat("No auto approval: No auto approval for customers that didn't repay at least {0} of their original principal. This customer has repaid {1}", autoApproveMinRepaidPortion, loanAmount == 0 ? 0 : outstandingPrincipal / loanAmount);
 				return false;
 			}
 
