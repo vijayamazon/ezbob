@@ -20,7 +20,7 @@ BEGIN
 END 
 GO
 
-IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE Name = N'IsOffline' and Object_ID = Object_ID(N'MP_MarketplaceType'))
+IF EXISTS (SELECT 1 FROM sys.columns WHERE Name = N'IsOffline' and Object_ID = Object_ID(N'MP_MarketplaceType'))
 BEGIN 
 	ALTER TABLE MP_MarketplaceType DROP COLUMN IsOffline
 END 
