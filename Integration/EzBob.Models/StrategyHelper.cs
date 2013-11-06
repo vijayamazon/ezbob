@@ -448,7 +448,7 @@
 		private bool CheckOutstandingLoans(int customerId)
 		{
 			int autoApproveMaxNumOfOutstandingLoans = configurationVariablesRepository.GetByNameAsInt("AutoApproveMaxNumOfOutstandingLoans");
-			int autoApproveMinRepaidPortion = configurationVariablesRepository.GetByNameAsInt("AutoApproveMinRepaidPortion");
+			decimal autoApproveMinRepaidPortion = configurationVariablesRepository.GetByNameAsDecimal("AutoApproveMinRepaidPortion");
 
 			List<Loan> outstandingLoans = GetOutstandingLoans(customerId);
 			if (outstandingLoans.Count > autoApproveMaxNumOfOutstandingLoans)
