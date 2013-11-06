@@ -43,7 +43,7 @@
 				if (string.IsNullOrEmpty(account.AccountNumber)) continue;
 
 				var number = account.AccountNumber.Replace("x", "").Replace(" ", "");
-				var routing = account.RoutingNumber.Replace("-", "").Replace(" ", "");
+				//var routing = account.RoutingNumber.Replace("-", "").Replace(" ", "");
 
 				if (accountNumber.Contains(number))
 				{
