@@ -9,6 +9,7 @@
 	using Infrastructure;
 	using Infrastructure.Filters;
 	using Infrastructure.csrf;
+	using StructureMap;
 	using Web.Models;
 	using NHibernate;
 	using NHibernate.Linq;
@@ -101,7 +102,9 @@
 			_crBuilder.ForceEvaluate(customer, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, false);
 
 	        var yodlees = customer.GetYodleeAccounts().ToList();
-			if (yodlees.Any())
+			var config = ObjectFactory.GetInstance<IEzBobConfiguration>();
+			bool refreshYodleeEnabled = config.RefreshYodleeEnabled;
+			if (yodlees.Any() && refreshYodleeEnabled)
 			{
 				return this.JsonNet(new { hasYodlee = true });
 			}

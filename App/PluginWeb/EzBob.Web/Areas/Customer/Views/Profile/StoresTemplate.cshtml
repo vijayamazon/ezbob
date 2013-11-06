@@ -1,6 +1,11 @@
-﻿@model dynamic
+﻿@using EzBob.Web.Infrastructure
+@using StructureMap
+@model dynamic
 @helper StoresContent()
 {
+    var config = ObjectFactory.GetInstance<IEzBobConfiguration>();
+    bool refreshYodleeEnabled = config.RefreshYodleeEnabled;
+
     <table class="table grey-table account-activity-table">
         <thead>
             <tr>
@@ -25,9 +30,15 @@
                     </td>
                     <td><%= store.displayName %></td>
                     <td class="last Live">LIVE 
-				          <%if(store.type == 'Yodlee') { %>
-                            <button class="button orange updateYodlee refresh_yodlee_help1" data-bank="<%= store.displayName %>">Update</button>
-                        <%}%>
+                              @if (refreshYodleeEnabled)
+                              {
+                                  <div>
+                                      <%if (store.type == 'Yodlee'){%>
+                                      <button class="button orange updateYodlee refresh_yodlee_help1" data-bank="<%= store.displayName %>">Update</button>
+                                      <%}%>
+                                  </div>
+                              }
+
                     </td>
                 </tr>
             <%
