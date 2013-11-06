@@ -27317,180 +27317,6 @@ VALUES
 
 GO
 
-
-
-
-print 'fill ReportUsers + ReportUsersMap'
-GO
-
-INSERT INTO dbo.Security_Application
-	(
-	Name
-	, Description
-	, ApplicationType
-	)
-VALUES
-	(
-	'SE'
-	, NULL
-	, 0
-	)
-GO
-
-INSERT INTO dbo.Security_Application
-	(
-	Name
-	, Description
-	, ApplicationType
-	)
-VALUES
-	(
-	'ScortoCoreWeb'
-	, NULL
-	, 1
-	)
-GO
-
-INSERT INTO dbo.Security_Application
-	(
-	Name
-	, Description
-	, ApplicationType
-	)
-VALUES
-	(
-	'Strategy Builder Server'
-	, NULL
-	, 0
-	)
-GO
-
-INSERT INTO dbo.Security_Application
-	(
-	Name
-	, Description
-	, ApplicationType
-	)
-VALUES
-	(
-	'Admin Server'
-	, NULL
-	, 0
-	)
-GO
-
-INSERT INTO dbo.Security_Application
-	(
-	Name
-	, Description
-	, ApplicationType
-	)
-VALUES
-	(
-	'Patron Server'
-	, NULL
-	, 0
-	)
-GO
-
-INSERT INTO dbo.Security_Application
-	(
-	Name
-	, Description
-	, ApplicationType
-	)
-VALUES
-	(
-	'CreditInspector'
-	, NULL
-	, 1
-	)
-GO
-
-INSERT INTO dbo.Security_Application
-	(
-	Name
-	, Description
-	, ApplicationType
-	)
-VALUES
-	(
-	'Auditor Server'
-	, NULL
-	, 0
-	)
-GO
-
-INSERT INTO dbo.Security_Application
-	(
-	Name
-	, Description
-	, ApplicationType
-	)
-VALUES
-	(
-	'SE (Autonodes)'
-	, NULL
-	, 2
-	)
-GO
-
-INSERT INTO dbo.Security_Application
-	(
-	Name
-	, Description
-	, ApplicationType
-	)
-VALUES
-	(
-	'Scorto Scoring Services'
-	, NULL
-	, 0
-	)
-GO
-
-INSERT INTO dbo.Security_Application
-	(
-	Name
-	, Description
-	, ApplicationType
-	)
-VALUES
-	(
-	'Scorto Authentication Service'
-	, NULL
-	, 0
-	)
-GO
-
-INSERT INTO dbo.Security_Application
-	(
-	Name
-	, Description
-	, ApplicationType
-	)
-VALUES
-	(
-	'Scorto Supervisor'
-	, NULL
-	, 0
-	)
-GO
-
-INSERT INTO dbo.Security_Application
-	(
-	Name
-	, Description
-	, ApplicationType
-	)
-VALUES
-	(
-	'FormsDesigner Server'
-	, NULL
-	, 0
-	)
-GO
-
 INSERT INTO dbo.Security_Permission
 	(
 	Id
@@ -27815,1216 +27641,6 @@ VALUES
 	)
 GO
 
-INSERT INTO dbo.Security_Role
-	(
-	Name
-	, Description
-	)
-VALUES
-	(
-	'Admin'
-	, 'Administrator - Manage users'
-	)
-GO
-
-INSERT INTO dbo.Security_Role
-	(
-	Name
-	, Description
-	)
-VALUES
-	(
-	'SuperUser'
-	, 'SuperUser - Have rights to all applications'
-	)
-GO
-
-INSERT INTO dbo.Security_Role
-	(
-	Name
-	, Description
-	)
-VALUES
-	(
-	'Nova'
-	, 'Nova'
-	)
-GO
-
-INSERT INTO dbo.Security_Role
-	(
-	Name
-	, Description
-	)
-VALUES
-	(
-	'Inspector'
-	, 'Inspector - Web working place'
-	)
-GO
-
-INSERT INTO dbo.Security_Role
-	(
-	Name
-	, Description
-	)
-VALUES
-	(
-	'CreditAnalyst'
-	, 'Credit Analyst - Manage strategies and workflow, uses Maven and Patron'
-	)
-GO
-
-INSERT INTO dbo.Security_Role
-	(
-	Name
-	, Description
-	)
-VALUES
-	(
-	'Maven'
-	, 'Maven - Creates workflow for strategies'
-	)
-GO
-
-INSERT INTO dbo.Security_Role
-	(
-	Name
-	, Description
-	)
-VALUES
-	(
-	'Patron'
-	, 'Patron - Manage nodes and strategies'
-	)
-GO
-
-INSERT INTO dbo.Security_Role
-	(
-	Name
-	, Description
-	)
-VALUES
-	(
-	'Auditor'
-	, 'Auditor - Monitoring system'
-	)
-GO
-
-INSERT INTO dbo.Security_Role
-	(
-	Name
-	, Description
-	)
-VALUES
-	(
-	'FormsDesigner'
-	, 'FormsDesigner - Develop node interface'
-	)
-GO
-
-INSERT INTO dbo.Security_Role
-	(
-	Name
-	, Description
-	)
-VALUES
-	(
-	'Web'
-	, 'Web'
-	)
-GO
-
-INSERT INTO dbo.Security_Role
-	(
-	Name
-	, Description
-	)
-VALUES
-	(
-	'Underwriter'
-	, 'Underwriter'
-	)
-GO
-
-INSERT INTO dbo.Security_Role
-	(
-	Name
-	, Description
-	)
-VALUES
-	(
-	'manager'
-	, 'Manager'
-	)
-GO
-
-INSERT INTO dbo.Security_Role
-	(
-	Name
-	, Description
-	)
-VALUES
-	(
-	'crm'
-	, 'CRM'
-	)
-GO
-
-INSERT INTO dbo.Security_Role
-	(
-	Name
-	, Description
-	)
-VALUES
-	(
-	'Collector'
-	, 'Collector - Allow change only Loans'
-	)
-GO
-
-DECLARE @RoleId INT, @AppId INT
-
-SELECT @RoleId = RoleId FROM Security_Role WHERE Name='Admin'
-SELECT @AppId = ApplicationId FROM Security_Application WHERE Name='Admin Server'
-
-
-INSERT INTO dbo.Security_RoleAppRel
-	(
-	RoleId
-	, AppId
-	)
-VALUES
-	(
-	@RoleId
-	, @AppId
-	)
-
-
-SELECT @AppId = ApplicationId FROM Security_Application WHERE Name='Scorto Authentication Service'
-INSERT INTO dbo.Security_RoleAppRel
-	(
-	RoleId
-	, AppId
-	)
-VALUES
-	(
-	@RoleId
-	, @AppId
-	)
-
-SELECT @RoleId = RoleId FROM Security_Role WHERE Name='SuperUser'
-SELECT @AppId = ApplicationId FROM Security_Application WHERE Name='ScortoCoreWeb'
-
-INSERT INTO dbo.Security_RoleAppRel
-	(
-	RoleId
-	, AppId
-	)
-VALUES
-	(
-	@RoleId
-	, @AppId
-	)
-
-SELECT @AppId = ApplicationId FROM Security_Application WHERE Name='Strategy Builder Server'
-INSERT INTO dbo.Security_RoleAppRel
-	(
-	RoleId
-	, AppId
-	)
-VALUES
-	(
-	@RoleId
-	, @AppId
-	)
-
-SELECT @AppId = ApplicationId FROM Security_Application WHERE Name='Admin Server'
-INSERT INTO dbo.Security_RoleAppRel
-	(
-	RoleId
-	, AppId
-	)
-VALUES
-	(
-	@RoleId
-	, @AppId
-	)
-
-SELECT @AppId = ApplicationId FROM Security_Application WHERE Name='Patron Server'
-INSERT INTO dbo.Security_RoleAppRel
-	(
-	RoleId
-	, AppId
-	)
-VALUES
-	(
-	@RoleId
-	, @AppId
-	)
-
-SELECT @AppId = ApplicationId FROM Security_Application WHERE Name='CreditInspector'
-INSERT INTO dbo.Security_RoleAppRel
-	(
-	RoleId
-	, AppId
-	)
-VALUES
-	(
-	@RoleId
-	, @AppId
-	)
-
-SELECT @AppId = ApplicationId FROM Security_Application WHERE Name='Auditor Server'
-INSERT INTO dbo.Security_RoleAppRel
-	(
-	RoleId
-	, AppId
-	)
-VALUES
-	(
-	@RoleId
-	, @AppId
-	)
-
-SELECT @AppId = ApplicationId FROM Security_Application WHERE Name='SE (Autonodes)'
-INSERT INTO dbo.Security_RoleAppRel
-	(
-	RoleId
-	, AppId
-	)
-VALUES
-	(
-	@RoleId
-	, @AppId
-	)
-
-SELECT @AppId = ApplicationId FROM Security_Application WHERE Name='Scorto Scoring Services'
-INSERT INTO dbo.Security_RoleAppRel
-	(
-	RoleId
-	, AppId
-	)
-VALUES
-	(
-	@RoleId
-	, @AppId
-	)
-
-SELECT @AppId = ApplicationId FROM Security_Application WHERE Name='Scorto Authentication Service'
-INSERT INTO dbo.Security_RoleAppRel
-	(
-	RoleId
-	, AppId
-	)
-VALUES
-	(
-	@RoleId
-	, @AppId
-	)
-
-SELECT @AppId = ApplicationId FROM Security_Application WHERE Name='Scorto Supervisor'
-INSERT INTO dbo.Security_RoleAppRel
-	(
-	RoleId
-	, AppId
-	)
-VALUES
-	(
-	@RoleId
-	, @AppId
-	)
-
-SELECT @AppId = ApplicationId FROM Security_Application WHERE Name='FormsDesigner Server'
-INSERT INTO dbo.Security_RoleAppRel
-	(
-	RoleId
-	, AppId
-	)
-VALUES
-	(
-	@RoleId
-	, @AppId
-	)
-	
-	
-	
-	
-	
-	
-SELECT @RoleId = RoleId FROM Security_Role WHERE Name='Nova'
-SELECT @AppId = ApplicationId FROM Security_Application WHERE Name='ScortoCoreWeb'
-
-INSERT INTO dbo.Security_RoleAppRel
-	(
-	RoleId
-	, AppId
-	)
-VALUES
-	(
-	@RoleId
-	, @AppId
-	)
-
-SELECT @AppId = ApplicationId FROM Security_Application WHERE Name='Strategy Builder Server'
-
-INSERT INTO dbo.Security_RoleAppRel
-	(
-	RoleId
-	, AppId
-	)
-VALUES
-	(
-	@RoleId
-	, @AppId
-	)
-
-SELECT @AppId = ApplicationId FROM Security_Application WHERE Name='Admin Server'
-
-INSERT INTO dbo.Security_RoleAppRel
-	(
-	RoleId
-	, AppId
-	)
-VALUES
-	(
-	@RoleId
-	, @AppId
-	)
-SELECT @AppId = ApplicationId FROM Security_Application WHERE Name='Patron Server'
-
-INSERT INTO dbo.Security_RoleAppRel
-	(
-	RoleId
-	, AppId
-	)
-VALUES
-	(
-	@RoleId
-	, @AppId
-	)
-
-
-SELECT @AppId = ApplicationId FROM Security_Application WHERE Name='CreditInspector'
-INSERT INTO dbo.Security_RoleAppRel
-	(
-	RoleId
-	, AppId
-	)
-VALUES
-	(
-	@RoleId
-	, @AppId
-	)
-
-SELECT @AppId = ApplicationId FROM Security_Application WHERE Name='Auditor Server'
-
-INSERT INTO dbo.Security_RoleAppRel
-	(
-	RoleId
-	, AppId
-	)
-VALUES
-	(
-	@RoleId
-	, @AppId
-	)
-
-SELECT @AppId = ApplicationId FROM Security_Application WHERE Name='SE (Autonodes)'
-
-INSERT INTO dbo.Security_RoleAppRel
-	(
-	RoleId
-	, AppId
-	)
-VALUES
-	(
-	@RoleId
-	, @AppId
-	)
-
-SELECT @AppId = ApplicationId FROM Security_Application WHERE Name='Scorto Scoring Services'
-
-INSERT INTO dbo.Security_RoleAppRel
-	(
-	RoleId
-	, AppId
-	)
-VALUES
-	(
-	@RoleId
-	, @AppId
-	)
-
-SELECT @AppId = ApplicationId FROM Security_Application WHERE Name='Scorto Authentication Service'
-
-INSERT INTO dbo.Security_RoleAppRel
-	(
-	RoleId
-	, AppId
-	)
-VALUES
-	(
-	@RoleId
-	, @AppId
-	)
-
-SELECT @AppId = ApplicationId FROM Security_Application WHERE Name='Scorto Supervisor'
-
-INSERT INTO dbo.Security_RoleAppRel
-	(
-	RoleId
-	, AppId
-	)
-VALUES
-	(
-	@RoleId
-	, @AppId
-	)
-
-SELECT @AppId = ApplicationId FROM Security_Application WHERE Name='FormsDesigner Server'
-
-INSERT INTO dbo.Security_RoleAppRel
-	(
-	RoleId
-	, AppId
-	)
-VALUES
-	(
-	@RoleId
-	, @AppId
-	)
-
-SELECT @AppId = ApplicationId FROM Security_Application WHERE Name='ScortoCoreWeb'
-SELECT @RoleId = RoleId FROM Security_Role WHERE Name='Inspector'
-
-INSERT INTO dbo.Security_RoleAppRel
-	(
-	RoleId
-	, AppId
-	)
-VALUES
-	(
-	@RoleId
-	, @AppId
-	)
-
-SELECT @AppId = ApplicationId FROM Security_Application WHERE Name='Scorto Authentication Service'
-
-INSERT INTO dbo.Security_RoleAppRel
-	(
-	RoleId
-	, AppId
-	)
-VALUES
-	(
-	@RoleId
-	, @AppId
-	)
-
-SELECT @AppId = ApplicationId FROM Security_Application WHERE Name='Strategy Builder Server'
-SELECT @RoleId = RoleId FROM Security_Role WHERE Name='Maven'
-
-INSERT INTO dbo.Security_RoleAppRel
-	(
-	RoleId
-	, AppId
-	)
-VALUES
-	(
-	@RoleId
-	, @AppId
-	)
-
-SELECT @AppId = ApplicationId FROM Security_Application WHERE Name='Scorto Authentication Service'
-
-INSERT INTO dbo.Security_RoleAppRel
-	(
-	RoleId
-	, AppId
-	)
-VALUES
-	(
-	@RoleId
-	, @AppId
-	)
-
-SELECT @RoleId = RoleId FROM Security_Role WHERE Name='Patron'
-
-SELECT @AppId = ApplicationId FROM Security_Application WHERE Name='Patron Server'
-INSERT INTO dbo.Security_RoleAppRel
-	(
-	RoleId
-	, AppId
-	)
-VALUES
-	(
-	@RoleId
-	, @AppId
-	)
-
-SELECT @AppId = ApplicationId FROM Security_Application WHERE Name='Scorto Authentication Service'
-
-INSERT INTO dbo.Security_RoleAppRel
-	(
-	RoleId
-	, AppId
-	)
-VALUES
-	(
-	@RoleId
-	, @AppId
-	)
-
-SELECT @AppId = ApplicationId FROM Security_Application WHERE Name='Auditor Server'
-SELECT @RoleId = RoleId FROM Security_Role WHERE Name='Auditor'
-
-INSERT INTO dbo.Security_RoleAppRel
-	(
-	RoleId
-	, AppId
-	)
-VALUES
-	(
-	@RoleId
-	, @AppId
-	)
-
-SELECT @AppId = ApplicationId FROM Security_Application WHERE Name='Scorto Authentication Service'
-
-INSERT INTO dbo.Security_RoleAppRel
-	(
-	RoleId
-	, AppId
-	)
-VALUES
-	(
-	@RoleId
-	, @AppId
-	)
-
-SELECT @RoleId = RoleId FROM Security_Role WHERE Name='FormsDesigner'
-
-SELECT @AppId = ApplicationId FROM Security_Application WHERE Name='FormsDesigner Server'
-INSERT INTO dbo.Security_RoleAppRel
-	(
-	RoleId
-	, AppId
-	)
-VALUES
-	(
-	@RoleId
-	, @AppId
-	)
-
-SELECT @RoleId = RoleId FROM Security_Role WHERE Name='Web'
-SELECT @AppId = ApplicationId FROM Security_Application WHERE Name='ScortoCoreWeb'
-
-INSERT INTO dbo.Security_RoleAppRel
-	(
-	RoleId
-	, AppId
-	)
-VALUES
-	(
-	@RoleId
-	, @AppId
-	)
-
-GO
-
-
-DECLARE @RoleId INT, @PermissionId INT
-
-SELECT @RoleId = RoleId FROM Security_Role WHERE Name='Underwriter'
-SELECT @PermissionId = Id FROM Security_Permission WHERE Name='EmailConfirmationButton'
-
-
-
-INSERT INTO dbo.Security_RolePermissionRel
-	(
-	RoleId
-	, PermissionId
-	)
-VALUES
-	(
-	@RoleId
-	, @PermissionId
-	)
-
-SELECT @PermissionId = Id FROM Security_Permission WHERE Name='CustomerStatus'
-
-INSERT INTO dbo.Security_RolePermissionRel
-	(
-	RoleId
-	, PermissionId
-	)
-VALUES
-	(
-	@RoleId
-	, @PermissionId
-	)
-
-SELECT @PermissionId = Id FROM Security_Permission WHERE Name='TestUser'
-
-INSERT INTO dbo.Security_RolePermissionRel
-	(
-	RoleId
-	, PermissionId
-	)
-VALUES
-	(
-	@RoleId
-	, @PermissionId
-	)
-
-SELECT @PermissionId = Id FROM Security_Permission WHERE Name='CRM'
-
-INSERT INTO dbo.Security_RolePermissionRel
-	(
-	RoleId
-	, PermissionId
-	)
-VALUES
-	(
-	@RoleId
-	, @PermissionId
-	)
-
-SELECT @PermissionId = Id FROM Security_Permission WHERE Name='NewCreditLineButton'
-
-INSERT INTO dbo.Security_RolePermissionRel
-	(
-	RoleId
-	, PermissionId
-	)
-VALUES
-	(
-	@RoleId
-	, @PermissionId
-	)
-
-SELECT @PermissionId = Id FROM Security_Permission WHERE Name='CreditLineFields'
-
-INSERT INTO dbo.Security_RolePermissionRel
-	(
-	RoleId
-	, PermissionId
-	)
-VALUES
-	(
-	@RoleId
-	, @PermissionId
-	)
-
-SELECT @PermissionId = Id FROM Security_Permission WHERE Name='ApproveReject'
-
-INSERT INTO dbo.Security_RolePermissionRel
-	(
-	RoleId
-	, PermissionId
-	)
-VALUES
-	(
-	@RoleId
-	, @PermissionId
-	)
-
-SELECT @PermissionId = Id FROM Security_Permission WHERE Name='Escalate'
-
-INSERT INTO dbo.Security_RolePermissionRel
-	(
-	RoleId
-	, PermissionId
-	)
-VALUES
-	(
-	@RoleId
-	, @PermissionId
-	)
-
-SELECT @PermissionId = Id FROM Security_Permission WHERE Name='RecheckMarketplaces'
-
-INSERT INTO dbo.Security_RolePermissionRel
-	(
-	RoleId
-	, PermissionId
-	)
-VALUES
-	(
-	@RoleId
-	, @PermissionId
-	)
-
-SELECT @PermissionId = Id FROM Security_Permission WHERE Name='CheckBankAccount'
-
-INSERT INTO dbo.Security_RolePermissionRel
-	(
-	RoleId
-	, PermissionId
-	)
-VALUES
-	(
-	@RoleId
-	, @PermissionId
-	)
-
-SELECT @PermissionId = Id FROM Security_Permission WHERE Name='RecheckPayPal'
-
-INSERT INTO dbo.Security_RolePermissionRel
-	(
-	RoleId
-	, PermissionId
-	)
-VALUES
-	(
-	@RoleId
-	, @PermissionId
-	)
-
-SELECT @PermissionId = Id FROM Security_Permission WHERE Name='RunCreditBureauChecks'
-
-INSERT INTO dbo.Security_RolePermissionRel
-	(
-	RoleId
-	, PermissionId
-	)
-VALUES
-	(
-	@RoleId
-	, @PermissionId
-	)
-
-SELECT @PermissionId = Id FROM Security_Permission WHERE Name='SendingMessagesToClients'
-
-INSERT INTO dbo.Security_RolePermissionRel
-	(
-	RoleId
-	, PermissionId
-	)
-VALUES
-	(
-	@RoleId
-	, @PermissionId
-	)
-
-SELECT @PermissionId = Id FROM Security_Permission WHERE Name='OpenBug'
-
-INSERT INTO dbo.Security_RolePermissionRel
-	(
-	RoleId
-	, PermissionId
-	)
-VALUES
-	(
-	@RoleId
-	, @PermissionId
-	)
-
-SELECT @PermissionId = Id FROM Security_Permission WHERE Name='AddBankAccount'
-
-INSERT INTO dbo.Security_RolePermissionRel
-	(
-	RoleId
-	, PermissionId
-	)
-VALUES
-	(
-	@RoleId
-	, @PermissionId
-	)
-
-SELECT @PermissionId = Id FROM Security_Permission WHERE Name='ChangeBankAccount'
-
-INSERT INTO dbo.Security_RolePermissionRel
-	(
-	RoleId
-	, PermissionId
-	)
-VALUES
-	(
-	@RoleId
-	, @PermissionId
-	)
-
-SELECT @PermissionId = Id FROM Security_Permission WHERE Name='AddDebitCard'
-
-INSERT INTO dbo.Security_RolePermissionRel
-	(
-	RoleId
-	, PermissionId
-	)
-VALUES
-	(
-	@RoleId
-	, @PermissionId
-	)
-
-SELECT @PermissionId = Id FROM Security_Permission WHERE Name='RerunningMarketplaces'
-
-INSERT INTO dbo.Security_RolePermissionRel
-	(
-	RoleId
-	, PermissionId
-	)
-VALUES
-	(
-	@RoleId
-	, @PermissionId
-	)
-
-SELECT @PermissionId = Id FROM Security_Permission WHERE Name='RerunningCreditCheck'
-
-INSERT INTO dbo.Security_RolePermissionRel
-	(
-	RoleId
-	, PermissionId
-	)
-VALUES
-	(
-	@RoleId
-	, @PermissionId
-	)
-
-SELECT @PermissionId = Id FROM Security_Permission WHERE Name='EmailConfirmationButton'
-SELECT @RoleId = RoleId FROM Security_Role WHERE Name='manager'
-
-INSERT INTO dbo.Security_RolePermissionRel
-	(
-	RoleId
-	, PermissionId
-	)
-VALUES
-	(
-	@RoleId
-	, @PermissionId
-	)
-
-SELECT @PermissionId = Id FROM Security_Permission WHERE Name='CustomerStatus'
-
-INSERT INTO dbo.Security_RolePermissionRel
-	(
-	RoleId
-	, PermissionId
-	)
-VALUES
-	(
-	@RoleId
-	, @PermissionId
-	)
-
-
-SELECT @PermissionId = Id FROM Security_Permission WHERE Name='TestUser'
-INSERT INTO dbo.Security_RolePermissionRel
-	(
-	RoleId
-	, PermissionId
-	)
-VALUES
-	(
-	@RoleId
-	, @PermissionId
-	)
-
-
-SELECT @PermissionId = Id FROM Security_Permission WHERE Name='CRM'
-INSERT INTO dbo.Security_RolePermissionRel
-	(
-	RoleId
-	, PermissionId
-	)
-VALUES
-	(
-	@RoleId
-	, @PermissionId
-	)
-
-SELECT @PermissionId = Id FROM Security_Permission WHERE Name='NewCreditLineButton'
-
-INSERT INTO dbo.Security_RolePermissionRel
-	(
-	RoleId
-	, PermissionId
-	)
-VALUES
-	(
-	@RoleId
-	, @PermissionId
-	)
-
-
-SELECT @PermissionId = Id FROM Security_Permission WHERE Name='CreditLineFields'
-INSERT INTO dbo.Security_RolePermissionRel
-	(
-	RoleId
-	, PermissionId
-	)
-VALUES
-	(
-	@RoleId
-	, @PermissionId
-	)
-
-SELECT @PermissionId = Id FROM Security_Permission WHERE Name='ApproveReject'
-
-INSERT INTO dbo.Security_RolePermissionRel
-	(
-	RoleId
-	, PermissionId
-	)
-VALUES
-	(
-	@RoleId
-	, @PermissionId
-	)
-
-
-SELECT @PermissionId = Id FROM Security_Permission WHERE Name='RecheckMarketplaces'
-INSERT INTO dbo.Security_RolePermissionRel
-	(
-	RoleId
-	, PermissionId
-	)
-VALUES
-	(
-	@RoleId
-	, @PermissionId
-	)
-
-SELECT @PermissionId = Id FROM Security_Permission WHERE Name='CheckBankAccount'
-
-INSERT INTO dbo.Security_RolePermissionRel
-	(
-	RoleId
-	, PermissionId
-	)
-VALUES
-	(
-	@RoleId
-	, @PermissionId
-	)
-
-
-SELECT @PermissionId = Id FROM Security_Permission WHERE Name='RecheckPayPal'
-INSERT INTO dbo.Security_RolePermissionRel
-	(
-	RoleId
-	, PermissionId
-	)
-VALUES
-	(
-	@RoleId
-	, @PermissionId
-	)
-
-SELECT @PermissionId = Id FROM Security_Permission WHERE Name='RunCreditBureauChecks'
-
-INSERT INTO dbo.Security_RolePermissionRel
-	(
-	RoleId
-	, PermissionId
-	)
-VALUES
-	(
-	@RoleId
-	, @PermissionId
-	)
-
-SELECT @PermissionId = Id FROM Security_Permission WHERE Name='SendingMessagesToClients'
-
-INSERT INTO dbo.Security_RolePermissionRel
-	(
-	RoleId
-	, PermissionId
-	)
-VALUES
-	(
-	@RoleId
-	, @PermissionId
-	)
-
-SELECT @PermissionId = Id FROM Security_Permission WHERE Name='EditLoanDetails'
-
-INSERT INTO dbo.Security_RolePermissionRel
-	(
-	RoleId
-	, PermissionId
-	)
-VALUES
-	(
-	@RoleId
-	, @PermissionId
-	)
-
-SELECT @PermissionId = Id FROM Security_Permission WHERE Name='OpenBug'
-
-INSERT INTO dbo.Security_RolePermissionRel
-	(
-	RoleId
-	, PermissionId
-	)
-VALUES
-	(
-	@RoleId
-	, @PermissionId
-	)
-
-SELECT @PermissionId = Id FROM Security_Permission WHERE Name='AddBankAccount'
-
-INSERT INTO dbo.Security_RolePermissionRel
-	(
-	RoleId
-	, PermissionId
-	)
-VALUES
-	(
-	@RoleId
-	, @PermissionId
-	)
-
-SELECT @PermissionId = Id FROM Security_Permission WHERE Name='ChangeBankAccount'
-
-INSERT INTO dbo.Security_RolePermissionRel
-	(
-	RoleId
-	, PermissionId
-	)
-VALUES
-	(
-	@RoleId
-	, @PermissionId
-	)
-
-SELECT @PermissionId = Id FROM Security_Permission WHERE Name='AddDebitCard'
-
-INSERT INTO dbo.Security_RolePermissionRel
-	(
-	RoleId
-	, PermissionId
-	)
-VALUES
-	(
-	@RoleId
-	, @PermissionId
-	)
-
-SELECT @PermissionId = Id FROM Security_Permission WHERE Name='RerunningMarketplaces'
-
-INSERT INTO dbo.Security_RolePermissionRel
-	(
-	RoleId
-	, PermissionId
-	)
-VALUES
-	(
-	@RoleId
-	, @PermissionId
-	)
-
-
-SELECT @PermissionId = Id FROM Security_Permission WHERE Name='RerunningCreditCheck'
-INSERT INTO dbo.Security_RolePermissionRel
-	(
-	RoleId
-	, PermissionId
-	)
-VALUES
-	(
-	@RoleId
-	, @PermissionId
-	)
-
-
-SELECT @PermissionId = Id FROM Security_Permission WHERE Name='PacnetManualButton'
-INSERT INTO dbo.Security_RolePermissionRel
-	(
-	RoleId
-	, PermissionId
-	)
-VALUES
-	(
-	@RoleId
-	, @PermissionId
-	)
-
-SELECT @RoleId = RoleId FROM Security_Role WHERE Name='crm'
-
-SELECT @PermissionId = Id FROM Security_Permission WHERE Name='CRM'
-INSERT INTO dbo.Security_RolePermissionRel
-	(
-	RoleId
-	, PermissionId
-	)
-VALUES
-	(
-	@RoleId
-	, @PermissionId
-	)
-
-SELECT @PermissionId = Id FROM Security_Permission WHERE Name='CheckBankAccount'
-
-INSERT INTO dbo.Security_RolePermissionRel
-	(
-	RoleId
-	, PermissionId
-	)
-VALUES
-	(
-	@RoleId
-	, @PermissionId
-	)
-
-SELECT @PermissionId = Id FROM Security_Permission WHERE Name='AddDebitCard'
-
-INSERT INTO dbo.Security_RolePermissionRel
-	(
-	RoleId
-	, PermissionId
-	)
-VALUES
-	(
-	@RoleId
-	, @PermissionId
-	)
-
-SELECT @RoleId = RoleId FROM Security_Role WHERE Name='Collector'
-
-SELECT @PermissionId = Id FROM Security_Permission WHERE Name='EditLoanDetails'
-INSERT INTO dbo.Security_RolePermissionRel
-	(
-	RoleId
-	, PermissionId
-	)
-VALUES
-	(
-	@RoleId
-	, @PermissionId
-	)
-
-	
-GO
-
-print 'insert into Security_User + Security_UserRolerRelation'
-
-GO
-
-print 'insert into ServiceRegistration'
-print 'example:'
-print 'INSERT INTO dbo.ServiceRegistration
-	(
-	[key]
-	)
-VALUES
-	(
-	''\\EZPROD01\C:\inetpub\ezbob\service\agent\scortosrv.exe''
-	)
-GO'
-
-GO
-
-
-
-
 INSERT INTO dbo.SiteAnalyticsCodes
 	(
 	Name
@@ -29143,10 +27759,6 @@ VALUES
 	'PageGetCash'
 	, 'GetCash page unique visitors'
 	)
-GO
-
-print 'verify all Strategy_x tables are filled like prod after running publisher'
-
 GO
 
 INSERT INTO dbo.YodleeBanks
@@ -30499,67 +29111,6 @@ VALUES
 	)
 GO
 
-
-INSERT INTO dbo.Security_User
- (
- UserName
- , FullName
- , Password
- , CreationDate
- , IsDeleted
- , EMail
- , CreateUserId
- , DeletionDate
- , DeleteUserId
- , BranchId
- , PassSetTime
- , LoginFailedCount
- , DisableDate
- , LastBadLogin
- , PassExpPeriod
- , ForcePassChange
- , DisablePassChange
- , DeleteId
- , CertificateThumbprint
- , DomainUserName
- , SecurityQuestion1Id
- , SecurityAnswer1
- , IsPasswordRestored
- )
-VALUES
- (
- '1'
- , '1'
- , '7aQnKVl9icj6UbypDHxzCNuCZF8='
- , '2007-01-19 16:22:08'
- , 0
- , NULL
- , NULL
- , NULL
- , NULL
- , 1
- , '2013-02-22 16:57:39'
- , NULL
- , NULL
- , NULL
- , NULL
- , NULL
- , NULL
- , NULL
- , NULL
- , NULL
- , NULL
- , NULL
- , 0
- )
-GO
-
-DECLARE @SecurityUserId INT, @SuperUserRoleId INT
-SELECT @SecurityUserId = UserId FROM Security_User WHERE UserName='1'
-SELECT @SuperUserRoleId = RoleId FROM Security_Role WHERE Name='SuperUser'
-INSERT Security_UserRoleRelation VALUES (@SecurityUserId, @SuperUserRoleId)
-GO
-
 INSERT INTO dbo.StrategyAreas
 	(
 	Name
@@ -30583,8 +29134,6 @@ VALUES
 	, NULL
 	)
 GO
-
-
 
 INSERT INTO dbo.StrategyTasks
 	(
@@ -30887,127 +29436,1109 @@ VALUES
 	)
 GO
 
-INSERT INTO dbo.Security_User
+
+SET IDENTITY_INSERT Security_User ON
+INSERT INTO Security_User (UserId, UserName, FullName, Password, CreationDate, IsDeleted, EMail, CreateUserId, DeletionDate, DeleteUserId, BranchId, PassSetTime, LoginFailedCount, DisableDate, LastBadLogin, PassExpPeriod, ForcePassChange, DisablePassChange, DeleteId, CertificateThumbprint, DomainUserName, SecurityQuestion1Id, SecurityAnswer1, IsPasswordRestored)
+	VALUES (1,'se', 'se', '+ToHzsMUj9KHoOGKkLhtXPWoM4I=', '2009-01-01 12:00:00', 0, NULL, NULL, NULL, NULL, 1, '2013-08-27 09:35:54', NULL, NULL, NULL, NULL, NULL, NULL, NULL, '3CC20FD087C832CC3066A139616590F3F7444CF6', NULL, NULL, NULL, 0)
+
+INSERT INTO Security_User (UserId, UserName, FullName, Password, CreationDate, IsDeleted, EMail, CreateUserId, DeletionDate, DeleteUserId, BranchId, PassSetTime, LoginFailedCount, DisableDate, LastBadLogin, PassExpPeriod, ForcePassChange, DisablePassChange, DeleteId, CertificateThumbprint, DomainUserName, SecurityQuestion1Id, SecurityAnswer1, IsPasswordRestored)
+	VALUES (6,'admin', 'admin', 'eH45XgKrzkU2WiCWJQ2Rzcx9oh0=', '2009-01-01 12:00:00', 0, NULL, NULL, NULL, NULL, 1, '2013-08-27 09:35:54.46', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)
+
+INSERT INTO Security_User (UserId, UserName, FullName, Password, CreationDate, IsDeleted, EMail, CreateUserId, DeletionDate, DeleteUserId, BranchId, PassSetTime, LoginFailedCount, DisableDate, LastBadLogin, PassExpPeriod, ForcePassChange, DisablePassChange, DeleteId, CertificateThumbprint, DomainUserName, SecurityQuestion1Id, SecurityAnswer1, IsPasswordRestored)
+	VALUES (9,'1', '1', '7aQnKVl9icj6UbypDHxzCNuCZF8=', '2007-01-19 16:22:08', 0, NULL, NULL, NULL, NULL, 1, '2013-08-27 09:35:54', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0)
+
+INSERT INTO Security_User (UserId, UserName, FullName, Password, CreationDate, IsDeleted, EMail, CreateUserId, DeletionDate, DeleteUserId, BranchId, PassSetTime, LoginFailedCount, DisableDate, LastBadLogin, PassExpPeriod, ForcePassChange, DisablePassChange, DeleteId, CertificateThumbprint, DomainUserName, SecurityQuestion1Id, SecurityAnswer1, IsPasswordRestored)
+	VALUES (21,'underwriter', 'Underwriter', 'mL5aow+h/rsJ1ICRUjuPZezL/4g=', '2007-01-19 16:22:08', 0, NULL, NULL, NULL, NULL, 1, '2013-08-27 09:35:54', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0)
+
+INSERT INTO Security_User (UserId, UserName, FullName, Password, CreationDate, IsDeleted, EMail, CreateUserId, DeletionDate, DeleteUserId, BranchId, PassSetTime, LoginFailedCount, DisableDate, LastBadLogin, PassExpPeriod, ForcePassChange, DisablePassChange, DeleteId, CertificateThumbprint, DomainUserName, SecurityQuestion1Id, SecurityAnswer1, IsPasswordRestored)
+	VALUES (22,'underwriter1', 'Underwriter1', 'R828Ux4okgcNdbdSRmCHS7vN6kU=', '2007-01-19 16:22:08', 0, NULL, NULL, NULL, NULL, 1, '2013-08-27 09:35:54', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0)
+
+INSERT INTO Security_User (UserId, UserName, FullName, Password, CreationDate, IsDeleted, EMail, CreateUserId, DeletionDate, DeleteUserId, BranchId, PassSetTime, LoginFailedCount, DisableDate, LastBadLogin, PassExpPeriod, ForcePassChange, DisablePassChange, DeleteId, CertificateThumbprint, DomainUserName, SecurityQuestion1Id, SecurityAnswer1, IsPasswordRestored)
+	VALUES (23,'underwriter3', 'Underwriter3', 't5atbT5KZMXr687siyaH4lug10U=', '2007-01-19 16:22:08', 0, NULL, NULL, NULL, NULL, 1, '2013-08-27 09:35:54.46', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)
+	
+INSERT INTO Security_User (UserId, UserName, FullName, Password, CreationDate, IsDeleted, EMail, CreateUserId, DeletionDate, DeleteUserId, BranchId, PassSetTime, LoginFailedCount, DisableDate, LastBadLogin, PassExpPeriod, ForcePassChange, DisablePassChange, DeleteId, CertificateThumbprint, DomainUserName, SecurityQuestion1Id, SecurityAnswer1, IsPasswordRestored)
+	VALUES (24,'underwriter2', 'Underwriter2', 'HyC5nDQds6iZRDbdOl4sUpW6TFM=', '2007-01-19 16:22:08', 0, NULL, NULL, NULL, NULL, 1, '2013-08-27 09:35:54.46', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)
+
+INSERT INTO Security_User (UserId, UserName, FullName, Password, CreationDate, IsDeleted, EMail, CreateUserId, DeletionDate, DeleteUserId, BranchId, PassSetTime, LoginFailedCount, DisableDate, LastBadLogin, PassExpPeriod, ForcePassChange, DisablePassChange, DeleteId, CertificateThumbprint, DomainUserName, SecurityQuestion1Id, SecurityAnswer1, IsPasswordRestored)
+	VALUES (25,'manager', 'manager', 'sWUtb0ssp9Rqv25RhYTdNTcY0vE=', '2013-02-12 18:04:57', 0, NULL, NULL, NULL, NULL, 1, '2013-08-27 09:35:54', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0)
+
+INSERT INTO Security_User (UserId, UserName, FullName, Password, CreationDate, IsDeleted, EMail, CreateUserId, DeletionDate, DeleteUserId, BranchId, PassSetTime, LoginFailedCount, DisableDate, LastBadLogin, PassExpPeriod, ForcePassChange, DisablePassChange, DeleteId, CertificateThumbprint, DomainUserName, SecurityQuestion1Id, SecurityAnswer1, IsPasswordRestored)
+	VALUES (26,'crm', 'crm', 'wPNgvVqc+EG+SGlzRJDdpOh0Qdk=', '2013-02-12 18:05:17', 0, NULL, NULL, NULL, NULL, 1, '2013-08-27 09:35:54.46', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)
+
+
+SET IDENTITY_INSERT Security_User OFF
+
+GO
+
+SET IDENTITY_INSERT Security_Role ON
+
+INSERT INTO Security_Role (RoleId, Name, Description)
+	VALUES (1,'Admin', 'Administrator - Manage users')
+	
+INSERT INTO Security_Role (RoleId, Name, Description)
+	VALUES (22,'SuperUser', 'SuperUser - Have rights to all applications')
+	
+INSERT INTO Security_Role (RoleId, Name, Description)
+	VALUES (23,'Nova', 'Nova')
+	
+INSERT INTO Security_Role (RoleId, Name, Description)
+	VALUES (24,'Inspector', 'Inspector - Web working place')
+	
+INSERT INTO Security_Role (RoleId, Name, Description)
+	VALUES (25,'CreditAnalyst', 'Credit Analyst - Manage strategies and workflow, uses Maven and Patron')
+	
+INSERT INTO Security_Role (RoleId, Name, Description)
+	VALUES (26,'Maven', 'Maven - Creates workflow for strategies')
+	
+INSERT INTO Security_Role (RoleId, Name, Description)
+	VALUES (27,'Patron', 'Patron - Manage nodes and strategies')
+	
+INSERT INTO Security_Role (RoleId, Name, Description)
+	VALUES (28,'Auditor', 'Auditor - Monitoring system')
+	
+INSERT INTO Security_Role (RoleId, Name, Description)
+	VALUES (29,'FormsDesigner', 'FormsDesigner - Develop node interface')
+	
+INSERT INTO Security_Role (RoleId, Name, Description)
+	VALUES (30,'Web', 'Web')
+	
+INSERT INTO Security_Role (RoleId, Name, Description)
+	VALUES (31,'Underwriter', 'Underwriter')
+	
+INSERT INTO Security_Role (RoleId, Name, Description)
+	VALUES (32,'manager', 'Manager')
+	
+INSERT INTO Security_Role (RoleId, Name, Description)
+	VALUES (33,'crm', 'CRM')
+	
+SET IDENTITY_INSERT Security_Role OFF
+
+GO
+
+SET IDENTITY_INSERT Security_Application ON
+
+INSERT INTO Security_Application (ApplicationId,Name,Description,ApplicationType)
+	VALUES (-1, 'SE', NULL, 0)
+
+INSERT INTO Security_Application (ApplicationId,Name,Description,ApplicationType)
+	VALUES (1, 'ScortoCoreWeb', NULL, 1)
+
+INSERT INTO Security_Application (ApplicationId,Name,Description,ApplicationType)
+	VALUES (2, 'Strategy Builder Server', NULL, 0)
+
+INSERT INTO Security_Application (ApplicationId,Name,Description,ApplicationType)
+	VALUES (3, 'Admin Server', NULL, 0)
+
+INSERT INTO Security_Application (ApplicationId,Name,Description,ApplicationType)
+	VALUES (4, 'Patron Server', NULL, 0)
+
+INSERT INTO Security_Application (ApplicationId,Name,Description,ApplicationType)
+	VALUES (6, 'CreditInspector', NULL, 1)
+
+INSERT INTO Security_Application (ApplicationId,Name,Description,ApplicationType)
+	VALUES (7, 'Auditor Server', NULL, 0)
+
+INSERT INTO Security_Application (ApplicationId,Name,Description,ApplicationType)
+	VALUES (8, 'SE (Autonodes)', NULL, 2)
+
+INSERT INTO Security_Application (ApplicationId,Name,Description,ApplicationType)
+	VALUES (9, 'Scorto Scoring Services', NULL, 0)
+
+INSERT INTO Security_Application (ApplicationId,Name,Description,ApplicationType)
+	VALUES (10, 'Scorto Authentication Service', NULL, 0)
+
+INSERT INTO Security_Application (ApplicationId,Name,Description,ApplicationType)
+	VALUES (11, 'Scorto Supervisor', NULL, 0)
+
+INSERT INTO Security_Application (ApplicationId,Name,Description,ApplicationType)
+	VALUES (12, 'FormsDesigner Server', NULL, 0)
+
+SET IDENTITY_INSERT Security_Application OFF
+
+GO
+
+
+INSERT INTO dbo.Security_RoleAppRel
 	(
-	UserName
-	, FullName
-	, Password
-	, CreationDate
-	, IsDeleted
-	, EMail
-	, CreateUserId
-	, DeletionDate
-	, DeleteUserId
-	, BranchId
-	, PassSetTime
-	, LoginFailedCount
-	, DisableDate
-	, LastBadLogin
-	, PassExpPeriod
-	, ForcePassChange
-	, DisablePassChange
-	, DeleteId
-	, CertificateThumbprint
-	, DomainUserName
-	, SecurityQuestion1Id
-	, SecurityAnswer1
-	, IsPasswordRestored
+	RoleId
+	, AppId
 	)
 VALUES
 	(
-	'underwriter1'
-	, 'Underwriter1'
-	, 'R828Ux4okgcNdbdSRmCHS7vN6kU='
-	, '2007-01-19 16:22:08'
-	, 0
-	, NULL
-	, NULL
-	, NULL
-	, NULL
+	1
+	, 3
+	)
+GO
+
+INSERT INTO dbo.Security_RoleAppRel
+	(
+	RoleId
+	, AppId
+	)
+VALUES
+	(
+	1
+	, 10
+	)
+GO
+
+INSERT INTO dbo.Security_RoleAppRel
+	(
+	RoleId
+	, AppId
+	)
+VALUES
+	(
+	22
 	, 1
-	, '2013-02-22 16:57:39'
-	, 0
-	, NULL
-	, NULL
-	, NULL
-	, NULL
-	, NULL
-	, NULL
-	, NULL
-	, NULL
-	, NULL
-	, NULL
-	, 0
 	)
 GO
 
-INSERT INTO dbo.Security_User
+INSERT INTO dbo.Security_RoleAppRel
 	(
-	UserName
-	, FullName
-	, Password
-	, CreationDate
-	, IsDeleted
-	, EMail
-	, CreateUserId
-	, DeletionDate
-	, DeleteUserId
-	, BranchId
-	, PassSetTime
-	, LoginFailedCount
-	, DisableDate
-	, LastBadLogin
-	, PassExpPeriod
-	, ForcePassChange
-	, DisablePassChange
-	, DeleteId
-	, CertificateThumbprint
-	, DomainUserName
-	, SecurityQuestion1Id
-	, SecurityAnswer1
-	, IsPasswordRestored
+	RoleId
+	, AppId
 	)
 VALUES
 	(
-	'manager'
-	, 'manager'
-	, 'SACt6LyFPGLIGtJ+8UiuAtBkiLo='
-	, '2013-02-25 16:31:31'
-	, 0
-	, ''
-	, NULL
-	, NULL
-	, NULL
-	, 0
-	, '2013-02-25 16:31:31'
-	, NULL
-	, NULL
-	, NULL
-	, NULL
-	, NULL
-	, NULL
-	, NULL
-	, NULL
-	, NULL
-	, NULL
-	, NULL
-	, 0
+	22
+	, 2
 	)
 GO
 
-DECLARE @SecurityUserId INT, @SuperUserRoleId INT
+INSERT INTO dbo.Security_RoleAppRel
+	(
+	RoleId
+	, AppId
+	)
+VALUES
+	(
+	22
+	, 3
+	)
+GO
 
-SELECT @SecurityUserId = UserId FROM Security_User WHERE UserName='underwriter1'
-SELECT @SuperUserRoleId = RoleId FROM Security_Role WHERE Name='Web'
-INSERT Security_UserRoleRelation VALUES (@SecurityUserId, @SuperUserRoleId)
-SELECT @SuperUserRoleId = RoleId FROM Security_Role WHERE Name='Underwriter'
-INSERT Security_UserRoleRelation VALUES (@SecurityUserId, @SuperUserRoleId)
+INSERT INTO dbo.Security_RoleAppRel
+	(
+	RoleId
+	, AppId
+	)
+VALUES
+	(
+	22
+	, 4
+	)
+GO
+
+INSERT INTO dbo.Security_RoleAppRel
+	(
+	RoleId
+	, AppId
+	)
+VALUES
+	(
+	22
+	, 6
+	)
+GO
+
+INSERT INTO dbo.Security_RoleAppRel
+	(
+	RoleId
+	, AppId
+	)
+VALUES
+	(
+	22
+	, 7
+	)
+GO
+
+INSERT INTO dbo.Security_RoleAppRel
+	(
+	RoleId
+	, AppId
+	)
+VALUES
+	(
+	22
+	, 8
+	)
+GO
+
+INSERT INTO dbo.Security_RoleAppRel
+	(
+	RoleId
+	, AppId
+	)
+VALUES
+	(
+	22
+	, 9
+	)
+GO
+
+INSERT INTO dbo.Security_RoleAppRel
+	(
+	RoleId
+	, AppId
+	)
+VALUES
+	(
+	22
+	, 10
+	)
+GO
+
+INSERT INTO dbo.Security_RoleAppRel
+	(
+	RoleId
+	, AppId
+	)
+VALUES
+	(
+	22
+	, 11
+	)
+GO
+
+INSERT INTO dbo.Security_RoleAppRel
+	(
+	RoleId
+	, AppId
+	)
+VALUES
+	(
+	22
+	, 12
+	)
+GO
+
+INSERT INTO dbo.Security_RoleAppRel
+	(
+	RoleId
+	, AppId
+	)
+VALUES
+	(
+	24
+	, 1
+	)
+GO
+
+INSERT INTO dbo.Security_RoleAppRel
+	(
+	RoleId
+	, AppId
+	)
+VALUES
+	(
+	24
+	, 10
+	)
+GO
+
+INSERT INTO dbo.Security_RoleAppRel
+	(
+	RoleId
+	, AppId
+	)
+VALUES
+	(
+	26
+	, 2
+	)
+GO
+
+INSERT INTO dbo.Security_RoleAppRel
+	(
+	RoleId
+	, AppId
+	)
+VALUES
+	(
+	26
+	, 10
+	)
+GO
+
+INSERT INTO dbo.Security_RoleAppRel
+	(
+	RoleId
+	, AppId
+	)
+VALUES
+	(
+	27
+	, 4
+	)
+GO
+
+INSERT INTO dbo.Security_RoleAppRel
+	(
+	RoleId
+	, AppId
+	)
+VALUES
+	(
+	27
+	, 10
+	)
+GO
+
+INSERT INTO dbo.Security_RoleAppRel
+	(
+	RoleId
+	, AppId
+	)
+VALUES
+	(
+	28
+	, 7
+	)
+GO
+
+INSERT INTO dbo.Security_RoleAppRel
+	(
+	RoleId
+	, AppId
+	)
+VALUES
+	(
+	28
+	, 10
+	)
+GO
+
+INSERT INTO dbo.Security_RoleAppRel
+	(
+	RoleId
+	, AppId
+	)
+VALUES
+	(
+	29
+	, 12
+	)
+GO
+
+INSERT INTO dbo.Security_RoleAppRel
+	(
+	RoleId
+	, AppId
+	)
+VALUES
+	(
+	30
+	, 1
+	)
+GO
+
+INSERT INTO dbo.Security_RolePermissionRel
+	(
+	RoleId
+	, PermissionId
+	)
+VALUES
+	(
+	31
+	, 1
+	)
+GO
+
+INSERT INTO dbo.Security_RolePermissionRel
+	(
+	RoleId
+	, PermissionId
+	)
+VALUES
+	(
+	32
+	, 1
+	)
+GO
+
+INSERT INTO dbo.Security_RolePermissionRel
+	(
+	RoleId
+	, PermissionId
+	)
+VALUES
+	(
+	31
+	, 2
+	)
+GO
+
+INSERT INTO dbo.Security_RolePermissionRel
+	(
+	RoleId
+	, PermissionId
+	)
+VALUES
+	(
+	32
+	, 2
+	)
+GO
+
+INSERT INTO dbo.Security_RolePermissionRel
+	(
+	RoleId
+	, PermissionId
+	)
+VALUES
+	(
+	31
+	, 3
+	)
+GO
+
+INSERT INTO dbo.Security_RolePermissionRel
+	(
+	RoleId
+	, PermissionId
+	)
+VALUES
+	(
+	32
+	, 3
+	)
+GO
+
+INSERT INTO dbo.Security_RolePermissionRel
+	(
+	RoleId
+	, PermissionId
+	)
+VALUES
+	(
+	31
+	, 4
+	)
+GO
+
+INSERT INTO dbo.Security_RolePermissionRel
+	(
+	RoleId
+	, PermissionId
+	)
+VALUES
+	(
+	32
+	, 4
+	)
+GO
+
+INSERT INTO dbo.Security_RolePermissionRel
+	(
+	RoleId
+	, PermissionId
+	)
+VALUES
+	(
+	33
+	, 4
+	)
+GO
+
+INSERT INTO dbo.Security_RolePermissionRel
+	(
+	RoleId
+	, PermissionId
+	)
+VALUES
+	(
+	31
+	, 5
+	)
+GO
+
+INSERT INTO dbo.Security_RolePermissionRel
+	(
+	RoleId
+	, PermissionId
+	)
+VALUES
+	(
+	32
+	, 5
+	)
+GO
+
+INSERT INTO dbo.Security_RolePermissionRel
+	(
+	RoleId
+	, PermissionId
+	)
+VALUES
+	(
+	31
+	, 6
+	)
+GO
+
+INSERT INTO dbo.Security_RolePermissionRel
+	(
+	RoleId
+	, PermissionId
+	)
+VALUES
+	(
+	32
+	, 6
+	)
+GO
+
+INSERT INTO dbo.Security_RolePermissionRel
+	(
+	RoleId
+	, PermissionId
+	)
+VALUES
+	(
+	31
+	, 7
+	)
+GO
+
+INSERT INTO dbo.Security_RolePermissionRel
+	(
+	RoleId
+	, PermissionId
+	)
+VALUES
+	(
+	32
+	, 7
+	)
+GO
+
+INSERT INTO dbo.Security_RolePermissionRel
+	(
+	RoleId
+	, PermissionId
+	)
+VALUES
+	(
+	31
+	, 8
+	)
+GO
+
+INSERT INTO dbo.Security_RolePermissionRel
+	(
+	RoleId
+	, PermissionId
+	)
+VALUES
+	(
+	31
+	, 9
+	)
+GO
+
+INSERT INTO dbo.Security_RolePermissionRel
+	(
+	RoleId
+	, PermissionId
+	)
+VALUES
+	(
+	32
+	, 9
+	)
+GO
+
+INSERT INTO dbo.Security_RolePermissionRel
+	(
+	RoleId
+	, PermissionId
+	)
+VALUES
+	(
+	33
+	, 9
+	)
+GO
+
+INSERT INTO dbo.Security_RolePermissionRel
+	(
+	RoleId
+	, PermissionId
+	)
+VALUES
+	(
+	31
+	, 10
+	)
+GO
+
+INSERT INTO dbo.Security_RolePermissionRel
+	(
+	RoleId
+	, PermissionId
+	)
+VALUES
+	(
+	32
+	, 10
+	)
+GO
+
+INSERT INTO dbo.Security_RolePermissionRel
+	(
+	RoleId
+	, PermissionId
+	)
+VALUES
+	(
+	31
+	, 11
+	)
+GO
+
+INSERT INTO dbo.Security_RolePermissionRel
+	(
+	RoleId
+	, PermissionId
+	)
+VALUES
+	(
+	32
+	, 11
+	)
+GO
+
+INSERT INTO dbo.Security_RolePermissionRel
+	(
+	RoleId
+	, PermissionId
+	)
+VALUES
+	(
+	31
+	, 12
+	)
+GO
+
+INSERT INTO dbo.Security_RolePermissionRel
+	(
+	RoleId
+	, PermissionId
+	)
+VALUES
+	(
+	32
+	, 12
+	)
+GO
+
+INSERT INTO dbo.Security_RolePermissionRel
+	(
+	RoleId
+	, PermissionId
+	)
+VALUES
+	(
+	31
+	, 13
+	)
+GO
+
+INSERT INTO dbo.Security_RolePermissionRel
+	(
+	RoleId
+	, PermissionId
+	)
+VALUES
+	(
+	32
+	, 13
+	)
+GO
+
+INSERT INTO dbo.Security_RolePermissionRel
+	(
+	RoleId
+	, PermissionId
+	)
+VALUES
+	(
+	32
+	, 14
+	)
+GO
+
+INSERT INTO dbo.Security_RolePermissionRel
+	(
+	RoleId
+	, PermissionId
+	)
+VALUES
+	(
+	31
+	, 15
+	)
+GO
+
+INSERT INTO dbo.Security_RolePermissionRel
+	(
+	RoleId
+	, PermissionId
+	)
+VALUES
+	(
+	32
+	, 15
+	)
+GO
+
+INSERT INTO dbo.Security_RolePermissionRel
+	(
+	RoleId
+	, PermissionId
+	)
+VALUES
+	(
+	31
+	, 16
+	)
+GO
+
+INSERT INTO dbo.Security_RolePermissionRel
+	(
+	RoleId
+	, PermissionId
+	)
+VALUES
+	(
+	32
+	, 16
+	)
+GO
+
+INSERT INTO dbo.Security_RolePermissionRel
+	(
+	RoleId
+	, PermissionId
+	)
+VALUES
+	(
+	31
+	, 17
+	)
+GO
+
+INSERT INTO dbo.Security_RolePermissionRel
+	(
+	RoleId
+	, PermissionId
+	)
+VALUES
+	(
+	32
+	, 17
+	)
+GO
+
+INSERT INTO dbo.Security_RolePermissionRel
+	(
+	RoleId
+	, PermissionId
+	)
+VALUES
+	(
+	31
+	, 18
+	)
+GO
+
+INSERT INTO dbo.Security_RolePermissionRel
+	(
+	RoleId
+	, PermissionId
+	)
+VALUES
+	(
+	32
+	, 18
+	)
+GO
+
+INSERT INTO dbo.Security_RolePermissionRel
+	(
+	RoleId
+	, PermissionId
+	)
+VALUES
+	(
+	31
+	, 19
+	)
+GO
+
+INSERT INTO dbo.Security_RolePermissionRel
+	(
+	RoleId
+	, PermissionId
+	)
+VALUES
+	(
+	32
+	, 19
+	)
+GO
+
+INSERT INTO dbo.Security_RolePermissionRel
+	(
+	RoleId
+	, PermissionId
+	)
+VALUES
+	(
+	31
+	, 20
+	)
+GO
+
+INSERT INTO dbo.Security_RolePermissionRel
+	(
+	RoleId
+	, PermissionId
+	)
+VALUES
+	(
+	32
+	, 20
+	)
+GO
+
+INSERT INTO dbo.Security_RolePermissionRel
+	(
+	RoleId
+	, PermissionId
+	)
+VALUES
+	(
+	31
+	, 15
+	)
+GO
+
+INSERT INTO dbo.Security_RolePermissionRel
+	(
+	RoleId
+	, PermissionId
+	)
+VALUES
+	(
+	31
+	, 16
+	)
+GO
+
+INSERT INTO dbo.Security_RolePermissionRel
+	(
+	RoleId
+	, PermissionId
+	)
+VALUES
+	(
+	32
+	, 15
+	)
+GO
+
+INSERT INTO dbo.Security_RolePermissionRel
+	(
+	RoleId
+	, PermissionId
+	)
+VALUES
+	(
+	32
+	, 16
+	)
+GO
+
+INSERT INTO dbo.Security_RolePermissionRel
+	(
+	RoleId
+	, PermissionId
+	)
+VALUES
+	(
+	32
+	, 21
+	)
+GO
 
 
-SELECT @SecurityUserId = UserId FROM Security_User WHERE UserName='manager'
-SELECT @SuperUserRoleId = RoleId FROM Security_Role WHERE Name='Web'
-INSERT Security_UserRoleRelation VALUES (@SecurityUserId, @SuperUserRoleId)
-SELECT @SuperUserRoleId = RoleId FROM Security_Role WHERE Name='manager'
-INSERT Security_UserRoleRelation VALUES (@SecurityUserId, @SuperUserRoleId)
+INSERT INTO dbo.Security_UserRoleRelation
+	(
+	UserId
+	, RoleId
+	)
+VALUES
+	(
+	6
+	, 1
+	)
+GO
 
+INSERT INTO dbo.Security_UserRoleRelation
+	(
+	UserId
+	, RoleId
+	)
+VALUES
+	(
+	9
+	, 22
+	)
+GO
+
+INSERT INTO dbo.Security_UserRoleRelation
+	(
+	UserId
+	, RoleId
+	)
+VALUES
+	(
+	21
+	, 30
+	)
+GO
+
+INSERT INTO dbo.Security_UserRoleRelation
+	(
+	UserId
+	, RoleId
+	)
+VALUES
+	(
+	21
+	, 31
+	)
+GO
+
+INSERT INTO dbo.Security_UserRoleRelation
+	(
+	UserId
+	, RoleId
+	)
+VALUES
+	(
+	22
+	, 30
+	)
+GO
+
+INSERT INTO dbo.Security_UserRoleRelation
+	(
+	UserId
+	, RoleId
+	)
+VALUES
+	(
+	22
+	, 31
+	)
+GO
+
+INSERT INTO dbo.Security_UserRoleRelation
+	(
+	UserId
+	, RoleId
+	)
+VALUES
+	(
+	23
+	, 30
+	)
+GO
+
+INSERT INTO dbo.Security_UserRoleRelation
+	(
+	UserId
+	, RoleId
+	)
+VALUES
+	(
+	23
+	, 31
+	)
+GO
+
+INSERT INTO dbo.Security_UserRoleRelation
+	(
+	UserId
+	, RoleId
+	)
+VALUES
+	(
+	24
+	, 30
+	)
+GO
+
+INSERT INTO dbo.Security_UserRoleRelation
+	(
+	UserId
+	, RoleId
+	)
+VALUES
+	(
+	24
+	, 31
+	)
+GO
+
+INSERT INTO dbo.Security_UserRoleRelation
+	(
+	UserId
+	, RoleId
+	)
+VALUES
+	(
+	25
+	, 30
+	)
+GO
+
+INSERT INTO dbo.Security_UserRoleRelation
+	(
+	UserId
+	, RoleId
+	)
+VALUES
+	(
+	25
+	, 32
+	)
+GO
+
+INSERT INTO dbo.Security_UserRoleRelation
+	(
+	UserId
+	, RoleId
+	)
+VALUES
+	(
+	26
+	, 30
+	)
+GO
+
+INSERT INTO dbo.Security_UserRoleRelation
+	(
+	UserId
+	, RoleId
+	)
+VALUES
+	(
+	26
+	, 33
+	)
 GO
