@@ -1,27 +1,45 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CommonLib
 {
-	class AnalysisFunctionsHelper
+	public class AnalysisFunctionsHelper
 	{
-		public double GetTurnoverForPeriod(List<AnalysisFunction> afs, TimePeriodEnum timePeriod)
+		public static double GetTurnoverForPeriod(List<MarketPlace> mps, TimePeriodEnum timePeriod)
 		{
-			double turnover = 0;
 			double paypal = 0;
 			double ebay = 0;
-
-			foreach (var af in afs)
+			double sum = 0;
+			var dbHelper = new DbHelper();
+			
+			foreach (var marketPlace in mps)
 			{
-				if (AnalysisFunctionIncome.IncomeFunctions.Contains(af.Function) && af.TimePeriod == timePeriod)
+				var afs = dbHelper.GetAnalysisFunctions(marketPlace.Id);
+				if (!afs.Any())
 				{
-					turnover += af.Value;
+					continue;
+				}
+				var av =
+					afs.OrderByDescending(af => af.Value).LastOrDefault(af => AnalysisFunctionIncome.IncomeFunctions.Contains(af.Function) && af.TimePeriod <= timePeriod);
+				double currentTurnover = Convert.ToDouble(av != null ? av.Value : 0);
+
+				if (afs[0].MarketPlaceName == "Pay Pal")
+				{
+					paypal += currentTurnover;
+				}
+				else if (afs[0].MarketPlaceName == "eBay")
+				{
+					ebay += currentTurnover;
+				}
+				else
+				{
+					sum += currentTurnover;
 				}
 			}
-			return turnover;
+			return sum + Math.Max(paypal, ebay);
 		}
+
+
 	}
 }

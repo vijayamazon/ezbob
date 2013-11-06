@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CommonLib
 {
@@ -10,7 +8,7 @@ namespace CommonLib
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
-	class DbHelper
+	public class DbHelper
 	{
 		private static readonly LegacyLog Log;
 		
@@ -43,11 +41,18 @@ namespace CommonLib
 
 		private void AddMpToList(List<MarketPlace> mps, DataRow row)
 		{
+			DateTime? originationDate = null;
+			string odStr = row["OriginationDate"].ToString();
+			if (!string.IsNullOrEmpty(odStr))
+			{
+				originationDate = DateTime.Parse(odStr);
+			}
 			mps.Add(new MarketPlace
 				{
 					Id = int.Parse(row["mpId"].ToString()),
 					Name = row["Name"].ToString(),
-					Type = row["Type"].ToString()
+					Type = row["Type"].ToString(),
+					OriginationDate = originationDate
 				});
 		}
 
@@ -78,6 +83,31 @@ namespace CommonLib
 					Function = row["FunctionName"].ToString(),
 					TimePeriod = (TimePeriodEnum)(int.Parse(row["TimePeriod"].ToString())),
 				});
+		}
+
+		public int GetExperianScore(int customerId)
+		{
+			var conn = new SqlConnection(Log);
+			var dt = conn.ExecuteReader("AV_GetExperianScore", new QueryParameter("@CustomerId", customerId));
+			if (dt.Rows.Count == 0)
+			{
+				return 0;
+			}
+			//todo retrieve defaults 
+			//var experianJson = dt.Rows[0]["JsonPacket"].ToString();
+			return int.Parse(dt.Rows[0]["ExperianScore"].ToString());
+		}
+
+		public bool WasApprovedForLoan(int customerId)
+		{
+			var conn = new SqlConnection(Log);
+			return bool.Parse(conn.ExecuteScalar<string>("AV_WasLoanApproved", new QueryParameter("@CustomerId", customerId)));
+		}
+
+		public bool HasDefaultAccounts(int customerId, int minDefBalance, int months)
+		{
+			var conn = new SqlConnection(Log);
+			return bool.Parse(conn.ExecuteScalar<string>("AV_HasDefaultAccounts", new QueryParameter("@CustomerId", customerId), new QueryParameter("@MinDefBalance", minDefBalance), new QueryParameter("@Months", months)));
 		}
 	}
 }

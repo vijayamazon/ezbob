@@ -11,7 +11,9 @@ namespace AutomationVerification
 		static void Main(string[] args)
 		{
 			var aj = new AutoRejection.AutoRejectionCalculator();
-			Console.WriteLine(aj.IsAutoRejected(4998));
+			string reason;
+			bool isAutoRehected = aj.IsAutoRejected(14166, out reason); 
+			Console.WriteLine("is rejected: {0} reason: {1}", isAutoRehected, reason);
 		}
 	}
 }

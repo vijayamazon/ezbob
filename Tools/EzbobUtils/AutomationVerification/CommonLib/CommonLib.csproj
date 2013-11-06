@@ -50,6 +50,7 @@
     <Compile Include="AnalysisFunctionsHelper.cs" />
     <Compile Include="DbHelper.cs" />
     <Compile Include="MarketPlace.cs" />
+    <Compile Include="MarketPlacesHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TimePeriodEnum.cs" />
   </ItemGroup>
