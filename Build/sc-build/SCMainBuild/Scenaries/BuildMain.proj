@@ -16,6 +16,7 @@
 		<WebFolder>websites</WebFolder>
 		<ConfigFolder>configtemplates</ConfigFolder>
 		<ToolsFolder>Tools</ToolsFolder>
+		<SqlFolder>Sql</SqlFolder>
 		<PublisherFolder>$(ToolsFolder)\Publisher</PublisherFolder>
 		<SDKFolder>SDK</SDKFolder>
 		<Database>Database</Database>
