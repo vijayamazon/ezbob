@@ -63,6 +63,7 @@ namespace EzBob.Web.Infrastructure
 		int PacnetBalanceWeekdayLimit { get; }
 		string NotEnoughFundsToAddress { get; }
         string NotEnoughFundsTemplateName { get; }
+		bool RefreshYodleeEnabled { get; }
     }
 
     public class EzBobConfiguration : ConfigurationRootWeb, IEzBobConfiguration
@@ -263,5 +264,10 @@ namespace EzBob.Web.Infrastructure
         {
             get { return GetValueWithDefault<string>("NotEnoughFundsTemplateName", "NotEnoughFunds"); }
         }
+
+		public bool RefreshYodleeEnabled
+		{
+			get { return GetValueWithDefault<bool>("RefreshYodleeEnabled", "False"); }
+		}
     }
 }
