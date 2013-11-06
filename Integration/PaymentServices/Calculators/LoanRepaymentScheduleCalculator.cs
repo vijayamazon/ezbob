@@ -91,7 +91,7 @@ namespace PaymentServices.Calculators
             _payments = loan.TransactionsWithPaypointSuccesefull;
             _charges = loan.Charges.OrderBy(x => x.Date).ToList();
 
-            _term = (term ?? DateTime.Now).Date;
+            _term = (term ?? DateTime.UtcNow).Date;
 
             _eventDayStart = new LoanRepaymentScheduleCalculatorEvent(_term);
             _eventDayEnd = new LoanRepaymentScheduleCalculatorEvent(_term.AddHours(23).AddMinutes(59).AddSeconds(59));
