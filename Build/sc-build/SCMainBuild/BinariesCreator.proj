@@ -44,7 +44,6 @@
 		<MultiCopy CopyFrom="$(Src)\App\ezmanage\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\ezmanage\" />
 		
 		<MultiCopy CopyFrom="$(Src)\Items\" CopyTo="$(BuildBin)\%(Edition.Identity)\Items\"/>
-		<MultiCopy CopyFrom="$(Src)\DataBaseScripts\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(Database)\"/>
 		<Copy SourceFiles="$(Src)\Build\sc-build\EnvironmentTemplate.xml" DestinationFolder="$(BuildBin)\%(Edition.Identity)\"/>
 		<Copy SourceFiles="$(Src)\Integration\ChannelGrabberConfig\channelgrabber.json" DestinationFolder="$(BuildBin)\%(Edition.Identity)\"/>
 		
