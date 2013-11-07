@@ -76,7 +76,7 @@
 		        customer.CollectionStatus.CollectionDescription = collectionStatus.CollectionDescription;
 
 				// Update loan options
-				foreach (Loan loan in customer.Loans)
+				foreach (Loan loan in customer.Loans.Where(l => l.Status != LoanStatus.PaidOff))
 				{
 					LoanOptions options = loanOptionsRepository.GetByLoanId(loan.Id);
 					if (options == null)

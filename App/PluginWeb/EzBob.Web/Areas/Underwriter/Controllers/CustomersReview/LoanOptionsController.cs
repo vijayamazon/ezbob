@@ -78,6 +78,11 @@
 						continue;
 					}
 
+					if (loan.Status == LoanStatus.PaidOff)
+					{
+						continue;
+					}
+
 					LoanOptions currentOptions = _loanOptionsRepository.GetByLoanId(loan.Id);
 					if (currentOptions == null)
 					{
