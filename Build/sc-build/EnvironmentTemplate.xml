@@ -333,7 +333,7 @@ T6C7Spa3i/ltRwpQYWeYRRvJGkNUa12VLyTMdYRAAAAAvBLTqmDnMOt2M1IbVhi98uhE0pS2YC+WwInF
 		<property name="ApplicationKey" value="a458bdf184d34c0cab7ef7ffbb5f016b" />
 		<property name="ApplicationToken" value="1ece74e1ca9e4befbb1b64daba7c4a24" />
 		<property name="AddAccountURL" value="https://lawint.yodlee.com/apps/ezbob/addAccounts.pfmlaw.action" />
-		<property name="EditAccountURL" value="https://lawint.yodlee.com/apps/ezbob/editSiteCredentials.pfmlaw.action" />
+		<property name="EditAccountURL" value="https://lawint.yodlee.com/ezbob/editSiteCredentials.pfmlaw.action" />
 		<property name="AccountPoolSize" value="10" />
     </module>
     <module id="PacNet">
