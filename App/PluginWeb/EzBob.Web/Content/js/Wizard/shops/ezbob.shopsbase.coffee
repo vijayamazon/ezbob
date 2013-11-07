@@ -86,7 +86,8 @@ class EzBob.StoreInfoBaseView extends Backbone.View
         hasEbay = @stores.eBay.button.model.length > 0
         hasPaypal = @stores.paypal.button.model.length > 0
 
-        @$el.find(".eBayPaypalRule").toggleClass("hide", not hasEbay or hasPaypal)
+        ebayPaypalRuleMessageVisible = hasEbay and !hasPaypal
+        @$el.find(".eBayPaypalRule").toggleClass("hide", !ebayPaypalRuleMessageVisible)
                 
         foundAllMandatories = true
         for key in Object.keys(@stores)
@@ -94,13 +95,13 @@ class EzBob.StoreInfoBaseView extends Backbone.View
                 foundAllMandatories = false
 
         if @isOffline
-            canContinue = (hasHmrc and foundAllMandatories) or @allowFinishOfflineWizardWithoutMarketplaces
+            canContinue = (hasFilledShops and (!hasEbay or (hasEbay and hasPaypal)) and foundAllMandatories) or @allowFinishOfflineWizardWithoutMarketplaces
             @$el.find('.next').toggleClass 'disabled', !canContinue
-            @$el.find('.AddMoreRule').toggleClass 'hide', !hasFilledShops or canContinue
+            @$el.find('.AddMoreRule').toggleClass 'hide', !hasFilledShops or canContinue or ebayPaypalRuleMessageVisible
         else
             canContinue = (hasFilledShops and (!hasEbay or (hasEbay and hasPaypal)) and foundAllMandatories) or @allowFinishOnlineWizardWithoutMarketplaces
             @$el.find(".next").toggleClass "disabled", !canContinue
-            @$el.find('.AddMoreRule').toggleClass 'hide', !hasFilledShops or canContinue
+            @$el.find('.AddMoreRule').toggleClass 'hide', !hasFilledShops or canContinue or ebayPaypalRuleMessageVisible
 
         for shop in sortedShopsByNumOfShops when shop.active 
             shop.button.render().$el.appendTo accountsList
