@@ -3,7 +3,9 @@ using EZBob.DatabaseLib.Common;
 
 namespace EzBob.AmazonServiceLib
 {
-    public class AmazonSecurityInfo : IMarketPlaceSecurityInfo
+	using System.Text;
+
+	public class AmazonSecurityInfo : IMarketPlaceSecurityInfo
     {
         public AmazonSecurityInfo()
         {
@@ -24,6 +26,5 @@ namespace EzBob.AmazonServiceLib
 
         public string MerchantId { get; set; }
         public List<string> MarketplaceId { get; set; }
-
     }
 }

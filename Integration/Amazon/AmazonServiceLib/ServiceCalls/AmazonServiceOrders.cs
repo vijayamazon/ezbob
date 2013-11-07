@@ -33,8 +33,8 @@ namespace EzBob.AmazonServiceLib.ServiceCalls
 		public static AmazonOrdersList2 GetListOrders( IAmazonServiceOrdersConfigurator configurator, AmazonOrdersRequestInfo requestInfo, ActionAccessType access )
 		{
 			var service = configurator.AmazonService;
-
-			WriteToLog( string.Format( "GetListOrders - SellerId: {0}, CreatedAfter (UTC) {1}", requestInfo.MerchantId, requestInfo.StartDate ) );
+			
+			WriteToLog( string.Format( "GetListOrders - SellerId: {0}, CreatedAfter (UTC) {1}, amazon mps id {2}, customer id {3} ", requestInfo.MerchantId, requestInfo.StartDate, requestInfo.GetMarketPlacesString(), requestInfo.CustomerId ) );
 
 			return new AmazonServiceOrders( service ).GetListOrders( requestInfo, access );
 		}
@@ -51,6 +51,7 @@ namespace EzBob.AmazonServiceLib.ServiceCalls
 
 		private AmazonOrdersList2 GetListOrders( AmazonOrdersRequestInfo requestInfo, ActionAccessType access )
 		{
+			
 			var request = new ListOrdersRequest
 			{
 				MarketplaceId = new MarketplaceIdList
@@ -60,7 +61,7 @@ namespace EzBob.AmazonServiceLib.ServiceCalls
 				SellerId = requestInfo.MerchantId,
 
 			};
-
+			
 			if ( requestInfo.StartDate.HasValue )
 			{
 				request.CreatedAfter = requestInfo.StartDate.Value.ToUniversalTime();
@@ -85,7 +86,7 @@ namespace EzBob.AmazonServiceLib.ServiceCalls
 
 			if ( result.IsSetOrders() )
 			{
-				ParceOrdersInfo( ordersList, result.Orders, request.SellerId, access );
+				ParceOrdersInfo( ordersList, result.Orders, request.SellerId, access, requestInfo.CustomerId );
 			}
 
 			if ( result.IsSetNextToken() )
@@ -118,7 +119,7 @@ namespace EzBob.AmazonServiceLib.ServiceCalls
 				var result = response.ListOrdersByNextTokenResult;
 				if (result.IsSetOrders())
 				{
-					ParceOrdersInfo( ordersList, result.Orders, sellerId, access );
+					ParceOrdersInfo( ordersList, result.Orders, sellerId, access, requestInfo.CustomerId );
 				}
 
 				if (result.IsSetNextToken())
@@ -128,8 +129,11 @@ namespace EzBob.AmazonServiceLib.ServiceCalls
 			}
 		}
 
-		private void ParceOrdersInfo( AmazonOrdersList2 ordersList, OrderList orders, string sellerId, ActionAccessType access )
+		private void ParceOrdersInfo( AmazonOrdersList2 ordersList, OrderList orders, string sellerId, ActionAccessType access, int customerId)
 		{
+			DateTime? firstDate = orders.Order.First().IsSetPurchaseDate() ? orders.Order[0].PurchaseDate : (DateTime?)null;
+			DateTime? lastDate = orders.Order.Last().IsSetPurchaseDate() ? orders.Order[0].PurchaseDate : (DateTime?)null;
+			WriteToLog(string.Format("Amazon ParceOrdersInfo customerId {2}, sellerId {0} number of orders {1}, first order date {3} last order date {4}", sellerId, ordersList.Count, customerId, firstDate, lastDate));
 			orders.Order.AsParallel().ForAll( o => ordersList.Add( ParceOrder( o ) ) );
 
 			/*foreach (AmazonOrderItem2 orderInfo in ordersList)

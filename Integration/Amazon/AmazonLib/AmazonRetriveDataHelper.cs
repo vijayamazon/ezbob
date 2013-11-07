@@ -43,7 +43,8 @@
         }
 
 		protected override void InternalUpdateInfoFirst( IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, MP_CustomerMarketplaceUpdatingHistory historyRecord )
-        {            
+        {
+			log.DebugFormat("InternalUpdateInfoFirst customer {0} amazon mp {1}", databaseCustomerMarketPlace.Customer.Id, databaseCustomerMarketPlace.DisplayName);
             var securityInfo = RetrieveCustomerSecurityInfo<AmazonSecurityInfo>(databaseCustomerMarketPlace);
 
             UpdateClientOrdersInfo(databaseCustomerMarketPlace, securityInfo, ActionAccessType.Full, historyRecord);
@@ -53,6 +54,7 @@
 
 		protected override void InternalUpdateInfo( IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, MP_CustomerMarketplaceUpdatingHistory historyRecord )
         {
+			log.DebugFormat("InternalUpdateInfo customer {0} amazon mp {1}", databaseCustomerMarketPlace.Customer.Id, databaseCustomerMarketPlace.DisplayName);
 			var securityInfo = RetrieveCustomerSecurityInfo<AmazonSecurityInfo>( databaseCustomerMarketPlace );
 
 			UpdateClientOrdersInfo( databaseCustomerMarketPlace, securityInfo, ActionAccessType.Limit, historyRecord );
@@ -170,6 +172,8 @@
 
         private void UpdateClientOrdersInfo(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, AmazonSecurityInfo securityInfo, ActionAccessType access, MP_CustomerMarketplaceUpdatingHistory historyRecord)
         {
+			log.DebugFormat("UpdateClientOrdersInfo customer {0}, amazon mp {1}, access {2}", databaseCustomerMarketPlace.Customer.Id, databaseCustomerMarketPlace.DisplayName, access);
+
             Helper.CustomerMarketplaceUpdateAction(CustomerMarketplaceUpdateActionType.UpdateOrdersInfo, databaseCustomerMarketPlace, historyRecord, () =>
 				{
 					// save data to order table
@@ -194,15 +198,14 @@
 													EndDate = toDate,
 													MarketplaceId = securityInfo.MarketplaceId,
 													MerchantId = securityInfo.MerchantId,
-													ErrorRetryingInfo = _AmazonSettings.ErrorRetryingInfo
+													ErrorRetryingInfo = _AmazonSettings.ErrorRetryingInfo,
+													CustomerId = databaseCustomerMarketPlace.Customer.Id
 												};
 
 					DateTime submittedDate;
 
-					string logMsg = string.Format("Fetching amazon orders for customer:{0} marketplace:{1}",
-					                              databaseCustomerMarketPlace.Customer.Id, databaseCustomerMarketPlace.Id);
-					log.Info(logMsg);
-					WriteLoggerHelper.Write(logMsg, WriteLogType.Info);
+					log.InfoFormat("Fetching amazon orders for customer:{0} marketplace:{1}",
+												  databaseCustomerMarketPlace.Customer.Id, databaseCustomerMarketPlace.Id);
 					
 					var orders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
 									ElapsedDataMemberType.RetrieveDataFromExternalService,

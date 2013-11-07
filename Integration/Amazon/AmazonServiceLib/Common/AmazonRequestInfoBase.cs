@@ -10,6 +10,7 @@ namespace EzBob.AmazonServiceLib.Common
 		public DateTime? EndDate { get; set; }
 		public string MerchantId { get; set; }
 		public List<string> MarketplaceId { get; set; }
+		public int CustomerId { get; set; }
 		public ErrorRetryingInfo ErrorRetryingInfo { get; set; }
 	}
 }
