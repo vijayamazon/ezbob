@@ -5,7 +5,6 @@
 	using System.Globalization;
 	using System.IO;
 	using System.Linq;
-	using System.Text;
 	using System.Xml.Serialization;
 	using ApplicationMng.Model;
 	using EZBob.DatabaseLib;
@@ -169,53 +168,60 @@
 		public int AutoApproveCheck(int customerId, int systemCalculatedAmount, int minExperianScore)
 		{
 			log.InfoFormat("Checking if auto approval should take place...");
-
 			var customer = _customers.Get(customerId);
 			int autoApproveMinAmount = configurationVariablesRepository.GetByNameAsInt("AutoApproveMinAmount");
 			int autoApproveMaxAmount = configurationVariablesRepository.GetByNameAsInt("AutoApproveMaxAmount");
 			int autoApprovedAmount = systemCalculatedAmount;
 
-			if (!CheckAMLResult(customer) ||
-				!CheckCustomerType(customer) ||
-				!CheckCustomerStatus(customer) ||
-				!CheckExperianScore(minExperianScore) ||
-				!CheckAge(customer) ||
-				!CheckTurnovers(customerId) ||
-				!CheckSeniority(customerId) ||
-				!CheckOutstandingOffers() ||
-				!CheckTodaysLoans() ||
-				!CheckTodaysApprovals() ||
-				!CheckDefaultAccounts(customerId))
+			try
 			{
-				return 0;
-			}
-
-			if (!loanRepository.ByCustomer(customerId).Any())
-			{
-				if (!CheckWorstCaisStatus(customer, new List<string> {"0", "1", "2"})) // Up to 60 days
-				{
-					return 0;
-				}
-			}
-			else
-			{
-				if (!CheckWorstCaisStatus(customer, new List<string> { "0", "1", "2", "3" }) || // Up to 90 days
-					!CheckRollovers(customerId) ||
-					!CheckLateDays(customerId) ||
-					!CheckOutstandingLoans(customerId))
+				if (!CheckAMLResult(customer) ||
+				    !CheckCustomerType(customer) ||
+				    !CheckCustomerStatus(customer) ||
+				    !CheckExperianScore(minExperianScore) ||
+				    !CheckAge(customer) ||
+				    !CheckTurnovers(customerId) ||
+				    !CheckSeniority(customerId) ||
+				    !CheckOutstandingOffers() ||
+				    !CheckTodaysLoans() ||
+				    !CheckTodaysApprovals() ||
+				    !CheckDefaultAccounts(customerId))
 				{
 					return 0;
 				}
 
-				// Reduce the system calculated amount by the already open amount
-				List<Loan> outstandingLoans = GetOutstandingLoans(customerId);
-				decimal outstandingPrincipal = outstandingLoans.Sum(loan => loan.Principal);
-				autoApprovedAmount -= (int)outstandingPrincipal;
-			}
+				if (!loanRepository.ByCustomer(customerId).Any())
+				{
+					if (!CheckWorstCaisStatus(customer, new List<string> {"0", "1", "2"})) // Up to 60 days
+					{
+						return 0;
+					}
+				}
+				else
+				{
+					if (!CheckWorstCaisStatus(customer, new List<string> {"0", "1", "2", "3"}) || // Up to 90 days
+					    !CheckRollovers(customerId) ||
+					    !CheckLateDays(customerId) ||
+					    !CheckOutstandingLoans(customerId))
+					{
+						return 0;
+					}
 
-			if (autoApprovedAmount < autoApproveMinAmount || autoApprovedAmount > autoApproveMaxAmount)
+					// Reduce the system calculated amount by the already open amount
+					List<Loan> outstandingLoans = GetOutstandingLoans(customerId);
+					decimal outstandingPrincipal = outstandingLoans.Sum(loan => loan.Principal);
+					autoApprovedAmount -= (int) outstandingPrincipal;
+				}
+
+				if (autoApprovedAmount < autoApproveMinAmount || autoApprovedAmount > autoApproveMaxAmount)
+				{
+					log.InfoFormat("No auto approval: System calculated amount is not between {0}-{1} but is {2}", autoApproveMinAmount, autoApproveMaxAmount, autoApprovedAmount);
+					return 0;
+				}
+			}
+			catch (Exception ex)
 			{
-				log.InfoFormat("No auto approval: System calculated amount is not between {0}-{1} but is {2}", autoApproveMinAmount, autoApproveMaxAmount, autoApprovedAmount);
+				log.ErrorFormat("No auto approval: Exception while checking auto approval conditions:{0}", ex);
 				return 0;
 			}
 
@@ -481,42 +487,35 @@
 		private bool CheckWorstCaisStatus(Customer customer, List<string> allowedStatuses)
 		{
 			log.InfoFormat("checking worst cais status");
-			try
+			
+			MP_ServiceLog serviceLog = serviceLogRepository.GetByCustomer(customer).Where(sl => sl.ServiceType == "Consumer Request").OrderByDescending(sl => sl.InsertDate).FirstOrDefault();
+			if (serviceLog == null)
 			{
-				MP_ServiceLog serviceLog = serviceLogRepository.GetByCustomer(customer).Where(sl => sl.ServiceType == "Consumer Request").OrderByDescending(sl => sl.InsertDate).FirstOrDefault();
-				if (serviceLog == null)
+				log.InfoFormat("No auto approval: Can't find worst CAIS status in MP_ServiceLog");
+				return false;
+			}
+			var serializer = new XmlSerializer(typeof(OutputRoot));
+			using (TextReader sr = new StringReader(serviceLog.ResponseData))
+			{
+				var output = (OutputRoot)serializer.Deserialize(sr);
+
+				if (output == null || output.Output == null || output.Output.FullConsumerData == null || output.Output.FullConsumerData.ConsumerData == null || output.Output.FullConsumerData.ConsumerData.CAIS == null)
 				{
-					log.InfoFormat("No auto approval: Can't find worst CAIS status in MP_ServiceLog");
+					log.InfoFormat("No auto approval: Can't find worst CAIS status in deserialized response");
 					return false;
 				}
-				var serializer = new XmlSerializer(typeof(OutputRoot));
-				using (TextReader sr = new StringReader(serviceLog.ResponseData))
+
+				foreach (var caisPart in output.Output.FullConsumerData.ConsumerData.CAIS)
 				{
-					var output = (OutputRoot)serializer.Deserialize(sr);
-
-					if (output == null || output.Output == null || output.Output.FullConsumerData == null || output.Output.FullConsumerData.ConsumerData == null || output.Output.FullConsumerData.ConsumerData.CAIS == null)
+					foreach (var caisDetailsPart in caisPart.CAISDetails)
 					{
-						log.InfoFormat("No auto approval: Can't find worst CAIS status in deserialized response");
-						return false;
-					}
-
-					foreach (var caisPart in output.Output.FullConsumerData.ConsumerData.CAIS)
-					{
-						foreach (var caisDetailsPart in caisPart.CAISDetails)
+						if (!allowedStatuses.Contains(caisDetailsPart.WorstStatus))
 						{
-							if (!allowedStatuses.Contains(caisDetailsPart.WorstStatus))
-							{
-								log.InfoFormat("No auto approval: Worst CAIS status is {0}. Allowed CAIS statuses are: {1}", caisDetailsPart.WorstStatus, allowedStatuses.Aggregate((i, j) => i + "," + j));
-								return false;
-							}
+							log.InfoFormat("No auto approval: Worst CAIS status is {0}. Allowed CAIS statuses are: {1}", caisDetailsPart.WorstStatus, allowedStatuses.Aggregate((i, j) => i + "," + j));
+							return false;
 						}
 					}
 				}
-			}
-			catch (Exception e)
-			{
-				log.InfoFormat("No auto approval: Exception while trying to check worst CAIS status:{0}", e);
-				return false;
 			}
 
 			return true;
