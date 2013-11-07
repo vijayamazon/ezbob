@@ -480,30 +480,44 @@
 
 		private bool CheckWorstCaisStatus(Customer customer, List<string> allowedStatuses)
 		{
-			MP_ServiceLog serviceLog = serviceLogRepository.GetByCustomer(customer).OrderByDescending(sl => sl.InsertDate).FirstOrDefault();
-			if (serviceLog == null)
+			log.InfoFormat("checking worst cais status");
+			try
 			{
-				log.InfoFormat("No auto approval: Can't find worst CAIS status in MP_ServiceLog");
-				return false;
-			}
-			var serializer = new XmlSerializer(typeof(OutputRoot));
-			using (TextReader sr = new StringReader(serviceLog.ResponseData))
-			{
-				var output = (OutputRoot)serializer.Deserialize(sr);
-
-				foreach (var caisPart in output.Output.FullConsumerData.ConsumerData.CAIS)
+				MP_ServiceLog serviceLog = serviceLogRepository.GetByCustomer(customer).Where(sl => sl.ServiceType == "Consumer Request").OrderByDescending(sl => sl.InsertDate).FirstOrDefault();
+				if (serviceLog == null)
 				{
-					foreach (var caisDetailsPart in caisPart.CAISDetails)
+					log.InfoFormat("No auto approval: Can't find worst CAIS status in MP_ServiceLog");
+					return false;
+				}
+				var serializer = new XmlSerializer(typeof(OutputRoot));
+				using (TextReader sr = new StringReader(serviceLog.ResponseData))
+				{
+					var output = (OutputRoot)serializer.Deserialize(sr);
+
+					if (output == null || output.Output == null || output.Output.FullConsumerData == null || output.Output.FullConsumerData.ConsumerData == null || output.Output.FullConsumerData.ConsumerData.CAIS == null)
 					{
-						if (!allowedStatuses.Contains(caisDetailsPart.WorstStatus))
+						log.InfoFormat("No auto approval: Can't find worst CAIS status in deserialized response");
+						return false;
+					}
+
+					foreach (var caisPart in output.Output.FullConsumerData.ConsumerData.CAIS)
+					{
+						foreach (var caisDetailsPart in caisPart.CAISDetails)
 						{
-							log.InfoFormat("No auto approval: Worst CAIS status is {0}. Allowed CAIS statuses are: {1}", caisDetailsPart.WorstStatus, allowedStatuses.Aggregate((i, j) => i + "," + j));
-							return false;
+							if (!allowedStatuses.Contains(caisDetailsPart.WorstStatus))
+							{
+								log.InfoFormat("No auto approval: Worst CAIS status is {0}. Allowed CAIS statuses are: {1}", caisDetailsPart.WorstStatus, allowedStatuses.Aggregate((i, j) => i + "," + j));
+								return false;
+							}
 						}
 					}
 				}
 			}
-
+			catch (Exception e)
+			{
+				log.InfoFormat("No auto approval: Exception while trying to check worst CAIS status:{0}", e);
+				return false;
+			}
 			return true;
 		}
 
