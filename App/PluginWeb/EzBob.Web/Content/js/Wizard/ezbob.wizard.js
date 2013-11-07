@@ -7,6 +7,7 @@ EzBob.WizardRouter = Backbone.Router.extend({
     initialize: function (options) {
         this.topNavigationEnabled = options.topNavigationEnabled;
         this.maxStepNum = options.maxStepNum;
+        this.isOffline = options.isOffline;
     },
     routes: {
         "": "SignUp",
@@ -24,7 +25,12 @@ EzBob.WizardRouter = Backbone.Router.extend({
     ShopInfo: function () {
         if (!this.topNavigationEnabled) {
             if (this.maxStepNum >= 1) {
-                this.trigger("ShopInfo");
+                if (this.isOffline) {
+                    this.maxStepNum = 2;
+                    this.navTo(2);
+                } else {
+                    this.trigger("ShopInfo");
+                }
             } else {
                 this.navTo(this.maxStepNum);
             }
@@ -106,10 +112,11 @@ EzBob.Wizard = Backbone.View.extend({
             s.view.on('previous', that.previous, that);
             s.view.on('linkClick', that.linkClick, that);
         });
-        
-        EzBob.App.on('wizard:progress', that.progressChanged, that);
 
-        this.router = new EzBob.WizardRouter({ topNavigationEnabled: this.topNavigationEnabled, maxStepNum: this.model.get("ready") != undefined ? this.model.get("ready").clean(undefined).length : 0 });
+        EzBob.App.on('wizard:progress', that.progressChanged, that);
+        this.isOffline = false;
+        try { this.isOffline = this.stepModels.models[0].get('IsOffline'); } catch (e) { }
+        this.router = new EzBob.WizardRouter({ topNavigationEnabled: this.topNavigationEnabled, maxStepNum: this.model.get("ready") != undefined ? this.model.get("ready").clean(undefined).length : 0, isOffline: this.isOffline });
         this.router.on("SignUp", this.SignUpRoute, this);
         this.router.on("ShopInfo", this.ShopInfoRoute, this);
         //this.router.on("PaymentAccounts", this.PaymentAccountsRoute, this);
@@ -132,7 +139,7 @@ EzBob.Wizard = Backbone.View.extend({
     render: function () {
         var template = this.template();
         this.$el.html(template);
-        
+
         this.renderSteps();
         this.stepChanged();
 
@@ -142,7 +149,6 @@ EzBob.Wizard = Backbone.View.extend({
         if (!this.topNavigationEnabled) {
             this.$el.find('.wizard-steps > ul li').css('cursor', 'default');
         }
-
         this.router.navTo(this.model.get("ready") != undefined ? this.model.get("ready").clean(undefined).length : 0);
 
         return this;
@@ -159,8 +165,8 @@ EzBob.Wizard = Backbone.View.extend({
         return false;
     },
     addStep: function (title, view) {
-    	var num = this.steps.length;
-    	this.steps.push({ num: num++, title: title, view: view });
+        var num = this.steps.length;
+        this.steps.push({ num: num++, title: title, view: view });
     },
     ready: function (num) {
         var ready = this.model.get("ready") || new Array(this.model.get("total") + 1);
@@ -174,9 +180,7 @@ EzBob.Wizard = Backbone.View.extend({
         if (!this.steps[num].ready) {
             this.steps[num].ready = true;
         }
-
         this.router.maxStepNum = this.model.get("ready") != undefined ? this.model.get("ready").clean(undefined).length : 0;
-        
         this.stepChanged();
     },
 
@@ -191,6 +195,7 @@ EzBob.Wizard = Backbone.View.extend({
         if (current == allowed) {
             return;
         }
+
         this.model.set('current', ++current);
         this.router.navTo(current);
     },
@@ -259,13 +264,13 @@ EzBob.Wizard = Backbone.View.extend({
             this.$el.find("#defaultMarketing").show();
             this.$el.find("#marketingProggress").hide().html(marketing);
         }
-        
+
         this.$el.find(".wizard-progress").html(this.progressTemplate(data));
 
         this.$el.find('.pages > div').hide().eq(current).show();
         if (this.steps[current]) this.$el.find('.wizard-header').text(this.steps[current].header);
     },
-    progressChanged: function(progress) {
+    progressChanged: function (progress) {
         this.progress = progress;
         this.stepChanged();
     }
