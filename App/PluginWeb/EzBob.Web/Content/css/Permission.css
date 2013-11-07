@@ -31,8 +31,6 @@ a[data-bug-type],
 .rollover,
 .make-payment,
 #btn-options,
-#addNewDoc,
-#deleteDocs,
 #RunBWAReCheckBtn,
 #RunAMLReCheckBtn,
 #RunReCheckBtn,
@@ -62,12 +60,6 @@ a[data-bug-type],
 
 .role-manager #btn-options,
 .role-Underwriter #btn-options,
-
-.role-manager #addNewDoc,
-.role-Underwriter #addNewDoc,
-
-.role-manager #deleteDocs,
-.role-Underwriter #deleteDocs,
 
 .role-Underwriter [name="avoidAutomaticDecisionButton"],
 .role-manager [name="avoidAutomaticDecisionButton"],
