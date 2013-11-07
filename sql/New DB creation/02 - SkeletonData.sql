@@ -9,7 +9,7 @@ INSERT INTO dbo.AppStatus
 VALUES
  (
  'Init'
- , 'Prefilling'
+ , 'Предварительное заполнение'
  )
 GO
 
@@ -21,7 +21,7 @@ INSERT INTO dbo.AppStatus
 VALUES
  (
  'FirstAutoChecks'
- , 'Initial checks'
+ , 'Предварительные проверки'
  )
 GO
 
@@ -33,7 +33,7 @@ INSERT INTO dbo.AppStatus
 VALUES
  (
  'KI_Input'
- , 'Filling out the application'
+ , 'Заполнение заявки '
  )
 GO
 
@@ -45,7 +45,7 @@ INSERT INTO dbo.AppStatus
 VALUES
  (
  'KI_Rework'
- , 'Further development of the application'
+ , 'Доработка заявки '
  )
 GO
 
@@ -57,7 +57,7 @@ INSERT INTO dbo.AppStatus
 VALUES
  (
  'MainAutoChecks'
- , 'Auto checks'
+ , 'Автоматические проверки'
  )
 GO
 
@@ -69,7 +69,7 @@ INSERT INTO dbo.AppStatus
 VALUES
  (
  'SM_Review'
- , 'Under security manager review'
+ , 'Рассматривается службой безопасности'
  )
 GO
 
@@ -81,7 +81,7 @@ INSERT INTO dbo.AppStatus
 VALUES
  (
  'AutoCalculations'
- , 'Auto calculations'
+ , 'Автоматические расчеты'
  )
 GO
 
@@ -93,7 +93,7 @@ INSERT INTO dbo.AppStatus
 VALUES
  (
  'CreditHistoryChecks'
- , 'Credit history checks'
+ , 'Проверка кредитной истории'
  )
 GO
 
@@ -105,7 +105,7 @@ INSERT INTO dbo.AppStatus
 VALUES
  (
  'RM_Review'
- , 'Under risk manager review'
+ , 'Рассматривается риск-менеджером '
  )
 GO
 
@@ -117,7 +117,7 @@ INSERT INTO dbo.AppStatus
 VALUES
  (
  'HD_Review'
- , 'Under head of lending review'
+ , 'Рассматривается начальником отдела кредитования'
  )
 GO
 
@@ -129,7 +129,7 @@ INSERT INTO dbo.AppStatus
 VALUES
  (
  'Approved'
- , 'Approved'
+ , 'Одобрена'
  )
 GO
 
@@ -141,7 +141,7 @@ INSERT INTO dbo.AppStatus
 VALUES
  (
  'Rejected'
- , 'Rejected'
+ , 'Отклонена'
  )
 GO
 
@@ -153,7 +153,7 @@ INSERT INTO dbo.AppStatus
 VALUES
  (
  'ClientRefuse'
- , 'Client refused'
+ , 'Отказ клиента'
  )
 GO
 
@@ -165,7 +165,7 @@ INSERT INTO dbo.AppStatus
 VALUES
  (
  'Archive_CreditGiven'
- , 'Archive. credit given'
+ , 'Архивная. Кредит выдан '
  )
 GO
 
@@ -177,7 +177,7 @@ INSERT INTO dbo.AppStatus
 VALUES
  (
  'Archive_ClientRefuse'
- , 'Archive. client refused'
+ , 'Архивная. Отказ Клиента'
  )
 GO
 
@@ -189,9 +189,13 @@ INSERT INTO dbo.AppStatus
 VALUES
  (
  'Archive_BankReject'
- , 'Archive. bank rejected'
+ , 'Архивная. Отказ Банка '
  )
 GO
+
+
+
+
 
 INSERT INTO dbo.App_Attach_DocType
  (
@@ -200,7 +204,7 @@ INSERT INTO dbo.App_Attach_DocType
  )
 VALUES
  (
- '<Undefined>'
+ '<Неопределен>'
  , NULL
  )
 GO
@@ -212,7 +216,7 @@ INSERT INTO dbo.App_Attach_DocType
  )
 VALUES
  (
- 'Identification Code'
+ 'Идентификационный код'
  , NULL
  )
 GO
@@ -224,7 +228,7 @@ INSERT INTO dbo.App_Attach_DocType
  )
 VALUES
  (
- 'Driving Licence'
+ 'Водительское удостоверение'
  , NULL
  )
 GO
@@ -236,7 +240,7 @@ INSERT INTO dbo.App_Attach_DocType
  )
 VALUES
  (
- 'Military Plate Id'
+ 'Воинский билет'
  , NULL
  )
 GO
@@ -248,7 +252,7 @@ INSERT INTO dbo.App_Attach_DocType
  )
 VALUES
  (
- 'Passport'
+ 'Паспорт'
  , NULL
  )
 GO
@@ -323,326 +327,6 @@ VALUES
 	1100
 	, 9999
 	, 0.03
-	)
-GO
-
-INSERT INTO dbo.CaisFlags
-	(
-	FlagSetting
-	, Description
-	, ValidForRecordType
-	, Comment
-	)
-VALUES
-	(
-	'Calculated value'
-	, 'Calculated value'
-	, ''
-	, ''
-	)
-GO
-
-INSERT INTO dbo.CaisFlags
-	(
-	FlagSetting
-	, Description
-	, ValidForRecordType
-	, Comment
-	)
-VALUES
-	(
-	'F'
-	, 'Individual Voluntary Arrangement'
-	, 'Non-Limited'
-	, '<p>Normally an alternative to bankruptcy proceedings, where someone makes a voluntary arrangement with their creditors for the repayment of debt.  It is arranged through the court.</p>'
-	)
-GO
-
-INSERT INTO dbo.CaisFlags
-	(
-	FlagSetting
-	, Description
-	, ValidForRecordType
-	, Comment
-	)
-VALUES
-	(
-	'H'
-	, 'Appointment of Receiver'
-	, 'Limited'
-	, '<p>An official, who may be an Insolvency Practitioner, who is appointed under a registered security, to look after the financial interests in a business of the security holder.</p> <p>An Appointment of Receiver can be set for any Status Code</p>'
-	)
-GO
-
-INSERT INTO dbo.CaisFlags
-	(
-	FlagSetting
-	, Description
-	, ValidForRecordType
-	, Comment
-	)
-VALUES
-	(
-	'J'
-	, 'Appointment of Administrator'
-	, 'Limited'
-	, '<p>Appointed by an order of the court to arrange and administer the payments of debts by a business.</p><p>An Appointment of Administrator can be set for any Status Code.</p>'
-	)
-GO
-
-INSERT INTO dbo.CaisFlags
-	(
-	FlagSetting
-	, Description
-	, ValidForRecordType
-	, Comment
-	)
-VALUES
-	(
-	'N'
-	, 'Appointment of Administrative Receiver'
-	, 'Limited'
-	, '<p>The process where an Insolvency Practitioner is appointed by a debenture holder to realise a business''s assets and to pay the preferential creditors. </p><p>An Appointment of Official Receiver can be set for any Status Code.</p>'
-	)
-GO
-
-INSERT INTO dbo.CaisFlags
-	(
-	FlagSetting
-	, Description
-	, ValidForRecordType
-	, Comment
-	)
-VALUES
-	(
-	'E'
-	, 'Business Closure'
-	, 'Limited and/or non-limited'
-	, '<p>Notification that a business has ceased to trade and closed its operation.</p><p>A Business Closure can be set for any Status Code.</p>'
-	)
-GO
-
-INSERT INTO dbo.CaisFlags
-	(
-	FlagSetting
-	, Description
-	, ValidForRecordType
-	, Comment
-	)
-VALUES
-	(
-	'L'
-	, 'Company Voluntary Arrangement'
-	, 'Limited'
-	, '<p>A recognised legal procedure that enables a company to enter into a binding agreement with its creditors as regards its outstanding debts.</p><p>A Company Voluntary Arrangement can be set for any Status Code.</p>'
-	)
-GO
-
-INSERT INTO dbo.CaisFlags
-	(
-	FlagSetting
-	, Description
-	, ValidForRecordType
-	, Comment
-	)
-VALUES
-	(
-	'C'
-	, 'Debt assigned (non CAIS member)'
-	, 'Limited and/or non-limited'
-	, '<p>The debt assigned flag should be used where the rights to a debt have been assigned to a new owner who is not a member of CAIS and therefore will not be registering the debt on CAIS in their own name. The record remains in the original lender''s name, shown as settled or satisfied together with the debt assigned flag to indicate that the record is closed due to its sale.</p><p>A debt assigned flag may be used together with any status code. </p><p>Where the debt assigned flag is being used, the current balance must be zero. </p><p>The close date field must contain a valid date of settlement or the original default date. Where there is no valid close date the flag will be dropped but the rest of the input record will be processed.</p><p>A record assigned to a new owner is not expected to receive any further monthly updates.  Further financial updates will therefore be rejected unless the flag is removed by manual amendment.</p>'
-	)
-GO
-
-INSERT INTO dbo.CaisFlags
-	(
-	FlagSetting
-	, Description
-	, ValidForRecordType
-	, Comment
-	)
-VALUES
-	(
-	'S'
-	, 'Debt sold to CAIS member'
-	, 'Limited and/or non-limited'
-	, '<p>The debt sold to CAIS member flag should be used where the rights to a debt have been assigned to a new owner that is already a CAIS member. In this circumstance the new owners should have already agreed to supply the record onto their own CAIS portfolio. In this situation, the original record will remain on CAIS indicated as sold to CAIS member, shown as settled or satisfied together with this flag to indicate the record is closed due to its sale. The new owners will continue to supply the performance of the record via their own portfolio.</p> <p>A debt sold to CAIS member flag can be used together with any status code.</p><p>Where this flag is being used the current balance must be zero.</p><p>The closed date field must contain a valid date of settlement or the original default date provided for default records. Where there is no valid closed date the flag will be dropped but the rest of the input record will be processed.</p><p>A record assigned to a new owner is not expected to receive any further monthly updates.  Further financial updates will therefore be rejected unless the flag is removed by manual amendment</p>'
-	)
-GO
-
-INSERT INTO dbo.CaisFlags
-	(
-	FlagSetting
-	, Description
-	, ValidForRecordType
-	, Comment
-	)
-VALUES
-	(
-	'G'
-	, 'Gone away'
-	, 'Limited and/or non-limited'
-	, '<p>Where the business address of the customer is no longer known and the account is falling into arrears, a ‘G’ flag should be used together with the last known address.</p><p>A gone-away flag does not necessarily indicate a defaulted account.</p><p>A gone away flag can only be registered if the account is in arrears. The CAIS status code accompanying the flag must be 1, 2, 3,4,5,6 or 8. </p><p>If the status is 0, D or U the gone-away flag will be dropped but the rest of the input record will be processed.</p><p>A record input with a blank in the flag field which matches to a previously filed gone away flag, will remove all reference to the gone away flag from that record.</p><p>A gone away record is still expected to receive monthly updates until the point at which it is marked as settled or is defaulted. </p><p>If a gone away record is received with any other type of flag the record will be updated with the new flag. (It is assumed that the person is now located).</p>'
-	)
-GO
-
-INSERT INTO dbo.CaisFlags
-	(
-	FlagSetting
-	, Description
-	, ValidForRecordType
-	, Comment
-	)
-VALUES
-	(
-	'R'
-	, 'Recourse'
-	, 'Limited and/or non-limited'
-	, '<p>Where an account is invoked with a recourse agreement (for instance between a dealer and a lender), the record should be set at the status code applicable when the recourse action took place together with a flag of ‘R’. </p><p>The date of recourse should be entered in the Close Date field and no further update is then necessary.</p><p>A recourse flag can only be registered if the account is in arrears. The CAIS status must be 1, 2, 3,4,5,6, or 8.</p><p>If the status is 0, D or U then the flag will be dropped but the rest of the input record will be processed.</p><p>A recourse flag once set should not be updated to a different flag. It can however be manually changed.</p><p>A recoursed record is not expected to receive any further monthly updates.</p>'
-	)
-GO
-
-INSERT INTO dbo.CaisFlags
-	(
-	FlagSetting
-	, Description
-	, ValidForRecordType
-	, Comment
-	)
-VALUES
-	(
-	'V'
-	, 'Voluntary termination'
-	, 'Non-Limited'
-	, '<p>There are three situations to be considered.</p><ul><li>1.     Where a Consumer Credit Act Section 100 balance is outstanding and there is no arrangement a ''V'' flag should be set along with a CAIS status of 8.</li><li>2.     Where a Section 100 balance is outstanding and there is an arrangement, then a ''V'' flag should be set and the CAIS status code appropriate to the repayment performance.</li><li>3.     Where a Section 100 balance has been met, the ''V'' flag should be set but the account should be closed with the appropriate status code and a balance of zero.<li></ul><p>A voluntary termination can only be set if the record is a Hire Purchase agreement (CAIS Account Type 01 and 20). If the voluntary termination flag is set on a record where the account type is not 01 or 20, the flag will be dropped but the rest of the input record will be processed.</p><p>A voluntary termination flag can be set alongside any status code. </p><p>Where a voluntary termination is registered at other than a status 8 or settled status 0, the account is deemed to be an arrangement within a voluntary termination. At this stage, two monthly payments will be registered, the current monthly payment (arrangement amount) and the previous monthly payment (how much was being paid before the voluntary termination was enforced). If the two monthly payment values are equal, the flag will be dropped but the rest of the input record will be processed. </p>'
-	)
-GO
-
-INSERT INTO dbo.CaisFlags
-	(
-	FlagSetting
-	, Description
-	, ValidForRecordType
-	, Comment
-	)
-VALUES
-	(
-	'A'
-	, 'Arrangement'
-	, 'Limited and/or non-limited'
-	, '<p>An arrangement can only be set if the status is 0, 1, 2, 3, 4, 5, 6, D or U.</p><p>Where a customer is granted an arrangement to pay, the arrears that accrue against the original contract should continue to be shown by the appropriate status code. An ‘A’ flag and the arranged monthly payment pertinent at that particular time should accompany this status code. An arranged monthly payment should only be provided on certain CAIS account types where monthly payments are applicable (see ‘Monthly Payment’ in the Customer Account Records section).  Please also refer to the guidance note on the filing of default data.</p><p>As a customer maintains the arrangement and in due course becomes a good payer once again, the status code can be reduced back to 0 and the flag removed. If the arrangement is placed on a more formal basis it is normal practice for some revolving products to ‘re-age’ the account when the arrangement has been maintained satisfactorily. In such cases the status code will reflect the performance of the arrangement. Such cases will continue to have an arrangement flag set even if the status code is 0 but will not display an end date for the arrangement thus indicating that it is still operating. Conversely, if the customer strays outside of the arrangement terms, this should be regarded as a serious breach of the agreement and the debt should continue to age against the original contract, upon removal of the flag.</p><p>For eligible accounts, the revised monthly payment is submitted in the usual monthly payment field (see field 5 above). Two monthly payments will be shown on the CAIS record during a credit search, the current monthly payment (arrangement amount) and the previous monthly payment (how much was being paid before the arrangement was enforced).</p> <ul><li>Only when they are equal i.e. the consumer returns to repaying the original contracted amount, will the arrangement be marked with an end date. This is achieved as follows:</li><li>Where the two monthly payment values are equal, the flag will be dropped but the rest of the record carried forward.</li><li>For account types that do not display the revised monthly payment the arrangement is closed off by removal of the flag at which time an end date will be appended.</li><p>Where the same record with a blank flag is subsequently submitted an end date of the arrangement will automatically be added to the record.</p>'
-	)
-GO
-
-INSERT INTO dbo.CaisFlags
-	(
-	FlagSetting
-	, Description
-	, ValidForRecordType
-	, Comment
-	)
-VALUES
-	(
-	'M'
-	, 'Debt management programme'
-	, 'Limited and/or non-limited'
-	, '<p>The flag of ''M'' should be used where the customer has entered into a debt management programme such as those run by the Citizens'' Advice Bureau.</p><p>The status should reflect the arrears of the account at the time the programme was entered into (similar to arrangement above).</p><p>A debt management programme can only be set on a record where the status is 0,1,2,3,4,5,6, D or U.</p><p>Two monthly payments are registered on CAIS, the current monthly payment (managed amount) and the previous monthly payment (how much was being paid before the programme was enforced). </p><p>Where the two monthly payment values are equal, the flag will be dropped but the rest of the record carried forward.</p><p>Where the same record with a blank flag is subsequently submitted, an end date of the programme will automatically be added to the record. </p>'
-	)
-GO
-
-INSERT INTO dbo.CaisFlags
-	(
-	FlagSetting
-	, Description
-	, ValidForRecordType
-	, Comment
-	)
-VALUES
-	(
-	'I'
-	, 'Credit insurance claim'
-	, 'Limited and/or non-limited'
-	, '<p>This flag is to be set at the point in time when the customer notifies the lender of the claim. A flag setting of ''I'' should be used along with a status setting of U for the life of the claim.</p><p>When used, the words ''CPI CLAIM'' will appear below the status summary lines.</p><p>A record that is subject to a credit insurance claim should be forwarded with a status of U.</p><p>If the account is sent without a status of U, then the flag will be rejected but the rest of the record carried forward.</p><p>Where we are subsequently notified of the same record with a blank flag, an end date of the claim will automatically be added to the record.</p> <p>A record with a credit insurance flag is still expected to receive monthly updates until the point at which it is marked as settled or is defaulted.</p> '
-	)
-GO
-
-INSERT INTO dbo.CaisFlags
-	(
-	FlagSetting
-	, Description
-	, ValidForRecordType
-	, Comment
-	)
-VALUES
-	(
-	'Q'
-	, 'Account query'
-	, 'Limited and/or non-limited'
-	, '<p>Where a query exists on an account, for example a merchandise complaint or a dispute over a defaulted account, the record should be flagged with the letter ''Q'' and a status of U or 8 as appropriate, for the term of the query.</p><p>If the account is sent with any status other than U or 8 the flag will be rejected but the rest of the input record will be processed.</p><p>Where the same record with a blank flag is subsequently submitted, the query flag will automatically be deleted. </p><p>A record marked as a query is still expected to receive monthly updates until the point at which it is marked as settled or is defaulted. </p>'
-	)
-GO
-
-INSERT INTO dbo.CaisFlags
-	(
-	FlagSetting
-	, Description
-	, ValidForRecordType
-	, Comment
-	)
-VALUES
-	(
-	'D'
-	, 'Deceased'
-	, 'Proprietor/Partner/Director'
-	, '<p>Where a subscribing member receives evidence that a Proprietor/Partner/Director is deceased, (for example a death certificate, probate or letters of administration) a flag of ''D'' should be set against the appropriate Proprietor/Partner/Director record. </p><p>A deceased flag can be input with any CAIS status for the business.</p>'
-	)
-GO
-
-INSERT INTO dbo.CaisFlags
-	(
-	FlagSetting
-	, Description
-	, ValidForRecordType
-	, Comment
-	)
-VALUES
-	(
-	'T'
-	, 'Bankruptcy'
-	, 'Non-limited'
-	, '<p>Bankruptcy is one way of dealing with debts that you cannot pay.  The bankruptcy proceedings will free the debtor from overwhelming debt so that they can make a fresh start, subject to some restrictions.</p><p>A Bankruptcy can be set for any Status Code.</p>'
-	)
-GO
-
-INSERT INTO dbo.CaisFlags
-	(
-	FlagSetting
-	, Description
-	, ValidForRecordType
-	, Comment
-	)
-VALUES
-	(
-	'K'
-	, 'Meeting of Creditors '
-	, 'Limited'
-	, '<p>A business may call a meeting of creditors if it encounters financial difficulty. The creditors will have an opportunity to question officers of the business about its performance. </p><p>A Meeting of Creditors can be set for any Status Code.</p>'
-	)
-GO
-
-INSERT INTO dbo.CaisFlags
-	(
-	FlagSetting
-	, Description
-	, ValidForRecordType
-	, Comment
-	)
-VALUES
-	(
-	'P'
-	, 'Partial or No settlement'
-	, 'Limited and/or non-limited'
-	, '<p>Where a partial settlement has been agreed or the debt has been discharged by bankruptcy a flag of `P` should be set.</p><p>A ‘P’ flag may be used together with any status code.</p><p>Where a ‘P’ flag is submitted there must be a valid date in the close date field to indicate a settled or satisfied record and a zero current balance.  Where there is no valid close date the flag will be dropped but the rest of the input record will be processed.</p><p>The ‘P’ flag should be used in the following circumstances where the record is being marked with a zero balance and full payment has not been received.  The record may in some cases also be marked as settled/satisfied but the debt was not fully paid and in some cases no payment was made at all:</p><ul><li>The debt was included in an IVA which has been completed successfully,</li><li>The debt was included in a bankruptcy which has since been discharged,</li><li>A smaller amount has been agreed and accepted in full and final settlement, but this term has not been conveyed to the consumer</li><li>An asset has been repossessed and the outstanding balance is not to be pursued.</li><p>A record with the ‘P’ flag is not expected to receive any further monthly updates.  Further financial updates will therefore be rejected unless the flag is removed by manual amendment.</p>'
 	)
 GO
 
@@ -29111,128 +28795,6 @@ VALUES
 	)
 GO
 
-INSERT INTO dbo.StrategyAreas
-	(
-	Name
-	, Description
-	)
-VALUES
-	(
-	'Credit Cards'
-	, NULL
-	)
-GO
-
-INSERT INTO dbo.StrategyAreas
-	(
-	Name
-	, Description
-	)
-VALUES
-	(
-	'Mortgage'
-	, NULL
-	)
-GO
-
-INSERT INTO dbo.StrategyTasks
-	(
-	Name
-	, Description
-	, AreaId
-	)
-VALUES
-	(
-	'Regular Scoring'
-	, NULL
-	, 1
-	)
-GO
-
-INSERT INTO dbo.StrategyTasks
-	(
-	Name
-	, Description
-	, AreaId
-	)
-VALUES
-	(
-	'Risk-Based Pricing'
-	, NULL
-	, 1
-	)
-GO
-
-INSERT INTO dbo.StrategyTasks
-	(
-	Name
-	, Description
-	, AreaId
-	)
-VALUES
-	(
-	'Cross-Selling'
-	, NULL
-	, 1
-	)
-GO
-
-INSERT INTO dbo.StrategyTasks
-	(
-	Name
-	, Description
-	, AreaId
-	)
-VALUES
-	(
-	'Transaction Analysis'
-	, NULL
-	, 1
-	)
-GO
-
-INSERT INTO dbo.StrategyTasks
-	(
-	Name
-	, Description
-	, AreaId
-	)
-VALUES
-	(
-	'Regular Scoring'
-	, NULL
-	, 2
-	)
-GO
-
-INSERT INTO dbo.StrategyTasks
-	(
-	Name
-	, Description
-	, AreaId
-	)
-VALUES
-	(
-	'Cross-Selling'
-	, NULL
-	, 2
-	)
-GO
-
-INSERT INTO dbo.StrategyTasks
-	(
-	Name
-	, Description
-	, AreaId
-	)
-VALUES
-	(
-	'Transaction Analysis'
-	, NULL
-	, 2
-	)
-GO
-
 INSERT INTO dbo.Strategy_ParameterType
 	(
 	Name
@@ -29376,28 +28938,6 @@ VALUES
 	, NULL
 	)
 GO
-
-INSERT INTO dbo.Application_DetailName
-	(
-	Name
-	)
-VALUES
-	(
-	'Root'
-	)
-GO
-
-INSERT INTO dbo.Application_DetailName
-	(
-	Name
-	)
-VALUES
-	(
-	'Body'
-	)
-GO
-
-
 
 INSERT INTO dbo.hibernate_unique_key
 	(
@@ -30542,3 +30082,511 @@ VALUES
 	, 33
 	)
 GO
+
+
+SET IDENTITY_INSERT Application_DetailName ON
+INSERT INTO Application_DetailName (DetailNameId, Name) VALUES (1, 'Root')
+INSERT INTO Application_DetailName (DetailNameId, Name) VALUES (2, 'Body')
+INSERT INTO Application_DetailName (DetailNameId, Name) VALUES (1001, 'refNum')
+INSERT INTO Application_DetailName (DetailNameId, Name) VALUES (1002, 'TimeToSuspend')
+INSERT INTO Application_DetailName (DetailNameId, Name) VALUES (1003, 'NodeOutletName')
+INSERT INTO Application_DetailName (DetailNameId, Name) VALUES (1004, 'userId')
+SET IDENTITY_INSERT Application_DetailName OFF
+GO
+
+
+
+SET IDENTITY_INSERT StrategyAreas ON
+INSERT INTO StrategyAreas (Id, Name, Description) VALUES (1, 'Credit Cards', NULL)
+INSERT INTO StrategyAreas (Id, Name, Description) VALUES (2, 'Mortgage', NULL)
+SET IDENTITY_INSERT StrategyAreas OFF
+
+
+SET IDENTITY_INSERT StrategyTasks ON
+INSERT INTO StrategyTasks (Id, Name, Description,AreaId) VALUES (1, 'Regular Scoring', NULL, 1)
+INSERT INTO StrategyTasks (Id, Name, Description,AreaId) VALUES (2, 'Risk-Based Pricing', NULL, 1)
+INSERT INTO StrategyTasks (Id, Name, Description,AreaId) VALUES (3, 'Cross-Selling', NULL, 1)
+INSERT INTO StrategyTasks (Id, Name, Description,AreaId) VALUES (4, 'Transaction Analysis', NULL, 1)
+INSERT INTO StrategyTasks (Id, Name, Description,AreaId) VALUES (5, 'Regular Scoring', NULL, 2)
+INSERT INTO StrategyTasks (Id, Name, Description,AreaId) VALUES (6, 'Cross-Selling', NULL, 2)
+INSERT INTO StrategyTasks (Id, Name, Description,AreaId) VALUES (7, 'Transaction Analysis', NULL, 2)
+SET IDENTITY_INSERT StrategyTasks OFF
+
+GO
+
+INSERT INTO dbo.Business
+	(
+	Name
+	, Address
+	)
+VALUES
+	(
+	'MOVERIGHT PROPERTY SERVICES LTD'
+	, '1ST FLOOR
+WRENS COURT
+46 SOUTH PARADE
+SUTTON COLDFIELD
+
+B72 1QY'
+	)
+GO
+
+INSERT INTO dbo.Business
+	(
+	Name
+	, Address
+	)
+VALUES
+	(
+	'THE SOOBSESSED NETWORK LTD  '
+	, 'STUDIO 5                      
+155 COMMERCIAL STREET         
+LONDON                        
+                              
+                              
+E1 6BJ  '
+	)
+GO
+
+INSERT INTO dbo.Business
+	(
+	Name
+	, Address
+	)
+VALUES
+	(
+	'FUTURE INTERNET SERVICES LTD'
+	, 'UNIT 4
+MILLENIUM WAY
+DUNSTON
+CHESTERFIELD
+
+S41 8ND'
+	)
+GO
+
+INSERT INTO dbo.Business
+	(
+	Name
+	, Address
+	)
+VALUES
+	(
+	'TTAG SCAFFOLDING LIMITED  '
+	, 'MEADOWSIDE STREET             
+RENFREW                       
+                              
+                              
+                              
+PA4 8LF '
+	)
+GO
+
+INSERT INTO dbo.Business
+	(
+	Name
+	, Address
+	)
+VALUES
+	(
+	'AIODISTRIBUTION LTD  '
+	, 'UNIT 1                        
+GATEWAY BUSINESS CENTRE       
+TOM CRIBB ROAD                
+ROYAL ARSENAL                 
+                              
+SE28 0EZ'
+	)
+GO
+
+INSERT INTO dbo.Business
+	(
+	Name
+	, Address
+	)
+VALUES
+	(
+	'THE SOOBSESSED NETWORK LTD'
+	, 'STUDIO 5
+155 COMMERCIAL STREET
+LONDON
+
+
+E1 6BJ'
+	)
+GO
+
+INSERT INTO dbo.Business
+	(
+	Name
+	, Address
+	)
+VALUES
+	(
+	'POSITIVE NOISE LIMITED  '
+	, '42 NEW ROAD                   
+ROCHESTER                     
+KENT                          
+                              
+                              
+ME1 1DX '
+	)
+GO
+
+INSERT INTO dbo.Business
+	(
+	Name
+	, Address
+	)
+VALUES
+	(
+	'POSITIVE NOISE LIMITED'
+	, '42 NEW ROAD
+ROCHESTER
+KENT
+
+
+ME1 1DX'
+	)
+GO
+
+INSERT INTO dbo.Business
+	(
+	Name
+	, Address
+	)
+VALUES
+	(
+	'JACOB ECO ENERGY LIMITED'
+	, '80 FOLLY LANE
+SWINTON
+MANCHESTER
+
+
+M27 0DH'
+	)
+GO
+
+SET IDENTITY_INSERT CaisFlags ON
+INSERT INTO dbo.CaisFlags
+	(Id,
+	FlagSetting
+	, Description
+	, ValidForRecordType
+	, Comment
+	)
+VALUES
+	(1,
+	'Calculated value'
+	, 'Calculated value'
+	, ''
+	, ''
+	)
+
+
+INSERT INTO dbo.CaisFlags
+	(Id,
+	FlagSetting
+	, Description
+	, ValidForRecordType
+	, Comment
+	)
+VALUES
+	(3,
+	'F'
+	, 'Individual Voluntary Arrangement'
+	, 'Non-Limited'
+	, '<p>Normally an alternative to bankruptcy proceedings, where someone makes a voluntary arrangement with their creditors for the repayment of debt.  It is arranged through the court.</p>'
+	)
+
+
+INSERT INTO dbo.CaisFlags
+	(Id,
+	FlagSetting
+	, Description
+	, ValidForRecordType
+	, Comment
+	)
+VALUES
+	(5,
+	'H'
+	, 'Appointment of Receiver'
+	, 'Limited'
+	, '<p>An official, who may be an Insolvency Practitioner, who is appointed under a registered security, to look after the financial interests in a business of the security holder.</p> <p>An Appointment of Receiver can be set for any Status Code</p>'
+	)
+
+
+INSERT INTO dbo.CaisFlags
+	(Id,
+	FlagSetting
+	, Description
+	, ValidForRecordType
+	, Comment
+	)
+VALUES
+	(6,
+	'J'
+	, 'Appointment of Administrator'
+	, 'Limited'
+	, '<p>Appointed by an order of the court to arrange and administer the payments of debts by a business.</p><p>An Appointment of Administrator can be set for any Status Code.</p>'
+	)
+
+
+INSERT INTO dbo.CaisFlags
+	(Id,
+	FlagSetting
+	, Description
+	, ValidForRecordType
+	, Comment
+	)
+VALUES
+	(7,
+	'N'
+	, 'Appointment of Administrative Receiver'
+	, 'Limited'
+	, '<p>The process where an Insolvency Practitioner is appointed by a debenture holder to realise a business''s assets and to pay the preferential creditors. </p><p>An Appointment of Official Receiver can be set for any Status Code.</p>'
+	)
+
+
+INSERT INTO dbo.CaisFlags
+	(Id,
+	FlagSetting
+	, Description
+	, ValidForRecordType
+	, Comment
+	)
+VALUES
+	(8,
+	'E'
+	, 'Business Closure'
+	, 'Limited and/or non-limited'
+	, '<p>Notification that a business has ceased to trade and closed its operation.</p><p>A Business Closure can be set for any Status Code.</p>'
+	)
+
+
+INSERT INTO dbo.CaisFlags
+	(Id,
+	FlagSetting
+	, Description
+	, ValidForRecordType
+	, Comment
+	)
+VALUES
+	(9,
+	'L'
+	, 'Company Voluntary Arrangement'
+	, 'Limited'
+	, '<p>A recognised legal procedure that enables a company to enter into a binding agreement with its creditors as regards its outstanding debts.</p><p>A Company Voluntary Arrangement can be set for any Status Code.</p>'
+	)
+
+
+INSERT INTO dbo.CaisFlags
+	(Id,
+	FlagSetting
+	, Description
+	, ValidForRecordType
+	, Comment
+	)
+VALUES
+	(11,
+	'C'
+	, 'Debt assigned (non CAIS member)'
+	, 'Limited and/or non-limited'
+	, '<p>The debt assigned flag should be used where the rights to a debt have been assigned to a new owner who is not a member of CAIS and therefore will not be registering the debt on CAIS in their own name. The record remains in the original lender''s name, shown as settled or satisfied together with the debt assigned flag to indicate that the record is closed due to its sale.</p><p>A debt assigned flag may be used together with any status code. </p><p>Where the debt assigned flag is being used, the current balance must be zero. </p><p>The close date field must contain a valid date of settlement or the original default date. Where there is no valid close date the flag will be dropped but the rest of the input record will be processed.</p><p>A record assigned to a new owner is not expected to receive any further monthly updates.  Further financial updates will therefore be rejected unless the flag is removed by manual amendment.</p>'
+	)
+
+
+INSERT INTO dbo.CaisFlags
+	(Id,
+	FlagSetting
+	, Description
+	, ValidForRecordType
+	, Comment
+	)
+VALUES
+	(12,
+	'S'
+	, 'Debt sold to CAIS member'
+	, 'Limited and/or non-limited'
+	, '<p>The debt sold to CAIS member flag should be used where the rights to a debt have been assigned to a new owner that is already a CAIS member. In this circumstance the new owners should have already agreed to supply the record onto their own CAIS portfolio. In this situation, the original record will remain on CAIS indicated as sold to CAIS member, shown as settled or satisfied together with this flag to indicate the record is closed due to its sale. The new owners will continue to supply the performance of the record via their own portfolio.</p> <p>A debt sold to CAIS member flag can be used together with any status code.</p><p>Where this flag is being used the current balance must be zero.</p><p>The closed date field must contain a valid date of settlement or the original default date provided for default records. Where there is no valid closed date the flag will be dropped but the rest of the input record will be processed.</p><p>A record assigned to a new owner is not expected to receive any further monthly updates.  Further financial updates will therefore be rejected unless the flag is removed by manual amendment</p>'
+	)
+
+
+INSERT INTO dbo.CaisFlags
+	(Id,
+	FlagSetting
+	, Description
+	, ValidForRecordType
+	, Comment
+	)
+VALUES
+	(13,
+	'G'
+	, 'Gone away'
+	, 'Limited and/or non-limited'
+	, '<p>Where the business address of the customer is no longer known and the account is falling into arrears, a ‘G’ flag should be used together with the last known address.</p><p>A gone-away flag does not necessarily indicate a defaulted account.</p><p>A gone away flag can only be registered if the account is in arrears. The CAIS status code accompanying the flag must be 1, 2, 3,4,5,6 or 8. </p><p>If the status is 0, D or U the gone-away flag will be dropped but the rest of the input record will be processed.</p><p>A record input with a blank in the flag field which matches to a previously filed gone away flag, will remove all reference to the gone away flag from that record.</p><p>A gone away record is still expected to receive monthly updates until the point at which it is marked as settled or is defaulted. </p><p>If a gone away record is received with any other type of flag the record will be updated with the new flag. (It is assumed that the person is now located).</p>'
+	)
+
+
+INSERT INTO dbo.CaisFlags
+	(Id,
+	FlagSetting
+	, Description
+	, ValidForRecordType
+	, Comment
+	)
+VALUES
+	(14,
+	'R'
+	, 'Recourse'
+	, 'Limited and/or non-limited'
+	, '<p>Where an account is invoked with a recourse agreement (for instance between a dealer and a lender), the record should be set at the status code applicable when the recourse action took place together with a flag of ‘R’. </p><p>The date of recourse should be entered in the Close Date field and no further update is then necessary.</p><p>A recourse flag can only be registered if the account is in arrears. The CAIS status must be 1, 2, 3,4,5,6, or 8.</p><p>If the status is 0, D or U then the flag will be dropped but the rest of the input record will be processed.</p><p>A recourse flag once set should not be updated to a different flag. It can however be manually changed.</p><p>A recoursed record is not expected to receive any further monthly updates.</p>'
+	)
+
+
+INSERT INTO dbo.CaisFlags
+	(Id,
+	FlagSetting
+	, Description
+	, ValidForRecordType
+	, Comment
+	)
+VALUES
+	(15,
+	'V'
+	, 'Voluntary termination'
+	, 'Non-Limited'
+	, '<p>There are three situations to be considered.</p><ul><li>1.     Where a Consumer Credit Act Section 100 balance is outstanding and there is no arrangement a ''V'' flag should be set along with a CAIS status of 8.</li><li>2.     Where a Section 100 balance is outstanding and there is an arrangement, then a ''V'' flag should be set and the CAIS status code appropriate to the repayment performance.</li><li>3.     Where a Section 100 balance has been met, the ''V'' flag should be set but the account should be closed with the appropriate status code and a balance of zero.<li></ul><p>A voluntary termination can only be set if the record is a Hire Purchase agreement (CAIS Account Type 01 and 20). If the voluntary termination flag is set on a record where the account type is not 01 or 20, the flag will be dropped but the rest of the input record will be processed.</p><p>A voluntary termination flag can be set alongside any status code. </p><p>Where a voluntary termination is registered at other than a status 8 or settled status 0, the account is deemed to be an arrangement within a voluntary termination. At this stage, two monthly payments will be registered, the current monthly payment (arrangement amount) and the previous monthly payment (how much was being paid before the voluntary termination was enforced). If the two monthly payment values are equal, the flag will be dropped but the rest of the input record will be processed. </p>'
+	)
+
+
+INSERT INTO dbo.CaisFlags
+	(Id,
+	FlagSetting
+	, Description
+	, ValidForRecordType
+	, Comment
+	)
+VALUES
+	(16,
+	'A'
+	, 'Arrangement'
+	, 'Limited and/or non-limited'
+	, '<p>An arrangement can only be set if the status is 0, 1, 2, 3, 4, 5, 6, D or U.</p><p>Where a customer is granted an arrangement to pay, the arrears that accrue against the original contract should continue to be shown by the appropriate status code. An ‘A’ flag and the arranged monthly payment pertinent at that particular time should accompany this status code. An arranged monthly payment should only be provided on certain CAIS account types where monthly payments are applicable (see ‘Monthly Payment’ in the Customer Account Records section).  Please also refer to the guidance note on the filing of default data.</p><p>As a customer maintains the arrangement and in due course becomes a good payer once again, the status code can be reduced back to 0 and the flag removed. If the arrangement is placed on a more formal basis it is normal practice for some revolving products to ‘re-age’ the account when the arrangement has been maintained satisfactorily. In such cases the status code will reflect the performance of the arrangement. Such cases will continue to have an arrangement flag set even if the status code is 0 but will not display an end date for the arrangement thus indicating that it is still operating. Conversely, if the customer strays outside of the arrangement terms, this should be regarded as a serious breach of the agreement and the debt should continue to age against the original contract, upon removal of the flag.</p><p>For eligible accounts, the revised monthly payment is submitted in the usual monthly payment field (see field 5 above). Two monthly payments will be shown on the CAIS record during a credit search, the current monthly payment (arrangement amount) and the previous monthly payment (how much was being paid before the arrangement was enforced).</p> <ul><li>Only when they are equal i.e. the consumer returns to repaying the original contracted amount, will the arrangement be marked with an end date. This is achieved as follows:</li><li>Where the two monthly payment values are equal, the flag will be dropped but the rest of the record carried forward.</li><li>For account types that do not display the revised monthly payment the arrangement is closed off by removal of the flag at which time an end date will be appended.</li><p>Where the same record with a blank flag is subsequently submitted an end date of the arrangement will automatically be added to the record.</p>'
+	)
+
+
+INSERT INTO dbo.CaisFlags
+	(Id,
+	FlagSetting
+	, Description
+	, ValidForRecordType
+	, Comment
+	)
+VALUES
+	(17,
+	'M'
+	, 'Debt management programme'
+	, 'Limited and/or non-limited'
+	, '<p>The flag of ''M'' should be used where the customer has entered into a debt management programme such as those run by the Citizens'' Advice Bureau.</p><p>The status should reflect the arrears of the account at the time the programme was entered into (similar to arrangement above).</p><p>A debt management programme can only be set on a record where the status is 0,1,2,3,4,5,6, D or U.</p><p>Two monthly payments are registered on CAIS, the current monthly payment (managed amount) and the previous monthly payment (how much was being paid before the programme was enforced). </p><p>Where the two monthly payment values are equal, the flag will be dropped but the rest of the record carried forward.</p><p>Where the same record with a blank flag is subsequently submitted, an end date of the programme will automatically be added to the record. </p>'
+	)
+
+
+INSERT INTO dbo.CaisFlags
+	(Id,
+	FlagSetting
+	, Description
+	, ValidForRecordType
+	, Comment
+	)
+VALUES
+	(18,
+	'I'
+	, 'Credit insurance claim'
+	, 'Limited and/or non-limited'
+	, '<p>This flag is to be set at the point in time when the customer notifies the lender of the claim. A flag setting of ''I'' should be used along with a status setting of U for the life of the claim.</p><p>When used, the words ''CPI CLAIM'' will appear below the status summary lines.</p><p>A record that is subject to a credit insurance claim should be forwarded with a status of U.</p><p>If the account is sent without a status of U, then the flag will be rejected but the rest of the record carried forward.</p><p>Where we are subsequently notified of the same record with a blank flag, an end date of the claim will automatically be added to the record.</p> <p>A record with a credit insurance flag is still expected to receive monthly updates until the point at which it is marked as settled or is defaulted.</p> '
+	)
+
+
+INSERT INTO dbo.CaisFlags
+	(Id,
+	FlagSetting
+	, Description
+	, ValidForRecordType
+	, Comment
+	)
+VALUES
+	(19,
+	'Q'
+	, 'Account query'
+	, 'Limited and/or non-limited'
+	, '<p>Where a query exists on an account, for example a merchandise complaint or a dispute over a defaulted account, the record should be flagged with the letter ''Q'' and a status of U or 8 as appropriate, for the term of the query.</p><p>If the account is sent with any status other than U or 8 the flag will be rejected but the rest of the input record will be processed.</p><p>Where the same record with a blank flag is subsequently submitted, the query flag will automatically be deleted. </p><p>A record marked as a query is still expected to receive monthly updates until the point at which it is marked as settled or is defaulted. </p>'
+	)
+
+
+INSERT INTO dbo.CaisFlags
+	(Id,
+	FlagSetting
+	, Description
+	, ValidForRecordType
+	, Comment
+	)
+VALUES
+	(20,
+	'D'
+	, 'Deceased'
+	, 'Proprietor/Partner/Director'
+	, '<p>Where a subscribing member receives evidence that a Proprietor/Partner/Director is deceased, (for example a death certificate, probate or letters of administration) a flag of ''D'' should be set against the appropriate Proprietor/Partner/Director record. </p><p>A deceased flag can be input with any CAIS status for the business.</p>'
+	)
+
+
+INSERT INTO dbo.CaisFlags
+	(Id,
+	FlagSetting
+	, Description
+	, ValidForRecordType
+	, Comment
+	)
+VALUES
+	(21,
+	'T'
+	, 'Bankruptcy'
+	, 'Non-limited'
+	, '<p>Bankruptcy is one way of dealing with debts that you cannot pay.  The bankruptcy proceedings will free the debtor from overwhelming debt so that they can make a fresh start, subject to some restrictions.</p><p>A Bankruptcy can be set for any Status Code.</p>'
+	)
+
+
+INSERT INTO dbo.CaisFlags
+	(Id,
+	FlagSetting
+	, Description
+	, ValidForRecordType
+	, Comment
+	)
+VALUES
+	(24,
+	'K'
+	, 'Meeting of Creditors '
+	, 'Limited'
+	, '<p>A business may call a meeting of creditors if it encounters financial difficulty. The creditors will have an opportunity to question officers of the business about its performance. </p><p>A Meeting of Creditors can be set for any Status Code.</p>'
+	)
+
+
+INSERT INTO dbo.CaisFlags
+	(Id,
+	FlagSetting
+	, Description
+	, ValidForRecordType
+	, Comment
+	)
+VALUES
+	(25,
+	'P'
+	, 'Partial or No settlement'
+	, 'Limited and/or non-limited'
+	, '<p>Where a partial settlement has been agreed or the debt has been discharged by bankruptcy a flag of `P` should be set.</p><p>A ‘P’ flag may be used together with any status code.</p><p>Where a ‘P’ flag is submitted there must be a valid date in the close date field to indicate a settled or satisfied record and a zero current balance.  Where there is no valid close date the flag will be dropped but the rest of the input record will be processed.</p><p>The ‘P’ flag should be used in the following circumstances where the record is being marked with a zero balance and full payment has not been received.  The record may in some cases also be marked as settled/satisfied but the debt was not fully paid and in some cases no payment was made at all:</p><ul><li>The debt was included in an IVA which has been completed successfully,</li><li>The debt was included in a bankruptcy which has since been discharged,</li><li>A smaller amount has been agreed and accepted in full and final settlement, but this term has not been conveyed to the consumer</li><li>An asset has been repossessed and the outstanding balance is not to be pursued.</li><p>A record with the ‘P’ flag is not expected to receive any further monthly updates.  Further financial updates will therefore be rejected unless the flag is removed by manual amendment.</p>'
+	)
+
+SET IDENTITY_INSERT CaisFlags OFF
+GO
+
