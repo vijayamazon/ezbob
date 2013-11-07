@@ -220,7 +220,7 @@
 			}
 
 			log.InfoFormat("Decided to auto approve amount:{0}", autoApprovedAmount);
-			return 0;
+			return autoApprovedAmount;
 		}
 
 		private bool CheckDefaultAccounts(int customerId)
