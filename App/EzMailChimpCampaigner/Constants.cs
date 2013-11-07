@@ -29,12 +29,12 @@
 
 		public const string FirstStepCustomersDayAfterSubject = "Jumpstart your business get up to £40K for one year";
 		//public const string FirstStepCustomersThreeDaysSubject = "You are less than 10 minutes away from cash";
-		//public const string FirstStepCustomersWeekSubject = "Get your business financed today";
+		public const string FirstStepCustomersWeekSubject = "Ezbob offers £100 rebate";
 
 		public const string SecondStepCustomersDayAfterSubject = "Your business pre-qualifies for £*|LOANOFFER|* in funding";
-		public const string SecondStepCustomersWeekSubject = "Take advantage: EZBOB pre-qualified you for £*|LOANOFFER|*";
+		public const string SecondStepCustomersWeekSubject = "Complete your application and get £100 rebate from Ezbob";
 		public const string SecondStepCustomersTwoWeeksSubject = "Reminder: you are pre-qualified for £*|LOANOFFER|* up to 12 months";
-		public const string SecondStepCustomersMonthSubject = ""; //TODO: add subject
+		public const string SecondStepCustomersMonthSubject = "Take advantage: EZBOB pre-qualified you for £*|LOANOFFER|*";
 
 		public const string LastStepCustomersDayAfterSubject = "*|FNAME|* £*|LOANOFFER|* in funding is waiting for you!";
 		public const string LastStepCustomersWeekSubject = "*|FNAME|* £*|LOANOFFER|* is just a click away";
@@ -45,18 +45,17 @@
 		public const string SecondStepCustomersTitle = "EZBOB Registered Store";
 		public const string LastStepCustomersTitle = "EZBOB Didnt Take Offer";
 
-		public const int FirstStepCustomersDayAfterTemplateId = 67421;//44149;
-		public const int SecondStepCustomersDayAfterTemplateId = 66273;//39833;
-		public const int LastStepCustomersDayAfterTemplateId = 67405;//39861;
-		
+		public const int FirstStepCustomersDayAfterTemplateId = 67421;
+		public const int SecondStepCustomersDayAfterTemplateId = 66273;
+		public const int LastStepCustomersDayAfterTemplateId = 67405;
 
 		//public const int FirstStepCustomersThreeDaysTemplateId = 39813;
 		//public const int SecondStepCustomersThreeDaysTemplateId = 44237;
 		//public const int LastStepCustomersThreeDaysTemplateId = 48169;
 
-		//public const int FirstStepCustomersWeekTemplateId = 44165;
-		public const int SecondStepCustomersWeekTemplateId = 66269;//44245;
-		public const int LastStepCustomersWeekTemplateId = 67409;//48149;
+		public const int FirstStepCustomersWeekTemplateId = 77577;
+		public const int SecondStepCustomersWeekTemplateId = 66269;
+		public const int LastStepCustomersWeekTemplateId = 67409;
 
 		public const int SecondStepCustomersTwoWeeksTemplateId = 66285;
 		public const int LastStepCustomersTwoWeeksTemplateId = 67413;
