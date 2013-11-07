@@ -52,6 +52,18 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
         this.customer.on('change:state', this.render, this);
 
         setInterval(_.bind(this.refreshTimer, this), 1000);
+        var that = this;
+        window.YodleeRefreshAccountRetry = function () {
+            that.attemptsLeft = (that.attemptsLeft || 5) - 1;
+            return {
+                url: that.$el.find('#refreshYodleeBtn').attr('href'),
+                attemptsLeft: that.attemptsLeft
+            };
+        };
+        window.YodleeAccountUpdateError = function (msg) {
+            $.colorbox.close();
+            EzBob.App.trigger('error', msg);
+        };
     },
     events: {
         'click button.get-cash': 'getCash',

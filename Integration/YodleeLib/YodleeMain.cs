@@ -94,6 +94,8 @@
 					signature
 				);
 
+				Log.InfoFormat("generated add url: {0}", finalUrl);
+
 				lu.logoutUser(UserContext);
 				return finalUrl;
 			}
@@ -148,6 +150,7 @@
 					normalizedRequestParameters,
 					signature
 				);
+				Log.InfoFormat("generated update url: {0}", finalUrl);
 				lu.logoutUser(UserContext);
 				return finalUrl;
 			}

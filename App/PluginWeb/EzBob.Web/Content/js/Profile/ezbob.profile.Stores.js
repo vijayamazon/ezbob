@@ -47,7 +47,19 @@ EzBob.Profile.StoresView = Backbone.View.extend({
 
         this.storeInfoView.on('previous', this.render, this);
         this.storeInfoView.on('completed', this.completed, this);
-
+        
+        var that = this;
+        window.YodleeRefreshAccountRetry = function () {
+            that.attemptsLeft = (that.attemptsLeft || 5) - 1;
+            return {
+                url: that.$el.find('#refreshYodleeBtn1').attr('href'),
+                attemptsLeft: that.attemptsLeft
+            };
+        };
+        window.YodleeAccountUpdateError = function (msg) {
+            $.colorbox.close();
+            EzBob.App.trigger('error', msg);
+        };
     },
     events: {
         'click .add-store': 'addStore',

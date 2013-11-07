@@ -11,14 +11,28 @@
     <script type="text/javascript">
         $(window).load(function () {
         if (querystring('oauth_error_code').length > 0) {
-            //window.opener.YodleeAccountUpdatingError("Error occurred while trying to update yodlee");
-            alert('Error occurred while updating bank account');
-            self.close();
+            var variables = window.opener.YodleeRefreshAccountRetry();
+            var attemptsLeft = variables.attemptsLeft;
+            var url = variables.url;
+                    
+            if (attemptsLeft <= 0) {
+                window.opener.YodleeAccountUpdateError("Error occurred while trying to update bank account");
+                self.close();
+            } else {
+                var model = @Html.Raw(JsonConvert.SerializeObject(Model));
+                    if (model != undefined && model.bankId != undefined) {
+                        // In here the marketplace was updated properly
+                        //window.opener.YodleeAccountAdded(@Html.Raw(JsonConvert.SerializeObject(Model)));
+                        self.close();
+                    } else {
+                        // In here we retry
+                        document.location.href = url;
+                    }
+                }
 
         } else {
-            //alert('Yodlee updated ' + @Html.Raw(JsonConvert.SerializeObject(Model)));
-             //window.opener.YodleeAccountUpdated(@Html.Raw(JsonConvert.SerializeObject(Model)));
-             self.close();
+            // In here the marketplace was updated properly
+            self.close();
          }
 
          function querystring(key) {
