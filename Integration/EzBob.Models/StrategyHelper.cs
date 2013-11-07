@@ -362,7 +362,12 @@
 		{
 			int autoApproveMaxTodayLoans = configurationVariablesRepository.GetByNameAsInt("AutoApproveMaxTodayLoans");
 			DateTime today = DateTime.UtcNow;
-			decimal todayLoansAmount = loanRepository.GetAll().Where(l => l.Date.Year == today.Year && l.Date.Month == today.Month && l.Date.Day == today.Day).Sum(l => l.LoanAmount);
+			var todayLoans = loanRepository.GetAll().Where(l => l.Date.Year == today.Year && l.Date.Month == today.Month && l.Date.Day == today.Day);
+			decimal todayLoansAmount = 0;
+			if (todayLoans.Any())
+			{
+				todayLoansAmount = todayLoans.Sum(l => l.LoanAmount);
+			}
 			if (todayLoansAmount >= autoApproveMaxTodayLoans)
 			{
 				log.InfoFormat("No auto approval: Maximal allowed today's loans for auto approval is: {0}. Today's loan amount is:{1}", autoApproveMaxTodayLoans, todayLoansAmount);
