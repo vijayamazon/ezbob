@@ -305,8 +305,7 @@ namespace EZBob.DatabaseLib.Model.Database {
                 return from loan in Loans
                        where
                            loan.Status == LoanStatus.Live ||
-                           loan.Status == LoanStatus.Late ||
-                           loan.Status == LoanStatus.Collection
+                           loan.Status == LoanStatus.Late
                        select loan;
             }
         }
@@ -455,7 +454,7 @@ namespace EZBob.DatabaseLib.Model.Database {
                 CreditResult = CreditResultStatus.Late;
             }
 
-            if (CreditResult == CreditResultStatus.Late && Loans.All(l => l.Status != LoanStatus.Late && l.Status != LoanStatus.Collection && l.Status != LoanStatus.Legal))
+            if (CreditResult == CreditResultStatus.Late && Loans.All(l => l.Status != LoanStatus.Late))
             {
                 CreditResult = CreditResultStatus.Approved;
             }

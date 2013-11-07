@@ -376,7 +376,7 @@
 				}
 			}
 
-			if (Status == LoanStatus.WrittenOff || Status == LoanStatus.Legal || Status == LoanStatus.PaidOff)
+			if (Status == LoanStatus.PaidOff)
 				return;
 
 			var date = term ?? DateTime.UtcNow;
@@ -614,7 +614,7 @@
 		}
 
 		public IQueryable<Loan> NotPaid() {
-			return GetAll().Where(l => l.Status != LoanStatus.PaidOff && l.Status != LoanStatus.WrittenOff);
+			return GetAll().Where(l => l.Status != LoanStatus.PaidOff);
 		}
 	} // class LoanRepository
 
