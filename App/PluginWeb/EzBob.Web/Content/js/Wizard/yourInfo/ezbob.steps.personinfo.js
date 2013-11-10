@@ -35,6 +35,7 @@ EzBob.YourInformationStepView = Backbone.View.extend({
 		this.PersonalView.$el.find('.addressCaption').hide();
 		return this;
 	},
+
 	ct_complete: function () {
 		this.infoView.$el.hide();
 		this.PersonalView.$el.hide();
@@ -44,6 +45,7 @@ EzBob.YourInformationStepView = Backbone.View.extend({
 		this.saveData();
 		return false;
 	},
+
 	jumpToCompanyMode: function () {
 		var name = this.$el.find('select[name="TypeOfBusiness"]').val();
 
@@ -80,15 +82,6 @@ EzBob.YourInformationStepView = Backbone.View.extend({
 		else
 			this.CompanyView.$el.show();
 
-
-            this.CompanyView.$el.appendTo(this.$el);
-            this.CompanyView.render();
-
-            this.CompanyView.on('back', this.backToPersonal, this);
-            this.CompanyView.on('next', this.saveData, this);
-        } else {
-            this.CompanyView.$el.show();
-        }
 		return false;
 	},
 
