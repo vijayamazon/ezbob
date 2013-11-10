@@ -3,6 +3,7 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Model.Database;
 	using NHibernate;
 	using Scorto.NHibernate.Repository;
 	using EZBob.DatabaseLib.Model.Marketplaces.Yodlee;
@@ -11,14 +12,15 @@
 	{
 		public SortedDictionary<string/*word*/, SortedDictionary<string/*Income/Expense*/, double/*amount/Count*/>> YodleeSearchWordModelDict { get; set; }
 		public Dictionary<int /*id*/, string /*word*/> WordsDict;
-		private readonly CurrencyConvertor _currencyConvertor;
 		private readonly List<string> _yodleeSearchWords;
+		private const string CustomerSurname = "0";
+		private const string DirectorSurname = "1";
+		private const string SearchWord = "2";
 
-		public YodleeSearchWordsModel(ISession session, string customerSurName)
+		public YodleeSearchWordsModel(ISession session, Customer customer)
 		{
 			YodleeSearchWordModelDict = new SortedDictionary<string, SortedDictionary<string, double>>();
 			WordsDict = new Dictionary<int, string>();
-			_currencyConvertor = new CurrencyConvertor(new CurrencyRateRepository(session));
 			var words = new YodleeSearchWordsRepository(session).GetAll();
 
 			foreach (var word in words)
@@ -26,8 +28,36 @@
 				WordsDict.Add(word.Id, word.SearchWords);
 			}
 
-			_yodleeSearchWords = words.Select(x => x.SearchWords).ToList();
-			_yodleeSearchWords.Add(customerSurName);
+			_yodleeSearchWords = words.Select(x => string.Format("{0}{1}", SearchWord, x.SearchWords)).ToList();
+
+			//Add customer surname
+			_yodleeSearchWords.Add(string.Format("{0}{1}", CustomerSurname, customer.PersonalInfo.Surname));
+
+			//Add directors surnames
+			var directors = new List<string>();
+			switch (customer.PersonalInfo.TypeOfBusiness.Reduce())
+			{
+				case TypeOfBusinessReduced.Limited:
+					if (customer.LimitedInfo != null && customer.LimitedInfo.Directors.Any())
+					{
+						directors = customer.LimitedInfo.Directors.Select(d => d.Surname).ToList();
+					}
+					break;
+				case TypeOfBusinessReduced.NonLimited:
+					if (customer.NonLimitedInfo != null && customer.NonLimitedInfo.Directors.Any())
+					{
+						directors = customer.NonLimitedInfo.Directors.Select(d => d.Surname).ToList();
+					}
+					break;
+				case TypeOfBusinessReduced.Personal:
+				default:
+					break;
+			}
+
+			foreach (var director in directors)
+			{
+				_yodleeSearchWords.Add(string.Format("{0}{1}", DirectorSurname, director));
+			}
 		}
 
 
@@ -35,7 +65,7 @@
 		{
 			foreach (var word in _yodleeSearchWords)
 			{
-				if (transaction.description.ToLowerInvariant().Contains(word.ToLowerInvariant()))
+				if (transaction.description.ToLowerInvariant().Contains(word.Substring(1).ToLowerInvariant()))
 				{
 					var amount = transaction.transactionAmount.HasValue ? transaction.transactionAmount.Value : 0;
 

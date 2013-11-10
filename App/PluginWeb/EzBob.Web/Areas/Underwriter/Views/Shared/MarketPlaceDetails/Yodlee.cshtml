@@ -53,7 +53,7 @@
                     if(cat[0] == '2' && obj[cat][month] < 0){ css='debit';}
                     if(cat[0] == '2' && obj[cat][month] >= 0){ css='credit';}
                     %>
-                    <td class="<%=css%>"><%= obj[cat][month] == 0 ? '' : (isPound ? EzBob.formatPoundsAsInt(obj[cat][month]) : parseInt(obj[cat][month]))  %></td>
+                    <td class="<%=css%>"><%= obj[cat][month] == 0 ? '-' : (isPound ? EzBob.formatPoundsAsInt(obj[cat][month]) : parseInt(obj[cat][month]))  %></td>
                     <%}/*for*/%>
                 </tr>
                 <%if(cat[0]=='2'){%>
@@ -81,7 +81,9 @@
             <thead>
                 <tr>
                     <th>Search Words Report</th>
+                    <th>Word Origin</th>
                     <% var obj = y.SearchWordsModel.YodleeSearchWordModelDict;
+                    console.log(obj, word1);
                     var word1 = obj[Object.keys(obj)[0]]; 
                     for (var type in word1) { %>
                     <th><%= type %></th>
@@ -94,9 +96,10 @@
             <tbody>
                 <%for(var word in obj){%>
                 <tr class="yodleeSearchWordsRow">
-                    <td><%=word%></td>
+                    <td><%=word.substr(1)%></td>
+                    <td><%switch(word[0]) { case '0': print('Customer surname'); break; case '1': print('Director surname'); break; case '2': print('Search word'); break; default: print('unknown'); break; } %></td>
                     <%for (var type in obj[word]) { var isPound = type.indexOf('#') == -1;%>
-                    <td><%= obj[word][type] == 0 ? '' : (isPound ? EzBob.formatPoundsAsInt(obj[word][type]) : parseInt(obj[word][type])) %></td>
+                    <td><%= obj[word][type] == 0 ? '-' : (isPound ? EzBob.formatPoundsAsInt(obj[word][type]) : parseInt(obj[word][type])) %></td>
                     <%}%>
                 </tr>
                 <%}%>
