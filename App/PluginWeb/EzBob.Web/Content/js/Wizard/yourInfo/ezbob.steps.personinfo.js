@@ -11,13 +11,13 @@ EzBob.YourInformationStepModel = EzBob.WizardStepModel.extend({
 
 EzBob.YourInformationStepView = Backbone.View.extend({
     initialize: function () {
-        this.types = {
-            entrepreneur: EzBob.PersonalInformationView,
-            pship3p: EzBob.NonLimitedInformationView,
-            pship: EzBob.NonLimitedInformationView,
-            llp: EzBob.LimitedInformationView,
-            limited: EzBob.LimitedInformationView,
-            soletrader: EzBob.NonLimitedInformationView
+        this.companyTypes = {
+            entrepreneur: { View: EzBob.PersonalInformationView, Type: "entrepreneur" },
+            pship3p: { View: EzBob.NonLimitedInformationView, Type: "NonLimited" },
+            pship: { View: EzBob.NonLimitedInformationView, Type: "NonLimited" },
+            llp: { View: EzBob.LimitedInformationView, Type: "Limited" },
+            limited: { View: EzBob.LimitedInformationView, Type: "Limited" },
+            soletrader: { View: EzBob.NonLimitedInformationView, Type: "NonLimited" },
         };
         this.thankYouPage = new EzBob.ThankYouWizardPage({ model: this.model });
         this.thankYouPage.$el.appendTo(this.$el);
@@ -26,7 +26,6 @@ EzBob.YourInformationStepView = Backbone.View.extend({
             EzBob.CT.recordEvent('ct:personalinfo.complete');
         });
 
-        EzBob.App.on('ct:personalinfo.show', this.showStep, this);
         EzBob.App.on('ct:personalinfo.complete', this.ct_complete, this);
     },
     render: function () {
@@ -35,31 +34,11 @@ EzBob.YourInformationStepView = Backbone.View.extend({
         this.PersonalView.on('next', this.next, this);
         this.PersonalView.on('back', this.back, this);
         this.PersonalView.$el.appendTo(this.$el);
-	    this.PersonalView.$el.find('.addressCaption').hide();
+        this.PersonalView.$el.find('.addressCaption').hide();
         return this;
     },
-    showStep: function (name) {
-        this.PersonalView.$el.hide();
-        if (name === "entrepreneur") {
-            EzBob.App.trigger("wizard:progress", 70);
-            this.infoView.$el.hide();
-            this.PersonalView.$el.show();
-            return;
-        }
-
-        var infoType = this.types[name.toLowerCase()];
-        if (!infoType) return;
-
-        if (this.infoView) {
-            this.infoView.$el.empty();
-        }
-
-        this.infoView = new infoType({ model: this.model });
-        this.infoView.$el.appendTo(this.$el);
-        this.infoView.render();
-    },
     ct_complete: function () {
-        this.infoView.$el.hide();
+        this.CompanyView.$el.hide();
         this.PersonalView.$el.hide();
         this.thankYouPage.render();
     },
@@ -68,30 +47,36 @@ EzBob.YourInformationStepView = Backbone.View.extend({
             this.saveData();
             return false;
         }
-        var infoType = this.types[name.toLowerCase()];
-        if (!infoType) return false;
-
+        var companyType = this.companyTypes[name.toLowerCase()];
+        if (!companyType) return false;
         EzBob.CT.recordEvent('ct:personalinfo.show', name);
         EzBob.App.trigger("wizard:progress", 90);
 
         this.PersonalView.$el.hide();
-        
-        this.infoView = new infoType({ model: this.model });
-        this.infoView.$el.appendTo(this.$el);
-        this.infoView.render();
 
-        this.infoView.on('back', this.backToPersonal, this);
-        this.infoView.on('next', this.saveData, this);
+        if (this.CompanyView && this.CompanyView.ViewName !== companyType.Type) {
+            this.CompanyView.$el.empty();
+            this.CompanyView = null;
+        }
+
+        if (!this.CompanyView) {
+            this.CompanyView = new companyType.View({ model: this.model });
+
+            this.CompanyView.$el.appendTo(this.$el);
+            this.CompanyView.render();
+
+            this.CompanyView.on('back', this.backToPersonal, this);
+            this.CompanyView.on('next', this.saveData, this);
+        } else {
+            this.CompanyView.$el.show();
+        }
         return false;
-    },
-    back: function () {
-        this.trigger('previous');
     },
     backToPersonal: function () {
         EzBob.App.trigger("wizard:progress", 70);
         scrollTop();
         EzBob.CT.recordEvent('ct:personalinfo.show', 'personal');
-        this.infoView.$el.hide();
+        this.CompanyView.$el.hide();
         this.PersonalView.$el.show();
         this.PersonalView.inputChanged();
     },
@@ -101,7 +86,7 @@ EzBob.YourInformationStepView = Backbone.View.extend({
     saveData: function () {
         var form = this.$el.find('form.CompanyDetailForm'),
             data = form.serializeArray();
-        
+
         var action = form.attr('action'),
             dataForCompany = SerializeArrayToEasyObject(data),
             typeOfBussiness = dataForCompany.TypeOfBusiness,
@@ -110,9 +95,8 @@ EzBob.YourInformationStepView = Backbone.View.extend({
             that = this,
             sCompanyFilter = '',
             refNum = "";
-        console.log(dataForCompany);
         EzBob.App.trigger("wizard:progress", 100);
-        
+
         switch (typeOfBussiness.toLowerCase()) {
             case "entrepreneur":
                 break;
@@ -186,7 +170,7 @@ EzBob.YourInformationStepView = Backbone.View.extend({
         var that = this;
         _.find(data, function (d) { return d.name == "OverallTurnOver"; }).value = this.$el.find("#OverallTurnOver").autoNumericGet();
         _.find(data, function (d) { return d.name == "WebSiteTurnOver"; }).value = this.$el.find("#WebSiteTurnOver").autoNumericGet();
-        
+
         var totalMonthlySalary = _.find(data, function (d) { return d.name == "TotalMonthlySalary"; });
         if (totalMonthlySalary) {
             totalMonthlySalary.value = this.$el.find("#TotalMonthlySalary").autoNumericGet();
@@ -197,17 +181,17 @@ EzBob.YourInformationStepView = Backbone.View.extend({
                 EzBob.App.trigger('error', res.error);
                 return;
             }
-            
+
             that.PersonalView.$el.hide();
-            if (that.infoView) that.infoView.$el.hide();
-            
+            if (that.CompanyView) that.CompanyView.$el.hide();
+
             that.thankYouPage.render();
             that.trigger('ready');
             scrollTop();
-            
+
         });
 
-        request.complete(function() {
+        request.complete(function () {
             BlockUi("Off");
         });
     }
@@ -218,19 +202,19 @@ EzBob.ThankYouWizardPage = Backbone.View.extend({
         this.template = $(_.template($("#lastWizardThankYouPage").html(), { ordty: ordty }));
     },
     render: function () {
-        $.getJSON(window.gRootPath + "Customer/Wizard/EarnedPointsStr").done(function(data) {
+        $.getJSON(window.gRootPath + "Customer/Wizard/EarnedPointsStr").done(function (data) {
             if (data.EarnedPointsStr)
                 $('#EarnedPoints').text(data.EarnedPointsStr);
         });
 
         this.$el.html(this.template);
         $('.sidebarBox').find('li[rel]').setPopover('left');
-        
+
         if (!this.model.get('IsOffline'))
             this.$el.find('.offline').remove();
         else
             this.$el.find('.notoffline').remove();
-        
+
         return this;
     }
 });
