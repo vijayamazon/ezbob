@@ -7,13 +7,11 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
         this.ViewName = "personal";
         this.PrevAddressValidator = false;
         this.AddressValidator = false;
-        this.type = "Personal";
 
         this.events = _.extend({}, this.events, {
             "change #TimeAtAddress": "PersonalTimeAtAddressChanged",
             "change #ResidentialStatus": "ResidentialStatusChanged",
             "change #OwnOtherProperty": "OwnOtherPropertyChanged",
-            'change select[name="TypeOfBusiness"]': "typeChanged",
             'click label[for="ConsentToSearch"] a': 'showConsent',
             'focus #OverallTurnOver': "overallTurnOverFocus",
             'focus #WebSiteTurnOver': "webSiteTurnOverFocus",
@@ -102,7 +100,6 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
 	},
     render: function () {
         this.constructor.__super__.render.call(this);
-        var that = this;
 
         var personalAddressView = new EzBob.AddressView({ model: this.model.get('PersonalAddress'), name: "PersonalAddress", max: 1 });
         personalAddressView.render().$el.appendTo(this.$el.find('#PersonalAddress'));
@@ -121,9 +118,42 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
         this.model.get('PersonalAddress').on("all", this.PersonalAddressModelChange, this);
         this.model.get('OtherPropertyAddress').on("all", this.OtherPropertyAddressModelChange, this);
         this.$el.find(".cashInput").moneyFormat();
-        
+
         if (!this.model.get('IsOffline'))
             this.$el.find('.offline').remove();
+
+		var oPersonalInfo = this.model.get('CustomerPersonalInfo');
+		if (oPersonalInfo) {
+			var sGender = '';
+			switch (oPersonalInfo.Gender) {
+				case 0:
+					sGender = 'M';
+					break;
+				case 1:
+					sGender = 'F';
+					break;
+			} // switch
+			this.$el.find('#FormRadioCtrl_' + sGender).prop('checked', true);
+
+			var aryBirthDate = (this.model.get('BirthDateYMD') || '').split('-');
+			if (aryBirthDate.length == 3) {
+				this.$el.find('#DateOfBirthDay').val(aryBirthDate[2]);
+				this.$el.find('#DateOfBirthMonth').val(aryBirthDate[1]);
+				this.$el.find('#DateOfBirthYear').val(aryBirthDate[0]);
+			} // if birthdate
+
+			var aryMaritalStatus = ['Married', 'Single', 'Divorced', 'Widow/er', 'Other'];
+			if (aryMaritalStatus[oPersonalInfo.MartialStatus])
+				this.$el.find('#MartialStatus').val(aryMaritalStatus[oPersonalInfo.MartialStatus]);
+
+			this.$el.find('#TimeAtAddress').val(oPersonalInfo.TimeAtAddress);
+			this.$el.find('#ResidentialStatus').val(oPersonalInfo.ResidentialStatus);
+			this.$el.find('#DayTimePhone').val(oPersonalInfo.DaytimePhone);
+			this.$el.find('#TypeOfBusiness').val(oPersonalInfo.TypeOfBusinessName);
+			this.$el.find('#WebSiteTurnOver').val(oPersonalInfo.WebSiteTurnOver);
+			this.$el.find('#OverallTurnOver').val(oPersonalInfo.OverallTurnOver);
+		} // if has personal info
+
         this.inputChanged();
     },
 
@@ -149,12 +179,7 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
         this.inputChanged();
         this.clearAddressError("#OtherPropertyAddress");
     },
-    typeChanged: function (e) {
-        this.type = e.target.value;
-        var buttonName = this.type == "Entrepreneur" ? "Complete" : "Continue";
-        this.$el.find('.btn-next').text(buttonName);
-    },
-    
+
     clearPrevAddressModel: function () {
         this.model.get('PrevPersonAddresses').remove(this.model.get('PrevPersonAddresses').models);
     },
@@ -171,8 +196,11 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
 
     next: function (e) {
         var $el = $(e.currentTarget);
-        if ($el.hasClass("disabled")) return false;
-        this.trigger('next', this.type);
+
+        if ($el.hasClass("disabled"))
+            return false;
+
+        this.trigger('next');
         return false;
     }
 });

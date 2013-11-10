@@ -189,8 +189,6 @@ EzBob.Profile.ProfileRouter = Backbone.Router.extend({
         if (EzBob.Config.ShowChangePasswordPage) {
             this.settings();
             this.widgets.Settings.editPassword();
-        } else {
-            //this.defaultRoute();
         }
 
         EzBob.App.on('ct:profile:show', this.ctNavigate, this);

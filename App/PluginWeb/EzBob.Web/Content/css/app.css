@@ -1034,21 +1034,16 @@ input[type="color"],
     text-shadow: 0 1px 1px #fff;
 }
 
-.bar_step30 {
-    width: 30%;
-}
-
-.bar_step70 {
-    width: 70%;
-}
-
-.bar_step90 {
-    width: 90%;
-}
-
-.bar_step100 {
-    width: 100%;
-}
+.bar_step10 { width: 10%; }
+.bar_step20 { width: 20%; }
+.bar_step30 { width: 30%; }
+.bar_step40 { width: 40%; }
+.bar_step50 { width: 50%; }
+.bar_step60 { width: 60%; }
+.bar_step70 { width: 70%; }
+.bar_step80 { width: 80%; }
+.bar_step90 { width: 90%; }
+.bar_step100 { width: 100%; }
 
 .bar_content {
     padding: 0 5px;

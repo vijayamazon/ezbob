@@ -4,71 +4,73 @@
 @using EzBob.Web.Models
 @model EzBob.Web.Areas.Customer.Models.CustomerModel
 @{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewBag.Title = "Create an EZBOB account";
-    var config = ViewData["Config"] as IEzBobConfiguration;
-    var customer = (CustomerModel)Model;
-    customer.IsProfile = false;
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	ViewBag.Title = "Create an EZBOB account";
+	var config = ViewData["Config"] as IEzBobConfiguration;
+	var customer = (CustomerModel)Model;
+	customer.IsProfile = false;
 }
 
 <div class="row-fluid wizard-wrapper">
-    <div id="wizard"></div>
+	<div id="wizard"></div>
 </div>
 
 @section Js{
-    @{Html.RenderPartial("_SignUpTemplate");}
-    @{Html.RenderPartial("StoreInfoMain");}
-    @{Html.RenderPartial("EbayStoreInfo");}
-    @{Html.RenderPartial("AmazonStoreInfo");}
-    @{Html.RenderPartial("StoreButton");}
-    @{Html.RenderPartial("PayPalInstructions");}
-    @{Html.RenderPartial("_CompanyDetails");}
-    @{Html.RenderPartial("_Wizard");}
-    @{Html.RenderPartial("BankAccountInstructions");}
-    @{Html.RenderPartial("Shops/EKMAccoutInfoTemplate");}
-    @{Html.RenderPartial("Shops/PayPointAccoutInfoTemplate");}
-    @{Html.RenderPartial("Shops/YodleeAccoutInfoTemplate");}
-    @{Html.RenderPartial("Shops/CGAccoutInfoTemplate");}
-    @BundleHelper.RenderWizardJs()
-    <script type="text/javascript">
-        
-        EzBob.Config.SessionTimeout = @config.SessionTimeout;
-        EzBob.Config.CaptchaMode = '@ViewData["CaptchaMode"]';
-        EzBob.Config.MarketPlaces = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewData["MarketPlaces"]));
-        SetCaptchaMode();
-        EzBob.Config.WizardTopNaviagtionEnabled = @config.WizardTopNaviagtionEnabled.ToString().ToLower(CultureInfo.InvariantCulture);
-            EzBob.Config.TargetsEnabled = @if (ViewData["TargetsEnabled"] != null)
-                                          {
-                                              @ViewData["TargetsEnabled"].ToString().ToLower(CultureInfo.InvariantCulture)
-                                          }
-                                          else
-                                          {
-                                              <text>false</text>
-                                          };
-        EzBob.Config.PayPalEnabled = @config.PayPalEnabled.ToString().ToLower();
-        EzBob.Config.PasswordPolicyType = '@config.PasswordPolicyType.ToLower()';
+	@{Html.RenderPartial("_SignUpTemplate");}
+	@{Html.RenderPartial("StoreInfoMain");}
+	@{Html.RenderPartial("EbayStoreInfo");}
+	@{Html.RenderPartial("AmazonStoreInfo");}
+	@{Html.RenderPartial("StoreButton");}
+	@{Html.RenderPartial("PayPalInstructions");}
+	@{Html.RenderPartial("_CompanyDetails");}
+	@{Html.RenderPartial("_Wizard");}
+	@{Html.RenderPartial("BankAccountInstructions");}
+	@{Html.RenderPartial("Shops/EKMAccoutInfoTemplate");}
+	@{Html.RenderPartial("Shops/PayPointAccoutInfoTemplate");}
+	@{Html.RenderPartial("Shops/YodleeAccoutInfoTemplate");}
+	@{Html.RenderPartial("Shops/CGAccoutInfoTemplate");}
+	@BundleHelper.RenderWizardJs()
+	<script type="text/javascript">
+		EzBob.Config.SessionTimeout = @config.SessionTimeout;
 
-        $(function () {
-            var options = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(customer));
-            options.el = $('#wizard');
-        
-            var customer = new EzBob.CustomerModel (options);
+		EzBob.Config.CaptchaMode = '@ViewData["CaptchaMode"]';
 
-            options.customer = customer;
+		EzBob.Config.MarketPlaces = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewData["MarketPlaces"]));
 
-            var signupWizard = new EzBob.SignUpWizard(options);
-            signupWizard.render();
+		SetCaptchaMode();
 
-            $("#signupEmail").focus();
-        
-            var strengthPasswordModel= new EzBob.StrengthPassword ();
-            var strengthPasswordView = new EzBob.StrengthPasswordView({ model: strengthPasswordModel, el: $('#strength-password-view') });
-            strengthPasswordView.render();
+		EzBob.Config.WizardTopNaviagtionEnabled = @config.WizardTopNaviagtionEnabled.ToString().ToLower(CultureInfo.InvariantCulture);
 
-            var oFieldStatusIcons = $('IMG.field_status');
-            oFieldStatusIcons.filter('.required').field_status({ required: true });
-            oFieldStatusIcons.not('.required').field_status({ required: false });
-            
-        })
-    </script>
+		EzBob.Config.TargetsEnabled = @if (ViewData["TargetsEnabled"] != null) {
+			@ViewData["TargetsEnabled"].ToString().ToLower(CultureInfo.InvariantCulture)
+		}
+		else {
+			<text>false</text>
+		};
+
+		EzBob.Config.PayPalEnabled = @config.PayPalEnabled.ToString().ToLower();
+		EzBob.Config.PasswordPolicyType = '@config.PasswordPolicyType.ToLower()';
+
+		$(function() {
+			var options = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(customer));
+			options.el = $('#wizard');
+
+			var customer = new EzBob.CustomerModel(options);
+
+			options.customer = customer;
+
+			var signupWizard = new EzBob.WizardView(options);
+			signupWizard.render();
+
+			$("#signupEmail").focus();
+
+			var strengthPasswordModel = new EzBob.StrengthPassword();
+			var strengthPasswordView = new EzBob.StrengthPasswordView({ model: strengthPasswordModel, el: $('#strength-password-view') });
+			strengthPasswordView.render();
+
+			var oFieldStatusIcons = $('IMG.field_status');
+			oFieldStatusIcons.filter('.required').field_status({ required: true });
+			oFieldStatusIcons.not('.required').field_status({ required: false });
+		});
+	</script>
 }

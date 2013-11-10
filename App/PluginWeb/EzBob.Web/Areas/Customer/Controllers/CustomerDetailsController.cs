@@ -61,7 +61,8 @@ namespace EzBob.Web.Areas.Customer.Controllers
             List<DirectorModel> nonLimitedDirectors,
             string dateOfBirth,
             List<CustomerAddress> otherPropertyAddress,
-			CompanyEmployeeCountInfo companyEmployeeCountInfo
+			CompanyEmployeeCountInfo companyEmployeeCountInfo,
+			bool isInCompanyMode
         )
         {
             var customer = _context.Customer;
@@ -82,9 +83,15 @@ namespace EzBob.Web.Areas.Customer.Controllers
 
             _crBuilder.CreateCashRequest(customer);
 
-            customer.WizardStep = WizardStepType.AllStep;
+			if (isInCompanyMode)
+				customer.WizardStep = WizardStepType.AllStep;
+			else {
+				customer.WizardStep = (personalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Personal)
+					? WizardStepType.AllStep
+					: WizardStepType.PersonalDetails;
+			} // if
 
-			if (customer.IsOffline) {
+	        if (customer.IsOffline) {
 				customer.CompanyEmployeeCount.Add(new CompanyEmployeeCount {
 					BottomEarningEmployeeCount = companyEmployeeCountInfo.BottomEarningEmployeeCount,
 					Created = DateTime.UtcNow,

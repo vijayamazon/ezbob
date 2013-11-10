@@ -63,41 +63,6 @@
 		}
 
 		[Transactional]
-		public JsonNetResult Banks()
-		{
-			var repository = new YodleeBanksRepository(_session);
-			var banks = repository.GetAll();
-
-			var dict = new Dictionary<string, YodleeParentBankModel>();
-			var yodleeBanksModel = new YodleeBanksModel
-				{
-					DropDownBanks = new List<YodleeSubBankModel>(),
-				};
-
-			foreach (var bank in banks)
-			{
-				if (bank.Active && bank.Image)
-				{
-					var sub = new YodleeSubBankModel {csId = bank.ContentServiceId, displayName = bank.Name};
-					if (!dict.ContainsKey(bank.ParentBank))
-					{
-						dict.Add(bank.ParentBank, new YodleeParentBankModel { parentBankName = bank.ParentBank, subBanks = new List<YodleeSubBankModel>()});
-					}
-					dict[bank.ParentBank].subBanks.Add(sub);
-				}
-
-				if (bank.Active && !bank.Image)
-				{
-					yodleeBanksModel.DropDownBanks.Add(new YodleeSubBankModel{ csId = bank.ContentServiceId, displayName = bank.Name});
-				}
-			}
-
-			yodleeBanksModel.ImageBanks= dict.Values.ToList();
-
-			return this.JsonNet(yodleeBanksModel);
-		}
-
-		[Transactional]
 		public ViewResult YodleeCallback()
 		{
 			Log.InfoFormat("Got to yodlee's callback with params:{0}", HttpContext.Request.Params);
@@ -280,25 +245,4 @@
 			};
 		}
 	}
-
-
-	public class YodleeParentBankModel
-	{
-		public string parentBankName { get; set; }
-		public List<YodleeSubBankModel> subBanks { get; set; }
-	}
-
-	public class YodleeSubBankModel
-	{
-		public long csId { get; set; }
-		public string displayName { get; set; }
-	}
-
-	public class YodleeBanksModel
-	{
-		public List<YodleeParentBankModel> ImageBanks;
-		public List<YodleeSubBankModel> DropDownBanks;
-	}
-
-
 }

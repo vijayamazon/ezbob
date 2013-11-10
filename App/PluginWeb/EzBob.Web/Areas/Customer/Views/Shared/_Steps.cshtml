@@ -1,28 +1,42 @@
 ﻿@model dynamic
 <div class="wizard-steps">
-    <ul class="application_steps">
-        <% _.each(steps, function(step, i){%>
-        <% 
-        var css = "";
-        if(i == current) css += "active current ";
-        if(i < current) css += "completed complete ";
-        if(progress == 100) css = "completed complete ";
-        %>
-        <li class="<%- css %> " data-step-num="<%= step.num %>">
-            <span class="step_label">Step <%= step.num + 1 %>:
-            </span>
-            <%= step.title %>
-        </li>
-        <%})%>
-    </ul>
-    <div class="ez_progress_bar active">
-        <div class="ez_bar bar_step<%= progress %>">
-            <%if(progress > 0){%>
-                <div class="bar_content alignright"><%= progress %>% Completed</div>
-            <%}else{%>
-                <div class="bar_content"><%= progress %>% Completed</div>
-            <%}%>
-        </div>
-    </div>
+	<ul class="application_steps"><%
+		(function() {
+			var nVisibleStepNum = 0;
 
+			_.each(steps, function(step, i) {
+				var css = '';
+
+				if (i == current)
+					css += 'active current ';
+
+				if (i < current)
+					css += 'completed complete ';
+
+				if (progress == 100)
+					css = 'completed complete ';
+
+				if (step.showTitleInWizardSteps)
+					nVisibleStepNum++;
+				else
+					css += 'hide';
+
+				%><li class="<%- css %> " data-step-num="<%= step.num %>">
+					<span class="step_label">Step <%= nVisibleStepNum %>:</span>
+					<%= step.title %>
+				</li><%
+			});
+		})();
+	%></ul>
+
+	<div class="ez_progress_bar active">
+		<div class="ez_bar bar_step<%= progress %>"><%
+			if(progress > 0) {
+				%><div class="bar_content alignright"><%= progress %>% Completed</div><%
+			}
+			else {
+				%><div class="bar_content"><%= progress %>% Completed</div><%
+			}
+		%></div>
+	</div>
 </div>

@@ -20,16 +20,9 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
         'click #OtherYodleeBanks': 'OtherYodleeBanksClicked'
         'change #OtherYodleeBanks': 'OtherYodleeBanksClicked'
 
-
-    loadBanks: () ->
-        @YodleeBanks.safeFetch().done =>
-            if @YodleeBanks.length > 0
-                @render
-                
     initialize: (options) ->
         that = @;
-        @YodleeBanks = new EzBob.YodleeBanksModel()
-        @loadBanks()
+
         window.YodleeAccountAdded = (result) ->
             if (result.error)
                 EzBob.App.trigger('error', result.error);
@@ -54,8 +47,6 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
         selectedId = $(el.currentTarget).find(':selected').val()
         selectedName = $(el.currentTarget).find(':selected').text()
 
-        
-
         if (selectedId)
             @$el.find("input[type='radio'][name='Bank']:checked").removeAttr('checked')
             @$el.find(".SubBank:not(.hide)").addClass('hide')
@@ -68,7 +59,6 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
             @$el.find("#yodleeLinkAccountBtn:not([class*='disabled'])").addClass('disabled')
             
         #return if(el.currentTarget.find(':selected').val()
-
 
     subBankSelectionChanged:(el) ->
         return false if (@$el.find(".SubBank option:selected").length == 0) 
@@ -100,12 +90,8 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
         @$el.find("#OtherYodleeBanks").change()
         return
 
-    render: ->
-        super()
-        return @
-
     serializeData: ->
-        return {YodleeBanks: @YodleeBanks.toJSON()}
+        return { YodleeBanks: JSON.parse $('#yodlee-banks').text() }
 
     back: ->
         @trigger 'back'
@@ -121,7 +107,3 @@ class EzBob.YodleeAccountModel extends Backbone.Model
 class EzBob.YodleeAccounts extends Backbone.Collection
     model: EzBob.YodleeAccountModel
     url: "#{window.gRootPath}Customer/YodleeMarketPlaces/Accounts"
-    
-class EzBob.YodleeBanksModel extends Backbone.Model
-    urlRoot: "#{window.gRootPath}Customer/YodleeMarketPlaces/Banks"
-

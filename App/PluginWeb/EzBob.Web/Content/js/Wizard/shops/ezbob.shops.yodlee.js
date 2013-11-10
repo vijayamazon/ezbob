@@ -53,20 +53,9 @@
       'change #OtherYodleeBanks': 'OtherYodleeBanksClicked'
     };
 
-    YodleeAccountInfoView.prototype.loadBanks = function() {
-      var _this = this;
-      return this.YodleeBanks.safeFetch().done(function() {
-        if (_this.YodleeBanks.length > 0) {
-          return _this.render;
-        }
-      });
-    };
-
     YodleeAccountInfoView.prototype.initialize = function(options) {
       var that;
       that = this;
-      this.YodleeBanks = new EzBob.YodleeBanksModel();
-      this.loadBanks();
       window.YodleeAccountAdded = function(result) {
         if (result.error) {
           EzBob.App.trigger('error', result.error);
@@ -150,14 +139,9 @@
       this.$el.find("#OtherYodleeBanks").change();
     };
 
-    YodleeAccountInfoView.prototype.render = function() {
-      YodleeAccountInfoView.__super__.render.call(this);
-      return this;
-    };
-
     YodleeAccountInfoView.prototype.serializeData = function() {
       return {
-        YodleeBanks: this.YodleeBanks.toJSON()
+        YodleeBanks: JSON.parse($('#yodlee-banks').text())
       };
     };
 
@@ -204,19 +188,5 @@
     return YodleeAccounts;
 
   })(Backbone.Collection);
-
-  EzBob.YodleeBanksModel = (function(_super) {
-
-    __extends(YodleeBanksModel, _super);
-
-    function YodleeBanksModel() {
-      return YodleeBanksModel.__super__.constructor.apply(this, arguments);
-    }
-
-    YodleeBanksModel.prototype.urlRoot = "" + window.gRootPath + "Customer/YodleeMarketPlaces/Banks";
-
-    return YodleeBanksModel;
-
-  })(Backbone.Model);
 
 }).call(this);

@@ -85,6 +85,7 @@
     <Compile Include="Model\Database\ApprovalsWithoutAMLMap.cs" />
     <Compile Include="Model\Database\CompanyEmployeeCount.cs" />
     <Compile Include="Model\Database\CompanyEmployeeCountMap.cs" />
+    <Compile Include="Model\Database\WizardStepSequence.cs" />
     <Compile Include="Model\Database\CustomerStatusHistoryMap.cs" />
     <Compile Include="Model\Database\CustomerStatusHistory.cs" />
     <Compile Include="Model\Database\CustomerStatusesMap.cs" />
@@ -129,6 +130,7 @@
     <Compile Include="Model\Marketplaces\PayPal\MP_PayPalTransactionItem2.cs" />
     <Compile Include="Model\Marketplaces\PayPal\MP_PayPalTransactionItem2Map.cs" />
     <Compile Include="Model\Marketplaces\Yodlee\MP_YodleeSearchWords.cs" />
+    <Compile Include="Model\Marketplaces\Yodlee\YodleeBanksModels.cs" />
     <Compile Include="PacNetManualBalance.cs" />
     <Compile Include="DatabaseWrapper\Order\ChannelGrabberOrderItem.cs" />
     <Compile Include="DatabaseWrapper\Order\InternalDataList.cs" />

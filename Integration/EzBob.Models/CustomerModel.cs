@@ -19,6 +19,7 @@ namespace EzBob.Web.Areas.Customer.Models
         public string accountType { get; set; }
 
         public PersonalInfo CustomerPersonalInfo { get; set; }
+		public string BirthDateYMD { get; set; }
 
         public string BusinessTypeReduced { get; set; }
 

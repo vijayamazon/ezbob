@@ -120,7 +120,8 @@ namespace EZBob.DatabaseLib.Model.Database {
     {   
         SignUp = 1,
         Marketplace = 2,
-        AllStep = 4
+        AllStep = 4,
+		PersonalDetails = 5
     }
 
 
@@ -674,6 +675,10 @@ namespace EZBob.DatabaseLib.Model.Database {
         public string MobilePhone { get; set; }
         public decimal? OverallTurnOver { get; set; }
         public decimal? WebSiteTurnOver { get; set; }
+
+		public string BirthDateYMD() {
+			return DateOfBirth.HasValue ? DateOfBirth.Value.ToString("yyyy-M-d", CultureInfo.InvariantCulture) : "";
+		}
     }
 
     public class AddressInfo

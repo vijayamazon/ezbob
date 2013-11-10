@@ -1088,6 +1088,7 @@
     <Content Include="Content\js\Underwriter\Support\ezbob.underwriter.support.js">
       <DependentUpon>ezbob.underwriter.support.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Wizard\ezbob.thankyoupage.js" />
     <Content Include="Content\js\Wizard\shops\ezbob.shopbutton.js">
       <DependentUpon>ezbob.shopbutton.coffee</DependentUpon>
     </Content>
@@ -1133,6 +1134,8 @@
     <Content Include="Content\js\Wizard\shops\ezbob.shops.yodlee.js">
       <DependentUpon>ezbob.shops.yodlee.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Wizard\wizardStepSequence.js" />
+    <Content Include="Content\js\Wizard\ezbob.wizardStepsModel.js" />
     <Content Include="Content\js\Wizard\yourInfo\ezbob.yourInfo.employeeCount.js" />
     <Content Include="Views\Shared\_Copyright.cshtml">
       <SubType>Code</SubType>
@@ -1327,7 +1330,6 @@
     <Content Include="Content\js\Wizard\accounts\ezbob.accounts.paypal.js" />
     <Content Include="Content\js\controls\ezbob.notifications.js" />
     <Content Include="Content\js\Wizard\ezbob.ct.bindShopToCT.js" />
-    <Content Include="Content\js\Wizard\ezbob.signupwizard.js" />
     <Content Include="Content\js\Wizard\yourInfo\ezbob.yourinfo.companyTarget.js" />
     <Content Include="Content\js\Wizard\yourInfo\ezbob.yourInfo.directors.js" />
     <Content Include="Content\js\Wizard\yourInfo\ezbob.yourinfo.notLimitedInformation.js" />
@@ -1335,7 +1337,7 @@
     <Content Include="Content\js\Wizard\yourInfo\ezbob.yourinfo.personalInfoBase.js" />
     <Content Include="Content\js\Wizard\yourInfo\ezbob.steps.personinfo.js" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.ebay.js" />
-    <Content Include="Content\js\Wizard\ezbob.wizard.js" />
+    <Content Include="Content\js\Wizard\ezbob.wizardView.js" />
     <Content Include="Content\js\Wizard\ezbob.wizard.signupstep.js" />
     <Content Include="Content\js\lib\underscore.js" />
     <Content Include="Content\js\Profile\ezbob.profile.payEarly.js" />

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Data;
+using Newtonsoft.Json;
 
 namespace EZBob.DatabaseLib
 {
@@ -106,6 +107,8 @@ namespace EZBob.DatabaseLib
 		private readonly LoanAgreementTemplateRepository _loanAgreementTemplateRepository;
 		private readonly BusinessRepository _businessRepository;
 		private readonly MP_VatReturnEntryNameRepositry _vatReturnEntryNameRepositry;
+		private readonly WizardStepSequenceRepository _wizardStepSequenceRepository;
+		private readonly YodleeBanksRepository _yodleeBanksRepository;
 
 		#endregion repositories
 
@@ -142,7 +145,69 @@ namespace EZBob.DatabaseLib
 			_loanAgreementTemplateRepository = new LoanAgreementTemplateRepository(session);
 			_businessRepository = new BusinessRepository(session);
 			_vatReturnEntryNameRepositry = new MP_VatReturnEntryNameRepositry(session);
-		}
+			_wizardStepSequenceRepository = new WizardStepSequenceRepository(session);
+
+			_yodleeBanksRepository = new YodleeBanksRepository(session);
+			m_sYodleeBanks = null;
+		} // constructor
+
+		#region property YodleeBanks
+
+		private string m_sYodleeBanks;
+
+		public string YodleeBanks { get {
+			if (m_sYodleeBanks == null) {
+				var banks = _yodleeBanksRepository.GetAll();
+
+				var dict = new Dictionary<string, YodleeParentBankModel>();
+				var yodleeBanksModel = new YodleeBanksModel {
+					DropDownBanks = new List<YodleeSubBankModel>(),
+				};
+
+				foreach (var bank in banks) {
+					if (bank.Active && bank.Image) {
+						var sub = new YodleeSubBankModel {csId = bank.ContentServiceId, displayName = bank.Name};
+
+						if (!dict.ContainsKey(bank.ParentBank))
+							dict.Add(bank.ParentBank, new YodleeParentBankModel {parentBankName = bank.ParentBank, subBanks = new List<YodleeSubBankModel>()});
+
+						dict[bank.ParentBank].subBanks.Add(sub);
+					} // if
+
+					if (bank.Active && !bank.Image)
+						yodleeBanksModel.DropDownBanks.Add(new YodleeSubBankModel {csId = bank.ContentServiceId, displayName = bank.Name});
+				} // for
+
+				yodleeBanksModel.ImageBanks = dict.Values.ToList();
+
+				m_sYodleeBanks = JsonConvert.SerializeObject(yodleeBanksModel);
+			} // if
+
+			return m_sYodleeBanks;
+		}} // YodleeBanks
+
+		#endregion property YodleeBanks
+
+		#region property WizardStepSequence
+
+		public string WizardStepSequence { get {
+			var oResult = new {
+					online = new Dictionary<string, object>(),
+					offline = new Dictionary<string, object>()
+				};
+
+			_wizardStepSequenceRepository.GetAll().ForEach(wss => {
+				if (wss.OnlineProgressBarPct.HasValue)
+					oResult.online[wss.StepName] = new { position = wss.OnlineProgressBarPct.Value, type = wss.StepType };
+
+				if (wss.OfflineProgressBarPct.HasValue)
+					oResult.offline[wss.StepName] = new { position = wss.OfflineProgressBarPct.Value, type = wss.StepType };
+			});
+
+			return JsonConvert.SerializeObject(oResult);
+		}} // WizardStepSequence
+
+		#endregion property WizardStepSequence
 
 		public LoanTransactionMethodRepository LoanTransactionMethodRepository { get { return _loanTransactionMethodRepository; } }
 
