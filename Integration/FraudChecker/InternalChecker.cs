@@ -253,6 +253,7 @@ namespace FraudChecker
 					  where cmp.Customer != customer
 					  where cmp.Customer.IsTest == false
 					  where cmp.Marketplace.Name != "Yodlee"
+					  where cmp.Marketplace.Name != "Sage"
 					  select cmp;
 			var mpCount = mps.Count();
 			var iterationCount = mpCount / pageSize;
@@ -275,6 +276,8 @@ namespace FraudChecker
 			{
 				InternalYodleeMpCheck(yodlees, customer, fraudDetections);
 			}
+
+			//TODO Sage Check (not using sage mp name (always the same))
 		}
 
 		private void InternalYodleeMpCheck(IEnumerable<MP_CustomerMarketPlace> customerYodlees, Customer customer, List<FraudDetection> fraudDetections)
