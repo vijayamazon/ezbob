@@ -165,10 +165,15 @@ if (m.CGData && m.CGData.VatReturn) {
 			</tr>
 			<tr>
 				<th>Revenues</th><td></td><%
+				var oRevenues = {};
+				var nRevenuesSum = aryTotals[6];
+
 				for (var i = nStartIdx; i < aryBusiness.length; i++) {
-					%><td class=r><%- EzBob.formatPoundsAsInt(aryBusiness[i].BoxData[6].amount) %></td><%
+					oRevenues[i] = aryBusiness[i].BoxData[6].amount;
+
+					%><td class=r><%- EzBob.formatPoundsAsInt(oRevenues[i]) %></td><%
 				} // for each relevant data item
-				%><td class=r><%- EzBob.formatPoundsAsInt(aryTotals[6]) %></td>
+				%><td class=r><%- EzBob.formatPoundsAsInt(nRevenuesSum) %></td>
 				<td></td>
 			</tr>
 			<tr>
@@ -179,24 +184,26 @@ if (m.CGData && m.CGData.VatReturn) {
 				%><td class=r><%- EzBob.formatPoundsAsInt(aryTotals[7]) %></td>
 				<td></td>
 			</tr>
-			<tr>
-				<th>Total Value Added</th><td></td><%
+			<tr class=chkpt>
+				<th>Total value added</th><td></td><%
+				var oTotalValueAdded = {};
+				var nTotalValueAdded = aryTotals[7];
+
 				for (var i = nStartIdx; i < aryBusiness.length; i++) {
-					%><td class=r><%- EzBob.formatPoundsAsInt(aryBusiness[i].BoxData[6].amount - aryBusiness[i].BoxData[7].amount) %></td><%
+					oTotalValueAdded[i] = aryBusiness[i].BoxData[6].amount - aryBusiness[i].BoxData[7].amount;
+					%><td class=r><%- EzBob.formatPoundsAsInt(oTotalValueAdded[i]) %></td><%
 				} // for each relevant data item
-				%><td class=r><%- EzBob.formatPoundsAsInt(aryTotals[6] - aryTotals[7]) %></td>
+				%><td class=r><%- EzBob.formatPoundsAsInt(nRevenuesSum - nTotalValueAdded) %></td>
 				<td></td>
 			</tr>
 			<tr>
-				<th>% of Revenues</th><td></td><%
+				<th>% of revenues</th><td></td><%
 				for (var i = nStartIdx; i < aryBusiness.length; i++) {
 					%><td class=r><%
-						var nRevenue = aryBusiness[i].BoxData[6].amount;
-						if (nRevenue)
-							print(EzBob.formatPercents((nRevenue - aryBusiness[i].BoxData[7].amount) / nRevenue));
+						print(EzBob.formatPercents0(oTotalValueAdded[i], oRevenues[i]) || '&ndash;');
 					%></td><%
 				} // for each relevant data item
-				%><td class=r><%- aryTotals[6] ? EzBob.formatPercents((aryTotals[6] - aryTotals[7]) / aryTotals[6]) : '' %></td>
+				%><td class=r><% print(EzBob.formatPercents0(nRevenuesSum - nTotalValueAdded, nRevenuesSum) || '&ndash;'); %></td>
 				<td></td>
 			</tr>
 			<tr>
@@ -216,41 +223,47 @@ if (m.CGData && m.CGData.VatReturn) {
 			<tr>
 				<th>Tax</th><td></td><%
 				for (var i = nStartIdx; i < aryBusiness.length; i++) {
-					%><td>&nbsp;</td><%
+					%><td class=r>&ndash;</td><%
 				} // for each relevant data item
-				%><td>&nbsp;</td>
+				%><td class=r>&ndash;</td>
 				<td></td>
 			</tr>
-			<tr>
+			<tr class=chkpt>
 				<th>EBIDA</th><td></td><%
+				var oEBIDA = {};
+				var nEBIDASum = 0;
+
 				for (var i = nStartIdx; i < aryBusiness.length; i++) {
-					%><td>&nbsp;</td><%
+					oEBIDA[i] = oTotalValueAdded[i] - arySalary[i].salary; // TODO: subtract Tax from the previous row.
+					nEBIDASum += oEBIDA[i];
+
+					%><td class=r><%- EzBob.formatPoundsAsInt(oEBIDA[i]) %></td><%
 				} // for each relevant data item
-				%><td>&nbsp;</td>
+				%><td class=r><%- EzBob.formatPoundsAsInt(nEBIDASum) %></td>
 				<td></td>
 			</tr>
 			<tr>
 				<th>% of annual</th><td></td><%
 				for (var i = nStartIdx; i < aryBusiness.length; i++) {
-					%><td>&nbsp;</td><%
+					%><td class=r><% print(EzBob.formatPercents0(oEBIDA[i], oRevenues[i]) || '&ndash;'); %></td><%
 				} // for each relevant data item
-				%><td>&nbsp;</td>
+				%><td class=r><%- EzBob.formatPercents0(nEBIDASum, nRevenuesSum) %></td>
 				<td></td>
 			</tr>
 			<tr>
 				<th>Actual loans repayment</th><td></td><%
 				for (var i = nStartIdx; i < aryBusiness.length; i++) {
-					%><td>&nbsp;</td><%
+					%><td class=r><%- EzBob.formatPoundsAsInt(0) %></td><%
 				} // for each relevant data item
-				%><td>&nbsp;</td>
+				%><td class=r><%- EzBob.formatPoundsAsInt(0) %></td>
 				<td></td>
 			</tr>
-			<tr>
-				<th>Free Cash Flow</th><td></td><%
+			<tr class=chkpt>
+				<th>Free cash flow</th><td></td><%
 				for (var i = nStartIdx; i < aryBusiness.length; i++) {
-					%><td>&nbsp;</td><%
+					%><td class=r><%- EzBob.formatPoundsAsInt(oEBIDA[i]) %></td><% // TODO: subtract Actual loans repayment from the previous row.
 				} // for each relevant data item
-				%><td>&nbsp;</td>
+				%><td class=r><%- EzBob.formatPoundsAsInt(nEBIDASum) %></td>
 				<td></td>
 			</tr>
 		</tbody></table><%
