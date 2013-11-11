@@ -1,38 +1,36 @@
-﻿using System.Linq;
-
-namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
+﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
 	using System;
-	using System.Collections.Generic;
 	using System.Web.Mvc;
 	using EZBob.DatabaseLib.Model.CustomerRelations;
 	using Models;
 	using Infrastructure.csrf;
 	using Scorto.Web;
+	using System.Linq;
 	using log4net;
 
 	public class CustomerRelationsController : Controller
 	{
-		private static readonly ILog log = LogManager.GetLogger(typeof(CustomerRelationsController));
-		private readonly CustomerRelationsRepository customerRelationsRepository;
-		private readonly CRMActionsRepository crmActionsRepository;
-		private readonly CRMStatusesRepository crmStatusesRepository;
+		private static readonly ILog Log = LogManager.GetLogger(typeof(CustomerRelationsController));
+		private readonly CustomerRelationsRepository _customerRelationsRepository;
+		private readonly CRMActionsRepository _crmActionsRepository;
+		private readonly CRMStatusesRepository _crmStatusesRepository;
 
 		public CustomerRelationsController(CustomerRelationsRepository customerRelationsRepository, CRMActionsRepository crmActionsRepository, CRMStatusesRepository crmStatusesRepository)
 		{
-			this.customerRelationsRepository = customerRelationsRepository;
-			this.crmActionsRepository = crmActionsRepository;
-			this.crmStatusesRepository = crmStatusesRepository;
+			_customerRelationsRepository = customerRelationsRepository;
+			_crmActionsRepository = crmActionsRepository;
+			_crmStatusesRepository = crmStatusesRepository;
 		}
 
-	    [Ajax]
+		[Ajax]
 		[HttpGet]
 		[Transactional]
 		[ValidateJsonAntiForgeryToken]
 		public JsonNetResult Index(int id)
 		{
-			var models = customerRelationsRepository.ByCustomer(id).Select(customerRelations => CustomerRelationsModel.Create(customerRelations)).ToList();
-		    return this.JsonNet(models);
+			var models = _customerRelationsRepository.ByCustomer(id).Select(customerRelations => CustomerRelationsModel.Create(customerRelations)).ToList();
+			return this.JsonNet(models);
 		}
 
 		[Ajax]
@@ -41,7 +39,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 		[ValidateJsonAntiForgeryToken]
 		public JsonNetResult Actions()
 		{
-			var actions = crmActionsRepository.GetAll();
+			var actions = _crmActionsRepository.GetAll();
 			return this.JsonNet(actions);
 		}
 
@@ -51,7 +49,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 		[ValidateJsonAntiForgeryToken]
 		public JsonNetResult Statuses()
 		{
-			var actions = crmStatusesRepository.GetAll();
+			var actions = _crmStatusesRepository.GetAll();
 			return this.JsonNet(actions);
 		}
 
@@ -61,21 +59,24 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 		{
 			try
 			{
-				var newEntry = new CustomerRelations();
-				newEntry.CustomerId = customerId;
-				newEntry.UserName = User.Identity.Name;
-				newEntry.Incoming = isIncoming;
-				newEntry.Action = crmActionsRepository.Get(action);
-				newEntry.Status = crmStatusesRepository.Get(status);
-				newEntry.Comment = comment;
-				newEntry.Timestamp = DateTime.UtcNow;
-				customerRelationsRepository.SaveOrUpdate(newEntry);
+				var newEntry = new CustomerRelations
+					{
+						CustomerId = customerId,
+						UserName = User.Identity.Name,
+						Incoming = isIncoming,
+						Action = _crmActionsRepository.Get(action),
+						Status = _crmStatusesRepository.Get(status),
+						Comment = comment,
+						Timestamp = DateTime.UtcNow
+					};
+
+				_customerRelationsRepository.SaveOrUpdate(newEntry);
 
 				return this.JsonNet(string.Empty);
 			}
 			catch (Exception e)
 			{
-				log.ErrorFormat("Exception while trying to save customer relations new entry:{0}", e);
+				Log.ErrorFormat("Exception while trying to save customer relations new entry:{0}", e);
 				return this.JsonNet(new { error = "Error saving new entry" });
 			}
 		}

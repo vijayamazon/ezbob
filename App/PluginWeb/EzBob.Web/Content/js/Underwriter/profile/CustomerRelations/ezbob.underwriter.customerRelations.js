@@ -29,7 +29,8 @@ EzBob.Underwriter.CustomerRelationsView = Backbone.Marionette.ItemView.extend({
         this.statuses.fetch();
     },
     serializeData: function () {
-        return { vals: this.model.toJSON() };
+        var sortedModel = _.sortBy(this.model.toJSON(), function (custRel) { return -custRel.Id; });
+        return { vals: sortedModel };
     },
 
     events: {
