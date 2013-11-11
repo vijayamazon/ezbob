@@ -76,21 +76,45 @@ if (m.CGData && m.CGData.VatReturn) {
 			<th>Business Details</th>
 			<th>&nbsp;</th>
 			<th>Last Tax Return</th><%
+
+			var nOneMonthSalary = null;
+
+			if (personalInfoModel) {
+				var cec = personalInfoModel.get('CompanyEmployeeCountInfo');
+				
+				if (cec && cec.HasData)
+					nOneMonthSalary = cec.TotalMonthlySalary;
+			} // if
+
 			for (var i = nStartIdx; i < aryBusiness.length; i++) {
 				%><th><%- EzBob.formatDateMY(aryBusiness[i].DateFrom) %> - <%- EzBob.formatDateMY(aryBusiness[i].DateTo) %></th><%
 
 				var oDateFrom = moment.utc(aryBusiness[i].DateFrom).local();
 				var oDateTo = moment.utc(aryBusiness[i].DateTo).local();
 
+				var nSalary = 0;
+
+				if (nOneMonthSalary != null) {
+					var nMonthCount = 0;
+
+					if (oDateFrom.year() == oDateTo.year())
+						nMonthCount = oDateTo.month() - oDateFrom.month() + 1;
+					else
+						nMonthCount = 13 - oDateFrom.month() + oDateTo.month();
+
+					nSalary = nOneMonthSalary * nMonthCount;
+				} // if
+
 				arySalary.push({
 					dateFrom: oDateFrom.year() * 100 + oDateFrom.month(),
 					dateTo: oDateTo.year() * 100 + oDateTo.month(),
-					salary: 0
+					salary: nSalary,
 				});
 			} // for each relevant data item
+
 			%><th>Last Four Periods</th><th>Bank Statement</th>
 		</tr></thead><%
-		if (m.CGData.RtiTaxMonths) {
+		if ((nOneMonthSalary === null) && m.CGData.RtiTaxMonths) {
 			for (var j = 0; j < m.CGData.RtiTaxMonths.length; j++) {
 				var oMonth = m.CGData.RtiTaxMonths[j];
 

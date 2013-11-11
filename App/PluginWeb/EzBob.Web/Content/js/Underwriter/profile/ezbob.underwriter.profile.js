@@ -46,7 +46,8 @@
       this.marketPlaces = new EzBob.Underwriter.MarketPlaces();
       this.marketPlaceView = new EzBob.Underwriter.MarketPlacesView({
         el: marketplaces,
-        model: this.marketPlaces
+        model: this.marketPlaces,
+        personalInfoModel: this.personalInfoModel
       });
       that = this;
       this.marketPlaceView.on("rechecked", this.mpRechecked, this.marketPlaces);
@@ -214,8 +215,6 @@
 
     ProfileView.prototype.ApproveBtnClick = function(e) {
       var approveLoanWithoutAMLDialog;
-      console.log('my model', this.model);
-      console.log('loan info model', this.loanInfoModel);
       if ($(e.currentTarget).hasClass("disabled")) {
         return false;
       }

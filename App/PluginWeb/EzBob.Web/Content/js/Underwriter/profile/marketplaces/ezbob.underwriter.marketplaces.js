@@ -142,7 +142,8 @@
       this.detailView = new EzBob.Underwriter.MarketPlaceDetailsView({
         model: this.model,
         currentId: id,
-        customerId: this.model.customerId
+        customerId: this.model.customerId,
+        personalInfoModel: this.options.personalInfoModel
       });
       EzBob.App.jqmodal.show(this.detailView);
       this.detailView.on("reCheck", this.reCheckmarketplaces, this);

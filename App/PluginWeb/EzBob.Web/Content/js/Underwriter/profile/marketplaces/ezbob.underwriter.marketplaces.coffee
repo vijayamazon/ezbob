@@ -78,7 +78,7 @@ class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
         return unless id
         shop = @model.get(id)
 
-        @detailView = new EzBob.Underwriter.MarketPlaceDetailsView model: @model, currentId: id, customerId: @model.customerId
+        @detailView = new EzBob.Underwriter.MarketPlaceDetailsView model: @model, currentId: id, customerId: @model.customerId, personalInfoModel: @options.personalInfoModel
 
         EzBob.App.jqmodal.show(@detailView)
 
