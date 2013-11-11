@@ -116,7 +116,7 @@ namespace EZBob.DatabaseLib.Model.Database {
                      .AsSet()
                      .KeyColumn("customerId")
                      .Where("addressType=" + Convert.ToInt32(CustomerAddressType.PersonalAddress))
-                     .Cascade.All()
+                     .Cascade.AllDeleteOrphan()
                      .Inverse()
                      .Cache.ReadWrite().Region("LongTerm").ReadWrite();
 
@@ -124,7 +124,7 @@ namespace EZBob.DatabaseLib.Model.Database {
                      .AsSet()
                      .KeyColumn("customerId")
                      .Where("addressType=" + Convert.ToInt32(CustomerAddressType.PrevPersonAddresses))
-                     .Cascade.All()
+                     .Cascade.AllDeleteOrphan()
                      .Inverse()
                      .Cache.ReadWrite().Region("LongTerm").ReadWrite();
 
@@ -171,7 +171,7 @@ namespace EZBob.DatabaseLib.Model.Database {
                      .AsSet()
                      .KeyColumn("customerId")
                      .Where("addressType=" + Convert.ToInt32(CustomerAddressType.OtherPropertyAddress))
-                     .Cascade.All()
+                     .Cascade.AllDeleteOrphan()
                      .Inverse()
                      .Cache.ReadWrite().Region("LongTerm").ReadWrite();
                 });

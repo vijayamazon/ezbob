@@ -96,7 +96,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
         this.blockBtn(true);
         var that = this;
-        if (this.model.get('signedIn') || (this.model.get('loggedIn'))) {
+        if (this.model.get('loggedIn')) {
             this.trigger('ready');
             this.trigger('next');
             that.blockBtn(false);
@@ -117,15 +117,13 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
             if (result.success) {
                 $('body').addClass('auth');
                 that.$el.find('input[type="password"], input[type="text"]').tooltip('hide');
-                EzBob.App.trigger("signedIn");
-                EzBob.App.trigger("clear");
+                EzBob.App.trigger('customerLoggedIn');
+                EzBob.App.trigger('clear');
                 //EzBob.App.trigger('info', "You have successfully registered. The message was sent to your email.");
-                that.model.set('signedIn', true);
-                that.trigger('ready');
-                that.trigger('next');
                 $.get(window.gRootPath + "Start/TopButton").done(function(dat) {
                     $('#pre_header').html(dat);
                 });
+                that.model.set('loggedIn', true); // triggers 'ready' and 'next'
             } else {
                 if (result.errorMessage) EzBob.App.trigger("error", result.errorMessage);
                 that.captcha.reload();

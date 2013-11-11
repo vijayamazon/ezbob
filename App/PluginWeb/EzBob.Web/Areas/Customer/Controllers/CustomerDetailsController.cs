@@ -128,34 +128,52 @@ namespace EzBob.Web.Areas.Customer.Controllers
 
             customer.PersonalInfo = personalInfo;
 
-            if (personalAddress != null)
+            if ((personalAddress != null) && (personalAddress.Any(x => x.AddressId == 0)))
             {
                 foreach (var val in personalAddress)
                 {
                     val.AddressType = CustomerAddressType.PersonalAddress;
                     val.Customer = customer;
                 }
-                customer.AddressInfo.PersonalAddress = new HashedSet<CustomerAddress>(personalAddress);
+
+				if (customer.AddressInfo.PersonalAddress == null)
+					customer.AddressInfo.PersonalAddress = new HashedSet<CustomerAddress>(personalAddress.Where(x => x.AddressId == 0).ToList());
+				else {
+					customer.AddressInfo.PersonalAddress.Clear();
+					customer.AddressInfo.PersonalAddress.AddAll(personalAddress.Where(x => x.AddressId == 0).ToList());
+				}
             }
 
-            if (prevPersonAddresses != null)
+            if ((prevPersonAddresses != null) && (prevPersonAddresses.Any(x => x.AddressId == 0)))
             {
                 foreach (var val in prevPersonAddresses)
                 {
                     val.AddressType = CustomerAddressType.PrevPersonAddresses;
                     val.Customer = customer;
                 }
-               customer.AddressInfo.PrevPersonAddresses = new HashedSet<CustomerAddress>(prevPersonAddresses);
+
+				if (customer.AddressInfo.PrevPersonAddresses == null)
+					customer.AddressInfo.PrevPersonAddresses = new HashedSet<CustomerAddress>(prevPersonAddresses.Where(x => x.AddressId == 0).ToList());
+				else {
+					customer.AddressInfo.PrevPersonAddresses.Clear();
+					customer.AddressInfo.PrevPersonAddresses.AddAll(prevPersonAddresses.Where(x => x.AddressId == 0).ToList());
+				}
             }
 
-            if (otherPropertyAddress != null)
+            if ((otherPropertyAddress != null) && (otherPropertyAddress.Any(x => x.AddressId == 0)))
             {
                 foreach (var val in otherPropertyAddress)
                 {
                     val.AddressType = CustomerAddressType.OtherPropertyAddress;
                     val.Customer = customer;
                 }
-                customer.AddressInfo.OtherPropertyAddress = new HashedSet<CustomerAddress>(otherPropertyAddress);
+
+				if (customer.AddressInfo.OtherPropertyAddress == null)
+					customer.AddressInfo.OtherPropertyAddress = new HashedSet<CustomerAddress>(otherPropertyAddress.Where(x => x.AddressId == 0).ToList());
+				else {
+					customer.AddressInfo.OtherPropertyAddress.Clear();
+					customer.AddressInfo.OtherPropertyAddress.AddAll(otherPropertyAddress.Where(x => x.AddressId == 0).ToList());
+				}
             }
         }
 

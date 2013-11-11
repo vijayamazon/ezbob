@@ -67,11 +67,11 @@
   EzBob.BindingConverters.moneyFormat = EzBob.BindingConverters.autonumericFormat(EzBob.moneyFormat);
 
   Backbone.Collection.prototype.safeFetch = function() {
-    var def, loggedIn;
-    loggedIn = function() {
+    var def, isLoggedIn;
+    isLoggedIn = function() {
       return $('body').hasClass('auth');
     };
-    if (loggedIn()) {
+    if (isLoggedIn()) {
       return this.fetch();
     }
     def = $.Deferred();
@@ -82,11 +82,11 @@
   };
 
   Backbone.Model.prototype.safeFetch = function() {
-    var def, loggedIn;
-    loggedIn = function() {
+    var def, isLoggedIn;
+    isLoggedIn = function() {
       return $('body').hasClass('auth');
     };
-    if (loggedIn()) {
+    if (isLoggedIn()) {
       return this.fetch();
     }
     def = $.Deferred();

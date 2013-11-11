@@ -51,9 +51,7 @@ EzBob.PayPalInfoView = Backbone.View.extend({
         };
 
     },
-    signedIn: function () {
-        this.bindToButton();
-    },
+    // signedIn: function () { this.bindToButton(); },
     back: function () {
         this.trigger('back');
         return false;

@@ -3,7 +3,7 @@
 EzBob.LoginView = Backbone.View.extend({
     initialize: function () {
         this.content = $('#login-template').html();
-        EzBob.App.on('signedIn', this.signedIn, this);
+        EzBob.App.on('customerLoggedIn', this.onCustomerLoggedIn, this);
         EzBob.App.on('ct:showLogin', this.ctShowLogin, this);
         EzBob.App.on('ct:hideLogin', this.ctHideLogin, this);
     },
@@ -48,7 +48,7 @@ EzBob.LoginView = Backbone.View.extend({
         
         return this;
     },
-    signedIn: function () {
+    onCustomerLoggedIn: function () {
         this.$el.find('.login').hide();
         this.$el.find('.logoff').show();
     }

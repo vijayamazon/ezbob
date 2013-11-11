@@ -5,8 +5,6 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
 
         this.template = _.template($('#personinfo-template').html());
         this.ViewName = "personal";
-        this.PrevAddressValidator = false;
-        this.AddressValidator = false;
 
         this.events = _.extend({}, this.events, {
             "change #TimeAtAddress": "PersonalTimeAtAddressChanged",
@@ -28,7 +26,7 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
 
         this.constructor.__super__.initialize.call(this);
     },
-    
+
     inputChanged: function (event) {
         var el = event ? $(event.currentTarget) : null;
         if (el && el.attr('id') == 'MiddleInitial' && el.val() == '') {
@@ -36,12 +34,18 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
             img.field_status('set', 'empty', 2);
         }
 
-        var enabled = EzBob.Validation.checkForm(this.validator) &&
-            this.PrevAddressValidator && this.AddressValidator
-            && this.OwnOtherPropertyIsValid();
+		var enabled = EzBob.Validation.checkForm(this.validator) &&
+			this.isPrevAddressValid() &&
+			this.isAddressValid() &&
+			this.OwnOtherPropertyIsValid();
 
         $('.continue').toggleClass('disabled', !enabled);
     },
+
+	isAddressValid: function() {
+		var oAddress = this.model.get('PersonalAddress');
+		return oAddress && (oAddress.length > 0);
+	},
     
     overallTurnOverFocus: function () {
         $("#OverallTurnOver").change();
@@ -154,6 +158,8 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
 			this.$el.find('#OverallTurnOver').val(oPersonalInfo.OverallTurnOver);
 		} // if has personal info
 
+	    this.$el.find('input, select').change();
+
         this.inputChanged();
     },
 
@@ -170,12 +176,10 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
         return false;
     },
     PersonalAddressModelChange: function (e, el) {
-        this.AddressValidator = el.collection && el.collection.length > 0;
         this.inputChanged();
         this.clearAddressError("#PersonalAddress");
     },
     OtherPropertyAddressModelChange: function (e, el) {
-        this.AddressValidator = el.collection && el.collection.length > 0;
         this.inputChanged();
         this.clearAddressError("#OtherPropertyAddress");
     },

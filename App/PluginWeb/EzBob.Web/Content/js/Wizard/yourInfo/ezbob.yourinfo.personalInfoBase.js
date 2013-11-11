@@ -62,15 +62,31 @@ EzBob.YourInformationStepViewBase = Backbone.View.extend({
         EzBob.Validation.unhighlightFS(this.$el.find(el));
     },
 
-    PrevModelChange: function (el, model) {
-        this.PrevAddressValidator = model.collection && model.collection.length > 0;
+	isPrevAddressValid: function() {
+		var oPersonalInfo = this.model.get('CustomerPersonalInfo');
 
-        if (this.PrevAddressValidator) {
+		if (!oPersonalInfo)
+			return true;
+
+		var nTimeAtAddress = parseInt(this.$el.find('#TimeAtAddress').val());
+
+		if ((nTimeAtAddress == 0) || (nTimeAtAddress == 3))
+			return true;
+
+		var oAddresses = this.model.get('PrevPersonAddresses');
+
+		return oAddresses && (oAddresses.length > 0);
+	},
+
+    PrevModelChange: function (el, model) {
+        if (this.isPrevAddressValid()) {
             this.clearAddressError("#PrevPersonAddresses");
             $("#PrevPersonAddresses .field_status").hide();
         }
         else
             $("#PrevPersonAddresses .field_status").show();
+
+	    this.inputChanged();
     },
     clickBack: function () {
         this.trigger('back');
@@ -82,12 +98,9 @@ EzBob.YourInformationStepViewBase = Backbone.View.extend({
         this.clearAddressError(buttonContainer);
         var currentVal = this.$el.find(select).val();
 
-        if (currentVal == 3 || !currentVal) {
+        if (currentVal == 3 || !currentVal)
             this.$el.find(button).parents('div.control-group').hide();
-            this.PrevAddressValidator = true;
-        } else {
+        else
             this.$el.find(button).parents('div.control-group').show();
-            this.PrevAddressValidator = false;
-        }
     }
 });

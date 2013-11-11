@@ -211,6 +211,10 @@ EzBob.YourInformationStepView = Backbone.View.extend({
 			}
 			else
 				that.jumpToCompanyMode();
+
+			that.model.fetch().done(function () {
+				that.PersonalView.render();
+			});
 		});
 
 		request.complete(function () {
