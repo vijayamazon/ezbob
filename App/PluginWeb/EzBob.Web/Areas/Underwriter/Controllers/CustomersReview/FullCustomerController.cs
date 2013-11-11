@@ -16,6 +16,8 @@ using System;
 
 namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
+	using EZBob.DatabaseLib.Model.Database.Loans;
+
 	public class FullCustomerController : Controller
 	{
 
@@ -29,6 +31,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 		private readonly ApiCheckLogBuilder _apiCheckLogBuilder;
 		private readonly MessagesModelBuilder _messagesModelBuilder;
 		private readonly CustomerRelationsRepository _customerRelationsRepository;
+		private readonly LoanRepository _loanRepository;
 		private readonly NHibernateRepositoryBase<MP_AlertDocument> _docRepo;
 		private readonly IBugRepository _bugs;
 
@@ -44,7 +47,8 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 											MessagesModelBuilder messagesModelBuilder,
 											CustomerRelationsRepository customerRelationsRepository,
 											NHibernateRepositoryBase<MP_AlertDocument> docRepo,
-											IBugRepository bugs)
+											IBugRepository bugs, 
+											LoanRepository loanRepository)
 		{
 			_customers = customers;
 			_session = session;
@@ -58,6 +62,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 			_customerRelationsRepository = customerRelationsRepository;
 			_docRepo = docRepo;
 			_bugs = bugs;
+			_loanRepository = loanRepository;
 		}
 
 		//[Ajax]
@@ -115,10 +120,9 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 
 			model.Messages = _messagesModelBuilder.Create(customer);
 
-			model.CustomerRelations =
-				_customerRelationsRepository.ByCustomer(id)
-					.Select(customerRelations => CustomerRelationsModel.Create(customerRelations))
-					.ToList();
+			var crm = new CustomerRelationsModelBuilder(_loanRepository, _customerRelationsRepository);
+
+			model.CustomerRelations = crm.Create(customer.Id).ToList();
 
 			model.AlertDocs =
 				(from d in _docRepo.GetAll() where d.Customer.Id == id select AlertDoc.FromDoc(d)).ToArray();

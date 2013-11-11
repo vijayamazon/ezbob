@@ -19,11 +19,11 @@
         </thead>
         <tbody>
             <%_.each(vals, function(val){ %>
-            <tr>
+            <tr class="<%if(val.Action == 'Took a Loan') print('customer-relations-took-loan'); if(val.Action == 'Repaid a Loan') print('customer-relations-repaid-loan');%>">
                 <td><%-EzBob.formatDateTime(val.DateTime)%></td>
                 <td><%-val.User%></td>
                 <td><%-val.Action%></td>
-                <td><%-val.Incoming ? "Incoming" : "Outgoing"%></td>
+                <td><%-val.InOut%></td>
                 <td><%-val.Status%></td>
                 <td style="word-wrap: break-word"><%-val.Comment%></td>
                 @*The <br/> is being converted in the browser?

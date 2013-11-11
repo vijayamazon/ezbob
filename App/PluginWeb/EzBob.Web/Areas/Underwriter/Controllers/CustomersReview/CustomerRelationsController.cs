@@ -3,6 +3,7 @@
 	using System;
 	using System.Web.Mvc;
 	using EZBob.DatabaseLib.Model.CustomerRelations;
+	using EZBob.DatabaseLib.Model.Database.Loans;
 	using Models;
 	using Infrastructure.csrf;
 	using Scorto.Web;
@@ -15,12 +16,13 @@
 		private readonly CustomerRelationsRepository _customerRelationsRepository;
 		private readonly CRMActionsRepository _crmActionsRepository;
 		private readonly CRMStatusesRepository _crmStatusesRepository;
-
-		public CustomerRelationsController(CustomerRelationsRepository customerRelationsRepository, CRMActionsRepository crmActionsRepository, CRMStatusesRepository crmStatusesRepository)
+		private readonly LoanRepository _loanRepository;
+		public CustomerRelationsController(CustomerRelationsRepository customerRelationsRepository, CRMActionsRepository crmActionsRepository, CRMStatusesRepository crmStatusesRepository, LoanRepository loanRepository)
 		{
 			_customerRelationsRepository = customerRelationsRepository;
 			_crmActionsRepository = crmActionsRepository;
 			_crmStatusesRepository = crmStatusesRepository;
+			_loanRepository = loanRepository;
 		}
 
 		[Ajax]
@@ -29,8 +31,9 @@
 		[ValidateJsonAntiForgeryToken]
 		public JsonNetResult Index(int id)
 		{
-			var models = _customerRelationsRepository.ByCustomer(id).Select(customerRelations => CustomerRelationsModel.Create(customerRelations)).ToList();
-			return this.JsonNet(models);
+			var crm = new CustomerRelationsModelBuilder(_loanRepository, _customerRelationsRepository);
+
+			return this.JsonNet(crm.Create(id));
 		}
 
 		[Ajax]

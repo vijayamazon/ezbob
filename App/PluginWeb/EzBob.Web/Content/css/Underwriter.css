@@ -258,10 +258,11 @@ table.squeezed tbody tr td {
 
 .customer-relations-date-column { width: 140px; }
 .customer-relations-user-column { width: 85px; }
-.customer-relations-action-column { width: 65px; }
+.customer-relations-action-column { width: 100px; }
 .customer-relations-inout-column { width: 65px; }
 .customer-relations-status-column { width: 65px; }
-
+.customer-relations-took-loan{ color: #797979;}
+.customer-relations-repaid-loan{ color: #797979;}
 .add-customer-entry-comment-size { 
     width: 515px;
     height: 80px !important;
