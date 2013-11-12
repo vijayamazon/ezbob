@@ -120,15 +120,9 @@
           foundAllMandatories = false;
         }
       }
-      if (this.isOffline) {
-        canContinue = (hasFilledShops && (!hasEbay || (hasEbay && hasPaypal)) && foundAllMandatories) || this.allowFinishOfflineWizardWithoutMarketplaces;
-        this.$el.find('.next').toggleClass('disabled', !canContinue);
-        this.$el.find('.AddMoreRule').toggleClass('hide', !hasFilledShops || canContinue || ebayPaypalRuleMessageVisible);
-      } else {
-        canContinue = (hasFilledShops && (!hasEbay || (hasEbay && hasPaypal)) && foundAllMandatories) || this.allowFinishOnlineWizardWithoutMarketplaces;
-        this.$el.find(".next").toggleClass("disabled", !canContinue);
-        this.$el.find('.AddMoreRule').toggleClass('hide', !hasFilledShops || canContinue || ebayPaypalRuleMessageVisible);
-      }
+      canContinue = (hasFilledShops && (!hasEbay || (hasEbay && hasPaypal)) && foundAllMandatories) || (this.isOffline && this.allowFinishOfflineWizardWithoutMarketplaces) || (!this.isOffline && this.allowFinishOnlineWizardWithoutMarketplaces);
+      this.$el.find('.next').toggleClass('disabled', !canContinue);
+      this.handleMandatoryText(hasFilledShops, canContinue, ebayPaypalRuleMessageVisible);
       for (_j = 0, _len1 = sortedShopsByNumOfShops.length; _j < _len1; _j++) {
         shop = sortedShopsByNumOfShops[_j];
         if (!shop.active) {
@@ -150,6 +144,34 @@
     StoreInfoBaseView.prototype.previousClick = function() {
       this.trigger("previous");
       return false;
+    };
+
+    StoreInfoBaseView.prototype.handleMandatoryText = function(hasFilledShops, canContinue, ebayPaypalRuleMessageVisible) {
+      var addMoreMsg, first, foundAllMandatories, key, shouldHide, text, _i, _j, _len, _len1, _ref1, _ref2;
+
+      shouldHide = !hasFilledShops || canContinue || ebayPaypalRuleMessageVisible;
+      if (!shouldHide) {
+        first = true;
+        text = 'Please add the following accounts in order to continue: ';
+        _ref1 = Object.keys(this.stores);
+        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+          key = _ref1[_i];
+          if (this.stores[key].button.model.length === 0 && this.stores[key].mandatory) {
+            foundAllMandatories = false;
+            if (!first) {
+              text += ', ';
+            }
+            first = false;
+            text += key;
+          }
+        }
+        _ref2 = this.$el.find('.AddMoreRule');
+        for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
+          addMoreMsg = _ref2[_j];
+          addMoreMsg.innerText = text;
+        }
+      }
+      return this.$el.find('.AddMoreRule').toggleClass('hide', shouldHide);
     };
 
     StoreInfoBaseView.prototype.connect = function(storeName) {

@@ -94,14 +94,9 @@ class EzBob.StoreInfoBaseView extends Backbone.View
             if @stores[key].button.model.length == 0 && @stores[key].mandatory
                 foundAllMandatories = false
 
-        if @isOffline
-            canContinue = (hasFilledShops and (!hasEbay or (hasEbay and hasPaypal)) and foundAllMandatories) or @allowFinishOfflineWizardWithoutMarketplaces
-            @$el.find('.next').toggleClass 'disabled', !canContinue
-            @$el.find('.AddMoreRule').toggleClass 'hide', !hasFilledShops or canContinue or ebayPaypalRuleMessageVisible
-        else
-            canContinue = (hasFilledShops and (!hasEbay or (hasEbay and hasPaypal)) and foundAllMandatories) or @allowFinishOnlineWizardWithoutMarketplaces
-            @$el.find(".next").toggleClass "disabled", !canContinue
-            @$el.find('.AddMoreRule').toggleClass 'hide', !hasFilledShops or canContinue or ebayPaypalRuleMessageVisible
+        canContinue = (hasFilledShops and (!hasEbay or (hasEbay and hasPaypal)) and foundAllMandatories) or (@isOffline and @allowFinishOfflineWizardWithoutMarketplaces) or (!@isOffline and @allowFinishOnlineWizardWithoutMarketplaces)
+        @$el.find('.next').toggleClass 'disabled', !canContinue
+        @handleMandatoryText(hasFilledShops, canContinue, ebayPaypalRuleMessageVisible)
 
         for shop in sortedShopsByNumOfShops when shop.active 
             shop.button.render().$el.appendTo accountsList
@@ -119,6 +114,25 @@ class EzBob.StoreInfoBaseView extends Backbone.View
     previousClick: ->
         @trigger "previous"
         false
+
+    handleMandatoryText: (hasFilledShops, canContinue, ebayPaypalRuleMessageVisible) ->
+        shouldHide = !hasFilledShops or canContinue or ebayPaypalRuleMessageVisible
+            
+        if !shouldHide
+            first = true
+            text = 'Please add the following accounts in order to continue: '
+            for key in Object.keys(@stores)
+                if @stores[key].button.model.length == 0 && @stores[key].mandatory
+                    foundAllMandatories = false
+                    if !first
+                        text += ', '
+                    first = false
+                    text += key
+
+            for addMoreMsg in @$el.find('.AddMoreRule')
+                addMoreMsg.innerText = text
+
+        @$el.find('.AddMoreRule').toggleClass 'hide', shouldHide
 
     connect: (storeName) ->
         EzBob.CT.recordEvent "ct:storebase." + @name + ".connect", storeName
