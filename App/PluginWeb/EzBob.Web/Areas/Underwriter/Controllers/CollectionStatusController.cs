@@ -1,13 +1,12 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers
 {
 	using System.Linq;
+	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Repository;
 	using EzBob.Models;
-	using ApplicationCreator;
 	using Infrastructure;
 	using PaymentServices.Calculators;
-	using PaymentServices.PayPoint;
 	using Scorto.Web;
 	using System.Web.Mvc;
 	using EZBob.DatabaseLib.Model.Database;
@@ -19,12 +18,14 @@
         private readonly ICustomerRepository _customerRepository;
 	    private readonly CustomerStatusesRepository _customerStatusesRepository;
 	    private readonly LoanOptionsRepository loanOptionsRepository;
+	    private ConfigurationVariablesRepository configurationVariablesRepository;
 
-        public CollectionStatusController(ICustomerRepository customerRepository, CustomerStatusesRepository customerStatusesRepository, LoanOptionsRepository loanOptionsRepository, IAppCreator appCreator, PayPointApi paypoint)
+		public CollectionStatusController(ICustomerRepository customerRepository, CustomerStatusesRepository customerStatusesRepository, LoanOptionsRepository loanOptionsRepository, ConfigurationVariablesRepository configurationVariablesRepository)
         {
             _customerRepository = customerRepository;
 	        _customerStatusesRepository = customerStatusesRepository;
 	        this.loanOptionsRepository = loanOptionsRepository;
+			this.configurationVariablesRepository = configurationVariablesRepository;
         }
 
 		[Ajax]
@@ -69,6 +70,8 @@
         [Permission(Name = "CustomerStatus")]
         public JsonNetResult Save(int customerId, int currentStatus, CollectionStatusModel collectionStatus)
         {
+			int minDectForDefault = configurationVariablesRepository.GetByNameAsInt("MinDectForDefault");
+
             var customer = _customerRepository.Get(customerId);
 			customer.CollectionStatus.CurrentStatus = _customerStatusesRepository.Get(currentStatus);
 			if (customer.CollectionStatus.CurrentStatus.Name == "Default")
@@ -76,7 +79,7 @@
 		        customer.CollectionStatus.CollectionDescription = collectionStatus.CollectionDescription;
 
 				// Update loan options
-				foreach (Loan loan in customer.Loans.Where(l => l.Status != LoanStatus.PaidOff))
+				foreach (Loan loan in customer.Loans.Where(l => l.Status != LoanStatus.PaidOff && l.Balance >= minDectForDefault))
 				{
 					LoanOptions options = loanOptionsRepository.GetByLoanId(loan.Id);
 					if (options == null)

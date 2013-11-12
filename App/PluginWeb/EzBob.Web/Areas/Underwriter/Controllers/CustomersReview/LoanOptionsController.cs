@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Web.Mvc;
+	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Repository;
@@ -16,15 +17,17 @@
 		private readonly CustomerStatusesRepository customerStatusesRepository;
         private readonly ILoanOptionsRepository _loanOptionsRepository;
         private readonly ILoanRepository _loanRepository;
-        private readonly ICaisFlagRepository _caisFlagRepository;
+		private readonly ICaisFlagRepository _caisFlagRepository;
+	    private ConfigurationVariablesRepository configurationVariablesRepository;
 
-		public LoanOptionsController(ILoanOptionsRepository loanOptionsRepository, ILoanRepository loanRepository, ICustomerStatusHistoryRepository customerStatusHistoryRepository, CustomerStatusesRepository customerStatusesRepository)
+		public LoanOptionsController(ILoanOptionsRepository loanOptionsRepository, ILoanRepository loanRepository, ICustomerStatusHistoryRepository customerStatusHistoryRepository, CustomerStatusesRepository customerStatusesRepository, ConfigurationVariablesRepository configurationVariablesRepository)
         {
             _loanOptionsRepository = loanOptionsRepository;
             _loanRepository = loanRepository;
             _caisFlagRepository = ObjectFactory.GetInstance<CaisFlagRepository>();
 			this.customerStatusHistoryRepository = customerStatusHistoryRepository;
 			this.customerStatusesRepository = customerStatusesRepository;
+			this.configurationVariablesRepository = configurationVariablesRepository;
         }
 
         [Ajax]
@@ -66,6 +69,7 @@
 
 			if (options.CaisAccountStatus == "8")
 			{
+				int minDectForDefault = configurationVariablesRepository.GetByNameAsInt("MinDectForDefault");
 				Customer customer = _loanRepository.Get(options.LoanId).Customer;
 				Loan triggeringLoan = null;
 				
@@ -78,7 +82,7 @@
 						continue;
 					}
 
-					if (loan.Status == LoanStatus.PaidOff)
+					if (loan.Status == LoanStatus.PaidOff || loan.Balance < minDectForDefault)
 					{
 						continue;
 					}
