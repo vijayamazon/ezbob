@@ -10,6 +10,7 @@ EzBob.WhatsNewView = Backbone.View.extend({
         this.events = _.extend({}, this.events, {
             "click #btnGotIt": "gotItClicked",
             "click #btnShowLater": "showLaterClicked",
+            "click .close": "showLaterClicked"
         });
 
         var that = this;
@@ -40,20 +41,14 @@ EzBob.WhatsNewView = Backbone.View.extend({
         return this;
     },
     gotItClicked: function () {
-        var that = this;
-        console.log("got it clicked", this.whatsNew);
-        var xhr = $.post("" + window.gRootPath + "Customer/WhatsNew/GotIt", { whatsNewId: this.whatsNewId });
-        xhr.always(function() {
-            that.clearAll();
-        });
+        this.save(true);
     },
     showLaterClicked: function () {
-        var that = this;
-        console.log("show later clicked", this.whatsNew);
-        var xhr = $.post("" + window.gRootPath + "Customer/WhatsNew/ShowLater", { whatsNewId: this.whatsNewId });
-        xhr.always(function () {
-            that.clearAll();
-        });
+        this.save(false);
+    },
+    save: function(gotIt) {
+        this.clearAll();
+        $.post("" + window.gRootPath + "Customer/WhatsNew/CustomerSaw", { whatsNewId: this.whatsNewId, gotIt: gotIt });
     },
     clearAll: function () {
         var that = this;

@@ -53,7 +53,7 @@
 
 				if (whatsNew != null)
 				{
-					return this.JsonNet(new { whatsNew = whatsNew.WhatsNewHtml, whatsNewId = whatsNew.Id });
+					return this.JsonNet(new { success = true, whatsNew = whatsNew.WhatsNewHtml, whatsNewId = whatsNew.Id });
 				}
 
 			}
@@ -66,18 +66,18 @@
 											 x.ValidUntil.Date >= DateTime.Today);
 				if (whatsNew != null)
 				{
-					return this.JsonNet(new { whatsNew = whatsNew.WhatsNewHtml, whatsNewId = whatsNew.Id });
+					return this.JsonNet(new { success = true, whatsNew = whatsNew.WhatsNewHtml, whatsNewId = whatsNew.Id });
 				}
 			}
 
-			return this.JsonNet(new { noWhatsNew = true });
+			return this.JsonNet(new { success = true, noWhatsNew = true });
 		}
 
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
 		[Transactional]
-		public void GotIt(int whatsNewId)
+		public void CustomerSaw(int whatsNewId, bool gotIt)
 		{
 			var whatsNew = _whatsNewRepository.Get(whatsNewId);
 			if (whatsNew == null)
@@ -89,30 +89,9 @@
 				{
 					Customer = _context.Customer,
 					Date = DateTime.UtcNow,
-					Understood = true,
+					Understood = gotIt,
 					WhatsNew = whatsNew
 				});
-		}
-
-		[Ajax]
-		[HttpPost]
-		[ValidateJsonAntiForgeryToken]
-		[Transactional]
-		public void ShowLater(int whatsNewId)
-		{
-			var whatsNew = _whatsNewRepository.Get(whatsNewId);
-			if (whatsNew == null)
-			{
-				return;
-			}
-
-			_whatsNewCustomerMapRepository.Save(new WhatsNewCustomerMap
-			{
-				Customer = _context.Customer,
-				Date = DateTime.UtcNow,
-				Understood = false,
-				WhatsNew = whatsNew
-			});
 		}
 	}
 }
