@@ -85,6 +85,8 @@
     <Compile Include="Model\Database\ApprovalsWithoutAMLMap.cs" />
     <Compile Include="Model\Database\CompanyEmployeeCount.cs" />
     <Compile Include="Model\Database\CompanyEmployeeCountMap.cs" />
+    <Compile Include="Model\Database\WhatsNewCustomerMap.cs" />
+    <Compile Include="Model\Database\WhatsNew.cs" />
     <Compile Include="Model\Database\WizardStepSequence.cs" />
     <Compile Include="Model\Database\CustomerStatusHistoryMap.cs" />
     <Compile Include="Model\Database\CustomerStatusHistory.cs" />
