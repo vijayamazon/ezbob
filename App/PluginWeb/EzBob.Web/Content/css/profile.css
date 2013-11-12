@@ -961,3 +961,22 @@ textarea.invite_friend {
     top: 0;
     right: 3px;
 }
+
+.whats-new {
+    background-image: url(../css/images/whatsnew.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    display: block;
+    height: 60px;
+}
+
+.whats-new-main {
+    width: inherit;
+}
+
+.whats-new-buttons {
+    display: block;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}

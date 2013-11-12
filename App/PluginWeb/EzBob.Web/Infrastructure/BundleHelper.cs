@@ -388,6 +388,7 @@ namespace EzBob.Web.Infrastructure
             return Bundle.JavaScript()
                 .Add("~/Content/js/controls/ezbob.address.js")
                 .Add("~/Content/js/controls/ezbob.notifications.js")
+				.Add("~/Content/js/controls/ezbob.whatsnew.js")
                 .Add("~/Content/js/controls/ezbob.livechat.livechatrouter.js")
                 .Add("~/Content/js/controls/ezbob.LoanScheduleView.coffee")
                 .Add("~/Content/js/Profile/ezbob.profile.payEarly.js")
