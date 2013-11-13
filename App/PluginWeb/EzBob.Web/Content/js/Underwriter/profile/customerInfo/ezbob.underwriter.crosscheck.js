@@ -42,12 +42,79 @@ EzBob.Underwriter.CrossCheckView = Backbone.View.extend({
 
 		this.setHmrcData();
 
-		this.crossCheckOne('#cross-check-company-name');
+		var bCompanyNameSuccess = this.crossCheckOne('#cross-check-company-name');
 
-		this.crossCheckOne('#cross-check-company-address');
+		var bCompanyAddressSuccess = this.crossCheckOne('#cross-check-company-address');
+
+		var bDirectorsSuccess = this.crossCheckDirectors();
+
+		this.$el.find('.cross-check-summary-company-name').addClass(bCompanyNameSuccess ? 'Checked' : 'NoChecked');
+		this.$el.find('.cross-check-summary-company-address').addClass(bCompanyAddressSuccess ? 'Checked' : 'NoChecked');
+		this.$el.find('.cross-check-summary-directors').addClass(bDirectorsSuccess ? 'Checked' : 'NoChecked');
 
 		this.crossCheckDone = true;
 	}, // doCrossCheck
+
+	crossCheckDirectors: function() {
+		var oDirectorsList = this.loadExperian('Limited Company Current Directorship Details');
+
+		var oUiDirector = this.$el.find('#cross-check-experian-only-directors');
+
+		if (!oDirectorsList) {
+			oUiDirector.remove();
+			return true;
+		} // if
+
+		var self = this;
+
+		var oExperian = {};
+		var nExperianCount = 0;
+
+		_.each(oDirectorsList, function(oDirector) {
+			var sName = self.name(oDirector.Name);
+
+			if (!sName)
+				return;
+			
+			oExperian[sName] = 1;
+			nExperianCount++;
+		}); // for each experian director
+
+		if (!nExperianCount) {
+			oUiDirector.remove();
+			return true;
+		} // if
+
+		var oApplication = {};
+
+		this.$el.find('.cross-check-director-details').each(function() {
+			var sName = self.name($(this).attr('director-name'));
+
+			if (!sName)
+				return;
+			
+			oApplication[sName] = 1;
+		}); // for each app director
+
+		var nOnlyCount = 0;
+
+		var oUiDirectorList = oUiDirector.find('ul');
+		
+		for (var sDirName in oExperian) {
+			if (oApplication[sDirName])
+				continue;
+
+			oUiDirectorList.append($('<li></li>').text(sDirName));
+			nOnlyCount++;
+		} // for
+
+		if (!nOnlyCount) {
+			oUiDirector.remove();
+			return true;
+		} // if
+
+		return false;
+	}, // crossCheckDirectors
 
 	crossCheckOne: function(sParentID) {
 		var oParent = this.$el.find(sParentID);
@@ -58,19 +125,25 @@ EzBob.Underwriter.CrossCheckView = Backbone.View.extend({
 		
 		if (sAppValue != sExperianValue) {
 			oParent.find('.checkoutcome').addClass('NoChecked');
-			return;
+			return false;
 		} // if
 
 		var oHmrc = oParent.find('.hmrc');
 
 		if (oHmrc.hasClass('hide')) {
-			if (sAppValue == sExperianValue)
+			if (sAppValue == sExperianValue) {
 				oParent.find('.checkoutcome').addClass('Checked');
+				return true;
+			} // if
 
-			return;
+			return false;
 		} // if HMRC is hidden
 
-		oParent.find('.checkoutcome').addClass(sAppValue == oHmrc.text() ? 'Checked' : 'NoChecked');
+		var bSuccess = sAppValue == oHmrc.text();
+
+		oParent.find('.checkoutcome').addClass(bSuccess ? 'Checked' : 'NoChecked');
+
+		return bSuccess;
 	}, // crossCheckOne
 
 	setHmrcData: function() {
@@ -105,8 +178,6 @@ EzBob.Underwriter.CrossCheckView = Backbone.View.extend({
 			return;
 		} // if
 
-		console.log('HMRC is', oHMRC);
-
 		var oCGData = oHMRC.get('CGData');
 
 		if (!oCGData || !oCGData.VatReturn || !oCGData.VatReturn.length)
@@ -120,22 +191,9 @@ EzBob.Underwriter.CrossCheckView = Backbone.View.extend({
 	}, // setHmrcData
 
 	setExperianData: function() {
-		console.log('company score is', this.options.companyScore);
+		var oCompanyIdList = this.loadExperian('Limited Company Identification');
 
-		if (!this.options.companyScore)
-			return;
-
-		var oDataset = this.options.companyScore.get('dataset');
-
-		if (!oDataset)
-			return;
-
-		if (!oDataset['Limited Company Identification'])
-			return;
-
-		var oCompanyIdList = oDataset['Limited Company Identification'].Data;
-
-		if (!oCompanyIdList || !oCompanyIdList[0])
+		if (!oCompanyIdList)
 			return;
 
 		var oCompanyID = oCompanyIdList[0];
@@ -144,6 +202,26 @@ EzBob.Underwriter.CrossCheckView = Backbone.View.extend({
 
 		this.$el.find('#cross-check-company-address .experian').text(this.address(oCompanyID['Office Address']));
 	}, // setExperianData
+
+	loadExperian: function(sDatumID) {
+		if (!this.options.companyScore)
+			return null;
+
+		var oDataset = this.options.companyScore.get('dataset');
+
+		if (!oDataset)
+			return null;
+
+		if (!oDataset[sDatumID])
+			return null;
+
+		var oDatum = oDataset[sDatumID].Data;
+
+		if (!oDatum || !oDatum.length)
+			return null;
+
+		return oDatum;
+	}, // loadExperian
 
 	address: function(oRawAddress) {
 		var aryRawAddress = null;
@@ -170,6 +248,18 @@ EzBob.Underwriter.CrossCheckView = Backbone.View.extend({
 			function (s) { return $.trim(s); }
 		).join('\n').toUpperCase();
 	}, // address
+
+	name: function(sRawName) {
+		if (!sRawName)
+			return '';
+
+		return _.map(
+			_.filter(
+				$.trim(sRawName).split(' '), function(s) { return $.trim(s) != ''; }
+			),
+			function (s) { return $.trim(s); }
+		).join(' ');
+	}, // name
 
 	events: {
 		"click #recheck-targeting": "recheckTargeting"

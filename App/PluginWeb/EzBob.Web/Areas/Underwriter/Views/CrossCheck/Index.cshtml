@@ -1,5 +1,4 @@
-﻿@using System.Globalization
-@using ApplicationMng.Model
+﻿@using ApplicationMng.Model
 @using EZBob.DatabaseLib.Model.Database
 @using EzBob.Web.Areas.Underwriter.Models
 @using EzBob.Web.Code
@@ -34,8 +33,26 @@
 	} // switch
 }
 
-<h3>Personal info</h3>
+<h3>Summary</h3>
 <table class="table table-bordered blue-header centered squeezed">
+	<tbody>
+	<tr>
+		<th class="narrow-as-possible"><a href="#cross-check-business-info-section">Company name</a></th>
+		<td><b class="marking cross-check-summary-company-name"></b></td>
+	</tr>
+	<tr>
+		<th class="narrow-as-possible"><a href="#cross-check-business-info-section">Company address</a></th>
+		<td><b class="marking cross-check-summary-company-address"></b></td>
+	</tr>
+	<tr>
+		<th class="narrow-as-possible"><a href="#cross-check-directors-section">Directors</a></th>
+		<td><b class="marking cross-check-summary-directors"></b></td>
+	</tr>
+	</tbody>
+</table>
+
+<h3>Personal info</h3>
+<table class="table table-bordered blue-header centered squeezed cross-check-director-details" director-name="@string.Join("\n", new [] { Model.Application.FirstName, Model.Application.MiddleInitial, Model.Application.Surname })">
 <thead>
 	<tr>
 		<th style="width: 20%;">Personal Info</th>
@@ -274,7 +291,7 @@ var companyName = (Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOf
 bool propertyOwnedByCompany = Model.Customer.CompanyAdditionalInfo != null && Model.Customer.CompanyAdditionalInfo.PropertyOwnedByCompany.HasValue && Model.Customer.CompanyAdditionalInfo.PropertyOwnedByCompany.Value;
 }
 
-<h3>Business info</h3>
+<h3 id="cross-check-business-info-section">Business info</h3>
 <table class="table table-striped table-bordered blue-header centered squeezed">
 <thead>
 	<tr>
@@ -421,9 +438,14 @@ bool propertyOwnedByCompany = Model.Customer.CompanyAdditionalInfo != null && Mo
 	</tbody>
 </table>
 
-<h3>Directors</h3>
+<h3 id="cross-check-directors-section">Directors</h3>
+<fieldset id="cross-check-experian-only-directors">
+	<legend>Directors received from Experian and not specified by the customer</legend>
+	<ul></ul>
+</fieldset>
+
 @if (Model.Directors.Count == 0) {
-	<fieldset><legend>No directors data found.</legend></fieldset>
+	<fieldset><legend>Customer did not specify any additional directors.</legend></fieldset>
 }
 
 @for (int i = 0; i < Model.Directors.Count; i++) {
@@ -452,10 +474,11 @@ bool propertyOwnedByCompany = Model.Customer.CompanyAdditionalInfo != null && Mo
 		break;
 	} // switch
 
+
 	<fieldset>
 		<legend>Director #@(i + 1) Info</legend>
 
-		<table class="table table-bordered">
+		<table class="table table-bordered cross-check-director-details" director-name="@string.Join("\n", new [] { d.Name, d.Middle, d.Surname })">
 		<tbody>
 			<tr>
 				<td><b>Name</b></td>
