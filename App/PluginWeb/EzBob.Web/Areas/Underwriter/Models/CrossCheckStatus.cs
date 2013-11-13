@@ -4,88 +4,84 @@ using ApplicationMng.Model;
 
 namespace EzBob.Web.Areas.Underwriter.Models
 {
-    public enum CrossCheckTypeStatus
-    {
-        Empty,
-        Checked,
-        NoChecked
-    }
+	using System.Collections.Generic;
 
-    public class CrossCheckStatus
-    {
-        public CrossCheckTypeStatus DateOfBirth { get; set; }
-        public CrossCheckTypeStatus MiddleInitial { get; set; }
-        public CrossCheckTypeStatus DaytimePhone { get; set; }
-        public CrossCheckTypeStatus BusinessName { get; set; }
-        public CrossCheckTypeStatus TypeOfBussnes { get; set; }
-        public CrossCheckTypeStatus FirstName { get; set; }
-        public CrossCheckTypeStatus Surname { get; set; }
-        public CrossCheckTypeStatus FullName { get; set; }
-        public CrossCheckTypeStatus Email { get; set; }
+	public enum CrossCheckTypeStatus
+	{
+		Empty,
+		Checked,
+		NoChecked
+	}
 
-        public CrossCheckTypeStatus Line1 { get; set; }
-        public CrossCheckTypeStatus Line2 { get; set; }
-        public CrossCheckTypeStatus Line3 { get; set; }
-        public CrossCheckTypeStatus Town { get; set; }
-        public CrossCheckTypeStatus County { get; set; }
-        public CrossCheckTypeStatus Postcode { get; set; }
-        public CrossCheckTypeStatus Country { get; set; }
+	public class CrossCheckStatus
+	{
+		public CrossCheckTypeStatus DateOfBirth { get; set; }
+		public CrossCheckTypeStatus MiddleInitial { get; set; }
+		public CrossCheckTypeStatus DaytimePhone { get; set; }
+		public CrossCheckTypeStatus BusinessName { get; set; }
+		public CrossCheckTypeStatus TypeOfBussnes { get; set; }
+		public CrossCheckTypeStatus FirstName { get; set; }
+		public CrossCheckTypeStatus Surname { get; set; }
+		public CrossCheckTypeStatus FullName { get; set; }
+		public CrossCheckTypeStatus Email { get; set; }
 
-        public void BuildMarkerStatusForPersonalInfo(PersonalInfo application, PersonalInfo payPal, PersonalInfo eBay)
-        {
-            payPal = payPal ?? new PersonalInfo();
-            eBay = eBay ?? new PersonalInfo();
-            Email = GetTypeStatusForThreeColumsAll(CrossCheckTypeStatus.Empty, eBay.Email, application.Email, payPal.Email);
-            FirstName = GetTypeStatusForThreeColums(eBay.FirstName, application.FirstName, payPal.FirstName, CrossCheckTypeStatus.NoChecked);
-            Surname = GetTypeStatusForThreeColums(eBay.Surname, application.Surname, payPal.Surname, CrossCheckTypeStatus.NoChecked);
-            FullName = GetStatusForFullName(FirstName, Surname);
-            DateOfBirth = GetTypeStatusForTwoColumns(application.DateOfBirth.ToString(), payPal.DateOfBirth.ToString(), CrossCheckTypeStatus.NoChecked);
-            DaytimePhone = GetStatusDayTimePhone(eBay.DaytimePhone, application.DaytimePhone, payPal.DaytimePhone, CrossCheckTypeStatus.Empty);
-            TypeOfBussnes = GetTypeStatusForTwoColumns(application.TypeOfBusiness.ToString(), eBay.SellerInfo.SellerInfoSellerBusinessType, CrossCheckTypeStatus.Empty);
-        }
+		public CrossCheckTypeStatus Line1 { get; set; }
+		public CrossCheckTypeStatus Line2 { get; set; }
+		public CrossCheckTypeStatus Line3 { get; set; }
+		public CrossCheckTypeStatus Town { get; set; }
+		public CrossCheckTypeStatus County { get; set; }
+		public CrossCheckTypeStatus Postcode { get; set; }
+		public CrossCheckTypeStatus Country { get; set; }
 
-        public void BuildMarkerStatusForCustomerAddress(CustomerAddress current, CustomerAddress ebaySeller, CustomerAddress payPall)
-        {
-            payPall = payPall ?? new CustomerAddress();
-            ebaySeller = ebaySeller ?? new CustomerAddress();
-            current = current ?? new CustomerAddress();
-            Line1 = GetTypeStatusForThreeColumsAll(CrossCheckTypeStatus.NoChecked, ebaySeller.Line1, current.Line1, payPall.Line1);
-            Line2 = GetTypeStatusForThreeColumsAll(CrossCheckTypeStatus.NoChecked, ebaySeller.Line2, current.Line2, payPall.Line2);
-            Town = GetTypeStatusForThreeColumsAll(CrossCheckTypeStatus.NoChecked, ebaySeller.Town, current.Town, payPall.Town);
-            County = GetTypeStatusForThreeColumsAll(CrossCheckTypeStatus.NoChecked, ebaySeller.County, current.County, payPall.County);
-            Country = GetTypeStatusForThreeColumsAll(CrossCheckTypeStatus.NoChecked, ebaySeller.Country, current.Country, payPall.Country);
-            Postcode = GetTypeStatusForThreeColumsAll(CrossCheckTypeStatus.NoChecked, ebaySeller.Postcode, current.Postcode, payPall.Postcode);
-        }
+		public void BuildMarkerStatusForPersonalInfo(PersonalInfo application, PersonalInfo payPal, PersonalInfo eBay)
+		{
+			payPal = payPal ?? new PersonalInfo();
+			eBay = eBay ?? new PersonalInfo();
+			Email = GetTypeStatusForColums(eBay.Email, application.Email, payPal.Email);
+			FirstName = GetTypeStatusForColums(eBay.FirstName, application.FirstName, payPal.FirstName);
+			Surname = GetTypeStatusForColums(eBay.Surname, application.Surname, payPal.Surname);
+			FullName = GetStatusForFullName(FirstName, Surname);
+			DateOfBirth = GetTypeStatusForColums(application.DateOfBirth.ToString(), payPal.DateOfBirth.ToString());
+			DaytimePhone = GetStatusDayTimePhone(eBay.DaytimePhone, application.DaytimePhone, payPal.DaytimePhone, CrossCheckTypeStatus.Empty);
+			TypeOfBussnes = GetTypeStatusForColums(application.TypeOfBusiness.ToString(), eBay.SellerInfo.SellerInfoSellerBusinessType);
+		}
 
-        public CrossCheckTypeStatus GetStatusDayTimePhone(string eBayDaytimePhone, string applicationDaytimePhone, string payPalDaytimePhone, CrossCheckTypeStatus defaultStatus)
-        {
-            applicationDaytimePhone = applicationDaytimePhone.Replace("+3", string.Empty);
+		public void BuildMarkerStatusForCustomerAddress(CustomerAddress current, CustomerAddress ebaySeller, CustomerAddress payPall)
+		{
+			payPall = payPall ?? new CustomerAddress();
+			ebaySeller = ebaySeller ?? new CustomerAddress();
+			current = current ?? new CustomerAddress();
+			Line1 = GetTypeStatusForColums( ebaySeller.Line1, current.Line1, payPall.Line1);
+			Line2 = GetTypeStatusForColums(ebaySeller.Line2, current.Line2, payPall.Line2);
+			Town = GetTypeStatusForColums(ebaySeller.Town, current.Town, payPall.Town);
+			County = GetTypeStatusForColums(ebaySeller.County, current.County, payPall.County);
+			Country = GetTypeStatusForCountry(ebaySeller.Country, current.Country, payPall.Country);
+			Postcode = GetTypeStatusForColums(ebaySeller.Postcode, current.Postcode, payPall.Postcode);
+		}
 
-            var result = defaultStatus;
+		public CrossCheckTypeStatus GetStatusDayTimePhone(string eBayDaytimePhone, string applicationDaytimePhone, string payPalDaytimePhone, CrossCheckTypeStatus defaultStatus)
+		{
+			applicationDaytimePhone = applicationDaytimePhone.Replace("+3", string.Empty);
+			return GetTypeStatusForColums(eBayDaytimePhone, applicationDaytimePhone, payPalDaytimePhone);
+		}
 
-            if (!String.IsNullOrEmpty(eBayDaytimePhone) && !String.IsNullOrEmpty(payPalDaytimePhone))
-                result = GetTypeStatusForThreeColums(eBayDaytimePhone, applicationDaytimePhone, payPalDaytimePhone, defaultStatus);
-            else
-            {
-                if (String.IsNullOrEmpty(eBayDaytimePhone))
-                    result = GetTypeStatusForTwoColumns(applicationDaytimePhone, payPalDaytimePhone, CrossCheckTypeStatus.NoChecked);
-                else
-                    if (String.IsNullOrEmpty(payPalDaytimePhone))
-                        result = GetTypeStatusForTwoColumns(applicationDaytimePhone, eBayDaytimePhone, CrossCheckTypeStatus.NoChecked);
-            }
-            return result;
-        }
+		public CrossCheckTypeStatus GetStatusForFullName(CrossCheckTypeStatus statusFirstName, CrossCheckTypeStatus statusSurname)
+		{
+			if (statusFirstName == CrossCheckTypeStatus.Checked && statusSurname == CrossCheckTypeStatus.Checked)
+			{
+				return CrossCheckTypeStatus.Checked;
+			}
+			if (statusFirstName == CrossCheckTypeStatus.NoChecked || statusSurname == CrossCheckTypeStatus.NoChecked)
+			{
+				return CrossCheckTypeStatus.NoChecked;
+			}
 
-        public CrossCheckTypeStatus GetStatusForFullName(CrossCheckTypeStatus statusFirstName, CrossCheckTypeStatus statusSurname)
-        {
-            return statusFirstName == CrossCheckTypeStatus.Checked && statusSurname == CrossCheckTypeStatus.Checked
-                       ? CrossCheckTypeStatus.Checked
-                       : CrossCheckTypeStatus.NoChecked;
-        }
+			return CrossCheckTypeStatus.Empty;
+		}
 
-        public CrossCheckTypeStatus GetTypeStatusForThreeColumsAll(CrossCheckTypeStatus defaultStatus, params string[] values)
-        {
-            var uk = new[]
+		public CrossCheckTypeStatus GetTypeStatusForCountry(params string[] values)
+		{
+			var uk = new[]
             {
                 "uk",
                 "unitedkingdom",
@@ -94,48 +90,58 @@ namespace EzBob.Web.Areas.Underwriter.Models
                 "greatbritain"
             };
 
-            var stripped = values.Where(v => !string.IsNullOrEmpty(v)).ToList();
+			var stripped = values.Where(v => !string.IsNullOrEmpty(v)).ToList();
 
-            if (stripped.Count < 2)
-                return defaultStatus;
+			if (stripped.Count < 2)
+				return CrossCheckTypeStatus.Empty;
 
-            var first = stripped.First().Replace(" ", string.Empty).ToLower();
+			var first = stripped.First().Replace(" ", string.Empty).ToLower();
 
-            var allEqual = stripped.All(v =>
-                                          {
-                                              var vv = v.Replace(" ", string.Empty).ToLower();
-                                              if (vv == first)
-                                              {
-                                                  return true;
-                                              }
+			var allEqual = stripped.All(v =>
+										  {
+											  var vv = v.Replace(" ", string.Empty).ToLower();
+											  if (vv == first)
+											  {
+												  return true;
+											  }
 
-                                              if (uk.Contains(first) && uk.Contains(vv)) return true;
+											  if (uk.Contains(first) && uk.Contains(vv)) return true;
 
-                                              return false;
+											  return false;
 
-                                          });
+										  });
 
-            return allEqual ? CrossCheckTypeStatus.Checked : defaultStatus;
-        }
+			return allEqual ? CrossCheckTypeStatus.Checked : CrossCheckTypeStatus.NoChecked;
+		}
 
-        public CrossCheckTypeStatus GetTypeStatusForTwoColumns(string applicationName, string payPallName, CrossCheckTypeStatus status)
-        {
-            if (String.IsNullOrEmpty(applicationName) || String.IsNullOrEmpty(payPallName))
-                return status;
+		public CrossCheckTypeStatus GetTypeStatusForColums(params string[] names)
+		{
+			var nonEmptyNames = new List<string>();
+			foreach (var name in names)
+			{
+				if (!string.IsNullOrEmpty(name)) { nonEmptyNames.Add(name.Trim()); }	
+			}
+			
+			if (nonEmptyNames.Count < 2)
+			{
+				return CrossCheckTypeStatus.Empty;
+			}
 
-            applicationName = applicationName.Replace(" ", string.Empty);
-            payPallName = payPallName.Replace(" ", string.Empty);
+			return GetTypeStatusForList(nonEmptyNames);
 
-            var isequal = string.Equals(applicationName, payPallName, StringComparison.OrdinalIgnoreCase);
+		}
 
-            return isequal ? CrossCheckTypeStatus.Checked : status;
-        }
-
-        public CrossCheckTypeStatus GetTypeStatusForThreeColums(string ebayName, string applicationName, string payPallName, CrossCheckTypeStatus defaultStatus)
-        {
-            return String.IsNullOrEmpty(ebayName) ?
-                GetTypeStatusForTwoColumns(applicationName, payPallName, CrossCheckTypeStatus.NoChecked)
-                : GetTypeStatusForThreeColumsAll(defaultStatus, ebayName, applicationName, payPallName);
-        }
-    }
+		private CrossCheckTypeStatus GetTypeStatusForList(List<string> names)
+		{
+			var name1 = names[0];
+			foreach (var name in names)
+			{
+				if (!string.Equals(name1, name, StringComparison.OrdinalIgnoreCase))
+				{
+					return CrossCheckTypeStatus.NoChecked;
+				}
+			}
+			return CrossCheckTypeStatus.Checked;
+		}
+	}
 }
