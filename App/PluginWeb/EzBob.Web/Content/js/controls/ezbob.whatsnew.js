@@ -27,7 +27,7 @@ EzBob.WhatsNewView = Backbone.View.extend({
     },
 
     showWhatsNew: function (whatsNew) {
-        var whatsNewDiv = $('<div class="' + whatsNew + '"></div>');
+        var whatsNewDiv = $('<div style="background-image: url(' + window.gRootPath +'Content/css/images/'+ whatsNew + ');" class="whats-new"></div>');
         scrollTop();
         this.$el.prepend(whatsNewDiv);
         whatsNewDiv.alert();
