@@ -520,9 +520,11 @@ table.internal-table td {
 #hmrc-vat-return-details .r
 { text-align: right !important; }
 
-#hmrc-vat-return-summary .chkpt th,
 #hmrc-vat-return-summary .chkpt td
-{ font-weight: bold!important; border-top: 5px solid black!important; }
+{ font-weight: bold!important; border-top: 2px solid black!important; }
+
+#hmrc-vat-return-summary .lastchkpt td
+{ border-bottom: 3px solid black!important; }
 
 .fraud-form .control-group {
     margin-bottom: 5px;
@@ -597,6 +599,8 @@ table.unlimited-width th, table.unlimited-width td { padding: 8px; }
 
 .known-as-experian-director { color: #008000; font-weight: bold; }
 
-#company-score-list .ui-accordion-header { padding: 0.7em 2em; font-size: 1.2em; }
+#company-score-list .ui-accordion-header,
+#cross-check-accordion .ui-accordion-header
+{ padding: 0.7em 2em; font-size: 1.2em; }
 
 .default-customer-status-warning { color: red; }
