@@ -126,14 +126,14 @@
 {
     <div class="tab-pane" id="yodleetab2">
         <%(function() { if (y.CashFlowReportModel && y.CashFlowReportModel.YodleeCashFlowReportModelDict) { %>
-        <h3 style="width: 800px; text-align: center;">Cash Flow<br />
+        <h3 style="width: 800px; text-align: center;">Monthly Activity Summary<br />
             <small>monthly as of date <%=EzBob.formatDate(new Date(Date.parse(y.CashFlowReportModel.AsOfDate)))%></small>
         </h3>
         <div class="well" style="width: 800px; height: 300px; position: relative;">
             <div id="yodleeBarGraph" class="jqplot-target" style="width: 800px; height: 300px; position: relative;"></div>
         </div>
         <hr />
-        <h3 style="width: 800px; text-align: center;">High/Low Running Balance<br />
+        <h3 style="width: 800px; text-align: center;">Cash Flow High/Low Trends<br />
             <small>monthly as of date <%=EzBob.formatDate(new Date(Date.parse(y.CashFlowReportModel.AsOfDate)))%></small>
         </h3>
         <div class="well" style="width: 800px; height: 300px; position: relative;">
