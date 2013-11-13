@@ -6,5 +6,6 @@ To create a new DB:
 3. Run '02 - SkeletonData.sql'
 4. Update sql\<machine-name>.conf to the new db name
 5. Execute all the new sqls (After Nov 13 release)
-6. Update the environment config file
-7. Run publisher
+6. Execute this query: INSERT INTO ServiceRegistration ([key]) VALUES ('\\<machine-name>\<Path of scorto service executable>')
+7. Update the environment config file
+8. Run publisher
