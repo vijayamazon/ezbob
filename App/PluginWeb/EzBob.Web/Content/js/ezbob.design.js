@@ -655,10 +655,6 @@ EzBob.formatPoundsWidhDash = function (val) {
     return EzBob.formatPounds(val);
 };
 
-EzBob.formatPercents = function (val) {
-    return EzBob.formatPoundsFormat(val, EzBob.percentFormat);
-};
-
 EzBob.formatPounds = function (val) {
     return EzBob.formatPoundsFormat(val, EzBob.moneyFormat);
 };
@@ -678,7 +674,6 @@ EzBob.formatPoundsAsInt = function (val) {
 EzBob.formatPoundsAsThousands = function (val) {
     return EzBob.formatPoundsFormat(val / 1000, EzBob.moneyFormatAsThousands) + ' K';
 };
-
 
 EzBob.formatPoundsFormat = function (val, format) {
     if (!val && val != 0) {
@@ -712,7 +707,6 @@ EzBob.formatDateTimeAsIs = function (date) {
     if (!date) return "";
     return moment.utc(date).format("DD/MM/YYYY HH:mm:ss");
 };
-
 
 EzBob.datetimeToDate = function (date) {
     if (!date) return "";
@@ -748,6 +742,24 @@ EzBob.formatPercents1 = function (num) {
         s = s.replace(/%$/, '.00%');
 
     return s;
+};
+
+EzBob.formatPercents0 = function (numerator, denominator) {
+	if (numerator === undefined || numerator == null || numerator === '')
+		return '';
+
+	var num = numerator;
+
+	if (denominator !== undefined && denominator != null && denominator !== '') {
+		var x = parseFloat(denominator);
+
+		if (x == 0)
+			return '';
+		
+		num /= x;
+	} // if
+
+	return EzBob.formatIntWithCommas(parseInt(num * 100)) + "%";
 };
 
 EzBob.formatLoanType = function (loanTypeSelection, loanType) {

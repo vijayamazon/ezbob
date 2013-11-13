@@ -520,6 +520,10 @@ table.internal-table td {
 #hmrc-vat-return-details .r
 { text-align: right !important; }
 
+#hmrc-vat-return-summary .chkpt th,
+#hmrc-vat-return-summary .chkpt td
+{ font-weight: bold!important; border-top: 5px solid black!important; }
+
 .fraud-form .control-group {
     margin-bottom: 5px;
 }
