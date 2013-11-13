@@ -143,16 +143,16 @@ namespace EzBob.Models.Marketplaces.Builders
 			model.banks = banks;
 			YodleeSearchWordsModel yodleeSearchWordsModel;
 			YodleeRunningBalanceModel yodleeRunningBalanceModel;
-			model.CashFlowReportModel = CreateYodleeCashFlowModel(model, mp.Customer.PersonalInfo.Surname, out yodleeSearchWordsModel, out yodleeRunningBalanceModel);
+			model.CashFlowReportModel = CreateYodleeCashFlowModel(model, mp.Customer, out yodleeSearchWordsModel, out yodleeRunningBalanceModel);
 			model.SearchWordsModel = yodleeSearchWordsModel;
 			model.RunningBalanceModel = yodleeRunningBalanceModel;
 			return model;
 		}
 
-		private YodleeCashFlowReportModel CreateYodleeCashFlowModel(YodleeModel model, string customerSurName, out YodleeSearchWordsModel yodleeSearchWordsModel, out YodleeRunningBalanceModel yodleeRunningBalanceModel)
+		private YodleeCashFlowReportModel CreateYodleeCashFlowModel(YodleeModel model, Customer customer, out YodleeSearchWordsModel yodleeSearchWordsModel, out YodleeRunningBalanceModel yodleeRunningBalanceModel)
 		{
 			var yodleeCashFlowReportModel = new YodleeCashFlowReportModel(_session);
-			yodleeSearchWordsModel = new YodleeSearchWordsModel(_session, customerSurName);
+			yodleeSearchWordsModel = new YodleeSearchWordsModel(_session, customer);
 			yodleeRunningBalanceModel = new YodleeRunningBalanceModel();
 			foreach (var bank in model.banks)
 			{
