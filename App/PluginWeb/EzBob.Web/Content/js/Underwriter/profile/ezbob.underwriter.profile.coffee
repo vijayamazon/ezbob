@@ -28,10 +28,12 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
             model: @personalInfoModel
         )
         @personalInfoModel.on "change", @changeDecisionButtonsState, this
+
         @marketPlaces = new EzBob.Underwriter.MarketPlaces()
         @marketPlaceView = new EzBob.Underwriter.MarketPlacesView(
             el: marketplaces
             model: @marketPlaces
+            personalInfoModel: @personalInfoModel
         )
 
         that = @

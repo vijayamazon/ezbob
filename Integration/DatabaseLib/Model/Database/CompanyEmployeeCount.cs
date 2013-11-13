@@ -28,9 +28,11 @@ namespace EZBob.DatabaseLib.Model.Database {
 	#region class CompanyEmployeeCountInfo
 
 	public class CompanyEmployeeCountInfo {
-		public CompanyEmployeeCountInfo() {} // constructor
+		public CompanyEmployeeCountInfo() {
+			HasData = false;
+		} // constructor
 
-		public CompanyEmployeeCountInfo(Customer oCustomer) {
+		public CompanyEmployeeCountInfo(Customer oCustomer) : this() {
 			var cec =
 				oCustomer.CompanyEmployeeCount.OrderBy(x => x.Created).LastOrDefault()
 				?? new CompanyEmployeeCount();
@@ -41,6 +43,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 			EmployeeCountChange        = cec.EmployeeCountChange;
 			TopEarningEmployeeCount    = cec.TopEarningEmployeeCount;
 			TotalMonthlySalary         = cec.TotalMonthlySalary;
+			HasData                    = true;
 		} // constructor
 
 		public int EmployeeCount { get; set; }
@@ -49,6 +52,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public int EmployeeCountChange { get; set; }
 		public double TotalMonthlySalary { get; set; }
 		public DateTime Created { get; set; }
+		public bool HasData { get; private set; }
 	} // class CompanyEmployeeCountInfo 
 
 	#endregion class CompanyEmployeeCountInfo

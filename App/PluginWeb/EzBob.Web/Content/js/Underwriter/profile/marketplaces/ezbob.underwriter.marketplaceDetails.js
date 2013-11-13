@@ -21,8 +21,17 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
         var aryCGAccounts = $.parseJSON($('div#cg-account-list').text());
 
         this.shop = this.model.get(this.options.currentId);
-        if (!this.shop) return false;
-        var data = { marketplaces: [], accounts: [], summary: null, customerId: this.options.customerId };
+
+        if (!this.shop)
+            return false;
+
+        var data = {
+            marketplaces: [],
+            accounts: [],
+            summary: null,
+            customerId: this.options.customerId,
+            personalInfoModel: this.options.personalInfoModel
+        };
 
         var sTargetList = '';
 
