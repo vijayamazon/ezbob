@@ -79,7 +79,6 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
             el: medalCalculations
             model: @medalCalculationModel
         )
-        @crossCheckView = new EzBob.Underwriter.CrossCheckView(el: @$el.find("#customer-info"))
 
         @companyScoreModel = new EzBob.Underwriter.CompanyScoreModel()
         @companyScoreView = new EzBob.Underwriter.CompanyScoreView(
@@ -89,6 +88,16 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
 
         that.$el.find('a.company-score-tab').on('shown.bs.tab', (evt) ->
             that.companyScoreView.showAccordion()
+        )
+
+        @crossCheckView = new EzBob.Underwriter.CrossCheckView(
+            el: @$el.find("#customer-info")
+            marketPlaces: @marketPlaces
+            companyScore: @companyScoreModel
+        )
+
+        that.$el.find('a.cross-check-tab').on('shown.bs.tab', (evt) ->
+            that.crossCheckView.doCrossCheck()
         )
 
         @messagesModel = new EzBob.Underwriter.MessageModel()
@@ -183,15 +192,13 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
             return false
         if @loanInfoModel.get("OfferExpired")
             EzBob.ShowMessage "Loan offer has expired. Set new validity date.", "Error"
-            return false            
+            return false
 
-        
-        
         @skipPopupForApprovalWithoutAML = @loanInfoModel.get("SkipPopupForApprovalWithoutAML")
         if @loanInfoModel.get("AMLResult") != 'Passed' && !@skipPopupForApprovalWithoutAML        
             approveLoanWithoutAMLDialog = new EzBob.Underwriter.ApproveLoanWithoutAML(model: @loanInfoModel, parent: this, skipPopupForApprovalWithoutAML: @skipPopupForApprovalWithoutAML)
             EzBob.App.modal.show(approveLoanWithoutAMLDialog);
-            return false        
+            return false
 
         @CheckCustomerStatusAndCreateApproveDialog()
 

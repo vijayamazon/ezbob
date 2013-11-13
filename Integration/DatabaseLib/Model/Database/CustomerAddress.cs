@@ -54,6 +54,10 @@ namespace ApplicationMng.Model
                 return string.Format("{0} {1} {2}, {3}, {4}, {5}", Line1, Line2, Line3, Town, Country, Postcode);
             }
         }
+
+		public virtual string[] AddressArray() {
+			return new string[] { Line1, Line2, Line3, Town, Postcode };
+		} // AddressArray
     }
     public static class CustomerAddressExtenstions
     {
