@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
-using ApplicationMng.Model;
 
 namespace EzBob.Web.Areas.Customer.Models
 {
-    public class PersonalInfoHistoryParameter
+	using EZBob.DatabaseLib.Model.Database;
+
+	public class PersonalInfoHistoryParameter
     {
         public string DaytimePhone { get; set; }
         public string MobilePhone { get; set; }

@@ -1,9 +1,10 @@
-﻿using ApplicationMng.Model;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace EzBob.Web.Code.PostCode
 {
-    public class PostCodeResponseFullAddressModel: CustomerAddress, IPostCodeResponse
+	using EZBob.DatabaseLib.Model.Database;
+
+	public class PostCodeResponseFullAddressModel: CustomerAddress, IPostCodeResponse
     {
         public virtual int Found { get; set; }
         [JsonIgnore]

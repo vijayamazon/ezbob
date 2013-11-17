@@ -1,7 +1,7 @@
 using FluentNHibernate.Mapping;
 
 namespace EZBob.DatabaseLib.Model.Database.Mapping {
-	public class LoanTransactionMethodMap : ClassMap<EZBob.DatabaseLib.Model.Database.Loans.LoanTransactionMethod> {
+	public class LoanTransactionMethodMap : ClassMap<Loans.LoanTransactionMethod> {
 		public LoanTransactionMethodMap() {
 			Table("LoanTransactionMethod");
 			ReadOnly();

@@ -179,7 +179,7 @@
 						<td class="centered"><%- m.RaitingPercent%> %</td>
 						<td class="centered"><%- EzBob.formatPoundsNoDecimals(m.inventory, true) %></td>
 						<td><% if(m.Disabled) print ("Disabled") %></td>
-						<td><%- m.UpdatingStatus %>
+						<td><%- m.UpdatingStatus %> <%- m.LastChecked%>
 							<% if (m.UpdateError) { %>
 								<button class="btn btn-mini mp-error-description" data-title="<%- m.UpdateError %>"><i class="icon-comment"></i></button>
 								<br />
@@ -268,7 +268,7 @@
 					<td class="centered"><%- ll(m, 'MonthInPayments', nBehaviour) %></td>
 					<td class="centered"><%- ll(m, 'TotalNetInPayments', nBehaviour) %></td>
 					<td class="centered"><%- (m.Name.toLowerCase() === 'paypoint') ? '-' : ll(m, 'TotalNetOutPayments', nBehaviour) %></td>
-					<td><%- m.UpdatingStatus %>
+					<td><%- m.UpdatingStatus %> <%- m.LastChecked%>
 						<% if(m.UpdateError){%>
 							<button class="btn btn-mini mp-error-description" data-title="<%- m.UpdateError %>"><i class="icon-comment"></i></button>
 							<br />

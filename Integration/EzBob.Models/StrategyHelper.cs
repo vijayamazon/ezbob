@@ -11,7 +11,6 @@
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
-	using EZBob.DatabaseLib.Model.Database.Repositories;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Experian;
 	using EZBob.DatabaseLib.Repository;
@@ -21,17 +20,18 @@
 	using Web.Code;
 	using NHibernate;
 	using StructureMap;
+	using ZooplaLib;
 	using log4net;
 	using MailApi;
 
 	public class StrategyHelper
 	{
 		private static readonly ILog log = LogManager.GetLogger(typeof(StrategyHelper));
-        private readonly CustomerRepository _customers;
-        private readonly DecisionHistoryRepository _decisionHistory;
-        private readonly ISession _session;
-        private readonly CaisReportsHistoryRepository _caisReportsHistoryRepository;
-        private readonly MarketPlacesFacade _mpFacade;
+		private readonly CustomerRepository _customers;
+		private readonly DecisionHistoryRepository _decisionHistory;
+		private readonly ISession _session;
+		private readonly CaisReportsHistoryRepository _caisReportsHistoryRepository;
+		private readonly MarketPlacesFacade _mpFacade;
 		private readonly PacNetBalanceRepository pacNetBalanceRepository;
 		private readonly LoanRepository loanRepository;
 		private readonly CashRequestsRepository cashRequestsRepository;
@@ -39,14 +39,14 @@
 		private readonly LoanScheduleTransactionRepository loanScheduleTransactionRepository;
 		private readonly ConfigurationVariablesRepository configurationVariablesRepository;
 		private readonly ServiceLogRepository serviceLogRepository;
-
-        public StrategyHelper()
-        {
-            _session = ObjectFactory.GetInstance<ISession>();
-            _decisionHistory = ObjectFactory.GetInstance<DecisionHistoryRepository>();
-            _customers = ObjectFactory.GetInstance<CustomerRepository>();
-            _caisReportsHistoryRepository = ObjectFactory.GetInstance<CaisReportsHistoryRepository>();
-            _mpFacade = ObjectFactory.GetInstance<MarketPlacesFacade>();
+		private readonly ZooplaRepository _zooplaRepository;
+		public StrategyHelper()
+		{
+			_session = ObjectFactory.GetInstance<ISession>();
+			_decisionHistory = ObjectFactory.GetInstance<DecisionHistoryRepository>();
+			_customers = ObjectFactory.GetInstance<CustomerRepository>();
+			_caisReportsHistoryRepository = ObjectFactory.GetInstance<CaisReportsHistoryRepository>();
+			_mpFacade = ObjectFactory.GetInstance<MarketPlacesFacade>();
 			pacNetBalanceRepository = ObjectFactory.GetInstance<PacNetBalanceRepository>();
 			loanRepository = ObjectFactory.GetInstance<LoanRepository>();
 			cashRequestsRepository = ObjectFactory.GetInstance<CashRequestsRepository>();
@@ -54,7 +54,8 @@
 			loanScheduleTransactionRepository = ObjectFactory.GetInstance<LoanScheduleTransactionRepository>();
 			configurationVariablesRepository = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
 			serviceLogRepository = ObjectFactory.GetInstance<ServiceLogRepository>();
-        }
+			_zooplaRepository = ObjectFactory.GetInstance<ZooplaRepository>();
+		}
 
 		public double GetTurnoverForPeriod(int customerId, TimePeriodEnum period)
 		{
@@ -62,7 +63,7 @@
 			double sum = 0;
 			double payPalSum = 0;
 			double ebaySum = 0;
-			foreach (var mp in customer.CustomerMarketPlaces.Where(mp => !mp.Disabled &&(!mp.Marketplace.IsPaymentAccount || mp.Marketplace.Name == "Pay Pal" )))
+			foreach (var mp in customer.CustomerMarketPlaces.Where(mp => !mp.Disabled && (!mp.Marketplace.IsPaymentAccount || mp.Marketplace.Name == "Pay Pal")))
 			{
 				var analisysFunction = RetrieveDataHelper.GetAnalysisValuesByCustomerMarketPlace(mp.Id);
 				var av = analisysFunction.Data.FirstOrDefault(x => x.Key == analisysFunction.Data.Max(y => y.Key)).Value;
@@ -89,10 +90,10 @@
 			return sum + Math.Max(payPalSum, ebaySum);
 		}
 
-        public double GetAnualTurnOverByCustomer(int customerId)
-        {
-	        return GetTurnoverForPeriod(customerId, TimePeriodEnum.Year);
-        }
+		public double GetAnualTurnOverByCustomer(int customerId)
+		{
+			return GetTurnoverForPeriod(customerId, TimePeriodEnum.Year);
+		}
 
 		public double GetTotalSumOfOrders3M(int customerId)
 		{
@@ -131,33 +132,33 @@
 			return (double)min;
 		}
 
-        public void AddRejectIntoDecisionHistory(int customerId, string comment)
-        {
-            var customer = _customers.Get(customerId);
-            var cr = customer.LastCashRequest;
+		public void AddRejectIntoDecisionHistory(int customerId, string comment)
+		{
+			var customer = _customers.Get(customerId);
+			var cr = customer.LastCashRequest;
 
-            cr.UnderwriterDecision = CreditResultStatus.Rejected;
-            cr.UnderwriterDecisionDate = DateTime.UtcNow;
-            cr.UnderwriterComment = comment;
+			cr.UnderwriterDecision = CreditResultStatus.Rejected;
+			cr.UnderwriterDecisionDate = DateTime.UtcNow;
+			cr.UnderwriterComment = comment;
 
-            customer.DateRejected = DateTime.UtcNow;
-            customer.RejectedReason = comment;
+			customer.DateRejected = DateTime.UtcNow;
+			customer.RejectedReason = comment;
 
-            _decisionHistory.LogAction(DecisionActions.Reject, comment, _session.Get<User>(1), customer);
-        }
+			_decisionHistory.LogAction(DecisionActions.Reject, comment, _session.Get<User>(1), customer);
+		}
 
-        public void AddApproveIntoDecisionHistory(int customerId, string comment)
-        {
-            var customer = _customers.Get(customerId);
-            var cr = customer.LastCashRequest;
+		public void AddApproveIntoDecisionHistory(int customerId, string comment)
+		{
+			var customer = _customers.Get(customerId);
+			var cr = customer.LastCashRequest;
 
-            cr.UnderwriterComment = comment;
+			cr.UnderwriterComment = comment;
 
-            customer.DateApproved = DateTime.UtcNow;
-            customer.ApprovedReason = comment;
+			customer.DateApproved = DateTime.UtcNow;
+			customer.ApprovedReason = comment;
 
-            _decisionHistory.LogAction(DecisionActions.Approve, comment, _session.Get<User>(1), customer);
-        }
+			_decisionHistory.LogAction(DecisionActions.Approve, comment, _session.Get<User>(1), customer);
+		}
 
 		public int MarketplaceSeniority(int customerId)
 		{
@@ -176,33 +177,33 @@
 			try
 			{
 				if (!CheckAMLResult(customer) ||
-				    !CheckCustomerType(customer) ||
-				    !CheckCustomerStatus(customer) ||
-				    !CheckExperianScore(minExperianScore) ||
-				    !CheckAge(customer) ||
-				    !CheckTurnovers(customerId) ||
-				    !CheckSeniority(customerId) ||
-				    !CheckOutstandingOffers() ||
-				    !CheckTodaysLoans() ||
-				    !CheckTodaysApprovals() ||
-				    !CheckDefaultAccounts(customerId))
+					!CheckCustomerType(customer) ||
+					!CheckCustomerStatus(customer) ||
+					!CheckExperianScore(minExperianScore) ||
+					!CheckAge(customer) ||
+					!CheckTurnovers(customerId) ||
+					!CheckSeniority(customerId) ||
+					!CheckOutstandingOffers() ||
+					!CheckTodaysLoans() ||
+					!CheckTodaysApprovals() ||
+					!CheckDefaultAccounts(customerId))
 				{
 					return 0;
 				}
 
 				if (!loanRepository.ByCustomer(customerId).Any())
 				{
-					if (!CheckWorstCaisStatus(customer, new List<string> {"0", "1", "2"})) // Up to 60 days
+					if (!CheckWorstCaisStatus(customer, new List<string> { "0", "1", "2" })) // Up to 60 days
 					{
 						return 0;
 					}
 				}
 				else
 				{
-					if (!CheckWorstCaisStatus(customer, new List<string> {"0", "1", "2", "3"}) || // Up to 90 days
-					    !CheckRollovers(customerId) ||
-					    !CheckLateDays(customerId) ||
-					    !CheckOutstandingLoans(customerId))
+					if (!CheckWorstCaisStatus(customer, new List<string> { "0", "1", "2", "3" }) || // Up to 90 days
+						!CheckRollovers(customerId) ||
+						!CheckLateDays(customerId) ||
+						!CheckOutstandingLoans(customerId))
 					{
 						return 0;
 					}
@@ -210,7 +211,7 @@
 					// Reduce the system calculated amount by the already open amount
 					List<Loan> outstandingLoans = GetOutstandingLoans(customerId);
 					decimal outstandingPrincipal = outstandingLoans.Sum(loan => loan.Principal);
-					autoApprovedAmount -= (int) outstandingPrincipal;
+					autoApprovedAmount -= (int)outstandingPrincipal;
 				}
 
 				if (autoApprovedAmount < autoApproveMinAmount || autoApprovedAmount > autoApproveMaxAmount)
@@ -487,7 +488,7 @@
 		private bool CheckWorstCaisStatus(Customer customer, List<string> allowedStatuses)
 		{
 			log.InfoFormat("checking worst cais status");
-			
+
 			MP_ServiceLog serviceLog = serviceLogRepository.GetByCustomer(customer).Where(sl => sl.ServiceType == "Consumer Request").OrderByDescending(sl => sl.InsertDate).FirstOrDefault();
 			if (serviceLog == null)
 			{
@@ -521,16 +522,16 @@
 			return true;
 		}
 
-        public void SaveCAISFile(string data, string name, string foldername, int type, int ofItems, int goodUsers, int defaults)
-        {
-            _caisReportsHistoryRepository.AddFile(ZipString.Zip(data), name, foldername, type, ofItems, goodUsers, defaults);
-        }
+		public void SaveCAISFile(string data, string name, string foldername, int type, int ofItems, int goodUsers, int defaults)
+		{
+			_caisReportsHistoryRepository.AddFile(ZipString.Zip(data), name, foldername, type, ofItems, goodUsers, defaults);
+		}
 
-        public string GetCAISFileById(int id)
-        {
-            var file = _caisReportsHistoryRepository.Get(id);
-            return file != null ? ZipString.Unzip(file.FileData) : "";
-        }
+		public string GetCAISFileById(int id)
+		{
+			var file = _caisReportsHistoryRepository.Get(id);
+			return file != null ? ZipString.Unzip(file.FileData) : "";
+		}
 
 		public void NotifyAutoApproveSilentMode(int customerId, int autoApproveAmount, string autoApproveSilentTemplateName, string autoApproveSilentToAddress)
 		{
@@ -558,7 +559,48 @@
 			{
 				log.ErrorFormat("Failed sending alert mail - silent auto approval. Exception:{0}", e);
 			}
-			
+
+		}
+
+		public void GetZooplaData(int customerId)
+		{
+			var customer = _customers.Get(customerId);
+			var customerAddress = customer.AddressInfo.PersonalAddress.FirstOrDefault<CustomerAddress>();
+			if (customerAddress != null)
+			{
+				if (!_zooplaRepository.ExistsByAddress(customerAddress))
+				{
+					var zooplaApi = new ZooplaApi();
+					try
+					{
+						var areaValueGraphs = zooplaApi.GetAreaValueGraphs(customerAddress.Postcode);
+						var averageSoldPrices = zooplaApi.GetAverageSoldPrices(customerAddress.Postcode);
+						_zooplaRepository.SaveOrUpdate(new Zoopla
+						{
+							AreaName = averageSoldPrices.AreaName,
+							AverageSoldPrice1Year = averageSoldPrices.AverageSoldPrice1Year,
+							AverageSoldPrice3Year = averageSoldPrices.AverageSoldPrice3Year,
+							AverageSoldPrice5Year = averageSoldPrices.AverageSoldPrice5Year,
+							AverageSoldPrice7Year = averageSoldPrices.AverageSoldPrice7Year,
+							NumerOfSales1Year = averageSoldPrices.NumerOfSales1Year,
+							NumerOfSales3Year = averageSoldPrices.NumerOfSales3Year,
+							NumerOfSales5Year = averageSoldPrices.NumerOfSales5Year,
+							NumerOfSales7Year = averageSoldPrices.NumerOfSales7Year,
+							TurnOver = averageSoldPrices.TurnOver,
+							PricesUrl = averageSoldPrices.PricesUrl,
+							AverageValuesGraphUrl = areaValueGraphs.AverageValuesGraphUrl,
+							HomeValuesGraphUrl = areaValueGraphs.HomeValuesGraphUrl,
+							ValueRangesGraphUrl = areaValueGraphs.ValueRangesGraphUrl,
+							ValueTrendGraphUrl = areaValueGraphs.ValueTrendGraphUrl,
+							CustomerAddress = customerAddress
+						});
+					}
+					catch (Exception arg)
+					{
+						log.ErrorFormat("Zoopla error {0}", arg);
+					}
+				}
+			}
 		}
 	}
 }

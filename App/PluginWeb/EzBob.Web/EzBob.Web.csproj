@@ -1022,6 +1022,7 @@
       <DependentUpon>ezbob.underwriter.goToCustomer.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Underwriter\profile\companyScore\ezbob.underwriter.companyScore.js" />
+    <Content Include="Content\js\Underwriter\profile\customerInfo\ezbob.underwriter.zoopla.js" />
     <Content Include="Content\js\Underwriter\profile\CustomerRelations\ezbob.underwriter.AddCustomerRelationsEntry.js">
       <DependentUpon>ezbob.underwriter.AddCustomerRelationsEntry.coffee</DependentUpon>
     </Content>
@@ -1196,6 +1197,7 @@
     <Content Include="Areas\Customer\Views\PacnetStatus\TradeTrackerConversion.cshtml" />
     <Content Include="Areas\Customer\Views\Profile\InviteFriendTemplate.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\SideBars\EU.cshtml" />
+    <Content Include="Areas\Underwriter\Views\CrossCheck\Zoopla.cshtml" />
     <None Include="Content\js\login\ezbob.restorePassword.coffee" />
     <Content Include="Content\js\Profile\ezbob.profile.yourInfo.js">
       <DependentUpon>ezbob.profile.yourInfo.coffee</DependentUpon>

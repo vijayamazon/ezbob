@@ -1,8 +1,8 @@
-﻿using ApplicationMng.Model;
-
-namespace EzBob.Web.Areas.Customer.Models
+﻿namespace EzBob.Web.Areas.Customer.Models
 {
-    public class DirectorAddressModel : CustomerAddress
+	using EZBob.DatabaseLib.Model.Database;
+
+	public class DirectorAddressModel : CustomerAddress
     {
         public virtual int DirectorId { get; set; }
     }
