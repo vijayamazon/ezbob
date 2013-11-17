@@ -1,4 +1,5 @@
 ﻿.attardi-input {
+	position: relative;
 	display: inline-block;
 	margin: 0 !important;
 }
@@ -16,16 +17,16 @@
 
 .attardi-input span.active { color: #ccc !important; }
 
-.attardi-input input, .attardi-input textarea, .attardi-input select {
-	z-index: 0;
-	padding: 6px;
-	margin: 0;
-	font: inherit;
+.attardi-input span.attardi-has-data {
+	bottom: 20px;
+	left: -3px;
+	color: black !important;
+	font-size: 70%;
 }
 
-/* Hack to remove Safari's extra padding. Remove if you don't care about pixel-perfection. */
-@media screen and (-webkit-min-device-pixel-ratio:0) {
-	.attardi-input input, .attardi-input textarea, .attardi-input select {
-		padding: 4px;
-	}
+.attardi-input input, .attardi-input textarea, .attardi-input select {
+	z-index: 0;
+	padding: 4px;
+	margin: 0;
+	font: inherit;
 }

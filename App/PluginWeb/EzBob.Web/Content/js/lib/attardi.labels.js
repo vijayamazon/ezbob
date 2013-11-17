@@ -33,14 +33,17 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 				var bIsEmpty = input.val() && (input.val() == input.attr('empty_value'));
 
 				if (bIsEmpty || !input.val() || (input.val() == def)) {
-					input.prev('span').css('visibility', '');
+					// input.prev('span').css('visibility', '');
+					input.prev('span').removeClass('attardi-has-data');
+
 					if (def) {
 						var dummy = $('<label></label>').text(def).css('visibility', 'hidden').appendTo('body');
 						input.prev('span').css('margin-left', dummy.width() + 3 + 'px');
 						dummy.remove();
 					}
 				} else {
-					input.prev('span').css('visibility', 'hidden');
+					// input.prev('span').css('visibility', 'hidden');
+					input.prev('span').addClass('attardi-has-data');
 				}
 			}, 0);
 		});
