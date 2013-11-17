@@ -1,9 +1,10 @@
-﻿using ApplicationMng.Model;
-using NHibernate;
+﻿using NHibernate;
 
-namespace ApplicationMng.Repository
+namespace EZBob.DatabaseLib.Model.Database.Repository
 {
-    public interface ICustomerAddressRepository : IRepository<CustomerAddress>
+	using ApplicationMng.Repository;
+
+	public interface ICustomerAddressRepository : IRepository<CustomerAddress>
     {
 
     }

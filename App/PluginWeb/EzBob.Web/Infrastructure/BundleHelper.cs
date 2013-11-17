@@ -295,6 +295,7 @@ namespace EzBob.Web.Infrastructure
                 .Add("~/Content/js/Underwriter/profile/alerts/ezbob.underwriter.AlertDocsView.coffee")
                 .Add("~/Content/js/Underwriter/profile/medalCalculator/ezbob.underwriter.medalCalculations.js")
                 .Add("~/Content/js/Underwriter/profile/customerInfo/ezbob.underwriter.crosscheck.js")
+				.Add("~/Content/js/Underwriter/profile/customerInfo/ezbob.underwriter.zoopla.js")
                 .Add("~/Content/js/Underwriter/profile/messages/ezbob.undewriter.messages.js")
                 .Add("~/Content/js/Underwriter/profile/companyScore/ezbob.underwriter.companyScore.js")
                 .Add("~/Content/js/Underwriter/profile/APIChecksLog/ezbob.underwriter.apiChecksLog.js")

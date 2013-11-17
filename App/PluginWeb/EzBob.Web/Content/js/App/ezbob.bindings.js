@@ -1,4 +1,4 @@
-﻿(function() {
+(function() {
   var root;
 
   root = typeof exports !== "undefined" && exports !== null ? exports : this;
@@ -53,6 +53,7 @@
 
   EzBob.BindingConverters.percentsFormat = function(direction, value) {
     var result;
+
     if (direction === 'ModelToView') {
       value = EzBob.BindingConverters.percents(direction, value);
       result = EzBob.BindingConverters.autonumericFormat(EzBob.percentFormat)(direction, value);

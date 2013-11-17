@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
-using ApplicationMng.Model;
 
 namespace EzBob.Web.Areas.Underwriter.Models
 {
 	using System.Collections.Generic;
+	using EZBob.DatabaseLib.Model.Database;
 
 	public enum CrossCheckTypeStatus
 	{

@@ -37,7 +37,7 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping
 	} // class LoanScheduleTransactionMap
 } // namespace EZBob.DatabaseLib.Model.Database.Mapping
 
-namespace EZBob.DatabaseLib.Model.Database.Repositories
+namespace EZBob.DatabaseLib.Model.Database.Repository
 {
 	using ApplicationMng.Repository;
 	using NHibernate;
@@ -54,4 +54,4 @@ namespace EZBob.DatabaseLib.Model.Database.Repositories
 		{
 		}
 	}
-} // namespace EZBob.DatabaseLib.Model.Database.Repositories
+} // namespace EZBob.DatabaseLib.Model.Database.Repository

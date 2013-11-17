@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using ApplicationMng.Model;
-using EZBob.DatabaseLib.Model.Database.Loans;
 
 namespace EzBob.Web.Areas.Customer.Models
 {
-    [Serializable]
+	using EZBob.DatabaseLib.Model.Database;
+
+	[Serializable]
     public class FormattedSchedule
     {
         public string  AmountDue { get; set; }
