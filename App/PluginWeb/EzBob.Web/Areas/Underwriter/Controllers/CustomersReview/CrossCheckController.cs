@@ -7,6 +7,7 @@ using Scorto.Web;
 
 namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
+	using EzBob.Models;
     public class CrossCheckController : Controller
     {
         private readonly CustomerRepository _customerRepository;
@@ -26,6 +27,11 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 
         [Ajax]
         [Transactional]
+				var sh = new StrategyHelper();
+				sh.GetZooplaData(customerId);
+				zoopla = _zooplaRepository.GetByAddress(address);
+				if(zoopla == null)
+					return this.JsonNet(new { error = "zoopla info not found" });
         public void SaveRefNum(int customerId, string companyRefNum)
         {
             var customer = _customerRepository.Get(customerId);

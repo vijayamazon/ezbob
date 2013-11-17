@@ -262,9 +262,19 @@ EzBob.Underwriter.CrossCheckView = Backbone.View.extend({
 	}, // name
 
 	events: {
-		"click #recheck-targeting": "recheckTargeting"
+	    "click #recheck-targeting": "recheckTargeting",
+	    "click #zoopla": "showZoopla"
 	}, // events
+	showZoopla: function () {
+	    BlockUi("On");
+	    $.get(window.gRootPath + "Underwriter/CrossCheck/Zoopla/?customerId=" + this.model.customerId, function (data) {
+	        var zooplaView = new EzBob.ZooplaView({ model: data });
+	        EzBob.App.jqmodal.show(zooplaView);
+	        BlockUi("Off");
 
+	    });
+        
+    },
 	recheckTargeting: function (e) {
 		var el = $(e.currentTarget),
 			postcode = el.attr("data-postcode"),

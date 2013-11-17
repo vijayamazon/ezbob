@@ -556,7 +556,12 @@ bool propertyOwnedByCompany = Model.Customer.CompanyAdditionalInfo != null && Mo
 @helper copyAddress(string name, CustomerAddress currentAddress) {
 	if (currentAddress != null) {
 	<div style="position: relative; display: inline-block;">
-		<button class="btn btn-primary btn-copy" data-address="@currentAddress.FormattedAddress" >Copy @name</button>
+	    @if(name == "Current"){
+            <button class="btn btn-primary" id="zoopla">Zoopla</button>
+        }
+        <button class="btn btn-primary btn-copy" data-address="@currentAddress.FormattedAddress" >@name Copy</button>
+	    <a class="btn btn-primary" href="http://maps.googleapis.com/maps/api/streetview?size=640x640&sensor=false&location=@Uri.EscapeDataString(currentAddress.FormattedAddress)" target="_blank">@name Image</a>
+	    <a class="btn btn-primary" href="http://www.zoopla.co.uk/home-values/aberdeen/upperkirkgate/ab10-1ba/?q=@Uri.EscapeDataString(currentAddress.FormattedAddress)" target="_blank">Zoopla @name</a>
 	</div>
 	}
 }
