@@ -55,7 +55,7 @@
     @{Html.RenderPartial("security_template");}
 </head>
 
-<body class="@authCookie">
+<body auth="@authCookie">
     @RenderSection("afterHead", false)
 
     @{

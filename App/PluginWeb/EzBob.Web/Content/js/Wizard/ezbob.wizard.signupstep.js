@@ -115,7 +115,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         
         xhr.done(function (result) {
             if (result.success) {
-                $('body').addClass('auth');
+                $('body').attr('auth', 'auth');
                 that.$el.find('input[type="password"], input[type="text"]').tooltip('hide');
                 EzBob.App.trigger("signedIn");
                 EzBob.App.trigger("clear");
