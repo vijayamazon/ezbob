@@ -12,10 +12,6 @@ class EzBob.AmazonStoreInfoView extends Backbone.View
         @marketplaceId = @$el.find('#amazonMarketplaceId')
         @merchantId = @$el.find('#amazonMerchantId')
 
-        oFieldStatusIcons = @$el.find 'IMG.field_status'
-        oFieldStatusIcons.filter('.required').field_status({ required: true })
-        oFieldStatusIcons.not('.required').field_status({ required: false })
-
         @marketplaceId.withoutSpaces()
         @merchantId.withoutSpaces()
         @

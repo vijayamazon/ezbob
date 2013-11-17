@@ -92,12 +92,6 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
 
         @crossCheckView = new EzBob.Underwriter.CrossCheckView(
             el: @$el.find("#customer-info")
-            marketPlaces: @marketPlaces
-            companyScore: @companyScoreModel
-        )
-
-        that.$el.find('a.cross-check-tab').on('shown.bs.tab', (evt) ->
-            that.crossCheckView.doCrossCheck()
         )
 
         @messagesModel = new EzBob.Underwriter.MessageModel()
@@ -255,7 +249,6 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
         @customerId = id
         fullModel = new EzBob.Underwriter.CustomerFullModel(customerId: id, history: (EzBob.parseDate(history) ? history : null))
         fullModel.fetch().done =>
-
             switch fullModel.get "State"
                 when "NotFound" 
                     EzBob.ShowMessage res.error,"Customer id. ##{id} was not found"
@@ -339,11 +332,14 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
             @companyScoreModel.set fullModel.get("CompanyScore"), silent: true
             @companyScoreModel.trigger "sync"
 
+            @crossCheckView.segmentType = fullModel.get('PersonalInfoModel').SegmentType
+            @crossCheckView.marketPlaces = @marketPlaces
+            @crossCheckView.companyScore = @companyScoreModel
+            @crossCheckView.experianDirectors = fullModel.get("ExperianDirectors")
+            @crossCheckView.render customerId: id
+
             $('a[href=#marketplaces]').click() if isHistory
             BlockUi "Off"
-
-
-        @crossCheckView.render customerId: id
 
         @controlButtons.model = new Backbone.Model(
             customerId: id

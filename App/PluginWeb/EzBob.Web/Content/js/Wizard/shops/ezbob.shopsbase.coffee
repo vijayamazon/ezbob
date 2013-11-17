@@ -59,21 +59,24 @@ class EzBob.StoreInfoBaseView extends Backbone.View
     render: ->
         hasHmrc = @stores.HMRC.button.model.length > 0
 
+        sShow = ''
+        sRemove = ''
+
         if @isOffline
             if hasHmrc
-                @$el.find('.entry_message').empty().append 'The more you link, the more funds you can get.'
+                sShow = '#plain_offline_entry_message'
+                sRemove = '#offline_entry_message, #online_entry_message'
             else
-                @$el.find('.entry_message').empty()
-                    .append('You must <strong>link</strong> or <strong>upload</strong> your ')
-                    .append(
-                        $('<span class="green btn">HM Revenue & Customs</span>')
-                        .click(-> EzBob.App.trigger 'ct:storebase.shops.connect', 'HMRC' )
-                    )
-                    .append(' account data')
-                    .append('<br />')
-                    .append('to be approved for a loan.')
+                sShow = '#offline_entry_message'
+                sRemove = '#plain_offline_entry_message, #online_entry_message'
 
             @$el.find('.importantnumber').text '£200,000'
+        else
+            sShow = '#online_entry_message'
+            sRemove = '#plain_offline_entry_message, #offline_entry_message'
+
+        @$el.find(sShow).show()
+        @$el.find(sRemove).remove()
 
         that = this
         accountsList = @storeList.find(".accounts-list")
@@ -139,6 +142,11 @@ class EzBob.StoreInfoBaseView extends Backbone.View
         @$el.find(">div").hide()
         storeView = @stores[storeName].view
         storeView.render()
+
+        oFieldStatusIcons = storeView.$el.find 'IMG.field_status'
+        oFieldStatusIcons.filter('.required').field_status({ required: true })
+        oFieldStatusIcons.not('.required').field_status({ required: false })
+
         storeView.$el.show()
         @oldTitle = $(document).attr("title")
         @setDocumentTitle storeView

@@ -134,6 +134,8 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 			var builder = new CompanyScoreModelBuilder();
 			model.CompanyScore = builder.Create(customer);
 
+			model.ExperianDirectors = new CrossCheckModel(customer).ExperianDirectors;
+
 			model.State = "Ok";
 
 			model.MarketplacesHistory = _marketPlaces.GetMarketPlaceHistoryModel(customer).ToList();
@@ -160,6 +162,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 			public List<BugModel> Bugs { get; set; }
 			public string State { get; set; }
 			public CompanyScoreModel CompanyScore { get; set; }
+			public SortedDictionary<string, int> ExperianDirectors { get; set; }
 		}
 
 	}

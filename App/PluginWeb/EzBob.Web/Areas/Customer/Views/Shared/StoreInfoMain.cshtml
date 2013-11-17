@@ -16,7 +16,16 @@
 			}
 		}*@
 
-		<div class="full_width entry_message">You can link one account to be approved for a loan. However, the more you link, the more funds you can get.</div>
+		<div class="full_width" style="display: none;" id="online_entry_message">You can link one account to be approved for a loan.
+			However, the more you link, the more funds you can get.
+		</div>
+
+		<div class="full_width" style="display: none;" id="offline_entry_message">You must <strong>link</strong> or <strong>upload</strong> your
+			<span class="green btn" onclick="EzBob.App.trigger('ct:storebase.shops.connect', 'HMRC')">HM Revenue &amp; Customs</span>
+			account data<br />to be approved for a loan.
+		</div>
+
+		<div class="full_width" style="display: none;" id="plain_offline_entry_message">The more you link, the more funds you can get.</div>
 
 		@if ((string)ViewContext.RouteData.Values["controller"] == "Wizard") {
 			<div class="eBayPaypalRule hide">Paypal account must be added in order to continue.</div>

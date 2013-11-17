@@ -102,12 +102,7 @@
         return that.companyScoreView.showAccordion();
       });
       this.crossCheckView = new EzBob.Underwriter.CrossCheckView({
-        el: this.$el.find("#customer-info"),
-        marketPlaces: this.marketPlaces,
-        companyScore: this.companyScoreModel
-      });
-      that.$el.find('a.cross-check-tab').on('shown.bs.tab', function(evt) {
-        return that.crossCheckView.doCrossCheck();
+        el: this.$el.find("#customer-info")
       });
       this.messagesModel = new EzBob.Underwriter.MessageModel();
       this.Message = new EzBob.Underwriter.Message({
@@ -459,13 +454,17 @@
           silent: true
         });
         _this.companyScoreModel.trigger("sync");
+        _this.crossCheckView.segmentType = fullModel.get('PersonalInfoModel').SegmentType;
+        _this.crossCheckView.marketPlaces = _this.marketPlaces;
+        _this.crossCheckView.companyScore = _this.companyScoreModel;
+        _this.crossCheckView.experianDirectors = fullModel.get("ExperianDirectors");
+        _this.crossCheckView.render({
+          customerId: id
+        });
         if (isHistory) {
           $('a[href=#marketplaces]').click();
         }
         return BlockUi("Off");
-      });
-      this.crossCheckView.render({
-        customerId: id
       });
       this.controlButtons.model = new Backbone.Model({
         customerId: id

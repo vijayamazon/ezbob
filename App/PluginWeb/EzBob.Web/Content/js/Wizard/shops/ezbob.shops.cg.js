@@ -1,5 +1,5 @@
-(function() {
-  var root, _ref, _ref1, _ref2, _ref3,
+﻿(function() {
+  var root,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
@@ -9,11 +9,11 @@
   root.EzBob = root.EzBob || {};
 
   EzBob.CGAccountButtonView = (function(_super) {
+
     __extends(CGAccountButtonView, _super);
 
     function CGAccountButtonView() {
-      _ref = CGAccountButtonView.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return CGAccountButtonView.__super__.constructor.apply(this, arguments);
     }
 
     CGAccountButtonView.prototype.initialize = function(options) {
@@ -35,15 +35,20 @@
   })(EzBob.StoreButtonView);
 
   EzBob.CGAccountInfoView = (function(_super) {
+
     __extends(CGAccountInfoView, _super);
 
     function CGAccountInfoView() {
       this.render = __bind(this.render, this);
+
       this.uploadFiles = __bind(this.uploadFiles, this);
+
       this.connect = __bind(this.connect, this);
+
       this.buildModel = __bind(this.buildModel, this);
-      this.inputChanged = __bind(this.inputChanged, this);      _ref1 = CGAccountInfoView.__super__.constructor.apply(this, arguments);
-      return _ref1;
+
+      this.inputChanged = __bind(this.inputChanged, this);
+      return CGAccountInfoView.__super__.constructor.apply(this, arguments);
     }
 
     CGAccountInfoView.prototype.events = {
@@ -61,14 +66,12 @@
 
     CGAccountInfoView.prototype.inputChanged = function() {
       var enabled;
-
       enabled = EzBob.Validation.checkForm(this.validator);
       return this.$el.find('a.connect-account').toggleClass('disabled', !enabled);
     };
 
     CGAccountInfoView.prototype.getVendorInfo = function() {
       var lst;
-
       if (!this.vendorInfo) {
         lst = $.parseJSON($('div#cg-account-list').text());
         this.vendorInfo = lst[this.accountType];
@@ -77,14 +80,13 @@
     };
 
     CGAccountInfoView.prototype.buildModel = function(bUploadMode) {
-      var accountModel, elm, fi, func, oVendorInfo, propName, propVal, _i, _len, _ref2;
-
+      var accountModel, elm, fi, func, oVendorInfo, propName, propVal, _i, _len, _ref;
       accountModel = $.parseJSON($('div#cg-account-model-template').text());
       oVendorInfo = this.getVendorInfo();
       accountModel.accountTypeName = this.accountType;
-      _ref2 = oVendorInfo.SecurityData.Fields;
-      for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
-        fi = _ref2[_i];
+      _ref = oVendorInfo.SecurityData.Fields;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        fi = _ref[_i];
         if (fi.Default) {
           accountModel[fi.NodeName] = fi.Default;
         }
@@ -110,7 +112,6 @@
     CGAccountInfoView.prototype.connect = function() {
       var acc, accountModel, oVendorInfo, xhr,
         _this = this;
-
       if (!EzBob.Validation.checkForm(this.validator)) {
         this.validator.form();
         return false;
@@ -139,7 +140,6 @@
       });
       xhr.done(function(res) {
         var elm, propName, propVal;
-
         if (res.error) {
           EzBob.App.trigger('error', res.error);
           return false;
@@ -165,7 +165,6 @@
     CGAccountInfoView.prototype.uploadFiles = function() {
       var oVendorInfo, sKey, sModelKey,
         _this = this;
-
       sKey = 'f' + (new Date()).getTime() + 'x' + Math.floor(Math.random() * 1000000000);
       sModelKey = 'model' + (new Date()).getTime() + 'x' + Math.floor(Math.random() * 1000000000);
       while (window[sKey]) {
@@ -180,7 +179,6 @@
       };
       window[sKey] = function(sResult) {
         var oResult;
-
         delete window[sKey];
         delete window[sModelKey];
         _this.uploadFileDlg.dialog('close');
@@ -213,19 +211,11 @@
     };
 
     CGAccountInfoView.prototype.render = function() {
-      var oFieldStatusIcons, self;
-
+      var self;
       CGAccountInfoView.__super__.render.call(this);
       self = this;
       this.$el.find('a.connect-account').click(function(evt) {
         return self.connect();
-      });
-      oFieldStatusIcons = $('IMG.field_status');
-      oFieldStatusIcons.filter('.required').field_status({
-        required: true
-      });
-      oFieldStatusIcons.not('.required').field_status({
-        required: false
       });
       this.validator = EzBob.validateCGShopForm(this.$el.find('form'), this.accountType);
       return this;
@@ -246,11 +236,11 @@
   })(Backbone.Marionette.ItemView);
 
   EzBob.CGAccountModel = (function(_super) {
+
     __extends(CGAccountModel, _super);
 
     function CGAccountModel() {
-      _ref2 = CGAccountModel.__super__.constructor.apply(this, arguments);
-      return _ref2;
+      return CGAccountModel.__super__.constructor.apply(this, arguments);
     }
 
     CGAccountModel.prototype.urlRoot = "" + window.gRootPath + "Customer/CGMarketPlaces/Accounts";
@@ -260,11 +250,11 @@
   })(Backbone.Model);
 
   EzBob.CGAccounts = (function(_super) {
+
     __extends(CGAccounts, _super);
 
     function CGAccounts() {
-      _ref3 = CGAccounts.__super__.constructor.apply(this, arguments);
-      return _ref3;
+      return CGAccounts.__super__.constructor.apply(this, arguments);
     }
 
     CGAccounts.prototype.model = EzBob.CGAccountModel;

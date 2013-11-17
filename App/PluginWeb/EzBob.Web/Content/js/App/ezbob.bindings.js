@@ -67,33 +67,23 @@
   EzBob.BindingConverters.moneyFormat = EzBob.BindingConverters.autonumericFormat(EzBob.moneyFormat);
 
   Backbone.Collection.prototype.safeFetch = function() {
-    var def, isLoggedIn;
-    isLoggedIn = function() {
-      return $('body').hasClass('auth');
-    };
-    if (isLoggedIn()) {
+    if (document.body.getAttribute('auth') === 'auth') {
       return this.fetch();
+    } else {
+      return {
+        done: function() {}
+      };
     }
-    def = $.Deferred();
-    setTimeout((function() {
-      return def.resolve().promise();
-    }), 1);
-    return def;
   };
 
   Backbone.Model.prototype.safeFetch = function() {
-    var def, isLoggedIn;
-    isLoggedIn = function() {
-      return $('body').hasClass('auth');
-    };
-    if (isLoggedIn()) {
+    if (document.body.getAttribute('auth') === 'auth') {
       return this.fetch();
+    } else {
+      return {
+        done: function() {}
+      };
     }
-    def = $.Deferred();
-    setTimeout((function() {
-      return def.resolve().promise();
-    }), 1);
-    return def;
   };
 
 }).call(this);

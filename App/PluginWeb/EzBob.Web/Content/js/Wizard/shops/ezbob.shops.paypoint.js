@@ -1,5 +1,5 @@
-(function() {
-  var root, _ref, _ref1, _ref2, _ref3,
+﻿(function() {
+  var root,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -8,11 +8,11 @@
   root.EzBob = root.EzBob || {};
 
   EzBob.PayPointAccountButtonView = (function(_super) {
+
     __extends(PayPointAccountButtonView, _super);
 
     function PayPointAccountButtonView() {
-      _ref = PayPointAccountButtonView.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return PayPointAccountButtonView.__super__.constructor.apply(this, arguments);
     }
 
     PayPointAccountButtonView.prototype.initialize = function() {
@@ -32,11 +32,11 @@
   })(EzBob.StoreButtonView);
 
   EzBob.PayPointAccountInfoView = (function(_super) {
+
     __extends(PayPointAccountInfoView, _super);
 
     function PayPointAccountInfoView() {
-      _ref1 = PayPointAccountInfoView.__super__.constructor.apply(this, arguments);
-      return _ref1;
+      return PayPointAccountInfoView.__super__.constructor.apply(this, arguments);
     }
 
     PayPointAccountInfoView.prototype.template = '#PayPointAccoutInfoTemplate';
@@ -58,16 +58,15 @@
 
     PayPointAccountInfoView.prototype.inputChanged = function() {
       var enabled;
-
-      enabled = this.ui.mid.val() && this.ui.vpnPassword.val() && this.ui.remotePassword.val();
+      enabled = EzBob.Validation.checkForm(this.validator);
       return this.ui.connect.toggleClass('disabled', !enabled);
     };
 
     PayPointAccountInfoView.prototype.connect = function() {
       var acc, xhr,
         _this = this;
-
-      if (!this.validator.form()) {
+      if (!EzBob.Validation.checkForm(this.validator)) {
+        this.validator.form();
         return false;
       }
       if (this.$el.find('a.connect-payPoint').hasClass('disabled')) {
@@ -95,7 +94,9 @@
           EzBob.App.trigger('error', res.error);
           return false;
         }
-        _this.model.add(acc);
+        try {
+          _this.model.add(acc);
+        } catch (_error) {}
         EzBob.App.trigger('info', "PayPoint Account Added Successfully");
         _this.ui.mid.val("");
         _this.ui.vpnPassword.val("");
@@ -118,16 +119,21 @@
       return false;
     };
 
+    PayPointAccountInfoView.prototype.getDocumentTitle = function() {
+      EzBob.App.trigger('clear');
+      return "Link PayPoint Account";
+    };
+
     return PayPointAccountInfoView;
 
   })(Backbone.Marionette.ItemView);
 
   EzBob.PayPointAccountModel = (function(_super) {
+
     __extends(PayPointAccountModel, _super);
 
     function PayPointAccountModel() {
-      _ref2 = PayPointAccountModel.__super__.constructor.apply(this, arguments);
-      return _ref2;
+      return PayPointAccountModel.__super__.constructor.apply(this, arguments);
     }
 
     PayPointAccountModel.prototype.urlRoot = "" + window.gRootPath + "Customer/PayPointMarketPlaces/Accounts";
@@ -137,11 +143,11 @@
   })(Backbone.Model);
 
   EzBob.PayPointAccounts = (function(_super) {
+
     __extends(PayPointAccounts, _super);
 
     function PayPointAccounts() {
-      _ref3 = PayPointAccounts.__super__.constructor.apply(this, arguments);
-      return _ref3;
+      return PayPointAccounts.__super__.constructor.apply(this, arguments);
     }
 
     PayPointAccounts.prototype.model = EzBob.PayPointAccountModel;

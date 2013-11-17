@@ -390,6 +390,7 @@
     <Compile Include="Controllers\PostcodeController.cs" />
     <Compile Include="Controllers\PrivatePolicyController.cs" />
     <Compile Include="Areas\Underwriter\Models\CrossCheckStatus.cs" />
+    <Compile Include="Controllers\UiActionController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -851,6 +852,7 @@
     </Content>
     <Content Include="Content\js\App\ezbob.validation.js" />
     <Content Include="Content\js\controls\ezbob.whatsnew.js" />
+    <Content Include="Content\js\ezbob.uiaction.js" />
     <Content Include="Content\js\lib\Backbone.EzBob.js" />
     <Content Include="Content\js\contactUs\ezbo.contactUs.js" />
     <Content Include="Content\js\controls\Captcha.js" />

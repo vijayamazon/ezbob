@@ -20,19 +20,11 @@
     };
 
     AmazonStoreInfoView.prototype.render = function() {
-      var oFieldStatusIcons;
       this.$el.html($('#amazon-store-info').html());
       this.form = this.$el.find('.AmazonForm');
       this.validator = EzBob.validateAmazonForm(this.form);
       this.marketplaceId = this.$el.find('#amazonMarketplaceId');
       this.merchantId = this.$el.find('#amazonMerchantId');
-      oFieldStatusIcons = this.$el.find('IMG.field_status');
-      oFieldStatusIcons.filter('.required').field_status({
-        required: true
-      });
-      oFieldStatusIcons.not('.required').field_status({
-        required: false
-      });
       this.marketplaceId.withoutSpaces();
       this.merchantId.withoutSpaces();
       return this;

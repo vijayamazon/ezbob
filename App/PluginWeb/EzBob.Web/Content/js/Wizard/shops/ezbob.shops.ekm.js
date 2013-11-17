@@ -1,5 +1,5 @@
-(function() {
-  var root, _ref, _ref1, _ref2, _ref3,
+﻿(function() {
+  var root,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -8,11 +8,11 @@
   root.EzBob = root.EzBob || {};
 
   EzBob.EKMAccountButtonView = (function(_super) {
+
     __extends(EKMAccountButtonView, _super);
 
     function EKMAccountButtonView() {
-      _ref = EKMAccountButtonView.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return EKMAccountButtonView.__super__.constructor.apply(this, arguments);
     }
 
     EKMAccountButtonView.prototype.initialize = function() {
@@ -32,11 +32,11 @@
   })(EzBob.StoreButtonView);
 
   EzBob.EKMAccountInfoView = (function(_super) {
+
     __extends(EKMAccountInfoView, _super);
 
     function EKMAccountInfoView() {
-      _ref1 = EKMAccountInfoView.__super__.constructor.apply(this, arguments);
-      return _ref1;
+      return EKMAccountInfoView.__super__.constructor.apply(this, arguments);
     }
 
     EKMAccountInfoView.prototype.template = '#EKMAccoutInfoTemplate';
@@ -57,16 +57,15 @@
 
     EKMAccountInfoView.prototype.inputChanged = function() {
       var enabled;
-
-      enabled = this.ui.login.val() && this.ui.password.val();
+      enabled = EzBob.Validation.checkForm(this.validator);
       return this.ui.connect.toggleClass('disabled', !enabled);
     };
 
     EKMAccountInfoView.prototype.connect = function() {
       var acc, xhr,
         _this = this;
-
-      if (!this.validator.form()) {
+      if (!EzBob.Validation.checkForm(this.validator)) {
+        this.validator.form();
         return false;
       }
       if (this.$el.find('a.connect-ekm').hasClass('disabled')) {
@@ -93,7 +92,9 @@
           EzBob.App.trigger('error', res.error);
           return false;
         }
-        _this.model.add(acc);
+        try {
+          _this.model.add(acc);
+        } catch (_error) {}
         EzBob.App.trigger('info', "EKM Account Added Successfully");
         _this.ui.login.val("");
         _this.ui.password.val("");
@@ -115,16 +116,21 @@
       return false;
     };
 
+    EKMAccountInfoView.prototype.getDocumentTitle = function() {
+      EzBob.App.trigger('clear');
+      return "Link EKM Account";
+    };
+
     return EKMAccountInfoView;
 
   })(Backbone.Marionette.ItemView);
 
   EzBob.EKMAccountModel = (function(_super) {
+
     __extends(EKMAccountModel, _super);
 
     function EKMAccountModel() {
-      _ref2 = EKMAccountModel.__super__.constructor.apply(this, arguments);
-      return _ref2;
+      return EKMAccountModel.__super__.constructor.apply(this, arguments);
     }
 
     EKMAccountModel.prototype.urlRoot = "" + window.gRootPath + "Customer/EkmMarketPlaces/Accounts";
@@ -134,11 +140,11 @@
   })(Backbone.Model);
 
   EzBob.EKMAccounts = (function(_super) {
+
     __extends(EKMAccounts, _super);
 
     function EKMAccounts() {
-      _ref3 = EKMAccounts.__super__.constructor.apply(this, arguments);
-      return _ref3;
+      return EKMAccounts.__super__.constructor.apply(this, arguments);
     }
 
     EKMAccounts.prototype.model = EzBob.EKMAccountModel;

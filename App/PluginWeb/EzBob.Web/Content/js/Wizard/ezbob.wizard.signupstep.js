@@ -41,7 +41,9 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
             this.trigger('ready');
             this.trigger('next');
         }
-        
+
+	    EzBob.UiAction.register(this.$el.find('[ui-event-control-id]'));
+
         this.$el.find('img[rel]').setPopover("left");
         this.$el.find('li[rel]').setPopover("left");
 
@@ -115,7 +117,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         
         xhr.done(function (result) {
             if (result.success) {
-                $('body').addClass('auth');
+                $('body').attr('auth', 'auth');
                 that.$el.find('input[type="password"], input[type="text"]').tooltip('hide');
                 EzBob.App.trigger('customerLoggedIn');
                 EzBob.App.trigger('clear');

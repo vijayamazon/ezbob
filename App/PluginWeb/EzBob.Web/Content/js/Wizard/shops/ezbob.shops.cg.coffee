@@ -65,6 +65,7 @@ class EzBob.CGAccountInfoView extends Backbone.Marionette.ItemView
         if not EzBob.Validation.checkForm(@validator)
             @validator.form()
             return false
+
         return false if @$el.find('a.connect-account').hasClass('disabled')
 
         accountModel = @buildModel false
@@ -164,10 +165,6 @@ class EzBob.CGAccountInfoView extends Backbone.Marionette.ItemView
 
         self = @
         @$el.find('a.connect-account').click((evt) -> self.connect())
-
-        oFieldStatusIcons = $ 'IMG.field_status'
-        oFieldStatusIcons.filter('.required').field_status({ required: true })
-        oFieldStatusIcons.not('.required').field_status({ required: false })
 
         @validator = EzBob.validateCGShopForm @$el.find('form'), @accountType
         return @
