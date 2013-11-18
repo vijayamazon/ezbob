@@ -4,7 +4,7 @@ BEGIN
 		UiControlID INT IDENTITY(1, 1) NOT NULL,
 		UiControlName NVARCHAR(255) NOT NULL,
 		TimestampCounter ROWVERSION,
-		CONSTRAINT PK_UiControls PRIMARY KEY (UiControlID)
+		CONSTRAINT PK_UiControls PRIMARY KEY (UiControlID),
 		CONSTRAINT CHK_UiControls CHECK (UiControlName != '')
 	)
 
@@ -14,7 +14,7 @@ BEGIN
 		UiActionID INT IDENTITY(1, 1) NOT NULL,
 		UiActionName NVARCHAR(255) NOT NULL,
 		TimestampCounter ROWVERSION,
-		CONSTRAINT PK_UiActions PRIMARY KEY (UiActionID)
+		CONSTRAINT PK_UiActions PRIMARY KEY (UiActionID),
 		CONSTRAINT CHK_UiActions CHECK (UiActionName != '')
 	)
 
