@@ -19,7 +19,6 @@ namespace EZBob.DatabaseLib.Model.Loans
 		public LoanAgreement(string name, Database.Loans.Loan loan, LoanAgreementTemplate template)
 		{
 			Name = name;
-			Template = "OBSOLETE COLUMN!! This template can be found in LoanAgreementTemplate by TemplateId."; // Obsolete line, to be removed.
 			Loan = loan;
 			FilePath = LongFilenameWithDir();
 			TemplateRef = template;
@@ -28,8 +27,6 @@ namespace EZBob.DatabaseLib.Model.Loans
 		public virtual int Id { get; set; }
 		public virtual string Name { get; set; }
 
-		[Obsolete]
-		public virtual string Template { get; set; } // Obsolete line, to be removed.
 		
 		public virtual Database.Loans.Loan Loan { get; set; }
 		public virtual string FilePath { get; set; }
@@ -92,7 +89,6 @@ namespace EZBob.DatabaseLib.Model.Loans
 			Id(x => x.Id).GeneratedBy.HiLo("100");
 			Map(x => x.Name).Length(200);
 			Map(x => x.FilePath).Length(400);
-			Map(x => x.Template).CustomType("StringClob"); // Obsolete line, to be removed.
 			References(x => x.Loan, "LoanId");
 			References(x => x.TemplateRef, "TemplateId").Cascade.SaveUpdate();
 		}

@@ -955,16 +955,24 @@ textarea.invite_friend {
 }
 .fb-icon {
     background-image: url(../css/images/facebook-icon.png);
-    width: 64px;
-    height: 64px;
+    background-size: contain;
+    width: 32px;
+    height: 32px;
     position: absolute;
     top: 0;
     right: 3px;
 }
 
+.share-on {
+    position: absolute;
+    top: 0;
+    right: 36px;
+}
+
 .whats-new {
     background-repeat: no-repeat;
     background-position: center;
+    background-size: contain;
     display: block;
     height: 60px;
 }

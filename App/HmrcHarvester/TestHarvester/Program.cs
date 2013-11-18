@@ -4,9 +4,9 @@ using System.IO;
 using System.Text;
 using Ezbob.HmrcHarvester;
 using Ezbob.Logger;
-using Integration.ChannelGrabberConfig;
-
 namespace TestHarvester {
+	using Integration.ChannelGrabberConfig;
+
 	class Program {
 		static void Main(string[] args) {
 			var oLog = new LegacyLog(new ConsoleLog());
@@ -17,7 +17,7 @@ namespace TestHarvester {
 		#region method FullTest
 
 		private static void FullTest(LegacyLog oLog) {
-			var ad = new AccountData(Integration.ChannelGrabberConfig.Configuration.GetInstance(oLog.UnderlyingLog).GetVendorInfo("HMRC")) {
+			var ad = new AccountData(Configuration.GetInstance(oLog.UnderlyingLog).GetVendorInfo("HMRC")) {
 				Login = "829144784260",
 				Password = "18june1974"
 			};
