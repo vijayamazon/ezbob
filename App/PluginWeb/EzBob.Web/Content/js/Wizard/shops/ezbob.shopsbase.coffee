@@ -57,6 +57,7 @@ class EzBob.StoreInfoBaseView extends Backbone.View
         @render()
 
     render: ->
+        console.log("EzBob.StoreInfoBaseView render")
         hasHmrc = @stores.HMRC.button.model.length > 0
 
         sShow = ''

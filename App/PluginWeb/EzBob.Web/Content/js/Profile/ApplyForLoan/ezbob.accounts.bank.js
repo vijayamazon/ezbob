@@ -15,7 +15,7 @@ EzBob.BankAccounts = Backbone.Collection.extend({
     url: window.gRootPath + 'Customer/PaymentAccounts/BankAccountsListFormatted'
 });
 
-EzBob.BankAccountButtonView = EzBob.StoreButtonWithListView.extend({
+EzBob.BankAccountButtonView = EzBob.StoreButtonView.extend({
     initialize: function () {
         EzBob.CT.bindShopToCT(this, 'bank');
         this.bankAccounts = new EzBob.BankAccounts();

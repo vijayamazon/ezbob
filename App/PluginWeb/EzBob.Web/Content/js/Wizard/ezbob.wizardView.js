@@ -99,37 +99,33 @@ EzBob.WizardView = Backbone.View.extend({
 		this.customer = options.customer;
 
 		var modelArgs = {
-			ebayMarketPlaces: options.ebayMarketPlaces,
-			amazonMarketPlaces: options.amazonMarketPlaces,
-			ekmMarketPlaces: options.ekmMarketPlaces,
-			freeagentMarketPlaces: options.freeagentMarketPlaces,
-			sageMarketPlaces: options.sageMarketPlaces,
-			yodleeAccounts: options.yodleeAccounts,
-			paypointMarketPlaces: options.paypointMarketPlaces
+		    mpAccounts: options.customer.mpAccounts
 		};
-
+	    
 		if ((this.customer.get('Id')) != 0)
 			HeartOfActivity();
 
-		var cgShops = options.cgShops;
+		//var cgShops = options.cgShops;
 
-		for (var i in cgShops) {
-			if (!cgShops.hasOwnProperty(i))
-				continue;
+		//for (var i in cgShops) {
+		//	if (!cgShops.hasOwnProperty(i))
+		//		continue;
 
-			var o = cgShops[i];
+		//	var o = cgShops[i];
 
-			if (!modelArgs[o.storeInfoStepModelShops])
-				modelArgs[o.storeInfoStepModelShops] = [];
+		//	if (!modelArgs[o.storeInfoStepModelShops])
+		//		modelArgs[o.storeInfoStepModelShops] = [];
 
-			modelArgs[o.storeInfoStepModelShops].push(o);
-		} // for each cg shop
+		//	modelArgs[o.storeInfoStepModelShops].push(o);
+		//} // for each cg shop
 
 		if (!this.customer.get('IsOffline') && (EzBob.getCookie('isoffline') == 'yes'))
 			this.customer.set('IsOffline', true);
 
 		modelArgs.isOffline = this.customer.get('IsOffline');
 		modelArgs.isProfile = this.customer.get('IsProfile');
+
+	    console.log('modelArgs w', modelArgs);
 		var storeInfoStepModel = new EzBob.StoreInfoStepModel(modelArgs);
 
 		var oWss = {

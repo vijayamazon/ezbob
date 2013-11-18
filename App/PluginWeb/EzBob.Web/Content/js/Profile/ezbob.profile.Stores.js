@@ -6,36 +6,30 @@ EzBob.Profile.StoresView = Backbone.View.extend({
         this.template = _.template($('#stores-template').html());
 
 		var modelArgs = {
-			ebayMarketPlaces: this.model.get('ebayMarketPlaces'),
-			amazonMarketPlaces: this.model.get('amazonMarketPlaces'),
-			ekmShops: this.model.get('ekmShops'),
-			freeAgentAccounts: this.model.get('freeAgentAccounts'),
-			sageAccounts: this.model.get('sageAccounts'),
-			payPointAccounts: this.model.get('payPointAccounts'),
-			yodleeAccounts: this.model.get('yodleeAccounts'),
-			paypalAccounts: this.model.get('paypalAccounts')
+		    mpAccounts: this.model.get('mpAccounts')
 		};
 
-		var oShops = {};
-		var cgShops = this.model.get('cgShops');
+		//var oShops = {};
+		//var cgShops = this.model.get('cgShops');
 
-		for (var i in cgShops) {
-			if (!cgShops.hasOwnProperty(i))
-				continue;
+		//for (var i in cgShops) {
+		//	if (!cgShops.hasOwnProperty(i))
+		//		continue;
 
-			var o = cgShops[i];
+		//	var o = cgShops[i];
 
-			if (!oShops[o.storeInfoStepModelShops])
-				oShops[o.storeInfoStepModelShops] = [];
+		//	if (!oShops[o.storeInfoStepModelShops])
+		//		oShops[o.storeInfoStepModelShops] = [];
 
-			oShops[o.storeInfoStepModelShops].push(o);
-		} // for each cg shop
+		//	oShops[o.storeInfoStepModelShops].push(o);
+		//} // for each cg shop
 
-		var sCgOnChange = '';
-		for (var i in oShops) {
-			modelArgs[i] = oShops[i];
-			sCgOnChange += ' change:' + i;
-		} // for
+		//var sCgOnChange = '';
+		//for (var i in oShops) {
+		//	modelArgs[i] = oShops[i];
+		//	sCgOnChange += ' change:' + i;
+		//} // for
+		console.log('modelArgs p', modelArgs);
 
 		modelArgs.isOffline = this.model.get('IsOffline');
 		modelArgs.isProfile = this.model.get('IsProfile');
@@ -43,7 +37,7 @@ EzBob.Profile.StoresView = Backbone.View.extend({
 
         this.storeInfoView = new EzBob.StoreInfoView({ model: this.storeInfoStepModel });
 
-        this.model.on('change:ebayMarketPlaces change:amazonMarketPlaces change:ekmShops change:freeAgentAccounts change:sageAccounts change:payPointAccounts change:paypalAccounts change:yodleeAccounts' + sCgOnChange, this.render, this);
+       //TODO this.model.on('change:ebayMarketPlaces change:amazonMarketPlaces change:ekmShops change:freeAgentAccounts change:sageAccounts change:payPointAccounts change:paypalAccounts change:yodleeAccounts' + sCgOnChange, this.render, this);
 
         this.storeInfoView.on('previous', this.render, this);
         this.storeInfoView.on('completed', this.completed, this);

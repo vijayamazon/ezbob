@@ -1,5 +1,5 @@
-(function() {
-  var root, _ref,
+﻿(function() {
+  var root,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -8,11 +8,11 @@
   root.EzBob = root.EzBob || {};
 
   EzBob.StoreInfoView = (function(_super) {
+
     __extends(StoreInfoView, _super);
 
     function StoreInfoView() {
-      _ref = StoreInfoView.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return StoreInfoView.__super__.constructor.apply(this, arguments);
     }
 
     StoreInfoView.prototype.attributes = {
@@ -20,17 +20,16 @@
     };
 
     StoreInfoView.prototype.initialize = function() {
-      var acc, accountTypeName, aryCGAccounts, ignore, j, lc, storeTypeName, vendorInfo, _i, _len, _ref1,
+      var acc, accountTypeName, aryCGAccounts, ignore, j, lc, storeTypeName, vendorInfo, _i, _len, _ref,
         _this = this;
-
-      this.ebayStores = this.model.get("ebayStores");
+      this.ebayStores = new EzBob.EbayStoreModels();
       this.EbayButtonView = new EzBob.EbayButtonView({
         model: this.ebayStores
       });
       this.EbayStoreView = new EzBob.EbayStoreInfoView();
       this.ebayStores.on("reset change", this.marketplacesChanged, this);
       this.ebayStores.on("sync", this.render, this);
-      this.amazonMarketplaces = this.model.get("amazonMarketplaces");
+      this.amazonMarketplaces = new EzBob.AmazonStoreModels();
       this.AmazonButtonView = new EzBob.AmazonButtonView({
         model: this.amazonMarketplaces
       });
@@ -161,9 +160,9 @@
       }
       this.isOffline = this.model.get('isOffline');
       this.isProfile = this.model.get('isProfile');
-      _ref1 = EzBob.Config.MarketPlaces;
-      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-        j = _ref1[_i];
+      _ref = EzBob.Config.MarketPlaces;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        j = _ref[_i];
         storeTypeName = j.Name === "Pay Pal" ? "paypal" : j.Name;
         if (this.stores[storeTypeName]) {
           this.stores[storeTypeName].active = this.isProfile ? (this.isOffline ? j.ActiveDashboardOffline : j.ActiveDashboardOnline) : (this.isOffline ? j.ActiveWizardOffline : j.ActiveWizardOnline);
@@ -179,6 +178,7 @@
 
     StoreInfoView.prototype.render = function() {
       StoreInfoView.__super__.render.call(this);
+      console.log("EzBob.StoreInfoView render");
       this.amazonMarketplaces.trigger("reset");
       this.ebayStores.trigger("reset");
       this.$el.find("img[rel]").setPopover("left");

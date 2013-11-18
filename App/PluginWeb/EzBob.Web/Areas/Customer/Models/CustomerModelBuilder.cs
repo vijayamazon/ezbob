@@ -70,15 +70,7 @@ namespace EzBob.Web.Areas.Customer.Models
                 customerModel.SortCode = customer.BankAccount.SortCode;
             }
 
-            customerModel.ebayMarketPlaces = customer.GetEbayMarketPlaces();
-			customerModel.amazonMarketPlaces = customer.GetAmazonMarketPlaces();
-			customerModel.ekmShops = customer.GetEkmShops();
-			customerModel.freeAgentAccounts = customer.GetFreeAgentAccounts();
-			customerModel.sageAccounts = customer.GetSageAccounts();
-			customerModel.payPointAccounts = customer.GetPayPointAccounts();
-			customerModel.yodleeAccounts = customer.GetYodleeAccounts();
-			customerModel.cgShops = customer.GetChannelGrabberShops();
-            customerModel.paypalAccounts = customer.GetPayPalAccountsSimple();
+            customerModel.mpAccounts = customer.GetMarketPlaces();
 
 			customerModel.LastApprovedLoanTypeID = customer.LastCashRequest != null ? customer.LastCashRequest.LoanType.Id : 0;
 			customerModel.LastApprovedRepaymentPeriod = customer.LastCashRequest != null ? customer.LastCashRequest.RepaymentPeriod : 0;

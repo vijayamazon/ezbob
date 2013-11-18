@@ -23,15 +23,7 @@ namespace EzBob.Web.Areas.Customer.Models
 
         public string BusinessTypeReduced { get; set; }
 
-        public IEnumerable<SimpleMarketPlaceModel> ebayMarketPlaces { get; set; }
-        public IEnumerable<SimpleMarketPlaceModel> amazonMarketPlaces { get; set; }
-        public IEnumerable<SimpleMarketPlaceModel> ekmShops { get; set; }
-        public IEnumerable<SimpleMarketPlaceModel> cgShops { get; set; }
-        public IEnumerable<SimpleMarketPlaceModel> payPointAccounts { get; set; }
-		public IEnumerable<SimpleMarketPlaceModel> yodleeAccounts { get; set; }
-		public IEnumerable<SimpleMarketPlaceModel> paypalAccounts { get; set; }
-		public IEnumerable<SimpleMarketPlaceModel> freeAgentAccounts { get; set; }
-		public IEnumerable<SimpleMarketPlaceModel> sageAccounts { get; set; }
+        public IEnumerable<SimpleMarketPlaceModel> mpAccounts { get; set; }
 
 		public int LastApprovedLoanTypeID { get; set; }
 		public int LastApprovedRepaymentPeriod { get; set; }
@@ -123,8 +115,10 @@ namespace EzBob.Web.Areas.Customer.Models
 
 	public class SimpleMarketPlaceModel
 	{
+		public string MpName { get; set; }
+		public int MpId { get; set; }
 		public string displayName { get; set; }
-		public string storeInfoStepModelShops { get; set; }
+		//public string storeInfoStepModelShops { get; set; }
 	} // class SimpleMarketPlaceModel
 
 	public class InvitedFriend

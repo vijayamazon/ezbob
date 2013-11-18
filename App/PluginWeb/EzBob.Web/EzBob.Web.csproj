@@ -1098,6 +1098,9 @@
       <DependentUpon>ezbob.underwriter.support.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Wizard\ezbob.thankyoupage.js" />
+    <Content Include="Content\js\Wizard\ezbob.wizard.shops.min.js">
+      <DependentUpon>ezbob.wizard.shops.coffee</DependentUpon>
+    </Content>
     <Content Include="Content\js\Wizard\shops\ezbob.shopbutton.js">
       <DependentUpon>ezbob.shopbutton.coffee</DependentUpon>
     </Content>
@@ -1707,7 +1710,6 @@
     <None Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.addPayPointCardView.coffee" />
     <None Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.bankAccountDetails.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shopbutton.coffee" />
-    <Content Include="Content\js\Wizard\shops\ezbob.shopbuttonlist.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.ekm.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.coffee" />
     <Content Include="Content\js\Wizard\yourInfo\ezbob.yourIno.consent.agreement.coffee" />

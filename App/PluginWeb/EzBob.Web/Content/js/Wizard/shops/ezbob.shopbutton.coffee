@@ -28,6 +28,7 @@ class EzBob.StoreButtonView extends Backbone.Marionette.ItemView
         return data
 
     onRender: ->
+        console.log("EzBob.StoreButtonView render")
         @$el.find('.tooltipdiv').tooltip()
         @$el.find('.source_help').colorbox({ inline:true, transition: 'none' });
 

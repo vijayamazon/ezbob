@@ -6,13 +6,13 @@ class EzBob.StoreInfoView extends EzBob.StoreInfoBaseView
         class: "stores-view"
 
     initialize: ->
-        @ebayStores = @model.get("ebayStores")
+        @ebayStores = new EzBob.EbayStoreModels()
         @EbayButtonView = new EzBob.EbayButtonView(model: @ebayStores)
         @EbayStoreView = new EzBob.EbayStoreInfoView()
         @ebayStores.on "reset change", @marketplacesChanged, this
         @ebayStores.on "sync", @render, this
 
-        @amazonMarketplaces = @model.get("amazonMarketplaces")
+        @amazonMarketplaces = new EzBob.AmazonStoreModels()
         @AmazonButtonView = new EzBob.AmazonButtonView(model: @amazonMarketplaces)
         @AmazonStoreInfoView = new EzBob.AmazonStoreInfoView()
         @amazonMarketplaces.on "reset change", @marketplacesChanged, this
@@ -109,6 +109,7 @@ class EzBob.StoreInfoView extends EzBob.StoreInfoBaseView
 
     render: ->
         super()
+        console.log("EzBob.StoreInfoView render")
         @amazonMarketplaces.trigger "reset"
         @ebayStores.trigger "reset"
         @$el.find("img[rel]").setPopover "left"

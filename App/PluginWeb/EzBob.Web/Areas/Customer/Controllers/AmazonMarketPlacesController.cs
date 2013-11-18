@@ -131,14 +131,6 @@ namespace EzBob.Web.Areas.Customer.Controllers
         }
 
         //-------------------------------------------------------
-        [Authorize]
-        [Transactional]
-        public JsonNetResult Index()
-        {
-            return this.JsonNet(_context.Customer.GetAmazonMarketPlaces());
-        }
-
-        //-------------------------------------------------------
         [HttpPost]
         [Authorize]
         [Transactional]
