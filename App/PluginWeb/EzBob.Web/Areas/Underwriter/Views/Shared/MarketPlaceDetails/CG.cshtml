@@ -55,11 +55,12 @@
 
 	case 1: // HMRC behaviour
 		%><div class="tabbable">
-		<ul class="nav nav-tabs">
-			<li class="active"><a href="#hmrc-vat-return-summary" data-toggle="tab">Financial Analysis Summary</a></li>
-			<li><a href="#hmrc-vat-return-details" data-toggle="tab">VAT Return Details</a></li>
-			<li><a href="#hmrc-rti-tax-years" data-toggle="tab">RTI Tax Years</a></li>
-		</ul>
+		  <ul class="nav nav-tabs">
+		      <li class="active"><a href="#hmrc-vat-return-summary" data-toggle="tab">Financial Analysis Summary</a></li>
+		      <li><a href="#hmrc-vat-return-details" data-toggle="tab">VAT Return Details</a></li>
+		      <li><a href="#hmrc-rti-tax-years" data-toggle="tab">RTI Tax Years</a></li>
+		  </ul>
+        </div>
 		<div class="tab-content">
 			<div class="tab-pane active" id="hmrc-vat-return-summary">@{ Html.RenderPartial("MarketPlaceDetails/CG_vat_return_summary"); }</div>
 			<div class="tab-pane" id="hmrc-vat-return-details">@{ Html.RenderPartial("MarketPlaceDetails/CG_vat_return_details"); }</div>

@@ -65,7 +65,7 @@
 		{
 			foreach (var word in _yodleeSearchWords)
 			{
-				if (transaction.description.ToLowerInvariant().Contains(word.Substring(1).ToLowerInvariant()))
+				if (!string.IsNullOrEmpty(transaction.description) && transaction.description.ToLowerInvariant().Contains(word.Substring(1).ToLowerInvariant()))
 				{
 					var amount = transaction.transactionAmount.HasValue ? transaction.transactionAmount.Value : 0;
 
