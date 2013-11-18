@@ -57,7 +57,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
             var ebay = new eBayDatabaseMarketPlace();
             var marketplaces = customer.CustomerMarketPlaces
                                             .Where(m => m.Marketplace.InternalId == ebay.InternalId)
-                                            .Select(m => new SimpleMarketPlaceModel { displayName = m.DisplayName });
+											.Select(m => new SimpleMarketPlaceModel { displayName = m.DisplayName, MpId = m.Marketplace.Id, MpName = m.Marketplace.Name });
             return this.JsonNet(marketplaces);
         }
 
