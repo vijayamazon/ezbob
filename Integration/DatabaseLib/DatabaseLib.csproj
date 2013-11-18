@@ -492,6 +492,13 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="UiEvents\BrowserVersion.cs" />
+    <Compile Include="UiEvents\Security_User.cs" />
+    <Compile Include="UiEvents\UiEvents.cs" />
+    <Compile Include="UiEvents\UiAction.cs" />
+    <Compile Include="UiEvents\UiActionEventModel.cs" />
+    <Compile Include="UiEvents\UiCachePkgModel.cs" />
+    <Compile Include="UiEvents\UiControl.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -110,6 +110,12 @@ namespace EZBob.DatabaseLib
 		private readonly WizardStepSequenceRepository _wizardStepSequenceRepository;
 		private readonly YodleeBanksRepository _yodleeBanksRepository;
 
+		private readonly BrowserVersionRepository _browserVersionRepository;
+		private readonly SecurityUserRepository _securityUserRepository;
+		private readonly UiActionRepository _uiActionRepository;
+		private readonly UiControlRepository _uiControlRepository;
+		private readonly UiEventRepository _uiEventRepository;
+
 		#endregion repositories
 
 		public DatabaseDataHelper(ISession session)
@@ -149,7 +155,23 @@ namespace EZBob.DatabaseLib
 
 			_yodleeBanksRepository = new YodleeBanksRepository(session);
 			m_sYodleeBanks = null;
+
+			_browserVersionRepository = new BrowserVersionRepository(session);
+			_securityUserRepository = new SecurityUserRepository(session);
+			_uiActionRepository = new UiActionRepository(session);
+			_uiControlRepository = new UiControlRepository(session);
+			_uiEventRepository = new UiEventRepository(session);
 		} // constructor
+
+		#region UI related
+
+		public BrowserVersionRepository BrowserVersionRepository { get { return _browserVersionRepository; } }
+		public SecurityUserRepository SecurityUserRepository { get { return _securityUserRepository; } }
+		public UiActionRepository UiActionRepository { get { return _uiActionRepository; } }
+		public UiControlRepository UiControlRepository { get { return _uiControlRepository; } }
+		public UiEventRepository UiEventRepository { get { return _uiEventRepository; } }
+
+		#endregion UI related
 
 		#region property YodleeBanks
 

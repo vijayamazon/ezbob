@@ -169,10 +169,23 @@ EzBob = EzBob || {};
 				success: function(oData, sStatus, jqXHR) {
 					console.log('status:', sStatus, 'saved:', oData, 'jqXHR:', jqXHR);
 
-					if (oData && oData.saved && oData.saved.length) {
-						for (var i = 0; i < oData.saved.length; i++)
-							delete self.cache.history[oData.saved[i]];
-					} // if
+					if (oData) {
+						if (oData.saved && oData.saved.length) {
+							for (var i = 0; i < oData.saved.length; i++)
+								delete self.cache.history[oData.saved[i]];
+						} // if has success
+
+						if (oData.failures && oData.failures.length) {
+							for (var i = 0; i < oData.failures.length; i++) {
+								var oPkg = oData.failures[i];
+
+								var oCached = self.cache.history[oPkg.id];
+
+								for (var j = 0; j < oPkg.success.length; j++)
+									delete oCached[oPkg.success[j]];
+							} // for each failed package
+						} // if has failures
+					} // if has data
 				}, // success
 			}); // $.ajax
 		}, // writeDown
