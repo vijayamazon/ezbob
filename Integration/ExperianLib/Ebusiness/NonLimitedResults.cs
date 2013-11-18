@@ -7,11 +7,10 @@ namespace ExperianLib.Ebusiness {
 	public class NonLimitedResults : BusinessReturnData {
 		#region public
 
-		public decimal BureauScore { get; set; }
 		public bool CompanyNotFoundOnBureau { get; set; }
-		public SortedSet<string> Owners { get; private set; }
 
-		public NonLimitedResults(string inputXml) : base(inputXml) {
+		public NonLimitedResults(string inputXml, DateTime lastCheckDate) : base(inputXml, lastCheckDate)
+		{
 			CompanyNotFoundOnBureau = IsError;
 		} // constructor
 

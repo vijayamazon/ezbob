@@ -11,32 +11,39 @@ using EzBob.Configuration;
 using StructureMap;
 using log4net;
 
-namespace ExperianLib.Ebusiness {
-	public class EBusinessService {
-		public EBusinessService() {
+namespace ExperianLib.Ebusiness
+{
+	public class EBusinessService
+	{
+		public EBusinessService()
+		{
 			_config = ConfigurationRootBob.GetConfiguration().Experian;
 		} // constructor
 
-		public TargetResults TargetBusiness(string companyName, string postCode, int customerId, TargetResults.LegalStatus nFilter, string regNum = "") {
-			try {
+		public TargetResults TargetBusiness(string companyName, string postCode, int customerId, TargetResults.LegalStatus nFilter, string regNum = "")
+		{
+			try
+			{
 				companyName = HttpUtility.HtmlEncode(companyName);
-				string isLimited = nFilter != TargetResults.LegalStatus.NonLimited ? "Y": "N";
-				string isNonLimited = nFilter != TargetResults.LegalStatus.Limited ? "Y": "N";
+				string isLimited = nFilter != TargetResults.LegalStatus.NonLimited ? "Y" : "N";
+				string isNonLimited = nFilter != TargetResults.LegalStatus.Limited ? "Y" : "N";
 
-				string requestXml = GetResource("ExperianLib.Ebusiness.TargetBusiness.xml", companyName, postCode, regNum, isNonLimited, isLimited );
+				string requestXml = GetResource("ExperianLib.Ebusiness.TargetBusiness.xml", companyName, postCode, regNum, isNonLimited, isLimited);
 				var response = MakeRequest("POST", "application/xml", requestXml);
 				Utils.WriteLog(requestXml, response, "ESeriesTargeting", customerId);
 				return new TargetResults(response);
 			}
-			catch (Exception e) {
+			catch (Exception e)
+			{
 				Log.Error(e);
 				throw;
 			} // try
 		} // TargetBusiness
 
-		public LimitedResults GetLimitedBusinessData(string regNumber, int customerId, bool checkInCacheOnly = false) {
+		public LimitedResults GetLimitedBusinessData(string regNumber, int customerId, bool checkInCacheOnly = false)
+		{
 			Log.DebugFormat("Begin GetLimitedBusinessData {0} {1} {2}", regNumber, customerId, checkInCacheOnly);
-			LimitedResults oRes = GetOneLimitedBusinessData(regNumber, customerId, checkInCacheOnly);
+			var oRes = GetOneLimitedBusinessData(regNumber, customerId, checkInCacheOnly);
 
 			foreach (string sOwnerRegNum in oRes.Owners)
 				GetOneLimitedBusinessData(sOwnerRegNum, customerId, checkInCacheOnly);
@@ -44,30 +51,37 @@ namespace ExperianLib.Ebusiness {
 			return oRes;
 		} // GetLimitedBusinessData
 
-		private LimitedResults GetOneLimitedBusinessData(string regNumber, int customerId, bool checkInCacheOnly) {
-			try {
-				string response = CheckCache(regNumber);
+		private LimitedResults GetOneLimitedBusinessData(string regNumber, int customerId, bool checkInCacheOnly)
+		{
+			try
+			{
+				var response = CheckCache(regNumber);
 
-				if (string.IsNullOrEmpty(response) && !checkInCacheOnly) {
+				if (string.IsNullOrEmpty(response.JsonPacket) && !checkInCacheOnly)
+				{
 					string requestXml = GetResource("ExperianLib.Ebusiness.LimitedBusinessRequest.xml", regNumber);
 
-					response = MakeRequest("POST", "application/xml", requestXml);
+					var newResponse = MakeRequest("POST", "application/xml", requestXml);
 
 					Utils.WriteLog(requestXml, response, "E-SeriesLimitedData", customerId);
 
-					AddToCache(regNumber, requestXml, response);
+					AddToCache(regNumber, requestXml, newResponse);
+
+					return  new LimitedResults(newResponse, DateTime.UtcNow);
 				} // if
 
-				return new LimitedResults(response);
+				return new LimitedResults(response.JsonPacket, response.LastUpdateDate);
 			}
-			catch (Exception e) {
+			catch (Exception e)
+			{
 				Log.Error(e);
 				return new LimitedResults(e);
 			} // try
 		} // GetOneLimitedBusinessData
 
-		public NonLimitedResults GetNotLimitedBusinessData(string regNumber, int customerId, bool checkInCacheOnly = false) {
-			NonLimitedResults oRes = GetOneNotLimitedBusinessData(regNumber, customerId, checkInCacheOnly);
+		public NonLimitedResults GetNotLimitedBusinessData(string regNumber, int customerId, bool checkInCacheOnly = false)
+		{
+			var oRes = GetOneNotLimitedBusinessData(regNumber, customerId, checkInCacheOnly);
 
 			foreach (string sOwnerRegNum in oRes.Owners)
 				GetOneNotLimitedBusinessData(sOwnerRegNum, customerId, checkInCacheOnly);
@@ -75,46 +89,53 @@ namespace ExperianLib.Ebusiness {
 			return oRes;
 		} // GetNotLimitedBusinessData
 
-		private NonLimitedResults GetOneNotLimitedBusinessData(string regNumber, int customerId, bool checkInCacheOnly) {
-			try {
+		private NonLimitedResults GetOneNotLimitedBusinessData(string regNumber, int customerId, bool checkInCacheOnly)
+		{
+			try
+			{
 				var response = CheckCache(regNumber);
 
-				if (string.IsNullOrEmpty(response) && !checkInCacheOnly) {
+				if (string.IsNullOrEmpty(response.JsonPacket) && !checkInCacheOnly)
+				{
 					string requestXml = GetResource("ExperianLib.Ebusiness.NonLimitedBusinessRequest.xml", regNumber);
 
-					response = MakeRequest("POST", "application/xml", requestXml);
+					var newResponse = MakeRequest("POST", "application/xml", requestXml);
 
 					Utils.WriteLog(requestXml, response, "E-SeriesNonLimitedData", customerId);
 
-					AddToCache(regNumber, requestXml, response);
+					AddToCache(regNumber, requestXml, newResponse);
+
+					return new NonLimitedResults(newResponse, DateTime.UtcNow);
 				} // if
 
-				return new NonLimitedResults(response);
+				return new NonLimitedResults(response.JsonPacket, response.LastUpdateDate);
 			}
-			catch (Exception e) {
+			catch (Exception e)
+			{
 				Log.Error(e);
 				return new NonLimitedResults(e);
 			} // try
 		} // GetOneNotLimitedBusinessData
 
-		private string CheckCache(string refNumber) {
+		private MP_ExperianDataCache CheckCache(string refNumber)
+		{
 			var repo = ObjectFactory.GetInstance<NHibernateRepositoryBase<MP_ExperianDataCache>>();
 
 			Log.InfoFormat("Checking cache for refNumber={0}...", refNumber);
 
 			var cacheVal = (from c in repo.GetAll() where c.CompanyRefNumber == refNumber select c).FirstOrDefault();
 
-			if (cacheVal != null) {
-				if ((DateTime.Now - cacheVal.LastUpdateDate).TotalDays <= _config.UpdateBusinessDataPeriodDays) {
-					Log.InfoFormat("Returning data from cache for refNumber={0}", refNumber);
-					return cacheVal.JsonPacket;
-				} // if
+			if (cacheVal != null)
+			{
+				Log.InfoFormat("Returning data from cache for refNumber={0}", refNumber);
+				return cacheVal;
 			} // if
-
+			Log.WarnFormat("Company data from cache for refNumber={0} was not found", refNumber);
 			return null;
 		} // CheckCache
 
-		private void AddToCache(string refNumber, string request, string response) {
+		private void AddToCache(string refNumber, string request, string response)
+		{
 			var repo = ObjectFactory.GetInstance<NHibernateRepositoryBase<MP_ExperianDataCache>>();
 
 			var cacheVal =
@@ -128,7 +149,8 @@ namespace ExperianLib.Ebusiness {
 			repo.SaveOrUpdate(cacheVal);
 		} // AddToCache
 
-		private string MakeRequest(string method, string contentType, string post) {
+		private string MakeRequest(string method, string contentType, string post)
+		{
 			Log.DebugFormat("Request URL: {0} with data: {1}", _config.ESeriesUrl, post);
 
 			var request = (HttpWebRequest)WebRequest.Create(_config.ESeriesUrl);
@@ -144,7 +166,7 @@ namespace ExperianLib.Ebusiness {
 			stOut.Write(post);
 			stOut.Close();
 
-			WebResponse resp = request.GetResponse();
+			var resp = request.GetResponse();
 
 			var sr = new StreamReader(resp.GetResponseStream());
 
@@ -153,8 +175,10 @@ namespace ExperianLib.Ebusiness {
 			return respStr;
 		} // MakeRequest
 
-		private string GetResource(string resName, params object[] p) {
-			using (Stream s = Assembly.GetExecutingAssembly().GetManifestResourceStream(resName)) {
+		private string GetResource(string resName, params object[] p)
+		{
+			using (Stream s = Assembly.GetExecutingAssembly().GetManifestResourceStream(resName))
+			{
 				if (s == null)
 					return null;
 

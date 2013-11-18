@@ -8,17 +8,14 @@ namespace ExperianLib.Ebusiness {
 		#region public
 
 		#region properties
-
-		public decimal BureauScore { get; set; }
+		
 		public decimal ExistingBusinessLoans { get; set; }
-
-		public SortedSet<string> Owners { get; private set; }
 
 		#endregion properties
 
 		#region constructors
 
-		public LimitedResults(string inputXml) : base(inputXml) {
+		public LimitedResults(string inputXml, DateTime lastCheckDate) : base(inputXml, lastCheckDate) {
 		} // constructor
 
 		public LimitedResults(Exception exception) : base(exception) {

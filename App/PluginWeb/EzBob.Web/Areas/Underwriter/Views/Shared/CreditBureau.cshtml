@@ -18,7 +18,7 @@
     <tr>
         @foreach (var s in arguments)
         {
-            <td>@Html.Raw(s)</td>    
+            <td>@Html.Raw(s)</td>
         }
     </tr>
 }
@@ -28,7 +28,7 @@
     <tr>
         @foreach (var s in arguments)
         {
-            <td style="text-align: center;">@Html.Raw(s)</td>    
+            <td style="text-align: center;">@Html.Raw(s)</td>
         }
     </tr>
 }
@@ -433,12 +433,21 @@
                 <div class="span6">
                     <table class="table table-condensed table-striped">
                         <tbody>
+                            <%if(experianInfo.LimitedInfo.IsDataExpired){%>
+                                @RawCell("<b class='red'>Company Info Expired", "")
+                            <%}%>
+                            @RawCell("Last Check Date", "<%experianInfo.LimitedInfo.LastCheckDate != undefined ? print(EzBob.formatDateTime(experianInfo.LimitedInfo.LastCheckDate)) : print('-');%>")
+                            <%if(experianInfo.LimitedInfo.IsError){%>
+                             
+                             @RawCell("Error", "<%- experianInfo.LimitedInfo.Error%>")
+                            <%}else{%>
                             @RawCell("Borrower Type", "<%- experianInfo.BorrowerType %>")
                             @RawCell("Bureau Score", "<%- experianInfo.LimitedInfo.BureauScore %>")
                             @RawCell("Risk Level", "<%- experianInfo.LimitedInfo.RiskLevel %>")
                             @RawCell("Existing Business Loans", "<%- experianInfo.LimitedInfo.ExistingBusinessLoans %>")
+                            <%}%>
                         </tbody>
-                    </table>        
+                    </table>
                 </div>
             </div>
             <% if(experianInfo.ModelType == "Limited") { %>
@@ -465,11 +474,19 @@
                             <div class="span6">
                                 <table class="table table-condensed table-striped">
                                     <tbody>
+                                        <%if(experianInfo.NonLimitedInfo.IsDataExpired){%>
+                                            @RawCell("<b class='red'>Company Info Expired", "")
+                                        <%}%>
+                                        @RawCell("Last Check Date", "<%experianInfo.NonLimitedInfo.LastCheckDate != undefined ? print(EzBob.formatDateTime(experianInfo.NonLimitedInfo.LastCheckDate)) : print('-');%>")
+                                        <%if(experianInfo.NonLimitedInfo.IsError){%>
+                                        @RawCell("Error", "<%- experianInfo.NonLimitedInfo.Error%>")
+                                        <%}else{%>
                                         @RawCell("Borrower Type", "<%- experianInfo.BorrowerType %>")
                                         @RawCell("Bureau Score", "<%- experianInfo.NonLimitedInfo.BureauScore %>")
                                         @RawCell("Existing Business Loans", "<%- experianInfo.NonLimitedInfo.CompanyNotFoundOnBureau %>")
+                                        <%}%>
                                     </tbody>
-                                </table>        
+                                </table>
                             </div>
                         </div>
                         <% if(experianInfo.ModelType == "NonLimited") { %>

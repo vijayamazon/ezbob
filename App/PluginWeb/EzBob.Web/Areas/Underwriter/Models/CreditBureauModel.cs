@@ -166,16 +166,23 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		public decimal AddressScore { get; set; }
 	}
 
-	public class ExperianLimitedInfo
+	public class ExperianCompanyInfo
 	{
 		public decimal BureauScore { get; set; }
+		public bool IsDataExpired { get; set; }
+		public bool IsError { get; set; }
+		public string Error { get; set; }
+		public DateTime? LastCheckDate { get; set; }
+	}
+
+	public class ExperianLimitedInfo : ExperianCompanyInfo
+	{
 		public string RiskLevel { get; set; }
 		public decimal ExistingBusinessLoans { get; set; }
 	}
 
-	public class ExperianNonLimitedInfo
+	public class ExperianNonLimitedInfo : ExperianCompanyInfo
 	{
-		public decimal BureauScore { get; set; }
 		public bool CompanyNotFoundOnBureau { get; set; }
 	}
 
