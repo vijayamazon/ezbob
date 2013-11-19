@@ -126,7 +126,6 @@ EzBob.WizardView = Backbone.View.extend({
         this.stepModels = new EzBob.WizardSteps([this.customer, storeInfoStepModel, new EzBob.YourInformationStepModel()]);
 
         this.model = new EzBob.WizardModel({ stepModels: this.stepModels, total: this.stepModels.length });
-        this.model.on('change', this.stepChanged, this);
 
         this.progress = 0;
         this.topNavigationEnabled = EzBob.Config.WizardTopNaviagtionEnabled;
@@ -217,18 +216,12 @@ EzBob.WizardView = Backbone.View.extend({
         var ready = this.model.get('ready') || new Array(this.model.get('total') + 1);
         ready[num] = true;
 
-        for (var i = 0; i < ready.length; i++)
-            if (!ready[i])
-                break;
-
         this.model.set('ready', ready);
 
         if (!this.steps[num].ready)
             this.steps[num].ready = true;
 
         this.router.maxStepNum = this.model.get('ready') != undefined ? this.model.get('ready').clean(undefined).length : 0;
-
-        this.stepChanged();
     },
 
     next: function () {
@@ -272,6 +265,7 @@ EzBob.WizardView = Backbone.View.extend({
     },
 
     stepChanged: function () {
+        
         var current = this.model.get('current');
         this.renderStep(current);
         var data = {

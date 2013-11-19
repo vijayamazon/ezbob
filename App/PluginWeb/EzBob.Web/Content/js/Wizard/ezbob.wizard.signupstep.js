@@ -11,16 +11,16 @@ var EzBob = EzBob || {};
 EzBob.QuickSignUpStepView = Backbone.View.extend({
     initialize: function () {
         this.template = _.template($('#signup-template').html());
-        
+
         if (typeof ordsu == 'undefined') { ordsu = Math.random() * 10000000000000000; }
         if (typeof ordpi == 'undefined') { ordpi = Math.random() * 10000000000000000; }
         if (typeof ordty == 'undefined') { ordty = Math.random() * 10000000000000000; }
         if (typeof ordla == 'undefined') { ordla = Math.random() * 10000000000000000; }
-        
+
         this.on('ready', this.ready, this);
         this.model.on('change:loggedIn', this.render, this);
 
-	    this.showOfflineHelp = true;
+        this.showOfflineHelp = true;
     },
     events: {
         'click :submit': 'submit',
@@ -42,7 +42,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
             this.trigger('next');
         }
 
-	    EzBob.UiAction.register(this.$el.find('[ui-event-control-id]'));
+        EzBob.UiAction.register(this.$el.find('[ui-event-control-id]'));
 
         this.$el.find('img[rel]').setPopover("left");
         this.$el.find('li[rel]').setPopover("left");
@@ -59,10 +59,10 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
             var x = $.colorbox({ inline: true, transition: 'none', open: true, href: oDialog });
         } // if
 
-	    return this;
+        return this;
     },
     inputChanged: function (evt) {
-        this.setFieldStatusNotRequired(evt,'promoCode');
+        this.setFieldStatusNotRequired(evt, 'promoCode');
         this.setFieldStatusNotRequired(evt, 'amount');
 
         this.toggleOtherSelect(evt, 'customerReason', '#otherReasonDiv');
@@ -71,24 +71,24 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         var enabled = EzBob.Validation.checkForm(this.validator);
         $("#signupSubmitButton").toggleClass('disabled', !enabled);
     },
-    amountFocused: function() {
+    amountFocused: function () {
         this.$el.find("#amount").change();
     },
-    setFieldStatusNotRequired: function(evt, el){
+    setFieldStatusNotRequired: function (evt, el) {
         if (evt && evt.target.id == el && evt.target.value == '') {
             var img = $(evt.target).closest('div').find('.field_status');
             img.field_status('set', 'empty', 2);
         }
     },
-    toggleOtherSelect: function(evt, el, div) {
+    toggleOtherSelect: function (evt, el, div) {
         if (evt && evt.target.id == el) {
             var other = false;
             if ($(evt.target).find('option:selected').text() == 'Other') {
                 other = true;
-            } 
+            }
             $(div).toggleClass('hide', !other);
-        } 
-        
+        }
+
         return false;
     },
     submit: function () {
@@ -104,17 +104,17 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
             that.blockBtn(false);
             return false;
         };
-        
+
         if (!EzBob.Validation.checkForm(that.validator)) {
             that.blockBtn(false);
             return false;
         }
         var data = that.form.serializeArray();
-        var amount = _.find(data, function(d) { return d.name == "amount"; });
+        var amount = _.find(data, function (d) { return d.name == "amount"; });
         if (amount) { amount.value = this.$el.find("#amount").autoNumericGet(); }
-        
+
         var xhr = $.post(that.form.attr("action"), data);
-        
+
         xhr.done(function (result) {
             if (result.success) {
                 $('body').attr('auth', 'auth');
@@ -122,7 +122,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
                 EzBob.App.trigger('customerLoggedIn');
                 EzBob.App.trigger('clear');
                 //EzBob.App.trigger('info', "You have successfully registered. The message was sent to your email.");
-                $.get(window.gRootPath + "Start/TopButton").done(function(dat) {
+                $.get(window.gRootPath + "Start/TopButton").done(function (dat) {
                     $('#pre_header').html(dat);
                 });
                 that.model.set('loggedIn', true); // triggers 'ready' and 'next'
@@ -154,6 +154,6 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         this.$el.find('[name="securityQuestion"]').trigger("liszt:updated");
     },
     blockBtn: function (isBlock) {
-        BlockUi(isBlock ? "on": "off");
+        BlockUi(isBlock ? "on" : "off");
     }
 });
