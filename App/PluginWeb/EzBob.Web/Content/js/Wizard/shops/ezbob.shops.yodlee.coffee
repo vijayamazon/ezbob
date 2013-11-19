@@ -1,13 +1,6 @@
 ﻿root = exports ? this
 root.EzBob = root.EzBob or {}
 
-class EzBob.YodleeAccountButtonView extends EzBob.StoreButtonView
-    initialize: ->
-        super({name: 'Yodlee', logoText: '', shops: @model})
-
-    update: ->
-        @model.fetch().done -> EzBob.App.trigger 'ct:storebase.shop.connected'
-
 class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
     template: '#YodleeAccoutInfoTemplate'
  

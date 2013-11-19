@@ -5,43 +5,19 @@ EzBob.Profile.StoresView = Backbone.View.extend({
     initialize: function () {
         this.template = _.template($('#stores-template').html());
 
-		var modelArgs = {
-		    mpAccounts: this.model.get('mpAccounts')
-		};
+        var modelArgs = {
+            mpAccounts: this.model.get('mpAccounts'),
+            isOffline: this.model.get('IsOffline'),
+            isProfile: this.model.get('IsProfile'),
+        };
 
-		//var oShops = {};
-		//var cgShops = this.model.get('cgShops');
-
-		//for (var i in cgShops) {
-		//	if (!cgShops.hasOwnProperty(i))
-		//		continue;
-
-		//	var o = cgShops[i];
-
-		//	if (!oShops[o.storeInfoStepModelShops])
-		//		oShops[o.storeInfoStepModelShops] = [];
-
-		//	oShops[o.storeInfoStepModelShops].push(o);
-		//} // for each cg shop
-
-		//var sCgOnChange = '';
-		//for (var i in oShops) {
-		//	modelArgs[i] = oShops[i];
-		//	sCgOnChange += ' change:' + i;
-		//} // for
-		console.log('modelArgs p', modelArgs);
-
-		modelArgs.isOffline = this.model.get('IsOffline');
-		modelArgs.isProfile = this.model.get('IsProfile');
-		this.storeInfoStepModel = new EzBob.StoreInfoStepModel(modelArgs);
+        this.storeInfoStepModel = new EzBob.StoreInfoStepModel(modelArgs);
 
         this.storeInfoView = new EzBob.StoreInfoView({ model: this.storeInfoStepModel });
 
-       //TODO this.model.on('change:ebayMarketPlaces change:amazonMarketPlaces change:ekmShops change:freeAgentAccounts change:sageAccounts change:payPointAccounts change:paypalAccounts change:yodleeAccounts' + sCgOnChange, this.render, this);
-
         this.storeInfoView.on('previous', this.render, this);
         this.storeInfoView.on('completed', this.completed, this);
-        
+
         var that = this;
         window.YodleeRefreshAccountRetry = function () {
             that.attemptsLeft = (that.attemptsLeft || 5) - 1;
@@ -61,7 +37,7 @@ EzBob.Profile.StoresView = Backbone.View.extend({
     },
     render: function () {
         this.storeInfoView.render();
-        
+
         if (!this.content) {
             this.content = $('<div/>');
             this.content.appendTo(this.$el);
@@ -69,21 +45,21 @@ EzBob.Profile.StoresView = Backbone.View.extend({
         }
 
         this.renderTable();
-        
+
         this.content.show();
         this.storeInfoView.$el.hide();
         this.storeInfoView.$el.find(".next ").hide();
         return this;
     },
-    
-    renderTable: function() {
+
+    renderTable: function () {
         this.content.html(this.template({ stores: this.storeInfoStepModel.getStores() }));
     },
 
     updateYodleeClicked: function (el) {
         var displayName = $(el.currentTarget).attr('data-bank');
         var url = "" + window.gRootPath + "Customer/YodleeMarketPlaces/RefreshYodlee/?displayName=" + displayName;
-        
+
         this.$el.find("#refreshYodleeBtn1").attr("href", url);
         this.$el.find('.refresh_yodlee_help1').colorbox({ href: "#refresh_yodlee_help1", inline: true, transition: 'none', open: true });
     },
@@ -92,7 +68,7 @@ EzBob.Profile.StoresView = Backbone.View.extend({
         this.storeInfoView.$el.show();
         return false;
     },
-    completed: function() {
+    completed: function () {
         var that = this;
         var xhr = this.model.fetch();
         xhr.done(function () {

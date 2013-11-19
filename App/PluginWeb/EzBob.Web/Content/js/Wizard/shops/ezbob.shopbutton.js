@@ -19,11 +19,10 @@
 
     StoreButtonView.prototype.initialize = function(options) {
       this.name = options.name;
-      this.logoText = options.logoText;
-      this.shops = options.shops;
-      if (this.shops) {
-        this.shops.on("change reset sync", this.render, this);
-      }
+      this.mpAccounts = options.mpAccounts.get('mpAccounts');
+      this.shops = this.mpAccounts ? this.shops = _.where(this.mpAccounts, {
+        MpName: this.name
+      }) : [];
       return this.shopClass = options.name.replace(' ', '');
     };
 
@@ -38,8 +37,8 @@
         shopNames: ""
       };
       if (this.shops) {
-        data.shops = this.shops.toJSON();
-        data.shopNames = this.shops.pluck("displayName").join(", ");
+        data.shops = this.shops;
+        data.shopNames = _.pluck(this.shops, "displayName").join(", ");
       }
       return data;
     };
@@ -56,7 +55,11 @@
       return true;
     };
 
-    StoreButtonView.prototype.update = function() {};
+    StoreButtonView.prototype.update = function(data) {
+      return this.shops = data ? this.shops = _.where(data, {
+        MpName: this.name
+      }) : [];
+    };
 
     return StoreButtonView;
 

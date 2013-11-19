@@ -1,14 +1,6 @@
 ﻿root = exports ? this
 root.EzBob = root.EzBob or {}
 
-class EzBob.EKMAccountButtonView extends EzBob.StoreButtonView
-    initialize: ->
-        super({name: 'EKM', logoText: '', shops: @model})
-    update: ->
-        @model.fetch()
-
-    #isAddingAllowed: -> true @model.length == 0
-
 class EzBob.EKMAccountInfoView extends Backbone.Marionette.ItemView
     template: '#EKMAccoutInfoTemplate'
     

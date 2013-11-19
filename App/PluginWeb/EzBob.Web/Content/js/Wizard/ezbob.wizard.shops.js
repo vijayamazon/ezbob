@@ -15,10 +15,13 @@
       return StoreInfoStepModel.__super__.constructor.apply(this, arguments);
     }
 
+    StoreInfoStepModel.prototype.url = "" + window.gRootPath + "Customer/MarketPlaces/Accounts";
+
     StoreInfoStepModel.prototype.initialize = function(options) {
       return this.set({
         isOffline: options.isOffline,
-        isProfile: options.isProfile
+        isProfile: options.isProfile,
+        stores: options.mpAccounts
       });
     };
 
@@ -26,15 +29,17 @@
       var mpAccounts, shop, stores, _i, _len;
       stores = [];
       mpAccounts = this.get('mpAccounts');
-      for (_i = 0, _len = mpAccounts.length; _i < _len; _i++) {
-        shop = mpAccounts[_i];
-        if (shop.MpName === "Pay Pal") {
-          shop.MpName = "paypal";
+      if (mpAccounts) {
+        for (_i = 0, _len = mpAccounts.length; _i < _len; _i++) {
+          shop = mpAccounts[_i];
+          if (shop.MpName === "Pay Pal") {
+            shop.MpName = "paypal";
+          }
+          stores.push({
+            displayName: shop.displayName,
+            type: shop.MpName
+          });
         }
-        stores.push({
-          displayName: shop.displayName,
-          type: shop.MpName
-        });
       }
       return stores;
     };
@@ -79,7 +84,6 @@
     };
 
     StoreInfoStepView.prototype.render = function() {
-      console.log("EzBob.StoreInfoStepView render");
       this.StoreInfoView.render().$el.appendTo(this.$el);
       return this;
     };

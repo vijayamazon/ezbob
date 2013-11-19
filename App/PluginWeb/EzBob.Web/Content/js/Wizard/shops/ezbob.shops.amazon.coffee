@@ -126,13 +126,3 @@ class EzBob.AmazonStoreModel extends Backbone.Model
 class EzBob.AmazonStoreModels extends Backbone.Collection
     model: EzBob.AmazonStoreModel
     url: "#{window.gRootPath}Customer/AmazonMarketPlaces"
-
-class EzBob.AmazonButtonView extends EzBob.StoreButtonView
-    initialize: ->
-        super({name: 'Amazon', logoText: '', shops: @model})
-
-    update: ->
-        xhr = @model.fetch()
-        xhr.done => 
-            EzBob.App.trigger 'ct:storebase.shop.connected'
-            @model.trigger("sync")
