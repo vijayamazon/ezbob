@@ -1,16 +1,6 @@
 ﻿root = exports ? this
 root.EzBob = root.EzBob or {}
 
-class EzBob.CGAccountButtonView extends EzBob.StoreButtonView
-    initialize: (options) ->
-        super
-            name: options.accountType
-            logoText: ''
-            shops: @model
-
-    update: ->
-        @model.fetch().done -> EzBob.App.trigger 'ct:storebase.shop.connected'
-
 class EzBob.CGAccountInfoView extends Backbone.Marionette.ItemView
     events:
         'click a.back': 'back'

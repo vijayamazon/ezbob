@@ -178,34 +178,4 @@
 
   })(Backbone.Collection);
 
-  EzBob.AmazonButtonView = (function(_super) {
-
-    __extends(AmazonButtonView, _super);
-
-    function AmazonButtonView() {
-      return AmazonButtonView.__super__.constructor.apply(this, arguments);
-    }
-
-    AmazonButtonView.prototype.initialize = function() {
-      return AmazonButtonView.__super__.initialize.call(this, {
-        name: 'Amazon',
-        logoText: '',
-        shops: this.model
-      });
-    };
-
-    AmazonButtonView.prototype.update = function() {
-      var xhr,
-        _this = this;
-      xhr = this.model.fetch();
-      return xhr.done(function() {
-        EzBob.App.trigger('ct:storebase.shop.connected');
-        return _this.model.trigger("sync");
-      });
-    };
-
-    return AmazonButtonView;
-
-  })(EzBob.StoreButtonView);
-
 }).call(this);

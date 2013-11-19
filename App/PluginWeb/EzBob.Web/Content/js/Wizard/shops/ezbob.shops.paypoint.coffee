@@ -1,12 +1,6 @@
 ﻿root = exports ? this
 root.EzBob = root.EzBob or {}
 
-class EzBob.PayPointAccountButtonView extends EzBob.StoreButtonView
-    initialize: ->
-        super({name: 'PayPoint', logoText: '', shops: @model})
-    update: ->
-        @model.fetch()
-
 class EzBob.PayPointAccountInfoView extends Backbone.Marionette.ItemView
     template: '#PayPointAccoutInfoTemplate'
  

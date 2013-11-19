@@ -19,6 +19,7 @@
 
     StoreInfoBaseView.prototype.initialize = function() {
       var name, ordpi, store, _ref;
+      console.log('model EzBob.StoreInfoBaseView', this.model);
       this.allowFinishOnlineWizardWithoutMarketplaces = $('#allowFinishWizardWithoutMarketplaces').attr('online').toLowerCase() === 'true';
       this.allowFinishOfflineWizardWithoutMarketplaces = $('#allowFinishWizardWithoutMarketplaces').attr('offline').toLowerCase() === 'true';
       if (typeof ordpi === 'undefined') {
@@ -36,12 +37,11 @@
         store.view.on("back", this.back, this);
         store.button.on("ready", this.ready, this);
       }
-      EzBob.App.on("ct:storebase.shop.connected", this.shopConnected, this);
       return EzBob.App.on("ct:storebase." + this.name + ".connect", this.connect, this);
     };
 
     StoreInfoBaseView.prototype.completed = function(name) {
-      this.stores[name].button.update();
+      this.shopConnected(name);
       this.render();
       return this.trigger("completed");
     };
@@ -79,14 +79,26 @@
       });
     };
 
-    StoreInfoBaseView.prototype.shopConnected = function() {
-      this.updateEarnedPoints();
-      return this.render();
+    StoreInfoBaseView.prototype.shopConnected = function(name) {
+      var that;
+      console.log('shop connected', name);
+      that = this;
+      return this.model.safeFetch().done(function() {
+        console.log('shop connected', that.stores);
+        _.each(that.stores, function(store) {
+          return store.button.update(that.model.get('mpAccounts'));
+        });
+        console.log('shop connected', that.stores);
+        that.updateEarnedPoints();
+        return that.render();
+      });
     };
 
     StoreInfoBaseView.prototype.render = function() {
       var accountsList, canContinue, ebayPaypalRuleMessageVisible, foundAllMandatories, hasEbay, hasFilledShops, hasHmrc, hasPaypal, key, sRemove, sShow, shop, sortedShopsByNumOfShops, sortedShopsByPriority, that, _i, _j, _len, _len1, _ref;
-      hasHmrc = this.stores.HMRC.button.model.length > 0;
+      console.log("EzBob.StoreInfoBaseView render");
+      console.log(this.stores.HMRC);
+      hasHmrc = this.stores.HMRC.button.shops.length > 0;
       sShow = '';
       sRemove = '';
       if (this.isOffline) {
@@ -110,18 +122,18 @@
         return s.priority;
       });
       sortedShopsByNumOfShops = _.sortBy(sortedShopsByPriority, function(s) {
-        return -s.button.model.length;
+        return -s.button.shops.length;
       });
-      hasFilledShops = sortedShopsByNumOfShops[0].button.model.length > 0;
-      hasEbay = this.stores.eBay.button.model.length > 0;
-      hasPaypal = this.stores.paypal.button.model.length > 0;
+      hasFilledShops = sortedShopsByNumOfShops[0].button.shops.length > 0;
+      hasEbay = this.stores.eBay.button.shops.length > 0;
+      hasPaypal = this.stores.paypal.button.shops.length > 0;
       ebayPaypalRuleMessageVisible = hasEbay && !hasPaypal;
       this.$el.find(".eBayPaypalRule").toggleClass("hide", !ebayPaypalRuleMessageVisible);
       foundAllMandatories = true;
       _ref = Object.keys(this.stores);
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         key = _ref[_i];
-        if (this.stores[key].button.model.length === 0 && this.stores[key].mandatory) {
+        if (this.stores[key].button.shops.length === 0 && this.stores[key].mandatory) {
           foundAllMandatories = false;
         }
       }
@@ -130,11 +142,9 @@
       this.handleMandatoryText(hasFilledShops, canContinue, ebayPaypalRuleMessageVisible);
       for (_j = 0, _len1 = sortedShopsByNumOfShops.length; _j < _len1; _j++) {
         shop = sortedShopsByNumOfShops[_j];
-        if (!shop.active) {
-          continue;
+        if (shop.active) {
+          shop.button.render().$el.appendTo(accountsList);
         }
-        shop.button.render().$el.appendTo(accountsList);
-        shop.view.render().$el.hide().appendTo(that.$el);
       }
       this.storeList.appendTo(this.$el);
       return this;
@@ -160,7 +170,7 @@
         _ref = Object.keys(this.stores);
         for (_i = 0, _len = _ref.length; _i < _len; _i++) {
           key = _ref[_i];
-          if (this.stores[key].button.model.length === 0 && this.stores[key].mandatory) {
+          if (this.stores[key].button.shops.length === 0 && this.stores[key].mandatory) {
             foundAllMandatories = false;
             if (!first) {
               text += ', ';
@@ -180,10 +190,12 @@
 
     StoreInfoBaseView.prototype.connect = function(storeName) {
       var oFieldStatusIcons, storeView;
+      console.log('connect', storeName);
       EzBob.CT.recordEvent("ct:storebase." + this.name + ".connect", storeName);
       this.$el.find(">div").hide();
       storeView = this.stores[storeName].view;
-      storeView.render();
+      console.log('connect', storeView);
+      storeView.render().$el.appendTo(this.$el);
       oFieldStatusIcons = storeView.$el.find('IMG.field_status');
       oFieldStatusIcons.filter('.required').field_status({
         required: true

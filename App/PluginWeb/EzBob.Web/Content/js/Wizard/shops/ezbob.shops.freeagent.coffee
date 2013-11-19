@@ -1,13 +1,6 @@
 ﻿root = exports ? this
 root.EzBob = root.EzBob or {}
 
-class EzBob.FreeAgentAccountButtonView extends EzBob.StoreButtonView
-    initialize: ->
-        super({name: 'FreeAgent', logoText: '', shops: @model})
-
-    update: ->
-        @model.fetch().done -> EzBob.App.trigger 'ct:storebase.shop.connected'
-
 class EzBob.FreeAgentAccountInfoView extends Backbone.View                
     initialize: (options) ->
         that = this;

@@ -54,16 +54,3 @@ EzBob.EbayStoreInfoView = Backbone.View.extend({
         return "Ebay: Link Ebay Account";
     }
 });
-
-EzBob.EbayButtonView = EzBob.StoreButtonView.extend({
-    initialize: function () {
-        this.constructor.__super__.initialize.apply(this, [{ name: "eBay", logoText: "", shops: this.model }]);
-    },
-    update: function () {
-        var that = this;
-        var xhr = this.model.fetch();
-        xhr.done(function() {
-            that.model.trigger("sync");
-        });
-    }
-});

@@ -50,7 +50,7 @@
 					{
 						displayName = m.DisplayName,
 						MpId = m.Marketplace.Id,
-						MpName = m.Marketplace.Name
+						MpName = m.Marketplace.Name == "Pay Pal" ? "paypal" : m.Marketplace.Name
 					}).ToList();
 		}
 	}

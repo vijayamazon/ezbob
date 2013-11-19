@@ -20,11 +20,10 @@ class EzBob.StoreInfoBaseView extends Backbone.View
             store.view.on "back", @back, this
             store.button.on "ready", @ready, this
 
-        EzBob.App.on "ct:storebase.shop.connected", @shopConnected, this
-        EzBob.App.on "ct:storebase." + @name + ".connect", @connect, this
+        EzBob.App.on "ct:storebase." + @name + ".connect", @connect, @
 
     completed: (name) ->
-        @stores[name].button.update()
+        @shopConnected(name)
         @render()
         @trigger "completed"
 
@@ -52,13 +51,15 @@ class EzBob.StoreInfoBaseView extends Backbone.View
             if data.EarnedPointsStr
                 $('#EarnedPoints').text data.EarnedPointsStr
 
-    shopConnected: ->
-        @updateEarnedPoints()
-        @render()
+    shopConnected: (name) ->
+        that = @
+        @model.safeFetch().done ->
+            that.stores[name].button.update(that.model.get('mpAccounts'))
+            that.updateEarnedPoints()
+            that.render()
 
     render: ->
-        console.log("EzBob.StoreInfoBaseView render")
-        hasHmrc = @stores.HMRC.button.model.length > 0
+        hasHmrc = @stores.HMRC.button.shops.length > 0
 
         sShow = ''
         sRemove = ''
@@ -83,29 +84,28 @@ class EzBob.StoreInfoBaseView extends Backbone.View
         accountsList = @storeList.find(".accounts-list")
 
         sortedShopsByPriority = _.sortBy(@stores, (s) -> s.priority)
-        sortedShopsByNumOfShops = _.sortBy(sortedShopsByPriority, (s) -> -s.button.model.length)
+        sortedShopsByNumOfShops = _.sortBy(sortedShopsByPriority, (s) -> -s.button.shops.length)
 
-        hasFilledShops = sortedShopsByNumOfShops[0].button.model.length > 0
+        hasFilledShops = sortedShopsByNumOfShops[0].button.shops.length > 0
 
-        hasEbay = @stores.eBay.button.model.length > 0
-        hasPaypal = @stores.paypal.button.model.length > 0
+        hasEbay = @stores.eBay.button.shops.length > 0
+        hasPaypal = @stores.paypal.button.shops.length > 0
 
         ebayPaypalRuleMessageVisible = hasEbay and !hasPaypal
         @$el.find(".eBayPaypalRule").toggleClass("hide", !ebayPaypalRuleMessageVisible)
                 
         foundAllMandatories = true
         for key in Object.keys(@stores)
-            if @stores[key].button.model.length == 0 && @stores[key].mandatory
+            if @stores[key].button.shops.length == 0 && @stores[key].mandatory
                 foundAllMandatories = false
 
         canContinue = (hasFilledShops and (!hasEbay or (hasEbay and hasPaypal)) and foundAllMandatories) or (@isOffline and @allowFinishOfflineWizardWithoutMarketplaces) or (!@isOffline and @allowFinishOnlineWizardWithoutMarketplaces)
         @$el.find('.next').toggleClass 'disabled', !canContinue
         @handleMandatoryText(hasFilledShops, canContinue, ebayPaypalRuleMessageVisible)
-
+        
         for shop in sortedShopsByNumOfShops when shop.active 
             shop.button.render().$el.appendTo accountsList
-            shop.view.render().$el.hide().appendTo that.$el
-
+        
         @storeList.appendTo @$el
 
         this
@@ -126,7 +126,7 @@ class EzBob.StoreInfoBaseView extends Backbone.View
             first = true
             text = 'Please add the following accounts in order to continue: '
             for key in Object.keys(@stores)
-                if @stores[key].button.model.length == 0 && @stores[key].mandatory
+                if @stores[key].button.shops.length == 0 && @stores[key].mandatory
                     foundAllMandatories = false
                     if !first
                         text += ', '
@@ -142,7 +142,7 @@ class EzBob.StoreInfoBaseView extends Backbone.View
         EzBob.CT.recordEvent "ct:storebase." + @name + ".connect", storeName
         @$el.find(">div").hide()
         storeView = @stores[storeName].view
-        storeView.render()
+        storeView.render().$el.appendTo @$el
 
         oFieldStatusIcons = storeView.$el.find 'IMG.field_status'
         oFieldStatusIcons.filter('.required').field_status({ required: true })
