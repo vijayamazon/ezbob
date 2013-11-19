@@ -7,9 +7,9 @@
 }
 
 <script id="personinfo-template" type="text/template">
-	<div class="row-fluid">
-	    <h2 class="form_start">Personal Information</h2>
-        
+    <div class="row-fluid">
+        <h2 class="form_start">Personal Information</h2>
+
         @*This ebay pixel code is commented out now in phase 1 but will be uncommented later - do not delete
 	    @{
             var config = ObjectFactory.GetInstance<IEzBobConfiguration>();
@@ -20,417 +20,425 @@
 	        }
 	    }*@
 
-	    <div>
-			@using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm PersonalDetailsForm" }))
+        <div>
+            @using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm PersonalDetailsForm" }))
             {
-				<div class="control-group form_field_container">
-					<div class="controls">
-						<label class="attardi-input"><span>First name</span>
-							<input class="form_field" type="text" id="FirstName" name="FirstName" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.FirstName : '' %>" />
-						</label>
-						<img id="FirstNameImage" class="field_status required"/>
-					</div>
-				</div>
+                <div class="control-group form_field_container">
+                    <div class="controls">
+                        <label class="attardi-input">
+                            <span>First name</span>
+                            <input class="form_field" type="text" id="FirstName" name="FirstName" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.FirstName : '' %>" />
+                        </label>
+                        <img id="FirstNameImage" class="field_status required" />
+                    </div>
+                </div>
 
-				<div class="control-group form_field_container">
-					<div class="controls">
-						<label class="attardi-input"><span>Middle name</span>
-							<input type="text" id="MiddleInitial" name="MiddleInitial" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.MiddleInitial : '' %>" class="form_field alphaOnly" />
-						</label>
-						<img id="MiddleNameImage" class="field_status empty"/>
-					</div>
-				</div>
+                <div class="control-group form_field_container">
+                    <div class="controls">
+                        <label class="attardi-input">
+                            <span>Middle name</span>
+                            <input type="text" id="MiddleInitial" name="MiddleInitial" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.MiddleInitial : '' %>" class="form_field alphaOnly" />
+                        </label>
+                        <img id="MiddleNameImage" class="field_status empty" />
+                    </div>
+                </div>
 
-				<div class="control-group form_field_container">
-					<div class="controls">
-						<label class="attardi-input"><span>Surname</span>
-							<input id="Surname" type="text" name="Surname" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.Surname : '' %>" class="form_field" />
-						</label>
-						<img id="SurnameImage" class="field_status required"/>
-					</div>
-				</div>
-				<input type="hidden" name="Fullname" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.Fullname : '' %>" />
+                <div class="control-group form_field_container">
+                    <div class="controls">
+                        <label class="attardi-input">
+                            <span>Surname</span>
+                            <input id="Surname" type="text" name="Surname" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.Surname : '' %>" class="form_field" />
+                        </label>
+                        <img id="SurnameImage" class="field_status required" />
+                    </div>
+                </div>
+                <input type="hidden" name="Fullname" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.Fullname : '' %>" />
 
-			    <div class="form_field_container FormRadioCtrl">
-			        <span>
-			            <input type="radio" name="Gender" value="M" id="FormRadioCtrl_M" class="required"><label for="FormRadioCtrl_M">Male</label>
-			            <input type="radio" name="Gender" value="F" id="FormRadioCtrl_F"><label for="FormRadioCtrl_F">Female</label>
-			        </span>
-                    <img id="GenderImage" class="field_status required" alt=""/>
-			    </div>
+                <div class="form_field_container FormRadioCtrl">
+                    <span>
+                        <input type="radio" name="Gender" value="M" id="FormRadioCtrl_M" class="required"><label for="FormRadioCtrl_M">Male</label>
+                        <input type="radio" name="Gender" value="F" id="FormRadioCtrl_F"><label for="FormRadioCtrl_F">Female</label>
+                    </span>
+                    <img id="GenderImage" class="field_status required" alt="" />
+                </div>
 
-				@EzForm.DateInput("DateOfBirth", "Date of birth", required: true, statusIcon: true)
+                @EzForm.DateInput("DateOfBirth", "Date of birth", required: true, statusIcon: true)
 
-				<div class="control-group form_field_container">
-					<div class="controls">
-						<label class="control-label attardi-input"><span>Marital status</span>
-							<select class="form_field" id="MartialStatus" name="MartialStatus">
-								<option></option>
-								<option value="Single">Single</option>
-								<option value="Married">Married</option>
-								<option value="Divorced">Divorced</option>
-								<option value="Widow/er">Widow/er</option>
-								<option value="Other">Other</option>
-							</select>
-						</label>
-						<img id="MartialStatusImage" class="field_status required"/>
-					</div>
-				</div>
+                <div class="control-group form_field_container">
+                    <div class="controls">
+                        <label class="control-label attardi-input">
+                            <span>Marital status</span>
+                            <select class="form_field" id="MartialStatus" name="MartialStatus">
+                                <option></option>
+                                <option value="Single">Single</option>
+                                <option value="Married">Married</option>
+                                <option value="Divorced">Divorced</option>
+                                <option value="Widow/er">Widow/er</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </label>
+                        <img id="MartialStatusImage" class="field_status required" />
+                    </div>
+                </div>
 
-				<h2 class="form_section">Home address</h2>
+                <h2 class="form_section">Home address</h2>
 
-				@EzForm.AddressInput("PersonalAddress", "Home address")
+                @EzForm.AddressInput("PersonalAddress", "Home address")
 
-				<div class="control-group form_field_container">
-					<div class="controls">
-						<label class="control-label attardi-input">
-							<span>Period of occupation</span>
-							<select id="TimeAtAddress" name="TimeAtAddress" class="TimeAtAddress select form_field">
-								<option selected="selected" value=""></option>
-								<option value="1">1 year</option>
-								<option value="2">2 years</option>
-								<option value="3">More than 3 years</option>
-							</select>
-						</label>
-						<img id="TimeAtAddressImage" class="field_status required"/>
-					</div>
-				</div>
+                <div class="control-group form_field_container">
+                    <div class="controls">
+                        <label class="control-label attardi-input">
+                            <span>Period of occupation</span>
+                            <select id="TimeAtAddress" name="TimeAtAddress" class="TimeAtAddress select form_field">
+                                <option selected="selected" value=""></option>
+                                <option value="1">1 year</option>
+                                <option value="2">2 years</option>
+                                <option value="3">More than 3 years</option>
+                            </select>
+                        </label>
+                        <img id="TimeAtAddressImage" class="field_status required" />
+                    </div>
+                </div>
 
-				@EzForm.AddressInput("PrevPersonAddresses", "Previous Address", "canDisabledAddress")
+                @EzForm.AddressInput("PrevPersonAddresses", "Previous Address", "canDisabledAddress")
 
-				<div class="control-group form_field_container">
-					<div class="controls">
-						<label class="control-label attardi-input">
-							<span>Residential status</span>
-								<select id="ResidentialStatus" name="ResidentialStatus" class="select form_field">
-									<option></option>
-									<option value="Home owner">Home owner</option>
-									<option value="Renting">Renting</option>
-									<option value="Living with parents">Living with parents</option>
-								</select>
-						</label>
-						<img id="ResidentialStatusImage" class="field_status required"/>
-					</div>
-				</div>
+                <div class="control-group form_field_container">
+                    <div class="controls">
+                        <label class="control-label attardi-input">
+                            <span>Residential status</span>
+                            <select id="ResidentialStatus" name="ResidentialStatus" class="select form_field">
+                                <option></option>
+                                <option value="Home owner">Home owner</option>
+                                <option value="Renting">Renting</option>
+                                <option value="Living with parents">Living with parents</option>
+                            </select>
+                        </label>
+                        <img id="ResidentialStatusImage" class="field_status required" />
+                    </div>
+                </div>
 
-				<div class="offline">
-					<h2 class="form_section">Property ownership</h2>
+                <div class="offline">
+                    <h2 class="form_section">Property ownership</h2>
 
-					<div class="control-group form_field_container">
-						<div class="controls">
-							<label class="control-label attardi-input">
-								<span id="OwnOtherPropertyQuestion">Do you own a property?</span>
-									<select id="OwnOtherProperty" name="OwnOtherProperty" class="select form_field">
-										<option value=""></option>
-										<option value="Yes">Yes, I own a property.</option>
-										<option value="No">No, I don't own a property.</option>
-									</select>
-							</label>
-							<img id="OwnOtherPropertyImage" class="field_status required"/>
-						</div>
-					</div>
+                    <div class="control-group form_field_container">
+                        <div class="controls">
+                            <label class="control-label attardi-input">
+                                <span id="OwnOtherPropertyQuestion">Do you own a property?</span>
+                                <select id="OwnOtherProperty" name="OwnOtherProperty" class="select form_field">
+                                    <option value=""></option>
+                                    <option value="Yes">Yes, I own a property.</option>
+                                    <option value="No">No, I don't own a property.</option>
+                                </select>
+                            </label>
+                            <img id="OwnOtherPropertyImage" class="field_status required" />
+                        </div>
+                    </div>
 
-					@EzForm.AddressInput("OtherPropertyAddress", "Other property address", "canDisabledAddress")
-				</div>
+                    @EzForm.AddressInput("OtherPropertyAddress", "Other property address", "canDisabledAddress")
+                </div>
 
-				<h2 class="form_section">Contact details</h2>
+                <h2 class="form_section">Contact details</h2>
 
-				<div class="control-group form_field_container">
-					<div class="controls">
-						<label class="control-label attardi-input">
-							<span>Best contact number</span>
-							<input type="text" class="phonenumber form_field" id="DayTimePhone" name="DayTimePhone" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.DayTimePhone : '' %>" />
-						</label>
-						<img id="DayTimePhoneImage" class="field_status required"/>
-					</div>
-				</div>
+                <div class="control-group form_field_container">
+                    <div class="controls">
+                        <label class="control-label attardi-input">
+                            <span>Best contact number</span>
+                            <input type="text" class="phonenumber form_field" id="DayTimePhone" name="DayTimePhone" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.DayTimePhone : '' %>" />
+                        </label>
+                        <img id="DayTimePhoneImage" class="field_status required" />
+                    </div>
+                </div>
 
-				<div class="control-group form_field_container">
-					<div class="controls">
-						<label class="control-label attardi-input">
-							<span>Additional contact number</span>
-							<input type="text" class="phonenumber form_field" name="MobilePhone" id="MobilePhone" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.MobilePhone : '' %>" />
-						</label>
-						<img id="MobilePhoneImage" class="field_status required"/>
-					</div>
-				</div>
+                <div class="control-group form_field_container">
+                    <div class="controls">
+                        <label class="control-label attardi-input">
+                            <span>Additional contact number</span>
+                            <input type="text" class="phonenumber form_field" name="MobilePhone" id="MobilePhone" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.MobilePhone : '' %>" />
+                        </label>
+                        <img id="MobilePhoneImage" class="field_status required" />
+                    </div>
+                </div>
 
-				<h2 class="form_section">Company information</h2> 
+                <h2 class="form_section">Company information</h2> 
 
-				<div class="control-group typeOfBussiness form_field_container">
-					<div class="controls">
-						<label class="attardi-input">
-							<span>Type of business</span>
-							<select class="form_field" id="TypeOfBusiness" name="TypeOfBusiness">
-								<option value=""></option>
-								<option class="notoffline" value="Entrepreneur">Sole trader (not Inc.)</option>
-								<option value="SoleTrader">Sole trader (Inc.)</option>
-								<option value="PShip3P">Partnership (Up to 3)</option>
-								<option value="PShip">Partnership (More than 3)</option>
-								<option value="Limited">Limited company</option>
-								<option value="LLP">LLP</option>
-							</select>
-						</label>
-						<img id="TypeOfBusinessImage" class="field_status required"/>
-					</div>
-				</div>
+                <div class="control-group typeOfBussiness form_field_container">
+                    <div class="controls">
+                        <label class="attardi-input">
+                            <span>Type of business</span>
+                            <select class="form_field" id="TypeOfBusiness" name="TypeOfBusiness">
+                                <option value=""></option>
+                                <option class="notoffline" value="Entrepreneur">Sole trader (not Inc.)</option>
+                                <option value="SoleTrader">Sole trader (Inc.)</option>
+                                <option value="PShip3P">Partnership (Up to 3)</option>
+                                <option value="PShip">Partnership (More than 3)</option>
+                                <option value="Limited">Limited company</option>
+                                <option value="LLP">LLP</option>
+                            </select>
+                        </label>
+                        <img id="TypeOfBusinessImage" class="field_status required" />
+                    </div>
+                </div>
 
-				<div class="control-group form_field_container">
-					<div class="controls cashControlls">
-						<label class="attardi-input">
-							<span>Total online sales (£)</span>
-							<input id="WebSiteTurnOver" name="WebSiteTurnOver" type="text" class="cashInput form_field" />
-						</label>
-						<img id="WebSiteTurnOverImage" class="field_status required" />
-					</div>
-				</div>
+                <div class="control-group form_field_container">
+                    <div class="controls cashControlls">
+                        <label class="attardi-input">
+                            <span>Total online sales (£)</span>
+                            <input id="WebSiteTurnOver" name="WebSiteTurnOver" type="text" class="cashInput form_field" />
+                        </label>
+                        <img id="WebSiteTurnOverImage" class="field_status required" />
+                    </div>
+                </div>
 
-				<div class="control-group form_field_container">
-					<div class="controls cashControlls">
-						<label class="attardi-input">
-							<span>Total sales (online & offline in £)</span>
-							<input id="OverallTurnOver" name="OverallTurnOver" type="text" class="cashInput form_field" />
-						</label>
-						<img id="OverallTurnOverImage" class="field_status required"/>
-					</div>
-				</div>
+                <div class="control-group form_field_container">
+                    <div class="controls cashControlls">
+                        <label class="attardi-input">
+                            <span>Total sales (online & offline in £)</span>
+                            <input id="OverallTurnOver" name="OverallTurnOver" type="text" class="cashInput form_field" />
+                        </label>
+                        <img id="OverallTurnOverImage" class="field_status required" />
+                    </div>
+                </div>
 
-				<div class="control-group form_read_and_accept">
-					<hr />
-					<div class="controls">
-						<input id="ConsentToSearch" name="ConsentToSearch" type="checkbox" value="false" />
-						<label for="ConsentToSearch" class="editor-label-with-checkbox"> I have read and accept the <a>terms and conditions</a> of the credit bureau search</label>
-					</div>
-				</div>
+                <div class="control-group form_read_and_accept">
+                    <hr />
+                    <div class="controls">
+                        <input id="ConsentToSearch" name="ConsentToSearch" type="checkbox" value="false" />
+                        <label for="ConsentToSearch" class="editor-label-with-checkbox">I have read and accept the <a>terms and conditions</a> of the credit bureau search</label>
+                    </div>
+                </div>
             }
-		</div>
+        </div>
 
-		<div class="form_buttons_container">
-			<a href="#" class="btn-continue button orange btn-next disabled continue">Continue</a>
-		</div>
-	</div>
+        <div class="form_buttons_container">
+            <a href="#" class="btn-continue button orange btn-next disabled continue">Continue</a>
+        </div>
+    </div>
 </script>
 
 <script id="director-edit-template" type="text/template">
-	<div>
-		<h2 class="form_section">Additional directors (optional)</h2>
+    <div>
+        <h2 class="form_section">Additional directors (optional)</h2>
 
-		<div class="directorArea"></div>
+        <div class="directorArea"></div>
 
-		<div class="add-director-container">
-			<div class="wizard-director-text">ezbob presumes that you a director of your company.</div>
-			<div class="wizard-director-text">Adding the details of additional directors may improve the offer you receive.</div>
+        <div class="add-director-container">
+            <div class="wizard-director-text">ezbob presumes that you a director of your company.</div>
+            <div class="wizard-director-text">Adding the details of additional directors may improve the offer you receive.</div>
 
-			<input id="addDirector" class="btn green" type="button" value="Add directors" />
-		</div>
-	</div>
+            <input id="addDirector" class="btn green" type="button" value="Add directors" />
+        </div>
+    </div>
 </script>
 
 <script id="employee-count-template" type="text/template">
-	<h2 class="form_section">Payroll information</h2>
+    <h2 class="form_section">Payroll information</h2>
 
-	<div class="control-group">
-		<div class="controls">
-			<label class="control-label attardi-input">
-				<span>Current # of employees</span>
-				<input id="EmployeeCount" name="EmployeeCount" type="text" class="form_field numeric" min="0" />
-			</label>
-			<img id="EmployeeCountImage" class="field_status required"/>
-		</div>
-	</div>
-
-	<div class="control-group">
-		<div class="controls">
-			<label class="control-label attardi-input">
-				<span># of earning (gross salary) over £41,450 per annum</span>
-				<input id="TopEarningEmployeeCount" name="TopEarningEmployeeCount" type="text" class="form_field numeric" min="0" />
-			</label>
-			<img id="TopEarningEmployeeCountImage" class="field_status required"/>
-		</div>
-	</div>
-
-	<div class="control-group">
-		<div class="controls">
-			<label class="control-label attardi-input">
-				<span># of earning (gross salary) less than £9,440 per annum</span>
-				<input id="BottomEarningEmployeeCount" name="BottomEarningEmployeeCount" type="text" class="form_field numeric" min="0" />
-			</label>
-			<img id="BottomEarningEmployeeCountImage" class="field_status required"/>
-		</div>
-	</div>
-
-	<div class="control-group">
-		<div class="controls">
-			<label class="control-label attardi-input">
-				<span>Change in the # of employees in last 12 months</span>
-				<select id="EmployeeCountChange" name="EmployeeCountChange" class="form_field select">
-					<option value=""></option>
-					<option value="-5">Reduced by 5 or more</option>
-					<option value="-4">Reduced by 4</option>
-					<option value="-3">Reduced by 3</option>
-					<option value="-2">Reduced by 2</option>
-					<option value="-1">Reduced by 1</option>
-					<option value="0">No change</option>
-					<option value="1">Increased by 1</option>
-					<option value="2">Increased by 2</option>
-					<option value="3">Increased by 3</option>
-					<option value="4">Increased by 4</option>
-					<option value="5">Increased by 5 or more</option>
-				</select>
-			</label>
-			<img id="EmployeeCountChangeImage" class="field_status required"/>
-		</div>
-	</div>
-    
     <div class="control-group">
-		<div class="controls">
-			<label class="control-label attardi-input">
-				<span>Total monthly salary expenditure (inc tax & NI)</span>
-				<input id="TotalMonthlySalary" name="TotalMonthlySalary" type="text" class="form_field cashInput" />
-			</label>
-			<img id="TotalMonthlySalaryImage" class="field_status required"/>
-		</div>
-	</div>
-    
+        <div class="controls">
+            <label class="control-label attardi-input">
+                <span>Current # of employees</span>
+                <input id="EmployeeCount" name="EmployeeCount" type="text" class="form_field numeric" min="0" />
+            </label>
+            <img id="EmployeeCountImage" class="field_status required" />
+        </div>
+    </div>
+
+    <div class="control-group">
+        <div class="controls">
+            <label class="control-label attardi-input">
+                <span># of earning (gross salary) over £41,450 per annum</span>
+                <input id="TopEarningEmployeeCount" name="TopEarningEmployeeCount" type="text" class="form_field numeric" min="0" />
+            </label>
+            <img id="TopEarningEmployeeCountImage" class="field_status required" />
+        </div>
+    </div>
+
+    <div class="control-group">
+        <div class="controls">
+            <label class="control-label attardi-input">
+                <span># of earning (gross salary) less than £9,440 per annum</span>
+                <input id="BottomEarningEmployeeCount" name="BottomEarningEmployeeCount" type="text" class="form_field numeric" min="0" />
+            </label>
+            <img id="BottomEarningEmployeeCountImage" class="field_status required" />
+        </div>
+    </div>
+
+    <div class="control-group">
+        <div class="controls">
+            <label class="control-label attardi-input">
+                <span>Change in the # of employees in last 12 months</span>
+                <select id="EmployeeCountChange" name="EmployeeCountChange" class="form_field select">
+                    <option value=""></option>
+                    <option value="-5">Reduced by 5 or more</option>
+                    <option value="-4">Reduced by 4</option>
+                    <option value="-3">Reduced by 3</option>
+                    <option value="-2">Reduced by 2</option>
+                    <option value="-1">Reduced by 1</option>
+                    <option value="0">No change</option>
+                    <option value="1">Increased by 1</option>
+                    <option value="2">Increased by 2</option>
+                    <option value="3">Increased by 3</option>
+                    <option value="4">Increased by 4</option>
+                    <option value="5">Increased by 5 or more</option>
+                </select>
+            </label>
+            <img id="EmployeeCountChangeImage" class="field_status required" />
+        </div>
+    </div>
+
+    <div class="control-group">
+        <div class="controls">
+            <label class="control-label attardi-input">
+                <span>Total monthly salary expenditure (inc tax & NI)</span>
+                <input id="TotalMonthlySalary" name="TotalMonthlySalary" type="text" class="form_field cashInput" />
+            </label>
+            <img id="TotalMonthlySalaryImage" class="field_status required" />
+        </div>
+    </div>
+
 
 </script>
 
 <script id="nonlimitededinfo-template" type="text/template">
-	<div class="row-fluid">
-		<h2 class="form_start">Company information</h2>
-		<div>
-			@using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm NonLimitedCompanyDetailForm" })) {
-				<input type="hidden" name="NonLimitedRefNum" class="RefNum" />
+    <div class="row-fluid">
+        <h2 class="form_start">Company information</h2>
+        <div>
+            @using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm NonLimitedCompanyDetailForm" }))
+            {
+                <input type="hidden" name="NonLimitedRefNum" class="RefNum" />
 
-				<div class="control-group">
-					<div class="controls">
-						<label class="control-label attardi-input">
-							<span>Name</span>
-							<input id="NonLimitedCompanyName" name="NonLimitedCompanyName" type="text" class="form_field" />
-						</label>
-						<img id="NonLimitedCompanyNameImage" class="field_status required"/>
-					</div>
-				</div>
+                <div class="control-group">
+                    <div class="controls">
+                        <label class="control-label attardi-input">
+                            <span>Name</span>
+                            <input id="NonLimitedCompanyName" name="NonLimitedCompanyName" type="text" class="form_field" />
+                        </label>
+                        <img id="NonLimitedCompanyNameImage" class="field_status required" />
+                    </div>
+                </div>
 
-				@EzForm.AddressInput("NonLimitedCompanyAddress", "Address")
+                @EzForm.AddressInput("NonLimitedCompanyAddress", "Address")
 
-				<div class="control-group notoffline">
-					<div class="controls">
-						<label class="control-label attardi-input">
-							<span>Period of occupation</span>
-							<select id="NonLimitedTimeAtAddress" name="NonLimitedTimeAtAddress" class="TimeAtAddress select form_field">
-								<option selected="selected" value=""></option>
-								<option value="1">1 year</option>
-								<option value="2">2 years</option>
-								<option value="3">More than 3 years</option>
-							</select>
-						</label>
-						<img id="NonLimitedTimeAtAddressImage" class="field_status required"/>
-					</div>
-				</div>
+                <div class="control-group notoffline">
+                    <div class="controls">
+                        <label class="control-label attardi-input">
+                            <span>Period of occupation</span>
+                            <select id="NonLimitedTimeAtAddress" name="NonLimitedTimeAtAddress" class="TimeAtAddress select form_field">
+                                <option selected="selected" value=""></option>
+                                <option value="1">1 year</option>
+                                <option value="2">2 years</option>
+                                <option value="3">More than 3 years</option>
+                            </select>
+                        </label>
+                        <img id="NonLimitedTimeAtAddressImage" class="field_status required" />
+                    </div>
+                </div>
 
-			    <div class="control-group">
-					<div class="controls">
-						<label class="control-label attardi-input">
-							<span>Time in business</span>
-							<select id="NonLimitedTimeInBusiness" name="NonLimitedTimeInBusiness" class="select form_field">
-								<option selected="selected" value=""></option>
-								<option value="1">1 year</option>
-								<option value="2">2 years</option>
-								<option value="3">3 years</option>
-								<option value="4">4 years</option>
-								<option value="5">5 years</option>
-								<option value="6">6 years</option>
-								<option value="7">7 years</option>
-								<option value="8">8 years</option>
-								<option value="9">9 years</option>
-								<option value="101">More than 10 years</option>
-							</select>
-						</label>
-						<img id="NonLimitedTimeInBusinessImage" class="field_status required"/>
-					</div>
-				</div>
+                <div class="control-group">
+                    <div class="controls">
+                        <label class="control-label attardi-input">
+                            <span>Time in business</span>
+                            <select id="NonLimitedTimeInBusiness" name="NonLimitedTimeInBusiness" class="select form_field">
+                                <option selected="selected" value=""></option>
+                                <option value="1">1 year</option>
+                                <option value="2">2 years</option>
+                                <option value="3">3 years</option>
+                                <option value="4">4 years</option>
+                                <option value="5">5 years</option>
+                                <option value="6">6 years</option>
+                                <option value="7">7 years</option>
+                                <option value="8">8 years</option>
+                                <option value="9">9 years</option>
+                                <option value="101">More than 10 years</option>
+                            </select>
+                        </label>
+                        <img id="NonLimitedTimeInBusinessImage" class="field_status required" />
+                    </div>
+                </div>
        
                 @AdditionalCompanyInfo("NonLimited")
 
-				<div class="control-group">
-					<div class="controls">
-						<label class="control-label attardi-input">
-							<span>Business phone</span>
-							<input id="NonLimitedBusinessPhone" name="NonLimitedBusinessPhone" type="text" class="form_field phonenumber" />
-						</label>
-						<img id="NonLimitedBusinessPhoneImage" class="field_status required"/>
-					</div>
-				</div>
+                <div class="control-group">
+                    <div class="controls">
+                        <label class="control-label attardi-input">
+                            <span>Business phone</span>
+                            <input id="NonLimitedBusinessPhone" name="NonLimitedBusinessPhone" type="text" class="form_field phonenumber" />
+                        </label>
+                        <img id="NonLimitedBusinessPhoneImage" class="field_status required" />
+                    </div>
+                </div>
 
-				<div class="offline employee-count"></div>
+                <div class="offline employee-count"></div>
 
-				<div class="directors"></div>
-		}
-		</div>
+                <div class="directors"></div>
+            }
+        </div>
 
-		<div class="form_buttons_container">
-			<a href="#" class="continue btn-continue next button orange disabled">Continue</a>
-			<a href="#" class="back btn-back button grey">Back</a>
-		</div>
-	</div>
+        <div class="form_buttons_container">
+            <a href="#" class="continue btn-continue next button orange disabled">Continue</a>
+            <a href="#" class="back btn-back button grey">Back</a>
+        </div>
+    </div>
 </script>
 
 <script id="limitedinfo-template" type="text/template">
-	<div class="row-fluid">
-		<h2 class="form_start">Company Information</h2> 
-		<div>
-			@using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm LimitedCompanyDetailForm" })) {
-				<div class="control-group">
-					<div class="controls">
-						<label class="control-label attardi-input"><span>Registration #</span>
-							<input id="LimitedCompanyNumber" name="LimitedCompanyNumber" type="text" class="form_field" />
-						</label>
-						<img id="LimitedCompanyNumberImage" class="field_status required"/>
-					</div>
-				</div>
+    <div class="row-fluid">
+        <h2 class="form_start">Company Information</h2>
+        <div>
+            @using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm LimitedCompanyDetailForm" }))
+            {
+                <div class="control-group">
+                    <div class="controls">
+                        <label class="control-label attardi-input">
+                            <span>Registration #</span>
+                            <input id="LimitedCompanyNumber" name="LimitedCompanyNumber" type="text" class="form_field" />
+                        </label>
+                        <img id="LimitedCompanyNumberImage" class="field_status required" />
+                    </div>
+                </div>
 
-				<div class="control-group">
-					<div class="controls">
-						<label class="control-label attardi-input">
-							<span>Name</span>
-							<input id="LimitedCompanyName" name="LimitedCompanyName" type="text" class="form_field" />
-						</label>
-						<img id="LimitedCompanyNameImage" class="field_status required"/>
-					</div>
-				</div>
+                <div class="control-group">
+                    <div class="controls">
+                        <label class="control-label attardi-input">
+                            <span>Name</span>
+                            <input id="LimitedCompanyName" name="LimitedCompanyName" type="text" class="form_field" />
+                        </label>
+                        <img id="LimitedCompanyNameImage" class="field_status required" />
+                    </div>
+                </div>
 
-				@EzForm.AddressInput("LimitedCompanyAddress", "Address")
+                @EzForm.AddressInput("LimitedCompanyAddress", "Address")
 
                 @AdditionalCompanyInfo("Limited")
 
-				<div class="control-group">
-					<div class="controls">
-						<label class="control-label attardi-input">
-							<span>Business phone</span>
-							<input id="LimitedBusinessPhone" name="LimitedBusinessPhone" type="text" class="form_field phonenumber" />
-						</label>
-						<img id="LimitedBusinessPhoneImage" class="field_status required"/>
-					</div>
-				</div>
+                <div class="control-group">
+                    <div class="controls">
+                        <label class="control-label attardi-input">
+                            <span>Business phone</span>
+                            <input id="LimitedBusinessPhone" name="LimitedBusinessPhone" type="text" class="form_field phonenumber" />
+                        </label>
+                        <img id="LimitedBusinessPhoneImage" class="field_status required" />
+                    </div>
+                </div>
 
                 
-				<input type="hidden" name="LimitedRefNum" class="RefNum" />
+                <input type="hidden" name="LimitedRefNum" class="RefNum" />
 
-				<div class="offline employee-count"></div>
+                <div class="offline employee-count"></div>
 
-				<div class="directors"></div>
-			}
-		</div>
+                <div class="directors"></div>
+            }
+        </div>
 
-		<div class="form_buttons_container">
-			<a href="#" class="next btn-continue button orange continue disabled">Continue</a>
-			<a href="#" class="back btn-back button grey">Back</a>
-		</div>
-	</div>
+        <div class="form_buttons_container">
+            <a href="#" class="next btn-continue button orange continue disabled">Continue</a>
+            <a href="#" class="back btn-back button grey">Back</a>
+        </div>
+    </div>
 </script>
 
-@helper AdditionalCompanyInfo(string prefix){
+@helper AdditionalCompanyInfo(string prefix)
+{
     <div class="offline">
         <div class="control-group form_field_container">
             <div class="controls">
@@ -480,48 +488,48 @@
 }
 
 <script id="address-popup-template" type="text/template">
-	@{Html.RenderPartial("_AddressPopupTemplate");}
+    @{Html.RenderPartial("_AddressPopupTemplate");}
 </script>
 
 <script id="address-template" type="text/template">
-	@{Html.RenderPartial("_AddressTemplate");}
+    @{Html.RenderPartial("_AddressTemplate");}
 </script>
 
 <script id="oneDirector" type="text/template">
-	<%_.each(directors, function(director, i){%>
-		<div class="Directors">	
-			<h1 class="form_start" preffix="<%-preffix%>" seqno="<%=i%>">Director #<%=i+1%><a style="margin-left: 15px; margin-bottom: 7px" number="<%=i+1%>" href="#" class="removeDirector btn green">Remove</a></h1>
+    <%_.each(directors, function(director, i){%>
+        <div class="Directors">
+            <h1 class="form_start" preffix="<%-preffix%>" seqno="<%=i%>">Director #<%=i+1%><a style="margin-left: 15px; margin-bottom: 7px" number="<%=i+1%>" href="#" class="removeDirector btn green">Remove</a></h1>
 
-			<div class="control-group">
-				<div class="controls">
-					<label class="control-label attardi-input">
-						<span>Name</span>
-						<input class="form_field director_name_part" id="<%-preffix%>[<%=i%>].Name" name="<%-preffix%>[<%=i%>].Name" type="text" value="<%- director.Name %>" />
-					</label>
-					<img id="<%-preffix%>[<%=i%>].NameImage" class="field_status required" />
-				</div>
-			</div>
+            <div class="control-group">
+                <div class="controls">
+                    <label class="control-label attardi-input">
+                        <span>Name</span>
+                        <input class="form_field director_name_part" id="<%-preffix%>[<%=i%>].Name" name="<%-preffix%>[<%=i%>].Name" type="text" value="<%- director.Name %>" />
+                    </label>
+                    <img id="<%-preffix%>[<%=i%>].NameImage" class="field_status required" />
+                </div>
+            </div>
 
-			<div class="control-group">
-				<div class="controls">
-					<label class="control-label attardi-input">
-						<span>Middle initial</span>
-						<input class="form_field director_name_part nonrequired alphaOnly" id="<%-preffix%>[<%=i%>].Middle" name="<%-preffix%>[<%=i%>].Middle" type="text" value="<%- director.Middle %>" />
-					</label>
-					<img id="<%-preffix%>[<%=i%>].MiddleImage" class="field_status"  />
-				</div>
-			</div>
+            <div class="control-group">
+                <div class="controls">
+                    <label class="control-label attardi-input">
+                        <span>Middle initial</span>
+                        <input class="form_field director_name_part nonrequired alphaOnly" id="<%-preffix%>[<%=i%>].Middle" name="<%-preffix%>[<%=i%>].Middle" type="text" value="<%- director.Middle %>" />
+                    </label>
+                    <img id="<%-preffix%>[<%=i%>].MiddleImage" class="field_status" />
+                </div>
+            </div>
 
-			<div class="control-group">
-				<div class="controls">
-					<label class="control-label attardi-input">
-						<span>Surname</span>
-						<input class="form_field director_surname_part" id="<%-preffix%>[<%=i%>].Surname" name="<%-preffix%>[<%=i%>].Surname" type="text" value="<%- director.Surname %>" />
-					</label>
-					<img id="<%-preffix%>[<%=i%>].SurnameImage" class="field_status required" />
-				</div>
-			</div>
-            
+            <div class="control-group">
+                <div class="controls">
+                    <label class="control-label attardi-input">
+                        <span>Surname</span>
+                        <input class="form_field director_surname_part" id="<%-preffix%>[<%=i%>].Surname" name="<%-preffix%>[<%=i%>].Surname" type="text" value="<%- director.Surname %>" />
+                    </label>
+                    <img id="<%-preffix%>[<%=i%>].SurnameImage" class="field_status required" />
+                </div>
+            </div>
+
             <div class="form_field_container FormRadioCtrl">
 				<span>
 					<input class="director_gender" <%if(director.Gender == 'M'){%>checked="checked"<%}%> type="radio" name="<%-preffix%>[<%=i%>].Gender" value="M" id="<%-preffix%>[<%=i%>].FormRadioCtrl_M"><label for="<%-preffix%>[<%=i%>].GenderCtrl_M">Male</label>
@@ -530,54 +538,54 @@
 				<img id="<%-preffix%>[<%=i%>].GenderImage" class="field_status required gender_image" />
 			</div>
 
-			@EzForm.DateInput("<%-preffix%>[<%=i%>].DateOfBirth", "Date of Birth", css: "director_date", required: true, statusIcon: true)
+            @EzForm.DateInput("<%-preffix%>[<%=i%>].DateOfBirth", "Date of Birth", css: "director_date", required: true, statusIcon: true)
 
-			<div class="control-group">
-				<div class="controls">
-					<label class="control-label attardi-input">
-						<span>Email</span>
-						<input class="form_field director_email" id="<%-preffix%>[<%=i%>].Email" name="<%-preffix%>[<%=i%>].Email" type="email" value="<%- director.Email %>" />
-					</label>
-					<img id="<%-preffix%>[<%=i%>].EmailImage" class="field_status required" />
-				</div>
-			</div>
+            <div class="control-group">
+                <div class="controls">
+                    <label class="control-label attardi-input">
+                        <span>Email</span>
+                        <input class="form_field director_email" id="<%-preffix%>[<%=i%>].Email" name="<%-preffix%>[<%=i%>].Email" type="email" value="<%- director.Email %>" />
+                    </label>
+                    <img id="<%-preffix%>[<%=i%>].EmailImage" class="field_status required" />
+                </div>
+            </div>
 
-			<div class="control-group">
-				<div class="controls">
-					<label class="control-label attardi-input">
-						<span>Best contact number</span>
-						<input class="form_field director_phone phonenumber" id="<%-preffix%>[<%=i%>].Phone" name="<%-preffix%>[<%=i%>].Phone" type="text" value="<%- director.Phone %>" />
-					</label>
-					<img id="<%-preffix%>[<%=i%>].PhoneImage" class="field_status required" />
-				</div>
-			</div>
+            <div class="control-group">
+                <div class="controls">
+                    <label class="control-label attardi-input">
+                        <span>Best contact number</span>
+                        <input class="form_field director_phone phonenumber" id="<%-preffix%>[<%=i%>].Phone" name="<%-preffix%>[<%=i%>].Phone" type="text" value="<%- director.Phone %>" />
+                    </label>
+                    <img id="<%-preffix%>[<%=i%>].PhoneImage" class="field_status required" />
+                </div>
+            </div>
 
-			<div class="director_address">
-			@EzForm.AddressInput("<%-preffix%>Address<%=i%>", "Address")
-			</div>
+            <div class="director_address">
+                @EzForm.AddressInput("<%-preffix%>Address<%=i%>", "Address")
+            </div>
 
-			<input type="hidden" name="<%-preffix%>[<%=i%>].NameImage" value="<%- director.NameStatus %>" />
-			<input type="hidden" name="<%-preffix%>[<%=i%>].MiddleImage" value="<%- director.MiddleStatus %>" />
-			<input type="hidden" name="<%-preffix%>[<%=i%>].SurnameImage" value="<%- director.SurnameStatus %>" />
-			<input type="hidden" name="<%-preffix%>[<%=i%>].GenderImage" value="<%- director.GenderStatus %>" />
-			<input type="hidden" name="<%-preffix%>[<%=i%>].DateOfBirthImage" value="<%- director.DateOfBirthStatus %>" />
-		</div>
-	<%
+            <input type="hidden" name="<%-preffix%>[<%=i%>].NameImage" value="<%- director.NameStatus %>" />
+            <input type="hidden" name="<%-preffix%>[<%=i%>].MiddleImage" value="<%- director.MiddleStatus %>" />
+            <input type="hidden" name="<%-preffix%>[<%=i%>].SurnameImage" value="<%- director.SurnameStatus %>" />
+            <input type="hidden" name="<%-preffix%>[<%=i%>].GenderImage" value="<%- director.GenderStatus %>" />
+            <input type="hidden" name="<%-preffix%>[<%=i%>].DateOfBirthImage" value="<%- director.DateOfBirthStatus %>" />
+        </div>
+    <%
 	})
 	%>
 </script>
 
 <script id="lastWizardThankYouPage" type="text/template">
-	<div>
-		<div style="display:inline;">
-			<img height="1" width="1" style="border-style:none;" alt="" src="//www.googleadservices.com/pagead/conversion/985067256/?value=0&amp;label=TBrFCLiQ9gQQ-N3b1QM&amp;guid=ON&amp;script=0"/>
-		</div>
-		<section id="full_width">
-			<div class="full_width">
-				<div style="margin: 0 0 20px 0;">
-					<h2 class="form_section">Your application is complete!</h2>
+    <div>
+        <div style="display: inline;">
+            <img height="1" width="1" style="border-style: none;" alt="" src="//www.googleadservices.com/pagead/conversion/985067256/?value=0&amp;label=TBrFCLiQ9gQQ-N3b1QM&amp;guid=ON&amp;script=0" />
+        </div>
+        <section id="full_width">
+            <div class="full_width">
+                <div style="margin: 0 0 20px 0;">
+                    <h2 class="form_section">Your application is complete!</h2>
 
-					@*This ebay pixel code is commented out now in phase 1 but will be uncommented later - do not delete
+                    @*This ebay pixel code is commented out now in phase 1 but will be uncommented later - do not delete
 					@{
 						if (ebayPixelEnabled)
 						{
@@ -585,51 +593,55 @@
 						}
 					}*@
                     <div class="notoffline">
-					    <p>Your application is now being processed and you should be receiving an email with an offer within the next 30 minutes. Please note that in certain cases the decision may be delayed for up to twelve hours.</p>
-					    <p>In case you don't receive a funding decision from us in the next twelve hours please check your spam or junk folder.
-                           If you do not receive a funding decision from us within the next twelve hours, please check your spam or junk folder. If you still have not received an email, please contact our customer care department by phone: 0800 011 4787 or by emailing: <a href="mailto:customercare@ezbob.com">customercare@ezbob.com</a>.</p>
-					    <p>The criteria for qualifying for funding is a minimum annual turnover of 10,000 pounds. If you have additional accounts we recommend that you link them to ezbob, so we can have a clearer understanding of your business and be able to increase the amount we can offer.</p>
+                        <p>Your application is now being processed and you should be receiving an email with an offer within the next 30 minutes. Please note that in certain cases the decision may be delayed for up to twelve hours.</p>
+                        <p>
+                            In case you don't receive a funding decision from us in the next twelve hours please check your spam or junk folder.
+                           If you do not receive a funding decision from us within the next twelve hours, please check your spam or junk folder. If you still have not received an email, please contact our customer care department by phone: 0800 011 4787 or by emailing: <a href="mailto:customercare@ezbob.com">customercare@ezbob.com</a>.
+                        </p>
+                        <p>The criteria for qualifying for funding is a minimum annual turnover of 10,000 pounds. If you have additional accounts we recommend that you link them to ezbob, so we can have a clearer understanding of your business and be able to increase the amount we can offer.</p>
                     </div>
                     <div class="offline">
-					    <p>Your application is now being processed and you should be receiving an email with an offer in the next business day.</p>
-					    <p>In case you don't receive a funding decision from us in the next 24 hours please check your spam or junk folder.
-                           If you do not receive a funding decision from us within the next twelve hours, please check your spam or junk folder. If you still have not received an email, please contact our customer care department by phone: 0800 011 4787 or by emailing: <a href="mailto:customercare@ezbob.com">customercare@ezbob.com</a>.</p>
-					    <p>The criteria for qualifying for funding is a minimum annual turnover of 150,000 pounds. If you have additional accounts we recommend that you link them to ezbob, so we can have a clearer understanding of your business and be able to increase the amount we can offer.</p>
+                        <p>Your application is now being processed and you should be receiving an email with an offer in the next business day.</p>
+                        <p>
+                            In case you don't receive a funding decision from us in the next 24 hours please check your spam or junk folder.
+                           If you do not receive a funding decision from us within the next twelve hours, please check your spam or junk folder. If you still have not received an email, please contact our customer care department by phone: 0800 011 4787 or by emailing: <a href="mailto:customercare@ezbob.com">customercare@ezbob.com</a>.
+                        </p>
+                        <p>The criteria for qualifying for funding is a minimum annual turnover of 150,000 pounds. If you have additional accounts we recommend that you link them to ezbob, so we can have a clearer understanding of your business and be able to increase the amount we can offer.</p>
                     </div>
-					<p>Thank You,<br>The EZBOB Team</p>
-				</div>
-				<a 
-					href='#'
-					class="btn-continue button orange pull-right"
-					onClick="EzBob.App.GA.trackEventReditect('@Url.Action("Index", "Profile", new { Area = "Customer" })', 'Wizard Complete', 'Go To Account', 'Awaiting Approval'); return false;">
-					Go to Account
-				</a>
-			</div>
-		</section>
-		<div class="clear"></div>
-		<br />
-		<br />
-		<br />
-	</div>
+                    <p>Thank You,<br>
+                        The EZBOB Team</p>
+                </div>
+                <a 
+                    href='#'
+                    class="btn-continue button orange pull-right"
+                    onClick="EzBob.App.GA.trackEventReditect('@Url.Action("Index", "Profile", new { Area = "Customer" })', 'Wizard Complete', 'Go To Account', 'Awaiting Approval'); return false;">Go to Account
+                </a>
+            </div>
+        </section>
+        <div class="clear"></div>
+        <br />
+        <br />
+        <br />
+    </div>
 </script>
 
 @{
-Html.RenderPartial("_TargetingTemplate");
+    Html.RenderPartial("_TargetingTemplate");
 }
 
 <script id="consent-agreement-temlate" type="text/template">
-	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-		<h3 id="myModalLabel">Consent</h3>
-	</div>
-	<div id="consent-conent" class="modal-body consent-dialog">
-		@{Html.RenderPartial("~/Areas/Customer/Views/Consent/Commercial.cshtml");}
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Consent</h3>
+    </div>
+    <div id="consent-conent" class="modal-body consent-dialog">
+        @{Html.RenderPartial("~/Areas/Customer/Views/Consent/Commercial.cshtml");}
 
-		<p><b>Agreed by:</b><%-firstName%> <%-middleInitial%> <%-surname%></p>
-		<p><b>Agreed on:</b> <%-EzBob.formatDate(date)%></p>
-	</div>
-	<div class="modal-footer">
-		<a href="#" class="pull-right print print-link">Print</a>
-		<a style="margin-right: 20px;"class="pull-right download pdf-link">Download</a>
-	</div>
+        <p><b>Agreed by:</b><%-firstName%> <%-middleInitial%> <%-surname%></p>
+        <p><b>Agreed on:</b> <%-EzBob.formatDate(date)%></p>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="pull-right print print-link">Print</a>
+        <a style="margin-right: 20px;" class="pull-right download pdf-link">Download</a>
+    </div>
 </script>

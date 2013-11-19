@@ -632,9 +632,6 @@ select.SubBank::-webkit-scrollbar {
 
 	.marketing_container {
 		text-align: center;
-        display: table-cell;
-        width: inherit;
-        
 	}
 
     .marketing_container .marketing_message {
@@ -644,10 +641,11 @@ select.SubBank::-webkit-scrollbar {
         margin: 0 0 20px 0;
         font-size: 16px;
         color: #71a61f;
-        display: -webkit-box;
     }
         .marketing_container .marketing_message ul {
-            margin: 0;
+            margin-top: 10px;
+            margin-left: 0;
+            margin-right: 0;
         }
 	.marketing_container .marketing_message li {
 		font-size: 12px !important;
