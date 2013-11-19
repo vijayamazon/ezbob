@@ -16,7 +16,7 @@
 
 @using (Html.BeginForm("SignUp", "Account", new {Area = ""}, FormMethod.Post, new {@class = "signup clearfix"}))
 {
-    <h2 class="form_start">Create an Account</h2>
+    <h2 class="form_start">Create an account</h2>
     
     if (ebayPixelEnabled)
     {
@@ -25,7 +25,7 @@
     
 	<div class="form_field_container">
 		<label class="attardi-input">
-			<span>Email Address</span>
+			<span>Email address</span>
 			<input type="email" name="Email" id="Email" tabindex="1" class="form_field" ui-event-control-id="signup:email" />
 		</label>
 		<img id="EmailImage" class="field_status required"/>
@@ -42,7 +42,7 @@
 
 	<div class="form_field_container">
 		<label class ="attardi-input">
-			<span>Confirm Password</span>
+			<span>Confirm password</span>
 			<input type="password" tabindex="3" class="form_field" name="signupPass2" id="signupPass2" ui-event-control-id="signup:password2" />
 		</label>
 		<img id="Password2Image" class="field_status required"/>
@@ -52,7 +52,7 @@
 		<!-- Don't remove the SPAN, its job is to display box-shadow and nothing else. -->
 		<span class="inform">
 			<label class="attardi-input">
-				<span>Secret Question</span>
+				<span>Secret question</span>
 				<select name="securityQuestion" id="securityQuestion" tabindex="4" class="form_field" ui-event-control-id="signup:security_question">
 					<option value=""></option>
 					@if (securityQuestions != null) {
@@ -68,7 +68,7 @@
 
     <div class="form_field_container">
         <label class="attardi-input">
-            <span>Secret Answer</span>
+            <span>Secret answer</span>
             <input type="text" name="SecurityAnswer" id="SecurityAnswer" tabindex="5" class="form_field" ui-event-control-id="signup:security-answer" />
         </label>
         <img id="SecretAnswerImage" class="field_status required"/>
@@ -76,11 +76,11 @@
     
     if (isOffline)
     {
-        <h2 class="form_start">Requested Loan</h2>
+        <h2 class="form_start">Requested loan</h2>
     
         <div class="form_field_container">
             <label class="attardi-input">
-                <span>Requested Loan Amount</span>
+                <span>Requested loan amount</span>
                 <input type="text" name="amount" id="amount" tabindex="6" class="form_field" ui-event-control-id="signup:requested-amount" />
             </label>
             <img id="amountImage" class="field_status"/>
@@ -107,7 +107,7 @@
 
         <div class="form_field_container hide" id="otherReasonDiv">
             <label class="attardi-input">
-                <span>Other Reason</span>
+                <span>Other reason</span>
                 <input type="text" name="otherCustomerReason" id="otherCustomerReason" tabindex="8" class="form_field" ui-event-control-id="signup:other-reason" />
             </label>
             <img id="otherReasonImage" class="field_status required"/>
@@ -116,7 +116,7 @@
         <div class="form_field_container">
             <span class="inform">
                 <label class="attardi-input">
-                    <span>Source Of Repayment</span>
+                    <span>Source of repayment</span>
                     <select name="customerSourceOfRepayment" id="customerSourceOfRepayment" tabindex="9" class="form_field" ui-event-control-id="signup:repayment-source-list">
                         <option value=""></option>
                         @if (customerSourceOfRepayment != null)
@@ -134,7 +134,7 @@
 
         <div class="form_field_container hide" id="otherSourceDiv">
             <label class="attardi-input">
-                <span>Other Source Of Repayment</span>
+                <span>Other source of repayment</span>
                 <input type="text" name="otherCustomerSourceOfRepayment" id="otherCustomerSourceOfRepayment" tabindex="10" class="form_field" ui-event-control-id="signup:other-repayment-source" />
             </label>
             <img id="otherCustomerSourceOfRepaymentImage" class="field_status required"/>
@@ -144,7 +144,7 @@
     {
         <div class="form_field_container">
             <label class ="attardi-input">
-                <span>Optional Promo Code</span>
+                <span>Promotional code (optional)</span>
                 <input type="text" class="form_field" name="promoCode" id="promoCode" ui-event-control-id="signup:promo-code"/>
             </label>
             <img id="promoCodeImage" class="field_status"/>
@@ -160,13 +160,13 @@
 	if (isOffline) {
 		<div class="hide">
 			<div id="offline_help" class="help_window">
-				<h2>Welcome to the EZBOB Application Process</h2>
-				<p>Please find below what you will need to complete the application successfully.</p>
-				<p>Good Luck, and please contact us with any issue, question or comment.</p>
+				<h2>Welcome to the ezbob application process</h2>
+				<p>Please find below what you need to complete your application successfully.</p>
+				@*<p>Good Luck, and please contact us with any issue, question or comment.</p>*@
 
 				<div class="help_image help_offline"></div>
 
-				<p>The Application is a quick process – have the information ready and you will be able to complete in 5 minutes.</p>
+				<p>Complete it in five minutes.</p>
 
 				<br>
 

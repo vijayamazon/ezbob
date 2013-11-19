@@ -1,6 +1,4 @@
-﻿@using EzBob.Web.Infrastructure
-@using StructureMap
-@model dynamic
+﻿@model dynamic
 <script id="store-info" type="text/template">
 	<div>
 		<h2 class="form_start">Link Accounts</h2>
@@ -16,9 +14,7 @@
 			}
 		}*@
 
-		<div class="full_width" style="display: none;" id="online_entry_message">You can link one account to be approved for a loan.
-			However, the more you link, the more funds you can get.
-		</div>
+		<div class="full_width" style="display: none;" id="online_entry_message">To be approved for a loan, link at least one account. The more accounts you link, the more funds you can borrow.</div>
 
 		<div class="full_width" style="display: none;" id="offline_entry_message">You must <strong>link</strong> or <strong>upload</strong> your
 			<span class="green btn" onclick="EzBob.App.trigger('ct:storebase.shops.connect', 'HMRC')">HM Revenue &amp; Customs</span>
