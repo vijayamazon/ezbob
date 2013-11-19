@@ -1,5 +1,5 @@
-(function() {
-  var root, _ref, _ref1,
+﻿(function() {
+  var root,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -10,11 +10,11 @@
   EzBob.Underwriter = EzBob.Underwriter || {};
 
   EzBob.Underwriter.SettingsApprovalModel = (function(_super) {
+
     __extends(SettingsApprovalModel, _super);
 
     function SettingsApprovalModel() {
-      _ref = SettingsApprovalModel.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return SettingsApprovalModel.__super__.constructor.apply(this, arguments);
     }
 
     SettingsApprovalModel.prototype.url = window.gRootPath + "Underwriter/StrategySettings/AutomationApproval";
@@ -24,11 +24,11 @@
   })(Backbone.Model);
 
   EzBob.Underwriter.SettingsApprovalView = (function(_super) {
+
     __extends(SettingsApprovalView, _super);
 
     function SettingsApprovalView() {
-      _ref1 = SettingsApprovalView.__super__.constructor.apply(this, arguments);
-      return _ref1;
+      return SettingsApprovalView.__super__.constructor.apply(this, arguments);
     }
 
     SettingsApprovalView.prototype.template = "#approval-settings-template";
@@ -69,7 +69,6 @@
     SettingsApprovalView.prototype.update = function() {
       var xhr,
         _this = this;
-
       xhr = this.model.fetch();
       return xhr.done(function() {
         return _this.render();

@@ -4,9 +4,6 @@ EzBob.Profile = EzBob.Profile or {}
 
 class EzBob.Profile.InviteFriendView extends Backbone.Marionette.Layout
     template: "#invite-friend-template"
-    
-    initialize: ->
-        
 
     events: 
         'click .inviteFriendHelp': 'inviteFriendHelpClicked'
@@ -19,7 +16,4 @@ class EzBob.Profile.InviteFriendView extends Backbone.Marionette.Layout
         .done =>
             @render()
             scrollTop()
-
-    onRender: ->
-        
 

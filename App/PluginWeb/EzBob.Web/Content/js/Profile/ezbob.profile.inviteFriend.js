@@ -19,13 +19,18 @@
 
     InviteFriendView.prototype.template = "#invite-friend-template";
 
-    InviteFriendView.prototype.initialize = function() {};
-
     InviteFriendView.prototype.events = {
-      'click .edit-personal': 'editPersonalViewShow'
+      'click .inviteFriendHelp': 'inviteFriendHelpClicked'
     };
 
-    InviteFriendView.prototype.editPersonalViewShow = function() {};
+    InviteFriendView.prototype.inviteFriendHelpClicked = function() {
+      return this.$el.find('.inviteFriendHelp').colorbox({
+        href: "#inviteFriendHelp",
+        inline: true,
+        transition: 'none',
+        open: true
+      });
+    };
 
     InviteFriendView.prototype.reload = function() {
       var _this = this;
@@ -34,8 +39,6 @@
         return scrollTop();
       });
     };
-
-    InviteFriendView.prototype.onRender = function() {};
 
     return InviteFriendView;
 
