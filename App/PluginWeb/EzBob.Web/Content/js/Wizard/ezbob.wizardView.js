@@ -184,7 +184,6 @@ EzBob.WizardView = Backbone.View.extend({
         var template = this.template();
         this.$el.html(template);
 
-        this.renderSteps();
         this.stepChanged();
 
         var notifications = new EzBob.NotificationsView({ el: this.$el.find('.notifications') });
@@ -259,24 +258,22 @@ EzBob.WizardView = Backbone.View.extend({
         this.router.navTo(current);
     },
 
-    renderSteps: function () {
+    renderStep: function (current) {
         var ul = this.$el.find('.pages');
 
-        _.each(this.steps, function (s) {
-            var view = s.view.render();
+        var view = this.steps[current].view.render();
 
-            view.$el.hide().appendTo(ul);
-            view.$el.find('.chzn-select').chosen({ disable_search_threshold: 10 });
-            if (view.$el.find('#captcha').length > 0) {
-                view.captcha = new EzBob.Captcha({ elementId: 'captcha', tabindex: 12 });
-                view.captcha.render();
-            }
-        });
+        view.$el.hide().appendTo(ul);
+        view.$el.find('.chzn-select').chosen({ disable_search_threshold: 10 });
+        if (view.$el.find('#captcha').length > 0) {
+            view.captcha = new EzBob.Captcha({ elementId: 'captcha', tabindex: 12 });
+            view.captcha.render();
+        }
     },
 
     stepChanged: function () {
         var current = this.model.get('current');
-
+        this.renderStep(current);
         var data = {
             steps: this.steps,
             current: current,
