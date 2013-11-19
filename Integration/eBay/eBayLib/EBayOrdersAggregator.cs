@@ -74,11 +74,23 @@ namespace EzBob.eBayLib
 			return val.HasValue ? val.Value : 0;
 		}
 
-		private double GetTotalSumOfOrders( IEnumerable<EbayDatabaseOrderItem> orders )
+		private double GetTotalSumOfOrders(IEnumerable<EbayDatabaseOrderItem> orders)
 		{
-			return orders.Where( o => o.OrderStatus == EBayOrderStatusCodeType.Completed ||
+			return orders.Where(o => o.OrderStatus == EBayOrderStatusCodeType.Completed ||
 				o.OrderStatus == EBayOrderStatusCodeType.Authenticated ||
-				o.OrderStatus == EBayOrderStatusCodeType.Shipped ).Sum( o => CurrencyConverter.ConvertToBaseCurrency( o.Total.CurrencyCode, o.Total.Value, o.CreatedTime ).Value );
+				o.OrderStatus == EBayOrderStatusCodeType.Shipped).Sum(o => CurrencyConverter.ConvertToBaseCurrency(o.Total.CurrencyCode, o.Total.Value, o.CreatedTime).Value);
+		}
+
+		private double GetTotalSumOfOrdersAnnualized(IEnumerable<EbayDatabaseOrderItem> orders)
+		{
+			var ordersWithExtraInfo = orders as ReceivedDataListTimeDependentInfo<EbayDatabaseOrderItem>;
+			if (ordersWithExtraInfo == null)
+			{
+				return 0;
+			}
+			
+			double sum = GetTotalSumOfOrders(orders);
+			return AnnualizeHelper.AnnualizeSum(ordersWithExtraInfo.TimePeriodType, ordersWithExtraInfo.SubmittedDate, sum);
 		}
 
 		protected override object InternalCalculateAggregatorValue( eBayDatabaseFunctionType functionType, IEnumerable<EbayDatabaseOrderItem> orders )
@@ -101,10 +113,13 @@ namespace EzBob.eBayLib
 					return GetOrdersCancellationRate( orders );
 
 				case eBayDatabaseFunctionType.TotalItemsOrdered:
-					return GetTotalItemsOrdered( orders );
+					return GetTotalItemsOrdered(orders);
 
 				case eBayDatabaseFunctionType.TotalSumOfOrders:
-					return GetTotalSumOfOrders( orders );
+					return GetTotalSumOfOrders(orders);
+
+				case eBayDatabaseFunctionType.TotalSumOfOrdersAnnualized:
+					return GetTotalSumOfOrdersAnnualized(orders);
 
 				default:
 					throw new NotImplementedException();

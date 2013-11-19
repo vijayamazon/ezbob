@@ -436,6 +436,7 @@
 						AmazonDatabaseFunctionType.NumOfOrders, 						
 						AmazonDatabaseFunctionType.TotalItemsOrdered, 
 						AmazonDatabaseFunctionType.TotalSumOfOrders, 
+						AmazonDatabaseFunctionType.TotalSumOfOrdersAnnualized, 
 						AmazonDatabaseFunctionType.OrdersCancellationRate, 
 					};
 

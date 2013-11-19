@@ -67,9 +67,21 @@ namespace EzBob.AmazonLib
 			return orders.Where( o => o.OrderStatus == AmazonOrdersList2ItemStatusType.Shipped && o.NumberOfItemsShipped != null ).Sum( o => o.NumberOfItemsShipped.Value );
 		}
 
-		private double GetTotalSumOfOrders( IEnumerable<AmazonOrderItem2> orders )
+		private double GetTotalSumOfOrders(IEnumerable<AmazonOrderItem2> orders)
 		{
-			return orders.Where( o => o.OrderStatus == AmazonOrdersList2ItemStatusType.Shipped ).Sum( o => CurrencyConverter.ConvertToBaseCurrency( o.OrderTotal.CurrencyCode, o.OrderTotal.Value, o.PurchaseDate ).Value );
+			return orders.Where(o => o.OrderStatus == AmazonOrdersList2ItemStatusType.Shipped).Sum(o => CurrencyConverter.ConvertToBaseCurrency(o.OrderTotal.CurrencyCode, o.OrderTotal.Value, o.PurchaseDate).Value);
+		}
+
+		private double GetTotalSumOfOrdersAnnualized(IEnumerable<AmazonOrderItem2> orders)
+		{
+			var receivedDataListTimeDependentInfo = orders as ReceivedDataListTimeDependentInfo<AmazonOrderItem2>;
+			if (receivedDataListTimeDependentInfo == null)
+			{
+				return 0;
+			}
+			
+			double totalSumOfOrders = GetTotalSumOfOrders(orders);
+			return AnnualizeHelper.AnnualizeSum(receivedDataListTimeDependentInfo.TimePeriodType, receivedDataListTimeDependentInfo.SubmittedDate, totalSumOfOrders);
 		}
 
 		protected override object InternalCalculateAggregatorValue( AmazonDatabaseFunctionType functionType, IEnumerable<AmazonOrderItem2> orders )
@@ -92,10 +104,13 @@ namespace EzBob.AmazonLib
 					return GetOrdersCancellationRate( orders );
 
 				case AmazonDatabaseFunctionType.TotalItemsOrdered:
-					return GetTotalItemsOrdered( orders );
-				
+					return GetTotalItemsOrdered(orders);
+
 				case AmazonDatabaseFunctionType.TotalSumOfOrders:
-					return GetTotalSumOfOrders( orders );
+					return GetTotalSumOfOrders(orders);
+
+				case AmazonDatabaseFunctionType.TotalSumOfOrdersAnnualized:
+					return GetTotalSumOfOrdersAnnualized(orders);
 
 				/*case AmazonDatabaseFunctionType.ReturnsToSalesRate:
 					return GetReturnsToSalesRate( orders );

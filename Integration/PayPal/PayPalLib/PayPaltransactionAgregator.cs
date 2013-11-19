@@ -45,6 +45,8 @@ namespace EzBob.PayPal
 			{
 				case PayPalDatabaseFunctionType.TotalNetInPayments:
 					return GetTotalNetInPayments(data);
+				case PayPalDatabaseFunctionType.TotalNetInPaymentsAnnualized:
+					return GetTotalNetInPaymentsAnnualized(data);
 				case PayPalDatabaseFunctionType.TotalNetOutPayments:
 					return GetTotalNetOutPayments(data);
 				case PayPalDatabaseFunctionType.TransactionsNumber:
@@ -219,6 +221,18 @@ namespace EzBob.PayPal
 					   .Sum(
 						   t =>
 						   CurrencyConverter.ConvertToBaseCurrency(t.NetAmount.CurrencyCode, t.NetAmount.Value, t.Created).Value);
+		}
+
+		private object GetTotalNetInPaymentsAnnualized(IEnumerable<PayPalTransactionItem> data)
+		{
+			var dataWithExtraInfo = data as ReceivedDataListTimeDependentInfo<PayPalTransactionItem>;
+			if (dataWithExtraInfo == null)
+			{
+				return 0;
+			}
+			
+			double sum = (double)GetTotalNetInPayments(data);
+			return AnnualizeHelper.AnnualizeSum(dataWithExtraInfo.TimePeriodType, dataWithExtraInfo.SubmittedDate, sum);
 		}
 
 		private double GetSum(IEnumerable<PayPalTransactionItem> data, IEnumerable<MP_PayPalAggregationFormula> formula, string name = "")

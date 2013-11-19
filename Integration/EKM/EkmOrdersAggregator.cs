@@ -61,11 +61,23 @@ namespace EKM
              );
         }
 
-        private double GetTotalSumOfOrders(IEnumerable<EkmOrderItem> orders)
-        {
-            return orders.Where(o => o.TotalCost.HasValue && !_ekmCancelledStatusList.Contains(o.OrderStatus.Trim().ToLower())).
-                Sum(o => (double)o.TotalCost /*CurrencyConverter.ConvertToBaseCurrency(o.OrderTotal.CurrencyCode, o.OrderTotal.Value, o.PurchaseDate).Value*/);
-        }
+		private double GetTotalSumOfOrders(IEnumerable<EkmOrderItem> orders)
+		{
+			return orders.Where(o => o.TotalCost.HasValue && !_ekmCancelledStatusList.Contains(o.OrderStatus.Trim().ToLower())).
+				Sum(o => (double)o.TotalCost /*CurrencyConverter.ConvertToBaseCurrency(o.OrderTotal.CurrencyCode, o.OrderTotal.Value, o.PurchaseDate).Value*/);
+		}
+
+		private double GetTotalSumOfOrdersAnnualized(IEnumerable<EkmOrderItem> orders)
+		{
+			var ordersWithExtraInfo = orders as ReceivedDataListTimeDependentInfo<EkmOrderItem>;
+			if (ordersWithExtraInfo == null)
+			{
+				return 0;
+			}
+			
+			double totalSumOfOrders = GetTotalSumOfOrders(orders);
+			return AnnualizeHelper.AnnualizeSum(ordersWithExtraInfo.TimePeriodType, ordersWithExtraInfo.SubmittedDate, totalSumOfOrders);
+		}
 
         private double GetTotalSumOfCancelledOrders(IEnumerable<EkmOrderItem> orders)
         {
@@ -136,10 +148,13 @@ namespace EKM
                     return GetOrdersCount(orders);
 
                 case EkmDatabaseFunctionType.AverageSumOfOrder:
-                    return GetAverageSumOfOrder(orders);
+					return GetAverageSumOfOrder(orders);
 
-                case EkmDatabaseFunctionType.TotalSumOfOrders:
-                    return GetTotalSumOfOrders(orders);
+				case EkmDatabaseFunctionType.TotalSumOfOrders:
+					return GetTotalSumOfOrders(orders);
+
+				case EkmDatabaseFunctionType.TotalSumOfOrdersAnnualized:
+					return GetTotalSumOfOrdersAnnualized(orders);
 
                 case EkmDatabaseFunctionType.NumOfCancelledOrders:
                     return GetCancelledOrdersCount(orders);

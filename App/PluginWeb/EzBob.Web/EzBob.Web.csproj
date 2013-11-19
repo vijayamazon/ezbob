@@ -1072,9 +1072,6 @@
     <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.marketplaces.js">
       <DependentUpon>ezbob.underwriter.marketplaces.coffee</DependentUpon>
     </Content>
-    <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.marketplaces.min.js">
-      <DependentUpon>ezbob.underwriter.marketplaces.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.marketplacesHistory.js">
       <DependentUpon>ezbob.underwriter.marketplacesHistory.coffee</DependentUpon>
     </Content>

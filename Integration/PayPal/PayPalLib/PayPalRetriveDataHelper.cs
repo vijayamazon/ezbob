@@ -142,6 +142,7 @@ namespace EzBob.PayPal
 				{
 					PayPalDatabaseFunctionType.TransactionsNumber,
 					PayPalDatabaseFunctionType.TotalNetInPayments,
+					PayPalDatabaseFunctionType.TotalNetInPaymentsAnnualized,
 					PayPalDatabaseFunctionType.TotalNetOutPayments,
 					PayPalDatabaseFunctionType.TotalNetRevenues,
 					PayPalDatabaseFunctionType.TotalNetExpenses,

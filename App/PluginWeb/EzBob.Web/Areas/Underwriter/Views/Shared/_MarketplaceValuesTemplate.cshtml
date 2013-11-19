@@ -147,7 +147,7 @@
 						<td>Total</td>
 						<td></td>
 						<td></td>
-						<td class="centered"><%- EzBob.formatPoundsNoDecimals(summary.monthSales) %> </td>
+						<td class="centered"><%- EzBob.formatPoundsNoDecimals(summary.monthSales) %><br/><label class="small-text"><%- EzBob.formatPoundsNoDecimals(summary.monthAnnualizedSales) %> </label></td>
 						<td class="centered"><%- EzBob.formatPoundsNoDecimals(summary.anualSales) %> </td>
 						<td class="centered"><%= EzBob.formatPercents(summary.rating, 1) %> </td>
 						<td class="centered"><%- EzBob.formatPoundsNoDecimals(summary.inventory, true) %> </td>
@@ -174,7 +174,7 @@
 						</td>
 						<td><a href="<%- m.SellerInfoStoreURL %>" target="_blank"><%- m.Type %></a></td>
 						<td class="centered"><%- m.age %></td>
-						<td class="centered"><%- EzBob.formatPoundsNoDecimals( m.monthSales) %></td>
+						<td class="centered"><%- EzBob.formatPoundsNoDecimals( m.monthSales) %><br/><label class="small-text"><%- EzBob.formatPoundsNoDecimals(m.monthAnnualizedSales) %> </label></td>
 						<td class="centered"><%- EzBob.formatPoundsNoDecimals( m.anualSales) %></td>
 						<td class="centered"><%- m.RaitingPercent%> %</td>
 						<td class="centered"><%- EzBob.formatPoundsNoDecimals(m.inventory, true) %></td>
@@ -258,14 +258,14 @@
 				var showAsNew = !m.IsNew ? 'hidden-field' : '';
 				%>
 				<tr data-id="<%- m.Id %>" class="<%if(m.Disabled){print('disabled')}%>">
-					<td>
-						<div class="source_labels new-ribbon  <%-showAsNew%>"></div>
-						<div class="<%- sSourceLabels %> <%- sShopName.toLowerCase() %>"></div>
-					</td>
+				    <td>
+				        <div class="source_labels new-ribbon  <%-showAsNew%>"></div>
+				        <div class="<%- sSourceLabels %> <%- sShopName.toLowerCase() %>"></div>
+				    </td>
 					<td><a href="<%- m.SellerInfoStoreURL %>" target="_blank"><%- m.Type %></a></td>
 					<td class="centered"><%- m.age %></td>
 					<td class="centered"><%- ll(m, 'TransactionsNumber', nBehaviour) %></td>
-					<td class="centered"><%- ll(m, 'MonthInPayments', nBehaviour) %></td>
+					<td class="centered"><%- ll(m, 'MonthInPayments', nBehaviour) %><br/><label class="small-text"><%- EzBob.formatPoundsNoDecimals(m.monthAnnualizedSales) %></label></td>
 					<td class="centered"><%- ll(m, 'TotalNetInPayments', nBehaviour) %></td>
 					<td class="centered"><%- (m.Name.toLowerCase() === 'paypoint') ? '-' : ll(m, 'TotalNetOutPayments', nBehaviour) %></td>
 					<td><%- m.UpdatingStatus %> <%- m.LastChecked%>

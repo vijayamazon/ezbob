@@ -1,17 +1,18 @@
-﻿using EZBob.DatabaseLib.Common;
-using EzBob.CommonLib;
-using EZBob.DatabaseLib.DatabaseWrapper.ValueType;
-using System;
-
-namespace EKM
+﻿namespace EKM
 {
+	using EZBob.DatabaseLib.Common;
+	using EzBob.CommonLib;
+	using EZBob.DatabaseLib.DatabaseWrapper.ValueType;
+	using System;
+
     public enum EkmDatabaseFunctionType
     {
         NumOfOrders,
         NumOfCancelledOrders,
         NumOfOtherOrders,
 
-        TotalSumOfOrders,
+		TotalSumOfOrders,
+		TotalSumOfOrdersAnnualized,
         TotalSumOfCancelledOrders,
         TotalSumOfOtherOrders,
 
@@ -30,7 +31,8 @@ namespace EKM
             : base(new EkmDatabaseFunctionTypeConverter())
         {
             CreateFunctionAndAddToCollection(EkmDatabaseFunctionType.NumOfOrders, DatabaseValueTypeEnum.Integer, "{FA09CE65-D6A9-4656-B00C-5E635D2083C2}");
-            CreateFunctionAndAddToCollection(EkmDatabaseFunctionType.TotalSumOfOrders, DatabaseValueTypeEnum.Double, "{8687DABC-C092-4296-92FF-42612A59157A}");
+			CreateFunctionAndAddToCollection(EkmDatabaseFunctionType.TotalSumOfOrders, DatabaseValueTypeEnum.Double, "{8687DABC-C092-4296-92FF-42612A59157A}");
+			CreateFunctionAndAddToCollection(EkmDatabaseFunctionType.TotalSumOfOrdersAnnualized, DatabaseValueTypeEnum.Double, "{9289D308-C204-4865-AB45-B21A83658034}");
             CreateFunctionAndAddToCollection(EkmDatabaseFunctionType.AverageSumOfOrder, DatabaseValueTypeEnum.Double, "{86A7E774-B48B-44C1-8DB1-F3212E5063F2}");
 
             CreateFunctionAndAddToCollection(EkmDatabaseFunctionType.NumOfCancelledOrders, DatabaseValueTypeEnum.Integer, "{DFAE1DC2-F8C6-4C71-A357-0C8A5FE3B23D}");
@@ -70,11 +72,15 @@ namespace EKM
 
                 case EkmDatabaseFunctionType.AverageSumOfOrder:
                     displayName = "Average Sum of Order";
-                    break;
+					break;
 
-                case EkmDatabaseFunctionType.TotalSumOfOrders:
-                    displayName = "Total Sum of Orders";
-                    break;
+				case EkmDatabaseFunctionType.TotalSumOfOrders:
+					displayName = "Total Sum of Orders";
+					break;
+
+				case EkmDatabaseFunctionType.TotalSumOfOrdersAnnualized:
+					displayName = "Total Sum of Orders Annualized";
+					break;
 
                 case EkmDatabaseFunctionType.NumOfCancelledOrders:
                     displayName = "Num of Cancelled Orders";

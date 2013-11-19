@@ -83,6 +83,7 @@ namespace EzBob.eBayDbLib
 		OrdersCancellationRate,
 		TotalItemsOrdered,
 		TotalSumOfOrders,
+		TotalSumOfOrdersAnnualized,
 		InventoryTotalItems,
 		InventoryTotalValue,
         TopCategories
@@ -101,7 +102,8 @@ namespace EzBob.eBayDbLib
 			CreateFunctionAndAddToCollection( eBayDatabaseFunctionType.CancelledOrdersCount, DatabaseValueTypeEnum.Integer, "{35E1D5BD-5516-4333-B8F8-4BDE93528D0B}" );
 			CreateFunctionAndAddToCollection( eBayDatabaseFunctionType.OrdersCancellationRate, DatabaseValueTypeEnum.Double, "{F7557576-C18B-4E31-95EB-D3E84E08BA71}" );
 			CreateFunctionAndAddToCollection( eBayDatabaseFunctionType.TotalItemsOrdered, DatabaseValueTypeEnum.Integer, "{2CEA9947-674A-4E1F-B879-D47E627E6E0D}" );
-			CreateFunctionAndAddToCollection( eBayDatabaseFunctionType.TotalSumOfOrders, DatabaseValueTypeEnum.Double, "{B90CA21F-069B-4076-BB87-D6FC09457971}" );
+			CreateFunctionAndAddToCollection(eBayDatabaseFunctionType.TotalSumOfOrders, DatabaseValueTypeEnum.Double, "{B90CA21F-069B-4076-BB87-D6FC09457971}");
+			CreateFunctionAndAddToCollection(eBayDatabaseFunctionType.TotalSumOfOrdersAnnualized, DatabaseValueTypeEnum.Double, "{29C87037-2133-4873-9208-96A4F0163D54}");
 			CreateFunctionAndAddToCollection( eBayDatabaseFunctionType.InventoryTotalItems, DatabaseValueTypeEnum.Integer, "{4D8E5159-5001-4DD8-8B25-EB86C9D1F891}" );
 			CreateFunctionAndAddToCollection( eBayDatabaseFunctionType.InventoryTotalValue, DatabaseValueTypeEnum.Double, "{E612A31D-C9F8-4636-BDC9-E7671BA29A48}" );
             CreateFunctionAndAddToCollection(eBayDatabaseFunctionType.TopCategories, DatabaseValueTypeEnum.String, "{0E0D49A5-0C37-4820-BC02-0E884059666A}");
@@ -219,6 +221,10 @@ namespace EzBob.eBayDbLib
 
 				case eBayDatabaseFunctionType.TotalSumOfOrders:
 					displayName = "Total Sum of Orders";
+					break;
+
+				case eBayDatabaseFunctionType.TotalSumOfOrdersAnnualized:
+					displayName = "Total Sum of Orders Annualized";
 					break;
 
 				case eBayDatabaseFunctionType.InventoryTotalValue:

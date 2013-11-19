@@ -73,6 +73,12 @@ namespace EzBob.eBayLib
 				case eBayDatabaseFunctionType.TotalSumOfOrders:
 					return GetEbayValue<double>(functionType, orders) + GetTotalSumOfOrders( ordersTeraPeak );
 
+				case eBayDatabaseFunctionType.TotalSumOfOrdersAnnualized:
+					double totalSumOfOrders = GetTotalSumOfOrders(ordersTeraPeak);
+					var receivedDataListTimeDependentInfo = orders as ReceivedDataListTimeDependentInfo<MixedReceivedDataItem>;
+					double annualizedSum = AnnualizeHelper.AnnualizeSum(receivedDataListTimeDependentInfo.TimePeriodType, receivedDataListTimeDependentInfo.SubmittedDate, totalSumOfOrders);
+					return GetEbayValue<double>(functionType, orders) + annualizedSum;
+
 				default:
 					throw new NotImplementedException();
 			}

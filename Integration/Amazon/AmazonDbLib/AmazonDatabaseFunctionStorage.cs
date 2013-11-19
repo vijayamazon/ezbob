@@ -15,6 +15,7 @@ namespace EzBob.AmazonDbLib
 		NumOfOrders,
 		TotalItemsOrdered,
 		TotalSumOfOrders,
+		TotalSumOfOrdersAnnualized,
 		AverageItemsPerOrder,
 		AverageSumOfOrder,
 		CancelledOrdersCount,
@@ -50,7 +51,8 @@ namespace EzBob.AmazonDbLib
 			CreateFunctionAndAddToCollection( AmazonDatabaseFunctionType.CancelledOrdersCount, DatabaseValueTypeEnum.Integer,"{A8B6DBE6-46F9-468C-8179-E9B714A1D131}" ) ;
 			CreateFunctionAndAddToCollection(  AmazonDatabaseFunctionType.OrdersCancellationRate, DatabaseValueTypeEnum.Double, "{0192BC7F-A3E6-4640-A607-0CB2C14C3DF5}" ) ;
 			CreateFunctionAndAddToCollection( AmazonDatabaseFunctionType.TotalItemsOrdered, DatabaseValueTypeEnum.Integer, "{1E360E0A-AAE6-496A-9769-508B9428FDAC}" );
-			CreateFunctionAndAddToCollection(  AmazonDatabaseFunctionType.TotalSumOfOrders,  DatabaseValueTypeEnum.Double,"{63235650-ACD7-4F73-9537-5D762B0B7D0A}" );
+			CreateFunctionAndAddToCollection(AmazonDatabaseFunctionType.TotalSumOfOrders, DatabaseValueTypeEnum.Double, "{63235650-ACD7-4F73-9537-5D762B0B7D0A}");
+			CreateFunctionAndAddToCollection(AmazonDatabaseFunctionType.TotalSumOfOrdersAnnualized, DatabaseValueTypeEnum.Double, "{1F5C801E-B845-400C-BA34-8F2552165B74}");
 			CreateFunctionAndAddToCollection( AmazonDatabaseFunctionType.InventoryTotalItems, DatabaseValueTypeEnum.Integer, "{04A9EB90-E0E6-4CBF-9003-55AA414A16BA}" );
 			CreateFunctionAndAddToCollection( AmazonDatabaseFunctionType.InventoryTotalValue, DatabaseValueTypeEnum.Double, "{94BFA976-BFEF-4DFF-AF25-6D31EF1EDFDD}" );
 			
@@ -115,6 +117,10 @@ namespace EzBob.AmazonDbLib
 
 				case AmazonDatabaseFunctionType.TotalSumOfOrders:
 					displayName = "Total Sum of Orders";
+					break;
+
+				case AmazonDatabaseFunctionType.TotalSumOfOrdersAnnualized:
+					displayName = "Total Sum of Orders Annualized";
 					break;
 
 				case AmazonDatabaseFunctionType.InventoryTotalValue:

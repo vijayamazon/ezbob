@@ -89,6 +89,7 @@ namespace EKM
                     EkmDatabaseFunctionType.AverageSumOfOrder,
                     EkmDatabaseFunctionType.NumOfOrders,
                     EkmDatabaseFunctionType.TotalSumOfOrders,
+                    EkmDatabaseFunctionType.TotalSumOfOrdersAnnualized,
                     EkmDatabaseFunctionType.AverageSumOfCancelledOrder,
                     EkmDatabaseFunctionType.NumOfCancelledOrders,
                     EkmDatabaseFunctionType.TotalSumOfCancelledOrders,

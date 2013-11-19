@@ -788,6 +788,7 @@ namespace EzBob.eBayLib
 						eBayDatabaseFunctionType.NumOfOrders,
 						eBayDatabaseFunctionType.TotalItemsOrdered,
 						eBayDatabaseFunctionType.TotalSumOfOrders,
+						eBayDatabaseFunctionType.TotalSumOfOrdersAnnualized,
 						eBayDatabaseFunctionType.OrdersCancellationRate,
                         eBayDatabaseFunctionType.TopCategories
 					};

@@ -1,14 +1,15 @@
-﻿using System;
-using EZBob.DatabaseLib.Common;
-using EZBob.DatabaseLib.DatabaseWrapper.ValueType;
-using EzBob.CommonLib;
-
-namespace EzBob.PayPalDbLib
+﻿namespace EzBob.PayPalDbLib
 {
+	using System;
+	using EZBob.DatabaseLib.Common;
+	using EZBob.DatabaseLib.DatabaseWrapper.ValueType;
+	using CommonLib;
+
 	public enum PayPalDatabaseFunctionType
 	{
 		TransactionsNumber,
 		TotalNetInPayments,
+		TotalNetInPaymentsAnnualized,
 		TotalNetOutPayments,
 		TotalNetRevenues,
 		TotalNetExpenses,
@@ -40,6 +41,7 @@ namespace EzBob.PayPalDbLib
 		{
 			CreateFunctionAndAddToCollection(PayPalDatabaseFunctionType.TransactionsNumber, DatabaseValueTypeEnum.Integer, "{D51543B7-32D4-450F-A047-58AA72C747E3}");
 			CreateFunctionAndAddToCollection(PayPalDatabaseFunctionType.TotalNetInPayments, DatabaseValueTypeEnum.Double, "{9370A525-890D-402B-9BAA-5C89E9905CA2}");
+			CreateFunctionAndAddToCollection(PayPalDatabaseFunctionType.TotalNetInPaymentsAnnualized, DatabaseValueTypeEnum.Double, "{455D0657-4D4F-4494-85F5-F762E67D1B01}");
 			CreateFunctionAndAddToCollection(PayPalDatabaseFunctionType.TotalNetOutPayments, DatabaseValueTypeEnum.Double, "{B8780D1E-3902-4DD1-97A6-D185F3DE7555}");
 			CreateFunctionAndAddToCollection(PayPalDatabaseFunctionType.TotalNetRevenues, DatabaseValueTypeEnum.Double, "{9E95B0DE-4EBB-433C-B87D-84C124099006}");
 			CreateFunctionAndAddToCollection(PayPalDatabaseFunctionType.TotalNetExpenses, DatabaseValueTypeEnum.Double, "{858D167C-A98B-4DE7-A194-32C0A14604CD}");
@@ -89,9 +91,14 @@ namespace EzBob.PayPalDbLib
 					displayName = "Total Net In Payments";
 					break;
 
+				case PayPalDatabaseFunctionType.TotalNetInPaymentsAnnualized:
+					displayName = "Total Net In Payments Annualized";
+					break;
+
 				case PayPalDatabaseFunctionType.TotalNetOutPayments:
 					displayName = "Total Net Out Payments";
 					break;
+
 				case PayPalDatabaseFunctionType.TotalNetRevenues:
 					displayName = "Total Net Revenues";
 					break;

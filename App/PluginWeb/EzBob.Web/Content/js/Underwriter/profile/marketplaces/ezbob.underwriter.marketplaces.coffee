@@ -13,17 +13,19 @@ class EzBob.Underwriter.MarketPlaceModel extends Backbone.Model
         ai = @get 'AnalysisDataInfo'
         accountAge = @get 'AccountAge'
         monthSales = if ai then (ai.TotalSumofOrders1M or 0) * 1 else 0
+        monthAnnualizedSales = if ai then (ai.TotalSumofOrdersAnnualized12M or 0) * 1 else 0
         anualSales = if ai then (ai.TotalSumofOrders12M or ai.TotalSumofOrders6M or ai.TotalSumofOrders3M or ai.TotalSumofOrders1M or 0) * 1 else 0
         inventory = if ai and not isNaN((ai.TotalValueofInventoryLifetime * 1)) then (ai.TotalValueofInventoryLifetime * 1) else "-"
 
         pp = @get("PayPal")
         if pp
             monthSales = pp.GeneralInfo.MonthInPayments
+            monthAnnualizedSales = pp.GeneralInfo.MonthAnnualized
             anualSales = pp.GeneralInfo.TotalNetInPayments
 
         age = if (accountAge isnt "-" and accountAge isnt 'undefined') then EzBob.SeniorityFormat(accountAge, 0) else "-"
 
-        @set {age: age, monthSales: monthSales, anualSales: anualSales, inventory: inventory}, {silent: true}
+        @set {age: age, monthSales: monthSales, monthAnnualizedSales: monthAnnualizedSales, anualSales: anualSales, inventory: inventory}, {silent: true}
 
 class EzBob.Underwriter.MarketPlaces extends Backbone.Collection
     model: EzBob.Underwriter.MarketPlaceModel
@@ -114,10 +116,12 @@ class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
                 positive : 0
                 negative : 0
                 neutral : 0
+                monthAnnualizedSales : 0
 
         for m in data.marketplaces
             data.summary.monthSales += m.monthSales if m.Disabled == false
             data.summary.anualSales += m.anualSales if m.Disabled == false
+            data.summary.monthAnnualizedSales += m.monthAnnualizedSales if m.Disabled == false
             data.summary.inventory += m.inventory if m.Disabled == false
             data.summary.positive += m.PositiveFeedbacks
             data.summary.negative += m.NegativeFeedbacks

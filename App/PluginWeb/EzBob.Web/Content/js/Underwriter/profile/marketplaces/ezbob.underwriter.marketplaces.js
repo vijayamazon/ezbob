@@ -1,5 +1,5 @@
-﻿(function() {
-  var root,
+(function() {
+  var root, _ref, _ref1, _ref2,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -10,11 +10,11 @@
   EzBob.Underwriter = EzBob.Underwriter || {};
 
   EzBob.Underwriter.MarketPlaceModel = (function(_super) {
-
     __extends(MarketPlaceModel, _super);
 
     function MarketPlaceModel() {
-      return MarketPlaceModel.__super__.constructor.apply(this, arguments);
+      _ref = MarketPlaceModel.__super__.constructor.apply(this, arguments);
+      return _ref;
     }
 
     MarketPlaceModel.prototype.idAttribute = "Id";
@@ -25,21 +25,25 @@
     };
 
     MarketPlaceModel.prototype.recalculate = function() {
-      var accountAge, age, ai, anualSales, inventory, monthSales, pp;
+      var accountAge, age, ai, anualSales, inventory, monthAnnualizedSales, monthSales, pp;
+
       ai = this.get('AnalysisDataInfo');
       accountAge = this.get('AccountAge');
       monthSales = ai ? (ai.TotalSumofOrders1M || 0) * 1 : 0;
+      monthAnnualizedSales = ai ? (ai.TotalSumofOrdersAnnualized12M || 0) * 1 : 0;
       anualSales = ai ? (ai.TotalSumofOrders12M || ai.TotalSumofOrders6M || ai.TotalSumofOrders3M || ai.TotalSumofOrders1M || 0) * 1 : 0;
       inventory = ai && !isNaN(ai.TotalValueofInventoryLifetime * 1) ? ai.TotalValueofInventoryLifetime * 1 : "-";
       pp = this.get("PayPal");
       if (pp) {
         monthSales = pp.GeneralInfo.MonthInPayments;
+        monthAnnualizedSales = pp.GeneralInfo.MonthAnnualized;
         anualSales = pp.GeneralInfo.TotalNetInPayments;
       }
       age = accountAge !== "-" && accountAge !== 'undefined' ? EzBob.SeniorityFormat(accountAge, 0) : "-";
       return this.set({
         age: age,
         monthSales: monthSales,
+        monthAnnualizedSales: monthAnnualizedSales,
         anualSales: anualSales,
         inventory: inventory
       }, {
@@ -52,11 +56,11 @@
   })(Backbone.Model);
 
   EzBob.Underwriter.MarketPlaces = (function(_super) {
-
     __extends(MarketPlaces, _super);
 
     function MarketPlaces() {
-      return MarketPlaces.__super__.constructor.apply(this, arguments);
+      _ref1 = MarketPlaces.__super__.constructor.apply(this, arguments);
+      return _ref1;
     }
 
     MarketPlaces.prototype.model = EzBob.Underwriter.MarketPlaceModel;
@@ -70,11 +74,11 @@
   })(Backbone.Collection);
 
   EzBob.Underwriter.MarketPlacesView = (function(_super) {
-
     __extends(MarketPlacesView, _super);
 
     function MarketPlacesView() {
-      return MarketPlacesView.__super__.constructor.apply(this, arguments);
+      _ref2 = MarketPlacesView.__super__.constructor.apply(this, arguments);
+      return _ref2;
     }
 
     MarketPlacesView.prototype.template = "#marketplace-template";
@@ -94,6 +98,7 @@
 
     MarketPlacesView.prototype.onRender = function() {
       var marketplacesHistoryDiv;
+
       this.$el.find('.mp-error-description').tooltip({
         placement: "bottom"
       });
@@ -128,6 +133,7 @@
 
     MarketPlacesView.prototype.rowClick = function(e) {
       var id, shop;
+
       if (e.target.getAttribute('href')) {
         return;
       }
@@ -160,10 +166,12 @@
     };
 
     MarketPlacesView.prototype.serializeData = function() {
-      var aryCGAccounts, data, isMarketplace, m, total, _i, _len, _ref;
+      var aryCGAccounts, data, isMarketplace, m, total, _i, _len, _ref3;
+
       aryCGAccounts = $.parseJSON($('div#cg-account-list').text());
       isMarketplace = function(x) {
         var cg;
+
         if (!aryCGAccounts[x.get('Name')]) {
           return !x.get('IsPaymentAccount');
         }
@@ -186,17 +194,21 @@
           inventory: 0,
           positive: 0,
           negative: 0,
-          neutral: 0
+          neutral: 0,
+          monthAnnualizedSales: 0
         }
       };
-      _ref = data.marketplaces;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        m = _ref[_i];
+      _ref3 = data.marketplaces;
+      for (_i = 0, _len = _ref3.length; _i < _len; _i++) {
+        m = _ref3[_i];
         if (m.Disabled === false) {
           data.summary.monthSales += m.monthSales;
         }
         if (m.Disabled === false) {
           data.summary.anualSales += m.anualSales;
+        }
+        if (m.Disabled === false) {
+          data.summary.monthAnnualizedSales += m.monthAnnualizedSales;
         }
         if (m.Disabled === false) {
           data.summary.inventory += m.inventory;
@@ -213,6 +225,7 @@
     MarketPlacesView.prototype.disableShop = function(e) {
       var $el, umi,
         _this = this;
+
       $el = $(e.currentTarget);
       umi = $el.attr("umi");
       EzBob.ShowMessage("Disable shop", "Are you sure?", (function() {
@@ -224,6 +237,7 @@
     MarketPlacesView.prototype.doEnableShop = function(umi, enabled) {
       var url, xhr,
         _this = this;
+
       url = enabled ? "" + window.gRootPath + "Underwriter/MarketPlaces/Enable" : "" + window.gRootPath + "Underwriter/MarketPlaces/Disable";
       xhr = $.post(url, {
         umi: umi
@@ -236,6 +250,7 @@
     MarketPlacesView.prototype.enableShop = function(e) {
       var $el, umi,
         _this = this;
+
       $el = $(e.currentTarget);
       umi = $el.attr("umi");
       EzBob.ShowMessage("Enable shop", "Are you sure?", (function() {
@@ -249,12 +264,14 @@
     MarketPlacesView.prototype.reCheckmarketplaces = function(e) {
       var $el, customerId, mpType, okFn, umi,
         _this = this;
+
       $el = $(e.currentTarget);
       umi = $el.attr("umi");
       mpType = $el.attr("marketplaceType");
       customerId = this.model.customerId;
       okFn = function() {
         var xhr;
+
         xhr = $.post("" + window.gRootPath + "Underwriter/MarketPlaces/ReCheckMarketplaces", {
           customerId: customerId,
           umi: umi,
@@ -282,6 +299,7 @@
     MarketPlacesView.prototype.reCheckPaypal = function(e) {
       var el, umi,
         _this = this;
+
       el = $(e.currentTarget);
       umi = el.attr("umi");
       EzBob.ShowMessage("", "Are you sure?", (function() {
@@ -293,6 +311,7 @@
     MarketPlacesView.prototype.doReCheck = function(umi, el) {
       var xhr,
         _this = this;
+
       xhr = $.post("" + window.gRootPath + "Underwriter/PaymentAccounts/ReCheckPaypal", {
         customerId: this.model.customerId,
         umi: umi
@@ -311,6 +330,7 @@
 
     MarketPlacesView.prototype.renewTokenClicked = function(e) {
       var umi;
+
       umi = $(e.currentTarget).data("umi");
       this.renewToken(umi);
       return false;
@@ -318,6 +338,7 @@
 
     MarketPlacesView.prototype.renewToken = function(umi) {
       var xhr;
+
       xhr = $.post("" + window.gRootPath + "Underwriter/MarketPlaces/RenewEbayToken", {
         umi: umi
       });

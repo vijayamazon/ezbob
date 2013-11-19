@@ -612,3 +612,5 @@ table.unlimited-width th, table.unlimited-width td { padding: 8px; }
 .default-customer-status-warning { color: red; }
 
 div#DecisionNotes { text-align: right; font-weight: bold; }
+
+.small-text { font-size: 10px; }

@@ -65,6 +65,7 @@
     <Compile Include="Security\CipherUtility.cs" />
     <Compile Include="Security\Encryptor.cs" />
     <Compile Include="Tests\ExtensionsFixture.cs" />
+    <Compile Include="TimePeriodLogic\AnnualizeHelper.cs" />
     <Compile Include="TimePeriodLogic\ReceivedDataListTimeDependentInfo.cs" />
     <Compile Include="TimePeriodLogic\TimePeriodEnum.cs" />
     <Compile Include="ErrorRetryingInfo.cs" />
