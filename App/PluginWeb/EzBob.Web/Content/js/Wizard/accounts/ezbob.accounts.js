@@ -1,7 +1,4 @@
 ﻿///<reference path="~/Content/js/lib/backbone.js" />
-///<reference path="~/Content/js/Wizard/accounts/ezbob.accounts.paypal.js" />
-///<reference path="~/Content/js/Wizard/accounts/ezbob.accounts.bank.js" />
-///<reference path="~/Content/js/Wizard/ezbob.storebase.js" />
 var EzBob = EzBob || {};
 
 
