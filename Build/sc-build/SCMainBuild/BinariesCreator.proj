@@ -65,23 +65,23 @@
 		<MultiCopy CopyFrom="$(Src)\Integration\FraudChecker\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
 		
 		<!--Stas-->
-		<MultiCopy SourceFiles="$(Src)\Integration\EzBob.Models\bin\$(BuildConfiguration)\EzBob.Models.dll" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy SourceFiles="$(Src)\Integration\Amazon\AmazonLib\bin\$(BuildConfiguration)\AmazonLib.dll" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy SourceFiles="$(Src)\Integration\Amazon\AmazonDbLib\bin\$(BuildConfiguration)\AmazonDbLib.dll" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy SourceFiles="$(Src)\Integration\CommonLib\bin\$(BuildConfiguration)\CommonLib.dll" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy SourceFiles="$(Src)\Integration\eBay\eBayLib\bin\$(BuildConfiguration)\eBayLib.dll" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy SourceFiles="$(Src)\Integration\eBay\eBayDbLib\bin\$(BuildConfiguration)\eBayDbLib.dll" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy SourceFiles="$(Src)\Integration\PayPal\PayPalLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy SourceFiles="$(Src)\Integration\PayPal\PayPalServiceLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy SourceFiles="$(Src)\Integration\DatabaseLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy SourceFiles="$(Src)\Integration\Amazon\AmazonServiceLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy SourceFiles="$(Src)\Integration\eBay\eBayServiceLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy SourceFiles="$(Src)\Integration\ExperianLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy SourceFiles="$(Src)\Integration\EzBob.Configuration\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy SourceFiles="$(Src)\Integration\GuiNodeEzBobLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy SourceFiles="$(Src)\Integration\PayPal\PayPal.Base\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy SourceFiles="$(Src)\Integration\PayPal\PayPal.Permissions\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy SourceFiles="$(Src)\Integration\TeraPeak\TeraPeakServiceLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
+		<MultiCopy CopyFrom="$(Src)\Integration\EzBob.Models\bin\$(BuildConfiguration)\EzBob.Models.dll" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
+		<MultiCopy CopyFrom="$(Src)\Integration\Amazon\AmazonLib\bin\$(BuildConfiguration)\AmazonLib.dll" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
+		<MultiCopy CopyFrom="$(Src)\Integration\Amazon\AmazonDbLib\bin\$(BuildConfiguration)\AmazonDbLib.dll" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
+		<MultiCopy CopyFrom="$(Src)\Integration\CommonLib\bin\$(BuildConfiguration)\CommonLib.dll" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
+		<MultiCopy CopyFrom="$(Src)\Integration\eBay\eBayLib\bin\$(BuildConfiguration)\eBayLib.dll" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
+		<MultiCopy CopyFrom="$(Src)\Integration\eBay\eBayDbLib\bin\$(BuildConfiguration)\eBayDbLib.dll" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
+		<MultiCopy CopyFrom="$(Src)\Integration\PayPal\PayPalLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
+		<MultiCopy CopyFrom="$(Src)\Integration\PayPal\PayPalServiceLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
+		<MultiCopy CopyFrom="$(Src)\Integration\DatabaseLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
+		<MultiCopy CopyFrom="$(Src)\Integration\Amazon\AmazonServiceLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
+		<MultiCopy CopyFrom="$(Src)\Integration\eBay\eBayServiceLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
+		<MultiCopy CopyFrom="$(Src)\Integration\ExperianLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
+		<MultiCopy CopyFrom="$(Src)\Integration\EzBob.Configuration\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
+		<MultiCopy CopyFrom="$(Src)\Integration\GuiNodeEzBobLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
+		<MultiCopy CopyFrom="$(Src)\Integration\PayPal\PayPal.Base\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
+		<MultiCopy CopyFrom="$(Src)\Integration\PayPal\PayPal.Permissions\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
+		<MultiCopy CopyFrom="$(Src)\Integration\TeraPeak\TeraPeakServiceLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
 		<!--End Stas-->
 		
 		<Copy SourceFiles="$(Src)\Integration\EzBob.Models\bin\$(BuildConfiguration)\EzBob.Models.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
