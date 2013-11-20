@@ -13,14 +13,14 @@ class EzBob.Underwriter.MarketPlaceModel extends Backbone.Model
         ai = @get 'AnalysisDataInfo'
         accountAge = @get 'AccountAge'
         monthSales = if ai then (ai.TotalSumofOrders1M or 0) * 1 else 0
-        monthAnnualizedSales = if ai then (ai.TotalSumofOrdersAnnualized12M or 0) * 1 else 0
+        monthAnnualizedSales = if ai then (ai.TotalSumofOrdersAnnualized1M or 0) * 1 else 0
         anualSales = if ai then (ai.TotalSumofOrders12M or ai.TotalSumofOrders6M or ai.TotalSumofOrders3M or ai.TotalSumofOrders1M or 0) * 1 else 0
         inventory = if ai and not isNaN((ai.TotalValueofInventoryLifetime * 1)) then (ai.TotalValueofInventoryLifetime * 1) else "-"
 
         pp = @get("PayPal")
         if pp
             monthSales = pp.GeneralInfo.MonthInPayments
-            monthAnnualizedSales = pp.GeneralInfo.MonthAnnualized
+            monthAnnualizedSales = pp.GeneralInfo.MonthInPaymentsAnnualized
             anualSales = pp.GeneralInfo.TotalNetInPayments
 
         age = if (accountAge isnt "-" and accountAge isnt 'undefined') then EzBob.SeniorityFormat(accountAge, 0) else "-"

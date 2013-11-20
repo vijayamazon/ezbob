@@ -36,17 +36,20 @@
 			var tnip = 0.0;
 			var tc = 0;
 			var mip = 0.0;
+			var mipa = 0.0;
 			if (av != null)
 			{
 				var tnipN = GetClosestToYear(av.Where(x => x.ParameterName == "Total Net In Payments"));
 				var tnopN = GetClosestToYear(av.Where(x => x.ParameterName == "Total Net Out Payments"));
 				var tcN = GetClosestToYear(av.Where(x => x.ParameterName == "Transactions Number"));
 				var mipN = GetMonth(av.Where(x => x.ParameterName == "Total Net In Payments"));
+				var mipaN = GetMonth(av.Where(x => x.ParameterName == "Total Net In Payments Annualized"));
 
 				if (mipN != null) mip = Math.Abs(Convert.ToDouble(mipN.Value, CultureInfo.InvariantCulture));
 				if (tnipN != null) tnip = Math.Abs(Convert.ToDouble(tnipN.Value, CultureInfo.InvariantCulture));
 				if (tnopN != null) tnop = Math.Abs(Convert.ToDouble(tnopN.Value, CultureInfo.InvariantCulture));
 				if (tcN != null) tc = Convert.ToInt32(tcN.Value, CultureInfo.InvariantCulture);
+				if (mipaN != null) mipa = Math.Abs(Convert.ToDouble(mipaN.Value, CultureInfo.InvariantCulture));
 			}
 
 			var status = m.GetUpdatingStatus(history);
@@ -56,6 +59,7 @@
 				displayName = m.DisplayName,
 				TotalNetInPayments = tnip,
 				MonthInPayments = mip,
+				MonthInPaymentsAnnualized = mipa,
 				TotalNetOutPayments = tnop,
 				TransactionsNumber = tc,
 				id = m.Id,

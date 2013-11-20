@@ -20,7 +20,7 @@ namespace EZBob.DatabaseLib
 
 		public override ITimePeriod TimePeriod
 		{
-			get { return _TimePeriod; }			
+			get { return _TimePeriod; }
 		}
 
 		public override IDatabaseValueType ValueType 
@@ -31,7 +31,7 @@ namespace EZBob.DatabaseLib
 		
 		public override object Value
 		{
-			get { return _Value; }			
+			get { return _Value; }
 		}
 
 		public override string ParameterName

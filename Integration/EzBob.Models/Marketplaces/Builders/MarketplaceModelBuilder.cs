@@ -43,7 +43,7 @@ namespace EzBob.Models.Marketplaces.Builders
 				Id = mp.Id,
 				Type = mp.DisplayName,
 				Name = mp.Marketplace.Name,
-				LastChecked = FormattingUtils.FormatDateToString(mp.Updated, "-"),
+				LastChecked = FormattingUtils.FormatDateToString(mp.UpdatingEnd.HasValue ? mp.UpdatingEnd.Value : mp.Updated, "-"),
 				EluminatingStatus = eluminatingStatus,
 				UpdatingStatus = mp.GetUpdatingStatus(history),
 				UpdateError = mp.GetUpdatingError(history),
@@ -59,7 +59,7 @@ namespace EzBob.Models.Marketplaces.Builders
 				Disabled = mp.Disabled,
 				IsNew = mp.IsNew,
 				IsHistory = history.HasValue,
-				History = history.HasValue ? history.Value : (DateTime?) null
+				History = history.HasValue ? history.Value : (DateTime?)null
 			};
 
 			InitializeSpecificData(mp, model, history);
@@ -93,14 +93,14 @@ namespace EzBob.Models.Marketplaces.Builders
 			try
 			{
 				av = history.HasValue
-					     ? analisysFunction.Data.FirstOrDefault(
+						 ? analisysFunction.Data.FirstOrDefault(
 							 x => x.Key == analisysFunction.Data.Where(pair => pair.Key.Date <= history.Value.Date).DefaultIfEmpty().Max(pair => pair.Key))
-					                       .Value
-					     : analisysFunction.Data.FirstOrDefault(x => x.Key == analisysFunction.Data.Max(y => y.Key)).Value;
+										   .Value
+						 : analisysFunction.Data.FirstOrDefault(x => x.Key == analisysFunction.Data.Max(y => y.Key)).Value;
 			}
 			catch (Exception ex)
 			{
-				
+
 			}
 			return av;
 		}
@@ -123,6 +123,7 @@ namespace EzBob.Models.Marketplaces.Builders
 			}
 
 			return data;
+
 		}
 
 		protected virtual void InitializeSpecificData(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history)
