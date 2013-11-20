@@ -45,7 +45,8 @@ a[data-bug-type],
 .renew-token,
 .set-paypoint-default,
 #recheck-askville,
-#SuspendBtn
+#SuspendBtn,
+.disable-shop
 {
     display: none;
     visibility: hidden; /* JQuery hide/show function use display:none. So we need to property visibility */
@@ -68,7 +69,10 @@ a[data-bug-type],
 .role-Underwriter #SuspendBtn,
 
 .role-manager [name="discountPlan"],
-.role-Underwriter [name="discountPlan"]
+.role-Underwriter [name="discountPlan"],
+
+.role-manager .disable-shop,
+.role-Underwriter .disable-shop
 
 /*
 .role-manager

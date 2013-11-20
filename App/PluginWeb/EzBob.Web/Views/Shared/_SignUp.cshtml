@@ -10,6 +10,7 @@
     var config = ObjectFactory.GetInstance<IEzBobConfiguration>();
     string captchamode = config.CaptchaMode;
     bool ebayPixelEnabled = config.EbayPixelEnabled;
+    bool instructionsEnabled = config.WizardInstructionsEnabled;
     bool isOffline = @Request.Cookies["isoffline"] != null && @Request.Cookies["isoffline"].Value == "yes";
 }
 
@@ -157,7 +158,7 @@
 
 	<div class="form_buttons_container"><input type="submit" id="signupSubmitButton" value="Continue" class="button orange continue disabled" tabindex="12" ui-event-control-id="signup:submit"></div>
 
-	if (isOffline) {
+    if (isOffline && instructionsEnabled) {
 		<div class="hide">
 			<div id="offline_help" class="help_window">
 				<h2>Welcome to the ezbob application process</h2>
