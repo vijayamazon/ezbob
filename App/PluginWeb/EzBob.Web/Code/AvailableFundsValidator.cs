@@ -15,7 +15,7 @@ namespace EzBob.Web.Code
         private readonly PacNetBalanceRepository _funds;
         private readonly PacNetManualBalanceRepository _manualFunds;
         private readonly IEzBobConfiguration _config;
-        private static readonly ILog Log = LogManager.GetLogger(typeof(LoanCreator));
+		private static readonly ILog Log = LogManager.GetLogger(typeof(AvailableFundsValidator));
 
         public AvailableFundsValidator(PacNetBalanceRepository funds, PacNetManualBalanceRepository manualFunds, IEzBobConfiguration config)
         {
@@ -31,9 +31,10 @@ namespace EzBob.Web.Code
                 var balance = _funds.GetBalance();
                 var manualBalance = _manualFunds.GetBalance();
                 var fundsAvailable = balance.Adjusted + manualBalance - transfered;
-
-                DateTime today = DateTime.UtcNow;
+				
+                var today = DateTime.UtcNow;
                 int relevantLimit = (today.DayOfWeek == DayOfWeek.Thursday || today.DayOfWeek == DayOfWeek.Friday) ? _config.PacnetBalanceWeekendLimit : _config.PacnetBalanceWeekdayLimit;
+				Log.InfoFormat("VerifyAvailableFunds pacnet balance {0} manual balance {1} transfered {2} funds available {3} relevant limit {4}", balance, manualBalance, transfered, fundsAvailable, relevantLimit);
                 if (fundsAvailable < relevantLimit)
                 {
                     SendMail(fundsAvailable, relevantLimit);
