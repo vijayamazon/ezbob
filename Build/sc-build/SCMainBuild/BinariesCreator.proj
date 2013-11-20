@@ -63,6 +63,7 @@
 		<MultiCopy CopyFrom="$(Src)\App\ScheduledServices\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
 		<MultiCopy CopyFrom="$(Src)\Integration\Ezbob.MailNode.Runtime\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
 		<MultiCopy CopyFrom="$(Src)\Integration\FraudChecker\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
+		<MultiCopy CopyFrom="$(Src)\Integration\ZooplaLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
 		
 		<!--Stas-->
 		<MultiCopy CopyFrom="$(Src)\Integration\EzBob.Models\bin\$(BuildConfiguration)\EzBob.Models.dll" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>

@@ -40,6 +40,42 @@ robocopy App\Utils\AgentRegistry\bin\Debug\ c:\ezbobSrv\ /e
 
 robocopy Integration\FraudChecker\bin\Debug\ c:\ezbobSrv\ /e
 
+robocopy Integration\ZooplaLib\bin\Debug\ c:\ezbobSrv\ /e
+
+robocopy Integration\Amazon\AmazonDbLib\bin\Debug\ c:\ezbobSrv\ /e
+
+robocopy Integration\Amazon\AmazonLib\bin\Debug\ c:\ezbobSrv\ /e
+
+robocopy Integration\Amazon\AmazonServiceLib\bin\ c:\ezbobSrv\ /e
+
+robocopy Integration\Amazon\FBAInventoryServiceMWS\bin\Debug\ c:\ezbobSrv\ /e
+
+robocopy Integration\eBay\eBayDbLib\bin\Debug\ c:\ezbobSrv\ /e
+
+robocopy Integration\eBay\eBayLib\bin\Debug\ c:\ezbobSrv\ /e
+
+robocopy Integration\eBay\eBayServiceLib\bin\Debug\ c:\ezbobSrv\ /e
+
+robocopy Integration\ExperianLib\bin\Debug\ c:\ezbobSrv\ /e
+
+robocopy Integration\EzBob\bin\Debug\ c:\ezbobSrv\ /e
+
+robocopy Integration\EzBob.Configuration\bin\Debug\ c:\ezbobSrv\ /e
+
+robocopy Integration\EzBob.Models\bin\Debug\ c:\ezbobSrv\ /e
+
+robocopy Integration\MailApi\bin\Debug\ c:\ezbobSrv\ /e
+
+robocopy Integration\EzBob.Models\bin\Debug\ c:\ezbobSrv\ /e
+
+robocopy Integration\PayPal\PayPal.Base\bin\Debug\ c:\ezbobSrv\ /e
+
+robocopy Integration\PayPal\PayPal.Permissions\bin\Debug\ c:\ezbobSrv\ /e
+
+robocopy Integration\PayPal\PayPalServiceLib\bin\Debug\ c:\ezbobSrv\ /e
+
+robocopy Integration\TeraPeak\TeraPeakServiceLib\bin\Debug\ c:\ezbobSrv\ /e
+
 copy Lib\Scorto.Core\DBSQLServer.dll c:\ezbobSrv\ 
 
 net start ScortoService
