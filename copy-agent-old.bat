@@ -62,8 +62,6 @@ robocopy Integration\EzBob\bin\Debug\ c:\ezbobSrv\ /e
 
 robocopy Integration\EzBob.Configuration\bin\Debug\ c:\ezbobSrv\ /e
 
-robocopy Integration\EzBob.Models\bin\Debug\ c:\ezbobSrv\ /e
-
 robocopy Integration\MailApi\bin\Debug\ c:\ezbobSrv\ /e
 
 robocopy Integration\EzBob.Models\bin\Debug\ c:\ezbobSrv\ /e
