@@ -19,6 +19,13 @@
 }
 
 .simpleCaptcha a {
-    display: block;
     width: 60px;
+    vertical-align: middle;
+    text-align: center;
+    margin-top: -65px;
+    display: inline-block;
+}
+
+.simpleCaptcha div {
+    margin-top: 10px;
 }
