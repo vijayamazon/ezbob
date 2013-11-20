@@ -9,7 +9,7 @@
 		[Ignore]
 		public void test_get_average_prices()
 		{
-			var postcode = "NR3 2SY";
+			var postcode = "EC1V4PW";
 			var z = new ZooplaApi();
 			var res = z.GetAverageSoldPrices(postcode);
 

@@ -16,7 +16,7 @@
 		/// </summary>
 		/// <param name="postcode"></param>
 		/// <returns></returns>
-		public AverageSoldPrices GetAverageSoldPrices(string postcode)
+		public AverageSoldPrices GetAverageSoldPrices(string postcode, bool retry = false)
 		{
 			var req = new RestRequest("http://api.zoopla.co.uk/api/v1/average_area_sold_price");
 			req.AddParameter("postcode", postcode);
@@ -32,21 +32,53 @@
 			{
 				throw new Exception(error.InnerText);
 			}
-
-			return new AverageSoldPrices
+			try
+			{
+				int averageSoldPrice1Year = 0;
+				int.TryParse(x.SelectSingleNode("/response/average_sold_price_1year").InnerText, out averageSoldPrice1Year);
+				int averageSoldPrice3Year = 0;
+				int.TryParse(x.SelectSingleNode("/response/average_sold_price_3year").InnerText, out averageSoldPrice3Year);
+				int averageSoldPrice5Year = 0;
+				int.TryParse(x.SelectSingleNode("/response/average_sold_price_5year").InnerText, out averageSoldPrice5Year);
+				int averageSoldPrice7Year = 0;
+				int.TryParse(x.SelectSingleNode("/response/average_sold_price_7year").InnerText, out averageSoldPrice7Year);
+				if (!retry && averageSoldPrice1Year == 0 && averageSoldPrice3Year == 0 && averageSoldPrice5Year == 0 &&
+				    averageSoldPrice7Year == 0)
 				{
-					AverageSoldPrice1Year = int.Parse(x.SelectSingleNode("/response/average_sold_price_1year").InnerText),
-					AverageSoldPrice3Year = int.Parse(x.SelectSingleNode("/response/average_sold_price_3year").InnerText),
-					AverageSoldPrice5Year = int.Parse(x.SelectSingleNode("/response/average_sold_price_5year").InnerText),
-					AverageSoldPrice7Year = int.Parse(x.SelectSingleNode("/response/average_sold_price_7year").InnerText),
-					NumerOfSales1Year = int.Parse(x.SelectSingleNode("/response/number_of_sales_1year").InnerText),
-					NumerOfSales3Year = int.Parse(x.SelectSingleNode("/response/number_of_sales_3year").InnerText),
-					NumerOfSales5Year = int.Parse(x.SelectSingleNode("/response/number_of_sales_5year").InnerText),
-					NumerOfSales7Year = int.Parse(x.SelectSingleNode("/response/number_of_sales_7year").InnerText),
+					return GetAverageSoldPrices(postcode.Substring(0, 3), true);
+				}
+				
+				int numerOfSales1Year = 0;
+				int.TryParse(x.SelectSingleNode("/response/number_of_sales_1year").InnerText, out numerOfSales1Year);
+				int numerOfSales3Year = 0;
+				int.TryParse(x.SelectSingleNode("/response/number_of_sales_3year").InnerText, out numerOfSales3Year);
+				int numerOfSales5Year = 0;
+				int.TryParse(x.SelectSingleNode("/response/number_of_sales_5year").InnerText, out numerOfSales5Year);
+				int numerOfSales7Year = 0;
+				int.TryParse(x.SelectSingleNode("/response/number_of_sales_7year").InnerText, out numerOfSales7Year);
+				double turnOver = 0;
+				double.TryParse(x.SelectSingleNode("/response/turnover").InnerText, out turnOver);
+
+				return new AverageSoldPrices
+				{
+					AverageSoldPrice1Year = averageSoldPrice1Year,
+					AverageSoldPrice3Year = averageSoldPrice3Year,
+					AverageSoldPrice5Year = averageSoldPrice5Year,
+					AverageSoldPrice7Year = averageSoldPrice7Year,
+					NumerOfSales1Year = numerOfSales1Year,
+					NumerOfSales3Year = numerOfSales3Year,
+					NumerOfSales5Year = numerOfSales5Year,
+					NumerOfSales7Year = numerOfSales7Year,
 					PricesUrl = x.SelectSingleNode("/response/prices_url").InnerText,
-					TurnOver = double.Parse(x.SelectSingleNode("/response/turnover").InnerText),
+					TurnOver = turnOver,
 					AreaName = x.SelectSingleNode("/response/area_name").InnerText
 				};
+			}
+			catch (Exception)
+			{
+				throw new Exception("Couldn't parse the response");
+			}
+			
 		}
 
 		#region not in use
