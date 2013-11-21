@@ -121,7 +121,7 @@ EzBob = EzBob || {};
 								break;
 
 							default:
-								console.error('Unsupported INPUT.type', this);
+								//console.error('Unsupported INPUT.type', this);
 								break;
 						} // switch for INPUT
 
@@ -150,10 +150,10 @@ EzBob = EzBob || {};
 		writeDown: function (bSync) {
 			var self = this;
 
-			console.log('write down, sync:', bSync ? 'yes' : 'no', 'history:', self.cache.history);
+			//console.log('write down, sync:', bSync ? 'yes' : 'no', 'history:', self.cache.history);
 
 			if (!self.cache.history || self.cache.history.hasNoData()) {
-				console.log('No data in cache, nothing to save.');
+				//console.log('No data in cache, nothing to save.');
 				return;
 			} // if
 
@@ -167,7 +167,7 @@ EzBob = EzBob || {};
 					history: JSON.stringify(self.cache.history),
 				},
 				success: function(oData, sStatus, jqXHR) {
-					console.log('status:', sStatus, 'saved:', oData, 'jqXHR:', jqXHR);
+					//console.log('status:', sStatus, 'saved:', oData, 'jqXHR:', jqXHR);
 
 					if (oData) {
 						if (oData.saved && oData.saved.length) {
@@ -205,7 +205,7 @@ EzBob = EzBob || {};
 		}, // save
 
 		flush: function (bSync) {
-			console.log('UiAction.flush', this);
+			//console.log('UiAction.flush', this);
 
 			if (this.isFranFleischman)
 				return;
@@ -248,12 +248,12 @@ EzBob = EzBob || {};
 		}, // cache
 
 		handleUnload: function () {
-			console.log('unload');
+			//console.log('unload');
 			this.flush(true);
 		}, // handleUnload
 
 		handleTimer: function () {
-			console.log('timer');
+			//console.log('timer');
 			this.flush();
 			this.startTimer();
 		}, // handleTimer

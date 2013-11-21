@@ -154,8 +154,8 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
 			this.$el.find('#ResidentialStatus').val(oPersonalInfo.ResidentialStatus);
 			this.$el.find('#DayTimePhone').val(oPersonalInfo.DaytimePhone);
 			this.$el.find('#TypeOfBusiness').val(oPersonalInfo.TypeOfBusinessName);
-			this.$el.find('#WebSiteTurnOver').val(oPersonalInfo.WebSiteTurnOver);
-			this.$el.find('#OverallTurnOver').val(oPersonalInfo.OverallTurnOver);
+			this.$el.find('#WebSiteTurnOver').autoNumericSet(oPersonalInfo.WebSiteTurnOver);
+			this.$el.find('#OverallTurnOver').autoNumericSet(oPersonalInfo.OverallTurnOver);
 		} // if has personal info
 
 	    this.$el.find('input, select').change();

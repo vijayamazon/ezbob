@@ -174,8 +174,8 @@ EzBob.WizardView = Backbone.View.extend({
 
         if (!oStep)
             return;
-
         this.model.changePage(oStep.num);
+        this.stepChanged();
         oStep.onFocus();
     },
 
@@ -201,11 +201,11 @@ EzBob.WizardView = Backbone.View.extend({
     },
 
     linkClick: function (e) {
+        
         if (!EzBob.Config.WizardTopNaviagtionEnabled)
             return false;
 
         var newCurrent = $(e.currentTarget).data('step-num');
-
         if (this.steps[newCurrent])
             this.router.navTo(newCurrent);
 
