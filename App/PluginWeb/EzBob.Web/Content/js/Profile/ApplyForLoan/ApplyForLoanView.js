@@ -171,7 +171,7 @@
     };
 
     ApplyForLoanView.prototype.submit = function(e) {
-      var creditSum, max, min;
+      var creditSum, enabled, form, max, min, validator;
       e.preventDefault();
       creditSum = this.model.get("neededCash");
       max = this.model.get("maxCash");
@@ -182,10 +182,11 @@
       if (creditSum > max || creditSum < min) {
         return false;
       }
-      if (!$(".preAgreementTermsRead").is(":checked") || !$(".agreementTermsRead").is(":checked")) {
-        return false;
-      }
-      if (this.isLoanSourceEU && !$("#EuAgreementTerms").is(":checked")) {
+      form = this.$el.find('form');
+      validator = EzBob.validateLoanLegalForm(form);
+      enabled = EzBob.Validation.checkForm(validator);
+      if (!enabled) {
+        this.showSubmit();
         return false;
       }
       this.trigger("submit");

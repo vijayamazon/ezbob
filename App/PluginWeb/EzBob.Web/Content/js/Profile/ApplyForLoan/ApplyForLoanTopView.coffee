@@ -50,17 +50,26 @@ class EzBob.Profile.ApplyForLoanTopView extends Backbone.Marionette.ItemView
         view.on "completed", => @submit()
         return view
 
-    amountSelected: ->
+    amountSelected: () ->
+        form = @$el.find('form')
+        validator = EzBob.validateLoanLegalForm(form)
+        enabled = EzBob.Validation.checkForm(validator)
+        return if not enabled
+        data = form.serialize()
         BlockUi "on"
-        xhr = $.post "#{window.gRootPath}Customer/GetCash/LoanLegalSigned"
+        xhr = $.post "#{window.gRootPath}Customer/GetCash/LoanLegalSigned", data
+        xhr.done (res) =>
+            if res.error
+                 EzBob.App.trigger('error', res.error)
+                 return
+
+            if not @customer.get("bankAccountAdded")
+                @model.set "state", "bank"
+                return
+
+            @submit()
         xhr.always ->
             BlockUi "off"
-        
-        if not @customer.get("bankAccountAdded")
-            @model.set "state", "bank"
-            return
-        
-        @submit()
 
     submit: ->
         view = new EzBob.Profile.PayPointCardSelectView( model: @customer, date: @lastPaymentDate )

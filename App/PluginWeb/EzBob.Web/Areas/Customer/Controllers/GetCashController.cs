@@ -245,21 +245,31 @@
 
 		[Transactional]
 		[HttpPost]
-		public void LoanLegalSigned()
+		public JsonNetResult LoanLegalSigned(bool preAgreementTermsRead = false, bool agreementTermsRead = false, bool euAgreementTermsRead = false)
 		{
-			var cashRequest = _context.Customer.LastCashRequest;
-			var typeOfBusiness = _context.Customer.PersonalInfo.TypeOfBusiness;
+			_log.DebugFormat("LoanLegalModel agreementTermsRead: {0} preAgreementTermsRead: {1} euAgreementTermsRead: {2}", agreementTermsRead, preAgreementTermsRead, euAgreementTermsRead);
 
-			_context.Customer.LastCashRequest.LoanLegals.Add(new LoanLegal()
+			var cashRequest = _context.Customer.LastCashRequest;
+			var typeOfBusiness = _context.Customer.PersonalInfo.TypeOfBusiness.Reduce();
+
+			if (!preAgreementTermsRead || !agreementTermsRead ||
+				(cashRequest.LoanSource.Name == "EU" && !euAgreementTermsRead))
+			{
+				return this.JsonNet(new { error = "You must agree to all agreements." });
+			}
+
+			_context.Customer.LastCashRequest.LoanLegals.Add(new LoanLegal
 				{
 					CashRequest = cashRequest,
 					Created = DateTime.UtcNow,
 					EUAgreementAgreed = cashRequest.LoanSource.Name == "EU",
-					CreditActAgreementAgreed = typeOfBusiness == TypeOfBusiness.Entrepreneur || typeOfBusiness == TypeOfBusiness.PShip3P || typeOfBusiness == TypeOfBusiness.SoleTrader,
-					PreContractAgreementAgreed = typeOfBusiness == TypeOfBusiness.Entrepreneur || typeOfBusiness == TypeOfBusiness.PShip3P || typeOfBusiness == TypeOfBusiness.SoleTrader,
-					PrivateCompanyLoanAgreementAgreed = typeOfBusiness == TypeOfBusiness.LLP || typeOfBusiness == TypeOfBusiness.Limited || typeOfBusiness == TypeOfBusiness.PShip,
-					GuarantyAgreementAgreed = typeOfBusiness == TypeOfBusiness.LLP || typeOfBusiness == TypeOfBusiness.Limited || typeOfBusiness == TypeOfBusiness.PShip,
+					CreditActAgreementAgreed = typeOfBusiness == TypeOfBusinessReduced.Personal || typeOfBusiness == TypeOfBusinessReduced.NonLimited,
+					PreContractAgreementAgreed = typeOfBusiness == TypeOfBusinessReduced.Personal || typeOfBusiness == TypeOfBusinessReduced.NonLimited,
+					PrivateCompanyLoanAgreementAgreed = typeOfBusiness == TypeOfBusinessReduced.Limited,
+					GuarantyAgreementAgreed = typeOfBusiness == TypeOfBusinessReduced.Limited,
 				});
+
+			return this.JsonNet(new { });
 		}
 	}
 }

@@ -134,8 +134,14 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
     @model.set "loanType", @currentLoanTypeID
     @model.set "repaymentPeriod", @currentRepaymentPeriod
     return false  if creditSum > max or creditSum < min
-    return false  if not $(".preAgreementTermsRead").is(":checked") or not $(".agreementTermsRead").is(":checked")
-    return false if @isLoanSourceEU and not $("#EuAgreementTerms").is(":checked")
+    
+    form = @$el.find('form')
+    validator = EzBob.validateLoanLegalForm(form)
+    enabled = EzBob.Validation.checkForm(validator)
+    if not enabled
+        @showSubmit()
+        return false 
+    
     @trigger ("submit")
     return false
 

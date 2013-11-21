@@ -92,17 +92,31 @@
     };
 
     ApplyForLoanTopView.prototype.amountSelected = function() {
-      var xhr;
-      BlockUi("on");
-      xhr = $.post("" + window.gRootPath + "Customer/GetCash/LoanLegalSigned");
-      xhr.always(function() {
-        return BlockUi("off");
-      });
-      if (!this.customer.get("bankAccountAdded")) {
-        this.model.set("state", "bank");
+      var data, enabled, form, validator, xhr,
+        _this = this;
+      form = this.$el.find('form');
+      validator = EzBob.validateLoanLegalForm(form);
+      enabled = EzBob.Validation.checkForm(validator);
+      if (!enabled) {
         return;
       }
-      return this.submit();
+      data = form.serialize();
+      BlockUi("on");
+      xhr = $.post("" + window.gRootPath + "Customer/GetCash/LoanLegalSigned", data);
+      xhr.done(function(res) {
+        if (res.error) {
+          EzBob.App.trigger('error', res.error);
+          return;
+        }
+        if (!_this.customer.get("bankAccountAdded")) {
+          _this.model.set("state", "bank");
+          return;
+        }
+        return _this.submit();
+      });
+      return xhr.always(function() {
+        return BlockUi("off");
+      });
     };
 
     ApplyForLoanTopView.prototype.submit = function() {

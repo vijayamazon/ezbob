@@ -17,7 +17,7 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
             'change input': 'inputChanged',
             'focusout input': 'inputChanged',
             'keyup input': 'inputChanged',
-            
+
             'focus select': 'inputChanged',
             'focusout select': 'inputChanged',
             'keyup select': 'inputChanged',
@@ -34,50 +34,49 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
             img.field_status('set', 'empty', 2);
         }
 
-		var enabled = EzBob.Validation.checkForm(this.validator) &&
-			this.isPrevAddressValid() &&
-			this.isAddressValid() &&
-			this.OwnOtherPropertyIsValid();
+        var enabled = EzBob.Validation.checkForm(this.validator) &&
+            this.isPrevAddressValid() &&
+            this.isAddressValid() &&
+            this.OwnOtherPropertyIsValid();
 
         $('.continue').toggleClass('disabled', !enabled);
     },
 
-	isAddressValid: function() {
-		var oAddress = this.model.get('PersonalAddress');
-		return oAddress && (oAddress.length > 0);
-	},
-    
+    isAddressValid: function () {
+        var oAddress = this.model.get('PersonalAddress');
+        return oAddress && (oAddress.length > 0);
+    },
+
     overallTurnOverFocus: function () {
         $("#OverallTurnOver").change();
     },
     webSiteTurnOverFocus: function () {
         $("#WebSiteTurnOver").change();
     },
-	ResidentialStatusChanged: function() {
-		var oCombo = this.$el.find('#OwnOtherProperty');
+    ResidentialStatusChanged: function () {
+        var oCombo = this.$el.find('#OwnOtherProperty');
 
-		if (oCombo.length < 1)
-			return;
+        if (oCombo.length < 1)
+            return;
 
-		switch(this.$el.find('#ResidentialStatus').val()) {
-		case 'Home owner':
-			this.$el.find('#OwnOtherPropertyQuestion').text('Do you own another property?');
-			oCombo.find('option[value="Yes"]').text('Yes, I own another property.');
-			oCombo.find('option[value="No"]').text('No, I don\'t own another property.');
-			break;
-
-		default:
-			this.$el.find('#OwnOtherPropertyQuestion').text('Do you own a property?');
-			oCombo.find('option[value="Yes"]').text('Yes, I own a property.');
-			oCombo.find('option[value="No"]').text('No, I don\'t own a property.');
-			break;
-		} // switch
-	},
+        switch (this.$el.find('#ResidentialStatus').val()) {
+            case 'Home owner':
+                this.$el.find('#OwnOtherPropertyQuestion').text('Do you own another property?');
+                oCombo.find('option[value="Yes"]').text('Yes, I own another property.');
+                oCombo.find('option[value="No"]').text('No, I don\'t own another property.');
+                break;
+            default:
+                this.$el.find('#OwnOtherPropertyQuestion').text('Do you own a property?');
+                oCombo.find('option[value="Yes"]').text('Yes, I own a property.');
+                oCombo.find('option[value="No"]').text('No, I don\'t own a property.');
+                break;
+        } // switch
+    },
     PersonalTimeAtAddressChanged: function () {
         this.clearPrevAddressModel();
         this.TimeAtAddressChanged("#PrevPersonAddresses", "#TimeAtAddress");
     },
-	OwnOtherPropertyChanged: function(evt) {
+    OwnOtherPropertyChanged: function (evt) {
         if (this.$el.find('#OwnOtherProperty').val() == 'Yes')
             this.$el.find('#OtherPropertyAddress').parents('div.control-group').show();
         else
@@ -85,23 +84,22 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
 
         this.inputChanged();
     },
-	OwnOtherPropertyIsValid: function() {
-		if (!this.model.get('IsOffline'))
-			return true;
+    OwnOtherPropertyIsValid: function () {
+        if (!this.model.get('IsOffline'))
+            return true;
 
-		switch (this.$el.find('#OwnOtherProperty').val()) {
-		case 'Yes': {
-			var oModel = this.model.get('OtherPropertyAddress');
-			return oModel && (oModel.length > 0);
-		}
-
-		case 'No':
-			return true;
-
-		default:
-			return false;
-		} // switch
-	},
+        switch (this.$el.find('#OwnOtherProperty').val()) {
+            case 'Yes':
+                {
+                    var oModel = this.model.get('OtherPropertyAddress');
+                    return oModel && (oModel.length > 0);
+                }
+            case 'No':
+                return true;
+            default:
+                return false;
+        } // switch
+    },
     render: function () {
         this.constructor.__super__.render.call(this);
 
@@ -126,39 +124,39 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
         if (!this.model.get('IsOffline'))
             this.$el.find('.offline').remove();
 
-		var oPersonalInfo = this.model.get('CustomerPersonalInfo');
-		if (oPersonalInfo) {
-			var sGender = '';
-			switch (oPersonalInfo.Gender) {
-				case 0:
-					sGender = 'M';
-					break;
-				case 1:
-					sGender = 'F';
-					break;
-			} // switch
-			this.$el.find('#FormRadioCtrl_' + sGender).prop('checked', true);
+        var oPersonalInfo = this.model.get('CustomerPersonalInfo');
+        if (oPersonalInfo) {
+            var sGender = '';
+            switch (oPersonalInfo.Gender) {
+                case 0:
+                    sGender = 'M';
+                    break;
+                case 1:
+                    sGender = 'F';
+                    break;
+            } // switch
+            this.$el.find('#FormRadioCtrl_' + sGender).prop('checked', true);
 
-			var aryBirthDate = (this.model.get('BirthDateYMD') || '').split('-');
-			if (aryBirthDate.length == 3) {
-				this.$el.find('#DateOfBirthDay').val(aryBirthDate[2]);
-				this.$el.find('#DateOfBirthMonth').val(aryBirthDate[1]);
-				this.$el.find('#DateOfBirthYear').val(aryBirthDate[0]);
-			} // if birthdate
+            var aryBirthDate = (this.model.get('BirthDateYMD') || '').split('-');
+            if (aryBirthDate.length == 3) {
+                this.$el.find('#DateOfBirthDay').val(aryBirthDate[2]);
+                this.$el.find('#DateOfBirthMonth').val(aryBirthDate[1]);
+                this.$el.find('#DateOfBirthYear').val(aryBirthDate[0]);
+            } // if birthdate
 
-			var aryMaritalStatus = ['Married', 'Single', 'Divorced', 'Widow/er', 'Other'];
-			if (aryMaritalStatus[oPersonalInfo.MartialStatus])
-				this.$el.find('#MartialStatus').val(aryMaritalStatus[oPersonalInfo.MartialStatus]);
+            var aryMaritalStatus = ['Married', 'Single', 'Divorced', 'Widow/er', 'Other'];
+            if (aryMaritalStatus[oPersonalInfo.MartialStatus])
+                this.$el.find('#MartialStatus').val(aryMaritalStatus[oPersonalInfo.MartialStatus]);
 
-			this.$el.find('#TimeAtAddress').val(oPersonalInfo.TimeAtAddress);
-			this.$el.find('#ResidentialStatus').val(oPersonalInfo.ResidentialStatus);
-			this.$el.find('#DayTimePhone').val(oPersonalInfo.DaytimePhone);
-			this.$el.find('#TypeOfBusiness').val(oPersonalInfo.TypeOfBusinessName);
-			this.$el.find('#WebSiteTurnOver').autoNumericSet(oPersonalInfo.WebSiteTurnOver);
-			this.$el.find('#OverallTurnOver').autoNumericSet(oPersonalInfo.OverallTurnOver);
-		} // if has personal info
+            this.$el.find('#TimeAtAddress').val(oPersonalInfo.TimeAtAddress);
+            this.$el.find('#ResidentialStatus').val(oPersonalInfo.ResidentialStatus);
+            this.$el.find('#DayTimePhone').val(oPersonalInfo.DaytimePhone);
+            this.$el.find('#TypeOfBusiness').val(oPersonalInfo.TypeOfBusinessName);
+            this.$el.find('#WebSiteTurnOver').autoNumericSet(oPersonalInfo.WebSiteTurnOver);
+            this.$el.find('#OverallTurnOver').autoNumericSet(oPersonalInfo.OverallTurnOver);
+        } // if has personal info
 
-	    this.$el.find('input, select').change();
+        this.$el.find('input, select').change();
 
         this.inputChanged();
     },
@@ -193,7 +191,7 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
         this.$el.find("input[name='MiddleInitial']").val(trim(this.$el.find("input[name='MiddleInitial']").val().trim()));
         this.$el.find("input[name='Surname']").val(this.$el.find("input[name='Surname']").val().trim());
     },
-    
+
     getValidator: function () {
         return EzBob.validatePersonalDetailsForm;
     },

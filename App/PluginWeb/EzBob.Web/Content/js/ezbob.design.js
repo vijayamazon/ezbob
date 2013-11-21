@@ -745,29 +745,29 @@ EzBob.formatPercents1 = function (num) {
 };
 
 EzBob.formatPercents0 = function (numerator, denominator) {
-	if (numerator === undefined || numerator == null || numerator === '')
-		return '';
+    if (numerator === undefined || numerator == null || numerator === '')
+        return '';
 
-	var num = numerator;
+    var num = numerator;
 
-	if (denominator !== undefined && denominator != null && denominator !== '') {
-		var x = parseFloat(denominator);
+    if (denominator !== undefined && denominator != null && denominator !== '') {
+        var x = parseFloat(denominator);
 
-		if (x == 0)
-			return '';
-		
-		num /= x;
-	} // if
+        if (x == 0)
+            return '';
 
-	return EzBob.formatIntWithCommas(parseInt(num * 100)) + "%";
+        num /= x;
+    } // if
+
+    return EzBob.formatIntWithCommas(parseInt(num * 100)) + "%";
 };
 
 EzBob.formatLoanType = function (loanTypeSelection, loanType) {
     return loanType;
 }; // formatLoanType
 
-EzBob.formatLoanSource = function(model) {
-	return model.LoanSource.Name || '--';
+EzBob.formatLoanSource = function (model) {
+    return model.LoanSource.Name || '--';
 }; // formatLoanSource
 
 EzBob.formatLoanTypeSelection = function (num) {
@@ -906,7 +906,7 @@ EzBob.validateSignUpForm = function (el) {
         errorPlacement: EzBob.Validation.errorPlacement,
         unhighlight: EzBob.Validation.unhighlightFS,
         highlight: EzBob.Validation.highlightFS,
-        ignore: ":not(:visible)" 
+        ignore: ":not(:visible)"
     });
 };
 
@@ -1208,30 +1208,47 @@ EzBob.validateCGShopForm = function (el, accountType) {
     return el.validate(v);
 };
 
+EzBob.validateLoanLegalForm = function (el) {
+    var e = el || $(".LoanLegal");
+
+    return e.validate({
+        rules: {
+            "preAgreementTermsRead": { required: true },
+            "agreementTermsRead": { required: true },
+            "euAgreementTermsRead": { required: true },
+        },
+        errorPlacement: EzBob.Validation.errorPlacement,
+        unhighlight: EzBob.Validation.unhighlightFS,
+        highlight: EzBob.Validation.highlightFS,
+        ignore: ":not(:visible)"
+    });
+};
+
+
 EzBob.poundToInt = function (sNumWithPounds) {
     return parseInt(sNumWithPounds.replace(/[^0-9\.-]/g, ''));
 };
 
-EzBob.getCookie = function(c_name) {
-	var c_value = document.cookie;
+EzBob.getCookie = function (c_name) {
+    var c_value = document.cookie;
 
-	var c_start = c_value.indexOf(" " + c_name + "=");
+    var c_start = c_value.indexOf(" " + c_name + "=");
 
-	if (c_start == -1)
-		c_start = c_value.indexOf(c_name + "=");
+    if (c_start == -1)
+        c_start = c_value.indexOf(c_name + "=");
 
-	if (c_start == -1)
-		c_value = null;
-	else {
-		c_start = c_value.indexOf("=", c_start) + 1;
+    if (c_start == -1)
+        c_value = null;
+    else {
+        c_start = c_value.indexOf("=", c_start) + 1;
 
-		var c_end = c_value.indexOf(";", c_start);
+        var c_end = c_value.indexOf(";", c_start);
 
-		if (c_end == -1)
-			c_end = c_value.length;
+        if (c_end == -1)
+            c_end = c_value.length;
 
-		c_value = unescape(c_value.substring(c_start, c_end));
-	} // if
+        c_value = unescape(c_value.substring(c_start, c_end));
+    } // if
 
-	return c_value;
+    return c_value;
 }; // EzBob.getCookie

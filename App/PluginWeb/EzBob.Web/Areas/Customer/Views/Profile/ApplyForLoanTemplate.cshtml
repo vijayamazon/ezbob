@@ -35,8 +35,11 @@
 <script id="apply-forloan-template" type="text/template">
     @ApplyForLoanTemplate()
     @EuLoanTemplate()
-    @AgreementCheckBoxes()
-    @ButtonsTemplate()
+    @using (Html.BeginForm("LoanLegalSigned", "GetCash", new { Area = "Customer" }, FormMethod.Post, new { @class = "LoanLegal" }))
+    {
+         @AgreementCheckBoxes()
+         @ButtonsTemplate()
+    }
 </script>
 
 <script id="consumers-agreement-template" type="text/template">
@@ -109,15 +112,15 @@
 {
     <div class="controls">
         <label class="checkbox">
-            <input type="checkbox" id="termsRead" class="preAgreementTermsRead" name="termsRead" />
+            <input type="checkbox" id="preAgreementTermsRead" class="preAgreementTermsRead" name="preAgreementTermsRead" value="true"/>
             I have read and agree to the agreement terms
         </label>
         <label class="checkbox">
-            <input type="checkbox" id="termsRead" class="agreementTermsRead" name="termsRead" />
+            <input type="checkbox" id="agreementTermsRead" class="agreementTermsRead" name="agreementTermsRead" value="true"/>
             I have read and agree to the guaranty terms
         </label>
         <label class="checkbox eu-agreement-section">
-            <input type="checkbox" id="EuAgreementTerms" name="EuAgreementTerms" class="euAgreementTermsRead" />
+            <input type="checkbox" id="euAgreementTermsRead" name="euAgreementTermsRead" class="euAgreementTermsRead" value="true"/>
             I agree to the EU program terms
         </label>
     </div>
