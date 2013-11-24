@@ -34,8 +34,8 @@ INSERT INTO #tmp_func_list (FuncID, FuncName, Vendor, DataType) VALUES ('C54B4BF
 
 IF NOT EXISTS (SELECT * FROM MP_MarketplaceType WHERE InternalId = @MPID)
 BEGIN
-	INSERT INTO [dbo].[MP_MarketplaceType] ([Name], [InternalId], [Description], Active, IsOffline)
-		VALUES (@MPNAME,  @MPID, @Description, @IsActive, @IsOffline)
+	INSERT INTO [dbo].[MP_MarketplaceType] ([Name], [InternalId], [Description]) -- , Active, IsOffline)
+		VALUES (@MPNAME,  @MPID, @Description) -- , @IsActive, @IsOffline)
 END
 
 DELETE
