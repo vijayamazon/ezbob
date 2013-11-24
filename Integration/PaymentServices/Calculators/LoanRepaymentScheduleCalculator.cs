@@ -17,7 +17,6 @@
         private readonly IList<LoanScheduleItem> _schedule;
         private readonly List<PaypointTransaction> _payments;
         private readonly List<LoanCharge> _charges;
-		private decimal futureCharge;
 
 
         //state variables
@@ -293,12 +292,10 @@
             }         
 
             var lastInstallment = _processed.Where(i => i.Status == LoanScheduleStatus.Late || i.Status == LoanScheduleStatus.StillToPay).LastOrDefault();
-	        futureCharge += charge.Amount;
             if (lastInstallment != null)
             {
                 if (lastInstallment.Status == LoanScheduleStatus.Late || (lastInstallment.Status == LoanScheduleStatus.StillToPay && _schedule.Count == _processed.Count))
                 {
-	                futureCharge = 0;
                     lastInstallment.AmountDue += charge.Amount;
                     lastInstallment.Fees += charge.Amount;
                 }
@@ -604,8 +601,7 @@
             //сколько должны заплатить по телу кредита в рамках этого installment
             var principalToPay = _principal - _expectedPrincipal - _rescentLate.Where(x => x.Status == LoanScheduleStatus.Late).Sum(x => x.LoanRepayment);
             var interestToPay = _totalInterestToPay - _paidInterest - _processed.Sum(x => x.Interest);
-			var feesToPay = _totalFeesToPay - _paidFees - _processed.Sum(x => x.Fees) + futureCharge;
-	        futureCharge = 0;
+			var feesToPay = _totalFeesToPay - _paidFees - _processed.Sum(x => x.Fees);
             installment.Interest = Math.Max(0, Math.Round(interestToPay, 2));
             installment.Fees = Math.Round(feesToPay, 2);
 
