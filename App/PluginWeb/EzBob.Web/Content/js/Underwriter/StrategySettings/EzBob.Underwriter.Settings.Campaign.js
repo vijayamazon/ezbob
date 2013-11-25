@@ -73,7 +73,6 @@
     };
 
     CampaignView.prototype.addCampaign = function(e, campaign) {
-      console.log('add', e, campaign);
       BlockUi("On");
       this.addCampaignView = new EzBob.Underwriter.Settings.AddCampaignView({
         model: this.model,
@@ -155,7 +154,7 @@
       form: "form",
       name: "#campaign-name",
       description: "#campaign-description",
-      type: "#campaign-type",
+      type: "#campaign-type option",
       startdate: "#campaign-start-date",
       enddate: "#campaign-end-date",
       clients: "#campaign-customers",
@@ -170,14 +169,12 @@
       if (this.isUpdate) {
         data += "&campaignId=" + this.campaign.Id;
       }
-      console.log(data);
       that = this;
       ok = function() {
         return that.trigger('campaign-added');
       };
       xhr = $.post("" + window.gRootPath + "Underwriter/StrategySettings/AddCampaign/?" + data);
       xhr.done(function(res) {
-        console.log('res', res);
         res.errorText = res.errorText ? res.errorText : res.error ? res.error : "";
         if (!res.success) {
           EzBob.ShowMessage("Failed to add the campaign. " + res.errorText, "Failure", null, "OK");
@@ -204,16 +201,21 @@
     };
 
     AddCampaignView.prototype.onRender = function() {
+      var that;
       this.$el.find('input.date').datepicker({
         format: 'dd/mm/yyyy'
       });
       this.$el.find('input[data-content], span[data-content]').setPopover();
+      that = this;
       if (this.isUpdate) {
         this.ui.name.val(this.campaign.Name);
         this.ui.description.val(this.campaign.Description);
+        this.$el.find("#campaign-type option").filter(function() {
+          return this.text === that.campaign.Type;
+        }).prop('selected', true);
         this.ui.startdate.val(EzBob.formatDate2(this.campaign.StartDate));
         this.ui.enddate.val(EzBob.formatDate2(this.campaign.EndDate));
-        this.ui.clients.val(this.campaign.Customers.replace(/,/g, ' '));
+        this.ui.clients.val(this.campaign.Customers.replace(/, /g, ' '));
         return this.ui.addCampaignBtn.html('Update Campaign');
       }
     };

@@ -38,7 +38,6 @@ class EzBob.Underwriter.Settings.CampaignView extends Backbone.Marionette.ItemVi
 
 
     addCampaign: (e, campaign)->
-        console.log('add',e, campaign)
         BlockUi("On")
         @addCampaignView = new EzBob.Underwriter.Settings.AddCampaignView(model: @model, campaign: campaign)
         @addCampaignView.on('campaign-added', @update, @)
@@ -89,7 +88,7 @@ class EzBob.Underwriter.Settings.AddCampaignView extends Backbone.Marionette.Ite
         form : "form"
         name: "#campaign-name"
         description: "#campaign-description"
-        type: "#campaign-type"
+        type: "#campaign-type option"
         startdate: "#campaign-start-date"
         enddate: "#campaign-end-date"
         clients: "#campaign-customers"
@@ -100,14 +99,12 @@ class EzBob.Underwriter.Settings.AddCampaignView extends Backbone.Marionette.Ite
         data = @ui.form.serialize()
         if @isUpdate
             data += "&campaignId=#{@campaign.Id}"
-        console.log data
         that = @
         ok = () =>
             that.trigger('campaign-added')
 
         xhr = $.post("#{window.gRootPath}Underwriter/StrategySettings/AddCampaign/?#{data}")
         xhr.done (res) ->
-            console.log 'res', res
             res.errorText = if res.errorText then res.errorText else if res.error then res.error else ""
             if(not res.success)
                 EzBob.ShowMessage("Failed to add the campaign. #{res.errorText}" , "Failure", null, "OK")
@@ -124,12 +121,16 @@ class EzBob.Underwriter.Settings.AddCampaignView extends Backbone.Marionette.Ite
     onRender: ->
         @$el.find('input.date').datepicker(format: 'dd/mm/yyyy')
         @$el.find('input[data-content], span[data-content]').setPopover()
+        that = @
         if @isUpdate
             @ui.name.val(@campaign.Name)
             @ui.description.val @campaign.Description
+            @$el.find("#campaign-type option").filter(-> 
+                return @.text is that.campaign.Type
+            ).prop 'selected', true
             @ui.startdate.val EzBob.formatDate2(@campaign.StartDate)
             @ui.enddate.val EzBob.formatDate2(@campaign.EndDate)
-            @ui.clients.val @campaign.Customers.replace(/,/g,' ')
+            @ui.clients.val @campaign.Customers.replace(/, /g,' ')
             @ui.addCampaignBtn.html 'Update Campaign'
 
 
