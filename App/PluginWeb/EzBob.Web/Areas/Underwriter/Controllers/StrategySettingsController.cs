@@ -318,6 +318,7 @@
 
 		[Ajax]
 		[HttpGet]
+		[Transactional]
 		public JsonNetResult SettingsCampaign()
 		{
 			var campaignsList = _campaignRepository
