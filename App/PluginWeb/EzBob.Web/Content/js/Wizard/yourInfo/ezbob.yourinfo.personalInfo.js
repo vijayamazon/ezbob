@@ -156,7 +156,7 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
             this.$el.find('#OverallTurnOver').autoNumericSet(oPersonalInfo.OverallTurnOver);
         } // if has personal info
 
-        this.$el.find('input, select').change();
+        this.$el.find('input, select:not(.form_field_date[value="-"])').change();
 
         this.inputChanged();
     },
