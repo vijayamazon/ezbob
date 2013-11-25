@@ -21,7 +21,6 @@
 	}
 }
 
-
 namespace EZBob.DatabaseLib.Model.DataMapping
 {
 	using Database;

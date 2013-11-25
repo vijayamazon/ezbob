@@ -696,6 +696,13 @@ EzBob.formatDate = function (date) {
     return moment.utc(date).local().format("MMM DD, YYYY");
 };
 
+//formats date for user from utc asp.net date
+EzBob.formatDate2 = function (date) {
+    if (!date) return "";
+    return moment.utc(date).local().format("DD/MM/YYYY");
+};
+
+
 //formats date for user from utc asp.net date + time
 EzBob.formatDateTime = function (date) {
     if (!date) return "";
