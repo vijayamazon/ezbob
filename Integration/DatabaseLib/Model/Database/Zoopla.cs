@@ -1,95 +1,24 @@
 ﻿namespace EZBob.DatabaseLib.Model.Database
 {
-	using ApplicationMng.Model;
-
-
 	public class Zoopla
 	{
-		public virtual int Id
-		{
-			get;
-			set;
-		}
-		public virtual CustomerAddress CustomerAddress
-		{
-			get;
-			set;
-		}
-		public virtual string AreaName
-		{
-			get;
-			set;
-		}
-		public virtual int AverageSoldPrice1Year
-		{
-			get;
-			set;
-		}
-		public virtual int AverageSoldPrice3Year
-		{
-			get;
-			set;
-		}
-		public virtual int AverageSoldPrice5Year
-		{
-			get;
-			set;
-		}
-		public virtual int AverageSoldPrice7Year
-		{
-			get;
-			set;
-		}
-		public virtual int NumerOfSales1Year
-		{
-			get;
-			set;
-		}
-		public virtual int NumerOfSales3Year
-		{
-			get;
-			set;
-		}
-		public virtual int NumerOfSales5Year
-		{
-			get;
-			set;
-		}
-		public virtual int NumerOfSales7Year
-		{
-			get;
-			set;
-		}
-		public virtual double TurnOver
-		{
-			get;
-			set;
-		}
-		public virtual string PricesUrl
-		{
-			get;
-			set;
-		}
-		public virtual string AverageValuesGraphUrl
-		{
-			get;
-			set;
-		}
-		public virtual string ValueRangesGraphUrl
-		{
-			get;
-			set;
-		}
-		public virtual string ValueTrendGraphUrl
-		{
-			get;
-			set;
-		}
-		public virtual string HomeValuesGraphUrl
-		{
-			get;
-			set;
-		}
+		public virtual int Id { get; set; }
+		public virtual CustomerAddress CustomerAddress { get; set; }
+		public virtual string AreaName { get; set; }
+		public virtual int AverageSoldPrice1Year { get; set; }
+		public virtual int AverageSoldPrice3Year { get; set; }
+		public virtual int AverageSoldPrice5Year { get; set; }
+		public virtual int AverageSoldPrice7Year { get; set; }
+		public virtual int NumerOfSales1Year { get; set; }
+		public virtual int NumerOfSales3Year { get; set; }
+		public virtual int NumerOfSales5Year { get; set; }
+		public virtual int NumerOfSales7Year { get; set; }
+		public virtual double TurnOver { get; set; }
+		public virtual string PricesUrl { get; set; }
+		public virtual string AverageValuesGraphUrl { get; set; }
+		public virtual string ValueRangesGraphUrl { get; set; }
+		public virtual string ValueTrendGraphUrl { get; set; }
+		public virtual string HomeValuesGraphUrl { get; set; }
 	}
 }
 

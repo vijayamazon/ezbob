@@ -7,11 +7,11 @@ class EzBob.Underwriter.StrategySettingsView extends Backbone.View
         @template = _.template($("#strategy-detail-settings").html())
 
     render: ->
-        console.clear()
         @$el.html @template()
-        general = @$el.find("#general-settings")
-        charges = @$el.find("#charges-settings")
+        general = @$el.find "#general-settings"
+        charges = @$el.find "#charges-settings"
         experian = @$el.find "#experian-settings"
+        campaign = @$el.find "#campaign-settings"
 
         @generalModel =  new EzBob.Underwriter.SettingsGeneralModel()
         @generalView =  new EzBob.Underwriter.SettingsGeneralView(
@@ -24,10 +24,15 @@ class EzBob.Underwriter.StrategySettingsView extends Backbone.View
             model: @chargesModel
         )
         @experianModel =  new EzBob.Underwriter.Settings.ExperianModel()
-        @experianView =  new EzBob.Underwriter.Settings.ExperianView
+        @experianView =  new EzBob.Underwriter.Settings.ExperianView(
             el: experian
             model: @experianModel
-
+        )
+        @campaignModel = new EzBob.Underwriter.Settings.CampaignModel()
+        @campaignView =  new EzBob.Underwriter.Settings.CampaignView(
+            el: campaign
+            model: @campaignModel
+        )
     show: (type) ->
         this.$el.show()
 

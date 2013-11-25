@@ -19,24 +19,24 @@
 			sumReview12M = ai.NegativeFeedbackrate12M * 1.0 + ai.PositiveFeedbackRate12M * 1.0 + ai.NeutralFeedbackrate12M * 1.0,
 			sumReviewLifetime = ai.NegativeFeedbackrateLifetime * 1.0 + ai.PositiveFeedbackRateLifetime * 1.0 + ai.NeutralFeedbackrateLifetime * 1.0,
 			
-			positivePercent1M = (sumReview1M != 0 ? ai.PositiveFeedbackRate1M / sumReview1M * 100 : 0).toFixed(0), 
-			negativePercent1M = (sumReview1M != 0 ? ai.NegativeFeedbackrate1M / sumReview1M * 100 : 0).toFixed(0), 
-			neutralPercent1M  = (sumReview1M != 0 ? ai.NeutralFeedbackrate1M  / sumReview1M * 100 : 0).toFixed(0),  
+			positivePercent1M = (sumReview1M != 0 ? ai.PositiveFeedbackRate1M / sumReview1M * 100 : 0).toFixed(0),
+			negativePercent1M = (sumReview1M != 0 ? ai.NegativeFeedbackrate1M / sumReview1M * 100 : 0).toFixed(0),
+			neutralPercent1M  = (sumReview1M != 0 ? ai.NeutralFeedbackrate1M  / sumReview1M * 100 : 0).toFixed(0),
 
-			positivePercent3M = (sumReview3M != 0 ? ai.PositiveFeedbackRate3M / sumReview3M * 100 : 0).toFixed(0), 
-			negativePercent3M = (sumReview3M != 0 ? ai.NegativeFeedbackrate3M / sumReview3M * 100 : 0).toFixed(0),  
-			neutralPercent3M  = (sumReview3M != 0 ? ai.NeutralFeedbackrate3M / sumReview3M * 100 : 0).toFixed(0),  
+			positivePercent3M = (sumReview3M != 0 ? ai.PositiveFeedbackRate3M / sumReview3M * 100 : 0).toFixed(0),
+			negativePercent3M = (sumReview3M != 0 ? ai.NegativeFeedbackrate3M / sumReview3M * 100 : 0).toFixed(0),
+			neutralPercent3M  = (sumReview3M != 0 ? ai.NeutralFeedbackrate3M / sumReview3M * 100 : 0).toFixed(0),
 			
-			positivePercent6M = (sumReview6M != 0 ? ai.PositiveFeedbackRate6M / sumReview6M * 100 : 0).toFixed(0), 
-			negativePercent6M = (sumReview6M != 0 ? ai.NegativeFeedbackrate6M / sumReview6M * 100 : 0).toFixed(0),  
-			neutralPercent6M  = (sumReview6M != 0 ? ai.NeutralFeedbackrate6M / sumReview6M * 100 : 0).toFixed(0),  
+			positivePercent6M = (sumReview6M != 0 ? ai.PositiveFeedbackRate6M / sumReview6M * 100 : 0).toFixed(0),
+			negativePercent6M = (sumReview6M != 0 ? ai.NegativeFeedbackrate6M / sumReview6M * 100 : 0).toFixed(0),
+			neutralPercent6M  = (sumReview6M != 0 ? ai.NeutralFeedbackrate6M / sumReview6M * 100 : 0).toFixed(0),
 
-			positivePercent12M = (sumReview12M != 0 ? ai.PositiveFeedbackRate12M / sumReview12M * 100 : 0).toFixed(0),  
-			negativePercent12M = (sumReview12M != 0 ? ai.NegativeFeedbackrate12M / sumReview12M * 100 : 0).toFixed(0), 
-			neutralPercent12M  = (sumReview12M != 0 ? ai.NeutralFeedbackrate12M / sumReview12M * 100 : 0).toFixed(0), 
+			positivePercent12M = (sumReview12M != 0 ? ai.PositiveFeedbackRate12M / sumReview12M * 100 : 0).toFixed(0),
+			negativePercent12M = (sumReview12M != 0 ? ai.NegativeFeedbackrate12M / sumReview12M * 100 : 0).toFixed(0),
+			neutralPercent12M  = (sumReview12M != 0 ? ai.NeutralFeedbackrate12M / sumReview12M * 100 : 0).toFixed(0),
 
-			positivePercentLifetime = (sumReviewLifetime != 0 ? ai.PositiveFeedbackRateLifetime / sumReviewLifetime * 100 : 0).toFixed(0),  
-			negativePercentLifetime = (sumReviewLifetime != 0 ? ai.NegativeFeedbackrateLifetime / sumReviewLifetime * 100 : 0).toFixed(0),  
+			positivePercentLifetime = (sumReviewLifetime != 0 ? ai.PositiveFeedbackRateLifetime / sumReviewLifetime * 100 : 0).toFixed(0),
+			negativePercentLifetime = (sumReviewLifetime != 0 ? ai.NegativeFeedbackrateLifetime / sumReviewLifetime * 100 : 0).toFixed(0),
 			neutralPercentLifetime  = (sumReviewLifetime != 0 ? ai.NeutralFeedbackrateLifetime / sumReviewLifetime * 100 : 0).toFixed(0)
 		;
 

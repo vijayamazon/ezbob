@@ -83,6 +83,9 @@
     <Compile Include="Model\CustomerSession.cs" />
     <Compile Include="Model\Database\ApprovalsWithoutAML.cs" />
     <Compile Include="Model\Database\ApprovalsWithoutAMLMap.cs" />
+    <Compile Include="Model\Database\Campaign\Campaign.cs" />
+    <Compile Include="Model\Database\Campaign\CampaignType.cs" />
+    <Compile Include="Model\Database\Campaign\CampaignClients.cs" />
     <Compile Include="Model\Database\CompanyEmployeeCount.cs" />
     <Compile Include="Model\Database\CompanyEmployeeCountMap.cs" />
     <Compile Include="Model\Database\WhatsNewCustomerMap.cs" />

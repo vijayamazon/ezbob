@@ -8,11 +8,13 @@
                 <li class="active"><a href="#general-settings" data-toggle="tab">General Settings</a></li>
                 <li><a href="#charges-settings" data-toggle="tab">Charges</a></li>
                 <li><a href="#experian-settings" data-toggle="tab">Experian</a></li>
+                <li><a href="#campaign-settings" data-toggle="tab">Campaign</a></li>
             </ul>
             <div class="tab-content">
                 <div class="tab-pane active" id="general-settings"></div>
                 <div class="tab-pane" id="charges-settings"></div>
                 <div class="tab-pane" id="experian-settings"></div>
+                <div class="tab-pane" id="campaign-settings"></div>
             </div>
         </div>  
     </div>
@@ -25,3 +27,4 @@
 @{ Html.RenderPartial("AutomationSettings/_GeneralSettings"); }
 @{ Html.RenderPartial("AutomationSettings/_ChargesSettings"); }
 @{ Html.RenderPartial("AutomationSettings/_ExperianSettings"); }
+@{ Html.RenderPartial("AutomationSettings/_CampaignSettings"); }

@@ -1,306 +1,424 @@
-﻿using System.Collections.Generic;
-using System.Web.Mvc;
-using EZBob.DatabaseLib.Model;
-using EzBob.Web.Infrastructure.csrf;
-using Scorto.Web;
-
-namespace EzBob.Web.Areas.Underwriter.Controllers
+﻿namespace EzBob.Web.Areas.Underwriter.Controllers
 {
+	using System.Globalization;
+	using System.Web.Mvc;
+	using EZBob.DatabaseLib.Model;
+	using EZBob.DatabaseLib.Model.Database;
+	using Infrastructure.csrf;
+	using Scorto.Web;
+	using System;
+	using System.Linq;
+	using EZBob.DatabaseLib.Model.Database.Repository;
+	using log4net;
 
-    public class StrategySettingsController : Controller
-    {
+	public class StrategySettingsController : Controller
+	{
 
-        private readonly IConfigurationVariablesRepository _configurationVariablesRepository;
+		private readonly IConfigurationVariablesRepository _configurationVariablesRepository;
+		private readonly CampaignRepository _campaignRepository;
+		private readonly CampaignTypeRepository _campaignTypeRepository;
+		private readonly CampaignClientsRepository _campaignClientsRepository;
+		private readonly CustomerRepository _customerRepository;
+		private static readonly ILog Log = LogManager.GetLogger(typeof(StrategySettingsController));
 
-        public StrategySettingsController(IConfigurationVariablesRepository configurationVariablesRepository)
-        {
-            _configurationVariablesRepository = configurationVariablesRepository;
-        }
+		public StrategySettingsController(IConfigurationVariablesRepository configurationVariablesRepository, CampaignRepository campaignRepository, CampaignTypeRepository campaignTypeRepository, CustomerRepository customerRepository, CampaignClientsRepository campaignClientsRepository)
+		{
+			_configurationVariablesRepository = configurationVariablesRepository;
+			_campaignRepository = campaignRepository;
+			_campaignTypeRepository = campaignTypeRepository;
+			_customerRepository = customerRepository;
+			_campaignClientsRepository = campaignClientsRepository;
+		}
 
-        [Ajax]
-        [ValidateJsonAntiForgeryToken]
-        [HttpGet]
-        [Transactional]
-        public JsonNetResult Index()
-        {
-            return this.JsonNet(string.Empty);
-        }
+		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		[HttpGet]
+		[Transactional]
+		public JsonNetResult Index()
+		{
+			return this.JsonNet(string.Empty);
+		}
 
-        [Ajax]
-        [ValidateJsonAntiForgeryToken]
-        [HttpGet]
-        [Transactional]
-        public JsonNetResult SettingsGeneral()
-        {
-            var bwaBusinessCheck = _configurationVariablesRepository.GetByName("BWABusinessCheck");
-            var displayEarnedPoints = _configurationVariablesRepository.GetByName("DisplayEarnedPoints");
+		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		[HttpGet]
+		[Transactional]
+		public JsonNetResult SettingsGeneral()
+		{
+			var bwaBusinessCheck = _configurationVariablesRepository.GetByName("BWABusinessCheck");
+			var displayEarnedPoints = _configurationVariablesRepository.GetByName("DisplayEarnedPoints");
 
-            var st = new
-                {
-                    BWABusinessCheck = bwaBusinessCheck.Value,
-                    BWABusinessCheckDesc = bwaBusinessCheck.Description,
-                    DisplayEarnedPoints = displayEarnedPoints.Value,
-                    DisplayEarnedPointsDesc = displayEarnedPoints.Description
-                };
-            return this.JsonNet(st);
-        }
+			var st = new
+				{
+					BWABusinessCheck = bwaBusinessCheck.Value,
+					BWABusinessCheckDesc = bwaBusinessCheck.Description,
+					DisplayEarnedPoints = displayEarnedPoints.Value,
+					DisplayEarnedPointsDesc = displayEarnedPoints.Description
+				};
+			return this.JsonNet(st);
+		}
 
-        [Ajax]
-        [ValidateJsonAntiForgeryToken]
-        [HttpPost]
-        [Transactional]
-        public JsonNetResult SettingsGeneral(string BWABusinessCheck, string DisplayEarnedPoints)
-        {
-            _configurationVariablesRepository.SetByName("BWABusinessCheck", BWABusinessCheck);
-            _configurationVariablesRepository.SetByName("DisplayEarnedPoints", DisplayEarnedPoints);
-            return SettingsGeneral();
-        }
+		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		[HttpPost]
+		[Transactional]
+		public JsonNetResult SettingsGeneral(string BWABusinessCheck, string DisplayEarnedPoints)
+		{
+			_configurationVariablesRepository.SetByName("BWABusinessCheck", BWABusinessCheck);
+			_configurationVariablesRepository.SetByName("DisplayEarnedPoints", DisplayEarnedPoints);
+			return SettingsGeneral();
+		}
 
-        [Ajax]
-        [ValidateJsonAntiForgeryToken]
-        [HttpGet]
-        [Transactional]
-        public JsonNetResult SettingsCharges()
-        {
-            var latePaymentCharge = _configurationVariablesRepository.GetByName("LatePaymentCharge");
-            var rolloverCharge = _configurationVariablesRepository.GetByName("RolloverCharge");
-            var partialPaymentCharge = _configurationVariablesRepository.GetByName("PartialPaymentCharge");
-            var administrationCharge = _configurationVariablesRepository.GetByName("AdministrationCharge");
-            var otherCharge = _configurationVariablesRepository.GetByName("OtherCharge");
-            var amountToChargeFrom = _configurationVariablesRepository.GetByName("AmountToChargeFrom");
+		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		[HttpGet]
+		[Transactional]
+		public JsonNetResult SettingsCharges()
+		{
+			var latePaymentCharge = _configurationVariablesRepository.GetByName("LatePaymentCharge");
+			var rolloverCharge = _configurationVariablesRepository.GetByName("RolloverCharge");
+			var partialPaymentCharge = _configurationVariablesRepository.GetByName("PartialPaymentCharge");
+			var administrationCharge = _configurationVariablesRepository.GetByName("AdministrationCharge");
+			var otherCharge = _configurationVariablesRepository.GetByName("OtherCharge");
+			var amountToChargeFrom = _configurationVariablesRepository.GetByName("AmountToChargeFrom");
 
-            var sc = new
-                {
-                    LatePaymentCharge = latePaymentCharge.Value,
-                    LatePaymentChargeDesc = latePaymentCharge.Description,
-                    RolloverCharge = rolloverCharge.Value,
-                    RolloverChargeDesc = rolloverCharge.Description,
-                    PartialPaymentCharge = partialPaymentCharge.Value,
-                    PartialPaymentChargeDesc = partialPaymentCharge.Description,
-                    AdministrationCharge = administrationCharge.Value,
-                    AdministrationChargeDesc = administrationCharge.Description,
-                    OtherCharge = otherCharge.Value,
-                    OtherChargeDesc = otherCharge.Description,
-                    AmountToChargeFrom = amountToChargeFrom.Value,
-                    AmountToChargeFromDesc = amountToChargeFrom.Description
-                };
-            return this.JsonNet(sc);
-        }
+			var sc = new
+				{
+					LatePaymentCharge = latePaymentCharge.Value,
+					LatePaymentChargeDesc = latePaymentCharge.Description,
+					RolloverCharge = rolloverCharge.Value,
+					RolloverChargeDesc = rolloverCharge.Description,
+					PartialPaymentCharge = partialPaymentCharge.Value,
+					PartialPaymentChargeDesc = partialPaymentCharge.Description,
+					AdministrationCharge = administrationCharge.Value,
+					AdministrationChargeDesc = administrationCharge.Description,
+					OtherCharge = otherCharge.Value,
+					OtherChargeDesc = otherCharge.Description,
+					AmountToChargeFrom = amountToChargeFrom.Value,
+					AmountToChargeFromDesc = amountToChargeFrom.Description
+				};
+			return this.JsonNet(sc);
+		}
 
-        [Ajax]
-        [ValidateJsonAntiForgeryToken]
-        [HttpPost]
-        [Transactional]
-        public JsonNetResult SettingsCharges(string administrationCharge,
-            string latePaymentCharge,
-            string otherCharge,
-            string partialPaymentCharge,
-            string rolloverCharge,
-            string amountToChargeFrom
-            )
-        {
-            _configurationVariablesRepository.SetByName("AdministrationCharge", administrationCharge);
-            _configurationVariablesRepository.SetByName("LatePaymentCharge", latePaymentCharge);
-            _configurationVariablesRepository.SetByName("OtherCharge", otherCharge);
-            _configurationVariablesRepository.SetByName("PartialPaymentCharge", partialPaymentCharge);
-            _configurationVariablesRepository.SetByName("RolloverCharge", rolloverCharge);
-            _configurationVariablesRepository.SetByName("AmountToChargeFrom", amountToChargeFrom);
-            return SettingsCharges();
-        }
+		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		[HttpPost]
+		[Transactional]
+		public JsonNetResult SettingsCharges(string administrationCharge,
+			string latePaymentCharge,
+			string otherCharge,
+			string partialPaymentCharge,
+			string rolloverCharge,
+			string amountToChargeFrom
+			)
+		{
+			_configurationVariablesRepository.SetByName("AdministrationCharge", administrationCharge);
+			_configurationVariablesRepository.SetByName("LatePaymentCharge", latePaymentCharge);
+			_configurationVariablesRepository.SetByName("OtherCharge", otherCharge);
+			_configurationVariablesRepository.SetByName("PartialPaymentCharge", partialPaymentCharge);
+			_configurationVariablesRepository.SetByName("RolloverCharge", rolloverCharge);
+			_configurationVariablesRepository.SetByName("AmountToChargeFrom", amountToChargeFrom);
+			return SettingsCharges();
+		}
 
-        [Ajax]
-        [ValidateJsonAntiForgeryToken]
-        [HttpGet]
-        [Transactional]
-        public JsonNetResult AutomationGeneral()
-        {
-            return this.JsonNet(string.Empty);
-        }
+		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		[HttpGet]
+		[Transactional]
+		public JsonNetResult AutomationGeneral()
+		{
+			return this.JsonNet(string.Empty);
+		}
 
-        [Ajax]
-        [ValidateJsonAntiForgeryToken]
-        [HttpPost]
-        [Transactional]
-        public JsonNetResult AutomationGeneral(string[] newSettings)
-        {
-            return this.JsonNet(string.Empty);
-        }
+		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		[HttpPost]
+		[Transactional]
+		public JsonNetResult AutomationGeneral(string[] newSettings)
+		{
+			return this.JsonNet(string.Empty);
+		}
 
-        [Ajax]
-        [ValidateJsonAntiForgeryToken]
-        [HttpGet]
-        [Transactional]
-        public JsonNetResult AutomationApproval()
+		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		[HttpGet]
+		[Transactional]
+		public JsonNetResult AutomationApproval()
 		{
 			var enableAutomaticApproval = _configurationVariablesRepository.GetByName("EnableAutomaticApproval");
 			var enableAutomaticReApproval = _configurationVariablesRepository.GetByName("EnableAutomaticReApproval");
-            var maxCapHomeOwner = _configurationVariablesRepository.GetByName("MaxCapHomeOwner");
-            var maxCapNotHomeOwner = _configurationVariablesRepository.GetByName("MaxCapNotHomeOwner");
+			var maxCapHomeOwner = _configurationVariablesRepository.GetByName("MaxCapHomeOwner");
+			var maxCapNotHomeOwner = _configurationVariablesRepository.GetByName("MaxCapNotHomeOwner");
 
-	        var sa = new
-		        {
-			        EnableAutomaticApproval = enableAutomaticApproval.Value,
-			        EnableAutomaticApprovalDesc = enableAutomaticApproval.Description,
-			        EnableAutomaticReApproval = enableAutomaticReApproval.Value,
-			        EnableAutomaticReApprovalDesc = enableAutomaticReApproval.Description,
-			        MaxCapHomeOwner = maxCapHomeOwner.Value,
-			        MaxCapHomeOwnerDesc = maxCapHomeOwner.Description,
-			        MaxCapNotHomeOwner = maxCapNotHomeOwner.Value,
-			        MaxCapNotHomeOwnerDesc = maxCapNotHomeOwner.Description
-		        };
-            return this.JsonNet(sa);
-        }
+			var sa = new
+				{
+					EnableAutomaticApproval = enableAutomaticApproval.Value,
+					EnableAutomaticApprovalDesc = enableAutomaticApproval.Description,
+					EnableAutomaticReApproval = enableAutomaticReApproval.Value,
+					EnableAutomaticReApprovalDesc = enableAutomaticReApproval.Description,
+					MaxCapHomeOwner = maxCapHomeOwner.Value,
+					MaxCapHomeOwnerDesc = maxCapHomeOwner.Description,
+					MaxCapNotHomeOwner = maxCapNotHomeOwner.Value,
+					MaxCapNotHomeOwnerDesc = maxCapNotHomeOwner.Description
+				};
+			return this.JsonNet(sa);
+		}
 
-        [Ajax]
-        [ValidateJsonAntiForgeryToken]
-        [HttpPost]
-        [Transactional]
+		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		[HttpPost]
+		[Transactional]
 		public JsonNetResult AutomationApproval(
 												string EnableAutomaticApproval,
 												string EnableAutomaticReApproval,
-                                                string MaxCapHomeOwner,
-                                                string MaxCapNotHomeOwner
-            )
+												string MaxCapHomeOwner,
+												string MaxCapNotHomeOwner
+			)
 		{
 			_configurationVariablesRepository.SetByName("EnableAutomaticApproval", EnableAutomaticApproval);
 			_configurationVariablesRepository.SetByName("EnableAutomaticReApproval", EnableAutomaticReApproval);
-            _configurationVariablesRepository.SetByName("MaxCapHomeOwner", MaxCapHomeOwner);
-            _configurationVariablesRepository.SetByName("MaxCapNotHomeOwner", MaxCapNotHomeOwner);
-            return AutomationApproval();
-        }
+			_configurationVariablesRepository.SetByName("MaxCapHomeOwner", MaxCapHomeOwner);
+			_configurationVariablesRepository.SetByName("MaxCapNotHomeOwner", MaxCapNotHomeOwner);
+			return AutomationApproval();
+		}
 
-        [Ajax]
-        [ValidateJsonAntiForgeryToken]
-        [HttpGet]
-        [Transactional]
-        public JsonNetResult AutomationRejection()
-        {
-            var enableAutomaticRejection = _configurationVariablesRepository.GetByName("EnableAutomaticRejection");
-            var lowCreditScore = _configurationVariablesRepository.GetByName("LowCreditScore");
-            var totalAnnualTurnover = _configurationVariablesRepository.GetByName("TotalAnnualTurnover");
-            var totalThreeMonthTurnover = _configurationVariablesRepository.GetByName("TotalThreeMonthTurnover");
+		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		[HttpGet]
+		[Transactional]
+		public JsonNetResult AutomationRejection()
+		{
+			var enableAutomaticRejection = _configurationVariablesRepository.GetByName("EnableAutomaticRejection");
+			var lowCreditScore = _configurationVariablesRepository.GetByName("LowCreditScore");
+			var totalAnnualTurnover = _configurationVariablesRepository.GetByName("TotalAnnualTurnover");
+			var totalThreeMonthTurnover = _configurationVariablesRepository.GetByName("TotalThreeMonthTurnover");
 
-            var reject_Defaults_CreditScore = _configurationVariablesRepository.GetByName("Reject_Defaults_CreditScore");
-            var reject_Defaults_AccountsNum = _configurationVariablesRepository.GetByName("Reject_Defaults_AccountsNum");
-            var reject_Defaults_Amount = _configurationVariablesRepository.GetByName("Reject_Defaults_Amount");
+			var reject_Defaults_CreditScore = _configurationVariablesRepository.GetByName("Reject_Defaults_CreditScore");
+			var reject_Defaults_AccountsNum = _configurationVariablesRepository.GetByName("Reject_Defaults_AccountsNum");
+			var reject_Defaults_Amount = _configurationVariablesRepository.GetByName("Reject_Defaults_Amount");
 			var reject_Defaults_MonthsNum = _configurationVariablesRepository.GetByName("Reject_Defaults_MonthsNum");
 			var reject_Minimal_Seniority = _configurationVariablesRepository.GetByName("Reject_Minimal_Seniority");
 
-            var enableAutomaticReRejection = _configurationVariablesRepository.GetByName("EnableAutomaticReRejection");
-            var autoRejectionExceptionCreditScore = _configurationVariablesRepository.GetByName("AutoRejectionException_CreditScore");
-            var autoRejectionExceptionAnualTurnover = _configurationVariablesRepository.GetByName("AutoRejectionException_AnualTurnover");
+			var enableAutomaticReRejection = _configurationVariablesRepository.GetByName("EnableAutomaticReRejection");
+			var autoRejectionExceptionCreditScore = _configurationVariablesRepository.GetByName("AutoRejectionException_CreditScore");
+			var autoRejectionExceptionAnualTurnover = _configurationVariablesRepository.GetByName("AutoRejectionException_AnualTurnover");
 
 
-            var sr = new
-                {
-                    EnableAutomaticRejection = enableAutomaticRejection.Value,
-                    EnableAutomaticRejectionDesc = enableAutomaticRejection.Description,
-                    LowCreditScore = lowCreditScore.Value,
-                    LowCreditScoreDesc = lowCreditScore.Description,
-                    TotalAnnualTurnover = totalAnnualTurnover.Value,
-                    TotalAnnualTurnoverDesc = totalAnnualTurnover.Description,
-                    TotalThreeMonthTurnover = totalThreeMonthTurnover.Value,
-                    TotalThreeMonthTurnoverDesc = totalThreeMonthTurnover.Description,
-                    Reject_Defaults_CreditScore = reject_Defaults_CreditScore.Value,
-                    Reject_Defaults_CreditScoreDesc = reject_Defaults_CreditScore.Description,
-                    Reject_Defaults_AccountsNum = reject_Defaults_AccountsNum.Value,
-                    Reject_Defaults_AccountsNumDesc = reject_Defaults_AccountsNum.Description,
-                    Reject_Defaults_Amount = reject_Defaults_Amount.Value,
-                    Reject_Defaults_AmountDesc = reject_Defaults_Amount.Description,
-                    Reject_Defaults_MonthsNum = reject_Defaults_MonthsNum.Value,
-                    Reject_Defaults_MonthsNumDesc = reject_Defaults_MonthsNum.Description,
+			var sr = new
+				{
+					EnableAutomaticRejection = enableAutomaticRejection.Value,
+					EnableAutomaticRejectionDesc = enableAutomaticRejection.Description,
+					LowCreditScore = lowCreditScore.Value,
+					LowCreditScoreDesc = lowCreditScore.Description,
+					TotalAnnualTurnover = totalAnnualTurnover.Value,
+					TotalAnnualTurnoverDesc = totalAnnualTurnover.Description,
+					TotalThreeMonthTurnover = totalThreeMonthTurnover.Value,
+					TotalThreeMonthTurnoverDesc = totalThreeMonthTurnover.Description,
+					Reject_Defaults_CreditScore = reject_Defaults_CreditScore.Value,
+					Reject_Defaults_CreditScoreDesc = reject_Defaults_CreditScore.Description,
+					Reject_Defaults_AccountsNum = reject_Defaults_AccountsNum.Value,
+					Reject_Defaults_AccountsNumDesc = reject_Defaults_AccountsNum.Description,
+					Reject_Defaults_Amount = reject_Defaults_Amount.Value,
+					Reject_Defaults_AmountDesc = reject_Defaults_Amount.Description,
+					Reject_Defaults_MonthsNum = reject_Defaults_MonthsNum.Value,
+					Reject_Defaults_MonthsNumDesc = reject_Defaults_MonthsNum.Description,
 					Reject_Minimal_Seniority = reject_Minimal_Seniority.Value,
 					Reject_Minimal_SeniorityDesc = reject_Minimal_Seniority.Description,
-                    EnableAutomaticReRejection = enableAutomaticReRejection.Value,
-                    EnableAutomaticReRejectionDesc = enableAutomaticReRejection.Description,
-                    AutoRejectionException_CreditScore = autoRejectionExceptionCreditScore.Value,
-                    AutoRejectionException_CreditScoreDesc = autoRejectionExceptionCreditScore.Description,
-                    AutoRejectionException_AnualTurnover = autoRejectionExceptionAnualTurnover.Value,
-                    AutoRejectionException_AnualTurnoverDesc = autoRejectionExceptionAnualTurnover.Description
-                    };
-            return this.JsonNet(sr);
-        }
+					EnableAutomaticReRejection = enableAutomaticReRejection.Value,
+					EnableAutomaticReRejectionDesc = enableAutomaticReRejection.Description,
+					AutoRejectionException_CreditScore = autoRejectionExceptionCreditScore.Value,
+					AutoRejectionException_CreditScoreDesc = autoRejectionExceptionCreditScore.Description,
+					AutoRejectionException_AnualTurnover = autoRejectionExceptionAnualTurnover.Value,
+					AutoRejectionException_AnualTurnoverDesc = autoRejectionExceptionAnualTurnover.Description
+				};
+			return this.JsonNet(sr);
+		}
 
-        [Ajax]
-        [ValidateJsonAntiForgeryToken]
-        [HttpPost]
-        [Transactional]
-        public JsonNetResult AutomationRejection(string EnableAutomaticRejection, 
-                                                 string LowCreditScore,
-                                                 string Reject_Defaults_AccountsNum,
-                                                 string Reject_Defaults_Amount,
-                                                 string Reject_Defaults_CreditScore,
-                                                 string Reject_Defaults_MonthsNum,
+		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		[HttpPost]
+		[Transactional]
+		public JsonNetResult AutomationRejection(string EnableAutomaticRejection,
+												 string LowCreditScore,
+												 string Reject_Defaults_AccountsNum,
+												 string Reject_Defaults_Amount,
+												 string Reject_Defaults_CreditScore,
+												 string Reject_Defaults_MonthsNum,
 												 string Reject_Minimal_Seniority,
-                                                 string TotalAnnualTurnover,
-                                                 string TotalThreeMonthTurnover,
-                                                 string EnableAutomaticReRejection,
-                                                 string AutoRejectionException_CreditScore,
-                                                 string AutoRejectionException_AnualTurnover)
-        {
-            _configurationVariablesRepository.SetByName("EnableAutomaticRejection", EnableAutomaticRejection);
-            _configurationVariablesRepository.SetByName("LowCreditScore", LowCreditScore);
-            _configurationVariablesRepository.SetByName("Reject_Defaults_AccountsNum", Reject_Defaults_AccountsNum);
-            _configurationVariablesRepository.SetByName("Reject_Defaults_Amount", Reject_Defaults_Amount);
+												 string TotalAnnualTurnover,
+												 string TotalThreeMonthTurnover,
+												 string EnableAutomaticReRejection,
+												 string AutoRejectionException_CreditScore,
+												 string AutoRejectionException_AnualTurnover)
+		{
+			_configurationVariablesRepository.SetByName("EnableAutomaticRejection", EnableAutomaticRejection);
+			_configurationVariablesRepository.SetByName("LowCreditScore", LowCreditScore);
+			_configurationVariablesRepository.SetByName("Reject_Defaults_AccountsNum", Reject_Defaults_AccountsNum);
+			_configurationVariablesRepository.SetByName("Reject_Defaults_Amount", Reject_Defaults_Amount);
 			_configurationVariablesRepository.SetByName("Reject_Defaults_CreditScore", Reject_Defaults_CreditScore);
 			_configurationVariablesRepository.SetByName("Reject_Defaults_MonthsNum", Reject_Defaults_MonthsNum);
 			_configurationVariablesRepository.SetByName("Reject_Minimal_Seniority", Reject_Minimal_Seniority);
-            _configurationVariablesRepository.SetByName("TotalAnnualTurnover", TotalAnnualTurnover);
-            _configurationVariablesRepository.SetByName("TotalThreeMonthTurnover", TotalThreeMonthTurnover);
-            _configurationVariablesRepository.SetByName("EnableAutomaticReRejection", EnableAutomaticReRejection);
-            _configurationVariablesRepository.SetByName("AutoRejectionException_CreditScore", AutoRejectionException_CreditScore);
-            _configurationVariablesRepository.SetByName("AutoRejectionException_AnualTurnover", AutoRejectionException_AnualTurnover);
+			_configurationVariablesRepository.SetByName("TotalAnnualTurnover", TotalAnnualTurnover);
+			_configurationVariablesRepository.SetByName("TotalThreeMonthTurnover", TotalThreeMonthTurnover);
+			_configurationVariablesRepository.SetByName("EnableAutomaticReRejection", EnableAutomaticReRejection);
+			_configurationVariablesRepository.SetByName("AutoRejectionException_CreditScore", AutoRejectionException_CreditScore);
+			_configurationVariablesRepository.SetByName("AutoRejectionException_AnualTurnover", AutoRejectionException_AnualTurnover);
 
-            return AutomationRejection();
-        }
+			return AutomationRejection();
+		}
 
-        [Ajax]
-        [HttpGet]
-        public JsonNetResult SettingsExperian()
-        {
-            var mainApplicant = _configurationVariablesRepository.GetByName("FinancialAccounts_MainApplicant").Value;
-            var aliasOfMainApplicant = _configurationVariablesRepository.GetByName("FinancialAccounts_AliasOfMainApplicant").Value;
-            var associationOfMainApplicant = _configurationVariablesRepository.GetByName("FinancialAccounts_AssociationOfMainApplicant").Value;
-            var jointApplicant = _configurationVariablesRepository.GetByName("FinancialAccounts_JointApplicant").Value;
-            var aliasOfJointApplicant = _configurationVariablesRepository.GetByName("FinancialAccounts_AliasOfJointApplicant").Value;
-            var associationOfJointApplicant = _configurationVariablesRepository.GetByName("FinancialAccounts_AssociationOfJointApplicant").Value;
-            var noMatch = _configurationVariablesRepository.GetByName("FinancialAccounts_No_Match").Value;
+		[Ajax]
+		[HttpGet]
+		public JsonNetResult SettingsExperian()
+		{
+			var mainApplicant = _configurationVariablesRepository.GetByName("FinancialAccounts_MainApplicant").Value;
+			var aliasOfMainApplicant = _configurationVariablesRepository.GetByName("FinancialAccounts_AliasOfMainApplicant").Value;
+			var associationOfMainApplicant = _configurationVariablesRepository.GetByName("FinancialAccounts_AssociationOfMainApplicant").Value;
+			var jointApplicant = _configurationVariablesRepository.GetByName("FinancialAccounts_JointApplicant").Value;
+			var aliasOfJointApplicant = _configurationVariablesRepository.GetByName("FinancialAccounts_AliasOfJointApplicant").Value;
+			var associationOfJointApplicant = _configurationVariablesRepository.GetByName("FinancialAccounts_AssociationOfJointApplicant").Value;
+			var noMatch = _configurationVariablesRepository.GetByName("FinancialAccounts_No_Match").Value;
 
-            var model = new
-            {
-                FinancialAccounts_MainApplicant = mainApplicant,
-                FinancialAccounts_AliasOfMainApplicant = aliasOfMainApplicant,
-                FinancialAccounts_AssociationOfMainApplicant = associationOfMainApplicant,
-                FinancialAccounts_JointApplicant = jointApplicant,
-                FinancialAccounts_AliasOfJointApplicant = aliasOfJointApplicant,
-                FinancialAccounts_AssociationOfJointApplicant = associationOfJointApplicant,
-                FinancialAccounts_No_Match = noMatch
-            };
-            return this.JsonNet(model);
-        }
+			var model = new
+			{
+				FinancialAccounts_MainApplicant = mainApplicant,
+				FinancialAccounts_AliasOfMainApplicant = aliasOfMainApplicant,
+				FinancialAccounts_AssociationOfMainApplicant = associationOfMainApplicant,
+				FinancialAccounts_JointApplicant = jointApplicant,
+				FinancialAccounts_AliasOfJointApplicant = aliasOfJointApplicant,
+				FinancialAccounts_AssociationOfJointApplicant = associationOfJointApplicant,
+				FinancialAccounts_No_Match = noMatch
+			};
+			return this.JsonNet(model);
+		}
 
-        // ReSharper disable  InconsistentNaming
-        [Ajax]
-        [HttpPost]
-        [Transactional]
-        public JsonNetResult SettingsExperian(
+		// ReSharper disable  InconsistentNaming
+		[Ajax]
+		[HttpPost]
+		[Transactional]
+		public JsonNetResult SettingsExperian(
 
-            string FinancialAccounts_MainApplicant,
-            string FinancialAccounts_AliasOfMainApplicant,
-            string FinancialAccounts_AssociationOfMainApplicant,
-            string FinancialAccounts_JointApplicant,
-            string FinancialAccounts_AliasOfJointApplicant,
-            string FinancialAccounts_AssociationOfJointApplicant,
-            string FinancialAccounts_No_Match)
-        {
-            _configurationVariablesRepository.SetByName("FinancialAccounts_MainApplicant", FinancialAccounts_MainApplicant);
-            _configurationVariablesRepository.SetByName("FinancialAccounts_AliasOfMainApplicant", FinancialAccounts_AliasOfMainApplicant);
-            _configurationVariablesRepository.SetByName("FinancialAccounts_AssociationOfMainApplicant", FinancialAccounts_AssociationOfMainApplicant);
-            _configurationVariablesRepository.SetByName("FinancialAccounts_JointApplicant", FinancialAccounts_JointApplicant);
-            _configurationVariablesRepository.SetByName("FinancialAccounts_AliasOfJointApplicant", FinancialAccounts_AliasOfJointApplicant);
-            _configurationVariablesRepository.SetByName("FinancialAccounts_AssociationOfJointApplicant", FinancialAccounts_AssociationOfJointApplicant);
-            _configurationVariablesRepository.SetByName("FinancialAccounts_No_Match", FinancialAccounts_No_Match);
-            return SettingsGeneral();
-        }
-    }
+			string FinancialAccounts_MainApplicant,
+			string FinancialAccounts_AliasOfMainApplicant,
+			string FinancialAccounts_AssociationOfMainApplicant,
+			string FinancialAccounts_JointApplicant,
+			string FinancialAccounts_AliasOfJointApplicant,
+			string FinancialAccounts_AssociationOfJointApplicant,
+			string FinancialAccounts_No_Match)
+		{
+			_configurationVariablesRepository.SetByName("FinancialAccounts_MainApplicant", FinancialAccounts_MainApplicant);
+			_configurationVariablesRepository.SetByName("FinancialAccounts_AliasOfMainApplicant", FinancialAccounts_AliasOfMainApplicant);
+			_configurationVariablesRepository.SetByName("FinancialAccounts_AssociationOfMainApplicant", FinancialAccounts_AssociationOfMainApplicant);
+			_configurationVariablesRepository.SetByName("FinancialAccounts_JointApplicant", FinancialAccounts_JointApplicant);
+			_configurationVariablesRepository.SetByName("FinancialAccounts_AliasOfJointApplicant", FinancialAccounts_AliasOfJointApplicant);
+			_configurationVariablesRepository.SetByName("FinancialAccounts_AssociationOfJointApplicant", FinancialAccounts_AssociationOfJointApplicant);
+			_configurationVariablesRepository.SetByName("FinancialAccounts_No_Match", FinancialAccounts_No_Match);
+			return SettingsGeneral();
+		}
+
+		[Ajax]
+		[HttpGet]
+		public JsonNetResult SettingsCampaign()
+		{
+			var campaignsList = _campaignRepository
+				.GetAll().ToList();
+
+			var campaigns = campaignsList
+				.Select(c => new
+					{
+						Name = c.Name,
+						Type = c.CampaignType.Type,
+						StartDate = c.StartDate,
+						EndDate = c.EndDate,
+						Description = c.Description,
+						Id = c.Id,
+						Customers = c.Clients.Any() ? c.Clients.Select(cc => cc.Customer.Id.ToString(CultureInfo.InvariantCulture)).ToList().Aggregate((i,j) => i + "," + j) : ""
+					})
+				.ToList();
+
+			var campaignTypes = _campaignTypeRepository
+				.GetAll()
+				.Select(ct => new
+					{
+						Type = ct.Type,
+						Id = ct.Id,
+						Description = ct.Description
+					})
+				.ToList();
+			
+			return this.JsonNet(new { campaigns, campaignTypes });
+		}
+
+		[Ajax]
+		[HttpPost]
+		[Transactional]
+		public JsonNetResult AddCampaign(
+
+			string campaignName,
+			string campaignDescription,
+			int? campaignType,
+			string campaignStartDate,
+			string campaignEndDate,
+			string campaignCustomers
+			)
+		{
+			if (string.IsNullOrEmpty(campaignName) || string.IsNullOrEmpty(campaignStartDate) ||
+				string.IsNullOrEmpty(campaignEndDate) || !campaignType.HasValue)
+			{
+				return this.JsonNet(new { success = false, error = "One or parameters missing" });
+			}
+
+
+			DateTime startDate = DateTime.ParseExact(campaignStartDate, "dd/MM/yyyy", null);
+			DateTime endDate = DateTime.ParseExact(campaignEndDate, "dd/MM/yyyy", null);
+			var campaign = new Campaign
+				{
+					Name = campaignName,
+					CampaignType = _campaignTypeRepository.Get(campaignType.Value),
+					StartDate = startDate,
+					EndDate = endDate,
+					Description = campaignDescription,
+				};
+			_campaignRepository.Save(campaign);
+			if (string.IsNullOrEmpty(campaignCustomers))
+			{
+				return this.JsonNet(new {success = true, error = ""});
+			}
+			string error = "";
+			var clients = campaignCustomers.Split(' ');
+			foreach (string client in clients)
+			{
+				int customerId;
+				if (int.TryParse(client, out customerId))
+				{
+					try
+					{
+						var customer = _customerRepository.TryGet(customerId);
+						if (customer != null)
+						{
+							_campaignClientsRepository.Save(new CampaignClients
+								{
+									Campaign = campaign,
+									Customer = customer
+								});
+						}
+						else
+						{
+							error += customerId + " not a valid customer id.";
+						}
+					}
+					catch (Exception)
+					{
+						error += customerId + " not a valid customer id.";
+					}
+				}
+				else
+				{
+					error += client + " not a valid customer id";
+				}
+			}
+			Log.DebugFormat("{0}, {1}, {2}, {3}, {4}, {5}. ", campaignName, campaignDescription, campaignType, startDate, endDate, campaignCustomers);
+			return this.JsonNet(new { success = true, error = error });
+		}
+	}
 }
