@@ -233,7 +233,7 @@
 <script id="employee-count-template" type="text/template">
     <h2 class="form_section">Payroll information</h2>
 
-    <div class="control-group">
+    <div class="control-group form_field_container">
         <div class="controls">
             <label class="control-label attardi-input">
                 <span>Current # of employees</span>
@@ -243,7 +243,7 @@
         </div>
     </div>
 
-    <div class="control-group">
+    <div class="control-group form_field_container">
         <div class="controls">
             <label class="control-label attardi-input">
                 <span># of earning (gross salary) over £41,450 per annum</span>
@@ -253,7 +253,7 @@
         </div>
     </div>
 
-    <div class="control-group">
+    <div class="control-group form_field_container">
         <div class="controls">
             <label class="control-label attardi-input">
                 <span># of earning (gross salary) less than £9,440 per annum</span>
@@ -263,7 +263,7 @@
         </div>
     </div>
 
-    <div class="control-group">
+    <div class="control-group form_field_container">
         <div class="controls">
             <label class="control-label attardi-input">
                 <span>Change in the # of employees in last 12 months</span>
@@ -286,7 +286,7 @@
         </div>
     </div>
 
-    <div class="control-group">
+    <div class="control-group form_field_container">
         <div class="controls">
             <label class="control-label attardi-input">
                 <span>Total monthly salary expenditure (inc tax & NI)</span>
@@ -307,7 +307,7 @@
             {
                 <input type="hidden" name="NonLimitedRefNum" class="RefNum" />
 
-                <div class="control-group">
+                <div class="control-group form_field_container">
                     <div class="controls">
                         <label class="control-label attardi-input">
                             <span>Name</span>
@@ -319,7 +319,7 @@
 
                 @EzForm.AddressInput("NonLimitedCompanyAddress", "Address")
 
-                <div class="control-group notoffline">
+                <div class="control-group form_field_container notoffline">
                     <div class="controls">
                         <label class="control-label attardi-input">
                             <span>Period of occupation</span>
@@ -334,7 +334,7 @@
                     </div>
                 </div>
 
-                <div class="control-group">
+                <div class="control-group form_field_container">
                     <div class="controls">
                         <label class="control-label attardi-input">
                             <span>Time in business</span>
@@ -358,7 +358,7 @@
        
                 @AdditionalCompanyInfo("NonLimited")
 
-                <div class="control-group">
+                <div class="control-group form_field_container">
                     <div class="controls">
                         <label class="control-label attardi-input">
                             <span>Business phone</span>
@@ -387,7 +387,7 @@
         <div>
             @using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm LimitedCompanyDetailForm" }))
             {
-                <div class="control-group">
+                <div class="control-group form_field_container">
                     <div class="controls">
                         <label class="control-label attardi-input">
                             <span>Registration #</span>
@@ -397,7 +397,7 @@
                     </div>
                 </div>
 
-                <div class="control-group">
+                <div class="control-group form_field_container">
                     <div class="controls">
                         <label class="control-label attardi-input">
                             <span>Name</span>
@@ -411,7 +411,7 @@
 
                 @AdditionalCompanyInfo("Limited")
 
-                <div class="control-group">
+                <div class="control-group form_field_container">
                     <div class="controls">
                         <label class="control-label attardi-input">
                             <span>Business phone</span>
@@ -500,7 +500,7 @@
         <div class="Directors">
             <h1 class="form_start" preffix="<%-preffix%>" seqno="<%=i%>">Director #<%=i+1%><a style="margin-left: 15px; margin-bottom: 7px" number="<%=i+1%>" href="#" class="removeDirector btn green">Remove</a></h1>
 
-            <div class="control-group">
+            <div class="control-group form_field_container">
                 <div class="controls">
                     <label class="control-label attardi-input">
                         <span>Name</span>
@@ -510,7 +510,7 @@
                 </div>
             </div>
 
-            <div class="control-group">
+            <div class="control-group form_field_container">
                 <div class="controls">
                     <label class="control-label attardi-input">
                         <span>Middle initial</span>
@@ -520,7 +520,7 @@
                 </div>
             </div>
 
-            <div class="control-group">
+            <div class="control-group form_field_container">
                 <div class="controls">
                     <label class="control-label attardi-input">
                         <span>Surname</span>
@@ -530,7 +530,7 @@
                 </div>
             </div>
 
-            <div class="form_field_container FormRadioCtrl">
+            <div class="control-group form_field_container FormRadioCtrl">
 				<span>
 					<input class="director_gender" <%if(director.Gender == 'M'){%>checked="checked"<%}%> type="radio" name="<%-preffix%>[<%=i%>].Gender" value="M" id="<%-preffix%>[<%=i%>].FormRadioCtrl_M"><label for="<%-preffix%>[<%=i%>].GenderCtrl_M">Male</label>
 					<input class="director_gender" <%if(director.Gender == 'F'){%>checked="checked"<%}%> type="radio" name="<%-preffix%>[<%=i%>].Gender" value="F" id="<%-preffix%>[<%=i%>].FormRadioCtrl_F"><label for="<%-preffix%>[<%=i%>].GenderCtrl_F">Female</label>
@@ -540,7 +540,7 @@
 
             @EzForm.DateInput("<%-preffix%>[<%=i%>].DateOfBirth", "Date of Birth", css: "director_date", required: true, statusIcon: true)
 
-            <div class="control-group">
+            <div class="control-group form_field_container">
                 <div class="controls">
                     <label class="control-label attardi-input">
                         <span>Email</span>
@@ -550,7 +550,7 @@
                 </div>
             </div>
 
-            <div class="control-group">
+            <div class="control-group form_field_container">
                 <div class="controls">
                     <label class="control-label attardi-input">
                         <span>Best contact number</span>

@@ -24,9 +24,13 @@
 	font-size: 70%;
 }
 
+.profile-widgets .attardi-input span.attardi-has-data {
+    height: 18px;
+}
+
 .attardi-input input, .attardi-input textarea, .attardi-input select {
 	z-index: 0;
 	padding: 4px;
 	margin: 0;
-	font: inherit;
+	/*font: inherit;*/
 }

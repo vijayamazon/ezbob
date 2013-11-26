@@ -10,48 +10,46 @@
             <h2 class="form_start">Please Select a Bank </h2>
         </div>
         <form id="yodleeAccount">
-            <div class="bank-account-instructions clearfix">
-                <div class="bank-account">
-                    <% if (YodleeBanks) {%>
-                    <div class="form_field_container BankContainer">
-                        <br />
-                        <% _.each(YodleeBanks.ImageBanks, function (bank, i) { %>
-                        <input type="radio" name="Bank" value="<%- bank.parentBankName %>" id="Bank_<%- bank.parentBankName %>" class="hide" />
-                        <a class="radio-fx <%- bank.parentBankName %>" href="#" id="<%- bank.parentBankName %>">
-                            <span class="<%- bank.parentBankName %> off"></span>
-                        </a>
-                        <% if (i % 2 !== 0) { %>
-                        <br />
-                        <% } %>
-                        <%});%>
-                    </div>
-                    <h3 id="subTypeHeader" class="hide">Select Account Type:</h3>
-                    <% _.each(YodleeBanks.ImageBanks, function (bank, i) {%>
-                    <select class="form_field_container hide <%- bank.parentBankName %>Container SubBank" size="3">
-                        <% _.each(bank.subBanks, function (sub, i) { %>
-                        <option value="<%- sub.csId %>"><%- sub.displayName %></option>
-                        <%});%>
-                    </select>
+            <div class="clearfix">
+                <% if (YodleeBanks) {%>
+                <div class="form_field_container BankContainer">
+                    <br />
+                    <% _.each(YodleeBanks.ImageBanks, function (bank, i) { %>
+                    <input type="radio" name="Bank" value="<%- bank.parentBankName %>" id="Bank_<%- bank.parentBankName %>" class="hide" />
+                    <a class="radio-fx <%- bank.parentBankName %>" href="#" id="<%- bank.parentBankName %>">
+                        <span class="<%- bank.parentBankName %> off"></span>
+                    </a>
+                    <% if (i % 2 !== 0) { %>
+                    <br />
+                    <% } %>
                     <%});%>
+                </div>
+                <h3 id="subTypeHeader" class="hide">Select Account Type:</h3>
+                <% _.each(YodleeBanks.ImageBanks, function (bank, i) {%>
+                <select class="form_field_container hide <%- bank.parentBankName %>Container SubBank" size="3">
+                    <% _.each(bank.subBanks, function (sub, i) { %>
+                    <option value="<%- sub.csId %>"><%- sub.displayName %></option>
+                    <%});%>
+                </select>
+                <%});%>
                     
-                    <div class="control-group form_field_container">
-                        <div class="controls">
-                            <label class="control-label attardi-input">
-                                <span>Other Banks</span>
-                                <select id="OtherYodleeBanks" class="form_field selectheight">
-                                    <option></option>
-                                    <% _.each(YodleeBanks.DropDownBanks, function (bank, i) { %>
-                                    <option value="<%-bank.csId%>"><%- bank.displayName %></option>
-                                    <%});%>
-                                </select>
-                            </label>
-                        </div>
+                <div class="control-group form_field_container">
+                    <div class="controls">
+                        <label class="control-label attardi-input">
+                            <span>Other Banks</span>
+                            <select id="OtherYodleeBanks" class="form_field selectheight">
+                                <option></option>
+                                <% _.each(YodleeBanks.DropDownBanks, function (bank, i) { %>
+                                <option value="<%-bank.csId%>"><%- bank.displayName %></option>
+                                <%});%>
+                            </select>
+                        </label>
                     </div>
-                    <%}/*if*/%>
-                    <div class="control-group clearfix" style="padding-right: 68px;">
-                        <a href="#yodlee_help" class="button orange pull-right disabled yodlee_help" id="yodleeLinkAccountBtn">Link Account</a>
-                        <a href="#" class="back button grey pull-right">Back</a>
-                    </div>
+                </div>
+                <%}/*if*/%>
+                <div class="control-group clearfix" style="padding-right: 68px;">
+                    <a href="#yodlee_help" class="button orange pull-right disabled yodlee_help" id="yodleeLinkAccountBtn">Link Account</a>
+                    <a href="#" class="back button grey pull-right">Back</a>
                 </div>
             </div>
 

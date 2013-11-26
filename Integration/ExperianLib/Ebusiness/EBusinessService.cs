@@ -57,13 +57,13 @@ namespace ExperianLib.Ebusiness
 			{
 				var response = CheckCache(regNumber);
 
-				if (string.IsNullOrEmpty(response.JsonPacket) && !checkInCacheOnly)
+				if (response == null && !checkInCacheOnly)
 				{
 					string requestXml = GetResource("ExperianLib.Ebusiness.LimitedBusinessRequest.xml", regNumber);
 
 					var newResponse = MakeRequest("POST", "application/xml", requestXml);
 
-					Utils.WriteLog(requestXml, response, "E-SeriesLimitedData", customerId);
+					Utils.WriteLog(requestXml, newResponse, "E-SeriesLimitedData", customerId);
 
 					AddToCache(regNumber, requestXml, newResponse);
 
@@ -95,13 +95,13 @@ namespace ExperianLib.Ebusiness
 			{
 				var response = CheckCache(regNumber);
 
-				if (string.IsNullOrEmpty(response.JsonPacket) && !checkInCacheOnly)
+				if (response == null && !checkInCacheOnly)
 				{
 					string requestXml = GetResource("ExperianLib.Ebusiness.NonLimitedBusinessRequest.xml", regNumber);
 
 					var newResponse = MakeRequest("POST", "application/xml", requestXml);
 
-					Utils.WriteLog(requestXml, response, "E-SeriesNonLimitedData", customerId);
+					Utils.WriteLog(requestXml, newResponse, "E-SeriesNonLimitedData", customerId);
 
 					AddToCache(regNumber, requestXml, newResponse);
 

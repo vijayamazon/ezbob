@@ -44,10 +44,11 @@
     var identificator = new HtmlString(id);
     var val = new HtmlString(value);
     
-    <div class="form_field_container control-group controls">
-        <label class="attardi-input">
-            <span>@caption</span>
-            <input 
+    <div class="form_field_container control-group">
+        <div class="controls">
+            <label class="attardi-input">
+                <span>@caption</span>
+                <input 
                 type="@type" 
                 name="@identificator" 
                 id="@identificator" 
@@ -57,31 +58,34 @@
                 { 
                     @:disabled="disabled"
                 } 
-                @if (tabIndex > 0) {
+                @if (tabIndex > 0)
+                {
                     @:tabindex="@tabIndex"
                 }
                 @if (maxLength > 0)
                 {
                     @:maxlength="@maxLength"
                 }
-             />
-        </label>
-        @if (statusIcon) {
-            var sId = identificator + "Image";
-            var sReq = isRequired ? "required" : "";
-            <img id="@sId" class="field_status @sReq"/>
-        }
-        else if (isRequired)
-        {
-            <span class="required">*</span>
-        }
+                />
+            </label>
+            @if (statusIcon)
+            {
+                var sId = identificator + "Image";
+                var sReq = isRequired ? "required" : "";
+                <img id="@sId" class="field_status @sReq"/>
+            }
+            else if (isRequired)
+            {
+                <span class="required">*</span>
+            }
+        </div>
     </div>
 }
 
 @helper InputTextUnderwriter(string id, string caption, string value, string cls = "", bool isDisabled = false)
 {
     
-    var identificator=new HtmlString(id);
+    var identificator = new HtmlString(id);
     var val = new HtmlString(value);
     <div class="control-group">
         <label for="@identificator" class="control-label">@(new HtmlString(caption))</label>
@@ -106,10 +110,11 @@
     var identificator = new HtmlString(id);
     var val = new HtmlString(value);
     
-    <div class="form_field_container">
-        <label class="attardi-input">
-            <span>@caption</span>
-            <input 
+    <div class="form_field_container control-group">
+        <div class="controls">
+            <label class="attardi-input">
+                <span>@caption</span>
+                <input 
                 type="password" 
                 name="@identificator" 
                 id="@identificator" 
@@ -119,17 +124,19 @@
                 { 
                     @:disabled="disabled"
                 } 
-             />
-        </label>
-        @if (statusIcon) {
-            var sId = identificator + "Image";
-            var sReq = isRequired ? "required" : "";
-            <img id="@sId" class="field_status @sReq"/>
-        }
-        else if (isRequired)
-        {
-            <span class="required">*</span>
-        }
+                />
+            </label>
+            @if (statusIcon)
+            {
+                var sId = identificator + "Image";
+                var sReq = isRequired ? "required" : "";
+                <img id="@sId" class="field_status @sReq"/>
+            }
+            else if (isRequired)
+            {
+                <span class="required">*</span>
+            }
+        </div>
     </div>
 }
 
@@ -253,7 +260,8 @@
     HtmlString oByPostcode = null;
     HtmlString oById = null;
 
-    if ((oCfg.DummyPostcodeSearchResult != string.Empty) && (oCfg.DummyAddressSearchResult != string.Empty)) {
+    if ((oCfg.DummyPostcodeSearchResult != string.Empty) && (oCfg.DummyAddressSearchResult != string.Empty))
+    {
         oByPostcode = new HtmlString(oCfg.DummyPostcodeSearchResult);
         oById = new HtmlString(oCfg.DummyAddressSearchResult);
     } // if
@@ -267,11 +275,12 @@
         </div>
     </div>
 
-    if (oByPostcode != null) { // !!! intentional inline style in the following line
-        <div style="display: none;" class="dummy_address_search_result">
-            <div class="by_postcode">@oByPostcode</div>
-            <div class="by_id">@oById</div>
-        </div>
+    if (oByPostcode != null)
+    { // !!! intentional inline style in the following line
+    <div style="display: none;" class="dummy_address_search_result">
+        <div class="by_postcode">@oByPostcode</div>
+        <div class="by_id">@oById</div>
+    </div>
     }
 }
 
@@ -287,11 +296,13 @@
     <div class="control-group form_field_container">
         <div class="controls ezDateTime">
             <span>@title</span>
-            @if (required && !statusIcon) {
-	            <span class="required">*</span>
+            @if (required && !statusIcon)
+            {
+                <span class="required">*</span>
             }
-            else {
-	            <span>&nbsp;</span>
+            else
+            {
+                <span>&nbsp;</span>
             }
 
             <label class="attardi-input">
@@ -345,13 +356,14 @@
             </label>
             <input  id='@identificator' class="@identificator @validationClass hidden-field" style="display: none !important" name="@identificator"/>
 
-			@if (statusIcon) {
-				var sReq = required ? "required" : "";
-				var sId = new HtmlString(identificator + "Image");
-				<img id="@sId" class="field_status @sReq"/>
-			}
+            @if (statusIcon)
+            {
+                var sReq = required ? "required" : "";
+                var sId = new HtmlString(identificator + "Image");
+                <img id="@sId" class="field_status @sReq"/>
+            }
 
-			
+
         </div>
     </div>
 }
@@ -362,54 +374,54 @@
     var validationClass = required ? "requiredDate" : "";
     var identificator = new HtmlString(name);
 
-    <div class="control-group" >
+    <div class="control-group">
 
         <label for="day" class="control-label">@title</label>
         <div class="controls ezDateTime">
-            <select name="day" style="width: 60px;" class="selectheight" >
+            <select name="day" style="width: 60px;" class="selectheight">
                 <option value="-">-</option>
                 @{ for (var i = 1; i <= 31; i++)
                    {
-                       <option @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Day == i)
-                               {
+                    <option @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Day == i)
+                            {
                                    @:selected="selected"
                                }
                         value="@i">@i</option>
                    } }
             </select>
 
-            <select name="month" style="width: 70px;" class="selectheight" >
+            <select name="month" style="width: 70px;" class="selectheight">
                 <option value="-">-</option>
                 @{ for (var i = 1; i <= 12; i++)
                    {
-                       <option @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Month == i)
-                               {
+                    <option @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Month == i)
+                            {
                                    @:selected="selected"
                                }
-                           value="@i"> @month[i-1]</option>
+                           value="@i">@month[i - 1]</option>
                    } 
-                 }
+                }
             </select>
 
-            <select name="year" style="width: 80px; " class="selectheight">
+            <select name="year" style="width: 80px;" class="selectheight">
                 <option value="-">-</option>
                 @{
                     var minYear = (minMaxDefaultDate == null) ? 1900 : minMaxDefaultDate[0].Year;
                     var maxYear = (minMaxDefaultDate == null) ? DateTime.Now.Year - 18 : minMaxDefaultDate[1].Year;
                     for (var i = minYear; i <= maxYear; i++)
                     {
-                        <option @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Year == i)
-                                {
+                    <option @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Year == i)
+                            {
                                     @:selected="selected"
                                 }
                             value="@i">@i</option>
                     }
                 }
             </select>
-            
+
             <input  id='@identificator' class="@identificator @validationClass  hidden-field required" name="@identificator"/>
         </div>
-        
+
     </div>
 }
 

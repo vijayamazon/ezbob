@@ -39,8 +39,10 @@
                 <li>Copy and Paste from Amazon Services:
                     @using (Html.BeginForm("", "", new { }, FormMethod.Post, new { @class = "AmazonForm", @style = "padding-top:20px;" }))
                     {
-                        @EzForm.InputText("amazonMerchantId", "Merchant ID", cls: "form_field", isRequired: true, statusIcon: true, isDisabled: true, maxLength: 15)
-                        @EzForm.InputText("amazonMarketplaceId", "Marketplace ID", cls: "form_field", isRequired: true, statusIcon: true, isDisabled: true, maxLength: 15)
+                        <div class="clearfix">
+                            @EzForm.InputText("amazonMerchantId", "Merchant ID", cls: "form_field", isRequired: true, statusIcon: true, isDisabled: true, maxLength: 15)
+                            @EzForm.InputText("amazonMarketplaceId", "Marketplace ID", cls: "form_field", isRequired: true, statusIcon: true, isDisabled: true, maxLength: 15)
+                        </div>
                     }
                 </li>
             </ol>
