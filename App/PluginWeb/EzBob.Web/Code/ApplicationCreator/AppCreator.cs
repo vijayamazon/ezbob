@@ -57,6 +57,7 @@ namespace EzBob.Web.Code.ApplicationCreator
                                                  new StrategyParameter("FirstName", firstName),
                                                  new StrategyParameter("CashAmount", cashAmount ),
                                                  new StrategyParameter("IsFirstLoan", isFirstLoan),
+                                                 new StrategyParameter("IsOffline", customer.IsOffline),
                                                  new StrategyParameter("SetUpFee", setUpFee), 
 												 new StrategyParameter("loanId", loanId)
                                              };
