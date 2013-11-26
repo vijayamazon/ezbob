@@ -17,17 +17,15 @@
 		private readonly IConfigurationVariablesRepository _configurationVariablesRepository;
 		private readonly CampaignRepository _campaignRepository;
 		private readonly CampaignTypeRepository _campaignTypeRepository;
-		private readonly CampaignClientsRepository _campaignClientsRepository;
 		private readonly CustomerRepository _customerRepository;
 		private static readonly ILog Log = LogManager.GetLogger(typeof(StrategySettingsController));
 
-		public StrategySettingsController(IConfigurationVariablesRepository configurationVariablesRepository, CampaignRepository campaignRepository, CampaignTypeRepository campaignTypeRepository, CustomerRepository customerRepository, CampaignClientsRepository campaignClientsRepository)
+		public StrategySettingsController(IConfigurationVariablesRepository configurationVariablesRepository, CampaignRepository campaignRepository, CampaignTypeRepository campaignTypeRepository, CustomerRepository customerRepository)
 		{
 			_configurationVariablesRepository = configurationVariablesRepository;
 			_campaignRepository = campaignRepository;
 			_campaignTypeRepository = campaignTypeRepository;
 			_customerRepository = customerRepository;
-			_campaignClientsRepository = campaignClientsRepository;
 		}
 
 		[Ajax]

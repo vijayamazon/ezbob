@@ -71,7 +71,7 @@
                     throw new Exception(String.Format("File id={0} not found", id));
                 }
                 fs = new FileContentResult(f.BinaryBody, f.FileType == 1 ? "application/pdf" : "application/msoffice");
-                fs.FileDownloadName = f.FileName;
+				fs.FileDownloadName = f.FileName.Replace(",", "").Replace("£", "");
             }
             return fs;
         }
