@@ -56,7 +56,8 @@
 
     ApplyForLoanView.prototype.ui = {
       submit: ".submit",
-      agreement: ".agreement"
+      agreement: ".agreement",
+      form: "form"
     };
 
     ApplyForLoanView.prototype.loanSelectionChanged = function(e) {
@@ -70,14 +71,10 @@
     };
 
     ApplyForLoanView.prototype.showSubmit = function() {
-      var read, readAgreement, readEUAgreement, readPreAgreement;
-      readPreAgreement = $(".preAgreementTermsRead").is(":checked");
-      readAgreement = $(".agreementTermsRead").is(":checked");
-      readEUAgreement = !this.isLoanSourceEU || (this.isLoanSourceEU && $("#EuAgreementTerms").is(":checked"));
-      read = readAgreement === true && readPreAgreement === true && readEUAgreement === true;
-      this.model.set("agree", read);
-      this.$el.find(".submit").toggleClass("disabled", !read);
-      return this.$el.find("#getChashContinueBtn").toggleClass("disabled", !read);
+      var enabled;
+      enabled = EzBob.Validation.checkForm(this.validator);
+      this.model.set("agree", enabled);
+      return this.ui.submit.toggleClass("disabled", !enabled);
     };
 
     ApplyForLoanView.prototype.recalculateSchedule = function(args) {
@@ -163,6 +160,7 @@
       this.neededCashChanged();
       this.$el.find("img[rel]").setPopover('right');
       this.$el.find("li[rel]").setPopover('left');
+      this.validator = EzBob.validateLoanLegalForm(this.ui.form);
       return this;
     };
 
@@ -171,7 +169,7 @@
     };
 
     ApplyForLoanView.prototype.submit = function(e) {
-      var creditSum, enabled, form, max, min, validator;
+      var creditSum, enabled, max, min;
       e.preventDefault();
       creditSum = this.model.get("neededCash");
       max = this.model.get("maxCash");
@@ -182,9 +180,7 @@
       if (creditSum > max || creditSum < min) {
         return false;
       }
-      form = this.$el.find('form');
-      validator = EzBob.validateLoanLegalForm(form);
-      enabled = EzBob.Validation.checkForm(validator);
+      enabled = EzBob.Validation.checkForm(this.validator);
       if (!enabled) {
         this.showSubmit();
         return false;
