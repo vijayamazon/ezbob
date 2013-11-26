@@ -331,7 +331,7 @@
 						EndDate = c.EndDate,
 						Description = c.Description,
 						Id = c.Id,
-						Customers = c.Clients.Any() ? c.Clients.Select(cc => cc.Customer.Id.ToString(CultureInfo.InvariantCulture)).ToList().Aggregate((i,j) => i + ", " + j) : ""
+						Customers = c.Clients.Any() ? c.Clients.OrderBy(cc => cc.Customer.Id).Select(cc => cc.Customer.Id.ToString(CultureInfo.InvariantCulture)).ToList().Aggregate((i,j) => i + ", " + j) : ""
 					})
 				.ToList();
 
