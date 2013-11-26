@@ -374,6 +374,11 @@
 			DateTime startDate = DateTime.ParseExact(campaignStartDate, "dd/MM/yyyy", null);
 			DateTime endDate = DateTime.ParseExact(campaignEndDate, "dd/MM/yyyy", null);
 
+			if (endDate < startDate)
+			{
+				return this.JsonNet(new { success = false, errorText = "End date prior to start date" });
+			}
+
 			Campaign campaign = campaignId.HasValue ? _campaignRepository.Get(campaignId) : new Campaign();
 
 			campaign.Name = campaignName;
@@ -382,7 +387,15 @@
 			campaign.EndDate = endDate;
 			campaign.Description = campaignDescription;
 			
+			
+			var campClients = campaign.Clients.ToArray();
+			foreach (var client in campClients)
+			{
+				campaign.Clients.Remove(client);
+			}
+			
 			_campaignRepository.SaveOrUpdate(campaign);
+
 			if (string.IsNullOrEmpty(campaignCustomers))
 			{
 				return this.JsonNet(new { success = true, errorText = "" });
@@ -391,6 +404,8 @@
 			var clients = campaignCustomers.Trim().Split(' ');
 			foreach (string client in clients)
 			{
+				if(string.IsNullOrWhiteSpace(client)) continue;
+
 				int customerId;
 				if (int.TryParse(client, out customerId))
 				{

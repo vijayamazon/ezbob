@@ -177,10 +177,10 @@
       xhr.done(function(res) {
         res.errorText = res.errorText ? res.errorText : res.error ? res.error : "";
         if (!res.success) {
-          EzBob.ShowMessage("Failed to add the campaign. " + res.errorText, "Failure", null, "OK");
+          EzBob.ShowMessage("Failed to add/update the campaign. " + res.errorText, "Failure", null, "OK");
           return;
         }
-        return EzBob.ShowMessage("Successfully Added. " + res.errorText, "The campaign added/updated successfully.", ok, "OK");
+        return EzBob.ShowMessage("Successfully Added/Updated. " + res.errorText, "The campaign added/updated successfully.", ok, "OK");
       });
       xhr.fail(function() {
         return EzBob.ShowMessage("Failed to add/update the campaign. ", "Failure", null, "OK");
@@ -205,7 +205,6 @@
       this.$el.find('input.date').datepicker({
         format: 'dd/mm/yyyy'
       });
-      this.$el.find('input[data-content], span[data-content]').setPopover();
       that = this;
       if (this.isUpdate) {
         this.ui.name.val(this.campaign.Name);

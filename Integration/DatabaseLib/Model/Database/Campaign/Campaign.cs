@@ -41,7 +41,7 @@ namespace EZBob.DatabaseLib.Model.DataMapping
 			HasMany(x => x.Clients)
 				.AsSet()
 				.KeyColumn("CampaignId")
-				.Cascade.All()
+				.Cascade.AllDeleteOrphan()
 				.Inverse();
 		}
 	}
