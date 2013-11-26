@@ -258,7 +258,7 @@ select.form_field { width: 410px; height: 30px; padding: 0; }
 
 select.form_field_date { width: 103px; height: 30px; padding: 0; }
 
-div.form_field_container { margin-bottom: 1.1em; }
+div.form_field_container { margin-bottom: 1.3em; }
 
 input.form_field_address { width: 245px; }
 input.form_field_address_lookup { width: 150px; }

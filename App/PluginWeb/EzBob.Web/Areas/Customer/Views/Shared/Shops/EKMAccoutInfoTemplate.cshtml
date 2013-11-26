@@ -1,23 +1,21 @@
 ﻿@model dynamic
-
 <script id="EKMAccoutInfoTemplate" type="text/template">
     @accountInfo()
 </script>
 
-@helper accountInfo(){
+@helper accountInfo()
+{
     <div class="row-fluid">
         <div class="wizard-top-notification">
-	        <h2 class="form_start">Please Enter EKMPowershop Credentials</h2>
+            <h2 class="form_start">Please Enter EKMPowershop Credentials</h2>
         </div>
-        <form id="ekmAccount">                              
-            <div class="bank-account-instructions clearfix">
-                <div class="bank-account">
-                    @EzForm.InputText("ekm_login", "EKM Login", cls:"form_field", isRequired: true, statusIcon: true)
-                    @EzForm.Password("ekm_password", "EKM Password", cls: "form_field", isRequired: true, statusIcon: true)
-                    <div class="control-group clearfix" style="padding-right: 68px;">
-                        <a href="#" class="button orange connect-ekm disabled pull-right">Link Account</a>
-                        <a href="#" class="back button grey pull-right">Back</a>
-                    </div>
+        <form id="ekmAccount">
+            <div class="clearfix">
+                @EzForm.InputText("ekm_login", "EKM Login", cls: "form_field", isRequired: true, statusIcon: true)
+                @EzForm.Password("ekm_password", "EKM Password", cls: "form_field", isRequired: true, statusIcon: true)
+                <div class="control-group clearfix" style="padding-right: 68px;">
+                    <a href="#" class="button orange connect-ekm disabled pull-right">Link Account</a>
+                    <a href="#" class="back button grey pull-right">Back</a>
                 </div>
             </div>
         </form>
