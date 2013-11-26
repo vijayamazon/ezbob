@@ -107,9 +107,9 @@ class EzBob.Underwriter.Settings.AddCampaignView extends Backbone.Marionette.Ite
         xhr.done (res) ->
             res.errorText = if res.errorText then res.errorText else if res.error then res.error else ""
             if(not res.success)
-                EzBob.ShowMessage("Failed to add the campaign. #{res.errorText}" , "Failure", null, "OK")
+                EzBob.ShowMessage("Failed to add/update the campaign. #{res.errorText}" , "Failure", null, "OK")
                 return
-            EzBob.ShowMessage("Successfully Added. #{res.errorText}", "The campaign added/updated successfully.", ok, "OK")
+            EzBob.ShowMessage("Successfully Added/Updated. #{res.errorText}", "The campaign added/updated successfully.", ok, "OK")
         xhr.fail -> EzBob.ShowMessage("Failed to add/update the campaign. ", "Failure", null, "OK")
         xhr.always -> BlockUi "off"
         false
@@ -120,7 +120,7 @@ class EzBob.Underwriter.Settings.AddCampaignView extends Backbone.Marionette.Ite
 
     onRender: ->
         @$el.find('input.date').datepicker(format: 'dd/mm/yyyy')
-        @$el.find('input[data-content], span[data-content]').setPopover()
+        #@$el.find('input[data-content], span[data-content]').setPopover()
         that = @
         if @isUpdate
             @ui.name.val(@campaign.Name)
