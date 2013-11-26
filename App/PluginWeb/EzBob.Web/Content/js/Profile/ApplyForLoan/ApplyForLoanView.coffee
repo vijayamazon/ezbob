@@ -24,6 +24,7 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
     @timerId = setInterval _.bind(@refreshTimer, this), 1000
     @model.set "CreditSum": @customer.get("CreditSum"), "OfferValid": @customer.offerValidFormatted()
 
+    
     if(@fixed)
       #@neededCashChanged()
       return
@@ -42,6 +43,7 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
   ui:
     submit: ".submit"
     agreement: ".agreement"
+    form: "form"
 
   loanSelectionChanged: (e) =>
     @currentRepaymentPeriod = @$('#loan-sliders .period-slider').slider 'value'
@@ -54,13 +56,9 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
     @neededCashChanged true
 
   showSubmit: ->
-    readPreAgreement = $(".preAgreementTermsRead").is(":checked")
-    readAgreement = $(".agreementTermsRead").is(":checked")
-    readEUAgreement = not @isLoanSourceEU or ( @isLoanSourceEU and $("#EuAgreementTerms").is(":checked") )
-    read = (readAgreement is true and readPreAgreement is true and readEUAgreement is true)
-    @model.set "agree", read
-    @$el.find(".submit").toggleClass "disabled", not read
-    @$el.find("#getChashContinueBtn").toggleClass "disabled", not read
+    enabled = EzBob.Validation.checkForm(@validator)
+    @model.set "agree", enabled
+    @ui.submit.toggleClass "disabled", not enabled
 
   recalculateSchedule: (args) ->
     val = args.value
@@ -119,7 +117,8 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
 
     @$el.find("img[rel]").setPopover 'right'
     @$el.find("li[rel]").setPopover 'left'
-
+    
+    @validator = EzBob.validateLoanLegalForm(@ui.form)
     this
 
   refreshTimer: ->
@@ -135,9 +134,7 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
     @model.set "repaymentPeriod", @currentRepaymentPeriod
     return false  if creditSum > max or creditSum < min
     
-    form = @$el.find('form')
-    validator = EzBob.validateLoanLegalForm(form)
-    enabled = EzBob.Validation.checkForm(validator)
+    enabled = EzBob.Validation.checkForm(@validator)
     if not enabled
         @showSubmit()
         return false 

@@ -43,18 +43,40 @@
 
     CampaignView.prototype.events = {
       "click .addCampaign": "addCampaign",
+      "click .editCampaign": "editCampaign",
       "click .campaignCustomers": "campaignCustomers"
     };
 
     CampaignView.prototype.campaignCustomers = function(e) {
-      console.log(e, $(e));
-      return EzBob.ShowMessage($(e.currentTarget).attr('data-campaign-clients'), "Campaign clients", null, "OK");
+      var clients;
+      clients = $(e.currentTarget).attr('data-campaign-clients');
+      if (!clients) {
+        clients = 'No clients in this campaign';
+      }
+      return EzBob.ShowMessage(clients, "Campaign clients", null, "OK");
     };
 
-    CampaignView.prototype.addCampaign = function() {
+    CampaignView.prototype.editCampaign = function(e) {
+      var campaign, campaignId, campaigns, _results;
+      campaignId = parseInt($(e.currentTarget).attr('data-campaign-id'));
+      campaigns = this.model.get("campaigns");
+      _results = [];
+      for (campaign in campaigns) {
+        if (campaigns[campaign].Id === campaignId) {
+          this.addCampaign(e, campaigns[campaign]);
+          break;
+        } else {
+          _results.push(void 0);
+        }
+      }
+      return _results;
+    };
+
+    CampaignView.prototype.addCampaign = function(e, campaign) {
       BlockUi("On");
       this.addCampaignView = new EzBob.Underwriter.Settings.AddCampaignView({
-        model: this.model
+        model: this.model,
+        campaign: campaign
       });
       this.addCampaignView.on('campaign-added', this.update, this);
       EzBob.App.jqmodal.show(this.addCampaignView);
@@ -66,26 +88,20 @@
       data = {
         campaigns: this.model.get('campaigns')
       };
-      console.log('ser', data);
       return data;
     };
 
     CampaignView.prototype.update = function() {
       var _this = this;
-      console.log('update');
       if (this.addCampaignView) {
         EzBob.App.jqmodal.hideModal(this.addCampaignView);
       }
-      console.log('update2');
-      this.model.fetch().done(function() {
-        console.log("@model", _this.model);
+      return this.model.fetch().done(function() {
         return _this.render();
       });
-      return console.log('update3');
     };
 
     CampaignView.prototype.onRender = function() {
-      console.log('render');
       if (!$("body").hasClass("role-manager")) {
         this.$el.find("select").addClass("disabled").attr({
           readonly: "readonly",
@@ -121,6 +137,11 @@
 
     AddCampaignView.prototype.initialize = function(options) {
       this.model.on("reset", this.render, this);
+      this.isUpdate = false;
+      if (options.campaign) {
+        this.isUpdate = true;
+        this.campaign = options.campaign;
+      }
       this.update();
       return this;
     };
@@ -130,7 +151,14 @@
     };
 
     AddCampaignView.prototype.ui = {
-      form: "form"
+      form: "form",
+      name: "#campaign-name",
+      description: "#campaign-description",
+      type: "#campaign-type option",
+      startdate: "#campaign-start-date",
+      enddate: "#campaign-end-date",
+      clients: "#campaign-customers",
+      addCampaignBtn: ".addCampaignBtn"
     };
 
     AddCampaignView.prototype.addCampaign = function() {
@@ -138,22 +166,24 @@
         _this = this;
       BlockUi("on");
       data = this.ui.form.serialize();
-      console.log(data);
+      if (this.isUpdate) {
+        data += "&campaignId=" + this.campaign.Id;
+      }
       that = this;
       ok = function() {
         return that.trigger('campaign-added');
       };
       xhr = $.post("" + window.gRootPath + "Underwriter/StrategySettings/AddCampaign/?" + data);
       xhr.done(function(res) {
-        console.log('res', res);
+        res.errorText = res.errorText ? res.errorText : res.error ? res.error : "";
         if (!res.success) {
-          EzBob.ShowMessage("Failed to add the campaign. " + res.error, "Failure", ok, "OK");
+          EzBob.ShowMessage("Failed to add the campaign. " + res.errorText, "Failure", null, "OK");
           return;
         }
-        return EzBob.ShowMessage("Successfully Added. " + res.error, "The campaign added successfully.", ok, "OK");
+        return EzBob.ShowMessage("Successfully Added. " + res.errorText, "The campaign added/updated successfully.", ok, "OK");
       });
       xhr.fail(function() {
-        return EzBob.ShowMessage("Failed to add the campaign. ", "Failure", ok, "OK");
+        return EzBob.ShowMessage("Failed to add/update the campaign. ", "Failure", null, "OK");
       });
       xhr.always(function() {
         return BlockUi("off");
@@ -171,17 +201,30 @@
     };
 
     AddCampaignView.prototype.onRender = function() {
+      var that;
       this.$el.find('input.date').datepicker({
         format: 'dd/mm/yyyy'
       });
-      return this.$el.find('input[data-content], span[data-content]').setPopover();
+      this.$el.find('input[data-content], span[data-content]').setPopover();
+      that = this;
+      if (this.isUpdate) {
+        this.ui.name.val(this.campaign.Name);
+        this.ui.description.val(this.campaign.Description);
+        this.$el.find("#campaign-type option").filter(function() {
+          return this.text === that.campaign.Type;
+        }).prop('selected', true);
+        this.ui.startdate.val(EzBob.formatDate2(this.campaign.StartDate));
+        this.ui.enddate.val(EzBob.formatDate2(this.campaign.EndDate));
+        this.ui.clients.val(this.campaign.Customers.replace(/, /g, ' '));
+        return this.ui.addCampaignBtn.html('Update Campaign');
+      }
     };
 
     AddCampaignView.prototype.jqoptions = function() {
       return {
         modal: true,
         resizable: false,
-        title: "Add campaign",
+        title: this.isUpdate ? "Update campaign" : "Add Campaign",
         position: "center",
         draggable: false,
         width: "40%",

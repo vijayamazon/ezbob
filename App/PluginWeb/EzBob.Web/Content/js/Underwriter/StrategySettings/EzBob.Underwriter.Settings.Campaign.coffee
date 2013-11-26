@@ -17,6 +17,7 @@ class EzBob.Underwriter.Settings.CampaignView extends Backbone.Marionette.ItemVi
 
     events:
         "click .addCampaign": "addCampaign"
+        "click .editCampaign": "editCampaign"
         "click .campaignCustomers" : "campaignCustomers"
 
     campaignCustomers: (e) ->
@@ -25,9 +26,20 @@ class EzBob.Underwriter.Settings.CampaignView extends Backbone.Marionette.ItemVi
             clients = 'No clients in this campaign'
         EzBob.ShowMessage(clients , "Campaign clients", null, "OK")
 
-    addCampaign: ->
+    editCampaign: (e) ->
+        campaignId = parseInt($(e.currentTarget).attr('data-campaign-id'))
+        campaigns = @model.get("campaigns")
+        
+        for campaign of campaigns
+            if campaigns[campaign].Id == campaignId
+                @addCampaign(e, campaigns[campaign])
+                break
+            
+
+
+    addCampaign: (e, campaign)->
         BlockUi("On")
-        @addCampaignView = new EzBob.Underwriter.Settings.AddCampaignView(model: @model)
+        @addCampaignView = new EzBob.Underwriter.Settings.AddCampaignView(model: @model, campaign: campaign)
         @addCampaignView.on('campaign-added', @update, @)
         EzBob.App.jqmodal.show(@addCampaignView)
         BlockUi("Off")
@@ -35,24 +47,15 @@ class EzBob.Underwriter.Settings.CampaignView extends Backbone.Marionette.ItemVi
     serializeData: ->
         data = 
             campaigns: @model.get('campaigns')
-
-        console.log('ser', data)
-       # _.each data.campaigns, (campaign) -> campaign.customersStr = campaign.customers.join()
-       # console.log('ser2', data)
         return data
 
     update: ->
-        console.log('update')
         if @addCampaignView 
             EzBob.App.jqmodal.hideModal(@addCampaignView)
-        console.log('update2')
         @model.fetch().done => 
-            console.log("@model", @model)
             @render()
-        console.log('update3')
 
     onRender: -> 
-        console.log('render')
         if !$("body").hasClass("role-manager") 
             @$el.find("select").addClass("disabled").attr({readonly:"readonly", disabled: "disabled"})
             @$el.find("button").hide()
@@ -71,6 +74,10 @@ class EzBob.Underwriter.Settings.AddCampaignView extends Backbone.Marionette.Ite
 
     initialize: (options) ->
         @model.on "reset", @render, @
+        @isUpdate = false
+        if(options.campaign)
+            @isUpdate = true
+            @campaign = options.campaign
         @update()
         @
 
@@ -79,23 +86,31 @@ class EzBob.Underwriter.Settings.AddCampaignView extends Backbone.Marionette.Ite
 
     ui:
         form : "form"
+        name: "#campaign-name"
+        description: "#campaign-description"
+        type: "#campaign-type option"
+        startdate: "#campaign-start-date"
+        enddate: "#campaign-end-date"
+        clients: "#campaign-customers"
+        addCampaignBtn: ".addCampaignBtn"
 
     addCampaign: ->
         BlockUi "on"
         data = @ui.form.serialize()
-        console.log data
+        if @isUpdate
+            data += "&campaignId=#{@campaign.Id}"
         that = @
         ok = () =>
             that.trigger('campaign-added')
 
         xhr = $.post("#{window.gRootPath}Underwriter/StrategySettings/AddCampaign/?#{data}")
         xhr.done (res) ->
-            console.log 'res', res
+            res.errorText = if res.errorText then res.errorText else if res.error then res.error else ""
             if(not res.success)
-                EzBob.ShowMessage("Failed to add the campaign. #{res.error}" , "Failure", ok, "OK")
+                EzBob.ShowMessage("Failed to add the campaign. #{res.errorText}" , "Failure", null, "OK")
                 return
-            EzBob.ShowMessage("Successfully Added. #{res.error}", "The campaign added successfully.", ok, "OK")
-        xhr.fail -> EzBob.ShowMessage("Failed to add the campaign. ", "Failure", ok, "OK")
+            EzBob.ShowMessage("Successfully Added. #{res.errorText}", "The campaign added/updated successfully.", ok, "OK")
+        xhr.fail -> EzBob.ShowMessage("Failed to add/update the campaign. ", "Failure", null, "OK")
         xhr.always -> BlockUi "off"
         false
 
@@ -106,12 +121,24 @@ class EzBob.Underwriter.Settings.AddCampaignView extends Backbone.Marionette.Ite
     onRender: ->
         @$el.find('input.date').datepicker(format: 'dd/mm/yyyy')
         @$el.find('input[data-content], span[data-content]').setPopover()
+        that = @
+        if @isUpdate
+            @ui.name.val(@campaign.Name)
+            @ui.description.val @campaign.Description
+            @$el.find("#campaign-type option").filter(-> 
+                return @.text is that.campaign.Type
+            ).prop 'selected', true
+            @ui.startdate.val EzBob.formatDate2(@campaign.StartDate)
+            @ui.enddate.val EzBob.formatDate2(@campaign.EndDate)
+            @ui.clients.val @campaign.Customers.replace(/, /g,' ')
+            @ui.addCampaignBtn.html 'Update Campaign'
+
 
     jqoptions: ->
         {
             modal: true
             resizable: false
-            title: "Add campaign"
+            title: if @isUpdate then "Update campaign" else "Add Campaign"
             position: "center"
             draggable: false
             width: "40%"

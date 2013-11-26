@@ -318,6 +318,7 @@
 
 		[Ajax]
 		[HttpGet]
+		[Transactional]
 		public JsonNetResult SettingsCampaign()
 		{
 			var campaignsList = _campaignRepository
@@ -332,7 +333,7 @@
 						EndDate = c.EndDate,
 						Description = c.Description,
 						Id = c.Id,
-						Customers = c.Clients.Any() ? c.Clients.Select(cc => cc.Customer.Id.ToString(CultureInfo.InvariantCulture)).ToList().Aggregate((i,j) => i + "," + j) : ""
+						Customers = c.Clients.Any() ? c.Clients.Select(cc => cc.Customer.Id.ToString(CultureInfo.InvariantCulture)).ToList().Aggregate((i,j) => i + ", " + j) : ""
 					})
 				.ToList();
 
@@ -359,33 +360,35 @@
 			int? campaignType,
 			string campaignStartDate,
 			string campaignEndDate,
-			string campaignCustomers
+			string campaignCustomers,
+			int? campaignId
 			)
 		{
 			if (string.IsNullOrEmpty(campaignName) || string.IsNullOrEmpty(campaignStartDate) ||
 				string.IsNullOrEmpty(campaignEndDate) || !campaignType.HasValue)
 			{
-				return this.JsonNet(new { success = false, error = "One or parameters missing" });
+				return this.JsonNet(new { success = false, errorText = "One or more parameters missing" });
 			}
 
 
 			DateTime startDate = DateTime.ParseExact(campaignStartDate, "dd/MM/yyyy", null);
 			DateTime endDate = DateTime.ParseExact(campaignEndDate, "dd/MM/yyyy", null);
-			var campaign = new Campaign
-				{
-					Name = campaignName,
-					CampaignType = _campaignTypeRepository.Get(campaignType.Value),
-					StartDate = startDate,
-					EndDate = endDate,
-					Description = campaignDescription,
-				};
-			_campaignRepository.Save(campaign);
+
+			Campaign campaign = campaignId.HasValue ? _campaignRepository.Get(campaignId) : new Campaign();
+
+			campaign.Name = campaignName;
+			campaign.CampaignType = _campaignTypeRepository.Get(campaignType.Value);
+			campaign.StartDate = startDate;
+			campaign.EndDate = endDate;
+			campaign.Description = campaignDescription;
+			
+			_campaignRepository.SaveOrUpdate(campaign);
 			if (string.IsNullOrEmpty(campaignCustomers))
 			{
-				return this.JsonNet(new {success = true, error = ""});
+				return this.JsonNet(new { success = true, errorText = "" });
 			}
 			string error = "";
-			var clients = campaignCustomers.Split(' ');
+			var clients = campaignCustomers.Trim().Split(' ');
 			foreach (string client in clients)
 			{
 				int customerId;
@@ -394,13 +397,9 @@
 					try
 					{
 						var customer = _customerRepository.TryGet(customerId);
-						if (customer != null)
+						if (customer != null && campaign.Clients.All(cc => cc.Customer != customer))
 						{
-							_campaignClientsRepository.Save(new CampaignClients
-								{
-									Campaign = campaign,
-									Customer = customer
-								});
+							campaign.Clients.Add(new CampaignClients {Campaign = campaign, Customer = customer});
 						}
 						else
 						{
@@ -414,11 +413,11 @@
 				}
 				else
 				{
-					error += client + " not a valid customer id";
+					error += client + " not a valid customer id.";
 				}
 			}
 			Log.DebugFormat("{0}, {1}, {2}, {3}, {4}, {5}. ", campaignName, campaignDescription, campaignType, startDate, endDate, campaignCustomers);
-			return this.JsonNet(new { success = true, error = error });
+			return this.JsonNet(new { success = true, errorText = error });
 		}
 	}
 }

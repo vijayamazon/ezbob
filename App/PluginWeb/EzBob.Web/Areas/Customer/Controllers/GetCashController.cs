@@ -94,7 +94,8 @@
 				!customer.CreditSum.HasValue ||
 				!customer.Status.HasValue ||
 				customer.Status.Value != Status.Approved ||
-				!customer.CollectionStatus.CurrentStatus.IsEnabled)
+				!customer.CollectionStatus.CurrentStatus.IsEnabled || 
+				!customer.LastCashRequest.LoanLegals.Any())
 			{
 				throw new Exception("Invalid customer state");
 			}

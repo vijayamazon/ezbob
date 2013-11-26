@@ -109,7 +109,7 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
 
         var prevPersonAddressesView = new EzBob.AddressView({ model: this.model.get('PrevPersonAddresses'), name: "PrevPersonAddresses", max: 3 });
         prevPersonAddressesView.render().$el.appendTo(this.$el.find('#PrevPersonAddresses'));
-        this.$el.find('#PrevPersonAddresses .addAddressContainer label.attardi-input span').text('Enter Previous Postcode');
+        this.$el.find('#PrevPersonAddresses .addAddressContainer label.attardi-input span').text('Enter previous postcode');
         this.addressErrorPlacement(prevPersonAddressesView.$el, prevPersonAddressesView.model);
 
         var otherPropertyAddressView = new EzBob.AddressView({ model: this.model.get('OtherPropertyAddress'), name: "OtherPropertyAddress", max: 1 });
@@ -156,7 +156,7 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
             this.$el.find('#OverallTurnOver').autoNumericSet(oPersonalInfo.OverallTurnOver);
         } // if has personal info
 
-        this.$el.find('input, select').change();
+        this.$el.find('input, select:not(.form_field_date[value="-"])').change();
 
         this.inputChanged();
     },

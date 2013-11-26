@@ -155,13 +155,13 @@
 
 	@if (@Model.Customer.PersonalInfo.TypeOfBusiness == TypeOfBusiness.Entrepreneur) {
 		<tr>
-			<td><b>Overall TurnOver</b></td>
+			<td><b>Overall turnover</b></td>
 			<td>@Model.Customer.PersonalInfo.OverallTurnOver</td>
 			<td></td>
 			<td></td>
 		</tr>
 		<tr>
-			<td><b>WebSite TurnOver</b></td>
+			<td><b>WebSite turnover</b></td>
 			<td>@Model.Customer.PersonalInfo.WebSiteTurnOver</td>
 			<td></td>
 			<td></td>
@@ -170,7 +170,7 @@
 </tbody>
 </table>
 
-<h3>Residual address</h3>
+<h3>Residential address</h3>
 <table class="table table-bordered  blue-header centered squeezed">
 <thead>
 	<tr>
@@ -224,22 +224,22 @@
 		<td>@Model.EBay.SellerInfo.SellerPaymentAddress.PostalCode</td>
 		<td>@Model.PayPalAddress.Postcode</td>
 	</tr>
-	<tr>
-		<td><b>Country</b><b class="marking pull-right @Model.CrossCheckStatus.Country"></b></td>
-		<td>@Model.CurrentAddress.Country</td>
-		<td>@Model.PrevAddress.Country</td>
-		<td>@Model.EBay.SellerInfo.SellerPaymentAddress.CountryName</td>
-		<td>@Model.PayPalAddress.Country</td>
-	</tr>
+    <tr>
+        <td><b>Country</b><b class="marking pull-right @Model.CrossCheckStatus.Country"></b></td>
+        <td>@Model.CurrentAddress.Country</td>
+        <td>@Model.PrevAddress.Country</td>
+        <td>@Model.EBay.SellerInfo.SellerPaymentAddress.CountryName</td>
+        <td>@Model.PayPalAddress.Country</td>
+    </tr>
+    <tr>
+        <td><b>Zoopla Copy Image</b></td>
+        <td>@copyAddress("Current", @Model.CurrentAddress)</td>
+        <td>@copyAddress("Previous", @Model.PrevAddress)</td>
+        <td>@copyAddress("PayPal", @Model.PayPalAddress)</td>
+        <td>@copyAddress("Ebay", @Model.EBayAddress)</td>
+    </tr>
 </tbody>
 </table>
-
-<div style="margin-bottom: 20px;" class="copy-buttons">
-	@copyAddress("Current", @Model.CurrentAddress)
-	@copyAddress("Previous", @Model.PrevAddress)
-	@copyAddress("PayPal", @Model.PayPalAddress)
-	@copyAddress("Ebay", @Model.EBayAddress)
-</div>
 
 @if (Model.Customer.IsOffline) {
 <h3>Other property ownership</h3>
