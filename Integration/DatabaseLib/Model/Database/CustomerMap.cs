@@ -104,7 +104,7 @@ namespace EZBob.DatabaseLib.Model.Database {
                     m.Map(x => x.MobilePhone);
                     m.Map(x => x.DaytimePhone);
                     m.Map(x => x.Gender).CustomType<GenderType>();
-                    m.Map(x => x.MartialStatus).CustomType<MartialStatusType>();
+                    m.Map(x => x.MaritalStatus).CustomType<MaritalStatusType>();
                     m.Map(x => x.TypeOfBusiness).CustomType<TypeOfBusinessType>();
                     m.Map(x => x.OverallTurnOver);
                     m.Map(x => x.WebSiteTurnOver);

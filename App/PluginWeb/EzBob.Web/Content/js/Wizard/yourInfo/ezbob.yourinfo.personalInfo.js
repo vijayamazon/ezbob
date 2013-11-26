@@ -145,8 +145,8 @@ EzBob.PersonalInformationView = EzBob.YourInformationStepViewBase.extend({
             } // if birthdate
 
             var aryMaritalStatus = ['Married', 'Single', 'Divorced', 'Widow/er', 'Other'];
-            if (aryMaritalStatus[oPersonalInfo.MartialStatus])
-                this.$el.find('#MartialStatus').val(aryMaritalStatus[oPersonalInfo.MartialStatus]);
+            if (aryMaritalStatus[oPersonalInfo.MaritalStatus])
+                this.$el.find('#MaritalStatus').val(aryMaritalStatus[oPersonalInfo.MaritalStatus]);
 
             this.$el.find('#TimeAtAddress').val(oPersonalInfo.TimeAtAddress);
             this.$el.find('#ResidentialStatus').val(oPersonalInfo.ResidentialStatus);

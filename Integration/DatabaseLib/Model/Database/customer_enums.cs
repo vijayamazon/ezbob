@@ -4,13 +4,13 @@ namespace EZBob.DatabaseLib.Model.Database {
 		F
 	} // enum Gender
 
-	public enum MartialStatus {
+	public enum MaritalStatus {
 		Married,
 		Single,
 		Divorced,
 		Widower,
 		Other
-	} // enum MartialStatus
+	} // enum MaritalStatus
 
 	public enum Medal {
 		Silver,

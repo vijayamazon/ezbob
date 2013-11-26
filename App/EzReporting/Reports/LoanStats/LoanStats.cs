@@ -74,23 +74,23 @@ namespace Reports {
 					lre.YearOfBirth = lse.BirthDate.Year;
 
 					switch (lse.MaritalStatus) {
-					case MartialStatus.Married:
+					case MaritalStatus.Married:
 						lre.FamilyStatus = 1;
 						break;
 
-					case MartialStatus.Single:
+					case MaritalStatus.Single:
 						lre.FamilyStatus = 0;
 						break;
 
-					case MartialStatus.Divorced:
+					case MaritalStatus.Divorced:
 						lre.FamilyStatus = 2;
 						break;
 
-					case MartialStatus.Widower:
+					case MaritalStatus.Widower:
 						lre.FamilyStatus = 3;
 						break;
 
-					case MartialStatus.Other:
+					case MaritalStatus.Other:
 						lre.FamilyStatus = 0;
 						break;
 

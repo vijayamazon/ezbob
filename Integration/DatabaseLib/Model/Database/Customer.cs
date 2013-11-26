@@ -101,7 +101,7 @@ namespace EZBob.DatabaseLib.Model.Database {
         
     }
 
-    public class MartialStatusType : EnumStringType<MartialStatus>
+    public class MaritalStatusType : EnumStringType<MaritalStatus>
     {
         
     }
@@ -665,7 +665,7 @@ namespace EZBob.DatabaseLib.Model.Database {
         public int?       TimeAtAddress { get; set; }        
         public string    ResidentialStatus { get; set; }
         public Gender Gender { get; set; }
-        public MartialStatus MartialStatus { get; set; }
+        public MaritalStatus MaritalStatus { get; set; }
         public TypeOfBusiness TypeOfBusiness { get; set; }
         public string TypeOfBusinessName
         {

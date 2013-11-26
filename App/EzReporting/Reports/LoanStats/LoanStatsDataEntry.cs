@@ -25,7 +25,7 @@ namespace Reports {
 		public Medal Medal { get; private set; }
 		public Gender Gender { get; private set; }
 		public DateTime BirthDate { get; private set; }
-		public MartialStatus MaritalStatus { get; private set; }
+		public MaritalStatus MaritalStatus { get; private set; }
 		public string ResidentialStatus { get; private set; }
 		public TypeOfBusiness TypeOfBusiness { get; private set; }
 		public string ReferenceSource { get; private set; }
@@ -93,7 +93,7 @@ namespace Reports {
 
 			Gender = (Gender)Enum.Parse(typeof(Gender), row["Gender"].ToString());
 			BirthDate = Convert.ToDateTime(row["DateOfBirth"]);
-			MaritalStatus = (MartialStatus)Enum.Parse(typeof(MartialStatus), row["MartialStatus"].ToString());
+			MaritalStatus = (MaritalStatus)Enum.Parse(typeof(MaritalStatus), row["MaritalStatus"].ToString());
 			ResidentialStatus = row["ResidentialStatus"].ToString();
 			TypeOfBusiness = (TypeOfBusiness)Enum.Parse(typeof(TypeOfBusiness), row["TypeOfBusiness"].ToString());
 			ReferenceSource = row["ReferenceSource"].ToString();
