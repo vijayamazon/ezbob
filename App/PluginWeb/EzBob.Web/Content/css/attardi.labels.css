@@ -24,7 +24,8 @@
 	font-size: 70%;
 }
 
-.profile-widgets .attardi-input span.attardi-has-data {
+.profile-widgets .attardi-input span.attardi-has-data,
+.bank-account .attardi-input span.attardi-has-data{
     height: 18px;
 }
 

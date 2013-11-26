@@ -57,6 +57,7 @@ EzBob.Validation.unhighlight = function (element) {
     $e.removeClass('error');
     $e.tooltip('disable');
     $e.closest('.ezDateTime').find('[data-original-title]').tooltip('disable');
+    $e.closest('.ezSortCode').find('[data-original-title]').tooltip('disable');
     $e.closest("div").find(".cashInput").removeClass("error");
     $e.closest("span").removeClass("error");
 };
