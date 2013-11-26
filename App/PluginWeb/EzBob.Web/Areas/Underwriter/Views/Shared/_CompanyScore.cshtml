@@ -307,7 +307,7 @@
 
 				%><table class="<%- sTableWidthClass %> table-striped blue-header table-fixed">
 					<thead><tr><th><%- i %></th></tr></thead>
-					<tbody><tr><td id="<%- sParentDivChartID %>"></td></tr></tbody>
+					<tbody><tr><td id="<%- sParentDivChartID %>" style="padding-top:40px"></td></tr></tbody>
 				</table><%
 
 				var oSortingOrder = ExtractSortingOrder(oMetaData.Sorting);
@@ -387,7 +387,7 @@
 								numberRows: 1,
 								numberColumns: null
 							},
-							placement: 'outsideGrid'
+							placement: 'outside',
 						},
 						axes: {
 							xaxis: {
