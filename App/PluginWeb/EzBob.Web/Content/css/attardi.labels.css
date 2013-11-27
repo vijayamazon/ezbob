@@ -25,7 +25,8 @@
 }
 
 .profile-widgets .attardi-input span.attardi-has-data,
-.bank-account .attardi-input span.attardi-has-data{
+.bank-account .attardi-input span.attardi-has-data,
+.paypont-form .attardi-input span.attardi-has-data{
     height: 18px;
 }
 
