@@ -336,8 +336,8 @@
 						.Select(cc => new CampaignCustomerModel
 							{
 								Id = cc.Customer.Id, 
-								Email = cc.Customer.Name, 
-								Name = cc.Customer.PersonalInfo.Fullname
+								Email = cc.Customer.Name,
+								Name = cc.Customer.PersonalInfo == null ? "" : cc.Customer.PersonalInfo.Fullname
 							}).ToList() 
 					})
 				.ToList();
