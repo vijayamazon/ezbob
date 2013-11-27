@@ -7,38 +7,22 @@ EzBob.LimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 		this.ViewName = "Limited";
 		this.companyAddressValidator = false;
 
+		this.parentView = this.options.parentView;
+
 		this.events = _.extend({}, this.events, {
-			'change   input': 'inputChanged',
-			'keyup    input': 'inputChanged',
-			'focusout input': 'inputChanged',
-			'click    input': 'inputChanged',
 			'change #LimitedPropertyOwnedByCompany': 'propertyOwnedByCompanyChanged',
-			'change   select': 'inputChanged',
-			'keyup    select': 'inputChanged',
-			'focusout select': 'inputChanged',
-			'click    select': 'inputChanged'
 		});
 	},
 
-	inputChanged: function(event) {
-		var el = event ? $(event.currentTarget) : null;
-
-		if (el && el.hasClass('nonrequired') && el.val() === '') {
-			var img = el.closest('div').find('.field_status');
-			img.field_status('set', 'empty', 2);
-		} // if
-
-		this.setContinueStatus();
-	},
-
-	setContinueStatus: function() {
-		var enabled = EzBob.Validation.checkForm(this.validator) &&
-			this.companyAddressValidator &&
+	readyToContinue: function() {
+		return this.companyAddressValidator &&
 			this.directorsView.validateAddresses() &&
 			(!this.employeeCountView || this.employeeCountView.isValid());
+	}, // readyToContinue
 
-		$('.continue').toggleClass('disabled', !enabled);
-	},
+	inputChanged: function() {
+		this.parentView.inputChanged();
+	}, // inputChanged
 
 	propertyOwnedByCompanyChanged: function(event) {
 		var toToggle = this.$el.find('#LimitedPropertyOwnedByCompany').val() !== 'false';
@@ -55,7 +39,7 @@ EzBob.LimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 		this.model.get('LimitedCompanyAddress').on("all", this.LimitedCompanyAddressChanged, this);
 		this.addressErrorPlacement(limitedAddressView.$el, limitedAddressView.model);
 
-		this.directorsView = new EzBob.DirectorMainView({ model: this.model.get('LimitedDirectors'), name: 'limitedDirectors', hidden: this.$el.find('.directorsData'), validator: this.validator });
+		this.directorsView = new EzBob.DirectorMainView({ model: this.model.get('LimitedDirectors'), name: 'limitedDirectors', });
 		this.directorsView.on("director:change", this.inputChanged, this);
 		this.directorsView.on("director:addressChanged", this.inputChanged, this);
 		this.directorsView.render().$el.appendTo(this.$el.find('.directors'));
@@ -63,8 +47,7 @@ EzBob.LimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 		if (this.model.get('IsOffline')) {
 			this.employeeCountView = new EzBob.EmployeeCountView({
 				model: this.model,
-				onchange: $.proxy(self.setContinueStatus, self),
-				validator: self.validator,
+				onchange: $.proxy(self.inputChanged, self),
 				prefix: "Limited"
 			});
 			this.employeeCountView.render().$el.appendTo(this.$el.find('.employee-count'));

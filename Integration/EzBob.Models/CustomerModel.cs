@@ -9,8 +9,7 @@ using EzBob.Models;
 namespace EzBob.Web.Areas.Customer.Models
 {
     [Serializable]
-    public class CustomerModel
-    {
+    public class CustomerModel {
         public int Id { get; set; }
         public bool loggedIn { get; set; }
         public bool bankAccountAdded { get; set; }
@@ -113,7 +112,9 @@ namespace EzBob.Web.Areas.Customer.Models
 		public string InviteFriendSource { get; set; }
 		public IEnumerable<InvitedFriend> InvitedFriends { get; set; }
 		public bool IsLastApprovedLoanSourceEu { get; set; }
-    }
+
+		public string LastSavedWizardStep { get; set; }
+	} // class CustomerModel
 
 	public class SimpleMarketPlaceModel
 	{

@@ -7,7 +7,6 @@ EzBob.DirectorMainView = Backbone.View.extend({
         this.directorTemplate = _.template($('#oneDirector').html());
         this.model = new EzBob.DirectorsModels();
         this.name = 'DirectorAddress';
-        this.validator = options.validator;
     },
     events: {
         "click #addDirector": "addDirector",
@@ -21,22 +20,15 @@ EzBob.DirectorMainView = Backbone.View.extend({
         "focusout select": "inputChanged",
         "keyup select": "inputChanged"
     },
+
     inputChanged: function(event) {
-        var status = this.validator.check($(event.currentTarget));
         var val = $(event.currentTarget).val();
         var name = $(event.currentTarget).attr('name');
         var hidden = $('[name="' + name + 'Image"]');
         
         if (hidden) {
-            if (status) {
-                hidden.val('ok');
-            }
-            if (!status && val) {
-                hidden.val('fail');
-            }
-            if (!status && !val && $(event.currentTarget).hasClass('required')) {
-                hidden.val('required');
-            }
+            hidden.val('ok');
+
             if (!val && $(event.currentTarget).hasClass('nonrequired')) {
                 hidden.val('empty');
                 var el = event ? $(event.currentTarget) : null;
@@ -44,6 +36,7 @@ EzBob.DirectorMainView = Backbone.View.extend({
             }
         }
     },
+
     render: function() {
         this.$el.html(this.template());
         this.directorArea = this.$el.find('.directorArea');
@@ -65,12 +58,12 @@ EzBob.DirectorMainView = Backbone.View.extend({
         this.$el.find('.alphaOnly').alphaOnly();
         this.$el.find('.phonenumber').numericOnly(11);
         this.$el.find(".addressCaption").hide();
+
         $.each(this.model.models, function(i, val) {
-            var addressElem = that.preffix + 'Address' + i,
-                name = that.preffix + "[" + i + "]." + that.name,
-                addressView = new EzBob.AddressView({ model: val.get('Address'), name: name, max: 1 }),
-                dateOfBirthValName = that.preffix + "[" + i + "]." + 'DateOfBirth',
-                phoneName = that.preffix + "[" + i + "]." + 'Phone';
+	        var addressElem = that.preffix + 'Address' + i,
+				name = that.preffix + "[" + i + "]." + that.name,
+				addressView = new EzBob.AddressView({ model: val.get('Address'), name: name, max: 1 }),
+				dateOfBirthValName = that.preffix + "[" + i + "]." + 'DateOfBirth';
 
             val.get('Address').on("all", function() {
                 that.trigger("director:addressChanged");
@@ -81,12 +74,9 @@ EzBob.DirectorMainView = Backbone.View.extend({
             that.updateStatuses(val, i);
             that.addressErrorPlacement(addressView.$el, addressView.model);
 
-            that.validator.settings.rules[dateOfBirthValName] = { yearLimit: 18 };
-            that.validator.settings.messages[dateOfBirthValName] = { yearLimit: "The number of full year should be more then 18 year" };
-
-            that.validator.settings.rules[phoneName] = { required: true, regex: "^0[0-9]{10}$" };
-            that.validator.settings.messages[phoneName] = { regex: "Please enter a valid UK number" };
+            that.$el.find('.phonenumber').numericOnly(11);
         });
+
         this.$el.attardi_labels('toggle_all');
         this.trigger("director:change");
     },

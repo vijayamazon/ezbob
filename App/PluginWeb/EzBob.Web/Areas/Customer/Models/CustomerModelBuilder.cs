@@ -206,6 +206,9 @@ namespace EzBob.Web.Areas.Customer.Models
 														   FriendName = string.IsNullOrEmpty(i.Customer.PersonalInfo.Fullname) ? i.Customer.Name : i.Customer.PersonalInfo.Fullname,
 														   FriendTookALoan = (i.Customer.Loans.Any() ? "Yes" : "No")
 													   });
+
+			customerModel.LastSavedWizardStep = ((customer.WizardStep == null) || customer.WizardStep.TheLastOne) ? "" : customer.WizardStep.Name;
+
             return customerModel;
         }
 

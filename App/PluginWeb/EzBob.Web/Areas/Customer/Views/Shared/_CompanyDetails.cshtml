@@ -219,10 +219,6 @@
 			</div>
 
 			<div class="row-fluid company-full-details"></div>
-
-			<div class="offline employee-count"></div>
-
-			<div class="directors"></div>
 		}
 	</div>
 
@@ -316,7 +312,9 @@
 <script id="nonlimitededinfo-template" type="text/template">
 	<input type="hidden" name="NonLimitedRefNum" class="RefNum" />
 
-                <div class="control-group form_field_container">
+	<h2 class="form_section">Company details</h2>
+
+	<div class="control-group form_field_container">
 		<div class="controls">
 			<label class="control-label attardi-input">
 				<span>Name</span>
@@ -328,7 +326,7 @@
 
 	@EzForm.AddressInput("NonLimitedCompanyAddress", "Address")
 
-                <div class="control-group form_field_container notoffline">
+	<div class="control-group form_field_container notoffline">
 		<div class="controls">
 			<label class="control-label attardi-input">
 				<span>Period of occupation</span>
@@ -343,7 +341,7 @@
 		</div>
 	</div>
 
-                <div class="control-group form_field_container">
+	<div class="control-group form_field_container">
 		<div class="controls">
 			<label class="control-label attardi-input">
 				<span>Time in business</span>
@@ -367,7 +365,7 @@
 
 	@AdditionalCompanyInfo("NonLimited")
 
-                <div class="control-group form_field_container">
+	<div class="control-group form_field_container">
 		<div class="controls">
 			<label class="control-label attardi-input">
 				<span>Business phone</span>
@@ -376,10 +374,16 @@
 			<img id="NonLimitedBusinessPhoneImage" class="field_status required" />
 		</div>
 	</div>
+
+	<div class="offline employee-count"></div>
+
+	<div class="directors"></div>
 </script>
 
 <script id="limitedinfo-template" type="text/template">
-                <div class="control-group form_field_container">
+	<h2 class="form_section">Company details</h2>
+
+	<div class="control-group form_field_container">
 		<div class="controls">
 			<label class="control-label attardi-input">
 				<span>Registration #</span>
@@ -389,7 +393,7 @@
 		</div>
 	</div>
 
-                <div class="control-group form_field_container">
+	<div class="control-group form_field_container">
 		<div class="controls">
 			<label class="control-label attardi-input">
 				<span>Name</span>
@@ -403,7 +407,7 @@
 
 	@AdditionalCompanyInfo("Limited")
 
-                <div class="control-group form_field_container">
+	<div class="control-group form_field_container">
 		<div class="controls">
 			<label class="control-label attardi-input">
 				<span>Business phone</span>
@@ -414,6 +418,10 @@
 	</div>
 
 	<input type="hidden" name="LimitedRefNum" class="RefNum" />
+
+	<div class="offline employee-count"></div>
+
+	<div class="directors"></div>
 </script>
 
 @helper AdditionalCompanyInfo(string prefix)
@@ -519,7 +527,7 @@
 				<img id="<%-preffix%>[<%=i%>].GenderImage" class="field_status required gender_image" />
 			</div>
 
-            @EzForm.DateInput("<%-preffix%>[<%=i%>].DateOfBirth", "Date of Birth", css: "director_date", required: true, statusIcon: true, uiEventControlID: "personal-info:director_birth_date")
+            @EzForm.DateInput("<%-preffix%>[<%=i%>].DateOfBirth", "Date of Birth", css: "director_date", required: true, statusIcon: true, uiEventControlID: "personal-info:director_birth_date", hiddenFieldAuxClass: "director_birth_date")
 
             <div class="control-group form_field_container">
                 <div class="controls">

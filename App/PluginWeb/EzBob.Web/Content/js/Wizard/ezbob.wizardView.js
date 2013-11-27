@@ -102,18 +102,20 @@ EzBob.WizardView = Backbone.View.extend({
 
 		this.steps = [];
 		this.stepsByName = {};
+		this.stepsOrderByName = {};
 
 		var sSequenceName = this.customer.get('IsOffline') ? 'offline' : 'online';
 
 		for (var i = 0; i < oConfiguredStepSequence[sSequenceName].length; i++) {
 			var oStep = oConfiguredStepSequence[sSequenceName][i];
 
-			oStep.view.on('ready', _.bind(this.ready, this, i));
 			oStep.view.on('next', this.next, this);
 			oStep.view.on('previous', this.previous, this);
+			oStep.view.on('jump-to', this.jumpTo, this);
 
 			this.steps[i] = oStep;
 			this.stepsByName[oStep.name] = oStep;
+			this.stepsOrderByName[oStep.name] = i;
 		} // for
 
 		EzBob.App.on('wizard:progress', this.progressChanged, this);
@@ -125,10 +127,19 @@ EzBob.WizardView = Backbone.View.extend({
 		this.router.on('all', this.onRoute, this);
 
 		Backbone.history.start({ silent: true });
-	},
+	}, // initialize
+
+	jumpTo: function(sLastSavedStepName, fCallback) {
+		if (!this.stepsOrderByName.hasOwnProperty(sLastSavedStepName))
+			return;
+
+		var nStepPos = this.stepsOrderByName[sLastSavedStepName];
+
+		if (nStepPos < this.steps.length - 1)
+			this.model.set('current', nStepPos);
+	}, // jumpTo
 
 	onRoute: function (sEventName) {
-		console.log('onRoute: name');
 		var oStep = this.stepsByName[sEventName];
 
 		if (!oStep)
@@ -137,7 +148,7 @@ EzBob.WizardView = Backbone.View.extend({
 		this.model.changePage(oStep.num);
 		this.stepChanged();
 		oStep.onFocus();
-	},
+	}, // onRoute
 
 	render: function () {
 		var template = this.template();
@@ -149,7 +160,7 @@ EzBob.WizardView = Backbone.View.extend({
 		notifications.render();
 
 		return this;
-	},
+	}, // render
 
 	handleTopNavigation: function (e) {
 		if (!this.topNavigationEnabled)
@@ -159,16 +170,6 @@ EzBob.WizardView = Backbone.View.extend({
 		if (this.steps[newCurrent])
 			this.router.navTo(newCurrent);
 	}, // handelTopNavigation
-
-	ready: function (num) {
-		var ready = this.model.get('ready') || new Array(this.model.get('total') + 1);
-		ready[num] = true;
-
-		this.model.set('ready', ready);
-
-		if (!this.steps[num].ready)
-			this.steps[num].ready = true;
-	}, // ready
 
 	next: function () {
 		scrollTop();

@@ -979,8 +979,6 @@ EzBob.validatePersonalDetailsForm = function (el) {
     var oIsOffline = e.find('.offline');
     var isOffline = oIsOffline.length > 0;
 
-    var turnoverRegex = isOffline ? '' : "^(?!£ 0.00$)";
-
     return e.validate({
         rules: {
             FirstName: EzBob.Validation.NameValidationObject,
@@ -988,12 +986,9 @@ EzBob.validatePersonalDetailsForm = function (el) {
             DateOfBirth: { requiredDate: true, yearLimit: 18 },
             DayTimePhone: { required: true, regex: "^0[0-9]{10}$" },
             MobilePhone: { required: true, regex: "^0[0-9]{10}$" },
-            TypeOfBusiness: { required: true },
             ResidentialStatus: { required: true },
             Gender: { required: true },
             MaritalStatus: { required: true },
-            OverallTurnOver: { required: true, defaultInvalidPounds: true, regex: turnoverRegex },
-            WebSiteTurnOver: { required: true, defaultInvalidPounds: true, regex: turnoverRegex },
             TimeAtAddress: { required: true },
             ConsentToSearch: { required: true },
             OwnOtherProperty: { required: isOffline }
@@ -1006,6 +1001,28 @@ EzBob.validatePersonalDetailsForm = function (el) {
             MaritalStatus: { required: "This field is required" },
             MobilePhone: { regex: "Please enter a valid UK number" },
             DayTimePhone: { regex: "Please enter a valid UK number" },
+        },
+        errorPlacement: EzBob.Validation.errorPlacement,
+        unhighlight: EzBob.Validation.unhighlightFS,
+        highlight: EzBob.Validation.highlightFS
+    });
+};
+
+EzBob.validateCompanyDetailsMetaData = function (el) {
+    var e = el || $(".CompanyDetailForm");
+    var oIsOffline = e.find('.offline');
+    var isOffline = oIsOffline.length > 0;
+
+    var turnoverRegex = isOffline ? '' : "^(?!£ 0.00$)";
+
+    return e.validate({
+        rules: {
+            TypeOfBusiness: { required: true },
+            OverallTurnOver: { required: true, defaultInvalidPounds: true, regex: turnoverRegex },
+            WebSiteTurnOver: { required: true, defaultInvalidPounds: true, regex: turnoverRegex },
+        },
+        messages: {
+            TimeAtAddress: { regex: "This field is required" },
             OverallTurnOver: { defaultInvalidPounds: "This field is required", regex: "This field is required" },
             WebSiteTurnOver: { defaultInvalidPounds: "This field is required", regex: "This field is required" }
         },

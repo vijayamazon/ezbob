@@ -88,47 +88,49 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 
 		#endregion method WizardComplete
 
-		#region method Save
+		#region method SaveCompany
 
 		[Transactional]
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
-		public JsonNetResult Save(
+		public JsonNetResult SaveCompany(
+			string TypeOfBusiness,
+			decimal WebSiteTurnOver,
+			decimal OverallTurnOver,
 			LimitedInfo limitedInfo,
 			NonLimitedInfo nonLimitedInfo,
 			CompanyAdditionalInfo companyAdditionalInfo,
-			PersonalInfo personalInfo,
-			List<CustomerAddress> personalAddress,
-			List<CustomerAddress> prevPersonAddresses,
 			List<CustomerAddress> limitedCompanyAddress,
 			List<CustomerAddress> nonLimitedCompanyAddress,
 			List<DirectorModel> limitedDirectors,
 			List<DirectorModel> nonLimitedDirectors,
-			string dateOfBirth,
-			List<CustomerAddress> otherPropertyAddress,
-			CompanyEmployeeCountInfo companyEmployeeCountInfo,
-			bool isInCompanyMode
+			CompanyEmployeeCountInfo companyEmployeeCountInfo
 		) {
 			var customer = _context.Customer;
 
-			ProcessPersonal(personalInfo, personalAddress, prevPersonAddresses, dateOfBirth, otherPropertyAddress, customer);
+			EZBob.DatabaseLib.Model.Database.TypeOfBusiness nBusinessType;
 
-			if (isInCompanyMode) {
-				switch (personalInfo.TypeOfBusiness.Reduce()) {
-				case TypeOfBusinessReduced.Limited:
-					ProcessLimited(limitedInfo, limitedCompanyAddress, limitedDirectors, customer);
-					break;
+			if (!EZBob.DatabaseLib.Model.Database.TypeOfBusiness.TryParse(TypeOfBusiness, true, out nBusinessType))
+				return this.JsonNet(new { error = "Failed to parse business type: " + TypeOfBusiness });
 
-				case TypeOfBusinessReduced.NonLimited:
-					ProcessNonLimited(nonLimitedInfo, nonLimitedCompanyAddress, nonLimitedDirectors, customer);
-					break;
-				} // switch
+			customer.PersonalInfo.TypeOfBusiness = nBusinessType;
+			customer.PersonalInfo.WebSiteTurnOver = WebSiteTurnOver;
+			customer.PersonalInfo.OverallTurnOver = OverallTurnOver;
 
-				customer.CompanyAdditionalInfo = companyAdditionalInfo;
-			} // if
+			switch (nBusinessType.Reduce()) {
+			case TypeOfBusinessReduced.Limited:
+				ProcessLimited(limitedInfo, limitedCompanyAddress, limitedDirectors, customer);
+				break;
 
-			customer.WizardStep = _helper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.PersonalDetails);
+			case TypeOfBusinessReduced.NonLimited:
+				ProcessNonLimited(nonLimitedInfo, nonLimitedCompanyAddress, nonLimitedDirectors, customer);
+				break;
+			} // switch
+
+			customer.CompanyAdditionalInfo = companyAdditionalInfo;
+
+			customer.WizardStep = _helper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.CompanyDetails);
 
 			if (customer.IsOffline) {
 				customer.CompanyEmployeeCount.Add(new CompanyEmployeeCount {
@@ -141,6 +143,58 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 					TotalMonthlySalary = companyAdditionalInfo.TotalMonthlySalary
 				});
 			} // if
+
+			_session.Flush();
+
+			return this.JsonNet(new { });
+		} // SaveCompany
+
+		#endregion method SaveCompany
+
+		#region method Save
+
+		[Transactional]
+		[Ajax]
+		[HttpPost]
+		[ValidateJsonAntiForgeryToken]
+		public JsonNetResult Save(
+			PersonalInfo personalInfo,
+			List<CustomerAddress> personalAddress,
+			List<CustomerAddress> prevPersonAddresses,
+			string dateOfBirth,
+			List<CustomerAddress> otherPropertyAddress
+		) {
+			var customer = _context.Customer;
+
+			ValidatePersonalInfo(personalInfo);
+
+			personalInfo.DateOfBirth = DateTime.ParseExact(dateOfBirth, "d/M/yyyy", CultureInfo.InvariantCulture);
+			personalInfo.Surname = personalInfo.Surname.Trim();
+			personalInfo.FirstName = personalInfo.FirstName.Trim();
+			personalInfo.MiddleInitial = string.IsNullOrEmpty(personalInfo.MiddleInitial) ? "" : personalInfo.MiddleInitial.Trim();
+			personalInfo.Fullname = string.Format("{0} {1} {2}", personalInfo.FirstName, personalInfo.Surname, personalInfo.MiddleInitial);
+
+			customer.PersonalInfo = personalInfo;
+
+			UpdateAddresses(
+				customer, personalAddress, customer.AddressInfo.PersonalAddress,
+				CustomerAddressType.PersonalAddress,
+				lst => customer.AddressInfo.PersonalAddress = lst
+			);
+
+			UpdateAddresses(
+				customer, prevPersonAddresses, customer.AddressInfo.PrevPersonAddresses,
+				CustomerAddressType.PrevPersonAddresses,
+				lst => customer.AddressInfo.PrevPersonAddresses = lst
+			);
+
+			UpdateAddresses(
+				customer, otherPropertyAddress, customer.AddressInfo.OtherPropertyAddress,
+				CustomerAddressType.OtherPropertyAddress,
+				lst => customer.AddressInfo.OtherPropertyAddress = lst
+			);
+
+			customer.WizardStep = _helper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.PersonalDetails);
 
 			_session.Flush();
 
@@ -332,47 +386,6 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 		#endregion public
 
 		#region private
-
-		#region static method ProcessPersonal
-
-		private static void ProcessPersonal(
-			PersonalInfo personalInfo,
-			IEnumerable<CustomerAddress> personalAddress,
-			IEnumerable<CustomerAddress> prevPersonAddresses,
-			string dateOfBirth,
-			IEnumerable<CustomerAddress> otherPropertyAddress,
-			EZBob.DatabaseLib.Model.Database.Customer customer
-		) {
-			ValidatePersonalInfo(personalInfo);
-
-			personalInfo.DateOfBirth = DateTime.ParseExact(dateOfBirth, "d/M/yyyy", CultureInfo.InvariantCulture);
-			personalInfo.Surname = personalInfo.Surname.Trim();
-			personalInfo.FirstName = personalInfo.FirstName.Trim();
-			personalInfo.MiddleInitial = string.IsNullOrEmpty(personalInfo.MiddleInitial) ? "" : personalInfo.MiddleInitial.Trim();
-			personalInfo.Fullname = string.Format("{0} {1} {2}", personalInfo.FirstName, personalInfo.Surname, personalInfo.MiddleInitial);
-
-			customer.PersonalInfo = personalInfo;
-
-			UpdateAddresses(
-				customer, personalAddress, customer.AddressInfo.PersonalAddress,
-				CustomerAddressType.PersonalAddress,
-				lst => customer.AddressInfo.PersonalAddress = lst
-			);
-
-			UpdateAddresses(
-				customer, prevPersonAddresses, customer.AddressInfo.PrevPersonAddresses,
-				CustomerAddressType.PrevPersonAddresses,
-				lst => customer.AddressInfo.PrevPersonAddresses = lst
-			);
-
-			UpdateAddresses(
-				customer, otherPropertyAddress, customer.AddressInfo.OtherPropertyAddress,
-				CustomerAddressType.OtherPropertyAddress,
-				lst => customer.AddressInfo.OtherPropertyAddress = lst
-			);
-		} // ProcessPersonal
-
-		#endregion static method ProcessPersonal
 
 		#region static method UpdateAddresses
 

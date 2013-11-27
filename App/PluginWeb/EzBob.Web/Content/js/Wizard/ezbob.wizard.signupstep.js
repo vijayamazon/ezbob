@@ -28,13 +28,17 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 	render: function() {
 		var isLoggedIn = this.model.get('loggedIn');
 
-		console.log('the modelelele ist', this.model);
-
 		if (isLoggedIn) {
-			// this.setReadOnly();
-			this.trigger('ready');
-			this.trigger('next');
 			this.readyToProceed = false;
+
+			this.trigger('ready');
+
+			var sLastSavedStep = this.model.get('LastSavedWizardStep');
+
+			if (sLastSavedStep)
+				this.trigger('jump-to', sLastSavedStep);
+
+			this.trigger('next');
 			return this;
 		} // if
 

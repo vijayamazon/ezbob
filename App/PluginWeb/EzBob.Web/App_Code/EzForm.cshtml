@@ -284,11 +284,15 @@
     }
 }
 
-@helper DateInput(string name, string title, bool required = true, DateTime[] minMaxDefaultDate = null, bool statusIcon = false, string css = "", string uiEventControlID = "")
+@helper DateInput(string name, string title, bool required = true, DateTime[] minMaxDefaultDate = null, bool statusIcon = false, string css = "", string uiEventControlID = "", string hiddenFieldAuxClass = "")
 {
 	var month = new[] { "Jan.", "Feb.", "Mar.", "Apr.", "May.", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec." };
 	var validationClass = required ? "requiredDate" : "";
 	var identificator = new HtmlString(name);
+
+	if (string.IsNullOrWhiteSpace(hiddenFieldAuxClass)) {
+		hiddenFieldAuxClass = string.Empty;
+	}
 
 	var dayIdentificator = new HtmlString(identificator + "Day");
 	var monthIdentificator = new HtmlString(identificator + "Month");
@@ -364,7 +368,7 @@
 					}
 				</select>
 			</label>
-			<input id="@identificator" class="@identificator @validationClass hidden-field" style="display: none !important" name="@identificator"/>
+			<input id="@identificator" class="@identificator @validationClass hidden-field @hiddenFieldAuxClass" style="display: none !important" name="@identificator"/>
 
             @if (statusIcon)
             {

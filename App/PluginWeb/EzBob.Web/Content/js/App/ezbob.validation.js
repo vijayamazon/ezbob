@@ -195,29 +195,6 @@ EzBob.Validation.checkDate = function (value) {
 
 jQuery.validator.addMethod("requiredDate", EzBob.Validation.checkDate, 'Please enter a valid date.');
 
-EzBob.Validation.checkDirectorName = function (value, elm) {
-    if (/\.Name$|\.Surname$/.test(elm.name)) {
-        var trimmed = $.trim(value);
-        var re = /^(([a-zA-Z]*[AEIOUYaeiouy]+[a-zA-Z]*)|(Ng)|(ng))( ([a-zA-Z]*[AEIOUYaeiouy]+[a-zA-Z]*)|(Ng)|(ng))*$/;
-        return re.test(trimmed);
-    } // if
-
-    return true;
-}; // EzBob.Validation.checkDirectorName
-
-EzBob.Validation.checkDirectorSurName = function (value, elm) {
-    return value.length >= 1;
-}; // EzBob.Validation.checkDirectorSurName
-
-jQuery.validator.addMethod("director_name_part", EzBob.Validation.checkDirectorName, 'Please check your input.');
-jQuery.validator.addMethod("director_surname_part", EzBob.Validation.checkDirectorSurName, 'Please check your input.');
-
-EzBob.Validation.checkDirectorGender = function(ignored, elm) {
-    return $(elm).closest('.FormRadioCtrl').find('.director_gender:checked').length == 1;
-}; // EzBob.Validation.checkDirectorGender
-
-jQuery.validator.addMethod("director_gender", EzBob.Validation.checkDirectorGender, 'Please check your input.');
-
 EzBob.Validation.validateAndNotify = function (validator) {
     if (!validator.form()) {
         if (validator.errorList && validator.errorList.length > 0) {
@@ -254,7 +231,40 @@ $.validator.methods.yearLimit = function (value, element, yearCount) {
     return currentFullYear >= yearCount;
 };
 
-//-----------  Validate  -----------  
+//-----------  Director Validation -----------  
+
+EzBob.Validation.checkDirectorName = function (value, elm) {
+    if (/\.Name$/.test(elm.name)) {
+        var trimmed = $.trim(value);
+        var re = /^(([a-zA-Z]*[AEIOUYaeiouy]+[a-zA-Z]*)|(Ng)|(ng))( ([a-zA-Z]*[AEIOUYaeiouy]+[a-zA-Z]*)|(Ng)|(ng))*$/;
+        return re.test(trimmed);
+    } // if
+
+    return true;
+}; // EzBob.Validation.checkDirectorName
+
+EzBob.Validation.checkDirectorSurName = function (value, elm) {
+    return value.length >= 1;
+}; // EzBob.Validation.checkDirectorSurName
+
+jQuery.validator.addMethod('director_name_part', EzBob.Validation.checkDirectorName, 'Please check your input.');
+jQuery.validator.addMethod('director_surname_part', EzBob.Validation.checkDirectorSurName, 'Please check your input.');
+
+EzBob.Validation.checkDirectorGender = function(ignored, elm) {
+    return $(elm).closest('.FormRadioCtrl').find('.director_gender:checked').length == 1;
+}; // EzBob.Validation.checkDirectorGender
+
+jQuery.validator.addMethod('director_gender', EzBob.Validation.checkDirectorGender, 'Please check your input.');
+
+EzBob.Validation.checkDirectorPhoneNumber = function(value, elm) {
+	return (/\.Phone$/.test(elm.name)) ? /^0[0-9]{10}$/.test($.trim(value)) : true;
+}; // EzBob.Validation.checkDirectorPhoneNumber
+
+jQuery.validator.addMethod('director_phone', EzBob.Validation.checkDirectorPhoneNumber, 'Please enter a valid UK number.');
+
+jQuery.validator.addMethod('director_birth_date', function(value, elm) { return $.validator.methods.yearLimit(value, elm, 18); }, 'Director should be at least 18 years old.');
+
+//-----------  Validate -----------  
 
 var validFunc = function (el) {
     if ($(el).closest('.ezDateTime').length != 0) {
