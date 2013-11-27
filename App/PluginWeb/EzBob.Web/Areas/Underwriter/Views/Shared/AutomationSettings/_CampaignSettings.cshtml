@@ -24,7 +24,7 @@
                 <td><%= campaign.Description ? campaign.Description : '-' %></td>
                 <td>
                     <button class="btn-link editCampaign" style="color: blue;" data-campaign-id="<%= campaign.Id %>">Edit</button>
-                    <button class="btn-link campaignCustomers" style="color: blue;" data-campaign-clients="<%= campaign.Customers %>">Clients</button>
+                    <button class="btn-link campaignCustomers" style="color: blue;" data-campaign-id="<%= campaign.Id %>">Clients</button>
                 </td>
             </tr>
             <%});%>
@@ -90,3 +90,26 @@
     </form>
 </script>
 
+
+<script type="text/template" id="campaign-customers-template">
+    <%if(campaign && campaign.Customers && campaign.Customers.length > 0){%>
+    <table class="table table-bordered table-striped blue-header squeezed darker">
+        <thead>
+            <th>customer id</th>
+            <th>email</th>
+            <th>name</th>
+        </thead>
+        <tbody>
+            <%_.each(campaign.Customers, function(client) {%>
+            <tr>
+                <td><%-client.Id%></td>
+                <td><%-client.Email%></td>
+                <td><%-client.Name%></td>
+            </tr>
+            <%});%>
+        </tbody>
+    </table>
+    <%} else { %>
+        <h3>No clients in this campaign</h3>
+    <%}%>
+</script>

@@ -21,21 +21,20 @@ class EzBob.Underwriter.Settings.CampaignView extends Backbone.Marionette.ItemVi
         "click .campaignCustomers" : "campaignCustomers"
 
     campaignCustomers: (e) ->
-        clients = $(e.currentTarget).attr('data-campaign-clients')
-        if not clients
-            clients = 'No clients in this campaign'
-        EzBob.ShowMessage(clients , "Campaign clients", null, "OK")
+        campaignId = parseInt($(e.currentTarget).attr('data-campaign-id'))
+        @campaignCustomersView = new EzBob.Underwriter.Settings.CampaignCustomersView(campaign: @getCampaign(campaignId))
+        EzBob.App.jqmodal.show(@campaignCustomersView)
 
     editCampaign: (e) ->
         campaignId = parseInt($(e.currentTarget).attr('data-campaign-id'))
+        @addCampaign(e, @getCampaign(campaignId))
+
+    getCampaign: (campaignId) ->
         campaigns = @model.get("campaigns")
-        
         for campaign of campaigns
             if campaigns[campaign].Id == campaignId
-                @addCampaign(e, campaigns[campaign])
-                break
-            
-
+                return campaigns[campaign]
+        return
 
     addCampaign: (e, campaign)->
         BlockUi("On")
@@ -66,8 +65,6 @@ class EzBob.Underwriter.Settings.CampaignView extends Backbone.Marionette.ItemVi
     hide: () ->
         this.$el.hide()
 
-    onClose: ->
-        
 
 class EzBob.Underwriter.Settings.AddCampaignView extends Backbone.Marionette.ItemView
     template: "#add-campaign-template"
@@ -120,7 +117,6 @@ class EzBob.Underwriter.Settings.AddCampaignView extends Backbone.Marionette.Ite
 
     onRender: ->
         @$el.find('input.date').datepicker(format: 'dd/mm/yyyy')
-        #@$el.find('input[data-content], span[data-content]').setPopover()
         that = @
         if @isUpdate
             @ui.name.val(@campaign.Name)
@@ -130,7 +126,7 @@ class EzBob.Underwriter.Settings.AddCampaignView extends Backbone.Marionette.Ite
             ).prop 'selected', true
             @ui.startdate.val EzBob.formatDate2(@campaign.StartDate)
             @ui.enddate.val EzBob.formatDate2(@campaign.EndDate)
-            @ui.clients.val @campaign.Customers.replace(/, /g,' ')
+            @ui.clients.val _.pluck(@campaign.Customers, 'Id').join().replace(/,/g,' ')
             @ui.addCampaignBtn.html 'Update Campaign'
 
 
@@ -150,3 +146,36 @@ class EzBob.Underwriter.Settings.AddCampaignView extends Backbone.Marionette.Ite
         data = 
             campaignTypes: @model.get('campaignTypes')
         return data
+
+
+class EzBob.Underwriter.Settings.CampaignCustomersView extends Backbone.Marionette.ItemView
+    template: "#campaign-customers-template"
+
+    initialize: (options) ->
+        if(options.campaign)
+            @campaign = options.campaign
+        @
+
+    jqoptions: ->
+        {
+            modal: true
+            resizable: false
+            title: "Campaign #{@campaign.Name} clients"
+            position: "center"
+            draggable: true
+            width: "40%"
+            height: 670
+            dialogClass: "CampaignClients"
+        }
+
+    serializeData: ->
+        data = 
+            campaign: @campaign
+        return data
+
+    show: (type) ->
+        this.$el.show()
+
+    hide: () ->
+        this.$el.hide()
+

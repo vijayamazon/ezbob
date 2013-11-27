@@ -1,10 +1,10 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers
 {
-	using System.Globalization;
 	using System.Web.Mvc;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using Infrastructure.csrf;
+	using Models;
 	using Scorto.Web;
 	using System;
 	using System.Linq;
@@ -323,7 +323,7 @@
 				.GetAll().ToList();
 
 			var campaigns = campaignsList
-				.Select(c => new
+				.Select(c => new CampaignModel
 					{
 						Name = c.Name,
 						Type = c.CampaignType.Type,
@@ -331,7 +331,14 @@
 						EndDate = c.EndDate,
 						Description = c.Description,
 						Id = c.Id,
-						Customers = c.Clients.Any() ? c.Clients.OrderBy(cc => cc.Customer.Id).Select(cc => cc.Customer.Id.ToString(CultureInfo.InvariantCulture)).ToList().Aggregate((i,j) => i + ", " + j) : ""
+						Customers = c.Clients
+						.OrderBy(cc => cc.Customer.Id)
+						.Select(cc => new CampaignCustomerModel
+							{
+								Id = cc.Customer.Id, 
+								Email = cc.Customer.Name, 
+								Name = cc.Customer.PersonalInfo.Fullname
+							}).ToList() 
 					})
 				.ToList();
 

@@ -37,7 +37,7 @@
 		public string PromoCode { get; set; }
 		public string PromoCodeCss { get; set; }
 		public CompanyEmployeeCountInfo CompanyEmployeeCountInfo { get; set; }
-
+		public string ActiveCampaign { get; set; }
 		public PersonalInfoModel() {
 			IndustryFields = new List<string>();
 			StrategyError = "";
@@ -105,6 +105,19 @@
 			} // if
 
 			CompanyEmployeeCountInfo = new CompanyEmployeeCountInfo(customer);
+
+			ActiveCampaign = "";
+			var activeCampaigns = customer.ActiveCampaigns
+				.Where(cc => 
+					cc.Campaign.EndDate >= DateTime.Today && 
+					cc.Campaign.StartDate <= DateTime.Today)
+				.Select(cc => cc.Campaign.Name)
+				.ToList();
+
+			if (activeCampaigns.Any())
+			{
+				ActiveCampaign = activeCampaigns.Aggregate((i, j) => i + ", " + j);
+			}
 		} // InitFromCustomer
 
 		public bool IsTest { get; set; }

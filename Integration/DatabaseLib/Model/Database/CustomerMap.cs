@@ -215,6 +215,12 @@ namespace EZBob.DatabaseLib.Model.Database {
                 .Inverse()
                 .Cascade.All();
 
+			HasMany(m => m.ActiveCampaigns)
+				.AsSet()
+				.KeyColumn("CustomerId")
+				.Inverse()
+				.Cascade.All();
+
             Map(x => x.Fraud);
             Map(x => x.FraudStatus).CustomType<FraudStatus>();
             Map(x => x.FinancialAccounts);

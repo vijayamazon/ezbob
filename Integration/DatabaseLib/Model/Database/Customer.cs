@@ -266,6 +266,13 @@ namespace EZBob.DatabaseLib.Model.Database {
             set { _decisionHistory = value; }
         }
 
+		private Iesi.Collections.Generic.ISet<CampaignClients> _activeCampaigns = new HashedSet<CampaignClients>();
+		public virtual Iesi.Collections.Generic.ISet<CampaignClients> ActiveCampaigns
+		{
+			get { return _activeCampaigns; }
+			set { _activeCampaigns = value; }
+		}
+
         /// <summary>
         /// Êîëè÷åñòî ïîïûòîê ïîëó÷èòü êýø. Ïî ñóòè êîëè÷åñòî íàæàòèé íà êíîïêó Request Cash.  // Strange language is detected.
         /// </summary>

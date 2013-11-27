@@ -242,6 +242,7 @@
     <Compile Include="Areas\Underwriter\Controllers\EmailVerificationController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\FraudController.cs" />
     <Compile Include="Areas\Underwriter\Models\ApiCheckLogBuilder.cs" />
+    <Compile Include="Areas\Underwriter\Models\CampaignModel.cs" />
     <Compile Include="Areas\Underwriter\Models\CustomerRelationsModelBuilder.cs" />
     <Compile Include="Areas\Underwriter\Models\LoanSourceModel.cs" />
     <Compile Include="Areas\Underwriter\Models\CreditBureauModelBuilder.cs" />

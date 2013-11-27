@@ -48,28 +48,28 @@
     };
 
     CampaignView.prototype.campaignCustomers = function(e) {
-      var clients;
-      clients = $(e.currentTarget).attr('data-campaign-clients');
-      if (!clients) {
-        clients = 'No clients in this campaign';
-      }
-      return EzBob.ShowMessage(clients, "Campaign clients", null, "OK");
+      var campaignId;
+      campaignId = parseInt($(e.currentTarget).attr('data-campaign-id'));
+      this.campaignCustomersView = new EzBob.Underwriter.Settings.CampaignCustomersView({
+        campaign: this.getCampaign(campaignId)
+      });
+      return EzBob.App.jqmodal.show(this.campaignCustomersView);
     };
 
     CampaignView.prototype.editCampaign = function(e) {
-      var campaign, campaignId, campaigns, _results;
+      var campaignId;
       campaignId = parseInt($(e.currentTarget).attr('data-campaign-id'));
+      return this.addCampaign(e, this.getCampaign(campaignId));
+    };
+
+    CampaignView.prototype.getCampaign = function(campaignId) {
+      var campaign, campaigns;
       campaigns = this.model.get("campaigns");
-      _results = [];
       for (campaign in campaigns) {
         if (campaigns[campaign].Id === campaignId) {
-          this.addCampaign(e, campaigns[campaign]);
-          break;
-        } else {
-          _results.push(void 0);
+          return campaigns[campaign];
         }
       }
-      return _results;
     };
 
     CampaignView.prototype.addCampaign = function(e, campaign) {
@@ -118,8 +118,6 @@
     CampaignView.prototype.hide = function() {
       return this.$el.hide();
     };
-
-    CampaignView.prototype.onClose = function() {};
 
     return CampaignView;
 
@@ -214,7 +212,7 @@
         }).prop('selected', true);
         this.ui.startdate.val(EzBob.formatDate2(this.campaign.StartDate));
         this.ui.enddate.val(EzBob.formatDate2(this.campaign.EndDate));
-        this.ui.clients.val(this.campaign.Customers.replace(/, /g, ' '));
+        this.ui.clients.val(_.pluck(this.campaign.Customers, 'Id').join().replace(/,/g, ' '));
         return this.ui.addCampaignBtn.html('Update Campaign');
       }
     };
@@ -241,6 +239,56 @@
     };
 
     return AddCampaignView;
+
+  })(Backbone.Marionette.ItemView);
+
+  EzBob.Underwriter.Settings.CampaignCustomersView = (function(_super) {
+
+    __extends(CampaignCustomersView, _super);
+
+    function CampaignCustomersView() {
+      return CampaignCustomersView.__super__.constructor.apply(this, arguments);
+    }
+
+    CampaignCustomersView.prototype.template = "#campaign-customers-template";
+
+    CampaignCustomersView.prototype.initialize = function(options) {
+      if (options.campaign) {
+        this.campaign = options.campaign;
+      }
+      return this;
+    };
+
+    CampaignCustomersView.prototype.jqoptions = function() {
+      return {
+        modal: true,
+        resizable: false,
+        title: "Campaign " + this.campaign.Name + " clients",
+        position: "center",
+        draggable: true,
+        width: "40%",
+        height: 670,
+        dialogClass: "CampaignClients"
+      };
+    };
+
+    CampaignCustomersView.prototype.serializeData = function() {
+      var data;
+      data = {
+        campaign: this.campaign
+      };
+      return data;
+    };
+
+    CampaignCustomersView.prototype.show = function(type) {
+      return this.$el.show();
+    };
+
+    CampaignCustomersView.prototype.hide = function() {
+      return this.$el.hide();
+    };
+
+    return CampaignCustomersView;
 
   })(Backbone.Marionette.ItemView);
 
