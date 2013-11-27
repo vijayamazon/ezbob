@@ -270,24 +270,24 @@
 		public GridCriteriaResult<Customer> RegisteredCustomers(GridSettings settings)
 		{
 			bool isTest = Request.Params["IsTest"] == "true";
-			if (isTest)
+			bool showAll = Request.Params["ShowAll"] == "true";
+			if (showAll)
 			{
 				return new GridCriteriaResult<Customer>(_session, null,
-														_gridRegisteredCustomers,
-														settings)
+													_gridRegisteredCustomers,
+													settings)
 				{
 					CustomizeFilter = crit => crit.Add(Restrictions.IsNull("CreditResult"))
+												  .Add(Restrictions.Eq("IsTest", isTest))
 				};
-
 			}
-
 			return new GridCriteriaResult<Customer>(_session, null,
 													_gridRegisteredCustomers,
 													settings)
 			{
-				CustomizeFilter = crit => crit.Add(Restrictions.Or(Restrictions.Eq("IsTest", false),
-												   Restrictions.IsNull("IsTest")))
-											  .Add(Restrictions.IsNull("CreditResult"))
+				CustomizeFilter = crit => crit.Add(Restrictions.IsNull("CreditResult"))
+											  .Add(Restrictions.Where<Customer>(c => c.GreetingMailSentDate >= DateTime.Today.AddDays(-7)))
+											  .Add(Restrictions.Eq("IsTest", isTest))
 			};
 		}
 
@@ -382,20 +382,8 @@
 			GridHelpers.CreateIdColumn(gridModel);
 			GridHelpers.CreateEmailColumn(gridModel);
 			GridHelpers.CreateUserStatusColumn(gridModel);
-			GridHelpers.CreateMpStatusColumn(gridModel);
 			GridHelpers.CreateRegisteredDateColumn(gridModel);
-			GridHelpers.CreateEbayStatusColumn(gridModel);
-			GridHelpers.CreateAmazonStatusColumn(gridModel);
-			GridHelpers.CreateEkmStatusColumn(gridModel);
-			GridHelpers.CreateVolusionStatusColumn(gridModel);
-			GridHelpers.CreatePlayStatusColumn(gridModel);
-			GridHelpers.CreateShopifyStatusColumn(gridModel);
-			GridHelpers.CreatePayPalStatusColumn(gridModel);
-			GridHelpers.CreatePayPointStatusColumn(gridModel);
-			GridHelpers.CreateYodleeStatusColumn(gridModel);
-			GridHelpers.CreateFreeAgentStatusColumn(gridModel);
-			GridHelpers.CreateXeroStatusColumn(gridModel);
-			GridHelpers.CreateSageStatusColumn(gridModel);
+			GridHelpers.CreateRegisteredMpStatusesColumn(gridModel);
 			GridHelpers.CreateWizardStepColumn(gridModel);
 			GridHelpers.CreatePaymentDemeanor(gridModel);
 			GridHelpers.CreateSegmentTypeColumn(gridModel);
@@ -652,8 +640,8 @@
 			string underwriter = User.Identity.Name;
 			var recentCustomersMap = new List<System.Tuple<int, string>>();
 
-			var recentCustomers = underwriterRecentCustomersRepository.GetAll().Where(e => e.UserName == underwriter).OrderByDescending(e=>e.Id);
-			
+			var recentCustomers = underwriterRecentCustomersRepository.GetAll().Where(e => e.UserName == underwriter).OrderByDescending(e => e.Id);
+
 			foreach (var recentCustomer in recentCustomers)
 			{
 				var customer = _customers.TryGet(recentCustomer.CustomerId);
@@ -670,32 +658,37 @@
 		public JsonNetResult GetCounters(bool isTest)
 		{
 			var model = new List<CustomersCountersModel>
-                {
-                    new CustomersCountersModel
-                        {
-                            Count =
-                                _customers.GetAll().Count(x => x.CreditResult == CreditResultStatus.WaitingForDecision && (isTest || x.IsTest == false)),
-                            Name = "waiting"
-                        },
-                    new CustomersCountersModel
-                        {
-                            Count =
-                                _customers.GetAll().Count(x => x.CreditResult == CreditResultStatus.ApprovedPending && (isTest || x.IsTest == false)),
-                            Name = "pending"
-                        },
-                    new CustomersCountersModel
-                        {
-                            Count =
-                                _customers.GetAll().Count(x => x.CreditResult == null && x.WizardStep == WizardStepType.AllStep && (isTest || x.IsTest == false)),
-                            Name = "RegisteredCustomers"
-                        },
-                    new CustomersCountersModel
-                        {
-                            Count =
-                                _customers.GetAll().Count(x => x.CreditResult == CreditResultStatus.Escalated && (isTest || x.IsTest == false)),
-                            Name = "escalated"
-                        },
-                };
+				{
+					new CustomersCountersModel
+						{
+							Count =
+								_customers.GetAll()
+								          .Count(x => x.CreditResult == CreditResultStatus.WaitingForDecision && (isTest || x.IsTest == false)),
+							Name = "waiting"
+						},
+					new CustomersCountersModel
+						{
+							Count =
+								_customers.GetAll()
+								          .Count(x => x.CreditResult == CreditResultStatus.ApprovedPending && (isTest || x.IsTest == false)),
+							Name = "pending"
+						},
+					new CustomersCountersModel
+						{
+							Count =
+								_customers.GetAll()
+								          .Count(
+									          x =>
+									          x.CreditResult == null && x.WizardStep == WizardStepType.AllStep && (isTest || x.IsTest == false)),
+							Name = "RegisteredCustomers"
+						},
+					new CustomersCountersModel
+						{
+							Count =
+								_customers.GetAll().Count(x => x.CreditResult == CreditResultStatus.Escalated && (isTest || x.IsTest == false)),
+							Name = "escalated"
+						},
+				};
 			return this.JsonNet(model);
 		}
 

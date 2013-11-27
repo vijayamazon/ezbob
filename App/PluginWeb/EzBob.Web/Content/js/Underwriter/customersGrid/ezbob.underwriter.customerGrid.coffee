@@ -11,11 +11,11 @@ EzBob.Underwriter.customerGrid = (settings) ->
     names = settings.names
     if list is "#"
         list = "#{settings.$el.attr('id')}-table"
-        $("<table id='#{list}'></table>").appendTo settings.$el
+        $("<table id='#{list}'></table>").prependTo settings.$el
         list = "##{list}"
     if pagerId is "#"
         pagerId = "#{settings.$el.attr('id')}-pager"
-        $("<div id='#{pagerId}'/>").appendTo settings.$el
+        $("<div id='#{pagerId}'/>").prependTo settings.$el
         pagerId = "##{pagerId}"
     options =
         sortable: true
@@ -65,27 +65,47 @@ EzBob.Underwriter.customerGrid = (settings) ->
     EzBob.App.vent.on "uw:grids:performsearch", ->
         $(list)[0].triggerToolbar()
 
-    checkbox = $("<input type='checkbox'>Show test customers</input>").on("change", ->
-        isTest = checkbox.is(":checked")
+    isTestCheckbox = settings.$el.find("#show-test-customers")
+    console.log("isTestCheckbox", isTestCheckbox)
+    isTestCheckbox.on "change", ->
+        isTest = isTestCheckbox.is(":checked")
         EzBob.Config.isTest = isTest
-        checkboxes = $(".show-test-customers input")
         if isTest
-            checkboxes.attr "checked", "checked"
+            isTestCheckbox.attr "checked", "checked"
         else
-            checkboxes.removeAttr "checked"
-        checkboxes.trigger "reload"
-    )
-    checkbox.on "reload", ->
-        isTest = checkbox.is(":checked")
+            isTestCheckbox.removeAttr "checked"
+        isTestCheckbox.trigger "reload"
+    
+    isTestCheckbox.on "reload", ->
+        console.log("isTestCheckbox reload", isTestCheckbox)
+        isTest = isTestCheckbox.is(":checked")
         EzBob.Config.isTest = isTest
         $(list).jqGrid "setGridParam",
             postData:
                 IsTest: isTest
         $(list).trigger "reloadGrid"
 
-    $div = $("<div class='show-test-customers'></div>")
-    checkbox.appendTo $div
-    $div.appendTo settings.$el
+    showAllCheckbox = settings.$el.find("#show-all-customers")
+    
+    showAllCheckbox.on "change", ->
+        console.log("showAllCheckbox change", showAllCheckbox)
+        showAll = showAllCheckbox.is(":checked")
+        EzBob.Config.showAll = showAll
+        if showAll
+            showAllCheckbox.attr "checked", "checked"
+        else
+            showAllCheckbox.removeAttr "checked"
+        showAllCheckbox.trigger "reload"
+    
+    showAllCheckbox.on "reload", ->
+        console.log("showAllCheckbox reload", showAllCheckbox)
+        showAll = showAllCheckbox.is(":checked")
+        EzBob.Config.showAll = showAll
+        $(list).jqGrid "setGridParam",
+            postData:
+                ShowAll: showAll
+        $(list).trigger "reloadGrid"
+
     settings.$el.on "dblclick", "tr", (ev) ->
         href = $(ev.currentTarget).find("a").first().attr("href")
         window.location.href = href if href

@@ -8,7 +8,7 @@
   EzBob.Underwriter = EzBob.Underwriter || {};
 
   EzBob.Underwriter.customerGrid = function(settings) {
-    var $div, $grid, checkbox, list, model, names, options, pagerId, url;
+    var $grid, isTestCheckbox, list, model, names, options, pagerId, showAllCheckbox, url;
     settings.$el = $(settings.el);
     list = "#" + (settings.$el.find("table").attr("id") || "");
     pagerId = "#" + (settings.$el.find("div").attr("id") || "");
@@ -17,12 +17,12 @@
     names = settings.names;
     if (list === "#") {
       list = "" + (settings.$el.attr('id')) + "-table";
-      $("<table id='" + list + "'></table>").appendTo(settings.$el);
+      $("<table id='" + list + "'></table>").prependTo(settings.$el);
       list = "#" + list;
     }
     if (pagerId === "#") {
       pagerId = "" + (settings.$el.attr('id')) + "-pager";
-      $("<div id='" + pagerId + "'/>").appendTo(settings.$el);
+      $("<div id='" + pagerId + "'/>").prependTo(settings.$el);
       pagerId = "#" + pagerId;
     }
     options = {
@@ -80,21 +80,23 @@
     EzBob.App.vent.on("uw:grids:performsearch", function() {
       return $(list)[0].triggerToolbar();
     });
-    checkbox = $("<input type='checkbox'>Show test customers</input>").on("change", function() {
-      var checkboxes, isTest;
-      isTest = checkbox.is(":checked");
-      EzBob.Config.isTest = isTest;
-      checkboxes = $(".show-test-customers input");
-      if (isTest) {
-        checkboxes.attr("checked", "checked");
-      } else {
-        checkboxes.removeAttr("checked");
-      }
-      return checkboxes.trigger("reload");
-    });
-    checkbox.on("reload", function() {
+    isTestCheckbox = settings.$el.find("#show-test-customers");
+    console.log("isTestCheckbox", isTestCheckbox);
+    isTestCheckbox.on("change", function() {
       var isTest;
-      isTest = checkbox.is(":checked");
+      isTest = isTestCheckbox.is(":checked");
+      EzBob.Config.isTest = isTest;
+      if (isTest) {
+        isTestCheckbox.attr("checked", "checked");
+      } else {
+        isTestCheckbox.removeAttr("checked");
+      }
+      return isTestCheckbox.trigger("reload");
+    });
+    isTestCheckbox.on("reload", function() {
+      var isTest;
+      console.log("isTestCheckbox reload", isTestCheckbox);
+      isTest = isTestCheckbox.is(":checked");
       EzBob.Config.isTest = isTest;
       $(list).jqGrid("setGridParam", {
         postData: {
@@ -103,9 +105,31 @@
       });
       return $(list).trigger("reloadGrid");
     });
-    $div = $("<div class='show-test-customers'></div>");
-    checkbox.appendTo($div);
-    $div.appendTo(settings.$el);
+    showAllCheckbox = settings.$el.find("#show-all-customers");
+    showAllCheckbox.on("change", function() {
+      var showAll;
+      console.log("showAllCheckbox change", showAllCheckbox);
+      showAll = showAllCheckbox.is(":checked");
+      EzBob.Config.showAll = showAll;
+      if (showAll) {
+        showAllCheckbox.attr("checked", "checked");
+      } else {
+        showAllCheckbox.removeAttr("checked");
+      }
+      return showAllCheckbox.trigger("reload");
+    });
+    showAllCheckbox.on("reload", function() {
+      var showAll;
+      console.log("showAllCheckbox reload", showAllCheckbox);
+      showAll = showAllCheckbox.is(":checked");
+      EzBob.Config.showAll = showAll;
+      $(list).jqGrid("setGridParam", {
+        postData: {
+          ShowAll: showAll
+        }
+      });
+      return $(list).trigger("reloadGrid");
+    });
     return settings.$el.on("dblclick", "tr", function(ev) {
       var href;
       href = $(ev.currentTarget).find("a").first().attr("href");

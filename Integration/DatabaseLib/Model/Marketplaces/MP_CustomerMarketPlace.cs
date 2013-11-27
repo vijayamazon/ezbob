@@ -107,6 +107,10 @@ namespace EZBob.DatabaseLib.Model.Database
 							 : (!String.IsNullOrEmpty(UpdateError))
 								   ? "Error"
 								   : "Done";
+				if (UpdatingStart == null)
+				{
+					status = "Never Started";
+				}
 			}
 			return status;
 
