@@ -11,8 +11,8 @@ table { border-collapse: collapse; border-spacing: 0; }
 hr { display: block; height: 1px; border: 0; border-top: 1px solid #ccc; margin: 1em 0; padding: 0; }
 input, select { vertical-align: middle; }
 
-body{background:#1F2022; font-family: Arial, Helvetica, sans-serif; font-size:14px; color:#666; text-shadow:0 1px 1px #fff;}
-body.popup, #wrapper, footer{background:#eee url(images/body_bg.jpg);}
+body{background:white; font-family: Arial, Helvetica, sans-serif; font-size:14px; color:#666; text-shadow:0 1px 1px #fff;}
+/* body.popup, #wrapper, footer{ background:#eee url(images/body_bg.jpg);} */
 
 /*-- Padding for inner sections --*/
 .inner{width:960px; padding:10px; margin:0 auto;/*min-height: 500px;*/ }
@@ -93,8 +93,9 @@ box-shadow: 0 0 10px #ccc;
 }
 /*-- 2 column layout with side bar --*/
 
-#content{float:left; width:670px; line-height:1.8em;}
-#sidebar{float:right; width:250px;}
+#content{float:left; width:70%; line-height:1.8em;}
+#sidebar{float:right; width: 30%;}
+
 /*-- Call to action --*/
 .cta_sub_text{text-align:center; margin:-35px 0 15px 0}
 .cta_bar{
@@ -228,9 +229,11 @@ body .form_field {
 	padding: 5px;
 	font-size: 14px;
 	border: 1px #ccc solid;
+	/*
 	-moz-box-shadow: 0 0 10px #ccc;
 	-webkit-box-shadow: 0 0 10px #ccc;
 	box-shadow: 0 0 10px #ccc;
+		*/
 }
 
 body .form_field_look:hover,
@@ -248,19 +251,21 @@ span.required {
 	margin-top: -0.6em;
 }
 
-input.form_field, textarea.form_field { width: 400px; }
+input.form_field, textarea.form_field { width: 560px; }
+
+input.form_field { height: 36px !important; font-size: 16px !important; font-weight: normal!important;}
 
 textarea.form_field_address { height: auto !important; margin-top: 1em; resize: none; }
 
 div.form_read_and_accept { width: 410px; }
 
-select.form_field { width: 410px; height: 30px; padding: 0; }
+select.form_field { width: 570px; height: 38px; padding: 4px; }
 
-select.form_field_date { width: 103px; height: 30px; padding: 0; }
+select.form_field_date { width: 190px; height: 36px; padding: 0; }
 
-div.form_field_container { margin-bottom: 1.3em; }
+div.form_field_container { margin-bottom: 1.6em; }
 
-input.form_field_address { width: 245px; }
+input.form_field_address { width: 405px; }
 input.form_field_address_lookup { width: 150px; }
 
 /*----table for payment schedule-----*/

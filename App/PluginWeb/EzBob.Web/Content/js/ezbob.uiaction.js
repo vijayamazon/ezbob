@@ -7,7 +7,7 @@ EzBob = EzBob || {};
 
 		var oElm = $(oDomElement);
 
-		this.userName = $('logged-in-user-name').text();
+		this.userName = $('#logged-in-user-name').text();
 		this.controlName = oElm.attr('ui-event-control-id');
 		this.htmlID = oElm.attr('id');
 		this.actionName = sEventName;
@@ -20,7 +20,7 @@ EzBob = EzBob || {};
 
 		if (bSaveValueOnChange)
 			this.eventArgs = oElm.val();
-		else if (sEventName == 'checked')
+		else if (sEventName === 'checked')
 			this.eventArgs = oDomElement.checked ? 'on' : 'off';
 	} // UiActionEvent
 
@@ -49,6 +49,14 @@ EzBob = EzBob || {};
 	EzBob.UiAction = EzBob.UiAction || {
 		flushInterval: 30, // seconds
 
+		evtLinked: function () { return 'linked'; }, // linked
+		evtChange: function () { return 'change'; }, // change
+		evtClick: function () { return 'click'; }, // click
+		evtFocusIn: function() { return 'focusin'; }, // focus in
+		evtFocusOut: function() { return 'focusout'; }, // focus out
+
+		evtListenerAttr: function () { return 'ezbob:ui-action:event-listener'; }, // listener attr
+
 		f: function (n) { return (n < 10) ? ('0' + n) : ('' + n); }, // f
 
 		now: function () {
@@ -66,6 +74,13 @@ EzBob = EzBob || {};
 			return '' + nSeqNum + '' + this.now();
 		}, // createID
 
+		registerView: function(oView) {
+			if (!oView || !oView.$el)
+				return;
+
+			this.register(oView.$el.find('[ui-event-control-id]'));
+		}, // registerView
+
 		register: function (jqElementList) {
 			if (!jqElementList)
 				return;
@@ -74,58 +89,55 @@ EzBob = EzBob || {};
 
 			jqElementList.each(function () {
 				switch (this.tagName.toLowerCase()) {
-					case 'select':
-					case 'textarea':
-						self.attach('change', this, true);
-						break;
+				case 'select':
+				case 'textarea':
+					self.attach(self.evtChange(), this, true);
+					break;
 
-					case 'a':
-					case 'button':
-						self.attach('click', this);
-						break;
+				case 'a':
+				case 'button':
+					self.attach(self.evtClick(), this);
+					break;
 
-					case 'input':
-						switch (this.type.toLowerCase()) {
-							case 'text':
-							case 'number':
-							case 'email':
-							case 'date':
-							case 'datetime':
-							case 'datetime-local':
-							case 'file':
-							case 'hidden':
-							case 'month':
-							case 'range':
-							case 'search':
-							case 'time':
-							case 'url':
-							case 'week':
-							case 'tel':
-								self.attach('change', this, true);
-								break;
+				case 'input':
+					switch (this.type.toLowerCase()) {
+						case 'text':
+						case 'number':
+						case 'email':
+						case 'date':
+						case 'datetime':
+						case 'datetime-local':
+						case 'file':
+						case 'hidden':
+						case 'month':
+						case 'range':
+						case 'search':
+						case 'time':
+						case 'url':
+						case 'week':
+						case 'tel':
+							self.attach(self.evtChange(), this, true);
+							break;
 
-							case 'password':
-								self.attach('change', this, false);
-								break;
+						case 'password':
+							self.attach(self.evtChange(), this, false);
+							break;
 
-							case 'radio':
-							case 'checkbox':
-								self.attach('checked', this);
-								break;
+						case 'radio':
+						case 'checkbox':
+						case 'button':
+						case 'submit':
+						case 'reset':
+						case 'image':
+							self.attach(self.evtClick(), this);
+							break;
 
-							case 'button':
-							case 'submit':
-							case 'reset':
-							case 'image':
-								self.attach('click', this);
-								break;
+						default:
+							console.error('Unsupported INPUT.type', this);
+							break;
+					} // switch for INPUT
 
-							default:
-								//console.error('Unsupported INPUT.type', this);
-								break;
-						} // switch for INPUT
-
-						break;
+					break;
 				} // switch for element
 			}); // for each
 
@@ -141,10 +153,17 @@ EzBob = EzBob || {};
 		}, // startTimer
 
 		attach: function (sEventName, oDomElement, bSaveValue) {
-			if (sEventName == 'change')
-				sEventName += ' focusin focusout';
+			var jqElement = $(oDomElement);
 
-			$(oDomElement).on(sEventName, { saveValue: bSaveValue || false }, $.proxy(this.save, this));
+			if (jqElement.data(this.evtListenerAttr()))
+				return;
+
+			if (sEventName === this.evtChange())
+				sEventName += ' ' + this.evtFocusIn() + ' ' + this.evtFocusOut();
+
+			jqElement
+				.on(sEventName, { saveValue: bSaveValue || false }, $.proxy(this.save, this))
+				.data(this.evtListenerAttr(), true);
 		}, // attach
 
 		writeDown: function (bSync) {
@@ -170,13 +189,15 @@ EzBob = EzBob || {};
 					//console.log('status:', sStatus, 'saved:', oData, 'jqXHR:', jqXHR);
 
 					if (oData) {
+						var i;
+
 						if (oData.saved && oData.saved.length) {
-							for (var i = 0; i < oData.saved.length; i++)
+							for (i = 0; i < oData.saved.length; i++)
 								delete self.cache.history[oData.saved[i]];
 						} // if has success
 
 						if (oData.failures && oData.failures.length) {
-							for (var i = 0; i < oData.failures.length; i++) {
+							for (i = 0; i < oData.failures.length; i++) {
 								var oPkg = oData.failures[i];
 
 								var oCached = self.cache.history[oPkg.id];
@@ -190,7 +211,19 @@ EzBob = EzBob || {};
 			}); // $.ajax
 		}, // writeDown
 
+		saveOne: function(sType, oTarget, bSaveValue) {
+			this.save({
+				type: sType,
+				target: oTarget,
+				data: {
+					saveValue: bSaveValue || false
+				},
+			});
+		}, // saveOne
+
 		save: function (evt) {
+			console.log('ui event save(', evt.type, evt.target, evt.data.saveValue, ')');
+
 			if (this.cache.current && this.cache.current.isFull()) {
 				this.cache.history[this.cache.current.id] = this.cache.current;
 				this.cache.current = null;

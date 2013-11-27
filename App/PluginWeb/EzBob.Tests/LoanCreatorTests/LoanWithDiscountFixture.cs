@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Linq;
+using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Loans;
+using EzBob.CommonLib;
 using NUnit.Framework;
+using StructureMap;
 
 namespace EzBob.Tests.LoanCreatorTests
 {
@@ -12,6 +16,8 @@ namespace EzBob.Tests.LoanCreatorTests
 
         public override void SetUp()
         {
+			var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
+
             _customer = new Customer()
             {
                 PersonalInfo = new PersonalInfo() { FirstName = "Test" },
@@ -21,7 +27,7 @@ namespace EzBob.Tests.LoanCreatorTests
                 CreditSum = 10000,
                 OfferStart = DateTime.UtcNow.AddDays(-1),
                 OfferValidUntil = DateTime.UtcNow.AddDays(1),
-                WizardStep = WizardStepType.AllStep
+				WizardStep = oDBHelper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.AllStep)
             };
         }
 

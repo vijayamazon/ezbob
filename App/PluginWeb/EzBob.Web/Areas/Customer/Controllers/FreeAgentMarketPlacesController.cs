@@ -92,8 +92,8 @@
 
 			var freeAgentDatabaseMarketPlace = new FreeAgentDatabaseMarketPlace();
 
-			if (_customer.WizardStep != WizardStepType.AllStep)
-				_customer.WizardStep = WizardStepType.Marketplace;
+			if (!_customer.WizardStep.TheLastOne)
+				_customer.WizardStep = _helper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.Marketplace);
 
 			log.Info("Saving marketplace data...");
 			var marketPlace = _helper.SaveOrUpdateCustomerMarketplace(securityData.Name, freeAgentDatabaseMarketPlace, securityData, _customer);

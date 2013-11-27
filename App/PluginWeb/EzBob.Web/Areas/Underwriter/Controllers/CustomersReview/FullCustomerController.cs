@@ -80,8 +80,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 				return this.JsonNet(model);
 			}
 
-			if (customer.WizardStep != WizardStepType.AllStep)
-			{
+			if (!customer.WizardStep.TheLastOne) {
 				model.State = "NotSuccesfullyRegistred";
 				return this.JsonNet(model);
 			}

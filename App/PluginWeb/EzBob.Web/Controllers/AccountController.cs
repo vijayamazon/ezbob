@@ -1,3 +1,5 @@
+using EZBob.DatabaseLib;
+
 namespace EzBob.Web.Controllers
 {
 	using System;
@@ -42,12 +44,14 @@ namespace EzBob.Web.Controllers
 		private readonly ITestCustomerRepository _testCustomers;
 		private readonly IConfigurationVariablesRepository _configurationVariables;
 		private readonly ICustomerStatusesRepository _customerStatusesRepository;
+		private readonly DatabaseDataHelper _helper;
 
 		private readonly ICustomerReasonRepository _reasons;
 		private readonly ICustomerSourceOfRepaymentRepository _sources;
 
 		//------------------------------------------------------------------------
 		public AccountController(
+			DatabaseDataHelper helper,
 			MembershipProvider membershipProvider,
 			IUsersRepository users,
 			CustomerRepository customers,
@@ -59,8 +63,9 @@ namespace EzBob.Web.Controllers
 			ICustomerSessionsRepository sessionIpLog,
 			ITestCustomerRepository testCustomers,
 			IConfigurationVariablesRepository configurationVariables,
-			ICustomerStatusesRepository customerStatusesRepository, ICustomerReasonRepository reasons, ICustomerSourceOfRepaymentRepository sources)
-		{
+			ICustomerStatusesRepository customerStatusesRepository, ICustomerReasonRepository reasons, ICustomerSourceOfRepaymentRepository sources
+		) {
+			_helper = helper;
 			_membershipProvider = membershipProvider;
 			_users = users;
 			_customers = customers;
@@ -389,7 +394,7 @@ namespace EzBob.Web.Controllers
 						Id = user.Id,
 						Status = Status.Registered,
 						RefNumber = g.GenerateForCustomer(),
-						WizardStep = WizardStepType.SignUp,
+						WizardStep = _helper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.SignUp),
 						CollectionStatus =
 							new CollectionStatus {CurrentStatus = _customerStatusesRepository.GetByName("Enabled")},
 						IsTest = isAutomaticTest,

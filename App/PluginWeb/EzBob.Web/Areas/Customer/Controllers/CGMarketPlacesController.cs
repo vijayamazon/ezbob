@@ -284,8 +284,8 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 				model.id = _mpTypes.GetAll().First(a => a.InternalId == oState.VendorInfo.Guid()).Id;
 				model.displayName = model.displayName ?? model.name;
 
-				if (_context.Customer.WizardStep != WizardStepType.AllStep)
-					_context.Customer.WizardStep = WizardStepType.Marketplace;
+				if (!_context.Customer.WizardStep.TheLastOne)
+					_context.Customer.WizardStep = _helper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.Marketplace);
 
 				IDatabaseCustomerMarketPlace mp = _helper.SaveOrUpdateCustomerMarketplace(model.name, oState.Marketplace, model, _context.Customer);
 				_session.Flush();

@@ -284,77 +284,87 @@
     }
 }
 
-@helper DateInput(string name, string title, bool required = true, DateTime[] minMaxDefaultDate = null, bool statusIcon = false, string css = "")
+@helper DateInput(string name, string title, bool required = true, DateTime[] minMaxDefaultDate = null, bool statusIcon = false, string css = "", string uiEventControlID = "")
 {
-    var month = new[] { "Jan.", "Feb.", "Mar.", "Apr.", "May.", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec." };
-    var validationClass = required ? "requiredDate" : "";
-    var identificator = new HtmlString(name);
-    var dayIdentificator = new HtmlString(identificator + "Day");
-    var monthIdentificator = new HtmlString(identificator + "Month");
-    var yearIdentificator = new HtmlString(identificator + "Year");
+	var month = new[] { "Jan.", "Feb.", "Mar.", "Apr.", "May.", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec." };
+	var validationClass = required ? "requiredDate" : "";
+	var identificator = new HtmlString(name);
 
-    <div class="control-group form_field_container">
-        <div class="controls ezDateTime">
-            <span>@title</span>
+	var dayIdentificator = new HtmlString(identificator + "Day");
+	var monthIdentificator = new HtmlString(identificator + "Month");
+	var yearIdentificator = new HtmlString(identificator + "Year");
+
+	var sDayUiEventControlID = "";
+	var sMonthUiEventControlID = "";
+	var sYearUiEventControlID = "";
+
+	if (!string.IsNullOrWhiteSpace(uiEventControlID)) {
+		sDayUiEventControlID = "ui-event-control-id=" + uiEventControlID + "_day";
+		sMonthUiEventControlID = "ui-event-control-id=" + uiEventControlID + "_month";
+		sYearUiEventControlID = "ui-event-control-id=" + uiEventControlID + "_year";
+	}
+
+	<div class="control-group form_field_container">
+		<div class="controls ezDateTime">
+			<span>@title</span>
             @if (required && !statusIcon)
             {
-                <span class="required">*</span>
-            }
+				<span class="required">*</span>
+			}
             else
             {
-                <span>&nbsp;</span>
-            }
+				<span>&nbsp;</span>
+			}
 
-            <label class="attardi-input">
-                <span>Day</span>
-                <select id='@dayIdentificator' name="day" class="selectheight form_field form_field_date @css" empty_value="-">
-                    <option value="-"></option>
-                    @{ for (var i = 1; i <= 31; i++)
-                       {
-                        <option @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Day == i)
-                                {
-							           @:selected="selected"
-						           }
-							   value="@i">@i</option>
-                       } }
-                </select>
-            </label>
+			<label class="attardi-input">
+				<span>Day</span>
+				<select id="@dayIdentificator" name="day" class="selectheight form_field form_field_date @css" empty_value="-" @sDayUiEventControlID>
+					<option value="-"></option>
+					@for (var i = 1; i <= 31; i++) {
+						<option
+							@if (minMaxDefaultDate != null && minMaxDefaultDate[2].Day == i) {
+								@:selected="selected"
+							}
+							value="@i"
+						>@i</option>
+					}
+				</select>
+			</label>
 
-            <label class="attardi-input">
-                <span>Month</span>
-                <select id='@monthIdentificator' name="month" class="selectheight form_field form_field_date @css" empty_value="-">
-                    <option value="-"></option>
-                    @{ for (var i = 1; i <= 12; i++)
-                       {
-                        <option @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Month == i)
-                                {
-							           @:selected="selected"
-						           }
-							   value="@i">@month[i - 1]</option>
-                       } 
-                    }
-                </select>
-            </label>
+			<label class="attardi-input">
+				<span>Month</span>
+				<select id='@monthIdentificator' name="month" class="selectheight form_field form_field_date @css" empty_value="-" @sMonthUiEventControlID>
+					<option value="-"></option>
+					@for (var i = 1; i <= 12; i++) {
+						<option
+							@if (minMaxDefaultDate != null && minMaxDefaultDate[2].Month == i) {
+								@:selected="selected"
+							}
+							value="@i"
+						>@month[i - 1]</option>
+					}
+				</select>
+			</label>
 
-            <label class="attardi-input">
-                <span>Year</span>
-                <select id='@yearIdentificator' name="year" class="selectheight form_field form_field_date @css" empty_value="-">
-                    <option value="-"></option>
-                    @{
-                        var minYear = (minMaxDefaultDate == null) ? 1900 : minMaxDefaultDate[0].Year;
-                        var maxYear = (minMaxDefaultDate == null) ? DateTime.Now.Year - 18 : minMaxDefaultDate[1].Year;
-                        for (var i = minYear; i <= maxYear; i++)
-                        {
-                        <option @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Year == i)
-                                {
-								        @:selected="selected"
-							        }
-								value="@i">@i</option>
-                        }
-                    }
-                </select>
-            </label>
-            <input  id='@identificator' class="@identificator @validationClass hidden-field" style="display: none !important" name="@identificator"/>
+			<label class="attardi-input">
+				<span>Year</span>
+				<select id='@yearIdentificator' name="year" class="selectheight form_field form_field_date @css" empty_value="-" @sYearUiEventControlID>
+					<option value="-"></option>
+					@{
+						var minYear = (minMaxDefaultDate == null) ? 1900 : minMaxDefaultDate[0].Year;
+						var maxYear = (minMaxDefaultDate == null) ? DateTime.Now.Year - 18 : minMaxDefaultDate[1].Year;
+						for (var i = minYear; i <= maxYear; i++) {
+							<option
+								@if (minMaxDefaultDate != null && minMaxDefaultDate[2].Year == i) {
+									@:selected="selected"
+								}
+								value="@i"
+							>@i</option>
+						}
+					}
+				</select>
+			</label>
+			<input id="@identificator" class="@identificator @validationClass hidden-field" style="display: none !important" name="@identificator"/>
 
             @if (statusIcon)
             {
@@ -362,10 +372,8 @@
                 var sId = new HtmlString(identificator + "Image");
                 <img id="@sId" class="field_status @sReq"/>
             }
-
-
-        </div>
-    </div>
+		</div>
+	</div>
 }
 
 @helper DateInputUnderwriter(string name, string title, bool required = true, DateTime[] minMaxDefaultDate = null)

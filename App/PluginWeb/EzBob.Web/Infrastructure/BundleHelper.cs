@@ -364,7 +364,7 @@ namespace EzBob.Web.Infrastructure
                 .Add("~/Content/js/Wizard/yourInfo/ezbob.yourinfo.limitedInformation.js")
                 .Add("~/Content/js/Wizard/yourInfo/ezbob.yourinfo.notLimitedInformation.js")
                 .Add("~/Content/js/Wizard/yourInfo/ezbob.yourinfo.personalInfo.js")
-                .Add("~/Content/js/Wizard/yourInfo/ezbob.steps.personinfo.js")
+                .Add("~/Content/js/Wizard/yourInfo/ezbob.steps.companydetails.js")
                 .Add("~/Content/js/Wizard/yourInfo/ezbob.yourInfo.directors.js")
                 .Add("~/Content/js/Wizard/yourInfo/ezbob.yourInfo.employeeCount.js")
                 .Add("~/Content/js/Wizard/yourInfo/ezbob.yourinfo.companyTarget.js")

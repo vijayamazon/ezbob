@@ -3,7 +3,6 @@
 EzBob.WizardStepInfo = function(basics, nPosition, oProgressAndType, oViewList) {
 	if (!EzBob.WizardStepInfo.prototype.onFocus) {
 		EzBob.WizardStepInfo.prototype.onFocus = function() {};
-		EzBob.WizardStepInfo.prototype.onInStepProgressChanged = function(inStepSectionID, nextStepProgress) {};
 	} // if
 
 	var nProgress = 0;
@@ -41,7 +40,7 @@ EzBob.WizardStepSequence = function(args) {
 	var oSignupStep = {
 		name: 'signup',
 		documentTitle: 'Create an EZBOB account',
-		title: 'Create an account',
+		title: 'Create<br>account',
 		trackPage: '/Customer/Wizard/SignUp',
 		marketingStrKey: 'MarketingWizardStepSignup',
 		showTitleInWizardSteps: true,
@@ -50,7 +49,7 @@ EzBob.WizardStepSequence = function(args) {
 	var oShopInfoStep = {
 		name: 'link',
 		documentTitle: 'Link your accounts',
-		title: 'Link accounts',
+		title: 'Link<br>accounts',
 		trackPage: '/Customer/Wizard/Shops',
 		marketingStrKey: 'MarketingWizardStepLinkAccounts',
 		showTitleInWizardSteps: true,
@@ -61,19 +60,19 @@ EzBob.WizardStepSequence = function(args) {
 	var oYourDetailsStep = {
 		name: 'details',
 		documentTitle: 'Fill personal details',
-		title: 'Enter information',
+		title: 'Personal<br>details',
 		trackPage: '/Customer/Wizard/PersonalDetails',
 		marketingStrKey: 'MarketingWizardStepPersonalInfo',
 		showTitleInWizardSteps: true,
+	};
 
-		onInStepProgressChanged: function(inStepSectionID, nextStepProgress) {
-			var nProgress = this.progress;
-
-			if ((inStepSectionID != 0) && (this.progress + 10 < nextStepProgress))
-				nProgress = 10 * parseInt(parseFloat(nextStepProgress - 10) / 10.0);
-
-			EzBob.App.trigger('wizard:progress', nProgress);
-		}, // onInStepProgressChanged
+	var oCompanyDetailsStep = {
+		name: 'companydetails',
+		documentTitle: 'Fill company details',
+		title: 'Company<br>details',
+		trackPage: '/Customer/Wizard/CompanyDetails',
+		marketingStrKey: 'MarketingWizardStepPersonalInfo',
+		showTitleInWizardSteps: true,
 	};
 
 	var oSuccessStep = {
@@ -83,11 +82,13 @@ EzBob.WizardStepSequence = function(args) {
 		trackPage: '/Customer/Wizard/Success',
 		marketingStrKey: 'MarketingWizardStepDone',
 		showTitleInWizardSteps: false,
+		onFocus: function() { $.post(window.gRootPath + 'CustomerDetails/WizardComplete'); },
 	};
 
 	var lst = {};
-	lst[oShopInfoStep.name]    = oShopInfoStep;
-	lst[oYourDetailsStep.name] = oYourDetailsStep;
+	lst[oShopInfoStep.name]       = oShopInfoStep;
+	lst[oYourDetailsStep.name]    = oYourDetailsStep;
+	lst[oCompanyDetailsStep.name] = oCompanyDetailsStep;
 
 	var oCfg = JSON.parse($('#wizard-step-sequence').text());
 

@@ -7,6 +7,7 @@ var EzBob = EzBob || {};
 EzBob.ThankYouWizardPage = Backbone.View.extend({
 	initialize: function () {
 		this.template = $(_.template($("#lastWizardThankYouPage").html(), { ordty: ordty }));
+		this.readyToProceed = true;
 	}, // initialize
 
 	render: function () {
@@ -23,6 +24,7 @@ EzBob.ThankYouWizardPage = Backbone.View.extend({
 		else
 			this.$el.find('.notoffline').remove();
 
+		this.readyToProceed = true;
 		return this;
 	} // render
 });

@@ -1,19 +1,12 @@
 ﻿@{
-    Layout = null;
+	Layout = null;
 }
 <script type="text/template" id="CompanyTargets">
-    @Targetting()
+	<div class="well">
+		<ul class="targets"></ul>
+		<div style="margin-left: 90px; height: 45px;">
+			<input class="btnTargetOk button orange pull-right" type="button" value="OK" ui-event-control-id="wizard:target_ok" />
+			<input class="btnTargetCancel button orange pull-right" type="button" value="Cancel" ui-event-control-id="wizard:target_cancel" />
+		</div>
+	</div>
 </script>
-
-@helper Targetting()
-{
-
-    <div class="well">
-        <ul class="targets"></ul>
-        <div style="margin-left: 90px; height: 45px;">
-            <input class="btnTargetOk button orange pull-right" type="button" value="OK" />
-            <input class="btnTargetCancel button orange pull-right" type="button" value="Cancel" />
-        </div>
-    </div>
-    
-}

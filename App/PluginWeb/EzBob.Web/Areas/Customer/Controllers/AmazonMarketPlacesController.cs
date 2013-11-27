@@ -168,8 +168,8 @@ namespace EzBob.Web.Areas.Customer.Controllers
                     Askville(marketplace.Id, merchantId, marketplaceId);
                 }
 
-                if (customer.WizardStep != WizardStepType.AllStep)
-                    customer.WizardStep = WizardStepType.Marketplace;
+				if (!customer.WizardStep.TheLastOne)
+					customer.WizardStep = _helper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.Marketplace);
 				
                 _customerRepository.SaveOrUpdate(customer);
 

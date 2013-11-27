@@ -60,6 +60,8 @@ EzBob.DirectorMainView = Backbone.View.extend({
         oFieldStatusIcons.filter('.required').field_status({ required: true });
         oFieldStatusIcons.not('.required').field_status({ required: false });
 
+	    EzBob.UiAction.registerView(this);
+
         this.$el.find('.alphaOnly').alphaOnly();
         this.$el.find('.phonenumber').numericOnly(11);
         this.$el.find(".addressCaption").hide();
@@ -117,7 +119,7 @@ EzBob.DirectorMainView = Backbone.View.extend({
     validateAddresses: function() {
         var result = true;
         $.each(this.model.models, function(i, val) {
-            if (val.get('Address').length == 0) {
+            if (val.get('Address').length === 0) {
                 result = false;
             }
         });
@@ -127,7 +129,7 @@ EzBob.DirectorMainView = Backbone.View.extend({
     addressErrorPlacement: function (el, model) {
         var $el = $(el);
         $el.on("focusout", function () {
-            if (model.length == 0) {
+            if (model.length === 0) {
                 $el.tooltip({
                     title: "This field is required"
                 }).tooltip("enable").tooltip('fixTitle');

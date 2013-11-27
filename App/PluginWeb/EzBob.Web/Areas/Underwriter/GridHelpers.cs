@@ -477,7 +477,7 @@ namespace EzBob.Web.Areas.Underwriter
 				Search = false,
 				Width = 87,
 				DataType = TypeCode.Boolean,
-				Data = x => x.WizardStep != WizardStepType.AllStep ? "registered" : "credit calculation"
+				Data = x => x.WizardStep.TheLastOne ? "credit calculation" : "registered"
 			});
 		}
 
@@ -536,7 +536,7 @@ namespace EzBob.Web.Areas.Underwriter
 				Search = false,
 				Width = 95,
 				DataType = TypeCode.Int32,
-				Data = x => x.WizardStep == WizardStepType.AllStep ? (object)"Passed" : x.WizardStep
+				Data = x => x.WizardStep.TheLastOne ? "Passed" : x.WizardStep.ID.ToString()
 			});
 		}
 

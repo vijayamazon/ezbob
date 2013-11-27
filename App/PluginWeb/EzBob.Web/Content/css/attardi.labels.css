@@ -7,20 +7,21 @@
 .attardi-input span {
 	font-weight: normal;
 	position: absolute;
-	padding: 5px;
+	padding: 8px;
 	margin-left: 3px;
 	color: #999;
 	z-index: 1;
 	cursor: text;
 	pointer-events: none;
+	font-size: 16px;
 }
 
 .attardi-input span.active { color: #ccc !important; }
 
 .attardi-input span.attardi-has-data {
-	bottom: 20px;
-	left: -3px;
-	color: black !important;
+	bottom: 24px;
+	left: -10px;
+	color: #4c4c4c !important;
 	font-size: 70%;
 }
 
@@ -30,9 +31,17 @@
     height: 18px;
 }
 
-.attardi-input input, .attardi-input textarea, .attardi-input select {
+.attardi-input input, .attardi-input textarea {
 	z-index: 0;
-	padding: 4px;
+	padding: 0 4px;
+	margin: 0;
+	font: inherit;
+	border: 1px solid #999999;
+}
+
+.attardi-input select {
+	z-index: 0;
 	margin: 0;
 	/*font: inherit;*/
+	border: 1px solid #999999;
 }

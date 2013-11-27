@@ -240,7 +240,8 @@ namespace EZBob.DatabaseLib.Model.Database {
                     m.Map(x => x.CollectionDescription);
 					m.References(x => x.CurrentStatus, "CollectionStatus").Cascade.All();
                 });
-            Map(x => x.WizardStep).CustomType(typeof (WizardStepType));
+
+	        References(x => x.WizardStep, "WizardStep");
 
             Map(x => x.NumApproves);
             Map(x => x.NumRejects);

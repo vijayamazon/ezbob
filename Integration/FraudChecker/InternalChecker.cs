@@ -32,7 +32,7 @@ namespace FraudChecker
 			var customer = _session.Get<Customer>(customerId);
 			if (customer == null)
 				throw new Exception("Customer not found");
-			if (customer.WizardStep != WizardStepType.AllStep)
+			if (!customer.WizardStep.TheLastOne)
 				throw new Exception(string.Format("Customer {0} not successfully  registered", customer.Id));
 
 			var fraudDetections = new List<FraudDetection>();
@@ -86,7 +86,7 @@ namespace FraudChecker
 				from ca in _session.Query<CustomerAddress>().Where(address => postcodes.Contains(address.Rawpostcode))
 				where ca.Customer.IsTest == false || ca.Director.Customer.IsTest == false
 				where ca.Customer != customer
-				where ca.Customer.WizardStep == WizardStepType.AllStep
+				where ca.Customer.WizardStep.TheLastOne
 				where ca.Customer.PersonalInfo.Surname == customer.PersonalInfo.Surname
 				select
 					Helper.CreateDetection("Customer Last Name, Raw Postcode", customer, ca.Customer,
@@ -236,7 +236,7 @@ namespace FraudChecker
 				from ca in _session.Query<CustomerAddress>().Where(address => postcodes.Contains(address.Postcode))
 				where ca.Customer.IsTest == false || ca.Director.Customer.IsTest == false
 				where ca.Customer != customer
-				where ca.Customer.WizardStep == WizardStepType.AllStep
+				where ca.Customer.WizardStep.TheLastOne
 				where ca.Customer.PersonalInfo.Surname == customer.PersonalInfo.Surname
 				select
 					Helper.CreateDetection("Customer Last Name, Postcode", customer, ca.Customer,
@@ -387,7 +387,7 @@ namespace FraudChecker
 			//Bank Account (sort + Bank Account)
 			fraudDetections.AddRange(
 				from c in customerPortion
-				where c.WizardStep == WizardStepType.AllStep
+				where c.WizardStep.TheLastOne
 				where c.BankAccount != null
 				where !string.IsNullOrEmpty(c.BankAccount.AccountNumber) && !string.IsNullOrEmpty(c.BankAccount.SortCode)
 				where
@@ -411,8 +411,7 @@ namespace FraudChecker
 			if (string.IsNullOrEmpty(companyName)) return;
 			fraudDetections.AddRange(
 				from c in customerPortion
-				where c.WizardStep == WizardStepType.AllStep &&
-					  c.PersonalInfo != null
+				where c.WizardStep.TheLastOne && c.PersonalInfo != null
 				where
 					((c.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited
 						  ? c.LimitedInfo.LimitedCompanyName
@@ -432,7 +431,7 @@ namespace FraudChecker
 			var lastName = customer.PersonalInfo.Surname;
 			fraudDetections.AddRange(
 				from c in customerPortion
-				where c.WizardStep == WizardStepType.AllStep
+				where c.WizardStep.TheLastOne
 				where
 					c.PersonalInfo != null &&
 					c.PersonalInfo.Surname == lastName &&
@@ -455,7 +454,7 @@ namespace FraudChecker
 			// First + Middle + Last
 			fraudDetections.AddRange(
 				from c in customerPortion
-				where c.WizardStep == WizardStepType.AllStep
+				where c.WizardStep.TheLastOne
 				where
 					c.PersonalInfo != null &&
 					c.PersonalInfo.FirstName == firstName &&

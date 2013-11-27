@@ -429,24 +429,44 @@ SerializeArrayToEasyObject = function (array) {
     return easyObject;
 };
 
-BlockUi = function (action, element) {
-    if (action.toLowerCase() == "on") {
-        var div = $("<img src='" + window.gRootPath + "Content/css/images/ajax-loader.gif' />"),
-        style = {
-            border: 'none',
-            padding: '15px',
-            backgroundColor: '#000',
-            '-webkit-border-radius': '10px',
-            '-moz-border-radius': '10px',
-            opacity: 0.5,
-            color: '#fff'
-        };
-        $.blockUI.defaults.overlayCSS.backgroundColor = '#ffffff';
-        var options = { message: div, css: style, baseZ: 1000000, };
-        element ? $(element).block(options) : $.blockUI(options);
-    } else {
-        element ? $(element).unblock() : $.unblockUI();
-    }
+BlockUi = function(action, element) {
+	if (arguments.length === 0) {
+		action = 'on';
+		element = null;
+	} // if
+
+	action = (action || 'on').toLowerCase();
+
+	switch (action) {
+	case 'on':
+		var div = $('<img src="' + window.gRootPath + 'Content/css/images/ajax-loader.gif" />'),
+
+		style = {
+			border: 'none',
+			padding: '15px',
+			backgroundColor: '#000',
+			'-webkit-border-radius': '10px',
+			'-moz-border-radius': '10px',
+			opacity: 0.5,
+			color: '#fff'
+		};
+
+		$.blockUI.defaults.overlayCSS.backgroundColor = '#ffffff';
+
+		var options = { message: div, css: style, baseZ: 1000000, };
+
+		element ? $(element).block(options) : $.blockUI(options);
+
+		break;
+
+	default:
+		element ? $(element).unblock() : $.unblockUI();
+		break;
+	} // switch
+}; // BlockUi
+
+UnBlockUi = function(element) {
+	BlockUi('off', element);
 };
 
 window.console = window.console || {
@@ -958,10 +978,8 @@ EzBob.validatePersonalDetailsForm = function (el) {
     var e = el || $(".PersonalDetailsForm");
     var oIsOffline = e.find('.offline');
     var isOffline = oIsOffline.length > 0;
-    var turnoverRegex = "^(?!£ 0.00$)";
-    if (isOffline) {
-        turnoverRegex = "";
-    }
+
+    var turnoverRegex = isOffline ? '' : "^(?!£ 0.00$)";
 
     return e.validate({
         rules: {

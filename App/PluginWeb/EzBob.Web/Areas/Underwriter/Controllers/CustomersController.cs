@@ -620,8 +620,13 @@
 		public JsonNetResult CheckCustomer(int customerId)
 		{
 			var customer = _customers.TryGet(customerId);
-			if (customer == null) return this.JsonNet(new { State = CustomerState.NotFound.ToString() });
-			if (customer.WizardStep != WizardStepType.AllStep) return this.JsonNet(new { State = CustomerState.NotSuccesfullyRegistred.ToString() });
+
+			if (customer == null)
+				return this.JsonNet(new { State = CustomerState.NotFound.ToString() });
+
+			if (!customer.WizardStep.TheLastOne)
+				return this.JsonNet(new { State = CustomerState.NotSuccesfullyRegistred.ToString() });
+
 			return this.JsonNet(new { State = CustomerState.Ok.ToString() });
 		}
 
@@ -679,7 +684,7 @@
 								_customers.GetAll()
 								          .Count(
 									          x =>
-									          x.CreditResult == null && x.WizardStep == WizardStepType.AllStep && (isTest || x.IsTest == false)),
+									          x.CreditResult == null && x.WizardStep.TheLastOne && (isTest || x.IsTest == false)),
 							Name = "RegisteredCustomers"
 						},
 					new CustomersCountersModel
@@ -702,7 +707,7 @@
 
 			var findResult =
 				_session.Query<Customer>()
-						.Where(x => x.WizardStep == WizardStepType.AllStep)
+						.Where(x => x.WizardStep.TheLastOne)
 						.Where(
 							c =>
 							c.Id == id || c.Name.Contains(term) ||

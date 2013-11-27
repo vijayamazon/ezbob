@@ -65,6 +65,8 @@ namespace EzBob.Web.Areas.Customer.Models
 
         public CustomerAddress[] PersonalAddress { get; set; }
 
+        public CustomerAddress[] PrevPersonAddresses { get; set; }
+
         public CustomerAddress[] OtherPropertyAddress { get; set; }
 
         public CustomerAddress[] LimitedAddress { get; set; }

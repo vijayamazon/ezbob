@@ -1,8 +1,8 @@
 ﻿<div class="addAddressContainer">
     <label class="attardi-input">
         <span>Enter postcode</span>
-        <input type="text" class="addAddressInput form_field_address form_field" /></label>
-    <input class="btn addAddress green form_field_address_lookup" type="button" value="Postcode lookup" disabled="disabled" />
+        <input type="text" class="addAddressInput form_field_address form_field" ui-event-control-id="address-form:postcode" /></label>
+    <input class="btn addAddress green form_field_address_lookup" type="button" value="Postcode lookup" disabled="disabled" ui-event-control-id="address-form:lookup" />
     <img class="field_status required" />
 </div>
 <%var i = 0; _.each(addresses, function(address) {%>
@@ -17,8 +17,8 @@ shortAddress.clean("");
 %>
 <div>
     <!-- Address information -->
-    <textarea class="form_field form_field_address" id="<%-addresses.addressInput%>" rows='<%-shortAddress.length%>' readonly="readonly" name="addressInput" type="text"><%-shortAddress.join("\n")%></textarea>
-    <a href="#" class="removeAddress" style="margin-top: 4px;" element-number="<%=i%>">clear</a>
+    <textarea class="form_field form_field_address" id="<%-addresses.addressInput%>" rows='<%-shortAddress.length%>' readonly="readonly" name="addressInput" type="text" ui-event-control-id="address-form:address"><%-shortAddress.join("\n")%></textarea>
+    <a href="#" class="removeAddress" style="margin-top: 4px;" element-number="<%=i%>" ui-event-control-id="address-form:clear">clear</a>
     <input type="hidden" name="<%-name%>[<%=i%>].Credits_display_text" value="<%=address.Credits_display_text%>" />
     <input type="hidden" name="<%=name%>[<%=i%>].Accountadminpage" value="<%=address.Accountadminpage%>" />
     <input type="hidden" name="<%-name%>[<%=i%>].Id" value="<%=address.Id%>" />

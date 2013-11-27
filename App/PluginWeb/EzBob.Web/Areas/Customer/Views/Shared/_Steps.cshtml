@@ -22,8 +22,7 @@
 					css += 'hide';
 
 				%><li class="<%- css %> " data-step-num="<%= step.num %>">
-					<span class="step_label">Step <%= nVisibleStepNum %>:</span>
-					<%= step.title %>
+					<span class="step_label"><% print(step.title) %></span>
 				</li><%
 			});
 		})();

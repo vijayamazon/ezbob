@@ -16,6 +16,8 @@ EzBob.Popup = Backbone.View.extend({
 	render: function () {
 		this.$el.html(this.template);
 
+		EzBob.UiAction.registerView(this);
+
 		this.$el.dialog({
 			autoOpen: true,
 			title: "Select Address",
@@ -39,11 +41,13 @@ EzBob.Popup = Backbone.View.extend({
 		'dblclick .postCodeTextArea': 'AddressesListDoubleClicked'
 	},
 
-	AddressesListClicked: function () {
+	AddressesListClicked: function (evt) {
+		EzBob.UiAction.saveOne(EzBob.UiAction.evtClick(), evt.target);
 		$(".postCodeBtnOk").removeAttr("disabled");
 	},
-	AddressesListDoubleClicked: function () {
-		this.AddressesListClicked();
+	AddressesListDoubleClicked: function (evt) {
+		this.AddressesListClicked(evt);
+		EzBob.UiAction.saveOne(EzBob.UiAction.evtLinked(), evt.target);
 		this.PostCodeBtnOk();
 	},
 	PostCodeBtnOk: function () {
@@ -79,7 +83,7 @@ EzBob.Popup = Backbone.View.extend({
 		var postCode = this.$el.find(".postCode").val(),
 			that = this;
 
-		this.textArea.html("");
+		this.textArea.empty();
 		this.$el.find('.postCodeBtn').attr("disabled", "disabled");
 
 		var oDoAlways = function () {
@@ -93,7 +97,14 @@ EzBob.Popup = Backbone.View.extend({
 
 		var oOnSuccess = function (oRecords) {
 			$.each(oRecords, function (i, val) {
-				that.textArea.append($('<li></li>').attr("data", val.Id).html(val.L));
+				that.textArea.append(
+					$('<li></li>')
+						.attr({
+							data: val.Id,
+							'ui-event-control-id': 'address-form:address-entry',
+						})
+						.html(val.L)
+				);
 			});
 
 			that.textArea.beautifullList();

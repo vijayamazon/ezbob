@@ -26,6 +26,7 @@ class EzBob.StoreInfoStepModel extends EzBob.WizardStepModel
 
 class EzBob.StoreInfoStepView extends Backbone.View
   initialize: ->
+    @readyToProceed = false
     @StoreInfoView = new EzBob.StoreInfoView(model: @model)
     @StoreInfoView.on "completed", @completed, this
     @StoreInfoView.on "ready", @ready, this
@@ -47,4 +48,5 @@ class EzBob.StoreInfoStepView extends Backbone.View
 
   render: ->
     @StoreInfoView.render().$el.appendTo @$el
+    @readyToProceed = true
     this

@@ -1,7 +1,7 @@
 ﻿var EzBob = EzBob || {};
 
 EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
-	initialize: function () {
+	initialize: function() {
 		this.constructor.__super__.initialize.call(this);
 		this.template = _.template($('#nonlimitededinfo-template').html());
 		this.ViewName = "NonLimited";
@@ -19,10 +19,10 @@ EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 		});
 	},
 
-	inputChanged: function (event) {
+	inputChanged: function(event) {
 		var el = event ? $(event.currentTarget) : null;
 
-		if (el && el.hasClass('nonrequired') && el.val() == '') {
+		if (el && el.hasClass('nonrequired') && el.val() === '') {
 			var img = el.closest('div').find('.field_status');
 			img.field_status('set', 'empty', 2);
 		} // if
@@ -30,21 +30,21 @@ EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 		this.setContinueStatus();
 	},
 
-	setContinueStatus: function () {
+	setContinueStatus: function() {
 		var enabled = EzBob.Validation.checkForm(this.validator) &&
 			this.companyAddressValidator &&
 			this.directorsView.validateAddresses() &&
-			((this.employeeCountView == null) || this.employeeCountView.isValid());
+			(!this.employeeCountView || this.employeeCountView.isValid());
 
 		$('.continue').toggleClass('disabled', !enabled);
-    },
-    propertyOwnedByCompanyChanged: function (event) {
-        var toToggle = this.$el.find('#NonLimitedPropertyOwnedByCompany').val() != 'false';
-        this.$el.find('.additionalCompanyAddressQuestions').toggleClass('hide', toToggle);
-        this.inputChanged(event);
+	},
+	propertyOwnedByCompanyChanged: function(event) {
+		var toToggle = this.$el.find('#NonLimitedPropertyOwnedByCompany').val() !== 'false';
+		this.$el.find('.additionalCompanyAddressQuestions').toggleClass('hide', toToggle);
+		this.inputChanged(event);
 	},
 
-	next: function (e) {
+	next: function(e) {
 		var $el = $(e.currentTarget);
 
 		if ($el.hasClass("disabled"))
@@ -54,7 +54,7 @@ EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 		return false;
 	},
 
-	render: function () {
+	render: function() {
 		var self = this;
 		this.constructor.__super__.render.call(this);
 
@@ -71,8 +71,7 @@ EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 		if (this.model.get('IsOffline')) {
 			this.employeeCountView = new EzBob.EmployeeCountView({
 				model: this.model,
-				parentView: self,
-				onchange: self.setContinueStatus,
+				onchange: $.proxy(self.setContinueStatus, self),
 				prefix: "NonLimited"
 			});
 			this.employeeCountView.render().$el.appendTo(this.$el.find('.employee-count'));
@@ -88,14 +87,16 @@ EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 		oFieldStatusIcons.filter('.required').field_status({ required: true });
 		oFieldStatusIcons.not('.required').field_status({ required: false });
 
+		EzBob.UiAction.registerView(this);
+
 		return this;
 	},
 
-	getValidator: function () {
+	getValidator: function() {
 		return EzBob.validateNonLimitedCompanyDetailForm;
 	},
 
-	NonLimitedCompanyAddressChanged: function (evt, oModel) {
+	NonLimitedCompanyAddressChanged: function(evt, oModel) {
 		this.companyAddressValidator = oModel.collection && oModel.collection.length > 0;
 		this.inputChanged();
 		this.clearAddressError("#NonLimitedCompanyAddress");

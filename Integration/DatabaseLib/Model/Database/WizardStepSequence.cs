@@ -4,10 +4,17 @@ using NHibernate;
 namespace EZBob.DatabaseLib.Model.Database {
 	public class WizardStepSequence {
 		public virtual int ID { get; set; }
-		public virtual string StepName { get; set; }
 		public virtual int? OnlineProgressBarPct { get; set; }
 		public virtual int? OfflineProgressBarPct { get; set; }
-		public virtual int StepType { get; set; }
+		public virtual WizardStep WizardStep { get; set; }
+
+		#region method Name
+
+		public virtual string Name() {
+			return WizardStep.Name;
+		} // Name
+
+		#endregion method Name
 	} // class WizardStepSequence
 
 	public class WizardStepSequenceRepository : NHibernateRepositoryBase<WizardStepSequence> {
@@ -24,10 +31,9 @@ namespace EZBob.DatabaseLib.Model.Database {
 			ReadOnly();
 
 			Id(x => x.ID);
-			Map(x => x.StepName).Length(64);
 			Map(x => x.OnlineProgressBarPct);
 			Map(x => x.OfflineProgressBarPct);
-			Map(x => x.StepType, "WizardStepType").CustomType(typeof (WizardStepType));
+			References(x => x.WizardStep, "WizardStepType");
 		} // constructor
 	} // class WizardStepSequenceMap
 } // namespace

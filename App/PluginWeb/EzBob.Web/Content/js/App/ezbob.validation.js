@@ -84,7 +84,7 @@ EzBob.Validation.highlightFS = function (element) {
         img.field_status('set', 'required', 2);
         return;
     }
-    
+
     if (img.hasClass("required") && !val) {
         img.field_status('set', 'required', 2);
     } else if ($el.hasClass('SortCodeSplit')) {

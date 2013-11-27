@@ -121,6 +121,7 @@ namespace EZBob.DatabaseLib.Model.Database
 	{
 		SignUp = 1,
 		Marketplace = 2,
+		PaymentAccounts = 3, // just because there are some customers in that state in DB
 		AllStep = 4,
 		PersonalDetails = 5
 	}
@@ -354,7 +355,8 @@ namespace EZBob.DatabaseLib.Model.Database
 		public virtual string ABTesting { get; set; }
 		public virtual bool IsOffline { get; set; }
 		public virtual IList<CustomerSession> Session { get; set; }
-		public virtual WizardStepType WizardStep { get; set; }
+
+		public virtual WizardStep WizardStep { get; set; }
 
 		public virtual CollectionStatus CollectionStatus
 		{

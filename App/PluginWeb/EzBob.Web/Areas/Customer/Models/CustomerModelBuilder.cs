@@ -147,6 +147,7 @@ namespace EzBob.Web.Areas.Customer.Models
             if (customer.AddressInfo != null)
             {
                 customerModel.PersonalAddress = customer.AddressInfo.PersonalAddress.ToArray();
+	            customerModel.PrevPersonAddresses = customer.AddressInfo.PrevPersonAddresses.ToArray();
                 customerModel.LimitedAddress = customer.AddressInfo.LimitedCompanyAddress.ToArray();
                 customerModel.NonLimitedAddress = customer.AddressInfo.NonLimitedCompanyAddress.ToArray();
                 customerModel.OtherPropertyAddress = customer.AddressInfo.OtherPropertyAddress.ToArray();

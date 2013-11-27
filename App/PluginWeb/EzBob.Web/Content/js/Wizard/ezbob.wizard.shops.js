@@ -57,6 +57,7 @@
     }
 
     StoreInfoStepView.prototype.initialize = function() {
+      this.readyToProceed = false;
       this.StoreInfoView = new EzBob.StoreInfoView({
         model: this.model
       });
@@ -85,6 +86,7 @@
 
     StoreInfoStepView.prototype.render = function() {
       this.StoreInfoView.render().$el.appendTo(this.$el);
+      this.readyToProceed = true;
       return this;
     };
 

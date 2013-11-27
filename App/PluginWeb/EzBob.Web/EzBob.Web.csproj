@@ -1169,6 +1169,7 @@
     </Content>
     <Content Include="Content\js\Wizard\wizardStepSequence.js" />
     <Content Include="Content\js\Wizard\ezbob.wizardStepsModel.js" />
+    <Content Include="Content\js\Wizard\yourInfo\ezbob.steps.companydetails.js" />
     <Content Include="Content\js\Wizard\yourInfo\ezbob.yourInfo.employeeCount.js" />
     <Content Include="Views\Shared\_Copyright.cshtml">
       <SubType>Code</SubType>
@@ -1370,7 +1371,6 @@
     <Content Include="Content\js\Wizard\yourInfo\ezbob.yourinfo.notLimitedInformation.js" />
     <Content Include="Content\js\Wizard\yourInfo\ezbob.yourinfo.limitedInformation.js" />
     <Content Include="Content\js\Wizard\yourInfo\ezbob.yourinfo.personalInfoBase.js" />
-    <Content Include="Content\js\Wizard\yourInfo\ezbob.steps.personinfo.js" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.ebay.js" />
     <Content Include="Content\js\Wizard\ezbob.wizardView.js" />
     <Content Include="Content\js\Wizard\ezbob.wizard.signupstep.js" />
@@ -1752,6 +1752,9 @@
     <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.Experian.coffee" />
     <Content Include="Content\js\Underwriter\Support\ezbob.underwriter.support.coffee" />
     <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.Campaign.coffee" />
+    <Content Include="Content\js\Wizard\ezbob.wizard.shops.min.js.map">
+      <DependentUpon>ezbob.wizard.shops.js</DependentUpon>
+    </Content>
     <None Include="Properties\PublishProfiles\EzBob.Local.pubxml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Shared\_LoginSimple.cshtml" />

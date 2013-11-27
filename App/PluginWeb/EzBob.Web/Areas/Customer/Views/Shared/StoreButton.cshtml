@@ -19,13 +19,14 @@
 									case 'paypal':
 									case 'FreeAgent':
 									case 'Sage':
-										%><a href="#<%- shopClass %>_help" class="source_help"><%
+										%><a href="#<%- shopClass %>_help" class="source_help" ui-event-control-id="link-account:add_name_link"><%
 										break;
 									default:
-										%><a href="#<%- shopClass %>_help" class="source_no_help" onclick='EzBob.App.trigger("ct:storebase.shops.connect", "<%- shopClass %>")'><%
+										%><a href="#<%- shopClass %>_help" class="source_no_help" onclick='EzBob.App.trigger("ct:storebase.shops.connect", "<%- shopClass %>")' ui-event-control-id="link-account:add_name_link"><%
 										break;
 									} // switch
-                                    var sRibbon = '';
+
+									var sRibbon = '';
 									if (ribbon && ribbon != '') {
 										sRibbon = ribbon + '-ribbon';
 										%><div class="<%= sSourceLabels %> <%= sRibbon %>"></div><%
@@ -57,46 +58,51 @@
 					case 'paypal':
 					case 'FreeAgent':
 					case 'Sage':
-						%><a href="#<%- shopClass %>_help" class="btn green button source_help" onclick='EzBob.App.trigger ("clear")'>Add Account</a><%
+						%><a href="#<%- shopClass %>_help" class="btn green button source_help" onclick='EzBob.App.trigger ("clear")' ui-event-control-id="link-account:add_button">Add Account</a><%
 						break;
 					default:
-						%><a href="#<%- shopClass %>_help" class="btn green button source_no_help" onclick='EzBob.App.trigger("ct:storebase.shops.connect", "<%- shopClass %>")'>Add Account</a><%
+						%><a href="#<%- shopClass %>_help" class="btn green button source_no_help" onclick='EzBob.App.trigger("ct:storebase.shops.connect", "<%- shopClass %>")' ui-event-control-id="link-account:add_button">Add Account</a><%
 						break;
 					} // switch %>
 				</div>
 			</div>
 		</div>
 
-		<div class="hide">
-			<div id="<%- shopClass %>_help" class="help_window">
-				<h2>Link <%- shopClass %> Account</h2>
-				<p>Please follow the instructions and click continue below to link your <%- shopClass %> account.</p>
-				<div class="help_image help_<%- shopClass %>"></div>
-				<br>
-				<div class="alignright" style="padding: 0 10px 0 0;">
-					<% switch (shopClass) {
-					case 'eBay':
-						%><a href="@Url.Action("AttachEbay", "EbayMarketPlaces", new { Area = "Customer" })" target="_blank" class="button orange connect-ebay pull-right">Continue</a><%
-						break;
-					case 'paypal':
-						%><a href="@Url.Action("AttachPayPal", "PaymentAccounts", new { Area = "Customer" })" class="button orange connect-paypal pull-right" target="_new">Continue</a><%
-						break;
-					case 'FreeAgent':
-						%><a href="@Url.Action("AttachFreeAgent", "FreeAgentMarketPlaces", new { Area = "Customer" })" class="button orange pull-right" target="_new">Continue</a><%
-						break;
-					case 'Sage':
-						%><a href="@Url.Action("AttachSage", "SageMarketPlaces", new { Area = "Customer" })" class="button orange pull-right" target="_new">Continue</a><%
-						break;
-					default:
-						%><input class="btn orange button addAccount" onclick='EzBob.App.trigger("ct:storebase.shops.connect", "<%- shopClass %>")' type="button" value="Continue" /><%
-						break;
-					} // switch %>
+		<% switch (shopClass) {
+		case 'eBay':
+		case 'paypal':
+		case 'FreeAgent':
+		case 'Sage':
+			%><div class="hide">
+				<div id="<%- shopClass %>_help" class="help_window">
+					<h2>Link <%- shopClass %> Account</h2>
+					<p>Please follow the instructions and click continue below to link your <%- shopClass %> account.</p>
+					<div class="help_image help_<%- shopClass %>"></div>
+					<br>
+					<div class="alignright" style="padding: 0 10px 0 0;">
+						<% switch (shopClass) {
+						case 'eBay':
+							%><a href="@Url.Action("AttachEbay", "EbayMarketPlaces", new { Area = "Customer" })" target="_blank" class="button orange connect-ebay pull-right" ui-event-control-id="link-account:help_popup_continue">Continue</a><%
+							break;
+						case 'paypal':
+							%><a href="@Url.Action("AttachPayPal", "PaymentAccounts", new { Area = "Customer" })" class="button orange connect-paypal pull-right" target="_new" ui-event-control-id="link-account:help_popup_continue">Continue</a><%
+							break;
+						case 'FreeAgent':
+							%><a href="@Url.Action("AttachFreeAgent", "FreeAgentMarketPlaces", new { Area = "Customer" })" class="button orange pull-right" target="_new" ui-event-control-id="link-account:help_popup_continue">Continue</a><%
+							break;
+						case 'Sage':
+							%><a href="@Url.Action("AttachSage", "SageMarketPlaces", new { Area = "Customer" })" class="button orange pull-right" target="_new" ui-event-control-id="link-account:help_popup_continue">Continue</a><%
+							break;
+						} // switch %>
+					</div>
+					<div class="clear"></div>
+					<hr>
+					<div class="help_security"></div>
 				</div>
-				<div class="clear"></div>
-				<hr>
-				<div class="help_security"></div>
-			</div>
-		</div>
+			</div><%
+			break;
+		} // switch to show help windows
+		%>
 
 		<div id="description<%- shopClass %>" class="accordion-body collapse">
 			<div class="accordion-inner">

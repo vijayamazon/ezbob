@@ -116,6 +116,8 @@ namespace EZBob.DatabaseLib
 		private readonly UiControlRepository _uiControlRepository;
 		private readonly UiEventRepository _uiEventRepository;
 
+		private readonly WizardStepRepository _wizardStepRepository;
+
 		#endregion repositories
 
 		public DatabaseDataHelper(ISession session)
@@ -161,6 +163,8 @@ namespace EZBob.DatabaseLib
 			_uiActionRepository = new UiActionRepository(session);
 			_uiControlRepository = new UiControlRepository(session);
 			_uiEventRepository = new UiEventRepository(session);
+
+			_wizardStepRepository = new WizardStepRepository(session);
 		} // constructor
 
 		#region UI related
@@ -220,16 +224,24 @@ namespace EZBob.DatabaseLib
 
 			_wizardStepSequenceRepository.GetAll().ForEach(wss => {
 				if (wss.OnlineProgressBarPct.HasValue)
-					oResult.online[wss.StepName] = new { position = wss.OnlineProgressBarPct.Value, type = wss.StepType };
+					oResult.online[wss.Name()] = new { position = wss.OnlineProgressBarPct.Value, type = wss.WizardStep.ID };
 
 				if (wss.OfflineProgressBarPct.HasValue)
-					oResult.offline[wss.StepName] = new { position = wss.OfflineProgressBarPct.Value, type = wss.StepType };
+					oResult.offline[wss.Name()] = new { position = wss.OfflineProgressBarPct.Value, type = wss.WizardStep.ID };
 			});
 
 			return JsonConvert.SerializeObject(oResult);
 		}} // WizardStepSequence
 
 		#endregion property WizardStepSequence
+
+		#region property WizardSteps
+
+		public WizardStepRepository WizardSteps {
+			get { return _wizardStepRepository; }
+		} // WizardSteps
+
+		#endregion property WizardSteps
 
 		public LoanTransactionMethodRepository LoanTransactionMethodRepository { get { return _loanTransactionMethodRepository; } }
 

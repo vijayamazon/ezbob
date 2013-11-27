@@ -36,16 +36,14 @@ namespace EzBob.Web.Infrastructure.Filters
 
                 var routeDictionary = new RouteValueDictionary {{"action", "Index"}, {"Area", "Customer"}};
 
-                if (customer.WizardStep != WizardStepType.AllStep)
-                {
-                    if (filterContext.RouteData.Values["controller"].ToString() == "Wizard") return;
-                    routeDictionary.Add("controller", "Wizard");
-                    filterContext.Result = new RedirectToRouteResult(routeDictionary);
-                }
-                else
-                {
+                if (customer.WizardStep.TheLastOne) {
                     if (filterContext.RouteData.Values["controller"].ToString() == "Profile") return;
                     routeDictionary.Add("controller", "Profile");
+                    filterContext.Result = new RedirectToRouteResult(routeDictionary);
+                }
+                else {
+                    if (filterContext.RouteData.Values["controller"].ToString() == "Wizard") return;
+                    routeDictionary.Add("controller", "Wizard");
                     filterContext.Result = new RedirectToRouteResult(routeDictionary);
                 }
             }

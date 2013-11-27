@@ -103,8 +103,8 @@
 					UserId = personalData.Email
 				};
 
-			if (customer.WizardStep != WizardStepType.AllStep)
-				customer.WizardStep = WizardStepType.Marketplace;
+			if (!customer.WizardStep.TheLastOne)
+				customer.WizardStep = _helper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.Marketplace);
 
 			var mp = _helper.SaveOrUpdateCustomerMarketplace(personalData.Email, paypal, securityData, customer);
 			_helper.SaveOrUpdateAcctountInfo(mp, personalData);

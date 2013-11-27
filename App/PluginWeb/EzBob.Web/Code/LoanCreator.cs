@@ -198,10 +198,8 @@
 				throw new CustomerIsNotApprovedException();
 			}
 
-			if (cus.WizardStep != WizardStepType.AllStep)
-			{
+			if (!cus.WizardStep.TheLastOne)
 				throw new CustomerIsNotFullyRegisteredException();
-			}
 
 			if (
 				!cus.CreditSum.HasValue ||

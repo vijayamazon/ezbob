@@ -169,8 +169,8 @@ namespace EzBob.Web.Areas.Customer.Controllers
                     _creator.CustomerMarketPlaceAdded(_context.Customer, mp.Id);
                 }
 
-                if (customer.WizardStep != WizardStepType.AllStep)
-                    customer.WizardStep = WizardStepType.Marketplace;
+				if (!customer.WizardStep.TheLastOne)
+					customer.WizardStep = _helper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.Marketplace);
 
                 _customers.SaveOrUpdate(customer); 
 

@@ -70,7 +70,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         [NoCache]
         public RedirectToRouteResult GenerateConsentAgreement()
         {
-            var customers = _customersRepository.GetAll().Where(x=>x.WizardStep == WizardStepType.AllStep).ToList() ;
+            var customers = _customersRepository.GetAll().Where(x => x.WizardStep.TheLastOne).ToList() ;
 
             foreach (var customer in customers.Where(customer => customer.PersonalInfo !=null))
             {
