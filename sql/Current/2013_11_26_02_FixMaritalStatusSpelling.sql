@@ -165,3 +165,33 @@ WHERE c.IsTest <> 1 and
  , ca.Postcode, c.DateOfBirth, ld.lsdate, LoanAmount.am, LoanAmount.SceduledRepayments, c.TypeOfBusiness, c.LimitedRefNum, c.NonLimitedRefNum, c.CreditResult
  , c.SortCode, l.IsDefaulted, lo.CaisAccountStatus, cs.IsEnabled, c.CollectionStatus, c.MaritalStatus, lo.ManualCaisFlag, cs.Name, l.Status
 GO
+
+IF EXISTS (SELECT 1 FROM sys.indexes WHERE name='IX_Customer_Fill' AND object_id = OBJECT_ID('Customer'))
+BEGIN
+	DROP INDEX Customer.IX_Customer_Fill
+	CREATE NONCLUSTERED INDEX [IX_Customer_Filled] ON [dbo].[Customer] 
+	(
+		[WizardStep] ASC,
+		[IsTest] ASC
+	)
+	INCLUDE ( [Id],
+	[CreditResult],
+	[FirstName],
+	[MiddleInitial],
+	[Surname],
+	[DateOfBirth],
+	[TimeAtAddress],
+	[ResidentialStatus],
+	[Gender],
+	[MaritalStatus],
+	[TypeOfBusiness],
+	[DaytimePhone],
+	[MobilePhone],
+	[Fullname],
+	[OverallTurnOver],
+	[WebSiteTurnOver]) WITH (PAD_INDEX  = OFF, STATISTICS_NORECOMPUTE  = OFF, SORT_IN_TEMPDB = OFF, 
+	IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS  = ON, ALLOW_PAGE_LOCKS  = ON) 
+	ON [PRIMARY]
+END
+GO
+
