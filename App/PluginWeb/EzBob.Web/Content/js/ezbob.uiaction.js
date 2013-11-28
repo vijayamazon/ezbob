@@ -26,7 +26,7 @@ var EzBob = EzBob || {};
 
 	function UiCachePkg() {
 		if (!UiCachePkg.prototype.MaxSize) {
-			UiCachePkg.prototype.MaxSize = 10;
+			UiCachePkg.prototype.MaxSize = 24;
 			UiCachePkg.prototype.LastSeqNum = 0;
 		} // if
 
@@ -225,7 +225,7 @@ var EzBob = EzBob || {};
 		}, // saveOne
 
 		save: function (evt) {
-			console.log('ui event save(', evt.type, $(evt.target).attr('ui-event-control-id'), evt.target, evt.data.saveValue, ')');
+			// console.log('ui event save(', evt.type, $(evt.target).attr('ui-event-control-id'), evt.target, evt.data.saveValue, ')');
 
 			if (this.cache.current && this.cache.current.isFull()) {
 				this.cache.history[this.cache.current.id] = this.cache.current;
