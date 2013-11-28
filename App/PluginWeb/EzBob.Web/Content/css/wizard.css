@@ -236,3 +236,7 @@ div.wizard-director-text { width: 414px; font-size: 11pt; color: #585858; }
 	vertical-align: top;
 	margin-top: 0.4em;
 }
+
+.fs16 {
+    font-size: 16px;
+}
