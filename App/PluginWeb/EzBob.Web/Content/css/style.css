@@ -277,7 +277,7 @@ div.form_field_container { margin-bottom: 1.6em; }
 
 input.form_field_address { width: 60%; }
 
-input.form_field_address_lookup { width: 26%; }
+input.form_field_address_lookup { width: 26%; height: 36px; }
 
 
 /*----table for payment schedule-----*/

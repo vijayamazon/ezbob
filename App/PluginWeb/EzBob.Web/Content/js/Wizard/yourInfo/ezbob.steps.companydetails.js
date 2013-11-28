@@ -146,7 +146,13 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
     webSiteTurnOverFocus: function () { $('#WebSiteTurnOver').change(); }, // webSiteTurnOverFocus
 
     render: function () {
+        
         this.$el.html(this.template(this.model.toJSON()));
+
+        if (!this.model.get('IsOffline'))
+            this.$el.find('.offline').remove();
+        else
+            this.$el.find('.notoffline').remove();
 
         this.$el.find('.cashInput').moneyFormat();
 
@@ -204,11 +210,12 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
                 sCompanyFilter = 'N';
                 break;
         } // switch type of business
-
-        if (this.isInCompanyMode && typeOfBussiness !== 'Entrepreneur' && EzBob.Config.TargetsEnabled)
+        if (typeOfBussiness !== 'Entrepreneur' && EzBob.Config.TargetsEnabled) {
             this.handleTargeting(form, action, data, postcode, companyName, sCompanyFilter, refNum);
-        else
+        } else {
             this.saveDataRequest(action, data);
+        }
+            
 
         return false;
     },
