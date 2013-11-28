@@ -16,7 +16,7 @@ var shortAddress = [address.Line1,
                     address.Postcode];
 shortAddress.clean("");
 %>
-<div class="attardi-input">
+<div>
     <!-- Address information -->
     <textarea class="form_field form_field_address" id="<%-addresses.addressInput%>" rows='<%-shortAddress.length%>' readonly="readonly" name="addressInput" type="text" ui-event-control-id="address-form:address"><%-shortAddress.join("\n")%></textarea>
     <a href="#" class="removeAddress" style="margin-top: 4px;" element-number="<%=i%>" ui-event-control-id="address-form:clear">clear</a>

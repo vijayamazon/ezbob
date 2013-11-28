@@ -33,28 +33,28 @@
         <div class="control-group">
             <label class="control-label">Name:</label>
             <div class="controls">
-                <input type="text" value="<%-CustomerPersonalInfo.FirstName%>" readonly="readonly"/>
+                <input type="text" value="<%-CustomerPersonalInfo.FirstName%>" class="form_field" readonly="readonly"/>
             </div>
         </div>
 
         <div class="control-group">
             <label class="control-label">Middle:</label>
             <div class="controls">
-                <input type="text" value="<%-CustomerPersonalInfo.MiddleInitial%>" readonly="readonly"/>
+                <input type="text" value="<%-CustomerPersonalInfo.MiddleInitial%>" class="form_field" readonly="readonly"/>
             </div>
         </div>
 
         <div class="control-group">
             <label class="control-label">Surname:</label>
             <div class="controls">
-                <input type="text" value="<%-CustomerPersonalInfo.Surname%>"  readonly="readonly"/>
+                <input type="text" value="<%-CustomerPersonalInfo.Surname%>" class="form_field" readonly="readonly"/>
             </div>
         </div>
 
         <div class="control-group">
             <label class="control-label">Date of Birth:</label>
             <div class="controls">
-                <input type="text" value="<%-EzBob.formatDate(CustomerPersonalInfo.DateOfBirth)%>"  readonly="readonly"/>
+                <input type="text" value="<%-EzBob.formatDate(CustomerPersonalInfo.DateOfBirth)%>" class="form_field" readonly="readonly"/>
             </div>
         </div>
             <div class="controls">
@@ -66,7 +66,7 @@
         <div class="control-group">
             <label class="control-label">Time at Address:</label>
             <div class="controls">
-                <input type="text" value="<%-CustomerPersonalInfo.TimeAtAddress%>  years"  readonly="readonly"/>
+                <input type="text" value="<%-CustomerPersonalInfo.TimeAtAddress%>  years" class="form_field" readonly="readonly"/>
             </div>
         </div>
 
@@ -79,42 +79,42 @@
         <div class="control-group">
             <label class="control-label">Residential Status:</label>
             <div class="controls">
-                <input type="text" value="<%-CustomerPersonalInfo.ResidentialStatus%>"  readonly="readonly"/>
+                <input type="text" value="<%-CustomerPersonalInfo.ResidentialStatus%>" class="form_field" readonly="readonly"/>
             </div>
         </div>
             
         <div class="control-group">
             <label class="control-label">Daytime Phone #</label>
             <div class="controls">
-                <input class ="personEditInput phonenumber" id="DayTimePhone" name="DayTimePhone" type="text" value="<%-CustomerPersonalInfo.DaytimePhone%>"  readonly="readonly" />
+                <input class ="personEditInput phonenumber form_field" id="DayTimePhone" name="DayTimePhone" type="text" value="<%-CustomerPersonalInfo.DaytimePhone%>"  readonly="readonly" />
             </div>
         </div>
             
         <div class="control-group">
             <label class="control-label">Mobile Phone #</label>
             <div class="controls">
-                <input class ="personEditInput phonenumber" id="MobilePhone" name="MobilePhone" type="text" value="<%-CustomerPersonalInfo.MobilePhone%>"  readonly="readonly" />
+                <input class ="personEditInput phonenumber form_field" id="MobilePhone" name="MobilePhone" type="text" value="<%-CustomerPersonalInfo.MobilePhone%>"  readonly="readonly" />
             </div>
         </div>
            
         <div class="control-group">
             <label class="control-label">Type of Business:</label>
             <div class="controls">
-                <input type="text" value="<%-CustomerPersonalInfo.TypeOfBusinessName%>"  readonly="readonly"/>
+                <input type="text" value="<%-CustomerPersonalInfo.TypeOfBusinessName%>" class="form_field" readonly="readonly"/>
             </div>
         </div>
         
         <div class="control-group">
             <label for="OverallTurnOver" class="control-label">Total <b>Estimated</b> Sales</label>
             <div class="controls cashControlls">
-                <input id="OverallTurnOver" readonly="readonly" name="OverallTurnOver" type="text" value="<%-CustomerPersonalInfo.OverallTurnOver%>" class="cashInput personEditInput" />
+                <input id="OverallTurnOver" readonly="readonly" name="OverallTurnOver" type="text" value="<%-CustomerPersonalInfo.OverallTurnOver%>" class="cashInput personEditInput form_field" />
             </div>
         </div>   
        
         <div class="control-group">
             <label for="WebSiteTurnOver" class="control-label">Online Estimated Sales</label>
             <div class="controls cashControlls">
-                <input id="WebSiteTurnOver" readonly="readonly" name="WebSiteTurnOver" type="text" value="<%-CustomerPersonalInfo.WebSiteTurnOver%>" class="cashInput personEditInput" />
+                <input id="WebSiteTurnOver" readonly="readonly" name="WebSiteTurnOver" type="text" value="<%-CustomerPersonalInfo.WebSiteTurnOver%>" class="cashInput personEditInput form_field" />
             </div>
         </div>   
 
@@ -122,7 +122,7 @@
         <div class="control-group">
             <label class="control-label">Earned points:</label>
             <div class="controls">
-                <input type="text" value="<%- LoyaltyPoints %>" readonly="readonly"/>
+                <input type="text" value="<%- LoyaltyPoints %>" readonly="readonly" class="form_field"/>
             </div>
         </div>
         }
@@ -137,14 +137,14 @@
             <label class="control-label">
                 Registration #:</label>
             <div class="controls">
-                <input type="text" value="<%-LimitedInfo.LimitedCompanyNumber%>" readonly="readonly" />
+                <input type="text" value="<%-LimitedInfo.LimitedCompanyNumber%>" readonly="readonly" class="form_field"/>
             </div>
         </div>
         <div class="control-group">
             <label class="control-label">
                 Company Name:</label>
             <div class="controls">
-                <input type="text" value="<%-LimitedInfo.LimitedCompanyName%>" readonly="readonly" />
+                <input type="text" value="<%-LimitedInfo.LimitedCompanyName%>" readonly="readonly" class="form_field"/>
             </div>
         </div>
         <div class="controls">
@@ -157,7 +157,7 @@
             <label class="control-label">
                 Business Phone #</label>
             <div class="controls">
-                <input class ="personEditInput phonenumber" id="BusinessPhone" name="BusinessPhone" type="text" value="<%-LimitedInfo.LimitedBusinessPhone%>" readonly="readonly"  />
+                <input class ="personEditInput phonenumber form_field" id="BusinessPhone" name="BusinessPhone" type="text" value="<%-LimitedInfo.LimitedBusinessPhone%>" readonly="readonly"  />
             </div>
         </div>
 
@@ -169,35 +169,35 @@
 				<div class="control-group">
 					<label class="control-label">Current Number of Employees:</label>
 					<div class="controls">
-						<input type="text" value="<%- CompanyEmployeeCountInfo.EmployeeCount %>"  readonly="readonly"/>
+						<input type="text" value="<%- CompanyEmployeeCountInfo.EmployeeCount %>" class="form_field" readonly="readonly"/>
 					</div>
 				</div>
 
 				<div class="control-group">
 					<label class="control-label">Number of Employees Earning (Gross Salary) over £41,450 Per Annum:</label>
 					<div class="controls">
-						<input type="text" value="<%- CompanyEmployeeCountInfo.TopEarningEmployeeCount %>"  readonly="readonly"/>
+						<input type="text" value="<%- CompanyEmployeeCountInfo.TopEarningEmployeeCount %>" class="form_field" readonly="readonly"/>
 					</div>
 				</div>
 
 				<div class="control-group">
 					<label class="control-label">Number of Employees Earning (Gross Salary) less than £9,440 Per Annum:</label>
 					<div class="controls">
-						<input type="text" value="<%- CompanyEmployeeCountInfo.BottomEarningEmployeeCount %>"  readonly="readonly"/>
+						<input type="text" value="<%- CompanyEmployeeCountInfo.BottomEarningEmployeeCount %>" class="form_field" readonly="readonly"/>
 					</div>
 				</div>
 
 				<div class="control-group">
 					<label class="control-label">Change in the Number of Employees in Last 12 Months:</label>
 					<div class="controls">
-						<input type="text" value="<%- CompanyEmployeeCountInfo.EmployeeCountChange %>"  readonly="readonly"/>
+						<input type="text" value="<%- CompanyEmployeeCountInfo.EmployeeCountChange %>" class="form_field" readonly="readonly"/>
 					</div>
 				</div>
                 
                 <div class="control-group">
 					<label class="control-label">Total Monthly Salary Expenditure (inc tax & NI):</label>
 					<div class="controls">
-						<input type="text" value="<%- CompanyEmployeeCountInfo.TotalMonthlySalary %>"  readonly="readonly"/>
+						<input type="text" value="<%- CompanyEmployeeCountInfo.TotalMonthlySalary %>" class="form_field" readonly="readonly"/>
 					</div>
 				</div>
 			</fieldset>
@@ -213,7 +213,7 @@
             <label class="control-label">
                 Company Name:</label>
             <div class="controls">
-                <input type="text" value="<%-NonLimitedInfo.NonLimitedCompanyName%>" readonly="readonly" />
+                <input type="text" value="<%-NonLimitedInfo.NonLimitedCompanyName%>" class="form_field" readonly="readonly" />
             </div>
         </div>
         <div class="controls">
@@ -225,21 +225,21 @@
             <label class="control-label">
                 Time at Address:</label>
             <div class="controls">
-                <input type="text" value="<%-NonLimitedInfo.NonLimitedTimeAtAddress%> years" readonly="readonly" />
+                <input type="text" value="<%-NonLimitedInfo.NonLimitedTimeAtAddress%> years" class="form_field" readonly="readonly" />
             </div>
         </div>
         <div class="control-group">
             <label class="control-label">
                 Time In Business:</label>
             <div class="controls">
-                <input type="text" value="<%-NonLimitedInfo.NonLimitedTimeInBusiness%>  years" readonly="readonly" />
+                <input type="text" value="<%-NonLimitedInfo.NonLimitedTimeInBusiness%>  years" class="form_field" readonly="readonly" />
             </div>
         </div>
         <div class="control-group">
             <label class="control-label">
                 Business Phone #</label>
             <div class="controls">
-                <input class ="personEditInput phonenumber" name="BusinessPhone" type="text" value="<%-NonLimitedInfo.NonLimitedBusinessPhone%>" readonly="readonly"  />
+                <input class ="personEditInput phonenumber form_field" name="BusinessPhone" type="text" value="<%-NonLimitedInfo.NonLimitedBusinessPhone%>" readonly="readonly"  />
             </div>
         </div>
 
@@ -251,28 +251,28 @@
 				<div class="control-group">
 					<label class="control-label">Current Number of Employees:</label>
 					<div class="controls">
-						<input type="text" value="<%- CompanyEmployeeCountInfo.EmployeeCount %>"  readonly="readonly"/>
+						<input type="text" value="<%- CompanyEmployeeCountInfo.EmployeeCount %>" class="form_field" readonly="readonly"/>
 					</div>
 				</div>
 
 				<div class="control-group">
 					<label class="control-label">Number of Employees Earning (Gross Salary) over £41,450 Per Annum:</label>
 					<div class="controls">
-						<input type="text" value="<%- CompanyEmployeeCountInfo.TopEarningEmployeeCount %>"  readonly="readonly"/>
+						<input type="text" value="<%- CompanyEmployeeCountInfo.TopEarningEmployeeCount %>" class="form_field" readonly="readonly"/>
 					</div>
 				</div>
 
 				<div class="control-group">
 					<label class="control-label">Number of Employees Earning (Gross Salary) less than £9,440 Per Annum:</label>
 					<div class="controls">
-						<input type="text" value="<%- CompanyEmployeeCountInfo.BottomEarningEmployeeCount %>"  readonly="readonly"/>
+						<input type="text" value="<%- CompanyEmployeeCountInfo.BottomEarningEmployeeCount %>" class="form_field" readonly="readonly"/>
 					</div>
 				</div>
 
 				<div class="control-group">
 					<label class="control-label">Change in the Number of Employees in Last 12 Months:</label>
 					<div class="controls">
-						<input type="text" value="<%- CompanyEmployeeCountInfo.EmployeeCountChange %>"  readonly="readonly"/>
+						<input type="text" value="<%- CompanyEmployeeCountInfo.EmployeeCountChange %>" class="form_field" readonly="readonly"/>
 					</div>
 				</div>
 			</fieldset>
