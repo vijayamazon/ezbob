@@ -1164,9 +1164,6 @@
     <Content Include="Content\js\Wizard\shops\ezbob.shops.yodlee.js">
       <DependentUpon>ezbob.shops.yodlee.coffee</DependentUpon>
     </Content>
-    <Content Include="Content\js\Wizard\shops\ezbob.shopsbase.min.js">
-      <DependentUpon>ezbob.shopsbase.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\Wizard\wizardStepSequence.js" />
     <Content Include="Content\js\Wizard\ezbob.wizardStepsModel.js" />
     <Content Include="Content\js\Wizard\yourInfo\ezbob.steps.companydetails.js" />

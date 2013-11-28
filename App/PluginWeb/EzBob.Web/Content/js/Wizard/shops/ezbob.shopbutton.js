@@ -47,7 +47,14 @@
       this.$el.find('.tooltipdiv').tooltip();
       return this.$el.find('.source_help').colorbox({
         inline: true,
-        transition: 'none'
+        transition: 'none',
+        onClosed: function() {
+          var oBackLink;
+          oBackLink = $('#link_account_implicit_back');
+          if (oBackLink.length) {
+            return EzBob.UiAction.saveOne('click', oBackLink);
+          }
+        }
       });
     };
 

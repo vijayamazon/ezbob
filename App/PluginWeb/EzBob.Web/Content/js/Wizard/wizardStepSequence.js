@@ -69,7 +69,7 @@ EzBob.WizardStepSequence = function(args) {
 	var oCompanyDetailsStep = {
 		name: 'companydetails',
 		documentTitle: 'Fill company details',
-		title: 'Company<br>details',
+		title: 'Business<br>details',
 		trackPage: '/Customer/Wizard/CompanyDetails',
 		marketingStrKey: 'MarketingWizardStepPersonalInfo',
 		showTitleInWizardSteps: true,

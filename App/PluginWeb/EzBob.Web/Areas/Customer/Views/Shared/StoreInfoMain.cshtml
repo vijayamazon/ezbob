@@ -17,7 +17,7 @@
 		<div class="full_width" style="display: none;" id="online_entry_message">To be approved for a loan, link at least one account. The more accounts you link, the more funds you can borrow.</div>
 
 		<div class="full_width" style="display: none;" id="offline_entry_message">You must <strong>link</strong> or <strong>upload</strong> your
-			<span class="green btn" onclick="EzBob.App.trigger('ct:storebase.shops.connect', 'HMRC')">HM Revenue &amp; Customs</span>
+			<span class="green btn" onclick="EzBob.App.trigger('ct:storebase.shops.connect', 'HMRC')" ui-event-control-id="link-account:add_hmrc_at_the_top">HM Revenue &amp; Customs</span>
 			account data<br />to be approved for a loan.
 		</div>
 
@@ -40,8 +40,9 @@
 			}
 
 			<div class="AddMoreRule hide">Please add more accounts in order to continue.</div>
-			<a href="#" class="back-step button grey pull-right">Back</a>
-			<a class="next button orange pull-right disabled">Continue</a>
+
+			<a class="next button orange pull-right disabled" ui-event-control-id="link-account:submit">Continue</a>
+			<a id="link_account_implicit_back" style="display: none;" class="hide" ui-event-control-id="link-account:implicit_back"></a>
 		</div>
 	</div>
 </script>

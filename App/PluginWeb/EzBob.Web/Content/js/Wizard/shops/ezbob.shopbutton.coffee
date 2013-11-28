@@ -26,7 +26,12 @@ class EzBob.StoreButtonView extends Backbone.Marionette.ItemView
 
     onRender: ->
         @$el.find('.tooltipdiv').tooltip()
-        @$el.find('.source_help').colorbox({ inline:true, transition: 'none' });
+        @$el.find('.source_help').colorbox({ inline:true, transition: 'none', onClosed: ->
+            oBackLink = $ '#link_account_implicit_back'
+
+            if oBackLink.length
+                EzBob.UiAction.saveOne 'click', oBackLink
+        });
 
     isAddingAllowed: -> return true
 

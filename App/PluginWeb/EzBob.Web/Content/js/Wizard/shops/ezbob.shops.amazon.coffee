@@ -14,6 +14,8 @@ class EzBob.AmazonStoreInfoView extends Backbone.View
 
         @marketplaceId.withoutSpaces()
         @merchantId.withoutSpaces()
+
+        EzBob.UiAction.registerView @
         @
 
     events:

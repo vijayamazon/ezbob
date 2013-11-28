@@ -36,8 +36,15 @@ namespace EzBob.Web.Controllers {
 				return this.JsonNet(new { result = "success" });
 			} // if
 
-			string sSessionID = Request.Cookies[m_sSessionCookieName] == null ? "" : Request.Cookies[m_sSessionCookieName].Value;
-			string sRemoteIP = RemoteIp();
+			string sSessionID = Request.Cookies[m_sSessionCookieName] == null ? "NO SESSION COOKIE" : (Request.Cookies[m_sSessionCookieName].Value ?? string.Empty).Trim();
+
+			if (string.IsNullOrEmpty(sSessionID))
+				sSessionID = "EMPTY SESSION COOKIE";
+
+			string sRemoteIP = (RemoteIp() ?? string.Empty).Trim();
+
+			if (string.IsNullOrEmpty(sRemoteIP))
+				sRemoteIP = "UNKNOWN SOURCE";
 
 			BrowserVersion oBrowserVersion = helper.BrowserVersionRepository.FindByName(version);
 

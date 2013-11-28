@@ -72,13 +72,13 @@ class EzBob.StoreInfoBaseView extends Backbone.View
                 sShow = '#offline_entry_message'
                 sRemove = '#plain_offline_entry_message, #online_entry_message'
 
-            @$el.find('.importantnumber').text '£200,000'
+            @storeList.find('.importantnumber').text '£200,000'
         else
             sShow = '#online_entry_message'
             sRemove = '#plain_offline_entry_message, #offline_entry_message'
 
-        @$el.find(sShow).show()
-        @$el.find(sRemove).remove()
+        @storeList.find(sShow).show()
+        @storeList.find(sRemove).remove()
 
         that = this
         accountsList = @storeList.find(".accounts-list")
@@ -105,19 +105,16 @@ class EzBob.StoreInfoBaseView extends Backbone.View
         
         for shop in sortedShopsByNumOfShops when shop.active 
             shop.button.render().$el.appendTo accountsList
-        
+
         @storeList.appendTo @$el
+
+        EzBob.UiAction.registerView @
 
         this
 
     events:
         "click a.connect-store": "close"
         "click a.next": "next"
-        "click a.back-step": "previousClick"
-
-    previousClick: ->
-        @trigger "previous"
-        false
 
     handleMandatoryText: (hasFilledShops, canContinue, ebayPaypalRuleMessageVisible) ->
         shouldHide = !hasFilledShops or canContinue or ebayPaypalRuleMessageVisible

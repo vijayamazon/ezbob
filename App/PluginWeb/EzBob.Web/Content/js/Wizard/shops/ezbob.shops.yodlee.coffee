@@ -36,6 +36,12 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
             that.attemptsLeft = (that.attemptsLeft || 5) - 1
             return {url: that.$el.find('#yodleeContinueBtn').attr('href'), attemptsLeft: that.attemptsLeft}
 
+    render: =>
+        super()
+        EzBob.UiAction.registerView @
+        @
+    # end of render
+
     OtherYodleeBanksClicked:(el) ->
         selectedId = $(el.currentTarget).find(':selected').val()
         selectedName = $(el.currentTarget).find(':selected').text()

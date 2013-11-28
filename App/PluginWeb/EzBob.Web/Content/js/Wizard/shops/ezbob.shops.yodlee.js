@@ -1,5 +1,6 @@
 ﻿(function() {
   var root,
+    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -7,37 +8,12 @@
 
   root.EzBob = root.EzBob || {};
 
-  EzBob.YodleeAccountButtonView = (function(_super) {
-
-    __extends(YodleeAccountButtonView, _super);
-
-    function YodleeAccountButtonView() {
-      return YodleeAccountButtonView.__super__.constructor.apply(this, arguments);
-    }
-
-    YodleeAccountButtonView.prototype.initialize = function() {
-      return YodleeAccountButtonView.__super__.initialize.call(this, {
-        name: 'Yodlee',
-        logoText: '',
-        shops: this.model
-      });
-    };
-
-    YodleeAccountButtonView.prototype.update = function() {
-      return this.model.fetch().done(function() {
-        return EzBob.App.trigger('ct:storebase.shop.connected');
-      });
-    };
-
-    return YodleeAccountButtonView;
-
-  })(EzBob.StoreButtonView);
-
   EzBob.YodleeAccountInfoView = (function(_super) {
 
     __extends(YodleeAccountInfoView, _super);
 
     function YodleeAccountInfoView() {
+      this.render = __bind(this.render, this);
       return YodleeAccountInfoView.__super__.constructor.apply(this, arguments);
     }
 
@@ -79,6 +55,12 @@
           attemptsLeft: that.attemptsLeft
         };
       };
+    };
+
+    YodleeAccountInfoView.prototype.render = function() {
+      YodleeAccountInfoView.__super__.render.call(this);
+      EzBob.UiAction.registerView(this);
+      return this;
     };
 
     YodleeAccountInfoView.prototype.OtherYodleeBanksClicked = function(el) {

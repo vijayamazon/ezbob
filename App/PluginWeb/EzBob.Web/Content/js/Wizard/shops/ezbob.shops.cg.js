@@ -194,6 +194,7 @@
         return self.connect();
       });
       this.validator = EzBob.validateCGShopForm(this.$el.find('form'), this.accountType);
+      EzBob.UiAction.registerView(this);
       return this;
     };
 

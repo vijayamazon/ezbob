@@ -19,7 +19,6 @@
 
     StoreInfoBaseView.prototype.initialize = function() {
       var name, ordpi, store, _ref;
-      console.log('model EzBob.StoreInfoBaseView', this.model);
       this.allowFinishOnlineWizardWithoutMarketplaces = $('#allowFinishWizardWithoutMarketplaces').attr('online').toLowerCase() === 'true';
       this.allowFinishOfflineWizardWithoutMarketplaces = $('#allowFinishWizardWithoutMarketplaces').attr('offline').toLowerCase() === 'true';
       if (typeof ordpi === 'undefined') {
@@ -81,14 +80,9 @@
 
     StoreInfoBaseView.prototype.shopConnected = function(name) {
       var that;
-      console.log('shop connected', name);
       that = this;
       return this.model.safeFetch().done(function() {
-        console.log('shop connected', that.stores);
-        _.each(that.stores, function(store) {
-          return store.button.update(that.model.get('mpAccounts'));
-        });
-        console.log('shop connected', that.stores);
+        that.stores[name].button.update(that.model.get('mpAccounts'));
         that.updateEarnedPoints();
         return that.render();
       });
@@ -96,8 +90,6 @@
 
     StoreInfoBaseView.prototype.render = function() {
       var accountsList, canContinue, ebayPaypalRuleMessageVisible, foundAllMandatories, hasEbay, hasFilledShops, hasHmrc, hasPaypal, key, sRemove, sShow, shop, sortedShopsByNumOfShops, sortedShopsByPriority, that, _i, _j, _len, _len1, _ref;
-      console.log("EzBob.StoreInfoBaseView render");
-      console.log(this.stores.HMRC);
       hasHmrc = this.stores.HMRC.button.shops.length > 0;
       sShow = '';
       sRemove = '';
@@ -109,13 +101,13 @@
           sShow = '#offline_entry_message';
           sRemove = '#plain_offline_entry_message, #online_entry_message';
         }
-        this.$el.find('.importantnumber').text('£200,000');
+        this.storeList.find('.importantnumber').text('£200,000');
       } else {
         sShow = '#online_entry_message';
         sRemove = '#plain_offline_entry_message, #offline_entry_message';
       }
-      this.$el.find(sShow).show();
-      this.$el.find(sRemove).remove();
+      this.storeList.find(sShow).show();
+      this.storeList.find(sRemove).remove();
       that = this;
       accountsList = this.storeList.find(".accounts-list");
       sortedShopsByPriority = _.sortBy(this.stores, function(s) {
@@ -147,18 +139,13 @@
         }
       }
       this.storeList.appendTo(this.$el);
+      EzBob.UiAction.registerView(this);
       return this;
     };
 
     StoreInfoBaseView.prototype.events = {
       "click a.connect-store": "close",
-      "click a.next": "next",
-      "click a.back-step": "previousClick"
-    };
-
-    StoreInfoBaseView.prototype.previousClick = function() {
-      this.trigger("previous");
-      return false;
+      "click a.next": "next"
     };
 
     StoreInfoBaseView.prototype.handleMandatoryText = function(hasFilledShops, canContinue, ebayPaypalRuleMessageVisible) {
@@ -190,11 +177,9 @@
 
     StoreInfoBaseView.prototype.connect = function(storeName) {
       var oFieldStatusIcons, storeView;
-      console.log('connect', storeName);
       EzBob.CT.recordEvent("ct:storebase." + this.name + ".connect", storeName);
       this.$el.find(">div").hide();
       storeView = this.stores[storeName].view;
-      console.log('connect', storeView);
       storeView.render().$el.appendTo(this.$el);
       oFieldStatusIcons = storeView.$el.find('IMG.field_status');
       oFieldStatusIcons.filter('.required').field_status({

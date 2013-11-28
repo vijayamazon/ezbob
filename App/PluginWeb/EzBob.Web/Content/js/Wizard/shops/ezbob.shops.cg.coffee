@@ -164,7 +164,10 @@ class EzBob.CGAccountInfoView extends Backbone.Marionette.ItemView
         @$el.find('a.connect-account').click((evt) -> self.connect())
 
         @validator = EzBob.validateCGShopForm @$el.find('form'), @accountType
-        return @
+
+        EzBob.UiAction.registerView @
+        @
+    # end of render
 
     back: ->
         @trigger 'back'

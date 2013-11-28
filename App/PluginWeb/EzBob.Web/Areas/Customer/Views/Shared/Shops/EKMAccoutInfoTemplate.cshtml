@@ -11,13 +11,13 @@
         </div>
         <form id="ekmAccount">
             <div class="clearfix">
-                @EzForm.InputText("ekm_login", "EKM Login", cls: "form_field", isRequired: true, statusIcon: true)
-                @EzForm.Password("ekm_password", "EKM Password", cls: "form_field", isRequired: true, statusIcon: true)
+                @EzForm.InputText("ekm_login", "EKM Login", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "link-account:ekm_login")
+                @EzForm.Password("ekm_password", "EKM Password", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "link-account:ekm_password")
 
                 <div class="form_buttons_container">
                     <div class="attardi-button">
-                        <a href="#" class="button orange connect-ekm disabled pull-right">Link Account</a>
-                        <a href="#" class="back button grey pull-right">Back</a>
+                        <a href="#" class="button orange connect-ekm disabled pull-right" ui-event-control-id="link-account:ekm_connect">Link Account</a>
+                        <a href="#" class="back button grey pull-right" ui-event-control-id="ekm_back">Back</a>
                     </div>
                 </div>
             </div>

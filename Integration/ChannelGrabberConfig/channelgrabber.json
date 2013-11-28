@@ -217,7 +217,7 @@
 				],
 				"Notes": [
 					"<p>You should provide URL to a private application connected to your shop. ",
-					"<a href='http://docs.shopify.com/api/tutorials/creating-a-private-app' target=_blank>Instructions on creating a private application.</a></p>",
+					"<a href='http://docs.shopify.com/api/tutorials/creating-a-private-app' target=_blank ui-event-control-id=\"link-account:shopify_help_link\">Instructions on creating a private application.</a></p>",
 					"<p>When you generate a new private application beside ApiKey, Password, SharedSecret and Url you get an example URL which looks like this:",
 					"<blockquote>https://a5a18488246744828f621d0073eda6d8a:b0ce472ffd5b4025af3ed570353c5d56b@test-shop.myshopify.com/admin/orders.xml</blockquote>",
 					"Enter your example URL in the above field.</p>"
@@ -303,8 +303,8 @@
 				"Notes": [
 					"To retrieve your Consumer Key and Consumer Secret:",
 					"<ol>",
-					"<li>Download <a href=\"/Content/xero/ezbob_xero_public_key.cer\">this key file</a> to your desktop.</li>",
-					"<li>Follow <a target=_blank href=\"https://api.xero.com/Application/Add\">this link to your Xero API area</a></li>",
+					"<li>Download <a href=\"/Content/xero/ezbob_xero_public_key.cer\" target=_blank ui-event-control-id=\"link-account:xero_public_key\">this key file</a> to your desktop.</li>",
+					"<li>Follow <a target=_blank href=\"https://api.xero.com/Application/Add\" ui-event-control-id=\"link-account:xero_api\">this link to your Xero API area</a></li>",
 					"<li>Choose <strong>Private</strong></li>",
 					"<li>Enter application name: <strong>EZBOB</strong></li>",
 					"<li>Click <strong>Choose File</strong> and select the file you downloaded on the step 1.</li>",
@@ -456,7 +456,7 @@
 				"UploadFilesHandler": "HandleUploadedHmrcVatReturn",
 				"Notes": [
 					"<p><strong>Don't have an online HMRC account? Upload your VAT return reports</strong></p>",
-					"<div><input type=\"button\" class=\"upload-files button orange\" value=\"Upload\"></div>"
+					"<div><input type=\"button\" class=\"upload-files button orange\" value=\"Upload\" ui-event-control-id=\"link-account:upload-files\"></div>"
 				],
 				"OnBeforeLink": [
 					"if (bUploadMode) {",

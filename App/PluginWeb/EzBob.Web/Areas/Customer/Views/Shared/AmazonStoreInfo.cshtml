@@ -5,7 +5,7 @@
         <div class="amazon-instructions-title">
             <h2>Add Amazon Shop</h2>
             <a class="amazonscreenshot" rel="group" href="#">
-                <img src="@Url.Content("~/Content/img/Tutorial/tn_amazon1.jpg")" alt="add amazon shop" />
+                <img src="@Url.Content("~/Content/img/Tutorial/tn_amazon1.jpg")" alt="add amazon shop" ui-event-control-id="link-account:amazon_tutorial" />
             </a>
             <label class="amazon_view_tutorial_label">View Tutorial</label>
         </div>
@@ -13,7 +13,7 @@
         <div style="padding-top: 10px;">
             <ol class='store-connect-manual'>
                 <li>
-                    <a href="https://sellercentral.amazon.co.uk/gp/mws/registration/register.html" class="blue-link-force go-to-amazon" target="_blank">Click here</a>   to be redirected to Amazon Services and login with your seller ID
+                    <a href="https://sellercentral.amazon.co.uk/gp/mws/registration/register.html" class="blue-link-force go-to-amazon" target="_blank" ui-event-control-id="link-account:amazon_link_to_register">Click here</a>   to be redirected to Amazon Services and login with your seller ID
                 </li>
 
                 <hr class="dotted" />
@@ -40,8 +40,8 @@
                     @using (Html.BeginForm("", "", new { }, FormMethod.Post, new { @class = "AmazonForm", @style = "padding-top:20px;" }))
                     {
                         <div class="clearfix">
-                            @EzForm.InputText("amazonMerchantId", "Merchant ID", cls: "form_field", isRequired: true, statusIcon: true, isDisabled: true, maxLength: 15)
-                            @EzForm.InputText("amazonMarketplaceId", "Marketplace ID", cls: "form_field", isRequired: true, statusIcon: true, isDisabled: true, maxLength: 15)
+                            @EzForm.InputText("amazonMerchantId", "Merchant ID", cls: "form_field", isRequired: true, statusIcon: true, isDisabled: true, maxLength: 15, uiEventControlID: "link-account:amazon_merchant_id")
+                            @EzForm.InputText("amazonMarketplaceId", "Marketplace ID", cls: "form_field", isRequired: true, statusIcon: true, isDisabled: true, maxLength: 15, uiEventControlID: "link-account:amazon_marketplace_id")
                         </div>
                     }
                 </li>
@@ -49,8 +49,8 @@
         </div>
         <div class="control-group clearfix form_buttons_container">
             <div class="attardi-button">
-                <a href="#Connect/amazon" class="connect-amazon button orange pull-right disabled">Continue</a>
-                <a href="#" class="back button grey pull-right">Back</a>
+                <a href="#Connect/amazon" class="connect-amazon button orange pull-right disabled" ui-event-control-id="link-account:amazon_connect">Continue</a>
+                <a href="#" class="back button grey pull-right" ui-event-control-id="link-account:amazon_back">Back</a>
             </div>
         </div>
     </div>

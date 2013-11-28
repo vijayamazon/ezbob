@@ -1,4 +1,4 @@
-EzBob = EzBob || {};
+var EzBob = EzBob || {};
 
 (function () {
 	function UiActionEvent(sEventName, oDomElement, bSaveValueOnChange) {
@@ -78,7 +78,7 @@ EzBob = EzBob || {};
 			if (!oView || !oView.$el)
 				return;
 
-			this.register(oView.$el.find('[ui-event-control-id]'));
+			this.register(oView.$el.find('[ui-event-control-id][ui-event-control-id!=""]'));
 		}, // registerView
 
 		register: function (jqElementList) {
@@ -96,6 +96,9 @@ EzBob = EzBob || {};
 
 				case 'a':
 				case 'button':
+				case 'div':
+				case 'img':
+				case 'span':
 					self.attach(self.evtClick(), this);
 					break;
 
@@ -222,7 +225,7 @@ EzBob = EzBob || {};
 		}, // saveOne
 
 		save: function (evt) {
-			console.log('ui event save(', evt.type, evt.target, evt.data.saveValue, ')');
+			console.log('ui event save(', evt.type, $(evt.target).attr('ui-event-control-id'), evt.target, evt.data.saveValue, ')');
 
 			if (this.cache.current && this.cache.current.isFull()) {
 				this.cache.history[this.cache.current.id] = this.cache.current;

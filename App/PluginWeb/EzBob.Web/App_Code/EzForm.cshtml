@@ -39,10 +39,11 @@
     </div>
 }
 
-@helper InputText(string id, string caption, string value = "", string type = "text", string cls = "", bool isDisabled = false, bool isRequired = false, bool statusIcon = false, int tabIndex = 0, int maxLength = 0)
+@helper InputText(string id, string caption, string value = "", string type = "text", string cls = "", bool isDisabled = false, bool isRequired = false, bool statusIcon = false, int tabIndex = 0, int maxLength = 0, string uiEventControlID = "")
 {
     var identificator = new HtmlString(id);
     var val = new HtmlString(value);
+
     
     <div class="form_field_container control-group">
         <div class="controls">
@@ -65,6 +66,9 @@
                     @if (maxLength > 0)
                     {
                         @:maxlength="@maxLength"
+                    }
+                    @if (!string.IsNullOrWhiteSpace(uiEventControlID)) {
+                        @:ui-event-control-id="@uiEventControlID"
                     }
                     />
                 @if (statusIcon)
@@ -106,7 +110,7 @@
     </div>
 }
 
-@helper Password(string id, string caption, string value = "", string cls = "", bool isDisabled = false, bool isRequired = true, bool statusIcon = false)
+@helper Password(string id, string caption, string value = "", string cls = "", bool isDisabled = false, bool isRequired = true, bool statusIcon = false, string uiEventControlID = "")
 {
     var identificator = new HtmlString(id);
     var val = new HtmlString(value);
@@ -125,6 +129,9 @@
                     { 
                         @:disabled="disabled"
                     } 
+                    @if (!string.IsNullOrWhiteSpace(uiEventControlID)) {
+                        @:ui-event-control-id="@uiEventControlID"
+                    }
                     />
                 @if (statusIcon)
             {

@@ -58,6 +58,8 @@ class EzBob.EKMAccountInfoView extends Backbone.Marionette.ItemView
         super()
 
         @validator = EzBob.validateEkmShopForm @ui.form
+
+        EzBob.UiAction.registerView @
         return @
 
     back: ->
