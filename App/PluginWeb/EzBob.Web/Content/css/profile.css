@@ -910,9 +910,7 @@ select.selectheight { height: 30px; }
 .apply-for-loan-total-block .rlc .real-cost { float: left; }
 
 .bank-account .for-radio { display: inline !important; }
-
-.bank-account #AccountNumber { width: 316px; }
-
+.bank-account { width: 70%; }
 .bank-account #baPersonal { margin: 0 4px -3px 4px; }
 .bank-account #baBusiness { margin: 0 4px -3px 28px; }
 
