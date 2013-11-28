@@ -9,8 +9,7 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 
 		this.events = _.extend({}, this.events, {
 			'change #TimeAtAddress': 'personalTimeAtAddressChanged',
-
-			'change #ResidentialStatus': 'residentialStatusChanged',
+            'change #ResidentialStatus': 'residentialStatusChanged',
 			'change #OwnOtherProperty': 'ownOtherPropertyChanged',
 			'click label[for="ConsentToSearch"] a': 'showConsent',
 
@@ -72,7 +71,7 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 		var buttonContainer = '#PrevPersonAddresses';
 
 		this.clearAddressError(buttonContainer);
-
+		this.$el.find('#PrevPersonAddresses .addAddressContainer label.attardi-input span').text('Enter previous postcode');
 		var jqElem = this.$el.find('#TimeAtAddress');
 
 		var nCurrentValue = parseInt(jqElem.val(), 10);
@@ -147,7 +146,7 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 
 		this.prevPersonAddressesView = new EzBob.AddressView({ model: this.model.get('PrevPersonAddresses'), name: 'PrevPersonAddresses', max: 3 });
 		this.prevPersonAddressesView.render().$el.appendTo(this.$el.find('#PrevPersonAddresses'));
-		this.$el.find('#PrevPersonAddresses .addAddressContainer label.attardi-input span').text('Enter previous postcode');
+		
 		this.addressErrorPlacement(this.prevPersonAddressesView.$el, this.prevPersonAddressesView.model);
 
 		this.otherPropertyAddressView = new EzBob.AddressView({ model: this.model.get('OtherPropertyAddress'), name: 'OtherPropertyAddress', max: 1 });
