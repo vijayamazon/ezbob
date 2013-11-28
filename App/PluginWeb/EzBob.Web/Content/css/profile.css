@@ -301,11 +301,11 @@ body .agreement-text {
 }
 .profile-widgets {
     margin-top: 0px;
-    border: solid 1px #c5c5c5;
+    /*border: solid 1px #c5c5c5;*/
     -webkit-border-radius: 8px;
     -moz-border-radius: 8px;
     border-radius: 8px;
-    padding: 15px;
+    /*padding: 15px;*/
     background-color: white;
     
     behavior: url(CSS3PIE);
@@ -738,14 +738,14 @@ html body .right {
     color: #0b73b4;
 }
 
-.company-info input[type="text"], input[type="password"],
+/*.company-info input[type="text"], input[type="password"],
 .personal-info input[type="text"], input[type="password"], .changePassword input[type="text"],
 .personal-info textarea {
     width: 95%;
 }
 .changePassword select {
     width: 100%;
-}
+}*/
 
 .dashboard-frame td.caption {
     width: 150px;
@@ -809,7 +809,7 @@ table.payment-schedule-table td{font-size: 16px;}
 .early-payment-form .radio .money { margin-left: 25px;}
 
 #profile-content .stores-view .next { display: none!important;}
-
+#profile-content .stores-view { width: 70%; }
 .cash-question h3{
     margin-top: 40px;
 }

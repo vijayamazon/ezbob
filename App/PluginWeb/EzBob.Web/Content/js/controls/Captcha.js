@@ -42,11 +42,12 @@ EzBob.SimpleCaptcha = Backbone.View.extend({
 									}) // attr
 									.addClass('form_field')
 							) // append to label
+			                .append(
+							$('<img />').addClass('field_status required').attr('id', 'CaptchaInputTextImage')
+						    )// append img
 					) // append to div
 						.append('<span>&nbsp;</span>')
-						.append(
-							$('<img />').addClass('field_status required').attr('id', 'CaptchaInputTextImage')
-						)
+						
 				); // replaceWith
 
 				that.$el.find('img.field_status').field_status({ required: true });

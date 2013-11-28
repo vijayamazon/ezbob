@@ -13,9 +13,12 @@
             <div class="clearfix">
                 @EzForm.InputText("ekm_login", "EKM Login", cls: "form_field", isRequired: true, statusIcon: true)
                 @EzForm.Password("ekm_password", "EKM Password", cls: "form_field", isRequired: true, statusIcon: true)
-                <div class="control-group clearfix" style="padding-right: 68px;">
-                    <a href="#" class="button orange connect-ekm disabled pull-right">Link Account</a>
-                    <a href="#" class="back button grey pull-right">Back</a>
+
+                <div class="form_buttons_container">
+                    <div class="attardi-button">
+                        <a href="#" class="button orange connect-ekm disabled pull-right">Link Account</a>
+                        <a href="#" class="back button grey pull-right">Back</a>
+                    </div>
                 </div>
             </div>
         </form>

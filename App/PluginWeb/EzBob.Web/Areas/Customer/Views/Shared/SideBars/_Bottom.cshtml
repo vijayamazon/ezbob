@@ -1,6 +1,6 @@
 ﻿@model dynamic
 
-<img src="@Url.Content("~/Content/css/images/live_help.jpg")" alt="Need help? Click here to use our live chat service" onclick="$('.lpchat-image').click()" style="cursor: pointer" />
+<img src="@Url.Content("~/Content/css/images/live_help.jpg")" alt="Need help? Click here to use our live chat service" onclick="$('.lpchat-image').click()" class="need-help-image" />
 
 <div style="margin: 10px 0; font-size: 16px;">
     <strong>Phone:</strong> 0800 011 4787<br>
@@ -12,7 +12,7 @@
 <br />
 <label>Protecting your data is our top priority. We use the highest level of encryption, and never see, have access to, or store any of your passwords.</label>
 <ul class="secure_icons">
-    <li>
+    <li class="lock-image">
         <img src="@Url.Content("~/Content/css/images/lock_64.png")" alt="Safe and Secure" />
     </li>
     <li class="verisign_seal">

@@ -260,16 +260,10 @@ ul.documents {
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
-    -moz-box-shadow: 0 0 10px #ccc;
-    -webkit-box-shadow: 0 0 10px #ccc;
-    box-shadow: 0 0 10px #ccc;
 }
 
 .source_header_on {
     background: #e8fcc6;
-    -moz-box-shadow: 0 0 10px #71a61f;
-    -webkit-box-shadow: 0 0 10px #71a61f;
-    box-shadow: 0 0 10px #71a61f;
 }
 
 .source_description {
@@ -483,7 +477,7 @@ div.shop-connected {
 }
 
 .FormRadioCtrl label {
-	display: inline;
+	display: inline-block;
 	font-weight: normal;
 	margin-left: 5px;
 }
@@ -1121,9 +1115,6 @@ a.amazonscreenshot {
 	top: 0;
 	left: 350px;
 	position: absolute;
-	-moz-box-shadow: 3px 3px 4px #000;
-	-webkit-box-shadow: 3px 3px 4px #000;
-	box-shadow: 3px 3px 4px #000;
 }
 
 a.amazonscreenshot:hover {

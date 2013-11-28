@@ -28,8 +28,9 @@
                         <label class="attardi-input">
                             <span>First name</span>
                             <input class="form_field" type="text" id="FirstName" name="FirstName" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.FirstName : '' %>" ui-event-control-id="personal-info:first_name" />
+                            <img id="FirstNameImage" class="field_status required" />
                         </label>
-                        <img id="FirstNameImage" class="field_status required" />
+                        
                     </div>
                 </div>
 
@@ -38,8 +39,9 @@
                         <label class="attardi-input">
                             <span>Middle name</span>
                             <input type="text" id="MiddleInitial" name="MiddleInitial" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.MiddleInitial : '' %>" class="form_field alphaOnly" ui-event-control-id="personal-info:middle_name" />
+                            <img id="MiddleNameImage" class="field_status empty" />
                         </label>
-                        <img id="MiddleNameImage" class="field_status empty" />
+                        
                     </div>
                 </div>
 
@@ -48,18 +50,20 @@
                         <label class="attardi-input">
                             <span>Surname</span>
                             <input id="Surname" type="text" name="Surname" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.Surname : '' %>" class="form_field"  ui-event-control-id="personal-info:last_name" />
+                            <img id="SurnameImage" class="field_status required" />
                         </label>
-                        <img id="SurnameImage" class="field_status required" />
+                        
                     </div>
                 </div>
                 <input type="hidden" name="Fullname" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.Fullname : '' %>" />
 
-                <div class="form_field_container FormRadioCtrl">
-                    <span>
+                <div class="form_field_container">
+                    <label class="attardi-input FormRadioCtrl">
                         <input type="radio" name="Gender" value="M" id="FormRadioCtrl_M" class="required" ui-event-control-id="personal-info:gender"><label for="FormRadioCtrl_M">Male</label>
                         <input type="radio" name="Gender" value="F" id="FormRadioCtrl_F" ui-event-control-id="personal-info:gender"><label for="FormRadioCtrl_F">Female</label>
-                    </span>
-                    <img id="GenderImage" class="field_status required" alt="" />
+                        <img id="GenderImage" class="field_status required" alt="" />
+                    </label>
+                    
                 </div>
 
                 @EzForm.DateInput("DateOfBirth", "Date of birth", required: true, statusIcon: true, uiEventControlID: "personal-info:birth_date")
@@ -76,8 +80,9 @@
                                 <option value="Widow/er">Widow/er</option>
                                 <option value="Other">Other</option>
                             </select>
+                            <img id="MaritalStatusImage" class="field_status required" />
                         </label>
-                        <img id="MaritalStatusImage" class="field_status required" />
+                        
                     </div>
                 </div>
 
@@ -95,8 +100,9 @@
                                 <option value="2">2 years</option>
                                 <option value="3">3 years or more</option>
                             </select>
+                            <img id="TimeAtAddressImage" class="field_status required" />
                         </label>
-                        <img id="TimeAtAddressImage" class="field_status required" />
+                        
                     </div>
                 </div>
 
@@ -112,8 +118,8 @@
                                 <option value="Renting">Renting</option>
                                 <option value="Living with parents">Living with parents</option>
                             </select>
+                            <img id="ResidentialStatusImage" class="field_status required" />
                         </label>
-                        <img id="ResidentialStatusImage" class="field_status required" />
                     </div>
                 </div>
 
@@ -129,8 +135,9 @@
                                     <option value="Yes">Yes, I own a property.</option>
                                     <option value="No">No, I don't own a property.</option>
                                 </select>
+                                <img id="OwnOtherPropertyImage" class="field_status required" />
                             </label>
-                            <img id="OwnOtherPropertyImage" class="field_status required" />
+                            
                         </div>
                     </div>
 
@@ -144,8 +151,9 @@
                         <label class="control-label attardi-input">
                             <span>Best contact number</span>
                             <input type="text" class="phonenumber form_field" id="DayTimePhone" name="DayTimePhone" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.DayTimePhone : '' %>"  ui-event-control-id="personal-info:daytime_phone" />
+                            <img id="DayTimePhoneImage" class="field_status required" />
                         </label>
-                        <img id="DayTimePhoneImage" class="field_status required" />
+                        
                     </div>
                 </div>
 
@@ -154,8 +162,8 @@
                         <label class="control-label attardi-input">
                             <span>Additional contact number</span>
                             <input type="text" class="phonenumber form_field" name="MobilePhone" id="MobilePhone" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.MobilePhone : '' %>"  ui-event-control-id="personal-info:mobile_phone" />
+                            <img id="MobilePhoneImage" class="field_status required" />
                         </label>
-                        <img id="MobilePhoneImage" class="field_status required" />
                     </div>
                 </div>
 
@@ -166,11 +174,13 @@
 					<label for="ConsentToSearch" class="editor-label-with-checkbox">I have read and accept the <a>terms and conditions</a> of the credit bureau search</label>
 				</div>
 			</div>
-		}
+            }
 		</div>
 
         <div class="form_buttons_container">
-            <a href="#" class="btn-continue button orange btn-next disabled continue" ui-event-control-id="personal-info:continue">Continue</a>
+            <div class="attardi-button">
+                <a href="#" class="btn-continue button orange btn-next disabled continue" ui-event-control-id="personal-info:continue">Continue</a>
+            </div>
         </div>
     </div>
 </script>
@@ -180,7 +190,7 @@
 		<h2 class="form_start">Company information</h2> 
 
 		@using (Html.BeginForm("SaveCompany", "CustomerDetails", new {Area = "Customer"}, FormMethod.Post, new {@class = "CompanyDetailForm"})) {
-			<div class="control-group typeOfBussiness form_field_container">
+		    <div class="control-group typeOfBussiness form_field_container">
 				<div class="controls">
 					<label class="attardi-input">
 						<span>Type of business</span>
@@ -193,28 +203,28 @@
 							<option value="Limited">Limited company</option>
 							<option value="LLP">LLP</option>
 						</select>
-					</label>
-					<img id="TypeOfBusinessImage" class="field_status required" />
+					    <img id="TypeOfBusinessImage" class="field_status required" />
+                    </label>
 				</div>
 			</div>
 
-			<div class="control-group form_field_container">
+		    <div class="control-group form_field_container">
 				<div class="controls cashControlls">
 					<label class="attardi-input">
 						<span>Total online sales (£)</span>
 						<input id="WebSiteTurnOver" name="WebSiteTurnOver" type="text" class="cashInput form_field" ui-event-control-id="personal-info:online_turnover" />
-					</label>
-					<img id="WebSiteTurnOverImage" class="field_status required" />
+					    <img id="WebSiteTurnOverImage" class="field_status required" />
+                    </label>
 				</div>
 			</div>
 
-			<div class="control-group form_field_container">
+		    <div class="control-group form_field_container">
 				<div class="controls cashControlls">
 					<label class="attardi-input">
 						<span>Total sales (online & offline in £)</span>
 						<input id="OverallTurnOver" name="OverallTurnOver" type="text" class="cashInput form_field" ui-event-control-id="personal-info:overall_turnover" />
-					</label>
-					<img id="OverallTurnOverImage" class="field_status required" />
+					    <img id="OverallTurnOverImage" class="field_status required" />
+                    </label>
 				</div>
 			</div>
 
@@ -250,8 +260,8 @@
             <label class="control-label attardi-input">
                 <span>Current # of employees</span>
                 <input id="EmployeeCount" name="EmployeeCount" type="text" class="form_field numeric" min="0" ui-event-control-id="personal-info:employee_count" />
+                <img id="EmployeeCountImage" class="field_status required" />
             </label>
-            <img id="EmployeeCountImage" class="field_status required" />
         </div>
     </div>
 
@@ -260,8 +270,8 @@
             <label class="control-label attardi-input">
                 <span># of earning (gross salary) over £41,450 per annum</span>
                 <input id="TopEarningEmployeeCount" name="TopEarningEmployeeCount" type="text" class="form_field numeric" min="0" ui-event-control-id="personal-info:top_earning_employee_count" />
+                <img id="TopEarningEmployeeCountImage" class="field_status required" />
             </label>
-            <img id="TopEarningEmployeeCountImage" class="field_status required" />
         </div>
     </div>
 
@@ -270,8 +280,8 @@
             <label class="control-label attardi-input">
                 <span># of earning (gross salary) less than £9,440 per annum</span>
                 <input id="BottomEarningEmployeeCount" name="BottomEarningEmployeeCount" type="text" class="form_field numeric" min="0" ui-event-control-id="personal-info:bottom_earning_employee_count" />
+                <img id="BottomEarningEmployeeCountImage" class="field_status required" />
             </label>
-            <img id="BottomEarningEmployeeCountImage" class="field_status required" />
         </div>
     </div>
 
@@ -293,8 +303,8 @@
                     <option value="4">Increased by 4</option>
                     <option value="5">Increased by 5 or more</option>
                 </select>
+                <img id="EmployeeCountChangeImage" class="field_status required" />
             </label>
-            <img id="EmployeeCountChangeImage" class="field_status required" />
         </div>
     </div>
 
@@ -303,8 +313,8 @@
             <label class="control-label attardi-input">
                 <span>Total monthly salary expenditure (inc tax & NI)</span>
                 <input id="TotalMonthlySalary" name="TotalMonthlySalary" type="text" class="form_field cashInput" ui-event-control-id="personal-info:total_monthly_salary" />
+                <img id="TotalMonthlySalaryImage" class="field_status required" />
             </label>
-            <img id="TotalMonthlySalaryImage" class="field_status required" />
         </div>
     </div>
 </script>
@@ -319,8 +329,8 @@
 			<label class="control-label attardi-input">
 				<span>Name</span>
 				<input id="NonLimitedCompanyName" name="NonLimitedCompanyName" type="text" class="form_field" ui-event-control-id="personal-info:nonlimited_company_name" />
-			</label>
-			<img id="NonLimitedCompanyNameImage" class="field_status required" />
+			    <img id="NonLimitedCompanyNameImage" class="field_status required" />
+            </label>
 		</div>
 	</div>
 
@@ -336,8 +346,8 @@
 					<option value="2">2 years</option>
 					<option value="3">More than 3 years</option>
 				</select>
-			</label>
-			<img id="NonLimitedTimeAtAddressImage" class="field_status required" />
+			    <img id="NonLimitedTimeAtAddressImage" class="field_status required" />
+            </label>
 		</div>
 	</div>
 
@@ -358,8 +368,8 @@
 					<option value="9">9 years</option>
 					<option value="101">More than 10 years</option>
 				</select>
-			</label>
-			<img id="NonLimitedTimeInBusinessImage" class="field_status required" />
+			    <img id="NonLimitedTimeInBusinessImage" class="field_status required" />
+            </label>
 		</div>
 	</div>
 
@@ -370,8 +380,8 @@
 			<label class="control-label attardi-input">
 				<span>Business phone</span>
 				<input id="NonLimitedBusinessPhone" name="NonLimitedBusinessPhone" type="text" class="form_field phonenumber" ui-event-control-id="personal-info:nonlimited_phone_number" />
-			</label>
-			<img id="NonLimitedBusinessPhoneImage" class="field_status required" />
+			    <img id="NonLimitedBusinessPhoneImage" class="field_status required" />
+            </label>
 		</div>
 	</div>
 
@@ -388,8 +398,8 @@
 			<label class="control-label attardi-input">
 				<span>Registration #</span>
 				<input id="LimitedCompanyNumber" name="LimitedCompanyNumber" type="text" class="form_field" ui-event-control-id="personal-info:limited_company_number" />
-			</label>
-			<img id="LimitedCompanyNumberImage" class="field_status required" />
+			    <img id="LimitedCompanyNumberImage" class="field_status required" />
+            </label>
 		</div>
 	</div>
 
@@ -398,8 +408,8 @@
 			<label class="control-label attardi-input">
 				<span>Name</span>
 				<input id="LimitedCompanyName" name="LimitedCompanyName" type="text" class="form_field" ui-event-control-id="personal-info:limited_company_name" />
-			</label>
-			<img id="LimitedCompanyNameImage" class="field_status required" />
+			    <img id="LimitedCompanyNameImage" class="field_status required" />
+            </label>
 		</div>
 	</div>
 
@@ -412,8 +422,8 @@
 			<label class="control-label attardi-input">
 				<span>Business phone</span>
 				<input id="LimitedBusinessPhone" name="LimitedBusinessPhone" type="text" class="form_field phonenumber" ui-event-control-id="personal-info:limited_phone_number" />
-			</label>
-			<img id="LimitedBusinessPhoneImage" class="field_status required" />
+			    <img id="LimitedBusinessPhoneImage" class="field_status required" />
+            </label>
 		</div>
 	</div>
 
@@ -438,8 +448,8 @@
                         <option value="true">Yes</option>
                         <option value="false">No</option>
                     </select>
+                    <img id="@string.Format("{0}{1}", prefix, "PropertyOwnedByCompanyImage")" class="field_status required" />
                 </label>
-                <img id="@string.Format("{0}{1}", prefix, "PropertyOwnedByCompanyImage")" class="field_status required" />
             </div>
         </div>
 
@@ -453,8 +463,8 @@
                         <option value="2">2 years</option>
                         <option value="3">More than 3 years</option>
                     </select>
+                    <img id="@string.Format("{0}{1}", prefix, "YearsInCompanyImage")" class="field_status required" />
                 </label>
-                <img id="@string.Format("{0}{1}", prefix, "YearsInCompanyImage")" class="field_status required" />
             </div>
         </div>
 
@@ -469,8 +479,8 @@
                         <option value="12-24">12-24 months</option>
                         <option value="24+">More than 24 months</option>
                     </select>
+                    <img id="@string.Format("{0}{1}", prefix, "RentMonthsLeftImage")" class="field_status required" />
                 </label>
-                <img id="@string.Format("{0}{1}", prefix, "RentMonthsLeftImage")" class="field_status required" />
             </div>
         </div>
     </div>
@@ -494,8 +504,8 @@
                     <label class="control-label attardi-input">
                         <span>Name</span>
                         <input class="form_field director_name_part" id="<%-preffix%>[<%=i%>].Name" name="<%-preffix%>[<%=i%>].Name" type="text" value="<%- director.Name %>" ui-event-control-id="personal-info:director_first_name" />
+                        <img id="<%-preffix%>[<%=i%>].NameImage" class="field_status required" />
                     </label>
-                    <img id="<%-preffix%>[<%=i%>].NameImage" class="field_status required" />
                 </div>
             </div>
 
@@ -504,8 +514,8 @@
                     <label class="control-label attardi-input">
                         <span>Middle initial</span>
                         <input class="form_field director_name_part nonrequired alphaOnly" id="<%-preffix%>[<%=i%>].Middle" name="<%-preffix%>[<%=i%>].Middle" type="text" value="<%- director.Middle %>" ui-event-control-id="personal-info:director_middle_name" />
+                        <img id="<%-preffix%>[<%=i%>].MiddleImage" class="field_status" />
                     </label>
-                    <img id="<%-preffix%>[<%=i%>].MiddleImage" class="field_status" />
                 </div>
             </div>
 
@@ -514,8 +524,8 @@
                     <label class="control-label attardi-input">
                         <span>Surname</span>
                         <input class="form_field director_surname_part" id="<%-preffix%>[<%=i%>].Surname" name="<%-preffix%>[<%=i%>].Surname" type="text" value="<%- director.Surname %>" ui-event-control-id="personal-info:director_last_name" />
+                        <img id="<%-preffix%>[<%=i%>].SurnameImage" class="field_status required" />
                     </label>
-                    <img id="<%-preffix%>[<%=i%>].SurnameImage" class="field_status required" />
                 </div>
             </div>
 
@@ -534,8 +544,8 @@
                     <label class="control-label attardi-input">
                         <span>Email</span>
                         <input class="form_field director_email" id="<%-preffix%>[<%=i%>].Email" name="<%-preffix%>[<%=i%>].Email" type="email" value="<%- director.Email %>" ui-event-control-id="personal-info:director_email" />
+                        <img id="<%-preffix%>[<%=i%>].EmailImage" class="field_status required" />
                     </label>
-                    <img id="<%-preffix%>[<%=i%>].EmailImage" class="field_status required" />
                 </div>
             </div>
 
@@ -544,8 +554,8 @@
                     <label class="control-label attardi-input">
                         <span>Best contact number</span>
                         <input class="form_field director_phone phonenumber" id="<%-preffix%>[<%=i%>].Phone" name="<%-preffix%>[<%=i%>].Phone" type="text" value="<%- director.Phone %>" ui-event-control-id="personal-info:director_phone" />
+                        <img id="<%-preffix%>[<%=i%>].PhoneImage" class="field_status required" />
                     </label>
-                    <img id="<%-preffix%>[<%=i%>].PhoneImage" class="field_status required" />
                 </div>
             </div>
 

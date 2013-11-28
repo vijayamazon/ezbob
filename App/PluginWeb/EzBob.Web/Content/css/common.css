@@ -99,12 +99,6 @@ ul.storelist li span {
     word-wrap: break-word;
 }
 
-#ekmAccount input[type="text"], #ekmAccount input[type="password"],
-#payPointAccount input[type="text"], #payPointAccount input[type="password"], #payPointAccount input[type="password"] { width: 245px; }
-
-.cg-link-account-form input[type="text"],
-.cg-link-account-form input[type="password"] { width: 400px; }
-
 .eu_explanation { width: 607px; margin-top: 20px; }
 
 .field-validation-error { display: block; font-weight: bold;}
@@ -115,17 +109,21 @@ ul.storelist li span {
 
 .ui-dialog {
     -moz-background-clip: padding-box;
-    -moz-border-radius: 6px;
-    -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
     -webkit-background-clip: padding-box;
-    -webkit-border-radius: 6px;
-    -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
     background-clip: padding-box;
+    
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    
     border: 1px solid #999;
     border: 1px solid rgba(0, 0, 0, 0.3);
     *border: 1px solid #999;
-    border-radius: 6px;
+    
+    -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
     box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+    
     outline: none;
 }
 

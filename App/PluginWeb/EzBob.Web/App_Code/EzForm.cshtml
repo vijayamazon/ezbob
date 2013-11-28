@@ -49,35 +49,36 @@
             <label class="attardi-input">
                 <span>@caption</span>
                 <input 
-                type="@type" 
-                name="@identificator" 
-                id="@identificator" 
-                class="@cls" 
-                value="@val"
-                @if (isDisabled)
-                { 
-                    @:disabled="disabled"
-                } 
-                @if (tabIndex > 0)
+                    type="@type" 
+                    name="@identificator" 
+                    id="@identificator" 
+                    class="@cls" 
+                    value="@val"
+                    @if (isDisabled)
+                    { 
+                        @:disabled="disabled"
+                    } 
+                    @if (tabIndex > 0)
+                    {
+                        @:tabindex="@tabIndex"
+                    }
+                    @if (maxLength > 0)
+                    {
+                        @:maxlength="@maxLength"
+                    }
+                    />
+                @if (statusIcon)
                 {
-                    @:tabindex="@tabIndex"
+                    var sId = identificator + "Image";
+                    var sReq = isRequired ? "required" : "";
+                    <img id="@sId" class="field_status @sReq"/>
                 }
-                @if (maxLength > 0)
+                else if (isRequired)
                 {
-                    @:maxlength="@maxLength"
+                    <span class="required">*</span>
                 }
-                />
             </label>
-            @if (statusIcon)
-            {
-                var sId = identificator + "Image";
-                var sReq = isRequired ? "required" : "";
-                <img id="@sId" class="field_status @sReq"/>
-            }
-            else if (isRequired)
-            {
-                <span class="required">*</span>
-            }
+            
         </div>
     </div>
 }
@@ -115,18 +116,17 @@
             <label class="attardi-input">
                 <span>@caption</span>
                 <input 
-                type="password" 
-                name="@identificator" 
-                id="@identificator" 
-                class="@cls" 
-                value="@val"
-                @if (isDisabled)
-                { 
-                    @:disabled="disabled"
-                } 
-                />
-            </label>
-            @if (statusIcon)
+                    type="password" 
+                    name="@identificator" 
+                    id="@identificator" 
+                    class="@cls" 
+                    value="@val"
+                    @if (isDisabled)
+                    { 
+                        @:disabled="disabled"
+                    } 
+                    />
+                @if (statusIcon)
             {
                 var sId = identificator + "Image";
                 var sReq = isRequired ? "required" : "";
@@ -136,6 +136,7 @@
             {
                 <span class="required">*</span>
             }
+            </label>
         </div>
     </div>
 }
@@ -352,30 +353,32 @@
 
 			<label class="attardi-input">
 				<span>Year</span>
-				<select id='@yearIdentificator' name="year" class="selectheight form_field form_field_date @css" empty_value="-" @sYearUiEventControlID>
-					<option value="-"></option>
-					@{
-						var minYear = (minMaxDefaultDate == null) ? 1900 : minMaxDefaultDate[0].Year;
-						var maxYear = (minMaxDefaultDate == null) ? DateTime.Now.Year - 18 : minMaxDefaultDate[1].Year;
-						for (var i = minYear; i <= maxYear; i++) {
-							<option
-								@if (minMaxDefaultDate != null && minMaxDefaultDate[2].Year == i) {
-									@:selected="selected"
-								}
-								value="@i"
-							>@i</option>
-						}
-					}
-				</select>
-			</label>
+			    <select id='@yearIdentificator' name="year" class="selectheight form_field form_field_date @css" empty_value="-" @sYearUiEventControlID>
+			        <option value="-"></option>
+			        @{
+			            var minYear = (minMaxDefaultDate == null) ? 1900 : minMaxDefaultDate[0].Year;
+			            var maxYear = (minMaxDefaultDate == null) ? DateTime.Now.Year - 18 : minMaxDefaultDate[1].Year;
+			            for (var i = minYear; i <= maxYear; i++) {
+			                <option
+			                    @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Year == i) {
+			                        @:selected="selected"
+			                    }
+			                    value="@i"
+			                    >@i</option>
+			            }
+			        }
+			    </select>
 			<input id="@identificator" class="@identificator @validationClass hidden-field @hiddenFieldAuxClass" style="display: none !important" name="@identificator"/>
-
-            @if (statusIcon)
+                @if (statusIcon)
             {
                 var sReq = required ? "required" : "";
                 var sId = new HtmlString(identificator + "Image");
                 <img id="@sId" class="field_status @sReq"/>
             }
+			</label>
+			<input id="@identificator" class="@identificator @validationClass hidden-field" style="display: none !important" name="@identificator"/>
+
+            
 		</div>
 	</div>
 }

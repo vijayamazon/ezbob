@@ -29,10 +29,12 @@
 
 				@{ WriteLiteral(string.Join("", vi.ClientSide.LinkForm.Notes)); }
 
-				<div class="control-group clearfix" style="padding-right: 68px;">
-					<a href="#" class="button orange disabled pull-right connect-account">Link Account</a>
-					<a href="#" class="back button grey pull-right">Back</a>
-				</div>
+				<div class="form_buttons_container">
+                    <div class="attardi-button">
+					    <a href="#" class="button orange disabled pull-right connect-account">Link Account</a>
+					    <a href="#" class="back button grey pull-right">Back</a>
+				    </div>
+                </div>
         
                 @if (@vi.DisplayName == "HMRC")
                 {

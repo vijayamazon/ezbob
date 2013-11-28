@@ -9,9 +9,6 @@
 	background: linear-gradient(to bottom,  #ffffff 0%,#e5e5e5 100%);
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr = '#ffffff', endColorstr = '#e5e5e5', GradientType = 0);
 	border: 1px #ccc solid;
-	-moz-box-shadow: 0 0 10px #ccc;
-	-webkit-box-shadow: 0 0 10px #ccc;
-	box-shadow: 0 0 10px #ccc;
 	padding: 10px;
 	position: relative;
 	border-radius: 8px;

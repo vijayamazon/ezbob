@@ -180,12 +180,14 @@ ul.contact_icons li.chat{ background-position: 0 -48px;}
 ul.secure_icons{list-style:none; margin:40px 0 20px 0; padding:0; overflow:hidden; width: 100%;}
 ul.secure_icons li{margin:0 0 10px 0; float:left;}
 ul.secure_icons li a{height:70px; display:block; text-indent: -9999px;}
-ul.secure_icons li.truste_seal{ width: 93px;}
+ul.secure_icons li.truste_seal{ width: 30%; }
 ul.secure_icons li.truste_seal a{width:142px; height: 70px; /*background:url(../img/logo-truste.png) no-repeat 0 0; */}
-ul.secure_icons li.verisign_seal{background:url(images/verisign_seal.gif) no-repeat; background-size: 93px auto;}
+ul.secure_icons li.verisign_seal{background:url(images/verisign_seal.gif) no-repeat; background-size: contain; width: 40%}
 ul.secure_icons li a img{ display: inherit; border: none;width:93px;}
 ul.secure_icons li.truste_seal a img{ margin-top: 12px;}
+ul.secure_icons li.lock-image{ width: 25%;}
 
+.need-help-image{ cursor: pointer;width: 100%; }
 .security_header_style {
     color: #0064d2;
     font-size: 20px;
@@ -196,7 +198,7 @@ ul.eu_icon{list-style:none; margin:130px 0 20px 0; padding:0; overflow:hidden;wi
 ul.eu_icon li{margin:0 0 10px 0;float: left;}
 ul.eu_icon li img{ width: 110px; }
 ul.eu_icon li label{color: navy; font-size: 20px; }
-ul.eu_icon li.textli{ margin: 0 0 0 10px;}
+ul.eu_icon li.textli{ margin: 0 0 0 10%;}
 ul.eu_icon li label.upper{ margin: 10px 0 0 0;}
 ul.eu_icon li label.lower{ margin: -10px 0 10px 0;}
 
@@ -251,22 +253,30 @@ span.required {
 	margin-top: -0.6em;
 }
 
-input.form_field, textarea.form_field { width: 560px; }
+input, select, textarea {
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+}
+
+input.form_field, textarea.form_field { width: 90%; }
 
 input.form_field { height: 36px !important; font-size: 16px !important; font-weight: normal!important;}
 
 textarea.form_field_address { height: auto !important; margin-top: 1em; resize: none; }
 
-div.form_read_and_accept { width: 410px; }
+div.form_read_and_accept { width: 90%; }
 
-select.form_field { width: 570px; height: 38px; padding: 4px; }
+select.form_field { width: 90%; height: 38px; padding: 4px; }
 
-select.form_field_date { width: 190px; height: 36px; padding: 0; }
+select.form_field_date { width: 70%; }
 
 div.form_field_container { margin-bottom: 1.6em; }
 
-input.form_field_address { width: 405px; }
-input.form_field_address_lookup { width: 150px; }
+input.form_field_address { width: 60%; }
+
+input.form_field_address_lookup { width: 26%; }
+
 
 /*----table for payment schedule-----*/
 table.table{width:100%;border-left:1px #ccc solid; border-top:1px #ccc solid;

@@ -27,52 +27,49 @@
 	<div class="form_field_container">
 		<label class="attardi-input">
 			<span>Email address</span>
-			<input type="email" name="Email" id="Email" tabindex="1" class="form_field" ui-event-control-id="signup:email" />
+		    <input type="email" name="Email" id="Email" tabindex="1" class="form_field" ui-event-control-id="signup:email" />
+            <img id="EmailImage" class="field_status required"/>
 		</label>
-		<img id="EmailImage" class="field_status required"/>
 	</div>
 
 	<div id="strength-password-view" class="form_field_container">
 		<label class ="attardi-input">
 			<span>Password</span>
-			<input type="password" tabindex="2" class="form_field" name="signupPass1" id="signupPass1" ui-event-control-id="signup:password1" />
+		    <input type="password" tabindex="2" class="form_field" name="signupPass1" id="signupPass1" ui-event-control-id="signup:password1" />
+            <img id="Password1Image" class="field_status required"/>
 		</label>
-		<img id="Password1Image" class="field_status required"/>
 		<p id="message" class="help-block"></p>
 	</div>
 
 	<div class="form_field_container">
 		<label class ="attardi-input">
 			<span>Confirm password</span>
-			<input type="password" tabindex="3" class="form_field" name="signupPass2" id="signupPass2" ui-event-control-id="signup:password2" />
+		    <input type="password" tabindex="3" class="form_field" name="signupPass2" id="signupPass2" ui-event-control-id="signup:password2" />
+            <img id="Password2Image" class="field_status required"/>
 		</label>
-		<img id="Password2Image" class="field_status required"/>
 	</div>
     
     <div class="form_field_container">
-		<!-- Don't remove the SPAN, its job is to display box-shadow and nothing else. -->
-		<span class="inform">
-			<label class="attardi-input">
-				<span>Secret question</span>
-				<select name="securityQuestion" id="securityQuestion" tabindex="4" class="form_field" ui-event-control-id="signup:security_question">
-					<option value=""></option>
-					@if (securityQuestions != null) {
-						foreach (var item in securityQuestions) {
-							<option value="@item.Id">@item.Name</option>
-						} // foreach
-					} // if
-				</select>
-			</label>
-		</span>
-		<img id="SecurityQuestionImage" class="field_status required" />
+		<label class="attardi-input">
+			<span>Secret question</span>
+			<select name="securityQuestion" id="securityQuestion" tabindex="4" class="form_field" ui-event-control-id="signup:security_question">
+			    <option value=""></option>
+			    @if (securityQuestions != null) {
+			        foreach (var item in securityQuestions) {
+			            <option value="@item.Id">@item.Name</option>
+			        } // foreach
+			    } // if
+			</select>
+            <img id="SecurityQuestionImage" class="field_status required" />
+		</label>
 	</div>
 
     <div class="form_field_container">
         <label class="attardi-input">
             <span>Secret answer</span>
             <input type="text" name="SecurityAnswer" id="SecurityAnswer" tabindex="5" class="form_field" ui-event-control-id="signup:security-answer" />
+            <img id="SecretAnswerImage" class="field_status required"/>
         </label>
-        <img id="SecretAnswerImage" class="field_status required"/>
     </div>
     
     if (isOffline)
@@ -83,62 +80,58 @@
             <label class="attardi-input">
                 <span>Requested loan amount</span>
                 <input type="text" name="amount" id="amount" tabindex="6" class="form_field" ui-event-control-id="signup:requested-amount" />
+                <img id="amountImage" class="field_status"/>
             </label>
-            <img id="amountImage" class="field_status"/>
         </div>
 
         <div class="form_field_container">
-            <span class="inform">
-                <label class="attardi-input">
-                    <span>Reason</span>
-                    <select name="customerReason" id="customerReason" tabindex="7" class="form_field" ui-event-control-id="signup:reason-list">
-                        <option value=""></option>
-                        @if (customerReason != null)
+            <label class="attardi-input">
+                <span>Reason</span>
+                <select name="customerReason" id="customerReason" tabindex="7" class="form_field" ui-event-control-id="signup:reason-list">
+                    <option value=""></option>
+                    @if (customerReason != null)
+                    {
+                        foreach (var item in customerReason)
                         {
-                            foreach (var item in customerReason)
-                            {
-                                <option value="@item.Id">@item.Reason</option>
-                            } // foreach
-                        } // if
-                    </select>
-                </label>
-            </span>
-            <img id="customerReasonImage" class="field_status required" />
+                            <option value="@item.Id">@item.Reason</option>
+                        } // foreach
+                    } // if
+                </select>
+                <img id="customerReasonImage" class="field_status required" />
+            </label>
         </div>
 
         <div class="form_field_container hide" id="otherReasonDiv">
             <label class="attardi-input">
                 <span>Other reason</span>
                 <input type="text" name="otherCustomerReason" id="otherCustomerReason" tabindex="8" class="form_field" ui-event-control-id="signup:other-reason" />
+                <img id="otherReasonImage" class="field_status required"/>
             </label>
-            <img id="otherReasonImage" class="field_status required"/>
         </div>
 
         <div class="form_field_container">
-            <span class="inform">
-                <label class="attardi-input">
-                    <span>Source of repayment</span>
-                    <select name="customerSourceOfRepayment" id="customerSourceOfRepayment" tabindex="9" class="form_field" ui-event-control-id="signup:repayment-source-list">
-                        <option value=""></option>
-                        @if (customerSourceOfRepayment != null)
+            <label class="attardi-input">
+                <span>Source of repayment</span>
+                <select name="customerSourceOfRepayment" id="customerSourceOfRepayment" tabindex="9" class="form_field" ui-event-control-id="signup:repayment-source-list">
+                    <option value=""></option>
+                    @if (customerSourceOfRepayment != null)
+                    {
+                        foreach (var item in customerSourceOfRepayment)
                         {
-                            foreach (var item in customerSourceOfRepayment)
-                            {
-                                <option value="@item.Id">@item.SourceOfRepayment</option>
-                            } // foreach
-                        } // if
-                    </select>
-                </label>
-            </span>
-            <img id="customerSourceOfRepaymentImage" class="field_status required" />
+                            <option value="@item.Id">@item.SourceOfRepayment</option>
+                        } // foreach
+                    } // if
+                </select>
+                <img id="customerSourceOfRepaymentImage" class="field_status required" />
+            </label>
         </div>
 
         <div class="form_field_container hide" id="otherSourceDiv">
             <label class="attardi-input">
                 <span>Other source of repayment</span>
                 <input type="text" name="otherCustomerSourceOfRepayment" id="otherCustomerSourceOfRepayment" tabindex="10" class="form_field" ui-event-control-id="signup:other-repayment-source" />
+                <img id="otherCustomerSourceOfRepaymentImage" class="field_status required"/>
             </label>
-            <img id="otherCustomerSourceOfRepaymentImage" class="field_status required"/>
         </div>
     }
     else
@@ -147,8 +140,8 @@
             <label class ="attardi-input">
                 <span>Promotional code (optional)</span>
                 <input type="text" class="form_field" name="promoCode" id="promoCode" ui-event-control-id="signup:promo-code"/>
+                <img id="promoCodeImage" class="field_status"/>
             </label>
-            <img id="promoCodeImage" class="field_status"/>
         </div>
     }
     
@@ -156,7 +149,11 @@
 		@EzForm.Captcha(captchamode)
 	</div>
 
-	<div class="form_buttons_container"><input type="submit" id="signupSubmitButton" value="Continue" class="button orange continue disabled" tabindex="12" ui-event-control-id="signup:submit"></div>
+    <div class="form_buttons_container">
+        <div class="attardi-button">
+            <input type="submit" id="signupSubmitButton" value="Continue" class="button orange continue disabled" tabindex="12" ui-event-control-id="signup:submit">
+        </div>
+    </div>
 
     if (isOffline && instructionsEnabled) {
 		<div class="hide">
