@@ -1,50 +1,52 @@
 ﻿.attardi-input, .attardi-button {
-	position: relative;
-	display: inline-block;
-	margin: 0 !important;
-    width: 90%;
+    position: relative;
+    display: inline-block;
+    margin: 0 !important;
+    width: 100%;
 }
 
-.attardi-input span {
-	font-weight: normal;
-	position: absolute;
-	padding: 8px;
-	margin-left: 3px;
-	color: #999;
-	z-index: 1;
-	cursor: text;
-	pointer-events: none;
-	font-size: 16px;
-}
+    .attardi-input span {
+        font-weight: normal;
+        position: absolute;
+        padding: 8px;
+        margin-left: 3px;
+        color: #999;
+        z-index: 1;
+        cursor: text;
+        pointer-events: none;
+        font-size: 16px;
+    }
 
-.attardi-input span.active { color: #ccc !important; }
+        .attardi-input span.active {
+            color: #ccc !important;
+        }
 
-.attardi-input span.attardi-has-data {
-	bottom: 24px;
-	left: -10px;
-	color: #4c4c4c !important;
-	font-size: 70%;
-}
+        .attardi-input span.attardi-has-data {
+            bottom: 24px;
+            left: -10px;
+            color: #4c4c4c !important;
+            font-size: 70%;
+        }
 
 .profile-widgets .attardi-input span.attardi-has-data,
 .bank-account .attardi-input span.attardi-has-data,
-.paypont-form .attardi-input span.attardi-has-data{
+.paypont-form .attardi-input span.attardi-has-data {
     height: 18px;
 }
 
 .attardi-input input:not([type='button']), .attardi-input textarea {
-	z-index: 0;
-	padding: 0 4px;
-	margin: 0;
-	font: inherit;
-	border: 1px solid #999999;
+    z-index: 0;
+    padding: 0 4px;
+    margin: 0;
+    font: inherit;
+    border: 1px solid #999999;
 }
 
 .attardi-input select {
-	z-index: 0;
-	margin: 0;
-	/*font: inherit;*/
-	border: 1px solid #999999;
+    z-index: 0;
+    margin: 0;
+    /*font: inherit;*/
+    border: 1px solid #999999;
 }
 
 .ezDateTime .attardi-input {
