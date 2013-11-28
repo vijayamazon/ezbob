@@ -8,14 +8,17 @@
 		function Body_OnLoad() {
 			document.getElementById('ok').onclick = function () {
 				document.getElementById('model').value = JSON.stringify(window.parent[document.getElementById('modelkey').value]());
-				document.getElementById('upload').submit();
-			};
+
+				var oForm = document.getElementById('upload');
+
+				oForm.action = "@{ WriteLiteral(ViewData["handler"]); }";
+				oForm.submit();
+			}; // on ok
 
 			document.getElementById('cancel').onclick = function() {
 				var oResult = { error: '' };
-
 				window.parent.@{ WriteLiteral(ViewData["key"]); }(JSON.stringify(oResult));
-			};
+			}; // on cancel
 		} // Body_OnLoad
 	</script>
 	
@@ -38,7 +41,7 @@
 		<dd><strong>Printed copy of submitted VAT return for your records</strong></dd>
 	</dl>
 
-	<form id=upload action="@{ WriteLiteral(ViewData["handler"]); }" method="POST" enctype="multipart/form-data">
+	<form id=upload method="POST" enctype="multipart/form-data">
 		<input type="file" name="file0" class="upload-file-name" />
 		<input type="file" name="file1" class="upload-file-name" />
 		<input type="file" name="file2" class="upload-file-name" />
@@ -49,8 +52,8 @@
 
 		<input type="hidden" name="model" id="model" />
 
-		<button id="cancel" class="button grey pull-right">Cancel</button>
-		<button id="ok" class="orange button pull-right">Submit files</button>
+		<button type="button" id="cancel" class="button grey pull-right">Cancel</button>
+		<button type="button" id="ok" class="orange button pull-right">Submit files</button>
 	</form>
 </body>
 </html>

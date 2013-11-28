@@ -456,7 +456,7 @@
 				"UploadFilesHandler": "HandleUploadedHmrcVatReturn",
 				"Notes": [
 					"<p><strong>Don't have an online HMRC account? Upload your VAT return reports</strong></p>",
-					"<div><button class=\"upload-files button orange\">Upload</button></div>"
+					"<div><input type=\"button\" class=\"upload-files button orange\" value=\"Upload\"></div>"
 				],
 				"OnBeforeLink": [
 					"if (bUploadMode) {",
