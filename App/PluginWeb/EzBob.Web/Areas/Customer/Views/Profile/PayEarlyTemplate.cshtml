@@ -107,7 +107,7 @@
                         <label class="radio inline-block-margin input-medium <%-loansClass%> other-amount-label w100p" <%-loanPaymentTypeDisabled%> <%=loanPaymentTypeHidden%> >
                             <input <%-loanPaymentTypeDisabled%> type="radio" name="loanPaymentType" value="other" <%-loanPaymentType=='other' && isPayLoan ? 'checked="checked"' : ''%>  />
                             Another Amount:
-                            <input type="text" class="money w70 bold" <%=loanPaymentTypeHidden%> name="paymentAmount" <%-loanPaymentType!='other' ? 'readonly="readonly"' : ''%> value="<%-EzBob.formatPounds(amount)%>" />
+                            <input type="text" class="money s84 bold" <%=loanPaymentTypeHidden%> name="paymentAmount" <%-loanPaymentType!='other' ? 'readonly="readonly"' : ''%> value="<%-EzBob.formatPounds(amount)%>" />
                         </label>
                     </div>
 
@@ -137,7 +137,7 @@
                         <label class="radio inline-block-margin input-medium lot-of-loans other-amount-label w100p" <%-rolloverDisabled%> <%=rolloverIsHided%> >
                             <input <%-rolloverDisabled%> type="radio" name="rolloverPaymentType" value="other"  <%-rolloverPaymentType=='other' ? 'checked="checked"' : ''%>/>
                             Another Amount:
-                        <input type="text" <%=rolloverAnotherAmountDisabled%> class="money w70 bold" <%=rolloverIsHided%> name="rolloverAmount" value="<%-EzBob.formatPounds(amount)%>" />
+                        <input type="text" <%=rolloverAnotherAmountDisabled%> class="money s84 bold" <%=rolloverIsHided%> name="rolloverAmount" value="<%-EzBob.formatPounds(amount)%>" />
                         </label>
                     </div>
 
