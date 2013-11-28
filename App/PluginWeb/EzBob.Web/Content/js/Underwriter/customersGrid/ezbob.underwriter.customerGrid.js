@@ -81,7 +81,6 @@
       return $(list)[0].triggerToolbar();
     });
     isTestCheckbox = settings.$el.find("#show-test-customers");
-    console.log("isTestCheckbox", isTestCheckbox);
     isTestCheckbox.on("change", function() {
       var isTest;
       isTest = isTestCheckbox.is(":checked");
@@ -95,7 +94,6 @@
     });
     isTestCheckbox.on("reload", function() {
       var isTest;
-      console.log("isTestCheckbox reload", isTestCheckbox);
       isTest = isTestCheckbox.is(":checked");
       EzBob.Config.isTest = isTest;
       $(list).jqGrid("setGridParam", {
@@ -108,7 +106,6 @@
     showAllCheckbox = settings.$el.find("#show-all-customers");
     showAllCheckbox.on("change", function() {
       var showAll;
-      console.log("showAllCheckbox change", showAllCheckbox);
       showAll = showAllCheckbox.is(":checked");
       EzBob.Config.showAll = showAll;
       if (showAll) {
@@ -120,7 +117,6 @@
     });
     showAllCheckbox.on("reload", function() {
       var showAll;
-      console.log("showAllCheckbox reload", showAllCheckbox);
       showAll = showAllCheckbox.is(":checked");
       EzBob.Config.showAll = showAll;
       $(list).jqGrid("setGridParam", {

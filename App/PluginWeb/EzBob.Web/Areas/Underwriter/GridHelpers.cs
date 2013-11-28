@@ -467,8 +467,8 @@ namespace EzBob.Web.Areas.Underwriter
 			gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
 			{
 				Caption = "User Status",
-				Name = "WizardStep",
-				Index = "WizardStep",
+				Name = "WizardStepType",
+				Index = "WizardStepType",
 				Resizable = false,
 				Align = Align.Center,
 				Title = false,
@@ -476,7 +476,7 @@ namespace EzBob.Web.Areas.Underwriter
 				Fixed = false,
 				Search = false,
 				Width = 87,
-				DataType = TypeCode.Boolean,
+				DataType = TypeCode.String,
 				Data = x => x.WizardStep.TheLastOne ? "credit calculation" : "registered"
 			});
 		}
@@ -526,8 +526,8 @@ namespace EzBob.Web.Areas.Underwriter
 			gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
 			{
 				Caption = "Wizard Step",
-				Name = "WizardStep",
-				Index = "WizardStep",
+				Name = "WizardStepType",
+				Index = "WizardStepType",
 				Resizable = false,
 				Align = Align.Center,
 				Title = false,
@@ -535,8 +535,8 @@ namespace EzBob.Web.Areas.Underwriter
 				Fixed = false,
 				Search = false,
 				Width = 95,
-				DataType = TypeCode.Int32,
-				Data = x => x.WizardStep.TheLastOne ? "Passed" : x.WizardStep.ID.ToString()
+				DataType = TypeCode.String,
+				Data = x => x.WizardStep.TheLastOne ? "Passed" : x.WizardStep.Name
 			});
 		}
 
