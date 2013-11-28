@@ -52,3 +52,7 @@
 .ezDateTime .attardi-input {
     width: 26.85%;
 }
+
+.director-birth-date {
+    width: 24% !important;
+}
