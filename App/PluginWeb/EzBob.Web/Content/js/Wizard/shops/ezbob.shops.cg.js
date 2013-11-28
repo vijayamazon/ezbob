@@ -1,38 +1,12 @@
 ﻿(function() {
   var root,
+    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
   root = typeof exports !== "undefined" && exports !== null ? exports : this;
 
   root.EzBob = root.EzBob || {};
-
-  EzBob.CGAccountButtonView = (function(_super) {
-
-    __extends(CGAccountButtonView, _super);
-
-    function CGAccountButtonView() {
-      return CGAccountButtonView.__super__.constructor.apply(this, arguments);
-    }
-
-    CGAccountButtonView.prototype.initialize = function(options) {
-      return CGAccountButtonView.__super__.initialize.call(this, {
-        name: options.accountType,
-        logoText: '',
-        shops: this.model
-      });
-    };
-
-    CGAccountButtonView.prototype.update = function() {
-      return this.model.fetch().done(function() {
-        return EzBob.App.trigger('ct:storebase.shop.connected');
-      });
-    };
-
-    return CGAccountButtonView;
-
-  })(EzBob.StoreButtonView);
 
   EzBob.CGAccountInfoView = (function(_super) {
 
@@ -162,9 +136,10 @@
       return false;
     };
 
-    CGAccountInfoView.prototype.uploadFiles = function() {
+    CGAccountInfoView.prototype.uploadFiles = function(evt) {
       var oVendorInfo, sKey, sModelKey,
         _this = this;
+      evt.preventDefault();
       sKey = 'f' + (new Date()).getTime() + 'x' + Math.floor(Math.random() * 1000000000);
       sModelKey = 'model' + (new Date()).getTime() + 'x' + Math.floor(Math.random() * 1000000000);
       while (window[sKey]) {
@@ -199,7 +174,7 @@
         iframe.setAttribute('height', 515);
         return iframe.setAttribute('src', ("" + window.gRootPath + "Customer/CGMarketPlaces/UploadFilesDialog?key=") + sKey + "&handler=" + oVendorInfo.ClientSide.LinkForm.UploadFilesHandler + '&modelkey=' + sModelKey);
       });
-      return this.uploadFileDlg = this.$el.find('div#upload-files-form').dialog({
+      this.uploadFileDlg = this.$el.find('div#upload-files-form').dialog({
         height: 600,
         width: 600,
         modal: true,
@@ -208,6 +183,7 @@
         dialogClass: 'upload-files-dialog',
         closeOnEscape: false
       });
+      return false;
     };
 
     CGAccountInfoView.prototype.render = function() {

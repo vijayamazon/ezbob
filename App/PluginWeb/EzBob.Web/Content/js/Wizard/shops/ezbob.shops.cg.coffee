@@ -102,7 +102,9 @@ class EzBob.CGAccountInfoView extends Backbone.Marionette.ItemView
 
         false
 
-    uploadFiles: =>
+    uploadFiles: (evt) =>
+        evt.preventDefault()
+
         sKey = 'f' + (new Date()).getTime() + 'x' + Math.floor(Math.random() * 1000000000)
         sModelKey = 'model' + (new Date()).getTime() + 'x' + Math.floor(Math.random() * 1000000000)
 
@@ -134,11 +136,13 @@ class EzBob.CGAccountInfoView extends Backbone.Marionette.ItemView
 
             @trigger 'completed'
             @trigger 'back'
+        # end of sKey handler
 
         $('iframe', @$el.find('div#upload-files-form')).each (idx, iframe) ->
             iframe.setAttribute 'width', 570
             iframe.setAttribute 'height', 515
             iframe.setAttribute 'src', "#{window.gRootPath}Customer/CGMarketPlaces/UploadFilesDialog?key=" + sKey + "&handler=" + oVendorInfo.ClientSide.LinkForm.UploadFilesHandler + '&modelkey=' + sModelKey
+        # end of each
 
         @uploadFileDlg = @$el.find('div#upload-files-form').dialog(
             height: 600,
@@ -149,6 +153,9 @@ class EzBob.CGAccountInfoView extends Backbone.Marionette.ItemView
             dialogClass: 'upload-files-dialog'
             closeOnEscape: false
         )
+
+        false
+    # end of uploadFiles
 
     render: =>
         super()
