@@ -240,3 +240,16 @@ div.wizard-director-text { width: 414px; font-size: 11pt; color: #585858; }
 .fs16 {
     font-size: 16px;
 }
+
+.director-gender {
+    width: 545px !important;
+}
+
+
+.director-gender input {
+    margin: 0 !important;
+}
+
+.personal-details-gender-image {
+    margin-left: 415px;
+}
