@@ -129,7 +129,7 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 			errorPlacement: EzBob.Validation.errorPlacement,
 			unhighlight: EzBob.Validation.unhighlightFS,
 			highlight: EzBob.Validation.highlightFS,
-			ignore: ':not(:visible)',
+			ignore: ':not(:visible):not(.director_birth_date)',
 		});
 
 		this.$el.find('.cashInput').moneyFormat();
