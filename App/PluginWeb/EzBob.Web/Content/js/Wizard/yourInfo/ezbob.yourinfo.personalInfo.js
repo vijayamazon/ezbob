@@ -241,10 +241,6 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 			this.$el.find('#OwnOtherProperty').val('Yes');
 			this.$el.find('#OtherPropertyAddress').parents('div.control-group').show();
 		}
-		else {
-			this.$el.find('#OwnOtherProperty').val('No');
-			this.$el.find('#OtherPropertyAddress').parents('div.control-group').hide();
-		}
 	}, // otherPropertyAddressModelChange
 
 	getValidator: function() { return EzBob.validatePersonalDetailsForm; }, // getValidator
@@ -259,7 +255,7 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 
 		var self = this;
 
-		var form = this.$el.find('form.CompanyDetailForm');
+		var form = this.$el.find('form.PersonalDetailsForm');
 		var request = $.post(form.attr('action'), form.serializeArray());
 
 		request.success(function(res) {

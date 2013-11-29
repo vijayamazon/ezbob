@@ -12,7 +12,7 @@ EzBob.LimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 		this.events = _.extend({}, this.events, {
 			'change #LimitedPropertyOwnedByCompany': 'propertyOwnedByCompanyChanged',
 		});
-	},
+	}, // initialize
 
 	readyToContinue: function() {
 		return this.companyAddressValidator &&
@@ -28,7 +28,7 @@ EzBob.LimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 		var toToggle = this.$el.find('#LimitedPropertyOwnedByCompany').val() !== 'false';
 		this.$el.find('.additionalCompanyAddressQuestions').toggleClass('hide', toToggle);
 		this.inputChanged(event);
-	},
+	}, // propertyOwnedByCompanyChanged
 
 	render: function() {
 		var self = this;
@@ -66,11 +66,11 @@ EzBob.LimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 		EzBob.UiAction.registerView(this);
 
 		return this;
-	},
+	}, // render
 
 	getValidator: function() {
 		return EzBob.validateLimitedCompanyDetailForm;
-	},
+	}, // getValidator
 
 	next: function(e) {
 		var $el = $(e.currentTarget);
@@ -80,11 +80,31 @@ EzBob.LimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 
 		this.trigger('next');
 		return false;
-	},
+	}, // next
 
 	LimitedCompanyAddressChanged: function(evt, oModel) {
 		this.companyAddressValidator = oModel.collection && oModel.collection.length > 0;
 		this.inputChanged();
 		this.clearAddressError("#LimitedCompanyAddress");
-	}
+	}, // LimitedCompanyAddressChanged
+
+	ownValidationRules: function() {
+		return {
+			LimitedCompanyNumber: { required: true, maxlength: 255, regex: "^[a-zA-Z0-9]+$" },
+			LimitedCompanyName: { required: true, minlength: 2 },
+			LimitedBusinessPhone: { required: true, regex: "^0[0-9]{10}$" },
+			PropertyOwnedByCompany: { required: true },
+			YearsInCompany: { required: true },
+			RentMonthsLeft: { required: true },
+			TotalMonthlySalary: { required: true, defaultInvalidPounds: true, regex: "^(?!£ 0.00$)" },
+		};
+	}, // ownValidationRules
+
+	ownValidationMessages: function() {
+		return {
+			LimitedBusinessPhone: { regex: "Please enter a valid UK number" },
+			LimitedCompanyNumber: { regex: "Please enter a valid company number" },
+			TotalMonthlySalary: { defaultInvalidPounds: "This field is required", regex: "This field is required" },
+		};
+	}, // ownValidationMessages
 });

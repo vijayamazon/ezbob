@@ -21,7 +21,7 @@
 	    }*@
 
         <div>
-            @using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm PersonalDetailsForm" }))
+            @using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "PersonalDetailsForm" }))
             {
                 <div class="control-group form_field_container">
                     <div class="controls">
@@ -188,9 +188,10 @@
 <script id="company-data-template" type="text/template">
 	<div class="row-fluid">
 		<h2 class="form_start">Company information</h2> 
+		<div class="offline"></div>
 
 		@using (Html.BeginForm("SaveCompany", "CustomerDetails", new {Area = "Customer"}, FormMethod.Post, new {@class = "CompanyDetailForm"})) {
-		    <div class="control-group typeOfBussiness form_field_container">
+		    <div class="control-group form_field_container">
 				<div class="controls">
 					<label class="attardi-input">
 						<span>Type of business</span>
@@ -208,7 +209,7 @@
 				</div>
 			</div>
 
-		    <div class="control-group form_field_container">
+		    <div class="control-group form_field_container WebSiteTurnOver hide">
 				<div class="controls cashControlls">
 					<label class="attardi-input">
 						<span>Total online sales (£)</span>
@@ -218,7 +219,7 @@
 				</div>
 			</div>
 
-		    <div class="control-group form_field_container">
+		    <div class="control-group form_field_container OverallTurnOver hide">
 				<div class="controls cashControlls">
 					<label class="attardi-input">
 						<span>Total sales (online & offline in £)</span>

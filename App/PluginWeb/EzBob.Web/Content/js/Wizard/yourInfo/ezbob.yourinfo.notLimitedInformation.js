@@ -12,7 +12,7 @@ EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 		this.events = _.extend({}, this.events, {
 			'change #NonLimitedPropertyOwnedByCompany': 'propertyOwnedByCompanyChanged',
 		});
-	},
+	}, // initialize
 
 	readyToContinue: function() {
 		return this.companyAddressValidator &&
@@ -28,7 +28,7 @@ EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 		var toToggle = this.$el.find('#NonLimitedPropertyOwnedByCompany').val() !== 'false';
 		this.$el.find('.additionalCompanyAddressQuestions').toggleClass('hide', toToggle);
 		this.inputChanged(event);
-	},
+	}, // propertyOwnedByCompanyChanged
 
 	next: function(e) {
 		var $el = $(e.currentTarget);
@@ -38,7 +38,7 @@ EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 
 		this.trigger('next');
 		return false;
-	},
+	}, // next
 
 	render: function() {
 		var self = this;
@@ -76,15 +76,35 @@ EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 		EzBob.UiAction.registerView(this);
 
 		return this;
-	},
+	}, // render
 
 	getValidator: function() {
 		return EzBob.validateNonLimitedCompanyDetailForm;
-	},
+	}, // getValidator
 
 	NonLimitedCompanyAddressChanged: function(evt, oModel) {
 		this.companyAddressValidator = oModel.collection && oModel.collection.length > 0;
 		this.inputChanged();
 		this.clearAddressError("#NonLimitedCompanyAddress");
-	}
+	}, // NonLimitedCompanyAddressChanged
+
+	ownValidationRules: function() {
+		return {
+			NonLimitedCompanyName: { required: true, minlength: 2 },
+			NonLimitedTimeInBusiness: { required: true },
+			NonLimitedTimeAtAddress: { required: true, digits: true },
+			NonLimitedBusinessPhone: { required: true, regex: "^0[0-9]{10}$" },
+			PropertyOwnedByCompany: { required: true },
+			YearsInCompany: { required: true },
+			RentMonthsLeft: { required: true },
+			TotalMonthlySalary: { required: true, defaultInvalidPounds: true, regex: "^(?!£ 0.00$)" },
+		};
+	}, // ownValidationRules
+
+	ownValidationMessages: function() {
+		return {
+			NonLimitedBusinessPhone: { regex: "Please enter a valid UK number" },
+			TotalMonthlySalary: { defaultInvalidPounds: "This field is required", regex: "This field is required" },
+		};
+	}, // ownValidationMessages
 });

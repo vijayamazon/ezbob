@@ -3,192 +3,174 @@
 EzBob.CompanyDetailsStepModel = EzBob.WizardStepModel.extend({});
 
 EzBob.CompanyDetailsStepView = Backbone.View.extend({
-    initialize: function () {
-        this.template = _.template($('#company-data-template').html());
+	initialize: function() {
+		this.template = _.template($('#company-data-template').html());
 
-        this.companyTypes = {
-            entrepreneur: {
-                View: null,
-                Type: 'entrepreneur',
-                ClassName: null,
-                Validator: EzBob.validateCompanyDetailsMetaData,
-                ValidatorEx: null,
-            },
+		this.companyTypes = {
+			entrepreneur: {
+				View: null,
+				Type: 'entrepreneur',
+			},
 
-            soletrader: {
-                View: EzBob.NonLimitedInformationView,
-                Type: 'NonLimited',
-                ClassName: 'NonLimitedCompanyDetailForm',
-                Validator: EzBob.validateNonLimitedCompanyDetailForm,
-                ValidatorEx: EzBob.validateCompanyDetailsMetaData,
-            },
+			soletrader: {
+				View: EzBob.NonLimitedInformationView,
+				Type: 'NonLimited',
+			},
 
-            llp: {
-                View: EzBob.LimitedInformationView,
-                Type: 'Limited',
-                ClassName: 'LimitedCompanyDetailForm',
-                Validator: EzBob.validateLimitedCompanyDetailForm,
-                ValidatorEx: EzBob.validateCompanyDetailsMetaData,
-            },
-        }; // companyTypes
+			llp: {
+				View: EzBob.LimitedInformationView,
+				Type: 'Limited',
+			},
+		}; // companyTypes
 
-        this.companyTypes.pship3p = this.companyTypes.soletrader;
-        this.companyTypes.pship = this.companyTypes.soletrader;
-        this.companyTypes.limited = this.companyTypes.llp;
+		this.validatorRules = this.ownValidationRules();
+		this.validatorMessages = this.ownValidationRules();
 
-        var companyTypeClassNames = {};
-        var aryClassNames = [];
+		for (var ct in this.companyTypes) {
+			var oView = this.companyTypes[ct].View;
 
-        for (var idx in this.companyTypes) {
-            var ct = this.companyTypes[idx];
+			if (!oView)
+				continue;
 
-            if (!ct.ClassName)
-                continue;
+			this.validatorRules = _.extend({}, this.validatorRules, oView.prototype.ownValidationRules());
+			this.validatorMessages = _.extend({}, this.validatorMessages, oView.prototype.ownValidationMessages());
+		} // for
 
-            if (!companyTypeClassNames[ct.ClassName]) {
-                companyTypeClassNames[ct.ClassName] = 1;
-                aryClassNames.push(ct.ClassName);
-            } // if
-        } // for
+		this.companyTypes.pship3p = this.companyTypes.soletrader;
+		this.companyTypes.pship = this.companyTypes.soletrader;
+		this.companyTypes.limited = this.companyTypes.llp;
 
-        this.companyTypeAllClassNames = aryClassNames.join(' ');
+		this.events = _.extend({}, this.events, {
+			'click .btn-continue': 'next',
 
-        this.parentView = this.options.parentView;
+			'change #TypeOfBusiness': 'typeOfBusinessChanged',
 
-        this.events = _.extend({}, this.events, {
-            'click .btn-continue': 'next',
+			'focus #OverallTurnOver': 'overallTurnOverFocus',
+			'focus #WebSiteTurnOver': 'webSiteTurnOverFocus',
 
-            'change #TypeOfBusiness': 'typeOfBusinessChanged',
-            'focus #OverallTurnOver': 'overallTurnOverFocus',
-            'focus #WebSiteTurnOver': 'webSiteTurnOverFocus',
+			'change   input': 'inputChanged',
+			'click    input': 'inputChanged',
+			'focusout input': 'inputChanged',
+			'keyup    input': 'inputChanged',
 
-            'change   input': 'inputChanged',
-            'click    input': 'inputChanged',
-            'focusout input': 'inputChanged',
-            'keyup    input': 'inputChanged',
+			'change   select': 'inputChanged',
+			'click    select': 'inputChanged',
+			'focusout select': 'inputChanged',
+			'keyup    select': 'inputChanged',
+		}); // events
 
-            'change   select': 'inputChanged',
-            'click    select': 'inputChanged',
-            'focusout select': 'inputChanged',
-            'keyup    select': 'inputChanged',
-        }); // events
+		this.validator = null;
 
-        this.validators = null;
+		this.readyToProceed = false;
+	}, // initialize
 
-        this.readyToProceed = false;
+	inputChanged: function() {
+		var enabled = this.validator.checkForm();
 
-        this.constructor.__super__.initialize.call(this);
-    }, // initialize
+		if (enabled && this.CompanyView)
+			enabled = this.CompanyView.readyToContinue();
 
-    inputChanged: function () {
-        var enabled = this.validators ? true : false;
+		$('.continue').toggleClass('disabled', !enabled);
+	}, // inputChanged
 
-        var oForm = null;
+	typeOfBusinessChanged: function() {
+		var name = this.$el.find('#TypeOfBusiness').val().toLowerCase();
 
-        for (var i = 0; i < this.validators.length; i++) {
-            if (!oForm)
-                oForm = this.$el.find('.CompanyDetailForm');
+		var companyType = this.companyTypes[name];
+		if (!companyType) {
+			if (this.CompanyView) {
+				this.CompanyView.$el.remove();
+				this.CompanyView = null;
+			} // if
 
-            var oValidator = this.validators[i](oForm);
+			this.$el.find('.WebSiteTurnOver, .OverallTurnOver').addClass('hide');
 
-            enabled = enabled && EzBob.Validation.checkForm(oValidator);
-        } // for
+			return false;
+		} // if
 
-        if (this.CompanyView)
-            enabled = enabled && this.CompanyView.readyToContinue();
+		this.$el.find('.WebSiteTurnOver, .OverallTurnOver').removeClass('hide');
 
-        $('.continue').toggleClass('disabled', !enabled);
-    }, // inputChanged
+		if (this.CompanyView && this.CompanyView.ViewName !== companyType.Type) {
+			this.CompanyView.$el.remove();
+			this.CompanyView = null;
+		} // if
 
-    typeOfBusinessChanged: function (evt) {
-        if(evt) $(evt.currentTarget).focusout();
-        var name = this.$el.find('select[name="TypeOfBusiness"]').val().toLowerCase();
+		if (!this.CompanyView) {
+			if (companyType.View) {
+				this.CompanyView = new companyType.View({ model: this.model, parentView: this });
+				this.CompanyView.on('next', this.next, this);
+				this.CompanyView.render();
+				this.CompanyView.$el.appendTo(this.$el.find('.company-full-details'));
+			} // if can create view
 
-        var oForm = this.$el.find('.CompanyDetailForm');
+			this.inputChanged();
+		}
+		else
+			this.CompanyView.$el.show();
 
-        oForm.removeClass(this.companyTypeAllClassNames);
+		return false;
+	}, // typeOfBusinessChanged
 
-        var companyType = this.companyTypes[name];
-        if (!companyType) {
-            this.setValidator();
-            if (this.CompanyView) {
-                this.CompanyView.$el.remove();
-                this.CompanyView = null;
-            }
-            return false;
-        } // if
+	overallTurnOverFocus: function() { $('#OverallTurnOver').change(); }, // overallTurnOverFocus
 
-        if (this.CompanyView && this.CompanyView.ViewName !== companyType.Type) {
-            this.CompanyView.$el.remove();
-            this.CompanyView = null;
-        } // if
+	webSiteTurnOverFocus: function() { $('#WebSiteTurnOver').change(); }, // webSiteTurnOverFocus
 
-        
+	render: function() {
+		this.$el.html(this.template(this.model.toJSON()));
 
+		if (!this.model.get('IsOffline'))
+			this.$el.find('.offline').remove();
+		else
+			this.$el.find('.notoffline').remove();
 
-        if (!this.CompanyView) {
-            this.CompanyView = new companyType.View({ model: this.model, parentView: this });
-            this.CompanyView.on('next', this.next, this);
-            this.CompanyView.$el.appendTo(this.$el.find('.company-full-details'));
-            this.CompanyView.render();
+		this.validator = this.$el.find('.CompanyDetailForm').validate({
+			rules: this.validatorRules,
+			messages: this.validatorMessages,
+			errorPlacement: EzBob.Validation.errorPlacement,
+			unhighlight: EzBob.Validation.unhighlightFS,
+			highlight: EzBob.Validation.highlightFS,
+			ignore: ':not(:visible)',
+		});
 
-            oForm.addClass(companyType.ClassName);
-            this.setValidator();
-        }
-        else
-            this.CompanyView.$el.show();
+		this.$el.find('.cashInput').moneyFormat();
 
-        return false;
-    }, // typeOfBusinessChanged
+		var oFieldStatusIcons = this.$el.find('IMG.field_status');
+		oFieldStatusIcons.filter('.required').field_status({ required: true });
+		oFieldStatusIcons.not('.required').field_status({ required: false });
 
-    overallTurnOverFocus: function () { $('#OverallTurnOver').change(); }, // overallTurnOverFocus
+		this.inputChanged();
 
-    webSiteTurnOverFocus: function () { $('#WebSiteTurnOver').change(); }, // webSiteTurnOverFocus
+		this.readyToProceed = true;
+		return this;
+	}, // render
 
-    render: function () {
-        
-        this.$el.html(this.template(this.model.toJSON()));
+	ownValidationRules: function() {
+		var overallRegex = "^(?!£ 0.00$)";
+		var turnoverRegex = this.model.get('IsOffline') ? "^(£ 0.00$)|" + overallRegex : overallRegex;
 
-        if (!this.model.get('IsOffline'))
-            this.$el.find('.offline').remove();
-        else
-            this.$el.find('.notoffline').remove();
+		return {
+			TypeOfBusiness: { required: true },
+			OverallTurnOver: { required: true, defaultInvalidPounds: true, regex: overallRegex },
+			WebSiteTurnOver: { required: true, defaultInvalidPounds: true, regex: turnoverRegex },
+		};
+	}, // ownValidationRules
 
-        this.$el.find('.cashInput').moneyFormat();
+	ownValidationMessages: function() {
+		return {
+			TimeAtAddress: { regex: "This field is required" },
+			OverallTurnOver: { defaultInvalidPounds: "This field is required", regex: "This field is required" },
+			WebSiteTurnOver: { defaultInvalidPounds: "This field is required", regex: "This field is required" },
+		};
+	}, // ownValidationMessages
 
-        var oFieldStatusIcons = this.$el.find('IMG.field_status');
-        oFieldStatusIcons.filter('.required').field_status({ required: true });
-        oFieldStatusIcons.not('.required').field_status({ required: false });
+	next: function(e) {
+		if ($('.continue').hasClass('disabled'))
+			return false;
 
-        this.typeOfBusinessChanged();
-        this.inputChanged();
-
-        this.readyToProceed = true;
-        return this;
-    }, // render
-
-    setValidator: function () {
-        var name = this.$el.find('select[name="TypeOfBusiness"]').val().toLowerCase();
-        var companyType = this.companyTypes[name];
-
-        if (!companyType) {
-            this.validators = [EzBob.validateCompanyDetailsMetaData];
-            return;
-        } // if
-
-        this.validators = [companyType.Validator];
-        if (companyType.ValidatorEx)
-            this.validators.push(companyType.ValidatorEx);
-    }, // setValidator
-
-    next: function (e) {
-        if ($('.continue').hasClass('disabled'))
-            return false;
-
-        var form = this.$el.find('form.CompanyDetailForm'),
+		var form = this.$el.find('form.CompanyDetailForm'),
 			data = form.serializeArray();
 
-        var action = form.attr('action'),
+		var action = form.attr('action'),
 			dataForCompany = SerializeArrayToEasyObject(data),
 			typeOfBussiness = dataForCompany.TypeOfBusiness,
 			companyName = null,
@@ -196,103 +178,104 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 			sCompanyFilter = '',
 			refNum = '';
 
-        switch (this.companyTypes[typeOfBussiness.toLowerCase()].Type) {
-            case 'Limited':
-                postcode = dataForCompany['LimitedCompanyAddress[0].Postcode'];
-                companyName = dataForCompany.LimitedCompanyName;
-                refNum = dataForCompany.LimitedCompanyNumber;
-                sCompanyFilter = 'L';
-                break;
+		switch (this.companyTypes[typeOfBussiness.toLowerCase()].Type) {
+			case 'Limited':
+				postcode = dataForCompany['LimitedCompanyAddress[0].Postcode'];
+				companyName = dataForCompany.LimitedCompanyName;
+				refNum = dataForCompany.LimitedCompanyNumber;
+				sCompanyFilter = 'L';
+				break;
 
-            case 'NonLimited':
-                postcode = dataForCompany['NonLimitedCompanyAddress[0].Postcode'];
-                companyName = dataForCompany.NonLimitedCompanyName;
-                sCompanyFilter = 'N';
-                break;
-        } // switch type of business
-        if (typeOfBussiness !== 'Entrepreneur' && EzBob.Config.TargetsEnabled) {
-            this.handleTargeting(form, action, data, postcode, companyName, sCompanyFilter, refNum);
-        } else {
-            this.saveDataRequest(action, data);
-        }
-            
+			case 'NonLimited':
+				postcode = dataForCompany['NonLimitedCompanyAddress[0].Postcode'];
+				companyName = dataForCompany.NonLimitedCompanyName;
+				sCompanyFilter = 'N';
+				break;
+		} // switch type of business
 
-        return false;
-    },
+		if (typeOfBussiness !== 'Entrepreneur' && EzBob.Config.TargetsEnabled)
+			this.handleTargeting(form, action, data, postcode, companyName, sCompanyFilter, refNum);
+		else
+			this.saveDataRequest(action, data);
 
-    setRefNum: function (refNum) {
-        $('.RefNum').val(refNum);
-    },
+		return false;
+	},
 
-    handleTargeting: function (form, action, data, postcode, companyName, sCompanyFilter, refNum) {
-        var that = this;
+	setRefNum: function(refNum) {
+		$('.RefNum').val(refNum);
+	}, // setRefNum
 
-        var req = $.get(window.gRootPath + 'Account/CheckingCompany', { companyName: companyName, postcode: postcode, filter: sCompanyFilter, refNum: refNum });
+	handleTargeting: function(form, action, data, postcode, companyName, sCompanyFilter, refNum) {
+		var that = this;
 
-        scrollTop();
-        BlockUi();
-        req.success(function (reqData) {
-            if (!reqData || !reqData.success)
-                that.saveDataRequest(action, data);
-            else {
-                switch (reqData.length) {
-                    case 0:
-                        EzBob.App.trigger('warning', 'Company was not found by post code. Please check your input and try again.');
-                        break;
-                    case 1:
-                        that.setRefNum(reqData[0].BusRefNum);
-                        data = form.serializeArray();
-                        that.saveDataRequest(action, data);
-                        break;
-                    default:
-                        var companyTargets = new EzBob.companyTargets({ model: reqData });
-                        companyTargets.render();
+		var req = $.get(window.gRootPath + 'Account/CheckingCompany', { companyName: companyName, postcode: postcode, filter: sCompanyFilter, refNum: refNum });
 
-                        companyTargets.on('BusRefNumGetted', function (busRefNum) {
-                            that.setRefNum(busRefNum);
-                            data = form.serializeArray();
-                            that.saveDataRequest(action, data);
-                        });
-                        break;
-                } // switch reqData.length
-            } // if
-        });
+		scrollTop();
 
-        req.complete(function () {
-            UnBlockUi();
-        });
-    }, // handleTargeting
+		BlockUi();
 
-    saveDataRequest: function (action, data) {
-        BlockUi();
+		req.success(function(reqData) {
+			if (!reqData || !reqData.success)
+				that.saveDataRequest(action, data);
+			else {
+				switch (reqData.length) {
+				case 0:
+					EzBob.App.trigger('warning', 'Company was not found by post code. Please check your input and try again.');
+					break;
+				case 1:
+					that.setRefNum(reqData[0].BusRefNum);
+					data = form.serializeArray();
+					that.saveDataRequest(action, data);
+					break;
+				default:
+					var companyTargets = new EzBob.companyTargets({ model: reqData });
+					companyTargets.render();
 
-        var that = this;
+					companyTargets.on('BusRefNumGetted', function(busRefNum) {
+						that.setRefNum(busRefNum);
+						data = form.serializeArray();
+						that.saveDataRequest(action, data);
+					});
+					break;
+				} // switch reqData.length
+			} // if
+		}); // on success
 
-        _.find(data, function (d) { return d.name === 'OverallTurnOver'; }).value = this.$el.find('#OverallTurnOver').autoNumericGet();
-        _.find(data, function (d) { return d.name === 'WebSiteTurnOver'; }).value = this.$el.find('#WebSiteTurnOver').autoNumericGet();
+		req.complete(function() {
+			UnBlockUi();
+		});
+	}, // handleTargeting
 
-        var totalMonthlySalary = _.find(data, function (d) { return d.name === 'TotalMonthlySalary'; });
-        if (totalMonthlySalary)
-            totalMonthlySalary.value = this.$el.find('#TotalMonthlySalary').autoNumericGet();
+	saveDataRequest: function(action, data) {
+		BlockUi();
 
-        var request = $.post(action, data);
+		var that = this;
 
-        request.success(function (res) {
-            scrollTop();
+		_.find(data, function(d) { return d.name === 'OverallTurnOver'; }).value = this.$el.find('#OverallTurnOver').autoNumericGet();
+		_.find(data, function(d) { return d.name === 'WebSiteTurnOver'; }).value = this.$el.find('#WebSiteTurnOver').autoNumericGet();
 
-            if (res.error) {
-                EzBob.App.trigger('error', res.error);
-                return;
-            } // if
+		var totalMonthlySalary = _.find(data, function(d) { return d.name === 'TotalMonthlySalary'; });
+		if (totalMonthlySalary)
+			totalMonthlySalary.value = this.$el.find('#TotalMonthlySalary').autoNumericGet();
 
-            that.model.fetch().done(function () {
-                that.trigger('ready');
-                that.trigger('next');
-            });
-        });
+		var request = $.post(action, data);
 
-        request.complete(function () {
-            UnBlockUi();
-        });
-    } // saveDataRequest
+		request.success(function(res) {
+			scrollTop();
+
+			if (res.error) {
+				EzBob.App.trigger('error', res.error);
+				return;
+			} // if
+
+			that.model.fetch().done(function() {
+				that.trigger('ready');
+				that.trigger('next');
+			});
+		});
+
+		request.complete(function() {
+			UnBlockUi();
+		});
+	}, // saveDataRequest
 }); // EzBob.CompanyDetailsStepView

@@ -262,6 +262,12 @@ EzBob.Validation.checkDirectorPhoneNumber = function(value, elm) {
 
 jQuery.validator.addMethod('director_phone', EzBob.Validation.checkDirectorPhoneNumber, 'Please enter a valid UK number.');
 
+EzBob.Validation.checkDirectorEmail = function (value, element) {
+	return /^[a-zA-Z][a-zA-Z0-9\.\-\_]{1,28}[a-zA-Z0-9]@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])$/i.test(value);
+};
+
+jQuery.validator.addMethod('director_email', EzBob.Validation.checkDirectorEmail, 'Please use between 3 and 30 characters before @.You can use letter, number and periods.');
+
 jQuery.validator.addMethod('director_birth_date', function(value, elm) { return $.validator.methods.yearLimit(value, elm, 18); }, 'Director should be at least 18 years old.');
 
 //-----------  Validate -----------  

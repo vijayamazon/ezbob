@@ -520,6 +520,7 @@ blockquote{margin:0 0 20px 0; padding:10px; border:1px #ccc solid; font-style:it
     width: 110px;
 }
 
+.PersonalDetailsForm.form-horizontal .control-label,
 .CompanyDetailForm.form-horizontal .control-label{
     width: 160px;
 } 
