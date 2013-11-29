@@ -14,8 +14,8 @@
     }
     else
     {
-        <!--uat-->
-        <base href="https://192.168.120.6:444" />
+        <!--qa-->
+        <base href="https://192.168.120.11" />
         <!--local-->
         <!--<base href="https://localhost:44300" />-->
     }
@@ -39,14 +39,6 @@
 
         body header + .inner, .main-page {
             margin: 0 auto !important;
-        }
-
-        select {
-            height: 30px !important;
-        }
-
-        .dashboard-steps {
-            background-image: none !important;
         }
 
         #paypal {
@@ -132,8 +124,8 @@
                                         ${EndIssue}
                                         ${card_types} 
                                     </select>
+                                    <img id="card_typeImage" class="field_status required" />
                                 </label>
-                                <img id="card_typeImage" class="field_status required" />
                             </div>
                             ${end_card_type}
                             
