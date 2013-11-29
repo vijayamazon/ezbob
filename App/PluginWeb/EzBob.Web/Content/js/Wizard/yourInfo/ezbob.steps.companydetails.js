@@ -201,8 +201,8 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 		return false;
 	},
 
-	setRefNum: function(refNum) {
-		$('.RefNum').val(refNum);
+	setRefNum: function (refNum) {
+	    $('.RefNum').val(refNum);
 	}, // setRefNum
 
 	handleTargeting: function(form, action, data, postcode, companyName, sCompanyFilter, refNum) {
@@ -214,8 +214,8 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 
 		BlockUi();
 
-		req.success(function(reqData) {
-			if (!reqData || !reqData.success)
+		req.done(function (reqData) {
+			if (!reqData)
 				that.saveDataRequest(action, data);
 			else {
 				switch (reqData.length) {
@@ -230,7 +230,6 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 				default:
 					var companyTargets = new EzBob.companyTargets({ model: reqData });
 					companyTargets.render();
-
 					companyTargets.on('BusRefNumGetted', function(busRefNum) {
 						that.setRefNum(busRefNum);
 						data = form.serializeArray();
@@ -239,9 +238,9 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 					break;
 				} // switch reqData.length
 			} // if
-		}); // on success
+		}); // on done
 
-		req.complete(function() {
+		req.always(function() {
 			UnBlockUi();
 		});
 	}, // handleTargeting

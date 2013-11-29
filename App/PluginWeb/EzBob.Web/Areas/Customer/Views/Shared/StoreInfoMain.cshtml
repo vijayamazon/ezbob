@@ -14,14 +14,14 @@
 			}
 		}*@
 
-		<div class="full_width" style="display: none;" id="online_entry_message">To be approved for a loan, link at least one account. The more accounts you link, the more funds you can borrow.</div>
+		<div style="display: none;" id="online_entry_message">To be approved for a loan, link at least one account. The more accounts you link, the more funds you can borrow.</div>
 
-		<div class="full_width" style="display: none;" id="offline_entry_message">You must <strong>link</strong> or <strong>upload</strong> your
+		<div style="display: none;" id="offline_entry_message">You must <strong>link</strong> or <strong>upload</strong> your
 			<span class="green btn" onclick="EzBob.App.trigger('ct:storebase.shops.connect', 'HMRC')" ui-event-control-id="link-account:add_hmrc_at_the_top">HM Revenue &amp; Customs</span>
 			account data<br />to be approved for a loan.
 		</div>
 
-		<div class="full_width" style="display: none;" id="plain_offline_entry_message">The more you link, the more funds you can get.</div>
+		<div style="display: none;" id="plain_offline_entry_message">The more you link, the more funds you can get.</div>
 
 		@if ((string)ViewContext.RouteData.Values["controller"] == "Wizard") {
 			<div class="eBayPaypalRule hide">Paypal account must be added in order to continue.</div>
