@@ -50,9 +50,10 @@
 }
 
 .ezDateTime .attardi-input {
-    width: 26.85%;
+    width: 24%;
 }
 
-.director-birth-date {
-    width: 24% !important;
+.ezDateTime .attardi-input select {
+    width: 90%;
 }
+

@@ -75,7 +75,7 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 
 	typeOfBusinessChanged: function() {
 		var name = this.$el.find('#TypeOfBusiness').val().toLowerCase();
-
+	    this.$el.find('#TypeOfBusiness').blur();
 		var companyType = this.companyTypes[name];
 		if (!companyType) {
 			if (this.CompanyView) {

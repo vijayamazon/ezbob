@@ -217,13 +217,13 @@ div.form_read_and_accept input { margin-top: -5px; }
 
 div.form_read_and_accept label { display: inline; }
 
-div.add-director-container { position: relative; width: 414px; }
+div.add-director-container { position: relative; width: 90%; }
 
-div.add-director-container #addDirector { position: relative; left: 300px; margin-bottom: 1em; }
+div.add-director-container #addDirector { position: relative; float: right; margin-bottom: 1em; }
 
 div.canDisabledAddress { display: none; }
 
-div.wizard-director-text { width: 414px; font-size: 11pt; color: #585858; }
+div.wizard-director-text { font-size: 11pt; color: #585858; }
 
 .wizard-wrapper .stores-view .back-step {
     display: none !important;

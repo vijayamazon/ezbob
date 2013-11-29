@@ -70,18 +70,18 @@
                     @if (!string.IsNullOrWhiteSpace(uiEventControlID)) {
                         @:ui-event-control-id="@uiEventControlID"
                     }
-            	/> 
+                    /> 
+                @if (statusIcon)
+                {
+                    var sId = identificator + "Image";
+                    var sReq = isRequired ? "required" : "";
+                    <img id="@sId" class="field_status @sReq"/>
+                }
+                else if (isRequired)
+                {
+                    <span class="required">*</span>
+                }
             </label>
-            @if (statusIcon)
-            {
-                var sId = identificator + "Image";
-                var sReq = isRequired ? "required" : "";
-                <img id="@sId" class="field_status @sReq"/>
-            }
-            else if (isRequired)
-            {
-                <span class="required">*</span>
-            }
         </div>
     </div>
 }
@@ -131,18 +131,18 @@
                     @if (!string.IsNullOrWhiteSpace(uiEventControlID)) {
                         @:ui-event-control-id="@uiEventControlID"
                     }
-                />
+                    />
+                @if (statusIcon)
+                {
+                    var sId = identificator + "Image";
+                    var sReq = isRequired ? "required" : "";
+                    <img id="@sId" class="field_status @sReq"/>
+                }
+                else if (isRequired)
+                {
+                    <span class="required">*</span>
+                }
             </label>
-            @if (statusIcon)
-            {
-                var sId = identificator + "Image";
-                var sReq = isRequired ? "required" : "";
-                <img id="@sId" class="field_status @sReq"/>
-            }
-            else if (isRequired)
-            {
-                <span class="required">*</span>
-            }
         </div>
     </div>
 }
