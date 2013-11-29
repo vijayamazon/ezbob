@@ -1118,13 +1118,16 @@ EzBob.validateAmazonForm = function (el) {
 
 EzBob.validateYourInfoEditForm = function (el) {
     var e = el || $(".editYourInfoForm");
+
+	var isOffline = e.find('.offline').length > 0;
+
     return e.validate({
         rules: {
             DayTimePhone: { required: true, regex: "^0[0-9]{10}$" },
             MobilePhone: { required: true, regex: "^0[0-9]{10}$" },
             BusinessPhone: { required: true, regex: "^0[0-9]{10}$" },
             OverallTurnOver: { required: true, digits: true, min: 1 },
-            WebSiteTurnOver: { required: true, digits: true, min: 1 }
+            WebSiteTurnOver: { required: true, digits: true, min: isOffline ? 0 : 1 }
         },
         messages: {
             DayTimePhone: { regex: "Please enter a valid UK number" },
