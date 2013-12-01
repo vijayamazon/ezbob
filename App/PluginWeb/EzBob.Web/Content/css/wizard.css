@@ -244,5 +244,9 @@ div.wizard-director-text { font-size: 11pt; color: #585858; }
 }
 
 .personal-details-gender-image {
-    margin-left: 415px;
+    margin-left: 417px;
+}
+
+.director_gender_image {
+    margin-left: -1px;
 }
