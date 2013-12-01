@@ -66,7 +66,6 @@ EzBob.Underwriter.customerGrid = (settings) ->
         $(list)[0].triggerToolbar()
 
     isTestCheckbox = settings.$el.find("#show-test-customers")
-    console.log("isTestCheckbox", isTestCheckbox)
     isTestCheckbox.on "change", ->
         isTest = isTestCheckbox.is(":checked")
         EzBob.Config.isTest = isTest
@@ -77,7 +76,6 @@ EzBob.Underwriter.customerGrid = (settings) ->
         isTestCheckbox.trigger "reload"
     
     isTestCheckbox.on "reload", ->
-        console.log("isTestCheckbox reload", isTestCheckbox)
         isTest = isTestCheckbox.is(":checked")
         EzBob.Config.isTest = isTest
         $(list).jqGrid "setGridParam",
@@ -88,7 +86,6 @@ EzBob.Underwriter.customerGrid = (settings) ->
     showAllCheckbox = settings.$el.find("#show-all-customers")
     
     showAllCheckbox.on "change", ->
-        console.log("showAllCheckbox change", showAllCheckbox)
         showAll = showAllCheckbox.is(":checked")
         EzBob.Config.showAll = showAll
         if showAll
@@ -98,7 +95,6 @@ EzBob.Underwriter.customerGrid = (settings) ->
         showAllCheckbox.trigger "reload"
     
     showAllCheckbox.on "reload", ->
-        console.log("showAllCheckbox reload", showAllCheckbox)
         showAll = showAllCheckbox.is(":checked")
         EzBob.Config.showAll = showAll
         $(list).jqGrid "setGridParam",
