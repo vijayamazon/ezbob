@@ -235,8 +235,8 @@
         <td><b>Zoopla Copy Image</b></td>
         <td>@copyAddress("Current", @Model.CurrentAddress)</td>
         <td>@copyAddress("Previous", @Model.PrevAddress)</td>
-        <td>@copyAddress("PayPal", @Model.PayPalAddress)</td>
         <td>@copyAddress("Ebay", @Model.EBayAddress)</td>
+        <td>@copyAddress("PayPal", @Model.PayPalAddress)</td>
     </tr>
 </tbody>
 </table>
@@ -557,7 +557,7 @@ bool propertyOwnedByCompany = Model.Customer.CompanyAdditionalInfo != null && Mo
 @helper copyAddress(string name, CustomerAddress currentAddress) {
     if (currentAddress != null && currentAddress.FormattedAddress != null)
     {
-	<div style="position: relative; display: inline-block;">
+	<div class="copy-buttons">
 	    @if(name == "Current"){
             <button class="btn btn-primary" id="zoopla">Zoopla</button>
         }
@@ -566,3 +566,4 @@ bool propertyOwnedByCompany = Model.Customer.CompanyAdditionalInfo != null && Mo
 	</div>
 	}
 }
+ 
