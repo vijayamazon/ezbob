@@ -1180,6 +1180,7 @@ DIV#upload-files-form { display: none; }
     width: 20% !important;
     outline: none;
     margin-left: 5px;
+    box-shadow: none;
 }
 
 .rc-button:hover {
