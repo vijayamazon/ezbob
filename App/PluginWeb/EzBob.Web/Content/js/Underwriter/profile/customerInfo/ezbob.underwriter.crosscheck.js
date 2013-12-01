@@ -103,14 +103,14 @@ EzBob.Underwriter.CrossCheckView = Backbone.View.extend({
 
 			if (!sName)
 				return;
-			
+
 			oApplication[sName] = 1;
 		}); // for each app director
 
 		var nOnlyCount = 0;
 
 		var oUiDirectorList = oUiDirector.find('ul');
-		
+
 		for (var sDirName in oExperian) {
 			if (oApplication[sDirName])
 				continue;
@@ -270,9 +270,9 @@ EzBob.Underwriter.CrossCheckView = Backbone.View.extend({
 
 		return _.map(
 			_.filter(
-				$.trim(sRawName).split(' '), function(s) { return $.trim(s) != ''; }
+				$.trim(sRawName).split(/ |\t|\n|\r/), function(s) { return $.trim(s) != ''; }
 			),
-			function (s) { return $.trim(s); }
+			function (s) { return $.trim(s).toUpperCase(); }
 		).join(' ');
 	}, // name
 
