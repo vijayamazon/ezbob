@@ -246,6 +246,11 @@ body .form_field:hover{border:1px #0064d2 solid; -moz-box-shadow: 0 0 5px #39f; 
 body .form_field_look:focus,
 body .form_field:focus{border:1px #666 solid;}
 
+div.form_buttons_container { position: relative; height: 30px;width: 90%;}
+div.form_buttons_container input, 
+div.form_buttons_container a { float: right; }
+
+
 label{display:block; font-weight:bold; margin:0 0 5px 0;}
 
 span.required {

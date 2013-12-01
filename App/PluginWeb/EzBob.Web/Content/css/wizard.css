@@ -209,10 +209,6 @@ h2.form_section {
 	 margin-top: 1em; padding-left: 0!important;
 }
 
-div.form_buttons_container { position: relative; height: 30px;width: 90%;}
-div.form_buttons_container input, 
-div.form_buttons_container a { float: right; }
-
 div.form_read_and_accept input { margin-top: -5px; }
 
 div.form_read_and_accept label { display: inline; }
