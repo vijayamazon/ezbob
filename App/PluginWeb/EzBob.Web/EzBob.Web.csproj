@@ -969,6 +969,7 @@
     <Content Include="Content\img\glyphicons-halflings.png" />
     <Content Include="Content\img\graphy.png" />
     <Content Include="Content\css\styles.css" />
+    <Content Include="Content\js\lib\jquery.scrollTo.js" />
     <Content Include="Content\js\lib\jquery.zclip.js" />
     <Content Include="Content\js\lib\splitter.js" />
     <Content Include="Areas\Underwriter\Views\CAIS\Index.cshtml" />

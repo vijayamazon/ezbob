@@ -121,6 +121,7 @@ namespace EzBob.Web.Infrastructure
             return Bundle.JavaScript()
                 .AddString(GetDbStrings())
                 .Add("~/Content/js/lib/jquery-1.8.3.js")
+                .Add("~/Content/js/lib/jquery.scrollTo.js")
                 .Add("~/Content/js/lib/jquery.blockUI.js")
 				.Add("~/Content/js/lib/jquery.mask.min.js")
                 .Add("~/Content/js/lib/jquery.validate.js")
@@ -140,6 +141,7 @@ namespace EzBob.Web.Infrastructure
         {
             return Bundle.JavaScript()
                 .Add("~/Content/js/lib/jquery-1.8.3.js")
+                .Add("~/Content/js/lib/jquery.scrollTo.js")
                 .Add("~/Content/js/lib/jquery.blockUI.js")
                 .Add("~/Content/js/lib/jquery.mousewheel.js")
                 .Add("~/Content/js/lib/jquery.jscrollpane.js")

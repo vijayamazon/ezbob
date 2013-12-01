@@ -1,4 +1,4 @@
-﻿.postCodeTextArea li
+﻿.matchingAddressList li
 {
     background-image: url('../img/house.png');
     background-repeat: no-repeat;
@@ -9,17 +9,17 @@
     color: #333;
 }
 
-.postCodeTextArea li:hover,
-.postCodeTextArea li.current {
+.matchingAddressList li:hover,
+.matchingAddressList li[selected] {
 	background-color: antiquewhite;
 }
 
-.postCodeTextArea[disabled="disabled"] {
+.matchingAddressList[disabled="disabled"] {
     background-color: #f5f5f5;
     border-color: #ddd;
     cursor: not-allowed;
 }
-.postCodeTextArea {
+.matchingAddressList {
     background-color: white;
     list-style: none outside none;
     margin-left: -10px;
@@ -28,9 +28,10 @@
     height: 300px;
     overflow-y: auto;
     border: solid 1px #CCC;
-    border-radius: 5px;
-    -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+	position: relative;
 }
 li[stripped="stripped"] {
     background-color: #f5f5f5;
