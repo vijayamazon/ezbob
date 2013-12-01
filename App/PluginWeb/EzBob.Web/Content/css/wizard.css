@@ -213,7 +213,6 @@ div.form_read_and_accept input { margin-top: -5px; }
 
 div.form_read_and_accept label { display: inline; }
 
-div.add-director-container { position: relative; width: 90%; }
 
 div.add-director-container #addDirector { position: relative; float: right; margin-bottom: 1em; }
 
@@ -234,11 +233,6 @@ div.wizard-director-text { font-size: 11pt; color: #585858; }
 .fs16 {
     font-size: 16px;
 }
-
-.director-gender {
-    width: 545px !important;
-}
-
 
 .director-gender input {
     margin: 0 !important;

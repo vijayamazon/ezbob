@@ -266,7 +266,10 @@ input, select, textarea {
   -webkit-box-sizing: border-box;
 }
 
+div.director-container { width: 96%; }
 .stores-view{ width: 96%; }
+
+div.add-director-container { position: relative; width: 96%; }
 
 input.form_field, textarea.form_field { width: 96%; }
 
@@ -282,7 +285,9 @@ select.form_field_date { width: 70%; }
 
 div.form_field_container { margin-bottom: 1.6em; }
 
-input.form_field_address { width: 60%; }
+input.form_field_address { width: 69%; }
+
+input.form_field_address_lookup { float: right;margin-right: 8px; }
 
 input.form_field_address_lookup { width: 26%; height: 36px; }
 
