@@ -467,8 +467,8 @@ namespace EzBob.Web.Areas.Underwriter
 			gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
 			{
 				Caption = "User Status",
-				Name = "WizardStepType",
-				Index = "WizardStepType",
+				Name = "WizardStep",
+				Index = "WizardStep",
 				Resizable = false,
 				Align = Align.Center,
 				Title = false,
@@ -507,8 +507,8 @@ namespace EzBob.Web.Areas.Underwriter
 			gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
 			{
 				Caption = "Mps Statuses",
-				Name = "MpsStatus",
-				Index = "MpsStatus",
+				Name = "RegisteredMpStatuses",
+				Index = "RegisteredMpStatuses",
 				Resizable = false,
 				Align = Align.Left,
 				Title = false,
@@ -516,6 +516,7 @@ namespace EzBob.Web.Areas.Underwriter
 				Fixed = false,
 				Width = 500,
 				Search = false,
+				Sortable = false,
 				DataType = TypeCode.String,
 				Data = x => x.RegisteredMpStatuses
 			});
@@ -526,8 +527,8 @@ namespace EzBob.Web.Areas.Underwriter
 			gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
 			{
 				Caption = "Wizard Step",
-				Name = "WizardStepType",
-				Index = "WizardStepType",
+				Name = "WizardStep",
+				Index = "WizardStep",
 				Resizable = false,
 				Align = Align.Center,
 				Title = false,
