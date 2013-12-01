@@ -12,13 +12,15 @@ namespace ExperianLib.Tests.Integration {
 		public void GetLimitedCompanyTest() {
 			var service = new EBusinessService();
 
-			var aryRefNumbs = new[] {
-				"05691397"/*,
-				"07943908", "07841965", "07915265", "01776469",
-				"07051457", "07852687", "06025730", "07197628", "05860211"*/
+			var aryRefNumbs = new[] { "",
+				/*"05691397", "07943908", "07841965", "07915265", "01776469",
+				"07051457", "07852687", "06025730", "07197628", "05860211", */
 			};
 
 			foreach (string refNum in aryRefNumbs) {
+				if (refNum == "")
+					continue;
+
 				var result = service.GetLimitedBusinessData(refNum, 1, false);
 				Debug.WriteLine("Limited business with ref number = {0} results: {1}", refNum,
 					JsonConvert.SerializeObject(result));

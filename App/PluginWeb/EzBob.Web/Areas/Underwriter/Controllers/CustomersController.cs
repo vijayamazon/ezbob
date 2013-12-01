@@ -267,29 +267,24 @@
 		[Ajax]
 		[HttpGet]
 		[Transactional]
-		public GridCriteriaResult<Customer> RegisteredCustomers(GridSettings settings)
-		{
+		public GridCriteriaResult<Customer> RegisteredCustomers(GridSettings settings) {
 			bool isTest = Request.Params["IsTest"] == "true";
 			bool showAll = Request.Params["ShowAll"] == "true";
-			if (showAll)
-			{
-				return new GridCriteriaResult<Customer>(_session, null,
-													_gridRegisteredCustomers,
-													settings)
-				{
-					CustomizeFilter = crit => crit.Add(Restrictions.IsNull("CreditResult"))
-												  .Add(Restrictions.Eq("IsTest", isTest))
-				};
-			}
-			return new GridCriteriaResult<Customer>(_session, null,
-													_gridRegisteredCustomers,
-													settings)
-			{
-				CustomizeFilter = crit => crit.Add(Restrictions.IsNull("CreditResult"))
-											  .Add(Restrictions.Where<Customer>(c => c.GreetingMailSentDate >= DateTime.Today.AddDays(-7)))
-											  .Add(Restrictions.Eq("IsTest", isTest))
+
+			var lst = new System.Collections.Generic.List<ICriterion> {
+				Restrictions.IsNull("CreditResult")
 			};
-		}
+
+			if (!showAll)
+				lst.Add(Restrictions.Where<Customer>(c => c.GreetingMailSentDate >= DateTime.Today.AddDays(-7)));
+
+			if (!isTest)
+				lst.Add( Restrictions.Or(Restrictions.Eq("IsTest", false), Restrictions.IsNull("IsTest")) );
+
+			return new GridCriteriaResult<Customer>(_session, null, _gridRegisteredCustomers, settings) {
+				CustomizeFilter = crit => { foreach (var c in lst) crit.Add(c); }
+			};
+		} // RegisteredCustomers
 
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
