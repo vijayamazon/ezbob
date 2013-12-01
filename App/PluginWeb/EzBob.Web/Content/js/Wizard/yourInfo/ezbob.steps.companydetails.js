@@ -71,7 +71,7 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 		if (enabled && this.CompanyView)
 			enabled = this.CompanyView.readyToContinue();
 
-		$('.continue').toggleClass('disabled', !enabled);
+		$('.btn-continue').toggleClass('disabled', !enabled);
 	}, // inputChanged
 
 	typeOfBusinessChanged: function() {
@@ -165,7 +165,7 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 	}, // ownValidationMessages
 
 	next: function(e) {
-		if ($('.continue').hasClass('disabled'))
+		if ($('.btn-continue').hasClass('disabled'))
 			return false;
 
 		var form = this.$el.find('form.CompanyDetailForm'),

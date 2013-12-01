@@ -179,7 +179,7 @@
 
         <div class="form_buttons_container">
             <div class="attardi-button">
-                <a href="#" class="btn-continue button orange btn-next disabled continue" ui-event-control-id="personal-info:continue">Continue</a>
+                <a href="#" class="rc-button green btn-continue disabled" ui-event-control-id="personal-info:continue">Continue</a>
             </div>
         </div>
     </div>
@@ -234,7 +234,9 @@
 	</div>
 
 	<div class="form_buttons_container">
-		<a href="#" class="continue btn-continue next button orange disabled" ui-event-control-id="personal-info:company_continue">Continue</a>
+        <div class="attardi-button">
+		    <a href="#" class="btn-continue next rc-button green disabled" ui-event-control-id="personal-info:company_continue">Continue</a>
+        </div>
 	</div>
 </script>
 
@@ -248,7 +250,7 @@
             <div class="wizard-director-text">ezbob presumes that you a director of your company.</div>
             <div class="wizard-director-text">Adding the details of additional directors may improve the offer you receive.</div>
 
-            <input id="addDirector" class="btn green" type="button" value="Add directors" ui-event-control-id="personal-info:add_director" />
+            <input id="addDirector" class="rc-button green" type="button" value="Add directors" ui-event-control-id="personal-info:add_director" />
         </div>
     </div>
 </script>
@@ -498,7 +500,7 @@
 <script id="oneDirector" type="text/template">
     <%_.each(directors, function(director, i){%>
         <div class="Directors">
-            <h1 class="form_start" preffix="<%-preffix%>" seqno="<%=i%>">Director #<%=i+1%><a style="margin-left: 15px; margin-bottom: 7px" number="<%=i+1%>" href="#" class="removeDirector btn green" ui-event-control-id="personal-info:remove_director">Remove</a></h1>
+            <h1 class="form_start" preffix="<%-preffix%>" seqno="<%=i%>">Director #<%=i+1%><a style="margin-left: 15px; margin-bottom: 7px" number="<%=i+1%>" href="#" class="removeDirector rc-button green" ui-event-control-id="personal-info:remove_director">Remove</a></h1>
 
             <div class="control-group form_field_container">
                 <div class="controls">
@@ -613,7 +615,7 @@
                 </div>
                 <a 
                     href='#'
-                    class="btn-continue button orange pull-right"
+                    class="btn-continue rc-button green pull-right"
                     ui-event-control-id="wizard:complete"
                     onClick="EzBob.App.GA.trackEventReditect('@Url.Action("Index", "Profile", new { Area = "Customer" })', 'Wizard Complete', 'Go To account', 'Awaiting Approval'); return false;">Go to Account
                 </a>

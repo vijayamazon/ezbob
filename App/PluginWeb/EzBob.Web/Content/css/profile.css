@@ -923,10 +923,6 @@ select.selectheight { height: 30px; }
 
 .bank-account .control-panel-and-bank-details { position: relative; display: inline-block; }
 
-.editYourInfoForm .form_field_address_lookup{
-    margin-left: 10px;
-}
-
 textarea.invite_friend {
     width: 400px;
     height: 100px;
@@ -990,4 +986,15 @@ textarea.invite_friend {
     right: 0;
     bottom: 0;
     z-index: 1;
+}
+
+div.addAddressContainer span.attardi-has-data {
+    display: none;
+}
+div.addAddressContainer .field_status {
+    visibility: hidden !important;
+}
+
+div.director-container {
+    width: 96%;
 }

@@ -15,8 +15,8 @@
             <div class="company-info"/>
         </div>
     </div>
-      <div class="row-fluid">
-        <div class="span12">
+      <div class="form_buttons_container">
+        <div class="attardi-button">
                  <a  class="btn-continue button orange submit-personal pull-right" display="none">Submit</a>
                  <a  class="btn-continue cancel button orange pull-right" display="none">Cancel</a>
                  <a  class="btn-continue edit-personal button orange pull-right" >Edit Information</a>
@@ -31,40 +31,40 @@
         <legend>Personal Information</legend>
             
         <div class="control-group">
-            <label class="control-label">Name:</label>
+            <label class="control-label">Name</label>
             <div class="controls">
                 <input type="text" value="<%-CustomerPersonalInfo.FirstName%>" class="form_field" readonly="readonly"/>
             </div>
         </div>
 
         <div class="control-group">
-            <label class="control-label">Middle:</label>
+            <label class="control-label">Middle</label>
             <div class="controls">
                 <input type="text" value="<%-CustomerPersonalInfo.MiddleInitial%>" class="form_field" readonly="readonly"/>
             </div>
         </div>
 
         <div class="control-group">
-            <label class="control-label">Surname:</label>
+            <label class="control-label">Surname</label>
             <div class="controls">
                 <input type="text" value="<%-CustomerPersonalInfo.Surname%>" class="form_field" readonly="readonly"/>
             </div>
         </div>
 
         <div class="control-group">
-            <label class="control-label">Date of Birth:</label>
+            <label class="control-label">Date of birth</label>
             <div class="controls">
                 <input type="text" value="<%-EzBob.formatDate(CustomerPersonalInfo.DateOfBirth)%>" class="form_field" readonly="readonly"/>
             </div>
         </div>
             <div class="controls">
                     <div class="addressEdit">
-                        @EzForm.AddressInput("PersonalAddress", "Address:")
+                        @EzForm.AddressInput("PersonalAddress", "Address")
                     </div>
             </div>
     
         <div class="control-group">
-            <label class="control-label">Time at Address:</label>
+            <label class="control-label">Time at address</label>
             <div class="controls">
                 <input type="text" value="<%-CustomerPersonalInfo.TimeAtAddress%>  years" class="form_field" readonly="readonly"/>
             </div>
@@ -72,47 +72,47 @@
 
         <div class="controls offline">
             <div class="addressEdit">
-                @EzForm.AddressInput("OtherPropertyAddress", "Other Property Address:")
+                @EzForm.AddressInput("OtherPropertyAddress", "Other property address")
             </div>
         </div>
 
         <div class="control-group">
-            <label class="control-label">Residential Status:</label>
+            <label class="control-label">Residential status</label>
             <div class="controls">
                 <input type="text" value="<%-CustomerPersonalInfo.ResidentialStatus%>" class="form_field" readonly="readonly"/>
             </div>
         </div>
             
         <div class="control-group">
-            <label class="control-label">Daytime Phone #</label>
+            <label class="control-label">Daytime phone #</label>
             <div class="controls">
                 <input class ="personEditInput phonenumber form_field" id="DayTimePhone" name="DayTimePhone" type="text" value="<%-CustomerPersonalInfo.DaytimePhone%>"  readonly="readonly" />
             </div>
         </div>
             
         <div class="control-group">
-            <label class="control-label">Mobile Phone #</label>
+            <label class="control-label">Mobile phone #</label>
             <div class="controls">
                 <input class ="personEditInput phonenumber form_field" id="MobilePhone" name="MobilePhone" type="text" value="<%-CustomerPersonalInfo.MobilePhone%>"  readonly="readonly" />
             </div>
         </div>
            
         <div class="control-group">
-            <label class="control-label">Type of Business:</label>
+            <label class="control-label">Type of business</label>
             <div class="controls">
                 <input type="text" value="<%-CustomerPersonalInfo.TypeOfBusinessName%>" class="form_field" readonly="readonly"/>
             </div>
         </div>
         
         <div class="control-group">
-            <label for="OverallTurnOver" class="control-label">Total <b>Estimated</b> Sales</label>
+            <label for="OverallTurnOver" class="control-label">Total <b>estimated</b> sales</label>
             <div class="controls cashControlls">
                 <input id="OverallTurnOver" readonly="readonly" name="OverallTurnOver" type="text" value="<%-CustomerPersonalInfo.OverallTurnOver%>" class="cashInput personEditInput form_field" />
             </div>
         </div>   
        
         <div class="control-group">
-            <label for="WebSiteTurnOver" class="control-label">Online Estimated Sales</label>
+            <label for="WebSiteTurnOver" class="control-label">Online estimated sales</label>
             <div class="controls cashControlls">
                 <input id="WebSiteTurnOver" readonly="readonly" name="WebSiteTurnOver" type="text" value="<%-CustomerPersonalInfo.WebSiteTurnOver%>" class="cashInput personEditInput form_field" />
             </div>
@@ -120,7 +120,7 @@
 
         @if (DBConfigurationValues.Instance.DisplayEarnedPoints) {
         <div class="control-group">
-            <label class="control-label">Earned points:</label>
+            <label class="control-label">Earned points</label>
             <div class="controls">
                 <input type="text" value="<%- LoyaltyPoints %>" readonly="readonly" class="form_field"/>
             </div>
@@ -135,14 +135,14 @@
         <legend>Business Information </legend>
         <div class="control-group">
             <label class="control-label">
-                Registration #:</label>
+                Registration #</label>
             <div class="controls">
                 <input type="text" value="<%-LimitedInfo.LimitedCompanyNumber%>" readonly="readonly" class="form_field"/>
             </div>
         </div>
         <div class="control-group">
             <label class="control-label">
-                Company Name:</label>
+                Company Name</label>
             <div class="controls">
                 <input type="text" value="<%-LimitedInfo.LimitedCompanyName%>" readonly="readonly" class="form_field"/>
             </div>
@@ -155,7 +155,7 @@
 
         <div class="control-group">
             <label class="control-label">
-                Business Phone #</label>
+                Business phone #</label>
             <div class="controls">
                 <input class ="personEditInput phonenumber form_field" id="BusinessPhone" name="BusinessPhone" type="text" value="<%-LimitedInfo.LimitedBusinessPhone%>" readonly="readonly"  />
             </div>
@@ -167,35 +167,35 @@
 			<fieldset>
 				<legend>On <%- EzBob.formatDate(CompanyEmployeeCountInfo.Created) %></legend>
 				<div class="control-group">
-					<label class="control-label">Current Number of Employees:</label>
+					<label class="control-label">Current number of employees</label>
 					<div class="controls">
 						<input type="text" value="<%- CompanyEmployeeCountInfo.EmployeeCount %>" class="form_field" readonly="readonly"/>
 					</div>
 				</div>
 
 				<div class="control-group">
-					<label class="control-label">Number of Employees Earning (Gross Salary) over £41,450 Per Annum:</label>
+					<label class="control-label">Number of employees earning (gross salary) over £41,450 per annum</label>
 					<div class="controls">
 						<input type="text" value="<%- CompanyEmployeeCountInfo.TopEarningEmployeeCount %>" class="form_field" readonly="readonly"/>
 					</div>
 				</div>
 
 				<div class="control-group">
-					<label class="control-label">Number of Employees Earning (Gross Salary) less than £9,440 Per Annum:</label>
+					<label class="control-label">Number of employees earning (gross salary) less than £9,440 per annum</label>
 					<div class="controls">
 						<input type="text" value="<%- CompanyEmployeeCountInfo.BottomEarningEmployeeCount %>" class="form_field" readonly="readonly"/>
 					</div>
 				</div>
 
 				<div class="control-group">
-					<label class="control-label">Change in the Number of Employees in Last 12 Months:</label>
+					<label class="control-label">Change in the number of employees in last 12 months</label>
 					<div class="controls">
 						<input type="text" value="<%- CompanyEmployeeCountInfo.EmployeeCountChange %>" class="form_field" readonly="readonly"/>
 					</div>
 				</div>
                 
                 <div class="control-group">
-					<label class="control-label">Total Monthly Salary Expenditure (inc tax & NI):</label>
+					<label class="control-label">Total monthly salary expenditure (inc tax & NI)</label>
 					<div class="controls">
 						<input type="text" value="<%- CompanyEmployeeCountInfo.TotalMonthlySalary %>" class="form_field" readonly="readonly"/>
 					</div>
@@ -211,7 +211,7 @@
         <legend>Business Information </legend>
         <div class="control-group">
             <label class="control-label">
-                Company Name:</label>
+                Company Name</label>
             <div class="controls">
                 <input type="text" value="<%-NonLimitedInfo.NonLimitedCompanyName%>" class="form_field" readonly="readonly" />
             </div>
@@ -223,21 +223,21 @@
         </div>    
         <div class="control-group notoffline">
             <label class="control-label">
-                Time at Address:</label>
+                Time at address</label>
             <div class="controls">
                 <input type="text" value="<%-NonLimitedInfo.NonLimitedTimeAtAddress%> years" class="form_field" readonly="readonly" />
             </div>
         </div>
         <div class="control-group">
             <label class="control-label">
-                Time In Business:</label>
+                Time in business</label>
             <div class="controls">
                 <input type="text" value="<%-NonLimitedInfo.NonLimitedTimeInBusiness%>  years" class="form_field" readonly="readonly" />
             </div>
         </div>
         <div class="control-group">
             <label class="control-label">
-                Business Phone #</label>
+                Business phone #</label>
             <div class="controls">
                 <input class ="personEditInput phonenumber form_field" name="BusinessPhone" type="text" value="<%-NonLimitedInfo.NonLimitedBusinessPhone%>" readonly="readonly"  />
             </div>
@@ -249,28 +249,28 @@
 			<fieldset>
 				<legend>On <%- EzBob.formatDate(CompanyEmployeeCountInfo.Created) %></legend>
 				<div class="control-group">
-					<label class="control-label">Current Number of Employees:</label>
+					<label class="control-label">Current number of employees</label>
 					<div class="controls">
 						<input type="text" value="<%- CompanyEmployeeCountInfo.EmployeeCount %>" class="form_field" readonly="readonly"/>
 					</div>
 				</div>
 
 				<div class="control-group">
-					<label class="control-label">Number of Employees Earning (Gross Salary) over £41,450 Per Annum:</label>
+					<label class="control-label">Number of employees earning (gross salary) over £41,450 per annum</label>
 					<div class="controls">
 						<input type="text" value="<%- CompanyEmployeeCountInfo.TopEarningEmployeeCount %>" class="form_field" readonly="readonly"/>
 					</div>
 				</div>
 
 				<div class="control-group">
-					<label class="control-label">Number of Employees Earning (Gross Salary) less than £9,440 Per Annum:</label>
+					<label class="control-label">number of employees earning (gross salary) less than £9,440 per annum</label>
 					<div class="controls">
 						<input type="text" value="<%- CompanyEmployeeCountInfo.BottomEarningEmployeeCount %>" class="form_field" readonly="readonly"/>
 					</div>
 				</div>
 
 				<div class="control-group">
-					<label class="control-label">Change in the Number of Employees in Last 12 Months:</label>
+					<label class="control-label">Change in the number of employees in last 12 months</label>
 					<div class="controls">
 						<input type="text" value="<%- CompanyEmployeeCountInfo.EmployeeCountChange %>" class="form_field" readonly="readonly"/>
 					</div>
@@ -289,8 +289,8 @@
 		</div>
 		<div id="colapse<%-Id%>" class="accordion-body collapse">
 			<div class="accordion-inner">
-				<p>Name:<b><%-Name%> <%-Middle%> <%-Surname%></b></p>
-				<p>Date Of Birth:<b><%-DateOfBirth%></b></p>
+				<p>Name: <b><%-Name%> <%-Middle%> <%-Surname%></b></p>
+				<p>Date Of birth: <b><%-DateOfBirth%></b></p>
 				<p>Email: <b><%- Email %></b></p>
 				<p>Phone: <b><%- Phone %></b></p>
 				<div class="addressEdit" >

@@ -41,7 +41,7 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 			this.isAddressValid() &&
 			this.ownOtherPropertyIsValid();
 
-		$('.continue').toggleClass('disabled', !enabled);
+		$('.btn-continue').toggleClass('disabled', !enabled);
 	}, // inputChanged
 
 	isAddressValid: function() {

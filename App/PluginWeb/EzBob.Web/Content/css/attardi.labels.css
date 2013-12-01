@@ -24,7 +24,7 @@
         .attardi-input span.attardi-has-data {
             bottom: 24px;
             left: -10px;
-            color: #4c4c4c !important;
+            color: #acacac !important;
             font-size: 70%;
         }
 
@@ -38,26 +38,29 @@
     z-index: 0;
     padding: 0 4px;
     margin: 0;
-    font: inherit;
-    border: 1px solid #999999;
 }
+
+.attardi-input input:not([type='button']):focus, .attardi-input select:focus {
+    border: #CCC 1px solid;
+    outline: none;
+}
+
+.attardi-input input:not([type='button']):hover, .attardi-input select:hover {
+    border: #CCC 1px solid;
+    outline: none;
+}
+
 
 .attardi-input select {
     z-index: 0;
     margin: 0;
-    /*font: inherit;*/
-    border: 1px solid #999999;
 }
 
 .ezDateTime .attardi-input {
-    width: 24.1%;
-}
-
-.personal-details-birth-date {
-    width: 24.23% !important;
+    width: 26%;
 }
 
 .ezDateTime .attardi-input select {
-    width: 90%;
+    width: 96%;
 }
 

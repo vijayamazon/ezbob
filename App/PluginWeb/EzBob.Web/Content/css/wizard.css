@@ -209,15 +209,10 @@ h2.form_section {
 	 margin-top: 1em; padding-left: 0!important;
 }
 
-div.form_buttons_container { position: relative; height: 30px;width: 90%;}
-div.form_buttons_container input, 
-div.form_buttons_container a { float: right; }
-
 div.form_read_and_accept input { margin-top: -5px; }
 
 div.form_read_and_accept label { display: inline; }
 
-div.add-director-container { position: relative; width: 90%; }
 
 div.add-director-container #addDirector { position: relative; float: right; margin-bottom: 1em; }
 
@@ -232,25 +227,15 @@ div.wizard-director-text { font-size: 11pt; color: #585858; }
 .field_status {
 	vertical-align: top;
 	margin-top: 0.4em;
+    float: right;
 }
 
 .fs16 {
     font-size: 16px;
 }
 
-.director-gender {
-    width: 545px !important;
-}
-
-
 .director-gender input {
     margin: 0 !important;
 }
 
-.personal-details-gender-image {
-    margin-left: 417px;
-}
 
-.director_gender_image {
-    margin-left: -1px;
-}

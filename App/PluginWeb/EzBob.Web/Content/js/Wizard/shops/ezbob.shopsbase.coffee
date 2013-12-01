@@ -35,7 +35,7 @@ class EzBob.StoreInfoBaseView extends Backbone.View
         false
 
     next: ->
-        return if @$el.find(".next").hasClass("disabled")
+        return if @$el.find(".continue").hasClass("disabled")
         @trigger "next"
         EzBob.App.trigger "clear"
         false
@@ -44,7 +44,7 @@ class EzBob.StoreInfoBaseView extends Backbone.View
         @trigger "ready", name
         unless @isReady
             @isReady = true
-            @$el.find(".next").show()
+            @$el.find(".continue").show()
 
     updateEarnedPoints: ->
         $.getJSON("#{window.gRootPath}Customer/Wizard/EarnedPointsStr").done (data) ->
@@ -100,7 +100,7 @@ class EzBob.StoreInfoBaseView extends Backbone.View
                 foundAllMandatories = false
 
         canContinue = (hasFilledShops and (!hasEbay or (hasEbay and hasPaypal)) and foundAllMandatories) or (@isOffline and @allowFinishOfflineWizardWithoutMarketplaces) or (!@isOffline and @allowFinishOnlineWizardWithoutMarketplaces)
-        @$el.find('.next').toggleClass 'disabled', !canContinue
+        @$el.find('.continue').toggleClass 'disabled', !canContinue
         @handleMandatoryText(hasFilledShops, canContinue, ebayPaypalRuleMessageVisible)
         
         for shop in sortedShopsByNumOfShops when shop.active 
@@ -114,7 +114,7 @@ class EzBob.StoreInfoBaseView extends Backbone.View
 
     events:
         "click a.connect-store": "close"
-        "click a.next": "next"
+        "click a.continue": "next"
 
     handleMandatoryText: (hasFilledShops, canContinue, ebayPaypalRuleMessageVisible) ->
         shouldHide = !hasFilledShops or canContinue or ebayPaypalRuleMessageVisible
