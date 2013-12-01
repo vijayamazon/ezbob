@@ -228,6 +228,7 @@ div.wizard-director-text { font-size: 11pt; color: #585858; }
 .field_status {
 	vertical-align: top;
 	margin-top: 0.4em;
+    float: right;
 }
 
 .fs16 {
@@ -243,10 +244,3 @@ div.wizard-director-text { font-size: 11pt; color: #585858; }
     margin: 0 !important;
 }
 
-.personal-details-gender-image {
-    margin-left: 417px;
-}
-
-.director_gender_image {
-    margin-left: -1px;
-}

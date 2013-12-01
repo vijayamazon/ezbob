@@ -246,7 +246,7 @@ body .form_field:hover{border:1px #0064d2 solid; -moz-box-shadow: 0 0 5px #39f; 
 body .form_field_look:focus,
 body .form_field:focus{border:1px #666 solid;}
 
-div.form_buttons_container { position: relative; height: 30px;width: 90%;}
+div.form_buttons_container { position: relative; height: 30px;width: 96%;}
 div.form_buttons_container input, 
 div.form_buttons_container a { float: right; }
 
@@ -266,15 +266,17 @@ input, select, textarea {
   -webkit-box-sizing: border-box;
 }
 
-input.form_field, textarea.form_field { width: 90%; }
+.stores-view{ width: 96%; }
+
+input.form_field, textarea.form_field { width: 96%; }
 
 input.form_field, input.form_field_look, select.form_field { height: 36px !important; font-size: 16px !important; font-weight: normal!important;}
 
-textarea.form_field_address { height: auto !important; margin-top: 1em; resize: none;width: 90%; }
+textarea.form_field_address { height: auto !important; margin-top: 1em; resize: none;width: 96%; }
 
 div.form_read_and_accept { width: 90%; }
 
-select.form_field { width: 90%; height: 38px; padding: 4px; }
+select.form_field { width: 96%; height: 38px; padding: 4px; }
 
 select.form_field_date { width: 70%; }
 

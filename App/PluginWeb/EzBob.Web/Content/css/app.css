@@ -662,7 +662,7 @@ select.SubBank::-webkit-scrollbar {
     ul.application_steps li {
         float: left;
         background: url(images/arrow.png) 15px 13px no-repeat;
-        padding: 10px 0px 10px 40px;
+        padding: 10px 35px 10px 40px;
 		font-style: italic;
         font-size: 16px;
         margin: 0 5px 0 0;
@@ -984,7 +984,7 @@ input[type="color"],
 
 .ez_progress_bar {
     width: 580px;
-    height: 20px;
+    height: 30px;
     padding: 0px;
     background: #f7f7f7;
     background: -moz-linear-gradient(top, #f7f7f7 0%, #e5e5e5 100%);
@@ -995,30 +995,30 @@ input[type="color"],
     background: linear-gradient(to bottom, #f7f7f7 0%,#e5e5e5 100%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f7f7f7', endColorstr='#e5e5e5',GradientType=0 );
     border: 1px #ccc solid;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
     margin-bottom: 39px;
+    border-radius: 5px;
 }
 
 .ez_bar {
-    background: #fcc612;
-    background: -moz-linear-gradient(top, #fcc612 0%, #f29447 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fcc612), color-stop(100%,#f29447));
-    background: -webkit-linear-gradient(top, #fcc612 0%,#f29447 100%);
-    background: -o-linear-gradient(top, #fcc612 0%,#f29447 100%);
-    background: -ms-linear-gradient(top, #fcc612 0%,#f29447 100%);
-    background: linear-gradient(to bottom, #fcc612 0%,#f29447 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcc612', endColorstr='#f29447',GradientType=0 );
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
-    font-size: 12px;
+    background:  #7bcc24;
+
+
+    background-image: -webkit-gradient(linear,left top,right top,color-stop(0.30,  #7bcc24),color-stop(1,  #7bb224));
+    background-image: -o-linear-gradient(right,  #7bcc24 30%,  #7bb224 100%);
+    background-image: -moz-linear-gradient(right,  #7bcc24 30%,  #7bb224 100%);
+    background-image: -webkit-linear-gradient(right,  #7bcc24 30%,  #7bb224 100%);
+    background-image: -ms-linear-gradient(right,  #7bcc24 30%,  #7bb224 100%);
+    background-image: linear-gradient(to right,  #7bcc24 30%,  #7bb224 100%);
+
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=' #7bf124', endColorstr='#7bb224',GradientType=0 );
+    font-size: 16px;
     color: #000;
-    text-shadow: 0 1px 1px #fff;
-    height: 20px;
+    height: 30px;
     position: relative;
     line-height: 1.6em;
+    border-radius: 5px;
+    text-shadow: none;
+    vertical-align: middle;
 }
 
 .bar_step0 {
@@ -1040,8 +1040,13 @@ input[type="color"],
 .bar_step100 { width: 100%; }
 
 .bar_content {
-    padding: 0 5px;
+    padding: 2px 5px 0 5px;
     min-width: 90px;
+    vertical-align: middle;
+    display: inline-block;
+    width: inherit;
+    text-align: center;
+    white-space: nowrap;
 }
 
 .help_window {
