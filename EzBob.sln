@@ -149,6 +149,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExperianStandAlone", "Integ
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZooplaLib", "Integration\ZooplaLib\ZooplaLib.csproj", "{0B829475-8239-498A-8454-AC5D91272235}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Backend", "Backend", "{8D1E3346-B62B-450C-A373-F03EA6430A93}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzbobService", "backend\EzbobService\EzbobService.csproj", "{DB53E538-D45B-4189-9D5B-0AD5F6006ADE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Strategies", "backend\Strategies\Strategies.csproj", "{7E526927-9849-4E6E-BBFF-D0D780F81A05}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -741,6 +747,26 @@ Global
 		{0B829475-8239-498A-8454-AC5D91272235}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{0B829475-8239-498A-8454-AC5D91272235}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{0B829475-8239-498A-8454-AC5D91272235}.Release|x86.ActiveCfg = Release|Any CPU
+		{DB53E538-D45B-4189-9D5B-0AD5F6006ADE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB53E538-D45B-4189-9D5B-0AD5F6006ADE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB53E538-D45B-4189-9D5B-0AD5F6006ADE}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{DB53E538-D45B-4189-9D5B-0AD5F6006ADE}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{DB53E538-D45B-4189-9D5B-0AD5F6006ADE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DB53E538-D45B-4189-9D5B-0AD5F6006ADE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB53E538-D45B-4189-9D5B-0AD5F6006ADE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB53E538-D45B-4189-9D5B-0AD5F6006ADE}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{DB53E538-D45B-4189-9D5B-0AD5F6006ADE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{DB53E538-D45B-4189-9D5B-0AD5F6006ADE}.Release|x86.ActiveCfg = Release|Any CPU
+		{7E526927-9849-4E6E-BBFF-D0D780F81A05}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E526927-9849-4E6E-BBFF-D0D780F81A05}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E526927-9849-4E6E-BBFF-D0D780F81A05}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{7E526927-9849-4E6E-BBFF-D0D780F81A05}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{7E526927-9849-4E6E-BBFF-D0D780F81A05}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7E526927-9849-4E6E-BBFF-D0D780F81A05}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E526927-9849-4E6E-BBFF-D0D780F81A05}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E526927-9849-4E6E-BBFF-D0D780F81A05}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{7E526927-9849-4E6E-BBFF-D0D780F81A05}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{7E526927-9849-4E6E-BBFF-D0D780F81A05}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -810,6 +836,8 @@ Global
 		{3B719D9D-7D14-4499-8EE9-5FDFD604453A} = {DC936AF4-81DC-44EB-A382-3B193BF88CEA}
 		{24723844-85C8-4C68-8293-A007044AA041} = {DC936AF4-81DC-44EB-A382-3B193BF88CEA}
 		{F851ADDC-B151-4CDE-8C83-AB0696B2E1EE} = {9DBFD4F9-06B0-4BAC-9836-AD0C686DF189}
+		{DB53E538-D45B-4189-9D5B-0AD5F6006ADE} = {8D1E3346-B62B-450C-A373-F03EA6430A93}
+		{7E526927-9849-4E6E-BBFF-D0D780F81A05} = {8D1E3346-B62B-450C-A373-F03EA6430A93}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		VisualSVNWorkingCopyRoot = .
