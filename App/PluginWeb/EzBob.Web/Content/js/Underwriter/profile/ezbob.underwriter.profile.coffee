@@ -336,6 +336,7 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
             @crossCheckView.marketPlaces = @marketPlaces
             @crossCheckView.companyScore = @companyScoreModel
             @crossCheckView.experianDirectors = fullModel.get("ExperianDirectors")
+            @crossCheckView.fullModel = fullModel
             @crossCheckView.render customerId: id
 
             $('a[href=#marketplaces]').click() if isHistory

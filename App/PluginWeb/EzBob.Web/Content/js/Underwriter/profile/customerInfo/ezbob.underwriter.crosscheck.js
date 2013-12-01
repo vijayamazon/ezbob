@@ -7,6 +7,7 @@ EzBob.Underwriter.CrossCheckView = Backbone.View.extend({
 		this.marketPlaces = null;
 		this.companyScore = null;
 		this.experianDirectors = null;
+		this.fullModel = null;
 	}, // initialize
 
 	render: function (d) {
@@ -45,15 +46,24 @@ EzBob.Underwriter.CrossCheckView = Backbone.View.extend({
 
 		this.setHmrcData();
 
-		var bCompanyNameSuccess = this.crossCheckOne('#cross-check-company-name');
+		var cb = null;
+		var sBusinessType = (
+			(this.fullModel ?
+				((cb = this.fullModel.get('CreditBureauModel')) ? cb.BorrowerType : '') :
+				'') || ''
+		).toLowerCase();
 
-		var bCompanyAddressSuccess = this.crossCheckOne('#cross-check-company-address');
+		if (sBusinessType && (sBusinessType != 'entrepreneur')) {
+			var bCompanyNameSuccess = this.crossCheckOne('#cross-check-company-name');
 
-		var bDirectorsSuccess = this.crossCheckDirectors();
+			var bCompanyAddressSuccess = this.crossCheckOne('#cross-check-company-address');
 
-		this.$el.find('.cross-check-summary-company-name').addClass(bCompanyNameSuccess ? 'Checked' : 'NoChecked');
-		this.$el.find('.cross-check-summary-company-address').addClass(bCompanyAddressSuccess ? 'Checked' : 'NoChecked');
-		this.$el.find('.cross-check-summary-directors').addClass(bDirectorsSuccess ? 'Checked' : 'NoChecked');
+			var bDirectorsSuccess = this.crossCheckDirectors();
+
+			this.$el.find('.cross-check-summary-company-name').addClass(bCompanyNameSuccess ? 'Checked' : 'NoChecked');
+			this.$el.find('.cross-check-summary-company-address').addClass(bCompanyAddressSuccess ? 'Checked' : 'NoChecked');
+			this.$el.find('.cross-check-summary-directors').addClass(bDirectorsSuccess ? 'Checked' : 'NoChecked');
+		} // if
 	}, // doCrossCheck
 
 	crossCheckDirectors: function() {
@@ -267,19 +277,20 @@ EzBob.Underwriter.CrossCheckView = Backbone.View.extend({
 	}, // name
 
 	events: {
-	    "click #recheck-targeting": "recheckTargeting",
-	    "click #zoopla": "showZoopla"
+		"click #recheck-targeting": "recheckTargeting",
+		"click #zoopla": "showZoopla"
 	}, // events
-	showZoopla: function () {
-	    BlockUi("On");
-	    $.get(window.gRootPath + "Underwriter/CrossCheck/Zoopla/?customerId=" + this.model.customerId, function (data) {
-	        var zooplaView = new EzBob.ZooplaView({ model: data });
-	        EzBob.App.jqmodal.show(zooplaView);
-	        BlockUi("Off");
 
-	    });
-        
-    },
+	showZoopla: function () {
+		BlockUi("On");
+
+		$.get(window.gRootPath + "Underwriter/CrossCheck/Zoopla/?customerId=" + this.model.customerId, function (data) {
+			var zooplaView = new EzBob.ZooplaView({ model: data });
+			EzBob.App.jqmodal.show(zooplaView);
+			BlockUi("Off");
+		});
+	}, // showZoopla
+
 	recheckTargeting: function (e) {
 		var el = $(e.currentTarget),
 			postcode = el.attr("data-postcode"),
