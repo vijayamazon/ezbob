@@ -1543,7 +1543,7 @@ namespace EZBob.DatabaseLib
 
 		public void CalculateYodleeRunningBalance(IDatabaseCustomerMarketPlace dmp, string sourceId, AmountInfo currentBalance)
 		{
-			var mp = _session.Query<MP_CustomerMarketPlace>().FirstOrDefault(m => m.Id == dmp.Id);
+			var mp = GetCustomerMarketPlace(dmp);
 			if (mp == null)
 			{
 				return;

@@ -1,5 +1,4 @@
 ﻿using EZBob.DatabaseLib.Model.Database;
-using EzBob.Web.Areas.Customer.Models;
 
 namespace EzBob.Web.Code.PostCode
 {
