@@ -268,7 +268,7 @@ input, select, textarea {
 
 input.form_field, textarea.form_field { width: 90%; }
 
-input.form_field, input.form_field_look { height: 36px !important; font-size: 16px !important; font-weight: normal!important;}
+input.form_field, input.form_field_look, select.form_field { height: 36px !important; font-size: 16px !important; font-weight: normal!important;}
 
 textarea.form_field_address { height: auto !important; margin-top: 1em; resize: none;width: 90%; }
 
