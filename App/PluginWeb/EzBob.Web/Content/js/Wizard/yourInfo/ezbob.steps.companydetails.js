@@ -43,8 +43,6 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 		this.events = _.extend({}, this.events, {
 			'click .btn-continue': 'next',
 
-			'change #TypeOfBusiness': 'typeOfBusinessChanged',
-
 			'focus #OverallTurnOver': 'overallTurnOverFocus',
 			'focus #WebSiteTurnOver': 'webSiteTurnOverFocus',
 
@@ -64,7 +62,10 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 		this.readyToProceed = false;
 	}, // initialize
 
-	inputChanged: function() {
+	inputChanged: function(evt) {
+		if (evt && (evt.type === 'change') && (evt.target.id === 'TypeOfBusiness'))
+			this.typeOfBusinessChanged();
+
 		var enabled = this.validator.checkForm();
 
 		if (enabled && this.CompanyView)
@@ -75,7 +76,7 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 
 	typeOfBusinessChanged: function() {
 		var name = this.$el.find('#TypeOfBusiness').val().toLowerCase();
-	    this.$el.find('#TypeOfBusiness').blur();
+
 		var companyType = this.companyTypes[name];
 		if (!companyType) {
 			if (this.CompanyView) {
