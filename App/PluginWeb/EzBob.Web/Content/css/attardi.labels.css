@@ -50,7 +50,11 @@
 }
 
 .ezDateTime .attardi-input {
-    width: 24%;
+    width: 24.1%;
+}
+
+.personal-details-birth-date {
+    width: 24.23% !important;
 }
 
 .ezDateTime .attardi-input select {

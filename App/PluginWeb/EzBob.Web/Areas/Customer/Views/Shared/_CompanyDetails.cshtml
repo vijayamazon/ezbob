@@ -66,7 +66,7 @@
                     
                 </div>
 
-                @EzForm.DateInput("DateOfBirth", "Date of birth", required: true, statusIcon: true, uiEventControlID: "personal-info:birth_date")
+                @EzForm.DateInput("DateOfBirth", "Date of birth", required: true, statusIcon: true, uiEventControlID: "personal-info:birth_date", labelCss: "personal-details-birth-date")
 
                 <div class="control-group form_field_container">
                     <div class="controls">
@@ -535,7 +535,7 @@
 					<input <%if(director.Gender == 'M'){%>checked="checked"<%}%> type="radio" name="<%-preffix%>[<%=i%>].Gender" value="M" id="<%-preffix%>[<%=i%>].FormRadioCtrl_M" ui-event-control-id="personal-info:director_gender"><label class="fs16" for="<%-preffix%>[<%=i%>].GenderCtrl_M">Male</label>
 					<input <%if(director.Gender == 'F'){%>checked="checked"<%}%> type="radio" name="<%-preffix%>[<%=i%>].Gender" value="F" id="<%-preffix%>[<%=i%>].FormRadioCtrl_F" ui-event-control-id="personal-info:director_gender"><label class="fs16" for="<%-preffix%>[<%=i%>].GenderCtrl_F">Female</label>
 				</span>
-				<img id="<%-preffix%>[<%=i%>].GenderImage" class="field_status required gender_image" />
+				<img id="<%-preffix%>[<%=i%>].GenderImage" class="field_status required director_gender_image" />
 			</div>
 
             @EzForm.DateInput("<%-preffix%>[<%=i%>].DateOfBirth", "Date of Birth", css: "director_date", required: true, statusIcon: true, uiEventControlID: "personal-info:director_birth_date", hiddenFieldAuxClass: "director_birth_date")
