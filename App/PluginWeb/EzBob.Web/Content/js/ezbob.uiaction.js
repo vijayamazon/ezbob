@@ -1,16 +1,14 @@
 var EzBob = EzBob || {};
 
 (function () {
-	function UiActionEvent(sEventName, oDomElement, bSaveValueOnChange) {
+	function UiActionEvent(options) {
 		if (!UiActionEvent.prototype.LastSeqNum)
 			UiActionEvent.prototype.LastSeqNum = 0;
 
-		var oElm = $(oDomElement);
-
 		this.userName = $('#logged-in-user-name').text();
-		this.controlName = oElm.attr('ui-event-control-id');
-		this.htmlID = oElm.attr('id');
-		this.actionName = sEventName;
+		this.controlName = options.controlName;
+		this.htmlID = options.htmlID;
+		this.actionName = options.type;
 		this.eventTime = EzBob.UiAction.now();
 
 		UiActionEvent.prototype.LastSeqNum++;
@@ -18,10 +16,10 @@ var EzBob = EzBob || {};
 
 		this.eventArgs = '';
 
-		if (bSaveValueOnChange)
-			this.eventArgs = oElm.val();
-		else if (sEventName === 'checked')
-			this.eventArgs = oDomElement.checked ? 'on' : 'off';
+		if (options.type === 'checked')
+			this.eventArgs = options.checked;
+		else if (options.saveValue)
+			this.eventArgs = options.value;
 	} // UiActionEvent
 
 	function UiCachePkg() {
@@ -41,8 +39,8 @@ var EzBob = EzBob || {};
 			return self.data.length >= self.MaxSize;
 		};
 
-		this.add = function (sEventName, oDomElement, bSaveValue) {
-			self.data.push(new UiActionEvent(sEventName, oDomElement, bSaveValue));
+		this.add = function (options) {
+			self.data.push(new UiActionEvent(options));
 		}; // add
 	} // UiCachePkg
 
@@ -227,6 +225,13 @@ var EzBob = EzBob || {};
 		save: function (evt) {
 			// console.log('ui event save(', evt.type, $(evt.target).attr('ui-event-control-id'), evt.target, evt.data.saveValue, ')');
 
+			var oElm = $(evt.target);
+
+			var oControlName = oElm.attr('ui-event-control-id');
+
+			if (!oControlName)
+				return;
+
 			if (this.cache.current && this.cache.current.isFull()) {
 				this.cache.history[this.cache.current.id] = this.cache.current;
 				this.cache.current = null;
@@ -237,8 +242,21 @@ var EzBob = EzBob || {};
 			if (!this.cache.current)
 				this.cache.current = new UiCachePkg();
 
-			this.cache.current.add(evt.type, evt.target, evt.data.saveValue);
+			this.cache.current.add({
+				type: evt.type,
+				saveValue: evt.data.saveValue ? true : false,
+				controlName: String(oControlName),
+				htmlID: String(oElm.attr('id') || ''),
+				value: String(oElm.val() || ''),
+				checked: (evt.type === 'checked') ? (evt.target.checked ? 'on' : 'off') : 'off',
+			});
 		}, // save
+
+		domProps: function (sEventName, oDomElement, b) {
+			var oElm = $(oDomElement);
+
+			return ;
+		}, // domProps
 
 		flush: function (bSync) {
 			//console.log('UiAction.flush', this);

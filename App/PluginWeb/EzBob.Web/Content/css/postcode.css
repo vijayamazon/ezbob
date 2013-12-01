@@ -8,6 +8,12 @@
     font-weight: bold;
     color: #333;
 }
+
+.postCodeTextArea li:hover,
+.postCodeTextArea li.current {
+	background-color: antiquewhite;
+}
+
 .postCodeTextArea[disabled="disabled"] {
     background-color: #f5f5f5;
     border-color: #ddd;
