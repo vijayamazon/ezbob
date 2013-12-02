@@ -6,21 +6,22 @@
         var questionName = settings.SecurityQuestions!=null && settings.SecurityQuestions.get(settings.SecurityQuestionId) ?
              settings.SecurityQuestions.get(settings.SecurityQuestionId).get('Name') : null;
         %>
+
         <div class="row">
-            <div class="span8" style="margin-left: 130px; margin-top: 8px;">
+            <div class="span8">
                 <div class="control-group">
-                    <label class="control-label">Password:</label>
+                    <label class="control-label">Password</label>
                     <div class="controls">
-                        <input type="text" readonly="readonly" value="**********" width="120px;" />
-                        <a href="#" class="btn-details button orange edit-password  pull-right">Edit</a>
+                        <input type="text" readonly="readonly" value="**********" class="form_field" />
+                        <a href="#" class="btn-details button orange edit-password">Edit</a>
                     </div>
                 </div>
     
                 <div class="control-group">
-                    <label class="control-label">Security Question:</label>
+                    <label class="control-label">Security Question</label>
                     <div class="controls">
-                        <input type="text" readonly="readonly" class="security-answer" width="120px;" value="<%-questionName%>" />
-                        <a href="#" class="btn-details button orange edit-question pull-right">Edit</a>
+                        <input type="text" readonly="readonly" class="security-answer form_field" value="<%-questionName%>" />
+                        <a href="#" class="btn-details button orange edit-question">Edit</a>
                     </div>
                 </div>
             </div>
@@ -29,41 +30,46 @@
 }
 @helper PasswordContent(){
 
-            <form id="change-password" action="" method ="POST" class="form-horizontal">
+            <form id="change-password" action="" method ="POST">
                 <fieldset>
-                    <legend style="padding-left: 18px;">Select Your New Password</legend>
-                    <div class="row">
-                        <div class="span5 offset2">
-                            <div class="control-group">
-                                <label class="control-label">Current Password:</label>
+                    <h2>Select your new password</h2>
+                        <div class="span8">
+                            <div class="control-group form_field_container">
                                 <div class="controls">
-                                    <input id="password" type="password" name="password" class="input-medium" value="" autocomplete="off"/>
+                                    <label class="control-label attardi-input">
+                                        <span class="">Current password</span>
+                                        <input id="password" type="password" name="password" class="form_field" value="" autocomplete="off"/>
+                                    </label>
                                 </div>
                             </div>
             
-                            <div class="control-group">
-                                <label class="control-label">New Password:</label>
+                            <div class="control-group form_field_container">
                                 <div class="controls">
-                                    <input id="new_password" type="password" name="new_password" class="input-medium" value="" autocomplete="off"/>
+                                    <label class="control-label attardi-input">
+                                        <span class="">New password</span>
+                                        <input id="new_password" type="password" name="new_password" class="form_field" value="" autocomplete="off"/>
+                                    </label>
                                 </div>
                             </div>
             
-                            <div class="control-group">
-                                <label class="control-label">Confirm Password:</label>
+                            <div class="control-group form_field_container">
                                 <div class="controls">
-                                    <input id="new_password2" type="password" name="new_password2" class="input-medium" value="" autocomplete="off"/>
+                                    <label class="control-label attardi-input">
+                                        <span class="">Confirm password</span>
+                                        <input id="new_password2" type="password" name="new_password2" class="form_field" value="" autocomplete="off"/>
+                                    </label>
                                 </div>
                             </div>
 
-                            <div style="width: 330px; margin-right: -6px;" class="clearfix pull-right">
-                                <a href="#" class="btn-continue button orange  submit pull-right">Submit</a>
-                                <a href="#" class="btn-back button grey back pull-right">Back</a>
+                            <div class="form_buttons_container">
+                                <div class="attardi-button">
+                                    <a href="#" class="btn-continue button orange  submit">Submit</a>
+                                    <a href="#" class="btn-back button grey back">Back</a>
+                                </div>
                             </div>
-
                         </div>
-                    </div>
                 </fieldset>
-            </form>    
+            </form>
 }
 
 
@@ -76,49 +82,52 @@
 </script>
 
 <script id="settings-question-template" type="text/template">
-    <form class="form-horizontal changePassword">
+    <form class="changePassword">
         <fieldset>
-            <legend style="padding-left: 18px;">
-                Security Question:
-            </legend>
-            <div class="row">
-                <div class="span6 offset2">
-                    <div class="control-group">
-                        <label class="control-label">Current Password:</label>
+            <h2>Security question</h2>
+                <div class="span8">
+                    <div class="control-group form_field_container">
                         <div class="controls">
-                            <input type="password" name="password" class="input-medium" value="" autocomplete="off"/>
+                            <label class="control-label attardi-input">
+                                <span class="">Current password</span>
+                                <input type="password" name="password" class="form_field" value="" autocomplete="off"/>
+                            </label>
                         </div>
                     </div>
 
-                    <div class="control-group">
-                        <label class="control-label">Question:</label>
+                    <div class="control-group form_field_container">
                         <div class="controls">
-                            <select class="selectheight">
-                                <%_.each(settings.SecurityQuestions.toJSON(), function(question){%>
-                                <%if(settings.SecurityQuestionId!=undefined){%>
-                                <option value="<%-question.Id%>" <%if ( question.Id == settings.SecurityQuestionId){%> selected="selected" <%}%>  ><%-question.Name%></option>
-                                <%}else{%>
-                                <option value="<%-question.Id%>"><%-question.Name%></option>
-                                <%}%>
-                                <%});%>
-                            </select>
+                            <label class="control-label attardi-input">
+                                <span class="">Question</span>
+                                <select class="form_field">
+                                    <%_.each(settings.SecurityQuestions.toJSON(), function(question){%>
+                                    <%if(settings.SecurityQuestionId!=undefined){%>
+                                    <option value="<%-question.Id%>" <%if ( question.Id == settings.SecurityQuestionId){%> selected="selected" <%}%>  ><%-question.Name%></option>
+                                    <%}else{%>
+                                    <option value="<%-question.Id%>"><%-question.Name%></option>
+                                    <%}%>
+                                    <%});%>
+                                </select>
+                            </label>
                         </div>
                     </div>
 
-                    <div class="control-group">
-                        <label class="control-label">Answer:</label>
+                    <div class="control-group form_field_container">
                         <div class="controls">
-                            <input type="text" name="answer" class="input-medium" value=""/>
+                            <label class="control-label attardi-input">
+                                <span class="">Answer</span>
+                                <input type="text" name="answer" class="form_field" value=""/>
+                            </label>
                         </div>
                     </div>
-                    
-                    <div style="width: 470px;" class="clearfix">
-                        <a href="#" class="btn-continue button orange submit pull-right disabled">Submit</a>
-                        <a href="#" class="btn-back back button grey  pull-right">Back</a>
+
+                    <div class="form_buttons_container">
+                        <div class="attardi-button">
+                            <a href="#" class="btn-continue button orange submit disabled">Submit</a>
+                            <a href="#" class="btn-back back button grey">Back</a>
+                        </div>
                     </div>
                 </div>
-            </div>
         </fieldset>
     </form>
-    
 </script>
