@@ -6,99 +6,132 @@ using Reports;
 using Ezbob.Database;
 using Ezbob.Logger;
 
-namespace EzReportToEMail {
+namespace EzReportToEMail
+{
 	#region class EmailReportHandler
 
-	public class EmailReportHandler : BaseReportHandler {
+	public class EmailReportHandler : BaseReportHandler
+	{
 		#region public
 
 		#region constructor
 
-		public EmailReportHandler(AConnection oDB, ASafeLog log = null) : base(oDB, log) {
+		public EmailReportHandler(AConnection oDB, ASafeLog log = null)
+			: base(oDB, log)
+		{
 		} // constructor
 
 		#endregion constructor
 
 		#region method ExecuteReportHandler
 
-		public void ExecuteReportHandler(DateTime dToday) {
+		public void ExecuteReportHandler(DateTime dToday)
+		{
 			SortedDictionary<string, Report> reportList = Report.GetScheduledReportsList(DB);
 
 			DateTime dTomorrow = dToday.AddDays(1);
 
 			var sender = new ReportDispatcher(DB, this);
+			try
+			{
+				Parallel.ForEach(reportList.Values, report =>
+					{
+						Debug("Generating {0} report...", report.Title);
 
-			Parallel.ForEach(reportList.Values, report => {
-				Debug("Generating {0} report...", report.Title);
+						switch (report.Type)
+						{
+							case ReportType.RPT_NEW_CLIENT:
+								sender.Dispatch(
+									report.Title,
+									dToday,
+									BuildNewClientReport(report, dToday),
+									BuildNewClientXls(report, dToday),
+									report.ToEmail
+									);
+								break;
 
-				switch (report.Type) {
-				case ReportType.RPT_NEW_CLIENT:
-					sender.Dispatch(
-						report.Title,
-						dToday,
-						BuildNewClientReport(report, dToday),
-						BuildNewClientXls(report, dToday),
-						report.ToEmail
-					);
-					break;
+							case ReportType.RPT_PLANNED_PAYTMENT:
+								sender.Dispatch(
+									report.Title,
+									dToday,
+									BuildPlainedPaymentReport(report, dToday),
+									BuildPlainedPaymentXls(report, dToday),
+									report.ToEmail
+									);
+								break;
 
-				case ReportType.RPT_PLANNED_PAYTMENT:
-					sender.Dispatch(
-						report.Title,
-						dToday,
-						BuildPlainedPaymentReport(report, dToday),
-						BuildPlainedPaymentXls(report, dToday),
-						report.ToEmail
-					);
-					break;
+							case ReportType.RPT_IN_WIZARD:
+								sender.Dispatch(
+									report.Title,
+									dToday,
+									BuildInWizardReport(report, dToday, dTomorrow),
+									BuildInWizardXls(report, dToday, dTomorrow),
+									report.ToEmail
+									);
+								break;
 
-				case ReportType.RPT_IN_WIZARD:
-					sender.Dispatch(
-						report.Title,
-						dToday,
-						BuildInWizardReport(report, dToday, dTomorrow),
-						BuildInWizardXls(report, dToday, dTomorrow),
-						report.ToEmail
-					);
-					break;
+							case ReportType.RPT_EARNED_INTEREST:
+								sender.Dispatch(
+									report.Title,
+									dToday,
+									BuildEarnedInterestReport(report, dToday, dTomorrow),
+									BuildEarnedInterestXls(report, dToday, dTomorrow),
+									report.ToEmail
+									);
+								break;
 
-				case ReportType.RPT_EARNED_INTEREST:
-					sender.Dispatch(
-						report.Title,
-						dToday,
-						BuildEarnedInterestReport(report, dToday, dTomorrow),
-						BuildEarnedInterestXls(report, dToday, dTomorrow),
-						report.ToEmail
-					);
-					break;
+							case ReportType.RPT_LOANS_GIVEN:
+								sender.Dispatch(
+									report.Title,
+									dToday,
+									BuildLoansIssuedReport(report, dToday, dTomorrow),
+									BuildLoansIssuedXls(report, dToday, dTomorrow),
+									report.ToEmail
+									);
+								break;
 
-				case ReportType.RPT_LOANS_GIVEN:
-					sender.Dispatch(
-						report.Title,
-						dToday,
-						BuildLoansIssuedReport(report, dToday, dTomorrow),
-						BuildLoansIssuedXls(report, dToday, dTomorrow),
-						report.ToEmail
-					);
-					break;
+							case ReportType.RPT_LOAN_STATS:
+								sender.Dispatch(
+									"loan_stats",
+									dToday,
+									null,
+									new LoanStats(DB, this).Xls(),
+									ReportDispatcher.ToDropbox
+									);
+								break;
 
-				case ReportType.RPT_LOAN_STATS:
-					sender.Dispatch(
-						"loan_stats",
-						dToday,
-						null,
-						new LoanStats(DB, this).Xls(),
-						ReportDispatcher.ToDropbox
-					);
-					break;
+							default:
+								HandleGenericReport(report, dToday, sender);
+								break;
+						} // switch
 
-				default:
-					HandleGenericReport(report, dToday, sender);
-					break;
-				} // switch
-
-				Debug("Generating {0} report complete.", report.Title);
-			}); // foreach
+						Debug("Generating {0} report complete.", report.Title);
+					}); // foreach
+			}
+			catch (AggregateException ae)
+			{
+				ae.Handle(x =>
+				{
+					if (x is ArgumentNullException)
+					{
+						Error("Parallel Exception ArgumentNullException {0}", x);
+						// manage the exception.
+						return true; // do not stop the program
+					}
+					else if (x is UnauthorizedAccessException)
+					{
+						Error("Parallel Exception UnauthorizedAccessException {0}", x);
+						// manage the access error.
+						return true;
+					}
+					else //is (Exception ex)
+					{
+						Error("Parallel Exception {0}", x);
+						// Any other exception here
+					}
+					return false; // Let anything else stop the application.
+				});
+			}
 		} // ExecuteReportHandler
 
 		#endregion method ExecuteReportHandler
@@ -109,7 +142,8 @@ namespace EzReportToEMail {
 
 		#region method HandleGenericReport
 
-		private void HandleGenericReport(Report report, DateTime dToday, ReportDispatcher sender) {
+		private void HandleGenericReport(Report report, DateTime dToday, ReportDispatcher sender)
+		{
 			if (report.IsDaily)
 				BuildReport(report, dToday, dToday.AddDays(1), DailyPerdiod, sender, dToday);
 
@@ -119,7 +153,8 @@ namespace EzReportToEMail {
 			if (IsMonthly(report.IsMonthly, dToday))
 				BuildReport(report, dToday.AddMonths(-1), dToday, MonthlyPerdiod, sender, dToday);
 
-			if (report.IsMonthToDate) {
+			if (report.IsMonthToDate)
+			{
 				DateTime monthStart = (new DateTime(dToday.Year, dToday.Month, 1));
 				BuildReport(report, monthStart, dToday.AddDays(1), MonthToDatePerdiod, sender, dToday);
 			} // if month to date
@@ -129,25 +164,27 @@ namespace EzReportToEMail {
 
 		#region method BuildReport
 
-		private void BuildReport(Report report, DateTime fromDate, DateTime toDate, string period, ReportDispatcher sender, DateTime oReportGenerationDate) {
+		private void BuildReport(Report report, DateTime fromDate, DateTime toDate, string period, ReportDispatcher sender, DateTime oReportGenerationDate)
+		{
 			var email = new ReportEmail();
 
-			switch (period) {
-			case DailyPerdiod:
-				email.Title.Append(new Text(period + " " + report.GetTitle(fromDate, " for ")));
-				break;
+			switch (period)
+			{
+				case DailyPerdiod:
+					email.Title.Append(new Text(period + " " + report.GetTitle(fromDate, " for ")));
+					break;
 
-			case WeeklyPerdiod:
-				email.Title.Append(new Text(period + " " + report.GetTitle(fromDate, " for ", toDate)));
-				break;
+				case WeeklyPerdiod:
+					email.Title.Append(new Text(period + " " + report.GetTitle(fromDate, " for ", toDate)));
+					break;
 
-			case MonthlyPerdiod:
-				email.Title.Append(new Text(period + " " + report.GetMonthTitle(fromDate)));
-				break;
+				case MonthlyPerdiod:
+					email.Title.Append(new Text(period + " " + report.GetMonthTitle(fromDate)));
+					break;
 
-			case MonthToDatePerdiod:
-				email.Title.Append(new Text(period + " " + report.GetMonthTitle(fromDate, toDate)));
-				break;
+				case MonthToDatePerdiod:
+					email.Title.Append(new Text(period + " " + report.GetMonthTitle(fromDate, toDate)));
+					break;
 			} // switch
 
 			var rptDef = new ReportQuery(report, fromDate, toDate);
@@ -172,7 +209,8 @@ namespace EzReportToEMail {
 
 		#region method IsMonthly
 
-		private bool IsMonthly(bool isMonthlyFlag, DateTime dToday) {
+		private bool IsMonthly(bool isMonthlyFlag, DateTime dToday)
+		{
 			return isMonthlyFlag && dToday.Day == 1;
 		} // IsMonthly
 
@@ -180,7 +218,8 @@ namespace EzReportToEMail {
 
 		#region method IsWeekly
 
-		private bool IsWeekly(bool isWeeklyFlag, DateTime dToday) {
+		private bool IsWeekly(bool isWeeklyFlag, DateTime dToday)
+		{
 			return isWeeklyFlag && dToday.DayOfWeek == DayOfWeek.Sunday;
 		} // IsWeekly
 
