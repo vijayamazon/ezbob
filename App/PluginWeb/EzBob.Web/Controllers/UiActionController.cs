@@ -53,15 +53,13 @@ namespace EzBob.Web.Controllers {
 				helper.BrowserVersionRepository.SaveOrUpdate(oBrowserVersion);
 			} // if
 
-			ms_oLog.DebugFormat("{1} at {2}: UiActionController.Save(version: {3} - {0}), data:",
-				oBrowserVersion.UserAgent, sSessionID, sRemoteIP, oBrowserVersion.ID
-			);
+			// ms_oLog.DebugFormat("{1} at {2}: UiActionController.Save(version: {3} - {0}), data:", oBrowserVersion.UserAgent, sSessionID, sRemoteIP, oBrowserVersion.ID );
 
 			var oSavedPackages = new List<string>();
 			var oFailedPackages = new List<UiCachePkgModel.SaveResult>();
 
 			foreach (var pair in oHistory) {
-				ms_oLog.DebugFormat("\tkey: {0} pkg: {1}", pair.Key, pair.Value);
+				// ms_oLog.DebugFormat("\tkey: {0} pkg: {1}", pair.Key, pair.Value);
 
 				UiCachePkgModel.SaveResult oResult = pair.Value.Save(helper, oBrowserVersion, sRemoteIP, sSessionID);
 

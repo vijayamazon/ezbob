@@ -161,50 +161,7 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 		if (!this.model.get('IsOffline'))
 			this.$el.find('.offline').remove();
 
-		var oPersonalInfo = this.model.get('CustomerPersonalInfo');
-		if (oPersonalInfo) {
-			var sGender = '';
-			switch (oPersonalInfo.Gender) {
-				case 0:
-					sGender = 'M';
-					break;
-				case 1:
-					sGender = 'F';
-					break;
-			} // switch
-
-			this.$el
-				.find('[id^="FormRadioCtrl_"]')
-				.prop('checked', false)
-				.filter('[id="FormRadioCtrl_' + sGender + '"]')
-				.prop('checked', true)
-				.click(); // to trigger validation
-
-			var aryBirthDate = (this.model.get('BirthDateYMD') || '').split('-');
-			if (aryBirthDate.length === 3) {
-				this.$el.find('#DateOfBirthDay').val(aryBirthDate[2]);
-				this.$el.find('#DateOfBirthMonth').val(aryBirthDate[1]);
-				this.$el.find('#DateOfBirthYear').val(aryBirthDate[0]);
-				this.$el.find('.ezDateTime').splittedDateTime();
-			} // if birthdate
-
-			var aryMaritalStatus = ['Married', 'Single', 'Divorced', 'Widow/er', 'Other'];
-			if (aryMaritalStatus[oPersonalInfo.MaritalStatus])
-				this.$el.find('#MaritalStatus').val(aryMaritalStatus[oPersonalInfo.MaritalStatus]);
-
-			this.$el.find('#TimeAtAddress').val(oPersonalInfo.TimeAtAddress);
-
-			this.$el.find('#ResidentialStatus').val(oPersonalInfo.ResidentialStatus);
-			this.$el.find('#DayTimePhone').val(oPersonalInfo.DaytimePhone);
-		} // if has personal info
-
-		this.otherPropertyAddressModelChange();
-
 		this.inputChanged();
-
-		this.personalTimeAtAddressChanged();
-
-		this.$el.find('input[type!="hidden"][type!="button"][type!="radio"], select:not(.form_field_date[value="-"])').blur(); // trigger validation
 
 		this.$el.find('.addressCaption').hide();
 		this.readyToProceed = true;

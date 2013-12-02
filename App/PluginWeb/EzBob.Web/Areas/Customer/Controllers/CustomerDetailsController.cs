@@ -33,9 +33,7 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 
 			if (string.IsNullOrEmpty(personalInfo.Surname))
 				throw new ArgumentNullException("personalInfo.S" + "urname");
-		}
-
-		// ValidatePersonalInfo
+		} // ValidatePersonalInfo
 
 		#endregion static method ValidatePersonalInfo
 
@@ -114,6 +112,9 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 			if (!EZBob.DatabaseLib.Model.Database.TypeOfBusiness.TryParse(TypeOfBusiness, true, out nBusinessType))
 				return this.JsonNet(new { error = "Failed to parse business type: " + TypeOfBusiness });
 
+			if (customer.PersonalInfo == null)
+				customer.PersonalInfo = new PersonalInfo();
+
 			customer.PersonalInfo.TypeOfBusiness = nBusinessType;
 			customer.PersonalInfo.WebSiteTurnOver = WebSiteTurnOver;
 			customer.PersonalInfo.OverallTurnOver = OverallTurnOver;
@@ -173,6 +174,12 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 			personalInfo.FirstName = personalInfo.FirstName.Trim();
 			personalInfo.MiddleInitial = string.IsNullOrEmpty(personalInfo.MiddleInitial) ? "" : personalInfo.MiddleInitial.Trim();
 			personalInfo.Fullname = string.Format("{0} {1} {2}", personalInfo.FirstName, personalInfo.Surname, personalInfo.MiddleInitial);
+
+			if (customer.PersonalInfo != null) {
+				personalInfo.TypeOfBusiness = customer.PersonalInfo.TypeOfBusiness;
+				personalInfo.WebSiteTurnOver = customer.PersonalInfo.WebSiteTurnOver;
+				personalInfo.OverallTurnOver = customer.PersonalInfo.OverallTurnOver;
+			} // if
 
 			customer.PersonalInfo = personalInfo;
 
