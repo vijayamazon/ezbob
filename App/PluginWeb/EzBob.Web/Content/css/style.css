@@ -285,11 +285,11 @@ select.form_field_date { width: 70%; }
 
 div.form_field_container { margin-bottom: 1.6em; }
 
-input.form_field_address { width: 69%; }
+input.form_field_address { max-width: 60%; }
 
 input.form_field_address_lookup { float: right;margin-right: 8px; }
 
-input.form_field_address_lookup { width: 26%; height: 36px; }
+input.form_field_address_lookup { width: 30%; height: 36px; }
 
 
 /*----table for payment schedule-----*/
