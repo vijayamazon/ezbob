@@ -614,3 +614,8 @@ table.unlimited-width th, table.unlimited-width td { padding: 8px; }
 div#DecisionNotes { text-align: right; font-weight: bold; }
 
 .small-text { font-size: 10px; }
+
+.copy-buttons {
+    position: relative;
+    display: inline-block;
+}
