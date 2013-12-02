@@ -161,8 +161,6 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 		if (!this.model.get('IsOffline'))
 			this.$el.find('.offline').remove();
 
-		this.inputChanged();
-
 		this.$el.find('.addressCaption').hide();
 		this.readyToProceed = true;
 		return this;
