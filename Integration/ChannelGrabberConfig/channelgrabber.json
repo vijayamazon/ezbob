@@ -306,7 +306,7 @@
 					"<li>Download <a href=\"/Content/xero/ezbob_xero_public_key.cer\" target=_blank ui-event-control-id=\"link-account:xero_public_key\">this key file</a> to your desktop.</li>",
 					"<li>Follow <a target=_blank href=\"https://api.xero.com/Application/Add\" ui-event-control-id=\"link-account:xero_api\">this link to your Xero API area</a></li>",
 					"<li>Choose <strong>Private</strong></li>",
-					"<li>Enter application name: <strong>EZBOB</strong></li>",
+					"<li>Enter application name: <span class='bold'>ezbob</span></li>",
 					"<li>Click <strong>Choose File</strong> and select the file you downloaded on the step 1.</li>",
 					"<li>Press <strong>Save</strong></li>",
 					"<li>You will get the OAuth Credentials: copy <strong>Consumer Key</strong> and <strong>Consumer Secret</strong> to the above fields</li>",

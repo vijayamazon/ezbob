@@ -8,7 +8,7 @@
                            "please click here: {0} to be directed to ezbob and see how much you qualify for.\n" +
                            "if you need more information please visit ezbob site or contact customer care.\n" +
                            "Join today.\n" +
-                           "The EZBOB team\n";
+                           "The ezbob team\n";
     //var encodedSummary = Uri.EscapeDataString(summary);
     var text = string.Format(summary, @url);
     var encodedSummary = Uri.EscapeDataString(text);
@@ -18,10 +18,10 @@
     var customer = (CustomerModel)Model.Customer;
 }
 <script id="invite-friend-template" type="text/template">
-    <h2>Refer a small business to EZBOB and both you and your friend can get £100!</h2>
+    <h2>Refer a small business to <span class="bold">ezbob</span> and both you and your friend can get £100!</h2>
     <p>
-        Help your friends grow their small business with up to £100,000 in EZBOB
-       instant funds. Refer them to EZBOB and you will earn £100 for each
+        Help your friends grow their small business with up to £100,000 in <span class="bold">ezbob</span>
+       instant funds. Refer them to <span class="bold">ezbob</span> and you will earn £100 for each
        business that signs up and takes a loan. The small business that you refer
        will also receive £100 when they sign up and take the funds. There is
        no limit to the number of referrals you can send or the amount of cash you can 

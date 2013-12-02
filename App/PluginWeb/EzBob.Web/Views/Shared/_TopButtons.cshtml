@@ -10,17 +10,17 @@
             @if (isAuth)
             {
 	            <span id="logged-in-user-name">@User.Identity.Name</span>
-                <a href="@Url.Action("LogOff", "Account", new{Area=""})" class="button grey medium_btn">Log Off</a>
+                <a href="@Url.Action("LogOff", "Account", new{Area=""})" class="button grey medium_btn">Log off</a>
             }
             else
             {
                 <div class="login_btn">
                     <span>Already have an account?</span>
-                    <a href="@Url.Action("LogOn", "Account", new{Area=""})" class="button grey medium_btn">LOGIN</a>
+                    <a href="@Url.Action("LogOn", "Account", new{Area=""})" class="button grey medium_btn">Login</a>
                 </div>
                 <div class="signup_btn hide">
                     <span>Don't have an account?</span>
-                    <a href='@Url.Action("Index", "Wizard", new {Area = "Customer"}, "https")#SignUp' class="button green medium_btn">Sign Up</a>
+                    <a href='@Url.Action("Index", "Wizard", new {Area = "Customer"}, "https")#SignUp' class="button green medium_btn">Sign up</a>
                 </div>
             }
         </div>

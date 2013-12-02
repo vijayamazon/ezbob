@@ -137,7 +137,7 @@ namespace EzBob.Web.Controllers
 						if (customer.CollectionStatus.CurrentStatus.Name == "Disabled")
 						{
 							ModelState.AddModelError("",
-													 "This account is closed, please contact EZBOB customer care<br/>customercare@ezbob.com");
+													 "This account is closed, please contact <span class='bold'>ezbob</span> customer care<br/>customercare@ezbob.com");
 							return View(model);
 						}
 					}
@@ -157,7 +157,7 @@ namespace EzBob.Web.Controllers
 						user.IsPasswordRestored = true;
 						user.LoginFailedCount = 0;
 
-						ModelState.AddModelError("", "Three unsuccessful login attempts have been made. EZBOB has issued you with a temporary password. Please check your e-mail.");
+						ModelState.AddModelError("", "Three unsuccessful login attempts have been made. <span class='bold'>ezbob</span> has issued you with a temporary password. Please check your e-mail.");
 					}
 					ModelState.AddModelError("", "User not found or incorrect password.");
 				}
@@ -191,7 +191,7 @@ namespace EzBob.Web.Controllers
 						var customer = _customers.Get(user.Id);
 						if (customer.CollectionStatus.CurrentStatus.Name == "Disabled")
 						{
-							errorMessage = @"This account is closed, please contact EZBOB customer care<br/> customercare@ezbob.com";
+							errorMessage = @"This account is closed, please contact <span class='bold'>ezbob</span> customer care<br/> customercare@ezbob.com";
 							_sessionIpLog.AddSessionIpLog(new CustomerSession()
 							{
 								CustomerId = user.Id,
@@ -254,7 +254,7 @@ namespace EzBob.Web.Controllers
 						user.LoginFailedCount = 0;
 
 						errorMessage =
-							@"Three unsuccessful login attempts have been made. EZBOB has issued you with a temporary password. Please check your e-mail.";
+							@"Three unsuccessful login attempts have been made. <span class='bold'>ezbob</span> has issued you with a temporary password. Please check your e-mail.";
 					}
 					else
 					{

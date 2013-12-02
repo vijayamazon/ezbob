@@ -3,17 +3,17 @@
 	<section id="content">
 	    <section class="pages">
 	        <h1>Login</h1>
-	        <h2>Welcome Back!</h2>
+	        <h2>Welcome back!</h2>
 	        @Html.TextBoxFor(x => x.ReturnUrl, new { type = "hidden" })
 
-	        @EzForm.InputText("UserName", "Email Address", cls: "form_field", isRequired: true, statusIcon: true)
+	        @EzForm.InputText("UserName", "Email address", cls: "form_field", isRequired: true, statusIcon: true)
 	        @EzForm.Password("Password", "Password", cls: "form_field", isRequired: true, statusIcon: true)
 
 	        <input name="RememberMe" type="hidden" value="@Model.RememberMe" />
 
 	        <div class="form_field_container">
 	            <label class="checkbox" for="RememberMe" style="font-weight: normal">
-	                Remember Me<input data-val="true" data-val-required="The Remember me? field is required." id="RememberMe" name="RememberMe" type="checkbox" value="@Model.RememberMe" />
+	                Remember me<input data-val="true" data-val-required="The Remember me? field is required." id="RememberMe" name="RememberMe" type="checkbox" value="@Model.RememberMe" />
 	            </label>
 	        </div>
 	        <div class="form_buttons_container">
@@ -21,7 +21,7 @@
 	                <input type="submit" value="Login" class="rc-button green login-btn disabled" id="loginSubmit" />
 	            </div>
 	        </div>
-	        <p>@Html.ActionLink("Forgotten Password", "ForgotPassword", "Account", new { }, new { }) | @Html.ActionLink("Sign up", "Index", "Wizard", new { Area = "Customer" }, new { })</p>
+	        <p>@Html.ActionLink("Forgotten password", "ForgotPassword", "Account", new { }, new { }) | @Html.ActionLink("Sign up", "Index", "Wizard", new { Area = "Customer" }, new { })</p>
 	    </section>
     </section>
 	<aside id="sidebar">

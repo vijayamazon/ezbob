@@ -189,7 +189,7 @@ jQuery.extend(jQuery.validator.messages, {
     required: "This field is required"
 });
 
-EzBob.Validation.checkDate = function (value) {    
+EzBob.Validation.checkDate = function (value) {
     return /\d+\/\d+\/\d+/.test(value);
 };
 
