@@ -33,7 +33,6 @@ EzBob.YourInformationStepViewBase = Backbone.View.extend({
 	}, // render
 
 	events: {
-		// 'click a.back': 'clickBack',
 		'click .btn-continue': 'next'
 	}, // events
 
@@ -42,28 +41,25 @@ EzBob.YourInformationStepViewBase = Backbone.View.extend({
 
 		$el.on('focusout', function() {
 			if (model.length === 0) {
-				$el.tooltip({
-					title: 'Please lookup your post code'
-				}).tooltip('enable').tooltip('fixTitle');
-			}
-		});
+				var oButton = $el.find('.addAddress');
+
+				oButton.tooltip({ title: 'Please lookup your post code' });
+
+				$el.hover(
+					function() { oButton.tooltip('show'); },
+					function() { oButton.tooltip('hide'); }
+				); // on hover
+			} // if
+		}); // on focus out
 
 		model.on('change', function() {
 			if (model.length > 0)
-				$el.tooltip('destroy');
-		});
+				$el.find('.addAddress').tooltip('destroy');
+		}); // on model changed
 	}, // addressErrorPlacement
 
 	clearAddressError: function(el) {
 		EzBob.Validation.unhighlight(this.$el.find(el));
 		EzBob.Validation.unhighlightFS(this.$el.find(el));
 	}, // clearAddressError
-
-	/*
-	clickBack: function() {
-		this.trigger('back');
-		EzBob.App.trigger('clear');
-		return false;
-	}, // clickBack
-	*/
 });
