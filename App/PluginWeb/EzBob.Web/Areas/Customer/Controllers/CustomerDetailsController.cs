@@ -59,6 +59,24 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 
 		#endregion constructor
 
+		#region method LinkAccountsComplete
+
+		[Transactional]
+		[Ajax]
+		[HttpPost]
+		[ValidateJsonAntiForgeryToken]
+		public JsonNetResult LinkAccountsComplete() {
+			var customer = _context.Customer;
+
+			customer.WizardStep = _helper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.Marketplace);
+			
+			_session.Flush();
+
+			return this.JsonNet(new { });
+		} // LinkAccountsComplete
+
+		#endregion method LinkAccountsComplete
+
 		#region method WizardComplete
 
 		[Transactional]

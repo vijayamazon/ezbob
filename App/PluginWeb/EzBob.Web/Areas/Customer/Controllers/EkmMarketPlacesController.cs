@@ -87,9 +87,6 @@ namespace EzBob.Web.Areas.Customer.Controllers
 
                 var mp = _helper.SaveOrUpdateCustomerMarketplace(username, ekm, ekmSecurityInfo.Password, customer);
 
-				if (!_customer.WizardStep.TheLastOne)
-					_customer.WizardStep = _helper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.Marketplace);
-
                 _session.Flush();
 
                 _appCreator.CustomerMarketPlaceAdded(customer, mp.Id);

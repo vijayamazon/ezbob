@@ -119,11 +119,7 @@
 
 			var yodleeDatabaseMarketPlace = new YodleeDatabaseMarketPlace();
 
-			if (!customer.WizardStep.TheLastOne)
-				customer.WizardStep = _helper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.Marketplace);
-
-			var marketPlace = _helper.SaveOrUpdateCustomerMarketplace(displayname, yodleeDatabaseMarketPlace,
-				                                                        securityData, customer);
+			var marketPlace = _helper.SaveOrUpdateCustomerMarketplace(displayname, yodleeDatabaseMarketPlace, securityData, customer);
 
 			Log.InfoFormat("Added or updated yodlee marketplace: {0}", marketPlace.Id);
 			

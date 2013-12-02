@@ -169,9 +169,6 @@ namespace EzBob.Web.Areas.Customer.Controllers
                     _creator.CustomerMarketPlaceAdded(_context.Customer, mp.Id);
                 }
 
-				if (!customer.WizardStep.TheLastOne)
-					customer.WizardStep = _helper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.Marketplace);
-
                 _customers.SaveOrUpdate(customer); 
 
                 return Json(new { msg = string.Format("Congratulations. Your shop was {0} successfully.", isUpdate ? "updated" : "added") }, JsonRequestBehavior.AllowGet);

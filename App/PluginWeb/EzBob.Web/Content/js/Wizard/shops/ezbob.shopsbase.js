@@ -54,9 +54,10 @@
     };
 
     StoreInfoBaseView.prototype.next = function() {
-      if (this.$el.find(".next").hasClass("disabled")) {
+      if (this.$el.find(".continue").hasClass("disabled")) {
         return;
       }
+      $.post(window.gRootPath + 'CustomerDetails/LinkAccountsComplete');
       this.trigger("next");
       EzBob.App.trigger("clear");
       return false;
@@ -66,7 +67,7 @@
       this.trigger("ready", name);
       if (!this.isReady) {
         this.isReady = true;
-        return this.$el.find(".next").show();
+        return this.$el.find(".continue").show();
       }
     };
 
@@ -130,7 +131,7 @@
         }
       }
       canContinue = (hasFilledShops && (!hasEbay || (hasEbay && hasPaypal)) && foundAllMandatories) || (this.isOffline && this.allowFinishOfflineWizardWithoutMarketplaces) || (!this.isOffline && this.allowFinishOnlineWizardWithoutMarketplaces);
-      this.$el.find('.next').toggleClass('disabled', !canContinue);
+      this.$el.find('.continue').toggleClass('disabled', !canContinue);
       this.handleMandatoryText(hasFilledShops, canContinue, ebayPaypalRuleMessageVisible);
       for (_j = 0, _len1 = sortedShopsByNumOfShops.length; _j < _len1; _j++) {
         shop = sortedShopsByNumOfShops[_j];
@@ -145,11 +146,11 @@
 
     StoreInfoBaseView.prototype.events = {
       "click a.connect-store": "close",
-      "click a.next": "next"
+      "click a.continue": "next"
     };
 
     StoreInfoBaseView.prototype.handleMandatoryText = function(hasFilledShops, canContinue, ebayPaypalRuleMessageVisible) {
-      var addMoreMsg, first, foundAllMandatories, key, shouldHide, text, _i, _j, _len, _len1, _ref, _ref1;
+      var first, foundAllMandatories, key, shouldHide, text, _i, _len, _ref;
       shouldHide = !hasFilledShops || canContinue || ebayPaypalRuleMessageVisible;
       if (!shouldHide) {
         first = true;
@@ -166,13 +167,9 @@
             text += key;
           }
         }
-        _ref1 = this.$el.find('.AddMoreRule');
-        for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
-          addMoreMsg = _ref1[_j];
-          addMoreMsg.innerText = text;
-        }
+        this.storeList.find('.AddMoreRule').text(text);
       }
-      return this.$el.find('.AddMoreRule').toggleClass('hide', shouldHide);
+      return this.storeList.find('.AddMoreRule').toggleClass('hide', shouldHide);
     };
 
     StoreInfoBaseView.prototype.connect = function(storeName) {

@@ -36,6 +36,7 @@ class EzBob.StoreInfoBaseView extends Backbone.View
 
     next: ->
         return if @$el.find(".continue").hasClass("disabled")
+        $.post window.gRootPath + 'CustomerDetails/LinkAccountsComplete'
         @trigger "next"
         EzBob.App.trigger "clear"
         false
@@ -118,7 +119,7 @@ class EzBob.StoreInfoBaseView extends Backbone.View
 
     handleMandatoryText: (hasFilledShops, canContinue, ebayPaypalRuleMessageVisible) ->
         shouldHide = !hasFilledShops or canContinue or ebayPaypalRuleMessageVisible
-            
+
         if !shouldHide
             first = true
             text = 'Please add the following accounts in order to continue: '
@@ -130,10 +131,9 @@ class EzBob.StoreInfoBaseView extends Backbone.View
                     first = false
                     text += key
 
-            for addMoreMsg in @$el.find('.AddMoreRule')
-                addMoreMsg.innerText = text
+            @storeList.find('.AddMoreRule').text text
 
-        @$el.find('.AddMoreRule').toggleClass 'hide', shouldHide
+        @storeList.find('.AddMoreRule').toggleClass 'hide', shouldHide
 
     connect: (storeName) ->
         EzBob.CT.recordEvent "ct:storebase." + @name + ".connect", storeName
