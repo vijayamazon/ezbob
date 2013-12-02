@@ -258,27 +258,8 @@ namespace EZBob.DatabaseLib
 
 		private static DateTime GetStartOfMonth(DateTime relativeDate, int numOfMonth)
 		{
-			int newYear = relativeDate.Year;
-
-			while (numOfMonth > 11)
-			{
-				numOfMonth -= 12;
-				newYear--;
-			}
-
-			int newMonth = relativeDate.Month - numOfMonth + 1;
-			if (relativeDate.Day == 1)
-			{
-				newMonth--;
-			}
-
-			if (newMonth < 1)
-			{
-				newYear--;
-				newMonth = 12 + newMonth;
-			}
-
-			return new DateTime(newYear, newMonth, 1);
+			DateTime tmpDate = relativeDate.Day == 1 ? relativeDate.AddMonths(-1 * numOfMonth) : relativeDate.AddMonths(-1 * (numOfMonth - 1));
+			return new DateTime(tmpDate.Year, tmpDate.Month, 1);
 		}
 	}
 }
