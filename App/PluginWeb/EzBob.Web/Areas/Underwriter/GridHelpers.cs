@@ -462,25 +462,6 @@ namespace EzBob.Web.Areas.Underwriter
 			});
 		}
 
-		public static void CreateUserStatusColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
-		{
-			gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
-			{
-				Caption = "User Status",
-				Name = "WizardStep",
-				Index = "WizardStep",
-				Resizable = false,
-				Align = Align.Center,
-				Title = false,
-				Hidden = false,
-				Fixed = false,
-				Search = false,
-				Width = 87,
-				DataType = TypeCode.String,
-				Data = x => x.WizardStep.TheLastOne ? "credit calculation" : "registered"
-			});
-		}
-
 		public static void CreateRegisteredDateColumn(GridModel<EZBob.DatabaseLib.Model.Database.Customer> gridModel)
 		{
 			gridModel.AddColumn(new CriteriaColumn<EZBob.DatabaseLib.Model.Database.Customer>
@@ -537,7 +518,7 @@ namespace EzBob.Web.Areas.Underwriter
 				Search = false,
 				Width = 95,
 				DataType = TypeCode.String,
-				Data = x => x.WizardStep.TheLastOne ? "Passed" : x.WizardStep.Name
+				Data = x => x.WizardStep.Name
 			});
 		}
 

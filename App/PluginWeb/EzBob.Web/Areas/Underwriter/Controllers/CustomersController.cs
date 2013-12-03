@@ -376,10 +376,9 @@
 			var gridModel = new GridModel<Customer>();
 			GridHelpers.CreateIdColumn(gridModel);
 			GridHelpers.CreateEmailColumn(gridModel);
-			GridHelpers.CreateUserStatusColumn(gridModel);
+			GridHelpers.CreateWizardStepColumn(gridModel);
 			GridHelpers.CreateRegisteredDateColumn(gridModel);
 			GridHelpers.CreateRegisteredMpStatusesColumn(gridModel);
-			GridHelpers.CreateWizardStepColumn(gridModel);
 			GridHelpers.CreatePaymentDemeanor(gridModel);
 			GridHelpers.CreateSegmentTypeColumn(gridModel);
 			return gridModel;
