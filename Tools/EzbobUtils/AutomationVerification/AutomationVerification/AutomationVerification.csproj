@@ -71,9 +71,9 @@
       <Project>{f92ca169-9532-4c4d-8d84-6f48ace5719c}</Project>
       <Name>Logger</Name>
     </ProjectReference>
-    <ProjectReference Include="..\AutoRejection\AutoRejection.csproj">
+    <ProjectReference Include="..\AutoRejection\AutomationCalculator.csproj">
       <Project>{d7b3530e-4038-446d-a25a-45d6df5b6d45}</Project>
-      <Name>AutoRejection</Name>
+      <Name>AutomationCalculator</Name>
     </ProjectReference>
     <ProjectReference Include="..\CommonLib\CommonLib.csproj">
       <Project>{60154e0c-26a0-410d-80c8-ed09507af2b6}</Project>

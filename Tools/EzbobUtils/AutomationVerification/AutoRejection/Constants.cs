@@ -1,4 +1,4 @@
-﻿namespace AutoRejection
+﻿namespace AutomationCalculator
 {
 	public static class Constants
 	{
