@@ -1,9 +1,9 @@
-﻿using System;
-using Scorto.Service.Scheduler;
-using log4net;
-
-namespace CustomSchedulers
+﻿namespace CustomSchedulers.Currency
 {
+	using System;
+	using Scorto.Service.Scheduler;
+	using log4net;
+
 	public class CurrencyUpdater : ScheduledExecution
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(CurrencyUpdater));

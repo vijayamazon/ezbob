@@ -1,8 +1,8 @@
-using System;
-using System.Collections.Generic;
-
-namespace CustomSchedulers
+namespace CustomSchedulers.Currency
 {
+	using System;
+	using System.Collections.Generic;
+
 	public class CurrencyHistoryData
 	{
 		public CurrencyHistoryData()

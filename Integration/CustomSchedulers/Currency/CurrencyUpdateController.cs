@@ -1,19 +1,17 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Net;
-using CustomSchedulers.Providers;
-using EZBob.DatabaseLib.Model.Database;
-using NHibernate.Linq;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Scorto.NHibernate.Repository;
-using StructureMap;
-using log4net;
-
-namespace CustomSchedulers
+namespace CustomSchedulers.Currency
 {
+	using System;
+	using System.Collections.Generic;
+	using System.IO;
+	using System.Linq;
+	using System.Net;
+	using EZBob.DatabaseLib.Model.Database;
+	using Newtonsoft.Json;
+	using Newtonsoft.Json.Linq;
+	using Scorto.NHibernate.Repository;
+	using StructureMap;
+	using log4net;
+
 	public class CurrencyUpdateController
 	{		
 		private static readonly ILog Log = LogManager.GetLogger( typeof( CurrencyUpdateController ) );
@@ -85,7 +83,7 @@ namespace CustomSchedulers
 				                   	}).ToDictionary(x => x.name, x => x.price);
 
 				//translate from USD base to GPB
-				string gbpLabel = CurrencyRateProviderBase.GbpLabel;
+				string gbpLabel = CurrencyRateProviderYahoo.GbpLabel;
 
 				if (!dict.ContainsKey(gbpLabel))
 				{
@@ -165,28 +163,24 @@ namespace CustomSchedulers
 			return !CurrencyRateRepository.IsContainsHistory( currencyName );
 		}
 
-		internal CurrencyHistoryData RetriveCurrencyHistoryFromWeb( string currencyName, DateTime startDate, DateTime endDate )
+		internal CurrencyHistoryData RetriveCurrencyHistoryFromWeb(string currencyName, DateTime startDate, DateTime endDate)
 		{
-			Log.Info( string.Format( "Retrieve historical price data started for Currency {0}...", currencyName ) );
-			var data = new CurrencyHistoryData( currencyName );
+			Log.Info(string.Format("Retrieve historical price data started for Currency {0}...", currencyName));
+			var data = new CurrencyHistoryData(currencyName);
 
-			if ( currencyName.Equals( CurrencyRateProviderBase.GbpLabel, StringComparison.InvariantCultureIgnoreCase ) )
+			if (currencyName.Equals(CurrencyRateProviderYahoo.GbpLabel, StringComparison.InvariantCultureIgnoreCase))
 			{
-				data.History.Add( new CurrencyHistoryItemData( startDate, 1 ) );
+				data.History.Add(new CurrencyHistoryItemData(startDate, 1));
 				return data;
 			}
 
-			var yahooService = CurrencyRateProviderFactory.Create( CurrencyRateProviderType.Yahoo );
-			var yahooData = yahooService.RetriveData( currencyName, startDate, endDate );
+			var yahooService = new CurrencyRateProviderYahoo();
+			var yahooData = yahooService.RetriveData(currencyName, startDate, endDate);
+			data.AddHistory(new CurrencyRateHistoryContainer(yahooData));
 
-			var msnService = CurrencyRateProviderFactory.Create( CurrencyRateProviderType.MSN );
-			var msnData = msnService.RetriveData( currencyName, startDate, endDate );
-
-			data.AddHistory( CurrencyRateHistoryContainer.Union( msnData, yahooData ) );
-
-			Log.Info( string.Format( "Retrieve historical price data successfully completed for Currency {0}!", currencyName ) );
+			Log.Info(string.Format("Retrieve historical price data successfully completed for Currency {0}!", currencyName));
 			return data;
-		}		
+		}
 
 		private void InternalRun()
 		{
@@ -214,7 +208,6 @@ namespace CustomSchedulers
 				    Log.Info( "Store currency historical price successfully completed!" );
 			    }
 
-
                 var latestData = _LastCurrencyRates.Select(pair =>
                     {
                         var currencyName = pair.Key;
@@ -232,8 +225,6 @@ namespace CustomSchedulers
                 Log.Info("Store latest currency rates successfully completed!");                    
             });
 		}
-
-		
 
 		public static void Run()
 		{

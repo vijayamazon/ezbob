@@ -95,13 +95,9 @@
   <ItemGroup>
     <Compile Include="Currency\CurrencyHistoryData.cs" />
     <Compile Include="Currency\CurrencyRateHistoryContainer.cs" />
-    <Compile Include="Currency\Providers\CurrencyRateProviderBase.cs" />
-    <Compile Include="Currency\Providers\CurrencyRateProviderBaseMsn.cs" />
-    <Compile Include="Currency\Providers\CurrencyRateProviderBaseYahoo.cs" />
-    <Compile Include="Currency\Providers\CurrencyRateProviderFactory.cs" />
+    <Compile Include="Currency\CurrencyRateProviderYahoo.cs" />
     <Compile Include="Currency\CurrencyUpdateController.cs" />
     <Compile Include="Currency\CurrencyUpdater.cs" />
-    <Compile Include="Currency\Providers\ICurrencyRateProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Currency\TestCurrencyUpdater.cs" />
   </ItemGroup>

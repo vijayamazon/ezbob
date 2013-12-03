@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using CustomSchedulers.Providers;
-using NUnit.Framework;
-
-namespace CustomSchedulers
+﻿namespace CustomSchedulers.Currency
 {
+	using System;
+	using System.Linq;
+	using NUnit.Framework;
+
 	class TestCurrencyUpdater
 	{
 		[Test]
@@ -69,22 +66,15 @@ namespace CustomSchedulers
 		public void TestRetriveCurrencyHistoryFromYahoo()
 		{
 			string currencyName = "USD";
-			var data = RetrieveData( currencyName, CurrencyRateProviderType.Yahoo );
+			var data = RetrieveData( currencyName );
 		}
 
-		[Test]
-		public void TestRetriveCurrencyHistoryFromMsn()
-		{
-			string currencyName = "VND";
-			var data = RetrieveData( currencyName, CurrencyRateProviderType.MSN );
-		}
-
-		private CurrencyRateHistoryContainer RetrieveData(string currencyName, CurrencyRateProviderType serviceType )
+		private CurrencyRateHistoryContainer RetrieveData(string currencyName )
 		{
 			var now = DateTime.Now;
 			var fromDate = now.AddYears( -1 );
 			var toDate = now;
-			var service = CurrencyRateProviderFactory.Create( serviceType );
+			var service = new CurrencyRateProviderYahoo();
 			return service.RetriveData( currencyName, fromDate, toDate );
 		}
 
