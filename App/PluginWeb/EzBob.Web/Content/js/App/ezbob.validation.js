@@ -7,6 +7,28 @@ EzBob.Validation.NameValidationObjectOld = { regex: "^(([a-zA-Z]*[AEIOUYaeiouy]+
 EzBob.Validation.NameValidationObject = { nameValidator: true, required: true, minlength: 2 };
 
 //-----------------------------------------------------------------
+EzBob.Validation.addressErrorPlacement = function(el, model) {
+	var $el = $(el);
+
+	$el.on('focusout', function() {
+		if (model.length === 0) {
+			var oButton = $el.find('.addAddress');
+
+			oButton.tooltip({ title: 'Please lookup your post code' });
+
+			$el.hover(
+				function() { oButton.tooltip('show'); },
+				function() { oButton.tooltip('hide'); }
+			); // on hover
+		} // if
+	}); // on focus out
+
+	model.on('change', function() {
+		if (model.length > 0)
+			$el.find('.addAddress').tooltip('destroy');
+	}); // on model changed
+}; // addressErrorPlacement
+
 EzBob.Validation.errorPlacement = function (error, element) {
     EzBob.Validation.unhighlight(element);
     if (error.text()) {

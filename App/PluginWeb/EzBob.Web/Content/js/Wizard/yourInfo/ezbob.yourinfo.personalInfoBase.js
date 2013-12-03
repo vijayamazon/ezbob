@@ -36,28 +36,6 @@ EzBob.YourInformationStepViewBase = Backbone.View.extend({
 		'click .btn-continue': 'next'
 	}, // events
 
-	addressErrorPlacement: function(el, model) {
-		var $el = $(el);
-
-		$el.on('focusout', function() {
-			if (model.length === 0) {
-				var oButton = $el.find('.addAddress');
-
-				oButton.tooltip({ title: 'Please lookup your post code' });
-
-				$el.hover(
-					function() { oButton.tooltip('show'); },
-					function() { oButton.tooltip('hide'); }
-				); // on hover
-			} // if
-		}); // on focus out
-
-		model.on('change', function() {
-			if (model.length > 0)
-				$el.find('.addAddress').tooltip('destroy');
-		}); // on model changed
-	}, // addressErrorPlacement
-
 	clearAddressError: function(el) {
 		EzBob.Validation.unhighlight(this.$el.find(el));
 		EzBob.Validation.unhighlightFS(this.$el.find(el));

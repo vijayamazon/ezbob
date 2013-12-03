@@ -89,8 +89,7 @@ class EzBob.Profile.YourInfoMainView extends Backbone.Marionette.Layout
 
     setInvalidAddressLabel: (address, element) -> 
         if address.length < 1
-            error = $('<label class=error generated=true>This field is required</label>')
-            EzBob.Validation.errorPlacement error, @$el.find(element)
+            EzBob.Validation.addressErrorPlacement @$el.find(element), address
         else 
             EzBob.Validation.unhighlight @$el.find(element)
 

@@ -142,16 +142,15 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 
 		this.personalAddressView = new EzBob.AddressView({ model: this.model.get('PersonalAddress'), name: 'PersonalAddress', max: 1 });
 		this.personalAddressView.render().$el.appendTo(this.$el.find('#PersonalAddress'));
-		this.addressErrorPlacement(this.personalAddressView.$el, this.personalAddressView.model);
+		EzBob.Validation.addressErrorPlacement(this.personalAddressView.$el, this.personalAddressView.model);
 
 		this.prevPersonAddressesView = new EzBob.AddressView({ model: this.model.get('PrevPersonAddresses'), name: 'PrevPersonAddresses', max: 3 });
 		this.prevPersonAddressesView.render().$el.appendTo(this.$el.find('#PrevPersonAddresses'));
-		
-		this.addressErrorPlacement(this.prevPersonAddressesView.$el, this.prevPersonAddressesView.model);
+		EzBob.Validation.addressErrorPlacement(this.prevPersonAddressesView.$el, this.prevPersonAddressesView.model);
 
 		this.otherPropertyAddressView = new EzBob.AddressView({ model: this.model.get('OtherPropertyAddress'), name: 'OtherPropertyAddress', max: 1 });
 		this.otherPropertyAddressView.render().$el.appendTo(this.$el.find('#OtherPropertyAddress'));
-		this.addressErrorPlacement(this.otherPropertyAddressView.$el, this.otherPropertyAddressView.model);
+		EzBob.Validation.addressErrorPlacement(this.otherPropertyAddressView.$el, this.otherPropertyAddressView.model);
 
 		this.model.get('PrevPersonAddresses').on('all', this.prevModelChange, this);
 		this.model.get('PersonalAddress').on('all', this.personalAddressModelChange, this);

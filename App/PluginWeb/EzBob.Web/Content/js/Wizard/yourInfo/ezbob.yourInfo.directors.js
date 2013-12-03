@@ -78,7 +78,7 @@ EzBob.DirectorMainView = Backbone.View.extend({
 
 			addressView.render().$el.appendTo(that.directorArea.find('#' + addressElem));
 			SetDefaultDate(dateOfBirthValName, val.get('DateOfBirth'));
-			that.addressErrorPlacement(addressView.$el, addressView.model);
+			EzBob.Validation.addressErrorPlacement(addressView.$el, addressView.model);
 
 			that.$el.find('.phonenumber').numericOnly(11);
 
@@ -101,28 +101,6 @@ EzBob.DirectorMainView = Backbone.View.extend({
 
 		return result;
 	}, // validateAddresses
-
-	addressErrorPlacement: function(el, model) {
-		var $el = $(el);
-
-		$el.on('focusout', function() {
-			if (model.length === 0) {
-				var oButton = $el.find('.addAddress');
-
-				oButton.tooltip({ title: 'Please lookup your post code' });
-
-				$el.hover(
-					function() { oButton.tooltip('show'); },
-					function() { oButton.tooltip('hide'); }
-				); // on hover
-			} // if no address foudn
-		}); // on focusout
-
-		model.on('change', function() {
-			if (model.length > 0)
-				$el.find('.addAddress').tooltip('destroy');
-		}); // on model change
-	}, // addressErrorPlacement
 
 	addDirector: function() {
 		this.model.add(new EzBob.DirectorsModel({ Address: new EzBob.AddressModels() }));
