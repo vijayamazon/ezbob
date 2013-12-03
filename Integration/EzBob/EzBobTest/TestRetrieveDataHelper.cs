@@ -11,7 +11,6 @@ namespace EzBobTest
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
-	using EzBob;
 	using EzBob.AmazonLib;
 	using EzBob.AmazonServiceLib;
 	using EzBob.CommonLib;
@@ -37,8 +36,9 @@ namespace EzBobTest
 	using Ezbob.HmrcHarvester;
 	using Ezbob.Logger;
 	using Integration.ChannelGrabberFrontend;
+	using RetrieveDataHelper = EzBob.RetrieveDataHelper;
 
-    [TestFixture]
+	[TestFixture]
     public class TestRetrieveDataHelper
     {
         private DatabaseDataHelper _Helper;
