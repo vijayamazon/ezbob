@@ -101,7 +101,7 @@ class EzBob.StoreInfoBaseView extends Backbone.View
                 foundAllMandatories = false
 
         canContinue = (hasFilledShops and (!hasEbay or (hasEbay and hasPaypal)) and foundAllMandatories) or (@isOffline and @allowFinishOfflineWizardWithoutMarketplaces) or (!@isOffline and @allowFinishOnlineWizardWithoutMarketplaces)
-        @$el.find('.continue').toggleClass 'disabled', !canContinue
+        @storeList.find('.continue').toggleClass 'disabled', !canContinue
         @handleMandatoryText(hasFilledShops, canContinue, ebayPaypalRuleMessageVisible)
         
         for shop in sortedShopsByNumOfShops when shop.active 

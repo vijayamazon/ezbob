@@ -131,7 +131,7 @@
         }
       }
       canContinue = (hasFilledShops && (!hasEbay || (hasEbay && hasPaypal)) && foundAllMandatories) || (this.isOffline && this.allowFinishOfflineWizardWithoutMarketplaces) || (!this.isOffline && this.allowFinishOnlineWizardWithoutMarketplaces);
-      this.$el.find('.continue').toggleClass('disabled', !canContinue);
+      this.storeList.find('.continue').toggleClass('disabled', !canContinue);
       this.handleMandatoryText(hasFilledShops, canContinue, ebayPaypalRuleMessageVisible);
       for (_j = 0, _len1 = sortedShopsByNumOfShops.length; _j < _len1; _j++) {
         shop = sortedShopsByNumOfShops[_j];
