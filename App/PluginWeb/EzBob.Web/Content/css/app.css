@@ -667,7 +667,7 @@ select.SubBank::-webkit-scrollbar {
 
         ul.application_steps li.current {
             background: url(images/current_arrow.png) no-repeat 15px 15px;
-            color: #577fa5;
+            color: #E8891A;
 			font-weight: bold;
         }
 
