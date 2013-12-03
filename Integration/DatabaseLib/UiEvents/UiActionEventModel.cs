@@ -45,7 +45,7 @@ namespace EZBob.DatabaseLib {
 
 			DateTime oTime;
 
-			if (!DateTime.TryParseExact(eventTime, "yyyyMMddHHmmss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out oTime)) {
+			if (!DateTime.TryParseExact(eventTime, "yyyyMMddHHmmss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal, out oTime)) {
 				ms_oLog.ErrorFormat("Failed to save UI event: cannot parse event time in {0}.", this);
 				return false;
 			} // if failed to parse time

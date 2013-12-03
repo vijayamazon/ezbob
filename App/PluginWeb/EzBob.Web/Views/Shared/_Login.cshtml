@@ -1,29 +1,39 @@
 ﻿@model EzBob.Web.Models.LogOnModel
 @using (Html.BeginForm("CustomerLogOn", "Account", new { Area = "" }, FormMethod.Post, new { @class = "simple-login" })) {
 	<section id="content">
-	    <section class="pages">
-	        <h1>Login</h1>
-	        <h2>Welcome back!</h2>
-	        @Html.TextBoxFor(x => x.ReturnUrl, new { type = "hidden" })
+		<section class="pages">
+			<h1>Login</h1>
+			<h2>Welcome back!</h2>
+			@Html.TextBoxFor(x => x.ReturnUrl, new { type = "hidden" })
 
-	        @EzForm.InputText("UserName", "Email address", cls: "form_field", isRequired: true, statusIcon: true)
-	        @EzForm.Password("Password", "Password", cls: "form_field", isRequired: true, statusIcon: true)
+			@EzForm.InputText("UserName", "Email address", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "login:user_name")
+			@EzForm.Password("Password", "Password", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "login:password")
 
-	        <input name="RememberMe" type="hidden" value="@Model.RememberMe" />
+			<input name="RememberMe" type="hidden" value="@Model.RememberMe" />
 
-	        <div class="form_field_container">
-	            <label class="checkbox" for="RememberMe" style="font-weight: normal">
-	                Remember me<input data-val="true" data-val-required="The Remember me? field is required." id="RememberMe" name="RememberMe" type="checkbox" value="@Model.RememberMe" />
-	            </label>
-	        </div>
-	        <div class="form_buttons_container">
-	            <div class="attardi-button">
-	                <input type="submit" value="Login" class="rc-button green login-btn disabled" id="loginSubmit" />
-	            </div>
-	        </div>
-	        <p>@Html.ActionLink("Forgotten password", "ForgotPassword", "Account", new { }, new { }) | @Html.ActionLink("Sign up", "Index", "Wizard", new { Area = "Customer" }, new { })</p>
-	    </section>
-    </section>
+			<div class="form_field_container">
+				<label class="checkbox" for="RememberMe" style="font-weight: normal">
+					Remember me<input data-val="true" data-val-required="The Remember me? field is required." id="RememberMe" name="RememberMe" type="checkbox" value="@Model.RememberMe" ui-event-control-id="login:remember_me" />
+				</label>
+			</div>
+			<div class="form_buttons_container">
+				<div class="attardi-button">
+					<input type="submit" value="Login" class="rc-button green login-btn disabled" id="loginSubmit" ui-event-control-id="login:submit" />
+				</div>
+			</div>
+			@{
+				var oForgottenAttr = new Dictionary<string, Object>();
+				oForgottenAttr["ui-event-control-id"] = "login:forgotten_password";
+
+				var oSignupRouteValues = new RouteValueDictionary();
+				oSignupRouteValues["Area"] = "Customer";
+				
+				var oSignupAttr = new Dictionary<string, Object>();
+				oSignupAttr["ui-event-control-id"] = "login:signup";
+			}
+			<p>@Html.ActionLink("Forgotten password", "ForgotPassword", "Account", new RouteValueDictionary(), oForgottenAttr) | @Html.ActionLink("Sign up", "Index", "Wizard", oSignupRouteValues, oSignupAttr)</p>
+		</section>
+	</section>
 	<aside id="sidebar">
 		@{Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_SecurityStatement.cshtml");}
 	</aside>

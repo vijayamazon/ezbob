@@ -14,11 +14,15 @@ class EzBob.CustomerLoginView extends Backbone.View
     @$el.html @template()
     @form = @$el.find(".simple-login")
     @validator = EzBob.validateLoginForm(@form)
+
     @$el.find("img[rel]").setPopover "left"
     @$el.find("li[rel]").setPopover "left"
+
     oFieldStatusIcons = this.$el.find('IMG.field_status')
     oFieldStatusIcons.filter('.required').field_status({ required: true })
     oFieldStatusIcons.not('.required').field_status({ required: false })
+
+    EzBob.UiAction.registerView @
     @
 
   inputChanged: ->

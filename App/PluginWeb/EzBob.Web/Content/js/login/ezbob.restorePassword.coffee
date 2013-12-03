@@ -32,6 +32,7 @@ class EzBob.ResetPasswordView extends Backbone.Marionette.ItemView
     @validator = EzBob.validateRestorePasswordForm(@ui.form)
     @initStatusIcons()
     $('#email').focus()
+    EzBob.UiAction.registerView @
     @
 
   events:
