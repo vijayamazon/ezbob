@@ -277,7 +277,7 @@ input.form_field, input.form_field_look, select.form_field { height: 36px !impor
 
 textarea.form_field_address { height: auto !important; margin-top: 1em; resize: none;width: 96%; }
 
-div.form_read_and_accept { width: 90%; }
+div.form_read_and_accept { width: 100%; }
 
 select.form_field { width: 96%; height: 38px; padding: 4px; }
 
@@ -289,7 +289,7 @@ input.form_field_address { max-width: 60%; }
 
 input.form_field_address_lookup { float: right;margin-right: 8px; }
 
-input.form_field_address_lookup { width: 30%; height: 36px; }
+input.form_field_address_lookup { width: 32%; max-width: 180px; height: 36px; }
 
 
 /*----table for payment schedule-----*/

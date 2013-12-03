@@ -64,3 +64,10 @@
     width: 96%;
 }
 
+.field_status {
+	vertical-align: top;
+	margin-top: 0.4em;
+    float: right;
+}
+
+

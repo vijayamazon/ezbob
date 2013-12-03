@@ -224,12 +224,6 @@ div.wizard-director-text { font-size: 11pt; color: #585858; }
     display: none !important;
 }
 
-.field_status {
-	vertical-align: top;
-	margin-top: 0.4em;
-    float: right;
-}
-
 .fs16 {
     font-size: 16px;
 }

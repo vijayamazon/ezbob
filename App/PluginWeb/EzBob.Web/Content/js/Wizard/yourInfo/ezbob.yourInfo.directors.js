@@ -82,7 +82,8 @@ EzBob.DirectorMainView = Backbone.View.extend({
 
 			that.$el.find('.phonenumber').numericOnly(11);
 
-			that.$el.find('input[type="text"], input[type="email"], select').blur();
+			that.$el.find('input[type="text"], input[type="email"]').blur();
+		    that.$el.find('select option:selected:not([value="-"])').parent().blur();
 			that.$el.find('input[type="radio"]:checked').click();
 		}); // foreach
 
