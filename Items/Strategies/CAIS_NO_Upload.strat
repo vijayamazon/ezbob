@@ -4,12 +4,12 @@
   <Description>Generates Experian report and stores it on the disk. Trigger - 1.Once a month (28th) 2.Underwriter-&gt;CAIS-&gt;Generate button</Description>
   <Workspace Name="CAIS_NO_Upload">
     <NodeElement Name="Account Number" NodeId="MultiAssignmentB32624764" />
-    <NodeElement Name="Assignment" NodeId="AssignmentB66097328" />
     <NodeElement Name="Assignment" NodeId="AssignmentB12268704" />
+    <NodeElement Name="Assignment" NodeId="AssignmentB66097328" />
     <NodeElement Name="Business" NodeId="ScriptNode57477797" />
     <NodeElement Name="Business Counter" NodeId="ConditionalAssignment9785067" />
-    <NodeElement Name="Close Files" NodeId="ScriptNode62435929" />
     <NodeElement Name="Close Files" NodeId="ScriptNode38605574" />
+    <NodeElement Name="Close Files" NodeId="ScriptNode62435929" />
     <NodeElement Name="Company type" NodeId="ConditionalAssignment23814038" />
     <NodeElement Name="Comparison" NodeId="Comparison16159142" />
     <NodeElement Name="Conditional Assignment" NodeId="ConditionalAssignment23892180" />
@@ -5827,6 +5827,7 @@ cais = CaisFileManager.GetBusinessCaisFileData()
 cais.Header.CompanyPortfolioName = "Orange Money"
 cais.Header.CreditCardBehaviouralSharingFlag = ""
 cais.Header.DateOfCreation = DateTime.Now
+cais.Header.SourceCode = 721
 
 record = BusinessAccountRecord()
 record.AccountNumber = AccountNumber
