@@ -131,9 +131,20 @@ namespace EzBob.AmazonServiceLib.ServiceCalls
 
 		private void ParceOrdersInfo( AmazonOrdersList2 ordersList, OrderList orders, string sellerId, ActionAccessType access, int customerId)
 		{
-			DateTime? firstDate = orders.Order.First().IsSetPurchaseDate() ? orders.Order[0].PurchaseDate : (DateTime?)null;
-			DateTime? lastDate = orders.Order.Last().IsSetPurchaseDate() ? orders.Order[0].PurchaseDate : (DateTime?)null;
-			WriteToLog(string.Format("Amazon ParceOrdersInfo customerId {2}, sellerId {0} number of orders {1}, first order date {3} last order date {4}", sellerId, ordersList.Count, customerId, firstDate, lastDate));
+			if (orders.Order.Any())
+			{
+				DateTime? firstDate = orders.Order.First().IsSetPurchaseDate() ? orders.Order[0].PurchaseDate : (DateTime?) null;
+				DateTime? lastDate = orders.Order.Last().IsSetPurchaseDate() ? orders.Order[0].PurchaseDate : (DateTime?) null;
+				WriteToLog(
+					string.Format(
+						"Amazon ParceOrdersInfo customerId {2}, sellerId {0} number of orders {1}, first order date {3} last order date {4}",
+						sellerId, ordersList.Count, customerId, firstDate, lastDate));
+			}
+			else
+			{
+				WriteToLog(
+					string.Format("Amazon ParceOrdersInfo customerId {1}, sellerId {0} number of orders 0", sellerId, customerId));
+			}
 			orders.Order.AsParallel().ForAll( o => ordersList.Add( ParceOrder( o ) ) );
 
 			/*foreach (AmazonOrderItem2 orderInfo in ordersList)

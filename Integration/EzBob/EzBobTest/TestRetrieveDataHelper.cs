@@ -10,6 +10,7 @@ namespace EzBobTest
 	using System.Linq;
 	using System.Threading;
 	using System.Xml;
+	using CustomSchedulers;
 	using EKM;
 	using FreeAgent;
 	using Sage;
@@ -84,6 +85,12 @@ namespace EzBobTest
 
             _Helper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
         }
+
+		[Test]
+		public void testCurrencyUpdateController()
+		{
+			CurrencyUpdateController.Run();
+		}
 
         [Test]
         public void PayPalSettingsStoredInConfig()

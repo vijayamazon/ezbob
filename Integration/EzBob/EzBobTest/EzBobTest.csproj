@@ -116,6 +116,10 @@
       <Project>{AEDBFBBD-BA7D-4582-AFCA-6ECF8AF33C98}</Project>
       <Name>CommonLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\CustomSchedulers\CustomSchedulers.csproj">
+      <Project>{47d73896-1b70-4347-beb5-a0ad94a45421}</Project>
+      <Name>CustomSchedulers</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\DatabaseLib\DatabaseLib.csproj">
       <Project>{FA67314A-0560-41D4-BC19-6524663E9D0D}</Project>
       <Name>DatabaseLib</Name>
