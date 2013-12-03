@@ -712,7 +712,7 @@
 					ExperianBirthDate = result.BirthDate;
 				}
 
-				if (!string.IsNullOrEmpty(ExperianConsumerError) && App_TimeAtAddress == 1 && !string.IsNullOrEmpty(App_Line6Prev)))
+				if (!string.IsNullOrEmpty(ExperianConsumerError) && App_TimeAtAddress == 1 && !string.IsNullOrEmpty(App_Line6Prev))
 				{
 					var consumerServiceForPrev = new ConsumerService();
 					var prevLocation = new InputLocationDetailsMultiLineLocation();
