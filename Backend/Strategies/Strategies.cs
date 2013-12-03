@@ -235,18 +235,152 @@
 			SendToCustomerAndEzbob(variables, customerEmail, templateName, subject);
 		}
 
+		public void PayPointNameValidationFailed(string cardHodlerName, int customerId)
+		{
+			string subject = "PayPoint personal data differs from EZBOB application";
+			const string templateName = "Mandrill - PayPoint data differs";
+
+			string customerEmail = null;
+			string customerFirstName = null;
+			string customerSurName = null;
+
+			// TODO: get customerEmail from customerId
+
+			var variables = new Dictionary<string, string>
+				{
+					{"E-mail", customerEmail},
+					{"UserId", customerId.ToString(CultureInfo.InvariantCulture)},
+					{"Name", customerFirstName},
+					{"Surname", customerSurName},
+					{"PayPointName", cardHodlerName}
+				};
+			SendToEzbob(variables, templateName, subject);
+		}
+
+		public void ApprovedUser(int customerId, decimal loanAmount)
+		{
+			string firstName = null; // TODO: get from customerId
+			string subject = string.Format("Congratulations {0}, £{1} is available to fund your business today", firstName, loanAmount);
+			string customerEmail = null;
+			bool isOffline = false; // TODO: get according to customerId
+			bool isFirstApproval = false; // TODO: get according to customerId (if DecisionHistory table for this customer contains at least one approval)
+			int validFor = 10; // TODO: get according to customerId (customer.OfferValidUntil - customer.OfferStart).Value.TotalHours)
+
+			// TODO: get customerEmail from customerId
+
+			var variables = new Dictionary<string, string>
+				{
+					{"FirstName", firstName},
+					{"LoanAmount", loanAmount.ToString(CultureInfo.InvariantCulture)},
+					{"ValidFor", validFor.ToString(CultureInfo.InvariantCulture)}
+				};
+
+			if (isOffline)
+			{
+				SendToCustomerAndEzbob(variables, customerEmail,
+				                       isFirstApproval
+					                       ? "Mandrill - Approval Offline (1st time)"
+					                       : "Mandrill - Approval Offline (not 1st time)", subject);
+			}
+			else
+			{
+				SendToCustomerAndEzbob(variables, customerEmail,
+									   isFirstApproval
+										   ? "Mandrill - Approval (1st time)"
+										   : "Mandrill - Approval (not 1st time)", subject);
+			}
+		}
+
+		public void RejectUser(int customerId)
+		{
+			string subject = "Sorry, EZBOB cannot make you a loan offer at this time";
+			const string templateName = "Mandrill - Rejection email";
+
+			string customerEmail = null;
+			string firstName = null;
+			// TODO: get customerEmail from customerId
+
+			var variables = new Dictionary<string, string>
+				{
+					{"FirstName", firstName},
+					{"EzbobAccount", "https://app.ezbob.com/Customer/Profile"}
+				};
+
+			SendToCustomerAndEzbob(variables, customerEmail, templateName, subject);
+		}
+
+		public void MoreAMLInformation(int customerId)
+		{
+			string subject = "Proof of ID required to make you a loan offer";
+			const string templateName = "Mandrill - Application incompleted AML";
+
+			string customerEmail = null;
+			string firstName = null;
+			// TODO: get customerEmail from customerId
+
+			var variables = new Dictionary<string, string>
+				{
+					{"FirstName", firstName}
+				};
+
+			SendToCustomerAndEzbob(variables, customerEmail, templateName, subject);
+		}
+
+		public void MoreAMLandBWAInformation(int customerId)
+		{
+			string subject = "We require a proof of bank account ownership and proof of ID to make you a loan offer";
+			const string templateName = "Mandrill - Application incompleted AML & Bank";
+
+			string customerEmail = null;
+			string firstName = null;
+			// TODO: get customerEmail from customerId
+
+			var variables = new Dictionary<string, string>
+				{
+					{"FirstName", firstName}
+				};
+
+			SendToCustomerAndEzbob(variables, customerEmail, templateName, subject);
+		}
+
+		public void MoreBWAInformation(int customerId)
+		{
+			string subject = "We require a proof of bank account ownership to make you a loan offer";
+			const string templateName = "Mandrill - Application incompleted Bank";
+
+			string customerEmail = null;
+			string firstName = null;
+			// TODO: get customerEmail from customerId
+
+			var variables = new Dictionary<string, string>
+				{
+					{"FirstName", firstName}
+				};
+
+			SendToCustomerAndEzbob(variables, customerEmail, templateName, subject);
+		}
 
 
 
+		public void SendEmailVerification(int customerId, string address)
+		{
+			string subject = "Please verify your email";
+			const string templateName = "Mandrill - Confirm your email";
 
+			string customerEmail = null;
+			string firstName = null;
+			// TODO: get customerEmail from customerId
 
+			var variables = new Dictionary<string, string>
+				{
+					{"FirstName", firstName},
+					{"Email", customerEmail},
+					{"ConfirmEmailAddress", address}
+				};
 
-
-
-
-
-
-
+			SendToCustomerAndEzbob(variables, customerEmail, templateName, subject);
+		}
+		
 		private void SendMailViaMandrill(Dictionary<string, string> variables, string toAddress, string ccAddress, string templateName, string subject)
 		{
 			var sendStatus = mail.Send(variables, toAddress, templateName, subject, ccAddress);
@@ -268,7 +402,11 @@
 		private void SendToCustomerAndEzbob(Dictionary<string, string> variables, string toAddress, string templateName, string subject)
 		{
 			SendMailViaMandrill(variables, toAddress, string.Empty, templateName, subject);
+			SendToEzbob(variables, templateName, subject);
+		}
 
+		private void SendToEzbob(Dictionary<string, string> variables, string templateName, string subject)
+		{
 			string ezbobCopyTo = null, ezbobCopyCc = null;
 			// TODO: add addresses to ConfigurationVariables
 			// TODO: load addresses from ConfigurationVariables
