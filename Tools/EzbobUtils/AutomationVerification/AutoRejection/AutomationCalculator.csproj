@@ -44,6 +44,9 @@
     <Compile Include="AutoReRejectionCalculator.cs" />
     <Compile Include="AutoApprovalCalculator.cs" />
     <Compile Include="AutoReApprovalCalculator.cs" />
+    <Compile Include="Enums.cs" />
+    <Compile Include="MedalScoreCalculator.cs" />
+    <Compile Include="Models.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
