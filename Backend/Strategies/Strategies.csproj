@@ -46,9 +46,17 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Integration\ExperianLib\ExperianLib.csproj">
+      <Project>{d91f3fd0-9e1b-41ff-ae2e-67f051198f51}</Project>
+      <Name>ExperianLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Integration\EzBob.Configuration\EzBob.Configuration.csproj">
       <Project>{7d1f5cbe-9ff9-4170-862b-ab203d968ef5}</Project>
       <Name>EzBob.Configuration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Integration\EzBob.Models\EzBob.Models.csproj">
+      <Project>{66411ff3-aa26-4b45-96d3-56e5e77bb544}</Project>
+      <Name>EzBob.Models</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Integration\EzBob\EzBob.csproj">
       <Project>{cb5b04a6-76c2-43c4-9a8f-20ee2601cb11}</Project>
