@@ -1,8 +1,3 @@
-using System.IO;
-using Ezbob.HmrcHarvester;
-using Ezbob.Logger;
-using Integration.ChannelGrabberFrontend;
-
 namespace EzBobTest
 {
 	using System;
@@ -10,7 +5,6 @@ namespace EzBobTest
 	using System.Linq;
 	using System.Threading;
 	using System.Xml;
-	using CustomSchedulers;
 	using EKM;
 	using FreeAgent;
 	using Sage;
@@ -39,6 +33,10 @@ namespace EzBobTest
 	using log4net.Config;
     using PayPoint;
     using YodleeLib.connector;
+	using System.IO;
+	using Ezbob.HmrcHarvester;
+	using Ezbob.Logger;
+	using Integration.ChannelGrabberFrontend;
 
     [TestFixture]
     public class TestRetrieveDataHelper
@@ -85,12 +83,6 @@ namespace EzBobTest
 
             _Helper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
         }
-
-		[Test]
-		public void testCurrencyUpdateController()
-		{
-			CurrencyUpdateController.Run();
-		}
 
         [Test]
         public void PayPalSettingsStoredInConfig()
