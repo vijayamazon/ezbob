@@ -1,17 +1,17 @@
-﻿using System;
-using System.Data;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using CustomSchedulers;
-using EzBob;
-using EzBob.AmazonLib;
-using EzBob.AmazonServiceLib.UserInfo;
-using EzBob.PayPal;
-using EzBob.RequestsQueueCore.RequestStates;
-using EzBob.eBayLib;
-
-namespace TestApplication
+﻿namespace TestApplication
 {
+	using System;
+	using System.Data;
+	using System.Threading.Tasks;
+	using System.Windows.Forms;
+	using EzBob;
+	using EzBob.AmazonLib;
+	using EzBob.AmazonServiceLib.UserInfo;
+	using EzBob.PayPal;
+	using EzBob.RequestsQueueCore.RequestStates;
+	using EzBob.eBayLib;
+	using CustomSchedulers.Currency;
+
 	public partial class Form1 : Form
 	{
 		private bool _CanClose = true;
