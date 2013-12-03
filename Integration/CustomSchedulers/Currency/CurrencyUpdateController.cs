@@ -98,7 +98,14 @@ namespace CustomSchedulers
 					dict[rate.Key] /= gbpRate;
 				}
 				dict.Remove(gbpLabel);
-				dict.Add("USD", 1/gbpRate);
+				if (dict.ContainsKey("USD"))
+				{
+					dict["USD"] = 1 / gbpRate;
+				}
+				else
+				{
+					dict.Add("USD", 1 / gbpRate);
+				}
 				dict.Add(gbpLabel, 1);
 
 				Log.Info( "Currency update latest rates successfully completed!" );
