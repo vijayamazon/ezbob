@@ -1012,6 +1012,7 @@
     <Content Include="Content\js\Underwriter\CAIS\ezbob.underwriter.CAIS.caisManage.js">
       <DependentUpon>ezbob.underwriter.CAIS.caisManage.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Underwriter\customersGrid\ezbob.underwriter.grids.js" />
     <Content Include="Content\js\Underwriter\customersGrid\ezbob.underwriter.customerGrid.js">
       <DependentUpon>ezbob.underwriter.customerGrid.coffee</DependentUpon>
     </Content>
@@ -1026,6 +1027,9 @@
     </Content>
     <Content Include="Content\js\Underwriter\ezbob.underwriter.goToCustomer.js">
       <DependentUpon>ezbob.underwriter.goToCustomer.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\Fraud\ezbob.underwriter.fraud.js">
+      <DependentUpon>ezbob.underwriter.fraud.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Underwriter\profile\companyScore\ezbob.underwriter.companyScore.js" />
     <Content Include="Content\js\Underwriter\profile\customerInfo\ezbob.underwriter.zoopla.js" />

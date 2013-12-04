@@ -1,4 +1,6 @@
-﻿namespace EzBob.Web.Areas.Underwriter.Controllers
+﻿using System.Collections;
+
+namespace EzBob.Web.Areas.Underwriter.Controllers
 {
 	using System;
 	using System.Collections.Generic;
@@ -196,6 +198,39 @@
 
 			this.underwriterRecentCustomersRepository = underwriterRecentCustomersRepository;
 		}
+
+		[ValidateJsonAntiForgeryToken]
+		[Ajax]
+		[HttpGet]
+		[Transactional]
+		public JsonNetResult GridWaiting(bool includeTestCustomers) {
+			var aryOutput = new List<object>();
+
+			var oRelevant = _customers.GetAll()
+				.Where(c =>
+					(includeTestCustomers || !c.IsTest)
+					&&
+					(c.CreditResult == CreditResultStatus.WaitingForDecision)
+				);
+
+			foreach (var oCustomer in oRelevant) {
+				aryOutput.Add(new {
+					Id = oCustomer.Id,
+					Cart = oCustomer.Medal.HasValue ? oCustomer.Medal.Value.ToString() : "",
+					MP_List = oCustomer.MpList,
+					Name = oCustomer.PersonalInfo == null ? "" : oCustomer.PersonalInfo.Fullname,
+					Email = oCustomer.Name,
+					ApplyDate = oCustomer.OfferStart,
+					RegDate = oCustomer.GreetingMailSentDate,
+					CurrentStatus = oCustomer.LastStatus,
+					CalcAmount = oCustomer.SystemCalculatedSum,
+					OSBalance = oCustomer.OutstandingBalance,
+					SegmentType = oCustomer.IsOffline ? "Offline" : "Online"
+				});
+			} // foreach
+
+			return this.JsonNet(new { aaData = aryOutput });
+		} // GridWaiting
 
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]

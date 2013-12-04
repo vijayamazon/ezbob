@@ -9,147 +9,134 @@
 
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>@ViewBag.Title</title>
-        <link rel="icon" type="image/png" href="@Url.Content("~/Content/img/big-bob.png")" />
-        <!--[if IE]>
-            <link rel="shortcut icon" href="@Url.Content("~/favicon.ico")" type="image/vnd.microsoft.icon" />
-        <![endif]-->
-        @BundleHelper.RenderCss()
-        @BundleHelper.RenderPrintCss()
-    </head>
+<head>
+	<title>@ViewBag.Title</title>
+	<link rel="icon" type="image/png" href="@Url.Content("~/Content/img/big-bob.png")" />
+	<!--[if IE]>
+		<link rel="shortcut icon" href="@Url.Content("~/favicon.ico")" type="image/vnd.microsoft.icon" />
+	<![endif]-->
+	@BundleHelper.RenderCss()
+	@BundleHelper.RenderPrintCss()
+</head>
 
-    <body style="background-image: none;" class="@Html.Action("PermissionClasses", "Helper", new{Area="Underwriter"}) @Html.Action("RolesClasses", "Helper", new{Area="Underwriter"})">
+<body style="background-image: none;" class="@Html.Action("PermissionClasses", "Helper", new { Area = "Underwriter" }) @Html.Action("RolesClasses", "Helper", new { Area = "Underwriter" })">
+	@Html.AntiForgeryTokenNoUserCheck()
+	<div class="navbar menu navbar-inverse navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container-fluid">
+				<ul class="nav">
+					<li>
+					@{
+						var sRoleImageUrl = Url.Content("~/Content/img/roles/crm.png");
+						var sRoleImageTitle = "CRM";
 
-        @Html.AntiForgeryTokenNoUserCheck()
-        @menu()
-        <div class="container-fluid" style="padding-top: 40px;">
-            <div class="row-fluid">
-                <div class="span12">
-                    @RenderBody()
-                </div>
-            </div>
-        </div>
-        <div id="modalRegion"  class="modal hide" tabindex="-1"></div>
-        <div id="modalRegion2" class="modal hide" tabindex="-1"></div>
-        <script type="text/javascript">
-            window.gRootPath = '@Url.Content("~/")';
-        </script>
-        @BundleHelper.RenderJs()
-        @BundleHelper.RenderUnderwriterJs()
-        <script id="login-template" type="text/template">
-            @{ Html.RenderPartial("_LoginSimple"); }
-        </script>
-        <script type="text/javascript">
-            $('.navbar.menu .roleImg').tooltip({placement: "bottom"});
-        </script>
-        @RenderSection("Js", false)
-        <div style="display: none;" class="hide" id="cg-account-list">@JsonConvert.SerializeObject(Configuration.Instance.Vendors)</div>
-        <div style="display: none;" class="hide" id="current-server-time-zone">@DateTimeOffset.Now.ToString("zzz", CultureInfo.InvariantCulture)</div>
-    </body>
+						try {
+							var context = ObjectFactory.GetInstance<IWorkplaceContext>();
+							var user = context.User;
+
+							if (user.Roles.Any(r => r.Name == "manager")) {
+								sRoleImageUrl = Url.Content("~/Content/img/roles/manager.png");
+								sRoleImageTitle = "Manager";
+							}
+							else if (user.Roles.Any(r => r.Name == "Underwriter")) {
+								sRoleImageUrl = Url.Content("~/Content/img/roles/underwriter.png");
+								sRoleImageTitle = "Underwriter";
+							}
+
+							sRoleImageTitle = user.Roles.Last().Name;
+						}
+						catch {
+						}
+						<img data-title="@sRoleImageTitle" class="roleImg" src="@sRoleImageUrl"/>
+					}
+					</li>
+					<li id="liApplications">
+						<a id="gotoCustomerId" href='@Url.Action("Index", "Customers")#'>Customers</a>
+					</li>
+					<li id="liClient">
+						<a href='#'>Go to Customer Id</a>
+					</li>
+					<li id="liReports" class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown">Reports</a>
+						<ul class="dropdown-menu">
+							<li id="liCustomerReports">
+							@{
+								var configurationVariablesRepository = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
+								var reportsIp = configurationVariablesRepository.GetByName("ReportsSite").Value;
+								<a href="@reportsIp" target="_blank">Reports Site</a>
+							}
+							</li>
+							<li id="liPerformenceReportPerUnderWriter">
+								<a href='@Url.Action("PerformenceReportPerUnderWriter", "Reports", new { Area = "Underwriter" })'>Performence Report / Underwriter</a>
+							</li>
+							<li id="liPerformenceReportPerMedal">
+								<a href='@Url.Action("PerformenceReportPerMedal", "Reports", new { Area = "Underwriter" })'>Performence Report / Medal</a>
+							</li>
+							<li id="liExposureReportPerUnderwriter">
+								<a href='@Url.Action("ExposureReportPerUnderwriter", "Reports", new { Area = "Underwriter" })'>Exposure Report / Underwriter</a>
+							</li>
+							<li id="liExposureReportPerMedal">
+								<a href='@Url.Action("ExposureReportPerMedal", "Reports", new { Area = "Underwriter" })'>Exposure Report / Medal</a>
+							</li>
+							<li id="liMedalStatisticReport">
+								<a href='@Url.Action("MedalStatisticReport", "Reports", new { Area = "Underwriter" })'>Medal Statistic</a>
+							</li>
+							<li id="liDaily">
+								<a href='@Url.Action("DailyReport", "Reports", new { Area = "Underwriter" })'>Daily Report</a>
+							</li>
+							<li id="liExtendedDaily">
+								<a href='@Url.Action("ExpectationReport", "Reports", new { Area = "Underwriter" })'>Expectation Report</a>
+							</li>
+						</ul>
+					</li>
+					<li id="liSupport">
+						<a href='Customers#support'>Support</a>
+					</li>
+					<li id="liFraud">
+						<a href='Customers#fraud'>Fraud</a>
+					</li>
+					<li id="liCAIS">
+						<a href="@Url.Action("Index", "CAIS")">CAIS</a>
+					</li>
+					<li id="liAutomation">
+						<a href="Customers#automation">Automation</a>
+					</li>
+					<li id="liStrategySettings">
+						<a href="Customers#settings">Settings</a>
+					</li>
+				</ul>
+				<ul class="nav pull-right">
+					<li>
+						@Html.ActionLink("Log out", "LogOff", "Account", new { Area = "", isUnderwriterPage = true }, new { })
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="container-fluid" style="padding-top: 40px;">
+		<div class="row-fluid">
+			<div class="span12">
+				@RenderBody()
+			</div>
+		</div>
+	</div>
+	<div id="modalRegion" class="modal hide" tabindex="-1"></div>
+	<div id="modalRegion2" class="modal hide" tabindex="-1"></div>
+	<script type="text/javascript">
+		window.gRootPath = '@Url.Content("~/")';
+	</script>
+	@BundleHelper.RenderJs()
+	@BundleHelper.RenderUnderwriterJs()
+	<script id="login-template" type="text/template">
+		@{ Html.RenderPartial("_LoginSimple"); }
+	</script>
+	<script type="text/javascript">
+		$('.navbar.menu .roleImg').tooltip({ placement: "bottom" });
+	</script>
+	@RenderSection("Js", false)
+	<div style="display: none;" class="hide" id="cg-account-list">@JsonConvert.SerializeObject(Configuration.Instance.Vendors)</div>
+	<div style="display: none;" class="hide" id="current-server-time-zone">@DateTimeOffset.Now.ToString("zzz", CultureInfo.InvariantCulture)</div>
+</body>
 </html>
 
-@helper menu()
-{
-    <div class="navbar menu navbar-inverse navbar-fixed-top">
-        <div class="navbar-inner">
-            <div class="container-fluid">
-                <ul class="nav">
-                    <li>
-                        @RoleUrl()
-                    </li>
-                    <li id="liApplications" class="active">
-                        <a id="gotoCustomerId" href='@Url.Action("Index", "Customers")#'>Customers</a>
-                    </li>
-                    <li id="liClient">
-                        <a href='#'>Go to Customer Id</a>
-                    </li>
-                    <li id="liReports" class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reports</a>
-                        <ul class="dropdown-menu">
-                            <li id="liCustomerReports">
-                                @ReportsSite()
-                            </li>
-                            <li id="liPerformenceReportPerUnderWriter">
-                                <a href='@Url.Action("PerformenceReportPerUnderWriter", "Reports", new { Area = "Underwriter" })'>Performence Report / Underwriter</a> 
-                            </li>
-                            <li id="liPerformenceReportPerMedal">
-                                <a href='@Url.Action("PerformenceReportPerMedal", "Reports", new { Area = "Underwriter" })'>Performence Report / Medal</a> 
-                            </li>
-                            <li id="liExposureReportPerUnderwriter">
-                                <a href='@Url.Action("ExposureReportPerUnderwriter", "Reports", new { Area = "Underwriter" })'>Exposure Report / Underwriter</a> 
-                            </li>
-                            <li id="liExposureReportPerMedal">
-                                <a href='@Url.Action("ExposureReportPerMedal", "Reports", new { Area = "Underwriter" })'>Exposure Report / Medal</a> 
-                            </li>
-                            <li id="liMedalStatisticReport">
-                                <a href='@Url.Action("MedalStatisticReport", "Reports", new { Area = "Underwriter" })'>Medal Statistic</a> 
-                            </li>
-                            <li id="liDaily">
-                                <a href='@Url.Action("DailyReport", "Reports", new { Area = "Underwriter" })'>Daily Report</a> 
-                            </li>
-                            <li id="liExtendedDaily">
-                                <a href='@Url.Action("ExpectationReport", "Reports", new { Area = "Underwriter" })'>Expectation Report</a> 
-                            </li>
-                        </ul>
-                    </li>
-                    <li id="liSupport">
-                        <a href='Customers#support'>Support</a>
-                    </li>
-                    <li id="liFraud">
-                        <a href='Customers#fraud'>Fraud</a>
-                    </li>
-                    <li id="liCAIS">
-                        <a href="@Url.Action("Index", "CAIS")">CAIS</a>
-                    </li>
-                    <li id="liAutomation">
-                        <a href="Customers#automation">Automation</a>
-                    </li>
-                    <li id="liStrategySettings">
-                        <a href="Customers#settings">Settings</a>
-                    </li>
-                </ul>
-                <ul class="nav pull-right">
-                    <li>
-                        @Html.ActionLink("Log out", "LogOff", "Account", new { Area = "", isUnderwriterPage = true }, new { })
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </div>
-}
 
-
-@helper ReportsSite()
-{
-    var configurationVariablesRepository = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
-    var reportsIp = configurationVariablesRepository.GetByName("ReportsSite").Value;
-    <a href="@reportsIp" target="_blank">Reports Site</a>
-}
-
-@helper RoleUrl()
-{
-    var url = Url.Content("~/Content/img/roles/crm.png");
-    var text = "CRM";
-    try
-    {
-        var context = ObjectFactory.GetInstance<IWorkplaceContext>();
-        var user = context.User;
-
-        if (user.Roles.Any(r => r.Name == "manager"))
-        {
-            url = Url.Content("~/Content/img/roles/manager.png");
-            text = "Manager";
-        }
-        else if (user.Roles.Any(r => r.Name == "Underwriter"))
-        {
-            url = Url.Content("~/Content/img/roles/underwriter.png");
-            text = "Underwriter";
-        }
-        text = user.Roles.Last().Name;
-    }
-    catch
-    {
-    }
-    <img data-title="@text" class="roleImg" src="@url"/>
-}

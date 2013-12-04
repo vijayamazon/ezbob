@@ -350,6 +350,55 @@ ul.left-underwriter-menu > li > a:hover {
     text-decoration: underline;
     color: #0088CC !important;
 }
+
+ul.left-underwriter-menu li div {
+	position: relative;
+}
+
+ul.left-underwriter-menu li input {
+	margin-left: 12px;
+}
+
+ul.left-underwriter-menu li label {
+	display: inline-block;
+	margin: -21px 0 0 30px;
+}
+
+#grids-view {
+	font-family: Tahoma, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-size: 12px;
+	font-weight: normal;
+	line-height: 20px;
+}
+
+#grids-view h2 { font-size: 1.3em; margin-left: 1em; }
+
+#grids-view .tab-pane label,
+#grids-view .tab-pane select,
+#grids-view .tab-pane input
+{
+	font-size: 12px;
+}
+
+#grids-view .tab-pane select,
+#grids-view .tab-pane input {
+	margin-top: 7px;
+}
+
+#grids-view .grid-data {
+	width: 100%;
+}
+
+#grids-view .grid-data .grid-item-Name {
+	white-space: nowrap;
+}
+
+#grids-view .grid-data tbody td { border: 1px solid #aaaaaa; }
+
+#grids-view .grid-data td.numeric {
+	text-align: right;
+}
+
 .customer-grids { 
     margin-left: 117px;
     position: absolute;

@@ -1,69 +1,488 @@
 ﻿@model EzBob.Web.Areas.Underwriter.Models.LoansGrids
 @{
-    ViewBag.Title = "Underwriter";
+ViewBag.Title = "Underwriter";
 }
+<div id="grids-view" style="display: none;">
+	<div class="tabbable tabs-left">
+		<ul class="nav nav-tabs ui-state-default left-underwriter-menu">
+			<li class="active"><a href="#waiting-grid" data-toggle="tab">Decision(<span id="waiting-count"></span>)</a></li>
+			@if (Model.Escalated != null) {
+				<li><a href="#escalated-grid" data-toggle="tab">Escalated(<span id="escalated-count"></span>)</a></li>
+			}
+			<li><a href="#pending-grid" data-toggle="tab">Pending(<span id="pending-count"></span>)</a></li>
+			<li><a href="#approved-grid" data-toggle="tab">Approved</a></li>
+			<li><a href="#loans-grid" data-toggle="tab">Loans</a></li>
+			<li><a href="#sales-grid" data-toggle="tab">Sales</a></li>
+			<li><a href="#collection-grid" data-toggle="tab">Collection</a></li>
+			<li><a href="#late-grid" data-toggle="tab">Late</a></li>
+			<li><a href="#rejected-grid" data-toggle="tab">Rejected</a></li>
+			<li><a href="#all-grid" data-toggle="tab">All customers</a></li>
+			<li><a href="#registered-grid" data-toggle="tab">Registered(<span id="RegisteredCustomers-count"></span>)</a></li>
+			<li class="test-customers" title="Check to include test customers">
+				<div>
+					<input type="checkbox" class="checkbox" id="include-test-customers"/>
+					<label for="include-test-customers">Test customers</label>
+				</div>
+				<div class="all-customers hide" title="Check to show all the customers (unchecked shows registered during last week only).">
+					<input type="checkbox" class="checkbox" id="include-all-customers"/>
+					<label for="include-all-customers">Show all customers</label>
+				</div>
+			</li>
+			<li><hr />These are new grids. <button type="button" class="show-old-grids">Show old grids</button></li>
+		</ul>
+		<div class="tab-content customer-grids">
+			<div class="tab-pane active" id="waiting-grid">
+				<h2>Waiting for decision</h2>
+				<table class="grid-data">
+				<thead><tr>
+					<th>#</th>
+					<th>Cart</th>
+					<th>MPs</th>
+					<th>Name</th>
+					<th>Email</th>
+					<th>Apply date</th>
+					<th>Reg. date</th>
+					<th>Current staus</th>
+					<th>Calc. amount</th>
+					<th>O/S balance</th>
+					<th>Segment type</th>
+				</tr></thead>
+				<tbody><tr>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr></tbody>
+				</table>
+			</div>
+			@if (Model.Escalated != null) {
+				<div class="tab-pane" id="escalated-grid">
+					<h2>Escalated</h2>
+					<table class="grid-data">
+					<thead><tr>
+						<th>#</th>
+						<th>Cart</th>
+						<th>MPs</th>
+						<th>Name</th>
+						<th>Email</th>
+						<th>Apply date</th>
+						<th>Reg. date</th>
+						<th>Current staus</th>
+						<th>Calc. amount</th>
+						<th>O/S balance</th>
+						<th>Segment type</th>
+						<th>Escalation date</th>
+						<th>Underwriter</th>
+						<th>Reason</th>
+					</tr></thead>
+					<tbody><tr>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+						<td></td>
+					</tr></tbody>
+					</table>
+				</div>
+			}
+			<div class="tab-pane" id="pending-grid">
+				<h2>Pending</h2>
+				<table class="grid-data">
+				<thead><tr>
+					<th>#</th>
+					<th>Cart</th>
+					<th>MPs</th>
+					<th>Name</th>
+					<th>Email</th>
+					<th>Apply date</th>
+					<th>Reg. date</th>
+					<th>Current staus</th>
+					<th>Calc. amount</th>
+					<th>O/S balance</th>
+					<th>Segment type</th>
+					<th>Pending status</th>
+				</tr></thead>
+				<tbody><tr>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr></tbody>
+				</table>
+			</div>
+			<div class="tab-pane" id="approved-grid">
+				<h2>Approved</h2>
+				<table class="grid-data">
+				<thead><tr>
+					<th>#</th>
+					<th>Cart</th>
+					<th>MPs</th>
+					<th>Name</th>
+					<th>E-mail</th>
+					<th>Apply date</th>
+					<th>Approve date</th>
+					<th>Reg. date</th>
+					<th>Calc. amount</th>
+					<th>Approved sum</th>
+					<th>Amount taken</th>
+					<th>Offer expire date</th>
+					<th>Approves #</th>
+					<th>Rejects #</th>
+					<th>Segment type</th>
+				</tr></thead>
+				<tbody><tr>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr></tbody>
+				</table>
+			</div>
+			<div class="tab-pane" id="loans-grid">
+				<h2>Loans</h2>
+				<table class="grid-data">
+				<thead><tr>
+					<th>#</th>
+					<th>Cart</th>
+					<th>MPs</th>
+					<th>Name</th>
+					<th>E-mail</th>
+					<th>Reg. date</th>
+					<th>Apply date</th>
+					<th>First loan date</th>
+					<th>Last loan date</th>
+					<th>Last loan amount</th>
+					<th>Amount taken</th>
+					<th>Total principal repaid</th>
+					<th>O/S balance</th>
+					<th>Next repayment date</th>
+					<th>Customer status</th>
+					<th>Segment type</th>
+				</tr></thead>
+				<tbody><tr>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr></tbody>
+				</table>
+			</div>
+			<div class="tab-pane" id="sales-grid">
+				<h2>Sales</h2>
+				<table class="grid-data">
+				<thead><tr>
+					<th>#</th>
+					<th>E-mail</th>
+					<th>Name</th>
+					<th>Mobile phone</th>
+					<th>Daytime phone</th>
+					<th>Approved sum</th>
+					<th>Amount taken</th>
+					<th>Offer date</th>
+					<th>O/S balance</th>
+					<th>CRM status</th>
+					<th>CRM comment</th>
+					<th>Interactions</th>
+					<th>Segment type</th>
+				</tr></thead>
+				<tbody><tr>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr></tbody>
+				</table>
+			</div>
+			<div class="tab-pane" id="collection-grid">
+				<h2>Collection</h2>
+				<table class="grid-data">
+				<thead><tr>
+					<th>#</th>
+					<th>E-mail</th>
+					<th>Name</th>
+					<th>Mobile phone</th>
+					<th>Daytime phone</th>
+					<th>Amount taken</th>
+					<th>O/S balance</th>
+					<th>CRM status</th>
+					<th>CRM comment</th>
+					<th>Collection status</th>
+					<th>Segment type</th>
+				</tr></thead>
+				<tbody><tr>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr></tbody>
+				</table>
+			</div>
+			<div class="tab-pane" id="late-grid">
+				<h2>Late</h2>
+				<table class="grid-data">
+				<thead><tr>
+					<th>#</th>
+					<th>Cart</th>
+					<th>MPs</th>
+					<th>Name</th>
+					<th>E-mail</th>
+					<th>Apply date</th>
+					<th>Approve date</th>
+					<th>Reg. date</th>
+					<th>Calc. amount</th>
+					<th>Approved sum</th>
+					<th>Amount taken</th>
+					<th>Approves #</th>
+					<th>Rejects #</th>
+					<th>Segment type</th>
+					<th>O/S balance</th>
+					<th>Date of late payment</th>
+					<th>Late amount</th>
+					<th>Delinquency</th>
+					<th>CRM status</th>
+					<th>CRM comment</th>
+				</tr></thead>
+				<tbody><tr>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr></tbody>
+				</table>
+			</div>
+			<div class="tab-pane" id="rejected-grid">
+				<h2>Rejected</h2>
+				<table class="grid-data">
+				<thead><tr>
+					<th>#</th>
+					<th>Cart</th>
+					<th>MPs</th>
+					<th>Name</th>
+					<th>E-mail</th>
+					<th>Apply date</th>
+					<th>Reg. date</th>
+					<th>Reason</th>
+					<th>Rejects #</th>
+					<th>Approves #</th>
+					<th>O/S balance</th>
+					<th>Segment type</th>
+				</tr></thead>
+				<tbody><tr>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr></tbody>
+				</table>
+			</div>
+			<div class="tab-pane" id="all-grid">
+				<h2>All</h2>
+				<table class="grid-data">
+				<thead><tr>
+					<th>#</th>
+					<th>Cart</th>
+					<th>MPs</th>
+					<th>Name</th>
+					<th>E-mail</th>
+					<th>Reg. date</th>
+					<th>Apply date</th>
+					<th>Customer status</th>
+					<th>Calc. amount</th>
+					<th>Approved sum</th>
+					<th>O/S balance</th>
+					<th>Segment type</th>
+				</tr></thead>
+				<tbody><tr>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr></tbody>
+				</table>
+			</div>
+			<div class="tab-pane" id="registered-grid">
+				<h2>Registered</h2>
+				<table class="grid-data">
+				<thead><tr>
+					<th>#</th>
+					<th>E-mail</th>
+					<th>User status</th>
+					<th>Reg. date</th>
+					<th>MPs statuses</th>
+					<th>Wizard step</th>
+					<th>Segment type</th>
+				</tr></thead>
+				<tbody><tr>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr></tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+
 <div id="customers-view" style="display: none;">
-    <div class="tabbable tabs-left" id="applications-tabs">
-        <ul class="nav nav-tabs ui-state-default left-underwriter-menu">
-            <li class="active"><a href="#customers/waiting" data-target="#waiting" data-toggle="tab">Decision(<span id="waiting-count"></span>)</a></li>
-            @if (Model.Escalated != null)
-            {
-                <li><a href="#customers/escalated" data-target="#escalated" data-toggle="tab">Escalated(<span id="escalated-count"></span>)</a></li>
-            }
-            <li><a href="#customers/pending" data-target="#pending" data-toggle="tab">Pending(<span id="pending-count"></span>)</a></li>
-            <li><a href="#customers/approved" data-target="#approved" data-toggle="tab">Approved</a></li>
-            <li><a href="#customers/loans" data-target="#loans" data-toggle="tab">Loans</a></li>
-            <li><a href="#customers/sales" data-target="#sales" data-toggle="tab">Sales</a></li>
-            <li><a href="#customers/collection" data-target="#collection" data-toggle="tab">Collection</a></li>
-            <li><a href="#customers/late" data-target="#late" data-toggle="tab">Late</a></li>
-            <li><a href="#customers/rejected" data-target="#rejected" data-toggle="tab">Rejected</a></li>
-            <li><a href="#customers/all" data-target="#all" data-toggle="tab">All customers</a></li>
-            <li><a href="#customers/RegisteredCustomers" data-target="#RegisteredCustomers" data-toggle="tab">Registered(<span id="RegisteredCustomers-count"></span>)</a></li>
-        </ul>
-        <div class="tab-content customer-grids">
-            <div class="tab-pane active" id="waiting">
-                @ShowTestCustomers()
-            </div>
-            @if (Model.Escalated != null)
-            {
-                <div class="tab-pane" id="escalated">
-                    @ShowTestCustomers()
-                </div>
-            }
-            <div class="tab-pane" id="pending">
-                @ShowTestCustomers()
-            </div>
-            <div class="tab-pane" id="approved">
-                @ShowTestCustomers()
-            </div>
-            <div class="tab-pane" id="late">
-                @ShowTestCustomers()
-            </div>
-            <div class="tab-pane" id="rejected">
-                @ShowTestCustomers()
-            </div>
-            <div class="tab-pane" id="all">
-                @ShowTestCustomers()
-            </div>
-            <div class="tab-pane" id="RegisteredCustomers">
-                @ShowTestCustomers()
-                <div class="form-inline">
-                    <input type="checkbox" class="checkbox" id="show-all-customers"/>
-                    <label for="show-all-customers" class="checkbox">Show all registered customers</label>
-                </div>
-            </div>
-            <div class="tab-pane" id="loans">
-                @ShowTestCustomers()
-            </div>
-            <div class="tab-pane" id="sales">
-                @ShowTestCustomers()
-            </div>
-            <div class="tab-pane" id="collection">
-                @ShowTestCustomers()
-            </div>
-        </div>
-    </div>
-    
+	<div class="tabbable tabs-left" id="applications-tabs">
+		<ul class="nav nav-tabs ui-state-default left-underwriter-menu">
+			<li class="active"><a href="#customers/waiting" data-target="#waiting" data-toggle="tab">Decision(<span id="waiting-count"></span>)</a></li>
+			@if (Model.Escalated != null) {
+				<li><a href="#customers/escalated" data-target="#escalated" data-toggle="tab">Escalated(<span id="escalated-count"></span>)</a></li>
+			}
+			<li><a href="#customers/pending" data-target="#pending" data-toggle="tab">Pending(<span id="pending-count"></span>)</a></li>
+			<li><a href="#customers/approved" data-target="#approved" data-toggle="tab">Approved</a></li>
+			<li><a href="#customers/loans" data-target="#loans" data-toggle="tab">Loans</a></li>
+			<li><a href="#customers/sales" data-target="#sales" data-toggle="tab">Sales</a></li>
+			<li><a href="#customers/collection" data-target="#collection" data-toggle="tab">Collection</a></li>
+			<li><a href="#customers/late" data-target="#late" data-toggle="tab">Late</a></li>
+			<li><a href="#customers/rejected" data-target="#rejected" data-toggle="tab">Rejected</a></li>
+			<li><a href="#customers/all" data-target="#all" data-toggle="tab">All customers</a></li>
+			<li><a href="#customers/RegisteredCustomers" data-target="#RegisteredCustomers" data-toggle="tab">Registered(<span id="RegisteredCustomers-count"></span>)</a></li>
+			<li>These are old grids.
+				<button type="button" class="show-new-grids">Show new grids</button></li>
+		</ul>
+		<div class="tab-content customer-grids">
+			<div class="tab-pane active" id="waiting">
+				@ShowTestCustomers()
+			</div>
+			@if (Model.Escalated != null) {
+				<div class="tab-pane" id="escalated">
+					@ShowTestCustomers()
+				</div>
+			}
+			<div class="tab-pane" id="pending">
+				@ShowTestCustomers()
+			</div>
+			<div class="tab-pane" id="approved">
+				@ShowTestCustomers()
+			</div>
+			<div class="tab-pane" id="late">
+				@ShowTestCustomers()
+			</div>
+			<div class="tab-pane" id="rejected">
+				@ShowTestCustomers()
+			</div>
+			<div class="tab-pane" id="all">
+				@ShowTestCustomers()
+			</div>
+			<div class="tab-pane" id="RegisteredCustomers">
+				@ShowTestCustomers()
+				<div class="form-inline">
+					<input type="checkbox" class="checkbox" id="show-all-customers" />
+					<label for="show-all-customers" class="checkbox">Show all registered customers</label>
+				</div>
+			</div>
+			<div class="tab-pane" id="loans">
+				@ShowTestCustomers()
+			</div>
+			<div class="tab-pane" id="sales">
+				@ShowTestCustomers()
+			</div>
+			<div class="tab-pane" id="collection">
+				@ShowTestCustomers()
+			</div>
+		</div>
+	</div>
 </div>
 <div id="profile-view" style="display: none;"></div>
 <div id="settings-view" style="display: none;"></div>
@@ -72,238 +491,262 @@
 <div id="fraud-area" style="display: none;"></div>
 
 @helper ShowTestCustomers(){
-    <div class="show-test-customers form-inline">
-        <input type="checkbox" class="checkbox" id="show-test-customers"/>
-        <label for="show-test-customers" class="checkbox">Show test customers</label>
-    </div>
+	<div class="show-test-customers form-inline">
+		<input type="checkbox" class="checkbox" id="show-test-customers"/>
+		<label for="show-test-customers" class="checkbox">Show test customers</label>
+	</div>
 }
 @{
-    Html.RenderPartial("_ProfileTemplateMain");
-    Html.RenderPartial("_CustomersPopupTemplate");
-    Html.RenderPartial("AutomationSettings/StrategySettings");
-    Html.RenderPartial("AutomationSettings/StrategyAutomation");
-    Html.RenderPartial("Support/_Support");
-    Html.RenderPartial("Fraud/Fraud");
+Html.RenderPartial("_ProfileTemplateMain");
+Html.RenderPartial("_CustomersPopupTemplate");
+Html.RenderPartial("AutomationSettings/StrategySettings");
+Html.RenderPartial("AutomationSettings/StrategyAutomation");
+Html.RenderPartial("Support/_Support");
+Html.RenderPartial("Fraud/Fraud");
 }
 @section Js{
-    <script type="text/javascript">
+	<script type="text/javascript">
 
-        EzBob.Config.MinLoan = @Model.Config.MinLoan;
-        EzBob.Config.MaxLoan = @Model.MaxLoan;
-        EzBob.Config.XMinLoan = @Model.Config.XMinLoan;
-        EzBob.Config.SessionTimeout = @Model.Config.SessionTimeout;
-        EzBob.Config.PacnetBalanceMaxManualChange = @Model.Config.PacnetBalanceMaxManualChange;
-        EzBob.Underwriter.StaticData = {};
-        EzBob.Underwriter.StaticData.CollectionStatuses = new EzBob.Underwriter.CollectionStatuses(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(@Model.CollectionStatuses)));
+		EzBob.Config.MinLoan = @Model.Config.MinLoan;
+		EzBob.Config.MaxLoan = @Model.MaxLoan;
+		EzBob.Config.XMinLoan = @Model.Config.XMinLoan;
+		EzBob.Config.SessionTimeout = @Model.Config.SessionTimeout;
+		EzBob.Config.PacnetBalanceMaxManualChange = @Model.Config.PacnetBalanceMaxManualChange;
+		EzBob.Underwriter.StaticData = {};
+		EzBob.Underwriter.StaticData.CollectionStatuses = new EzBob.Underwriter.CollectionStatuses(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(@Model.CollectionStatuses)));
 
-        $(function() {
+		$(function() {
+			var customersOptions = {
+				el: $('#customers-view'),
 
-            var customersOptions = {
-                el: $('#customers-view'),
-                grids: [
-                    { el: '#waiting', url: '@Url.Action(@Model.WaitingForDecision.Action, new { Area = "Underwriter" })', model: @Model.WaitingForDecision.ColModel, names: @Model.WaitingForDecision.ColNames }
-                    @if (Model.Escalated != null)
-                    {
-                        <text>
-                    ,
-                    { el: '#escalated', url: '@Url.Action(@Model.Escalated.Action, new { Area = "Underwriter" })', model: @Model.Escalated.ColModel, names: @Model.Escalated.ColNames}
-                    </text>
-                    } ,
-                    { el: '#pending', url: '@Url.Action(@Model.Pending.Action, new { Area = "Underwriter" })', model: @Model.Pending.ColModel, names: @Model.Pending.ColNames },
-                    { el: '#approved', url: '@Url.Action(@Model.Approved.Action, new { Area = "Underwriter" })', model: @Model.Approved.ColModel, names: @Model.Approved.ColNames },
-                    { el: '#late', url: '@Url.Action(@Model.Late.Action, new { Area = "Underwriter" })', model: @Model.Late.ColModel, names: @Model.Late.ColNames },
-                    { el: '#rejected', url: '@Url.Action(@Model.Rejected.Action, new { Area = "Underwriter" })', model: @Model.Rejected.ColModel, names: @Model.Rejected.ColNames },
-                    { el: '#all', url: '@Url.Action(@Model.All.Action, new { Area = "Underwriter" })', model: @Model.All.ColModel, names: @Model.All.ColNames },
-                    { el: '#RegisteredCustomers', url: '@Url.Action(@Model.RegisteredCustomers.Action, new { Area = "Underwriter" })', model: @Model.RegisteredCustomers.ColModel, names: @Model.RegisteredCustomers.ColNames },
-                    { el: '#loans', url: '@Url.Action(@Model.Loans.Action, new { Area = "Underwriter" })', model: @Model.Loans.ColModel, names: @Model.Loans.ColNames },
-                    { el: '#sales', url: '@Url.Action(@Model.Sales.Action, new { Area = "Underwriter" })', model: @Model.Sales.ColModel, names: @Model.Sales.ColNames },
-                    { el: '#collection', url: '@Url.Action(@Model.Collection.Action, new { Area = "Underwriter" })', model: @Model.Collection.ColModel, names: @Model.Collection.ColNames }
-                ]
-            };
+				grids: [
+					{ el: '#waiting', url: '@Url.Action(@Model.WaitingForDecision.Action, new {Area = "Underwriter"})', model: @Model.WaitingForDecision.ColModel, names: @Model.WaitingForDecision.ColNames },
+					@if (Model.Escalated != null) {
+						<text>{ el: '#escalated', url: '@Url.Action(@Model.Escalated.Action, new {Area = "Underwriter"})', model: @Model.Escalated.ColModel, names: @Model.Escalated.ColNames},</text>
+					}
+					{ el: '#pending', url: '@Url.Action(@Model.Pending.Action, new {Area = "Underwriter"})', model: @Model.Pending.ColModel, names: @Model.Pending.ColNames },
+					{ el: '#approved', url: '@Url.Action(@Model.Approved.Action, new {Area = "Underwriter"})', model: @Model.Approved.ColModel, names: @Model.Approved.ColNames },
+					{ el: '#late', url: '@Url.Action(@Model.Late.Action, new {Area = "Underwriter"})', model: @Model.Late.ColModel, names: @Model.Late.ColNames },
+					{ el: '#rejected', url: '@Url.Action(@Model.Rejected.Action, new {Area = "Underwriter"})', model: @Model.Rejected.ColModel, names: @Model.Rejected.ColNames },
+					{ el: '#all', url: '@Url.Action(@Model.All.Action, new {Area = "Underwriter"})', model: @Model.All.ColModel, names: @Model.All.ColNames },
+					{ el: '#RegisteredCustomers', url: '@Url.Action(@Model.RegisteredCustomers.Action, new {Area = "Underwriter"})', model: @Model.RegisteredCustomers.ColModel, names: @Model.RegisteredCustomers.ColNames },
+					{ el: '#loans', url: '@Url.Action(@Model.Loans.Action, new {Area = "Underwriter"})', model: @Model.Loans.ColModel, names: @Model.Loans.ColNames },
+					{ el: '#sales', url: '@Url.Action(@Model.Sales.Action, new {Area = "Underwriter"})', model: @Model.Sales.ColModel, names: @Model.Sales.ColNames },
+					{ el: '#collection', url: '@Url.Action(@Model.Collection.Action, new {Area = "Underwriter"})', model: @Model.Collection.ColModel, names: @Model.Collection.ColNames },
+				], // grids
+			}; // customersOptions
 
-            //count updater
-            var counterTimer;
+			//count updater
+			var counterTimer;
 
-            function updateCounters() {
-                var xhr = $.get(window.gRootPath + "Underwriter/Customers/GetCounters", { isTest: EzBob.Config.isTest });
-                xhr.done(function(response) {
-                    _.each(response, function(val) {
-                        $("#" + val.Name + "-count").text(val.Count);
-                    });
-                });
-            }
+			function updateCounters() {
+				var xhr = $.get(window.gRootPath + 'Underwriter/Customers/GetCounters', { isTest: EzBob.Config.isTest });
+				xhr.done(function(response) {
+					_.each(response, function(val) {
+						$('#' + val.Name + '-count').text(val.Count);
+					});
+				});
+			} // updateCounters
 
-            var customersView = new EzBob.Underwriter.CustomersView(customersOptions);
-            var profileView = new EzBob.Underwriter.ProfileView({ el: $('#profile-view') });
-            var strategySettingsView = new EzBob.Underwriter.StrategySettingsView({ el: $('#settings-view') });
-            var strategyAutomationView = new EzBob.Underwriter.StrategyAutomationView({ el: $('#automation-view') });
-            var supportView = new EzBob.Underwriter.SupportView({ el: $("#support-area") });
-            var fraudView = new EzBob.Underwriter.FraudView({ el: $("#fraud-area") });
+			var underwriterRouter = Backbone.Router.extend({
+				initialize: function() {
+					this.views = {
+						customers: {                                                       // TODO: remove
+							view: new EzBob.Underwriter.CustomersView(customersOptions),  // TODO: remove
+							isRendered: false,                                           // TODO: remove
+							menuItem: 'liApplications',                                 // TODO: remove
+						},                                                             // TODO: remove
+						grids: {
+							view: new EzBob.Underwriter.GridsView({ el: $('#grids-view') }),
+							isRendered: false,
+							menuItem: 'liApplications',
+						},
+						profile: {
+							view: new EzBob.Underwriter.ProfileView({ el: $('#profile-view') }),
+							isRendered: false,
+							menuItem: 'liApplications',
+						},
+						strategySettings: {
+							view: new EzBob.Underwriter.StrategySettingsView({ el: $('#settings-view') }),
+							isRendered: false,
+							menuItem: 'liStrategySettings',
+						},
+						strategyAutomation: {
+							view: new EzBob.Underwriter.StrategyAutomationView({ el: $('#automation-view') }),
+							isRendered: false,
+							menuItem: 'liAutomation',
+						},
+						support: {
+							view: new EzBob.Underwriter.SupportView({ el: $('#support-area') }),
+							isRendered: false,
+							menuItem: 'liSupport',
+						},
+						fraud: {
+							view: new EzBob.Underwriter.FraudView({ el: $('#fraud-area') }),
+							isRendered: false,
+							menuItem: 'liFraud',
+						},
+					}; // views
+				}, // initialize
 
-            var underwriterRouter = Backbone.Router.extend({
-                initialize: function() {
-                    this.isCustomersRendered = false;
-                    this.isProfileRendered = false;
-                    this.isSettingsRendered = false;
-                    this.isAutomationRendered = false;
-                    this.isSupportRendered = false;
-                    this.isFraudRendered = false;
-                },
-                routes: {
-                    "": "customers",
-                    "customers/:type": "customers",
-                    "profile/:id": "profile",
-                    "profile/:id/:type": "profilePopup",
-                    "settings": "settings",
-                    "automation": "automation",
-                    "support": "support",
-                    "fraud": "fraud"
-                },
-                customers: function(type) {
-                    counterTimer = counterTimer || setInterval(updateCounters, 5000);
-                    if (!this.isCustomersRendered) {
-                        this.isCustomersRendered = true;
-                        customersView.render();
-                    }
-                    this.switchMenuTo("liApplications");
-                    this.hideAll();
+				routes: {
+					'': 'customers',
+					'customers/:type': 'customers',
+					'profile/:id': 'profile',
+					'profile/:id/:type': 'profilePopup',
+					'settings': 'settings',
+					'automation': 'automation',
+					'support': 'support',
+					'fraud': 'fraud'
+				}, // routes
 
-                    customersView.show(type);
-                    EzBob.App.vent.trigger('uw:grids:refresh');
-                },
-                profile: function(id, type) {
-                    clearInterval(counterTimer);
-                    counterTimer = null;
-                    this.switchMenuTo("liApplications");
-                    if (!this.isProfileRendered) {
-                        this.isProfileRendered = true;
-                        profileView.render();
-                    }
-                    this.hideAll();
-                    profileView.show(id, type);
-                    profileView.showed = true;
+				profilePopup: function(id, type) {
+					var profilePopupView = new EzBob.Underwriter.ProfilePopupView({ customerId: id });
+					profilePopupView.modalOptions = { show: true, keyboard: false, width: 650 };
 
-                },
-                profilePopup: function(id, type) {
-                    var profilePopupView = new EzBob.Underwriter.ProfilePopupView({ customerId: id });
-                    profilePopupView.modalOptions = { show: true, keyboard: false, width: 650 };
+					var that = this;
+					profilePopupView.on('close', function() {
+						that.navigate('#customers/registered');
+					});
 
-                    var that = this;
-                    profilePopupView.on("close", function() {
-                        that.navigate("#customers/RegisteredCustomers");
-                    });
-                    EzBob.App.modal.show(profilePopupView);
-                },
-                settings: function() {
-                    this.switchMenuTo("liStrategySettings");
-                    if (!this.isSettingsRendered) {
-                        this.isSettingsRendered = true;
-                        strategySettingsView.render();
-                    }
-                    this.hideAll();
-                    strategySettingsView.show();
-                },
-                automation: function() {
-                    this.switchMenuTo("liAutomation");
-                    if (!this.isAutomationRendered) {
-                        this.isAutomationRendered = true;
-                        strategyAutomationView.render();
-                    }
-                    this.hideAll();
-                    strategyAutomationView.show();
-                },
-                support: function() {
-                    this.switchMenuTo("liSupport");
-                    if (!this.isSupportRendered) {
-                        this.isSupportRendered = true;
-                        supportView.render();
-                    }
-                    this.hideAll();
-                    supportView.show();
+					EzBob.App.modal.show(profilePopupView);
+				}, // profilePopup
 
-                },
-                fraud: function() {
-                    this.switchMenuTo("liFraud");
-                    if (!this.isFraudRendered)
-                        this.isFraudRendered = true;
-                    this.hideAll();
-                    fraudView.$el.show();
-                },
-                switchMenuTo: function(name) {
-                    $(".container-fluid > ul.nav > li[id]").removeClass("active");
-                    $("#" + name).addClass("active");
-                },
-                hideAll: function() {
-                    customersView.hide();
-                    profileView.hide();
-                    profileView.showed = false;
-                    strategyAutomationView.hide();
-                    strategySettingsView.hide();
-                    supportView.hide();
-                    fraudView.$el.hide();
-                }
-            });
+				handleRoute: function(sViewName, id, type) {
+					var oView = this.views[sViewName];
 
-            profileView.router = new underwriterRouter();
-            Backbone.history.start();
-            profileView.on("customerNotFull", function(customerId) {
-                profileView.router.navigate("#customers/RegisteredCustomers", { trigger: true, replace: true });
-                profileView.router.navigate("#profile/" + customerId + "/RegisteredCustomers", { trigger: true, replace: true });
-            });
+					this.switchMenuTo(oView.menuItem);
 
-            supportView.on("rechecked", function(options) {
-                var umi = options.umi;
-                var el = $("[umi=" + umi + "]");
-                var status = el.parent().prev();
-                supportView.model.fetch().done(function() {
-                    var interval = setInterval(function() {
-                        var req = $.get(window.gRootPath + "Underwriter/MarketPlaces/CheckForUpdatedStatus", {
-                            mpId: umi
-                        });
-                        return req.done(function(response) {
-                            status.text(response.status);
-                            if (response.status !== "In progress") {
-                                clearInterval(interval);
-                                supportView.model.fetch().done(function() {
-                                    el.removeClass("disabled");
-                                    if (response.status == 'Done') {
-                                        EzBob.ShowMessage("The MP " + umi + " rechecked successfully", "", null, "OK");
-                                    }
-                                    supportView.model.trigger('change');
-                                });
-                            }
-                        });
-                    }, 1000);
-                });
+					if (!oView.isRendered) {
+						oView.isRendered = true;
+						oView.view.render();
+					} // if
 
-            });
+					this.hideAll();
 
-            if (window.location.hash != "") {
-                $('a[href="' + window.location.hash + '"]').tab('show');
-            }
-            
-            var recentCustomersModel = new EzBob.Underwriter.RecentCustomersModel();
-            recentCustomersModel.fetch().done(function() {
-                localStorage.setItem("RecentCustomers", JSON.stringify(recentCustomersModel.get('RecentCustomers')));
-                var a = new EzBob.Underwriter.goToCustomerId();
-                a.on("ok", function(id) {
-                    profileView.router.navigate("profile/" + id, { trigger: true, replace: true });
-                });
+					oView.view.show(id, type);
+				}, // handleRoute
 
-                $("#liClient > a").on("click", function() {
-                    a.render();
-                    return false;
-                });
-            });
-        });
+				customers: function(type) {
+					counterTimer = counterTimer || setInterval(updateCounters, 5000);
 
-    @if (Model.Escalated != null)
-    {
-        <text>  var escalatedFlag = 1;  </text>
-    }
-    else
-    {
-        <text>  var escalatedFlag = 0;  </text>
-    }
-    </script>
+					this.handleRoute('grids', null, type);
+
+					if (!this.views.customers.isRendered) {      // TODO: remove
+						this.views.customers.isRendered = true; // TODO: remove
+						this.views.customers.view.render();    // TODO: remove
+					}                                         // TODO: remove
+
+					EzBob.App.vent.trigger('uw:grids:refresh'); // TODO: remove
+				}, // customers
+
+				profile: function(id, type) {
+					clearInterval(counterTimer);
+					counterTimer = null;
+
+					this.handleRoute('profile', id, type);
+
+					this.views.profile.view.showed = true;
+				}, // profile
+
+				settings: function() {
+					this.handleRoute('strategySettings');
+				}, // settings
+
+				automation: function() {
+					this.handleRoute('strategyAutomation');
+				}, // automation
+
+				support: function() {
+					this.handleRoute('support');
+				}, // support
+
+				fraud: function() {
+					this.handleRoute('fraud');
+				}, // fraud
+
+				switchMenuTo: function(name) {
+					$('.container-fluid > ul.nav > li[id]').removeClass('active');
+					$('#' + name).addClass('active');
+				}, // switchMenuTo
+
+				hideAll: function() {
+					for (var i in this.views)
+						this.views[i].view.hide();
+
+					this.views.profile.view.showed = false;
+				}, // hideAll
+			}); // underwriterRouter
+
+			var oRouter = new underwriterRouter();
+
+			oRouter.views.grids.view.router = oRouter;
+
+			oRouter.views.profile.view.router = oRouter;
+
+			Backbone.history.start();
+
+			oRouter.views.profile.view.on('customerNotFull', function(customerId) {
+				oRouter.router.navigate('#customers/registered', { trigger: true, replace: true });
+				oRouter.router.navigate('#profile/' + customerId + '/registered', { trigger: true, replace: true });
+			});
+
+			oRouter.views.support.view.on('rechecked', function(options) {
+				var umi = options.umi;
+
+				var el = $('[umi=' + umi + ']');
+
+				var status = el.parent().prev();
+
+				oRouter.views.support.view.model.fetch().done(function() {
+					var interval = setInterval(function() {
+						var req = $.get(window.gRootPath + 'Underwriter/MarketPlaces/CheckForUpdatedStatus', { mpId: umi });
+
+						return req.done(function(response) {
+							status.text(response.status);
+
+							if (response.status !== 'In progress') {
+								clearInterval(interval);
+
+								oRouter.views.support.view.model.fetch().done(function() {
+									el.removeClass('disabled');
+
+									if (response.status == 'Done')
+										EzBob.ShowMessage('The MP ' + umi + ' rechecked successfully', '', null, 'OK');
+
+									oRouter.views.support.view.model.trigger('change');
+								});
+							} // if
+						}); // done
+					}, 1000); // setInterval
+				}); // on fetch done
+			}); // on rechecked
+
+			// if (window.location.hash != '') { $('a[href="' + window.location.hash + '"]').tab('show'); }
+
+			var recentCustomersModel = new EzBob.Underwriter.RecentCustomersModel();
+
+			recentCustomersModel.fetch().done(function() {
+				localStorage.setItem('RecentCustomers', JSON.stringify(recentCustomersModel.get('RecentCustomers')));
+
+				var a = new EzBob.Underwriter.goToCustomerId();
+
+				a.on('ok', function(id) {
+					oRouter.views.profile.view.router.navigate('profile/' + id, { trigger: true, replace: true });
+				});
+
+				$('#liClient > a').on('click', function() {
+					a.render();
+					return false;
+				});
+			}); // recent customers model fetch done
+		});
+
+		@if (Model.Escalated != null) {
+			<text>var escalatedFlag = 1;</text>
+		}
+		else {
+			<text>var escalatedFlag = 0;</text>
+		}
+	</script>
 }

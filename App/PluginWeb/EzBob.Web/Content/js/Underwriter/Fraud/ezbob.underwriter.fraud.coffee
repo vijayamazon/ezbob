@@ -154,3 +154,9 @@ class EzBob.Underwriter.FraudView extends Backbone.Marionette.ItemView
         EzBob.App.modal.show view
         model.on "saved", => @model.fetch()
         false
+
+    show: ->
+        @$el.show()
+
+    hide: ->
+        @$el.hide()

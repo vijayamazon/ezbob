@@ -5,6 +5,15 @@ EzBob.Underwriter.CustomersView = Backbone.View.extend({
     initialize: function (options) {
         this.grids = options.grids;
     },
+	events: {
+		'click .show-new-grids': 'showNewGrids',
+	}, // events
+
+	showNewGrids: function () {
+		this.hide();
+		$('#grids-view').show();
+	}, // showNewGrids
+
     render: function () {
         this.$el.find('a[data-toggle="tab"]').on('shown', _.bind(this.tabShown, this));
         _.each(this.grids, function (g) {
