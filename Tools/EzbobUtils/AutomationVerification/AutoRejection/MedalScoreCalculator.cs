@@ -3,8 +3,6 @@
 	using System;
 	using System.Collections.Generic;
 
-
-
 	public class MedalScoreCalculator
 	{
 		public ScoreMedalOffer CalculateMedalScore(
@@ -344,7 +342,7 @@
 		{
 			Console.WriteLine("{0} {1}%, offer: {2} £ at  {3}%", scoreMedal.Medal, scoreMedal.Score * 100, scoreMedal.MaxOffer, scoreMedal.MaxOfferPercent * 100);
 			Console.WriteLine();
-			decimal s1 = 0M, s2 = 0M, s3 = 0M, s4 = 0M, s5 = 0M, s6 = 0M, s7 = 0M, s8 = 0M, s9 = 0M, s10 = 0M;
+			decimal s1 = 0M, s2 = 0M, s3 = 0M, s4 = 0M, s5 = 0M, s6 = 0M, s7 = 0M, s8 = 0M, s9 = 0M, s10 = 0M, s11 = 0M;
 			foreach (var weight in dict)
 			{
 				Console.WriteLine("{0}| {10}| {11}| {1}| {2}| {3}| {4}| {5}| {6}| {7}| {8}| {9}", weight.Key.ToString().PadRight(25),
@@ -358,7 +356,7 @@
 					weight.Value.MinimumGrade,
 					weight.Value.MaximumGrade,
 					weight.Value.Grade,
-					weight.Value.Score.ToString("{0:F6}").PadRight(10));
+					String.Format("{0}", weight.Value.Score).PadRight(50));
 				s1 += weight.Value.FinalWeightFixedWeightParameter;
 				s2 += weight.Value.StandardWeightFixedWeightParameter;
 				s3 += weight.Value.StandardWeightAdjustableWeightParameter;
@@ -369,11 +367,12 @@
 				s8 += weight.Value.MinimumGrade;
 				s9 += weight.Value.MaximumGrade;
 				s10 += weight.Value.Score;
+				s11 += weight.Value.Grade;
 			}
 			Console.WriteLine("--------------------------------------------------------------------");
-			Console.WriteLine("{0}| {10}| {1}| {2}| {3}| {4}| {5}| {6}| {7}| {8}| {9}", "Sum".PadRight(25), 
-				ToPercent(s1), ToPercent(s2), ToPercent(s3), ToPercent(s4), ToPercent(s5), 
-							  ToPercent(s6/100), ToPercent(s7/100), s8, s9, s10);
+			Console.WriteLine("{0}| {10}| {11}| {1}| {2}| {3}| {4}| {5}| {6}| {7}| {8}| {9}", "Sum".PadRight(25), 
+				ToPercent(s1), ToPercent(s2), ToPercent(s3), ToPercent(s4), ToPercent(s5),
+							  ToPercent(s6 / 100), ToPercent(s7 / 100), s8, s9, s11, s10.ToString().PadRight(50));
 
 		}
 

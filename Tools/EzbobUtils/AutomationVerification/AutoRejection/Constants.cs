@@ -148,7 +148,7 @@
 		public static List<RangeGrage> NumOfStoresRanges = new List<RangeGrage>
 			{
 				new RangeGrage {MinValue = 1,MaxValue = 2, Grade = 1},
-				new RangeGrage {MinValue = 3,MaxValue = 4, Grade = 2},
+				new RangeGrage {MinValue = 3,MaxValue = 4, Grade = 3},
 				new RangeGrage {MinValue = 5,MaxValue = null, Grade = 5},
 			};
 
