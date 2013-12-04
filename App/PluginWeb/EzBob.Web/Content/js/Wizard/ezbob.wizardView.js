@@ -12,10 +12,6 @@ EzBob.WizardRouter = Backbone.Router.extend({
 
 	navTo: function (i) {
 		var oStep = this.stepList[i];
-
-		$(document).attr('title', oStep.documentTitle);
-		EzBob.App.GA.trackPage(oStep.trackPage);
-		EzBob.App.trigger('wizard:progress', oStep.progress);
 		this.navigate(oStep.name);
 		this.trigger(oStep.name);
 	} // navTo
@@ -73,7 +69,8 @@ EzBob.WizardView = Backbone.View.extend({
 		};
 
 		var storeInfoStepModel = new EzBob.StoreInfoStepModel(modelArgs);
-
+		
+	    
 		var oWss = {
 			views: {
 				signup: new EzBob.QuickSignUpStepView({ model: this.customer }),
@@ -227,12 +224,12 @@ EzBob.WizardView = Backbone.View.extend({
 		if (!this.renderStep(current))
 			return;
 
-		var data = {
-			steps: this.steps,
-			current: current,
-			progress: this.progress
-		};
+		var currStep = this.steps[current];
+	    EzBob.App.GA.trackPage(currStep.trackPage);
+	    $(document).attr('title', currStep.documentTitle);
+	    EzBob.App.trigger('wizard:progress', currStep.progress);
 
+	    
 		var marketing = EzBob.dbStrings.MarketingDefault;
 		var isWizard = false;
 
@@ -253,7 +250,11 @@ EzBob.WizardView = Backbone.View.extend({
 			this.$el.find('#marketingProggress').hide().html(marketing);
 		}
 
-		this.$el.find('.wizard-progress').html(this.progressTemplate(data));
+	    this.$el.find('.wizard-progress').html(this.progressTemplate({
+	        steps: this.steps,
+	        current: current,
+	        progress: this.progress
+	    }));
 		if (this.topNavigationEnabled)
 			this.$el.find('li[data-step-num]').click($.proxy(this.handleTopNavigation, this));
 		else
