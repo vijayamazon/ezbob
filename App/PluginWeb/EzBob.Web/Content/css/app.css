@@ -1181,6 +1181,7 @@ DIV#upload-files-form { display: none; }
     outline: none;
     margin-left: 5px;
     box-shadow: none;
+    text-shadow: none !important;
 }
 
 .rc-button:hover {
@@ -1191,6 +1192,6 @@ DIV#upload-files-form { display: none; }
     -moz-transition: all 0.0s;
     -webkit-transition: all 0.0s;
     transition: all 0.0s;
-   
+    text-shadow: none !important;
 }
 
