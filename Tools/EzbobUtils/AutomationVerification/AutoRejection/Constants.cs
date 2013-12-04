@@ -52,14 +52,14 @@
 		public static decimal EzbobSeniorityBaseWeight = 0M;
 		public static decimal EzbobSeniority_FirstRepaymentWeight = 0.03M;
 
-		public static decimal EzbobNumOfPreviousOnTimeLoansBaseWeight = 0M;
-		public static decimal EzbobNumOfPreviousOnTimeLoans_FirstRepaymentWeight = 0.05M;
+		public static decimal EzbobNumOfLoansBaseWeight = 0M;
+		public static decimal EzbobNumOfLoans_FirstRepaymentWeight = 0.05M;
 
-		public static decimal EzbobNumOfPreviousLatePaymentsBaseWeight = 0M;
-		public static decimal EzbobNumOfPreviousLatePayments_FirstRepaymentWeight = 0.04M;
+		public static decimal EzbobNumOfLateRepaymentsBaseWeight = 0M;
+		public static decimal EzbobNumOfLateRepayments_FirstRepaymentWeight = 0.04M;
 
-		public static decimal EzbobNumOfPreviousEarlyPaymentsBaseWeight = 0M;
-		public static decimal EzbobNumOfPreviousEarlyPayments_FirstRepaymentWeight = 0.03M;
+		public static decimal EzbobNumOfEarlyRepaymentsBaseWeight = 0M;
+		public static decimal EzbobNumOfEarlyRepayments_FirstRepaymentWeight = 0.03M;
 
 		#region Weight Min/Max
 
@@ -68,6 +68,8 @@
 
 		public static decimal MpSeniorityWeightMin = 4M;
 		public static decimal MpSeniorityWeightMax = 2M;
+
+		public static int PositiveFeedback_GT50K = 50000;
 
 		#endregion Weight Min/Max
 
@@ -99,12 +101,12 @@
 		public static int NumOfStoresGradeMax = 5;
 		public static int EzbobSeniorityGradeMin = 2;
 		public static int EzbobSeniorityGradeMax = 4;
-		public static int EzbobNumOfPreviousOnTimeLoansGradeMin = 1;
-		public static int EzbobNumOfPreviousOnTimeLoansGradeMax = 4;
-		public static int EzbobNumOfPreviousLatePaymentsGradeMin = 0;
-		public static int EzbobNumOfPreviousLatePaymentsGradeMax = 5;
-		public static int EzbobNumOfPreviousEarlyPaymentsGradeMin = 2;
-		public static int EzbobNumOfPreviousEarlyPaymentsGradeMax = 5;
+		public static int EzbobNumOfLoansGradeMin = 1;
+		public static int EzbobNumOfLoansGradeMax = 4;
+		public static int EzbobNumOfLateRepaymentsGradeMin = 0;
+		public static int EzbobNumOfLateRepaymentsGradeMax = 5;
+		public static int EzbobNumOfEarlyRepaymentsGradeMin = 2;
+		public static int EzbobNumOfEarlyRepaymentsGradeMax = 5;
 
 		#endregion Min/Max Grade
 
@@ -133,7 +135,7 @@
 				new RangeGrage {MinValue = 5001,MaxValue = 50000, Grade = 3},
 				new RangeGrage {MinValue = 50001,MaxValue = null, Grade = 5},
 			};
-		
+
 		public static List<RangeGrage> AnnualTurnoverRanges = new List<RangeGrage>
 			{
 				new RangeGrage {MinValue = null,MaxValue = 12000, Grade = 1},
@@ -186,9 +188,45 @@
 		public static int MaritalStatusGrade_Widower = 4;
 
 		#endregion Grade Ranges
-		
+
 		#endregion Grade
-		
+
+		#region Medal Range
+
+		public static List<RangeMedal> MedalRanges = new List<RangeMedal>
+			{
+				new RangeMedal {MinValue = null,MaxValue = 0.4M, Medal = Medal.Silver },
+				new RangeMedal {MinValue = 0.4M,MaxValue = 0.6M, Medal = Medal.Gold},
+				new RangeMedal {MinValue = 0.6M,MaxValue = 0.8M, Medal = Medal.Platinum},
+				new RangeMedal {MinValue = 0.8M,MaxValue = null,Medal = Medal.Diamond},
+			};
+
+		#endregion Medal Range
+
+		#region Offer Percent Range
+
+		public static List<RangeOfferPercent> OfferPercentRanges = new List<RangeOfferPercent>
+			{
+				new RangeOfferPercent {MinValue = null,MaxValue = 649, OfferPercent = 0.07M },
+				new RangeOfferPercent {MinValue = 650,MaxValue = 849, OfferPercent = 0.06M },
+				new RangeOfferPercent {MinValue = 850,MaxValue = 999, OfferPercent = 0.05M },
+				new RangeOfferPercent {MinValue = 1000,MaxValue = 1099, OfferPercent = 0.04M },
+				new RangeOfferPercent {MinValue = 1100,MaxValue = null, OfferPercent = 0.03M },
+			};
+
+		#endregion Offer Percent Range
+
+		#region Decision Percent Range
+
+		public static List<RangeOfferPercent> DecisionPercentRanges = new List<RangeOfferPercent>
+			{
+				new RangeOfferPercent {MinValue = null,MaxValue = 549, OfferPercent = 0.07M },
+				new RangeOfferPercent {MinValue = 550,MaxValue = 649, OfferPercent = 0.65M },
+				new RangeOfferPercent {MinValue = 650,MaxValue = null, OfferPercent = 1 },
+			};
+
+		#endregion Decision Percent Range
+
 		#endregion MedalScoreCalculation
 	}
 }

@@ -1,9 +1,11 @@
 ﻿namespace AutomationCalculator
 {
-	public class ScoreMedal
+	public class ScoreMedalOffer
 	{
 		public Medal Medal { get; set; }
 		public decimal Score { get; set; }
+		public int MaxOffer { get; set; }
+		public decimal MaxOfferPercent { get; set; }
 	}
 
 	public class Weight
@@ -22,11 +24,10 @@
 		public decimal Score { get; set; }
 	}
 
-	public class RangeGrage
+	public class Range
 	{
-		public int? MinValue { get; set; }
-		public int? MaxValue { get; set; }
-		public int Grade { get; set; }
+		public decimal? MinValue { get; set; }
+		public decimal? MaxValue { get; set; }
 
 		public bool IsInRange(decimal value)
 		{
@@ -35,5 +36,20 @@
 			if (MinValue.HasValue && !MaxValue.HasValue && value >= MinValue.Value) return true;
 			return false;
 		}
+	}
+
+	public class RangeGrage : Range
+	{
+		public int Grade { get; set; }
+	}
+
+	public class RangeMedal : Range
+	{
+		public Medal Medal { get; set; }
+	}
+
+	public class RangeOfferPercent : Range
+	{
+		public decimal OfferPercent { get; set; }
 	}
 }

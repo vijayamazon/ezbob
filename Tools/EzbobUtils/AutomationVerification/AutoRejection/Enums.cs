@@ -17,10 +17,11 @@
 
 	public enum Medal
 	{
-		Silver,
-		Gold,
-		Platinum,
-		Diamond
+		NoMedal = 0,
+		Silver = 6,
+		Gold = 8,
+		Platinum = 10,
+		Diamond = 12,
 	} // enum Medal
 
 	public enum Parameter
