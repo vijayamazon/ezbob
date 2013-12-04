@@ -1,4 +1,4 @@
-﻿namespace EzbobService
+﻿namespace EzBob.Backend.EzbobService
 {
 	using System.Runtime.Serialization;
 	using System.ServiceModel;

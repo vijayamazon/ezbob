@@ -1,4 +1,4 @@
-﻿namespace EzbobService
+﻿namespace EzBob.Backend.EzbobService
 {
 	using log4net;
 	using Strategies;

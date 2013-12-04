@@ -1,4 +1,4 @@
-﻿namespace Strategies
+﻿namespace EzBob.Backend.Strategies
 {
 	using MailApi;
 	using log4net;

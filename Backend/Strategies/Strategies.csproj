@@ -7,7 +7,7 @@
     <ProjectGuid>{7E526927-9849-4E6E-BBFF-D0D780F81A05}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Strategies</RootNamespace>
+    <RootNamespace>EzBob.Backend.Strategies</RootNamespace>
     <AssemblyName>Strategies</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -33,6 +33,10 @@
     <Reference Include="log4net">
       <HintPath>..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="nunit.framework, Version=2.5.3.9345, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\3rdparty\NUnit\nunit.framework.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -43,6 +47,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainStrategy.cs" />
+    <Compile Include="ScoreCalculation\Constants.cs" />
+    <Compile Include="ScoreCalculation\Enums.cs" />
+    <Compile Include="ScoreCalculation\MedalScoreCalculator.cs" />
+    <Compile Include="ScoreCalculation\MedalScoreCalculatorTestFixure.cs" />
+    <Compile Include="ScoreCalculation\Models.cs" />
     <Compile Include="StrategiesMailer.cs" />
     <Compile Include="Strategies.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
