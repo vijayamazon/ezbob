@@ -46,6 +46,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutoDecisions\Approval.cs" />
+    <Compile Include="AutoDecisions\AutoDecisionMaker.cs" />
+    <Compile Include="AutoDecisions\Rejection.cs" />
+    <Compile Include="AutoDecisions\ReApproval.cs" />
+    <Compile Include="AutoDecisions\ReRejection.cs" />
     <Compile Include="MainStrategy.cs" />
     <Compile Include="ScoreCalculation\Constants.cs" />
     <Compile Include="ScoreCalculation\Enums.cs" />
