@@ -2,7 +2,6 @@
 {
 	using System;
 	using System.Data;
-	using Backend.Strategies;
 	using DbConnection;
 	using Models;
 
@@ -26,11 +25,11 @@
 		private int autoApproveAmount;
 		private decimal availableFunds;
 
-		public bool MakeDecision(MainStrategy mainStrategy)
+		public bool MakeDecision(AutoDecisionRequest request, AutoDecisionResponse response)
 		{
-			if (mainStrategy.EnableAutomaticApproval)
+			if (request.EnableAutomaticApproval)
 			{
-				autoApproveAmount = strategyHelper.AutoApproveCheck(mainStrategy.CustomerId, mainStrategy.OfferedCreditLine, mainStrategy.MinExperianScore);
+				autoApproveAmount = strategyHelper.AutoApproveCheck(request.CustomerId, request.OfferedCreditLine, request.MinExperianScore);
 
 				if (autoApproveAmount != 0)
 				{
@@ -41,36 +40,36 @@
 					{
 						if (autoApproveIsSilent)
 						{
-							strategyHelper.NotifyAutoApproveSilentMode(mainStrategy.CustomerId, autoApproveAmount, autoApproveSilentTemplateName, autoApproveSilentToAddress);
+							strategyHelper.NotifyAutoApproveSilentMode(request.CustomerId, autoApproveAmount, autoApproveSilentTemplateName, autoApproveSilentToAddress);
 
-							mainStrategy.CreditResult = "WaitingForDecision";
-							mainStrategy.UserStatus = "Manual";
-							mainStrategy.SystemDecision = "Manual";
+							response.CreditResult = "WaitingForDecision";
+							response.UserStatus = "Manual";
+							response.SystemDecision = "Manual";
 						}
 						else
 						{
-							dt = DbConnection.ExecuteSpReader("GetLastOfferDataForApproval", DbConnection.CreateParam("CustomerId", mainStrategy.CustomerId));
+							dt = DbConnection.ExecuteSpReader("GetLastOfferDataForApproval", DbConnection.CreateParam("CustomerId", request.CustomerId));
 							DataRow results = dt.Rows[0];
 							bool loanOfferEmailSendingBanned = bool.Parse(results["EmailSendingBanned"].ToString());
 							DateTime loanOfferOfferStart = DateTime.Parse(results["OfferStart"].ToString());
 							DateTime loanOfferOfferValidUntil = DateTime.Parse(results["OfferValidUntil"].ToString());
 
-							mainStrategy.CreditResult = "Approved";
-							mainStrategy.UserStatus = "Approved";
-							mainStrategy.SystemDecision = "Approve";
-							mainStrategy.LoanOffer_UnderwriterComment = "Auto Approval";
-							mainStrategy.LoanOffer_OfferValidDays = (loanOfferOfferValidUntil - loanOfferOfferStart).TotalDays;
-							mainStrategy.App_ApplyForLoan = null;
-							mainStrategy.App_ValidFor = DateTime.UtcNow.AddDays(mainStrategy.LoanOffer_OfferValidDays);
-							mainStrategy.IsAutoApproval = true;
-							mainStrategy.LoanOffer_EmailSendingBanned_new = loanOfferEmailSendingBanned;
+							response.CreditResult = "Approved";
+							response.UserStatus = "Approved";
+							response.SystemDecision = "Approve";
+							response.LoanOffer_UnderwriterComment = "Auto Approval";
+							response.LoanOffer_OfferValidDays = (loanOfferOfferValidUntil - loanOfferOfferStart).TotalDays;
+							response.App_ApplyForLoan = null;
+							response.App_ValidFor = DateTime.UtcNow.AddDays(request.LoanOffer_OfferValidDays);
+							response.IsAutoApproval = true;
+							response.LoanOffer_EmailSendingBanned_new = loanOfferEmailSendingBanned;
 						}
 					}
 					else
 					{
-						mainStrategy.CreditResult = "WaitingForDecision";
-						mainStrategy.UserStatus = "Manual";
-						mainStrategy.SystemDecision = "Manual";
+						response.CreditResult = "WaitingForDecision";
+						response.UserStatus = "Manual";
+						response.SystemDecision = "Manual";
 					}
 
 					return true;

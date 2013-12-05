@@ -1,31 +1,32 @@
 ﻿namespace EzBob.Backend.Strategies.AutoDecisions
 {
-	using Backend.Strategies;
 	using log4net;
 
 	public class AutoDecisionMaker
 	{
 		private static readonly ILog log = LogManager.GetLogger(typeof(AutoDecisionMaker));
 
-		// TODO: move all configs \ db values that are used here but not outside here
-		public static void MakeDecision(MainStrategy mainStrategy)
+		public static AutoDecisionResponse MakeDecision(AutoDecisionRequest request)
 		{
-			if (new ReRejection().MakeDecision(mainStrategy))
+			var autoDecisionResponse = new AutoDecisionResponse(request);
+
+			if (new ReRejection().MakeDecision(request, autoDecisionResponse))
 			{
-				return;
-			}
-			
-			if (new ReApproval().MakeDecision(mainStrategy))
-			{
-				return;
+				return autoDecisionResponse;
 			}
 
-			if (new Approval().MakeDecision(mainStrategy))
+			if (new ReApproval().MakeDecision(request, autoDecisionResponse))
 			{
-				return;
+				return autoDecisionResponse;
 			}
 
-			new Rejection().MakeDecision(mainStrategy);
+			if (new Approval().MakeDecision(request, autoDecisionResponse))
+			{
+				return autoDecisionResponse;
+			}
+
+			new Rejection().MakeDecision(request, autoDecisionResponse);
+			return autoDecisionResponse;
 		}
 	}
 }

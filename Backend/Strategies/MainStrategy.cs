@@ -244,7 +244,6 @@
 		public string UserStatus { get; set; }
 		public string SystemDecision { get; set; }
 		public int ModelLoanOffer { get; set; }
-		public int NumOfOutstandingLoans { get; set; }
 		public string LoanOffer_UnderwriterComment { get; set; }
 		public double LoanOffer_OfferValidDays { get; set; }
 		public DateTime? App_ApplyForLoan { get; set; }
@@ -554,7 +553,22 @@
 				OfferedCreditLine = MaxCapNotHomeOwnerNum;
 			}
 
-			AutoDecisionMaker.MakeDecision(this);
+
+
+
+			AutoDecisionResponse autoDecisionResponse = AutoDecisionMaker.MakeDecision(CreateAutoDecisionRequest());
+			IsReRejected = autoDecisionResponse.IsReRejected;
+			AutoRejectReason = autoDecisionResponse.AutoRejectReason;
+			CreditResult = autoDecisionResponse.CreditResult;
+			UserStatus = autoDecisionResponse.UserStatus;
+			SystemDecision = autoDecisionResponse.SystemDecision;
+			ModelLoanOffer = autoDecisionResponse.ModelLoanOffer;
+			LoanOffer_UnderwriterComment = autoDecisionResponse.LoanOffer_UnderwriterComment;
+			LoanOffer_OfferValidDays = autoDecisionResponse.LoanOffer_OfferValidDays;
+			App_ApplyForLoan = autoDecisionResponse.App_ApplyForLoan;
+			App_ValidFor = autoDecisionResponse.App_ValidFor;
+			LoanOffer_EmailSendingBanned_new = autoDecisionResponse.LoanOffer_EmailSendingBanned_new;
+			IsAutoApproval = autoDecisionResponse.IsAutoApproval;
 
 			if (Underwriter_Check)
 			{
@@ -563,6 +577,43 @@
 			}
 
 
+		}
+
+		private AutoDecisionRequest CreateAutoDecisionRequest()
+		{
+			return new AutoDecisionRequest
+			{
+				App_ApplyForLoan = App_ApplyForLoan,
+				App_ValidFor = App_ValidFor,
+				AutoRejectReason = AutoRejectReason,
+				CreditResult = CreditResult,
+				CustomerId = CustomerId,
+				EnableAutomaticApproval = EnableAutomaticApproval,
+				EnableAutomaticReApproval = EnableAutomaticReApproval,
+				EnableAutomaticRejection = EnableAutomaticRejection,
+				EnableAutomaticReRejection = EnableAutomaticReRejection,
+				Inintial_ExperianConsumerScore = Inintial_ExperianConsumerScore,
+				IsAutoApproval = IsAutoApproval,
+				SystemDecision = SystemDecision,
+				UserStatus = UserStatus,
+				LoanOffer_UnderwriterComment = LoanOffer_UnderwriterComment,
+				ModelLoanOffer = ModelLoanOffer,
+				IsReRejected = IsReRejected,
+				LoanOffer_EmailSendingBanned_new = LoanOffer_EmailSendingBanned_new,
+				LoanOffer_ReApprovalFullAmountOld = LoanOffer_ReApprovalFullAmountOld,
+				LoanOffer_OfferValidDays = LoanOffer_OfferValidDays,
+				LoanOffer_ReApprovalFullAmount = LoanOffer_ReApprovalFullAmount,
+				LoanOffer_ReApprovalRemainingAmount = LoanOffer_ReApprovalRemainingAmount,
+				LoanOffer_ReApprovalRemainingAmountOld = LoanOffer_ReApprovalRemainingAmountOld,
+				LowTotalAnnualTurnover = LowTotalAnnualTurnover,
+				LowTotalThreeMonthTurnover = LowTotalThreeMonthTurnover,
+				MarketplaceSeniorityDays = MarketplaceSeniorityDays,
+				MinExperianScore = MinExperianScore,
+				OfferedCreditLine = OfferedCreditLine,
+				PayPal_NumberOfStores = PayPal_NumberOfStores,
+				PayPal_TotalSumOfOrders1Y = PayPal_TotalSumOfOrders1Y,
+				PayPal_TotalSumOfOrders3M = PayPal_TotalSumOfOrders3M
+			};
 		}
 
 		private void ScoringStrategyStub()

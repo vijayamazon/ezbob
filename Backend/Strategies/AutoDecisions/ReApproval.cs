@@ -2,7 +2,6 @@
 {
 	using System;
 	using System.Data;
-	using Backend.Strategies;
 	using DbConnection;
 	using Models;
 
@@ -20,9 +19,9 @@
 		private readonly int autoReApproveMaxNumOfOutstandingLoans;
 		private decimal availableFunds;
 
-		public bool MakeDecision(MainStrategy mainStrategy)
+		public bool MakeDecision(AutoDecisionRequest request, AutoDecisionResponse response)
 		{
-			DataTable dt = DbConnection.ExecuteSpReader("GetLastOfferDataForReApproval", DbConnection.CreateParam("CustomerId", mainStrategy.CustomerId));
+			DataTable dt = DbConnection.ExecuteSpReader("GetLastOfferDataForReApproval", DbConnection.CreateParam("CustomerId", request.CustomerId));
 			DataRow results = dt.Rows[0];
 			bool loanOfferEmailSendingBanned = bool.Parse(results["EmailSendingBanned"].ToString());
 			DateTime loanOfferOfferStart = DateTime.Parse(results["OfferStart"].ToString());
@@ -32,8 +31,8 @@
 			int loanOfferNumOfMPsAddedOld = int.Parse(results["NumOfMPsAddedOld"].ToString());
 			int loanOfferPrincipalPaidAmountOld = int.Parse(results["PrincipalPaidAmountOld"].ToString());
 
-			if ((mainStrategy.LoanOffer_ReApprovalFullAmount > 0 || mainStrategy.LoanOffer_ReApprovalRemainingAmount > 0) ||
-			    ((mainStrategy.LoanOffer_ReApprovalFullAmountOld > 0 || mainStrategy.LoanOffer_ReApprovalRemainingAmountOld > 0) &&
+			if ((request.LoanOffer_ReApprovalFullAmount > 0 || request.LoanOffer_ReApprovalRemainingAmount > 0) ||
+				((request.LoanOffer_ReApprovalFullAmountOld > 0 || request.LoanOffer_ReApprovalRemainingAmountOld > 0) &&
 			     loanOfferPrincipalPaidAmountOld == 0 && loanOfferSumOfChargesOld == 0 &&
 			     loanOfferNumOfMPsAddedOld == 0))
 			{
@@ -41,31 +40,30 @@
 				availableFunds = decimal.Parse(dt.Rows[0]["AvailableFunds"].ToString());
 				if (availableFunds > loanOfferSystemCalculatedSum)
 				{
-					mainStrategy.NumOfOutstandingLoans = strategyHelper.GetOutstandingLoansNum(mainStrategy.CustomerId);
-					if (mainStrategy.NumOfOutstandingLoans > autoReApproveMaxNumOfOutstandingLoans)
+					int numOfOutstandingLoans = strategyHelper.GetOutstandingLoansNum(request.CustomerId);
+					if (numOfOutstandingLoans > autoReApproveMaxNumOfOutstandingLoans)
 					{
-						mainStrategy.CreditResult = "WaitingForDecision";
-						mainStrategy.UserStatus = "Manual";
-						mainStrategy.SystemDecision = "Manual";
+						response.CreditResult = "WaitingForDecision";
+						response.UserStatus = "Manual";
+						response.SystemDecision = "Manual";
 						return true;
 					}
 
-					mainStrategy.CreditResult = mainStrategy.EnableAutomaticReApproval ? "Approved" : "WaitingForDecision";
-					mainStrategy.UserStatus = "Approved";
-					mainStrategy.SystemDecision = "Approve";
-					mainStrategy.LoanOffer_UnderwriterComment = "Auto Re-Approval";
-					mainStrategy.LoanOffer_OfferValidDays =
+					response.CreditResult = request.EnableAutomaticReApproval ? "Approved" : "WaitingForDecision";
+					response.UserStatus = "Approved";
+					response.SystemDecision = "Approve";
+					response.LoanOffer_UnderwriterComment = "Auto Re-Approval";
+					response.LoanOffer_OfferValidDays =
 						(loanOfferOfferValidUntil - loanOfferOfferStart).TotalDays;
-					mainStrategy.App_ApplyForLoan = null;
-					mainStrategy.App_ValidFor = DateTime.UtcNow.AddDays(mainStrategy.LoanOffer_OfferValidDays);
-					mainStrategy.LoanOffer_EmailSendingBanned_new = loanOfferEmailSendingBanned;
+					response.App_ApplyForLoan = null;
+					response.App_ValidFor = DateTime.UtcNow.AddDays(request.LoanOffer_OfferValidDays);
+					response.LoanOffer_EmailSendingBanned_new = loanOfferEmailSendingBanned;
 					return true;
 				}
 
-
-				mainStrategy.CreditResult = "WaitingForDecision";
-				mainStrategy.UserStatus = "Manual";
-				mainStrategy.SystemDecision = "Manual";
+				response.CreditResult = "WaitingForDecision";
+				response.UserStatus = "Manual";
+				response.SystemDecision = "Manual";
 				return true;
 			}
 
