@@ -55,7 +55,7 @@ namespace CustomSchedulers.Currency
 			{
 				if (ex.Message.Contains("404"))
 				{
-					if (symbolName == "USD" || symbolName == "GBP" || symbolName == "EUR")
+					if (symbolName == "USD" || symbolName == "GBP" || symbolName == "EUR" || symbolName == "CAD" || symbolName == "AUD" || symbolName == "ILS")
 					{
 						Log.Error(string.Format("Yahoo: for Symbol [{0}] Update: {1}", symbolName, ex.Message));
 					}
