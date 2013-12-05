@@ -76,8 +76,6 @@
 		string BWABusinessCheck = string.Empty;
 		int MaxCapHomeOwner = 1;
 		int MaxCapNotHomeOwner = 1;
-		int Reject_Defaults_Amount = 1;
-		int Reject_Defaults_MonthsNum = 1;
 
 
 

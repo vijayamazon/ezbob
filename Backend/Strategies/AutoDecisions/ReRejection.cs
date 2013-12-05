@@ -1,15 +1,30 @@
 ﻿namespace EzBob.Backend.Strategies.AutoDecisions
 {
+	using System.Data;
+	using DbConnection;
+
 	public class ReRejection
 	{
-		public int Re_Reject_NewCustomer_ReReject { get; private set; }
-		public int Re_Reject_OldCustomer_ReReject { get; private set; }
-		public int Re_Reject_PrincipalPaidAmount { get; private set; }
-		public int Re_Reject_LoanAmountTaken { get; private set; }
+		private readonly int newCustomerReReject;
+		private readonly int oldCustomerReReject;
+		private readonly int principalPaidAmount;
+		private readonly int loanAmountTaken;
+		private readonly AutoDecisionRequest request;
 
-		public bool MakeDecision(AutoDecisionRequest request, AutoDecisionResponse response)
+		public ReRejection(AutoDecisionRequest request)
 		{
-			if (Re_Reject_NewCustomer_ReReject > 0 || (Re_Reject_OldCustomer_ReReject > 0 && Re_Reject_LoanAmountTaken * 0.5 >= Re_Reject_PrincipalPaidAmount))
+			this.request = request;
+			DataTable dt = DbConnection.ExecuteSpReader("GetCustomerDataForReRejection");
+			DataRow results = dt.Rows[0];
+			newCustomerReReject = int.Parse(results["NewCustomer_ReReject"].ToString());
+			oldCustomerReReject = int.Parse(results["OldCustomer_ReReject"].ToString());
+			principalPaidAmount = int.Parse(results["PrincipalPaidAmount"].ToString());
+			loanAmountTaken = int.Parse(results["LoanAmountTaken"].ToString());
+		}
+
+		public bool MakeDecision(AutoDecisionResponse response)
+		{
+			if (newCustomerReReject > 0 || (oldCustomerReReject > 0 && loanAmountTaken * 0.5 >= principalPaidAmount))
 			{
 				response.IsReRejected = true;
 				response.AutoRejectReason = "Auto Re-Reject";

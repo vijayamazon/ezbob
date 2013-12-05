@@ -8,18 +8,19 @@
 	public class ReApproval
 	{
 		private readonly StrategyHelper strategyHelper = new StrategyHelper();
+		private readonly int autoReApproveMaxNumOfOutstandingLoans;
+		private decimal availableFunds;
+		private readonly AutoDecisionRequest request;
 
-		public ReApproval()
+		public ReApproval(AutoDecisionRequest request)
 		{
+			this.request = request;
 			DataTable dt = DbConnection.ExecuteSpReader("GetReApprovalConfigs");
 			DataRow results = dt.Rows[0];
 			autoReApproveMaxNumOfOutstandingLoans = int.Parse(results["AutoReApproveMaxNumOfOutstandingLoans"].ToString());
 		}
 
-		private readonly int autoReApproveMaxNumOfOutstandingLoans;
-		private decimal availableFunds;
-
-		public bool MakeDecision(AutoDecisionRequest request, AutoDecisionResponse response)
+		public bool MakeDecision(AutoDecisionResponse response)
 		{
 			DataTable dt = DbConnection.ExecuteSpReader("GetLastOfferDataForReApproval", DbConnection.CreateParam("CustomerId", request.CustomerId));
 			DataRow results = dt.Rows[0];

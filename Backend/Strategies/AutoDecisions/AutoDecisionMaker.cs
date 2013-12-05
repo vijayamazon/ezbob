@@ -10,22 +10,22 @@
 		{
 			var autoDecisionResponse = new AutoDecisionResponse(request);
 
-			if (new ReRejection().MakeDecision(request, autoDecisionResponse))
+			if (new ReRejection(request).MakeDecision(autoDecisionResponse))
 			{
 				return autoDecisionResponse;
 			}
 
-			if (new ReApproval().MakeDecision(request, autoDecisionResponse))
+			if (new ReApproval(request).MakeDecision(autoDecisionResponse))
 			{
 				return autoDecisionResponse;
 			}
 
-			if (new Approval().MakeDecision(request, autoDecisionResponse))
+			if (new Approval(request).MakeDecision(autoDecisionResponse))
 			{
 				return autoDecisionResponse;
 			}
 
-			new Rejection().MakeDecision(request, autoDecisionResponse);
+			new Rejection(request).MakeDecision(autoDecisionResponse);
 			return autoDecisionResponse;
 		}
 	}

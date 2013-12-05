@@ -8,9 +8,11 @@
 	public class Approval
 	{
 		private readonly StrategyHelper strategyHelper = new StrategyHelper();
+		private readonly AutoDecisionRequest request;
 
-		public Approval()
+		public Approval(AutoDecisionRequest request)
 		{
+			this.request = request;
 			DataTable dt = DbConnection.ExecuteSpReader("GetApprovalConfigs");
 			DataRow results = dt.Rows[0];
 
@@ -25,7 +27,7 @@
 		private int autoApproveAmount;
 		private decimal availableFunds;
 
-		public bool MakeDecision(AutoDecisionRequest request, AutoDecisionResponse response)
+		public bool MakeDecision(AutoDecisionResponse response)
 		{
 			if (request.EnableAutomaticApproval)
 			{
