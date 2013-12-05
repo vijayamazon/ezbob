@@ -1,0 +1,75 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace StrategiesTestTool
+{
+	using EzBob.Backend.Strategies.ScoreCalculation;
+
+	class Program
+	{
+		static void Main(string[] args)
+		{
+			Usage();
+			if (args.Length < 2)
+			{
+				Console.WriteLine("Not enough parameter");
+				Usage();
+			}
+			switch (args[0])
+			{
+				case "medal":
+					try
+					{
+
+
+						decimal annualTurnover = decimal.Parse(args[1]);
+						int experianScore = int.Parse(args[2]);
+						decimal mpSeniorityYears = decimal.Parse(args[3]);
+						decimal positiveFeedbackCount = decimal.Parse(args[4]);
+						MaritalStatus maritalStatus = (MaritalStatus) int.Parse(args[5]);
+						Gender gender = (Gender) int.Parse(args[6]);
+						int numberOfStores = int.Parse(args[7]);
+						bool firstRepaymentDatePassed = bool.Parse(args[8]);
+						decimal ezbobSeniority = decimal.Parse(args[9]);
+						int ezbobNumOfLoans = int.Parse(args[10]);
+						int ezbobNumOfLateRepayments = int.Parse(args[11]);
+						int ezbobNumOfEarlyReayments = int.Parse(args[12]);
+						var msc = new MedalScoreCalculator();
+						msc.CalculateMedalScore(annualTurnover,
+						                        experianScore,
+						                        mpSeniorityYears,
+						                        positiveFeedbackCount,
+						                        maritalStatus,
+						                        gender,
+						                        numberOfStores,
+						                        firstRepaymentDatePassed,
+						                        ezbobSeniority,
+						                        ezbobNumOfLoans,
+						                        ezbobNumOfLateRepayments,
+						                        ezbobNumOfEarlyReayments);
+					}
+					catch (Exception ex)
+					{
+						Console.WriteLine("Error in parsing the parameters. \n {0}", ex.Message);
+						Usage();
+					}
+					break;
+				default:
+					Console.WriteLine("unknown strategy name");
+					Usage();
+					break;
+			}
+		}
+
+		private static void Usage()
+		{
+			Console.WriteLine("Usage: StrategiesTestTool.exe <strategy name> [parameters...]");
+			Console.WriteLine("Strategy Score Medal Calculation: name: medal, parameters: annualTurnover experianScore mpSeniorityYears positiveFeedbackCount maritalStatus gender numberOfStores firstRepaymentDatePassed ezbobSeniority ezbobNumOfLoans ezbobNumOfLateRepayments ezbobNumOfEarlyReayments");
+			Console.WriteLine("maritalStatus: Married=0,Single=1,Divorced=2,Widower=3,Other=4 \n gender: M=0,F=1, firstRepaymentDatePassed: true/false");
+			Console.WriteLine("Example: medal 125000 740 8 10000 0 0 0 false 1.2 0 0 0");
+		}
+	}
+}
