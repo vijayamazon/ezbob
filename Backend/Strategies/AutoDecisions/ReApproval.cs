@@ -1,8 +1,8 @@
-﻿namespace Strategies.AutoDecisions
+﻿namespace EzBob.Backend.Strategies.AutoDecisions
 {
 	using System;
-	using EzBob.Backend.Strategies;
-	using EzBob.Models;
+	using Backend.Strategies;
+	using Models;
 
 	public class ReApproval
 	{

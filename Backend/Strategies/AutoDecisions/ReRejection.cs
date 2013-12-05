@@ -1,6 +1,6 @@
-﻿namespace Strategies.AutoDecisions
+﻿namespace EzBob.Backend.Strategies.AutoDecisions
 {
-	using EzBob.Backend.Strategies;
+	using Backend.Strategies;
 
 	public class ReRejection
 	{

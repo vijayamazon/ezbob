@@ -1,6 +1,6 @@
-﻿namespace Strategies.AutoDecisions
+﻿namespace EzBob.Backend.Strategies.AutoDecisions
 {
-	using EzBob.Backend.Strategies;
+	using Backend.Strategies;
 
 	public class Rejection
 	{
@@ -19,7 +19,7 @@
 		{
 			if (LoanOffer_ApprovalNum > 0 || mainStrategy.TotalSumOfOrders1YTotal > AutoRejectionException_AnualTurnover ||
 				mainStrategy.Inintial_ExperianConsumerScore > AutoRejectionException_CreditScore || ErrorMPsNum > 0 ||
-				mainStrategy.Inintial_ExperianConsumerScore == 0 || HasAccountingAccounts)
+				(decimal)mainStrategy.Inintial_ExperianConsumerScore == 0 || HasAccountingAccounts)
 			{
 				mainStrategy.CreditResult = "WaitingForDecision";
 				mainStrategy.UserStatus = "Manual";
@@ -29,6 +29,7 @@
 
 			return false;
 		}
+
 		public bool MakeDecision(MainStrategy mainStrategy)
 		{
 			if (IsException(mainStrategy))
@@ -70,16 +71,18 @@
 			}
 			else
 			{
-				// manual node - verify
 				mainStrategy.CreditResult = "WaitingForDecision";
 				mainStrategy.UserStatus = "Manual";
 				mainStrategy.SystemDecision = "Manual";
 				return true;
 			}
 
-			// complete from node - enable automatic rejection (leads to 3 reject assignment nodes)
+			mainStrategy.CreditResult = mainStrategy.EnableAutomaticRejection ? "WaitingForDecision" : "Rejected";
+			mainStrategy.UserStatus = "Rejected";
+			mainStrategy.SystemDecision = "Reject";
+			mainStrategy.ModelLoanOffer = 0;
 
-			return false;
+			return true;
 		}
 	}
 }

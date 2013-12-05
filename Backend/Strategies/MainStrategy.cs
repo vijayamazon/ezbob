@@ -3,12 +3,12 @@
 	using System;
 	using System.Globalization;
 	using System.Threading;
+	using AutoDecisions;
 	using ExperianLib;
 	using ExperianLib.Ebusiness;
 	using ExperianLib.IdIdentityHub;
-	using EzBob.Models;
+	using Models;
 	using EzBobIntegration.Web_References.Consumer;
-	using global::Strategies.AutoDecisions;
 	using log4net;
 	using System.Collections.Generic;
 
@@ -25,7 +25,6 @@
 		private static readonly ILog log = LogManager.GetLogger(typeof(MainStrategy));
 		private readonly StrategiesMailer mailer = new StrategiesMailer();
 		private StrategyHelper strategyHelper = new StrategyHelper();
-		private AutoDecisionMaker autoDecisionMaker = new AutoDecisionMaker();
 
 		private const string CP_Experian_Actions_AMLMortality = "The underwriter will need to clarify that the applicant is actually alive (can be a tricky discussion!) and get copies of proof of identity";
 		private const string CP_Experian_Actions_AMLAccommodationAddress = "If this is a personal address then reject";
@@ -52,7 +51,6 @@
 		
 		// TODO: Read from ConfigurationVariables (ConfigurationVariables_MainStrat)
 		string BWABusinessCheck = string.Empty;
-		bool EnableAutomaticRejection = false;
 		int MaxCapHomeOwner = 1;
 		int MaxCapNotHomeOwner = 1;
 		int Reject_Defaults_Amount = 1;
@@ -214,6 +212,7 @@
 		public double Inintial_ExperianConsumerScore { get; private set; }
 		public double MarketplaceSeniorityDays { get; private set; }
 		public double TotalSumOfOrders3MTotal { get; private set; }
+		public bool EnableAutomaticRejection { get; private set; }
 
 		// Being set inside the decision maker, should extract to DecisionResult class
 		public bool IsReRejected { get; set; }
