@@ -199,38 +199,290 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
 			this.underwriterRecentCustomersRepository = underwriterRecentCustomersRepository;
 		}
 
+		#region underwriter grids
+
+		#region method GridWaiting
+
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
 		[HttpGet]
 		[Transactional]
 		public JsonNetResult GridWaiting(bool includeTestCustomers) {
+			return GridWaitingEscalated(includeTestCustomers, CreditResultStatus.WaitingForDecision);
+		} // GridWaiting
+
+		#endregion method GridWaiting
+
+		#region method GridEscalated
+
+		[ValidateJsonAntiForgeryToken]
+		[Ajax]
+		[HttpGet]
+		[Transactional]
+		public JsonNetResult GridEscalated(bool includeTestCustomers) {
+			return GridWaitingEscalated(includeTestCustomers, CreditResultStatus.Escalated);
+		} // GridEscalated
+
+		#endregion method GridEscalated
+
+		#region method GridPending
+
+		[ValidateJsonAntiForgeryToken]
+		[Ajax]
+		[HttpGet]
+		[Transactional]
+		public JsonNetResult GridPending(bool includeTestCustomers) {
+			return GridWaitingEscalated(includeTestCustomers, CreditResultStatus.ApprovedPending);
+		} // GridPending
+
+		#endregion method GridPending
+
+		#region method GridWaitingEscalated
+
+		private JsonNetResult GridWaitingEscalated(bool bIncludeTestCustomers, CreditResultStatus nStatus) {
 			var aryOutput = new List<object>();
 
-			var oRelevant = _customers.GetAll()
-				.Where(c =>
-					(includeTestCustomers || !c.IsTest)
-					&&
-					(c.CreditResult == CreditResultStatus.WaitingForDecision)
-				);
+			IEnumerable<Customer> oRelevant = RelevantCustomers(bIncludeTestCustomers, c => (c.CreditResult == nStatus));
 
 			foreach (var oCustomer in oRelevant) {
-				aryOutput.Add(new {
-					Id = oCustomer.Id,
-					Cart = oCustomer.Medal.HasValue ? oCustomer.Medal.Value.ToString() : "",
-					MP_List = oCustomer.MpList,
-					Name = oCustomer.PersonalInfo == null ? "" : oCustomer.PersonalInfo.Fullname,
-					Email = oCustomer.Name,
-					ApplyDate = oCustomer.OfferStart,
-					RegDate = oCustomer.GreetingMailSentDate,
-					CurrentStatus = oCustomer.LastStatus,
-					CalcAmount = oCustomer.SystemCalculatedSum,
-					OSBalance = oCustomer.OutstandingBalance,
-					SegmentType = oCustomer.IsOffline ? "Offline" : "Online"
-				});
+				var oRow = new Dictionary<string, object>();
+
+				SetCommonGridFields(oRow, oCustomer);
+
+				oRow["CurrentStatus"] = oCustomer.LastStatus;
+				oRow["OSBalance"] = oCustomer.OutstandingBalance;
+
+				if (nStatus == CreditResultStatus.Escalated) {
+					oRow["EscalationDate"] = oCustomer.DateEscalated;
+					oRow["Underwriter"] = oCustomer.UnderwriterName;
+					oRow["Reason"] = oCustomer.EscalationReason;
+				}
+				else if (nStatus == CreditResultStatus.ApprovedPending)
+					oRow["Pending"] = oCustomer.PendingStatus.ToString();
+
+				aryOutput.Add(oRow);
 			} // foreach
 
 			return this.JsonNet(new { aaData = aryOutput });
-		} // GridWaiting
+		} // GridWaitingEscalated
+
+		#endregion method GridWaitingEscalated
+
+		#region method GridApproved
+
+		[ValidateJsonAntiForgeryToken]
+		[Ajax]
+		[HttpGet]
+		[Transactional]
+		public JsonNetResult GridApproved(bool includeTestCustomers) {
+			return GridApprovedLate(includeTestCustomers, CreditResultStatus.Approved);
+		} // GridApproved
+
+		#endregion method GridApproved
+
+		#region method GridLate
+
+		[ValidateJsonAntiForgeryToken]
+		[Ajax]
+		[HttpGet]
+		[Transactional]
+		public JsonNetResult GridLate(bool includeTestCustomers) {
+			return GridApprovedLate(includeTestCustomers, CreditResultStatus.Late);
+		} // GridLate
+
+		#endregion method GridLate
+
+		#region method GridApprovedLate
+
+		private JsonNetResult GridApprovedLate(bool bIncludeTestCustomers, CreditResultStatus nStatus) {
+			var aryOutput = new List<object>();
+
+			IEnumerable<Customer> oRelevant = RelevantCustomers(bIncludeTestCustomers, c => (c.CreditResult == nStatus));
+
+			foreach (var oCustomer in oRelevant) {
+				var oRow = new Dictionary<string, object>();
+
+				SetCommonGridFields(oRow, oCustomer);
+
+				oRow["ApproveDate"] = oCustomer.DateApproved;
+				oRow["ApprovedSum"] = oCustomer.ManagerApprovedSum;
+				oRow["AmountTaken"] = oCustomer.AmountTaken;
+				oRow["ApprovesNum"] = oCustomer.NumApproves;
+				oRow["RejectsNum"] = oCustomer.NumRejects;
+
+				if (nStatus == CreditResultStatus.Approved)
+					oRow["OfferExpireDate"] = oCustomer.OfferValidUntil;
+				else if (nStatus == CreditResultStatus.Late) {
+					oRow["OSBalance"] = oCustomer.OutstandingBalance;
+					oRow["LatePaymentDate"] = oCustomer.DateOfLate;
+					oRow["LatePaymentAmount"] = oCustomer.LateAmount;
+					oRow["Delinquency"] = oCustomer.Delinquency;
+					oRow["CRMstatus"] = oCustomer.LatestCRMstatus ?? string.Empty;
+					oRow["CRMcomment"] = oCustomer.LatestCRMComment ?? string.Empty;
+				} // if
+
+				aryOutput.Add(oRow);
+			} // foreach
+
+			return this.JsonNet(new { aaData = aryOutput });
+		} // GridApprovedLate
+
+		#endregion method GridApprovedLate
+
+		#region method GridLoans
+
+		[ValidateJsonAntiForgeryToken]
+		[Ajax]
+		[HttpGet]
+		[Transactional]
+		public JsonNetResult GridLoans(bool includeTestCustomers) {
+			var aryOutput = new List<object>();
+
+			IEnumerable<Customer> oRelevant = RelevantCustomers(includeTestCustomers, c => (c.Loans.Count > 0));
+
+			foreach (var oCustomer in oRelevant) {
+				var oRow = new Dictionary<string, object>();
+
+				SetCommonGridFields(oRow, oCustomer, bCalcAmount: false);
+
+				oRow["FirstLoanDate"] = oCustomer.FirstLoanDate;
+				oRow["LastLoanDate"] = oCustomer.LastLoanDate;
+				oRow["LastLoanAmount"] = oCustomer.LastLoanAmount;
+				oRow["AmountTaken"] = oCustomer.AmountTaken;
+				oRow["TotalPrincipalRepaid"] = oCustomer.TotalPrincipalRepaid;
+				oRow["OSBalance"] = oCustomer.OutstandingBalance;
+				oRow["NextRepaymentDate"] = oCustomer.NextRepaymentDate;
+				oRow["CustomerStatus"] = oCustomer.CustomerStatus;
+
+				aryOutput.Add(oRow);
+			} // foreach
+
+			return this.JsonNet(new { aaData = aryOutput });
+		} // GridLoans
+
+		#endregion method GridLoans
+
+		#region method GridSales
+
+		[ValidateJsonAntiForgeryToken]
+		[Ajax]
+		[HttpGet]
+		[Transactional]
+		public JsonNetResult GridSales(bool includeTestCustomers) {
+			var aryOutput = new List<object>();
+
+			IEnumerable<Customer> oRelevant = RelevantCustomers(
+				includeTestCustomers,
+				c => ((c.ManagerApprovedSum > c.AmountTaken) && (c.LatestCRMstatus != "NoSale" || c.LatestCRMstatus == null))
+			);
+
+			foreach (var oCustomer in oRelevant) {
+				var oRow = new Dictionary<string, object>();
+
+				SetCommonGridFields(oRow, oCustomer, bCart: false, bCalcAmount: false);
+
+				SetSalesCollectionFields(oRow, oCustomer);
+
+				oRow["ApprovedSum"] = oCustomer.ManagerApprovedSum;
+				oRow["OfferDate"] = oCustomer.OfferDate;
+				oRow["Interactions"] = oCustomer.AmountOfInteractions;
+
+				aryOutput.Add(oRow);
+			} // foreach
+
+			return this.JsonNet(new { aaData = aryOutput });
+		} // GridSales
+
+		#endregion method GridSales
+
+		#region method GridCollection
+
+		[ValidateJsonAntiForgeryToken]
+		[Ajax]
+		[HttpGet]
+		[Transactional]
+		public JsonNetResult GridCollection(bool includeTestCustomers) {
+			var aryOutput = new List<object>();
+
+			IEnumerable<Customer> oRelevant = RelevantCustomers(
+				includeTestCustomers,
+				c => ((c.CollectionStatus.CurrentStatus.Id == legalIndex) || (c.CollectionStatus.CurrentStatus.Id == defaultIndex))
+			);
+
+			foreach (var oCustomer in oRelevant) {
+				var oRow = new Dictionary<string, object>();
+
+				SetCommonGridFields(oRow, oCustomer, bCart: false, bCalcAmount: false);
+
+				SetSalesCollectionFields(oRow, oCustomer);
+
+				oRow["CollectionStatus"] = oCustomer.CollectionStatus.CurrentStatus.Name;
+
+				aryOutput.Add(oRow);
+			} // foreach
+
+			return this.JsonNet(new { aaData = aryOutput });
+		} // GridCollection
+
+		#endregion method GridCollection
+
+		#region method SetSalesCollectionFields
+
+		private void SetSalesCollectionFields(Dictionary<string, object> oRow, Customer oCustomer) {
+			oRow["MobilePhone"] = oCustomer.PersonalInfo == null ? string.Empty : (oCustomer.PersonalInfo.MobilePhone ?? string.Empty);
+			oRow["DaytimePhone"] = oCustomer.PersonalInfo == null ? string.Empty : (oCustomer.PersonalInfo.DaytimePhone ?? string.Empty);
+			oRow["AmountTaken"] = oCustomer.AmountTaken;
+			oRow["OSBalance"] = oCustomer.OutstandingBalance;
+			oRow["CRMstatus"] = oCustomer.LatestCRMstatus ?? string.Empty;
+			oRow["CRMcomment"] = oCustomer.LatestCRMComment ?? string.Empty;
+		} // SetSalesCollectionFields
+
+		#endregion method SetSalesCollectionFields
+
+		#region method SetCommonGridFields
+
+		private void SetCommonGridFields(Dictionary<string, object> oRow, Customer oCustomer, bool bCalcAmount = true, bool bCart = true) {
+			oRow["Id"] = oCustomer.Id;
+
+			if (bCart) {
+				oRow["Cart"] = oCustomer.Medal.HasValue ? oCustomer.Medal.Value.ToString() : "";
+				oRow["MP_List"] = oCustomer.MpList;
+				oRow["ApplyDate"] = oCustomer.OfferStart;
+				oRow["RegDate"] = oCustomer.GreetingMailSentDate;
+			} // if
+
+			oRow["Name"] = oCustomer.PersonalInfo == null ? "" : oCustomer.PersonalInfo.Fullname;
+			oRow["Email"] = oCustomer.Name;
+
+			if (bCalcAmount)
+				oRow["CalcAmount"] = oCustomer.SystemCalculatedSum;
+
+			oRow["SegmentType"] = oCustomer.IsOffline ? "Offline" : "Online";
+
+			oRow["IsWasLate"] = oCustomer.PaymentDemenaor == PaymentdemeanorType.Ok ? "" : "iswaslate";
+		} // SetCommonGridFields
+
+		#endregion method SetCommonGridFields
+
+		#region method RelevantCustomers
+
+		private IEnumerable<Customer> RelevantCustomers(bool bIncludeTestCustomers, Func<Customer, bool> fCustomFilter) {
+			var oResult = new List<Customer>();
+
+// ReSharper disable LoopCanBeConvertedToQuery
+			// The following loop cannot be converted to linq expression because nhibernate cannot convert
+			// custom filter to SQL thus throwing run time exception.
+			foreach (var oCustomer in _customers.GetAll().Where(c => bIncludeTestCustomers || !c.IsTest))
+				if (fCustomFilter(oCustomer))
+					oResult.Add(oCustomer);
+// ReSharper restore LoopCanBeConvertedToQuery
+
+			return oResult;
+		} // RelevantCustomers
+
+		#endregion method RelevantCustomers
+
+		#endregion underwriter grids
 
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]

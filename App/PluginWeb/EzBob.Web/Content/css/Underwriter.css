@@ -389,15 +389,20 @@ ul.left-underwriter-menu li label {
 	width: 100%;
 }
 
+#grids-view .grid-data thead th,
 #grids-view .grid-data .grid-item-Name {
 	white-space: nowrap;
 }
+
+#grids-view .grid-data tbody tr.iswaslate { background-color: #ffdfdf!important; }
 
 #grids-view .grid-data tbody td { border: 1px solid #aaaaaa; }
 
 #grids-view .grid-data td.numeric {
 	text-align: right;
 }
+
+#grids-view tbody td.grid-item-Cart { text-align: center; }
 
 .customer-grids { 
     margin-left: 117px;

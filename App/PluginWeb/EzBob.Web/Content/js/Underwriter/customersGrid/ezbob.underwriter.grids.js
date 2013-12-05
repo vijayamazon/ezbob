@@ -68,14 +68,58 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 					if (oData.Name)
 						$('.grid-item-Name', oTR).empty().html(EzBob.Underwriter.GridTools.profileLink(oData.Id, oData.Name));
 				} // if has name
+
+				$(oTR).dblclick(function() {
+					location.assign($(oTR).find('.profileLink').first().attr('href'));
+				});
 			} // if has id
+
+			if (oData.IsWasLate)
+				$(oTR).addClass(oData.IsWasLate);
 		}; // fnRowCallback
+
+		var sWaitingColumns = '#Id,Cart,MP_List,Name,Email,^ApplyDate,^RegDate,CurrentStatus,$CalcAmount,$OSBalance,SegmentType';
+
+		function approvedLateColumns(onTime) {
+			return '#Id,Cart,MP_List,Name,Email,^ApplyDate,^ApproveDate,^RegDate,$CalcAmount,$ApprovedSum,$AmountTaken' +
+				(onTime ? ',^OfferExpireDate' : '') +
+				',#ApprovesNum,#RejectsNum,SegmentType' +
+				(!onTime ? ',$OSBalance,^LatePaymentDate,$LatePaymentAmount,#Delinquency,CRMstatus,CRMcomment' : '');
+		} // approvedLateColumns
 
 		this.gridProperties = {
 			waiting: new GridProperties({
 				action: 'GridWaiting',
-				columns: '#Id,Cart,MP_List,Name,Email,ApplyDate,RegDate,CurrentStatus,$CalcAmount,$OSBalance,SegmentType',
+				columns: sWaitingColumns,
 			}), // waiting
+			escalated: new GridProperties({
+				action: 'GridEscalated',
+				columns: sWaitingColumns + ',^EscalationDate,Underwriter,Reason',
+			}), // escalated
+			pending: new GridProperties({
+				action: 'GridPending',
+				columns: sWaitingColumns + ',Pending',
+			}), // pending
+			approved: new GridProperties({
+				action: 'GridApproved',
+				columns: approvedLateColumns(true),
+			}), // approved
+			loans: new GridProperties({
+				action: 'GridLoans',
+				columns: '#Id,Cart,MP_List,Name,Email,^RegDate,^ApplyDate,^FirstLoanDate,^LastLoanDate,$LastLoanAmount,$AmountTaken,$TotalPrincipalRepaid,$OSBalance,^NextRepaymentDate,CustomerStatus,SegmentType',
+			}), // loans
+			sales: new GridProperties({
+				action: 'GridSales',
+				columns: '#Id,Email,Name,MobilePhone,DaytimePhone,$ApprovedSum,$AmountTaken,^OfferDate,$OSBalance,CRMstatus,CRMcomment,#Interactions,SegmentType',
+			}), // sales
+			collection: new GridProperties({
+				action: 'GridCollection',
+				columns: '#Id,Email,Name,MobilePhone,DaytimePhone,$AmountTaken,$OSBalance,CRMstatus,CRMcomment,CollectionStatus,SegmentType',
+			}), // collection
+			late: new GridProperties({
+				action: 'GridLate',
+				columns: approvedLateColumns(false),
+			}), // late
 		}; // gridProperties
 	}, // initialize
 
@@ -101,16 +145,20 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 	handleTabSwitch: function(evt) {
 		var sType = this.typeFromHref($(evt.target).attr('href'));
 
-		this.$el.find('.all-customers').toggleClass('hide', sType != 'registered');
+		this.$el.find('.all-customers').toggleClass('hide', sType !== 'registered');
 
 		this.loadGrid(sType);
 	}, // handleTabSwitch
 
 	reloadActive: function() {
-		this.loadGrid(this.getValidType(
-			this.tabLinks().closest('li').filter('.active').find('a[data-toggle]').attr('href')
-		));
+		this.loadGrid(this.activeGridType());
 	}, // reloadActive
+
+	activeGridType: function() {
+		return this.typeFromHref(
+			this.tabLinks().closest('li').filter('.active').find('a[data-toggle]').attr('href')
+		);
+	}, // activeGridType
 
 	loadGrid: function(sGridName) {
 		if (this.router)
@@ -127,6 +175,9 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 		if (!oGridProperties)
 			return;
 
+		if (!oGridProperties.name)
+			oGridProperties.name = sGridName;
+
 		$.ajax(this.gridSrcUrl(oGridProperties)).success(function(data, status, jqXHR) {
 			console.log('data:', data);
 		});
@@ -136,6 +187,9 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 			bProcessing: true,
 			sAjaxSource: this.gridSrcUrl(oGridProperties),
 			aoColumns: this.extractColumns(oGridProperties),
+
+			aLengthMenu: [[-1, 10, 25, 50, 100], ['all', 10, 25, 50, 100]],
+			iDisplayLength: -1,
 
 			sPaginationType: 'full_numbers',
 			bJQueryUI: true,
@@ -150,6 +204,17 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 		var bIncludeTest = this.$el.find('#include-test-customers:checked').length > 0;
 		var bIncludeAll = this.$el.find('#include-all-customers:visible:checked').length > 0;
 
+		var oTabPane = this.$el.find('#' + oGridProperties.name + '-grid');
+
+		var oShowingTest = oTabPane.find('.showing-test');
+
+		if (bIncludeTest) {
+			if (oShowingTest.length !== 1)
+				oTabPane.find('h2').append('<span class=showing-test> (including test customers)</span>');
+		}
+		else
+			oShowingTest.remove();
+
 		return window.gRootPath + 'Underwriter/Customers/' + oGridProperties.action +
 			'?includeTestCustomers=' + (bIncludeTest ? 'true' : 'false') +
 			'&includeAllCustomers=' + (bIncludeAll ? 'true' : 'false');
@@ -160,22 +225,61 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 
 		var aryNames = oGridProperties.columns.split(',');
 
+		function renderMoney(oData, sAction, oFullSource) {
+			switch (sAction) {
+			case 'display':
+				return EzBob.formatPoundsNoDecimals(oData);
+
+			case 'filter':
+			case 'type':
+			case 'sort':
+			default:
+				return oData;
+			} // switch
+		} // renderMoney
+
+		function renderDate(oData, sAction, oFullSource) {
+			switch (sAction) {
+			case 'display':
+				return EzBob.formatDate(oData);
+
+			case 'filter':
+				return oData + ' ' + EzBob.formatDate(oData);
+
+			case 'type':
+			case 'sort':
+			default:
+				return oData;
+			} // switch
+		} // renderDate
+
 		for (var i = 0; i < aryNames.length; i++) {
 			var sName = aryNames[i];
+
+			if (!sName)
+				continue;
+
+			var oRenderFunc = null;
 			var sClass = '';
 
 			if (sName[0] === '#') {
-				sName = sName.substr(1);
 				sClass = 'numeric';
+				sName = sName.substr(1);
 			}
 			else if (sName[0] === '$'){
-				sName = sName.substr(1);
 				sClass = 'numeric';
+				sName = sName.substr(1);
+				oRenderFunc = renderMoney;
+			}
+			else if (sName[0] === '^') {
+				sName = sName.substr(1);
+				oRenderFunc = renderDate;
 			}
 
 			aryResult.push({
 				mData: sName,
 				sClass: sClass + ' grid-item-' + sName,
+				mRender: oRenderFunc,
 			});
 		} // for
 
