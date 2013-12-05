@@ -49,7 +49,7 @@
 						}
 						else
 						{
-							dt = DbConnection.ExecuteSpReader("GetOfferDatesForApproval");
+							dt = DbConnection.ExecuteSpReader("GetLastOfferDataForApproval", DbConnection.CreateParam("CustomerId", mainStrategy.CustomerId));
 							DataRow results = dt.Rows[0];
 							bool loanOfferEmailSendingBanned = bool.Parse(results["EmailSendingBanned"].ToString());
 							DateTime loanOfferOfferStart = DateTime.Parse(results["OfferStart"].ToString());
