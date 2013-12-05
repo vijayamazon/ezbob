@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Backend.Strategies
 {
 	using System;
+	using System.Data;
 	using System.Globalization;
 	using System.Threading;
 	using AutoDecisions;
@@ -11,6 +12,7 @@
 	using EzBobIntegration.Web_References.Consumer;
 	using log4net;
 	using System.Collections.Generic;
+	using DbConnection;
 
 	public enum NewCreditLineOption
 	{
@@ -24,8 +26,13 @@
 	{
 		private static readonly ILog log = LogManager.GetLogger(typeof(MainStrategy));
 		private readonly StrategiesMailer mailer = new StrategiesMailer();
-		private StrategyHelper strategyHelper = new StrategyHelper();
+		private readonly StrategyHelper strategyHelper = new StrategyHelper();
 
+
+
+
+
+		// Consts
 		private const string CP_Experian_Actions_AMLMortality = "The underwriter will need to clarify that the applicant is actually alive (can be a tricky discussion!) and get copies of proof of identity";
 		private const string CP_Experian_Actions_AMLAccommodationAddress = "If this is a personal address then reject";
 		private const string CP_Experian_Actions_AMLRedirection = "Contact client and confirm reason for redirection. Why is this person’s mail being redirected? Might be a legitimate way of doing e-business";
@@ -35,8 +42,20 @@
 		private const string CP_Experian_Actions_BWANameError = "Underwriter to confirm the account details by asking for copy of statement";
 		private const string CP_Experian_Actions_BWAAccountStatus = "Underwriter to confirm the account details by asking for copy of statement";
 		private const string CP_Experian_Actions_BWAAddressError = "Underwriter to confirm the account details by asking for copy of statement";
-
 		private const string FAQPage = "https://www.ezbob.com/Customer/HowItWorks#Faq";
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 		// These parameter are from the other flow:
 		string idhubHouseNumber = null;
@@ -49,6 +68,10 @@
 		string idhubBranchCode = null;
 		string idhubAccountNumber = null;
 		
+
+
+
+
 		// TODO: Read from ConfigurationVariables (ConfigurationVariables_MainStrat)
 		string BWABusinessCheck = string.Empty;
 		int MaxCapHomeOwner = 1;
@@ -192,10 +215,10 @@
 		private int LoanOffer_ReApprovalSum;
 
 
-		private int Underwriter_Check;
+		private bool Underwriter_Check;
 
-
-
+		private NewCreditLineOption newCreditLineOption;
+		private int avoidAutomaticDescison;
 
 
 		/* AutoDecisionMaker related properties */
@@ -227,8 +250,6 @@
 		public DateTime? App_ApplyForLoan { get; set; }
 		public DateTime App_ValidFor { get; set; }
 		public bool LoanOffer_EmailSendingBanned_new { get; set; }
-		public int AutoApproveAmount { get; set; }
-		public int AvailableFunds { get; set; }
 		public bool IsAutoApproval { get; set; }
 		public double TotalSumOfOrders1YTotal { get; private set; }
 		public int LowTotalAnnualTurnover { get; private set; }
@@ -236,15 +257,17 @@
 		public decimal PayPal_TotalSumOfOrders3M { get; private set; }
 		public decimal PayPal_TotalSumOfOrders1Y { get; private set; }
 		public int PayPal_NumberOfStores { get; private set; }
-
-		// main strategy - flow 1
-		public void Evaluate(int customerId, NewCreditLineOption newCreditLineOption, int avoidAutomaticDescison,
-		                     bool isUnderwriterForced = false)
+		
+		public void Execute()
 		{
-			CustomerId = customerId;
 			// TODO: remove column Customer.LastStartedMainStrategy
-
 			strategyHelper.GetZooplaData(CustomerId);
+
+			// Read configurations!
+			DataTable dt = DbConnection.ExecuteSpReader("MainStrategyGetConfigs");
+
+			// Read customer data
+			//...
 
 			if (!CustomerStatusIsEnabled || CustomerStatusIsWarning)
 			{
@@ -263,7 +286,7 @@
 			if (newCreditLineOption != NewCreditLineOption.SkipEverything &&
 			    newCreditLineOption != NewCreditLineOption.UpdateEverythingExceptMp)
 			{
-				if (!WaitForMarketplacesToFinishUpdates(CustomerId))
+				if (!WaitForMarketplacesToFinishUpdates())
 				{
 					string customerEmail = null;
 
@@ -533,10 +556,13 @@
 
 			AutoDecisionMaker.MakeDecision(this);
 
-			if (Underwriter_Check == 1)
+			if (Underwriter_Check)
 			{
-				
+				// Update_Main_Strat_Finish_Date
+				return;
 			}
+
+
 		}
 
 		private void ScoringStrategyStub()
@@ -883,7 +909,7 @@
 			}
 		}
 
-		private bool WaitForMarketplacesToFinishUpdates(int CustomerId)
+		private bool WaitForMarketplacesToFinishUpdates()
 		{
 			bool isUpdated = false; // TODO: get from MP_IsCustomerMarketPlacesUpdated
 			int totalTimeToWaitInSeconds = 43200; //TODO put in ConfigurationVariables
@@ -902,6 +928,40 @@
 			}
 
 			return true;
+		}
+
+		// These are the activation methods:
+		// main strategy - flow 1
+		public void Evaluate(int customerId, NewCreditLineOption newCreditLine, int avoidAutoDescison,
+							 bool isUnderwriterForced = false)
+		{
+			CustomerId = customerId;
+			newCreditLineOption = newCreditLine;
+			avoidAutomaticDescison = avoidAutoDescison;
+			Underwriter_Check = isUnderwriterForced;
+			Execute();
+		}
+
+		// main strategy - flow 2
+		public void EvaluateWithIdHubCustomAddress(int customerId, int checkType, string houseNumber, string houseName,
+												   string street,
+												   string district, string town, string county, string postcode,
+												   string bankAccount, string sortCode, int avoidAutoDescison)
+		{
+			CustomerId = customerId;
+			UseCustomIdHubAddress = checkType;
+			Underwriter_Check = true;
+			idhubHouseNumber = houseNumber;
+			idhubHouseName = houseName;
+			idhubStreet = street;
+			idhubDistrict = district;
+			idhubTown = town;
+			idhubCounty = county;
+			idhubPostCode = postcode;
+			idhubAccountNumber = bankAccount;
+			idhubBranchCode = sortCode;
+			avoidAutomaticDescison = avoidAutoDescison;
+			Execute();
 		}
 	}
 }

@@ -155,6 +155,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzbobService", "backend\Ezb
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Strategies", "backend\Strategies\Strategies.csproj", "{7E526927-9849-4E6E-BBFF-D0D780F81A05}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbConnection", "Utils\DbConnection\DbConnection.csproj", "{978D5AF5-AB9D-4AAE-BFBF-2820F991613B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -767,6 +769,16 @@ Global
 		{7E526927-9849-4E6E-BBFF-D0D780F81A05}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{7E526927-9849-4E6E-BBFF-D0D780F81A05}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{7E526927-9849-4E6E-BBFF-D0D780F81A05}.Release|x86.ActiveCfg = Release|Any CPU
+		{978D5AF5-AB9D-4AAE-BFBF-2820F991613B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{978D5AF5-AB9D-4AAE-BFBF-2820F991613B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{978D5AF5-AB9D-4AAE-BFBF-2820F991613B}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{978D5AF5-AB9D-4AAE-BFBF-2820F991613B}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{978D5AF5-AB9D-4AAE-BFBF-2820F991613B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{978D5AF5-AB9D-4AAE-BFBF-2820F991613B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{978D5AF5-AB9D-4AAE-BFBF-2820F991613B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{978D5AF5-AB9D-4AAE-BFBF-2820F991613B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{978D5AF5-AB9D-4AAE-BFBF-2820F991613B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{978D5AF5-AB9D-4AAE-BFBF-2820F991613B}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -838,6 +850,7 @@ Global
 		{F851ADDC-B151-4CDE-8C83-AB0696B2E1EE} = {9DBFD4F9-06B0-4BAC-9836-AD0C686DF189}
 		{DB53E538-D45B-4189-9D5B-0AD5F6006ADE} = {8D1E3346-B62B-450C-A373-F03EA6430A93}
 		{7E526927-9849-4E6E-BBFF-D0D780F81A05} = {8D1E3346-B62B-450C-A373-F03EA6430A93}
+		{978D5AF5-AB9D-4AAE-BFBF-2820F991613B} = {8D1E3346-B62B-450C-A373-F03EA6430A93}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		VisualSVNWorkingCopyRoot = .

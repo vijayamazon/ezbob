@@ -1,35 +1,47 @@
 ﻿namespace EzBob.Backend.Strategies.AutoDecisions
 {
 	using System;
+	using System.Data;
 	using Backend.Strategies;
+	using DbConnection;
 	using Models;
 
 	public class Approval
 	{
-		private StrategyHelper strategyHelper = new StrategyHelper();
+		private readonly StrategyHelper strategyHelper = new StrategyHelper();
 
-		public bool AutoApproveIsSilent { get; private set; }
-		public string AutoApproveSilentTemplateName { get; private set; }
-		public string AutoApproveSilentToAddress { get; private set; }
-		public bool LoanOffer_EmailSendingBanned { get; private set; }
-		public DateTime LoanOffer_OfferStart { get; private set; }
-		public DateTime LoanOffer_OfferValidUntil { get; private set; }
+		public Approval()
+		{
+			DataTable dt = DbConnection.ExecuteSpReader("GetApprovalConfigs");
+			DataRow results = dt.Rows[0];
+
+			autoApproveIsSilent = bool.Parse(results["AutoApproveIsSilent"].ToString());
+			autoApproveSilentTemplateName = results["AutoApproveSilentTemplateName"].ToString();
+			autoApproveSilentToAddress = results["AutoApproveSilentToAddress"].ToString();
+		}
+
+		private readonly bool autoApproveIsSilent;
+		private readonly string autoApproveSilentTemplateName;
+		private readonly string autoApproveSilentToAddress;
+		private int autoApproveAmount;
+		private decimal availableFunds;
 
 		public bool MakeDecision(MainStrategy mainStrategy)
 		{
 			if (mainStrategy.EnableAutomaticApproval)
 			{
-				mainStrategy.AutoApproveAmount = strategyHelper.AutoApproveCheck(mainStrategy.CustomerId, mainStrategy.OfferedCreditLine, mainStrategy.MinExperianScore);
+				autoApproveAmount = strategyHelper.AutoApproveCheck(mainStrategy.CustomerId, mainStrategy.OfferedCreditLine, mainStrategy.MinExperianScore);
 
-				if (mainStrategy.AutoApproveAmount != 0)
+				if (autoApproveAmount != 0)
 				{
-					mainStrategy.AvailableFunds = 0; // TODO: call GetAvailableFunds
+					DataTable dt = DbConnection.ExecuteSpReader("GetAvailableFunds");
+					availableFunds = decimal.Parse(dt.Rows[0]["AvailableFunds"].ToString());
 
-					if (mainStrategy.AvailableFunds > mainStrategy.AutoApproveAmount)
+					if (availableFunds > autoApproveAmount)
 					{
-						if (AutoApproveIsSilent)
+						if (autoApproveIsSilent)
 						{
-							strategyHelper.NotifyAutoApproveSilentMode(mainStrategy.CustomerId, mainStrategy.AutoApproveAmount, AutoApproveSilentTemplateName, AutoApproveSilentToAddress);
+							strategyHelper.NotifyAutoApproveSilentMode(mainStrategy.CustomerId, autoApproveAmount, autoApproveSilentTemplateName, autoApproveSilentToAddress);
 
 							mainStrategy.CreditResult = "WaitingForDecision";
 							mainStrategy.UserStatus = "Manual";
@@ -37,15 +49,21 @@
 						}
 						else
 						{
+							dt = DbConnection.ExecuteSpReader("GetOfferDatesForApproval");
+							DataRow results = dt.Rows[0];
+							bool loanOfferEmailSendingBanned = bool.Parse(results["EmailSendingBanned"].ToString());
+							DateTime loanOfferOfferStart = DateTime.Parse(results["OfferStart"].ToString());
+							DateTime loanOfferOfferValidUntil = DateTime.Parse(results["OfferValidUntil"].ToString());
+
 							mainStrategy.CreditResult = "Approved";
 							mainStrategy.UserStatus = "Approved";
 							mainStrategy.SystemDecision = "Approve";
 							mainStrategy.LoanOffer_UnderwriterComment = "Auto Approval";
-							mainStrategy.LoanOffer_OfferValidDays = (LoanOffer_OfferValidUntil - LoanOffer_OfferStart).TotalDays;
+							mainStrategy.LoanOffer_OfferValidDays = (loanOfferOfferValidUntil - loanOfferOfferStart).TotalDays;
 							mainStrategy.App_ApplyForLoan = null;
 							mainStrategy.App_ValidFor = DateTime.UtcNow.AddDays(mainStrategy.LoanOffer_OfferValidDays);
 							mainStrategy.IsAutoApproval = true;
-							mainStrategy.LoanOffer_EmailSendingBanned_new = LoanOffer_EmailSendingBanned;
+							mainStrategy.LoanOffer_EmailSendingBanned_new = loanOfferEmailSendingBanned;
 						}
 					}
 					else

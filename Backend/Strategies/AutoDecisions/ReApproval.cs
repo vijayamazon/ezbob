@@ -1,7 +1,9 @@
 ﻿namespace EzBob.Backend.Strategies.AutoDecisions
 {
 	using System;
+	using System.Data;
 	using Backend.Strategies;
+	using DbConnection;
 	using Models;
 
 	public class ReApproval
@@ -15,6 +17,7 @@
 		public DateTime LoanOffer_OfferValidUntil { get; private set; }
 		public int LoanOffer_NumOfMPsAddedOld { get; private set; }
 		public int LoanOffer_SumOfChargesOld { get; private set; }
+		private decimal availableFunds;
 
 		public bool MakeDecision(MainStrategy mainStrategy)
 		{
@@ -23,7 +26,9 @@
 			     LoanOffer_PrincipalPaidAmountOld == 0 && LoanOffer_SumOfChargesOld == 0 &&
 			     LoanOffer_NumOfMPsAddedOld == 0))
 			{
-				if (mainStrategy.AvailableFunds > LoanOffer_SystemCalculatedSum)
+				DataTable dt = DbConnection.ExecuteSpReader("GetAvailableFunds");
+				availableFunds = decimal.Parse(dt.Rows[0]["AvailableFunds"].ToString());
+				if (availableFunds > LoanOffer_SystemCalculatedSum)
 				{
 					mainStrategy.NumOfOutstandingLoans = strategyHelper.GetOutstandingLoansNum(mainStrategy.CustomerId);
 					if (mainStrategy.NumOfOutstandingLoans > AutoReApproveMaxNumOfOutstandingLoans)

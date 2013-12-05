@@ -82,6 +82,13 @@
       <Project>{de254378-4cf8-400c-bcc4-a9af01550350}</Project>
       <Name>MailApi</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Utils\DbConnection\DbConnection.csproj">
+      <Project>{978d5af5-ab9d-4aae-bfbf-2820f991613b}</Project>
+      <Name>DbConnection</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
