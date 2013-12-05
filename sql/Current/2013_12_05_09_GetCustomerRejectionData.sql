@@ -11,11 +11,12 @@ CREATE PROCEDURE [dbo].[GetCustomerRejectionData]
 	 @Reject_Defaults_Amount INT)
 AS
 BEGIN
-	DECLARE @HasAccountingAccounts INT
+	DECLARE @HasAccountingAccounts INT,
 			@ErrorMPsNum INT,
 			@Counter INT,
 			@ApprovalNum INT,
 			@NumOfDefaultAccounts INT
+, @MarketPlaceGroup INT, @BankGroup INT, @RowNum INT
 	
 	IF EXISTS (SELECT 1 FROM MP_CustomerMarketPlace, MP_MarketplaceType WHERE MP_CustomerMarketPlace.CustomerId = @CustomerId AND MP_CustomerMarketPlace.MarketPlaceId = MP_MarketplaceType.Id AND (MP_MarketplaceType.GroupId = @MarketPlaceGroup OR MP_MarketplaceType.GroupId = @BankGroup) AND MP_MarketplaceType.Name != 'Pay Pal')
 	BEGIN
