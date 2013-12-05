@@ -3,12 +3,12 @@
 	using System;
 	using System.Globalization;
 	using System.Threading;
-	using AutoDecisions;
 	using ExperianLib;
 	using ExperianLib.Ebusiness;
 	using ExperianLib.IdIdentityHub;
 	using EzBob.Models;
 	using EzBobIntegration.Web_References.Consumer;
+	using global::Strategies.AutoDecisions;
 	using log4net;
 	using System.Collections.Generic;
 

@@ -1,5 +1,6 @@
 ﻿namespace Strategies.AutoDecisions
 {
+	using EzBob.Backend.Strategies;
 	using log4net;
 
 	public class AutoDecisionMaker

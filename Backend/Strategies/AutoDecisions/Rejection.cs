@@ -1,5 +1,7 @@
 ﻿namespace Strategies.AutoDecisions
 {
+	using EzBob.Backend.Strategies;
+
 	public class Rejection
 	{
 		public int LoanOffer_ApprovalNum { get; private set; }

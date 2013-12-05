@@ -1,5 +1,7 @@
 ﻿namespace Strategies.AutoDecisions
 {
+	using EzBob.Backend.Strategies;
+
 	public class ReRejection
 	{
 		public int Re_Reject_NewCustomer_ReReject { get; private set; }

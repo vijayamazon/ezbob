@@ -1,6 +1,7 @@
 ﻿namespace Strategies.AutoDecisions
 {
 	using System;
+	using EzBob.Backend.Strategies;
 	using EzBob.Models;
 
 	public class Approval
