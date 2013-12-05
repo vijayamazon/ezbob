@@ -5,8 +5,9 @@ namespace ExperianLib.CaisFile
 {
     public class Utils
     {
-        public static string GetPaddingString(string input, int size, bool isLeft = false)
+        public static string GetPaddingString(string input, int size, bool isLeft = false, bool padWithZeros = false)
         {
+			if(string.IsNullOrEmpty(input) && padWithZeros) return new string('0', size);
             if (input == null) return String.Empty.PadRight(size);
             if (input.Length < size)
             {

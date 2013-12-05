@@ -83,6 +83,23 @@ namespace ExperianLib.CaisFile
         //-----------------------------------------------------------------------------------
         public string Serialize()
         {
+			//fix for empty OriginalDefaultBalance for default accounts todo remove once the strategies translated
+			if (OriginalDefaultBalance == 0 && AccountStatus == "8")
+			{
+				OriginalDefaultBalance = CurrentBalance;
+			}
+			//fix for empty address type todo remove once the strategies translated add enum retrieve the type (if possible)
+			//‘R’ - Registered
+			//‘H’ - Head Office
+			//‘T’ - Trading
+			//‘B’ - Branch
+			//‘D’ - Delivery
+			//‘O’ - Other
+			if (string.IsNullOrEmpty(AddressType))
+			{
+				AddressType = "R";
+			}
+
             var ret = new StringBuilder();
             ret.Append(Utils.GetPaddingString(AccountNumber, 19, true));
             ret.Append(Utils.GetPaddingString(ProprietorPartnerDirectorNumber, 4, false));
@@ -90,7 +107,7 @@ namespace ExperianLib.CaisFile
             ret.Append(NameAddressRegisteredOfficeTradingAddress.Serialize());
             ret.Append(Utils.GetPaddingString(AddressType, 1, false));
             ret.Append(Utils.GetPaddingString(NameChange, 1, false));
-            ret.Append(Utils.GetPaddingString(CompanyRegisteredNumberBusinessNumber, 8, true));
+            ret.Append(Utils.GetPaddingString(CompanyRegisteredNumberBusinessNumber, 8, true, true));
             ret.Append(Utils.GetPaddingString(SICCode, 4, false));
             ret.Append(Utils.GetPaddingString(VATNumber, 9, false));
             ret.Append(Utils.GetPaddingString(YearBusinessStarted, 4, false));
