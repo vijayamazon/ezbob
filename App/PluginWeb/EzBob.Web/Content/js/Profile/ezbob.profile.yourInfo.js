@@ -107,14 +107,14 @@
       if (this.model.get(typeOfBusinessName + 'Info')) {
         directors = this.model.get(typeOfBusinessName + 'Info').Directors;
         return _.each(directors, function(dir) {
-          return self.setInvalidAddressLabel(dir.DirectorAddress, '.directorAddress' + dir.Id + ' #DirectorAddress');
+          return self.setInvalidAddressLabel(dir.DirectorAddress, '.directorAddress' + dir.Id + ' #DirectorAddress', dir.Id);
         });
       }
     };
 
-    YourInfoMainView.prototype.setInvalidAddressLabel = function(address, element) {
+    YourInfoMainView.prototype.setInvalidAddressLabel = function(address, element, dirId) {
       if (address.length < 1) {
-        return EzBob.Validation.addressErrorPlacement(this.$el.find(element), address);
+        return EzBob.Validation.addressErrorPlacement(this.$el.find(element), (dirId ? this.model : address), dirId, this.model.get('BusinessTypeReduced'));
       } else {
         return EzBob.Validation.unhighlight(this.$el.find(element));
       }

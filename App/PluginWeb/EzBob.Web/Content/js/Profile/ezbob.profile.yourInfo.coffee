@@ -85,11 +85,11 @@ class EzBob.Profile.YourInfoMainView extends Backbone.Marionette.Layout
             directors = @model.get(typeOfBusinessName + 'Info').Directors
 
             _.each directors, (dir) ->
-                self.setInvalidAddressLabel dir.DirectorAddress, '.directorAddress' + dir.Id + ' #DirectorAddress'
+                self.setInvalidAddressLabel dir.DirectorAddress, '.directorAddress' + dir.Id + ' #DirectorAddress', dir.Id
 
-    setInvalidAddressLabel: (address, element) -> 
+    setInvalidAddressLabel: (address, element, dirId) -> 
         if address.length < 1
-            EzBob.Validation.addressErrorPlacement @$el.find(element), address
+            EzBob.Validation.addressErrorPlacement @$el.find(element), (if dirId then @model else address), dirId, @model.get 'BusinessTypeReduced'
         else 
             EzBob.Validation.unhighlight @$el.find(element)
 

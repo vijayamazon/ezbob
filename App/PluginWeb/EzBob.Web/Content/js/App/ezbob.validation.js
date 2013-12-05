@@ -7,11 +7,35 @@ EzBob.Validation.NameValidationObjectOld = { regex: "^(([a-zA-Z]*[AEIOUYaeiouy]+
 EzBob.Validation.NameValidationObject = { nameValidator: true, required: true, minlength: 2 };
 
 //-----------------------------------------------------------------
-EzBob.Validation.addressErrorPlacement = function(el, model) {
+EzBob.Validation.addressErrorPlacement = function(el, model, nDirectorID, sTypeOfBusiness) {
+	function addressListLength(oModel, nDirID, sBusinessType) {
+		if (!nDirID)
+			return oModel.length;
+
+		var oBusinessTypeInfo = oModel.get(sBusinessType + 'Info');
+
+		if (!oBusinessTypeInfo || !oBusinessTypeInfo.Directors)
+			return 0;
+
+		for (var nIdx = 0; nIdx < oBusinessTypeInfo.Directors.length; nIdx++) {
+			var oDirector = oBusinessTypeInfo.Directors[nIdx];
+
+			if (oDirector.Id != nDirID)
+				continue;
+
+			if (!oDirector.DirectorAddress)
+				return 0;
+
+			return oDirector.DirectorAddress.length;
+		} // for
+
+		return 0;
+	} // addressListLength
+
 	var $el = $(el);
 
 	$el.on('focusout', function() {
-		if (model.length === 0) {
+		if (addressListLength(model, nDirectorID, sTypeOfBusiness) === 0) {
 			var oButton = $el.find('.addAddress');
 
 			oButton.tooltip({ title: 'Please lookup your post code' });
@@ -24,7 +48,7 @@ EzBob.Validation.addressErrorPlacement = function(el, model) {
 	}); // on focus out
 
 	model.on('change', function() {
-		if (model.length > 0)
+		if (addressListLength(model, nDirectorID, sTypeOfBusiness) > 0)
 			$el.find('.addAddress').tooltip('destroy');
 	}); // on model changed
 }; // addressErrorPlacement
