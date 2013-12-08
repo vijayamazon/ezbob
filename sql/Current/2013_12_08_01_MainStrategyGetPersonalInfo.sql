@@ -11,7 +11,8 @@ AS
 BEGIN
 	DECLARE
 		@CustomerStatusIsEnabled BIT,
-		@CustomerStatusIsWarning BIT
+		@CustomerStatusIsWarning BIT,
+		@NumOfMps INT
 
 	SELECT 
 		@CustomerStatusIsEnabled = IsEnabled, 
@@ -21,7 +22,12 @@ BEGIN
 	WHERE
 		Id = @CustomerId
 	
-	
+	SELECT 
+		@NumOfMps = COUNT(cmp.Id)
+	FROM 
+		MP_CustomerMarketPlace cmp
+	WHERE 
+		CustomerId = @CustomerId
 	
 	
 	
@@ -37,7 +43,13 @@ BEGIN
 		Surname,
 		Gender,
 		DateOfBirth,
-		ResidentialStatus AS HomeOwner
+		ResidentialStatus AS HomeOwner,
+		@NumOfMps AS NumOfMps,
+		TimeAtAddress,
+		AccountNumber,
+		SortCode,
+		GreetingMailSentDate AS RegistrationDate,
+		BankAccountType
 	FROM
 		Customer
 	WHERE

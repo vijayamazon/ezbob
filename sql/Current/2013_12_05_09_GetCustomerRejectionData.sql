@@ -90,6 +90,9 @@ BEGIN
  
  
 	
-	SELECT @HasAccountingAccounts, @ErrorMPsNum, @ApprovalNum, @NumOfDefaultAccounts
+	SELECT @HasAccountingAccounts AS HasAccountingAccounts, 
+		@ErrorMPsNum AS ErrorMPsNum, 
+		@ApprovalNum AS ApprovalNum, 
+		@NumOfDefaultAccounts AS NumOfDefaultAccounts
 END
 GO

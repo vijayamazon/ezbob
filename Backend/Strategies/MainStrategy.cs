@@ -66,6 +66,8 @@
 		private int Reject_Defaults_CreditScore;
 		private int Reject_Defaults_AccountsNum;
 		private int Reject_Minimal_Seniority;
+		private int Reject_Defaults_MonthsNum;
+		private int Reject_Defaults_Amount;
 		private string BWABusinessCheck;
 		private bool EnableAutomaticReRejection;
 		private bool EnableAutomaticReApproval;
@@ -73,6 +75,9 @@
 		private bool EnableAutomaticRejection;
 		private int MaxCapHomeOwner;
 		private int MaxCapNotHomeOwner;
+		private int LowCreditScore;
+		private int LowTotalAnnualTurnover;
+		private int LowTotalThreeMonthTurnover;
 
 		// Loaded from DB per customer
 		private bool CustomerStatusIsEnabled;
@@ -87,7 +92,12 @@
 		private DateTime App_DateOfBirth;
 		private string App_Gender;
 		private string App_HomeOwner;
-
+		private int App_TimeAtAddress;
+		private string App_AccountNumber;
+		private string App_SortCode;
+		private DateTime App_RegistrationDate;
+		private string App_BankAccountType;
+		
 		// Validated as used
 		private string App_Line1;
 		private string App_Line2;
@@ -103,8 +113,8 @@
 		private string App_Line6Prev;
 		private int MinExperianScore;
 		private int ExperianConsumerScore;
-
-		DateTime ExperianBirthDate = new DateTime(1900, 1, 1); // Could be deleted?
+		private DateTime ExperianBirthDate = new DateTime(1900, 1, 1);
+		private int AllMPsNum;
 
 		// Could be localized
 		private decimal ExperianAMLAuthentication;
@@ -116,20 +126,9 @@
 		// Below this line variables should be converted to locals
 
 
-		// ?
 
 
-		string App_MaritalStatus = string.Empty;
-		int App_TimeAtAddress = 1;
-		string App_AccountNumber = string.Empty;
-		string App_SortCode = string.Empty;
-		decimal App_OverallTurnOver = 1;
-		decimal App_WebSiteTurnOver = 1;
-		DateTime App_RegistrationDate = DateTime.Now;
-		string App_RefNumber = string.Empty;
-		string App_BankAccountType = string.Empty;
-		int Prev_ExperianConsumerScore = 1;
-		string ScortoInternalErrorMessage = string.Empty;
+
 		private bool isFirstLoan;
 		public decimal PayPal_TotalSumOfOrders3M { get; private set; }
 		public decimal PayPal_TotalSumOfOrders1Y { get; private set; }
@@ -140,7 +139,6 @@
 
 		
 
-		int LowCreditScore = 0;
 
 
 
@@ -153,10 +151,6 @@
 		
 
 
-
-		string ExperianNonLimitedError = null;
-		bool ExperianCompanyNotFoundOnBureau = false;
-		string ExperianDirectorError = string.Empty;
 		
 
 
@@ -203,7 +197,6 @@
 
 
 
-		int AllMPsNum;
 		int LoanOffer_EKMStoresNum;
 		string LoanOffer_SystemDecision;
 		int LoanOffer_ManagerApprovedSum;
@@ -239,7 +232,6 @@
 		public double TotalSumOfOrders3MTotal { get; private set; }
 
 		// Being set inside the decision maker, should extract to DecisionResult class
-		public bool IsReRejected { get; set; }
 		public string AutoRejectReason { get; set; }
 		public string CreditResult { get; set; }
 		public string UserStatus { get; set; }
@@ -252,8 +244,6 @@
 		public bool LoanOffer_EmailSendingBanned_new { get; set; }
 		public bool IsAutoApproval { get; set; }
 		public double TotalSumOfOrders1YTotal { get; private set; }
-		public int LowTotalAnnualTurnover { get; private set; }
-		public int LowTotalThreeMonthTurnover { get; private set; }
 		
 		private void ReadConfigurations()
 		{
@@ -263,6 +253,8 @@
 			Reject_Defaults_CreditScore = int.Parse(results["Reject_Defaults_CreditScore"].ToString());
 			Reject_Defaults_AccountsNum = int.Parse(results["Reject_Defaults_AccountsNum"].ToString());
 			Reject_Minimal_Seniority = int.Parse(results["Reject_Minimal_Seniority"].ToString());
+			Reject_Defaults_MonthsNum = int.Parse(results["Reject_Defaults_MonthsNum"].ToString());
+			Reject_Defaults_Amount = int.Parse(results["Reject_Defaults_Amount"].ToString());
 			BWABusinessCheck = results["BWABusinessCheck"].ToString();
 			EnableAutomaticApproval = bool.Parse(results["EnableAutomaticApproval"].ToString());
 			EnableAutomaticReApproval = bool.Parse(results["EnableAutomaticReApproval"].ToString());
@@ -270,10 +262,11 @@
 			EnableAutomaticReRejection = bool.Parse(results["EnableAutomaticReRejection"].ToString());
 			MaxCapHomeOwner = int.Parse(results["MaxCapHomeOwner"].ToString());
 			MaxCapNotHomeOwner = int.Parse(results["MaxCapNotHomeOwner"].ToString());
-
-
+			LowCreditScore = int.Parse(results["LowCreditScore"].ToString());
+			LowTotalAnnualTurnover = int.Parse(results["LowTotalAnnualTurnover"].ToString());
+			LowTotalThreeMonthTurnover = int.Parse(results["LowTotalThreeMonthTurnover"].ToString());
 		}
-
+		
 		private void GerPersonalInfo()
 		{
 			DataTable dt = DbConnection.ExecuteSpReader("MainStrategyGetPersonalInfo");
@@ -291,6 +284,13 @@
 			App_Gender = results["Gender"].ToString();
 			App_DateOfBirth = DateTime.Parse(results["DateOfBirth"].ToString());
 			App_HomeOwner = results["HomeOwner"].ToString();
+			AllMPsNum = int.Parse(results["NumOfMps"].ToString());
+			App_TimeAtAddress = int.Parse(results["TimeAtAddress"].ToString());
+			App_AccountNumber = results["AccountNumber"].ToString();
+			App_SortCode = results["SortCode"].ToString();
+			App_RegistrationDate = DateTime.Parse(results["RegistrationDate"].ToString());
+			App_BankAccountType = results["BankAccountType"].ToString();
+
 		}
 
 		private void UpdateExperianConsumer(string firstName, string surname, string postCode, string error, int score, int customerId, int directorId)
@@ -394,6 +394,7 @@
 							continue;
 						}
 
+						string ExperianDirectorError;
 						GetConsumerInfo(App_DirName, App_DirSurname, dirGender, dirBirthdate, App_DirId, dirLine1, dirLine2, dirLine3, dirLine4, dirLine5, dirLine6, out ExperianDirectorError);
 
 						if (ExperianConsumerScore > 0 && ExperianConsumerScore < MinExperianScore)
@@ -413,7 +414,6 @@
 					DbConnection.CreateParam("AMLResult", ExperianAmlResult));
 			}
 
-			// TODO: with MP_GetScoreCardData...
 			DataTable scoreCardDataTable = DbConnection.ExecuteSpReader("GetDirectorsAddresses", DbConnection.CreateParam("CustomerId", CustomerId));
 			DataRow scoreCardResults = scoreCardDataTable.Rows[0];
 			var maritalStatus = (MaritalStatus) int.Parse(scoreCardResults["MaritalStatus"].ToString());
@@ -454,7 +454,16 @@
 			MedalType = ModelMedal;
 
 			// TODO: call CustomerScoringResult_Insert
-
+			/*DbConnection.ExecuteSpNonQuery("CustomerScoringResult_Insert",
+				DbConnection.CreateParam("pCustomerId", CustomerId),
+				DbConnection.CreateParam("pAC_Parameters", scoringResult.AcParameters),
+				DbConnection.CreateParam("AC_Descriptors", scoringResult.AcDescriptors),
+				DbConnection.CreateParam("Result_Weight", scoringResult.ResultWeights),
+				DbConnection.CreateParam("pResult_MAXPossiblePoints", scoringResult.MaxPoints),
+				DbConnection.CreateParam("pMedal", scoringResult.Medal),
+				DbConnection.CreateParam("pScorePoints", scoringResult.Score),
+				DbConnection.CreateParam("pScoreResult", scoringResult.Result));*/
+			
 			if (newCreditLineOption == NewCreditLineOption.SkipEverything ||
 			    newCreditLineOption == NewCreditLineOption.UpdateEverythingExceptMp ||
 			    newCreditLineOption == NewCreditLineOption.UpdateEverythingAndGoToManualDecision || avoidAutomaticDescison == 1)
@@ -467,8 +476,13 @@
 
 			
 			// TODO: make the following calls:
-			// Get_EKM_Shops_Number
-			// Get_MPs_Error_Num
+			DataTable defaultAccountsNumDataTable = DbConnection.ExecuteSpReader("GetNumberOfDefaultAccounts",
+				DbConnection.CreateParam("CustomerId", CustomerId),
+				DbConnection.CreateParam("Months", Reject_Defaults_MonthsNum),
+				DbConnection.CreateParam("Amount", Reject_Defaults_Amount));
+			DataRow defaultAccountsNumResults = defaultAccountsNumDataTable.Rows[0];
+			NumOfDefaultAccounts = int.Parse(scoreCardResults["NumOfDefaultAccounts"].ToString());
+			
 			// GetExperianDefaultsAccounts and fill NumOfDefaultAccounts
 			// GetLastOfferForAutomtedDecision
 			// MP_Get_PayPal_Aggregates
@@ -514,7 +528,6 @@
 
 
 			AutoDecisionResponse autoDecisionResponse = AutoDecisionMaker.MakeDecision(CreateAutoDecisionRequest());
-			IsReRejected = autoDecisionResponse.IsReRejected;
 			AutoRejectReason = autoDecisionResponse.AutoRejectReason;
 			CreditResult = autoDecisionResponse.CreditResult;
 			UserStatus = autoDecisionResponse.UserStatus;
@@ -644,9 +657,9 @@
 			}
 			else if (UserStatus == "Rejected")
 			{
-				if ((IsReRejected && !EnableAutomaticReRejection) || (!IsReRejected && !EnableAutomaticRejection))
+				if ((autoDecisionResponse.IsReRejected && !EnableAutomaticReRejection) || (!autoDecisionResponse.IsReRejected && !EnableAutomaticRejection))
 				{
-					SendRejectionExplanationMail(IsReRejected ? "User was automatically Re-Rejected" : "User was automatically Rejected");
+					SendRejectionExplanationMail(autoDecisionResponse.IsReRejected ? "User was automatically Re-Rejected" : "User was automatically Rejected");
 				}
 				else
 				{
@@ -841,7 +854,7 @@
 				UserStatus = UserStatus,
 				LoanOffer_UnderwriterComment = LoanOffer_UnderwriterComment,
 				ModelLoanOffer = ModelLoanOffer,
-				IsReRejected = IsReRejected,
+				IsReRejected = false,
 				LoanOffer_EmailSendingBanned_new = LoanOffer_EmailSendingBanned_new,
 				LoanOffer_ReApprovalFullAmountOld = LoanOffer_ReApprovalFullAmountOld,
 				LoanOffer_OfferValidDays = LoanOffer_OfferValidDays,
@@ -1211,7 +1224,6 @@
 			return true;
 		}
 
-		// These are the activation methods:
 		// main strategy - flow 1
 		public void Evaluate(int customerId, NewCreditLineOption newCreditLine, int avoidAutoDescison,
 							 bool isUnderwriterForced = false)

@@ -12,12 +12,10 @@
 		private readonly int LowCreditScore;
 		private readonly int Reject_Defaults_AccountsNum;
 		private readonly int AutoRejectionException_CreditScore;
-
-		
-		public bool HasAccountingAccounts { get; private set; } 
-		public int ErrorMPsNum { get; private set; } 
-		public int LoanOffer_ApprovalNum { get; private set; } 
-		public int NumOfDefaultAccounts { get; private set; } 
+		private readonly bool HasAccountingAccounts;
+		private readonly int ErrorMPsNum;
+		private readonly int LoanOffer_ApprovalNum;
+		private readonly int NumOfDefaultAccounts;
 
 		public Rejection(AutoDecisionRequest request)
 		{
@@ -40,9 +38,12 @@
 			results = dt.Rows[0];
 
 			HasAccountingAccounts = bool.Parse(results["HasAccountingAccounts"].ToString());
+			ErrorMPsNum = int.Parse(results["ErrorMPsNum"].ToString());
+			LoanOffer_ApprovalNum = int.Parse(results["ApprovalNum"].ToString());
+			NumOfDefaultAccounts = int.Parse(results["NumOfDefaultAccounts"].ToString());
 		}
 
-		private bool IsException(AutoDecisionResponse response)
+		private bool IsException()
 		{
 			if (LoanOffer_ApprovalNum > 0 || request.TotalSumOfOrders1YTotal > AutoRejectionException_AnualTurnover ||
 				request.Inintial_ExperianConsumerScore > AutoRejectionException_CreditScore || ErrorMPsNum > 0 ||
@@ -56,7 +57,7 @@
 
 		public bool MakeDecision(AutoDecisionResponse response)
 		{
-			if (IsException(response))
+			if (IsException())
 			{
 				return false;
 			}
