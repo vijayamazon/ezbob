@@ -24,25 +24,24 @@
 		private readonly bool autoApproveIsSilent;
 		private readonly string autoApproveSilentTemplateName;
 		private readonly string autoApproveSilentToAddress;
-		private int autoApproveAmount;
 		private decimal availableFunds;
 
 		public bool MakeDecision(AutoDecisionResponse response)
 		{
 			if (request.EnableAutomaticApproval)
 			{
-				autoApproveAmount = strategyHelper.AutoApproveCheck(request.CustomerId, request.OfferedCreditLine, request.MinExperianScore);
+				response.AutoApproveAmount = strategyHelper.AutoApproveCheck(request.CustomerId, request.OfferedCreditLine, request.MinExperianScore);
 
-				if (autoApproveAmount != 0)
+				if (response.AutoApproveAmount != 0)
 				{
 					DataTable dt = DbConnection.ExecuteSpReader("GetAvailableFunds");
 					availableFunds = decimal.Parse(dt.Rows[0]["AvailableFunds"].ToString());
 
-					if (availableFunds > autoApproveAmount)
+					if (availableFunds > response.AutoApproveAmount)
 					{
 						if (autoApproveIsSilent)
 						{
-							strategyHelper.NotifyAutoApproveSilentMode(request.CustomerId, autoApproveAmount, autoApproveSilentTemplateName, autoApproveSilentToAddress);
+							strategyHelper.NotifyAutoApproveSilentMode(request.CustomerId, response.AutoApproveAmount, autoApproveSilentTemplateName, autoApproveSilentToAddress);
 
 							response.CreditResult = "WaitingForDecision";
 							response.UserStatus = "Manual";

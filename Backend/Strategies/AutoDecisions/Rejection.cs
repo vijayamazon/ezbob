@@ -48,9 +48,6 @@
 				request.Inintial_ExperianConsumerScore > AutoRejectionException_CreditScore || ErrorMPsNum > 0 ||
 				(decimal)request.Inintial_ExperianConsumerScore == 0 || HasAccountingAccounts)
 			{
-				response.CreditResult = "WaitingForDecision";
-				response.UserStatus = "Manual";
-				response.SystemDecision = "Manual";
 				return true;
 			}
 
@@ -61,7 +58,7 @@
 		{
 			if (IsException(response))
 			{
-				return true;
+				return false;
 			}
 
 			if (request.Inintial_ExperianConsumerScore < Reject_Defaults_CreditScore &&
@@ -97,10 +94,7 @@
 			}
 			else
 			{
-				response.CreditResult = "WaitingForDecision";
-				response.UserStatus = "Manual";
-				response.SystemDecision = "Manual";
-				return true;
+				return false;
 			}
 
 			response.CreditResult = request.EnableAutomaticRejection ? "WaitingForDecision" : "Rejected";

@@ -25,7 +25,16 @@
 				return autoDecisionResponse;
 			}
 
-			new Rejection(request).MakeDecision(autoDecisionResponse);
+			if (new Rejection(request).MakeDecision(autoDecisionResponse))
+			{
+				return autoDecisionResponse;
+			}
+
+
+			autoDecisionResponse.CreditResult = "WaitingForDecision";
+			autoDecisionResponse.UserStatus = "Manual";
+			autoDecisionResponse.SystemDecision = "Manual";
+
 			return autoDecisionResponse;
 		}
 	}

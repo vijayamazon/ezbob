@@ -27,7 +27,7 @@
 		private static readonly ILog log = LogManager.GetLogger(typeof(MainStrategy));
 		private readonly StrategiesMailer mailer = new StrategiesMailer();
 		private readonly StrategyHelper strategyHelper = new StrategyHelper();
-
+		
 
 
 
@@ -45,14 +45,11 @@
 		private const string FAQPage = "https://www.ezbob.com/Customer/HowItWorks#Faq";
 
 
-
-
-
-
-
-
-
-
+		private int AutoApproveAmount;
+		int Reject_Defaults_CreditScore = 0;//get from config = int.Parse(results["Reject_Defaults_CreditScore"].ToString());
+		int Reject_Defaults_AccountsNum = 0;// = int.Parse(results["Reject_Defaults_AccountsNum"].ToString());
+		int Reject_Minimal_Seniority = 0;// = int.Parse(results["Reject_Minimal_Seniority"].ToString());
+		int LowCreditScore = 0;//
 
 
 
@@ -67,9 +64,9 @@
 		string idhubPostCode = null;
 		string idhubBranchCode = null;
 		string idhubAccountNumber = null;
-		
 
 
+		private bool isFirstLoan;// fill it
 
 
 		// TODO: Read from ConfigurationVariables (ConfigurationVariables_MainStrat)
@@ -147,6 +144,7 @@
 		string App_Line5Prev = null;
 		string App_Line6Prev = null;
 
+		int NumOfDefaultAccounts = 0;
 
 		private string Bwa;
 		private string ExperianBWAAccountStatus;
@@ -508,7 +506,7 @@
 			// TODO: make the following calls:
 			// Get_EKM_Shops_Number
 			// Get_MPs_Error_Num
-			// GetExperianDefaultsAccounts
+			// GetExperianDefaultsAccounts and fill NumOfDefaultAccounts
 			// GetLastOfferForAutomtedDecision
 			// MP_Get_PayPal_Aggregates
 			// GetBaseLoanInterest
@@ -567,14 +565,195 @@
 			App_ValidFor = autoDecisionResponse.App_ValidFor;
 			LoanOffer_EmailSendingBanned_new = autoDecisionResponse.LoanOffer_EmailSendingBanned_new;
 			IsAutoApproval = autoDecisionResponse.IsAutoApproval;
+			AutoApproveAmount = autoDecisionResponse.AutoApproveAmount;
 
 			if (Underwriter_Check)
 			{
-				// Update_Main_Strat_Finish_Date
+				DbConnection.ExecuteSpNonQuery("Update_Main_Strat_Finish_Date", DbConnection.CreateParam("UserId", CustomerId));
 				return;
 			}
 
+			// Update scoring result
 
+			// UpdateCashRequests
+
+			if (UserStatus == "Approved")
+			{
+				if (IsAutoApproval)
+				{
+					// UpdateAutoApproval
+
+
+					var variables = new Dictionary<string, string>
+						{
+							{"ApprovedReApproved", "Approved"},
+							{"RegistrationDate", App_RegistrationDate.ToString(CultureInfo.InvariantCulture)},
+							{"userID", CustomerId.ToString(CultureInfo.InvariantCulture)},
+							{"Name", App_email},
+							{"FirstName", App_FirstName},
+							{"Surname", App_Surname},
+							{"MP_Counter", AllMPsNum.ToString(CultureInfo.InvariantCulture)},
+							{"MedalType", MedalType},
+							{"SystemDecision", SystemDecision},
+							{"ApprovalAmount", LoanOffer_ReApprovalSum.ToString(CultureInfo.InvariantCulture)},
+							{"RepaymentPeriod", LoanOffer_RepaymentPeriod.ToString(CultureInfo.InvariantCulture)},
+							{"InterestRate", LoanOffer_InterestRate.ToString(CultureInfo.InvariantCulture)},
+							{"OfferValidUntil", App_ValidFor.ToString(CultureInfo.InvariantCulture)}
+						};
+					mailer.SendToEzbob(variables, "Mandrill - User is approved or re-approved", "User was automatically approved");
+
+					double LoanOffer_OfferValidHours = Math.Round(LoanOffer_OfferValidDays * 24, 0);
+					
+
+					if (isFirstLoan)
+					{
+						var variables3 = new Dictionary<string, string>
+							{
+								{"FirstName", App_FirstName},
+								{"LoanAmount", AutoApproveAmount.ToString(CultureInfo.InvariantCulture)}
+							};
+
+						mailer.SendToCustomerAndEzbob(variables3, App_email, "Mandrill - Approval (1st time)",
+						                              "Congratulations " + App_FirstName + ", £" + AutoApproveAmount +
+						                              " is available to fund your business today");
+
+						strategyHelper.AddApproveIntoDecisionHistory(CustomerId, "Auto Approval");
+						DbConnection.ExecuteSpNonQuery("Update_Main_Strat_Finish_Date", DbConnection.CreateParam("UserId", CustomerId));
+					}
+					else
+					{
+						var variables4 = new Dictionary<string, string>
+						{
+							{"FirstName", App_FirstName},
+							{"LoanAmount", AutoApproveAmount.ToString(CultureInfo.InvariantCulture)}
+						};
+
+						mailer.SendToCustomerAndEzbob(variables4, App_email, "Mandrill - Approval (not 1st time)", "Congratulations " + App_FirstName + ", £" + AutoApproveAmount +
+								   " is available to fund your business today");
+
+						strategyHelper.AddApproveIntoDecisionHistory(CustomerId, "AutoApproval");
+						DbConnection.ExecuteSpNonQuery("Update_Main_Strat_Finish_Date", DbConnection.CreateParam("UserId", CustomerId));
+					}
+					return;
+				}
+				else
+				{
+					// UpdateCashRequestsReApproval
+
+					var variables = new Dictionary<string, string>
+						{
+							{"ApprovedReApproved", "Re-Approved"},
+							{"RegistrationDate", App_RegistrationDate.ToString(CultureInfo.InvariantCulture)},
+							{"userID", CustomerId.ToString(CultureInfo.InvariantCulture)},
+							{"Name", App_email},
+							{"FirstName", App_FirstName},
+							{"Surname", App_Surname},
+							{"MP_Counter", AllMPsNum.ToString(CultureInfo.InvariantCulture)},
+							{"MedalType", MedalType},
+							{"SystemDecision", SystemDecision},
+							{"ApprovalAmount", LoanOffer_ReApprovalSum.ToString(CultureInfo.InvariantCulture)},
+							{"RepaymentPeriod", LoanOffer_RepaymentPeriod.ToString(CultureInfo.InvariantCulture)},
+							{"InterestRate", LoanOffer_InterestRate.ToString(CultureInfo.InvariantCulture)},
+							{"OfferValidUntil", App_ValidFor.ToString(CultureInfo.InvariantCulture)}
+						};
+					mailer.SendToEzbob(variables, "Mandrill - User is approved or re-approved", "User was automatically Re-Approved");
+
+					if (!EnableAutomaticReApproval)
+					{
+						DbConnection.ExecuteSpNonQuery("Update_Main_Strat_Finish_Date", DbConnection.CreateParam("UserId", CustomerId));
+					}
+					else
+					{
+						double LoanOffer_OfferValidHours = Math.Round(LoanOffer_OfferValidDays * 24, 0);
+
+						var variables2 = new Dictionary<string, string>
+						{
+							{"FirstName", App_FirstName},
+							{"LoanAmount", LoanOffer_ReApprovalSum.ToString(CultureInfo.InvariantCulture)}
+						};
+
+						mailer.SendToCustomerAndEzbob(variables2, App_email, "Mandrill - Approval (not 1st time)", "Congratulations " + App_FirstName + ", £" + LoanOffer_ReApprovalSum +
+								   " is available to fund your business today");
+
+						strategyHelper.AddApproveIntoDecisionHistory(CustomerId, "Auto Re-Approval");
+						DbConnection.ExecuteSpNonQuery("Update_Main_Strat_Finish_Date", DbConnection.CreateParam("UserId", CustomerId));
+					}
+
+					return;
+				}
+			}
+			else if (UserStatus == "Rejected")
+			{
+				if ((IsReRejected && !EnableAutomaticReRejection) || (!IsReRejected && !EnableAutomaticRejection))
+				{
+					SendRejectionExplanationMail(IsReRejected ? "User was automatically Re-Rejected" : "User was automatically Rejected");
+				}
+				else
+				{
+					const string rejectionSubject = "Sorry, EZBOB cannot make you a loan offer at this time";
+					SendRejectionExplanationMail(rejectionSubject);
+
+					var variables = new Dictionary<string, string>
+						{
+							{"FirstName", App_FirstName},
+							{"EzbobAccount", "https://app.ezbob.com/Customer/Profile"}
+						};
+
+					mailer.SendToCustomerAndEzbob(variables, App_email, "Mandrill - Rejection email", rejectionSubject);
+					strategyHelper.AddRejectIntoDecisionHistory(CustomerId, AutoRejectReason);
+				}
+				DbConnection.ExecuteSpNonQuery("Update_Main_Strat_Finish_Date", DbConnection.CreateParam("UserId", CustomerId));
+			}
+			else
+			{
+				var variables = new Dictionary<string, string>
+						{
+							{"RegistrationDate", App_RegistrationDate.ToString(CultureInfo.InvariantCulture)},
+							{"userID", CustomerId.ToString(CultureInfo.InvariantCulture)},
+							{"Name", App_email},
+							{"FirstName", App_FirstName},
+							{"Surname", App_Surname},
+							{"MP_Counter", AllMPsNum.ToString(CultureInfo.InvariantCulture)},
+							{"MedalType", MedalType},
+							{"SystemDecision", SystemDecision}
+						};
+
+				mailer.SendToEzbob(variables, "Mandrill - User is waiting for decision", "User is now waiting for decision");
+				DbConnection.ExecuteSpNonQuery("Update_Main_Strat_Finish_Date", DbConnection.CreateParam("UserId", CustomerId));
+			}
+		}
+
+		private void SendRejectionExplanationMail(string subject)
+		{
+			var variables = new Dictionary<string, string>
+						{
+							{"RegistrationDate", App_RegistrationDate.ToString(CultureInfo.InvariantCulture)},
+							{"userID", CustomerId.ToString(CultureInfo.InvariantCulture)},
+							{"Name", App_email},
+							{"FirstName", App_FirstName},
+							{"Surname", App_Surname},
+							{"MP_Counter", AllMPsNum.ToString(CultureInfo.InvariantCulture)},
+							{"MedalType", MedalType},
+							{"SystemDecision", SystemDecision},
+							{"ExperianConsumerScore", Inintial_ExperianConsumerScore.ToString(CultureInfo.InvariantCulture)},
+							{"CVExperianConsumerScore", LowCreditScore.ToString(CultureInfo.InvariantCulture)},
+							{"TotalAnnualTurnover", TotalSumOfOrders1YTotal.ToString(CultureInfo.InvariantCulture)},
+							{"CVTotalAnnualTurnover", LowTotalAnnualTurnover.ToString(CultureInfo.InvariantCulture)},
+							{"Total3MTurnover", TotalSumOfOrders3MTotal.ToString(CultureInfo.InvariantCulture)},
+							{"CVTotal3MTurnover", LowTotalThreeMonthTurnover.ToString(CultureInfo.InvariantCulture)},
+							{"PayPalStoresNum", PayPal_NumberOfStores.ToString(CultureInfo.InvariantCulture)},
+							{"PayPalAnnualTurnover", PayPal_TotalSumOfOrders1Y.ToString(CultureInfo.InvariantCulture)},
+							{"CVPayPalAnnualTurnover", LowTotalAnnualTurnover.ToString(CultureInfo.InvariantCulture)},
+							{"PayPal3MTurnover", PayPal_TotalSumOfOrders3M.ToString(CultureInfo.InvariantCulture)},
+							{"CVPayPal3MTurnover", LowTotalThreeMonthTurnover.ToString(CultureInfo.InvariantCulture)},
+							{"CVExperianConsumerScoreDefAcc", Reject_Defaults_CreditScore.ToString(CultureInfo.InvariantCulture)},
+							{"ExperianDefAccNum", NumOfDefaultAccounts.ToString(CultureInfo.InvariantCulture)},
+							{"CVExperianDefAccNum", Reject_Defaults_AccountsNum.ToString(CultureInfo.InvariantCulture)},
+							{"Seniority", MarketplaceSeniorityDays.ToString(CultureInfo.InvariantCulture)},
+							{"SeniorityThreshold", Reject_Minimal_Seniority.ToString(CultureInfo.InvariantCulture)}
+						};
+
+			mailer.SendToEzbob(variables, "Mandrill - User is rejected by the strategy", subject);
 		}
 
 		private AutoDecisionRequest CreateAutoDecisionRequest()
@@ -622,6 +801,9 @@
 			ModelScorePoints = 1;
 			ModelLoanOffer = 1;
 			ModelMedal = "";
+
+
+
 			Model_AC_Parameters = "";
 			Model_AC_Descriptors = "";
 			Model_Result_Weights = "";

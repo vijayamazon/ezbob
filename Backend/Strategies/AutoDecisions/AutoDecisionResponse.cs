@@ -32,5 +32,6 @@
 		public DateTime App_ValidFor { get; set; }
 		public bool LoanOffer_EmailSendingBanned_new { get; set; }
 		public bool IsAutoApproval { get; set; }
+		public int AutoApproveAmount { get; set; }
 	}
 }
