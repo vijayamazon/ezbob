@@ -328,8 +328,8 @@
 @helper YodleeRules()
 {
     <div class="tab-pane" id="yodleetab6">
-        <%(function() { console.log(y.RuleModel); if (y.RuleModel && y.RuleModel.GroupRulesDict) { %>
-        <table class="table table-bordered table-striped  blue-header centered rright" style="width: auto;">
+        <%(function() { if (y.RuleModel && y.RuleModel.GroupRulesDict) { var rm = y.RuleModel; %>
+        <table class="table table-bordered table-striped  blue-header centered" style="width: auto;">
             <thead>
                 <tr>
                     <th>Group</th>
@@ -337,12 +337,12 @@
                 </tr>
             </thead>
             <tbody>
-                <%for(var gr in y.RuleModel.GroupRulesDict){%>
+                <%for(var gr in rm.GroupRulesDict){%>
                 <tr class="yodleeSearchWordsRow">
                     <td><%=gr%></td>
                     <td>
-                        <%for(var r in y.RuleModel.GroupRulesDict[gr]){ %>
-                            <%=r%> <%if(y.RuleModel.GroupRulesDict[gr][r]) { print(': '); %>  <%=y.RuleModel.GroupRulesDict[gr][r]%> <%}%><br/>
+                        <%for(var r in rm.GroupRulesDict[gr]){ %>
+                            <%=r%> <%if(rm.GroupRulesDict[gr][r]) { print(': '); %>  <%=rm.GroupRulesDict[gr][r]%> <%}%><br/>
                         <%}%>
                     </td>
                 </tr>
@@ -355,23 +355,22 @@
             <label for="yodleeGroup">Group</label>
             <select id="yodleeGroup" class="selectheight" style="margin-bottom: 0">
                 <option></option>
-                <%for(var g in y.RuleModel.Groups) { %>
-                <option value="<%=g.Id%>"><%=g.Group%></option>
+                <%for(var i in rm.Groups) { if(!rm.Groups.hasOwnProperty(i)) {continue;} %>
+                <option value="<%=rm.Groups[i].Id%>"><%=rm.Groups[i].Group%> <%=rm.Groups[i].SubGroup%></option>
                 <%}%>
             </select>
-            
             <label for="yodleeRule">Rule</label>
             <select id="yodleeRule" class="selectheight" style="margin-bottom: 0">
                 <option></option>
-                <%for(var r in y.RuleModel.Rules) { %>
-                <option value="<%=r.Id%>"><%=r.Rule%></option>
+                <%for(var i in rm.Rules) { if(!rm.Rules.hasOwnProperty(i)) {continue;} %>
+                <option value="<%=rm.Rules[i].Id%>"><%=rm.Rules[i].Rule%></option>
                 <%}%>
             </select>
             <label for="yodleeLiteral">Word</label>
             <input type="text" id="yodleeLiteral" style="margin-bottom: 0" />
             <button class="btn yodleeRuleAdd" id="yodleeRuleAdd">Add</button>
 
-@*            <button class="btn yodleeSearchWordsDelete" id="removeYodleeSearchWord">Remove</button>*@
+            @*<button class="btn yodleeSearchWordsDelete" id="removeYodleeSearchWord">Remove</button>*@
             <hr />
             
 

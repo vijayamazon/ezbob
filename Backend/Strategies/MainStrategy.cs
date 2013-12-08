@@ -427,6 +427,8 @@
 
 
 			ScoreMedalOffer scoringResult = medalScoreCalculator.CalculateMedalScore(TotalSumOfOrdersForLoanOffer, MinExperianScore, (decimal)MarketplaceSeniorityDays / 365, Model_MaxFeedback, maritalStatus, App_Gender == "M" ? Gender.M : Gender.F, Model_MPsNumber, Model_FirstRepaymentDate < DateTime.UtcNow, Model_EZBOBSeniority, Model_OnTimeLoans, Model_LatePayments, Model_EarlyPayments);
+			ModelScoreResult = scoringResult.ScoreResult;
+			ModelScorePoints = scoringResult.ScorePoints;
 			ModelLoanOffer = scoringResult.MaxOffer;
 			
 			MedalType = scoringResult.Medal;
