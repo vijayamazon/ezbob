@@ -135,6 +135,9 @@
     <Compile Include="Model\Marketplaces\MP_MarketplaceGroup.cs" />
     <Compile Include="Model\Marketplaces\PayPal\MP_PayPalTransactionItem2.cs" />
     <Compile Include="Model\Marketplaces\PayPal\MP_PayPalTransactionItem2Map.cs" />
+    <Compile Include="Model\Marketplaces\Yodlee\MP_YodleeGroupRuleMap.cs" />
+    <Compile Include="Model\Marketplaces\Yodlee\MP_YodleeRule.cs" />
+    <Compile Include="Model\Marketplaces\Yodlee\MP_YodleeGroup.cs" />
     <Compile Include="Model\Marketplaces\Yodlee\MP_YodleeSearchWords.cs" />
     <Compile Include="Model\Marketplaces\Yodlee\YodleeBanksModels.cs" />
     <Compile Include="Model\Database\Zoopla.cs" />

@@ -102,5 +102,6 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.Yodlee
 		public virtual bool isMedicalExpenseSpecified { get; set; }
 		public virtual string categorizationKeyword { get; set; }
 		public virtual string sourceTransactionType { get; set; }
+		public virtual MP_YodleeGroup ezbobCategory { get; set; }
 	}
 }

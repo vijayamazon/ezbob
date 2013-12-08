@@ -95,6 +95,8 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.Yodlee
             Map(x => x.isMedicalExpenseSpecified);
             Map(x => x.categorizationKeyword).Length(300);
             Map(x => x.sourceTransactionType).Length(300);
+
+	        References(x => x.ezbobCategory, "EzbobCategory");
         }
     }
 }

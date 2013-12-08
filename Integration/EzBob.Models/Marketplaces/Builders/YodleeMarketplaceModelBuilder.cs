@@ -73,6 +73,7 @@ namespace EzBob.Models.Marketplaces.Builders
 
 		private YodleeModel BuildYodlee(MP_CustomerMarketPlace mp, DateTime? history)
 		{
+			
 			YodleeOrderDictionary yodleeData = null;
 			if (mp.Marketplace.InternalId == new YodleeServiceInfo().InternalId)
 			{
@@ -83,6 +84,7 @@ namespace EzBob.Models.Marketplaces.Builders
 			if (yodleeData == null) return null;
 
 			var model = new YodleeModel();
+			model.RuleModel = new YodleeRuleModel(_session);
 			var banks = new List<YodleeBankModel>();
 			foreach (var bank in yodleeData.Data.Keys)
 			{

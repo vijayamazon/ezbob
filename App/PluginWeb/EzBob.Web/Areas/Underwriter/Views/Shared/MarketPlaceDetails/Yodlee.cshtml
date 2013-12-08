@@ -6,6 +6,7 @@
         <li><a href="#yodleetab3" data-toggle="tab">Bank Account Details</a></li>
         <li><a href="#yodleetab4" id="yodleeTransactionsTabLink" data-toggle="tab">Bank Accounts Transactions</a></li>
         <li><a href="#yodleetab5" data-toggle="tab">Aggregates</a></li>
+        <li><a href="#yodleetab6" data-toggle="tab">Custom Categorization Rules</a></li>
     </ul>
     <div class="tab-content">
         @YodleeCashFlowReport()
@@ -14,6 +15,7 @@
         @YodleeBankAccounts()
         @YodleeBankAccountsTransactions()
         @YodleeAggregates()
+        @YodleeRules()
     </div>
 </div>
 
@@ -320,5 +322,60 @@
                 </tr>
             </tbody>
         </table>
+    </div>
+}
+
+@helper YodleeRules()
+{
+    <div class="tab-pane" id="yodleetab6">
+        <%(function() { console.log(y.RuleModel); if (y.RuleModel && y.RuleModel.GroupRulesDict) { %>
+        <table class="table table-bordered table-striped  blue-header centered rright" style="width: auto;">
+            <thead>
+                <tr>
+                    <th>Group</th>
+                    <th>Rule</th>
+                </tr>
+            </thead>
+            <tbody>
+                <%for(var gr in y.RuleModel.GroupRulesDict){%>
+                <tr class="yodleeSearchWordsRow">
+                    <td><%=gr%></td>
+                    <td>
+                        <%for(var r in y.RuleModel.GroupRulesDict[gr]){ %>
+                            <%=r%> <%if(y.RuleModel.GroupRulesDict[gr][r]) { print(': '); %>  <%=y.RuleModel.GroupRulesDict[gr][r]%> <%}%><br/>
+                        <%}%>
+                    </td>
+                </tr>
+                <%}%>
+            </tbody>
+        </table>
+        <hr />
+        <div class="well" style="width: 570px">
+            <span>Add/Remove Rules</span>
+            <label for="yodleeGroup">Group</label>
+            <select id="yodleeGroup" class="selectheight" style="margin-bottom: 0">
+                <option></option>
+                <%for(var g in y.RuleModel.Groups) { %>
+                <option value="<%=g.Id%>"><%=g.Group%></option>
+                <%}%>
+            </select>
+            
+            <label for="yodleeRule">Rule</label>
+            <select id="yodleeRule" class="selectheight" style="margin-bottom: 0">
+                <option></option>
+                <%for(var r in y.RuleModel.Rules) { %>
+                <option value="<%=r.Id%>"><%=r.Rule%></option>
+                <%}%>
+            </select>
+            <label for="yodleeLiteral">Word</label>
+            <input type="text" id="yodleeLiteral" style="margin-bottom: 0" />
+            <button class="btn yodleeRuleAdd" id="yodleeRuleAdd">Add</button>
+
+@*            <button class="btn yodleeSearchWordsDelete" id="removeYodleeSearchWord">Remove</button>*@
+            <hr />
+            
+
+        </div>
+        <%} else {print('No rules available');} })();%>
     </div>
 }

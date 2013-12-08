@@ -110,6 +110,7 @@
     <Compile Include="Marketplaces\PaymentAccountsModel.cs" />
     <Compile Include="Marketplaces\PayPalAccountInfoModel.cs" />
     <Compile Include="Marketplaces\PayPalAccountModel.cs" />
+    <Compile Include="Marketplaces\Yodlee\YodleeRuleModel.cs" />
     <Compile Include="Marketplaces\Yodlee\YodleeRunningBalanceModel.cs" />
     <Compile Include="Marketplaces\Yodlee\YodleeCashFlowReportModel.cs" />
     <Compile Include="Marketplaces\Yodlee\YodleeBankModel.cs" />
