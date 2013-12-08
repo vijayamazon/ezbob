@@ -351,7 +351,6 @@
     <Compile Include="Areas\Underwriter\Controllers\Reports\CartImageProvider.cs" />
     <Compile Include="Areas\Underwriter\Controllers\Reports\IImageProvider.cs" />
     <Compile Include="Areas\Underwriter\Controllers\Reports\ReportTableCreator.cs" />
-    <Compile Include="Areas\Underwriter\GridHelpers.cs" />
     <Compile Include="Areas\Underwriter\Models\AlertDoc.cs" />
     <Compile Include="Areas\Underwriter\Models\ApiChecksLogModel.cs" />
     <Compile Include="Areas\Underwriter\Models\ApplicationInfoModel.cs" />
@@ -1013,12 +1012,6 @@
       <DependentUpon>ezbob.underwriter.CAIS.caisManage.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Underwriter\customersGrid\ezbob.underwriter.grids.js" />
-    <Content Include="Content\js\Underwriter\customersGrid\ezbob.underwriter.customerGrid.js">
-      <DependentUpon>ezbob.underwriter.customerGrid.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Underwriter\customersGrid\ezbob.underwriter.customerGrid.min.js">
-      <DependentUpon>ezbob.underwriter.customerGrid.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\Underwriter\customersGrid\ezbob.underwriter.ProfilePopupView.js">
       <DependentUpon>ezbob.underwriter.ProfilePopupView.coffee</DependentUpon>
     </Content>
@@ -1381,7 +1374,6 @@
     <Content Include="Content\js\Profile\ezbob.profile.payEarly.js" />
     <Content Include="Content\js\Wizard\yourInfo\ezbob.yourinfo.personalInfo.js" />
     <Content Include="Content\js\Underwriter\profile\creditBureau\ezbob.underwriter.experianInfo.js" />
-    <Content Include="Content\js\Underwriter\customersGrid\ezbob.underwriter.customers.js" />
     <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.marketplaceDetails.js" />
     <Content Include="Content\PIE.htc" />
     <Content Include="Global.asax" />
@@ -1720,7 +1712,6 @@
     <Content Include="Content\js\Underwriter\editLoan\installmentEditor.coffee" />
     <Content Include="Content\js\Underwriter\editLoan\editFee.coffee" />
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.creditLineDialog.coffee" />
-    <Content Include="Content\js\Underwriter\customersGrid\ezbob.underwriter.customerGrid.coffee" />
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.functionsDialog.coffee" />
     <Content Include="Content\js\Profile\ezbob.profile.yourInfo.coffee" />
     <Content Include="Content\js\Underwriter\ezbob.underwriter.goToCustomer.coffee" />
@@ -1731,9 +1722,6 @@
     <Content Include="Content\js\Underwriter\profile\ezbob.underwriter.customerFullModel.coffee" />
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.ApproveLoanForWarningStatusCustomer.coffee" />
     <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.marketplacesHistory.coffee" />
-    <Content Include="Content\js\Underwriter\customersGrid\ezbob.underwriter.customerGrid.min.js.map">
-      <DependentUpon>ezbob.underwriter.customerGrid.js</DependentUpon>
-    </Content>
     <None Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.addPayPointCardView.coffee" />
     <None Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.bankAccountDetails.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shopbutton.coffee" />

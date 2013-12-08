@@ -14,18 +14,8 @@ namespace EzBob.Web.Areas.Underwriter.Models
 
     public class LoansGrids
     {
-        public CustomerGridModel WaitingForDecision { get; set; }
-        public CustomerGridModel Escalated { get; set; }
-        public CustomerGridModel Pending { get; set; }
-        public CustomerGridModel Approved { get; set; }
-        public CustomerGridModel Rejected { get; set; }
-        public CustomerGridModel All { get; set; }
-        public CustomerGridModel RegisteredCustomers { get; set; }
-        public CustomerGridModel Late { get; set; }
-		public CustomerGridModel Loans { get; set; }
-		public CustomerGridModel Sales { get; set; }
-		public CustomerGridModel Collection { get; set; }
-        public IEzBobConfiguration Config { get; set; }
+	    public bool IsEscalated { get; set; }
+	    public IEzBobConfiguration Config { get; set; }
         public decimal MaxLoan { get; set; }
         public IEnumerable<MP_MarketplaceType> MpTypes { get; set; }
         public List<CustomerStatuses> CollectionStatuses { get; set; }

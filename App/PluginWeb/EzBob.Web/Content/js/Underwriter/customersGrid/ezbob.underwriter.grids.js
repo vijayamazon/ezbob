@@ -42,6 +42,10 @@ EzBob.Underwriter.GridTools = {
 	profileLink: function(nCustomerID, sLinkText) {
 		return EzBob.Underwriter.GridTools.withScrollbar('<a class=profileLink title="Open customer profile" href="#profile/' + nCustomerID + '">' + (sLinkText || nCustomerID) + '</a>');
 	}, // profileLink
+
+	profileWithTypeLink: function(nCustomerID, sGridType) {
+		return EzBob.Underwriter.GridTools.withScrollbar('<a class=profileLink href="#profile/' + nCustomerID + '/' + sGridType + '">' + nCustomerID + '</a>');
+	}, // profileWithTypeLink
 }; // EzBob.Underwriter.GridTools
 
 EzBob.Underwriter.GridsView = Backbone.View.extend({
@@ -53,8 +57,6 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 		} // GridProperties
 
 		GridProperties.prototype.fnRowCallback = function(oTR, oData, iDisplayIndex, iDisplayIndexFull) {
-			console.log('row call', oTR, oData, iDisplayIndex, iDisplayIndexFull);
-
 			if (oData.hasOwnProperty('Cart'))
 				$('.grid-item-Cart', oTR).empty().html(EzBob.Underwriter.GridTools.showMedalIcon(oData.Cart));
 
@@ -120,19 +122,35 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 				action: 'GridLate',
 				columns: approvedLateColumns(false),
 			}), // late
+			rejected: new GridProperties({
+				action: 'GridRejected',
+				columns: '#Id,Cart,MP_List,Name,Email,^ApplyDate,^RegDate,Reason,#RejectsNum,#ApprovesNum,$OSBalance,SegmentType',
+			}), // rejected
+			all: new GridProperties({
+				action: 'GridAll',
+				columns: '#Id,Cart,MP_List,Name,Email,^RegDate,^ApplyDate,CustomerStatus,$CalcAmount,$ApprovedSum,$OSBalance,SegmentType',
+			}), // all
+			registered: new GridProperties({
+				action: 'GridRegistered',
+				columns: '#UserId,Email,UserStatus,^RegDate,MP_Statuses,WizardStep,SegmentType',
+				fnRowCallback: function(oTR, oData, iDisplayIndex, iDisplayIndexFull) {
+					$('.grid-item-UserId', oTR).empty().html(EzBob.Underwriter.GridTools.profileWithTypeLink(oData.UserId, 'registered'));
+
+					$(oTR).dblclick(function() {
+						location.assign($(oTR).find('.profileLink').first().attr('href'));
+					});
+
+					if (oData.IsWasLate)
+						$(oTR).addClass(oData.IsWasLate);
+				}, // fnRowCallback
+			}), // registered
 		}; // gridProperties
 	}, // initialize
 
 	events: {
-		'click .show-old-grids': 'showOldGrids',
 		'click #include-test-customers': 'reloadActive',
 		'click #include-all-customers': 'reloadActive',
 	}, // events
-
-	showOldGrids: function() {
-		this.hide();
-		$('#customers-view').show();
-	}, // showOldGrids
 
 	render: function() {
 		var self = this;
@@ -143,12 +161,12 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 	}, // render
 
 	handleTabSwitch: function(evt) {
-		var sType = this.typeFromHref($(evt.target).attr('href'));
-
-		this.$el.find('.all-customers').toggleClass('hide', sType !== 'registered');
-
-		this.loadGrid(sType);
+		this.loadGrid(this.typeFromHref($(evt.target).attr('href')));
 	}, // handleTabSwitch
+
+	toggleAllCustomers: function(sCurTabType) {
+		this.$el.find('.all-customers').toggleClass('hide', sCurTabType !== 'registered');
+	}, // toggleAllCustomers
 
 	reloadActive: function() {
 		this.loadGrid(this.activeGridType());
@@ -164,6 +182,8 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 		if (this.router)
 			this.router.navigate('#customers/' + sGridName);
 
+		this.toggleAllCustomers(sGridName);
+
 		this.tabLinks().closest('li').filter('.active').removeClass('active');
 
 		this.tabLinkTo(sGridName).closest('li').addClass('active');
@@ -177,10 +197,6 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 
 		if (!oGridProperties.name)
 			oGridProperties.name = sGridName;
-
-		$.ajax(this.gridSrcUrl(oGridProperties)).success(function(data, status, jqXHR) {
-			console.log('data:', data);
-		});
 
 		this.$el.find('#' + sGridName + '-grid .grid-data').dataTable({
 			bDestroy: true,
@@ -283,7 +299,6 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 			});
 		} // for
 
-		console.log('columns:', aryResult);
 		return aryResult;
 	}, // extractColumns
 

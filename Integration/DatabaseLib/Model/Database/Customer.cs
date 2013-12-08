@@ -611,6 +611,14 @@ namespace EZBob.DatabaseLib.Model.Database
 		{
 			return obj.Id.GetHashCode();
 		}
+
+		public virtual string SegmentType() {
+			return IsOffline ? "Offline" : "Online";
+		} // SegmentType
+
+		public virtual string IsWasLateName() {
+			return PaymentDemenaor == PaymentdemeanorType.Ok ? "" : "iswaslate";
+		} // IsWasLateName
 	}
 
 	public class ParseExperianResult : Tuple<Dictionary<string, ParsedData>, ParsingResult, string, string, string>
