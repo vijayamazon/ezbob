@@ -2,8 +2,14 @@
 {
 	public class ScoreMedalOffer
 	{
+		public string AcParameters { get; set; }
+		public string AcDescriptors { get; set; }
+		public string ResultWeigts { get; set; }
+		public string ResultMaxPoints { get; set; }
+
 		public Medal Medal { get; set; }
-		public decimal Score { get; set; }
+		public decimal ScorePoints { get; set; }
+		public decimal ScoreResult { get; set; }
 		public int MaxOffer { get; set; }
 		public decimal MaxOfferPercent { get; set; }
 	}

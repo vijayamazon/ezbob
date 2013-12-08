@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Text;
 
 	public class MedalScoreCalculator
 	{
@@ -40,7 +41,7 @@
 
 			return scoreMedal;
 		}
-		
+
 		private ScoreMedalOffer CalcScoreMedalOffer(Dictionary<Parameter, Weight> dict, decimal annualTurnover, int experianScore)
 		{
 			decimal minScoreSum = 0M;
@@ -48,33 +49,77 @@
 			decimal scoreSum = 0M;
 			foreach (var weight in dict.Values)
 			{
-				weight.Score = weight.Grade*weight.FinalWeight;
+				weight.Score = weight.Grade * weight.FinalWeight;
 				minScoreSum += weight.MinimumScore;
 				maxScoreSum += weight.MaximumScore;
 				scoreSum += weight.Score;
 			}
 
-			decimal score = (scoreSum - minScoreSum)/(maxScoreSum - minScoreSum);
+			decimal score = (scoreSum - minScoreSum) / (maxScoreSum - minScoreSum);
 			Medal medal = GetMedal(Constants.MedalRanges, score);
 			var smo = new ScoreMedalOffer
 				{
 					Medal = medal,
-					Score = score,
+					ScorePoints = scoreSum * 100,
+					ScoreResult = score,
 					MaxOffer = (int)((int)medal * annualTurnover * GetRange(Constants.DecisionPercentRanges, experianScore).OfferPercent / 100),
-					MaxOfferPercent = GetRange(Constants.OfferPercentRanges, experianScore).OfferPercent
+					MaxOfferPercent = GetRange(Constants.OfferPercentRanges, experianScore).OfferPercent,
+					AcDescriptors = "Experian score;Marketplace seniority;Marital status;Positive feedback count;Other;Annual turnover;Number of stores;EZBOB seniority;EZBOB number of loans;EZBOB previous late payments;EZBOB previous early payments",
+					AcParameters = BuildParameters(dict),
+					ResultWeigts = BuildWeights(dict),
+					ResultMaxPoints = BuildMaxPoints(dict)
 				};
 
 			PrintDict(smo, dict);
 			return smo;
 		}
 
-		
+		private string BuildMaxPoints(Dictionary<Parameter, Weight> dict)
+		{
+			var sb = new StringBuilder();
+			foreach (var pair in dict)
+			{
+				sb.Append(pair.Value.MaximumScore * 100);
+				sb.Append("; ");
+			}
+			return sb.ToString();
+		}
+
+		private string BuildWeights(Dictionary<Parameter, Weight> dict)
+		{
+			var sb = new StringBuilder();
+			foreach (var pair in dict)
+			{
+				sb.Append(pair.Value.Score*100);
+				sb.Append("; ");
+			}
+			return sb.ToString();
+		}
+
+		private string BuildParameters(Dictionary<Parameter, Weight> dict)
+		{
+			return
+				string.Format(
+					"ExperianScore ({0});MarketplaceSeniority ({1});MaritalStatus ({2});PositiveFeedbackCount ({3});Gender ({4});AnnualTurnover ({5});NumberOfStores ({6});EZBOBSeniority ({7});EZBOBNumberOfLoans ({8});EZBOBPrevLatePayments ({9});EZBOBPrevEarlyPayments ({10})",
+					dict[Parameter.ExperianScore].FinalWeight * 100,
+					dict[Parameter.MpSeniority].FinalWeight * 100,
+					dict[Parameter.MaritalStatus].FinalWeight * 100,
+					dict[Parameter.PositiveFeedback].FinalWeight * 100,
+					dict[Parameter.Other].FinalWeight * 100,
+					dict[Parameter.AnnualTurnover].FinalWeight * 100,
+					dict[Parameter.NumOfStores].FinalWeight * 100,
+					dict[Parameter.EzbobSeniority].FinalWeight * 100,
+					dict[Parameter.EzbobNumOfLoans].FinalWeight * 100,
+					dict[Parameter.EzbobNumOfLateRepayments].FinalWeight * 100,
+					dict[Parameter.EzbobNumOfEarlyRepayments].FinalWeight * 100);
+		}
+
 
 		private void CalcDelta(Dictionary<Parameter, Weight> dict)
 		{
 			decimal finalWeightsFixedWeightParameterSum = 0M;
-			decimal standardWeightsFixedWeightParameterSum= 0M;
-			decimal standardWeightsAdjustableWeightParameterSum= 0M;
+			decimal standardWeightsFixedWeightParameterSum = 0M;
+			decimal standardWeightsAdjustableWeightParameterSum = 0M;
 
 			foreach (var weight in dict.Values)
 			{
@@ -84,23 +129,23 @@
 			}
 
 			CalcDeltaPerParameter(dict[Parameter.MaritalStatus], finalWeightsFixedWeightParameterSum,
-			                      standardWeightsFixedWeightParameterSum, standardWeightsAdjustableWeightParameterSum);
+								  standardWeightsFixedWeightParameterSum, standardWeightsAdjustableWeightParameterSum);
 			CalcDeltaPerParameter(dict[Parameter.Other], finalWeightsFixedWeightParameterSum,
-			                      standardWeightsFixedWeightParameterSum, standardWeightsAdjustableWeightParameterSum);
+								  standardWeightsFixedWeightParameterSum, standardWeightsAdjustableWeightParameterSum);
 			CalcDeltaPerParameter(dict[Parameter.AnnualTurnover], finalWeightsFixedWeightParameterSum,
-			                      standardWeightsFixedWeightParameterSum, standardWeightsAdjustableWeightParameterSum);
+								  standardWeightsFixedWeightParameterSum, standardWeightsAdjustableWeightParameterSum);
 			CalcDeltaPerParameter(dict[Parameter.NumOfStores], finalWeightsFixedWeightParameterSum,
-			                      standardWeightsFixedWeightParameterSum, standardWeightsAdjustableWeightParameterSum);
+								  standardWeightsFixedWeightParameterSum, standardWeightsAdjustableWeightParameterSum);
 
 		}
 
-		private void CalcDeltaPerParameter(Weight weight, 
-			decimal finalWeightsFixedWeightParameterSum, 
-			decimal standardWeightsFixedWeightParameterSum, 
+		private void CalcDeltaPerParameter(Weight weight,
+			decimal finalWeightsFixedWeightParameterSum,
+			decimal standardWeightsFixedWeightParameterSum,
 			decimal standardWeightsAdjustableWeightParameterSum)
 		{
 			weight.DeltaForAdjustableWeightParameter = (weight.StandardWeightAdjustableWeightParameter / standardWeightsAdjustableWeightParameterSum) *
-			                                           (finalWeightsFixedWeightParameterSum - standardWeightsFixedWeightParameterSum);
+													   (finalWeightsFixedWeightParameterSum - standardWeightsFixedWeightParameterSum);
 
 			weight.FinalWeight = weight.StandardWeightAdjustableWeightParameter - weight.DeltaForAdjustableWeightParameter;
 			weight.MinimumScore = weight.FinalWeight * weight.MinimumGrade;
@@ -146,7 +191,7 @@
 				MaximumGrade = Constants.NumOfStoresGradeMax,
 				Grade = GetGrade(Constants.NumOfStoresRanges, numberOfStores),
 			};
-			
+
 			return numOfStoresWeight;
 		}
 
@@ -232,7 +277,7 @@
 					maritalStatusWeight.Grade = Constants.MaritalStatusGrade_Widower;
 					break;
 			}
-			
+
 			return maritalStatusWeight;
 		}
 
@@ -315,7 +360,7 @@
 			}
 			return Medal.NoMedal;
 		}
-		
+
 		private int GetGrade(IEnumerable<RangeGrage> rangeGrages, decimal value)
 		{
 			var range = GetRange(rangeGrages, value);
@@ -340,7 +385,7 @@
 
 		private void PrintDict(ScoreMedalOffer scoreMedal, Dictionary<Parameter, Weight> dict)
 		{
-			Console.WriteLine("{0} {1}%, offer: {2} £ at  {3}%", scoreMedal.Medal, scoreMedal.Score * 100, scoreMedal.MaxOffer, scoreMedal.MaxOfferPercent * 100);
+			Console.WriteLine("medal: {0} points: {4} result: {1}%, offer: {2} £ at  {3}%", scoreMedal.Medal, scoreMedal.ScoreResult * 100, scoreMedal.MaxOffer, scoreMedal.MaxOfferPercent * 100, scoreMedal.ScorePoints);
 			Console.WriteLine();
 			decimal s1 = 0M, s2 = 0M, s3 = 0M, s4 = 0M, s5 = 0M, s6 = 0M, s7 = 0M, s8 = 0M, s9 = 0M, s10 = 0M, s11 = 0M;
 			foreach (var weight in dict)
@@ -351,8 +396,8 @@
 					ToPercent(weight.Value.StandardWeightAdjustableWeightParameter),
 					ToPercent(weight.Value.DeltaForAdjustableWeightParameter),
 					ToPercent(weight.Value.FinalWeight),
-					ToPercent(weight.Value.MinimumScore/100),
-					ToPercent(weight.Value.MaximumScore/100),
+					ToPercent(weight.Value.MinimumScore / 100),
+					ToPercent(weight.Value.MaximumScore / 100),
 					weight.Value.MinimumGrade,
 					weight.Value.MaximumGrade,
 					weight.Value.Grade,
@@ -370,7 +415,7 @@
 				s11 += weight.Value.Grade;
 			}
 			Console.WriteLine("--------------------------------------------------------------------");
-			Console.WriteLine("{0}| {10}| {11}| {1}| {2}| {3}| {4}| {5}| {6}| {7}| {8}| {9}", "Sum".PadRight(25), 
+			Console.WriteLine("{0}| {10}| {11}| {1}| {2}| {3}| {4}| {5}| {6}| {7}| {8}| {9}", "Sum".PadRight(25),
 				ToPercent(s1), ToPercent(s2), ToPercent(s3), ToPercent(s4), ToPercent(s5),
 							  ToPercent(s6 / 100), ToPercent(s7 / 100), s8, s9, s11, s10.ToString().PadRight(50));
 
