@@ -168,36 +168,17 @@
 		private string ExperianAMLError;
 
 
-		//private string Model_MaritalStatus;
-		//private int Model_MaxFeedback;
-		//private int Model_MPsNumber;
-		//private int Model_EZBOBSeniority;
-		//private int Model_OnTimeLoans;
-		//private int Model_LatePayments;
-		//private int Model_EarlyPayments;
-		//private DateTime Model_FirstRepaymentDate;
-		//private string Model_ScortoInternalErrorMessage;
-
-
 		private decimal TotalSumOfOrdersForLoanOffer;
 
 
 
-		private Medal ModelMedal;
 		private Medal MedalType;
-		private decimal ModelScoreResult;
-		private decimal ModelScorePoints;
-		private string Model_AC_Parameters;
-		private string Model_AC_Descriptors;
-		private string Model_Result_Weights;
-		private string Model_Result_MAXPossiblePoints;
 
 
 
 
 
 
-		int LoanOffer_EKMStoresNum;
 		string LoanOffer_SystemDecision;
 		int LoanOffer_ManagerApprovedSum;
 		string LoanOffer_MedalType;
@@ -446,23 +427,20 @@
 
 
 			ScoreMedalOffer scoringResult = medalScoreCalculator.CalculateMedalScore(TotalSumOfOrdersForLoanOffer, MinExperianScore, (decimal)MarketplaceSeniorityDays / 365, Model_MaxFeedback, maritalStatus, App_Gender == "M" ? Gender.M : Gender.F, Model_MPsNumber, Model_FirstRepaymentDate < DateTime.UtcNow, Model_EZBOBSeniority, Model_OnTimeLoans, Model_LatePayments, Model_EarlyPayments);
-			ModelScoreResult = scoringResult.Score;
-			ModelScorePoints = scoringResult.Score;
 			ModelLoanOffer = scoringResult.MaxOffer;
-			ModelMedal = scoringResult.Medal;
 			
-			MedalType = ModelMedal;
+			MedalType = scoringResult.Medal;
 
 			// TODO: call CustomerScoringResult_Insert
-			/*DbConnection.ExecuteSpNonQuery("CustomerScoringResult_Insert",
+			DbConnection.ExecuteSpNonQuery("CustomerScoringResult_Insert",
 				DbConnection.CreateParam("pCustomerId", CustomerId),
 				DbConnection.CreateParam("pAC_Parameters", scoringResult.AcParameters),
 				DbConnection.CreateParam("AC_Descriptors", scoringResult.AcDescriptors),
-				DbConnection.CreateParam("Result_Weight", scoringResult.ResultWeights),
-				DbConnection.CreateParam("pResult_MAXPossiblePoints", scoringResult.MaxPoints),
+				DbConnection.CreateParam("Result_Weight", scoringResult.ResultWeigts),
+				DbConnection.CreateParam("pResult_MAXPossiblePoints", scoringResult.ResultMaxPoints),
 				DbConnection.CreateParam("pMedal", scoringResult.Medal),
-				DbConnection.CreateParam("pScorePoints", scoringResult.Score),
-				DbConnection.CreateParam("pScoreResult", scoringResult.Result));*/
+				DbConnection.CreateParam("pScorePoints", scoringResult.ScorePoints),
+				DbConnection.CreateParam("pScoreResult", scoringResult.ScoreResult));
 			
 			if (newCreditLineOption == NewCreditLineOption.SkipEverything ||
 			    newCreditLineOption == NewCreditLineOption.UpdateEverythingExceptMp ||
