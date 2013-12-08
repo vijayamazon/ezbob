@@ -32,11 +32,12 @@ BEGIN
 		Name AS CustomerEmail,
 		TypeOfBusiness AS CompanyType,
 		LimitedRefNum,
-		NonLimitedRefNum
+		NonLimitedRefNum,
 		FirstName, 
 		Surname,
 		Gender,
-		DateOfBirth
+		DateOfBirth,
+		ResidentialStatus AS HomeOwner
 	FROM
 		Customer
 	WHERE

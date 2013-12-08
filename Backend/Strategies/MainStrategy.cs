@@ -10,6 +10,7 @@
 	using ExperianLib.IdIdentityHub;
 	using Models;
 	using EzBobIntegration.Web_References.Consumer;
+	using ScoreCalculation;
 	using log4net;
 	using System.Collections.Generic;
 	using DbConnection;
@@ -29,6 +30,7 @@
 		private readonly StrategiesMailer mailer = new StrategiesMailer();
 		private readonly StrategyHelper strategyHelper = new StrategyHelper();
 		private readonly IdHubService idHubService = new IdHubService();
+		private readonly MedalScoreCalculator medalScoreCalculator = new MedalScoreCalculator();
 
 		// Consts
 		private const string CP_Experian_Actions_AMLMortality = "The underwriter will need to clarify that the applicant is actually alive (can be a tricky discussion!) and get copies of proof of identity";
@@ -42,7 +44,6 @@
 		private const string CP_Experian_Actions_BWAAddressError = "Underwriter to confirm the account details by asking for copy of statement";
 
 		// For auto-decisions
-		AuthenticationResults authenticationResults;
 		AccountVerificationResults accountVerificationResults;
 
 		// Inputs
@@ -85,6 +86,7 @@
 		private string App_Surname;
 		private DateTime App_DateOfBirth;
 		private string App_Gender;
+		private string App_HomeOwner;
 
 		// Validated as used
 		private string App_Line1;
@@ -104,6 +106,12 @@
 
 		DateTime ExperianBirthDate = new DateTime(1900, 1, 1); // Could be deleted?
 
+		// Could be localized
+		private decimal ExperianAMLAuthentication;
+		private string ExperianAmlResult;
+		private string ExperianAMLWarning;
+		private string ExperianAMLReject;
+
 
 		// Below this line variables should be converted to locals
 
@@ -111,7 +119,6 @@
 		// ?
 
 
-		string App_HomeOwner = string.Empty;
 		string App_MaritalStatus = string.Empty;
 		int App_TimeAtAddress = 1;
 		string App_AccountNumber = string.Empty;
@@ -163,33 +170,29 @@
 		private decimal ExperianBWANameScore;
 		private decimal ExperianBWAAddressScore;
 		private string ExperianBWAError;
-		private decimal ExperianAMLAuthentication;
-		private string ExperianAMLResult;
-		private string ExperianAMLWarning;
-		private string ExperianAMLReject;
 		private string ExperianAMLPassed;
 		private string ExperianAMLError;
 
 
-		private string Model_MaritalStatus;
-		private int Model_MaxFeedback;
-		private int Model_MPsNumber;
-		private int Model_EZBOBSeniority;
-		private int Model_OnTimeLoans;
-		private int Model_LatePayments;
-		private int Model_EarlyPayments;
-		private DateTime Model_FirstRepaymentDate;
-		private string Model_ScortoInternalErrorMessage;
+		//private string Model_MaritalStatus;
+		//private int Model_MaxFeedback;
+		//private int Model_MPsNumber;
+		//private int Model_EZBOBSeniority;
+		//private int Model_OnTimeLoans;
+		//private int Model_LatePayments;
+		//private int Model_EarlyPayments;
+		//private DateTime Model_FirstRepaymentDate;
+		//private string Model_ScortoInternalErrorMessage;
 
 
-		private double TotalSumOfOrdersForLoanOffer;
+		private decimal TotalSumOfOrdersForLoanOffer;
 
 
 
-		private string ModelMedal;
-		private string MedalType;
-		private int ModelScoreResult;
-		private int ModelScorePoints;
+		private Medal ModelMedal;
+		private Medal MedalType;
+		private decimal ModelScoreResult;
+		private decimal ModelScorePoints;
 		private string Model_AC_Parameters;
 		private string Model_AC_Descriptors;
 		private string Model_Result_Weights;
@@ -287,6 +290,19 @@
 			App_Surname = results["Surname"].ToString();
 			App_Gender = results["Gender"].ToString();
 			App_DateOfBirth = DateTime.Parse(results["DateOfBirth"].ToString());
+			App_HomeOwner = results["HomeOwner"].ToString();
+		}
+
+		private void UpdateExperianConsumer(string firstName, string surname, string postCode, string error, int score, int customerId, int directorId)
+		{
+			DbConnection.ExecuteSpNonQuery("UpdateExperianConsumer",
+			                               DbConnection.CreateParam("Name", firstName),
+			                               DbConnection.CreateParam("Surname", surname),
+			                               DbConnection.CreateParam("PostCode", postCode),
+			                               DbConnection.CreateParam("ExperianError", error),
+			                               DbConnection.CreateParam("ExperianScore", score),
+			                               DbConnection.CreateParam("CustomerId", customerId),
+			                               DbConnection.CreateParam("DirectorId", directorId));
 		}
 
 		public void Execute()
@@ -334,11 +350,11 @@
 				string ExperianConsumerError;
 				string ExperianConsumerErrorPrev = null;
 
-				GetConsumerInfo(App_Line1, App_Line2, App_Line3, App_Line4, App_Line5, App_Line6, out ExperianConsumerError);
+				GetConsumerInfo(App_FirstName, App_Surname, App_Gender, App_DateOfBirth, 0, App_Line1, App_Line2, App_Line3, App_Line4, App_Line5, App_Line6, out ExperianConsumerError);
 
 				if (!string.IsNullOrEmpty(ExperianConsumerError) && App_TimeAtAddress == 1 && !string.IsNullOrEmpty(App_Line6Prev))
 				{
-					GetConsumerInfo(App_Line1Prev, App_Line2Prev, App_Line3Prev, App_Line4Prev, App_Line5Prev, App_Line6Prev, out ExperianConsumerErrorPrev);
+					GetConsumerInfo(App_FirstName, App_Surname, App_Gender, App_DateOfBirth, 0, App_Line1Prev, App_Line2Prev, App_Line3Prev, App_Line4Prev, App_Line5Prev, App_Line6Prev, out ExperianConsumerErrorPrev);
 				}
 
 				if (ExperianBirthDate.Year == 1900 && ExperianBirthDate.Month == 1 && ExperianBirthDate.Day == 1)
@@ -348,103 +364,93 @@
 
 				MinExperianScore = ExperianConsumerScore;
 				Inintial_ExperianConsumerScore = ExperianConsumerScore;
-				//ExperianScoreConsumer = ExperianConsumerScore; // in 3 updates
-				
-				DbConnection.ExecuteSpNonQuery("UpdateExperianConsumer",
-				                               DbConnection.CreateParam("Name", App_FirstName),
-				                               DbConnection.CreateParam("Surname", App_Surname),
-				                               DbConnection.CreateParam("PostCode", App_Line6),
-				                               DbConnection.CreateParam("ExperianError", ExperianConsumerError),
-				                               DbConnection.CreateParam("ExperianScore", ExperianConsumerScore),
-				                               DbConnection.CreateParam("CustomerId", CustomerId),
-				                               DbConnection.CreateParam("DirectorId", 0));
+				//ExperianScoreConsumer = ExperianConsumerScore; // in cashrequest...
 
-
-				DbConnection.ExecuteSpNonQuery("UpdateExperianConsumer",
-											   DbConnection.CreateParam("Name", App_FirstName),
-											   DbConnection.CreateParam("Surname", App_Surname),
-											   DbConnection.CreateParam("PostCode", App_Line6Prev),
-											   DbConnection.CreateParam("ExperianError", ExperianConsumerErrorPrev),
-											   DbConnection.CreateParam("ExperianScore", ExperianConsumerScore),
-											   DbConnection.CreateParam("CustomerId", CustomerId),
-											   DbConnection.CreateParam("DirectorId", 0));
+				UpdateExperianConsumer(App_FirstName, App_Surname, App_Line6, ExperianConsumerError, ExperianConsumerScore, CustomerId, 0);
+				UpdateExperianConsumer(App_FirstName, App_Surname, App_Line6Prev, ExperianConsumerErrorPrev, ExperianConsumerScore, CustomerId, 0);
 				
 				if (CompanyType != "Entrepreneur")
 				{
-					IEnumerable<string> results = null; // TODO: get results from Get_Other_Directors_Address
+					DataTable dt = DbConnection.ExecuteSpReader("GetDirectorsAddresses", DbConnection.CreateParam("CustomerId", CustomerId));
 
-					foreach (var director in results)
+					foreach (DataRow row in dt.Rows)
 					{
-						string App_DirSurnameScalar = null;
-						string App_DirNameScalar = null;
-						App_Line6 = null;
-						App_Line5 = null;
-						App_Line4 = null;
-						App_Line3 = null;
-						App_Line2 = null;
-						App_Line1 = null;
-						int App_DirIdScalar = 0;
-						string App_DirGenderScalar = null;
-						DateTime? App_DirDateOfBirthScalar = null;
+						int App_DirId = int.Parse(row["DirId"].ToString());
+						//int addressType = int.Parse(row["AddressType"].ToString());
+						string dirLine1 = row["DirLine1"].ToString();
+						string dirLine2 = row["DirLine2"].ToString();
+						string dirLine3 = row["DirLine3"].ToString();
+						string dirLine4 = row["DirLine4"].ToString();
+						string dirLine5 = row["DirLine5"].ToString();
+						string dirLine6 = row["DirLine6"].ToString();
+						string App_DirName = row["DirName"].ToString();
+						string App_DirSurname = row["DirSurname"].ToString();
+						DateTime dirBirthdate = DateTime.Parse(row["DirDateOfBirth"].ToString());
+						string dirGender = row["DirGender"].ToString();
 
-						if (string.IsNullOrEmpty(App_DirNameScalar) || string.IsNullOrEmpty(App_DirSurnameScalar))
+
+						if (string.IsNullOrEmpty(App_DirName) || string.IsNullOrEmpty(App_DirSurname))
 						{
 							continue;
 						}
 
-						var consumerServiceForDir = new ConsumerService();
-						var dirLocation = new InputLocationDetailsMultiLineLocation();
-						dirLocation.LocationLine1 = App_Line1;
-						dirLocation.LocationLine2 = App_Line2;
-						dirLocation.LocationLine3 = App_Line3;
-						dirLocation.LocationLine4 = App_Line4;
-						dirLocation.LocationLine5 = App_Line5;
-						dirLocation.LocationLine6 = App_Line6;
-						var dirResult = consumerServiceForDir.GetConsumerInfo(App_DirNameScalar, App_DirSurnameScalar, App_DirGenderScalar,
-						                                                      App_DirDateOfBirthScalar, null, dirLocation, "PL", CustomerId,
-						                                                      App_DirIdScalar);
-
-						if (dirResult.IsError)
-						{
-							ExperianDirectorError = dirResult.Error;
-						}
-						else
-						{
-							ExperianConsumerScore = (int)dirResult.BureauScore;
-							ExperianBirthDate = dirResult.BirthDate;
-						}
+						GetConsumerInfo(App_DirName, App_DirSurname, dirGender, dirBirthdate, App_DirId, dirLine1, dirLine2, dirLine3, dirLine4, dirLine5, dirLine6, out ExperianDirectorError);
 
 						if (ExperianConsumerScore > 0 && ExperianConsumerScore < MinExperianScore)
 						{
 							MinExperianScore = ExperianConsumerScore;
 						}
 
-						// TODO: call to UpdateExperianConsumer
+						UpdateExperianConsumer(App_DirName, App_DirSurname, dirLine6, ExperianDirectorError, ExperianConsumerScore, CustomerId, App_DirId);
 					}
 				}
 
-				// TODO: call Get_Customer_Address_and_Previous_Address
-
 				AmlAndBwa(CustomerId);
 
-				// TODO:UpdateExperianBWA_AML
+				DbConnection.ExecuteSpReader("UpdateExperianBWA_AML",
+					DbConnection.CreateParam("CustomerId", CustomerId),
+					DbConnection.CreateParam("BWAResult", ExperianBwaResult),
+					DbConnection.CreateParam("AMLResult", ExperianAmlResult));
 			}
 
 			// TODO: with MP_GetScoreCardData...
-
-			TotalSumOfOrders1YTotal = strategyHelper.GetAnualTurnOverByCustomer(CustomerId);
-			TotalSumOfOrders3MTotal = strategyHelper.GetTotalSumOfOrders3M(CustomerId);
-			MarketplaceSeniorityDays = strategyHelper.MarketplaceSeniority(CustomerId);
-			TotalSumOfOrdersForLoanOffer = strategyHelper.GetTotalSumOfOrdersForLoanOffer(CustomerId);
-
-			if (Model_MaxFeedback == null)
+			DataTable scoreCardDataTable = DbConnection.ExecuteSpReader("GetDirectorsAddresses", DbConnection.CreateParam("CustomerId", CustomerId));
+			DataRow scoreCardResults = scoreCardDataTable.Rows[0];
+			var maritalStatus = (MaritalStatus) int.Parse(scoreCardResults["MaritalStatus"].ToString());
+			string maxFeedbackRaw = scoreCardResults["MaxFeedback"].ToString();
+			int Model_MaxFeedback;
+			
+			if (string.IsNullOrEmpty(maxFeedbackRaw))
 			{
 				log.InfoFormat("No feedback information exists. Will use 20000.");
 				Model_MaxFeedback = 20000; // average value will not influence scorecard calculations
 			}
+			else
+			{
+				Model_MaxFeedback = int.Parse(maxFeedbackRaw);
+			}
+			int Model_MPsNumber = int.Parse(scoreCardResults["MPsNumber"].ToString());
+			int Model_EZBOBSeniority = int.Parse(scoreCardResults["EZBOBSeniority"].ToString());
+			int Model_OnTimeLoans = int.Parse(scoreCardResults["OnTimeLoans"].ToString());
+			int Model_LatePayments = int.Parse(scoreCardResults["LatePayments"].ToString());
+			int Model_EarlyPayments = int.Parse(scoreCardResults["EarlyPayments"].ToString());
+			DateTime Model_FirstRepaymentDate = DateTime.Parse(scoreCardResults["FirstRepaymentDate"].ToString());
 
-			ScoringStrategyStub();
 
+
+
+			TotalSumOfOrders1YTotal = strategyHelper.GetAnualTurnOverByCustomer(CustomerId);
+			TotalSumOfOrders3MTotal = strategyHelper.GetTotalSumOfOrders3M(CustomerId);
+			MarketplaceSeniorityDays = strategyHelper.MarketplaceSeniority(CustomerId);
+			TotalSumOfOrdersForLoanOffer = (decimal)strategyHelper.GetTotalSumOfOrdersForLoanOffer(CustomerId);
+
+
+			ScoreMedalOffer scoringResult = medalScoreCalculator.CalculateMedalScore(TotalSumOfOrdersForLoanOffer, MinExperianScore, (decimal)MarketplaceSeniorityDays / 365, Model_MaxFeedback, maritalStatus, App_Gender == "M" ? Gender.M : Gender.F, Model_MPsNumber, Model_FirstRepaymentDate < DateTime.UtcNow, Model_EZBOBSeniority, Model_OnTimeLoans, Model_LatePayments, Model_EarlyPayments);
+			ModelScoreResult = scoringResult.Score;
+			ModelScorePoints = scoringResult.Score;
+			ModelLoanOffer = scoringResult.MaxOffer;
+			ModelMedal = scoringResult.Medal;
+			
 			MedalType = ModelMedal;
 
 			// TODO: call CustomerScoringResult_Insert
@@ -547,7 +553,7 @@
 							{"FirstName", App_FirstName},
 							{"Surname", App_Surname},
 							{"MP_Counter", AllMPsNum.ToString(CultureInfo.InvariantCulture)},
-							{"MedalType", MedalType},
+							{"MedalType", MedalType.ToString()},
 							{"SystemDecision", SystemDecision},
 							{"ApprovalAmount", LoanOffer_ReApprovalSum.ToString(CultureInfo.InvariantCulture)},
 							{"RepaymentPeriod", LoanOffer_RepaymentPeriod.ToString(CultureInfo.InvariantCulture)},
@@ -603,7 +609,7 @@
 							{"FirstName", App_FirstName},
 							{"Surname", App_Surname},
 							{"MP_Counter", AllMPsNum.ToString(CultureInfo.InvariantCulture)},
-							{"MedalType", MedalType},
+							{"MedalType", MedalType.ToString()},
 							{"SystemDecision", SystemDecision},
 							{"ApprovalAmount", LoanOffer_ReApprovalSum.ToString(CultureInfo.InvariantCulture)},
 							{"RepaymentPeriod", LoanOffer_RepaymentPeriod.ToString(CultureInfo.InvariantCulture)},
@@ -668,7 +674,7 @@
 							{"FirstName", App_FirstName},
 							{"Surname", App_Surname},
 							{"MP_Counter", AllMPsNum.ToString(CultureInfo.InvariantCulture)},
-							{"MedalType", MedalType},
+							{"MedalType", MedalType.ToString()},
 							{"SystemDecision", SystemDecision}
 						};
 
@@ -677,7 +683,7 @@
 			}
 		}
 
-		private void GetConsumerInfo(string line1, string line2, string line3, string line4, string line5, string line6, out string error)
+		private void GetConsumerInfo(string firstName, string surname, string gender, DateTime birthDate, int directorId, string line1, string line2, string line3, string line4, string line5, string line6, out string error)
 		{
 			var consumerService = new ConsumerService();
 			var location = new InputLocationDetailsMultiLineLocation
@@ -690,7 +696,7 @@
 				LocationLine6 = line6
 			};
 
-			ConsumerServiceResult result = consumerService.GetConsumerInfo(App_FirstName, App_Surname, App_Gender, App_DateOfBirth, null, location, "PL", CustomerId, 0);
+			ConsumerServiceResult result = consumerService.GetConsumerInfo(firstName, surname, gender, birthDate, null, location, "PL", CustomerId, directorId);
 
 			if (result.IsError)
 			{
@@ -793,7 +799,7 @@
 							{"FirstName", App_FirstName},
 							{"Surname", App_Surname},
 							{"MP_Counter", AllMPsNum.ToString(CultureInfo.InvariantCulture)},
-							{"MedalType", MedalType},
+							{"MedalType", MedalType.ToString()},
 							{"SystemDecision", SystemDecision},
 							{"ExperianConsumerScore", Inintial_ExperianConsumerScore.ToString(CultureInfo.InvariantCulture)},
 							{"CVExperianConsumerScore", LowCreditScore.ToString(CultureInfo.InvariantCulture)},
@@ -853,25 +859,9 @@
 			};
 		}
 
-		private void ScoringStrategyStub()
-		{
-			// implemented elsewhere by Stas
-			// Fill these:
-			ModelScoreResult = 1;
-			ModelScorePoints = 1;
-			ModelLoanOffer = 1;
-			ModelMedal = "";
-
-
-
-			Model_AC_Parameters = "";
-			Model_AC_Descriptors = "";
-			Model_Result_Weights = "";
-			Model_Result_MAXPossiblePoints = "";
-		}
-
 		private void AmlAndBwa(int CustomerId)
 		{
+			AuthenticationResults authenticationResults;
 			if (UseCustomIdHubAddress != 0)
 			{
 				if (UseCustomIdHubAddress != 2)
@@ -930,11 +920,11 @@
 
 			if (ExperianAMLError != "")
 			{
-				ExperianAMLResult = "Warning";
+				ExperianAmlResult = "Warning";
 			}
 			else
 			{
-				if (ExperianAMLAuthentication < 40 && ExperianAMLResult == "Rejected")
+				if (ExperianAMLAuthentication < 40 && ExperianAmlResult == "Rejected")
 				{
 					ExperianAMLWarning = ExperianAMLWarning + "#1,Authentication < 40 (" +
 													ExperianAMLAuthentication + ")||" +
@@ -946,12 +936,12 @@
 												   ExperianAMLAuthentication + ");";
 				}
 
-				if (ExperianAMLAuthentication < 40 && ExperianAMLResult != "Rejected")
+				if (ExperianAMLAuthentication < 40 && ExperianAmlResult != "Rejected")
 				{
 					ExperianAMLWarning = ExperianAMLWarning + "#1,Authentication < 40 (" +
 													ExperianAMLAuthentication + ")||" +
 													CP_Experian_Actions_AMLAuthentication + ";";
-					ExperianAMLResult = "Warning";
+					ExperianAmlResult = "Warning";
 				}
 				else
 				{
@@ -1116,18 +1106,18 @@
 			if (!results.HasError)
 			{
 				ExperianAMLAuthentication = results.AuthenticationIndexType;
-				ExperianAMLResult = "Passed";
+				ExperianAmlResult = "Passed";
 				foreach (var returnedHrp in results.ReturnedHRP)
 				{
 					if (returnedHrp.HighRiskPolRuleID == "U001")
 					{
 						ExperianAMLWarning += "#2, Mortality||" + CP_Experian_Actions_AMLMortality + ";";
-						ExperianAMLResult = "Warning";
+						ExperianAmlResult = "Warning";
 					}
 					else if (returnedHrp.HighRiskPolRuleID == "U004")
 					{
 						ExperianAMLWarning += "#3, Accommodation address||" + CP_Experian_Actions_AMLAccommodationAddress + ";";
-						ExperianAMLResult = "Warning";
+						ExperianAmlResult = "Warning";
 					}
 					else if (returnedHrp.HighRiskPolRuleID == "U007")
 					{
@@ -1136,28 +1126,28 @@
 					else if (returnedHrp.HighRiskPolRuleID == "U013")
 					{
 						ExperianAMLWarning += "#5, Redirection||" + CP_Experian_Actions_AMLRedirection + ";";
-						ExperianAMLResult = "Warning";
+						ExperianAmlResult = "Warning";
 					}
 					else if (returnedHrp.HighRiskPolRuleID == "U015" || returnedHrp.HighRiskPolRuleID == "U131" ||
 							 returnedHrp.HighRiskPolRuleID == "U133" || returnedHrp.HighRiskPolRuleID == "U135")
 					{
 						ExperianAMLReject += "#6, Sanctions;";
-						ExperianAMLResult = "Warning";
+						ExperianAmlResult = "Warning";
 					}
 					else if (returnedHrp.HighRiskPolRuleID == "U018")
 					{
 						ExperianAMLWarning += "#7, Inconsistencies||" + CP_Experian_Actions_AMLInconsistencies + ";";
-						ExperianAMLResult = "Warning";
+						ExperianAmlResult = "Warning";
 					}
 					else if (returnedHrp.HighRiskPolRuleID == "U0132" || returnedHrp.HighRiskPolRuleID == "U0134")
 					{
 						ExperianAMLWarning += "#8, PEP||" + CP_Experian_Actions_AMLPEP + ";";
-						ExperianAMLResult = "Warning";
+						ExperianAmlResult = "Warning";
 					}
 					else if (returnedHrp.HighRiskPolRuleID == "U007")
 					{
 						ExperianAMLReject += "#4, Developed Identity;";
-						ExperianAMLResult = "Rejected";
+						ExperianAmlResult = "Rejected";
 					}
 					else if (returnedHrp.HighRiskPolRuleID != "U001")
 					{
