@@ -24,13 +24,11 @@
 
 	public class MainStrategy
 	{
+		// Helpers
 		private static readonly ILog log = LogManager.GetLogger(typeof(MainStrategy));
 		private readonly StrategiesMailer mailer = new StrategiesMailer();
 		private readonly StrategyHelper strategyHelper = new StrategyHelper();
-		
-
-
-
+		private readonly IdHubService idHubService = new IdHubService();
 
 		// Consts
 		private const string CP_Experian_Actions_AMLMortality = "The underwriter will need to clarify that the applicant is actually alive (can be a tricky discussion!) and get copies of proof of identity";
@@ -42,107 +40,121 @@
 		private const string CP_Experian_Actions_BWANameError = "Underwriter to confirm the account details by asking for copy of statement";
 		private const string CP_Experian_Actions_BWAAccountStatus = "Underwriter to confirm the account details by asking for copy of statement";
 		private const string CP_Experian_Actions_BWAAddressError = "Underwriter to confirm the account details by asking for copy of statement";
-		private const string FAQPage = "https://www.ezbob.com/Customer/HowItWorks#Faq";
+
+		// For auto-decisions
+		AuthenticationResults authenticationResults;
+		AccountVerificationResults accountVerificationResults;
+
+		// Inputs
+		private int CustomerId;
+		private NewCreditLineOption newCreditLineOption;
+		private bool Underwriter_Check;
+		private int avoidAutomaticDescison;
+		private int UseCustomIdHubAddress;
+		private string idhubHouseNumber;
+		private string idhubHouseName;
+		private string idhubStreet;
+		private string idhubDistrict;
+		private string idhubTown;
+		private string idhubCounty;
+		private string idhubPostCode;
+		private string idhubBranchCode;
+		private string idhubAccountNumber;
+
+		// Configs
+		private int Reject_Defaults_CreditScore;
+		private int Reject_Defaults_AccountsNum;
+		private int Reject_Minimal_Seniority;
+		private string BWABusinessCheck;
+		private bool EnableAutomaticReRejection;
+		private bool EnableAutomaticReApproval;
+		private bool EnableAutomaticApproval;
+		private bool EnableAutomaticRejection;
+		private int MaxCapHomeOwner;
+		private int MaxCapNotHomeOwner;
+
+		// Loaded from DB per customer
+		private bool CustomerStatusIsEnabled;
+		private bool CustomerStatusIsWarning;
+		private bool IsOffline;
+		private string App_email;
+		private string CompanyType;
+		private string App_LimitedRefNum;
+		private string App_NonLimitedRefNum;
+		private string App_FirstName;
+		private string App_Surname;
+		private DateTime App_DateOfBirth;
+		private string App_Gender;
+
+		// Validated as used
+		private string App_Line1;
+		private string App_Line2;
+		private string App_Line3;
+		private string App_Line4;
+		private string App_Line5;
+		private string App_Line6;
+		private string App_Line1Prev;
+		private string App_Line2Prev;
+		private string App_Line3Prev;
+		private string App_Line4Prev;
+		private string App_Line5Prev;
+		private string App_Line6Prev;
+		private int MinExperianScore;
+		private int ExperianConsumerScore;
+
+		DateTime ExperianBirthDate = new DateTime(1900, 1, 1); // Could be deleted?
 
 
-		private int AutoApproveAmount;
-		int Reject_Defaults_CreditScore = 0;//get from config = int.Parse(results["Reject_Defaults_CreditScore"].ToString());
-		int Reject_Defaults_AccountsNum = 0;// = int.Parse(results["Reject_Defaults_AccountsNum"].ToString());
-		int Reject_Minimal_Seniority = 0;// = int.Parse(results["Reject_Minimal_Seniority"].ToString());
-		int LowCreditScore = 0;//
+		// Below this line variables should be converted to locals
 
 
+		// ?
 
 
-		// These parameter are from the other flow:
-		string idhubHouseNumber = null;
-		string idhubHouseName = null;
-		string idhubStreet = null;
-		string idhubDistrict = null;
-		string idhubTown = null;
-		string idhubCounty = null;
-		string idhubPostCode = null;
-		string idhubBranchCode = null;
-		string idhubAccountNumber = null;
-
-
-		private bool isFirstLoan;// fill it
-
-
-		// TODO: Read from ConfigurationVariables (ConfigurationVariables_MainStrat)
-		string BWABusinessCheck = string.Empty;
-		int MaxCapHomeOwner = 1;
-		int MaxCapNotHomeOwner = 1;
-
-
-
-
-
-		string ExperianBwaResult = null;
-		string ExperianBWAWarning = null;
-		string ExperianBWAPassed = null;
-
-
-		// TODO: get personal info (GetPersonalInfo)
-		string App_email = string.Empty;
-		string App_FirstName = string.Empty;
-		string App_Surname = string.Empty;
-		DateTime App_DateOfBirth = DateTime.Now;
 		string App_HomeOwner = string.Empty;
 		string App_MaritalStatus = string.Empty;
 		int App_TimeAtAddress = 1;
-		string App_Gender = string.Empty;
-		string CompanyType = string.Empty;
 		string App_AccountNumber = string.Empty;
 		string App_SortCode = string.Empty;
-		string App_LimitedRefNum = string.Empty;
-		string App_NonLimitedRefNum = string.Empty;
 		decimal App_OverallTurnOver = 1;
 		decimal App_WebSiteTurnOver = 1;
 		DateTime App_RegistrationDate = DateTime.Now;
 		string App_RefNumber = string.Empty;
 		string App_BankAccountType = string.Empty;
 		int Prev_ExperianConsumerScore = 1;
-		bool CustomerStatusIsEnabled = false;
-		bool CustomerStatusIsWarning = false;
-		bool IsOffline = false;
 		string ScortoInternalErrorMessage = string.Empty;
+		private bool isFirstLoan;
+		public decimal PayPal_TotalSumOfOrders3M { get; private set; }
+		public decimal PayPal_TotalSumOfOrders1Y { get; private set; }
+		public int PayPal_NumberOfStores { get; private set; }
 
 
+		// ???
 
-		string ExperianLimitedError = null;
-		string ExperianNonLimitedError = null;
-		decimal ExperianBureauScoreLimited = 0;
-		decimal ExperianExistingBusinessLoans = 0;
-		decimal ExperianBureauScoreNonLimited = 0;
-		bool ExperianCompanyNotFoundOnBureau = false;
-		string ExperianConsumerError = string.Empty;
-		string ExperianConsumerErrorPrev = string.Empty;
-		string ExperianDirectorError = string.Empty;
-		int ExperianConsumerScore = 0;
-		double ExperianScoreConsumer = 0;
-		DateTime ExperianBirthDate = DateTime.Now;
 		
 
-		IdHubService idHubService = new IdHubService();
-		AuthenticationResults authenticationResults = null;
-		AccountVerificationResults accountVerificationResults = null;
-		int UseCustomIdHubAddress = 2; // TODO: should be input parameter from one flow
+		int LowCreditScore = 0;
 
 
 
-		string App_Line1 = null;
-		string App_Line2 = null;
-		string App_Line3 = null;
-		string App_Line4 = null;
-		string App_Line5 = null;
-		string App_Line6 = null;
-		string App_Line1Prev = null;
-		string App_Line2Prev = null;
-		string App_Line3Prev = null;
-		string App_Line4Prev = null;
-		string App_Line5Prev = null;
-		string App_Line6Prev = null;
+		// fill it
+		string ExperianBwaResult = null;
+		string ExperianBWAWarning = null;
+		string ExperianBWAPassed = null;
+
+
+		
+
+
+
+		string ExperianNonLimitedError = null;
+		bool ExperianCompanyNotFoundOnBureau = false;
+		string ExperianDirectorError = string.Empty;
+		
+
+
+
+
 
 		int NumOfDefaultAccounts = 0;
 
@@ -211,27 +223,17 @@
 		private int LoanOffer_ReApprovalSum;
 
 
-		private bool Underwriter_Check;
-
-		private NewCreditLineOption newCreditLineOption;
-		private int avoidAutomaticDescison;
 
 
 		/* AutoDecisionMaker related properties */
-		public bool EnableAutomaticReRejection { get; private set; }
-		public int CustomerId { get; private set; }
 		public int LoanOffer_ReApprovalFullAmount { get; private set; }
 		public int LoanOffer_ReApprovalRemainingAmount { get; private set; }
 		public int LoanOffer_ReApprovalFullAmountOld { get; private set; }
 		public int LoanOffer_ReApprovalRemainingAmountOld { get; private set; }
-		public bool EnableAutomaticReApproval { get; private set; }
-		public int MinExperianScore { get; private set; }
 		public int OfferedCreditLine { get; private set; }
-		public bool EnableAutomaticApproval { get; private set; }
 		public double Inintial_ExperianConsumerScore { get; private set; }
 		public double MarketplaceSeniorityDays { get; private set; }
 		public double TotalSumOfOrders3MTotal { get; private set; }
-		public bool EnableAutomaticRejection { get; private set; }
 
 		// Being set inside the decision maker, should extract to DecisionResult class
 		public bool IsReRejected { get; set; }
@@ -249,20 +251,50 @@
 		public double TotalSumOfOrders1YTotal { get; private set; }
 		public int LowTotalAnnualTurnover { get; private set; }
 		public int LowTotalThreeMonthTurnover { get; private set; }
-		public decimal PayPal_TotalSumOfOrders3M { get; private set; }
-		public decimal PayPal_TotalSumOfOrders1Y { get; private set; }
-		public int PayPal_NumberOfStores { get; private set; }
 		
+		private void ReadConfigurations()
+		{
+			DataTable dt = DbConnection.ExecuteSpReader("MainStrategyGetConfigs");
+			DataRow results = dt.Rows[0];
+			
+			Reject_Defaults_CreditScore = int.Parse(results["Reject_Defaults_CreditScore"].ToString());
+			Reject_Defaults_AccountsNum = int.Parse(results["Reject_Defaults_AccountsNum"].ToString());
+			Reject_Minimal_Seniority = int.Parse(results["Reject_Minimal_Seniority"].ToString());
+			BWABusinessCheck = results["BWABusinessCheck"].ToString();
+			EnableAutomaticApproval = bool.Parse(results["EnableAutomaticApproval"].ToString());
+			EnableAutomaticReApproval = bool.Parse(results["EnableAutomaticReApproval"].ToString());
+			EnableAutomaticRejection = bool.Parse(results["EnableAutomaticRejection"].ToString());
+			EnableAutomaticReRejection = bool.Parse(results["EnableAutomaticReRejection"].ToString());
+			MaxCapHomeOwner = int.Parse(results["MaxCapHomeOwner"].ToString());
+			MaxCapNotHomeOwner = int.Parse(results["MaxCapNotHomeOwner"].ToString());
+
+
+		}
+
+		private void GerPersonalInfo()
+		{
+			DataTable dt = DbConnection.ExecuteSpReader("MainStrategyGetPersonalInfo");
+			DataRow results = dt.Rows[0];
+
+			CustomerStatusIsEnabled = bool.Parse(results["CustomerStatusIsEnabled"].ToString());
+			CustomerStatusIsWarning = bool.Parse(results["CustomerStatusIsWarning"].ToString());
+			IsOffline = bool.Parse(results["IsOffline"].ToString());
+			App_email = results["CustomerEmail"].ToString();
+			CompanyType = results["CompanyType"].ToString();
+			App_LimitedRefNum = results["LimitedRefNum"].ToString();
+			App_NonLimitedRefNum = results["NonLimitedRefNum"].ToString();
+			App_FirstName = results["FirstName"].ToString();
+			App_Surname = results["Surname"].ToString();
+			App_Gender = results["Gender"].ToString();
+			App_DateOfBirth = DateTime.Parse(results["DateOfBirth"].ToString());
+		}
+
 		public void Execute()
 		{
+			ReadConfigurations();
+			GerPersonalInfo();
 			// TODO: remove column Customer.LastStartedMainStrategy
 			strategyHelper.GetZooplaData(CustomerId);
-
-			// Read configurations!
-			DataTable dt = DbConnection.ExecuteSpReader("MainStrategyGetConfigs");
-
-			// Read customer data
-			//...
 
 			if (!CustomerStatusIsEnabled || CustomerStatusIsWarning)
 			{
@@ -283,15 +315,11 @@
 			{
 				if (!WaitForMarketplacesToFinishUpdates())
 				{
-					string customerEmail = null;
-
-					// TODO: get customerEmail from CustomerId
-
 					var variables = new Dictionary<string, string>
 						{
-							{"UserEmail", customerEmail},
+							{"UserEmail", App_email},
 							{"CustomerID", CustomerId.ToString(CultureInfo.InvariantCulture)},
-							{"ApplicationID", customerEmail}
+							{"ApplicationID", App_email}
 						};
 					mailer.SendToEzbob(variables, "Mandrill - No Information about shops", "No information about customer marketplace");
 					return;
@@ -300,104 +328,17 @@
 
 			if (newCreditLineOption != NewCreditLineOption.SkipEverything)
 			{
-				if (CompanyType == "Limited" || CompanyType == "LLP")
-				{
-					if (string.IsNullOrEmpty(App_LimitedRefNum))
-					{
-						ExperianLimitedError = "RefNumber is empty";
-					}
-					else
-					{
-						var service = new EBusinessService();
-						LimitedResults limitedData = service.GetLimitedBusinessData(App_LimitedRefNum, CustomerId);
+				UpdateCompanyScore();
+				GetAddresses();
 
-						if (!limitedData.IsError)
-						{
-							ExperianBureauScoreLimited = limitedData.BureauScore;
-							ExperianExistingBusinessLoans = limitedData.ExistingBusinessLoans;
-						}
-						else
-						{
-							ExperianLimitedError = limitedData.Error;
-						}
-					}
+				string ExperianConsumerError;
+				string ExperianConsumerErrorPrev = null;
 
-					// TODO: call UpdateExperianBusiness (App_LimitedRefNum,ExperianLimitedError,ExperianBureauScoreLimited)
-				}
-				else if (CompanyType == "PShip3P" || CompanyType == "PShip" || CompanyType == "SoleTrader")
-				{
-					if (string.IsNullOrEmpty(App_NonLimitedRefNum))
-					{
-						ExperianNonLimitedError = "RefNumber is empty";
-					}
-					else
-					{
-						var service = new EBusinessService();
-						var nonlimitedData = service.GetNotLimitedBusinessData(App_NonLimitedRefNum, CustomerId);
-						if (!nonlimitedData.IsError)
-						{
-							ExperianBureauScoreNonLimited = nonlimitedData.BureauScore;
-							ExperianCompanyNotFoundOnBureau = nonlimitedData.CompanyNotFoundOnBureau;
-						}
-						else
-						{
-							ExperianNonLimitedError = nonlimitedData.Error;
-						}
-					}
-
-					// TODO: call UpdateExperianBusiness (App_NonLimitedRefNum,ExperianNonLimitedError,ExperianBureauScoreNonLimited)
-				}
-
-				// TODO: call Get_Customer_Address_and_Previous_Address
-
-
-
-
-				var consumerService = new ConsumerService();
-				var location = new InputLocationDetailsMultiLineLocation();
-				location.LocationLine1 = App_Line1;
-				location.LocationLine2 = App_Line2;
-				location.LocationLine3 = App_Line3;
-				location.LocationLine4 = App_Line4;
-				location.LocationLine5 = App_Line5;
-				location.LocationLine6 = App_Line6;
-				var result = consumerService.GetConsumerInfo(App_FirstName, App_Surname, App_Gender, App_DateOfBirth, null, location,
-				                                             "PL", CustomerId, 0); // TODO: verify the null in 5th parameter is ok
-
-				if (result.IsError)
-				{
-					ExperianConsumerError = result.Error;
-				}
-				else
-				{
-					ExperianConsumerScore = (int)result.BureauScore;
-					ExperianBirthDate = result.BirthDate;
-				}
+				GetConsumerInfo(App_Line1, App_Line2, App_Line3, App_Line4, App_Line5, App_Line6, out ExperianConsumerError);
 
 				if (!string.IsNullOrEmpty(ExperianConsumerError) && App_TimeAtAddress == 1 && !string.IsNullOrEmpty(App_Line6Prev))
 				{
-					var consumerServiceForPrev = new ConsumerService();
-					var prevLocation = new InputLocationDetailsMultiLineLocation();
-					prevLocation.LocationLine1 = App_Line1Prev;
-					prevLocation.LocationLine2 = App_Line2Prev;
-					prevLocation.LocationLine3 = App_Line3Prev;
-					prevLocation.LocationLine4 = App_Line4Prev;
-					prevLocation.LocationLine5 = App_Line5Prev;
-					prevLocation.LocationLine6 = App_Line6Prev;
-
-					result = consumerServiceForPrev.GetConsumerInfo(App_FirstName, App_Surname, App_Gender, App_DateOfBirth, null,
-					                                                location, "PL", CustomerId, 0);
-						// TODO: verify the null in 5th parameter is ok
-
-					if (result.IsError)
-					{
-						ExperianConsumerErrorPrev = result.Error;
-					}
-					else
-					{
-						ExperianConsumerScore = (int)result.BureauScore;
-						ExperianBirthDate = result.BirthDate;
-					}
+					GetConsumerInfo(App_Line1Prev, App_Line2Prev, App_Line3Prev, App_Line4Prev, App_Line5Prev, App_Line6Prev, out ExperianConsumerErrorPrev);
 				}
 
 				if (ExperianBirthDate.Year == 1900 && ExperianBirthDate.Month == 1 && ExperianBirthDate.Day == 1)
@@ -407,10 +348,27 @@
 
 				MinExperianScore = ExperianConsumerScore;
 				Inintial_ExperianConsumerScore = ExperianConsumerScore;
-				ExperianScoreConsumer = ExperianConsumerScore;
+				//ExperianScoreConsumer = ExperianConsumerScore; // in 3 updates
+				
+				DbConnection.ExecuteSpNonQuery("UpdateExperianConsumer",
+				                               DbConnection.CreateParam("Name", App_FirstName),
+				                               DbConnection.CreateParam("Surname", App_Surname),
+				                               DbConnection.CreateParam("PostCode", App_Line6),
+				                               DbConnection.CreateParam("ExperianError", ExperianConsumerError),
+				                               DbConnection.CreateParam("ExperianScore", ExperianConsumerScore),
+				                               DbConnection.CreateParam("CustomerId", CustomerId),
+				                               DbConnection.CreateParam("DirectorId", 0));
 
-				// TODO: 2 calls to UpdateExperianConsumer (current and prev)
 
+				DbConnection.ExecuteSpNonQuery("UpdateExperianConsumer",
+											   DbConnection.CreateParam("Name", App_FirstName),
+											   DbConnection.CreateParam("Surname", App_Surname),
+											   DbConnection.CreateParam("PostCode", App_Line6Prev),
+											   DbConnection.CreateParam("ExperianError", ExperianConsumerErrorPrev),
+											   DbConnection.CreateParam("ExperianScore", ExperianConsumerScore),
+											   DbConnection.CreateParam("CustomerId", CustomerId),
+											   DbConnection.CreateParam("DirectorId", 0));
+				
 				if (CompanyType != "Entrepreneur")
 				{
 					IEnumerable<string> results = null; // TODO: get results from Get_Other_Directors_Address
@@ -443,9 +401,8 @@
 						dirLocation.LocationLine5 = App_Line5;
 						dirLocation.LocationLine6 = App_Line6;
 						var dirResult = consumerServiceForDir.GetConsumerInfo(App_DirNameScalar, App_DirSurnameScalar, App_DirGenderScalar,
-						                                                      App_DirDateOfBirthScalar, null, location, "PL", CustomerId,
+						                                                      App_DirDateOfBirthScalar, null, dirLocation, "PL", CustomerId,
 						                                                      App_DirIdScalar);
-							// TODO: verify the null in 5th parameter is ok
 
 						if (dirResult.IsError)
 						{
@@ -527,26 +484,24 @@
 
 			OfferedCreditLine = ModelLoanOffer;
 
-			int MaxCapHomeOwnerNum = 0;
-			int MaxCapNotHomeOwnerNum = 0;
-			if (App_HomeOwner == "Home owner" && MaxCapHomeOwnerNum < LoanOffer_ReApprovalSum)
+			if (App_HomeOwner == "Home owner" && MaxCapHomeOwner < LoanOffer_ReApprovalSum)
 			{
-				LoanOffer_ReApprovalSum = MaxCapHomeOwnerNum;
+				LoanOffer_ReApprovalSum = MaxCapHomeOwner;
 			}
 
-			if (App_HomeOwner != "Home owner" && MaxCapNotHomeOwnerNum < LoanOffer_ReApprovalSum)
+			if (App_HomeOwner != "Home owner" && MaxCapNotHomeOwner < LoanOffer_ReApprovalSum)
 			{
-				LoanOffer_ReApprovalSum = MaxCapNotHomeOwnerNum;
+				LoanOffer_ReApprovalSum = MaxCapNotHomeOwner;
 			}
 
-			if (App_HomeOwner == "Home owner" && MaxCapHomeOwnerNum < OfferedCreditLine)
+			if (App_HomeOwner == "Home owner" && MaxCapHomeOwner < OfferedCreditLine)
 			{
-				OfferedCreditLine = MaxCapHomeOwnerNum;
+				OfferedCreditLine = MaxCapHomeOwner;
 			}
 
-			if (App_HomeOwner != "Home owner" && MaxCapNotHomeOwnerNum < OfferedCreditLine)
+			if (App_HomeOwner != "Home owner" && MaxCapNotHomeOwner < OfferedCreditLine)
 			{
-				OfferedCreditLine = MaxCapNotHomeOwnerNum;
+				OfferedCreditLine = MaxCapNotHomeOwner;
 			}
 
 
@@ -565,7 +520,6 @@
 			App_ValidFor = autoDecisionResponse.App_ValidFor;
 			LoanOffer_EmailSendingBanned_new = autoDecisionResponse.LoanOffer_EmailSendingBanned_new;
 			IsAutoApproval = autoDecisionResponse.IsAutoApproval;
-			AutoApproveAmount = autoDecisionResponse.AutoApproveAmount;
 
 			if (Underwriter_Check)
 			{
@@ -610,11 +564,11 @@
 						var variables3 = new Dictionary<string, string>
 							{
 								{"FirstName", App_FirstName},
-								{"LoanAmount", AutoApproveAmount.ToString(CultureInfo.InvariantCulture)}
+								{"LoanAmount", autoDecisionResponse.AutoApproveAmount.ToString(CultureInfo.InvariantCulture)}
 							};
 
 						mailer.SendToCustomerAndEzbob(variables3, App_email, "Mandrill - Approval (1st time)",
-						                              "Congratulations " + App_FirstName + ", £" + AutoApproveAmount +
+													  "Congratulations " + App_FirstName + ", £" + autoDecisionResponse.AutoApproveAmount +
 						                              " is available to fund your business today");
 
 						strategyHelper.AddApproveIntoDecisionHistory(CustomerId, "Auto Approval");
@@ -625,10 +579,10 @@
 						var variables4 = new Dictionary<string, string>
 						{
 							{"FirstName", App_FirstName},
-							{"LoanAmount", AutoApproveAmount.ToString(CultureInfo.InvariantCulture)}
+							{"LoanAmount", autoDecisionResponse.AutoApproveAmount.ToString(CultureInfo.InvariantCulture)}
 						};
 
-						mailer.SendToCustomerAndEzbob(variables4, App_email, "Mandrill - Approval (not 1st time)", "Congratulations " + App_FirstName + ", £" + AutoApproveAmount +
+						mailer.SendToCustomerAndEzbob(variables4, App_email, "Mandrill - Approval (not 1st time)", "Congratulations " + App_FirstName + ", £" + autoDecisionResponse.AutoApproveAmount +
 								   " is available to fund your business today");
 
 						strategyHelper.AddApproveIntoDecisionHistory(CustomerId, "AutoApproval");
@@ -720,6 +674,112 @@
 
 				mailer.SendToEzbob(variables, "Mandrill - User is waiting for decision", "User is now waiting for decision");
 				DbConnection.ExecuteSpNonQuery("Update_Main_Strat_Finish_Date", DbConnection.CreateParam("UserId", CustomerId));
+			}
+		}
+
+		private void GetConsumerInfo(string line1, string line2, string line3, string line4, string line5, string line6, out string error)
+		{
+			var consumerService = new ConsumerService();
+			var location = new InputLocationDetailsMultiLineLocation
+			{
+				LocationLine1 = line1,
+				LocationLine2 = line2,
+				LocationLine3 = line3,
+				LocationLine4 = line4,
+				LocationLine5 = line5,
+				LocationLine6 = line6
+			};
+
+			ConsumerServiceResult result = consumerService.GetConsumerInfo(App_FirstName, App_Surname, App_Gender, App_DateOfBirth, null, location, "PL", CustomerId, 0);
+
+			if (result.IsError)
+			{
+				error = result.Error;
+			}
+			else
+			{
+				ExperianConsumerScore = (int) result.BureauScore;
+				ExperianBirthDate = result.BirthDate;
+				error = null;
+			}
+		}
+
+		private void GetAddresses()
+		{
+			DataTable dt = DbConnection.ExecuteSpReader("GetCustomerAddresses");
+			DataRow addressesResults = dt.Rows[0];
+			App_Line1 = addressesResults["Line1"].ToString();
+			App_Line2 = addressesResults["Line2"].ToString();
+			App_Line3 = addressesResults["Line3"].ToString();
+			App_Line4 = addressesResults["Line4"].ToString();
+			App_Line5 = addressesResults["Line5"].ToString();
+			App_Line6 = addressesResults["Line6"].ToString();
+			App_Line1Prev = addressesResults["Line1Prev"].ToString();
+			App_Line2Prev = addressesResults["Line2Prev"].ToString();
+			App_Line3Prev = addressesResults["Line3Prev"].ToString();
+			App_Line4Prev = addressesResults["Line4Prev"].ToString();
+			App_Line5Prev = addressesResults["Line5Prev"].ToString();
+			App_Line6Prev = addressesResults["Line6Prev"].ToString();
+		}
+
+		private void UpdateCompanyScore()
+		{
+			if (CompanyType == "Limited" || CompanyType == "LLP")
+			{
+				string ExperianLimitedError = null;
+				decimal ExperianBureauScoreLimited = 0;
+				if (string.IsNullOrEmpty(App_LimitedRefNum))
+				{
+					ExperianLimitedError = "RefNumber is empty";
+				}
+				else
+				{
+					var service = new EBusinessService();
+					LimitedResults limitedData = service.GetLimitedBusinessData(App_LimitedRefNum, CustomerId);
+
+					if (!limitedData.IsError)
+					{
+						ExperianBureauScoreLimited = limitedData.BureauScore;
+					}
+					else
+					{
+						ExperianLimitedError = limitedData.Error;
+					}
+				}
+
+				DbConnection.ExecuteSpNonQuery("UpdateExperianBusiness",
+				                               DbConnection.CreateParam("CompanyRefNumber", App_LimitedRefNum),
+				                               DbConnection.CreateParam("ExperianError", ExperianLimitedError),
+				                               DbConnection.CreateParam("ExperianScore", ExperianBureauScoreLimited),
+				                               DbConnection.CreateParam("CustomerId", CustomerId));
+			}
+			else if (CompanyType == "PShip3P" || CompanyType == "PShip" || CompanyType == "SoleTrader")
+			{
+				string ExperianNonLimitedError = null;
+				decimal ExperianBureauScoreNonLimited = 0;
+				if (string.IsNullOrEmpty(App_NonLimitedRefNum))
+				{
+					ExperianNonLimitedError = "RefNumber is empty";
+				}
+				else
+				{
+					var service = new EBusinessService();
+					var nonlimitedData = service.GetNotLimitedBusinessData(App_NonLimitedRefNum, CustomerId);
+					if (!nonlimitedData.IsError)
+					{
+						ExperianBureauScoreNonLimited = nonlimitedData.BureauScore;
+					}
+					else
+					{
+						ExperianNonLimitedError = nonlimitedData.Error;
+					}
+				}
+
+				DbConnection.ExecuteSpNonQuery("UpdateExperianBusiness",
+				                               DbConnection.CreateParam("CompanyRefNumber", App_NonLimitedRefNum),
+				                               DbConnection.CreateParam("ExperianError", ExperianNonLimitedError),
+				                               DbConnection.CreateParam("ExperianScore", ExperianBureauScoreNonLimited),
+				                               DbConnection.CreateParam("CustomerId", CustomerId));
 			}
 		}
 
