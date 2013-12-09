@@ -72,7 +72,9 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
         "click .yodleeSearchWordsAdd": "searchYodleeWordsAddClicked",
         "click .yodleeSearchWordsDelete": "searchYodleeWordsDeleteClicked",
         "click .yodleeReplotGraph": "replotYodleeGraphClicked",
-        "click .yodleeAccountsRow": "yodleeAccountsRowClicked"
+        "click .yodleeAccountsRow": "yodleeAccountsRowClicked",
+        "click .yodleeShowTransactionsInRange": "yodleeShowTrnInRangeClicked",
+        //"click #yodleetab2": "replotYodleeGraphClicked"
     },
     renewTokenClicked: function (e) {
         var umi = $(e.currentTarget).data("umi");
@@ -130,7 +132,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
             aLengthMenu: [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "All"]],
             iDisplayLength: -1,
             asSorting: [],
-            aoColumns: [{ sType: "numeric" }, { sType: "string" }, { sType: "date" }, { sType: "formatted-num" }, { sType: "formatted-num" }, { sType: "string" }, { sType: "string" }, { sType: "string" }, { sType: "string" }, { sType: "string" }],
+            aoColumns: [{ sType: "numeric" }, { sType: "string" }, { sType: "date-euro" }, { sType: "formatted-num" }, { sType: "formatted-num" }, { sType: "string" }, { sType: "string" }, { sType: "string" }, { sType: "string" }, { sType: "string" }],
             "fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay) {
                 //calculate totals per selection
                 //var iTotalMarket = 0;
@@ -161,7 +163,47 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
                 "sSearch": "Filter all columns:"
             }
         };
+        var that = this;
+        $.fn.dataTableExt.afnFiltering.push(
+            function (oSettings, aData, iDataIndex) {
+                // "date-range" is the id for my input
+                var dateRange = that.$el.find('#date-range').attr("value");
+                if (!dateRange) return true;
+                // parse the range from a single field into min and max, remove " - "
+                dateMin = dateRange.substring(0, 4) + dateRange.substring(5, 7) + dateRange.substring(8, 10);
+                dateMax = dateRange.substring(13, 17) + dateRange.substring(18, 20) + dateRange.substring(21, 23);
+
+                // 2 here is the column where my dates are.
+                var date = aData[2];
+
+                // remove the time stamp out of my date
+                // 2010-04-11 20:48:22 -> 2010-04-11
+                date = date.substring(0, 10);
+                // remove the "-" characters
+                // 2010-04-11 -> 20100411
+                date = date.substring(6, 10) + date.substring(3, 5) + date.substring(0, 2);
+                // run through cases
+                if (dateMin == "" && date <= dateMax) {
+                    return true;
+                }
+                else if (dateMin == "" && date <= dateMax) {
+                    return true;
+                }
+                else if (dateMin <= date && "" == dateMax) {
+                    return true;
+                }
+                else if (dateMin <= date && date <= dateMax) {
+                    return true;
+                }
+                // all failed
+                return false;
+            }
+        );
+
         var oTable = this.$el.find('.YodleeTransactionsTable').dataTable(oDataTableArgs);
+
+        this.$el.find("#DataTables_Table_1_length").after(this.$el.find('#range-filter'));
+        this.$el.find("#date-range").keyup(function () { oTable.fnDraw(); });
 
         this.$el.find(".YodleeTransactionsTable tfoot input").click(function () {
             oTable.fnFilter(this.value, $("tfoot input").index(this));
@@ -180,7 +222,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
         this.$el.find(".YodleeTransactionsTable tfoot input").blur(function (i) {
             if (this.value == "") { this.value = asInitVals[$("tfoot input").index(this)]; }
         });
-        var that = this;
+        
         this.$el.find("div.dataTables_filter input").focus(function() {
             that.$el.find(".YodleeTransactionsTable tfoot input").val("").keyup();
         });
@@ -214,7 +256,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
             bankFrameLine.push([new Date(Date.parse(date)), parseInt(bankFrame, 10)]);
         }
         
-        if (lowBalanceLine.length && highBalanceLine.length) {
+        if (lowBalanceLine.length && highBalanceLine.length && !this.runningBalancePlot) {
             this.runningBalancePlot = $.jqplot('yodleeRunningBalanceChart', [highBalanceLine, lowBalanceLine, runningBalanceLine, bankFrameLine], {
                 animateReplot: true,
                 drawIfHidden: true,
@@ -437,6 +479,12 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
         $('#yodleeTransactionsTabLink').click();
         $('#yodleetab4 .YodleeTransactionsTable [name="search_acct"]').val(accountId).change();
         $('.YodleeTransactionsTable').dataTable().fnFilter(accountId, 0); //account num id
+    },
+    yodleeShowTrnInRangeClicked: function() {
+        var minDate = moment.utc(this.runningBalancePlot.axes.xaxis.min).format('YYYY-MM-DD');
+        var maxDate = moment.utc(this.runningBalancePlot.axes.xaxis.max).format('YYYY-MM-DD');
+        $('#yodleeTransactionsTabLink').click();
+        $('#yodleetab4 #date-range').val(minDate + ' - ' + maxDate).keyup();
     },
     searchYodleeWordsAddClicked: function () {
         var that = this;

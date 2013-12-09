@@ -142,6 +142,7 @@
         </h3>
         <div class="well" style="width: 800px; height: 300px; position: relative;">
             <button class="yodleeReplotGraph btn btn-mini" style="right: 0px; top: 0px; position: absolute;" title="Replot"><i class="icon-refresh"></i></button>
+            <button class="yodleeShowTransactionsInRange btn btn-mini" style="right: 0px; top: 25px; position: absolute;" title="Show transactions in range"><i class="icon-magnet"></i></button>
             <div id="yodleeRunningBalanceChart" class="jqplot-target" style="width: 800px; height: 300px; position: relative;"></div>
         </div>
         
@@ -192,6 +193,9 @@
 @helper YodleeBankAccountsTransactions()
 {
     <div class="tab-pane" id="yodleetab4">
+        <div class="dataTables_filter" id="range-filter">
+            <label for="date-range"> Filter by date range: <input type="text" id="date-range"/></label>
+        </div>
         <table class="table table-bordered table-striped  blue-header centered nowrap YodleeTransactionsTable">
             <thead>
                 <tr>
@@ -212,12 +216,12 @@
                 <%_.each(bank.transactions, function(transaction, j) {%>
                 <%if(transaction.transactionBaseType=='credit'){ %>
                 <tr class="credit">
-                    <%}else{%>
+                <%}else{%>
                 <tr class="debit">
                     <%}%>
                     <td><%=i+1%></td>
                     <td><%-transaction.transactionBaseType!=undefined ? transaction.transactionBaseType : "-"%></td>
-                    <td><%-transaction.transactionDate!=undefined ? EzBob.formatDateHumanFull(transaction.transactionDate) : "-"%></td>
+                    <td><%-transaction.transactionDate!=undefined ? EzBob.formatDateWithoutTime(transaction.transactionDate) : "-"%></td>
                     <td style="text-align: right"><%-transaction.transactionAmount!=undefined ? EzBob.formatPoundsAsInt(transaction.transactionAmount) : "-"%></td>
                     <td style="text-align: right"><%-transaction.runningBalance!=undefined ? EzBob.formatPoundsAsInt(transaction.runningBalance) : "-"%></td>
                     <td><%-transaction.ezbobCategory!=undefined ? transaction.ezbobCategory : "-"%></td>

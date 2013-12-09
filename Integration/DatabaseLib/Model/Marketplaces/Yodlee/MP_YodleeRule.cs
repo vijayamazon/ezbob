@@ -22,6 +22,7 @@
 		public MP_YodleeRuleMap()
 		{
 			Table("MP_YodleeRule");
+			ReadOnly();
 			Id(x => x.Id);
 			Map(x => x.Rule, "RuleDescription").Length(100);
 		}

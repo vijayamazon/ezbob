@@ -27,6 +27,7 @@
 		public MP_YodleeGroupMap()
 		{
 			Table("MP_YodleeGroup");
+			ReadOnly();
 			Id(x => x.Id);
 			Map(x => x.Group, "MainGroup").Length(100);
 			Map(x => x.SubGroup).Length(100);

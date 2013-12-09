@@ -56,19 +56,47 @@ $(function () {
         po.not("input[name='UserName']").find(".arrow").css("left", "40%");
         po.has("input[name='UserName']").find(".arrow").css("left", "84%");
     });
+    
+    function dateHeight(dateStr) {
+        if (dateStr) {
+            var frDateParts = dateStr.split('/');
+            var day = frDateParts[0] * 60 * 24;
+            var month = frDateParts[1] * 60 * 24 * 31;
+            var year = frDateParts[2] * 60 * 24 * 366;
+            var hour = 0;
+            var minutes = 0;
+            var x = day + month + year + hour + minutes;
+        } else {
+            var x = 99999999999999999; //GoHorse!
+        }
+        return x;
+    }
+    
     if ($.fn.dataTableExt) {
         $.extend(jQuery.fn.dataTableExt.oSort, {
-            "formatted-num-pre": function (a) {
+            "formatted-num-pre": function(a) {
                 a = (a === "-" || a === "") ? 0 : a.replace(/[^\d\-\.]/g, "");
                 return parseFloat(a);
             },
 
-            "formatted-num-asc": function (a, b) {
+            "formatted-num-asc": function(a, b) {
                 return a - b;
             },
 
-            "formatted-num-desc": function (a, b) {
+            "formatted-num-desc": function(a, b) {
                 return b - a;
+            },
+            'date-euro-asc': function(a, b) {
+                var x = dateHeight(a);
+                var y = dateHeight(b);
+                var z = ((x < y) ? -1 : ((x > y) ? 1 : 0));
+                return z;
+            },
+            'date-euro-desc': function(a, b) {
+                var x = dateHeight(a);
+                var y = dateHeight(b);
+                var z = ((x < y) ? 1 : ((x > y) ? -1 : 0));
+                return z;
             }
         }); // sorting plugin for formatted numbers
     }
