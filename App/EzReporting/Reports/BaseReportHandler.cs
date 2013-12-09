@@ -200,9 +200,9 @@ namespace Reports {
 
 		#endregion method BuildEarnedInterestReport
 
+		#region method BuildLoanIntegrityReport
 
-		public ATag BuildLoanIntegrityReport(Report report, List<string> oColumnTypes = null)
-		{
+		public ATag BuildLoanIntegrityReport(Report report, List<string> oColumnTypes = null) {
 			KeyValuePair<ReportQuery, DataTable> oData = CreateLoanIntegrityReport(report);
 
 			Body body = new Body();
@@ -211,7 +211,9 @@ namespace Reports {
 			body.Append(new P().Append(TableReport(oData.Key, oData.Value, oColumnTypes: oColumnTypes)));
 
 			return body;
-		}
+		} // BuildLoanIntegrityReport
+
+		#endregion method BuildLoanIntegrityReport
 
 		#region method BuildLoansIssuedReport
 
@@ -234,6 +236,18 @@ namespace Reports {
 		} // BuildPlainedPaymentReport
 
 		#endregion method BuildPlainedPaymentReport
+
+		#region method BuildCciReport
+
+		public ATag BuildCciReport(Report report, DateTime today, DateTime tomorrow, List<string> oColumnTypes = null) {
+			KeyValuePair<ReportQuery, DataTable> oData = CreateCciReport(report, today, tomorrow);
+
+			return new Html.Tags.Body().Add<Class>("Body")
+				.Append(new H1().Append(new Text(report.GetTitle(today, oToDate: tomorrow))))
+				.Append(new P().Append(TableReport(oData.Key, oData.Value, oColumnTypes: oColumnTypes)));
+		} // BuildCciReport
+
+		#endregion method BuildCciReport
 
 		#endregion HTML generators
 
@@ -372,6 +386,16 @@ namespace Reports {
 		} // ErrorXlsReport
 
 		#endregion method XlsReport
+
+		#region method BuildCciXls
+
+		public ExcelPackage BuildCciXls(Report report, DateTime today, DateTime tomorrow) {
+			KeyValuePair<ReportQuery, DataTable> oData = CreateCciReport(report, today, tomorrow);
+
+			return AddSheetToExcel(oData.Value, report.GetTitle(today, oToDate: tomorrow), "RptEarnedInterest");
+		} // BuildCciXls
+
+		#endregion method BuildCciXls
 
 		#endregion Excel generators
 
@@ -533,29 +557,6 @@ namespace Reports {
 
 		#endregion class EarnedInterestRow
 
-		private class LoanIntegrityRow
-		{
-			public int LoanId { get; set; }
-			public decimal Diff { get; set; }
-
-			public static int Compare(LoanIntegrityRow a, LoanIntegrityRow b)
-			{
-				if (a.Diff == b.Diff)
-					return 0;
-				if (a.Diff > b.Diff)
-					return 1;
-				return -1;
-			}
-
-			public void ToRow(DataTable tbl)
-			{
-				DataRow row = tbl.NewRow();
-				row["LoanId"] = LoanId;
-				row["Diff"] = Diff;
-				tbl.Rows.Add(row);
-			}
-		}
-
 		#region method CreateEarnedInterestReport
 
 		private KeyValuePair<ReportQuery, DataTable> CreateEarnedInterestReport(Report report, DateTime today, DateTime tomorrow) {
@@ -606,22 +607,50 @@ namespace Reports {
 
 		#endregion method CreateEarnedInterestReport
 
-		private KeyValuePair<ReportQuery, DataTable> CreateLoanIntegrityReport(Report report)
-		{
+		#endregion Earned Interest
+
+		#region LoanIntegrity
+
+		#region class LoanIntegrityRow
+
+		private class LoanIntegrityRow {
+			public int LoanId { get; set; }
+			public decimal Diff { get; set; }
+
+			public static int Compare(LoanIntegrityRow a, LoanIntegrityRow b) {
+				if (a.Diff == b.Diff)
+					return 0;
+				if (a.Diff > b.Diff)
+					return 1;
+				return -1;
+			} // Compare
+
+			public void ToRow(DataTable tbl) {
+				DataRow row = tbl.NewRow();
+				row["LoanId"] = LoanId;
+				row["Diff"] = Diff;
+				tbl.Rows.Add(row);
+			} // ToRow
+		} // class LoanIntegrityRow
+
+		#endregion class LoanIntegrityRow
+
+		#region method CreateLoanIntegrityReport
+
+		private KeyValuePair<ReportQuery, DataTable> CreateLoanIntegrityReport(Report report) {
 			var loanIntegrity = new LoanIntegrity(DB, this);
 			SortedDictionary<int, decimal> diffs = loanIntegrity.Run();
 			
 			var oRows = new List<LoanIntegrityRow>();
 
-			foreach (int loanId in diffs.Keys)
-			{
-				var oNewRow = new LoanIntegrityRow
-				{
+			foreach (int loanId in diffs.Keys) {
+				var oNewRow = new LoanIntegrityRow {
 					LoanId = loanId,
 					Diff = diffs[loanId]
 				};
+
 				oRows.Add(oNewRow);
-			}
+			} // foreach
 
 			oRows.Sort(LoanIntegrityRow.Compare);
 
@@ -633,8 +662,11 @@ namespace Reports {
 			oRows.ForEach(r => r.ToRow(oOutput));
 
 			return new KeyValuePair<ReportQuery, DataTable>(new ReportQuery(report), oOutput); // qqq - the new repoerQuery here is wrong
-		}
-		#endregion Earned Interest
+		} // CreateLoanIntegrityReport
+
+		#endregion method CreateLoanIntegrityReport
+
+		#endregion LoanIntegrity
 
 		#region Loans Issued
 
@@ -1063,6 +1095,25 @@ namespace Reports {
 
 		#endregion method PaymentReport
 
+		#region method CreateCciReport
+
+		private KeyValuePair<ReportQuery, DataTable> CreateCciReport(Report report, DateTime today, DateTime tomorrow) {
+			var cc = new CciReport(DB, this);
+			List<CciReportItem> oItems = cc.Run();
+
+			var rpt = new ReportQuery(report) {
+				DateStart = today,
+				DateEnd = tomorrow
+			};
+
+			DataTable oOutput = CciReportItem.CreateTable();
+
+			oItems.ForEach(r => r.ToRow(oOutput));
+
+			return new KeyValuePair<ReportQuery, DataTable>(rpt, oOutput);
+		} // CreateCciReport
+
+		#endregion method CreateCciReport
 		#endregion report generators
 
 		#region private static

@@ -27,7 +27,16 @@ namespace Reports {
 			/// for the date range between the earliest issued loan
 			/// and today.
 			/// </summary>
-			ByIssuedLoans
+			ByIssuedLoans,
+
+			/// <summary>
+			/// Calculates earned interest for all loans that were issued
+			/// to customers that are currently (i.e. at run time) are
+			/// marked as CCI. Earned interest is calculated
+			/// for the date range between the earliest issued loan
+			/// and today.
+			/// </summary>
+			CciCustomers,
 		} // enum WorkingMode
 
 		#endregion enum WorkingMode
@@ -61,12 +70,19 @@ namespace Reports {
 		public SortedDictionary<int, decimal> Run() {
 			switch (m_nMode) {
 			case WorkingMode.ByIssuedLoans:
-				FillIssuedLoans();
+				FillBySp("RptEarnedInterest_IssuedLoans");
 				break;
 
 			case WorkingMode.ForPeriod:
 				FillForPeriod();
 				break;
+
+			case WorkingMode.CciCustomers:
+				FillBySp("RptEarnedInterest_CciCustomers");
+				break;
+
+			default:
+				throw new NotImplementedException("Unsupported working mode: " + m_nMode.ToString());
 			} // switch
 
 			FillFreezeIntervals();
@@ -120,7 +136,9 @@ namespace Reports {
 				int nLoanID = Convert.ToInt32(row[1]);
 
 				if (!m_oLoans.ContainsKey(nLoanID)) {
-					Debug("Ignoring loan id {0}", nLoanID);
+					if (VerboseLogging)
+						Debug("Ignoring loan id {0}", nLoanID);
+
 					continue;
 				} // if
 
@@ -158,11 +176,37 @@ namespace Reports {
 
 		#endregion method ProcessLoans
 
-		#region method FillIssuedLoans
+		#region method FillForPeriod
 
-		public void FillIssuedLoans() {
+		private void FillForPeriod() {
 			DataTable tbl = m_oDB.ExecuteReader(
-				"RptEarnedInterest_IssuedLoans", 
+				"RptEarnedInterest_ForPeriod", 
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("@DateStart", m_oDateStart),
+				new QueryParameter("@DateEnd", m_oDateEnd)
+			);
+
+			foreach (DataRow row in tbl.Rows) {
+				int nLoanID = Convert.ToInt32(row[0]);
+				DateTime oDate = Convert.ToDateTime(row[1]);
+				decimal nAmount = Convert.ToDecimal(row[2]);
+
+				m_oLoans[nLoanID] = new LoanData(nLoanID, this) {
+					IssueDate = oDate,
+					Amount = nAmount
+				};
+			} // for each row
+
+			Info("{0} loans, date range: {1} - {2}", m_oLoans.Count, m_oDateStart, m_oDateEnd);
+		} // FillForPeriod
+
+		#endregion method FillForPeriod
+
+		#region method FillBySp
+
+		private void FillBySp(string sSpName) {
+			DataTable tbl = m_oDB.ExecuteReader(
+				sSpName,
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("@DateStart", m_oDateStart),
 				new QueryParameter("@DateEnd", m_oDateEnd)
@@ -186,35 +230,9 @@ namespace Reports {
 			} // for each row
 
 			Info("{0} loans, date range: {1} - {2}", m_oLoans.Count, m_oDateStart, m_oDateEnd);
-		} // FillIssuedLoans
+		} // FillBySp
 
-		#endregion method FillIssuedLoans
-
-		#region method FillForPeriod
-
-		public void FillForPeriod() {
-			DataTable tbl = m_oDB.ExecuteReader(
-				"RptEarnedInterest_ForPeriod", 
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("@DateStart", m_oDateStart),
-				new QueryParameter("@DateEnd", m_oDateEnd)
-			);
-
-			foreach (DataRow row in tbl.Rows) {
-				int nLoanID = Convert.ToInt32(row[0]);
-				DateTime oDate = Convert.ToDateTime(row[1]);
-				decimal nAmount = Convert.ToDecimal(row[2]);
-
-				m_oLoans[nLoanID] = new LoanData(nLoanID, this) {
-					IssueDate = oDate,
-					Amount = nAmount
-				};
-			} // for each row
-
-			Info("{0} loans, date range: {1} - {2}", m_oLoans.Count, m_oDateStart, m_oDateEnd);
-		} // FillForPeriod
-
-		#endregion method FillForPeriod
+		#endregion method FillBySp
 
 		#region fields
 

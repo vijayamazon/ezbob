@@ -100,6 +100,16 @@ namespace EzReportToEMail
 									);
 								break;
 
+							case ReportType.RPT_CCI:
+								sender.Dispatch(
+									report.Title,
+									dToday,
+									BuildCciReport(report, dToday, dTomorrow),
+									BuildCciXls(report, dToday, dTomorrow),
+									report.ToEmail
+									);
+								break;
+
 							default:
 								HandleGenericReport(report, dToday, sender);
 								break;

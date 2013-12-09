@@ -52,6 +52,7 @@
 			IsTest = customer.IsTest;
 			SegmentType = customer.IsOffline ? "Offline" : "Online";
 			IsAvoid = customer.IsAvoid;
+
 			FraudCheckStatus = customer.FraudStatus.Description();
 			FraudCheckStatusId = (int)customer.FraudStatus;
 			if (customer.FraudStatus == FraudStatus.FraudSuspect)
@@ -65,7 +66,7 @@
 				Name = customer.PersonalInfo.Fullname;
 				MobilePhone = customer.PersonalInfo.MobilePhone;
 				DaytimePhone = customer.PersonalInfo.DaytimePhone;
-			}
+			} // if
 
 			Medal = customer.Medal.HasValue ? customer.Medal.ToString() : "";
 			Email = customer.Name;
@@ -86,7 +87,7 @@
 			if (customer.PersonalInfo != null) {
 				OverallTurnOver = customer.PersonalInfo.OverallTurnOver;
 				WebSiteTurnOver = customer.PersonalInfo.WebSiteTurnOver;
-			}
+			} // if
 
 			ReferenceSource = customer.ReferenceSource;
 			ABTesting = customer.ABTesting;
@@ -110,18 +111,20 @@
 			var activeCampaigns = customer.ActiveCampaigns
 				.Where(cc => 
 					cc.Campaign.EndDate >= DateTime.Today && 
-					cc.Campaign.StartDate <= DateTime.Today)
+					cc.Campaign.StartDate <= DateTime.Today
+				)
 				.Select(cc => cc.Campaign.Name)
 				.ToList();
 
 			if (activeCampaigns.Any())
-			{
 				ActiveCampaign = activeCampaigns.Aggregate((i, j) => i + ", " + j);
-			}
+
+			CciMark = customer.CciMark;
 		} // InitFromCustomer
 
 		public bool IsTest { get; set; }
 		public bool IsAvoid { get; set; }
 		public string SegmentType { get; set; }
+		public bool CciMark { get; set; }
 	} // class PersonalInfoModel
 } // namespace

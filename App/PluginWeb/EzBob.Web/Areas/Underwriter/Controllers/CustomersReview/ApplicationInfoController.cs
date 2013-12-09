@@ -300,6 +300,24 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             Log.DebugFormat("Customer({0}).IsTest = {1}", id, enbaled);
         }
 
+		[HttpPost]
+		[Transactional]
+		[ValidateJsonAntiForgeryToken]
+		[Ajax]
+		public JsonNetResult ToggleCciMark(int id) {
+			Customer oCustomer = _customerRepository.Get(id);
+
+			if (oCustomer == null) {
+				Log.DebugFormat("Customer({0}) not found", id);
+				return this.JsonNet(new { error = "Customer not found.", id = id });
+			} // if
+
+			oCustomer.CciMark = !oCustomer.CciMark;
+			Log.DebugFormat("Customer({0}).CciMark set to {1}", id, oCustomer.CciMark);
+
+			return this.JsonNet(new { error = (string)null, id = id, mark = oCustomer.CciMark });
+		} // ToggleCciMark
+
         [HttpPost]
         [Transactional]
         [ValidateJsonAntiForgeryToken]

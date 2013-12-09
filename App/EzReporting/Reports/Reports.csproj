@@ -83,6 +83,8 @@
     <Compile Include="attributes.cs" />
     <Compile Include="BaseReportHandler.cs" />
     <Compile Include="BaseReportSender.cs" />
+    <Compile Include="Cci\CciReport.cs" />
+    <Compile Include="Cci\CciReportItem.cs" />
     <Compile Include="ColumnInfo.cs" />
     <Compile Include="DropboxReportSaver.cs" />
     <Compile Include="EarnedInterest\InterestFreezePeriods.cs" />

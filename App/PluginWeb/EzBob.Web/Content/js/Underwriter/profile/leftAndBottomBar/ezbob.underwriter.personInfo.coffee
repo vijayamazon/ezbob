@@ -9,8 +9,37 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
         @bindTo @model, "change sync", @render, this
 
     onRender: ->
+        console.log 'der modelllle ist', @model
+        @setCciMark()
         @$el.find(".tltp").tooltip()
         @$el.find(".tltp-left").tooltip({placement: "left"})
+
+    setCciMark: ->
+        oSpan = @$el.find '.cci-mark'
+
+        if @model.get 'CciMark'
+            oSpan.text('on').closest('td').addClass 'red_cell'
+        else
+            oSpan.text('off').closest('td').removeClass 'red_cell'
+    # end of setCciMark
+
+    toggleCciMark: ->
+        id = @model.get 'Id'
+
+        BlockUi()
+
+        $.post(window.gRootPath + 'Underwriter/ApplicationInfo/ToggleCciMark',
+            id: id
+        ).done( (result) =>
+            if result.error
+                EzBob.App.trigger 'error', result.error
+            else
+                @model.set('CciMark', result.mark)
+                @setCciMark()
+        ).always( ->
+            UnBlockUi()
+        )
+    # end of toggleCciMark
 
     events:
         "click button[name=\"changeDisabledState\"]": "changeDisabledState"
@@ -18,6 +47,7 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
         "click [name=\"isTestEditButton\"]": "isTestEditButton"
         "click [name=\"avoidAutomaticDecisionButton\"]": "avoidAutomaticDecisionButton"
         "click [name=\"changeFraudStatusManualy\"]": "changeFraudStatusManualyClicked"
+        'click button.cci-mark-toggle': 'toggleCciMark'
 
     changeFraudStatusManualyClicked: ->
         fraudStatusModel = new EzBob.Underwriter.FraudStatusModel( 

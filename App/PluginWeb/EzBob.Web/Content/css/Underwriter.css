@@ -566,6 +566,8 @@ span.active {
     margin-left: 3px;
 }
 
+.cci-mark { display: inline-block; margin-right: 1em; }
+
 td.no-padding { padding: 0 !important; }
 
 table.internal-table { border-collapse: collapse; width: 100% !important; }
