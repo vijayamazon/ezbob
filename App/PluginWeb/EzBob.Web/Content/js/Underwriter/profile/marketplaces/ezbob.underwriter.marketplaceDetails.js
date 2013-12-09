@@ -74,6 +74,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
         "click .yodleeReplotGraph": "replotYodleeGraphClicked",
         "click .yodleeAccountsRow": "yodleeAccountsRowClicked",
         "click .yodleeShowTransactionsInRange": "yodleeShowTrnInRangeClicked",
+        "click .yodleeRuleAdd": "yodleeRuleAddClicked"
         //"click #yodleetab2": "replotYodleeGraphClicked"
     },
     renewTokenClicked: function (e) {
@@ -486,6 +487,31 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
         $('#yodleeTransactionsTabLink').click();
         $('#yodleetab4 #date-range').val(minDate + ' - ' + maxDate).keyup();
     },
+    yodleeRuleAddClicked: function () {
+        var that = this;
+        var group = this.$el.find("#yodleeGroup").val();
+        var rule = this.$el.find("#yodleeRule").val();
+        var literal = this.$el.find("#yodleeLiteral").val();
+        if (!group || !rule) return false;
+        if ((rule == 1 || rule == 5) && !literal) return false; //include/dont include literal rules
+        
+        EzBob.ShowMessage(
+            "Add rule", "Are you sure you want to add rule: " + this.$el.find("#yodleeRule option:selected").text() + " to group: " + this.$el.find("#yodleeGroup option:selected").text() + "?",
+            function () {
+                BlockUi('on');
+
+                $.post(window.gRootPath + "Underwriter/MarketPlaces/AddYodleeRule", { group: group, rule: rule, literal: literal })
+                .done(function () {
+                    that.model.fetch().done(function () {
+                        that.render();
+                        $('#yodleeRulesTab').click();
+                        BlockUi('off');
+                        EzBob.ShowMessage("Successfully Added", "The rule added successfully. ", null, "OK");
+                    });
+                });
+            }, "Yes", null, "No");
+        return false;
+    },
     searchYodleeWordsAddClicked: function () {
         var that = this;
         var word = this.$el.find("#yodleeAddSearchWordTxt").val();
@@ -507,7 +533,6 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
             }, "Yes", null, "No");
         return false;
     },
-
     searchYodleeWordsDeleteClicked: function () {
         var word = this.$el.find("#yodleeSearchWordsDdl option:selected").text();
         var that = this;

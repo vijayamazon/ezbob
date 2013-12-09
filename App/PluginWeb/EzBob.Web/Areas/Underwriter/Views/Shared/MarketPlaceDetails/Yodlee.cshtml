@@ -6,7 +6,7 @@
         <li><a href="#yodleetab3" data-toggle="tab">Bank Account Details</a></li>
         <li><a href="#yodleetab4" id="yodleeTransactionsTabLink" data-toggle="tab">Bank Accounts Transactions</a></li>
         <li><a href="#yodleetab5" data-toggle="tab">Aggregates</a></li>
-        <li><a href="#yodleetab6" data-toggle="tab">Custom Categorization Rules</a></li>
+        <li><a href="#yodleetab6" id="yodleeRulesTab" data-toggle="tab">Custom Categorization Rules</a></li>
     </ul>
     <div class="tab-content">
         @YodleeCashFlowReport()
@@ -343,7 +343,7 @@
                 </tr>
             </thead>
             <tbody>
-                <%for(var gr in rm.GroupRulesDict){%>
+                <%for(var gr in rm.GroupRulesDict){ %>
                 <tr class="yodleeSearchWordsRow">
                     <td><%=gr%></td>
                     <td>
@@ -357,12 +357,12 @@
         </table>
         <hr />
         <div class="well" style="width: 570px">
-            <span>Add/Remove Rules</span>
+            <span>Add Rule</span>
             <label for="yodleeGroup">Group</label>
             <select id="yodleeGroup" class="selectheight" style="margin-bottom: 0">
                 <option></option>
                 <%for(var i in rm.Groups) { if(!rm.Groups.hasOwnProperty(i)) {continue;} %>
-                <option value="<%=rm.Groups[i].Id%>"><%=rm.Groups[i].Group%> <%=rm.Groups[i].SubGroup%></option>
+                <option value="<%=rm.Groups[i].Id%>"><%=rm.Groups[i].Group%> <%if(rm.Groups[i].SubGroup) { print(' - ');%><%=rm.Groups[i].SubGroup%><%}%></option>
                 <%}%>
             </select>
             <label for="yodleeRule">Rule</label>
@@ -372,8 +372,9 @@
                 <option value="<%=rm.Rules[i].Id%>"><%=rm.Rules[i].Rule%></option>
                 <%}%>
             </select>
-            <label for="yodleeLiteral">Word</label>
+            <label for="yodleeLiteral">Literal</label>
             <input type="text" id="yodleeLiteral" style="margin-bottom: 0" />
+            <br/>
             <button class="btn yodleeRuleAdd" id="yodleeRuleAdd">Add</button>
 
             @*<button class="btn yodleeSearchWordsDelete" id="removeYodleeSearchWord">Remove</button>*@

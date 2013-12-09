@@ -22,7 +22,7 @@
 			GroupRulesDict = new Dictionary<string, Dictionary<string, string>>();
 			foreach (var gr in groupRules)
 			{
-				var group = gr.Group.Group + gr.Group.SubGroup;
+				var group = gr.Group.Group + (string.IsNullOrEmpty(gr.Group.SubGroup) ? "" : " - " + gr.Group.SubGroup);
 				if (!GroupRulesDict.ContainsKey(group))
 				{
 					GroupRulesDict[group] = new Dictionary<string, string>

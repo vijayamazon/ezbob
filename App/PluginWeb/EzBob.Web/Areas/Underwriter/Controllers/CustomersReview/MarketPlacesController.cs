@@ -30,8 +30,21 @@
 		private readonly MP_TeraPeakOrderItemRepository _teraPeakOrderItems;
 		private readonly YodleeAccountsRepository _yodleeAccountsRepository;
 		private readonly YodleeSearchWordsRepository _yodleeSearchWordsRepository;
+		private readonly YodleeGroupRepository _yodleeGroupRepository;
+		private readonly YodleeRuleRepository _yodleeRuleRepository;
+		private readonly YodleeGroupRuleMapRepository _yodleeGroupRuleMapRepository;
 
-		public MarketPlacesController(CustomerRepository customers, AnalyisisFunctionValueRepository functions, CustomerMarketPlaceRepository customerMarketplaces, MarketPlacesFacade marketPlaces, IAppCreator appCreator, MP_TeraPeakOrderItemRepository teraPeakOrderItems, YodleeAccountsRepository yodleeAccountsRepository, YodleeSearchWordsRepository yodleeSearchWordsRepository)
+		public MarketPlacesController(CustomerRepository customers, 
+			AnalyisisFunctionValueRepository functions, 
+			CustomerMarketPlaceRepository customerMarketplaces, 
+			MarketPlacesFacade marketPlaces, 
+			IAppCreator appCreator, 
+			MP_TeraPeakOrderItemRepository teraPeakOrderItems, 
+			YodleeAccountsRepository yodleeAccountsRepository, 
+			YodleeSearchWordsRepository yodleeSearchWordsRepository, 
+			YodleeGroupRepository yodleeGroupRepository, 
+			YodleeRuleRepository yodleeRuleRepository,
+			YodleeGroupRuleMapRepository yodleeGroupRuleMapRepository)
 		{
 			_customerMarketplaces = customerMarketplaces;
 			_marketPlaces = marketPlaces;
@@ -41,6 +54,9 @@
 			_teraPeakOrderItems = teraPeakOrderItems;
 			_yodleeAccountsRepository = yodleeAccountsRepository;
 			_yodleeSearchWordsRepository = yodleeSearchWordsRepository;
+			_yodleeGroupRepository = yodleeGroupRepository;
+			_yodleeRuleRepository = yodleeRuleRepository;
+			_yodleeGroupRuleMapRepository = yodleeGroupRuleMapRepository;
 		}
 
 		[Ajax]
@@ -222,6 +238,25 @@
 		public void AddSearchWord(string word)
 		{
 			_yodleeSearchWordsRepository.AddWord(word);
+		}
+
+		[Transactional]
+		[Ajax]
+		public void AddYodleeRule(int group, int rule, string literal)
+		{
+			Log.DebugFormat("{0} {1} {2}", group, rule, literal);
+			var oGroup = _yodleeGroupRepository.Get(group);
+			var oRule = _yodleeRuleRepository.Get(rule);
+
+			if (oGroup != null && oRule != null)
+			{
+				_yodleeGroupRuleMapRepository.SaveOrUpdate(new MP_YodleeGroupRuleMap()
+					{
+						Group = oGroup,
+						Rule = oRule,
+						Literal = literal
+					});
+			}
 		}
 
 		[Transactional]
