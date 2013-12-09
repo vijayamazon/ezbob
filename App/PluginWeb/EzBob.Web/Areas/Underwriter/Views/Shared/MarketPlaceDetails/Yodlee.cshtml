@@ -200,6 +200,7 @@
                     <th>Tr/Post Date</th>
                     <th>Tr Amount £</th>
                     <th>Running Balance End Of Day £<i class="icon-info-sign" data-yodlee-calculated=""></i></th>
+                    <th>Tr Group</th>
                     <th>Category</th>
                     <th>Category Type</th>
                     <th>Description</th>
@@ -219,6 +220,7 @@
                     <td><%-transaction.transactionDate!=undefined ? EzBob.formatDateHumanFull(transaction.transactionDate) : "-"%></td>
                     <td style="text-align: right"><%-transaction.transactionAmount!=undefined ? EzBob.formatPoundsAsInt(transaction.transactionAmount) : "-"%></td>
                     <td style="text-align: right"><%-transaction.runningBalance!=undefined ? EzBob.formatPoundsAsInt(transaction.runningBalance) : "-"%></td>
+                    <td><%-transaction.ezbobCategory!=undefined ? transaction.ezbobCategory : "-"%></td>
                     <td><%-transaction.categoryName!=undefined ? transaction.categoryName : "-"%></td>
                     <td><%-transaction.categoryType!=undefined ? transaction.categoryType : "-"%></td>
                     <td><%-transaction.description!=undefined ? transaction.description : "-"%></td>

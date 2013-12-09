@@ -19,6 +19,7 @@
 		public virtual int Id { get; set; }
 		public virtual string Group { get; set; }
 		public virtual string SubGroup { get; set; }
+		public virtual string BaseType { get; set; }
 	}
 
 	public class MP_YodleeGroupMap : ClassMap<MP_YodleeGroup>
@@ -29,6 +30,7 @@
 			Id(x => x.Id);
 			Map(x => x.Group, "MainGroup").Length(100);
 			Map(x => x.SubGroup).Length(100);
+			Map(x => x.BaseType).Length(100);
 		}
 	}
 }

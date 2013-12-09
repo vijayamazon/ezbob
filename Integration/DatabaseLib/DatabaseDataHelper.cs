@@ -181,63 +181,78 @@ namespace EZBob.DatabaseLib
 
 		private string m_sYodleeBanks;
 
-		public string YodleeBanks { get {
-			if (m_sYodleeBanks == null) {
-				var banks = _yodleeBanksRepository.GetAll();
+		public string YodleeBanks
+		{
+			get
+			{
+				if (m_sYodleeBanks == null)
+				{
+					var banks = _yodleeBanksRepository.GetAll();
 
-				var dict = new Dictionary<string, YodleeParentBankModel>();
-				var yodleeBanksModel = new YodleeBanksModel {
-					DropDownBanks = new List<YodleeSubBankModel>(),
-				};
+					var dict = new Dictionary<string, YodleeParentBankModel>();
+					var yodleeBanksModel = new YodleeBanksModel
+					{
+						DropDownBanks = new List<YodleeSubBankModel>(),
+					};
 
-				foreach (var bank in banks) {
-					if (bank.Active && bank.Image) {
-						var sub = new YodleeSubBankModel {csId = bank.ContentServiceId, displayName = bank.Name};
+					foreach (var bank in banks)
+					{
+						if (bank.Active && bank.Image)
+						{
+							var sub = new YodleeSubBankModel { csId = bank.ContentServiceId, displayName = bank.Name };
 
-						if (!dict.ContainsKey(bank.ParentBank))
-							dict.Add(bank.ParentBank, new YodleeParentBankModel {parentBankName = bank.ParentBank, subBanks = new List<YodleeSubBankModel>()});
+							if (!dict.ContainsKey(bank.ParentBank))
+								dict.Add(bank.ParentBank, new YodleeParentBankModel { parentBankName = bank.ParentBank, subBanks = new List<YodleeSubBankModel>() });
 
-						dict[bank.ParentBank].subBanks.Add(sub);
-					} // if
+							dict[bank.ParentBank].subBanks.Add(sub);
+						} // if
 
-					if (bank.Active && !bank.Image)
-						yodleeBanksModel.DropDownBanks.Add(new YodleeSubBankModel {csId = bank.ContentServiceId, displayName = bank.Name});
-				} // for
+						if (bank.Active && !bank.Image)
+							yodleeBanksModel.DropDownBanks.Add(new YodleeSubBankModel { csId = bank.ContentServiceId, displayName = bank.Name });
+					} // for
 
-				yodleeBanksModel.ImageBanks = dict.Values.ToList();
+					yodleeBanksModel.ImageBanks = dict.Values.ToList();
 
-				m_sYodleeBanks = JsonConvert.SerializeObject(yodleeBanksModel);
-			} // if
+					m_sYodleeBanks = JsonConvert.SerializeObject(yodleeBanksModel);
+				} // if
 
-			return m_sYodleeBanks;
-		}} // YodleeBanks
+				return m_sYodleeBanks;
+			}
+		} // YodleeBanks
 
 		#endregion property YodleeBanks
 
 		#region property WizardStepSequence
 
-		public string WizardStepSequence { get {
-			var oResult = new {
+		public string WizardStepSequence
+		{
+			get
+			{
+				var oResult = new
+				{
 					online = new Dictionary<string, object>(),
 					offline = new Dictionary<string, object>()
 				};
 
-			_wizardStepSequenceRepository.GetAll().ForEach(wss => {
-				if (wss.OnlineProgressBarPct.HasValue)
-					oResult.online[wss.Name()] = new { position = wss.OnlineProgressBarPct.Value, type = wss.WizardStep.ID };
+				_wizardStepSequenceRepository.GetAll().ForEach(wss =>
+				{
+					if (wss.OnlineProgressBarPct.HasValue)
+						oResult.online[wss.Name()] = new { position = wss.OnlineProgressBarPct.Value, type = wss.WizardStep.ID };
 
-				if (wss.OfflineProgressBarPct.HasValue)
-					oResult.offline[wss.Name()] = new { position = wss.OfflineProgressBarPct.Value, type = wss.WizardStep.ID };
-			});
+					if (wss.OfflineProgressBarPct.HasValue)
+						oResult.offline[wss.Name()] = new { position = wss.OfflineProgressBarPct.Value, type = wss.WizardStep.ID };
+				});
 
-			return JsonConvert.SerializeObject(oResult);
-		}} // WizardStepSequence
+				return JsonConvert.SerializeObject(oResult);
+			}
+		} // WizardStepSequence
 
 		#endregion property WizardStepSequence
 
 		#region property WizardSteps
 
-		public WizardStepRepository WizardSteps {
+		public WizardStepRepository WizardSteps
+		{
 			get { return _wizardStepRepository; }
 		} // WizardSteps
 
@@ -1255,6 +1270,9 @@ namespace EZBob.DatabaseLib
 		{
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
 
+			var yodleeGroupRepository = new YodleeGroupRepository(_session).GetAll().ToList();
+			var yodleeGroupRuleMapRepository = new YodleeGroupRuleMapRepository(_session).GetAll().ToList();
+
 			// LogData("Yodlee Orders Data", customerMarketPlace, ordersData);
 
 			if (ordersData == null)
@@ -1418,6 +1436,10 @@ namespace EZBob.DatabaseLib
 
 				foreach (var bankTransaction in ordersData.Data[item])
 				{
+					string surname = null;
+					try { surname = customerMarketPlace.Customer.PersonalInfo.Surname; }
+					catch { }
+					var ezbobCategory = CategorizeTransaction(yodleeGroupRepository, yodleeGroupRuleMapRepository, bankTransaction.description, bankTransaction.transactionBaseType, (int)bankTransaction.transactionAmount.amount.Value, customerMarketPlace.Customer.Id, surname);
 					var orderBankTransaction = new MP_YodleeOrderItemBankTransaction
 					{
 						YodleeOrderItem = mpOrderItem,
@@ -1529,6 +1551,7 @@ namespace EZBob.DatabaseLib
 						isMedicalExpenseSpecified = bankTransaction.isMedicalExpenseSpecified,
 						categorizationKeyword = bankTransaction.categorizationKeyword,
 						sourceTransactionType = bankTransaction.sourceTransactionType,
+						ezbobCategory = ezbobCategory
 					};
 					mpOrderItem.OrderItemBankTransactions.Add(orderBankTransaction);
 				}
@@ -1541,6 +1564,106 @@ namespace EZBob.DatabaseLib
 			_CustomerMarketplaceRepository.Update(customerMarketPlace);
 		}
 
+		private MP_YodleeGroup CategorizeTransaction(List<MP_YodleeGroup> yodleeGroupRepository, List<MP_YodleeGroupRuleMap> yodleeGroupRuleMapRepository, string description, string baseType, int amount, int customerId, string customerSurname)
+		{
+			var directorsNames = _session.Query<Director>().Where(d => d.Customer.Id == customerId).Select(d => d.Surname).ToList();
+			if (!string.IsNullOrEmpty(customerSurname))
+			{
+				directorsNames.Add(customerSurname);
+			}
+
+			var category = yodleeGroupRepository.FirstOrDefault(x => x.Id == (int)YodleeGroup.Exception);
+
+			if (baseType == "debit")
+			{
+				category = yodleeGroupRepository.FirstOrDefault(x => x.Id == (int)YodleeGroup.Opex);
+			}
+
+			foreach (var mpYodleeGroup in yodleeGroupRepository)
+			{
+				MP_YodleeGroup group = mpYodleeGroup;
+
+				if (group.Id == (int)YodleeGroup.Opex || group.Id == (int)YodleeGroup.Exception) continue;
+
+				var includeLiteral = yodleeGroupRuleMapRepository.Where(x => x.Group == group && x.Rule.Id == (int)YodleeRule.IncludeLiteralWord).Select(x => x.Literal).ToList();
+				var dontIncludeLiteral = yodleeGroupRuleMapRepository.Where(x => x.Group == group && x.Rule.Id == (int)YodleeRule.DontIncludeLiteralWord).Select(x => x.Literal).ToList();
+				bool includeDirector = yodleeGroupRuleMapRepository.Any(x => x.Group == group && x.Rule.Id == (int)YodleeRule.IncludeDirector);
+				bool dontIncludeDirector = yodleeGroupRuleMapRepository.Any(x => x.Group == group && x.Rule.Id == (int)YodleeRule.DontIncludeDirector);
+				bool roundFigure = yodleeGroupRuleMapRepository.Any(x => x.Group == group && x.Rule.Id == (int)YodleeRule.TransactionRoundFigure);
+
+				bool containsLiteral = false;
+				foreach (var literal in includeLiteral)
+				{
+					if (description.ToLowerInvariant().Contains(literal))
+					{
+						containsLiteral = true;
+					}
+				}
+
+				bool dontContainsLiteral = true;
+				foreach (var literal in dontIncludeLiteral)
+				{
+					if (description.ToLowerInvariant().Contains(literal))
+					{
+						dontContainsLiteral = false;
+					}
+				}
+
+				bool containsDirector = false;
+				if (includeDirector || dontIncludeDirector)
+				{
+					foreach (var directorsName in directorsNames)
+					{
+						if (description.Contains(directorsName))
+						{
+							containsDirector = true;
+						}
+					}
+				}
+
+				bool isRoundFigure = false;
+				if (roundFigure)
+				{
+					if (amount % 100 == 0)
+					{
+						isRoundFigure = true;
+					}
+				}
+
+				if (includeLiteral.Any() && !containsLiteral)
+				{
+					continue;
+				}
+
+				if (dontIncludeLiteral.Any() && !dontContainsLiteral)
+				{
+					continue;
+				}
+
+
+				if ((includeDirector && !containsDirector) || (dontIncludeDirector && containsDirector))
+				{
+					continue;
+				}
+
+
+				if (roundFigure && !isRoundFigure)
+				{
+					continue;
+				}
+
+				if (!string.IsNullOrEmpty(group.BaseType) &&
+					group.BaseType.ToLowerInvariant().Trim() != baseType.ToLowerInvariant().Trim())
+				{
+					continue;
+				}
+
+				return group;
+			}
+
+			return category;
+		}
+
 		public void CalculateYodleeRunningBalance(IDatabaseCustomerMarketPlace dmp, string sourceId, AmountInfo currentBalance)
 		{
 			var mp = GetCustomerMarketPlace(dmp);
@@ -1548,7 +1671,7 @@ namespace EZBob.DatabaseLib
 			{
 				return;
 			}
-			
+
 			var orderItemBankTransactions =
 				mp.YodleeOrders
 				  .SelectMany(yo => yo.OrderItems)
@@ -1561,21 +1684,42 @@ namespace EZBob.DatabaseLib
 			{
 				return;
 			}
-			DateTime currDate;
+
+			var yodleeGroupRepository = new YodleeGroupRepository(_session).GetAll().ToList();
+			var yodleeGroupRuleMapRepository = new YodleeGroupRuleMapRepository(_session).GetAll().ToList();
+
+			DateTime currDate = new DateTime();
 			int currIndex = 0;
 			if (!transactions[0].runningBalance.HasValue)
 			{
 				transactions[0].runningBalance = currentBalance.Value;
 				transactions[0].runningBalanceCurrency = currentBalance.CurrencyCode;
 				currDate = (transactions[0].postDate ?? transactions[0].transactionDate).Value;
+				try
+				{
+					transactions[0].ezbobCategory = CategorizeTransaction(yodleeGroupRepository, yodleeGroupRuleMapRepository, transactions[0].description, transactions[0].transactionBaseType,
+															  (int)transactions[0].transactionAmount.Value, mp.Customer.Id,
+															  mp.Customer.PersonalInfo.Surname);
+				}
+				catch { }
 			}
 			else
 			{
-				return;
+				if (transactions[0].ezbobCategory != null) return;
 			}
 
 			for (int i = 1; i < transactions.Count; ++i)
 			{
+				if (transactions[i].ezbobCategory == null)
+				{
+					try
+					{
+						transactions[i].ezbobCategory = CategorizeTransaction(yodleeGroupRepository, yodleeGroupRuleMapRepository, transactions[i].description, transactions[i].transactionBaseType,
+																  (int)transactions[i].transactionAmount.Value, mp.Customer.Id,
+																  mp.Customer.PersonalInfo.Surname);
+					}
+					catch { }
+				}
 				if (transactions[i].runningBalance.HasValue)
 				{
 					continue;
@@ -1603,7 +1747,7 @@ namespace EZBob.DatabaseLib
 				{
 					for (int j = currIndex; j < i; j++)
 					{
-						transactions[j].runningBalance = transactions[i-1].runningBalance;
+						transactions[j].runningBalance = transactions[i - 1].runningBalance;
 					}
 					currDate = (transactions[i].postDate ?? transactions[i].transactionDate).Value;
 					currIndex = i;
@@ -1622,7 +1766,7 @@ namespace EZBob.DatabaseLib
 			var mpYodleeOrder = customerMarketPlace.YodleeOrders.LastOrDefault(y => y.Created.Date <= history);
 			if (mpYodleeOrder != null)
 			{
-				var orderItems = mpYodleeOrder.OrderItems.Where(x=>x.isSeidMod.HasValue && x.isSeidMod.Value == 0);
+				var orderItems = mpYodleeOrder.OrderItems.Where(x => x.isSeidMod.HasValue && x.isSeidMod.Value == 0);
 				//Not Retrieving Seid transactions as they seem to be duplicated data
 				foreach (var item in orderItems)
 				{
@@ -1694,6 +1838,7 @@ namespace EZBob.DatabaseLib
 																			 item.asOfDate));
 					}
 
+
 					var bankTransactionsDataList = customerMarketPlace
 						.YodleeOrders
 						.SelectMany(x => x.OrderItems)
@@ -1741,7 +1886,7 @@ namespace EZBob.DatabaseLib
 								siteCategory = bankTransaction.siteCategory,
 								classUpdationSource = bankTransaction.classUpdationSource,
 								lastCategorised = bankTransaction.lastCategorised,
-								transactionDate = new YDate {date = bankTransaction.transactionDate},
+								transactionDate = new YDate { date = bankTransaction.transactionDate },
 								isReimbursable = bankTransaction.isReimbursable,
 								isReimbursableSpecified = bankTransaction.isReimbursableSpecified,
 								mcCode = bankTransaction.mcCode,
@@ -1773,9 +1918,9 @@ namespace EZBob.DatabaseLib
 											amount = bankTransaction.calcRunningBalance,
 											currencyCode = bankTransaction.calcRunningBalanceCurrency
 										},
-								category = bankTransaction.category,
+								category = bankTransaction.ezbobCategory == null ? "-" : bankTransaction.ezbobCategory.Group + " " + bankTransaction.ezbobCategory.SubGroup,
 								link = bankTransaction.link,
-								postDate = new YDate {date = bankTransaction.postDate},
+								postDate = new YDate { date = bankTransaction.postDate },
 								prevTransactionCategoryId = bankTransaction.prevTransactionCategoryId,
 								prevTransactionCategoryIdSpecified = bankTransaction.prevTransactionCategoryIdSpecified,
 								isBusinessExpense = bankTransaction.isBusinessExpense,
@@ -1800,8 +1945,9 @@ namespace EZBob.DatabaseLib
 								isMedicalExpenseSpecified = bankTransaction.isMedicalExpenseSpecified,
 								categorizationKeyword = bankTransaction.categorizationKeyword,
 								sourceTransactionType = bankTransaction.sourceTransactionType,
+
 							})
-						
+
 						.Distinct(new YodleeOrderComparer())
 						.ToList();
 
@@ -1905,17 +2051,17 @@ namespace EZBob.DatabaseLib
 									: ((dataItem.GrossAmount != null && dataItem.GrossAmount.CurrencyCode != null)
 										   ? dataItem.GrossAmount.CurrencyCode
 										   : ((dataItem.NetAmount != null && dataItem.NetAmount.CurrencyCode != null)
-											      ? dataItem.NetAmount.CurrencyCode
-											      : "GBP"))),
+												  ? dataItem.NetAmount.CurrencyCode
+												  : "GBP"))),
 							FeeAmount =
 								_CurrencyConvertor.ConvertToBaseCurrency(
-									dataItem.FeeAmount ?? new AmountInfo {CurrencyCode = "GBP", Value = 0}, dataItem.Created).Value,
+									dataItem.FeeAmount ?? new AmountInfo { CurrencyCode = "GBP", Value = 0 }, dataItem.Created).Value,
 							GrossAmount =
 								_CurrencyConvertor.ConvertToBaseCurrency(
-									dataItem.GrossAmount ?? new AmountInfo {CurrencyCode = "GBP", Value = 0}, dataItem.Created).Value,
+									dataItem.GrossAmount ?? new AmountInfo { CurrencyCode = "GBP", Value = 0 }, dataItem.Created).Value,
 							NetAmount =
 								_CurrencyConvertor.ConvertToBaseCurrency(
-									dataItem.NetAmount ?? new AmountInfo {CurrencyCode = "GBP", Value = 0}, dataItem.Created).Value,
+									dataItem.NetAmount ?? new AmountInfo { CurrencyCode = "GBP", Value = 0 }, dataItem.Created).Value,
 							TimeZone = dataItem.Timezone,
 							Status = dataItem.Status,
 							Type = dataItem.Type,
@@ -2715,13 +2861,15 @@ namespace EZBob.DatabaseLib
 
 		#region class AnalysisFunctionData
 
-		private class AnalysisFunctionData {
+		private class AnalysisFunctionData
+		{
 			public Guid fid { get; private set; }
-			public Guid fpid { get ; private set ; }
-			public string value { get ; private set ; }
-			public DateTime afDate { get ; private set ; }
+			public Guid fpid { get; private set; }
+			public string value { get; private set; }
+			public DateTime afDate { get; private set; }
 
-			public AnalysisFunctionData(IDataReader oReader) {
+			public AnalysisFunctionData(IDataReader oReader)
+			{
 				fid = new Guid(oReader["fid"].ToString());
 				fpid = new Guid(oReader["fpid"].ToString());
 				value = oReader["value"].ToString();
@@ -2731,7 +2879,8 @@ namespace EZBob.DatabaseLib
 
 		#endregion class AnalysisFunctionData
 
-		public Dictionary<DateTime, List<IAnalysisDataParameterInfo>> GetAnalyisisFunctions(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
+		public Dictionary<DateTime, List<IAnalysisDataParameterInfo>> GetAnalyisisFunctions(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
+		{
 			IDbCommand cmd = _session.Connection.CreateCommand();
 			cmd.CommandText = "GetFunctionAnalysisValuesByCustomerMarketPlace";
 			cmd.CommandType = CommandType.StoredProcedure;
@@ -2746,17 +2895,20 @@ namespace EZBob.DatabaseLib
 
 			var lst = new List<AnalysisFunctionData>();
 
-			try {
+			try
+			{
 				IDataReader oReader = cmd.ExecuteReader();
 
-				if (oReader != null) {
+				if (oReader != null)
+				{
 					while (oReader.Read())
 						lst.Add(new AnalysisFunctionData(oReader));
 
 					oReader.Dispose();
 				} // if readers is not null
 			}
-			catch (Exception e) {
+			catch (Exception e)
+			{
 				_Log.Error(string.Format("Failed to GetAnalyisisFunctions(for mp {0})", databaseCustomerMarketPlace.Id), e);
 			} // try
 
@@ -2764,10 +2916,12 @@ namespace EZBob.DatabaseLib
 
 			var oResult = new Dictionary<DateTime, List<IAnalysisDataParameterInfo>>();
 
-			foreach (var afd in lst) {
+			foreach (var afd in lst)
+			{
 				List<IAnalysisDataParameterInfo> paramsList;
 
-				if (!oResult.TryGetValue(afd.afDate, out paramsList)) {
+				if (!oResult.TryGetValue(afd.afDate, out paramsList))
+				{
 					paramsList = new List<IAnalysisDataParameterInfo>();
 					oResult.Add(afd.afDate, paramsList);
 				} // if
