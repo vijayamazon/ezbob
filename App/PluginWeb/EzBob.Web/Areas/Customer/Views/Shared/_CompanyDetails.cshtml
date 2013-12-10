@@ -500,8 +500,9 @@
 <script id="oneDirector" type="text/template">
     <%_.each(directors, function(director, i){%>
         <div class="Directors">
-            <h1 class="form_start" preffix="<%-preffix%>" seqno="<%=i%>">Director #<%=i+1%><a style="margin-left: 15px; margin-bottom: 7px" number="<%=i+1%>" href="#" class="removeDirector rc-button green" ui-event-control-id="personal-info:remove_director">Remove</a></h1>
-
+            <div class="add-director-container">
+                <h1 class="form_start" preffix="<%-preffix%>" seqno="<%=i%>">Director #<%=i+1%><a style="float: right; margin-bottom: 7px" number="<%=i+1%>" href="#" class="removeDirector rc-button green" ui-event-control-id="personal-info:remove_director">Remove</a></h1>
+            </div>
             <div class="control-group form_field_container">
                 <div class="controls">
                     <label class="control-label attardi-input">

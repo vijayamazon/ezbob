@@ -496,6 +496,7 @@
     <Content Include="Content\css\images\help\help_sage.jpg" />
     <Content Include="Content\css\images\help\help_security.png" />
     <Content Include="Content\css\images\help_ebay.jpg" />
+    <Content Include="Content\css\images\invite_chat_bg.png" />
     <Content Include="Content\css\images\live_help.jpg" />
     <Content Include="Content\css\images\lock_64.png" />
     <Content Include="Content\css\images\magento-logo.png" />

@@ -3,6 +3,8 @@ using FluentNHibernate.Mapping;
 
 namespace EZBob.DatabaseLib.Model.Database
 {
+	using Iesi.Collections.Generic;
+
 	public enum CustomerAddressType
 	{
 		PersonalAddress = 1,
@@ -46,6 +48,8 @@ namespace EZBob.DatabaseLib.Model.Database
 		public virtual string Mailsortcode { get; set; }
 		public virtual string Udprn { get; set; }
 
+		[Newtonsoft.Json.JsonIgnore]
+		public virtual ISet<Zoopla> Zoopla { get; set; }
 		public virtual string FormattedAddress
 		{
 			get
@@ -98,6 +102,12 @@ namespace EZBob.DatabaseLib.Model.Database.Mappings
 			Map(x => x.Udprn).Column("Udprn").Length(200);
 			References(x => x.Director, "DirectorId");
 			References(x => x.Customer, "CustomerId");
+
+			HasMany<Zoopla>(x => x.Zoopla)
+				.AsSet()
+				.Inverse()
+				.KeyColumn("CustomerAddressId")
+				.Cascade.AllDeleteOrphan();
 		}
 	}
 }
