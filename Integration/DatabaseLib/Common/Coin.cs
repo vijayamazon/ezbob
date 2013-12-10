@@ -1,6 +1,9 @@
 ﻿namespace EZBob.DatabaseLib.Common {
+	using System;
+
 	#region class Coin
 
+	[Serializable]
 	public class Coin {
 		#region public
 

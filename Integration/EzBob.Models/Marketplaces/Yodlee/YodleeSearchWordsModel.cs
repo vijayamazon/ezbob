@@ -1,31 +1,40 @@
 ﻿namespace EzBob.Models.Marketplaces.Yodlee
 {
+	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
 	using NHibernate;
-	using Scorto.NHibernate.Repository;
 	using EZBob.DatabaseLib.Model.Marketplaces.Yodlee;
 
+	[Serializable]
 	public class YodleeSearchWordsModel
 	{
-		public SortedDictionary<string/*word*/, SortedDictionary<string/*Income/Expense*/, double/*amount/Count*/>> YodleeSearchWordModelDict { get; set; }
+		public SortedDictionary<string /*word*/, SortedDictionary<string /*Income/Expense*/, double /*amount/Count*/>> YodleeSearchWordModelDict { get; set; }
 		public Dictionary<int /*id*/, string /*word*/> WordsDict;
+	}
+
+	public class YodleeSearchWordsModelBuilder
+	{
+
 		private readonly List<string> _yodleeSearchWords;
 		private const string CustomerSurname = "0";
 		private const string DirectorSurname = "1";
 		private const string SearchWord = "2";
+		private YodleeSearchWordsModel yodlee;
 
-		public YodleeSearchWordsModel(ISession session, Customer customer)
+		public YodleeSearchWordsModelBuilder(ISession session, Customer customer)
 		{
-			YodleeSearchWordModelDict = new SortedDictionary<string, SortedDictionary<string, double>>();
-			WordsDict = new Dictionary<int, string>();
+			yodlee = new YodleeSearchWordsModel
+				{
+					YodleeSearchWordModelDict = new SortedDictionary<string, SortedDictionary<string, double>>(),
+					WordsDict = new Dictionary<int, string>()
+				};
 			var words = new YodleeSearchWordsRepository(session).GetAll();
 
 			foreach (var word in words)
 			{
-				WordsDict.Add(word.Id, word.SearchWords);
+				yodlee.WordsDict.Add(word.Id, word.SearchWords);
 			}
 
 			_yodleeSearchWords = words.Select(x => string.Format("{0}{1}", SearchWord, x.SearchWords)).ToList();
@@ -87,16 +96,16 @@
 		public void AddMissing()
 		{
 			//retrieving type list
-			var typeList = (from word in YodleeSearchWordModelDict from type in YodleeSearchWordModelDict[word.Key] select type.Key).ToList();
+			var typeList = (from word in yodlee.YodleeSearchWordModelDict from type in yodlee.YodleeSearchWordModelDict[word.Key] select type.Key).ToList();
 
 			//adding amount 0 for missing word/type
-			foreach (var word in YodleeSearchWordModelDict)
+			foreach (var word in yodlee.YodleeSearchWordModelDict)
 			{
 				foreach (var type in typeList)
 				{
-					if (!YodleeSearchWordModelDict[word.Key].ContainsKey(type))
+					if (!yodlee.YodleeSearchWordModelDict[word.Key].ContainsKey(type))
 					{
-						YodleeSearchWordModelDict[word.Key][type] = 0;
+						yodlee.YodleeSearchWordModelDict[word.Key][type] = 0;
 					}
 				}
 			}
@@ -104,9 +113,9 @@
 
 		private void Add(string word, string type, double amount)
 		{
-			if (!YodleeSearchWordModelDict.ContainsKey(word))
+			if (!yodlee.YodleeSearchWordModelDict.ContainsKey(word))
 			{
-				YodleeSearchWordModelDict[word] = new SortedDictionary<string, double>();
+				yodlee.YodleeSearchWordModelDict[word] = new SortedDictionary<string, double>();
 			}
 
 			Sum(word, type, amount);
@@ -114,7 +123,7 @@
 
 		private void Sum(string cat, string type, double amount)
 		{
-			var x = YodleeSearchWordModelDict[cat];
+			var x = yodlee.YodleeSearchWordModelDict[cat];
 
 			if (!x.ContainsKey(type))
 			{
@@ -124,6 +133,11 @@
 			{
 				x[type] += amount;
 			}
+		}
+
+		public YodleeSearchWordsModel GetModel()
+		{
+			return yodlee;
 		}
 	}
 }

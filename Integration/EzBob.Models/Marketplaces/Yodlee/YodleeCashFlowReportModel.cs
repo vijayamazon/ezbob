@@ -2,17 +2,26 @@
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Globalization;
 	using System.Linq;
 	using EZBob.DatabaseLib.Model;
 	using NHibernate;
-	
+
+	[Serializable]
 	public class YodleeCashFlowReportModel
 	{
-		public SortedDictionary<string/*type,name*/, SortedDictionary<int/*yearmonth*/, double/*amount*/>> YodleeCashFlowReportModelDict { get; set; }
-		public SortedDictionary<int/*yearmonth*/, int/*minday*/ > MinDateDict { get; set; }
-		public SortedDictionary<int/*yearmonth*/, int/*maxday*/> MaxDateDict { get; set; }
+		public BankStatementDataModel BankStatementDataModel { get; set; }
+		public SortedDictionary<string /*type,name*/, SortedDictionary<int /*yearmonth*/, double /*amount*/>>
+			YodleeCashFlowReportModelDict { get; set; }
+
+		public SortedDictionary<int /*yearmonth*/, int /*minday*/> MinDateDict { get; set; }
+		public SortedDictionary<int /*yearmonth*/, int /*maxday*/> MaxDateDict { get; set; }
 		public double MonthInPayments = 0;
 		public DateTime AsOfDate;
+	}
+
+	public class YodleeCashFlowReportModelBuilder
+	{
 		private const int TotalColumn = 999999;
 		private const string OtherIncomeCat = "Other Income";
 		private const string OtherExpensesCat = "Other Expenses";
@@ -39,11 +48,17 @@
 		
 
 		private readonly IConfigurationVariablesRepository _configVariables;
-		public YodleeCashFlowReportModel(ISession session)
+
+		private YodleeCashFlowReportModel yodlee;
+		public YodleeCashFlowReportModelBuilder(ISession session)
 		{
-			YodleeCashFlowReportModelDict = new SortedDictionary<string, SortedDictionary<int, double>>();
-			MinDateDict = new SortedDictionary<int, int>();
-			MaxDateDict = new SortedDictionary<int, int>();
+			yodlee = new YodleeCashFlowReportModel
+				{
+					YodleeCashFlowReportModelDict = new SortedDictionary<string, SortedDictionary<int, double>>(),
+					MinDateDict = new SortedDictionary<int, int>(),
+					MaxDateDict = new SortedDictionary<int, int>(),
+
+				};
 			_configVariables = new ConfigurationVariablesRepository(session);
 		}
 
@@ -51,7 +66,7 @@
 		{
 			var amount = transaction.transactionAmount.HasValue ? transaction.transactionAmount.Value : 0;
 			//var catType = transaction.transactionCategory.Type;
-			var catName = transaction.categoryName;
+			var catName = transaction.ezbobCategory;
 			var baseType = transaction.transactionBaseType;
 			var date = transaction.transactionDate;
 			var cat = string.Format("{1}{0}", catName, baseType == "credit" ? Credit : Dedit);
@@ -82,7 +97,7 @@
 			var monthAgo = DateTime.Today.AddMonths(-1);
 			if (date >= monthAgo)
 			{
-				MonthInPayments += amount;
+				yodlee.MonthInPayments += amount;
 			}
 		}
 
@@ -90,28 +105,28 @@
 		{
 			if (!date.HasValue) return;
 
-			if (!MinDateDict.ContainsKey(yearmonth))
+			if (!yodlee.MinDateDict.ContainsKey(yearmonth))
 			{
-				MinDateDict[yearmonth] = date.Value.Day;
+				yodlee.MinDateDict[yearmonth] = date.Value.Day;
 			}
 			else
 			{
-				if (MinDateDict[yearmonth] > date.Value.Day)
+				if (yodlee.MinDateDict[yearmonth] > date.Value.Day)
 				{
-					MinDateDict[yearmonth] = date.Value.Day;
+					yodlee.MinDateDict[yearmonth] = date.Value.Day;
 				}
 			}
 
 
-			if (!MaxDateDict.ContainsKey(yearmonth))
+			if (!yodlee.MaxDateDict.ContainsKey(yearmonth))
 			{
-				MaxDateDict[yearmonth] = date.Value.Day;
+				yodlee.MaxDateDict[yearmonth] = date.Value.Day;
 			}
 			else
 			{
-				if (MaxDateDict[yearmonth] < date.Value.Day)
+				if (yodlee.MaxDateDict[yearmonth] < date.Value.Day)
 				{
-					MaxDateDict[yearmonth] = date.Value.Day;
+					yodlee.MaxDateDict[yearmonth] = date.Value.Day;
 				}
 			}
 		}
@@ -122,7 +137,7 @@
 			CalculateOther(Dedit, string.Format("{0}{1}", OtherDedit, OtherExpensesCat));
 
 			//retrieving month list
-			var monthList = (from cat in YodleeCashFlowReportModelDict from month in YodleeCashFlowReportModelDict[cat.Key] select month.Key).ToList();
+			var monthList = (from cat in yodlee.YodleeCashFlowReportModelDict from month in yodlee.YodleeCashFlowReportModelDict[cat.Key] select month.Key).ToList();
 
 			//adding missing categories
 			AddIfMissing(TotalCredit, TotalIncomeCat);
@@ -131,18 +146,18 @@
 			AddIfMissing(NumTransDedit, NumOfTransactionsCat);
 
 			//adding amount 0 for missing month/categories
-			foreach (var cat in YodleeCashFlowReportModelDict)
+			foreach (var cat in yodlee.YodleeCashFlowReportModelDict)
 			{
 				foreach (var m in monthList)
 				{
-					if (!YodleeCashFlowReportModelDict[cat.Key].ContainsKey(m))
+					if (!yodlee.YodleeCashFlowReportModelDict[cat.Key].ContainsKey(m))
 					{
-						YodleeCashFlowReportModelDict[cat.Key][m] = 0;
+						yodlee.YodleeCashFlowReportModelDict[cat.Key][m] = 0;
 					}
 				}
 			}
 
-			if (YodleeCashFlowReportModelDict.Count > 0)
+			if (yodlee.YodleeCashFlowReportModelDict.Count > 0)
 			{
 				//Calc Avarage Rows
 				CalculateAverage(string.Format("{0}{1}", AverageCredit, AverageIncomeCat),
@@ -156,21 +171,40 @@
 									 string.Format("{0}{1}", TotalCredit, TotalIncomeCat),
 									 string.Format("{0}{1}", TotalDedit, TotalExpensesCat));
 			}
+
+			yodlee.BankStatementDataModel = new BankStatementDataModel();
+			DateTime from = new DateTime(yodlee.MinDateDict.First().Key / 100, yodlee.MinDateDict.First().Key % 100, yodlee.MinDateDict.Last().Value);
+			DateTime to = new DateTime(yodlee.MaxDateDict.First().Key / 100, yodlee.MaxDateDict.First().Key % 100, yodlee.MaxDateDict.Last().Value);
+
+			yodlee.BankStatementDataModel.Period = string.Format("{0} - {1}", from.ToString("MMM yy", CultureInfo.InvariantCulture), to.ToString("MMM yy", CultureInfo.InvariantCulture));
+			yodlee.BankStatementDataModel.Revenues = yodlee.YodleeCashFlowReportModelDict.ContainsKey("3Revenues Online") ? yodlee.YodleeCashFlowReportModelDict["3Revenues Online"][TotalColumn] : 0;
+			yodlee.BankStatementDataModel.Revenues += yodlee.YodleeCashFlowReportModelDict.ContainsKey("3Revenues Transfers") ? yodlee.YodleeCashFlowReportModelDict["3Revenues Transfers"][TotalColumn] : 0;
+			yodlee.BankStatementDataModel.Opex = yodlee.YodleeCashFlowReportModelDict.ContainsKey("7Opex ") ? yodlee.YodleeCashFlowReportModelDict["7Opex "][TotalColumn] : 0;
+			yodlee.BankStatementDataModel.Salaries = yodlee.YodleeCashFlowReportModelDict.ContainsKey("7Salaries and Tax Salaries") ? yodlee.YodleeCashFlowReportModelDict["7Salaries and Tax Salaries"][TotalColumn] : 0;
+			yodlee.BankStatementDataModel.Tax = yodlee.YodleeCashFlowReportModelDict.ContainsKey("7Salaries and Tax Taxes") ? yodlee.YodleeCashFlowReportModelDict["7Salaries and Tax Taxes"][TotalColumn] : 0;
+			yodlee.BankStatementDataModel.ActualLoansRepayment = yodlee.YodleeCashFlowReportModelDict.ContainsKey("7Loan Repayments ") ? yodlee.YodleeCashFlowReportModelDict["7Loan Repayments "][TotalColumn] : 0;
+			yodlee.BankStatementDataModel.TotalValueAdded = yodlee.BankStatementDataModel.Revenues - yodlee.BankStatementDataModel.Opex;
+			yodlee.BankStatementDataModel.PercentOfRevenues = yodlee.BankStatementDataModel.Revenues / yodlee.BankStatementDataModel.TotalValueAdded;
+			yodlee.BankStatementDataModel.Ebida = yodlee.BankStatementDataModel.Salaries + yodlee.BankStatementDataModel.Tax;
+			yodlee.BankStatementDataModel.FreeCashFlow = yodlee.BankStatementDataModel.Ebida - yodlee.BankStatementDataModel.ActualLoansRepayment;
+
+			
+
 		}
 
 		private void AddIfMissing(char catPrefix, string cat)
 		{
-			if (!YodleeCashFlowReportModelDict.ContainsKey(string.Format("{0}{1}", catPrefix, cat)))
+			if (!yodlee.YodleeCashFlowReportModelDict.ContainsKey(string.Format("{0}{1}", catPrefix, cat)))
 			{
 				var total = new SortedDictionary<int, double> {{TotalColumn, 0}};
-				YodleeCashFlowReportModelDict[string.Format("{0}{1}", catPrefix, cat)] = total;
+				yodlee.YodleeCashFlowReportModelDict[string.Format("{0}{1}", catPrefix, cat)] = total;
 			}
 		}
 
 		private void CalculateNetCashFlow(string netCashFlowCat, string totalIncomeCat, string totalExpensesCat)
 		{
-			var totalIncomeRow = YodleeCashFlowReportModelDict[totalIncomeCat];
-			var totalExpensesRow = YodleeCashFlowReportModelDict[totalExpensesCat];
+			var totalIncomeRow = yodlee.YodleeCashFlowReportModelDict[totalIncomeCat];
+			var totalExpensesRow = yodlee.YodleeCashFlowReportModelDict[totalExpensesCat];
 
 			foreach (var yearmonth in totalIncomeRow.Keys)
 			{
@@ -180,8 +214,8 @@
 
 		private void CalculateAverage(string averageCat, string totalCat, string numOfTransCat)
 		{
-			var totalRow = YodleeCashFlowReportModelDict[totalCat];
-			var numOfTransRow = YodleeCashFlowReportModelDict[numOfTransCat];
+			var totalRow = yodlee.YodleeCashFlowReportModelDict[totalCat];
+			var numOfTransRow = yodlee.YodleeCashFlowReportModelDict[numOfTransCat];
 
 			foreach (var yearmonth in totalRow.Keys)
 			{
@@ -202,9 +236,9 @@
 			//calculating other (less than 500 pound in totals (configurable)
 			var maxYodleeOtherCategoryAmount = double.Parse(_configVariables.GetByName("MaxYodleeOtherCategoryAmount").Value);
 
-			foreach (var cat in YodleeCashFlowReportModelDict)
+			foreach (var cat in yodlee.YodleeCashFlowReportModelDict)
 			{
-				var x = YodleeCashFlowReportModelDict[cat.Key];
+				var x = yodlee.YodleeCashFlowReportModelDict[cat.Key];
 				if (cat.Key[0] == baseType && x[TotalColumn] < maxYodleeOtherCategoryAmount)
 				{
 					otherList.Add(cat.Key);
@@ -218,7 +252,7 @@
 
 			foreach (var other in otherList)
 			{
-				foreach (var cat in YodleeCashFlowReportModelDict[other])
+				foreach (var cat in yodlee.YodleeCashFlowReportModelDict[other])
 				{
 					Sum(otherCat, cat.Key, cat.Value);
 				}
@@ -226,15 +260,15 @@
 
 			foreach (var other in otherList)
 			{
-				YodleeCashFlowReportModelDict.Remove(other);
+				yodlee.YodleeCashFlowReportModelDict.Remove(other);
 			}
 		}
 
 		private void Add(string cat, double amount, int yearmonth)
 		{
-			if (!YodleeCashFlowReportModelDict.ContainsKey(cat))
+			if (!yodlee.YodleeCashFlowReportModelDict.ContainsKey(cat))
 			{
-				YodleeCashFlowReportModelDict[cat] = new SortedDictionary<int, double>();
+				yodlee.YodleeCashFlowReportModelDict[cat] = new SortedDictionary<int, double>();
 			}
 
 			Sum(cat, yearmonth, amount);
@@ -242,7 +276,7 @@
 
 		private void Sum(string cat, int yearmonth, double amount)
 		{
-			var x = YodleeCashFlowReportModelDict[cat];
+			var x = yodlee.YodleeCashFlowReportModelDict[cat];
 
 			if (!x.ContainsKey(yearmonth))
 			{
@@ -252,6 +286,16 @@
 			{
 				x[yearmonth] += amount;
 			}
+		}
+
+		public void SetAsOfDate(DateTime asOfDate)
+		{
+			yodlee.AsOfDate = asOfDate;
+		}
+
+		public YodleeCashFlowReportModel GetModel()
+		{
+			return yodlee;
 		}
 	}
 }

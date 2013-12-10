@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using EZBob.DatabaseLib.Common;
 
 namespace EZBob.DatabaseLib.DatabaseWrapper.Order {
+	
+	[Serializable]
 	public class VatReturnEntry : AInternalOrderItem {
 		#region public
 

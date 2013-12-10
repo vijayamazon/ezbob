@@ -1,5 +1,6 @@
 ﻿namespace EZBob.DatabaseLib.Model.Marketplaces.Yodlee
 {
+	using System;
 	using FluentNHibernate.Mapping;
 	public enum YodleeRule
 	{
@@ -11,6 +12,7 @@
 		DontIncludeDirector = 6
 	}
 
+	[Serializable]
 	public class MP_YodleeRule
 	{
 		public virtual int Id { get; set; }

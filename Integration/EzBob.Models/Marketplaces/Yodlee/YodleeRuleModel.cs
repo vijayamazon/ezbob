@@ -1,21 +1,22 @@
 ﻿namespace EzBob.Models.Marketplaces.Yodlee
 {
+	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 	using EZBob.DatabaseLib.Model.Database.Repository;
-	using EZBob.DatabaseLib.Model.Marketplaces.Yodlee;
 	using NHibernate;
 
+	[Serializable]
 	public class YodleeRuleModel
 	{
-		public List<MP_YodleeGroup> Groups;
-		public List<MP_YodleeRule> Rules;
+		public List<YodleeGroupModel> Groups;
+		public List<YodleeRulesModel> Rules;
 		public Dictionary<string /*group*/, Dictionary<string,string> /*Rule,Literal*/> GroupRulesDict;
 
 		public YodleeRuleModel(ISession session)
 		{
-			Groups = new YodleeGroupRepository(session).GetAll().ToList();
-			Rules = new YodleeRuleRepository(session).GetAll().ToList();
+			Groups = new YodleeGroupRepository(session).GetAll().Select(gr => new YodleeGroupModel{ Id = gr.Id, Group = gr.Group + (string.IsNullOrEmpty(gr.SubGroup) ? "" : " - " + gr.SubGroup) }).ToList();
+			Rules = new YodleeRuleRepository(session).GetAll().Select(r => new YodleeRulesModel{Id =r.Id, Rule = r.Rule}).ToList();
 
 			var groupRules = new YodleeGroupRuleMapRepository(session).GetAll().ToList();
 
@@ -40,5 +41,19 @@
 				}
 			}
 		}
+	}
+
+	[Serializable]
+	public class YodleeRulesModel
+	{
+		public int Id { get; set; }
+		public string Rule { get; set; }
+	}
+
+	[Serializable]
+	public class YodleeGroupModel
+	{
+		public int Id { get; set; }
+		public string Group { get; set; }
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 namespace EzBob.Models.Marketplaces
 {
+	[Serializable]
 	public class YodleeTransactionModel
 	{
 		public YodleeTransactionModel()

@@ -71,7 +71,7 @@ namespace EzBob.Models.Marketplaces.Builders
 			model.Yodlee = _yodleeModel;
 		}
 
-		private YodleeModel BuildYodlee(MP_CustomerMarketPlace mp, DateTime? history)
+		public YodleeModel BuildYodlee(MP_CustomerMarketPlace mp, DateTime? history)
 		{
 			
 			YodleeOrderDictionary yodleeData = null;
@@ -155,34 +155,38 @@ namespace EzBob.Models.Marketplaces.Builders
 
 		private YodleeCashFlowReportModel CreateYodleeCashFlowModel(YodleeModel model, Customer customer, out YodleeSearchWordsModel yodleeSearchWordsModel, out YodleeRunningBalanceModel yodleeRunningBalanceModel)
 		{
-			var yodleeCashFlowReportModel = new YodleeCashFlowReportModel(_session);
-			yodleeSearchWordsModel = new YodleeSearchWordsModel(_session, customer);
-			yodleeRunningBalanceModel = new YodleeRunningBalanceModel();
+			var yodleeCashFlowReportModelBuilder = new YodleeCashFlowReportModelBuilder(_session);
+			var yodleeSearchWordsModelBuilder = new YodleeSearchWordsModelBuilder(_session, customer);
+			var yodleeRunningBalanceModelBuilder = new YodleeRunningBalanceModelBuilder();
 			foreach (var bank in model.banks)
 			{
 				if (bank.overdraftProtection.HasValue && bank.transactions.Any())
 				{
-					yodleeRunningBalanceModel.BankFrame -= bank.overdraftProtection.Value;
+					yodleeRunningBalanceModelBuilder.SetBankFrame(bank.overdraftProtection.Value);
 				}
 
 				if (bank.asOfDate.HasValue)
 				{
-					yodleeCashFlowReportModel.AsOfDate = bank.asOfDate.Value;
-					yodleeRunningBalanceModel.AsOfDate = bank.asOfDate.Value;
+					yodleeCashFlowReportModelBuilder.SetAsOfDate(bank.asOfDate.Value);
+					yodleeRunningBalanceModelBuilder.SetAsOfDate(bank.asOfDate.Value);
 				}
-				yodleeRunningBalanceModel.AccountCurrentBalanceDict[bank.accountNumber] = bank.currentBalance.HasValue? bank.currentBalance.Value : 0;
+				yodleeRunningBalanceModelBuilder.SetAccountCurrentBalance(bank.accountNumber, bank.currentBalance.HasValue? bank.currentBalance.Value : 0);
 				foreach (var transaction in bank.transactions)
 				{
-					yodleeCashFlowReportModel.Add(transaction);
-					yodleeSearchWordsModel.Add(transaction);
-					yodleeRunningBalanceModel.Add(transaction, bank.accountNumber);
+					yodleeCashFlowReportModelBuilder.Add(transaction);
+					yodleeSearchWordsModelBuilder.Add(transaction);
+					yodleeRunningBalanceModelBuilder.Add(transaction, bank.accountNumber);
 				}
 			}
 
-			yodleeCashFlowReportModel.AddMissingAndSort();
-			yodleeSearchWordsModel.AddMissing();
-			yodleeRunningBalanceModel.CalculateMergedRunningBalace();
-			return yodleeCashFlowReportModel;
+			yodleeCashFlowReportModelBuilder.AddMissingAndSort();
+			yodleeSearchWordsModelBuilder.AddMissing();
+
+			yodleeSearchWordsModel = yodleeSearchWordsModelBuilder.GetModel();
+			yodleeRunningBalanceModelBuilder.CalculateMergedRunningBalace();
+
+			yodleeRunningBalanceModel = yodleeRunningBalanceModelBuilder.GetModel();
+			return yodleeCashFlowReportModelBuilder.GetModel();
 		}
 
 		public override DateTime? GetSeniority(MP_CustomerMarketPlace mp)

@@ -1,5 +1,6 @@
 ﻿namespace EZBob.DatabaseLib.Model.Marketplaces.Yodlee
 {
+	using System;
 	using FluentNHibernate.Mapping;
 	public enum YodleeGroup
 	{
@@ -14,6 +15,7 @@
 		Exception = 9,
 	}
 
+	[Serializable]
 	public class MP_YodleeGroup
 	{
 		public virtual int Id { get; set; }

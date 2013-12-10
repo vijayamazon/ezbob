@@ -1,7 +1,9 @@
 ﻿namespace EzBob.Models.Marketplaces.Yodlee
 {
+	using System;
 	using System.Collections.Generic;
 
+	[Serializable]
 	public class YodleeModel
 	{
 		public IEnumerable<YodleeBankModel> banks { get; set; }

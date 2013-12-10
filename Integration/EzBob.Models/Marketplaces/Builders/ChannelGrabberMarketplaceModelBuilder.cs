@@ -8,25 +8,32 @@ using Integration.ChannelGrabberConfig;
 using NHibernate;
 using NHibernate.Linq;
 
-namespace EzBob.Models.Marketplaces.Builders {
-	class ChannelGrabberMarketplaceModelBuilder : MarketplaceModelBuilder {
+namespace EzBob.Models.Marketplaces.Builders
+{
+	class ChannelGrabberMarketplaceModelBuilder : MarketplaceModelBuilder
+	{
 		#region constructor
 
+		private readonly ISession _session;
 		public ChannelGrabberMarketplaceModelBuilder(ISession session)
-			: base(session) {
+			: base(session)
+		{
+			_session = session;
 		} // constructor
 
 		#endregion constructor
 
 		#region method GetPaymentAccountModel
 
-		public override PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history) {
+		public override PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history)
+		{
 			VendorInfo vi = Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(mp.Marketplace.Name);
 
 			if (!vi.HasExpenses && (vi.Behaviour == Behaviour.Default))
 				return null;
 
-			var paymentAccountModel = new PaymentAccountsModel {
+			var paymentAccountModel = new PaymentAccountsModel
+			{
 				TotalNetInPayments = 0,
 				TotalNetOutPayments = 0,
 				TransactionsNumber = 0,
@@ -66,52 +73,67 @@ namespace EzBob.Models.Marketplaces.Builders {
 
 		#region method InitializeSpecificData
 
-		protected override void InitializeSpecificData(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history) {
+		protected override void InitializeSpecificData(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history)
+		{
 			VendorInfo vi = Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(mp.Marketplace.Name);
 
-			switch (vi.Behaviour) {
-			case Behaviour.Default: // nothing here
-				break;
+			switch (vi.Behaviour)
+			{
+				case Behaviour.Default: // nothing here
+					break;
 
-			case Behaviour.HMRC:
-				var oVatReturn = DatabaseDataHelper
-					.GetAllHmrcVatReturnData(DateTime.UtcNow, mp)
-					.Distinct(new InternalOrderComparer())
-					.Select(x => (VatReturnEntry)x)
-					.ToList();
+				case Behaviour.HMRC:
+					var oVatReturn = DatabaseDataHelper
+						.GetAllHmrcVatReturnData(DateTime.UtcNow, mp)
+						.Distinct(new InternalOrderComparer())
+						.Select(x => (VatReturnEntry)x)
+						.ToList();
 
-				var oRtiTaxMonths = DatabaseDataHelper
-					.GetAllHmrcRtiTaxMonthData(DateTime.UtcNow, mp)
-					.GroupBy(
-						x => x.NativeOrderId, // key selector - split into groups having the same key
-						x => (RtiTaxMonthEntry)x, // element selector - convert each element in each group
-						(oIgnoredKey, lst) => { // result selector - select one element from each group
-							RtiTaxMonthEntry oResult = null;
+					var oRtiTaxMonths = DatabaseDataHelper
+						.GetAllHmrcRtiTaxMonthData(DateTime.UtcNow, mp)
+						.GroupBy(
+							x => x.NativeOrderId, // key selector - split into groups having the same key
+							x => (RtiTaxMonthEntry)x, // element selector - convert each element in each group
+							(oIgnoredKey, lst) =>
+							{ // result selector - select one element from each group
+								RtiTaxMonthEntry oResult = null;
 
-							lst.ForEach(o => {
-								if ((oResult == null) || (oResult.FetchTime < o.FetchTime))
-									oResult = o;
-							});
+								lst.ForEach(o =>
+								{
+									if ((oResult == null) || (oResult.FetchTime < o.FetchTime))
+										oResult = o;
+								});
 
-							// At this point oResult should not be null because
-							// at least one element with the oIgnoredKey was found...
+								// At this point oResult should not be null because
+								// at least one element with the oIgnoredKey was found...
 
-							return oResult;
-						} // end of result selector
-					)
-					.ToList();
+								return oResult;
+							} // end of result selector
+						)
+						.ToList();
 
-				oVatReturn.Sort(VatReturnEntry.CompareForSort);
-				oRtiTaxMonths.Sort(RtiTaxMonthEntry.CompareForSort);
+					oVatReturn.Sort(VatReturnEntry.CompareForSort);
+					oRtiTaxMonths.Sort(RtiTaxMonthEntry.CompareForSort);
 
-				model.CGData = new ChannelGrabberHmrcData {
-					VatReturn = oVatReturn,
-					RtiTaxMonths = oRtiTaxMonths
-				};
-				break;
 
-			default:
-				throw new ArgumentOutOfRangeException();
+					model.CGData = new ChannelGrabberHmrcData
+					{
+						VatReturn = oVatReturn,
+						RtiTaxMonths = oRtiTaxMonths,
+						BankStatement = new BankStatementDataModel()
+					};
+
+					var yodlee = mp.Customer.CustomerMarketPlaces.FirstOrDefault(m => m.Marketplace.Name == "Yodlee");
+					if (yodlee != null)
+					{
+						var yodleeMarketplaceModelBuilder = new YodleeMarketplaceModelBuilder(_session);
+						var yodleeModel = yodleeMarketplaceModelBuilder.BuildYodlee(yodlee, null);
+						((ChannelGrabberHmrcData)model.CGData).BankStatement = yodleeModel.CashFlowReportModel.BankStatementDataModel;
+					}
+					break;
+
+				default:
+					throw new ArgumentOutOfRangeException();
 			} // switch
 		} // InitializeSpecificData
 
@@ -119,7 +141,8 @@ namespace EzBob.Models.Marketplaces.Builders {
 
 		#region method GetSeniority
 
-		public override DateTime? GetSeniority(MP_CustomerMarketPlace mp) {
+		public override DateTime? GetSeniority(MP_CustomerMarketPlace mp)
+		{
 			if (null == Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(mp.Marketplace.Name))
 				return null;
 
