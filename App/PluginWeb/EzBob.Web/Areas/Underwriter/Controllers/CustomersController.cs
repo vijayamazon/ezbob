@@ -324,6 +324,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 
 				SetCommonGridFields(oRow, oCustomer, bCalcAmount: false);
 
+				oRow["DateRejected"] = oCustomer.DateRejected;
 				oRow["Reason"] = oCustomer.RejectedReason;
 				oRow["ApprovesNum"] = oCustomer.NumApproves;
 				oRow["RejectsNum"] = oCustomer.NumRejects;

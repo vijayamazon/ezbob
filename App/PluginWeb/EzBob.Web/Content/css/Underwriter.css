@@ -373,6 +373,13 @@ ul.left-underwriter-menu li label {
 
 #grids-view h2 { font-size: 1.3em; margin-left: 1em; }
 
+#grids-view .tab-pane .dataTables_processing {
+	z-index: 1;
+	background-color: yellow;
+	color: red;
+	font-weight: bold;
+}
+
 #grids-view .tab-pane label,
 #grids-view .tab-pane select,
 #grids-view .tab-pane input

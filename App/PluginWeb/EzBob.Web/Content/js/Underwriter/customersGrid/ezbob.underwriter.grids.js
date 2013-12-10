@@ -124,7 +124,7 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 			}), // late
 			rejected: new GridProperties({
 				action: 'GridRejected',
-				columns: '#Id,Cart,MP_List,Name,Email,^ApplyDate,^RegDate,Reason,#RejectsNum,#ApprovesNum,$OSBalance,SegmentType',
+				columns: '#Id,Cart,MP_List,Name,Email,^ApplyDate,^RegDate,^DateRejected,Reason,#RejectsNum,#ApprovesNum,$OSBalance,SegmentType',
 			}), // rejected
 			all: new GridProperties({
 				action: 'GridAll',
@@ -211,6 +211,8 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 			bJQueryUI: true,
 
 			fnRowCallback: oGridProperties.fnRowCallback,
+
+			aaSorting: [[ 0, 'desc' ]],
 
 			bAutoWidth: true,
 		}); // create data table
