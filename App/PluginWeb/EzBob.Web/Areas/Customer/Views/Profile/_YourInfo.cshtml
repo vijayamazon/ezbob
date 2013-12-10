@@ -3,17 +3,15 @@
 <script id="your-info-template" type="text/template">
   @using (Html.BeginForm("Edit", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "editYourInfoForm" }))
   {
-      <div class="row-fluid" style="position: relative;">
-        <div class="span6 personal-info">
+      <div class="personal-company-info-container" style="position: relative;">
+        <div class="column personal-info">
         </div>
           @*
         <div class="" style="overflow: hidden; height: 725px; padding-top:9px; ">
             <img src='@Url.Content("~/Content/img/gradient-line.png")' style='display: block; margin: 0px auto' alt=""/>
         </div>
           *@
-        <div class="span6">
-            <div class="company-info"/>
-        </div>
+        <div class="column company-info"/>
     </div>
       <div class="form_buttons_container">
         <div class="attardi-button">
@@ -285,7 +283,7 @@
 	<div class="accordion-group">
 		<div class="accordion-heading faq-accordion-head">
 			<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#colapse<%-Id%>">
-				<b class="play"></b>Director</a>
+				<b class="play"></b><span class="link-text">Director</span></a>
 		</div>
 		<div id="colapse<%-Id%>" class="accordion-body collapse">
 			<div class="accordion-inner">

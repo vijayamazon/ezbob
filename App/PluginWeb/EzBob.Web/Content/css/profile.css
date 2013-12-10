@@ -369,6 +369,17 @@ body .agreement-text {
 
 .profile-widgets .cunt-button .btn-continue{ display: none !important;}
 
+.personal-company-info-container {
+	width: 100%;
+	*zoom: 1;
+}
+
+.personal-company-info-container:before,
+.personal-company-info-container:after { display: table; line-height: 0; content: ""; }
+.personal-company-info-container:after { clear: both; }
+
+.personal-company-info-container .column { width: 470px; margin-right: 10px; float: left; }
+
 body .apply-header-approved {
     font-size: 18px;
 }
@@ -430,12 +441,6 @@ body .grey-table .statusLate {
     height: 30px;
     width: 277px;
     border-bottom: none;
-}
-
-
-
-.company-info {
-    padding-left: 30px;
 }
 
 .grey-table td {
@@ -984,13 +989,16 @@ textarea.invite_friend {
     z-index: 1;
 }
 
-div.addAddressContainer span.attardi-has-data {
-    display: none;
-}
-div.addAddressContainer .field_status {
-    visibility: hidden !important;
-}
+div.addAddressContainer span.attardi-has-data { display: none; }
 
-div.director-container {
-    width: 96%;
-}
+div.addAddressContainer .field_status { visibility: hidden !important; }
+
+div.director-container { width: 100% !important; }
+
+div.director-container .accordion-group { border: 0 !important; }
+
+div.director-container .accordion-heading .link-text { font-weight: bold; }
+
+div.director-container .accordion-toggle { padding-left: 0 !important; }
+
+div.director-container .accordion-inner { padding: 0 !important; margin-left: 15px; border-top: 0 !important; }
