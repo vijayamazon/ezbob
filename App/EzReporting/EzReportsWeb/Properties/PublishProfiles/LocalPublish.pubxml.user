@@ -8,148 +8,149 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <LastUsedBuildConfiguration>Release</LastUsedBuildConfiguration>
     <LastUsedPlatform>Any CPU</LastUsedPlatform>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <_PublishTargetUrl>c:\temp\reporting</_PublishTargetUrl>
   </PropertyGroup>
   <ItemGroup>
     <File Include="bin/Barrymore.dll">
-      <publishTime>10/10/2013 18:37:01</publishTime>
+      <publishTime>12/09/2013 20:18:38</publishTime>
     </File>
     <File Include="bin/DbConnection.dll">
-      <publishTime>10/10/2013 18:48:24</publishTime>
+      <publishTime>12/09/2013 20:18:38</publishTime>
     </File>
     <File Include="bin/DropNet.dll">
-      <publishTime>09/12/2013 19:48:36</publishTime>
+      <publishTime>11/19/2013 22:08:37</publishTime>
     </File>
     <File Include="bin/EPPlus.dll">
-      <publishTime>09/12/2013 19:48:36</publishTime>
+      <publishTime>11/19/2013 22:08:37</publishTime>
     </File>
     <File Include="bin/EzEnvironment.dll">
-      <publishTime>10/10/2013 18:37:01</publishTime>
+      <publishTime>11/19/2013 22:10:52</publishTime>
     </File>
     <File Include="bin/EzReportsWeb.dll">
-      <publishTime>10/10/2013 18:48:26</publishTime>
+      <publishTime>12/10/2013 11:34:31</publishTime>
     </File>
     <File Include="bin/log4net.dll">
-      <publishTime>06/24/2013 12:03:42</publishTime>
+      <publishTime>11/19/2013 22:10:55</publishTime>
     </File>
     <File Include="bin/Logger.dll">
-      <publishTime>10/10/2013 18:37:00</publishTime>
+      <publishTime>12/09/2013 20:18:38</publishTime>
     </File>
     <File Include="bin/Mailer.dll">
-      <publishTime>10/10/2013 18:37:01</publishTime>
+      <publishTime>12/09/2013 20:18:38</publishTime>
     </File>
     <File Include="bin/Newtonsoft.Json.dll">
-      <publishTime>06/24/2013 12:03:42</publishTime>
+      <publishTime>11/19/2013 22:10:46</publishTime>
     </File>
     <File Include="bin/Report.css">
-      <publishTime>07/25/2013 15:57:58</publishTime>
+      <publishTime>11/19/2013 22:08:37</publishTime>
     </File>
     <File Include="bin/ReportAuthenticationLib.dll">
-      <publishTime>10/10/2013 18:48:25</publishTime>
+      <publishTime>12/09/2013 20:18:39</publishTime>
     </File>
     <File Include="bin/Reports.dll">
-      <publishTime>10/10/2013 18:48:25</publishTime>
+      <publishTime>12/10/2013 11:34:30</publishTime>
     </File>
     <File Include="bin/RestSharp.dll">
-      <publishTime>09/12/2013 19:48:36</publishTime>
+      <publishTime>11/19/2013 22:08:39</publishTime>
     </File>
     <File Include="bin/ValueIntervals.dll">
-      <publishTime>10/10/2013 18:37:00</publishTime>
+      <publishTime>12/09/2013 20:18:38</publishTime>
     </File>
     <File Include="css/admin.css">
-      <publishTime>09/03/2013 11:27:39</publishTime>
+      <publishTime>11/19/2013 22:08:36</publishTime>
     </File>
     <File Include="css/combined.css">
-      <publishTime>09/03/2013 11:27:39</publishTime>
+      <publishTime>11/19/2013 22:08:36</publishTime>
     </File>
     <File Include="css/login.css">
-      <publishTime>08/05/2013 20:09:43</publishTime>
+      <publishTime>11/19/2013 22:08:36</publishTime>
     </File>
     <File Include="Default.aspx">
-      <publishTime>09/03/2013 11:27:39</publishTime>
+      <publishTime>11/19/2013 22:08:36</publishTime>
     </File>
     <File Include="images/back_disabled.png">
-      <publishTime>06/24/2013 12:03:35</publishTime>
+      <publishTime>11/19/2013 22:08:36</publishTime>
     </File>
     <File Include="images/back_enabled.png">
-      <publishTime>06/24/2013 12:03:35</publishTime>
+      <publishTime>11/19/2013 22:08:36</publishTime>
     </File>
     <File Include="images/back_enabled_hover.png">
-      <publishTime>06/24/2013 12:03:35</publishTime>
+      <publishTime>11/19/2013 22:08:36</publishTime>
     </File>
     <File Include="images/css/admin.css">
-      <publishTime>09/17/2013 11:37:15</publishTime>
+      <publishTime>11/19/2013 22:08:36</publishTime>
     </File>
     <File Include="images/css/combined.css">
-      <publishTime>09/17/2013 11:37:15</publishTime>
+      <publishTime>11/19/2013 22:08:36</publishTime>
     </File>
     <File Include="images/css/login.css">
-      <publishTime>09/17/2013 11:37:15</publishTime>
+      <publishTime>11/19/2013 22:08:36</publishTime>
     </File>
     <File Include="images/ezbob_logo.png">
-      <publishTime>06/24/2013 12:03:35</publishTime>
+      <publishTime>11/19/2013 22:08:36</publishTime>
     </File>
     <File Include="images/favicon32x32.png">
-      <publishTime>06/24/2013 12:03:35</publishTime>
+      <publishTime>11/19/2013 22:08:36</publishTime>
     </File>
     <File Include="images/forward_disabled.png">
-      <publishTime>06/24/2013 12:03:35</publishTime>
+      <publishTime>11/19/2013 22:08:36</publishTime>
     </File>
     <File Include="images/forward_enabled.png">
-      <publishTime>06/24/2013 12:03:35</publishTime>
+      <publishTime>11/19/2013 22:08:36</publishTime>
     </File>
     <File Include="images/forward_enabled_hover.png">
-      <publishTime>06/24/2013 12:03:35</publishTime>
+      <publishTime>11/19/2013 22:08:36</publishTime>
     </File>
     <File Include="images/nav_bg.png">
-      <publishTime>06/24/2013 12:03:35</publishTime>
+      <publishTime>11/19/2013 22:08:36</publishTime>
     </File>
     <File Include="images/nav_bg2.png">
-      <publishTime>06/24/2013 12:03:35</publishTime>
+      <publishTime>11/19/2013 22:08:36</publishTime>
     </File>
     <File Include="images/nav_bg3.png">
-      <publishTime>06/24/2013 12:03:35</publishTime>
+      <publishTime>11/19/2013 22:08:36</publishTime>
     </File>
     <File Include="images/show_report.png">
-      <publishTime>06/24/2013 12:03:35</publishTime>
+      <publishTime>11/19/2013 22:08:36</publishTime>
     </File>
     <File Include="images/sort_asc.png">
-      <publishTime>06/24/2013 12:03:35</publishTime>
+      <publishTime>11/19/2013 22:08:36</publishTime>
     </File>
     <File Include="images/sort_asc_disabled.png">
-      <publishTime>06/24/2013 12:03:35</publishTime>
+      <publishTime>11/19/2013 22:08:36</publishTime>
     </File>
     <File Include="images/sort_both.png">
-      <publishTime>06/24/2013 12:03:35</publishTime>
+      <publishTime>11/19/2013 22:08:36</publishTime>
     </File>
     <File Include="images/sort_desc.png">
-      <publishTime>06/24/2013 12:03:35</publishTime>
+      <publishTime>11/19/2013 22:08:36</publishTime>
     </File>
     <File Include="images/sort_desc_disabled.png">
-      <publishTime>06/24/2013 12:03:35</publishTime>
+      <publishTime>11/19/2013 22:08:36</publishTime>
     </File>
     <File Include="images/xls_icon.png">
-      <publishTime>06/24/2013 12:03:35</publishTime>
+      <publishTime>11/19/2013 22:08:36</publishTime>
     </File>
     <File Include="js/admin.js">
-      <publishTime>08/01/2013 11:30:18</publishTime>
+      <publishTime>11/19/2013 22:08:36</publishTime>
     </File>
     <File Include="js/default.js">
-      <publishTime>10/10/2013 17:55:41</publishTime>
+      <publishTime>11/19/2013 22:08:36</publishTime>
     </File>
     <File Include="js/jquery.dataTables.min.js">
-      <publishTime>06/24/2013 12:03:35</publishTime>
+      <publishTime>11/19/2013 22:08:36</publishTime>
     </File>
     <File Include="js/jquery.js">
-      <publishTime>06/24/2013 12:03:35</publishTime>
+      <publishTime>11/19/2013 22:08:36</publishTime>
     </File>
     <File Include="js/login.js">
-      <publishTime>08/05/2013 20:09:43</publishTime>
+      <publishTime>11/19/2013 22:08:36</publishTime>
     </File>
     <File Include="Login.aspx">
-      <publishTime>08/05/2013 20:09:43</publishTime>
+      <publishTime>11/19/2013 22:08:36</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>10/10/2013 18:37:04</publishTime>
+      <publishTime>12/09/2013 20:18:40</publishTime>
     </File>
   </ItemGroup>
 </Project>

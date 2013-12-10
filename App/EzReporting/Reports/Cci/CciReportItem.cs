@@ -44,6 +44,7 @@ namespace Reports {
 			oOutput.Columns.Add("OfficeAdress", typeof(string));
 			oOutput.Columns.Add("ResidentialStatus", typeof(string));
 			oOutput.Columns.Add("Notes", typeof(string));
+			oOutput.Columns.Add("CssClass", typeof(string));
 
 			return oOutput;
 		} // CreateTable
@@ -88,12 +89,22 @@ namespace Reports {
 		#region method ToRow
 
 		public void ToRow(DataTable tbl) {
+			if (Math.Abs(TotalDue) < 0.01m)
+				return;
+
+			var sClass = string.Empty;
+
+			if (Math.Abs(Principal + Fees) < 0.01m)
+				sClass = (Interest <= -0.01m) ? "unmatched" : sClass;
+			else
+				sClass = (Interest <= -0.01m) ? "highlight" : sClass;
+
 			tbl.Rows.Add(
 				DebtorType, LoanType, OriginalAmount, Principal, Fees, Interest, TotalDue,
 				Currency, LoanRef, DateOfAgreement, DateOfDefault, CompanyName, LegalProcess, LegalAmount,
 				Gender, FirstName, LastName, DateOfBirth, NationalInsurance, MobilePhone, DaytimePhone,
 				EmailApplicant, EbayPhone, PaypalPhone, EmailEbay, HasOtherEbay, CurrentAddress, OfficeAdress,
-				ResidentialStatus, Notes
+				ResidentialStatus, Notes, sClass
 			);
 		} // ToRow
 

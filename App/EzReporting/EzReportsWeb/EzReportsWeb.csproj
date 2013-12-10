@@ -81,9 +81,6 @@
     <Content Include="images\back_disabled.png" />
     <Content Include="images\back_enabled.png" />
     <Content Include="images\back_enabled_hover.png" />
-    <Content Include="images\css\admin.css" />
-    <Content Include="images\css\combined.css" />
-    <Content Include="images\css\login.css" />
     <Content Include="images\ezbob_logo.png" />
     <Content Include="images\favicon32x32.png" />
     <Content Include="images\forward_disabled.png" />
@@ -170,7 +167,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>59384</DevelopmentServerPort>
+          <DevelopmentServerPort>55058</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>

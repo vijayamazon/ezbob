@@ -16,9 +16,9 @@ header .inner {
 	padding: 0 10px!important;
 }
 
-header td { vertical-align: top; padding: 5px; }
+header td { vertical-align: top; padding-right: 15px; }
 
-header td div { vertical-align: top; padding: 5px; }
+header td div { padding-bottom: 5px; }
 
 .well {
 	min-height: 20px;
@@ -151,9 +151,15 @@ body header + .inner, .main-page {
 	margin-right: 20px;
 }
 
-#divFilter {
-	float: left;
-}
+#divFilter { float: left; }
+
+#divFilter #ddlReportTypes { margin-right: 2em; }
+
+#divFilter div.inline { display: inline-block; margin-left: 2em; }
+
+#divCustomFilter { display: inline; }
+
+#rblFilter label { cursor: pointer; }
 
 .rbppcol {
 	display: inline;
@@ -185,6 +191,7 @@ body header + .inner, .main-page {
 
 .ReportButton {
 	height: 40px;
+	vertical-align: middle;
 }
 
 table {
@@ -313,9 +320,8 @@ table.table {
 .paginate_disabled_next,
 .paginate_enabled_next {
 	height: 19px;
-	float: left;
-	cursor: pointer;
 	*cursor: pointer;
+	cursor: pointer;
 	color: #111 !important;
 }
 
@@ -451,6 +457,8 @@ table.dataTable thead td:active {
  */
 
 .unmatched { color: red; }
+
+.highlight { color: #b22222; }
 
 .total { font-weight: bold; color: white; background-color: navy!important; }
 

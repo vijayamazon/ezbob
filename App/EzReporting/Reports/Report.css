@@ -114,6 +114,8 @@
 
 .unmatched { color: red; }
 
+.highlight { color: #b22222; }
+
 .total { font-weight: bold; color: white; background-color: navy!important; }
 
 .total2 { font-weight: bold; color: black; background-color: orange!important; }
