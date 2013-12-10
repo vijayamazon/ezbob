@@ -1695,6 +1695,9 @@ namespace EZBob.DatabaseLib
 				transactions[0].runningBalance = currentBalance.Value;
 				transactions[0].runningBalanceCurrency = currentBalance.CurrencyCode;
 				currDate = (transactions[0].postDate ?? transactions[0].transactionDate).Value;
+			}
+			else if (transactions[0].ezbobCategory == null)
+			{
 				try
 				{
 					transactions[0].ezbobCategory = CategorizeTransaction(yodleeGroupRepository, yodleeGroupRuleMapRepository, transactions[0].description, transactions[0].transactionBaseType,
