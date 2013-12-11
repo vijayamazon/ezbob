@@ -588,8 +588,8 @@ Html.RenderPartial("Fraud/Fraud");
 			Backbone.history.start();
 
 			oRouter.views.profile.view.on('customerNotFull', function(customerId) {
-				oRouter.router.navigate('#customers/registered', { trigger: true, replace: true });
-				oRouter.router.navigate('#profile/' + customerId + '/registered', { trigger: true, replace: true });
+				oRouter.navigate('#customers/registered', { trigger: true, replace: true });
+				oRouter.navigate('#profile/' + customerId + '/registered', { trigger: true, replace: true });
 			});
 
 			oRouter.views.support.view.on('rechecked', function(options) {
