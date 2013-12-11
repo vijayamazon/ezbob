@@ -109,5 +109,11 @@ namespace CommonLib
 			var conn = new SqlConnection(Log);
 			return bool.Parse(conn.ExecuteScalar<string>("AV_HasDefaultAccounts", new QueryParameter("@CustomerId", customerId), new QueryParameter("@MinDefBalance", minDefBalance), new QueryParameter("@Months", months)));
 		}
+
+		public DataTable GetAutoDecisions(DateTime from, DateTime to)
+		{
+			var conn = new SqlConnection(Log);
+			return conn.ExecuteReader("AV_GetAutomaticDecisions", new QueryParameter("@DateStart", from), new QueryParameter("@DateEnd", to));
+		}
 	}
 }

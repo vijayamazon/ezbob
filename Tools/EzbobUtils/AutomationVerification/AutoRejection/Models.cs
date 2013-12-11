@@ -1,5 +1,7 @@
 ﻿namespace AutomationCalculator
 {
+	using System;
+
 	public class ScoreMedalOffer
 	{
 		public Medal Medal { get; set; }
@@ -51,5 +53,32 @@
 	public class RangeOfferPercent : Range
 	{
 		public decimal OfferPercent { get; set; }
+	}
+
+	public class AutoDecision
+	{
+		public int CashRequestId { get; set; }
+		public int CustomerId { get; set; }
+		public Decision SystemDecision { get; set; }
+		public DateTime SystemDecisionDate { get; set; }
+		public int SystemCalculatedSum { get; set; }
+		public Medal MedalType { get; set; }
+		public int RepaymentPeriod { get; set; }
+		public double ScorePoints { get; set; }
+		public int ExpirianRating { get; set; }
+		public int AnualTurnover { get; set; }
+		public double InterestRate { get; set; }
+		public bool HasLoans { get; set; }
+		public string Comment { get; set; }
+	}
+
+	public class VerificationReport
+	{
+		public int CashRequestId { get; set; }
+		public int CustomerId { get; set; }
+		public Decision SystemDecision { get; set; }
+		public Decision VerificationDecision { get; set; }
+		public string SystemComment { get; set; }
+		public string VerificationComment { get; set; }
 	}
 }

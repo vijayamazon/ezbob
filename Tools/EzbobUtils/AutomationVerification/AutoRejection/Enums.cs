@@ -38,4 +38,11 @@
 		EzbobNumOfLateRepayments,
 		EzbobNumOfEarlyRepayments
 	}
+
+	public enum Decision
+	{
+		Approve,
+		Reject,
+		Manual
+	}
 }
