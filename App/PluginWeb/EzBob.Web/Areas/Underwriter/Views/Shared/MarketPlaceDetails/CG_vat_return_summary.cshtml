@@ -204,7 +204,7 @@ if (m.CGData && m.CGData.VatReturn) {
 					%></td><%
 				} // for each relevant data item
 				%><td class=r><% print(EzBob.formatPercents0(nRevenuesSum - nTotalValueAdded, nRevenuesSum) || '&ndash;'); %></td>
-				<td><%=EzBob.formatPercents0(m.CGData.BankStatement.PercentOfRevenues)%></td>
+				<td><%=EzBob.formatPercents(m.CGData.BankStatement.PercentOfRevenues,2)%></td>
 			</tr>
 			<tr>
 				<th>Salaries</th><td></td><%
@@ -256,7 +256,7 @@ if (m.CGData && m.CGData.VatReturn) {
 					%><td class=r><%- EzBob.formatPoundsAsInt(0) %></td><%
 				} // for each relevant data item
 				%><td class=r><%- EzBob.formatPoundsAsInt(0) %></td>
-				<td><%=EzBob.formatPoundsAsInt(m.CGData.BankStatement.ActualLoanRepayments)%></td>
+				<td><%=EzBob.formatPoundsAsInt(m.CGData.BankStatement.ActualLoansRepayment)%></td>
 			</tr>
 			<tr class="chkpt lastchkpt">
 				<th>Free cash flow</th><td></td><%
