@@ -250,12 +250,28 @@
 
 			if (oGroup != null && oRule != null)
 			{
-				_yodleeGroupRuleMapRepository.SaveOrUpdate(new MP_YodleeGroupRuleMap()
-					{
-						Group = oGroup,
-						Rule = oRule,
-						Literal = literal
-					});
+				if (
+					(!_yodleeGroupRuleMapRepository.GetAll()
+					                               .Any(
+						                               x =>
+						                               x.Group == oGroup && x.Rule == oRule &&
+						                               x.Rule.Id != (int) YodleeRule.IncludeLiteralWord &&
+						                               x.Rule.Id != (int) YodleeRule.DontIncludeLiteralWord)) ||
+					(!_yodleeGroupRuleMapRepository.GetAll()
+					                               .Any(
+						                               x =>
+						                               x.Group == oGroup && x.Rule == oRule &&
+						                               (x.Rule.Id == (int) YodleeRule.IncludeLiteralWord ||
+						                                x.Rule.Id == (int) YodleeRule.DontIncludeLiteralWord) &&
+						                               x.Literal == literal.Trim().ToLowerInvariant())))
+				{
+					_yodleeGroupRuleMapRepository.Save(new MP_YodleeGroupRuleMap()
+						{
+							Group = oGroup,
+							Rule = oRule,
+							Literal = literal.Trim().ToLowerInvariant()
+						});
+				}
 			}
 		}
 
