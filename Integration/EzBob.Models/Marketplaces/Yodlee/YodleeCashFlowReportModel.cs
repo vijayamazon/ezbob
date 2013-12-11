@@ -173,23 +173,23 @@
 			}
 
 			yodlee.BankStatementDataModel = new BankStatementDataModel();
-			DateTime from = new DateTime(yodlee.MinDateDict.First().Key / 100, yodlee.MinDateDict.First().Key % 100, yodlee.MinDateDict.Last().Value);
-			DateTime to = new DateTime(yodlee.MaxDateDict.Last().Key / 100, yodlee.MaxDateDict.Last().Key % 100, yodlee.MaxDateDict.Last().Value);
+			if (yodlee.MinDateDict.Any() && yodlee.MinDateDict.Any())
+			{
+				var from = new DateTime(yodlee.MinDateDict.First().Key / 100, yodlee.MinDateDict.First().Key % 100, yodlee.MinDateDict.Last().Value);
+				var to = new DateTime(yodlee.MaxDateDict.Last().Key / 100, yodlee.MaxDateDict.Last().Key % 100, yodlee.MaxDateDict.Last().Value);
 
-			yodlee.BankStatementDataModel.Period = string.Format("{0} - {1}", from.ToString("MMM yy", CultureInfo.InvariantCulture), to.ToString("MMM yy", CultureInfo.InvariantCulture));
-			yodlee.BankStatementDataModel.Revenues = yodlee.YodleeCashFlowReportModelDict.ContainsKey("3Revenues Online") ? yodlee.YodleeCashFlowReportModelDict["3Revenues Online"][TotalColumn] : 0;
-			yodlee.BankStatementDataModel.Revenues += yodlee.YodleeCashFlowReportModelDict.ContainsKey("3Revenues Transfers") ? yodlee.YodleeCashFlowReportModelDict["3Revenues Transfers"][TotalColumn] : 0;
-			yodlee.BankStatementDataModel.Opex = yodlee.YodleeCashFlowReportModelDict.ContainsKey("7Opex ") ? yodlee.YodleeCashFlowReportModelDict["7Opex "][TotalColumn] : 0;
-			yodlee.BankStatementDataModel.Salaries = yodlee.YodleeCashFlowReportModelDict.ContainsKey("7Salaries and Tax Salaries") ? yodlee.YodleeCashFlowReportModelDict["7Salaries and Tax Salaries"][TotalColumn] : 0;
-			yodlee.BankStatementDataModel.Tax = yodlee.YodleeCashFlowReportModelDict.ContainsKey("7Salaries and Tax Taxes") ? yodlee.YodleeCashFlowReportModelDict["7Salaries and Tax Taxes"][TotalColumn] : 0;
-			yodlee.BankStatementDataModel.ActualLoansRepayment = yodlee.YodleeCashFlowReportModelDict.ContainsKey("7Loan Repayments ") ? yodlee.YodleeCashFlowReportModelDict["7Loan Repayments "][TotalColumn] : 0;
-			yodlee.BankStatementDataModel.TotalValueAdded = yodlee.BankStatementDataModel.Revenues - yodlee.BankStatementDataModel.Opex;
-			yodlee.BankStatementDataModel.PercentOfRevenues = yodlee.BankStatementDataModel.TotalValueAdded / yodlee.BankStatementDataModel.Revenues;
-			yodlee.BankStatementDataModel.Ebida = yodlee.BankStatementDataModel.TotalValueAdded - (yodlee.BankStatementDataModel.Salaries + yodlee.BankStatementDataModel.Tax);
-			yodlee.BankStatementDataModel.FreeCashFlow = yodlee.BankStatementDataModel.Ebida - yodlee.BankStatementDataModel.ActualLoansRepayment;
-
-			
-
+				yodlee.BankStatementDataModel.Period = string.Format("{0} - {1}", from.ToString("MMM yy", CultureInfo.InvariantCulture), to.ToString("MMM yy", CultureInfo.InvariantCulture));
+				yodlee.BankStatementDataModel.Revenues = yodlee.YodleeCashFlowReportModelDict.ContainsKey("3Revenues Online") ? yodlee.YodleeCashFlowReportModelDict["3Revenues Online"][TotalColumn] : 0;
+				yodlee.BankStatementDataModel.Revenues += yodlee.YodleeCashFlowReportModelDict.ContainsKey("3Revenues Transfers") ? yodlee.YodleeCashFlowReportModelDict["3Revenues Transfers"][TotalColumn] : 0;
+				yodlee.BankStatementDataModel.Opex = yodlee.YodleeCashFlowReportModelDict.ContainsKey("7Opex ") ? yodlee.YodleeCashFlowReportModelDict["7Opex "][TotalColumn] : 0;
+				yodlee.BankStatementDataModel.Salaries = yodlee.YodleeCashFlowReportModelDict.ContainsKey("7Salaries and Tax Salaries") ? yodlee.YodleeCashFlowReportModelDict["7Salaries and Tax Salaries"][TotalColumn] : 0;
+				yodlee.BankStatementDataModel.Tax = yodlee.YodleeCashFlowReportModelDict.ContainsKey("7Salaries and Tax Taxes") ? yodlee.YodleeCashFlowReportModelDict["7Salaries and Tax Taxes"][TotalColumn] : 0;
+				yodlee.BankStatementDataModel.ActualLoansRepayment = yodlee.YodleeCashFlowReportModelDict.ContainsKey("7Loan Repayments ") ? yodlee.YodleeCashFlowReportModelDict["7Loan Repayments "][TotalColumn] : 0;
+				yodlee.BankStatementDataModel.TotalValueAdded = yodlee.BankStatementDataModel.Revenues - yodlee.BankStatementDataModel.Opex;
+				yodlee.BankStatementDataModel.PercentOfRevenues = yodlee.BankStatementDataModel.TotalValueAdded / yodlee.BankStatementDataModel.Revenues;
+				yodlee.BankStatementDataModel.Ebida = yodlee.BankStatementDataModel.TotalValueAdded - (yodlee.BankStatementDataModel.Salaries + yodlee.BankStatementDataModel.Tax);
+				yodlee.BankStatementDataModel.FreeCashFlow = yodlee.BankStatementDataModel.Ebida - yodlee.BankStatementDataModel.ActualLoansRepayment;
+			}
 		}
 
 		private void AddIfMissing(char catPrefix, string cat)
