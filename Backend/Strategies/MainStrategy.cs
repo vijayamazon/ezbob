@@ -284,7 +284,7 @@
 		{
 			ReadConfigurations();
 			GerPersonalInfo();
-			// TODO: remove column Customer.LastStartedMainStrategy
+			// TODO: remove column Customer.LastStartedMainStrategy, Customer.Eliminated
 			strategyHelper.GetZooplaData(CustomerId);
 
 			if (!CustomerStatusIsEnabled || CustomerStatusIsWarning)
@@ -518,9 +518,7 @@
 				OfferedCreditLine = MaxCapNotHomeOwner;
 			}
 
-
-
-
+			// TODO: try to remove the members that are assigned from the response
 			autoDecisionResponse = AutoDecisionMaker.MakeDecision(CreateAutoDecisionRequest());
 			ModelLoanOffer = autoDecisionResponse.ModelLoanOffer;
 			LoanOffer_UnderwriterComment = autoDecisionResponse.LoanOffer_UnderwriterComment;
@@ -536,8 +534,15 @@
 				return;
 			}
 
-			// Update scoring result
-
+			DbConnection.ExecuteSpNonQuery("UpdateScoringResultsNew",
+				DbConnection.CreateParam("CreditResult", autoDecisionResponse.CreditResult),
+				DbConnection.CreateParam("SystemDecision", autoDecisionResponse.SystemDecision),
+				DbConnection.CreateParam("Status", autoDecisionResponse.UserStatus),
+				DbConnection.CreateParam("Medal", MedalType),
+				DbConnection.CreateParam("ApplyForLoan", App_ApplyForLoan),
+				DbConnection.CreateParam("ValidFor", App_ValidFor));
+			
+ 
 			// UpdateCashRequests
 
 			if (autoDecisionResponse.UserStatus == "Approved")

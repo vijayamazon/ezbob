@@ -14,7 +14,7 @@ BEGIN
 	FROM 
 		BasicInterestRate
 	WHERE 
-		@ExperianScore >= FromScore AND 
-		@ExperianScore <= ToScore
+		@Score >= FromScore AND 
+		@Score <= ToScore
 END
 GO
