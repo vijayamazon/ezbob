@@ -7,10 +7,6 @@
 		public AutoDecisionResponse(AutoDecisionRequest request)
 		{
 			IsReRejected = request.IsReRejected;
-			AutoRejectReason = request.AutoRejectReason;
-			CreditResult = request.CreditResult;
-			UserStatus = request.UserStatus;
-			SystemDecision = request.SystemDecision;
 			ModelLoanOffer = request.ModelLoanOffer;
 			LoanOffer_UnderwriterComment = request.LoanOffer_UnderwriterComment;
 			LoanOffer_OfferValidDays = request.LoanOffer_OfferValidDays;
@@ -33,5 +29,8 @@
 		public bool LoanOffer_EmailSendingBanned_new { get; set; }
 		public bool IsAutoApproval { get; set; }
 		public int AutoApproveAmount { get; set; }
+		public decimal PayPal_TotalSumOfOrders3M { get; set; }
+		public decimal PayPal_TotalSumOfOrders1Y { get; set; }
+		public int PayPal_NumberOfStores { get; set; }
 	}
 }

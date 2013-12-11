@@ -115,6 +115,7 @@
 		private int ExperianConsumerScore;
 		private DateTime ExperianBirthDate = new DateTime(1900, 1, 1);
 		private int AllMPsNum;
+		private AutoDecisionResponse autoDecisionResponse;
 
 		// Could be localized
 		private decimal ExperianAMLAuthentication;
@@ -130,9 +131,6 @@
 
 
 		private bool isFirstLoan;
-		public decimal PayPal_TotalSumOfOrders3M { get; private set; }
-		public decimal PayPal_TotalSumOfOrders1Y { get; private set; }
-		public int PayPal_NumberOfStores { get; private set; }
 
 
 		// ???
@@ -213,10 +211,6 @@
 		public double TotalSumOfOrders3MTotal { get; private set; }
 
 		// Being set inside the decision maker, should extract to DecisionResult class
-		public string AutoRejectReason { get; set; }
-		public string CreditResult { get; set; }
-		public string UserStatus { get; set; }
-		public string SystemDecision { get; set; }
 		public int ModelLoanOffer { get; set; }
 		public string LoanOffer_UnderwriterComment { get; set; }
 		public double LoanOffer_OfferValidDays { get; set; }
@@ -452,7 +446,6 @@
 				EnableAutomaticRejection = false;
 				EnableAutomaticReRejection = false;
 			}
-
 			
 			DataTable defaultAccountsNumDataTable = DbConnection.ExecuteSpReader("GetNumberOfDefaultAccounts",
 				DbConnection.CreateParam("CustomerId", CustomerId),
@@ -485,11 +478,11 @@
 			IsCustomerRepaymentPeriodSelectionAllowed = int.Parse(lastOfferResults["IsCustomerRepaymentPeriodSelectionAllowed"].ToString());
 
 
+			DataTable basicInterestRateDataTable = DbConnection.ExecuteSpReader("GetBasicInterestRate",
+			                                                                    DbConnection.CreateParam("Score", Inintial_ExperianConsumerScore));
+			DataRow basicInterestRateRow = basicInterestRateDataTable.Rows[0];
+			LoanIntrestBase = decimal.Parse(basicInterestRateRow["LoanIntrestBase"].ToString());
 			
-			// MP_Get_PayPal_Aggregates
-			// GetBaseLoanInterest
-			// Get_Automatic_ReRejects
-
 			if (LoanOffer_ReApprovalRemainingAmount < 1000) // TODO: make this 1000 configurable
 			{
 				LoanOffer_ReApprovalRemainingAmount = 0;
@@ -528,11 +521,7 @@
 
 
 
-			AutoDecisionResponse autoDecisionResponse = AutoDecisionMaker.MakeDecision(CreateAutoDecisionRequest());
-			AutoRejectReason = autoDecisionResponse.AutoRejectReason;
-			CreditResult = autoDecisionResponse.CreditResult;
-			UserStatus = autoDecisionResponse.UserStatus;
-			SystemDecision = autoDecisionResponse.SystemDecision;
+			autoDecisionResponse = AutoDecisionMaker.MakeDecision(CreateAutoDecisionRequest());
 			ModelLoanOffer = autoDecisionResponse.ModelLoanOffer;
 			LoanOffer_UnderwriterComment = autoDecisionResponse.LoanOffer_UnderwriterComment;
 			LoanOffer_OfferValidDays = autoDecisionResponse.LoanOffer_OfferValidDays;
@@ -551,7 +540,7 @@
 
 			// UpdateCashRequests
 
-			if (UserStatus == "Approved")
+			if (autoDecisionResponse.UserStatus == "Approved")
 			{
 				if (IsAutoApproval)
 				{
@@ -568,7 +557,7 @@
 							{"Surname", App_Surname},
 							{"MP_Counter", AllMPsNum.ToString(CultureInfo.InvariantCulture)},
 							{"MedalType", MedalType.ToString()},
-							{"SystemDecision", SystemDecision},
+							{"SystemDecision", autoDecisionResponse.SystemDecision},
 							{"ApprovalAmount", LoanOffer_ReApprovalSum.ToString(CultureInfo.InvariantCulture)},
 							{"RepaymentPeriod", LoanOffer_RepaymentPeriod.ToString(CultureInfo.InvariantCulture)},
 							{"InterestRate", LoanOffer_InterestRate.ToString(CultureInfo.InvariantCulture)},
@@ -624,7 +613,7 @@
 							{"Surname", App_Surname},
 							{"MP_Counter", AllMPsNum.ToString(CultureInfo.InvariantCulture)},
 							{"MedalType", MedalType.ToString()},
-							{"SystemDecision", SystemDecision},
+							{"SystemDecision", autoDecisionResponse.SystemDecision},
 							{"ApprovalAmount", LoanOffer_ReApprovalSum.ToString(CultureInfo.InvariantCulture)},
 							{"RepaymentPeriod", LoanOffer_RepaymentPeriod.ToString(CultureInfo.InvariantCulture)},
 							{"InterestRate", LoanOffer_InterestRate.ToString(CultureInfo.InvariantCulture)},
@@ -656,7 +645,7 @@
 					return;
 				}
 			}
-			else if (UserStatus == "Rejected")
+			else if (autoDecisionResponse.UserStatus == "Rejected")
 			{
 				if ((autoDecisionResponse.IsReRejected && !EnableAutomaticReRejection) || (!autoDecisionResponse.IsReRejected && !EnableAutomaticRejection))
 				{
@@ -674,7 +663,7 @@
 						};
 
 					mailer.SendToCustomerAndEzbob(variables, App_email, "Mandrill - Rejection email", rejectionSubject);
-					strategyHelper.AddRejectIntoDecisionHistory(CustomerId, AutoRejectReason);
+					strategyHelper.AddRejectIntoDecisionHistory(CustomerId, autoDecisionResponse.AutoRejectReason);
 				}
 				DbConnection.ExecuteSpNonQuery("Update_Main_Strat_Finish_Date", DbConnection.CreateParam("UserId", CustomerId));
 			}
@@ -689,7 +678,7 @@
 							{"Surname", App_Surname},
 							{"MP_Counter", AllMPsNum.ToString(CultureInfo.InvariantCulture)},
 							{"MedalType", MedalType.ToString()},
-							{"SystemDecision", SystemDecision}
+							{"SystemDecision", autoDecisionResponse.SystemDecision}
 						};
 
 				mailer.SendToEzbob(variables, "Mandrill - User is waiting for decision", "User is now waiting for decision");
@@ -814,17 +803,17 @@
 							{"Surname", App_Surname},
 							{"MP_Counter", AllMPsNum.ToString(CultureInfo.InvariantCulture)},
 							{"MedalType", MedalType.ToString()},
-							{"SystemDecision", SystemDecision},
+							{"SystemDecision", autoDecisionResponse.SystemDecision},
 							{"ExperianConsumerScore", Inintial_ExperianConsumerScore.ToString(CultureInfo.InvariantCulture)},
 							{"CVExperianConsumerScore", LowCreditScore.ToString(CultureInfo.InvariantCulture)},
 							{"TotalAnnualTurnover", TotalSumOfOrders1YTotal.ToString(CultureInfo.InvariantCulture)},
 							{"CVTotalAnnualTurnover", LowTotalAnnualTurnover.ToString(CultureInfo.InvariantCulture)},
 							{"Total3MTurnover", TotalSumOfOrders3MTotal.ToString(CultureInfo.InvariantCulture)},
 							{"CVTotal3MTurnover", LowTotalThreeMonthTurnover.ToString(CultureInfo.InvariantCulture)},
-							{"PayPalStoresNum", PayPal_NumberOfStores.ToString(CultureInfo.InvariantCulture)},
-							{"PayPalAnnualTurnover", PayPal_TotalSumOfOrders1Y.ToString(CultureInfo.InvariantCulture)},
+							{"PayPalStoresNum", autoDecisionResponse.PayPal_NumberOfStores.ToString(CultureInfo.InvariantCulture)},
+							{"PayPalAnnualTurnover", autoDecisionResponse.PayPal_TotalSumOfOrders1Y.ToString(CultureInfo.InvariantCulture)},
 							{"CVPayPalAnnualTurnover", LowTotalAnnualTurnover.ToString(CultureInfo.InvariantCulture)},
-							{"PayPal3MTurnover", PayPal_TotalSumOfOrders3M.ToString(CultureInfo.InvariantCulture)},
+							{"PayPal3MTurnover", autoDecisionResponse.PayPal_TotalSumOfOrders3M.ToString(CultureInfo.InvariantCulture)},
 							{"CVPayPal3MTurnover", LowTotalThreeMonthTurnover.ToString(CultureInfo.InvariantCulture)},
 							{"CVExperianConsumerScoreDefAcc", Reject_Defaults_CreditScore.ToString(CultureInfo.InvariantCulture)},
 							{"ExperianDefAccNum", NumOfDefaultAccounts.ToString(CultureInfo.InvariantCulture)},
@@ -842,8 +831,6 @@
 			{
 				App_ApplyForLoan = App_ApplyForLoan,
 				App_ValidFor = App_ValidFor,
-				AutoRejectReason = AutoRejectReason,
-				CreditResult = CreditResult,
 				CustomerId = CustomerId,
 				EnableAutomaticApproval = EnableAutomaticApproval,
 				EnableAutomaticReApproval = EnableAutomaticReApproval,
@@ -851,8 +838,6 @@
 				EnableAutomaticReRejection = EnableAutomaticReRejection,
 				Inintial_ExperianConsumerScore = Inintial_ExperianConsumerScore,
 				IsAutoApproval = IsAutoApproval,
-				SystemDecision = SystemDecision,
-				UserStatus = UserStatus,
 				LoanOffer_UnderwriterComment = LoanOffer_UnderwriterComment,
 				ModelLoanOffer = ModelLoanOffer,
 				IsReRejected = false,
@@ -866,10 +851,7 @@
 				LowTotalThreeMonthTurnover = LowTotalThreeMonthTurnover,
 				MarketplaceSeniorityDays = MarketplaceSeniorityDays,
 				MinExperianScore = MinExperianScore,
-				OfferedCreditLine = OfferedCreditLine,
-				PayPal_NumberOfStores = PayPal_NumberOfStores,
-				PayPal_TotalSumOfOrders1Y = PayPal_TotalSumOfOrders1Y,
-				PayPal_TotalSumOfOrders3M = PayPal_TotalSumOfOrders3M
+				OfferedCreditLine = OfferedCreditLine
 			};
 		}
 

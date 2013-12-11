@@ -62,6 +62,14 @@
 				return false;
 			}
 
+			DataTable dt = DbConnection.ExecuteSpReader("GetPayPalAggregations",
+														DbConnection.CreateParam("CustomerId", request.CustomerId));
+			DataRow results = dt.Rows[0];
+
+			response.PayPal_NumberOfStores = int.Parse(results["PayPal_NumberOfStores"].ToString());
+			response.PayPal_TotalSumOfOrders3M = decimal.Parse(results["PayPal_TotalSumOfOrders3M"].ToString());
+			response.PayPal_TotalSumOfOrders1Y = decimal.Parse(results["PayPal_TotalSumOfOrders1Y"].ToString());
+
 			if (request.Inintial_ExperianConsumerScore < Reject_Defaults_CreditScore &&
 				NumOfDefaultAccounts >= Reject_Defaults_AccountsNum)
 			{
@@ -75,15 +83,15 @@
 								   LowCreditScore;
 			}
 			else if (
-				(request.PayPal_NumberOfStores == 0 ||
-				 request.PayPal_TotalSumOfOrders3M < request.LowTotalThreeMonthTurnover || request.PayPal_TotalSumOfOrders1Y < request.LowTotalAnnualTurnover)
+				(response.PayPal_NumberOfStores == 0 ||
+				 response.PayPal_TotalSumOfOrders3M < request.LowTotalThreeMonthTurnover || response.PayPal_TotalSumOfOrders1Y < request.LowTotalAnnualTurnover)
 				 &&
 				(request.TotalSumOfOrders3MTotal < request.LowTotalThreeMonthTurnover || request.TotalSumOfOrders1YTotal < request.LowTotalAnnualTurnover)
 			   )
 			{
-				response.AutoRejectReason = "AutoReject: Totals. Condition not met: (" + request.PayPal_NumberOfStores + " < 0 OR" +
-								request.PayPal_TotalSumOfOrders3M + " < " +
-								   request.LowTotalThreeMonthTurnover + " OR " + request.PayPal_TotalSumOfOrders1Y + " < " +
+				response.AutoRejectReason = "AutoReject: Totals. Condition not met: (" + response.PayPal_NumberOfStores + " < 0 OR" +
+								response.PayPal_TotalSumOfOrders3M + " < " +
+								   request.LowTotalThreeMonthTurnover + " OR " + response.PayPal_TotalSumOfOrders1Y + " < " +
 								   request.LowTotalAnnualTurnover + ") AND (" + request.TotalSumOfOrders3MTotal + " < " +
 								   request.LowTotalThreeMonthTurnover + " OR " + request.TotalSumOfOrders1YTotal + " < " +
 								   request.LowTotalAnnualTurnover + ")";
