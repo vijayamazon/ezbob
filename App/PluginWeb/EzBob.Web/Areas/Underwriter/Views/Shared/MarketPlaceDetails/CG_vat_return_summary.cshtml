@@ -233,9 +233,13 @@ if (m.CGData && m.CGData.VatReturn) {
 				var oEBIDA = {};
 				var nEBIDASum = 0;
 
-				for (var i = (aryBusiness.length <= 4 ? 0 : aryBusiness.length - 4); i < aryBusiness.length; i++) {
+				var nSumStartIdx = aryBusiness.length <= 4 ? 0 : aryBusiness.length - 4;
+
+				for (var i = nStartIdx; i < aryBusiness.length; i++) {
 					oEBIDA[i] = oTotalValueAdded[i] - arySalary[i].salary; // TODO: subtract Tax from the previous row.
-					nEBIDASum += oEBIDA[i];
+
+					if (i >= nSumStartIdx)
+						nEBIDASum += oEBIDA[i];
 
 					%><td class=r><%- EzBob.formatPoundsAsInt(oEBIDA[i]) %></td><%
 				} // for each relevant data item
