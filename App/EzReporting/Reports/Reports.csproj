@@ -105,6 +105,14 @@
     <Compile Include="ReportDispatcher.cs" />
     <Compile Include="ReportQuery.cs" />
     <Compile Include="tags.cs" />
+    <Compile Include="UiReports\AddressKey.cs" />
+    <Compile Include="UiReports\CustomerInfo.cs" />
+    <Compile Include="UiReports\Extractor.cs" />
+    <Compile Include="UiReports\UiEvent.cs" />
+    <Compile Include="UiReports\UiReportItemGroupAction.cs" />
+    <Compile Include="UiReports\UiReport.cs" />
+    <Compile Include="UiReports\UiReportItem.cs" />
+    <Compile Include="UiReports\UiReportItemGroupData.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -140,6 +148,7 @@
       <Name>Mailer</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -43,9 +43,6 @@ namespace Reports {
 
 		#endregion public
 
-		#region protected
-		#endregion protected
-
 		#region private
 
 		private readonly AConnection m_oDB;

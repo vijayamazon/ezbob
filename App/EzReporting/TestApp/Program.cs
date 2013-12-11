@@ -8,15 +8,20 @@ using Html;
 using Reports;
 
 namespace TestApp {
-
 	class Program {
+		#region method Main
+
 		static void Main(string[] args) {
 			var log = new ConsoleLog(new LegacyLog());
 
 			var oDB = new SqlConnection(log);
 
+			TestUiReport(oDB, log);
+
 			// TestLoansIssuedReport(oDB, log);
-			TestEarnedInterest(oDB, log);
+
+			// TestEarnedInterest(oDB, log);
+
 			// TestLoanIntegrity(oDB, log);
 
 			// TestLoanStats(oDB, log);
@@ -25,6 +30,21 @@ namespace TestApp {
 
 			// TestInterestFreeze(oDB, log);
 		} // Main
+
+		#endregion method Main
+
+		#region method TestUiReport
+
+		private static void TestUiReport(AConnection oDB, ASafeLog log) {
+			var rpt = new UiReport(oDB, new DateTime(2013, 12, 1), new DateTime(2013, 12, 10), log);
+			rpt.VerboseLogging = true;
+
+			rpt.Run();
+		} // TestUiReport
+
+		#endregion method TestUiReport
+
+		#region method TestInterestFreeze
 
 		private static void TestInterestFreeze(AConnection oDB, ASafeLog log) {
 			DataTable tbl = oDB.ExecuteReader("RptEarnedInterest_Freeze", CommandSpecies.StoredProcedure);
@@ -52,6 +72,10 @@ namespace TestApp {
 				log.Msg("LoanID: {0} Freeze Periods: {1}", pair.Key, pair.Value);
 		} // TestInerestFreeze
 
+		#endregion method TestInterestFreeze
+
+		#region method TestIntervalsOperations
+
 		private static void TestIntervalsOperations() {
 			TestIntervalsOperations(
 				new FreezeInterval(new DateTime(1976, 7, 1), null, 0.3m),
@@ -69,6 +93,10 @@ namespace TestApp {
 			);
 		} // TestIntervalOperations
 
+		#endregion method TestIntervalsOperations
+
+		#region method TestIntervalsOperations
+
 		private static void TestIntervalsOperations(FreezeInterval di, FreezeInterval di2) {
 			Console.WriteLine("\n***\n\n");
 
@@ -83,10 +111,18 @@ namespace TestApp {
 			Console.WriteLine("\n***\n\n");
 		} // TestIntervalOperations
 
+		#endregion method TestIntervalsOperations
+
+		#region method TestLoanStats
+
 		private static void TestLoanStats(AConnection oDB, ASafeLog log) {
 			var sender = new ReportDispatcher(oDB, log);
 			sender.Dispatch("loan_stats", DateTime.Today, null, new LoanStats(oDB, log).Xls(), ReportDispatcher.ToDropbox);
 		} // TestLoanStats
+
+		#endregion method TestLoanStats
+
+		#region method TestLoansIssuedReport
 
 		private static void TestLoansIssuedReport(AConnection oDB, ASafeLog log) {
 			var brh = new BaseReportHandler(oDB, log);
@@ -95,6 +131,10 @@ namespace TestApp {
 
 			ATag oTag = brh.BuildLoansIssuedReport(rpt, new DateTime(2013, 7, 1), new DateTime(2013, 7, 15));
 		} // TestLoansIssuedReport
+
+		#endregion method TestLoansIssuedReport
+
+		#region method TestEarnedInterest
 
 		private static void TestEarnedInterest(AConnection oDB, ASafeLog log) {
 			var ea = new EarnedInterest(
@@ -110,6 +150,10 @@ namespace TestApp {
 			ea.Run();
 		} // TestEarnedInterest
 
+		#endregion method TestEarnedInterest
+
+		#region method TestLoanIntegrity
+
 		private static void TestLoanIntegrity(AConnection oDB, ASafeLog log) {
 			var ea = new LoanIntegrity(oDB, log) {
 				VerboseLogging = true
@@ -117,5 +161,7 @@ namespace TestApp {
 
 			ea.Run();
 		} // TestLoanIntegrity
+
+		#endregion method TestLoanIntegrity
 	} // class Program
 } // namespace
