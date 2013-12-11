@@ -42,10 +42,7 @@
 		private const string CP_Experian_Actions_BWANameError = "Underwriter to confirm the account details by asking for copy of statement";
 		private const string CP_Experian_Actions_BWAAccountStatus = "Underwriter to confirm the account details by asking for copy of statement";
 		private const string CP_Experian_Actions_BWAAddressError = "Underwriter to confirm the account details by asking for copy of statement";
-
-		// For auto-decisions
-		AccountVerificationResults accountVerificationResults;
-
+		
 		// Inputs
 		private int CustomerId;
 		private NewCreditLineOption newCreditLineOption;
@@ -116,48 +113,46 @@
 		private DateTime ExperianBirthDate = new DateTime(1900, 1, 1);
 		private int AllMPsNum;
 		private AutoDecisionResponse autoDecisionResponse;
+		private int NumOfDefaultAccounts;
+		private Medal MedalType;
+		private decimal LoanOffer_APR;
+		private int LoanOffer_RepaymentPeriod;
+		private int LoanOffer_ExpirianRating;
+		private decimal LoanOffer_InterestRate;
+		private int LoanOffer_UseSetupFee;
+		private int LoanOffer_LoanTypeId;
+		private int LoanOffer_IsLoanTypeSelectionAllowed;
+		private int LoanOffer_DiscountPlanId;
+		private int LoanSourceId;
+		private int IsCustomerRepaymentPeriodSelectionAllowed;
+		private decimal LoanIntrestBase;
+		private int LoanOffer_ReApprovalSum;
+		private int LoanOffer_ReApprovalFullAmount;
+		private int LoanOffer_ReApprovalRemainingAmount;
+		private int LoanOffer_ReApprovalFullAmountOld;
+		private int LoanOffer_ReApprovalRemainingAmountOld;
+		private int OfferedCreditLine;
+		private double Inintial_ExperianConsumerScore;
+		private double MarketplaceSeniorityDays;
+		private double TotalSumOfOrders3MTotal;
+		private int ModelLoanOffer;
+		private string LoanOffer_UnderwriterComment;
+		private double LoanOffer_OfferValidDays;
+		private DateTime? App_ApplyForLoan;
+		private DateTime App_ValidFor;
+		private bool LoanOffer_EmailSendingBanned_new;
+		private bool IsAutoApproval;
+		private double TotalSumOfOrders1YTotal;
+		private bool isFirstLoan;
 
-		// Could be localized
+		// AML & BWA
 		private decimal ExperianAMLAuthentication;
 		private string ExperianAmlResult;
 		private string ExperianAMLWarning;
 		private string ExperianAMLReject;
-
-
-		// Below this line variables should be converted to locals
-
-
-
-
-
-		private bool isFirstLoan;
-
-
-		// ???
-
-		
-
-
-
-
-		// fill it
-		string ExperianBwaResult = null;
-		string ExperianBWAWarning = null;
-		string ExperianBWAPassed = null;
-
-
-		
-
-
-		
-
-
-
-
-
-		int NumOfDefaultAccounts = 0;
-
-		private string Bwa;
+		private string ExperianBwaResult;
+		private string ExperianBWAWarning;
+		private string ExperianBWAPassed;
 		private string ExperianBWAAccountStatus;
 		private decimal ExperianBWANameScore;
 		private decimal ExperianBWAAddressScore;
@@ -165,60 +160,12 @@
 		private string ExperianAMLPassed;
 		private string ExperianAMLError;
 
-
-		private decimal TotalSumOfOrdersForLoanOffer;
-
-
-
-		private Medal MedalType;
-
-
-
-
-
-
-		string LoanOffer_SystemDecision;
-		int LoanOffer_ManagerApprovedSum;
-		string LoanOffer_MedalType;
-		decimal LoanOffer_APR;
-		int LoanOffer_RepaymentPeriod;
-		int LoanOffer_ScorePoints;
-		int LoanOffer_ExpirianRating;
-		decimal LoanOffer_AnualTurnover;
-		decimal LoanOffer_InterestRate;
-		int LoanOffer_UseSetupFee;
-		int LoanOffer_LoanTypeId;
-		int LoanOffer_IsLoanTypeSelectionAllowed;
-		int LoanOffer_DiscountPlanId;
-		int LoanSourceId;
-		int IsCustomerRepaymentPeriodSelectionAllowed;
-		decimal LoanIntrestBase;
-
-
-		private int LoanOffer_ReApprovalSum;
-
-
-
-
-		/* AutoDecisionMaker related properties */
-		public int LoanOffer_ReApprovalFullAmount { get; private set; }
-		public int LoanOffer_ReApprovalRemainingAmount { get; private set; }
-		public int LoanOffer_ReApprovalFullAmountOld { get; private set; }
-		public int LoanOffer_ReApprovalRemainingAmountOld { get; private set; }
-		public int OfferedCreditLine { get; private set; }
-		public double Inintial_ExperianConsumerScore { get; private set; }
-		public double MarketplaceSeniorityDays { get; private set; }
-		public double TotalSumOfOrders3MTotal { get; private set; }
-
-		// Being set inside the decision maker, should extract to DecisionResult class
-		public int ModelLoanOffer { get; set; }
-		public string LoanOffer_UnderwriterComment { get; set; }
-		public double LoanOffer_OfferValidDays { get; set; }
-		public DateTime? App_ApplyForLoan { get; set; }
-		public DateTime App_ValidFor { get; set; }
-		public bool LoanOffer_EmailSendingBanned_new { get; set; }
-		public bool IsAutoApproval { get; set; }
-		public double TotalSumOfOrders1YTotal { get; private set; }
+		// TODOs:
+		private string LoanOffer_SystemDecision; // TODO: remove this variable it is redundant
+		private int LoanOffer_ManagerApprovedSum; // TODO: remove this variable it is redundant
+		private string LoanOffer_MedalType; // TODO: remove this variable it is redundant
+		private int LoanOffer_ScorePoints; // TODO: remove this variable it is redundant
+		private decimal LoanOffer_AnualTurnover; // TODO: remove this variable it is redundant
 		
 		private void ReadConfigurations()
 		{
@@ -265,7 +212,8 @@
 			App_SortCode = results["SortCode"].ToString();
 			App_RegistrationDate = DateTime.Parse(results["RegistrationDate"].ToString());
 			App_BankAccountType = results["BankAccountType"].ToString();
-
+			int NumOfLoans = int.Parse(results["NumOfLoans"].ToString());
+			isFirstLoan = NumOfLoans == 0;
 		}
 
 		private void UpdateExperianConsumer(string firstName, string surname, string postCode, string error, int score, int customerId, int directorId)
@@ -339,7 +287,6 @@
 
 				MinExperianScore = ExperianConsumerScore;
 				Inintial_ExperianConsumerScore = ExperianConsumerScore;
-				//ExperianScoreConsumer = ExperianConsumerScore; // in cashrequest...
 
 				UpdateExperianConsumer(App_FirstName, App_Surname, App_Line6, ExperianConsumerError, ExperianConsumerScore, CustomerId, 0);
 				UpdateExperianConsumer(App_FirstName, App_Surname, App_Line6Prev, ExperianConsumerErrorPrev, ExperianConsumerScore, CustomerId, 0);
@@ -351,7 +298,6 @@
 					foreach (DataRow row in dt.Rows)
 					{
 						int App_DirId = int.Parse(row["DirId"].ToString());
-						//int addressType = int.Parse(row["AddressType"].ToString());
 						string dirLine1 = row["DirLine1"].ToString();
 						string dirLine2 = row["DirLine2"].ToString();
 						string dirLine3 = row["DirLine3"].ToString();
@@ -397,6 +343,7 @@
 			
 			if (string.IsNullOrEmpty(maxFeedbackRaw))
 			{
+				// TODO: place in config
 				log.InfoFormat("No feedback information exists. Will use 20000.");
 				Model_MaxFeedback = 20000; // average value will not influence scorecard calculations
 			}
@@ -411,18 +358,12 @@
 			int Model_EarlyPayments = int.Parse(scoreCardResults["EarlyPayments"].ToString());
 			DateTime Model_FirstRepaymentDate = DateTime.Parse(scoreCardResults["FirstRepaymentDate"].ToString());
 
-
-
-
 			TotalSumOfOrders1YTotal = strategyHelper.GetAnualTurnOverByCustomer(CustomerId);
 			TotalSumOfOrders3MTotal = strategyHelper.GetTotalSumOfOrders3M(CustomerId);
 			MarketplaceSeniorityDays = strategyHelper.MarketplaceSeniority(CustomerId);
-			TotalSumOfOrdersForLoanOffer = (decimal)strategyHelper.GetTotalSumOfOrdersForLoanOffer(CustomerId);
-
+			decimal TotalSumOfOrdersForLoanOffer = (decimal)strategyHelper.GetTotalSumOfOrdersForLoanOffer(CustomerId);
 
 			ScoreMedalOffer scoringResult = medalScoreCalculator.CalculateMedalScore(TotalSumOfOrdersForLoanOffer, MinExperianScore, (decimal)MarketplaceSeniorityDays / 365, Model_MaxFeedback, maritalStatus, App_Gender == "M" ? Gender.M : Gender.F, Model_MPsNumber, Model_FirstRepaymentDate < DateTime.UtcNow, Model_EZBOBSeniority, Model_OnTimeLoans, Model_LatePayments, Model_EarlyPayments);
-			// ModelScoreResult = scoringResult.ScoreResult; // FIXME: rebuild all fails because of this
-			// ModelScorePoints = scoringResult.ScorePoints; // FIXME: rebuild all fails because of this
 			ModelLoanOffer = scoringResult.MaxOffer;
 			
 			MedalType = scoringResult.Medal;
@@ -541,16 +482,28 @@
 				DbConnection.CreateParam("Medal", MedalType),
 				DbConnection.CreateParam("ApplyForLoan", App_ApplyForLoan),
 				DbConnection.CreateParam("ValidFor", App_ValidFor));
-			
+
+
+			DbConnection.ExecuteSpNonQuery("UpdateCashRequests",
+				DbConnection.CreateParam("CustomerId", CustomerId),
+				DbConnection.CreateParam("SystemCalculatedAmount", ModelLoanOffer),
+				DbConnection.CreateParam("ManagerApprovedSum", OfferedCreditLine),
+				DbConnection.CreateParam("SystemDecision", autoDecisionResponse.SystemDecision),
+				DbConnection.CreateParam("MedalType", MedalType),
+				DbConnection.CreateParam("ScorePoints", scoringResult.ScoreResult),
+				DbConnection.CreateParam("ExpirianRating", ExperianConsumerScore),
+				DbConnection.CreateParam("AnualTurnover", TotalSumOfOrders1YTotal),
+				DbConnection.CreateParam("InterestRate", LoanIntrestBase));
+
  
-			// UpdateCashRequests
 
 			if (autoDecisionResponse.UserStatus == "Approved")
 			{
 				if (IsAutoApproval)
 				{
-					// UpdateAutoApproval
-
+					DbConnection.ExecuteSpNonQuery("UpdateAutoApproval",
+					    DbConnection.CreateParam("CustomerId", CustomerId),
+						DbConnection.CreateParam("AutoApproveAmount", autoDecisionResponse.AutoApproveAmount));
 
 					var variables = new Dictionary<string, string>
 						{
@@ -569,9 +522,6 @@
 							{"OfferValidUntil", App_ValidFor.ToString(CultureInfo.InvariantCulture)}
 						};
 					mailer.SendToEzbob(variables, "Mandrill - User is approved or re-approved", "User was automatically approved");
-
-					double LoanOffer_OfferValidHours = Math.Round(LoanOffer_OfferValidDays * 24, 0);
-					
 
 					if (isFirstLoan)
 					{
@@ -606,7 +556,23 @@
 				}
 				else
 				{
-					// UpdateCashRequestsReApproval
+					DbConnection.ExecuteSpNonQuery("UpdateCashRequestsReApproval",
+					    DbConnection.CreateParam("CustomerId", CustomerId),
+						DbConnection.CreateParam("UnderwriterDecision", autoDecisionResponse.UserStatus),
+						DbConnection.CreateParam("ManagerApprovedSum", LoanOffer_ReApprovalSum),
+						DbConnection.CreateParam("APR", LoanOffer_APR),
+						DbConnection.CreateParam("RepaymentPeriod", LoanOffer_RepaymentPeriod),
+						DbConnection.CreateParam("InterestRate", LoanOffer_InterestRate),
+						DbConnection.CreateParam("UseSetupFee", LoanOffer_UseSetupFee),
+						DbConnection.CreateParam("OfferValidDays", LoanOffer_OfferValidDays),
+						DbConnection.CreateParam("EmailSendingBanned", LoanOffer_EmailSendingBanned_new),
+						DbConnection.CreateParam("LoanTypeId", LoanOffer_LoanTypeId),
+						DbConnection.CreateParam("UnderwriterComment", LoanOffer_UnderwriterComment),
+						DbConnection.CreateParam("IsLoanTypeSelectionAllowed", LoanOffer_IsLoanTypeSelectionAllowed),
+						DbConnection.CreateParam("DiscountPlanId", LoanOffer_DiscountPlanId),
+						DbConnection.CreateParam("ExperianRating", LoanOffer_ExpirianRating),
+						DbConnection.CreateParam("LoanSourceId", LoanSourceId),
+						DbConnection.CreateParam("IsCustomerRepaymentPeriodSelectionAllowed", IsCustomerRepaymentPeriodSelectionAllowed));
 
 					var variables = new Dictionary<string, string>
 						{
@@ -632,8 +598,6 @@
 					}
 					else
 					{
-						double LoanOffer_OfferValidHours = Math.Round(LoanOffer_OfferValidDays * 24, 0);
-
 						var variables2 = new Dictionary<string, string>
 						{
 							{"FirstName", App_FirstName},
@@ -862,7 +826,9 @@
 
 		private void AmlAndBwa(int CustomerId)
 		{
+			AccountVerificationResults accountVerificationResults;
 			AuthenticationResults authenticationResults;
+
 			if (UseCustomIdHubAddress != 0)
 			{
 				if (UseCustomIdHubAddress != 2)
@@ -1090,7 +1056,7 @@
 		{
 			if (!results.HasError)
 			{
-				Bwa = string.Format("account status: {0}, name score: {1}, address score: {2}", results.AccountStatus,
+				log.InfoFormat("account status: {0}, name score: {1}, address score: {2}", results.AccountStatus,
 				                    results.NameScore, results.AddressScore);
 				ExperianBWAAccountStatus = results.AccountStatus;
 				ExperianBWANameScore = results.NameScore;

@@ -12,7 +12,8 @@ BEGIN
 	DECLARE
 		@CustomerStatusIsEnabled BIT,
 		@CustomerStatusIsWarning BIT,
-		@NumOfMps INT
+		@NumOfMps INT,
+		@NumOfLoans INT
 
 	SELECT 
 		@CustomerStatusIsEnabled = IsEnabled, 
@@ -29,7 +30,12 @@ BEGIN
 	WHERE 
 		CustomerId = @CustomerId
 	
-	
+	SELECT
+		@NumOfLoans = COUNT(1)
+	FROM
+		Loan
+	WHERE
+		CustomerId = @CustomerId
 	
 	SELECT
 		@CustomerStatusIsEnabled AS CustomerStatusIsEnabled,
@@ -49,7 +55,8 @@ BEGIN
 		AccountNumber,
 		SortCode,
 		GreetingMailSentDate AS RegistrationDate,
-		BankAccountType
+		BankAccountType,
+		@NumOfLoans AS NumOfLoans
 	FROM
 		Customer
 	WHERE
