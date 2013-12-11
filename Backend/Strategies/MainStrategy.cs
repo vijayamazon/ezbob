@@ -212,8 +212,8 @@
 			App_SortCode = results["SortCode"].ToString();
 			App_RegistrationDate = DateTime.Parse(results["RegistrationDate"].ToString());
 			App_BankAccountType = results["BankAccountType"].ToString();
-			int NumOfLoans = int.Parse(results["NumOfLoans"].ToString());
-			isFirstLoan = NumOfLoans == 0;
+			int numOfLoans = int.Parse(results["NumOfLoans"].ToString());
+			isFirstLoan = numOfLoans == 0;
 		}
 
 		private void UpdateExperianConsumer(string firstName, string surname, string postCode, string error, int score, int customerId, int directorId)
@@ -232,7 +232,7 @@
 		{
 			ReadConfigurations();
 			GerPersonalInfo();
-			// TODO: remove column Customer.LastStartedMainStrategy, Customer.Eliminated
+			// TODO: remove columns Customer.LastStartedMainStrategy, Customer.Eliminated
 			strategyHelper.GetZooplaData(CustomerId);
 
 			if (!CustomerStatusIsEnabled || CustomerStatusIsWarning)

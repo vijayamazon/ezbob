@@ -80,6 +80,10 @@
       <Project>{cb5b04a6-76c2-43c4-9a8f-20ee2601cb11}</Project>
       <Name>EzBob</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Integration\FraudChecker\FraudChecker.csproj">
+      <Project>{edc99346-e59d-44b7-bdd0-a08cd3d56941}</Project>
+      <Name>FraudChecker</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Integration\MailApi\MailApi.csproj">
       <Project>{de254378-4cf8-400c-bcc4-a9af01550350}</Project>
       <Name>MailApi</Name>
