@@ -433,7 +433,6 @@
 			
 			MedalType = scoringResult.Medal;
 
-			// TODO: call CustomerScoringResult_Insert
 			DbConnection.ExecuteSpNonQuery("CustomerScoringResult_Insert",
 				DbConnection.CreateParam("pCustomerId", CustomerId),
 				DbConnection.CreateParam("pAC_Parameters", scoringResult.AcParameters),
@@ -455,16 +454,38 @@
 			}
 
 			
-			// TODO: make the following calls:
 			DataTable defaultAccountsNumDataTable = DbConnection.ExecuteSpReader("GetNumberOfDefaultAccounts",
 				DbConnection.CreateParam("CustomerId", CustomerId),
 				DbConnection.CreateParam("Months", Reject_Defaults_MonthsNum),
 				DbConnection.CreateParam("Amount", Reject_Defaults_Amount));
 			DataRow defaultAccountsNumResults = defaultAccountsNumDataTable.Rows[0];
-			NumOfDefaultAccounts = int.Parse(scoreCardResults["NumOfDefaultAccounts"].ToString());
+			NumOfDefaultAccounts = int.Parse(defaultAccountsNumResults["NumOfDefaultAccounts"].ToString());
+
+			DataTable lastOfferDataTable = DbConnection.ExecuteSpReader("GetLastOfferForAutomatedDecision",
+																		DbConnection.CreateParam("CustomerId", CustomerId));
+			DataRow lastOfferResults = lastOfferDataTable.Rows[0];
+			LoanOffer_ReApprovalFullAmount = int.Parse(lastOfferResults["ReApprovalFullAmountNew"].ToString());
+			LoanOffer_ReApprovalRemainingAmount = int.Parse(lastOfferResults["ReApprovalRemainingAmount"].ToString());
+			LoanOffer_ReApprovalFullAmountOld = int.Parse(lastOfferResults["ReApprovalFullAmountOld"].ToString());
+			LoanOffer_ReApprovalRemainingAmountOld = int.Parse(lastOfferResults["ReApprovalRemainingAmountOld"].ToString());
+			LoanOffer_SystemDecision = lastOfferResults["SystemDecision"].ToString();
+			LoanOffer_ManagerApprovedSum = int.Parse(lastOfferResults["ManagerApprovedSum"].ToString());
+			LoanOffer_MedalType = lastOfferResults["MedalType"].ToString();
+			LoanOffer_APR = int.Parse(lastOfferResults["APR"].ToString());
+			LoanOffer_RepaymentPeriod = int.Parse(lastOfferResults["RepaymentPeriod"].ToString());
+			LoanOffer_ScorePoints = int.Parse(lastOfferResults["ScorePoints"].ToString());
+			LoanOffer_ExpirianRating = int.Parse(lastOfferResults["ExpirianRating"].ToString());
+			LoanOffer_AnualTurnover = int.Parse(lastOfferResults["AnualTurnover"].ToString());
+			LoanOffer_InterestRate = int.Parse(lastOfferResults["InterestRate"].ToString());
+			LoanOffer_UseSetupFee = int.Parse(lastOfferResults["UseSetupFee"].ToString());
+			LoanOffer_LoanTypeId = int.Parse(lastOfferResults["LoanTypeId"].ToString());
+			LoanOffer_IsLoanTypeSelectionAllowed = int.Parse(lastOfferResults["IsLoanTypeSelectionAllowed"].ToString());
+			LoanOffer_DiscountPlanId = int.Parse(lastOfferResults["DiscountPlanId"].ToString());
+			LoanSourceId = int.Parse(lastOfferResults["LoanSourceID"].ToString());
+			IsCustomerRepaymentPeriodSelectionAllowed = int.Parse(lastOfferResults["IsCustomerRepaymentPeriodSelectionAllowed"].ToString());
+
+
 			
-			// GetExperianDefaultsAccounts and fill NumOfDefaultAccounts
-			// GetLastOfferForAutomtedDecision
 			// MP_Get_PayPal_Aggregates
 			// GetBaseLoanInterest
 			// Get_Automatic_ReRejects

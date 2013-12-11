@@ -9,7 +9,6 @@
 	{
 		private readonly StrategyHelper strategyHelper = new StrategyHelper();
 		private readonly int autoReApproveMaxNumOfOutstandingLoans;
-		private decimal availableFunds;
 		private readonly AutoDecisionRequest request;
 
 		public ReApproval(AutoDecisionRequest request)
@@ -38,7 +37,7 @@
 			     loanOfferNumOfMPsAddedOld == 0))
 			{
 				dt = DbConnection.ExecuteSpReader("GetAvailableFunds");
-				availableFunds = decimal.Parse(dt.Rows[0]["AvailableFunds"].ToString());
+				decimal availableFunds = decimal.Parse(dt.Rows[0]["AvailableFunds"].ToString());
 				if (availableFunds > loanOfferSystemCalculatedSum)
 				{
 					int numOfOutstandingLoans = strategyHelper.GetOutstandingLoansNum(request.CustomerId);

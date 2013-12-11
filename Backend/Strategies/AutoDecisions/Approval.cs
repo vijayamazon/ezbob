@@ -9,6 +9,9 @@
 	{
 		private readonly StrategyHelper strategyHelper = new StrategyHelper();
 		private readonly AutoDecisionRequest request;
+		private readonly bool autoApproveIsSilent;
+		private readonly string autoApproveSilentTemplateName;
+		private readonly string autoApproveSilentToAddress;
 
 		public Approval(AutoDecisionRequest request)
 		{
@@ -21,11 +24,6 @@
 			autoApproveSilentToAddress = results["AutoApproveSilentToAddress"].ToString();
 		}
 
-		private readonly bool autoApproveIsSilent;
-		private readonly string autoApproveSilentTemplateName;
-		private readonly string autoApproveSilentToAddress;
-		private decimal availableFunds;
-
 		public bool MakeDecision(AutoDecisionResponse response)
 		{
 			if (request.EnableAutomaticApproval)
@@ -35,7 +33,7 @@
 				if (response.AutoApproveAmount != 0)
 				{
 					DataTable dt = DbConnection.ExecuteSpReader("GetAvailableFunds");
-					availableFunds = decimal.Parse(dt.Rows[0]["AvailableFunds"].ToString());
+					decimal availableFunds = decimal.Parse(dt.Rows[0]["AvailableFunds"].ToString());
 
 					if (availableFunds > response.AutoApproveAmount)
 					{
