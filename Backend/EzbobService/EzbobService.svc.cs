@@ -1,16 +1,15 @@
 ﻿namespace EzBob.Backend.EzbobService
 {
+	using Strategies.MailStrategies;
 	using log4net;
-	using Strategies;
 
 	public class EzbobService : IEzbobService
 	{
-		private readonly Strategies strategies = new Strategies();
 		private static readonly ILog log = LogManager.GetLogger(typeof(EzbobService));
 
 		public void Greeting(int custumerId, string confirmEmailAddress)
 		{
-			strategies.Greeting(custumerId, confirmEmailAddress);
+			new Greeting(custumerId, confirmEmailAddress).Execute();
 		}
 
 		/* Examples
