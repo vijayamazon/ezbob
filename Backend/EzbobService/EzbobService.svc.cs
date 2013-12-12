@@ -8,9 +8,9 @@
 		private readonly Strategies strategies = new Strategies();
 		private static readonly ILog log = LogManager.GetLogger(typeof(EzbobService));
 
-		public void Greeting(string customerEmail, string confirmEmailAddress, int custumerId)
+		public void Greeting(int custumerId, string confirmEmailAddress)
 		{
-			strategies.Greeting(customerEmail, confirmEmailAddress, custumerId);
+			strategies.Greeting(custumerId, confirmEmailAddress);
 		}
 
 		/* Examples

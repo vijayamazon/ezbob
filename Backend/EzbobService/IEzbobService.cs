@@ -7,7 +7,7 @@
 	public interface IEzbobService
 	{
 		[OperationContract]
-		void Greeting(string customerEmail, string confirmEmailAddress, int custumerId);
+		void Greeting(int custumerId, string confirmEmailAddress);
 
 		/* Examples
 		[OperationContract]
