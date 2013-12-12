@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Aspose.Words, Version=8.1.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\3rdparty\Aspose\Aspose.Words.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
     </Reference>
@@ -75,7 +79,6 @@
     <Compile Include="MailStrategies\PasswordChanged.cs" />
     <Compile Include="MailStrategies\ThreeInvalidAttempts.cs" />
     <Compile Include="MailStrategies\Greeting.cs" />
-    <Compile Include="MailStrategies\MailStrategies.cs" />
     <Compile Include="MailStrategies\CustomerData.cs" />
     <Compile Include="MailStrategies\MailStrategyBase.cs" />
     <Compile Include="MainStrategy.cs" />
