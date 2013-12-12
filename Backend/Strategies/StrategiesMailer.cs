@@ -27,7 +27,7 @@
 
 			if (shouldRecord)
 			{
-				string filename = string.Format("{0}({1}).docx", subject, DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss", CultureInfo.InvariantCulture));
+				string filename = string.Format("{0}({1}).docx", subject, DateTime.UtcNow.ToString("yyyy-MM-dd_HH-mm-ss", CultureInfo.InvariantCulture));
 				DbConnection.ExecuteSpNonQuery("RecordMail",
 				    DbConnection.CreateParam("Filename", filename),
 				    DbConnection.CreateParam("Body", HtmlToDocxBinary(renderedHtml)),
