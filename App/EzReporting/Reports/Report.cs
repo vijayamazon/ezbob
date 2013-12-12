@@ -11,24 +11,6 @@ using Ezbob.Database;
 using Html;
 
 namespace Reports {
-	#region enum ReportType
-
-	public enum ReportType {
-		RPT_GENERIC,
-		RPT_NEW_CLIENT,
-		RPT_PLANNED_PAYTMENT,
-		RPT_IN_WIZARD,
-		RPT_EARNED_INTEREST,
-		RPT_LOAN_INTEGRITY,
-		RPT_LOANS_GIVEN,
-		RPT_LOAN_STATS,
-		RPT_CCI,
-	} // enum ReportType
-
-	#endregion enum ReportType
-
-	#region class Report
-
 	public class Report {
 		#region public const
 
@@ -359,6 +341,4 @@ namespace Reports {
 
 		#endregion private static
 	} // class Report
-
-	#endregion class Report
 } // namespace Reports

@@ -1,41 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Data;
 using System.Text;
 
 namespace Reports {
 	#region class UiReportItem
 
 	public class UiReportItem {
-		#region static constructor
-
-		static UiReportItem() {
-			ms_oControlGroups = new SortedDictionary<ItemGroups, SortedSet<int>>();
-
-			foreach (ItemGroups nItemType in (ItemGroups [])Enum.GetValues(typeof (ItemGroups)))
-				ms_oControlGroups[nItemType] = new SortedSet<int>();
-		} // static constructor
-
-		#endregion static constructor
-
 		#region public
 
-		#region method AddControlToItemGroup
+		#region method CreateTable
 
-		public static void AddControlToItemGroup(int nControlID, string sControlName) {
-			// TODO
-		} // AddControlToItemGroup
+		public static DataTable CreateTable() {
+			var oOutput = new DataTable();
 
-		#endregion method AddControlToItemGroup
+			oOutput.Columns.Add("UserID", typeof(int));
+			oOutput.Columns.Add("FirstName", typeof(string));
+			oOutput.Columns.Add("LastName", typeof(string));
+
+			foreach (UiItemGroups nItemType in UiItemGroupsSequence.Get())
+				oOutput.Columns.Add(nItemType.ToString(), typeof(string));
+
+			return oOutput;
+		} // CreateTable
+		#endregion method CreateTable
 
 		#region constructor
 
-		public UiReportItem(CustomerInfo oInfo) {
+		public UiReportItem(CustomerInfo oInfo, SortedDictionary<UiItemGroups, SortedDictionary<int, string>> oRelevantControlGroups) {
 			CustomerInfo = oInfo;
-			m_oData = new SortedDictionary<ItemGroups, UiReportItemGroupData>();
+			m_oData = new SortedDictionary<UiItemGroups, UiReportItemGroupData>();
 
-			foreach (ItemGroups nItemType in (ItemGroups [])Enum.GetValues(typeof (ItemGroups)))
-				m_oData[nItemType] = new UiReportItemGroupData(ms_oControlGroups[nItemType]);
+			foreach (UiItemGroups nItemType in UiItemGroupsSequence.Get())
+				m_oData[nItemType] = new UiReportItemGroupData(CustomerInfo, nItemType, oRelevantControlGroups[nItemType]);
 		} // constructor
 
 		#endregion constructor
@@ -44,19 +41,19 @@ namespace Reports {
 
 		public CustomerInfo CustomerInfo { get; private set; }
 
-		public UiReportItemGroupData PersonalInfo { get { return m_oData[ItemGroups.PersonalInfo]; } }
-		public UiReportItemGroupData HomeAddress { get { return m_oData[ItemGroups.HomeAddress]; } }
-		public UiReportItemGroupData ContactDetails { get { return m_oData[ItemGroups.ContactDetails]; } }
-		public UiReportItemGroupData CompanyInformation { get { return m_oData[ItemGroups.CompanyInformation]; } }
-		public UiReportItemGroupData CompanyDetails { get { return m_oData[ItemGroups.CompanyDetails]; } }
-		public UiReportItemGroupData AdditionalDirectors { get { return m_oData[ItemGroups.AdditionalDirectors]; } }
+		public UiReportItemGroupData PersonalInfo { get { return m_oData[UiItemGroups.PersonalInfo]; } }
+		public UiReportItemGroupData HomeAddress { get { return m_oData[UiItemGroups.HomeAddress]; } }
+		public UiReportItemGroupData ContactDetails { get { return m_oData[UiItemGroups.ContactDetails]; } }
+		public UiReportItemGroupData CompanyInformation { get { return m_oData[UiItemGroups.CompanyInfo]; } }
+		public UiReportItemGroupData CompanyDetails { get { return m_oData[UiItemGroups.CompanyDetails]; } }
+		public UiReportItemGroupData AdditionalDirectors { get { return m_oData[UiItemGroups.AdditionalDirectors]; } }
 
 		#endregion properties
 
 		#region method Generate
 
 		public void Generate() {
-			foreach (ItemGroups nItemType in (ItemGroups [])Enum.GetValues(typeof (ItemGroups)))
+			foreach (UiItemGroups nItemType in UiItemGroupsSequence.Get())
 				m_oData[nItemType].Generate();	
 		} // Generate
 
@@ -65,32 +62,45 @@ namespace Reports {
 		#region method AddEvent
 
 		public void AddEvent(UiEvent oEvent) {
-			foreach (ItemGroups nItemType in (ItemGroups [])Enum.GetValues(typeof (ItemGroups)))
+			foreach (UiItemGroups nItemType in UiItemGroupsSequence.Get())
 				m_oData[nItemType].AddEvent(oEvent);	
 		} // AddEvent
 
 		#endregion method AddEvent
 
+		#region method ToRow
+
+		public void ToRow(DataTable tbl) {
+			var oRow = new List<object>(new object[] { CustomerInfo.ID, CustomerInfo.FirstName, CustomerInfo.Surname });
+
+			foreach (UiItemGroups nItemType in UiItemGroupsSequence.Get())
+				m_oData[nItemType].ToRow(oRow);
+
+			tbl.Rows.Add(oRow.ToArray());
+		} // ToRow
+
+		#endregion method ToRow
+
+		#region method ToString
+
+		public override string ToString() {
+			var os = new StringBuilder();
+
+			foreach (UiItemGroups nItemType in UiItemGroupsSequence.Get())
+				os.AppendFormat("{0} ", m_oData[nItemType].ToString());
+
+			os.AppendFormat("{0}", CustomerInfo);
+
+			return os.ToString();
+		} // ToString
+
+		#endregion method ToString
+
 		#endregion public
 
 		#region private
 
-		#region enum ItemGroups
-
-		private enum ItemGroups {
-			PersonalInfo,
-			HomeAddress,
-			ContactDetails,
-			CompanyInformation,
-			CompanyDetails,
-			AdditionalDirectors,
-		} // enum ItemGroups
-
-		#endregion enum ItemGroups
-
-		private static readonly SortedDictionary<ItemGroups, SortedSet<int>> ms_oControlGroups; 
-
-		private readonly SortedDictionary<ItemGroups, UiReportItemGroupData> m_oData; 
+		private readonly SortedDictionary<UiItemGroups, UiReportItemGroupData> m_oData; 
 
 		#endregion private
 	} // class UiReportItem

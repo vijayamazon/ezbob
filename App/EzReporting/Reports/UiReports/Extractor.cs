@@ -40,20 +40,20 @@ namespace Reports {
 
 		#region method Value
 
-		protected static string Value(string sVal) {
-			return sVal ?? "-- null --";
+		protected static string Value<T>(T sVal) where T: class {
+			return ReferenceEquals(sVal, null) ? "-- null --" : sVal.ToString();
 		} // Value
 
 		protected static string Value(DateTime? oVal) {
 			return oVal.HasValue ? oVal.Value.ToString("MMM d yyyy", CultureInfo.InvariantCulture) : "-- null --";
 		} // Value
 
-		protected static string Value(DateTime oVal) {
-			return oVal.ToString("MMM d yyyy H:mm:ss", CultureInfo.InvariantCulture);
-		} // Value
-
 		protected static string Value(int? oVal) {
 			return oVal.HasValue ? oVal.Value.ToString() : "-- null --";
+		} // Value
+
+		protected static string Value(DateTime oVal) {
+			return oVal.ToString("MMM d yyyy H:mm:ss", CultureInfo.InvariantCulture);
 		} // Value
 
 		#endregion method Value

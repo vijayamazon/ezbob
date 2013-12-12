@@ -249,6 +249,18 @@ namespace Reports {
 
 		#endregion method BuildCciReport
 
+		#region method BuildUiReport
+
+		public ATag BuildUiReport(Report report, DateTime today, DateTime tomorrow, List<string> oColumnTypes = null) {
+			KeyValuePair<ReportQuery, DataTable> oData = CreateUiReport(report, today, tomorrow);
+
+			return new Html.Tags.Body().Add<Class>("Body")
+				.Append(new H1().Append(new Text(report.GetTitle(today, oToDate: tomorrow))))
+				.Append(new P().Append(TableReport(oData.Key, oData.Value, oColumnTypes: oColumnTypes)));
+		} // BuildUiReport
+
+		#endregion method BuildUiReport
+
 		#endregion HTML generators
 
 		#region Excel generators
@@ -396,6 +408,16 @@ namespace Reports {
 		} // BuildCciXls
 
 		#endregion method BuildCciXls
+
+		#region method BuildUiXls
+
+		public ExcelPackage BuildUiXls(Report report, DateTime today, DateTime tomorrow) {
+			KeyValuePair<ReportQuery, DataTable> oData = CreateUiReport(report, today, tomorrow);
+
+			return AddSheetToExcel(oData.Value, report.GetTitle(today, oToDate: tomorrow), "RptEarnedInterest");
+		} // BuildUiXls
+
+		#endregion method BuildUiXls
 
 		#endregion Excel generators
 
@@ -1114,6 +1136,28 @@ namespace Reports {
 		} // CreateCciReport
 
 		#endregion method CreateCciReport
+
+		#region method CreateUiReport
+
+		private KeyValuePair<ReportQuery, DataTable> CreateUiReport(Report report, DateTime today, DateTime tomorrow) {
+			var cc = new UiReport(DB, today, tomorrow, this);
+			SortedDictionary<int, UiReportItem> oItems = cc.Run();
+
+			var rpt = new ReportQuery(report) {
+				DateStart = today,
+				DateEnd = tomorrow
+			};
+
+			DataTable oOutput = UiReportItem.CreateTable();
+
+			foreach (KeyValuePair<int, UiReportItem> pair in oItems)
+				 pair.Value.ToRow(oOutput);
+
+			return new KeyValuePair<ReportQuery, DataTable>(rpt, oOutput);
+		} // CreateUiReport
+
+		#endregion method CreateUiReport
+
 		#endregion report generators
 
 		#region private static

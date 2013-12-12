@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
+using EZBob.DatabaseLib.Model.Database;
 
 namespace Reports {
 	#region class CustomerInfo
@@ -9,7 +11,7 @@ namespace Reports {
 
 		#region constructor
 
-		public CustomerInfo(IDataRecord oRow) : base(oRow) {
+		public CustomerInfo(IDataRecord oRow, SortedDictionary<int, AddressInfo> oAddressList, SortedDictionary<int, int> oDirectorCountList) : base(oRow) {
 			ID = Retrieve<int>("CustomerID").Value;
 			FirstName = Retrieve("FirstName");
 			Surname = Retrieve("Surname");
@@ -25,6 +27,9 @@ namespace Reports {
 			LimitedCompanyName = Retrieve("LimitedCompanyName");
 
 			IsOffline = Convert.ToBoolean(oRow["IsOffline"]);
+
+			AddressInfo = oAddressList.ContainsKey(ID) ? oAddressList[ID] : null;
+			DirectorCount = oDirectorCountList.ContainsKey(ID) ? oDirectorCountList[ID] : 0;
 		} // constructor
 
 		#endregion constructor
@@ -46,14 +51,49 @@ namespace Reports {
 		public string LimitedCompanyName { get; private set; }
 		public bool IsOffline { get; private set; }
 
+		public AddressInfo AddressInfo { get; private set; }
+		public int DirectorCount { get; private set; }
+
 		#endregion properties
+
+		#region method HasAllData
+
+		public bool HasAllData(UiItemGroups nItemGroup) {
+			switch (nItemGroup) {
+			case UiItemGroups.PersonalInfo:
+				return !string.IsNullOrWhiteSpace(FirstName);
+
+			case UiItemGroups.HomeAddress:
+				return HasHomeAddress();
+
+			case UiItemGroups.ContactDetails:
+				return !string.IsNullOrWhiteSpace(MobilePhone);
+
+			case UiItemGroups.CompanyInfo:
+				return !string.IsNullOrWhiteSpace(TypeOfBusiness);
+
+			case UiItemGroups.CompanyDetails:
+				return HasCompanyDetails();
+
+			case UiItemGroups.AdditionalDirectors:
+				return DirectorCount > 0;
+
+			default:
+				throw new ArgumentOutOfRangeException("nItemGroup");
+			} // switch
+
+			return false;
+		} // HasAllData
+
+		#endregion method HasAllData
 
 		#region method ToString
 
 		public override string ToString() {
 			return string.Format(
 				"{13}: {12} {0} {1} {2}, born on {3}, currently {4}, available at {5} or {6}, " +
-				"residual age is {7}, is a {8}, business {9}, unlim name {10}, ltd name {11}",
+				"residual age is {7}, is a {8}, business {9}, unlim name {10}, ltd name {11} " +
+				"addresses {14}, director count {15}",
 				NameTitle(),
 				Value(FirstName),
 				Value(Surname),
@@ -67,7 +107,9 @@ namespace Reports {
 				Value(NonLimitedCompanyName),
 				Value(LimitedCompanyName),
 				Segment(),
-				ID
+				ID,
+				Value(AddressInfo),
+				DirectorCount
 			);
 		} // ToString
 
@@ -99,6 +141,54 @@ namespace Reports {
 		} // NameTitle
 
 		#endregion method NameTitle
+
+		#region method HasCompanyDetails
+
+		private bool HasCompanyDetails() {
+			EZBob.DatabaseLib.Model.Database.TypeOfBusiness bt;
+
+			if (!EZBob.DatabaseLib.Model.Database.TypeOfBusiness.TryParse(TypeOfBusiness, out bt))
+				return false;
+
+			switch (bt) {
+			case EZBob.DatabaseLib.Model.Database.TypeOfBusiness.Entrepreneur:
+				return true;
+
+			case EZBob.DatabaseLib.Model.Database.TypeOfBusiness.LLP:
+			case EZBob.DatabaseLib.Model.Database.TypeOfBusiness.Limited:
+				return !string.IsNullOrWhiteSpace(LimitedCompanyName);
+
+			case EZBob.DatabaseLib.Model.Database.TypeOfBusiness.PShip3P:
+			case EZBob.DatabaseLib.Model.Database.TypeOfBusiness.PShip:
+			case EZBob.DatabaseLib.Model.Database.TypeOfBusiness.SoleTrader:
+				return !string.IsNullOrWhiteSpace(NonLimitedCompanyName);
+
+			default:
+				throw new ArgumentOutOfRangeException();
+			} // switch
+		} // HasCompanyDetails
+
+		#endregion method HasCompanyDetails
+
+		#region method HasHomeAddress
+
+		private bool HasHomeAddress() {
+			if (AddressInfo == null)
+				return false;
+
+			if (AddressInfo[CustomerAddressType.PersonalAddress] < 1)
+				return false;
+
+			if (!TimeAtAddress.HasValue)
+				return false;
+
+			if ((TimeAtAddress == 1) || (TimeAtAddress == 2))
+				return AddressInfo[CustomerAddressType.PrevPersonAddresses] > 0;
+
+			return true;
+		} // HasHomeAddress
+
+		#endregion method HasHomeAddress
 
 		#endregion private
 	} // class CustomerInfo

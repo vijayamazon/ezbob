@@ -48,6 +48,9 @@ namespace EzReportsWeb {
 			case ReportType.RPT_CCI:
 				return BuildCciReport(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd, oColumnTypes);
 
+			case ReportType.RPT_UI_REPORT:
+				return BuildUiReport(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd, oColumnTypes);
+
 			default:
 				string sReportTitle = report.GetTitle((DateTime)rptDef.DateStart, " ", report.IsDaily ? (DateTime?)null : (DateTime)rptDef.DateEnd);
 
@@ -88,6 +91,9 @@ namespace EzReportsWeb {
 
 			case ReportType.RPT_CCI:
 				return BuildCciXls(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd);
+
+			case ReportType.RPT_UI_REPORT:
+				return BuildUiXls(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd);
 
 			default:
 				var xlsTitle = report.GetTitle((DateTime)rptDef.DateStart, " ", report.IsDaily ? (DateTime?)null : (DateTime)rptDef.DateEnd);
