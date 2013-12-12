@@ -88,6 +88,7 @@
     <Compile Include="Model\Database\Campaign\CampaignClients.cs" />
     <Compile Include="Model\Database\CompanyEmployeeCount.cs" />
     <Compile Include="Model\Database\CompanyEmployeeCountMap.cs" />
+    <Compile Include="Model\Database\CustomerAddressType.cs" />
     <Compile Include="Model\Database\WizardStep.cs" />
     <Compile Include="Model\Database\WhatsNewCustomerMap.cs" />
     <Compile Include="Model\Database\WhatsNew.cs" />

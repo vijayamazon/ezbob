@@ -5,22 +5,6 @@ namespace EZBob.DatabaseLib.Model.Database
 {
 	using Iesi.Collections.Generic;
 
-	public enum CustomerAddressType
-	{
-		PersonalAddress = 1,
-		PrevPersonAddresses = 2,
-		LimitedCompanyAddress = 3,
-		LimitedDirectorHomeAddress = 4,
-		NonLimitedCompanyAddress = 5,
-		NonLimitedDirectorHomeAddress = 6,
-		LimitedCompanyAddressPrev = 7,
-		LimitedDirectorHomeAddressPrev = 8,
-		NonLimitedCompanyAddressPrev = 9,
-		NonLimitedDirectorHomeAddressPrev = 10,
-		OtherPropertyAddress = 11,
-		OtherPropertyAddressPrev = 12
-	}
-
 	[Serializable]
 	public class CustomerAddress
 	{
