@@ -324,7 +324,7 @@
 		}
 
 		private MP_EbayAmazonCategory[] GetAndSaveAmazonProcuctCategory( IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
-												AmazonProductsRequestBase requestInfo,
+												AmazonProductsRequestInfoBySellerSku requestInfo,
 												ActionAccessType access,
 												RequestsCounterData requestCounter,
 												ElapsedTimeInfo elapsedTimeInfo )
@@ -349,30 +349,6 @@
 				var marketplace = databaseCustomerMarketPlace.Marketplace;
 				categories = Helper.AddAmazonCategories( marketplace, productItem, elapsedTimeInfo );
 			}
-			return categories;
-		}
-
-		private MP_EbayAmazonCategory[] GetAndSaveAmazonProcuctCategoryByProductAsin( IDatabaseCustomerMarketPlace databaseCustomerMarketPlace,
-												AmazonSecurityInfo securityInfo,
-												string asin,
-												ActionAccessType access,
-												RequestsCounterData requestCounter, 
-												ElapsedTimeInfo elapsedTimeInfo)
-		{
-			var categories = Helper.FindAmazonCategoryByProductAsin( asin, elapsedTimeInfo );
-
-			if ( categories == null )
-			{
-				var requestInfo = new AmazonProductsRequestInfoByAsin
-				{
-					MarketplaceId = securityInfo.MarketplaceId,
-					MerchantId = securityInfo.MerchantId,
-					ProductASIN = asin,
-					ErrorRetryingInfo = _AmazonSettings.ErrorRetryingInfo
-				};
-				categories = GetAndSaveAmazonProcuctCategory( databaseCustomerMarketPlace, requestInfo, access, requestCounter, elapsedTimeInfo );
-			}
-
 			return categories;
 		}
 

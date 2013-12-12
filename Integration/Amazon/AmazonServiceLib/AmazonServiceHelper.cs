@@ -49,7 +49,7 @@ namespace EzBob.AmazonServiceLib
 			return AmazonServiceReports.GetUserInventory( configurator, requestInfo, access );
 		}
 
-		public static AmazonProductItemBase GetProductCategories( AmazonServiceConnectionInfo connectionInfo, AmazonProductsRequestBase requestInfo, ActionAccessType access, RequestsCounterData requestCounter )
+		public static AmazonProductItemBase GetProductCategories(AmazonServiceConnectionInfo connectionInfo, AmazonProductsRequestInfoBySellerSku requestInfo, ActionAccessType access, RequestsCounterData requestCounter)
 		{
 			var configurator = AmazonServiceConfigurationFactory.CreateServiceProductsConfigurator( connectionInfo );
 			return AmazonServiceProducts.GetProductCategories( configurator, requestInfo, access, requestCounter );

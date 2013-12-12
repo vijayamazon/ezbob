@@ -12,38 +12,16 @@ namespace EzBob.AmazonServiceLib.Inventory.Model
 		BySellerSku
 	}
 
-	public abstract class AmazonProductsRequestBase : AmazonRequestInfoBase
-	{
-		public abstract AmazonProductRequestType Type { get; }
-
-		internal abstract AmazonProductItemBase RequestData( AmazonServiceProducts data, ActionAccessType access, RequestsCounterData requestCounte );
-	}
-
-	public class AmazonProductsRequestInfoByAsin : AmazonProductsRequestBase
-	{
-		public string ProductASIN { get; set; }
-
-		public override AmazonProductRequestType Type
-		{
-			get { return AmazonProductRequestType.ByAsin; }
-		}
-
-		internal override AmazonProductItemBase RequestData( AmazonServiceProducts data, ActionAccessType access, RequestsCounterData requestCounte )
-		{
-			return data.GetProductCategoriesByAsin( this, access, requestCounte );
-		}
-	}
-
-	public class AmazonProductsRequestInfoBySellerSku : AmazonProductsRequestBase
+	public class AmazonProductsRequestInfoBySellerSku : AmazonRequestInfoBase
 	{
 		public string SellerSku { get; set; }
 
-		public override AmazonProductRequestType Type
+		public AmazonProductRequestType Type
 		{
 			get { return AmazonProductRequestType.BySellerSku; }
 		}
 
-		internal override AmazonProductItemBase RequestData( AmazonServiceProducts data, ActionAccessType access, RequestsCounterData requestCounte )
+		internal AmazonProductItemBase RequestData( AmazonServiceProducts data, ActionAccessType access, RequestsCounterData requestCounte )
 		{
 			return data.GetProductCategoriesBySellerSku( this, access, requestCounte );
 		}

@@ -26,7 +26,7 @@ namespace EzBob.AmazonServiceLib.ServiceCalls
 			_Service = service;
 		}
 
-		public static AmazonProductItemBase GetProductCategories( IAmazonServiceProductsConfigurator configurator, AmazonProductsRequestBase requestInfo, ActionAccessType access, RequestsCounterData requestCounter )
+		public static AmazonProductItemBase GetProductCategories(IAmazonServiceProductsConfigurator configurator, AmazonProductsRequestInfoBySellerSku requestInfo, ActionAccessType access, RequestsCounterData requestCounter)
 		{
 			var service = configurator.AmazonService;
 
@@ -34,34 +34,6 @@ namespace EzBob.AmazonServiceLib.ServiceCalls
 
 			return requestInfo.RequestData( data, access, requestCounter );
 			
-		}
-
-		internal AmazonProductItemBase GetProductCategoriesByAsin( AmazonProductsRequestInfoByAsin requestInfo, ActionAccessType access, RequestsCounterData requestCounter )
-		{
-			var productItem = new AmazonProductItemByAsin( requestInfo.ProductASIN );
-
-			var request = new GetProductCategoriesForASINRequest
-			{
-				MarketplaceId = requestInfo.MarketplaceId.First(),				
-				SellerId = requestInfo.MerchantId,
-				ASIN = requestInfo.ProductASIN
-			};
-
-			var response =  AmazonWaitBeforeRetryHelper.DoServiceAction( 
-									requestInfo.ErrorRetryingInfo, 
-									RequestGetProductCategoriesTrapForThrottling, 
-									"GetProductCategoriesForASIN", 
-									access, 
-									requestCounter, 
-									() => _Service.GetProductCategoriesForASIN( request ));
-
-			if (response != null && response.IsSetGetProductCategoriesForASINResult() && response.GetProductCategoriesForASINResult.IsSetSelf())
-			{
-				FillCategories( productItem, response.GetProductCategoriesForASINResult.Self );
-
-			}
-
-			return productItem;
 		}
 
 		internal AmazonProductItemBase GetProductCategoriesBySellerSku( AmazonProductsRequestInfoBySellerSku requestInfo, ActionAccessType access, RequestsCounterData requestCounter )
