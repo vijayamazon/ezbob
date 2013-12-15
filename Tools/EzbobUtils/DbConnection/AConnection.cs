@@ -267,7 +267,10 @@ namespace Ezbob.Database {
 
 								bool bStop = false;
 
-								while (oReader.HasRows) {
+								do {
+									if (!oReader.HasRows)
+										continue;
+
 									bool bRowSetStart = true;
 
 									while (oReader.Read()) {
@@ -283,12 +286,7 @@ namespace Ezbob.Database {
 
 										bRowSetStart = false;
 									} // while has rows in current set
-
-									if (bStop)
-										break;
-
-									oReader.NextResult();
-								} // while has row sets
+								} while (!bStop && oReader.NextResult());
 
 								return null;
 							} // ExecMode.ForEachRow
