@@ -23,6 +23,8 @@ BEGIN
 		(SELECT Value FROM ConfigurationVariables WHERE Name = 'MaxCapNotHomeOwner') AS MaxCapNotHomeOwner,		
 		(SELECT Value FROM ConfigurationVariables WHERE Name = 'LowCreditScore') AS LowCreditScore,
 		(SELECT Value FROM ConfigurationVariables WHERE Name = 'TotalAnnualTurnover') AS LowTotalAnnualTurnover,
-		(SELECT Value FROM ConfigurationVariables WHERE Name = 'TotalThreeMonthTurnover') AS LowTotalThreeMonthTurnover
+		(SELECT Value FROM ConfigurationVariables WHERE Name = 'TotalThreeMonthTurnover') AS LowTotalThreeMonthTurnover,
+		(SELECT Value FROM ConfigurationVariables WHERE Name = 'DefaultFeedbackValue') AS DefaultFeedbackValue,
+		(SELECT Value FROM ConfigurationVariables WHERE Name = 'TotalTimeToWaitForMarketplacesUpdate') AS TotalTimeToWaitForMarketplacesUpdate
 END
 GO

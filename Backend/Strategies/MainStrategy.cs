@@ -75,6 +75,9 @@
 		private int LowCreditScore;
 		private int LowTotalAnnualTurnover;
 		private int LowTotalThreeMonthTurnover;
+		private int defaultFeedbackValue;
+		private int totalTimeToWaitForMarketplacesUpdate;
+		private int intervalWaitForMarketplacesUpdate;
 
 		// Loaded from DB per customer
 		private bool CustomerStatusIsEnabled;
@@ -159,13 +162,6 @@
 		private string ExperianBWAError;
 		private string ExperianAMLPassed;
 		private string ExperianAMLError;
-
-		// TODOs:
-		private string LoanOffer_SystemDecision; // TODO: remove this variable it is redundant
-		private int LoanOffer_ManagerApprovedSum; // TODO: remove this variable it is redundant
-		private string LoanOffer_MedalType; // TODO: remove this variable it is redundant
-		private int LoanOffer_ScorePoints; // TODO: remove this variable it is redundant
-		private decimal LoanOffer_AnualTurnover; // TODO: remove this variable it is redundant
 		
 		private void ReadConfigurations()
 		{
@@ -187,6 +183,9 @@
 			LowCreditScore = int.Parse(results["LowCreditScore"].ToString());
 			LowTotalAnnualTurnover = int.Parse(results["LowTotalAnnualTurnover"].ToString());
 			LowTotalThreeMonthTurnover = int.Parse(results["LowTotalThreeMonthTurnover"].ToString());
+			defaultFeedbackValue = int.Parse(results["DefaultFeedbackValue"].ToString());
+			totalTimeToWaitForMarketplacesUpdate = int.Parse(results["TotalTimeToWaitForMarketplacesUpdate"].ToString());
+			intervalWaitForMarketplacesUpdate = int.Parse(results["IntervalWaitForMarketplacesUpdate"].ToString());
 		}
 		
 		private void GerPersonalInfo()
@@ -232,7 +231,6 @@
 		{
 			ReadConfigurations();
 			GerPersonalInfo();
-			// TODO: remove columns Customer.LastStartedMainStrategy, Customer.Eliminated
 			strategyHelper.GetZooplaData(CustomerId);
 
 			if (!CustomerStatusIsEnabled || CustomerStatusIsWarning)
@@ -343,9 +341,8 @@
 			
 			if (string.IsNullOrEmpty(maxFeedbackRaw))
 			{
-				// TODO: place in config
-				log.InfoFormat("No feedback information exists. Will use 20000.");
-				Model_MaxFeedback = 20000; // average value will not influence scorecard calculations
+				log.InfoFormat("No feedback information exists. Will use {0}.", defaultFeedbackValue);
+				Model_MaxFeedback = defaultFeedbackValue;
 			}
 			else
 			{
@@ -402,14 +399,9 @@
 			LoanOffer_ReApprovalRemainingAmount = int.Parse(lastOfferResults["ReApprovalRemainingAmount"].ToString());
 			LoanOffer_ReApprovalFullAmountOld = int.Parse(lastOfferResults["ReApprovalFullAmountOld"].ToString());
 			LoanOffer_ReApprovalRemainingAmountOld = int.Parse(lastOfferResults["ReApprovalRemainingAmountOld"].ToString());
-			LoanOffer_SystemDecision = lastOfferResults["SystemDecision"].ToString();
-			LoanOffer_ManagerApprovedSum = int.Parse(lastOfferResults["ManagerApprovedSum"].ToString());
-			LoanOffer_MedalType = lastOfferResults["MedalType"].ToString();
 			LoanOffer_APR = int.Parse(lastOfferResults["APR"].ToString());
 			LoanOffer_RepaymentPeriod = int.Parse(lastOfferResults["RepaymentPeriod"].ToString());
-			LoanOffer_ScorePoints = int.Parse(lastOfferResults["ScorePoints"].ToString());
 			LoanOffer_ExpirianRating = int.Parse(lastOfferResults["ExpirianRating"].ToString());
-			LoanOffer_AnualTurnover = int.Parse(lastOfferResults["AnualTurnover"].ToString());
 			LoanOffer_InterestRate = int.Parse(lastOfferResults["InterestRate"].ToString());
 			LoanOffer_UseSetupFee = int.Parse(lastOfferResults["UseSetupFee"].ToString());
 			LoanOffer_LoanTypeId = int.Parse(lastOfferResults["LoanTypeId"].ToString());
@@ -418,9 +410,8 @@
 			LoanSourceId = int.Parse(lastOfferResults["LoanSourceID"].ToString());
 			IsCustomerRepaymentPeriodSelectionAllowed = int.Parse(lastOfferResults["IsCustomerRepaymentPeriodSelectionAllowed"].ToString());
 
-
 			DataTable basicInterestRateDataTable = DbConnection.ExecuteSpReader("GetBasicInterestRate",
-			                                                                    DbConnection.CreateParam("Score", Inintial_ExperianConsumerScore));
+				DbConnection.CreateParam("Score", Inintial_ExperianConsumerScore));
 			DataRow basicInterestRateRow = basicInterestRateDataTable.Rows[0];
 			LoanIntrestBase = decimal.Parse(basicInterestRateRow["LoanIntrestBase"].ToString());
 			
@@ -919,7 +910,8 @@
 
 			if (UseCustomIdHubAddress == 1)
 			{
-				// TODO: DB - GetPrevBwaResult
+				DataTable dt = DbConnection.ExecuteSpReader("GetPrevBwaResult");
+				ExperianBwaResult = dt.Rows[0]["BWAResult"].ToString();
 			}
 			else
 			{
@@ -1160,18 +1152,16 @@
 		private bool WaitForMarketplacesToFinishUpdates()
 		{
 			bool isUpdated = false; // TODO: get from MP_IsCustomerMarketPlacesUpdated
-			int totalTimeToWaitInSeconds = 43200; //TODO put in ConfigurationVariables
-			int intervalInMilliseconds = 300000; //TODO put in ConfigurationVariables
 			DateTime startWaitingTime = DateTime.UtcNow;
 
 			while (!isUpdated)
 			{
-				if ((DateTime.UtcNow - startWaitingTime).TotalSeconds > totalTimeToWaitInSeconds)
+				if ((DateTime.UtcNow - startWaitingTime).TotalSeconds > totalTimeToWaitForMarketplacesUpdate)
 				{
 					return false;
 				}
 
-				Thread.Sleep(intervalInMilliseconds);
+				Thread.Sleep(intervalWaitForMarketplacesUpdate);
 				isUpdated = false; // TODO: get from MP_IsCustomerMarketPlacesUpdated
 			}
 
