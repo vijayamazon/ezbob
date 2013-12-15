@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://daylistenquiryv2_0.ws.bg.lr.gov/" name="DaylistEnquiryV2_0WebService" targetNamespace="http://daylistenquiryv2_0.ws.bg.lr.gov/" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <types>
+    <xsd:schema xmlns:ns3="http://daylistenquiryv2_0.ws.bg.lr.gov/" xmlns:ns1="http://www.oscre.org/ns/eReg-Final/2011/RequestDaylistEnquiryV2_0" xmlns:ns2="http://www.oscre.org/ns/eReg-Final/2011/ResponseDaylistEnquiryV2_0" targetNamespace="http://daylistenquiryv2_0.ws.bg.lr.gov/">
+      <xsd:import schemaLocation="RequestDaylistEnquiryV2_0.xsd" namespace="http://www.oscre.org/ns/eReg-Final/2011/RequestDaylistEnquiryV2_0" />
+      <xsd:import schemaLocation="ResponseDaylistEnquiryV2_0.xsd" namespace="http://www.oscre.org/ns/eReg-Final/2011/ResponseDaylistEnquiryV2_0" />
+      <xsd:element name="SOAPEngineSystemException" nillable="true" type="xsd:string" />
+      <xsd:element name="daylistEnquiry" type="ns3:daylistEnquiry" />
+      <xsd:element name="daylistEnquiryResponse" type="ns3:daylistEnquiryResponse" />
+      <xsd:complexType name="daylistEnquiry">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="arg0" type="ns1:RequestDaylistEnquiryV2_0Type" />
+        </xsd:sequence>
+      </xsd:complexType>
+      <xsd:complexType name="daylistEnquiryResponse">
+        <xsd:sequence>
+          <xsd:element minOccurs="0" name="return" type="ns2:ResponseDaylistEnquiryV2_0Type" />
+        </xsd:sequence>
+      </xsd:complexType>
+    </xsd:schema>
+  </types>
+  <message name="daylistEnquiryResponse">
+    <part name="parameters" element="tns:daylistEnquiryResponse" />
+  </message>
+  <message name="daylistEnquiryRequest">
+    <part name="parameters" element="tns:daylistEnquiry" />
+  </message>
+  <message name="SOAPEngineSystemException">
+    <part name="fault" element="tns:SOAPEngineSystemException" />
+  </message>
+  <portType name="DaylistEnquiryV2_0Service">
+    <operation name="daylistEnquiry">
+      <input message="tns:daylistEnquiryRequest" />
+      <output message="tns:daylistEnquiryResponse" />
+      <fault name="SOAPEngineSystemException" message="tns:SOAPEngineSystemException" />
+    </operation>
+  </portType>
+  <binding name="DaylistEnquiryV2_0WSImplPortBinding" type="tns:DaylistEnquiryV2_0Service">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <operation name="daylistEnquiry">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+      <fault name="SOAPEngineSystemException">
+        <soap:fault use="literal" name="SOAPEngineSystemException" namespace="" />
+      </fault>
+    </operation>
+  </binding>
+  <service name="DaylistEnquiryV2_0WebService">
+    <port name="DaylistEnquiryV2_0WSImplPort" binding="tns:DaylistEnquiryV2_0WSImplPortBinding">
+      <soap:address location="https://z0.b2b.http.server.landregistry.gov:13007/BGStubService/DaylistEnquiryV2_0WebService" />
+    </port>
+  </service>
+</definitions>
