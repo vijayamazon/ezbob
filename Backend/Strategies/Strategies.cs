@@ -15,14 +15,12 @@
 		private static readonly ILog log = LogManager.GetLogger(typeof(Strategies));
 		private readonly StrategiesMailer mailer = new StrategiesMailer();
 		
-		// Small but not mail
 		public void FraudChecker(int customerId)
 		{
 			var checker = new FraudDetectionChecker();
 			checker.Check(customerId);
 		}
 		
-		// Large strategies:
 		private object caisGenerationLock = new object();
 		private int caisGenerationTriggerer = -1;
 		public void CAISGenerate(int underwriterId)
@@ -52,6 +50,8 @@
 		
 		public void CustomerMarketPlaceAdded(int customerId, int marketplaceId)
 		{
+			DateTime startTime = DateTime.UtcNow;
+
 			var requestId = RetrieveDataHelper.UpdateCustomerMarketplaceData(marketplaceId);
 
 			while (!RetrieveDataHelper.IsRequestDone(requestId))
@@ -60,19 +60,26 @@
 			}
 			var requestState = RetrieveDataHelper.GetRequestState(requestId);
 			string errorCode = null;
+			string errorMessage = null;
+			bool tokenExpired = false;
 
 			if (requestState == null || requestState.HasError())
 			{
-				string errorMessage = null;
-				string marketplaceType = null;
-				bool isEbay = false;
-				bool tokenExpired = false;
-				// TODO: fill errorCode, errorMessage, marketplaceType from requestState.ErorrInfo
-				// TODO: fill isEbay from marketplaceId
+				DataTable dt = DbConnection.ExecuteSpReader("GetMarketplaceType");
+				DataRow result = dt.Rows[0];
+				string marketplaceType = result["Name"].ToString();
+
+				if (requestState != null)
+				{
+					// TODO: make sure it contains the ebay error codes below such as token expired
+					// What is the difference between errorCode & errorMessage?
+					errorCode = requestState.ErorrInfo.Message; 
+					errorMessage = requestState.ErorrInfo.Message;
+				}
 
 				string emailSubject, templateName;
 
-				if (isEbay &&
+				if (marketplaceType == "eBay" &&
 					(errorCode == "16110" || errorCode == "931" || errorCode == "932" || errorCode == "16118" ||
 					 errorCode == "16119" || errorCode == "17470"))
 				{
@@ -93,7 +100,7 @@
 				}
 				else
 				{
-					emailSubject = "eBay token has expired";
+					emailSubject = "ERROR occured when updating Customer Marketplace data";
 					templateName = "Mandrill - UpdateCMP Error";
 
 					// TODO: Remove ApplicationID from mandrill\mailchimp templates
@@ -108,14 +115,27 @@
 				}
 			}
 
-			// TODO: update end time & (errorCode, tokenExpired)
+			DbConnection.ExecuteSpNonQuery("UpdateMPErrorMP",
+				DbConnection.CreateParam("umi", marketplaceId),
+				DbConnection.CreateParam("UpdateError", errorMessage),
+				DbConnection.CreateParam("TokenExpired", tokenExpired));
+
+			DbConnection.ExecuteSpNonQuery("InsertStrategyMarketPlaceUpdateTime",
+				DbConnection.CreateParam("MarketPlaceId", marketplaceId),
+				DbConnection.CreateParam("StartDate", startTime),
+				DbConnection.CreateParam("EndDate", DateTime.UtcNow));
+
 		}
 
 		public void UpdateAllMarketplaces(int customerId)
 		{
-			
+			DataTable dt = DbConnection.ExecuteSpReader("GetCustomerMarketplaces", DbConnection.CreateParam("CustomerId", customerId));
+			foreach (DataRow row in dt.Rows)
+			{
+				int marketplaceId = int.Parse(row["Id"].ToString());
+				CustomerMarketPlaceAdded(customerId, marketplaceId);
+			}
 		}
-
 
 		// main strategy - 1
 		public void Evaluate(int customerId, NewCreditLineOption newCreditLineOption, int avoidAutomaticDescison, bool isUnderwriterForced = false)
