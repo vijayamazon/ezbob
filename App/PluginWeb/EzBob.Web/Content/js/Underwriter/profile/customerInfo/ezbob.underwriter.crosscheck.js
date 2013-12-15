@@ -2,352 +2,364 @@
 EzBob.Underwriter = EzBob.Underwriter || {};
 
 EzBob.Underwriter.CrossCheckView = Backbone.View.extend({
-	initialize: function () {
-		this.segmentType = '';
-		this.marketPlaces = null;
-		this.companyScore = null;
-		this.experianDirectors = null;
-		this.fullModel = null;
-	}, // initialize
+    initialize: function () {
+        this.segmentType = '';
+        this.marketPlaces = null;
+        this.companyScore = null;
+        this.experianDirectors = null;
+        this.fullModel = null;
+    }, // initialize
 
-	render: function (d) {
-		this.model = d;
+    render: function (d) {
+        this.model = d;
 
-		var view = this;
+        var view = this;
 
-		var jx = $.get(window.gRootPath + "Underwriter/CrossCheck/Index/" + this.model.customerId, function (data) {
-			view.$el.html(data);
+        var jx = $.get(window.gRootPath + "Underwriter/CrossCheck/Index/" + this.model.customerId, function (data) {
+            view.$el.html(data);
 
-			view.$el.find('.copy-buttons').one('mouseover', function () {
-				view.$el.find(".btn-copy").each(function () {
-					var element = $(this);
+            view.$el.find('.copy-buttons').one('mouseover', function () {
+                view.$el.find(".btn-copy").each(function () {
+                    var element = $(this);
 
-					if ( (/[^\s,]/g).test(element.data('address')) ) {
-						element.zclip({
-							path: window.gRootPath + "Content/flash/ZeroClipboard.swf",
-							copy: function() {
-								return element.data('address');
-							}
-						});
-					}
-					else
-						element.addClass("disabled");
-				});
-			});
+                    if ((/[^\s,]/g).test(element.data('address'))) {
+                        element.zclip({
+                            path: window.gRootPath + "Content/flash/ZeroClipboard.swf",
+                            copy: function () {
+                                return element.data('address');
+                            }
+                        });
+                    }
+                    else
+                        element.addClass("disabled");
+                });
+            });
 
-			view.doCrossCheck();
-		});
+            view.doCrossCheck();
+        });
 
-		jx.error(function () { view.$el.html("Failed to get cross check data."); });
-	}, // render
+        jx.error(function () { view.$el.html("Failed to get cross check data."); });
+    }, // render
 
-	doCrossCheck: function() {
-		this.setExperianData();
+    doCrossCheck: function () {
+        this.setExperianData();
 
-		this.setHmrcData();
+        this.setHmrcData();
 
-		var cb = null;
-		var sBusinessType = (
+        var cb = null;
+        var sBusinessType = (
 			(this.fullModel ?
 				((cb = this.fullModel.get('CreditBureauModel')) ? cb.BorrowerType : '') :
 				'') || ''
 		).toLowerCase();
 
-		if (sBusinessType && (sBusinessType != 'entrepreneur')) {
-			var bCompanyNameSuccess = this.crossCheckOne('#cross-check-company-name');
+        if (sBusinessType && (sBusinessType != 'entrepreneur')) {
+            var bCompanyNameSuccess = this.crossCheckOne('#cross-check-company-name');
 
-			var bCompanyAddressSuccess = this.crossCheckOne('#cross-check-company-address');
+            var bCompanyAddressSuccess = this.crossCheckOne('#cross-check-company-address');
 
-			var bDirectorsSuccess = this.crossCheckDirectors();
+            var bDirectorsSuccess = this.crossCheckDirectors();
 
-			this.$el.find('.cross-check-summary-company-name').addClass(bCompanyNameSuccess ? 'Checked' : 'NoChecked');
-			this.$el.find('.cross-check-summary-company-address').addClass(bCompanyAddressSuccess ? 'Checked' : 'NoChecked');
-			this.$el.find('.cross-check-summary-directors').addClass(bDirectorsSuccess ? 'Checked' : 'NoChecked');
-		} // if
-	}, // doCrossCheck
+            this.$el.find('.cross-check-summary-company-name').addClass(bCompanyNameSuccess ? 'Checked' : 'NoChecked');
+            this.$el.find('.cross-check-summary-company-address').addClass(bCompanyAddressSuccess ? 'Checked' : 'NoChecked');
+            this.$el.find('.cross-check-summary-directors').addClass(bDirectorsSuccess ? 'Checked' : 'NoChecked');
+        } // if
+    }, // doCrossCheck
 
-	crossCheckDirectors: function() {
-		var oUiDirector = this.$el.find('#cross-check-experian-only-directors');
+    crossCheckDirectors: function () {
+        var oUiDirector = this.$el.find('#cross-check-experian-only-directors');
 
-		oUiDirector.show();
+        oUiDirector.show();
 
-		if (!this.experianDirectors) {
-			oUiDirector.hide();
-			return true;
-		} // if
+        if (!this.experianDirectors) {
+            oUiDirector.hide();
+            return true;
+        } // if
 
-		var self = this;
+        var self = this;
 
-		var oExperian = {};
-		var nExperianCount = 0;
+        var oExperian = {};
+        var nExperianCount = 0;
 
-		_.each(this.experianDirectors, function(nDummyValue, sDirectorName) {
-			var sName = self.name(sDirectorName.toUpperCase());
+        _.each(this.experianDirectors, function (nDummyValue, sDirectorName) {
+            var sName = self.name(sDirectorName.toUpperCase());
 
-			if (!sName)
-				return;
-			
-			oExperian[sName] = 1;
-			nExperianCount++;
-		}); // for each experian director
+            if (!sName)
+                return;
 
-		if (0 == nExperianCount) {
-			oUiDirector.hide();
-			return true;
-		} // if
+            oExperian[sName] = 1;
+            nExperianCount++;
+        }); // for each experian director
 
-		var oApplication = {};
+        if (0 == nExperianCount) {
+            oUiDirector.hide();
+            return true;
+        } // if
 
-		this.$el.find('.cross-check-director-details').each(function() {
-			var sName = self.name($(this).attr('director-name'));
+        var oApplication = {};
 
-			if (!sName)
-				return;
+        this.$el.find('.cross-check-director-details').each(function () {
+            var sName = self.name($(this).attr('director-name'));
 
-			oApplication[sName] = 1;
-		}); // for each app director
+            if (!sName)
+                return;
 
-		var nOnlyCount = 0;
+            oApplication[sName] = 1;
+        }); // for each app director
 
-		var oUiDirectorList = oUiDirector.find('ul');
+        var nOnlyCount = 0;
 
-		for (var sDirName in oExperian) {
-			if (oApplication[sDirName])
-				continue;
+        var oUiDirectorList = oUiDirector.find('ul');
 
-			oUiDirectorList.append($('<li></li>').text(sDirName));
-			nOnlyCount++;
+        for (var sDirName in oExperian) {
+            if (oApplication[sDirName])
+                continue;
 
-			oUiDirector.show();
-		} // for
+            oUiDirectorList.append($('<li></li>').text(sDirName));
+            nOnlyCount++;
 
-		if (0 == nOnlyCount) {
-			oUiDirector.hide();
-			return true;
-		} // if
+            oUiDirector.show();
+        } // for
 
-		return false;
-	}, // crossCheckDirectors
+        if (0 == nOnlyCount) {
+            oUiDirector.hide();
+            return true;
+        } // if
 
-	crossCheckOne: function(sParentID) {
-		var oParent = this.$el.find(sParentID);
+        return false;
+    }, // crossCheckDirectors
 
-		var sAppValue = oParent.find('.application').text();
+    crossCheckOne: function (sParentID) {
+        var oParent = this.$el.find(sParentID);
 
-		var sExperianValue = oParent.find('.experian').text();
-		
-		if (sAppValue != sExperianValue) {
-			oParent.find('.checkoutcome').addClass('NoChecked');
-			return false;
-		} // if
+        var sAppValue = oParent.find('.application').text();
 
-		var oHmrc = oParent.find('.hmrc');
+        var sExperianValue = oParent.find('.experian').text();
 
-		if (oHmrc.hasClass('hide')) {
-			if (sAppValue == sExperianValue) {
-				oParent.find('.checkoutcome').addClass('Checked');
-				return true;
-			} // if
+        if (sAppValue != sExperianValue) {
+            oParent.find('.checkoutcome').addClass('NoChecked');
+            return false;
+        } // if
 
-			return false;
-		} // if HMRC is hidden
+        var oHmrc = oParent.find('.hmrc');
 
-		var bSuccess = sAppValue == oHmrc.text();
+        if (oHmrc.hasClass('hide')) {
+            if (sAppValue == sExperianValue) {
+                oParent.find('.checkoutcome').addClass('Checked');
+                return true;
+            } // if
 
-		oParent.find('.checkoutcome').addClass(bSuccess ? 'Checked' : 'NoChecked');
+            return false;
+        } // if HMRC is hidden
 
-		return bSuccess;
-	}, // crossCheckOne
+        var bSuccess = sAppValue == oHmrc.text();
 
-	setHmrcData: function() {
-		if (this.segmentType != 'Offline') {
-			this.$el.find('.hmrc').addClass('hide').hide();
-			return;
-		} // if
+        oParent.find('.checkoutcome').addClass(bSuccess ? 'Checked' : 'NoChecked');
 
-		this.$el.find('.hmrc').removeClass('hide').show();
+        return bSuccess;
+    }, // crossCheckOne
 
-		if (!this.marketPlaces)
-			return;
+    setHmrcData: function () {
+        if (this.segmentType != 'Offline') {
+            this.$el.find('.hmrc').addClass('hide').hide();
+            return;
+        } // if
 
-		var oHMRC = null;
+        this.$el.find('.hmrc').removeClass('hide').show();
 
-		_.every(this.marketPlaces.models, function(mdl) {
-			var bContinue = true;
+        if (!this.marketPlaces)
+            return;
 
-			mdl.collection.each(function(mp) {
-				if (mp.get('Name') == 'HMRC') {
-					oHMRC = mp;
-					bContinue = false;
-					return false;
-				} // if
+        var oHMRC = null;
 
-				return true;
-			}); // for every collection member
+        _.every(this.marketPlaces.models, function (mdl) {
+            var bContinue = true;
 
-			return bContinue;
-		}); // for every model list in collection
+            mdl.collection.each(function (mp) {
+                if (mp.get('Name') == 'HMRC') {
+                    oHMRC = mp;
+                    bContinue = false;
+                    return false;
+                } // if
 
-		if (oHMRC == null) {
-			this.$el.find('.hmrc').addClass('hide').hide();
-			return;
-		} // if
+                return true;
+            }); // for every collection member
 
-		var oCGData = oHMRC.get('CGData');
+            return bContinue;
+        }); // for every model list in collection
 
-		if (!oCGData || !oCGData.VatReturn || !oCGData.VatReturn.length)
-			return;
+        if (oHMRC == null) {
+            this.$el.find('.hmrc').addClass('hide').hide();
+            return;
+        } // if
 
-		var oCompanyID = oCGData.VatReturn[oCGData.VatReturn.length - 1];
+        var oCGData = oHMRC.get('CGData');
 
-		this.$el.find('#cross-check-company-name .hmrc').text($.trim(oCompanyID['BusinessName']));
+        if (!oCGData || !oCGData.VatReturn || !oCGData.VatReturn.length)
+            return;
 
-		this.$el.find('#cross-check-company-address .hmrc').text(this.address(oCompanyID['BusinessAddress']));
-	}, // setHmrcData
+        var oCompanyID = oCGData.VatReturn[oCGData.VatReturn.length - 1];
 
-	setExperianData: function() {
-		var oCompanyIdList = this.loadExperian('Limited Company Identification');
+        this.$el.find('#cross-check-company-name .hmrc').text($.trim(oCompanyID['BusinessName']));
 
-		if (!oCompanyIdList)
-			return;
+        this.$el.find('#cross-check-company-address .hmrc').text(this.address(oCompanyID['BusinessAddress']));
+    }, // setHmrcData
 
-		var oCompanyID = oCompanyIdList[0];
+    setExperianData: function () {
+        var oCompanyIdList = this.loadExperian('Limited Company Identification');
 
-		this.$el.find('#cross-check-company-name .experian').text($.trim(oCompanyID['Company Name']));
+        if (!oCompanyIdList)
+            return;
 
-		this.$el.find('#cross-check-company-address .experian').text(this.address(oCompanyID['Office Address']));
-	}, // setExperianData
+        var oCompanyID = oCompanyIdList[0];
 
-	loadExperian: function(sDatumID) {
-		if (!this.companyScore)
-			return null;
+        this.$el.find('#cross-check-company-name .experian').text($.trim(oCompanyID['Company Name']));
 
-		var oDataset = this.companyScore.get('dataset');
+        this.$el.find('#cross-check-company-address .experian').text(this.address(oCompanyID['Office Address']));
+    }, // setExperianData
 
-		if (!oDataset)
-			return null;
+    loadExperian: function (sDatumID) {
+        if (!this.companyScore)
+            return null;
 
-		if (!oDataset[sDatumID])
-			return null;
+        var oDataset = this.companyScore.get('dataset');
 
-		var oDatum = oDataset[sDatumID].Data;
+        if (!oDataset)
+            return null;
 
-		if (!oDatum || !oDatum.length)
-			return null;
+        if (!oDataset[sDatumID])
+            return null;
 
-		return oDatum;
-	}, // loadExperian
+        var oDatum = oDataset[sDatumID].Data;
 
-	address: function(oRawAddress) {
-		var aryRawAddress = null;
+        if (!oDatum || !oDatum.length)
+            return null;
 
-		if (!oRawAddress)
-			return '';
+        return oDatum;
+    }, // loadExperian
 
-		switch (Object.prototype.toString.call(oRawAddress)) {
-		case '[object Array]':
-			aryRawAddress = oRawAddress;
-			break;
+    address: function (oRawAddress) {
+        var aryRawAddress = null;
 
-		case '[object String]':
-			aryRawAddress = oRawAddress.split('\n');
-			break;
+        if (!oRawAddress)
+            return '';
 
-		default:
-			return '';
-			break;
-		} // switch
+        switch (Object.prototype.toString.call(oRawAddress)) {
+            case '[object Array]':
+                aryRawAddress = oRawAddress;
+                break;
 
-		return _.map(
+            case '[object String]':
+                aryRawAddress = oRawAddress.split('\n');
+                break;
+
+            default:
+                return '';
+                break;
+        } // switch
+
+        return _.map(
 			_.filter(aryRawAddress, function (s) { return $.trim(s) != ''; }),
 			function (s) { return $.trim(s); }
 		).join('\n').toUpperCase();
-	}, // address
+    }, // address
 
-	name: function(sRawName) {
-		if (!sRawName)
-			return '';
+    name: function (sRawName) {
+        if (!sRawName)
+            return '';
 
-		return _.map(
+        return _.map(
 			_.filter(
-				$.trim(sRawName).split(/ |\t|\n|\r/), function(s) { return $.trim(s) != ''; }
+				$.trim(sRawName).split(/ |\t|\n|\r/), function (s) { return $.trim(s) != ''; }
 			),
 			function (s) { return $.trim(s).toUpperCase(); }
 		).join(' ');
-	}, // name
+    }, // name
 
-	events: {
-		"click #recheck-targeting": "recheckTargeting",
-		"click #zoopla": "showZoopla"
-	}, // events
+    events: {
+        "click #recheck-targeting": "recheckTargeting",
+        "click #zoopla": "showZoopla",
+        "click .zooplaRecheck": "recheckZoopla"
+    }, // events
 
-	showZoopla: function () {
-		BlockUi("On");
+    recheckZoopla: function () {
+        BlockUi("On");
+        var that = this;
+        var xhr = $.get(window.gRootPath + "Underwriter/CrossCheck/Zoopla/?customerId=" + this.model.customerId + "&recheck=true");
+        xhr.done(function () {
+            that.render(that.model);
+        });
+        xhr.always(function () {
+            BlockUi("Off");
+        });
+    },
+    showZoopla: function () {
+        BlockUi("On");
 
-		$.get(window.gRootPath + "Underwriter/CrossCheck/Zoopla/?customerId=" + this.model.customerId, function (data) {
-			var zooplaView = new EzBob.ZooplaView({ model: data });
-			EzBob.App.jqmodal.show(zooplaView);
-			BlockUi("Off");
-		});
-	}, // showZoopla
+        $.get(window.gRootPath + "Underwriter/CrossCheck/Zoopla/?customerId=" + this.model.customerId + "&recheck=false", function (data) {
+            var zooplaView = new EzBob.ZooplaView({ model: data });
+            EzBob.App.jqmodal.show(zooplaView);
+            BlockUi("Off");
+        });
+    }, // showZoopla
 
-	recheckTargeting: function (e) {
-		var el = $(e.currentTarget),
+    recheckTargeting: function (e) {
+        var el = $(e.currentTarget),
 			postcode = el.attr("data-postcode"),
 			companyName = el.attr("data-company-name"),
 			companyLegalStatus = el.attr('data-company-legal-status')[0],
 			that = this;
 
-		if (el.hasClass("disabled"))
-			return false;
+        if (el.hasClass("disabled"))
+            return false;
 
-		el.addClass("disabled");
-		scrollTop();
-		BlockUi("On");
+        el.addClass("disabled");
+        scrollTop();
+        BlockUi("On");
 
-		$.get(window.gRootPath + "Account/CheckingCompany", { companyName: companyName, postcode: postcode, filter: companyLegalStatus })
+        $.get(window.gRootPath + "Account/CheckingCompany", { companyName: companyName, postcode: postcode, filter: companyLegalStatus })
 		.success(function (reqData) {
-			if (reqData == undefined || reqData.success === false)
-				EzBob.ShowMessage("Targeting service is not responding", "Error", null, "OK");
-			else {
-				switch (reqData.length) {
-					case 0:
-						EzBob.ShowMessage("Company was not found by post code.", "Warning", null, "OK");
-						$("#recheck-targeting").removeClass("disabled");
-						break;
+		    if (reqData == undefined || reqData.success === false)
+		        EzBob.ShowMessage("Targeting service is not responding", "Error", null, "OK");
+		    else {
+		        switch (reqData.length) {
+		            case 0:
+		                EzBob.ShowMessage("Company was not found by post code.", "Warning", null, "OK");
+		                $("#recheck-targeting").removeClass("disabled");
+		                break;
 
-					case 1:
-						that.saveRefNum(reqData[0].BusRefNum);
-						break;
+		            case 1:
+		                that.saveRefNum(reqData[0].BusRefNum);
+		                break;
 
-					default:
-						var companyTargets = new EzBob.companyTargets({ model: reqData });
+		            default:
+		                var companyTargets = new EzBob.companyTargets({ model: reqData });
 
-						companyTargets.render();
+		                companyTargets.render();
 
-						companyTargets.on("BusRefNumGetted", function (busRefNum) {
-							that.saveRefNum(busRefNum);
-						});
+		                companyTargets.on("BusRefNumGetted", function (busRefNum) {
+		                    that.saveRefNum(busRefNum);
+		                });
 
-						break;
-				} // switch
-			} // if
+		                break;
+		        } // switch
+		    } // if
 		}).complete(function () {
-			BlockUi("Off");
+		    BlockUi("Off");
 		});;
 
-		return false;
-	}, // recheckTargeting
+        return false;
+    }, // recheckTargeting
 
-	saveRefNum: function (refnum) {
-		var that = this;
-		$.post(window.gRootPath + "Underwriter/CrossCheck/SaveRefNum", { customerId: this.model.customerId, companyRefNum: refnum })
+    saveRefNum: function (refnum) {
+        var that = this;
+        $.post(window.gRootPath + "Underwriter/CrossCheck/SaveRefNum", { customerId: this.model.customerId, companyRefNum: refnum })
 		.done(function () {
-			EzBob.ShowMessage("Company Ref Number was updated", "Updated successfully", null, "OK");
+		    EzBob.ShowMessage("Company Ref Number was updated", "Updated successfully", null, "OK");
 		})
 		.complete(function () {
-			$("#recheck-targeting").removeClass("disabled");
-			that.render(that.model);
+		    $("#recheck-targeting").removeClass("disabled");
+		    that.render(that.model);
 		});
-	}, // saveRefNum
+    }, // saveRefNum
 }); // EzBob.Underwriter.CrossCheckView

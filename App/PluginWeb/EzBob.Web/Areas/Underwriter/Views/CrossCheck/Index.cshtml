@@ -238,6 +238,13 @@
         <td>@copyAddress("Ebay", @Model.EBayAddress)</td>
         <td>@copyAddress("PayPal", @Model.PayPalAddress)</td>
     </tr>
+    <tr>
+        <td><b>Zoopla Estimate</b></td>
+        <td>@getZooplaEstimate(Model.CurrentAddress.ZooplaEstimate, Model.CurrentAddress.ZooplaUpdateDate) <button class="zooplaRecheck btn btn-mini" title="Recheck"><i class="icon-refresh"></i></button></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
 </tbody>
 </table>
 
@@ -565,5 +572,15 @@ bool propertyOwnedByCompany = Model.Customer.CompanyAdditionalInfo != null && Mo
 	    <a class="btn btn-primary" href="http://maps.googleapis.com/maps/api/streetview?size=640x640&sensor=false&location=@Uri.EscapeDataString(currentAddress.FormattedAddress)" target="_blank">@name Image</a>
 	</div>
 	}
+}
+
+@helper getZooplaEstimate(string estimate, DateTime? date)
+{
+    <span>@WebUtility.HtmlDecode(estimate)</span>
+    if (date.HasValue)
+    {
+        <span>, updated: @date.Value.ToString("dd/MM/yyyy")</span>
+    }
+
 }
  

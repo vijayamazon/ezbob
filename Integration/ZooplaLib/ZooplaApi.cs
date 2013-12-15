@@ -163,5 +163,11 @@
 				};
 		}
 
+		public string GetZooplaEstimate(string address)
+		{
+			var zooplaEstimate = new ZooplaEstimate();
+			return zooplaEstimate.GetEstimate(address);
+		}
+
 	}
 }

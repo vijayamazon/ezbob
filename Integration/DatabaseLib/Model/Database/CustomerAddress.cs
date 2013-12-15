@@ -34,12 +34,24 @@ namespace EZBob.DatabaseLib.Model.Database
 
 		[Newtonsoft.Json.JsonIgnore]
 		public virtual ISet<Zoopla> Zoopla { get; set; }
+		public virtual string ZooplaEstimate { get; set; }
+		public virtual DateTime? ZooplaUpdateDate { get; set; }
+
 		public virtual string FormattedAddress
 		{
 			get
 			{
 				return string.IsNullOrEmpty(Postcode) ? null : string.Format("{0} {1} {2}, {3}, {4}, {5}", 
 					new object[] { Line1, Line2, Line3, Town, Country, Postcode });
+			}
+		}
+
+		public virtual string ZooplaAddress
+		{
+			get
+			{
+				return string.IsNullOrEmpty(Postcode) ? null : string.Format("{0}{1}{2}, {3} {4}",
+					Line1.Trim(), string.IsNullOrEmpty(Line2) ? "" : " " + Line2.Trim(), string.IsNullOrEmpty(Line3) ? "" : " " + Line3.Trim(), Town, Postcode);
 			}
 		}
 

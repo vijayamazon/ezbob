@@ -562,20 +562,22 @@
 
 		}
 
-		public void GetZooplaData(int customerId)
+		public void GetZooplaData(int customerId, bool reCheck = false)
 		{
 			var customer = _customers.Get(customerId);
 			var customerAddress = customer.AddressInfo.PersonalAddress.FirstOrDefault<CustomerAddress>();
 			if (customerAddress != null)
 			{
-				if (!_zooplaRepository.ExistsByAddress(customerAddress))
+				if (!_zooplaRepository.ExistsByAddress(customerAddress) || reCheck)
 				{
-					var zooplaApi = new ZooplaApi();
+					var zooplaApi = new ZooplaApi();	
 					try
 					{
+
 						var areaValueGraphs = zooplaApi.GetAreaValueGraphs(customerAddress.Postcode);
 						var averageSoldPrices = zooplaApi.GetAverageSoldPrices(customerAddress.Postcode);
-						_zooplaRepository.SaveOrUpdate(new Zoopla
+						var zooplaEstimate = zooplaApi.GetZooplaEstimate(customerAddress.ZooplaAddress);
+						customerAddress.Zoopla.Add(new Zoopla
 						{
 							AreaName = averageSoldPrices.AreaName,
 							AverageSoldPrice1Year = averageSoldPrices.AverageSoldPrice1Year,
@@ -592,7 +594,9 @@
 							HomeValuesGraphUrl = areaValueGraphs.HomeValuesGraphUrl,
 							ValueRangesGraphUrl = areaValueGraphs.ValueRangesGraphUrl,
 							ValueTrendGraphUrl = areaValueGraphs.ValueTrendGraphUrl,
-							CustomerAddress = customerAddress
+							CustomerAddress = customerAddress,
+							ZooplaEstimate = zooplaEstimate,
+							UpdateDate = DateTime.UtcNow
 						});
 					}
 					catch (Exception arg)

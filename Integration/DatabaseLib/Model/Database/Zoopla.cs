@@ -1,5 +1,7 @@
 ﻿namespace EZBob.DatabaseLib.Model.Database
 {
+	using System;
+
 	public class Zoopla
 	{
 		public virtual int Id { get; set; }
@@ -19,6 +21,8 @@
 		public virtual string ValueRangesGraphUrl { get; set; }
 		public virtual string ValueTrendGraphUrl { get; set; }
 		public virtual string HomeValuesGraphUrl { get; set; }
+		public virtual string ZooplaEstimate { get; set; }
+		public virtual DateTime? UpdateDate { get; set; }
 	}
 }
 
@@ -27,6 +31,7 @@ namespace EZBob.DatabaseLib.Model.DataMapping
 {
 	using Database;
 	using FluentNHibernate.Mapping;
+	using NHibernate.Type;
 
 	public class ZooplaMap : ClassMap<Zoopla>
 	{
@@ -50,6 +55,8 @@ namespace EZBob.DatabaseLib.Model.DataMapping
 			Map(x => x.ValueRangesGraphUrl).Length(100);
 			Map(x => x.ValueTrendGraphUrl).Length(100);
 			Map(x => x.HomeValuesGraphUrl).Length(100);
+			Map(x => x.ZooplaEstimate).Length(30);
+			Map(x => x.UpdateDate).CustomType<UtcDateTimeType>();
 		}
 	}
 }

@@ -29,7 +29,7 @@
 		[Ajax]
 		[Transactional]
 		[HttpGet]
-		public JsonNetResult Zoopla(int customerId)
+		public JsonNetResult Zoopla(int customerId, bool recheck)
 		{
 			var customer = _customerRepository.Get(customerId);
 			if (customer == null)
@@ -44,10 +44,10 @@
 			}
 			var zoopla = _zooplaRepository.GetByAddress(address);
 
-			if (zoopla == null)
+			if (zoopla == null || recheck)
 			{
 				var sh = new StrategyHelper();
-				sh.GetZooplaData(customerId);
+				sh.GetZooplaData(customerId, recheck);
 				zoopla = _zooplaRepository.GetByAddress(address);
 				if (zoopla == null)
 					return this.JsonNet(new {error = "zoopla info not found"});
