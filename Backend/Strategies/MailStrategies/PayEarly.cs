@@ -18,7 +18,7 @@
 
 		public override void SetTemplateAndSubjectAndVariables()
 		{
-			Subject = string.Format("Dear {0}, your payment of £{1} has been credited to your EZBOB account.", CustomerData.FirstName, amount);
+			Subject = string.Format("Dear {0}, your payment of £{1} has been credited to your ezbob account.", CustomerData.FirstName, amount);
 			TemplateName = "Mandrill - Repayment confirmation";
 
 			Variables = new Dictionary<string, string>

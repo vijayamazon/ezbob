@@ -15,7 +15,7 @@
 
 		public override void SetTemplateAndSubjectAndVariables()
 		{
-			Subject = "PayPoint personal data differs from EZBOB application";
+			Subject = "PayPoint personal data differs from ezbob application";
 			TemplateName = "Mandrill - PayPoint data differs";
 
 			Variables = new Dictionary<string, string>

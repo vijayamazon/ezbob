@@ -11,7 +11,7 @@
 
 		public override void SetTemplateAndSubjectAndVariables()
 		{
-			Subject = "Sorry, EZBOB cannot make you a loan offer at this time";
+			Subject = "Sorry, ezbob cannot make you a loan offer at this time";
 			TemplateName = "Mandrill - Rejection email";
 
 			Variables = new Dictionary<string, string>

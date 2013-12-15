@@ -23,12 +23,12 @@
 
 			if (CustomerData.NumOfLoans == 1)
 			{
-				Subject = "Welcome to the EZBOB family";
+				Subject = "Welcome to the ezbob family";
 				TemplateName = CustomerData.IsOffline ? "Mandrill - Took Offline Loan (1st loan)" : "Mandrill - Took Loan (1st loan)";
 			}
 			else
 			{
-				Subject = "Thanks for choosing EZBOB as your funding partner";
+				Subject = "Thanks for choosing ezbob as your funding partner";
 				TemplateName = CustomerData.IsOffline ? "Mandrill - Took Offline Loan (not 1st loan)" : "Mandrill - Took Loan (not 1st loan)";
 			}
 		}

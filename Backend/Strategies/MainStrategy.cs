@@ -622,7 +622,7 @@
 				}
 				else
 				{
-					const string rejectionSubject = "Sorry, EZBOB cannot make you a loan offer at this time";
+					const string rejectionSubject = "Sorry, ezbob cannot make you a loan offer at this time";
 					SendRejectionExplanationMail(rejectionSubject);
 
 					var variables = new Dictionary<string, string>

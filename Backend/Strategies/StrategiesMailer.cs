@@ -14,6 +14,16 @@
 	{
 		private static readonly ILog log = LogManager.GetLogger(typeof(StrategiesMailer));
 		private readonly Mail mail = new Mail();
+		private readonly string ezbobCopyTo;
+		private readonly string ezbobCopyCc;
+
+		public StrategiesMailer()
+		{
+			DataTable dt = DbConnection.ExecuteSpReader("GetMails");
+			DataRow results = dt.Rows[0];
+			ezbobCopyTo = results["EzbobMailTo"].ToString();
+			ezbobCopyCc = results["EzbobMailCc"].ToString();
+	}
 
 		private void SendMailViaMandrill(Dictionary<string, string> variables, string toAddress, string ccAddress, string templateName, string subject, bool shouldRecord)
 		{
@@ -57,10 +67,6 @@
 
 		public void SendToEzbob(Dictionary<string, string> variables, string templateName, string subject)
 		{
-			DataTable dt = DbConnection.ExecuteSpReader("GetMails");
-			DataRow results = dt.Rows[0];
-			string ezbobCopyTo = results["EzbobMailTo"].ToString();
-			string ezbobCopyCc = results["EzbobMailCc"].ToString();
 			SendMailViaMandrill(variables, ezbobCopyTo, ezbobCopyCc, templateName, subject, false);
 		}
 	}

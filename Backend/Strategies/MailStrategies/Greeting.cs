@@ -21,7 +21,7 @@
 					{"ConfirmEmailAddress", confirmEmailAddress}
 				};
 
-			Subject = "Thank you for registering with EZBOB!";
+			Subject = "Thank you for registering with ezbob!";
 			TemplateName = "Greeting";
 		}
 

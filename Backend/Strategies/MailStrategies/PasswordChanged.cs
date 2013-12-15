@@ -14,7 +14,7 @@
 
 		public override void SetTemplateAndSubjectAndVariables()
 		{
-			Subject = "Your new EZBOB password has been registered.";
+			Subject = "Your new ezbob password has been registered.";
 			TemplateName = "Mandrill - New password";
 
 			Variables = new Dictionary<string, string>
