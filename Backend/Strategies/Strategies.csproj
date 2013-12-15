@@ -57,6 +57,7 @@
     <Compile Include="AutoDecisions\Rejection.cs" />
     <Compile Include="AutoDecisions\ReApproval.cs" />
     <Compile Include="AutoDecisions\ReRejection.cs" />
+    <Compile Include="SetLateLoanStatus.cs" />
     <Compile Include="LateBy14Days.cs" />
     <Compile Include="FirstOfMonthStatusNotifier.cs" />
     <Compile Include="XDaysDue.cs" />
