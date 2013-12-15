@@ -11,8 +11,9 @@
 		SalariesAndTaxTaxes = 5,
 		SalariesAndTaxDirectorsWithdrawal = 6,
 		CorporateTax = 7,
-		LoanRepayments = 8,
-		Exception = 9,
+		LoanRepaymentsReceipt = 8,
+		LoanRepaymentsRepayment = 9,
+		Exception = 10,
 	}
 
 	[Serializable]

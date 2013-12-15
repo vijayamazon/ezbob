@@ -12,10 +12,12 @@ namespace EzBob.Models.Marketplaces.Builders
 	using NHibernate;
 	using CommonLib.TimePeriodLogic;
 	using EZBob.DatabaseLib;
+	using log4net;
 
 	public class MarketplaceModelBuilder : IMarketplaceModelBuilder
 	{
 		protected readonly ISession _session;
+		protected static readonly ILog Log = LogManager.GetLogger(typeof(MarketplaceModelBuilder));
 
 		public MarketplaceModelBuilder(ISession session)
 		{

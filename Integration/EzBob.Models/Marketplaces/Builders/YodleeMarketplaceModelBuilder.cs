@@ -15,7 +15,7 @@ namespace EzBob.Models.Marketplaces.Builders
 	using NHibernate;
 	using Scorto.NHibernate.Repository;
 
-	class YodleeMarketplaceModelBuilder : MarketplaceModelBuilder
+	public class YodleeMarketplaceModelBuilder : MarketplaceModelBuilder
 	{
 		private readonly MP_YodleeTransactionCategoriesRepository _mpYodleeTransactionCategoriesRepository;
 		private readonly CurrencyConvertor _currencyConvertor;
@@ -66,7 +66,16 @@ namespace EzBob.Models.Marketplaces.Builders
 		{
 			if (_yodleeModel == null)
 			{
-				_yodleeModel = BuildYodlee(mp, history);
+				try
+				{
+					_yodleeModel = BuildYodlee(mp, history);
+				}
+				catch (Exception ex)
+				{
+					Log.WarnFormat("Build Yodlee Model Failed {0}", ex);
+					
+				}
+				
 			}
 			model.Yodlee = _yodleeModel;
 		}
@@ -85,6 +94,7 @@ namespace EzBob.Models.Marketplaces.Builders
 
 			var model = new YodleeModel();
 			model.RuleModel = new YodleeRuleModel(_session);
+			model.BankStatementDataModel = new BankStatementDataModel();
 			var banks = new List<YodleeBankModel>();
 			foreach (var bank in yodleeData.Data.Keys)
 			{
@@ -186,6 +196,7 @@ namespace EzBob.Models.Marketplaces.Builders
 			yodleeRunningBalanceModelBuilder.CalculateMergedRunningBalace();
 
 			yodleeRunningBalanceModel = yodleeRunningBalanceModelBuilder.GetModel();
+			model.BankStatementDataModel = yodleeCashFlowReportModelBuilder.GetBankStatementDataModel();
 			return yodleeCashFlowReportModelBuilder.GetModel();
 		}
 

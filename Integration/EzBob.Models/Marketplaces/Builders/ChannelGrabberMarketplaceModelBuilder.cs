@@ -122,14 +122,7 @@ namespace EzBob.Models.Marketplaces.Builders
 						RtiTaxMonths = oRtiTaxMonths,
 						BankStatement = new BankStatementDataModel()
 					};
-
-					var yodlee = mp.Customer.CustomerMarketPlaces.FirstOrDefault(m => m.Marketplace.Name == "Yodlee");
-					if (yodlee != null)
-					{
-						var yodleeMarketplaceModelBuilder = new YodleeMarketplaceModelBuilder(_session);
-						var yodleeModel = yodleeMarketplaceModelBuilder.BuildYodlee(yodlee, null);
-						((ChannelGrabberHmrcData)model.CGData).BankStatement = yodleeModel.CashFlowReportModel.BankStatementDataModel;
-					}
+					
 					break;
 
 				default:

@@ -25,8 +25,12 @@
 				model.PaymentAccountBasic = builder.GetPaymentAccountModel(mp, model, history);
 
 				return model;
-			});
+			}).ToList();
 
+			if (models.Any(m => m.Name == "HMRC") && models.Any(m => m.Name == "Yodlee"))
+			{
+				((ChannelGrabberHmrcData)models.First(m => m.Name == "HMRC").CGData).BankStatement = models.First(m => m.Name == "Yodlee").Yodlee.BankStatementDataModel;
+			}
 			return models;
 		} // GetMarketPlaceModels
 

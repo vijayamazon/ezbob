@@ -7,9 +7,11 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Repository;
+	using EzBob.Models.Marketplaces.Builders;
 	using EzBob.Web.ApplicationCreator;
 	using EzBob.Web.Areas.Underwriter.Models;
 	using EzBob.Models.Marketplaces;
+	using NHibernate;
 	using Scorto.Web;
 	using CommonLib;
 	using CommonLib.Security;
@@ -33,7 +35,7 @@
 		private readonly YodleeGroupRepository _yodleeGroupRepository;
 		private readonly YodleeRuleRepository _yodleeRuleRepository;
 		private readonly YodleeGroupRuleMapRepository _yodleeGroupRuleMapRepository;
-
+		private readonly ISession _session;
 		public MarketPlacesController(CustomerRepository customers, 
 			AnalyisisFunctionValueRepository functions, 
 			CustomerMarketPlaceRepository customerMarketplaces, 
@@ -44,7 +46,8 @@
 			YodleeSearchWordsRepository yodleeSearchWordsRepository, 
 			YodleeGroupRepository yodleeGroupRepository, 
 			YodleeRuleRepository yodleeRuleRepository,
-			YodleeGroupRuleMapRepository yodleeGroupRuleMapRepository)
+			YodleeGroupRuleMapRepository yodleeGroupRuleMapRepository,
+			ISession session)
 		{
 			_customerMarketplaces = customerMarketplaces;
 			_marketPlaces = marketPlaces;
@@ -57,6 +60,7 @@
 			_yodleeGroupRepository = yodleeGroupRepository;
 			_yodleeRuleRepository = yodleeRuleRepository;
 			_yodleeGroupRuleMapRepository = yodleeGroupRuleMapRepository;
+			_session = session;
 		}
 
 		[Ajax]
@@ -110,6 +114,16 @@
 			var cm = _customerMarketplaces.Get(id);
 			var values = _functions.GetAllValuesFor(cm);
 			return this.JsonNet(values.Select(v => new FunctionValueModel(v)));
+		}
+
+		[Ajax]
+		[HttpGet]
+		[Transactional]
+		public JsonNetResult YodleeDetails(int id)
+		{
+			var mp = _customerMarketplaces.Get(id);
+			var b = new YodleeMarketplaceModelBuilder(_session);
+			return this.JsonNet(b.BuildYodlee(mp, null));
 		}
 
 		[Ajax]

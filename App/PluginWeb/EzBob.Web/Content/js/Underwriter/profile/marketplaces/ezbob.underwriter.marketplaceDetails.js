@@ -11,6 +11,13 @@ EzBob.Underwriter.MarketPlaceDetails = Backbone.Collection.extend({
     }
 });
 
+EzBob.Underwriter.MarketPlaceYodleeDetailModel = Backbone.Model.extend({
+    url: function () {
+        return window.gRootPath + "Underwriter/MarketPlaces/YodleeDetails/" + this.get("makertplaceId");
+    }
+});
+
+
 EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
     initialize: function () {
         this.template = _.template($('#marketplace-values-template').html());
@@ -51,7 +58,8 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
         this.$el.find('i[data-yodlee-calculated]').tooltip({ title: 'Calculated Field' });
 
         if (this.shop.get('Name') == 'Yodlee') {
-            this.renderYodlee();
+            
+            that.renderYodlee();
         }
 
         $('a[data-toggle="tab"]').on('shown', function (e) {
@@ -75,7 +83,6 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
         "click .yodleeAccountsRow": "yodleeAccountsRowClicked",
         "click .yodleeShowTransactionsInRange": "yodleeShowTrnInRangeClicked",
         "click .yodleeRuleAdd": "yodleeRuleAddClicked"
-        //"click #yodleetab2": "replotYodleeGraphClicked"
     },
     renewTokenClicked: function (e) {
         var umi = $(e.currentTarget).data("umi");
@@ -167,23 +174,14 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
         var that = this;
         $.fn.dataTableExt.afnFiltering.push(
             function (oSettings, aData, iDataIndex) {
-                // "date-range" is the id for my input
                 var dateRange = that.$el.find('#date-range').attr("value");
                 if (!dateRange) return true;
-                // parse the range from a single field into min and max, remove " - "
-                dateMin = dateRange.substring(0, 4) + dateRange.substring(5, 7) + dateRange.substring(8, 10);
-                dateMax = dateRange.substring(13, 17) + dateRange.substring(18, 20) + dateRange.substring(21, 23);
-
-                // 2 here is the column where my dates are.
+                var dateMin = dateRange.substring(0, 4) + dateRange.substring(5, 7) + dateRange.substring(8, 10);
+                var dateMax = dateRange.substring(13, 17) + dateRange.substring(18, 20) + dateRange.substring(21, 23);
                 var date = aData[2];
-
-                // remove the time stamp out of my date
-                // 2010-04-11 20:48:22 -> 2010-04-11
                 date = date.substring(0, 10);
-                // remove the "-" characters
-                // 2010-04-11 -> 20100411
                 date = date.substring(6, 10) + date.substring(3, 5) + date.substring(0, 2);
-                // run through cases
+
                 if (dateMin == "" && date <= dateMax) {
                     return true;
                 }
@@ -196,7 +194,6 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
                 else if (dateMin <= date && date <= dateMax) {
                     return true;
                 }
-                // all failed
                 return false;
             }
         );
@@ -227,6 +224,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
         this.$el.find("div.dataTables_filter input").focus(function() {
             that.$el.find(".YodleeTransactionsTable tfoot input").val("").keyup();
         });
+
     },
     yodleeShowGraph: function () {
         var cashModel = this.shop.get("Yodlee").CashFlowReportModel;
@@ -372,7 +370,6 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
             //////////////////////////////////////////////////////////////////////////////////////////
             var minDay = cashModel.MinDateDict;
             var maxDay = cashModel.MaxDateDict;
-
             var income = cashFlow["0Total Income"];
             var expenses = cashFlow["1Total Expenses"];
             var numOfTransactionsIncome = cashFlow["5Num Of Transactions"];
@@ -458,7 +455,6 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
             /*
             $('#yodleeBarGraph').bind('jqplotDataHighlight',
                     function (ev, seriesIndex, pointIndex, data) {
-                        console.log(ev, seriesIndex, pointIndex, data);
                         $('#yodleeBarInfo').html(data[1]);
                     }
                 );
