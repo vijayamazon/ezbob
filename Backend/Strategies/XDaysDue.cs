@@ -4,7 +4,6 @@
 	using System.Collections.Generic;
 	using System.Data;
 	using System.Globalization;
-	using PaymentServices.PacNet;
 	using Web.Code;
 	using log4net;
 	using DbConnection;
