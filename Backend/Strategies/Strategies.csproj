@@ -57,6 +57,7 @@
     <Compile Include="AutoDecisions\Rejection.cs" />
     <Compile Include="AutoDecisions\ReApproval.cs" />
     <Compile Include="AutoDecisions\ReRejection.cs" />
+    <Compile Include="XDaysDue.cs" />
     <Compile Include="UpdateTransactionStatus.cs" />
     <Compile Include="MailStrategies\CashTransferred.cs" />
     <Compile Include="MailStrategies\RenewEbayToken.cs" />
