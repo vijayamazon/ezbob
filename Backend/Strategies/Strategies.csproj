@@ -57,6 +57,7 @@
     <Compile Include="AutoDecisions\Rejection.cs" />
     <Compile Include="AutoDecisions\ReApproval.cs" />
     <Compile Include="AutoDecisions\ReRejection.cs" />
+    <Compile Include="UpdateTransactionStatus.cs" />
     <Compile Include="MailStrategies\CashTransferred.cs" />
     <Compile Include="MailStrategies\RenewEbayToken.cs" />
     <Compile Include="MailStrategies\LoanFullyPaid.cs" />
@@ -115,6 +116,10 @@
     <ProjectReference Include="..\..\Integration\MailApi\MailApi.csproj">
       <Project>{de254378-4cf8-400c-bcc4-a9af01550350}</Project>
       <Name>MailApi</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Integration\PaymentServices\PaymentServices.csproj">
+      <Project>{544a1fd5-76d3-4b73-97dd-0c7aa32f66c2}</Project>
+      <Name>PaymentServices</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Utils\DbConnection\DbConnection.csproj">
       <Project>{978d5af5-ab9d-4aae-bfbf-2820f991613b}</Project>
