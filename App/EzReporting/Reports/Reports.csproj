@@ -36,8 +36,9 @@
     <Reference Include="DropNet">
       <HintPath>..\packages\DropNet.1.9.6\lib\net40\DropNet.dll</HintPath>
     </Reference>
-    <Reference Include="EPPlus">
-      <HintPath>..\lib\EPPlus.dll</HintPath>
+    <Reference Include="EPPlus, Version=3.1.3.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\3rdparty\EPPlus\EPPlus.dll</HintPath>
     </Reference>
     <Reference Include="Fizzler">
       <HintPath>..\..\..\Lib\3rdparty\Fizzler4.5\Fizzler.dll</HintPath>

@@ -1,35 +1,99 @@
-﻿using System;
-
-
-namespace AutomationVerification
+﻿namespace AutomationVerification
 {
+	using System;
 	using System.Collections.Generic;
 	using System.Data;
-	using System.Linq;
+	using System.Globalization;
+	using System.Text;
 	using AutomationCalculator;
 	using CommonLib;
+	using Ezbob.Database;
+	using Ezbob.Logger;
+	using Html.Tags;
+	using Reports;
 
 	class Program
 	{
-		static void Main(string[] args)
+		static void Main()
 		{
 			var from = new DateTime(2013,10,01);//todo change
 			var to = DateTime.Today;
 			var systemDecisions = GetAutomaticDecisions(from, to);
 			var verificitaionDecisions = GetVerificationDecisions(systemDecisions);
 			var report = GetComparisonReport(systemDecisions, verificitaionDecisions);
-			SendReport(report);
+			//SendReport(report);
+			SendReport(to, GetTable(report), new SafeLog());
 		}
 
-		private static void SendReport(IEnumerable<VerificationReport> report)
+		//private static void SendReport(IEnumerable<VerificationReport> report)
+		//{
+		//	foreach (var verificationReport in report)
+		//	{
+		//		Console.WriteLine("{0} {1} {2} {3} {4} {5}", verificationReport.CashRequestId, verificationReport.CustomerId, verificationReport.SystemDecision, verificationReport.SystemComment, verificationReport.VerificationDecision, verificationReport.VerificationComment);
+		//	}
+		//}
+
+		private static void SendReport(DateTime oDate,DataTable data,  ASafeLog oLog)
 		{
-			foreach (var verificationReport in report)
-			{
-				Console.WriteLine("{0} {1} {2} {3} {4} {5}", verificationReport.CashRequestId, verificationReport.CustomerId, verificationReport.SystemDecision, verificationReport.SystemComment, verificationReport.VerificationDecision, verificationReport.VerificationComment);
-			}
+			oLog.Debug("Generating automation verification report...");
+
+			var oDb = new SqlConnection();
+
+			oLog.Debug("Loading Automation verification report metadata from db...");
+
+			var reportMetaData = new Report(oDb, "RPT_AUTOMATION_VERIFICATION");
+
+			var rh = new BaseReportHandler(oDb, oLog);
+
+			var sender = new ReportDispatcher(oDb, oLog);
+
+			var email = new ReportEmail();
+
+			email.ReportBody.Append(new H2().Append(new Text(reportMetaData.GetTitle(oDate))));
+			
+			email.ReportBody.Append(
+				rh.TableReport(new ReportQuery(reportMetaData, oDate, oDate), data)
+			);
+
+			var sTo = new StringBuilder();
+
+			sTo.Append(reportMetaData.ToEmail);
+
+			oLog.Debug("Sending report...");
+
+			sender.Dispatch(
+				"Automation Verification " + oDate.ToString("MMMM d yyyy", CultureInfo.InvariantCulture),
+				oDate,
+				email.HtmlBody,
+				null,
+				sTo.ToString()
+			);
+
+			oLog.Debug("Automation verification report generation complete.");
 		}
 
-		private static List<VerificationReport> GetComparisonReport(Dictionary<int, AutoDecision> systemDecisions, Dictionary<int, AutoDecision> verificitaionDecisions)
+		private static DataTable GetTable(IEnumerable<VerificationReport> reportRows)
+		{
+			var dt = new DataTable();
+
+			dt.Columns.Add("CashRequestId", typeof(int));
+			dt.Columns.Add("CustomerId", typeof(int));
+			dt.Columns.Add("SystemDecision", typeof(string));
+			dt.Columns.Add("SystemComment", typeof(string));
+			dt.Columns.Add("VerificationDecision", typeof(string));
+			dt.Columns.Add("VerificationComment", typeof(string));
+			dt.Columns.Add("Css", typeof(string));
+
+			foreach (var vr in reportRows)
+			{
+				dt.Rows.Add(vr.CashRequestId, vr.CustomerId, vr.SystemDecision, vr.SystemComment, vr.VerificationDecision,
+				            vr.VerificationComment, "Failed unmatched");
+			}
+			
+			return dt;
+		}
+
+		private static IEnumerable<VerificationReport> GetComparisonReport(Dictionary<int, AutoDecision> systemDecisions, Dictionary<int, AutoDecision> verificitaionDecisions)
 		{
 			var verificationReportList = new List<VerificationReport>();
 			foreach (int cashRequest in systemDecisions.Keys)

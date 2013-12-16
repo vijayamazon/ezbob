@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EPPlus">
+      <HintPath>..\..\..\..\Lib\3rdparty\EPPlus\EPPlus.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
     </Reference>
@@ -57,6 +60,14 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\App\EzReporting\Mailer\Mailer.csproj">
+      <Project>{68180204-5112-43af-9d83-e5cdd39f93a0}</Project>
+      <Name>Mailer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\App\EzReporting\Reports\Reports.csproj">
+      <Project>{fbd0f86b-fc06-418a-80a1-ada19e973a7e}</Project>
+      <Name>Reports</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\ConfigurationBase\ConfigurationBase.csproj">
       <Project>{e31f233f-09aa-47c8-a2e0-8e33a87f868d}</Project>
       <Name>ConfigurationBase</Name>
