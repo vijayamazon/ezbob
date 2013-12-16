@@ -33,5 +33,14 @@
 			var estimate = z.GetEstimate("16 Upperkirkgate, Aberdeen AB10 1BA");
 			Assert.NotNull(estimate);
 		}
+
+		[Test]
+		[Ignore]
+		public void test_get_zoopla_estimate_sorry()
+		{
+			var z = new ZooplaEstimate();
+			var estimate = z.GetEstimate("145 – 157 John Street, London EC1V 4PW");
+			Assert.NotNull(estimate);
+		}
 	}
 }

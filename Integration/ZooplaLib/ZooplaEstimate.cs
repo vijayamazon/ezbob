@@ -60,23 +60,29 @@
 
 		private string GetEstimate(HtmlDocument doc, string addr)
 		{
-			HtmlNodeCollection tr = doc.DocumentNode.SelectNodes("/html/body//table/tbody/tr[position() mod 2 = 1]");
-
-			foreach (HtmlNode node in tr)
-			{
-				var address = node.SelectSingleNode("td[2]/h2");
-				if (address.InnerText == addr)
+			
+				HtmlNodeCollection tr = doc.DocumentNode.SelectNodes("/html/body//table/tbody/tr[position() mod 2 = 1]");
+				if (tr == null)
 				{
-					var estimate = node.SelectSingleNode("td[3]/strong");
-					if (estimate != null)
-					{
-						return estimate.InnerText;
-					}
-					return "No Estimate";
+					return "Address not found";
 				}
-			}
 
-			return null;
+				foreach (HtmlNode node in tr)
+				{
+					var address = node.SelectSingleNode("td[2]/h2");
+					if (address.InnerText == addr)
+					{
+						var estimate = node.SelectSingleNode("td[3]/strong");
+						if (estimate != null)
+						{
+							return estimate.InnerText;
+						}
+						return "No Estimate";
+					}
+				}
+
+				return null;
+		
 		}
 
 		private string ToQueryString(Dictionary<string, string> dict)
