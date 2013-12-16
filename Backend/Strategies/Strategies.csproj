@@ -61,6 +61,7 @@
     <Compile Include="AutoDecisions\Rejection.cs" />
     <Compile Include="AutoDecisions\ReApproval.cs" />
     <Compile Include="AutoDecisions\ReRejection.cs" />
+    <Compile Include="PayPointCharger.cs" />
     <Compile Include="FraudChecker.cs" />
     <Compile Include="UpdateMarketplaces.cs" />
     <Compile Include="SetLateLoanStatus.cs" />
