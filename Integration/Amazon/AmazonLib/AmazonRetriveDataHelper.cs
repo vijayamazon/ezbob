@@ -198,7 +198,12 @@
 												};
 
 					DateTime submittedDate;
-					log.InfoFormat("Fetching amazon orders for customer:{0} marketplace:{1}", databaseCustomerMarketPlace.Customer.Id, databaseCustomerMarketPlace.Id);
+
+					string logMsg = string.Format("Fetching amazon orders for customer:{0} marketplace:{1}",
+					                              databaseCustomerMarketPlace.Customer.Id, databaseCustomerMarketPlace.Id);
+					log.Info(logMsg);
+					WriteLoggerHelper.Write(logMsg, WriteLogType.Info);
+					
 					var orders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
 									ElapsedDataMemberType.RetrieveDataFromExternalService,
 									() => AmazonServiceHelper.GetListOrders( _ConnectionInfo, amazonOrdersRequestInfo, access ) );
