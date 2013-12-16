@@ -1,7 +1,5 @@
 ﻿namespace EzBob.Backend.Strategies.AutoDecisions
 {
-	using System;
-
 	public class AutoDecisionRequest
 	{
 		// TODO: try to reduce the number of properties here as much as possible
@@ -25,11 +23,5 @@
 
 		public bool IsReRejected { get; set; }
 		public int ModelLoanOffer { get; set; }
-		public string LoanOffer_UnderwriterComment { get; set; }
-		public double LoanOffer_OfferValidDays { get; set; }
-		public DateTime? App_ApplyForLoan { get; set; }
-		public DateTime App_ValidFor { get; set; }
-		public bool LoanOffer_EmailSendingBanned_new { get; set; }
-		public bool IsAutoApproval { get; set; }
 	}
 }

@@ -8,12 +8,6 @@
 		{
 			IsReRejected = request.IsReRejected;
 			ModelLoanOffer = request.ModelLoanOffer;
-			LoanOffer_UnderwriterComment = request.LoanOffer_UnderwriterComment;
-			LoanOffer_OfferValidDays = request.LoanOffer_OfferValidDays;
-			App_ApplyForLoan = request.App_ApplyForLoan;
-			App_ValidFor = request.App_ValidFor;
-			LoanOffer_EmailSendingBanned_new = request.LoanOffer_EmailSendingBanned_new;
-			IsAutoApproval = request.IsAutoApproval;
 		}
 
 		public bool IsReRejected { get; set; }

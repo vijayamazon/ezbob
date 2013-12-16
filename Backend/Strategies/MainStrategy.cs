@@ -139,12 +139,6 @@
 		private double MarketplaceSeniorityDays;
 		private double TotalSumOfOrders3MTotal;
 		private int ModelLoanOffer;
-		private string LoanOffer_UnderwriterComment;
-		private double LoanOffer_OfferValidDays;
-		private DateTime? App_ApplyForLoan;
-		private DateTime App_ValidFor;
-		private bool LoanOffer_EmailSendingBanned_new;
-		private bool IsAutoApproval;
 		private double TotalSumOfOrders1YTotal;
 		private bool isFirstLoan;
 
@@ -450,15 +444,8 @@
 				OfferedCreditLine = MaxCapNotHomeOwner;
 			}
 
-			// TODO: try to remove the members that are assigned from the response
 			autoDecisionResponse = AutoDecisionMaker.MakeDecision(CreateAutoDecisionRequest());
 			ModelLoanOffer = autoDecisionResponse.ModelLoanOffer;
-			LoanOffer_UnderwriterComment = autoDecisionResponse.LoanOffer_UnderwriterComment;
-			LoanOffer_OfferValidDays = autoDecisionResponse.LoanOffer_OfferValidDays;
-			App_ApplyForLoan = autoDecisionResponse.App_ApplyForLoan;
-			App_ValidFor = autoDecisionResponse.App_ValidFor;
-			LoanOffer_EmailSendingBanned_new = autoDecisionResponse.LoanOffer_EmailSendingBanned_new;
-			IsAutoApproval = autoDecisionResponse.IsAutoApproval;
 
 			if (Underwriter_Check)
 			{
@@ -471,9 +458,8 @@
 				DbConnection.CreateParam("SystemDecision", autoDecisionResponse.SystemDecision),
 				DbConnection.CreateParam("Status", autoDecisionResponse.UserStatus),
 				DbConnection.CreateParam("Medal", MedalType),
-				DbConnection.CreateParam("ApplyForLoan", App_ApplyForLoan),
-				DbConnection.CreateParam("ValidFor", App_ValidFor));
-
+				DbConnection.CreateParam("ApplyForLoan", autoDecisionResponse.App_ApplyForLoan),
+				DbConnection.CreateParam("ValidFor", autoDecisionResponse.App_ValidFor));
 
 			DbConnection.ExecuteSpNonQuery("UpdateCashRequests",
 				DbConnection.CreateParam("CustomerId", CustomerId),
@@ -486,11 +472,9 @@
 				DbConnection.CreateParam("AnualTurnover", TotalSumOfOrders1YTotal),
 				DbConnection.CreateParam("InterestRate", LoanIntrestBase));
 
- 
-
 			if (autoDecisionResponse.UserStatus == "Approved")
 			{
-				if (IsAutoApproval)
+				if (autoDecisionResponse.IsAutoApproval)
 				{
 					DbConnection.ExecuteSpNonQuery("UpdateAutoApproval",
 					    DbConnection.CreateParam("CustomerId", CustomerId),
@@ -510,19 +494,19 @@
 							{"ApprovalAmount", LoanOffer_ReApprovalSum.ToString(CultureInfo.InvariantCulture)},
 							{"RepaymentPeriod", LoanOffer_RepaymentPeriod.ToString(CultureInfo.InvariantCulture)},
 							{"InterestRate", LoanOffer_InterestRate.ToString(CultureInfo.InvariantCulture)},
-							{"OfferValidUntil", App_ValidFor.ToString(CultureInfo.InvariantCulture)}
+							{"OfferValidUntil", autoDecisionResponse.App_ValidFor.ToString(CultureInfo.InvariantCulture)}
 						};
 					mailer.SendToEzbob(variables, "Mandrill - User is approved or re-approved", "User was automatically approved");
 
 					if (isFirstLoan)
 					{
-						var variables3 = new Dictionary<string, string>
+						var customerMailVariables = new Dictionary<string, string>
 							{
 								{"FirstName", App_FirstName},
 								{"LoanAmount", autoDecisionResponse.AutoApproveAmount.ToString(CultureInfo.InvariantCulture)}
 							};
 
-						mailer.SendToCustomerAndEzbob(variables3, App_email, "Mandrill - Approval (1st time)",
+						mailer.SendToCustomerAndEzbob(customerMailVariables, App_email, "Mandrill - Approval (1st time)",
 													  "Congratulations " + App_FirstName + ", £" + autoDecisionResponse.AutoApproveAmount +
 						                              " is available to fund your business today");
 
@@ -531,13 +515,13 @@
 					}
 					else
 					{
-						var variables4 = new Dictionary<string, string>
+						var customerMailVariables = new Dictionary<string, string>
 						{
 							{"FirstName", App_FirstName},
 							{"LoanAmount", autoDecisionResponse.AutoApproveAmount.ToString(CultureInfo.InvariantCulture)}
 						};
 
-						mailer.SendToCustomerAndEzbob(variables4, App_email, "Mandrill - Approval (not 1st time)", "Congratulations " + App_FirstName + ", £" + autoDecisionResponse.AutoApproveAmount +
+						mailer.SendToCustomerAndEzbob(customerMailVariables, App_email, "Mandrill - Approval (not 1st time)", "Congratulations " + App_FirstName + ", £" + autoDecisionResponse.AutoApproveAmount +
 								   " is available to fund your business today");
 
 						strategyHelper.AddApproveIntoDecisionHistory(CustomerId, "AutoApproval");
@@ -555,10 +539,10 @@
 						DbConnection.CreateParam("RepaymentPeriod", LoanOffer_RepaymentPeriod),
 						DbConnection.CreateParam("InterestRate", LoanOffer_InterestRate),
 						DbConnection.CreateParam("UseSetupFee", LoanOffer_UseSetupFee),
-						DbConnection.CreateParam("OfferValidDays", LoanOffer_OfferValidDays),
-						DbConnection.CreateParam("EmailSendingBanned", LoanOffer_EmailSendingBanned_new),
+						DbConnection.CreateParam("OfferValidDays", autoDecisionResponse.LoanOffer_OfferValidDays),
+						DbConnection.CreateParam("EmailSendingBanned", autoDecisionResponse.LoanOffer_EmailSendingBanned_new),
 						DbConnection.CreateParam("LoanTypeId", LoanOffer_LoanTypeId),
-						DbConnection.CreateParam("UnderwriterComment", LoanOffer_UnderwriterComment),
+						DbConnection.CreateParam("UnderwriterComment", autoDecisionResponse.LoanOffer_UnderwriterComment),
 						DbConnection.CreateParam("IsLoanTypeSelectionAllowed", LoanOffer_IsLoanTypeSelectionAllowed),
 						DbConnection.CreateParam("DiscountPlanId", LoanOffer_DiscountPlanId),
 						DbConnection.CreateParam("ExperianRating", LoanOffer_ExpirianRating),
@@ -579,7 +563,7 @@
 							{"ApprovalAmount", LoanOffer_ReApprovalSum.ToString(CultureInfo.InvariantCulture)},
 							{"RepaymentPeriod", LoanOffer_RepaymentPeriod.ToString(CultureInfo.InvariantCulture)},
 							{"InterestRate", LoanOffer_InterestRate.ToString(CultureInfo.InvariantCulture)},
-							{"OfferValidUntil", App_ValidFor.ToString(CultureInfo.InvariantCulture)}
+							{"OfferValidUntil", autoDecisionResponse.App_ValidFor.ToString(CultureInfo.InvariantCulture)}
 						};
 					mailer.SendToEzbob(variables, "Mandrill - User is approved or re-approved", "User was automatically Re-Approved");
 
@@ -589,13 +573,13 @@
 					}
 					else
 					{
-						var variables2 = new Dictionary<string, string>
+						var customerMailVariables = new Dictionary<string, string>
 						{
 							{"FirstName", App_FirstName},
 							{"LoanAmount", LoanOffer_ReApprovalSum.ToString(CultureInfo.InvariantCulture)}
 						};
 
-						mailer.SendToCustomerAndEzbob(variables2, App_email, "Mandrill - Approval (not 1st time)", "Congratulations " + App_FirstName + ", £" + LoanOffer_ReApprovalSum +
+						mailer.SendToCustomerAndEzbob(customerMailVariables, App_email, "Mandrill - Approval (not 1st time)", "Congratulations " + App_FirstName + ", £" + LoanOffer_ReApprovalSum +
 								   " is available to fund your business today");
 
 						strategyHelper.AddApproveIntoDecisionHistory(CustomerId, "Auto Re-Approval");
@@ -789,21 +773,15 @@
 		{
 			return new AutoDecisionRequest
 			{
-				App_ApplyForLoan = App_ApplyForLoan,
-				App_ValidFor = App_ValidFor,
 				CustomerId = CustomerId,
 				EnableAutomaticApproval = EnableAutomaticApproval,
 				EnableAutomaticReApproval = EnableAutomaticReApproval,
 				EnableAutomaticRejection = EnableAutomaticRejection,
 				EnableAutomaticReRejection = EnableAutomaticReRejection,
 				Inintial_ExperianConsumerScore = Inintial_ExperianConsumerScore,
-				IsAutoApproval = IsAutoApproval,
-				LoanOffer_UnderwriterComment = LoanOffer_UnderwriterComment,
 				ModelLoanOffer = ModelLoanOffer,
 				IsReRejected = false,
-				LoanOffer_EmailSendingBanned_new = LoanOffer_EmailSendingBanned_new,
 				LoanOffer_ReApprovalFullAmountOld = LoanOffer_ReApprovalFullAmountOld,
-				LoanOffer_OfferValidDays = LoanOffer_OfferValidDays,
 				LoanOffer_ReApprovalFullAmount = LoanOffer_ReApprovalFullAmount,
 				LoanOffer_ReApprovalRemainingAmount = LoanOffer_ReApprovalRemainingAmount,
 				LoanOffer_ReApprovalRemainingAmountOld = LoanOffer_ReApprovalRemainingAmountOld,
@@ -857,7 +835,6 @@
 																						App_Line2, App_Line3, App_Line4, null,
 																						App_Line6, CustomerId);
 				CreateAmlResultFromAuthenticationReuslts(authenticationResults);
-
 
 				accountVerificationResults = idHubService.AccountVerification(App_FirstName, null, App_Surname, App_Gender, App_DateOfBirth, App_Line1, App_Line2, App_Line3, App_Line4, null, App_Line6, App_SortCode, App_AccountNumber, CustomerId);
 				CreateBwaResultFromAccountVerificationResults(accountVerificationResults);
@@ -1151,7 +1128,12 @@
 
 		private bool WaitForMarketplacesToFinishUpdates()
 		{
-			bool isUpdated = false; // TODO: get from MP_IsCustomerMarketPlacesUpdated
+			DataTable dt = DbConnection.ExecuteSpReader("MP_CustomerMarketplacesIsUpdated",
+				DbConnection.CreateParam("CustomerId", CustomerId));
+			DataRow result = dt.Rows[0];
+
+			bool isUpdated = bool.Parse(result["IsUpdated"].ToString());
+			
 			DateTime startWaitingTime = DateTime.UtcNow;
 
 			while (!isUpdated)
@@ -1162,7 +1144,10 @@
 				}
 
 				Thread.Sleep(intervalWaitForMarketplacesUpdate);
-				isUpdated = false; // TODO: get from MP_IsCustomerMarketPlacesUpdated
+				dt = DbConnection.ExecuteSpReader("MP_CustomerMarketplacesIsUpdated",
+					DbConnection.CreateParam("CustomerId", CustomerId));
+				result = dt.Rows[0];
+				isUpdated = bool.Parse(result["IsUpdated"].ToString());
 			}
 
 			return true;
