@@ -58,7 +58,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
         this.$el.find('i[data-yodlee-calculated]').tooltip({ title: 'Calculated Field' });
 
         if (this.shop.get('Name') == 'Yodlee') {
-            
+
             that.renderYodlee();
         }
 
@@ -165,40 +165,47 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
 
                 /* Modify the footer row to match what we want */
                 var nCells = nRow.getElementsByTagName('th');
-                nCells[0].innerHTML = "|Total #Credit: <i>" + parseInt(iPageCountCredit) + "</i> | Sum Credit: " + EzBob.formatPoundsAsInt(iPageAmountCredit) + " | Total #Debit: <i>" + parseInt(iPageCountDebit) + "</i> | Sum Debit: "+ EzBob.formatPoundsAsInt(iPageAmountDebit);
+                nCells[0].innerHTML = "|Total #Credit: <i>" + parseInt(iPageCountCredit) + "</i> | Sum Credit: " + EzBob.formatPoundsAsInt(iPageAmountCredit) + " | Total #Debit: <i>" + parseInt(iPageCountDebit) + "</i> | Sum Debit: " + EzBob.formatPoundsAsInt(iPageAmountDebit);
             },
             "oLanguage": {
                 "sSearch": "Filter all columns:"
             }
         };
         var that = this;
-        $.fn.dataTableExt.afnFiltering.push(
-            function (oSettings, aData, iDataIndex) {
-                var dateRange = that.$el.find('#date-range').attr("value");
-                if (!dateRange) return true;
-                var dateMin = dateRange.substring(0, 4) + dateRange.substring(5, 7) + dateRange.substring(8, 10);
-                var dateMax = dateRange.substring(13, 17) + dateRange.substring(18, 20) + dateRange.substring(21, 23);
-                var date = aData[2];
-                date = date.substring(0, 10);
-                date = date.substring(6, 10) + date.substring(3, 5) + date.substring(0, 2);
-
-                if (dateMin == "" && date <= dateMax) {
-                    return true;
-                }
-                else if (dateMin == "" && date <= dateMax) {
-                    return true;
-                }
-                else if (dateMin <= date && "" == dateMax) {
-                    return true;
-                }
-                else if (dateMin <= date && date <= dateMax) {
-                    return true;
-                }
-                return false;
-            }
-        );
-
         var oTable = this.$el.find('.YodleeTransactionsTable').dataTable(oDataTableArgs);
+
+        if ($.fn.dataTableExt.afnFiltering.length == 0) {
+            $.fn.dataTableExt.afnFiltering.push(
+                function(oSettings, aData, iDataIndex) {
+                    if (oSettings.nTable !== document.getElementById("YodleeTransactionsTable")) {
+                        // if not table should be ignored
+                        return true;
+                    }
+                    var dateRange = that.$el.find('#date-range').attr("value");
+                    if (dateRange == null) return true;
+
+                    var dateMin = dateRange.substring(0, 4) + dateRange.substring(5, 7) + dateRange.substring(8, 10);
+                    var dateMax = dateRange.substring(13, 17) + dateRange.substring(18, 20) + dateRange.substring(21, 23);
+                    var date = aData[2];
+                    if (date == null) {
+                        return true;
+                    }
+                    date = date.substring(0, 10);
+                    date = date.substring(6, 10) + date.substring(3, 5) + date.substring(0, 2);
+                    if (dateMin == "" && date <= dateMax) {
+                        return true;
+                    } else if (dateMin == "" && date <= dateMax) {
+                        return true;
+                    } else if (dateMin <= date && "" == dateMax) {
+                        return true;
+                    } else if (dateMin <= date && date <= dateMax) {
+                        return true;
+                    }
+                    return false;
+                }
+            );
+        }        
+        
 
         this.$el.find("#DataTables_Table_1_length").after(this.$el.find('#range-filter'));
         this.$el.find("#date-range").keyup(function () { oTable.fnDraw(); });
@@ -220,8 +227,8 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
         this.$el.find(".YodleeTransactionsTable tfoot input").blur(function (i) {
             if (this.value == "") { this.value = asInitVals[$("tfoot input").index(this)]; }
         });
-        
-        this.$el.find("div.dataTables_filter input").focus(function() {
+
+        this.$el.find("div.dataTables_filter input").focus(function () {
             that.$el.find(".YodleeTransactionsTable tfoot input").val("").keyup();
         });
 
@@ -247,14 +254,14 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
 
         for (var monthYear2 in highRunningBalance) {
             highBalanceLine.push([new Date(Date.parse(highRunningBalance[monthYear2].Date)), parseInt(highRunningBalance[monthYear2].Balance, 10)]);
-            
-        } 
-        
+
+        }
+
         for (var date in runningBalance) {
             runningBalanceLine.push([new Date(Date.parse(date)), parseInt(runningBalance[date], 10)]);
             bankFrameLine.push([new Date(Date.parse(date)), parseInt(bankFrame, 10)]);
         }
-        
+
         if (lowBalanceLine.length && highBalanceLine.length && !this.runningBalancePlot) {
             this.runningBalancePlot = $.jqplot('yodleeRunningBalanceChart', [highBalanceLine, lowBalanceLine, runningBalanceLine, bankFrameLine], {
                 animateReplot: true,
@@ -272,7 +279,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
                     {
                         label: 'Running Balance ' + formatedBankFrame,
                         trendline: {
-                            show:false
+                            show: false
                         },
                         markerOptions: {
                             show: false,
@@ -365,7 +372,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
                 //    ]
                 //}
             });
-            
+
             $('.jqplot-highlighter-tooltip').addClass('ui-corner-all');
             //////////////////////////////////////////////////////////////////////////////////////////
             var minDay = cashModel.MinDateDict;
@@ -382,7 +389,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
             var expensesBar = [];
             var incomeLabels = [];
             var expensesLabels = [];
-            
+
             for (var i in income) {
                 if (!income.hasOwnProperty(i)) continue;
                 if (i == '999999') continue; //skipping total
@@ -472,12 +479,12 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
         $('.YodleeTransactionsTable').dataTable().fnFilter(searchWord, 7); //description id
     },
     yodleeAccountsRowClicked: function (el) {
-        var accountId = $(el.currentTarget).index()+1;
+        var accountId = $(el.currentTarget).index() + 1;
         $('#yodleeTransactionsTabLink').click();
         $('#yodleetab4 .YodleeTransactionsTable [name="search_acct"]').val(accountId).change();
         $('.YodleeTransactionsTable').dataTable().fnFilter(accountId, 0); //account num id
     },
-    yodleeShowTrnInRangeClicked: function() {
+    yodleeShowTrnInRangeClicked: function () {
         var minDate = moment.utc(this.runningBalancePlot.axes.xaxis.min).format('YYYY-MM-DD');
         var maxDate = moment.utc(this.runningBalancePlot.axes.xaxis.max).format('YYYY-MM-DD');
         $('#yodleeTransactionsTabLink').click();
@@ -490,7 +497,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
         var literal = this.$el.find("#yodleeLiteral").val();
         if (!group || !rule) return false;
         if ((rule == 1 || rule == 5) && !literal) return false; //include/dont include literal rules
-        
+
         EzBob.ShowMessage(
             "Add rule", "Are you sure you want to add rule: " + this.$el.find("#yodleeRule option:selected").text() + " to group: " + this.$el.find("#yodleeGroup option:selected").text() + "?",
             function () {

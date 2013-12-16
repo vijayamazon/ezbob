@@ -40,8 +40,7 @@ namespace landRegistry1.LandRegistryEnquiryByPropertyDescriptionNS {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=0)]
-		public LandRegistryEnquiryByPropertyDescriptionNS.Q1IdentifierType ID
-		{
+        public Q1IdentifierType ID {
             get {
                 return this.idField;
             }

@@ -75,22 +75,24 @@ namespace landRegistry1
 			// create an instance of the client
 			using (var client = new LandRegistryEnquiryByPropertyDescriptionNS.PropertyDescriptionEnquiryV2_0ServiceClient())
 			{
-				client.ChannelFactory.Endpoint.Behaviors.Add(new HMLRBGMessageEndpointBehavior("BGUser001", "LandReg001"));
+				client.ChannelFactory.Endpoint.Behaviors.Add(new HMLRBGMessageEndpointBehavior("BGUser001", "landreg001"));
 				// create a request object
 				var request = new LandRegistryEnquiryByPropertyDescriptionNS.RequestSearchByPropertyDescriptionV2_0Type
 				{
-					ID = new LandRegistryEnquiryByPropertyDescriptionNS.Q1IdentifierType { MessageID = new LandRegistryEnquiryByPropertyDescriptionNS.Q1TextType { Value = "170100" } },
+					ID = new LandRegistryEnquiryByPropertyDescriptionNS.Q1IdentifierType { MessageID = new LandRegistryEnquiryByPropertyDescriptionNS.Q1TextType { Value = "pollST500681" } },
 					Product = new LandRegistryEnquiryByPropertyDescriptionNS.Q1ProductType
 						{
-							ExternalReference = new LandRegistryEnquiryByPropertyDescriptionNS.Q1ExternalReferenceType { Reference = "Ext_ref" },
-							CustomerReference = new LandRegistryEnquiryByPropertyDescriptionNS.Q1CustomerReferenceType { Reference = "Bguser1" },
+							ExternalReference = new LandRegistryEnquiryByPropertyDescriptionNS.Q1ExternalReferenceType { Reference = "123" },
+							CustomerReference = new LandRegistryEnquiryByPropertyDescriptionNS.Q1CustomerReferenceType { Reference = "321" },
 							SubjectProperty = new LandRegistryEnquiryByPropertyDescriptionNS.Q1SubjectPropertyType
 								{
 									Address = new LandRegistryEnquiryByPropertyDescriptionNS.Q1AddressType()
 										{
-											BuildingNumber = "99",
-											StreetName = "Flake Avenue",
-											CityName = "Torquay",
+											BuildingName = "27",
+											BuildingNumber = "27",
+											StreetName = "Church Road",
+											CityName = "Bristol",
+											PostcodeZone = "TQ56 4HY"
 										}
 								}
 						}
