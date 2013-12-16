@@ -16,7 +16,7 @@ BEGIN
 		Customer c, 
 		MP_CustomerMarketPlace cmp				
 	WHERE 
-		c.Id = @pCustomerId AND 
+		c.Id = @CustomerId AND 
 		cmp.CustomerId = c.Id AND 
 		(cmp.UpdatingStart IS NULL OR 
 		 (cmp.UpdatingStart IS NOT NULL	AND 
