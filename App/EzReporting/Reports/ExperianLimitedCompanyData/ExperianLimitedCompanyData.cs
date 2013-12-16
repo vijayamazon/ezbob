@@ -1,0 +1,158 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data.Common;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml;
+using Ezbob.Database;
+using Ezbob.Logger;
+
+namespace Reports {
+	#region class ExperianLimitedCompanyData
+
+	public class ExperianLimitedCompanyData : SafeLog {
+		#region public
+
+		#region method ToOutput
+
+		public static void ToOutput(string sFileName, Tuple<List<ExperianLimitedCompanyReportItem>, SortedSet<string>> oData) {
+			List<ExperianLimitedCompanyReportItem> oReportItems = oData.Item1;
+			SortedSet<string> oFieldNames = oData.Item2;
+
+			var oFieldCaptions = new List<string> {"Company Reg #", "Company Name", "Customer ID", "Date"};
+
+			oFieldCaptions.AddRange(oFieldNames);
+
+			string[] aryFieldCaptions = oFieldCaptions.ToArray();
+
+			var oOutput = new List<string[]> { aryFieldCaptions };
+
+			foreach (ExperianLimitedCompanyReportItem ri in oReportItems)
+				oOutput.AddRange(ri.ToOutput(oFieldNames));
+
+			var fout = new StreamWriter(sFileName, false, Encoding.UTF8);
+
+			for (int i = 0; i < aryFieldCaptions.Length; i++) {
+				bool bFirst = true;
+
+				foreach (string[] ary in oOutput) {
+					if (bFirst)
+						bFirst = false;
+					else
+						fout.Write(",");
+
+					fout.Write(ary[i]);
+				} // for each array
+
+				fout.WriteLine();
+			} // for i
+
+			fout.Close();
+		} // ToOutput
+
+		#endregion method ToOutput
+
+		#region constructor
+
+		public ExperianLimitedCompanyData(AConnection oDB, ASafeLog log = null) : base(log) {
+			m_oDB = oDB;
+
+			VerboseLogging = false;
+		} // constructor
+
+		#endregion constructor
+
+		#region method Run
+
+		public Tuple<List<ExperianLimitedCompanyReportItem>, SortedSet<string>>  Run() {
+			m_oResult = new List<ExperianLimitedCompanyReportItem>();
+			m_oFieldNames = new SortedSet<string>();
+
+			m_oDB.ForEachRow(
+				HandleRow,
+				"RptExperianLimitedCompanyData",
+				CommandSpecies.StoredProcedure
+			);
+
+			return new Tuple<List<ExperianLimitedCompanyReportItem>, SortedSet<string>>(m_oResult, m_oFieldNames);
+		} // Run
+
+		#endregion method Run
+
+		#region property VerboseLogging
+
+		public bool VerboseLogging { get; set; }
+
+		#endregion property VerboseLogging
+
+		#endregion public
+
+		#region private
+
+		#region method HandleRow
+
+		private ActionResult HandleRow(DbDataReader oRow, bool bStartOfRowset) {
+			int nCustomerID = Convert.ToInt32(oRow["Id"]);
+			string sXml = oRow["JsonPacket"].ToString();
+
+			if (VerboseLogging)
+				Debug("Customer ID: {0}", nCustomerID);
+
+			XmlDocument doc = new XmlDocument();
+
+			try {
+				doc.LoadXml(sXml);
+			}
+			catch (Exception e) {
+				Warn(e, "Failed to parse Experian output as XML for customer {0}", nCustomerID);
+				return ActionResult.Continue;
+			} // try
+
+			if (doc.DocumentElement == null) {
+				Warn("Failed to parse Experian output (root node) for customer {0}", nCustomerID);
+				return ActionResult.Continue;
+			} // if
+
+			XmlNode oNode = doc.DocumentElement.SelectSingleNode("./REQUEST/DL12/REGNUMBER");
+
+			if (oNode == null) {
+				Warn("Failed to parse Experian output (company number) for customer {0}", nCustomerID);
+				return ActionResult.Continue;
+			} // if
+
+			string sCompanyNumber = oNode.InnerText;
+
+			oNode = doc.DocumentElement.SelectSingleNode("./REQUEST/DL12/COMPANYNAME");
+
+			if (oNode == null) {
+				Warn("Failed to parse Experian output (company name) for customer {0}", nCustomerID);
+				return ActionResult.Continue;
+			} // if
+
+			string sCompanyName = oNode.InnerText;
+
+			var oItem = new ExperianLimitedCompanyReportItem(nCustomerID, sCompanyNumber, sCompanyName, doc.DocumentElement.SelectNodes("./REQUEST/DL99"), m_oFieldNames);
+
+			if (oItem.Validate()) {
+				m_oResult.Add(oItem);
+
+				if (VerboseLogging)
+					Debug("{0} records found", oItem.Data.Count);
+			} // if
+
+			return ActionResult.Continue;
+		} // HandleRow
+
+		#endregion method HandleRow
+
+		private readonly AConnection m_oDB;
+		private List<ExperianLimitedCompanyReportItem> m_oResult;
+		private SortedSet<string> m_oFieldNames;
+
+		#endregion private
+	} // class ExperianLimitedCompanyData
+
+	#endregion class ExperianLimitedCompanyData
+} // namespace Reports

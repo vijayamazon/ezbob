@@ -16,7 +16,9 @@ namespace TestApp {
 
 			var oDB = new SqlConnection(log);
 
-			TestUiReport(oDB, log);
+			TestExperianLimitedCompanyData(oDB, log);
+
+			// TestUiReport(oDB, log);
 
 			// TestLoansIssuedReport(oDB, log);
 
@@ -32,6 +34,23 @@ namespace TestApp {
 		} // Main
 
 		#endregion method Main
+
+		#region method TestExperianLimitedCompanyData
+
+		private static void TestExperianLimitedCompanyData(AConnection oDB, ASafeLog log) {
+			var rpt = new ExperianLimitedCompanyData(oDB, log);
+			rpt.VerboseLogging = true;
+
+			Tuple<List<ExperianLimitedCompanyReportItem>, SortedSet<string>> oOutput = rpt.Run();
+
+			log.Debug("Report start");
+
+			ExperianLimitedCompanyData.ToOutput(@"c:\temp\dl99.csv", oOutput);
+
+			log.Debug("Report end");
+		} // TestExperianLimitedCompanyData
+
+		#endregion method TestExperianLimitedCompanyData
 
 		#region method TestUiReport
 
