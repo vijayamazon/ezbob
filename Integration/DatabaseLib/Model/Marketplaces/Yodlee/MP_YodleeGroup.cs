@@ -14,6 +14,7 @@
 		LoanRepaymentsReceipt = 8,
 		LoanRepaymentsRepayment = 9,
 		Exception = 10,
+		VAT = 11
 	}
 
 	[Serializable]

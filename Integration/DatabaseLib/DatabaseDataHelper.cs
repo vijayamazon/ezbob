@@ -12,6 +12,7 @@ namespace EZBob.DatabaseLib
 	using System.Diagnostics;
 	using System.Linq;
 	using System.Net;
+	using System.Text.RegularExpressions;
 	using Common;
 	using Model.Database.Loans;
 	using DatabaseWrapper;
@@ -1594,7 +1595,11 @@ namespace EZBob.DatabaseLib
 				bool containsLiteral = false;
 				foreach (var literal in includeLiteral)
 				{
-					if (description.ToLowerInvariant().Contains(literal))
+					if (literal.Contains("/")) //is regex
+					{
+						containsLiteral = Regex.IsMatch(description.ToLowerInvariant(), literal);
+					}
+					else if (description.ToLowerInvariant().Contains(literal))
 					{
 						containsLiteral = true;
 					}
@@ -1841,15 +1846,16 @@ namespace EZBob.DatabaseLib
 																			 item.asOfDate));
 					}
 
-
+					//Not Retrieving Seid transactions as they seem to be duplicated data
 					var bankTransactionsDataList = customerMarketPlace
 						.YodleeOrders
 						.SelectMany(x => x.OrderItems)
 						.Where(oi => oi.srcElementId == bankData.srcElementId)
 						.SelectMany(b => b.OrderItemBankTransactions)
 						.Where(t =>
-							(t.transactionDate.HasValue && t.transactionDate.Value.Date <= history) ||
+							((t.transactionDate.HasValue && t.transactionDate.Value.Date <= history) ||
 							(t.postDate.HasValue && t.postDate.Value.Date <= history))
+							&& (t.isSeidMod.HasValue && t.isSeidMod == 0)) 
 						.Select(bankTransaction => new BankTransactionData
 							{
 								isSeidFromDataSource = bankTransaction.isSeidFromDataSource,
