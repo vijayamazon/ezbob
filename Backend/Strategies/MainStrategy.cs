@@ -1154,21 +1154,18 @@
 		}
 
 		// main strategy - flow 1
-		public void Evaluate(int customerId, NewCreditLineOption newCreditLine, int avoidAutoDescison,
-							 bool isUnderwriterForced = false)
+		public MainStrategy(int customerId, NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced = false)
 		{
 			CustomerId = customerId;
 			newCreditLineOption = newCreditLine;
 			avoidAutomaticDescison = avoidAutoDescison;
 			Underwriter_Check = isUnderwriterForced;
-			Execute();
 		}
 
 		// main strategy - flow 2
-		public void EvaluateWithIdHubCustomAddress(int customerId, int checkType, string houseNumber, string houseName,
-												   string street,
-												   string district, string town, string county, string postcode,
-												   string bankAccount, string sortCode, int avoidAutoDescison)
+		public MainStrategy(int customerId, int checkType, string houseNumber, string houseName,
+			string street, string district, string town, string county, string postcode,
+			string bankAccount, string sortCode, int avoidAutoDescison)
 		{
 			CustomerId = customerId;
 			UseCustomIdHubAddress = checkType;
@@ -1183,7 +1180,6 @@
 			idhubAccountNumber = bankAccount;
 			idhubBranchCode = sortCode;
 			avoidAutomaticDescison = avoidAutoDescison;
-			Execute();
 		}
 	}
 }

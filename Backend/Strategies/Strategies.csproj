@@ -41,6 +41,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\3rdparty\NUnit\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="StructureMap, Version=2.6.3.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\App\PluginWeb\EzBob.Web\bin\StructureMap.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -57,6 +61,8 @@
     <Compile Include="AutoDecisions\Rejection.cs" />
     <Compile Include="AutoDecisions\ReApproval.cs" />
     <Compile Include="AutoDecisions\ReRejection.cs" />
+    <Compile Include="FraudChecker.cs" />
+    <Compile Include="UpdateMarketplaces.cs" />
     <Compile Include="SetLateLoanStatus.cs" />
     <Compile Include="LateBy14Days.cs" />
     <Compile Include="FirstOfMonthStatusNotifier.cs" />
@@ -93,10 +99,50 @@
     <Compile Include="ScoreCalculation\MedalScoreCalculatorTestFixure.cs" />
     <Compile Include="ScoreCalculation\Models.cs" />
     <Compile Include="StrategiesMailer.cs" />
-    <Compile Include="Strategies.cs" />
+    <Compile Include="CaisGenerator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Integration\Amazon\AmazonDbLib\AmazonDbLib.csproj">
+      <Project>{fd263eb4-a3ef-4447-94b1-de1b308c604b}</Project>
+      <Name>AmazonDbLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Integration\Amazon\AmazonLib\AmazonLib.csproj">
+      <Project>{45EB1597-4C92-4AB8-B615-5206D5A9F472}</Project>
+      <Name>AmazonLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Integration\ChannelGrabberAPI\ChannelGrabberAPI.csproj">
+      <Project>{189d7477-dee3-4f7b-b703-d24c92352c0c}</Project>
+      <Name>ChannelGrabberAPI</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Integration\ChannelGrabberConfig\ChannelGrabberConfig.csproj">
+      <Project>{8ad07daa-3f09-4279-a390-17acde79b44f}</Project>
+      <Name>ChannelGrabberConfig</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Integration\ChannelGrabberFrontend\ChannelGrabberFrontend.csproj">
+      <Project>{eb0e1f2b-36af-4ec4-b4ce-79bc52f8252b}</Project>
+      <Name>ChannelGrabberFrontend</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Integration\CommonLib\CommonLib.csproj">
+      <Project>{aedbfbbd-ba7d-4582-afca-6ecf8af33c98}</Project>
+      <Name>CommonLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Integration\DatabaseLib\DatabaseLib.csproj">
+      <Project>{fa67314a-0560-41d4-bc19-6524663e9d0d}</Project>
+      <Name>DatabaseLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Integration\eBay\eBayDbLib\eBayDbLib.csproj">
+      <Project>{fb3eac65-ab2b-4a7e-ada5-aae0651caaf6}</Project>
+      <Name>eBayDbLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Integration\eBay\eBayLib\eBayLib.csproj">
+      <Project>{ac296ac1-dd5a-4aa4-a299-dd708e5f1a10}</Project>
+      <Name>eBayLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Integration\EKM\EKM.csproj">
+      <Project>{590c01c7-cf2c-4d5b-a307-3eb7ec61fb0d}</Project>
+      <Name>EKM</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Integration\ExperianLib\ExperianLib.csproj">
       <Project>{d91f3fd0-9e1b-41ff-ae2e-67f051198f51}</Project>
       <Name>ExperianLib</Name>
@@ -117,6 +163,10 @@
       <Project>{edc99346-e59d-44b7-bdd0-a08cd3d56941}</Project>
       <Name>FraudChecker</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Integration\FreeAgent\FreeAgent.csproj">
+      <Project>{ee7f496f-963f-4383-b0c2-3bcf9fc15511}</Project>
+      <Name>FreeAgent</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Integration\MailApi\MailApi.csproj">
       <Project>{de254378-4cf8-400c-bcc4-a9af01550350}</Project>
       <Name>MailApi</Name>
@@ -124,6 +174,26 @@
     <ProjectReference Include="..\..\Integration\PaymentServices\PaymentServices.csproj">
       <Project>{544a1fd5-76d3-4b73-97dd-0c7aa32f66c2}</Project>
       <Name>PaymentServices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Integration\PayPal\PayPalLib\PayPalLib.csproj">
+      <Project>{231243d6-9b1a-43bc-ac7e-fc6ae5ddc006}</Project>
+      <Name>PayPalLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Integration\PayPal\PayPalServiceLib\PayPalServiceLib.csproj">
+      <Project>{c519f59f-456a-4c7b-ade8-22ac96d572f3}</Project>
+      <Name>PayPalServiceLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Integration\PayPoint\PayPoint.csproj">
+      <Project>{4e55dfa2-822f-4b94-9105-e77f6ac568db}</Project>
+      <Name>PayPoint</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Integration\Sage\Sage.csproj">
+      <Project>{a4c5e0af-f627-4b08-808c-de8edde725d5}</Project>
+      <Name>Sage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Integration\YodleeLib\YodleeLib.csproj">
+      <Project>{241a8baf-f486-44b9-93bd-baa5ca8091f3}</Project>
+      <Name>YodleeLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Utils\DbConnection\DbConnection.csproj">
       <Project>{978d5af5-ab9d-4aae-bfbf-2820f991613b}</Project>

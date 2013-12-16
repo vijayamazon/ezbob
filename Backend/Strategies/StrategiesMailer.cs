@@ -21,8 +21,8 @@
 		{
 			DataTable dt = DbConnection.ExecuteSpReader("GetMails");
 			DataRow results = dt.Rows[0];
-			ezbobCopyTo = results["EzbobMailTo"].ToString();
-			ezbobCopyCc = results["EzbobMailCc"].ToString();
+			ezbobCopyTo = results["ToAddress"].ToString();
+			ezbobCopyCc = results["CcAddress"].ToString();
 	}
 
 		private void SendMailViaMandrill(Dictionary<string, string> variables, string toAddress, string ccAddress, string templateName, string subject, bool shouldRecord)
