@@ -49,11 +49,11 @@
 			DataTable dt = DbConnection.ExecuteSpReader("GetCustomersForPayPoint");
 			foreach (DataRow row in dt.Rows)
 			{
-				HandleOneCustomer(row);
+				HandleOnePayment(row);
 			}
 		}
 
-		private void HandleOneCustomer(DataRow row)
+		private void HandleOnePayment(DataRow row)
 		{
 			int loanScheduleId = int.Parse(row["id"].ToString());
 			int loanId = int.Parse(row["LoanId"].ToString());
@@ -123,97 +123,8 @@
 
 			if (autoPaymentResult.PaymentCollectedSuccessfully)
 			{
-				if ((DateTime.UtcNow - scheduledDate).TotalDays >= 1)
-				{
-					DataTable dt = DbConnection.ExecuteSpReader("GetScheduleInterest",
-						DbConnection.CreateParam("LoanSchedule", loanScheduleId));
-					DataRow result = dt.Rows[0];
-
-					decimal interest = decimal.Parse(result["Interest"].ToString());
-
-					decimal amountDueNew = payPointApi.GetAmountToPay(loanScheduleId);
-
-					if ((scheduledDate <= DateTime.UtcNow && 
-						scheduledDate.AddDays(collectionPeriod1) >= DateTime.UtcNow && 
-						interest != 0 &&
-						latePaymentNotification
-						)
-						||
-						(scheduledDate.AddDays(collectionPeriod1 + 1) <= DateTime.UtcNow && 
-						scheduledDate.AddDays(collectionPeriod2) >= DateTime.UtcNow && 
-						interest != 0 &&
-						latePaymentNotification
-						))
-					{
-						var variables = new Dictionary<string, string>
-						{
-							{"FirstName", firstName},
-							{"AmountToCharge", initialAmountDue.ToString(CultureInfo.InvariantCulture)},
-							{"ChargeDate", FormattingUtils.FormatDateToString(scheduledDate)}
-						};
-						mailer.SendToCustomerAndEzbob(variables, customerMail, "Mandrill - Payment reminder", "Reminder : Your ezbob monthly re-payment is overdue");
-						SendLoanStatusMail(loanId, firstName, refNum, customerMail);
-					}
-					else if (
-						(scheduledDate <= DateTime.UtcNow && 
-						scheduledDate.AddDays(collectionPeriod1) >= DateTime.UtcNow && 
-						amountDueNew != 0 &&
-						interest == 0 &&
-						latePaymentNotification
-						)
-						|| 
-						(scheduledDate.AddDays(collectionPeriod1 + 1) <= DateTime.UtcNow && 
-						scheduledDate.AddDays(collectionPeriod2) >= DateTime.UtcNow && 
-						amountDueNew != 0 && 
-						interest == 0 &&
-						latePaymentNotification
-						))
-					{
-						var variables = new Dictionary<string, string>
-						{
-							{"FirstName", firstName},
-							{"AmountCharged", amountDue.ToString(CultureInfo.InvariantCulture)},
-							{"ChargeDate", FormattingUtils.FormatDateToString(scheduledDate)},
-							{"InitialAmountDue", initialAmountDue.ToString(CultureInfo.InvariantCulture)}
-						};
-						mailer.SendToCustomerAndEzbob(variables, customerMail, "Mandrill - Partial repayment", "ezbob received a partial re-payment from you");
-						SendLoanStatusMail(loanId, firstName, refNum, customerMail);
-					}
-					else if (
-						(scheduledDate <= DateTime.UtcNow && 
-						scheduledDate.AddDays(collectionPeriod1) >= DateTime.UtcNow && 
-						amountDueNew == 0 &&
-						interest == 0 &&
-						latePaymentNotification
-						)
-						||
-						(scheduledDate.AddDays(collectionPeriod1 + 1) <= DateTime.UtcNow && 
-						scheduledDate.AddDays(collectionPeriod2) >= DateTime.UtcNow && 
-						amountDueNew == 0 && 
-						interest == 0 &&
-						latePaymentNotification
-						))
-					{
-						var variables = new Dictionary<string, string>
-						{
-							{"FirstName", firstName},
-							{"AmountCharged", amountDue.ToString(CultureInfo.InvariantCulture)},
-							{"ChargeDate", FormattingUtils.FormatDateToString(scheduledDate)}
-						};
-						mailer.SendToCustomerAndEzbob(variables, customerMail, "Mandrill - Received Full Repayment", "We received your re-payment in full");
-						SendLoanStatusMail(loanId, firstName, refNum, customerMail);
-					}
-					else
-					{
-						SendConfirmationMail(firstName, amountDue, refNum, customerMail);
-						SendLoanStatusMail(loanId, firstName, refNum, customerMail);
-					}
-				}
-				else
-				{
-					SendConfirmationMail(firstName, amountDue, refNum, customerMail);
-					SendLoanStatusMail(loanId, firstName, refNum, customerMail);
-				}
+				SendConfirmationMail(firstName, amountDue, refNum, customerMail);
+				SendLoanStatusMail(loanId, firstName, refNum, customerMail);
 			}
 		}
 

@@ -6,7 +6,6 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[GetCustomersForPayPoint]
-	(@MarketplaceId INT) 
 AS
 BEGIN
 	SELECT 
