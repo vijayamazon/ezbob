@@ -78,16 +78,6 @@
 					"accountModel.name = (aryDisplayName && aryDisplayName.length && aryDisplayName.length == 2) ? aryDisplayName[1] : accountModel.url;",
 					"accountModel.name = accountModel.name || accountModel.url;",
 					"return accountModel;"
-				],
-				"SourceLabel": [
-					{ "Property": "background", "Value": "url(/Content/css/images/volusion-logo.png) no-repeat 0 0" },
-					{ "Property": "background-position", "Value": "0px -3px" },
-					{ "Property": "width", "Value": "98px" }
-				],
-				"SourceLabelOn": [
-					{ "Property": "background", "Value": "url(/Content/css/images/volusion-logo.png) no-repeat 0 0" },
-					{ "Property": "background-position", "Value": "0px -43px" },
-					{ "Property": "width", "Value": "98px" }
 				]
 			},
 			"ErrorMessages": []
@@ -156,16 +146,6 @@
 					"var aryMatch = /^(http:\\/\\/|https:\\/\\/)?(www\\.)?play\\.com\\/stores\\/([^#\\?\\/]+)/.exec(accountModel.name);",
 					"if (aryMatch) accountModel.name = aryMatch[3];",
 					"return accountModel;"
-				],
-				"SourceLabel": [
-					{ "Property": "background", "Value": "url(/Content/css/images/play-logo.png) no-repeat 0 0" },
-					{ "Property": "background-position", "Value": "0px 0px" },
-					{ "Property": "width", "Value": "116px" }
-				],
-				"SourceLabelOn": [
-					{ "Property": "background", "Value": "url(/Content/css/images/play-logo.png) no-repeat 0 0" },
-					{ "Property": "background-position", "Value": "0px -40px" },
-					{ "Property": "width", "Value": "116px" }
 				]
 			},
 			"ErrorMessages": [
@@ -228,16 +208,6 @@
 					"accountModel.name = aryMatch[2];",
 					"accountModel.url = aryMatch[1];",
 					"return accountModel;"
-				],
-				"SourceLabel": [
-					{ "Property": "background", "Value": "url(/Content/css/images/shopify-logo.png) no-repeat 0 0" },
-					{ "Property": "background-position", "Value": "0px 0px" },
-					{ "Property": "width", "Value": "104px" }
-				],
-				"SourceLabelOn": [
-					{ "Property": "background", "Value": "url(/Content/css/images/shopify-logo.png) no-repeat 0 0" },
-					{ "Property": "background-position", "Value": "0px -40px" },
-					{ "Property": "width", "Value": "104px" }
 				]
 			},
 			"ErrorMessages": []
@@ -319,16 +289,6 @@
 					"delete accountModel.publicCert;",
 					"delete accountModel.privateKey;",
 					"return accountModel;"
-				],
-				"SourceLabel": [
-					{ "Property": "background", "Value": "url(/Content/css/images/xero-logo.png) no-repeat 0 0" },
-					{ "Property": "background-position", "Value": "0px 0px" },
-					{ "Property": "width", "Value": "54px" }
-				],
-				"SourceLabelOn": [
-					{ "Property": "background", "Value": "url(/Content/css/images/xero-logo.png) no-repeat 0 0" },
-					{ "Property": "background-position", "Value": "0px -40px" },
-					{ "Property": "width", "Value": "54px" }
 				]
 			},
 			"ErrorMessages": []
@@ -391,16 +351,6 @@
 				"Notes": [],
 				"OnBeforeLink": [
 					"return accountModel;"
-				],
-				"SourceLabel": [
-					{ "Property": "background", "Value": "url(/Content/css/images/kashflow-logo.png) no-repeat 0 0" },
-					{ "Property": "background-position", "Value": "0px 0px" },
-					{ "Property": "width", "Value": "145px" }
-				],
-				"SourceLabelOn": [
-					{ "Property": "background", "Value": "url(/Content/css/images/kashflow-logo.png) no-repeat 0 0" },
-					{ "Property": "background-position", "Value": "0px -40px" },
-					{ "Property": "width", "Value": "145px" }
 				]
 			},
 			"ErrorMessages": []
@@ -467,16 +417,6 @@
 					"else",
 						"accountModel.name = accountModel.login;",
 					"return accountModel;"
-				],
-				"SourceLabel": [
-					{ "Property": "background", "Value": "url(/Content/css/images/hmrc-logo.png) no-repeat 0 0" },
-					{ "Property": "background-position", "Value": "0px 0px" },
-					{ "Property": "width", "Value": "149px" }
-				],
-				"SourceLabelOn": [
-					{ "Property": "background", "Value": "url(/Content/css/images/hmrc-logo.png) no-repeat 0 0" },
-					{ "Property": "background-position", "Value": "0px -40px" },
-					{ "Property": "width", "Value": "149px" }
 				]
 			},
 			"ErrorMessages": []
@@ -550,16 +490,6 @@
 					"accountModel.name = aryMatch[3];",
 					"accountModel.url = aryMatch[1] + '/api/v2_soap?wsdl=1';",
 					"return accountModel;"
-				],
-				"SourceLabel": [
-					{ "Property": "background", "Value": "url(/Content/css/images/magento-logo.png) no-repeat 0 0" },
-					{ "Property": "background-position", "Value": "0px 0px" },
-					{ "Property": "width", "Value": "145px" }
-				],
-				"SourceLabelOn": [
-					{ "Property": "background", "Value": "url(/Content/css/images/magento-logo.png) no-repeat 0 0" },
-					{ "Property": "background-position", "Value": "0px -40px" },
-					{ "Property": "width", "Value": "145px" }
 				]
 			},
 			"ErrorMessages": []
@@ -626,16 +556,6 @@
 					"accountModel.name = aryMatch[3];",
 					"accountModel.url = aryMatch[1];",
 					"return accountModel;"
-				],
-				"SourceLabel": [
-					{ "Property": "background", "Value": "url(/Content/css/images/prestashop-logo.png) no-repeat 0 0" },
-					{ "Property": "background-position", "Value": "0px 0px" },
-					{ "Property": "width", "Value": "145px" }
-				],
-				"SourceLabelOn": [
-					{ "Property": "background", "Value": "url(/Content/css/images/prestashop-logo.png) no-repeat 0 0" },
-					{ "Property": "background-position", "Value": "0px -40px" },
-					{ "Property": "width", "Value": "145px" }
 				]
 			},
 			"ErrorMessages": []
@@ -709,16 +629,6 @@
 					"accountModel.name = aryMatch[2];",
 					"accountModel.url = aryMatch[1];",
 					"return accountModel;"
-				],
-				"SourceLabel": [
-					{ "Property": "background", "Value": "url(/Content/css/images/bigcommerce-logo.png) no-repeat 0 0" },
-					{ "Property": "background-position", "Value": "0px 0px" },
-					{ "Property": "width", "Value": "145px" }
-				],
-				"SourceLabelOn": [
-					{ "Property": "background", "Value": "url(/Content/css/images/bigcommerce-logo.png) no-repeat 0 0" },
-					{ "Property": "background-position", "Value": "0px -40px" },
-					{ "Property": "width", "Value": "145px" }
 				]
 			},
 			"ErrorMessages": []

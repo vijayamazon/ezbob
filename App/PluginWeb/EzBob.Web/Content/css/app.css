@@ -236,6 +236,7 @@ ul.documents {
 .label.green {
     background-color: rgb(100, 153, 30);
 }
+
 .add_account_button_alignment {
     margin: auto;
     float: left;
@@ -310,29 +311,29 @@ div.shop-connected {
     vertical-align: middle;
 }
 
-.source_labels{
+.source_labels {
     display: inline-block;
 }
 
-.source_labels.new-ribbon{
-    background: url(images/new_ribbon.png) no-repeat 0 0;
-    height: 25px;
-    width: 25px;
-    display: block;
-    float: left;
-    margin-top: -1px;
-}
+    .source_labels.new-ribbon {
+        background: url(images/new_ribbon.png) no-repeat 0 0;
+        height: 25px;
+        width: 25px;
+        display: block;
+        float: left;
+        margin-top: -1px;
+    }
 
-.source_labels.beta-ribbon{
-    background: url(images/beta_ribbon.png) no-repeat 0 0;
-    height: 25px;
-    width: 25px;
-    display: block;
-    float: left;
-    margin-top: -1px;
-}
+    .source_labels.beta-ribbon {
+        background: url(images/beta_ribbon.png) no-repeat 0 0;
+        height: 25px;
+        width: 25px;
+        display: block;
+        float: left;
+        margin-top: -1px;
+    }
 
-.source_labels_on.new-ribbon{
+.source_labels_on.new-ribbon {
     display: none;
     visibility: hidden;
 }
@@ -343,148 +344,152 @@ div.shop-connected {
 }
 
 .source_labels, .source_labels_on {
-    height: 40px;
-    width: 100px;
+    max-width: 120px;
+    min-height: 35px;
     display: block;
     text-indent: -9999px;
-    margin-top: 5px;
+    margin: 5px;
 }
-
-.source_labels, .source_labels_on {
-	background: url(images/source_sprite.png) no-repeat 0 0;
-}
-
-    .source_labels.Yodlee, .source_labels.yodlee {
-        background-position: -1134px -1px;
-		width: 115px;
-		/*margin-right: auto;
-		margin-left: auto;
-		margin-top: 3px;
-		margin-bottom: 2px;*/
-    }
 
     .source_labels_on.Yodlee, .source_labels_on.yodlee {
-		background-position: -1134px -41px;
-		width: 115px;
-		/*margin-right: auto;
-		margin-left: auto;
-		margin-top: 3px;
-		margin-bottom: 2px;*/
-    }
-
-    .source_labels.eBay, .source_labels.ebay {
-        background-position: 0 -1px;
-        width: 81px;
+        background: url(images/accounts/bank.png) no-repeat 0 0;
+        background-size: contain;
+        background-position: left center;
     }
 
     .source_labels_on.eBay, .source_labels_on.ebay {
-        background-position: 0 -41px;
-        width: 81px;
+        background: url(images/accounts/ebay.png) no-repeat 0 0;
+        background-size: contain;
+        background-position: left center;
     }
 
-    .source_labels.Amazon, .source_labels.amazon {
-        background-position: -85px -1px;
-        width: 110px;
+    .source_labels_on.HMRC, .source_labels_on.HMRC {
+        background: url(images/accounts/hmrc.png) no-repeat 0 0;
+        background-size: contain;
+        background-position: left center;
     }
 
     .source_labels_on.Amazon, .source_labels_on.amazon {
-        background-position: -85px -41px;
-        width: 110px;
-    }
-
-    .source_labels.EKM, .source_labels.ekm {
-        background-position: -558px -2px;
-        width: 150px;
+        background: url(images/accounts/amazon.png) no-repeat 0 0;
+        background-size: contain;
+        background-position: left center;
     }
 
     .source_labels_on.EKM, .source_labels_on.ekm {
-        background-position: -558px -42px;
-        width: 150px;
-    }
-
-    .source_labels.FreeAgent, .source_labels.freeagent {
-        background: url(images/freeagent_off.png) no-repeat 0 0;
-        width: 161px;
+        background: url(images/accounts/ekm.png) no-repeat 0 0;
+        background-size: contain;
+        background-position: left center;
     }
 
     .source_labels_on.FreeAgent, .source_labels_on.freeagent {
-        background: url(images/freeagent_on.png) no-repeat 0 0;
-        width: 161px;
-    }
-
-    .source_labels.Sage, .source_labels_on.sage {
-        background: url(images/sage_off.png) no-repeat 0 0;
-        width: 156px;
+        background: url(images/accounts/freeagent.png) no-repeat 0 0;
+        background-size: contain;
+        background-position: left center;
     }
 
     .source_labels_on.Sage, .source_labels_on.sage {
-        background: url(images/sage_on.png) no-repeat 0 0;
-        width: 156px;
-    }
-
-    .source_labels.paypal {
-        background-position: -751px -2px;
-        width: 111px;
+        background: url(images/accounts/sage.png) no-repeat 0 0;
+        background-size: contain;
+        background-position: left center;
     }
 
     .source_labels_on.paypal {
-        background-position: -751px -42px;
-        width: 111px;
-    }
-
-    .source_labels.PayPoint, .source_labels.paypoint {
-        background-position: -967px -1px;
-        width: 163px;
+        background: url(images/accounts/paypal.png) no-repeat 0 0;
+        background-size: contain;
+        background-position: left center;
     }
 
     .source_labels_on.PayPoint, .source_labels_on.paypoint {
-        background-position: -967px -41px;
-        width: 163px;
-    }
-
-    .source_labels.google_shopping {
-        background-position: -417px 0;
-        width: 85px;
+        background: url(images/accounts/paypoint.png) no-repeat 0 0;
+        background-size: contain;
+        background-position: left center;
     }
 
     .source_labels_on.google_shopping {
-        background-position: -417px -40px;
-        width: 85px;
-    }
-
-    .source_labels.etsy {
-        background-position: -502px 0;
-        width: 55px;
+        background: url(images/accounts/google.png) no-repeat 0 0;
+        background-size: contain;
+        background-position: left center;
     }
 
     .source_labels_on.etsy {
-        background-position: -502px -40px;
-        width: 55px;
+        background: url(images/accounts/etsy.png) no-repeat 0 0;
+        background-size: contain;
+        background-position: left center;
     }
+
+    .source_labels_on.Volusion, .source_labels_on.volusion {
+        background: url(images/accounts/volusion.png) no-repeat 0 0;
+        background-size: contain;
+        background-position: left center;
+    }
+
+    .source_labels_on.Play, .source_labels_on.play {
+        background: url(images/accounts/play.png) no-repeat 0 0;
+        background-size: contain;
+        background-position: left center;
+    }
+
+    .source_labels_on.KashFlow, .source_labels_on.kashflow {
+        background: url(images/accounts/kashflow.png) no-repeat 0 0;
+        background-size: contain;
+        background-position: left center;
+    }
+
+    .source_labels_on.Shopify, .source_labels_on.shopify {
+        background: url(images/accounts/shopify.png) no-repeat 0 0;
+        background-size: contain;
+        background-position: left center;
+    }
+
+    .source_labels_on.Magento, .source_labels_on.magento {
+        background: url(images/accounts/magento.png) no-repeat 0 0;
+        background-size: contain;
+        background-position: left center;
+    }
+
+    .source_labels_on.Prestashop, .source_labels_on.prestashop {
+        background: url(images/accounts/prestashop.png) no-repeat 0 0;
+        background-size: contain;
+        background-position: left center;
+    }
+
+    .source_labels_on.Bigcommerece, .source_labels_on.Bigcommerce {
+        background: url(images/accounts/bigcommerce.png) no-repeat 0 0;
+        background-size: contain;
+        background-position: left center;
+    }
+
+    .source_labels_on.Xero, .source_labels_on.xero {
+        background: url(images/accounts/xero.png) no-repeat 0 0;
+        background-size: contain;
+        background-position: left center;
+    }
+
 
 .BankContainer {
     width: 580px;
 }
 
-.FormRadioCtrl input, 
-.BankContainer input {
-	margin: -5px 0 0 15px;
-}
+    .FormRadioCtrl input,
+    .BankContainer input {
+        margin: -5px 0 0 15px;
+    }
 
 .FormRadioCtrl label {
-	display: inline-block;
-	font-weight: normal;
-	margin-left: 5px;
+    display: inline-block;
+    font-weight: normal;
+    margin-left: 5px;
 }
 
 .FormRadioCtrl > span {
     width: 410px;
     display: inline-block;
 }
-.FormRadioCtrl > span.error {
-    width: 408px;
-    display: inline-block;
-}
+
+    .FormRadioCtrl > span.error {
+        width: 408px;
+        display: inline-block;
+    }
 
 .SubBank {
     width: 400px;
@@ -494,9 +499,9 @@ select.SubBank {
     overflow: hidden;
 }
 
-select.SubBank::-webkit-scrollbar { 
-    display: none; 
-}
+    select.SubBank::-webkit-scrollbar {
+        display: none;
+    }
 
 .BankContainer a.radio-fx {
     /*padding: 15px;*/
@@ -504,13 +509,13 @@ select.SubBank::-webkit-scrollbar {
     display: inline-block;
 }
 
-.BankContainer label, 
+.BankContainer label,
 .SubBank label {
-	display: inline;
-	font-weight: normal;
-	margin-left: 5px;
+    display: inline;
+    font-weight: normal;
+    margin-left: 5px;
 }
- 
+
 .BankContainer span {
     display: inline-block;
     background: url(images/yodlee/banks_sprite.png) no-repeat 0 0;
@@ -523,6 +528,7 @@ select.SubBank::-webkit-scrollbar {
         background-position: -406px -1px;
         width: 153px;
     }
+
     .BankContainer span.HSBC.on {
         background-position: -406px -41px;
         width: 153px;
@@ -532,6 +538,7 @@ select.SubBank::-webkit-scrollbar {
         background-position: -746px -1px;
         width: 177px;
     }
+
     .BankContainer span.Barclays.on {
         background-position: -746px -41px;
         width: 177px;
@@ -541,6 +548,7 @@ select.SubBank::-webkit-scrollbar {
         background-position: -193px -1px;
         width: 210px;
     }
+
     .BankContainer span.Lloyds.on {
         background-position: -193px -41px;
         width: 210px;
@@ -550,6 +558,7 @@ select.SubBank::-webkit-scrollbar {
         background-position: -653px -1px;
         width: 93px;
     }
+
     .BankContainer span.RBS.on {
         background-position: -653px -41px;
         width: 93px;
@@ -559,6 +568,7 @@ select.SubBank::-webkit-scrollbar {
         background-position: 0 -1px;
         width: 193px;
     }
+
     .BankContainer span.Santander.on {
         background-position: 0 -41px;
         width: 193px;
@@ -568,6 +578,7 @@ select.SubBank::-webkit-scrollbar {
         background-position: -928px -1px;
         width: 165px;
     }
+
     .BankContainer span.NatWest.on {
         background-position: -928px -41px;
         width: 165px;
@@ -577,6 +588,7 @@ select.SubBank::-webkit-scrollbar {
         background: url(images/yodlee/dag_off.png) no-repeat 0 0;
         width: 80px;
     }
+
     .BankContainer span.DAG.on {
         background: url(images/yodlee/dag_on.png) no-repeat 0 0;
         width: 80px;
@@ -586,6 +598,7 @@ select.SubBank::-webkit-scrollbar {
         background-position: -562px -1px;
         width: 88px;
     }
+
     .BankContainer span.Halifax.on {
         background-position: -562px -41px;
         width: 88px;
@@ -595,6 +608,7 @@ select.SubBank::-webkit-scrollbar {
         background-position: -1098px -1px;
         width: 180px;
     }
+
     .BankContainer span.Nationwide.on {
         background-position: -1098px -41px;
         width: 180px;
@@ -619,9 +633,9 @@ select.SubBank::-webkit-scrollbar {
             width: 10px;
         }
 
-	.marketing_container {
-		text-align: center;
-	}
+.marketing_container {
+    text-align: center;
+}
 
     .marketing_container .marketing_message {
         padding: 5px;
@@ -630,36 +644,38 @@ select.SubBank::-webkit-scrollbar {
         font-size: 16px;
         color: #71a61f;
     }
+
         .marketing_container .marketing_message ul {
             margin-top: 10px;
             margin-left: 0;
             margin-right: 0;
         }
-	.marketing_container .marketing_message li {
-		font-size: 16px !important;
-	    font-weight: normal;
-		text-align: left !important;
-		color: #333333;
-		list-style-type: none;
-		background: url(../img/ok16.png) no-repeat top left;
-		padding-left: 20px;
-	}
+
+        .marketing_container .marketing_message li {
+            font-size: 16px !important;
+            font-weight: normal;
+            text-align: left !important;
+            color: #333333;
+            list-style-type: none;
+            background: url(../img/ok16.png) no-repeat top left;
+            padding-left: 20px;
+        }
 
     .marketing_container .large {
         font-size: 40px;
     }
 
-	ul.application_steps {
-		margin: 0 0 10px 0;
-		overflow: hidden;
-		list-style: none;
-	}
+ul.application_steps {
+    margin: 0 0 10px 0;
+    overflow: hidden;
+    list-style: none;
+}
 
     ul.application_steps li {
         float: left;
         background: url(images/arrow.png) 15px 13px no-repeat;
         padding: 10px 35px 10px 40px;
-		font-style: italic;
+        font-style: italic;
         font-size: 16px;
         margin: 0 5px 0 0;
         position: relative;
@@ -668,7 +684,7 @@ select.SubBank::-webkit-scrollbar {
         ul.application_steps li.current {
             background: url(images/current_arrow.png) no-repeat 15px 15px;
             color: #E8891A;
-			font-weight: bold;
+            font-weight: bold;
         }
 
         ul.application_steps li.complete {
@@ -678,8 +694,8 @@ select.SubBank::-webkit-scrollbar {
 
         ul.application_steps li .step_label {
             display: block;
-	        margin-left: 5px;
-			line-height: 17px;
+            margin-left: 5px;
+            line-height: 17px;
         }
 
         ul.application_steps li .progress_tip {
@@ -996,16 +1012,13 @@ input[type="color"],
 }
 
 .ez_bar {
-    background:  #7bcc24;
-
-
-    background-image: -webkit-gradient(linear,left top,right top,color-stop(0.30,  #7bcc24),color-stop(1,  #7bb224));
-    background-image: -o-linear-gradient(right,  #7bcc24 30%,  #7bb224 100%);
-    background-image: -moz-linear-gradient(right,  #7bcc24 30%,  #7bb224 100%);
-    background-image: -webkit-linear-gradient(right,  #7bcc24 30%,  #7bb224 100%);
-    background-image: -ms-linear-gradient(right,  #7bcc24 30%,  #7bb224 100%);
-    background-image: linear-gradient(to right,  #7bcc24 30%,  #7bb224 100%);
-
+    background: #7bcc24;
+    background-image: -webkit-gradient(linear,left top,right top,color-stop(0.30, #7bcc24),color-stop(1, #7bb224));
+    background-image: -o-linear-gradient(right, #7bcc24 30%, #7bb224 100%);
+    background-image: -moz-linear-gradient(right, #7bcc24 30%, #7bb224 100%);
+    background-image: -webkit-linear-gradient(right, #7bcc24 30%, #7bb224 100%);
+    background-image: -ms-linear-gradient(right, #7bcc24 30%, #7bb224 100%);
+    background-image: linear-gradient(to right, #7bcc24 30%, #7bb224 100%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=' #7bf124', endColorstr='#7bb224',GradientType=0 );
     font-size: 16px;
     color: #000;
@@ -1024,16 +1037,45 @@ input[type="color"],
     text-shadow: 0 1px 1px #fff;
 }
 
-.bar_step10 { width: 10%; }
-.bar_step20 { width: 20%; }
-.bar_step30 { width: 30%; }
-.bar_step40 { width: 40%; }
-.bar_step50 { width: 50%; }
-.bar_step60 { width: 60%; }
-.bar_step70 { width: 70%; }
-.bar_step80 { width: 80%; }
-.bar_step90 { width: 90%; }
-.bar_step100 { width: 100%; }
+.bar_step10 {
+    width: 10%;
+}
+
+.bar_step20 {
+    width: 20%;
+}
+
+.bar_step30 {
+    width: 30%;
+}
+
+.bar_step40 {
+    width: 40%;
+}
+
+.bar_step50 {
+    width: 50%;
+}
+
+.bar_step60 {
+    width: 60%;
+}
+
+.bar_step70 {
+    width: 70%;
+}
+
+.bar_step80 {
+    width: 80%;
+}
+
+.bar_step90 {
+    width: 90%;
+}
+
+.bar_step100 {
+    width: 100%;
+}
 
 .bar_content {
     padding: 2px 5px 0 5px;
@@ -1054,6 +1096,7 @@ input[type="color"],
     width: 759px;
     height: 543px;
 }
+
 .help_EKM {
     background: url(images/help/help_ekm.jpg) no-repeat center center;
 }
@@ -1098,47 +1141,57 @@ input[type="color"],
 
 .accounts-list > div {
     margin-left: 0!important;
-	margin-top: 20px;
+    margin-top: 20px;
 }
 
-.eBayPaypalRule, .AddMoreRule { font-weight: bold; color: red; margin-top: 0.6em; }
+.eBayPaypalRule, .AddMoreRule {
+    font-weight: bold;
+    color: red;
+    margin-top: 0.6em;
+}
 
 .cunt-button .eBayPaypalRule,
-.cunt-button .AddMoreRule { float: left; }
+.cunt-button .AddMoreRule {
+    float: left;
+}
 
-div.full_width { width: 581px; }
+div.full_width {
+    width: 581px;
+}
 
-.amazon-instructions-title { position: relative; }
+.amazon-instructions-title {
+    position: relative;
+}
 
 a.amazonscreenshot {
-	height: 40px;
-	top: 0;
-	left: 350px;
-	position: absolute;
+    height: 40px;
+    top: 0;
+    left: 350px;
+    position: absolute;
 }
 
-a.amazonscreenshot:hover {
-	-moz-box-shadow: none;
-	-webkit-box-shadow: none;
-	box-shadow: none;
-	position: absolute;
-	top: 5px;
-	left: 355px;
-}
+    a.amazonscreenshot:hover {
+        -moz-box-shadow: none;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+        position: absolute;
+        top: 5px;
+        left: 355px;
+    }
 
 .amazon_view_tutorial_label {
-	position: absolute;
-	top: 40px;
-	left: 358px;
-	line-height: 25px;
+    position: absolute;
+    top: 40px;
+    left: 358px;
+    line-height: 25px;
 }
 
-.blue-link, a.blue-link, a.blue-link:visited, a.blue-link:active,  a.blue-link:hover {
+.blue-link, a.blue-link, a.blue-link:visited, a.blue-link:active, a.blue-link:hover {
     color: #0B73B4;
     text-decoration: underline;
 }
 
-.blue-link-force, a.blue-link-force, a.blue-link-force:visited, a.blue-link-force:active,  a.blue-link-force:hover {
+.blue-link-force, a.blue-link-force, a.blue-link-force:visited, a.blue-link-force:active, a.blue-link-force:hover {
     color: #0B73B4!important;
     text-decoration: underline;
     font-weight: bold!important;
@@ -1149,9 +1202,13 @@ a.amazonscreenshot:hover {
     border: 1px solid red;
 }
 
-DIV#upload-files-form { display: none; }
+DIV#upload-files-form {
+    display: none;
+}
 
-.upload-files-dialog .ui-dialog-titlebar-close { display: none; }
+.upload-files-dialog .ui-dialog-titlebar-close {
+    display: none;
+}
 
 
 .rc-button {
@@ -1161,7 +1218,7 @@ DIV#upload-files-form { display: none; }
     color: #444;
     font-size: 16px;
     font-weight: normal;
-    height: 100%  !important;
+    height: 100% !important;
     padding: 0 8px;
     line-height: 36px;
     -moz-border-radius: 3px;
@@ -1184,14 +1241,249 @@ DIV#upload-files-form { display: none; }
     text-shadow: none !important;
 }
 
-.rc-button:hover {
-    border: 1px solid #c6c6c6;
-    color: #333;
-    text-decoration: none;
-    -o-transition: all 0.0s;
-    -moz-transition: all 0.0s;
-    -webkit-transition: all 0.0s;
-    transition: all 0.0s;
-    text-shadow: none !important;
+    .rc-button:hover {
+        border: 1px solid #c6c6c6;
+        color: #333;
+        text-decoration: none;
+        -o-transition: all 0.0s;
+        -moz-transition: all 0.0s;
+        -webkit-transition: all 0.0s;
+        transition: all 0.0s;
+        text-shadow: none !important;
+    }
+
+td.account-logo {
+    width: 187px;
 }
 
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+
+    html, body {
+        padding: 0;
+        margin: 0;
+    }
+
+    #pre_header {
+        margin: 0;
+        padding: 0;
+    }
+
+    div.full_width {
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    .inner {
+        width: 100%;
+        padding: 0 2px;
+        margin: 0 auto;
+    }
+
+    .inner_nopadding {
+        width: 100%;
+        padding: 0;
+        margin: 0 auto;
+    }
+
+    aside#sidebar {
+        clear: both;
+    }
+    /*ul.eu_icon{position:absolute  ; top:0  ; left:0  ;}*/
+    div.wizard-director-text {
+        width: 100%;
+        font-size: 11pt;
+        color: #585858;
+    }
+
+    #content {
+        float: left;
+        width: 100%;
+        line-height: 1.8em;
+    }
+
+    .ez_progress_bar {
+        width: 100%;
+        height: 30px;
+        padding: 0;
+        background: #f7f7f7;
+        background: -moz-linear-gradient(top,#f7f7f7 0%,#e5e5e5 90%);
+    }
+
+    .notification_green, .notification_yellow, .notification_orange, .notification_red, .notification_pink, .notification_darkblue, .notification_lightblue, .notification_white {
+        min-height: 10px;
+        -moz-border-radius: 5px;
+        -webkit-border-radius: 5px;
+        -moz-box-shadow: inset 0 0 1px #fff,0 0 10px rgba(0,0,0,.2);
+        -webkit-box-shadow: inset 0 0 1px #fff,0 0 10px rgba(0,0,0,.2);
+        box-shadow: inset 0 0 1px #fff,0 0 10px rgba(0,0,0,.2);
+        position: relative;
+        padding-left: 15px;
+        padding-right: 14px;
+        padding-top: 5px;
+        padding-bottom: 10px;
+        font-size: 11px;
+        text-align: justify;
+        font-family: Arial;
+        line-height: 18px;
+        margin: 10px 0 10px 0;
+        text-shadow: 0 1px 0 rgba(255,255,255,.24);
+        width: 100%;
+    }
+
+        .notification_green .specular, .notification_yellow .specular, .notification_orange .specular, .notification_red .specular, .notification_pink .specular, .notification_darkblue .specular, .notification_lightblue .specular, .notification_white .specular {
+            position: absolute;
+            width: 200%;
+            height: 90%;
+            background: #fff;
+            opacity: .15;
+            filter: alpha(opacity=15);
+            top: -30%;
+            left: -10%;
+            -moz-transform: rotate(20deg);
+            -webkit-transform: rotate(20deg);
+            -o-transform: rotate(50deg);
+        }
+
+    input.form_field, textarea.form_field {
+        width: 92%;
+    }
+
+    div.form_read_and_accept {
+        width: 100%;
+    }
+
+    select.form_field {
+        width: 92%px;
+        height: 30px;
+        padding: 0;
+    }
+
+    .FormRadioCtrl > span {
+        width: 100%;
+        display: inline-block;
+    }
+
+        .FormRadioCtrl > span.error {
+            width: 100%;
+            display: inline-block;
+        }
+
+    .SubBank {
+        width: 100%;
+    }
+
+    div.form_buttons_container {
+        position: relative;
+        height: 30px;
+    }
+
+        div.form_buttons_container input.confirm {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        div.form_buttons_container input.continue, div.form_buttons_container a.continue {
+            position: relative;
+            clear: both;
+        }
+
+        div.form_buttons_container input.back, div.form_buttons_container a.back {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+    ul.application_steps {
+        margin: 0 0 0 0;
+        overflow: hidden;
+        list-style: none;
+    }
+
+        ul.application_steps li {
+            background: url(images/arrow-m.png) no-repeat;
+            background-position: left center;
+            padding: 10px 0 10px 8px;
+            font-weight: bold;
+            font-size: 12px;
+            width: 21%;
+            margin: 0 0;
+            position: relative;
+        }
+
+            ul.application_steps li.current {
+                background: url(images/current_arrow-m.png) no-repeat;
+                background-position: left center;
+                color: #e98511;
+            }
+
+            ul.application_steps li.complete {
+                background: url(images/tick-m.png) no-repeat;
+                background-position: left center;
+                color: #497307;
+            }
+
+            ul.application_steps li .step_label {
+                display: block;
+                font-weight: normal;
+                margin-left: 10px;
+            }
+
+            ul.application_steps li .progress_tip {
+                background: url(images/progress_tip.png) no-repeat 0 0;
+                width: 115px;
+                height: 27px;
+                padding: 9px 0 0 15px;
+                font-size: 12px;
+                color: #fff;
+                text-shadow: 0 1px 1px #c60;
+                position: absolute;
+                bottom: -33px;
+                left: 0;
+            }
+
+    input[disabled], select[disabled], textarea[disabled], input[readonly], select[readonly], textarea[readonly] {
+        background-color: #eee;
+        border: 1px #ccc solid;
+        cursor: default;
+    }
+
+    .attardi-input input, .attardi-input textarea, .attardi-input select {
+        padding: 4px;
+    }
+
+    .modal {
+        width: 100%;
+    }
+
+    #sidebar {
+        width: 100%;
+    }
+
+    .clear {
+        display: none;
+        visibility: hidden;
+    }
+
+    td.account_logo {
+        width: 90px;
+        overflow: hidden;
+        padding-right: 10px;
+    }
+
+    .pages, .stores-view {
+        width: 100%;
+    }
+
+    .bar_step30 {
+        width: 40%;
+    }
+
+    .btn {
+        padding: 8px 6px;
+    }
+
+    .source {
+        font-size: 11px;
+    }
+}

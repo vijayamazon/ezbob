@@ -30,7 +30,8 @@
 		public void test_get_zoopla_estimate()
 		{
 			var z = new ZooplaEstimate();
-			var estimate = z.GetEstimate("16 Upperkirkgate, Aberdeen AB10 1BA");
+			//var estimate = z.GetEstimate("16 Upperkirkgate, Aberdeen AB10 1BA");
+			var estimate = z.GetEstimate("Flat B 2 Upperkirkgate Aberdeen AB10 1BA");
 			Assert.NotNull(estimate);
 		}
 

@@ -449,7 +449,27 @@
     <Content Include="Content\css\common.css" />
     <Content Include="Content\css\customer.css" />
     <Content Include="Content\css\images\300x250.jpg" />
+    <Content Include="Content\css\images\accounts\amazon.png" />
+    <Content Include="Content\css\images\accounts\bank.png" />
+    <Content Include="Content\css\images\accounts\bigcommerce.png" />
+    <Content Include="Content\css\images\accounts\ebay.png" />
+    <Content Include="Content\css\images\accounts\ekm.png" />
+    <Content Include="Content\css\images\accounts\etsy.png" />
+    <Content Include="Content\css\images\accounts\freeagent.png" />
+    <Content Include="Content\css\images\accounts\google.png" />
+    <Content Include="Content\css\images\accounts\hmrc.png" />
+    <Content Include="Content\css\images\accounts\kashflow.png" />
+    <Content Include="Content\css\images\accounts\magento.png" />
+    <Content Include="Content\css\images\accounts\paypal.png" />
+    <Content Include="Content\css\images\accounts\paypoint.png" />
+    <Content Include="Content\css\images\accounts\play.png" />
+    <Content Include="Content\css\images\accounts\prestashop.png" />
+    <Content Include="Content\css\images\accounts\sage.png" />
+    <Content Include="Content\css\images\accounts\shopify.png" />
+    <Content Include="Content\css\images\accounts\volusion.png" />
+    <Content Include="Content\css\images\accounts\xero.png" />
     <Content Include="Content\css\images\apply_now.png" />
+    <Content Include="Content\css\images\arrow-m.png" />
     <Content Include="Content\css\images\arrow.png" />
     <Content Include="Content\css\images\bank_details.png" />
     <Content Include="Content\css\images\beta_ribbon.png" />
@@ -463,6 +483,7 @@
     <Content Include="Content\css\images\companies\tamebay.png" />
     <Content Include="Content\css\images\companies\techcrunch.png" />
     <Content Include="Content\css\images\companies\yahoo.png" />
+    <Content Include="Content\css\images\current_arrow-m.png" />
     <Content Include="Content\css\images\current_arrow.png" />
     <Content Include="Content\css\images\dataTables\back_disabled.png" />
     <Content Include="Content\css\images\dataTables\back_enabled.png" />
@@ -527,6 +548,7 @@
     <Content Include="Content\css\images\sprites\social_sprite_round.png" />
     <Content Include="Content\css\images\star.png" />
     <Content Include="Content\css\images\sticky_chat_bg.png" />
+    <Content Include="Content\css\images\tick-m.png" />
     <Content Include="Content\css\images\tick.png" />
     <Content Include="Content\css\images\verisign_seal.gif" />
     <Content Include="Content\css\images\volusion-logo.png" />
@@ -543,7 +565,6 @@
     <Content Include="Content\css\loanDetails.css">
       <DependentUpon>loanDetails.less</DependentUpon>
     </Content>
-    <Content Include="Content\css\mobile\ezbob-app-mobile.css" />
     <Content Include="Content\css\Permission.css" />
     <Content Include="Content\css\popover.css" />
     <Content Include="Content\css\shops.css" />
@@ -1418,7 +1439,9 @@
     <Content Include="Views\Shared\_LivePerson.cshtml" />
     <Content Include="Views\Shared\security_template.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Content\css\mobile\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="App_Code\EzForm.cshtml" />
   </ItemGroup>
