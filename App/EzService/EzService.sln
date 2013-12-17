@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzServiceHost", "EzServiceHost\EzServiceHost.csproj", "{F29673B2-4396-4AA2-9E37-0486A67875BD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzService", "EzService\EzService.csproj", "{15B3E0D2-6217-493A-A690-158C497F5318}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestEzClient", "TestEzClient\TestEzClient.csproj", "{94F7920D-8E20-4508-838C-84C0D41FD6A0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F29673B2-4396-4AA2-9E37-0486A67875BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F29673B2-4396-4AA2-9E37-0486A67875BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F29673B2-4396-4AA2-9E37-0486A67875BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F29673B2-4396-4AA2-9E37-0486A67875BD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15B3E0D2-6217-493A-A690-158C497F5318}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15B3E0D2-6217-493A-A690-158C497F5318}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15B3E0D2-6217-493A-A690-158C497F5318}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15B3E0D2-6217-493A-A690-158C497F5318}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94F7920D-8E20-4508-838C-84C0D41FD6A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94F7920D-8E20-4508-838C-84C0D41FD6A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94F7920D-8E20-4508-838C-84C0D41FD6A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94F7920D-8E20-4508-838C-84C0D41FD6A0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
