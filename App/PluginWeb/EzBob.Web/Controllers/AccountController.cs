@@ -411,6 +411,14 @@ namespace EzBob.Web.Controllers
 					customer.ReferenceSource = sourceref.Value;
 				}
 
+				var googleCookie = Request.Cookies["__utmz"];
+				if (googleCookie != null)
+				{
+					var cookie = new HttpCookie("__utmz", "") { Expires = DateTime.Now.AddMonths(-1), HttpOnly = true, Secure = true };
+					Response.Cookies.Add(cookie);
+					customer.GoogleCookie = googleCookie.Value;
+				}
+
 				var customerInviteFriend = new CustomerInviteFriend(customer);
 				var inviteFriend = Request.Cookies["invite"];
 				if (inviteFriend != null)

@@ -19,6 +19,7 @@ using log4net;
 
 namespace EZBob.DatabaseLib.Model.Database {
 	using System.ComponentModel;
+	using System.Web;
 
 	#region relevant to Customer class
 
@@ -855,6 +856,8 @@ namespace EZBob.DatabaseLib.Model.Database {
 		} // IsWasLateName
 
 		public virtual bool CciMark { get; set; }
+
+		public virtual string GoogleCookie { get; set; }
 	} // class Customer
 
 	#endregion class Customer

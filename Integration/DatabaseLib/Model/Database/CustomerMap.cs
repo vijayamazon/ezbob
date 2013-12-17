@@ -364,6 +364,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 			*/
 
 			Map(x => x.CciMark);
+			Map(x => x.GoogleCookie).Length(300);
 		} // constructor
 	} // class CustomerMap
 } // namespace EZBob.DatabaseLib.Model.Database
