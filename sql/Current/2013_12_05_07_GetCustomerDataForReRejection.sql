@@ -32,7 +32,7 @@ BEGIN
 			cr.IdCustomer = @CustomerId AND 
 			cr.IdUnderwriter IS NOT NULL AND 
 			cr.UnderwriterDecision = 'Rejected' AND 
-			@ManualDecisionDate >= (SELECT cast(max(created) AS DATE) FROM MP_CustomerMarketPlace WHERE CustomerId=@CustomerId) AND 
+			@ManualDecisionDate >= (SELECT cast(max(created) AS DATE) FROM MP_CustomerMarketPlace WHERE CustomerId = @CustomerId) AND 
 			DATEADD(DD, 30, @ManualDecisionDate) >= GETUTCDATE() AND l.Id IS NULL AND 
 			@ManualDecisionDate = (SELECT cast(max(cr.UnderwriterDecisionDate) AS DATE) FROM CashRequests cr WHERE cr.IdCustomer = @CustomerId)
 		) AS NewCustomer_ReReject,
@@ -48,7 +48,7 @@ BEGIN
 		cr.IdCustomer = @CustomerId AND 
 		cr.IdUnderwriter IS NOT NULL AND 
 		cr.UnderwriterDecision = 'Rejected' AND 
-		@ManualDecisionDate >= (SELECT cast(max(created)AS DATE) FROM MP_CustomerMarketPlace WHERE CustomerId=@CustomerId) AND 
+		@ManualDecisionDate >= (SELECT cast(max(created) AS DATE) FROM MP_CustomerMarketPlace WHERE CustomerId = @CustomerId) AND 
 		DATEADD(DD, 30, @ManualDecisionDate) >= GETUTCDATE() AND 
 		l.Id IS NOT NULL AND 
 		@ManualDecisionDate = (SELECT cast(max(cr.UnderwriterDecisionDate) AS DATE) FROM CashRequests cr WHERE cr.IdCustomer = @CustomerId) 

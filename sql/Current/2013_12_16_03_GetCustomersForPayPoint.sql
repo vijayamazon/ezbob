@@ -10,20 +10,15 @@ CREATE PROCEDURE [dbo].[GetCustomersForPayPoint]
 AS
 BEGIN
 	SELECT 
-		ls.id, 
-		c.PayPointTransactionId, 
-		ls.AmountDue, 
-		ls.LoanId, 
-		ls.RepaymentAmount, 
-		c.FirstName, 
+		ls.id,
+		ls.LoanId,
+		c.FirstName,
+		c.Fullname,
+		c.Id AS CustomerId,
 		c.Name AS Email, 
 		convert(date, ls.Date) AS Date, 
 		lo.ReductionFee, 
-		ls.Delinquency, 
-		ls.Interest, 
-		ls.LateCharges, 
-		lo.LatePaymentNotification, 
-		lo.StopSendingEmails, 
+		lo.LatePaymentNotification,
 		l.RefNum,
 		CAST(
 			CASE 
