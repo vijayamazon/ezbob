@@ -89,6 +89,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Service References\LandRegistryEnquiryByProprtyDescriptionPollNS\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Service References\LandRegistryRESNS\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -121,17 +126,30 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="Service References\LandRegistryEnquiryByPropertyDescriptionNS\EnquiryByPropertyDescriptionV2_0WebService.wsdl" />
+    <None Include="Service References\LandRegistryEnquiryByPropertyDescriptionNS\EnquiryByPropertyDescriptionV2_0WebService1.wsdl" />
     <None Include="Service References\LandRegistryEnquiryByPropertyDescriptionNS\landRegistry1.LandRegistryEnquiryByPropertyDescriptionNS.ResponseSearchByPropertyDescriptionV2_0Type.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\LandRegistryEnquiryByPropertyDescriptionNS\landRegistry1.LandRegistryEnquiryByPropertyDescriptionNS.searchPropertiesResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Service References\LandRegistryEnquiryByPropertyDescriptionNS\RequestSearchByPropertyDescriptionV2_0.xsd">
+    <None Include="Service References\LandRegistryEnquiryByPropertyDescriptionNS\RequestSearchByPropertyDescriptionV2_01.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\LandRegistryEnquiryByPropertyDescriptionNS\ResponseSearchByPropertyDescriptionV2_0.xsd">
+    <None Include="Service References\LandRegistryEnquiryByPropertyDescriptionNS\ResponseSearchByPropertyDescriptionV2_01.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\LandRegistryEnquiryByProprtyDescriptionPollNS\EnquiryByPropertyDescriptionV2_0PollWebService.wsdl" />
+    <None Include="Service References\LandRegistryEnquiryByProprtyDescriptionPollNS\landRegistry1.LandRegistryEnquiryByProprtyDescriptionPollNS.getResponseResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\LandRegistryEnquiryByProprtyDescriptionPollNS\landRegistry1.LandRegistryEnquiryByProprtyDescriptionPollNS.ResponseSearchByPropertyDescriptionV2_0Type.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\LandRegistryEnquiryByProprtyDescriptionPollNS\PollRequest.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\LandRegistryEnquiryByProprtyDescriptionPollNS\ResponseSearchByPropertyDescriptionV2_0.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\LandRegistryRESNS\landRegistry1.LandRegistryRESNS.performOCWithSummaryResponse.datasource">
@@ -169,6 +187,7 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\LandRegistryEnquiryByPropertyDescriptionNS\" />
+    <WCFMetadataStorage Include="Service References\LandRegistryEnquiryByProprtyDescriptionPollNS\" />
     <WCFMetadataStorage Include="Service References\LandRegistryRESNS\" />
     <WCFMetadataStorage Include="Service References\LandRegistryServiceNS\" />
   </ItemGroup>
@@ -221,6 +240,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Service References\LandRegistryRESNS\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\LandRegistryEnquiryByProprtyDescriptionPollNS\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\LandRegistryEnquiryByProprtyDescriptionPollNS\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\LandRegistryEnquiryByProprtyDescriptionPollNS\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>

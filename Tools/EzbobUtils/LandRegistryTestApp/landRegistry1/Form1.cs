@@ -30,6 +30,7 @@ namespace landRegistry1
 			{
 				client.ChannelFactory.Endpoint.Behaviors.Add(new HMLRBGMessageEndpointBehavior("BGUser001", "LandReg001"));
 				// create a request object
+				
 				var request = new landRegistry1.LandRegistryServiceNS.RequestDaylistEnquiryV2_0Type
 					{
 						ID = new LandRegistryServiceNS.Q1IdentifierType { MessageID = new LandRegistryServiceNS.Q1TextType { Value = "testsuccessmanyresults" } },
@@ -78,6 +79,7 @@ namespace landRegistry1
 			{
 				client.ChannelFactory.Endpoint.Behaviors.Add(new HMLRBGMessageEndpointBehavior("BGUser001", "landreg001"));
 				// create a request object
+				
 				var request = new LandRegistryEnquiryByPropertyDescriptionNS.RequestSearchByPropertyDescriptionV2_0Type
 				{
 					ID = new LandRegistryEnquiryByPropertyDescriptionNS.Q1IdentifierType { MessageID = new LandRegistryEnquiryByPropertyDescriptionNS.Q1TextType { Value = "012345" } },
@@ -125,28 +127,6 @@ namespace landRegistry1
 				catch (Exception ex)
 				{
 					File.WriteAllText("resex1b.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
-				}
-
-				request.ID.MessageID.Value = "pollST500681";
-				request.Product = new LandRegistryEnquiryByPropertyDescriptionNS.Q1ProductType
-				{
-					ExternalReference = new LandRegistryEnquiryByPropertyDescriptionNS.Q1ExternalReferenceType(),
-					CustomerReference = new LandRegistryEnquiryByPropertyDescriptionNS.Q1CustomerReferenceType(),
-					SubjectProperty = new LandRegistryEnquiryByPropertyDescriptionNS.Q1SubjectPropertyType
-					{
-						Address = new LandRegistryEnquiryByPropertyDescriptionNS.Q1AddressType()
-					}
-				};
-
-				SerializeObject(request, "req1c.xml");
-				try
-				{
-					response = client.searchProperties(request);
-					SerializeObject(response, "res1c.xml");
-				}
-				catch (Exception ex)
-				{
-					File.WriteAllText("resex1c.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
 				}
 
 				request.ID.MessageID.Value = "012345";
@@ -205,28 +185,6 @@ namespace landRegistry1
 					File.WriteAllText("resex2b.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
 				}
 
-				request.ID.MessageID.Value = "pollND66318";
-				request.Product = new LandRegistryEnquiryByPropertyDescriptionNS.Q1ProductType
-				{
-					ExternalReference = new LandRegistryEnquiryByPropertyDescriptionNS.Q1ExternalReferenceType(),
-					CustomerReference = new LandRegistryEnquiryByPropertyDescriptionNS.Q1CustomerReferenceType(),
-					SubjectProperty = new LandRegistryEnquiryByPropertyDescriptionNS.Q1SubjectPropertyType
-					{
-						Address = new LandRegistryEnquiryByPropertyDescriptionNS.Q1AddressType()
-					}
-				};
-
-				SerializeObject(request, "req2c.xml");
-				try
-				{
-					response = client.searchProperties(request);
-					SerializeObject(response, "res2c.xml");
-				}
-				catch (Exception ex)
-				{
-					File.WriteAllText("resex2c.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
-				}
-
 				request.ID.MessageID.Value = "012345";
 				request.Product = new LandRegistryEnquiryByPropertyDescriptionNS.Q1ProductType
 				{
@@ -255,6 +213,47 @@ namespace landRegistry1
 					File.WriteAllText("resex1a.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
 				}
 			}
+
+			using (var client = new LandRegistryEnquiryByProprtyDescriptionPollNS.PropertyDescriptionEnquiryV2_0PollServiceClient())
+			{
+				client.ChannelFactory.Endpoint.Behaviors.Add(new HMLRBGMessageEndpointBehavior("BGUser001", "landreg001"));
+				// create a request object
+				var pollRequest = new LandRegistryEnquiryByProprtyDescriptionPollNS.PollRequestType
+					{
+						ID = new LandRegistryEnquiryByProprtyDescriptionPollNS.Q1IdentifierType
+							{
+								MessageID = new LandRegistryEnquiryByProprtyDescriptionPollNS.MessageIDTextType
+									{
+										Value = "pollST500681"
+									}
+							}
+					};
+				SerializeObject(pollRequest, "req1c.xml");
+				LandRegistryEnquiryByProprtyDescriptionPollNS.ResponseSearchByPropertyDescriptionV2_0Type pollResponse;
+				try
+				{
+					pollResponse = client.getResponse(pollRequest);
+					SerializeObject(pollResponse, "res1c.xml");
+				}
+				catch (Exception ex)
+				{
+					File.WriteAllText("resex1c.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
+				}
+
+				pollRequest.ID.MessageID.Value = "pollND66318";
+				
+				SerializeObject(pollRequest, "req2c.xml");
+				try
+				{
+					pollResponse = client.getResponse(pollRequest);
+					SerializeObject(pollResponse, "res2c.xml");
+				}
+				catch (Exception ex)
+				{
+					File.WriteAllText("resex2c.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
+				}
+			}
+
 			throw new Exception("Application Processed");
 		}
 
@@ -288,10 +287,10 @@ namespace landRegistry1
 					}
 				};
 
-				SerializeObject(request, "req3.xml");
+				SerializeObject(request, "req33.xml");
 
 				LandRegistryRESNS.ResponseOCWithSummaryV2_1Type response = client.performOCWithSummary(request);
-				SerializeObject(response, "res3.xml");
+				SerializeObject(response, "res33.xml");
 				File.WriteAllBytes("file.zip", response.GatewayResponse.Results.Attachment.EmbeddedFileBinaryObject.Value);
 			}
 			throw new Exception("Application Processed");

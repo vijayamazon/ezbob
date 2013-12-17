@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="4d3oc5bt57pljqvHt6B888U7u04=">
+<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="RUXAA/ZYEq6ROsLrWQYzE89G62Q=">
   <bindingConfigurations>
-    <bindingConfiguration bindingType="basicHttpBinding" name="PropertyDescriptionEnquiryV2_0WSImplPortBinding">
+    <bindingConfiguration bindingType="basicHttpBinding" name="PropertyDescriptionEnquiryV2_0PollRequestWSImplPortBinding">
       <properties>
         <property path="/name" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>PropertyDescriptionEnquiryV2_0WSImplPortBinding</serializedValue>
+          <serializedValue>PropertyDescriptionEnquiryV2_0PollRequestWSImplPortBinding</serializedValue>
         </property>
         <property path="/closeTimeout" isComplexType="false" isExplicitlyDefined="true" clrType="System.TimeSpan, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
@@ -110,10 +110,10 @@
         </property>
       </properties>
     </bindingConfiguration>
-    <bindingConfiguration bindingType="basicHttpBinding" name="PropertyDescriptionEnquiryV2_0WSImplPortBinding1">
+    <bindingConfiguration bindingType="basicHttpBinding" name="PropertyDescriptionEnquiryV2_0PollRequestWSImplPortBinding1">
       <properties>
         <property path="/name" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>PropertyDescriptionEnquiryV2_0WSImplPortBinding1</serializedValue>
+          <serializedValue>PropertyDescriptionEnquiryV2_0PollRequestWSImplPortBinding1</serializedValue>
         </property>
         <property path="/closeTimeout" isComplexType="false" isExplicitlyDefined="true" clrType="System.TimeSpan, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
@@ -221,10 +221,10 @@
     </bindingConfiguration>
   </bindingConfigurations>
   <endpoints>
-    <endpoint name="PropertyDescriptionV2_0WSImplPort" contract="LandRegistryEnquiryByPropertyDescriptionNS.PropertyDescriptionEnquiryV2_0Service" bindingType="basicHttpBinding" address="https://z0.b2b.http.server.landregistry.gov:13007/ECBG_StubService/EnquiryByPropertyDescriptionV2_0WebService" bindingConfiguration="PropertyDescriptionEnquiryV2_0WSImplPortBinding">
+    <endpoint name="PropertyDescriptionEnquiryV2_0PollRequestWSImplPort" contract="LandRegistryEnquiryByProprtyDescriptionPollNS.PropertyDescriptionEnquiryV2_0PollService" bindingType="basicHttpBinding" address="https://z0.b2b.http.server.landregistry.gov:13007/ECBG_StubService/EnquiryByPropertyDescriptionV2_0PollWebService" bindingConfiguration="PropertyDescriptionEnquiryV2_0PollRequestWSImplPortBinding">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>https://z0.b2b.http.server.landregistry.gov:13007/ECBG_StubService/EnquiryByPropertyDescriptionV2_0WebService</serializedValue>
+          <serializedValue>https://z0.b2b.http.server.landregistry.gov:13007/ECBG_StubService/EnquiryByPropertyDescriptionV2_0PollWebService</serializedValue>
         </property>
         <property path="/behaviorConfiguration" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
@@ -233,10 +233,10 @@
           <serializedValue>basicHttpBinding</serializedValue>
         </property>
         <property path="/bindingConfiguration" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>PropertyDescriptionEnquiryV2_0WSImplPortBinding</serializedValue>
+          <serializedValue>PropertyDescriptionEnquiryV2_0PollRequestWSImplPortBinding</serializedValue>
         </property>
         <property path="/contract" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>LandRegistryEnquiryByPropertyDescriptionNS.PropertyDescriptionEnquiryV2_0Service</serializedValue>
+          <serializedValue>LandRegistryEnquiryByProprtyDescriptionPollNS.PropertyDescriptionEnquiryV2_0PollService</serializedValue>
         </property>
         <property path="/headers" isComplexType="true" isExplicitlyDefined="false" clrType="System.ServiceModel.Configuration.AddressHeaderCollectionElement, System.ServiceModel, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>System.ServiceModel.Configuration.AddressHeaderCollectionElement</serializedValue>
@@ -296,7 +296,7 @@
           <serializedValue>False</serializedValue>
         </property>
         <property path="/name" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>PropertyDescriptionV2_0WSImplPort</serializedValue>
+          <serializedValue>PropertyDescriptionEnquiryV2_0PollRequestWSImplPort</serializedValue>
         </property>
         <property path="/kind" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />

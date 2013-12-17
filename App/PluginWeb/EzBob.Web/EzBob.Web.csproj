@@ -1439,9 +1439,7 @@
     <Content Include="Views\Shared\_LivePerson.cshtml" />
     <Content Include="Views\Shared\security_template.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Content\css\mobile\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="App_Code\EzForm.cshtml" />
   </ItemGroup>

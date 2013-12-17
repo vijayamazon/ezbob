@@ -52,7 +52,7 @@
   </binding>
   <service name="EnquiryByPropertyDescriptionV2_0WebService">
     <port name="PropertyDescriptionV2_0WSImplPort" binding="tns:PropertyDescriptionEnquiryV2_0WSImplPortBinding">
-      <soap:address location="https://z0.b2b.http.server.landregistry.gov:13007/BGStubService/EnquiryByPropertyDescriptionV2_0WebService" />
+      <soap:address location="https://z0.b2b.http.server.landregistry.gov:13007/ECBG_StubService/EnquiryByPropertyDescriptionV2_0WebService" />
     </port>
   </service>
 </definitions>
