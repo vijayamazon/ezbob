@@ -1,10 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 
 namespace Reports {
@@ -13,12 +9,47 @@ namespace Reports {
 	public class ExperianLimitedCompanyReportItem {
 		#region public
 
+		#region method ExtractDate
+
+		public static DateTime? ExtractDate(XmlNode oNode, string sFieldNamePrefix) {
+			XmlNode oYear = oNode.SelectSingleNode(sFieldNamePrefix + "-YYYY");
+			if (oYear == null)
+				return null;
+
+			XmlNode oMonth = oNode.SelectSingleNode(sFieldNamePrefix + "-MM");
+			if (oMonth == null)
+				return null;
+			
+			XmlNode oDay = oNode.SelectSingleNode(sFieldNamePrefix + "-DD");
+			if (oDay == null)
+				return null;
+
+			DateTime oDate;
+
+			if (!DateTime.TryParseExact(oYear.InnerText + MD(oMonth) + MD(oDay), "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out oDate))
+				return null;
+
+			return oDate;
+		} // ExtractDate
+
+		#endregion method ExtractDate
+
 		#region constructor
 
-		public ExperianLimitedCompanyReportItem(int nCustomerID, string sRegNumber, string sCompanyName, XmlNodeList oDL99, SortedSet<string> oFieldNames) {
+		public ExperianLimitedCompanyReportItem(
+			int nCustomerID,
+			string sRegNumber,
+			string sCompanyName,
+			DateTime oIncorporationDate,
+			int nCompanyScore,
+			XmlNodeList oDL99,
+			SortedSet<string> oFieldNames
+		) {
 			CustomerID = nCustomerID;
 			RegNumber = sRegNumber;
 			CompanyName = sCompanyName;
+			IncorporationDate = oIncorporationDate;
+			CompanyScore = nCompanyScore;
 
 			Data = new SortedList<DateTime, SortedDictionary<string, string>>();
 
@@ -27,10 +58,16 @@ namespace Reports {
 
 		#endregion constructor
 
+		#region properties
+
 		public int CustomerID { get; private set; }
 		public string RegNumber { get; private set; }
 		public string CompanyName { get; private set; }
+		public DateTime IncorporationDate { get; private set; }
+		public int CompanyScore { get; private set; }
 		public SortedList<DateTime, SortedDictionary<string, string>> Data { get; private set; }
+
+		#endregion properties
 
 		#region method Validate
 
@@ -55,7 +92,9 @@ namespace Reports {
 				var oRow = new List<string>();
 
 				oRow.Add(RegNumber);
-				oRow.Add(CompanyName);
+				oRow.Add('"' + CompanyName + '"');
+				oRow.Add(IncorporationDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
+				oRow.Add(CompanyScore < 0 ? "" : CompanyScore.ToString());
 				oRow.Add(CustomerID.ToString());
 				oRow.Add(pair.Key.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
 
@@ -86,24 +125,12 @@ namespace Reports {
 			var oIgnoredNames = new SortedSet<string> { "DATEOFACCOUNTS-YYYY", "DATEOFACCOUNTS-MM", "DATEOFACCOUNTS-DD", "REGNUMBER", "EXPERIANREF" };
 
 			foreach (XmlNode oNode in oDL99) {
-				XmlNode oYear = oNode.SelectSingleNode("DATEOFACCOUNTS-YYYY");
-				if (oYear == null)
+				DateTime? oRecordDate = ExtractDate(oNode, "DATEOFACCOUNTS");
+
+				if (!oRecordDate.HasValue)
 					continue;
 
-				XmlNode oMonth = oNode.SelectSingleNode("DATEOFACCOUNTS-MM");
-				if (oMonth == null)
-					continue;
-				
-				XmlNode oDay = oNode.SelectSingleNode("DATEOFACCOUNTS-DD");
-				if (oDay == null)
-					continue;
-
-				DateTime oRecordDate;
-
-				if (!DateTime.TryParseExact(oYear.InnerText + MD(oMonth) + MD(oDay), "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out oRecordDate))
-					continue;
-
-				LoadOne(oNode, oRecordDate, oIgnoredNames, oFieldNames);
+				LoadOne(oNode, oRecordDate.Value, oIgnoredNames, oFieldNames);
 			} // foreach
 		} // LoadFields
 
@@ -130,7 +157,7 @@ namespace Reports {
 
 		#region method MD
 
-		private string MD(XmlNode oNode) {
+		private static string MD(XmlNode oNode) {
 			string s = oNode.InnerText;
 
 			if (s.Length < 2)

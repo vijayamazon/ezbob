@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using Ezbob.Database;
 using Ezbob.Logger;
@@ -21,7 +19,7 @@ namespace Reports {
 			List<ExperianLimitedCompanyReportItem> oReportItems = oData.Item1;
 			SortedSet<string> oFieldNames = oData.Item2;
 
-			var oFieldCaptions = new List<string> {"Company Reg #", "Company Name", "Customer ID", "Date"};
+			var oFieldCaptions = new List<string> {"Company reg #", "Company name", "Incorporation date", "Company score", "Customer ID", "Date"};
 
 			oFieldCaptions.AddRange(oFieldNames);
 
@@ -133,7 +131,28 @@ namespace Reports {
 
 			string sCompanyName = oNode.InnerText;
 
-			var oItem = new ExperianLimitedCompanyReportItem(nCustomerID, sCompanyNumber, sCompanyName, doc.DocumentElement.SelectNodes("./REQUEST/DL99"), m_oFieldNames);
+			DateTime? oIncorporationDate = ExperianLimitedCompanyReportItem.ExtractDate(doc.DocumentElement, "./REQUEST/DL12/DATEINCORP");
+
+			if (!oIncorporationDate.HasValue) {
+				Warn("Failed to parse Experian output (incorporation date) for customer {0}", nCustomerID);
+				return ActionResult.Continue;
+			} // if
+
+			oNode = doc.DocumentElement.SelectSingleNode("./REQUEST/DL76/RISKSCORE");
+			int nCompanyScore = -1;
+
+			if (oNode != null)
+				int.TryParse(oNode.InnerText, out nCompanyScore);
+
+			var oItem = new ExperianLimitedCompanyReportItem(
+				nCustomerID,
+				sCompanyNumber,
+				sCompanyName,
+				oIncorporationDate.Value,
+				nCompanyScore,
+				doc.DocumentElement.SelectNodes("./REQUEST/DL99"),
+				m_oFieldNames
+			);
 
 			if (oItem.Validate()) {
 				m_oResult.Add(oItem);
