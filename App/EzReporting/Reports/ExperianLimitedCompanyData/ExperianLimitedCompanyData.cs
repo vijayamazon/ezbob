@@ -21,14 +21,14 @@ namespace Reports {
 
 			var oFieldCaptions = new List<string> {"Company reg #", "Company name", "Incorporation date", "Company score", "Customer ID", "Date"};
 
-			oFieldCaptions.AddRange(oFieldNames);
+			oFieldCaptions.AddRange(ExperianLimitedCompanyReportItem.RelevantFieldNames);
 
 			string[] aryFieldCaptions = oFieldCaptions.ToArray();
 
 			var oOutput = new List<string[]> { aryFieldCaptions };
 
 			foreach (ExperianLimitedCompanyReportItem ri in oReportItems)
-				oOutput.AddRange(ri.ToOutput(oFieldNames));
+				oOutput.AddRange(ri.ToOutput());
 
 			var fout = new StreamWriter(sFileName, false, Encoding.UTF8);
 
