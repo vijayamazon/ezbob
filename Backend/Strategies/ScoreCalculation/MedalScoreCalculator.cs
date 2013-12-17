@@ -312,7 +312,7 @@
 			var experianWeight = new Weight
 				{
 					FinalWeightFixedWeightParameter = Constants.ExperianScoreBaseWeight,
-					StandardWeightFixedWeightParameter = firstRepaymentDatePassed ? Constants.ExperianScoreBaseWeight = Constants.ExperianScoreWeightDeduction : Constants.ExperianScoreBaseWeight,
+					StandardWeightFixedWeightParameter = firstRepaymentDatePassed ? Constants.ExperianScoreBaseWeight - Constants.ExperianScoreWeightDeduction : Constants.ExperianScoreBaseWeight,
 					StandardWeightAdjustableWeightParameter = 0,
 					DeltaForAdjustableWeightParameter = 0,
 					MinimumGrade = Constants.ExperianScoreGradeMin,

@@ -83,7 +83,7 @@
 				return true;
 			}
 
-			reason = "None of the rules";
+			reason = "None of the auto rejection rules";
 			return false;
 		}
     }

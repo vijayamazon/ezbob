@@ -129,6 +129,16 @@
 						SystemDecision = isAutoRejected ? Decision.Reject : Decision.Manual,
 						Comment = reason
 					});
+
+				var arr = new AutoReRejectionCalculator();
+				bool isAutoReRejected = arr.IsAutoReRejected(autoDecision.CustomerId, out reason);
+				verificationDecisions.Add(autoDecision.CashRequestId, new AutoDecision
+				{
+					CashRequestId = autoDecision.CashRequestId,
+					CustomerId = autoDecision.CustomerId,
+					SystemDecision = isAutoReRejected ? Decision.Reject : Decision.Manual,
+					Comment = reason
+				});
 			}
 
 			return verificationDecisions;

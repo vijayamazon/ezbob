@@ -115,5 +115,21 @@ namespace CommonLib
 			var conn = new SqlConnection(Log);
 			return conn.ExecuteReader("AV_GetAutomaticDecisions", new QueryParameter("@DateStart", from), new QueryParameter("@DateEnd", to));
 		}
+
+		public ReRejectionData GetReRejectionData(int customerId)
+		{
+			var conn = new SqlConnection(Log);
+			var sqlData = conn.ExecuteReader("AV_ReRejectionData", new QueryParameter("@CustomerId", customerId));
+
+			var data = new ReRejectionData
+				{
+					ManualRejectDate = string.IsNullOrEmpty(sqlData.Rows[0]["ManualRejectDate"].ToString()) ? (DateTime?)null : DateTime.Parse(sqlData.Rows[0]["ManualRejectDate"].ToString()),
+					IsNewClient = bool.Parse(sqlData.Rows[0]["IsNewClient"].ToString()),
+					NewDataSourceAdded = bool.Parse(sqlData.Rows[0]["NewDataSourceAdded"].ToString()),
+					LoanAmount = int.Parse(sqlData.Rows[0]["LoanAmount"].ToString()),
+					RepaidAmount = decimal.Parse(sqlData.Rows[0]["RepaidAmount"].ToString())
+				};
+			return data;
+		}
 	}
 }
