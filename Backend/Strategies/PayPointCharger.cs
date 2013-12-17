@@ -13,7 +13,6 @@
 	{
 		public decimal ActualAmountCharged { get; set; }
 		public bool PaymentFailed { get; set; }
-		public bool PaymentFailedBy1Day { get; set; }
 		public bool PaymentCollectedSuccessfully { get; set; }
 		public bool IsException { get; set; }
 	}
@@ -29,8 +28,6 @@
 			ReadConfigs();
 		}
 
-		private int collectionPeriod1;
-		private int collectionPeriod2;
 		private int amountToChargeFrom;
 
 
@@ -39,8 +36,6 @@
 			DataTable configsDataTable = DbConnection.ExecuteSpReader("PayPointChargerGetConfigs");
 			DataRow configsResult = configsDataTable.Rows[0];
 
-			collectionPeriod1 = int.Parse(configsResult["CollectionPeriod1"].ToString());
-			collectionPeriod2 = int.Parse(configsResult["CollectionPeriod2"].ToString());
 			amountToChargeFrom = int.Parse(configsResult["AmountToChargeFrom"].ToString());
 		}
 
@@ -61,13 +56,7 @@
 			int customerId = int.Parse(row["CustomerId"].ToString());
 			string customerMail = row["Email"].ToString();
 			string fullname = row["Fullname"].ToString();
-			DateTime scheduledDate = DateTime.Parse(row["Date"].ToString());
 			bool reductionFee = bool.Parse(row["ReductionFee"].ToString());
-			bool latePaymentNotification;
-			if (!bool.TryParse(row["LatePaymentNotification"].ToString(), out latePaymentNotification))
-			{
-				latePaymentNotification = true;
-			}
 			string refNum = row["RefNum"].ToString();
 			bool lastInstallment = bool.Parse(row["LastInstallment"].ToString());
 
@@ -82,7 +71,7 @@
 			decimal initialAmountDue = amountDue;
 
 			AutoPaymentResult autoPaymentResult = TryToMakeAutoPayment(loanScheduleId, initialAmountDue, customerId, customerMail,
-				fullname, scheduledDate, reductionFee);
+				fullname, reductionFee);
 
 			if (autoPaymentResult.IsException)
 			{
@@ -95,32 +84,6 @@
 				return;
 			}
 
-			if (autoPaymentResult.PaymentFailedBy1Day)
-			{
-				if ((scheduledDate <= DateTime.UtcNow &&
-				     scheduledDate.AddDays(collectionPeriod1) >= DateTime.UtcNow &&
-				     latePaymentNotification
-					) ||
-					(scheduledDate.AddDays(collectionPeriod1 + 1) <= DateTime.UtcNow && 
-					 scheduledDate.AddDays(collectionPeriod2) >= DateTime.UtcNow &&
-					 latePaymentNotification)
-					)
-				{
-					var variables = new Dictionary<string, string>
-						{
-							{"AmountCharged", initialAmountDue.ToString(CultureInfo.InvariantCulture)},
-							{"RefNum", refNum},
-							{"FirstName", firstName}
-						};
-					mailer.SendToCustomerAndEzbob(variables, customerMail, "Mandrill - Loan repayment late (1D late)", "Your re-payment is late");
-
-					SendConfirmationMail(firstName, amountDue, refNum, customerMail);
-				}
-
-				SendLoanStatusMail(loanId, firstName, refNum, customerMail);
-				return;
-			}
-
 			if (autoPaymentResult.PaymentCollectedSuccessfully)
 			{
 				SendConfirmationMail(firstName, amountDue, refNum, customerMail);
@@ -129,7 +92,7 @@
 		}
 
 		private AutoPaymentResult TryToMakeAutoPayment(int loanScheduleId, decimal initialAmountDue, int customerId, 
-			string customerMail, string fullname, DateTime scheduledDate, bool reductionFee)
+			string customerMail, string fullname, bool reductionFee)
 		{
 			var result = new AutoPaymentResult();
 			decimal actualAmountCharged = initialAmountDue;
@@ -177,12 +140,6 @@
 					}
 					else
 					{
-						if ((DateTime.UtcNow - scheduledDate).TotalDays >= 1)
-						{
-							result.PaymentFailedBy1Day = true;
-							return result;
-						}
-
 						result.PaymentFailed = true;
 						return result;
 					}

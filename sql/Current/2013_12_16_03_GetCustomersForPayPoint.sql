@@ -14,10 +14,8 @@ BEGIN
 		c.FirstName,
 		c.Fullname,
 		c.Id AS CustomerId,
-		c.Name AS Email, 
-		convert(date, ls.Date) AS Date, 
-		lo.ReductionFee, 
-		lo.LatePaymentNotification,
+		c.Name AS Email,
+		lo.ReductionFee,
 		l.RefNum,
 		CAST(
 			CASE 

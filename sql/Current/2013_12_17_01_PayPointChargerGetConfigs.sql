@@ -9,8 +9,6 @@ CREATE PROCEDURE [dbo].[PayPointChargerGetConfigs]
 AS
 BEGIN
 	SELECT
-		(SELECT Value FROM ConfigurationVariables cv WHERE cv.Name = 'CollectionPeriod1') AS CollectionPeriod1,
-		(SELECT Value FROM ConfigurationVariables cv WHERE cv.Name = 'CollectionPeriod2') AS CollectionPeriod2,
 		(SELECT Value FROM ConfigurationVariables cv WHERE cv.Name = 'AmountToChargeFrom') AS AmountToChargeFrom
 END
 GO
