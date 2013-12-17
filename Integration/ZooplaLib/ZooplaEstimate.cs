@@ -70,7 +70,7 @@
 				foreach (HtmlNode node in tr)
 				{
 					var address = node.SelectSingleNode("td[2]/h2");
-					if (address.InnerText == addr)
+					if (address.InnerText.Replace(",","") == addr.Replace(",", ""))
 					{
 						var estimate = node.SelectSingleNode("td[3]/strong");
 						if (estimate != null)
