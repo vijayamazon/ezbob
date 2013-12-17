@@ -13,6 +13,7 @@ namespace landRegistry1
 	using System.IO;
 	using System.Xml;
 	using System.Xml.Serialization;
+	using LandRegistryEnquiryByPropertyDescriptionNS;
 	using LandRegistryRESNS;
 
 	public partial class Form1 : Form
@@ -79,28 +80,180 @@ namespace landRegistry1
 				// create a request object
 				var request = new LandRegistryEnquiryByPropertyDescriptionNS.RequestSearchByPropertyDescriptionV2_0Type
 				{
-					ID = new LandRegistryEnquiryByPropertyDescriptionNS.Q1IdentifierType { MessageID = new LandRegistryEnquiryByPropertyDescriptionNS.Q1TextType { Value = "pollST500681" } },
+					ID = new LandRegistryEnquiryByPropertyDescriptionNS.Q1IdentifierType { MessageID = new LandRegistryEnquiryByPropertyDescriptionNS.Q1TextType { Value = "012345" } },
 					Product = new LandRegistryEnquiryByPropertyDescriptionNS.Q1ProductType
 						{
-							ExternalReference = new LandRegistryEnquiryByPropertyDescriptionNS.Q1ExternalReferenceType { Reference = "123" },
-							CustomerReference = new LandRegistryEnquiryByPropertyDescriptionNS.Q1CustomerReferenceType { Reference = "321" },
+							ExternalReference = new LandRegistryEnquiryByPropertyDescriptionNS.Q1ExternalReferenceType { Reference = "12345" },
+							CustomerReference = new LandRegistryEnquiryByPropertyDescriptionNS.Q1CustomerReferenceType { Reference = "23456" },
 							SubjectProperty = new LandRegistryEnquiryByPropertyDescriptionNS.Q1SubjectPropertyType
 								{
 									Address = new LandRegistryEnquiryByPropertyDescriptionNS.Q1AddressType()
 										{
-											BuildingName = "27",
+											BuildingName = null,
 											BuildingNumber = "27",
 											StreetName = "Church Road",
-											CityName = "Bristol",
-											PostcodeZone = "TQ56 4HY"
+											CityName = "Exeter",
+											PostcodeZone = null
 										}
 								}
 						}
 				};
 				
-				SerializeObject(request, "req.xml");
+				SerializeObject(request, "req3.xml");
+				LandRegistryEnquiryByPropertyDescriptionNS.ResponseSearchByPropertyDescriptionV2_0Type response;
+				try
+				{
+					response = client.searchProperties(request);
+					SerializeObject(response, "res3.xml");
+				}
+				catch (Exception ex)
+				{
+					File.WriteAllText("resex3.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
+				}
 
-				LandRegistryEnquiryByPropertyDescriptionNS.ResponseSearchByPropertyDescriptionV2_0Type response = client.searchProperties(request);
+				request.ID.MessageID.Value = "pollST500681";
+				request.Product.SubjectProperty.Address.BuildingNumber = "99";
+				request.Product.SubjectProperty.Address.StreetName = "Flake Avenue";
+				request.Product.SubjectProperty.Address.CityName = "Torquay";
+				request.Product.SubjectProperty.Address.PostcodeZone = null;
+				SerializeObject(request, "req1b.xml");
+				try
+				{
+					response = client.searchProperties(request);
+					SerializeObject(response, "res1b.xml");
+				}
+				catch (Exception ex)
+				{
+					File.WriteAllText("resex1b.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
+				}
+
+				request.ID.MessageID.Value = "pollST500681";
+				request.Product = new LandRegistryEnquiryByPropertyDescriptionNS.Q1ProductType
+				{
+					ExternalReference = new LandRegistryEnquiryByPropertyDescriptionNS.Q1ExternalReferenceType(),
+					CustomerReference = new LandRegistryEnquiryByPropertyDescriptionNS.Q1CustomerReferenceType(),
+					SubjectProperty = new LandRegistryEnquiryByPropertyDescriptionNS.Q1SubjectPropertyType
+					{
+						Address = new LandRegistryEnquiryByPropertyDescriptionNS.Q1AddressType()
+					}
+				};
+
+				SerializeObject(request, "req1c.xml");
+				try
+				{
+					response = client.searchProperties(request);
+					SerializeObject(response, "res1c.xml");
+				}
+				catch (Exception ex)
+				{
+					File.WriteAllText("resex1c.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
+				}
+
+				request.ID.MessageID.Value = "012345";
+				request.Product = new LandRegistryEnquiryByPropertyDescriptionNS.Q1ProductType
+					{
+						ExternalReference = new LandRegistryEnquiryByPropertyDescriptionNS.Q1ExternalReferenceType { Reference = "12345" },
+						CustomerReference = new LandRegistryEnquiryByPropertyDescriptionNS.Q1CustomerReferenceType { Reference = "23456" },
+						SubjectProperty = new LandRegistryEnquiryByPropertyDescriptionNS.Q1SubjectPropertyType
+							{
+								Address = new LandRegistryEnquiryByPropertyDescriptionNS.Q1AddressType()
+									{
+										BuildingName = null,
+										BuildingNumber = "71",
+										StreetName = "Allerburn Lea",
+										CityName = "Alnwick",
+										PostcodeZone = null
+									}
+							}
+					};
+				SerializeObject(request, "req2a.xml");
+				try
+				{
+					response = client.searchProperties(request);
+					SerializeObject(response, "res2a.xml");
+				}
+				catch (Exception ex)
+				{
+					File.WriteAllText("resex2a.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
+				}
+
+				request.ID.MessageID.Value = "pollND66318";
+				request.Product = new LandRegistryEnquiryByPropertyDescriptionNS.Q1ProductType
+				{
+					ExternalReference = new LandRegistryEnquiryByPropertyDescriptionNS.Q1ExternalReferenceType { Reference = "12345" },
+					CustomerReference = new LandRegistryEnquiryByPropertyDescriptionNS.Q1CustomerReferenceType { Reference = "23456" },
+					SubjectProperty = new LandRegistryEnquiryByPropertyDescriptionNS.Q1SubjectPropertyType
+					{
+						Address = new LandRegistryEnquiryByPropertyDescriptionNS.Q1AddressType()
+						{
+							BuildingName = null,
+							BuildingNumber = "71",
+							StreetName = "Allerburn Lea",
+							CityName = "Alnwick",
+							PostcodeZone = null
+						}
+					}
+				};
+				SerializeObject(request, "req2b.xml");
+				try
+				{
+					response = client.searchProperties(request);
+					SerializeObject(response, "res2b.xml");
+				}
+				catch (Exception ex)
+				{
+					File.WriteAllText("resex2b.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
+				}
+
+				request.ID.MessageID.Value = "pollND66318";
+				request.Product = new LandRegistryEnquiryByPropertyDescriptionNS.Q1ProductType
+				{
+					ExternalReference = new LandRegistryEnquiryByPropertyDescriptionNS.Q1ExternalReferenceType(),
+					CustomerReference = new LandRegistryEnquiryByPropertyDescriptionNS.Q1CustomerReferenceType(),
+					SubjectProperty = new LandRegistryEnquiryByPropertyDescriptionNS.Q1SubjectPropertyType
+					{
+						Address = new LandRegistryEnquiryByPropertyDescriptionNS.Q1AddressType()
+					}
+				};
+
+				SerializeObject(request, "req2c.xml");
+				try
+				{
+					response = client.searchProperties(request);
+					SerializeObject(response, "res2c.xml");
+				}
+				catch (Exception ex)
+				{
+					File.WriteAllText("resex2c.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
+				}
+
+				request.ID.MessageID.Value = "012345";
+				request.Product = new LandRegistryEnquiryByPropertyDescriptionNS.Q1ProductType
+				{
+					ExternalReference = new LandRegistryEnquiryByPropertyDescriptionNS.Q1ExternalReferenceType { Reference = "12345" },
+					CustomerReference = new LandRegistryEnquiryByPropertyDescriptionNS.Q1CustomerReferenceType { Reference = "23456" },
+					SubjectProperty = new LandRegistryEnquiryByPropertyDescriptionNS.Q1SubjectPropertyType
+					{
+						Address = new LandRegistryEnquiryByPropertyDescriptionNS.Q1AddressType()
+						{
+							BuildingName = null,
+							BuildingNumber = "99",
+							StreetName = null,
+							CityName = null,
+							PostcodeZone = "TQ56 4HY"
+						}
+					}
+				};
+				SerializeObject(request, "req1a.xml");
+				try
+				{
+					response = client.searchProperties(request);
+					SerializeObject(response, "res1a.xml");
+				}
+				catch (Exception ex)
+				{
+					File.WriteAllText("resex1a.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
+				}
 			}
 			throw new Exception("Application Processed");
 		}
