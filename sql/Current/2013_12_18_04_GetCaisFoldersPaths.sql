@@ -6,7 +6,6 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[GetCaisFoldersPaths]
-	(@CaisId INT)
 AS
 BEGIN
 	SELECT 

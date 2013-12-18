@@ -1,10 +1,13 @@
 ﻿namespace EzBob.Backend.Strategies
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Data;
+	using System.Globalization;
 	using System.IO;
 	using System.Text;
 	using DbConnection;
+	using ExperianLib.CaisFile;
 	using Models;
 	using log4net;
 
@@ -25,6 +28,14 @@
 		private decimal MonthlyPayment;
 		private DateTime StratSatartDate;
 		private decimal OriginalDefaultBalance;
+		private int BusinessCounter;
+		private int BusinessGoodCounter;
+		private int BusinessDefaultsCounter;
+		private int ConsumerCounter;
+		private int ConsumerGoodCounter;
+		private int ConsumerDefaultsCounter;
+		private string CompanyTypeCode;
+		private string CompanyRefNum;
 
 		public CaisGenerator()
 		{
@@ -185,7 +196,7 @@
 					}
 				}
 
-				string Line23Scalar = Line2 + " " + Line3;
+				string Line23 = Line2 + " " + Line3;
 				string FullName = GenderPrefix + " " + FirstName + " " + MiddleInitial + " " + Surname;
 
 				CAISFlag = null;
@@ -203,11 +214,269 @@
 					CurrentBalance = 0;
 				}
 
-				//if (CustomerStatus == "Collection")
-				//{
+				string TransferredToCollectionFlag = CustomerState == "Collection" ? "Y" : string.Empty;
 
-				//}
+
+				string AccountNumber = RefNumber + loanID;
+
+				if (CompanyType == "Entrepreneur")
+				{
+					var file = CaisFileManager.GetCaisFileData();
+					var h = file.Header;
+					h.SourceCodeNumber = 402;
+					h.DateCreation = DateTime.UtcNow;
+					h.CompanyPortfolioName = "Orange Money";
+					h.OverdraftReportingCutOff = 0;
+					h.IsCardsBehaviouralSharing = false;
+
+					var account = new AccountRecord();
+
+					account.AccountNumber = AccountNumber;
+					account.AccountType = "02";
+					account.StartDate = StartDate;
+					account.CloseDate = StartDate > DateClose ? DateTime.MinValue : DateClose;
+					account.MonthlyPayment = Convert.ToInt32(MonthlyPayment);
+					account.RepaymentPeriod = Convert.ToInt32(SceduledRepayments);
+					account.CurrentBalance = Convert.ToInt32(CurrentBalance);
+					account.CreditBalanceIndicator = "";
+					account.AccountStatus = AccountStatus;
+					account.SpecialInstructionIndicator = "";
+					account.PaymentAmount = 0;
+					account.CreditPaymentIndicator = "";
+					account.PreviousStatementBalance = 0;
+					account.PreviousStatementBalanceIndicator = "";
+					account.NumberCashAdvances = 0;
+					account.ValueCashAdvances = 0;
+					account.PaymentCode = "";
+					account.PromotionActivityFlag = "";
+					account.TransientAssociationFlag = "";
+					account.AirtimeFlag = "";
+					account.FlagSettings = CAISFlag;
+					account.NameAndAddress = new NameAndAddressData();
+					account.NameAndAddress.Name = FullName;
+					account.NameAndAddress.AddressLine1 = Line1;
+					account.NameAndAddress.AddressLine2 = Line23;
+					account.NameAndAddress.AddressLine3 = Town;
+					account.NameAndAddress.AddressLine4 = County;
+					account.NameAndAddress.Postcode = Postcode;
+					account.CreditLimit = 0;
+					account.DateBirth = DateOfBirth;
+					account.TransferredCollectionAccountFlag = TransferredToCollectionFlag;
+					account.BalanceType = "";
+					account.CreditTurnover = 0;
+					account.PrimaryAccountIndicator = "";
+					account.DefaultSatisfactionDate = DateTime.MinValue;
+					account.TransactionFlag = "";
+					account.OriginalDefaultBalance = Convert.ToInt32(OriginalDefaultBalance);
+					account.PaymentFrequency = "M";
+					account.NewAccountNumber = "";
+
+					file.Accounts.Add(account);
+
+					ConsumerCounter++;
+					if (AccountStatus == "0")
+					{
+						ConsumerGoodCounter++;
+					}
+					else if (AccountStatus == "8")
+					{
+						ConsumerDefaultsCounter++;
+					}
+				}
+				else
+				{
+					if (CompanyType == "Limited" || CompanyType == "PShip" || CompanyType == "LLP")
+					{
+						CompanyTypeCode = "L";
+						CompanyRefNum = LimitedRefNum;
+					}
+					else if (CompanyType == "PShip3P" || CompanyType == "SoleTrader")
+					{
+						CompanyTypeCode = "N";
+						CompanyRefNum = NonLimitedRefNum;
+					}
+
+
+
+
+
+
+
+
+					var cais = CaisFileManager.GetBusinessCaisFileData();
+					cais.Header.CompanyPortfolioName = "Orange Money";
+					cais.Header.CreditCardBehaviouralSharingFlag = "";
+					cais.Header.DateOfCreation = DateTime.UtcNow;
+					cais.Header.SourceCode = 721;
+
+					var record = new BusinessAccountRecord();
+					record.AccountNumber = AccountNumber;
+					record.ProprietorPartnerDirectorNumber = 0;
+					record.LimitedNonlimitedAndOtherFlag = CompanyTypeCode;
+
+
+					record.NameAddressRegisteredOfficeTradingAddress.Name = FullName;
+					record.NameAddressRegisteredOfficeTradingAddress.AddressLine1 = Line1;
+					record.NameAddressRegisteredOfficeTradingAddress.AddressLine2 = Line23;
+					record.NameAddressRegisteredOfficeTradingAddress.AddressLine3 = Town;
+					record.NameAddressRegisteredOfficeTradingAddress.AddressLine4 = County;
+					record.NameAddressRegisteredOfficeTradingAddress.PostCode = Postcode;
+
+					record.AddressType = "";
+					record.NameChange = "N";
+					record.CompanyRegisteredNumberBusinessNumber = CompanyRefNum;
+					record.SICCode = 0;
+					record.VATNumber = "";
+					record.YearBusinessStarted = 0;
+					record.AdditionalTradingStyle = "";
+					record.BusinessCompanyTelephoneNumber = "";
+					record.BusinessCompanyWebsite = "";
+					record.PointOfContactName = "";
+					record.PointOfContactEmailAddress = "";
+					record.PointOfContactTelephoneNumber = "";
+					record.PointOfContactJobTitle = "";
+
+					record.ParentCompanyNameAddress.Name = "";
+					record.ParentCompanyNameAddress.AddressLine1 = "";
+					record.ParentCompanyNameAddress.AddressLine2 = "";
+					record.ParentCompanyNameAddress.AddressLine3 = "";
+					record.ParentCompanyNameAddress.AddressLine4 = "";
+					record.ParentCompanyNameAddress.PostCode = "";
+
+					record.ParentCompanyRegisteredNumber = "";
+					record.ParentCompanyTelephoneNumber = "";
+					record.ParentCompanyVATNumber = "";
+
+					record.PreviousNameandAddress.Name = "";
+					record.PreviousNameandAddress.AddressLine1 = "";
+					record.PreviousNameandAddress.AddressLine2 = "";
+					record.PreviousNameandAddress.AddressLine3 = "";
+					record.PreviousNameandAddress.AddressLine4 = "";
+					record.PreviousNameandAddress.PostCode = "";
+
+					record.ProprietorPartnerDirectororOtherFlag = "";
+					record.SignatoryontheAccountFlag = "";
+					record.ShareholdersFlag = "";
+					record.CountryofRegistration = "";
+					record.DateofBirth = DateTime.MinValue;
+					record.ProprietorsDirectorsGuarantee = "";
+					record.ProprietorsDirectorsGuaranteeCancelledDischarged = "";
+					record.AccountType = 2;
+
+					record.StartDateofAgreement = StartDate;
+					if (StartDate > DateClose)
+					{
+						record.CloseDateofAgreement = DateTime.MinValue;
+					}
+					else
+					{
+						record.CloseDateofAgreement = DateClose;
+					}
+					record.MonthlyPayment = Convert.ToInt32(MonthlyPayment);
+					record.RepaymentPeriod = Convert.ToInt32(SceduledRepayments);
+					record.CurrentBalance = Convert.ToInt32(CurrentBalance);
+					record.CreditBalanceIndicator = "";
+					record.AccountStatus = AccountStatus;
+					record.SpecialInstructionIndicator = "";
+
+					record.CreditLimit = 0;
+					record.FlagSettings = CAISFlag;
+					record.Debenture = "";
+					record.MortgageFlags = "";
+					record.AirtimeStatusFlag = "";
+					record.TransferredtoCollectionAccountFlag = TransferredToCollectionFlag;
+					record.BalanceType = "";
+					record.CreditTurnover = 0;
+					record.PrimaryAccountIndicator = "";
+					record.DefaultSatisfactionDate = DateTime.MinValue;
+					record.RejectionFlag = "";
+					record.BankerDetailsSortCode = Convert.ToInt32(SortCode);
+					record.OriginalDefaultBalance = Convert.ToInt32(OriginalDefaultBalance);
+					record.PaymentFrequencyIndicator = "M";
+					record.NumberofCreditCardsissued = 0;
+
+					record.PaymentAmount = 0;
+					record.PaymentCreditIndicator = "";
+					record.PreviousStatementBalance = 0;
+					record.PreviousStatementBalanceIndicator = "";
+					record.NumberofCashAdvances = 0;
+					record.ValueofCashAdvances = 0;
+					record.PaymentCode = "";
+					record.PromotionActivityFlag = "";
+					record.PaymentType = "B";
+					record.NewAccountNumber = "";
+					record.NewProprietorPartnerDirectorNumber = "";
+
+
+					cais.Accounts.Add(record);
+
+
+
+
+
+
+
+
+
+
+
+
+
+					BusinessCounter++;
+					if (AccountStatus == "0")
+					{
+						BusinessGoodCounter++;
+					}
+					else if (AccountStatus == "8")
+					{
+						BusinessDefaultsCounter++;
+					}
+
+
+
+
+				}
+
+				DbConnection.ExecuteSpNonQuery("UpdateLastReportedCAISstatus",
+				    DbConnection.CreateParam("LoanId", loanID),
+				    DbConnection.CreateParam("CAISStatus", AccountStatus));
 			}
+
+			// Mail addresses
+			// 4 more nodes
+			var variables = new Dictionary<string, string>
+				{
+					{"CurrDate", DateTime.UtcNow.ToString(CultureInfo.InvariantCulture)},
+					{"Path", dir_path}
+				};
+			mailer.SendToEzbob(variables, "Mandrill - CAIS report", "CAIS Report generated");
+
+			string BusinessPath = dir_path + "\\F1364.D.COMCAIS.ORMO.DI55CUST.INPUT";
+			string consumerPath = dir_path + "\\F530.E.OMO.MSTEI49.XMIT";
+			int ConsumerCompanyType = 1;
+			int BusinessCompanyType = 2;
+			string BusinessFilename = "F1364.D.COMCAIS.ORMO.DI55CUST";
+			string ConsumerFilename = "F530.E.OMO.MSTEI49";
+
+
+
+
+			var b = CaisFileManager.GetBusinessCaisFileData();
+			var CAISstring = b.WriteToString();
+			b.WriteToFile(dir_path + "\\F1364.D.COMCAIS.ORMO.DI55CUST.INPUT");
+			b.WriteToFile(dir_path2 + "\\F1364.D.COMCAIS.ORMO.DI55CUST.INPUT");
+			strategyHelper.SaveCAISFile(CAISstring, "F1364.D.COMCAIS.ORMO.DI55CUST.INPUT", dir_path, 2, BusinessCounter,
+			                            BusinessGoodCounter, BusinessDefaultsCounter);
+			CaisFileManager.RemoveBusinessCaisFileData();
+
+			var c = CaisFileManager.GetCaisFileData();
+			CAISstring = c.WriteToString();
+			c.WriteToFile(dir_path + "\\F530.E.OMO.MSTEI49.XMIT");
+			c.WriteToFile(dir_path2 + "\\F530.E.OMO.MSTEI49.XMIT");
+			strategyHelper.SaveCAISFile(CAISstring, "F530.E.OMO.MSTEI49.XMIT", dir_path, 1, ConsumerCounter, ConsumerGoodCounter,
+			                            ConsumerDefaultsCounter);
+			CaisFileManager.RemoveCaisFileData();
+
 
 			lock (caisGenerationLock)
 			{
