@@ -231,6 +231,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public string YearsInCompany { get; set; }
 		public string RentMonthsLeft { get; set; }
 		public double TotalMonthlySalary { get; set; }
+		public double CapitalExpenditure { get; set; }
 	} // class CompanyAdditionalInfo
 
 	#endregion class CompanyAdditionalInfo

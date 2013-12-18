@@ -72,6 +72,7 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 			enabled = this.CompanyView.readyToContinue();
 
 		$('.btn-continue').toggleClass('disabled', !enabled);
+		this.$el.find('.cashInput').moneyFormat();
 	}, // inputChanged
 
 	typeOfBusinessChanged: function() {
@@ -117,7 +118,7 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 	webSiteTurnOverFocus: function() { $('#WebSiteTurnOver').change(); }, // webSiteTurnOverFocus
 
 	render: function() {
-		this.$el.html(this.template(this.model.toJSON()));
+	    this.$el.html(this.template(this.model.toJSON()));
 
 		if (!this.model.get('IsOffline'))
 			this.$el.find('.offline').remove();
@@ -254,9 +255,13 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 		_.find(data, function(d) { return d.name === 'OverallTurnOver'; }).value = this.$el.find('#OverallTurnOver').autoNumericGet();
 		_.find(data, function(d) { return d.name === 'WebSiteTurnOver'; }).value = this.$el.find('#WebSiteTurnOver').autoNumericGet();
 
-		var totalMonthlySalary = _.find(data, function(d) { return d.name === 'TotalMonthlySalary'; });
+		var totalMonthlySalary = _.find(data, function (d) { return d.name === 'TotalMonthlySalary'; });
 		if (totalMonthlySalary)
-			totalMonthlySalary.value = this.$el.find('#TotalMonthlySalary').autoNumericGet();
+		    totalMonthlySalary.value = this.$el.find('#TotalMonthlySalary').autoNumericGet();
+	    
+		var capitalExpenditure = _.find(data, function (d) { return d.name === 'CapitalExpenditure'; });
+	    if (capitalExpenditure)
+	        capitalExpenditure.value = this.$el.find('#CapitalExpenditure').autoNumericGet();
 
 		var request = $.post(action, data);
 

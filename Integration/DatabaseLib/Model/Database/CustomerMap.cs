@@ -91,6 +91,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 				m.Map(x => x.PropertyOwnedByCompany);
 				m.Map(x => x.YearsInCompany).Length(50);
 				m.Map(x => x.RentMonthsLeft).Length(50);
+				m.Map(x => x.CapitalExpenditure);
 			});
 
 			Component(x => x.PersonalInfo, m => {
