@@ -9,9 +9,9 @@
         <div class='pages'>
         </div>        
     </section>
-    <aside  id="sidebar">
-        @{Html.RenderPartial("SideBars/_SecurityStatement");}
-    </aside>
+	<aside class="customer-sidebar wizard">
+		@{Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_Sidebar.cshtml");}
+	</aside>
     <div class="clear"/>
 }
 <script type="text/template" id="wizard-template">

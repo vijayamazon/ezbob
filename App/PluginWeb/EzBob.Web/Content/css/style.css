@@ -94,7 +94,6 @@ box-shadow: 0 0 10px #ccc;
 /*-- 2 column layout with side bar --*/
 
 #content{float:left; width:70%; line-height:1.8em;}
-#sidebar{float:right; width: 30%;}
 
 .pages {width: 90%;}
 
@@ -179,12 +178,12 @@ ul.contact_icons li.telephone{ background-position: 0 0;}
 ul.contact_icons li.email{background-position: 0 -24px;}
 ul.contact_icons li.chat{ background-position: 0 -48px;}
 /*-- SSL security icons --*/
-ul.secure_icons{list-style:none; margin:40px 0 20px 0; padding:0; overflow:hidden; width: 100%;}
+ul.secure_icons{list-style:none; padding:0; overflow:hidden; margin-top: 1em; }
 ul.secure_icons li{margin:0 0 10px 0; float:left;}
 ul.secure_icons li a{height:70px; display:block; text-indent: -9999px;}
 ul.secure_icons li.truste_seal{ width: 30%; }
 ul.secure_icons li.truste_seal a{width:142px; height: 70px; /*background:url(../img/logo-truste.png) no-repeat 0 0; */}
-ul.secure_icons li.verisign_seal{background:url(images/verisign_seal.gif) no-repeat; background-size: contain; width: 40%}
+ul.secure_icons li.verisign_seal{background:url(images/verisign_seal.gif) no-repeat; background-size: contain; margin-right: 3em; }
 ul.secure_icons li a img{ display: inherit; border: none;width:93px;}
 ul.secure_icons li.truste_seal a img{ margin-top: 12px;}
 ul.secure_icons li.lock-image{ width: 25%;}

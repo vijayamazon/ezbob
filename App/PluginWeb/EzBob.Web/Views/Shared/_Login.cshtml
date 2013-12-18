@@ -24,8 +24,8 @@
             <p>@Html.ActionLink("Forgotten Password", "ForgotPassword", "Account", new { }, new { }) | @Html.ActionLink("Sign up", "Index", "Wizard", new { Area = "Customer" }, new { })</p>
         </section>
     </section>
-	<aside id="sidebar">
-		@{Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_SecurityStatement.cshtml");}
+	<aside class="customer-sidebar login">
+		@{Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_Sidebar.cshtml");}
 	</aside>
 	<div class="clear" />
 	<div id="DontHaveAccount">
