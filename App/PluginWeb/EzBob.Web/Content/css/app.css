@@ -1286,9 +1286,6 @@ td.account-logo {
         margin: 0 auto;
     }
 
-    aside#sidebar {
-        clear: both;
-    }
     /*ul.eu_icon{position:absolute  ; top:0  ; left:0  ;}*/
     div.wizard-director-text {
         width: 100%;
@@ -1454,10 +1451,6 @@ td.account-logo {
     }
 
     .modal {
-        width: 100%;
-    }
-
-    #sidebar {
         width: 100%;
     }
 
