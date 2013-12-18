@@ -209,7 +209,7 @@
 				</div>
 			</div>
 
-		    <div class="control-group form_field_container WebSiteTurnOver hide">
+		    <div class="control-group form_field_container WebSiteTurnOver hide notoffline">
 				<div class="controls cashControlls">
 					<label class="attardi-input">
 						<span>Total online sales (£)</span>
@@ -219,7 +219,7 @@
 				</div>
 			</div>
 
-		    <div class="control-group form_field_container OverallTurnOver hide">
+		    <div class="control-group form_field_container OverallTurnOver hide notoffline">
 				<div class="controls cashControlls">
 					<label class="attardi-input">
 						<span>Total sales (online & offline in £)</span>
@@ -268,7 +268,7 @@
         </div>
     </div>
 
-    <div class="control-group form_field_container">
+    <div class="control-group form_field_container hide">
         <div class="controls">
             <label class="control-label attardi-input">
                 <span># of earning (gross salary) over £41,450 per annum</span>
@@ -278,7 +278,7 @@
         </div>
     </div>
 
-    <div class="control-group form_field_container">
+    <div class="control-group form_field_container hide">
         <div class="controls">
             <label class="control-label attardi-input">
                 <span># of earning (gross salary) less than £9,440 per annum</span>
@@ -288,7 +288,7 @@
         </div>
     </div>
 
-    <div class="control-group form_field_container">
+    <div class="control-group form_field_container hide">
         <div class="controls">
             <label class="control-label attardi-input">
                 <span>Change in the # of employees in last 12 months</span>
@@ -378,7 +378,7 @@
 
 	@AdditionalCompanyInfo("NonLimited")
 
-	<div class="control-group form_field_container">
+	<div class="control-group form_field_container notoffline">
 		<div class="controls">
 			<label class="control-label attardi-input">
 				<span>Business phone</span>
@@ -420,7 +420,7 @@
 
 	@AdditionalCompanyInfo("Limited")
 
-	<div class="control-group form_field_container">
+	<div class="control-group form_field_container notoffline">
 		<div class="controls">
 			<label class="control-label attardi-input">
 				<span>Business phone</span>
@@ -437,11 +437,14 @@
 	<div class="directors"></div>
 </script>
 
+
+
+
 @helper AdditionalCompanyInfo(string prefix)
 {
 	var prfx = prefix.ToLower();
 
-    <div class="offline">
+    <div class="offline hide">
         <div class="control-group form_field_container">
             <div class="controls">
                 <label class="control-label attardi-input">

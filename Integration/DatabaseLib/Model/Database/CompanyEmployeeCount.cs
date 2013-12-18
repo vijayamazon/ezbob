@@ -17,9 +17,9 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual Customer Customer { get; set; }
 		public virtual DateTime Created { get; set; }
 		public virtual int EmployeeCount { get; set; }
-		public virtual int TopEarningEmployeeCount { get; set; }
-		public virtual int BottomEarningEmployeeCount { get; set; }
-		public virtual int EmployeeCountChange { get; set; }
+		public virtual int? TopEarningEmployeeCount { get; set; }
+		public virtual int? BottomEarningEmployeeCount { get; set; }
+		public virtual int? EmployeeCountChange { get; set; }
 		public virtual double TotalMonthlySalary { get; set; }
 	} // class CompanyEmployeeCount
 
@@ -47,9 +47,9 @@ namespace EZBob.DatabaseLib.Model.Database {
 		} // constructor
 
 		public int EmployeeCount { get; set; }
-		public int TopEarningEmployeeCount { get; set; }
-		public int BottomEarningEmployeeCount { get; set; }
-		public int EmployeeCountChange { get; set; }
+		public int? TopEarningEmployeeCount { get; set; }
+		public int? BottomEarningEmployeeCount { get; set; }
+		public int? EmployeeCountChange { get; set; }
 		public double TotalMonthlySalary { get; set; }
 		public DateTime Created { get; set; }
 		public bool HasData { get; private set; }

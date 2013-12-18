@@ -54,6 +54,8 @@ namespace EzBob.Web.Areas.Underwriter.Models
         public CrossCheckModel(EZBob.DatabaseLib.Model.Database.Customer customer)
         {
             Customer = customer;
+			if(Customer.CompanyAdditionalInfo == null) Customer.CompanyAdditionalInfo = new CompanyAdditionalInfo();
+
             Application = new PersonalInfo();
             EBay = new PersonalInfo();
             PayPal = new PersonalInfo();

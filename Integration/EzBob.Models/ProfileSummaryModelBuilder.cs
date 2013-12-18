@@ -77,8 +77,8 @@
 			{
 				rl.Amount = requestedLoan.Amount;
 				rl.Created = requestedLoan.Created;
-				rl.CustomerReason = requestedLoan.CustomerReason.Reason;
-				rl.CustomerSourceOfRepayment = requestedLoan.CustomerSourceOfRepayment.SourceOfRepayment;
+				rl.CustomerReason = requestedLoan.CustomerReason == null ? null : requestedLoan.CustomerReason.Reason;
+				rl.CustomerSourceOfRepayment = requestedLoan.CustomerSourceOfRepayment == null ? null : requestedLoan.CustomerSourceOfRepayment.SourceOfRepayment;
 				rl.OtherReason = requestedLoan.OtherReason;
 				rl.OtherSourceOfRepayment = requestedLoan.OtherSourceOfRepayment;
 			}

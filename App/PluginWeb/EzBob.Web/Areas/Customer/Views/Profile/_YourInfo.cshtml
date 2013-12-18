@@ -102,21 +102,24 @@
             </div>
         </div>
         
+        <%if(CustomerPersonalInfo.OverallTurnOver != null){%>
         <div class="control-group">
             <label for="OverallTurnOver" class="control-label">Total <b>estimated</b> sales</label>
             <div class="controls cashControlls">
                 <input id="OverallTurnOver" readonly="readonly" name="OverallTurnOver" type="text" value="<%-CustomerPersonalInfo.OverallTurnOver%>" class="cashInput personEditInput form_field" />
             </div>
         </div>   
-       
+       <%}%>
+        <%if(CustomerPersonalInfo.WebSiteTurnOver != null){%>
         <div class="control-group">
             <label for="WebSiteTurnOver" class="control-label">Online estimated sales</label>
             <div class="controls cashControlls">
                 <input id="WebSiteTurnOver" readonly="readonly" name="WebSiteTurnOver" type="text" value="<%-CustomerPersonalInfo.WebSiteTurnOver%>" class="cashInput personEditInput form_field" />
             </div>
         </div>   
-
-        @if (DBConfigurationValues.Instance.DisplayEarnedPoints) {
+        <%}%>
+        @if (DBConfigurationValues.Instance.DisplayEarnedPoints)
+        {
         <div class="control-group">
             <label class="control-label">Earned points</label>
             <div class="controls">
@@ -150,7 +153,7 @@
                     @EzForm.AddressInput("LimitedCompanyAddress", "Address")
                 </div>
         </div>    
-
+        <%if(LimitedInfo.LimitedBusinessPhone != null){%>
         <div class="control-group">
             <label class="control-label">
                 Business phone #</label>
@@ -158,47 +161,11 @@
                 <input class ="personEditInput phonenumber form_field" id="BusinessPhone" name="BusinessPhone" type="text" value="<%-LimitedInfo.LimitedBusinessPhone%>" readonly="readonly"  />
             </div>
         </div>
-
+        <%}%>
         <div class="control-group director-container"></div>
 
 		<div class="offline">
-			<fieldset>
-				<legend>On <%- EzBob.formatDate(CompanyEmployeeCountInfo.Created) %></legend>
-				<div class="control-group">
-					<label class="control-label">Current number of employees</label>
-					<div class="controls">
-						<input type="text" value="<%- CompanyEmployeeCountInfo.EmployeeCount %>" class="form_field" readonly="readonly"/>
-					</div>
-				</div>
-
-				<div class="control-group">
-					<label class="control-label">Number of employees earning (gross salary) over £41,450 per annum</label>
-					<div class="controls">
-						<input type="text" value="<%- CompanyEmployeeCountInfo.TopEarningEmployeeCount %>" class="form_field" readonly="readonly"/>
-					</div>
-				</div>
-
-				<div class="control-group">
-					<label class="control-label">Number of employees earning (gross salary) less than £9,440 per annum</label>
-					<div class="controls">
-						<input type="text" value="<%- CompanyEmployeeCountInfo.BottomEarningEmployeeCount %>" class="form_field" readonly="readonly"/>
-					</div>
-				</div>
-
-				<div class="control-group">
-					<label class="control-label">Change in the number of employees in last 12 months</label>
-					<div class="controls">
-						<input type="text" value="<%- CompanyEmployeeCountInfo.EmployeeCountChange %>" class="form_field" readonly="readonly"/>
-					</div>
-				</div>
-                
-                <div class="control-group">
-					<label class="control-label">Total monthly salary expenditure (inc tax & NI)</label>
-					<div class="controls">
-						<input type="text" value="<%- CompanyEmployeeCountInfo.TotalMonthlySalary %>" class="form_field" readonly="readonly"/>
-					</div>
-				</div>
-			</fieldset>
+			@CompanyCountFields()
 		</div>
     </fieldset>
         
@@ -233,6 +200,7 @@
                 <input type="text" value="<%-NonLimitedInfo.NonLimitedTimeInBusiness%>  years" class="form_field" readonly="readonly" />
             </div>
         </div>
+        <%if(NonLimitedInfo.NonLimitedBusinessPhone != null){%>
         <div class="control-group">
             <label class="control-label">
                 Business phone #</label>
@@ -240,40 +208,11 @@
                 <input class ="personEditInput phonenumber form_field" name="BusinessPhone" type="text" value="<%-NonLimitedInfo.NonLimitedBusinessPhone%>" readonly="readonly"  />
             </div>
         </div>
-
+        <%}%>
         <div class="control-group director-container"></div>
 
 		<div class="offline">
-			<fieldset>
-				<legend>On <%- EzBob.formatDate(CompanyEmployeeCountInfo.Created) %></legend>
-				<div class="control-group">
-					<label class="control-label">Current number of employees</label>
-					<div class="controls">
-						<input type="text" value="<%- CompanyEmployeeCountInfo.EmployeeCount %>" class="form_field" readonly="readonly"/>
-					</div>
-				</div>
-
-				<div class="control-group">
-					<label class="control-label">Number of employees earning (gross salary) over £41,450 per annum</label>
-					<div class="controls">
-						<input type="text" value="<%- CompanyEmployeeCountInfo.TopEarningEmployeeCount %>" class="form_field" readonly="readonly"/>
-					</div>
-				</div>
-
-				<div class="control-group">
-					<label class="control-label">number of employees earning (gross salary) less than £9,440 per annum</label>
-					<div class="controls">
-						<input type="text" value="<%- CompanyEmployeeCountInfo.BottomEarningEmployeeCount %>" class="form_field" readonly="readonly"/>
-					</div>
-				</div>
-
-				<div class="control-group">
-					<label class="control-label">Change in the number of employees in last 12 months</label>
-					<div class="controls">
-						<input type="text" value="<%- CompanyEmployeeCountInfo.EmployeeCountChange %>" class="form_field" readonly="readonly"/>
-					</div>
-				</div>
-			</fieldset>
+			@CompanyCountFields()
 		</div>
     </fieldset>
         
@@ -312,3 +251,46 @@
 <script id="address-template" type="text/template">
     @{Html.RenderPartial("_AddressTemplate");}
 </script>
+
+@helper CompanyCountFields()
+{
+    <fieldset>
+        <legend>On <%- EzBob.formatDate(CompanyEmployeeCountInfo.Created) %></legend>
+        <div class="control-group">
+            <label class="control-label">Current number of employees</label>
+            <div class="controls">
+                <input type="text" value="<%- CompanyEmployeeCountInfo.EmployeeCount %>" class="form_field" readonly="readonly" />
+            </div>
+        </div>
+        <%if(CompanyEmployeeCountInfo.TopEarningEmployeeCount != null){%>
+		<div class="control-group">
+            <label class="control-label">Number of employees earning (gross salary) over £41,450 per annum</label>
+            <div class="controls">
+                <input type="text" value="<%- CompanyEmployeeCountInfo.TopEarningEmployeeCount %>" class="form_field" readonly="readonly" />
+            </div>
+        </div>
+        <%}%>
+        <%if(CompanyEmployeeCountInfo.BottomEarningEmployeeCount != null){%>
+		<div class="control-group">
+            <label class="control-label">Number of employees earning (gross salary) less than £9,440 per annum</label>
+            <div class="controls">
+                <input type="text" value="<%- CompanyEmployeeCountInfo.BottomEarningEmployeeCount %>" class="form_field" readonly="readonly" />
+            </div>
+        </div>
+        <%}%>
+        <%if(CompanyEmployeeCountInfo.EmployeeCountChange != null){%>
+		<div class="control-group">
+            <label class="control-label">Change in the number of employees in last 12 months</label>
+            <div class="controls">
+                <input type="text" value="<%- CompanyEmployeeCountInfo.EmployeeCountChange %>" class="form_field" readonly="readonly" />
+            </div>
+        </div>
+        <%}%>
+        <div class="control-group">
+            <label class="control-label">Total monthly salary expenditure (inc tax & NI)</label>
+            <div class="controls">
+                <input type="text" value="<%- CompanyEmployeeCountInfo.TotalMonthlySalary %>" class="form_field" readonly="readonly" />
+            </div>
+        </div>
+    </fieldset>
+}
