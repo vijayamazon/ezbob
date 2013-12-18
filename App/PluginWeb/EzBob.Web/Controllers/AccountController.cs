@@ -449,8 +449,8 @@ namespace EzBob.Web.Controllers
 							Customer = customer,
 							Amount = amount,
 							Created = DateTime.UtcNow,
-							CustomerReason = _reasons.Get(customerReason),
-							CustomerSourceOfRepayment = _sources.Get(customerSourceOfRepayment),
+							CustomerReason = customerReason.HasValue ? _reasons.Get(customerReason) : null,
+							CustomerSourceOfRepayment = customerSourceOfRepayment.HasValue ? _sources.Get(customerSourceOfRepayment) : null,
 							OtherReason = otherCustomerReason,
 							OtherSourceOfRepayment = otherCustomerSourceOfRepayment
 						});

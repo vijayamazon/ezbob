@@ -96,8 +96,8 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 		[ValidateJsonAntiForgeryToken]
 		public JsonNetResult SaveCompany(
 			string TypeOfBusiness,
-			decimal WebSiteTurnOver,
-			decimal OverallTurnOver,
+			decimal? WebSiteTurnOver,
+			decimal? OverallTurnOver,
 			LimitedInfo limitedInfo,
 			NonLimitedInfo nonLimitedInfo,
 			CompanyAdditionalInfo companyAdditionalInfo,

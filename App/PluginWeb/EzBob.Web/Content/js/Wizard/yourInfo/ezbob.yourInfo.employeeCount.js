@@ -164,7 +164,7 @@ EzBob.EmployeeCountView = Backbone.View.extend({
 	}, // someCountChanged
 
 	isValid: function() {
-		if (this.$el.find('#EmployeeCountChange').val() === '')
+	    if (this.$el.find('#EmployeeCountChange').val() === '' && this.$el.find('#EmployeeCountChange').is(":visible"))
 			return false;
 
 		var nTotalCount = this.getVal('#EmployeeCount');
@@ -173,16 +173,20 @@ EzBob.EmployeeCountView = Backbone.View.extend({
 			return false;
 
 		var nTopCount = this.getVal('#TopEarningEmployeeCount');
-
-		if (nTopCount < 0)
+	    var bTopCountVisible = this.$el.find('#TopEarningEmployeeCount').is(":visible");
+		if (nTopCount < 0 && bTopCountVisible)
 			return false;
 
 		var nBottomCount = this.getVal('#BottomEarningEmployeeCount');
-
-		if (nBottomCount < 0)
+		var bBottomCountVisible = this.$el.find('#BottomEarningEmployeeCount').is(":visible");
+		if (nBottomCount < 0 && bBottomCountVisible)
 			return false;
 
-		return nTopCount + nBottomCount <= nTotalCount;
+		if (bBottomCountVisible && bTopCountVisible)
+		    return nTopCount + nBottomCount <= nTotalCount;
+
+	    return true;
+
 	}, // isValid
 
 	getVal: function(sEl) {
