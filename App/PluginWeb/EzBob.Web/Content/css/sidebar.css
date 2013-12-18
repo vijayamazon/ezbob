@@ -1,51 +1,47 @@
 aside.customer-sidebar { float:right; width: 29%; }
 
-div.customer-sidebar-content { width: 100%; }
+div.customer-sidebar-content {
+	margin-top: 62px;
+	width: 100%;
+	border: 30px solid #f1f1f1;
+	border-radius: 10px;
+}
 
 div.customer-sidebar-content div.item {
 	min-height: 70px;
 	padding: 5px;
-	border: 1px dotted lightgray;
+	color: #5c6373;
+	font-size: 12px;
+	position: relative;
+	border-bottom: 0px solid #fafafa;
 }
 
 div.customer-sidebar-content div.item div.icon {
+	position: absolute;
+	left: 0;
+	top: 0;
 	width: 20%;
-	float: left;
 	text-align: center;
 }
 
-div.customer-sidebar-content div.item div.icon img {
+div.customer-sidebar-content div.item div.icon img.sb-icon {
 	margin-top: 19px;
 	width: 32px;
+	height: 32px;
 	border: 0;
 }
 
 div.customer-sidebar-content div.item div.text {
+	position: absolute;
+	right: 0;
+	top: 0;
 	width: 79%;
-	float: right;
+	padding-left: 30px;
 }
 
 div.customer-sidebar-content div.item div.text h3 {
 	font-weight: bold;
 	font-size: 1.2em;
 	margin: 0 0 0.1em 0;
-}
-
-div.customer-sidebar-content div.item div.text div.security-seals {
-	position: relative;
-}
-
-div.customer-sidebar-content div.item div.text div.security-seals div.verisign-seal {
-	/* background: url(images/verisign_seal.gif) no-repeat; */
-	position: absolute;
-	height: 72px;
-	width: 100px;
-	top: 0;
-	left: 0;
-}
-
-div.customer-sidebar-content div.item div.text div.security-seals div.truste-seal {
-	position: absolute;
-	top: 0;
-	right: 0;
+	margin-left: -13px;
 }
