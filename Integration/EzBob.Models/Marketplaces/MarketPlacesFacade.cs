@@ -6,6 +6,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using Builders;
 	using StructureMap;
+	using Web.Areas.Customer.Models;
 
 	public class MarketPlacesFacade
 	{
@@ -18,19 +19,39 @@
 
 			var models = marketplaces.Select(mp =>
 			{
-				var builder = GetBuilder(mp);
+				try
+				{
+					var builder = GetBuilder(mp);
 
-				var model = builder.Create(mp, history);
+					var model = builder.Create(mp, history);
 
-				model.PaymentAccountBasic = builder.GetPaymentAccountModel(mp, model, history);
+					model.PaymentAccountBasic = builder.GetPaymentAccountModel(mp, model, history);
 
-				return model;
+					return model;
+				}
+				catch
+				{
+					return new MarketPlaceModel
+					{
+						Id = mp.Id,
+						Type = mp.DisplayName,
+						Name = mp.Marketplace.Name,
+						PaymentAccountBasic = new PaymentAccountsModel()
+							{
+								displayName = mp.DisplayName,
+							}
+					};
+				}
 			}).ToList();
-
-			if (models.Any(m => m.Name == "HMRC") && models.Any(m => m.Name == "Yodlee"))
+			try
 			{
-				((ChannelGrabberHmrcData)models.First(m => m.Name == "HMRC").CGData).BankStatement = models.First(m => m.Name == "Yodlee").Yodlee.BankStatementDataModel;
-			}
+				if (models.Any(m => m.Name == "HMRC") && models.Any(m => m.Name == "Yodlee"))
+				{
+					((ChannelGrabberHmrcData) models.First(m => m.Name == "HMRC").CGData).BankStatement =
+						models.First(m => m.Name == "Yodlee").Yodlee.BankStatementDataModel;
+				}
+			}catch{}
+
 			return models;
 		} // GetMarketPlaceModels
 

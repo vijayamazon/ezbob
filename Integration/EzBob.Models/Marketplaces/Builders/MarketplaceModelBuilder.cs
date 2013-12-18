@@ -114,12 +114,15 @@ namespace EzBob.Models.Marketplaces.Builders
 			{
 				foreach (var info in av)
 				{
-					var val = info.ParameterName.Replace(" ", "").Replace("%", "") + info.TimePeriod;
-					string temp;
-					data.TryGetValue(val, out temp);
-					if (temp == null)
+					if (!string.IsNullOrEmpty(info.ParameterName))
 					{
-						data.Add(val, info.Value.ToString());
+						var val = info.ParameterName.Replace(" ", "").Replace("%", "") + info.TimePeriod;
+						string temp;
+						data.TryGetValue(val, out temp);
+						if (temp == null)
+						{
+							data.Add(val, info.Value.ToString());
+						}
 					}
 				}
 			}

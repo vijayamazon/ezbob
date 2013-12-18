@@ -168,7 +168,7 @@
 					var showAsNew = !m.IsNew ? 'hidden-field' : '';
 					%>
 					<tr data-id="<%- m.Id %>" class="<%if(m.Disabled){print('disabled')}%>">
-						<td>
+						<td class="account-logo">
 							<div class="source_labels new-ribbon <%-showAsNew%>"></div>
 							<div class="<%- sSourceLabels %> <%- sShopName.toLowerCase() %>"></div>
 						</td>
@@ -258,7 +258,7 @@
 				var showAsNew = !m.IsNew ? 'hidden-field' : '';
 				%>
 				<tr data-id="<%- m.Id %>" class="<%if(m.Disabled){print('disabled')}%>">
-				    <td>
+				    <td class="account-logo">
 				        <div class="source_labels new-ribbon  <%-showAsNew%>"></div>
 				        <div class="<%- sSourceLabels %> <%- sShopName.toLowerCase() %>"></div>
 				    </td>

@@ -36,7 +36,7 @@ namespace EZBob.DatabaseLib
 
 		public override string ParameterName
 		{
-			get { return _Function.DisplayName; }
+			get { return _Function == null ? null : _Function.DisplayName; }
 			
 		}
 	}
