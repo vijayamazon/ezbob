@@ -228,8 +228,12 @@ div.wizard-director-text { font-size: 11pt; color: #585858; }
     font-size: 16px;
 }
 
-.director-gender input {
+.male-director-gender-margin {
     margin: 0 !important;
+}
+
+.gender-margin {
+    margin-left: 50px !important;
 }
 
 
