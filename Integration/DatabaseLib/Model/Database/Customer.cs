@@ -153,8 +153,6 @@ namespace EZBob.DatabaseLib.Model.Database
 
 	public class Customer : IEqualityComparer<Customer>
 	{
-		public double? CapitalExpenditure { get; set; }
-
 		public Customer()
 		{
 			CustomerMarketPlaces = new HashedSet<MP_CustomerMarketPlace>();
@@ -674,7 +672,7 @@ namespace EZBob.DatabaseLib.Model.Database
 		public string YearsInCompany { get; set; }
 		public string RentMonthsLeft { get; set; }
 		public double TotalMonthlySalary { get; set; }
-		public double CapitalExpenditure { get; set; }
+		public double? CapitalExpenditure { get; set; }
 	}
 
 	public class PersonalInfo
