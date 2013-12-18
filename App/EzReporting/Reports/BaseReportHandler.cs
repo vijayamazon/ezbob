@@ -1141,7 +1141,7 @@ namespace Reports {
 
 		private KeyValuePair<ReportQuery, DataTable> CreateUiReport(Report report, DateTime today, DateTime tomorrow) {
 			var cc = new UiReport(DB, today, tomorrow, this);
-			SortedDictionary<int, UiReportItem> oItems = cc.Run();
+			List<UiReportItem> oItems = cc.Run();
 
 			var rpt = new ReportQuery(report) {
 				DateStart = today,
@@ -1150,8 +1150,8 @@ namespace Reports {
 
 			DataTable oOutput = UiReportItem.CreateTable();
 
-			foreach (KeyValuePair<int, UiReportItem> pair in oItems)
-				 pair.Value.ToRow(oOutput);
+			foreach (UiReportItem oItem in oItems)
+				 oItem.ToRow(oOutput);
 
 			return new KeyValuePair<ReportQuery, DataTable>(rpt, oOutput);
 		} // CreateUiReport

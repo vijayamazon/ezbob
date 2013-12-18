@@ -25,6 +25,7 @@ namespace Reports {
 			m_oUiActions = new SortedDictionary<int, string>();
 			m_oAddresses = new SortedDictionary<int, AddressInfo>();
 			m_oDirectors = new SortedDictionary<int, int>();
+			m_oAccounts = new SortedDictionary<int, int>();
 			m_oResult = new SortedDictionary<int, UiReportItem>();
 
 			m_oCurHandler = null;
@@ -38,7 +39,7 @@ namespace Reports {
 
 		#region method Run
 
-		public SortedDictionary<int, UiReportItem> Run() {
+		public List<UiReportItem> Run() {
 			m_oDB.ForEachRow(
 				HandleRow,
 				"RptUiReportData",
@@ -52,12 +53,18 @@ namespace Reports {
 
 			Msg("Generating report...");
 
-			foreach (KeyValuePair<int, UiReportItem> pair in m_oResult)
+			var oOut = new List<UiReportItem>();
+
+			foreach (KeyValuePair<int, UiReportItem> pair in m_oResult) {
 				pair.Value.Generate();
+				oOut.Add(pair.Value);
+			} // for each
 
 			Msg("Generating report complete.");
 
-			return m_oResult;
+			oOut.Sort();
+
+			return oOut;
 		} // Run
 
 		#endregion method Run
@@ -112,6 +119,13 @@ namespace Reports {
 					m_oCurHandler = SaveDirector;
 					break;
 
+				case "LinkedAccounts":
+					if (VerboseLogging)
+						Debug("UiReport: current row handler set to SaveLinkedAccounts.");
+
+					m_oCurHandler = SaveLinkedAccounts;
+					break;
+
 				case "UiEvents":
 					if (VerboseLogging)
 						Debug("UiReport: current row handler set to ProcessEvent.");
@@ -157,8 +171,9 @@ namespace Reports {
 		private void SaveUiControl(DbDataReader oRow) {
 			int nID = Convert.ToInt32(oRow["UiControlID"]);
 			string sName = Convert.ToString(oRow["UiControlName"]);
+			int nGroupID = Convert.ToInt32(oRow["UiControlGroupID"]);
 
-			AddControlToItemGroup(nID, sName);
+			AddControlToItemGroup(nID, sName, nGroupID);
 
 			if (VerboseLogging)
 				Debug("UiReport: UiControl[{0}] = {1}", nID, sName);
@@ -169,7 +184,7 @@ namespace Reports {
 		#region method SaveCustomer
 
 		private void SaveCustomer(DbDataReader oRow) {
-			var oCustomer = new CustomerInfo(oRow, m_oAddresses, m_oDirectors);
+			var oCustomer = new CustomerInfo(oRow, m_oAddresses, m_oDirectors, m_oAccounts);
 
 			m_oResult[oCustomer.ID] = new UiReportItem(oCustomer, m_oControlGroups);
 
@@ -219,6 +234,20 @@ namespace Reports {
 
 		#endregion method SaveDirector
 
+		#region method SaveLinkedAccounts
+
+		private void SaveLinkedAccounts(DbDataReader oRow) {
+			int nID = Convert.ToInt32(oRow["CustomerID"]);
+			int nCount = Convert.ToInt32(oRow["AccountCount"]);
+
+			m_oAccounts[nID] = nCount;
+
+			if (VerboseLogging)
+				Debug("UiReport: linked accounts[{0}] = {1}", nID, nCount);
+		} // SaveLinkedAccounts
+
+		#endregion method SaveDirector
+
 		#region method ProcessEvent
 
 		private void ProcessEvent(DbDataReader oRow) {
@@ -239,13 +268,16 @@ namespace Reports {
 
 		#region method AddControlToItemGroup
 
-		private void AddControlToItemGroup(int nControlID, string sControlName) {
+		private void AddControlToItemGroup(int nControlID, string sControlName, int nGroupID) {
+			if (nGroupID == 3) {
+				m_oControlGroups[UiItemGroups.LinkAccounts][nControlID] = sControlName;
+				return;
+			} // if
+
 			if (!sControlName.StartsWith("personal-info:"))
 				return;
 
-			string sControlType = sControlName.Substring(14);
-
-			switch (sControlType) {
+			switch (sControlName.Substring(14)) {
 			case "first_name":
 			case "gender":
 			case "last_name":
@@ -257,17 +289,17 @@ namespace Reports {
 			case "middle_name":
 			case "continue":
 			case "own_other_property":
-				m_oControlGroups[UiItemGroups.PersonalInfo][nControlID] = sControlType;
+				m_oControlGroups[UiItemGroups.PersonalInfo][nControlID] = sControlName;
 				break;
 
 			case "residential_status":
 			case "time_at_address":
-				m_oControlGroups[UiItemGroups.HomeAddress][nControlID] = sControlType;
+				m_oControlGroups[UiItemGroups.HomeAddress][nControlID] = sControlName;
 				break;
 
 			case "daytime_phone":
 			case "mobile_phone":
-				m_oControlGroups[UiItemGroups.ContactDetails][nControlID] = sControlType;
+				m_oControlGroups[UiItemGroups.ContactDetails][nControlID] = sControlName;
 				break;
 
 			case "add_director":
@@ -281,7 +313,7 @@ namespace Reports {
 			case "director_middle_name":
 			case "director_phone":
 			case "remove_director":
-				m_oControlGroups[UiItemGroups.AdditionalDirectors][nControlID] = sControlType;
+				m_oControlGroups[UiItemGroups.AdditionalDirectors][nControlID] = sControlName;
 				break;
 
 			case "type_of_business":
@@ -294,7 +326,7 @@ namespace Reports {
 			case "top_earning_employee_count":
 			case "bottom_earning_employee_count":
 			case "total_monthly_salary":
-				m_oControlGroups[UiItemGroups.CompanyInfo][nControlID] = sControlType;
+				m_oControlGroups[UiItemGroups.CompanyInfo][nControlID] = sControlName;
 				break;
 
 			case "limited_company_name":
@@ -311,7 +343,7 @@ namespace Reports {
 			case "nonlimited_time_at_address":
 			case "nonlimited_time_in_business":
 			case "nonlimited_years_in_company":
-				m_oControlGroups[UiItemGroups.CompanyDetails][nControlID] = sControlType;
+				m_oControlGroups[UiItemGroups.CompanyDetails][nControlID] = sControlName;
 				break;
 			} // switch
 		} // AddControlToItemGroup
@@ -325,6 +357,7 @@ namespace Reports {
 		private readonly SortedDictionary<int, string> m_oUiActions;
 		private readonly SortedDictionary<int, AddressInfo> m_oAddresses;
 		private readonly SortedDictionary<int, int> m_oDirectors;
+		private readonly SortedDictionary<int, int> m_oAccounts;
 
 		private readonly SortedDictionary<int, UiReportItem> m_oResult;
 

@@ -58,12 +58,12 @@ namespace TestApp {
 			var rpt = new UiReport(oDB, new DateTime(2013, 12, 1), new DateTime(2013, 12, 10), log);
 			rpt.VerboseLogging = true;
 
-			SortedDictionary<int, UiReportItem> oOutput = rpt.Run();
+			List<UiReportItem> oOutput = rpt.Run();
 
 			log.Debug("Report start");
 
-			foreach (KeyValuePair<int, UiReportItem> pair in oOutput)
-				log.Debug(pair.Value.ToString());
+			foreach (UiReportItem oItem in oOutput)
+				log.Debug(oItem.ToString());
 
 			log.Debug("Report end");
 		} // TestUiReport

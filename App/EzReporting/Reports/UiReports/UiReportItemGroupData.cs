@@ -58,7 +58,6 @@ namespace Reports {
 
 		public void ToRow(List<object> oRow) {
 			string sPrefix = string.Empty;
-			string sInfix = string.Empty;
 
 			switch (Action) {
 			case UiReportItemGroupAction.NeverStarted:
@@ -66,13 +65,11 @@ namespace Reports {
 				return;
 
 			case UiReportItemGroupAction.Started:
-				sPrefix = "Started";
-				sInfix = ", spent";
+				sPrefix = "Spent";
 				break;
 
 			case UiReportItemGroupAction.Completed:
-				sPrefix = "Finished";
-				sInfix = " in";
+				sPrefix = "F";
 				break;
 
 			default:
@@ -90,11 +87,9 @@ namespace Reports {
 					sTime = oDuration.Minutes + ":" + oDuration.Seconds.ToString("00");
 				else
 					sTime = (oDuration.Days > 0 ? oDuration.Days + "d " : "") + oDuration.Hours + ":" + oDuration.Minutes.ToString("00") + ":" + oDuration.Seconds.ToString("00");
-
-				sTime = sInfix + " " + sTime;
 			} // if
 
-			oRow.Add(sPrefix + sTime);
+			oRow.Add(sPrefix + " " + sTime);
 		} // ToRow
 
 		#endregion method ToRow

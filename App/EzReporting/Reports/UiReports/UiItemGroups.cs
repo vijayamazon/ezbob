@@ -4,13 +4,19 @@ using System.Collections.Generic;
 namespace Reports {
 	#region enum UiItemGroups
 
+	// Values of the enum members are used to order data in the output table.
+	// New enum member can be inserted in the middle.
+	// However if enum contains n members they must cover all the numbers
+	// from 0 to n-1 inclusive, see ms_SortedGroups initialisation in the
+	// static constructor below.
 	public enum UiItemGroups {
 		PersonalInfo = 0,
 		HomeAddress = 1,
 		ContactDetails = 2,
-		CompanyInfo = 3,
-		CompanyDetails = 4,
-		AdditionalDirectors = 5,
+		LinkAccounts = 3,
+		CompanyInfo = 4,
+		CompanyDetails = 5,
+		AdditionalDirectors = 6,
 	} // enum UiItemGroups
 
 	#endregion enum UiItemGroups
