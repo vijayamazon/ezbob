@@ -60,7 +60,7 @@
                 <div class="form_field_container">
                     <label class="attardi-input FormRadioCtrl fs16">
                         <input type="radio" name="Gender" value="M" id="FormRadioCtrl_M" class="required" ui-event-control-id="personal-info:gender"><label for="FormRadioCtrl_M">Male</label>
-                        <input type="radio" name="Gender" value="F" id="FormRadioCtrl_F" ui-event-control-id="personal-info:gender"><label for="FormRadioCtrl_F">Female</label>
+                        <input class="gender-margin" type="radio" name="Gender" value="F" id="FormRadioCtrl_F" ui-event-control-id="personal-info:gender"><label for="FormRadioCtrl_F">Female</label>
                         <img id="GenderImage" class="field_status required personal-details-gender-image" alt="" />
                     </label>
                     
@@ -541,9 +541,9 @@
             </div>
 
             <div class="control-group form_field_container FormRadioCtrl">
-				<span class="director-gender">
-					<input <%if(director.Gender == 'M'){%>checked="checked"<%}%> type="radio" name="<%-preffix%>[<%=i%>].Gender" value="M" id="<%-preffix%>[<%=i%>].FormRadioCtrl_M" ui-event-control-id="personal-info:director_gender"><label class="fs16" for="<%-preffix%>[<%=i%>].GenderCtrl_M">Male</label>
-					<input <%if(director.Gender == 'F'){%>checked="checked"<%}%> type="radio" name="<%-preffix%>[<%=i%>].Gender" value="F" id="<%-preffix%>[<%=i%>].FormRadioCtrl_F" ui-event-control-id="personal-info:director_gender"><label class="fs16" for="<%-preffix%>[<%=i%>].GenderCtrl_F">Female</label>
+				<span>
+					<input class="male-director-gender-margin" <%if(director.Gender == 'M'){%>checked="checked"<%}%> type="radio" name="<%-preffix%>[<%=i%>].Gender" value="M" id="<%-preffix%>[<%=i%>].FormRadioCtrl_M" ui-event-control-id="personal-info:director_gender"><label class="fs16" for="<%-preffix%>[<%=i%>].GenderCtrl_M">Male</label>
+					<input class="gender-margin" <%if(director.Gender == 'F'){%>checked="checked"<%}%> type="radio" name="<%-preffix%>[<%=i%>].Gender" value="F" id="<%-preffix%>[<%=i%>].FormRadioCtrl_F" ui-event-control-id="personal-info:director_gender"><label class="fs16" for="<%-preffix%>[<%=i%>].GenderCtrl_F">Female</label>
 				</span>
 				<img id="<%-preffix%>[<%=i%>].GenderImage" class="field_status required director_gender_image" />
 			</div>
