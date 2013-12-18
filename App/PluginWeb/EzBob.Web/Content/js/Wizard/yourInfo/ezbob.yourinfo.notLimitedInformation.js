@@ -95,6 +95,7 @@ EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 			NonLimitedTimeAtAddress: { required: true, digits: true },
 			NonLimitedBusinessPhone: { required: true, regex: "^0[0-9]{10}$" },
 			PropertyOwnedByCompany: { required: true },
+			CapitalExpenditure: { required: true, defaultInvalidPounds: true },
 			YearsInCompany: { required: true },
 			RentMonthsLeft: { required: true },
 			TotalMonthlySalary: { required: true, defaultInvalidPounds: true, regex: "^(?!£ 0.00$)" },
@@ -103,7 +104,8 @@ EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 
 	ownValidationMessages: function() {
 		return {
-			NonLimitedBusinessPhone: { regex: "Please enter a valid UK number" },
+		    NonLimitedBusinessPhone: { regex: "Please enter a valid UK number" },
+		    CapitalExpenditure: { defaultInvalidPounds: "This field is required" },
 			TotalMonthlySalary: { defaultInvalidPounds: "This field is required", regex: "This field is required" },
 		};
 	}, // ownValidationMessages
