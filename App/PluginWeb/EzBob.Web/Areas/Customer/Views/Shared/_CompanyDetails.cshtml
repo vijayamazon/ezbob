@@ -196,7 +196,7 @@
 					<label class="attardi-input">
 						<span>Type of business</span>
 						<select class="form_field" id="TypeOfBusiness" name="TypeOfBusiness" ui-event-control-id="personal-info:type_of_business" >
-							<option value=""></option>
+							<option></option>
 							<option class="notoffline" value="Entrepreneur">Sole trader (not Inc.)</option>
 							<option value="SoleTrader">Sole trader (Inc.)</option>
 							<option value="PShip3P">Partnership (Up to 3)</option>
@@ -444,8 +444,8 @@
 {
 	var prfx = prefix.ToLower();
 
-    <div class="offline hide">
-        <div class="control-group form_field_container">
+    <div class="offline">
+        <div class="control-group form_field_container hide">
             <div class="controls">
                 <label class="control-label attardi-input">
                     <span>Property owned by company</span>
@@ -493,7 +493,7 @@
         <div class="control-group form_field_container">
             <div class="controls">
                 <label class="control-label attardi-input">
-                    <span>Amount of capital expenditure in the last 12 months</span>
+                    <span>Amount of capital expenditure in the last 12 months (excl. vat)</span>
                     <input id="CapitalExpenditure" name="CapitalExpenditure" type="text" class="form_field cashInput" ui-event-control-id="personal-info:capital_expenditure" />
                     <img id="CapitalExpenditureImage" class="field_status required" />
                 </label>
