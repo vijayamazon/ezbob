@@ -52,7 +52,6 @@
     <Compile Include="Behaviour.cs" />
     <Compile Include="InvalidCredentialsException.cs" />
     <Compile Include="ErrorMessage.cs" />
-    <Compile Include="Stylesheet.cs" />
     <Compile Include="LinkForm.cs" />
     <Compile Include="ValidationMessage.cs" />
     <Compile Include="ValidationRules.cs" />

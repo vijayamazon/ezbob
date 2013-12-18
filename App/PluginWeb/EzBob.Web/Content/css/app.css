@@ -479,6 +479,7 @@ div.shop-connected {
     display: inline-block;
     font-weight: normal;
     margin-left: 5px;
+    margin-right: 10%;
 }
 
 .FormRadioCtrl > span {
@@ -1465,7 +1466,7 @@ td.account-logo {
         visibility: hidden;
     }
 
-    td.account_logo {
+    td.account-logo {
         width: 90px;
         overflow: hidden;
         padding-right: 10px;

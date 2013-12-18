@@ -110,26 +110,6 @@ namespace Integration.ChannelGrabberConfig {
 
 		#endregion property Vendors
 
-		#region method GetSourceLabelCSS
-
-		public string GetSourceLabelCSS() {
-			var sb = new StringBuilder();
-
-			ForEachVendor(vi => {
-				sb.AppendFormat(".source_labels.{0}, .source_labels.{1} {{", vi.Name, vi.Name.ToLower());
-				vi.ClientSide.LinkForm.SourceLabel.ForEach( css => sb.Append(css.ToString()) );
-				sb.Append("}");
-
-				sb.AppendFormat(".source_labels_on.{0}, .source_labels_on.{1} {{", vi.Name, vi.Name.ToLower());
-				vi.ClientSide.LinkForm.SourceLabelOn.ForEach( css => sb.Append(css.ToString()) );
-				sb.Append("}");
-			});
-
-			return sb.ToString();
-		} // GetSourceLabelCSS
-
-		#endregion method GetSourceLabelCSS
-
 		#region GetMarketPlaceDiscrimintor
 
 		public string GetMarketplaceDiscriminator() {
