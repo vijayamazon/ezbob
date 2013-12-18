@@ -46,6 +46,26 @@
 		
 		#endregion
 
+		#region ReAproval
+
+		
+
+		#region New Client
+
+		public static readonly int MinReApproveAmount = 1000;
+		public static readonly int MissedPaymentCalendarDays = 5;//no need?
+		public static readonly int NewReApprovePeriodDays = 30;
+		#endregion
+
+		#region Old Client
+
+		public static readonly bool TookLoanBeforeOffer = true;
+		public static readonly int OldReApprovePeriodDays = 28;
+
+
+		#endregion
+
+		#endregion
 		#region MedalScoreCalculation
 
 		#region Weight

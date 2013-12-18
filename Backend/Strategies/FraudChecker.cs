@@ -1,8 +1,8 @@
-﻿namespace EzBob.Backend.Strategies
-{
-	using log4net;
-	using global::FraudChecker;
+﻿using log4net;
+using FraudChecker;
 
+namespace EzBob.Backend.Strategies
+{
 	public class FraudChecker
 	{
 		private static readonly ILog log = LogManager.GetLogger(typeof(FraudChecker));

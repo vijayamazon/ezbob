@@ -7,7 +7,6 @@ using ApplicationMng.Model;
 using ApplicationMng.Repository;
 using EZBob.DatabaseLib.Model.Database.Loans;
 using EZBob.DatabaseLib.Model.Email;
-using EZBob.DatabaseLib.Repository;
 using EzBob.CommonLib;
 using Ezbob.ExperianParser;
 using Ezbob.Logger;
@@ -19,7 +18,6 @@ using log4net;
 
 namespace EZBob.DatabaseLib.Model.Database {
 	using System.ComponentModel;
-	using System.Web;
 
 	#region relevant to Customer class
 
