@@ -320,6 +320,16 @@
             </label>
         </div>
     </div>
+    
+    <div class="control-group form_field_container">
+            <div class="controls">
+                <label class="control-label attardi-input">
+                    <span>Amount of capital expenditure in the last 12 months (excl. vat)</span>
+                    <input id="CapitalExpenditure" name="CapitalExpenditure" type="text" class="form_field cashInput" ui-event-control-id="personal-info:capital_expenditure" />
+                    <img id="CapitalExpenditureImage" class="field_status required" />
+                </label>
+            </div>
+        </div>
 </script>
 
 <script id="nonlimitededinfo-template" type="text/template">
@@ -486,16 +496,6 @@
                         <option value="24+">More than 24 months</option>
                     </select>
                     <img id="@string.Format("{0}{1}", prefix, "RentMonthsLeftImage")" class="field_status required" />
-                </label>
-            </div>
-        </div>
-        
-        <div class="control-group form_field_container">
-            <div class="controls">
-                <label class="control-label attardi-input">
-                    <span>Amount of capital expenditure in the last 12 months (excl. vat)</span>
-                    <input id="CapitalExpenditure" name="CapitalExpenditure" type="text" class="form_field cashInput" ui-event-control-id="personal-info:capital_expenditure" />
-                    <img id="CapitalExpenditureImage" class="field_status required" />
                 </label>
             </div>
         </div>

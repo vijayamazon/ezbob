@@ -440,13 +440,6 @@ bool propertyOwnedByCompany = Model.Customer.CompanyAdditionalInfo != null && Mo
 					<td class="hmrc"></td>
 				</tr>
 			}
-            
-            <tr>
-				<td><b>Amount of capital expenditure in the last 12 months (excl. vat)</b></td>
-				<td>@(Model.Customer.CompanyAdditionalInfo.CapitalExpenditure.HasValue ? Model.Customer.CompanyAdditionalInfo.CapitalExpenditure.Value.ToString() : "-")</td>
-				<td></td>
-				<td class="hmrc"></td>
-			</tr>
 		}
 	}
 	</tbody>

@@ -22,6 +22,7 @@
         cb = m.CreditBureau || {},
         rl = m.RequestedLoan,
         cec = m.CompanyEmployeeCountInfo || {};
+        cai = m.CompanyAdditionalInfo || {};
 
 		if (cec.Created == '@{ WriteLiteral(CompanyEmployeeCount.LongAgo().ToString("yyyy-MM-dd'T'HH:mm:ssK")); }')
 			cec = {};
@@ -395,9 +396,13 @@
 				        <td><%- cec.EmployeeCountChange %></td>
 				    </tr>
                     
-                    <tr>
+				    <tr>
 				        <td><b>Total Monthly Salary Expenditure (inc tax & NI):</b></td>
 				        <td><%- EzBob.formatPoundsAsInt(cec.TotalMonthlySalary) %></td>
+				    </tr>
+                    <tr>
+				        <td><b>Amount of capital expenditure in the last 12 months (excl. vat):</b></td>
+				        <td><%console.log(m);%><%- EzBob.formatPoundsAsInt(cai.CapitalExpenditure) %></td>
 				    </tr>
 				</tbody>
 			</table>

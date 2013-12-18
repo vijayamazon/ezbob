@@ -64,6 +64,7 @@
             summary.Comment = customer.Comment;
 
 			summary.CompanyEmployeeCountInfo = new CompanyEmployeeCountInfo(customer);
+			summary.CompanyAdditionalInfo = customer.CompanyAdditionalInfo ?? new CompanyAdditionalInfo();
 			summary.IsOffline = customer.IsOffline;
 
             return summary;
