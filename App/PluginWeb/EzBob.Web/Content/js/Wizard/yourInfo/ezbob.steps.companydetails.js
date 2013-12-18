@@ -120,6 +120,9 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
     render: function () {
         this.$el.html(this.template(this.model.toJSON()));
 
+        var oFieldStatusIcons = this.$el.find('IMG.field_status');
+        oFieldStatusIcons.filter('.required').field_status({ required: true });
+        oFieldStatusIcons.not('.required').field_status({ required: false });
 
         this.validator = this.$el.find('.CompanyDetailForm').validate({
             rules: this.validatorRules,
@@ -130,21 +133,14 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
             ignore: ':not(:visible):not(.director_birth_date)',
         });
 
+        this.$el.find('.cashInput').moneyFormat();
 
         if (!this.model.get('IsOffline'))
             this.$el.find('.offline').remove();
         else {
             this.$el.find('.notoffline').remove();
-            this.$el.find('#TypeOfBusiness').val("Limited").change().blur();
+            this.$el.find('#TypeOfBusiness').focus().val("Limited").change().blur().focusout();
         }
-
-        this.$el.find('.cashInput').moneyFormat();
-
-        var oFieldStatusIcons = this.$el.find('IMG.field_status');
-        oFieldStatusIcons.filter('.required').field_status({ required: true });
-        oFieldStatusIcons.not('.required').field_status({ required: false });
-
-        this.inputChanged();
 
         this.readyToProceed = true;
         return this;

@@ -153,6 +153,7 @@ namespace EZBob.DatabaseLib.Model.Database
 
 	public class Customer : IEqualityComparer<Customer>
 	{
+		public double? CapitalExpenditure { get; set; }
 
 		public Customer()
 		{
