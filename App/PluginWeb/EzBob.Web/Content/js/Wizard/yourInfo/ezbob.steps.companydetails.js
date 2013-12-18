@@ -72,6 +72,7 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 			enabled = this.CompanyView.readyToContinue();
 
 		$('.continue').toggleClass('disabled', !enabled);
+		this.$el.find('.cashInput').moneyFormat();
 	}, // inputChanged
 
 	typeOfBusinessChanged: function() {
@@ -256,7 +257,11 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 
 		var totalMonthlySalary = _.find(data, function(d) { return d.name === 'TotalMonthlySalary'; });
 		if (totalMonthlySalary)
-			totalMonthlySalary.value = this.$el.find('#TotalMonthlySalary').autoNumericGet();
+		    totalMonthlySalary.value = this.$el.find('#TotalMonthlySalary').autoNumericGet();
+	    
+	    var capitalExpenditure = _.find(data, function (d) { return d.name === 'CapitalExpenditure'; });
+	    if (capitalExpenditure)
+	        capitalExpenditure.value = this.$el.find('#CapitalExpenditure').autoNumericGet();
 
 		var request = $.post(action, data);
 
