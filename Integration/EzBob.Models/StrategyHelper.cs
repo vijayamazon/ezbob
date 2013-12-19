@@ -16,6 +16,7 @@
 	using EZBob.DatabaseLib.Repository;
 	using CommonLib.TimePeriodLogic;
 	using EzBobIntegration.Web_References.Consumer;
+	using LandRegistryLib;
 	using Marketplaces;
 	using Web.Code;
 	using NHibernate;
@@ -604,6 +605,14 @@
 					}
 				}
 			}
+		}
+
+		public string GetLandRegistryDate(int customerId, bool recheck = false)
+		{
+			//todo implement the logic to retrieve enquiry data, retrieve res data store to db
+			var lr = new LandRegistryApi();
+			var data = lr.Res(null);
+			return data.Response;
 		}
 	}
 }

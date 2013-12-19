@@ -232,7 +232,7 @@
         <td>@Model.PayPalAddress.Country</td>
     </tr>
     <tr>
-        <td><b>Zoopla Copy Image</b></td>
+        <td><b>Zoopla LR Copy Image</b></td>
         <td>@copyAddress("Current", @Model.CurrentAddress)</td>
         <td>@copyAddress("Previous", @Model.PrevAddress)</td>
         <td>@copyAddress("Ebay", @Model.EBayAddress)</td>
@@ -559,6 +559,7 @@ bool propertyOwnedByCompany = Model.Customer.CompanyAdditionalInfo != null && Mo
 @{
 	Html.RenderPartial("~/Areas/Customer/Views/Shared/_TargetingTemplate.cshtml");
     Html.RenderPartial("~/Areas/Underwriter/Views/CrossCheck/Zoopla.cshtml");
+    Html.RenderPartial("~/Areas/Underwriter/Views/CrossCheck/LandRegistry.cshtml");
 }
 
 @helper copyAddress(string name, CustomerAddress currentAddress) {
@@ -566,7 +567,8 @@ bool propertyOwnedByCompany = Model.Customer.CompanyAdditionalInfo != null && Mo
     {
 	<div class="copy-buttons">
 	    @if(name == "Current"){
-            <button class="btn btn-primary" id="zoopla">Zoopla</button>
+	        <button class="btn btn-primary" id="zoopla">Zoopla</button>
+            <button class="btn btn-primary" id="landregistry">Land Registry</button>
         }
         <button class="btn btn-primary btn-copy" data-address="@currentAddress.FormattedAddress" >@name Copy</button>
 	    <a class="btn btn-primary" href="http://maps.googleapis.com/maps/api/streetview?size=640x640&sensor=false&location=@Uri.EscapeDataString(currentAddress.FormattedAddress)" target="_blank">@name Image</a>

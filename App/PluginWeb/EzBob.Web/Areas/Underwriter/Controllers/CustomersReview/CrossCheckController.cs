@@ -54,6 +54,37 @@
 			return this.JsonNet(zoopla);
 		}
 
+		[Ajax]
+		[Transactional]
+		[HttpGet]
+		public JsonNetResult LandRegistry(int customerId, bool recheck)
+		{
+			var customer = _customerRepository.Get(customerId);
+			if (customer == null)
+			{
+				return this.JsonNet(new { error = "customer not found" });
+			}
+
+			var address = customer.AddressInfo.PersonalAddress.FirstOrDefault();
+			if (address == null)
+			{
+				return this.JsonNet(new { error = "address not found" });
+			}
+			
+			string landregistry = null;// address.LandRegistry.LastOrDefault();
+
+			if (landregistry == null || recheck)
+			{
+				var sh = new StrategyHelper();
+				landregistry = sh.GetLandRegistryDate(customerId, recheck);
+				//landregistry = address.Zoopla.LastOrDefault();
+				if (landregistry == null)
+					return this.JsonNet(new { error = "land registry info not found" });
+			}
+
+			return this.JsonNet(new { response = landregistry} );
+		}
+
 		public void SaveRefNum(int customerId, string companyRefNum)
 		{
 			var customer = _customerRepository.Get(customerId);

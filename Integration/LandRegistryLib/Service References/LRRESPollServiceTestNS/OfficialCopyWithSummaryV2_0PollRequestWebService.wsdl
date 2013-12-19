@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tns="http://poll.ocwithsummaryv2_0.ws.bg.lr.gov/" name="OfficialCopyWithSummaryV2_0PollRequestWebService" targetNamespace="http://poll.ocwithsummaryv2_0.ws.bg.lr.gov/" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <types>
+    <xs:schema xmlns:ns3="http://poll.ocwithsummaryv2_0.ws.bg.lr.gov/" xmlns:ns1="http://www.oscre.org/ns/eReg/MR01-20090605/PollRequest" xmlns:ns2="http://www.oscre.org/ns/eReg-Final/2011/ResponseOCWithSummaryV2_0" targetNamespace="http://poll.ocwithsummaryv2_0.ws.bg.lr.gov/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:import schemaLocation="PollRequest.xsd" namespace="http://www.oscre.org/ns/eReg/MR01-20090605/PollRequest" />
+      <xs:import schemaLocation="ResponseOCWithSummaryV2_0.xsd" namespace="http://www.oscre.org/ns/eReg-Final/2011/ResponseOCWithSummaryV2_0" />
+      <xs:element name="SOAPEngineSystemException" nillable="true" type="xs:string" />
+      <xs:element name="getResponse" type="ns3:getResponse" />
+      <xs:element name="getResponseResponse" type="ns3:getResponseResponse" />
+      <xs:complexType name="getResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="arg0" type="ns1:PollRequestType" />
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="getResponseResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="return" type="ns2:ResponseOCWithSummaryV2_0Type" />
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+  </types>
+  <message name="SOAPEngineSystemException">
+    <part name="fault" element="tns:SOAPEngineSystemException" />
+  </message>
+  <message name="oCWithSummaryPollRequest">
+    <part name="parameters" element="tns:getResponse" />
+  </message>
+  <message name="oCWithSummaryPollResponse">
+    <part name="parameters" element="tns:getResponseResponse" />
+  </message>
+  <portType name="OCWithSummaryV2_0PollService">
+    <operation name="getResponse">
+      <input message="tns:oCWithSummaryPollRequest" />
+      <output message="tns:oCWithSummaryPollResponse" />
+      <fault name="SOAPEngineSystemException" message="tns:SOAPEngineSystemException" />
+    </operation>
+  </portType>
+  <binding name="OCWithSummaryV2_0PollRequestWSImplPortBinding" type="tns:OCWithSummaryV2_0PollService">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <operation name="getResponse">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:body use="literal" />
+      </input>
+      <output>
+        <soap:body use="literal" />
+      </output>
+      <fault name="SOAPEngineSystemException">
+        <soap:fault use="literal" name="SOAPEngineSystemException" namespace="" />
+      </fault>
+    </operation>
+  </binding>
+  <service name="OfficialCopyWithSummaryV2_0PollRequestWebService">
+    <port name="OCWithSummaryV2_0PollRequestWSImplPort" binding="tns:OCWithSummaryV2_0PollRequestWSImplPortBinding">
+      <soap:address location="https://z0.b2b.http.server.landregistry.gov:13007/BGStubService/OfficialCopyWithSummaryV2_0PollRequestWebService" />
+    </port>
+  </service>
+</definitions>

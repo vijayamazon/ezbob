@@ -1,0 +1,14 @@
+﻿@{
+    ViewBag.Title = "Land Registry";
+}
+
+<script type="text/template" id="landregistry-template">
+    <%
+    var data = this.model;
+    if(data.error) {%>
+        <h3><%-data.error%></h3>
+    <%} else { %>
+    <pre class="highlight"><code class="language-xml"><%-data.response%></code></pre>
+    <%}%>
+</script>
+

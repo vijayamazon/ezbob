@@ -993,6 +993,7 @@
     <Content Include="Content\img\graphy.png" />
     <Content Include="Content\css\styles.css" />
     <Content Include="Content\js\lib\jquery.scrollTo.js" />
+    <Content Include="Content\js\lib\jquery.syntaxhighlighter.min.js" />
     <Content Include="Content\js\lib\jquery.zclip.js" />
     <Content Include="Content\js\lib\splitter.js" />
     <Content Include="Areas\Underwriter\Views\CAIS\Index.cshtml" />
@@ -1048,6 +1049,7 @@
       <DependentUpon>ezbob.underwriter.fraud.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Underwriter\profile\companyScore\ezbob.underwriter.companyScore.js" />
+    <Content Include="Content\js\Underwriter\profile\customerInfo\ezbob.underwriter.landregistry.js" />
     <Content Include="Content\js\Underwriter\profile\customerInfo\ezbob.underwriter.zoopla.js" />
     <Content Include="Content\js\Underwriter\profile\CustomerRelations\ezbob.underwriter.AddCustomerRelationsEntry.js">
       <DependentUpon>ezbob.underwriter.AddCustomerRelationsEntry.coffee</DependentUpon>
@@ -1247,6 +1249,7 @@
     <Content Include="Areas\Underwriter\Views\CrossCheck\Zoopla.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\AutomationSettings\_CampaignSettings.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\SideBars\_Sidebar.cshtml" />
+    <Content Include="Areas\Underwriter\Views\CrossCheck\LandRegistry.cshtml" />
     <None Include="Content\js\login\ezbob.restorePassword.coffee" />
     <Content Include="Content\js\Profile\ezbob.profile.yourInfo.js">
       <DependentUpon>ezbob.profile.yourInfo.coffee</DependentUpon>

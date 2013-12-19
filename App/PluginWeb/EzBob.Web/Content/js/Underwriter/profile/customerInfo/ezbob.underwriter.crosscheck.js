@@ -279,7 +279,8 @@ EzBob.Underwriter.CrossCheckView = Backbone.View.extend({
     events: {
         "click #recheck-targeting": "recheckTargeting",
         "click #zoopla": "showZoopla",
-        "click .zooplaRecheck": "recheckZoopla"
+        "click .zooplaRecheck": "recheckZoopla",
+        "click #landregistry" : "showLandRegistry"
     }, // events
 
     recheckZoopla: function () {
@@ -302,7 +303,15 @@ EzBob.Underwriter.CrossCheckView = Backbone.View.extend({
             BlockUi("Off");
         });
     }, // showZoopla
+    showLandRegistry: function () {
+        BlockUi("On");
 
+        $.get(window.gRootPath + "Underwriter/CrossCheck/LandRegistry/?customerId=" + this.model.customerId + "&recheck=false", function (data) {
+            var lrView = new EzBob.LandRegistryView({ model: data });
+            EzBob.App.jqmodal.show(lrView);
+            BlockUi("Off");
+        });
+    }, // showZoopla
     recheckTargeting: function (e) {
         var el = $(e.currentTarget),
 			postcode = el.attr("data-postcode"),
