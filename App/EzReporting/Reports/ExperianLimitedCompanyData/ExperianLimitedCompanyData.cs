@@ -151,15 +151,12 @@ namespace Reports {
 				oIncorporationDate.Value,
 				nCompanyScore,
 				doc.DocumentElement.SelectNodes("./REQUEST/DL99"),
-				m_oFieldNames
+				m_oFieldNames,
+				VerboseLogging ? this : null
 			);
 
-			if (oItem.Validate()) {
+			if (oItem.Validate())
 				m_oResult.Add(oItem);
-
-				if (VerboseLogging)
-					Debug("{0} records found", oItem.Data.Count);
-			} // if
 
 			return ActionResult.Continue;
 		} // HandleRow

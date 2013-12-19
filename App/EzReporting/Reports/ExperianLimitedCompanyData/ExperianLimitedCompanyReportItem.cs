@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Xml;
+using Ezbob.Logger;
 
 namespace Reports {
 	#region class ExperianLimitedCompanyReportItem
 
-	public class ExperianLimitedCompanyReportItem {
+	public class ExperianLimitedCompanyReportItem : SafeLog {
 		#region public
 
 		#region method ExtractDate
@@ -43,8 +44,10 @@ namespace Reports {
 			DateTime oIncorporationDate,
 			int nCompanyScore,
 			XmlNodeList oDL99,
-			SortedSet<string> oFieldNames
-		) {
+			SortedSet<string> oFieldNames,
+			ASafeLog log = null
+		) : base(log)
+		{
 			CustomerID = nCustomerID;
 			RegNumber = sRegNumber;
 			CompanyName = sCompanyName;
@@ -72,11 +75,15 @@ namespace Reports {
 		#region method Validate
 
 		public bool Validate() {
+			Debug("\t{0} records before validation", Data.Count);
+
 			if (Data.Count < 1)
 				return false;
 
 			while (Data.Count > 3)
 				Data.RemoveAt(0);
+
+			Debug("\t{0} records found", Data.Count);
 
 			return true;
 		} // Validate
@@ -119,11 +126,15 @@ namespace Reports {
 		#region method LoadFields
 
 		private void LoadFields(XmlNodeList oDL99, SortedSet<string> oFieldNames) {
-			if (oDL99 == null)
+			if (oDL99 == null) {
+				Debug("\tDL99 data not found (null)");
 				return;
+			} // if
 
-			if (oDL99.Count < 1)
+			if (oDL99.Count < 1) {
+				Debug("\tDL99 data not found (count < 1)");
 				return;
+			} // if
 
 			var oIgnoredNames = new SortedSet<string> { "DATEOFACCOUNTS-YYYY", "DATEOFACCOUNTS-MM", "DATEOFACCOUNTS-DD", "REGNUMBER", "EXPERIANREF" };
 
@@ -145,9 +156,10 @@ namespace Reports {
 			var oResult = new SortedDictionary<string, string>();
 
 			//for (XmlNode oNode = oDL99.FirstChild; oNode != null; oNode = oNode.NextSibling) {
-			//	if (oIgnoredNames.Contains(oNode.Name))
-			//		continue;
 			foreach (string sFieldName in RelevantFieldNames) {
+				if (oIgnoredNames.Contains(sFieldName))
+					continue;
+
 				XmlNode oNode = oDL99.SelectSingleNode("./" + sFieldName);
 
 				if (oNode == null)
