@@ -35,7 +35,7 @@
 				{
 					if (!GroupRulesDict[group].ContainsKey(gr.Rule.Rule))
 					{
-						GroupRulesDict[group].Add(gr.Rule.Rule, groupRules.Where(r => r.Rule == gr.Rule).Select(r => r.Literal).Aggregate((a, b) => a + ", " + b));
+						GroupRulesDict[group].Add(gr.Rule.Rule, groupRules.Where(r => r.Rule == gr.Rule && r.Group == gr.Group).Select(r => r.Literal).Aggregate((a, b) => a + ", " + b));
 					}
 					
 				}
