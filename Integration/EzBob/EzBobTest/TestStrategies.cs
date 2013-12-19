@@ -27,7 +27,7 @@ namespace EzBobTest
 	using Integration.ChannelGrabberFrontend;
 
 	[TestFixture]
-	public class TestUpdateMarketplaces
+	public class TestStrategies
 	{
 		private DatabaseDataHelper _Helper;
 
@@ -81,13 +81,160 @@ namespace EzBobTest
 		public void UpdateCustomerMarketplace()
 		{
 			var s = new UpdateMarketplaces();
-			s.CustomerMarketPlaceAddedAlternative(3055, 3040);
+			//s.CustomerMarketPlaceAddedAlternative(3055, 3040);
 		}
 
 		[Test]
 		public void Greeting()
 		{
 			var s = new Greeting(3060, "dfgdfsg");
+			s.Execute();
+		}
+
+		[Test]
+		public void ApprovedUser()
+		{
+			var s = new ApprovedUser(3060, 2500);
+			s.Execute();
+		}
+
+		[Test]
+		public void CashTransferred()
+		{
+			var s = new CashTransferred(3060, 2500);
+			s.Execute();
+		}
+
+		[Test]
+		public void EmailRolloverAdded()
+		{
+			var s = new EmailRolloverAdded(3060, 2500);
+			s.Execute();
+		}
+
+		[Test]
+		public void EmailUnderReview()
+		{
+			var s = new EmailUnderReview(3060);
+			s.Execute();
+		}
+
+		[Test]
+		public void Escalated()
+		{
+			var s = new Escalated(3060);
+			s.Execute();
+		}
+
+		[Test]
+		public void GetCashFailed()
+		{
+			var s = new GetCashFailed(3060);
+			s.Execute();
+		}
+
+		[Test]
+		public void LoanFullyPaid()
+		{
+			var s = new LoanFullyPaid(3060, "fdsfdf");
+			s.Execute();
+		}
+
+		[Test]
+		public void MoreAMLandBWAInformation()
+		{
+			var s = new MoreAMLandBWAInformation(3060);
+			s.Execute();
+		}
+
+		[Test]
+		public void MoreAMLInformation()
+		{
+			var s = new MoreAMLInformation(3060);
+			s.Execute();
+		}
+
+		[Test]
+		public void MoreBWAInformation()
+		{
+			var s = new MoreBWAInformation(3060);
+			s.Execute();
+		}
+
+		[Test]
+		public void PasswordChanged()
+		{
+			var s = new PasswordChanged(3060, "dfsgfsdg");
+			s.Execute();
+		}
+
+		[Test]
+		public void PasswordRestored()
+		{
+			var s = new PasswordRestored(3060, "dfsgfsdg");
+			s.Execute();
+		}
+
+		[Test]
+		public void PayEarly()
+		{
+			var s = new PayEarly(3060, 2500, "dfsgfsdg");
+			s.Execute();
+		}
+
+		[Test]
+		public void PayPointAddedByUnderwriter()
+		{
+			var s = new PayPointAddedByUnderwriter(3060, "dfgsdf", "dfsgfsdg", 5);
+			s.Execute();
+		}
+
+		[Test]
+		public void PayPointNameValidationFailed()
+		{
+			var s = new PayPointNameValidationFailed(3060, "dfgsdf");
+			s.Execute();
+		}
+
+		[Test]
+		public void RejectUser()
+		{
+			var s = new RejectUser(3060);
+			s.Execute();
+		}
+
+		[Test]
+		public void RenewEbayToken()
+		{
+			var s = new RenewEbayToken(3060, "sdfgfgg", "dsfg");
+			s.Execute();
+		}
+
+		[Test]
+		public void RequestCashWithoutTakenLoan()
+		{
+			var s = new RequestCashWithoutTakenLoan(3060);
+			s.Execute();
+		}
+
+		[Test]
+		public void SendEmailVerification()
+		{
+			var s = new SendEmailVerification(3060, "dfg");
+			s.Execute();
+		}
+
+		[Test]
+		public void ThreeInvalidAttempts()
+		{
+			var s = new ThreeInvalidAttempts(3060, "dfg");
+			s.Execute();
+		}
+
+		[Test]
+		public void TransferCashFailed()
+		{
+			var s = new TransferCashFailed(3060);
 			s.Execute();
 		}
 	}

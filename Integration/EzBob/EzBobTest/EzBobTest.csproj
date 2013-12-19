@@ -73,7 +73,7 @@
     </CodeAnalysisDependentAssemblyPaths>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TestUpdateMarketplaces.cs" />
+    <Compile Include="TestStrategies.cs" />
     <Compile Include="TestCurrencyUpdateController.cs" />
     <Compile Include="TestFirstOfMonthStatusStrategyHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
