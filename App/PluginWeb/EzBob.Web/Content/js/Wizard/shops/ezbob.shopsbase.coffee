@@ -73,7 +73,7 @@ class EzBob.StoreInfoBaseView extends Backbone.View
                 sShow = '#offline_entry_message'
                 sRemove = '#plain_offline_entry_message, #online_entry_message'
 
-            @storeList.find('.importantnumber').text '£200,000'
+            @storeList.find('.importantnumber').text '£150,000'
         else
             sShow = '#online_entry_message'
             sRemove = '#plain_offline_entry_message, #offline_entry_message'

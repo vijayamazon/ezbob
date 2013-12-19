@@ -1,5 +1,5 @@
-﻿(function() {
-  var root,
+(function() {
+  var root, _ref,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -8,17 +8,18 @@
   root.EzBob = root.EzBob || {};
 
   EzBob.StoreInfoBaseView = (function(_super) {
-
     __extends(StoreInfoBaseView, _super);
 
     function StoreInfoBaseView() {
-      return StoreInfoBaseView.__super__.constructor.apply(this, arguments);
+      _ref = StoreInfoBaseView.__super__.constructor.apply(this, arguments);
+      return _ref;
     }
 
     StoreInfoBaseView.prototype.isOffline = false;
 
     StoreInfoBaseView.prototype.initialize = function() {
-      var name, ordpi, store, _ref;
+      var name, ordpi, store, _ref1;
+
       this.allowFinishOnlineWizardWithoutMarketplaces = $('#allowFinishWizardWithoutMarketplaces').attr('online').toLowerCase() === 'true';
       this.allowFinishOfflineWizardWithoutMarketplaces = $('#allowFinishWizardWithoutMarketplaces').attr('offline').toLowerCase() === 'true';
       if (typeof ordpi === 'undefined') {
@@ -28,9 +29,9 @@
         ordpi: ordpi
       }));
       this.isReady = false;
-      _ref = this.stores;
-      for (name in _ref) {
-        store = _ref[name];
+      _ref1 = this.stores;
+      for (name in _ref1) {
+        store = _ref1[name];
         store.button.on("selected", this.connect, this);
         store.view.on("completed", _.bind(this.completed, this, store.button.name));
         store.view.on("back", this.back, this);
@@ -81,6 +82,7 @@
 
     StoreInfoBaseView.prototype.shopConnected = function(name) {
       var that;
+
       that = this;
       return this.model.safeFetch().done(function() {
         that.stores[name].button.update(that.model.get('mpAccounts'));
@@ -90,7 +92,8 @@
     };
 
     StoreInfoBaseView.prototype.render = function() {
-      var accountsList, canContinue, ebayPaypalRuleMessageVisible, foundAllMandatories, hasEbay, hasFilledShops, hasHmrc, hasPaypal, key, sRemove, sShow, shop, sortedShopsByNumOfShops, sortedShopsByPriority, that, _i, _j, _len, _len1, _ref;
+      var accountsList, canContinue, ebayPaypalRuleMessageVisible, foundAllMandatories, hasEbay, hasFilledShops, hasHmrc, hasPaypal, key, sRemove, sShow, shop, sortedShopsByNumOfShops, sortedShopsByPriority, that, _i, _j, _len, _len1, _ref1;
+
       hasHmrc = this.stores.HMRC.button.shops.length > 0;
       sShow = '';
       sRemove = '';
@@ -102,7 +105,7 @@
           sShow = '#offline_entry_message';
           sRemove = '#plain_offline_entry_message, #online_entry_message';
         }
-        this.storeList.find('.importantnumber').text('£200,000');
+        this.storeList.find('.importantnumber').text('£150,000');
       } else {
         sShow = '#online_entry_message';
         sRemove = '#plain_offline_entry_message, #offline_entry_message';
@@ -123,9 +126,9 @@
       ebayPaypalRuleMessageVisible = hasEbay && !hasPaypal;
       this.$el.find(".eBayPaypalRule").toggleClass("hide", !ebayPaypalRuleMessageVisible);
       foundAllMandatories = true;
-      _ref = Object.keys(this.stores);
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        key = _ref[_i];
+      _ref1 = Object.keys(this.stores);
+      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+        key = _ref1[_i];
         if (this.stores[key].button.shops.length === 0 && this.stores[key].mandatory) {
           foundAllMandatories = false;
         }
@@ -150,14 +153,15 @@
     };
 
     StoreInfoBaseView.prototype.handleMandatoryText = function(hasFilledShops, canContinue, ebayPaypalRuleMessageVisible) {
-      var first, foundAllMandatories, key, shouldHide, text, _i, _len, _ref;
+      var first, foundAllMandatories, key, shouldHide, text, _i, _len, _ref1;
+
       shouldHide = !hasFilledShops || canContinue || ebayPaypalRuleMessageVisible;
       if (!shouldHide) {
         first = true;
         text = 'Please add the following accounts in order to continue: ';
-        _ref = Object.keys(this.stores);
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          key = _ref[_i];
+        _ref1 = Object.keys(this.stores);
+        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
+          key = _ref1[_i];
           if (this.stores[key].button.shops.length === 0 && this.stores[key].mandatory) {
             foundAllMandatories = false;
             if (!first) {
@@ -174,6 +178,7 @@
 
     StoreInfoBaseView.prototype.connect = function(storeName) {
       var oFieldStatusIcons, storeView;
+
       EzBob.CT.recordEvent("ct:storebase." + this.name + ".connect", storeName);
       this.$el.find(">div").hide();
       storeView = this.stores[storeName].view;
@@ -194,6 +199,7 @@
 
     StoreInfoBaseView.prototype.setFocus = function(storeName) {
       var aryCGAccounts;
+
       $.colorbox.close();
       switch (storeName) {
         case "EKM":
@@ -210,6 +216,7 @@
 
     StoreInfoBaseView.prototype.setDocumentTitle = function(view) {
       var title;
+
       title = view.getDocumentTitle();
       if (title) {
         return $(document).attr("title", "Step 2: " + title + " | EZBOB");
