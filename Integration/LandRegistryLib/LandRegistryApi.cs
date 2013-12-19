@@ -3,19 +3,23 @@
 namespace LandRegistryLib
 {
 	using System.IO;
+	using System.Net;
 	using System.Xml;
 	using System.Xml.Serialization;
+	using log4net;
 
 	public class LandRegistryApi
 	{
+		private static readonly ILog Log = LogManager.GetLogger(typeof(LandRegistryApi));
+
 		public LandRegistryDataModel EnquiryByPropertyDescription(string buildingNumber, string streetName, string cityName, string postCode)
 		{
 			var model = new LandRegistryDataModel { RequestType = LandRegistryRequestType.EnquiryByPropertyDescription };
-			// create an instance of the client
 			using (var client = new LREnquiryServiceTestNS.PropertyDescriptionEnquiryV2_0ServiceClient())
 			{
 				client.ChannelFactory.Endpoint.Behaviors.Add(new HMLRBGMessageEndpointBehavior("BGUser001", "landreg001"));
-				// create a request object
+				ServicePointManager.Expect100Continue = true;
+				ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3;
 
 				var request = new LREnquiryServiceTestNS.RequestSearchByPropertyDescriptionV2_0Type
 					{
@@ -52,6 +56,7 @@ namespace LandRegistryLib
 				}
 				catch (Exception ex)
 				{
+					Log.ErrorFormat("{0}", ex);
 					model.Error = ex.Message;
 					//File.WriteAllText("resex3.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
 				}
@@ -88,6 +93,7 @@ namespace LandRegistryLib
 				}
 				catch (Exception ex)
 				{
+					Log.ErrorFormat("{0}", ex);
 					model.Error = ex.Message;
 					//File.WriteAllText("resex1c.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
 				}
@@ -142,6 +148,7 @@ namespace LandRegistryLib
 				}
 				catch (Exception ex)
 				{
+					Log.ErrorFormat("{0}", ex);
 					model.Error = ex.Message;
 					//File.WriteAllText("resex1c.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
 				}
@@ -177,8 +184,7 @@ namespace LandRegistryLib
 						response.GatewayResponse.Results.Attachment != null &&
 					    response.GatewayResponse.Results.Attachment.EmbeddedFileBinaryObject != null)
 					{
-						File.WriteAllBytes(string.Format("{0}_{1}.zip", pollId, DateTime.Today.Ticks),
-						                   response.GatewayResponse.Results.Attachment.EmbeddedFileBinaryObject.Value);
+						//File.WriteAllBytes(string.Format("{0}_{1}.zip", pollId, DateTime.Today.Ticks), response.GatewayResponse.Results.Attachment.EmbeddedFileBinaryObject.Value);
 						response.GatewayResponse.Results.Attachment = null;
 					}
 					
@@ -187,6 +193,7 @@ namespace LandRegistryLib
 				}
 				catch (Exception ex)
 				{
+					Log.ErrorFormat("{0}", ex);
 					model.Error = ex.Message;
 					//File.WriteAllText("resex1c.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
 				}
@@ -194,7 +201,7 @@ namespace LandRegistryLib
 			return model;
 		}
 
-		private string SerializeObject<T>(T serializableObject)
+		private static string SerializeObject<T>(T serializableObject)
 		{
 			if (serializableObject == null) { return null; }
 
@@ -215,12 +222,12 @@ namespace LandRegistryLib
 			}
 			catch (Exception ex)
 			{
-				//Log exception here
+				Log.ErrorFormat("{0}", ex);
 			}
 			return null;
 		}
 
-		private LandRegistryResponseType GetResponseType(int value)
+		private static LandRegistryResponseType GetResponseType(int value)
 		{
 			LandRegistryResponseType type;
 			switch (value)
