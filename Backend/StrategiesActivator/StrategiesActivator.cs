@@ -118,9 +118,9 @@
 					ActivateXDaysDue();
 					break;
 
-					
 				default:
 					Console.WriteLine("Strategy {0} is not supported", strategyName);
+					Console.WriteLine("Supported stratefies are:Greeting, ApprovedUser, CashTransferred, EmailRolloverAdded, EmailUnderReview, Escalated, GetCashFailed, LoanFullyPaid, MoreAMLandBWAInformation, MoreAMLInformation, MoreBWAInformation, PasswordChanged, PasswordRestored, PayEarly, PayPointAddedByUnderwriter, PayPointNameValidationFailed, RejectUser, RenewEbayToken, RequestCashWithoutTakenLoan, SendEmailVerification, ThreeInvalidAttempts, TransferCashFailed, CaisGenerate, CaisUpdate, FirstOfMonthStatusNotifier, FraudChecker, LateBy14Days, PayPointCharger, SetLateLoanStatus, CustomerMarketPlaceAdded, UpdateAllMarketplaces, UpdateTransactionStatus, XDaysDue");
 					break;
 			}
 		}
