@@ -4,6 +4,7 @@
 	using System.Collections.Generic;
 	using System.IO;
 	using System.Linq;
+	using System.Text.RegularExpressions;
 	using System.Xml;
 	using EzBob.CommonLib.Security;
 	using NUnit.Framework;
@@ -13,16 +14,17 @@
 	using log4net.Config;
 
 	[TestFixture]
-	class YodleeTestFixure
+	internal class YodleeTestFixure
 	{
 
 		[SetUp]
 		public void Init()
 		{
-			var paths = new [] {
-				@"c:\alexbo\src\App\clients\Maven\maven.exe",
-				@"c:\EzBob\App\clients\Maven\maven.exe"
-			};
+			var paths = new[]
+				{
+					@"c:\alexbo\src\App\clients\Maven\maven.exe",
+					@"c:\EzBob\App\clients\Maven\maven.exe"
+				};
 
 			foreach (string sPath in paths.Where(File.Exists))
 			{
@@ -31,7 +33,7 @@
 			}
 
 			Scanner.Register();
-			
+
 			var cfg = ConfigurationRoot.GetConfiguration();
 			XmlElement configurationElement = cfg.XmlElementLog;
 			XmlConfigurator.Configure(configurationElement);
@@ -87,8 +89,26 @@
 			long itemId = 10403741;
 			g.GetBankDataForItem(m.UserContext, itemId, out s1, out err, out data);
 
-			Console.WriteLine("info {0}, errors:{1}, count of data:{2}",s1, err, data.Keys.Count);
-			
+			Console.WriteLine("info {0}, errors:{1}, count of data:{2}", s1, err, data.Keys.Count);
+
+		}
+
+		[Test]
+		public void test_regex()
+		{
+			string literal = @"\w{3}\d{10}[a-zA-Z]\d{3}";
+			string description = "abc1122334455x123";
+			bool containsLiteral = false;
+			if (literal.Contains("\\")) //is regex
+			{
+				containsLiteral = Regex.IsMatch(description.ToLowerInvariant(), literal);
+			}
+			else if (description.ToLowerInvariant().Contains(literal))
+			{
+				containsLiteral = true;
+			}
+
+			Assert.AreEqual(true, containsLiteral);
 		}
 	}
 }

@@ -8,7 +8,7 @@
 		public virtual MP_YodleeGroup Group { get; set; }
 		public virtual MP_YodleeRule Rule { get; set; }
 		public virtual string Literal { get; set; }
-
+		public virtual bool IsRegex { get; set; }
 	}
 
 	public class MP_YodleeGroupRuleMapMap : ClassMap<MP_YodleeGroupRuleMap>
@@ -20,6 +20,7 @@
 			References(x => x.Group, "GroupId");
 			References(x => x.Rule, "RuleId");
 			Map(x => x.Literal).Length(100);
+			Map(x => x.IsRegex).Default("0");
 		}
 	}
 }

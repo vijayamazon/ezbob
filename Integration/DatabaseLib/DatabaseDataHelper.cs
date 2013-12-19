@@ -1586,7 +1586,7 @@ namespace EZBob.DatabaseLib
 
 				if (group.Id == (int)YodleeGroup.Opex || group.Id == (int)YodleeGroup.Exception) continue;
 
-				var includeLiteral = yodleeGroupRuleMapRepository.Where(x => x.Group == group && x.Rule.Id == (int)YodleeRule.IncludeLiteralWord).Select(x => x.Literal).ToList();
+				var includeLiteral = yodleeGroupRuleMapRepository.Where(x => x.Group == group && x.Rule.Id == (int)YodleeRule.IncludeLiteralWord).Select(x => new { x.Literal, x.IsRegex} ).ToList();
 				var dontIncludeLiteral = yodleeGroupRuleMapRepository.Where(x => x.Group == group && x.Rule.Id == (int)YodleeRule.DontIncludeLiteralWord).Select(x => x.Literal).ToList();
 				bool includeDirector = yodleeGroupRuleMapRepository.Any(x => x.Group == group && x.Rule.Id == (int)YodleeRule.IncludeDirector);
 				bool dontIncludeDirector = yodleeGroupRuleMapRepository.Any(x => x.Group == group && x.Rule.Id == (int)YodleeRule.DontIncludeDirector);
@@ -1595,11 +1595,11 @@ namespace EZBob.DatabaseLib
 				bool containsLiteral = false;
 				foreach (var literal in includeLiteral)
 				{
-					if (literal.Contains("/")) //is regex
+					if (literal.IsRegex)
 					{
-						containsLiteral = Regex.IsMatch(description.ToLowerInvariant(), literal);
+						containsLiteral = Regex.IsMatch(description.ToLowerInvariant(), literal.Literal);
 					}
-					else if (description.ToLowerInvariant().Contains(literal))
+					else if (description.ToLowerInvariant().Contains(literal.Literal))
 					{
 						containsLiteral = true;
 					}
