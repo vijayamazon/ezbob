@@ -32,81 +32,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FluentNHibernate">
-      <HintPath>..\..\Lib\3rdparty\Nhibernate\FluentNHibernate.dll</HintPath>
-    </Reference>
-    <Reference Include="Iesi.Collections">
-      <HintPath>..\..\Lib\3rdparty\Nhibernate\Iesi.Collections.dll</HintPath>
-    </Reference>
-    <Reference Include="log4net">
-      <HintPath>..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="NHibernate">
-      <HintPath>..\..\Lib\3rdparty\Nhibernate\NHibernate.dll</HintPath>
-    </Reference>
-    <Reference Include="NHibernate.Caches.SysCache2">
-      <HintPath>..\..\Lib\3rdparty\Nhibernate\NHibernate.Caches.SysCache2.dll</HintPath>
-    </Reference>
-    <Reference Include="Scorto.Configuration">
-      <HintPath>..\..\Lib\Scorto.Core\Scorto.Configuration.dll</HintPath>
-    </Reference>
-    <Reference Include="Scorto.Configuration.Loader">
+    <Reference Include="Scorto.Configuration.Loader, Version=22.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\Scorto.Core\Scorto.Configuration.Loader.dll</HintPath>
     </Reference>
-    <Reference Include="Scorto.Configuration.Plugins">
-      <HintPath>..\..\Lib\Scorto.Core\Scorto.Configuration.Plugins.dll</HintPath>
-    </Reference>
-    <Reference Include="Scorto.NHibernate">
-      <HintPath>..\..\Lib\Scorto.Core\Scorto.NHibernate.dll</HintPath>
-    </Reference>
-    <Reference Include="Scorto.RegistryScanner">
-      <HintPath>..\..\Lib\Scorto.Core\Scorto.RegistryScanner.dll</HintPath>
-    </Reference>
-    <Reference Include="StructureMap">
-      <HintPath>..\..\Lib\3rdparty\StructureMap\StructureMap.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="OrderItemTwo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Utils\StandaloneInitializer\StandaloneInitializer.csproj">
-      <Project>{3B719D9D-7D14-4499-8EE9-5FDFD604453A}</Project>
-      <Name>StandaloneInitializer</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Integration\CommonLib\CommonLib.csproj">
-      <Project>{AEDBFBBD-BA7D-4582-AFCA-6ECF8AF33C98}</Project>
-      <Name>CommonLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Integration\DatabaseLib\DatabaseLib.csproj">
-      <Project>{FA67314A-0560-41D4-BC19-6524663E9D0D}</Project>
-      <Name>DatabaseLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Integration\EzBob.Configuration\EzBob.Configuration.csproj">
-      <Project>{7d1f5cbe-9ff9-4170-862b-ab203d968ef5}</Project>
-      <Name>EzBob.Configuration</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Integration\EzBob\EzBob.csproj">
-      <Project>{CB5B04A6-76C2-43C4-9A8F-20EE2601CB11}</Project>
-      <Name>EzBob</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Integration\Amazon\AmazonLib\AmazonLib.csproj">
-      <Project>{45EB1597-4C92-4AB8-B615-5206D5A9F472}</Project>
-      <Name>AmazonLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Integration\Amazon\AmazonServiceLib\AmazonServiceLib.csproj">
-      <Project>{9E536824-37AD-4CC7-B597-11B882091DBD}</Project>
-      <Name>AmazonServiceLib</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Strategies\Strategies.csproj">
       <Project>{7e526927-9849-4e6e-bbff-d0d780f81a05}</Project>
       <Name>Strategies</Name>

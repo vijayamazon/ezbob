@@ -1,123 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using EZBob.DatabaseLib.Model.Database;
-using EzBob.AmazonLib;
-using EzBob.AmazonServiceLib;
-using EzBob.AmazonServiceLib.Common;
-using EzBob.AmazonServiceLib.Config;
-using EzBob.AmazonServiceLib.Orders.Model;
-using EzBob.AmazonServiceLib.ServiceCalls;
-using EzBob.CommonLib;
-using NHibernate;
-using Scorto.NHibernate;
-using StandaloneInitializer;
-using StructureMap;
-
-namespace StrategiesActivator
+﻿namespace StrategiesActivator
 {
+	using System;
+	using Scorto.Configuration.Loader;
 	using EzBob.Backend.Strategies.MailStrategies;
 
-	class Program
+	public class StrategiesActivator
     {
-        static void Main(string[] args)
+		public static void Main(string[] args)
         {
-            StandaloneApp.Execute<App>(args);
+			if (args.Length < 1)
+			{
+				Console.WriteLine("Usage: StrategiesActivator.exe <StrategyName> [param1] [param2] ... [paramN]");
+				return;
+			}
+
+			LoadConfigurations();
+
+			var g = new Greeting(3060, "dfg");
+			g.Execute();
         }
 
-        public class App : StandaloneApp
+        private static void LoadConfigurations()
         {
-            public override void Run(string[] args)
-            {
-                if (args.Length != 3)
-                {
-                    Console.WriteLine("Usage: StrategiesActivator.exe <umi> <days> <isReporting>");
-                    return;
-                }
-
-                Init();
-
-	            var g = new Greeting(3060, "dfg");
-				g.Execute();
-
-                var connectionInfo = ObjectFactory.GetInstance<IAmazonMarketPlaceTypeConnection>();
-                var connection = AmazonServiceConnectionFactory.CreateConnection(connectionInfo);
-                var amazonSettings = ObjectFactory.GetInstance<IAmazonMarketplaceSettings>();
-
-                int umi = int.Parse(args[0]);
-                int days = int.Parse(args[1]);
-                bool isReporting = int.Parse(args[2]) == 1;
-
-                var elapsedTimeInfo = new ElapsedTimeInfo();
-
-                var orders = GetOrders(umi, amazonSettings, elapsedTimeInfo, connection, days, isReporting);
-
-                DisplayOrders(elapsedTimeInfo, orders);
-            }
-        }
-
-
-        private static List<OrderItemTwo> GetOrders(int umi, IAmazonMarketplaceSettings amazonSettings,
-                                                   ElapsedTimeInfo elapsedTimeInfo, AmazonServiceConnectionInfo _ConnectionInfo, int days, bool useReporting)
-        {
-            var session = ObjectFactory.GetInstance<ISession>();
-
-            var marketplace = session.Get<MP_CustomerMarketPlace>(umi);
-
-            var securityInfo = SerializeDataHelper.DeserializeType<AmazonSecurityInfo>(marketplace.SecurityData);
-
-            var endDate = DateTime.UtcNow;
-            var startDate = endDate.AddDays(-days);
-
-            var amazonOrdersRequestInfo = new AmazonOrdersRequestInfo
-                {
-                    StartDate = startDate,
-                    EndDate = endDate,
-                    MarketplaceId = securityInfo.MarketplaceId,
-                    MerchantId = securityInfo.MerchantId,
-                    ErrorRetryingInfo = amazonSettings.ErrorRetryingInfo
-                };
-
-
-            List<OrderItemTwo> orders;
-
-            if (useReporting)
-            {
-                var configurator = AmazonServiceConfigurationFactory.CreateServiceReportsConfigurator(_ConnectionInfo);
-
-                orders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
-                                                                                                            ElapsedDataMemberType.RetrieveDataFromExternalService,
-                                                                                                            () => AmazonServiceReports.GetUserOrders(configurator, amazonOrdersRequestInfo, ActionAccessType.Full))
-                                                                                                            .Select(o => OrderItemTwo.FromOrderItem(o))
-                                                                                                            .ToList();
-            }
-            else
-            {
-                orders = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
-                                                                                            ElapsedDataMemberType.RetrieveDataFromExternalService,
-                                                                                            () => AmazonServiceHelper.GetListOrders(_ConnectionInfo, amazonOrdersRequestInfo, ActionAccessType.Full))
-                                                                                            .Select(o => OrderItemTwo.FromOrderItem2(o))
-                                                                                            .ToList();
-            }
-
-            return orders;
-        }
-
-        private static void DisplayOrders(ElapsedTimeInfo elapsedTimeInfo, List<OrderItemTwo> orders)
-        {
-            foreach (var order in orders)
-            {
-                Console.WriteLine(order.ToString());
-            }
-
-            Console.WriteLine("RetrieveDataFromExternalService took {0} s", elapsedTimeInfo.GetValue(ElapsedDataMemberType.RetrieveDataFromExternalService));
-            Console.WriteLine("Number of orders: {0}", orders.Count);
-        }
-
-        public static void Init()
-        {
-            Bootstrap.Init();
-            NHibernateManager.FluentAssemblies.Add(typeof(AmazonDatabaseMarketPlace).Assembly);
+			EnvironmentConfigurationLoader.AppPathDummy = @"c:\ezbob\app\pluginweb\EzBob.Web\";
         }
     }
 }
