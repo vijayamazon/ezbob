@@ -2,9 +2,8 @@
 {
 	using System;
 	using Scorto.Configuration.Loader;
-	using EzBob.Backend.Strategies.MailStrategies;
 
-	public class StrategiesActivator
+	public class Program
     {
 		public static void Main(string[] args)
         {
@@ -16,11 +15,11 @@
 
 			LoadConfigurations();
 
-			var g = new Greeting(3060, "dfg");
-			g.Execute();
+			var strategiesActivator = new StrategiesActivator(args);
+			strategiesActivator.Execute();
         }
 
-        private static void LoadConfigurations()
+		private static void LoadConfigurations()
         {
 			EnvironmentConfigurationLoader.AppPathDummy = @"c:\ezbob\app\pluginweb\EzBob.Web\";
         }
