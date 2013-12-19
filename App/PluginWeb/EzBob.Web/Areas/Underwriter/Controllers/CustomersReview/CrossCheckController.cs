@@ -10,12 +10,10 @@
 	public class CrossCheckController : Controller
 	{
 		private readonly CustomerRepository _customerRepository;
-		private readonly ZooplaRepository _zooplaRepository;
 
-		public CrossCheckController(CustomerRepository customerRepository, ZooplaRepository zooplaRepository)
+		public CrossCheckController(CustomerRepository customerRepository)
 		{
 			_customerRepository = customerRepository;
-			_zooplaRepository = zooplaRepository;
 		}
 
 		[Ajax]
@@ -42,13 +40,13 @@
 			{
 				return this.JsonNet(new { error = "address not found" });
 			}
-			var zoopla = _zooplaRepository.GetByAddress(address);
+			var zoopla = address.Zoopla.LastOrDefault();
 
 			if (zoopla == null || recheck)
 			{
 				var sh = new StrategyHelper();
 				sh.GetZooplaData(customerId, recheck);
-				zoopla = _zooplaRepository.GetByAddress(address);
+				zoopla = address.Zoopla.LastOrDefault();
 				if (zoopla == null)
 					return this.JsonNet(new {error = "zoopla info not found"});
 			}

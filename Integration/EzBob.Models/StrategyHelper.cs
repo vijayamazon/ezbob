@@ -39,7 +39,6 @@
 		private readonly LoanScheduleTransactionRepository loanScheduleTransactionRepository;
 		private readonly ConfigurationVariablesRepository configurationVariablesRepository;
 		private readonly ServiceLogRepository serviceLogRepository;
-		private readonly ZooplaRepository _zooplaRepository;
 		public StrategyHelper()
 		{
 			_session = ObjectFactory.GetInstance<ISession>();
@@ -54,7 +53,6 @@
 			loanScheduleTransactionRepository = ObjectFactory.GetInstance<LoanScheduleTransactionRepository>();
 			configurationVariablesRepository = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
 			serviceLogRepository = ObjectFactory.GetInstance<ServiceLogRepository>();
-			_zooplaRepository = ObjectFactory.GetInstance<ZooplaRepository>();
 		}
 
 		public double GetTurnoverForPeriod(int customerId, TimePeriodEnum period)
@@ -565,15 +563,14 @@
 		public void GetZooplaData(int customerId, bool reCheck = false)
 		{
 			var customer = _customers.Get(customerId);
-			var customerAddress = customer.AddressInfo.PersonalAddress.FirstOrDefault<CustomerAddress>();
+			var customerAddress = customer.AddressInfo.PersonalAddress.FirstOrDefault();
 			if (customerAddress != null)
 			{
-				if (!_zooplaRepository.ExistsByAddress(customerAddress) || reCheck)
+				if (customerAddress.Zoopla.Any() || reCheck)
 				{
-					var zooplaApi = new ZooplaApi();	
+					var zooplaApi = new ZooplaApi();
 					try
 					{
-
 						var areaValueGraphs = zooplaApi.GetAreaValueGraphs(customerAddress.Postcode);
 						var averageSoldPrices = zooplaApi.GetAverageSoldPrices(customerAddress.Postcode);
 						var zooplaEstimate = zooplaApi.GetZooplaEstimate(customerAddress.ZooplaAddress);
@@ -598,6 +595,8 @@
 							ZooplaEstimate = zooplaEstimate,
 							UpdateDate = DateTime.UtcNow
 						});
+
+						_session.Flush();
 					}
 					catch (Exception arg)
 					{
