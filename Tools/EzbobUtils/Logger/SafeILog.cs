@@ -89,8 +89,9 @@ namespace Ezbob.Logger {
 				break;
 
 			case Severity.Info:
+			case Severity.Msg:
 				if ((parameters == null) || (parameters.Length == 0))
-					m_oiLog.Info(format);
+					m_oiLog.Info(format, ex);
 				else {
 					m_oiLog.InfoFormat(format, parameters);
 					m_oiLog.Info("", ex);
@@ -100,7 +101,7 @@ namespace Ezbob.Logger {
 
 			case Severity.Warn:
 				if ((parameters == null) || (parameters.Length == 0))
-					m_oiLog.Warn(format);
+					m_oiLog.Warn(format, ex);
 				else {
 					m_oiLog.WarnFormat(format, parameters);
 					m_oiLog.Warn("", ex);
@@ -109,8 +110,9 @@ namespace Ezbob.Logger {
 				break;
 
 			case Severity.Error:
+			case Severity.Alert:
 				if ((parameters == null) || (parameters.Length == 0))
-					m_oiLog.Error(format);
+					m_oiLog.Error(format, ex);
 				else {
 					m_oiLog.ErrorFormat(format, parameters);
 					m_oiLog.Error("", ex);
@@ -120,7 +122,7 @@ namespace Ezbob.Logger {
 
 			case Severity.Fatal:
 				if ((parameters == null) || (parameters.Length == 0))
-					m_oiLog.Fatal(format);
+					m_oiLog.Fatal(format, ex);
 				else {
 					m_oiLog.FatalFormat(format, parameters);
 					m_oiLog.Fatal("", ex);
