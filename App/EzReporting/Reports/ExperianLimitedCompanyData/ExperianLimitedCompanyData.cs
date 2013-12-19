@@ -155,8 +155,9 @@ namespace Reports {
 				VerboseLogging ? this : null
 			);
 
-			if (oItem.Validate())
-				m_oResult.Add(oItem);
+			oItem.Validate();
+
+			m_oResult.Add(oItem);
 
 			return ActionResult.Continue;
 		} // HandleRow

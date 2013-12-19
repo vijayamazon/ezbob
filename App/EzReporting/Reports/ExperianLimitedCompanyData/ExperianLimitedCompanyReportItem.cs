@@ -98,21 +98,32 @@ namespace Reports {
 
 			var oResult = new List<string[]>();
 
-			foreach (KeyValuePair<DateTime, SortedDictionary<string, string>> pair in Data) {
+			if (Data.Count < 1) {
 				var oRow = new List<string>();
 
-				oRow.Add(RegNumber);
-				oRow.Add('"' + CompanyName + '"');
-				oRow.Add(IncorporationDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
-				oRow.Add(CompanyScore < 0 ? "" : CompanyScore.ToString());
-				oRow.Add(CustomerID.ToString());
-				oRow.Add(pair.Key.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
+				OutputMetaData(oRow);
+
+				oRow.Add("");
 
 				foreach (string sFieldName in oFieldNames)
-					oRow.Add(pair.Value.ContainsKey(sFieldName) ? pair.Value[sFieldName] : "");
+					oRow.Add("");
 
 				oResult.Add(oRow.ToArray());
-			} // foreach
+			}
+			else {
+				foreach (KeyValuePair<DateTime, SortedDictionary<string, string>> pair in Data) {
+					var oRow = new List<string>();
+
+					OutputMetaData(oRow);
+
+					oRow.Add(pair.Key.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
+
+					foreach (string sFieldName in oFieldNames)
+						oRow.Add(pair.Value.ContainsKey(sFieldName) ? pair.Value[sFieldName] : "");
+
+					oResult.Add(oRow.ToArray());
+				} // foreach
+			} // if
 
 			return oResult;
 		} // ToOutput
@@ -122,6 +133,18 @@ namespace Reports {
 		#endregion public
 
 		#region private
+
+		#region method OutputMetaData
+
+		private void OutputMetaData(List<string> oRow) {
+			oRow.Add(RegNumber);
+			oRow.Add('"' + CompanyName + '"');
+			oRow.Add(IncorporationDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture));
+			oRow.Add(CompanyScore < 0 ? "" : CompanyScore.ToString());
+			oRow.Add(CustomerID.ToString());
+		} // OutputMetaData
+
+		#endregion method OutputMetaData
 
 		#region method LoadFields
 
