@@ -3,6 +3,7 @@ namespace EzBobTest
 	using System.Xml;
 	using EKM;
 	using EzBob.Backend.Strategies;
+	using EzBob.Backend.Strategies.MailStrategies;
 	using FreeAgent;
 	using Sage;
 	using EZBob.DatabaseLib;
@@ -81,6 +82,13 @@ namespace EzBobTest
 		{
 			var s = new UpdateMarketplaces();
 			s.CustomerMarketPlaceAddedAlternative(3055, 3040);
+		}
+
+		[Test]
+		public void Greeting()
+		{
+			var s = new Greeting(3060, "dfgdfsg");
+			s.Execute();
 		}
 	}
 }

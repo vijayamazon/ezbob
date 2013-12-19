@@ -41,7 +41,7 @@
 				DbConnection.ExecuteSpNonQuery("RecordMail",
 				    DbConnection.CreateParam("Filename", filename),
 				    DbConnection.CreateParam("Body", HtmlToDocxBinary(renderedHtml)),
-				    DbConnection.CreateParam("Creation", DateTime.UtcNow.ToString("yyyy-MM-dd_HH-mm-ss", CultureInfo.InvariantCulture)),
+				    DbConnection.CreateParam("Creation", DateTime.UtcNow),
 				    DbConnection.CreateParam("CustomerMail", toAddress));
 			}
 		}
