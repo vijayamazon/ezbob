@@ -42,7 +42,7 @@
 					description = result.Status;
 				}
 
-				DbConnection.ExecuteSpNonQuery("GetPacnetTransactions",
+				DbConnection.ExecuteSpNonQuery("UpdateTransactionStatus",
 					DbConnection.CreateParam("TrackingId", trackingNumber),
 					DbConnection.CreateParam("TransactionStatus", newStatus),
 					DbConnection.CreateParam("Description", description));

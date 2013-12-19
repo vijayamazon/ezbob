@@ -42,7 +42,6 @@
 			caisPath2 = results["CaisPath2"].ToString();
 		}
 
-
 		public void CaisGenerate(int underwriterId)
 		{
 			lock (caisGenerationLock)

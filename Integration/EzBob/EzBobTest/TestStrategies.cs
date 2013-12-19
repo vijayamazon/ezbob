@@ -6,10 +6,8 @@ namespace EzBobTest
 	using EzBob.Backend.Strategies.MailStrategies;
 	using FreeAgent;
 	using Sage;
-	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
 	using EzBob.AmazonLib;
-	using EzBob.CommonLib;
 	using EzBob.PayPal;
 	using EzBob.eBayLib;
 	using NHibernate;
@@ -29,12 +27,10 @@ namespace EzBobTest
 	[TestFixture]
 	public class TestStrategies
 	{
-		private DatabaseDataHelper _Helper;
-
 		[SetUp]
 		public void Init()
 		{
-			var paths = new string[]
+			var paths = new []
 				{
 					@"c:\alexbo\src\App\clients\Maven\maven.exe",
 					@"c:\EzBob\App\clients\Maven\maven.exe"
@@ -73,15 +69,13 @@ namespace EzBobTest
 
 			XmlElement configurationElement = cfg.XmlElementLog;
 			XmlConfigurator.Configure(configurationElement);
-
-			_Helper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
 		}
 
 		[Test]
 		public void UpdateCustomerMarketplace()
 		{
 			var s = new UpdateMarketplaces();
-			s.CustomerMarketPlaceAddedAlternative(3055, 3040);
+			s.CustomerMarketPlaceAdded(3055, 3040);
 		}
 
 		[Test]
@@ -141,21 +135,21 @@ namespace EzBobTest
 		}
 
 		[Test]
-		public void MoreAMLandBWAInformation()
+		public void MoreAmLandBwaInformation()
 		{
 			var s = new MoreAMLandBWAInformation(3060);
 			s.Execute();
 		}
 
 		[Test]
-		public void MoreAMLInformation()
+		public void MoreAmlInformation()
 		{
 			var s = new MoreAMLInformation(3060);
 			s.Execute();
 		}
 
 		[Test]
-		public void MoreBWAInformation()
+		public void MoreBwaInformation()
 		{
 			var s = new MoreBWAInformation(3060);
 			s.Execute();
