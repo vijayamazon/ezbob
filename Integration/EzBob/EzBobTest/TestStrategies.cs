@@ -81,7 +81,7 @@ namespace EzBobTest
 		public void UpdateCustomerMarketplace()
 		{
 			var s = new UpdateMarketplaces();
-			//s.CustomerMarketPlaceAddedAlternative(3055, 3040);
+			s.CustomerMarketPlaceAddedAlternative(3055, 3040);
 		}
 
 		[Test]
