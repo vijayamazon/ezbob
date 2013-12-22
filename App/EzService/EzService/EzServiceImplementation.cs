@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ServiceModel;
 using System.Threading;
+using EzBob.Backend.Strategies;
 using EzBob.Backend.Strategies.MailStrategies;
 using Ezbob.Database;
 using Ezbob.Logger;
@@ -18,6 +19,9 @@ namespace EzService {
 			ms_oActiveActions = new SortedDictionary<Guid, ActionMetaData>();
 			ms_oLockActiveActions = new object();
 			ms_oLockTerminateAction = new object();
+
+			ms_oLockNewInstancesAllowed = new object();
+			ms_bNewInstancesAllowed = true;
 		} // static constructor
 
 		#endregion static constructor
@@ -27,6 +31,9 @@ namespace EzService {
 		#region constructor
 
 		public EzServiceImplementation(EzServiceInstanceRuntimeData oData) {
+			if (!NewInstancesAllowed)
+				throw new FaultException("Cannot create EzService instance: new instances are disabled.");
+
 			m_oData = oData;
 
 			m_oLog = ((m_oData != null) && (m_oData.Log != null)) ? m_oData.Log : new SafeLog();
@@ -44,16 +51,23 @@ namespace EzService {
 
 		public ActionMetaData Shutdown() {
 			try {
+				ActionMetaData amd = NewSync(ActionStatus.Done);
+
+				NewInstancesAllowed = false;
+
 				m_oLog.Msg("Shutdown() method started...");
 
-				ActionMetaData amd = NewSync();
+				lock (ms_oLockActiveActions) {
+					foreach (KeyValuePair<Guid, ActionMetaData> kv in ms_oActiveActions)
+						kv.Value.UnderlyingThread.Abort();
+				} // lock
 
 				if ((m_oData != null) && (m_oData.Host != null)) {
 					m_oData.Host.Shutdown();
 					amd.Status = ActionStatus.Done;
 				}
 				else {
-					amd.Status = ActionStatus.Failed;
+					amd.Status = ActionStatus.Finished;
 					amd.Comment = "Host data not initialized.";
 				} // if
 
@@ -73,22 +87,12 @@ namespace EzService {
 
 		#region method Terminate
 
-		public ActionMetaData Terminate(string sActionID) {
-			try {
-				return Terminate(new Guid(sActionID));
-			}
-			catch(Exception e) {
-				m_oLog.Alert(e, "Exception during Terminate(string) method.");
-				throw new FaultException(e.Message);
-			} // try
-		} // Terminate
-
 		public ActionMetaData Terminate(Guid oActionID) {
 			lock (ms_oLockTerminateAction) {
 				try {
-					m_oLog.Msg("Terminate({0}) method started...", oActionID);
-
 					ActionMetaData amd = NewSync();
+
+					m_oLog.Msg("Terminate({0}) method started...", oActionID);
 
 					if (oActionID == null) {
 						amd.Status = ActionStatus.Finished;
@@ -174,6 +178,35 @@ namespace EzService {
 
 		#endregion method Nop
 
+		#region method ListActiveActions
+
+		public StringListActionResult ListActiveActions() {
+			try {
+				ActionMetaData amd = NewSync();
+
+				m_oLog.Msg("ListActiveActions() method started...");
+
+				var oResult = new List<string>();
+
+				lock (ms_oLockActiveActions) {
+					foreach (KeyValuePair<Guid, ActionMetaData> kv in ms_oActiveActions)
+						oResult.Add(kv.Value + " - thread state: " + kv.Value.UnderlyingThread.ThreadState);
+				} // lock
+
+				amd.Status = ActionStatus.Done;
+				SaveActionStatus(amd);
+				m_oLog.Msg("ListActiveActions() method complete with result {0}.", amd);
+
+				return new StringListActionResult { MetaData = amd, Records = oResult };
+			}
+			catch (Exception e) {
+				m_oLog.Alert(e, "Exception during ListActiveActions() method.");
+				throw new FaultException(e.Message);
+			} // try
+		} // ListActiveActions
+
+		#endregion method ListActiveActions
+
 		#endregion IEzServiceAdmin exposed methods
 
 		#region IEzServiceClient exposed methods
@@ -221,6 +254,27 @@ namespace EzService {
 
 		#endregion method GreetingMailStrategy
 
+		#region method CustomerMarketplaceAdded
+
+		public ActionMetaData CustomerMarketplaceAdded(int nCustomerID, int nMarketplaceID) {
+			try {
+				ActionMetaData amd = NewSync(ActionStatus.InProgress);
+
+				new UpdateMarketplaces(m_oDB, m_oLog).CustomerMarketPlaceAdded(nCustomerID, nMarketplaceID);
+
+				amd.Status = ActionStatus.Done;
+				SaveActionStatus(amd);
+
+				return amd;
+			}
+			catch (Exception e) {
+				m_oLog.Alert(e, "Exception during GreetingMailStrategy() method.");
+				throw new FaultException(e.Message);
+			} // try
+		} // CustomerMarketplaceAdded
+
+		#endregion method CustomerMarketplaceAdded
+
 		#endregion IEzServiceClient exposed methods
 
 		#region method IDisposable.Dispose
@@ -235,6 +289,27 @@ namespace EzService {
 		#endregion public
 
 		#region private
+
+		#region property NewInstancesAllowed
+
+		private bool NewInstancesAllowed {
+			get {
+				bool b;
+
+				lock (ms_oLockNewInstancesAllowed) {
+					b = ms_bNewInstancesAllowed;
+				} // lock
+
+				return b;
+			} // get
+			set {
+				lock (ms_oLockNewInstancesAllowed) {
+					ms_bNewInstancesAllowed = value;
+				} // lock
+			} // set
+		} // NewInstancesAllowed
+
+		#endregion property NewInstancesAllowed
 
 		#region method SaveActionStatus
 
@@ -298,6 +373,9 @@ namespace EzService {
 		private static readonly SortedDictionary<Guid, ActionMetaData> ms_oActiveActions;
 		private static readonly object ms_oLockActiveActions;
 		private static readonly object ms_oLockTerminateAction;
+
+		private static bool ms_bNewInstancesAllowed;
+		private static readonly object ms_oLockNewInstancesAllowed;
 
 		#endregion properties
 

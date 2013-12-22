@@ -10,6 +10,9 @@ namespace EzService {
 
 		[OperationContract]
 		ActionMetaData GreetingMailStrategy(int nCustomerID, string sConfirmationEmail);
+
+		[OperationContract]
+		ActionMetaData CustomerMarketplaceAdded(int nCustomerID, int nMarketplaceID);
 	} // interface IEzServiceClient
 
 	#endregion interface IEzServiceClient

@@ -10,10 +10,10 @@ namespace EzService {
 		[OperationContract]
 		ActionMetaData Nop(int nLengthInSeconds);
 
-		[OperationContract(Name = "Kill")]
-		ActionMetaData Terminate(string sActionID);
-
 		[OperationContract]
 		ActionMetaData Terminate(Guid sActionID);
+
+		[OperationContract]
+		StringListActionResult ListActiveActions();
 	} // interface IEzServiceAdmin
 } // namespace EzService

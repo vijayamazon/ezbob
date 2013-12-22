@@ -153,8 +153,13 @@ namespace EzService {
 		#region method Create
 
 		private static ActionMetaData Create(bool bIsSynchronous, ActionStatus nStatus, string sComment) {
-			return  new ActionMetaData {
-				ActionID = Guid.NewGuid(),
+			Guid oActionID = Guid.NewGuid();
+
+			while (oActionID == Guid.Empty)
+				oActionID = Guid.NewGuid();
+
+			return new ActionMetaData {
+				ActionID = oActionID,
 				IsSynchronous = bIsSynchronous,
 				Status = nStatus,
 				UnderlyingThread = Thread.CurrentThread,
