@@ -2,12 +2,20 @@
 {
 	using System;
 	using CommonLib;
+	using Ezbob.Logger;
 
 	public class AutoReApprovalCalculator
     {
+		private static ASafeLog _log;
+
+		public AutoReApprovalCalculator(ASafeLog log)
+		{
+			_log = log;
+		}
+
 		public bool IsAutoReApproved(int customerId, out string reason, out int amount)
 		{
-			var dbHelper = new DbHelper();
+			var dbHelper = new DbHelper(_log);
 			var reApprovalData = dbHelper.GetReApprovalData(customerId);
 			amount = 0;
 			decimal remainingAmount = 0;

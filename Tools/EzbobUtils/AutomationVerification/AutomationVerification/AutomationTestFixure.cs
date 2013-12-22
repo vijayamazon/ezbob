@@ -1,11 +1,14 @@
 ﻿namespace AutomationVerification
 {
 	using AutomationCalculator;
+	using Ezbob.Logger;
 	using NUnit.Framework;
 
 	[TestFixture]
 	class AutomationTestFixure
 	{
+		public static readonly ASafeLog Log = new ConsoleLog();
+
 		[Test]
 		public void testMedalCalculation()
 		{
@@ -27,7 +30,7 @@
 		[Test]
 		public void testAutoRerejetion()
 		{
-			var arr = new AutoReRejectionCalculator();
+			var arr = new AutoReRejectionCalculator(Log);
 			string reason;
 			var des = arr.IsAutoReRejected(14223, out reason);
 			Assert.AreEqual(des, false);
@@ -36,7 +39,7 @@
 		[Test]
 		public void testAutoReapproval()
 		{
-			var arr = new AutoReApprovalCalculator();
+			var arr = new AutoReApprovalCalculator(Log);
 			string reason;
 			int amount = 0;
 			var des = arr.IsAutoReApproved(14223, out reason, out amount);
@@ -46,7 +49,7 @@
 		[Test]
 		public void testAutoApproval()
 		{
-			var arr = new AutoApprovalCalculator();
+			var arr = new AutoApprovalCalculator(Log);
 			string reason;
 			int amount = 0;
 			var des = arr.IsAutoApproved(14223, out reason, out amount);

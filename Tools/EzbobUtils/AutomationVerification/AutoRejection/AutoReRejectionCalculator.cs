@@ -2,12 +2,19 @@
 {
 	using System;
 	using CommonLib;
+	using Ezbob.Logger;
 
 	public class AutoReRejectionCalculator
-    {
+	{
+		private static ASafeLog _log;
+		public AutoReRejectionCalculator(ASafeLog log)
+		{
+			_log = log;
+		}
+
 		public bool IsAutoReRejected(int customerId, out string reason)
 		{
-			var dbHelper = new DbHelper();
+			var dbHelper = new DbHelper(_log);
 			var rerejectionData = dbHelper.GetReRejectionData(customerId);
 			
 			if (rerejectionData.IsNewClient)

@@ -2,18 +2,25 @@
 {
 	using System;
 	using CommonLib;
+	using Ezbob.Logger;
 
 	public class AutoApprovalCalculator
 	{
+		private static ASafeLog _log;
+		public AutoApprovalCalculator(ASafeLog log)
+		{
+			_log = log;
+		}
+
 		public bool IsAutoApproved(int customerId, out string reason, out int amount)
 		{
 			amount = 0;
-			var dbHelper = new DbHelper();
+			var dbHelper = new DbHelper(_log);
 			var experianScore = dbHelper.GetExperianScore(customerId);
 			var mps = dbHelper.GetCustomerMarketPlaces(customerId);
-			var anualTurnover = AnalysisFunctionsHelper.GetTurnoverForPeriod(mps, TimePeriodEnum.Year);
-			var quarterTurnover = AnalysisFunctionsHelper.GetTurnoverForPeriod(mps, TimePeriodEnum.Month3);
-			var lastTurnover = AnalysisFunctionsHelper.GetTurnoverForPeriod(mps, TimePeriodEnum.Month);
+			var anualTurnover = AnalysisFunctionsHelper.GetTurnoverForPeriod(mps, TimePeriodEnum.Year, _log);
+			var quarterTurnover = AnalysisFunctionsHelper.GetTurnoverForPeriod(mps, TimePeriodEnum.Month3, _log);
+			var lastTurnover = AnalysisFunctionsHelper.GetTurnoverForPeriod(mps, TimePeriodEnum.Month, _log);
 			var hasDefaultAccounts = dbHelper.HasDefaultAccounts(customerId, 0, 12);
 			var seniorityMonth = MarketPlacesHelper.GetMarketPlacesSeniority(mps) / 12;
 			var birthDate = dbHelper.GetCustomerBirthDate(customerId);

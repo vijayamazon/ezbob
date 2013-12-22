@@ -10,11 +10,16 @@ namespace CommonLib
 
 	public class DbHelper
 	{
-		private static readonly LegacyLog Log;
+		private static ASafeLog _log;
+
+		public DbHelper(ASafeLog log)
+		{
+			_log = log;
+		}
 		
 		public DateTime? GetCustomerBirthDate(int customerId)
 		{
-			var conn = new SqlConnection(Log);
+			var conn = new SqlConnection(_log);
 			var dt = conn.ExecuteReader("AV_GetCustomerBirthDate", new QueryParameter("@CustomerId", customerId));
 			if (dt.Rows.Count == 0)
 			{
@@ -31,7 +36,7 @@ namespace CommonLib
 		public List<MarketPlace> GetCustomerMarketPlaces(int customerId)
 		{
 			
-			var conn = new SqlConnection(Log);
+			var conn = new SqlConnection(_log);
 			var dt = conn.ExecuteReader("AV_GetCustomerMarketPlaces", new QueryParameter("@CustomerId", customerId));
 			
 			var mps = new List<MarketPlace>();
@@ -69,7 +74,7 @@ namespace CommonLib
 		/// <returns></returns>
 		public List<AnalysisFunction> GetAnalysisFunctions(int mpId)
 		{
-			var conn = new SqlConnection(Log);
+			var conn = new SqlConnection(_log);
 			var dt = conn.ExecuteReader("AV_GetAnalysisFunctions", new QueryParameter("@CustomerMarketPlaceId", mpId));
 
 			var afvs = new List<AnalysisFunction>();
@@ -93,7 +98,7 @@ namespace CommonLib
 
 		public int GetExperianScore(int customerId)
 		{
-			var conn = new SqlConnection(Log);
+			var conn = new SqlConnection(_log);
 			var dt = conn.ExecuteReader("AV_GetExperianScore", new QueryParameter("@CustomerId", customerId));
 			if (dt.Rows.Count == 0)
 			{
@@ -106,25 +111,25 @@ namespace CommonLib
 
 		public bool WasApprovedForLoan(int customerId)
 		{
-			var conn = new SqlConnection(Log);
+			var conn = new SqlConnection(_log);
 			return bool.Parse(conn.ExecuteScalar<string>("AV_WasLoanApproved", new QueryParameter("@CustomerId", customerId)));
 		}
 
 		public bool HasDefaultAccounts(int customerId, int minDefBalance, int months)
 		{
-			var conn = new SqlConnection(Log);
+			var conn = new SqlConnection(_log);
 			return bool.Parse(conn.ExecuteScalar<string>("AV_HasDefaultAccounts", new QueryParameter("@CustomerId", customerId), new QueryParameter("@MinDefBalance", minDefBalance), new QueryParameter("@Months", months)));
 		}
 
 		public DataTable GetAutoDecisions(DateTime from, DateTime to)
 		{
-			var conn = new SqlConnection(Log);
+			var conn = new SqlConnection(_log);
 			return conn.ExecuteReader("AV_GetAutomaticDecisions", new QueryParameter("@DateStart", from), new QueryParameter("@DateEnd", to));
 		}
 
 		public ReRejectionData GetReRejectionData(int customerId)
 		{
-			var conn = new SqlConnection(Log);
+			var conn = new SqlConnection(_log);
 			var sqlData = conn.ExecuteReader("AV_ReRejectionData", new QueryParameter("@CustomerId", customerId));
 
 			var data = new ReRejectionData
@@ -140,7 +145,7 @@ namespace CommonLib
 
 		public ReApprovalData GetReApprovalData(int customerId)
 		{
-			var conn = new SqlConnection(Log);
+			var conn = new SqlConnection(_log);
 			var sqlData = conn.ExecuteReader("AV_ReApprovalData", new QueryParameter("@CustomerId", customerId));
 
 			var data = new ReApprovalData
@@ -159,7 +164,7 @@ namespace CommonLib
 
 		public decimal GetMedalRate(int customerId)
 		{
-			var conn = new SqlConnection(Log);
+			var conn = new SqlConnection(_log);
 			return conn.ExecuteScalar<decimal>("AV_GetMedalRate", new QueryParameter("@CustomerId", customerId)); 
 		}
 	}

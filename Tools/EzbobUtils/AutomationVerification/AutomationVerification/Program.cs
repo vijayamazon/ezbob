@@ -14,15 +14,26 @@
 
 	class Program
 	{
+		public static readonly ASafeLog Log = new FileLog("AutomationVerification", bUtcTimeInName:true, bAppend:true);
+
 		static void Main()
 		{
-			var from = DateTime.Today.AddDays(-1); //new DateTime(2013, 10, 01));//todo change
-			var to = DateTime.Today;
-			var systemDecisions = GetAutomaticDecisions(from, to);
-			var verificitaionDecisions = GetVerificationDecisions(systemDecisions);
-			var report = GetComparisonReport(systemDecisions, verificitaionDecisions);
-			//SendReport(report);
-			SendReport(to, GetTable(report), new SafeLog());
+			try
+			{
+				var from = DateTime.Today.AddDays(-1); //new DateTime(2013, 10, 01);//todo change
+				var to = DateTime.Today;
+				Log.Debug("Running Begin");
+				var systemDecisions = GetAutomaticDecisions(from, to);
+				var verificitaionDecisions = GetVerificationDecisions(systemDecisions);
+				var report = GetComparisonReport(systemDecisions, verificitaionDecisions);
+				//SendReport(report);
+				SendReport(to, GetTable(report), Log);
+				Log.Debug("Running End");
+			}
+			catch (Exception ex)
+			{
+				Log.Error(ex);
+			}
 		}
 
 		//private static void SendReport(IEnumerable<VerificationReport> report)
@@ -95,42 +106,75 @@
 			return dt;
 		}
 
-		private static IEnumerable<VerificationReport> GetComparisonReport(Dictionary<int, AutoDecision> systemDecisions, Dictionary<int, List<AutoDecision>> verificitaionDecisions)
+		private static IEnumerable<VerificationReport> GetComparisonReport(Dictionary<int, AutoDecision> systemDecisions, Dictionary<int, Dictionary<DecisionType, AutoDecision>> verificitaionDecisions)
 		{
 			var verificationReportList = new List<VerificationReport>();
 			foreach (int cashRequest in systemDecisions.Keys)
 			{
-				foreach (var verificitaionDecision in verificitaionDecisions[cashRequest])
+				if (systemDecisions[cashRequest].SystemDecision == Decision.Reject &&
+					systemDecisions[cashRequest].Comment.Contains("Auto Re-Reject"))
 				{
-					if (systemDecisions[cashRequest].SystemDecision != verificitaionDecision.SystemDecision)
+					var verificationDesicion = verificitaionDecisions[cashRequest][DecisionType.AutoReReject];
+					Compare(verificationReportList, systemDecisions[cashRequest], verificationDesicion, cashRequest);
+				}
+
+				else if (systemDecisions[cashRequest].SystemDecision == Decision.Reject &&
+				         systemDecisions[cashRequest].Comment.Contains("AutoReject"))
+				{
+					var verificationDesicion = verificitaionDecisions[cashRequest][DecisionType.AutoReject];
+					Compare(verificationReportList, systemDecisions[cashRequest], verificationDesicion, cashRequest);
+				}else if (systemDecisions[cashRequest].SystemDecision == Decision.Approve &&
+				         systemDecisions[cashRequest].Comment.Contains("Auto Re-Approval"))
+				{
+					var verificationDesicion = verificitaionDecisions[cashRequest][DecisionType.AutoReApprove];
+					Compare(verificationReportList, systemDecisions[cashRequest], verificationDesicion, cashRequest);
+				}
+				else
+				{
+					foreach (var verificationDecision in verificitaionDecisions[cashRequest])
 					{
-						verificationReportList.Add(new VerificationReport
-							{
-								CashRequestId = cashRequest,
-								CustomerId = systemDecisions[cashRequest].CustomerId,
-								SystemDecision = systemDecisions[cashRequest].SystemDecision,
-								SystemComment = systemDecisions[cashRequest].Comment,
-								VerificationDecision = verificitaionDecision.SystemDecision,
-								VerificationComment = verificitaionDecision.Comment,
-								SystemCalculatedSum = systemDecisions[cashRequest].SystemCalculatedSum,
-								VerificationCalculatedSum = verificitaionDecision.SystemCalculatedSum
-							});
+						Compare(verificationReportList, systemDecisions[cashRequest], verificationDecision.Value, cashRequest);
 					}
 				}
 			}
+			
 			return verificationReportList;
 		}
 
-		private static Dictionary<int, List<AutoDecision>> GetVerificationDecisions(Dictionary<int, AutoDecision> decisions)
+		private static void Compare(List<VerificationReport> verificationReportList, AutoDecision systemDecision, AutoDecision verificationDesicion, int cashRequest)
 		{
-			var verificationDecisions = new Dictionary<int, List<AutoDecision>>();
-			var aj = new AutoRejectionCalculator();
+			if (systemDecision.SystemDecision != verificationDesicion.SystemDecision)
+			{
+				verificationReportList.Add(new VerificationReport
+				{
+					CashRequestId = cashRequest,
+					CustomerId = systemDecision.CustomerId,
+					SystemDecision = systemDecision.SystemDecision,
+					SystemComment = systemDecision.Comment,
+					VerificationDecision = verificationDesicion.SystemDecision,
+					VerificationComment = verificationDesicion.Comment,
+					SystemCalculatedSum = systemDecision.SystemCalculatedSum,
+					VerificationCalculatedSum = verificationDesicion.SystemCalculatedSum
+				});
+			}
+		}
+
+	
+
+		private static Dictionary<int, Dictionary<DecisionType,AutoDecision>> GetVerificationDecisions(Dictionary<int, AutoDecision> decisions)
+		{
+			var verificationDecisions = new Dictionary<int, Dictionary<DecisionType,AutoDecision>>();
+			var aj = new AutoRejectionCalculator(Log);
+			var arr = new AutoReRejectionCalculator(Log);
+			var ara = new AutoReApprovalCalculator(Log);
+			var aa = new AutoApprovalCalculator(Log);
+
 			foreach (var autoDecision in decisions.Values)
 			{
-				var autoDecisionsList = new List<AutoDecision>();
+				var autoDecisionsDict = new Dictionary<DecisionType, AutoDecision>();
 				string reason;
 				bool isAutoRejected = aj.IsAutoRejected(autoDecision.CustomerId, out reason);
-				autoDecisionsList.Add(new AutoDecision
+				autoDecisionsDict.Add(DecisionType.AutoReject, new AutoDecision
 					{
 						CashRequestId = autoDecision.CashRequestId,
 						CustomerId = autoDecision.CustomerId,
@@ -139,9 +183,9 @@
 					});
 
 
-				var arr = new AutoReRejectionCalculator();
+				
 				bool isAutoReRejected = arr.IsAutoReRejected(autoDecision.CustomerId, out reason);
-				autoDecisionsList.Add(new AutoDecision
+				autoDecisionsDict.Add(DecisionType.AutoReReject, new AutoDecision
 				{
 					CashRequestId = autoDecision.CashRequestId,
 					CustomerId = autoDecision.CustomerId,
@@ -150,10 +194,9 @@
 				});
 
 				int amount = 0;
-				var ara = new AutoReApprovalCalculator();
 
 				bool isAutoReApproved = ara.IsAutoReApproved(autoDecision.CustomerId, out reason, out amount);
-				autoDecisionsList.Add(new AutoDecision
+				autoDecisionsDict.Add(DecisionType.AutoReApprove, new AutoDecision
 				{
 					CashRequestId = autoDecision.CashRequestId,
 					CustomerId = autoDecision.CustomerId,
@@ -162,9 +205,9 @@
 					Comment = reason
 				});
 
-				var aa = new AutoApprovalCalculator();
+				
 				bool isAutoApproved = aa.IsAutoApproved(autoDecision.CustomerId, out reason, out amount);
-				autoDecisionsList.Add(new AutoDecision
+				autoDecisionsDict.Add(DecisionType.AutoApprove, new AutoDecision
 				{
 					CashRequestId = autoDecision.CashRequestId,
 					CustomerId = autoDecision.CustomerId,
@@ -173,7 +216,7 @@
 					Comment = reason
 				});
 
-				verificationDecisions.Add(autoDecision.CashRequestId, autoDecisionsList);
+				verificationDecisions.Add(autoDecision.CashRequestId, autoDecisionsDict);
 			}
 
 			return verificationDecisions;
@@ -181,7 +224,7 @@
 
 		private static Dictionary<int, AutoDecision> GetAutomaticDecisions(DateTime from, DateTime to)
 		{
-			var db = new DbHelper();
+			var db = new DbHelper(Log);
 			var decisionsTable = db.GetAutoDecisions(from, to);
 			var decisionsDict = new Dictionary<int, AutoDecision>();
 			foreach (DataRow row in decisionsTable.Rows)

@@ -4,14 +4,16 @@ using System.Linq;
 
 namespace CommonLib
 {
+	using Ezbob.Logger;
+
 	public class AnalysisFunctionsHelper
 	{
-		public static double GetTurnoverForPeriod(List<MarketPlace> mps, TimePeriodEnum timePeriod)
+		public static double GetTurnoverForPeriod(List<MarketPlace> mps, TimePeriodEnum timePeriod, ASafeLog log)
 		{
 			double paypal = 0;
 			double ebay = 0;
 			double sum = 0;
-			var dbHelper = new DbHelper();
+			var dbHelper = new DbHelper(log);
 			
 			foreach (var marketPlace in mps)
 			{

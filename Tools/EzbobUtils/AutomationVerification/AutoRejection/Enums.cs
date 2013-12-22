@@ -45,4 +45,12 @@
 		Reject,
 		Manual
 	}
+
+	public enum DecisionType
+	{
+		AutoApprove,
+		AutoReApprove,
+		AutoReject,
+		AutoReReject,
+	}
 }
