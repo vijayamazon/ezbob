@@ -7,7 +7,9 @@ using NHibernate.Linq;
 
 namespace EZBob.DatabaseLib.Repository
 {
-    public class FraudDetectionRepository: NHibernateRepositoryBase<FraudDetection>
+	using System;
+
+	public class FraudDetectionRepository: NHibernateRepositoryBase<FraudDetection>
     {
         public FraudDetectionRepository(ISession session) : base(session)
         {
@@ -18,13 +20,13 @@ namespace EZBob.DatabaseLib.Repository
             return GetAll().Where(x => x.CurrentCustomer.Id == customerId);
         }
 
-        public IEnumerable<FraudDetection> GetLastDetections(int customerId)
+        public IEnumerable<FraudDetection> GetLastDetections(int customerId, out DateTime? lastDateCheck)
         {
             var lastCheckDate =
                 _session.Query<FraudDetection>()
                 .Where(x => x.CurrentCustomer.Id == customerId)
                 .Max(x => x.DateOfCheck);
-
+	        lastDateCheck = lastCheckDate;
             return GetByCustomerId(customerId).Where(x => x.DateOfCheck == lastCheckDate);
         }
     }

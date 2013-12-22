@@ -9,7 +9,6 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
         @bindTo @model, "change sync", @render, this
 
     onRender: ->
-        #console.log 'der modelllle ist', @model
         @setCciMark()
         @$el.find(".tltp").tooltip()
         @$el.find(".tltp-left").tooltip({placement: "left"})

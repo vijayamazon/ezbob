@@ -2,10 +2,6 @@
 EzBob.Underwriter = EzBob.Underwriter || {};
 
 EzBob.Underwriter.fraudDetectionLogModel = Backbone.Model.extend({
-
-});
-
-EzBob.Underwriter.FraudDetectionLogs = Backbone.Collection.extend({
     model: EzBob.Underwriter.fraudDetectionLogModel,
     url: function () {
         return window.gRootPath + "Underwriter/FraudDetectionLog/Index/" + this.customerId;
@@ -15,9 +11,22 @@ EzBob.Underwriter.FraudDetectionLogs = Backbone.Collection.extend({
 EzBob.Underwriter.FraudDetectionLogView = Backbone.Marionette.ItemView.extend({
     template: '#fraudDetectionLog',
     initialize: function () {
-        this.model.on("reset sync", this.render, this);
+        this.model.on("change sync", this.render, this);
+    },
+    events: {
+        "click #recheckFraud": "reCheck",
+    },
+    reCheck: function () {
+        BlockUi('on');
+        $.post(window.gRootPath + "Underwriter/FraudDetectionLog/Recheck", { customerId: this.customerId })
+               .done(function () {
+                   EzBob.ShowMessage("Fraud recheck Started", "refresh in a couple of minutes", null, "OK");
+               })
+               .always(function () {
+                   BlockUi('off');
+               });
     },
     serializeData: function () {
-        return { vals: this.model.toJSON() };
+        return { vals: this.model.get("FraudDetectionLogRows"), checkDate: this.model.get("LastCheckDate") };
     }
 });

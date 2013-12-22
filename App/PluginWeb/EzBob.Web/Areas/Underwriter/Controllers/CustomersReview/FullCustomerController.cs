@@ -109,11 +109,15 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 
 			model.MedalCalculations = new MedalCalculators(customer);
 
-			model.FraudDetectionLog =
-				_fraudDetectionLog.GetLastDetections(id)
-					.Select(x => new FraudDetectionLogModel(x))
-					.OrderByDescending(x => x.Id)
-					.ToList();
+			DateTime? lastDateCheck = null;
+			model.FraudDetectionLog = new FraudDetectionLogModel
+				{
+					FraudDetectionLogRows = _fraudDetectionLog.GetLastDetections(id, out lastDateCheck)
+					                                          .Select(x => new FraudDetectionLogRowModel(x))
+					                                          .OrderByDescending(x => x.Id)
+					                                          .ToList(),
+					LastCheckDate = lastDateCheck
+				};
 
 			model.ApiCheckLogs = _apiCheckLogBuilder.Create(customer);
 
@@ -153,7 +157,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 			public ProfileSummaryModel SummaryModel { get; set; }
 			public PaymentsAccountModel PaymentAccountModel { get; set; }
 			public MedalCalculators MedalCalculations { get; set; }
-			public List<FraudDetectionLogModel> FraudDetectionLog { get; set; }
+			public FraudDetectionLogModel FraudDetectionLog { get; set; }
 			public List<ApiChecksLogModel> ApiCheckLogs { get; set; }
 			public List<MessagesModel> Messages { get; set; }
 			public List<CustomerRelationsModel> CustomerRelations { get; set; }

@@ -3,9 +3,18 @@ using EzBob.Web.Code;
 
 namespace EzBob.Web.Areas.Underwriter.Models
 {
-    public class FraudDetectionLogModel
+	using System;
+	using System.Collections.Generic;
+
+	public class FraudDetectionLogModel
+	{
+		public DateTime? LastCheckDate { get; set; }
+		public List<FraudDetectionLogRowModel> FraudDetectionLogRows { get; set; }
+	}
+
+    public class FraudDetectionLogRowModel
     {
-        public FraudDetectionLogModel(FraudDetection fraudDetection)
+        public FraudDetectionLogRowModel(FraudDetection fraudDetection)
         {
             Id = fraudDetection.Id;
             CompareField = fraudDetection.CompareField;
@@ -13,7 +22,6 @@ namespace EzBob.Web.Areas.Underwriter.Models
             Value = fraudDetection.Value;
             Concurrence = fraudDetection.Concurrence;
             Type = fraudDetection.ExternalUser != null ? "External" : "Internal";
-            DateOfLastCheck = FormattingUtils.FormatDateTimeToString(fraudDetection.DateOfCheck);
         }
 
         public int Id { get; set; }
@@ -22,6 +30,5 @@ namespace EzBob.Web.Areas.Underwriter.Models
         public string CompareField { get; set; }
         public string Value { get; set; }
         public string Concurrence { get; set; }
-        public string DateOfLastCheck { get; set; }
     }
 }

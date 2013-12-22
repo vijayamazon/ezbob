@@ -156,7 +156,6 @@ class EzBob.Underwriter.CAIS.CaisManageView extends Backbone.Marionette.ItemView
         xhr.fail ->
             EzBob.ShowMessage "Error occured", "Something went wrong"
         xhr.always ->
-            console.log 'clicked always', 
             BlockUi "off"
 
     saveFileChange: (e)->

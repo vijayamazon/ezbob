@@ -114,7 +114,7 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
             el: customerRelations
             model: @CustomerRelationsData
         )
-        @FraudDetectionLogs = new EzBob.Underwriter.FraudDetectionLogs()
+        @FraudDetectionLogs = new EzBob.Underwriter.fraudDetectionLogModel()
         @FraudDetectionLogView = new EzBob.Underwriter.FraudDetectionLogView(
             el: fraudDetection
             model: @FraudDetectionLogs
@@ -306,8 +306,8 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
             @medalCalculationModel.trigger "sync"
 
             @FraudDetectionLogs.customerId = id
-            @FraudDetectionLogView.idCustomer = id
-            @FraudDetectionLogs.reset fullModel.get("FraudDetectionLog"), silent: true
+            @FraudDetectionLogView.customerId = id
+            @FraudDetectionLogs.set fullModel.get("FraudDetectionLog"), silent: true
             @FraudDetectionLogs.trigger "sync"
 
             @ApicCheckLogs.customerId = id

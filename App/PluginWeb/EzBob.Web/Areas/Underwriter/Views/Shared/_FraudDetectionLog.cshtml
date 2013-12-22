@@ -3,11 +3,12 @@
 </script>
 
 @helper FraudDetectionLog(){
+    <button class="btn-primary btn" id="recheckFraud"><i class="icon-refresh"></i> Recheck</button><span>  Last check date: <%-checkDate == undefined ? 'Never checked' : EzBob.formatDate(checkDate)%></span>
+    
     <table class="table table-bordered table-striped blue-header centered table-fixed">
         <thead>
             <tr>
                 <th>Check Type</th>
-                <th>Date Of Last Check</th>
                 <th>Current Field</th>
                 <th>Compare Field</th>
                 <th style="width: 130px;">Value</th>
@@ -18,7 +19,6 @@
             <%_.each(vals, function(val){%>
             <tr>
                 <td class="break-word"><%-val.Type%></td>
-                <td class="break-word"><%-val.DateOfLastCheck%></td>
                 <td class="break-word"><%-val.CurrentField%></td>
                 <td class="break-word"><%-val.CompareField || ''%></td>
                 <td class="break-word"><%-val.Value || ''%></td>

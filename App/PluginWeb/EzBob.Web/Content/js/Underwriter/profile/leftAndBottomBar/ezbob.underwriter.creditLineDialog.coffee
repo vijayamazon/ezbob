@@ -97,7 +97,6 @@ class EzBob.Underwriter.CreditLineDialog extends Backbone.Marionette.ItemView
     onRender: -> 
         @modelBinder.bind @cloneModel, @el, @bindings
         @$el.find("#startingFromDate, #offerValidUntil").mask("99/99/9999").datepicker({ autoclose: true, format: 'dd/mm/yyyy' })
-        console.log(@$el.find("#offeredCreditLine"))
         @$el.find("#offeredCreditLine").autoNumeric (EzBob.moneyFormat)
         if(@$el.find("#offeredCreditLine").val() == "-") 
             @$el.find("#offeredCreditLine").val("")

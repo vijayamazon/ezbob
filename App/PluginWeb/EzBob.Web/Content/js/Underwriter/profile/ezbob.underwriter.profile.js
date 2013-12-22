@@ -125,7 +125,7 @@
         el: customerRelations,
         model: this.CustomerRelationsData
       });
-      this.FraudDetectionLogs = new EzBob.Underwriter.FraudDetectionLogs();
+      this.FraudDetectionLogs = new EzBob.Underwriter.fraudDetectionLogModel();
       this.FraudDetectionLogView = new EzBob.Underwriter.FraudDetectionLogView({
         el: fraudDetection,
         model: this.FraudDetectionLogs
@@ -417,8 +417,8 @@
         });
         _this.medalCalculationModel.trigger("sync");
         _this.FraudDetectionLogs.customerId = id;
-        _this.FraudDetectionLogView.idCustomer = id;
-        _this.FraudDetectionLogs.reset(fullModel.get("FraudDetectionLog"), {
+        _this.FraudDetectionLogView.customerId = id;
+        _this.FraudDetectionLogs.set(fullModel.get("FraudDetectionLog"), {
           silent: true
         });
         _this.FraudDetectionLogs.trigger("sync");
@@ -458,6 +458,7 @@
         _this.crossCheckView.marketPlaces = _this.marketPlaces;
         _this.crossCheckView.companyScore = _this.companyScoreModel;
         _this.crossCheckView.experianDirectors = fullModel.get("ExperianDirectors");
+        _this.crossCheckView.fullModel = fullModel;
         _this.crossCheckView.render({
           customerId: id
         });

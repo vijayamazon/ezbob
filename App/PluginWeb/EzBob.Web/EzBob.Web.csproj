@@ -1060,6 +1060,9 @@
     <Content Include="Content\js\Underwriter\profile\ezbob.underwriter.profile.js">
       <DependentUpon>ezbob.underwriter.profile.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Underwriter\profile\ezbob.underwriter.profile.min.js">
+      <DependentUpon>ezbob.underwriter.profile.coffee</DependentUpon>
+    </Content>
     <Content Include="Content\js\Underwriter\profile\fraudDetection\ezbob.underwriter.fraudStatus.js">
       <DependentUpon>ezbob.underwriter.fraudStatus.coffee</DependentUpon>
     </Content>

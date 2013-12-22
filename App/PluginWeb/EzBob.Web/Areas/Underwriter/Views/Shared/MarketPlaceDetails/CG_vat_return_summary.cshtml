@@ -113,7 +113,7 @@ if (m.CGData && m.CGData.VatReturn) {
 			} // for each relevant data item
 
 			%><th>Last Four Periods</th><th>Bank Statement <%if(m.CGData.BankStatement.Period) {print(m.CGData.BankStatement.Period);}%> </th>
-		</tr></thead><% console.log(m.CGData);
+		</tr></thead><% 
 		if ((nOneMonthSalary === null) && m.CGData.RtiTaxMonths) {
 			for (var j = 0; j < m.CGData.RtiTaxMonths.length; j++) {
 				var oMonth = m.CGData.RtiTaxMonths[j];
