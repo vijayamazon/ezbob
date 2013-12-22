@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>StrategiesActivator</RootNamespace>
     <AssemblyName>StrategiesActivator</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -21,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -30,8 +32,12 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\..\Integration\NodeEzBobLib\bin\Debug\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="Scorto.Configuration.Loader, Version=22.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\Scorto.Core\Scorto.Configuration.Loader.dll</HintPath>
@@ -44,10 +50,25 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\DbConnection\DbConnection.csproj">
+      <Project>{270baf49-7f7d-4220-91a2-d8f5bf16b3e4}</Project>
+      <Name>DbConnection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\EzEnvironment\EzEnvironment.csproj">
+      <Project>{b91eb116-94eb-416b-9422-d3ba97993163}</Project>
+      <Name>EzEnvironment</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\Logger\Logger.csproj">
+      <Project>{f92ca169-9532-4c4d-8d84-6f48ace5719c}</Project>
+      <Name>Logger</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Strategies\Strategies.csproj">
       <Project>{7e526927-9849-4e6e-bbff-d0d780f81a05}</Project>
       <Name>Strategies</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

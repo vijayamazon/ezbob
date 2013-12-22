@@ -1,7 +1,8 @@
-﻿namespace EzBob.Backend.Strategies.AutoDecisions
+﻿using Ezbob.Database;
+
+namespace EzBob.Backend.Strategies.AutoDecisions
 {
 	using System.Data;
-	using DbConnection;
 
 	public class Rejection
 	{
@@ -16,11 +17,12 @@
 		private readonly int ErrorMPsNum;
 		private readonly int LoanOffer_ApprovalNum;
 		private readonly int NumOfDefaultAccounts;
+		private AConnection DB { get; set; }
 
-		public Rejection(AutoDecisionRequest request)
-		{
+		public Rejection(AutoDecisionRequest request, AConnection oDB) {
+			DB = oDB;
 			this.request = request;
-			DataTable dt = DbConnection.ExecuteSpReader("GetRejectionConfigs");
+			DataTable dt = DB.ExecuteReader("GetRejectionConfigs", CommandSpecies.StoredProcedure);
 			DataRow results = dt.Rows[0];
 
 			AutoRejectionException_AnualTurnover = int.Parse(results["AutoRejectionException_AnualTurnover"].ToString());
@@ -32,9 +34,14 @@
 			int Reject_Defaults_Months = int.Parse(results["Reject_Defaults_MonthsNum"].ToString());
 			int Reject_Defaults_Amount = int.Parse(results["Reject_Defaults_Amount"].ToString());
 
-			dt = DbConnection.ExecuteSpReader("GetCustomerRejectionData", DbConnection.CreateParam("CustomerId", request.CustomerId)
-				, DbConnection.CreateParam("Reject_Defaults_Months", Reject_Defaults_Months)
-				, DbConnection.CreateParam("Reject_Defaults_Amount", Reject_Defaults_Amount));
+			dt = DB.ExecuteReader(
+				"GetCustomerRejectionData",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", request.CustomerId),
+				new QueryParameter("Reject_Defaults_Months", Reject_Defaults_Months),
+				new QueryParameter("Reject_Defaults_Amount", Reject_Defaults_Amount)
+			);
+
 			results = dt.Rows[0];
 
 			HasAccountingAccounts = bool.Parse(results["HasAccountingAccounts"].ToString());
@@ -58,12 +65,14 @@
 		public bool MakeDecision(AutoDecisionResponse response)
 		{
 			if (IsException())
-			{
 				return false;
-			}
 
-			DataTable dt = DbConnection.ExecuteSpReader("GetPayPalAggregations",
-														DbConnection.CreateParam("CustomerId", request.CustomerId));
+			DataTable dt = DB.ExecuteReader(
+				"GetPayPalAggregations",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", request.CustomerId)
+			);
+
 			DataRow results = dt.Rows[0];
 
 			response.PayPal_NumberOfStores = int.Parse(results["PayPal_NumberOfStores"].ToString());

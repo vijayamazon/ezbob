@@ -1,35 +1,57 @@
-﻿namespace EzBob.Backend.Strategies.MailStrategies
-{
-	using DbConnection;
-	using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Ezbob.Database;
+using Ezbob.Logger;
 
-	public class Greeting : MailStrategyBase
-	{
-		private readonly string confirmEmailAddress;
+namespace EzBob.Backend.Strategies.MailStrategies {
+	public class Greeting : AMailStrategyBase {
+		#region public
 
-		public Greeting(int customerId, string confirmEmailAddress)
-			: base(customerId, true)
-		{
+		#region constructor
+
+		public Greeting(int customerId, string confirmEmailAddress, AConnection oDB, ASafeLog oLog) : base(customerId, true, oDB, oLog) {
 			this.confirmEmailAddress = confirmEmailAddress;
-		}
+		} // constructor
 
-		public override void SetTemplateAndSubjectAndVariables()
-		{
-			Variables = new Dictionary<string, string>
-				{
-					{"Email", CustomerData.Mail},
-					{"ConfirmEmailAddress", confirmEmailAddress}
-				};
+		#endregion constructor
+
+		public override string Name { get { return "Greeting"; } } // Name
+
+		#endregion public
+
+		#region protected
+
+		#region method SetTemplateAndSubjectAndVariables
+
+		protected override void SetTemplateAndSubjectAndVariables() {
+			Variables = new Dictionary<string, string> {
+				{"Email", CustomerData.Mail},
+				{"ConfirmEmailAddress", confirmEmailAddress}
+			};
 
 			Subject = "Thank you for registering with ezbob!";
 			TemplateName = "Greeting";
-		}
+		} // SetTemplateAndSubjectAndVariables
 
-		public override void ActionAtEnd()
-		{
-			DbConnection.ExecuteSpNonQuery("Greeting_Mail_Sent",
-				DbConnection.CreateParam("UserId", CustomerId),
-				DbConnection.CreateParam("GreetingMailSent", 1));
-		}
-	}
-}
+		#endregion method SetTemplateAndSubjectAndVariables
+
+		#region method ActionAtEnd
+
+		protected override void ActionAtEnd() {
+			DB.ExecuteNonQuery("Greeting_Mail_Sent",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("UserId", CustomerId),
+				new QueryParameter("GreetingMailSent", 1)
+			);
+		} // ActionAtEnd
+
+		#endregion method ActionAtEnd
+
+		#endregion protected
+
+		#region private
+
+		private readonly string confirmEmailAddress;
+
+		#endregion private
+	} // class Greeting
+} // namespace

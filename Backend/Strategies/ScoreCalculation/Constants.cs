@@ -1,9 +1,7 @@
-﻿namespace EzBob.Backend.Strategies.ScoreCalculation
-{
-	using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-	public static class Constants
-	{
+namespace EzBob.Backend.Strategies.ScoreCalculation {
+	public static class Constants {
 		#region AutoRejection
 
 		public static int MinCreditScore = 550;
@@ -112,73 +110,64 @@
 
 		#region Grade Ranges
 
-		public static List<RangeGrage> ExperianRanges = new List<RangeGrage>
-			{
-				new RangeGrage {MinValue = null,MaxValue = 680, Grade = 1},
-				new RangeGrage {MinValue = 681,MaxValue = 760, Grade = 1},
-				new RangeGrage {MinValue = 761,MaxValue = 840, Grade = 2},
-				new RangeGrage {MinValue = 841,MaxValue = 920, Grade = 3},
-				new RangeGrage {MinValue = 921,MaxValue = 1000, Grade = 4},
-				new RangeGrage {MinValue = 1001,MaxValue = null, Grade = 5},
-			};
+		public static List<RangeGrage> ExperianRanges = new List<RangeGrage> {
+			new RangeGrage {MinValue = null,MaxValue = 680, Grade = 1},
+			new RangeGrage {MinValue = 681,MaxValue = 760, Grade = 1},
+			new RangeGrage {MinValue = 761,MaxValue = 840, Grade = 2},
+			new RangeGrage {MinValue = 841,MaxValue = 920, Grade = 3},
+			new RangeGrage {MinValue = 921,MaxValue = 1000, Grade = 4},
+			new RangeGrage {MinValue = 1001,MaxValue = null, Grade = 5},
+		};
 
-		public static List<RangeGrage> MpSeniorityRanges = new List<RangeGrage>
-			{
-				new RangeGrage {MinValue = null,MaxValue = 1, Grade = 2},
-				new RangeGrage {MinValue = 2,MaxValue = 3, Grade = 3},
-				new RangeGrage {MinValue = 4,MaxValue = null, Grade = 4},
-			};
+		public static List<RangeGrage> MpSeniorityRanges = new List<RangeGrage> {
+			new RangeGrage {MinValue = null,MaxValue = 1, Grade = 2},
+			new RangeGrage {MinValue = 2,MaxValue = 3, Grade = 3},
+			new RangeGrage {MinValue = 4,MaxValue = null, Grade = 4},
+		};
 
-		public static List<RangeGrage> PositiveFeedbackRanges = new List<RangeGrage>
-			{
-				new RangeGrage {MinValue = null,MaxValue = 5000, Grade = 2},
-				new RangeGrage {MinValue = 5001,MaxValue = 50000, Grade = 3},
-				new RangeGrage {MinValue = 50001,MaxValue = null, Grade = 5},
-			};
+		public static List<RangeGrage> PositiveFeedbackRanges = new List<RangeGrage> {
+			new RangeGrage {MinValue = null,MaxValue = 5000, Grade = 2},
+			new RangeGrage {MinValue = 5001,MaxValue = 50000, Grade = 3},
+			new RangeGrage {MinValue = 50001,MaxValue = null, Grade = 5},
+		};
 
-		public static List<RangeGrage> AnnualTurnoverRanges = new List<RangeGrage>
-			{
-				new RangeGrage {MinValue = null,MaxValue = 12000, Grade = 1},
-				new RangeGrage {MinValue = 12001,MaxValue = 28000, Grade = 4},
-				new RangeGrage {MinValue = 28001,MaxValue = 82000, Grade = 5},
-				new RangeGrage {MinValue = 82001,MaxValue = 120000, Grade = 3},
-				new RangeGrage {MinValue = 120001,MaxValue = null, Grade = 1},
-			};
+		public static List<RangeGrage> AnnualTurnoverRanges = new List<RangeGrage> {
+			new RangeGrage {MinValue = null,MaxValue = 12000, Grade = 1},
+			new RangeGrage {MinValue = 12001,MaxValue = 28000, Grade = 4},
+			new RangeGrage {MinValue = 28001,MaxValue = 82000, Grade = 5},
+			new RangeGrage {MinValue = 82001,MaxValue = 120000, Grade = 3},
+			new RangeGrage {MinValue = 120001,MaxValue = null, Grade = 1},
+		};
 
-		public static List<RangeGrage> NumOfStoresRanges = new List<RangeGrage>
-			{
-				new RangeGrage {MinValue = 1,MaxValue = 2, Grade = 1},
-				new RangeGrage {MinValue = 3,MaxValue = 4, Grade = 3},
-				new RangeGrage {MinValue = 5,MaxValue = null, Grade = 5},
-			};
+		public static List<RangeGrage> NumOfStoresRanges = new List<RangeGrage> {
+			new RangeGrage {MinValue = 1,MaxValue = 2, Grade = 1},
+			new RangeGrage {MinValue = 3,MaxValue = 4, Grade = 3},
+			new RangeGrage {MinValue = 5,MaxValue = null, Grade = 5},
+		};
 
-		public static List<RangeGrage> EzbobSeniorityRanges = new List<RangeGrage>
-			{
-				new RangeGrage {MinValue = null,MaxValue = 6, Grade = 2},
-				new RangeGrage {MinValue = 6,MaxValue = 18, Grade = 3},
-				new RangeGrage {MinValue = 18,MaxValue = null, Grade = 4},
-			};
+		public static List<RangeGrage> EzbobSeniorityRanges = new List<RangeGrage> {
+			new RangeGrage {MinValue = null,MaxValue = 6, Grade = 2},
+			new RangeGrage {MinValue = 6,MaxValue = 18, Grade = 3},
+			new RangeGrage {MinValue = 18,MaxValue = null, Grade = 4},
+		};
 
-		public static List<RangeGrage> EzbobNumOfLoansRanges = new List<RangeGrage>
-			{
-				new RangeGrage {MinValue = 0,MaxValue = 1, Grade = 1},
-				new RangeGrage {MinValue = 2,MaxValue = 3, Grade = 3},
-				new RangeGrage {MinValue = 4,MaxValue = null, Grade = 4},
-			};
+		public static List<RangeGrage> EzbobNumOfLoansRanges = new List<RangeGrage> {
+			new RangeGrage {MinValue = 0,MaxValue = 1, Grade = 1},
+			new RangeGrage {MinValue = 2,MaxValue = 3, Grade = 3},
+			new RangeGrage {MinValue = 4,MaxValue = null, Grade = 4},
+		};
 
-		public static List<RangeGrage> EzbobNumOfLateRepaymentsRanges = new List<RangeGrage>
-			{
-				new RangeGrage {MinValue = 0,MaxValue = 0, Grade = 5},
-				new RangeGrage {MinValue = 1,MaxValue = 1, Grade = 2},
-				new RangeGrage {MinValue = 2,MaxValue = null, Grade = 0},
-			};
+		public static List<RangeGrage> EzbobNumOfLateRepaymentsRanges = new List<RangeGrage> {
+			new RangeGrage {MinValue = 0,MaxValue = 0, Grade = 5},
+			new RangeGrage {MinValue = 1,MaxValue = 1, Grade = 2},
+			new RangeGrage {MinValue = 2,MaxValue = null, Grade = 0},
+		};
 
-		public static List<RangeGrage> EzbobNumOfEarlyRepaymentsRanges = new List<RangeGrage>
-			{
-				new RangeGrage {MinValue = 0,MaxValue = 0, Grade = 2},
-				new RangeGrage {MinValue = 1,MaxValue = 2, Grade = 3},
-				new RangeGrage {MinValue = 3,MaxValue = null, Grade = 5},
-			};
+		public static List<RangeGrage> EzbobNumOfEarlyRepaymentsRanges = new List<RangeGrage> {
+			new RangeGrage {MinValue = 0,MaxValue = 0, Grade = 2},
+			new RangeGrage {MinValue = 1,MaxValue = 2, Grade = 3},
+			new RangeGrage {MinValue = 3,MaxValue = null, Grade = 5},
+		};
 
 		public static int OtherGrade = 2;
 
@@ -193,40 +182,37 @@
 
 		#region Medal Range
 
-		public static List<RangeMedal> MedalRanges = new List<RangeMedal>
-			{
-				new RangeMedal {MinValue = null,MaxValue = 0.4M, Medal = Medal.Silver },
-				new RangeMedal {MinValue = 0.4M,MaxValue = 0.6M, Medal = Medal.Gold},
-				new RangeMedal {MinValue = 0.6M,MaxValue = 0.8M, Medal = Medal.Platinum},
-				new RangeMedal {MinValue = 0.8M,MaxValue = null,Medal = Medal.Diamond},
-			};
+		public static List<RangeMedal> MedalRanges = new List<RangeMedal> {
+			new RangeMedal {MinValue = null,MaxValue = 0.4M, Medal = MedalMultiplier.Silver },
+			new RangeMedal {MinValue = 0.4M,MaxValue = 0.6M, Medal = MedalMultiplier.Gold},
+			new RangeMedal {MinValue = 0.6M,MaxValue = 0.8M, Medal = MedalMultiplier.Platinum},
+			new RangeMedal {MinValue = 0.8M,MaxValue = null,Medal = MedalMultiplier.Diamond},
+		};
 
 		#endregion Medal Range
 
 		#region Offer Percent Range
 
-		public static List<RangeOfferPercent> OfferPercentRanges = new List<RangeOfferPercent>
-			{
-				new RangeOfferPercent {MinValue = null,MaxValue = 649, OfferPercent = 0.07M },
-				new RangeOfferPercent {MinValue = 650,MaxValue = 849, OfferPercent = 0.06M },
-				new RangeOfferPercent {MinValue = 850,MaxValue = 999, OfferPercent = 0.05M },
-				new RangeOfferPercent {MinValue = 1000,MaxValue = 1099, OfferPercent = 0.04M },
-				new RangeOfferPercent {MinValue = 1100,MaxValue = null, OfferPercent = 0.03M },
-			};
+		public static List<RangeOfferPercent> OfferPercentRanges = new List<RangeOfferPercent> {
+			new RangeOfferPercent {MinValue = null,MaxValue = 649, OfferPercent = 0.07M },
+			new RangeOfferPercent {MinValue = 650,MaxValue = 849, OfferPercent = 0.06M },
+			new RangeOfferPercent {MinValue = 850,MaxValue = 999, OfferPercent = 0.05M },
+			new RangeOfferPercent {MinValue = 1000,MaxValue = 1099, OfferPercent = 0.04M },
+			new RangeOfferPercent {MinValue = 1100,MaxValue = null, OfferPercent = 0.03M },
+		};
 
 		#endregion Offer Percent Range
 
 		#region Decision Percent Range
 
-		public static List<RangeOfferPercent> DecisionPercentRanges = new List<RangeOfferPercent>
-			{
-				new RangeOfferPercent {MinValue = null,MaxValue = 549, OfferPercent = 0.07M },
-				new RangeOfferPercent {MinValue = 550,MaxValue = 649, OfferPercent = 0.65M },
-				new RangeOfferPercent {MinValue = 650,MaxValue = null, OfferPercent = 1 },
-			};
+		public static List<RangeOfferPercent> DecisionPercentRanges = new List<RangeOfferPercent> {
+			new RangeOfferPercent {MinValue = null,MaxValue = 549, OfferPercent = 0.07M },
+			new RangeOfferPercent {MinValue = 550,MaxValue = 649, OfferPercent = 0.65M },
+			new RangeOfferPercent {MinValue = 650,MaxValue = null, OfferPercent = 1 },
+		};
 
 		#endregion Decision Percent Range
 
 		#endregion MedalScoreCalculation
-	}
-}
+	} // class Constants
+} // namespace

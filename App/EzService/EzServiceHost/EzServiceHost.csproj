@@ -39,6 +39,9 @@
     <Reference Include="NDesk.Options">
       <HintPath>..\packages\NDesk.Options.0.2.1\lib\NDesk.Options.dll</HintPath>
     </Reference>
+    <Reference Include="Scorto.Configuration.Loader">
+      <HintPath>..\..\..\Lib\Scorto.Core\Scorto.Configuration.Loader.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -62,6 +65,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\backend\Strategies\Strategies.csproj">
+      <Project>{7e526927-9849-4e6e-bbff-d0d780f81a05}</Project>
+      <Name>Strategies</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Tools\EzbobUtils\DbConnection\DbConnection.csproj">
       <Project>{270BAF49-7F7D-4220-91A2-D8F5BF16B3E4}</Project>
       <Name>DbConnection</Name>

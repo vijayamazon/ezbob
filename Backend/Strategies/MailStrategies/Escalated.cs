@@ -1,24 +1,36 @@
-﻿namespace EzBob.Backend.Strategies.MailStrategies
-{
-	using System;
-	using System.Data;
-	using System.Globalization;
-	using System.Collections.Generic;
-	using DbConnection;
+﻿using System;
+using System.Data;
+using System.Globalization;
+using System.Collections.Generic;
+using Ezbob.Database;
+using Ezbob.Logger;
 
-	public class Escalated : MailStrategyBase
-	{
-		public Escalated(int customerId)
-			: base(customerId, true)
-		{
-		}
+namespace EzBob.Backend.Strategies.MailStrategies {
+	public class Escalated : AMailStrategyBase {
+		#region constructor
 
-		public override void SetTemplateAndSubjectAndVariables()
-		{
+		public Escalated(int customerId, AConnection oDB, ASafeLog oLog) : base(customerId, true, oDB, oLog) {
+		} // constructor
+
+		#endregion constructor
+
+		public override string Name { get { return "Escalated"; } } // Name
+
+		#region method SetTemplateAndSubjectAndVariables
+
+		protected override void SetTemplateAndSubjectAndVariables() {
 			Subject = "User was Escalated";
 			TemplateName = "Mandrill - User was escalated";
 
-			DataTable dt = DbConnection.ExecuteSpReader("GetEscalationData", DbConnection.CreateParam("CustomerId", CustomerId));
+			DataTable dt = DB.ExecuteReader(
+				"GetEscalationData",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", CustomerId)
+			);
+
+			if (dt.Rows.Count < 1)
+				throw new StrategyException(this, "failed to load escalation data from customer " + CustomerData);
+
 			DataRow results = dt.Rows[0];
 
 			string escalationReason = results["EscalationReason"].ToString();
@@ -27,18 +39,19 @@
 			string medal = results["MedalType"].ToString();
 			string systemDecision = results["SystemDecision"].ToString();
 
-			Variables = new Dictionary<string, string>
-				{
-					{"userID", CustomerId.ToString(CultureInfo.InvariantCulture)},
-					{"Name", CustomerData.Mail},
-					{"EscalationReason", escalationReason},
-					{"UWName", underwriterName},
-					{"RegistrationDate", registrationDate.ToString(CultureInfo.InvariantCulture)},
-					{"FirstName", CustomerData.FirstName},
-					{"Surname", CustomerData.Surname},
-					{"MedalType", medal},
-					{"SystemDecision", systemDecision}
-				};
-		}
-	}
-}
+			Variables = new Dictionary<string, string> {
+				{"userID", CustomerId.ToString(CultureInfo.InvariantCulture)},
+				{"Name", CustomerData.Mail},
+				{"EscalationReason", escalationReason},
+				{"UWName", underwriterName},
+				{"RegistrationDate", registrationDate.ToString(CultureInfo.InvariantCulture)},
+				{"FirstName", CustomerData.FirstName},
+				{"Surname", CustomerData.Surname},
+				{"MedalType", medal},
+				{"SystemDecision", systemDecision}
+			};
+		} //  SetTemplateAndSubjectAndVariables
+
+		#endregion method SetTemplateAndSubjectAndVariables
+	} // class Escalated
+} // namespace

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ServiceModel;
 using System.Threading;
+using EzBob.Backend.Strategies.MailStrategies;
 using Ezbob.Database;
 using Ezbob.Logger;
 
@@ -73,7 +74,13 @@ namespace EzService {
 		#region method Terminate
 
 		public ActionMetaData Terminate(string sActionID) {
-			return Terminate(new Guid(sActionID));
+			try {
+				return Terminate(new Guid(sActionID));
+			}
+			catch(Exception e) {
+				m_oLog.Alert(e, "Exception during Terminate(string) method.");
+				throw new FaultException(e.Message);
+			} // try
 		} // Terminate
 
 		public ActionMetaData Terminate(Guid oActionID) {
@@ -115,7 +122,7 @@ namespace EzService {
 					return amd;
 				}
 				catch (Exception e) {
-					m_oLog.Alert(e, "Exception during Terminate() method.");
+					m_oLog.Alert(e, "Exception during Terminate(Guid) method.");
 					throw new FaultException(e.Message);
 				} // try
 			} // lock
@@ -186,12 +193,33 @@ namespace EzService {
 				};
 			}
 			catch (Exception e) {
-				m_oLog.Alert(e, "Exception during Shutdown() method.");
+				m_oLog.Alert(e, "Exception during GetStrategiesList() method.");
 				throw new FaultException(e.Message);
 			} // try
 		} // GetStrategiesList
 
 		#endregion method GetStrategiesList
+
+		#region method GreetingMailStrategy
+
+		public ActionMetaData GreetingMailStrategy(int nCustomerID, string sConfirmationEmail) {
+			try {
+				ActionMetaData amd = NewSync(ActionStatus.InProgress);
+
+				new Greeting(nCustomerID, sConfirmationEmail, m_oDB, m_oLog).Execute();
+
+				amd.Status = ActionStatus.Done;
+				SaveActionStatus(amd);
+
+				return amd;
+			}
+			catch (Exception e) {
+				m_oLog.Alert(e, "Exception during GreetingMailStrategy() method.");
+				throw new FaultException(e.Message);
+			} // try
+		} // GreetingMailStrategy
+
+		#endregion method GreetingMailStrategy
 
 		#endregion IEzServiceClient exposed methods
 

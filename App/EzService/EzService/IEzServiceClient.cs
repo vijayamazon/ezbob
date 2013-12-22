@@ -7,6 +7,9 @@ namespace EzService {
 	public interface IEzServiceClient {
 		[OperationContract]
 		StringListActionResult GetStrategiesList();
+
+		[OperationContract]
+		ActionMetaData GreetingMailStrategy(int nCustomerID, string sConfirmationEmail);
 	} // interface IEzServiceClient
 
 	#endregion interface IEzServiceClient

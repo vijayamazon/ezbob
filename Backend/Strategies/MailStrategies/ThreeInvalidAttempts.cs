@@ -1,29 +1,36 @@
-﻿namespace EzBob.Backend.Strategies.MailStrategies
-{
-	using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Ezbob.Database;
+using Ezbob.Logger;
 
-	public class ThreeInvalidAttempts : MailStrategyBase
-	{
-		private readonly string password;
+namespace EzBob.Backend.Strategies.MailStrategies {
+	public class ThreeInvalidAttempts : AMailStrategyBase {
+		#region constructor
 
-		public ThreeInvalidAttempts(int customerId, string password)
-			: base(customerId, true)
-		{
+		public ThreeInvalidAttempts(int customerId, string password, AConnection oDB, ASafeLog oLog)
+			: base(customerId, true, oDB, oLog) {
 			this.password = password;
-		}
+		} // constructor
 
-		public override void SetTemplateAndSubjectAndVariables()
-		{
+		#endregion constructor
+
+		public override string Name { get {return "Three Invalid Attempts"; } } // Name
+
+		#region method SetTemplateAndSubjectAndVariables
+
+		protected override void SetTemplateAndSubjectAndVariables() {
 			Subject = "Three unsuccessful login attempts to your account have been made.";
 			TemplateName = "Mandrill - Temporary password";
 
-			Variables = new Dictionary<string, string>
-				{
-					{"Password", password},
-					{"FirstName", CustomerData.FirstName},
-					{"ProfilePage", "https://app.ezbob.com/Customer/Profile"},
-					{"NIMRODTELEPHONENUMBER", "+44 800 011 4787"} // TODO: change name of variable here and in mandrill\mailchimp
-				};
-		}
-	}
-}
+			Variables = new Dictionary<string, string> {
+				{"Password", password},
+				{"FirstName", CustomerData.FirstName},
+				{"ProfilePage", "https://app.ezbob.com/Customer/Profile"},
+				{"NIMRODTELEPHONENUMBER", "+44 800 011 4787"} // TODO: change name of variable here and in mandrill\mailchimp
+			};
+		} // SetTemplateAndSubjectAndVariables
+
+		#endregion method SetTemplateAndSubjectAndVariables
+
+		private readonly string password;
+	} // class ThreeInvalidAttempts
+} // namespace

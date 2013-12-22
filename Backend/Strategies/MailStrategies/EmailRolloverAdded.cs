@@ -1,28 +1,34 @@
-﻿namespace EzBob.Backend.Strategies.MailStrategies
-{
-	using System.Globalization;
-	using System.Collections.Generic;
+﻿using System.Globalization;
+using System.Collections.Generic;
+using Ezbob.Database;
+using Ezbob.Logger;
 
-	public class EmailRolloverAdded : MailStrategyBase
-	{
-		private readonly int amount;
+namespace EzBob.Backend.Strategies.MailStrategies {
+	public class EmailRolloverAdded : AMailStrategyBase {
+		#region constructor
 
-		public EmailRolloverAdded(int customerId, int amount)
-			: base(customerId, true)
-		{
+		public EmailRolloverAdded(int customerId, int amount, AConnection oDB, ASafeLog oLog) : base(customerId, true, oDB, oLog) {
 			this.amount = amount;
-		}
+		} // constructor
 
-		public override void SetTemplateAndSubjectAndVariables()
-		{
+		#endregion constructor
+
+		public override string Name { get { return "Email Rollover Added"; } }
+
+		#region method SetTemplateAndSubjectAndVariables
+
+		protected override void SetTemplateAndSubjectAndVariables() {
 			Subject = "Rollover added";
 			TemplateName = "Mandrill - Rollover added";
 
-			Variables = new Dictionary<string, string>
-				{
-					{"FirstName", CustomerData.FirstName},
-					{"RolloverAmount", amount.ToString(CultureInfo.InvariantCulture)}
-				};
-		}
-	}
-}
+			Variables = new Dictionary<string, string> {
+				{"FirstName", CustomerData.FirstName},
+				{"RolloverAmount", amount.ToString(CultureInfo.InvariantCulture)}
+			};
+		} // SetTemplateAndSubjectAndVariables
+
+		#endregion method SetTemplateAndSubjectAndVariables
+
+		private readonly int amount;
+	} // class EmailRolloverAdded
+} // namespace

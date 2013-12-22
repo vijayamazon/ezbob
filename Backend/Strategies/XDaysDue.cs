@@ -1,23 +1,36 @@
-﻿namespace EzBob.Backend.Strategies
-{
-	using System;
-	using System.Collections.Generic;
-	using System.Data;
-	using System.Globalization;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Globalization;
+using Ezbob.Database;
+using Ezbob.Logger;
+
+namespace EzBob.Backend.Strategies {
 	using Web.Code;
-	using log4net;
-	using DbConnection;
 
-	public class XDaysDue
-	{
-		private static readonly ILog log = LogManager.GetLogger(typeof(XDaysDue));
-		private readonly StrategiesMailer mailer = new StrategiesMailer();
+	public class XDaysDue : AStrategy {
+		#region constructor
 
-		public void Execute()
-		{
-			DataTable dt = DbConnection.ExecuteSpReader("GetCustomersFiveDaysDue");
-			foreach (DataRow row in dt.Rows)
-			{
+		public XDaysDue(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+			mailer = new StrategiesMailer(DB, Log);
+		} // constructor
+
+		#endregion constructor
+
+		#region property Name
+
+		public override string Name {
+			get { return "XDays Due"; }
+		} // Name
+
+		#endregion property Name
+
+		#region property Execute
+
+		public void Execute() {
+			DataTable dt = DB.ExecuteReader("GetCustomersFiveDaysDue", CommandSpecies.StoredProcedure);
+
+			foreach (DataRow row in dt.Rows) {
 				int loanScheduleId = int.Parse(row["id"].ToString());
 				decimal amountDue = decimal.Parse(row["AmountDue"].ToString());
 				string firstName = row["FirstName"].ToString();
@@ -27,24 +40,25 @@
 
 				string subject = string.Format("Dear {0}, your ezbob monthly automatic loan re-payment is due in 5 days", firstName);
 
-				var variables = new Dictionary<string, string>
-					{
-						{"FirstName", firstName},
-						{"AmountDueScalar", amountDue.ToString(CultureInfo.InvariantCulture)},
-						{"Date", FormattingUtils.FormatDateToString(sceduledDate)},
-						{"DebitCard", creditCard}
-					};
+				var variables = new Dictionary<string, string> {
+					{"FirstName", firstName},
+					{"AmountDueScalar", amountDue.ToString(CultureInfo.InvariantCulture)},
+					{"Date", FormattingUtils.FormatDateToString(sceduledDate)},
+					{"DebitCard", creditCard}
+				};
+
 				mailer.SendToCustomerAndEzbob(variables, mail, "Mandrill - 5 days notice", subject);
 
-				DbConnection.ExecuteSpNonQuery("UpdateFiveDaysDueMailSent",
-				                               DbConnection.CreateParam("Id", loanScheduleId),
-											   DbConnection.CreateParam("UpdateFiveDaysDueMailSent", true));
+				DB.ExecuteNonQuery("UpdateFiveDaysDueMailSent",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("Id", loanScheduleId),
+					new QueryParameter("UpdateFiveDaysDueMailSent", true)
+				);
+			} // for each
 
-			}
+			dt = DB.ExecuteReader("GetCustomersTwoDaysDue", CommandSpecies.StoredProcedure);
 
-			dt = DbConnection.ExecuteSpReader("GetCustomersTwoDaysDue");
-			foreach (DataRow row in dt.Rows)
-			{
+			foreach (DataRow row in dt.Rows) {
 				int loanScheduleId = int.Parse(row["id"].ToString());
 				decimal amountDue = decimal.Parse(row["AmountDue"].ToString());
 				string firstName = row["FirstName"].ToString();
@@ -54,19 +68,25 @@
 
 				string subject = string.Format("Dear {0}, your ezbob monthly automatic loan re-payment is due in 48 hours", firstName);
 
-				var variables = new Dictionary<string, string>
-					{
-						{"FirstName", firstName},
-						{"AmountDueScalar", amountDue.ToString(CultureInfo.InvariantCulture)},
-						{"Date", FormattingUtils.FormatDateToString(sceduledDate)},
-						{"DebitCard", creditCard}
-					};
+				var variables = new Dictionary<string, string> {
+					{"FirstName", firstName},
+					{"AmountDueScalar", amountDue.ToString(CultureInfo.InvariantCulture)},
+					{"Date", FormattingUtils.FormatDateToString(sceduledDate)},
+					{"DebitCard", creditCard}
+				};
+
 				mailer.SendToCustomerAndEzbob(variables, mail, "Mandrill - 2 days notice", subject);
 
-				DbConnection.ExecuteSpNonQuery("UpdateTwoDaysDueMailSent",
-											   DbConnection.CreateParam("Id", loanScheduleId),
-											   DbConnection.CreateParam("UpdateTwoDaysDueMailSent", true));
-			}
-		}
-	}
-}
+				DB.ExecuteNonQuery("UpdateTwoDaysDueMailSent",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("Id", loanScheduleId),
+					new QueryParameter("UpdateTwoDaysDueMailSent", true)
+				);
+			} // for each
+		} // Execute
+
+		#endregion property Execute
+
+		private readonly StrategiesMailer mailer;
+	} // class XDaysDue
+} // namespace

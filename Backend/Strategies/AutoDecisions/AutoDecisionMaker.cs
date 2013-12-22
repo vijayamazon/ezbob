@@ -1,31 +1,29 @@
-﻿namespace EzBob.Backend.Strategies.AutoDecisions
-{
-	using log4net;
+﻿using Ezbob.Database;
 
+namespace EzBob.Backend.Strategies.AutoDecisions
+{
 	public class AutoDecisionMaker
 	{
-		private static readonly ILog log = LogManager.GetLogger(typeof(AutoDecisionMaker));
-
-		public static AutoDecisionResponse MakeDecision(AutoDecisionRequest request)
+		public static AutoDecisionResponse MakeDecision(AutoDecisionRequest request, AConnection oDB)
 		{
 			var autoDecisionResponse = new AutoDecisionResponse(request);
 
-			if (new ReRejection(request).MakeDecision(autoDecisionResponse))
+			if (new ReRejection(request, oDB).MakeDecision(autoDecisionResponse))
 			{
 				return autoDecisionResponse;
 			}
 
-			if (new ReApproval(request).MakeDecision(autoDecisionResponse))
+			if (new ReApproval(request, oDB).MakeDecision(autoDecisionResponse))
 			{
 				return autoDecisionResponse;
 			}
 
-			if (new Approval(request).MakeDecision(autoDecisionResponse))
+			if (new Approval(request, oDB).MakeDecision(autoDecisionResponse))
 			{
 				return autoDecisionResponse;
 			}
 
-			if (new Rejection(request).MakeDecision(autoDecisionResponse))
+			if (new Rejection(request, oDB).MakeDecision(autoDecisionResponse))
 			{
 				return autoDecisionResponse;
 			}

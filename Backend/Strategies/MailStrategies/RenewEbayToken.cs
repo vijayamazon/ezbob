@@ -1,30 +1,36 @@
-﻿namespace EzBob.Backend.Strategies.MailStrategies
-{
-	using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Ezbob.Database;
+using Ezbob.Logger;
 
-	public class RenewEbayToken : MailStrategyBase
-	{
-		private readonly string marketplaceName;
-		private readonly string eBayAddress;
+namespace EzBob.Backend.Strategies.MailStrategies {
+	public class RenewEbayToken : AMailStrategyBase {
+		#region constructor
 
-		public RenewEbayToken(int customerId, string marketplaceName, string eBayAddress)
-			: base(customerId, true)
-		{
+		public RenewEbayToken(int customerId, string marketplaceName, string eBayAddress, AConnection oDB, ASafeLog oLog) : base(customerId, true, oDB, oLog) {
 			this.marketplaceName = marketplaceName;
 			this.eBayAddress = eBayAddress;
-		}
+		} // constructor
 
-		public override void SetTemplateAndSubjectAndVariables()
-		{
+		#endregion constructor
+
+		public override string Name { get { return "Renew eBay Token"; } } // Name
+
+		#region method SetTemplateAndSubjectAndVariables
+
+		protected override void SetTemplateAndSubjectAndVariables() {
 			Subject = "Please renew your eBay token";
 			TemplateName = "Mandrill - Renew your eBay token";
 
-			Variables = new Dictionary<string, string>
-				{
-					{"FirstName", CustomerData.FirstName},
-					{"eBayName", marketplaceName},
-					{"eBayAddress", eBayAddress}
-				};
-		}
-	}
-}
+			Variables = new Dictionary<string, string> {
+				{"FirstName", CustomerData.FirstName},
+				{"eBayName", marketplaceName},
+				{"eBayAddress", eBayAddress}
+			};
+		} // SetTemplateAndSubjectAndVariables
+
+		#endregion method SetTemplateAndSubjectAndVariables
+
+		private readonly string marketplaceName;
+		private readonly string eBayAddress;
+	} // class RenewEbayToken
+} // namespace

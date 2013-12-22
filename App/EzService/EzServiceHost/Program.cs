@@ -12,6 +12,7 @@ using Ezbob.Database;
 using Ezbob.Logger;
 using NDesk.Options;
 using log4net;
+using Scorto.Configuration.Loader;
 
 namespace EzServiceHost {
 	public class Program : IHost {
@@ -82,6 +83,8 @@ namespace EzServiceHost {
 			m_oLog = new SafeILog(LogManager.GetLogger(typeof(EzServiceHost)));
 
 			NotifyStartStop("started");
+
+			EnvironmentConfigurationLoader.AppPathDummy = @"c:\ezbob\app\pluginweb\EzBob.Web\";
 		} // constructor
 
 		#endregion constructor

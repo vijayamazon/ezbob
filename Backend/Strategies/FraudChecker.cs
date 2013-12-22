@@ -1,23 +1,22 @@
-﻿using log4net;
+﻿using Ezbob.Database;
+using Ezbob.Logger;
 using FraudChecker;
 
-namespace EzBob.Backend.Strategies
-{
-	public class FraudChecker
-	{
-		private static readonly ILog log = LogManager.GetLogger(typeof(FraudChecker));
-
-		private readonly int customerId;
-
-		public FraudChecker(int customerId)
-		{
+namespace EzBob.Backend.Strategies {
+	public class FraudChecker : AStrategy {
+		public FraudChecker(int customerId, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			this.customerId = customerId;
-		}
+		} // constructor
 
-		public void Execute()
-		{
+		public override string Name {
+			get { return "Fraud Checker"; }
+		} // Name
+
+		public void Execute() {
 			var checker = new FraudDetectionChecker();
 			checker.Check(customerId);
-		}
-	}
-}
+		} // Execute
+
+		private readonly int customerId;
+	} // class FraudChecker
+} // namespace

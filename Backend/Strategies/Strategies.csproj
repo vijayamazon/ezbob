@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>EzBob.Backend.Strategies</RootNamespace>
     <AssemblyName>Strategies</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -20,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -28,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Aspose.Words, Version=8.1.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
@@ -53,6 +56,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\Integration\DatabaseLib\Model\Database\customer_enums.cs">
+      <Link>ScoreCalculation\customer_enums.cs</Link>
+    </Compile>
+    <Compile Include="AStrategy.cs" />
     <Compile Include="AutoDecisions\Approval.cs" />
     <Compile Include="AutoDecisions\AutoDecisionMaker.cs" />
     <Compile Include="AutoDecisions\AutoDecisionResponse.cs" />
@@ -60,8 +67,11 @@
     <Compile Include="AutoDecisions\Rejection.cs" />
     <Compile Include="AutoDecisions\ReApproval.cs" />
     <Compile Include="AutoDecisions\ReRejection.cs" />
+    <Compile Include="Exceptions\FailedToInitStrategyException.cs" />
     <Compile Include="PayPointCharger.cs" />
     <Compile Include="FraudChecker.cs" />
+    <Compile Include="Exceptions\StrategyException.cs" />
+    <Compile Include="StrategyLog.cs" />
     <Compile Include="UpdateMarketplaces.cs" />
     <Compile Include="SetLateLoanStatus.cs" />
     <Compile Include="LateBy14Days.cs" />
@@ -91,7 +101,7 @@
     <Compile Include="MailStrategies\ThreeInvalidAttempts.cs" />
     <Compile Include="MailStrategies\Greeting.cs" />
     <Compile Include="MailStrategies\CustomerData.cs" />
-    <Compile Include="MailStrategies\MailStrategyBase.cs" />
+    <Compile Include="MailStrategies\AMailStrategyBase.cs" />
     <Compile Include="MainStrategy.cs" />
     <Compile Include="ScoreCalculation\Constants.cs" />
     <Compile Include="ScoreCalculation\Enums.cs" />
@@ -195,9 +205,13 @@
       <Project>{241a8baf-f486-44b9-93bd-baa5ca8091f3}</Project>
       <Name>YodleeLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Utils\DbConnection\DbConnection.csproj">
-      <Project>{978d5af5-ab9d-4aae-bfbf-2820f991613b}</Project>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\DbConnection\DbConnection.csproj">
+      <Project>{270baf49-7f7d-4220-91a2-d8f5bf16b3e4}</Project>
       <Name>DbConnection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\Logger\Logger.csproj">
+      <Project>{F92CA169-9532-4C4D-8D84-6F48ACE5719C}</Project>
+      <Name>Logger</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

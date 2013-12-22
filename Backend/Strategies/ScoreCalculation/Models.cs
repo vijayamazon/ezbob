@@ -7,7 +7,7 @@
 		public string ResultWeigts { get; set; }
 		public string ResultMaxPoints { get; set; }
 
-		public Medal Medal { get; set; }
+		public MedalMultiplier Medal { get; set; }
 		public decimal ScorePoints { get; set; }
 		public decimal ScoreResult { get; set; }
 		public int MaxOffer { get; set; }
@@ -51,7 +51,7 @@
 
 	public class RangeMedal : Range
 	{
-		public Medal Medal { get; set; }
+		public MedalMultiplier Medal { get; set; }
 	}
 
 	public class RangeOfferPercent : Range

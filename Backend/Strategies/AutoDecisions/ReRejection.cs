@@ -1,7 +1,8 @@
-﻿namespace EzBob.Backend.Strategies.AutoDecisions
+﻿using Ezbob.Database;
+
+namespace EzBob.Backend.Strategies.AutoDecisions
 {
 	using System.Data;
-	using DbConnection;
 
 	public class ReRejection
 	{
@@ -10,11 +11,12 @@
 		private readonly int principalPaidAmount;
 		private readonly int loanAmountTaken;
 		private readonly AutoDecisionRequest request;
+		private AConnection DB { get; set; }
 
-		public ReRejection(AutoDecisionRequest request)
-		{
+		public ReRejection(AutoDecisionRequest request, AConnection oDB) {
+			DB = oDB;
 			this.request = request;
-			DataTable dt = DbConnection.ExecuteSpReader("GetCustomerDataForReRejection");
+			DataTable dt = DB.ExecuteReader("GetCustomerDataForReRejection", CommandSpecies.StoredProcedure);
 			DataRow results = dt.Rows[0];
 			newCustomerReReject = int.Parse(results["NewCustomer_ReReject"].ToString());
 			oldCustomerReReject = int.Parse(results["OldCustomer_ReReject"].ToString());

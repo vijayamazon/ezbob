@@ -1,31 +1,13 @@
-﻿namespace EzBob.Backend.Strategies.ScoreCalculation
-{
-	public enum Gender
-	{
-		M,
-		F
-	} // enum Gender
-
-	public enum MaritalStatus
-	{
-		Married,
-		Single,
-		Divorced,
-		Widower,
-		Other
-	} // enum MaritalStatus
-
-	public enum Medal
-	{
+﻿namespace EzBob.Backend.Strategies.ScoreCalculation {
+	public enum MedalMultiplier {
 		NoMedal = 0,
 		Silver = 6,
 		Gold = 8,
 		Platinum = 10,
 		Diamond = 12,
-	} // enum Medal
+	} // enum MedalMultiplier
 
-	public enum Parameter
-	{
+	public enum Parameter {
 		ExperianScore,
 		MpSeniority,
 		MaritalStatus,
@@ -37,5 +19,5 @@
 		EzbobNumOfLoans,
 		EzbobNumOfLateRepayments,
 		EzbobNumOfEarlyRepayments
-	}
-}
+	} // enum Parameter
+} // namespace

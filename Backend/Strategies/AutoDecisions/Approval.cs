@@ -1,8 +1,9 @@
-﻿namespace EzBob.Backend.Strategies.AutoDecisions
+﻿using Ezbob.Database;
+
+namespace EzBob.Backend.Strategies.AutoDecisions
 {
 	using System;
 	using System.Data;
-	using DbConnection;
 	using Models;
 
 	public class Approval
@@ -12,17 +13,18 @@
 		private readonly bool autoApproveIsSilent;
 		private readonly string autoApproveSilentTemplateName;
 		private readonly string autoApproveSilentToAddress;
+		private AConnection DB { get; set; }
 
-		public Approval(AutoDecisionRequest request)
-		{
+		public Approval(AutoDecisionRequest request, AConnection oDB) {
+			DB = oDB;
 			this.request = request;
-			DataTable dt = DbConnection.ExecuteSpReader("GetApprovalConfigs");
+			DataTable dt = DB.ExecuteReader("GetApprovalConfigs", CommandSpecies.StoredProcedure);
 			DataRow results = dt.Rows[0];
 
 			autoApproveIsSilent = bool.Parse(results["AutoApproveIsSilent"].ToString());
 			autoApproveSilentTemplateName = results["AutoApproveSilentTemplateName"].ToString();
 			autoApproveSilentToAddress = results["AutoApproveSilentToAddress"].ToString();
-		}
+		} // constructor
 
 		public bool MakeDecision(AutoDecisionResponse response)
 		{
@@ -32,7 +34,7 @@
 
 				if (response.AutoApproveAmount != 0)
 				{
-					DataTable dt = DbConnection.ExecuteSpReader("GetAvailableFunds");
+					DataTable dt = DB.ExecuteReader("GetAvailableFunds", CommandSpecies.StoredProcedure);
 					decimal availableFunds = decimal.Parse(dt.Rows[0]["AvailableFunds"].ToString());
 
 					if (availableFunds > response.AutoApproveAmount)
@@ -47,7 +49,12 @@
 						}
 						else
 						{
-							dt = DbConnection.ExecuteSpReader("GetLastOfferDataForApproval", DbConnection.CreateParam("CustomerId", request.CustomerId));
+							dt = DB.ExecuteReader(
+								"GetLastOfferDataForApproval",
+								CommandSpecies.StoredProcedure,
+								new QueryParameter("CustomerId", request.CustomerId)
+							);
+
 							DataRow results = dt.Rows[0];
 							bool loanOfferEmailSendingBanned = bool.Parse(results["EmailSendingBanned"].ToString());
 							DateTime loanOfferOfferStart = DateTime.Parse(results["OfferStart"].ToString());

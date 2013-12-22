@@ -1,16 +1,17 @@
-﻿namespace EzBob.Backend.Strategies.MailStrategies
-{
-	using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Ezbob.Database;
+using Ezbob.Logger;
 
-	public class RejectUser : MailStrategyBase
-	{
-		public RejectUser(int customerId)
-			: base(customerId, true)
-		{
-		}
+namespace EzBob.Backend.Strategies.MailStrategies {
+	public class RejectUser : AMailStrategyBase {
+		public RejectUser(int customerId, AConnection oDB, ASafeLog oLog) : base(customerId, true, oDB, oLog) {
+		} // constructor
 
-		public override void SetTemplateAndSubjectAndVariables()
-		{
+		public override string Name { get { return "Reject User"; } } // Name
+
+		#region method SetTemplateAndSubjectAndVariables
+
+		protected override void SetTemplateAndSubjectAndVariables() {
 			Subject = "Sorry, ezbob cannot make you a loan offer at this time";
 			TemplateName = "Mandrill - Rejection email";
 
@@ -19,6 +20,8 @@
 					{"FirstName", CustomerData.FirstName},
 					{"EzbobAccount", "https://app.ezbob.com/Customer/Profile"}
 				};
-		}
-	}
-}
+		} // SetTemplateAndSubjectAndVariables
+
+		#endregion method SetTemplateAndSubjectAndVariables
+	} // class RejectUser
+} // namespace

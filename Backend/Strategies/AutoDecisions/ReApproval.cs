@@ -1,8 +1,9 @@
-﻿namespace EzBob.Backend.Strategies.AutoDecisions
+﻿using Ezbob.Database;
+
+namespace EzBob.Backend.Strategies.AutoDecisions
 {
 	using System;
 	using System.Data;
-	using DbConnection;
 	using Models;
 
 	public class ReApproval
@@ -10,18 +11,24 @@
 		private readonly StrategyHelper strategyHelper = new StrategyHelper();
 		private readonly int autoReApproveMaxNumOfOutstandingLoans;
 		private readonly AutoDecisionRequest request;
+		private AConnection DB { get; set; }
 
-		public ReApproval(AutoDecisionRequest request)
-		{
+		public ReApproval(AutoDecisionRequest request, AConnection oDB) {
+			DB = oDB;
 			this.request = request;
-			DataTable dt = DbConnection.ExecuteSpReader("GetReApprovalConfigs");
+			DataTable dt = DB.ExecuteReader("GetReApprovalConfigs", CommandSpecies.StoredProcedure);
 			DataRow results = dt.Rows[0];
 			autoReApproveMaxNumOfOutstandingLoans = int.Parse(results["AutoReApproveMaxNumOfOutstandingLoans"].ToString());
 		}
 
 		public bool MakeDecision(AutoDecisionResponse response)
 		{
-			DataTable dt = DbConnection.ExecuteSpReader("GetLastOfferDataForReApproval", DbConnection.CreateParam("CustomerId", request.CustomerId));
+			DataTable dt = DB.ExecuteReader(
+				"GetLastOfferDataForReApproval",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", request.CustomerId)
+			);
+
 			DataRow results = dt.Rows[0];
 			bool loanOfferEmailSendingBanned = bool.Parse(results["EmailSendingBanned"].ToString());
 			DateTime loanOfferOfferStart = DateTime.Parse(results["OfferStart"].ToString());
@@ -36,7 +43,7 @@
 			     loanOfferPrincipalPaidAmountOld == 0 && loanOfferSumOfChargesOld == 0 &&
 			     loanOfferNumOfMPsAddedOld == 0))
 			{
-				dt = DbConnection.ExecuteSpReader("GetAvailableFunds");
+				dt = DB.ExecuteReader("GetAvailableFunds", CommandSpecies.StoredProcedure);
 				decimal availableFunds = decimal.Parse(dt.Rows[0]["AvailableFunds"].ToString());
 				if (availableFunds > loanOfferSystemCalculatedSum)
 				{

@@ -1,11 +1,10 @@
-﻿namespace EzBob.Backend.Strategies.ScoreCalculation
-{
-	using System;
-	using System.Collections.Generic;
-	using System.Text;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using EZBob.DatabaseLib.Model.Database;
 
-	public class MedalScoreCalculator
-	{
+namespace EzBob.Backend.Strategies.ScoreCalculation {
+	public class MedalScoreCalculator {
 		public ScoreMedalOffer CalculateMedalScore(
 			decimal annualTurnover,
 			int experianScore,
@@ -20,35 +19,31 @@
 			int ezbobNumOfLateRepayments,
 			int ezbobNumOfEarlyReayments)
 		{
-
-			var dict = new Dictionary<Parameter, Weight>
-				{
-					{Parameter.ExperianScore,            GetExperianScoreWeight(experianScore, firstRepaymentDatePassed)},
-					{Parameter.MpSeniority,              GetMpSeniorityWeight(mpSeniorityYears, firstRepaymentDatePassed)},
-					{Parameter.MaritalStatus,            GetMaritalStatusWeight(maritalStatus, firstRepaymentDatePassed)},
-					{Parameter.PositiveFeedback,         GetPositiveFeedbackWeight(positiveFeedbackCount, firstRepaymentDatePassed)},
-					{Parameter.Other,                    GetOtherWeight(gender, firstRepaymentDatePassed)},
-					{Parameter.AnnualTurnover,           GetAnnualTurnoverWeight(annualTurnover, firstRepaymentDatePassed)},
-					{Parameter.NumOfStores,              GetNumOfStoresWeight(numberOfStores, firstRepaymentDatePassed)},
-					{Parameter.EzbobSeniority,           GetEzbobSeniorityWeight(ezbobSeniority, firstRepaymentDatePassed)},
-					{Parameter.EzbobNumOfLoans,          GetEzbobNumOfLoansWeight(ezbobNumOfLoans, firstRepaymentDatePassed)},
-					{Parameter.EzbobNumOfLateRepayments, GetEzbobNumOfLateRepaymentsWeight(ezbobNumOfLateRepayments, firstRepaymentDatePassed)},
-					{Parameter.EzbobNumOfEarlyRepayments,GetEzbobNumOfEarlyRepaymentsWeight(ezbobNumOfEarlyReayments, firstRepaymentDatePassed)}
-				};
+			var dict = new Dictionary<Parameter, Weight> {
+				{Parameter.ExperianScore,            GetExperianScoreWeight(experianScore, firstRepaymentDatePassed)},
+				{Parameter.MpSeniority,              GetMpSeniorityWeight(mpSeniorityYears, firstRepaymentDatePassed)},
+				{Parameter.MaritalStatus,            GetMaritalStatusWeight(maritalStatus, firstRepaymentDatePassed)},
+				{Parameter.PositiveFeedback,         GetPositiveFeedbackWeight(positiveFeedbackCount, firstRepaymentDatePassed)},
+				{Parameter.Other,                    GetOtherWeight(gender, firstRepaymentDatePassed)},
+				{Parameter.AnnualTurnover,           GetAnnualTurnoverWeight(annualTurnover, firstRepaymentDatePassed)},
+				{Parameter.NumOfStores,              GetNumOfStoresWeight(numberOfStores, firstRepaymentDatePassed)},
+				{Parameter.EzbobSeniority,           GetEzbobSeniorityWeight(ezbobSeniority, firstRepaymentDatePassed)},
+				{Parameter.EzbobNumOfLoans,          GetEzbobNumOfLoansWeight(ezbobNumOfLoans, firstRepaymentDatePassed)},
+				{Parameter.EzbobNumOfLateRepayments, GetEzbobNumOfLateRepaymentsWeight(ezbobNumOfLateRepayments, firstRepaymentDatePassed)},
+				{Parameter.EzbobNumOfEarlyRepayments,GetEzbobNumOfEarlyRepaymentsWeight(ezbobNumOfEarlyReayments, firstRepaymentDatePassed)}
+			};
 
 			CalcDelta(dict);
 			ScoreMedalOffer scoreMedal = CalcScoreMedalOffer(dict, annualTurnover, experianScore);
 
 			return scoreMedal;
-		}
+		} // constructor
 
-		private ScoreMedalOffer CalcScoreMedalOffer(Dictionary<Parameter, Weight> dict, decimal annualTurnover, int experianScore)
-		{
+		private ScoreMedalOffer CalcScoreMedalOffer(Dictionary<Parameter, Weight> dict, decimal annualTurnover, int experianScore) {
 			decimal minScoreSum = 0M;
 			decimal maxScoreSum = 0M;
 			decimal scoreSum = 0M;
-			foreach (var weight in dict.Values)
-			{
+			foreach (var weight in dict.Values) {
 				weight.Score = weight.Grade * weight.FinalWeight;
 				minScoreSum += weight.MinimumScore;
 				maxScoreSum += weight.MaximumScore;
@@ -56,7 +51,7 @@
 			}
 
 			decimal score = (scoreSum - minScoreSum) / (maxScoreSum - minScoreSum);
-			Medal medal = GetMedal(Constants.MedalRanges, score);
+			MedalMultiplier medal = GetMedal(Constants.MedalRanges, score);
 			var smo = new ScoreMedalOffer
 				{
 					Medal = medal,
@@ -351,14 +346,14 @@
 			return fixedWeight;
 		}
 
-		private Medal GetMedal(IEnumerable<RangeMedal> rangeMedals, decimal value)
+		private MedalMultiplier GetMedal(IEnumerable<RangeMedal> rangeMedals, decimal value)
 		{
 			var range = GetRange(rangeMedals, value);
 			if (range != null)
 			{
 				return range.Medal;
 			}
-			return Medal.NoMedal;
+			return MedalMultiplier.NoMedal;
 		}
 
 		private int GetGrade(IEnumerable<RangeGrage> rangeGrages, decimal value)

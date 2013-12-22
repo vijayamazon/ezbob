@@ -1,4 +1,7 @@
-﻿namespace EzBob.Backend.Strategies
+﻿using Ezbob.Database;
+using Ezbob.Logger;
+
+namespace EzBob.Backend.Strategies
 {
 	using System;
 	using System.Collections.Generic;
@@ -6,60 +9,50 @@
 	using System.Globalization;
 	using System.IO;
 	using System.Text;
-	using DbConnection;
 	using ExperianLib.CaisFile;
 	using Models;
-	using log4net;
 
-	public class CaisGenerator
+	public class CaisGenerator : AStrategy
 	{
-		private static readonly ILog log = LogManager.GetLogger(typeof(CaisGenerator));
-		private readonly StrategiesMailer mailer = new StrategiesMailer();
-		private readonly StrategyHelper strategyHelper = new StrategyHelper();
+		public CaisGenerator(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+			mailer = new StrategiesMailer(DB, Log);
 
-		private readonly object caisGenerationLock = new object();
-		private int caisGenerationTriggerer = -1;
-		private readonly string caisPath;
-		private readonly string caisPath2;
-		private string accountStatus;
-		private decimal monthlyPayment;
-		private decimal originalDefaultBalance;
-		private int businessCounter;
-		private int businessGoodCounter;
-		private int businessDefaultsCounter;
-		private int consumerCounter;
-		private int consumerGoodCounter;
-		private int consumerDefaultsCounter;
-		private string companyTypeCode;
-		private string companyRefNum;
-
-		public CaisGenerator()
-		{
-			DataTable dt = DbConnection.ExecuteSpReader("GetCaisFoldersPaths");
+			DataTable dt = DB.ExecuteReader("GetCaisFoldersPaths", CommandSpecies.StoredProcedure);
 			DataRow results = dt.Rows[0];
 
 			caisPath = results["CaisPath"].ToString();
 			caisPath2 = results["CaisPath2"].ToString();
 		}
 
-		public void CaisGenerate(int underwriterId)
-		{
-			lock (caisGenerationLock)
-			{
-				if (caisGenerationTriggerer != -1)
-				{
-					log.WarnFormat("A CAIS generation is already in progress. Triggered by Underwriter:{0}", caisGenerationTriggerer);
+		public override string Name {
+			get { return "CAIS Generator"; }
+		} // Name
+
+		public void CaisGenerate(int underwriterId) {
+			lock (caisGenerationLock) {
+				if (caisGenerationTriggerer != -1) {
+					Log.Warn("A CAIS generation is already in progress. Triggered by Underwriter:{0}", caisGenerationTriggerer);
 					return;
-				}
+				} // if
 				caisGenerationTriggerer = underwriterId;
-			}
+			} // lock
 
 			Generate();
 
-			lock (caisGenerationLock)
-			{
+			lock (caisGenerationLock) {
 				caisGenerationTriggerer = -1;
-			}
+			} // lock
+		} // CaisGenerate
+
+		public void CaisUpdate(int caisId) {
+			DataTable dt = DB.ExecuteReader("GetCaisFileData", CommandSpecies.StoredProcedure);
+			DataRow results = dt.Rows[0];
+
+			string fileName = results["FileName"].ToString();
+			string dirName = results["DirName"].ToString();
+
+			var unzippedFileContent = strategyHelper.GetCAISFileById(caisId);
+			File.WriteAllText(string.Format("{0}\\{1}", dirName, fileName), unzippedFileContent, Encoding.ASCII);
 		}
 
 		private void Generate()
@@ -71,7 +64,7 @@
 			Directory.CreateDirectory(dirPath);
 			Directory.CreateDirectory(dirPath2);
 
-			DataTable dt = DbConnection.ExecuteSpReader("GetCaisData");
+			DataTable dt = DB.ExecuteReader("GetCaisData", CommandSpecies.StoredProcedure);
 			foreach (DataRow row in dt.Rows)
 			{
 				int loanId = int.Parse(row["loanID"].ToString());
@@ -209,9 +202,11 @@
 					}
 				}
 
-				DbConnection.ExecuteSpNonQuery("UpdateLastReportedCAISstatus",
-				    DbConnection.CreateParam("LoanId", loanId),
-				    DbConnection.CreateParam("CAISStatus", accountStatus));
+				DB.ExecuteNonQuery("UpdateLastReportedCAISstatus",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("LoanId", loanId),
+					new QueryParameter("CAISStatus", accountStatus)
+				);
 			}
 
 			var variables = new Dictionary<string, string>
@@ -448,16 +443,23 @@
 			return record;
 		}
 
-		public void CaisUpdate(int caisId)
-		{
-			DataTable dt = DbConnection.ExecuteSpReader("GetCaisFileData");
-			DataRow results = dt.Rows[0];
+		private readonly StrategiesMailer mailer;
+		private readonly StrategyHelper strategyHelper = new StrategyHelper();
 
-			string fileName = results["FileName"].ToString();
-			string dirName = results["DirName"].ToString();
-
-			var unzippedFileContent = strategyHelper.GetCAISFileById(caisId);
-			File.WriteAllText(string.Format("{0}\\{1}", dirName, fileName), unzippedFileContent, Encoding.ASCII);
-		}
-	}
-}
+		private readonly object caisGenerationLock = new object();
+		private int caisGenerationTriggerer = -1;
+		private readonly string caisPath;
+		private readonly string caisPath2;
+		private string accountStatus;
+		private decimal monthlyPayment;
+		private decimal originalDefaultBalance;
+		private int businessCounter;
+		private int businessGoodCounter;
+		private int businessDefaultsCounter;
+		private int consumerCounter;
+		private int consumerGoodCounter;
+		private int consumerDefaultsCounter;
+		private string companyTypeCode;
+		private string companyRefNum;
+	} // CaisGenerator
+} // namespace

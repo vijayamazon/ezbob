@@ -1,150 +1,195 @@
-﻿namespace EzBob.Backend.Strategies
-{
-	using System;
-	using System.Collections.Generic;
-	using System.Data;
-	using System.Globalization;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Globalization;
+using EKM;
+using EZBob.DatabaseLib;
+using Ezbob.Database;
+using Ezbob.Logger;
+using FreeAgent;
+using Integration.ChannelGrabberFrontend;
+using Integration.ChannelGrabberConfig;
+using PayPoint;
+using Sage;
+using StructureMap;
+using YodleeLib.connector;
+
+namespace EzBob.Backend.Strategies {
 	using AmazonLib;
-	using EKM;
-	using EZBob.DatabaseLib;
-	using FreeAgent;
-	using Integration.ChannelGrabberFrontend;
 	using PayPal;
-	using PayPoint;
-	using Sage;
-	using StructureMap;
-	using YodleeLib.connector;
 	using eBayLib;
-	using log4net;
-	using DbConnection;
 
-	public class UpdateMarketplaces
-	{
-		private static readonly ILog log = LogManager.GetLogger(typeof(UpdateMarketplaces));
-		private readonly StrategiesMailer mailer = new StrategiesMailer();
+	public class UpdateMarketplaces : AStrategy {
+		#region public
 
-		private DatabaseDataHelper Helper
-		{
-			get { return ObjectFactory.GetInstance<DatabaseDataHelper>(); }
-		}
-		public void CustomerMarketPlaceAdded(int customerId, int marketplaceId)
-		{
+		#region constructor
+
+		public UpdateMarketplaces(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+			mailer = new StrategiesMailer(DB, Log);
+		} // constructor
+
+		#endregion constructor
+
+		#region property Name
+
+		public override string Name {
+			get { return "Update Marketplaces"; }
+		} // Name
+
+		#endregion property Name
+
+		#region method CustomerMarketPlaceAdded
+
+		public void CustomerMarketPlaceAdded(int customerId, int marketplaceId) {
 			string errorMessage = string.Empty;
 			DateTime startTime = DateTime.UtcNow;
-			DataTable dt = DbConnection.ExecuteSpReader("GetMarketplaceDetailsForUpdate",
-				DbConnection.CreateParam("MarketplaceId", marketplaceId));
+
+			DataTable dt = DB.ExecuteReader(
+				"GetMarketplaceDetailsForUpdate",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("MarketplaceId", marketplaceId)
+			);
+
 			DataRow result = dt.Rows[0];
 			string marketplaceName = result["Name"].ToString();
 			bool disabled = bool.Parse(result["Disabled"].ToString());
 
 			if (disabled)
-			{
 				return;
-			}
+
 			bool tokenExpired = false;
 
-			try
-			{
-				switch (marketplaceName)
-				{
+			try {
+				if (null == Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(marketplaceName)) {
+					switch (marketplaceName) {
 					case "eBay":
 						// TODO: make all the constructors empty, create helper and mp inside if needed
 						new eBayRetriveDataHelper(Helper, new eBayDatabaseMarketPlace()).UpdateCustomerMarketplaceFirst(marketplaceId);
 						break;
+
 					case "Amazon":
 						new AmazonRetriveDataHelper(Helper, new AmazonDatabaseMarketPlace()).UpdateCustomerMarketplaceFirst(marketplaceId);
 						break;
+
 					case "Pay Pal":
 						new PayPalRetriveDataHelper(Helper, new PayPalDatabaseMarketPlace()).UpdateCustomerMarketplaceFirst(marketplaceId);
 						break;
+
 					case "EKM":
 						new EkmRetriveDataHelper(Helper, new EkmDatabaseMarketPlace()).UpdateCustomerMarketplaceFirst(marketplaceId);
 						break;
+
 					case "FreeAgent":
 						new FreeAgentRetrieveDataHelper(Helper, new FreeAgentDatabaseMarketPlace()).UpdateCustomerMarketplaceFirst(marketplaceId);
 						break;
+
 					case "Sage":
 						new SageRetrieveDataHelper(Helper, new SageDatabaseMarketPlace()).UpdateCustomerMarketplaceFirst(marketplaceId);
 						break;
+
 					case "PayPoint":
 						new PayPointRetrieveDataHelper(Helper, new PayPointDatabaseMarketPlace()).UpdateCustomerMarketplaceFirst(marketplaceId);
 						break;
+
 					case "Yodlee":
 						new YodleeRetriveDataHelper(Helper, new YodleeDatabaseMarketPlace()).UpdateCustomerMarketplaceFirst(marketplaceId);
 						break;
-					case "Volusion":
-					case "Play":
-					case "Shopify":
-					case "Xero":
-					case "KashFlow":
-					case "Magento":
-					case "Prestashop":
-					case "Bigcommerce":
-					case "HMRC":
-						new RetrieveDataHelper(Helper, new DatabaseMarketPlace(marketplaceName), Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(marketplaceName)).UpdateCustomerMarketplaceFirst(marketplaceId);
-						break;
+					} // switch
 				}
+				else
+					new Integration.ChannelGrabberFrontend.RetrieveDataHelper(Helper, new DatabaseMarketPlace(marketplaceName), Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(marketplaceName)).UpdateCustomerMarketplaceFirst(marketplaceId);
 			}
-			catch (Exception e)
-			{
+			catch (Exception e) {
 				errorMessage = e.Message;
 				string emailSubject, templateName;
 
-				if (marketplaceName == "eBay" &&
-					(e.Message.Contains("16110") || e.Message.Contains("931") || e.Message.Contains("932") || e.Message.Contains("16118") ||
-					 e.Message.Contains("16119") || e.Message.Contains("17470")))
-				{
+				if (
+					marketplaceName == "eBay" && (
+						e.Message.Contains("16110") ||
+						e.Message.Contains("931") ||
+						e.Message.Contains("932") ||
+						e.Message.Contains("16118") ||
+						e.Message.Contains("16119") ||
+						e.Message.Contains("17470")
+					)
+				) {
 					tokenExpired = true;
 					emailSubject = "eBay token has expired";
 					templateName = "Mandrill - Update MP Error Code";
 
-					var variables = new Dictionary<string, string>
-						{
-							{"userID", customerId.ToString(CultureInfo.InvariantCulture)},
-							{"MPType", marketplaceName},
-							{"CustomerMarketPlaceId", marketplaceId.ToString(CultureInfo.InvariantCulture)},
-							{"ErrorMessage", e.Message},
-							{"ErrorCode", e.Message}
-						};
+					var variables = new Dictionary<string, string> {
+						{"userID", customerId.ToString(CultureInfo.InvariantCulture)},
+						{"MPType", marketplaceName},
+						{"CustomerMarketPlaceId", marketplaceId.ToString(CultureInfo.InvariantCulture)},
+						{"ErrorMessage", e.Message},
+						{"ErrorCode", e.Message}
+					};
 
 					mailer.SendToEzbob(variables, templateName, emailSubject);
 				}
-				else
-				{
+				else {
 					emailSubject = "ERROR occured when updating Customer Marketplace data";
 					templateName = "Mandrill - UpdateCMP Error";
 
-					var variables = new Dictionary<string, string>
-						{
-							{"userID", customerId.ToString(CultureInfo.InvariantCulture)},
-							{"CustomerMarketPlaceId", marketplaceId.ToString(CultureInfo.InvariantCulture)},
-							{"UpdateCMP_Error", e.Message}
-						};
+					var variables = new Dictionary<string, string> {
+						{"userID", customerId.ToString(CultureInfo.InvariantCulture)},
+						{"CustomerMarketPlaceId", marketplaceId.ToString(CultureInfo.InvariantCulture)},
+						{"UpdateCMP_Error", e.Message}
+					};
 
 					mailer.SendToEzbob(variables, templateName, emailSubject);
-				}
-			}
+				} // if
+			} // try
 
-			DbConnection.ExecuteSpNonQuery("UpdateMPErrorMP",
-				DbConnection.CreateParam("umi", marketplaceId),
-				DbConnection.CreateParam("UpdateError", errorMessage),
-				DbConnection.CreateParam("TokenExpired", tokenExpired));
+			DB.ExecuteNonQuery("UpdateMPErrorMP",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("umi", marketplaceId),
+				new QueryParameter("UpdateError", errorMessage),
+				new QueryParameter("TokenExpired", tokenExpired)
+			);
 
-			DbConnection.ExecuteSpNonQuery("InsertStrategyMarketPlaceUpdateTime",
-				DbConnection.CreateParam("MarketPlaceId", marketplaceId),
-				DbConnection.CreateParam("StartDate", startTime),
-				DbConnection.CreateParam("EndDate", DateTime.UtcNow));
-		}
+			DB.ExecuteNonQuery("InsertStrategyMarketPlaceUpdateTime",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("MarketPlaceId", marketplaceId),
+				new QueryParameter("StartDate", startTime),
+				new QueryParameter("EndDate", DateTime.UtcNow)
+			);
+		} // CustomerMarketPlaceAdded
 
-		public void UpdateAllMarketplaces(int customerId)
-		{
-			DataTable dt = DbConnection.ExecuteSpReader("GetCustomerMarketplaces", DbConnection.CreateParam("CustomerId", customerId));
-			foreach (DataRow row in dt.Rows)
-			{
+		#endregion method CustomerMarketPlaceAdded
+
+		#region method UpdateAllMarketplaces
+
+		public void UpdateAllMarketplaces(int customerId) {
+			DataTable dt = DB.ExecuteReader(
+				"GetCustomerMarketplaces",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", customerId)
+			);
+
+			foreach (DataRow row in dt.Rows) {
 				int marketplaceId = int.Parse(row["Id"].ToString());
 				CustomerMarketPlaceAdded(customerId, marketplaceId);
-			}
-		}
+			} // foreach
+		} // UpdateAllMarketplaces
+
+		#endregion method UpdateAllMarketplaces
+
+		#endregion public
+
+		#region private
+
+		#region property Helper
+
+		private DatabaseDataHelper Helper {
+			get { return ObjectFactory.GetInstance<DatabaseDataHelper>(); }
+		} // Helper
+
+		#endregion property Helper
+
+		private readonly StrategiesMailer mailer;
+
+		#endregion private
 
 		/* Original */
 		//public void CustomerMarketPlaceAddedOriginal(int customerId, int marketplaceId)
@@ -235,5 +280,5 @@
 		//		CustomerMarketPlaceAddedOriginal(customerId, marketplaceId);
 		//	}
 		//}
-	}
-}
+	} // class UpdateMarketplaces
+} // namespace

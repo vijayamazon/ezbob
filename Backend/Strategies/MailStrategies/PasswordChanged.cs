@@ -1,27 +1,33 @@
-﻿namespace EzBob.Backend.Strategies.MailStrategies
-{
-	using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using Ezbob.Database;
+using Ezbob.Logger;
 
-	public class PasswordChanged : MailStrategyBase
-	{
-		private readonly string password;
+namespace EzBob.Backend.Strategies.MailStrategies {
+	public class PasswordChanged : AMailStrategyBase {
+		#region constructor
 
-		public PasswordChanged(int customerId, string password)
-			: base(customerId, true)
-		{
+		public PasswordChanged(int customerId, string password, AConnection oDB, ASafeLog oLog) : base(customerId, true, oDB, oLog) {
 			this.password = password;
-		}
+		} // constructor
 
-		public override void SetTemplateAndSubjectAndVariables()
-		{
+		#endregion constructor
+
+		public override string Name { get { return "Password Changed"; } } // Name
+
+		#region method SetTemplateAndSubjectAndVariables
+
+		protected override void SetTemplateAndSubjectAndVariables() {
 			Subject = "Your new ezbob password has been registered.";
 			TemplateName = "Mandrill - New password";
 
-			Variables = new Dictionary<string, string>
-				{
-					{"Password", password},
-					{"FirstName", CustomerData.FirstName}
-				};
-		}
-	}
-}
+			Variables = new Dictionary<string, string> {
+				{"Password", password},
+				{"FirstName", CustomerData.FirstName}
+			};
+		} // SetTemplateAndSubjectAndVariables
+
+		#endregion method SetTemplateAndSubjectAndVariables
+
+		private readonly string password;
+	} // class PasswordChanged
+} // namespace
