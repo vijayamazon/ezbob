@@ -4,7 +4,16 @@ using System.Linq;
 
 namespace PaymentServices.PayPoint
 {
-    public class PayPointReturnData
+	public enum ResponseCode
+	{
+		Referral = 2,
+		Referral2 = 83,
+		NotAuthorised = 5,
+		NotAuthorized2 = 54,
+		GeneralError = 30,
+	}
+
+	public class PayPointReturnData
     {
         public string Error { get; set; }
         public bool HasError

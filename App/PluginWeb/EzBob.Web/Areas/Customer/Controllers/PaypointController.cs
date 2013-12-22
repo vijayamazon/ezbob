@@ -96,8 +96,17 @@
 
             if (!valid || code != "A")
             {
-                Log.ErrorFormat("Paypoint result code is : {0} ({1}). Message: {2}", code, string.Join(", ", statusDescription.ToArray()), message);
-                _logRepository.Log(_context.UserId, DateTime.Now, "Paypoint Pay Redirect to ", "Failed", String.Format("Paypoint result code is : {0} ({1}). Message: {2}", code, string.Join(", ", statusDescription.ToArray()), message));
+	            if (code == "N")
+	            {
+		            Log.WarnFormat("Paypoint result code is : {0} ({1}). Message: {2}", code,
+		                            string.Join(", ", statusDescription.ToArray()), message);
+	            }
+	            else
+	            {
+					Log.ErrorFormat("Paypoint result code is : {0} ({1}). Message: {2}", code,
+									string.Join(", ", statusDescription.ToArray()), message);
+	            }
+	            _logRepository.Log(_context.UserId, DateTime.Now, "Paypoint Pay Redirect to ", "Failed", String.Format("Paypoint result code is : {0} ({1}). Message: {2}", code, string.Join(", ", statusDescription.ToArray()), message));
                 return View("Error");
             }
 

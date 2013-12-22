@@ -125,7 +125,7 @@
 
 		//-----------------------------------------------------------------------------------
 		/// <summary>
-		/// Make automatic payment for givven installment
+		/// Make automatic payment for given installment
 		/// </summary>
 		/// <param name="loanScheduleId">Installment Id</param>
 		/// <param name="amount">Amount to pay</param>
@@ -258,7 +258,14 @@
 
 			if (ret.HasError)
 			{
-				Log.Error("RepeatTransaction error: " + str);
+				if (ret.Code == "N")
+				{
+					Log.WarnFormat("RepeatTransaction error: {0}", str);
+				}
+				else
+				{
+					Log.ErrorFormat("RepeatTransaction error: {0}", str);
+				}
 				throw new PayPointException(str, ret);
 			}
 			Log.DebugFormat("RepeatTransaction successful: " + str);
