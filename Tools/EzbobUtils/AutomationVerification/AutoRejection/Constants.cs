@@ -46,26 +46,59 @@
 		
 		#endregion
 
-		#region ReAproval
-
+		#region AutoReApproval
 		
-
 		#region New Client
 
-		public static readonly int MinReApproveAmount = 1000;
+		public static readonly int NewMinReApproveAmount = 1000;
 		public static readonly int MissedPaymentCalendarDays = 5;//no need?
 		public static readonly int NewReApprovePeriodDays = 30;
 		#endregion
 
 		#region Old Client
 
-		public static readonly bool TookLoanBeforeOffer = true;
 		public static readonly int OldReApprovePeriodDays = 28;
+		public static readonly int OldMinReApproveAmount = 500;
 
 
 		#endregion
 
 		#endregion
+
+		#region AutoApproval
+
+		public static readonly int ApprovalMinCreditScore = 900;
+		public static readonly int ApprovalMinAnnualTurnover = 10000;
+		public static readonly int ApprovalMinQuarterTurnover = 2000;
+		public static readonly int ApprovalMinLastTurnover = 1000;
+		public static readonly int ApprovalMinSeniorityMonths = 12;
+		public static readonly int ApprovalMinAge = 22;
+		public static readonly int ApprovalMaxAge = 60;
+
+		public static readonly int ApprovalMinAmount = 1000;
+		public static readonly int ApprovalMaxAmount = 10000;
+		public static readonly int ApprovalMaxOutstandingOffersAmountPerDay = 200000;
+		public static readonly int ApprovalMaxIssuedAmountPerDay = 150000;
+
+		#region New Client
+
+		public static readonly int ApprovalNewMaxDelaysDaysOnCaisAccount = 60;
+		
+		#endregion
+
+		#region Old Client
+
+		public static readonly int ApprovalOldMaxDelaysDaysOnCaisAccount = 90;
+		public static readonly decimal ApprovalOldMaxDecreaseOfTurnoverPercent = 0.15M;
+		public static readonly int ApprovalOldMaxLatePaymentsDays = 7;
+		public static readonly int ApprovalOldMaxNumOfOutstandingLoans = 1;
+		public static readonly decimal ApprovalOldMaxOutstandingPrincipalPercent = 0.5M;
+
+		#endregion
+
+		#endregion
+
+
 		#region MedalScoreCalculation
 
 		#region Weight

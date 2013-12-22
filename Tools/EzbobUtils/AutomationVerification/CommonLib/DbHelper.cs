@@ -12,9 +12,15 @@ namespace CommonLib
 	{
 		private static readonly LegacyLog Log;
 		
-		public void GetCustomers()
+		public DateTime? GetCustomerBirthDate(int customerId)
 		{
-			
+			var conn = new SqlConnection(Log);
+			var dt = conn.ExecuteReader("AV_GetCustomerBirthDate", new QueryParameter("@CustomerId", customerId));
+			if (dt.Rows.Count == 0)
+			{
+				return null;
+			}
+			return DateTime.Parse(dt.Rows[0]["DateOfBirth"].ToString());
 		}
 
 		/// <summary>
@@ -130,6 +136,31 @@ namespace CommonLib
 					RepaidAmount = decimal.Parse(sqlData.Rows[0]["RepaidAmount"].ToString())
 				};
 			return data;
+		}
+
+		public ReApprovalData GetReApprovalData(int customerId)
+		{
+			var conn = new SqlConnection(Log);
+			var sqlData = conn.ExecuteReader("AV_ReApprovalData", new QueryParameter("@CustomerId", customerId));
+
+			var data = new ReApprovalData
+			{
+				ManualApproveDate = string.IsNullOrEmpty(sqlData.Rows[0]["ManualApproveDate"].ToString()) ? (DateTime?)null : DateTime.Parse(sqlData.Rows[0]["ManualApproveDate"].ToString()),
+				IsNewClient = bool.Parse(sqlData.Rows[0]["IsNewClient"].ToString()),
+				NewDataSourceAdded = bool.Parse(sqlData.Rows[0]["NewDataSourceAdded"].ToString()),
+				OfferedAmount = string.IsNullOrEmpty(sqlData.Rows[0]["OfferedAmount"].ToString()) ? 0 : int.Parse(sqlData.Rows[0]["OfferedAmount"].ToString()),
+				PrincipalRepaymentsSinceOffer = string.IsNullOrEmpty(sqlData.Rows[0]["PrincipalRepaymentsSinceOffer"].ToString()) ? 0 : decimal.Parse(sqlData.Rows[0]["PrincipalRepaymentsSinceOffer"].ToString()),
+				TookAmountLastRequest = string.IsNullOrEmpty(sqlData.Rows[0]["TookAmountLastRequest"].ToString()) ? 0 : int.Parse(sqlData.Rows[0]["TookAmountLastRequest"].ToString()),
+				TookLoanLastRequest = bool.Parse(sqlData.Rows[0]["TookLoanLastRequest"].ToString()),
+				WasLate = bool.Parse(sqlData.Rows[0]["WasLate"].ToString()),
+			};
+			return data;
+		}
+
+		public decimal GetMedalRate(int customerId)
+		{
+			var conn = new SqlConnection(Log);
+			return conn.ExecuteScalar<decimal>("AV_GetMedalRate", new QueryParameter("@CustomerId", customerId)); 
 		}
 	}
 }

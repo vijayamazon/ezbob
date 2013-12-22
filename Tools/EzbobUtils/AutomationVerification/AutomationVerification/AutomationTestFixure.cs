@@ -32,5 +32,25 @@
 			var des = arr.IsAutoReRejected(14223, out reason);
 			Assert.AreEqual(des, false);
 		}
+
+		[Test]
+		public void testAutoReapproval()
+		{
+			var arr = new AutoReApprovalCalculator();
+			string reason;
+			int amount = 0;
+			var des = arr.IsAutoReApproved(14223, out reason, out amount);
+			Assert.AreEqual(des, false);
+		}
+
+		[Test]
+		public void testAutoApproval()
+		{
+			var arr = new AutoApprovalCalculator();
+			string reason;
+			int amount = 0;
+			var des = arr.IsAutoApproved(14223, out reason, out amount);
+			Assert.AreEqual(des, false);
+		}
 	}
 }

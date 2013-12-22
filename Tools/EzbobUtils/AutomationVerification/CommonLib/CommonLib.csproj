@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="AnalysisFunction.cs" />
     <Compile Include="AnalysisFunctionsHelper.cs" />
+    <Compile Include="ReApprovalData.cs" />
     <Compile Include="DbHelper.cs" />
     <Compile Include="MarketPlace.cs" />
     <Compile Include="MarketPlacesHelper.cs" />

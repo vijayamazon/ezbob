@@ -16,7 +16,7 @@
 	{
 		static void Main()
 		{
-			var from = new DateTime(2013,10,01);//todo change
+			var from = DateTime.Today.AddDays(-1); //new DateTime(2013, 10, 01));//todo change
 			var to = DateTime.Today;
 			var systemDecisions = GetAutomaticDecisions(from, to);
 			var verificitaionDecisions = GetVerificationDecisions(systemDecisions);
@@ -33,7 +33,7 @@
 		//	}
 		//}
 
-		private static void SendReport(DateTime oDate,DataTable data,  ASafeLog oLog)
+		private static void SendReport(DateTime oDate, DataTable data, ASafeLog oLog)
 		{
 			oLog.Debug("Generating automation verification report...");
 
@@ -50,7 +50,7 @@
 			var email = new ReportEmail();
 
 			email.ReportBody.Append(new H2().Append(new Text(reportMetaData.GetTitle(oDate))));
-			
+
 			email.ReportBody.Append(
 				rh.TableReport(new ReportQuery(reportMetaData, oDate, oDate), data)
 			);
@@ -82,47 +82,55 @@
 			dt.Columns.Add("SystemComment", typeof(string));
 			dt.Columns.Add("VerificationDecision", typeof(string));
 			dt.Columns.Add("VerificationComment", typeof(string));
+			dt.Columns.Add("SystemCalculatedSum", typeof(int));
+			dt.Columns.Add("VerificationCalculatedSum", typeof(int));
 			dt.Columns.Add("Css", typeof(string));
 
 			foreach (var vr in reportRows)
 			{
 				dt.Rows.Add(vr.CashRequestId, vr.CustomerId, vr.SystemDecision, vr.SystemComment, vr.VerificationDecision,
-				            vr.VerificationComment, "Failed unmatched");
+							vr.VerificationComment, vr.SystemCalculatedSum, vr.VerificationCalculatedSum, "Failed unmatched");
 			}
-			
+
 			return dt;
 		}
 
-		private static IEnumerable<VerificationReport> GetComparisonReport(Dictionary<int, AutoDecision> systemDecisions, Dictionary<int, AutoDecision> verificitaionDecisions)
+		private static IEnumerable<VerificationReport> GetComparisonReport(Dictionary<int, AutoDecision> systemDecisions, Dictionary<int, List<AutoDecision>> verificitaionDecisions)
 		{
 			var verificationReportList = new List<VerificationReport>();
 			foreach (int cashRequest in systemDecisions.Keys)
 			{
-				if (systemDecisions[cashRequest].SystemDecision != verificitaionDecisions[cashRequest].SystemDecision)
+				foreach (var verificitaionDecision in verificitaionDecisions[cashRequest])
 				{
-					verificationReportList.Add(new VerificationReport
-						{
-							CashRequestId = cashRequest,
-							CustomerId = systemDecisions[cashRequest].CustomerId,
-							SystemDecision = systemDecisions[cashRequest].SystemDecision,
-							SystemComment = systemDecisions[cashRequest].Comment,
-							VerificationDecision = verificitaionDecisions[cashRequest].SystemDecision,
-							VerificationComment = verificitaionDecisions[cashRequest].Comment
-						});
+					if (systemDecisions[cashRequest].SystemDecision != verificitaionDecision.SystemDecision)
+					{
+						verificationReportList.Add(new VerificationReport
+							{
+								CashRequestId = cashRequest,
+								CustomerId = systemDecisions[cashRequest].CustomerId,
+								SystemDecision = systemDecisions[cashRequest].SystemDecision,
+								SystemComment = systemDecisions[cashRequest].Comment,
+								VerificationDecision = verificitaionDecision.SystemDecision,
+								VerificationComment = verificitaionDecision.Comment,
+								SystemCalculatedSum = systemDecisions[cashRequest].SystemCalculatedSum,
+								VerificationCalculatedSum = verificitaionDecision.SystemCalculatedSum
+							});
+					}
 				}
 			}
 			return verificationReportList;
 		}
 
-		private static Dictionary<int, AutoDecision> GetVerificationDecisions(Dictionary<int, AutoDecision> decisions)
+		private static Dictionary<int, List<AutoDecision>> GetVerificationDecisions(Dictionary<int, AutoDecision> decisions)
 		{
-			var verificationDecisions = new Dictionary<int, AutoDecision>();
+			var verificationDecisions = new Dictionary<int, List<AutoDecision>>();
 			var aj = new AutoRejectionCalculator();
 			foreach (var autoDecision in decisions.Values)
 			{
+				var autoDecisionsList = new List<AutoDecision>();
 				string reason;
 				bool isAutoRejected = aj.IsAutoRejected(autoDecision.CustomerId, out reason);
-				verificationDecisions.Add(autoDecision.CashRequestId, new AutoDecision
+				autoDecisionsList.Add(new AutoDecision
 					{
 						CashRequestId = autoDecision.CashRequestId,
 						CustomerId = autoDecision.CustomerId,
@@ -130,15 +138,42 @@
 						Comment = reason
 					});
 
+
 				var arr = new AutoReRejectionCalculator();
 				bool isAutoReRejected = arr.IsAutoReRejected(autoDecision.CustomerId, out reason);
-				verificationDecisions.Add(autoDecision.CashRequestId, new AutoDecision
+				autoDecisionsList.Add(new AutoDecision
 				{
 					CashRequestId = autoDecision.CashRequestId,
 					CustomerId = autoDecision.CustomerId,
 					SystemDecision = isAutoReRejected ? Decision.Reject : Decision.Manual,
 					Comment = reason
 				});
+
+				int amount = 0;
+				var ara = new AutoReApprovalCalculator();
+
+				bool isAutoReApproved = ara.IsAutoReApproved(autoDecision.CustomerId, out reason, out amount);
+				autoDecisionsList.Add(new AutoDecision
+				{
+					CashRequestId = autoDecision.CashRequestId,
+					CustomerId = autoDecision.CustomerId,
+					SystemDecision = isAutoReApproved ? Decision.Approve : Decision.Manual,
+					SystemCalculatedSum = isAutoReApproved ? amount : 0,
+					Comment = reason
+				});
+
+				var aa = new AutoApprovalCalculator();
+				bool isAutoApproved = aa.IsAutoApproved(autoDecision.CustomerId, out reason, out amount);
+				autoDecisionsList.Add(new AutoDecision
+				{
+					CashRequestId = autoDecision.CashRequestId,
+					CustomerId = autoDecision.CustomerId,
+					SystemDecision = isAutoApproved ? Decision.Approve : Decision.Manual,
+					SystemCalculatedSum = amount,
+					Comment = reason
+				});
+
+				verificationDecisions.Add(autoDecision.CashRequestId, autoDecisionsList);
 			}
 
 			return verificationDecisions;
@@ -155,10 +190,10 @@
 					{
 						CashRequestId = int.Parse(row["CashRequestId"].ToString()),
 						CustomerId = int.Parse(row["CustomerId"].ToString()),
-						SystemDecision = (Decision) Enum.Parse(typeof (Decision), row["SystemDecision"].ToString()),
+						SystemDecision = (Decision)Enum.Parse(typeof(Decision), row["SystemDecision"].ToString()),
 						SystemDecisionDate = DateTime.Parse(row["SystemDecisionDate"].ToString()),
 						SystemCalculatedSum = int.Parse(row["SystemCalculatedSum"].ToString()),
-						MedalType = (Medal) Enum.Parse(typeof (Medal), row["MedalType"].ToString()),
+						MedalType = (Medal)Enum.Parse(typeof(Medal), row["MedalType"].ToString()),
 						RepaymentPeriod = int.Parse(row["RepaymentPeriod"].ToString()),
 						ScorePoints = double.Parse(row["ScorePoints"].ToString()),
 						ExpirianRating = int.Parse(row["ExpirianRating"].ToString()),

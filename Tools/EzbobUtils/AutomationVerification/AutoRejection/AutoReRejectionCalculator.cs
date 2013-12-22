@@ -15,7 +15,7 @@
 				if (rerejectionData.ManualRejectDate.HasValue && rerejectionData.ManualRejectDate.Value.AddDays(Constants.ManualDecisionDateRangeDays) >= DateTime.UtcNow &&
 				    !rerejectionData.NewDataSourceAdded)
 				{
-					reason = "Auto ReRejection New Client Application within min date range and no new data sources added";
+					reason = "ReRejection. New Client. Application within min date range and no new data sources added";
 					return true;
 				}
 			}
@@ -26,11 +26,11 @@
 					!rerejectionData.NewDataSourceAdded && 
 					repaymentPercent < Constants.MinRepaidPrincipalPercent)
 				{
-					reason = "Auto ReRejection Old Client Application within min date range and no new data sources added and not repaid min principal amount";
+					reason = "ReRejection. Old Client. Application within min date range and no new data sources added and not repaid min principal amount";
 					return true;
 				}
 			}
-			reason = "None of the auto rerejection rules";
+			reason = "No ReRejection. None of the auto rerejection rules match";
 			return false;
 		}
     }
