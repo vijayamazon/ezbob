@@ -47,7 +47,6 @@ namespace EzBobTest
         public void Init()
         {
 			var paths = new string[] {
-				@"c:\alexbo\src\App\clients\Maven\maven.exe",
 				@"c:\EzBob\App\clients\Maven\maven.exe"
 			};
 
@@ -137,7 +136,7 @@ namespace EzBobTest
 
 		[Test]
 		public void UpdateCustomerMarketplace() {
-			var umis = new[] { 12235 };
+			var umis = new[] { 13 };
 
 			//umis.AsParallel().ForAll( UpdateCustomerMarketplace );
 

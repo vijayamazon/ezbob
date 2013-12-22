@@ -905,13 +905,17 @@ namespace Ezbob.HmrcHarvester {
 					continue;
 				} // if first row
 
-				if (oCells.Count != 3)
-					throw new HarvesterException(string.Format("Failed to fetch RTI tag years: unexpected number of cells in row {0}", nRowNum));
+				string sFirstCell = oCells.Count > 0 ? oCells[0].InnerText.Trim() : string.Empty;
 
-				string sFirstCell = oCells[0].InnerText.Trim();
+				if (oCells.Count != 3) {
+					if ((oCells.Count == 1) && (sFirstCell == "Previous tax years"))
+						break;
+
+					throw new HarvesterException(string.Format("Failed to fetch RTI tax years: unexpected number of cells in row {0}", nRowNum));
+				} // if
 
 				if (sFirstCell == "Total")
-					continue;
+					break;
 
 				try {
 					data.Add(new RtiTaxYearRowData(sFirstCell, oCells[1].InnerText.Trim(), oCells[2].InnerText.Trim())); 
