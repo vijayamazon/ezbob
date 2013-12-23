@@ -23,6 +23,7 @@ namespace EzBob.Backend.Strategies {
 
 				int loanId = int.Parse(row["LoanId"].ToString());
 				string signDate = row["SignDate"].ToString();
+				string firstName = row["FirstName"].ToString();
 				decimal loanAmount = decimal.Parse(row["LoanAmount"].ToString());
 				decimal principal = decimal.Parse(row["Principal"].ToString());
 				decimal interest = decimal.Parse(row["Interest"].ToString());
@@ -31,6 +32,7 @@ namespace EzBob.Backend.Strategies {
 				string mail = row["Email"].ToString();
 
 				var variables = new Dictionary<string, string> {
+					{"FirstName", firstName},
 					{"SignDate", signDate},
 					{"LoanAmount", loanAmount.ToString(CultureInfo.InvariantCulture)},
 					{"Principal", principal.ToString(CultureInfo.InvariantCulture)},
