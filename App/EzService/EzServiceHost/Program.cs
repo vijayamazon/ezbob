@@ -161,8 +161,6 @@ namespace EzServiceHost {
 			if (m_oDB == null)
 				throw new Exception("Failed to create a DB connection.");
 
-			// TODO: add SMTP settings from DB to logger
-
 			m_nMainLoopSleepTime = 1000; // TODO: read from DB
 
 			int nAdminListeningPort = 7081; // TODO: configurable from DB

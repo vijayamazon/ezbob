@@ -75,6 +75,12 @@
   <wsdl:message name="IEzServiceAdmin_ListActiveActions_OutputMessage">
     <wsdl:part name="parameters" element="tns:ListActiveActionsResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzServiceAdmin_WriteToLog_InputMessage">
+    <wsdl:part name="parameters" element="tns:WriteToLog" />
+  </wsdl:message>
+  <wsdl:message name="IEzServiceAdmin_WriteToLog_OutputMessage">
+    <wsdl:part name="parameters" element="tns:WriteToLogResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_GreetingMailStrategy_InputMessage">
     <wsdl:part name="parameters" element="tns:GreetingMailStrategy" />
   </wsdl:message>
@@ -290,6 +296,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/ListActiveActions" message="tns:IEzServiceAdmin_ListActiveActions_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceAdmin/ListActiveActionsResponse" message="tns:IEzServiceAdmin_ListActiveActions_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="WriteToLog">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/WriteToLog" message="tns:IEzServiceAdmin_WriteToLog_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceAdmin/WriteToLogResponse" message="tns:IEzServiceAdmin_WriteToLog_OutputMessage" />
+    </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IEzService">
     <wsdl:operation name="GreetingMailStrategy">
@@ -458,6 +468,15 @@
     </wsdl:operation>
     <wsdl:operation name="ListActiveActions">
       <soap12:operation soapAction="http://tempuri.org/IEzServiceAdmin/ListActiveActions" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WriteToLog">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceAdmin/WriteToLog" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -774,7 +793,7 @@
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>yulys-PC\yulys</Upn>
+          <Upn>alexbo-pc\alexbo</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

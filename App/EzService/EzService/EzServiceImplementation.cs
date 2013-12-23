@@ -209,6 +209,36 @@ namespace EzService {
 
 		#endregion method ListActiveActions
 
+		#region method WriteToLog
+
+		public ActionMetaData WriteToLog(string sSeverity, string sMsg) {
+			try {
+				ActionMetaData amd = NewSync(ActionStatus.Done);
+
+				m_oLog.Msg("WriteToLog() method started...");
+
+				Severity nSeverity = Severity.Info;
+
+				Severity.TryParse(sSeverity, true, out nSeverity);
+
+				m_oLog.Debug("Requested severity: {0}, actual severity: {1}", sSeverity, nSeverity);
+
+				m_oLog.Say(nSeverity, sMsg);
+
+				m_oLog.Msg("WriteToLog() method complete with result {0}.", amd);
+
+				SaveActionStatus(amd);
+
+				return amd;
+			}
+			catch (Exception e) {
+				m_oLog.Alert(e, "Exception during WriteToLog() method.");
+				throw new FaultException(e.Message);
+			} // try
+		} // WriteToLog
+
+		#endregion method WriteToLog
+
 		#endregion IEzServiceAdmin exposed methods
 
 		#region IEzService exposed methods

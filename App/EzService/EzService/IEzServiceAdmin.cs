@@ -15,5 +15,8 @@ namespace EzService {
 
 		[OperationContract]
 		StringListActionResult ListActiveActions();
+
+		[OperationContract]
+		ActionMetaData WriteToLog(string sSeverity, string sMsg);
 	} // interface IEzServiceAdmin
 } // namespace EzService
