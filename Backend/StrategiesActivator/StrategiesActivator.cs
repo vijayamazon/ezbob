@@ -11,7 +11,7 @@
 	public class StrategiesActivator
 	{
 		private readonly string[] args;
-		private readonly EzServiceClientClient serviceClient = new EzServiceClientClient();
+		private readonly EzServiceClient serviceClient = new EzServiceClient();
 
 		public StrategiesActivator(string[] args)
 		{

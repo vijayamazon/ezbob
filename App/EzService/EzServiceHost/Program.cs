@@ -202,7 +202,7 @@ namespace EzServiceHost {
 				// To remove permission:
 				//     netsh http add urlacl url=http://+:7082/
 				// Mind the backslash at the end of the URL.
-				oHost.AddServiceEndpoint(typeof(IEzServiceClient), new NetHttpBinding(), m_sClientBaseAddress);
+				oHost.AddServiceEndpoint(typeof(IEzService), new NetHttpBinding(), m_sClientBaseAddress);
 
 				m_oLog.Info("EzService endpoint has been created.");
 

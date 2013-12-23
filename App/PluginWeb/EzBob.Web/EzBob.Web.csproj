@@ -1444,7 +1444,9 @@
     <Content Include="Views\Shared\_LivePerson.cshtml" />
     <Content Include="Views\Shared\security_template.cshtml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="App_Code\EzForm.cshtml" />
   </ItemGroup>

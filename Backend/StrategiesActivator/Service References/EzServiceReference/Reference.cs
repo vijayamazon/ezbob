@@ -288,61 +288,233 @@ namespace EzServiceReference {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="EzServiceReference.IEzServiceClient")]
-    public interface IEzServiceClient {
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="EzServiceReference.IEzService")]
+    public interface IEzService {
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceClient/GetStrategiesList", ReplyAction="http://tempuri.org/IEzServiceClient/GetStrategiesListResponse")]
-        EzServiceReference.StringListActionResult GetStrategiesList();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceClient/GetStrategiesList", ReplyAction="http://tempuri.org/IEzServiceClient/GetStrategiesListResponse")]
-        System.Threading.Tasks.Task<EzServiceReference.StringListActionResult> GetStrategiesListAsync();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceClient/GreetingMailStrategy", ReplyAction="http://tempuri.org/IEzServiceClient/GreetingMailStrategyResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GreetingMailStrategy", ReplyAction="http://tempuri.org/IEzService/GreetingMailStrategyResponse")]
         EzServiceReference.ActionMetaData GreetingMailStrategy(int nCustomerID, string sConfirmationEmail);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceClient/GreetingMailStrategy", ReplyAction="http://tempuri.org/IEzServiceClient/GreetingMailStrategyResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GreetingMailStrategy", ReplyAction="http://tempuri.org/IEzService/GreetingMailStrategyResponse")]
         System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> GreetingMailStrategyAsync(int nCustomerID, string sConfirmationEmail);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceClient/CustomerMarketplaceAdded", ReplyAction="http://tempuri.org/IEzServiceClient/CustomerMarketplaceAddedResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CustomerMarketplaceAdded", ReplyAction="http://tempuri.org/IEzService/CustomerMarketplaceAddedResponse")]
         EzServiceReference.ActionMetaData CustomerMarketplaceAdded(int nCustomerID, int nMarketplaceID);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceClient/CustomerMarketplaceAdded", ReplyAction="http://tempuri.org/IEzServiceClient/CustomerMarketplaceAddedResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CustomerMarketplaceAdded", ReplyAction="http://tempuri.org/IEzService/CustomerMarketplaceAddedResponse")]
         System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> CustomerMarketplaceAddedAsync(int nCustomerID, int nMarketplaceID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ApprovedUser", ReplyAction="http://tempuri.org/IEzService/ApprovedUserResponse")]
+        EzServiceReference.ActionMetaData ApprovedUser(int customerId, decimal loanAmount);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ApprovedUser", ReplyAction="http://tempuri.org/IEzService/ApprovedUserResponse")]
+        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> ApprovedUserAsync(int customerId, decimal loanAmount);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CashTransferred", ReplyAction="http://tempuri.org/IEzService/CashTransferredResponse")]
+        EzServiceReference.ActionMetaData CashTransferred(int customerId, int amount);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CashTransferred", ReplyAction="http://tempuri.org/IEzService/CashTransferredResponse")]
+        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> CashTransferredAsync(int customerId, int amount);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EmailUnderReview", ReplyAction="http://tempuri.org/IEzService/EmailUnderReviewResponse")]
+        EzServiceReference.ActionMetaData EmailUnderReview(int customerId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EmailUnderReview", ReplyAction="http://tempuri.org/IEzService/EmailUnderReviewResponse")]
+        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> EmailUnderReviewAsync(int customerId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ActivateEscalated", ReplyAction="http://tempuri.org/IEzService/ActivateEscalatedResponse")]
+        EzServiceReference.ActionMetaData ActivateEscalated(int customerId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ActivateEscalated", ReplyAction="http://tempuri.org/IEzService/ActivateEscalatedResponse")]
+        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> ActivateEscalatedAsync(int customerId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ActivateGetCashFailed", ReplyAction="http://tempuri.org/IEzService/ActivateGetCashFailedResponse")]
+        EzServiceReference.ActionMetaData ActivateGetCashFailed(int customerId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ActivateGetCashFailed", ReplyAction="http://tempuri.org/IEzService/ActivateGetCashFailedResponse")]
+        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> ActivateGetCashFailedAsync(int customerId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ActivateLoanFullyPaid", ReplyAction="http://tempuri.org/IEzService/ActivateLoanFullyPaidResponse")]
+        EzServiceReference.ActionMetaData ActivateLoanFullyPaid(int customerId, string loanRefNum);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ActivateLoanFullyPaid", ReplyAction="http://tempuri.org/IEzService/ActivateLoanFullyPaidResponse")]
+        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> ActivateLoanFullyPaidAsync(int customerId, string loanRefNum);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MoreAmLandBwaInformation", ReplyAction="http://tempuri.org/IEzService/MoreAmLandBwaInformationResponse")]
+        EzServiceReference.ActionMetaData MoreAmLandBwaInformation(int customerId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MoreAmLandBwaInformation", ReplyAction="http://tempuri.org/IEzService/MoreAmLandBwaInformationResponse")]
+        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> MoreAmLandBwaInformationAsync(int customerId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MoreAmlInformation", ReplyAction="http://tempuri.org/IEzService/MoreAmlInformationResponse")]
+        EzServiceReference.ActionMetaData MoreAmlInformation(int customerId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MoreAmlInformation", ReplyAction="http://tempuri.org/IEzService/MoreAmlInformationResponse")]
+        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> MoreAmlInformationAsync(int customerId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MoreBwaInformation", ReplyAction="http://tempuri.org/IEzService/MoreBwaInformationResponse")]
+        EzServiceReference.ActionMetaData MoreBwaInformation(int customerId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MoreBwaInformation", ReplyAction="http://tempuri.org/IEzService/MoreBwaInformationResponse")]
+        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> MoreBwaInformationAsync(int customerId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PasswordChanged", ReplyAction="http://tempuri.org/IEzService/PasswordChangedResponse")]
+        EzServiceReference.ActionMetaData PasswordChanged(int customerId, string password);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PasswordChanged", ReplyAction="http://tempuri.org/IEzService/PasswordChangedResponse")]
+        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> PasswordChangedAsync(int customerId, string password);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PasswordRestored", ReplyAction="http://tempuri.org/IEzService/PasswordRestoredResponse")]
+        EzServiceReference.ActionMetaData PasswordRestored(int customerId, string password);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PasswordRestored", ReplyAction="http://tempuri.org/IEzService/PasswordRestoredResponse")]
+        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> PasswordRestoredAsync(int customerId, string password);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PayEarly", ReplyAction="http://tempuri.org/IEzService/PayEarlyResponse")]
+        EzServiceReference.ActionMetaData PayEarly(int customerId, int amount, string loanRefNum);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PayEarly", ReplyAction="http://tempuri.org/IEzService/PayEarlyResponse")]
+        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> PayEarlyAsync(int customerId, int amount, string loanRefNum);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PayPointAddedByUnderwriter", ReplyAction="http://tempuri.org/IEzService/PayPointAddedByUnderwriterResponse")]
+        EzServiceReference.ActionMetaData PayPointAddedByUnderwriter(int customerId, string cardno, string underwriterName, int underwriterId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PayPointAddedByUnderwriter", ReplyAction="http://tempuri.org/IEzService/PayPointAddedByUnderwriterResponse")]
+        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> PayPointAddedByUnderwriterAsync(int customerId, string cardno, string underwriterName, int underwriterId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PayPointNameValidationFailed", ReplyAction="http://tempuri.org/IEzService/PayPointNameValidationFailedResponse")]
+        EzServiceReference.ActionMetaData PayPointNameValidationFailed(int customerId, string cardHolderName);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PayPointNameValidationFailed", ReplyAction="http://tempuri.org/IEzService/PayPointNameValidationFailedResponse")]
+        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> PayPointNameValidationFailedAsync(int customerId, string cardHolderName);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/RejectUser", ReplyAction="http://tempuri.org/IEzService/RejectUserResponse")]
+        EzServiceReference.ActionMetaData RejectUser(int customerId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/RejectUser", ReplyAction="http://tempuri.org/IEzService/RejectUserResponse")]
+        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> RejectUserAsync(int customerId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/RenewEbayToken", ReplyAction="http://tempuri.org/IEzService/RenewEbayTokenResponse")]
+        EzServiceReference.ActionMetaData RenewEbayToken(int customerId, string marketplaceName, string eBayAddress);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/RenewEbayToken", ReplyAction="http://tempuri.org/IEzService/RenewEbayTokenResponse")]
+        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> RenewEbayTokenAsync(int customerId, string marketplaceName, string eBayAddress);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/RequestCashWithoutTakenLoan", ReplyAction="http://tempuri.org/IEzService/RequestCashWithoutTakenLoanResponse")]
+        EzServiceReference.ActionMetaData RequestCashWithoutTakenLoan(int customerId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/RequestCashWithoutTakenLoan", ReplyAction="http://tempuri.org/IEzService/RequestCashWithoutTakenLoanResponse")]
+        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> RequestCashWithoutTakenLoanAsync(int customerId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SendEmailVerification", ReplyAction="http://tempuri.org/IEzService/SendEmailVerificationResponse")]
+        EzServiceReference.ActionMetaData SendEmailVerification(int customerId, string address);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SendEmailVerification", ReplyAction="http://tempuri.org/IEzService/SendEmailVerificationResponse")]
+        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> SendEmailVerificationAsync(int customerId, string address);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ThreeInvalidAttempts", ReplyAction="http://tempuri.org/IEzService/ThreeInvalidAttemptsResponse")]
+        EzServiceReference.ActionMetaData ThreeInvalidAttempts(int customerId, string password);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ThreeInvalidAttempts", ReplyAction="http://tempuri.org/IEzService/ThreeInvalidAttemptsResponse")]
+        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> ThreeInvalidAttemptsAsync(int customerId, string password);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/TransferCashFailed", ReplyAction="http://tempuri.org/IEzService/TransferCashFailedResponse")]
+        EzServiceReference.ActionMetaData TransferCashFailed(int customerId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/TransferCashFailed", ReplyAction="http://tempuri.org/IEzService/TransferCashFailedResponse")]
+        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> TransferCashFailedAsync(int customerId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CaisGenerate", ReplyAction="http://tempuri.org/IEzService/CaisGenerateResponse")]
+        EzServiceReference.ActionMetaData CaisGenerate(int underwriterId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CaisGenerate", ReplyAction="http://tempuri.org/IEzService/CaisGenerateResponse")]
+        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> CaisGenerateAsync(int underwriterId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CaisUpdate", ReplyAction="http://tempuri.org/IEzService/CaisUpdateResponse")]
+        EzServiceReference.ActionMetaData CaisUpdate(int caisId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CaisUpdate", ReplyAction="http://tempuri.org/IEzService/CaisUpdateResponse")]
+        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> CaisUpdateAsync(int caisId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FirstOfMonthStatusNotifier", ReplyAction="http://tempuri.org/IEzService/FirstOfMonthStatusNotifierResponse")]
+        EzServiceReference.ActionMetaData FirstOfMonthStatusNotifier();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FirstOfMonthStatusNotifier", ReplyAction="http://tempuri.org/IEzService/FirstOfMonthStatusNotifierResponse")]
+        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> FirstOfMonthStatusNotifierAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FraudChecker", ReplyAction="http://tempuri.org/IEzService/FraudCheckerResponse")]
+        EzServiceReference.ActionMetaData FraudChecker(int customerId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FraudChecker", ReplyAction="http://tempuri.org/IEzService/FraudCheckerResponse")]
+        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> FraudCheckerAsync(int customerId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LateBy14Days", ReplyAction="http://tempuri.org/IEzService/LateBy14DaysResponse")]
+        EzServiceReference.ActionMetaData LateBy14Days();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LateBy14Days", ReplyAction="http://tempuri.org/IEzService/LateBy14DaysResponse")]
+        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> LateBy14DaysAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PayPointCharger", ReplyAction="http://tempuri.org/IEzService/PayPointChargerResponse")]
+        EzServiceReference.ActionMetaData PayPointCharger();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PayPointCharger", ReplyAction="http://tempuri.org/IEzService/PayPointChargerResponse")]
+        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> PayPointChargerAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SetLateLoanStatus", ReplyAction="http://tempuri.org/IEzService/SetLateLoanStatusResponse")]
+        EzServiceReference.ActionMetaData SetLateLoanStatus();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SetLateLoanStatus", ReplyAction="http://tempuri.org/IEzService/SetLateLoanStatusResponse")]
+        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> SetLateLoanStatusAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateMarketplaces", ReplyAction="http://tempuri.org/IEzService/UpdateMarketplacesResponse")]
+        EzServiceReference.ActionMetaData UpdateMarketplaces(int customerId, int marketplaceId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateMarketplaces", ReplyAction="http://tempuri.org/IEzService/UpdateMarketplacesResponse")]
+        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> UpdateMarketplacesAsync(int customerId, int marketplaceId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateAllMarketplaces", ReplyAction="http://tempuri.org/IEzService/UpdateAllMarketplacesResponse")]
+        EzServiceReference.ActionMetaData UpdateAllMarketplaces(int customerId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateAllMarketplaces", ReplyAction="http://tempuri.org/IEzService/UpdateAllMarketplacesResponse")]
+        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> UpdateAllMarketplacesAsync(int customerId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateTransactionStatus", ReplyAction="http://tempuri.org/IEzService/UpdateTransactionStatusResponse")]
+        EzServiceReference.ActionMetaData UpdateTransactionStatus();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateTransactionStatus", ReplyAction="http://tempuri.org/IEzService/UpdateTransactionStatusResponse")]
+        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> UpdateTransactionStatusAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/XDaysDue", ReplyAction="http://tempuri.org/IEzService/XDaysDueResponse")]
+        EzServiceReference.ActionMetaData XDaysDue();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/XDaysDue", ReplyAction="http://tempuri.org/IEzService/XDaysDueResponse")]
+        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> XDaysDueAsync();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface IEzServiceClientChannel : EzServiceReference.IEzServiceClient, System.ServiceModel.IClientChannel {
+    public interface IEzServiceChannel : EzServiceReference.IEzService, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class EzServiceClientClient : System.ServiceModel.ClientBase<EzServiceReference.IEzServiceClient>, EzServiceReference.IEzServiceClient {
+    public partial class EzServiceClient : System.ServiceModel.ClientBase<EzServiceReference.IEzService>, EzServiceReference.IEzService {
         
-        public EzServiceClientClient() {
+        public EzServiceClient() {
         }
         
-        public EzServiceClientClient(string endpointConfigurationName) : 
+        public EzServiceClient(string endpointConfigurationName) : 
                 base(endpointConfigurationName) {
         }
         
-        public EzServiceClientClient(string endpointConfigurationName, string remoteAddress) : 
+        public EzServiceClient(string endpointConfigurationName, string remoteAddress) : 
                 base(endpointConfigurationName, remoteAddress) {
         }
         
-        public EzServiceClientClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
+        public EzServiceClient(string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(endpointConfigurationName, remoteAddress) {
         }
         
-        public EzServiceClientClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+        public EzServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
-        }
-        
-        public EzServiceReference.StringListActionResult GetStrategiesList() {
-            return base.Channel.GetStrategiesList();
-        }
-        
-        public System.Threading.Tasks.Task<EzServiceReference.StringListActionResult> GetStrategiesListAsync() {
-            return base.Channel.GetStrategiesListAsync();
         }
         
         public EzServiceReference.ActionMetaData GreetingMailStrategy(int nCustomerID, string sConfirmationEmail) {
@@ -359,6 +531,254 @@ namespace EzServiceReference {
         
         public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> CustomerMarketplaceAddedAsync(int nCustomerID, int nMarketplaceID) {
             return base.Channel.CustomerMarketplaceAddedAsync(nCustomerID, nMarketplaceID);
+        }
+        
+        public EzServiceReference.ActionMetaData ApprovedUser(int customerId, decimal loanAmount) {
+            return base.Channel.ApprovedUser(customerId, loanAmount);
+        }
+        
+        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> ApprovedUserAsync(int customerId, decimal loanAmount) {
+            return base.Channel.ApprovedUserAsync(customerId, loanAmount);
+        }
+        
+        public EzServiceReference.ActionMetaData CashTransferred(int customerId, int amount) {
+            return base.Channel.CashTransferred(customerId, amount);
+        }
+        
+        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> CashTransferredAsync(int customerId, int amount) {
+            return base.Channel.CashTransferredAsync(customerId, amount);
+        }
+        
+        public EzServiceReference.ActionMetaData EmailUnderReview(int customerId) {
+            return base.Channel.EmailUnderReview(customerId);
+        }
+        
+        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> EmailUnderReviewAsync(int customerId) {
+            return base.Channel.EmailUnderReviewAsync(customerId);
+        }
+        
+        public EzServiceReference.ActionMetaData ActivateEscalated(int customerId) {
+            return base.Channel.ActivateEscalated(customerId);
+        }
+        
+        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> ActivateEscalatedAsync(int customerId) {
+            return base.Channel.ActivateEscalatedAsync(customerId);
+        }
+        
+        public EzServiceReference.ActionMetaData ActivateGetCashFailed(int customerId) {
+            return base.Channel.ActivateGetCashFailed(customerId);
+        }
+        
+        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> ActivateGetCashFailedAsync(int customerId) {
+            return base.Channel.ActivateGetCashFailedAsync(customerId);
+        }
+        
+        public EzServiceReference.ActionMetaData ActivateLoanFullyPaid(int customerId, string loanRefNum) {
+            return base.Channel.ActivateLoanFullyPaid(customerId, loanRefNum);
+        }
+        
+        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> ActivateLoanFullyPaidAsync(int customerId, string loanRefNum) {
+            return base.Channel.ActivateLoanFullyPaidAsync(customerId, loanRefNum);
+        }
+        
+        public EzServiceReference.ActionMetaData MoreAmLandBwaInformation(int customerId) {
+            return base.Channel.MoreAmLandBwaInformation(customerId);
+        }
+        
+        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> MoreAmLandBwaInformationAsync(int customerId) {
+            return base.Channel.MoreAmLandBwaInformationAsync(customerId);
+        }
+        
+        public EzServiceReference.ActionMetaData MoreAmlInformation(int customerId) {
+            return base.Channel.MoreAmlInformation(customerId);
+        }
+        
+        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> MoreAmlInformationAsync(int customerId) {
+            return base.Channel.MoreAmlInformationAsync(customerId);
+        }
+        
+        public EzServiceReference.ActionMetaData MoreBwaInformation(int customerId) {
+            return base.Channel.MoreBwaInformation(customerId);
+        }
+        
+        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> MoreBwaInformationAsync(int customerId) {
+            return base.Channel.MoreBwaInformationAsync(customerId);
+        }
+        
+        public EzServiceReference.ActionMetaData PasswordChanged(int customerId, string password) {
+            return base.Channel.PasswordChanged(customerId, password);
+        }
+        
+        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> PasswordChangedAsync(int customerId, string password) {
+            return base.Channel.PasswordChangedAsync(customerId, password);
+        }
+        
+        public EzServiceReference.ActionMetaData PasswordRestored(int customerId, string password) {
+            return base.Channel.PasswordRestored(customerId, password);
+        }
+        
+        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> PasswordRestoredAsync(int customerId, string password) {
+            return base.Channel.PasswordRestoredAsync(customerId, password);
+        }
+        
+        public EzServiceReference.ActionMetaData PayEarly(int customerId, int amount, string loanRefNum) {
+            return base.Channel.PayEarly(customerId, amount, loanRefNum);
+        }
+        
+        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> PayEarlyAsync(int customerId, int amount, string loanRefNum) {
+            return base.Channel.PayEarlyAsync(customerId, amount, loanRefNum);
+        }
+        
+        public EzServiceReference.ActionMetaData PayPointAddedByUnderwriter(int customerId, string cardno, string underwriterName, int underwriterId) {
+            return base.Channel.PayPointAddedByUnderwriter(customerId, cardno, underwriterName, underwriterId);
+        }
+        
+        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> PayPointAddedByUnderwriterAsync(int customerId, string cardno, string underwriterName, int underwriterId) {
+            return base.Channel.PayPointAddedByUnderwriterAsync(customerId, cardno, underwriterName, underwriterId);
+        }
+        
+        public EzServiceReference.ActionMetaData PayPointNameValidationFailed(int customerId, string cardHolderName) {
+            return base.Channel.PayPointNameValidationFailed(customerId, cardHolderName);
+        }
+        
+        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> PayPointNameValidationFailedAsync(int customerId, string cardHolderName) {
+            return base.Channel.PayPointNameValidationFailedAsync(customerId, cardHolderName);
+        }
+        
+        public EzServiceReference.ActionMetaData RejectUser(int customerId) {
+            return base.Channel.RejectUser(customerId);
+        }
+        
+        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> RejectUserAsync(int customerId) {
+            return base.Channel.RejectUserAsync(customerId);
+        }
+        
+        public EzServiceReference.ActionMetaData RenewEbayToken(int customerId, string marketplaceName, string eBayAddress) {
+            return base.Channel.RenewEbayToken(customerId, marketplaceName, eBayAddress);
+        }
+        
+        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> RenewEbayTokenAsync(int customerId, string marketplaceName, string eBayAddress) {
+            return base.Channel.RenewEbayTokenAsync(customerId, marketplaceName, eBayAddress);
+        }
+        
+        public EzServiceReference.ActionMetaData RequestCashWithoutTakenLoan(int customerId) {
+            return base.Channel.RequestCashWithoutTakenLoan(customerId);
+        }
+        
+        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> RequestCashWithoutTakenLoanAsync(int customerId) {
+            return base.Channel.RequestCashWithoutTakenLoanAsync(customerId);
+        }
+        
+        public EzServiceReference.ActionMetaData SendEmailVerification(int customerId, string address) {
+            return base.Channel.SendEmailVerification(customerId, address);
+        }
+        
+        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> SendEmailVerificationAsync(int customerId, string address) {
+            return base.Channel.SendEmailVerificationAsync(customerId, address);
+        }
+        
+        public EzServiceReference.ActionMetaData ThreeInvalidAttempts(int customerId, string password) {
+            return base.Channel.ThreeInvalidAttempts(customerId, password);
+        }
+        
+        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> ThreeInvalidAttemptsAsync(int customerId, string password) {
+            return base.Channel.ThreeInvalidAttemptsAsync(customerId, password);
+        }
+        
+        public EzServiceReference.ActionMetaData TransferCashFailed(int customerId) {
+            return base.Channel.TransferCashFailed(customerId);
+        }
+        
+        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> TransferCashFailedAsync(int customerId) {
+            return base.Channel.TransferCashFailedAsync(customerId);
+        }
+        
+        public EzServiceReference.ActionMetaData CaisGenerate(int underwriterId) {
+            return base.Channel.CaisGenerate(underwriterId);
+        }
+        
+        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> CaisGenerateAsync(int underwriterId) {
+            return base.Channel.CaisGenerateAsync(underwriterId);
+        }
+        
+        public EzServiceReference.ActionMetaData CaisUpdate(int caisId) {
+            return base.Channel.CaisUpdate(caisId);
+        }
+        
+        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> CaisUpdateAsync(int caisId) {
+            return base.Channel.CaisUpdateAsync(caisId);
+        }
+        
+        public EzServiceReference.ActionMetaData FirstOfMonthStatusNotifier() {
+            return base.Channel.FirstOfMonthStatusNotifier();
+        }
+        
+        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> FirstOfMonthStatusNotifierAsync() {
+            return base.Channel.FirstOfMonthStatusNotifierAsync();
+        }
+        
+        public EzServiceReference.ActionMetaData FraudChecker(int customerId) {
+            return base.Channel.FraudChecker(customerId);
+        }
+        
+        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> FraudCheckerAsync(int customerId) {
+            return base.Channel.FraudCheckerAsync(customerId);
+        }
+        
+        public EzServiceReference.ActionMetaData LateBy14Days() {
+            return base.Channel.LateBy14Days();
+        }
+        
+        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> LateBy14DaysAsync() {
+            return base.Channel.LateBy14DaysAsync();
+        }
+        
+        public EzServiceReference.ActionMetaData PayPointCharger() {
+            return base.Channel.PayPointCharger();
+        }
+        
+        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> PayPointChargerAsync() {
+            return base.Channel.PayPointChargerAsync();
+        }
+        
+        public EzServiceReference.ActionMetaData SetLateLoanStatus() {
+            return base.Channel.SetLateLoanStatus();
+        }
+        
+        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> SetLateLoanStatusAsync() {
+            return base.Channel.SetLateLoanStatusAsync();
+        }
+        
+        public EzServiceReference.ActionMetaData UpdateMarketplaces(int customerId, int marketplaceId) {
+            return base.Channel.UpdateMarketplaces(customerId, marketplaceId);
+        }
+        
+        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> UpdateMarketplacesAsync(int customerId, int marketplaceId) {
+            return base.Channel.UpdateMarketplacesAsync(customerId, marketplaceId);
+        }
+        
+        public EzServiceReference.ActionMetaData UpdateAllMarketplaces(int customerId) {
+            return base.Channel.UpdateAllMarketplaces(customerId);
+        }
+        
+        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> UpdateAllMarketplacesAsync(int customerId) {
+            return base.Channel.UpdateAllMarketplacesAsync(customerId);
+        }
+        
+        public EzServiceReference.ActionMetaData UpdateTransactionStatus() {
+            return base.Channel.UpdateTransactionStatus();
+        }
+        
+        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> UpdateTransactionStatusAsync() {
+            return base.Channel.UpdateTransactionStatusAsync();
+        }
+        
+        public EzServiceReference.ActionMetaData XDaysDue() {
+            return base.Channel.XDaysDue();
+        }
+        
+        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> XDaysDueAsync() {
+            return base.Channel.XDaysDueAsync();
         }
     }
 }

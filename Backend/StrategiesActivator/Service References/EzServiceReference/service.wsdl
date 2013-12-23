@@ -33,7 +33,7 @@
       </wsp:All>
     </wsp:ExactlyOne>
   </wsp:Policy>
-  <wsp:Policy wsu:Id="NetHttpBinding_IEzServiceClient_policy">
+  <wsp:Policy wsu:Id="NetHttpBinding_IEzService_policy">
     <wsp:ExactlyOne>
       <wsp:All>
         <msb:BinaryEncoding xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1">
@@ -75,23 +75,203 @@
   <wsdl:message name="IEzServiceAdmin_ListActiveActions_OutputMessage">
     <wsdl:part name="parameters" element="tns:ListActiveActionsResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzServiceClient_GetStrategiesList_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetStrategiesList" />
-  </wsdl:message>
-  <wsdl:message name="IEzServiceClient_GetStrategiesList_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetStrategiesListResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzServiceClient_GreetingMailStrategy_InputMessage">
+  <wsdl:message name="IEzService_GreetingMailStrategy_InputMessage">
     <wsdl:part name="parameters" element="tns:GreetingMailStrategy" />
   </wsdl:message>
-  <wsdl:message name="IEzServiceClient_GreetingMailStrategy_OutputMessage">
+  <wsdl:message name="IEzService_GreetingMailStrategy_OutputMessage">
     <wsdl:part name="parameters" element="tns:GreetingMailStrategyResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzServiceClient_CustomerMarketplaceAdded_InputMessage">
+  <wsdl:message name="IEzService_CustomerMarketplaceAdded_InputMessage">
     <wsdl:part name="parameters" element="tns:CustomerMarketplaceAdded" />
   </wsdl:message>
-  <wsdl:message name="IEzServiceClient_CustomerMarketplaceAdded_OutputMessage">
+  <wsdl:message name="IEzService_CustomerMarketplaceAdded_OutputMessage">
     <wsdl:part name="parameters" element="tns:CustomerMarketplaceAddedResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_ApprovedUser_InputMessage">
+    <wsdl:part name="parameters" element="tns:ApprovedUser" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_ApprovedUser_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ApprovedUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CashTransferred_InputMessage">
+    <wsdl:part name="parameters" element="tns:CashTransferred" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CashTransferred_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CashTransferredResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_EmailUnderReview_InputMessage">
+    <wsdl:part name="parameters" element="tns:EmailUnderReview" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_EmailUnderReview_OutputMessage">
+    <wsdl:part name="parameters" element="tns:EmailUnderReviewResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_ActivateEscalated_InputMessage">
+    <wsdl:part name="parameters" element="tns:ActivateEscalated" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_ActivateEscalated_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ActivateEscalatedResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_ActivateGetCashFailed_InputMessage">
+    <wsdl:part name="parameters" element="tns:ActivateGetCashFailed" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_ActivateGetCashFailed_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ActivateGetCashFailedResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_ActivateLoanFullyPaid_InputMessage">
+    <wsdl:part name="parameters" element="tns:ActivateLoanFullyPaid" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_ActivateLoanFullyPaid_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ActivateLoanFullyPaidResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_MoreAmLandBwaInformation_InputMessage">
+    <wsdl:part name="parameters" element="tns:MoreAmLandBwaInformation" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_MoreAmLandBwaInformation_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MoreAmLandBwaInformationResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_MoreAmlInformation_InputMessage">
+    <wsdl:part name="parameters" element="tns:MoreAmlInformation" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_MoreAmlInformation_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MoreAmlInformationResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_MoreBwaInformation_InputMessage">
+    <wsdl:part name="parameters" element="tns:MoreBwaInformation" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_MoreBwaInformation_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MoreBwaInformationResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_PasswordChanged_InputMessage">
+    <wsdl:part name="parameters" element="tns:PasswordChanged" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_PasswordChanged_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PasswordChangedResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_PasswordRestored_InputMessage">
+    <wsdl:part name="parameters" element="tns:PasswordRestored" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_PasswordRestored_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PasswordRestoredResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_PayEarly_InputMessage">
+    <wsdl:part name="parameters" element="tns:PayEarly" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_PayEarly_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PayEarlyResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_PayPointAddedByUnderwriter_InputMessage">
+    <wsdl:part name="parameters" element="tns:PayPointAddedByUnderwriter" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_PayPointAddedByUnderwriter_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PayPointAddedByUnderwriterResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_PayPointNameValidationFailed_InputMessage">
+    <wsdl:part name="parameters" element="tns:PayPointNameValidationFailed" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_PayPointNameValidationFailed_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PayPointNameValidationFailedResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_RejectUser_InputMessage">
+    <wsdl:part name="parameters" element="tns:RejectUser" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_RejectUser_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RejectUserResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_RenewEbayToken_InputMessage">
+    <wsdl:part name="parameters" element="tns:RenewEbayToken" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_RenewEbayToken_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RenewEbayTokenResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_RequestCashWithoutTakenLoan_InputMessage">
+    <wsdl:part name="parameters" element="tns:RequestCashWithoutTakenLoan" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_RequestCashWithoutTakenLoan_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RequestCashWithoutTakenLoanResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_SendEmailVerification_InputMessage">
+    <wsdl:part name="parameters" element="tns:SendEmailVerification" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_SendEmailVerification_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SendEmailVerificationResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_ThreeInvalidAttempts_InputMessage">
+    <wsdl:part name="parameters" element="tns:ThreeInvalidAttempts" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_ThreeInvalidAttempts_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ThreeInvalidAttemptsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_TransferCashFailed_InputMessage">
+    <wsdl:part name="parameters" element="tns:TransferCashFailed" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_TransferCashFailed_OutputMessage">
+    <wsdl:part name="parameters" element="tns:TransferCashFailedResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CaisGenerate_InputMessage">
+    <wsdl:part name="parameters" element="tns:CaisGenerate" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CaisGenerate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CaisGenerateResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CaisUpdate_InputMessage">
+    <wsdl:part name="parameters" element="tns:CaisUpdate" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CaisUpdate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CaisUpdateResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_FirstOfMonthStatusNotifier_InputMessage">
+    <wsdl:part name="parameters" element="tns:FirstOfMonthStatusNotifier" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_FirstOfMonthStatusNotifier_OutputMessage">
+    <wsdl:part name="parameters" element="tns:FirstOfMonthStatusNotifierResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_FraudChecker_InputMessage">
+    <wsdl:part name="parameters" element="tns:FraudChecker" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_FraudChecker_OutputMessage">
+    <wsdl:part name="parameters" element="tns:FraudCheckerResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LateBy14Days_InputMessage">
+    <wsdl:part name="parameters" element="tns:LateBy14Days" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LateBy14Days_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LateBy14DaysResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_PayPointCharger_InputMessage">
+    <wsdl:part name="parameters" element="tns:PayPointCharger" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_PayPointCharger_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PayPointChargerResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_SetLateLoanStatus_InputMessage">
+    <wsdl:part name="parameters" element="tns:SetLateLoanStatus" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_SetLateLoanStatus_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SetLateLoanStatusResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_UpdateMarketplaces_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateMarketplaces" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_UpdateMarketplaces_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateMarketplacesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_UpdateAllMarketplaces_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateAllMarketplaces" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_UpdateAllMarketplaces_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateAllMarketplacesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_UpdateTransactionStatus_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateTransactionStatus" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_UpdateTransactionStatus_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateTransactionStatusResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_XDaysDue_InputMessage">
+    <wsdl:part name="parameters" element="tns:XDaysDue" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_XDaysDue_OutputMessage">
+    <wsdl:part name="parameters" element="tns:XDaysDueResponse" />
   </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
@@ -111,18 +291,138 @@
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceAdmin/ListActiveActionsResponse" message="tns:IEzServiceAdmin_ListActiveActions_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
-  <wsdl:portType name="IEzServiceClient">
-    <wsdl:operation name="GetStrategiesList">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceClient/GetStrategiesList" message="tns:IEzServiceClient_GetStrategiesList_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceClient/GetStrategiesListResponse" message="tns:IEzServiceClient_GetStrategiesList_OutputMessage" />
-    </wsdl:operation>
+  <wsdl:portType name="IEzService">
     <wsdl:operation name="GreetingMailStrategy">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceClient/GreetingMailStrategy" message="tns:IEzServiceClient_GreetingMailStrategy_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceClient/GreetingMailStrategyResponse" message="tns:IEzServiceClient_GreetingMailStrategy_OutputMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GreetingMailStrategy" message="tns:IEzService_GreetingMailStrategy_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GreetingMailStrategyResponse" message="tns:IEzService_GreetingMailStrategy_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="CustomerMarketplaceAdded">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceClient/CustomerMarketplaceAdded" message="tns:IEzServiceClient_CustomerMarketplaceAdded_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceClient/CustomerMarketplaceAddedResponse" message="tns:IEzServiceClient_CustomerMarketplaceAdded_OutputMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CustomerMarketplaceAdded" message="tns:IEzService_CustomerMarketplaceAdded_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CustomerMarketplaceAddedResponse" message="tns:IEzService_CustomerMarketplaceAdded_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ApprovedUser">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ApprovedUser" message="tns:IEzService_ApprovedUser_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/ApprovedUserResponse" message="tns:IEzService_ApprovedUser_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CashTransferred">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CashTransferred" message="tns:IEzService_CashTransferred_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CashTransferredResponse" message="tns:IEzService_CashTransferred_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="EmailUnderReview">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/EmailUnderReview" message="tns:IEzService_EmailUnderReview_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/EmailUnderReviewResponse" message="tns:IEzService_EmailUnderReview_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ActivateEscalated">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ActivateEscalated" message="tns:IEzService_ActivateEscalated_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/ActivateEscalatedResponse" message="tns:IEzService_ActivateEscalated_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ActivateGetCashFailed">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ActivateGetCashFailed" message="tns:IEzService_ActivateGetCashFailed_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/ActivateGetCashFailedResponse" message="tns:IEzService_ActivateGetCashFailed_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ActivateLoanFullyPaid">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ActivateLoanFullyPaid" message="tns:IEzService_ActivateLoanFullyPaid_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/ActivateLoanFullyPaidResponse" message="tns:IEzService_ActivateLoanFullyPaid_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="MoreAmLandBwaInformation">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MoreAmLandBwaInformation" message="tns:IEzService_MoreAmLandBwaInformation_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MoreAmLandBwaInformationResponse" message="tns:IEzService_MoreAmLandBwaInformation_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="MoreAmlInformation">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MoreAmlInformation" message="tns:IEzService_MoreAmlInformation_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MoreAmlInformationResponse" message="tns:IEzService_MoreAmlInformation_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="MoreBwaInformation">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MoreBwaInformation" message="tns:IEzService_MoreBwaInformation_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MoreBwaInformationResponse" message="tns:IEzService_MoreBwaInformation_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PasswordChanged">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/PasswordChanged" message="tns:IEzService_PasswordChanged_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/PasswordChangedResponse" message="tns:IEzService_PasswordChanged_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PasswordRestored">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/PasswordRestored" message="tns:IEzService_PasswordRestored_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/PasswordRestoredResponse" message="tns:IEzService_PasswordRestored_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PayEarly">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/PayEarly" message="tns:IEzService_PayEarly_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/PayEarlyResponse" message="tns:IEzService_PayEarly_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PayPointAddedByUnderwriter">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/PayPointAddedByUnderwriter" message="tns:IEzService_PayPointAddedByUnderwriter_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/PayPointAddedByUnderwriterResponse" message="tns:IEzService_PayPointAddedByUnderwriter_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PayPointNameValidationFailed">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/PayPointNameValidationFailed" message="tns:IEzService_PayPointNameValidationFailed_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/PayPointNameValidationFailedResponse" message="tns:IEzService_PayPointNameValidationFailed_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RejectUser">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/RejectUser" message="tns:IEzService_RejectUser_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/RejectUserResponse" message="tns:IEzService_RejectUser_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RenewEbayToken">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/RenewEbayToken" message="tns:IEzService_RenewEbayToken_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/RenewEbayTokenResponse" message="tns:IEzService_RenewEbayToken_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RequestCashWithoutTakenLoan">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/RequestCashWithoutTakenLoan" message="tns:IEzService_RequestCashWithoutTakenLoan_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/RequestCashWithoutTakenLoanResponse" message="tns:IEzService_RequestCashWithoutTakenLoan_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SendEmailVerification">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SendEmailVerification" message="tns:IEzService_SendEmailVerification_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SendEmailVerificationResponse" message="tns:IEzService_SendEmailVerification_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ThreeInvalidAttempts">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ThreeInvalidAttempts" message="tns:IEzService_ThreeInvalidAttempts_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/ThreeInvalidAttemptsResponse" message="tns:IEzService_ThreeInvalidAttempts_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="TransferCashFailed">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/TransferCashFailed" message="tns:IEzService_TransferCashFailed_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/TransferCashFailedResponse" message="tns:IEzService_TransferCashFailed_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CaisGenerate">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CaisGenerate" message="tns:IEzService_CaisGenerate_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CaisGenerateResponse" message="tns:IEzService_CaisGenerate_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CaisUpdate">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CaisUpdate" message="tns:IEzService_CaisUpdate_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CaisUpdateResponse" message="tns:IEzService_CaisUpdate_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="FirstOfMonthStatusNotifier">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/FirstOfMonthStatusNotifier" message="tns:IEzService_FirstOfMonthStatusNotifier_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/FirstOfMonthStatusNotifierResponse" message="tns:IEzService_FirstOfMonthStatusNotifier_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="FraudChecker">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/FraudChecker" message="tns:IEzService_FraudChecker_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/FraudCheckerResponse" message="tns:IEzService_FraudChecker_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LateBy14Days">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LateBy14Days" message="tns:IEzService_LateBy14Days_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LateBy14DaysResponse" message="tns:IEzService_LateBy14Days_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PayPointCharger">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/PayPointCharger" message="tns:IEzService_PayPointCharger_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/PayPointChargerResponse" message="tns:IEzService_PayPointCharger_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SetLateLoanStatus">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SetLateLoanStatus" message="tns:IEzService_SetLateLoanStatus_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SetLateLoanStatusResponse" message="tns:IEzService_SetLateLoanStatus_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateMarketplaces">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateMarketplaces" message="tns:IEzService_UpdateMarketplaces_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UpdateMarketplacesResponse" message="tns:IEzService_UpdateMarketplaces_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateAllMarketplaces">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateAllMarketplaces" message="tns:IEzService_UpdateAllMarketplaces_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UpdateAllMarketplacesResponse" message="tns:IEzService_UpdateAllMarketplaces_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UpdateTransactionStatus">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateTransactionStatus" message="tns:IEzService_UpdateTransactionStatus_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UpdateTransactionStatusResponse" message="tns:IEzService_UpdateTransactionStatus_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="XDaysDue">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/XDaysDue" message="tns:IEzService_XDaysDue_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/XDaysDueResponse" message="tns:IEzService_XDaysDue_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
@@ -166,21 +466,12 @@
       </wsdl:output>
     </wsdl:operation>
   </wsdl:binding>
-  <wsdl:binding name="NetHttpBinding_IEzServiceClient" type="tns:IEzServiceClient">
-    <wsp:PolicyReference URI="#NetHttpBinding_IEzServiceClient_policy">
+  <wsdl:binding name="NetHttpBinding_IEzService" type="tns:IEzService">
+    <wsp:PolicyReference URI="#NetHttpBinding_IEzService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
-    <wsdl:operation name="GetStrategiesList">
-      <soap12:operation soapAction="http://tempuri.org/IEzServiceClient/GetStrategiesList" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="GreetingMailStrategy">
-      <soap12:operation soapAction="http://tempuri.org/IEzServiceClient/GreetingMailStrategy" style="document" />
+      <soap12:operation soapAction="http://tempuri.org/IEzService/GreetingMailStrategy" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -189,7 +480,286 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="CustomerMarketplaceAdded">
-      <soap12:operation soapAction="http://tempuri.org/IEzServiceClient/CustomerMarketplaceAdded" style="document" />
+      <soap12:operation soapAction="http://tempuri.org/IEzService/CustomerMarketplaceAdded" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ApprovedUser">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/ApprovedUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CashTransferred">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/CashTransferred" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EmailUnderReview">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/EmailUnderReview" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ActivateEscalated">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/ActivateEscalated" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ActivateGetCashFailed">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/ActivateGetCashFailed" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ActivateLoanFullyPaid">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/ActivateLoanFullyPaid" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MoreAmLandBwaInformation">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/MoreAmLandBwaInformation" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MoreAmlInformation">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/MoreAmlInformation" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MoreBwaInformation">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/MoreBwaInformation" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PasswordChanged">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/PasswordChanged" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PasswordRestored">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/PasswordRestored" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PayEarly">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/PayEarly" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PayPointAddedByUnderwriter">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/PayPointAddedByUnderwriter" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PayPointNameValidationFailed">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/PayPointNameValidationFailed" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RejectUser">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/RejectUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RenewEbayToken">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/RenewEbayToken" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RequestCashWithoutTakenLoan">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/RequestCashWithoutTakenLoan" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SendEmailVerification">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/SendEmailVerification" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ThreeInvalidAttempts">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/ThreeInvalidAttempts" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TransferCashFailed">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/TransferCashFailed" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CaisGenerate">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/CaisGenerate" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CaisUpdate">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/CaisUpdate" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FirstOfMonthStatusNotifier">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/FirstOfMonthStatusNotifier" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="FraudChecker">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/FraudChecker" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LateBy14Days">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/LateBy14Days" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PayPointCharger">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/PayPointCharger" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SetLateLoanStatus">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/SetLateLoanStatus" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateMarketplaces">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/UpdateMarketplaces" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateAllMarketplaces">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/UpdateAllMarketplaces" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UpdateTransactionStatus">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/UpdateTransactionStatus" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="XDaysDue">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/XDaysDue" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -208,7 +778,7 @@
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
-    <wsdl:port name="NetHttpBinding_IEzServiceClient" binding="tns:NetHttpBinding_IEzServiceClient">
+    <wsdl:port name="NetHttpBinding_IEzService" binding="tns:NetHttpBinding_IEzService">
       <soap12:address location="http://localhost:7082/" />
       <wsa10:EndpointReference>
         <wsa10:Address>http://localhost:7082/</wsa10:Address>

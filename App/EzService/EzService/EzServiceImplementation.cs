@@ -14,7 +14,7 @@ namespace EzService {
 		InstanceContextMode = InstanceContextMode.PerCall,
 		IncludeExceptionDetailInFaults = true
 	)]
-	public class EzServiceImplementation : IEzServiceAdmin, IEzServiceClient, IDisposable {
+	public class EzServiceImplementation : IEzServiceAdmin, IEzService, IDisposable {
 		#region static constructor
 
 		static EzServiceImplementation() {
@@ -211,7 +211,7 @@ namespace EzService {
 
 		#endregion IEzServiceAdmin exposed methods
 
-		#region IEzServiceClient exposed methods
+		#region IEzService exposed methods
 
 		public ActionMetaData GreetingMailStrategy(int nCustomerID, string sConfirmationEmail) {
 			return Execute(typeof(Greeting), nCustomerID, sConfirmationEmail);
@@ -345,7 +345,7 @@ namespace EzService {
 			return Execute(typeof (XDaysDue));
 		} // XDaysDue
 
-		#endregion IEzServiceClient exposed methods
+		#endregion IEzService exposed methods
 
 		#region method IDisposable.Dispose
 

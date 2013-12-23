@@ -1,10 +1,10 @@
 ﻿using System.ServiceModel;
 
 namespace EzService {
-	#region interface IEzServiceClient
+	#region interface IEzService
 
 	[ServiceContract(SessionMode = SessionMode.Allowed)]
-	public interface IEzServiceClient {
+	public interface IEzService {
 		[OperationContract]
 		ActionMetaData GreetingMailStrategy(int nCustomerID, string sConfirmationEmail);
 
@@ -103,7 +103,7 @@ namespace EzService {
 
 		[OperationContract]
 		ActionMetaData XDaysDue();
-	} // interface IEzServiceClient
+	} // interface IEzService
 
-	#endregion interface IEzServiceClient
+	#endregion interface IEzService
 } // namespace EzService
