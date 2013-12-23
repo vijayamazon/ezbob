@@ -142,7 +142,10 @@ namespace StrategiesActivator
 				Console.WriteLine("Usage: StrategiesActivator.exe Greeting <CustomerId> <ConfirmEmailAddress>");
 				return;
 			}
-			new Greeting(customerId, args[2], m_oDB, m_oLog).Execute();
+			EzServiceReference.EzServiceClientClient e = new EzServiceReference.EzServiceClientClient();
+
+			e.GreetingMailStrategy(customerId, args[2]);
+			//new Greeting(customerId, args[2], m_oDB, m_oLog).Execute();
 		}
 
 		private void ActivateApprovedUser()

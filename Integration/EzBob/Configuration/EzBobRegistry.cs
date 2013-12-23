@@ -4,6 +4,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using AmazonServiceLib.Config;
 	using CommonLib;
+	using MailApi;
 	using PayPalServiceLib;
 	using PayPalServiceLib.Common;
 	using TeraPeakServiceLib;
@@ -23,6 +24,7 @@
 				For<IPayPalConfig>().Singleton().Use(ezBobConfigRoot.PayPalConfig);
 				For<IPayPalMarketplaceSettings>().Singleton().Use( ezBobConfigRoot.PayPalSettings );
 				For<IEbayMarketplaceTypeConnection>().Use( ezBobConfigRoot.eBayConfig);
+
 				For<IEbayMarketplaceSettings>().Use( ezBobConfigRoot.eBaySettings );
 				For<IAmazonMarketPlaceTypeConnection>().Use( ezBobConfigRoot.AmazonConfig);
 				For<IAmazonMarketplaceSettings>().Use(ezBobConfigRoot.AmazonSetings);
@@ -43,6 +45,9 @@
 			For<IBugRepository>().Use<BugRepository>();
 			For<ICustomerStatusesRepository>().Use<CustomerStatusesRepository>();
 			For<IApprovalsWithoutAMLRepository>().Use<ApprovalsWithoutAMLRepository>();
+			For<IMail>().Use<Mail>();
+			var bobconfig = EnvironmentConfiguration.Configuration.GetCurrentConfiguration<ConfigurationRootBob>();
+			For<IMandrillConfig>().Use(bobconfig.MandrillConfig);
 		}
 	}
 }

@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.datacontract.org/2004/07/EzService" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/EzService" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:complexType name="ActionMetaData">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ActionID" type="ser:guid" />
+      <xs:element minOccurs="0" name="Comment" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="IsSynchronous" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Status" type="tns:ActionStatus" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ActionMetaData" nillable="true" type="tns:ActionMetaData" />
+  <xs:simpleType name="ActionStatus">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="InProgress" />
+      <xs:enumeration value="Done" />
+      <xs:enumeration value="Finished" />
+      <xs:enumeration value="Failed" />
+      <xs:enumeration value="Terminated" />
+      <xs:enumeration value="Unknown" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="ActionStatus" nillable="true" type="tns:ActionStatus" />
+  <xs:complexType name="StringListActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ActionResult">
+        <xs:sequence>
+          <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Records" nillable="true" type="q1:ArrayOfstring" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="StringListActionResult" nillable="true" type="tns:StringListActionResult" />
+  <xs:complexType name="ActionResult">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="MetaData" nillable="true" type="tns:ActionMetaData" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ActionResult" nillable="true" type="tns:ActionResult" />
+</xs:schema>

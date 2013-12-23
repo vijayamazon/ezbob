@@ -1,0 +1,218 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="EzServiceImplementation" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsp:Policy wsu:Id="NetTcpBinding_IEzServiceAdmin_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <msb:BinaryEncoding xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1">
+        </msb:BinaryEncoding>
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <msf:WindowsTransportSecurity xmlns:msf="http://schemas.microsoft.com/ws/2006/05/framing/policy">
+                  <msf:ProtectionLevel>EncryptAndSign</msf:ProtectionLevel>
+                </msf:WindowsTransportSecurity>
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256>
+                </sp:Basic256>
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict>
+                </sp:Strict>
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+        <wsaw:UsingAddressing>
+        </wsaw:UsingAddressing>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsp:Policy wsu:Id="NetHttpBinding_IEzServiceClient_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <msb:BinaryEncoding xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1">
+        </msb:BinaryEncoding>
+        <wsaw:UsingAddressing>
+        </wsaw:UsingAddressing>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import namespace="http://tempuri.org/" />
+      <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzService" />
+      <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IEzServiceAdmin_Shutdown_InputMessage">
+    <wsdl:part name="parameters" element="tns:Shutdown" />
+  </wsdl:message>
+  <wsdl:message name="IEzServiceAdmin_Shutdown_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ShutdownResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzServiceAdmin_Nop_InputMessage">
+    <wsdl:part name="parameters" element="tns:Nop" />
+  </wsdl:message>
+  <wsdl:message name="IEzServiceAdmin_Nop_OutputMessage">
+    <wsdl:part name="parameters" element="tns:NopResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzServiceAdmin_Terminate_InputMessage">
+    <wsdl:part name="parameters" element="tns:Terminate" />
+  </wsdl:message>
+  <wsdl:message name="IEzServiceAdmin_Terminate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:TerminateResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzServiceAdmin_ListActiveActions_InputMessage">
+    <wsdl:part name="parameters" element="tns:ListActiveActions" />
+  </wsdl:message>
+  <wsdl:message name="IEzServiceAdmin_ListActiveActions_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ListActiveActionsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzServiceClient_GetStrategiesList_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetStrategiesList" />
+  </wsdl:message>
+  <wsdl:message name="IEzServiceClient_GetStrategiesList_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetStrategiesListResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzServiceClient_GreetingMailStrategy_InputMessage">
+    <wsdl:part name="parameters" element="tns:GreetingMailStrategy" />
+  </wsdl:message>
+  <wsdl:message name="IEzServiceClient_GreetingMailStrategy_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GreetingMailStrategyResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzServiceClient_CustomerMarketplaceAdded_InputMessage">
+    <wsdl:part name="parameters" element="tns:CustomerMarketplaceAdded" />
+  </wsdl:message>
+  <wsdl:message name="IEzServiceClient_CustomerMarketplaceAdded_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CustomerMarketplaceAddedResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IEzServiceAdmin">
+    <wsdl:operation name="Shutdown">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/Shutdown" message="tns:IEzServiceAdmin_Shutdown_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceAdmin/ShutdownResponse" message="tns:IEzServiceAdmin_Shutdown_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="Nop">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/Nop" message="tns:IEzServiceAdmin_Nop_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceAdmin/NopResponse" message="tns:IEzServiceAdmin_Nop_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="Terminate">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/Terminate" message="tns:IEzServiceAdmin_Terminate_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceAdmin/TerminateResponse" message="tns:IEzServiceAdmin_Terminate_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ListActiveActions">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/ListActiveActions" message="tns:IEzServiceAdmin_ListActiveActions_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceAdmin/ListActiveActionsResponse" message="tns:IEzServiceAdmin_ListActiveActions_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="IEzServiceClient">
+    <wsdl:operation name="GetStrategiesList">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceClient/GetStrategiesList" message="tns:IEzServiceClient_GetStrategiesList_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceClient/GetStrategiesListResponse" message="tns:IEzServiceClient_GetStrategiesList_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GreetingMailStrategy">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceClient/GreetingMailStrategy" message="tns:IEzServiceClient_GreetingMailStrategy_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceClient/GreetingMailStrategyResponse" message="tns:IEzServiceClient_GreetingMailStrategy_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CustomerMarketplaceAdded">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceClient/CustomerMarketplaceAdded" message="tns:IEzServiceClient_CustomerMarketplaceAdded_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceClient/CustomerMarketplaceAddedResponse" message="tns:IEzServiceClient_CustomerMarketplaceAdded_OutputMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
+    <wsp:PolicyReference URI="#NetTcpBinding_IEzServiceAdmin_policy">
+    </wsp:PolicyReference>
+    <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="Shutdown">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceAdmin/Shutdown" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Nop">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceAdmin/Nop" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Terminate">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceAdmin/Terminate" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ListActiveActions">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceAdmin/ListActiveActions" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="NetHttpBinding_IEzServiceClient" type="tns:IEzServiceClient">
+    <wsp:PolicyReference URI="#NetHttpBinding_IEzServiceClient_policy">
+    </wsp:PolicyReference>
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="GetStrategiesList">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceClient/GetStrategiesList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GreetingMailStrategy">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceClient/GreetingMailStrategy" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CustomerMarketplaceAdded">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceClient/CustomerMarketplaceAdded" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="EzServiceImplementation">
+    <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
+      <soap12:address location="net.tcp://localhost:7081/" />
+      <wsa10:EndpointReference>
+        <wsa10:Address>net.tcp://localhost:7081/</wsa10:Address>
+        <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
+          <Upn>yulys-PC\yulys</Upn>
+        </Identity>
+      </wsa10:EndpointReference>
+    </wsdl:port>
+    <wsdl:port name="NetHttpBinding_IEzServiceClient" binding="tns:NetHttpBinding_IEzServiceClient">
+      <soap12:address location="http://localhost:7082/" />
+      <wsa10:EndpointReference>
+        <wsa10:Address>http://localhost:7082/</wsa10:Address>
+      </wsa10:EndpointReference>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
