@@ -42,7 +42,8 @@
 
 		#region method CustomerMarketPlaceAdded
 
-		public void Execute() {
+		public override void Execute()
+		{
 			string errorMessage = string.Empty;
 			DateTime startTime = DateTime.UtcNow;
 

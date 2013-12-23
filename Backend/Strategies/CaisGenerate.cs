@@ -29,7 +29,7 @@ namespace EzBob.Backend.Strategies
 			get { return "CAIS Generator"; }
 		} // Name
 
-		public void Execute() {
+		public override void Execute() {
 			lock (caisGenerationLock) {
 				if (caisGenerationTriggerer != -1) {
 					Log.Warn("A CAIS generation is already in progress. Triggered by Underwriter:{0}", caisGenerationTriggerer);
