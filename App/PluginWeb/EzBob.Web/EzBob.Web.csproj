@@ -179,6 +179,8 @@
     </Reference>
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Net.Http, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Web.WebPages, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Web.Helpers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
@@ -437,6 +439,11 @@
     <Compile Include="Models\Strings\DbStrings.cs" />
     <Compile Include="Models\WizardModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service References\EzServiceReference\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\css\alertify.css" />
@@ -1194,6 +1201,18 @@
     <Content Include="Content\js\Wizard\ezbob.wizardStepsModel.js" />
     <Content Include="Content\js\Wizard\yourInfo\ezbob.steps.companydetails.js" />
     <Content Include="Content\js\Wizard\yourInfo\ezbob.yourInfo.employeeCount.js" />
+    <Content Include="Service References\EzServiceReference\configuration91.svcinfo" />
+    <Content Include="Service References\EzServiceReference\configuration.svcinfo" />
+    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.ActionMetaData.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.StringListActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\EzServiceReference\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </Content>
     <Content Include="Views\Shared\_Copyright.cshtml">
       <SubType>Code</SubType>
     </Content>
@@ -1443,6 +1462,19 @@
     <Content Include="Views\Shared\_GetSatisfaction.cshtml" />
     <Content Include="Views\Shared\_LivePerson.cshtml" />
     <Content Include="Views\Shared\security_template.cshtml" />
+    <None Include="Service References\EzServiceReference\Arrays.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\EzServiceReference\EzService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="Service References\EzServiceReference\service.wsdl" />
+    <None Include="Service References\EzServiceReference\service.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\EzServiceReference\service1.xsd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -1801,6 +1833,9 @@
     <Content Include="Views\PaypointTemplate\DownloadPage.cshtml" />
     <Content Include="Views\Shared\_FrameKiller.cshtml" />
     <Content Include="Views\Account\Recaptcha.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\EzServiceReference\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

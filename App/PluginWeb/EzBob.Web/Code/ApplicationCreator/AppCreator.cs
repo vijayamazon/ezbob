@@ -14,7 +14,10 @@ using log4net;
 
 namespace EzBob.Web.Code.ApplicationCreator
 {
-    public class AppCreator : IAppCreator
+	using EZBob.DatabaseLib.Model;
+	using EzServiceReference;
+
+	public class AppCreator : IAppCreator
     {
         private readonly IStrategyRepository _strategies;
         private readonly IEzBobConfiguration _config;
@@ -23,8 +26,11 @@ namespace EzBob.Web.Code.ApplicationCreator
         private readonly StrategyManager _sm;
         private readonly ISession _session;
         private readonly ApplicationRepository _applicationRepository;
+		private readonly bool useNewMailStrategies;
+		private readonly EzServiceClient serviceClient = new EzServiceClient();
 
-        public AppCreator(IEzBobConfiguration config, IUsersRepository users, ISession session, ApplicationRepository applicationRepository, IStrategyRepository strategies)
+	    public AppCreator(IEzBobConfiguration config, IUsersRepository users, ISession session, ApplicationRepository applicationRepository,
+			IStrategyRepository strategies, ConfigurationVariablesRepository configurationVariablesRepository)
         {
             _config = config;
             _users = users;
@@ -32,17 +38,27 @@ namespace EzBob.Web.Code.ApplicationCreator
             _applicationRepository = applicationRepository;
             _strategies = strategies;
             _sm = new StrategyManager();
+
+		    useNewMailStrategies = configurationVariablesRepository.GetByNameAsBool("UseNewMailStrategies");
+
         }
 
         public void AfterSignup(User user, string address)
         {
-            var strategyParameters = new[]
-                                             {
-                                                 new StrategyParameter("email", user.EMail),
-                                                 new StrategyParameter("ConfirmEmailAddress", address),
-                                                 new StrategyParameter("userId", user.Id)
-                                             };
-            CreateApplication(user, strategyParameters, _config.GreetingStrategyName);
+	        if (useNewMailStrategies)
+			{
+				serviceClient.GreetingMailStrategy(user.Id, address);
+	        }
+	        else
+	        {
+		        var strategyParameters = new[]
+			        {
+				        new StrategyParameter("email", user.EMail),
+				        new StrategyParameter("ConfirmEmailAddress", address),
+				        new StrategyParameter("userId", user.Id)
+			        };
+		        CreateApplication(user, strategyParameters, _config.GreetingStrategyName);
+	        }
         }
 
         public void CashTransfered(User user, string firstName, decimal? cashAmount, decimal setUpFee, int loanId)
@@ -424,14 +440,15 @@ namespace EzBob.Web.Code.ApplicationCreator
         public void LoanFullyPaid(Loan loan)
         {
             var customer = loan.Customer;
-            var strategyParameters = new[]
-                {
-                    new StrategyParameter("userId", customer.Id),
-                    new StrategyParameter("FirstName", customer.PersonalInfo.FirstName),
-                    new StrategyParameter("email", customer.Name),
-                    new StrategyParameter("RefNum", loan.RefNumber)
-                };
-            CreateApplication(loan.Customer, strategyParameters, "Email Loan Paid Fully");
+
+		    var strategyParameters = new[]
+			    {
+				    new StrategyParameter("userId", customer.Id),
+				    new StrategyParameter("FirstName", customer.PersonalInfo.FirstName),
+				    new StrategyParameter("email", customer.Name),
+				    new StrategyParameter("RefNum", loan.RefNumber)
+			    };
+		    CreateApplication(loan.Customer, strategyParameters, "Email Loan Paid Fully");
         }
     }
 }

@@ -406,7 +406,7 @@ namespace EzService {
 			try {
 				m_oLog.Debug("Executing " + oStrategyType + " started...");
 
-				amd = NewSync();
+				amd = NewAsync();
 
 				var oParams = new List<object>(args) { m_oDB, m_oLog };
 
@@ -417,12 +417,19 @@ namespace EzService {
 
 				m_oLog.Debug(oStrategyType + " constructor found, invoking...");
 
-				((AStrategy)oCreator.Invoke(oParams.ToArray())).Execute();
+				amd.UnderlyingThread = new Thread(() =>
+				{
+					((AStrategy)oCreator.Invoke(oParams.ToArray())).Execute();
 
-				amd.Status = ActionStatus.Done;
-				SaveActionStatus(amd);
+					amd.Status = ActionStatus.Done;
 
-				m_oLog.Debug("Executing " + oStrategyType + " complete.");
+					m_oLog.Debug("Executing " + oStrategyType + " complete.");
+
+					SaveActionStatus(amd);
+				});
+				amd.UnderlyingThread.Start();
+
+				m_oLog.Debug("Executing " + oStrategyType + " started on another thread.");
 
 				return amd;
 			}

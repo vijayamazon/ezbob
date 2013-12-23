@@ -353,21 +353,21 @@ namespace EzBob.Web.Controllers
 			}
 		}
 
-		[HttpPost]
-		[Transactional]
-		[Ajax(false)]
-		[CaptchaValidationFilter]
-		public ActionResult SignUp(User model, string signupPass1, string signupPass2, string securityQuestion, string promoCode, double? amount, int? customerReason, int? customerSourceOfRepayment, string otherCustomerReason, string otherCustomerSourceOfRepayment)
-		{
-			if (!ModelState.IsValid)
-			{
-				return GetModelStateErrors(ModelState);
-			}
+		//[HttpPost]
+		//[Transactional]
+		//[Ajax(false)]
+		//[CaptchaValidationFilter]
+		//public ActionResult SignUp(User model, string signupPass1, string signupPass2, string securityQuestion, string promoCode, double? amount, int? customerReason, int? customerSourceOfRepayment, string otherCustomerReason, string otherCustomerSourceOfRepayment)
+		//{
+		//	if (!ModelState.IsValid)
+		//	{
+		//		return GetModelStateErrors(ModelState);
+		//	}
 
-			SignUpInternal(model, signupPass1, signupPass2, securityQuestion, promoCode, amount, customerReason, customerSourceOfRepayment, otherCustomerReason, otherCustomerSourceOfRepayment);
+		//	SignUpInternal(model, signupPass1, signupPass2, securityQuestion, promoCode, amount, customerReason, customerSourceOfRepayment, otherCustomerReason, otherCustomerSourceOfRepayment);
 
-			return SetCookieAndRedirect(new LogOnModel { Password = signupPass1, UserName = model.EMail, ReturnUrl = Url.Action("Index", "Profile", new { Area = "Customer" }) });
-		}
+		//	return SetCookieAndRedirect(new LogOnModel { Password = signupPass1, UserName = model.EMail, ReturnUrl = Url.Action("Index", "Profile", new { Area = "Customer" }) });
+		//}
 
 		private void SignUpInternal(User model, string signupPass1, string signupPass2, string securityQuestion, string promoCode, double? amount, int? customerReason, int? customerSourceOfRepayment, string otherCustomerReason, string otherCustomerSourceOfRepayment)
 		{
