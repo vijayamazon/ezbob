@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.ServiceModel;
 using System.Threading;
 using EzBob.Backend.Strategies;
@@ -211,213 +213,137 @@ namespace EzService {
 
 		#region IEzServiceClient exposed methods
 
-		#region method GetStrategiesList
-
-		public StringListActionResult GetStrategiesList() {
-			try {
-				// TODO: something real or remove
-				ActionMetaData amd = NewSync(ActionStatus.Done);
-
-				SaveActionStatus(amd);
-
-				return new StringListActionResult {
-					MetaData = amd,
-					Records = new List<string> { "Main", "UpdateMarketplace", "Котовский", "И вообще..." }
-				};
-			}
-			catch (Exception e) {
-				m_oLog.Alert(e, "Exception during GetStrategiesList() method.");
-				throw new FaultException(e.Message);
-			} // try
-		} // GetStrategiesList
-
-		#endregion method GetStrategiesList
-
-		#region method GreetingMailStrategy
-
 		public ActionMetaData GreetingMailStrategy(int nCustomerID, string sConfirmationEmail) {
-			return Execute(new Greeting(nCustomerID, sConfirmationEmail, m_oDB, m_oLog));
+			return Execute(typeof(Greeting), nCustomerID, sConfirmationEmail);
 		} // GreetingMailStrategy
 
-		#endregion method GreetingMailStrategy
-
-		#region method CustomerMarketplaceAdded
-
 		public ActionMetaData CustomerMarketplaceAdded(int nCustomerID, int nMarketplaceID) {
-			try {
-				ActionMetaData amd = NewSync(ActionStatus.InProgress);
+			return Execute(typeof (UpdateMarketplace), nCustomerID, nMarketplaceID);
+		} // CustomerMarketplaceAdded
 
-				new UpdateMarketplace(nCustomerID, nMarketplaceID, m_oDB, m_oLog).Execute();
+		public ActionMetaData ApprovedUser(int customerId, decimal loanAmount) {
+			return Execute(typeof (ApprovedUser), customerId, loanAmount);
+		} // ApprovedUser
 
-				amd.Status = ActionStatus.Done;
-				SaveActionStatus(amd);
+		public ActionMetaData CashTransferred(int customerId, int amount) {
+			return Execute(typeof (CashTransferred), customerId, amount);
+		} // CashTransferred
 
-				return amd;
-			}
-			catch (Exception e) {
-				m_oLog.Alert(e, "Exception during GreetingMailStrategy() method.");
-				throw new FaultException(e.Message);
-			} // try
-		}
+		public ActionMetaData EmailUnderReview(int customerId) {
+			return Execute(typeof (EmailUnderReview), customerId);
+		} // EmailUnderReview
 
-		public ActionMetaData ApprovedUser(int customerId, decimal loanAmount)
-		{
-			throw new NotImplementedException();
-		}
+		public ActionMetaData ActivateEscalated(int customerId) {
+			return Execute(typeof (Escalated), customerId);
+		} // ActivateEscalated
 
-		public ActionMetaData CashTransferred(int customerId, int amount)
-		{
-			throw new NotImplementedException();
-		}
+		public ActionMetaData ActivateGetCashFailed(int customerId) {
+			return Execute(typeof (GetCashFailed), customerId);
+		} // ActivateGetCashFailed
 
-		public ActionMetaData EmailUnderReview(int customerId)
-		{
-			throw new NotImplementedException();
-		}
+		public ActionMetaData ActivateLoanFullyPaid(int customerId, string loanRefNum) {
+			return Execute(typeof(LoanFullyPaid), customerId, loanRefNum);
+		} // ActivateLoanFullyPaid
 
-		public ActionMetaData ActivateEscalated(int customerId)
-		{
-			throw new NotImplementedException();
-		}
+		public ActionMetaData MoreAmLandBwaInformation(int customerId) {
+			return Execute(typeof (MoreAMLandBWAInformation), customerId);
+		} // MoreAmLandBwaInformation
 
-		public ActionMetaData ActivateGetCashFailed(int customerId)
-		{
-			throw new NotImplementedException();
-		}
+		public ActionMetaData MoreAmlInformation(int customerId) {
+			return Execute(typeof (MoreAMLInformation), customerId);
+		} // MoreAmlInformation
 
-		public ActionMetaData ActivateLoanFullyPaid(int customerId, string loanRefNum)
-		{
-			throw new NotImplementedException();
-		}
+		public ActionMetaData MoreBwaInformation(int customerId) {
+			return Execute(typeof (MoreBWAInformation), customerId);
+		} // MoreBwaInformation
 
-		public ActionMetaData MoreAmLandBwaInformation(int customerId)
-		{
-			throw new NotImplementedException();
-		}
+		public ActionMetaData PasswordChanged(int customerId, string password) {
+			return Execute(typeof (PasswordChanged), customerId, password);
+		} // PasswordChanged
 
-		public ActionMetaData MoreAmlInformation(int customerId)
-		{
-			throw new NotImplementedException();
-		}
+		public ActionMetaData PasswordRestored(int customerId, string password) {
+			return Execute(typeof (PasswordRestored), customerId, password);
+		} // PasswordRestored
 
-		public ActionMetaData MoreBwaInformation(int customerId)
-		{
-			throw new NotImplementedException();
-		}
+		public ActionMetaData PayEarly(int customerId, int amount, string loanRefNum) {
+			return Execute(typeof (PayEarly), customerId, amount, loanRefNum);
+		} // PayEarly
 
-		public ActionMetaData PasswordChanged(int customerId, string password)
-		{
-			throw new NotImplementedException();
-		}
+		public ActionMetaData PayPointAddedByUnderwriter(int customerId, string cardno, string underwriterName, int underwriterId) {
+			return Execute(typeof (PayPointAddedByUnderwriter), customerId, cardno, underwriterName, underwriterId);
+		} // PayPointAddedByUnderwriter
 
-		public ActionMetaData PasswordRestored(int customerId, string password)
-		{
-			throw new NotImplementedException();
-		}
+		public ActionMetaData PayPointNameValidationFailed(int customerId, string cardHolderName) {
+			return Execute(typeof (PayPointNameValidationFailed), customerId, cardHolderName);
+		} // PayPointNameValidationFailed
 
-		public ActionMetaData PayEarly(int customerId, int amount, string loanRefNum)
-		{
-			throw new NotImplementedException();
-		}
+		public ActionMetaData RejectUser(int customerId) {
+			return Execute(typeof (RejectUser), customerId);
+		} // RejectUser
 
-		public ActionMetaData PayPointAddedByUnderwriter(int customerId, string cardno, string underwriterName, int underwriterId)
-		{
-			throw new NotImplementedException();
-		}
+		public ActionMetaData RenewEbayToken(int customerId, string marketplaceName, string eBayAddress) {
+			return Execute(typeof (RenewEbayToken), customerId, marketplaceName, eBayAddress);
+		} // RenewEbayToken
 
-		public ActionMetaData PayPointNameValidationFailed(int customerId, string cardHolderName)
-		{
-			throw new NotImplementedException();
-		}
+		public ActionMetaData RequestCashWithoutTakenLoan(int customerId) {
+			return Execute(typeof (RequestCashWithoutTakenLoan), customerId);
+		} // RequestCashWithoutTakenLoan
 
-		public ActionMetaData RejectUser(int customerId)
-		{
-			throw new NotImplementedException();
-		}
+		public ActionMetaData SendEmailVerification(int customerId, string address) {
+			return Execute(typeof (SendEmailVerification), customerId, address);
+		} // SendEmailVerification
 
-		public ActionMetaData RenewEbayToken(int customerId, string marketplaceName, string eBayAddress)
-		{
-			throw new NotImplementedException();
-		}
+		public ActionMetaData ThreeInvalidAttempts(int customerId, string password) {
+			return Execute(typeof (ThreeInvalidAttempts), customerId, password);
+		} // ThreeInvalidAttempts
 
-		public ActionMetaData RequestCashWithoutTakenLoan(int customerId)
-		{
-			throw new NotImplementedException();
-		}
+		public ActionMetaData TransferCashFailed(int customerId) {
+			return Execute(typeof (TransferCashFailed), customerId);
+		} // TransferCashFailed
 
-		public ActionMetaData SendEmailVerification(int customerId, string address)
-		{
-			throw new NotImplementedException();
-		}
+		public ActionMetaData CaisGenerate(int underwriterId) {
+			return Execute(typeof (CaisGenerate), underwriterId);
+		} // CaisGenerate
 
-		public ActionMetaData ThreeInvalidAttempts(int customerId, string password)
-		{
-			throw new NotImplementedException();
-		}
+		public ActionMetaData CaisUpdate(int caisId) {
+			return Execute(typeof (CaisUpdate), caisId);
+		} // CaisUpdate
 
-		public ActionMetaData TransferCashFailed(int customerId)
-		{
-			throw new NotImplementedException();
-		}
+		public ActionMetaData FirstOfMonthStatusNotifier() {
+			return Execute(typeof (FirstOfMonthStatusNotifier));
+		} // FirstOfMonthStatusNotifier
 
-		public ActionMetaData CaisGenerate(int underwriterId)
-		{
-			throw new NotImplementedException();
-		}
+		public ActionMetaData FraudChecker(int customerId) {
+			return Execute(typeof (FraudChecker), customerId);
+		} // FraudChecker
 
-		public ActionMetaData CaisUpdate(int caisId)
-		{
-			throw new NotImplementedException();
-		}
+		public ActionMetaData LateBy14Days() {
+			return Execute(typeof (LateBy14Days));
+		} // LateBy14Days
 
-		public ActionMetaData FirstOfMonthStatusNotifier()
-		{
-			throw new NotImplementedException();
-		}
+		public ActionMetaData PayPointCharger() {
+			return Execute(typeof (PayPointCharger));
+		} // PayPointCharger
 
-		public ActionMetaData FraudChecker(int customerId)
-		{
-			throw new NotImplementedException();
-		}
+		public ActionMetaData SetLateLoanStatus() {
+			return Execute(typeof (SetLateLoanStatus));
+		} // SetLateLoanStatus
 
-		public ActionMetaData LateBy14Days()
-		{
-			throw new NotImplementedException();
-		}
+		public ActionMetaData UpdateMarketplaces(int customerId, int marketplaceId) {
+			return Execute(typeof (UpdateMarketplace), customerId, marketplaceId);
+		} // UpdateMarketplaces
 
-		public ActionMetaData PayPointCharger()
-		{
-			throw new NotImplementedException();
-		}
+		public ActionMetaData UpdateAllMarketplaces(int customerId) {
+			return Execute(typeof (UpdateMarketplaces), customerId);
+		} // UpdateAllMarketplaces
 
-		public ActionMetaData SetLateLoanStatus()
-		{
-			throw new NotImplementedException();
-		}
+		public ActionMetaData UpdateTransactionStatus() {
+			return Execute(typeof (UpdateTransactionStatus));
+		} // UpdateTransactionStatus
 
-		public ActionMetaData UpdateMarketplaces(int customerId, int marketplaceId)
-		{
-			throw new NotImplementedException();
-		}
-
-		public ActionMetaData UpdateAllMarketplaces(int customerId)
-		{
-			throw new NotImplementedException();
-		}
-
-		public ActionMetaData UpdateTransactionStatus()
-		{
-			throw new NotImplementedException();
-		}
-
-		public ActionMetaData XDaysDue()
-		{
-			throw new NotImplementedException();
-		}
-
-// CustomerMarketplaceAdded
-
-		#endregion method CustomerMarketplaceAdded
+		public ActionMetaData XDaysDue() {
+			return Execute(typeof (XDaysDue));
+		} // XDaysDue
 
 		#endregion IEzServiceClient exposed methods
 
@@ -474,16 +400,29 @@ namespace EzService {
 
 		#region method Execute
 
-		private ActionMetaData Execute(AStrategy a) {
+		private ActionMetaData Execute(Type oStrategyType, params object[] args) {
 			ActionMetaData amd = null;
 
 			try {
-				amd = NewSync(ActionStatus.InProgress);
+				m_oLog.Debug("Executing " + oStrategyType + " started...");
 
-				a.Execute();
+				amd = NewSync();
+
+				var oParams = new List<object>(args) { m_oDB, m_oLog };
+
+				ConstructorInfo oCreator = oStrategyType.GetConstructors().FirstOrDefault(ci => ci.GetParameters().Length == oParams.Count);
+
+				if (oCreator == null)
+					throw new Exception("Failed to find a constructor for " + oStrategyType + " with " + oParams.Count + " arguments.");
+
+				m_oLog.Debug(oStrategyType + " constructor found, invoking...");
+
+				((AStrategy)oCreator.Invoke(oParams.ToArray())).Execute();
 
 				amd.Status = ActionStatus.Done;
 				SaveActionStatus(amd);
+
+				m_oLog.Debug("Executing " + oStrategyType + " complete.");
 
 				return amd;
 			}
@@ -493,7 +432,7 @@ namespace EzService {
 					SaveActionStatus(amd);
 				} // if
 
-				m_oLog.Alert(e, "Exception during GreetingMailStrategy() method.");
+				m_oLog.Alert(e, "Exception during executing " + oStrategyType + " strategy.");
 				throw new FaultException(e.Message);
 			} // try
 		} // Execute

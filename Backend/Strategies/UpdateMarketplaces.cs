@@ -29,8 +29,7 @@
 
 		#region method UpdateAllMarketplaces
 
-		public override void Execute()
-		{
+		public override void Execute() {
 			DataTable dt = DB.ExecuteReader(
 				"GetCustomerMarketplaces",
 				CommandSpecies.StoredProcedure,

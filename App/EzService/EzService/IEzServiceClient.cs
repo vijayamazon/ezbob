@@ -6,9 +6,6 @@ namespace EzService {
 	[ServiceContract(SessionMode = SessionMode.Allowed)]
 	public interface IEzServiceClient {
 		[OperationContract]
-		StringListActionResult GetStrategiesList();
-
-		[OperationContract]
 		ActionMetaData GreetingMailStrategy(int nCustomerID, string sConfirmationEmail);
 
 		[OperationContract]

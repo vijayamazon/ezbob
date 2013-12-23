@@ -19,7 +19,7 @@
 			get { return "CAIS Generator"; }
 		} // Name
 
-		public override void Execute()
+		public override void Execute() {
 		{
 			DataTable dt = DB.ExecuteReader("GetCaisFileData", CommandSpecies.StoredProcedure);
 			DataRow results = dt.Rows[0];

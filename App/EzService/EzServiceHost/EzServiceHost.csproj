@@ -32,6 +32,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FluentNHibernate, Version=1.3.0.722, Culture=neutral, PublicKeyToken=8aa435e3cb308880, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\3rdparty\Nhibernate\FluentNHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="HibernatingRhinos.Profiler.Appender.v4.0">
+      <HintPath>..\..\..\Lib\3rdparty\Nhibernate\HibernatingRhinos.Profiler.Appender.v4.0.dll</HintPath>
+    </Reference>
+    <Reference Include="Iesi.Collections, Version=1.0.1.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\3rdparty\Nhibernate\Iesi.Collections.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
@@ -39,8 +50,30 @@
     <Reference Include="NDesk.Options">
       <HintPath>..\..\..\Lib\3rdparty\ndesk-options\NDesk.Options.dll</HintPath>
     </Reference>
+    <Reference Include="NHibernate, Version=3.2.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\Scorto.Core\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate.Caches.EnyimMemcached">
+      <HintPath>..\..\..\Lib\3rdparty\Nhibernate\NHibernate.Caches.EnyimMemcached.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate.Caches.SysCache2">
+      <HintPath>..\..\..\Lib\3rdparty\Nhibernate\NHibernate.Caches.SysCache2.dll</HintPath>
+    </Reference>
     <Reference Include="Scorto.Configuration.Loader">
       <HintPath>..\..\..\Lib\Scorto.Core\Scorto.Configuration.Loader.dll</HintPath>
+    </Reference>
+    <Reference Include="Scorto.NHibernate, Version=22.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\Scorto.Core\Scorto.NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="Scorto.RegistryScanner, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\Scorto.Core\Scorto.RegistryScanner.dll</HintPath>
+    </Reference>
+    <Reference Include="StructureMap, Version=2.6.3.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\3rdparty\StructureMap\StructureMap.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -70,6 +103,50 @@
     <ProjectReference Include="..\..\..\backend\Strategies\Strategies.csproj">
       <Project>{7e526927-9849-4e6e-bbff-d0d780f81a05}</Project>
       <Name>Strategies</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\Amazon\AmazonLib\AmazonLib.csproj">
+      <Project>{45eb1597-4c92-4ab8-b615-5206d5a9f472}</Project>
+      <Name>AmazonLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\ChannelGrabberFrontend\ChannelGrabberFrontend.csproj">
+      <Project>{eb0e1f2b-36af-4ec4-b4ce-79bc52f8252b}</Project>
+      <Name>ChannelGrabberFrontend</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\CommonLib\CommonLib.csproj">
+      <Project>{aedbfbbd-ba7d-4582-afca-6ecf8af33c98}</Project>
+      <Name>CommonLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\DatabaseLib\DatabaseLib.csproj">
+      <Project>{fa67314a-0560-41d4-bc19-6524663e9d0d}</Project>
+      <Name>DatabaseLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\eBay\eBayLib\eBayLib.csproj">
+      <Project>{ac296ac1-dd5a-4aa4-a299-dd708e5f1a10}</Project>
+      <Name>eBayLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\EKM\EKM.csproj">
+      <Project>{590c01c7-cf2c-4d5b-a307-3eb7ec61fb0d}</Project>
+      <Name>EKM</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\FreeAgent\FreeAgent.csproj">
+      <Project>{ee7f496f-963f-4383-b0c2-3bcf9fc15511}</Project>
+      <Name>FreeAgent</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\PayPal\PayPalLib\PayPalLib.csproj">
+      <Project>{231243d6-9b1a-43bc-ac7e-fc6ae5ddc006}</Project>
+      <Name>PayPalLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\PayPoint\PayPoint.csproj">
+      <Project>{4e55dfa2-822f-4b94-9105-e77f6ac568db}</Project>
+      <Name>PayPoint</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\Sage\Sage.csproj">
+      <Project>{a4c5e0af-f627-4b08-808c-de8edde725d5}</Project>
+      <Name>Sage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\YodleeLib\YodleeLib.csproj">
+      <Project>{241a8baf-f486-44b9-93bd-baa5ca8091f3}</Project>
+      <Name>YodleeLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Tools\EzbobUtils\DbConnection\DbConnection.csproj">
       <Project>{270BAF49-7F7D-4220-91A2-D8F5BF16B3E4}</Project>
