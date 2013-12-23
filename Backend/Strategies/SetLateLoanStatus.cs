@@ -44,7 +44,7 @@ namespace EzBob.Backend.Strategies {
 
 		#region method Execute
 
-		public void Execute() {
+		public override void Execute() {
 			MarkLoansAsLate();
 
 			DataTable lateForCollectionDataTable = DB.ExecuteReader("GetLateForCollection", CommandSpecies.StoredProcedure);

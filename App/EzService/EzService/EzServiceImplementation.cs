@@ -236,20 +236,7 @@ namespace EzService {
 		#region method GreetingMailStrategy
 
 		public ActionMetaData GreetingMailStrategy(int nCustomerID, string sConfirmationEmail) {
-			try {
-				ActionMetaData amd = NewSync(ActionStatus.InProgress);
-
-				new Greeting(nCustomerID, sConfirmationEmail, m_oDB, m_oLog).Execute();
-
-				amd.Status = ActionStatus.Done;
-				SaveActionStatus(amd);
-
-				return amd;
-			}
-			catch (Exception e) {
-				m_oLog.Alert(e, "Exception during GreetingMailStrategy() method.");
-				throw new FaultException(e.Message);
-			} // try
+			return Execute(new Greeting(nCustomerID, sConfirmationEmail, m_oDB, m_oLog));
 		} // GreetingMailStrategy
 
 		#endregion method GreetingMailStrategy
@@ -327,6 +314,34 @@ namespace EzService {
 		} // SaveActionStatus
 
 		#endregion method SaveActionStatus
+
+		#region method Execute
+
+		private ActionMetaData Execute(AStrategy a) {
+			ActionMetaData amd = null;
+
+			try {
+				amd = NewSync(ActionStatus.InProgress);
+
+				a.Execute();
+
+				amd.Status = ActionStatus.Done;
+				SaveActionStatus(amd);
+
+				return amd;
+			}
+			catch (Exception e) {
+				if (amd != null) {
+					amd.Status = ActionStatus.Failed;
+					SaveActionStatus(amd);
+				} // if
+
+				m_oLog.Alert(e, "Exception during GreetingMailStrategy() method.");
+				throw new FaultException(e.Message);
+			} // try
+		} // Execute
+
+		#endregion method Execute
 
 		#region static methods
 

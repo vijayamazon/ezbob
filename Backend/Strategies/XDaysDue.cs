@@ -27,7 +27,7 @@ namespace EzBob.Backend.Strategies {
 
 		#region property Execute
 
-		public void Execute() {
+		public override void Execute() {
 			DataTable dt = DB.ExecuteReader("GetCustomersFiveDaysDue", CommandSpecies.StoredProcedure);
 
 			foreach (DataRow row in dt.Rows) {

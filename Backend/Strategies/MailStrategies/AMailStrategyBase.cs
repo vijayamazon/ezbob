@@ -10,7 +10,7 @@ namespace EzBob.Backend.Strategies.MailStrategies {
 
 		#region method Execute
 
-		public virtual void Execute() {
+		public override void Execute() {
 			try {
 				Log.Debug("Execute() started...");
 

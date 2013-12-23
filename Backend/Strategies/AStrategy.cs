@@ -10,6 +10,8 @@ namespace EzBob.Backend.Strategies {
 
 		public abstract string Name { get; }
 
+		public abstract void Execute();
+
 		#endregion public
 
 		#region protected

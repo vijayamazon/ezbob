@@ -12,7 +12,7 @@ namespace EzBob.Backend.Strategies {
 			get { return "Fraud Checker"; }
 		} // Name
 
-		public void Execute() {
+		public override void Execute() {
 			var checker = new FraudDetectionChecker();
 			checker.Check(customerId);
 		} // Execute

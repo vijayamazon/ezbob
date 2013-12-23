@@ -41,7 +41,7 @@ namespace EzBob.Backend.Strategies {
 
 		#region method Execute
 
-		public void Execute() {
+		public override void Execute() {
 			DataTable dt = DB.ExecuteReader("GetCustomersForPayPoint", CommandSpecies.StoredProcedure);
 
 			foreach (DataRow row in dt.Rows)

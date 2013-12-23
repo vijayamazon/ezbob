@@ -9,7 +9,7 @@ namespace EzBob.Backend.Strategies {
 
 		public override string Name { get { return "First Of Month Status Notifier"; } } // Name
 
-		public void Execute() {
+		public override void Execute() {
 			new FirstOfMonthStatusStrategyHelper().SendFirstOfMonthStatusMail();
 		} // Execute
 	} // class FirstOfMonthStatusNotifier

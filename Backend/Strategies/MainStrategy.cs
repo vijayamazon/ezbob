@@ -113,7 +113,7 @@ namespace EzBob.Backend.Strategies
 
 		#region method Execute
 
-		public void Execute() {
+		public override void Execute() {
 			ReadConfigurations();
 			GerPersonalInfo();
 			strategyHelper.GetZooplaData(CustomerId);

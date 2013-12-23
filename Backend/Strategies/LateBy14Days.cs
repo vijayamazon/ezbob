@@ -12,7 +12,7 @@ namespace EzBob.Backend.Strategies {
 
 		public override string Name { get { return "Late by 14 days"; } } // Name
 
-		public void Execute() {
+		public override void Execute() {
 			DataTable dt = DB.ExecuteReader("GetLateBy14DaysAndUpdate", CommandSpecies.StoredProcedure);
 
 			foreach (DataRow row in dt.Rows) {
