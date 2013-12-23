@@ -126,6 +126,10 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 				action: 'GridRejected',
 				columns: '#Id,Cart,MP_List,Name,Email,^ApplyDate,^RegDate,^DateRejected,Reason,#RejectsNum,#ApprovesNum,$OSBalance,SegmentType',
 			}), // rejected
+			offline: new GridProperties({
+			    action: 'GridOffline',
+			    columns: '#Id,^RegDate,Cart,MP_List,Name,Email,WizardStep'
+			}), // offline
 			all: new GridProperties({
 				action: 'GridAll',
 				columns: '#Id,Cart,MP_List,Name,Email,^RegDate,^ApplyDate,CustomerStatus,$CalcAmount,$ApprovedSum,$OSBalance,SegmentType',

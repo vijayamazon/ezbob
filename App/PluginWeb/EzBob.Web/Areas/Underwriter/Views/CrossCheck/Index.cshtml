@@ -363,7 +363,7 @@ bool propertyOwnedByCompany = Model.Customer.CompanyAdditionalInfo != null && Mo
 
 		<tr id="cross-check-company-name">
 			<td><b>Company Name</b><b class="marking pull-right checkoutcome"></b></td>
-			<td class="application">@((Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited ? Model.Customer.LimitedInfo.LimitedCompanyName : Model.Customer.NonLimitedInfo.NonLimitedCompanyName).ToUpper())</td>
+			<td class="application">@((Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited ? Model.Customer.LimitedInfo.LimitedCompanyName ?? "" : Model.Customer.NonLimitedInfo.NonLimitedCompanyName ?? "").ToUpper())</td>
 			<td class="experian"></td>
 			<td class="hmrc"></td>
 		</tr>

@@ -338,6 +338,41 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 
 		#endregion method GridRejected
 
+		#region method GridOffline
+
+		[ValidateJsonAntiForgeryToken]
+		[Ajax]
+		[HttpGet]
+		[Transactional]
+		public JsonNetResult GridOffline(bool includeTestCustomers)
+		{
+			var aryOutput = new List<object>();
+
+			IEnumerable<Customer> oRelevant = RelevantCustomers(
+				includeTestCustomers,
+				c => (c.SegmentType() == "Offline")
+			);
+
+			foreach (var oCustomer in oRelevant)
+			{
+				var oRow = new Dictionary<string, object>();
+				
+				oRow["Id"] = oCustomer.Id;
+				oRow["RegDate"] = oCustomer.GreetingMailSentDate;
+				oRow["Cart"] = oCustomer.Medal.HasValue ? oCustomer.Medal.Value.ToString() : "";
+				oRow["MP_List"] = oCustomer.MpList;
+				oRow["Name"] = oCustomer.PersonalInfo == null ? "" : oCustomer.PersonalInfo.Fullname;
+				oRow["Email"] = oCustomer.Name;
+				oRow["WizardStep"] = oCustomer.WizardStep.Name;
+
+				aryOutput.Add(oRow);
+			} // foreach
+
+			return this.JsonNet(new { aaData = aryOutput });
+		} // GridRejected
+
+		#endregion method GridOffline
+
 		#region method GridAll
 
 		[ValidateJsonAntiForgeryToken]

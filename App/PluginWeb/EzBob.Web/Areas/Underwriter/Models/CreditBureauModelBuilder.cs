@@ -118,11 +118,11 @@ namespace EzBob.Web.Areas.Underwriter.Models
 									  where s.Customer.Id == customer.Id
 									  where s.ServiceType == "Consumer Request"
 									  select new CheckHistoryModel
-									  {
-										  Date = s.InsertDate.ToUniversalTime(),
-										  Id = s.Id,
-										  Score = GetScoreFromXml(s.ResponseData)
-									  }).ToList();
+										  {
+											  Date = s.InsertDate.ToUniversalTime(),
+											  Id = s.Id,
+											  Score = s.ResponseData == null ? -1 : GetScoreFromXml(s.ResponseData)
+										  }).ToList();
 
 			model.CheckHistorys = checkHistoryModels.OrderByDescending(h => h.Date);
 		}
