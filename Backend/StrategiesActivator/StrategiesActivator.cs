@@ -1,4 +1,7 @@
-﻿namespace StrategiesActivator
+﻿using System.ServiceModel;
+using EzService;
+
+namespace StrategiesActivator
 {
 	using System;
 	using EzBob.Backend.Strategies;
@@ -11,16 +14,26 @@
 	public class StrategiesActivator
 	{
 		private readonly string[] args;
-		private readonly EzServiceClient serviceClient = new EzServiceClient();
+		private readonly EzServiceClient serviceClient;
 
 		public StrategiesActivator(string[] args)
 		{
-			this.args = args;
+			this.args = new string[args.Length - 1];
+			Array.Copy(args, 1, this.args, 0, args.Length - 1);
+
+			string sInstanceName = args[0];
 
 			m_oLog = new SafeILog(LogManager.GetLogger(typeof(StrategiesActivator)));
 
 			var env = new Ezbob.Context.Environment(m_oLog);
 			m_oDB = new SqlConnection(env, m_oLog);
+
+			var cfg = new Configuration(sInstanceName, m_oDB, m_oLog);
+
+			serviceClient = new EzServiceClient(
+				new NetHttpBinding(),
+				new EndpointAddress(cfg.GetClientEndpointAddress())
+			);
 		}
 
 		public void Execute()

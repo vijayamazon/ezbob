@@ -75,6 +75,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\App\EzService\EzService\EzService.csproj">
+      <Project>{15b3e0d2-6217-493a-a690-158c497f5318}</Project>
+      <Name>EzService</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Integration\Amazon\AmazonDbLib\AmazonDbLib.csproj">
       <Project>{fd263eb4-a3ef-4447-94b1-de1b308c604b}</Project>
       <Name>AmazonDbLib</Name>

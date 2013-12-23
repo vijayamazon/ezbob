@@ -22,9 +22,9 @@
     {
 		public static void Main(string[] args)
         {
-			if (args.Length < 1)
+			if (args.Length < 2)
 			{
-				Console.WriteLine("Usage: StrategiesActivator.exe <StrategyName> [param1] [param2] ... [paramN]");
+				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> <StrategyName> [param1] [param2] ... [paramN]");
 				return;
 			}
 

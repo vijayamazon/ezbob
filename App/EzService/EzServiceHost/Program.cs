@@ -161,17 +161,7 @@ namespace EzServiceHost {
 			if (m_oDB == null)
 				throw new Exception("Failed to create a DB connection.");
 
-			m_nMainLoopSleepTime = 1000; // TODO: read from DB
-
-			int nAdminListeningPort = 7081; // TODO: configurable from DB
-
-			int nClientListeningPort = 7082; // TODO: configurable from DB
-
-			m_sAdminBaseAddress = "net.tcp://localhost:" + nAdminListeningPort;
-			m_sClientBaseAddress = "http://localhost:" + nClientListeningPort;
-
-			m_oLog.Info("EzService admin base address: {0}", m_sAdminBaseAddress);
-			m_oLog.Info("EzService client base address: {0}", m_sClientBaseAddress);
+			m_oCfg = new Configuration(m_sInstanceName, m_oDB, m_oLog);
 
 			return true;
 		} // Init
@@ -185,13 +175,13 @@ namespace EzServiceHost {
 				var oHost = new EzServiceHost(
 					new EzServiceInstanceRuntimeData { Host = this, Log = m_oLog, DB = m_oDB },
 					typeof(EzServiceImplementation),
-					new Uri(m_sAdminBaseAddress),
-					new Uri(m_sClientBaseAddress)
+					new Uri(m_oCfg.GetAdminEndpointAddress()),
+					new Uri(m_oCfg.GetClientEndpointAddress())
 				);
 
 				SetMetadataEndpoit(oHost);
 
-				oHost.AddServiceEndpoint(typeof(IEzServiceAdmin), new NetTcpBinding(), m_sAdminBaseAddress);
+				oHost.AddServiceEndpoint(typeof(IEzServiceAdmin), new NetTcpBinding(), m_oCfg.GetAdminEndpointAddress());
 
 				// To enable HTTP binding on custom port: open cmd.exe as administrator and
 				//     netsh http add urlacl url=http://+:7082/ user=ALEXBO-PC\alexbo
@@ -200,7 +190,7 @@ namespace EzServiceHost {
 				// To remove permission:
 				//     netsh http add urlacl url=http://+:7082/
 				// Mind the backslash at the end of the URL.
-				oHost.AddServiceEndpoint(typeof(IEzService), new NetHttpBinding(), m_sClientBaseAddress);
+				oHost.AddServiceEndpoint(typeof(IEzService), new NetHttpBinding(), m_oCfg.GetClientEndpointAddress());
 
 				m_oLog.Info("EzService endpoint has been created.");
 
@@ -208,7 +198,19 @@ namespace EzServiceHost {
 
 				m_oLog.Info("EzService host has been opened.");
 
-				MainLoop();
+				m_oLog.Info("Entering the main loop.");
+
+				bool bStop = false;
+
+				do {
+					Thread.Sleep(m_oCfg.SleepTimeout);
+
+					lock (ms_oLock) {
+						bStop = ms_bStop;
+					} // lock
+				} while (!bStop);
+
+				m_oLog.Info("Main loop has completed.");
 
 				oHost.Close();
 
@@ -254,26 +256,6 @@ namespace EzServiceHost {
 
 		#endregion method SetMetadataEndpoint
 
-		#region method MainLoop
-
-		private void MainLoop() {
-			m_oLog.Info("Entering the main loop, sleep time is {0} ms.", m_nMainLoopSleepTime);
-
-			bool bStop = false;
-
-			do {
-				Thread.Sleep(m_nMainLoopSleepTime);
-
-				lock (ms_oLock) {
-					bStop = ms_bStop;
-				} // lock
-			} while (!bStop);
-
-			m_oLog.Info("Main loop has completed.");
-		} // MainLoop
-
-		#endregion method MainLoop
-
 		#region method NotifyStartStop
 
 		private void NotifyStartStop(string sEvent) {
@@ -294,9 +276,7 @@ namespace EzServiceHost {
 
 		private readonly string[] m_aryArgs;
 		private string m_sInstanceName;
-		private string m_sAdminBaseAddress;
-		private string m_sClientBaseAddress;
-		private int m_nMainLoopSleepTime;
+		private Configuration m_oCfg;
 
 		private ASafeLog m_oLog;
 		private AConnection m_oDB;
