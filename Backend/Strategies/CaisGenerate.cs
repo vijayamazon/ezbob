@@ -12,9 +12,9 @@ namespace EzBob.Backend.Strategies
 	using ExperianLib.CaisFile;
 	using Models;
 
-	public class CaisGenerator : AStrategy
+	public class CaisGenerate : AStrategy
 	{
-		public CaisGenerator(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public CaisGenerate(int underwriterId, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			mailer = new StrategiesMailer(DB, Log);
 
 			DataTable dt = DB.ExecuteReader("GetCaisFoldersPaths", CommandSpecies.StoredProcedure);
@@ -22,13 +22,14 @@ namespace EzBob.Backend.Strategies
 
 			caisPath = results["CaisPath"].ToString();
 			caisPath2 = results["CaisPath2"].ToString();
+			this.underwriterId = underwriterId;
 		}
 
 		public override string Name {
 			get { return "CAIS Generator"; }
 		} // Name
 
-		public void CaisGenerate(int underwriterId) {
+		public void Execute() {
 			lock (caisGenerationLock) {
 				if (caisGenerationTriggerer != -1) {
 					Log.Warn("A CAIS generation is already in progress. Triggered by Underwriter:{0}", caisGenerationTriggerer);
@@ -42,19 +43,8 @@ namespace EzBob.Backend.Strategies
 			lock (caisGenerationLock) {
 				caisGenerationTriggerer = -1;
 			} // lock
-		} // CaisGenerate
-
-		public void CaisUpdate(int caisId) {
-			DataTable dt = DB.ExecuteReader("GetCaisFileData", CommandSpecies.StoredProcedure);
-			DataRow results = dt.Rows[0];
-
-			string fileName = results["FileName"].ToString();
-			string dirName = results["DirName"].ToString();
-
-			var unzippedFileContent = strategyHelper.GetCAISFileById(caisId);
-			File.WriteAllText(string.Format("{0}\\{1}", dirName, fileName), unzippedFileContent, Encoding.ASCII);
-		}
-
+		} // Execute
+		
 		private void Generate()
 		{
 			string timeString = DateTime.UtcNow.ToString("%Y-%m-%d-%H-%M-%S"); // TODO: check out real path format!!!
@@ -461,5 +451,6 @@ namespace EzBob.Backend.Strategies
 		private int consumerDefaultsCounter;
 		private string companyTypeCode;
 		private string companyRefNum;
+		private readonly int underwriterId;
 	} // CaisGenerator
 } // namespace

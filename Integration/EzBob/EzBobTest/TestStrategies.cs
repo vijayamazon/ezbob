@@ -82,8 +82,8 @@ namespace EzBobTest
 		[Test]
 		public void UpdateCustomerMarketplace()
 		{
-			var s = new UpdateMarketplaces(m_oDB, m_oLog);
-			s.CustomerMarketPlaceAdded(3055, 3040);
+			var s = new UpdateMarketplace(3055, 3040, m_oDB, m_oLog);
+			s.Execute();
 		}
 
 		[Test]

@@ -67,6 +67,8 @@
     <Compile Include="AutoDecisions\Rejection.cs" />
     <Compile Include="AutoDecisions\ReApproval.cs" />
     <Compile Include="AutoDecisions\ReRejection.cs" />
+    <Compile Include="CaisUpdate.cs" />
+    <Compile Include="UpdateMarketplace.cs" />
     <Compile Include="Exceptions\FailedToInitStrategyException.cs" />
     <Compile Include="PayPointCharger.cs" />
     <Compile Include="FraudChecker.cs" />
@@ -109,7 +111,7 @@
     <Compile Include="ScoreCalculation\MedalScoreCalculatorTestFixure.cs" />
     <Compile Include="ScoreCalculation\Models.cs" />
     <Compile Include="StrategiesMailer.cs" />
-    <Compile Include="CaisGenerator.cs" />
+    <Compile Include="CaisGenerate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

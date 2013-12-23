@@ -247,7 +247,7 @@ namespace EzService {
 			try {
 				ActionMetaData amd = NewSync(ActionStatus.InProgress);
 
-				new UpdateMarketplaces(m_oDB, m_oLog).CustomerMarketPlaceAdded(nCustomerID, nMarketplaceID);
+				new UpdateMarketplace(nCustomerID, nMarketplaceID, m_oDB, m_oLog).Execute();
 
 				amd.Status = ActionStatus.Done;
 				SaveActionStatus(amd);
@@ -258,7 +258,164 @@ namespace EzService {
 				m_oLog.Alert(e, "Exception during GreetingMailStrategy() method.");
 				throw new FaultException(e.Message);
 			} // try
-		} // CustomerMarketplaceAdded
+		}
+
+		public ActionMetaData ApprovedUser(int customerId, decimal loanAmount)
+		{
+			throw new NotImplementedException();
+		}
+
+		public ActionMetaData CashTransferred(int customerId, int amount)
+		{
+			throw new NotImplementedException();
+		}
+
+		public ActionMetaData EmailUnderReview(int customerId)
+		{
+			throw new NotImplementedException();
+		}
+
+		public ActionMetaData ActivateEscalated(int customerId)
+		{
+			throw new NotImplementedException();
+		}
+
+		public ActionMetaData ActivateGetCashFailed(int customerId)
+		{
+			throw new NotImplementedException();
+		}
+
+		public ActionMetaData ActivateLoanFullyPaid(int customerId, string loanRefNum)
+		{
+			throw new NotImplementedException();
+		}
+
+		public ActionMetaData MoreAmLandBwaInformation(int customerId)
+		{
+			throw new NotImplementedException();
+		}
+
+		public ActionMetaData MoreAmlInformation(int customerId)
+		{
+			throw new NotImplementedException();
+		}
+
+		public ActionMetaData MoreBwaInformation(int customerId)
+		{
+			throw new NotImplementedException();
+		}
+
+		public ActionMetaData PasswordChanged(int customerId, string password)
+		{
+			throw new NotImplementedException();
+		}
+
+		public ActionMetaData PasswordRestored(int customerId, string password)
+		{
+			throw new NotImplementedException();
+		}
+
+		public ActionMetaData PayEarly(int customerId, int amount, string loanRefNum)
+		{
+			throw new NotImplementedException();
+		}
+
+		public ActionMetaData PayPointAddedByUnderwriter(int customerId, string cardno, string underwriterName, int underwriterId)
+		{
+			throw new NotImplementedException();
+		}
+
+		public ActionMetaData PayPointNameValidationFailed(int customerId, string cardHolderName)
+		{
+			throw new NotImplementedException();
+		}
+
+		public ActionMetaData RejectUser(int customerId)
+		{
+			throw new NotImplementedException();
+		}
+
+		public ActionMetaData RenewEbayToken(int customerId, string marketplaceName, string eBayAddress)
+		{
+			throw new NotImplementedException();
+		}
+
+		public ActionMetaData RequestCashWithoutTakenLoan(int customerId)
+		{
+			throw new NotImplementedException();
+		}
+
+		public ActionMetaData SendEmailVerification(int customerId, string address)
+		{
+			throw new NotImplementedException();
+		}
+
+		public ActionMetaData ThreeInvalidAttempts(int customerId, string password)
+		{
+			throw new NotImplementedException();
+		}
+
+		public ActionMetaData TransferCashFailed(int customerId)
+		{
+			throw new NotImplementedException();
+		}
+
+		public ActionMetaData CaisGenerate(int underwriterId)
+		{
+			throw new NotImplementedException();
+		}
+
+		public ActionMetaData CaisUpdate(int caisId)
+		{
+			throw new NotImplementedException();
+		}
+
+		public ActionMetaData FirstOfMonthStatusNotifier()
+		{
+			throw new NotImplementedException();
+		}
+
+		public ActionMetaData FraudChecker(int customerId)
+		{
+			throw new NotImplementedException();
+		}
+
+		public ActionMetaData LateBy14Days()
+		{
+			throw new NotImplementedException();
+		}
+
+		public ActionMetaData PayPointCharger()
+		{
+			throw new NotImplementedException();
+		}
+
+		public ActionMetaData SetLateLoanStatus()
+		{
+			throw new NotImplementedException();
+		}
+
+		public ActionMetaData UpdateMarketplaces(int customerId, int marketplaceId)
+		{
+			throw new NotImplementedException();
+		}
+
+		public ActionMetaData UpdateAllMarketplaces(int customerId)
+		{
+			throw new NotImplementedException();
+		}
+
+		public ActionMetaData UpdateTransactionStatus()
+		{
+			throw new NotImplementedException();
+		}
+
+		public ActionMetaData XDaysDue()
+		{
+			throw new NotImplementedException();
+		}
+
+// CustomerMarketplaceAdded
 
 		#endregion method CustomerMarketplaceAdded
 

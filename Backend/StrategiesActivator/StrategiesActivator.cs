@@ -1,16 +1,17 @@
-﻿using Ezbob.Database;
-using Ezbob.Logger;
-using log4net;
-
-namespace StrategiesActivator
+﻿namespace StrategiesActivator
 {
 	using System;
 	using EzBob.Backend.Strategies;
 	using EzBob.Backend.Strategies.MailStrategies;
+	using EzServiceReference;
+	using Ezbob.Database;
+	using Ezbob.Logger;
+	using log4net;
 
 	public class StrategiesActivator
 	{
 		private readonly string[] args;
+		private readonly EzServiceClientClient serviceClient = new EzServiceClientClient();
 
 		public StrategiesActivator(string[] args)
 		{
@@ -142,10 +143,8 @@ namespace StrategiesActivator
 				Console.WriteLine("Usage: StrategiesActivator.exe Greeting <CustomerId> <ConfirmEmailAddress>");
 				return;
 			}
-			EzServiceReference.EzServiceClientClient e = new EzServiceReference.EzServiceClientClient();
 
-			e.GreetingMailStrategy(customerId, args[2]);
-			//new Greeting(customerId, args[2], m_oDB, m_oLog).Execute();
+			serviceClient.GreetingMailStrategy(customerId, args[2]);
 		}
 
 		private void ActivateApprovedUser()
@@ -390,7 +389,7 @@ namespace StrategiesActivator
 				Console.WriteLine("Usage: StrategiesActivator.exe CaisGenerate <underwriterId>");
 				return;
 			}
-			new CaisGenerator(m_oDB, m_oLog).CaisGenerate(underwriterId);
+			new CaisGenerate(underwriterId, m_oDB, m_oLog).Execute();
 		}
 
 		private void ActivateCaisUpdate()
@@ -401,7 +400,7 @@ namespace StrategiesActivator
 				Console.WriteLine("Usage: StrategiesActivator.exe CaisUpdate <caisId>");
 				return;
 			}
-			new CaisGenerator(m_oDB, m_oLog).CaisUpdate(caisId);
+			new CaisGenerate(caisId, m_oDB, m_oLog).Execute();
 		}
 
 		private void ActivateFirstOfMonthStatusNotifier()
@@ -463,7 +462,7 @@ namespace StrategiesActivator
 				Console.WriteLine("Usage: StrategiesActivator.exe CustomerMarketPlaceAdded <CustomerId> <marketplaceId>");
 				return;
 			}
-			new UpdateMarketplaces(m_oDB, m_oLog).CustomerMarketPlaceAdded(customerId, marketplaceId);
+			new UpdateMarketplace(customerId, marketplaceId, m_oDB, m_oLog).Execute();
 		}
 
 		private void ActivateUpdateAllMarketplaces()
@@ -474,7 +473,7 @@ namespace StrategiesActivator
 				Console.WriteLine("Usage: StrategiesActivator.exe UpdateAllMarketplaces <CustomerId>");
 				return;
 			}
-			new UpdateMarketplaces(m_oDB, m_oLog).UpdateAllMarketplaces(customerId);
+			new UpdateMarketplaces(customerId, m_oDB, m_oLog).Execute();
 		}
 
 		private void ActivateUpdateTransactionStatus()
