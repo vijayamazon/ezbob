@@ -7,63 +7,83 @@ using StructureMap;
 
 namespace FraudChecker
 {
-    public class FraudDetectionChecker
-    {
-        private readonly ISession _session;
-        private readonly InternalChecker _internalChecker;
-        private readonly ExternalChecker _externalChecker;
-        private readonly BussinessChecker _bussinessChecker;
+	using EZBob.DatabaseLib.Model.Database.Repository;
+	using Iesi.Collections.Generic;
 
-        public FraudDetectionChecker()
-        {
-            _bussinessChecker = new BussinessChecker();
-            _internalChecker = new InternalChecker();
-            _externalChecker = new ExternalChecker();
-            _session = ObjectFactory.GetInstance<ISession>();
-        }
+	public class FraudDetectionChecker
+	{
+		private readonly ISession _session;
+		private readonly InternalChecker _internalChecker;
+		private readonly ExternalChecker _externalChecker;
+		private readonly BussinessChecker _bussinessChecker;
+		private readonly CustomerRepository _customerRepository;
+		public FraudDetectionChecker()
+		{
+			_bussinessChecker = new BussinessChecker();
+			_internalChecker = new InternalChecker();
+			_externalChecker = new ExternalChecker();
+			_session = ObjectFactory.GetInstance<ISession>();
+			_customerRepository = ObjectFactory.GetInstance<CustomerRepository>();
+		}
 
-        /// <summary>
-        /// run fraud all checks
-        /// </summary>
-        /// <param name="customerId">Customer.Id for check</param>
-        /// <returns></returns>
-        public string Check(int customerId)
-        {
-            var startDate = DateTime.UtcNow;
-            var detections = new List<FraudDetection>();
-            detections.AddRange(_internalChecker.InternalSystemDecision(customerId));
-            detections.AddRange(_externalChecker.ExternalSystemDecision(customerId));
-            detections.AddRange(_bussinessChecker.SpecialBussinesRulesSystemDecision(customerId));
+		/// <summary>
+		/// run fraud all checks
+		/// </summary>
+		/// <param name="customerId">Customer.Id for check</param>
+		/// <returns></returns>
+		public string Check(int customerId)
+		{
+			var startDate = DateTime.UtcNow;
+			var detections = new List<FraudDetection>();
+			detections.AddRange(_internalChecker.InternalSystemDecision(customerId));
+			detections.AddRange(_externalChecker.ExternalSystemDecision(customerId));
+			detections.AddRange(_bussinessChecker.SpecialBussinesRulesSystemDecision(customerId));
 
-            SaveInDB(detections, startDate, customerId);
-            return Helper.PrepareResultForOutput(detections);
-        }
+			SaveToDb(detections, startDate, customerId);
+			return Helper.PrepareResultForOutput(detections);
+		}
 
-        private void SaveInDB(IList<FraudDetection> fraudDetections, DateTime startDate, int customerId)
-        {
-            var count = fraudDetections.Count;
-            for (var i = 0; i < count; i++)
-            {
-                var fraud = fraudDetections[i];
-                fraud.DateOfCheck = startDate;
-                fraud.Concurrence = Helper.ConcurrencePrepare(fraud);
-                _session.Save(fraud);
+		private void SaveToDb(IList<FraudDetection> fraudDetections, DateTime startDate, int customerId)
+		{
+			var req = new FraudRequest
+				{
+					CheckDate = startDate,
+					Customer = _customerRepository.Get(customerId),
+					FraudDetections = new HashedSet<FraudDetection>()
+				};
+			var count = fraudDetections.Count;
+			for (var i = 0; i < count; i++)
+			{
+				var fraud = fraudDetections[i];
+				fraud.Concurrence = Helper.ConcurrencePrepare(fraud);
+				fraud.FraudRequest = req;
+				req.FraudDetections.Add(fraud);
 
-                //for disabling lock db
-                if (i % 20 != 0) continue;
-                _session.Flush();
-                _session.Clear();
-            }
-            if (count != 0)
-            {
-                //All other statuses will be set manually. See documentation
-                var currentCustomer = _session.Get<Customer>(customerId); //object customer is CustomerProxy so we need customer from DB to update him
-                currentCustomer.FraudStatus = FraudStatus.FraudSuspect;
-                _session.Save(currentCustomer);
-                _session.Flush();
-            }
-        }
+			}
+			_session.Save(req);
+			_session.Flush();
+			_session.Clear();
 
-    }
+			var currentCustomer = _session.Get<Customer>(customerId);
+			if (count != 0)
+			{
+				//All other statuses will be set manually. See documentation
+				//object customer is CustomerProxy so we need customer from DB to update him
+				currentCustomer.FraudStatus = FraudStatus.FraudSuspect;
+			}
+			else
+			{
+				if (currentCustomer.FraudStatus == FraudStatus.FraudSuspect)
+				{
+					currentCustomer.FraudStatus = FraudStatus.Ok;
+				}
+			}
+
+			_session.Save(currentCustomer);
+			_session.Flush();
+
+		}
+
+	}
 
 }

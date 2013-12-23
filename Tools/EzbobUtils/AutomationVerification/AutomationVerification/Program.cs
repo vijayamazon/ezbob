@@ -12,16 +12,17 @@
 	using Html.Tags;
 	using Reports;
 
-	class Program
+	public class Program
 	{
-		public static readonly ASafeLog Log = new FileLog("AutomationVerification", bUtcTimeInName:true, bAppend:true);
+		public static ASafeLog Log;
 
-		static void Main()
+		public static void Main()
 		{
 			try
 			{
 				var from = DateTime.Today.AddDays(-1); //new DateTime(2013, 10, 01);//todo change
 				var to = DateTime.Today;
+				Log = new FileLog("AutomationVerification", bUtcTimeInName:true, bAppend:true, sPath: @"C:\EzUtils\AutomationVerification\");
 				Log.Debug("Running Begin");
 				var systemDecisions = GetAutomaticDecisions(from, to);
 				var verificitaionDecisions = GetVerificationDecisions(systemDecisions);

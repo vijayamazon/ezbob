@@ -6,6 +6,7 @@ namespace PaymentServices.PayPoint
 {
 	public enum ResponseCode
 	{
+		Success = 0,
 		Referral = 2,
 		Referral2 = 83,
 		NotAuthorised = 5,
@@ -25,6 +26,7 @@ namespace PaymentServices.PayPoint
         public string NewTransId { get; set; }
         public string Code { get; set; }
         public string Message { get; set; }
+		public int RespCode { get; set; }
         
         //-----------------------------------------------------------------------------------
         public PayPointReturnData()
@@ -58,6 +60,13 @@ namespace PaymentServices.PayPoint
             {
                 Error = dict["message"] ?? "OutStr string contain valid=false, please versify OutStr for additional details";
             }
+
+			if (dict.ContainsKey("resp_code"))
+			{
+				int respCode = 0;
+				int.TryParse(dict["resp_code"], out respCode);
+				RespCode = respCode;
+			}
         }
 
         private Dictionary<string, string> ParseParams(string input)

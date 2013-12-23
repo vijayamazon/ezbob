@@ -260,11 +260,11 @@
 			{
 				if (ret.Code == "N")
 				{
-					Log.WarnFormat("RepeatTransaction error: {0}", str);
+					Log.WarnFormat("RepeatTransaction error: {0} error {1} message {2} respCode {3}", str, ret.Error,ret.Message, (ResponseCode)ret.RespCode);
 				}
 				else
 				{
-					Log.ErrorFormat("RepeatTransaction error: {0}", str);
+					Log.ErrorFormat("RepeatTransaction error: {0} error {1} message {2} respCode {3}", str, ret.Error, ret.Message, (ResponseCode)ret.RespCode);
 				}
 				throw new PayPointException(str, ret);
 			}
