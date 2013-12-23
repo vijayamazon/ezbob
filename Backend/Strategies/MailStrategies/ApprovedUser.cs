@@ -44,7 +44,18 @@ namespace EzBob.Backend.Strategies.MailStrategies {
 				{"ValidFor", validHours.ToString(CultureInfo.InvariantCulture)}
 			};
 
-			SetTemplateName("Mandrill - Approval __OFFLINE__ __FIRST_TIME__", "1st time", numOfApprovals == 0);
+			if (CustomerData.IsOffline)
+			{
+				TemplateName = numOfApprovals == 0
+								   ? "Mandrill - Approval Offline (1st time)"
+								   : "Mandrill - Approval Offline (not 1st time)";
+			}
+			else
+			{
+				TemplateName = numOfApprovals == 0
+								   ? "Mandrill - Approval (1st time)"
+								   : "Mandrill - Approval (not 1st time)";
+			}
 		} // SetTemplateAndSubjectAndVariables
 
 		#endregion method SetTemplateAndSubjectAndVariables

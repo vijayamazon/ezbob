@@ -88,17 +88,6 @@ namespace EzBob.Backend.Strategies.MailStrategies {
 
 		#endregion properties
 
-		#region method SetTemplateName
-
-		protected void SetTemplateName(string sPattern, string sFirstTimeStr, bool bIsFirst) {
-			TemplateName = sPattern
-				.Replace("__OFFLINE__", CustomerData.IsOffline ? "Offline" : string.Empty)
-				.Replace("__FIRST_LOAN__", "(" + (bIsFirst ? string.Empty : "not ") + sFirstTimeStr + ")")
-				.Replace("  ", " ");
-		} // SetTemplateName
-
-		#endregion method SetTemplateName
-
 		#endregion protected
 
 		#region private

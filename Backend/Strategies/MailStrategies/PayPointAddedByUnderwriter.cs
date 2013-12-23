@@ -7,7 +7,7 @@ namespace EzBob.Backend.Strategies.MailStrategies {
 	public class PayPointAddedByUnderwriter : AMailStrategyBase {
 		#region constructor
 
-		public PayPointAddedByUnderwriter(int customerId, string cardno, string underwriterName, int underwriterId, AConnection oDB, ASafeLog oLog) : base(customerId, true, oDB, oLog) {
+		public PayPointAddedByUnderwriter(int customerId, string cardno, string underwriterName, int underwriterId, AConnection oDB, ASafeLog oLog) : base(customerId, false, oDB, oLog) {
 			this.underwriterId = underwriterId;
 			this.cardno = cardno;
 			this.underwriterName = underwriterName;

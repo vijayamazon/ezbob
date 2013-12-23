@@ -23,9 +23,16 @@ namespace EzBob.Backend.Strategies.MailStrategies {
 				{"Amount", amount.ToString(CultureInfo.InvariantCulture)}
 			};
 
-			Subject = (CustomerData.NumOfLoans == 1) ? "Welcome to the ezbob family" : "Thanks for choosing ezbob as your funding partner";
-
-			SetTemplateName("Mandrill - Took __OFFLINE__ Loan __FIRST_TIME__", "1st loan", CustomerData.NumOfLoans == 1);
+			if (CustomerData.NumOfLoans == 1)
+			{
+				Subject = "Welcome to the ezbob family";
+				TemplateName = CustomerData.IsOffline ? "Mandrill - Took Offline Loan (1st loan)" : "Mandrill - Took Loan (1st loan)";
+			}
+			else
+			{
+				Subject = "Thanks for choosing ezbob as your funding partner";
+				TemplateName = CustomerData.IsOffline ? "Mandrill - Took Offline Loan (not 1st loan)" : "Mandrill - Took Loan (not 1st loan)";
+			}
 		} // SetTemplateAndSubjectAndVariables
 
 		#endregion method SetTemplateAndSubjectAndVariables

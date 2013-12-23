@@ -17,7 +17,7 @@ namespace EzBob.Backend.Strategies.MailStrategies {
 		#region method SetTemplateAndSubjectAndVariables
 
 		protected override void SetTemplateAndSubjectAndVariables() {
-			Subject = string.Format("{0}, we are currently re-analysing your business in order to make you a new funding offer.", CustomerData.FirstName);
+			Subject = "You have paid your loan off in full.  Benefit from a lower interest cost on your next loan.";
 			TemplateName = "Mandrill - Loan paid in full";
 
 			Variables = new Dictionary<string, string> {

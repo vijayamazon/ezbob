@@ -9,7 +9,7 @@ namespace EzBob.Backend.Strategies.MailStrategies {
 	public class Escalated : AMailStrategyBase {
 		#region constructor
 
-		public Escalated(int customerId, AConnection oDB, ASafeLog oLog) : base(customerId, true, oDB, oLog) {
+		public Escalated(int customerId, AConnection oDB, ASafeLog oLog) : base(customerId, false, oDB, oLog) {
 		} // constructor
 
 		#endregion constructor
