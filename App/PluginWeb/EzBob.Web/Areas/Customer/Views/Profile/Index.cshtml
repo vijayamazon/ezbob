@@ -162,11 +162,11 @@
             <dd class="dashes">---
             </dd>
         </dl>
-        <button href="#" class="button orange apply-for-loan refresh_yodlee_help">Request Cash</button>
+        <button href="#" class="button orange apply-for-loan refresh_yodlee_help refresh_ekm_help">Request Cash</button>
 
         <div class="hide">
             <div id="refresh_yodlee_help" class="help_window">
-                <h2>Refresh Bank Account</h2>
+                <h2>Refresh bank account</h2>
                 <p>
                     Please click continue button below to refresh your bank account.
                 <br />
@@ -181,6 +181,26 @@
                 <hr>
                 <div class="help_security"></div>
             </div>
+
+            <div id="refresh_ekm_help" class="help_window">
+                <h2>Update ekmpowershop account credentials</h2>
+                <p>Your credentials changed, please provide new credentials below.</p>
+                <p class="error" style="color:red;min-height:32px;" id="update-ekm-error"> </p>
+                <br />
+                @EzForm.InputText("refresh_ekm_login", "ekm login", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "refresh-account:ekm_login")
+                @EzForm.Password("refresh_ekm_password", "ekm password", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "refresh-account:ekm_password")
+
+                <div class="form_buttons_container">
+                    <div class="attardi-button">
+                        <a href="#" class="button orange pull-right" id="refreshEkmBtn" onclick="updateEkm();">Continue</a>
+                        <a href="#" class="button grey pull-right" id="cancelEkmBtn" onclick="$.colorbox.close();">Cancel</a>
+                    </div>
+                </div>
+                <div class="clear"></div>
+                <hr>
+                <div class="help_security"></div>
+            </div>
+
         </div>
     </script>
 
@@ -274,7 +294,7 @@
     @{Html.RenderPartial("~/Areas/Customer/Views/Shared/Shops/CGAccoutInfoTemplate.cshtml");}
 
     <script type="text/javascript">
-        
+
         EzBob.Config.GetCashSliderStep = @Model.Config.GetCashSliderStep.ToString();
         EzBob.Config.MinLoan = @Model.Config.MinLoan.ToString();
         EzBob.Config.XMinLoan = @Model.Config.XMinLoan.ToString();
@@ -283,12 +303,12 @@
         EzBob.Config.MarketPlaces = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewData["MarketPlaces"]));
         EzBob.Config.SessionTimeout = @Model.Config.SessionTimeout;
 
-        $(function () {
-            
-            var options = new EzBob.CustomerModel (@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(customer)));
+        $(function() {
+
+            var options = new EzBob.CustomerModel(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(customer)));
             var profileView = new EzBob.Profile.ProfileView(options);
             profileView.render();
-            
+
             var notifications = new EzBob.NotificationsView({ el: $('.notifications') });
             notifications.render();
 
@@ -300,6 +320,24 @@
             Backbone.history.start();
 
         });
+
+        function updateEkm() {
+            $("#update-ekm-error").html('');
+            BlockUi('on');
+            var url = "" + window.gRootPath + "Customer/EkmMarketPlaces/Update";
+            $.post(url, { name: $('#refresh_ekm_login').val(), password: $('#refresh_ekm_password').val() })
+                .done(function(res) {
+                    if (res.error) {
+                        $("#update-ekm-error").html(res.error);
+                    }
+                    if (res.success) {
+                        $.colorbox.close();
+                        $('button.apply-for-loan').click();
+                    }
+                }).always(function() {
+                    BlockUi('off');
+                });
+        }
     </script>
 
     @BundleHelper.RenderProfileJs()

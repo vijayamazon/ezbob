@@ -2,8 +2,11 @@
 {
 	using System;
 	using System.Web.Mvc;
+	using CommonLib.Security;
+	using EKM;
 	using EZBob.DatabaseLib.Model.Database;
 	using ApplicationCreator;
+	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Models;
 	using Code;
 	using Infrastructure;
@@ -18,75 +21,91 @@
 	using EZBob.DatabaseLib.Model;
 
 	public class ProfileController : Controller
-    {
-        private readonly CustomerModelBuilder _customerModelBuilder;
-        private readonly IEzbobWorkplaceContext _context;
-        private readonly IAppCreator _creator;
-        private readonly IEzBobConfiguration _config;
-        private readonly CashRequestBuilder _crBuilder;
+	{
+		private readonly CustomerModelBuilder _customerModelBuilder;
+		private readonly IEzbobWorkplaceContext _context;
+		private readonly IAppCreator _creator;
+		private readonly IEzBobConfiguration _config;
+		private readonly CashRequestBuilder _crBuilder;
 		private readonly ISession _session;
-		private readonly IConfigurationVariablesRepository configurationVariablesRepository;
-
-        //----------------------------------------------------------------------
-        public ProfileController(
-            CustomerModelBuilder customerModelBuilder, 
-            IEzbobWorkplaceContext context, 
-            IAppCreator creator, 
-            IEzBobConfiguration config,
-            CashRequestBuilder crBuilder,
+		private readonly IConfigurationVariablesRepository _configurationVariablesRepository;
+		//----------------------------------------------------------------------
+		public ProfileController(
+			CustomerModelBuilder customerModelBuilder,
+			IEzbobWorkplaceContext context,
+			IAppCreator creator,
+			IEzBobConfiguration config,
+			CashRequestBuilder crBuilder,
 			ISession session,
 			IConfigurationVariablesRepository configurationVariablesRepository)
-        {
-            _customerModelBuilder = customerModelBuilder;
-            _context = context;
-            _creator = creator;
-            _config = config;
-            _crBuilder = crBuilder;
+		{
+			_customerModelBuilder = customerModelBuilder;
+			_context = context;
+			_creator = creator;
+			_config = config;
+			_crBuilder = crBuilder;
 			_session = session;
-			this.configurationVariablesRepository = configurationVariablesRepository;
-        }
+			_configurationVariablesRepository = configurationVariablesRepository;
+		}
 
-        //----------------------------------------------------------------------
-        [IsSuccessfullyRegisteredFilter]
-        [Transactional]
-        public ViewResult Index()
-        {
-            var wizardModel = new WizardModel() {Customer = _customerModelBuilder.BuildWizardModel(_context.Customer), Config = _config};
-            ViewData["ShowChangePasswordPage"] = _context.User.IsPasswordRestored;
+		//----------------------------------------------------------------------
+		[IsSuccessfullyRegisteredFilter]
+		[Transactional]
+		public ViewResult Index()
+		{
+			var wizardModel = new WizardModel() { Customer = _customerModelBuilder.BuildWizardModel(_context.Customer), Config = _config };
+			ViewData["ShowChangePasswordPage"] = _context.User.IsPasswordRestored;
 
-            ViewData["MarketPlaces"] = _session
-                .Query<MP_MarketplaceType>()
-                .ToArray();
+			ViewData["MarketPlaces"] = _session
+				.Query<MP_MarketplaceType>()
+				.ToArray();
 
 			return View("Index", wizardModel);
-        }
-        
-        [Transactional]
-        [Ajax]
-        [HttpGet]
-        [ValidateJsonAntiForgeryToken]
-        public JsonNetResult Details()
-        {
-            var details = _customerModelBuilder.BuildWizardModel(_context.Customer);
-            return this.JsonNet(details);
-        }
+		}
 
-        [Transactional]
-        [Ajax]
-        [HttpPost]
-        [ValidateJsonAntiForgeryToken]
-        public JsonNetResult ApplyForALoan()
-        {
-            var customer = _context.Customer;
-            if(customer == null)
-            {
-                return this.JsonNet(new {});
-            }
+		[Transactional]
+		[Ajax]
+		[HttpGet]
+		[ValidateJsonAntiForgeryToken]
+		public JsonNetResult Details()
+		{
+			var details = _customerModelBuilder.BuildWizardModel(_context.Customer);
+			return this.JsonNet(details);
+		}
 
+		[Transactional]
+		[Ajax]
+		[HttpPost]
+		[ValidateJsonAntiForgeryToken]
+		public JsonNetResult ApplyForALoan()
+		{
+			var customer = _context.Customer;
+			if (customer == null)
+			{
+				return this.JsonNet(new { });
+			}
+			var ekmType = new EkmDatabaseMarketPlace();
+			var ekms = customer.CustomerMarketPlaces.Where(m => m.Marketplace.InternalId == ekmType.InternalId).ToList();
+			if (ekms.Any())
+			{
+				var validator = new EkmConnector();
+				foreach (var ekm in ekms)
+				{
+					var name = ekm.DisplayName;
+					var password = Encryptor.Decrypt(ekm.SecurityData);
+					string error;
+					var isValid = validator.Validate(name, password, out error);
+					if (!isValid)
+					{
+						return this.JsonNet(new {hasBadEkm = true, error = error, ekm = ekm.DisplayName});
+					}
+				}
+
+			}
 			customer.CreditResult = null;
 
 			customer.OfferStart = DateTime.UtcNow;
-			int offerValidForHours = (int)configurationVariablesRepository.GetByNameAsDecimal("OfferValidForHours");
+			int offerValidForHours = (int)_configurationVariablesRepository.GetByNameAsDecimal("OfferValidForHours");
 			customer.OfferValidUntil = DateTime.UtcNow.AddHours(offerValidForHours);
 
 			customer.ApplyCount = customer.ApplyCount + 1;
@@ -101,7 +120,7 @@
 
 			_crBuilder.ForceEvaluate(customer, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, false);
 
-	        var yodlees = customer.GetYodleeAccounts().ToList();
+			var yodlees = customer.GetYodleeAccounts().ToList();
 			var config = ObjectFactory.GetInstance<IEzBobConfiguration>();
 			bool refreshYodleeEnabled = config.RefreshYodleeEnabled;
 			if (yodlees.Any() && refreshYodleeEnabled)
@@ -109,13 +128,13 @@
 				return this.JsonNet(new { hasYodlee = true });
 			}
 
-            return this.JsonNet(new {});
-        }
+			return this.JsonNet(new { });
+		}
 
 
-        public ViewResult RenewEbayToken()
-        {
-            return View();
-        }
-    }
+		public ViewResult RenewEbayToken()
+		{
+			return View();
+		}
+	}
 }

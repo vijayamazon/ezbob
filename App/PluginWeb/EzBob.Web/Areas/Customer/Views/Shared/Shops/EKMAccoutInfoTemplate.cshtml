@@ -7,16 +7,16 @@
 {
     <div class="row-fluid">
         <div class="wizard-top-notification">
-            <h2 class="form_start">Please Enter EKMPowershop Credentials</h2>
+            <h2 class="form_start">Please enter ekmpowershop credentials</h2>
         </div>
         <form id="ekmAccount">
             <div class="clearfix">
-                @EzForm.InputText("ekm_login", "EKM Login", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "link-account:ekm_login")
-                @EzForm.Password("ekm_password", "EKM Password", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "link-account:ekm_password")
+                @EzForm.InputText("ekm_login", "ekm login", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "link-account:ekm_login")
+                @EzForm.Password("ekm_password", "ekm password", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "link-account:ekm_password")
 
                 <div class="form_buttons_container">
                     <div class="attardi-button">
-                        <a href="#" class="rc-button green connect-ekm disabled" ui-event-control-id="link-account:ekm_connect">Link Account</a>
+                        <a href="#" class="rc-button green connect-ekm disabled" ui-event-control-id="link-account:ekm_connect">Link account</a>
                         <a href="#" class="rc-button grey back" ui-event-control-id="link-account:ekm_back">Back</a>
                     </div>
                 </div>

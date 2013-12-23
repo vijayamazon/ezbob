@@ -67,7 +67,7 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
     },
     events: {
         'click button.get-cash': 'getCash',
-        'click button.apply-for-loan': 'applyForALoan'
+        'click button.apply-for-loan': 'applyForALoan',
     },
     getCash: function () {
         if (this.customer.hasLateLoans()) return;
@@ -83,15 +83,23 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
         if (this.customer.get('state') != 'apply' && this.customer.get('state') != 'bad' && this.customer.get('state') != 'disabled') return;
         
         this.trigger('applyForLoan');
+        BlockUi('on');
         $.post(window.gRootPath + "Customer/Profile/ApplyForALoan")
             .done(function (result) {
                 if (result.hasYodlee) {
                     var url = "" + window.gRootPath +"Customer/YodleeMarketPlaces/RefreshYodlee";
                     that.$el.find("#refreshYodleeBtn").attr("href", url);
                     that.$el.find('.refresh_yodlee_help').colorbox({ href: "#refresh_yodlee_help", inline: true, transition: 'none', open: true });
-                    
+                }
+                if (result.hasBadEkm) {
+                    that.$el.find('#refresh_ekm_login').val(result.ekm).change();
+                    that.$el.find('.refresh_ekm_help').colorbox({ href: "#refresh_ekm_help", inline: true, transition: 'none', open: true });
+                    return;
                 }
                 that.customer.set('state', 'wait');
+            })
+            .always(function () {
+                BlockUi('off');
             });
     },
     render: function () {

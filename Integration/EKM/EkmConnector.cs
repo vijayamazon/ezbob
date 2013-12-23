@@ -18,7 +18,7 @@
         private static string PartnerEndpointName = "PartnerAPISoap";
         private static string PartnerContractName = "API.PartnerAPISoap";
         //private static string NoErrorIndication = "No data returned";
-        private static string LineBreak = "<br />";
+        private static string LineBreak = Environment.NewLine;
 
         public bool Validate(string userName, string password, out string errMsg)
         {
@@ -43,7 +43,7 @@
                     sb.Append(LineBreak);
 				}
 				_Log.Info(sb.ToString());
-                errMsg = "Invalid Credentials";
+	            errMsg = sb.ToString();// "Invalid Credentials";
                 return false;
             }
 
