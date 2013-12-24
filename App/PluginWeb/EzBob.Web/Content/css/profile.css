@@ -323,6 +323,7 @@ body .agreement-text {
 .profile-menu .nav {
     height: 36px;
     width: 950px;
+    margin: 0 10px;
 }
 
 .profile-menu .navbar-inner {

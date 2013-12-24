@@ -1,12 +1,11 @@
-﻿@using EzBob.Web.Areas.Customer.Models
-@using EzBob.Web.Infrastructure
+﻿@using EzBob.Web.Infrastructure
 @using StructureMap
 @model EzBob.Web.Models.WizardModel
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     var config = ObjectFactory.GetInstance<IEzBobConfiguration>();
     bool taboolaPixelEnabled = config.TaboolaPixelEnabled;
-    var customer = (CustomerModel)Model.Customer;
+    var customer = Model.Customer;
     customer.IsProfile = true;
 }
 
@@ -59,8 +58,11 @@
                     <li><a href="#Settings">Settings</a></li>
                     <li class="divider-vertical"></li>
                     <li><a href="#InviteFriend">Refer A Friend</a></li>
-                    <li class="divider-vertical"></li>
-                    <li><a href="#Perks">Perks</a></li>
+                    @if (Model.Customer.Perks != null)
+                    {
+                        <li class="divider-vertical"></li>
+                        <li><a href="#Perks">Perks</a></li>
+                    }
                 </ul>
             </div>
         </div>

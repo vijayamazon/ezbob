@@ -1029,12 +1029,6 @@
     <Content Include="Content\js\Profile\ApplyForLoan\ApplyForLoanView.js">
       <DependentUpon>ApplyForLoanView.coffee</DependentUpon>
     </Content>
-    <Content Include="Content\js\Profile\Copy of ezbob.profile.inviteFriend.js">
-      <DependentUpon>ezbob.profile.perks.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Profile\Copy of ezbob.profile.inviteFriend.min.js">
-      <DependentUpon>ezbob.profile.perks.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\Profile\ezbob.profile.Agreements.min.js">
       <DependentUpon>ezbob.profile.Agreements.coffee</DependentUpon>
     </Content>
@@ -1043,6 +1037,12 @@
     </Content>
     <Content Include="Content\js\Profile\ezbob.profile.inviteFriend.min.js">
       <DependentUpon>ezbob.profile.inviteFriend.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Profile\ezbob.profile.perks.js">
+      <DependentUpon>ezbob.profile.perks.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Profile\ezbob.profile.perks.min.js">
+      <DependentUpon>ezbob.profile.perks.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Underwriter\CAIS\ezbob.underwriter.CAIS.caisManage.js">
       <DependentUpon>ezbob.underwriter.CAIS.caisManage.coffee</DependentUpon>

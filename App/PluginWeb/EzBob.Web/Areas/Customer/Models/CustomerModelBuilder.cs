@@ -23,19 +23,21 @@ namespace EzBob.Web.Areas.Customer.Models
 		private readonly PaymentRolloverRepository _paymentRolloverRepository;
 		private readonly ChangeLoanDetailsModelBuilder _changeLoanDetailsModelBuilder;
 		private readonly ICustomerInviteFriendRepository _customerInviteFriendRepository;
-
+		private readonly PerksRepository _perksRepository;
 		public CustomerModelBuilder(
 			ISecurityQuestionRepository questions, 
 			ICustomerRepository customerRepository, 
 			IUsersRepository users, 
 			PaymentRolloverRepository paymentRolloverRepository, 
-			ICustomerInviteFriendRepository customerInviteFriendRepository)
+			ICustomerInviteFriendRepository customerInviteFriendRepository, 
+			PerksRepository perksRepository)
 		{
 			_questions = questions;
 			_customerRepository = customerRepository;
 			_users = users;
 			_paymentRolloverRepository = paymentRolloverRepository;
 			_customerInviteFriendRepository = customerInviteFriendRepository;
+			_perksRepository = perksRepository;
 			_facade = new LoanPaymentFacade();
 			_changeLoanDetailsModelBuilder = new ChangeLoanDetailsModelBuilder();
 		}
@@ -209,6 +211,9 @@ namespace EzBob.Web.Areas.Customer.Models
 
 			customerModel.LastSavedWizardStep = ((customer.WizardStep == null) || customer.WizardStep.TheLastOne) ? "" : customer.WizardStep.Name;
 
+			var isDefault = customer.CollectionStatus != null && customer.CollectionStatus.CurrentStatus != null &&
+			                 customer.CollectionStatus.CurrentStatus.Name == "Default";
+			customerModel.Perks = isDefault ? null : _perksRepository.GetActivePerk();
             return customerModel;
         }
 
