@@ -298,11 +298,11 @@ namespace EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SetLateLoanStatus", ReplyAction="http://tempuri.org/IEzService/SetLateLoanStatusResponse")]
         System.Threading.Tasks.Task<EzService.ActionMetaData> SetLateLoanStatusAsync();
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateMarketplaces", ReplyAction="http://tempuri.org/IEzService/UpdateMarketplacesResponse")]
-        EzService.ActionMetaData UpdateMarketplaces(int customerId, int marketplaceId);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateMarketplace", ReplyAction="http://tempuri.org/IEzService/UpdateMarketplaceResponse")]
+        EzService.ActionMetaData UpdateMarketplace(int customerId, int marketplaceId);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateMarketplaces", ReplyAction="http://tempuri.org/IEzService/UpdateMarketplacesResponse")]
-        System.Threading.Tasks.Task<EzService.ActionMetaData> UpdateMarketplacesAsync(int customerId, int marketplaceId);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateMarketplace", ReplyAction="http://tempuri.org/IEzService/UpdateMarketplaceResponse")]
+        System.Threading.Tasks.Task<EzService.ActionMetaData> UpdateMarketplaceAsync(int customerId, int marketplaceId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateAllMarketplaces", ReplyAction="http://tempuri.org/IEzService/UpdateAllMarketplacesResponse")]
         EzService.ActionMetaData UpdateAllMarketplaces(int customerId);
@@ -590,12 +590,12 @@ namespace EzServiceReference {
             return base.Channel.SetLateLoanStatusAsync();
         }
         
-        public EzService.ActionMetaData UpdateMarketplaces(int customerId, int marketplaceId) {
-            return base.Channel.UpdateMarketplaces(customerId, marketplaceId);
+        public EzService.ActionMetaData UpdateMarketplace(int customerId, int marketplaceId) {
+            return base.Channel.UpdateMarketplace(customerId, marketplaceId);
         }
         
-        public System.Threading.Tasks.Task<EzService.ActionMetaData> UpdateMarketplacesAsync(int customerId, int marketplaceId) {
-            return base.Channel.UpdateMarketplacesAsync(customerId, marketplaceId);
+        public System.Threading.Tasks.Task<EzService.ActionMetaData> UpdateMarketplaceAsync(int customerId, int marketplaceId) {
+            return base.Channel.UpdateMarketplaceAsync(customerId, marketplaceId);
         }
         
         public EzService.ActionMetaData UpdateAllMarketplaces(int customerId) {

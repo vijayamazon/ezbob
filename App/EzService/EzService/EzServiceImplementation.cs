@@ -363,9 +363,9 @@ namespace EzService {
 			return Execute(typeof (SetLateLoanStatus));
 		} // SetLateLoanStatus
 
-		public ActionMetaData UpdateMarketplaces(int customerId, int marketplaceId) {
+		public ActionMetaData UpdateMarketplace(int customerId, int marketplaceId) {
 			return Execute(typeof (UpdateMarketplace), customerId, marketplaceId);
-		} // UpdateMarketplaces
+		} // UpdateMarketplace
 
 		public ActionMetaData UpdateAllMarketplaces(int customerId) {
 			return Execute(typeof (UpdateMarketplaces), customerId);

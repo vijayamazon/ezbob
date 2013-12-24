@@ -25,8 +25,10 @@ namespace EzBob.Web.Code.ApplicationCreator
         private static readonly ILog Log = LogManager.GetLogger(typeof(AppCreator));
         private readonly StrategyManager _sm;
         private readonly ISession _session;
-        private readonly ApplicationRepository _applicationRepository;
+		private readonly ApplicationRepository _applicationRepository;
 		private readonly bool useNewMailStrategies;
+		private readonly bool useNewUpdateMpStrategy;
+		private readonly bool useNewUpdateCustomerMpsStrategy;
 		private readonly EzServiceClient serviceClient = new EzServiceClient();
 
 	    public AppCreator(IEzBobConfiguration config, IUsersRepository users, ISession session, ApplicationRepository applicationRepository,
@@ -39,7 +41,9 @@ namespace EzBob.Web.Code.ApplicationCreator
             _strategies = strategies;
             _sm = new StrategyManager();
 
-		    useNewMailStrategies = configurationVariablesRepository.GetByNameAsBool("UseNewMailStrategies");
+			useNewMailStrategies = configurationVariablesRepository.GetByNameAsBool("UseNewMailStrategies");
+			useNewUpdateMpStrategy = configurationVariablesRepository.GetByNameAsBool("UseNewUpdateMpStrategy");
+			useNewUpdateCustomerMpsStrategy = configurationVariablesRepository.GetByNameAsBool("UseNewUpdateCustomerMpsStrategy");
         }
 
         public void AfterSignup(User user, string address)
@@ -169,28 +173,35 @@ namespace EzBob.Web.Code.ApplicationCreator
 
         public void CustomerMarketPlaceAdded(Customer customer, int umi)
         {
-            var strategyParameters = new[]
-                                             {
-                                                 new StrategyParameter("umi", umi),
-                                                 new StrategyParameter("refNum", customer.RefNumber),
-                                                 new StrategyParameter("userId", customer.Id)
-                                             };
-            CreateApplication(customer, strategyParameters, _config.CustomerMarketPlaceStrategyName);
+	        if (useNewUpdateMpStrategy)
+			{
+				serviceClient.UpdateMarketplace(customer.Id, umi);
+	        }
+	        else
+	        {
+		        var strategyParameters = new[]
+			        {
+				        new StrategyParameter("umi", umi),
+				        new StrategyParameter("refNum", customer.RefNumber),
+				        new StrategyParameter("userId", customer.Id)
+			        };
+		        CreateApplication(customer, strategyParameters, _config.CustomerMarketPlaceStrategyName);
+	        }
         }
 
         public void Evaluate(User user, NewCreditLineOption newCreditLineOption, int avoidAutomaticDescison, bool isUnderwriterForced = false)
         {
-            var strategyParameters = new[]
-                                             {
-                                                 new StrategyParameter("userId", user.Id),
-                                                 new StrategyParameter("Underwriter_Check", isUnderwriterForced ? 1 : 0),
-                                                 new StrategyParameter("NewCreditLineOption", (int)newCreditLineOption),
-                                                 new StrategyParameter("AvoidAutomaticDescison", avoidAutomaticDescison)
-                                             };
-            var application = CreateApplication(user, strategyParameters, _config.ScoringResultStrategyName);
-            var customer = _session.Get<Customer>(user.Id);
-            customer.LastStartedMainStrategy = application;
-            _session.Update(customer);
+		    var strategyParameters = new[]
+			    {
+				    new StrategyParameter("userId", user.Id),
+				    new StrategyParameter("Underwriter_Check", isUnderwriterForced ? 1 : 0),
+				    new StrategyParameter("NewCreditLineOption", (int) newCreditLineOption),
+				    new StrategyParameter("AvoidAutomaticDescison", avoidAutomaticDescison)
+			    };
+		    var application = CreateApplication(user, strategyParameters, _config.ScoringResultStrategyName);
+		    var customer = _session.Get<Customer>(user.Id);
+		    customer.LastStartedMainStrategy = application;
+		    _session.Update(customer);
         }
 
         public void EvaluateWithIdHubCustomAddress(User user, int checkType, string houseNumber, string houseName, string street,
@@ -434,12 +445,19 @@ namespace EzBob.Web.Code.ApplicationCreator
 
         public void UpdateAllMarketplaces(Customer customer)
         {
-            var strategyParameters = new[]
-                                         {
-                                             new StrategyParameter("customerId", customer.Id),
-                                             new StrategyParameter("userId", customer.Id)
-                                         };
-            CreateApplication(customer, strategyParameters, _config.UpdateMarketplacesStrategyName);
+	        if (useNewUpdateCustomerMpsStrategy)
+	        {
+				serviceClient.UpdateAllMarketplaces(customer.Id);
+	        }
+	        else
+	        {
+		        var strategyParameters = new[]
+			        {
+				        new StrategyParameter("customerId", customer.Id),
+				        new StrategyParameter("userId", customer.Id)
+			        };
+		        CreateApplication(customer, strategyParameters, _config.UpdateMarketplacesStrategyName);
+	        }
         }
 
         public void EmailRolloverAdded(Customer customer, decimal amount, DateTime expireDate)

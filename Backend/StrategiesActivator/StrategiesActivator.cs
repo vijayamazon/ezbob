@@ -494,7 +494,8 @@
 				Console.WriteLine("Usage: StrategiesActivator.exe CustomerMarketPlaceAdded <CustomerId> <marketplaceId>");
 				return;
 			}
-			new UpdateMarketplace(customerId, marketplaceId, m_oDB, m_oLog).Execute();
+
+			serviceClient.UpdateMarketplace(customerId, marketplaceId);
 		}
 
 		private void ActivateUpdateAllMarketplaces()
@@ -505,7 +506,8 @@
 				Console.WriteLine("Usage: StrategiesActivator.exe UpdateAllMarketplaces <CustomerId>");
 				return;
 			}
-			new UpdateMarketplaces(customerId, m_oDB, m_oLog).Execute();
+
+			serviceClient.UpdateAllMarketplaces(customerId);
 		}
 
 		private void ActivateUpdateTransactionStatus()

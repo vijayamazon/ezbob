@@ -261,11 +261,11 @@
   <wsdl:message name="IEzService_SetLateLoanStatus_OutputMessage">
     <wsdl:part name="parameters" element="tns:SetLateLoanStatusResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_UpdateMarketplaces_InputMessage">
-    <wsdl:part name="parameters" element="tns:UpdateMarketplaces" />
+  <wsdl:message name="IEzService_UpdateMarketplace_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateMarketplace" />
   </wsdl:message>
-  <wsdl:message name="IEzService_UpdateMarketplaces_OutputMessage">
-    <wsdl:part name="parameters" element="tns:UpdateMarketplacesResponse" />
+  <wsdl:message name="IEzService_UpdateMarketplace_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateMarketplaceResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_UpdateAllMarketplaces_InputMessage">
     <wsdl:part name="parameters" element="tns:UpdateAllMarketplaces" />
@@ -428,9 +428,9 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SetLateLoanStatus" message="tns:IEzService_SetLateLoanStatus_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SetLateLoanStatusResponse" message="tns:IEzService_SetLateLoanStatus_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="UpdateMarketplaces">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateMarketplaces" message="tns:IEzService_UpdateMarketplaces_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UpdateMarketplacesResponse" message="tns:IEzService_UpdateMarketplaces_OutputMessage" />
+    <wsdl:operation name="UpdateMarketplace">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateMarketplace" message="tns:IEzService_UpdateMarketplace_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UpdateMarketplaceResponse" message="tns:IEzService_UpdateMarketplace_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="UpdateAllMarketplaces">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateAllMarketplaces" message="tns:IEzService_UpdateAllMarketplaces_InputMessage" />
@@ -769,8 +769,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="UpdateMarketplaces">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/UpdateMarketplaces" style="document" />
+    <wsdl:operation name="UpdateMarketplace">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/UpdateMarketplace" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

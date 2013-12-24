@@ -360,8 +360,8 @@ namespace EzBob.Web.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SetLateLoanStatus", ReplyAction="http://tempuri.org/IEzService/SetLateLoanStatusResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData SetLateLoanStatus();
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateMarketplaces", ReplyAction="http://tempuri.org/IEzService/UpdateMarketplacesResponse")]
-        EzBob.Web.EzServiceReference.ActionMetaData UpdateMarketplaces(int customerId, int marketplaceId);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateMarketplace", ReplyAction="http://tempuri.org/IEzService/UpdateMarketplaceResponse")]
+        EzBob.Web.EzServiceReference.ActionMetaData UpdateMarketplace(int customerId, int marketplaceId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateAllMarketplaces", ReplyAction="http://tempuri.org/IEzService/UpdateAllMarketplacesResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData UpdateAllMarketplaces(int customerId);
@@ -520,8 +520,8 @@ namespace EzBob.Web.EzServiceReference {
             return base.Channel.SetLateLoanStatus();
         }
         
-        public EzBob.Web.EzServiceReference.ActionMetaData UpdateMarketplaces(int customerId, int marketplaceId) {
-            return base.Channel.UpdateMarketplaces(customerId, marketplaceId);
+        public EzBob.Web.EzServiceReference.ActionMetaData UpdateMarketplace(int customerId, int marketplaceId) {
+            return base.Channel.UpdateMarketplace(customerId, marketplaceId);
         }
         
         public EzBob.Web.EzServiceReference.ActionMetaData UpdateAllMarketplaces(int customerId) {

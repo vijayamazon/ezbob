@@ -499,7 +499,7 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="UpdateMarketplaces">
+  <xs:element name="UpdateMarketplace">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="customerId" type="xs:int" />
@@ -507,10 +507,10 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="UpdateMarketplacesResponse">
+  <xs:element name="UpdateMarketplaceResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q37="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="UpdateMarketplacesResult" nillable="true" type="q37:ActionMetaData" />
+        <xs:element xmlns:q37="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="UpdateMarketplaceResult" nillable="true" type="q37:ActionMetaData" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

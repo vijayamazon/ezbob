@@ -96,7 +96,7 @@ namespace EzService {
 		ActionMetaData SetLateLoanStatus();
 
 		[OperationContract]
-		ActionMetaData UpdateMarketplaces(int customerId, int marketplaceId);
+		ActionMetaData UpdateMarketplace(int customerId, int marketplaceId);
 
 		[OperationContract]
 		ActionMetaData UpdateAllMarketplaces(int customerId);
