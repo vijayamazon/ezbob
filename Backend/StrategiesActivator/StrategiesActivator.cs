@@ -1,4 +1,8 @@
-﻿namespace StrategiesActivator
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+
+namespace StrategiesActivator
 {
 	using System.ServiceModel;
 	using EzService;
@@ -34,121 +38,31 @@
 			);
 		}
 
-		public void Execute()
-		{
+		public void Execute() {
 			string strategyName = args[0];
-			switch (strategyName)
-			{
-				case "Greeting":
-					ActivateGreeting();
-					break;
-				case "ApprovedUser":
-					ActivateApprovedUser();
-					break;
-				case "CashTransferred":
-					ActivateCashTransferred();
-					break;
-				case "EmailRolloverAdded":
-					ActivateEmailRolloverAdded();
-					break;
-				case "EmailUnderReview":
-					ActivateEmailUnderReview();
-					break;
-				case "Escalated":
-					ActivateEscalated();
-					break;
-				case "GetCashFailed":
-					ActivateGetCashFailed();
-					break;
-				case "LoanFullyPaid":
-					ActivateLoanFullyPaid();
-					break;
-				case "MoreAMLandBWAInformation":
-					ActivateMoreAmLandBwaInformation();
-					break;
-				case "MoreAMLInformation":
-					ActivateMoreAmlInformation();
-					break;
-				case "MoreBWAInformation":
-					ActivateMoreBwaInformation();
-					break;
-				case "PasswordChanged":
-					ActivatePasswordChanged();
-					break;
-				case "PasswordRestored":
-					ActivatePasswordRestored();
-					break;
-				case "PayEarly":
-					ActivatePayEarly();
-					break;
-				case "PayPointAddedByUnderwriter":
-					ActivatePayPointAddedByUnderwriter();
-					break;
-				case "PayPointNameValidationFailed":
-					ActivatePayPointNameValidationFailed();
-					break;
-				case "RejectUser":
-					ActivateRejectUser();
-					break;
-				case "RenewEbayToken":
-					ActivateRenewEbayToken();
-					break;
-				case "RequestCashWithoutTakenLoan":
-					ActivateRequestCashWithoutTakenLoan();
-					break;
-				case "SendEmailVerification":
-					ActivateSendEmailVerification();
-					break;
-				case "ThreeInvalidAttempts":
-					ActivateThreeInvalidAttempts();
-					break;
-				case "TransferCashFailed":
-					ActivateTransferCashFailed();
-					break;
-				case "CaisGenerate":
-					ActivateCaisGenerate();
-					break;
-				case "CaisUpdate":
-					ActivateCaisUpdate();
-					break;
-				case "FirstOfMonthStatusNotifier":
-					ActivateFirstOfMonthStatusNotifier();
-					break;
-				case "FraudChecker":
-					ActivateFraudChecker();
-					break;
-				case "LateBy14Days":
-					ActivateLateBy14Days();
-					break;
-				case "PayPointCharger":
-					ActivatePayPointCharger();
-					break;
-				case "SetLateLoanStatus":
-					ActivateSetLateLoanStatus();
-					break;
-				case "CustomerMarketPlaceAdded":
-					ActivateCustomerMarketPlaceAdded();
-					break;
-				case "UpdateAllMarketplaces":
-					ActivateUpdateAllMarketplaces();
-					break;
-				case "UpdateTransactionStatus":
-					ActivateUpdateTransactionStatus();
-					break;
-				case "XDaysDue":
-					ActivateXDaysDue();
-					break;
-				case "MainStrategy":
-					ActivateMainStrategy();
-					break;
 
-				default:
-					Console.WriteLine("Strategy {0} is not supported", strategyName);
-					Console.WriteLine("Supported stratefies are:Greeting, ApprovedUser, CashTransferred, EmailRolloverAdded, EmailUnderReview, Escalated, GetCashFailed, LoanFullyPaid, MoreAMLandBWAInformation, MoreAMLInformation, MoreBWAInformation, PasswordChanged, PasswordRestored, PayEarly, PayPointAddedByUnderwriter, PayPointNameValidationFailed, RejectUser, RenewEbayToken, RequestCashWithoutTakenLoan, SendEmailVerification, ThreeInvalidAttempts, TransferCashFailed, CaisGenerate, CaisUpdate, FirstOfMonthStatusNotifier, FraudChecker, LateBy14Days, PayPointCharger, SetLateLoanStatus, CustomerMarketPlaceAdded, UpdateAllMarketplaces, UpdateTransactionStatus, XDaysDue, MainStrategy");
-					break;
+			MethodInfo[] aryMethods = this.GetType().GetMethods(BindingFlags.NonPublic | BindingFlags.Instance);
+
+			var oMethods = new SortedDictionary<string, MethodInfo>();
+
+			foreach (MethodInfo mi in aryMethods) {
+				IEnumerable<StrategyActivatorAttribute> oAttrList = mi.GetCustomAttributes<StrategyActivatorAttribute>();
+
+				if (oAttrList.Any())
+					oMethods[mi.Name] = mi;
+			} // foreach
+
+			string sKey = "Activate" + strategyName;
+
+			if (oMethods.ContainsKey(sKey))
+				oMethods[sKey].Invoke(this, new object[]{});
+			else {
+				Console.WriteLine("Strategy {0} is not supported", strategyName);
+				Console.WriteLine("Supported stratefies are: {0}", string.Join(", ", oMethods.Keys.Select(k => k.Substring(8))));
 			}
-		}
+		} // Execute
 
+		[StrategyActivator]
 		private void ActivateGreeting()
 		{
 			int customerId;
@@ -161,6 +75,7 @@
 			serviceClient.GreetingMailStrategy(customerId, args[2]);
 		}
 
+		[StrategyActivator]
 		private void ActivateApprovedUser()
 		{
 			int customerId;
@@ -174,6 +89,7 @@
 			serviceClient.ApprovedUser(customerId, loanAmount);
 		}
 
+		[StrategyActivator]
 		private void ActivateCashTransferred()
 		{
 			int customerId;
@@ -187,6 +103,7 @@
 			serviceClient.CashTransferred(customerId, amount);
 		}
 
+		[StrategyActivator]
 		private void ActivateEmailRolloverAdded()
 		{
 			int customerId;
@@ -200,6 +117,7 @@
 			serviceClient.EmailRolloverAdded(customerId, amount);
 		}
 
+		[StrategyActivator]
 		private void ActivateEmailUnderReview()
 		{
 			int customerId;
@@ -212,6 +130,7 @@
 			serviceClient.EmailUnderReview(customerId);
 		}
 
+		[StrategyActivator]
 		private void ActivateEscalated()
 		{
 			int customerId;
@@ -224,6 +143,7 @@
 			serviceClient.Escalated(customerId);
 		}
 
+		[StrategyActivator]
 		private void ActivateGetCashFailed()
 		{
 			int customerId;
@@ -236,6 +156,7 @@
 			serviceClient.GetCashFailed(customerId);
 		}
 
+		[StrategyActivator]
 		private void ActivateLoanFullyPaid()
 		{
 			int customerId;
@@ -248,6 +169,7 @@
 			serviceClient.LoanFullyPaid(customerId, args[2]);
 		}
 
+		[StrategyActivator]
 		private void ActivateMoreAmLandBwaInformation()
 		{
 			int customerId;
@@ -260,6 +182,7 @@
 			serviceClient.MoreAmLandBwaInformation(customerId);
 		}
 
+		[StrategyActivator]
 		private void ActivateMoreAmlInformation()
 		{
 			int customerId;
@@ -271,6 +194,7 @@
 			serviceClient.MoreAmlInformation(customerId);
 		}
 
+		[StrategyActivator]
 		private void ActivateMoreBwaInformation()
 		{
 			int customerId;
@@ -283,6 +207,7 @@
 			serviceClient.MoreBwaInformation(customerId);
 		}
 
+		[StrategyActivator]
 		private void ActivatePasswordChanged()
 		{
 			int customerId;
@@ -295,6 +220,7 @@
 			serviceClient.PasswordChanged(customerId, args[2]);
 		}
 
+		[StrategyActivator]
 		private void ActivatePasswordRestored()
 		{
 			int customerId;
@@ -307,6 +233,7 @@
 			serviceClient.PasswordRestored(customerId, args[2]);
 		}
 
+		[StrategyActivator]
 		private void ActivatePayEarly()
 		{
 			int customerId;
@@ -320,6 +247,7 @@
 			serviceClient.PayEarly(customerId, amount, args[3]);
 		}
 
+		[StrategyActivator]
 		private void ActivatePayPointAddedByUnderwriter()
 		{
 			int customerId, underwriterId;
@@ -332,6 +260,7 @@
 			serviceClient.PayPointAddedByUnderwriter(customerId, args[2], args[3], underwriterId);
 		}
 
+		[StrategyActivator]
 		private void ActivatePayPointNameValidationFailed()
 		{
 			int customerId;
@@ -344,6 +273,7 @@
 			serviceClient.PayPointNameValidationFailed(customerId, args[2]);
 		}
 
+		[StrategyActivator]
 		private void ActivateRejectUser()
 		{
 			int customerId;
@@ -356,6 +286,7 @@
 			serviceClient.RejectUser(customerId);
 		}
 
+		[StrategyActivator]
 		private void ActivateRenewEbayToken()
 		{
 			int customerId;
@@ -368,6 +299,7 @@
 			serviceClient.RenewEbayToken(customerId, args[2], args[3]);
 		}
 
+		[StrategyActivator]
 		private void ActivateRequestCashWithoutTakenLoan()
 		{
 			int customerId;
@@ -380,6 +312,7 @@
 			serviceClient.RequestCashWithoutTakenLoan(customerId);
 		}
 
+		[StrategyActivator]
 		private void ActivateSendEmailVerification()
 		{
 			int customerId;
@@ -392,6 +325,7 @@
 			serviceClient.SendEmailVerification(customerId, args[2]);
 		}
 
+		[StrategyActivator]
 		private void ActivateThreeInvalidAttempts()
 		{
 			int customerId;
@@ -404,6 +338,7 @@
 			serviceClient.ThreeInvalidAttempts(customerId, args[2]);
 		}
 
+		[StrategyActivator]
 		private void ActivateTransferCashFailed()
 		{
 			int customerId;
@@ -416,6 +351,7 @@
 			serviceClient.TransferCashFailed(customerId);
 		}
 
+		[StrategyActivator]
 		private void ActivateCaisGenerate()
 		{
 			int underwriterId;
@@ -428,6 +364,7 @@
 			serviceClient.CaisGenerate(underwriterId);
 		}
 
+		[StrategyActivator]
 		private void ActivateCaisUpdate()
 		{
 			int caisId;
@@ -440,6 +377,7 @@
 			serviceClient.CaisUpdate(caisId);
 		}
 
+		[StrategyActivator]
 		private void ActivateFirstOfMonthStatusNotifier()
 		{
 			if (args.Length != 1)
@@ -450,6 +388,7 @@
 			new FirstOfMonthStatusNotifier(m_oDB, m_oLog).Execute();
 		}
 
+		[StrategyActivator]
 		private void ActivateFraudChecker()
 		{
 			int customerId;
@@ -462,6 +401,7 @@
 			serviceClient.FraudChecker(customerId);
 		}
 
+		[StrategyActivator]
 		private void ActivateLateBy14Days()
 		{
 			if (args.Length != 1)
@@ -472,6 +412,7 @@
 			new LateBy14Days(m_oDB, m_oLog).Execute();
 		}
 
+		[StrategyActivator]
 		private void ActivatePayPointCharger()
 		{
 			if (args.Length != 1)
@@ -482,6 +423,7 @@
 			new PayPointCharger(m_oDB, m_oLog).Execute();
 		}
 
+		[StrategyActivator]
 		private void ActivateSetLateLoanStatus()
 		{
 			if (args.Length != 1)
@@ -492,6 +434,7 @@
 			new SetLateLoanStatus(m_oDB, m_oLog).Execute();
 		}
 
+		[StrategyActivator]
 		private void ActivateCustomerMarketPlaceAdded()
 		{
 			int customerId, marketplaceId;
@@ -504,6 +447,7 @@
 			serviceClient.UpdateMarketplace(customerId, marketplaceId);
 		}
 
+		[StrategyActivator]
 		private void ActivateUpdateAllMarketplaces()
 		{
 			int customerId;
@@ -516,6 +460,7 @@
 			serviceClient.UpdateAllMarketplaces(customerId);
 		}
 
+		[StrategyActivator]
 		private void ActivateUpdateTransactionStatus()
 		{
 			if (args.Length != 1)
@@ -526,6 +471,7 @@
 			new UpdateTransactionStatus(m_oDB, m_oLog).Execute();
 		}
 
+		[StrategyActivator]
 		private void ActivateXDaysDue()
 		{
 			if (args.Length != 1)
@@ -536,6 +482,7 @@
 			new XDaysDue(m_oDB, m_oLog).Execute();
 		}
 
+		[StrategyActivator]
 		private void ActivateMainStrategy()
 		{
 			int customerId, avoidAutoDescison;

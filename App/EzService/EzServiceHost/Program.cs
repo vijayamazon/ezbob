@@ -163,27 +163,13 @@ namespace EzServiceHost {
 
 			m_oCfg = new Configuration(m_sInstanceName, m_oDB, m_oLog);
 
-			m_oHost = new EzServiceHost(
-				new EzServiceInstanceRuntimeData { Host = this, Log = m_oLog, DB = m_oDB, InstanceName = m_sInstanceName, InstanceID = m_oCfg.InstanceID },
-				typeof(EzServiceImplementation),
-				new Uri(m_oCfg.GetAdminEndpointAddress()),
-				new Uri(m_oCfg.GetClientEndpointAddress())
-			);
-
-			SetMetadataEndpoit();
-
-			m_oHost.AddServiceEndpoint(typeof(IEzServiceAdmin), new NetTcpBinding(), m_oCfg.GetAdminEndpointAddress());
-
-			// To enable HTTP binding on custom port: open cmd.exe as administrator and
-			//     netsh http add urlacl url=http://+:7082/ user=ALEXBO-PC\alexbo
-			// where 7082 is your customer port and ALEXBO-PC\alexbo is the user
-			// who runs the instance of the host.
-			// To remove permission:
-			//     netsh http add urlacl url=http://+:7082/
-			// Mind the backslash at the end of the URL.
-			m_oHost.AddServiceEndpoint(typeof(IEzService), new NetHttpBinding(), m_oCfg.GetClientEndpointAddress());
-
-			m_oLog.Info("EzService endpoint has been created.");
+			m_oHost = new EzServiceHost(m_oCfg, new EzServiceInstanceRuntimeData {
+				Host = this,
+				Log = m_oLog,
+				DB = m_oDB,
+				InstanceName = m_sInstanceName,
+				InstanceID = m_oCfg.InstanceID
+			});
 
 			return true;
 		} // Init
@@ -235,26 +221,6 @@ namespace EzServiceHost {
 		} // Done
 
 		#endregion method Done
-
-		#region method SetMetadataEndpoint
-
-		private void SetMetadataEndpoit() {
-			m_oLog.Info("Establishing EzService meta data publishing endpoint...");
-
-			ServiceMetadataBehavior metadataBehavior = m_oHost.Description.Behaviors.Find<ServiceMetadataBehavior>();
-
-			if (metadataBehavior == null) {
-				metadataBehavior = new ServiceMetadataBehavior { HttpGetEnabled = true };
-				m_oHost.Description.Behaviors.Add(metadataBehavior);
-			} // if
-
-			Binding binding = MetadataExchangeBindings.CreateMexTcpBinding();
-			m_oHost.AddServiceEndpoint(typeof(IMetadataExchange), binding, "MEX");
-
-			m_oLog.Info("Establishing EzService meta data publishing endpoint completed.");
-		} // SetMetadataEndpoint
-
-		#endregion method SetMetadataEndpoint
 
 		#region method NotifyStartStop
 
