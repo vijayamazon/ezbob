@@ -1029,6 +1029,12 @@
     <Content Include="Content\js\Profile\ApplyForLoan\ApplyForLoanView.js">
       <DependentUpon>ApplyForLoanView.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Profile\Copy of ezbob.profile.inviteFriend.js">
+      <DependentUpon>ezbob.profile.perks.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Profile\Copy of ezbob.profile.inviteFriend.min.js">
+      <DependentUpon>ezbob.profile.perks.coffee</DependentUpon>
+    </Content>
     <Content Include="Content\js\Profile\ezbob.profile.Agreements.min.js">
       <DependentUpon>ezbob.profile.Agreements.coffee</DependentUpon>
     </Content>
@@ -1201,6 +1207,8 @@
     <Content Include="Content\js\Wizard\ezbob.wizardStepsModel.js" />
     <Content Include="Content\js\Wizard\yourInfo\ezbob.steps.companydetails.js" />
     <Content Include="Content\js\Wizard\yourInfo\ezbob.yourInfo.employeeCount.js" />
+    <Content Include="Areas\Customer\Views\Profile\PerksTemplate.cshtml" />
+    <Content Include="Content\js\Profile\ezbob.profile.perks.coffee" />
     <None Include="Service References\EzServiceReference\configuration91.svcinfo" />
     <None Include="Service References\EzServiceReference\configuration.svcinfo" />
     <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.ActionMetaData.datasource">

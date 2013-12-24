@@ -47,21 +47,21 @@
 
         <div class="navbar profile-menu">
             <div class="navbar-inner">
-                <div class="container-fluid">
-                    <ul class="nav">
-                        <li class="active"><a href="#AccountActivity">Account Activity</a></li>
-                        <li class="divider-vertical"></li>
-                        <li><a href="#YourStores">Accounts</a></li>
-                        <li class="divider-vertical"></li>
-                        <li><a href="#PaymentAccounts">Payment Accounts</a></li>
-                        <li class="divider-vertical"></li>
-                        <li><a href="#YourDetails">My Information</a></li>
-                        <li class="divider-vertical"></li>
-                        <li><a href="#Settings">Settings</a></li>
-                        <li class="divider-vertical"></li>
-                        <li><a href="#InviteFriend">Refer A Friend</a></li>
-                    </ul>
-                </div>
+                <ul class="nav">
+                    <li class="active"><a href="#AccountActivity">Account Activity</a></li>
+                    <li class="divider-vertical"></li>
+                    <li><a href="#YourStores">Accounts</a></li>
+                    <li class="divider-vertical"></li>
+                    <li><a href="#PaymentAccounts">Payment Accounts</a></li>
+                    <li class="divider-vertical"></li>
+                    <li><a href="#YourDetails">My Information</a></li>
+                    <li class="divider-vertical"></li>
+                    <li><a href="#Settings">Settings</a></li>
+                    <li class="divider-vertical"></li>
+                    <li><a href="#InviteFriend">Refer A Friend</a></li>
+                    <li class="divider-vertical"></li>
+                    <li><a href="#Perks">Perks</a></li>
+                </ul>
             </div>
         </div>
 
@@ -185,7 +185,7 @@
             <div id="refresh_ekm_help" class="help_window">
                 <h2>Update ekmpowershop account credentials</h2>
                 <p>Your credentials changed, please provide new credentials below.</p>
-                <p class="error" style="color:red;min-height:32px;" id="update-ekm-error"> </p>
+                <p class="error" style="color: red; min-height: 32px;" id="update-ekm-error"></p>
                 <br />
                 @EzForm.InputText("refresh_ekm_login", "ekm login", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "refresh-account:ekm_login")
                 @EzForm.Password("refresh_ekm_password", "ekm password", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "refresh-account:ekm_password")
@@ -287,6 +287,7 @@
     @{Html.RenderPartial("StoreInfoMain");}
     @{Html.RenderPartial("PayPalInstructions");}
     @{Html.RenderPartial("InviteFriendTemplate");}
+    @{Html.RenderPartial("PerksTemplate");}
     @{Html.RenderPartial("~/Areas/Customer/Views/Shared/Profile/_PayPointCardSelectViewTemplate.cshtml");}
     @{Html.RenderPartial("~/Areas/Customer/Views/Shared/Shops/EKMAccoutInfoTemplate.cshtml");}
     @{Html.RenderPartial("~/Areas/Customer/Views/Shared/Shops/YodleeAccoutInfoTemplate.cshtml");}

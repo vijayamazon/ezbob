@@ -429,6 +429,7 @@ namespace EzBob.Web.Infrastructure
                 .Add("~/Content/js/Profile/ezbob.profile.yourInfo.coffee")
                 .Add("~/Content/js/Profile/ezbob.profile.paypointSchedule.js")
 				.Add("~/Content/js/Profile/ezbob.profile.inviteFriend.coffee")
+				.Add("~/Content/js/Profile/ezbob.profile.perks.coffee")
                 .Add("~/Content/js/Profile/Settings/ezbob.profile.settingsMain.js")
                 .Add("~/Content/js/Profile/Settings/ezbob.profile.settingsMaster.js")
                 .Add("~/Content/js/Profile/Settings/ezbob.profile.settingsPassword.js")
