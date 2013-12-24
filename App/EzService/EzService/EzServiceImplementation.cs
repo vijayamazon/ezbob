@@ -263,17 +263,17 @@ namespace EzService {
 			return Execute(typeof (EmailUnderReview), customerId);
 		} // EmailUnderReview
 
-		public ActionMetaData ActivateEscalated(int customerId) {
+		public ActionMetaData Escalated(int customerId) {
 			return Execute(typeof (Escalated), customerId);
-		} // ActivateEscalated
+		} // Escalated
 
-		public ActionMetaData ActivateGetCashFailed(int customerId) {
+		public ActionMetaData GetCashFailed(int customerId) {
 			return Execute(typeof (GetCashFailed), customerId);
-		} // ActivateGetCashFailed
+		} // GetCashFailed
 
-		public ActionMetaData ActivateLoanFullyPaid(int customerId, string loanRefNum) {
+		public ActionMetaData LoanFullyPaid(int customerId, string loanRefNum) {
 			return Execute(typeof(LoanFullyPaid), customerId, loanRefNum);
-		} // ActivateLoanFullyPaid
+		} // LoanFullyPaid
 
 		public ActionMetaData MoreAmLandBwaInformation(int customerId) {
 			return Execute(typeof (MoreAMLandBWAInformation), customerId);
@@ -295,7 +295,7 @@ namespace EzService {
 			return Execute(typeof (PasswordRestored), customerId, password);
 		} // PasswordRestored
 
-		public ActionMetaData PayEarly(int customerId, int amount, string loanRefNum) {
+		public ActionMetaData PayEarly(int customerId, decimal amount, string loanRefNum) {
 			return Execute(typeof (PayEarly), customerId, amount, loanRefNum);
 		} // PayEarly
 

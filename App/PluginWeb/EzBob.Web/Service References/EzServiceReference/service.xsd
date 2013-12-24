@@ -143,35 +143,35 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="ActivateEscalated">
+  <xs:element name="Escalated">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="customerId" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="ActivateEscalatedResponse">
+  <xs:element name="EscalatedResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="ActivateEscalatedResult" nillable="true" type="q12:ActionMetaData" />
+        <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="EscalatedResult" nillable="true" type="q12:ActionMetaData" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="ActivateGetCashFailed">
+  <xs:element name="GetCashFailed">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="customerId" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="ActivateGetCashFailedResponse">
+  <xs:element name="GetCashFailedResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="ActivateGetCashFailedResult" nillable="true" type="q13:ActionMetaData" />
+        <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="GetCashFailedResult" nillable="true" type="q13:ActionMetaData" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="ActivateLoanFullyPaid">
+  <xs:element name="LoanFullyPaid">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="customerId" type="xs:int" />
@@ -179,10 +179,10 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="ActivateLoanFullyPaidResponse">
+  <xs:element name="LoanFullyPaidResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="ActivateLoanFullyPaidResult" nillable="true" type="q14:ActionMetaData" />
+        <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="LoanFullyPaidResult" nillable="true" type="q14:ActionMetaData" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -262,7 +262,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="customerId" type="xs:int" />
-        <xs:element minOccurs="0" name="amount" type="xs:int" />
+        <xs:element minOccurs="0" name="amount" type="xs:decimal" />
         <xs:element minOccurs="0" name="loanRefNum" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>

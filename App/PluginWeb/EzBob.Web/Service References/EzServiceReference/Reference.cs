@@ -285,14 +285,14 @@ namespace EzBob.Web.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EmailUnderReview", ReplyAction="http://tempuri.org/IEzService/EmailUnderReviewResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData EmailUnderReview(int customerId);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ActivateEscalated", ReplyAction="http://tempuri.org/IEzService/ActivateEscalatedResponse")]
-        EzBob.Web.EzServiceReference.ActionMetaData ActivateEscalated(int customerId);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/Escalated", ReplyAction="http://tempuri.org/IEzService/EscalatedResponse")]
+        EzBob.Web.EzServiceReference.ActionMetaData Escalated(int customerId);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ActivateGetCashFailed", ReplyAction="http://tempuri.org/IEzService/ActivateGetCashFailedResponse")]
-        EzBob.Web.EzServiceReference.ActionMetaData ActivateGetCashFailed(int customerId);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCashFailed", ReplyAction="http://tempuri.org/IEzService/GetCashFailedResponse")]
+        EzBob.Web.EzServiceReference.ActionMetaData GetCashFailed(int customerId);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ActivateLoanFullyPaid", ReplyAction="http://tempuri.org/IEzService/ActivateLoanFullyPaidResponse")]
-        EzBob.Web.EzServiceReference.ActionMetaData ActivateLoanFullyPaid(int customerId, string loanRefNum);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoanFullyPaid", ReplyAction="http://tempuri.org/IEzService/LoanFullyPaidResponse")]
+        EzBob.Web.EzServiceReference.ActionMetaData LoanFullyPaid(int customerId, string loanRefNum);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MoreAmLandBwaInformation", ReplyAction="http://tempuri.org/IEzService/MoreAmLandBwaInformationResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData MoreAmLandBwaInformation(int customerId);
@@ -310,7 +310,7 @@ namespace EzBob.Web.EzServiceReference {
         EzBob.Web.EzServiceReference.ActionMetaData PasswordRestored(int customerId, string password);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PayEarly", ReplyAction="http://tempuri.org/IEzService/PayEarlyResponse")]
-        EzBob.Web.EzServiceReference.ActionMetaData PayEarly(int customerId, int amount, string loanRefNum);
+        EzBob.Web.EzServiceReference.ActionMetaData PayEarly(int customerId, decimal amount, string loanRefNum);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PayPointAddedByUnderwriter", ReplyAction="http://tempuri.org/IEzService/PayPointAddedByUnderwriterResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData PayPointAddedByUnderwriter(int customerId, string cardno, string underwriterName, int underwriterId);
@@ -417,16 +417,16 @@ namespace EzBob.Web.EzServiceReference {
             return base.Channel.EmailUnderReview(customerId);
         }
         
-        public EzBob.Web.EzServiceReference.ActionMetaData ActivateEscalated(int customerId) {
-            return base.Channel.ActivateEscalated(customerId);
+        public EzBob.Web.EzServiceReference.ActionMetaData Escalated(int customerId) {
+            return base.Channel.Escalated(customerId);
         }
         
-        public EzBob.Web.EzServiceReference.ActionMetaData ActivateGetCashFailed(int customerId) {
-            return base.Channel.ActivateGetCashFailed(customerId);
+        public EzBob.Web.EzServiceReference.ActionMetaData GetCashFailed(int customerId) {
+            return base.Channel.GetCashFailed(customerId);
         }
         
-        public EzBob.Web.EzServiceReference.ActionMetaData ActivateLoanFullyPaid(int customerId, string loanRefNum) {
-            return base.Channel.ActivateLoanFullyPaid(customerId, loanRefNum);
+        public EzBob.Web.EzServiceReference.ActionMetaData LoanFullyPaid(int customerId, string loanRefNum) {
+            return base.Channel.LoanFullyPaid(customerId, loanRefNum);
         }
         
         public EzBob.Web.EzServiceReference.ActionMetaData MoreAmLandBwaInformation(int customerId) {
@@ -449,7 +449,7 @@ namespace EzBob.Web.EzServiceReference {
             return base.Channel.PasswordRestored(customerId, password);
         }
         
-        public EzBob.Web.EzServiceReference.ActionMetaData PayEarly(int customerId, int amount, string loanRefNum) {
+        public EzBob.Web.EzServiceReference.ActionMetaData PayEarly(int customerId, decimal amount, string loanRefNum) {
             return base.Channel.PayEarly(customerId, amount, loanRefNum);
         }
         

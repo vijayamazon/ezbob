@@ -40,7 +40,6 @@ namespace EzBob.Web.Code.ApplicationCreator
             _sm = new StrategyManager();
 
 		    useNewMailStrategies = configurationVariablesRepository.GetByNameAsBool("UseNewMailStrategies");
-
         }
 
         public void AfterSignup(User user, string address)
@@ -89,28 +88,42 @@ namespace EzBob.Web.Code.ApplicationCreator
 
         public void ThreeInvalidAttempts(User user, string firstName, string password)
         {
-			var customer = _session.Get<Customer>(user.Id);
+	        if (useNewMailStrategies)
+	        {
+				serviceClient.ThreeInvalidAttempts(user.Id, password);
+	        }
+	        else
+	        {
+		        var customer = _session.Get<Customer>(user.Id);
 
-            var strategyParameters = new[]
-                                             {
-                                                 new StrategyParameter("userId", user.Id),
-                                                 new StrategyParameter("email", user.EMail),
-                                                 new StrategyParameter("FirstName", customer.PersonalInfo.FirstName),
-                                                 new StrategyParameter("Password", password)
-                                             };
-            CreateApplication(user, strategyParameters, _config.ThreeInvalidAttemptsStrategyName);
+		        var strategyParameters = new[]
+			        {
+				        new StrategyParameter("userId", user.Id),
+				        new StrategyParameter("email", user.EMail),
+				        new StrategyParameter("FirstName", customer.PersonalInfo.FirstName),
+				        new StrategyParameter("Password", password)
+			        };
+		        CreateApplication(user, strategyParameters, _config.ThreeInvalidAttemptsStrategyName);
+	        }
         }
 
         public void PasswordChanged(User user, string firstName, string password)
         {
-            var strategyParameters = new[]
-                                             {
-                                                 new StrategyParameter("userId", user.Id),
-                                                 new StrategyParameter("email", user.EMail),
-                                                 new StrategyParameter("FirstName", firstName),
-                                                 new StrategyParameter("Password", password)
-                                             };
-            CreateApplication(user, strategyParameters, _config.ChangePasswordStrategyName);
+	        if (useNewMailStrategies)
+	        {
+		        serviceClient.PasswordChanged(user.Id, password);
+	        }
+	        else
+	        {
+		        var strategyParameters = new[]
+			        {
+				        new StrategyParameter("userId", user.Id),
+				        new StrategyParameter("email", user.EMail),
+				        new StrategyParameter("FirstName", firstName),
+				        new StrategyParameter("Password", password)
+			        };
+		        CreateApplication(user, strategyParameters, _config.ChangePasswordStrategyName);
+	        }
         }
 
         private Application CreateApplication(Customer customer, IEnumerable<StrategyParameter> strategyParameters, string strategyName)
@@ -137,14 +150,21 @@ namespace EzBob.Web.Code.ApplicationCreator
 
         public void PasswordRestored(User user, string emailTo, string firstName, string password)
         {
-            var strategyParameters = new[]
-                                             {
-                                                 new StrategyParameter("userId", user.Id),
-                                                 new StrategyParameter("email", emailTo),
-                                                 new StrategyParameter("FirstName", firstName),
-                                                 new StrategyParameter("Password", password)
-                                             };
-            CreateApplication(user, strategyParameters, _config.RestorePasswordStrategyName);
+	        if (useNewMailStrategies)
+	        {
+		        serviceClient.PasswordRestored(user.Id, password);
+	        }
+	        else
+	        {
+		        var strategyParameters = new[]
+			        {
+				        new StrategyParameter("userId", user.Id),
+				        new StrategyParameter("email", emailTo),
+				        new StrategyParameter("FirstName", firstName),
+				        new StrategyParameter("Password", password)
+			        };
+		        CreateApplication(user, strategyParameters, _config.RestorePasswordStrategyName);
+	        }
         }
 
         public void CustomerMarketPlaceAdded(Customer customer, int umi)
@@ -197,38 +217,58 @@ namespace EzBob.Web.Code.ApplicationCreator
 
         public void GetCashFailed(User user, string firstName)
         {
-            var strategyParameters = new[]
-                                             {
-                                                 new StrategyParameter("email", user.EMail),
-                                                 new StrategyParameter("userId", user.Id),
-                                                 new StrategyParameter("FirstName", firstName)
-                                             };
-            CreateApplication(user, strategyParameters, _config.GetCashFailedStrategyName);
+	        if (useNewMailStrategies)
+	        {
+		        serviceClient.GetCashFailed(user.Id);
+	        }
+	        else
+	        {
+		        var strategyParameters = new[]
+			        {
+				        new StrategyParameter("email", user.EMail),
+				        new StrategyParameter("userId", user.Id),
+				        new StrategyParameter("FirstName", firstName)
+			        };
+		        CreateApplication(user, strategyParameters, _config.GetCashFailedStrategyName);
+	        }
         }
 
         public void TransferCashFailed(User user, string firstName)
         {
-            var strategyParameters = new[]
-                                             {
-                                                 new StrategyParameter("email", user.EMail),
-                                                 new StrategyParameter("FirstName", firstName)
-                                             };
-            CreateApplication(user, strategyParameters, _config.TransferCashFailedStrategyName);
+	        if (useNewMailStrategies)
+	        {
+		        serviceClient.TransferCashFailed(user.Id);
+	        }
+	        else
+	        {
+		        var strategyParameters = new[]
+			        {
+				        new StrategyParameter("email", user.EMail),
+				        new StrategyParameter("FirstName", firstName)
+			        };
+		        CreateApplication(user, strategyParameters, _config.TransferCashFailedStrategyName);
+	        }
         }
-
 
         public void PayEarly(User user, DateTime date, decimal? amount, string firstName, string refNumber)
         {
-            var strategyParameters = new[]
-                                             {
-                                                 new StrategyParameter("email", user.EMail),
-                                                 new StrategyParameter("userId", user.Id),
-                                                 new StrategyParameter("Date", date),
-                                                 new StrategyParameter("Amount", amount),
-                                                 new StrategyParameter("FirstName", firstName),
-                                                 new StrategyParameter("RefNum", refNumber)
-                                             };
-            CreateApplication(user, strategyParameters, _config.PayEarlyStrategyName);
+	        if (useNewMailStrategies)
+	        {
+				serviceClient.PayEarly(user.Id, amount.HasValue ? amount.Value : 0, refNumber);
+	        }
+	        else
+	        {
+		        var strategyParameters = new[]
+			        {
+				        new StrategyParameter("email", user.EMail),
+				        new StrategyParameter("userId", user.Id),
+				        new StrategyParameter("Date", date),
+				        new StrategyParameter("Amount", amount),
+				        new StrategyParameter("FirstName", firstName),
+				        new StrategyParameter("RefNum", refNumber)
+			        };
+		        CreateApplication(user, strategyParameters, _config.PayEarlyStrategyName);
+	        }
         }
 
         public void PayPointNameValidationFailed(string cardHodlerName, User user, Customer customer)

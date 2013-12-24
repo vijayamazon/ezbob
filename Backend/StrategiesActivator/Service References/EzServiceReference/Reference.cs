@@ -148,23 +148,23 @@ namespace EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EmailUnderReview", ReplyAction="http://tempuri.org/IEzService/EmailUnderReviewResponse")]
         System.Threading.Tasks.Task<EzService.ActionMetaData> EmailUnderReviewAsync(int customerId);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ActivateEscalated", ReplyAction="http://tempuri.org/IEzService/ActivateEscalatedResponse")]
-        EzService.ActionMetaData ActivateEscalated(int customerId);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/Escalated", ReplyAction="http://tempuri.org/IEzService/EscalatedResponse")]
+        EzService.ActionMetaData Escalated(int customerId);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ActivateEscalated", ReplyAction="http://tempuri.org/IEzService/ActivateEscalatedResponse")]
-        System.Threading.Tasks.Task<EzService.ActionMetaData> ActivateEscalatedAsync(int customerId);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/Escalated", ReplyAction="http://tempuri.org/IEzService/EscalatedResponse")]
+        System.Threading.Tasks.Task<EzService.ActionMetaData> EscalatedAsync(int customerId);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ActivateGetCashFailed", ReplyAction="http://tempuri.org/IEzService/ActivateGetCashFailedResponse")]
-        EzService.ActionMetaData ActivateGetCashFailed(int customerId);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCashFailed", ReplyAction="http://tempuri.org/IEzService/GetCashFailedResponse")]
+        EzService.ActionMetaData GetCashFailed(int customerId);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ActivateGetCashFailed", ReplyAction="http://tempuri.org/IEzService/ActivateGetCashFailedResponse")]
-        System.Threading.Tasks.Task<EzService.ActionMetaData> ActivateGetCashFailedAsync(int customerId);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCashFailed", ReplyAction="http://tempuri.org/IEzService/GetCashFailedResponse")]
+        System.Threading.Tasks.Task<EzService.ActionMetaData> GetCashFailedAsync(int customerId);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ActivateLoanFullyPaid", ReplyAction="http://tempuri.org/IEzService/ActivateLoanFullyPaidResponse")]
-        EzService.ActionMetaData ActivateLoanFullyPaid(int customerId, string loanRefNum);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoanFullyPaid", ReplyAction="http://tempuri.org/IEzService/LoanFullyPaidResponse")]
+        EzService.ActionMetaData LoanFullyPaid(int customerId, string loanRefNum);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ActivateLoanFullyPaid", ReplyAction="http://tempuri.org/IEzService/ActivateLoanFullyPaidResponse")]
-        System.Threading.Tasks.Task<EzService.ActionMetaData> ActivateLoanFullyPaidAsync(int customerId, string loanRefNum);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoanFullyPaid", ReplyAction="http://tempuri.org/IEzService/LoanFullyPaidResponse")]
+        System.Threading.Tasks.Task<EzService.ActionMetaData> LoanFullyPaidAsync(int customerId, string loanRefNum);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MoreAmLandBwaInformation", ReplyAction="http://tempuri.org/IEzService/MoreAmLandBwaInformationResponse")]
         EzService.ActionMetaData MoreAmLandBwaInformation(int customerId);
@@ -197,10 +197,10 @@ namespace EzServiceReference {
         System.Threading.Tasks.Task<EzService.ActionMetaData> PasswordRestoredAsync(int customerId, string password);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PayEarly", ReplyAction="http://tempuri.org/IEzService/PayEarlyResponse")]
-        EzService.ActionMetaData PayEarly(int customerId, int amount, string loanRefNum);
+        EzService.ActionMetaData PayEarly(int customerId, decimal amount, string loanRefNum);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PayEarly", ReplyAction="http://tempuri.org/IEzService/PayEarlyResponse")]
-        System.Threading.Tasks.Task<EzService.ActionMetaData> PayEarlyAsync(int customerId, int amount, string loanRefNum);
+        System.Threading.Tasks.Task<EzService.ActionMetaData> PayEarlyAsync(int customerId, decimal amount, string loanRefNum);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PayPointAddedByUnderwriter", ReplyAction="http://tempuri.org/IEzService/PayPointAddedByUnderwriterResponse")]
         EzService.ActionMetaData PayPointAddedByUnderwriter(int customerId, string cardno, string underwriterName, int underwriterId);
@@ -384,28 +384,28 @@ namespace EzServiceReference {
             return base.Channel.EmailUnderReviewAsync(customerId);
         }
         
-        public EzService.ActionMetaData ActivateEscalated(int customerId) {
-            return base.Channel.ActivateEscalated(customerId);
+        public EzService.ActionMetaData Escalated(int customerId) {
+            return base.Channel.Escalated(customerId);
         }
         
-        public System.Threading.Tasks.Task<EzService.ActionMetaData> ActivateEscalatedAsync(int customerId) {
-            return base.Channel.ActivateEscalatedAsync(customerId);
+        public System.Threading.Tasks.Task<EzService.ActionMetaData> EscalatedAsync(int customerId) {
+            return base.Channel.EscalatedAsync(customerId);
         }
         
-        public EzService.ActionMetaData ActivateGetCashFailed(int customerId) {
-            return base.Channel.ActivateGetCashFailed(customerId);
+        public EzService.ActionMetaData GetCashFailed(int customerId) {
+            return base.Channel.GetCashFailed(customerId);
         }
         
-        public System.Threading.Tasks.Task<EzService.ActionMetaData> ActivateGetCashFailedAsync(int customerId) {
-            return base.Channel.ActivateGetCashFailedAsync(customerId);
+        public System.Threading.Tasks.Task<EzService.ActionMetaData> GetCashFailedAsync(int customerId) {
+            return base.Channel.GetCashFailedAsync(customerId);
         }
         
-        public EzService.ActionMetaData ActivateLoanFullyPaid(int customerId, string loanRefNum) {
-            return base.Channel.ActivateLoanFullyPaid(customerId, loanRefNum);
+        public EzService.ActionMetaData LoanFullyPaid(int customerId, string loanRefNum) {
+            return base.Channel.LoanFullyPaid(customerId, loanRefNum);
         }
         
-        public System.Threading.Tasks.Task<EzService.ActionMetaData> ActivateLoanFullyPaidAsync(int customerId, string loanRefNum) {
-            return base.Channel.ActivateLoanFullyPaidAsync(customerId, loanRefNum);
+        public System.Threading.Tasks.Task<EzService.ActionMetaData> LoanFullyPaidAsync(int customerId, string loanRefNum) {
+            return base.Channel.LoanFullyPaidAsync(customerId, loanRefNum);
         }
         
         public EzService.ActionMetaData MoreAmLandBwaInformation(int customerId) {
@@ -448,11 +448,11 @@ namespace EzServiceReference {
             return base.Channel.PasswordRestoredAsync(customerId, password);
         }
         
-        public EzService.ActionMetaData PayEarly(int customerId, int amount, string loanRefNum) {
+        public EzService.ActionMetaData PayEarly(int customerId, decimal amount, string loanRefNum) {
             return base.Channel.PayEarly(customerId, amount, loanRefNum);
         }
         
-        public System.Threading.Tasks.Task<EzService.ActionMetaData> PayEarlyAsync(int customerId, int amount, string loanRefNum) {
+        public System.Threading.Tasks.Task<EzService.ActionMetaData> PayEarlyAsync(int customerId, decimal amount, string loanRefNum) {
             return base.Channel.PayEarlyAsync(customerId, amount, loanRefNum);
         }
         

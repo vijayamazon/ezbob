@@ -181,7 +181,8 @@ namespace StrategiesActivator
 				Console.WriteLine("Usage: StrategiesActivator.exe CashTransferred <CustomerId> <amount>");
 				return;
 			}
-			new CashTransferred(customerId, amount, m_oDB, m_oLog).Execute();
+
+			serviceClient.CashTransferred(customerId, amount);
 		}
 
 		private void ActivateEmailRolloverAdded()
@@ -226,7 +227,8 @@ namespace StrategiesActivator
 				Console.WriteLine("Usage: StrategiesActivator.exe GetCashFailed <CustomerId>");
 				return;
 			}
-			new GetCashFailed(customerId, m_oDB, m_oLog).Execute();
+
+			serviceClient.GetCashFailed(customerId);
 		}
 
 		private void ActivateLoanFullyPaid()
@@ -281,7 +283,8 @@ namespace StrategiesActivator
 				Console.WriteLine("Usage: StrategiesActivator.exe PasswordChanged <CustomerId> <password>");
 				return;
 			}
-			new PasswordChanged(customerId, args[2], m_oDB, m_oLog).Execute();
+
+			serviceClient.PasswordChanged(customerId, args[2]);
 		}
 
 		private void ActivatePasswordRestored()
@@ -292,18 +295,21 @@ namespace StrategiesActivator
 				Console.WriteLine("Usage: StrategiesActivator.exe PasswordRestored <CustomerId> <password>");
 				return;
 			}
-			new PasswordRestored(customerId, args[2], m_oDB, m_oLog).Execute();
+
+			serviceClient.PasswordRestored(customerId, args[2]);
 		}
 
 		private void ActivatePayEarly()
 		{
-			int customerId, amount;
-			if (args.Length != 4 || !int.TryParse(args[1], out customerId) || !int.TryParse(args[2], out amount))
+			int customerId;
+			decimal amount;
+			if (args.Length != 4 || !int.TryParse(args[1], out customerId) || !decimal.TryParse(args[2], out amount))
 			{
 				Console.WriteLine("Usage: StrategiesActivator.exe PayEarly <CustomerId> <amount> <loanRefNumber>");
 				return;
 			}
 			new PayEarly(customerId, amount, args[3], m_oDB, m_oLog).Execute();
+			serviceClient.PayEarly(customerId, amount, args[3]);
 		}
 
 		private void ActivatePayPointAddedByUnderwriter()
@@ -380,7 +386,8 @@ namespace StrategiesActivator
 				Console.WriteLine("Usage: StrategiesActivator.exe ThreeInvalidAttempts <CustomerId> <password>");
 				return;
 			}
-			new ThreeInvalidAttempts(customerId, args[2], m_oDB, m_oLog).Execute();
+
+			serviceClient.ThreeInvalidAttempts(customerId, args[2]);
 		}
 
 		private void ActivateTransferCashFailed()
@@ -391,7 +398,8 @@ namespace StrategiesActivator
 				Console.WriteLine("Usage: StrategiesActivator.exe TransferCashFailed <CustomerId>");
 				return;
 			}
-			new TransferCashFailed(customerId, m_oDB, m_oLog).Execute();
+
+			serviceClient.TransferCashFailed(customerId);
 		}
 
 		private void ActivateCaisGenerate()
@@ -509,7 +517,7 @@ namespace StrategiesActivator
 			new XDaysDue(m_oDB, m_oLog).Execute();
 		}
 
-		private AConnection m_oDB;
-		private ASafeLog m_oLog;
+		private readonly AConnection m_oDB;
+		private readonly ASafeLog m_oLog;
 	}
 }

@@ -111,23 +111,23 @@
   <wsdl:message name="IEzService_EmailUnderReview_OutputMessage">
     <wsdl:part name="parameters" element="tns:EmailUnderReviewResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_ActivateEscalated_InputMessage">
-    <wsdl:part name="parameters" element="tns:ActivateEscalated" />
+  <wsdl:message name="IEzService_Escalated_InputMessage">
+    <wsdl:part name="parameters" element="tns:Escalated" />
   </wsdl:message>
-  <wsdl:message name="IEzService_ActivateEscalated_OutputMessage">
-    <wsdl:part name="parameters" element="tns:ActivateEscalatedResponse" />
+  <wsdl:message name="IEzService_Escalated_OutputMessage">
+    <wsdl:part name="parameters" element="tns:EscalatedResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_ActivateGetCashFailed_InputMessage">
-    <wsdl:part name="parameters" element="tns:ActivateGetCashFailed" />
+  <wsdl:message name="IEzService_GetCashFailed_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetCashFailed" />
   </wsdl:message>
-  <wsdl:message name="IEzService_ActivateGetCashFailed_OutputMessage">
-    <wsdl:part name="parameters" element="tns:ActivateGetCashFailedResponse" />
+  <wsdl:message name="IEzService_GetCashFailed_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetCashFailedResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_ActivateLoanFullyPaid_InputMessage">
-    <wsdl:part name="parameters" element="tns:ActivateLoanFullyPaid" />
+  <wsdl:message name="IEzService_LoanFullyPaid_InputMessage">
+    <wsdl:part name="parameters" element="tns:LoanFullyPaid" />
   </wsdl:message>
-  <wsdl:message name="IEzService_ActivateLoanFullyPaid_OutputMessage">
-    <wsdl:part name="parameters" element="tns:ActivateLoanFullyPaidResponse" />
+  <wsdl:message name="IEzService_LoanFullyPaid_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LoanFullyPaidResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_MoreAmLandBwaInformation_InputMessage">
     <wsdl:part name="parameters" element="tns:MoreAmLandBwaInformation" />
@@ -322,17 +322,17 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/EmailUnderReview" message="tns:IEzService_EmailUnderReview_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/EmailUnderReviewResponse" message="tns:IEzService_EmailUnderReview_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="ActivateEscalated">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ActivateEscalated" message="tns:IEzService_ActivateEscalated_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/ActivateEscalatedResponse" message="tns:IEzService_ActivateEscalated_OutputMessage" />
+    <wsdl:operation name="Escalated">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/Escalated" message="tns:IEzService_Escalated_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/EscalatedResponse" message="tns:IEzService_Escalated_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="ActivateGetCashFailed">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ActivateGetCashFailed" message="tns:IEzService_ActivateGetCashFailed_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/ActivateGetCashFailedResponse" message="tns:IEzService_ActivateGetCashFailed_OutputMessage" />
+    <wsdl:operation name="GetCashFailed">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCashFailed" message="tns:IEzService_GetCashFailed_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetCashFailedResponse" message="tns:IEzService_GetCashFailed_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="ActivateLoanFullyPaid">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ActivateLoanFullyPaid" message="tns:IEzService_ActivateLoanFullyPaid_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/ActivateLoanFullyPaidResponse" message="tns:IEzService_ActivateLoanFullyPaid_OutputMessage" />
+    <wsdl:operation name="LoanFullyPaid">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoanFullyPaid" message="tns:IEzService_LoanFullyPaid_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoanFullyPaidResponse" message="tns:IEzService_LoanFullyPaid_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="MoreAmLandBwaInformation">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MoreAmLandBwaInformation" message="tns:IEzService_MoreAmLandBwaInformation_InputMessage" />
@@ -534,8 +534,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="ActivateEscalated">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/ActivateEscalated" style="document" />
+    <wsdl:operation name="Escalated">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/Escalated" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -543,8 +543,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="ActivateGetCashFailed">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/ActivateGetCashFailed" style="document" />
+    <wsdl:operation name="GetCashFailed">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/GetCashFailed" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -552,8 +552,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="ActivateLoanFullyPaid">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/ActivateLoanFullyPaid" style="document" />
+    <wsdl:operation name="LoanFullyPaid">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/LoanFullyPaid" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

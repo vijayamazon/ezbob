@@ -8,7 +8,7 @@ namespace EzBob.Backend.Strategies.MailStrategies {
 	public class PayEarly : AMailStrategyBase {
 		#region constructor
 
-		public PayEarly(int customerId, int amount, string loanRefNumber, AConnection oDB, ASafeLog oLog) : base(customerId, true, oDB, oLog) {
+		public PayEarly(int customerId, decimal amount, string loanRefNumber, AConnection oDB, ASafeLog oLog) : base(customerId, true, oDB, oLog) {
 			this.amount = amount;
 			this.loanRefNumber = loanRefNumber;
 		} // constructor
@@ -33,7 +33,7 @@ namespace EzBob.Backend.Strategies.MailStrategies {
 
 		#endregion method SetTemplateAndSubjectAndVariables
 
-		private readonly int amount;
+		private readonly decimal amount;
 		private readonly string loanRefNumber;
 	} // class PayEarly
 } // namespace

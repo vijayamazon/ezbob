@@ -21,13 +21,13 @@ namespace EzService {
 		ActionMetaData EmailUnderReview(int customerId);
 
 		[OperationContract]
-		ActionMetaData ActivateEscalated(int customerId);
+		ActionMetaData Escalated(int customerId);
 
 		[OperationContract]
-		ActionMetaData ActivateGetCashFailed(int customerId);
+		ActionMetaData GetCashFailed(int customerId);
 
 		[OperationContract]
-		ActionMetaData ActivateLoanFullyPaid(int customerId, string loanRefNum);
+		ActionMetaData LoanFullyPaid(int customerId, string loanRefNum);
 
 		[OperationContract]
 		ActionMetaData MoreAmLandBwaInformation(int customerId);
@@ -45,7 +45,7 @@ namespace EzService {
 		ActionMetaData PasswordRestored(int customerId, string password);
 
 		[OperationContract]
-		ActionMetaData PayEarly(int customerId, int amount, string loanRefNum);
+		ActionMetaData PayEarly(int customerId, decimal amount, string loanRefNum);
 
 		[OperationContract]
 		ActionMetaData PayPointAddedByUnderwriter(int customerId, string cardno, string underwriterName, int underwriterId);
