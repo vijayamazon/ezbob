@@ -5,6 +5,8 @@ using Ezbob.Database;
 using Ezbob.Logger;
 
 namespace EzBob.Backend.Strategies {
+	using System;
+
 	public class LateBy14Days : AStrategy {
 		public LateBy14Days(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			mailer = new StrategiesMailer(DB, Log);
@@ -16,7 +18,7 @@ namespace EzBob.Backend.Strategies {
 			DataTable dt = DB.ExecuteReader("GetLateBy14DaysAndUpdate", CommandSpecies.StoredProcedure);
 
 			foreach (DataRow row in dt.Rows) {
-				bool is14DaysLate = bool.Parse(row["Is14DaysLate"].ToString());
+				bool is14DaysLate = Convert.ToBoolean(row["Is14DaysLate"]);
 
 				if (!is14DaysLate)
 					continue;

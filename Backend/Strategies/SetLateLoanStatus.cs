@@ -186,7 +186,7 @@ namespace EzBob.Backend.Strategies {
 			foreach (DataRow row in loansToCollectDataTable.Rows) {
 				int id = int.Parse(row["id"].ToString());
 				int loanId = int.Parse(row["LoanId"].ToString());
-				bool isLastInstallment = bool.Parse(row["LastInstallment"].ToString());
+				bool isLastInstallment = Convert.ToBoolean(row["LastInstallment"]);
 				int customerId = int.Parse(row["CustomerId"].ToString());
 				DateTime customInstallmentDate = DateTime.Parse(row["CustomInstallmentDate"].ToString());
 

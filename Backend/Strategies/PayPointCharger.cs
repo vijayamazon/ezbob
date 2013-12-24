@@ -71,9 +71,9 @@ namespace EzBob.Backend.Strategies {
 			int customerId = int.Parse(row["CustomerId"].ToString());
 			string customerMail = row["Email"].ToString();
 			string fullname = row["Fullname"].ToString();
-			bool reductionFee = bool.Parse(row["ReductionFee"].ToString());
+			bool reductionFee = Convert.ToBoolean(row["ReductionFee"]);
 			string refNum = row["RefNum"].ToString();
-			bool lastInstallment = bool.Parse(row["LastInstallment"].ToString());
+			bool lastInstallment = Convert.ToBoolean(row["LastInstallment"]);
 
 			decimal amountDue = payPointApi.GetAmountToPay(loanScheduleId);
 

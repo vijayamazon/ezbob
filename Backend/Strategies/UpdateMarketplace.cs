@@ -54,7 +54,7 @@
 
 			DataRow result = dt.Rows[0];
 			string marketplaceName = result["Name"].ToString();
-			bool disabled = bool.Parse(result["Disabled"].ToString());
+			bool disabled = Convert.ToBoolean(result["Disabled"]);
 
 			if (disabled)
 				return;

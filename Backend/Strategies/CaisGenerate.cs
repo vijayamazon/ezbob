@@ -47,7 +47,7 @@ namespace EzBob.Backend.Strategies
 		
 		private void Generate()
 		{
-			string timeString = DateTime.UtcNow.ToString("%Y-%m-%d-%H-%M-%S"); // TODO: check out real path format!!!
+			string timeString = DateTime.UtcNow.ToString("yyyy-MM-dd-HH-mm-ss");
 
 			string dirPath = caisPath + "\\" + timeString;
 			string dirPath2 = caisPath2 + "\\" + timeString;
@@ -81,15 +81,15 @@ namespace EzBob.Backend.Strategies
 					minLsDate = tmp;
 				}
 				decimal loanAmount = decimal.Parse(row["LoanAmount"].ToString());
-				int scheduledRepayments = int.Parse(row["SceduledRepayments"].ToString()); // TODO: fix to ScheduledRepayments typo
+				int scheduledRepayments = int.Parse(row["ScheduledRepayments"].ToString());
 				string companyType = row["CompanyType"].ToString();
 				string limitedRefNum = row["LimitedRefNum"].ToString();
 				string nonLimitedRefNum = row["NonLimitedRefNum"].ToString();
 				string customerState = row["CustomerState"].ToString();
 				string sortCode = row["SortCode"].ToString();
-				bool isDefaulted = bool.Parse(row["IsDefaulted"].ToString());
-				string caisAccountStatus = row["CaisAccountStatus"].ToString(); //
-				bool customerStatusIsEnabled = bool.Parse(row["CustomerStatusIsEnabled"].ToString());
+				bool isDefaulted = Convert.ToBoolean(row["IsDefaulted"]);
+				string caisAccountStatus = row["CaisAccountStatus"].ToString();
+				bool customerStatusIsEnabled = Convert.ToBoolean(row["CustomerStatusIsEnabled"]);
 				string maritalStatus = row["MaritalStatus"].ToString();
 
 				string genderPrefix;

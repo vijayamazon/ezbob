@@ -710,10 +710,10 @@ namespace EzBob.Backend.Strategies
 			Reject_Defaults_MonthsNum = int.Parse(results["Reject_Defaults_MonthsNum"].ToString());
 			Reject_Defaults_Amount = int.Parse(results["Reject_Defaults_Amount"].ToString());
 			BWABusinessCheck = results["BWABusinessCheck"].ToString();
-			EnableAutomaticApproval = bool.Parse(results["EnableAutomaticApproval"].ToString());
-			EnableAutomaticReApproval = bool.Parse(results["EnableAutomaticReApproval"].ToString());
-			EnableAutomaticRejection = bool.Parse(results["EnableAutomaticRejection"].ToString());
-			EnableAutomaticReRejection = bool.Parse(results["EnableAutomaticReRejection"].ToString());
+			EnableAutomaticApproval = Convert.ToBoolean(results["EnableAutomaticApproval"]);
+			EnableAutomaticReApproval = Convert.ToBoolean(results["EnableAutomaticReApproval"]);
+			EnableAutomaticRejection = Convert.ToBoolean(results["EnableAutomaticRejection"]);
+			EnableAutomaticReRejection = Convert.ToBoolean(results["EnableAutomaticReRejection"]);
 			MaxCapHomeOwner = int.Parse(results["MaxCapHomeOwner"].ToString());
 			MaxCapNotHomeOwner = int.Parse(results["MaxCapNotHomeOwner"].ToString());
 			LowCreditScore = int.Parse(results["LowCreditScore"].ToString());
@@ -732,9 +732,9 @@ namespace EzBob.Backend.Strategies
 			DataTable dt = DB.ExecuteReader("MainStrategyGetPersonalInfo", CommandSpecies.StoredProcedure);
 			DataRow results = dt.Rows[0];
 
-			CustomerStatusIsEnabled = bool.Parse(results["CustomerStatusIsEnabled"].ToString());
-			CustomerStatusIsWarning = bool.Parse(results["CustomerStatusIsWarning"].ToString());
-			IsOffline = bool.Parse(results["IsOffline"].ToString());
+			CustomerStatusIsEnabled = Convert.ToBoolean(results["CustomerStatusIsEnabled"]);
+			CustomerStatusIsWarning = Convert.ToBoolean(results["CustomerStatusIsWarning"]);
+			IsOffline = Convert.ToBoolean(results["IsOffline"]);
 			App_email = results["CustomerEmail"].ToString();
 			CompanyType = results["CompanyType"].ToString();
 			App_LimitedRefNum = results["LimitedRefNum"].ToString();
@@ -1229,7 +1229,7 @@ namespace EzBob.Backend.Strategies
 
 			DataRow result = dt.Rows[0];
 
-			bool isUpdated = bool.Parse(result["IsUpdated"].ToString());
+			bool isUpdated = Convert.ToBoolean(result["IsUpdated"]);
 			
 			DateTime startWaitingTime = DateTime.UtcNow;
 

@@ -30,7 +30,7 @@ namespace EzBob.Backend.Strategies.AutoDecisions
 			);
 
 			DataRow results = dt.Rows[0];
-			bool loanOfferEmailSendingBanned = bool.Parse(results["EmailSendingBanned"].ToString());
+			bool loanOfferEmailSendingBanned = Convert.ToBoolean(results["EmailSendingBanned"]);
 			DateTime loanOfferOfferStart = DateTime.Parse(results["OfferStart"].ToString());
 			DateTime loanOfferOfferValidUntil = DateTime.Parse(results["OfferValidUntil"].ToString());
 			int loanOfferSystemCalculatedSum = int.Parse(results["SystemCalculatedSum"].ToString());

@@ -2,6 +2,7 @@
 
 namespace EzBob.Backend.Strategies.AutoDecisions
 {
+	using System;
 	using System.Data;
 
 	public class Rejection
@@ -44,7 +45,7 @@ namespace EzBob.Backend.Strategies.AutoDecisions
 
 			results = dt.Rows[0];
 
-			HasAccountingAccounts = bool.Parse(results["HasAccountingAccounts"].ToString());
+			HasAccountingAccounts = Convert.ToBoolean(results["HasAccountingAccounts"]);
 			ErrorMPsNum = int.Parse(results["ErrorMPsNum"].ToString());
 			LoanOffer_ApprovalNum = int.Parse(results["ApprovalNum"].ToString());
 			NumOfDefaultAccounts = int.Parse(results["NumOfDefaultAccounts"].ToString());

@@ -24,7 +24,7 @@ namespace EzBob.Backend.Strategies.MailStrategies {
 			Surname = results["Surname"].ToString();
 			FullName = results["FullName"].ToString();
 			Mail = results["Mail"].ToString();
-			IsOffline = bool.Parse(results["IsOffline"].ToString());
+			IsOffline = Convert.ToBoolean(results["IsOffline"]);
 			NumOfLoans = int.Parse(results["NumOfLoans"].ToString());
 		} // constructor
 
