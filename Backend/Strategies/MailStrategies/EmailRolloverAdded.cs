@@ -7,7 +7,9 @@ namespace EzBob.Backend.Strategies.MailStrategies {
 	public class EmailRolloverAdded : AMailStrategyBase {
 		#region constructor
 
-		public EmailRolloverAdded(int customerId, int amount, AConnection oDB, ASafeLog oLog) : base(customerId, true, oDB, oLog) {
+		public EmailRolloverAdded(int customerId, decimal amount, AConnection oDB, ASafeLog oLog)
+			: base(customerId, true, oDB, oLog)
+		{
 			this.amount = amount;
 		} // constructor
 
@@ -29,6 +31,6 @@ namespace EzBob.Backend.Strategies.MailStrategies {
 
 		#endregion method SetTemplateAndSubjectAndVariables
 
-		private readonly int amount;
+		private readonly decimal amount;
 	} // class EmailRolloverAdded
 } // namespace

@@ -273,107 +273,163 @@ namespace EzBob.Web.Code.ApplicationCreator
 
         public void PayPointNameValidationFailed(string cardHodlerName, User user, Customer customer)
         {
-            var strategyParameters = new[]
-                                             {
-                                                 new StrategyParameter("email", customer.Name),
-                                                 new StrategyParameter("userId", customer.Id),
-                                                 new StrategyParameter("name", customer.PersonalInfo.FirstName),
-                                                 new StrategyParameter("surname", customer.PersonalInfo.Surname),
-                                                 new StrategyParameter("cardHodlerName", cardHodlerName)
-                                             };
-            CreateApplication(user, strategyParameters, _config.PayPointNameValidationFailedStrategyName);
+	        if (useNewMailStrategies)
+	        {
+				serviceClient.PayPointNameValidationFailed(user.Id, cardHodlerName);
+	        }
+	        else
+	        {
+		        var strategyParameters = new[]
+			        {
+				        new StrategyParameter("email", customer.Name),
+				        new StrategyParameter("userId", customer.Id),
+				        new StrategyParameter("name", customer.PersonalInfo.FirstName),
+				        new StrategyParameter("surname", customer.PersonalInfo.Surname),
+				        new StrategyParameter("cardHodlerName", cardHodlerName)
+			        };
+		        CreateApplication(user, strategyParameters, _config.PayPointNameValidationFailedStrategyName);
+	        }
         }
 
         public void ApprovedUser(User user, Customer customer, decimal? loanAmount)
         {
-			bool isNotFirstApproval = customer.DecisionHistory.Any(x => x.Action == DecisionActions.Approve);
+	        if (useNewMailStrategies)
+	        {
+				serviceClient.ApprovedUser(user.Id, loanAmount.HasValue ? loanAmount.Value : 0);
+	        }
+	        else
+	        {
+		        bool isNotFirstApproval = customer.DecisionHistory.Any(x => x.Action == DecisionActions.Approve);
 
-            var strategyParameters = new[]
-                                             {
-                                                 new StrategyParameter("email", customer.Name ),
-                                                 new StrategyParameter("userId", customer.Id),
-                                                 new StrategyParameter("FirstName", customer.PersonalInfo.FirstName ), 
-                                                 new StrategyParameter("LoanAmount", loanAmount),
-                                                 new StrategyParameter("ValidFor", (customer.OfferValidUntil - customer.OfferStart).Value.TotalHours),
-                                                 new StrategyParameter("LoanType", customer.LastCashRequest.LoanType.Type),
-                                                 new StrategyParameter("IsFirstApproval", !isNotFirstApproval),
-                                                 new StrategyParameter("InterestNumberOfMonths", Math.Floor(customer.LastCashRequest.RepaymentPeriod / 2.0))
-                                             };
+		        var strategyParameters = new[]
+			        {
+				        new StrategyParameter("email", customer.Name),
+				        new StrategyParameter("userId", customer.Id),
+				        new StrategyParameter("FirstName", customer.PersonalInfo.FirstName),
+				        new StrategyParameter("LoanAmount", loanAmount),
+				        new StrategyParameter("ValidFor", (customer.OfferValidUntil - customer.OfferStart).Value.TotalHours),
+				        new StrategyParameter("LoanType", customer.LastCashRequest.LoanType.Type),
+				        new StrategyParameter("IsFirstApproval", !isNotFirstApproval),
+				        new StrategyParameter("InterestNumberOfMonths", Math.Floor(customer.LastCashRequest.RepaymentPeriod/2.0))
+			        };
 
-            CreateApplication(user, strategyParameters, _config.ApprovedUserStrategyName);
+		        CreateApplication(user, strategyParameters, _config.ApprovedUserStrategyName);
+	        }
         }
 
         public void RejectUser(User user, string email, int userId, string firstName)
         {
-            var strategyParameters = new[]
-                                             {
-                                                 new StrategyParameter("email", email),
-                                                 new StrategyParameter("userId", userId),
-                                                 new StrategyParameter("FirstName", firstName  )
-                                             };
-            CreateApplication(user, strategyParameters, _config.RejectUserStrategyName);
+	        if (useNewMailStrategies)
+	        {
+				serviceClient.RejectUser(user.Id);
+	        }
+	        else
+	        {
+		        var strategyParameters = new[]
+			        {
+				        new StrategyParameter("email", email),
+				        new StrategyParameter("userId", userId),
+				        new StrategyParameter("FirstName", firstName)
+			        };
+		        CreateApplication(user, strategyParameters, _config.RejectUserStrategyName);
+	        }
         }
 
         public void MoreAMLInformation(User user, string email, int userId, string firstName)
         {
-            var strategyParameters = new[]
-                                             {
-                                                 new StrategyParameter("email",  email),
-                                                 new StrategyParameter("userId", userId),
-                                                 new StrategyParameter("FirstName", firstName  )
-                                             };
-            CreateApplication(user, strategyParameters, _config.MoreAMLInformationStrategyName);
+	        if (useNewMailStrategies)
+	        {
+		        serviceClient.MoreAmlInformation(user.Id);
+	        }
+	        else
+	        {
+		        var strategyParameters = new[]
+			        {
+				        new StrategyParameter("email", email),
+				        new StrategyParameter("userId", userId),
+				        new StrategyParameter("FirstName", firstName)
+			        };
+		        CreateApplication(user, strategyParameters, _config.MoreAMLInformationStrategyName);
+	        }
         }
 
         public void MoreAMLandBWAInformation(User user, string email, int userId, string firstName)
         {
-            var strategyParameters = new[]
-                                             {
-                                                 new StrategyParameter("email", email ),
-                                                 new StrategyParameter("userId", userId),
-                                                 new StrategyParameter("FirstName", firstName  )
-                                             };
-            CreateApplication(user, strategyParameters, _config.MoreAMLandBWAStrategyName);
+	        if (useNewMailStrategies)
+	        {
+		        serviceClient.MoreAmLandBwaInformation(user.Id);
+	        }
+	        else
+	        {
+		        var strategyParameters = new[]
+			        {
+				        new StrategyParameter("email", email),
+				        new StrategyParameter("userId", userId),
+				        new StrategyParameter("FirstName", firstName)
+			        };
+		        CreateApplication(user, strategyParameters, _config.MoreAMLandBWAStrategyName);
+	        }
         }
 
         public void MoreBWAInformation(User user, string email, int userId, string firstName)
         {
-            var strategyParameters = new[]
-                                             {
-                                                 new StrategyParameter("email", email),
-                                                 new StrategyParameter("userId", userId),
-                                                 new StrategyParameter("FirstName", firstName  )
-                                             };
-            CreateApplication(user, strategyParameters, _config.MoreBWAInformationStrategyName);
+	        if (useNewMailStrategies)
+	        {
+		        serviceClient.MoreBwaInformation(user.Id);
+	        }
+	        else
+	        {
+		        var strategyParameters = new[]
+			        {
+				        new StrategyParameter("email", email),
+				        new StrategyParameter("userId", userId),
+				        new StrategyParameter("FirstName", firstName)
+			        };
+		        CreateApplication(user, strategyParameters, _config.MoreBWAInformationStrategyName);
+	        }
         }
 
         public void SendEmailVerification(User user, Customer customer, string address)
         {
-            var strategyParameters = new[]
-                                             {
-                                                 new StrategyParameter("email", user.EMail),
-                                                 new StrategyParameter("ConfirmEmailAddress", address),
-                                                 new StrategyParameter("userId", user.Id),
-                                                 new StrategyParameter("FirstName", customer.PersonalInfo.FirstName),
-                                                 new StrategyParameter("LastName", customer.PersonalInfo.Surname)
-                                             };
-            CreateApplication(user, strategyParameters, _config.ConfirmationEmailStrategyName);
+	        if (useNewMailStrategies)
+	        {
+				serviceClient.SendEmailVerification(user.Id, address);
+	        }
+	        else
+	        {
+		        var strategyParameters = new[]
+			        {
+				        new StrategyParameter("email", user.EMail),
+				        new StrategyParameter("ConfirmEmailAddress", address),
+				        new StrategyParameter("userId", user.Id),
+				        new StrategyParameter("FirstName", customer.PersonalInfo.FirstName),
+				        new StrategyParameter("LastName", customer.PersonalInfo.Surname)
+			        };
+		        CreateApplication(user, strategyParameters, _config.ConfirmationEmailStrategyName);
+	        }
         }
 
-        public void PayPointAddedByUnderwriter(User user, Customer customer, string cardno)
+		public void PayPointAddedByUnderwriter(User user, Customer customer, string cardno)
         {
-            var strategyParameters = new[]
-                                             {
-                                                 new StrategyParameter("email", customer.Name),
-                                                 new StrategyParameter("userId", user.Id),
-                                                 new StrategyParameter("customerId", customer.Id),
-                                                 new StrategyParameter("cardno", cardno),
-                                                 new StrategyParameter("FirstName", customer.PersonalInfo.FirstName),
-                                                 new StrategyParameter("LastName", customer.PersonalInfo.Surname),
-                                                 new StrategyParameter("UnderwriterName", user.FullName)
+	        if (useNewMailStrategies)
+	        {
+				serviceClient.PayPointAddedByUnderwriter(customer.Id, cardno, user.FullName, user.Id);
+	        }
+	        else
+	        {
+		        var strategyParameters = new[]
+			        {
+				        new StrategyParameter("email", customer.Name),
+				        new StrategyParameter("userId", user.Id),
+				        new StrategyParameter("customerId", customer.Id),
+				        new StrategyParameter("cardno", cardno),
+				        new StrategyParameter("FirstName", customer.PersonalInfo.FirstName),
+				        new StrategyParameter("LastName", customer.PersonalInfo.Surname),
+				        new StrategyParameter("UnderwriterName", user.FullName)
 
-                                             };
-            CreateApplication(user, strategyParameters, "PayPointAddedByUnderwriter");
+			        };
+		        CreateApplication(user, strategyParameters, "PayPointAddedByUnderwriter");
+	        }
         }
 
         public void UpdateAllMarketplaces(Customer customer)
@@ -388,43 +444,64 @@ namespace EzBob.Web.Code.ApplicationCreator
 
         public void EmailRolloverAdded(Customer customer, decimal amount, DateTime expireDate)
         {
-            var strategyParameters = new[]
-                                         {
-                                             new StrategyParameter("email", customer.Name),
-                                             new StrategyParameter("Amount", amount),
-                                             new StrategyParameter("Firstname", customer.PersonalInfo.FirstName),
-                                             new StrategyParameter("ExpiryDate", expireDate)
-                                         };
-            CreateApplication(customer, strategyParameters, _config.EmailRolloverAddedStrategyName);
+	        if (useNewMailStrategies)
+	        {
+				serviceClient.EmailRolloverAdded(customer.Id, amount);
+	        }
+	        else
+	        {
+		        var strategyParameters = new[]
+			        {
+				        new StrategyParameter("email", customer.Name),
+				        new StrategyParameter("Amount", amount),
+				        new StrategyParameter("Firstname", customer.PersonalInfo.FirstName),
+				        new StrategyParameter("ExpiryDate", expireDate)
+			        };
+		        CreateApplication(customer, strategyParameters, _config.EmailRolloverAddedStrategyName);
+	        }
         }
 
         public void RenewEbayToken(Customer customer, string marketplaceName, string url)
         {
-            var strategyParameters = new[]
-                                         {
-                                             new StrategyParameter("email", customer.Name),
-                                             new StrategyParameter("Firstname", customer.PersonalInfo.FirstName),
-                                             new StrategyParameter("eBayName", marketplaceName),
-                                             new StrategyParameter("url", url)
-                                         };
-            CreateApplication(customer, strategyParameters, _config.ReneweBayTokenStrategyName);
+	        if (useNewMailStrategies)
+	        {
+		        serviceClient.RenewEbayToken(customer.Id, marketplaceName, url);
+	        }
+	        else
+	        {
+		        var strategyParameters = new[]
+			        {
+				        new StrategyParameter("email", customer.Name),
+				        new StrategyParameter("Firstname", customer.PersonalInfo.FirstName),
+				        new StrategyParameter("eBayName", marketplaceName),
+				        new StrategyParameter("url", url)
+			        };
+		        CreateApplication(customer, strategyParameters, _config.ReneweBayTokenStrategyName);
+	        }
         }
 
         public void Escalated(Customer customer)
         {
-            var strategyParameters = new[]
-                                         {
-                                             new StrategyParameter("userId", customer.Id),
-                                             new StrategyParameter("email", customer.Name),
-                                             new StrategyParameter("FirstName", customer.PersonalInfo.FirstName),
-                                             new StrategyParameter("LastName", customer.PersonalInfo.Surname),
-                                             new StrategyParameter("MedalType", customer.Medal.HasValue ? customer.Medal.ToString() : ""),
-                                             new StrategyParameter("SystemDecision", customer.SystemDecision),
-                                             new StrategyParameter("UWName", customer.UnderwriterName),
-                                             new StrategyParameter("RegistrationDate", customer.GreetingMailSentDate),
-                                             new StrategyParameter("EscalatedReason", customer.EscalationReason)
-                                         };
-            CreateApplication(customer, strategyParameters, _config.CustomerEscalatedStrategyName);
+	        if (useNewMailStrategies)
+	        {
+		        serviceClient.Escalated(customer.Id);
+	        }
+	        else
+	        {
+		        var strategyParameters = new[]
+			        {
+				        new StrategyParameter("userId", customer.Id),
+				        new StrategyParameter("email", customer.Name),
+				        new StrategyParameter("FirstName", customer.PersonalInfo.FirstName),
+				        new StrategyParameter("LastName", customer.PersonalInfo.Surname),
+				        new StrategyParameter("MedalType", customer.Medal.HasValue ? customer.Medal.ToString() : ""),
+				        new StrategyParameter("SystemDecision", customer.SystemDecision),
+				        new StrategyParameter("UWName", customer.UnderwriterName),
+				        new StrategyParameter("RegistrationDate", customer.GreetingMailSentDate),
+				        new StrategyParameter("EscalatedReason", customer.EscalationReason)
+			        };
+		        CreateApplication(customer, strategyParameters, _config.CustomerEscalatedStrategyName);
+	        }
         }
 
         public void CAISGenerate(User user)
@@ -464,38 +541,58 @@ namespace EzBob.Web.Code.ApplicationCreator
 
 		public void EmailUnderReview(User user, string firstName, string email)
 		{
-			var strategyParameters = new[]
-                {
-                    new StrategyParameter("FirstName", firstName),
-                    new StrategyParameter("email", email)
-                };
-			CreateApplication(user, strategyParameters, _config.EmailUnderReviewStrategyName);
+			if (useNewMailStrategies)
+			{
+				serviceClient.EmailUnderReview(user.Id);
+			}
+			else
+			{
+				var strategyParameters = new[]
+					{
+						new StrategyParameter("FirstName", firstName),
+						new StrategyParameter("email", email)
+					};
+				CreateApplication(user, strategyParameters, _config.EmailUnderReviewStrategyName);
+			}
 		}
 
         public void RequestCashWithoutTakenLoan(Customer customer, string dashboard)
         {
-            var strategyParameters = new[]
-                {
-                    new StrategyParameter("userId", customer.Id),
-                    new StrategyParameter("FirstName", customer.PersonalInfo.FirstName),
-                    new StrategyParameter("DashboardPage", dashboard),
-                    new StrategyParameter("email", customer.Name)
-                };
-            CreateApplication(customer, strategyParameters, "Email Didnt take offer and reapplies");
+	        if (useNewMailStrategies)
+	        {
+				serviceClient.RequestCashWithoutTakenLoan(customer.Id);
+	        }
+	        else
+	        {
+		        var strategyParameters = new[]
+			        {
+				        new StrategyParameter("userId", customer.Id),
+				        new StrategyParameter("FirstName", customer.PersonalInfo.FirstName),
+				        new StrategyParameter("DashboardPage", dashboard),
+				        new StrategyParameter("email", customer.Name)
+			        };
+		        CreateApplication(customer, strategyParameters, "Email Didnt take offer and reapplies");
+	        }
         }
 
         public void LoanFullyPaid(Loan loan)
-        {
-            var customer = loan.Customer;
-
-		    var strategyParameters = new[]
-			    {
-				    new StrategyParameter("userId", customer.Id),
-				    new StrategyParameter("FirstName", customer.PersonalInfo.FirstName),
-				    new StrategyParameter("email", customer.Name),
-				    new StrategyParameter("RefNum", loan.RefNumber)
-			    };
-		    CreateApplication(loan.Customer, strategyParameters, "Email Loan Paid Fully");
+		{
+			var customer = loan.Customer;
+	        if (useNewMailStrategies)
+	        {
+				serviceClient.LoanFullyPaid(customer.Id, loan.RefNumber);
+	        }
+	        else
+	        {
+		        var strategyParameters = new[]
+			        {
+				        new StrategyParameter("userId", customer.Id),
+				        new StrategyParameter("FirstName", customer.PersonalInfo.FirstName),
+				        new StrategyParameter("email", customer.Name),
+				        new StrategyParameter("RefNum", loan.RefNumber)
+			        };
+		        CreateApplication(loan.Customer, strategyParameters, "Email Loan Paid Fully");
+	        }
         }
     }
 }

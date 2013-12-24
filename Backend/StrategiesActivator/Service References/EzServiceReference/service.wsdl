@@ -183,6 +183,12 @@
   <wsdl:message name="IEzService_RejectUser_OutputMessage">
     <wsdl:part name="parameters" element="tns:RejectUserResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_EmailRolloverAdded_InputMessage">
+    <wsdl:part name="parameters" element="tns:EmailRolloverAdded" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_EmailRolloverAdded_OutputMessage">
+    <wsdl:part name="parameters" element="tns:EmailRolloverAddedResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_RenewEbayToken_InputMessage">
     <wsdl:part name="parameters" element="tns:RenewEbayToken" />
   </wsdl:message>
@@ -369,6 +375,10 @@
     <wsdl:operation name="RejectUser">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/RejectUser" message="tns:IEzService_RejectUser_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/RejectUserResponse" message="tns:IEzService_RejectUser_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="EmailRolloverAdded">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/EmailRolloverAdded" message="tns:IEzService_EmailRolloverAdded_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/EmailRolloverAddedResponse" message="tns:IEzService_EmailRolloverAdded_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="RenewEbayToken">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/RenewEbayToken" message="tns:IEzService_RenewEbayToken_InputMessage" />
@@ -635,6 +645,15 @@
     </wsdl:operation>
     <wsdl:operation name="RejectUser">
       <soap12:operation soapAction="http://tempuri.org/IEzService/RejectUser" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EmailRolloverAdded">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/EmailRolloverAdded" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

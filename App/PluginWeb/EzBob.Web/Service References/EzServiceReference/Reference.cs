@@ -321,6 +321,9 @@ namespace EzBob.Web.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/RejectUser", ReplyAction="http://tempuri.org/IEzService/RejectUserResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData RejectUser(int customerId);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EmailRolloverAdded", ReplyAction="http://tempuri.org/IEzService/EmailRolloverAddedResponse")]
+        EzBob.Web.EzServiceReference.ActionMetaData EmailRolloverAdded(int customerId, decimal amount);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/RenewEbayToken", ReplyAction="http://tempuri.org/IEzService/RenewEbayTokenResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData RenewEbayToken(int customerId, string marketplaceName, string eBayAddress);
         
@@ -463,6 +466,10 @@ namespace EzBob.Web.EzServiceReference {
         
         public EzBob.Web.EzServiceReference.ActionMetaData RejectUser(int customerId) {
             return base.Channel.RejectUser(customerId);
+        }
+        
+        public EzBob.Web.EzServiceReference.ActionMetaData EmailRolloverAdded(int customerId, decimal amount) {
+            return base.Channel.EmailRolloverAdded(customerId, amount);
         }
         
         public EzBob.Web.EzServiceReference.ActionMetaData RenewEbayToken(int customerId, string marketplaceName, string eBayAddress) {

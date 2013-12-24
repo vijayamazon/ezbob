@@ -57,6 +57,9 @@ namespace EzService {
 		ActionMetaData RejectUser(int customerId);
 
 		[OperationContract]
+		ActionMetaData EmailRolloverAdded(int customerId, decimal amount);
+
+		[OperationContract]
 		ActionMetaData RenewEbayToken(int customerId, string marketplaceName, string eBayAddress);
 
 		[OperationContract]

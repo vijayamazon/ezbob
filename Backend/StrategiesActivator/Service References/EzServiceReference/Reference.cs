@@ -220,6 +220,12 @@ namespace EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/RejectUser", ReplyAction="http://tempuri.org/IEzService/RejectUserResponse")]
         System.Threading.Tasks.Task<EzService.ActionMetaData> RejectUserAsync(int customerId);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EmailRolloverAdded", ReplyAction="http://tempuri.org/IEzService/EmailRolloverAddedResponse")]
+        EzService.ActionMetaData EmailRolloverAdded(int customerId, decimal amount);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EmailRolloverAdded", ReplyAction="http://tempuri.org/IEzService/EmailRolloverAddedResponse")]
+        System.Threading.Tasks.Task<EzService.ActionMetaData> EmailRolloverAddedAsync(int customerId, decimal amount);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/RenewEbayToken", ReplyAction="http://tempuri.org/IEzService/RenewEbayTokenResponse")]
         EzService.ActionMetaData RenewEbayToken(int customerId, string marketplaceName, string eBayAddress);
         
@@ -478,6 +484,14 @@ namespace EzServiceReference {
         
         public System.Threading.Tasks.Task<EzService.ActionMetaData> RejectUserAsync(int customerId) {
             return base.Channel.RejectUserAsync(customerId);
+        }
+        
+        public EzService.ActionMetaData EmailRolloverAdded(int customerId, decimal amount) {
+            return base.Channel.EmailRolloverAdded(customerId, amount);
+        }
+        
+        public System.Threading.Tasks.Task<EzService.ActionMetaData> EmailRolloverAddedAsync(int customerId, decimal amount) {
+            return base.Channel.EmailRolloverAddedAsync(customerId, amount);
         }
         
         public EzService.ActionMetaData RenewEbayToken(int customerId, string marketplaceName, string eBayAddress) {

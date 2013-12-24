@@ -1,11 +1,9 @@
-﻿using System.ServiceModel;
-using EzService;
-
-namespace StrategiesActivator
+﻿namespace StrategiesActivator
 {
+	using System.ServiceModel;
+	using EzService;
 	using System;
 	using EzBob.Backend.Strategies;
-	using EzBob.Backend.Strategies.MailStrategies;
 	using EzServiceReference;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -169,7 +167,8 @@ namespace StrategiesActivator
 				Console.WriteLine("Usage: StrategiesActivator.exe ApprovedUser <CustomerId> <loanAmount>");
 				return;
 			}
-			new ApprovedUser(customerId, loanAmount, m_oDB, m_oLog).Execute();
+
+			serviceClient.ApprovedUser(customerId, loanAmount);
 		}
 
 		private void ActivateCashTransferred()
@@ -188,13 +187,14 @@ namespace StrategiesActivator
 		private void ActivateEmailRolloverAdded()
 		{
 			int customerId;
-			int amount;
-			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !int.TryParse(args[2], out amount))
+			decimal amount;
+			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !decimal.TryParse(args[2], out amount))
 			{
 				Console.WriteLine("Usage: StrategiesActivator.exe EmailRolloverAdded <CustomerId> <amount>");
 				return;
 			}
-			new EmailRolloverAdded(customerId, amount, m_oDB, m_oLog).Execute();
+
+			serviceClient.EmailRolloverAdded(customerId, amount);
 		}
 
 		private void ActivateEmailUnderReview()
@@ -205,7 +205,8 @@ namespace StrategiesActivator
 				Console.WriteLine("Usage: StrategiesActivator.exe EmailUnderReview <CustomerId>");
 				return;
 			}
-			new EmailUnderReview(customerId, m_oDB, m_oLog).Execute();
+
+			serviceClient.EmailUnderReview(customerId);
 		}
 
 		private void ActivateEscalated()
@@ -216,7 +217,8 @@ namespace StrategiesActivator
 				Console.WriteLine("Usage: StrategiesActivator.exe Escalated <CustomerId>");
 				return;
 			}
-			new Escalated(customerId, m_oDB, m_oLog).Execute();
+
+			serviceClient.Escalated(customerId);
 		}
 
 		private void ActivateGetCashFailed()
@@ -239,7 +241,8 @@ namespace StrategiesActivator
 				Console.WriteLine("Usage: StrategiesActivator.exe LoanFullyPaid <CustomerId> <loanRefNum>");
 				return;
 			}
-			new LoanFullyPaid(customerId, args[2], m_oDB, m_oLog).Execute();
+
+			serviceClient.LoanFullyPaid(customerId, args[2]);
 		}
 
 		private void ActivateMoreAmLandBwaInformation()
@@ -250,7 +253,8 @@ namespace StrategiesActivator
 				Console.WriteLine("Usage: StrategiesActivator.exe MoreAMLandBWAInformation <CustomerId>");
 				return;
 			}
-			new MoreAMLandBWAInformation(customerId, m_oDB, m_oLog).Execute();
+
+			serviceClient.MoreAmLandBwaInformation(customerId);
 		}
 
 		private void ActivateMoreAmlInformation()
@@ -261,7 +265,7 @@ namespace StrategiesActivator
 				Console.WriteLine("Usage: StrategiesActivator.exe MoreAMLInformation <CustomerId>");
 				return;
 			}
-			new MoreAMLInformation(customerId, m_oDB, m_oLog).Execute();
+			serviceClient.MoreAmlInformation(customerId);
 		}
 
 		private void ActivateMoreBwaInformation()
@@ -272,7 +276,8 @@ namespace StrategiesActivator
 				Console.WriteLine("Usage: StrategiesActivator.exe MoreBWAInformation <CustomerId>");
 				return;
 			}
-			new MoreBWAInformation(customerId, m_oDB, m_oLog).Execute();
+
+			serviceClient.MoreBwaInformation(customerId);
 		}
 
 		private void ActivatePasswordChanged()
@@ -308,7 +313,7 @@ namespace StrategiesActivator
 				Console.WriteLine("Usage: StrategiesActivator.exe PayEarly <CustomerId> <amount> <loanRefNumber>");
 				return;
 			}
-			new PayEarly(customerId, amount, args[3], m_oDB, m_oLog).Execute();
+
 			serviceClient.PayEarly(customerId, amount, args[3]);
 		}
 
@@ -320,7 +325,8 @@ namespace StrategiesActivator
 				Console.WriteLine("Usage: StrategiesActivator.exe PayPointAddedByUnderwriter <CustomerId> <cardno> <underwriterName> <underwriterId>");
 				return;
 			}
-			new PayPointAddedByUnderwriter(customerId, args[2], args[3], underwriterId, m_oDB, m_oLog).Execute();
+
+			serviceClient.PayPointAddedByUnderwriter(customerId, args[2], args[3], underwriterId);
 		}
 
 		private void ActivatePayPointNameValidationFailed()
@@ -331,7 +337,8 @@ namespace StrategiesActivator
 				Console.WriteLine("Usage: StrategiesActivator.exe PayPointNameValidationFailed <CustomerId> <cardHodlerName>");
 				return;
 			}
-			new PayPointNameValidationFailed(customerId, args[2], m_oDB, m_oLog).Execute();
+
+			serviceClient.PayPointNameValidationFailed(customerId, args[2]);
 		}
 
 		private void ActivateRejectUser()
@@ -342,7 +349,8 @@ namespace StrategiesActivator
 				Console.WriteLine("Usage: StrategiesActivator.exe RejectUser <CustomerId>");
 				return;
 			}
-			new RejectUser(customerId, m_oDB, m_oLog).Execute();
+
+			serviceClient.RejectUser(customerId);
 		}
 
 		private void ActivateRenewEbayToken()
@@ -353,7 +361,8 @@ namespace StrategiesActivator
 				Console.WriteLine("Usage: StrategiesActivator.exe RenewEbayToken <CustomerId> <marketplaceName> <eBayAddress>");
 				return;
 			}
-			new RenewEbayToken(customerId, args[2], args[3], m_oDB, m_oLog).Execute();
+
+			serviceClient.RenewEbayToken(customerId, args[2], args[3]);
 		}
 
 		private void ActivateRequestCashWithoutTakenLoan()
@@ -364,7 +373,8 @@ namespace StrategiesActivator
 				Console.WriteLine("Usage: StrategiesActivator.exe RequestCashWithoutTakenLoan <CustomerId>");
 				return;
 			}
-			new RequestCashWithoutTakenLoan(customerId, m_oDB, m_oLog).Execute();
+
+			serviceClient.RequestCashWithoutTakenLoan(customerId);
 		}
 
 		private void ActivateSendEmailVerification()
@@ -375,7 +385,8 @@ namespace StrategiesActivator
 				Console.WriteLine("Usage: StrategiesActivator.exe SendEmailVerification <CustomerId> <address>");
 				return;
 			}
-			new SendEmailVerification(customerId, args[2], m_oDB, m_oLog).Execute();
+
+			serviceClient.SendEmailVerification(customerId, args[2]);
 		}
 
 		private void ActivateThreeInvalidAttempts()

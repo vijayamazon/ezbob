@@ -311,6 +311,10 @@ namespace EzService {
 			return Execute(typeof (RejectUser), customerId);
 		} // RejectUser
 
+		public ActionMetaData EmailRolloverAdded(int customerId, decimal amount) {
+			return Execute(typeof(EmailRolloverAdded), customerId, amount);
+		} // EmailRolloverAdded
+
 		public ActionMetaData RenewEbayToken(int customerId, string marketplaceName, string eBayAddress) {
 			return Execute(typeof (RenewEbayToken), customerId, marketplaceName, eBayAddress);
 		} // RenewEbayToken
