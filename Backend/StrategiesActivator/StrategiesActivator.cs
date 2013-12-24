@@ -175,8 +175,8 @@ namespace StrategiesActivator
 		private void ActivateCashTransferred()
 		{
 			int customerId;
-			int amount;
-			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !int.TryParse(args[2], out amount))
+			decimal amount;
+			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !decimal.TryParse(args[2], out amount))
 			{
 				Console.WriteLine("Usage: StrategiesActivator.exe CashTransferred <CustomerId> <amount>");
 				return;

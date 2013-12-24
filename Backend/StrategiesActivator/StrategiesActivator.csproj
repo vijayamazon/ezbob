@@ -152,6 +152,8 @@
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Properties\DataSources\EzService.ActionMetaData.datasource" />
+    <None Include="Properties\DataSources\EzService.StringListActionResult.datasource" />
     <None Include="Service References\EzServiceReference\Arrays.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -164,12 +166,6 @@
     </None>
     <None Include="Service References\EzServiceReference\service1.xsd">
       <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.ActionMetaData.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.StringListActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>

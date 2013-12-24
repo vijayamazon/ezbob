@@ -61,23 +61,30 @@ namespace EzBob.Web.Code.ApplicationCreator
 	        }
         }
 
-        public void CashTransfered(User user, string firstName, decimal? cashAmount, decimal setUpFee, int loanId)
+        public void CashTransfered(User user, string firstName, decimal cashAmount, decimal setUpFee, int loanId)
         {
-			var customer = _session.Get<Customer>(user.Id);
-			bool isFirstLoan = customer.Loans.Count == 1;
+	        if (useNewMailStrategies)
+	        {
+				serviceClient.CashTransferred(user.Id, cashAmount);
+	        }
+	        else
+			{
+				var customer = _session.Get<Customer>(user.Id);
+				bool isFirstLoan = customer.Loans.Count == 1;
 
-            var strategyParameters = new[]
-                                             {
-                                                 new StrategyParameter("email", user.EMail),
-                                                 new StrategyParameter("userId", user.Id),
-                                                 new StrategyParameter("FirstName", firstName),
-                                                 new StrategyParameter("CashAmount", cashAmount ),
-                                                 new StrategyParameter("IsFirstLoan", isFirstLoan),
-                                                 new StrategyParameter("IsOffline", customer.IsOffline),
-                                                 new StrategyParameter("SetUpFee", setUpFee), 
-												 new StrategyParameter("loanId", loanId)
-                                             };
-            CreateApplication(user, strategyParameters, _config.CashTransferedStrategyName);
+		        var strategyParameters = new[]
+			        {
+				        new StrategyParameter("email", user.EMail),
+				        new StrategyParameter("userId", user.Id),
+				        new StrategyParameter("FirstName", firstName),
+				        new StrategyParameter("CashAmount", cashAmount),
+				        new StrategyParameter("IsFirstLoan", isFirstLoan),
+				        new StrategyParameter("IsOffline", customer.IsOffline),
+				        new StrategyParameter("SetUpFee", setUpFee),
+				        new StrategyParameter("loanId", loanId)
+			        };
+		        CreateApplication(user, strategyParameters, _config.CashTransferedStrategyName);
+	        }
         }
 
         public void ThreeInvalidAttempts(User user, string firstName, string password)

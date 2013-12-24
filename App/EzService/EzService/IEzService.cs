@@ -15,7 +15,7 @@ namespace EzService {
 		ActionMetaData ApprovedUser(int customerId, decimal loanAmount);
 
 		[OperationContract]
-		ActionMetaData CashTransferred(int customerId, int amount);
+		ActionMetaData CashTransferred(int customerId, decimal amount);
 
 		[OperationContract]
 		ActionMetaData EmailUnderReview(int customerId);

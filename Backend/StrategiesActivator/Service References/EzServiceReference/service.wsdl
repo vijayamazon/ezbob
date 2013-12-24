@@ -793,7 +793,7 @@
       <wsa10:EndpointReference>
         <wsa10:Address>net.tcp://localhost:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>alexbo-pc\alexbo</Upn>
+          <Upn>yulys-PC\yulys</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

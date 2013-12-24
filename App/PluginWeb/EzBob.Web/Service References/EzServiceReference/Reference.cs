@@ -213,6 +213,9 @@ namespace EzBob.Web.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceAdmin/ListActiveActions", ReplyAction="http://tempuri.org/IEzServiceAdmin/ListActiveActionsResponse")]
         EzBob.Web.EzServiceReference.StringListActionResult ListActiveActions();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceAdmin/WriteToLog", ReplyAction="http://tempuri.org/IEzServiceAdmin/WriteToLogResponse")]
+        EzBob.Web.EzServiceReference.ActionMetaData WriteToLog(string sSeverity, string sMsg);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -257,6 +260,10 @@ namespace EzBob.Web.EzServiceReference {
         public EzBob.Web.EzServiceReference.StringListActionResult ListActiveActions() {
             return base.Channel.ListActiveActions();
         }
+        
+        public EzBob.Web.EzServiceReference.ActionMetaData WriteToLog(string sSeverity, string sMsg) {
+            return base.Channel.WriteToLog(sSeverity, sMsg);
+        }
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -273,7 +280,7 @@ namespace EzBob.Web.EzServiceReference {
         EzBob.Web.EzServiceReference.ActionMetaData ApprovedUser(int customerId, decimal loanAmount);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CashTransferred", ReplyAction="http://tempuri.org/IEzService/CashTransferredResponse")]
-        EzBob.Web.EzServiceReference.ActionMetaData CashTransferred(int customerId, int amount);
+        EzBob.Web.EzServiceReference.ActionMetaData CashTransferred(int customerId, decimal amount);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EmailUnderReview", ReplyAction="http://tempuri.org/IEzService/EmailUnderReviewResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData EmailUnderReview(int customerId);
@@ -402,7 +409,7 @@ namespace EzBob.Web.EzServiceReference {
             return base.Channel.ApprovedUser(customerId, loanAmount);
         }
         
-        public EzBob.Web.EzServiceReference.ActionMetaData CashTransferred(int customerId, int amount) {
+        public EzBob.Web.EzServiceReference.ActionMetaData CashTransferred(int customerId, decimal amount) {
             return base.Channel.CashTransferred(customerId, amount);
         }
         

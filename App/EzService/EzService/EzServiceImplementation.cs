@@ -255,7 +255,7 @@ namespace EzService {
 			return Execute(typeof (ApprovedUser), customerId, loanAmount);
 		} // ApprovedUser
 
-		public ActionMetaData CashTransferred(int customerId, int amount) {
+		public ActionMetaData CashTransferred(int customerId, decimal amount) {
 			return Execute(typeof (CashTransferred), customerId, amount);
 		} // CashTransferred
 

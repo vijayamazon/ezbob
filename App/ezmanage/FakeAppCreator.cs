@@ -13,7 +13,7 @@ namespace ezmanage
             
         }
 
-        public void CashTransfered(User user, string firstName, decimal? cashAmount, decimal setUpFee, int loanId)
+        public void CashTransfered(User user, string firstName, decimal cashAmount, decimal setUpFee, int loanId)
         {
             
         }

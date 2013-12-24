@@ -1201,18 +1201,18 @@
     <Content Include="Content\js\Wizard\ezbob.wizardStepsModel.js" />
     <Content Include="Content\js\Wizard\yourInfo\ezbob.steps.companydetails.js" />
     <Content Include="Content\js\Wizard\yourInfo\ezbob.yourInfo.employeeCount.js" />
-    <Content Include="Service References\EzServiceReference\configuration91.svcinfo" />
-    <Content Include="Service References\EzServiceReference\configuration.svcinfo" />
+    <None Include="Service References\EzServiceReference\configuration91.svcinfo" />
+    <None Include="Service References\EzServiceReference\configuration.svcinfo" />
     <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.ActionMetaData.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
     <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.StringListActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
-    <Content Include="Service References\EzServiceReference\Reference.svcmap">
+    <None Include="Service References\EzServiceReference\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
-    </Content>
+    </None>
     <Content Include="Views\Shared\_Copyright.cshtml">
       <SubType>Code</SubType>
     </Content>
@@ -1468,7 +1468,7 @@
     <None Include="Service References\EzServiceReference\EzService.xsd">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="Service References\EzServiceReference\service.wsdl" />
+    <None Include="Service References\EzServiceReference\service.wsdl" />
     <None Include="Service References\EzServiceReference\service.xsd">
       <SubType>Designer</SubType>
     </None>
