@@ -684,7 +684,7 @@ ul.application_steps {
 
         ul.application_steps li.current {
             background: url(images/current_arrow.png) no-repeat 15px 15px;
-            color: #E8891A;
+            color: #577fa5;
             font-weight: bold;
         }
 
