@@ -114,6 +114,8 @@ namespace EzBob.Web.Areas.Customer.Models
 		public bool IsLastApprovedLoanSourceEu { get; set; }
 
 		public string LastSavedWizardStep { get; set; }
+		public string Perks { get; set; }
+
 	} // class CustomerModel
 
 	public class SimpleMarketPlaceModel

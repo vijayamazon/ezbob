@@ -47,6 +47,7 @@ namespace EzBob.Backend.Strategies {
 					description = result.Status;
 				} // if
 
+				this.Log.Debug("UpdateTransactionStatus: CustomerId {4}, Tracking number {5}, Pacnet Result: status: {0}, error: {1}, Update data: status {2}, description {3}", result.Status, result.Error, newStatus, description);
 				DB.ExecuteNonQuery("UpdateTransactionStatus",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("TrackingId", trackingNumber),

@@ -2,11 +2,16 @@
 
 namespace PaymentServices.PacNet
 {
-    public class FakePacnetService : IPacnetService
+	using log4net;
+
+	public class FakePacnetService : IPacnetService
     {
+		private static readonly ILog Log = LogManager.GetLogger(typeof(FakePacnetService));
+
         private Random _random = new Random();
         public virtual PacnetReturnData SendMoney(int customerId, decimal amount, string bankNumber, string accountNumber, string accountName, string fileName = null, string currencyCode = "GBP", string description = null)
         {
+			Log.DebugFormat("Fake SendMoney customerId {0} amount {1} bankNumber {2} accountNumber {3} accountName {4} fileName {5} currencyCode {6} description {7}", customerId, amount, bankNumber, accountNumber, accountName, fileName, currencyCode, description);
             var trackingNumber = _random.Next(111111111, 999999999);
             var pacnetReturnData = new PacnetReturnData()
                                        {
@@ -18,11 +23,16 @@ namespace PaymentServices.PacNet
 
         public virtual PacnetReturnData CheckStatus(int customerId, string trackingNumber)
         {
+	        string[] statuses = {"inprogress", "submited", "error"};
+	        int r = _random.Next(0, 2);
             var pacnetReturnData = new PacnetReturnData()
                                        {
-                                           Status = "Submited",
-                                           TrackingNumber = trackingNumber
+                                           Status = statuses[r],
+                                           TrackingNumber = trackingNumber,
                                        };
+
+			Log.DebugFormat("Fake CheckStatus customerId {0} trackingNumber {1} Status {2}", customerId, trackingNumber, pacnetReturnData.Status);
+
             return pacnetReturnData;
         }
 

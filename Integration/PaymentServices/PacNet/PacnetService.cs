@@ -18,6 +18,8 @@ namespace PaymentServices.PacNet
 
 		public PacnetReturnData SendMoney(int customerId, decimal amount, string bankNumber, string accountNumber, string accountName, string fileName = "ezbob", string currencyCode = "GBP", string description = "EZBOB")
         {
+			Log.DebugFormat("PacnetService SendMoney customerId {0} amount {1} bankNumber {2} accountNumber {3} accountName {4} fileName {5} currencyCode {6} description {7}", customerId, amount, bankNumber, accountNumber, accountName, fileName, currencyCode, description);
+
             try
             {
                 var request = new RavenRequest("submit");
@@ -83,7 +85,9 @@ namespace PaymentServices.PacNet
                     Log.DebugFormat("Result: " + wr);
                 }
                 Log.DebugFormat("CheckStatus completed successfully");
-                return new PacnetReturnData(response);
+	            var pacnetResponse = new PacnetReturnData(response);
+				Log.DebugFormat("CheckStatus customerId {0} trackingNumber {1} Status {2}", customerId, trackingNumber, pacnetResponse.Status);
+				return pacnetResponse;
             }
             catch (Exception ex)
             {
