@@ -105,24 +105,24 @@ namespace FraudChecker
 				switch (mp.Marketplace.Name)
 				{
 					case "eBay":
-						var ebaUserData = mp.EbayUserData.FirstOrDefault();
-						if (ebaUserData != null)
+						var ebayUserData = mp.EbayUserData.FirstOrDefault();
+						if (ebayUserData != null)
 						{
-							if (ebaUserData.RegistrationAddress != null && !string.IsNullOrEmpty(ebaUserData.RegistrationAddress.Phone))
+							if (ebayUserData.RegistrationAddress != null && !string.IsNullOrEmpty(ebayUserData.RegistrationAddress.Phone))
 							{
-								customerPhones.Add("Ebay phone", ebaUserData.RegistrationAddress.Phone.Replace(" ", ""));
+								customerPhones.Add("Ebay phone" + ebayUserData.Id, ebayUserData.RegistrationAddress.Phone.Replace(" ", ""));
 							}
 								
-							if (ebaUserData.RegistrationAddress != null && !string.IsNullOrEmpty(ebaUserData.RegistrationAddress.Phone2))
+							if (ebayUserData.RegistrationAddress != null && !string.IsNullOrEmpty(ebayUserData.RegistrationAddress.Phone2))
 							{
-								customerPhones.Add("Ebay phone 2", ebaUserData.RegistrationAddress.Phone2.Replace(" ", ""));
+								customerPhones.Add("Ebay phone 2" + ebayUserData.Id, ebayUserData.RegistrationAddress.Phone2.Replace(" ", ""));
 							}
 						}
 						break;
 					case "Pay Pal":
 						if (mp.PersonalInfo != null && !string.IsNullOrEmpty(mp.PersonalInfo.Phone))
 						{
-							customerPhones.Add("PayPal phone", mp.PersonalInfo.Phone.Replace(" ", ""));
+							customerPhones.Add("PayPal phone" + mp.Id, mp.PersonalInfo.Phone.Replace(" ", ""));
 						}
 						break;
 				}
