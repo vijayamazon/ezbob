@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Runtime.Serialization;
 using System.Threading;
+using Ezbob.Database;
+using Ezbob.Logger;
 
 namespace EzService {
 	#region enum TriState
@@ -15,37 +17,46 @@ namespace EzService {
 
 	#region enum ActionStatus
 
+	/// <summary>
+	/// Do not change numeric values - they are used as keys in DB.
+	/// </summary>
 	[DataContract]
 	public enum ActionStatus {
 		[EnumMember]
-		InProgress,
+		InProgress = 1,
 
 		/// <summary>
 		/// Action completed successfully.
 		/// </summary>
 		[EnumMember]
-		Done,
+		Done = 2,
 
 		/// <summary>
 		/// Action completed, but result is "failure".
 		/// </summary>
 		[EnumMember]
-		Finished,
+		Finished = 3,
 
 		/// <summary>
 		/// Action failed to complete.
 		/// </summary>
 		[EnumMember]
-		Failed,
+		Failed = 4,
 
 		/// <summary>
 		/// Action was terminated.
 		/// </summary>
 		[EnumMember]
-		Terminated,
+		Terminated = 5,
 
 		[EnumMember]
-		Unknown,
+		Unknown = 6,
+
+		/// <summary>
+		/// Underlying thread has been started in background.
+		/// </summary>
+		[EnumMember]
+		Launched = 7,
 	} // enum ActionStatus
 
 	#endregion enum ActionStatus
@@ -58,21 +69,32 @@ namespace EzService {
 
 		#region static methods
 
-		#region method NewAsync
+		#region method Create
 
-		public static ActionMetaData NewAsync(ActionStatus status = ActionStatus.InProgress, string comment = null) {
-			return Create(false, status, comment);
-		} // NewAsync
+		public static ActionMetaData Create(string sServiceInstanceName, string sActionName, AConnection oDB, ASafeLog oLog, bool bIsSynchronous, ActionStatus nStatus, string sComment) {
+			Guid oActionID = Guid.NewGuid();
 
-		#endregion method NewAsync
+			while (oActionID == Guid.Empty)
+				oActionID = Guid.NewGuid();
 
-		#region method NewSync
+			var amd = new ActionMetaData {
+				ActionID = oActionID,
+				Name = sActionName,
+				IsSynchronous = bIsSynchronous,
+				Status = nStatus,
+				UnderlyingThread = Thread.CurrentThread,
+				Comment = sComment,
+				m_oDB = oDB,
+				m_oLog = oLog,
+				m_sServiceInstanceName = sServiceInstanceName
+			};
 
-		public static ActionMetaData NewSync(ActionStatus status = ActionStatus.InProgress, string comment = null) {
-			return Create(true, status, comment);
-		} // NewSync
+			amd.Save();
 
-		#endregion method NewSync
+			return amd;
+		} // Create
+
+		#endregion method Create
 
 		#endregion static methods
 
@@ -80,6 +102,9 @@ namespace EzService {
 
 		[DataMember]
 		public Guid ActionID { get; private set; }
+
+		[DataMember]
+		public string Name { get; private set; }
 
 		[DataMember]
 		public ActionStatus Status;
@@ -96,12 +121,13 @@ namespace EzService {
 
 		public override string ToString() {
 			return string.Format(
-				"{{ {0}: [{1}sync {2}] {3}: {4} }}",
+				"{{ {0}: {5} [{1}sync {2}] {3}: {4} }}",
 				ActionID,
 				IsSynchronous ? "" : "a",
 				UnderlyingThread.ManagedThreadId,
 				Status,
-				Comment ?? "no comments"
+				Comment ?? "no comments",
+				Name
 			);
 		} // ToString
 
@@ -118,6 +144,7 @@ namespace EzService {
 				return TriState.Yes;
 
 			case ActionStatus.InProgress:
+			case ActionStatus.Launched:
 				return TriState.No;
 
 			case ActionStatus.Unknown:
@@ -135,8 +162,8 @@ namespace EzService {
 		public Thread UnderlyingThread {
 			get { return m_oUnderlyingThread; } // get
 			set {
-				if (value == null)
-					throw new ArgumentNullException("UnderlyingThread");
+				if (ReferenceEquals(value, null))
+					throw new ArgumentNullException("value", "UnderlyingThread cannot be null");
 
 				m_oUnderlyingThread = value;
 			} // set
@@ -146,28 +173,45 @@ namespace EzService {
 
 		#endregion property UnderlyingThread
 
+		#region method Save
+
+		public void Save(ActionStatus nNewStatus) {
+			Status = nNewStatus;
+			Save();
+		} // Save
+
+		public void Save() {
+			m_oLog.Debug("Saving action status of {0} to DB...", this);
+
+			try {
+				m_oDB.ExecuteNonQuery("EzServiceSaveActionMetaData",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("@InstanceName", m_sServiceInstanceName),
+					new QueryParameter("@ActionName", Name),
+					new QueryParameter("@ActionID", ActionID),
+					new QueryParameter("@IsSync", IsSynchronous),
+					new QueryParameter("@Status", (int)Status),
+					new QueryParameter("@CurrentThreadID", Thread.CurrentThread.ManagedThreadId),
+					new QueryParameter("@UnderlyingThreadID", UnderlyingThread.ManagedThreadId),
+					new QueryParameter("@Comment", Comment)
+				);
+
+				m_oLog.Debug("Saving action status of {0} to DB complete.", this);
+			}
+			catch (Exception e) {
+				m_oLog.Alert(e, "Failed to save action status of {0} to DB.", this);
+			} // try
+		} // Save
+
+		#endregion method Save
+
 		#endregion public
 
 		#region private
 
-		#region method Create
-
-		private static ActionMetaData Create(bool bIsSynchronous, ActionStatus nStatus, string sComment) {
-			Guid oActionID = Guid.NewGuid();
-
-			while (oActionID == Guid.Empty)
-				oActionID = Guid.NewGuid();
-
-			return new ActionMetaData {
-				ActionID = oActionID,
-				IsSynchronous = bIsSynchronous,
-				Status = nStatus,
-				UnderlyingThread = Thread.CurrentThread,
-				Comment = sComment
-			};
-		} // Create
-
-		#endregion method Create
+		private AConnection m_oDB;
+		private ASafeLog m_oLog;
+		private string m_sServiceInstanceName;
 
 		#endregion private
 	} // struct ActionMetaData

@@ -2,8 +2,6 @@
 using Ezbob.Logger;
 
 namespace EzService {
-	#region class EzServiceInstanceRuntimeData
-
 	public class EzServiceInstanceRuntimeData {
 		#region public
 
@@ -13,8 +11,8 @@ namespace EzService {
 
 		public AConnection DB { get; set; }
 
+		public string InstanceName { get; set; }
+
 		#endregion public
 	} // class EzServiceInstanceRuntimeData
-
-	#endregion class EzServiceInstanceRuntimeData
 } // namespace EzService

@@ -173,7 +173,7 @@ namespace EzServiceHost {
 		private void Run() {
 			try {
 				var oHost = new EzServiceHost(
-					new EzServiceInstanceRuntimeData { Host = this, Log = m_oLog, DB = m_oDB },
+					new EzServiceInstanceRuntimeData { Host = this, Log = m_oLog, DB = m_oDB, InstanceName = m_sInstanceName },
 					typeof(EzServiceImplementation),
 					new Uri(m_oCfg.GetAdminEndpointAddress()),
 					new Uri(m_oCfg.GetClientEndpointAddress())
@@ -244,7 +244,7 @@ namespace EzServiceHost {
 			ServiceMetadataBehavior metadataBehavior = oHost.Description.Behaviors.Find<ServiceMetadataBehavior>();
 
 			if (metadataBehavior == null) {
-				metadataBehavior = new ServiceMetadataBehavior();
+				metadataBehavior = new ServiceMetadataBehavior { HttpGetEnabled = true };
 				oHost.Description.Behaviors.Add(metadataBehavior);
 			} // if
 

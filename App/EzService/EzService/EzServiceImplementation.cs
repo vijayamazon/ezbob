@@ -38,11 +38,7 @@ namespace EzService {
 
 			m_oData = oData;
 
-			m_oLog = ((m_oData != null) && (m_oData.Log != null)) ? m_oData.Log : new SafeLog();
-
-			m_oDB = (m_oData != null) ? m_oData.DB : null;
-
-			m_oLog.Msg("EzService instance created.");
+			Log.Msg("EzService instance created.");
 		} // constructor
 
 		#endregion constructor
@@ -52,35 +48,44 @@ namespace EzService {
 		#region method Shutdown
 
 		public ActionMetaData Shutdown() {
+			ActionMetaData amd = null;
+
 			try {
-				ActionMetaData amd = NewSync(ActionStatus.Done);
+				amd = NewSync("Admin.Shutdown", ActionStatus.Done);
 
 				NewInstancesAllowed = false;
 
-				m_oLog.Msg("Shutdown() method started...");
+				Log.Msg("Shutdown() method started...");
 
 				lock (ms_oLockActiveActions) {
 					foreach (KeyValuePair<Guid, ActionMetaData> kv in ms_oActiveActions)
 						kv.Value.UnderlyingThread.Abort();
 				} // lock
 
+				ActionStatus nNewStatus;
+
 				if ((m_oData != null) && (m_oData.Host != null)) {
 					m_oData.Host.Shutdown();
-					amd.Status = ActionStatus.Done;
+					nNewStatus = ActionStatus.Done;
 				}
 				else {
-					amd.Status = ActionStatus.Finished;
 					amd.Comment = "Host data not initialized.";
+					nNewStatus = ActionStatus.Finished;
 				} // if
 
-				m_oLog.Msg("Shutdown() method complete with result {0}.", amd);
+				Log.Msg("Shutdown() method complete with result {0}.", amd);
 
-				SaveActionStatus(amd);
+				SaveActionStatus(amd, nNewStatus);
 
 				return amd;
 			}
 			catch (Exception e) {
-				m_oLog.Alert(e, "Exception during Shutdown() method.");
+				if (amd != null) {
+					amd.Comment = e.Message;
+					SaveActionStatus(amd, ActionStatus.Failed);
+				} // if
+
+				Log.Alert(e, "Exception during Shutdown() method.");
 				throw new FaultException(e.Message);
 			} // try
 		} // Shutdown
@@ -92,13 +97,15 @@ namespace EzService {
 		public ActionMetaData Terminate(Guid oActionID) {
 			lock (ms_oLockTerminateAction) {
 				try {
-					ActionMetaData amd = NewSync();
+					ActionMetaData amd = NewSync("Admin.Terminate", comment: "condemned: " + oActionID);
 
-					m_oLog.Msg("Terminate({0}) method started...", oActionID);
+					Log.Msg("Terminate({0}) method started...", oActionID);
 
-					if (oActionID == null) {
-						amd.Status = ActionStatus.Finished;
+					ActionStatus nNewStatus;
+
+					if (ReferenceEquals(oActionID, null)) {
 						amd.Comment = "Action ID not specified.";
+						nNewStatus = ActionStatus.Finished;
 					}
 					else{
 						ActionMetaData oCondemned = null;
@@ -109,26 +116,26 @@ namespace EzService {
 						} // lock
 
 						if (oCondemned == null) {
-							amd.Status = ActionStatus.Finished;
 							amd.Comment = "Requested action not found.";
+							nNewStatus = ActionStatus.Finished;
 						}
 						else {
 							oCondemned.UnderlyingThread.Abort();
 
-							oCondemned.Status = ActionStatus.Terminated;
-							SaveActionStatus(oCondemned);
+							SaveActionStatus(oCondemned, ActionStatus.Terminated);
 
-							amd.Status = ActionStatus.Done;
+							nNewStatus = ActionStatus.Done;
 						} // if (not) found action
 					} // if (not) specified id of action to terminate
 
-					m_oLog.Msg("Terminate({0}) method complete with result {1}.", oActionID, amd);
+					SaveActionStatus(amd, nNewStatus);
 
-					SaveActionStatus(amd);
+					Log.Msg("Terminate({0}) method complete with result {1}.", oActionID, amd);
+
 					return amd;
 				}
 				catch (Exception e) {
-					m_oLog.Alert(e, "Exception during Terminate(Guid) method.");
+					Log.Alert(e, "Exception during Terminate(Guid) method.");
 					throw new FaultException(e.Message);
 				} // try
 			} // lock
@@ -140,40 +147,40 @@ namespace EzService {
 
 		public ActionMetaData Nop(int nLengthInSeconds) {
 			try {
-				m_oLog.Msg("Nop({0}) method started...", nLengthInSeconds);
+				Log.Msg("Nop({0}) method started...", nLengthInSeconds);
 
-				ActionMetaData amd = NewAsync();
+				ActionMetaData amd = NewAsync("Admin.Nop", comment: nLengthInSeconds + " seconds");
 
 				if (nLengthInSeconds < 1)
 					throw new Exception("Nop length is less than 1 second.");
 
-				m_oLog.Msg("Nop({0}) method: creating a sleeper...", nLengthInSeconds);
+				Log.Msg("Nop({0}) method: creating a sleeper...", nLengthInSeconds);
 
 				amd.UnderlyingThread = new Thread(() => {
 					for (int i = 1; i <= nLengthInSeconds; i++) {
-						m_oLog.Msg("Nop({0}) method asleeper: {1}...", nLengthInSeconds, i);
+						Log.Msg("Nop({0}) method asleeper: {1}...", nLengthInSeconds, i);
 						Thread.Sleep(1000);
 					} // for
 
-					amd.Status = ActionStatus.Done;
+					SaveActionStatus(amd, ActionStatus.Done);
 
-					m_oLog.Msg("Nop({0}) method asleeper: completed: {1}.", nLengthInSeconds, amd);
-
-					SaveActionStatus(amd);
+					Log.Msg("Nop({0}) method asleeper: completed: {1}.", nLengthInSeconds, amd);
 				});
 
-				m_oLog.Msg("Nop({0}) method: starting asleeper...", nLengthInSeconds);
+				Log.Msg("Nop({0}) method: starting asleeper...", nLengthInSeconds);
 
 				amd.UnderlyingThread.Start();
 
-				m_oLog.Msg("Nop({0}) method: asleeper started: {1}.", nLengthInSeconds, amd);
+				SaveActionStatus(amd, ActionStatus.Launched);
 
-				m_oLog.Msg("Nop({0}) method complete.", nLengthInSeconds);
+				Log.Msg("Nop({0}) method: asleeper started: {1}.", nLengthInSeconds, amd);
+
+				Log.Msg("Nop({0}) method complete.", nLengthInSeconds);
 
 				return amd;
 			}
 			catch (Exception e) {
-				m_oLog.Alert(e, "Exception during Nop() method.");
+				Log.Alert(e, "Exception during Nop() method.");
 				throw new FaultException(e.Message);
 			} // try
 		} // Nop
@@ -184,9 +191,9 @@ namespace EzService {
 
 		public StringListActionResult ListActiveActions() {
 			try {
-				ActionMetaData amd = NewSync();
+				ActionMetaData amd = NewSync("Admin.ListActiveActions");
 
-				m_oLog.Msg("ListActiveActions() method started...");
+				Log.Msg("ListActiveActions() method started...");
 
 				var oResult = new List<string>();
 
@@ -195,14 +202,14 @@ namespace EzService {
 						oResult.Add(kv.Value + " - thread state: " + kv.Value.UnderlyingThread.ThreadState);
 				} // lock
 
-				amd.Status = ActionStatus.Done;
-				SaveActionStatus(amd);
-				m_oLog.Msg("ListActiveActions() method complete with result {0}.", amd);
+				SaveActionStatus(amd, ActionStatus.Done);
+
+				Log.Msg("ListActiveActions() method complete with result {0}.", amd);
 
 				return new StringListActionResult { MetaData = amd, Records = oResult };
 			}
 			catch (Exception e) {
-				m_oLog.Alert(e, "Exception during ListActiveActions() method.");
+				Log.Alert(e, "Exception during ListActiveActions() method.");
 				throw new FaultException(e.Message);
 			} // try
 		} // ListActiveActions
@@ -212,27 +219,34 @@ namespace EzService {
 		#region method WriteToLog
 
 		public ActionMetaData WriteToLog(string sSeverity, string sMsg) {
-			try {
-				ActionMetaData amd = NewSync(ActionStatus.Done);
+			ActionMetaData amd = null;
 
-				m_oLog.Msg("WriteToLog() method started...");
+			try {
+				amd = NewSync("Admin.WriteToLog", comment: string.Format("{0}: {1}", sSeverity, sMsg));
+
+				Log.Msg("WriteToLog() method started...");
 
 				Severity nSeverity = Severity.Info;
 
 				Severity.TryParse(sSeverity, true, out nSeverity);
 
-				m_oLog.Debug("Requested severity: {0}, actual severity: {1}", sSeverity, nSeverity);
+				Log.Debug("Requested severity: {0}, actual severity: {1}", sSeverity, nSeverity);
 
-				m_oLog.Say(nSeverity, sMsg);
+				Log.Say(nSeverity, sMsg);
 
-				m_oLog.Msg("WriteToLog() method complete with result {0}.", amd);
+				Log.Msg("WriteToLog() method complete with result {0}.", amd);
 
-				SaveActionStatus(amd);
+				SaveActionStatus(amd, ActionStatus.Done);
 
 				return amd;
 			}
 			catch (Exception e) {
-				m_oLog.Alert(e, "Exception during WriteToLog() method.");
+				if (amd != null) {
+					amd.Comment = e.Message;
+					SaveActionStatus(amd, ActionStatus.Done);
+				} // if
+
+				Log.Alert(e, "Exception during WriteToLog() method.");
 				throw new FaultException(e.Message);
 			} // try
 		} // WriteToLog
@@ -384,8 +398,7 @@ namespace EzService {
 		#region method IDisposable.Dispose
 
 		public void Dispose() {
-			// TODO: empty so far
-			m_oLog.Msg("EzService instance disposed.");
+			Log.Msg("EzService instance disposed.");
 		} // Dispose
 
 		#endregion method IDisposable.Dispose
@@ -415,10 +428,61 @@ namespace EzService {
 
 		#endregion property NewInstancesAllowed
 
+		#region method Execute
+
+		private ActionMetaData Execute(Type oStrategyType, params object[] args) {
+			ActionMetaData amd = null;
+
+			try {
+				Log.Debug("Executing " + oStrategyType + " started...");
+
+				amd = NewAsync(oStrategyType.ToString(), comment: string.Join("; ", args));
+
+				var oParams = new List<object>(args) { DB, Log };
+
+				ConstructorInfo oCreator = oStrategyType.GetConstructors().FirstOrDefault(ci => ci.GetParameters().Length == oParams.Count);
+
+				if (oCreator == null)
+					throw new Exception("Failed to find a constructor for " + oStrategyType + " with " + oParams.Count + " arguments.");
+
+				Log.Debug(oStrategyType + " constructor found, invoking...");
+
+				amd.UnderlyingThread = new Thread(() => {
+					((AStrategy)oCreator.Invoke(oParams.ToArray())).Execute();
+
+					Log.Debug("Executing " + oStrategyType + " complete.");
+
+					SaveActionStatus(amd, ActionStatus.Done);
+				});
+
+				amd.UnderlyingThread.Start();
+
+				SaveActionStatus(amd, ActionStatus.Launched);
+
+				Log.Debug("Executing " + oStrategyType + " started on another thread.");
+
+				return amd;
+			}
+			catch (Exception e) {
+				if (amd != null) {
+					amd.Comment = e.Message;
+					SaveActionStatus(amd, ActionStatus.Failed);
+				} // if
+
+				Log.Alert(e, "Exception during executing " + oStrategyType + " strategy.");
+				throw new FaultException(e.Message);
+			} // try
+		} // Execute
+
+		#endregion method Execute
+
 		#region method SaveActionStatus
 
-		private void SaveActionStatus(ActionMetaData amd) {
-			m_oLog.Debug("EzService: saving action status to DB: {0}.", amd);
+		private void SaveActionStatus(ActionMetaData amd, ActionStatus nNewStatus) {
+			if (amd == null)
+				return;
+
+			amd.Save(nNewStatus);
 
 			if (amd.IsComplete() == TriState.Yes) {
 				lock (ms_oLockActiveActions) {
@@ -426,101 +490,77 @@ namespace EzService {
 						ms_oActiveActions.Remove(amd.ActionID);
 				} // lock
 			} // if
-
-			// TODO: save to DB
 		} // SaveActionStatus
 
 		#endregion method SaveActionStatus
 
-		#region method Execute
-
-		private ActionMetaData Execute(Type oStrategyType, params object[] args) {
-			ActionMetaData amd = null;
-
-			try {
-				m_oLog.Debug("Executing " + oStrategyType + " started...");
-
-				amd = NewAsync();
-
-				var oParams = new List<object>(args) { m_oDB, m_oLog };
-
-				ConstructorInfo oCreator = oStrategyType.GetConstructors().FirstOrDefault(ci => ci.GetParameters().Length == oParams.Count);
-
-				if (oCreator == null)
-					throw new Exception("Failed to find a constructor for " + oStrategyType + " with " + oParams.Count + " arguments.");
-
-				m_oLog.Debug(oStrategyType + " constructor found, invoking...");
-
-				amd.UnderlyingThread = new Thread(() =>
-				{
-					((AStrategy)oCreator.Invoke(oParams.ToArray())).Execute();
-
-					amd.Status = ActionStatus.Done;
-
-					m_oLog.Debug("Executing " + oStrategyType + " complete.");
-
-					SaveActionStatus(amd);
-				});
-				amd.UnderlyingThread.Start();
-
-				m_oLog.Debug("Executing " + oStrategyType + " started on another thread.");
-
-				return amd;
-			}
-			catch (Exception e) {
-				if (amd != null) {
-					amd.Status = ActionStatus.Failed;
-					SaveActionStatus(amd);
-				} // if
-
-				m_oLog.Alert(e, "Exception during executing " + oStrategyType + " strategy.");
-				throw new FaultException(e.Message);
-			} // try
-		} // Execute
-
-		#endregion method Execute
-
-		#region static methods
-
 		#region method NewAsync
 
-		private ActionMetaData NewAsync(ActionStatus status = ActionStatus.InProgress, string comment = null) {
-			return CreateActionMetaData(false, status, comment);
+		private ActionMetaData NewAsync(string sActionName, ActionStatus status = ActionStatus.InProgress, string comment = null) {
+			return CreateActionMetaData(sActionName, false, status, comment);
 		} // NewAsync
 
 		#endregion method NewAsync
 
 		#region method NewSync
 
-		private ActionMetaData NewSync(ActionStatus status = ActionStatus.InProgress, string comment = null) {
-			return CreateActionMetaData(true, status, comment);
+		private ActionMetaData NewSync(string sActionName, ActionStatus status = ActionStatus.InProgress, string comment = null) {
+			return CreateActionMetaData(sActionName, true, status, comment);
 		} // NewSync
 
 		#endregion method NewSync
 
 		#region method CreateActionMetaData
 
-		private ActionMetaData CreateActionMetaData(bool bIsSynchronous, ActionStatus status = ActionStatus.InProgress, string comment = null) {
-			var amd = bIsSynchronous ? ActionMetaData.NewSync(status, comment) : ActionMetaData.NewAsync(status, comment);
+		private ActionMetaData CreateActionMetaData(string sActionName, bool bIsSynchronous, ActionStatus status = ActionStatus.InProgress, string comment = null) {
+			var amd = ActionMetaData.Create(InstanceName, sActionName, DB, Log, bIsSynchronous, status, comment);
 
-			lock (ms_oLockActiveActions) {
-				ms_oActiveActions[amd.ActionID] = amd;
-			} // lock
-
-			SaveActionStatus(amd);
+			if (amd.IsComplete() != TriState.Yes) {
+				lock (ms_oLockActiveActions) {
+					ms_oActiveActions[amd.ActionID] = amd;
+				} // lock
+			} // if
 
 			return amd;
 		} // CreateActionMetaData
 
 		#endregion method CreateActionMetaData
 
-		#endregion static methods
-
-		#region properties
+		#region properties and fields
 
 		private readonly EzServiceInstanceRuntimeData m_oData;
-		private readonly ASafeLog m_oLog;
-		private readonly AConnection m_oDB;
+
+		#region property Log
+
+		private ASafeLog Log {
+			get {
+				if (ReferenceEquals(m_oTheLog, null))
+					m_oTheLog = ((m_oData != null) && (m_oData.Log != null)) ? m_oData.Log : new SafeLog();
+
+				return m_oTheLog;
+			} // get
+		} // Log
+		private ASafeLog m_oTheLog;
+
+		#endregion property Log
+
+		#region property DB
+
+		private AConnection DB {
+			get { return ReferenceEquals(m_oData, null) ? null : m_oData.DB; } // get
+		} // DB
+
+		#endregion property DB
+
+		#region property InstanceName
+
+		private string InstanceName {
+			get { return ReferenceEquals(m_oData, null) ? string.Empty : m_oData.InstanceName; } // get
+		} // InstanceName
+
+		#endregion property InstanceName
+
+		#region static fields
 
 		private static readonly SortedDictionary<Guid, ActionMetaData> ms_oActiveActions;
 		private static readonly object ms_oLockActiveActions;
@@ -529,7 +569,9 @@ namespace EzService {
 		private static bool ms_bNewInstancesAllowed;
 		private static readonly object ms_oLockNewInstancesAllowed;
 
-		#endregion properties
+		#endregion static fields
+
+		#endregion properties and fields
 
 		#endregion private
 	} // class EzServiceImplementation
