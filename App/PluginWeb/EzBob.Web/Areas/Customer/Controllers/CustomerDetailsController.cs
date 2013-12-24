@@ -1,21 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Web.Mvc;
-using EZBob.DatabaseLib;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Repository;
-using EzBob.Web.ApplicationCreator;
-using EzBob.Web.Areas.Customer.Models;
-using EzBob.Web.Code;
-using EzBob.Web.Infrastructure;
-using EzBob.Web.Infrastructure.csrf;
-using Iesi.Collections.Generic;
-using NHibernate;
-using Scorto.Web;
+﻿namespace EzBob.Web.Areas.Customer.Controllers 
+{
+	using System;
+	using System.Collections.Generic;
+	using System.Globalization;
+	using System.Linq;
+	using System.Web.Mvc;
+	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Repository;
+	using ApplicationCreator;
+	using Models;
+	using Code;
+	using Infrastructure;
+	using Infrastructure.csrf;
+	using Iesi.Collections.Generic;
+	using NHibernate;
+	using Scorto.Web;
+	using EzServiceReference;
 
-namespace EzBob.Web.Areas.Customer.Controllers {
 	#region class CustomerDetailsController
 
 	public class CustomerDetailsController : Controller {

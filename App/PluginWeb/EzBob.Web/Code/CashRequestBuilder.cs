@@ -11,6 +11,7 @@ using PaymentServices.Calculators;
 namespace EzBob.Web.Code
 {
 	using EZBob.DatabaseLib.Model;
+	using EzServiceReference;
 
 	public class CashRequestBuilder
     {

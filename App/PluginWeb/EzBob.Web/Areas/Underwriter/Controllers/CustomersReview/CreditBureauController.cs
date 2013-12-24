@@ -1,19 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using ApplicationMng.Repository;
-using ExperianLib.IdIdentityHub;
-using EZBob.DatabaseLib.Model.Database.Repository;
-using EzBob.Web.ApplicationCreator;
-using EzBob.Web.Areas.Underwriter.Models;
-using EzBob.Web.Code;
-using EzBob.Web.Infrastructure;
-using Scorto.Web;
-
-namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
+﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
-    public class CreditBureauController : Controller
+	using System;
+	using System.Linq;
+	using System.Web.Mvc;
+	using ApplicationMng.Repository;
+	using ExperianLib.IdIdentityHub;
+	using EZBob.DatabaseLib.Model.Database.Repository;
+	using ApplicationCreator;
+	using Models;
+	using Code;
+	using Infrastructure;
+	using Scorto.Web;
+	using EzServiceReference;
+	using ActionResult = System.Web.Mvc.ActionResult;
+
+	public class CreditBureauController : Controller
     {
         private readonly CustomerRepository _customers;
         private readonly IAppCreator _creator;

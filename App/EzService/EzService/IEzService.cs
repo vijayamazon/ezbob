@@ -1,6 +1,8 @@
 ﻿using System.ServiceModel;
 
 namespace EzService {
+	using EzBob.Backend.Strategies;
+
 	#region interface IEzService
 
 	[ServiceContract(SessionMode = SessionMode.Allowed)]
@@ -106,7 +108,18 @@ namespace EzService {
 
 		[OperationContract]
 		ActionMetaData XDaysDue();
+
+		[OperationContract]
+		ActionMetaData MainStrategy1(int customerId, NewCreditLineOption newCreditLine, int avoidAutoDescison);
+
+		[OperationContract]
+		ActionMetaData MainStrategy2(int customerId, NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced);
+
+		[OperationContract]
+		ActionMetaData MainStrategy3(int customerId, int checkType, string houseNumber, string houseName, string street, string district, string town, string county, string postcode, string bankAccount, string sortCode, int avoidAutoDescison);
 	} // interface IEzService
 
 	#endregion interface IEzService
 } // namespace EzService
+
+

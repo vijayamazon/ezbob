@@ -2,6 +2,7 @@
 <xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import namespace="http://schemas.datacontract.org/2004/07/EzService" />
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies" />
   <xs:element name="Shutdown">
     <xs:complexType>
       <xs:sequence />
@@ -549,6 +550,64 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element xmlns:q40="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="XDaysDueResult" nillable="true" type="q40:ActionMetaData" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="MainStrategy1">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="customerId" type="xs:int" />
+        <xs:element xmlns:q41="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies" minOccurs="0" name="newCreditLine" type="q41:NewCreditLineOption" />
+        <xs:element minOccurs="0" name="avoidAutoDescison" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="MainStrategy1Response">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q42="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="MainStrategy1Result" nillable="true" type="q42:ActionMetaData" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="MainStrategy2">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="customerId" type="xs:int" />
+        <xs:element xmlns:q43="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies" minOccurs="0" name="newCreditLine" type="q43:NewCreditLineOption" />
+        <xs:element minOccurs="0" name="avoidAutoDescison" type="xs:int" />
+        <xs:element minOccurs="0" name="isUnderwriterForced" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="MainStrategy2Response">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q44="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="MainStrategy2Result" nillable="true" type="q44:ActionMetaData" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="MainStrategy3">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="customerId" type="xs:int" />
+        <xs:element minOccurs="0" name="checkType" type="xs:int" />
+        <xs:element minOccurs="0" name="houseNumber" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="houseName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="street" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="district" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="town" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="county" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="postcode" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="bankAccount" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="sortCode" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="avoidAutoDescison" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="MainStrategy3Response">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q45="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="MainStrategy3Result" nillable="true" type="q45:ActionMetaData" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

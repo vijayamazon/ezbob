@@ -1,18 +1,19 @@
-﻿using System;
-using System.Web.Mvc;
-using ApplicationMng.Model;
-using ApplicationMng.Repository;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Repository;
-using EzBob.Models;
-using EzBob.Web.ApplicationCreator;
-using EzBob.Web.Areas.Underwriter.Models;
-using System.Linq;
-using Scorto.Web;
-
-namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
+﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
-    public class ProfileController : Controller
+	using System;
+	using System.Web.Mvc;
+	using ApplicationMng.Model;
+	using ApplicationMng.Repository;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Repository;
+	using EzBob.Models;
+	using ApplicationCreator;
+	using System.Linq;
+	using Scorto.Web;
+	using EzServiceReference;
+	using ActionResult = System.Web.Mvc.ActionResult;
+
+	public class ProfileController : Controller
     {
         private readonly ProfileSummaryModelBuilder _summaryModelBuilder;
         private CustomerRepository CustomerRepository { get; set; }

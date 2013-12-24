@@ -30,6 +30,7 @@ namespace EzBob.Web.Code.ApplicationCreator
 		private readonly bool useNewUpdateMpStrategy;
 		private readonly bool useNewUpdateCustomerMpsStrategy;
 		private readonly bool useNewFraudCheckerStrategy;
+		private readonly bool useNewMainStrategy;
 		private readonly bool useNewCaisStrategies;
 		private readonly EzServiceClient serviceClient = new EzServiceClient();
 
@@ -48,6 +49,7 @@ namespace EzBob.Web.Code.ApplicationCreator
 			useNewUpdateCustomerMpsStrategy = configurationVariablesRepository.GetByNameAsBool("UseNewUpdateCustomerMpsStrategy");
 			useNewCaisStrategies = configurationVariablesRepository.GetByNameAsBool("UseNewCaisStrategies");
 			useNewFraudCheckerStrategy = configurationVariablesRepository.GetByNameAsBool("UseNewFraudCheckerStrategy");
+			useNewMainStrategy = configurationVariablesRepository.GetByNameAsBool("UseNewMainStrategy");
         }
 
         public void AfterSignup(User user, string address)
@@ -193,41 +195,62 @@ namespace EzBob.Web.Code.ApplicationCreator
 	        }
         }
 
-        public void Evaluate(User user, NewCreditLineOption newCreditLineOption, int avoidAutomaticDescison, bool isUnderwriterForced = false)
+		public void Evaluate(User user, NewCreditLineOption newCreditLineOption, int avoidAutomaticDescison, bool isUnderwriterForced = false)
         {
-		    var strategyParameters = new[]
-			    {
-				    new StrategyParameter("userId", user.Id),
-				    new StrategyParameter("Underwriter_Check", isUnderwriterForced ? 1 : 0),
-				    new StrategyParameter("NewCreditLineOption", (int) newCreditLineOption),
-				    new StrategyParameter("AvoidAutomaticDescison", avoidAutomaticDescison)
-			    };
-		    var application = CreateApplication(user, strategyParameters, _config.ScoringResultStrategyName);
-		    var customer = _session.Get<Customer>(user.Id);
-		    customer.LastStartedMainStrategy = application;
-		    _session.Update(customer);
+	        if (useNewMainStrategy)
+	        {
+		        if (!isUnderwriterForced)
+		        {
+			        serviceClient.MainStrategy1(user.Id, newCreditLineOption, avoidAutomaticDescison);
+		        }
+		        else
+				{
+					serviceClient.MainStrategy2(user.Id, newCreditLineOption, avoidAutomaticDescison, true);
+		        }
+	        }
+	        else
+	        {
+		        var strategyParameters = new[]
+			        {
+				        new StrategyParameter("userId", user.Id),
+				        new StrategyParameter("Underwriter_Check", isUnderwriterForced ? 1 : 0),
+				        new StrategyParameter("NewCreditLineOption", (int) newCreditLineOption),
+				        new StrategyParameter("AvoidAutomaticDescison", avoidAutomaticDescison)
+			        };
+		        var application = CreateApplication(user, strategyParameters, _config.ScoringResultStrategyName);
+		        var customer = _session.Get<Customer>(user.Id);
+		        customer.LastStartedMainStrategy = application;
+		        _session.Update(customer);
+	        }
         }
 
         public void EvaluateWithIdHubCustomAddress(User user, int checkType, string houseNumber, string houseName, string street,
                                             string district, string town, string county, string postcode, string bankAccount, string sortCode, int avoidAutomaticDescison)
         {
-            var strategyParameters = new[]
-                                         {
-                                             new StrategyParameter("userId", user.Id),
-                                             new StrategyParameter("Underwriter_Check", 1),
-                                             new StrategyParameter("UseCustomIdHubAddress", checkType),
-                                             new StrategyParameter("idhubHouseNumber", houseNumber),
-                                             new StrategyParameter("idhubHouseName", houseName),
-                                             new StrategyParameter("idhubStreet", street),
-                                             new StrategyParameter("idhubDistrict", district),
-                                             new StrategyParameter("idhubTown", town),
-                                             new StrategyParameter("idhubCounty", county),
-                                             new StrategyParameter("idhubPostCode", postcode),
-                                             new StrategyParameter("idhubAccountNumber", bankAccount),
-                                             new StrategyParameter("idhubBranchCode", sortCode),
-                                             new StrategyParameter("AvoidAutomaticDescison", avoidAutomaticDescison)
-                                         };
-            CreateApplication(user, strategyParameters, _config.ScoringResultStrategyName);
+	        if (useNewMainStrategy)
+			{
+				serviceClient.MainStrategy3(user.Id, checkType, houseNumber, houseName, street, district, town, county, postcode, bankAccount, sortCode, avoidAutomaticDescison);
+	        }
+	        else
+	        {
+		        var strategyParameters = new[]
+			        {
+				        new StrategyParameter("userId", user.Id),
+				        new StrategyParameter("Underwriter_Check", 1),
+				        new StrategyParameter("UseCustomIdHubAddress", checkType),
+				        new StrategyParameter("idhubHouseNumber", houseNumber),
+				        new StrategyParameter("idhubHouseName", houseName),
+				        new StrategyParameter("idhubStreet", street),
+				        new StrategyParameter("idhubDistrict", district),
+				        new StrategyParameter("idhubTown", town),
+				        new StrategyParameter("idhubCounty", county),
+				        new StrategyParameter("idhubPostCode", postcode),
+				        new StrategyParameter("idhubAccountNumber", bankAccount),
+				        new StrategyParameter("idhubBranchCode", sortCode),
+				        new StrategyParameter("AvoidAutomaticDescison", avoidAutomaticDescison)
+			        };
+		        CreateApplication(user, strategyParameters, _config.ScoringResultStrategyName);
+	        }
         }
 
         public void GetCashFailed(User user, string firstName)

@@ -321,6 +321,24 @@ namespace EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/XDaysDue", ReplyAction="http://tempuri.org/IEzService/XDaysDueResponse")]
         System.Threading.Tasks.Task<EzService.ActionMetaData> XDaysDueAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy1", ReplyAction="http://tempuri.org/IEzService/MainStrategy1Response")]
+        EzService.ActionMetaData MainStrategy1(int customerId, EzBob.Backend.Strategies.NewCreditLineOption newCreditLine, int avoidAutoDescison);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy1", ReplyAction="http://tempuri.org/IEzService/MainStrategy1Response")]
+        System.Threading.Tasks.Task<EzService.ActionMetaData> MainStrategy1Async(int customerId, EzBob.Backend.Strategies.NewCreditLineOption newCreditLine, int avoidAutoDescison);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy2", ReplyAction="http://tempuri.org/IEzService/MainStrategy2Response")]
+        EzService.ActionMetaData MainStrategy2(int customerId, EzBob.Backend.Strategies.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy2", ReplyAction="http://tempuri.org/IEzService/MainStrategy2Response")]
+        System.Threading.Tasks.Task<EzService.ActionMetaData> MainStrategy2Async(int customerId, EzBob.Backend.Strategies.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy3", ReplyAction="http://tempuri.org/IEzService/MainStrategy3Response")]
+        EzService.ActionMetaData MainStrategy3(int customerId, int checkType, string houseNumber, string houseName, string street, string district, string town, string county, string postcode, string bankAccount, string sortCode, int avoidAutoDescison);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy3", ReplyAction="http://tempuri.org/IEzService/MainStrategy3Response")]
+        System.Threading.Tasks.Task<EzService.ActionMetaData> MainStrategy3Async(int customerId, int checkType, string houseNumber, string houseName, string street, string district, string town, string county, string postcode, string bankAccount, string sortCode, int avoidAutoDescison);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -620,6 +638,30 @@ namespace EzServiceReference {
         
         public System.Threading.Tasks.Task<EzService.ActionMetaData> XDaysDueAsync() {
             return base.Channel.XDaysDueAsync();
+        }
+        
+        public EzService.ActionMetaData MainStrategy1(int customerId, EzBob.Backend.Strategies.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
+            return base.Channel.MainStrategy1(customerId, newCreditLine, avoidAutoDescison);
+        }
+        
+        public System.Threading.Tasks.Task<EzService.ActionMetaData> MainStrategy1Async(int customerId, EzBob.Backend.Strategies.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
+            return base.Channel.MainStrategy1Async(customerId, newCreditLine, avoidAutoDescison);
+        }
+        
+        public EzService.ActionMetaData MainStrategy2(int customerId, EzBob.Backend.Strategies.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced) {
+            return base.Channel.MainStrategy2(customerId, newCreditLine, avoidAutoDescison, isUnderwriterForced);
+        }
+        
+        public System.Threading.Tasks.Task<EzService.ActionMetaData> MainStrategy2Async(int customerId, EzBob.Backend.Strategies.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced) {
+            return base.Channel.MainStrategy2Async(customerId, newCreditLine, avoidAutoDescison, isUnderwriterForced);
+        }
+        
+        public EzService.ActionMetaData MainStrategy3(int customerId, int checkType, string houseNumber, string houseName, string street, string district, string town, string county, string postcode, string bankAccount, string sortCode, int avoidAutoDescison) {
+            return base.Channel.MainStrategy3(customerId, checkType, houseNumber, houseName, street, district, town, county, postcode, bankAccount, sortCode, avoidAutoDescison);
+        }
+        
+        public System.Threading.Tasks.Task<EzService.ActionMetaData> MainStrategy3Async(int customerId, int checkType, string houseNumber, string houseName, string street, string district, string town, string county, string postcode, string bankAccount, string sortCode, int avoidAutoDescison) {
+            return base.Channel.MainStrategy3Async(customerId, checkType, houseNumber, houseName, street, district, town, county, postcode, bankAccount, sortCode, avoidAutoDescison);
         }
     }
 }

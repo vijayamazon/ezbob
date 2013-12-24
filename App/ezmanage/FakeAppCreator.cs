@@ -1,12 +1,13 @@
-﻿using System;
-using ApplicationMng.Model;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Loans;
-using EzBob.Web.ApplicationCreator;
-
-namespace ezmanage
+﻿namespace ezmanage
 {
-    public class FakeAppCreator : IAppCreator
+	using System;
+	using ApplicationMng.Model;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EzBob.Web.ApplicationCreator;
+	using EzBob.Web.EzServiceReference;
+
+	public class FakeAppCreator : IAppCreator
     {
         public void AfterSignup(User user, string address)
         {

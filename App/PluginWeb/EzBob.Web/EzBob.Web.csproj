@@ -1209,6 +1209,9 @@
     <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.StringListActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
+    <None Include="Service References\EzServiceReference\EzBob.Backend.Strategies.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\EzServiceReference\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>

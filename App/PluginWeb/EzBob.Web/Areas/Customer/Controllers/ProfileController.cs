@@ -6,7 +6,7 @@
 	using EKM;
 	using EZBob.DatabaseLib.Model.Database;
 	using ApplicationCreator;
-	using EZBob.DatabaseLib.Model.Database.Repository;
+	using EzServiceReference;
 	using Models;
 	using Code;
 	using Infrastructure;

@@ -26,6 +26,7 @@
     <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="94aef124-bba3-42b9-b156-bc34f98842c1" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="EzService.xsd" MetadataType="Schema" ID="b86310cc-fbfb-4463-a6f3-23b91a73e991" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="Arrays.xsd" MetadataType="Schema" ID="fda44409-db1c-4437-aec9-d42978772e11" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
+    <MetadataFile FileName="EzBob.Backend.Strategies.xsd" MetadataType="Schema" ID="a9346739-ffcc-450e-b83a-d87e81504361" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

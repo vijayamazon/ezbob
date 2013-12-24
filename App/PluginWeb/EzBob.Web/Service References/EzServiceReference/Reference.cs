@@ -198,6 +198,23 @@ namespace EzBob.Web.EzServiceReference {
         }
     }
     
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="NewCreditLineOption", Namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies")]
+    public enum NewCreditLineOption : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        SkipEverything = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        UpdateEverythingExceptMp = 2,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        UpdateEverythingAndApplyAutoRules = 3,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        UpdateEverythingAndGoToManualDecision = 4,
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="EzServiceReference.IEzServiceAdmin")]
     public interface IEzServiceAdmin {
@@ -371,6 +388,15 @@ namespace EzBob.Web.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/XDaysDue", ReplyAction="http://tempuri.org/IEzService/XDaysDueResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData XDaysDue();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy1", ReplyAction="http://tempuri.org/IEzService/MainStrategy1Response")]
+        EzBob.Web.EzServiceReference.ActionMetaData MainStrategy1(int customerId, EzBob.Web.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy2", ReplyAction="http://tempuri.org/IEzService/MainStrategy2Response")]
+        EzBob.Web.EzServiceReference.ActionMetaData MainStrategy2(int customerId, EzBob.Web.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy3", ReplyAction="http://tempuri.org/IEzService/MainStrategy3Response")]
+        EzBob.Web.EzServiceReference.ActionMetaData MainStrategy3(int customerId, int checkType, string houseNumber, string houseName, string street, string district, string town, string county, string postcode, string bankAccount, string sortCode, int avoidAutoDescison);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -534,6 +560,18 @@ namespace EzBob.Web.EzServiceReference {
         
         public EzBob.Web.EzServiceReference.ActionMetaData XDaysDue() {
             return base.Channel.XDaysDue();
+        }
+        
+        public EzBob.Web.EzServiceReference.ActionMetaData MainStrategy1(int customerId, EzBob.Web.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
+            return base.Channel.MainStrategy1(customerId, newCreditLine, avoidAutoDescison);
+        }
+        
+        public EzBob.Web.EzServiceReference.ActionMetaData MainStrategy2(int customerId, EzBob.Web.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced) {
+            return base.Channel.MainStrategy2(customerId, newCreditLine, avoidAutoDescison, isUnderwriterForced);
+        }
+        
+        public EzBob.Web.EzServiceReference.ActionMetaData MainStrategy3(int customerId, int checkType, string houseNumber, string houseName, string street, string district, string town, string county, string postcode, string bankAccount, string sortCode, int avoidAutoDescison) {
+            return base.Channel.MainStrategy3(customerId, checkType, houseNumber, houseName, street, district, town, county, postcode, bankAccount, sortCode, avoidAutoDescison);
         }
     }
 }

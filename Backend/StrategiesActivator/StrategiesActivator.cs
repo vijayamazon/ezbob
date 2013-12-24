@@ -138,10 +138,13 @@
 				case "XDaysDue":
 					ActivateXDaysDue();
 					break;
+				case "MainStrategy":
+					ActivateMainStrategy();
+					break;
 
 				default:
 					Console.WriteLine("Strategy {0} is not supported", strategyName);
-					Console.WriteLine("Supported stratefies are:Greeting, ApprovedUser, CashTransferred, EmailRolloverAdded, EmailUnderReview, Escalated, GetCashFailed, LoanFullyPaid, MoreAMLandBWAInformation, MoreAMLInformation, MoreBWAInformation, PasswordChanged, PasswordRestored, PayEarly, PayPointAddedByUnderwriter, PayPointNameValidationFailed, RejectUser, RenewEbayToken, RequestCashWithoutTakenLoan, SendEmailVerification, ThreeInvalidAttempts, TransferCashFailed, CaisGenerate, CaisUpdate, FirstOfMonthStatusNotifier, FraudChecker, LateBy14Days, PayPointCharger, SetLateLoanStatus, CustomerMarketPlaceAdded, UpdateAllMarketplaces, UpdateTransactionStatus, XDaysDue");
+					Console.WriteLine("Supported stratefies are:Greeting, ApprovedUser, CashTransferred, EmailRolloverAdded, EmailUnderReview, Escalated, GetCashFailed, LoanFullyPaid, MoreAMLandBWAInformation, MoreAMLInformation, MoreBWAInformation, PasswordChanged, PasswordRestored, PayEarly, PayPointAddedByUnderwriter, PayPointNameValidationFailed, RejectUser, RenewEbayToken, RequestCashWithoutTakenLoan, SendEmailVerification, ThreeInvalidAttempts, TransferCashFailed, CaisGenerate, CaisUpdate, FirstOfMonthStatusNotifier, FraudChecker, LateBy14Days, PayPointCharger, SetLateLoanStatus, CustomerMarketPlaceAdded, UpdateAllMarketplaces, UpdateTransactionStatus, XDaysDue, MainStrategy");
 					break;
 			}
 		}
@@ -494,7 +497,7 @@
 			int customerId, marketplaceId;
 			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !int.TryParse(args[2], out marketplaceId))
 			{
-				Console.WriteLine("Usage: StrategiesActivator.exe CustomerMarketPlaceAdded <CustomerId> <marketplaceId>");
+				Console.WriteLine("Usage: StrategiesActivator.exe CustomerMarketPlaceAdded <CustomerId> <CustomerMarketplaceId>");
 				return;
 			}
 
@@ -531,6 +534,44 @@
 				return;
 			}
 			new XDaysDue(m_oDB, m_oLog).Execute();
+		}
+
+		private void ActivateMainStrategy()
+		{
+			int customerId, avoidAutoDescison;
+			NewCreditLineOption newCreditLineOption;
+			if (args.Length == 4)
+			{
+				if (int.TryParse(args[2], out customerId) && Enum.TryParse(args[3], out newCreditLineOption) && int.TryParse(args[4], out avoidAutoDescison))
+				{
+					serviceClient.MainStrategy1(customerId, newCreditLineOption, avoidAutoDescison);
+					return;
+				}
+			}
+			else if (args.Length == 5)
+			{
+				bool isUnderwriterForced;
+				if (int.TryParse(args[2], out customerId) && Enum.TryParse(args[3], out newCreditLineOption) && int.TryParse(args[4], out avoidAutoDescison) && bool.TryParse(args[5], out isUnderwriterForced))
+				{
+					serviceClient.MainStrategy2(customerId, newCreditLineOption, avoidAutoDescison, isUnderwriterForced);
+					return;
+				}
+			}
+			else if (args.Length == 14)
+			{
+				int checkType; 
+				if (int.TryParse(args[2], out customerId) && int.TryParse(args[3], out checkType) && int.TryParse(args[13], out avoidAutoDescison))
+				{
+					serviceClient.MainStrategy3(customerId, checkType, args[4], args[5], args[6], args[7], args[8], args[9], args[10], args[11], args[12], avoidAutoDescison);
+					return;
+				}
+			}
+
+			Console.WriteLine("Usage: StrategiesActivator.exe MainStrategy <customerId> <newCreditLineOption> <avoidAutoDescison>");
+			Console.WriteLine("OR");
+			Console.WriteLine("Usage: StrategiesActivator.exe MainStrategy <customerId> <newCreditLineOption> <avoidAutoDescison> <isUnderwriterForced(should always be true)>");
+			Console.WriteLine("OR");
+			Console.WriteLine("Usage: StrategiesActivator.exe MainStrategy <customerId> <checkType> <houseNumber> <houseName> <street> <district> <town> <county> <postcode> <bankAccount> <sortCode> <avoidAutoDescison>");
 		}
 
 		private readonly AConnection m_oDB;

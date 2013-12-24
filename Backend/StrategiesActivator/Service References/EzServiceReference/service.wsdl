@@ -49,6 +49,7 @@
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzService" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IEzServiceAdmin_Shutdown_InputMessage">
@@ -285,6 +286,24 @@
   <wsdl:message name="IEzService_XDaysDue_OutputMessage">
     <wsdl:part name="parameters" element="tns:XDaysDueResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_MainStrategy1_InputMessage">
+    <wsdl:part name="parameters" element="tns:MainStrategy1" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_MainStrategy1_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MainStrategy1Response" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_MainStrategy2_InputMessage">
+    <wsdl:part name="parameters" element="tns:MainStrategy2" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_MainStrategy2_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MainStrategy2Response" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_MainStrategy3_InputMessage">
+    <wsdl:part name="parameters" element="tns:MainStrategy3" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_MainStrategy3_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MainStrategy3Response" />
+  </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/Shutdown" message="tns:IEzServiceAdmin_Shutdown_InputMessage" />
@@ -443,6 +462,18 @@
     <wsdl:operation name="XDaysDue">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/XDaysDue" message="tns:IEzService_XDaysDue_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/XDaysDueResponse" message="tns:IEzService_XDaysDue_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="MainStrategy1">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MainStrategy1" message="tns:IEzService_MainStrategy1_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MainStrategy1Response" message="tns:IEzService_MainStrategy1_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="MainStrategy2">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MainStrategy2" message="tns:IEzService_MainStrategy2_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MainStrategy2Response" message="tns:IEzService_MainStrategy2_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="MainStrategy3">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MainStrategy3" message="tns:IEzService_MainStrategy3_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MainStrategy3Response" message="tns:IEzService_MainStrategy3_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
@@ -798,6 +829,33 @@
     </wsdl:operation>
     <wsdl:operation name="XDaysDue">
       <soap12:operation soapAction="http://tempuri.org/IEzService/XDaysDue" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MainStrategy1">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/MainStrategy1" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MainStrategy2">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/MainStrategy2" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MainStrategy3">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/MainStrategy3" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

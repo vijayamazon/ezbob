@@ -393,6 +393,22 @@ namespace EzService {
 			return Execute(typeof (XDaysDue));
 		} // XDaysDue
 
+
+		public ActionMetaData MainStrategy1(int customerId, NewCreditLineOption newCreditLine, int avoidAutoDescison)
+		{
+			return Execute(typeof(MainStrategy), customerId, newCreditLine, avoidAutoDescison);
+		}
+
+		public ActionMetaData MainStrategy2(int customerId, NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced)
+		{
+			return Execute(typeof(MainStrategy), customerId, newCreditLine, avoidAutoDescison, isUnderwriterForced);
+		}
+
+		public ActionMetaData MainStrategy3(int customerId, int checkType, string houseNumber, string houseName, string street, string district, string town, string county, string postcode, string bankAccount, string sortCode, int avoidAutoDescison)
+		{
+			return Execute(typeof(MainStrategy), customerId, checkType, houseNumber, houseName, street, district, town, county, postcode, bankAccount, sortCode, avoidAutoDescison);
+		}
+
 		#endregion IEzService exposed methods
 
 		#region method IDisposable.Dispose

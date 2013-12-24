@@ -1,11 +1,12 @@
-using System;
-using ApplicationMng.Model;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Loans;
-
 namespace EzBob.Web.ApplicationCreator
 {
-    public interface IAppCreator
+	using System;
+	using ApplicationMng.Model;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EzServiceReference;
+
+	public interface IAppCreator
     {
         void AfterSignup(User user, string address);
         void CashTransfered(User user, string firstName, decimal cashAmount, decimal setUpFee, int loanId);
@@ -37,13 +38,5 @@ namespace EzBob.Web.ApplicationCreator
 	    void FraudChecker(User user);
         void RequestCashWithoutTakenLoan(Customer customer, string dashboard);
         void LoanFullyPaid(Loan loan);
-    }
-
-    public enum NewCreditLineOption
-    {
-        SkipEverything = 1,
-        UpdateEverythingExceptMp = 2,
-        UpdateEverythingAndApplyAutoRules = 3,
-        UpdateEverythingAndGoToManualDecision = 4,
     }
 }

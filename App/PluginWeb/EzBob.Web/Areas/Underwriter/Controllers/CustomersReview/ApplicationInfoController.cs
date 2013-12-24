@@ -1,7 +1,6 @@
-﻿using EZBob.DatabaseLib.Model.Database.Loans;
-
-namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
+﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
+	using EZBob.DatabaseLib.Model.Database.Loans;
 	using System;
 	using System.Web.Mvc;
 	using ApplicationMng.Repository;
@@ -10,7 +9,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Loans;
-	using ApplicationCreator;
+	using EzServiceReference;
 	using Models;
 	using Code;
 	using Infrastructure;
