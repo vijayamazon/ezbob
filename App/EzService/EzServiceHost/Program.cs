@@ -163,6 +163,28 @@ namespace EzServiceHost {
 
 			m_oCfg = new Configuration(m_sInstanceName, m_oDB, m_oLog);
 
+			m_oHost = new EzServiceHost(
+				new EzServiceInstanceRuntimeData { Host = this, Log = m_oLog, DB = m_oDB, InstanceName = m_sInstanceName, InstanceID = m_oCfg.InstanceID },
+				typeof(EzServiceImplementation),
+				new Uri(m_oCfg.GetAdminEndpointAddress()),
+				new Uri(m_oCfg.GetClientEndpointAddress())
+			);
+
+			SetMetadataEndpoit();
+
+			m_oHost.AddServiceEndpoint(typeof(IEzServiceAdmin), new NetTcpBinding(), m_oCfg.GetAdminEndpointAddress());
+
+			// To enable HTTP binding on custom port: open cmd.exe as administrator and
+			//     netsh http add urlacl url=http://+:7082/ user=ALEXBO-PC\alexbo
+			// where 7082 is your customer port and ALEXBO-PC\alexbo is the user
+			// who runs the instance of the host.
+			// To remove permission:
+			//     netsh http add urlacl url=http://+:7082/
+			// Mind the backslash at the end of the URL.
+			m_oHost.AddServiceEndpoint(typeof(IEzService), new NetHttpBinding(), m_oCfg.GetClientEndpointAddress());
+
+			m_oLog.Info("EzService endpoint has been created.");
+
 			return true;
 		} // Init
 
@@ -172,29 +194,7 @@ namespace EzServiceHost {
 
 		private void Run() {
 			try {
-				var oHost = new EzServiceHost(
-					new EzServiceInstanceRuntimeData { Host = this, Log = m_oLog, DB = m_oDB, InstanceName = m_sInstanceName },
-					typeof(EzServiceImplementation),
-					new Uri(m_oCfg.GetAdminEndpointAddress()),
-					new Uri(m_oCfg.GetClientEndpointAddress())
-				);
-
-				SetMetadataEndpoit(oHost);
-
-				oHost.AddServiceEndpoint(typeof(IEzServiceAdmin), new NetTcpBinding(), m_oCfg.GetAdminEndpointAddress());
-
-				// To enable HTTP binding on custom port: open cmd.exe as administrator and
-				//     netsh http add urlacl url=http://+:7082/ user=ALEXBO-PC\alexbo
-				// where 7082 is your customer port and ALEXBO-PC\alexbo is the user
-				// who runs the instance of the host.
-				// To remove permission:
-				//     netsh http add urlacl url=http://+:7082/
-				// Mind the backslash at the end of the URL.
-				oHost.AddServiceEndpoint(typeof(IEzService), new NetHttpBinding(), m_oCfg.GetClientEndpointAddress());
-
-				m_oLog.Info("EzService endpoint has been created.");
-
-				oHost.Open();
+				m_oHost.Open();
 
 				m_oLog.Info("EzService host has been opened.");
 
@@ -212,7 +212,7 @@ namespace EzServiceHost {
 
 				m_oLog.Info("Main loop has completed.");
 
-				oHost.Close();
+				m_oHost.Close();
 
 				m_oLog.Info("EzService host has been closed.");
 			}
@@ -238,18 +238,18 @@ namespace EzServiceHost {
 
 		#region method SetMetadataEndpoint
 
-		private void SetMetadataEndpoit(EzServiceHost oHost) {
+		private void SetMetadataEndpoit() {
 			m_oLog.Info("Establishing EzService meta data publishing endpoint...");
 
-			ServiceMetadataBehavior metadataBehavior = oHost.Description.Behaviors.Find<ServiceMetadataBehavior>();
+			ServiceMetadataBehavior metadataBehavior = m_oHost.Description.Behaviors.Find<ServiceMetadataBehavior>();
 
 			if (metadataBehavior == null) {
 				metadataBehavior = new ServiceMetadataBehavior { HttpGetEnabled = true };
-				oHost.Description.Behaviors.Add(metadataBehavior);
+				m_oHost.Description.Behaviors.Add(metadataBehavior);
 			} // if
 
 			Binding binding = MetadataExchangeBindings.CreateMexTcpBinding();
-			oHost.AddServiceEndpoint(typeof(IMetadataExchange), binding, "MEX");
+			m_oHost.AddServiceEndpoint(typeof(IMetadataExchange), binding, "MEX");
 
 			m_oLog.Info("Establishing EzService meta data publishing endpoint completed.");
 		} // SetMetadataEndpoint
@@ -277,6 +277,7 @@ namespace EzServiceHost {
 		private readonly string[] m_aryArgs;
 		private string m_sInstanceName;
 		private Configuration m_oCfg;
+		private EzServiceHost m_oHost;
 
 		private ASafeLog m_oLog;
 		private AConnection m_oDB;

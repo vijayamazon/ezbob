@@ -71,7 +71,7 @@ namespace EzService {
 
 		#region method Create
 
-		public static ActionMetaData Create(string sServiceInstanceName, string sActionName, AConnection oDB, ASafeLog oLog, bool bIsSynchronous, ActionStatus nStatus, string sComment) {
+		public static ActionMetaData Create(int nServiceInstanceID, string sActionName, AConnection oDB, ASafeLog oLog, bool bIsSynchronous, ActionStatus nStatus, string sComment) {
 			Guid oActionID = Guid.NewGuid();
 
 			while (oActionID == Guid.Empty)
@@ -86,7 +86,7 @@ namespace EzService {
 				Comment = sComment,
 				m_oDB = oDB,
 				m_oLog = oLog,
-				m_sServiceInstanceName = sServiceInstanceName
+				m_nServiceInstanceID = nServiceInstanceID
 			};
 
 			amd.Save();
@@ -126,7 +126,7 @@ namespace EzService {
 				IsSynchronous ? "" : "a",
 				UnderlyingThread.ManagedThreadId,
 				Status,
-				Comment ?? "no comments",
+				Comment ?? "-- no comments --",
 				Name
 			);
 		} // ToString
@@ -186,7 +186,7 @@ namespace EzService {
 			try {
 				m_oDB.ExecuteNonQuery("EzServiceSaveActionMetaData",
 					CommandSpecies.StoredProcedure,
-					new QueryParameter("@InstanceName", m_sServiceInstanceName),
+					new QueryParameter("@InstanceID", m_nServiceInstanceID),
 					new QueryParameter("@ActionName", Name),
 					new QueryParameter("@ActionID", ActionID),
 					new QueryParameter("@IsSync", IsSynchronous),
@@ -211,7 +211,7 @@ namespace EzService {
 
 		private AConnection m_oDB;
 		private ASafeLog m_oLog;
-		private string m_sServiceInstanceName;
+		private int m_nServiceInstanceID;
 
 		#endregion private
 	} // struct ActionMetaData

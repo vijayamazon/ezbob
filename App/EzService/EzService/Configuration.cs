@@ -12,8 +12,6 @@ namespace EzService {
 
 		#region constructor
 
-		public Configuration() {} // default constructor - for deserialization
-
 		public Configuration(string sInstanceName, AConnection oDB, ASafeLog oLog) {
 			oLog.Debug("Loading service configuration from DB for service instance {0}...", sInstanceName);
 
@@ -26,17 +24,21 @@ namespace EzService {
 			if (oTbl.Rows.Count != 1)
 				throw new Exception(string.Format("Failed to load service configuration for service instance {0} from DB.", sInstanceName));
 
-			Configuration cfg = JsonConvert.DeserializeObject<Configuration>(oTbl.Rows[0][0].ToString());
+			DataRow oRow = oTbl.Rows[0];
 
-			if (!cfg.IsValid())
-				throw new Exception("Invalid service configuration loaded from DB.");
+			InstanceID = Convert.ToInt32(oRow["InstanceID"]);
+			SleepTimeout = Convert.ToInt32(oRow["SleepTimeout"]);
+			AdminPort = Convert.ToInt32(oRow["AdminPort"]);
+			ClientPort = Convert.ToInt32(oRow["ClientPort"]);
+			HostName = oRow["HostName"].ToString();
 
-			SleepTimeout = cfg.SleepTimeout;
-			AdminPort = cfg.AdminPort;
-			ClientPort = cfg.ClientPort;
-			HostName = cfg.HostName;
+			oTbl.Dispose();
+
+			if (!IsValid())
+				throw new Exception(string.Format("Invalid service configuration for service instance {0} has been loaded from DB.", sInstanceName));
 
 			oLog.Debug("Service configuration:");
+			oLog.Debug("Instance ID: {0}", InstanceID);
 			oLog.Debug("Main loop sleep time: {0}", SleepTimeout);
 			oLog.Debug("Client endpoint address: {0}", GetClientEndpointAddress());
 			oLog.Debug("Admin endpoint address: {0}", GetAdminEndpointAddress());
@@ -47,9 +49,10 @@ namespace EzService {
 
 		#endregion constructor
 
-		public int SleepTimeout { get; set; }
-		public int AdminPort { get; set; }
-		public int ClientPort { get; set; }
+		public int InstanceID { get; private set; }
+		public int SleepTimeout { get; private set; }
+		public int AdminPort { get; private set; }
+		public int ClientPort { get; private set; }
 
 		#region property HostName
 

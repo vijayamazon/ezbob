@@ -44,35 +44,8 @@ GO
 
 -------------------------------------------------------------------------------
 
-IF OBJECT_ID('EzServiceSaveActionMetaData') IS NULL
-	EXECUTE('CREATE PROCEDURE EzServiceSaveActionMetaData AS SELECT 1')
-GO
-
-ALTER PROCEDURE EzServiceSaveActionMetaData
-@InstanceName NVARCHAR(32),
-@ActionName NVARCHAR(255),
-@ActionID UNIQUEIDENTIFIER,
-@IsSync BIT,
-@Status INT,
-@CurrentThreadID INT,
-@UnderlyingThreadID INT,
-@Comment NTEXT = NULL
-AS
-BEGIN
-	SET NOCOUNT ON;
-
-	DECLARE @ActionNameID INT
-
-	EXECUTE EzServiceGetActionNameID @ActionName, @ActionNameID OUTPUT
-	
-	INSERT INTO EzServiceActionHistory (ServiceInstanceName, ActionNameID, ActionID, IsSync, ActionStatusID, CurrentThreadID, UnderlyingThreadID, Comment) VALUES
-		(@InstanceName, @ActionNameID, @ActionID, @IsSync, @Status, @CurrentThreadID, @UnderlyingThreadID, @Comment)
-END
-GO
-
--------------------------------------------------------------------------------
-
 IF NOT EXISTS (SELECT * FROM EzServiceActionStatus WHERE ActionStatusID = 7)
 	INSERT INTO EzServiceActionStatus (ActionStatusID, ActionStatusName, ActionStatusDescription) VALUES
 		(7, 'BG launch', 'Underlying thread has been started.')
 GO
+

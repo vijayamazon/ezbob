@@ -13,6 +13,8 @@ namespace EzService {
 
 		public string InstanceName { get; set; }
 
+		public int InstanceID { get; set; }
+
 		#endregion public
 	} // class EzServiceInstanceRuntimeData
 } // namespace EzService

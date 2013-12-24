@@ -39,21 +39,3 @@ BEGIN
 END
 GO
 
-IF OBJECT_ID('EzServiceSaveActionMetaData') IS NULL
-	EXECUTE('CREATE PROCEDURE EzServiceSaveActionMetaData AS SELECT 1')
-GO
-
-ALTER PROCEDURE EzServiceSaveActionMetaData
-@InstanceName NVARCHAR(32),
-@ActionID UNIQUEIDENTIFIER,
-@IsSync BIT,
-@Status INT,
-@CurrentThreadID INT,
-@UnderlyingThreadID INT,
-@Comment NTEXT = NULL
-AS
-BEGIN
-	INSERT INTO EzServiceActionHistory (ServiceInstanceName, ActionID, IsSync, ActionStatusID, CurrentThreadID, UnderlyingThreadID, Comment) VALUES
-		(@InstanceName, @ActionID, @IsSync, @Status, @CurrentThreadID, @UnderlyingThreadID, @Comment)
-END
-GO

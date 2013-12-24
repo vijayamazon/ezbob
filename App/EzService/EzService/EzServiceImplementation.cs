@@ -529,7 +529,7 @@ namespace EzService {
 		#region method CreateActionMetaData
 
 		private ActionMetaData CreateActionMetaData(string sActionName, bool bIsSynchronous, ActionStatus status = ActionStatus.InProgress, string comment = null) {
-			var amd = ActionMetaData.Create(InstanceName, sActionName, DB, Log, bIsSynchronous, status, comment);
+			var amd = ActionMetaData.Create(InstanceID, sActionName, DB, Log, bIsSynchronous, status, comment);
 
 			if (amd.IsComplete() != TriState.Yes) {
 				lock (ms_oLockActiveActions) {
@@ -575,6 +575,14 @@ namespace EzService {
 		} // InstanceName
 
 		#endregion property InstanceName
+
+		#region property InstanceID
+
+		private int InstanceID {
+			get { return ReferenceEquals(m_oData, null) ? 0 : m_oData.InstanceID; } // get
+		} // InstanceID
+
+		#endregion property InstanceID
 
 		#region static fields
 
