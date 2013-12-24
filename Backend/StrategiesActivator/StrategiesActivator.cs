@@ -421,7 +421,8 @@
 				Console.WriteLine("Usage: StrategiesActivator.exe CaisGenerate <underwriterId>");
 				return;
 			}
-			new CaisGenerate(underwriterId, m_oDB, m_oLog).Execute();
+
+			serviceClient.CaisGenerate(underwriterId);
 		}
 
 		private void ActivateCaisUpdate()
@@ -432,7 +433,8 @@
 				Console.WriteLine("Usage: StrategiesActivator.exe CaisUpdate <caisId>");
 				return;
 			}
-			new CaisGenerate(caisId, m_oDB, m_oLog).Execute();
+
+			serviceClient.CaisUpdate(caisId);
 		}
 
 		private void ActivateFirstOfMonthStatusNotifier()
@@ -453,7 +455,8 @@
 				Console.WriteLine("Usage: StrategiesActivator.exe FraudChecker <CustomerId>");
 				return;
 			}
-			new FraudChecker(customerId, m_oDB, m_oLog).Execute();
+
+			serviceClient.FraudChecker(customerId);
 		}
 
 		private void ActivateLateBy14Days()

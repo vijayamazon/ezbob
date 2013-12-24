@@ -29,6 +29,8 @@ namespace EzBob.Web.Code.ApplicationCreator
 		private readonly bool useNewMailStrategies;
 		private readonly bool useNewUpdateMpStrategy;
 		private readonly bool useNewUpdateCustomerMpsStrategy;
+		private readonly bool useNewFraudCheckerStrategy;
+		private readonly bool useNewCaisStrategies;
 		private readonly EzServiceClient serviceClient = new EzServiceClient();
 
 	    public AppCreator(IEzBobConfiguration config, IUsersRepository users, ISession session, ApplicationRepository applicationRepository,
@@ -44,6 +46,8 @@ namespace EzBob.Web.Code.ApplicationCreator
 			useNewMailStrategies = configurationVariablesRepository.GetByNameAsBool("UseNewMailStrategies");
 			useNewUpdateMpStrategy = configurationVariablesRepository.GetByNameAsBool("UseNewUpdateMpStrategy");
 			useNewUpdateCustomerMpsStrategy = configurationVariablesRepository.GetByNameAsBool("UseNewUpdateCustomerMpsStrategy");
+			useNewCaisStrategies = configurationVariablesRepository.GetByNameAsBool("UseNewCaisStrategies");
+			useNewFraudCheckerStrategy = configurationVariablesRepository.GetByNameAsBool("UseNewFraudCheckerStrategy");
         }
 
         public void AfterSignup(User user, string address)
@@ -524,37 +528,58 @@ namespace EzBob.Web.Code.ApplicationCreator
 
         public void CAISGenerate(User user)
         {
-            var caisStrategies = _strategies.GetAll().Where(x => x.DisplayName == _config.CAISNoUploadStrategyName);
-            var caisStrat = caisStrategies.FirstOrDefault(x => x.Id == caisStrategies.Max(y => y.Id));
-            var caisStratStatus = _applicationRepository.GetAll().Where(x => x.Strategy == caisStrat).Select(x=>x.State);
-            if (caisStratStatus.Any(x => 
-                   x != ApplicationStrategyState.SecurityViolation &&
-                   x != ApplicationStrategyState.StrategyFinishedWithoutErrors &&
-                   x != ApplicationStrategyState.StrategyFinishedWithErrors &&
-                   x != ApplicationStrategyState.Error 
-                ))
-            {
-                throw new Exception("Strategy already started");
-            }
-            CreateApplication(user, new StrategyParameter[]{}, _config.CAISNoUploadStrategyName);
+	        if (useNewCaisStrategies)
+	        {
+		        serviceClient.CaisGenerate(user.Id);
+	        }
+	        else
+	        {
+		        var caisStrategies = _strategies.GetAll().Where(x => x.DisplayName == _config.CAISNoUploadStrategyName);
+		        var caisStrat = caisStrategies.FirstOrDefault(x => x.Id == caisStrategies.Max(y => y.Id));
+		        var caisStratStatus = _applicationRepository.GetAll().Where(x => x.Strategy == caisStrat).Select(x => x.State);
+		        if (caisStratStatus.Any(x =>
+		                                x != ApplicationStrategyState.SecurityViolation &&
+		                                x != ApplicationStrategyState.StrategyFinishedWithoutErrors &&
+		                                x != ApplicationStrategyState.StrategyFinishedWithErrors &&
+		                                x != ApplicationStrategyState.Error
+			        ))
+		        {
+			        throw new Exception("Strategy already started");
+		        }
+		        CreateApplication(user, new StrategyParameter[] {}, _config.CAISNoUploadStrategyName);
+	        }
         }
 
         public void CAISUpdate(User user, int caisId)
         {
-            var strategyParameters = new[]
-                {
-                    new StrategyParameter("caisId", caisId)
-                };
-            CreateApplication(user, strategyParameters, _config.CAISNoUploadStrategyName);
+	        if (useNewCaisStrategies)
+	        {
+				serviceClient.CaisUpdate(caisId);
+	        }
+	        else
+	        {
+		        var strategyParameters = new[]
+			        {
+				        new StrategyParameter("caisId", caisId)
+			        };
+		        CreateApplication(user, strategyParameters, _config.CAISNoUploadStrategyName);
+	        }
         }
 
         public void FraudChecker(User user)
         {
-            var strategyParameters = new[]
-                {
-                    new StrategyParameter("CustomerId", user.Id),
-                };
-            CreateApplication(user, strategyParameters, _config.FraudCheckerStrategyName);
+	        if (useNewFraudCheckerStrategy)
+	        {
+		        serviceClient.FraudChecker(user.Id);
+	        }
+	        else
+	        {
+		        var strategyParameters = new[]
+			        {
+				        new StrategyParameter("CustomerId", user.Id),
+			        };
+		        CreateApplication(user, strategyParameters, _config.FraudCheckerStrategyName);
+	        }
         }
 
 		public void EmailUnderReview(User user, string firstName, string email)
