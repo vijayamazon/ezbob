@@ -82,5 +82,6 @@
 		public string VerificationComment { get; set; }
 		public int SystemCalculatedSum { get; set; }
 		public int VerificationCalculatedSum { get; set; }
+		public bool IsMatch { get; set; }
 	}
 }

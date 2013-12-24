@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace CommonLib
 {
@@ -16,7 +15,57 @@ namespace CommonLib
 		{
 			_log = log;
 		}
-		
+
+		public RejectionConstants GetRejectionConstants()
+		{
+
+			var conn = new SqlConnection(_log);
+			var dt = conn.ExecuteReader("AV_RejectionConstants");
+			if (dt.Rows.Count == 0)
+			{
+				return null;
+			}
+			var consts = new RejectionConstants();
+			foreach (DataRow row in dt.Rows)
+			{
+				switch (row["Name"].ToString())
+				{
+					case "LowCreditScore":
+						consts.MinCreditScore = int.Parse(row["Value"].ToString());
+						break;
+					case "TotalAnnualTurnover":
+						consts.MinAnnualTurnover = int.Parse(row["Value"].ToString());
+						break;
+					case "TotalThreeMonthTurnover":
+						consts.MinThreeMonthTurnover = int.Parse(row["Value"].ToString());
+						break;
+					case "Reject_Defaults_CreditScore":
+						consts.DefaultScoreBelow = int.Parse(row["Value"].ToString());
+						break;
+					case "Reject_Defaults_AccountsNum":
+						break;
+					case "Reject_Defaults_Amount":
+						consts.DefaultMinAmount = int.Parse(row["Value"].ToString());
+						break;
+					case "Reject_Defaults_MonthsNum":
+						consts.DefaultMinMonths = int.Parse(row["Value"].ToString());
+						break;
+					case "Reject_Minimal_Seniority":
+						consts.MinMarketPlaceSeniorityDays = int.Parse(row["Value"].ToString());
+						break;
+					case "AutoRejectionException_CreditScore":
+						consts.NoRejectIfCreditScoreAbove = int.Parse(row["Value"].ToString());
+						break;
+					case "AutoRejectionException_AnualTurnover":
+						consts.NoRejectIfTotalAnnualTurnoverAbove = int.Parse(row["Value"].ToString());
+						break;
+					default:
+						break;
+				}
+			}
+
+			return consts;
+		}
 		public DateTime? GetCustomerBirthDate(int customerId)
 		{
 			var conn = new SqlConnection(_log);
@@ -35,14 +84,14 @@ namespace CommonLib
 		/// <returns></returns>
 		public List<MarketPlace> GetCustomerMarketPlaces(int customerId)
 		{
-			
+
 			var conn = new SqlConnection(_log);
 			var dt = conn.ExecuteReader("AV_GetCustomerMarketPlaces", new QueryParameter("@CustomerId", customerId));
-			
+
 			var mps = new List<MarketPlace>();
 			foreach (DataRow row in dt.Rows)
 			{
-				AddMpToList(mps,row);
+				AddMpToList(mps, row);
 			}
 
 			dt.Dispose();
@@ -165,7 +214,7 @@ namespace CommonLib
 		public decimal GetMedalRate(int customerId)
 		{
 			var conn = new SqlConnection(_log);
-			return conn.ExecuteScalar<decimal>("AV_GetMedalRate", new QueryParameter("@CustomerId", customerId)); 
+			return conn.ExecuteScalar<decimal>("AV_GetMedalRate", new QueryParameter("@CustomerId", customerId));
 		}
 	}
 }

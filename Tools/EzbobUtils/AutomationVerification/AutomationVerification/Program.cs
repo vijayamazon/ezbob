@@ -20,7 +20,7 @@
 		{
 			try
 			{
-				var from = DateTime.Today.AddDays(-1); //new DateTime(2013, 10, 01);//todo change
+				var from = DateTime.Today.AddDays(-1);// new DateTime(2013, 10, 01);//todo change
 				var to = DateTime.Today;
 				Log = new FileLog("AutomationVerification", bUtcTimeInName:true, bAppend:true, sPath: @"C:\EzUtils\AutomationVerification\");
 				Log.Debug("Running Begin");
@@ -86,25 +86,25 @@
 
 		private static DataTable GetTable(IEnumerable<VerificationReport> reportRows)
 		{
-			var dt = new DataTable();
+				var dt = new DataTable();
 
-			dt.Columns.Add("CashRequestId", typeof(int));
-			dt.Columns.Add("CustomerId", typeof(int));
-			dt.Columns.Add("SystemDecision", typeof(string));
-			dt.Columns.Add("SystemComment", typeof(string));
-			dt.Columns.Add("VerificationDecision", typeof(string));
-			dt.Columns.Add("VerificationComment", typeof(string));
-			dt.Columns.Add("SystemCalculatedSum", typeof(int));
-			dt.Columns.Add("VerificationCalculatedSum", typeof(int));
-			dt.Columns.Add("Css", typeof(string));
+				dt.Columns.Add("CashRequestId", typeof (int));
+				dt.Columns.Add("CustomerId", typeof (int));
+				dt.Columns.Add("SystemDecision", typeof (string));
+				dt.Columns.Add("SystemComment", typeof (string));
+				dt.Columns.Add("VerificationDecision", typeof (string));
+				dt.Columns.Add("VerificationComment", typeof (string));
+				dt.Columns.Add("SystemCalculatedSum", typeof (int));
+				dt.Columns.Add("VerificationCalculatedSum", typeof (int));
+				dt.Columns.Add("Css", typeof (string));
 
-			foreach (var vr in reportRows)
-			{
-				dt.Rows.Add(vr.CashRequestId, vr.CustomerId, vr.SystemDecision, vr.SystemComment, vr.VerificationDecision,
-							vr.VerificationComment, vr.SystemCalculatedSum, vr.VerificationCalculatedSum, "Failed unmatched");
-			}
+				foreach (var vr in reportRows)
+				{
+					dt.Rows.Add(vr.CashRequestId, vr.CustomerId, vr.SystemDecision, vr.SystemComment, vr.VerificationDecision,
+						vr.VerificationComment, vr.SystemCalculatedSum, vr.VerificationCalculatedSum, vr.IsMatch ? "Successful" : "Failed unmatched");
+				}
 
-			return dt;
+				return dt;
 		}
 
 		private static IEnumerable<VerificationReport> GetComparisonReport(Dictionary<int, AutoDecision> systemDecisions, Dictionary<int, Dictionary<DecisionType, AutoDecision>> verificitaionDecisions)
@@ -129,6 +129,38 @@
 				{
 					var verificationDesicion = verificitaionDecisions[cashRequest][DecisionType.AutoReApprove];
 					Compare(verificationReportList, systemDecisions[cashRequest], verificationDesicion, cashRequest);
+				}else if(systemDecisions[cashRequest].SystemDecision == Decision.Manual)
+				{
+					var areEqual = true;
+					var sb = new StringBuilder();
+					foreach (var verificationDecision in verificitaionDecisions[cashRequest])
+					{
+						if (verificationDecision.Value.SystemDecision != Decision.Manual)
+						{
+							areEqual = false;
+							Compare(verificationReportList, systemDecisions[cashRequest], verificationDecision.Value, cashRequest);
+							break;
+						}
+						else
+						{
+							sb.AppendLine(verificationDecision.Value.Comment + "<br>");
+						}
+					}
+					if (areEqual)
+					{
+						verificationReportList.Add(new VerificationReport
+						{
+							CashRequestId = cashRequest,
+							CustomerId = systemDecisions[cashRequest].CustomerId,
+							SystemDecision = systemDecisions[cashRequest].SystemDecision,
+							SystemComment = systemDecisions[cashRequest].Comment,
+							VerificationDecision = Decision.Manual,
+							VerificationComment = sb.ToString(),
+							SystemCalculatedSum = systemDecisions[cashRequest].SystemCalculatedSum,
+							VerificationCalculatedSum = 0,
+							IsMatch = true
+						});
+					}
 				}
 				else
 				{
@@ -144,8 +176,8 @@
 
 		private static void Compare(List<VerificationReport> verificationReportList, AutoDecision systemDecision, AutoDecision verificationDesicion, int cashRequest)
 		{
-			if (systemDecision.SystemDecision != verificationDesicion.SystemDecision)
-			{
+			//if (systemDecision.SystemDecision != verificationDesicion.SystemDecision)
+			//{
 				verificationReportList.Add(new VerificationReport
 				{
 					CashRequestId = cashRequest,
@@ -155,9 +187,10 @@
 					VerificationDecision = verificationDesicion.SystemDecision,
 					VerificationComment = verificationDesicion.Comment,
 					SystemCalculatedSum = systemDecision.SystemCalculatedSum,
-					VerificationCalculatedSum = verificationDesicion.SystemCalculatedSum
+					VerificationCalculatedSum = verificationDesicion.SystemCalculatedSum,
+					IsMatch = systemDecision.SystemDecision == verificationDesicion.SystemDecision
 				});
-			}
+			//}
 		}
 
 	
@@ -165,7 +198,9 @@
 		private static Dictionary<int, Dictionary<DecisionType,AutoDecision>> GetVerificationDecisions(Dictionary<int, AutoDecision> decisions)
 		{
 			var verificationDecisions = new Dictionary<int, Dictionary<DecisionType,AutoDecision>>();
-			var aj = new AutoRejectionCalculator(Log);
+			var db = new DbHelper(Log);
+			var rejectionConstants = db.GetRejectionConstants();
+			var aj = new AutoRejectionCalculator(Log, rejectionConstants);
 			var arr = new AutoReRejectionCalculator(Log);
 			var ara = new AutoReApprovalCalculator(Log);
 			var aa = new AutoApprovalCalculator(Log);

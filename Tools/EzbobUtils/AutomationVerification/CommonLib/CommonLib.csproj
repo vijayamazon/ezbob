@@ -53,6 +53,7 @@
     <Compile Include="MarketPlace.cs" />
     <Compile Include="MarketPlacesHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RejectionConstants.cs" />
     <Compile Include="ReRejectionData.cs" />
     <Compile Include="TimePeriodEnum.cs" />
   </ItemGroup>

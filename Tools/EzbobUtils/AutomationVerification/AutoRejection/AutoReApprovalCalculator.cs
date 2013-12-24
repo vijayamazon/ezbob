@@ -30,7 +30,7 @@
 				if (reApprovalData.ManualApproveDate.HasValue &&
 				    reApprovalData.ManualApproveDate.Value.AddDays(Constants.NewReApprovePeriodDays) < DateTime.Today)
 				{
-					reason = string.Format("ReApprove. New client. Was manual approved more then {0} days ago", Constants.NewReApprovePeriodDays);
+					reason = string.Format("No ReApprove. New client. Was manual approved more then {0} days ago", Constants.NewReApprovePeriodDays);
 					return false;
 				}
 
