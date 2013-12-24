@@ -35,6 +35,32 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 				throw new ArgumentNullException("personalInfo.S" + "urname");
 		} // ValidatePersonalInfo
 
+		[NonAction]
+		static string UppercaseWords(string value)
+		{
+			char[] array = value.ToCharArray();
+			// Handle the first letter in the string.
+			if (array.Length >= 1)
+			{
+				if (char.IsLower(array[0]))
+				{
+					array[0] = char.ToUpper(array[0]);
+				}
+			}
+			// Scan through the letters, checking for spaces.
+			// ... Uppercase the lowercase letters following spaces.
+			for (int i = 1; i < array.Length; i++)
+			{
+				if (array[i - 1] == ' ')
+				{
+					if (char.IsLower(array[i]))
+					{
+						array[i] = char.ToUpper(array[i]);
+					}
+				}
+			}
+			return new string(array);
+		}
 		#endregion static method ValidatePersonalInfo
 
 		#region constructor
@@ -188,9 +214,9 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 			ValidatePersonalInfo(personalInfo);
 
 			personalInfo.DateOfBirth = DateTime.ParseExact(dateOfBirth, "d/M/yyyy", CultureInfo.InvariantCulture);
-			personalInfo.Surname = personalInfo.Surname.Trim();
-			personalInfo.FirstName = personalInfo.FirstName.Trim();
-			personalInfo.MiddleInitial = string.IsNullOrEmpty(personalInfo.MiddleInitial) ? "" : personalInfo.MiddleInitial.Trim();
+			personalInfo.Surname = UppercaseWords(personalInfo.Surname.Trim());
+			personalInfo.FirstName = UppercaseWords(personalInfo.FirstName.Trim());
+			personalInfo.MiddleInitial = string.IsNullOrEmpty(personalInfo.MiddleInitial) ? "" : UppercaseWords(personalInfo.MiddleInitial.Trim());
 			personalInfo.Fullname = string.Format("{0} {1} {2}", personalInfo.FirstName, personalInfo.Surname, personalInfo.MiddleInitial);
 
 			if (customer.PersonalInfo != null) {
