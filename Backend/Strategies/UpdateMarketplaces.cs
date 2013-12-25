@@ -1,10 +1,8 @@
 ﻿namespace EzBob.Backend.Strategies 
 {
 	using System.Data;
-	using EZBob.DatabaseLib;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using StructureMap;
 
 	public class UpdateMarketplaces : AStrategy {
 		#region public

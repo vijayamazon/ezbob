@@ -1,19 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Globalization;
-using Ezbob.Database;
-using Ezbob.Logger;
-using PaymentServices.PayPoint;
+﻿namespace EzBob.Backend.Strategies {
+	using System;
+	using System.Collections.Generic;
+	using System.Data;
+	using System.Globalization;
+	using Ezbob.Database;
+	using Ezbob.Logger;
+	using PaymentServices.PayPoint;
 
-namespace EzBob.Backend.Strategies {
 	public class SetLateLoanStatus : AStrategy {
 		#region public
 
 		#region constructor
 
+<<<<<<< HEAD
 		public SetLateLoanStatus(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			mailer = new StrategiesMailer(DB, Log);
+=======
+		public SetLateLoanStatus(AConnection oDb, ASafeLog oLog) : base(oDb, oLog) {
+			mailer = new StrategiesMailer(Db, Log);
+>>>>>>> using statements location
 
 			DataTable configsDataTable = DB.ExecuteReader("SetLateLoanStatusGetConfigs", CommandSpecies.StoredProcedure);
 			DataRow configsResult = configsDataTable.Rows[0];
