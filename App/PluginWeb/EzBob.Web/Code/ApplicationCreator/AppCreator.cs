@@ -14,8 +14,6 @@ using EZBob.DatabaseLib.Model;
 
 namespace EzBob.Web.Code.ApplicationCreator {
 	using System.ServiceModel;
-	using System.ServiceModel.Channels;
-	using System.Web.Services.Description;
 	using EzServiceReference;
 	using ISession = NHibernate.ISession;
 
@@ -246,7 +244,7 @@ namespace EzBob.Web.Code.ApplicationCreator {
 
 		public void PayPointNameValidationFailed(string cardHodlerName, User user, Customer customer) {
 			if (useNewMailStrategies) {
-				ServiceClient.PayPointNameValidationFailed(user.Id, cardHodlerName);
+				ServiceClient.PayPointNameValidationFailed(customer.Id, cardHodlerName);
 			}
 			else {
 				var strategyParameters = new[] {
@@ -262,7 +260,7 @@ namespace EzBob.Web.Code.ApplicationCreator {
 
 		public void ApprovedUser(User user, Customer customer, decimal? loanAmount) {
 			if (useNewMailStrategies) {
-				ServiceClient.ApprovedUser(user.Id, loanAmount.HasValue ? loanAmount.Value : 0);
+				ServiceClient.ApprovedUser(customer.Id, loanAmount.HasValue ? loanAmount.Value : 0);
 			}
 			else {
 				bool isNotFirstApproval = customer.DecisionHistory.Any(x => x.Action == DecisionActions.Approve);
@@ -284,7 +282,7 @@ namespace EzBob.Web.Code.ApplicationCreator {
 
 		public void RejectUser(User user, string email, int userId, string firstName) {
 			if (useNewMailStrategies) {
-				ServiceClient.RejectUser(user.Id);
+				ServiceClient.RejectUser(userId);
 			}
 			else {
 				var strategyParameters = new[] {
@@ -298,7 +296,7 @@ namespace EzBob.Web.Code.ApplicationCreator {
 
 		public void MoreAMLInformation(User user, string email, int userId, string firstName) {
 			if (useNewMailStrategies) {
-				ServiceClient.MoreAmlInformation(user.Id);
+				ServiceClient.MoreAmlInformation(userId);
 			}
 			else {
 				var strategyParameters = new[] {
@@ -312,7 +310,7 @@ namespace EzBob.Web.Code.ApplicationCreator {
 
 		public void MoreAMLandBWAInformation(User user, string email, int userId, string firstName) {
 			if (useNewMailStrategies) {
-				ServiceClient.MoreAmlAndBwaInformation(user.Id);
+				ServiceClient.MoreAmlAndBwaInformation(userId);
 			}
 			else {
 				var strategyParameters = new[] {
@@ -326,7 +324,7 @@ namespace EzBob.Web.Code.ApplicationCreator {
 
 		public void MoreBWAInformation(User user, string email, int userId, string firstName) {
 			if (useNewMailStrategies) {
-				ServiceClient.MoreBwaInformation(user.Id);
+				ServiceClient.MoreBwaInformation(userId);
 			}
 			else {
 				var strategyParameters = new[] {
