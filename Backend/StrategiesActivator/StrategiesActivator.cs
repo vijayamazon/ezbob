@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-
-namespace StrategiesActivator
+﻿namespace StrategiesActivator
 {
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Reflection;
 	using System.ServiceModel;
 	using EzService;
 	using System;
@@ -25,12 +24,12 @@ namespace StrategiesActivator
 
 			string sInstanceName = args[0];
 
-			m_oLog = new SafeILog(LogManager.GetLogger(typeof(StrategiesActivator)));
+			ASafeLog log = new SafeILog(LogManager.GetLogger(typeof(StrategiesActivator)));
 
-			var env = new Ezbob.Context.Environment(m_oLog);
-			m_oDB = new SqlConnection(env, m_oLog);
+			var env = new Ezbob.Context.Environment(log);
+			AConnection db = new SqlConnection(env, log);
 
-			var cfg = new Configuration(sInstanceName, m_oDB, m_oLog);
+			var cfg = new Configuration(sInstanceName, db, log);
 
 			serviceClient = new EzServiceClient(
 				new NetHttpBinding(),
@@ -38,25 +37,32 @@ namespace StrategiesActivator
 			);
 		}
 
-		public void Execute() {
+		public void Execute() 
+		{
 			string strategyName = args[0];
 
-			MethodInfo[] aryMethods = this.GetType().GetMethods(BindingFlags.NonPublic | BindingFlags.Instance);
+			MethodInfo[] aryMethods = GetType().GetMethods(BindingFlags.NonPublic | BindingFlags.Instance);
 
 			var oMethods = new SortedDictionary<string, MethodInfo>();
 
-			foreach (MethodInfo mi in aryMethods) {
+			foreach (MethodInfo mi in aryMethods) 
+			{
 				IEnumerable<StrategyActivatorAttribute> oAttrList = mi.GetCustomAttributes<StrategyActivatorAttribute>();
 
 				if (oAttrList.Any())
+				{
 					oMethods[mi.Name] = mi;
+				}
 			} // foreach
 
 			string sKey = "Activate" + strategyName;
 
 			if (oMethods.ContainsKey(sKey))
-				oMethods[sKey].Invoke(this, new object[]{});
-			else {
+			{
+				oMethods[sKey].Invoke(this, new object[] {});
+			}
+			else
+			{
 				Console.WriteLine("Strategy {0} is not supported", strategyName);
 				Console.WriteLine("Supported stratefies are: {0}", string.Join(", ", oMethods.Keys.Select(k => k.Substring(8))));
 			}
@@ -385,7 +391,8 @@ namespace StrategiesActivator
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> FirstOfMonthStatusNotifier");
 				return;
 			}
-			new FirstOfMonthStatusNotifier(m_oDB, m_oLog).Execute();
+
+			serviceClient.FirstOfMonthStatusNotifier();
 		}
 
 		[StrategyActivator]
@@ -409,7 +416,8 @@ namespace StrategiesActivator
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> LateBy14Days");
 				return;
 			}
-			new LateBy14Days(m_oDB, m_oLog).Execute();
+
+			serviceClient.LateBy14Days();
 		}
 
 		[StrategyActivator]
@@ -420,7 +428,8 @@ namespace StrategiesActivator
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> PayPointCharger");
 				return;
 			}
-			new PayPointCharger(m_oDB, m_oLog).Execute();
+
+			serviceClient.PayPointCharger();
 		}
 
 		[StrategyActivator]
@@ -431,7 +440,8 @@ namespace StrategiesActivator
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> SetLateLoanStatus");
 				return;
 			}
-			new SetLateLoanStatus(m_oDB, m_oLog).Execute();
+
+			serviceClient.SetLateLoanStatus();
 		}
 
 		[StrategyActivator]
@@ -468,7 +478,8 @@ namespace StrategiesActivator
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> UpdateTransactionStatus");
 				return;
 			}
-			new UpdateTransactionStatus(m_oDB, m_oLog).Execute();
+
+			serviceClient.UpdateTransactionStatus();
 		}
 
 		[StrategyActivator]
@@ -479,7 +490,8 @@ namespace StrategiesActivator
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> XDaysDue");
 				return;
 			}
-			new XDaysDue(m_oDB, m_oLog).Execute();
+
+			serviceClient.XDaysDue();
 		}
 
 		[StrategyActivator]
@@ -520,8 +532,5 @@ namespace StrategiesActivator
 			Console.WriteLine("OR");
 			Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> MainStrategy <customerId> <checkType> <houseNumber> <houseName> <street> <district> <town> <county> <postcode> <bankAccount> <sortCode> <avoidAutoDescison>");
 		}
-
-		private readonly AConnection m_oDB;
-		private readonly ASafeLog m_oLog;
 	}
 }
