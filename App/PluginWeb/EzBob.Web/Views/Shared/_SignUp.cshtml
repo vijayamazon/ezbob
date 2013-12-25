@@ -12,8 +12,8 @@
     bool ebayPixelEnabled = config.EbayPixelEnabled;
     bool instructionsEnabled = config.WizardInstructionsEnabled;
     bool isOffline = @Request.Cookies["isoffline"] != null && @Request.Cookies["isoffline"].Value == "yes";
+    bool twilioEnabled = config.TwilioEnabled;
 }
-
 
 @using (Html.BeginForm("SignUp", "Account", new {Area = ""}, FormMethod.Post, new {@class = "signup clearfix"}))
 {
@@ -145,10 +145,16 @@
         </div>
     }
     
-    <div class="form_field_container">
-		@EzForm.Captcha(captchamode)
-	</div>
-
+    if (twilioEnabled)
+    {
+    }
+    else
+    {
+        <div class="form_field_container">
+            @EzForm.Captcha(captchamode)
+        </div>
+    }
+    
     <div class="form_buttons_container">
         <div class="attardi-button">
             <input type="submit" id="signupSubmitButton" value="Continue" class="rc-button green continue disabled" tabindex="12" ui-event-control-id="signup:submit">

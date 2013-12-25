@@ -33,27 +33,34 @@ namespace EzBob.Web.Infrastructure.Filters
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            switch (_config.CaptchaMode)
-            {
-                case "off":
-                    _capthcaModel.IsValid = true;
-                    break;
-                case "simple":
-                    _capthcaModel.IsValid = CaptchaHelper.IsCaptchaVerify(filterContext.Controller, ErrorMessage);
-                    break;
-                case "reCaptcha":
-                    var validator = new RecaptchaValidator
-                                    {
-                                        PrivateKey = PrivateKey,
-                                        RemoteIP = filterContext.HttpContext.Request.UserHostAddress,
-                                        Challenge = filterContext.HttpContext.Request.Form[ChallengeFieldKey],
-                                        Response = filterContext.HttpContext.Request.Form[ResponseFieldKey]
-                                    };
-                    _capthcaModel.IsValid = validator.Validate().IsValid;
-                    break;
-            }
+	        if (_config.TwilioEnabled)
+	        {
+		        _capthcaModel.IsValid = true;
+	        }
+	        else
+	        {
 
-            filterContext.Controller.ViewData.ModelState.Clear();
+		        switch (_config.CaptchaMode)
+		        {
+			        case "off":
+				        _capthcaModel.IsValid = true;
+				        break;
+			        case "simple":
+				        _capthcaModel.IsValid = CaptchaHelper.IsCaptchaVerify(filterContext.Controller, ErrorMessage);
+				        break;
+			        case "reCaptcha":
+				        var validator = new RecaptchaValidator
+					        {
+						        PrivateKey = PrivateKey,
+						        RemoteIP = filterContext.HttpContext.Request.UserHostAddress,
+						        Challenge = filterContext.HttpContext.Request.Form[ChallengeFieldKey],
+						        Response = filterContext.HttpContext.Request.Form[ResponseFieldKey]
+					        };
+				        _capthcaModel.IsValid = validator.Validate().IsValid;
+				        break;
+		        }
+	        }
+	        filterContext.Controller.ViewData.ModelState.Clear();
             if (!_capthcaModel.IsValid)
             {
                 filterContext.Controller.ViewData.ModelState.AddModelError("", _capthcaModel.ErrorMessage);

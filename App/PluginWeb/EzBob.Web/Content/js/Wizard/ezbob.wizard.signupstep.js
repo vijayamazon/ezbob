@@ -129,6 +129,8 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 		var amount = _.find(data, function(d) { return d.name === 'amount'; });
 		if (amount) { amount.value = this.$el.find('#amount').autoNumericGet(); }
 
+	    var twilioEnabled = true;
+
 		var xhr = $.post(this.form.attr('action'), data);
 
 		var that = this;
@@ -148,17 +150,21 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
 				that.model.set('loggedIn', true); // triggers 'ready' and 'next'
 			} else {
-				if (result.errorMessage) EzBob.App.trigger('error', result.errorMessage);
-				that.captcha.reload();
-				that.$el.find(':submit').addClass('disabled');
+			    if (result.errorMessage) EzBob.App.trigger('error', result.errorMessage);
+			    if (!twilioEnabled) {
+			        that.captcha.reload();
+			    }
+			    that.$el.find(':submit').addClass('disabled');
 			}
 			that.blockBtn(false);
 		});
 
 		xhr.fail(function() {
-			EzBob.App.trigger('error', 'Something went wrong');
-			that.captcha.reload();
-			that.blockBtn(false);
+		    EzBob.App.trigger('error', 'Something went wrong');
+		    if (!twilioEnabled) {
+		        that.captcha.reload();
+		    }
+		    that.blockBtn(false);
 		});
 
 		return false;
@@ -171,8 +177,14 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 	setReadOnly: function() {
 		this.readOnly = true;
 		this.$el.find(':input').not(':submit').attr('disabled', 'disabled').attr('readonly', 'readonly').css('disabled');
-		this.$el.find('#captcha').hide();
-		this.$el.find('.captcha').hide();
+		var captchaElement = this.$el.find('#captcha');
+	    if (captchaElement != undefined) {
+	        captchaElement.hide();
+	    }
+	    captchaElement = this.$el.find('.captcha');
+	    if (captchaElement != undefined) {
+	        captchaElement.hide();
+	    }
 		this.$el.find(':submit').val('Continue');
 		this.$el.find('[name="securityQuestion"]').trigger('liszt:updated');
 	},
