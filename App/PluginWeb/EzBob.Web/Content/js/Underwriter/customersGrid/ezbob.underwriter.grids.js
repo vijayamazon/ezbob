@@ -76,8 +76,10 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 				});
 			} // if has id
 
-			if (oData.IsWasLate)
-				$(oTR).addClass(oData.IsWasLate);
+		    if (oData.IsWasLate) {
+		        //$(oTR).addClass(oData.IsWasLate);
+		        $(oTR).addClass("table-flag-red");
+		    }
 		}; // fnRowCallback
 
 		var sWaitingColumns = '#Id,Cart,MP_List,Name,Email,^ApplyDate,^RegDate,CurrentStatus,$CalcAmount,$OSBalance,SegmentType';
@@ -211,15 +213,20 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 			aLengthMenu: [[-1, 10, 25, 50, 100], ['all', 10, 25, 50, 100]],
 			iDisplayLength: -1,
 
-			sPaginationType: 'full_numbers',
-			bJQueryUI: true,
+			sPaginationType: 'bootstrap',
+			bJQueryUI: false,
 
 			fnRowCallback: oGridProperties.fnRowCallback,
 
 			aaSorting: [[ 0, 'desc' ]],
 
 			bAutoWidth: true,
+			sDom: '<"top"f>tr<"bottom"<"col-md-4"l><"col-md-4"i><"col-md-4"p>><"clear">'
+			
 		}); // create data table
+
+	    this.$el.find('.active .box .box-title .dataTables_filter').remove();
+	    this.$el.find('.top .dataTables_filter').appendTo(this.$el.find('.active .box .box-title'));
 	}, // loadGrid
 
 	gridSrcUrl: function(oGridProperties) {
@@ -323,7 +330,8 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 		this.loadGrid(this.getValidType(type));
 	}, // show
 
-	typeFromHref: function(sHref) {
+	typeFromHref: function (sHref) {
+	    console.log("sHref",sHref);
 		if (!sHref)
 			sHref = this.tabLinks().first().attr('href');
 
@@ -335,7 +343,8 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 		return this.typeFromHref(this.tabLinks().first().attr('href'));
 	}, // typeFromHref
 
-	getValidType: function(sType) {
+	getValidType: function (sType) {
+	    console.log("sType", sType);
 		if (this.isValidType(sType))
 			return sType;
 

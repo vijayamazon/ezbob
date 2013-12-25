@@ -3,495 +3,597 @@
     ViewBag.Title = "Underwriter";
 }
 <div id="grids-view" style="display: none;">
-    <div class="tabbable tabs-left">
-        <ul class="nav nav-tabs ui-state-default left-underwriter-menu">
-            <li class="active"><a href="#waiting-grid" data-toggle="tab">Decision(<span id="waiting-count"></span>)</a></li>
+    <div id="sidebar" class="navbar-collapse collapse">
+        <ul class="nav nav-list">
+            <li class="active"><a href="#waiting-grid" data-toggle="tab"><i class="fa fa-table"></i><span>Decision(<span id="waiting-count"></span>)</span></a></li>
             @if (Model.IsEscalated)
             {
-                <li><a href="#escalated-grid" data-toggle="tab">Escalated(<span id="escalated-count"></span>)</a></li>
+                <li><a href="#escalated-grid" data-toggle="tab"><i class="fa fa-table"></i><span>Escalated(<span id="escalated-count"></span>)</span></a></li>
             }
-            <li><a href="#pending-grid" data-toggle="tab">Pending(<span id="pending-count"></span>)</a></li>
-            <li><a href="#approved-grid" data-toggle="tab">Approved</a></li>
-            <li><a href="#loans-grid" data-toggle="tab">Loans</a></li>
-            <li><a href="#sales-grid" data-toggle="tab">Sales</a></li>
-            <li><a href="#collection-grid" data-toggle="tab">Collection</a></li>
-            <li><a href="#late-grid" data-toggle="tab">Late</a></li>
-            <li><a href="#rejected-grid" data-toggle="tab">Rejected</a></li>
-            <li><a href="#offline-grid" data-toggle="tab">Offline</a></li>
-            <li><a href="#all-grid" data-toggle="tab">All customers</a></li>
-            <li><a href="#registered-grid" data-toggle="tab">Registered(<span id="RegisteredCustomers-count"></span>)</a></li>
+            <li><a href="#pending-grid" data-toggle="tab"><i class="fa fa-table"></i><span>Pending(<span id="pending-count"></span>)</span></a></li>
+            <li><a href="#approved-grid" data-toggle="tab"><i class="fa fa-table"></i><span>Approved</span></a></li>
+            <li><a href="#loans-grid" data-toggle="tab"><i class="fa fa-table"></i><span>Loans</span></a></li>
+            <li><a href="#sales-grid" data-toggle="tab"><i class="fa fa-table"></i><span>Sales</span></a></li>
+            <li><a href="#collection-grid" data-toggle="tab"><i class="fa fa-table"></i><span>Collection</span></a></li>
+            <li><a href="#late-grid" data-toggle="tab"><i class="fa fa-table"></i><span>Late</span></a></li>
+            <li><a href="#rejected-grid" data-toggle="tab"><i class="fa fa-table"></i><span>Rejected</span></a></li>
+            <li><a href="#offline-grid" data-toggle="tab"><i class="fa fa-table"></i><span>Offline</span></a></li>
+            <li><a href="#all-grid" data-toggle="tab"><i class="fa fa-table"></i><span>All customers</span></a></li>
+            <li><a href="#registered-grid" data-toggle="tab"><i class="fa fa-table"></i><span>Registered(<span id="RegisteredCustomers-count"></span>)</span></a></li>
             <li class="test-customers" title="Check to include test customers">
-                <div>
+                <i class="fa fa-filter"></i>
+                <label class="checkbox-inline">
                     <input type="checkbox" class="checkbox" id="include-test-customers" />
-                    <label for="include-test-customers">Test customers</label>
-                </div>
+                    Test customers
+                </label>
+            </li>
+            <li>
                 <div class="all-customers hide" title="Check to show all the customers (unchecked shows registered during last week only).">
-                    <input type="checkbox" class="checkbox" id="include-all-customers" />
-                    <label for="include-all-customers">Show all customers</label>
+                    <i class="fa fa-filter"></i>
+                    <label class="checkbox-inline">
+                        <input type="checkbox" class="checkbox" id="include-all-customers" />
+                        Show all customers
+                    </label>
                 </div>
             </li>
         </ul>
-        <div class="tab-content customer-grids">
-            <div class="tab-pane active" id="waiting-grid">
-                <h2>Waiting for decision</h2>
-                <table class="grid-data">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Cart</th>
-                            <th>MPs</th>
-                            <th>Name</th>
-                            <th>E-mail</th>
-                            <th>Apply date</th>
-                            <th>Reg. date</th>
-                            <th>Current staus</th>
-                            <th>Calc. amount</th>
-                            <th>O/S balance</th>
-                            <th>Segment type</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                </table>
+        <div id="sidebar-collapse" class="visible-lg">
+            <i class="fa fa-angle-double-left"></i>
+        </div>
+    </div>
+    <div id="main-content">
+        <div class="page-title">
+            <div>
+                <h1><i class="fa fa-file-o"></i>Customers</h1>
             </div>
-            @if (Model.IsEscalated)
-            {
-                <div class="tab-pane" id="escalated-grid">
-                    <h2>Escalated</h2>
-                    <table class="grid-data">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Cart</th>
-                                <th>MPs</th>
-                                <th>Name</th>
-                                <th>E-mail</th>
-                                <th>Apply date</th>
-                                <th>Reg. date</th>
-                                <th>Current staus</th>
-                                <th>Calc. amount</th>
-                                <th>O/S balance</th>
-                                <th>Segment type</th>
-                                <th>Escalation date</th>
-                                <th>Underwriter</th>
-                                <th>Reason</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        </tbody>
-                    </table>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="tab-pane active" id="waiting-grid">
+                    <div class="box">
+                        <div class="box-title">
+                            <h3><i class="fa fa-table"></i>Waiting for decision</h3>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="table-responsive" style="border: 0;">
+                        <table class="table table-advance grid-data">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Cart</th>
+                                    <th>MPs</th>
+                                    <th><i class="fa fa-user"></i> Name</th>
+                                    <th><i class="fa fa-envelope"></i> E-mail</th>
+                                    <th><i class="fa fa-calendar"></i> Apply date</th>
+                                    <th><i class="fa fa-calendar-o"></i> Reg. date</th>
+                                    <th>Current staus</th>
+                                    <th><i class="fa fa-money"></i> Calc. amount</th>
+                                    <th><i class="fa fa-money"></i> O/S balance</th>
+                                    <th><i class="fa fa-users"></i> Segment</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-            }
-            <div class="tab-pane" id="pending-grid">
-                <h2>Pending</h2>
-                <table class="grid-data">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Cart</th>
-                            <th>MPs</th>
-                            <th>Name</th>
-                            <th>E-mail</th>
-                            <th>Apply date</th>
-                            <th>Reg. date</th>
-                            <th>Current staus</th>
-                            <th>Calc. amount</th>
-                            <th>O/S balance</th>
-                            <th>Segment type</th>
-                            <th>Pending status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="tab-pane" id="approved-grid">
-                <h2>Approved</h2>
-                <table class="grid-data">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Cart</th>
-                            <th>MPs</th>
-                            <th>Name</th>
-                            <th>E-mail</th>
-                            <th>Apply date</th>
-                            <th>Approve date</th>
-                            <th>Reg. date</th>
-                            <th>Calc. amount</th>
-                            <th>Approved sum</th>
-                            <th>Amount taken</th>
-                            <th>Offer expire date</th>
-                            <th>Approves #</th>
-                            <th>Rejects #</th>
-                            <th>Segment type</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="tab-pane" id="loans-grid">
-                <h2>Loans</h2>
-                <table class="grid-data">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Cart</th>
-                            <th>MPs</th>
-                            <th>Name</th>
-                            <th>E-mail</th>
-                            <th>Reg. date</th>
-                            <th>Apply date</th>
-                            <th>First loan date</th>
-                            <th>Last loan date</th>
-                            <th>Last loan amount</th>
-                            <th>Amount taken</th>
-                            <th>Total principal repaid</th>
-                            <th>O/S balance</th>
-                            <th>Next repayment date</th>
-                            <th>Customer status</th>
-                            <th>Segment type</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="tab-pane" id="sales-grid">
-                <h2>Sales</h2>
-                <table class="grid-data">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>E-mail</th>
-                            <th>Name</th>
-                            <th>Mobile phone</th>
-                            <th>Daytime phone</th>
-                            <th>Approved sum</th>
-                            <th>Amount taken</th>
-                            <th>Offer date</th>
-                            <th>O/S balance</th>
-                            <th>CRM status</th>
-                            <th>CRM comment</th>
-                            <th>Interactions</th>
-                            <th>Segment type</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="tab-pane" id="collection-grid">
-                <h2>Collection</h2>
-                <table class="grid-data">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>E-mail</th>
-                            <th>Name</th>
-                            <th>Mobile phone</th>
-                            <th>Daytime phone</th>
-                            <th>Amount taken</th>
-                            <th>O/S balance</th>
-                            <th>CRM status</th>
-                            <th>CRM comment</th>
-                            <th>Collection status</th>
-                            <th>Segment type</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="tab-pane" id="late-grid">
-                <h2>Late</h2>
-                <table class="grid-data">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Cart</th>
-                            <th>MPs</th>
-                            <th>Name</th>
-                            <th>E-mail</th>
-                            <th>Apply date</th>
-                            <th>Approve date</th>
-                            <th>Reg. date</th>
-                            <th>Calc. amount</th>
-                            <th>Approved sum</th>
-                            <th>Amount taken</th>
-                            <th>Approves #</th>
-                            <th>Rejects #</th>
-                            <th>Segment type</th>
-                            <th>O/S balance</th>
-                            <th>Date of late payment</th>
-                            <th>Late amount</th>
-                            <th>Delinquency</th>
-                            <th>CRM status</th>
-                            <th>CRM comment</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="tab-pane" id="rejected-grid">
-                <h2>Rejected</h2>
-                <table class="grid-data">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Cart</th>
-                            <th>MPs</th>
-                            <th>Name</th>
-                            <th>E-mail</th>
-                            <th>Apply date</th>
-                            <th>Reg. date</th>
-                            <th>Rejected date</th>
-                            <th>Reason</th>
-                            <th>Rejects #</th>
-                            <th>Approves #</th>
-                            <th>O/S balance</th>
-                            <th>Segment type</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="tab-pane" id="offline-grid">
-                <h2>Offline</h2>
-                <table class="grid-data">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Reg. date</th>
-                            <th>Cart</th>
-                            <th>MPs</th>
-                            <th>Name</th>
-                            <th>E-mail</th>
-                            <th>Wizard step</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="tab-pane" id="all-grid">
-                <h2>All</h2>
-                <table class="grid-data">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Cart</th>
-                            <th>MPs</th>
-                            <th>Name</th>
-                            <th>E-mail</th>
-                            <th>Reg. date</th>
-                            <th>Apply date</th>
-                            <th>Customer status</th>
-                            <th>Calc. amount</th>
-                            <th>Approved sum</th>
-                            <th>O/S balance</th>
-                            <th>Segment type</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="tab-pane" id="registered-grid">
-                <h2>Registered</h2>
-                <table class="grid-data">
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>E-mail</th>
-                            <th>User status</th>
-                            <th>Reg. date</th>
-                            <th>MPs statuses</th>
-                            <th>Wizard step</th>
-                            <th>Segment type</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                </table>
+                @if (Model.IsEscalated)
+                {
+                    <div class="tab-pane" id="escalated-grid">
+                        <div class="box">
+                            <div class="box-title">
+                                <h3><i class="fa fa-table"></i>Escalated</h3>
+                            </div>
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="table-responsive" style="border: 0;">
+                            <table class="table table-advance grid-data">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Cart</th>
+                                        <th>MPs</th>
+                                        <th>Name</th>
+                                        <th>E-mail</th>
+                                        <th>Apply date</th>
+                                        <th>Reg. date</th>
+                                        <th>Current staus</th>
+                                        <th>Calc. amount</th>
+                                        <th>O/S balance</th>
+                                        <th>Segment</th>
+                                        <th>Escalation date</th>
+                                        <th>Underwriter</th>
+                                        <th>Reason</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                }
+                <div class="tab-pane" id="pending-grid">
+                    <div class="box">
+                        <div class="box-title">
+                            <h3><i class="fa fa-table"></i>Pending</h3>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="table-responsive" style="border: 0;">
+                        <table class="table table-advance grid-data">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Cart</th>
+                                    <th>MPs</th>
+                                    <th>Name</th>
+                                    <th>E-mail</th>
+                                    <th>Apply date</th>
+                                    <th>Reg. date</th>
+                                    <th>Current staus</th>
+                                    <th>Calc. amount</th>
+                                    <th>O/S balance</th>
+                                    <th>Segment</th>
+                                    <th>Pending status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="tab-pane" id="approved-grid">
+                    <div class="box">
+                        <div class="box-title">
+                            <h3><i class="fa fa-table"></i>Approved</h3>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="table-responsive" style="border: 0;">
+                        <table class="table table-advance grid-data">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Cart</th>
+                                    <th>MPs</th>
+                                    <th>Name</th>
+                                    <th>E-mail</th>
+                                    <th>Apply date</th>
+                                    <th>Approve date</th>
+                                    <th>Reg. date</th>
+                                    <th>Calc. amount</th>
+                                    <th>Approved sum</th>
+                                    <th>Amount taken</th>
+                                    <th>Offer expire date</th>
+                                    <th>Approves #</th>
+                                    <th>Rejects #</th>
+                                    <th>Segment</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="tab-pane" id="loans-grid">
+                    <div class="box">
+                        <div class="box-title">
+                            <h3><i class="fa fa-table"></i>Loans</h3>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="table-responsive" style="border: 0;">
+                        <table class="table table-advance grid-data">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Cart</th>
+                                    <th>MPs</th>
+                                    <th>Name</th>
+                                    <th>E-mail</th>
+                                    <th>Reg. date</th>
+                                    <th>Apply date</th>
+                                    <th>First loan date</th>
+                                    <th>Last loan date</th>
+                                    <th>Last loan amount</th>
+                                    <th>Amount taken</th>
+                                    <th>Total principal repaid</th>
+                                    <th>O/S balance</th>
+                                    <th>Next repayment date</th>
+                                    <th>Customer status</th>
+                                    <th>Segment</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="tab-pane" id="sales-grid">
+                    <div class="box">
+                        <div class="box-title">
+                            <h3><i class="fa fa-table"></i>Sales</h3>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="table-responsive" style="border: 0;">
+                        <table class="table table-advance grid-data">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>E-mail</th>
+                                    <th>Name</th>
+                                    <th>Mobile phone</th>
+                                    <th>Daytime phone</th>
+                                    <th>Approved sum</th>
+                                    <th>Amount taken</th>
+                                    <th>Offer date</th>
+                                    <th>O/S balance</th>
+                                    <th>CRM status</th>
+                                    <th>CRM comment</th>
+                                    <th>Interactions</th>
+                                    <th>Segment</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="tab-pane" id="collection-grid">
+                    <div class="box">
+                        <div class="box-title">
+                            <h3><i class="fa fa-table"></i>Collection</h3>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="table-responsive" style="border: 0;">
+                        <table class="table table-advance grid-data">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>E-mail</th>
+                                    <th>Name</th>
+                                    <th>Mobile phone</th>
+                                    <th>Daytime phone</th>
+                                    <th>Amount taken</th>
+                                    <th>O/S balance</th>
+                                    <th>CRM status</th>
+                                    <th>CRM comment</th>
+                                    <th>Collection status</th>
+                                    <th>Segment</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="tab-pane" id="late-grid">
+                    <div class="box">
+                        <div class="box-title">
+                            <h3><i class="fa fa-table"></i>Late</h3>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="table-responsive" style="border: 0;">
+                        <table class="table table-advance grid-data">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Cart</th>
+                                    <th>MPs</th>
+                                    <th>Name</th>
+                                    <th>E-mail</th>
+                                    <th>Apply date</th>
+                                    <th>Approve date</th>
+                                    <th>Reg. date</th>
+                                    <th>Calc. amount</th>
+                                    <th>Approved sum</th>
+                                    <th>Amount taken</th>
+                                    <th>Approves #</th>
+                                    <th>Rejects #</th>
+                                    <th>Segment</th>
+                                    <th>O/S balance</th>
+                                    <th>Date of late payment</th>
+                                    <th>Late amount</th>
+                                    <th>Delinquency</th>
+                                    <th>CRM status</th>
+                                    <th>CRM comment</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="tab-pane" id="rejected-grid">
+                    <div class="box">
+                        <div class="box-title">
+                            <h3><i class="fa fa-table"></i>Rejected</h3>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="table-responsive" style="border: 0;">
+                        <table class="table table-advance grid-data">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Cart</th>
+                                    <th>MPs</th>
+                                    <th>Name</th>
+                                    <th>E-mail</th>
+                                    <th>Apply date</th>
+                                    <th>Reg. date</th>
+                                    <th>Rejected date</th>
+                                    <th>Reason</th>
+                                    <th>Rejects #</th>
+                                    <th>Approves #</th>
+                                    <th>O/S balance</th>
+                                    <th>Segment</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="tab-pane" id="offline-grid">
+                    <div class="box">
+                        <div class="box-title">
+                            <h3><i class="fa fa-table"></i>Offline</h3>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="table-responsive" style="border: 0;">
+                        <table class="table table-advance grid-data">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Reg. date</th>
+                                    <th>Cart</th>
+                                    <th>MPs</th>
+                                    <th>Name</th>
+                                    <th>E-mail</th>
+                                    <th>Wizard step</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="tab-pane" id="all-grid">
+                    <div class="box">
+                        <div class="box-title">
+                            <h3><i class="fa fa-table"></i>All</h3>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="table-responsive" style="border: 0;">
+                        <table class="table table-advance grid-data">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Cart</th>
+                                    <th>MPs</th>
+                                    <th>Name</th>
+                                    <th>E-mail</th>
+                                    <th>Reg. date</th>
+                                    <th>Apply date</th>
+                                    <th>Customer status</th>
+                                    <th>Calc. amount</th>
+                                    <th>Approved sum</th>
+                                    <th>O/S balance</th>
+                                    <th>Segment</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="tab-pane" id="registered-grid">
+                    <div class="box">
+                        <div class="box-title">
+                            <h3><i class="fa fa-table"></i>Registered</h3>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="table-responsive" style="border: 0;">
+                        <table class="table table-advance grid-data">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>E-mail</th>
+                                    <th>User status</th>
+                                    <th>Reg. date</th>
+                                    <th>MPs statuses</th>
+                                    <th>Wizard step</th>
+                                    <th>Segment</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -522,201 +624,201 @@
         EzBob.Underwriter.StaticData = {};
         EzBob.Underwriter.StaticData.CollectionStatuses = new EzBob.Underwriter.CollectionStatuses(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(@Model.CollectionStatuses)));
 
-		$(function() {
-		    //count updater
-		    var counterTimer;
+        $(function() {
+            //count updater
+            var counterTimer;
 
-		    function updateCounters() {
-		        var xhr = $.get(window.gRootPath + 'Underwriter/Customers/GetCounters', { isTest: EzBob.Config.isTest });
-		        xhr.done(function(response) {
-		            _.each(response, function(val) {
-		                $('#' + val.Name + '-count').text(val.Count);
-		            });
-		        });
-		    } // updateCounters
+            function updateCounters() {
+                var xhr = $.get(window.gRootPath + 'Underwriter/Customers/GetCounters', { isTest: EzBob.Config.isTest });
+                xhr.done(function(response) {
+                    _.each(response, function(val) {
+                        $('#' + val.Name + '-count').text(val.Count);
+                    });
+                });
+            } // updateCounters
 
-		    var underwriterRouter = Backbone.Router.extend({
-		        initialize: function() {
-		            this.views = {
-		                grids: {
-		                    view: new EzBob.Underwriter.GridsView({ el: $('#grids-view') }),
-		                    isRendered: false,
-		                    menuItem: 'liApplications',
-		                },
-		                profile: {
-		                    view: new EzBob.Underwriter.ProfileView({ el: $('#profile-view') }),
-		                    isRendered: false,
-		                    menuItem: 'liApplications',
-		                },
-		                strategySettings: {
-		                    view: new EzBob.Underwriter.StrategySettingsView({ el: $('#settings-view') }),
-		                    isRendered: false,
-		                    menuItem: 'liStrategySettings',
-		                },
-		                strategyAutomation: {
-		                    view: new EzBob.Underwriter.StrategyAutomationView({ el: $('#automation-view') }),
-		                    isRendered: false,
-		                    menuItem: 'liAutomation',
-		                },
-		                support: {
-		                    view: new EzBob.Underwriter.SupportView({ el: $('#support-area') }),
-		                    isRendered: false,
-		                    menuItem: 'liSupport',
-		                },
-		                fraud: {
-		                    view: new EzBob.Underwriter.FraudView({ el: $('#fraud-area') }),
-		                    isRendered: false,
-		                    menuItem: 'liFraud',
-		                },
-		            }; // views
-		        }, // initialize
+            var underwriterRouter = Backbone.Router.extend({
+                initialize: function() {
+                    this.views = {
+                        grids: {
+                            view: new EzBob.Underwriter.GridsView({ el: $('#grids-view') }),
+                            isRendered: false,
+                            menuItem: 'liApplications',
+                        },
+                        profile: {
+                            view: new EzBob.Underwriter.ProfileView({ el: $('#profile-view') }),
+                            isRendered: false,
+                            menuItem: 'liApplications',
+                        },
+                        strategySettings: {
+                            view: new EzBob.Underwriter.StrategySettingsView({ el: $('#settings-view') }),
+                            isRendered: false,
+                            menuItem: 'liStrategySettings',
+                        },
+                        strategyAutomation: {
+                            view: new EzBob.Underwriter.StrategyAutomationView({ el: $('#automation-view') }),
+                            isRendered: false,
+                            menuItem: 'liAutomation',
+                        },
+                        support: {
+                            view: new EzBob.Underwriter.SupportView({ el: $('#support-area') }),
+                            isRendered: false,
+                            menuItem: 'liSupport',
+                        },
+                        fraud: {
+                            view: new EzBob.Underwriter.FraudView({ el: $('#fraud-area') }),
+                            isRendered: false,
+                            menuItem: 'liFraud',
+                        },
+                    }; // views
+                }, // initialize
 
-		        routes: {
-		            '': 'customers',
-		            'customers/:type': 'customers',
-		            'profile/:id': 'profile',
-		            'profile/:id/:type': 'profilePopup',
-		            'settings': 'settings',
-		            'automation': 'automation',
-		            'support': 'support',
-		            'fraud': 'fraud'
-		        }, // routes
+                routes: {
+                    '': 'customers',
+                    'customers/:type': 'customers',
+                    'profile/:id': 'profile',
+                    'profile/:id/:type': 'profilePopup',
+                    'settings': 'settings',
+                    'automation': 'automation',
+                    'support': 'support',
+                    'fraud': 'fraud'
+                }, // routes
 
-		        profilePopup: function(id, type) {
-		            var profilePopupView = new EzBob.Underwriter.ProfilePopupView({ customerId: id });
-		            profilePopupView.modalOptions = { show: true, keyboard: false, width: 650 };
+                profilePopup: function(id, type) {
+                    var profilePopupView = new EzBob.Underwriter.ProfilePopupView({ customerId: id });
+                    profilePopupView.modalOptions = { show: true, keyboard: false, width: 650 };
 
-		            var that = this;
-		            profilePopupView.on('close', function() {
-		                that.navigate('#customers/registered');
-		            });
+                    var that = this;
+                    profilePopupView.on('close', function() {
+                        that.navigate('#customers/registered');
+                    });
 
-		            EzBob.App.modal.show(profilePopupView);
-		        }, // profilePopup
+                    EzBob.App.modal.show(profilePopupView);
+                }, // profilePopup
 
-		        handleRoute: function(sViewName, id, type) {
-		            var oView = this.views[sViewName];
+                handleRoute: function(sViewName, id, type) {
+                    var oView = this.views[sViewName];
 
-		            this.switchMenuTo(oView.menuItem);
+                    this.switchMenuTo(oView.menuItem);
 
-		            if (!oView.isRendered) {
-		                oView.isRendered = true;
-		                oView.view.render();
-		            } // if
+                    if (!oView.isRendered) {
+                        oView.isRendered = true;
+                        oView.view.render();
+                    } // if
 
-		            this.hideAll();
+                    this.hideAll();
 
-		            oView.view.show(id, type);
-		        }, // handleRoute
+                    oView.view.show(id, type);
+                }, // handleRoute
 
-		        customers: function(type) {
-		            counterTimer = counterTimer || setInterval(updateCounters, 5000);
+                customers: function(type) {
+                    counterTimer = counterTimer || setInterval(updateCounters, 5000);
 
-		            this.handleRoute('grids', null, type);
-		        }, // customers
+                    this.handleRoute('grids', null, type);
+                }, // customers
 
-		        profile: function(id, type) {
-		            clearInterval(counterTimer);
-		            counterTimer = null;
+                profile: function(id, type) {
+                    clearInterval(counterTimer);
+                    counterTimer = null;
 
-		            this.handleRoute('profile', id, type);
+                    this.handleRoute('profile', id, type);
 
-		            this.views.profile.view.showed = true;
-		        }, // profile
+                    this.views.profile.view.showed = true;
+                }, // profile
 
-		        settings: function() {
-		            this.handleRoute('strategySettings');
-		        }, // settings
+                settings: function() {
+                    this.handleRoute('strategySettings');
+                }, // settings
 
-		        automation: function() {
-		            this.handleRoute('strategyAutomation');
-		        }, // automation
+                automation: function() {
+                    this.handleRoute('strategyAutomation');
+                }, // automation
 
-		        support: function() {
-		            this.handleRoute('support');
-		        }, // support
+                support: function() {
+                    this.handleRoute('support');
+                }, // support
 
-		        fraud: function() {
-		            this.handleRoute('fraud');
-		        }, // fraud
+                fraud: function() {
+                    this.handleRoute('fraud');
+                }, // fraud
 
-		        switchMenuTo: function(name) {
-		            $('.container-fluid > ul.nav > li[id]').removeClass('active');
-		            $('#' + name).addClass('active');
-		        }, // switchMenuTo
+                switchMenuTo: function(name) {
+                    $('.container-fluid > ul.nav > li[id]').removeClass('active');
+                    $('#' + name).addClass('active');
+                }, // switchMenuTo
 
-		        hideAll: function() {
-		            for (var i in this.views)
-		                this.views[i].view.hide();
+                hideAll: function() {
+                    for (var i in this.views)
+                        this.views[i].view.hide();
 
-		            this.views.profile.view.showed = false;
-		        }, // hideAll
-		    }); // underwriterRouter
+                    this.views.profile.view.showed = false;
+                }, // hideAll
+            }); // underwriterRouter
 
-		    var oRouter = new underwriterRouter();
+            var oRouter = new underwriterRouter();
 
-		    oRouter.views.grids.view.router = oRouter;
+            oRouter.views.grids.view.router = oRouter;
 
-		    oRouter.views.profile.view.router = oRouter;
+            oRouter.views.profile.view.router = oRouter;
 
-		    Backbone.history.start();
+            Backbone.history.start();
 
-		    oRouter.views.profile.view.on('customerNotFull', function(customerId) {
-		        oRouter.navigate('#customers/registered', { trigger: true, replace: true });
-		        oRouter.navigate('#profile/' + customerId + '/registered', { trigger: true, replace: true });
-		    });
+            oRouter.views.profile.view.on('customerNotFull', function(customerId) {
+                oRouter.navigate('#customers/registered', { trigger: true, replace: true });
+                oRouter.navigate('#profile/' + customerId + '/registered', { trigger: true, replace: true });
+            });
 
-		    oRouter.views.support.view.on('rechecked', function(options) {
-		        var umi = options.umi;
+            oRouter.views.support.view.on('rechecked', function(options) {
+                var umi = options.umi;
 
-		        var el = $('[umi=' + umi + ']');
+                var el = $('[umi=' + umi + ']');
 
-		        var status = el.parent().prev();
+                var status = el.parent().prev();
 
-		        oRouter.views.support.view.model.fetch().done(function() {
-		            var interval = setInterval(function() {
-		                var req = $.get(window.gRootPath + 'Underwriter/MarketPlaces/CheckForUpdatedStatus', { mpId: umi });
+                oRouter.views.support.view.model.fetch().done(function() {
+                    var interval = setInterval(function() {
+                        var req = $.get(window.gRootPath + 'Underwriter/MarketPlaces/CheckForUpdatedStatus', { mpId: umi });
 
-		                return req.done(function(response) {
-		                    status.text(response.status);
+                        return req.done(function(response) {
+                            status.text(response.status);
 
-		                    if (response.status !== 'In progress') {
-		                        clearInterval(interval);
+                            if (response.status !== 'In progress') {
+                                clearInterval(interval);
 
-		                        oRouter.views.support.view.model.fetch().done(function() {
-		                            el.removeClass('disabled');
+                                oRouter.views.support.view.model.fetch().done(function() {
+                                    el.removeClass('disabled');
 
-		                            if (response.status == 'Done')
-		                                EzBob.ShowMessage('The MP ' + umi + ' rechecked successfully', '', null, 'OK');
+                                    if (response.status == 'Done')
+                                        EzBob.ShowMessage('The MP ' + umi + ' rechecked successfully', '', null, 'OK');
 
-		                            oRouter.views.support.view.model.trigger('change');
-		                        });
-		                    } // if
-		                }); // done
-		            }, 1000); // setInterval
-		        }); // on fetch done
-		    }); // on rechecked
+                                    oRouter.views.support.view.model.trigger('change');
+                                });
+                            } // if
+                        }); // done
+                    }, 1000); // setInterval
+                }); // on fetch done
+            }); // on rechecked
 
-		    // if (window.location.hash != '') { $('a[href="' + window.location.hash + '"]').tab('show'); }
+            // if (window.location.hash != '') { $('a[href="' + window.location.hash + '"]').tab('show'); }
 
-		    var recentCustomersModel = new EzBob.Underwriter.RecentCustomersModel();
+            var recentCustomersModel = new EzBob.Underwriter.RecentCustomersModel();
 
-		    recentCustomersModel.fetch().done(function() {
-		        localStorage.setItem('RecentCustomers', JSON.stringify(recentCustomersModel.get('RecentCustomers')));
+            recentCustomersModel.fetch().done(function() {
+                localStorage.setItem('RecentCustomers', JSON.stringify(recentCustomersModel.get('RecentCustomers')));
 
-		        var a = new EzBob.Underwriter.goToCustomerId();
+                var a = new EzBob.Underwriter.goToCustomerId();
 
-		        a.on('ok', function(id) {
-		            oRouter.views.profile.view.router.navigate('profile/' + id, { trigger: true, replace: true });
-		        });
+                a.on('ok', function(id) {
+                    oRouter.views.profile.view.router.navigate('profile/' + id, { trigger: true, replace: true });
+                });
 
-		        $('#liClient > a').on('click', function() {
-		            a.render();
-		            return false;
-		        });
-		    }); // recent customers model fetch done
-		});
+                $('#liClient > a').on('click', function() {
+                    a.render();
+                    return false;
+                });
+            }); // recent customers model fetch done
+        });
 
-		var escalatedFlag = @(Model.IsEscalated ? 1 : 0);
+        var escalatedFlag = @(Model.IsEscalated ? 1 : 0);
     </script>
 }

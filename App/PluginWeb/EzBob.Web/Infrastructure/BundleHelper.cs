@@ -11,12 +11,12 @@ namespace EzBob.Web.Infrastructure
 {
     public class BundleHelper
     {
-        public static MvcHtmlString RenderCss()
+        public static MvcHtmlString RenderUnderwriterCss()
         {
             return Bundle.Css()
                 .Add("~/Content/css/datepicker.css")
-                .Add("~/Content/css/jquery-ui-1.8.16.custom.css")
-                .Add("~/Content/css/jquery.ui.1.8.16.ie.css")
+				.Add("~/Content/css/jquery-ui-1.8.16.custom.css")
+				.Add("~/Content/css/jquery.ui.1.8.16.ie.css")
                 .Add("~/Content/css/ui.jqgrid.css")
                 .Add("~/Content/css/jquery.jscrollpane.css")
                 .Add("~/Content/css/bootstrap.css")
@@ -39,8 +39,12 @@ namespace EzBob.Web.Infrastructure
                 .Add("~/Content/css/attardi.labels.css")
                 .Add("~/Content/css/loan-type-selector.css")
                 .Add("~/Content/css/amount-period-sliders.css")
-				.Add("~/Content/css/jquery.dataTables.css")
-				.Add("~/Content/css/jquery.dataTables_themeroller.css")
+				.Add("~/Content/css/flaty/bootstrap.min.css")
+				.Add("~/Content/css/flaty/dataTables.bootstrap.css")
+				.Add("~/Content/css/flaty/DT_bootstrap.css")
+				.Add("~/Content/css/flaty/flaty-responsive.css")
+				.Add("~/Content/css/flaty/flaty.css")
+				.Add("~/Content/css/flaty/font-awesome.min.css")
                 .MvcRender("~/Content/css/min/combined_#.css");
         }
 
@@ -213,6 +217,8 @@ namespace EzBob.Web.Infrastructure
                 .Add("~/Content/js/lib/attardi.labels.js")
                 .Add("~/Content/js/lib/amount-period-sliders.js")
                 .Add("~/Content/js/lib/jquery.field_status.js")
+				.Add("~/Content/js/lib/jquery.cookie.js")
+				.Add("~/Content/js/lib/jquery.slimscroll.min.js")
                 .Add("~/Content/js/lib/jqplot/jquery.jqplot.js")
                 .Add("~/Content/js/lib/jqplot/plugins/jqplot.dateAxisRenderer.js")
                 .Add("~/Content/js/lib/jqplot/plugins/jqplot.canvasTextRenderer.js")
@@ -228,6 +234,11 @@ namespace EzBob.Web.Infrastructure
 				.Add("~/Content/js/lib/jqplot/plugins/jqplot.canvasOverlay.js")
 				.Add("~/Content/js/lib/jqplot/plugins/jqplot.pointLabels.js")
 				.Add("~/Content/js/lib/jquery.dataTables.min.js")
+
+				//Flaty
+				.Add("~/Content/js/lib/flaty/dataTables.bootstrap.js")
+				.Add("~/Content/js/lib/flaty/DT_Bootstrap.js")
+				.Add("~/Content/js/lib/flaty/flaty.js")
 
 				// HighCharts
 				.Add("~/Content/js/lib/highcharts/highcharts.js")
@@ -445,5 +456,7 @@ namespace EzBob.Web.Infrastructure
                 .Add("~/Content/js/login/ezbob.login.view.coffee")
                 .MvcRender("~/Content/js/min/profile_#.js");
         }
+
+		
     }
 }

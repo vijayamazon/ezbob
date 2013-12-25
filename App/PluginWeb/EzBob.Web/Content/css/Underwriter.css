@@ -203,7 +203,7 @@ table.rright tbody td:not(:first-child) { text-align: right; }
 
 #spl {
     width: 100%;
-    height: 1000px;
+    height: 1600px;
 }
 
 #spl > div { overflow: visible; }
@@ -316,8 +316,6 @@ table.table { font-family: Tahoma; }
     word-wrap: break-word;
 }
 
-.roleImg { margin-top: 5px; }
-
 #installment-edit-form, #fee-edit-form { margin-top: 20px; }
 
 table tr.editing td { background-color: beige !important; }
@@ -364,6 +362,11 @@ ul.left-underwriter-menu li label {
 	margin: -21px 0 0 30px;
 }
 
+#grids-view .dataTables_filter {
+    display: inline-block;
+    float: right;
+}
+/*
 #grids-view {
 	font-family: Tahoma, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 	font-size: 12px;
@@ -391,7 +394,7 @@ ul.left-underwriter-menu li label {
 #grids-view .tab-pane input {
 	margin-top: 7px;
 }
-
+ 
 #grids-view .grid-data {
 	width: 100%;
 }
@@ -410,7 +413,7 @@ ul.left-underwriter-menu li label {
 }
 
 #grids-view tbody td.grid-item-Cart { text-align: center; }
-
+*/
 .customer-grids { 
     margin-left: 117px;
     position: absolute;
