@@ -24,7 +24,7 @@
 
 		#region constructor
 
-		public UpdateMarketplace(int customerId, int marketplaceId, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public UpdateMarketplace(int customerId, int marketplaceId, AConnection oDb, ASafeLog oLog) : base(oDb, oLog) {
 			mailer = new StrategiesMailer(Db, Log);
 			this.customerId = customerId;
 			this.marketplaceId = marketplaceId;
@@ -99,7 +99,7 @@
 					} // switch
 				}
 				else
-					new Integration.ChannelGrabberFrontend.RetrieveDataHelper(Helper, new DatabaseMarketPlace(marketplaceName), Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(marketplaceName)).UpdateCustomerMarketplaceFirst(marketplaceId);
+					new RetrieveDataHelper(Helper, new DatabaseMarketPlace(marketplaceName), Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(marketplaceName)).UpdateCustomerMarketplaceFirst(marketplaceId);
 			}
 			catch (Exception e) {
 				errorMessage = e.Message;

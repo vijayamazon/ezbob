@@ -1,24 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Globalization;
-using System.IO;
-using Aspose.Words;
-using Ezbob.Database;
-using Ezbob.Logger;
-using MailApi;
+﻿namespace EzBob.Backend.Strategies {
+	using System;
+	using System.Collections.Generic;
+	using System.Data;
+	using System.Globalization;
+	using System.IO;
+	using Aspose.Words;
+	using Ezbob.Database;
+	using Ezbob.Logger;
+	using MailApi;
 
-namespace EzBob.Backend.Strategies {
 	public class StrategiesMailer {
 		#region public
 
 		#region constructor
 
-		public StrategiesMailer(AConnection oDB, ASafeLog oLog) {
-			DB = oDB;
+		public StrategiesMailer(AConnection oDb, ASafeLog oLog) {
+			Db = oDb;
 			Log = new SafeLog(oLog);
 
-			DataTable dt = DB.ExecuteReader("GetMails", CommandSpecies.StoredProcedure);
+			DataTable dt = Db.ExecuteReader("GetMails", CommandSpecies.StoredProcedure);
 			DataRow results = dt.Rows[0];
 			ezbobCopyTo = results["ToAddress"].ToString();
 			ezbobCopyCc = results["CcAddress"].ToString();
@@ -58,7 +58,7 @@ namespace EzBob.Backend.Strategies {
 
 			if (shouldRecord) {
 				string filename = string.Format("{0}({1}).docx", subject, DateTime.UtcNow.ToString("yyyy-MM-dd_HH-mm-ss", CultureInfo.InvariantCulture));
-				DB.ExecuteNonQuery(
+				Db.ExecuteNonQuery(
 					"RecordMail",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("Filename", filename),
@@ -92,7 +92,7 @@ namespace EzBob.Backend.Strategies {
 		private readonly string ezbobCopyTo;
 		private readonly string ezbobCopyCc;
 
-		private AConnection DB { get; set; }
+		private AConnection Db { get; set; }
 		private SafeLog Log { get; set; }
 
 		#endregion properties

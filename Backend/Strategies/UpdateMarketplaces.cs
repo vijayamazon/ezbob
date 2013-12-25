@@ -11,9 +11,9 @@
 
 		#region constructor
 
-		public UpdateMarketplaces(int customerId, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public UpdateMarketplaces(int customerId, AConnection oDb, ASafeLog oLog) : base(oDb, oLog) {
 			this.customerId = customerId;
-			m_oDB = oDB;
+			m_oDB = oDb;
 			m_oLog = oLog;
 		} // constructor
 
@@ -47,15 +47,7 @@
 		#endregion public
 
 		#region private
-
-		#region property Helper
-
-		private DatabaseDataHelper Helper {
-			get { return ObjectFactory.GetInstance<DatabaseDataHelper>(); }
-		} // Helper
-
-		#endregion property Helper
-
+		
 		private readonly int customerId;
 		private readonly AConnection m_oDB;
 		private readonly ASafeLog m_oLog;

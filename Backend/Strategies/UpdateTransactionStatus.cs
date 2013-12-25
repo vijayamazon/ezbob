@@ -1,13 +1,13 @@
-﻿using System.Data;
-using Ezbob.Database;
-using Ezbob.Logger;
-using PaymentServices.PacNet;
+﻿namespace EzBob.Backend.Strategies {
+	using System.Data;
+	using Ezbob.Database;
+	using Ezbob.Logger;
+	using PaymentServices.PacNet;
 
-namespace EzBob.Backend.Strategies {
 	public class UpdateTransactionStatus : AStrategy {
 		#region constructor
 
-		public UpdateTransactionStatus(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) { } // constructor
+		public UpdateTransactionStatus(AConnection oDb, ASafeLog oLog) : base(oDb, oLog) { } // constructor
 
 		#endregion constructor
 
@@ -47,7 +47,7 @@ namespace EzBob.Backend.Strategies {
 					description = result.Status;
 				} // if
 
-				this.Log.Debug("UpdateTransactionStatus: CustomerId {4}, Tracking number {5}, Pacnet Result: status: {0}, error: {1}, Update data: status {2}, description {3}", result.Status, result.Error, newStatus, description);
+				Log.Debug("UpdateTransactionStatus: CustomerId {4}, Tracking number {5}, Pacnet Result: status: {0}, error: {1}, Update data: status {2}, description {3}", result.Status, result.Error, newStatus, description);
 				Db.ExecuteNonQuery("UpdateTransactionStatus",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("TrackingId", trackingNumber),

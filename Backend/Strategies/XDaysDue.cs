@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Globalization;
-using Ezbob.Database;
-using Ezbob.Logger;
-
-namespace EzBob.Backend.Strategies {
+﻿namespace EzBob.Backend.Strategies {
 	using Web.Code;
+	using System;
+	using System.Collections.Generic;
+	using System.Data;
+	using System.Globalization;
+	using Ezbob.Database;
+	using Ezbob.Logger;
 
 	public class XDaysDue : AStrategy {
 		#region constructor
 
-		public XDaysDue(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public XDaysDue(AConnection oDb, ASafeLog oLog) : base(oDb, oLog) {
 			mailer = new StrategiesMailer(Db, Log);
 		} // constructor
 
