@@ -169,9 +169,9 @@ namespace EzService {
 
 				Log.Msg("Nop({0}) method: starting asleeper...", nLengthInSeconds);
 
-				amd.UnderlyingThread.Start();
-
 				SaveActionStatus(amd, ActionStatus.Launched);
+
+				amd.UnderlyingThread.Start();
 
 				Log.Msg("Nop({0}) method: asleeper started: {1}.", nLengthInSeconds, amd);
 
@@ -472,17 +472,16 @@ namespace EzService {
 						SaveActionStatus(amd, ActionStatus.Done);
 					}
 					catch (Exception e) {
+						Log.Alert(e, "Exception during executing " + oStrategyType + " strategy.");
+
 						amd.Comment = e.Message;
 						SaveActionStatus(amd, ActionStatus.Failed);
-
-						Log.Alert(e, "Exception during executing " + oStrategyType + " strategy.");
-						throw new FaultException(e.Message);
 					} // try
 				});
 
-				amd.UnderlyingThread.Start();
-
 				SaveActionStatus(amd, ActionStatus.Launched);
+
+				amd.UnderlyingThread.Start();
 
 				Log.Debug("Executing " + oStrategyType + " started on another thread.");
 
