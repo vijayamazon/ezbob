@@ -20,7 +20,7 @@ namespace EzBob.Backend.Strategies {
 			foreach (DataRow row in dt.Rows) {
 				bool is14DaysLate = Convert.ToBoolean(row["Is14DaysLate"]);
 
-				if (!is14DaysLate)
+				if (is14DaysLate)
 					continue;
 
 				int loanId = int.Parse(row["LoanId"].ToString());
