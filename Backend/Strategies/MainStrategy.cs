@@ -57,7 +57,7 @@ namespace EzBob.Backend.Strategies
 			ASafeLog oLog
 		) : base(oDB, oLog)
 		{
-			mailer = new StrategiesMailer(DB, Log);
+			mailer = new StrategiesMailer(Db, Log);
 			CustomerId = customerId;
 			newCreditLineOption = newCreditLine;
 			avoidAutomaticDescison = avoidAutoDescison;
@@ -85,7 +85,7 @@ namespace EzBob.Backend.Strategies
 			ASafeLog oLog
 		) : base(oDB, oLog)
 		{
-			mailer = new StrategiesMailer(DB, Log);
+			mailer = new StrategiesMailer(Db, Log);
 			CustomerId = customerId;
 			UseCustomIdHubAddress = checkType;
 			Underwriter_Check = true;
@@ -166,7 +166,7 @@ namespace EzBob.Backend.Strategies
 				UpdateExperianConsumer(App_FirstName, App_Surname, App_Line6Prev, ExperianConsumerErrorPrev, ExperianConsumerScore, CustomerId, 0);
 				
 				if (CompanyType != "Entrepreneur") {
-					DataTable dt = DB.ExecuteReader(
+					DataTable dt = Db.ExecuteReader(
 						"GetDirectorsAddresses",
 						CommandSpecies.StoredProcedure,
 						new QueryParameter("CustomerId", CustomerId)
@@ -200,7 +200,7 @@ namespace EzBob.Backend.Strategies
 
 				AmlAndBwa(CustomerId);
 
-				DB.ExecuteReader(
+				Db.ExecuteReader(
 					"UpdateExperianBWA_AML",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("CustomerId", CustomerId),
@@ -209,7 +209,7 @@ namespace EzBob.Backend.Strategies
 				);
 			} // if
 
-			DataTable scoreCardDataTable = DB.ExecuteReader(
+			DataTable scoreCardDataTable = Db.ExecuteReader(
 				"GetDirectorsAddresses",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", CustomerId)
@@ -244,7 +244,7 @@ namespace EzBob.Backend.Strategies
 			
 			MedalType = scoringResult.Medal;
 
-			DB.ExecuteNonQuery(
+			Db.ExecuteNonQuery(
 				"CustomerScoringResult_Insert",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("pCustomerId", CustomerId),
@@ -269,7 +269,7 @@ namespace EzBob.Backend.Strategies
 				EnableAutomaticReRejection = false;
 			}
 			
-			DataTable defaultAccountsNumDataTable = DB.ExecuteReader(
+			DataTable defaultAccountsNumDataTable = Db.ExecuteReader(
 				"GetNumberOfDefaultAccounts",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", CustomerId),
@@ -280,7 +280,7 @@ namespace EzBob.Backend.Strategies
 			DataRow defaultAccountsNumResults = defaultAccountsNumDataTable.Rows[0];
 			NumOfDefaultAccounts = int.Parse(defaultAccountsNumResults["NumOfDefaultAccounts"].ToString());
 
-			DataTable lastOfferDataTable = DB.ExecuteReader(
+			DataTable lastOfferDataTable = Db.ExecuteReader(
 				"GetLastOfferForAutomatedDecision",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", CustomerId)
@@ -302,7 +302,7 @@ namespace EzBob.Backend.Strategies
 			LoanSourceId = int.Parse(lastOfferResults["LoanSourceID"].ToString());
 			IsCustomerRepaymentPeriodSelectionAllowed = int.Parse(lastOfferResults["IsCustomerRepaymentPeriodSelectionAllowed"].ToString());
 
-			DataTable basicInterestRateDataTable = DB.ExecuteReader(
+			DataTable basicInterestRateDataTable = Db.ExecuteReader(
 				"GetBasicInterestRate",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("Score", Inintial_ExperianConsumerScore)
@@ -338,11 +338,11 @@ namespace EzBob.Backend.Strategies
 			if (App_HomeOwner != "Home owner" && MaxCapNotHomeOwner < OfferedCreditLine)
 				OfferedCreditLine = MaxCapNotHomeOwner;
 
-			autoDecisionResponse = AutoDecisionMaker.MakeDecision(CreateAutoDecisionRequest(), DB);
+			autoDecisionResponse = AutoDecisionMaker.MakeDecision(CreateAutoDecisionRequest(), Db);
 			ModelLoanOffer = autoDecisionResponse.ModelLoanOffer;
 
 			if (Underwriter_Check) {
-				DB.ExecuteNonQuery(
+				Db.ExecuteNonQuery(
 					"Update_Main_Strat_Finish_Date", 
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("UserId", CustomerId)
@@ -351,18 +351,18 @@ namespace EzBob.Backend.Strategies
 				return;
 			} // if
 
-			DB.ExecuteNonQuery(
+			Db.ExecuteNonQuery(
 				"UpdateScoringResultsNew",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CreditResult", autoDecisionResponse.CreditResult),
 				new QueryParameter("SystemDecision", autoDecisionResponse.SystemDecision),
 				new QueryParameter("Status", autoDecisionResponse.UserStatus),
 				new QueryParameter("Medal", MedalType),
-				new QueryParameter("ApplyForLoan", autoDecisionResponse.App_ApplyForLoan),
-				new QueryParameter("ValidFor", autoDecisionResponse.App_ValidFor)
+				new QueryParameter("ApplyForLoan", autoDecisionResponse.AppApplyForLoan),
+				new QueryParameter("ValidFor", autoDecisionResponse.AppValidFor)
 			);
 
-			DB.ExecuteNonQuery(
+			Db.ExecuteNonQuery(
 				"UpdateCashRequests",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", CustomerId),
@@ -378,7 +378,7 @@ namespace EzBob.Backend.Strategies
 
 			if (autoDecisionResponse.UserStatus == "Approved") {
 				if (autoDecisionResponse.IsAutoApproval) {
-					DB.ExecuteNonQuery(
+					Db.ExecuteNonQuery(
 						"UpdateAutoApproval",
 						CommandSpecies.StoredProcedure,
 						new QueryParameter("CustomerId", CustomerId),
@@ -398,7 +398,7 @@ namespace EzBob.Backend.Strategies
 						{"ApprovalAmount", LoanOffer_ReApprovalSum.ToString(CultureInfo.InvariantCulture)},
 						{"RepaymentPeriod", LoanOffer_RepaymentPeriod.ToString(CultureInfo.InvariantCulture)},
 						{"InterestRate", LoanOffer_InterestRate.ToString(CultureInfo.InvariantCulture)},
-						{"OfferValidUntil", autoDecisionResponse.App_ValidFor.ToString(CultureInfo.InvariantCulture)}
+						{"OfferValidUntil", autoDecisionResponse.AppValidFor.ToString(CultureInfo.InvariantCulture)}
 					};
 
 					mailer.SendToEzbob(variables, "Mandrill - User is approved or re-approved", "User was automatically approved");
@@ -417,7 +417,7 @@ namespace EzBob.Backend.Strategies
 						);
 
 						strategyHelper.AddApproveIntoDecisionHistory(CustomerId, "Auto Approval");
-						DB.ExecuteNonQuery(
+						Db.ExecuteNonQuery(
 							"Update_Main_Strat_Finish_Date",
 							CommandSpecies.StoredProcedure,
 							new QueryParameter("UserId", CustomerId)
@@ -437,7 +437,7 @@ namespace EzBob.Backend.Strategies
 						);
 
 						strategyHelper.AddApproveIntoDecisionHistory(CustomerId, "AutoApproval");
-						DB.ExecuteNonQuery(
+						Db.ExecuteNonQuery(
 							"Update_Main_Strat_Finish_Date",
 							CommandSpecies.StoredProcedure,
 							new QueryParameter("UserId", CustomerId)
@@ -445,7 +445,7 @@ namespace EzBob.Backend.Strategies
 					} // if
 				}
 				else {
-					DB.ExecuteNonQuery(
+					Db.ExecuteNonQuery(
 						"UpdateCashRequestsReApproval",
 						CommandSpecies.StoredProcedure,
 						new QueryParameter("CustomerId", CustomerId),
@@ -455,10 +455,10 @@ namespace EzBob.Backend.Strategies
 						new QueryParameter("RepaymentPeriod", LoanOffer_RepaymentPeriod),
 						new QueryParameter("InterestRate", LoanOffer_InterestRate),
 						new QueryParameter("UseSetupFee", LoanOffer_UseSetupFee),
-						new QueryParameter("OfferValidDays", autoDecisionResponse.LoanOffer_OfferValidDays),
-						new QueryParameter("EmailSendingBanned", autoDecisionResponse.LoanOffer_EmailSendingBanned_new),
+						new QueryParameter("OfferValidDays", autoDecisionResponse.LoanOfferOfferValidDays),
+						new QueryParameter("EmailSendingBanned", autoDecisionResponse.LoanOfferEmailSendingBannedNew),
 						new QueryParameter("LoanTypeId", LoanOffer_LoanTypeId),
-						new QueryParameter("UnderwriterComment", autoDecisionResponse.LoanOffer_UnderwriterComment),
+						new QueryParameter("UnderwriterComment", autoDecisionResponse.LoanOfferUnderwriterComment),
 						new QueryParameter("IsLoanTypeSelectionAllowed", LoanOffer_IsLoanTypeSelectionAllowed),
 						new QueryParameter("DiscountPlanId", LoanOffer_DiscountPlanId),
 						new QueryParameter("ExperianRating", LoanOffer_ExpirianRating),
@@ -479,13 +479,13 @@ namespace EzBob.Backend.Strategies
 						{"ApprovalAmount", LoanOffer_ReApprovalSum.ToString(CultureInfo.InvariantCulture)},
 						{"RepaymentPeriod", LoanOffer_RepaymentPeriod.ToString(CultureInfo.InvariantCulture)},
 						{"InterestRate", LoanOffer_InterestRate.ToString(CultureInfo.InvariantCulture)},
-						{"OfferValidUntil", autoDecisionResponse.App_ValidFor.ToString(CultureInfo.InvariantCulture)}
+						{"OfferValidUntil", autoDecisionResponse.AppValidFor.ToString(CultureInfo.InvariantCulture)}
 					};
 
 					mailer.SendToEzbob(variables, "Mandrill - User is approved or re-approved", "User was automatically Re-Approved");
 
 					if (!EnableAutomaticReApproval) {
-						DB.ExecuteNonQuery(
+						Db.ExecuteNonQuery(
 							"Update_Main_Strat_Finish_Date",
 							CommandSpecies.StoredProcedure,
 							new QueryParameter("UserId", CustomerId)
@@ -505,7 +505,7 @@ namespace EzBob.Backend.Strategies
 
 						strategyHelper.AddApproveIntoDecisionHistory(CustomerId, "Auto Re-Approval");
 
-						DB.ExecuteNonQuery(
+						Db.ExecuteNonQuery(
 							"Update_Main_Strat_Finish_Date",
 							CommandSpecies.StoredProcedure,
 							new QueryParameter("UserId", CustomerId)
@@ -529,7 +529,7 @@ namespace EzBob.Backend.Strategies
 					strategyHelper.AddRejectIntoDecisionHistory(CustomerId, autoDecisionResponse.AutoRejectReason);
 				} // if
 
-				DB.ExecuteNonQuery(
+				Db.ExecuteNonQuery(
 					"Update_Main_Strat_Finish_Date",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("UserId", CustomerId)
@@ -549,7 +549,7 @@ namespace EzBob.Backend.Strategies
 
 				mailer.SendToEzbob(variables, "Mandrill - User is waiting for decision", "User is now waiting for decision");
 
-				DB.ExecuteNonQuery(
+				Db.ExecuteNonQuery(
 					"Update_Main_Strat_Finish_Date",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("UserId", CustomerId)
@@ -701,7 +701,7 @@ namespace EzBob.Backend.Strategies
 		#region method ReadConfigurations
 
 		private void ReadConfigurations() {
-			DataTable dt = DB.ExecuteReader("MainStrategyGetConfigs", CommandSpecies.StoredProcedure);
+			DataTable dt = Db.ExecuteReader("MainStrategyGetConfigs", CommandSpecies.StoredProcedure);
 			DataRow results = dt.Rows[0];
 			
 			Reject_Defaults_CreditScore = int.Parse(results["Reject_Defaults_CreditScore"].ToString());
@@ -729,7 +729,7 @@ namespace EzBob.Backend.Strategies
 		#region method GerPersonalInfo
 
 		private void GerPersonalInfo() {
-			DataTable dt = DB.ExecuteReader("MainStrategyGetPersonalInfo", CommandSpecies.StoredProcedure);
+			DataTable dt = Db.ExecuteReader("MainStrategyGetPersonalInfo", CommandSpecies.StoredProcedure);
 			DataRow results = dt.Rows[0];
 
 			CustomerStatusIsEnabled = Convert.ToBoolean(results["CustomerStatusIsEnabled"]);
@@ -759,7 +759,7 @@ namespace EzBob.Backend.Strategies
 		#region method UpdateExperianConsumer
 
 		private void UpdateExperianConsumer(string firstName, string surname, string postCode, string error, int score, int customerId, int directorId) {
-			DB.ExecuteNonQuery(
+			Db.ExecuteNonQuery(
 				"UpdateExperianConsumer",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("Name", firstName),
@@ -804,7 +804,7 @@ namespace EzBob.Backend.Strategies
 		#region GetAddresses
 
 		private void GetAddresses() {
-			DataTable dt = DB.ExecuteReader("GetCustomerAddresses", CommandSpecies.StoredProcedure);
+			DataTable dt = Db.ExecuteReader("GetCustomerAddresses", CommandSpecies.StoredProcedure);
 			DataRow addressesResults = dt.Rows[0];
 			App_Line1 = addressesResults["Line1"].ToString();
 			App_Line2 = addressesResults["Line2"].ToString();
@@ -841,7 +841,7 @@ namespace EzBob.Backend.Strategies
 						ExperianLimitedError = limitedData.Error;
 				} // if
 
-				DB.ExecuteNonQuery(
+				Db.ExecuteNonQuery(
 					"UpdateExperianBusiness",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("CompanyRefNumber", App_LimitedRefNum),
@@ -866,7 +866,7 @@ namespace EzBob.Backend.Strategies
 						ExperianNonLimitedError = nonlimitedData.Error;
 				} // if
 
-				DB.ExecuteNonQuery(
+				Db.ExecuteNonQuery(
 					"UpdateExperianBusiness",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("CompanyRefNumber", App_NonLimitedRefNum),
@@ -897,10 +897,10 @@ namespace EzBob.Backend.Strategies
 				{"CVTotalAnnualTurnover", LowTotalAnnualTurnover.ToString(CultureInfo.InvariantCulture)},
 				{"Total3MTurnover", TotalSumOfOrders3MTotal.ToString(CultureInfo.InvariantCulture)},
 				{"CVTotal3MTurnover", LowTotalThreeMonthTurnover.ToString(CultureInfo.InvariantCulture)},
-				{"PayPalStoresNum", autoDecisionResponse.PayPal_NumberOfStores.ToString(CultureInfo.InvariantCulture)},
-				{"PayPalAnnualTurnover", autoDecisionResponse.PayPal_TotalSumOfOrders1Y.ToString(CultureInfo.InvariantCulture)},
+				{"PayPalStoresNum", autoDecisionResponse.PayPalNumberOfStores.ToString(CultureInfo.InvariantCulture)},
+				{"PayPalAnnualTurnover", autoDecisionResponse.PayPalTotalSumOfOrders1Y.ToString(CultureInfo.InvariantCulture)},
 				{"CVPayPalAnnualTurnover", LowTotalAnnualTurnover.ToString(CultureInfo.InvariantCulture)},
-				{"PayPal3MTurnover", autoDecisionResponse.PayPal_TotalSumOfOrders3M.ToString(CultureInfo.InvariantCulture)},
+				{"PayPal3MTurnover", autoDecisionResponse.PayPalTotalSumOfOrders3M.ToString(CultureInfo.InvariantCulture)},
 				{"CVPayPal3MTurnover", LowTotalThreeMonthTurnover.ToString(CultureInfo.InvariantCulture)},
 				{"CVExperianConsumerScoreDefAcc", Reject_Defaults_CreditScore.ToString(CultureInfo.InvariantCulture)},
 				{"ExperianDefAccNum", NumOfDefaultAccounts.ToString(CultureInfo.InvariantCulture)},
@@ -923,13 +923,13 @@ namespace EzBob.Backend.Strategies
 				EnableAutomaticReApproval = EnableAutomaticReApproval,
 				EnableAutomaticRejection = EnableAutomaticRejection,
 				EnableAutomaticReRejection = EnableAutomaticReRejection,
-				Inintial_ExperianConsumerScore = Inintial_ExperianConsumerScore,
+				InitialExperianConsumerScore = Inintial_ExperianConsumerScore,
 				ModelLoanOffer = ModelLoanOffer,
 				IsReRejected = false,
-				LoanOffer_ReApprovalFullAmountOld = LoanOffer_ReApprovalFullAmountOld,
-				LoanOffer_ReApprovalFullAmount = LoanOffer_ReApprovalFullAmount,
-				LoanOffer_ReApprovalRemainingAmount = LoanOffer_ReApprovalRemainingAmount,
-				LoanOffer_ReApprovalRemainingAmountOld = LoanOffer_ReApprovalRemainingAmountOld,
+				LoanOfferReApprovalFullAmountOld = LoanOffer_ReApprovalFullAmountOld,
+				LoanOfferReApprovalFullAmount = LoanOffer_ReApprovalFullAmount,
+				LoanOfferReApprovalRemainingAmount = LoanOffer_ReApprovalRemainingAmount,
+				LoanOfferReApprovalRemainingAmountOld = LoanOffer_ReApprovalRemainingAmountOld,
 				LowTotalAnnualTurnover = LowTotalAnnualTurnover,
 				LowTotalThreeMonthTurnover = LowTotalThreeMonthTurnover,
 				MarketplaceSeniorityDays = MarketplaceSeniorityDays,
@@ -1039,7 +1039,7 @@ namespace EzBob.Backend.Strategies
 			} // if
 
 			if (UseCustomIdHubAddress == 1) {
-				DataTable dt = DB.ExecuteReader("GetPrevBwaResult", CommandSpecies.StoredProcedure);
+				DataTable dt = Db.ExecuteReader("GetPrevBwaResult", CommandSpecies.StoredProcedure);
 				ExperianBwaResult = dt.Rows[0]["BWAResult"].ToString();
 			}
 			else {
@@ -1221,7 +1221,7 @@ namespace EzBob.Backend.Strategies
 		#region method WaitForMarketplacesToFinishUpdates
 
 		private bool WaitForMarketplacesToFinishUpdates() {
-			DataTable dt = DB.ExecuteReader(
+			DataTable dt = Db.ExecuteReader(
 				"MP_CustomerMarketplacesIsUpdated",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", CustomerId)
@@ -1239,7 +1239,7 @@ namespace EzBob.Backend.Strategies
 
 				Thread.Sleep(intervalWaitForMarketplacesUpdate);
 
-				dt = DB.ExecuteReader(
+				dt = Db.ExecuteReader(
 					"MP_CustomerMarketplacesIsUpdated",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("CustomerId", CustomerId)

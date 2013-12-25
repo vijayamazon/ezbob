@@ -290,15 +290,15 @@ namespace EzService {
 		} // LoanFullyPaid
 
 		public ActionMetaData MoreAmLandBwaInformation(int customerId) {
-			return Execute(typeof (MoreAMLandBWAInformation), customerId);
+			return Execute(typeof(MoreAmlAndBwaInformation), customerId);
 		} // MoreAmLandBwaInformation
 
 		public ActionMetaData MoreAmlInformation(int customerId) {
-			return Execute(typeof (MoreAMLInformation), customerId);
+			return Execute(typeof (MoreAmlInformation), customerId);
 		} // MoreAmlInformation
 
 		public ActionMetaData MoreBwaInformation(int customerId) {
-			return Execute(typeof (MoreBWAInformation), customerId);
+			return Execute(typeof (MoreBwaInformation), customerId);
 		} // MoreBwaInformation
 
 		public ActionMetaData PasswordChanged(int customerId, string password) {

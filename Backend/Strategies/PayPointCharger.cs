@@ -28,9 +28,9 @@ namespace EzBob.Backend.Strategies {
 		#region constructor
 
 		public PayPointCharger(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
-			mailer = new StrategiesMailer(DB, Log);
+			mailer = new StrategiesMailer(Db, Log);
 
-			DataTable configsDataTable = DB.ExecuteReader("PayPointChargerGetConfigs", CommandSpecies.StoredProcedure);
+			DataTable configsDataTable = Db.ExecuteReader("PayPointChargerGetConfigs", CommandSpecies.StoredProcedure);
 
 			DataRow configsResult = configsDataTable.Rows[0];
 
@@ -42,7 +42,7 @@ namespace EzBob.Backend.Strategies {
 		#region method Execute
 
 		public override void Execute() {
-			DataTable dt = DB.ExecuteReader("GetCustomersForPayPoint", CommandSpecies.StoredProcedure);
+			DataTable dt = Db.ExecuteReader("GetCustomersForPayPoint", CommandSpecies.StoredProcedure);
 
 			foreach (DataRow row in dt.Rows)
 				HandleOnePayment(row);
@@ -177,7 +177,7 @@ namespace EzBob.Backend.Strategies {
 		#region method SendLoanStatusMail
 
 		private void SendLoanStatusMail(int loanId, string firstName, string refNum, string customerMail) {
-			DataTable dt = DB.ExecuteReader(
+			DataTable dt = Db.ExecuteReader(
 				"GetLoanStatus",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("LoanId", loanId)

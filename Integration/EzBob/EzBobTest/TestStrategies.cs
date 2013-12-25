@@ -145,21 +145,21 @@ namespace EzBobTest
 		[Test]
 		public void MoreAmLandBwaInformation()
 		{
-			var s = new MoreAMLandBWAInformation(3060, m_oDB, m_oLog);
+			var s = new MoreAmlAndBwaInformation(3060, m_oDB, m_oLog);
 			s.Execute();
 		}
 
 		[Test]
 		public void MoreAmlInformation()
 		{
-			var s = new MoreAMLInformation(3060, m_oDB, m_oLog);
+			var s = new MoreAmlInformation(3060, m_oDB, m_oLog);
 			s.Execute();
 		}
 
 		[Test]
 		public void MoreBwaInformation()
 		{
-			var s = new MoreBWAInformation(3060, m_oDB, m_oLog);
+			var s = new MoreBwaInformation(3060, m_oDB, m_oLog);
 			s.Execute();
 		}
 

@@ -22,7 +22,7 @@ namespace EzBob.Backend.Strategies {
 		#region method Execute
 
 		public override void Execute() {
-			DataTable dt = DB.ExecuteReader("GetPacnetTransactions", CommandSpecies.StoredProcedure);
+			DataTable dt = Db.ExecuteReader("GetPacnetTransactions", CommandSpecies.StoredProcedure);
 
 			foreach (DataRow row in dt.Rows) {
 				int customerId = int.Parse(row["CustomerId"].ToString());
@@ -48,7 +48,7 @@ namespace EzBob.Backend.Strategies {
 				} // if
 
 				this.Log.Debug("UpdateTransactionStatus: CustomerId {4}, Tracking number {5}, Pacnet Result: status: {0}, error: {1}, Update data: status {2}, description {3}", result.Status, result.Error, newStatus, description);
-				DB.ExecuteNonQuery("UpdateTransactionStatus",
+				Db.ExecuteNonQuery("UpdateTransactionStatus",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("TrackingId", trackingNumber),
 					new QueryParameter("TransactionStatus", newStatus),

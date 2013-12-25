@@ -12,7 +12,7 @@ namespace EzBob.Backend.Strategies {
 		#region constructor
 
 		public XDaysDue(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
-			mailer = new StrategiesMailer(DB, Log);
+			mailer = new StrategiesMailer(Db, Log);
 		} // constructor
 
 		#endregion constructor
@@ -28,7 +28,7 @@ namespace EzBob.Backend.Strategies {
 		#region property Execute
 
 		public override void Execute() {
-			DataTable dt = DB.ExecuteReader("GetCustomersFiveDaysDue", CommandSpecies.StoredProcedure);
+			DataTable dt = Db.ExecuteReader("GetCustomersFiveDaysDue", CommandSpecies.StoredProcedure);
 
 			foreach (DataRow row in dt.Rows) {
 				int loanScheduleId = int.Parse(row["id"].ToString());
@@ -49,14 +49,14 @@ namespace EzBob.Backend.Strategies {
 
 				mailer.SendToCustomerAndEzbob(variables, mail, "Mandrill - 5 days notice", subject);
 
-				DB.ExecuteNonQuery("UpdateFiveDaysDueMailSent",
+				Db.ExecuteNonQuery("UpdateFiveDaysDueMailSent",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("Id", loanScheduleId),
 					new QueryParameter("UpdateFiveDaysDueMailSent", true)
 				);
 			} // for each
 
-			dt = DB.ExecuteReader("GetCustomersTwoDaysDue", CommandSpecies.StoredProcedure);
+			dt = Db.ExecuteReader("GetCustomersTwoDaysDue", CommandSpecies.StoredProcedure);
 
 			foreach (DataRow row in dt.Rows) {
 				int loanScheduleId = int.Parse(row["id"].ToString());
@@ -77,7 +77,7 @@ namespace EzBob.Backend.Strategies {
 
 				mailer.SendToCustomerAndEzbob(variables, mail, "Mandrill - 2 days notice", subject);
 
-				DB.ExecuteNonQuery("UpdateTwoDaysDueMailSent",
+				Db.ExecuteNonQuery("UpdateTwoDaysDueMailSent",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("Id", loanScheduleId),
 					new QueryParameter("UpdateTwoDaysDueMailSent", true)
