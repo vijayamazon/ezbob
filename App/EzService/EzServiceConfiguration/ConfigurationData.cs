@@ -1,7 +1,7 @@
 ﻿using System;
 
 namespace EzServiceConfiguration {
-	public abstract class Configuration {
+	public abstract class ConfigurationData {
 		#region public
 
 		#region configuration details
@@ -64,7 +64,7 @@ namespace EzServiceConfiguration {
 
 		#region constructor
 
-		protected Configuration(string sInstanceName) {
+		protected ConfigurationData(string sInstanceName) {
 			RequestedInstanceName = sInstanceName;
 		} // constructor
 
@@ -96,5 +96,5 @@ namespace EzServiceConfiguration {
 		#endregion method IsPortValid
 
 		#endregion protected
-	} // class Configuration
+	} // class ConfigurationData
 } // namespace EzServiceConfiguration

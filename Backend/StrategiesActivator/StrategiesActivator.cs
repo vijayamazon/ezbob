@@ -3,7 +3,7 @@
 	using System.Linq;
 	using System.Reflection;
 	using System.ServiceModel;
-	using EzService;
+	using EzServiceConfigurationLoader;
 	using System;
 	using EzBob.Backend.Strategies;
 	using EzServiceReference;

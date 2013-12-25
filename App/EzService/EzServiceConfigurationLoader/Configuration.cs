@@ -3,8 +3,8 @@ using System.Data;
 using Ezbob.Database;
 using Ezbob.Logger;
 
-namespace EzService {
-	public class Configuration : EzServiceConfiguration.Configuration {
+namespace EzServiceConfigurationLoader {
+	public class Configuration : EzServiceConfiguration.ConfigurationData {
 		#region public
 
 		#region constructor
@@ -71,4 +71,4 @@ namespace EzService {
 
 		#endregion private
 	} // class Configuration
-} // namespace EzService
+} // namespace EzServiceConfigurationLoader

@@ -76,13 +76,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\App\EzService\EzServiceConfigurationLoader\EzServiceConfigurationLoader.csproj">
+      <Project>{b030e475-eb48-463d-99de-160179cd5331}</Project>
+      <Name>EzServiceConfigurationLoader</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\App\EzService\EzServiceConfiguration\EzServiceConfiguration.csproj">
       <Project>{1F4AB740-E9BB-4448-9C4D-22A191C297B9}</Project>
       <Name>EzServiceConfiguration</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\App\EzService\EzService\EzService.csproj">
-      <Project>{15b3e0d2-6217-493a-a690-158c497f5318}</Project>
-      <Name>EzService</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Integration\Amazon\AmazonDbLib\AmazonDbLib.csproj">
       <Project>{fd263eb4-a3ef-4447-94b1-de1b308c604b}</Project>
@@ -174,6 +174,12 @@
     </None>
     <None Include="Service References\EzServiceReference\service1.xsd">
       <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.ActionMetaData.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.StringListActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
   </ItemGroup>
   <ItemGroup>

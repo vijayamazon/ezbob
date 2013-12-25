@@ -63,7 +63,6 @@
   <ItemGroup>
     <Compile Include="ActionMetaData.cs" />
     <Compile Include="ActionResult.cs" />
-    <Compile Include="Configuration.cs" />
     <Compile Include="NewCreditLineOption.cs" />
     <Compile Include="StringListActionResult.cs" />
     <Compile Include="EzServiceInstanceRuntimeData.cs" />

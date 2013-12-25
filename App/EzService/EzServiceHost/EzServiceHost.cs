@@ -4,6 +4,7 @@ using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using System.ServiceModel.Discovery;
 using EzService;
+using EzServiceConfigurationLoader;
 
 namespace EzServiceHost {
 	#region class EzServiceHost

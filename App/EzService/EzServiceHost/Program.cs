@@ -28,6 +28,8 @@ using Scorto.Configuration.Loader;
 using ISession = NHibernate.ISession;
 
 namespace EzServiceHost {
+	using EzServiceConfigurationLoader;
+
 	public class Program : IHost {
 		#region public
 

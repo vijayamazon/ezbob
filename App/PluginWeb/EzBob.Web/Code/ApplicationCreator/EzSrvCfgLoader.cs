@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace EzBob.Web.Code.ApplicationCreator {
 	using System.Collections;
@@ -9,7 +6,7 @@ namespace EzBob.Web.Code.ApplicationCreator {
 	using NHibernate;
 	using log4net;
 
-	public class EzSrvCfgLoader : EzServiceConfiguration.Configuration {
+	public class EzSrvCfgLoader : EzServiceConfiguration.ConfigurationData {
 		public EzSrvCfgLoader(ISession oSession, ILog oLog) : base(System.Environment.MachineName) {
 			m_oSession = oSession;
 			m_oLog = new SafeILog(oLog);
