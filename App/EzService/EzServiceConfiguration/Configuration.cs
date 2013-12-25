@@ -11,7 +11,7 @@ namespace EzServiceConfiguration {
 		public virtual int AdminPort { get; protected set; }
 		public virtual int ClientPort { get; protected set; }
 
-		public virtual string InstanceName { get; private set; }
+		public virtual string InstanceName { get; protected set; }
 
 		#region property HostName
 
@@ -50,7 +50,8 @@ namespace EzServiceConfiguration {
 			if (!IsValid())
 				throw new Exception(string.Format("Invalid service configuration for service instance {0} has been loaded from DB.", RequestedInstanceName));
 
-			InstanceName = RequestedInstanceName;
+			if (!string.IsNullOrWhiteSpace(InstanceName))
+				InstanceName = RequestedInstanceName;
 
 			WriteToLog();
 		} // Init

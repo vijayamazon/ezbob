@@ -8,13 +8,16 @@ using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Loans;
 using EzBob.Web.ApplicationCreator;
 using EzBob.Web.Infrastructure;
-using NHibernate;
 using Scorto.Strategy;
 using log4net;
 using EZBob.DatabaseLib.Model;
 
 namespace EzBob.Web.Code.ApplicationCreator {
+	using System.ServiceModel;
+	using System.ServiceModel.Channels;
+	using System.Web.Services.Description;
 	using EzServiceReference;
+	using ISession = NHibernate.ISession;
 
 	public class AppCreator : IAppCreator {
 		public AppCreator(IEzBobConfiguration config, IUsersRepository users, ISession session, ApplicationRepository applicationRepository,
@@ -529,8 +532,26 @@ namespace EzBob.Web.Code.ApplicationCreator {
 
 		private EzServiceClient ServiceClient {
 			get {
-				if (ReferenceEquals(m_oServiceClient, null))
-					m_oServiceClient = new EzServiceClient();
+				if (ReferenceEquals(m_oServiceClient, null) || (m_oServiceClient.State != CommunicationState.Opened)) {
+					try {
+						var cfg = new EzSrvCfgLoader(_session, Log);
+						cfg.Init();
+
+						var binding = new CustomBinding(new BinaryMessageEncodingBindingElement(), new HttpTransportBindingElement());
+
+						m_oServiceClient = new EzServiceClient(
+							binding,
+							new EndpointAddress(cfg.ClientEndpointAddress)
+						);
+					}
+					catch (Exception e) {
+						Log.Debug("Failed to connect to EzService", e);
+
+						// TODO: save to DB failed request to run it later...
+
+						throw; // TODO: remove this after the previous TODO is implemented
+					} // try
+				} // if
 
 				return m_oServiceClient;
 			} // get

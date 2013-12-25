@@ -2,9 +2,6 @@
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using System.ServiceModel;
-using System.ServiceModel.Channels;
-using System.ServiceModel.Description;
 using System.Text;
 using System.Threading;
 using EKM;
@@ -53,17 +50,23 @@ namespace EzServiceHost {
 		private static void Main(string[] args) {
 			var app = new Program(args);
 
-			if (app.Init())
-				app.Run();
+			try {
+				if (app.Init())
+					app.Run();
 
-			app.Done();
+				app.Done();
+			}
+			catch (Exception e) {
+				app.m_oLog.Fatal(e, "EzServiceHost root level: unhandled exception caught!");
+				throw;
+			} // try
 		} // Main
 
 		#endregion method Main
 
 		#region method Usage
 
-		private bool Usage(OptionSet oArgs, Exception e) {
+		private void Usage(OptionSet oArgs, Exception e) {
 			var os = new StringBuilder();
 			var sw = new StringWriter(os);
 
@@ -83,8 +86,6 @@ namespace EzServiceHost {
 				m_oLog.Msg(e, s);
 				throw e;
 			} // if
-
-			return false;
 		} // Usage
 
 		#endregion method Usage
@@ -138,11 +139,13 @@ namespace EzServiceHost {
 
 			oArgs.Parse(m_aryArgs);
 
-			if (bShowHelp)
-				return Usage(oArgs, null);
+			if (bShowHelp) {
+				Usage(oArgs, null);
+				return false;
+			} // if
 
 			if (string.IsNullOrWhiteSpace(m_sInstanceName))
-				return Usage(oArgs, new Exception("Instance name not specifed."));
+				Usage(oArgs, new Exception("Instance name not specifed."));
 
 			return true;
 		} // InitInstanceName
@@ -247,7 +250,7 @@ namespace EzServiceHost {
 		private Configuration m_oCfg;
 		private EzServiceHost m_oHost;
 
-		private ASafeLog m_oLog;
+		private readonly ASafeLog m_oLog;
 		private AConnection m_oDB;
 
 		#endregion properties
