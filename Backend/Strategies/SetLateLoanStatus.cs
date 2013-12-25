@@ -13,9 +13,9 @@ namespace EzBob.Backend.Strategies {
 		#region constructor
 
 		public SetLateLoanStatus(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
-			mailer = new StrategiesMailer(Db, Log);
+			mailer = new StrategiesMailer(DB, Log);
 
-			DataTable configsDataTable = Db.ExecuteReader("SetLateLoanStatusGetConfigs", CommandSpecies.StoredProcedure);
+			DataTable configsDataTable = DB.ExecuteReader("SetLateLoanStatusGetConfigs", CommandSpecies.StoredProcedure);
 			DataRow configsResult = configsDataTable.Rows[0];
 
 			collectionPeriod1 = int.Parse(configsResult["CollectionPeriod1"].ToString());
@@ -47,7 +47,7 @@ namespace EzBob.Backend.Strategies {
 		public override void Execute() {
 			MarkLoansAsLate();
 
-			DataTable lateForCollectionDataTable = Db.ExecuteReader("GetLateForCollection", CommandSpecies.StoredProcedure);
+			DataTable lateForCollectionDataTable = DB.ExecuteReader("GetLateForCollection", CommandSpecies.StoredProcedure);
 
 			foreach (DataRow row in lateForCollectionDataTable.Rows) {
 				DateTime date = DateTime.Parse(row["Date"].ToString());
@@ -89,7 +89,7 @@ namespace EzBob.Backend.Strategies {
 
 				AccumulateFee(loanId, daysBetween, amountDue);
 				
-				Db.ExecuteNonQuery(
+				DB.ExecuteNonQuery(
 					"UpdateCollection",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("LoanId", loanId),
@@ -181,7 +181,7 @@ namespace EzBob.Backend.Strategies {
 		#region method MarkLoansAsLate
 
 		private void MarkLoansAsLate() {
-			DataTable loansToCollectDataTable = Db.ExecuteReader("GetLoansToCollect", CommandSpecies.StoredProcedure);
+			DataTable loansToCollectDataTable = DB.ExecuteReader("GetLoansToCollect", CommandSpecies.StoredProcedure);
 
 			foreach (DataRow row in loansToCollectDataTable.Rows) {
 				int id = int.Parse(row["id"].ToString());
@@ -196,7 +196,7 @@ namespace EzBob.Backend.Strategies {
 					int daysBetweenCustom = (int) (customInstallmentDate - DateTime.UtcNow).TotalDays;
 
 					if (!(amountDue > amountToChargeFrom && daysBetweenCustom > 1)) {
-						Db.ExecuteNonQuery(
+						DB.ExecuteNonQuery(
 							"UpdateLoanScheduleCustomDate",
 							CommandSpecies.StoredProcedure,
 							new QueryParameter("Id", id)
@@ -205,7 +205,7 @@ namespace EzBob.Backend.Strategies {
 					}
 				} // if
 
-				Db.ExecuteNonQuery(
+				DB.ExecuteNonQuery(
 					"UpdateLoanStatusToLate",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("LoanId", loanId),
@@ -214,7 +214,7 @@ namespace EzBob.Backend.Strategies {
 					new QueryParameter("LoanStatus", "Late")
 				);
 
-				Db.ExecuteNonQuery("UpdateLoanScheduleStatus",
+				DB.ExecuteNonQuery("UpdateLoanScheduleStatus",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("Id", id),
 					new QueryParameter("Status", "Late")

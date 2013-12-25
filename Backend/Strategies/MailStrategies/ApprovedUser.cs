@@ -1,11 +1,11 @@
-﻿namespace EzBob.Backend.Strategies.MailStrategies {
-	using System;
+﻿	using System;
 	using System.Data;
 	using System.Globalization;
 	using System.Collections.Generic;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
+namespace EzBob.Backend.Strategies.MailStrategies {
 	public class ApprovedUser : AMailStrategyBase {
 		#region constructor
 
@@ -22,7 +22,7 @@
 		protected override void SetTemplateAndSubjectAndVariables() {
 			Subject = string.Format("Congratulations {0}, £{1} is available to fund your business today", CustomerData.FirstName, loanAmount);
 
-			DataTable dt = Db.ExecuteReader(
+			DataTable dt = DB.ExecuteReader(
 				"GetApprovalData",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", CustomerId)

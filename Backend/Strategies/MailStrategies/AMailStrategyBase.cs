@@ -1,10 +1,10 @@
-﻿namespace EzBob.Backend.Strategies.MailStrategies {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using Ezbob.Database;
-	using Ezbob.Logger;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Ezbob.Database;
+using Ezbob.Logger;
 
+namespace EzBob.Backend.Strategies.MailStrategies {
 	public abstract class AMailStrategyBase : AStrategy {
 		#region public
 
@@ -15,7 +15,7 @@
 				Log.Debug("Execute() started...");
 
 				Log.Debug("loading customer data...");
-				CustomerData = new CustomerData(CustomerId, Db);
+				CustomerData = new CustomerData(CustomerId, DB);
 				Log.Debug("loading customer data complete.");
 
 				Log.Debug("setting template and subject variables...");
@@ -54,8 +54,9 @@
 
 		#region constructor
 
-		protected AMailStrategyBase(int customerId, bool sendToCustomer, AConnection oDb, ASafeLog oLog) : base(oDb, oLog) {
-			mailer = new StrategiesMailer(Db, Log);
+		protected AMailStrategyBase(int customerId, bool sendToCustomer, AConnection oDb, ASafeLog oLog)
+			: base(oDb, oLog) {
+			mailer = new StrategiesMailer(DB, Log);
 
 			CustomerId = customerId;
 			this.sendToCustomer = sendToCustomer;

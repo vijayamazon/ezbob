@@ -1,17 +1,15 @@
-﻿namespace EzBob.Backend.Strategies
-{
-	using Ezbob.Database;
-	using Ezbob.Logger;
-	using System.Data;
-	using System.IO;
-	using System.Text;
+﻿using Ezbob.Database;
+using Ezbob.Logger;
+using System.Data;
+using System.IO;
+using System.Text;
+
+namespace EzBob.Backend.Strategies {
 	using Models;
 
-	public class CaisUpdate : AStrategy
-	{
+	public class CaisUpdate : AStrategy {
 		public CaisUpdate(int caisId, AConnection oDb, ASafeLog oLog)
-			: base(oDb, oLog)
-		{
+			: base(oDb, oLog) {
 			this.caisId = caisId;
 		}
 
@@ -20,7 +18,7 @@
 		} // Name
 
 		public override void Execute() {
-			DataTable dt = Db.ExecuteReader("GetCaisFileData", CommandSpecies.StoredProcedure);
+			DataTable dt = DB.ExecuteReader("GetCaisFileData", CommandSpecies.StoredProcedure);
 			DataRow results = dt.Rows[0];
 
 			string fileName = results["FileName"].ToString();

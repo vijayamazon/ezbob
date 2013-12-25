@@ -1,8 +1,8 @@
-﻿namespace EzBob.Backend.Strategies {
-	using System;
-	using Ezbob.Database;
-	using Ezbob.Logger;
+﻿using System;
+using Ezbob.Database;
+using Ezbob.Logger;
 
+namespace EzBob.Backend.Strategies {
 	#region class AStrategy
 
 	public abstract class AStrategy {
@@ -20,11 +20,11 @@
 			if (ReferenceEquals(oDb, null))
 				throw new FailedToInitStrategyException(this, new ArgumentNullException("oDb", "DB connection is not specified for mail strategy."));
 
-			Db = oDb;
+			DB = oDb;
 			Log = new StrategyLog(this, oLog);
 		} // constructor
 
-		protected AConnection Db { get; private set; }
+		protected AConnection DB { get; private set; }
 		protected StrategyLog Log { get; private set; }
 
 		#endregion protected

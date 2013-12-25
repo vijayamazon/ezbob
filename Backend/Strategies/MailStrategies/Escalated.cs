@@ -1,15 +1,16 @@
-﻿namespace EzBob.Backend.Strategies.MailStrategies {
-	using System;
-	using System.Data;
-	using System.Globalization;
-	using System.Collections.Generic;
-	using Ezbob.Database;
-	using Ezbob.Logger;
+﻿using System;
+using System.Data;
+using System.Globalization;
+using System.Collections.Generic;
+using Ezbob.Database;
+using Ezbob.Logger;
 
+namespace EzBob.Backend.Strategies.MailStrategies {
 	public class Escalated : AMailStrategyBase {
 		#region constructor
 
-		public Escalated(int customerId, AConnection oDb, ASafeLog oLog) : base(customerId, false, oDb, oLog) {
+		public Escalated(int customerId, AConnection oDb, ASafeLog oLog)
+			: base(customerId, false, oDb, oLog) {
 		} // constructor
 
 		#endregion constructor
@@ -22,7 +23,7 @@
 			Subject = "User was Escalated";
 			TemplateName = "Mandrill - User was escalated";
 
-			DataTable dt = Db.ExecuteReader(
+			DataTable dt = DB.ExecuteReader(
 				"GetEscalationData",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", CustomerId)

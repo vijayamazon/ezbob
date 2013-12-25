@@ -1,21 +1,21 @@
-﻿namespace EzBob.Backend.Strategies
-{
-	using Ezbob.Database;
-	using Ezbob.Logger;
-	using System;
-	using System.Collections.Generic;
-	using System.Data;
-	using System.Globalization;
-	using System.IO;
-	using ExperianLib.CaisFile;
+﻿using Ezbob.Database;
+using Ezbob.Logger;
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Globalization;
+using System.IO;
+using ExperianLib.CaisFile;
+
+namespace EzBob.Backend.Strategies {
 	using Models;
 
-	public class CaisGenerate : AStrategy
-	{
-		public CaisGenerate(int underwriterId, AConnection oDb, ASafeLog oLog) : base(oDb, oLog) {
-			mailer = new StrategiesMailer(Db, Log);
+	public class CaisGenerate : AStrategy {
+		public CaisGenerate(int underwriterId, AConnection oDb, ASafeLog oLog)
+			: base(oDb, oLog) {
+			mailer = new StrategiesMailer(DB, Log);
 
-			DataTable dt = Db.ExecuteReader("GetCaisFoldersPaths", CommandSpecies.StoredProcedure);
+			DataTable dt = DB.ExecuteReader("GetCaisFoldersPaths", CommandSpecies.StoredProcedure);
 			DataRow results = dt.Rows[0];
 
 			caisPath = results["CaisPath"].ToString();
@@ -42,9 +42,8 @@
 				caisGenerationTriggerer = -1;
 			} // lock
 		} // Execute
-		
-		private void Generate()
-		{
+
+		private void Generate() {
 			string timeString = DateTime.UtcNow.ToString("yyyy-MM-dd-HH-mm-ss");
 
 			string dirPath = caisPath + "\\" + timeString;
@@ -52,9 +51,8 @@
 			Directory.CreateDirectory(dirPath);
 			Directory.CreateDirectory(dirPath2);
 
-			DataTable dt = Db.ExecuteReader("GetCaisData", CommandSpecies.StoredProcedure);
-			foreach (DataRow row in dt.Rows)
-			{
+			DataTable dt = DB.ExecuteReader("GetCaisData", CommandSpecies.StoredProcedure);
+			foreach (DataRow row in dt.Rows) {
 				int loanId = int.Parse(row["loanID"].ToString());
 				DateTime startDate = DateTime.Parse(row["StartDate"].ToString());
 				DateTime dateClose = DateTime.Parse(row["DateClose"].ToString());
@@ -74,8 +72,7 @@
 
 				DateTime? minLsDate = null;
 				DateTime tmp;
-				if (DateTime.TryParse(row["MinLSDate"].ToString(), out tmp))
-				{
+				if (DateTime.TryParse(row["MinLSDate"].ToString(), out tmp)) {
 					minLsDate = tmp;
 				}
 				decimal loanAmount = decimal.Parse(row["LoanAmount"].ToString());
@@ -91,49 +88,41 @@
 				string maritalStatus = row["MaritalStatus"].ToString();
 
 				string genderPrefix;
-				if (gender == "M")
-				{
+				if (gender == "M") {
 					genderPrefix = "Mr.";
 				}
-				else
-				{
+				else {
 					genderPrefix = maritalStatus == "Married" ? "Mrs." : "Ms.";
 				}
 
 				accountStatus = GetAccountStatus(minLsDate, caisAccountStatus, dateClose, startDate, isDefaulted, customerStatusIsEnabled);
 
-				if (accountStatus == "8")
-				{
+				if (accountStatus == "8") {
 					originalDefaultBalance = currentBalance;
 					dateClose = DateTime.UtcNow;
 				}
-				else
-				{
+				else {
 					originalDefaultBalance = 0;
 				}
 
 				string line23 = string.Format("{0} {1}", line2, line3);
 				string fullName = string.Format("{0} {1} {2} {3}", genderPrefix, firstName, middleInitial, surname);
 
-				if (scheduledRepayments != 0)
-				{
+				if (scheduledRepayments != 0) {
 					monthlyPayment = loanAmount / scheduledRepayments;
 				}
-				else
-				{
+				else {
 					monthlyPayment = 0;
 				}
 
-				if (accountStatus != "8" && dateClose > startDate)
-				{
+				if (accountStatus != "8" && dateClose > startDate) {
 					currentBalance = 0;
 				}
 
 				string transferredToCollectionFlag = customerState == "Collection" ? "Y" : string.Empty;
 				string accountNumber = refNumber + loanId;
 
-				if (companyType == "Entrepreneur")
-				{
+				if (companyType == "Entrepreneur") {
 					var file = CaisFileManager.GetCaisFileData();
 					var h = file.Header;
 					h.SourceCodeNumber = 402;
@@ -147,24 +136,19 @@
 					file.Accounts.Add(account);
 
 					consumerCounter++;
-					if (accountStatus == "0")
-					{
+					if (accountStatus == "0") {
 						consumerGoodCounter++;
 					}
-					else if (accountStatus == "8")
-					{
+					else if (accountStatus == "8") {
 						consumerDefaultsCounter++;
 					}
 				}
-				else
-				{
-					if (companyType == "Limited" || companyType == "PShip" || companyType == "LLP")
-					{
+				else {
+					if (companyType == "Limited" || companyType == "PShip" || companyType == "LLP") {
 						companyTypeCode = "L";
 						companyRefNum = limitedRefNum;
 					}
-					else if (companyType == "PShip3P" || companyType == "SoleTrader")
-					{
+					else if (companyType == "PShip3P" || companyType == "SoleTrader") {
 						companyTypeCode = "N";
 						companyRefNum = nonLimitedRefNum;
 					}
@@ -176,21 +160,19 @@
 					cais.Header.SourceCode = 721;
 
 					var record = CreateBusinessRecord(accountNumber, fullName, line1, line23, town, county, postcode, startDate, dateClose, scheduledRepayments, currentBalance, transferredToCollectionFlag, sortCode);
-					
+
 					cais.Accounts.Add(record);
-					
+
 					businessCounter++;
-					if (accountStatus == "0")
-					{
+					if (accountStatus == "0") {
 						businessGoodCounter++;
 					}
-					else if (accountStatus == "8")
-					{
+					else if (accountStatus == "8") {
 						businessDefaultsCounter++;
 					}
 				}
 
-				Db.ExecuteNonQuery("UpdateLastReportedCAISstatus",
+				DB.ExecuteNonQuery("UpdateLastReportedCAISstatus",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("LoanId", loanId),
 					new QueryParameter("CAISStatus", accountStatus)
@@ -203,72 +185,59 @@
 					{"Path", dirPath}
 				};
 			mailer.SendToEzbob(variables, "Mandrill - CAIS report", "CAIS Report generated");
-			
+
 			var businessCaisFileData = CaisFileManager.GetBusinessCaisFileData();
 			businessCaisFileData.WriteToFile(dirPath + "\\F1364.D.COMCAIS.ORMO.DI55CUST.INPUT");
 			businessCaisFileData.WriteToFile(dirPath2 + "\\F1364.D.COMCAIS.ORMO.DI55CUST.INPUT");
 			strategyHelper.SaveCAISFile(businessCaisFileData.WriteToString(), "F1364.D.COMCAIS.ORMO.DI55CUST.INPUT", dirPath, 2, businessCounter,
-			                            businessGoodCounter, businessDefaultsCounter);
+										businessGoodCounter, businessDefaultsCounter);
 			CaisFileManager.RemoveBusinessCaisFileData();
 
 			var consumerCaisFileData = CaisFileManager.GetCaisFileData();
 			consumerCaisFileData.WriteToFile(dirPath + "\\F530.E.OMO.MSTEI49.XMIT");
 			consumerCaisFileData.WriteToFile(dirPath2 + "\\F530.E.OMO.MSTEI49.XMIT");
 			strategyHelper.SaveCAISFile(consumerCaisFileData.WriteToString(), "F530.E.OMO.MSTEI49.XMIT", dirPath, 1, consumerCounter, consumerGoodCounter,
-			                            consumerDefaultsCounter);
+										consumerDefaultsCounter);
 			CaisFileManager.RemoveCaisFileData();
 		}
 
 		private string GetAccountStatus(DateTime? minLsDate, string caisAccountStatus, DateTime dateClose, DateTime startDate, bool isDefaulted,
-		                      bool customerStatusIsEnabled)
-		{
+							  bool customerStatusIsEnabled) {
 			int daysBetween;
-			if (!minLsDate.HasValue)
-			{
+			if (!minLsDate.HasValue) {
 				daysBetween = 0;
 			}
-			else
-			{
+			else {
 				daysBetween = (int)(DateTime.UtcNow - minLsDate.Value).TotalDays;
 			}
 
-			if (string.IsNullOrEmpty(caisAccountStatus) && caisAccountStatus != "Calculated value")
-			{
+			if (string.IsNullOrEmpty(caisAccountStatus) && caisAccountStatus != "Calculated value") {
 				return caisAccountStatus;
 			}
-			
-			if (dateClose < startDate)
-			{
-				if (isDefaulted || !customerStatusIsEnabled)
-				{
+
+			if (dateClose < startDate) {
+				if (isDefaulted || !customerStatusIsEnabled) {
 					return "8";
 				}
-				if (daysBetween > 180)
-				{
+				if (daysBetween > 180) {
 					return "6";
 				}
-				if (daysBetween > 150 && daysBetween <= 180)
-				{
+				if (daysBetween > 150 && daysBetween <= 180) {
 					return "5";
 				}
-				if (daysBetween > 120 && daysBetween <= 150)
-				{
+				if (daysBetween > 120 && daysBetween <= 150) {
 					return "4";
 				}
-				if (daysBetween > 90 && daysBetween <= 120)
-				{
+				if (daysBetween > 90 && daysBetween <= 120) {
 					return "3";
 				}
-				if (daysBetween > 60 && daysBetween <= 90)
-				{
+				if (daysBetween > 60 && daysBetween <= 90) {
 					return "2";
 				}
-				if (daysBetween > 30 && daysBetween <= 60)
-				{
+				if (daysBetween > 30 && daysBetween <= 60) {
 					return "1";
 				}
-				if (daysBetween <= 30)
-				{
+				if (daysBetween <= 30) {
 					return "0";
 				}
 			}
@@ -277,157 +246,149 @@
 		}
 
 		private AccountRecord CreateConsumerRecord(string accountNumber, DateTime startDate, DateTime dateClose, int scheduledRepayments,
-		                                    decimal currentBalance, string fullName, string line1, string line23, string town,
-		                                    string county, string postcode, DateTime dateOfBirth,
-		                                    string transferredToCollectionFlag)
-		{
+											decimal currentBalance, string fullName, string line1, string line23, string town,
+											string county, string postcode, DateTime dateOfBirth,
+											string transferredToCollectionFlag) {
 			// TODO: investigate if we need all the assigments to 0 and empty strings
-			var account = new AccountRecord
-				{
-					AccountNumber = accountNumber,
-					AccountType = "02",
-					StartDate = startDate,
-					CloseDate = startDate > dateClose ? DateTime.MinValue : dateClose,
-					MonthlyPayment = Convert.ToInt32(monthlyPayment),
-					RepaymentPeriod = Convert.ToInt32(scheduledRepayments),
-					CurrentBalance = Convert.ToInt32(currentBalance),
-					CreditBalanceIndicator = string.Empty,
-					AccountStatus = accountStatus,
-					SpecialInstructionIndicator = string.Empty,
-					PaymentAmount = 0,
-					CreditPaymentIndicator = string.Empty,
-					PreviousStatementBalance = 0,
-					PreviousStatementBalanceIndicator = string.Empty,
-					NumberCashAdvances = 0,
-					ValueCashAdvances = 0,
-					PaymentCode = string.Empty,
-					PromotionActivityFlag = string.Empty,
-					TransientAssociationFlag = string.Empty,
-					AirtimeFlag = string.Empty,
-					FlagSettings = null,
-					NameAndAddress = new NameAndAddressData
-						{
-							Name = fullName,
-							AddressLine1 = line1,
-							AddressLine2 = line23,
-							AddressLine3 = town,
-							AddressLine4 = county,
-							Postcode = postcode
-						},
-					CreditLimit = 0,
-					DateBirth = dateOfBirth,
-					TransferredCollectionAccountFlag = transferredToCollectionFlag,
-					BalanceType = string.Empty,
-					CreditTurnover = 0,
-					PrimaryAccountIndicator = string.Empty,
-					DefaultSatisfactionDate = DateTime.MinValue,
-					TransactionFlag = string.Empty,
-					OriginalDefaultBalance = Convert.ToInt32(originalDefaultBalance),
-					PaymentFrequency = "M",
-					NewAccountNumber = string.Empty
-				};
+			var account = new AccountRecord {
+				AccountNumber = accountNumber,
+				AccountType = "02",
+				StartDate = startDate,
+				CloseDate = startDate > dateClose ? DateTime.MinValue : dateClose,
+				MonthlyPayment = Convert.ToInt32(monthlyPayment),
+				RepaymentPeriod = Convert.ToInt32(scheduledRepayments),
+				CurrentBalance = Convert.ToInt32(currentBalance),
+				CreditBalanceIndicator = string.Empty,
+				AccountStatus = accountStatus,
+				SpecialInstructionIndicator = string.Empty,
+				PaymentAmount = 0,
+				CreditPaymentIndicator = string.Empty,
+				PreviousStatementBalance = 0,
+				PreviousStatementBalanceIndicator = string.Empty,
+				NumberCashAdvances = 0,
+				ValueCashAdvances = 0,
+				PaymentCode = string.Empty,
+				PromotionActivityFlag = string.Empty,
+				TransientAssociationFlag = string.Empty,
+				AirtimeFlag = string.Empty,
+				FlagSettings = null,
+				NameAndAddress = new NameAndAddressData {
+					Name = fullName,
+					AddressLine1 = line1,
+					AddressLine2 = line23,
+					AddressLine3 = town,
+					AddressLine4 = county,
+					Postcode = postcode
+				},
+				CreditLimit = 0,
+				DateBirth = dateOfBirth,
+				TransferredCollectionAccountFlag = transferredToCollectionFlag,
+				BalanceType = string.Empty,
+				CreditTurnover = 0,
+				PrimaryAccountIndicator = string.Empty,
+				DefaultSatisfactionDate = DateTime.MinValue,
+				TransactionFlag = string.Empty,
+				OriginalDefaultBalance = Convert.ToInt32(originalDefaultBalance),
+				PaymentFrequency = "M",
+				NewAccountNumber = string.Empty
+			};
 
 			return account;
 		}
 
 		private BusinessAccountRecord CreateBusinessRecord(string accountNumber, string fullName, string line1, string line23,
-		                                            string town, string county, string postcode, DateTime startDate,
-		                                            DateTime dateClose, int scheduledRepayments, decimal currentBalance,
-		                                            string transferredToCollectionFlag, string sortCode)
-		{
+													string town, string county, string postcode, DateTime startDate,
+													DateTime dateClose, int scheduledRepayments, decimal currentBalance,
+													string transferredToCollectionFlag, string sortCode) {
 			// TODO: investigate if we need all the assigments to 0 and empty strings
-			var record = new BusinessAccountRecord
-				{
-					AccountNumber = accountNumber,
-					ProprietorPartnerDirectorNumber = 0,
-					LimitedNonlimitedAndOtherFlag = companyTypeCode,
-					AddressType = string.Empty,
-					NameChange = "N",
-					CompanyRegisteredNumberBusinessNumber = companyRefNum,
-					SICCode = 0,
-					VATNumber = string.Empty,
-					YearBusinessStarted = 0,
-					AdditionalTradingStyle = string.Empty,
-					BusinessCompanyTelephoneNumber = string.Empty,
-					BusinessCompanyWebsite = string.Empty,
-					PointOfContactName = string.Empty,
-					PointOfContactEmailAddress = string.Empty,
-					PointOfContactTelephoneNumber = string.Empty,
-					PointOfContactJobTitle = string.Empty,
-					ParentCompanyRegisteredNumber = string.Empty,
-					ParentCompanyTelephoneNumber = string.Empty,
-					ParentCompanyVATNumber = string.Empty,
-					ProprietorPartnerDirectororOtherFlag = string.Empty,
-					SignatoryontheAccountFlag = string.Empty,
-					ShareholdersFlag = string.Empty,
-					CountryofRegistration = string.Empty,
-					DateofBirth = DateTime.MinValue,
-					ProprietorsDirectorsGuarantee = string.Empty,
-					ProprietorsDirectorsGuaranteeCancelledDischarged = string.Empty,
-					AccountType = 2,
-					StartDateofAgreement = startDate,
-					CloseDateofAgreement = startDate > dateClose ? DateTime.MinValue : dateClose,
-					MonthlyPayment = Convert.ToInt32(monthlyPayment),
-					RepaymentPeriod = Convert.ToInt32(scheduledRepayments),
-					CurrentBalance = Convert.ToInt32(currentBalance),
-					CreditBalanceIndicator = string.Empty,
-					AccountStatus = accountStatus,
-					SpecialInstructionIndicator = string.Empty,
-					CreditLimit = 0,
-					FlagSettings = null,
-					Debenture = string.Empty,
-					MortgageFlags = string.Empty,
-					AirtimeStatusFlag = string.Empty,
-					TransferredtoCollectionAccountFlag = transferredToCollectionFlag,
-					BalanceType = string.Empty,
-					CreditTurnover = 0,
-					PrimaryAccountIndicator = string.Empty,
-					DefaultSatisfactionDate = DateTime.MinValue,
-					RejectionFlag = string.Empty,
-					BankerDetailsSortCode = Convert.ToInt32(sortCode),
-					OriginalDefaultBalance = Convert.ToInt32(originalDefaultBalance),
-					PaymentFrequencyIndicator = "M",
-					NumberofCreditCardsissued = 0,
-					PaymentAmount = 0,
-					PaymentCreditIndicator = string.Empty,
-					PreviousStatementBalance = 0,
-					PreviousStatementBalanceIndicator = string.Empty,
-					NumberofCashAdvances = 0,
-					ValueofCashAdvances = 0,
-					PaymentCode = string.Empty,
-					PromotionActivityFlag = string.Empty,
-					PaymentType = "B",
-					NewAccountNumber = string.Empty,
-					NewProprietorPartnerDirectorNumber = string.Empty,
-					NameAddressRegisteredOfficeTradingAddress =
-						{
-							Name = fullName,
-							AddressLine1 = line1,
-							AddressLine2 = line23,
-							AddressLine3 = town,
-							AddressLine4 = county,
-							PostCode = postcode
-						},
-					ParentCompanyNameAddress =
-						{
-							Name = string.Empty,
-							AddressLine1 = string.Empty,
-							AddressLine2 = string.Empty,
-							AddressLine3 = string.Empty,
-							AddressLine4 = string.Empty,
-							PostCode = string.Empty
-						},
-					PreviousNameandAddress =
-					{
-						Name = string.Empty,
-						AddressLine1 = string.Empty,
-						AddressLine2 = string.Empty,
-						AddressLine3 = string.Empty,
-						AddressLine4 = string.Empty,
-						PostCode = string.Empty
-					}
-				};
-			
+			var record = new BusinessAccountRecord {
+				AccountNumber = accountNumber,
+				ProprietorPartnerDirectorNumber = 0,
+				LimitedNonlimitedAndOtherFlag = companyTypeCode,
+				AddressType = string.Empty,
+				NameChange = "N",
+				CompanyRegisteredNumberBusinessNumber = companyRefNum,
+				SICCode = 0,
+				VATNumber = string.Empty,
+				YearBusinessStarted = 0,
+				AdditionalTradingStyle = string.Empty,
+				BusinessCompanyTelephoneNumber = string.Empty,
+				BusinessCompanyWebsite = string.Empty,
+				PointOfContactName = string.Empty,
+				PointOfContactEmailAddress = string.Empty,
+				PointOfContactTelephoneNumber = string.Empty,
+				PointOfContactJobTitle = string.Empty,
+				ParentCompanyRegisteredNumber = string.Empty,
+				ParentCompanyTelephoneNumber = string.Empty,
+				ParentCompanyVATNumber = string.Empty,
+				ProprietorPartnerDirectororOtherFlag = string.Empty,
+				SignatoryontheAccountFlag = string.Empty,
+				ShareholdersFlag = string.Empty,
+				CountryofRegistration = string.Empty,
+				DateofBirth = DateTime.MinValue,
+				ProprietorsDirectorsGuarantee = string.Empty,
+				ProprietorsDirectorsGuaranteeCancelledDischarged = string.Empty,
+				AccountType = 2,
+				StartDateofAgreement = startDate,
+				CloseDateofAgreement = startDate > dateClose ? DateTime.MinValue : dateClose,
+				MonthlyPayment = Convert.ToInt32(monthlyPayment),
+				RepaymentPeriod = Convert.ToInt32(scheduledRepayments),
+				CurrentBalance = Convert.ToInt32(currentBalance),
+				CreditBalanceIndicator = string.Empty,
+				AccountStatus = accountStatus,
+				SpecialInstructionIndicator = string.Empty,
+				CreditLimit = 0,
+				FlagSettings = null,
+				Debenture = string.Empty,
+				MortgageFlags = string.Empty,
+				AirtimeStatusFlag = string.Empty,
+				TransferredtoCollectionAccountFlag = transferredToCollectionFlag,
+				BalanceType = string.Empty,
+				CreditTurnover = 0,
+				PrimaryAccountIndicator = string.Empty,
+				DefaultSatisfactionDate = DateTime.MinValue,
+				RejectionFlag = string.Empty,
+				BankerDetailsSortCode = Convert.ToInt32(sortCode),
+				OriginalDefaultBalance = Convert.ToInt32(originalDefaultBalance),
+				PaymentFrequencyIndicator = "M",
+				NumberofCreditCardsissued = 0,
+				PaymentAmount = 0,
+				PaymentCreditIndicator = string.Empty,
+				PreviousStatementBalance = 0,
+				PreviousStatementBalanceIndicator = string.Empty,
+				NumberofCashAdvances = 0,
+				ValueofCashAdvances = 0,
+				PaymentCode = string.Empty,
+				PromotionActivityFlag = string.Empty,
+				PaymentType = "B",
+				NewAccountNumber = string.Empty,
+				NewProprietorPartnerDirectorNumber = string.Empty,
+				NameAddressRegisteredOfficeTradingAddress = {
+					Name = fullName,
+					AddressLine1 = line1,
+					AddressLine2 = line23,
+					AddressLine3 = town,
+					AddressLine4 = county,
+					PostCode = postcode
+				},
+				ParentCompanyNameAddress = {
+					Name = string.Empty,
+					AddressLine1 = string.Empty,
+					AddressLine2 = string.Empty,
+					AddressLine3 = string.Empty,
+					AddressLine4 = string.Empty,
+					PostCode = string.Empty
+				},
+				PreviousNameandAddress = {
+					Name = string.Empty,
+					AddressLine1 = string.Empty,
+					AddressLine2 = string.Empty,
+					AddressLine3 = string.Empty,
+					AddressLine4 = string.Empty,
+					PostCode = string.Empty
+				}
+			};
+
 			return record;
 		}
 
