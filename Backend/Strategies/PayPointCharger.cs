@@ -1,12 +1,13 @@
-﻿namespace EzBob.Backend.Strategies {
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Globalization;
+using Ezbob.Database;
+using Ezbob.Logger;
+using PaymentServices.PayPoint;
+
+namespace EzBob.Backend.Strategies {
 	using Web.Code;
-	using System;
-	using System.Collections.Generic;
-	using System.Data;
-	using System.Globalization;
-	using Ezbob.Database;
-	using Ezbob.Logger;
-	using PaymentServices.PayPoint;
 
 	#region class AutoPaymentResult
 
@@ -26,13 +27,8 @@
 
 		#region constructor
 
-<<<<<<< HEAD
 		public PayPointCharger(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			mailer = new StrategiesMailer(DB, Log);
-=======
-		public PayPointCharger(AConnection oDb, ASafeLog oLog) : base(oDb, oLog) {
-			mailer = new StrategiesMailer(Db, Log);
->>>>>>> using statements location
 
 			DataTable configsDataTable = DB.ExecuteReader("PayPointChargerGetConfigs", CommandSpecies.StoredProcedure);
 
