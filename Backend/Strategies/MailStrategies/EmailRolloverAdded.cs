@@ -1,14 +1,14 @@
-﻿using System.Globalization;
-using System.Collections.Generic;
-using Ezbob.Database;
-using Ezbob.Logger;
+﻿namespace EzBob.Backend.Strategies.MailStrategies {
+	using System.Globalization;
+	using System.Collections.Generic;
+	using Ezbob.Database;
+	using Ezbob.Logger;
 
-namespace EzBob.Backend.Strategies.MailStrategies {
 	public class EmailRolloverAdded : AMailStrategyBase {
 		#region constructor
 
-		public EmailRolloverAdded(int customerId, decimal amount, AConnection oDB, ASafeLog oLog)
-			: base(customerId, true, oDB, oLog)
+		public EmailRolloverAdded(int customerId, decimal amount, AConnection oDb, ASafeLog oLog)
+			: base(customerId, true, oDb, oLog)
 		{
 			this.amount = amount;
 		} // constructor

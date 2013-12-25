@@ -9,8 +9,8 @@
 
 	public class CaisUpdate : AStrategy
 	{
-		public CaisUpdate(int caisId, AConnection oDB, ASafeLog oLog)
-			: base(oDB, oLog)
+		public CaisUpdate(int caisId, AConnection oDb, ASafeLog oLog)
+			: base(oDb, oLog)
 		{
 			this.caisId = caisId;
 		}
@@ -20,7 +20,7 @@
 		} // Name
 
 		public override void Execute() {
-			DataTable dt = DB.ExecuteReader("GetCaisFileData", CommandSpecies.StoredProcedure);
+			DataTable dt = Db.ExecuteReader("GetCaisFileData", CommandSpecies.StoredProcedure);
 			DataRow results = dt.Rows[0];
 
 			string fileName = results["FileName"].ToString();

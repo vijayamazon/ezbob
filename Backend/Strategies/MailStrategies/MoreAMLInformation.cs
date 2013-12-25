@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using Ezbob.Database;
-using Ezbob.Logger;
+﻿namespace EzBob.Backend.Strategies.MailStrategies {
+	using System.Collections.Generic;
+	using Ezbob.Database;
+	using Ezbob.Logger;
 
-namespace EzBob.Backend.Strategies.MailStrategies {
-	public class MoreAMLInformation : AMailStrategyBase {
-		public MoreAMLInformation(int customerId, AConnection oDB, ASafeLog oLog) : base(customerId, true, oDB, oLog) {
+	public class MoreAmlInformation : AMailStrategyBase {
+		public MoreAmlInformation(int customerId, AConnection oDb, ASafeLog oLog) : base(customerId, true, oDb, oLog) {
 		} // constructor
 
 		public override string Name { get { return "More AML Information"; } } // Name

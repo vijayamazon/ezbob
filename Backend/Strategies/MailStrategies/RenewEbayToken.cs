@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
-using Ezbob.Database;
-using Ezbob.Logger;
+﻿namespace EzBob.Backend.Strategies.MailStrategies {
+	using System.Collections.Generic;
+	using Ezbob.Database;
+	using Ezbob.Logger;
 
-namespace EzBob.Backend.Strategies.MailStrategies {
 	public class RenewEbayToken : AMailStrategyBase {
 		#region constructor
 
-		public RenewEbayToken(int customerId, string marketplaceName, string eBayAddress, AConnection oDB, ASafeLog oLog) : base(customerId, true, oDB, oLog) {
+		public RenewEbayToken(int customerId, string marketplaceName, string eBayAddress, AConnection oDb, ASafeLog oLog) : base(customerId, true, oDb, oLog) {
 			this.marketplaceName = marketplaceName;
 			this.eBayAddress = eBayAddress;
 		} // constructor

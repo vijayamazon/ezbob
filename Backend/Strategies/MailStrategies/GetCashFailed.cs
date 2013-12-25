@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
-using Ezbob.Database;
-using Ezbob.Logger;
+﻿namespace EzBob.Backend.Strategies.MailStrategies {
+	using System.Collections.Generic;
+	using Ezbob.Database;
+	using Ezbob.Logger;
 
-namespace EzBob.Backend.Strategies.MailStrategies {
 	public class GetCashFailed : AMailStrategyBase {
 		#region constructor
 
-		public GetCashFailed(int customerId, AConnection oDB, ASafeLog oLog) : base(customerId, true, oDB, oLog) {
+		public GetCashFailed(int customerId, AConnection oDb, ASafeLog oLog) : base(customerId, true, oDb, oLog) {
 		} // constructor
 
 		#endregion constructor

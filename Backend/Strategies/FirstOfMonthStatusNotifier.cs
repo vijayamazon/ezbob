@@ -1,11 +1,10 @@
-﻿using Ezbob.Database;
-using Ezbob.Logger;
-
-namespace EzBob.Backend.Strategies {
+﻿namespace EzBob.Backend.Strategies {
 	using Models;
+	using Ezbob.Database;
+	using Ezbob.Logger;
 
 	public class FirstOfMonthStatusNotifier : AStrategy {
-		public FirstOfMonthStatusNotifier(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {}
+		public FirstOfMonthStatusNotifier(AConnection oDb, ASafeLog oLog) : base(oDb, oLog) {}
 
 		public override string Name { get { return "First Of Month Status Notifier"; } } // Name
 

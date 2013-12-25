@@ -1,29 +1,29 @@
-﻿using Ezbob.Database;
-
-namespace EzBob.Backend.Strategies.AutoDecisions
+﻿namespace EzBob.Backend.Strategies.AutoDecisions
 {
+	using Ezbob.Database;
+
 	public class AutoDecisionMaker
 	{
-		public static AutoDecisionResponse MakeDecision(AutoDecisionRequest request, AConnection oDB)
+		public static AutoDecisionResponse MakeDecision(AutoDecisionRequest request, AConnection oDb)
 		{
 			var autoDecisionResponse = new AutoDecisionResponse(request);
 
-			if (new ReRejection(request, oDB).MakeDecision(autoDecisionResponse))
+			if (new ReRejection(request, oDb).MakeDecision(autoDecisionResponse))
 			{
 				return autoDecisionResponse;
 			}
 
-			if (new ReApproval(request, oDB).MakeDecision(autoDecisionResponse))
+			if (new ReApproval(request, oDb).MakeDecision(autoDecisionResponse))
 			{
 				return autoDecisionResponse;
 			}
 
-			if (new Approval(request, oDB).MakeDecision(autoDecisionResponse))
+			if (new Approval(request, oDb).MakeDecision(autoDecisionResponse))
 			{
 				return autoDecisionResponse;
 			}
 
-			if (new Rejection(request, oDB).MakeDecision(autoDecisionResponse))
+			if (new Rejection(request, oDb).MakeDecision(autoDecisionResponse))
 			{
 				return autoDecisionResponse;
 			}

@@ -1,7 +1,6 @@
-﻿using Ezbob.Database;
-
-namespace EzBob.Backend.Strategies.AutoDecisions
+﻿namespace EzBob.Backend.Strategies.AutoDecisions
 {
+	using Ezbob.Database;
 	using System;
 	using System.Data;
 	using Models;
@@ -11,19 +10,19 @@ namespace EzBob.Backend.Strategies.AutoDecisions
 		private readonly StrategyHelper strategyHelper = new StrategyHelper();
 		private readonly int autoReApproveMaxNumOfOutstandingLoans;
 		private readonly AutoDecisionRequest request;
-		private AConnection DB { get; set; }
+		private AConnection Db { get; set; }
 
-		public ReApproval(AutoDecisionRequest request, AConnection oDB) {
-			DB = oDB;
+		public ReApproval(AutoDecisionRequest request, AConnection oDb) {
+			Db = oDb;
 			this.request = request;
-			DataTable dt = DB.ExecuteReader("GetReApprovalConfigs", CommandSpecies.StoredProcedure);
+			DataTable dt = Db.ExecuteReader("GetReApprovalConfigs", CommandSpecies.StoredProcedure);
 			DataRow results = dt.Rows[0];
 			autoReApproveMaxNumOfOutstandingLoans = int.Parse(results["AutoReApproveMaxNumOfOutstandingLoans"].ToString());
 		}
 
 		public bool MakeDecision(AutoDecisionResponse response)
 		{
-			DataTable dt = DB.ExecuteReader(
+			DataTable dt = Db.ExecuteReader(
 				"GetLastOfferDataForReApproval",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", request.CustomerId)
@@ -38,12 +37,12 @@ namespace EzBob.Backend.Strategies.AutoDecisions
 			int loanOfferNumOfMPsAddedOld = int.Parse(results["NumOfMPsAddedOld"].ToString());
 			int loanOfferPrincipalPaidAmountOld = int.Parse(results["PrincipalPaidAmountOld"].ToString());
 
-			if ((request.LoanOffer_ReApprovalFullAmount > 0 || request.LoanOffer_ReApprovalRemainingAmount > 0) ||
-				((request.LoanOffer_ReApprovalFullAmountOld > 0 || request.LoanOffer_ReApprovalRemainingAmountOld > 0) &&
+			if ((request.LoanOfferReApprovalFullAmount > 0 || request.LoanOfferReApprovalRemainingAmount > 0) ||
+				((request.LoanOfferReApprovalFullAmountOld > 0 || request.LoanOfferReApprovalRemainingAmountOld > 0) &&
 			     loanOfferPrincipalPaidAmountOld == 0 && loanOfferSumOfChargesOld == 0 &&
 			     loanOfferNumOfMPsAddedOld == 0))
 			{
-				dt = DB.ExecuteReader("GetAvailableFunds", CommandSpecies.StoredProcedure);
+				dt = Db.ExecuteReader("GetAvailableFunds", CommandSpecies.StoredProcedure);
 				decimal availableFunds = decimal.Parse(dt.Rows[0]["AvailableFunds"].ToString());
 				if (availableFunds > loanOfferSystemCalculatedSum)
 				{
@@ -59,12 +58,12 @@ namespace EzBob.Backend.Strategies.AutoDecisions
 					response.CreditResult = request.EnableAutomaticReApproval ? "Approved" : "WaitingForDecision";
 					response.UserStatus = "Approved";
 					response.SystemDecision = "Approve";
-					response.LoanOffer_UnderwriterComment = "Auto Re-Approval";
-					response.LoanOffer_OfferValidDays =
+					response.LoanOfferUnderwriterComment = "Auto Re-Approval";
+					response.LoanOfferOfferValidDays =
 						(loanOfferOfferValidUntil - loanOfferOfferStart).TotalDays;
-					response.App_ApplyForLoan = null;
-					response.App_ValidFor = DateTime.UtcNow.AddDays(response.LoanOffer_OfferValidDays);
-					response.LoanOffer_EmailSendingBanned_new = loanOfferEmailSendingBanned;
+					response.AppApplyForLoan = null;
+					response.AppValidFor = DateTime.UtcNow.AddDays(response.LoanOfferOfferValidDays);
+					response.LoanOfferEmailSendingBannedNew = loanOfferEmailSendingBanned;
 					return true;
 				}
 

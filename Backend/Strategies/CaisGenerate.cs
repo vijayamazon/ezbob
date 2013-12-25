@@ -1,23 +1,21 @@
-﻿using Ezbob.Database;
-using Ezbob.Logger;
-
-namespace EzBob.Backend.Strategies
+﻿namespace EzBob.Backend.Strategies
 {
+	using Ezbob.Database;
+	using Ezbob.Logger;
 	using System;
 	using System.Collections.Generic;
 	using System.Data;
 	using System.Globalization;
 	using System.IO;
-	using System.Text;
 	using ExperianLib.CaisFile;
 	using Models;
 
 	public class CaisGenerate : AStrategy
 	{
-		public CaisGenerate(int underwriterId, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
-			mailer = new StrategiesMailer(DB, Log);
+		public CaisGenerate(int underwriterId, AConnection oDb, ASafeLog oLog) : base(oDb, oLog) {
+			mailer = new StrategiesMailer(Db, Log);
 
-			DataTable dt = DB.ExecuteReader("GetCaisFoldersPaths", CommandSpecies.StoredProcedure);
+			DataTable dt = Db.ExecuteReader("GetCaisFoldersPaths", CommandSpecies.StoredProcedure);
 			DataRow results = dt.Rows[0];
 
 			caisPath = results["CaisPath"].ToString();
@@ -54,7 +52,7 @@ namespace EzBob.Backend.Strategies
 			Directory.CreateDirectory(dirPath);
 			Directory.CreateDirectory(dirPath2);
 
-			DataTable dt = DB.ExecuteReader("GetCaisData", CommandSpecies.StoredProcedure);
+			DataTable dt = Db.ExecuteReader("GetCaisData", CommandSpecies.StoredProcedure);
 			foreach (DataRow row in dt.Rows)
 			{
 				int loanId = int.Parse(row["loanID"].ToString());
@@ -192,7 +190,7 @@ namespace EzBob.Backend.Strategies
 					}
 				}
 
-				DB.ExecuteNonQuery("UpdateLastReportedCAISstatus",
+				Db.ExecuteNonQuery("UpdateLastReportedCAISstatus",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("LoanId", loanId),
 					new QueryParameter("CAISStatus", accountStatus)

@@ -1,19 +1,19 @@
-﻿using System;
-using System.Data;
-using Ezbob.Database;
+﻿namespace EzBob.Backend.Strategies.MailStrategies {
+	using System;
+	using System.Data;
+	using Ezbob.Database;
 
-namespace EzBob.Backend.Strategies.MailStrategies {
 	public class CustomerData {
 		#region constructor
 
-		public CustomerData(int customerId, AConnection oDB) {
-			DataTable dt = oDB.ExecuteReader(
+		public CustomerData(int customerId, AConnection oDb) {
+			DataTable dt = oDb.ExecuteReader(
 				"GetBasicCustomerData",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId)
 			);
 
-			ID = customerId;
+			Id = customerId;
 
 			if (dt.Rows.Count != 1)
 				throw new Exception("Failed to find a customer by id " + customerId);
@@ -35,7 +35,7 @@ namespace EzBob.Backend.Strategies.MailStrategies {
 		public override string ToString() {
 			return string.Format(
 				"{0}: {1} {2} ({5}, {3}) {4} loan #: {6}",
-				ID,
+				Id,
 				FirstName,
 				Surname,
 				FullName,
@@ -49,7 +49,7 @@ namespace EzBob.Backend.Strategies.MailStrategies {
 
 		#region properties
 
-		public int ID { get; private set; }
+		public int Id { get; private set; }
 		public string FirstName { get; private set; }
 		public string Surname { get; private set; }
 		public string FullName { get; private set; }

@@ -1,61 +1,60 @@
-﻿using Ezbob.Database;
-
-namespace EzBob.Backend.Strategies.AutoDecisions
+﻿namespace EzBob.Backend.Strategies.AutoDecisions
 {
+	using Ezbob.Database;
 	using System;
 	using System.Data;
 
 	public class Rejection
 	{
 		private readonly AutoDecisionRequest request;
-		private readonly int AutoRejectionException_AnualTurnover;
-		private readonly int Reject_Defaults_CreditScore;
-		private readonly int Reject_Minimal_Seniority;
-		private readonly int LowCreditScore;
-		private readonly int Reject_Defaults_AccountsNum;
-		private readonly int AutoRejectionException_CreditScore;
-		private readonly bool HasAccountingAccounts;
-		private readonly int ErrorMPsNum;
-		private readonly int LoanOffer_ApprovalNum;
-		private readonly int NumOfDefaultAccounts;
-		private AConnection DB { get; set; }
+		private readonly int autoRejectionExceptionAnualTurnover;
+		private readonly int rejectDefaultsCreditScore;
+		private readonly int rejectMinimalSeniority;
+		private readonly int lowCreditScore;
+		private readonly int rejectDefaultsAccountsNum;
+		private readonly int autoRejectionExceptionCreditScore;
+		private readonly bool hasAccountingAccounts;
+		private readonly int errorMPsNum;
+		private readonly int loanOfferApprovalNum;
+		private readonly int numOfDefaultAccounts;
+		private AConnection Db { get; set; }
 
-		public Rejection(AutoDecisionRequest request, AConnection oDB) {
-			DB = oDB;
+		public Rejection(AutoDecisionRequest request, AConnection oDb) {
+			Db = oDb;
 			this.request = request;
-			DataTable dt = DB.ExecuteReader("GetRejectionConfigs", CommandSpecies.StoredProcedure);
+			DataTable dt = Db.ExecuteReader("GetRejectionConfigs", CommandSpecies.StoredProcedure);
 			DataRow results = dt.Rows[0];
 
-			AutoRejectionException_AnualTurnover = int.Parse(results["AutoRejectionException_AnualTurnover"].ToString());
-			Reject_Defaults_CreditScore = int.Parse(results["Reject_Defaults_CreditScore"].ToString());
-			Reject_Minimal_Seniority = int.Parse(results["Reject_Minimal_Seniority"].ToString());
-			LowCreditScore = int.Parse(results["LowCreditScore"].ToString());
-			Reject_Defaults_AccountsNum = int.Parse(results["Reject_Defaults_AccountsNum"].ToString());
-			AutoRejectionException_CreditScore = int.Parse(results["AutoRejectionException_CreditScore"].ToString());
-			int Reject_Defaults_Months = int.Parse(results["Reject_Defaults_MonthsNum"].ToString());
-			int Reject_Defaults_Amount = int.Parse(results["Reject_Defaults_Amount"].ToString());
+			autoRejectionExceptionAnualTurnover = int.Parse(results["AutoRejectionException_AnualTurnover"].ToString());
+			rejectDefaultsCreditScore = int.Parse(results["Reject_Defaults_CreditScore"].ToString());
+			rejectMinimalSeniority = int.Parse(results["Reject_Minimal_Seniority"].ToString());
+			lowCreditScore = int.Parse(results["LowCreditScore"].ToString());
+			rejectDefaultsAccountsNum = int.Parse(results["Reject_Defaults_AccountsNum"].ToString());
+			autoRejectionExceptionCreditScore = int.Parse(results["AutoRejectionException_CreditScore"].ToString());
+			int rejectDefaultsMonths = int.Parse(results["Reject_Defaults_MonthsNum"].ToString());
+			int rejectDefaultsAmount = int.Parse(results["Reject_Defaults_Amount"].ToString());
 
-			dt = DB.ExecuteReader(
+			dt = Db.ExecuteReader(
 				"GetCustomerRejectionData",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", request.CustomerId),
-				new QueryParameter("Reject_Defaults_Months", Reject_Defaults_Months),
-				new QueryParameter("Reject_Defaults_Amount", Reject_Defaults_Amount)
+				new QueryParameter("Reject_Defaults_Months", rejectDefaultsMonths),
+				new QueryParameter("Reject_Defaults_Amount", rejectDefaultsAmount)
 			);
 
 			results = dt.Rows[0];
 
-			HasAccountingAccounts = Convert.ToBoolean(results["HasAccountingAccounts"]);
-			ErrorMPsNum = int.Parse(results["ErrorMPsNum"].ToString());
-			LoanOffer_ApprovalNum = int.Parse(results["ApprovalNum"].ToString());
-			NumOfDefaultAccounts = int.Parse(results["NumOfDefaultAccounts"].ToString());
+			hasAccountingAccounts = Convert.ToBoolean(results["HasAccountingAccounts"]);
+			errorMPsNum = int.Parse(results["ErrorMPsNum"].ToString());
+			loanOfferApprovalNum = int.Parse(results["ApprovalNum"].ToString());
+			numOfDefaultAccounts = int.Parse(results["NumOfDefaultAccounts"].ToString());
 		}
 
 		private bool IsException()
 		{
-			if (LoanOffer_ApprovalNum > 0 || request.TotalSumOfOrders1YTotal > AutoRejectionException_AnualTurnover ||
-				request.Inintial_ExperianConsumerScore > AutoRejectionException_CreditScore || ErrorMPsNum > 0 ||
-				(decimal)request.Inintial_ExperianConsumerScore == 0 || HasAccountingAccounts)
+			if (loanOfferApprovalNum > 0 || request.TotalSumOfOrders1YTotal > autoRejectionExceptionAnualTurnover ||
+				request.InitialExperianConsumerScore > autoRejectionExceptionCreditScore || errorMPsNum > 0 ||
+				(decimal)request.InitialExperianConsumerScore == 0 || hasAccountingAccounts)
 			{
 				return true;
 			}
@@ -68,7 +67,7 @@ namespace EzBob.Backend.Strategies.AutoDecisions
 			if (IsException())
 				return false;
 
-			DataTable dt = DB.ExecuteReader(
+			DataTable dt = Db.ExecuteReader(
 				"GetPayPalAggregations",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", request.CustomerId)
@@ -76,40 +75,40 @@ namespace EzBob.Backend.Strategies.AutoDecisions
 
 			DataRow results = dt.Rows[0];
 
-			response.PayPal_NumberOfStores = int.Parse(results["PayPal_NumberOfStores"].ToString());
-			response.PayPal_TotalSumOfOrders3M = decimal.Parse(results["PayPal_TotalSumOfOrders3M"].ToString());
-			response.PayPal_TotalSumOfOrders1Y = decimal.Parse(results["PayPal_TotalSumOfOrders1Y"].ToString());
+			response.PayPalNumberOfStores = int.Parse(results["PayPal_NumberOfStores"].ToString());
+			response.PayPalTotalSumOfOrders3M = decimal.Parse(results["PayPal_TotalSumOfOrders3M"].ToString());
+			response.PayPalTotalSumOfOrders1Y = decimal.Parse(results["PayPal_TotalSumOfOrders1Y"].ToString());
 
-			if (request.Inintial_ExperianConsumerScore < Reject_Defaults_CreditScore &&
-				NumOfDefaultAccounts >= Reject_Defaults_AccountsNum)
+			if (request.InitialExperianConsumerScore < rejectDefaultsCreditScore &&
+				numOfDefaultAccounts >= rejectDefaultsAccountsNum)
 			{
-				response.AutoRejectReason = "AutoReject: Score & DefaultAccountsNum. Condition not met:" + request.Inintial_ExperianConsumerScore +
-								   " < " + Reject_Defaults_CreditScore + " AND " + NumOfDefaultAccounts + " >= " +
-								   Reject_Defaults_AccountsNum;
+				response.AutoRejectReason = "AutoReject: Score & DefaultAccountsNum. Condition not met:" + request.InitialExperianConsumerScore +
+								   " < " + rejectDefaultsCreditScore + " AND " + numOfDefaultAccounts + " >= " +
+								   rejectDefaultsAccountsNum;
 			}
-			else if (request.Inintial_ExperianConsumerScore < LowCreditScore)
+			else if (request.InitialExperianConsumerScore < lowCreditScore)
 			{
-				response.AutoRejectReason = "AutoReject: Low score. Condition not met:" + request.Inintial_ExperianConsumerScore + " < " +
-								   LowCreditScore;
+				response.AutoRejectReason = "AutoReject: Low score. Condition not met:" + request.InitialExperianConsumerScore + " < " +
+								   lowCreditScore;
 			}
 			else if (
-				(response.PayPal_NumberOfStores == 0 ||
-				 response.PayPal_TotalSumOfOrders3M < request.LowTotalThreeMonthTurnover || response.PayPal_TotalSumOfOrders1Y < request.LowTotalAnnualTurnover)
+				(response.PayPalNumberOfStores == 0 ||
+				 response.PayPalTotalSumOfOrders3M < request.LowTotalThreeMonthTurnover || response.PayPalTotalSumOfOrders1Y < request.LowTotalAnnualTurnover)
 				 &&
 				(request.TotalSumOfOrders3MTotal < request.LowTotalThreeMonthTurnover || request.TotalSumOfOrders1YTotal < request.LowTotalAnnualTurnover)
 			   )
 			{
-				response.AutoRejectReason = "AutoReject: Totals. Condition not met: (" + response.PayPal_NumberOfStores + " < 0 OR" +
-								response.PayPal_TotalSumOfOrders3M + " < " +
-								   request.LowTotalThreeMonthTurnover + " OR " + response.PayPal_TotalSumOfOrders1Y + " < " +
+				response.AutoRejectReason = "AutoReject: Totals. Condition not met: (" + response.PayPalNumberOfStores + " < 0 OR" +
+								response.PayPalTotalSumOfOrders3M + " < " +
+								   request.LowTotalThreeMonthTurnover + " OR " + response.PayPalTotalSumOfOrders1Y + " < " +
 								   request.LowTotalAnnualTurnover + ") AND (" + request.TotalSumOfOrders3MTotal + " < " +
 								   request.LowTotalThreeMonthTurnover + " OR " + request.TotalSumOfOrders1YTotal + " < " +
 								   request.LowTotalAnnualTurnover + ")";
 			}
-			else if (request.MarketplaceSeniorityDays < Reject_Minimal_Seniority && ErrorMPsNum == 0)
+			else if (request.MarketplaceSeniorityDays < rejectMinimalSeniority && errorMPsNum == 0)
 			{
 				response.AutoRejectReason = "AutoReject: Seniority. Condition not met: (" + request.MarketplaceSeniorityDays + " < " +
-								   Reject_Minimal_Seniority + ")";
+								   rejectMinimalSeniority + ")";
 			}
 			else
 			{

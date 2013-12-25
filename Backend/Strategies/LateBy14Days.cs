@@ -1,21 +1,20 @@
-﻿using System.Collections.Generic;
-using System.Data;
-using System.Globalization;
-using Ezbob.Database;
-using Ezbob.Logger;
-
-namespace EzBob.Backend.Strategies {
+﻿namespace EzBob.Backend.Strategies {
 	using System;
+	using System.Collections.Generic;
+	using System.Data;
+	using System.Globalization;
+	using Ezbob.Database;
+	using Ezbob.Logger;
 
 	public class LateBy14Days : AStrategy {
-		public LateBy14Days(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
-			mailer = new StrategiesMailer(DB, Log);
+		public LateBy14Days(AConnection oDb, ASafeLog oLog) : base(oDb, oLog) {
+			mailer = new StrategiesMailer(Db, Log);
 		} // constructor
 
 		public override string Name { get { return "Late by 14 days"; } } // Name
 
 		public override void Execute() {
-			DataTable dt = DB.ExecuteReader("GetLateBy14DaysAndUpdate", CommandSpecies.StoredProcedure);
+			DataTable dt = Db.ExecuteReader("GetLateBy14DaysAndUpdate", CommandSpecies.StoredProcedure);
 
 			foreach (DataRow row in dt.Rows) {
 				bool is14DaysLate = Convert.ToBoolean(row["Is14DaysLate"]);
@@ -45,7 +44,7 @@ namespace EzBob.Backend.Strategies {
 
 				mailer.SendToCustomerAndEzbob(variables, mail, "Mandrill - 14 days notification email", "Please contact us immediately in order to make full payment on all outstanding debts");
 
-				DB.ExecuteNonQuery("SetLateBy14Days", CommandSpecies.StoredProcedure, new QueryParameter("LoanId", loanId));
+				Db.ExecuteNonQuery("SetLateBy14Days", CommandSpecies.StoredProcedure, new QueryParameter("LoanId", loanId));
 			} // for
 		} // Execute
 

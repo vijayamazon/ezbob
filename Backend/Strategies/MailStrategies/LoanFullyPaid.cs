@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
-using Ezbob.Database;
-using Ezbob.Logger;
+﻿namespace EzBob.Backend.Strategies.MailStrategies {
+	using System.Collections.Generic;
+	using Ezbob.Database;
+	using Ezbob.Logger;
 
-namespace EzBob.Backend.Strategies.MailStrategies {
 	public class LoanFullyPaid : AMailStrategyBase {
 		#region constructor
 
-		public LoanFullyPaid(int customerId, string loanRefNum, AConnection oDB, ASafeLog oLog) : base(customerId, true, oDB, oLog) {
+		public LoanFullyPaid(int customerId, string loanRefNum, AConnection oDb, ASafeLog oLog) : base(customerId, true, oDb, oLog) {
 			this.loanRefNum = loanRefNum;
 		} // constructor
 

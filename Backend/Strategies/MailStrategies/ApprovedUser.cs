@@ -1,15 +1,15 @@
-﻿using System;
-using System.Data;
-using System.Globalization;
-using System.Collections.Generic;
-using Ezbob.Database;
-using Ezbob.Logger;
+﻿namespace EzBob.Backend.Strategies.MailStrategies {
+	using System;
+	using System.Data;
+	using System.Globalization;
+	using System.Collections.Generic;
+	using Ezbob.Database;
+	using Ezbob.Logger;
 
-namespace EzBob.Backend.Strategies.MailStrategies {
 	public class ApprovedUser : AMailStrategyBase {
 		#region constructor
 
-		public ApprovedUser(int customerId, decimal loanAmount, AConnection oDB, ASafeLog oLog) : base(customerId, true, oDB, oLog) {
+		public ApprovedUser(int customerId, decimal loanAmount, AConnection oDb, ASafeLog oLog) : base(customerId, true, oDb, oLog) {
 			this.loanAmount = loanAmount;
 		} // constructor
 
@@ -22,7 +22,7 @@ namespace EzBob.Backend.Strategies.MailStrategies {
 		protected override void SetTemplateAndSubjectAndVariables() {
 			Subject = string.Format("Congratulations {0}, £{1} is available to fund your business today", CustomerData.FirstName, loanAmount);
 
-			DataTable dt = DB.ExecuteReader(
+			DataTable dt = Db.ExecuteReader(
 				"GetApprovalData",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", CustomerId)
@@ -36,12 +36,12 @@ namespace EzBob.Backend.Strategies.MailStrategies {
 			DateTime applyForLoan = DateTime.Parse(results["ApplyForLoan"].ToString());
 			DateTime validFor = DateTime.Parse(results["ValidFor"].ToString());
 
-			int validHours = (int)(validFor - applyForLoan).TotalHours;
+			double validHours = (validFor - applyForLoan).TotalHours;
 
 			Variables = new Dictionary<string, string> {
 				{"FirstName", CustomerData.FirstName},
 				{"LoanAmount", loanAmount.ToString(CultureInfo.InvariantCulture)},
-				{"ValidFor", validHours.ToString(CultureInfo.InvariantCulture)}
+				{"ValidFor", ((int)validHours).ToString(CultureInfo.InvariantCulture)}
 			};
 
 			if (CustomerData.IsOffline)

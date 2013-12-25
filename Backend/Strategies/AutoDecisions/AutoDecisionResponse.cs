@@ -16,15 +16,15 @@
 		public string UserStatus { get; set; }
 		public string SystemDecision { get; set; }
 		public int ModelLoanOffer { get; set; }
-		public string LoanOffer_UnderwriterComment { get; set; }
-		public double LoanOffer_OfferValidDays { get; set; }
-		public DateTime? App_ApplyForLoan { get; set; }
-		public DateTime App_ValidFor { get; set; }
-		public bool LoanOffer_EmailSendingBanned_new { get; set; }
+		public string LoanOfferUnderwriterComment { get; set; }
+		public double LoanOfferOfferValidDays { get; set; }
+		public DateTime? AppApplyForLoan { get; set; }
+		public DateTime AppValidFor { get; set; }
+		public bool LoanOfferEmailSendingBannedNew { get; set; }
 		public bool IsAutoApproval { get; set; }
 		public int AutoApproveAmount { get; set; }
-		public decimal PayPal_TotalSumOfOrders3M { get; set; }
-		public decimal PayPal_TotalSumOfOrders1Y { get; set; }
-		public int PayPal_NumberOfStores { get; set; }
+		public decimal PayPalTotalSumOfOrders3M { get; set; }
+		public decimal PayPalTotalSumOfOrders1Y { get; set; }
+		public int PayPalNumberOfStores { get; set; }
 	}
 }

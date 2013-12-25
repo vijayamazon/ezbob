@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
-using Ezbob.Database;
-using Ezbob.Logger;
+﻿namespace EzBob.Backend.Strategies.MailStrategies {
+	using System.Collections.Generic;
+	using Ezbob.Database;
+	using Ezbob.Logger;
 
-namespace EzBob.Backend.Strategies.MailStrategies {
 	public class ThreeInvalidAttempts : AMailStrategyBase {
 		#region constructor
 
-		public ThreeInvalidAttempts(int customerId, string password, AConnection oDB, ASafeLog oLog)
-			: base(customerId, true, oDB, oLog) {
+		public ThreeInvalidAttempts(int customerId, string password, AConnection oDb, ASafeLog oLog)
+			: base(customerId, true, oDb, oLog) {
 			this.password = password;
 		} // constructor
 

@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
-using Ezbob.Database;
-using Ezbob.Logger;
+﻿namespace EzBob.Backend.Strategies.MailStrategies {
+	using System.Collections.Generic;
+	using Ezbob.Database;
+	using Ezbob.Logger;
 
-namespace EzBob.Backend.Strategies.MailStrategies {
 	public class EmailUnderReview : AMailStrategyBase {
 		#region constructor
 
-		public EmailUnderReview(int customerId, AConnection oDB, ASafeLog oLog)
-			: base(customerId, true, oDB, oLog) {
+		public EmailUnderReview(int customerId, AConnection oDb, ASafeLog oLog)
+			: base(customerId, true, oDb, oLog) {
 		} // constructor
 
 		#endregion constructor

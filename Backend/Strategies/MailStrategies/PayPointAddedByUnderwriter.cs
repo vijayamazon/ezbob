@@ -1,13 +1,13 @@
-﻿using System.Globalization;
-using System.Collections.Generic;
-using Ezbob.Database;
-using Ezbob.Logger;
+﻿namespace EzBob.Backend.Strategies.MailStrategies {
+	using System.Globalization;
+	using System.Collections.Generic;
+	using Ezbob.Database;
+	using Ezbob.Logger;
 
-namespace EzBob.Backend.Strategies.MailStrategies {
 	public class PayPointAddedByUnderwriter : AMailStrategyBase {
 		#region constructor
 
-		public PayPointAddedByUnderwriter(int customerId, string cardno, string underwriterName, int underwriterId, AConnection oDB, ASafeLog oLog) : base(customerId, false, oDB, oLog) {
+		public PayPointAddedByUnderwriter(int customerId, string cardno, string underwriterName, int underwriterId, AConnection oDb, ASafeLog oLog) : base(customerId, false, oDb, oLog) {
 			this.underwriterId = underwriterId;
 			this.cardno = cardno;
 			this.underwriterName = underwriterName;

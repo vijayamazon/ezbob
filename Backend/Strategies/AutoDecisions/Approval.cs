@@ -1,7 +1,6 @@
-﻿using Ezbob.Database;
-
-namespace EzBob.Backend.Strategies.AutoDecisions
+﻿namespace EzBob.Backend.Strategies.AutoDecisions
 {
+	using Ezbob.Database;
 	using System;
 	using System.Data;
 	using Models;
@@ -13,12 +12,12 @@ namespace EzBob.Backend.Strategies.AutoDecisions
 		private readonly bool autoApproveIsSilent;
 		private readonly string autoApproveSilentTemplateName;
 		private readonly string autoApproveSilentToAddress;
-		private AConnection DB { get; set; }
+		private AConnection Db { get; set; }
 
-		public Approval(AutoDecisionRequest request, AConnection oDB) {
-			DB = oDB;
+		public Approval(AutoDecisionRequest request, AConnection oDb) {
+			Db = oDb;
 			this.request = request;
-			DataTable dt = DB.ExecuteReader("GetApprovalConfigs", CommandSpecies.StoredProcedure);
+			DataTable dt = Db.ExecuteReader("GetApprovalConfigs", CommandSpecies.StoredProcedure);
 			DataRow results = dt.Rows[0];
 
 			autoApproveIsSilent = Convert.ToBoolean(results["AutoApproveIsSilent"]);
@@ -34,7 +33,7 @@ namespace EzBob.Backend.Strategies.AutoDecisions
 
 				if (response.AutoApproveAmount != 0)
 				{
-					DataTable dt = DB.ExecuteReader("GetAvailableFunds", CommandSpecies.StoredProcedure);
+					DataTable dt = Db.ExecuteReader("GetAvailableFunds", CommandSpecies.StoredProcedure);
 					decimal availableFunds = decimal.Parse(dt.Rows[0]["AvailableFunds"].ToString());
 
 					if (availableFunds > response.AutoApproveAmount)
@@ -49,7 +48,7 @@ namespace EzBob.Backend.Strategies.AutoDecisions
 						}
 						else
 						{
-							dt = DB.ExecuteReader(
+							dt = Db.ExecuteReader(
 								"GetLastOfferDataForApproval",
 								CommandSpecies.StoredProcedure,
 								new QueryParameter("CustomerId", request.CustomerId)
@@ -63,12 +62,12 @@ namespace EzBob.Backend.Strategies.AutoDecisions
 							response.CreditResult = "Approved";
 							response.UserStatus = "Approved";
 							response.SystemDecision = "Approve";
-							response.LoanOffer_UnderwriterComment = "Auto Approval";
-							response.LoanOffer_OfferValidDays = (loanOfferOfferValidUntil - loanOfferOfferStart).TotalDays;
-							response.App_ApplyForLoan = null;
-							response.App_ValidFor = DateTime.UtcNow.AddDays(response.LoanOffer_OfferValidDays);
+							response.LoanOfferUnderwriterComment = "Auto Approval";
+							response.LoanOfferOfferValidDays = (loanOfferOfferValidUntil - loanOfferOfferStart).TotalDays;
+							response.AppApplyForLoan = null;
+							response.AppValidFor = DateTime.UtcNow.AddDays(response.LoanOfferOfferValidDays);
 							response.IsAutoApproval = true;
-							response.LoanOffer_EmailSendingBanned_new = loanOfferEmailSendingBanned;
+							response.LoanOfferEmailSendingBannedNew = loanOfferEmailSendingBanned;
 						}
 					}
 					else

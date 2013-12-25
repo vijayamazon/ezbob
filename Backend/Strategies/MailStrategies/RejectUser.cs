@@ -1,10 +1,10 @@
-﻿using System.Collections.Generic;
-using Ezbob.Database;
-using Ezbob.Logger;
+﻿namespace EzBob.Backend.Strategies.MailStrategies {
+	using System.Collections.Generic;
+	using Ezbob.Database;
+	using Ezbob.Logger;
 
-namespace EzBob.Backend.Strategies.MailStrategies {
 	public class RejectUser : AMailStrategyBase {
-		public RejectUser(int customerId, AConnection oDB, ASafeLog oLog) : base(customerId, true, oDB, oLog) {
+		public RejectUser(int customerId, AConnection oDb, ASafeLog oLog) : base(customerId, true, oDb, oLog) {
 		} // constructor
 
 		public override string Name { get { return "Reject User"; } } // Name

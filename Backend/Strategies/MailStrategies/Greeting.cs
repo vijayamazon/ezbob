@@ -1,14 +1,13 @@
-﻿using System.Collections.Generic;
-using Ezbob.Database;
-using Ezbob.Logger;
-
-namespace EzBob.Backend.Strategies.MailStrategies {
+﻿namespace EzBob.Backend.Strategies.MailStrategies {
+	using System.Collections.Generic;
+	using Ezbob.Database;
+	using Ezbob.Logger;
 	public class Greeting : AMailStrategyBase {
 		#region public
 
 		#region constructor
 
-		public Greeting(int customerId, string confirmEmailAddress, AConnection oDB, ASafeLog oLog) : base(customerId, true, oDB, oLog) {
+		public Greeting(int customerId, string confirmEmailAddress, AConnection oDb, ASafeLog oLog) : base(customerId, true, oDb, oLog) {
 			this.confirmEmailAddress = confirmEmailAddress;
 		} // constructor
 
@@ -37,7 +36,7 @@ namespace EzBob.Backend.Strategies.MailStrategies {
 		#region method ActionAtEnd
 
 		protected override void ActionAtEnd() {
-			DB.ExecuteNonQuery("Greeting_Mail_Sent",
+			Db.ExecuteNonQuery("Greeting_Mail_Sent",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("UserId", CustomerId),
 				new QueryParameter("GreetingMailSent", 1)

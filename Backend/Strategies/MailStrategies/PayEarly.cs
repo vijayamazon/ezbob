@@ -1,14 +1,14 @@
-﻿using System;
-using System.Globalization;
-using System.Collections.Generic;
-using Ezbob.Database;
-using Ezbob.Logger;
+﻿namespace EzBob.Backend.Strategies.MailStrategies {
+	using System;
+	using System.Globalization;
+	using System.Collections.Generic;
+	using Ezbob.Database;
+	using Ezbob.Logger;
 
-namespace EzBob.Backend.Strategies.MailStrategies {
 	public class PayEarly : AMailStrategyBase {
 		#region constructor
 
-		public PayEarly(int customerId, decimal amount, string loanRefNumber, AConnection oDB, ASafeLog oLog) : base(customerId, true, oDB, oLog) {
+		public PayEarly(int customerId, decimal amount, string loanRefNumber, AConnection oDb, ASafeLog oLog) : base(customerId, true, oDb, oLog) {
 			this.amount = amount;
 			this.loanRefNumber = loanRefNumber;
 		} // constructor

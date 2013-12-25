@@ -1,10 +1,10 @@
-﻿using Ezbob.Database;
-using Ezbob.Logger;
-using FraudChecker;
+﻿namespace EzBob.Backend.Strategies {
+	using Ezbob.Database;
+	using Ezbob.Logger;
+	using global::FraudChecker;
 
-namespace EzBob.Backend.Strategies {
 	public class FraudChecker : AStrategy {
-		public FraudChecker(int customerId, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public FraudChecker(int customerId, AConnection oDb, ASafeLog oLog) : base(oDb, oLog) {
 			this.customerId = customerId;
 		} // constructor
 
