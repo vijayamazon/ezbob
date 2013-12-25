@@ -33,11 +33,34 @@
       </wsp:All>
     </wsp:ExactlyOne>
   </wsp:Policy>
-  <wsp:Policy wsu:Id="NetHttpBinding_IEzService_policy">
+  <wsp:Policy wsu:Id="NetTcpBinding_IEzService_policy">
     <wsp:ExactlyOne>
       <wsp:All>
         <msb:BinaryEncoding xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1">
         </msb:BinaryEncoding>
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <msf:WindowsTransportSecurity xmlns:msf="http://schemas.microsoft.com/ws/2006/05/framing/policy">
+                  <msf:ProtectionLevel>EncryptAndSign</msf:ProtectionLevel>
+                </msf:WindowsTransportSecurity>
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256>
+                </sp:Basic256>
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict>
+                </sp:Strict>
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
         <wsaw:UsingAddressing>
         </wsaw:UsingAddressing>
       </wsp:All>
@@ -526,10 +549,10 @@
       </wsdl:output>
     </wsdl:operation>
   </wsdl:binding>
-  <wsdl:binding name="NetHttpBinding_IEzService" type="tns:IEzService">
-    <wsp:PolicyReference URI="#NetHttpBinding_IEzService_policy">
+  <wsdl:binding name="NetTcpBinding_IEzService" type="tns:IEzService">
+    <wsp:PolicyReference URI="#NetTcpBinding_IEzService_policy">
     </wsp:PolicyReference>
-    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
     <wsdl:operation name="GreetingMailStrategy">
       <soap12:operation soapAction="http://tempuri.org/IEzService/GreetingMailStrategy" style="document" />
       <wsdl:input>
@@ -866,18 +889,21 @@
   </wsdl:binding>
   <wsdl:service name="EzServiceImplementation">
     <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
-      <soap12:address location="net.tcp://alexbo-pc:7081/" />
+      <soap12:address location="net.tcp://ezqa01:7501/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://ezqa01:7501/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>alexbo-pc\alexbo</Upn>
+          <Upn>EZQA01\Administrator</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
-    <wsdl:port name="NetHttpBinding_IEzService" binding="tns:NetHttpBinding_IEzService">
-      <soap12:address location="http://alexbo-pc:7082/" />
+    <wsdl:port name="NetTcpBinding_IEzService" binding="tns:NetTcpBinding_IEzService">
+      <soap12:address location="net.tcp://ezqa01:7501/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>http://alexbo-pc:7082/</wsa10:Address>
+        <wsa10:Address>net.tcp://ezqa01:7501/</wsa10:Address>
+        <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
+          <Upn>EZQA01\Administrator</Upn>
+        </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
   </wsdl:service>

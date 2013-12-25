@@ -537,11 +537,13 @@ namespace EzBob.Web.Code.ApplicationCreator {
 						var cfg = new EzSrvCfgLoader(_session, Log);
 						cfg.Init();
 
-						var binding = new CustomBinding(new BinaryMessageEncodingBindingElement(), new HttpTransportBindingElement());
+						var oTcpBinding = new NetTcpBinding();
+						oTcpBinding.Security.Mode = SecurityMode.Transport;
+						oTcpBinding.Security.Transport.ClientCredentialType = TcpClientCredentialType.Windows;
 
 						m_oServiceClient = new EzServiceClient(
-							binding,
-							new EndpointAddress(cfg.ClientEndpointAddress)
+							oTcpBinding, // TODO: HTTPS...
+							new EndpointAddress(cfg.AdminEndpointAddress) // TODO: when HTTPS is ready make it ClientAdminEndpoint
 						);
 					}
 					catch (Exception e) {

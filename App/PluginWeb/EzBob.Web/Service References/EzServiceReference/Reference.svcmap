@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="669b0373-790f-48d2-b487-79106e29b3ce" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="0ba3a0fb-d047-4c69-9db2-6e7f65b7a53e" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
     <EnableDataBinding>true</EnableDataBinding>
@@ -18,15 +18,15 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="net.tcp://localhost:7081/mex" Protocol="mex" SourceId="1" />
+    <MetadataSource Address="net.tcp://ezqa01:7501/mex" Protocol="mex" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="8332fcfb-4b3c-4d06-8f9d-f4495420a83b" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
-    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="b5f7898f-75ce-4a74-8bf0-f47524a750ac" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
-    <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="94aef124-bba3-42b9-b156-bc34f98842c1" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
-    <MetadataFile FileName="EzService.xsd" MetadataType="Schema" ID="b86310cc-fbfb-4463-a6f3-23b91a73e991" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
-    <MetadataFile FileName="Arrays.xsd" MetadataType="Schema" ID="fda44409-db1c-4437-aec9-d42978772e11" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
-    <MetadataFile FileName="EzBob.Backend.Strategies.xsd" MetadataType="Schema" ID="a9346739-ffcc-450e-b83a-d87e81504361" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
+    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="aec783df-af1f-4b48-b839-965559d95618" SourceId="1" SourceUrl="net.tcp://ezqa01:7501/mex" />
+    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="8008ba19-a60c-415e-ae03-9c3273c90ce6" SourceId="1" SourceUrl="net.tcp://ezqa01:7501/mex" />
+    <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="912c14a2-0e02-43e8-b277-8b105622936c" SourceId="1" SourceUrl="net.tcp://ezqa01:7501/mex" />
+    <MetadataFile FileName="EzService.xsd" MetadataType="Schema" ID="888b80e1-8c4b-4400-ae74-5abe2cd6bc14" SourceId="1" SourceUrl="net.tcp://ezqa01:7501/mex" />
+    <MetadataFile FileName="Arrays.xsd" MetadataType="Schema" ID="edaafc4a-4781-4bb4-a41e-254c04af3db4" SourceId="1" SourceUrl="net.tcp://ezqa01:7501/mex" />
+    <MetadataFile FileName="EzBob.Backend.Strategies.xsd" MetadataType="Schema" ID="948a3a97-10bb-4bba-b36c-85cc448142e1" SourceId="1" SourceUrl="net.tcp://ezqa01:7501/mex" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

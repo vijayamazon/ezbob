@@ -29,9 +29,13 @@
 			var cfg = new Configuration(sInstanceName, db, log);
 			cfg.Init();
 
+			var oTcpBinding = new NetTcpBinding();
+			oTcpBinding.Security.Mode = SecurityMode.Transport;
+			oTcpBinding.Security.Transport.ClientCredentialType = TcpClientCredentialType.Windows;
+
 			serviceClient = new EzServiceClient(
-				new NetHttpBinding(),
-				new EndpointAddress(cfg.ClientEndpointAddress)
+				oTcpBinding,
+				new EndpointAddress(cfg.AdminEndpointAddress)
 			);
 		}
 
