@@ -100,20 +100,62 @@ namespace EzService {
 
 		#region serialised properties
 
+		#region property ActionID
+
 		[DataMember]
 		public Guid ActionID { get; private set; }
+
+		#endregion property ActionID
+
+		#region property Name
 
 		[DataMember]
 		public string Name { get; private set; }
 
-		[DataMember]
-		public ActionStatus Status;
+		#endregion property Name
+
+		#region property Status
 
 		[DataMember]
-		public string Comment;
+		public ActionStatus Status {
+			get {
+				lock (m_oLockStatus)
+					return m_nStatus;
+			} // get
+			set {
+				lock (m_oLockStatus)
+					m_nStatus = value;
+			} // set
+		} // Status
+
+		private ActionStatus m_nStatus;
+
+		#endregion property Status
+
+		#region property Comment
+
+		[DataMember]
+		public string Comment {
+			get {
+				lock (m_oLockComment)
+					return m_sComment;
+			} // get
+			set {
+				lock (m_oLockComment)
+					m_sComment = value;
+			} // set
+		} // Status
+
+		private string m_sComment;
+
+		#endregion property Comment
+
+		#region property IsSynchronous
 
 		[DataMember]
 		public bool IsSynchronous { get; private set; }
+
+		#endregion property IsSynchronous
 
 		#endregion serialised properties
 
@@ -181,26 +223,28 @@ namespace EzService {
 		} // Save
 
 		public void Save() {
-			m_oLog.Debug("Saving action status of {0} to DB...", this);
+			lock (m_oLockSave) {
+				m_oLog.Debug("Saving action status of {0} to DB...", this);
 
-			try {
-				m_oDB.ExecuteNonQuery("EzServiceSaveActionMetaData",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("@InstanceID", m_nServiceInstanceID),
-					new QueryParameter("@ActionName", Name),
-					new QueryParameter("@ActionID", ActionID),
-					new QueryParameter("@IsSync", IsSynchronous),
-					new QueryParameter("@Status", (int)Status),
-					new QueryParameter("@CurrentThreadID", Thread.CurrentThread.ManagedThreadId),
-					new QueryParameter("@UnderlyingThreadID", UnderlyingThread.ManagedThreadId),
-					new QueryParameter("@Comment", Comment)
-				);
+				try {
+					m_oDB.ExecuteNonQuery("EzServiceSaveActionMetaData",
+						CommandSpecies.StoredProcedure,
+						new QueryParameter("@InstanceID", m_nServiceInstanceID),
+						new QueryParameter("@ActionName", Name),
+						new QueryParameter("@ActionID", ActionID),
+						new QueryParameter("@IsSync", IsSynchronous),
+						new QueryParameter("@Status", (int)Status),
+						new QueryParameter("@CurrentThreadID", Thread.CurrentThread.ManagedThreadId),
+						new QueryParameter("@UnderlyingThreadID", UnderlyingThread.ManagedThreadId),
+						new QueryParameter("@Comment", Comment)
+					);
 
-				m_oLog.Debug("Saving action status of {0} to DB complete.", this);
-			}
-			catch (Exception e) {
-				m_oLog.Alert(e, "Failed to save action status of {0} to DB.", this);
-			} // try
+					m_oLog.Debug("Saving action status of {0} to DB complete.", this);
+				}
+				catch (Exception e) {
+					m_oLog.Alert(e, "Failed to save action status of {0} to DB.", this);
+				} // try
+			} // lock
 		} // Save
 
 		#endregion method Save
@@ -209,9 +253,31 @@ namespace EzService {
 
 		#region private
 
+		#region constructor
+
+		private ActionMetaData() {
+			m_oLockSave = new object();
+			m_oLockStatus = new object();
+			m_oLockComment = new object();
+		} // constructor
+
+		#endregion constructor
+
+		#region locks
+
+		private readonly object m_oLockSave;
+		private readonly object m_oLockStatus;
+		private readonly object m_oLockComment;
+
+		#endregion locks
+
+		#region fields
+
 		private AConnection m_oDB;
 		private ASafeLog m_oLog;
 		private int m_nServiceInstanceID;
+
+		#endregion fields
 
 		#endregion private
 	} // struct ActionMetaData
