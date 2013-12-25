@@ -395,7 +395,7 @@ namespace EzBob.Web.Code.ApplicationCreator
         {
 	        if (useNewMailStrategies)
 	        {
-		        serviceClient.MoreAmLandBwaInformation(user.Id);
+		        serviceClient.MoreAmlAndBwaInformation(user.Id);
 	        }
 	        else
 	        {

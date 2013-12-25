@@ -130,11 +130,11 @@
   <wsdl:message name="IEzService_LoanFullyPaid_OutputMessage">
     <wsdl:part name="parameters" element="tns:LoanFullyPaidResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_MoreAmLandBwaInformation_InputMessage">
-    <wsdl:part name="parameters" element="tns:MoreAmLandBwaInformation" />
+  <wsdl:message name="IEzService_MoreAmlAndBwaInformation_InputMessage">
+    <wsdl:part name="parameters" element="tns:MoreAmlAndBwaInformation" />
   </wsdl:message>
-  <wsdl:message name="IEzService_MoreAmLandBwaInformation_OutputMessage">
-    <wsdl:part name="parameters" element="tns:MoreAmLandBwaInformationResponse" />
+  <wsdl:message name="IEzService_MoreAmlAndBwaInformation_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MoreAmlAndBwaInformationResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_MoreAmlInformation_InputMessage">
     <wsdl:part name="parameters" element="tns:MoreAmlInformation" />
@@ -359,9 +359,9 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoanFullyPaid" message="tns:IEzService_LoanFullyPaid_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoanFullyPaidResponse" message="tns:IEzService_LoanFullyPaid_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="MoreAmLandBwaInformation">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MoreAmLandBwaInformation" message="tns:IEzService_MoreAmLandBwaInformation_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MoreAmLandBwaInformationResponse" message="tns:IEzService_MoreAmLandBwaInformation_OutputMessage" />
+    <wsdl:operation name="MoreAmlAndBwaInformation">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MoreAmlAndBwaInformation" message="tns:IEzService_MoreAmlAndBwaInformation_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MoreAmlAndBwaInformationResponse" message="tns:IEzService_MoreAmlAndBwaInformation_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="MoreAmlInformation">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MoreAmlInformation" message="tns:IEzService_MoreAmlInformation_InputMessage" />
@@ -602,8 +602,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="MoreAmLandBwaInformation">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/MoreAmLandBwaInformation" style="document" />
+    <wsdl:operation name="MoreAmlAndBwaInformation">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/MoreAmlAndBwaInformation" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -866,18 +866,18 @@
   </wsdl:binding>
   <wsdl:service name="EzServiceImplementation">
     <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
-      <soap12:address location="net.tcp://yulys:7081/" />
+      <soap12:address location="net.tcp://yulys-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://yulys:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://yulys-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
           <Upn>yulys-PC\yulys</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetHttpBinding_IEzService" binding="tns:NetHttpBinding_IEzService">
-      <soap12:address location="http://yulys:7082/" />
+      <soap12:address location="http://yulys-pc:7082/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>http://yulys:7082/</wsa10:Address>
+        <wsa10:Address>http://yulys-pc:7082/</wsa10:Address>
       </wsa10:EndpointReference>
     </wsdl:port>
   </wsdl:service>

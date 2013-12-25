@@ -32,7 +32,7 @@ namespace EzService {
 		ActionMetaData LoanFullyPaid(int customerId, string loanRefNum);
 
 		[OperationContract]
-		ActionMetaData MoreAmLandBwaInformation(int customerId);
+		ActionMetaData MoreAmlAndBwaInformation(int customerId);
 
 		[OperationContract]
 		ActionMetaData MoreAmlInformation(int customerId);

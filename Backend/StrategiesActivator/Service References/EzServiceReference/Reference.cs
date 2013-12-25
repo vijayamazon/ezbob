@@ -166,11 +166,11 @@ namespace EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoanFullyPaid", ReplyAction="http://tempuri.org/IEzService/LoanFullyPaidResponse")]
         System.Threading.Tasks.Task<EzService.ActionMetaData> LoanFullyPaidAsync(int customerId, string loanRefNum);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MoreAmLandBwaInformation", ReplyAction="http://tempuri.org/IEzService/MoreAmLandBwaInformationResponse")]
-        EzService.ActionMetaData MoreAmLandBwaInformation(int customerId);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MoreAmlAndBwaInformation", ReplyAction="http://tempuri.org/IEzService/MoreAmlAndBwaInformationResponse")]
+        EzService.ActionMetaData MoreAmlAndBwaInformation(int customerId);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MoreAmLandBwaInformation", ReplyAction="http://tempuri.org/IEzService/MoreAmLandBwaInformationResponse")]
-        System.Threading.Tasks.Task<EzService.ActionMetaData> MoreAmLandBwaInformationAsync(int customerId);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MoreAmlAndBwaInformation", ReplyAction="http://tempuri.org/IEzService/MoreAmlAndBwaInformationResponse")]
+        System.Threading.Tasks.Task<EzService.ActionMetaData> MoreAmlAndBwaInformationAsync(int customerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MoreAmlInformation", ReplyAction="http://tempuri.org/IEzService/MoreAmlInformationResponse")]
         EzService.ActionMetaData MoreAmlInformation(int customerId);
@@ -432,12 +432,12 @@ namespace EzServiceReference {
             return base.Channel.LoanFullyPaidAsync(customerId, loanRefNum);
         }
         
-        public EzService.ActionMetaData MoreAmLandBwaInformation(int customerId) {
-            return base.Channel.MoreAmLandBwaInformation(customerId);
+        public EzService.ActionMetaData MoreAmlAndBwaInformation(int customerId) {
+            return base.Channel.MoreAmlAndBwaInformation(customerId);
         }
         
-        public System.Threading.Tasks.Task<EzService.ActionMetaData> MoreAmLandBwaInformationAsync(int customerId) {
-            return base.Channel.MoreAmLandBwaInformationAsync(customerId);
+        public System.Threading.Tasks.Task<EzService.ActionMetaData> MoreAmlAndBwaInformationAsync(int customerId) {
+            return base.Channel.MoreAmlAndBwaInformationAsync(customerId);
         }
         
         public EzService.ActionMetaData MoreAmlInformation(int customerId) {

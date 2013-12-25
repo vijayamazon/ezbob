@@ -289,7 +289,7 @@ namespace EzService {
 			return Execute(typeof(LoanFullyPaid), customerId, loanRefNum);
 		} // LoanFullyPaid
 
-		public ActionMetaData MoreAmLandBwaInformation(int customerId) {
+		public ActionMetaData MoreAmlAndBwaInformation(int customerId) {
 			return Execute(typeof(MoreAmlAndBwaInformation), customerId);
 		} // MoreAmLandBwaInformation
 

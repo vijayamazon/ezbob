@@ -176,16 +176,16 @@
 		}
 
 		[StrategyActivator]
-		private void ActivateMoreAmLandBwaInformation()
+		private void ActivateMoreAmlAndBwaInformation()
 		{
 			int customerId;
 			if (args.Length != 2 || !int.TryParse(args[1], out customerId))
 			{
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> MoreAMLandBWAInformation <CustomerId>");
+				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> MoreAmlAndBwaInformation <CustomerId>");
 				return;
 			}
 
-			serviceClient.MoreAmLandBwaInformation(customerId);
+			serviceClient.MoreAmlAndBwaInformation(customerId);
 		}
 
 		[StrategyActivator]
@@ -194,7 +194,7 @@
 			int customerId;
 			if (args.Length != 2 || !int.TryParse(args[1], out customerId))
 			{
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> MoreAMLInformation <CustomerId>");
+				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> MoreAmlInformation <CustomerId>");
 				return;
 			}
 			serviceClient.MoreAmlInformation(customerId);
@@ -206,7 +206,7 @@
 			int customerId;
 			if (args.Length != 2 || !int.TryParse(args[1], out customerId))
 			{
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> MoreBWAInformation <CustomerId>");
+				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> MoreBwaInformation <CustomerId>");
 				return;
 			}
 

@@ -330,8 +330,8 @@ namespace EzBob.Web.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoanFullyPaid", ReplyAction="http://tempuri.org/IEzService/LoanFullyPaidResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData LoanFullyPaid(int customerId, string loanRefNum);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MoreAmLandBwaInformation", ReplyAction="http://tempuri.org/IEzService/MoreAmLandBwaInformationResponse")]
-        EzBob.Web.EzServiceReference.ActionMetaData MoreAmLandBwaInformation(int customerId);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MoreAmlAndBwaInformation", ReplyAction="http://tempuri.org/IEzService/MoreAmlAndBwaInformationResponse")]
+        EzBob.Web.EzServiceReference.ActionMetaData MoreAmlAndBwaInformation(int customerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MoreAmlInformation", ReplyAction="http://tempuri.org/IEzService/MoreAmlInformationResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData MoreAmlInformation(int customerId);
@@ -477,8 +477,8 @@ namespace EzBob.Web.EzServiceReference {
             return base.Channel.LoanFullyPaid(customerId, loanRefNum);
         }
         
-        public EzBob.Web.EzServiceReference.ActionMetaData MoreAmLandBwaInformation(int customerId) {
-            return base.Channel.MoreAmLandBwaInformation(customerId);
+        public EzBob.Web.EzServiceReference.ActionMetaData MoreAmlAndBwaInformation(int customerId) {
+            return base.Channel.MoreAmlAndBwaInformation(customerId);
         }
         
         public EzBob.Web.EzServiceReference.ActionMetaData MoreAmlInformation(int customerId) {
