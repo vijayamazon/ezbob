@@ -25,7 +25,7 @@
 		#region constructor
 
 		public UpdateMarketplace(int customerId, int marketplaceId, AConnection oDb, ASafeLog oLog) : base(oDb, oLog) {
-			mailer = new StrategiesMailer(Db, Log);
+			mailer = new StrategiesMailer(DB, Log);
 			this.customerId = customerId;
 			this.marketplaceId = marketplaceId;
 		} // constructor
@@ -46,7 +46,7 @@
 			string errorMessage = string.Empty;
 			DateTime startTime = DateTime.UtcNow;
 
-			DataTable dt = Db.ExecuteReader(
+			DataTable dt = DB.ExecuteReader(
 				"GetMarketplaceDetailsForUpdate",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("MarketplaceId", marketplaceId)
@@ -143,14 +143,14 @@
 				} // if
 			} // try
 
-			Db.ExecuteNonQuery("UpdateMPErrorMP",
+			DB.ExecuteNonQuery("UpdateMPErrorMP",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("umi", marketplaceId),
 				new QueryParameter("UpdateError", errorMessage),
 				new QueryParameter("TokenExpired", tokenExpired)
 			);
 
-			Db.ExecuteNonQuery("InsertStrategyMarketPlaceUpdateTime",
+			DB.ExecuteNonQuery("InsertStrategyMarketPlaceUpdateTime",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("MarketPlaceId", marketplaceId),
 				new QueryParameter("StartDate", startTime),

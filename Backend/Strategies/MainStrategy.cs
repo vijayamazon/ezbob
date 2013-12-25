@@ -60,7 +60,7 @@
 		)
 			: base(oDb, oLog)
 		{
-			mailer = new StrategiesMailer(Db, Log);
+			mailer = new StrategiesMailer(DB, Log);
 			this.customerId = customerId;
 			newCreditLineOption = newCreditLine;
 			avoidAutomaticDescison = avoidAutoDescison;
@@ -89,7 +89,7 @@
 		)
 			: base(oDb, oLog)
 		{
-			mailer = new StrategiesMailer(Db, Log);
+			mailer = new StrategiesMailer(DB, Log);
 			this.customerId = customerId;
 			useCustomIdHubAddress = checkType;
 			underwriterCheck = true;
@@ -177,7 +177,7 @@
 
 				if (companyType != "Entrepreneur")
 				{
-					DataTable dt = Db.ExecuteReader(
+					DataTable dt = DB.ExecuteReader(
 						"GetDirectorsAddresses",
 						CommandSpecies.StoredProcedure,
 						new QueryParameter("CustomerId", customerId)
@@ -212,7 +212,7 @@
 
 				AmlAndBwa();
 
-				Db.ExecuteReader(
+				DB.ExecuteReader(
 					"UpdateExperianBWA_AML",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("CustomerId", customerId),
@@ -221,7 +221,7 @@
 				);
 			} // if
 
-			DataTable scoreCardDataTable = Db.ExecuteReader(
+			DataTable scoreCardDataTable = DB.ExecuteReader(
 				"GetDirectorsAddresses",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId)
@@ -257,7 +257,7 @@
 
 			medalType = scoringResult.Medal;
 
-			Db.ExecuteNonQuery(
+			DB.ExecuteNonQuery(
 				"CustomerScoringResult_Insert",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("pCustomerId", customerId),
@@ -283,7 +283,7 @@
 				enableAutomaticReRejection = false;
 			}
 
-			DataTable defaultAccountsNumDataTable = Db.ExecuteReader(
+			DataTable defaultAccountsNumDataTable = DB.ExecuteReader(
 				"GetNumberOfDefaultAccounts",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId),
@@ -294,7 +294,7 @@
 			DataRow defaultAccountsNumResults = defaultAccountsNumDataTable.Rows[0];
 			numOfDefaultAccounts = int.Parse(defaultAccountsNumResults["NumOfDefaultAccounts"].ToString());
 
-			DataTable lastOfferDataTable = Db.ExecuteReader(
+			DataTable lastOfferDataTable = DB.ExecuteReader(
 				"GetLastOfferForAutomatedDecision",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId)
@@ -316,7 +316,7 @@
 			loanSourceId = int.Parse(lastOfferResults["LoanSourceID"].ToString());
 			isCustomerRepaymentPeriodSelectionAllowed = int.Parse(lastOfferResults["IsCustomerRepaymentPeriodSelectionAllowed"].ToString());
 
-			DataTable basicInterestRateDataTable = Db.ExecuteReader(
+			DataTable basicInterestRateDataTable = DB.ExecuteReader(
 				"GetBasicInterestRate",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("Score", inintialExperianConsumerScore)
@@ -352,12 +352,12 @@
 			if (appHomeOwner != "Home owner" && maxCapNotHomeOwner < offeredCreditLine)
 				offeredCreditLine = maxCapNotHomeOwner;
 
-			autoDecisionResponse = AutoDecisionMaker.MakeDecision(CreateAutoDecisionRequest(), Db);
+			autoDecisionResponse = AutoDecisionMaker.MakeDecision(CreateAutoDecisionRequest(), DB);
 			modelLoanOffer = autoDecisionResponse.ModelLoanOffer;
 
 			if (underwriterCheck)
 			{
-				Db.ExecuteNonQuery(
+				DB.ExecuteNonQuery(
 					"Update_Main_Strat_Finish_Date",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("UserId", customerId)
@@ -366,7 +366,7 @@
 				return;
 			} // if
 
-			Db.ExecuteNonQuery(
+			DB.ExecuteNonQuery(
 				"UpdateScoringResultsNew",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CreditResult", autoDecisionResponse.CreditResult),
@@ -377,7 +377,7 @@
 				new QueryParameter("ValidFor", autoDecisionResponse.AppValidFor)
 			);
 
-			Db.ExecuteNonQuery(
+			DB.ExecuteNonQuery(
 				"UpdateCashRequests",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId),
@@ -395,7 +395,7 @@
 			{
 				if (autoDecisionResponse.IsAutoApproval)
 				{
-					Db.ExecuteNonQuery(
+					DB.ExecuteNonQuery(
 						"UpdateAutoApproval",
 						CommandSpecies.StoredProcedure,
 						new QueryParameter("CustomerId", customerId),
@@ -435,7 +435,7 @@
 						);
 
 						strategyHelper.AddApproveIntoDecisionHistory(customerId, "Auto Approval");
-						Db.ExecuteNonQuery(
+						DB.ExecuteNonQuery(
 							"Update_Main_Strat_Finish_Date",
 							CommandSpecies.StoredProcedure,
 							new QueryParameter("UserId", customerId)
@@ -456,7 +456,7 @@
 						);
 
 						strategyHelper.AddApproveIntoDecisionHistory(customerId, "AutoApproval");
-						Db.ExecuteNonQuery(
+						DB.ExecuteNonQuery(
 							"Update_Main_Strat_Finish_Date",
 							CommandSpecies.StoredProcedure,
 							new QueryParameter("UserId", customerId)
@@ -465,7 +465,7 @@
 				}
 				else
 				{
-					Db.ExecuteNonQuery(
+					DB.ExecuteNonQuery(
 						"UpdateCashRequestsReApproval",
 						CommandSpecies.StoredProcedure,
 						new QueryParameter("CustomerId", customerId),
@@ -506,7 +506,7 @@
 
 					if (!enableAutomaticReApproval)
 					{
-						Db.ExecuteNonQuery(
+						DB.ExecuteNonQuery(
 							"Update_Main_Strat_Finish_Date",
 							CommandSpecies.StoredProcedure,
 							new QueryParameter("UserId", customerId)
@@ -527,7 +527,7 @@
 
 						strategyHelper.AddApproveIntoDecisionHistory(customerId, "Auto Re-Approval");
 
-						Db.ExecuteNonQuery(
+						DB.ExecuteNonQuery(
 							"Update_Main_Strat_Finish_Date",
 							CommandSpecies.StoredProcedure,
 							new QueryParameter("UserId", customerId)
@@ -553,7 +553,7 @@
 					strategyHelper.AddRejectIntoDecisionHistory(customerId, autoDecisionResponse.AutoRejectReason);
 				} // if
 
-				Db.ExecuteNonQuery(
+				DB.ExecuteNonQuery(
 					"Update_Main_Strat_Finish_Date",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("UserId", customerId)
@@ -574,7 +574,7 @@
 
 				mailer.SendToEzbob(variables, "Mandrill - User is waiting for decision", "User is now waiting for decision");
 
-				Db.ExecuteNonQuery(
+				DB.ExecuteNonQuery(
 					"Update_Main_Strat_Finish_Date",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("UserId", customerId)
@@ -727,7 +727,7 @@
 
 		private void ReadConfigurations()
 		{
-			DataTable dt = Db.ExecuteReader("MainStrategyGetConfigs", CommandSpecies.StoredProcedure);
+			DataTable dt = DB.ExecuteReader("MainStrategyGetConfigs", CommandSpecies.StoredProcedure);
 			DataRow results = dt.Rows[0];
 
 			rejectDefaultsCreditScore = int.Parse(results["Reject_Defaults_CreditScore"].ToString());
@@ -756,7 +756,7 @@
 
 		private void GerPersonalInfo()
 		{
-			DataTable dt = Db.ExecuteReader("MainStrategyGetPersonalInfo", CommandSpecies.StoredProcedure);
+			DataTable dt = DB.ExecuteReader("MainStrategyGetPersonalInfo", CommandSpecies.StoredProcedure);
 			DataRow results = dt.Rows[0];
 
 			customerStatusIsEnabled = Convert.ToBoolean(results["CustomerStatusIsEnabled"]);
@@ -787,7 +787,7 @@
 
 		private void UpdateExperianConsumer(string firstName, string surname, string postCode, string error, int score, int directorId)
 		{
-			Db.ExecuteNonQuery(
+			DB.ExecuteNonQuery(
 				"UpdateExperianConsumer",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("Name", firstName),
@@ -836,7 +836,7 @@
 
 		private void GetAddresses()
 		{
-			DataTable dt = Db.ExecuteReader("GetCustomerAddresses", CommandSpecies.StoredProcedure);
+			DataTable dt = DB.ExecuteReader("GetCustomerAddresses", CommandSpecies.StoredProcedure);
 			DataRow addressesResults = dt.Rows[0];
 			appLine1 = addressesResults["Line1"].ToString();
 			appLine2 = addressesResults["Line2"].ToString();
@@ -876,7 +876,7 @@
 						experianLimitedError = limitedData.Error;
 				} // if
 
-				Db.ExecuteNonQuery(
+				DB.ExecuteNonQuery(
 					"UpdateExperianBusiness",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("CompanyRefNumber", appLimitedRefNum),
@@ -903,7 +903,7 @@
 						experianNonLimitedError = nonlimitedData.Error;
 				} // if
 
-				Db.ExecuteNonQuery(
+				DB.ExecuteNonQuery(
 					"UpdateExperianBusiness",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("CompanyRefNumber", appNonLimitedRefNum),
@@ -1093,7 +1093,7 @@
 
 			if (useCustomIdHubAddress == 1)
 			{
-				DataTable dt = Db.ExecuteReader("GetPrevBwaResult", CommandSpecies.StoredProcedure);
+				DataTable dt = DB.ExecuteReader("GetPrevBwaResult", CommandSpecies.StoredProcedure);
 				experianBwaResult = dt.Rows[0]["BWAResult"].ToString();
 			}
 			else
@@ -1303,7 +1303,7 @@
 
 		private bool WaitForMarketplacesToFinishUpdates()
 		{
-			DataTable dt = Db.ExecuteReader(
+			DataTable dt = DB.ExecuteReader(
 				"MP_CustomerMarketplacesIsUpdated",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId)
@@ -1322,7 +1322,7 @@
 
 				Thread.Sleep(intervalWaitForMarketplacesUpdate);
 
-				dt = Db.ExecuteReader(
+				dt = DB.ExecuteReader(
 					"MP_CustomerMarketplacesIsUpdated",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("CustomerId", customerId)

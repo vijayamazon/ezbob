@@ -309,7 +309,7 @@ namespace EzBob.Web.Code.ApplicationCreator {
 
 		public void MoreAMLandBWAInformation(User user, string email, int userId, string firstName) {
 			if (useNewMailStrategies) {
-				ServiceClient.MoreAmLandBwaInformation(user.Id);
+				ServiceClient.MoreAmlAndBwaInformation(user.Id);
 			}
 			else {
 				var strategyParameters = new[] {
@@ -444,7 +444,7 @@ namespace EzBob.Web.Code.ApplicationCreator {
 				if (caisStratStatus.Any(x => OneOf(x)))
 					throw new Exception("Strategy already started");
 
-				CreateApplication(user, new StrategyParameter[] {}, _config.CAISNoUploadStrategyName);
+				CreateApplication(user, new StrategyParameter[] { }, _config.CAISNoUploadStrategyName);
 			}
 		}
 

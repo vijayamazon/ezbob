@@ -11,7 +11,7 @@
 		#region constructor
 
 		public XDaysDue(AConnection oDb, ASafeLog oLog) : base(oDb, oLog) {
-			mailer = new StrategiesMailer(Db, Log);
+			mailer = new StrategiesMailer(DB, Log);
 		} // constructor
 
 		#endregion constructor
@@ -27,7 +27,7 @@
 		#region property Execute
 
 		public override void Execute() {
-			DataTable dt = Db.ExecuteReader("GetCustomersFiveDaysDue", CommandSpecies.StoredProcedure);
+			DataTable dt = DB.ExecuteReader("GetCustomersFiveDaysDue", CommandSpecies.StoredProcedure);
 
 			foreach (DataRow row in dt.Rows) {
 				int loanScheduleId = int.Parse(row["id"].ToString());
@@ -48,14 +48,14 @@
 
 				mailer.SendToCustomerAndEzbob(variables, mail, "Mandrill - 5 days notice", subject);
 
-				Db.ExecuteNonQuery("UpdateFiveDaysDueMailSent",
+				DB.ExecuteNonQuery("UpdateFiveDaysDueMailSent",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("Id", loanScheduleId),
 					new QueryParameter("UpdateFiveDaysDueMailSent", true)
 				);
 			} // for each
 
-			dt = Db.ExecuteReader("GetCustomersTwoDaysDue", CommandSpecies.StoredProcedure);
+			dt = DB.ExecuteReader("GetCustomersTwoDaysDue", CommandSpecies.StoredProcedure);
 
 			foreach (DataRow row in dt.Rows) {
 				int loanScheduleId = int.Parse(row["id"].ToString());
@@ -76,7 +76,7 @@
 
 				mailer.SendToCustomerAndEzbob(variables, mail, "Mandrill - 2 days notice", subject);
 
-				Db.ExecuteNonQuery("UpdateTwoDaysDueMailSent",
+				DB.ExecuteNonQuery("UpdateTwoDaysDueMailSent",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("Id", loanScheduleId),
 					new QueryParameter("UpdateTwoDaysDueMailSent", true)
