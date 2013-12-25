@@ -90,7 +90,6 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
                 xhr.done (result) =>    
                     BlockUi "on"        
                     isWarning = result
-                    disabled =  waiting or !isStatusEnabled
                     that.model.set 'Disabled', newStatus
                     that.model.set 'IsWarning', isWarning
                     xhr2 = $.post "#{window.gRootPath}Underwriter/ApplicationInfo/LogStatusChange", {newStatus: newStatus, prevStatus: prevStatus, customerId: customerId}
