@@ -464,11 +464,20 @@ namespace EzService {
 				Log.Debug(oStrategyType + " constructor found, invoking...");
 
 				amd.UnderlyingThread = new Thread(() => {
-					((AStrategy)oCreator.Invoke(oParams.ToArray())).Execute();
+					try {
+						((AStrategy)oCreator.Invoke(oParams.ToArray())).Execute();
 
-					Log.Debug("Executing " + oStrategyType + " complete.");
+						Log.Debug("Executing " + oStrategyType + " complete.");
 
-					SaveActionStatus(amd, ActionStatus.Done);
+						SaveActionStatus(amd, ActionStatus.Done);
+					}
+					catch (Exception e) {
+						amd.Comment = e.Message;
+						SaveActionStatus(amd, ActionStatus.Failed);
+
+						Log.Alert(e, "Exception during executing " + oStrategyType + " strategy.");
+						throw new FaultException(e.Message);
+					} // try
 				});
 
 				amd.UnderlyingThread.Start();
