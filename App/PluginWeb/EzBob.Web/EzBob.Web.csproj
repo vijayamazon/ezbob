@@ -1661,6 +1661,10 @@
       <Project>{90cc3a5f-5bea-4c13-82b7-992adc41f854}</Project>
       <Name>ValueIntervals</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\EzService\EzServiceConfiguration\EzServiceConfiguration.csproj">
+      <Project>{1f4ab740-e9bb-4448-9c4d-22a191c297b9}</Project>
+      <Name>EzServiceConfiguration</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\HmrcHarvester\HmrcHarvester\HmrcHarvester.csproj">
       <Project>{dfc5b190-afa4-40a7-8237-8404687b4513}</Project>
       <Name>HmrcHarvester</Name>

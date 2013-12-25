@@ -11,13 +11,13 @@ namespace EzServiceHost {
 	class EzServiceHost : ServiceHost {
 		public EzServiceHost(Configuration oCfg, EzServiceInstanceRuntimeData oData) : base(
 			typeof(EzServiceImplementation),
-			new Uri(oCfg.GetAdminEndpointAddress()),
-			new Uri(oCfg.GetClientEndpointAddress())
+			new Uri(oCfg.AdminEndpointAddress),
+			new Uri(oCfg.ClientEndpointAddress)
 		) {
 			m_oCfg = oCfg;
 			m_oData = oData;
 
-			AddServiceEndpoint(typeof(IEzServiceAdmin), new NetTcpBinding(), m_oCfg.GetAdminEndpointAddress());
+			AddServiceEndpoint(typeof(IEzServiceAdmin), new NetTcpBinding(), m_oCfg.AdminEndpointAddress);
 
 			// To enable HTTP binding on custom port: open cmd.exe as administrator and
 			//     netsh http add urlacl url=http://+:7082/ user=ALEXBO-PC\alexbo
@@ -26,7 +26,7 @@ namespace EzServiceHost {
 			// To remove permission:
 			//     netsh http add urlacl url=http://+:7082/
 			// Mind the backslash at the end of the URL.
-			AddServiceEndpoint(typeof(IEzService), new NetHttpBinding(), m_oCfg.GetClientEndpointAddress());
+			AddServiceEndpoint(typeof(IEzService), new NetHttpBinding(), m_oCfg.ClientEndpointAddress);
 		} // constructor
 
 		#region protected

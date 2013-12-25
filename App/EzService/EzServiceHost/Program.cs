@@ -163,6 +163,8 @@ namespace EzServiceHost {
 
 			m_oCfg = new Configuration(m_sInstanceName, m_oDB, m_oLog);
 
+			m_oCfg.Init();
+
 			m_oHost = new EzServiceHost(m_oCfg, new EzServiceInstanceRuntimeData {
 				Host = this,
 				Log = m_oLog,

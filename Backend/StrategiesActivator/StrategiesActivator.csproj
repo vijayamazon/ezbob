@@ -76,6 +76,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\App\EzService\EzServiceConfiguration\EzServiceConfiguration.csproj">
+      <Project>{1F4AB740-E9BB-4448-9C4D-22A191C297B9}</Project>
+      <Name>EzServiceConfiguration</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\App\EzService\EzService\EzService.csproj">
       <Project>{15b3e0d2-6217-493a-a690-158c497f5318}</Project>
       <Name>EzService</Name>

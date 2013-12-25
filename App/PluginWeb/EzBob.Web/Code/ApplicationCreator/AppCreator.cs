@@ -454,9 +454,7 @@ namespace EzBob.Web.Code.ApplicationCreator {
 				x != ApplicationStrategyState.StrategyFinishedWithoutErrors &&
 				x != ApplicationStrategyState.StrategyFinishedWithErrors &&
 				x != ApplicationStrategyState.Error;
-		}
-
-		// OneOf
+		} // OneOf
 
 		public void CAISUpdate(User user, int caisId) {
 			if (useNewCaisStrategies) {

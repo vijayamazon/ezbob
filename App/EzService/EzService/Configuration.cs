@@ -2,27 +2,37 @@
 using System.Data;
 using Ezbob.Database;
 using Ezbob.Logger;
-using Newtonsoft.Json;
 
 namespace EzService {
-	#region class Configuration
-
-	public class Configuration {
+	public class Configuration : EzServiceConfiguration.Configuration {
 		#region public
 
 		#region constructor
 
-		public Configuration(string sInstanceName, AConnection oDB, ASafeLog oLog) {
-			oLog.Debug("Loading service configuration from DB for service instance {0}...", sInstanceName);
+		public Configuration(string sInstanceName, AConnection oDB, ASafeLog oLog) : base(sInstanceName) {
+			m_oDB = oDB;
+			m_oLog = new SafeLog(oLog);
+		} // constructor
 
-			DataTable oTbl = oDB.ExecuteReader(
+		#endregion constructor
+
+		#endregion public
+
+		#region protected
+
+		#region method LoadFromDB
+
+		protected override void LoadFromDB() {
+			m_oLog.Debug("Loading service configuration from DB for service instance {0}...", RequestedInstanceName);
+
+			DataTable oTbl = m_oDB.ExecuteReader(
 				"EzServiceLoadConfiguration",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("@InstanceName", sInstanceName)
+				new QueryParameter("@InstanceName", RequestedInstanceName)
 			);
 
 			if (oTbl.Rows.Count != 1)
-				throw new Exception(string.Format("Failed to load service configuration for service instance {0} from DB.", sInstanceName));
+				throw new Exception(string.Format("Failed to load service configuration for service instance {0} from DB.", RequestedInstanceName));
 
 			DataRow oRow = oTbl.Rows[0];
 
@@ -34,71 +44,31 @@ namespace EzService {
 
 			oTbl.Dispose();
 
-			if (!IsValid())
-				throw new Exception(string.Format("Invalid service configuration for service instance {0} has been loaded from DB.", sInstanceName));
+			m_oLog.Debug("Loading service configuration from DB for service instance {0} complete.", RequestedInstanceName);
+		} // LoadFromDB
 
-			oLog.Debug("Service configuration:");
-			oLog.Debug("Instance ID: {0}", InstanceID);
-			oLog.Debug("Main loop sleep time: {0}", SleepTimeout);
-			oLog.Debug("Client endpoint address: {0}", GetClientEndpointAddress());
-			oLog.Debug("Admin endpoint address: {0}", GetAdminEndpointAddress());
-			oLog.Debug("End of service configuration.");
+		#endregion method LoadFromDB
 
-			oLog.Debug("Loading service configuration from DB for service instance {0} complete.", sInstanceName);
-		} // constructor
+		#region method WriteToLog
 
-		#endregion constructor
+		protected override void WriteToLog() {
+			m_oLog.Debug("Service configuration:");
+			m_oLog.Debug("Instance ID: {0}", InstanceID);
+			m_oLog.Debug("Main loop sleep time: {0}", SleepTimeout);
+			m_oLog.Debug("Client endpoint address: {0}", ClientEndpointAddress);
+			m_oLog.Debug("Admin endpoint address: {0}", AdminEndpointAddress);
+			m_oLog.Debug("End of service configuration.");
+		} // WriteToLog
 
-		public int InstanceID { get; private set; }
-		public int SleepTimeout { get; private set; }
-		public int AdminPort { get; private set; }
-		public int ClientPort { get; private set; }
+		#endregion method WriteToLog
 
-		#region property HostName
-
-		public string HostName {
-			get { return m_sHostName; }
-			set { m_sHostName = (value ?? string.Empty).Trim(); }
-		} // HostName
-
-		private string m_sHostName;
-
-		#endregion property HostName
-
-		#region method GetClientEndpointAddress
-
-		public string GetClientEndpointAddress() {
-			return "http://" + HostName + ":" + ClientPort;
-		} // GetClientEndpointAddress
-
-		#endregion method GetClientEndpointAddress
-
-		#region method GetAdminEndpointAddress
-
-		public string GetAdminEndpointAddress() {
-			return "net.tcp://" + HostName + ":" + AdminPort;
-		} // GetAdminEndpointAddress
-
-		#endregion method GetAdminEndpointAddress
-
-		#endregion public
+		#endregion protected
 
 		#region private
 
-		private bool IsValid() {
-			return
-				!string.IsNullOrEmpty(HostName) &&
-				IsPortValid(AdminPort) &&
-				IsPortValid(ClientPort) &&
-				(SleepTimeout > 100);
-		} // IsValid
-
-		private bool IsPortValid(int nPort) {
-			return (1024 <= nPort) && (nPort <= 65535);
-		} // IsPortValid
+		private readonly AConnection m_oDB;
+		private readonly SafeLog m_oLog;
 
 		#endregion private
 	} // class Configuration
-
-	#endregion class Configuration
 } // namespace EzService
