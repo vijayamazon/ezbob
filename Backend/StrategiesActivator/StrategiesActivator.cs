@@ -50,23 +50,25 @@
 				IEnumerable<StrategyActivatorAttribute> oAttrList = mi.GetCustomAttributes<StrategyActivatorAttribute>();
 
 				if (oAttrList.Any()) {
-					oMethods[mi.Name] = mi;
+					oMethods[mi.Name.ToLower()] = mi;
 				}
 			} // foreach
 
-			string sKey = "Activate" + strategyName;
+			string sKey = strategyName.ToLower();
 
 			if (oMethods.ContainsKey(sKey)) {
 				oMethods[sKey].Invoke(this, new object[] { });
 			}
 			else {
 				Console.WriteLine("Strategy {0} is not supported", strategyName);
-				Console.WriteLine("Supported stratefies are: {0}", string.Join(", ", oMethods.Keys.Select(k => k.Substring(8))));
+				Console.WriteLine("Supported strategies are (case insensitive):\n\t{0}", string.Join("\n\t", oMethods.Keys));
 			}
 		} // Execute
 
+		#region strategy activators
+
 		[StrategyActivator]
-		private void ActivateGreeting() {
+		private void Greeting() {
 			int customerId;
 			if (args.Length != 3 || !int.TryParse(args[1], out customerId)) {
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> Greeting <CustomerId> <ConfirmEmailAddress>");
@@ -77,7 +79,7 @@
 		}
 
 		[StrategyActivator]
-		private void ActivateApprovedUser() {
+		private void ApprovedUser() {
 			int customerId;
 			decimal loanAmount;
 			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !decimal.TryParse(args[2], out loanAmount)) {
@@ -89,7 +91,7 @@
 		}
 
 		[StrategyActivator]
-		private void ActivateCashTransferred() {
+		private void CashTransferred() {
 			int customerId;
 			decimal amount;
 			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !decimal.TryParse(args[2], out amount)) {
@@ -101,7 +103,7 @@
 		}
 
 		[StrategyActivator]
-		private void ActivateEmailRolloverAdded() {
+		private void EmailRolloverAdded() {
 			int customerId;
 			decimal amount;
 			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !decimal.TryParse(args[2], out amount)) {
@@ -113,7 +115,7 @@
 		}
 
 		[StrategyActivator]
-		private void ActivateEmailUnderReview() {
+		private void EmailUnderReview() {
 			int customerId;
 			if (args.Length != 2 || !int.TryParse(args[1], out customerId)) {
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> EmailUnderReview <CustomerId>");
@@ -124,7 +126,7 @@
 		}
 
 		[StrategyActivator]
-		private void ActivateEscalated() {
+		private void Escalated() {
 			int customerId;
 			if (args.Length != 2 || !int.TryParse(args[1], out customerId)) {
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> Escalated <CustomerId>");
@@ -135,7 +137,7 @@
 		}
 
 		[StrategyActivator]
-		private void ActivateGetCashFailed() {
+		private void GetCashFailed() {
 			int customerId;
 			if (args.Length != 2 || !int.TryParse(args[1], out customerId)) {
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> GetCashFailed <CustomerId>");
@@ -146,7 +148,7 @@
 		}
 
 		[StrategyActivator]
-		private void ActivateLoanFullyPaid() {
+		private void LoanFullyPaid() {
 			int customerId;
 			if (args.Length != 3 || !int.TryParse(args[1], out customerId)) {
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> LoanFullyPaid <CustomerId> <loanRefNum>");
@@ -157,7 +159,7 @@
 		}
 
 		[StrategyActivator]
-		private void ActivateMoreAmlAndBwaInformation() {
+		private void MoreAmlAndBwaInformation() {
 			int customerId;
 			if (args.Length != 2 || !int.TryParse(args[1], out customerId)) {
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> MoreAmlAndBwaInformation <CustomerId>");
@@ -168,7 +170,7 @@
 		}
 
 		[StrategyActivator]
-		private void ActivateMoreAmlInformation() {
+		private void MoreAmlInformation() {
 			int customerId;
 			if (args.Length != 2 || !int.TryParse(args[1], out customerId)) {
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> MoreAmlInformation <CustomerId>");
@@ -178,7 +180,7 @@
 		}
 
 		[StrategyActivator]
-		private void ActivateMoreBwaInformation() {
+		private void MoreBwaInformation() {
 			int customerId;
 			if (args.Length != 2 || !int.TryParse(args[1], out customerId)) {
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> MoreBwaInformation <CustomerId>");
@@ -189,7 +191,7 @@
 		}
 
 		[StrategyActivator]
-		private void ActivatePasswordChanged() {
+		private void PasswordChanged() {
 			int customerId;
 			if (args.Length != 3 || !int.TryParse(args[1], out customerId)) {
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> PasswordChanged <CustomerId> <password>");
@@ -200,7 +202,7 @@
 		}
 
 		[StrategyActivator]
-		private void ActivatePasswordRestored() {
+		private void PasswordRestored() {
 			int customerId;
 			if (args.Length != 3 || !int.TryParse(args[1], out customerId)) {
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> PasswordRestored <CustomerId> <password>");
@@ -211,7 +213,7 @@
 		}
 
 		[StrategyActivator]
-		private void ActivatePayEarly() {
+		private void PayEarly() {
 			int customerId;
 			decimal amount;
 			if (args.Length != 4 || !int.TryParse(args[1], out customerId) || !decimal.TryParse(args[2], out amount)) {
@@ -223,7 +225,7 @@
 		}
 
 		[StrategyActivator]
-		private void ActivatePayPointAddedByUnderwriter() {
+		private void PayPointAddedByUnderwriter() {
 			int customerId, underwriterId;
 			if (args.Length != 5 || !int.TryParse(args[1], out customerId) || !int.TryParse(args[4], out underwriterId)) {
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> PayPointAddedByUnderwriter <CustomerId> <cardno> <underwriterName> <underwriterId>");
@@ -234,7 +236,7 @@
 		}
 
 		[StrategyActivator]
-		private void ActivatePayPointNameValidationFailed() {
+		private void PayPointNameValidationFailed() {
 			int customerId;
 			if (args.Length != 3 || !int.TryParse(args[1], out customerId)) {
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> PayPointNameValidationFailed <CustomerId> <cardHodlerName>");
@@ -245,7 +247,7 @@
 		}
 
 		[StrategyActivator]
-		private void ActivateRejectUser() {
+		private void RejectUser() {
 			int customerId;
 			if (args.Length != 2 || !int.TryParse(args[1], out customerId)) {
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> RejectUser <CustomerId>");
@@ -256,7 +258,7 @@
 		}
 
 		[StrategyActivator]
-		private void ActivateRenewEbayToken() {
+		private void RenewEbayToken() {
 			int customerId;
 			if (args.Length != 4 || !int.TryParse(args[1], out customerId)) {
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> RenewEbayToken <CustomerId> <marketplaceName> <eBayAddress>");
@@ -267,7 +269,7 @@
 		}
 
 		[StrategyActivator]
-		private void ActivateRequestCashWithoutTakenLoan() {
+		private void RequestCashWithoutTakenLoan() {
 			int customerId;
 			if (args.Length != 2 || !int.TryParse(args[1], out customerId)) {
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> RequestCashWithoutTakenLoan <CustomerId>");
@@ -278,7 +280,7 @@
 		}
 
 		[StrategyActivator]
-		private void ActivateSendEmailVerification() {
+		private void SendEmailVerification() {
 			int customerId;
 			if (args.Length != 3 || !int.TryParse(args[1], out customerId)) {
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> SendEmailVerification <CustomerId> <address>");
@@ -289,7 +291,7 @@
 		}
 
 		[StrategyActivator]
-		private void ActivateThreeInvalidAttempts() {
+		private void ThreeInvalidAttempts() {
 			int customerId;
 			if (args.Length != 3 || !int.TryParse(args[1], out customerId)) {
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> ThreeInvalidAttempts <CustomerId> <password>");
@@ -300,7 +302,7 @@
 		}
 
 		[StrategyActivator]
-		private void ActivateTransferCashFailed() {
+		private void TransferCashFailed() {
 			int customerId;
 			if (args.Length != 2 || !int.TryParse(args[1], out customerId)) {
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> TransferCashFailed <CustomerId>");
@@ -311,7 +313,7 @@
 		}
 
 		[StrategyActivator]
-		private void ActivateCaisGenerate() {
+		private void CaisGenerate() {
 			int underwriterId;
 			if (args.Length != 2 || !int.TryParse(args[1], out underwriterId)) {
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> CaisGenerate <underwriterId>");
@@ -322,7 +324,7 @@
 		}
 
 		[StrategyActivator]
-		private void ActivateCaisUpdate() {
+		private void CaisUpdate() {
 			int caisId;
 			if (args.Length != 2 || !int.TryParse(args[1], out caisId)) {
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> CaisUpdate <caisId>");
@@ -333,7 +335,7 @@
 		}
 
 		[StrategyActivator]
-		private void ActivateFirstOfMonthStatusNotifier() {
+		private void FirstOfMonthStatusNotifier() {
 			if (args.Length != 1) {
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> FirstOfMonthStatusNotifier");
 				return;
@@ -343,7 +345,7 @@
 		}
 
 		[StrategyActivator]
-		private void ActivateFraudChecker() {
+		private void FraudChecker() {
 			int customerId;
 			if (args.Length != 2 || !int.TryParse(args[1], out customerId)) {
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> FraudChecker <CustomerId>");
@@ -354,7 +356,7 @@
 		}
 
 		[StrategyActivator]
-		private void ActivateLateBy14Days() {
+		private void LateBy14Days() {
 			if (args.Length != 1) {
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> LateBy14Days");
 				return;
@@ -364,7 +366,7 @@
 		}
 
 		[StrategyActivator]
-		private void ActivatePayPointCharger() {
+		private void PayPointCharger() {
 			if (args.Length != 1) {
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> PayPointCharger");
 				return;
@@ -374,7 +376,7 @@
 		}
 
 		[StrategyActivator]
-		private void ActivateSetLateLoanStatus() {
+		private void SetLateLoanStatus() {
 			if (args.Length != 1) {
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> SetLateLoanStatus");
 				return;
@@ -384,7 +386,7 @@
 		}
 
 		[StrategyActivator]
-		private void ActivateCustomerMarketPlaceAdded() {
+		private void CustomerMarketPlaceAdded() {
 			int customerId, marketplaceId;
 			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !int.TryParse(args[2], out marketplaceId)) {
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> CustomerMarketPlaceAdded <CustomerId> <CustomerMarketplaceId>");
@@ -395,7 +397,7 @@
 		}
 
 		[StrategyActivator]
-		private void ActivateUpdateAllMarketplaces() {
+		private void UpdateAllMarketplaces() {
 			int customerId;
 			if (args.Length != 2 || !int.TryParse(args[1], out customerId)) {
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> UpdateAllMarketplaces <CustomerId>");
@@ -406,7 +408,7 @@
 		}
 
 		[StrategyActivator]
-		private void ActivateUpdateTransactionStatus() {
+		private void UpdateTransactionStatus() {
 			if (args.Length != 1) {
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> UpdateTransactionStatus");
 				return;
@@ -416,7 +418,7 @@
 		}
 
 		[StrategyActivator]
-		private void ActivateXDaysDue() {
+		private void XDaysDue() {
 			if (args.Length != 1) {
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> XDaysDue");
 				return;
@@ -426,7 +428,7 @@
 		}
 
 		[StrategyActivator]
-		private void ActivateMainStrategy() {
+		private void MainStrategy() {
 			int customerId, avoidAutoDescison;
 			NewCreditLineOption newCreditLineOption;
 			if (args.Length == 4) {
@@ -456,5 +458,7 @@
 			Console.WriteLine("OR");
 			Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> MainStrategy <customerId> <checkType> <houseNumber> <houseName> <street> <district> <town> <county> <postcode> <bankAccount> <sortCode> <avoidAutoDescison>");
 		}
+
+		#endregion strategy activators
 	}
 }

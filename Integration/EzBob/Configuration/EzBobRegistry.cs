@@ -50,6 +50,7 @@
 			var bobconfig = EnvironmentConfiguration.Configuration.GetCurrentConfiguration<ConfigurationRootBob>();
 			For<IMandrillConfig>().Use(bobconfig.MandrillConfig);
 			For<ILoanRepository>().Use<LoanRepository>();
+			For<ILoanScheduleRepository>().Use<LoanScheduleRepository>();
 		}
 	}
 }
