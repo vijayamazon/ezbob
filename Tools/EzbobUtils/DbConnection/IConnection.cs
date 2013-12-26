@@ -28,6 +28,17 @@ namespace Ezbob.Database {
 
 	#endregion enum CommandSpecies
 
+	#region enum LogVerbosityLevel
+
+	public enum LogVerbosityLevel {
+		Compact,
+		Verbose
+	} // enum LogVerbosityLevel
+
+	#endregion enum LogVerbosityLevel
+
+	#region interface IConnection
+
 	public interface IConnection {
 		T ExecuteScalar<T>(string sQuery, params QueryParameter[] aryParams);
 		DataTable ExecuteReader(string sQuery, params QueryParameter[] aryParams);
@@ -41,4 +52,6 @@ namespace Ezbob.Database {
 
 		string DateToString(DateTime oDate);
 	} // IConnection
+
+	#endregion interface IConnection
 } // namespace Ezbob.Database

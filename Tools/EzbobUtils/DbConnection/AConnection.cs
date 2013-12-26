@@ -10,6 +10,8 @@ using System.Configuration;
 using Ezbob.Logger;
 
 namespace Ezbob.Database {
+	using System.Globalization;
+
 	public abstract class AConnection : SafeLog, IConnection {
 		#region public
 
@@ -78,6 +80,17 @@ namespace Ezbob.Database {
 
 		#endregion IConnection implementation
 
+		#region property LogVerbosityLevel
+
+		public virtual LogVerbosityLevel LogVerbosityLevel {
+			get { return m_nLogVerbosityLevel; }
+			set { m_nLogVerbosityLevel = value; }
+		} // LogVerbosityLevel
+
+		private LogVerbosityLevel m_nLogVerbosityLevel;
+
+		#endregion property LogVerbosityLevel
+
 		#endregion public
 
 		#region protected
@@ -87,11 +100,13 @@ namespace Ezbob.Database {
 		protected AConnection(ASafeLog log = null, string sConnectionString = null) : base(log) {
 			Env = new Ezbob.Context.Environment(log);
 			m_sConnectionString = sConnectionString;
+			m_nLogVerbosityLevel = LogVerbosityLevel.Compact;
 		} // constructor
 
 		protected AConnection(Ezbob.Context.Environment oEnv, ASafeLog log = null) : base(log) {
 			Env = oEnv;
 			m_sConnectionString = null;
+			m_nLogVerbosityLevel = LogVerbosityLevel.Compact;
 		} // Env
 
 		#endregion constructor
@@ -131,7 +146,7 @@ namespace Ezbob.Database {
 					throw new Ezbob.Database.DbException(sMsg, e);
 				} // try
 
-				Info(string.Format("ConnectionString: {0}", m_sConnectionString));
+				Info("ConnectionString: {0}", m_sConnectionString);
 
 				return m_sConnectionString;
 			} // get
@@ -165,9 +180,9 @@ namespace Ezbob.Database {
 						throw;
 
 					if (e.Number == 1205)
-						Warn(string.Format("Deadlock, retrying {0}", e));
+						Warn("Deadlock, retrying {0}", e);
 					else if (e.Number == -2)
-						Warn(string.Format("Timeout, retrying {0}", e));
+						Warn("Timeout, retrying {0}", e);
 					else
 						throw;
 
@@ -199,13 +214,19 @@ namespace Ezbob.Database {
 			if ((nMode == ExecMode.ForEachRow) && ReferenceEquals(oAction, null))
 				throw new DbException("Callback action not specified in 'ForEachRow' call.");
 
-			var sb = new StringBuilder();
+			var oArgsForLog = new StringBuilder();
+
+			LogVerbosityLevel nLogVerbosityLevel = LogVerbosityLevel;
 
 			foreach (var prm in aryParams)
-				sb.Append(sb.Length > 0 ? ", " : " with parameters: ").Append(prm);
+				oArgsForLog.Append(oArgsForLog.Length > 0 ? ", " : string.Empty).Append(prm);
+
+			string sArgsForLog = "(" + oArgsForLog + ")";
 
 			Guid guid = Guid.NewGuid();
-			Debug("Starting to run query:\n\tid = {0}\n\t{1}{2}", guid, spName, sb);
+
+			if (nLogVerbosityLevel == LogVerbosityLevel.Verbose)
+				Debug("Starting to run query:\n\tid = {0}\n\t{1}{2}", guid, spName, sArgsForLog);
 
 			try {
 				return Retry(() => {
@@ -243,27 +264,49 @@ namespace Ezbob.Database {
 							switch (nMode) {
 							case ExecMode.Scalar:
 								object value = command.ExecuteScalar();
-								PublishRunningTime(guid, sw);
+								PublishRunningTime(nLogVerbosityLevel, spName, sArgsForLog, guid, sw);
 								return value;
 
 							case ExecMode.Reader: {
 								var oReader = command.ExecuteReader();
-								PublishRunningTime(guid, sw);
+
+								long nPrevStopwatchValue = sw.ElapsedMilliseconds;
+
+								if (nLogVerbosityLevel == LogVerbosityLevel.Verbose)
+									PublishRunningTime(nLogVerbosityLevel, spName, sArgsForLog, guid, sw);
+
 								var dataTable = new DataTable();
 								dataTable.Load(oReader);
-								PublishRunningTime(guid, sw, "data loaded");
+
+								string sMsg = string.Empty;
+
+								switch (nLogVerbosityLevel) {
+								case LogVerbosityLevel.Compact:
+									sMsg = "completed and data loaded";
+									break;
+
+								case LogVerbosityLevel.Verbose:
+									sMsg = "data loaded";
+									break;
+
+								default:
+									throw new ArgumentOutOfRangeException();
+								} // switch
+
+								PublishRunningTime(nLogVerbosityLevel, spName, sArgsForLog, guid, sw, nPrevStopwatchValue, sMsg);
 								return dataTable;
 							} // ExecMode.Reader
 
 							case ExecMode.NonQuery: {
 								int nResult = command.ExecuteNonQuery();
-								PublishRunningTime(guid, sw, string.Format("- {0} row{1} affected", nResult, nResult == 1 ? "" : "s"));
+								string sResult = ((nResult == 0) || (nResult == -1)) ? "no" : nResult.ToString(CultureInfo.InvariantCulture);
+								PublishRunningTime(nLogVerbosityLevel, spName, sArgsForLog, guid, sw, sAuxMsg: string.Format("- {0} row{1} changed", sResult, nResult == 1 ? "" : "s"));
 								return nResult;
 							} // ExecMode.NonQuery
 
 							case ExecMode.ForEachRow: {
 								var oReader = command.ExecuteReader();
-								PublishRunningTime(guid, sw);
+								PublishRunningTime(nLogVerbosityLevel, spName, sArgsForLog, guid, sw);
 
 								bool bStop = false;
 
@@ -308,12 +351,41 @@ namespace Ezbob.Database {
 
 		#region method PublishRunningTime
 
-		protected void PublishRunningTime(Guid guid, Stopwatch sw, string sMsg = "completed", string sAuxMsg = "") {
-			sAuxMsg = (sAuxMsg ?? "").Trim();
+		protected void PublishRunningTime(
+			LogVerbosityLevel nLogVerbosityLevel,
+			string sSpName,
+			string sArgsForLog,
+			Guid guid,
+			Stopwatch sw,
+			long nPrevStopwatchValue = -1,
+			string sMsg = "completed",
+			string sAuxMsg = ""
+		) {
+			long nCurStopwatchValue = sw.ElapsedMilliseconds;
+
+			sAuxMsg = (sAuxMsg ?? string.Empty).Trim();
 			if (sAuxMsg != string.Empty)
 				sAuxMsg = " " + sAuxMsg;
 
-			Debug("Query {1} {2} in {0}ms{3}", sw.ElapsedMilliseconds, guid, sMsg, sAuxMsg);
+			switch (nLogVerbosityLevel) {
+			case LogVerbosityLevel.Compact:
+				string sTime;
+
+				if (nPrevStopwatchValue == -1)
+					sTime = nCurStopwatchValue + "ms";
+				else
+					sTime = nPrevStopwatchValue + "ms / " + (nCurStopwatchValue - nPrevStopwatchValue) + "ms";
+
+				Debug("Query {0} in {1}{2}. Request: {3}{4}", sMsg, sTime, sAuxMsg, sSpName, sArgsForLog);
+				break;
+
+			case LogVerbosityLevel.Verbose:
+				Debug("Query {1} {2} in {0}ms{3} since query start.", nCurStopwatchValue, guid, sMsg, sAuxMsg);
+				break;
+
+			default:
+				throw new ArgumentOutOfRangeException("nLogVerbosityLevel");
+			} // switch
 		} // PublishRunnigTime
 
 		#endregion method PublishRunningTime
