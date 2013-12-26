@@ -120,7 +120,7 @@
 		public override void Execute()
 		{
 			ReadConfigurations();
-			GerPersonalInfo();
+			GetPersonalInfo();
 			strategyHelper.GetZooplaData(customerId);
 
 			if (!customerStatusIsEnabled || customerStatusIsWarning)
@@ -752,11 +752,11 @@
 
 		#endregion method ReadConfigurations
 
-		#region method GerPersonalInfo
+		#region method GetPersonalInfo
 
-		private void GerPersonalInfo()
+		private void GetPersonalInfo()
 		{
-			DataTable dt = DB.ExecuteReader("MainStrategyGetPersonalInfo", CommandSpecies.StoredProcedure);
+			DataTable dt = DB.ExecuteReader("MainStrategyGetPersonalInfo", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
 			DataRow results = dt.Rows[0];
 
 			customerStatusIsEnabled = Convert.ToBoolean(results["CustomerStatusIsEnabled"]);
@@ -779,9 +779,9 @@
 			appBankAccountType = results["BankAccountType"].ToString();
 			int numOfLoans = int.Parse(results["NumOfLoans"].ToString());
 			isFirstLoan = numOfLoans == 0;
-		} // GerPersonalInfo
+		} // GetPersonalInfo
 
-		#endregion method GerPersonalInfo
+		#endregion method GetPersonalInfo
 
 		#region method UpdateExperianConsumer
 

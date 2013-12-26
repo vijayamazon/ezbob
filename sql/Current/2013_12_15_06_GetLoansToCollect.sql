@@ -14,14 +14,17 @@ BEGIN
 	SELECT 
 		ls.id, 
 		ls.LoanId,
-		CASE 
-			WHEN 
-				(SELECT MAX(ls1.Date) FROM LoanSchedule ls1 WHERE ls.LoanId = ls1.LoanId) = ls.date
-			THEN 
-				1 
-			ELSE 
-				0 
-		END AS LastInstallment,
+		CAST(
+			CASE 
+				WHEN 
+					(SELECT MAX(ls1.Date) FROM LoanSchedule ls1 WHERE ls.LoanId = ls1.LoanId) = ls.date
+				THEN 
+					1 
+				ELSE 
+					0 
+			END 
+		AS BIT
+		) AS LastInstallment,
 		l.CustomerId, 
 		ls.CustomInstallmentDate
 	FROM 

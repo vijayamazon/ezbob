@@ -9,7 +9,7 @@ CREATE PROCEDURE [dbo].[GetApprovalConfigs]
 AS
 BEGIN
 	SELECT
-		(SELECT convert(INT, Value) FROM ConfigurationVariables WHERE Name = 'AutoApproveIsSilent') AS AutoApproveIsSilent,
+		(SELECT convert(BIT, Value) FROM ConfigurationVariables WHERE Name = 'AutoApproveIsSilent') AS AutoApproveIsSilent,
 		(SELECT Value FROM ConfigurationVariables WHERE Name = 'AutoApproveSilentTemplateName') AS AutoApproveSilentTemplateName,
 		(SELECT Value FROM ConfigurationVariables WHERE Name = 'AutoApproveSilentToAddress') AS AutoApproveSilentToAddress
 END

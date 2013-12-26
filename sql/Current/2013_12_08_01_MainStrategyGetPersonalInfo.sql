@@ -19,9 +19,11 @@ BEGIN
 		@CustomerStatusIsEnabled = IsEnabled, 
 		@CustomerStatusIsWarning = IsWarning
 	FROM
-		CustomerStatuses
+		CustomerStatuses,
+		Customer
 	WHERE
-		Id = @CustomerId
+		Customer.CollectionStatus = CustomerStatuses.Id AND
+		Customer.Id = @CustomerId
 	
 	SELECT 
 		@NumOfMps = COUNT(cmp.Id)

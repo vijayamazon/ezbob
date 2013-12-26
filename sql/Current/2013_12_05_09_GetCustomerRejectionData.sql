@@ -11,7 +11,7 @@ CREATE PROCEDURE [dbo].[GetCustomerRejectionData]
 	 @Reject_Defaults_Amount INT)
 AS
 BEGIN
-	DECLARE @HasAccountingAccounts INT,
+	DECLARE @HasAccountingAccounts BIT,
 			@ErrorMPsNum INT,
 			@Counter INT,
 			@ApprovalNum INT,

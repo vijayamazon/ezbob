@@ -430,22 +430,22 @@
 			int customerId, avoidAutoDescison;
 			NewCreditLineOption newCreditLineOption;
 			if (args.Length == 4) {
-				if (int.TryParse(args[2], out customerId) && Enum.TryParse(args[3], out newCreditLineOption) && int.TryParse(args[4], out avoidAutoDescison)) {
+				if (int.TryParse(args[1], out customerId) && Enum.TryParse(args[2], out newCreditLineOption) && int.TryParse(args[3], out avoidAutoDescison)) {
 					serviceClient.MainStrategy1(customerId, newCreditLineOption, avoidAutoDescison);
 					return;
 				}
 			}
 			else if (args.Length == 5) {
 				bool isUnderwriterForced;
-				if (int.TryParse(args[2], out customerId) && Enum.TryParse(args[3], out newCreditLineOption) && int.TryParse(args[4], out avoidAutoDescison) && bool.TryParse(args[5], out isUnderwriterForced)) {
+				if (int.TryParse(args[1], out customerId) && Enum.TryParse(args[2], out newCreditLineOption) && int.TryParse(args[3], out avoidAutoDescison) && bool.TryParse(args[4], out isUnderwriterForced)) {
 					serviceClient.MainStrategy2(customerId, newCreditLineOption, avoidAutoDescison, isUnderwriterForced);
 					return;
 				}
 			}
 			else if (args.Length == 14) {
 				int checkType;
-				if (int.TryParse(args[2], out customerId) && int.TryParse(args[3], out checkType) && int.TryParse(args[13], out avoidAutoDescison)) {
-					serviceClient.MainStrategy3(customerId, checkType, args[4], args[5], args[6], args[7], args[8], args[9], args[10], args[11], args[12], avoidAutoDescison);
+				if (int.TryParse(args[1], out customerId) && int.TryParse(args[2], out checkType) && int.TryParse(args[12], out avoidAutoDescison)) {
+					serviceClient.MainStrategy3(customerId, checkType, args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10], args[11], avoidAutoDescison);
 					return;
 				}
 			}

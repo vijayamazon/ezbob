@@ -18,7 +18,7 @@ namespace EzBob.Backend.Strategies {
 		} // Name
 
 		public override void Execute() {
-			DataTable dt = DB.ExecuteReader("GetCaisFileData", CommandSpecies.StoredProcedure);
+			DataTable dt = DB.ExecuteReader("GetCaisFileData", CommandSpecies.StoredProcedure, new QueryParameter("CaisId", caisId));
 			DataRow results = dt.Rows[0];
 
 			string fileName = results["FileName"].ToString();
