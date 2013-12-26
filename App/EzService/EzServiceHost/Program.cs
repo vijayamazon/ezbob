@@ -28,6 +28,7 @@ using Scorto.Configuration.Loader;
 using ISession = NHibernate.ISession;
 
 namespace EzServiceHost {
+	using EzBob.Configuration;
 	using EzServiceConfigurationLoader;
 
 	public class Program : IHost {
@@ -123,6 +124,8 @@ namespace EzServiceHost {
 				x.For<ISession>().LifecycleIs(new ThreadLocalStorageLifecycle()).Use(ctx => NHibernateManager.SessionFactory.OpenSession());
 				x.For<ISessionFactory>().Use(() => NHibernateManager.SessionFactory);
 			});
+
+			ObjectFactory.Configure(x => x.AddRegistry<EzBobRegistry>());
 		} // constructor
 
 		#endregion constructor

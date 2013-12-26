@@ -129,6 +129,10 @@
       <Project>{590c01c7-cf2c-4d5b-a307-3eb7ec61fb0d}</Project>
       <Name>EKM</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\EzBob\EzBob.csproj">
+      <Project>{CB5B04A6-76C2-43C4-9A8F-20EE2601CB11}</Project>
+      <Name>EzBob</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\FreeAgent\FreeAgent.csproj">
       <Project>{ee7f496f-963f-4383-b0c2-3bcf9fc15511}</Project>
       <Name>FreeAgent</Name>
