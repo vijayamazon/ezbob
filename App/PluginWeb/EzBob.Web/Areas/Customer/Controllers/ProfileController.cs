@@ -118,7 +118,7 @@
 
 			var cashRequest = _crBuilder.CreateCashRequest(customer);
 
-			_crBuilder.ForceEvaluate(customer, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, false);
+			_crBuilder.ForceEvaluate(customer.Id, customer, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, false);
 
 			var yodlees = customer.GetYodleeAccounts().ToList();
 			var config = ObjectFactory.GetInstance<IEzBobConfiguration>();

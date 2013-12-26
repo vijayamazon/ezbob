@@ -5,7 +5,6 @@
 	using System.ServiceModel;
 	using EzServiceConfigurationLoader;
 	using System;
-	using EzBob.Backend.Strategies;
 	using EzServiceReference;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -80,14 +79,16 @@
 
 		[StrategyActivator]
 		private void ApprovedUser() {
+			int underwriterId;
 			int customerId;
 			decimal loanAmount;
-			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !decimal.TryParse(args[2], out loanAmount)) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> ApprovedUser <CustomerId> <loanAmount>");
+
+			if (args.Length != 4 || !int.TryParse(args[1], out underwriterId) || !int.TryParse(args[2], out customerId) || !decimal.TryParse(args[3], out loanAmount)) {
+				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> ApprovedUser <Underwriter ID> <CustomerId> <loanAmount>");
 				return;
 			}
 
-			serviceClient.ApprovedUser(customerId, loanAmount);
+			serviceClient.ApprovedUser(underwriterId, customerId, loanAmount);
 		}
 
 		[StrategyActivator]
@@ -160,34 +161,37 @@
 
 		[StrategyActivator]
 		private void MoreAmlAndBwaInformation() {
+			int underwriterId;
 			int customerId;
-			if (args.Length != 2 || !int.TryParse(args[1], out customerId)) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> MoreAmlAndBwaInformation <CustomerId>");
+			if (args.Length != 3 || !int.TryParse(args[1], out underwriterId) || !int.TryParse(args[2], out customerId)) {
+				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> MoreAmlAndBwaInformation <Underwriter ID> <CustomerId>");
 				return;
 			}
 
-			serviceClient.MoreAmlAndBwaInformation(customerId);
+			serviceClient.MoreAmlAndBwaInformation(underwriterId, customerId);
 		}
 
 		[StrategyActivator]
 		private void MoreAmlInformation() {
+			int underwriterId;
 			int customerId;
-			if (args.Length != 2 || !int.TryParse(args[1], out customerId)) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> MoreAmlInformation <CustomerId>");
+			if (args.Length != 3 || !int.TryParse(args[1], out underwriterId) || !int.TryParse(args[2], out customerId)) {
+				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> MoreAmlInformation <Underwriter ID> <CustomerId>");
 				return;
 			}
-			serviceClient.MoreAmlInformation(customerId);
+			serviceClient.MoreAmlInformation(underwriterId, customerId);
 		}
 
 		[StrategyActivator]
 		private void MoreBwaInformation() {
+			int underwriterId;
 			int customerId;
-			if (args.Length != 2 || !int.TryParse(args[1], out customerId)) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> MoreBwaInformation <CustomerId>");
+			if (args.Length != 3 || !int.TryParse(args[1], out underwriterId) || !int.TryParse(args[2], out customerId)) {
+				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> MoreBwaInformation <Underwriter ID> <CustomerId>");
 				return;
 			}
 
-			serviceClient.MoreBwaInformation(customerId);
+			serviceClient.MoreBwaInformation(underwriterId, customerId);
 		}
 
 		[StrategyActivator]
@@ -237,24 +241,26 @@
 
 		[StrategyActivator]
 		private void PayPointNameValidationFailed() {
+			int underwriterId;
 			int customerId;
-			if (args.Length != 3 || !int.TryParse(args[1], out customerId)) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> PayPointNameValidationFailed <CustomerId> <cardHodlerName>");
+			if (args.Length != 4 || !int.TryParse(args[1], out underwriterId) || !int.TryParse(args[2], out customerId)) {
+				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> PayPointNameValidationFailed <Underwriter ID> <CustomerId> <cardHodlerName>");
 				return;
 			}
 
-			serviceClient.PayPointNameValidationFailed(customerId, args[2]);
+			serviceClient.PayPointNameValidationFailed(underwriterId, customerId, args[2]);
 		}
 
 		[StrategyActivator]
 		private void RejectUser() {
+			int underwriterId;
 			int customerId;
-			if (args.Length != 2 || !int.TryParse(args[1], out customerId)) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> RejectUser <CustomerId>");
+			if (args.Length != 3 || !int.TryParse(args[1], out underwriterId) || !int.TryParse(args[2], out customerId)) {
+				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> RejectUser <Underwriter ID> <CustomerId>");
 				return;
 			}
 
-			serviceClient.RejectUser(customerId);
+			serviceClient.RejectUser(underwriterId, customerId);
 		}
 
 		[StrategyActivator]
@@ -325,13 +331,14 @@
 
 		[StrategyActivator]
 		private void CaisUpdate() {
+			int underwriterId;
 			int caisId;
-			if (args.Length != 2 || !int.TryParse(args[1], out caisId)) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> CaisUpdate <caisId>");
+			if (args.Length != 3 || !int.TryParse(args[1], out underwriterId) || !int.TryParse(args[2], out caisId)) {
+				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> CaisUpdate <Underwriter ID> <caisId>");
 				return;
 			}
 
-			serviceClient.CaisUpdate(caisId);
+			serviceClient.CaisUpdate(underwriterId, caisId);
 		}
 
 		[StrategyActivator]
@@ -429,34 +436,40 @@
 
 		[StrategyActivator]
 		private void MainStrategy() {
+			int underwriterId;
 			int customerId, avoidAutoDescison;
 			NewCreditLineOption newCreditLineOption;
-			if (args.Length == 4) {
-				if (int.TryParse(args[1], out customerId) && Enum.TryParse(args[2], out newCreditLineOption) && int.TryParse(args[3], out avoidAutoDescison)) {
-					serviceClient.MainStrategy1(customerId, newCreditLineOption, avoidAutoDescison);
-					return;
-				}
-			}
-			else if (args.Length == 5) {
-				bool isUnderwriterForced;
-				if (int.TryParse(args[1], out customerId) && Enum.TryParse(args[2], out newCreditLineOption) && int.TryParse(args[3], out avoidAutoDescison) && bool.TryParse(args[4], out isUnderwriterForced)) {
-					serviceClient.MainStrategy2(customerId, newCreditLineOption, avoidAutoDescison, isUnderwriterForced);
-					return;
-				}
-			}
-			else if (args.Length == 14) {
-				int checkType;
-				if (int.TryParse(args[1], out customerId) && int.TryParse(args[2], out checkType) && int.TryParse(args[12], out avoidAutoDescison)) {
-					serviceClient.MainStrategy3(customerId, checkType, args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10], args[11], avoidAutoDescison);
-					return;
-				}
-			}
 
-			Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> MainStrategy <customerId> <newCreditLineOption> <avoidAutoDescison>");
+			switch (args.Length) {
+			case 5:
+				if (int.TryParse(args[1], out underwriterId) && int.TryParse(args[2], out customerId) && Enum.TryParse(args[3], out newCreditLineOption) && int.TryParse(args[4], out avoidAutoDescison)) {
+					serviceClient.MainStrategy1(underwriterId, customerId, newCreditLineOption, avoidAutoDescison);
+					return;
+				}
+				break;
+
+			case  6:
+				bool isUnderwriterForced;
+				if (int.TryParse(args[1], out underwriterId) && int.TryParse(args[2], out customerId) && Enum.TryParse(args[3], out newCreditLineOption) && int.TryParse(args[4], out avoidAutoDescison) && bool.TryParse(args[5], out isUnderwriterForced)) {
+					serviceClient.MainStrategy2(underwriterId, customerId, newCreditLineOption, avoidAutoDescison, isUnderwriterForced);
+					return;
+				}
+				break;
+
+			case 15:
+				int checkType;
+				if (int.TryParse(args[1], out underwriterId) && int.TryParse(args[2], out customerId) && int.TryParse(args[3], out checkType) && int.TryParse(args[13], out avoidAutoDescison)) {
+					serviceClient.MainStrategy3(underwriterId, customerId, checkType, args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10], args[11], avoidAutoDescison);
+					return;
+				}
+				break;
+			} // switch
+
+			Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> MainStrategy <Underwriter ID> <customerId> <newCreditLineOption> <avoidAutoDescison>");
 			Console.WriteLine("OR");
-			Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> MainStrategy <customerId> <newCreditLineOption> <avoidAutoDescison> <isUnderwriterForced(should always be true)>");
+			Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> MainStrategy <Underwriter ID> <customerId> <newCreditLineOption> <avoidAutoDescison> <isUnderwriterForced(should always be true)>");
 			Console.WriteLine("OR");
-			Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> MainStrategy <customerId> <checkType> <houseNumber> <houseName> <street> <district> <town> <county> <postcode> <bankAccount> <sortCode> <avoidAutoDescison>");
+			Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> MainStrategy <Underwriter ID> <customerId> <checkType> <houseNumber> <houseName> <street> <district> <town> <county> <postcode> <bankAccount> <sortCode> <avoidAutoDescison>");
 		}
 
 		#endregion strategy activators

@@ -111,12 +111,6 @@
   <wsdl:message name="IEzService_GreetingMailStrategy_OutputMessage">
     <wsdl:part name="parameters" element="tns:GreetingMailStrategyResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_CustomerMarketplaceAdded_InputMessage">
-    <wsdl:part name="parameters" element="tns:CustomerMarketplaceAdded" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_CustomerMarketplaceAdded_OutputMessage">
-    <wsdl:part name="parameters" element="tns:CustomerMarketplaceAddedResponse" />
-  </wsdl:message>
   <wsdl:message name="IEzService_ApprovedUser_InputMessage">
     <wsdl:part name="parameters" element="tns:ApprovedUser" />
   </wsdl:message>
@@ -354,10 +348,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GreetingMailStrategy" message="tns:IEzService_GreetingMailStrategy_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GreetingMailStrategyResponse" message="tns:IEzService_GreetingMailStrategy_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="CustomerMarketplaceAdded">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CustomerMarketplaceAdded" message="tns:IEzService_CustomerMarketplaceAdded_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CustomerMarketplaceAddedResponse" message="tns:IEzService_CustomerMarketplaceAdded_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="ApprovedUser">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ApprovedUser" message="tns:IEzService_ApprovedUser_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/ApprovedUserResponse" message="tns:IEzService_ApprovedUser_OutputMessage" />
@@ -555,15 +545,6 @@
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
     <wsdl:operation name="GreetingMailStrategy">
       <soap12:operation soapAction="http://tempuri.org/IEzService/GreetingMailStrategy" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="CustomerMarketplaceAdded">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/CustomerMarketplaceAdded" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -889,20 +870,20 @@
   </wsdl:binding>
   <wsdl:service name="EzServiceImplementation">
     <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
-      <soap12:address location="net.tcp://ezqa01:7501/" />
+      <soap12:address location="net.tcp://alexbo-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://ezqa01:7501/</wsa10:Address>
+        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>EZQA01\Administrator</Upn>
+          <Upn>alexbo-pc\alexbo</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IEzService" binding="tns:NetTcpBinding_IEzService">
-      <soap12:address location="net.tcp://ezqa01:7501/" />
+      <soap12:address location="net.tcp://alexbo-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://ezqa01:7501/</wsa10:Address>
+        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>EZQA01\Administrator</Upn>
+          <Upn>alexbo-pc\alexbo</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

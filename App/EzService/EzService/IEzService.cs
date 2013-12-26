@@ -11,10 +11,7 @@ namespace EzService {
 		ActionMetaData GreetingMailStrategy(int nCustomerID, string sConfirmationEmail);
 
 		[OperationContract]
-		ActionMetaData CustomerMarketplaceAdded(int nCustomerID, int nMarketplaceID);
-		
-		[OperationContract]
-		ActionMetaData ApprovedUser(int customerId, decimal loanAmount);
+		ActionMetaData ApprovedUser(int userId, int customerId, decimal loanAmount);
 
 		[OperationContract]
 		ActionMetaData CashTransferred(int customerId, decimal amount);
@@ -32,13 +29,13 @@ namespace EzService {
 		ActionMetaData LoanFullyPaid(int customerId, string loanRefNum);
 
 		[OperationContract]
-		ActionMetaData MoreAmlAndBwaInformation(int customerId);
+		ActionMetaData MoreAmlAndBwaInformation(int userId, int customerId);
 
 		[OperationContract]
-		ActionMetaData MoreAmlInformation(int customerId);
+		ActionMetaData MoreAmlInformation(int userId, int customerId);
 
 		[OperationContract]
-		ActionMetaData MoreBwaInformation(int customerId);
+		ActionMetaData MoreBwaInformation(int userId, int customerId);
 
 		[OperationContract]
 		ActionMetaData PasswordChanged(int customerId, string password);
@@ -53,10 +50,10 @@ namespace EzService {
 		ActionMetaData PayPointAddedByUnderwriter(int customerId, string cardno, string underwriterName, int underwriterId);
 
 		[OperationContract]
-		ActionMetaData PayPointNameValidationFailed(int customerId, string cardHolderName);
+		ActionMetaData PayPointNameValidationFailed(int userId, int customerId, string cardHolderName);
 
 		[OperationContract]
-		ActionMetaData RejectUser(int customerId);
+		ActionMetaData RejectUser(int userId, int customerId);
 
 		[OperationContract]
 		ActionMetaData EmailRolloverAdded(int customerId, decimal amount);
@@ -80,7 +77,7 @@ namespace EzService {
 		ActionMetaData CaisGenerate(int underwriterId);
 
 		[OperationContract]
-		ActionMetaData CaisUpdate(int caisId);
+		ActionMetaData CaisUpdate(int userId, int caisId);
 
 		[OperationContract]
 		ActionMetaData FirstOfMonthStatusNotifier();
@@ -110,13 +107,13 @@ namespace EzService {
 		ActionMetaData XDaysDue();
 
 		[OperationContract]
-		ActionMetaData MainStrategy1(int customerId, NewCreditLineOption newCreditLine, int avoidAutoDescison);
+		ActionMetaData MainStrategy1(int uderwriterId, int customerId, NewCreditLineOption newCreditLine, int avoidAutoDescison);
 
 		[OperationContract]
-		ActionMetaData MainStrategy2(int customerId, NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced);
+		ActionMetaData MainStrategy2(int uderwriterId, int customerId, NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced);
 
 		[OperationContract]
-		ActionMetaData MainStrategy3(int customerId, int checkType, string houseNumber, string houseName, string street, string district, string town, string county, string postcode, string bankAccount, string sortCode, int avoidAutoDescison);
+		ActionMetaData MainStrategy3(int uderwriterId, int customerId, int checkType, string houseNumber, string houseName, string street, string district, string town, string county, string postcode, string bankAccount, string sortCode, int avoidAutoDescison);
 	} // interface IEzService
 
 	#endregion interface IEzService

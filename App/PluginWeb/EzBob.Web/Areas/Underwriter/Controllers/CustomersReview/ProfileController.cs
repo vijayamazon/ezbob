@@ -113,7 +113,8 @@
 
             if (MainStrategyUpdatingStatus(mainStrat) == "Finished")
             {
-                _creator.Evaluate(_users.Get(customerId), NewCreditLineOption.UpdateEverythingAndApplyAutoRules, Convert.ToInt32(customer.IsAvoid));
+				var underwriter = _users.GetUserByLogin(User.Identity.Name);
+                _creator.Evaluate(underwriter.Id, _users.Get(customerId), NewCreditLineOption.UpdateEverythingAndApplyAutoRules, Convert.ToInt32(customer.IsAvoid));
             }
             else
             {

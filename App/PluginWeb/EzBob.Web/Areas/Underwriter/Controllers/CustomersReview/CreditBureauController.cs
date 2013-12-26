@@ -46,7 +46,9 @@
             if (anyApps)
                 return this.JsonNet(new { Message = "The evaluation strategy is already running. Please wait..." });
 
-            _creator.Evaluate(_users.Get(id), NewCreditLineOption.UpdateEverythingExceptMp, Convert.ToInt32(customer.IsAvoid), true);
+	        var underwriter = _users.GetUserByLogin(User.Identity.Name);
+
+            _creator.Evaluate(underwriter.Id, _users.Get(id), NewCreditLineOption.UpdateEverythingExceptMp, Convert.ToInt32(customer.IsAvoid), true);
             return this.JsonNet(new { Message = "The evaluation has been started. Please refresh this application after a while..." });
         }
 
@@ -138,7 +140,9 @@
             if (isRunning)
                 return this.JsonNet(new { Message = "The evaluation strategy is already running. Please wait..." });
 
-            _creator.EvaluateWithIdHubCustomAddress(_users.Get(id), checkType, houseNumber, houseName, street,
+	        var underwriter = _users.GetUserByLogin(User.Identity.Name);
+
+            _creator.EvaluateWithIdHubCustomAddress(underwriter.Id, _users.Get(id), checkType, houseNumber, houseName, street,
                                             district, town, county, postcode, bankAccount, sortCode, Convert.ToInt32(customer.IsAvoid));
             return this.JsonNet(new { Message = "The evaluation has been started. Please refresh this application after a while..." });
         }

@@ -29,6 +29,9 @@ namespace EzBob.Web.EzServiceReference {
         private string CommentField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<int> CustomerIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool IsSynchronousField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -36,6 +39,9 @@ namespace EzBob.Web.EzServiceReference {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EzBob.Web.EzServiceReference.ActionStatus StatusField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<int> UserIDField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
@@ -69,6 +75,19 @@ namespace EzBob.Web.EzServiceReference {
                 if ((object.ReferenceEquals(this.CommentField, value) != true)) {
                     this.CommentField = value;
                     this.RaisePropertyChanged("Comment");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<int> CustomerID {
+            get {
+                return this.CustomerIDField;
+            }
+            set {
+                if ((this.CustomerIDField.Equals(value) != true)) {
+                    this.CustomerIDField = value;
+                    this.RaisePropertyChanged("CustomerID");
                 }
             }
         }
@@ -108,6 +127,19 @@ namespace EzBob.Web.EzServiceReference {
                 if ((this.StatusField.Equals(value) != true)) {
                     this.StatusField = value;
                     this.RaisePropertyChanged("Status");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<int> UserID {
+            get {
+                return this.UserIDField;
+            }
+            set {
+                if ((this.UserIDField.Equals(value) != true)) {
+                    this.UserIDField = value;
+                    this.RaisePropertyChanged("UserID");
                 }
             }
         }
@@ -309,11 +341,8 @@ namespace EzBob.Web.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GreetingMailStrategy", ReplyAction="http://tempuri.org/IEzService/GreetingMailStrategyResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData GreetingMailStrategy(int nCustomerID, string sConfirmationEmail);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CustomerMarketplaceAdded", ReplyAction="http://tempuri.org/IEzService/CustomerMarketplaceAddedResponse")]
-        EzBob.Web.EzServiceReference.ActionMetaData CustomerMarketplaceAdded(int nCustomerID, int nMarketplaceID);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ApprovedUser", ReplyAction="http://tempuri.org/IEzService/ApprovedUserResponse")]
-        EzBob.Web.EzServiceReference.ActionMetaData ApprovedUser(int customerId, decimal loanAmount);
+        EzBob.Web.EzServiceReference.ActionMetaData ApprovedUser(int userId, int customerId, decimal loanAmount);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CashTransferred", ReplyAction="http://tempuri.org/IEzService/CashTransferredResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData CashTransferred(int customerId, decimal amount);
@@ -331,13 +360,13 @@ namespace EzBob.Web.EzServiceReference {
         EzBob.Web.EzServiceReference.ActionMetaData LoanFullyPaid(int customerId, string loanRefNum);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MoreAmlAndBwaInformation", ReplyAction="http://tempuri.org/IEzService/MoreAmlAndBwaInformationResponse")]
-        EzBob.Web.EzServiceReference.ActionMetaData MoreAmlAndBwaInformation(int customerId);
+        EzBob.Web.EzServiceReference.ActionMetaData MoreAmlAndBwaInformation(int userId, int customerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MoreAmlInformation", ReplyAction="http://tempuri.org/IEzService/MoreAmlInformationResponse")]
-        EzBob.Web.EzServiceReference.ActionMetaData MoreAmlInformation(int customerId);
+        EzBob.Web.EzServiceReference.ActionMetaData MoreAmlInformation(int userId, int customerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MoreBwaInformation", ReplyAction="http://tempuri.org/IEzService/MoreBwaInformationResponse")]
-        EzBob.Web.EzServiceReference.ActionMetaData MoreBwaInformation(int customerId);
+        EzBob.Web.EzServiceReference.ActionMetaData MoreBwaInformation(int userId, int customerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PasswordChanged", ReplyAction="http://tempuri.org/IEzService/PasswordChangedResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData PasswordChanged(int customerId, string password);
@@ -352,10 +381,10 @@ namespace EzBob.Web.EzServiceReference {
         EzBob.Web.EzServiceReference.ActionMetaData PayPointAddedByUnderwriter(int customerId, string cardno, string underwriterName, int underwriterId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PayPointNameValidationFailed", ReplyAction="http://tempuri.org/IEzService/PayPointNameValidationFailedResponse")]
-        EzBob.Web.EzServiceReference.ActionMetaData PayPointNameValidationFailed(int customerId, string cardHolderName);
+        EzBob.Web.EzServiceReference.ActionMetaData PayPointNameValidationFailed(int userId, int customerId, string cardHolderName);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/RejectUser", ReplyAction="http://tempuri.org/IEzService/RejectUserResponse")]
-        EzBob.Web.EzServiceReference.ActionMetaData RejectUser(int customerId);
+        EzBob.Web.EzServiceReference.ActionMetaData RejectUser(int userId, int customerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EmailRolloverAdded", ReplyAction="http://tempuri.org/IEzService/EmailRolloverAddedResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData EmailRolloverAdded(int customerId, decimal amount);
@@ -379,7 +408,7 @@ namespace EzBob.Web.EzServiceReference {
         EzBob.Web.EzServiceReference.ActionMetaData CaisGenerate(int underwriterId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CaisUpdate", ReplyAction="http://tempuri.org/IEzService/CaisUpdateResponse")]
-        EzBob.Web.EzServiceReference.ActionMetaData CaisUpdate(int caisId);
+        EzBob.Web.EzServiceReference.ActionMetaData CaisUpdate(int userId, int caisId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FirstOfMonthStatusNotifier", ReplyAction="http://tempuri.org/IEzService/FirstOfMonthStatusNotifierResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData FirstOfMonthStatusNotifier();
@@ -409,13 +438,13 @@ namespace EzBob.Web.EzServiceReference {
         EzBob.Web.EzServiceReference.ActionMetaData XDaysDue();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy1", ReplyAction="http://tempuri.org/IEzService/MainStrategy1Response")]
-        EzBob.Web.EzServiceReference.ActionMetaData MainStrategy1(int customerId, EzBob.Web.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison);
+        EzBob.Web.EzServiceReference.ActionMetaData MainStrategy1(int uderwriterId, int customerId, EzBob.Web.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy2", ReplyAction="http://tempuri.org/IEzService/MainStrategy2Response")]
-        EzBob.Web.EzServiceReference.ActionMetaData MainStrategy2(int customerId, EzBob.Web.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced);
+        EzBob.Web.EzServiceReference.ActionMetaData MainStrategy2(int uderwriterId, int customerId, EzBob.Web.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy3", ReplyAction="http://tempuri.org/IEzService/MainStrategy3Response")]
-        EzBob.Web.EzServiceReference.ActionMetaData MainStrategy3(int customerId, int checkType, string houseNumber, string houseName, string street, string district, string town, string county, string postcode, string bankAccount, string sortCode, int avoidAutoDescison);
+        EzBob.Web.EzServiceReference.ActionMetaData MainStrategy3(int uderwriterId, int customerId, int checkType, string houseNumber, string houseName, string street, string district, string town, string county, string postcode, string bankAccount, string sortCode, int avoidAutoDescison);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -449,12 +478,8 @@ namespace EzBob.Web.EzServiceReference {
             return base.Channel.GreetingMailStrategy(nCustomerID, sConfirmationEmail);
         }
         
-        public EzBob.Web.EzServiceReference.ActionMetaData CustomerMarketplaceAdded(int nCustomerID, int nMarketplaceID) {
-            return base.Channel.CustomerMarketplaceAdded(nCustomerID, nMarketplaceID);
-        }
-        
-        public EzBob.Web.EzServiceReference.ActionMetaData ApprovedUser(int customerId, decimal loanAmount) {
-            return base.Channel.ApprovedUser(customerId, loanAmount);
+        public EzBob.Web.EzServiceReference.ActionMetaData ApprovedUser(int userId, int customerId, decimal loanAmount) {
+            return base.Channel.ApprovedUser(userId, customerId, loanAmount);
         }
         
         public EzBob.Web.EzServiceReference.ActionMetaData CashTransferred(int customerId, decimal amount) {
@@ -477,16 +502,16 @@ namespace EzBob.Web.EzServiceReference {
             return base.Channel.LoanFullyPaid(customerId, loanRefNum);
         }
         
-        public EzBob.Web.EzServiceReference.ActionMetaData MoreAmlAndBwaInformation(int customerId) {
-            return base.Channel.MoreAmlAndBwaInformation(customerId);
+        public EzBob.Web.EzServiceReference.ActionMetaData MoreAmlAndBwaInformation(int userId, int customerId) {
+            return base.Channel.MoreAmlAndBwaInformation(userId, customerId);
         }
         
-        public EzBob.Web.EzServiceReference.ActionMetaData MoreAmlInformation(int customerId) {
-            return base.Channel.MoreAmlInformation(customerId);
+        public EzBob.Web.EzServiceReference.ActionMetaData MoreAmlInformation(int userId, int customerId) {
+            return base.Channel.MoreAmlInformation(userId, customerId);
         }
         
-        public EzBob.Web.EzServiceReference.ActionMetaData MoreBwaInformation(int customerId) {
-            return base.Channel.MoreBwaInformation(customerId);
+        public EzBob.Web.EzServiceReference.ActionMetaData MoreBwaInformation(int userId, int customerId) {
+            return base.Channel.MoreBwaInformation(userId, customerId);
         }
         
         public EzBob.Web.EzServiceReference.ActionMetaData PasswordChanged(int customerId, string password) {
@@ -505,12 +530,12 @@ namespace EzBob.Web.EzServiceReference {
             return base.Channel.PayPointAddedByUnderwriter(customerId, cardno, underwriterName, underwriterId);
         }
         
-        public EzBob.Web.EzServiceReference.ActionMetaData PayPointNameValidationFailed(int customerId, string cardHolderName) {
-            return base.Channel.PayPointNameValidationFailed(customerId, cardHolderName);
+        public EzBob.Web.EzServiceReference.ActionMetaData PayPointNameValidationFailed(int userId, int customerId, string cardHolderName) {
+            return base.Channel.PayPointNameValidationFailed(userId, customerId, cardHolderName);
         }
         
-        public EzBob.Web.EzServiceReference.ActionMetaData RejectUser(int customerId) {
-            return base.Channel.RejectUser(customerId);
+        public EzBob.Web.EzServiceReference.ActionMetaData RejectUser(int userId, int customerId) {
+            return base.Channel.RejectUser(userId, customerId);
         }
         
         public EzBob.Web.EzServiceReference.ActionMetaData EmailRolloverAdded(int customerId, decimal amount) {
@@ -541,8 +566,8 @@ namespace EzBob.Web.EzServiceReference {
             return base.Channel.CaisGenerate(underwriterId);
         }
         
-        public EzBob.Web.EzServiceReference.ActionMetaData CaisUpdate(int caisId) {
-            return base.Channel.CaisUpdate(caisId);
+        public EzBob.Web.EzServiceReference.ActionMetaData CaisUpdate(int userId, int caisId) {
+            return base.Channel.CaisUpdate(userId, caisId);
         }
         
         public EzBob.Web.EzServiceReference.ActionMetaData FirstOfMonthStatusNotifier() {
@@ -581,16 +606,16 @@ namespace EzBob.Web.EzServiceReference {
             return base.Channel.XDaysDue();
         }
         
-        public EzBob.Web.EzServiceReference.ActionMetaData MainStrategy1(int customerId, EzBob.Web.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
-            return base.Channel.MainStrategy1(customerId, newCreditLine, avoidAutoDescison);
+        public EzBob.Web.EzServiceReference.ActionMetaData MainStrategy1(int uderwriterId, int customerId, EzBob.Web.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
+            return base.Channel.MainStrategy1(uderwriterId, customerId, newCreditLine, avoidAutoDescison);
         }
         
-        public EzBob.Web.EzServiceReference.ActionMetaData MainStrategy2(int customerId, EzBob.Web.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced) {
-            return base.Channel.MainStrategy2(customerId, newCreditLine, avoidAutoDescison, isUnderwriterForced);
+        public EzBob.Web.EzServiceReference.ActionMetaData MainStrategy2(int uderwriterId, int customerId, EzBob.Web.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced) {
+            return base.Channel.MainStrategy2(uderwriterId, customerId, newCreditLine, avoidAutoDescison, isUnderwriterForced);
         }
         
-        public EzBob.Web.EzServiceReference.ActionMetaData MainStrategy3(int customerId, int checkType, string houseNumber, string houseName, string street, string district, string town, string county, string postcode, string bankAccount, string sortCode, int avoidAutoDescison) {
-            return base.Channel.MainStrategy3(customerId, checkType, houseNumber, houseName, street, district, town, county, postcode, bankAccount, sortCode, avoidAutoDescison);
+        public EzBob.Web.EzServiceReference.ActionMetaData MainStrategy3(int uderwriterId, int customerId, int checkType, string houseNumber, string houseName, string street, string district, string town, string county, string postcode, string bankAccount, string sortCode, int avoidAutoDescison) {
+            return base.Channel.MainStrategy3(uderwriterId, customerId, checkType, houseNumber, houseName, street, district, town, county, postcode, bankAccount, sortCode, avoidAutoDescison);
         }
     }
 }

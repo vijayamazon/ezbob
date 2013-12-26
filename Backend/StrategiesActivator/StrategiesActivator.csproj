@@ -36,11 +36,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net">
-      <HintPath>..\..\Integration\NodeEzBobLib\bin\Debug\log4net.dll</HintPath>
+      <HintPath>..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate, Version=3.2.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\App\PluginWeb\EzBob.Web\bin\NHibernate.dll</HintPath>
+    <Reference Include="NHibernate">
+      <HintPath>..\..\Lib\Scorto.Core\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate.Caches.SysCache2">
       <HintPath>..\..\Lib\3rdparty\Nhibernate\NHibernate.Caches.SysCache2.dll</HintPath>
@@ -49,9 +48,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\Scorto.Core\Scorto.Configuration.Loader.dll</HintPath>
     </Reference>
-    <Reference Include="Scorto.NHibernate, Version=22.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\App\PluginWeb\EzBob.Web\bin\Scorto.NHibernate.dll</HintPath>
+    <Reference Include="Scorto.NHibernate">
+      <HintPath>..\..\Lib\Scorto.Core\Scorto.NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="Scorto.RegistryScanner">
       <HintPath>..\..\Lib\Scorto.Core\Scorto.RegistryScanner.dll</HintPath>
@@ -147,10 +145,6 @@
     <ProjectReference Include="..\..\Tools\EzbobUtils\Logger\Logger.csproj">
       <Project>{f92ca169-9532-4c4d-8d84-6f48ace5719c}</Project>
       <Name>Logger</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Strategies\Strategies.csproj">
-      <Project>{7e526927-9849-4e6e-bbff-d0d780f81a05}</Project>
-      <Name>Strategies</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

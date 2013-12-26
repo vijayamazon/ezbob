@@ -103,24 +103,6 @@ namespace EzBob.Web.Code.ApplicationCreator {
 			}
 		}
 
-		private Application CreateApplication(Customer customer, IEnumerable<StrategyParameter> strategyParameters, string strategyName) {
-			var user = _users.Get(customer.Id);
-			return CreateApplication(user, strategyParameters, strategyName);
-		}
-
-		private Application CreateApplication(User user, IEnumerable<StrategyParameter> strategyParameters, string strategyName) {
-			try {
-				var strategy = _strategies.GetStrategyByDisplayName(strategyName);
-				var createApplicationParameters = new CreateApplicationParameters(strategy.Id, user.Id, strategyParameters);
-				var appId = _sm.CreateApplication(createApplicationParameters);
-				return _session.Get<Application>(appId);
-			}
-			catch (Exception ex) {
-				Log.Error(ex);
-			}
-			return null;
-		}
-
 		public void PasswordRestored(User user, string emailTo, string firstName, string password) {
 			if (useNewMailStrategies) {
 				ServiceClient.PasswordRestored(user.Id, password);
@@ -150,13 +132,13 @@ namespace EzBob.Web.Code.ApplicationCreator {
 			}
 		}
 
-		public void Evaluate(User user, NewCreditLineOption newCreditLineOption, int avoidAutomaticDescison, bool isUnderwriterForced = false) {
+		public void Evaluate(int underwriterId, User user, NewCreditLineOption newCreditLineOption, int avoidAutomaticDescison, bool isUnderwriterForced = false) {
 			if (useNewMainStrategy) {
 				if (!isUnderwriterForced) {
-					ServiceClient.MainStrategy1(user.Id, newCreditLineOption, avoidAutomaticDescison);
+					ServiceClient.MainStrategy1(underwriterId, user.Id, newCreditLineOption, avoidAutomaticDescison);
 				}
 				else {
-					ServiceClient.MainStrategy2(user.Id, newCreditLineOption, avoidAutomaticDescison, true);
+					ServiceClient.MainStrategy2(underwriterId, user.Id, newCreditLineOption, avoidAutomaticDescison, true);
 				}
 			}
 			else {
@@ -173,10 +155,10 @@ namespace EzBob.Web.Code.ApplicationCreator {
 			}
 		}
 
-		public void EvaluateWithIdHubCustomAddress(User user, int checkType, string houseNumber, string houseName, string street,
+		public void EvaluateWithIdHubCustomAddress(int underwriterId, User user, int checkType, string houseNumber, string houseName, string street,
 												   string district, string town, string county, string postcode, string bankAccount, string sortCode, int avoidAutomaticDescison) {
 			if (useNewMainStrategy) {
-				ServiceClient.MainStrategy3(user.Id, checkType, houseNumber, houseName, street, district, town, county, postcode, bankAccount, sortCode, avoidAutomaticDescison);
+				ServiceClient.MainStrategy3(underwriterId, user.Id, checkType, houseNumber, houseName, street, district, town, county, postcode, bankAccount, sortCode, avoidAutomaticDescison);
 			}
 			else {
 				var strategyParameters = new[] {
@@ -244,7 +226,7 @@ namespace EzBob.Web.Code.ApplicationCreator {
 
 		public void PayPointNameValidationFailed(string cardHodlerName, User user, Customer customer) {
 			if (useNewMailStrategies) {
-				ServiceClient.PayPointNameValidationFailed(customer.Id, cardHodlerName);
+				ServiceClient.PayPointNameValidationFailed(user.Id, customer.Id, cardHodlerName);
 			}
 			else {
 				var strategyParameters = new[] {
@@ -260,7 +242,7 @@ namespace EzBob.Web.Code.ApplicationCreator {
 
 		public void ApprovedUser(User user, Customer customer, decimal? loanAmount) {
 			if (useNewMailStrategies) {
-				ServiceClient.ApprovedUser(customer.Id, loanAmount.HasValue ? loanAmount.Value : 0);
+				ServiceClient.ApprovedUser(user.Id, customer.Id, loanAmount.HasValue ? loanAmount.Value : 0);
 			}
 			else {
 				bool isNotFirstApproval = customer.DecisionHistory.Any(x => x.Action == DecisionActions.Approve);
@@ -282,7 +264,7 @@ namespace EzBob.Web.Code.ApplicationCreator {
 
 		public void RejectUser(User user, string email, int userId, string firstName) {
 			if (useNewMailStrategies) {
-				ServiceClient.RejectUser(userId);
+				ServiceClient.RejectUser(user.Id, userId);
 			}
 			else {
 				var strategyParameters = new[] {
@@ -296,7 +278,7 @@ namespace EzBob.Web.Code.ApplicationCreator {
 
 		public void MoreAMLInformation(User user, string email, int userId, string firstName) {
 			if (useNewMailStrategies) {
-				ServiceClient.MoreAmlInformation(userId);
+				ServiceClient.MoreAmlInformation(user.Id, userId);
 			}
 			else {
 				var strategyParameters = new[] {
@@ -310,7 +292,7 @@ namespace EzBob.Web.Code.ApplicationCreator {
 
 		public void MoreAMLandBWAInformation(User user, string email, int userId, string firstName) {
 			if (useNewMailStrategies) {
-				ServiceClient.MoreAmlAndBwaInformation(userId);
+				ServiceClient.MoreAmlAndBwaInformation(user.Id, userId);
 			}
 			else {
 				var strategyParameters = new[] {
@@ -324,7 +306,7 @@ namespace EzBob.Web.Code.ApplicationCreator {
 
 		public void MoreBWAInformation(User user, string email, int userId, string firstName) {
 			if (useNewMailStrategies) {
-				ServiceClient.MoreBwaInformation(userId);
+				ServiceClient.MoreBwaInformation(user.Id, userId);
 			}
 			else {
 				var strategyParameters = new[] {
@@ -459,7 +441,7 @@ namespace EzBob.Web.Code.ApplicationCreator {
 
 		public void CAISUpdate(User user, int caisId) {
 			if (useNewCaisStrategies) {
-				ServiceClient.CaisUpdate(caisId);
+				ServiceClient.CaisUpdate(user.Id, caisId);
 			}
 			else {
 				var strategyParameters = new[] {
@@ -522,7 +504,7 @@ namespace EzBob.Web.Code.ApplicationCreator {
 					new StrategyParameter("email", customer.Name),
 					new StrategyParameter("RefNum", loan.RefNumber)
 				};
-				CreateApplication(loan.Customer, strategyParameters, "Email Loan Paid Fully");
+				CreateApplication(customer, strategyParameters, "Email Loan Paid Fully");
 			}
 		}
 
@@ -560,6 +542,24 @@ namespace EzBob.Web.Code.ApplicationCreator {
 		private EzServiceClient m_oServiceClient;
 
 		#endregion property ServiceClient
+
+		private Application CreateApplication(Customer customer, IEnumerable<StrategyParameter> strategyParameters, string strategyName) {
+			var user = _users.Get(customer.Id);
+			return CreateApplication(user, strategyParameters, strategyName);
+		}
+
+		private Application CreateApplication(User user, IEnumerable<StrategyParameter> strategyParameters, string strategyName) {
+			try {
+				var strategy = _strategies.GetStrategyByDisplayName(strategyName);
+				var createApplicationParameters = new CreateApplicationParameters(strategy.Id, user.Id, strategyParameters);
+				var appId = _sm.CreateApplication(createApplicationParameters);
+				return _session.Get<Application>(appId);
+			}
+			catch (Exception ex) {
+				Log.Error(ex);
+			}
+			return null;
+		}
 
 		private readonly IStrategyRepository _strategies;
 		private readonly IEzBobConfiguration _config;

@@ -258,156 +258,148 @@ namespace EzService {
 		#region IEzService exposed methods
 
 		public ActionMetaData GreetingMailStrategy(int nCustomerID, string sConfirmationEmail) {
-			return Execute(typeof(Greeting), nCustomerID, sConfirmationEmail);
+			return Execute(nCustomerID, null, typeof(Greeting), nCustomerID, sConfirmationEmail);
 		} // GreetingMailStrategy
 
-		public ActionMetaData CustomerMarketplaceAdded(int nCustomerID, int nMarketplaceID) {
-			return Execute(typeof (UpdateMarketplace), nCustomerID, nMarketplaceID);
-		} // CustomerMarketplaceAdded
-
-		public ActionMetaData ApprovedUser(int customerId, decimal loanAmount) {
-			return Execute(typeof (ApprovedUser), customerId, loanAmount);
+		public ActionMetaData ApprovedUser(int userId, int customerId, decimal loanAmount) {
+			return Execute(customerId, userId, typeof (ApprovedUser), customerId, customerId, customerId, loanAmount);
 		} // ApprovedUser
 
 		public ActionMetaData CashTransferred(int customerId, decimal amount) {
-			return Execute(typeof (CashTransferred), customerId, amount);
+			return Execute(customerId, null, typeof (CashTransferred), customerId, amount);
 		} // CashTransferred
 
 		public ActionMetaData EmailUnderReview(int customerId) {
-			return Execute(typeof (EmailUnderReview), customerId);
+			return Execute(customerId, null, typeof (EmailUnderReview), customerId, customerId, customerId);
 		} // EmailUnderReview
 
 		public ActionMetaData Escalated(int customerId) {
-			return Execute(typeof (Escalated), customerId);
+			return Execute(customerId, customerId, typeof (Escalated), customerId);
 		} // Escalated
 
 		public ActionMetaData GetCashFailed(int customerId) {
-			return Execute(typeof (GetCashFailed), customerId);
+			return Execute(customerId, null, typeof (GetCashFailed), customerId, customerId, customerId);
 		} // GetCashFailed
 
 		public ActionMetaData LoanFullyPaid(int customerId, string loanRefNum) {
-			return Execute(typeof(LoanFullyPaid), customerId, loanRefNum);
+			return Execute(customerId, null, typeof(LoanFullyPaid), customerId, loanRefNum);
 		} // LoanFullyPaid
 
-		public ActionMetaData MoreAmlAndBwaInformation(int customerId) {
-			return Execute(typeof(MoreAmlAndBwaInformation), customerId);
+		public ActionMetaData MoreAmlAndBwaInformation(int userId, int customerId) {
+			return Execute(customerId, userId, typeof(MoreAmlAndBwaInformation), customerId);
 		} // MoreAmLandBwaInformation
 
-		public ActionMetaData MoreAmlInformation(int customerId) {
-			return Execute(typeof (MoreAmlInformation), customerId);
+		public ActionMetaData MoreAmlInformation(int userId, int customerId) {
+			return Execute(customerId, userId, typeof (MoreAmlInformation), customerId);
 		} // MoreAmlInformation
 
-		public ActionMetaData MoreBwaInformation(int customerId) {
-			return Execute(typeof (MoreBwaInformation), customerId);
+		public ActionMetaData MoreBwaInformation(int userId, int customerId) {
+			return Execute(customerId, userId, typeof (MoreBwaInformation), customerId);
 		} // MoreBwaInformation
 
 		public ActionMetaData PasswordChanged(int customerId, string password) {
-			return Execute(typeof (PasswordChanged), customerId, password);
+			return Execute(customerId, null, typeof (PasswordChanged), customerId, password);
 		} // PasswordChanged
 
 		public ActionMetaData PasswordRestored(int customerId, string password) {
-			return Execute(typeof (PasswordRestored), customerId, password);
+			return Execute(customerId, null, typeof (PasswordRestored), customerId, password);
 		} // PasswordRestored
 
 		public ActionMetaData PayEarly(int customerId, decimal amount, string loanRefNum) {
-			return Execute(typeof (PayEarly), customerId, amount, loanRefNum);
+			return Execute(customerId, customerId, typeof (PayEarly), customerId, amount, loanRefNum);
 		} // PayEarly
 
 		public ActionMetaData PayPointAddedByUnderwriter(int customerId, string cardno, string underwriterName, int underwriterId) {
-			return Execute(typeof (PayPointAddedByUnderwriter), customerId, cardno, underwriterName, underwriterId);
+			return Execute(customerId, underwriterId, typeof (PayPointAddedByUnderwriter), customerId, cardno, underwriterName, underwriterId);
 		} // PayPointAddedByUnderwriter
 
-		public ActionMetaData PayPointNameValidationFailed(int customerId, string cardHolderName) {
-			return Execute(typeof (PayPointNameValidationFailed), customerId, cardHolderName);
+		public ActionMetaData PayPointNameValidationFailed(int userId, int customerId, string cardHolderName) {
+			return Execute(customerId, userId, typeof (PayPointNameValidationFailed), customerId, cardHolderName);
 		} // PayPointNameValidationFailed
 
-		public ActionMetaData RejectUser(int customerId) {
-			return Execute(typeof (RejectUser), customerId);
+		public ActionMetaData RejectUser(int userId, int customerId) {
+			return Execute(customerId, userId, typeof (RejectUser), customerId);
 		} // RejectUser
 
 		public ActionMetaData EmailRolloverAdded(int customerId, decimal amount) {
-			return Execute(typeof(EmailRolloverAdded), customerId, amount);
+			return Execute(customerId, customerId, typeof(EmailRolloverAdded), customerId, amount);
 		} // EmailRolloverAdded
 
 		public ActionMetaData RenewEbayToken(int customerId, string marketplaceName, string eBayAddress) {
-			return Execute(typeof (RenewEbayToken), customerId, marketplaceName, eBayAddress);
+			return Execute(customerId, customerId, typeof (RenewEbayToken), customerId, marketplaceName, eBayAddress);
 		} // RenewEbayToken
 
 		public ActionMetaData RequestCashWithoutTakenLoan(int customerId) {
-			return Execute(typeof (RequestCashWithoutTakenLoan), customerId);
+			return Execute(customerId, null, typeof (RequestCashWithoutTakenLoan), customerId);
 		} // RequestCashWithoutTakenLoan
 
 		public ActionMetaData SendEmailVerification(int customerId, string address) {
-			return Execute(typeof (SendEmailVerification), customerId, address);
+			return Execute(customerId, customerId, typeof (SendEmailVerification), customerId, address);
 		} // SendEmailVerification
 
 		public ActionMetaData ThreeInvalidAttempts(int customerId, string password) {
-			return Execute(typeof (ThreeInvalidAttempts), customerId, password);
+			return Execute(customerId, null, typeof (ThreeInvalidAttempts), customerId, password);
 		} // ThreeInvalidAttempts
 
 		public ActionMetaData TransferCashFailed(int customerId) {
-			return Execute(typeof (TransferCashFailed), customerId);
+			return Execute(customerId, null, typeof (TransferCashFailed), customerId);
 		} // TransferCashFailed
 
 		public ActionMetaData CaisGenerate(int underwriterId) {
-			return Execute(typeof (CaisGenerate), underwriterId);
+			return Execute(null, underwriterId, typeof (CaisGenerate), underwriterId);
 		} // CaisGenerate
 
-		public ActionMetaData CaisUpdate(int caisId) {
-			return Execute(typeof (CaisUpdate), caisId);
+		public ActionMetaData CaisUpdate(int userId,  int caisId) {
+			return Execute(null, userId, typeof (CaisUpdate), caisId);
 		} // CaisUpdate
 
 		public ActionMetaData FirstOfMonthStatusNotifier() {
-			return Execute(typeof (FirstOfMonthStatusNotifier));
+			return Execute(null, null, typeof (FirstOfMonthStatusNotifier));
 		} // FirstOfMonthStatusNotifier
 
 		public ActionMetaData FraudChecker(int customerId) {
-			return Execute(typeof (FraudChecker), customerId);
+			return Execute(customerId, null, typeof (FraudChecker), customerId);
 		} // FraudChecker
 
 		public ActionMetaData LateBy14Days() {
-			return Execute(typeof (LateBy14Days));
+			return Execute(null, null, typeof (LateBy14Days));
 		} // LateBy14Days
 
 		public ActionMetaData PayPointCharger() {
-			return Execute(typeof (PayPointCharger));
+			return Execute(null, null, typeof (PayPointCharger));
 		} // PayPointCharger
 
 		public ActionMetaData SetLateLoanStatus() {
-			return Execute(typeof (SetLateLoanStatus));
+			return Execute(null, null, typeof (SetLateLoanStatus));
 		} // SetLateLoanStatus
 
 		public ActionMetaData UpdateMarketplace(int customerId, int marketplaceId) {
-			return Execute(typeof (UpdateMarketplace), customerId, marketplaceId);
+			return Execute(customerId, null, typeof (UpdateMarketplace), customerId, marketplaceId);
 		} // UpdateMarketplace
 
 		public ActionMetaData UpdateAllMarketplaces(int customerId) {
-			return Execute(typeof (UpdateMarketplaces), customerId);
+			return Execute(customerId, null, typeof (UpdateMarketplaces), customerId);
 		} // UpdateAllMarketplaces
 
 		public ActionMetaData UpdateTransactionStatus() {
-			return Execute(typeof (UpdateTransactionStatus));
+			return Execute(null, null, typeof (UpdateTransactionStatus));
 		} // UpdateTransactionStatus
 
 		public ActionMetaData XDaysDue() {
-			return Execute(typeof (XDaysDue));
+			return Execute(null, null, typeof (XDaysDue));
 		} // XDaysDue
 
+		public ActionMetaData MainStrategy1(int underwriterId, int customerId, NewCreditLineOption newCreditLine, int avoidAutoDescison) {
+			return Execute(customerId, underwriterId, typeof(MainStrategy), customerId, newCreditLine, avoidAutoDescison);
+		} // MainStrategy1
 
-		public ActionMetaData MainStrategy1(int customerId, NewCreditLineOption newCreditLine, int avoidAutoDescison)
-		{
-			return Execute(typeof(MainStrategy), customerId, newCreditLine, avoidAutoDescison);
-		}
+		public ActionMetaData MainStrategy2(int underwriterId, int customerId, NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced) {
+			return Execute(customerId, underwriterId, typeof(MainStrategy), customerId, newCreditLine, avoidAutoDescison, isUnderwriterForced);
+		} // MainStrategy2
 
-		public ActionMetaData MainStrategy2(int customerId, NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced)
-		{
-			return Execute(typeof(MainStrategy), customerId, newCreditLine, avoidAutoDescison, isUnderwriterForced);
-		}
-
-		public ActionMetaData MainStrategy3(int customerId, int checkType, string houseNumber, string houseName, string street, string district, string town, string county, string postcode, string bankAccount, string sortCode, int avoidAutoDescison)
-		{
-			return Execute(typeof(MainStrategy), customerId, checkType, houseNumber, houseName, street, district, town, county, postcode, bankAccount, sortCode, avoidAutoDescison);
-		}
+		public ActionMetaData MainStrategy3(int underwriterId, int customerId, int checkType, string houseNumber, string houseName, string street, string district, string town, string county, string postcode, string bankAccount, string sortCode, int avoidAutoDescison) {
+			return Execute(customerId, underwriterId, typeof(MainStrategy), customerId, checkType, houseNumber, houseName, street, district, town, county, postcode, bankAccount, sortCode, avoidAutoDescison);
+		} // MainStrategy3
 
 		#endregion IEzService exposed methods
 
@@ -446,13 +438,13 @@ namespace EzService {
 
 		#region method Execute
 
-		private ActionMetaData Execute(Type oStrategyType, params object[] args) {
+		private ActionMetaData Execute(int? nCustomerID, int? nUserID, Type oStrategyType, params object[] args) {
 			ActionMetaData amd = null;
 
 			try {
 				Log.Debug("Executing " + oStrategyType + " started...");
 
-				amd = NewAsync(oStrategyType.ToString(), comment: string.Join("; ", args));
+				amd = NewAsync(oStrategyType.ToString(), comment: string.Join("; ", args), nCustomerID: nCustomerID, nUserID: nUserID);
 
 				var oParams = new List<object>(args) { DB, Log };
 
@@ -520,24 +512,24 @@ namespace EzService {
 
 		#region method NewAsync
 
-		private ActionMetaData NewAsync(string sActionName, ActionStatus status = ActionStatus.InProgress, string comment = null) {
-			return CreateActionMetaData(sActionName, false, status, comment);
+		private ActionMetaData NewAsync(string sActionName, ActionStatus status = ActionStatus.InProgress, string comment = null, int? nCustomerID = null, int? nUserID = null) {
+			return CreateActionMetaData(sActionName, false, status, comment, nCustomerID, nUserID);
 		} // NewAsync
 
 		#endregion method NewAsync
 
 		#region method NewSync
 
-		private ActionMetaData NewSync(string sActionName, ActionStatus status = ActionStatus.InProgress, string comment = null) {
-			return CreateActionMetaData(sActionName, true, status, comment);
+		private ActionMetaData NewSync(string sActionName, ActionStatus status = ActionStatus.InProgress, string comment = null, int? nCustomerID = null, int? nUserID = null) {
+			return CreateActionMetaData(sActionName, true, status, comment, nCustomerID, nUserID);
 		} // NewSync
 
 		#endregion method NewSync
 
 		#region method CreateActionMetaData
 
-		private ActionMetaData CreateActionMetaData(string sActionName, bool bIsSynchronous, ActionStatus status = ActionStatus.InProgress, string comment = null) {
-			var amd = ActionMetaData.Create(InstanceID, sActionName, DB, Log, bIsSynchronous, status, comment);
+		private ActionMetaData CreateActionMetaData(string sActionName, bool bIsSynchronous, ActionStatus status, string comment, int? nCustomerID, int? nUserID) {
+			var amd = ActionMetaData.Create(InstanceID, sActionName, DB, Log, bIsSynchronous, status, comment, nCustomerID, nUserID);
 
 			if (amd.IsComplete() != TriState.Yes) {
 				lock (ms_oLockActiveActions) {

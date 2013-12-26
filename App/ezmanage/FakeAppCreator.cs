@@ -39,12 +39,12 @@
             
         }
 
-        public void Evaluate(User user, NewCreditLineOption runNewCreditLine, int avoidAutomaticDescison, bool isUnderwriterForced = false)
+        public void Evaluate(int underwriterId, User user, NewCreditLineOption runNewCreditLine, int avoidAutomaticDescison, bool isUnderwriterForced = false)
         {
             
         }
 
-        public void EvaluateWithIdHubCustomAddress(User user, int checkType, string houseNumber, string houseName, string street,
+        public void EvaluateWithIdHubCustomAddress(int underwriterId, User user, int checkType, string houseNumber, string houseName, string street,
                                                    string district, string town, string county, string postcode, string bankAccount,
                                                    string sortCode, int avoidAutomaticDescison)
         {

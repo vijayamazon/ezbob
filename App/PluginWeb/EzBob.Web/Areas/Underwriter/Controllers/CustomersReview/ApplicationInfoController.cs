@@ -34,8 +34,9 @@
 		private readonly IConfigurationVariablesRepository configurationVariablesRepository;
 		private readonly ICustomerStatusHistoryRepository customerStatusHistoryRepository;
 		private readonly ILoanSourceRepository _loanSources;
+		private readonly IUsersRepository _users;
 
-        private static readonly ILog Log = LogManager.GetLogger(typeof (ApplicationInfoController));
+		private static readonly ILog Log = LogManager.GetLogger(typeof (ApplicationInfoController));
 
 		public ApplicationInfoController(
 			ICustomerRepository customerRepository,
@@ -52,7 +53,8 @@
 			IApprovalsWithoutAMLRepository approvalsWithoutAMLRepository,
 			IConfigurationVariablesRepository configurationVariablesRepository,
 			ICustomerStatusHistoryRepository customerStatusHistoryRepository,
-			ILoanSourceRepository loanSources
+			ILoanSourceRepository loanSources,
+			IUsersRepository users
 		)
 		{
 			_customerRepository = customerRepository;
@@ -70,6 +72,7 @@
 			this.configurationVariablesRepository = configurationVariablesRepository;
 			this.customerStatusHistoryRepository = customerStatusHistoryRepository;
 			_loanSources = loanSources;
+			_users = users;
 		}
 
 		[Ajax]
@@ -418,7 +421,9 @@
             var cashRequest = _crBuilder.CreateCashRequest(customer);
             cashRequest.LoanType = _loanTypes.GetDefault();
 
-            _crBuilder.ForceEvaluate(customer, (NewCreditLineOption) newCreditLineOption, false);
+	        var underwriter = _users.GetUserByLogin(User.Identity.Name);
+
+            _crBuilder.ForceEvaluate(underwriter.Id, customer, (NewCreditLineOption) newCreditLineOption, false);
 
             customer.CreditResult = null;
 			customer.OfferStart = cashRequest.OfferStart;

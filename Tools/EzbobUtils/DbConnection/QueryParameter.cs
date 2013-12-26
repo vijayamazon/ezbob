@@ -1,6 +1,6 @@
 ﻿namespace Ezbob.Database {
-	using System.Data;
 	using System;
+	using System.Data;
 
 	#region struct QueryParameter
 

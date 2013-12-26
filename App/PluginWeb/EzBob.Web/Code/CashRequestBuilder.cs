@@ -66,7 +66,7 @@ namespace EzBob.Web.Code
 			return cashRequest;
 		}
 
-        public void ForceEvaluate(Customer customer, NewCreditLineOption newCreditLineOption, bool isUnderwriterForced)
+        public void ForceEvaluate(int underwriterId, Customer customer, NewCreditLineOption newCreditLineOption, bool isUnderwriterForced)
         {
             if (
                 customer.CustomerMarketPlaces.Any(
@@ -83,7 +83,7 @@ namespace EzBob.Web.Code
                 }
                 _creator.UpdateAllMarketplaces(customer);
             }
-            _creator.Evaluate(_users.Get(customer.Id), newCreditLineOption, Convert.ToInt32(customer.IsAvoid), isUnderwriterForced);
+            _creator.Evaluate(underwriterId, _users.Get(customer.Id), newCreditLineOption, Convert.ToInt32(customer.IsAvoid), isUnderwriterForced);
         }
     }
 }

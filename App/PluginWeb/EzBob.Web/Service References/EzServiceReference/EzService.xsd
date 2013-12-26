@@ -6,9 +6,11 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="ActionID" type="ser:guid" />
       <xs:element minOccurs="0" name="Comment" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CustomerID" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="IsSynchronous" type="xs:boolean" />
       <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Status" type="tns:ActionStatus" />
+      <xs:element minOccurs="0" name="UserID" nillable="true" type="xs:int" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ActionMetaData" nillable="true" type="tns:ActionMetaData" />

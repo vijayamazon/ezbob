@@ -29,6 +29,9 @@ namespace EzServiceReference {
         private string CommentField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<int> CustomerIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool IsSynchronousField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -36,6 +39,9 @@ namespace EzServiceReference {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private EzServiceReference.ActionStatus StatusField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<int> UserIDField;
         
         [global::System.ComponentModel.BrowsableAttribute(false)]
         public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
@@ -69,6 +75,19 @@ namespace EzServiceReference {
                 if ((object.ReferenceEquals(this.CommentField, value) != true)) {
                     this.CommentField = value;
                     this.RaisePropertyChanged("Comment");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<int> CustomerID {
+            get {
+                return this.CustomerIDField;
+            }
+            set {
+                if ((this.CustomerIDField.Equals(value) != true)) {
+                    this.CustomerIDField = value;
+                    this.RaisePropertyChanged("CustomerID");
                 }
             }
         }
@@ -108,6 +127,19 @@ namespace EzServiceReference {
                 if ((this.StatusField.Equals(value) != true)) {
                     this.StatusField = value;
                     this.RaisePropertyChanged("Status");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<int> UserID {
+            get {
+                return this.UserIDField;
+            }
+            set {
+                if ((this.UserIDField.Equals(value) != true)) {
+                    this.UserIDField = value;
+                    this.RaisePropertyChanged("UserID");
                 }
             }
         }
@@ -215,6 +247,23 @@ namespace EzServiceReference {
                 }
             }
         }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="NewCreditLineOption", Namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies")]
+    public enum NewCreditLineOption : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        SkipEverything = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        UpdateEverythingExceptMp = 2,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        UpdateEverythingAndApplyAutoRules = 3,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        UpdateEverythingAndGoToManualDecision = 4,
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -330,17 +379,11 @@ namespace EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GreetingMailStrategy", ReplyAction="http://tempuri.org/IEzService/GreetingMailStrategyResponse")]
         System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> GreetingMailStrategyAsync(int nCustomerID, string sConfirmationEmail);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CustomerMarketplaceAdded", ReplyAction="http://tempuri.org/IEzService/CustomerMarketplaceAddedResponse")]
-        EzServiceReference.ActionMetaData CustomerMarketplaceAdded(int nCustomerID, int nMarketplaceID);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CustomerMarketplaceAdded", ReplyAction="http://tempuri.org/IEzService/CustomerMarketplaceAddedResponse")]
-        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> CustomerMarketplaceAddedAsync(int nCustomerID, int nMarketplaceID);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ApprovedUser", ReplyAction="http://tempuri.org/IEzService/ApprovedUserResponse")]
+        EzServiceReference.ActionMetaData ApprovedUser(int userId, int customerId, decimal loanAmount);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ApprovedUser", ReplyAction="http://tempuri.org/IEzService/ApprovedUserResponse")]
-        EzServiceReference.ActionMetaData ApprovedUser(int customerId, decimal loanAmount);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ApprovedUser", ReplyAction="http://tempuri.org/IEzService/ApprovedUserResponse")]
-        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> ApprovedUserAsync(int customerId, decimal loanAmount);
+        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> ApprovedUserAsync(int userId, int customerId, decimal loanAmount);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CashTransferred", ReplyAction="http://tempuri.org/IEzService/CashTransferredResponse")]
         EzServiceReference.ActionMetaData CashTransferred(int customerId, decimal amount);
@@ -373,22 +416,22 @@ namespace EzServiceReference {
         System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> LoanFullyPaidAsync(int customerId, string loanRefNum);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MoreAmlAndBwaInformation", ReplyAction="http://tempuri.org/IEzService/MoreAmlAndBwaInformationResponse")]
-        EzServiceReference.ActionMetaData MoreAmlAndBwaInformation(int customerId);
+        EzServiceReference.ActionMetaData MoreAmlAndBwaInformation(int userId, int customerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MoreAmlAndBwaInformation", ReplyAction="http://tempuri.org/IEzService/MoreAmlAndBwaInformationResponse")]
-        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> MoreAmlAndBwaInformationAsync(int customerId);
+        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> MoreAmlAndBwaInformationAsync(int userId, int customerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MoreAmlInformation", ReplyAction="http://tempuri.org/IEzService/MoreAmlInformationResponse")]
-        EzServiceReference.ActionMetaData MoreAmlInformation(int customerId);
+        EzServiceReference.ActionMetaData MoreAmlInformation(int userId, int customerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MoreAmlInformation", ReplyAction="http://tempuri.org/IEzService/MoreAmlInformationResponse")]
-        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> MoreAmlInformationAsync(int customerId);
+        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> MoreAmlInformationAsync(int userId, int customerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MoreBwaInformation", ReplyAction="http://tempuri.org/IEzService/MoreBwaInformationResponse")]
-        EzServiceReference.ActionMetaData MoreBwaInformation(int customerId);
+        EzServiceReference.ActionMetaData MoreBwaInformation(int userId, int customerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MoreBwaInformation", ReplyAction="http://tempuri.org/IEzService/MoreBwaInformationResponse")]
-        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> MoreBwaInformationAsync(int customerId);
+        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> MoreBwaInformationAsync(int userId, int customerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PasswordChanged", ReplyAction="http://tempuri.org/IEzService/PasswordChangedResponse")]
         EzServiceReference.ActionMetaData PasswordChanged(int customerId, string password);
@@ -415,16 +458,16 @@ namespace EzServiceReference {
         System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> PayPointAddedByUnderwriterAsync(int customerId, string cardno, string underwriterName, int underwriterId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PayPointNameValidationFailed", ReplyAction="http://tempuri.org/IEzService/PayPointNameValidationFailedResponse")]
-        EzServiceReference.ActionMetaData PayPointNameValidationFailed(int customerId, string cardHolderName);
+        EzServiceReference.ActionMetaData PayPointNameValidationFailed(int userId, int customerId, string cardHolderName);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PayPointNameValidationFailed", ReplyAction="http://tempuri.org/IEzService/PayPointNameValidationFailedResponse")]
-        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> PayPointNameValidationFailedAsync(int customerId, string cardHolderName);
+        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> PayPointNameValidationFailedAsync(int userId, int customerId, string cardHolderName);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/RejectUser", ReplyAction="http://tempuri.org/IEzService/RejectUserResponse")]
-        EzServiceReference.ActionMetaData RejectUser(int customerId);
+        EzServiceReference.ActionMetaData RejectUser(int userId, int customerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/RejectUser", ReplyAction="http://tempuri.org/IEzService/RejectUserResponse")]
-        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> RejectUserAsync(int customerId);
+        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> RejectUserAsync(int userId, int customerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EmailRolloverAdded", ReplyAction="http://tempuri.org/IEzService/EmailRolloverAddedResponse")]
         EzServiceReference.ActionMetaData EmailRolloverAdded(int customerId, decimal amount);
@@ -469,10 +512,10 @@ namespace EzServiceReference {
         System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> CaisGenerateAsync(int underwriterId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CaisUpdate", ReplyAction="http://tempuri.org/IEzService/CaisUpdateResponse")]
-        EzServiceReference.ActionMetaData CaisUpdate(int caisId);
+        EzServiceReference.ActionMetaData CaisUpdate(int userId, int caisId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CaisUpdate", ReplyAction="http://tempuri.org/IEzService/CaisUpdateResponse")]
-        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> CaisUpdateAsync(int caisId);
+        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> CaisUpdateAsync(int userId, int caisId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FirstOfMonthStatusNotifier", ReplyAction="http://tempuri.org/IEzService/FirstOfMonthStatusNotifierResponse")]
         EzServiceReference.ActionMetaData FirstOfMonthStatusNotifier();
@@ -529,22 +572,22 @@ namespace EzServiceReference {
         System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> XDaysDueAsync();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy1", ReplyAction="http://tempuri.org/IEzService/MainStrategy1Response")]
-        EzServiceReference.ActionMetaData MainStrategy1(int customerId, EzBob.Backend.Strategies.NewCreditLineOption newCreditLine, int avoidAutoDescison);
+        EzServiceReference.ActionMetaData MainStrategy1(int uderwriterId, int customerId, EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy1", ReplyAction="http://tempuri.org/IEzService/MainStrategy1Response")]
-        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> MainStrategy1Async(int customerId, EzBob.Backend.Strategies.NewCreditLineOption newCreditLine, int avoidAutoDescison);
+        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> MainStrategy1Async(int uderwriterId, int customerId, EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy2", ReplyAction="http://tempuri.org/IEzService/MainStrategy2Response")]
-        EzServiceReference.ActionMetaData MainStrategy2(int customerId, EzBob.Backend.Strategies.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced);
+        EzServiceReference.ActionMetaData MainStrategy2(int uderwriterId, int customerId, EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy2", ReplyAction="http://tempuri.org/IEzService/MainStrategy2Response")]
-        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> MainStrategy2Async(int customerId, EzBob.Backend.Strategies.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced);
+        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> MainStrategy2Async(int uderwriterId, int customerId, EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy3", ReplyAction="http://tempuri.org/IEzService/MainStrategy3Response")]
-        EzServiceReference.ActionMetaData MainStrategy3(int customerId, int checkType, string houseNumber, string houseName, string street, string district, string town, string county, string postcode, string bankAccount, string sortCode, int avoidAutoDescison);
+        EzServiceReference.ActionMetaData MainStrategy3(int uderwriterId, int customerId, int checkType, string houseNumber, string houseName, string street, string district, string town, string county, string postcode, string bankAccount, string sortCode, int avoidAutoDescison);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy3", ReplyAction="http://tempuri.org/IEzService/MainStrategy3Response")]
-        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> MainStrategy3Async(int customerId, int checkType, string houseNumber, string houseName, string street, string district, string town, string county, string postcode, string bankAccount, string sortCode, int avoidAutoDescison);
+        System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> MainStrategy3Async(int uderwriterId, int customerId, int checkType, string houseNumber, string houseName, string street, string district, string town, string county, string postcode, string bankAccount, string sortCode, int avoidAutoDescison);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -582,20 +625,12 @@ namespace EzServiceReference {
             return base.Channel.GreetingMailStrategyAsync(nCustomerID, sConfirmationEmail);
         }
         
-        public EzServiceReference.ActionMetaData CustomerMarketplaceAdded(int nCustomerID, int nMarketplaceID) {
-            return base.Channel.CustomerMarketplaceAdded(nCustomerID, nMarketplaceID);
+        public EzServiceReference.ActionMetaData ApprovedUser(int userId, int customerId, decimal loanAmount) {
+            return base.Channel.ApprovedUser(userId, customerId, loanAmount);
         }
         
-        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> CustomerMarketplaceAddedAsync(int nCustomerID, int nMarketplaceID) {
-            return base.Channel.CustomerMarketplaceAddedAsync(nCustomerID, nMarketplaceID);
-        }
-        
-        public EzServiceReference.ActionMetaData ApprovedUser(int customerId, decimal loanAmount) {
-            return base.Channel.ApprovedUser(customerId, loanAmount);
-        }
-        
-        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> ApprovedUserAsync(int customerId, decimal loanAmount) {
-            return base.Channel.ApprovedUserAsync(customerId, loanAmount);
+        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> ApprovedUserAsync(int userId, int customerId, decimal loanAmount) {
+            return base.Channel.ApprovedUserAsync(userId, customerId, loanAmount);
         }
         
         public EzServiceReference.ActionMetaData CashTransferred(int customerId, decimal amount) {
@@ -638,28 +673,28 @@ namespace EzServiceReference {
             return base.Channel.LoanFullyPaidAsync(customerId, loanRefNum);
         }
         
-        public EzServiceReference.ActionMetaData MoreAmlAndBwaInformation(int customerId) {
-            return base.Channel.MoreAmlAndBwaInformation(customerId);
+        public EzServiceReference.ActionMetaData MoreAmlAndBwaInformation(int userId, int customerId) {
+            return base.Channel.MoreAmlAndBwaInformation(userId, customerId);
         }
         
-        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> MoreAmlAndBwaInformationAsync(int customerId) {
-            return base.Channel.MoreAmlAndBwaInformationAsync(customerId);
+        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> MoreAmlAndBwaInformationAsync(int userId, int customerId) {
+            return base.Channel.MoreAmlAndBwaInformationAsync(userId, customerId);
         }
         
-        public EzServiceReference.ActionMetaData MoreAmlInformation(int customerId) {
-            return base.Channel.MoreAmlInformation(customerId);
+        public EzServiceReference.ActionMetaData MoreAmlInformation(int userId, int customerId) {
+            return base.Channel.MoreAmlInformation(userId, customerId);
         }
         
-        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> MoreAmlInformationAsync(int customerId) {
-            return base.Channel.MoreAmlInformationAsync(customerId);
+        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> MoreAmlInformationAsync(int userId, int customerId) {
+            return base.Channel.MoreAmlInformationAsync(userId, customerId);
         }
         
-        public EzServiceReference.ActionMetaData MoreBwaInformation(int customerId) {
-            return base.Channel.MoreBwaInformation(customerId);
+        public EzServiceReference.ActionMetaData MoreBwaInformation(int userId, int customerId) {
+            return base.Channel.MoreBwaInformation(userId, customerId);
         }
         
-        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> MoreBwaInformationAsync(int customerId) {
-            return base.Channel.MoreBwaInformationAsync(customerId);
+        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> MoreBwaInformationAsync(int userId, int customerId) {
+            return base.Channel.MoreBwaInformationAsync(userId, customerId);
         }
         
         public EzServiceReference.ActionMetaData PasswordChanged(int customerId, string password) {
@@ -694,20 +729,20 @@ namespace EzServiceReference {
             return base.Channel.PayPointAddedByUnderwriterAsync(customerId, cardno, underwriterName, underwriterId);
         }
         
-        public EzServiceReference.ActionMetaData PayPointNameValidationFailed(int customerId, string cardHolderName) {
-            return base.Channel.PayPointNameValidationFailed(customerId, cardHolderName);
+        public EzServiceReference.ActionMetaData PayPointNameValidationFailed(int userId, int customerId, string cardHolderName) {
+            return base.Channel.PayPointNameValidationFailed(userId, customerId, cardHolderName);
         }
         
-        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> PayPointNameValidationFailedAsync(int customerId, string cardHolderName) {
-            return base.Channel.PayPointNameValidationFailedAsync(customerId, cardHolderName);
+        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> PayPointNameValidationFailedAsync(int userId, int customerId, string cardHolderName) {
+            return base.Channel.PayPointNameValidationFailedAsync(userId, customerId, cardHolderName);
         }
         
-        public EzServiceReference.ActionMetaData RejectUser(int customerId) {
-            return base.Channel.RejectUser(customerId);
+        public EzServiceReference.ActionMetaData RejectUser(int userId, int customerId) {
+            return base.Channel.RejectUser(userId, customerId);
         }
         
-        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> RejectUserAsync(int customerId) {
-            return base.Channel.RejectUserAsync(customerId);
+        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> RejectUserAsync(int userId, int customerId) {
+            return base.Channel.RejectUserAsync(userId, customerId);
         }
         
         public EzServiceReference.ActionMetaData EmailRolloverAdded(int customerId, decimal amount) {
@@ -766,12 +801,12 @@ namespace EzServiceReference {
             return base.Channel.CaisGenerateAsync(underwriterId);
         }
         
-        public EzServiceReference.ActionMetaData CaisUpdate(int caisId) {
-            return base.Channel.CaisUpdate(caisId);
+        public EzServiceReference.ActionMetaData CaisUpdate(int userId, int caisId) {
+            return base.Channel.CaisUpdate(userId, caisId);
         }
         
-        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> CaisUpdateAsync(int caisId) {
-            return base.Channel.CaisUpdateAsync(caisId);
+        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> CaisUpdateAsync(int userId, int caisId) {
+            return base.Channel.CaisUpdateAsync(userId, caisId);
         }
         
         public EzServiceReference.ActionMetaData FirstOfMonthStatusNotifier() {
@@ -846,28 +881,28 @@ namespace EzServiceReference {
             return base.Channel.XDaysDueAsync();
         }
         
-        public EzServiceReference.ActionMetaData MainStrategy1(int customerId, EzBob.Backend.Strategies.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
-            return base.Channel.MainStrategy1(customerId, newCreditLine, avoidAutoDescison);
+        public EzServiceReference.ActionMetaData MainStrategy1(int uderwriterId, int customerId, EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
+            return base.Channel.MainStrategy1(uderwriterId, customerId, newCreditLine, avoidAutoDescison);
         }
         
-        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> MainStrategy1Async(int customerId, EzBob.Backend.Strategies.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
-            return base.Channel.MainStrategy1Async(customerId, newCreditLine, avoidAutoDescison);
+        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> MainStrategy1Async(int uderwriterId, int customerId, EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
+            return base.Channel.MainStrategy1Async(uderwriterId, customerId, newCreditLine, avoidAutoDescison);
         }
         
-        public EzServiceReference.ActionMetaData MainStrategy2(int customerId, EzBob.Backend.Strategies.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced) {
-            return base.Channel.MainStrategy2(customerId, newCreditLine, avoidAutoDescison, isUnderwriterForced);
+        public EzServiceReference.ActionMetaData MainStrategy2(int uderwriterId, int customerId, EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced) {
+            return base.Channel.MainStrategy2(uderwriterId, customerId, newCreditLine, avoidAutoDescison, isUnderwriterForced);
         }
         
-        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> MainStrategy2Async(int customerId, EzBob.Backend.Strategies.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced) {
-            return base.Channel.MainStrategy2Async(customerId, newCreditLine, avoidAutoDescison, isUnderwriterForced);
+        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> MainStrategy2Async(int uderwriterId, int customerId, EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced) {
+            return base.Channel.MainStrategy2Async(uderwriterId, customerId, newCreditLine, avoidAutoDescison, isUnderwriterForced);
         }
         
-        public EzServiceReference.ActionMetaData MainStrategy3(int customerId, int checkType, string houseNumber, string houseName, string street, string district, string town, string county, string postcode, string bankAccount, string sortCode, int avoidAutoDescison) {
-            return base.Channel.MainStrategy3(customerId, checkType, houseNumber, houseName, street, district, town, county, postcode, bankAccount, sortCode, avoidAutoDescison);
+        public EzServiceReference.ActionMetaData MainStrategy3(int uderwriterId, int customerId, int checkType, string houseNumber, string houseName, string street, string district, string town, string county, string postcode, string bankAccount, string sortCode, int avoidAutoDescison) {
+            return base.Channel.MainStrategy3(uderwriterId, customerId, checkType, houseNumber, houseName, street, district, town, county, postcode, bankAccount, sortCode, avoidAutoDescison);
         }
         
-        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> MainStrategy3Async(int customerId, int checkType, string houseNumber, string houseName, string street, string district, string town, string county, string postcode, string bankAccount, string sortCode, int avoidAutoDescison) {
-            return base.Channel.MainStrategy3Async(customerId, checkType, houseNumber, houseName, street, district, town, county, postcode, bankAccount, sortCode, avoidAutoDescison);
+        public System.Threading.Tasks.Task<EzServiceReference.ActionMetaData> MainStrategy3Async(int uderwriterId, int customerId, int checkType, string houseNumber, string houseName, string street, string district, string town, string county, string postcode, string bankAccount, string sortCode, int avoidAutoDescison) {
+            return base.Channel.MainStrategy3Async(uderwriterId, customerId, checkType, houseNumber, houseName, street, district, town, county, postcode, bankAccount, sortCode, avoidAutoDescison);
         }
     }
 }

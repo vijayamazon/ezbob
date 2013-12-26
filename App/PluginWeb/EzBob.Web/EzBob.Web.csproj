@@ -1227,20 +1227,20 @@
     <Content Include="Content\js\Profile\ezbob.profile.perks.coffee" />
     <Content Include="Content\css\fonts\fontawesome-webfont.eot" />
     <Content Include="Content\css\fonts\fontawesome-webfont.ttf" />
-    <Content Include="Service References\EzServiceReference\configuration91.svcinfo" />
-    <Content Include="Service References\EzServiceReference\configuration.svcinfo" />
     <Content Include="Content\css\fonts\fontawesome-webfont.woff" />
     <Content Include="Content\css\fonts\FontAwesome.otf" />
+    <None Include="Service References\EzServiceReference\configuration91.svcinfo" />
+    <None Include="Service References\EzServiceReference\configuration.svcinfo" />
     <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.ActionMetaData.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
     <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.StringListActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
-    <Content Include="Service References\EzServiceReference\Reference.svcmap">
+    <None Include="Service References\EzServiceReference\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
-    </Content>
+    </None>
     <Content Include="Views\Shared\_Copyright.cshtml">
       <SubType>Code</SubType>
     </Content>
@@ -1499,7 +1499,7 @@
     <None Include="Service References\EzServiceReference\EzService.xsd">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="Service References\EzServiceReference\service.wsdl" />
+    <None Include="Service References\EzServiceReference\service.wsdl" />
     <None Include="Service References\EzServiceReference\service.xsd">
       <SubType>Designer</SubType>
     </None>

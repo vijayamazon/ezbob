@@ -71,22 +71,23 @@ namespace EzService {
 
 		#region method Create
 
-		public static ActionMetaData Create(int nServiceInstanceID, string sActionName, AConnection oDB, ASafeLog oLog, bool bIsSynchronous, ActionStatus nStatus, string sComment) {
+		public static ActionMetaData Create(int nServiceInstanceID, string sActionName, AConnection oDB, ASafeLog oLog, bool bIsSynchronous, ActionStatus nStatus, string sComment, int? nCustomerID, int? nUserID) {
 			Guid oActionID = Guid.NewGuid();
 
 			while (oActionID == Guid.Empty)
 				oActionID = Guid.NewGuid();
 
-			var amd = new ActionMetaData {
+			var amd = new ActionMetaData(nStatus) {
 				ActionID = oActionID,
 				Name = sActionName,
 				IsSynchronous = bIsSynchronous,
-				Status = nStatus,
 				UnderlyingThread = Thread.CurrentThread,
 				Comment = sComment,
 				m_oDB = oDB,
 				m_oLog = oLog,
-				m_nServiceInstanceID = nServiceInstanceID
+				m_nServiceInstanceID = nServiceInstanceID,
+				UserID = nUserID,
+				CustomerID = nCustomerID
 			};
 
 			amd.Save();
@@ -118,17 +119,11 @@ namespace EzService {
 
 		[DataMember]
 		public ActionStatus Status {
-			get {
-				lock (m_oLockStatus)
-					return m_nStatus;
-			} // get
-			set {
-				lock (m_oLockStatus)
-					m_nStatus = value;
-			} // set
+			get { return m_oStatus.Value; } // get
+			set { m_oStatus.Value = value; } // set
 		} // Status
 
-		private ActionStatus m_nStatus;
+		private readonly SafeValue<ActionStatus> m_oStatus;
 
 		#endregion property Status
 
@@ -136,17 +131,11 @@ namespace EzService {
 
 		[DataMember]
 		public string Comment {
-			get {
-				lock (m_oLockComment)
-					return m_sComment;
-			} // get
-			set {
-				lock (m_oLockComment)
-					m_sComment = value;
-			} // set
+			get { return m_oComment.Value; } // get
+			set { m_oComment.Value = value; } // set
 		} // Status
 
-		private string m_sComment;
+		private readonly SafeValue<string> m_oComment;
 
 		#endregion property Comment
 
@@ -156,6 +145,30 @@ namespace EzService {
 		public bool IsSynchronous { get; private set; }
 
 		#endregion property IsSynchronous
+
+		#region property UserID
+
+		[DataMember]
+		public int? UserID {
+			get { return m_oUserID.Value; } // get
+			set { m_oUserID.Value = value; } // set
+		} // UserID
+
+		private readonly SafeValue<int?> m_oUserID;
+
+		#endregion property UserID
+
+		#region property CustomerID
+
+		[DataMember]
+		public int? CustomerID {
+			get { return m_oCustomerID.Value; } // get
+			set { m_oCustomerID.Value = value; } // set
+		} // CustomerID
+
+		private readonly SafeValue<int?> m_oCustomerID;
+
+		#endregion property CustomerID
 
 		#endregion serialised properties
 
@@ -236,7 +249,9 @@ namespace EzService {
 						new QueryParameter("@Status", (int)Status),
 						new QueryParameter("@CurrentThreadID", Thread.CurrentThread.ManagedThreadId),
 						new QueryParameter("@UnderlyingThreadID", UnderlyingThread.ManagedThreadId),
-						new QueryParameter("@Comment", Comment)
+						new QueryParameter("@Comment", Comment),
+						new QueryParameter("@UserID", UserID.HasValue ? UserID.Value : (int?)null),
+						new QueryParameter("@CustomerID", CustomerID.HasValue ? CustomerID.Value : (int?)null)
 					);
 
 					m_oLog.Debug("Saving action status of {0} to DB complete.", this);
@@ -255,23 +270,20 @@ namespace EzService {
 
 		#region constructor
 
-		private ActionMetaData() {
+		private ActionMetaData(ActionStatus nStatus) {
 			m_oLockSave = new object();
-			m_oLockStatus = new object();
-			m_oLockComment = new object();
+
+			m_oStatus = new SafeValue<ActionStatus>(nStatus);
+			m_oComment = new SafeValue<string>();
+			m_oUserID = new SafeValue<int?>();
+			m_oCustomerID = new SafeValue<int?>();
 		} // constructor
 
 		#endregion constructor
 
-		#region locks
+		#region fields
 
 		private readonly object m_oLockSave;
-		private readonly object m_oLockStatus;
-		private readonly object m_oLockComment;
-
-		#endregion locks
-
-		#region fields
 
 		private AConnection m_oDB;
 		private ASafeLog m_oLog;
