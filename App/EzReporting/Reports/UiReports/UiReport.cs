@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
-using System.Linq;
-using System.Text;
 using Ezbob.Database;
 using Ezbob.Logger;
 using Ezbob.Utils;
@@ -284,10 +282,8 @@ namespace Reports {
 			case "birth_date_day":
 			case "birth_date_month":
 			case "birth_date_year":
-			case "consent_to_search":
 			case "marital_status":
 			case "middle_name":
-			case "continue":
 			case "own_other_property":
 				m_oControlGroups[UiItemGroups.PersonalInfo][nControlID] = sControlName;
 				break;
@@ -299,6 +295,8 @@ namespace Reports {
 
 			case "daytime_phone":
 			case "mobile_phone":
+			case "consent_to_search":
+			case "continue":
 				m_oControlGroups[UiItemGroups.ContactDetails][nControlID] = sControlName;
 				break;
 
