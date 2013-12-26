@@ -2,14 +2,14 @@
 {
 	public enum TimePeriodEnum
 	{
-		Month,
-		Month3,
-		Month6,
-		Year,
-		Month15,
-		Month18,
-		Year2,
-		Lifetime,
-		Zero
+		Month = 1,
+		Month3 = 2,
+		Month6 = 3,
+		Year = 4,
+		Month15 = 5,
+		Month18 = 6,
+		Year2 = 7,
+		Lifetime = 8,
+		Zero = 9
 	}
 }

@@ -23,7 +23,7 @@ namespace CommonLib
 					continue;
 				}
 				var av =
-					afs.OrderByDescending(af => af.Value).LastOrDefault(af => AnalysisFunctionIncome.IncomeFunctions.Contains(af.Function) && af.TimePeriod <= timePeriod);
+					afs.OrderByDescending(af => af.TimePeriod).FirstOrDefault(af => AnalysisFunctionIncome.IncomeFunctions.Contains(af.Function) && af.TimePeriod <= timePeriod);
 				double currentTurnover = Convert.ToDouble(av != null ? av.Value : 0);
 
 				if (afs[0].MarketPlaceName == "Pay Pal")

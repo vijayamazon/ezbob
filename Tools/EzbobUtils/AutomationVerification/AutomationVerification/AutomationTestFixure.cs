@@ -1,6 +1,7 @@
 ﻿namespace AutomationVerification
 {
 	using AutomationCalculator;
+	using CommonLib;
 	using Ezbob.Logger;
 	using NUnit.Framework;
 
@@ -32,7 +33,18 @@
 		{
 			var arr = new AutoReRejectionCalculator(Log);
 			string reason;
-			var des = arr.IsAutoReRejected(14223, out reason);
+			var des = arr.IsAutoReRejected(7839, out reason);
+			Assert.AreEqual(des, false);
+		}
+
+		[Test]
+		public void testAutoRejetion()
+		{
+			var db = new DbHelper(Log);
+			var rejectionConstants = db.GetRejectionConstants();
+			var arr = new AutoRejectionCalculator(Log, rejectionConstants);
+			string reason;
+			var des = arr.IsAutoRejected(7839, out reason);
 			Assert.AreEqual(des, false);
 		}
 

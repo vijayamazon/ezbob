@@ -15,8 +15,9 @@ namespace CommonLib
 	{
 		public static string[] IncomeFunctions =
 			{
-				"TotlaIncome",
-				"TotalNetInPayments"
+				"TotalIncome",
+				"TotalNetInPayments",
+				"TotalSumOfOrders"
 			};
 	}
 }
