@@ -34,7 +34,7 @@
 }
 
 <h3>Summary</h3>
-<table class="cross-check-summary-table table table-bordered blue-header centered squeezed">
+<table class="cross-check-summary-table table centered squeezed">
 <tbody>
 <tr>
 	<th class="narrow-as-possible"><a href="javascript:document.getElementById('cross-check-business-info-section').scrollIntoView()">Company name</a></th>
@@ -52,9 +52,9 @@
 </table>
 
 <h3>Personal info</h3>
-<table class="table table-bordered blue-header centered squeezed cross-check-director-details" director-name="@string.Join("\n", new [] { Model.Application.FirstName, Model.Application.MiddleInitial, Model.Application.Surname })">
-<thead>
-	<tr>
+<table class="table centered squeezed cross-check-director-details" director-name="@string.Join("\n", new [] { Model.Application.FirstName, Model.Application.MiddleInitial, Model.Application.Surname })">
+<thead class="box">
+	<tr class="box-title">
 		<th style="width: 20%;">Personal Info</th>
 		<th style="width: 20%;">Application</th>
 		<th style="width: 30%;">eBay</th>
@@ -171,9 +171,9 @@
 </table>
 
 <h3>Residential address</h3>
-<table class="table table-bordered  blue-header centered squeezed">
-<thead>
-	<tr>
+<table class="table centered squeezed">
+<thead class="box">
+	<tr class="box-title">
 		<th style="width: 20%;">Address</th>
 		<th style="width: 20%;">Current</th>
 		<th style="width: 20%;">Previous</th>
@@ -249,46 +249,52 @@
 </table>
 
 @if (Model.Customer.IsOffline) {
-<h3>Other property ownership</h3>
-<table class="table table-striped table-bordered blue-header centered squeezed">
-	<tbody>
-		@if (Model.OtherPropertyAddress == null) {
-			<tr>
-				<td colspan="2">Does not own another property</td>
-			</tr>
-		}
-		else {
-			<tr>
-				<td><b>Line1</b></td>
-				<td>@Model.OtherPropertyAddress.Line1</td>
-			</tr>
-			<tr>
-				<td><b>Line2</b></td>
-				<td>@Model.OtherPropertyAddress.Line2</td>
-			</tr>
-			<tr>
-				<td><b>Line3</b></td>
-				<td>@Model.OtherPropertyAddress.Line3</td>
-			</tr>
-			<tr>
-				<td><b>Town</b></td>
-				<td>@Model.OtherPropertyAddress.Town</td>
-			</tr>
-			<tr>
-				<td><b>County</b></td>
-				<td>@Model.OtherPropertyAddress.County</td>
-			</tr>
-			<tr>
-				<td><b>Postcode</b></td>
-				<td>@Model.OtherPropertyAddress.Postcode</td>
-			</tr>
-			<tr>
-				<td><b>Country</b></td>
-				<td>@Model.OtherPropertyAddress.Country</td>
-			</tr>
-		}
-	</tbody>
-</table>
+    <table class="table centered squeezed">
+        <thead class="box">
+            <tr class="box-title">
+                <th colspan="2">
+                    <h3>Other property ownership</h3>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.OtherPropertyAddress == null) {
+                <tr>
+                    <td colspan="2">Does not own another property</td>
+                </tr>
+            }
+            else {
+                <tr>
+                    <td><b>Line1</b></td>
+                    <td>@Model.OtherPropertyAddress.Line1</td>
+                </tr>
+                <tr>
+                    <td><b>Line2</b></td>
+                    <td>@Model.OtherPropertyAddress.Line2</td>
+                </tr>
+                <tr>
+                    <td><b>Line3</b></td>
+                    <td>@Model.OtherPropertyAddress.Line3</td>
+                </tr>
+                <tr>
+                    <td><b>Town</b></td>
+                    <td>@Model.OtherPropertyAddress.Town</td>
+                </tr>
+                <tr>
+                    <td><b>County</b></td>
+                    <td>@Model.OtherPropertyAddress.County</td>
+                </tr>
+                <tr>
+                    <td><b>Postcode</b></td>
+                    <td>@Model.OtherPropertyAddress.Postcode</td>
+                </tr>
+                <tr>
+                    <td><b>Country</b></td>
+                    <td>@Model.OtherPropertyAddress.Country</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
 
 @{
@@ -299,9 +305,9 @@ bool propertyOwnedByCompany = Model.Customer.CompanyAdditionalInfo != null && Mo
 }
 
 <h3 id="cross-check-business-info-section">Business info</h3>
-<table class="table table-striped table-bordered blue-header centered squeezed">
-<thead>
-	<tr>
+<table class="table centered squeezed">
+<thead class="box">
+	<tr class="box-title">
 		<th></th>
 		<th>Application</th>
 		<th>Experian</th>

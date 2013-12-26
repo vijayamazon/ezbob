@@ -13,6 +13,16 @@ class EzBob.Underwriter.RolloverView extends Backbone.View
                 return null
         @
 
+    jqoptions: ->
+        modal: true
+        resizable: false
+        title: "Rollover"
+        position: "center"
+        draggable: false
+        width: "73%"
+        height: Math.max(window.innerHeight * 0.9, 600)
+        dialogClass: "rollover-popup"
+
     events:
         "click .confirm" : "addRollover",
         "click .remove" : "removeRollover"

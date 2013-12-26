@@ -218,39 +218,12 @@ table.rright tbody td:not(:first-child) { text-align: right; }
 
 .profile-tabs { padding-left: 10px; }
 
-.blue-header { border-radius: 4px; }
-
-.blue-header thead tr {
-    color: #ffffff;
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-    background-color: #9AB1D1;
-    border-color: #9AB1D1 #9AB1D1 #6e7d91;
-    background-image: -moz-linear-gradient(top, #9AB1D1, #6e7d91);
-    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#9AB1D1), to(#6e7d91));
-    background-repeat: repeat-x;
-}
-
-.green-header { border-radius: 4px; }
-
-.green-header thead tr {
-    background-color: #B1B1B1;
-    color: white;
-    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-    background-color: #B1B1B1;
-    border-color: #B1B1B1 #B1B1B1 #919191;
-    background-image: -moz-linear-gradient(top, #B1B1B1, #919191);
-    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#B1B1B1), to(#919191));
-    background-repeat: repeat-x;
-}
-
 .centered thead tr th { text-align: center; }
 
 table.squeezed tbody tr td {
     padding-top: 4px;
     padding-bottom: 4px;
 }
-
-.table-striped.darker tbody tr:nth-child(odd) td, .table-striped.darker tbody tr:nth-child(odd) th { background-color: #F1F1F1; }
 
 .api-check-first-column { width: 140px; }
 
@@ -366,6 +339,22 @@ ul.left-underwriter-menu li label {
     display: inline-block;
     float: right;
 }
+#grids-view .table {
+    white-space: nowrap;
+}
+
+a.ezbob-logo {
+    width: 100px;
+    height: 40px;
+    background-image: url(../img/ezbob-logo.png);
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.roleImg {
+    margin-top: -5px;
+}
+
 /*
 #grids-view {
 	font-family: Tahoma, 'Helvetica Neue', Helvetica, Arial, sans-serif;

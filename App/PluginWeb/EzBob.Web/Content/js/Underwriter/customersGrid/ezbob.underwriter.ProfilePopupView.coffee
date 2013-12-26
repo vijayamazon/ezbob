@@ -34,6 +34,16 @@ class EzBob.Underwriter.ProfilePopupView extends Backbone.Marionette.ItemView
 
     template: "#profile-popup-view-template"
 
+    jqoptions: ->
+        modal: true
+        resizable: false
+        title: "Registered"
+        position: "center"
+        draggable: false
+        width: "73%"
+        height: Math.max(window.innerHeight * 0.9, 600)
+        dialogClass: "registered-popup"
+
     events:
         "click .recheck-mp": "recheckMpClicked"
         "click .recheck-yodlee": "recheckYodleeClicked"

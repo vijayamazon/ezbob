@@ -47,7 +47,7 @@ EzBob.Underwriter.CustomerRelationsView = Backbone.Marionette.ItemView.extend({
         }
         var options = { actions: actionsObject, statuses: statusesObject, mainTab: this };
         var view = new EzBob.Underwriter.AddCustomerRelationsEntry(options);
-        EzBob.App.modal.show(view);
+        EzBob.App.jqmodal.show(view);
         return false;
     }
 });

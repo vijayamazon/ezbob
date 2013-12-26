@@ -23,9 +23,9 @@
 {
     <div class="tab-pane active" id="yodleetab0">
         <%(function() { if (y.CashFlowReportModel && y.CashFlowReportModel.YodleeCashFlowReportModelDict) { %>
-        <table class="table table-bordered table-striped  blue-header centered rright" style="width: auto;">
-            <thead>
-                <tr>
+        <table class="table centered rright" style="width: auto;">
+            <thead class="box">
+                <tr class="box-title">
                     <th>Cash Flow Report</th>
                     <% var obj = y.CashFlowReportModel.YodleeCashFlowReportModelDict;
                     var minDay = y.CashFlowReportModel.MinDateDict;
@@ -80,9 +80,9 @@
 {
     <div class="tab-pane" id="yodleetab1">
         <%(function() { if (y.SearchWordsModel && y.SearchWordsModel.YodleeSearchWordModelDict) { %>
-        <table class="table table-bordered table-striped  blue-header centered rright" style="width: auto;">
-            <thead>
-                <tr>
+        <table class="table centered rright" style="width: auto;">
+            <thead class="box">
+                <tr class="box-title">
                     <th>Search Words Report</th>
                     <th>Word Origin</th>
                     <% var obj = y.SearchWordsModel.YodleeSearchWordModelDict;
@@ -156,9 +156,9 @@
 @helper YodleeBankAccounts()
 {
     <div class="tab-pane" id="yodleetab3">
-        <table class="table table-bordered table-striped  blue-header centered nowrap">
-            <thead>
-                <tr>
+        <table class="table centered nowrap">
+            <thead class="box">
+                <tr class="box-title">
                     <th>Account Name</th>
                     <th>Account Number</th>
                     <th>Account Type</th>
@@ -197,9 +197,9 @@
         <div class="dataTables_filter" id="range-filter">
             <label for="date-range"> Filter by date range: <input type="text" id="date-range"/></label>
         </div>
-        <table class="table table-bordered table-striped  blue-header centered nowrap YodleeTransactionsTable" id="YodleeTransactionsTable">
-            <thead>
-                <tr>
+        <table class="table centered nowrap YodleeTransactionsTable" id="YodleeTransactionsTable">
+            <thead class="box">
+                <tr class="box-title">
                     <th>Acct #</th>
                     <th>Tr Type</th>
                     <th>Tr/Post Date</th>
@@ -257,9 +257,9 @@
 @helper YodleeAggregates()
 {
     <div class="tab-pane" id="yodleetab5">
-        <table class="table table-bordered table-striped  blue-header centered nowrap rright">
-            <thead>
-                <tr>
+        <table class="table centered nowrap rright">
+            <thead class="box">
+                <tr class="box-title">
                     <th></th>
                     <th>1M</th>
                     <th>3M</th>
@@ -336,9 +336,9 @@
 {
     <div class="tab-pane" id="yodleetab6">
         <%(function() { if (y.RuleModel && y.RuleModel.GroupRulesDict) { var rm = y.RuleModel; %>
-        <table class="table table-bordered table-striped  blue-header centered" style="width: auto;">
-            <thead>
-                <tr>
+        <table class="table centered" style="width: auto;">
+            <thead class="box">
+                <tr class="box-title">
                     <th>Group</th>
                     <th>Rule</th>
                 </tr>

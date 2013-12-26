@@ -1,5 +1,5 @@
 (function() {
-  var root, _ref,
+  var root,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -10,11 +10,11 @@
   EzBob.Underwriter = EzBob.Underwriter || {};
 
   EzBob.Underwriter.ApproveLoanWithoutAML = (function(_super) {
+
     __extends(ApproveLoanWithoutAML, _super);
 
     function ApproveLoanWithoutAML() {
-      _ref = ApproveLoanWithoutAML.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return ApproveLoanWithoutAML.__super__.constructor.apply(this, arguments);
     }
 
     ApproveLoanWithoutAML.prototype.template = '#approve-loan-without-aml-template';
@@ -26,6 +26,19 @@
       return ApproveLoanWithoutAML.__super__.initialize.call(this);
     };
 
+    ApproveLoanWithoutAML.prototype.jqoptions = function() {
+      return {
+        modal: true,
+        resizable: false,
+        title: "Warning",
+        position: "center",
+        draggable: false,
+        width: "73%",
+        height: Math.max(window.innerHeight * 0.9, 600),
+        dialogClass: "warning-aml-status-popup"
+      };
+    };
+
     ApproveLoanWithoutAML.prototype.render = function() {
       ApproveLoanWithoutAML.__super__.render.call(this);
       return this;
@@ -33,7 +46,6 @@
 
     ApproveLoanWithoutAML.prototype.onSave = function() {
       var isChecked, that, xhr;
-
       isChecked = $('#isDoNotShowAgain').is(':checked');
       this.model.set('SkipPopupForApprovalWithoutAML', isChecked);
       BlockUi("on");

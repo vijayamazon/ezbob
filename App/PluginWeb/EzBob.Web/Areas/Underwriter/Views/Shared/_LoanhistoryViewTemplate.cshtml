@@ -27,9 +27,9 @@
 </script>
 
 @helper Loans(){
-    <table class="table table-bordered table-selected table-striped blue-header centered">
-        <thead>
-            <tr>        
+    <table class="table centered">
+        <thead class="box">
+            <tr class="box-title">
                 <th>Loan ref#</th>
                 <th>Loan amount</th>
                 <th>Repayments</th>
@@ -58,7 +58,7 @@
                     <% if (loan.Modified) {%>
                     *
                     <%}%>
-                    <a href="#" class="btn btn-mini edit-loan" data-id="<%-loan.Id%>" ><i class="icon-pencil"></i></a>
+                    <a href="#" class="btn btn-info btn-mini edit-loan" data-id="<%-loan.Id%>" ><i class="icon-pencil"></i></a>
                 </td>
                 <td><%- EzBob.formatPounds(loan.LoanAmount) %></td>
                 <td><%- EzBob.formatPounds(loan.Repayments) %></td>
@@ -99,9 +99,9 @@
 
 @helper Offers(){
    
-    <table class="table table-bordered table-striped blue-header centered">
-        <thead>
-            <tr>
+    <table class="table centered">
+        <thead class="box">
+            <tr class="box-title">
                 <th>Action</th>
                 <th>Offer</th>
                 <th>Start Date</th>
@@ -114,7 +114,6 @@
                 <th>Type</th>
                 <th>Source</th>
                 <th>Comments</th>
-                
             </tr>
         </thead>
         <tbody>
@@ -171,7 +170,6 @@
 
     <input type="hidden" name="loanId" value="<%-loanId%>"/>
     <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         <h3 id="myModalLabel">Manual Payment</h3>
     </div>
 
@@ -193,6 +191,5 @@
     
     <div class="modal-footer">
         <button class="btn btn-primary confirm">OK</button>
-        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
     </div>
 }

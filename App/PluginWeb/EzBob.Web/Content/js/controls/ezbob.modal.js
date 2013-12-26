@@ -36,17 +36,21 @@ EzBob.ModalRegion = Backbone.Marionette.Region.extend({
     
     setDisplayOptions: function () {
         if (!this.isUnderwriter) return;
-
+        
         var $el = $(this.$el),
             modalHeight = $el.height(),
-            modalWidth = $el.width(),
-            $modalBody = $el.find('.modal-body'),
+            modalWidth = $el.width();
+        
+        console.log('modal', $el.height(), $el.width());
+
+        var $modalBody = $el.find('.modal-body'),
             bodyHeight = $modalBody.height(),
             bodyWidht = $modalBody.width();
-        
+
         $el.resizable({
-            minHeight: modalHeight,
-            minWidth: modalWidth,
+        //    minHeight: modalHeight,
+            //    minWidth: modalWidth,
+            
             resize: function(e, ui) {
                 $modalBody.height(bodyHeight + ui.size.height - modalHeight);
                 $modalBody.width(bodyWidht + ui.size.width - modalWidth);

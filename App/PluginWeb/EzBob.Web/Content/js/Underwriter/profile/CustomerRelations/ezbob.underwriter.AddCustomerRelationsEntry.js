@@ -1,4 +1,4 @@
-﻿(function() {
+(function() {
   var root,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -21,6 +21,19 @@
 
     AddCustomerRelationsEntry.prototype.events = {
       "keyup textarea": "commentKeyup"
+    };
+
+    AddCustomerRelationsEntry.prototype.jqoptions = function() {
+      return {
+        modal: true,
+        resizable: false,
+        title: "CRM",
+        position: "center",
+        draggable: false,
+        width: "73%",
+        height: Math.max(window.innerHeight * 0.9, 600),
+        dialogClass: "customer-relations-popup"
+      };
     };
 
     AddCustomerRelationsEntry.prototype.initialize = function(options) {

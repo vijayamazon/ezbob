@@ -43,6 +43,16 @@ class EzBob.Underwriter.EditBugView extends EzBob.BoundItemView
 
     template: '#bug-edit-template'
 
+    jqoptions: ->
+        modal: true
+        resizable: false
+        title: "Bug Reporter"
+        position: "center"
+        draggable: false
+        width: "73%"
+        height: Math.max(window.innerHeight * 0.9, 600)
+        dialogClass: "bugs-popup"
+
     eqConverter: (v) ->
         (direction, value) -> 
             value is v
@@ -124,5 +134,5 @@ $('body').on 'click', 'a[data-bug-type]', (e) ->
             view.close()
 
         view.options = {show: true, keyboard: false, focusOn: "textarea:first"}
-        EzBob.App.modal.show view
+        EzBob.App.jqmodal.show view
     false

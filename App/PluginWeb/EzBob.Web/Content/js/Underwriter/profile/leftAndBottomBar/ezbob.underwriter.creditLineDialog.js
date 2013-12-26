@@ -1,4 +1,4 @@
-﻿(function() {
+(function() {
   var root,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -34,6 +34,19 @@
 
     CreditLineDialog.prototype.ui = {
       form: "form"
+    };
+
+    CreditLineDialog.prototype.jqoptions = function() {
+      return {
+        modal: true,
+        resizable: false,
+        title: "Credit Line",
+        position: "center",
+        draggable: false,
+        width: "73%",
+        height: Math.max(window.innerHeight * 0.9, 600),
+        dialogClass: "creditline-popup"
+      };
     };
 
     CreditLineDialog.prototype.onChangeLoanTypeSelectionAllowed = function() {
@@ -143,7 +156,6 @@
         autoclose: true,
         format: 'dd/mm/yyyy'
       });
-      console.log(this.$el.find("#offeredCreditLine"));
       this.$el.find("#offeredCreditLine").autoNumeric(EzBob.moneyFormat);
       if (this.$el.find("#offeredCreditLine").val() === "-") {
         this.$el.find("#offeredCreditLine").val("");

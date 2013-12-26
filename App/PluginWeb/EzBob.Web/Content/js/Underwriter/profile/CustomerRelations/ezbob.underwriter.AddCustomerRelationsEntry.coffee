@@ -8,6 +8,16 @@ class EzBob.Underwriter.AddCustomerRelationsEntry extends EzBob.BoundItemView
     events:
         "keyup textarea": "commentKeyup"
 
+    jqoptions: ->
+        modal: true
+        resizable: false
+        title: "CRM"
+        position: "center"
+        draggable: false
+        width: "73%"
+        height: Math.max(window.innerHeight * 0.9, 600)
+        dialogClass: "customer-relations-popup"
+
     initialize: (options) ->
         @model = new Backbone.Model(actions: options.actions, statuses: options.statuses)
         @mainTab = options.mainTab

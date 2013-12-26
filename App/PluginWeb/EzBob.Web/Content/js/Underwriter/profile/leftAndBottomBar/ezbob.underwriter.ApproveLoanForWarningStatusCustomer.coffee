@@ -9,7 +9,17 @@ class EzBob.Underwriter.ApproveLoanForWarningStatusCustomer extends EzBob.BoundI
         @model = options.model
         @parent = options.parent
         super()
-        
+    
+    jqoptions: ->
+        modal: true
+        resizable: false
+        title: "Warning"
+        position: "center"
+        draggable: false
+        width: "73%"
+        height: Math.max(window.innerHeight * 0.9, 600)
+        dialogClass: "warning-customer-status-popup"
+
     render: ->
         super()
         return @

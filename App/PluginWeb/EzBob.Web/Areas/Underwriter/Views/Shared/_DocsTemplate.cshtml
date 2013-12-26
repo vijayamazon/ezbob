@@ -5,9 +5,9 @@
 </script>
 
 @helper docsTemplate(){
-    <table id="alertDocsTable" class="table table-bordered blue-header centered" >
-        <thead>
-            <tr>
+    <table id="alertDocsTable" class="table centered" >
+        <thead class="box">
+            <tr class="box-title">
                 <th>Uploaded document name</th>
                 <th>Date</th>
                 <th>Employee name</th>
@@ -39,7 +39,6 @@
 
 @helper FileUpload(){
     <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         <h3 id="myModalLabel">Add/Edit Document</h3>
     </div>
         
@@ -63,6 +62,5 @@
         
     <div class="modal-footer">
         <button class="btn btn-primary button-upload">Save</button>
-        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
     </div>
 }

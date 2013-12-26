@@ -144,7 +144,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.Reports
         public static MvcHtmlString CreateTable<T>(ReportTableModel<T> model, bool withTotal = true)
         {
             var table = new TagBuilder("table");
-            table.AddCssClass("table table-striped table-bordered table-condensed");
+            table.AddCssClass("table");
 
             
             table.InnerHtml += FormThead(model);

@@ -9,7 +9,6 @@
 %>
 </text>
     <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         <h3 id="myModalLabel"><%=title%></h3>
     </div>
     
@@ -18,9 +17,9 @@
         <b>Customer Full Name:  </b> <%-cName%> <br/>
         <hr/>
 
-        <table class="table table-bordered table-striped">
-            <thead>
-                <tr>
+        <table class="table">
+            <thead class="box">
+                <tr class="box-title">
                     <th>#</th>
                     <th>Name</th>
                     <th>Type</th>
@@ -60,9 +59,9 @@
         </table>
         
         <hr/>
-        <table class="table table-bordered table-striped">
-            <thead>
-                <tr>
+        <table class="table">
+            <thead class="box">
+                <tr class="box-title">
                     <th>Name</th>
                     <th>Status</th>
                     <th>Start Time</th>
@@ -84,9 +83,5 @@
                 </tr>
             </tbody>
         </table>
-    </div>
-    
-    <div class="modal-footer">
-        <button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
     </div>
 }

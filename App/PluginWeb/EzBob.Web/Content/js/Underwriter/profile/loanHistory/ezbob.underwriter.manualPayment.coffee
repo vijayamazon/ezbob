@@ -5,6 +5,16 @@ EzBob.Underwriter = EzBob.Underwriter or {}
 class EzBob.Underwriter.ManualPaymentView extends Backbone.Marionette.ItemView
     template: "#manualPayment-template"
 
+    jqoptions: ->
+        modal: true
+        resizable: false
+        title: "Manual Payment"
+        position: "center"
+        draggable: false
+        width: "73%"
+        height: Math.max(window.innerHeight * 0.9, 600)
+        dialogClass: "manual-payment-popup"
+
     onRender: ->
         @$el.find('.ezDateTime').splittedDateTime()
         @validator = EzBob.validatemanualPaymentForm @ui.form

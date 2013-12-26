@@ -5,9 +5,9 @@
 @helper FraudDetectionLog(){
     <button class="btn-primary btn" id="recheckFraud"><i class="icon-refresh"></i> Recheck</button><span>  Last check date: <%-checkDate == undefined ? 'Never checked' : EzBob.formatDate(checkDate)%></span>
     
-    <table class="table table-bordered table-striped blue-header centered table-fixed">
-        <thead>
-            <tr>
+    <table class="table centered">
+        <thead class="box">
+            <tr class="box-title">
                 <th>Check Type</th>
                 <th>Current Field</th>
                 <th>Compare Field</th>

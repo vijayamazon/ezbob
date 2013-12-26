@@ -40,7 +40,7 @@
 		<td class="@Html.Raw(css)">@Html.Raw(title)</td>
 		<td class="@Html.Raw(css)">
 			<span>@Html.Raw(val1) </span>
-			<button class="btn btn-mini" name="@Html.Raw(val2)"><i class="icon-pencil" /></button>
+			<button class="btn btn-mini btn-info" name="@Html.Raw(val2)"><i class="icon-pencil" /></button>
 			@{ WriteLiteral(sRawHtmlUnder); }
 		</td>
 	</tr>
@@ -52,7 +52,7 @@
 		</td>
 		<td>
 			@Html.Raw(val1) &nbsp;&nbsp;&nbsp;
-			<button class="btn btn-mini" name="@Html.Raw(val2)"><i class="icon-refresh" /></button>
+			<button class="btn btn-mini btn-info" name="@Html.Raw(val2)"><i class="icon-refresh" /></button>
 		</td>
 	</tr>
 }
@@ -71,9 +71,9 @@
 </script>
 
 <script id="profile-person-info-template" type="text/template">
-	<table class="table table-bordered table-striped green-header squeezed darker rright" style="table-layout: fixed;">
-		<thead>
-			<tr>
+	<table class="table squeezed rright" style="table-layout: fixed;">
+		<thead class="box">
+			<tr class="box-title">
 				<th colspan="2">Customer Details</th>
 			</tr>
 		</thead>
@@ -87,7 +87,7 @@
 					<i data-title="<%- EmailState %>" class="tltp <%=getIcon()%>"></i>
 				</td>
 				<td>
-					<button class="btn btn-mini" name="editEmail"><i class="icon-pencil"></i></button>
+					<button class="btn btn-mini btn-info" name="editEmail"><i class="icon-pencil"></i></button>
 					<%- Email.length <= 20 ? Email : Email.substring(0,17)+'...' %>
 					<i data-title="<%- Email %>" class="tltp-left <%=getIcon()%>"></i>
 				</td>
@@ -96,7 +96,7 @@
 
 			<tr>
 				<td width="40%">CCI mark</td>
-				<td><span class="cci-mark"></span><button type="button" class="btn btn-mini cci-mark-toggle">Toggle</button></td>
+				<td><span class="cci-mark"></span><button type="button" class="btn btn-mini btn-info cci-mark-toggle">Toggle</button></td>
 			</tr>
 
 			@RawCell("Mobile Phone #", "<%- MobilePhone %>")
@@ -125,9 +125,9 @@
 
 <script id="profile-loan-info-template" type="text/template">
 	<% (function(m) { %>
-	<table class="table table-bordered table-striped green-header squeezed darker rright">
-		<thead>
-			<tr>
+	<table class="table squeezed rright">
+		<thead class="box">
+			<tr class="box-title">
 				<th colspan="2">Offer Details</th>
 			</tr>
 		</thead>
@@ -192,8 +192,8 @@
 				<td width="40%" class="<%- m.FundsAvailableUnderLimitClass %>">Funds avaliable</td>
 				<td class="<%- m.FundsAvailableUnderLimitClass %>">
 					<span>£ <%- m.FundsAvaliable %></span>
-					<button class="btn btn-mini couple_buttons" name="openPacnetManualButton"><i class="icon-plus"></i></button>
-					<button class="btn btn-mini couple_buttons" name="clearPacnetManualButton"><i class="icon-ban-circle"></i></button>
+					<button class="btn btn-mini btn-info couple_buttons" name="openPacnetManualButton"><i class="icon-plus"></i></button>
+					<button class="btn btn-mini btn-info couple_buttons" name="clearPacnetManualButton"><i class="icon-ban-circle"></i></button>
 				</td>
 			</tr>
 
@@ -241,15 +241,11 @@
 
 		</tbody>
 	</table>
-	<div class="control-group">
-		<input type="button" class="btn" value="New Credit Line" name="newCreditLineBtn" />
-	</div>
 	<% })(m); %>
 </script>
 
 <script id="email-edit-template" type="text/template">
 	<div class="modal-header">
-		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 		<h3 id="myModalLabel">Customer Email Edit</h3>
 	</div>
 	<div class="modal-body">
@@ -262,7 +258,6 @@
 		<button class="btn btn-primary email-change-address">Change Email</button>
 		<button class="btn btn-primary email-send-new-request">Send New Request</button>
 		<button class="btn btn-primary email-confirm-manually">Confirm Manually</button>
-		<button class="btn" data-dismiss="modal" aria-hidden="true">Cancel</button>
 	</div>
 </script>
 

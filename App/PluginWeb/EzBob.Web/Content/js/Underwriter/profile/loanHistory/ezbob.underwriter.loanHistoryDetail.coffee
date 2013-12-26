@@ -71,7 +71,7 @@ class EzBob.Underwriter.LoanDetailsView extends Backbone.Marionette.View
             loanId: @model.loanid
 
         rolloverView = new EzBob.Underwriter.RolloverView(model: model)
-        EzBob.App.modal.show rolloverView
+        EzBob.App.jqmodal.show rolloverView
         rolloverView.on "addRollover", @addRollover, this
         rolloverView.on "removeRollover", @removeRollover, this
 
@@ -107,7 +107,7 @@ class EzBob.Underwriter.LoanDetailsView extends Backbone.Marionette.View
         #return  unless @checkForActiveLoan()
         model = loanId: @options.loan.Id
         view = new EzBob.Underwriter.ManualPaymentView(model: new Backbone.Model(model))
-        EzBob.App.modal.show view
+        EzBob.App.jqmodal.show view
         view.on "addPayment", @addPayment, this
 
     addPayment: (data) ->
@@ -134,7 +134,7 @@ class EzBob.Underwriter.LoanDetailsView extends Backbone.Marionette.View
         xhr.done ->
             @optionsView = new EzBob.Underwriter.LoanOptionsView(model: that.loanOptionsModel)
             @optionsView.render()
-            EzBob.App.modal.show @optionsView
+            EzBob.App.jqmodal.show @optionsView
 
     checkForActiveLoan: ->
         if @options.loan.Status is "PaidOff"

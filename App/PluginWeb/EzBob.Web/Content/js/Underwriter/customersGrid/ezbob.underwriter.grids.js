@@ -331,7 +331,6 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 	}, // show
 
 	typeFromHref: function (sHref) {
-	    console.log("sHref",sHref);
 		if (!sHref)
 			sHref = this.tabLinks().first().attr('href');
 
@@ -344,7 +343,6 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 	}, // typeFromHref
 
 	getValidType: function (sType) {
-	    console.log("sType", sType);
 		if (this.isValidType(sType))
 			return sType;
 

@@ -7,7 +7,7 @@
 @helper ButtonLights(string buttonStyle, string icon, string caption, string onClick = "")
 {
     onClick = string.IsNullOrEmpty(onClick) ? "" : onClick + ";window.scrollTop();";
-    <button class="btn btn-mini @Html.Raw(buttonStyle) pull-right" onclick="@Html.Raw(onClick)"><i class="@Html.Raw(icon)"></i> @Html.Raw(caption)</button>
+    <button class="btn btn-xs @Html.Raw(buttonStyle) pull-right" onclick="@Html.Raw(onClick)"><i class="@Html.Raw(icon)"></i> @Html.Raw(caption)</button>
 }
 
 @helper ProfileSummary()
@@ -37,9 +37,9 @@
     </text>
     <div class="row-fluid">
         <div class="span6">
-            <table class="table table-striped blue-header rright">
-                <thead>
-                    <tr>
+            <table class="table rright">
+                <thead class="box">
+                    <tr class="box-title">
                         <th colspan="2">Marketplaces @ButtonLights("<%- mp.Lighter.ButtonStyle %>", "<%- mp.Lighter.Icon %>", "<%- mp.Lighter.Caption %>", "$('[href=\\'#marketplaces\\']').tab('show')")</th>
                     </tr>
                 </thead>
@@ -90,9 +90,9 @@
             </table>
         </div>
         <div class="span6">
-            <table class="table table-striped blue-header rright">
-                <thead>
-                    <tr>
+            <table class="table rright">
+                <thead class="box">
+                    <tr class="box-title">
                         <th colspan="2">Payment accounts</th>
                     </tr>
                 </thead>
@@ -135,9 +135,9 @@
     </div>
     <div class="row-fluid">
         <div class="span6">
-            <table class="table table-striped blue-header rright">
-                <thead>
-                    <tr>
+            <table class="table rright">
+                <thead class="box">
+                    <tr class="box-title">
                         <% 
                         if (cb.FinancialAccounts == 0)
                         {
@@ -159,7 +159,7 @@
                             <%-cb!=null ? cb.CreditBureauScore : "-"%>
                         </td>
                         <td>
-                            <a href="#" class="btn btn-mini" data-bug-type="CreditBureauScore" data-bug-customer="<%-m.Id%>" ><i class="icon-tag"></i></a>
+                            <a href="#" class="btn btn-mini btn-lime" data-bug-type="CreditBureauScore" data-bug-customer="<%-m.Id%>" ><i class="fa fa-bug"></i></a>
                         </td>
                     </tr>
                     <tr>
@@ -170,7 +170,7 @@
                             <%-cb!=null ? GBPValues( cb.TotalDebt, true ) : "-"%>
                         </td>
                         <td>
-                            <a href="#" class="btn btn-mini" data-bug-type="TotalDebt" data-bug-customer="<%-m.Id%>"><i class="icon-tag"></i></a>
+                            <a href="#" class="btn btn-mini btn-lime" data-bug-type="TotalDebt" data-bug-customer="<%-m.Id%>"><i class="fa fa-bug"></i></a>
                         </td>
                     </tr>
                     <tr>
@@ -181,7 +181,7 @@
                             <%-cb!=null ? GBPValues( cb.TotalMonthlyRepayments, true ) : "-"%>
                         </td>
                         <td>
-                            <a href="#" class="btn btn-mini" data-bug-type="TotalMonthlyRepayments" data-bug-customer="<%-m.Id%>"><i class="icon-tag"></i></a>
+                            <a href="#" class="btn btn-mini btn-lime" data-bug-type="TotalMonthlyRepayments" data-bug-customer="<%-m.Id%>"><i class="fa fa-bug"></i></a>
                         </td>
                     </tr>
                     <tr>
@@ -192,7 +192,7 @@
                             <%-cb!=null ? GBPValues( cb.CreditCardBalances, true ) : "-"%>
                         </td>
                         <td>
-                            <a href="#" class="btn btn-mini" data-bug-type="CreditCardBalances" data-bug-customer="<%-m.Id%>"><i class="icon-tag"></i></a>
+                            <a href="#" class="btn btn-mini btn-lime" data-bug-type="CreditCardBalances" data-bug-customer="<%-m.Id%>"><i class="fa fa-bug"></i></a>
                         </td>
                     </tr>
                     <tr>
@@ -203,7 +203,7 @@
                             <%-cb!=null ? cb.BorrowerType : "-"%>
                         </td>
                         <td>
-                            <a href="#" class="btn btn-mini" data-bug-type="BorrowerType" data-bug-customer="<%-m.Id%>"><i class="icon-tag"></i></a>
+                            <a href="#" class="btn btn-mini btn-lime" data-bug-type="BorrowerType" data-bug-customer="<%-m.Id%>"><i class="fa fa-bug"></i></a>
                         </td>
                     </tr>
                     <tr>                   
@@ -214,16 +214,16 @@
                             <%- cb.ThinFile %>
                         </td>
                         <td>
-                            <a href="#" class="btn btn-mini" data-bug-type="ActiveFinancialAccounts" data-bug-customer="<%-m.Id%>"><i class="icon-tag"></i></a>
+                            <a href="#" class="btn btn-mini btn-lime" data-bug-type="ActiveFinancialAccounts" data-bug-customer="<%-m.Id%>"><i class="fa fa-bug"></i></a>
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
         <div class="span6">
-            <table class="table table-striped  blue-header rright">
-                <thead>
-                    <tr>
+            <table class="table rright">
+                <thead class="box">
+                    <tr class="box-title">
                         <th colspan="2">AML & Bank @ButtonLights("<%- ab.Lighter.ButtonStyle %>", "<%- ab.Lighter.Icon %>", "<%- ab.Lighter.Caption %>", "$('[href=\\'#credit-bureau\\']').tab('show')")</th>
                     </tr>
                 </thead>
@@ -258,9 +258,9 @@
     </div>
     <div class="row-fluid">
         <div class="span6">
-            <table class="table table-striped blue-header rright">
-                <thead>
-                    <tr>
+            <table class="table rright">
+                <thead class="box">
+                    <tr class="box-title">
                         <th colspan="2">Loans Activity @ButtonLights("<%- la.Lighter.ButtonStyle %>", "<%- la.Lighter.Icon %>", "<%- la.Lighter.Caption %>", "$('[href=\\'#loanhistorys\\']').tab('show')")</th>
                     </tr>
                 </thead>
@@ -332,9 +332,9 @@
             </table>
         </div>
         <div class="span6 offline">
-            <table class="table table-striped blue-header rright">
-                <thead>
-                    <tr>
+            <table class="table rright">
+                <thead class="box">
+                    <tr class="box-title">
                         <th colspan="2">Offline Requested Loan</th>
                     </tr>
                 </thead>
@@ -367,9 +367,9 @@
             </table>
         </div>
 		<div class="span6 offline">
-			<table class="table table-striped blue-header rright">
-				<thead>
-					<tr>
+			<table class="table rright">
+				<thead class="box">
+					<tr class="box-title">
 						<th colspan="2">Company Employee Count</th>
 					</tr>
 				</thead>
@@ -420,9 +420,9 @@
             <%if(m.DecisionHistory.length > 0){%>
             <fieldset>
                 <legend>Decisions History:</legend>
-                <table class="table table-bordered table-striped blue-header centered">
-                    <thead>
-                        <tr>
+                <table class="table centered">
+                    <thead class="box">
+                        <tr class="box-title">
                             <th> Action </th>
                             <th style="width: 100px;"> Date </th>
                             <th> ApprovedSum </th>

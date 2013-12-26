@@ -138,7 +138,7 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
 
     editEmail: ->
         view = new EzBob.EmailEditView(model: @model)
-        EzBob.App.modal.show view
+        EzBob.App.jqmodal.show view
         view.on "showed", ->
             view.$el.find("input").focus()
 

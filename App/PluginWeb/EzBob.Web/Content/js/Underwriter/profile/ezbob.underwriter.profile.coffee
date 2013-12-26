@@ -191,7 +191,7 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
         @skipPopupForApprovalWithoutAML = @loanInfoModel.get("SkipPopupForApprovalWithoutAML")
         if @loanInfoModel.get("AMLResult") != 'Passed' && !@skipPopupForApprovalWithoutAML        
             approveLoanWithoutAMLDialog = new EzBob.Underwriter.ApproveLoanWithoutAML(model: @loanInfoModel, parent: this, skipPopupForApprovalWithoutAML: @skipPopupForApprovalWithoutAML)
-            EzBob.App.modal.show(approveLoanWithoutAMLDialog);
+            EzBob.App.jqmodal.show(approveLoanWithoutAMLDialog);
             return false
 
         @CheckCustomerStatusAndCreateApproveDialog()
@@ -199,7 +199,7 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
     CheckCustomerStatusAndCreateApproveDialog: ->
         if @personalInfoModel.get("IsWarning")        
             approveLoanForWarningStatusCustomer = new EzBob.Underwriter.ApproveLoanForWarningStatusCustomer(model: @personalInfoModel, parent: this)
-            EzBob.App.modal.show(approveLoanForWarningStatusCustomer);
+            EzBob.App.jqmodal.show(approveLoanForWarningStatusCustomer);
             return false
         
         @CreateApproveDialog()

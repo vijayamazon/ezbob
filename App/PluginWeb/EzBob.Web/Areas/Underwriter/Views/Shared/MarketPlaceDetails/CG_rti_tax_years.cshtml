@@ -1,7 +1,7 @@
 ﻿<% (function() {
 if (m.CGData && m.CGData.RtiTaxMonths) {
-	%><table class="table table-bordered table-striped  blue-header centered">
-	<thead><tr><th>Month</th><th>Amount Paid</th><th>Amount Due</th></tr></thead><tbody><%
+	%><table class="table centered">
+	<thead class="box"><tr class="box-title"><th>Month</th><th>Amount Paid</th><th>Amount Due</th></tr></thead><tbody><%
 	for (var i = 0; i < m.CGData.RtiTaxMonths.length; i++) {
 		var oMonth = m.CGData.RtiTaxMonths[i];
 		%><tr>

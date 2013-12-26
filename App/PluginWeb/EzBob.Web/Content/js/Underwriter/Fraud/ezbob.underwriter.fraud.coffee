@@ -61,6 +61,16 @@ class EzBob.Underwriter.SimpleValueView extends Backbone.Marionette.ItemView
 class EzBob.Underwriter.AddEditFraudView extends Backbone.Marionette.ItemView
     template: "#fraud-add-edit-template"
 
+    jqoptions: ->
+        modal: true
+        resizable: false
+        title: "Fraud"
+        position: "center"
+        draggable: false
+        width: "73%"
+        height: Math.max(window.innerHeight * 0.9, 600)
+        dialogClass: "fraud-popup"
+
     ui:
         form: "form"
 
@@ -151,7 +161,7 @@ class EzBob.Underwriter.FraudView extends Backbone.Marionette.ItemView
             keyboard: false
             width: 600
             height: 600
-        EzBob.App.modal.show view
+        EzBob.App.modal.jqshow view
         model.on "saved", => @model.fetch()
         false
 

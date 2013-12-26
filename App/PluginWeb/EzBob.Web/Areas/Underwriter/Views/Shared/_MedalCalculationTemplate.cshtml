@@ -1,12 +1,12 @@
 ﻿@model dynamic
 
 <script id="medal-calculation-template" type="text/template">
-    <table class="table table-bordered table-striped blue-header centered">
-        <thead>
+    <table class="table centered">
+        <thead class="box">
             <%
             medals.Score = medals.Score || {};
             %>
-            <tr>
+            <tr class="box-title">
                 <th>Medal</th>
                 <th>Points</th>
                 <th>Result</th>
@@ -21,9 +21,9 @@
         </tbody>
     </table>
 
-    <table class="table table-bordered table-striped blue-header centered">
-        <thead>
-            <tr>
+    <table class="table centered">
+        <thead class="box">
+            <tr class="box-title">
                 <th>Customer Characteristic</th>
                 <th>Weight Used</th>
                 <th>Points Obtained</th>

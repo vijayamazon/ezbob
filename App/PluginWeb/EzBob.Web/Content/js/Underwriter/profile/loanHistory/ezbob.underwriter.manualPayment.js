@@ -1,4 +1,4 @@
-﻿(function() {
+(function() {
   var root,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -18,6 +18,19 @@
     }
 
     ManualPaymentView.prototype.template = "#manualPayment-template";
+
+    ManualPaymentView.prototype.jqoptions = function() {
+      return {
+        modal: true,
+        resizable: false,
+        title: "Manual Payment",
+        position: "center",
+        draggable: false,
+        width: "73%",
+        height: Math.max(window.innerHeight * 0.9, 600),
+        dialogClass: "manual-payment-popup"
+      };
+    };
 
     ManualPaymentView.prototype.onRender = function() {
       this.$el.find('.ezDateTime').splittedDateTime();

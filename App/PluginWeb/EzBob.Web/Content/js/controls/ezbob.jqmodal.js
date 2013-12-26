@@ -1,4 +1,4 @@
-﻿(function() {
+(function() {
   var root,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -38,7 +38,9 @@
       this.dialog.one('dialogclose', function() {
         return _this.close();
       });
-      this.dialog.parent('.ui-dialog').find('.ui-dialog-buttonset button').addClass('btn');
+      this.dialog.find('.ui-dialog').addClass('box');
+      this.dialog.find('.ui-dialog-titlebar').addClass('box-title');
+      this.dialog.parent('.ui-dialog').find('.ui-dialog-buttonset button').addClass('btn btn-info');
       if (view.onAfterShow) {
         return view.onAfterShow.call(view);
       }

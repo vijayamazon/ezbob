@@ -1,5 +1,5 @@
 (function() {
-  var root, _ref, _ref1,
+  var root,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -10,11 +10,11 @@
   EzBob.Underwriter = EzBob.Underwriter || {};
 
   EzBob.Underwriter.ProfilePopupModel = (function(_super) {
+
     __extends(ProfilePopupModel, _super);
 
     function ProfilePopupModel() {
-      _ref = ProfilePopupModel.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return ProfilePopupModel.__super__.constructor.apply(this, arguments);
     }
 
     ProfilePopupModel.prototype.idAttribute = "Id";
@@ -31,7 +31,6 @@
     ProfilePopupModel.prototype.initialize = function() {
       var interval,
         _this = this;
-
       interval = setInterval((function() {
         return _this.fetch();
       }), 2000);
@@ -43,11 +42,11 @@
   })(Backbone.Model);
 
   EzBob.Underwriter.ProfilePopupView = (function(_super) {
+
     __extends(ProfilePopupView, _super);
 
     function ProfilePopupView() {
-      _ref1 = ProfilePopupView.__super__.constructor.apply(this, arguments);
-      return _ref1;
+      return ProfilePopupView.__super__.constructor.apply(this, arguments);
     }
 
     ProfilePopupView.prototype.initialize = function(options) {
@@ -70,6 +69,19 @@
 
     ProfilePopupView.prototype.template = "#profile-popup-view-template";
 
+    ProfilePopupView.prototype.jqoptions = function() {
+      return {
+        modal: true,
+        resizable: false,
+        title: "Registered",
+        position: "center",
+        draggable: false,
+        width: "73%",
+        height: Math.max(window.innerHeight * 0.9, 600),
+        dialogClass: "registered-popup"
+      };
+    };
+
     ProfilePopupView.prototype.events = {
       "click .recheck-mp": "recheckMpClicked",
       "click .recheck-yodlee": "recheckYodleeClicked",
@@ -78,7 +90,6 @@
 
     ProfilePopupView.prototype.recheckMpClicked = function(e) {
       var $el, model, xhr;
-
       $el = $(e.currentTarget);
       if ($el.hasClass("disabled")) {
         return;
@@ -92,22 +103,20 @@
 
     ProfilePopupView.prototype.recheckYodleeClicked = function(e) {
       var $el;
-
       $el = $(e.currentTarget);
       if ($el.hasClass("disabled")) {
 
       }
       /*
-      model = 
-          umi: $(e.currentTarget).data('mp-id')
-      xhr = $.post "#{window.gRootPath}Underwriter/MarketPlaces/TryRecheckYodlee", model
+              model = 
+                  umi: $(e.currentTarget).data('mp-id')
+              xhr = $.post "#{window.gRootPath}Underwriter/MarketPlaces/TryRecheckYodlee", model
       */
 
     };
 
     ProfilePopupView.prototype.recheckMainStrat = function(e) {
       var $el, model, xhr;
-
       $el = $(e.currentTarget);
       if ($el.hasClass("disabled")) {
         return;

@@ -3,9 +3,9 @@
     <h3>Campaign Settings</h3>
     <%if(campaigns && campaigns.length > 0) {%>
    
-    <table class="table table-bordered table-striped blue-header squeezed darker">
+    <table class="table squeezed">
         <thead>
-            <tr>
+            <tr class="box">
                 <th>Campaign</th>
                 <th>Type</th>
                 <th>Start Date</th>
@@ -93,11 +93,13 @@
 
 <script type="text/template" id="campaign-customers-template">
     <%if(campaign && campaign.Customers && campaign.Customers.length > 0){%>
-    <table class="table table-bordered table-striped blue-header squeezed darker">
-        <thead>
-            <th>customer id</th>
-            <th>email</th>
-            <th>name</th>
+    <table class="table squeezed">
+        <thead class="box">
+            <tr class="box-title">
+                <th>customer id</th>
+                <th>email</th>
+                <th>name</th>
+            </tr>
         </thead>
         <tbody>
             <%_.each(campaign.Customers, function(client) {%>

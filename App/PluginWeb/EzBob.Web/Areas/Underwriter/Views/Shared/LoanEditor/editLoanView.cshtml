@@ -12,9 +12,9 @@
 
 <script type="text/template" id="loan_editor_schedule_template">
 	<h4>Standard Schedule</h4>
-	<table class="table table-bordered table-selected table-striped blue-header centered">
-		<thead>
-			<tr>
+	<table class="table table-selected centered">
+		<thead class="box">
+			<tr class="box-title">
 				<th width="90">#</th>
 				<th>Date</th>
 				<th>Principal</th>
@@ -34,7 +34,7 @@
 				%><tr class="<%= editClass %>">
 					<td><%- i+1 %>&nbsp;<%
 						if (item.Editable) { %>
-							<button class="btn btn-mini edit-schedule-item" data-id="<%- i %>"><i class="icon-pencil"></i></button>
+							<button class="btn btn-info btn-mini edit-schedule-item" data-id="<%- i %>"><i class="icon-pencil"></i></button>
 						<%
 						}
 
@@ -107,9 +107,9 @@
 
 <script type="text/template" id="loan_editor_freeze_intervals_template">
 	<h4>Freeze Intervals</h4>
-	<table class="table table-bordered table-selected table-striped blue-header centered">
-		<thead>
-			<tr>
+	<table class="table table-selected centered">
+		<thead class="box">
+			<tr class="box-title">
 				<th>From (inclusive)</th>
 				<th>To (inclusive)</th>
 				<th>Interest Rate</th>

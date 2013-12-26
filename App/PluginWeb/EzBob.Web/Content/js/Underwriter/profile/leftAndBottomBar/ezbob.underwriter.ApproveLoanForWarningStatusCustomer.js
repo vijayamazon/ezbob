@@ -1,5 +1,5 @@
 (function() {
-  var root, _ref,
+  var root,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -10,11 +10,11 @@
   EzBob.Underwriter = EzBob.Underwriter || {};
 
   EzBob.Underwriter.ApproveLoanForWarningStatusCustomer = (function(_super) {
+
     __extends(ApproveLoanForWarningStatusCustomer, _super);
 
     function ApproveLoanForWarningStatusCustomer() {
-      _ref = ApproveLoanForWarningStatusCustomer.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return ApproveLoanForWarningStatusCustomer.__super__.constructor.apply(this, arguments);
     }
 
     ApproveLoanForWarningStatusCustomer.prototype.template = '#approve-loan-for-warning-status-customer';
@@ -23,6 +23,19 @@
       this.model = options.model;
       this.parent = options.parent;
       return ApproveLoanForWarningStatusCustomer.__super__.initialize.call(this);
+    };
+
+    ApproveLoanForWarningStatusCustomer.prototype.jqoptions = function() {
+      return {
+        modal: true,
+        resizable: false,
+        title: "Warning",
+        position: "center",
+        draggable: false,
+        width: "73%",
+        height: Math.max(window.innerHeight * 0.9, 600),
+        dialogClass: "warning-customer-status-popup"
+      };
     };
 
     ApproveLoanForWarningStatusCustomer.prototype.render = function() {

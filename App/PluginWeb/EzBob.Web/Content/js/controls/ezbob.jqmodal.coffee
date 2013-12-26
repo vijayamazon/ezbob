@@ -23,7 +23,12 @@ class EzBob.JqModalRegion extends  Backbone.Marionette.Region
         @dialog.dialog(option)
         @dialog.one 'dialogclose', =>
             @close()
-        @dialog.parent('.ui-dialog').find('.ui-dialog-buttonset button').addClass('btn')
+
+        #todo
+        @dialog.find('.ui-dialog').addClass('box')
+        @dialog.find('.ui-dialog-titlebar').addClass('box-title')
+
+        @dialog.parent('.ui-dialog').find('.ui-dialog-buttonset button').addClass('btn btn-info')
         if view.onAfterShow
             view.onAfterShow.call(view)
 

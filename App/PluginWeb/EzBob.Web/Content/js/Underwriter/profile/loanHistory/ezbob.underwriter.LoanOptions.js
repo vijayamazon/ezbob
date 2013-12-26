@@ -1,5 +1,5 @@
 (function() {
-  var root, _ref, _ref1,
+  var root,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
@@ -11,11 +11,11 @@
   EzBob.Underwriter = EzBob.Underwriter || {};
 
   EzBob.Underwriter.LoanOptionsModel = (function(_super) {
+
     __extends(LoanOptionsModel, _super);
 
     function LoanOptionsModel() {
-      _ref = LoanOptionsModel.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return LoanOptionsModel.__super__.constructor.apply(this, arguments);
     }
 
     LoanOptionsModel.prototype.urlRoot = function() {
@@ -27,16 +27,32 @@
   })(Backbone.Model);
 
   EzBob.Underwriter.LoanOptionsView = (function(_super) {
+
     __extends(LoanOptionsView, _super);
 
     function LoanOptionsView() {
       this.onSave = __bind(this.onSave, this);
+
       this.onCancel = __bind(this.onCancel, this);
-      this.changeAccountStatus = __bind(this.changeAccountStatus, this);      _ref1 = LoanOptionsView.__super__.constructor.apply(this, arguments);
-      return _ref1;
+
+      this.changeAccountStatus = __bind(this.changeAccountStatus, this);
+      return LoanOptionsView.__super__.constructor.apply(this, arguments);
     }
 
     LoanOptionsView.prototype.template = '#loan-options-template';
+
+    LoanOptionsView.prototype.jqoptions = function() {
+      return {
+        modal: true,
+        resizable: false,
+        title: "Loan Options",
+        position: "center",
+        draggable: false,
+        width: "73%",
+        height: Math.max(window.innerHeight * 0.9, 600),
+        dialogClass: "loan-options-popup"
+      };
+    };
 
     LoanOptionsView.prototype.initialize = function() {
       this.loanOptions = new Backbone.Model(this.model.get('Options'));
@@ -73,7 +89,6 @@
 
     LoanOptionsView.prototype.changeFlags = function() {
       var curentFlag, index;
-
       this.loanOptions.set('ManulCaisFlag', this.$el.find("#cais-flags option:selected").val());
       index = this.$el.find("#cais-flags option:selected").attr('data-id');
       curentFlag = this.model.get('ManualCaisFlags')[index];
@@ -82,7 +97,6 @@
 
     LoanOptionsView.prototype.changeAccountStatus = function() {
       var tmp;
-
       tmp = $("#CaisAccountStatus option:selected").val();
       if (tmp === '8') {
         $("#defaultExplanation").show();
@@ -94,7 +108,6 @@
 
     LoanOptionsView.prototype.save = function() {
       var action, postData, request;
-
       postData = this.loanOptions.toJSON();
       action = "" + window.gRootPath + "Underwriter/LoanOptions/Save";
       request = $.post(action, postData);

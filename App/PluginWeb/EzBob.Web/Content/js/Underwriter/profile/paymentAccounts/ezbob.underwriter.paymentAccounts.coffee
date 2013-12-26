@@ -75,14 +75,14 @@ class EzBob.Underwriter.PaymentAccountView extends Backbone.Marionette.ItemView
             EzBob.ShowMessage message, "Bank account check"
             return false
         view = new EzBob.Underwriter.BankAccountDetailsView model: new Backbone.Model(card)
-        EzBob.App.modal.show view
+        EzBob.App.jqmodal.show view
         false
 
     addNewDebitCard: ->
         view = new EzBob.Underwriter.AddBankAccount(customerId: @model.customerId)
         view.on 'saved', =>
             @model.fetch()
-        EzBob.App.modal.show view
+        EzBob.App.jqmodal.show view
         false
 
     setDefault: (e) ->
@@ -124,5 +124,5 @@ class EzBob.Underwriter.PaymentAccountView extends Backbone.Marionette.ItemView
             xhr.done =>
                 BlockUi "off"
                 @model.fetch()
-        EzBob.App.modal.show view
+        EzBob.App.jqmodal.show view
         return false

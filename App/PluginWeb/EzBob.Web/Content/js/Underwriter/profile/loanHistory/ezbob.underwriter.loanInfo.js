@@ -1,4 +1,4 @@
-﻿(function() {
+(function() {
   var ModelUpdater, root,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     __hasProp = {}.hasOwnProperty,
@@ -316,7 +316,7 @@
         _this = this;
       d = new EzBob.Dialogs.ComboEdit({
         model: this.model,
-        propertyName: "LoanSourceID",
+        propertyName: "LoanSource.LoanSourceID",
         title: "Loan source",
         comboValues: _.map(this.model.get('AllLoanSources'), function(ls) {
           return {
@@ -436,7 +436,7 @@
         var disabled, isStatusEnabled;
         isStatusEnabled = result;
         disabled = waiting || !isStatusEnabled;
-        return _this.$el.find("input[name='newCreditLineBtn']").toggleClass("disabled", disabled);
+        return $("input[name='newCreditLineBtn']").toggleClass("disabled", disabled);
       });
     };
 

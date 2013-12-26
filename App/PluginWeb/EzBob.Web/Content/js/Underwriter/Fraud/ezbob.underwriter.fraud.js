@@ -1,4 +1,4 @@
-﻿(function() {
+(function() {
   var root,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -143,6 +143,19 @@
     }
 
     AddEditFraudView.prototype.template = "#fraud-add-edit-template";
+
+    AddEditFraudView.prototype.jqoptions = function() {
+      return {
+        modal: true,
+        resizable: false,
+        title: "Fraud",
+        position: "center",
+        draggable: false,
+        width: "73%",
+        height: Math.max(window.innerHeight * 0.9, 600),
+        dialogClass: "fraud-popup"
+      };
+    };
 
     AddEditFraudView.prototype.ui = {
       form: "form"
@@ -290,7 +303,7 @@
         width: 600,
         height: 600
       };
-      EzBob.App.modal.show(view);
+      EzBob.App.modal.jqshow(view);
       model.on("saved", function() {
         return _this.model.fetch();
       });

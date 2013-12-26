@@ -122,8 +122,18 @@
 			} // if
 
 			if (oMetaData.ID == 'DL41') {
-				%><div class=tab-content><table class="<%- sTableWidthClass %> table-striped blue-header table-bordered">
-					<thead><tr><th colspan=4><%- i %></th></tr><tr><th></th><th>Company</th><th>Industry</th><th></th></thead>
+				%><div class=tab-content><table class="<%- sTableWidthClass %> table">
+					<thead class="box">
+                        <tr class="box-title">
+                            <th colspan=4><%- i %></th>
+                        </tr>
+                        <tr class="box-title">
+                            <th></th>
+                            <th>Company</th>
+                            <th>Industry</th>
+                            <th></th>
+                        </tr>
+                    </thead>
 					<tbody><%
 						var aryCompany = {};
 						var aryIndustry = {};
@@ -305,8 +315,10 @@
 				var sDivChartID = 'chart' + oMetaData.ID;
 				var sParentDivChartID = 'parent_' + sDivChartID;
 
-				%><table class="<%- sTableWidthClass %> table-striped blue-header table-fixed">
-					<thead><tr><th><%- i %></th></tr></thead>
+				%><table class="<%- sTableWidthClass %> table">
+					<thead  class="box">
+                        <tr class="box-title"><th><%- i %></th></tr>
+                    </thead>
 					<tbody><tr><td id="<%- sParentDivChartID %>" style="padding-top:40px"></td></tr></tbody>
 				</table><%
 
@@ -432,12 +444,18 @@
 			else if (oMetaData.DisplayDirection == 'horizontal') {
 				var arySortOrder = OrderFieldsForSorting(aryData[0], oMetaData.Sorting);
 
-				%><div class=tab-content><table class="<%- sTableWidthClass %> table-striped blue-header table-bordered table-fixed">
-				<thead><tr><th colspan=<%= arySortOrder.length %>><%= i %></th></tr><tr><%
-				for (var j = 0; j < arySortOrder.length; j++) {
-					%><th><%- arySortOrder[j] %></th><%
-				}
-				%></tr></thead><tbody><%
+				%><div class=tab-content><table class="<%- sTableWidthClass %> table">
+				<thead  class="box">
+                    <tr class="box-title">
+                        <th colspan="<%= arySortOrder.length %>"><%= i %></th>
+                    </tr>
+                    <tr class="box-title">
+                        <%for (var j = 0; j < arySortOrder.length; j++) {
+					        %><th><%- arySortOrder[j] %></th><%
+				        }%>
+                    </tr>
+				</thead>
+                <tbody><%
 				for (var j = 0; j < aryData.length; j++) {
 					var obj = aryData[j];
 
@@ -455,8 +473,8 @@
 			else {
 				var arySortOrder = OrderFieldsForSorting(aryData[0], oMetaData.Sorting);
 
-				%><div class=tab-content><table class="<%- sTableWidthClass %> table-striped blue-header">
-				<thead><tr><th colspan=2><%= i %></th></tr></thead>
+				%><div class=tab-content><table class="<%- sTableWidthClass %> table">
+				<thead  class="box"><tr class="box-title"><th colspan=2><%= i %></th></tr></thead>
 				<tbody><%
 				for (var j = 0; j < aryData.length; j++) {
 					var obj = aryData[j];

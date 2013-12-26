@@ -346,7 +346,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         xhr.done (result) =>
             isStatusEnabled = result
             disabled =  waiting or !isStatusEnabled
-            @$el.find("input[name='newCreditLineBtn']").toggleClass "disabled", disabled
+            $("input[name='newCreditLineBtn']").toggleClass "disabled", disabled
 
     statuses: {}
 
@@ -385,7 +385,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         xhr = @model.fetch()
         xhr.done =>
             dialog = new EzBob.Underwriter.CreditLineDialog (model: @model)
-            EzBob.App.modal.show dialog 
+            EzBob.App.jqmodal.show dialog 
 
     showErrorDialog: (errorMsg)->
         EzBob.ShowMessage errorMsg, "Something went wrong"
