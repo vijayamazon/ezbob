@@ -19,7 +19,7 @@
 		public string LoanOfferUnderwriterComment { get; set; }
 		public double LoanOfferOfferValidDays { get; set; }
 		public DateTime? AppApplyForLoan { get; set; }
-		public DateTime AppValidFor { get; set; }
+		public DateTime? AppValidFor { get; set; }
 		public bool LoanOfferEmailSendingBannedNew { get; set; }
 		public bool IsAutoApproval { get; set; }
 		public int AutoApproveAmount { get; set; }

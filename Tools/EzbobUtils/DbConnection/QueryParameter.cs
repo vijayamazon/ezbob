@@ -1,6 +1,7 @@
-﻿using System.Data;
+﻿namespace Ezbob.Database {
+	using System.Data;
+	using System;
 
-namespace Ezbob.Database {
 	#region struct QueryParameter
 
 	public class QueryParameter {
@@ -11,7 +12,7 @@ namespace Ezbob.Database {
 
 		public QueryParameter(string sName, object oValue) {
 			Name = sName;
-			Value = oValue;
+			Value = oValue ?? DBNull.Value;
 		} // constructor
 
 		public override string ToString() {

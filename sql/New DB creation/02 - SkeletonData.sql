@@ -268,7 +268,7 @@ INSERT INTO dbo.BasicInterestRate
 	)
 VALUES
 	(
-	550
+	0
 	, 649
 	, 0.07
 	)

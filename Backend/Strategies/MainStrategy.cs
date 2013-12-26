@@ -60,6 +60,7 @@
 		)
 			: base(oDb, oLog)
 		{
+			medalScoreCalculator = new MedalScoreCalculator(oLog);
 			mailer = new StrategiesMailer(DB, Log);
 			this.customerId = customerId;
 			newCreditLineOption = newCreditLine;
@@ -222,13 +223,13 @@
 			} // if
 
 			DataTable scoreCardDataTable = DB.ExecuteReader(
-				"GetDirectorsAddresses",
+				"GetScoreCardData",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId)
 			);
 
 			DataRow scoreCardResults = scoreCardDataTable.Rows[0];
-			var maritalStatus = (MaritalStatus)int.Parse(scoreCardResults["MaritalStatus"].ToString());
+			MaritalStatus maritalStatus = (MaritalStatus)Enum.Parse(typeof(MaritalStatus), scoreCardResults["MaritalStatus"].ToString());
 			string maxFeedbackRaw = scoreCardResults["MaxFeedback"].ToString();
 			int modelMaxFeedback;
 
@@ -245,14 +246,21 @@
 			int modelOnTimeLoans = int.Parse(scoreCardResults["OnTimeLoans"].ToString());
 			int modelLatePayments = int.Parse(scoreCardResults["LatePayments"].ToString());
 			int modelEarlyPayments = int.Parse(scoreCardResults["EarlyPayments"].ToString());
-			DateTime modelFirstRepaymentDate = DateTime.Parse(scoreCardResults["FirstRepaymentDate"].ToString());
+
+			bool firstRepaymentDatePassed = false;
+
+			DateTime modelFirstRepaymentDate;
+			if (DateTime.TryParse(scoreCardResults["FirstRepaymentDate"].ToString(), out modelFirstRepaymentDate))
+			{
+				firstRepaymentDatePassed = modelFirstRepaymentDate < DateTime.UtcNow;
+			}
 
 			totalSumOfOrders1YTotal = strategyHelper.GetAnualTurnOverByCustomer(customerId);
 			totalSumOfOrders3MTotal = strategyHelper.GetTotalSumOfOrders3M(customerId);
 			marketplaceSeniorityDays = strategyHelper.MarketplaceSeniority(customerId);
 			decimal totalSumOfOrdersForLoanOffer = (decimal)strategyHelper.GetTotalSumOfOrdersForLoanOffer(customerId);
 
-			ScoreMedalOffer scoringResult = medalScoreCalculator.CalculateMedalScore(totalSumOfOrdersForLoanOffer, minExperianScore, (decimal)marketplaceSeniorityDays / 365, modelMaxFeedback, maritalStatus, appGender == "M" ? Gender.M : Gender.F, modelMPsNumber, modelFirstRepaymentDate < DateTime.UtcNow, modelEzbobSeniority, modelOnTimeLoans, modelLatePayments, modelEarlyPayments);
+			ScoreMedalOffer scoringResult = medalScoreCalculator.CalculateMedalScore(totalSumOfOrdersForLoanOffer, minExperianScore, (decimal)marketplaceSeniorityDays / 365, modelMaxFeedback, maritalStatus, appGender == "M" ? Gender.M : Gender.F, modelMPsNumber, firstRepaymentDatePassed, modelEzbobSeniority, modelOnTimeLoans, modelLatePayments, modelEarlyPayments);
 			modelLoanOffer = scoringResult.MaxOffer;
 
 			medalType = scoringResult.Medal;
@@ -270,18 +278,16 @@
 				new QueryParameter("pScoreResult", scoringResult.ScoreResult)
 			);
 
-			if (
-				newCreditLineOption == NewCreditLineOption.SkipEverything ||
+			if (newCreditLineOption == NewCreditLineOption.SkipEverything ||
 				newCreditLineOption == NewCreditLineOption.UpdateEverythingExceptMp ||
 				newCreditLineOption == NewCreditLineOption.UpdateEverythingAndGoToManualDecision ||
-				avoidAutomaticDescison == 1
-			)
-			{
-				enableAutomaticApproval = false;
-				enableAutomaticReApproval = false;
-				enableAutomaticRejection = false;
-				enableAutomaticReRejection = false;
-			}
+				avoidAutomaticDescison == 1)
+				{
+					enableAutomaticApproval = false;
+					enableAutomaticReApproval = false;
+					enableAutomaticRejection = false;
+					enableAutomaticReRejection = false;
+				}
 
 			DataTable defaultAccountsNumDataTable = DB.ExecuteReader(
 				"GetNumberOfDefaultAccounts",
@@ -300,21 +306,24 @@
 				new QueryParameter("CustomerId", customerId)
 			);
 
-			DataRow lastOfferResults = lastOfferDataTable.Rows[0];
-			loanOfferReApprovalFullAmount = int.Parse(lastOfferResults["ReApprovalFullAmountNew"].ToString());
-			loanOfferReApprovalRemainingAmount = int.Parse(lastOfferResults["ReApprovalRemainingAmount"].ToString());
-			loanOfferReApprovalFullAmountOld = int.Parse(lastOfferResults["ReApprovalFullAmountOld"].ToString());
-			loanOfferReApprovalRemainingAmountOld = int.Parse(lastOfferResults["ReApprovalRemainingAmountOld"].ToString());
-			loanOfferApr = int.Parse(lastOfferResults["APR"].ToString());
-			loanOfferRepaymentPeriod = int.Parse(lastOfferResults["RepaymentPeriod"].ToString());
-			loanOfferExpirianRating = int.Parse(lastOfferResults["ExpirianRating"].ToString());
-			loanOfferInterestRate = int.Parse(lastOfferResults["InterestRate"].ToString());
-			loanOfferUseSetupFee = int.Parse(lastOfferResults["UseSetupFee"].ToString());
-			loanOfferLoanTypeId = int.Parse(lastOfferResults["LoanTypeId"].ToString());
-			loanOfferIsLoanTypeSelectionAllowed = int.Parse(lastOfferResults["IsLoanTypeSelectionAllowed"].ToString());
-			loanOfferDiscountPlanId = int.Parse(lastOfferResults["DiscountPlanId"].ToString());
-			loanSourceId = int.Parse(lastOfferResults["LoanSourceID"].ToString());
-			isCustomerRepaymentPeriodSelectionAllowed = int.Parse(lastOfferResults["IsCustomerRepaymentPeriodSelectionAllowed"].ToString());
+			if (lastOfferDataTable.Rows.Count == 1)
+			{
+				DataRow lastOfferResults = lastOfferDataTable.Rows[0];
+				loanOfferReApprovalFullAmount = decimal.Parse(lastOfferResults["ReApprovalFullAmountNew"].ToString());
+				loanOfferReApprovalRemainingAmount = decimal.Parse(lastOfferResults["ReApprovalRemainingAmount"].ToString());
+				loanOfferReApprovalFullAmountOld = decimal.Parse(lastOfferResults["ReApprovalFullAmountOld"].ToString());
+				loanOfferReApprovalRemainingAmountOld = decimal.Parse(lastOfferResults["ReApprovalRemainingAmountOld"].ToString());
+				loanOfferApr = decimal.Parse(lastOfferResults["APR"].ToString());
+				loanOfferRepaymentPeriod = int.Parse(lastOfferResults["RepaymentPeriod"].ToString());
+				loanOfferExpirianRating = int.Parse(lastOfferResults["ExpirianRating"].ToString());
+				loanOfferInterestRate = decimal.Parse(lastOfferResults["InterestRate"].ToString());
+				loanOfferUseSetupFee = int.Parse(lastOfferResults["UseSetupFee"].ToString());
+				loanOfferLoanTypeId = int.Parse(lastOfferResults["LoanTypeId"].ToString());
+				loanOfferIsLoanTypeSelectionAllowed = int.Parse(lastOfferResults["IsLoanTypeSelectionAllowed"].ToString());
+				loanOfferDiscountPlanId = int.Parse(lastOfferResults["DiscountPlanId"].ToString());
+				loanSourceId = int.Parse(lastOfferResults["LoanSourceID"].ToString());
+				isCustomerRepaymentPeriodSelectionAllowed = int.Parse(lastOfferResults["IsCustomerRepaymentPeriodSelectionAllowed"].ToString());
+			}
 
 			DataTable basicInterestRateDataTable = DB.ExecuteReader(
 				"GetBasicInterestRate",
@@ -331,7 +340,7 @@
 			if (loanOfferReApprovalRemainingAmountOld < 500) // TODO: make this 500 configurable
 				loanOfferReApprovalRemainingAmountOld = 0;
 
-			loanOfferReApprovalSum = new int[] {
+			loanOfferReApprovalSum = new decimal[] {
 				loanOfferReApprovalFullAmount,
 				loanOfferReApprovalRemainingAmount,
 				loanOfferReApprovalFullAmountOld,
@@ -369,6 +378,7 @@
 			DB.ExecuteNonQuery(
 				"UpdateScoringResultsNew",
 				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", customerId),
 				new QueryParameter("CreditResult", autoDecisionResponse.CreditResult),
 				new QueryParameter("SystemDecision", autoDecisionResponse.SystemDecision),
 				new QueryParameter("Status", autoDecisionResponse.UserStatus),
@@ -415,7 +425,7 @@
 						{"ApprovalAmount", loanOfferReApprovalSum.ToString(CultureInfo.InvariantCulture)},
 						{"RepaymentPeriod", loanOfferRepaymentPeriod.ToString(CultureInfo.InvariantCulture)},
 						{"InterestRate", loanOfferInterestRate.ToString(CultureInfo.InvariantCulture)},
-						{"OfferValidUntil", autoDecisionResponse.AppValidFor.ToString(CultureInfo.InvariantCulture)}
+						{"OfferValidUntil", autoDecisionResponse.AppValidFor.HasValue ? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture) : string.Empty}
 					};
 
 					mailer.SendToEzbob(variables, "Mandrill - User is approved or re-approved", "User was automatically approved");
@@ -499,7 +509,7 @@
 						{"ApprovalAmount", loanOfferReApprovalSum.ToString(CultureInfo.InvariantCulture)},
 						{"RepaymentPeriod", loanOfferRepaymentPeriod.ToString(CultureInfo.InvariantCulture)},
 						{"InterestRate", loanOfferInterestRate.ToString(CultureInfo.InvariantCulture)},
-						{"OfferValidUntil", autoDecisionResponse.AppValidFor.ToString(CultureInfo.InvariantCulture)}
+						{"OfferValidUntil", autoDecisionResponse.AppValidFor.HasValue ? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture) : string.Empty}
 					};
 
 					mailer.SendToEzbob(variables, "Mandrill - User is approved or re-approved", "User was automatically Re-Approved");
@@ -594,7 +604,7 @@
 		private readonly StrategiesMailer mailer;
 		private readonly StrategyHelper strategyHelper = new StrategyHelper();
 		private readonly IdHubService idHubService = new IdHubService();
-		private readonly MedalScoreCalculator medalScoreCalculator = new MedalScoreCalculator();
+		private readonly MedalScoreCalculator medalScoreCalculator;
 
 		// Consts
 		private const string CpExperianActionsAmlMortality = "The underwriter will need to clarify that the applicant is actually alive (can be a tricky discussion!) and get copies of proof of identity";
@@ -693,11 +703,11 @@
 		private int loanSourceId;
 		private int isCustomerRepaymentPeriodSelectionAllowed;
 		private decimal loanIntrestBase;
-		private int loanOfferReApprovalSum;
-		private int loanOfferReApprovalFullAmount;
-		private int loanOfferReApprovalRemainingAmount;
-		private int loanOfferReApprovalFullAmountOld;
-		private int loanOfferReApprovalRemainingAmountOld;
+		private decimal loanOfferReApprovalSum;
+		private decimal loanOfferReApprovalFullAmount;
+		private decimal loanOfferReApprovalRemainingAmount;
+		private decimal loanOfferReApprovalFullAmountOld;
+		private decimal loanOfferReApprovalRemainingAmountOld;
 		private int offeredCreditLine;
 		private double inintialExperianConsumerScore;
 		private double marketplaceSeniorityDays;
@@ -836,7 +846,7 @@
 
 		private void GetAddresses()
 		{
-			DataTable dt = DB.ExecuteReader("GetCustomerAddresses", CommandSpecies.StoredProcedure);
+			DataTable dt = DB.ExecuteReader("GetCustomerAddresses", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
 			DataRow addressesResults = dt.Rows[0];
 			appLine1 = addressesResults["Line1"].ToString();
 			appLine2 = addressesResults["Line2"].ToString();
@@ -1093,7 +1103,7 @@
 
 			if (useCustomIdHubAddress == 1)
 			{
-				DataTable dt = DB.ExecuteReader("GetPrevBwaResult", CommandSpecies.StoredProcedure);
+				DataTable dt = DB.ExecuteReader("GetPrevBwaResult", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
 				experianBwaResult = dt.Rows[0]["BWAResult"].ToString();
 			}
 			else

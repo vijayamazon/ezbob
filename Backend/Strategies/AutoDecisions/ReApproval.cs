@@ -28,6 +28,11 @@
 				new QueryParameter("CustomerId", request.CustomerId)
 			);
 
+			if (dt.Rows.Count == 0) // Cant reapprove without previous approvals
+			{
+				return false;
+			}
+
 			DataRow results = dt.Rows[0];
 			bool loanOfferEmailSendingBanned = Convert.ToBoolean(results["EmailSendingBanned"]);
 			DateTime loanOfferOfferStart = DateTime.Parse(results["OfferStart"].ToString());

@@ -1,10 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using EZBob.DatabaseLib.Model.Database;
+﻿namespace EzBob.Backend.Strategies.ScoreCalculation {
+	using Ezbob.Logger;
+	using System;
+	using System.Collections.Generic;
+	using System.Text;
+	using EZBob.DatabaseLib.Model.Database;
 
-namespace EzBob.Backend.Strategies.ScoreCalculation {
-	public class MedalScoreCalculator {
+	public class MedalScoreCalculator 
+	{
+		private readonly ASafeLog m_oLog;
+
+		public MedalScoreCalculator(ASafeLog oLog)
+		{
+			m_oLog = oLog;
+		}
+
 		public ScoreMedalOffer CalculateMedalScore(
 			decimal annualTurnover,
 			int experianScore,
@@ -380,12 +389,11 @@ namespace EzBob.Backend.Strategies.ScoreCalculation {
 
 		private void PrintDict(ScoreMedalOffer scoreMedal, Dictionary<Parameter, Weight> dict)
 		{
-			Console.WriteLine("medal: {0} points: {4} result: {1}%, offer: {2} £ at  {3}%", scoreMedal.Medal, scoreMedal.ScoreResult * 100, scoreMedal.MaxOffer, scoreMedal.MaxOfferPercent * 100, scoreMedal.ScorePoints);
-			Console.WriteLine();
+			m_oLog.Info("medal: {0} points: {4} result: {1}%, offer: {2} £ at  {3}%", scoreMedal.Medal, scoreMedal.ScoreResult * 100, scoreMedal.MaxOffer, scoreMedal.MaxOfferPercent * 100, scoreMedal.ScorePoints);
 			decimal s1 = 0M, s2 = 0M, s3 = 0M, s4 = 0M, s5 = 0M, s6 = 0M, s7 = 0M, s8 = 0M, s9 = 0M, s10 = 0M, s11 = 0M;
 			foreach (var weight in dict)
 			{
-				Console.WriteLine("{0}| {10}| {11}| {1}| {2}| {3}| {4}| {5}| {6}| {7}| {8}| {9}", weight.Key.ToString().PadRight(25),
+				m_oLog.Info("{0}| {10}| {11}| {1}| {2}| {3}| {4}| {5}| {6}| {7}| {8}| {9}", weight.Key.ToString().PadRight(25),
 					ToPercent(weight.Value.FinalWeightFixedWeightParameter),
 					ToPercent(weight.Value.StandardWeightFixedWeightParameter),
 					ToPercent(weight.Value.StandardWeightAdjustableWeightParameter),
@@ -409,8 +417,8 @@ namespace EzBob.Backend.Strategies.ScoreCalculation {
 				s10 += weight.Value.Score;
 				s11 += weight.Value.Grade;
 			}
-			Console.WriteLine("--------------------------------------------------------------------");
-			Console.WriteLine("{0}| {10}| {11}| {1}| {2}| {3}| {4}| {5}| {6}| {7}| {8}| {9}", "Sum".PadRight(25),
+			m_oLog.Info("--------------------------------------------------------------------");
+			m_oLog.Info("{0}| {10}| {11}| {1}| {2}| {3}| {4}| {5}| {6}| {7}| {8}| {9}", "Sum".PadRight(25),
 				ToPercent(s1), ToPercent(s2), ToPercent(s3), ToPercent(s4), ToPercent(s5),
 							  ToPercent(s6 / 100), ToPercent(s7 / 100), s8, s9, s11, s10.ToString().PadRight(50));
 

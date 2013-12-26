@@ -2,10 +2,10 @@
 {
 	public class AutoDecisionRequest
 	{
-		public int LoanOfferReApprovalFullAmount { get; set; }
-		public int LoanOfferReApprovalRemainingAmount { get; set; }
-		public int LoanOfferReApprovalFullAmountOld { get; set; }
-		public int LoanOfferReApprovalRemainingAmountOld { get; set; }
+		public decimal LoanOfferReApprovalFullAmount { get; set; }
+		public decimal LoanOfferReApprovalRemainingAmount { get; set; }
+		public decimal LoanOfferReApprovalFullAmountOld { get; set; }
+		public decimal LoanOfferReApprovalRemainingAmountOld { get; set; }
 		public int CustomerId { get; set; }
 		public bool EnableAutomaticApproval { get; set; }
 		public double InitialExperianConsumerScore { get; set; }
