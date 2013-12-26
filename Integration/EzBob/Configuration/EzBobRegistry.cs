@@ -5,6 +5,7 @@
 	using AmazonServiceLib.Config;
 	using CommonLib;
 	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EZBob.DatabaseLib.Model.Loans;
 	using MailApi;
 	using PayPalServiceLib;
 	using PayPalServiceLib.Common;
@@ -51,6 +52,7 @@
 			For<IMandrillConfig>().Use(bobconfig.MandrillConfig);
 			For<ILoanRepository>().Use<LoanRepository>();
 			For<ILoanScheduleRepository>().Use<LoanScheduleRepository>();
+			For<ILoanHistoryRepository>().Use<LoanHistoryRepository>();
 		}
 	}
 }

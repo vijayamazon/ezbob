@@ -22,6 +22,8 @@
     {
 		public static void Main(string[] args)
         {
+			log4net.Config.XmlConfigurator.Configure();
+
 			if (args.Length < 2)
 			{
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> <StrategyName> [param1] [param2] ... [paramN]");
