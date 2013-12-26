@@ -4555,17 +4555,17 @@ div.tagsinput .not_valid {
 ======================================================== */
 /* Theme Setting */
 #theme-setting {
-    position: absolute;
+    /*position: absolute;
     top: 60px;
     right: 0;
     z-index: 99;
-    white-space: nowrap;
+    white-space: nowrap;*/
 }
 #theme-setting > a {
     display: inline-block;
-    color: #999;
+    /*color: #afafaf;*/
     vertical-align: top;
-    background: rgba(255,255,255,0.7);
+    /*background: rgba(255,255,255,0.7);*/
     padding: 10px;
 }
 #theme-setting > a:hover {
@@ -4737,7 +4737,7 @@ div.tagsinput .not_valid {
 .nav-list > li.active > a:after                     {border-right-color: #e9f0f9;}
 .login-page:before,
 .error-page:before,
-#main-content                                       {background: #e9f0f9;}          /* Content Background */
+#main-content                                       {background: #ffffff;}          /* Content Background */
 
 .box > .box-title {
     background-color: #b6d1f2;

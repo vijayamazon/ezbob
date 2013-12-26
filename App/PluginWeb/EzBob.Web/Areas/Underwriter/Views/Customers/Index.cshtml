@@ -5,21 +5,21 @@
 <div id="grids-view" style="display: none;">
     <div id="sidebar" class="navbar-collapse collapse">
         <ul class="nav nav-list">
-            <li class="active"><a href="#waiting-grid" data-toggle="tab"><i class="fa fa-table"></i><span>Decision(<span id="waiting-count"></span>)</span></a></li>
+            <li class="active"><a href="#waiting-grid" data-toggle="tab"><i class="fa fa-star"></i><span>Decision(<span id="waiting-count"></span>)</span></a></li>
             @if (Model.IsEscalated)
             {
-                <li><a href="#escalated-grid" data-toggle="tab"><i class="fa fa-table"></i><span>Escalated(<span id="escalated-count"></span>)</span></a></li>
+                <li><a href="#escalated-grid" data-toggle="tab"><i class="fa fa-arrow-up"></i><span>Escalated(<span id="escalated-count"></span>)</span></a></li>
             }
-            <li><a href="#pending-grid" data-toggle="tab"><i class="fa fa-table"></i><span>Pending(<span id="pending-count"></span>)</span></a></li>
-            <li><a href="#approved-grid" data-toggle="tab"><i class="fa fa-table"></i><span>Approved</span></a></li>
-            <li><a href="#loans-grid" data-toggle="tab"><i class="fa fa-table"></i><span>Loans</span></a></li>
-            <li><a href="#sales-grid" data-toggle="tab"><i class="fa fa-table"></i><span>Sales</span></a></li>
-            <li><a href="#collection-grid" data-toggle="tab"><i class="fa fa-table"></i><span>Collection</span></a></li>
-            <li><a href="#late-grid" data-toggle="tab"><i class="fa fa-table"></i><span>Late</span></a></li>
-            <li><a href="#rejected-grid" data-toggle="tab"><i class="fa fa-table"></i><span>Rejected</span></a></li>
-            <li><a href="#offline-grid" data-toggle="tab"><i class="fa fa-table"></i><span>Offline</span></a></li>
-            <li><a href="#all-grid" data-toggle="tab"><i class="fa fa-table"></i><span>All customers</span></a></li>
-            <li><a href="#registered-grid" data-toggle="tab"><i class="fa fa-table"></i><span>Registered(<span id="RegisteredCustomers-count"></span>)</span></a></li>
+            <li><a href="#pending-grid" data-toggle="tab"><i class="fa fa-clock-o"></i><span>Pending(<span id="pending-count"></span>)</span></a></li>
+            <li><a href="#approved-grid" data-toggle="tab"><i class="fa fa-thumbs-o-up"></i><span>Approved</span></a></li>
+            <li><a href="#loans-grid" data-toggle="tab"><i class="fa fa-gbp"></i><span>Loans</span></a></li>
+            <li><a href="#sales-grid" data-toggle="tab"><i class="fa fa-phone"></i><span>Sales</span></a></li>
+            <li><a href="#collection-grid" data-toggle="tab"><i class="fa fa-rocket"></i><span>Collection</span></a></li>
+            <li><a href="#late-grid" data-toggle="tab"><i class="fa fa-flag"></i><span>Late</span></a></li>
+            <li><a href="#rejected-grid" data-toggle="tab"><i class="fa fa-thumbs-o-down"></i><span>Rejected</span></a></li>
+            <li><a href="#offline-grid" data-toggle="tab"><i class="fa fa-briefcase"></i><span>Offline</span></a></li>
+            <li><a href="#all-grid" data-toggle="tab"><i class="fa fa-female"></i><span>All customers</span></a></li>
+            <li><a href="#registered-grid" data-toggle="tab"><i class="fa fa-bars"></i><span>Registered(<span id="RegisteredCustomers-count"></span>)</span></a></li>
             <li class="test-customers" title="Check to include test customers">
                 <i class="fa fa-filter"></i>
                 <label class="checkbox-inline">
@@ -57,12 +57,12 @@
                     </div>
                     <div class="clearfix"></div>
                     <div class="table-responsive" style="border: 0;">
-                        <table class="table table-advance grid-data">
+                        <table class="table  grid-data">
                             <thead>
                                 <tr>
                                     <th>#</th>
-                                    <th>Cart</th>
-                                    <th>MPs</th>
+                                    <th><i class="fa fa-shopping-cart"></i> Cart</th>
+                                    <th><i class="fa fa-barcode"></i> Market Places</th>
                                     <th><i class="fa fa-user"></i> Name</th>
                                     <th><i class="fa fa-envelope"></i> E-mail</th>
                                     <th><i class="fa fa-calendar"></i> Apply date</th>
@@ -101,7 +101,7 @@
                         </div>
                         <div class="clearfix"></div>
                         <div class="table-responsive" style="border: 0;">
-                            <table class="table table-advance grid-data">
+                            <table class="table  grid-data">
                                 <thead>
                                     <tr>
                                         <th>#</th>
@@ -150,7 +150,7 @@
                     </div>
                     <div class="clearfix"></div>
                     <div class="table-responsive" style="border: 0;">
-                        <table class="table table-advance grid-data">
+                        <table class="table  grid-data">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -194,7 +194,7 @@
                     </div>
                     <div class="clearfix"></div>
                     <div class="table-responsive" style="border: 0;">
-                        <table class="table table-advance grid-data">
+                        <table class="table  grid-data">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -244,7 +244,7 @@
                     </div>
                     <div class="clearfix"></div>
                     <div class="table-responsive" style="border: 0;">
-                        <table class="table table-advance grid-data">
+                        <table class="table  grid-data">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -296,7 +296,7 @@
                     </div>
                     <div class="clearfix"></div>
                     <div class="table-responsive" style="border: 0;">
-                        <table class="table table-advance grid-data">
+                        <table class="table  grid-data">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -342,7 +342,7 @@
                     </div>
                     <div class="clearfix"></div>
                     <div class="table-responsive" style="border: 0;">
-                        <table class="table table-advance grid-data">
+                        <table class="table  grid-data">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -384,7 +384,7 @@
                     </div>
                     <div class="clearfix"></div>
                     <div class="table-responsive" style="border: 0;">
-                        <table class="table table-advance grid-data">
+                        <table class="table  grid-data">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -444,7 +444,7 @@
                     </div>
                     <div class="clearfix"></div>
                     <div class="table-responsive" style="border: 0;">
-                        <table class="table table-advance grid-data">
+                        <table class="table  grid-data">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -490,7 +490,7 @@
                     </div>
                     <div class="clearfix"></div>
                     <div class="table-responsive" style="border: 0;">
-                        <table class="table table-advance grid-data">
+                        <table class="table  grid-data">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -524,7 +524,7 @@
                     </div>
                     <div class="clearfix"></div>
                     <div class="table-responsive" style="border: 0;">
-                        <table class="table table-advance grid-data">
+                        <table class="table  grid-data">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -568,7 +568,7 @@
                     </div>
                     <div class="clearfix"></div>
                     <div class="table-responsive" style="border: 0;">
-                        <table class="table table-advance grid-data">
+                        <table class="table  grid-data">
                             <thead>
                                 <tr>
                                     <th>#</th>
