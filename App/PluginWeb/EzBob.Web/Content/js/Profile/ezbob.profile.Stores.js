@@ -33,6 +33,7 @@ EzBob.Profile.StoresView = Backbone.View.extend({
     },
     events: {
         'click .add-store': 'addStore',
+        'click .back-store': 'backStore',
         'click .updateYodlee': 'updateYodleeClicked'
     },
     render: function () {
@@ -66,6 +67,11 @@ EzBob.Profile.StoresView = Backbone.View.extend({
     addStore: function () {
         this.content.hide();
         this.storeInfoView.$el.show();
+        return false;
+    },
+    backStore: function () {
+        this.content.show();
+        this.storeInfoView.$el.hide();
         return false;
     },
     completed: function () {
