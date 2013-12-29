@@ -1,5 +1,4 @@
 ﻿@model dynamic
-
 @helper ButtonStatus(string checkStatus, string checkIcon, string btnStyle)
 {
     var icon = "<i class=\"" + checkIcon + "\"></i>";
@@ -7,14 +6,14 @@
 }
 
 @helper RawHeaderCell(params string[] arguments)
-    {
-    <tr>
+{
+    <tr class="box-title">
         <th colspan="@arguments.Length">@Html.Raw(arguments[0])</th>
     </tr>
 }
 
 @helper RawCell(params string[] arguments)
-    {
+{
     <tr>
         @foreach (var s in arguments)
         {
@@ -35,11 +34,11 @@
 
 @helper ScoreMark(string score, string scorePos, string valPos, string color, string align)
 {
-        var backDivStyle = "height: 50px; width: 128px; position: relative; left: " + scorePos + "background-color: " + color;
-        var scoreDivStyle = "height: 50px; width: 120px; background-color: white; position: relative; font-size: 48px; "
-            + " color: " + color
-            + " left: " + valPos
-            + " text-align: " + align;
+    var backDivStyle = "height: 50px; width: 128px; position: relative; left: " + scorePos + "background-color: " + color;
+    var scoreDivStyle = "height: 50px; width: 120px; background-color: white; position: relative; font-size: 48px; "
+        + " color: " + color
+        + " left: " + valPos
+        + " text-align: " + align;
     <div style="height: 50px;">
         @Html.Raw("<div style=\"" + backDivStyle + "\">" + "<div style=\"" + scoreDivStyle + "\">" + score + "</div></div>")
     </div>
@@ -50,59 +49,59 @@
 
 @helper InputTextSmallReadOnly(string id, string caption, string value)
 {
-    <div class="control-group">
+    <div class="form-group">
         <label for="@id" class="control-label">@caption</label>
-        <div class="controls">
-            @Html.Raw("<input class=\"input-small\" id=\""+id+"\" name=\""+id+"\" readonly=\"readonly\" type=\"text\" value=\"" +value +"\" />")
+        <div class="col-md-4">
+            @Html.Raw("<input class=\"form-control\" id=\"" + id + "\" name=\"" + id + "\" readonly=\"readonly\" type=\"text\" value=\"" + value + "\" />")
         </div>
     </div>
 }
 
 @helper BureauSummary(string checkStatus, string checkIcon, string buttonStyle, string score, string borrowerType, string checkDate, string checkValidity, string creditBureauDirectorId = null)
 {
-<div class="row">
-    <div class="span6 control-group form-horizontal">
-        @ButtonStatus(checkStatus, checkIcon, buttonStyle)
-        <a href="#" class="btn btn-mini btn-lime" data-bug-type="ExpConsumer" data-credit-bureau-director-id="@Html.Raw(@creditBureauDirectorId)" data-bug-customer="<%=experianInfo.Id%>" style="float:right"><i class="fa fa-bug"></i></a>
-        @InputTextSmallReadOnly("creditb-score", "Credit bureau score", score)
-        @InputTextSmallReadOnly("creditb-borrower-type", "Borrower type", borrowerType)
+    <div class="row">
+        <div class="span6 control-group form-horizontal">
+            @ButtonStatus(checkStatus, checkIcon, buttonStyle)
+            <a href="#" class="btn btn-mini btn-lime" data-bug-type="ExpConsumer" data-credit-bureau-director-id="@Html.Raw(@creditBureauDirectorId)" data-bug-customer="<%=experianInfo.Id%>" style="float:right"><i class="fa fa-bug"></i></a>
+            @InputTextSmallReadOnly("creditb-score", "Credit bureau score", score)
+            @InputTextSmallReadOnly("creditb-borrower-type", "Borrower type", borrowerType)
+        </div>
+        <div class="span6 control-group form-horizontal">
+            @InputTextSmallReadOnly("creditb-check-date", "Check date", checkDate)
+            @InputTextSmallReadOnly("creditb-valid-till", "Check is valid till", checkValidity)
+        </div>
     </div>
-    <div class="span6 control-group form-horizontal">
-        @InputTextSmallReadOnly("creditb-check-date", "Check date", checkDate)
-        @InputTextSmallReadOnly("creditb-valid-till", "Check is valid till", checkValidity)
-    </div>
-</div>
 }
 
 @helper RunCheckButton()
 {
-<div class="row-fluid">
-    <div class="span12 control-group">
-        <a class="btn" href="#" id="RunCheckBtn">Run check</a>
+    <div class="row-fluid">
+        <div class="span12 control-group">
+            <a class="btn" href="#" id="RunCheckBtn">Run check</a>
+        </div>
     </div>
-</div>
 }
 
 @helper RunReCheckButton()
 {
-<div class="row-fluid">
-    <div class="span12 control-group">
-        <a class="btn pull-right" href="#" id="RunBWAReCheckBtn">Recheck BWA</a>
-        <a class="btn pull-right" href="#" id="RunAMLReCheckBtn">Recheck AML</a>
-        <a class="btn pull-right" href="#" id="RunReCheckBtn">Recheck credit</a>
+    <div class="row-fluid">
+        <div class="span12 control-group">
+            <a class="btn pull-right" href="#" id="RunBWAReCheckBtn">Recheck BWA</a>
+            <a class="btn pull-right" href="#" id="RunAMLReCheckBtn">Recheck AML</a>
+            <a class="btn pull-right" href="#" id="RunReCheckBtn">Recheck credit</a>
+        </div>
     </div>
-</div>
 }
 
 @helper RunIdHubChecksButtons()
 {
-<div class="row-fluid">
-    <div class="span12 control-group">
-        <a class="btn" href="#" id="RunAMLCheckBtn">Check AML</a>
-        <a class="btn" href="#" id="RunAMLBWACheckBtn">Check AML&amp;BWA</a>
-        <a class="btn" href="#" id="RunBWACheckBtn">Check BWA</a>
+    <div class="row-fluid">
+        <div class="span12 control-group">
+            <a class="btn" href="#" id="RunAMLCheckBtn">Check AML</a>
+            <a class="btn" href="#" id="RunAMLBWACheckBtn">Check AML&amp;BWA</a>
+            <a class="btn" href="#" id="RunBWACheckBtn">Check BWA</a>
+        </div>
     </div>
-</div>
 }
 
 @helper DisplayConsumerData()
@@ -137,9 +136,9 @@
                                 @RawCell("BWA CheckResult", "No information" + bwaBugBtn)
                                 <% } %>
                             </tbody>
-                        </table>        
+                        </table>
                     </div>
-                </div>               
+                </div>
                 <% if(experianInfo.ModelType == "Consumer") { %>
                 @RunCheckButton()
                 <% } %>
@@ -168,7 +167,7 @@
                                 @RawCell("Delphi Score is", "<%- experianInfo.Score %>")
                                 @RawCell("Consumer Indebtedness Index", "<%- experianInfo.CII %>")
                             </tbody>
-                        </table>        
+                        </table>
                     </div>
                 </div>
             </div>
@@ -189,7 +188,7 @@
                                 @RawCell("Authentication Index", "<%- experianInfo.AmlInfo.AuthenticationIndexType %>")
                                 @RawCell("Description", "<%- experianInfo.AmlInfo.AuthIndexText %>")
                             </tbody>
-                        </table>        
+                        </table>
                     </div>
                 </div>
                 <div class="row-fluid">
@@ -211,7 +210,7 @@
                             <tbody>
                                 @RawCell("AML Check Result", "No information")
                             </tbody>
-                        </table>        
+                        </table>
                     </div>
                 </div>
                 <% } %>
@@ -223,7 +222,7 @@
                                 @RawCell("BWA Check Result", "<%- experianInfo.BavInfo.BankAccountVerificationResult %>")
                                 @RawCell("Description", "<%- experianInfo.BavInfo.AuthenticationText %>")
                             </tbody>
-                        </table>        
+                        </table>
                     </div>
                 </div>
                 <div class="row-fluid">
@@ -240,7 +239,7 @@
                             <tbody>
                                 @RawCell("BWA Check Result", "No information")
                             </tbody>
-                        </table>        
+                        </table>
                     </div>
                 </div>
                 <% } %>
@@ -267,7 +266,7 @@
                                 @RawCell("Age of most recent CCJ", "<%- experianInfo.ConsumerSummaryCharacteristics.AgeOfMostRecentCCJ %>")
                                 @RawCell("Number credit cards over limit", "<%- experianInfo.ConsumerSummaryCharacteristics.NumberOfCCOverLimit %>")
                             </tbody>
-                        </table>        
+                        </table>
                     </div>
                     <div class="span6 control-group form-horizontal">
                         <table class="table">
@@ -281,7 +280,7 @@
                                 @RawCell("CAIS Special Instruction Flag", "<%- experianInfo.ConsumerSummaryCharacteristics.CAISSpecialInstructionFlag %>")
                                 @RawCell("Satisfied judgements", "<%- experianInfo.ConsumerSummaryCharacteristics.SatisfiedJudgements %>")
                             </tbody>
-                        </table>        
+                        </table>
                     </div>
                 </div>
             </div>
@@ -296,8 +295,8 @@
                 <div class="row-fluid">
                     <div class="span12 control-group form-horizontal">
                         <table class="table">
-                            <thead>
-                                <tr>
+                            <thead class="box">
+                                <tr class="box-title">
                                     <th>Type</th>
                                     <th>Open Accounts</th>
                                     <th>Worst Arrears</th>
@@ -327,14 +326,14 @@
                                          "<%- experianInfo.ConsumerAccountsOverview.TotalCurLimits_Other %>",
                                          "<%- experianInfo.ConsumerAccountsOverview.Balance_Other %>")
                             </tbody>
-                            <tfoot>                    
+                            <tfoot>
                                 @RawCell("Total",
                                          "<%- experianInfo.ConsumerAccountsOverview.OpenAccounts_Total %>",
                                          "<%- experianInfo.ConsumerAccountsOverview.WorstArrears_Total %>",
                                          "<%- experianInfo.ConsumerAccountsOverview.TotalCurLimits_Total %>",
                                          "<%- experianInfo.ConsumerAccountsOverview.Balance_Total %>")
                             </tfoot>
-                        </table>        
+                        </table>
                     </div>
                 </div>
             </div>
@@ -350,7 +349,7 @@
         <div id="collapseNOCs" class="accordion-body collapse">
             <div class="accordion-inner">
                 <div class="row-fluid">
-                    <div class="span12 control-group form-horizontal">    
+                    <div class="span12 control-group form-horizontal">
                         <%
                         _.each(experianInfo.NOCs, function(noc){
                         %>   
@@ -388,29 +387,29 @@
         <% }%>
     </div>
     <div id="idhub-custom-address"></div>
-    }
+}
 
 @helper DisplayExperianError()
 {
-<div class="span9 accordion page-content-frame" id="accordion-request-error">
-    <div class="accordion-heading">
-        <a class="accordion-toggle" data-toggle="collapse" href="#collapseExperianRequestFailed">
-            <b class="play"></b>Experian Request failed</a>
-    </div>
-    <div id="collapseExperianRequestFailed" class="accordion-body collapse">
-        <div class="accordion-inner">
-            <div class="row">
-                <div class="span8">
-                    <ul>
-                    <% _.each(experianInfo.ErrorList, function(errMessage){ %>
+    <div class="span9 accordion page-content-frame" id="accordion-request-error">
+        <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" href="#collapseExperianRequestFailed">
+                <b class="play"></b>Experian Request failed</a>
+        </div>
+        <div id="collapseExperianRequestFailed" class="accordion-body collapse">
+            <div class="accordion-inner">
+                <div class="row">
+                    <div class="span8">
+                        <ul>
+                            <% _.each(experianInfo.ErrorList, function(errMessage){ %>
                         <li>@Html.Raw("<%- errMessage %>")</li>
-                    <% }); %>
-                    </ul>
+                            <% }); %>
+                        </ul>
+                    </div>
                 </div>
             </div>
-         </div>
+        </div>
     </div>
-</div>
 }
 
 @helper DisplayFailedExperianCheck()
@@ -424,9 +423,9 @@
 @helper DisplayLimitedData()
 {
     <div class="accordion-heading">
-                <a class="accordion-toggle" data-toggle="collapse" href="#collapseLimited">
-                    <b class="play"></b>Company Bureau Check for <%-experianInfo.CompanyName%></a>
-            </div>
+        <a class="accordion-toggle" data-toggle="collapse" href="#collapseLimited">
+            <b class="play"></b>Company Bureau Check for <%-experianInfo.CompanyName%></a>
+    </div>
     <div id="collapseLimited" class="accordion-body collapse">
         <div class="accordion-inner">
             <div class="row-fluid">
@@ -460,10 +459,11 @@
 
 @helper DisplayNonLimitedData()
 {
-    <fieldset><legend>Business</legend>
+    <fieldset>
+        <legend>Business</legend>
         <div class="row-fluid">
             <div class="span9 accordion page-content-frame" id="accordion-nonlimited">
-            
+
                 <div class="accordion-heading">
                     <a class="accordion-toggle" data-toggle="collapse" href="#collapseNonLimited">
                         <b class="play"></b>Company Bureau Check for <%-experianInfo.CompanyName%></a>
@@ -502,25 +502,25 @@
 @helper DisplayDirectors()
 {
     <div>
-       <% var directorIdx = 0 %>
+        <% var directorIdx = 0 %>
         <% _.each(experianInfo.directorsModels, function(model,i){ %>   
         <fieldset>
             <legend>Director #<%-i+1%></legend>
-        <% var accordionId = 'accordion-credit-bureau' + directorIdx %>
+            <% var accordionId = 'accordion-credit-bureau' + directorIdx %>
         <div class="row-fluid">
             <div class="accordion page-content-frame" id="<%-accordionId%>">
                 <% var collapseSummaryId = 'collapseSummary' + directorIdx %>
                 <div class="accordion-heading">
                     <a class="accordion-toggle" data-toggle="collapse" href="#<%-collapseSummaryId%>">
-                    <b class="play"></b>Credit Bureau Summary for  <%-model.FullName%></a>
+                        <b class="play"></b>Credit Bureau Summary for  <%-model.FullName%></a>
                 </div>
                 <div id="<%-collapseSummaryId%>" class="accordion-body collapse">
-                <div class="accordion-inner">
-                    @BureauSummary("<%-model.CheckStatus%>", "<%-model.CheckIcon%>", "<%-model.ButtonStyle%>",
+                    <div class="accordion-inner">
+                        @BureauSummary("<%-model.CheckStatus%>", "<%-model.CheckIcon%>", "<%-model.ButtonStyle%>",
                                    "<%-model.Score%>", "<%-model.BorrowerType%>",
-                                   "<%-model.CheckDate%>", "<%-model.CheckValidity%>","<%-model.Id%>")
+                                   "<%-model.CheckDate%>", "<%-model.CheckValidity%>", "<%-model.Id%>")
+                    </div>
                 </div>
-            </div>
 
                 <% var collapseDetailsId = 'collapseDetails' + directorIdx %>
                 <div class="accordion-heading">
@@ -545,7 +545,7 @@
                                         @RawCell("Delphi Score is", "<%- model.Score %>")
                                         @RawCell("Consumer Indebtedness Index", "<%- model.CII %>")
                                     </tbody>
-                                </table>        
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -571,7 +571,7 @@
                                         @RawCell("Age of most recent CCJ", "<%- model.ConsumerSummaryCharacteristics.AgeOfMostRecentCCJ %>")
                                         @RawCell("Number credit cards over limit", "<%- model.ConsumerSummaryCharacteristics.NumberOfCCOverLimit %>")
                                     </tbody>
-                                </table>        
+                                </table>
                             </div>
                             <div class="span6 control-group form-horizontal">
                                 <table class="table">
@@ -585,7 +585,7 @@
                                         @RawCell("CAIS Special Instruction Flag", "<%- model.ConsumerSummaryCharacteristics.CAISSpecialInstructionFlag %>")
                                         @RawCell("Satisfied judgements", "<%- model.ConsumerSummaryCharacteristics.SatisfiedJudgements %>")
                                     </tbody>
-                                </table>        
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -632,14 +632,14 @@
                                                 "<%- model.ConsumerAccountsOverview.TotalCurLimits_Other %>",
                                                 "<%- model.ConsumerAccountsOverview.Balance_Other %>")
                                     </tbody>
-                                    <tfoot>                    
+                                    <tfoot>
                                         @RawCell("Total",
                                                 "<%- model.ConsumerAccountsOverview.OpenAccounts_Total %>",
                                                 "<%- model.ConsumerAccountsOverview.WorstArrears_Total %>",
                                                 "<%- model.ConsumerAccountsOverview.TotalCurLimits_Total %>",
                                                 "<%- model.ConsumerAccountsOverview.Balance_Total %>")
                                     </tfoot>
-                                </table>        
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -675,7 +675,7 @@
                                         <tbody>
                                             @RawCell("<%- ai.OpenDate %>", "<%- ai.Account %>", "<%- ai.MatchTo %>", "<%- ai.TermAndfreq %>",
                                                      "<%- ai.Limit %>", "<%- ai.AccBalance %>", "<%- ai.CashWithdrawals %>", "<%- ai.MinimumPayment %>")
-                                        </tbody>    
+                                        </tbody>
                                     </table>
                                     <table class="table table-finaccount">
                                         <tr>
@@ -716,7 +716,7 @@
                                         </tr>
                                     </table>
                                 </div>
-                                <hr/>
+                                <hr />
                                 <%
                                 });
                                 %>
@@ -734,7 +734,7 @@
                 <div id="<%-collapseNOCsId%>" class="accordion-body collapse">
                     <div class="accordion-inner">
                         <div class="row-fluid">
-                            <div class="span12 control-group form-horizontal">    
+                            <div class="span12 control-group form-horizontal">
                                 <%
                                 _.each(model.NOCs, function(noc){
                                 %>   
@@ -772,9 +772,9 @@
                 </div>
                 <% }%>
             </div>
-                </div>
+        </div>
 
-        <% directorIdx = directorIdx + 1; %>        
+            <% directorIdx = directorIdx + 1; %>        
         </fieldset>
         <% }); %>
     </div>
@@ -786,34 +786,27 @@
     experianInfo.Summary.ConsumerAccountsOverview = experianInfo.Summary.ConsumerAccountsOverview || {};
     %>
     <% if (experianInfo.IsExperianError) { %>
-         @DisplayExperianError()   
+         @DisplayExperianError()
     <% } else { %>
-
-    <% if (experianInfo.CheckFailed) { %>
+        <% if (experianInfo.CheckFailed) { %>
             @DisplayFailedExperianCheck()
             @RunReCheckButton()
-         <% } else { %>
-            
-            @BureauSummaryForCustomer()
-
-            <% if(experianInfo.ModelType == "Consumer") { %>
+        <% } else { %>
+                @BureauSummaryForCustomer()
                 @DisplayConsumerData()
-            <% } %>
-            
-            <% if(experianInfo.ModelType == "Limited") { %>
-                @DisplayLimitedData()
-                @DisplayConsumerData()
-                @DisplayDirectors()
-             <% } %>
-
-            <% if(experianInfo.ModelType == "NonLimited") { %>
-                @DisplayNonLimitedData()
-                @DisplayConsumerData()
-                @DisplayDirectors()
-             <% } %>
-         <% } %>
-<% }%>
-@ExperianConsent()
+        <% } %>
+    <% } %>
+    
+    <% if(experianInfo.ModelType == "Limited") { %>
+        @DisplayLimitedData()
+        @DisplayDirectors()
+    <% } %>
+    <% if(experianInfo.ModelType == "NonLimited") { %>
+        @DisplayNonLimitedData()
+        @DisplayDirectors()
+    <% } %>
+    
+    @ExperianConsent()
 
 
 </script>
@@ -839,7 +832,7 @@
                                 @RawCell("Gender", "<%- customAddress.Gender %>")
                                 @RawCell("Date of birth", "<%- customAddress.DateOfBirth %>")
                             </tbody>
-                        </table>        
+                        </table>
                     </fieldset>
                 </td>
                 <td rowspan="2" style="vertical-align: top; padding-left: 40px;">
@@ -867,9 +860,9 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th>Address Field \ Type Of Address</th> 
-                                    <th>Current Address</th> 
-                                    <th>Previous Address</th> 
+                                    <th>Address Field \ Type Of Address</th>
+                                    <th>Current Address</th>
+                                    <th>Previous Address</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -881,7 +874,7 @@
                                 @RawCell("Postcode", "<%- customAddress.CurAddressPostcode %>", "<%- customAddress.PrevAddressPostcode %>")
                                 @RawCell("Country", "<%- customAddress.CurAddressCountry %>", "<%- customAddress.PrevAddressCountry %>")
                             </tbody>
-                        </table>        
+                        </table>
                     </fieldset>
                 </td>
             </tr>
@@ -891,16 +884,17 @@
 }
 
 
-@helper FinancialAccounts(){
-        <div class="accordion-heading">
-            <a class="accordion-toggle" data-toggle="collapse" href="#collapseFinancialAccounts">
-                <b class="play"></b>Financial Accounts</a>
-        </div>
-        <div id="collapseFinancialAccounts" class="accordion-body collapse">
-            <div class="accordion-inner">
-                <div class="row-fluid">
-                    <div class="span12 control-group form-horizontal">
-                        <%if(experianInfo.AccountsInformation) {
+@helper FinancialAccounts()
+{
+    <div class="accordion-heading">
+        <a class="accordion-toggle" data-toggle="collapse" href="#collapseFinancialAccounts">
+            <b class="play"></b>Financial Accounts</a>
+    </div>
+    <div id="collapseFinancialAccounts" class="accordion-body collapse">
+        <div class="accordion-inner">
+            <div class="row-fluid">
+                <div class="span12 control-group form-horizontal">
+                    <%if(experianInfo.AccountsInformation) {
                         _.each(experianInfo.AccountsInformation, function(ai, index){
                         %>
                         <div style="overflow: scroll;">
@@ -921,10 +915,10 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @RawCell("<%- ai.OpenDate %>", "<%- ai.Account %>","<%- ai.MatchTo %>", "<%- ai.TermAndfreq %>",
+                                    @RawCell("<%- ai.OpenDate %>", "<%- ai.Account %>", "<%- ai.MatchTo %>", "<%- ai.TermAndfreq %>",
                                              "<%- ai.Limit %>", "<%- ai.AccBalance %>", "<%- ai.AccountStatus %>", "<%- ai.SettlementDate %>",
                                              "<%- ai.CashWithdrawals %>", "<%- ai.MinimumPayment %>")
-                                </tbody>    
+                                </tbody>
                             </table>
                             <table class="table table-finaccount">
                                 <tr>
@@ -965,20 +959,21 @@
                                 </tr>
                             </table>
                         </div>
-                        <hr/>
-                        <%
+                    <hr />
+                    <%
                         }); //each
                         }//if
                         %>
-                    </div>
                 </div>
             </div>
         </div>
+    </div>
 }
 
-@helper ExperianConsent(){
+@helper ExperianConsent()
+{
     <div class="accordion-heading">
-            <a class="accordion-toggle" data-toggle="collapse" href="#collapseExperianConsent"><b class="play"></b>Agreement</a>
+        <a class="accordion-toggle" data-toggle="collapse" href="#collapseExperianConsent"><b class="play"></b>Agreement</a>
     </div>
     <div id="collapseExperianConsent" class="accordion-body collapse">
         <div class="accordion-inner">
@@ -993,70 +988,71 @@
     </div>
 }
 
-@helper BureauSummaryForCustomer(){
-        <div class="row-fluid">
-            <div class="span6">
-                <table class="table rright">
-                    <thead>
-                        <tr>
-                            @RawHeaderCell("Consumer","")
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @RawCell("Score", "<%- experianInfo.Summary.Score  %>")
-                        @RawCell("Consumer Indebtedness Index", "<%- experianInfo.Summary.ConsumerIndebtednessIndex  %>")
-                        @RawCell("Check Date", "<%- experianInfo.Summary.CheckDate  %>")
-                        @RawCell("Valid till", "<%- experianInfo.Summary.Validtill  %>")
-                        @RawCell("Worst Current status", "<%- experianInfo.Summary.WorstCurrentstatus  %>")
-                        @RawCell("Worst Historical status", "<%- experianInfo.Summary.WorstHistoricalstatus  %>")
-                        @RawCell("Number of defaults", "<%- experianInfo.Summary.Numberofdefaults  %>")
-                        @RawCell("Active Accounts", "<%- experianInfo.Summary.Accounts  %>")
-                        @RawCell("ThinFile", "<%- (experianInfo.AccountsInformation && experianInfo.AccountsInformation.length == 0) ? 'Yes' : 'No'  %>")
-                        @RawCell("CCJ's", "<%- experianInfo.Summary.CCJs  %>")
-                        @RawCell("Most recent CCJ", "<%- experianInfo.Summary.MostrecentCCJ  %>")
-                        @RawCell("DSR and ownership type", "<%- experianInfo.Summary.DSRandownershiptype  %>")
-                        @RawCell("Credit card utilization", "<%- experianInfo.Summary.Creditcardutilization  %>")
-                        @RawCell("Enquiries in last 6 months", "<%- experianInfo.Summary.Enquiriesinlast6months  %>")
-                        @RawCell("Enquiries in last 3 months", "<%- experianInfo.Summary.Enquiriesinlast3months  %>")
-                        @RawCell("Total balance", "<%- experianInfo.Summary.Totalbalance  %>")
-                    </tbody>
-                </table>
-            </div>
-            <div class="span6">
-                <table class="table rright">
-                    <thead>
-                        @RawHeaderCell("Business/AML","","")
-                    </thead>
-                    <tbody>
-                        @RawCell("AML", "<%- experianInfo.Summary.AML  %>","<%- experianInfo.Summary.AMLnum  %>")
-                        @RawCell("BWA", "<%- experianInfo.Summary.BWA  %>","<%- experianInfo.Summary.BWAnum  %>")
-                        @RawCell("Business type", "<%- experianInfo.Summary.Businesstype  %>","")
-                        @RawCell("Business Score", "<%- experianInfo.Summary.BusinessScore  %>","")
-                        @RawCell("Risk Level", "<%- experianInfo.Summary.RiskLevel  %>","")
-                        @RawCell("Existing business loans", "<%- experianInfo.Summary.Existingbusinessloans  %>","")
-                    </tbody>
-                </table>
-                <table class="table rright check-history">
-                    <thead>
-                        @RawHeaderCell("Check history","","")
-                    </thead>
-                    <tbody>
-                        @EzForm.RawCellBold("Id","Date insert","Score")
-                        <% _.each(experianInfo.CheckHistorys, function(val, i){%>
-                        @RawCell("<%-val.Id%>","<%-EzBob.formatDateTime(val.Date)%>","<%-val.Score%>")
-                        <%})%>
-                    </tbody>
-                </table>
-            </div>
+@helper BureauSummaryForCustomer()
+{
+    <div class="row-fluid">
+        <div class="span6">
+            <table class="table rright">
+                <thead>
+                    <tr>
+                        @RawHeaderCell("Consumer", "")
+                    </tr>
+                </thead>
+                <tbody>
+                    @RawCell("Score", "<%- experianInfo.Summary.Score  %>")
+                    @RawCell("Consumer Indebtedness Index", "<%- experianInfo.Summary.ConsumerIndebtednessIndex  %>")
+                    @RawCell("Check Date", "<%- experianInfo.Summary.CheckDate  %>")
+                    @RawCell("Valid till", "<%- experianInfo.Summary.Validtill  %>")
+                    @RawCell("Worst Current status", "<%- experianInfo.Summary.WorstCurrentstatus  %>")
+                    @RawCell("Worst Historical status", "<%- experianInfo.Summary.WorstHistoricalstatus  %>")
+                    @RawCell("Number of defaults", "<%- experianInfo.Summary.Numberofdefaults  %>")
+                    @RawCell("Active Accounts", "<%- experianInfo.Summary.Accounts  %>")
+                    @RawCell("ThinFile", "<%- (experianInfo.AccountsInformation && experianInfo.AccountsInformation.length == 0) ? 'Yes' : 'No'  %>")
+                    @RawCell("CCJ's", "<%- experianInfo.Summary.CCJs  %>")
+                    @RawCell("Most recent CCJ", "<%- experianInfo.Summary.MostrecentCCJ  %>")
+                    @RawCell("DSR and ownership type", "<%- experianInfo.Summary.DSRandownershiptype  %>")
+                    @RawCell("Credit card utilization", "<%- experianInfo.Summary.Creditcardutilization  %>")
+                    @RawCell("Enquiries in last 6 months", "<%- experianInfo.Summary.Enquiriesinlast6months  %>")
+                    @RawCell("Enquiries in last 3 months", "<%- experianInfo.Summary.Enquiriesinlast3months  %>")
+                    @RawCell("Total balance", "<%- experianInfo.Summary.Totalbalance  %>")
+                </tbody>
+            </table>
         </div>
+        <div class="span6">
+            <table class="table rright">
+                <thead>
+                    @RawHeaderCell("Business/AML", "", "")
+                </thead>
+                <tbody>
+                    @RawCell("AML", "<%- experianInfo.Summary.AML  %>", "<%- experianInfo.Summary.AMLnum  %>")
+                    @RawCell("BWA", "<%- experianInfo.Summary.BWA  %>", "<%- experianInfo.Summary.BWAnum  %>")
+                    @RawCell("Business type", "<%- experianInfo.Summary.Businesstype  %>", "")
+                    @RawCell("Business Score", "<%- experianInfo.Summary.BusinessScore  %>", "")
+                    @RawCell("Risk Level", "<%- experianInfo.Summary.RiskLevel  %>", "")
+                    @RawCell("Existing business loans", "<%- experianInfo.Summary.Existingbusinessloans  %>", "")
+                </tbody>
+            </table>
+            <table class="table rright check-history">
+                <thead>
+                    @RawHeaderCell("Check history", "", "")
+                </thead>
+                <tbody>
+                    @EzForm.RawCellBold("Id", "Date insert", "Score")
+                    <% _.each(experianInfo.CheckHistorys, function(val, i){%>
+                        @RawCell("<%-val.Id%>", "<%-EzBob.formatDateTime(val.Date)%>", "<%-val.Score%>")
+                    <%})%>
+                </tbody>
+            </table>
+        </div>
+    </div>
     <div class="row-fluid">
         <div class="span12">
             <table class="table">
                 <thead>
-                    @RawHeaderCell("Account Overview","","","")
+                    @RawHeaderCell("Account Overview", "", "", "")
                 </thead>
                 <tbody>
-                    @RawCell("Type","Open Accounts","Worst Arrears","Total Balance")
+                    @RawCell("Type", "Open Accounts", "Worst Arrears", "Total Balance")
                     @RawCell("Credit Cards",
                              "<%- experianInfo.Summary.ConsumerAccountsOverview.OpenAccounts_CC %>",
                              "<%- experianInfo.Summary.ConsumerAccountsOverview.WorstArrears_CC %>",
@@ -1074,13 +1070,13 @@
                              "<%- experianInfo.Summary.ConsumerAccountsOverview.WorstArrears_Other %>",
                              "<%- experianInfo.Summary.ConsumerAccountsOverview.Balance_Other %>")
                 </tbody>
-                <tfoot>                    
+                <tfoot>
                     @RawCell("Total",
                              "<%- experianInfo.Summary.ConsumerAccountsOverview.OpenAccounts_Total %>",
                              "<%- experianInfo.Summary.ConsumerAccountsOverview.WorstArrears_Total %>",
                              "<%- experianInfo.Summary.ConsumerAccountsOverview.Balance_Total %>")
                 </tfoot>
-            </table>        
+            </table>
         </div>
     </div>
 }

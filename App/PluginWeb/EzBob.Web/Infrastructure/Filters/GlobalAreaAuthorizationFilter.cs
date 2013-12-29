@@ -25,26 +25,27 @@ namespace EzBob.Web.Infrastructure.Filters
         protected override bool AuthorizeCore(HttpContextBase httpContext)
         {
             var routeData = httpContext.Request.RequestContext.RouteData;
+	        if (routeData.Values.Any())
+	        {
+		        var controller = routeData.GetRequiredString("controller");
 
-            var controller = routeData.GetRequiredString("controller");
+		        if (_whiteList.Contains(controller)) return true;
 
-            if (_whiteList.Contains(controller)) return true;
+		        var area = routeData.DataTokens["area"] as string;
 
-            var area = routeData.DataTokens["area"] as string;
+		        if (string.IsNullOrEmpty(area)) return true;
 
-            if(string.IsNullOrEmpty(area)) return true;
+		        if (area != _areaName) return true;
 
-            if (area != _areaName) return true;
+		        if (!base.AuthorizeCore(httpContext)) return false;
 
-            if (!base.AuthorizeCore(httpContext)) return false;
+		        var users = UsersRepository();
+		        var user = users.GetUserByLogin(httpContext.User.Identity.Name);
 
-            var users = UsersRepository();
-            var user = users.GetUserByLogin(httpContext.User.Identity.Name);
-
-            //if strict mode, do not allow to login users that have more than one role
-            if (_strict && user.Roles.Count > 1) return false;
-
-            return true;
+		        //if strict mode, do not allow to login users that have more than one role
+		        if (_strict && user.Roles.Count > 1) return false;
+	        }
+	        return true;
         }
 
         protected virtual IUsersRepository UsersRepository()
