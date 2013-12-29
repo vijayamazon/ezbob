@@ -49,6 +49,12 @@ namespace EzBob.Web.Code.ApplicationCreator {
 			}
 		}
 
+		public void GetMobileCode(string mobilePhone)
+		{
+			var x = ServiceClient.GetMobileCode(mobilePhone);
+			Log.InfoFormat(x.ToString());
+		}
+
 		public void CashTransfered(User user, string firstName, decimal cashAmount, decimal setUpFee, int loanId) {
 			if (useNewMailStrategies) {
 				ServiceClient.CashTransferred(user.Id, cashAmount);
@@ -424,20 +430,18 @@ namespace EzBob.Web.Code.ApplicationCreator {
 				var caisStrat = caisStrategies.FirstOrDefault(x => x.Id == caisStrategies.Max(y => y.Id));
 				var caisStratStatus = _applicationRepository.GetAll().Where(x => x.Strategy == caisStrat).Select(x => x.State);
 
-				if (caisStratStatus.Any(x => OneOf(x)))
+				if (Enumerable.Any(caisStratStatus, x => 
+					x != ApplicationStrategyState.SecurityViolation &&
+					x != ApplicationStrategyState.StrategyFinishedWithoutErrors &&
+					x != ApplicationStrategyState.StrategyFinishedWithErrors &&
+					x != ApplicationStrategyState.Error))
+				{
 					throw new Exception("Strategy already started");
+				}
 
 				CreateApplication(user, new StrategyParameter[] { }, _config.CAISNoUploadStrategyName);
 			}
 		}
-
-		private bool OneOf(ApplicationStrategyState x) {
-			return
-				x != ApplicationStrategyState.SecurityViolation &&
-				x != ApplicationStrategyState.StrategyFinishedWithoutErrors &&
-				x != ApplicationStrategyState.StrategyFinishedWithErrors &&
-				x != ApplicationStrategyState.Error;
-		} // OneOf
 
 		public void CAISUpdate(User user, int caisId) {
 			if (useNewCaisStrategies) {
