@@ -395,7 +395,7 @@ namespace EzBob.Backend.Strategies {
 		private readonly StrategiesMailer mailer;
 		private readonly StrategyHelper strategyHelper = new StrategyHelper();
 
-		private readonly object caisGenerationLock = new object();
+		private static readonly object caisGenerationLock = new object();
 		private int caisGenerationTriggerer = -1;
 		private readonly string caisPath;
 		private readonly string caisPath2;

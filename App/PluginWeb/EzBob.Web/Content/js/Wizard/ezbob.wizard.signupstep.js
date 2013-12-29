@@ -114,6 +114,14 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 	
 	getMobileCode: function () {
 	    // send request to server to generate and send code
+	    var xhr = $.post(window.gRootPath + "Account/GetMobileCode", { mobilePhone: this.$el.find('.phonenumber').val() });
+	    xhr.done(function () {
+	        
+	        //this.$el.find('.phonenumbercode').show();
+
+	        return false;
+	    });
+
 	    // add 'message sent' indication to ui
 
 	    return false;
@@ -140,7 +148,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 		var amount = _.find(data, function(d) { return d.name === 'amount'; });
 		if (amount) { amount.value = this.$el.find('#amount').autoNumericGet(); }
 
-	    var twilioEnabled = false;
+	    var twilioEnabled = true;
 
 		var xhr = $.post(this.form.attr('action'), data);
 

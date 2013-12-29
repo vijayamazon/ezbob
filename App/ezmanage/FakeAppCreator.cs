@@ -14,7 +14,12 @@
             
         }
 
-        public void CashTransfered(User user, string firstName, decimal cashAmount, decimal setUpFee, int loanId)
+		public string GetMobileCode(string mobilePhone)
+		{
+			return string.Empty;
+		}
+
+		public void CashTransfered(User user, string firstName, decimal cashAmount, decimal setUpFee, int loanId)
         {
             
         }

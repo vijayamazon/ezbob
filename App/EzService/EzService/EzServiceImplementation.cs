@@ -401,6 +401,14 @@ namespace EzService {
 			return Execute(customerId, underwriterId, typeof(MainStrategy), customerId, checkType, houseNumber, houseName, street, district, town, county, postcode, bankAccount, sortCode, avoidAutoDescison);
 		} // MainStrategy3
 
+		public StringActionResult GetMobileCode(string mobilePhone)
+		{
+			var strategyInstance = new GenerateMobileCode(mobilePhone, DB, Log);
+			var result = ExecuteSync(strategyInstance, null, null, typeof(GenerateMobileCode), mobilePhone);
+
+			return new StringActionResult { MetaData = result, Value = strategyInstance.GetCode() };
+		}
+
 		#endregion IEzService exposed methods
 
 		#region method IDisposable.Dispose
@@ -491,6 +499,70 @@ namespace EzService {
 		} // Execute
 
 		#endregion method Execute
+
+		#region method ExecuteSync
+
+		private ActionMetaData ExecuteSync(AStrategy instance, int? nCustomerID, int? nUserID, Type oStrategyType, params object[] args)
+		{
+			ActionMetaData amd = null;
+
+			try
+			{
+				Log.Debug("Executing " + oStrategyType + " started...");
+
+				amd = NewSync(oStrategyType.ToString(), comment: string.Join("; ", args), nCustomerID: nCustomerID, nUserID: nUserID);
+
+				var oParams = new List<object>(args) { DB, Log };
+
+				if (instance == null)
+				{
+
+					ConstructorInfo oCreator =
+						oStrategyType.GetConstructors().FirstOrDefault(ci => ci.GetParameters().Length == oParams.Count);
+
+					if (oCreator == null)
+						throw new Exception("Failed to find a constructor for " + oStrategyType + " with " + oParams.Count + " arguments.");
+
+					Log.Debug(oStrategyType + " constructor found, invoking...");
+					instance = ((AStrategy) oCreator.Invoke(oParams.ToArray()));
+				}
+
+				try
+				{
+					instance.Execute();
+
+					Log.Debug("Executing " + oStrategyType + " complete.");
+
+					SaveActionStatus(amd, ActionStatus.Done);
+				}
+				catch (Exception e)
+				{
+					Log.Alert(e, "Exception during executing " + oStrategyType + " strategy.");
+
+					amd.Comment = e.Message;
+					SaveActionStatus(amd, ActionStatus.Failed);
+				} // try
+
+				SaveActionStatus(amd, ActionStatus.Launched);
+				
+				Log.Debug("Executing " + oStrategyType + " started on another thread.");
+
+				return amd;
+			}
+			catch (Exception e)
+			{
+				if (amd != null)
+				{
+					amd.Comment = e.Message;
+					SaveActionStatus(amd, ActionStatus.Failed);
+				} // if
+
+				Log.Alert(e, "Exception during executing " + oStrategyType + " strategy.");
+				throw new FaultException(e.Message);
+			} // try
+		} // ExecuteSync
+
+		#endregion method ExecuteSync
 
 		#region method SaveActionStatus
 

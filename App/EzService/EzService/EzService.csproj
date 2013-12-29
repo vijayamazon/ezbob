@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="ActionMetaData.cs" />
     <Compile Include="ActionResult.cs" />
+    <Compile Include="StringActionResult.cs" />
     <Compile Include="NewCreditLineOption.cs" />
     <Compile Include="SafeValue.cs" />
     <Compile Include="StringListActionResult.cs" />

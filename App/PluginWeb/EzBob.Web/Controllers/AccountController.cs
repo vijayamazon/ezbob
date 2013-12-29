@@ -628,5 +628,13 @@ namespace EzBob.Web.Controllers
 													  .Select(x => x.ErrorMessage))
 					});
 		}
+
+
+		[Ajax]
+		[HttpPost]
+		public string GetMobileCode(string mobilePhone)
+		{
+			return _appCreator.GetMobileCode(mobilePhone);
+		}
 	}
 }

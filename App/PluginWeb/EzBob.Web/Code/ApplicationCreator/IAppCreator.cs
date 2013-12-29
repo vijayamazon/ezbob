@@ -9,6 +9,7 @@ namespace EzBob.Web.ApplicationCreator
 	public interface IAppCreator
     {
         void AfterSignup(User user, string address);
+		string GetMobileCode(string mobilePhone);
         void CashTransfered(User user, string firstName, decimal cashAmount, decimal setUpFee, int loanId);
         void ThreeInvalidAttempts(User user, string firstName, string password);
         void PasswordChanged(User user, string firstName, string password);
