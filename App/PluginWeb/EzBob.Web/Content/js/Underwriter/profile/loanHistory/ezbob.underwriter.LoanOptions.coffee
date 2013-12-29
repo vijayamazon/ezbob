@@ -14,8 +14,6 @@ class EzBob.Underwriter.LoanOptionsView extends Backbone.Marionette.ItemView
         title: "Loan Options"
         position: "center"
         draggable: false
-        width: "73%"
-        height: Math.max(window.innerHeight * 0.9, 600)
         dialogClass: "loan-options-popup"
 
     initialize: () ->

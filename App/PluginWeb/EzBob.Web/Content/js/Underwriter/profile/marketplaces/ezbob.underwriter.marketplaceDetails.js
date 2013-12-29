@@ -130,7 +130,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
             title: this.model.get('Name'),
             position: "center",
             draggable: false,
-            width: "73%",
+            width: "90%",
             height: Math.max(window.innerHeight * 0.9, 600),
             dialogClass: "marketplaceDetail"
         };

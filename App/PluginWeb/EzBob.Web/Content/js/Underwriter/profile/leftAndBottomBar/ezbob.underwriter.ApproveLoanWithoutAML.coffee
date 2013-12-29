@@ -17,8 +17,6 @@ class EzBob.Underwriter.ApproveLoanWithoutAML extends EzBob.BoundItemView
         title: "Warning"
         position: "center"
         draggable: false
-        width: "73%"
-        height: Math.max(window.innerHeight * 0.9, 600)
         dialogClass: "warning-aml-status-popup"
 
     render: ->

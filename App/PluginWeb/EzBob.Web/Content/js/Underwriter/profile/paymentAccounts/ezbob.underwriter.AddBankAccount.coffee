@@ -11,8 +11,6 @@ class EzBob.Underwriter.AddBankAccount extends EzBob.BoundItemView
         title: "Add Bank Account"
         position: "center"
         draggable: false
-        width: "73%"
-        height: Math.max(window.innerHeight * 0.9, 600)
         dialogClass: "add-bank-account-popup"
         
 

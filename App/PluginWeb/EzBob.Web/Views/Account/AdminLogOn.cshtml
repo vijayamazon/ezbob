@@ -1,18 +1,15 @@
-﻿@using EzBob.Web.Infrastructure
-@model EzBob.Web.Models.LogOnModel
+﻿@model EzBob.Web.Models.LogOnModel
 @{
     ViewBag.Title = " Login to your EZBOB Account";
+    Layout = "../../Areas/Underwriter/Views/Shared/_Layout.cshtml";
 }
-    <div class="row-fluid">
+<div class="login-page">
+    <div class="login-wrapper">
         <div class="notifications"></div>
-        <div class="row">
-            <div class="offset3 span6">
-                <div class="well">
-                    @Html.Partial("_LoginSimple")
-                </div>
-            </div>
-        </div>
+        @Html.Partial("_LoginSimple")
     </div>
+</div>
+
 
 @section Js{
 

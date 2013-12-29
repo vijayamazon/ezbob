@@ -521,13 +521,6 @@ blockquote{margin:0 0 20px 0; padding:10px; border:1px #ccc solid; font-style:it
 	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#e5e5e5', endColorstr='#cccccc')!important;
 }
 
-.simple-login .controls {
-}
-
-.simple-login .control-label{
-    width: 110px;
-}
-
 .PersonalDetailsForm.form-horizontal .control-label,
 .CompanyDetailForm.form-horizontal .control-label{
     width: 160px;

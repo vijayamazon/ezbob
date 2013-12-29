@@ -67,8 +67,6 @@ class EzBob.Underwriter.AddEditFraudView extends Backbone.Marionette.ItemView
         title: "Fraud"
         position: "center"
         draggable: false
-        width: "73%"
-        height: Math.max(window.innerHeight * 0.9, 600)
         dialogClass: "fraud-popup"
 
     ui:

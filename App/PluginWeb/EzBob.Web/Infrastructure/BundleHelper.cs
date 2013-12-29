@@ -19,7 +19,7 @@ namespace EzBob.Web.Infrastructure
 				.Add("~/Content/css/jquery.ui.1.8.16.ie.css")
                 .Add("~/Content/css/ui.jqgrid.css")
                 .Add("~/Content/css/jquery.jscrollpane.css")
-                .Add("~/Content/css/bootstrap.css")
+				.Add("~/Content/css/bootstrap.css")
                 .Add("~/Content/css/bootstrap-modal.css")
                 .Add("~/Content/css/jquery.jqplot.css")
                 .Add("~/Content/css/notifications.css")

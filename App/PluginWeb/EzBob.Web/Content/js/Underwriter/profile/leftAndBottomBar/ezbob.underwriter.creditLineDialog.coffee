@@ -24,8 +24,6 @@ class EzBob.Underwriter.CreditLineDialog extends Backbone.Marionette.ItemView
         title: "Credit Line"
         position: "center"
         draggable: false
-        width: "73%"
-        height: Math.max(window.innerHeight * 0.9, 600)
         dialogClass: "creditline-popup"
 
     onChangeLoanTypeSelectionAllowed: ->

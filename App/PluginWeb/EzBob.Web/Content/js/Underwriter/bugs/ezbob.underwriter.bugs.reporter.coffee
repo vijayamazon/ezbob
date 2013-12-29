@@ -49,8 +49,6 @@ class EzBob.Underwriter.EditBugView extends EzBob.BoundItemView
         title: "Bug Reporter"
         position: "center"
         draggable: false
-        width: "73%"
-        height: Math.max(window.innerHeight * 0.9, 600)
         dialogClass: "bugs-popup"
 
     eqConverter: (v) ->

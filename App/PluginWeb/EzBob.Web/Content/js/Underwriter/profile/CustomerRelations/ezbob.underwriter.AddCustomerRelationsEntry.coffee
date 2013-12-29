@@ -14,8 +14,6 @@ class EzBob.Underwriter.AddCustomerRelationsEntry extends EzBob.BoundItemView
         title: "CRM"
         position: "center"
         draggable: false
-        width: "73%"
-        height: Math.max(window.innerHeight * 0.9, 600)
         dialogClass: "customer-relations-popup"
 
     initialize: (options) ->

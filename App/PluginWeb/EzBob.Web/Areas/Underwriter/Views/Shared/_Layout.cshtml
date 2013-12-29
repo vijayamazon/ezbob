@@ -20,38 +20,46 @@
     @BundleHelper.RenderPrintCss()
 </head>
 
-<body style="background-image: none;" class="@Html.Action("PermissionClasses", "Helper", new { Area = "Underwriter" }) @Html.Action("RolesClasses", "Helper", new { Area = "Underwriter" }) skin-blue">
+<body class="@Html.Action("PermissionClasses", "Helper", new { Area = "Underwriter" }) @Html.Action("RolesClasses", "Helper", new { Area = "Underwriter" }) skin-blue">
     @Html.AntiForgeryTokenNoUserCheck()
-    <div class="navbar navbar-blue" id="navbar">
+    
+    @{
+        var sRoleImageUrl = Url.Content("~/Content/img/roles/crm.png");
+        var sRoleImageTitle = "CRM";
+        var userName = "";
+        try
+        {
+            var context = ObjectFactory.GetInstance<IWorkplaceContext>();
+            var user = context.User;
+            userName = user.FullName ?? user.Name;
+            if (user.Roles.Any(r => r.Name == "manager"))
+            {
+                sRoleImageUrl = Url.Content("~/Content/img/roles/manager.png");
+                sRoleImageTitle = "Manager";
+            }
+            else if (user.Roles.Any(r => r.Name == "Underwriter"))
+            {
+                sRoleImageUrl = Url.Content("~/Content/img/roles/underwriter.png");
+                sRoleImageTitle = "Underwriter";
+            }
+
+            sRoleImageTitle = user.Roles.Last().Name;
+        }
+        catch
+        {
+        }
+    }
+    
+    @{if (!string.IsNullOrEmpty(userName))
+      {
+        <div class="navbar navbar-blue" id="navbar">
         <button type="button" class="navbar-toggle navbar-btn collapsed" data-toggle="collapse" data-target="#sidebar">
             <span class="fa fa-bars"></span>
         </button>
+        
         <a class="navbar-brand" href="#">
             @{
-                var sRoleImageUrl = Url.Content("~/Content/img/roles/crm.png");
-                var sRoleImageTitle = "CRM";
-                var userName = "";
-                try
-                {
-                    var context = ObjectFactory.GetInstance<IWorkplaceContext>();
-                    var user = context.User;
-                    userName = user.FullName ?? user.Name;
-                    if (user.Roles.Any(r => r.Name == "manager"))
-                    {
-                        sRoleImageUrl = Url.Content("~/Content/img/roles/manager.png");
-                        sRoleImageTitle = "Manager";
-                    }
-                    else if (user.Roles.Any(r => r.Name == "Underwriter"))
-                    {
-                        sRoleImageUrl = Url.Content("~/Content/img/roles/underwriter.png");
-                        sRoleImageTitle = "Underwriter";
-                    }
-
-                    sRoleImageTitle = user.Roles.Last().Name;
-                }
-                catch
-                {
-                }
+                
                 <img data-title="@sRoleImageTitle" class="roleImg" src="@sRoleImageUrl"/>  @userName
             }
         </a>
@@ -67,8 +75,8 @@
                 <ul class="dropdown-menu">
                     <li id="liCustomerReports">
                         @{
-                            var configurationVariablesRepository = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
-                            var reportsIp = configurationVariablesRepository.GetByName("ReportsSite").Value;
+          var configurationVariablesRepository = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
+          var reportsIp = configurationVariablesRepository.GetByName("ReportsSite").Value;
                             <a href="@reportsIp" target="_blank">Reports Site</a>
                         }
                     </li>
@@ -174,11 +182,11 @@
             </li>
         </ul>
     </div>
+      }
+    }
     <div class="container" id="main-container">
         @RenderBody()
     </div>
-    <div id="modalRegion" class="modal" tabindex="-1"></div>
-    <div id="modalRegion2" class="modal" tabindex="-1"></div>
     <script type="text/javascript">
         window.gRootPath = '@Url.Content("~/")';
     </script>

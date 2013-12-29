@@ -6060,7 +6060,8 @@ var uiDialogClasses =
 		'ui-dialog ' +
 		'ui-widget ' +
 		'ui-widget-content ' +
-		'ui-corner-all ',
+		'ui-corner-all ' + 
+        'box ',
 	sizeRelatedOptions = {
 		buttons: true,
 		height: true,
@@ -6156,7 +6157,8 @@ $.widget("ui.dialog", {
 				.removeAttr('title')
 				.addClass(
 					'ui-dialog-content ' +
-					'ui-widget-content')
+					'ui-widget-content'
+				)
 				.appendTo(uiDialog),
 
 			uiDialogTitlebar = (self.uiDialogTitlebar = $('<div></div>'))
@@ -6164,7 +6166,8 @@ $.widget("ui.dialog", {
 					'ui-dialog-titlebar ' +
 					'ui-widget-header ' +
 					'ui-corner-all ' +
-					'ui-helper-clearfix'
+					'ui-helper-clearfix ' + 
+					'box-title'
 				)
 				.prependTo(uiDialog),
 
@@ -7723,8 +7726,8 @@ $.widget( "ui.tabs", {
 		// initialization from scratch
 		if ( init ) {
 			// attach necessary classes for styling
-			this.element.addClass( "ui-tabs ui-widget ui-widget-content ui-corner-all" );
-			this.list.addClass( "ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all" );
+			this.element.addClass( "ui-tabs ui-widget ui-widget-content ui-corner-all box" );
+			this.list.addClass( "ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all box-title" );
 			this.lis.addClass( "ui-state-default ui-corner-top" );
 			this.panels.addClass( "ui-tabs-panel ui-widget-content ui-corner-bottom" );
 
@@ -8006,10 +8009,10 @@ $.widget( "ui.tabs", {
 
 		this.element
 			.unbind( ".tabs" )
-			.removeClass( "ui-tabs ui-widget ui-widget-content ui-corner-all ui-tabs-collapsible" )
+			.removeClass( "ui-tabs ui-widget ui-widget-content ui-corner-all ui-tabs-collapsible box" )
 			.removeData( "tabs" );
 
-		this.list.removeClass( "ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all" );
+		this.list.removeClass( "ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all box-title" );
 
 		this.anchors.each(function() {
 			var href = $.data( this, "href.tabs" );

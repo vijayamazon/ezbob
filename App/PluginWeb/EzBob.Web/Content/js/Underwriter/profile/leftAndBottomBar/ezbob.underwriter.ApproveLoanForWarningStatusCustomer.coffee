@@ -16,8 +16,6 @@ class EzBob.Underwriter.ApproveLoanForWarningStatusCustomer extends EzBob.BoundI
         title: "Warning"
         position: "center"
         draggable: false
-        width: "73%"
-        height: Math.max(window.innerHeight * 0.9, 600)
         dialogClass: "warning-customer-status-popup"
 
     render: ->

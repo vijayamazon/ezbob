@@ -1,19 +1,29 @@
 ﻿@model dynamic
-
 @using (Html.BeginForm("AdminLogOn", "Account", new { Area = "" }, FormMethod.Post, new { @class = "simple-login" }))
 {
-    <div style="padding-left: 11px;padding-top: 18px;" class="clearfix">
-        @Html.TextBox("UserName", "", new {@class="simle-login-input form_field", placeholder = "enter your email", tabindex = "11", autofocus="autofocus" })
-        @Html.Password("Password", "", new {@class="simle-login-input form_field", placeholder = "password", tabindex = "12", autocomplete="off" })
-        <br/>
-        
-        @*
-        <label class="checkbox">Remember Me @Html.CheckBox("RememberMe", false)</label>
-        *@
-
-        @Html.Hidden("returnUrl",ViewData["returnUrl"])
-        <br/>
-        <input class="button orange" type="submit" value="Log In" tabindex="13" id="loginSubmitBtn"/>
-        @Html.ActionLink("Forgot password?", "ForgotPassword", "Account", new { Area="" }, new { })
+    <div>
+        <h3>Login to your account</h3>
+        <hr />
+        <div class="form-group">
+            <div class="controls">
+                @Html.TextBox("UserName", "", new { @class = "form_control", placeholder = "enter your email", tabindex = "11", autofocus = "autofocus" })
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="controls">
+                @Html.Password("Password", "", new { @class = "form_control", placeholder = "password", tabindex = "12", autocomplete = "off" })
+            </div>
+        </div>
+        @Html.Hidden("returnUrl", ViewData["returnUrl"])
+        <br />
+        <div class="form-group">
+            <div class="controls">
+                <input class="btn btn-primary form-control" type="submit" value="Log In" tabindex="13" id="loginSubmitBtn" />
+            </div>
+        </div>
+         <hr/>
+        <p class="clearfix">
+            @Html.ActionLink("Forgot password?", "ForgotPassword", "Account", new { Area = "" }, new { @class = "goto-forgot" })
+        </p>
     </div>
 }

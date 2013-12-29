@@ -2791,10 +2791,11 @@ a.tile:hover {
 }
 .login-page form input[type="text"],
 .login-page form input[type="password"],
-.login-page form button {
+.login-page form input[type="submit"] {
     padding: 15px 10px !important;
     height: auto !important;
     font-size: 16px;
+    width: 100% !important;
 }
 .login-page form button {
     margin-top: 25px;
@@ -3597,9 +3598,9 @@ a.tile:hover {
     border: 0!important;
     background: #d9d9d9!important;
 }
-.ui-widget-header {
+/*.ui-widget-header {
     background: #aaa!important;
-}
+}*/
 .ui-slider-horizontal             {height: 2px!important;}
 .ui-slider-vertical               {width: 2px!important;}
 .ui-slider-horizontal.bar-large   {height: 4px!important;}
@@ -4737,7 +4738,7 @@ div.tagsinput .not_valid {
 .nav-list > li.active > a:after                     {border-right-color: #e9f0f9;}
 .login-page:before,
 .error-page:before,
-#main-content                                       {background: #ffffff;}          /* Content Background */
+#main-content                                       {background: #e9f0f9;}          /* Content Background */
 
 .box > .box-title {
     background-color: #b6d1f2;
