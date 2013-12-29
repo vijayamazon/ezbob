@@ -262,7 +262,7 @@ namespace EzService {
 		} // GreetingMailStrategy
 
 		public ActionMetaData ApprovedUser(int userId, int customerId, decimal loanAmount) {
-			return Execute(customerId, userId, typeof (ApprovedUser), customerId, customerId, customerId, loanAmount);
+			return Execute(customerId, userId, typeof (ApprovedUser), customerId, loanAmount);
 		} // ApprovedUser
 
 		public ActionMetaData CashTransferred(int customerId, decimal amount) {
@@ -270,7 +270,7 @@ namespace EzService {
 		} // CashTransferred
 
 		public ActionMetaData EmailUnderReview(int customerId) {
-			return Execute(customerId, null, typeof (EmailUnderReview), customerId, customerId, customerId);
+			return Execute(customerId, null, typeof (EmailUnderReview), customerId);
 		} // EmailUnderReview
 
 		public ActionMetaData Escalated(int customerId) {
@@ -278,7 +278,7 @@ namespace EzService {
 		} // Escalated
 
 		public ActionMetaData GetCashFailed(int customerId) {
-			return Execute(customerId, null, typeof (GetCashFailed), customerId, customerId, customerId);
+			return Execute(customerId, null, typeof (GetCashFailed), customerId);
 		} // GetCashFailed
 
 		public ActionMetaData LoanFullyPaid(int customerId, string loanRefNum) {
