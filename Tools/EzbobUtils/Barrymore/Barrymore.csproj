@@ -41,6 +41,7 @@
     <Compile Include="PostcodeToRegion.cs" />
     <Compile Include="ProgressCounter.cs" />
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="SortedTable.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="uk\postcode\regions.txt" />

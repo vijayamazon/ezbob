@@ -16,9 +16,11 @@ namespace TestApp {
 
 			var oDB = new SqlConnection(log);
 
+			TestLoanDateScore(oDB, log);
+
 			// TestExperianLimitedCompanyData(oDB, log);
 
-			TestUiReport(oDB, log);
+			// TestUiReport(oDB, log);
 
 			// TestLoansIssuedReport(oDB, log);
 
@@ -34,6 +36,22 @@ namespace TestApp {
 		} // Main
 
 		#endregion method Main
+
+		#region method TestLoanDateScore
+
+		private static void TestLoanDateScore(AConnection oDB, ASafeLog log) {
+			var rpt = new LoanDateScore(oDB, log) { VerboseLogging = true };
+
+			rpt.Run();
+
+			log.Debug("Report start");
+
+			rpt.ToOutput(@"c:\temp\loan_date_score.csv");
+
+			log.Debug("Report end");
+		} // TestLoanDateScore
+
+		#endregion method TestExperianLimitedCompanyData
 
 		#region method TestExperianLimitedCompanyData
 

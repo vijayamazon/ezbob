@@ -1,0 +1,211 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Reports {
+	using System.Data.Common;
+	using System.Globalization;
+	using System.IO;
+	using System.Xml;
+	using Ezbob.Database;
+	using Ezbob.Logger;
+
+	#region class LoanDateScoreItem
+
+	public class LoanDateScoreItem {
+		#region public
+
+		#region constructor
+
+		public LoanDateScoreItem(DbDataReader oRow, ASafeLog oLog) {
+			m_oLog = new SafeLog(oLog);
+
+			CustomerID = Convert.ToInt32(oRow["CustomerID"]);
+			m_oLastLoanDate = Convert.ToDateTime(oRow["LoanIssueDate"]);
+
+			m_oLog.Debug("Customer {0} took last loan on {1}", CustomerID, m_oLastLoanDate);
+		} // constructor
+
+		#endregion constructor
+
+		public int CustomerID { get; set; }
+
+		#region method Add
+
+		public void Add(DbDataReader oRow) {
+			string sXml = oRow["ResponseData"].ToString();
+
+			var doc = new XmlDocument();
+
+			try {
+				doc.LoadXml(sXml);
+			}
+			catch (Exception e) {
+				m_oLog.Warn(e, "Failed to parse Experian output as XML for customer {0}", CustomerID);
+				return;
+			} // try
+
+			if (doc.DocumentElement == null) {
+				m_oLog.Warn("Failed to parse Experian output (root node) for customer {0}", CustomerID);
+				return;
+			} // if
+
+			DateTime oInsertDate = Convert.ToDateTime(oRow["InsertDate"]);
+
+			string sServiceType = oRow["ServiceType"].ToString();
+
+			switch (sServiceType) {
+			case "Consumer Request":
+				if (DateFits(ref m_oNdspciiDataDate, oInsertDate))
+					AddNdspciiData(doc);
+				break;
+
+			case "E-SeriesLimitedData":
+				if (DateFits(ref m_oCompanyDataDate, oInsertDate))
+					AddCompanyData(doc);
+				break;
+			} // switch
+		} // Add
+
+		#endregion method Add
+
+		#region method ToOutput
+
+		public void ToOutput(StreamWriter fout) {
+			fout.WriteLine(string.Join(";", new string[] {
+				CustomerID.ToString(), m_oLastLoanDate.ToString("yyyy-MM-dd"),
+				(m_oIncorporationDate.HasValue ? m_oIncorporationDate.Value.ToString("yyyy-MM-dd") : ""),
+				m_nCompanyScore.ToString(), (m_oCompanyDataDate.HasValue ? m_oCompanyDataDate.Value.ToString("yyyy-MM-dd") : ""),
+				m_nNdspcii.ToString(), (m_oNdspciiDataDate.HasValue ? m_oNdspciiDataDate.Value.ToString("yyyy-MM-dd") : ""),
+				m_sCompanyNumber, m_sCompanyName
+			}));
+		} // ToOutput
+
+		#endregion method ToOutput
+
+		#endregion public
+
+		#region private
+
+		private readonly DateTime m_oLastLoanDate;
+
+		private readonly ASafeLog m_oLog;
+
+		private DateTime? m_oNdspciiDataDate;
+		private int? m_nNdspcii;
+
+		private DateTime? m_oCompanyDataDate;
+
+		private int? m_nCompanyScore;
+		private DateTime? m_oIncorporationDate;
+		private string m_sCompanyNumber;
+		private string m_sCompanyName;
+
+		#region method DateFits
+
+		private bool DateFits(ref DateTime? oSavedDate, DateTime oInsertDate) {
+			if (oInsertDate > m_oLastLoanDate)
+				return false;
+
+			bool b = !oSavedDate.HasValue || (oInsertDate > oSavedDate.Value);
+
+			if (b)
+				oSavedDate = oInsertDate;
+
+			return b;
+		} // DateFits
+
+		#endregion method DateFits
+
+		#region method AddNdspciiData
+
+		private void AddNdspciiData(XmlDocument doc) {
+			XmlNode oNode = doc.DocumentElement.SelectSingleNode("//NDSPCII");
+
+			if (oNode == null)
+				m_oLog.Warn("Failed to parse Experian output (NDSPCII) for customer {0}", CustomerID);
+			else
+				m_nNdspcii = Convert.ToInt32(oNode.InnerText.Trim());
+		} // AddNdspciiDAta
+
+		#endregion method AddNdspciiData
+
+		#region method AddCompanyData
+
+		private void AddCompanyData(XmlDocument doc) {
+			XmlNode oNode = doc.DocumentElement.SelectSingleNode("./REQUEST/DL12/REGNUMBER");
+
+			if (oNode == null)
+				m_oLog.Warn("Failed to parse Experian output (company number) for customer {0}", CustomerID);
+			else
+				m_sCompanyNumber = oNode.InnerText;
+
+			oNode = doc.DocumentElement.SelectSingleNode("./REQUEST/DL12/COMPANYNAME");
+
+			if (oNode == null)
+				m_oLog.Warn("Failed to parse Experian output (company name) for customer {0}", CustomerID);
+			else
+				m_sCompanyName = oNode.InnerText;
+
+			m_oIncorporationDate = ExtractDate(doc.DocumentElement, "./REQUEST/DL12/DATEINCORP");
+
+			if (!m_oIncorporationDate.HasValue)
+				m_oLog.Warn("Failed to parse Experian output (incorporation date) for customer {0}", CustomerID);
+
+			oNode = doc.DocumentElement.SelectSingleNode("./REQUEST/DL76/RISKSCORE");
+
+			if (oNode != null) {
+				int nCompanyScore;
+
+				if (int.TryParse(oNode.InnerText, out nCompanyScore))
+					m_nCompanyScore = nCompanyScore;
+			} // if
+		} // Add
+
+		#endregion method AddCompanyData
+
+		#region method ExtractDate
+
+		private static DateTime? ExtractDate(XmlNode oNode, string sFieldNamePrefix) {
+			XmlNode oYear = oNode.SelectSingleNode(sFieldNamePrefix + "-YYYY");
+			if (oYear == null)
+				return null;
+
+			XmlNode oMonth = oNode.SelectSingleNode(sFieldNamePrefix + "-MM");
+			if (oMonth == null)
+				return null;
+			
+			XmlNode oDay = oNode.SelectSingleNode(sFieldNamePrefix + "-DD");
+			if (oDay == null)
+				return null;
+
+			DateTime oDate;
+
+			if (!DateTime.TryParseExact(oYear.InnerText + MD(oMonth) + MD(oDay), "yyyyMMdd", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out oDate))
+				return null;
+
+			return oDate;
+		} // ExtractDate
+
+		#endregion method ExtractDate
+
+		#region method MD
+
+		private static string MD(XmlNode oNode) {
+			string s = oNode.InnerText;
+
+			if (s.Length < 2)
+				return "0" + s;
+
+			return s;
+		} // MD
+
+		#endregion method MD
+
+		#endregion private
+	} // class LoanDateScoreItem
+
+	#endregion class LoanDateScoreItem
+} // namespace Reports
