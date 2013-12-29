@@ -430,11 +430,12 @@ namespace EzBob.Web.Code.ApplicationCreator {
 				var caisStrat = caisStrategies.FirstOrDefault(x => x.Id == caisStrategies.Max(y => y.Id));
 				var caisStratStatus = _applicationRepository.GetAll().Where(x => x.Strategy == caisStrat).Select(x => x.State);
 
-				if (Enumerable.Any(caisStratStatus, x => 
-					x != ApplicationStrategyState.SecurityViolation &&
-					x != ApplicationStrategyState.StrategyFinishedWithoutErrors &&
-					x != ApplicationStrategyState.StrategyFinishedWithErrors &&
-					x != ApplicationStrategyState.Error))
+				if (caisStratStatus.Any(x =>
+				                        x != ApplicationStrategyState.SecurityViolation &&
+				                        x != ApplicationStrategyState.StrategyFinishedWithoutErrors &&
+				                        x != ApplicationStrategyState.StrategyFinishedWithErrors &&
+				                        x != ApplicationStrategyState.Error
+					))
 				{
 					throw new Exception("Strategy already started");
 				}
