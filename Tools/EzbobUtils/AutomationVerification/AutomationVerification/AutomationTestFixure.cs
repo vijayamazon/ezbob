@@ -33,8 +33,8 @@
 		{
 			var arr = new AutoReRejectionCalculator(Log);
 			string reason;
-			var des = arr.IsAutoReRejected(7839, out reason);
-			Assert.AreEqual(des, false);
+			var des = arr.IsAutoReRejected(7822, out reason);
+			Assert.AreEqual(false, des);
 		}
 
 		[Test]
@@ -44,8 +44,8 @@
 			var rejectionConstants = db.GetRejectionConstants();
 			var arr = new AutoRejectionCalculator(Log, rejectionConstants);
 			string reason;
-			var des = arr.IsAutoRejected(7839, out reason);
-			Assert.AreEqual(des, false);
+			var des = arr.IsAutoRejected(5894, out reason);
+			Assert.AreEqual(false, des);
 		}
 
 		[Test]
@@ -55,7 +55,7 @@
 			string reason;
 			int amount = 0;
 			var des = arr.IsAutoReApproved(14223, out reason, out amount);
-			Assert.AreEqual(des, false);
+			Assert.AreEqual(false, des);
 		}
 
 		[Test]
@@ -65,7 +65,7 @@
 			string reason;
 			int amount = 0;
 			var des = arr.IsAutoApproved(14223, out reason, out amount);
-			Assert.AreEqual(des, false);
+			Assert.AreEqual(false, des);
 		}
 	}
 }

@@ -139,6 +139,7 @@ namespace CommonLib
 			afvs.Add(new AnalysisFunction()
 				{
 					Updated = DateTime.Parse(row["Updated"].ToString()),
+					MarketPlaceName = row["MarketPlaceName"].ToString(),
 					Value = double.Parse(row["Value"].ToString()),
 					Function = row["FunctionName"].ToString(),
 					TimePeriod = (TimePeriodEnum)(int.Parse(row["TimePeriod"].ToString())),
