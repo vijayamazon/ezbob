@@ -15,7 +15,7 @@ BEGIN
 		c.Fullname,
 		c.Id AS CustomerId,
 		c.Name AS Email,
-		lo.ReductionFee,
+		ISNULL(lo.ReductionFee, 1) AS ReductionFee,
 		l.RefNum,
 		CAST(
 			CASE 
