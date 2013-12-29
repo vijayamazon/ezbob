@@ -945,7 +945,9 @@ EzBob.validateSignUpForm = function (el) {
             customerReason: { required: true },
             customerSourceOfRepayment: { required: true },
             otherCustomerReason: { required: true },
-            otherCustomerSourceOfRepayment: { required: true }
+            otherCustomerSourceOfRepayment: { required: true },
+            mobilePhone: { required: true, regex: "^0[0-9]{10}$" },
+            mobileCode: { required: true, minlength: 6, maxlength: 6 } // TODO: should check in db that it matches the email
         },
         messages: {
             "Email": { required: EzBob.dbStrings.NotValidEmailAddress, email: EzBob.dbStrings.NotValidEmailAddress },
@@ -954,7 +956,9 @@ EzBob.validateSignUpForm = function (el) {
             "promoCode": { maxlength: "Maximum promo code length is 30 characters" },
             "securityQuestion": { required: "This field is required" },
             "SecurityAnswer": { maxlength: "Maximum answer length is 199 characters" },
-            "CaptchaInputText": { required: "This field is required" }
+            "CaptchaInputText": { required: "This field is required" },
+            "mobilePhone": { regex: "Please enter a valid UK number" },
+            "mobileCode": { regex: "Please enter the code you received" }
         },
         errorPlacement: EzBob.Validation.errorPlacement,
         unhighlight: EzBob.Validation.unhighlightFS,

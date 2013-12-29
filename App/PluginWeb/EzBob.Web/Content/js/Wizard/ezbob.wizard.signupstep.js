@@ -16,7 +16,8 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 		this.readyToProceed = false;
 	},
 	events: {
-		'click :submit': 'submit',
+	    'click :submit': 'submit',
+	    'click .getMobileCode': 'getMobileCode',
 
 		'change input': 'inputChanged',
 		'keyup  input': 'inputChanged',
@@ -50,6 +51,9 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 		this.$el.find('li[rel]').setPopover('left');
 
 		this.$el.find('#amount').moneyFormat();
+	    
+		this.$el.find('.phonenumber').numericOnly(11);
+		this.$el.find('.phonenumbercode').numericOnly(6);
 
 		fixSelectValidate(this.$el.find('select'));
 
@@ -107,6 +111,13 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
 		return false;
 	},
+	
+	getMobileCode: function () {
+	    // send request to server to generate and send code
+	    // add 'message sent' indication to ui
+
+	    return false;
+	},
 	submit: function() {
 		if (this.$el.find(':submit').hasClass('disabled'))
 			return false;
@@ -129,7 +140,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 		var amount = _.find(data, function(d) { return d.name === 'amount'; });
 		if (amount) { amount.value = this.$el.find('#amount').autoNumericGet(); }
 
-	    var twilioEnabled = true;
+	    var twilioEnabled = false;
 
 		var xhr = $.post(this.form.attr('action'), data);
 

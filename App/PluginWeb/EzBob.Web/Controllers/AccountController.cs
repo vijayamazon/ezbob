@@ -316,7 +316,7 @@ namespace EzBob.Web.Controllers
 		[ActionName("SignUp")]
 		[ValidateJsonAntiForgeryToken]
 		[CaptchaValidationFilter]
-		public JsonNetResult SignUpAjax(User model, string signupPass1, string signupPass2, string securityQuestion, string promoCode, double? amount, int? customerReason, int? customerSourceOfRepayment, string otherCustomerReason, string otherCustomerSourceOfRepayment)
+		public JsonNetResult SignUpAjax(User model, string signupPass1, string signupPass2, string securityQuestion, string promoCode, double? amount, int? customerReason, int? customerSourceOfRepayment, string otherCustomerReason, string otherCustomerSourceOfRepayment, string mobilePhone)
 		{
 			if (!ModelState.IsValid)
 			{
@@ -329,7 +329,7 @@ namespace EzBob.Web.Controllers
 			try
 			{
 				var customerIp = Request.ServerVariables["REMOTE_ADDR"];
-				SignUpInternal(model, signupPass1, signupPass2, securityQuestion, promoCode, amount, customerReason, customerSourceOfRepayment, otherCustomerReason, otherCustomerSourceOfRepayment);
+				SignUpInternal(model, signupPass1, signupPass2, securityQuestion, promoCode, amount, customerReason, customerSourceOfRepayment, otherCustomerReason, otherCustomerSourceOfRepayment, mobilePhone);
 				FormsAuthentication.SetAuthCookie(model.EMail, false);
 
 				var user = _users.GetUserByLogin(model.EMail);
@@ -369,7 +369,7 @@ namespace EzBob.Web.Controllers
 		//	return SetCookieAndRedirect(new LogOnModel { Password = signupPass1, UserName = model.EMail, ReturnUrl = Url.Action("Index", "Profile", new { Area = "Customer" }) });
 		//}
 
-		private void SignUpInternal(User model, string signupPass1, string signupPass2, string securityQuestion, string promoCode, double? amount, int? customerReason, int? customerSourceOfRepayment, string otherCustomerReason, string otherCustomerSourceOfRepayment)
+		private void SignUpInternal(User model, string signupPass1, string signupPass2, string securityQuestion, string promoCode, double? amount, int? customerReason, int? customerSourceOfRepayment, string otherCustomerReason, string otherCustomerSourceOfRepayment, string mobilePhone)
 		{
 			MembershipCreateStatus status;
 
@@ -400,7 +400,8 @@ namespace EzBob.Web.Controllers
 						IsTest = isAutomaticTest,
 						IsOffline = false,
 						PromoCode = promoCode,
-						CustomerInviteFriend = new List<CustomerInviteFriend>()
+						CustomerInviteFriend = new List<CustomerInviteFriend>(),
+						PersonalInfo = new PersonalInfo { MobilePhone = mobilePhone }
 					};
 
 				var sourceref = Request.Cookies["sourceref"];
