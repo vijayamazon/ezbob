@@ -29,6 +29,7 @@ WHERE
 	c.IsOffline = 1
 ORDER BY
 	w.TheLastOne DESC,
+	w.WizardStepTypeDescription DESC,
 	c.GreetingMailSentDate,
 	c.Fullname
 GO
