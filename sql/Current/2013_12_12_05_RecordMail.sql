@@ -8,7 +8,7 @@ GO
 CREATE PROCEDURE dbo.RecordMail 
  (
 	@Filename NVARCHAR(3000),
-	@Body VARBINARY,
+	@Body VARBINARY(MAX),
 	@Creation DATETIME,
 	@CustomerMail NVARCHAR(200)
  )
