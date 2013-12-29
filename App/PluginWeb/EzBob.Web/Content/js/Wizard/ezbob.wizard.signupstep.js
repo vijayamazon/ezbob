@@ -18,9 +18,10 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 		this.twilioEnabled = true; // TODO: get from config
 		this.numberOfMobileCodeAttempts = 4; // TODO: get from config
 	},
+
 	events: {
-	    'click :submit': 'submit',
-	    'click .getMobileCode': 'getMobileCode',
+		'click :submit': 'submit',
+		'click .getMobileCode': 'getMobileCode',
 
 		'change input': 'inputChanged',
 		'keyup  input': 'inputChanged',
@@ -29,10 +30,9 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
 		'focus #amount': 'amountFocused',
 	},
-	render: function() {
-		var isLoggedIn = this.model.get('loggedIn');
 
-		if (isLoggedIn) {
+	render: function() {
+		if (this.model.get('loggedIn')) {
 			this.readyToProceed = false;
 
 			this.trigger('ready');
@@ -60,13 +60,12 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
 		fixSelectValidate(this.$el.find('select'));
 
-		if (this.showOfflineHelp && !isLoggedIn && (EzBob.getCookie('isoffline') === 'yes')) {
+		if (this.showOfflineHelp && (EzBob.getCookie('isoffline') === 'yes')) {
 			this.showOfflineHelp = false;
 
 			var oDialog = this.$el.find('#offline_help');
-			if (oDialog.length > 0) {
+			if (oDialog.length > 0)
 				var x = $.colorbox({ inline: true, transition: 'none', open: true, href: oDialog });
-			}
 		} // if
 
 		var oFieldStatusIcons = this.$el.find('IMG.field_status');

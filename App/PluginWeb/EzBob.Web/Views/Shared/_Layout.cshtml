@@ -69,7 +69,22 @@
         @{ Html.RenderPartial("_TopButtons"); }
         <header>
             <div class="inner">
-                <a href="http://www.ezbob.com" class="logo_ezbob indent_text" id="ezbob_logo" title="Fast business loans">EZBob - Fast Business Loans</a>
+				@{
+					var sLogoClassExt = "online";
+
+					if (!string.IsNullOrEmpty(User.Identity.Name)) {
+						var oCustomer = oDBHelper.FindCustomerByEmail(User.Identity.Name);
+
+						if ((oCustomer != null) && oCustomer.IsOffline) {
+							sLogoClassExt = "offline";
+						}
+					}
+					else if (Session["isoffline"] == "yes") {
+						sLogoClassExt = "offline";
+					}
+				}
+
+                <a href="http://www.ezbob.com" class="ezbob_logo ezbob_logo_@{ WriteLiteral(sLogoClassExt); } indent_text" id="ezbob_logo" title="Fast business loans">EZBob - Fast Business Loans</a>
                 <div class="clear"></div>
             </div>
         </header>

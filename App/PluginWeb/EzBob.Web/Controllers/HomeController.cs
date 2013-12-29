@@ -39,9 +39,12 @@ namespace EzBob.Web.Controllers
                 Response.Cookies.Add(cookie);
             }
 
+			Session["isoffline"] = "";
+
             if ((offline ?? "").Trim().ToLower().Equals("yes")) {
                 var cookie = new HttpCookie("isoffline", "yes") { Expires = DateTime.Now.AddMonths(3), HttpOnly = false, Secure = true };
                 Response.Cookies.Add(cookie);
+				Session["isoffline"] = "yes";
             }
 			else {
                 var cookie = new HttpCookie("isoffline", "no") { Expires = DateTime.Now.AddMonths(3), HttpOnly = false, Secure = true };

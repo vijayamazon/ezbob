@@ -33,8 +33,13 @@ body{background:white; font-family: Arial, Helvetica, sans-serif; font-size:14px
 /*-- header - logo --*/
 header{background:url(images/nav_bg.png) repeat-x 0 0; height:70px;}
 header .inner{padding:0 10px!important;}
-a#ezbob_logo{ float:left; margin:8px 0 0 0;}
-.logo_ezbob {background: url(images/ezbob_logo.png) 0px 0px no-repeat; display: block; width: 168px; height: 57px;}
+
+a.ezbob_logo { float:left; margin:8px 0 0 0; display: block; width: 168px; height: 57px; }
+
+a.ezbob_logo_online { background: url(images/ezbob_logo.png) 0px 0px no-repeat; }
+
+a.ezbob_logo_offline { background: url(images/ezbob_logo_cartless.png) 0px 0px no-repeat; }
+
 #login_button{position:absolute; top:5px; right:10px;}
 /*-- header navigation --*/
 #nav_container{position:relative;}
