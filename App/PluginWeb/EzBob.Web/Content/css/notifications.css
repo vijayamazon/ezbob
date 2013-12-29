@@ -1,3 +1,6 @@
+.login-page .notification_red {
+    width: 100% !important;
+}
 .notification_green, .notification_yellow, .notification_orange, .notification_red, .notification_pink, .notification_darkblue, .notification_lightblue, .notification_white {
 	min-height: 10px;
 	-moz-border-radius: 5px;

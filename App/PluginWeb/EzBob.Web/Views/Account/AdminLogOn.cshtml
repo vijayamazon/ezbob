@@ -5,7 +5,6 @@
 }
 <div class="login-page">
     <div class="login-wrapper">
-        <div class="notifications"></div>
         @Html.Partial("_LoginSimple")
     </div>
 </div>
@@ -15,7 +14,7 @@
 
     <script type="text/javascript">
         $(function () {
-            //EzBob.validateSignUpForm();
+            EzBob.validateAdminLoginForm();
             var notifications = new EzBob.NotificationsView({ el: $('.notifications') });
             EzBob.App.trigger('error', '@Html.ValidationMessage("")');
         });

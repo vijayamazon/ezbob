@@ -109,7 +109,7 @@ namespace EzBob.Web.Controllers
 					return SetCookieAndRedirectAdmin(model);
 				}
 			}
-			ModelState.AddModelError("", "User not found or incorrect password.");
+			ModelState.AddModelError("", "Wrong user name/password.");
 			return View(model);
 		}
 

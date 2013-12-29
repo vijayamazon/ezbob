@@ -1,13 +1,13 @@
 ﻿@helper RawCell(System.Web.Mvc.HtmlHelper html, params string[] arguments) {
 	<tr>
-		<td width="40%">@html.Raw(arguments[0])</td>
+		<td width="10%">@html.Raw(arguments[0])</td>
 		<td>@html.Raw(arguments[1])</td>
 	</tr>
 }
 
 @helper RawCellWithRawHtmlUnder(System.Web.Mvc.HtmlHelper html, string sCaption, string sValue, string sRawHtmlUnder) {
 	<tr>
-		<td width="40%">@html.Raw(sCaption)</td>
+		<td>@html.Raw(sCaption)</td>
 		<td>@html.Raw(sValue)
 			@html.Raw(sRawHtmlUnder)
 		</td>

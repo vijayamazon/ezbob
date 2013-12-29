@@ -71,7 +71,7 @@
 </script>
 
 <script id="profile-person-info-template" type="text/template">
-	<table class="table squeezed rright" style="table-layout: fixed;">
+	<table class="table squeezed rright">
 		<thead class="box">
 			<tr class="box-title">
 				<th colspan="2">Customer Details</th>
@@ -87,15 +87,15 @@
 					<i data-title="<%- EmailState %>" class="tltp <%=getIcon()%>"></i>
 				</td>
 				<td>
-					<button class="btn btn-mini btn-info" name="editEmail"><i class="icon-pencil"></i></button>
-					<%- Email.length <= 20 ? Email : Email.substring(0,17)+'...' %>
+                    <%- Email.length <= 20 ? Email : Email.substring(0,17)+'...' %>
 					<i data-title="<%- Email %>" class="tltp-left <%=getIcon()%>"></i>
+					<button class="btn btn-mini btn-info" name="editEmail"><i class="icon-pencil"></i></button>
 				</td>
 			</tr>
 			@RawCell("Segment Type", "<%- SegmentType %>")
 
 			<tr>
-				<td width="40%">CCI mark</td>
+				<td>CCI mark</td>
 				<td><span class="cci-mark"></span><button type="button" class="btn btn-mini btn-info cci-mark-toggle">Toggle</button></td>
 			</tr>
 
@@ -103,15 +103,15 @@
 			@RawCell("Daytime Phone #", "<%- DaytimePhone %>")
 
 			@RawCell("Cart", "<%- Medal %>")
-			@RawCell("Reference Source", "<%- ReferenceSource || '-' %>")
+			@RawCell("Ref Source", "<%- ReferenceSource || '-' %>")
 			@RawCell("A/B Testing", "<%- ABTesting || '-' %>")
 			@RawCell("User score", "<%- CreditScore %>")
-			@RawCell("Registration date", "<%- EzBob.formatDate(RegistrationDate) %>")
+			@RawCell("Reg date", "<%- EzBob.formatDate(RegistrationDate) %>")
 			@RawCellWithButtonNear("Customer Status", "<%- DisabledText %>", "changeDisabledState")
 			@RawCell("User status", "<%- UserStatus %>")
 			@RawCellWithButtonNear("Test User:", "<%= IsTest ? 'Yes' : 'No' %>", "isTestEditButton")
 			@RawCellWithButtonNear("Manual Decision:", "<%= IsAvoid ? 'Yes' : 'No' %>", "avoidAutomaticDecisionButton")
-			@RawCellWithButtonNear("Fraud Check Status:", "<%= FraudCheckStatus %>", "changeFraudStatusManualy", "<%- FraudHighlightCss %>")
+			@RawCellWithButtonNear("Fraud Status:", "<%= FraudCheckStatus %>", "changeFraudStatusManualy", "<%- FraudHighlightCss %>")
             <tr>
 		        <td class="<%= PromoCodeCss %>">Promo Code:</td>
 		        <td class="<%= PromoCodeCss %>">
@@ -189,7 +189,7 @@
 			<%}%>
 	
 			<tr>
-				<td width="40%" class="<%- m.FundsAvailableUnderLimitClass %>">Funds avaliable</td>
+				<td class="<%- m.FundsAvailableUnderLimitClass %>">Funds avaliable</td>
 				<td class="<%- m.FundsAvailableUnderLimitClass %>">
 					<span>£ <%- m.FundsAvaliable %></span>
 					<button class="btn btn-mini btn-info couple_buttons" name="openPacnetManualButton"><i class="icon-plus"></i></button>

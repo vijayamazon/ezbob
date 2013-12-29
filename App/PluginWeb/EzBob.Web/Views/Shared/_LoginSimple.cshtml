@@ -1,6 +1,7 @@
 ﻿@model dynamic
 @using (Html.BeginForm("AdminLogOn", "Account", new { Area = "" }, FormMethod.Post, new { @class = "simple-login" }))
 {
+    <div class="notifications"></div>
     <div>
         <h3>Login to your account</h3>
         <hr />
@@ -21,7 +22,7 @@
                 <input class="btn btn-primary form-control" type="submit" value="Log In" tabindex="13" id="loginSubmitBtn" />
             </div>
         </div>
-         <hr/>
+        <hr/>
         <p class="clearfix">
             @Html.ActionLink("Forgot password?", "ForgotPassword", "Account", new { Area = "" }, new { @class = "goto-forgot" })
         </p>

@@ -208,6 +208,7 @@ namespace EzBob.Web.Infrastructure
             return Bundle.JavaScript()
                 //3rd party libs
                 .Add("~/Content/js/lib/alertify.js")
+				.Add("~/Content/js/lib/notifications.js")
                 .Add("~/Content/js/lib/jquery.zclip.js")
                 .Add("~/Content/js/lib/grid.locale-en.js")
                 .Add("~/Content/js/lib/jquery.jqGrid.src.js")
@@ -325,6 +326,7 @@ namespace EzBob.Web.Infrastructure
 				.Add("~/Content/js/Wizard/yourInfo/ezbob.yourinfo.companyTarget.js")
 				.Add("~/Content/js/controls/ezbob.LoanScheduleView.coffee")
 				.Add("~/Content/js/controls/ezbob.simpleValueEditDlg.js")
+				.Add("~/Content/js/controls/ezbob.notifications.js")
 
                 .MvcRender("~/Content/js/min/underwriter_#.js");
         }
