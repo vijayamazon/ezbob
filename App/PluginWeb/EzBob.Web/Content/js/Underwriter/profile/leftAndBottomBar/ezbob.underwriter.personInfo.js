@@ -24,7 +24,6 @@
     };
 
     PersonInfoView.prototype.onRender = function() {
-      console.log('der modelllle ist', this.model);
       this.setCciMark();
       this.$el.find(".tltp").tooltip();
       return this.$el.find(".tltp-left").tooltip({

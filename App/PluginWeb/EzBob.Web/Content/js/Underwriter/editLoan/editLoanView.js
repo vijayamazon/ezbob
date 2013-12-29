@@ -1,5 +1,5 @@
-﻿(function() {
-  var root,
+(function() {
+  var root, _ref,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -8,11 +8,11 @@
   root.EzBob = root.EzBob || {};
 
   EzBob.EditLoanView = (function(_super) {
-
     __extends(EditLoanView, _super);
 
     function EditLoanView() {
-      return EditLoanView.__super__.constructor.apply(this, arguments);
+      _ref = EditLoanView.__super__.constructor.apply(this, arguments);
+      return _ref;
     }
 
     EditLoanView.prototype.template = "#loan_editor_template";
@@ -26,11 +26,10 @@
 
     EditLoanView.prototype.serializeData = function() {
       var data, e, stack;
+
       data = this.model.toJSON();
-      console.log('serialised data ist', data);
       e = new Error('dummy');
       stack = e.stack.replace(/^[^\(]+?[\n$]/gm, '').replace(/^\s+at\s+/gm, '').replace(/^Object.<anonymous>\s*\(/gm, '{anonymous}()@').split('\n');
-      console.log(stack);
       data.editItemIndex = this.editItemIndex;
       return data;
     };
@@ -60,6 +59,7 @@
 
     EditLoanView.prototype.addInstallment = function() {
       var add, date, editor, installment, view;
+
       date = new Date(this.model.get("Items").last().get("Date"));
       date.setMonth(date.getMonth() + 1);
       installment = new EzBob.Installment({
@@ -92,6 +92,7 @@
 
     EditLoanView.prototype.addFee = function() {
       var add, editor, fee, view;
+
       fee = new EzBob.Installment({
         "Editable": true,
         "Deletable": true,
@@ -121,6 +122,7 @@
 
     EditLoanView.prototype.showEditView = function(view) {
       var _this = this;
+
       view.on("close", function() {
         return _this.ui.buttons.show();
       });
@@ -131,6 +133,7 @@
     EditLoanView.prototype.removeScheduleItem = function(e) {
       var id, ok,
         _this = this;
+
       id = e.currentTarget.getAttribute("data-id");
       ok = function() {
         return _this.model.removeItem(id);
@@ -140,6 +143,7 @@
 
     EditLoanView.prototype.editScheduleItem = function(e) {
       var closed, editor, id, item, row, view;
+
       id = e.currentTarget.getAttribute("data-id");
       row = $(e.currentTarget).parents('tr');
       row.addClass("editing");
@@ -167,6 +171,7 @@
     EditLoanView.prototype.onOk = function() {
       var xhr,
         _this = this;
+
       if (this.ui.ok.hasClass('disabled')) {
         return;
       }
@@ -190,6 +195,7 @@
 
     EditLoanView.prototype.renderRegions = function() {
       var data;
+
       data = this.serializeData();
       this.renderSchedule(data);
       return this.renderFreeze(data);
@@ -206,6 +212,7 @@
 
     EditLoanView.prototype.onAddFreezeInterval = function() {
       var nRate, sEnd, sStart;
+
       sStart = this.$el.find(".new-freeze-interval-start").val();
       sEnd = this.$el.find(".new-freeze-interval-end").val();
       nRate = this.$el.find(".new-freeze-interval-rate").val() / 100.0;
@@ -224,6 +231,7 @@
     EditLoanView.prototype.validateFreezeIntervals = function(sStartDate, sEndDate) {
       var bConflict, oEnd, oStart, tmp,
         _this = this;
+
       oStart = moment.utc(sStartDate);
       oEnd = moment.utc(sEndDate);
       if (oStart !== null && oEnd !== null && oStart > oEnd) {
@@ -236,6 +244,7 @@
       bConflict = false;
       _.each(this.model.get('InterestFreeze'), function(item, idx) {
         var ary, bFirst, bSecond, oLeft, oRight;
+
         if (bConflict) {
           return;
         }
