@@ -14,6 +14,9 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
 		this.showOfflineHelp = true;
 		this.readyToProceed = false;
+		this.mobileCodesSent = 0;
+		this.twilioEnabled = true; // TODO: get from config
+		this.numberOfMobileCodeAttempts = 4; // TODO: get from config
 	},
 	events: {
 	    'click :submit': 'submit',
@@ -113,11 +116,19 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 	},
 	
 	getMobileCode: function () {
+	    this.mobileCodesSent++;
+	    if (this.mobileCodesSent == this.numberOfMobileCodeAttempts) {
+	        EzBob.App.trigger('warning', "Switching to authentication via captcha");
+	        this.$el.find('#twilioDiv').hide();
+	        this.$el.find('#captchaDiv').show();
+	        this.twilioEnabled = false;
+	        return false;
+	    }
 	    // send request to server to generate and send code
 	    var xhr = $.post(window.gRootPath + "Account/GetMobileCode", { mobilePhone: this.$el.find('.phonenumber').val() });
 	    xhr.done(function () {
 	        
-	        //this.$el.find('.phonenumbercode').show();
+	        EzBob.App.trigger('info', "Code was sent to mobile");
 
 	        return false;
 	    });
@@ -148,7 +159,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 		var amount = _.find(data, function(d) { return d.name === 'amount'; });
 		if (amount) { amount.value = this.$el.find('#amount').autoNumericGet(); }
 
-	    var twilioEnabled = true;
+	    
 
 		var xhr = $.post(this.form.attr('action'), data);
 
@@ -170,7 +181,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 				that.model.set('loggedIn', true); // triggers 'ready' and 'next'
 			} else {
 			    if (result.errorMessage) EzBob.App.trigger('error', result.errorMessage);
-			    if (!twilioEnabled) {
+			    if (!that.twilioEnabled) {
 			        that.captcha.reload();
 			    }
 			    that.$el.find(':submit').addClass('disabled');
@@ -180,7 +191,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
 		xhr.fail(function() {
 		    EzBob.App.trigger('error', 'Something went wrong');
-		    if (!twilioEnabled) {
+		    if (!that.twilioEnabled) {
 		        that.captcha.reload();
 		    }
 		    that.blockBtn(false);

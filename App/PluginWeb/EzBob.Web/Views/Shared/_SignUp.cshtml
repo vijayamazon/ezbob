@@ -147,30 +147,32 @@
     
     if (twilioEnabled)
     {
-        <div class="form_field_container">
-            <label class ="attardi-input">
-                <span>Mobile phone</span>
-                <input type="text" class="phonenumber form_field" name="mobilePhone" id="mobilePhone" tabindex="11" ui-event-control-id="signup:mobile-phone"/>
-                <img id="mobilePhoneImage" class="field_status required"/>
-            </label>
-        </div>
+        <div id="twilioDiv">
+            <div class="form_field_container">
+                <label class ="attardi-input">
+                    <span>Mobile phone</span>
+                    <input type="text" class="phonenumber form_field" name="mobilePhone" id="mobilePhone" tabindex="11" ui-event-control-id="signup:mobile-phone"/>
+                    <img id="mobilePhoneImage" class="field_status required"/>
+                </label>
+            </div>
     
-        <input class="btn green getMobileCode" type="button" value="Get authentication code" ui-event-control-id="signup:get-mobile-code" />
+            <input class="btn green getMobileCode" type="button" value="Get authentication code" ui-event-control-id="signup:get-mobile-code" />
     
-        <div class="form_field_container">
-            <label class ="attardi-input">
-                <span>Mobile phone authentication code</span>
-                <input type="text" class="phonenumbercode form_field" name="mobileCode" id="mobileCode" tabindex="12" ui-event-control-id="signup:mobile-code"/>
-                <img id="mobileCodeImage" class="field_status required"/>
-            </label>
+            <div class="form_field_container">
+                <label class ="attardi-input">
+                    <span>Mobile phone authentication code</span>
+                    <input type="text" class="phonenumbercode form_field" name="mobileCode" id="mobileCode" tabindex="12" ui-event-control-id="signup:mobile-code"/>
+                    <img id="mobileCodeImage" class="field_status required"/>
+                </label>
+            </div>
         </div>
     }
-    else
-    {
+    
+    <div id="captchaDiv" class="hide">
         <div class="form_field_container">
             @EzForm.Captcha(captchamode)
         </div>
-    }
+    </div>
     
     <div class="form_buttons_container">
         <div class="attardi-button">
