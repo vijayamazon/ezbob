@@ -17,6 +17,10 @@ namespace Ezbob.Utils {
 
 		#region method Contains
 
+		public bool Contains(TRowKey oRowKey) {
+			return m_oData.ContainsKey(oRowKey);
+		} // Contains
+
 		public bool Contains(TRowKey oRowKey, TColumnKey oColumnKey) {
 			if (m_oData.ContainsKey(oRowKey)) {
 				SortedDictionary<TColumnKey, TData> oRow = m_oData[oRowKey];
@@ -30,6 +34,15 @@ namespace Ezbob.Utils {
 		#endregion method Contains
 
 		#region indexer
+
+		public SortedDictionary<TColumnKey, TData> this[TRowKey oRowKey] {
+			get { 
+				if (m_oData.ContainsKey(oRowKey))
+					return m_oData[oRowKey];
+
+				throw new KeyNotFoundException("Cannot find row by requested key");
+			} // get
+		} // indexer
 
 		public TData this[TRowKey oRowKey, TColumnKey oColumnKey] {
 			get {

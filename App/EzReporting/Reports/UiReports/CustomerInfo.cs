@@ -6,7 +6,7 @@ using EZBob.DatabaseLib.Model.Database;
 namespace Reports {
 	#region class CustomerInfo
 
-	public class CustomerInfo : Extractor {
+	public class CustomerInfo : CustomerData {
 		#region public
 
 		#region constructor
@@ -17,9 +17,6 @@ namespace Reports {
 			SortedDictionary<int, int> oDirectorCountList,
 			SortedDictionary<int, int> oAccountCountList
 		) : base(oRow) {
-			ID = Retrieve<int>("CustomerID").Value;
-			FirstName = Retrieve("FirstName");
-			Surname = Retrieve("Surname");
 			Gender = Retrieve("Gender");
 			DateOfBirth = Retrieve<DateTime>("DateOfBirth");
 			MaritalStatus = Retrieve("MaritalStatus");
@@ -27,15 +24,10 @@ namespace Reports {
 			DaytimePhone = Retrieve("DaytimePhone");
 			TimeAtAddress = Retrieve<int>("TimeAtAddress");
 			ResidentialStatus = Retrieve("ResidentialStatus");
-			TypeOfBusiness = Retrieve("TypeOfBusiness");
 			NonLimitedCompanyName = Retrieve("NonLimitedCompanyName");
 			LimitedCompanyName = Retrieve("LimitedCompanyName");
 
 			WizardStep = Retrieve<int>("WizardStep").Value;
-			WizardStepName = Retrieve("WizardStepTypeName");
-			WizardStepIsLast = Convert.ToBoolean(oRow["TheLastOne"]);
-
-			IsOffline = Convert.ToBoolean(oRow["IsOffline"]);
 
 			AddressInfo = oAddressList.ContainsKey(ID) ? oAddressList[ID] : null;
 			DirectorCount = oDirectorCountList.ContainsKey(ID) ? oDirectorCountList[ID] : 0;
@@ -46,9 +38,6 @@ namespace Reports {
 
 		#region properties
 
-		public int ID { get; private set; }
-		public string FirstName { get; private set; }
-		public string Surname { get; private set; }
 		public string Gender { get; private set; }
 		public DateTime? DateOfBirth { get; private set; }
 		public string MaritalStatus { get; private set; }
@@ -56,13 +45,9 @@ namespace Reports {
 		public string DaytimePhone { get; private set; }
 		public int? TimeAtAddress { get; private set; }
 		public string ResidentialStatus { get; private set; }
-		public string TypeOfBusiness { get; private set; }
 		public string NonLimitedCompanyName { get; private set; }
 		public string LimitedCompanyName { get; private set; }
-		public bool IsOffline { get; private set; }
 		public int WizardStep { get; private set; }
-		public string WizardStepName { get; private set; }
-		public bool WizardStepIsLast { get; private set; }
 
 		public AddressInfo AddressInfo { get; private set; }
 		public int DirectorCount { get; private set; }
@@ -136,14 +121,6 @@ namespace Reports {
 		#endregion public
 
 		#region private
-
-		#region method Segment
-
-		private string Segment() {
-			return IsOffline ? "Offline" : "Online";
-		} // Segment
-
-		#endregion method Segment
 
 		#region method NameTitle
 

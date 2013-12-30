@@ -120,6 +120,16 @@ namespace EzReportToEMail
 									);
 								break;
 
+							case ReportType.RPT_UI_EXT_REPORT:
+								sender.Dispatch(
+									report.Title,
+									dToday,
+									BuildUiExtReport(report, dToday, dTomorrow),
+									BuildUiExtXls(report, dToday, dTomorrow),
+									report.ToEmail
+									);
+								break;
+
 							default:
 								HandleGenericReport(report, dToday, sender);
 								break;

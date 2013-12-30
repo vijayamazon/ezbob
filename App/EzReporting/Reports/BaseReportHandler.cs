@@ -261,6 +261,18 @@ namespace Reports {
 
 		#endregion method BuildUiReport
 
+		#region method BuildUiExtReport
+
+		public ATag BuildUiExtReport(Report report, DateTime today, DateTime tomorrow, List<string> oColumnTypes = null) {
+			KeyValuePair<ReportQuery, DataTable> oData = CreateUiExtReport(report, today, tomorrow);
+
+			return new Html.Tags.Body().Add<Class>("Body")
+				.Append(new H1().Append(new Text(report.GetTitle(today, oToDate: tomorrow))))
+				.Append(new P().Append(TableReport(oData.Key, oData.Value, isSharones: true, oColumnTypes: oColumnTypes)));
+		} // BuildUiExtReport
+
+		#endregion method BuildUiExtReport
+
 		#endregion HTML generators
 
 		#region Excel generators
@@ -414,10 +426,20 @@ namespace Reports {
 		public ExcelPackage BuildUiXls(Report report, DateTime today, DateTime tomorrow) {
 			KeyValuePair<ReportQuery, DataTable> oData = CreateUiReport(report, today, tomorrow);
 
-			return AddSheetToExcel(oData.Value, report.GetTitle(today, oToDate: tomorrow), "RptEarnedInterest");
+			return AddSheetToExcel(oData.Value, report.GetTitle(today, oToDate: tomorrow), "RptUiExt");
 		} // BuildUiXls
 
 		#endregion method BuildUiXls
+
+		#region method BuildUiExtXls
+
+		public ExcelPackage BuildUiExtXls(Report report, DateTime today, DateTime tomorrow) {
+			KeyValuePair<ReportQuery, DataTable> oData = CreateUiExtReport(report, today, tomorrow);
+
+			return AddSheetToExcel(oData.Value, report.GetTitle(today, oToDate: tomorrow), "RptUiExtReport");
+		} // BuildUiExtXls
+
+		#endregion method BuildUiExtXls
 
 		#endregion Excel generators
 
@@ -1157,6 +1179,25 @@ namespace Reports {
 		} // CreateUiReport
 
 		#endregion method CreateUiReport
+
+		#region method CreateUiExtReport
+
+		private KeyValuePair<ReportQuery, DataTable> CreateUiExtReport(Report report, DateTime today, DateTime tomorrow) {
+			var cc = new UiReportExt(DB, today, tomorrow, this);
+
+			var rpt = new ReportQuery(report) {
+				DateStart = today,
+				DateEnd = tomorrow
+			};
+
+			Tuple<DataTable, ColumnInfo[]> oOutput = cc.Run();
+
+			rpt.Columns = oOutput.Item2;
+
+			return new KeyValuePair<ReportQuery, DataTable>(rpt, oOutput.Item1);
+		} // CreateUiExtReport
+
+		#endregion method CreateUiExtReport
 
 		#endregion report generators
 

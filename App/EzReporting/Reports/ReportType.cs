@@ -10,5 +10,6 @@
 		RPT_LOAN_STATS,
 		RPT_CCI,
 		RPT_UI_REPORT,
+		RPT_UI_EXT_REPORT,
 	} // enum ReportType
 } // namespace Reports

@@ -51,6 +51,9 @@ namespace EzReportsWeb {
 			case ReportType.RPT_UI_REPORT:
 				return BuildUiReport(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd, oColumnTypes);
 
+			case ReportType.RPT_UI_EXT_REPORT:
+				return BuildUiExtReport(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd, oColumnTypes);
+
 			default:
 				string sReportTitle = report.GetTitle((DateTime)rptDef.DateStart, " ", report.IsDaily ? (DateTime?)null : (DateTime)rptDef.DateEnd);
 
@@ -61,8 +64,6 @@ namespace EzReportsWeb {
 		} // GetReportData
 
 		internal ExcelPackage GetWorkBook(System.Web.UI.WebControls.ListItem selectedReport, ReportQuery rptDef, bool isDaily) {
-			// InitAspose();
-
 			Report report = GetReport(selectedReport.Text);
 
 			if (report == null)
@@ -94,6 +95,9 @@ namespace EzReportsWeb {
 
 			case ReportType.RPT_UI_REPORT:
 				return BuildUiXls(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd);
+
+			case ReportType.RPT_UI_EXT_REPORT:
+				return BuildUiExtXls(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd);
 
 			default:
 				var xlsTitle = report.GetTitle((DateTime)rptDef.DateStart, " ", report.IsDaily ? (DateTime?)null : (DateTime)rptDef.DateEnd);

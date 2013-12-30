@@ -114,6 +114,9 @@
     <Compile Include="ReportQuery.cs" />
     <Compile Include="ReportType.cs" />
     <Compile Include="tags.cs" />
+    <Compile Include="UiReportExt\CustomerData.cs" />
+    <Compile Include="UiReportExt\UiControlData.cs" />
+    <Compile Include="UiReportExt\UiReportExt.cs" />
     <Compile Include="UiReports\AddressInfo.cs" />
     <Compile Include="UiReports\CustomerInfo.cs" />
     <Compile Include="UiReports\Extractor.cs" />

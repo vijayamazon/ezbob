@@ -16,7 +16,9 @@ namespace TestApp {
 
 			var oDB = new SqlConnection(log);
 
-			TestLoanDateScore(oDB, log);
+			TestUiReportExt(oDB, log);
+
+			// TestLoanDateScore(oDB, log);
 
 			// TestExperianLimitedCompanyData(oDB, log);
 
@@ -36,6 +38,20 @@ namespace TestApp {
 		} // Main
 
 		#endregion method Main
+
+		#region method TestUiReportExt
+
+		private static void TestUiReportExt(AConnection oDB, ASafeLog log) {
+			var rpt = new UiReportExt(oDB, new DateTime(2013, 12, 23), new DateTime(2013, 12, 31), log) { VerboseLogging = true };
+
+			rpt.Run();
+
+			log.Debug("Report start");
+
+			log.Debug("Report end");
+		} // TestUiReportExt
+
+		#endregion method TestUiReportExt
 
 		#region method TestLoanDateScore
 
