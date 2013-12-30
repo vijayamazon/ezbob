@@ -3,6 +3,7 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using PaymentServices.PacNet;
+	using StructureMap;
 
 	public class UpdateTransactionStatus : AStrategy {
 		#region constructor
@@ -23,28 +24,33 @@
 
 		public override void Execute() {
 			DataTable dt = DB.ExecuteReader("GetPacnetTransactions", CommandSpecies.StoredProcedure);
-
+			var service = ObjectFactory.GetInstance<IPacnetService>();
 			foreach (DataRow row in dt.Rows) {
 				int customerId = int.Parse(row["CustomerId"].ToString());
 				string trackingNumber = row["TrackingNumber"].ToString();
-
-				var service = new PacnetService();
+				
 				PacnetReturnData result = service.CheckStatus(customerId, trackingNumber);
 
 				string newStatus;
-				string description = null;
+				string description = row["allDescriptions"].ToString();
 
 				if (string.IsNullOrEmpty(result.Status)) {
 					newStatus = "Error";
 					description = result.Error;
 				}
 				else if (result.Status.ToLower().Contains("inprogress"))
+				{
 					newStatus = "InProgress";
+				}
 				else if (result.Status.ToLower().Contains("submitted"))
+				{
 					newStatus = "Done";
-				else {
+					description = "Done";
+				}
+				else
+				{
 					newStatus = "Error";
-					description = result.Status;
+					description = result.Status + " " + result.Error;
 				} // if
 
 				Log.Debug("UpdateTransactionStatus: CustomerId {4}, Tracking number {5}, Pacnet Result: status: {0}, error: {1}, Update data: status {2}, description {3}", result.Status, result.Error, newStatus, description);

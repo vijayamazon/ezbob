@@ -15,7 +15,7 @@ namespace PaymentServices.PacNet
             var trackingNumber = _random.Next(111111111, 999999999);
             var pacnetReturnData = new PacnetReturnData()
                                        {
-                                           Status = "Submited",
+                                           Status = "Submitted",
                                            TrackingNumber = trackingNumber.ToString()
                                        };
             return pacnetReturnData;
@@ -23,12 +23,13 @@ namespace PaymentServices.PacNet
 
         public virtual PacnetReturnData CheckStatus(int customerId, string trackingNumber)
         {
-	        string[] statuses = {"inprogress", "submited", "error"};
-	        int r = _random.Next(0, 2);
+	        string[] statuses = {"inprogress", "submitted", "error"};
+	        int r = new Random(DateTime.Now.Millisecond).Next(0, 2);
             var pacnetReturnData = new PacnetReturnData()
                                        {
                                            Status = statuses[r],
                                            TrackingNumber = trackingNumber,
+										   Error = "Fake " + statuses[r]
                                        };
 
 			Log.DebugFormat("Fake CheckStatus customerId {0} trackingNumber {1} Status {2}", customerId, trackingNumber, pacnetReturnData.Status);
