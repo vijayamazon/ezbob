@@ -10,7 +10,7 @@ namespace EzBob.Web.Areas.Customer.Models
     public interface IPayPointFacade
     {
         bool CheckHash(string hash, Uri url);
-        string GeneratePaymentUrl(decimal amount, string callback, bool deferred = false);
+        string GeneratePaymentUrl(bool bIsOffline, decimal amount, string callback, bool deferred = false);
     }
 
     public class PayPointFacade : IPayPointFacade
@@ -46,7 +46,7 @@ namespace EzBob.Web.Areas.Customer.Models
             return sb.ToString().ToLowerInvariant();
         }
 
-        public string GeneratePaymentUrl(decimal amount, string callback, bool deferred = false)
+        public string GeneratePaymentUrl(bool bIsOffline, decimal amount, string callback, bool deferred = false)
         {
             var transactionId = Guid.NewGuid().ToString();
             var merchantId = _config.PayPoint.Mid;
@@ -61,14 +61,16 @@ namespace EzBob.Web.Areas.Customer.Models
                 }
                 options += "deferred=true;";
             }
-            var url = string.Format("https://www.secpay.com/java-bin/ValCard?amount={0}&merchant={1}&trans_id={2}&callback={3}&digest={4}&template={5}&options={6}",
+            var url = string.Format("https://www.secpay.com/java-bin/ValCard?amount={0}&merchant={1}&trans_id={2}&callback={3}&digest={4}&template={5}&options={6}&segmenttype={7}",
                 amountStr,
                 merchantId,
                 transactionId,
                 HttpUtility.UrlEncode(callback),
                 digest,
                 HttpUtility.UrlEncode(_config.PayPoint.TemplateUrl),
-                HttpUtility.UrlEncode(options));
+                HttpUtility.UrlEncode(options),
+				bIsOffline ? "offline" : "online"
+			);
             return url;
         }
     }

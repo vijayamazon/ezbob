@@ -7,6 +7,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using ApplicationCreator;
+	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Models;
 	using Infrastructure;
 	using Infrastructure.csrf;
@@ -26,8 +27,9 @@
         private readonly IPacnetPaypointServiceLogRepository _logRepository;
         private readonly IPaypointTransactionRepository _paypointTransactionRepository;
         private readonly PayPointApi _paypoint;
+		private readonly ICustomerRepository _customerRepository;
 
-        public PaypointController(IEzbobWorkplaceContext context, PayPointFacade payPointFacade, IAppCreator appCreator, LoanPaymentFacade loanPaymentFacade, IPacnetPaypointServiceLogRepository pacnetPaypointServiceLogRepository, IPaypointTransactionRepository paypointTransactionRepository, PayPointApi paypoint)
+        public PaypointController(IEzbobWorkplaceContext context, PayPointFacade payPointFacade, IAppCreator appCreator, LoanPaymentFacade loanPaymentFacade, IPacnetPaypointServiceLogRepository pacnetPaypointServiceLogRepository, IPaypointTransactionRepository paypointTransactionRepository, PayPointApi paypoint, ICustomerRepository customerRepository)
         {
             _context = context;
             _payPointFacade = payPointFacade;
@@ -36,6 +38,7 @@
             _paypointTransactionRepository = paypointTransactionRepository;
             _loanRepaymentFacade = loanPaymentFacade;
             _paypoint = paypoint;
+	        _customerRepository = customerRepository;
         }
 
         [NoCache]
@@ -53,7 +56,10 @@
                 }
 
                 var callback = Url.Action("Callback", "Paypoint", new {Area = "Customer", loanId, type, username= (_context.User != null ? _context.User.Name : "")}, "https");
-                var url = _payPointFacade.GeneratePaymentUrl(amount, callback);
+
+	            var oCustomer = _context.User == null ? null : _customerRepository.Get(_context.User.Id);
+
+                var url = _payPointFacade.GeneratePaymentUrl(oCustomer != null && oCustomer.IsOffline, amount, callback);
 
                 _logRepository.Log(_context.UserId, DateTime.Now, "Paypoint Pay Redirect to " + url, "Successful", "");
 

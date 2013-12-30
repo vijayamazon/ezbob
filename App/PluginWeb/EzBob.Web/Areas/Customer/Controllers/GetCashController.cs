@@ -83,7 +83,7 @@
 												 lastDatePayment = FormattingUtils.FormatDateToString(lastDateOfPayment)
 											 },
 										 "https");
-			string url = _payPointFacade.GeneratePaymentUrl(5.00m, callback);
+			string url = _payPointFacade.GeneratePaymentUrl(customer.IsOffline, 5.00m, callback);
 			_logRepository.Log(_context.UserId, DateTime.Now, "Paypoint GetCash Redirect to " + url, "Successful", "");
 			return Redirect(url);
 		}
