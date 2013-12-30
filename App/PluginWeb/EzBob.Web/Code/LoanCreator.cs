@@ -2,12 +2,12 @@
 {
 	using System;
 	using System.Linq;
+	using ApplicationCreator;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
 	using NHibernate;
-	using Web.ApplicationCreator;
 	using Areas.Customer.Controllers;
 	using Areas.Customer.Controllers.Exceptions;
 	using Agreements;

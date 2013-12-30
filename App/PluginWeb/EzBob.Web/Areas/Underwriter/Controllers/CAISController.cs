@@ -6,14 +6,15 @@ using System.Web.Mvc;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Repository;
 using ExperianLib.CaisFile;
-using EzBob.Web.ApplicationCreator;
 using EzBob.Web.Areas.Underwriter.Models.CAIS;
 using EzBob.Web.Code;
 using Scorto.Web;
 
 namespace EzBob.Web.Areas.Underwriter.Controllers
 {
-    public class CAISController : Controller
+	using Code.ApplicationCreator;
+
+	public class CAISController : Controller
     {
         private readonly CaisReportsHistoryRepository _caisReportsHistoryRepository;
         private readonly IAppCreator _appCreator;

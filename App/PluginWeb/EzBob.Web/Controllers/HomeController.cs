@@ -1,26 +1,34 @@
-﻿using System;
-using System.Web;
-using System.Web.Mvc;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Repository;
-using ExperianLib;
-using Scorto.Web;
-
-namespace EzBob.Web.Controllers
+﻿namespace EzBob.Web.Controllers
 {
-    public class HomeController : Controller
-    {
-        private readonly AskvilleRepository _askvilleRepository;
+	using System;
+	using System.Web;
+	using System.Web.Mvc;
+	using Code.ApplicationCreator;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Repository;
+	using ExperianLib;
+	using EzServiceReference;
+	using Scorto.Web;
+	using ActionResult = System.Web.Mvc.ActionResult;
 
-        public HomeController(AskvilleRepository askvilleRepository)
+	public class HomeController : Controller
+    {
+		private readonly AskvilleRepository askvilleRepository;
+		private readonly IAppCreator appCreator;
+
+		public HomeController(AskvilleRepository askvilleRepository, IAppCreator appCreator)
         {
-            _askvilleRepository = askvilleRepository;
+            this.askvilleRepository = askvilleRepository;
+			this.appCreator = appCreator;
         }
 
         public ActionResult Index(string sourceref = "", string shop = "", string ezbobab = "", string offline = "", string invite = "")
         {
-
             Session["Shop"] = shop;
+
+			WizardConfigsActionResult c = appCreator.GetWizardConfigs();
+			Session["IsSmsValidationActive"] = c.IsSmsValidationActive;
+			Session["NumberOfMobileCodeAttempts"] = c.NumberOfMobileCodeAttempts;
 
             if(!string.IsNullOrEmpty(sourceref))
             {
@@ -59,18 +67,24 @@ namespace EzBob.Web.Controllers
         {
             if (approve != null)
             {
-                var askville = _askvilleRepository.GetAskvilleByGuid(id);
+                var askville = askvilleRepository.GetAskvilleByGuid(id);
                 var confirmStatus = (bool) approve ? AskvilleStatus.Confirmed : AskvilleStatus.NotConfirmed;
                 if (askville != null)
                 {
                     askville.Status = confirmStatus;
                     askville.IsPassed = true;
-                    _askvilleRepository.SaveOrUpdate(askville);
+                    askvilleRepository.SaveOrUpdate(askville);
                     Utils.WriteLog("Askville confirmation", "Confirmation status " + confirmStatus.ToString(), "Askville", askville.MarketPlace.Customer.Id);
                 }
                 ViewData["Approve"] = approve;
             }
             return View();
         }
+
+		[HttpPost]
+		public JsonNetResult GetTwilioConfig()
+		{
+			return this.JsonNet(new { isSmsValidationActive = Session["IsSmsValidationActive"], numberOfMobileCodeAttempts = Session["NumberOfMobileCodeAttempts"] });
+		}
     }
 }

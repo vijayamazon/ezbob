@@ -426,6 +426,18 @@ namespace EzService {
 			return new BoolActionResult { MetaData = result, Value = strategyInstance.IsValidatedSuccessfully() };
 		}
 
+		public WizardConfigsActionResult GetWizardConfigs()
+		{
+			var strategyInstance = new GetWizardConfigs(DB, Log);
+			var result = ExecuteSync(strategyInstance, null, null, typeof(GetWizardConfigs));
+			return new WizardConfigsActionResult
+				{
+					MetaData = result,
+					IsSmsValidationActive = strategyInstance.IsSmsValidationActive,
+					NumberOfMobileCodeAttempts = strategyInstance.NumberOfMobileCodeAttempts
+				};
+		}
+
 		#endregion IEzService exposed methods
 
 		#region method IDisposable.Dispose

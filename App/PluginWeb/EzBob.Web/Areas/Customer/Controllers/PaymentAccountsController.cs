@@ -4,6 +4,7 @@
 	using System.Linq;
 	using System.Text.RegularExpressions;
 	using System.Web.Mvc;
+	using Code.ApplicationCreator;
 	using Code.Bank;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.DatabaseWrapper.AccountInfo;
@@ -13,7 +14,6 @@
 	using PayPal;
 	using PayPalDbLib.Models;
 	using PayPalServiceLib;
-	using ApplicationCreator;
 	using Code.MpUniq;
 	using Infrastructure;
 	using Infrastructure.csrf;

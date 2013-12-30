@@ -1,4 +1,4 @@
-namespace EzBob.Web.ApplicationCreator
+namespace EzBob.Web.Code.ApplicationCreator
 {
 	using System;
 	using ApplicationMng.Model;
@@ -11,6 +11,7 @@ namespace EzBob.Web.ApplicationCreator
         void AfterSignup(User user, string address);
 		void GenerateMobileCode(string mobilePhone);
 		bool ValidateMobileCode(string mobilePhone, string mobileCode);
+		WizardConfigsActionResult GetWizardConfigs();
         void CashTransfered(User user, string firstName, decimal cashAmount, decimal setUpFee, int loanId);
         void ThreeInvalidAttempts(User user, string firstName, string password);
         void PasswordChanged(User user, string firstName, string password);

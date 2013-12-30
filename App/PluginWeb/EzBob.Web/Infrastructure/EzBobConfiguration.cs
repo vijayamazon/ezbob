@@ -65,7 +65,6 @@ namespace EzBob.Web.Infrastructure
 		string NotEnoughFundsTemplateName { get; }
 		bool RefreshYodleeEnabled { get; }
 		bool WizardInstructionsEnabled { get; }
-		bool TwilioEnabled { get; }
 	}
 
 	public class EzBobConfiguration : ConfigurationRootWeb, IEzBobConfiguration
@@ -282,11 +281,6 @@ namespace EzBob.Web.Infrastructure
 		public bool WizardInstructionsEnabled
 		{
 			get { return GetValueWithDefault<bool>("WizardInstructionsEnabled", "False"); }
-		}
-
-		public bool TwilioEnabled
-		{
-			get { return GetValueWithDefault<bool>("TwilioEnabled", "False"); }
 		}
 	}
 }

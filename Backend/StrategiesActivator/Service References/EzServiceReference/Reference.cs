@@ -185,6 +185,7 @@ namespace StrategiesActivator.EzServiceReference {
     [System.Runtime.Serialization.DataContractAttribute(Name="ActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
     [System.SerializableAttribute()]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.BoolActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.WizardConfigsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.StringListActionResult))]
     public partial class ActionResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
@@ -245,6 +246,45 @@ namespace StrategiesActivator.EzServiceReference {
                 if ((this.ValueField.Equals(value) != true)) {
                     this.ValueField = value;
                     this.RaisePropertyChanged("Value");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="WizardConfigsActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class WizardConfigsActionResult : StrategiesActivator.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool IsSmsValidationActiveField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int NumberOfMobileCodeAttemptsField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool IsSmsValidationActive {
+            get {
+                return this.IsSmsValidationActiveField;
+            }
+            set {
+                if ((this.IsSmsValidationActiveField.Equals(value) != true)) {
+                    this.IsSmsValidationActiveField = value;
+                    this.RaisePropertyChanged("IsSmsValidationActive");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int NumberOfMobileCodeAttempts {
+            get {
+                return this.NumberOfMobileCodeAttemptsField;
+            }
+            set {
+                if ((this.NumberOfMobileCodeAttemptsField.Equals(value) != true)) {
+                    this.NumberOfMobileCodeAttemptsField = value;
+                    this.RaisePropertyChanged("NumberOfMobileCodeAttempts");
                 }
             }
         }
@@ -624,6 +664,12 @@ namespace StrategiesActivator.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ValidateMobileCode", ReplyAction="http://tempuri.org/IEzService/ValidateMobileCodeResponse")]
         System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BoolActionResult> ValidateMobileCodeAsync(string phone, string code);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetWizardConfigs", ReplyAction="http://tempuri.org/IEzService/GetWizardConfigsResponse")]
+        StrategiesActivator.EzServiceReference.WizardConfigsActionResult GetWizardConfigs();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetWizardConfigs", ReplyAction="http://tempuri.org/IEzService/GetWizardConfigsResponse")]
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.WizardConfigsActionResult> GetWizardConfigsAsync();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -955,6 +1001,14 @@ namespace StrategiesActivator.EzServiceReference {
         
         public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BoolActionResult> ValidateMobileCodeAsync(string phone, string code) {
             return base.Channel.ValidateMobileCodeAsync(phone, code);
+        }
+        
+        public StrategiesActivator.EzServiceReference.WizardConfigsActionResult GetWizardConfigs() {
+            return base.Channel.GetWizardConfigs();
+        }
+        
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.WizardConfigsActionResult> GetWizardConfigsAsync() {
+            return base.Channel.GetWizardConfigsAsync();
         }
     }
 }

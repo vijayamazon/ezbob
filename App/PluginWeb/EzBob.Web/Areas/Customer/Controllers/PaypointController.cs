@@ -4,9 +4,9 @@
 	using System.Globalization;
 	using System.Linq;
 	using System.Web.Mvc;
+	using Code.ApplicationCreator;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
-	using ApplicationCreator;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Models;
 	using Infrastructure;

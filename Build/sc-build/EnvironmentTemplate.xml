@@ -50,8 +50,7 @@
 		<property name="RequestForDatesPart" value="from_date={0}&amp;to_date={1}" />			
 	</module>
 	<property name="WizardInstructionsEnabled" value="True" />
-    <property name="EbayPixelEnabled" value="False" />		
-    <property name="TwilioEnabled" value="False" />
+    <property name="EbayPixelEnabled" value="False" />	
 	<property name="TaboolaPixelEnabled" value="False" />	
 	<property name="TradeTrackerPixelEnabled" value="False" />
 	<property name="RefreshYodleeEnabled" value="False" />	

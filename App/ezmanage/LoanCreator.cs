@@ -6,9 +6,9 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Loans;
-	using EzBob.Web.ApplicationCreator;
 	using EzBob.Web.Code;
 	using EzBob.Web.Code.Agreements;
+	using EzBob.Web.Code.ApplicationCreator;
 	using NHibernate;
 	using PaymentServices.PacNet;
 

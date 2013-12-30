@@ -120,6 +120,9 @@ namespace EzService {
 
 		[OperationContract]
 		BoolActionResult ValidateMobileCode(string phone, string code);
+
+		[OperationContract]
+		WizardConfigsActionResult GetWizardConfigs();
 	} // interface IEzService
 
 	#endregion interface IEzService

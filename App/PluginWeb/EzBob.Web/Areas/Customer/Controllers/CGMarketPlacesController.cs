@@ -13,7 +13,6 @@ using Ezbob.HmrcHarvester;
 using EzBob.Web.Infrastructure;
 using EzBob.Web.Code.MpUniq;
 using EzBob.Web.Models.Strings;
-using EzBob.Web.ApplicationCreator;
 using Ezbob.Logger;
 using Ezbob.ValueIntervals;
 using Integration.ChannelGrabberConfig;
@@ -23,6 +22,7 @@ using log4net;
 using Scorto.Web;
 
 namespace EzBob.Web.Areas.Customer.Controllers {
+	using Code.ApplicationCreator;
 	using NHibernate;
 
 	public class CGMarketPlacesController : Controller {

@@ -6,7 +6,6 @@ using ApplicationMng.Model;
 using ApplicationMng.Repository;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Loans;
-using EzBob.Web.ApplicationCreator;
 using EzBob.Web.Infrastructure;
 using Scorto.Strategy;
 using log4net;
@@ -58,6 +57,11 @@ namespace EzBob.Web.Code.ApplicationCreator {
 		{
 			var result = ServiceClient.ValidateMobileCode(mobilePhone, mobileCode);
 			return result.Value;
+		}
+
+		public WizardConfigsActionResult GetWizardConfigs()
+		{
+			return ServiceClient.GetWizardConfigs();
 		}
 
 		public void CashTransfered(User user, string firstName, decimal cashAmount, decimal setUpFee, int loanId) {

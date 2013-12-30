@@ -18,7 +18,6 @@ namespace EzBob.Web.Infrastructure
 	using EzBob.Models.Agreements;
 	using PayPalServiceLib;
 	using PayPalServiceLib.Common;
-	using ApplicationCreator;
 	using Areas.Customer.Controllers;
 	using Areas.Customer.Models;
 	using Code;

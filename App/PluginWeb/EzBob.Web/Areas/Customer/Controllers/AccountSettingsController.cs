@@ -1,5 +1,4 @@
 ﻿using System.Web.Mvc;
-using EzBob.Web.ApplicationCreator;
 using EzBob.Web.Areas.Customer.Models;
 using EzBob.Web.Infrastructure;
 using EzBob.Web.Infrastructure.csrf;
@@ -9,7 +8,9 @@ using Scorto.Web;
 
 namespace EzBob.Web.Areas.Customer.Controllers
 {
-    public class AccountSettingsController : Controller
+	using Code.ApplicationCreator;
+
+	public class AccountSettingsController : Controller
     {
         private readonly IWorkplaceContext _context;
         private readonly UserManager _userManager;

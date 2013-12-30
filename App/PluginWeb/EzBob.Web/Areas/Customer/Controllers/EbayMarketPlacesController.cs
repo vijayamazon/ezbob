@@ -4,7 +4,6 @@ using System.Web.Mvc;
 using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Repository;
-using EzBob.Web.ApplicationCreator;
 using EzBob.Web.Areas.Customer.Models;
 using EzBob.Web.Code.MpUniq;
 using EzBob.Web.Infrastructure;
@@ -18,7 +17,9 @@ using log4net;
 
 namespace EzBob.Web.Areas.Customer.Controllers
 {
-    public class EbayMarketPlacesController : Controller
+	using Code.ApplicationCreator;
+
+	public class EbayMarketPlacesController : Controller
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(EbayMarketPlacesController));
         private readonly IEzbobWorkplaceContext _context;

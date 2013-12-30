@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers
 {
-    using EZBob.DatabaseLib;
+	using Code.ApplicationCreator;
+	using EZBob.DatabaseLib;
     using EZBob.DatabaseLib.DatabaseWrapper;
 	using System;
 	using System.Linq;
@@ -11,9 +12,8 @@
 	using Infrastructure;
 	using Scorto.Web;
 	using log4net;
-	using ApplicationCreator;
 
-    public class FreeAgentMarketPlacesController : Controller
+	public class FreeAgentMarketPlacesController : Controller
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(FreeAgentMarketPlacesController));
         private readonly IRepository<MP_MarketplaceType> _mpTypes;

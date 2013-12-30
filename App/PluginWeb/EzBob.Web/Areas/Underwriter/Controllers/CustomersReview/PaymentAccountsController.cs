@@ -1,7 +1,6 @@
 ﻿using System;
 using EZBob.DatabaseLib.Model.Database;
 using EzBob.Models;
-using EzBob.Web.ApplicationCreator;
 using PostcodeAnywhere;
 using Scorto.Web;
 using System.Linq;
@@ -12,7 +11,9 @@ using EzBob.Web.Areas.Customer.Models;
 
 namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
-    public class PaymentAccountsController : Controller
+	using Code.ApplicationCreator;
+
+	public class PaymentAccountsController : Controller
     {
         private readonly CustomerRepository _customers;
         private readonly ICustomerMarketPlaceRepository _customerMarketplaces;

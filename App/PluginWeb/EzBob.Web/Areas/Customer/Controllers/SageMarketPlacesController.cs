@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers
 {
-    using EZBob.DatabaseLib;
+	using Code.ApplicationCreator;
+	using EZBob.DatabaseLib;
     using EZBob.DatabaseLib.DatabaseWrapper;
 	using System.Linq;
 	using System.Web.Mvc;
@@ -10,7 +11,6 @@
     using Sage;
     using Scorto.Web;
 	using log4net;
-	using ApplicationCreator;
 
 	public class SageMarketPlacesController : Controller
     {

@@ -10,11 +10,11 @@
 	using EZBob.DatabaseLib.Model.Loans;
 	using EZBob.DatabaseLib.Repository;
 	using EzBob.CommonLib;
-	using EzBob.Web.ApplicationCreator;
 	using EzBob.Web.Areas.Customer.Controllers;
 	using EzBob.Web.Areas.Customer.Models;
 	using EzBob.Web.Code;
 	using EzBob.Web.Code.Agreements;
+	using EzBob.Web.Code.ApplicationCreator;
 	using EzBob.Web.Code.Email;
 	using EzBob.Models.Agreements;
 	using EzBob.Web.Infrastructure;

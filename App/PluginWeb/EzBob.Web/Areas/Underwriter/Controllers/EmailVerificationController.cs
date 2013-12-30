@@ -1,7 +1,6 @@
 ﻿using System.Web.Mvc;
 using ApplicationMng.Repository;
 using EZBob.DatabaseLib.Model.Database.Repository;
-using EzBob.Web.ApplicationCreator;
 using EzBob.Web.Code.Email;
 using EzBob.Web.Infrastructure;
 using Scorto.Security.UserManagement;
@@ -9,7 +8,9 @@ using Scorto.Web;
 
 namespace EzBob.Web.Areas.Underwriter.Controllers
 {
-    public class EmailVerificationController : Controller
+	using Code.ApplicationCreator;
+
+	public class EmailVerificationController : Controller
     {
         private readonly IEmailConfirmation _confirmation;
         private readonly ICustomerRepository _customers;

@@ -4,12 +4,12 @@ using ApplicationMng.Repository;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Loans;
 using EZBob.DatabaseLib.Model.Loans;
-using EzBob.Web.ApplicationCreator;
 using EzBob.Web.Infrastructure;
 using PaymentServices.Calculators;
 
 namespace EzBob.Web.Code
 {
+	using ApplicationCreator;
 	using EZBob.DatabaseLib.Model;
 	using EzServiceReference;
 

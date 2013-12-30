@@ -10,7 +10,6 @@ using EZBob.DatabaseLib.Model.Database.Repository;
 using EZBob.DatabaseLib.Model.Loans;
 using EZBob.DatabaseLib.Repository;
 using EzBob.Models;
-using EzBob.Web.ApplicationCreator;
 using EzBob.Web.Areas.Customer.Models;
 using EzBob.Web.Areas.Underwriter.Models;
 using EzBob.Web.Code;
@@ -24,7 +23,9 @@ using log4net;
 
 namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
-    public class LoanHistoryController : Controller
+	using Code.ApplicationCreator;
+
+	public class LoanHistoryController : Controller
     {
         private static readonly ILog _log = LogManager.GetLogger("LoanHistoryController");
         private readonly IAppCreator _appCreator;

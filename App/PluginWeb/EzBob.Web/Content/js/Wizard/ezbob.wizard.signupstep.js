@@ -15,8 +15,15 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 		this.showOfflineHelp = true;
 		this.readyToProceed = false;
 		this.mobileCodesSent = 0;
-		this.twilioEnabled = true; // TODO: get from config
-		this.numberOfMobileCodeAttempts = 4; // TODO: get from config
+
+		var that = this;
+		var xhr = $.post(window.gRootPath + "Home/GetTwilioConfig");
+		xhr.done(function (isSmsValidationActive, numberOfMobileCodeAttempts) {
+		    that.twilioEnabled = isSmsValidationActive;
+		    that.numberOfMobileCodeAttempts = numberOfMobileCodeAttempts + 1;
+
+		    return false;
+		});
 	},
 
 	events: {

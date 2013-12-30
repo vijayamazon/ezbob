@@ -8,9 +8,9 @@ using Scorto.Web;
 namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
 	using System;
-	using ApplicationCreator;
 	using ApplicationMng.Model;
 	using ApplicationMng.Repository;
+	using Code.ApplicationCreator;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using NHibernate;
 

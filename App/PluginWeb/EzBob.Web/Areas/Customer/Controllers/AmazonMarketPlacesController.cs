@@ -10,7 +10,6 @@ using EzBob.AmazonLib;
 using EzBob.AmazonServiceLib;
 using EzBob.AmazonServiceLib.ServiceCalls;
 using EzBob.AmazonServiceLib.UserInfo;
-using EzBob.Web.ApplicationCreator;
 using EzBob.Web.Areas.Customer.Models;
 using EzBob.Web.Code.MpUniq;
 using EzBob.Web.Infrastructure;
@@ -22,7 +21,9 @@ using log4net;
 
 namespace EzBob.Web.Areas.Customer.Controllers
 {
-    public class AmazonMarketPlacesController : Controller
+	using Code.ApplicationCreator;
+
+	public class AmazonMarketPlacesController : Controller
     {
         private readonly IEzbobWorkplaceContext _context;
         private readonly DatabaseDataHelper _helper;

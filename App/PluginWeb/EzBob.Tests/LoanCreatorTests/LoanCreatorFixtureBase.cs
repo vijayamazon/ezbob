@@ -2,9 +2,9 @@
 {
 	using EZBob.DatabaseLib.Model.Loans;
 	using Models;
-	using Web.ApplicationCreator;
 	using Web.Code;
 	using Web.Code.Agreements;
+	using Web.Code.ApplicationCreator;
 	using Web.Infrastructure;
 	using Moq;
 	using NUnit.Framework;

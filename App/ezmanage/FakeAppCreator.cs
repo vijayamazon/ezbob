@@ -4,7 +4,7 @@
 	using ApplicationMng.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
-	using EzBob.Web.ApplicationCreator;
+	using EzBob.Web.Code.ApplicationCreator;
 	using EzBob.Web.EzServiceReference;
 
 	public class FakeAppCreator : IAppCreator
@@ -21,6 +21,11 @@
 		public bool ValidateMobileCode(string mobilePhone, string mobileCode)
 		{
 			return true;
+		}
+
+		public WizardConfigsActionResult GetWizardConfigs()
+		{
+			return null;
 		}
 
 		public void CashTransfered(User user, string firstName, decimal cashAmount, decimal setUpFee, int loanId)

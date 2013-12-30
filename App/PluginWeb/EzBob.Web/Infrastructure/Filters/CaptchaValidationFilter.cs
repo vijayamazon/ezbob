@@ -1,11 +1,12 @@
-﻿using System.Web.Mvc;
-using CaptchaMvc.HtmlHelpers;
-using Recaptcha;
-using StructureMap;
-
-namespace EzBob.Web.Infrastructure.Filters
+﻿namespace EzBob.Web.Infrastructure.Filters
 {
-    struct CapthcaModel
+	using System.Web.Mvc;
+	using CaptchaMvc.HtmlHelpers;
+	using Recaptcha;
+	using StructureMap;
+	using System;
+
+	struct CapthcaModel
     {
         public string ErrorMessage { get; set; }
         public bool IsValid { get; set; }
@@ -33,10 +34,16 @@ namespace EzBob.Web.Infrastructure.Filters
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-	        if (_config.TwilioEnabled)
+	        bool isTwilioEnabled = false; 
+			if (filterContext != null && filterContext.HttpContext != null && filterContext.HttpContext.Session != null)
 	        {
-		        _capthcaModel.IsValid = true;
+				isTwilioEnabled = Convert.ToBoolean(filterContext.HttpContext.Session["IsSmsValidationActive"]);
 	        }
+
+			if (isTwilioEnabled)
+			{
+				_capthcaModel.IsValid = true;
+			}
 	        else
 	        {
 

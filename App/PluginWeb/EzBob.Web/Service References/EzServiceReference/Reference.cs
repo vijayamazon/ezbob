@@ -185,6 +185,7 @@ namespace EzBob.Web.EzServiceReference {
     [System.Runtime.Serialization.DataContractAttribute(Name="ActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
     [System.SerializableAttribute()]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.BoolActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.WizardConfigsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.StringListActionResult))]
     public partial class ActionResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
@@ -245,6 +246,45 @@ namespace EzBob.Web.EzServiceReference {
                 if ((this.ValueField.Equals(value) != true)) {
                     this.ValueField = value;
                     this.RaisePropertyChanged("Value");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="WizardConfigsActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class WizardConfigsActionResult : EzBob.Web.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool IsSmsValidationActiveField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int NumberOfMobileCodeAttemptsField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool IsSmsValidationActive {
+            get {
+                return this.IsSmsValidationActiveField;
+            }
+            set {
+                if ((this.IsSmsValidationActiveField.Equals(value) != true)) {
+                    this.IsSmsValidationActiveField = value;
+                    this.RaisePropertyChanged("IsSmsValidationActive");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int NumberOfMobileCodeAttempts {
+            get {
+                return this.NumberOfMobileCodeAttemptsField;
+            }
+            set {
+                if ((this.NumberOfMobileCodeAttemptsField.Equals(value) != true)) {
+                    this.NumberOfMobileCodeAttemptsField = value;
+                    this.RaisePropertyChanged("NumberOfMobileCodeAttempts");
                 }
             }
         }
@@ -475,6 +515,9 @@ namespace EzBob.Web.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ValidateMobileCode", ReplyAction="http://tempuri.org/IEzService/ValidateMobileCodeResponse")]
         EzBob.Web.EzServiceReference.BoolActionResult ValidateMobileCode(string phone, string code);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetWizardConfigs", ReplyAction="http://tempuri.org/IEzService/GetWizardConfigsResponse")]
+        EzBob.Web.EzServiceReference.WizardConfigsActionResult GetWizardConfigs();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -654,6 +697,10 @@ namespace EzBob.Web.EzServiceReference {
         
         public EzBob.Web.EzServiceReference.BoolActionResult ValidateMobileCode(string phone, string code) {
             return base.Channel.ValidateMobileCode(phone, code);
+        }
+        
+        public EzBob.Web.EzServiceReference.WizardConfigsActionResult GetWizardConfigs() {
+            return base.Channel.GetWizardConfigs();
         }
     }
 }
