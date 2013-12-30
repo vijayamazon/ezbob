@@ -114,9 +114,12 @@ namespace EzService {
 
 		[OperationContract]
 		ActionMetaData MainStrategy3(int uderwriterId, int customerId, int checkType, string houseNumber, string houseName, string street, string district, string town, string county, string postcode, string bankAccount, string sortCode, int avoidAutoDescison);
+		
+		[OperationContract]
+		ActionMetaData GenerateMobileCode(string phone);
 
 		[OperationContract]
-		StringActionResult GetMobileCode(string mobilePhone);
+		BoolActionResult ValidateMobileCode(string phone, string code);
 	} // interface IEzService
 
 	#endregion interface IEzService

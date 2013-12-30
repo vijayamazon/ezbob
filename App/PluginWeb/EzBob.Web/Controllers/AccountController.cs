@@ -316,7 +316,7 @@ namespace EzBob.Web.Controllers
 		[ActionName("SignUp")]
 		[ValidateJsonAntiForgeryToken]
 		[CaptchaValidationFilter]
-		public JsonNetResult SignUpAjax(User model, string signupPass1, string signupPass2, string securityQuestion, string promoCode, double? amount, int? customerReason, int? customerSourceOfRepayment, string otherCustomerReason, string otherCustomerSourceOfRepayment, string mobilePhone)
+		public JsonNetResult SignUpAjax(User model, string signupPass1, string signupPass2, string securityQuestion, string promoCode, double? amount, int? customerReason, int? customerSourceOfRepayment, string otherCustomerReason, string otherCustomerSourceOfRepayment, string mobilePhone, string mobileCode)
 		{
 			if (!ModelState.IsValid)
 			{
@@ -329,7 +329,7 @@ namespace EzBob.Web.Controllers
 			try
 			{
 				var customerIp = Request.ServerVariables["REMOTE_ADDR"];
-				SignUpInternal(model, signupPass1, signupPass2, securityQuestion, promoCode, amount, customerReason, customerSourceOfRepayment, otherCustomerReason, otherCustomerSourceOfRepayment, mobilePhone);
+				SignUpInternal(model, signupPass1, signupPass2, securityQuestion, promoCode, amount, customerReason, customerSourceOfRepayment, otherCustomerReason, otherCustomerSourceOfRepayment, mobilePhone, mobileCode);
 				FormsAuthentication.SetAuthCookie(model.EMail, false);
 
 				var user = _users.GetUserByLogin(model.EMail);
@@ -353,23 +353,7 @@ namespace EzBob.Web.Controllers
 			}
 		}
 
-		//[HttpPost]
-		//[Transactional]
-		//[Ajax(false)]
-		//[CaptchaValidationFilter]
-		//public ActionResult SignUp(User model, string signupPass1, string signupPass2, string securityQuestion, string promoCode, double? amount, int? customerReason, int? customerSourceOfRepayment, string otherCustomerReason, string otherCustomerSourceOfRepayment)
-		//{
-		//	if (!ModelState.IsValid)
-		//	{
-		//		return GetModelStateErrors(ModelState);
-		//	}
-
-		//	SignUpInternal(model, signupPass1, signupPass2, securityQuestion, promoCode, amount, customerReason, customerSourceOfRepayment, otherCustomerReason, otherCustomerSourceOfRepayment);
-
-		//	return SetCookieAndRedirect(new LogOnModel { Password = signupPass1, UserName = model.EMail, ReturnUrl = Url.Action("Index", "Profile", new { Area = "Customer" }) });
-		//}
-
-		private void SignUpInternal(User model, string signupPass1, string signupPass2, string securityQuestion, string promoCode, double? amount, int? customerReason, int? customerSourceOfRepayment, string otherCustomerReason, string otherCustomerSourceOfRepayment, string mobilePhone)
+		private void SignUpInternal(User model, string signupPass1, string signupPass2, string securityQuestion, string promoCode, double? amount, int? customerReason, int? customerSourceOfRepayment, string otherCustomerReason, string otherCustomerSourceOfRepayment, string mobilePhone, string mobileCode)
 		{
 			MembershipCreateStatus status;
 
@@ -380,6 +364,12 @@ namespace EzBob.Web.Controllers
 			if (signupPass1.Length < maxPassLength)
 			{
 				throw new Exception(DbStrings.NotValidEmailAddress);
+			}
+
+			bool isCorrect = _appCreator.ValidateMobileCode(mobilePhone, mobileCode);
+			if (!isCorrect)
+			{
+				throw new Exception("Invalid code");
 			}
 
 			_membershipProvider.CreateUser(model.EMail, signupPass1, model.EMail, securityQuestion, model.SecurityAnswer, false, null, out status);
@@ -632,9 +622,9 @@ namespace EzBob.Web.Controllers
 
 		[Ajax]
 		[HttpPost]
-		public string GetMobileCode(string mobilePhone)
+		public void GenerateMobileCode(string mobilePhone)
 		{
-			return _appCreator.GetMobileCode(mobilePhone);
+			_appCreator.GenerateMobileCode(mobilePhone);
 		}
 	}
 }

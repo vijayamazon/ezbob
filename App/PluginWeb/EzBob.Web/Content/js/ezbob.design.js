@@ -947,7 +947,7 @@ EzBob.validateSignUpForm = function (el) {
             otherCustomerReason: { required: true },
             otherCustomerSourceOfRepayment: { required: true },
             mobilePhone: { required: true, regex: "^0[0-9]{10}$" },
-            mobileCode: { required: true, minlength: 6, maxlength: 6 } // TODO: should check in db that it matches the email
+            mobileCode: { required: true, minlength: 6, maxlength: 6 }
         },
         messages: {
             "Email": { required: EzBob.dbStrings.NotValidEmailAddress, email: EzBob.dbStrings.NotValidEmailAddress },

@@ -606,17 +606,32 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetMobileCode">
+  <xs:element name="GenerateMobileCode">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="mobilePhone" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="phone" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetMobileCodeResponse">
+  <xs:element name="GenerateMobileCodeResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q45="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="GetMobileCodeResult" nillable="true" type="q45:StringActionResult" />
+        <xs:element xmlns:q45="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="GenerateMobileCodeResult" nillable="true" type="q45:ActionMetaData" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ValidateMobileCode">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="phone" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="code" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ValidateMobileCodeResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q46="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="ValidateMobileCodeResult" nillable="true" type="q46:BoolActionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

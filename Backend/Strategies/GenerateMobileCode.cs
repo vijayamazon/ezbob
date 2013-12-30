@@ -34,7 +34,7 @@
 			code = (100000 + random.Next(899999)).ToString(CultureInfo.InvariantCulture);
 
 			DB.ExecuteNonQuery("StoreMobileCode", CommandSpecies.StoredProcedure,
-				new QueryParameter("MobilePhone", mobilePhone),
+				new QueryParameter("Phone", mobilePhone),
 				new QueryParameter("Code", code));
 		} // Execute
 

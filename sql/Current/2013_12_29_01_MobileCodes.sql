@@ -2,7 +2,7 @@ IF OBJECT_ID('MobileCodes') IS NULL
 BEGIN
 	CREATE TABLE MobileCodes (
 		Id INT IDENTITY NOT NULL,
-		MobilePhone CHAR(11) NOT NULL,
+		Phone VARCHAR(11) NOT NULL,
 		Code CHAR(6) NOT NULL,
 		Active BIT
 	)
@@ -17,12 +17,12 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[StoreMobileCode]
-	(@MobilePhone CHAR(11),
+	(@Phone VARCHAR(11),
 	 @Code CHAR(6))
 AS
 BEGIN
-	UPDATE MobileCodes SET Active = 0 WHERE	MobilePhone = @MobilePhone
+	UPDATE MobileCodes SET Active = 0 WHERE	Phone = @Phone
 	
-	INSERT INTO	MobileCodes (MobilePhone, Code, Active) VALUES (@MobilePhone, @Code, 1)
+	INSERT INTO	MobileCodes (Phone, Code, Active) VALUES (@Phone, @Code, 1)
 END
 GO

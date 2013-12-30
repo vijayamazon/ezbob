@@ -21,7 +21,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
 	events: {
 		'click :submit': 'submit',
-		'click .getMobileCode': 'getMobileCode',
+		'click .generateMobileCode': 'generateMobileCode',
 
 		'change input': 'inputChanged',
 		'keyup  input': 'inputChanged',
@@ -114,7 +114,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 		return false;
 	},
 	
-	getMobileCode: function () {
+	generateMobileCode: function () {
 	    this.mobileCodesSent++;
 	    if (this.mobileCodesSent == this.numberOfMobileCodeAttempts) {
 	        EzBob.App.trigger('warning', "Switching to authentication via captcha");
@@ -123,16 +123,13 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 	        this.twilioEnabled = false;
 	        return false;
 	    }
-	    // send request to server to generate and send code
-	    var xhr = $.post(window.gRootPath + "Account/GetMobileCode", { mobilePhone: this.$el.find('.phonenumber').val() });
+	    
+	    var xhr = $.post(window.gRootPath + "Account/GenerateMobileCode", { mobilePhone: this.$el.find('.phonenumber').val() });
 	    xhr.done(function () {
-	        
 	        EzBob.App.trigger('info', "Code was sent to mobile");
 
 	        return false;
 	    });
-
-	    // add 'message sent' indication to ui
 
 	    return false;
 	},

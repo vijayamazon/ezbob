@@ -1282,7 +1282,7 @@
     <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.StringListActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
-    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.StringActionResult.datasource">
+    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.BoolActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
     <None Include="Service References\EzServiceReference\Reference.svcmap">

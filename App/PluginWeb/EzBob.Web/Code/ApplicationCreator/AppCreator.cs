@@ -49,10 +49,15 @@ namespace EzBob.Web.Code.ApplicationCreator {
 			}
 		}
 
-		public string GetMobileCode(string mobilePhone)
+		public void GenerateMobileCode(string mobilePhone)
 		{
-			var x = ServiceClient.GetMobileCode(mobilePhone);
-			return x.Value; // TODO: use this for the validation of the signup page
+			ServiceClient.GenerateMobileCode(mobilePhone);
+		}
+		
+		public bool ValidateMobileCode(string mobilePhone, string mobileCode)
+		{
+			var result = ServiceClient.ValidateMobileCode(mobilePhone, mobileCode);
+			return result.Value;
 		}
 
 		public void CashTransfered(User user, string firstName, decimal cashAmount, decimal setUpFee, int loanId) {

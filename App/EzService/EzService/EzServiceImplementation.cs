@@ -403,10 +403,10 @@ namespace EzService {
 			return Execute(customerId, underwriterId, typeof(MainStrategy), customerId, checkType, houseNumber, houseName, street, district, town, county, postcode, bankAccount, sortCode, avoidAutoDescison);
 		} // MainStrategy3
 
-		public StringActionResult GetMobileCode(string mobilePhone)
+		public ActionMetaData GenerateMobileCode(string phone)
 		{
-			var strategyInstance = new GenerateMobileCode(mobilePhone, DB, Log);
-			var result = ExecuteSync(strategyInstance, null, null, typeof(GenerateMobileCode), mobilePhone);
+			var strategyInstance = new GenerateMobileCode(phone, DB, Log);
+			var result = ExecuteSync(strategyInstance, null, null, typeof(GenerateMobileCode), phone);
 
 			string accountSid = "ACcc682df6341371ee27ada6858025490b"; // Get from config and use prod credentials
 			string authToken = "fab0b8bd342443ff44497273b4ba2aa1"; // Get from config and use prod credentials
@@ -414,9 +414,16 @@ namespace EzService {
 			var twilio = new TwilioRestClient(accountSid, authToken);
 
 			// TODO: test sending the sms with Emma
-			var message = twilio.SendSmsMessage(fromNumber, "+972544771676"/*mobilePhone*/, string.Format("Your authentication code is:{0}", strategyInstance.GetCode()), "");
-			Log.Info("Sms message sent to '{0}'. Sid:'{1}'", mobilePhone, message.Sid);
-			return new StringActionResult { MetaData = result, Value = strategyInstance.GetCode() };
+			var message = twilio.SendSmsMessage(fromNumber, "+972544771676"/*phone*/, string.Format("Your authentication code is:{0}", strategyInstance.GetCode()), "");
+			Log.Info("Sms message sent to '{0}'. Sid:'{1}'", phone, message.Sid);
+			return result;
+		}
+
+		public BoolActionResult ValidateMobileCode(string phone, string code)
+		{
+			var strategyInstance = new ValidateMobileCode(phone, code, DB, Log);
+			var result = ExecuteSync(strategyInstance, null, null, typeof(ValidateMobileCode), phone, code);
+			return new BoolActionResult { MetaData = result, Value = strategyInstance.IsValidatedSuccessfully() };
 		}
 
 		#endregion IEzService exposed methods

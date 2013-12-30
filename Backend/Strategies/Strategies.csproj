@@ -68,6 +68,7 @@
     <Compile Include="AutoDecisions\ReApproval.cs" />
     <Compile Include="AutoDecisions\ReRejection.cs" />
     <Compile Include="CaisUpdate.cs" />
+    <Compile Include="ValidateMobileCode.cs" />
     <Compile Include="GenerateMobileCode.cs" />
     <Compile Include="UpdateMarketplace.cs" />
     <Compile Include="Exceptions\FailedToInitStrategyException.cs" />

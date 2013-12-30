@@ -14,9 +14,13 @@
             
         }
 
-		public string GetMobileCode(string mobilePhone)
+		public void GenerateMobileCode(string mobilePhone)
 		{
-			return string.Empty;
+		}
+
+		public bool ValidateMobileCode(string mobilePhone, string mobileCode)
+		{
+			return true;
 		}
 
 		public void CashTransfered(User user, string firstName, decimal cashAmount, decimal setUpFee, int loanId)

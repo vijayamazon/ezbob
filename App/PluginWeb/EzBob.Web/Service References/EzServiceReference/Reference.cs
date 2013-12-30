@@ -184,7 +184,7 @@ namespace EzBob.Web.EzServiceReference {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="ActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
     [System.SerializableAttribute()]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.StringActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.BoolActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.StringListActionResult))]
     public partial class ActionResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
@@ -229,20 +229,20 @@ namespace EzBob.Web.EzServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="StringActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="BoolActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
     [System.SerializableAttribute()]
-    public partial class StringActionResult : EzBob.Web.EzServiceReference.ActionResult {
+    public partial class BoolActionResult : EzBob.Web.EzServiceReference.ActionResult {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string ValueField;
+        private bool ValueField;
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Value {
+        public bool Value {
             get {
                 return this.ValueField;
             }
             set {
-                if ((object.ReferenceEquals(this.ValueField, value) != true)) {
+                if ((this.ValueField.Equals(value) != true)) {
                     this.ValueField = value;
                     this.RaisePropertyChanged("Value");
                 }
@@ -470,8 +470,11 @@ namespace EzBob.Web.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy3", ReplyAction="http://tempuri.org/IEzService/MainStrategy3Response")]
         EzBob.Web.EzServiceReference.ActionMetaData MainStrategy3(int uderwriterId, int customerId, int checkType, string houseNumber, string houseName, string street, string district, string town, string county, string postcode, string bankAccount, string sortCode, int avoidAutoDescison);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetMobileCode", ReplyAction="http://tempuri.org/IEzService/GetMobileCodeResponse")]
-        EzBob.Web.EzServiceReference.StringActionResult GetMobileCode(string mobilePhone);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GenerateMobileCode", ReplyAction="http://tempuri.org/IEzService/GenerateMobileCodeResponse")]
+        EzBob.Web.EzServiceReference.ActionMetaData GenerateMobileCode(string phone);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ValidateMobileCode", ReplyAction="http://tempuri.org/IEzService/ValidateMobileCodeResponse")]
+        EzBob.Web.EzServiceReference.BoolActionResult ValidateMobileCode(string phone, string code);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -645,8 +648,12 @@ namespace EzBob.Web.EzServiceReference {
             return base.Channel.MainStrategy3(uderwriterId, customerId, checkType, houseNumber, houseName, street, district, town, county, postcode, bankAccount, sortCode, avoidAutoDescison);
         }
         
-        public EzBob.Web.EzServiceReference.StringActionResult GetMobileCode(string mobilePhone) {
-            return base.Channel.GetMobileCode(mobilePhone);
+        public EzBob.Web.EzServiceReference.ActionMetaData GenerateMobileCode(string phone) {
+            return base.Channel.GenerateMobileCode(phone);
+        }
+        
+        public EzBob.Web.EzServiceReference.BoolActionResult ValidateMobileCode(string phone, string code) {
+            return base.Channel.ValidateMobileCode(phone, code);
         }
     }
 }
