@@ -136,8 +136,8 @@ class EzBob.Underwriter.Settings.AddCampaignView extends Backbone.Marionette.Ite
         title: if @isUpdate then "Update campaign" else "Add Campaign"
         position: "center"
         draggable: false
-        width: "40%"
-        height: 670
+        width: "45%"
+        height: 690
         dialogClass: "addCampaign"
 
     serializeData: ->

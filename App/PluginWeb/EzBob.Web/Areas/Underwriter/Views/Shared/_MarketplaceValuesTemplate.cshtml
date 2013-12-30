@@ -126,7 +126,7 @@
 
 @helper MarketPlaces() {
 	<div style="overflow: auto">
-		<table class="table marketplace-table centered <%if (hideMarketplaces) print('hide');%>">
+		<table class="table marketplace-table centered <%if (hideMarketplaces) print('hide');%>" style="white-space: nowrap;">
 			<thead class="box">
 				<tr class="box-title">
 					<th></th>
@@ -181,7 +181,7 @@
 						<td><% if(m.Disabled) print ("Disabled") %></td>
 						<td><%- m.UpdatingStatus %> <%- m.LastChecked%>
 							<% if (m.UpdateError) { %>
-								<button class="btn btn-mini mp-error-description" data-title="<%- m.UpdateError %>"><i class="icon-comment"></i></button>
+								<button class="btn btn-primary btn-mini mp-error-description" data-title="<%- m.UpdateError %>"><i class="icon-comment"></i></button>
 								<br />
 							<% } %>
 						</td>
@@ -192,15 +192,15 @@
 					            <a href="#" class="btn btn-mini btn-success enable-shop %>" umi="<%- m.Id %>"><i class="icon-play"></i>Enable</a>
 					            <% }
 					            else { %>
-					            <a href="#" class="btn btn-mini btn-info reCheckMP <%- sShopName.toLowerCase() %>" umi="<%- m.Id %>" marketplacetype="<%- m.Name %>"><i class="icon-refresh"></i>Recheck</a>
-					            <a href="#" class="btn btn-mini btn-warning disable-shop %>" umi="<%- m.Id %>"><i class="icon-ban-circle"></i>Disable</a>
+					            <a href="#" class="btn btn-mini btn-primary reCheckMP <%- sShopName.toLowerCase() %>" umi="<%- m.Id %>" marketplacetype="<%- m.Name %>"><i class="icon-refresh"></i></a>
+					            <a href="#" class="btn btn-mini btn-primary disable-shop %>" umi="<%- m.Id %>"><i class="fa fa-ban"></i></a>
 					            <% if (m.UpdateError && m.Name == 'eBay') { %>
 					            <br />
-					            <button class="btn btn-mini btn-info renew-token" data-umi="<%- m.Id %>"><i class="icon-refresh"></i>Renew token</button>
+					            <button class="btn btn-mini btn-primary renew-token" data-umi="<%- m.Id %>"><i class="icon-refresh"></i></button>
 					            <br />
 					            <% } %>
 					            <% } %>
-                                <a href="#" class="btn btn-mini btn-lime" data-bug-type="<%- m.Name %>" data-bug-customer="<%-customerId%>" data-bug-mp="<%-m.Id%>" data-title="Report Bug"><i class="fa fa-bug"></i></a>
+                                <a href="#" class="btn btn-mini btn-primary" data-bug-type="<%- m.Name %>" data-bug-customer="<%-customerId%>" data-bug-mp="<%-m.Id%>" data-title="Report Bug"><i class="fa fa-bug"></i></a>
                             <%}%>
 					        </div>
 					    </td>
@@ -270,7 +270,7 @@
 					<td class="centered"><%- (m.Name.toLowerCase() === 'paypoint') ? '-' : ll(m, 'TotalNetOutPayments', nBehaviour) %></td>
 					<td><%- m.UpdatingStatus %> <%- m.LastChecked%>
 						<% if(m.UpdateError){%>
-							<button class="btn btn-mini mp-error-description" data-title="<%- m.UpdateError %>"><i class="icon-comment"></i></button>
+							<button class="btn btn-mini btn-primary mp-error-description" data-title="<%- m.UpdateError %>"><i class="icon-comment"></i></button>
 							<br />
 						<%}%>
 					</td>
@@ -281,16 +281,16 @@
 				            <% }
 				            else {
 				            if (m.Name.toLowerCase() === 'paypal') {%>
-				            <a href="#" class="btn btn-mini reCheck-paypal btn-info" umi="<%- m.PaymentAccountBasic.id %>"><i class="icon-repeat"></i>Recheck</a>
-				            <a href="#" class="btn btn-mini btn-lime" data-bug-type="PayPal" data-bug-customer="<%- customerId %>" data-bug-mp="<%- m.Id %>"><i class="fa fa-bug"></i></a>
+				            <a href="#" class="btn btn-mini reCheck-paypal btn-primary" umi="<%- m.PaymentAccountBasic.id %>"><i class="icon-repeat"></i>Recheck</a>
+				            <a href="#" class="btn btn-mini btn-primary" data-bug-type="PayPal" data-bug-customer="<%- customerId %>" data-bug-mp="<%- m.Id %>"><i class="fa fa-bug"></i></a>
 				            <% } else if (m.Name.toLowerCase() !== 'yodlee') { %>
-				            <a href="#" class="btn btn-mini btn-info reCheckMP <%- sShopName.toLowerCase() %>" umi="<%- m.Id %>" marketplacetype="<%- m.Name %>"><i class="icon-refresh"></i>Recheck</a>
-				            <a href="#" class="btn btn-mini btn-lime" data-bug-type="<%- m.Name %>" data-bug-customer="<%-customerId%>" data-bug-mp="<%-m.Id%>" data-title="Report Bug"><i class="fa fa-bug"></i></a>
+				            <a href="#" class="btn btn-mini btn-primary reCheckMP <%- sShopName.toLowerCase() %>" umi="<%- m.Id %>" marketplacetype="<%- m.Name %>"><i class="icon-refresh"></i>Recheck</a>
+				            <a href="#" class="btn btn-mini btn-primary" data-bug-type="<%- m.Name %>" data-bug-customer="<%-customerId%>" data-bug-mp="<%-m.Id%>" data-title="Report Bug"><i class="fa fa-bug"></i></a>
 				            <% } else { %>
-				            <a href='@Url.Action("TryRecheckYodlee", "MarketPlaces", new { Area = "Underwriter" }, "https")/?umi=<%- m.Id %>' target="_blank" class="tryRecheckYodlee btn btn-mini btn-info" data-mp-id="<%-m.id%>"><i class="icon-refresh"></i>Try Recheck</a>
-				            <a href="#" class="btn btn-mini btn-lime" data-bug-type="<%- m.Name %>" data-bug-customer="<%-customerId%>" data-bug-mp="<%-m.Id%>" data-title="Report Bug"><i class="fa fa-bug"></i></a>
+				            <a href='@Url.Action("TryRecheckYodlee", "MarketPlaces", new { Area = "Underwriter" }, "https")/?umi=<%- m.Id %>' target="_blank" class="tryRecheckYodlee btn btn-mini btn-primary" data-mp-id="<%-m.id%>"><i class="icon-refresh"></i>Try Recheck</a>
+				            <a href="#" class="btn btn-mini btn-primary" data-bug-type="<%- m.Name %>" data-bug-customer="<%-customerId%>" data-bug-mp="<%-m.Id%>" data-title="Report Bug"><i class="fa fa-bug"></i></a>
 				            <% } %>
-				            <a href="#" class="btn btn-mini btn-warning disable-shop %>" umi="<%- m.Id %>"><i class="icon-ban-circle"></i>Disable</a>
+				            <a href="#" class="btn btn-mini btn-primary disable-shop %>" umi="<%- m.Id %>"><i class="fa fa-ban"></i>Disable</a>
 				            <% } %>
                         <% } %>
 				    </td>

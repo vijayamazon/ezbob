@@ -18,6 +18,7 @@ namespace EzBob.Web.Areas.Underwriter.Models.Reports
         public ExposurePerUnderwriterData(ExposurePerUnderwriterDataRow data)
             :base(data)
         {
+			if(data == null) return;
             IdUnderwriter = data.IdUnderwriter;
             Underwriter = data.Underwriter;
         }

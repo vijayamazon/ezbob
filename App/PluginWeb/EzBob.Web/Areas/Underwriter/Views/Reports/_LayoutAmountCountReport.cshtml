@@ -5,35 +5,39 @@
 {
     @using (Html.BeginForm())
     {
-    <div class="well">
-        <div style="float: left; vertical-align: middle">
-            <input type="radio" name="group" value="Amount" onclick="showAmountReport()" style="padding-right: 5px" />
-            @*@Html.RadioButtonFor(model => model.AccountView, "true")*@
-            £
+        <div class="box">
+            <div class="well box-title">
+                <div class="box-tool">
+                    @Html.Partial("TimeFilterReportControl", Model)
+                </div>
+                <div class="controls">
+                    <label class="radio-inline">
+                        <input type="radio" name="group" value="Amount" onclick="showAmountReport()" />
+                        £
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="group" value="Count" checked="checked" onclick="showCountReport()" />
+                        # of applications
+                    </label>
+                </div>
+                
+            </div>
         </div>
-        <div style="padding-left: 10px; float: left; vertical-align: middle">
-            @*@Html.RadioButtonFor(model => model.AccountView, "false")*@
-            <input type="radio" name="group" value="Count" checked="checked" onclick="showCountReport()" style="padding-right: 5px" />
-                   # of applications
-        </div>
-        @Html.Partial("TimeFilterReportControl", Model)
-        
-    </div>
-    }    
-    
+    }
+
 }
 @section report
 {
-    <div id="amountReport" style="display:none"> 
-        @RenderSection("AmountReport") 
-            <div class="pull-right">
-                <a class="btn-back" href="@HttpUtility.JavaScriptStringEncode(Url.Action( Model.DownloadAmountAction, Model.DateFilter))" id="exportAmountBtn">Export</a> 
-            </div>
+    <div id="amountReport" style="display: none">
+        @RenderSection("AmountReport")
+        <div>
+            <a class="btn btn-primary btn-back" href="@HttpUtility.JavaScriptStringEncode(Url.Action(Model.DownloadAmountAction, Model.DateFilter))" id="exportAmountBtn">Export</a>
+        </div>
     </div>
-    <div id="countReport"> 
-        @RenderSection("CountReport") 
-        <div class="pull-right">
-            <a class="btn-back" href="@HttpUtility.JavaScriptStringEncode(Url.Action(Model.DownloadCountAction, Model.DateFilter))" id="exportCountBtn">Export</a> 
+    <div id="countReport">
+        @RenderSection("CountReport")
+        <div>
+            <a class="btn btn-primary btn-back" href="@HttpUtility.JavaScriptStringEncode(Url.Action(Model.DownloadCountAction, Model.DateFilter))" id="exportCountBtn">Export</a>
         </div>
     </div>
 }
@@ -48,13 +52,13 @@
             $("#countReport").show();
             $("#amountReport").hide();
         }
-        
+
         function showAmountReport() {
             $("#amountReport").show();
             $("#countReport").hide();
         }
 
-        
+
     </script>
     @RenderSection("Js", false)
 }

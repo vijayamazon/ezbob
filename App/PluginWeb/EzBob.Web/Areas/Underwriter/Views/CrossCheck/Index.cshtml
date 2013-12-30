@@ -240,7 +240,7 @@
     </tr>
     <tr>
         <td><b>Zoopla Estimate</b></td>
-        <td>@getZooplaEstimate(Model.CurrentAddress.ZooplaEstimate, Model.CurrentAddress.ZooplaUpdateDate) <button class="zooplaRecheck btn btn-mini" title="Recheck"><i class="icon-refresh"></i></button></td>
+        <td>@getZooplaEstimate(Model.CurrentAddress.ZooplaEstimate, Model.CurrentAddress.ZooplaUpdateDate) <button class="btn btn-mini btn-primary zooplaRecheck" title="Recheck"><i class="icon-refresh"></i></button></td>
         <td></td>
         <td></td>
         <td></td>
@@ -326,12 +326,12 @@ bool propertyOwnedByCompany = Model.Customer.CompanyAdditionalInfo != null && Mo
 		<tr>
 			<td><b>Targeting Status</b></td>
 			<td>
-				<a class="btn btn-mini pull-right @(String.IsNullOrEmpty(companyRefNum) ? "btn-danger" : "btn-success") disabled" style="margin-left: 10px;">
+				<a class="btn btn-mini pull-right @(String.IsNullOrEmpty(companyRefNum) ? "btn-primary" : "btn-success") disabled" style="margin-left: 10px;">
 					<i class="@(String.IsNullOrEmpty(companyRefNum) ? "icon-remove-sign" : "icon-ok-sign")"></i>
 					@(String.IsNullOrEmpty(companyRefNum) ? "Not performed" : "Performed")
 				</a>
 				<a id="recheck-targeting"
-					class="btn btn-mini pull-right"
+					class="btn btn-mini btn-primary pull-right"
 					href="#"
 					data-postcode="@postcode.Select(x => x.Postcode).FirstOrDefault()"
 					data-company-name="@companyName"

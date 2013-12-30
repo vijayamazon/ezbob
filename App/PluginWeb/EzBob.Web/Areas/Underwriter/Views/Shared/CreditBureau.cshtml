@@ -62,7 +62,7 @@
     <div class="row">
         <div class="span6 control-group form-horizontal">
             @ButtonStatus(checkStatus, checkIcon, buttonStyle)
-            <a href="#" class="btn btn-mini btn-lime" data-bug-type="ExpConsumer" data-credit-bureau-director-id="@Html.Raw(@creditBureauDirectorId)" data-bug-customer="<%=experianInfo.Id%>" style="float:right"><i class="fa fa-bug"></i></a>
+            <a href="#" class="btn btn-mini btn-primary" data-bug-type="ExpConsumer" data-credit-bureau-director-id="@Html.Raw(@creditBureauDirectorId)" data-bug-customer="<%=experianInfo.Id%>" style="float:right"><i class="fa fa-bug"></i></a>
             @InputTextSmallReadOnly("creditb-score", "Credit bureau score", score)
             @InputTextSmallReadOnly("creditb-borrower-type", "Borrower type", borrowerType)
         </div>
@@ -76,8 +76,8 @@
 @helper RunCheckButton()
 {
     <div class="row-fluid">
-        <div class="span12 control-group">
-            <a class="btn" href="#" id="RunCheckBtn">Run check</a>
+        <div class="pull-right">
+            <a class="btn btn-primary" href="#" id="RunCheckBtn">Run check</a>
         </div>
     </div>
 }
@@ -85,10 +85,10 @@
 @helper RunReCheckButton()
 {
     <div class="row-fluid">
-        <div class="span12 control-group">
-            <a class="btn pull-right" href="#" id="RunBWAReCheckBtn">Recheck BWA</a>
-            <a class="btn pull-right" href="#" id="RunAMLReCheckBtn">Recheck AML</a>
-            <a class="btn pull-right" href="#" id="RunReCheckBtn">Recheck credit</a>
+        <div class="form-group pull-right">
+            <a class="btn btn-primary" href="#" id="RunBWAReCheckBtn">Recheck BWA</a>
+            <a class="btn btn-primary" href="#" id="RunAMLReCheckBtn">Recheck AML</a>
+            <a class="btn btn-primary" href="#" id="RunReCheckBtn">Recheck credit</a>
         </div>
     </div>
 }
@@ -96,10 +96,10 @@
 @helper RunIdHubChecksButtons()
 {
     <div class="row-fluid">
-        <div class="span12 control-group">
-            <a class="btn" href="#" id="RunAMLCheckBtn">Check AML</a>
-            <a class="btn" href="#" id="RunAMLBWACheckBtn">Check AML&amp;BWA</a>
-            <a class="btn" href="#" id="RunBWACheckBtn">Check BWA</a>
+        <div class="form-group pull-right">
+            <a class="btn btn-primary" href="#" id="RunAMLCheckBtn">Check AML</a>
+            <a class="btn btn-primary" href="#" id="RunAMLBWACheckBtn">Check AML&amp;BWA</a>
+            <a class="btn btn-primary" href="#" id="RunBWACheckBtn">Check BWA</a>
         </div>
     </div>
 }
@@ -121,8 +121,8 @@
                         <table class="table">
                             <tbody>
                                 @{
-                                    const string amlBugBtn = "<a href=\"#\" style='float:right' class=\"btn btn-mini btn-lime\" data-bug-type=\"ExpAML\" data-bug-customer=\"<%=experianInfo.Id%>\" ><i class=\"fa fa-bug\"></i></a>";
-                                    const string bwaBugBtn = "<a href=\"#\" style='float:right' class=\"btn btn-mini btn-lime\" data-bug-type=\"ExpBWA\" data-bug-customer=\"<%=experianInfo.Id%>\" ><i class=\"fa fa-bug\"></i></a>";
+                                    const string amlBugBtn = "<a href=\"#\" style='float:right' class=\"btn btn-mini btn-primary\" data-bug-type=\"ExpAML\" data-bug-customer=\"<%=experianInfo.Id%>\" ><i class=\"fa fa-bug\"></i></a>";
+                                    const string bwaBugBtn = "<a href=\"#\" style='float:right' class=\"btn btn-mini btn-primary\" data-bug-type=\"ExpBWA\" data-bug-customer=\"<%=experianInfo.Id%>\" ><i class=\"fa fa-bug\"></i></a>";
                                 }
                                 <% if (experianInfo.AmlInfo != null) { %>
                                 @RawCell("AML Check Result", "<%- experianInfo.AmlInfo.AMLResult %>" + amlBugBtn)

@@ -1,5 +1,5 @@
 ﻿<script type="text/template" id="support-template">
-    <table class="table centered">
+    <table class="table centered" style="white-space: nowrap;">
         <thead class="box">
             @EzForm.RawHeaderCell("Marketplaces with error", "", "", "", "", "", "", "")
         </thead>
@@ -23,7 +23,7 @@
                     "<pre><%-val.ErrorMessage%></pre>",
                     "<%-val.CustomerId%>",
                     "<%-val.Status%>",
-                    "<a href='#' class='btn btn-mini btn-success reCheckMP <%- val.Name.toLowerCase() %> <%-disabled%>' umi='<%- val.Umi %>' marketplaceType='<%- val.Type %>'><i class='icon-refresh'></i>Recheck</a>")
+                    "<a href='#' class='btn btn-mini btn-primary reCheckMP <%- val.Name.toLowerCase() %> <%-disabled%>' umi='<%- val.Umi %>' marketplaceType='<%- val.Type %>'><i class='icon-refresh'></i>Recheck</a>")
             <%});%>
         </tbody>
     </table>

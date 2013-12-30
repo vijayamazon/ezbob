@@ -172,7 +172,17 @@ namespace EZBob.DatabaseLib.Model.Loans
 
         public LoanHistory Before
         {
-            get { return _before.Value ?? new LoanHistory(Loan, Loan.Date); }
+	        get
+	        {
+		        try
+		        {
+			        return _before.Value ?? new LoanHistory(Loan, Loan.Date);
+		        }
+		        catch
+		        {
+			        return new LoanHistory(Loan, Loan.Date);
+		        }
+	        }
         }
 
         public LoanHistory Expected

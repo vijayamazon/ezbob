@@ -26,7 +26,7 @@
 				</tr>
 				<tr>
 					<td style="text-align: right">
-						<input type="button" class="btn-back" value="..." name="@Html.Raw(arguments[2])" />
+						<input type="button" class="btn btn-primary btn-back" value="..." name="@Html.Raw(arguments[2])" />
 					</td>
 				</tr>
 			</table>
@@ -40,7 +40,7 @@
 		<td class="@Html.Raw(css)">@Html.Raw(title)</td>
 		<td class="@Html.Raw(css)">
 			<span>@Html.Raw(val1) </span>
-			<button class="btn btn-mini btn-info" name="@Html.Raw(val2)"><i class="icon-pencil" /></button>
+			<button class="btn btn-mini btn-primary" name="@Html.Raw(val2)"><i class="fa fa-pencil" /></button>
 			@{ WriteLiteral(sRawHtmlUnder); }
 		</td>
 	</tr>
@@ -52,7 +52,7 @@
 		</td>
 		<td>
 			@Html.Raw(val1) &nbsp;&nbsp;&nbsp;
-			<button class="btn btn-mini btn-info" name="@Html.Raw(val2)"><i class="icon-refresh" /></button>
+			<button class="btn btn-mini btn-primary" name="@Html.Raw(val2)"><i class="icon-refresh" /></button>
 		</td>
 	</tr>
 }
@@ -89,14 +89,14 @@
 				<td>
                     <%- Email.length <= 20 ? Email : Email.substring(0,17)+'...' %>
 					<i data-title="<%- Email %>" class="tltp-left <%=getIcon()%>"></i>
-					<button class="btn btn-mini btn-info" name="editEmail"><i class="icon-pencil"></i></button>
+					<button class="btn btn-mini btn-primary" name="editEmail"><i class="fa fa-pencil"></i></button>
 				</td>
 			</tr>
 			@RawCell("Segment Type", "<%- SegmentType %>")
 
 			<tr>
 				<td>CCI mark</td>
-				<td><span class="cci-mark"></span><button type="button" class="btn btn-mini btn-info cci-mark-toggle">Toggle</button></td>
+				<td><span class="cci-mark"></span><button type="button" class="btn btn-mini btn-primary cci-mark-toggle">Toggle</button></td>
 			</tr>
 
 			@RawCell("Mobile Phone #", "<%- MobilePhone %>")
@@ -192,8 +192,8 @@
 				<td class="<%- m.FundsAvailableUnderLimitClass %>">Funds avaliable</td>
 				<td class="<%- m.FundsAvailableUnderLimitClass %>">
 					<span>£ <%- m.FundsAvaliable %></span>
-					<button class="btn btn-mini btn-info couple_buttons" name="openPacnetManualButton"><i class="icon-plus"></i></button>
-					<button class="btn btn-mini btn-info couple_buttons" name="clearPacnetManualButton"><i class="icon-ban-circle"></i></button>
+					<button class="btn btn-mini btn-primary couple_buttons" name="openPacnetManualButton"><i class="fa fa-plus"></i></button>
+					<button class="btn btn-mini btn-primary couple_buttons" name="clearPacnetManualButton"><i class="fafa-ban"></i></button>
 				</td>
 			</tr>
 
@@ -254,7 +254,7 @@
 			<input class="form-control" type="text" id="edit-email" name="edit-email" value="<%- Email %>">
 		</form>
 	</div>
-	<div class="modal-footer">
+	<div class="pull-right">
 		<button class="btn btn-primary email-change-address">Change Email</button>
 		<button class="btn btn-primary email-send-new-request">Send New Request</button>
 		<button class="btn btn-primary email-confirm-manually">Confirm Manually</button>

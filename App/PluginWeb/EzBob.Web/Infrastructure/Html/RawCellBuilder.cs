@@ -85,8 +85,8 @@ namespace EzBob.Web.Infrastructure.Html
             if (string.IsNullOrEmpty(_buttonName)) return;
             var button = new TagBuilder("button");
             button.MergeAttribute("name", _buttonName);
-            button.AddCssClass("btn btn-mini btn-info");
-            button.InnerHtml = @"<i class='icon-pencil'/>";
+            button.AddCssClass("btn btn-mini btn-primary");
+			button.InnerHtml = @"<i class='fa fa-pencil'/>";
             td.InnerHtml += button.ToString();
         }
     }

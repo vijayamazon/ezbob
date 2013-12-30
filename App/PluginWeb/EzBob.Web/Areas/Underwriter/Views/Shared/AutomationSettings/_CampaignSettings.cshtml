@@ -4,8 +4,8 @@
     <%if(campaigns && campaigns.length > 0) {%>
    
     <table class="table squeezed">
-        <thead>
-            <tr class="box">
+        <thead class="box">
+            <tr class="box-title">
                 <th>Campaign</th>
                 <th>Type</th>
                 <th>Start Date</th>
@@ -32,12 +32,12 @@
     </table>
     <%}%>
    
-    <button class="btn addCampaign">Add Campaign</button>
+    <button class="btn btn-primary addCampaign">Add Campaign</button>
 
 </script>
 
 <script type="text/template" id="add-campaign-template">
-    <form id="add-campaign-form">
+    <form id="add-campaign-form" class="form-horizontal">
 
         @EzHtml.InputText().Label("Campaign name:").Id("campaign-name").Name("campaignName").Class("form-control").Render()
         @EzHtml.InputText().Label("Campaign description:").Id("campaign-description").Name("campaignDescription").Class("form-control").Render()
@@ -45,48 +45,49 @@
         <div class="control-group">
             <label class="control-label">Type:</label>
             <div class="controls controls-row">
-                <div style="margin-bottom: 10px; float: left;">
-                    <select id="campaign-type" name="campaignType" class="form-control selectheight">
-                        <option></option>
-                        <%_.each(campaignTypes, function(type){%>
+                <select id="campaign-type" name="campaignType" class="form-control selectheight">
+                    <option></option>
+                    <%_.each(campaignTypes, function(type){%>
                             <option value="<%-type.Id%>"><%-type.Type%></option>
-                        <%});%>
-                    </select>
-                </div>
+                    <%});%>
+                </select>
             </div>
         </div>
 
         <div class="control-group">
-            <label class="control-label">Start Date:</label>
+            <label class="control-label">
+                Start Date:
+                <span class="add-on">
+                    <i class="icon-calendar"></i>
+                </span>
+            </label>
             <div class="controls controls-row">
-                <div style="margin-bottom: 10px; float: left;">
-                    <input type="text" id="campaign-start-date" name="campaignStartDate" class="form-control date" style="width: 100px;">
-                    <span class="add-on">
-                        <i class="icon-calendar"></i>
-                    </span>
-                </div>
+                <input type="text" id="campaign-start-date" name="campaignStartDate" class="form-control date">
             </div>
         </div>
 
         <div class="control-group">
-            <label class="control-label">End Date:</label>
+            <label class="control-label">
+                End Date: 
+                <span class="add-on">
+                    <i class="icon-calendar"></i>
+                </span>
+            </label>
             <div class="controls controls-row">
-                <div style="margin-bottom: 10px; float: left;">
-                    <input type="text" id="campaign-end-date" name="campaignEndDate" class="form-control date" style="width: 100px;">
-                    <span class="add-on">
-                        <i class="icon-calendar"></i>
-                    </span>
-                </div>
+                <input type="text" id="campaign-end-date" name="campaignEndDate" class="form-control date">
             </div>
         </div>
         <div class="control-group">
             <label class="control-label">Customers list (white space separated):</label>
             <div class="controls controls-row">
-                    <textarea id="campaign-customers" name="campaignCustomers" maxlength="1000" style="width:250px;height:100px;"></textarea>
+                <textarea id="campaign-customers" name="campaignCustomers" maxlength="1000" style="width: 100%; height: 100px;"></textarea>
             </div>
         </div>
-
-        <button class="btn btn-primary addCampaignBtn">Add Campaign</button>
+        <div class="control-group">
+            <div class="controls controls-row">
+                <button class="btn btn-primary addCampaignBtn pull-right">Add Campaign</button>
+            </div>
+        </div>
     </form>
 </script>
 

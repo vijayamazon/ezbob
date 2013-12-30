@@ -224,8 +224,8 @@
         title: this.isUpdate ? "Update campaign" : "Add Campaign",
         position: "center",
         draggable: false,
-        width: "40%",
-        height: 670,
+        width: "45%",
+        height: 690,
         dialogClass: "addCampaign"
       };
     };

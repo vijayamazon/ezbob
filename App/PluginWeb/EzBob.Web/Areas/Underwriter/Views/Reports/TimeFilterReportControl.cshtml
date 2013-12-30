@@ -2,7 +2,7 @@
 @model ReportModelBase
 
 <div class="reportDiv">
-    <input type="submit" value="Recalculate"/>
+    <input type="submit" class="btn btn-primary" value="Recalculate"/>
 </div>
 <div class="reportDiv">
     @Html.TextBoxFor(x => @Model.DateFilter.StringFrom, new { @class = "datepicker form-control reportDatePicker", style = "display: none", @id = "dpFrom" })
@@ -17,7 +17,7 @@
     From
 </div>
 <div class="reportDiv">
-    @Html.DropDownListFor(x => @Model.DateFilter.TimeFilterString, ReportModelBase.FilterTypes, new {id = "timeFilter", @class = "selectheight form-control"})
+    @Html.DropDownListFor(x => @Model.DateFilter.TimeFilterString, ReportModelBase.FilterTypes, new {id = "timeFilter", @class = "selectheight ddl-inlign"})
 </div>
 <div class="reportDiv">
     Range

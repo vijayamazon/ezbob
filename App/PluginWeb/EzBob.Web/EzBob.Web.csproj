@@ -1084,6 +1084,9 @@
     <Content Include="Content\js\Underwriter\ezbob.underwriter.goToCustomer.js">
       <DependentUpon>ezbob.underwriter.goToCustomer.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.goToCustomer.min.js">
+      <DependentUpon>ezbob.underwriter.goToCustomer.coffee</DependentUpon>
+    </Content>
     <Content Include="Content\js\Underwriter\Fraud\ezbob.underwriter.fraud.js">
       <DependentUpon>ezbob.underwriter.fraud.coffee</DependentUpon>
     </Content>

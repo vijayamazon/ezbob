@@ -180,8 +180,11 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.Reports
         private static TagBuilder FormThead<T>(ReportTableModel<T> model)
         {
             var thead = new TagBuilder("thead");
+			thead.AddCssClass("box");
             var trTop = new TagBuilder("tr");
+			trTop.AddCssClass("box-title");
             var trBottom = new TagBuilder("tr");
+			trBottom.AddCssClass("box-title");
             foreach (var reportTableColumn in model.Columns)
             {
                 var th = CreateColumn(reportTableColumn);
@@ -208,7 +211,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.Reports
         private static TagBuilder CreateColumn(ReportTableColumn reportTableColumn)
         {
             var th = new TagBuilder("th");
-            th.AddCssClass("reportTableHeader");
+            //th.AddCssClass("reportTableHeader");
             th.InnerHtml += reportTableColumn.Caption;
             return th;
         }

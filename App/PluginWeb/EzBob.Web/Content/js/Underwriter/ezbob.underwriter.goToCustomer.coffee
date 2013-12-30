@@ -20,10 +20,10 @@ class EzBob.Underwriter.goToCustomerId extends Backbone.Marionette.ItemView
             allOptions += '<option value="' + customer.Item1 + '">' + customer.Item2 + '</option>'
 
         el = $("<div id='go-to-template'/>").html("
-            <input type='text' class='goto-customerId' autocomplete='off'/>
+            <input type='text' class='goto-customerId form-control' autocomplete='off'/>
             <br/>
             <label>Recent customers:</label>
-            <select id='recentCustomers'class='selectheight'>" + allOptions + "</select>
+            <select id='recentCustomers'class='selectheight form-control'>" + allOptions + "</select>
             <br/>
             <div class='error-place' style='color:red'></div>")
         $('body').append el

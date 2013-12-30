@@ -659,7 +659,7 @@ EzBob.ShowMessage = function (message, title, cbOk, okText, cbCancel, cancelText
 
         });
     //added ezbob style
-    modalpopup.parents('.ui-dialog').find("button").addClass('btn');
+    modalpopup.parents('.ui-dialog').find("button").addClass('btn btn-primary');
 
     return modalpopup;
 };

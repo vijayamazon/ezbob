@@ -33,6 +33,7 @@ namespace EzBob.Web.Areas.Underwriter.Models.Reports
 
         protected ExposureDataBase(ExposureDataBaseRow data)
         {
+			if (data==null) return;
             Processed = data.Processed;
             ProcessedAmount = data.ProcessedAmount;
             Approved = data.Approved;

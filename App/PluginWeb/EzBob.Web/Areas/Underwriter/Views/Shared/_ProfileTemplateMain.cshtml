@@ -51,15 +51,15 @@
 
 <script id="controls-button-template" type="text/template">
 	<div id="DecisionNotes"></div>
-    <a class="btn btn-inverse back" href="#"><i class="fa fa-arrow-circle-o-left" />Go back</a>
-    <a href="#" class="btn btn-lime" id="ReportBug" data-bug-customer="<%-customerId%>" data-bug-type="Other"><i class="fa fa-bug" />Report Bug</a>
-    <button class="btn btn-success disabled" name="newCreditLineBtn"><i class="fa fa-plus-circle" />New Credit Line</button>
+    <a class="btn btn-primary back" href="#"><i class="fa fa-arrow-circle-o-left" />Go back</a>
+    <a href="#" class="btn btn-primary" id="ReportBug" data-bug-customer="<%-customerId%>" data-bug-type="Other"><i class="fa fa-bug" />Report Bug</a>
+    <button class="btn btn-primary disabled" name="newCreditLineBtn"><i class="fa fa-plus-circle" />New Credit Line</button>
     <div class="pull-right">
-        <button class="btn btn-inverse" id="ReturnBtn"><i class="icon-repeat" />Return</button>
-        <button class="btn btn-warning" id="SuspendBtn"><i class="icon-pause" />Suspend</button>
-        <button class="btn btn-danger" id="RejectBtn"><i class="icon-remove-sign" />Reject</button>
-        <button class="btn btn-success" id="ApproveBtn"><i class="icon-ok-sign" />Approve</button>
-        <button class="btn btn-warning" id="EscalateBtn"><i class="icon-question-sign" />Escalate</button>
+        <button class="btn btn-primary" id="ReturnBtn"><i class="icon-repeat" />Return</button>
+        <button class="btn btn-primary" id="SuspendBtn"><i class="icon-pause" />Suspend</button>
+        <button class="btn btn-primary" id="RejectBtn"><i class="icon-remove-sign" />Reject</button>
+        <button class="btn btn-primary" id="ApproveBtn"><i class="icon-ok-sign" />Approve</button>
+        <button class="btn btn-primary" id="EscalateBtn"><i class="icon-question-sign" />Escalate</button>
     </div>
 </script>
 
@@ -106,8 +106,8 @@
         
         
         <div class="pull-right">
-            <input class="btn button-ok" type="button" value="OK" />
-            <input class="btn button-cancel" type="button" value="Cancel" />
+            <input class="btn btn-primary button-ok" type="button" value="OK" />
+            <input class="btn btn-primary button-cancel" type="button" value="Cancel" />
         </div>
     </div>  
 }
@@ -118,7 +118,7 @@
 <script id="approve-details" type="text/template">
     <div id="loan-schedule"></div>
     <div>
-        <button class="btn btn-danger change-offer-details"><i class="icon-pencil"></i>Edit</button>
+        <button class="btn btn-primary change-offer-details"><i class="fa fa-pencil"></i>Edit</button>
         <a href="#" class="pull-right print-link excel-link">Export to Excel</a>
         <a href="#" style="margin-right: 20px;" class="pull-right pdf-link">Export to PDF</a>
     </div>
@@ -127,10 +127,10 @@
 
 <script id="message-template" type="text/template">
     @{Html.RenderPartial("_Messages");}
-    <div class="pull-right" style="margin-bottom: 10px;">
-        <button class="btn" id="btnAMLInformation">AML</button>
-        <button class="btn" id="btnAMLandBWAInformation">AML and BWA</button>
-        <button class="btn" id="btnBWAInformation">BWA</button>
+    <div class="pull-right">
+        <button class="btn btn-primary" id="btnAMLInformation">AML</button>
+        <button class="btn btn-primary" id="btnAMLandBWAInformation">AML and BWA</button>
+        <button class="btn btn-primary" id="btnBWAInformation">BWA</button>
     </div>
 </script>
 

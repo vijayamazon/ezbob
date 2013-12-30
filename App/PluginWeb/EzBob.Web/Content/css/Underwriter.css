@@ -158,13 +158,13 @@ p.yodlee-cashflow-graph-labels {
 
 .left-underwriter-pane { }
 
-.reportDatePicker { width: 70px !important; }
+.reportDatePicker { width: 170px !important;  margin-bottom: 0 !important;}
 
 select.selectheight { height: 30px; }
 
 .reportDiv {
-    float: right;
-    padding-left: 10px;
+    display: inline-block;
+    margin-top: -5px;
 }
 
 .numberTd { text-align: right !important; }
@@ -351,6 +351,11 @@ a.ezbob-logo {
     background-size: contain;
 }
 
+a.ezbob-logo-login {
+    display: inline-block;
+    vertical-align: middle;
+    margin-top: -5px;
+}
 .roleImg {
     margin-top: -5px;
 }
@@ -677,4 +682,12 @@ div#DecisionNotes { text-align: right; font-weight: bold; }
 
 .copy-buttons .btn {
     margin-top: 3px;
+}
+
+.ui-dialog .ui-dialog-buttonpane {
+    background-color: #ffffff !important;
+}
+
+.ddl-inlign {
+    display: inline-block;
 }

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace EzBob.Web.Areas.Underwriter.Controllers.Reports
 {
@@ -9,7 +6,9 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.Reports
     {
         public string GetImagePath(object o)
         {
-            if (o.ToString() == "Silver")
+	        if (o == null)
+		        return @"..\..\Content\img\no-face.png";
+			if (o.ToString() == "Silver")
                 return @"..\..\Content\img\cart_silver.png";
             if (o.ToString() == "Gold")
                 return @"..\..\Content\img\cart_gold.png";

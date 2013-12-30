@@ -5,7 +5,7 @@
     <div class="editloan-item-editor-region"></div>
     <div class="buttons">
         <hr />
-        <button class="btn  pull-right cancel">Cancel</button>
+        <button class="btn btn-primary pull-right cancel">Cancel</button>
         <button class="btn btn-primary pull-right save" style="margin-right: 10px;">Save Standard Schedule</button>
     </div>
 </script>
@@ -35,12 +35,12 @@
 				%><tr class="<%= editClass %>">
                     <td><%- i+1 %>&nbsp;<%
 						if (item.Editable) { %>
-							<button class="btn btn-info btn-mini edit-schedule-item" data-id="<%- i %>"><i class="icon-pencil"></i></button>
+							<button class="btn btn-primary btn-mini edit-schedule-item" data-id="<%- i %>"><i class="fa fa-pencil"></i></button>
                         <%
 						}
 
 						if (item.Deletable) { %>
-							<button class="btn btn-mini remove-schedule-item" data-id="<%- i %>"><i class="icon-trash"></i></button>
+							<button class="btn btn-primary btn-mini remove-schedule-item" data-id="<%- i %>"><i class="icon-trash"></i></button>
                         <%
 						}
 					%></td>
@@ -114,8 +114,8 @@
 	}
 
 	%><div>
-        <button class="btn add-installment">Add Installment</button>
-        <button class="btn add-fee">Add Fee</button>
+        <button class="btn btn-primary add-installment">Add Installment</button>
+        <button class="btn btn-primary add-fee">Add Fee</button>
     </div>
 </script>
 
@@ -144,7 +144,7 @@
                     <td><%- EzBob.formatDateWithoutTime(ary[1]) %></td>
                     <td class="right"><%- EzBob.formatPercents(ary[2]) %></td>
                     <td class="centered">
-                        <button class="btn btn-mini remove-freeze-interval" data-id="<%- ary[5] %>"><i class="icon-trash"></i></button>
+                        <button class="btn btn-primary btn-mini remove-freeze-interval" data-id="<%- ary[5] %>"><i class="icon-trash"></i></button>
                     </td>
                 </tr>
                 <%
@@ -163,7 +163,7 @@
                     <td class="right">
                         <input class="new-freeze-interval-rate form-control" type="number" value="0" min="0" step="0.01" />%</td>
                     <td class="centered">
-                        <button class="btn btn-mini add-freeze-interval btn-info"><i class="icon-plus-sign"></i></button>
+                        <button class="btn btn-mini add-freeze-interval btn-primary"><i class="icon-plus-sign"></i></button>
                     </td>
                 </tr>
             </tfoot>

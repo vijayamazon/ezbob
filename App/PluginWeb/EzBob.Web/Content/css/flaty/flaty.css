@@ -4366,12 +4366,12 @@ div.tagsinput .not_valid {
 /* ========================================================
    Footer
 ======================================================== */
-#main-content > footer {
+#main-container > footer {
     background: rgba(255,255,255,0.6);
     padding: 12px 20px 3px;
     margin-top: 20px;
 }
-#main-content > footer p {
+#main-container > footer p {
     text-align: center;
     color: #222;
 }

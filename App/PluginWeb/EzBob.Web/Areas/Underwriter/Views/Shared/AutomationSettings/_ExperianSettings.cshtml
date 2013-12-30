@@ -4,23 +4,25 @@
 
 <script type="text/template" id="experian-settings-template">
     <form>
-        <table class="table squeezed">
-            <thead  class="box">
-                @EzForm.RawHeaderCell("Financial Accounts", "", "")
-            </thead>
-            <tbody>
-                @EzForm.RawCell("FinancialAccounts_MainApplicant", Select("FinancialAccounts_MainApplicant"), description)
-                @EzForm.RawCell("FinancialAccounts_AliasOfMainApplicant", Select("FinancialAccounts_AliasOfMainApplicant"), description)
-                @EzForm.RawCell("FinancialAccounts_AssociationOfMainApplicant", Select("FinancialAccounts_AssociationOfMainApplicant"), description)
-                @EzForm.RawCell("FinancialAccounts_JointApplicant", Select("FinancialAccounts_JointApplicant"), description)
-                @EzForm.RawCell("FinancialAccounts_AliasOfJointApplicant", Select("FinancialAccounts_AliasOfJointApplicant"), description)
-                @EzForm.RawCell("FinancialAccounts_AssociationOfJointApplicant", Select("FinancialAccounts_AssociationOfJointApplicant"), description)
-                @EzForm.RawCell("FinancialAccounts_No_Match", Select("FinancialAccounts_No_Match"), description)
-            </tbody>
-        </table>
+        <div class="table-big">
+            <table class="table squeezed">
+                <thead class="box">
+                    @EzForm.RawHeaderCell("Financial Accounts", "", "")
+                </thead>
+                <tbody>
+                    @EzForm.RawCell("FinancialAccounts_MainApplicant", Select("FinancialAccounts_MainApplicant"), description)
+                    @EzForm.RawCell("FinancialAccounts_AliasOfMainApplicant", Select("FinancialAccounts_AliasOfMainApplicant"), description)
+                    @EzForm.RawCell("FinancialAccounts_AssociationOfMainApplicant", Select("FinancialAccounts_AssociationOfMainApplicant"), description)
+                    @EzForm.RawCell("FinancialAccounts_JointApplicant", Select("FinancialAccounts_JointApplicant"), description)
+                    @EzForm.RawCell("FinancialAccounts_AliasOfJointApplicant", Select("FinancialAccounts_AliasOfJointApplicant"), description)
+                    @EzForm.RawCell("FinancialAccounts_AssociationOfJointApplicant", Select("FinancialAccounts_AssociationOfJointApplicant"), description)
+                    @EzForm.RawCell("FinancialAccounts_No_Match", Select("FinancialAccounts_No_Match"), description)
+                </tbody>
+            </table>
+        </div>
         <div class="pull-right">
-            <button class="btn" id="SaveExperianSettings" ><i class="icon-ok-sign" />Save</button> 
-            <button class="btn" id="CancelExperianSettings" ><i class="icon-refresh" />Reset</button> 
+            <button class="btn btn-primary" id="SaveExperianSettings"><i class="icon-ok-sign" />Save</button>
+            <button class="btn btn-primary" id="CancelExperianSettings"><i class="icon-refresh" />Reset</button>
         </div>
     </form>
 </script>
@@ -29,8 +31,8 @@
 
     public string Select(string name)
     {
-        var select = new Dictionary<string, string> {{"0", "Disable"}, {"1", "Enable"}};
-        HelperResult preparedSelect = EzForm.SelectAdvanced(name, "", select, "", "form-control selectheight ");
+        var select = new Dictionary<string, string> { { "0", "Disable" }, { "1", "Enable" } };
+        HelperResult preparedSelect = EzForm.SelectSimple(name, select, "", "form-control selectheight ");
         return preparedSelect.ToString();
     }
 

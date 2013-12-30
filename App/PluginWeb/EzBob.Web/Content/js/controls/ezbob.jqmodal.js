@@ -40,7 +40,7 @@
       });
       this.dialog.find('.ui-dialog').addClass('box');
       this.dialog.find('.ui-dialog-titlebar').addClass('box-title');
-      this.dialog.parent('.ui-dialog').find('.ui-dialog-buttonset button').addClass('btn btn-info');
+      this.dialog.parent('.ui-dialog').find('.ui-dialog-buttonset button').addClass('btn btn-primary');
       if (view.onAfterShow) {
         return view.onAfterShow.call(view);
       }

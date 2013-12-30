@@ -15,8 +15,8 @@
 {
     <div id="report"> 
         @RenderSection("Report") 
-            <div class="pull-right">
-                <a class="btn-back" href="@HttpUtility.JavaScriptStringEncode(Url.Action(Model.DownloadAction, Model.DateFilter))" id="exportAmountBtn" onclick="exportToExcel()">Export</a> 
+            <div class="">
+                <a class="btn btn-primary btn-back" href="@HttpUtility.JavaScriptStringEncode(Url.Action(Model.DownloadAction, Model.DateFilter))" id="exportAmountBtn" onclick="exportToExcel()">Export</a> 
             </div>
     </div>
 }

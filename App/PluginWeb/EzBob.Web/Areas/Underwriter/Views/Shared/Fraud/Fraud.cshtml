@@ -2,8 +2,8 @@
 
 <script type="text/template" id="fraud-template">
     <div class="left simple-well">
-        <button class="add btn btn-success btn-small"><i class="icon-plus"></i>Add new fraud user</button>
-        <button class="all btn btn-warning btn-small pull-right"><i class="icon-plus"></i>Test all check(using for debug)</button>
+        <button class="add btn btn-success btn-small"><i class="fa fa-plus"></i>Add new fraud user</button>
+        <button class="all btn btn-primary btn-small pull-right"><i class="fa fa-plus"></i>Test all check(using for debug)</button>
     </div>
 
     <table class="table">
@@ -60,37 +60,37 @@
 
             <b>Fraud Addresses </b><span>(Postcode, line1, Line2, Line3, Town, County)</span>
             <div class="Addresses"></div>
-            <button class="btn-mini btn btn-success add" data-type="Addresses"><i class="icon-plus"></i></button>
+            <button class="btn-mini btn btn-success add" data-type="Addresses"><i class="fa fa-plus"></i></button>
             <hr/>
 
             <b>Fraud Phones</b>
             <div class="Phones"></div>
-            <button class="btn-mini btn btn-success add" data-type="Phones"><i class="icon-plus"></i></button>
+            <button class="btn-mini btn btn-success add" data-type="Phones"><i class="fa fa-plus"></i></button>
             <hr/>
 
             <b>Fraud Emails</b>
             <div class="Emails"></div>
-            <button class="btn-mini btn btn-success add" data-type="Emails"><i class="icon-plus"></i></button>
+            <button class="btn-mini btn btn-success add" data-type="Emails"><i class="fa fa-plus"></i></button>
             <hr/>
 
             <b>Fraud Email Domains </b><span>(like "gmail.com")</span>
             <div class="EmailDomains"></div>
-            <button class="btn-mini btn btn-success add" data-type="EmailDomains"><i class="icon-plus"></i></button>
+            <button class="btn-mini btn btn-success add" data-type="EmailDomains"><i class="fa fa-plus"></i></button>
             <hr/>
 
             <b>Fraud Bank Accounts </b><span>(Bank account, Sort code)</span>
             <div class="BankAccounts"></div>
-            <button class="btn-mini btn btn-success add" data-type="BankAccounts"><i class="icon-plus"></i></button>
+            <button class="btn-mini btn btn-success add" data-type="BankAccounts"><i class="fa fa-plus"></i></button>
             <hr/>
             
             <b>Fraud Companies </b><span>(Company name, Registration Number)</span>
             <div class="Companies"></div>
-            <button class="btn-mini btn btn-success add" data-type="Companies"><i class="icon-plus"></i></button>
+            <button class="btn-mini btn btn-success add" data-type="Companies"><i class="fa fa-plus"></i></button>
             <hr/>
 
             <b>Fraud Shops </b><span>(Shop name, Shop type)</span>
             <div class="Shops"></div>
-            <button class="btn-mini btn btn-success add" data-type="Shops"><i class="icon-plus"></i></button>
+            <button class="btn-mini btn btn-success add" data-type="Shops"><i class="fa fa-plus"></i></button>
             <hr/>
         </form>
     </div>
@@ -133,10 +133,10 @@
             <div class="controls">
                 <%if(_.keys(val).length>2){ %>
                 <textarea  disabled="disabled" style="height:40px; resize: none"><%-_.values(val)%></textarea>
-                <button class="btn btn-mini btn-danger remove" data-index="<%-i%>" data-type="@type"><i class="icon-remove"></i></button>
+                <button class="btn btn-mini btn-primary remove" data-index="<%-i%>" data-type="@type"><i class="icon-remove"></i></button>
                 <%}else{%>
                 <input type="text"  disabled="disabled" value="<%-_.values(val)%>">
-                <button class="btn btn-mini btn-danger remove" data-index="<%-i%>" data-type="@type" style="margin-top: -10px"><i class="icon-remove"></i></button>
+                <button class="btn btn-mini btn-primary remove" data-index="<%-i%>" data-type="@type" style="margin-top: -10px"><i class="icon-remove"></i></button>
                 <%}%>
                 
             </div>
