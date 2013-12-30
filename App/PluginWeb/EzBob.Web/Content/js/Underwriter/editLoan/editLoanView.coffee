@@ -223,7 +223,7 @@ class EzBob.EditLoanView extends Backbone.Marionette.ItemView
         @editRegion.close()
 
     jqoptions: ->
-        width: 1000
+        width: '80%'
         modal: true
         title: 'Edit Loan Details'
         resizable: true

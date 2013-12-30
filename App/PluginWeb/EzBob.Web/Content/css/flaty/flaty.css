@@ -1205,7 +1205,7 @@ hr.margin-0  {margin: 0;}
 
 .table-flag-blue    {border-left-color: #00bfdd!important;}
 .table-flag-green   {border-left-color: #8dca35!important;}
-.table-flag-red     {border-left-color: #fa5a35!important;}
+.table-flag-red     {border-left-color: #fa5a35!important; border-left-width: 5px; border-left-style: solid;}
 .table-flag-orange  {border-left-color: #ffab00!important;}
 .table-flag-yellow  {border-left-color: #fafd1d!important;}
 .table-flag-lime    {border-left-color: #abfd1d!important;}

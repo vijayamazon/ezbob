@@ -25,6 +25,7 @@ class EzBob.Underwriter.CreditLineDialog extends Backbone.Marionette.ItemView
         position: "center"
         draggable: false
         dialogClass: "creditline-popup"
+        width: 600
 
     onChangeLoanTypeSelectionAllowed: ->
         controlledElements = '#loan-type, #repaymentPeriod'

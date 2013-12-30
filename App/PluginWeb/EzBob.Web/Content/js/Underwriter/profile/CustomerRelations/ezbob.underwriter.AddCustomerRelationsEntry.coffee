@@ -15,6 +15,7 @@ class EzBob.Underwriter.AddCustomerRelationsEntry extends EzBob.BoundItemView
         position: "center"
         draggable: false
         dialogClass: "customer-relations-popup"
+        width: 600
 
     initialize: (options) ->
         @model = new Backbone.Model(actions: options.actions, statuses: options.statuses)

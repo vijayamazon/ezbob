@@ -18,6 +18,7 @@ class EzBob.EmailEditView extends Backbone.Marionette.ItemView
         title: "Edit Email"
         position: "center"
         draggable: false
+        width: 530
         dialogClass: "edit-email-popup"
 
     confirmManually: ->

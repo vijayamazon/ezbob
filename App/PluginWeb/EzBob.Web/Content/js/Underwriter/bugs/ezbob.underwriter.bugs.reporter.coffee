@@ -43,14 +43,6 @@ class EzBob.Underwriter.EditBugView extends EzBob.BoundItemView
 
     template: '#bug-edit-template'
 
-    jqoptions: ->
-        modal: true
-        resizable: false
-        title: "Bug Reporter"
-        position: "center"
-        draggable: false
-        dialogClass: "bugs-popup"
-
     eqConverter: (v) ->
         (direction, value) -> 
             value is v

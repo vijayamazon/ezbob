@@ -75,6 +75,18 @@
       return this.type = options.type;
     };
 
+    simpleValueAddView.prototype.jqoptions = function() {
+      return {
+        modal: true,
+        resizable: false,
+        title: "Value Add",
+        position: "center",
+        draggable: false,
+        width: 530,
+        dialogClass: "value-add-popup"
+      };
+    };
+
     simpleValueAddView.prototype.events = {
       "click .ok": "okClicked"
     };
@@ -151,9 +163,8 @@
         title: "Fraud",
         position: "center",
         draggable: false,
-        width: "73%",
-        height: Math.max(window.innerHeight * 0.9, 600),
-        dialogClass: "fraud-popup"
+        dialogClass: "fraud-popup",
+        width: 600
       };
     };
 
@@ -212,7 +223,7 @@
         template: template,
         type: type
       });
-      EzBob.App.modal2.show(view);
+      EzBob.App.jqmodal.show(view);
       view.on("added", this.simpleValueAdded, this);
       return false;
     };
@@ -303,7 +314,7 @@
         width: 600,
         height: 600
       };
-      EzBob.App.modal.jqshow(view);
+      EzBob.App.jqmodal.show(view);
       model.on("saved", function() {
         return _this.model.fetch();
       });

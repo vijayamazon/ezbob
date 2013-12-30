@@ -94,16 +94,14 @@
             <hr/>
         </form>
     </div>
-    <div class="modal-footer">
-        <button class="btn btn-primary save">Save</button>
-        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+    <div class="form-group">
+        <button class="btn btn-primary form-control save">Save</button>
     </div>
 </script>
 
 @helper AddValuesModal(string caption, IEnumerable<InputValuesModel> values)
 {
     <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
         <h3>@caption</h3>
     </div>
     <div class="modal-body">
@@ -121,7 +119,7 @@
             }
         </form>
     </div>
-    <div class="modal-footer">
+    <div class="form-group">
         <button class="btn btn-primary ok">Add</button>
     </div>
 }

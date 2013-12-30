@@ -20,6 +20,7 @@ class EzBob.Underwriter.RolloverView extends Backbone.View
         position: "center"
         draggable: false
         dialogClass: "rollover-popup"
+        width: 600
 
     events:
         "click .confirm" : "addRollover",

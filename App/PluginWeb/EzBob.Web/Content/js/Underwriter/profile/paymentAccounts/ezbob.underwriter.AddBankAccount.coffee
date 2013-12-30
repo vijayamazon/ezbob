@@ -12,7 +12,7 @@ class EzBob.Underwriter.AddBankAccount extends EzBob.BoundItemView
         position: "center"
         draggable: false
         dialogClass: "add-bank-account-popup"
-        
+        width: 600
 
     events:
         "click .check-account": "check"
@@ -68,5 +68,5 @@ class EzBob.Underwriter.AddBankAccount extends EzBob.BoundItemView
         xhr.done (r) ->
             return if r.error?
             view = new EzBob.Underwriter.BankAccountDetailsView model: new Backbone.Model(r)
-            EzBob.App.modal2.show view
+            EzBob.App.jqmodal.show view
         xhr.complete -> BlockUi "off"

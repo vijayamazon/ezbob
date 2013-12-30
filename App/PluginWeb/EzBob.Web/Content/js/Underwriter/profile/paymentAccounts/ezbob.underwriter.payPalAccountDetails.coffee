@@ -23,3 +23,4 @@ class EzBob.Underwriter.PayPalAccountDetailsView extends Backbone.Marionette.Ite
         position: "center"
         draggable: false
         dialogClass: "paypalDetail"
+        width: 600

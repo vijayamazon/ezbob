@@ -27,9 +27,23 @@
       return this.modelBinder.bind(this.model, this.el, this.bindings);
     };
 
+    BoundItemView.prototype.jqoptions = function() {
+      return {
+        modal: true,
+        resizable: false,
+        title: "Bug Reporter",
+        position: "center",
+        draggable: false,
+        dialogClass: "bugs-popup",
+        width: 500
+      };
+    };
+
     BoundItemView.prototype.save = function() {
       this.trigger('save');
-      return this.close();
+      if (this.onSave != null) {
+        return this.onSave();
+      }
     };
 
     BoundItemView.prototype.onClose = function() {

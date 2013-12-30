@@ -43,6 +43,7 @@ namespace EzBob.Web.Infrastructure
 				.Add("~/Content/css/flaty/dataTables.bootstrap.css")
 				.Add("~/Content/css/flaty/DT_bootstrap.css")
 				.Add("~/Content/css/flaty/flaty-responsive.css")
+				.Add("~/Content/css/flaty/bootstrap-responsive.min.css")
 				.Add("~/Content/css/flaty/flaty.css")
 				.Add("~/Content/css/flaty/font-awesome.min.css")
                 .MvcRender("~/Content/css/min/combined_#.css");
@@ -149,7 +150,7 @@ namespace EzBob.Web.Infrastructure
                 .Add("~/Content/js/lib/jquery.validate.js")
                 .Add("~/Content/js/lib/jquery-ui-1.8.24.custom.js")
                 .Add("~/Content/js/lib/jsuri-1.1.1.js")
-                .Add("~/Content/js/lib/bootstrap.js")
+                //.Add("~/Content/js/lib/bootstrap.js")
                 .Add("~/Content/js/lib/bootstrap-datepicker.js")
                 .Add("~/Content/js/lib/bootstrap-modal.js")
                 .Add("~/Content/js/lib/bootstrap-modalmanager.js")
@@ -240,6 +241,7 @@ namespace EzBob.Web.Infrastructure
 				.Add("~/Content/js/lib/flaty/dataTables.bootstrap.js")
 				.Add("~/Content/js/lib/flaty/DT_Bootstrap.js")
 				.Add("~/Content/js/lib/flaty/flaty.js")
+				.Add("~/Content/js/lib/flaty/bootstrap3.js")
 
 				// HighCharts
 				.Add("~/Content/js/lib/highcharts/highcharts.js")
@@ -352,7 +354,7 @@ namespace EzBob.Web.Infrastructure
         public static MvcHtmlString RenderWizardJs()
         {
             return Bundle.JavaScript()
-                .Add("~/Content/js/controls/ezbob.notifications.js")
+				.Add("~/Content/js/controls/ezbob.notifications.js")
                 .Add("~/Content/js/ezbob.customerModel.js")
                 .Add("~/Content/js/Wizard/wizardStepSequence.js")
                 .Add("~/Content/js/Wizard/ezbob.wizardStepsModel.js")
@@ -400,6 +402,7 @@ namespace EzBob.Web.Infrastructure
         public static MvcHtmlString RenderProfileJs()
         {
             return Bundle.JavaScript()
+				.Add("~/Content/js/lib/bootstrap.js")
                 .Add("~/Content/js/controls/ezbob.address.js")
                 .Add("~/Content/js/controls/ezbob.notifications.js")
 				.Add("~/Content/js/controls/ezbob.whatsnew.js")

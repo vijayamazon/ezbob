@@ -1,123 +1,138 @@
 ﻿@model dynamic
 <script type="text/template" id="loan_editor_template">
-	<div class="editloan-freeze-intervals-region"></div>
-	<div class="editloan-schedule-region"></div>
-	<div class="editloan-item-editor-region"></div>
-	<div class="buttons">
-		<hr />
-		<button class="btn  pull-right cancel">Cancel</button>
-		<button class="btn btn-primary pull-right save" style="margin-right: 10px;">Save Standard Schedule</button>
-	</div>
+    <div class="editloan-freeze-intervals-region"></div>
+    <div class="editloan-schedule-region"></div>
+    <div class="editloan-item-editor-region"></div>
+    <div class="buttons">
+        <hr />
+        <button class="btn  pull-right cancel">Cancel</button>
+        <button class="btn btn-primary pull-right save" style="margin-right: 10px;">Save Standard Schedule</button>
+    </div>
 </script>
 
 <script type="text/template" id="loan_editor_schedule_template">
-	<h4>Standard Schedule</h4>
-	<table class="table table-selected centered">
-		<thead class="box">
-			<tr class="box-title">
-				<th width="90">#</th>
-				<th>Date</th>
-				<th>Principal</th>
-				<th>Balance</th>
-				<th>Interest<br />
-					Rate</th>
-				<th>Interest</th>
-				<th>Fees</th>
-				<th>Status</th>
-				<th>Total</th>
-				<th width="200">Description</th>
-			</tr>
-		</thead>
-		<tbody><%
+    <h4>Standard Schedule</h4>
+    <table class="table table-selected centered">
+        <thead class="box">
+            <tr class="box-title">
+                <th width="90">#</th>
+                <th>Date</th>
+                <th>Principal</th>
+                <th>Balance</th>
+                <th>Interest<br />
+                    Rate</th>
+                <th>Interest</th>
+                <th>Fees</th>
+                <th>Status</th>
+                <th>Total</th>
+                <th width="200">Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <%
 			_.each(Items, function(item, i) {
 				var editClass = editItemIndex == i ? "editing" : "";
 				%><tr class="<%= editClass %>">
-					<td><%- i+1 %>&nbsp;<%
+                    <td><%- i+1 %>&nbsp;<%
 						if (item.Editable) { %>
 							<button class="btn btn-info btn-mini edit-schedule-item" data-id="<%- i %>"><i class="icon-pencil"></i></button>
-						<%
+                        <%
 						}
 
 						if (item.Deletable) { %>
 							<button class="btn btn-mini remove-schedule-item" data-id="<%- i %>"><i class="icon-trash"></i></button>
-						<%
+                        <%
 						}
 					%></td>
 
-					<td><%- EzBob.formatDateWithoutTime(item.Date) %></td><%
+                    <td><%- EzBob.formatDateWithoutTime(item.Date) %></td>
+                    <%
 
 					if (item.Type == "Fee") {
 						%><td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td><%- EzBob.formatPounds(item.Fees) %></td>
-						<td><%- item.Status %></td>
-						<td></td>
-						<td><%- item.Description %></td><%
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><%- EzBob.formatPounds(item.Fees) %></td>
+                    <td><%- item.Status %></td>
+                    <td></td>
+                    <td><%- item.Description %></td>
+                    <%
 					} else if (item.Type == "Installment") {
 						%><td><%- EzBob.formatPounds(item.Principal) %></td>
-						<td><%- EzBob.formatPounds(item.Balance) %></td>
-						<td><%- EzBob.formatPercents (item.InterestRate) %></td>
-						<td><%- EzBob.formatPounds(item.Interest) %></td>
-						<td><%- EzBob.formatPounds(item.Fees) %></td>
-						<td><%- item.Status %></td>
-						<td><%- EzBob.formatPounds(item.Total) %></td>
-						<td></td><%
+                    <td><%- EzBob.formatPounds(item.Balance) %></td>
+                    <td><%- EzBob.formatPercents (item.InterestRate) %></td>
+                    <td><%- EzBob.formatPounds(item.Interest) %></td>
+                    <td><%- EzBob.formatPounds(item.Fees) %></td>
+                    <td><%- item.Status %></td>
+                    <td><%- EzBob.formatPounds(item.Total) %></td>
+                    <td></td>
+                    <%
 					} else if (item.Type == "Pacnet") {
 						%><td></td>
-						<td></td>
-						<td></td>
-						<td></td>
-						<td><%- EzBob.formatPounds(item.Fees) %></td>
-						<td><%- item.Status %></td>
-						<td><%- EzBob.formatPounds(item.Total) %></td>
-						<td><%- item.Description %></td><%
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><%- EzBob.formatPounds(item.Fees) %></td>
+                    <td><%- item.Status %></td>
+                    <td><%- EzBob.formatPounds(item.Total) %></td>
+                    <td><%- item.Description %></td>
+                    <%
 					} else {
 						%><td><%- EzBob.formatPounds(item.Principal) %></td>
-						<td><%- EzBob.formatPounds(item.Balance) %></td>
-						<td><%- EzBob.formatPercents (item.InterestRate) %></td>
-						<td><%- EzBob.formatPounds(item.Interest) %></td>
-						<td><%- EzBob.formatPounds(item.Fees) %></td>
-						<td><%- item.Status %></td>
-						<td><%- EzBob.formatPounds(item.Total) %></td>
-						<td><%- item.Description %></td><%
+                    <td><%- EzBob.formatPounds(item.Balance) %></td>
+                    <td><%- EzBob.formatPercents (item.InterestRate) %></td>
+                    <td><%- EzBob.formatPounds(item.Interest) %></td>
+                    <td><%- EzBob.formatPounds(item.Fees) %></td>
+                    <td><%- item.Status %></td>
+                    <td><%- EzBob.formatPounds(item.Total) %></td>
+                    <td><%- item.Description %></td>
+                    <%
 					}
-				%></tr><%
+				%>
+            </tr>
+            <%
 			});
-		%></tbody>
-	</table><%
+		%>
+        </tbody>
+    </table>
+    <%
 	
 	if(HasErrors) {
 		%><div class="alert alert-error">
-			Following conditions(s) were not satisfied:
-			<ul><%
+            Following conditions(s) were not satisfied:
+			<ul>
+                <%
 				_.each(Errors, function(e) {
-					%><li><%- e %></li><%
+					%><li><%- e %></li>
+                <%
 				});
-			%></ul>
-		</div><%
+			%>
+            </ul>
+        </div>
+    <%
 	}
 
 	%><div>
-		<button class="btn add-installment">Add Installment</button>
-		<button class="btn add-fee">Add Fee</button>
-	</div>
+        <button class="btn add-installment">Add Installment</button>
+        <button class="btn add-fee">Add Fee</button>
+    </div>
 </script>
 
 <script type="text/template" id="loan_editor_freeze_intervals_template">
-	<h4>Freeze Intervals</h4>
-	<table class="table table-selected centered">
-		<thead class="box">
-			<tr class="box-title">
-				<th>From (inclusive)</th>
-				<th>To (inclusive)</th>
-				<th>Interest Rate</th>
-				<th></th>
-			</tr>
-		</thead>
-		<tbody class="freeze-intervals-list">
-			<%
+    <h4>Freeze Intervals</h4>
+    <div class="table-big">
+        <table class="table table-selected centered" style="white-space: nowrap;">
+            <thead class="box">
+                <tr class="box-title">
+                    <th>From (inclusive)</th>
+                    <th>To (inclusive)</th>
+                    <th>Interest Rate</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody class="freeze-intervals-list">
+                <%
 			_.each(InterestFreeze, function(item, idx) {
 				var ary = item.split('|');
 
@@ -125,26 +140,33 @@
 					return;
 
 				%><tr>
-					<td><%- EzBob.formatDateWithoutTime(ary[0]) %></td>
-					<td><%- EzBob.formatDateWithoutTime(ary[1]) %></td>
-					<td class=right><%- EzBob.formatPercents(ary[2]) %></td>
-					<td class=centered><button class="btn btn-mini remove-freeze-interval" data-id="<%- ary[5] %>"><i class="icon-trash"></i></button></td>
-				</tr><%
+                    <td><%- EzBob.formatDateWithoutTime(ary[0]) %></td>
+                    <td><%- EzBob.formatDateWithoutTime(ary[1]) %></td>
+                    <td class="right"><%- EzBob.formatPercents(ary[2]) %></td>
+                    <td class="centered">
+                        <button class="btn btn-mini remove-freeze-interval" data-id="<%- ary[5] %>"><i class="icon-trash"></i></button>
+                    </td>
+                </tr>
+                <%
 			});
 		%>
-		</tbody>
-		<tfoot>
-			<tr>
-				<th colspan="4">Add New Interval <span class="new-freeze-interval-error"></span></th>
-			</tr>
-			<tr>
-				<td><input class="new-freeze-interval-start" type="date" /></td>
-				<td><input class="new-freeze-interval-end" type="date" /></td>
-				<td class=right><input class="new-freeze-interval-rate" type="number" value="0" min="0" step="0.01" />%</td>
-				<td class=centered>
-					<button class="btn btn-mini add-freeze-interval"><i class="icon-plus-sign"></i></button>
-				</td>
-			</tr>
-		</tfoot>
-	</table>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="4">Add New Interval <span class="new-freeze-interval-error"></span></th>
+                </tr>
+                <tr>
+                    <td>
+                        <input class="new-freeze-interval-start form-control" type="date" /></td>
+                    <td>
+                        <input class="new-freeze-interval-end form-control" type="date" /></td>
+                    <td class="right">
+                        <input class="new-freeze-interval-rate form-control" type="number" value="0" min="0" step="0.01" />%</td>
+                    <td class="centered">
+                        <button class="btn btn-mini add-freeze-interval btn-info"><i class="icon-plus-sign"></i></button>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
 </script>

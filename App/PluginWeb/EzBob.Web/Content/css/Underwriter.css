@@ -674,3 +674,7 @@ div#DecisionNotes { text-align: right; font-weight: bold; }
     position: relative;
     display: inline-block;
 }
+
+.copy-buttons .btn {
+    margin-top: 3px;
+}

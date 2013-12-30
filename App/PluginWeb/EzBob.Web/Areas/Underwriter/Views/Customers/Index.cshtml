@@ -47,110 +47,60 @@
                 <h1></h1>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="tab-pane active" id="waiting-grid">
-                    <div class="box">
-                        <div class="box-title">
-                            <h3><i class="fa fa-table"></i>Waiting for decision</h3>
-                        </div>
-                    </div>
-                    <div class="clearfix"></div>
-                    <div class="table-responsive" style="border: 0;">
-                        <table class="table  grid-data">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th><i class="fa fa-shopping-cart"></i> Cart</th>
-                                    <th><i class="fa fa-barcode"></i> Market Places</th>
-                                    <th><i class="fa fa-user"></i> Name</th>
-                                    <th><i class="fa fa-envelope"></i> E-mail</th>
-                                    <th><i class="fa fa-calendar"></i> Apply date</th>
-                                    <th><i class="fa fa-calendar-o"></i> Reg. date</th>
-                                    <th>Current staus</th>
-                                    <th><i class="fa fa-money"></i> Calc. amount</th>
-                                    <th><i class="fa fa-money"></i> O/S balance</th>
-                                    <th><i class="fa fa-users"></i> Segment</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                            </tbody>
-                        </table>
+        <div class="col-md-12">
+            <div class="tab-pane active" id="waiting-grid">
+                <div class="box">
+                    <div class="box-title">
+                        <h3><i class="fa fa-table"></i>Waiting for decision</h3>
                     </div>
                 </div>
-                @if (Model.IsEscalated)
-                {
-                    <div class="tab-pane" id="escalated-grid">
-                        <div class="box">
-                            <div class="box-title">
-                                <h3><i class="fa fa-table"></i>Escalated</h3>
-                            </div>
-                        </div>
-                        <div class="clearfix"></div>
-                        <div class="table-responsive" style="border: 0;">
-                            <table class="table  grid-data">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Cart</th>
-                                        <th>MPs</th>
-                                        <th>Name</th>
-                                        <th>E-mail</th>
-                                        <th>Apply date</th>
-                                        <th>Reg. date</th>
-                                        <th>Current staus</th>
-                                        <th>Calc. amount</th>
-                                        <th>O/S balance</th>
-                                        <th>Segment</th>
-                                        <th>Escalation date</th>
-                                        <th>Underwriter</th>
-                                        <th>Reason</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                }
-                <div class="tab-pane" id="pending-grid">
+                <div class="clearfix"></div>
+                <div class="table-responsive table-big" style="border: 0;">
+                    <table class="table grid-data">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th><i class="fa fa-shopping-cart"></i>Cart</th>
+                                <th><i class="fa fa-barcode"></i>Market Places</th>
+                                <th><i class="fa fa-user"></i>Name</th>
+                                <th><i class="fa fa-envelope"></i>E-mail</th>
+                                <th><i class="fa fa-calendar"></i>Apply date</th>
+                                <th><i class="fa fa-calendar-o"></i>Reg. date</th>
+                                <th>Current staus</th>
+                                <th><i class="fa fa-money"></i>Calc. amount</th>
+                                <th><i class="fa fa-money"></i>O/S balance</th>
+                                <th><i class="fa fa-users"></i>Segment</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            @if (Model.IsEscalated)
+            {
+                <div class="tab-pane" id="escalated-grid">
                     <div class="box">
                         <div class="box-title">
-                            <h3><i class="fa fa-table"></i>Pending</h3>
+                            <h3><i class="fa fa-table"></i>Escalated</h3>
                         </div>
                     </div>
                     <div class="clearfix"></div>
-                    <div class="table-responsive" style="border: 0;">
-                        <table class="table  grid-data">
+                    <div class="table-responsive table-big" style="border: 0;">
+                        <table class="table grid-data">
                             <thead>
                                 <tr>
                                     <th>#</th>
@@ -164,306 +114,14 @@
                                     <th>Calc. amount</th>
                                     <th>O/S balance</th>
                                     <th>Segment</th>
-                                    <th>Pending status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="tab-pane" id="approved-grid">
-                    <div class="box">
-                        <div class="box-title">
-                            <h3><i class="fa fa-table"></i>Approved</h3>
-                        </div>
-                    </div>
-                    <div class="clearfix"></div>
-                    <div class="table-responsive" style="border: 0;">
-                        <table class="table  grid-data">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Cart</th>
-                                    <th>MPs</th>
-                                    <th>Name</th>
-                                    <th>E-mail</th>
-                                    <th>Apply date</th>
-                                    <th>Approve date</th>
-                                    <th>Reg. date</th>
-                                    <th>Calc. amount</th>
-                                    <th>Approved sum</th>
-                                    <th>Amount taken</th>
-                                    <th>Offer expire date</th>
-                                    <th>Approves #</th>
-                                    <th>Rejects #</th>
-                                    <th>Segment</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="tab-pane" id="loans-grid">
-                    <div class="box">
-                        <div class="box-title">
-                            <h3><i class="fa fa-table"></i>Loans</h3>
-                        </div>
-                    </div>
-                    <div class="clearfix"></div>
-                    <div class="table-responsive" style="border: 0;">
-                        <table class="table  grid-data">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Cart</th>
-                                    <th>MPs</th>
-                                    <th>Name</th>
-                                    <th>E-mail</th>
-                                    <th>Reg. date</th>
-                                    <th>Apply date</th>
-                                    <th>First loan date</th>
-                                    <th>Last loan date</th>
-                                    <th>Last loan amount</th>
-                                    <th>Amount taken</th>
-                                    <th>Total principal repaid</th>
-                                    <th>O/S balance</th>
-                                    <th>Next repayment date</th>
-                                    <th>Customer status</th>
-                                    <th>Segment</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="tab-pane" id="sales-grid">
-                    <div class="box">
-                        <div class="box-title">
-                            <h3><i class="fa fa-table"></i>Sales</h3>
-                        </div>
-                    </div>
-                    <div class="clearfix"></div>
-                    <div class="table-responsive" style="border: 0;">
-                        <table class="table  grid-data">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>E-mail</th>
-                                    <th>Name</th>
-                                    <th>Mobile phone</th>
-                                    <th>Daytime phone</th>
-                                    <th>Approved sum</th>
-                                    <th>Amount taken</th>
-                                    <th>Offer date</th>
-                                    <th>O/S balance</th>
-                                    <th>CRM status</th>
-                                    <th>CRM comment</th>
-                                    <th>Interactions</th>
-                                    <th>Segment</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="tab-pane" id="collection-grid">
-                    <div class="box">
-                        <div class="box-title">
-                            <h3><i class="fa fa-table"></i>Collection</h3>
-                        </div>
-                    </div>
-                    <div class="clearfix"></div>
-                    <div class="table-responsive" style="border: 0;">
-                        <table class="table  grid-data">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>E-mail</th>
-                                    <th>Name</th>
-                                    <th>Mobile phone</th>
-                                    <th>Daytime phone</th>
-                                    <th>Amount taken</th>
-                                    <th>O/S balance</th>
-                                    <th>CRM status</th>
-                                    <th>CRM comment</th>
-                                    <th>Collection status</th>
-                                    <th>Segment</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="tab-pane" id="late-grid">
-                    <div class="box">
-                        <div class="box-title">
-                            <h3><i class="fa fa-table"></i>Late</h3>
-                        </div>
-                    </div>
-                    <div class="clearfix"></div>
-                    <div class="table-responsive" style="border: 0;">
-                        <table class="table  grid-data">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Cart</th>
-                                    <th>MPs</th>
-                                    <th>Name</th>
-                                    <th>E-mail</th>
-                                    <th>Apply date</th>
-                                    <th>Approve date</th>
-                                    <th>Reg. date</th>
-                                    <th>Calc. amount</th>
-                                    <th>Approved sum</th>
-                                    <th>Amount taken</th>
-                                    <th>Approves #</th>
-                                    <th>Rejects #</th>
-                                    <th>Segment</th>
-                                    <th>O/S balance</th>
-                                    <th>Date of late payment</th>
-                                    <th>Late amount</th>
-                                    <th>Delinquency</th>
-                                    <th>CRM status</th>
-                                    <th>CRM comment</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="tab-pane" id="rejected-grid">
-                    <div class="box">
-                        <div class="box-title">
-                            <h3><i class="fa fa-table"></i>Rejected</h3>
-                        </div>
-                    </div>
-                    <div class="clearfix"></div>
-                    <div class="table-responsive" style="border: 0;">
-                        <table class="table  grid-data">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Cart</th>
-                                    <th>MPs</th>
-                                    <th>Name</th>
-                                    <th>E-mail</th>
-                                    <th>Apply date</th>
-                                    <th>Reg. date</th>
-                                    <th>Rejected date</th>
+                                    <th>Escalation date</th>
+                                    <th>Underwriter</th>
                                     <th>Reason</th>
-                                    <th>Rejects #</th>
-                                    <th>Approves #</th>
-                                    <th>O/S balance</th>
-                                    <th>Segment</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
+                                    <td></td>
                                     <td></td>
                                     <td></td>
                                     <td></td>
@@ -482,117 +140,457 @@
                         </table>
                     </div>
                 </div>
-                <div class="tab-pane" id="offline-grid">
-                    <div class="box">
-                        <div class="box-title">
-                            <h3><i class="fa fa-table"></i>Offline</h3>
-                        </div>
-                    </div>
-                    <div class="clearfix"></div>
-                    <div class="table-responsive" style="border: 0;">
-                        <table class="table  grid-data">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Reg. date</th>
-                                    <th>Cart</th>
-                                    <th>MPs</th>
-                                    <th>Name</th>
-                                    <th>E-mail</th>
-                                    <th>Wizard step</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                            </tbody>
-                        </table>
+            }
+            <div class="tab-pane" id="pending-grid">
+                <div class="box">
+                    <div class="box-title">
+                        <h3><i class="fa fa-table"></i>Pending</h3>
                     </div>
                 </div>
-                <div class="tab-pane" id="all-grid">
-                    <div class="box">
-                        <div class="box-title">
-                            <h3><i class="fa fa-table"></i>All</h3>
-                        </div>
-                    </div>
-                    <div class="clearfix"></div>
-                    <div class="table-responsive" style="border: 0;">
-                        <table class="table  grid-data">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Cart</th>
-                                    <th>MPs</th>
-                                    <th>Name</th>
-                                    <th>E-mail</th>
-                                    <th>Reg. date</th>
-                                    <th>Apply date</th>
-                                    <th>Customer status</th>
-                                    <th>Calc. amount</th>
-                                    <th>Approved sum</th>
-                                    <th>O/S balance</th>
-                                    <th>Segment</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                <div class="clearfix"></div>
+                <div class="table-responsive table-big" style="border: 0;">
+                    <table class="table grid-data">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Cart</th>
+                                <th>MPs</th>
+                                <th>Name</th>
+                                <th>E-mail</th>
+                                <th>Apply date</th>
+                                <th>Reg. date</th>
+                                <th>Current staus</th>
+                                <th>Calc. amount</th>
+                                <th>O/S balance</th>
+                                <th>Segment</th>
+                                <th>Pending status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="tab-pane" id="approved-grid">
+                <div class="box">
+                    <div class="box-title">
+                        <h3><i class="fa fa-table"></i>Approved</h3>
                     </div>
                 </div>
-                <div class="tab-pane" id="registered-grid">
-                    <div class="box">
-                        <div class="box-title">
-                            <h3><i class="fa fa-table"></i>Registered</h3>
-                        </div>
+                <div class="clearfix"></div>
+                <div class="table-responsive table-big" style="border: 0;">
+                    <table class="table grid-data">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Cart</th>
+                                <th>MPs</th>
+                                <th>Name</th>
+                                <th>E-mail</th>
+                                <th>Apply date</th>
+                                <th>Approve date</th>
+                                <th>Reg. date</th>
+                                <th>Calc. amount</th>
+                                <th>Approved sum</th>
+                                <th>Amount taken</th>
+                                <th>Offer expire date</th>
+                                <th>Approves #</th>
+                                <th>Rejects #</th>
+                                <th>Segment</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="tab-pane" id="loans-grid">
+                <div class="box">
+                    <div class="box-title">
+                        <h3><i class="fa fa-table"></i>Loans</h3>
                     </div>
-                    <div class="clearfix"></div>
-                    <div class="table-responsive" style="border: 0;">
-                        <table class="table  grid-data">
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>E-mail</th>
-                                    <th>User status</th>
-                                    <th>Reg. date</th>
-                                    <th>MPs statuses</th>
-                                    <th>Wizard step</th>
-                                    <th>Segment</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                    <td></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                </div>
+                <div class="clearfix"></div>
+                <div class="table-responsive table-big" style="border: 0;">
+                    <table class="table grid-data">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Cart</th>
+                                <th>MPs</th>
+                                <th>Name</th>
+                                <th>E-mail</th>
+                                <th>Reg. date</th>
+                                <th>Apply date</th>
+                                <th>First loan date</th>
+                                <th>Last loan date</th>
+                                <th>Last loan amount</th>
+                                <th>Amount taken</th>
+                                <th>Total principal repaid</th>
+                                <th>O/S balance</th>
+                                <th>Next repayment date</th>
+                                <th>Customer status</th>
+                                <th>Segment</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="tab-pane" id="sales-grid">
+                <div class="box">
+                    <div class="box-title">
+                        <h3><i class="fa fa-table"></i>Sales</h3>
                     </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="table-responsive table-big" style="border: 0;">
+                    <table class="table grid-data">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>E-mail</th>
+                                <th>Name</th>
+                                <th>Mobile phone</th>
+                                <th>Daytime phone</th>
+                                <th>Approved sum</th>
+                                <th>Amount taken</th>
+                                <th>Offer date</th>
+                                <th>O/S balance</th>
+                                <th>CRM status</th>
+                                <th>CRM comment</th>
+                                <th>Interactions</th>
+                                <th>Segment</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="tab-pane" id="collection-grid">
+                <div class="box">
+                    <div class="box-title">
+                        <h3><i class="fa fa-table"></i>Collection</h3>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="table-responsive table-big" style="border: 0;">
+                    <table class="table grid-data">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>E-mail</th>
+                                <th>Name</th>
+                                <th>Mobile phone</th>
+                                <th>Daytime phone</th>
+                                <th>Amount taken</th>
+                                <th>O/S balance</th>
+                                <th>CRM status</th>
+                                <th>CRM comment</th>
+                                <th>Collection status</th>
+                                <th>Segment</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="tab-pane" id="late-grid">
+                <div class="box">
+                    <div class="box-title">
+                        <h3><i class="fa fa-table"></i>Late</h3>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="table-responsive table-big" style="border: 0;">
+                    <table class="table grid-data">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Cart</th>
+                                <th>MPs</th>
+                                <th>Name</th>
+                                <th>E-mail</th>
+                                <th>Apply date</th>
+                                <th>Approve date</th>
+                                <th>Reg. date</th>
+                                <th>Calc. amount</th>
+                                <th>Approved sum</th>
+                                <th>Amount taken</th>
+                                <th>Approves #</th>
+                                <th>Rejects #</th>
+                                <th>Segment</th>
+                                <th>O/S balance</th>
+                                <th>Date of late payment</th>
+                                <th>Late amount</th>
+                                <th>Delinquency</th>
+                                <th>CRM status</th>
+                                <th>CRM comment</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="tab-pane" id="rejected-grid">
+                <div class="box">
+                    <div class="box-title">
+                        <h3><i class="fa fa-table"></i>Rejected</h3>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="table-responsive table-big" style="border: 0;">
+                    <table class="table grid-data">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Cart</th>
+                                <th>MPs</th>
+                                <th>Name</th>
+                                <th>E-mail</th>
+                                <th>Apply date</th>
+                                <th>Reg. date</th>
+                                <th>Rejected date</th>
+                                <th>Reason</th>
+                                <th>Rejects #</th>
+                                <th>Approves #</th>
+                                <th>O/S balance</th>
+                                <th>Segment</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="tab-pane" id="offline-grid">
+                <div class="box">
+                    <div class="box-title">
+                        <h3><i class="fa fa-table"></i>Offline</h3>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="table-responsive table-big" style="border: 0;">
+                    <table class="table grid-data">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Reg. date</th>
+                                <th>Cart</th>
+                                <th>MPs</th>
+                                <th>Name</th>
+                                <th>E-mail</th>
+                                <th>Wizard step</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="tab-pane" id="all-grid">
+                <div class="box">
+                    <div class="box-title">
+                        <h3><i class="fa fa-table"></i>All</h3>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="table-responsive table-big" style="border: 0;">
+                    <table class="table grid-data">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Cart</th>
+                                <th>MPs</th>
+                                <th>Name</th>
+                                <th>E-mail</th>
+                                <th>Reg. date</th>
+                                <th>Apply date</th>
+                                <th>Customer status</th>
+                                <th>Calc. amount</th>
+                                <th>Approved sum</th>
+                                <th>O/S balance</th>
+                                <th>Segment</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="tab-pane" id="registered-grid">
+                <div class="box">
+                    <div class="box-title">
+                        <h3><i class="fa fa-table"></i>Registered</h3>
+                    </div>
+                </div>
+                <div class="clearfix"></div>
+                <div class="table-responsive table-big" style="border: 0;">
+                    <table class="table grid-data">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>E-mail</th>
+                                <th>User status</th>
+                                <th>Reg. date</th>
+                                <th>MPs statuses</th>
+                                <th>Wizard step</th>
+                                <th>Segment</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -743,7 +741,7 @@
                 }, // fraud
 
                 switchMenuTo: function(name) {
-                    $('.container-fluid > ul.nav > li[id]').removeClass('active');
+                    $('.navbar ul.nav > li[id]').removeClass('active');
                     $('#' + name).addClass('active');
                 }, // switchMenuTo
 

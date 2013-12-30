@@ -161,12 +161,12 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 	render: function() {
 		var self = this;
 
-		this.tabLinks().on('shown', function(e) { self.handleTabSwitch(e); });
+		this.tabLinks().on('shown.bs.tab', function (e) { self.handleTabSwitch(e); });
 
 		return this;
 	}, // render
 
-	handleTabSwitch: function(evt) {
+	handleTabSwitch: function (evt) {
 		this.loadGrid(this.typeFromHref($(evt.target).attr('href')));
 	}, // handleTabSwitch
 
@@ -315,17 +315,17 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 		return aryResult;
 	}, // extractColumns
 
-	tabLinks: function() {
+	tabLinks: function () {
 		return this.$el.find('a[data-toggle="tab"]');
 	}, // tabLinks
 
-	tabLinkTo: function(sTarget) {
+	tabLinkTo: function (sTarget) {
 		return this.tabLinks().filter('[href="#' + (sTarget || '') + '-grid"]');
 	}, // tabLinkTo
 
 	/// id argument is not used here. It was added to be consistent with
 	/// previously created views.
-	show: function(id, type) {
+	show: function (id, type) {
 		this.$el.show();
 		this.loadGrid(this.getValidType(type));
 	}, // show

@@ -91,7 +91,7 @@
     
     var identificator = new HtmlString(id);
     var val = new HtmlString(value);
-    <div class="control-group">
+    <div class="form-group">
         <label for="@identificator" class="control-label">@(new HtmlString(caption))</label>
         <div class="controls">
             <input 
@@ -99,7 +99,7 @@
                 name="@identificator" 
                 type="text" 
                 value="@val" 
-                class="@cls" 
+                class="@cls form-control" 
                 @if (isDisabled)
                 {
                     @:disabled="disabled"

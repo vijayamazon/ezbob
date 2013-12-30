@@ -105,19 +105,6 @@
 
     EditBugView.prototype.template = '#bug-edit-template';
 
-    EditBugView.prototype.jqoptions = function() {
-      return {
-        modal: true,
-        resizable: false,
-        title: "Bug Reporter",
-        position: "center",
-        draggable: false,
-        width: "73%",
-        height: Math.max(window.innerHeight * 0.9, 600),
-        dialogClass: "bugs-popup"
-      };
-    };
-
     EditBugView.prototype.eqConverter = function(v) {
       return function(direction, value) {
         return value === v;

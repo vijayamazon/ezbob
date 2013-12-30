@@ -29,6 +29,15 @@ class EzBob.Underwriter.simpleValueAddView extends Backbone.Marionette.ItemView
         @template = options.template
         @type = options.type
 
+    jqoptions: ->
+        modal: true
+        resizable: false
+        title: "Value Add"
+        position: "center"
+        draggable: false
+        width: 530
+        dialogClass: "value-add-popup"
+
     events:
         "click .ok":"okClicked"
 
@@ -68,6 +77,7 @@ class EzBob.Underwriter.AddEditFraudView extends Backbone.Marionette.ItemView
         position: "center"
         draggable: false
         dialogClass: "fraud-popup"
+        width: 600
 
     ui:
         form: "form"
@@ -108,7 +118,7 @@ class EzBob.Underwriter.AddEditFraudView extends Backbone.Marionette.ItemView
         type = $el.data "type"
         template = "#add-#{type}-template"
         view = new EzBob.Underwriter.simpleValueAddView({template: template, type: type})
-        EzBob.App.modal2.show view
+        EzBob.App.jqmodal.show view
         view.on("added", @simpleValueAdded, @)
         false
 
@@ -159,7 +169,7 @@ class EzBob.Underwriter.FraudView extends Backbone.Marionette.ItemView
             keyboard: false
             width: 600
             height: 600
-        EzBob.App.modal.jqshow view
+        EzBob.App.jqmodal.show view
         model.on "saved", => @model.fetch()
         false
 

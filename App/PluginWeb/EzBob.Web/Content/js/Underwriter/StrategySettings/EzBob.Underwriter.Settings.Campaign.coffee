@@ -131,16 +131,14 @@ class EzBob.Underwriter.Settings.AddCampaignView extends Backbone.Marionette.Ite
 
 
     jqoptions: ->
-        {
-            modal: true
-            resizable: false
-            title: if @isUpdate then "Update campaign" else "Add Campaign"
-            position: "center"
-            draggable: false
-            width: "40%"
-            height: 670
-            dialogClass: "addCampaign"
-        }
+        modal: true
+        resizable: false
+        title: if @isUpdate then "Update campaign" else "Add Campaign"
+        position: "center"
+        draggable: false
+        width: "40%"
+        height: 670
+        dialogClass: "addCampaign"
 
     serializeData: ->
         data = 
@@ -157,16 +155,14 @@ class EzBob.Underwriter.Settings.CampaignCustomersView extends Backbone.Marionet
         @
 
     jqoptions: ->
-        {
-            modal: true
-            resizable: false
-            title: "Campaign #{@campaign.Name} clients"
-            position: "center"
-            draggable: true
-            width: "40%"
-            height: 670
-            dialogClass: "CampaignClients"
-        }
+        modal: true
+        resizable: false
+        title: "Campaign #{@campaign.Name} clients"
+        position: "center"
+        draggable: true
+        width: "40%"
+        height: 670
+        dialogClass: "CampaignClients"
 
     serializeData: ->
         data = 

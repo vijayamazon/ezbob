@@ -15,6 +15,15 @@ class EzBob.Underwriter.UploadDocView extends Backbone.Marionette.ItemView
     initialize: (options) ->
         @customerId = options.customerId
 
+    jqoptions: ->
+        modal: true
+        resizable: false
+        title: "Upload Doc"
+        position: "center"
+        draggable: false
+        width: 530
+        dialogClass: "upload-doc-popup"
+
     events: {'click .button-upload' : 'upload'}
     
     upload: (e) ->
@@ -70,7 +79,7 @@ class EzBob.Underwriter.AlertDocsView extends Backbone.Marionette.ItemView
             @model.fetch()
             EzBob.ShowMessage "File successfully downloaded to \"Messages\" tab", "Successful"
         view.on('upload:ok', cb, this)
-        EzBob.App.modal2.show(view)
+        EzBob.App.jqmodal.show(view)
 
     deleteClick: ->
         ids = ($(e).data('id') for e in @$el.find('input[type="checkbox"]:checked'))

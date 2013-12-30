@@ -12,4 +12,5 @@ class EzBob.Underwriter.BankAccountDetailsView extends Backbone.Marionette.ItemV
         position: "center"
         draggable: false
         dialogClass: "bank-account-details-popup"
+        width: 500
         

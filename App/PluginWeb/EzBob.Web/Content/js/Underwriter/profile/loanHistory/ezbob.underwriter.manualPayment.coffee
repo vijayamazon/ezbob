@@ -12,6 +12,7 @@ class EzBob.Underwriter.ManualPaymentView extends Backbone.Marionette.ItemView
         position: "center"
         draggable: false
         dialogClass: "manual-payment-popup"
+        width: 600
 
     onRender: ->
         @$el.find('.ezDateTime').splittedDateTime()

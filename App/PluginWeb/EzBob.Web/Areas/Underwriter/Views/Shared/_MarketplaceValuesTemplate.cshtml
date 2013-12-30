@@ -287,7 +287,7 @@
 				            <a href="#" class="btn btn-mini btn-info reCheckMP <%- sShopName.toLowerCase() %>" umi="<%- m.Id %>" marketplacetype="<%- m.Name %>"><i class="icon-refresh"></i>Recheck</a>
 				            <a href="#" class="btn btn-mini btn-lime" data-bug-type="<%- m.Name %>" data-bug-customer="<%-customerId%>" data-bug-mp="<%-m.Id%>" data-title="Report Bug"><i class="fa fa-bug"></i></a>
 				            <% } else { %>
-				            <a href='@Url.Action("TryRecheckYodlee", "MarketPlaces", new { Area = "Underwriter" }, "https")/?umi=<%- m.Id %>' target="_blank" class="tryRecheckYodlee btn btn-mini %>" data-mp-id="<%-m.id%>"><i class="icon-refresh"></i>Try Recheck</a>
+				            <a href='@Url.Action("TryRecheckYodlee", "MarketPlaces", new { Area = "Underwriter" }, "https")/?umi=<%- m.Id %>' target="_blank" class="tryRecheckYodlee btn btn-mini btn-info" data-mp-id="<%-m.id%>"><i class="icon-refresh"></i>Try Recheck</a>
 				            <a href="#" class="btn btn-mini btn-lime" data-bug-type="<%- m.Name %>" data-bug-customer="<%-customerId%>" data-bug-mp="<%-m.Id%>" data-title="Report Bug"><i class="fa fa-bug"></i></a>
 				            <% } %>
 				            <a href="#" class="btn btn-mini btn-warning disable-shop %>" umi="<%- m.Id %>"><i class="icon-ban-circle"></i>Disable</a>

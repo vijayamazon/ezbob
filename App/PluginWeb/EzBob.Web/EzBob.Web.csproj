@@ -456,6 +456,7 @@
     <Content Include="Content\css\choosen\chosen.css" />
     <Content Include="Content\css\common.css" />
     <Content Include="Content\css\customer.css" />
+    <Content Include="Content\css\flaty\bootstrap-responsive.min.css" />
     <Content Include="Content\css\flaty\bootstrap.min.css" />
     <Content Include="Content\css\flaty\dataTables.bootstrap.css" />
     <Content Include="Content\css\flaty\DT_bootstrap.css" />
@@ -893,6 +894,9 @@
       <DependentUpon>ezbob.GA.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\App\ezbob.validation.js" />
+    <Content Include="Content\js\controls\ezbob.BoundItemView.min.js">
+      <DependentUpon>ezbob.BoundItemView.coffee</DependentUpon>
+    </Content>
     <Content Include="Content\js\controls\ezbob.jqmodal.min.js">
       <DependentUpon>ezbob.jqmodal.coffee</DependentUpon>
     </Content>
@@ -920,6 +924,7 @@
     <Content Include="Content\js\lib\Backbone.ModelBinder.js" />
     <Content Include="Content\js\lib\bootstrap-modal.js" />
     <Content Include="Content\js\lib\bootstrap-modalmanager.js" />
+    <Content Include="Content\js\lib\flaty\bootstrap3.js" />
     <Content Include="Content\js\lib\flaty\dataTables.bootstrap.js" />
     <Content Include="Content\js\lib\flaty\DT_bootstrap.js" />
     <Content Include="Content\js\lib\flaty\flaty.js" />
@@ -1084,6 +1089,12 @@
     </Content>
     <Content Include="Content\js\Underwriter\Fraud\ezbob.underwriter.fraud.min.js">
       <DependentUpon>ezbob.underwriter.fraud.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\profile\alerts\ezbob.underwriter.AlertDocsView.js">
+      <DependentUpon>ezbob.underwriter.AlertDocsView.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\profile\alerts\ezbob.underwriter.AlertDocsView.min.js">
+      <DependentUpon>ezbob.underwriter.AlertDocsView.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Underwriter\profile\companyScore\ezbob.underwriter.companyScore.js" />
     <Content Include="Content\js\Underwriter\profile\customerInfo\ezbob.underwriter.landregistry.js" />
@@ -1274,6 +1285,9 @@
     <Content Include="Content\css\fonts\fontawesome-webfont.ttf" />
     <Content Include="Content\css\fonts\fontawesome-webfont.woff" />
     <Content Include="Content\css\fonts\FontAwesome.otf" />
+    <Content Include="Content\js\Underwriter\Fraud\ezbob.underwriter.fraud.min.js.map">
+      <DependentUpon>ezbob.underwriter.fraud.js</DependentUpon>
+    </Content>
     <None Include="Service References\EzServiceReference\configuration91.svcinfo" />
     <None Include="Service References\EzServiceReference\configuration.svcinfo" />
     <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.ActionMetaData.datasource">
