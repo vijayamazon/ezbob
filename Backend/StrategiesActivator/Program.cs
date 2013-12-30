@@ -32,7 +32,7 @@
 
 			LoadConfigurations();
 
-			var strategiesActivator = new StrategiesActivator(args);
+			var strategiesActivator = new ServiceClientActivation(args);
 			strategiesActivator.Execute();
         }
 

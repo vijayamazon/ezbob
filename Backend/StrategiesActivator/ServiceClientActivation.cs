@@ -10,17 +10,17 @@
 	using Ezbob.Logger;
 	using log4net;
 
-	public class StrategiesActivator {
+	public class ServiceClientActivation {
 		private readonly string[] args;
 		private readonly EzServiceClient serviceClient;
 
-		public StrategiesActivator(string[] args) {
+		public ServiceClientActivation(string[] args) {
 			this.args = new string[args.Length - 1];
 			Array.Copy(args, 1, this.args, 0, args.Length - 1);
 
 			string sInstanceName = args[0];
 
-			ASafeLog log = new SafeILog(LogManager.GetLogger(typeof(StrategiesActivator)));
+			ASafeLog log = new SafeILog(LogManager.GetLogger(typeof(ServiceClientActivation)));
 
 			var env = new Ezbob.Context.Environment(log);
 			AConnection db = new SqlConnection(env, log);
@@ -46,7 +46,7 @@
 			var oMethods = new SortedDictionary<string, MethodInfo>();
 
 			foreach (MethodInfo mi in aryMethods) {
-				IEnumerable<StrategyActivatorAttribute> oAttrList = mi.GetCustomAttributes<StrategyActivatorAttribute>();
+				IEnumerable<ActivationAttribute> oAttrList = mi.GetCustomAttributes<ActivationAttribute>();
 
 				if (oAttrList.Any()) {
 					oMethods[mi.Name.ToLower()] = mi;
@@ -65,8 +65,9 @@
 		} // Execute
 
 		#region strategy activators
+// ReSharper disable UnusedMember.Local
 
-		[StrategyActivator]
+		[Activation]
 		private void Greeting() {
 			int customerId;
 			if (args.Length != 3 || !int.TryParse(args[1], out customerId)) {
@@ -77,7 +78,7 @@
 			serviceClient.GreetingMailStrategy(customerId, args[2]);
 		}
 
-		[StrategyActivator]
+		[Activation]
 		private void ApprovedUser() {
 			int underwriterId;
 			int customerId;
@@ -91,7 +92,7 @@
 			serviceClient.ApprovedUser(underwriterId, customerId, loanAmount);
 		}
 
-		[StrategyActivator]
+		[Activation]
 		private void CashTransferred() {
 			int customerId;
 			decimal amount;
@@ -103,7 +104,7 @@
 			serviceClient.CashTransferred(customerId, amount);
 		}
 
-		[StrategyActivator]
+		[Activation]
 		private void EmailRolloverAdded() {
 			int customerId;
 			decimal amount;
@@ -115,7 +116,7 @@
 			serviceClient.EmailRolloverAdded(customerId, amount);
 		}
 
-		[StrategyActivator]
+		[Activation]
 		private void EmailUnderReview() {
 			int customerId;
 			if (args.Length != 2 || !int.TryParse(args[1], out customerId)) {
@@ -126,7 +127,7 @@
 			serviceClient.EmailUnderReview(customerId);
 		}
 
-		[StrategyActivator]
+		[Activation]
 		private void Escalated() {
 			int customerId;
 			if (args.Length != 2 || !int.TryParse(args[1], out customerId)) {
@@ -137,7 +138,7 @@
 			serviceClient.Escalated(customerId);
 		}
 
-		[StrategyActivator]
+		[Activation]
 		private void GetCashFailed() {
 			int customerId;
 			if (args.Length != 2 || !int.TryParse(args[1], out customerId)) {
@@ -148,7 +149,7 @@
 			serviceClient.GetCashFailed(customerId);
 		}
 
-		[StrategyActivator]
+		[Activation]
 		private void LoanFullyPaid() {
 			int customerId;
 			if (args.Length != 3 || !int.TryParse(args[1], out customerId)) {
@@ -159,7 +160,7 @@
 			serviceClient.LoanFullyPaid(customerId, args[2]);
 		}
 
-		[StrategyActivator]
+		[Activation]
 		private void MoreAmlAndBwaInformation() {
 			int underwriterId;
 			int customerId;
@@ -171,7 +172,7 @@
 			serviceClient.MoreAmlAndBwaInformation(underwriterId, customerId);
 		}
 
-		[StrategyActivator]
+		[Activation]
 		private void MoreAmlInformation() {
 			int underwriterId;
 			int customerId;
@@ -182,7 +183,7 @@
 			serviceClient.MoreAmlInformation(underwriterId, customerId);
 		}
 
-		[StrategyActivator]
+		[Activation]
 		private void MoreBwaInformation() {
 			int underwriterId;
 			int customerId;
@@ -194,7 +195,7 @@
 			serviceClient.MoreBwaInformation(underwriterId, customerId);
 		}
 
-		[StrategyActivator]
+		[Activation]
 		private void PasswordChanged() {
 			int customerId;
 			if (args.Length != 3 || !int.TryParse(args[1], out customerId)) {
@@ -205,7 +206,7 @@
 			serviceClient.PasswordChanged(customerId, args[2]);
 		}
 
-		[StrategyActivator]
+		[Activation]
 		private void PasswordRestored() {
 			int customerId;
 			if (args.Length != 3 || !int.TryParse(args[1], out customerId)) {
@@ -216,7 +217,7 @@
 			serviceClient.PasswordRestored(customerId, args[2]);
 		}
 
-		[StrategyActivator]
+		[Activation]
 		private void PayEarly() {
 			int customerId;
 			decimal amount;
@@ -228,7 +229,7 @@
 			serviceClient.PayEarly(customerId, amount, args[3]);
 		}
 
-		[StrategyActivator]
+		[Activation]
 		private void PayPointAddedByUnderwriter() {
 			int customerId, underwriterId;
 			if (args.Length != 5 || !int.TryParse(args[1], out customerId) || !int.TryParse(args[4], out underwriterId)) {
@@ -239,7 +240,7 @@
 			serviceClient.PayPointAddedByUnderwriter(customerId, args[2], args[3], underwriterId);
 		}
 
-		[StrategyActivator]
+		[Activation]
 		private void PayPointNameValidationFailed() {
 			int underwriterId;
 			int customerId;
@@ -251,7 +252,7 @@
 			serviceClient.PayPointNameValidationFailed(underwriterId, customerId, args[2]);
 		}
 
-		[StrategyActivator]
+		[Activation]
 		private void RejectUser() {
 			int underwriterId;
 			int customerId;
@@ -263,7 +264,7 @@
 			serviceClient.RejectUser(underwriterId, customerId);
 		}
 
-		[StrategyActivator]
+		[Activation]
 		private void RenewEbayToken() {
 			int customerId;
 			if (args.Length != 4 || !int.TryParse(args[1], out customerId)) {
@@ -274,7 +275,7 @@
 			serviceClient.RenewEbayToken(customerId, args[2], args[3]);
 		}
 
-		[StrategyActivator]
+		[Activation]
 		private void RequestCashWithoutTakenLoan() {
 			int customerId;
 			if (args.Length != 2 || !int.TryParse(args[1], out customerId)) {
@@ -285,7 +286,7 @@
 			serviceClient.RequestCashWithoutTakenLoan(customerId);
 		}
 
-		[StrategyActivator]
+		[Activation]
 		private void SendEmailVerification() {
 			int customerId;
 			if (args.Length != 3 || !int.TryParse(args[1], out customerId)) {
@@ -296,7 +297,7 @@
 			serviceClient.SendEmailVerification(customerId, args[2]);
 		}
 
-		[StrategyActivator]
+		[Activation]
 		private void ThreeInvalidAttempts() {
 			int customerId;
 			if (args.Length != 3 || !int.TryParse(args[1], out customerId)) {
@@ -307,7 +308,7 @@
 			serviceClient.ThreeInvalidAttempts(customerId, args[2]);
 		}
 
-		[StrategyActivator]
+		[Activation]
 		private void TransferCashFailed() {
 			int customerId;
 			if (args.Length != 2 || !int.TryParse(args[1], out customerId)) {
@@ -318,7 +319,7 @@
 			serviceClient.TransferCashFailed(customerId);
 		}
 
-		[StrategyActivator]
+		[Activation]
 		private void CaisGenerate() {
 			int underwriterId;
 			if (args.Length != 2 || !int.TryParse(args[1], out underwriterId)) {
@@ -329,7 +330,7 @@
 			serviceClient.CaisGenerate(underwriterId);
 		}
 
-		[StrategyActivator]
+		[Activation]
 		private void CaisUpdate() {
 			int underwriterId;
 			int caisId;
@@ -341,7 +342,7 @@
 			serviceClient.CaisUpdate(underwriterId, caisId);
 		}
 
-		[StrategyActivator]
+		[Activation]
 		private void FirstOfMonthStatusNotifier() {
 			if (args.Length != 1) {
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> FirstOfMonthStatusNotifier");
@@ -351,7 +352,7 @@
 			serviceClient.FirstOfMonthStatusNotifier();
 		}
 
-		[StrategyActivator]
+		[Activation]
 		private void FraudChecker() {
 			int customerId;
 			if (args.Length != 2 || !int.TryParse(args[1], out customerId)) {
@@ -362,7 +363,7 @@
 			serviceClient.FraudChecker(customerId);
 		}
 
-		[StrategyActivator]
+		[Activation]
 		private void LateBy14Days() {
 			if (args.Length != 1) {
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> LateBy14Days");
@@ -372,7 +373,7 @@
 			serviceClient.LateBy14Days();
 		}
 
-		[StrategyActivator]
+		[Activation]
 		private void PayPointCharger() {
 			if (args.Length != 1) {
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> PayPointCharger");
@@ -382,7 +383,7 @@
 			serviceClient.PayPointCharger();
 		}
 
-		[StrategyActivator]
+		[Activation]
 		private void SetLateLoanStatus() {
 			if (args.Length != 1) {
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> SetLateLoanStatus");
@@ -392,7 +393,7 @@
 			serviceClient.SetLateLoanStatus();
 		}
 
-		[StrategyActivator]
+		[Activation]
 		private void CustomerMarketPlaceAdded() {
 			int customerId, marketplaceId;
 			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !int.TryParse(args[2], out marketplaceId)) {
@@ -403,7 +404,7 @@
 			serviceClient.UpdateMarketplace(customerId, marketplaceId);
 		}
 
-		[StrategyActivator]
+		[Activation]
 		private void UpdateAllMarketplaces() {
 			int customerId;
 			if (args.Length != 2 || !int.TryParse(args[1], out customerId)) {
@@ -414,7 +415,7 @@
 			serviceClient.UpdateAllMarketplaces(customerId);
 		}
 
-		[StrategyActivator]
+		[Activation]
 		private void UpdateTransactionStatus() {
 			if (args.Length != 1) {
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> UpdateTransactionStatus");
@@ -424,7 +425,7 @@
 			serviceClient.UpdateTransactionStatus();
 		}
 
-		[StrategyActivator]
+		[Activation]
 		private void XDaysDue() {
 			if (args.Length != 1) {
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> XDaysDue");
@@ -434,7 +435,7 @@
 			serviceClient.XDaysDue();
 		}
 
-		[StrategyActivator]
+		[Activation]
 		private void MainStrategy() {
 			int underwriterId;
 			int customerId, avoidAutoDescison;
@@ -472,6 +473,7 @@
 			Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> MainStrategy <Underwriter ID> <customerId> <checkType> <houseNumber> <houseName> <street> <district> <town> <county> <postcode> <bankAccount> <sortCode> <avoidAutoDescison>");
 		}
 
+// ReSharper restore UnusedMember.Local
 		#endregion strategy activators
 	}
 }
