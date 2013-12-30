@@ -20,8 +20,9 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 	},
 
 	events: {
-		'click :submit': 'submit',
-		'click .generateMobileCode': 'generateMobileCode',
+	    'click :submit': 'submit',
+	    'click #generateMobileCode': 'generateMobileCode',
+	    'click #switchToCaptcha': 'switchToCaptcha',
 
 		'change input': 'inputChanged',
 		'keyup  input': 'inputChanged',
@@ -115,6 +116,14 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 	},
 	
 	generateMobileCode: function () {
+	    EzBob.App.trigger('clear');
+	    
+	    var isValidPhone = this.validator.check(this.$el.find('.phonenumber'));
+	    if (!isValidPhone) {
+	        EzBob.App.trigger('error', "Please enter a valid phone first");
+	        return false;
+	    }
+
 	    this.mobileCodesSent++;
 	    if (this.mobileCodesSent == this.numberOfMobileCodeAttempts) {
 	        EzBob.App.trigger('warning', "Switching to authentication via captcha");
@@ -133,6 +142,15 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
 	    return false;
 	},
+
+	switchToCaptcha: function () {
+	    EzBob.App.trigger('clear');
+	    this.$el.find('#twilioDiv').hide();
+	    this.$el.find('#captchaDiv').show();
+	    this.twilioEnabled = false;
+	    return false;
+	},
+	
 	submit: function() {
 		if (this.$el.find(':submit').hasClass('disabled'))
 			return false;
