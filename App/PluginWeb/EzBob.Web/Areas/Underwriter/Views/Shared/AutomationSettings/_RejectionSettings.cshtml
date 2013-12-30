@@ -18,7 +18,7 @@
                     <tr>
                         <td width="20%">EnableAutomaticRejection: </td>
                         <td width="20%">
-                            <select name="enableAutomaticRejection" class="selectheight">
+                            <select name="enableAutomaticRejection" class="form-control selectheight">
                                 <option value="0">Disabled</option>
                                 <option value="1">Enabled</option>
                             </select>
@@ -27,48 +27,48 @@
                     </tr>                    
                     <tr>
                         <td>LowCreditScore: </td>
-                        <td><input name="lowCreditScore" class="input-large"/></td>
+                        <td><input name="lowCreditScore" class="form-control"/></td>
                         <td><%- LowCreditScoreDesc %></td>
                     </tr>
                     <tr>
                         <td>TotalAnnualTurnover: </td>
-                        <td><input name="totalAnnualTurnover" class="input-large"/></td>
+                        <td><input name="totalAnnualTurnover" class="form-control"/></td>
                         <td><%- TotalAnnualTurnoverDesc %></td>
                     </tr>
                     <tr>
                         <td>TotalThreeMonthTurnover: </td>
-                        <td><input name="totalThreeMonthTurnover" class="input-large"/></td>
+                        <td><input name="totalThreeMonthTurnover" class="form-control"/></td>
                         <td><%- TotalThreeMonthTurnoverDesc %></td>
                     </tr>
                     <tr>
                         <td>Reject_Defaults_CreditScore: </td>
-                        <td><input name="reject_Defaults_CreditScore" class="input-large"/></td>
+                        <td><input name="reject_Defaults_CreditScore" class="form-control"/></td>
                         <td><%- Reject_Defaults_CreditScoreDesc %></td>
                     </tr>
                     <tr>
                         <td>Reject_Defaults_AccountsNum: </td>
-                        <td><input name="reject_Defaults_AccountsNum" class="input-large"/></td>
+                        <td><input name="reject_Defaults_AccountsNum" class="form-control"/></td>
                         <td><%- Reject_Defaults_AccountsNumDesc %></td>
                     </tr>
                     <tr>
                         <td>Reject_Defaults_Amount: </td>
-                        <td><input name="reject_Defaults_Amount" class="input-large"/></td>
+                        <td><input name="reject_Defaults_Amount" class="form-control"/></td>
                         <td><%- Reject_Defaults_AmountDesc %></td>
                     </tr>
                     <tr>
                         <td>Reject_Defaults_MonthsNum: </td>
-                        <td><input name="reject_Defaults_MonthsNum" class="input-large"/></td>
+                        <td><input name="reject_Defaults_MonthsNum" class="form-control"/></td>
                         <td><%- Reject_Defaults_MonthsNumDesc %></td>
                     </tr>
                     <tr>
                         <td>Reject_Minimal_Seniority: </td>
-                        <td><input name="reject_Minimal_Seniority" class="input-large"/></td>
+                        <td><input name="reject_Minimal_Seniority" class="form-control"/></td>
                         <td><%- Reject_Minimal_SeniorityDesc %></td>
                     </tr>
                     <tr>
                         <td width="20%">EnableAutomaticReRejection: </td>
                         <td width="20%">
-                            <select name="enableAutomaticReRejection" class="selectheight">
+                            <select name="enableAutomaticReRejection" class="form-control selectheight">
                                 <option value="0">Disabled</option>
                                 <option value="1">Enabled</option>
                             </select>
@@ -77,20 +77,20 @@
                     </tr>                    
                     <tr>
                         <td>AutoRejectionException_CreditScore: </td>
-                        <td><input name="autoRejectionException_CreditScore" class="input-large"/></td>
+                        <td><input name="autoRejectionException_CreditScore" class="form-control"/></td>
                         <td ><%- AutoRejectionException_CreditScoreDesc %></td>
                     </tr>                    
                     <tr>
                         <td>AutoRejectionException_AnualTurnover: </td>
-                        <td><input name="autoRejectionException_AnualTurnover" class="input-large"/></td>
+                        <td><input name="autoRejectionException_AnualTurnover" class="form-control"/></td>
                         <td ><%- AutoRejectionException_AnualTurnoverDesc %></td>
                     </tr>                    
 
                 </tbody>
             </table>
             <div class="pull-right">
-                <button class="btn" name="SaveRejectionSettings" ><i class="icon-ok-sign" />Save</button> 
-                <button class="btn"name="CancelRejectionSettings" ><i class="icon-refresh" />Reset</button> 
+                <button class="btn btn-primary" name="SaveRejectionSettings" ><i class="icon-ok-sign" />Save</button> 
+                <button class="btn btn-primary"name="CancelRejectionSettings" ><i class="icon-refresh" />Reset</button> 
             </div>
         </div>
     </form>

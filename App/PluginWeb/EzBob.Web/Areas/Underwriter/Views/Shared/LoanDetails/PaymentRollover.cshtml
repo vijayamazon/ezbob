@@ -13,7 +13,7 @@
             <div class="control-group">
                 <label class="control-label" for="installment">Installment</label>
                 <div class="controls">
-                    <select id="installment" name="ScheduleId" class="selectheight">
+                    <select id="installment" name="ScheduleId" class="form-control selectheight">
                         <% _.each(model.schedule, function(item, i){
                         var selected = (model.hasActive && model.rollover.LoanScheduleId == item.Id) ? "selected='selected'" : "";
                         %>

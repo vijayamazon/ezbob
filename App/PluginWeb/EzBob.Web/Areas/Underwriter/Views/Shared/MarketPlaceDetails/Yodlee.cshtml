@@ -111,7 +111,7 @@
         <div class="well" style="width: 570px">
             <span>Add/Remove Search Words For Yodlee Transactions</span>
             <label for="yodleeSearchWordsDdl">Search Words</label>
-            <select id="yodleeSearchWordsDdl" class="selectheight" style="margin-bottom: 0">
+            <select id="yodleeSearchWordsDdl" class="form-control selectheight" style="margin-bottom: 0">
                 <option></option>
                 <%for(var word in y.SearchWordsModel.WordsDict) { %>
                 <option value="<%=word%>"><%=y.SearchWordsModel.WordsDict[word]%></option>
@@ -360,14 +360,14 @@
         <div class="well" style="width: 570px">
             <span>Add Rule</span>
             <label for="yodleeGroup">Group</label>
-            <select id="yodleeGroup" class="selectheight" style="margin-bottom: 0">
+            <select id="yodleeGroup" class="form-control selectheight" style="margin-bottom: 0">
                 <option></option>
                 <%for(var i in rm.Groups) { if(!rm.Groups.hasOwnProperty(i)) {continue;} %>
                 <option value="<%=rm.Groups[i].Id%>"><%=rm.Groups[i].Group%> <%if(rm.Groups[i].SubGroup) { print(' - ');%><%=rm.Groups[i].SubGroup%><%}%></option>
                 <%}%>
             </select>
             <label for="yodleeRule">Rule</label>
-            <select id="yodleeRule" class="selectheight" style="margin-bottom: 0">
+            <select id="yodleeRule" class="form-control selectheight" style="margin-bottom: 0">
                 <option></option>
                 <%for(var i in rm.Rules) { if(!rm.Rules.hasOwnProperty(i)) {continue;} %>
                 <option value="<%=rm.Rules[i].Id%>"><%=rm.Rules[i].Rule%></option>
@@ -376,7 +376,7 @@
             <label for="yodleeLiteral">Literal</label>
             <input type="text" id="yodleeLiteral" style="margin-bottom: 0" />
             <br/>
-            <button class="btn yodleeRuleAdd" id="yodleeRuleAdd">Add</button>
+            <button class="btn btn-primary yodleeRuleAdd" id="yodleeRuleAdd">Add</button>
 
             @*<button class="btn yodleeSearchWordsDelete" id="removeYodleeSearchWord">Remove</button>*@
             <hr />

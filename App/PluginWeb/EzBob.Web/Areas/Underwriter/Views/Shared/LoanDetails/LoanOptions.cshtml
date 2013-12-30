@@ -50,7 +50,7 @@
                             {"Calculated value", "Calculated value"}, {"0", "0"}, {"1", "1"}, {"2", "2"},
                             {"3", "3"}, {"4", "4"}, {"5", "5"}, {"6", "6"},
                             {"8", "8"}, {"D", "D"}, {"U", "U"}
-                        }, css: "selectheight")
+                        }, css: "form-control selectheight")
                     <div class="controls hide" id="defaultExplanation">
                         <label class="default-customer-status-warning">Saving this CAIS status will also effect the customer status and other loans
                         </label>
@@ -61,7 +61,7 @@
             <div class="span2" style="margin-top: 3px;">
                 <label for="cais-flags">
                     Manual CAIS Flag
-                    <select style="width: 320px;" id="cais-flags" name="cais-flags" class="selectheight">
+                    <select style="width: 320px;" id="cais-flags" name="cais-flags" class="form-control selectheight">
                         <%var i = 0; _.each(ManualCaisFlags, function(caisFlag){%>
                         <option data-id="<%-i%>" value="<%-caisFlag.FlagSetting%>"><%-caisFlag.Description == "Calculated value" ? "" : caisFlag.FlagSetting+'-'%><%-caisFlag.Description%></option>
                         <%i++;}) %>

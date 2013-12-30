@@ -30,7 +30,7 @@
     public string Select(string name)
     {
         var select = new Dictionary<string, string> {{"0", "Disable"}, {"1", "Enable"}};
-        HelperResult preparedSelect = EzForm.SelectAdvanced(name, "", select, "", "selectheight ");
+        HelperResult preparedSelect = EzForm.SelectAdvanced(name, "", select, "", "form-control selectheight ");
         return preparedSelect.ToString();
     }
 

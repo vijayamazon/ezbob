@@ -1,7 +1,7 @@
 ﻿<script id="marketplace-history-template" type="text/template">
     <h2 id="megah2">Market Places History</h2>
     
-    <select class="selectheight" style="margin-bottom: 0px" id="mpHistoryDdl">
+    <select class="form-control selectheight" style="margin-bottom: 0px" id="mpHistoryDdl">
         <option></option>
         <%_.each(MarketPlacesHistory.models, function(history, i) {
             var hId = EzBob.formatDateWithoutTime(history.get("HistoryDate"));
@@ -10,6 +10,6 @@
         <option value="<%-hId%>"><%-hDate%></option>
         <%});%>
     </select>
-    <button class="btn showHistoryMarketPlaces">Show History</button>
-    <button class="btn showCurrentMarketPlaces">Show Current</button>
+    <button class="btn btn-primary showHistoryMarketPlaces">Show History</button>
+    <button class="btn btn-primary showCurrentMarketPlaces">Show Current</button>
 </script>
