@@ -347,6 +347,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
             isStatusEnabled = result
             disabled =  waiting or !isStatusEnabled
             $("input[name='newCreditLineBtn']").toggleClass "disabled", disabled
+            $("#newCreditLineLnkId").toggleClass "disabled", disabled
 
     statuses: {}
 
