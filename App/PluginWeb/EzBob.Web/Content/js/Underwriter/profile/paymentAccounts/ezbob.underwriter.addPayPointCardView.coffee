@@ -15,7 +15,7 @@ class EzBob.Underwriter.AddPayPointCardView extends Backbone.Marionette.ItemView
         position: "center"
         draggable: false
         dialogClass: "add-paypoint-popup"
-        width: 600
+        width: 620
 
     events:
         'click .btn-primary'  : 'save'

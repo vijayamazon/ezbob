@@ -1,19 +1,32 @@
 ﻿@model dynamic
-
 <script type="text/template" id="add-paypoint-card-template">
     <div class="modal-header">
         <h3 id="myModalLabel">Add PayPoint Card</h3>
     </div>
     <div class="modal-body">
-        <form id="paypoint-edit-form">
-            <label>Transaction Id</label>
-            <input type="text" style="width:300px" id="paypoint-edit-transactionid" name="transactionid">
-
-            <label>Card Last 4 Digits</label>
-            <input type="text" class="input-small" id="paypoint-edit-cardno" name="cardno" maxlength="4">
-    
-            <label>Expire Date</label>
-            <input type="text" class="input-small" id="installment-edit-expiredate" name="expiredate" maxlength="5">
+        <form id="paypoint-edit-form" class="form-horizontal">
+            <div class="row">
+                <div class="span6">
+                    <div class="control-group">
+                        <label class="control-label">Transaction Id</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" id="paypoint-edit-transactionid" name="transactionid">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Card Last 4 Digits</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" id="paypoint-edit-cardno" name="cardno" maxlength="4">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label">Expire Date</label>
+                        <div class="controls">
+                            <input type="text" class="form-control" id="installment-edit-expiredate" name="expiredate" maxlength="5">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </form>
     </div>
     <div class="pull-right">
