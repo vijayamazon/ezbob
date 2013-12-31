@@ -17,6 +17,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 		this.mobileCodesSent = 0;
 
 		var that = this;
+	    
 		var xhr = $.post(window.gRootPath + "Home/GetTwilioConfig");
 		xhr.done(function (isSmsValidationActive, numberOfMobileCodeAttempts) {
 		    that.twilioEnabled = isSmsValidationActive;
@@ -46,7 +47,6 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 			this.trigger('ready');
 
 			var sLastSavedStep = this.model.get('LastSavedWizardStep');
-
 			if (sLastSavedStep)
 				this.trigger('jump-to', sLastSavedStep);
 
@@ -163,6 +163,10 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 			return false;
 
 		this.blockBtn(true);
+	    
+        if (this.twilioEnabled) {
+            this.model.set('twilioPhone', this.$el.find('.phonenumber').val());
+        }
 
 		if (this.model.get('loggedIn')) {
 			this.trigger('ready');

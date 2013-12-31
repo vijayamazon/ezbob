@@ -6,7 +6,7 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 	initialize: function() {
 		this.template = _.template($('#personinfo-template').html());
 		this.ViewName = 'personal';
-
+        
 		this.events = _.extend({}, this.events, {
 			'change #TimeAtAddress': 'personalTimeAtAddressChanged',
             'change #ResidentialStatus': 'residentialStatusChanged',
@@ -139,7 +139,6 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 
 	render: function() {
 		this.constructor.__super__.render.call(this);
-
 		this.personalAddressView = new EzBob.AddressView({ model: this.model.get('PersonalAddress'), name: 'PersonalAddress', max: 1 });
 		this.personalAddressView.render().$el.appendTo(this.$el.find('#PersonalAddress'));
 		EzBob.Validation.addressErrorPlacement(this.personalAddressView.$el, this.personalAddressView.model);
@@ -161,6 +160,24 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 			this.$el.find('.offline').remove();
 
 		this.$el.find('.addressCaption').hide();
+
+		var personalInfo = this.model.get('CustomerPersonalInfo');
+		var predefinedPhone = undefined;
+	    if (personalInfo != undefined) {
+	        predefinedPhone = personalInfo.MobilePhone;
+	    } else {
+	        var twilioPhone = this.model.get('twilioPhone');
+	        if (twilioPhone != undefined) {
+	            predefinedPhone = twilioPhone;
+	        }
+	    }
+	    
+	    if (predefinedPhone != undefined) {
+		    var movileobj = this.$el.find('#MobilePhone');
+		    movileobj.addClass('disabled');
+		    movileobj.val(predefinedPhone).change().attardi_labels('toggle');
+		}
+
 		this.readyToProceed = true;
 		return this;
 	}, // render
