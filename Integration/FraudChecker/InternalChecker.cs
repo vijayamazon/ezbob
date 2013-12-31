@@ -135,7 +135,7 @@ namespace FraudChecker
 				if(cd == customer) continue;
 				foreach (var mp in cd.CustomerMarketPlaces)
 				{
-					if (mp.PersonalInfo != null && !string.IsNullOrEmpty(mp.PersonalInfo.Phone))
+					if (mp.PersonalInfo != null && !string.IsNullOrEmpty(mp.PersonalInfo.Phone) && mp.PersonalInfo.Phone.Trim() != "0")
 					{
 						Helper.AddValue(mpPhoneDetections, cd, "Pay Pal", mp.PersonalInfo.Phone.Replace(" ", ""));
 						

@@ -2003,7 +2003,7 @@ namespace EZBob.DatabaseLib
 			info.FirstName = data.FirstName;
 			info.Country = data.AddressCountry;
 			info.DateOfBirth = data.BirthDate;
-			info.Phone = data.Phone;
+			info.Phone = data.Phone == "0" ? null : data.Phone;
 			info.EMail = data.Email;
 			info.LastName = data.LastName;
 			info.FullName = data.FullName;
@@ -2014,8 +2014,6 @@ namespace EZBob.DatabaseLib
 			info.Street2 = data.AddressStreet2;
 
 			_CustomerMarketplaceRepository.SaveOrUpdate(customerMarketPlace);
-
-
 		}
 
 
