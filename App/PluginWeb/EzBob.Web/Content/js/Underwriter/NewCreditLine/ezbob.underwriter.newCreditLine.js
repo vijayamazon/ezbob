@@ -7,7 +7,7 @@
 
   EzBob.Underwriter = EzBob.Underwriter || {};
 
-  $('body').on('click', 'a[name="newCreditLineLnk"]', function(e) {
+  $('body').on('click', 'button[name="newCreditLineLnk"]', function(e) {
     return $('#newCreditLineButtonId').click();
   });
 
