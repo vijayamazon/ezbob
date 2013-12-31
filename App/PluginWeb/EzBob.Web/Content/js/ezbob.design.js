@@ -645,7 +645,8 @@ EzBob.ShowMessage = function (message, title, cbOk, okText, cbCancel, cancelText
     }
     modalpopup.dialog(
         {
-            'title': title,
+            title: title,
+            width: 350,
             modal: true,
             draggable: document.location.href.indexOf("Underwriter") > -1, //enable for underwriter
             resizable: document.location.href.indexOf("Underwriter") > -1, // -//-

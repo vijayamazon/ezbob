@@ -101,6 +101,7 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
             model: @model
             propertyName: "IsTest"
             title: "Is Testing User"
+            width: 350
             postValueName: "enbaled"
             checkboxName: "Test"
             url: "Underwriter/ApplicationInfo/ChangeTestStatus"
@@ -115,6 +116,7 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
             model: @model
             propertyName: "IsAvoid"
             title: "Manual Decision"
+            width: 350
             postValueName: "enbaled"
             checkboxName: "Enable Manual Decision"
             url: "Underwriter/ApplicationInfo/AvoidAutomaticDecision"

@@ -154,6 +154,7 @@
         model: this.model,
         propertyName: "IsTest",
         title: "Is Testing User",
+        width: 350,
         postValueName: "enbaled",
         checkboxName: "Test",
         url: "Underwriter/ApplicationInfo/ChangeTestStatus",

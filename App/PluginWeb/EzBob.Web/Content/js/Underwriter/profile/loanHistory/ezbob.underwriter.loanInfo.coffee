@@ -37,6 +37,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
             model: @model
             propertyName: "OfferValidateUntil"
             title: "Offer valid until edit"
+            width: 370
             postValueName: "date"
             url: "Underwriter/ApplicationInfo/ChangeOferValid"
             data:
@@ -51,6 +52,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
             model: @model
             propertyName: "StartingFromDate"
             title: "Starting date edit"
+            width: 350
             postValueName: "date"
             url: "Underwriter/ApplicationInfo/ChangeStartingDate"
             data:
@@ -67,6 +69,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
             model: @model
             propertyName: "RepaymentPerion"
             title: "Repayment period edit"
+            width : 350
             postValueName: "period"
             url: "Underwriter/ApplicationInfo/ChangeCashRequestRepaymentPeriod"
             data:
@@ -81,6 +84,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
             model: @model
             propertyName: "OfferedCreditLine"
             title: "Offer credit line edit"
+            width: 350
             postValueName: "amount"
             url: "Underwriter/ApplicationInfo/ChangeCashRequestOpenCreditLine"
             data:
@@ -100,6 +104,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         d = new EzBob.Dialogs.PacentManual(
             model: @model
             title: "Pacnet Balance - Add Manual Funds"
+            width: 350
             postValueName: "amount"
             url: "Underwriter/ApplicationInfo/SavePacnetManual"
             data:
@@ -121,6 +126,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
             model: @model
             propertyName: "UseSetupFee"
             title: "Pacnet Balance - Clear Manual Funds"
+            width: 350
             checkboxName: "I am sure"
             postValueName: "isSure"
             url: "Underwriter/ApplicationInfo/DisableTodaysPacnetManual"
@@ -138,6 +144,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
             model: @model
             propertyName: "InterestRate"
             title: "Interest rate edit"
+            width: 350
             postValueName: "interestRate"
             url: "Underwriter/ApplicationInfo/ChangeCashRequestInterestRate"
             data:
@@ -151,6 +158,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
             model: @model
             propertyName: "Details"
             title: "Details edit"
+            width: 350
             postValueName: "details"
             url: "Underwriter/ApplicationInfo/SaveDetails"
             data:
@@ -164,6 +172,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
             model: @model
             propertyName: "UseSetupFee"
             title: "Setup Fee"
+            width: 350
             postValueName: "enbaled"
             checkboxName: "Enable Setup Fee"
             url: "Underwriter/ApplicationInfo/ChangeSetupFee"
@@ -201,6 +210,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
             model: @model
             propertyName: "AllowSendingEmail"
             title: "Allow sending emails"
+            width: 350
             postValueName: "enbaled"
             checkboxName: "Allow"
             url: "Underwriter/ApplicationInfo/AllowSendingEmails"
@@ -213,6 +223,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
             model: @model
             propertyName: "IsLoanTypeSelectionAllowed"
             title: "Customer selection"
+            width: 350
             postValueName: "loanTypeSelection"
             comboValues: [{ value: 0, text: 'Disabled' }, { value: 1, text: 'Enabled' }]
             url: "Underwriter/ApplicationInfo/IsLoanTypeSelectionAllowed"
@@ -236,6 +247,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
             model: @model
             propertyName: "LoanTypeId"
             title: "Loan type"
+            width: 350
             comboValues: @model.get('LoanTypes')
             postValueName: "LoanType"
             url: "Underwriter/ApplicationInfo/LoanType"
@@ -249,6 +261,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
             model: @model
             propertyName: "LoanSource.LoanSourceID"
             title: "Loan source"
+            width: 350
             comboValues: _.map(@model.get('AllLoanSources'), (ls) -> { value: ls.Id, text: ls.Name })
             postValueName: "LoanSourceID"
             url: "Underwriter/ApplicationInfo/LoanSource"
@@ -330,6 +343,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
             model: @model
             propertyName: "DiscountPlanId"
             title: "Discount Plan"
+            width: 350
             comboValues: _.map(@model.get('DiscountPlans'), (v) -> {value: v.Id, text: v.Name})
             postValueName: "DiscountPlanId"
             url: "Underwriter/ApplicationInfo/DiscountPlan"

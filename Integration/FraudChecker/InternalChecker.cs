@@ -14,6 +14,7 @@ using EZBob.DatabaseLib.Model.Marketplaces.Yodlee;
 
 namespace FraudChecker
 {
+	using System.Text.RegularExpressions;
 
 
 	public class InternalChecker
@@ -175,7 +176,7 @@ namespace FraudChecker
 						if (mpPhone.Phone == phone)
 						{
 							fraudDetections.Add(Helper.CreateDetection(mpPhone.MpType, customer, cd,
-							                                           customerPhone.Key, null, phone));
+																	   Regex.Replace(customerPhone.Key, @"[\d]", string.Empty), null, phone));
 						}
 					}	
 				}
