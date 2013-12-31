@@ -14,6 +14,11 @@
     bool isOffline = @Request.Cookies["isoffline"] != null && @Request.Cookies["isoffline"].Value == "yes";
 
     bool twilioEnabled = Convert.ToBoolean(@Session["IsSmsValidationActive"]);
+    string captchaVisibilityClass = "";
+    if (twilioEnabled)
+    {
+        captchaVisibilityClass = "hide";
+    }
 }
 
 @using (Html.BeginForm("SignUp", "Account", new {Area = ""}, FormMethod.Post, new {@class = "signup clearfix"}))
@@ -170,7 +175,7 @@
         </div>
     }
     
-    <div id="captchaDiv" class="hide">
+    <div id="captchaDiv" class="@captchaVisibilityClass">
         <div class="form_field_container">
             @EzForm.Captcha(captchamode)
         </div>

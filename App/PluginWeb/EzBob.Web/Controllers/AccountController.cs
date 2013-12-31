@@ -366,10 +366,14 @@ namespace EzBob.Web.Controllers
 				throw new Exception(DbStrings.NotValidEmailAddress);
 			}
 
-			bool isCorrect = _appCreator.ValidateMobileCode(mobilePhone, mobileCode);
-			if (!isCorrect)
+			bool isTwilioEnabled = Convert.ToBoolean(@Session["IsSmsValidationActive"]);
+			if (isTwilioEnabled)
 			{
-				throw new Exception("Invalid code");
+				bool isCorrect = _appCreator.ValidateMobileCode(mobilePhone, mobileCode);
+				if (!isCorrect)
+				{
+					throw new Exception("Invalid code");
+				}
 			}
 
 			_membershipProvider.CreateUser(model.EMail, signupPass1, model.EMail, securityQuestion, model.SecurityAnswer, false, null, out status);
