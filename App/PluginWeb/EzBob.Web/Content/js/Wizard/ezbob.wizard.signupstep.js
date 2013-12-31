@@ -38,6 +38,8 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 		'change select': 'inputChanged',
 
 		'focus #amount': 'amountFocused',
+	    
+	    'keyup #mobilePhone': 'mobilePhoneChanged'
 	},
 
 	render: function() {
@@ -123,13 +125,10 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 	},
 	
 	generateMobileCode: function () {
-	    EzBob.App.trigger('clear');
-	    
-	    var isValidPhone = this.validator.check(this.$el.find('.phonenumber'));
-	    if (!isValidPhone) {
-	        EzBob.App.trigger('error', "Please enter a valid phone first");
+	    if ($('#generateMobileCode').hasClass('disabled')) {
 	        return false;
 	    }
+	    EzBob.App.trigger('clear');
 
 	    this.mobileCodesSent++;
 	    if (this.mobileCodesSent == this.numberOfMobileCodeAttempts) {
@@ -146,6 +145,19 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
 	        return false;
 	    });
+
+	    return false;
+	},
+
+	mobilePhoneChanged: function () {
+	    var isValidPhone = this.validator.check(this.$el.find('.phonenumber'));
+	    var generateCodeButton = $('#generateMobileCode');
+	    if (isValidPhone && generateCodeButton.hasClass('disabled')) {
+	        generateCodeButton.removeClass('disabled');
+	    }
+	    else if (!isValidPhone && !generateCodeButton.hasClass('disabled')) {
+	        generateCodeButton.addClass('disabled');
+	    }
 
 	    return false;
 	},
