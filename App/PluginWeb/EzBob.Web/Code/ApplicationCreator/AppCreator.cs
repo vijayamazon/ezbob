@@ -26,13 +26,17 @@ namespace EzBob.Web.Code.ApplicationCreator {
 			_strategies = strategies;
 			_sm = new StrategyManager();
 
-			useNewMailStrategies = configurationVariablesRepository.GetByNameAsBool("UseNewMailStrategies");
-			useNewUpdateMpStrategy = configurationVariablesRepository.GetByNameAsBool("UseNewUpdateMpStrategy");
-			useNewUpdateCustomerMpsStrategy = configurationVariablesRepository.GetByNameAsBool("UseNewUpdateCustomerMpsStrategy");
-			useNewCaisStrategies = configurationVariablesRepository.GetByNameAsBool("UseNewCaisStrategies");
-			useNewFraudCheckerStrategy = configurationVariablesRepository.GetByNameAsBool("UseNewFraudCheckerStrategy");
-			useNewMainStrategy = configurationVariablesRepository.GetByNameAsBool("UseNewMainStrategy");
-		}
+			if (!readConfig)
+			{
+				readConfig = true;
+				useNewMailStrategies = configurationVariablesRepository.GetByNameAsBool("UseNewMailStrategies");
+				useNewUpdateMpStrategy = configurationVariablesRepository.GetByNameAsBool("UseNewUpdateMpStrategy");
+				useNewUpdateCustomerMpsStrategy = configurationVariablesRepository.GetByNameAsBool("UseNewUpdateCustomerMpsStrategy");
+				useNewCaisStrategies = configurationVariablesRepository.GetByNameAsBool("UseNewCaisStrategies");
+				useNewFraudCheckerStrategy = configurationVariablesRepository.GetByNameAsBool("UseNewFraudCheckerStrategy");
+				useNewMainStrategy = configurationVariablesRepository.GetByNameAsBool("UseNewMainStrategy");
+			}
+						  }
 
 		public void AfterSignup(User user, string address) {
 			if (useNewMailStrategies) {
@@ -582,11 +586,12 @@ namespace EzBob.Web.Code.ApplicationCreator {
 		private readonly StrategyManager _sm;
 		private readonly ISession _session;
 		private readonly ApplicationRepository _applicationRepository;
-		private readonly bool useNewMailStrategies;
-		private readonly bool useNewUpdateMpStrategy;
-		private readonly bool useNewUpdateCustomerMpsStrategy;
-		private readonly bool useNewFraudCheckerStrategy;
-		private readonly bool useNewMainStrategy;
-		private readonly bool useNewCaisStrategies;
+		private static bool useNewMailStrategies;
+		private static bool useNewUpdateMpStrategy;
+		private static bool useNewUpdateCustomerMpsStrategy;
+		private static bool useNewFraudCheckerStrategy;
+		private static bool useNewMainStrategy;
+		private static bool useNewCaisStrategies;
+		private static bool readConfig = false;
 	} // class AppCreator
 } // namespace
