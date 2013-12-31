@@ -42,7 +42,7 @@ EzBob.Dialogs.SimpleValueEdit = Backbone.View.extend({
         dialog.dialog('open');
     },
     dlgOpened: function (event, ui) {
-        this.$el.parent('.ui-dialog').find('.ui-dialog-buttonset button').addClass('btn');
+        this.$el.parent('.ui-dialog').find('.ui-dialog-buttonset button').addClass('btn btn-primary');
         this.onDialogOpened(event, ui);
     },
     dlgClosed: function () {
@@ -85,7 +85,7 @@ EzBob.Dialogs.SimpleValueEdit = Backbone.View.extend({
         return val;
     },
     createEditField: function () {
-        return $('<input name="simpleValueEdit" id="simpleValueEdit" type="text"/>');
+        return $('<input name="simpleValueEdit" id="simpleValueEdit" type="text" class="form-control"/>');
     },
     getEditValue: function () {
         return this.editField.val();

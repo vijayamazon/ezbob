@@ -63,7 +63,7 @@
 </div>
 
 <script id="simple-value-editor-cb-template" type="text/template">
-	<select name='simpleValueEdit' class="selectheight">
+	<select name='simpleValueEdit' class="form-control selectheight">
 		<%_.each(options, function(o){%>
 				<option value="<%=o.value%>"><%=o.text%></option>
 		<%});%>		
@@ -193,7 +193,7 @@
 				<td class="<%- m.FundsAvailableUnderLimitClass %>">
 					<span>£ <%- m.FundsAvaliable %></span>
 					<button class="btn btn-mini btn-primary couple_buttons" name="openPacnetManualButton"><i class="fa fa-plus"></i></button>
-					<button class="btn btn-mini btn-primary couple_buttons" name="clearPacnetManualButton"><i class="fafa-ban"></i></button>
+					<button class="btn btn-mini btn-primary couple_buttons" name="clearPacnetManualButton"><i class="fa fa-ban"></i></button>
 				</td>
 			</tr>
 

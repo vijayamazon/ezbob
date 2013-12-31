@@ -26,6 +26,7 @@
             left: -10px;
             color: #acacac !important;
             font-size: 70%;
+            min-height: 18px;
         }
 
 .profile-widgets .attardi-input span.attardi-has-data,
