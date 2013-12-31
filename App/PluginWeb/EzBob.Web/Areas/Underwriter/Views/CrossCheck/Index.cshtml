@@ -298,10 +298,12 @@
 }
 
 @{
-var companyRefNum = (Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited ? Model.Customer.LimitedInfo.LimitedRefNum : Model.Customer.NonLimitedInfo.NonLimitedRefNum);
-var postcode = (Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited ? Model.Customer.AddressInfo.LimitedCompanyAddress : Model.Customer.AddressInfo.NonLimitedCompanyAddress);
-var companyName = (Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited ? Model.Customer.LimitedInfo.LimitedCompanyName : Model.Customer.NonLimitedInfo.NonLimitedCompanyName);
-bool propertyOwnedByCompany = Model.Customer.CompanyAdditionalInfo != null && Model.Customer.CompanyAdditionalInfo.PropertyOwnedByCompany.HasValue && Model.Customer.CompanyAdditionalInfo.PropertyOwnedByCompany.Value;
+    var companyRefNum = (Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited ? Model.Customer.LimitedInfo.LimitedRefNum : Model.Customer.NonLimitedInfo.NonLimitedRefNum);
+    var companyNum = (Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited ? Model.Customer.LimitedInfo.LimitedCompanyNumber : null);
+    var companyType = (Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited ? "L" : "N");
+    var postcode = (Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited ? Model.Customer.AddressInfo.LimitedCompanyAddress : Model.Customer.AddressInfo.NonLimitedCompanyAddress);
+    var companyName = (Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited ? Model.Customer.LimitedInfo.LimitedCompanyName : Model.Customer.NonLimitedInfo.NonLimitedCompanyName);
+    bool propertyOwnedByCompany = Model.Customer.CompanyAdditionalInfo != null && Model.Customer.CompanyAdditionalInfo.PropertyOwnedByCompany.HasValue && Model.Customer.CompanyAdditionalInfo.PropertyOwnedByCompany.Value;
 }
 
 <h3 id="cross-check-business-info-section">Business info</h3>
@@ -335,7 +337,8 @@ bool propertyOwnedByCompany = Model.Customer.CompanyAdditionalInfo != null && Mo
 					href="#"
 					data-postcode="@postcode.Select(x => x.Postcode).FirstOrDefault()"
 					data-company-name="@companyName"
-					data-company-legal-status="@Model.Customer.PersonalInfo.TypeOfBusiness.Reduce()"
+				    data-company-legal-status="@companyType"
+                    data-company-number="@companyNum"
 				>Recheck</a>
 			</td>
 			<td></td>

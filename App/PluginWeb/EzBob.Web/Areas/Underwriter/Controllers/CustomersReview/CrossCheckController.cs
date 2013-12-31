@@ -85,6 +85,9 @@
 			return this.JsonNet(new { response = landregistry} );
 		}
 
+		[Ajax]
+		[Transactional]
+		[HttpPost]
 		public void SaveRefNum(int customerId, string companyRefNum)
 		{
 			var customer = _customerRepository.Get(customerId);
@@ -98,6 +101,8 @@
 					customer.LimitedInfo.LimitedRefNum = companyRefNum;
 					break;
 			}
+
+			_customerRepository.Update(customer);
 		}
 	}
 }

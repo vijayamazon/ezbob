@@ -549,7 +549,7 @@ namespace EzBob.Web.Controllers
 		[Authorize(Roles = "Underwriter, Web")]
 		public JsonNetResult CheckingCompany(string postcode, string companyName, string filter, string refNum)
 		{
-			TargetResults.LegalStatus nFilter = TargetResults.LegalStatus.DontCare;
+			var nFilter = TargetResults.LegalStatus.DontCare;
 
 			switch (filter.ToUpper()) {
 			case "L":
