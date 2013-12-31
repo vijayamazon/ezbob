@@ -15,20 +15,28 @@
     {
 		private readonly AskvilleRepository askvilleRepository;
 		private readonly IAppCreator appCreator;
+		private readonly WizardConfigsActionResult wizardConfigsActionResult;
 
 		public HomeController(AskvilleRepository askvilleRepository, IAppCreator appCreator)
         {
             this.askvilleRepository = askvilleRepository;
 			this.appCreator = appCreator;
+
+			wizardConfigsActionResult = appCreator.GetWizardConfigs();
         }
+
+		private bool sessionInitialized;
 
         public ActionResult Index(string sourceref = "", string shop = "", string ezbobab = "", string offline = "", string invite = "")
         {
             Session["Shop"] = shop;
 
-			WizardConfigsActionResult c = appCreator.GetWizardConfigs();
-			Session["IsSmsValidationActive"] = c.IsSmsValidationActive;
-			Session["NumberOfMobileCodeAttempts"] = c.NumberOfMobileCodeAttempts;
+			if (!sessionInitialized)
+			{
+				Session["IsSmsValidationActive"] = wizardConfigsActionResult.IsSmsValidationActive;
+				Session["NumberOfMobileCodeAttempts"] = wizardConfigsActionResult.NumberOfMobileCodeAttempts;
+				sessionInitialized = true;
+			}
 
             if(!string.IsNullOrEmpty(sourceref))
             {
@@ -84,6 +92,12 @@
 		[HttpPost]
 		public JsonNetResult GetTwilioConfig()
 		{
+			if (!sessionInitialized)
+			{
+				Session["IsSmsValidationActive"] = wizardConfigsActionResult.IsSmsValidationActive;
+				Session["NumberOfMobileCodeAttempts"] = wizardConfigsActionResult.NumberOfMobileCodeAttempts;
+				sessionInitialized = true;
+			}
 			return this.JsonNet(new { isSmsValidationActive = Session["IsSmsValidationActive"], numberOfMobileCodeAttempts = Session["NumberOfMobileCodeAttempts"] });
 		}
     }
