@@ -19,9 +19,9 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 		var that = this;
 	    
 		var xhr = $.post(window.gRootPath + "Home/GetTwilioConfig");
-		xhr.done(function (isSmsValidationActive, numberOfMobileCodeAttempts) {
-		    that.twilioEnabled = isSmsValidationActive;
-		    that.numberOfMobileCodeAttempts = numberOfMobileCodeAttempts + 1;
+		xhr.done(function (res) {
+		    that.twilioEnabled = res.isSmsValidationActive;
+		    that.numberOfMobileCodeAttempts = res.numberOfMobileCodeAttempts + 1;
 
 		    return false;
 		});
