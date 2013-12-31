@@ -38,8 +38,9 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 
 		var enabled = EzBob.Validation.checkForm(this.validator) &&
 			this.isPrevAddressValid() &&
-			this.isAddressValid() &&
-			this.ownOtherPropertyIsValid();
+			this.isAddressValid();
+	        // Commented out the offline Property ownership section 
+		    // && this.ownOtherPropertyIsValid();
 
 		$('.btn-continue').toggleClass('disabled', !enabled);
 	}, // inputChanged

@@ -16,7 +16,7 @@ EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 
 	readyToContinue: function() {
 		return this.companyAddressValidator &&
-			this.directorsView.validateAddresses() &&
+			(this.model.get('IsOffline') || this.directorsView.validateAddresses()) &&
 			(!this.employeeCountView || this.employeeCountView.isValid());
 	}, // readyToContinue
 
@@ -54,12 +54,7 @@ EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 		nonLimitedAddressView.render().$el.appendTo(oAddressContainer);
 		this.model.get('NonLimitedCompanyAddress').on("all", this.NonLimitedCompanyAddressChanged, this);
 		EzBob.Validation.addressErrorPlacement(nonLimitedAddressView.$el, nonLimitedAddressView.model);
-
-		this.directorsView = new EzBob.DirectorMainView({ model: this.model.get('NonLimitedDirectors'), name: "nonlimitedDirectors", });
-		this.directorsView.on("director:change", this.inputChanged, this);
-		this.directorsView.on("director:addressChanged", this.inputChanged, this);
-		this.directorsView.render().$el.appendTo(this.$el.find('.directors'));
-
+        
 		if (this.model.get('IsOffline')) {
 			this.employeeCountView = new EzBob.EmployeeCountView({
 				model: this.model,
@@ -69,6 +64,10 @@ EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 			this.employeeCountView.render().$el.appendTo(this.$el.find('.employee-count'));
 		}
 		else {
+		    this.directorsView = new EzBob.DirectorMainView({ model: this.model.get('NonLimitedDirectors'), name: "nonlimitedDirectors", });
+		    this.directorsView.on("director:change", this.inputChanged, this);
+		    this.directorsView.on("director:addressChanged", this.inputChanged, this);
+		    this.directorsView.render().$el.appendTo(this.$el.find('.directors'));
 			this.$el.find('.offline').remove();
 			this.employeeCountView = null;
 		} // if
