@@ -111,10 +111,8 @@ if (m.CGData && m.CGData.VatReturn) {
 			for (var i = nStartIdx; i < aryBusiness.length; i++)
 				%><th><%- EzBob.formatDateMY(aryBusiness[i].DateFrom) %> - <%- EzBob.formatDateMY(aryBusiness[i].DateTo) %></th><%
 			%><th>Last Four Periods</th>
-			<th>Bank Statement<%
-				if (m.CGData.BankStatement.Period)
-					print(m.CGData.BankStatement.Period);
-			%></th>
+		    <th>Bank Statement <%if (m.CGData.BankStatement.Period) print(m.CGData.BankStatement.Period);%></th>
+            <th>Bank Statement Annualized Percent Trend</th>
 		</tr></thead><% 
 		if ((nOneMonthSalary === null) && m.CGData.RtiTaxMonths) {
 			for (var j = 0; j < m.CGData.RtiTaxMonths.length; j++) {
@@ -163,7 +161,8 @@ if (m.CGData && m.CGData.VatReturn) {
 					%></td><%
 				} // for each relevant data item
 				%><td class=r><%- EzBob.formatPercents(1) %></td>
-				<td>-</td>
+			    <td>-</td>
+                <td>-</td>
 			</tr>
 			<tr>
 				<th>Revenues</th><td></td><%
@@ -176,7 +175,8 @@ if (m.CGData && m.CGData.VatReturn) {
 					%><td class=r><%- EzBob.formatPoundsAsInt(oRevenues[i]) %></td><%
 				} // for each relevant data item
 				%><td class=r><%- EzBob.formatPoundsAsInt(nRevenuesSum) %></td>
-				<td><%=EzBob.formatPoundsAsInt(m.CGData.BankStatement.Revenues)%></td>
+			    <td><%=EzBob.formatPoundsAsInt(m.CGData.BankStatement.Revenues)%></td>
+                <td><%=EzBob.formatPercents(m.CGData.BankStatementAnnualized.Revenues / nRevenuesSum - 1,2)%></td>
 			</tr>
 			<tr>
 				<th>Opex</th><td></td><%
@@ -184,7 +184,8 @@ if (m.CGData && m.CGData.VatReturn) {
 					%><td class=r><%- EzBob.formatPoundsAsInt(aryBusiness[i].BoxData[7].amount) %></td><%
 				} // for each relevant data item
 				%><td class=r><%- EzBob.formatPoundsAsInt(aryTotals[7]) %></td>
-				<td><%=EzBob.formatPoundsAsInt(m.CGData.BankStatement.Opex)%></td>
+			    <td><%=EzBob.formatPoundsAsInt(m.CGData.BankStatement.Opex)%></td>
+                <td><%=EzBob.formatPercents(m.CGData.BankStatementAnnualized.Opex / aryTotals[7] - 1,2)%></td>
 			</tr>
 			<tr class=chkpt>
 				<th>Total value added</th><td></td><%
@@ -196,7 +197,8 @@ if (m.CGData && m.CGData.VatReturn) {
 					%><td class=r><%- EzBob.formatPoundsAsInt(oTotalValueAdded[i]) %></td><%
 				} // for each relevant data item
 				%><td class=r><%- EzBob.formatPoundsAsInt(nRevenuesSum - nTotalValueAdded) %></td>
-				<td><%=EzBob.formatPoundsAsInt(m.CGData.BankStatement.TotalValueAdded)%></td>
+			    <td><%=EzBob.formatPoundsAsInt(m.CGData.BankStatement.TotalValueAdded)%></td>
+                <td><%=EzBob.formatPercents(m.CGData.BankStatementAnnualized.TotalValueAdded / nTotalValueAdded - 1 ,2)%></td>
 			</tr>
 			<tr>
 				<th>% of revenues</th><td></td><%
@@ -206,7 +208,8 @@ if (m.CGData && m.CGData.VatReturn) {
 					%></td><%
 				} // for each relevant data item
 				%><td class=r><% print(EzBob.formatPercents0(nRevenuesSum - nTotalValueAdded, nRevenuesSum) || '&ndash;'); %></td>
-				<td><%=EzBob.formatPercents(m.CGData.BankStatement.PercentOfRevenues,2)%></td>
+			    <td><%=EzBob.formatPercents(m.CGData.BankStatement.PercentOfRevenues,2)%></td>
+                <td>-</td>
 			</tr>
 			<tr>
 				<th>Salaries</th><td></td><%
@@ -220,7 +223,8 @@ if (m.CGData && m.CGData.VatReturn) {
 						nSalarySum += arySalary[i].salary;
 
 				%><%- EzBob.formatPoundsAsInt(nSalarySum) %></td>
-				<td><%=EzBob.formatPoundsAsInt(m.CGData.BankStatement.Salaries)%></td>
+			    <td><%=EzBob.formatPoundsAsInt(m.CGData.BankStatement.Salaries)%></td>
+                <td><%=EzBob.formatPercents(m.CGData.BankStatementAnnualized.Salaries / nSalarySum - 1,2)%></td>
 			</tr>
 			<tr>
 				<th>Tax</th><td></td><%
@@ -228,7 +232,8 @@ if (m.CGData && m.CGData.VatReturn) {
 					%><td class=r>&ndash;</td><%
 				} // for each relevant data item
 				%><td class=r>&ndash;</td>
-				<td><%=EzBob.formatPoundsAsInt(m.CGData.BankStatement.Tax)%></td>
+			    <td><%=EzBob.formatPoundsAsInt(m.CGData.BankStatement.Tax)%></td>
+                <td>-</td>
 			</tr>
 			<tr class=chkpt>
 				<th>EBIDA</th><td></td><%
@@ -246,7 +251,8 @@ if (m.CGData && m.CGData.VatReturn) {
 					%><td class=r><%- EzBob.formatPoundsAsInt(oEBIDA[i]) %></td><%
 				} // for each relevant data item
 				%><td class=r><%- EzBob.formatPoundsAsInt(nEBIDASum) %></td>
-				<td><%=EzBob.formatPoundsAsInt(m.CGData.BankStatement.Ebida)%></td>
+			    <td><%=EzBob.formatPoundsAsInt(m.CGData.BankStatement.Ebida)%></td>
+                <td><%=EzBob.formatPercents(m.CGData.BankStatementAnnualized.Ebida / nEBIDASum - 1,2)%></td>
 			</tr>
 			<tr>
 				<th>% of annual</th><td></td><%
@@ -254,7 +260,8 @@ if (m.CGData && m.CGData.VatReturn) {
 					%><td class=r><% print(EzBob.formatPercents0(oEBIDA[i], oRevenues[i]) || '&ndash;'); %></td><%
 				} // for each relevant data item
 				%><td class=r><%- EzBob.formatPercents0(nEBIDASum, nRevenuesSum) %></td>
-				<td>-</td>
+			    <td>-</td>
+                <td>-</td>
 			</tr>
 			<tr>
 				<th>Actual loans repayment</th><td></td><%
@@ -262,7 +269,8 @@ if (m.CGData && m.CGData.VatReturn) {
 					%><td class=r><%- EzBob.formatPoundsAsInt(0) %></td><%
 				} // for each relevant data item
 				%><td class=r><%- EzBob.formatPoundsAsInt(0) %></td>
-				<td><%=EzBob.formatPoundsAsInt(m.CGData.BankStatement.ActualLoansRepayment)%></td>
+			    <td><%=EzBob.formatPoundsAsInt(m.CGData.BankStatement.ActualLoansRepayment)%></td>
+                <td>-</td>
 			</tr>
 			<tr class="chkpt lastchkpt">
 				<th>Free cash flow</th><td></td><%
@@ -270,7 +278,8 @@ if (m.CGData && m.CGData.VatReturn) {
 					%><td class=r><%- EzBob.formatPoundsAsInt(oEBIDA[i]) %></td><% // TODO: subtract Actual loans repayment from the previous row.
 				} // for each relevant data item
 				%><td class=r><%- EzBob.formatPoundsAsInt(nEBIDASum) %></td>
-				<td><%=EzBob.formatPoundsAsInt(m.CGData.BankStatement.FreeCashFlow)%></td>
+			    <td><%=EzBob.formatPoundsAsInt(m.CGData.BankStatement.FreeCashFlow)%></td>
+                <td><%=EzBob.formatPercents(m.CGData.BankStatementAnnualized.FreeCashFlow / nEBIDASum - 1,2)%></td>
 			</tr>
 		</tbody></table><%
 	} // for each business

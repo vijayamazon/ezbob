@@ -120,7 +120,8 @@ namespace EzBob.Models.Marketplaces.Builders
 					{
 						VatReturn = oVatReturn,
 						RtiTaxMonths = oRtiTaxMonths,
-						BankStatement = new BankStatementDataModel()
+						BankStatement = new BankStatementDataModel(),
+						BankStatementAnnualized = new BankStatementDataModel()
 					};
 					
 					break;

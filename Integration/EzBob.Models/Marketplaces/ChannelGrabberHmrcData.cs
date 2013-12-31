@@ -11,6 +11,7 @@ namespace EzBob.Models.Marketplaces {
 		public IEnumerable<VatReturnEntry> VatReturn { get; set; }
 		public IEnumerable<RtiTaxMonthEntry> RtiTaxMonths { get; set; }
 		public BankStatementDataModel BankStatement { get; set; }
+		public BankStatementDataModel BankStatementAnnualized { get; set; }
 	} // class ChannelGrabberHmrcData
 
 	#endregion class ChannelGrabberHmrcData
@@ -19,6 +20,7 @@ namespace EzBob.Models.Marketplaces {
 
 	public class BankStatementDataModel
 	{
+		public int PeriodMonthsNum { get; set; }
 		public string Period { get; set; }
 		public double PercentOfAnnual { get; set; }
 		public double Revenues { get; set; }

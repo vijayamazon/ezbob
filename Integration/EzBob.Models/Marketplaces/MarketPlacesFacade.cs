@@ -47,13 +47,80 @@
 			{
 				if (models.Any(m => m.Name == "HMRC") && models.Any(m => m.Name == "Yodlee"))
 				{
-					((ChannelGrabberHmrcData) models.First(m => m.Name == "HMRC").CGData).BankStatement =
-						models.First(m => m.Name == "Yodlee").Yodlee.BankStatementDataModel;
+					var hmrcData = ((ChannelGrabberHmrcData) models.First(m => m.Name == "HMRC").CGData);
+					hmrcData.BankStatement = models.First(m => m.Name == "Yodlee").Yodlee.BankStatementDataModel;
+					hmrcData.BankStatementAnnualized = CalculateAnnualizedBankStatement(hmrcData);
 				}
 			}catch{}
 
 			return models;
-		} // GetMarketPlaceModels
+		}
+
+		private BankStatementDataModel CalculateAnnualizedBankStatement(ChannelGrabberHmrcData hmrcData)
+		{
+			var annualized = new BankStatementDataModel();
+			var lastVatReturn = hmrcData.VatReturn.LastOrDefault();
+			
+			decimal box3 = 0M, box4 = 0M, box6 = 0M, box7 = 0M;
+			if (lastVatReturn != null)
+			{
+				foreach (var vat in lastVatReturn.Data)
+				{
+
+					if (vat.Key.Contains("(Box 3)"))
+					{
+						box3 = vat.Value.Amount;
+						continue;
+					}
+
+					if (vat.Key.Contains("(Box 4)"))
+					{
+						box4 = vat.Value.Amount;
+						continue;
+					}
+
+					if (vat.Key.Contains("(Box 6)"))
+					{
+						box6 = vat.Value.Amount;
+						continue;
+					}
+
+					if (vat.Key.Contains("(Box 7)"))
+					{
+						box7 = vat.Value.Amount;
+						continue;
+					}
+				}
+			}
+
+			var vatRevenues = 1 + (box6 == 0 ? 0 : (box3/box6));
+			var vatOpex = 1 + (box7 == 0 ? 0 : (box4/box7));
+			
+			var bankStat = hmrcData.BankStatement;
+
+			bankStat.Revenues -= (double)vatRevenues;
+			bankStat.Opex -= (double) vatOpex;
+			bankStat.TotalValueAdded = bankStat.Revenues - bankStat.Opex;
+			bankStat.PercentOfRevenues = Math.Abs(bankStat.Revenues - 0) < 0.01 ? 0 : bankStat.TotalValueAdded/bankStat.Revenues;
+			bankStat.Ebida = bankStat.TotalValueAdded - (bankStat.Salaries + bankStat.Tax);
+			bankStat.FreeCashFlow = bankStat.Ebida - bankStat.ActualLoansRepayment;
+
+			if (bankStat.PeriodMonthsNum == 0) return annualized;
+			const int year = 12;
+			
+			annualized.Revenues = (bankStat.Revenues / bankStat.PeriodMonthsNum * year);
+			annualized.Opex = (bankStat.Opex / bankStat.PeriodMonthsNum * year);
+			annualized.TotalValueAdded = annualized.Revenues - annualized.Opex;
+			annualized.PercentOfRevenues = annualized.TotalValueAdded / annualized.Revenues;
+			annualized.Salaries = (bankStat.Salaries / bankStat.PeriodMonthsNum * year);
+			annualized.Tax = (bankStat.Tax / bankStat.PeriodMonthsNum * year);
+			annualized.Ebida = annualized.TotalValueAdded - (annualized.Salaries + annualized.Tax);
+			annualized.ActualLoansRepayment = (bankStat.ActualLoansRepayment / bankStat.PeriodMonthsNum * year);
+			annualized.FreeCashFlow = annualized.Ebida - annualized.ActualLoansRepayment;
+			return annualized;
+		}
+
+// GetMarketPlaceModels
 
 
 		public DateTime MarketplacesSeniority(Customer customer, bool onlyForEluminationPassed = false, bool? isPaymentAccount = null)
