@@ -44,8 +44,14 @@ EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 		var self = this;
 		this.constructor.__super__.render.call(this);
 
-		var nonLimitedAddressView = new EzBob.AddressView({ model: this.model.get('NonLimitedCompanyAddress').reset(), name: "NonLimitedCompanyAddress", max: 1 });
-		nonLimitedAddressView.render().$el.appendTo(this.$el.find('#NonLimitedCompanyAddress'));
+		var oAddressContainer = this.$el.find('#NonLimitedCompanyAddress');
+		var nonLimitedAddressView = new EzBob.AddressView({
+			model: this.model.get('NonLimitedCompanyAddress').reset(),
+			name: "NonLimitedCompanyAddress",
+			max: 1,
+			uiEventControlIdPrefix: oAddressContainer.attr('data-ui-event-control-id-prefix'),
+		});
+		nonLimitedAddressView.render().$el.appendTo(oAddressContainer);
 		this.model.get('NonLimitedCompanyAddress').on("all", this.NonLimitedCompanyAddressChanged, this);
 		EzBob.Validation.addressErrorPlacement(nonLimitedAddressView.$el, nonLimitedAddressView.model);
 

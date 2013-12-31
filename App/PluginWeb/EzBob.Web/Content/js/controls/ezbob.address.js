@@ -4,17 +4,30 @@ EzBob.Popup = Backbone.View.extend({
 	initialize: function (options) {
 		this.template = $('#address-popup-template').html();
 		this.defaultPostcode = options.postcode;
+		this.uiEventControlIdPrefix = options.uiEventControlIdPrefix;
+
 		if (window.gRootPath == undefined) {
 			this.rootPath = '/';
 			console.warn('window.gRootPath is not initialized!');
 		} else {
 			this.rootPath = window.gRootPath;
 		}
-
-	},
+	}, // initialize
 
 	render: function () {
+		var self = this;
+
 		this.$el.html(this.template);
+
+		if (this.uiEventControlIdPrefix) {
+			this.$el.find('[ui-event-control-id]').each(function() {
+				var oElem = $(this);
+
+				oElem.attr('ui-event-control-id',
+					self.uiEventControlIdPrefix + '-' + oElem.attr('ui-event-control-id')
+				);
+			});
+		} // if
 
 		EzBob.UiAction.registerView(this);
 
@@ -31,7 +44,7 @@ EzBob.Popup = Backbone.View.extend({
 		this.$el.find('.postCode').val(this.defaultPostcode);
 
 		return this;
-	},
+	}, // render
 
 	events: {
 		'click input.postCodeBtnOk': 'PostCodeBtnOk',
@@ -41,7 +54,7 @@ EzBob.Popup = Backbone.View.extend({
 		'dblclick .matchingAddressList': 'AddressesListDoubleClicked',
 		'keyup    .matchingAddressList': 'AddressesListKeyUp',
 		'keydown  .matchingAddressList': 'AddressesListKeyDown',
-	},
+	}, // events
 
 	AddressesListKeyDown: function(evt) {
 		switch (evt.which) {
@@ -129,18 +142,21 @@ EzBob.Popup = Backbone.View.extend({
 	AddressesListClicked: function (evt) {
 		EzBob.UiAction.saveOne(EzBob.UiAction.evtClick(), evt.target);
 		$('.postCodeBtnOk').removeAttr('disabled');
-	},
+	}, // AddressesListClicked
+
 	AddressesListDoubleClicked: function (evt) {
 		this.AddressesListClicked(evt);
 		EzBob.UiAction.saveOne(EzBob.UiAction.evtLinked(), evt.target);
 		this.PostCodeBtnOk();
-	},
+	}, // AddressesListDoubleClicked
+
 	PostCodeBtnOk: function () {
 		var id = this.addressList.attr('data');
+
 		if (!id || id == 0) {
 			this.addressList.css('border', '1px solid red');
 			return;
-		}
+		} // if
 
 		var addressModel = null;
 
@@ -159,14 +175,15 @@ EzBob.Popup = Backbone.View.extend({
 		this.$el.dialog('close');
 		this.remove();
 		this.unbind();
-	},
+	}, // PostCodeBtnOk
 
 	PostCodeBtnCancel: function () {
 		this.$el.dialog('close');
-	},
+	}, // PostCodeBtnCancel
+
 	SearchByPostcode: function () {
-		var postCode = this.$el.find('.postCode').val(),
-			that = this;
+		var postCode = this.$el.find('.postCode').val();
+		var that = this;
 
 		this.addressList.empty();
 		this.$el.find('.postCodeBtn').attr('disabled', 'disabled');
@@ -178,7 +195,12 @@ EzBob.Popup = Backbone.View.extend({
 			//fix for chosen select and JQuery dialog 
 			$('.ui-dialog-content').css('overflow', 'visible');
 			$('.ui-dialog ').css('overflow', 'visible');
-		};
+		}; // do always
+
+		var sAddressEntryUiEventControlID = 'address-form:address-entry';
+
+		if (this.uiEventControlIdPrefix)
+			sAddressEntryUiEventControlID = this.uiEventControlIdPrefix + '-' + sAddressEntryUiEventControlID;
 
 		var oOnSuccess = function (oRecords) {
 			$.each(oRecords, function (i, val) {
@@ -186,14 +208,14 @@ EzBob.Popup = Backbone.View.extend({
 					$('<li></li>')
 						.attr({
 							data: val.Id,
-							'ui-event-control-id': 'address-form:address-entry',
+							'ui-event-control-id': sAddressEntryUiEventControlID,
 						})
 						.html(val.L)
 				);
 			});
 
 			that.addressList.beautifullList().removeAttr('disabled').focus();
-		};
+		}; // on success
 
 		var oDummyResults = $('.dummy_address_search_result');
 
@@ -213,18 +235,18 @@ EzBob.Popup = Backbone.View.extend({
 			}
 
 			oOnSuccess(data.Records);
-		});
+		}); // on success
 
 		request.fail(function () {
 			that.addressList.append($('<li></li>').val(0).html('Not found'));
 
 			that.addressList.attr('disabled', 'disabled');
 			that.$el.find('.postCodeBtnOk').attr('disabled', 'disabled');
-		});
+		}); // on fail
 
 		request.always(oDoAlways);
-	}
-});
+	}, // SearchByPostcode
+}); // EzBob.Popup
 
 EzBob.AddressView = Backbone.View.extend({
 	initialize: function (options) {
@@ -235,34 +257,45 @@ EzBob.AddressView = Backbone.View.extend({
 		this.isShowClear = options.isShowClear;
 		this.directorId = options.directorId || 0;
 		this.customerId = options.customerId || 0;
+		this.uiEventControlIdPrefix = options.uiEventControlIdPrefix;
 	},
 
 	render: function () {
 		var self = this;
 
 		this.$el.html(this.template({ addresses: this.model.toJSON(), name: this.name }));
+
+		if (this.uiEventControlIdPrefix) {
+			this.$el.find('[ui-event-control-id]').each(function() {
+				var oElem = $(this);
+
+				oElem.attr('ui-event-control-id',
+					self.uiEventControlIdPrefix + '-' + oElem.attr('ui-event-control-id')
+				);
+			});
+		} // if
+
 		this.$el.find('.btn').toggle(this.max > this.model.length);
 		this.$el.find('.addAddressContainer').toggle(this.max > this.model.length);
 		this.postcodeInput = this.$el.find('.addAddressInput');
 		this.showClear(this.isShowClear);
 
+		console.log('address container', this.$el.closest('.address-container'), this.$el);
+
 		var sInitialStatus = (this.model && this.model.length) ? 'ok' : '';
 
 		this.$el.find('img.field_status').each(function () {
 			var bRequired = $(this).hasClass('required');
-			$(this).field_status({ required: bRequired, initial_status: sInitialStatus });
+			$(this).field_status({ required: bRequired, initial_status: sInitialStatus, });
 		});
 
 		_.each(this.model.models, function (val) {
-			val.set(
-				{
-					director: self.directorId,
-					customer: self.customerId
-				},
-				{
-					silent: true
-				}
-			);
+			val.set({
+				director: self.directorId,
+				customer: self.customerId,
+			}, {
+				silent: true
+			});
 		});
 
 		return this;
@@ -296,7 +329,11 @@ EzBob.AddressView = Backbone.View.extend({
 	},
 
 	addAddress: function () {
-		var popUp = new EzBob.Popup({ model: this.model, postcode: $.trim(this.postcodeInput.val()) });
+		var popUp = new EzBob.Popup({
+			model: this.model,
+			postcode: $.trim(this.postcodeInput.val()),
+			uiEventControlIdPrefix: this.uiEventControlIdPrefix,
+		});
 		popUp.render();
 		popUp.SearchByPostcode();
 	}

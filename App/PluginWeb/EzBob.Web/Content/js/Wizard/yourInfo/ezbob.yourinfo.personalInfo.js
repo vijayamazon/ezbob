@@ -139,16 +139,34 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 
 	render: function() {
 		this.constructor.__super__.render.call(this);
-		this.personalAddressView = new EzBob.AddressView({ model: this.model.get('PersonalAddress'), name: 'PersonalAddress', max: 1 });
-		this.personalAddressView.render().$el.appendTo(this.$el.find('#PersonalAddress'));
+		var oAddressContainer = this.$el.find('#PersonalAddress');
+		this.personalAddressView = new EzBob.AddressView({
+			model: this.model.get('PersonalAddress'),
+			name: 'PersonalAddress',
+			max: 1,
+			uiEventControlIdPrefix: oAddressContainer.attr('data-ui-event-control-id-prefix'),
+		});
+		this.personalAddressView.render().$el.appendTo(oAddressContainer);
 		EzBob.Validation.addressErrorPlacement(this.personalAddressView.$el, this.personalAddressView.model);
 
-		this.prevPersonAddressesView = new EzBob.AddressView({ model: this.model.get('PrevPersonAddresses'), name: 'PrevPersonAddresses', max: 3 });
-		this.prevPersonAddressesView.render().$el.appendTo(this.$el.find('#PrevPersonAddresses'));
+		oAddressContainer = this.$el.find('#PrevPersonAddresses');
+		this.prevPersonAddressesView = new EzBob.AddressView({
+			model: this.model.get('PrevPersonAddresses'),
+			name: 'PrevPersonAddresses',
+			max: 3,
+			uiEventControlIdPrefix: oAddressContainer.attr('data-ui-event-control-id-prefix'),
+		});
+		this.prevPersonAddressesView.render().$el.appendTo(oAddressContainer);
 		EzBob.Validation.addressErrorPlacement(this.prevPersonAddressesView.$el, this.prevPersonAddressesView.model);
 
-		this.otherPropertyAddressView = new EzBob.AddressView({ model: this.model.get('OtherPropertyAddress'), name: 'OtherPropertyAddress', max: 1 });
-		this.otherPropertyAddressView.render().$el.appendTo(this.$el.find('#OtherPropertyAddress'));
+		oAddressContainer = this.$el.find('#OtherPropertyAddress');
+		this.otherPropertyAddressView = new EzBob.AddressView({
+			model: this.model.get('OtherPropertyAddress'),
+			name: 'OtherPropertyAddress',
+			max: 1,
+			uiEventControlIdPrefix: oAddressContainer.attr('data-ui-event-control-id-prefix'),
+		});
+		this.otherPropertyAddressView.render().$el.appendTo(oAddressContainer);
 		EzBob.Validation.addressErrorPlacement(this.otherPropertyAddressView.$el, this.otherPropertyAddressView.model);
 
 		this.model.get('PrevPersonAddresses').on('all', this.prevModelChange, this);

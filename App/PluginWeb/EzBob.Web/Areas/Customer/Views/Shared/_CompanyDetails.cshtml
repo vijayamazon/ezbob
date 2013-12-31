@@ -88,7 +88,7 @@
 
                 <h2 class="form_section">Home address</h2>
 
-                @EzForm.AddressInput("PersonalAddress", "Home address")
+                @EzForm.AddressInput("PersonalAddress", "Home address", "personal")
 
                 <div class="control-group form_field_container">
                     <div class="controls">
@@ -106,7 +106,7 @@
                     </div>
                 </div>
 
-                @EzForm.AddressInput("PrevPersonAddresses", "Previous address", "canDisabledAddress")
+                @EzForm.AddressInput("PrevPersonAddresses", "Previous address", "previous-personal", "canDisabledAddress")
 
                 <div class="control-group form_field_container">
                     <div class="controls">
@@ -141,7 +141,7 @@
                         </div>
                     </div>
 
-                    @EzForm.AddressInput("OtherPropertyAddress", "Other property address", "canDisabledAddress")
+                    @EzForm.AddressInput("OtherPropertyAddress", "Other property address", "other-property", "canDisabledAddress")
                 </div>
 
                 <h2 class="form_section">Contact details</h2>
@@ -347,7 +347,7 @@
 		</div>
 	</div>
 
-	@EzForm.AddressInput("NonLimitedCompanyAddress", "Address")
+	@EzForm.AddressInput("NonLimitedCompanyAddress", "Address", "nonlimited")
 
 	<div class="control-group form_field_container notoffline">
 		<div class="controls">
@@ -426,7 +426,7 @@
 		</div>
 	</div>
 
-	@EzForm.AddressInput("LimitedCompanyAddress", "Address")
+	@EzForm.AddressInput("LimitedCompanyAddress", "Address", "limited")
 
 	@AdditionalCompanyInfo("Limited")
 
@@ -577,7 +577,7 @@
             </div>
 
             <div class="director_address">
-                @EzForm.AddressInput("<%-preffix%>Address<%=i%>", "Address")
+                @EzForm.AddressInput("<%-preffix%>Address<%=i%>", "Address", "director")
             </div>
 
             <input type="hidden" name="<%-preffix%>[<%=i%>].NameImage" value="<%- director.NameStatus %>" />

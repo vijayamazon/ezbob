@@ -1,4 +1,4 @@
-﻿(function() {
+(function() {
   var root,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -232,11 +232,14 @@
 
     PersonalInfoView.prototype.onRender = function() {
       var address, otherAddress;
+      console.log('@personAddress is', this.personAddress);
+      console.log('@personAddress.$el is', this.personAddress.getEl(this.personAddress.el));
       address = new EzBob.AddressView({
         model: this.model.get('PersonalAddress'),
         name: 'PersonalAddress',
         max: 10,
-        isShowClear: true
+        isShowClear: true,
+        uiEventControlIdPrefix: this.personAddress.getEl(this.personAddress.el).attr('data-ui-event-control-id-prefix')
       });
       this.personAddress.show(address);
       if (this.model.get('IsOffline')) {
@@ -244,7 +247,8 @@
           model: this.model.get('OtherPropertyAddress'),
           name: 'OtherPropertyAddress',
           max: 1,
-          isShowClear: true
+          isShowClear: true,
+          uiEventControlIdPrefix: this.otherPropertyAddress.getEl(this.otherPropertyAddress.el).attr('data-ui-event-control-id-prefix')
         });
         this.otherPropertyAddress.show(otherAddress);
       } else {
@@ -278,7 +282,8 @@
         model: this.model.get('NonLimitedCompanyAddress'),
         name: 'NonLimitedCompanyAddress',
         max: 10,
-        isShowClear: true
+        isShowClear: true,
+        uiEventControlIdPrefix: this.nonlimitedAddress.getEl(this.nonlimitedAddress.el).attr('data-ui-event-control-id-prefix')
       });
       this.nonlimitedAddress.show(address);
       directors = this.model.get('NonLimitedInfo').Directors;
@@ -321,7 +326,8 @@
         model: this.model.get('LimitedCompanyAddress'),
         name: 'LimitedCompanyAddress',
         max: 10,
-        isShowClear: true
+        isShowClear: true,
+        uiEventControlIdPrefix: this.limitedAddress.getEl(this.limitedAddress.el).attr('data-ui-event-control-id-prefix')
       });
       this.limitedAddress.show(address);
       directors = this.model.get('LimitedInfo').Directors;
@@ -366,7 +372,8 @@
         name: "DirectorAddress[" + (this.model.get('Position')) + "]",
         max: 10,
         isShowClear: true,
-        directorId: this.model.get('Id')
+        directorId: this.model.get('Id'),
+        uiEventControlIdPrefix: this.directorAddress.getEl(this.directorAddress.el).attr('data-ui-event-control-id-prefix')
       });
       this.model.get('DirectorAddress').on('all', this.addressModelChange, this);
       this.directorAddress.show(address);

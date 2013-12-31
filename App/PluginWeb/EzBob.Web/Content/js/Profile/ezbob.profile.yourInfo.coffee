@@ -171,10 +171,23 @@ class EzBob.Profile.PersonalInfoView extends Backbone.Marionette.Layout
         otherPropertyAddress: '#OtherPropertyAddress'
 
     onRender: ->
-        address = new EzBob.AddressView({ model: @model.get('PersonalAddress'), name: 'PersonalAddress', max: 10, isShowClear:true })
+        address = new EzBob.AddressView({
+            model: @model.get('PersonalAddress'),
+            name: 'PersonalAddress',
+            max: 10,
+            isShowClear: true,
+            uiEventControlIdPrefix: @personAddress.getEl(@personAddress.el).attr('data-ui-event-control-id-prefix'),
+        })
         @personAddress.show(address)
+
         if @model.get('IsOffline')
-            otherAddress = new EzBob.AddressView({ model: @model.get('OtherPropertyAddress'), name: 'OtherPropertyAddress', max: 1, isShowClear:true })
+            otherAddress = new EzBob.AddressView({
+                model: @model.get('OtherPropertyAddress'),
+                name: 'OtherPropertyAddress',
+                max: 1,
+                isShowClear: true,
+                uiEventControlIdPrefix: @otherPropertyAddress.getEl(@otherPropertyAddress.el).attr('data-ui-event-control-id-prefix'),
+            })
             @otherPropertyAddress.show(otherAddress)
         else
             @$el.find('.offline').remove()
@@ -189,7 +202,13 @@ class EzBob.Profile.NonLimitedInfoView extends Backbone.Marionette.Layout
         director: '.director-container' 
 
     onRender: ->
-        address = new EzBob.AddressView({ model: @model.get('NonLimitedCompanyAddress'), name: 'NonLimitedCompanyAddress', max: 10, isShowClear:true })
+        address = new EzBob.AddressView({
+            model: @model.get('NonLimitedCompanyAddress'),
+            name: 'NonLimitedCompanyAddress',
+            max: 10,
+            isShowClear: true,
+            uiEventControlIdPrefix: @nonlimitedAddress.getEl(@nonlimitedAddress.el).attr('data-ui-event-control-id-prefix'),
+        })
         @nonlimitedAddress.show(address)
 
         directors = @model.get('NonLimitedInfo').Directors;
@@ -213,7 +232,13 @@ class EzBob.Profile.LimitedInfoView extends Backbone.Marionette.Layout
         director: '.director-container' 
 
     onRender: ->
-        address = new EzBob.AddressView({ model: @model.get('LimitedCompanyAddress'), name: 'LimitedCompanyAddress', max: 10, isShowClear:true })
+        address = new EzBob.AddressView({
+            model: @model.get('LimitedCompanyAddress'),
+            name: 'LimitedCompanyAddress',
+            max: 10,
+            isShowClear: true,
+            uiEventControlIdPrefix: @limitedAddress.getEl(@limitedAddress.el).attr('data-ui-event-control-id-prefix'),
+        })
         @limitedAddress.show(address)
         
         directors = @model.get('LimitedInfo').Directors;
@@ -237,7 +262,14 @@ class EzBob.Profile.DirectorInfoView extends Backbone.Marionette.Layout
         EzBob.App.trigger 'dash-director-address-change', @model
 
     onRender: ->
-        address = new EzBob.AddressView({ model: @model.get('DirectorAddress'), name: "DirectorAddress[#{@model.get('Position')}]", max: 10, isShowClear:true, directorId: @model.get('Id') })
+        address = new EzBob.AddressView({
+            model: @model.get('DirectorAddress'),
+            name: "DirectorAddress[#{@model.get('Position')}]",
+            max: 10,
+            isShowClear: true,
+            directorId: @model.get('Id')
+            uiEventControlIdPrefix: @directorAddress.getEl(@directorAddress.el).attr('data-ui-event-control-id-prefix'),
+        })
         @model.get('DirectorAddress').on 'all', @addressModelChange, @
         @directorAddress.show(address)
         @$el.find('.addressEdit').addClass 'directorAddress' + @model.get 'Id'

@@ -260,9 +260,11 @@
     </tr>
 }
 
-@helper AddressInput(string name, string title, string css = "")
+@helper AddressInput(string name, string title, string sUiEventControlID, string css = "")
 {
     var oCfg = ObjectFactory.GetInstance<IEzBobConfiguration>();
+
+	sUiEventControlID = string.IsNullOrWhiteSpace(sUiEventControlID) ? string.Empty : sUiEventControlID;
 
     var identificator = new HtmlString(name);
 
@@ -279,7 +281,7 @@
         <label class="control-label addressCaption">@title</label>
         <div class="controls">
             <label class="control-label">
-                <div id="@identificator" class="address-field"></div>
+                <div id="@identificator" class="address-field" data-ui-event-control-id-prefix="@sUiEventControlID"></div>
             </label>
         </div>
     </div>

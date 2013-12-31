@@ -67,16 +67,22 @@ EzBob.DirectorMainView = Backbone.View.extend({
 		this.$el.find('.addressCaption').hide();
 
 		$.each(this.model.models, function(i, val) {
-			var addressElem = that.preffix + 'Address' + i,
-				name = that.preffix + '[' + i + '].' + that.name,
-				addressView = new EzBob.AddressView({ model: val.get('Address'), name: name, max: 1 }),
-				dateOfBirthValName = that.preffix + '[' + i + '].' + 'DateOfBirth';
+			var addressElem = that.preffix + 'Address' + i;
+			var oAddressContainer = that.directorArea.find('#' + addressElem);
+			var name = that.preffix + '[' + i + '].' + that.name;
+			var addressView = new EzBob.AddressView({
+				model: val.get('Address'),
+				name: name,
+				max: 1,
+				uiEventControlIdPrefix: oAddressContainer.attr('data-ui-event-control-id-prefix'),
+			});
+			var dateOfBirthValName = that.preffix + '[' + i + '].' + 'DateOfBirth';
 
 			val.get('Address').on('all', function() {
 				that.trigger('director:addressChanged');
 			});
 
-			addressView.render().$el.appendTo(that.directorArea.find('#' + addressElem));
+			addressView.render().$el.appendTo(oAddressContainer);
 			SetDefaultDate(dateOfBirthValName, val.get('DateOfBirth'));
 			EzBob.Validation.addressErrorPlacement(addressView.$el, addressView.model);
 

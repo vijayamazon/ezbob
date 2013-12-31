@@ -34,8 +34,14 @@ EzBob.LimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 		var self = this;
 		this.constructor.__super__.render.call(this);
 
-		var limitedAddressView = new EzBob.AddressView({ model: this.model.get('LimitedCompanyAddress').reset(), name: "LimitedCompanyAddress", max: 1 });
-		limitedAddressView.render().$el.appendTo(this.$el.find('#LimitedCompanyAddress'));
+		var oAddressContainer = this.$el.find('#LimitedCompanyAddress');
+		var limitedAddressView = new EzBob.AddressView({
+			model: this.model.get('LimitedCompanyAddress').reset(),
+			name: "LimitedCompanyAddress",
+			max: 1,
+			uiEventControlIdPrefix: oAddressContainer.attr('data-ui-event-control-id-prefix'),
+		});
+		limitedAddressView.render().$el.appendTo(oAddressContainer);
 		this.model.get('LimitedCompanyAddress').on("all", this.LimitedCompanyAddressChanged, this);
 		EzBob.Validation.addressErrorPlacement(limitedAddressView.$el, limitedAddressView.model);
 

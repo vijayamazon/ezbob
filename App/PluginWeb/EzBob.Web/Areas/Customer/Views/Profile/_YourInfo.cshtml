@@ -57,7 +57,7 @@
         </div>
             <div class="controls">
                     <div class="addressEdit">
-                        @EzForm.AddressInput("PersonalAddress", "Address")
+                        @EzForm.AddressInput("PersonalAddress", "Address", "personal")
                     </div>
             </div>
     
@@ -70,7 +70,7 @@
 
         <div class="controls offline">
             <div class="addressEdit">
-                @EzForm.AddressInput("OtherPropertyAddress", "Other property address")
+                @EzForm.AddressInput("OtherPropertyAddress", "Other property address", "other-property")
             </div>
         </div>
 
@@ -150,7 +150,7 @@
         </div>
         <div class="controls">
                 <div class="addressEdit" display:"none">
-                    @EzForm.AddressInput("LimitedCompanyAddress", "Address")
+                    @EzForm.AddressInput("LimitedCompanyAddress", "Address", "limited")
                 </div>
         </div>    
         <%if(LimitedInfo.LimitedBusinessPhone != null){%>
@@ -183,7 +183,7 @@
         </div>
         <div class="controls">
                <div class="addressEdit">
-                    @EzForm.AddressInput("NonLimitedAddress", "Address")
+                    @EzForm.AddressInput("NonLimitedAddress", "Address", "nonlimited")
                </div>
         </div>    
         <div class="control-group notoffline">
@@ -231,7 +231,7 @@
 				<p>Email: <b><%- Email %></b></p>
 				<p>Phone: <b><%- Phone %></b></p>
 				<div class="addressEdit" >
-					@EzForm.AddressInput("DirectorAddress", "Address")
+					@EzForm.AddressInput("DirectorAddress", "Address", "director")
 				</div>
 			</div>
 		</div>
