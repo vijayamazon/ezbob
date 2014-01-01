@@ -98,8 +98,8 @@
 			
 			var bankStat = hmrcData.BankStatement;
 
-			bankStat.Revenues -= (double)vatRevenues;
-			bankStat.Opex -= (double) vatOpex;
+			bankStat.Revenues /= (double)vatRevenues;
+			bankStat.Opex /= (double) vatOpex;
 			bankStat.TotalValueAdded = bankStat.Revenues - bankStat.Opex;
 			bankStat.PercentOfRevenues = Math.Abs(bankStat.Revenues - 0) < 0.01 ? 0 : bankStat.TotalValueAdded/bankStat.Revenues;
 			bankStat.Ebida = bankStat.TotalValueAdded - (bankStat.Salaries + bankStat.Tax);

@@ -5,6 +5,10 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
     initialize: ->
         @template = _.template($("#profile-template-main").html())
 
+        @$el.on('shown.bs.tab', () ->
+            $("#spl").css("height", Math.max($('.profile-person-info').height() + $('.profile-loan-info').height() + 20, $('.profile-tabs .tabbable').height() + 40) + "px").trigger("resize")
+        )
+
     render: ->
         @$el.html @template()
         profileInfo = @$el.find(".profile-person-info")
@@ -123,9 +127,8 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
         @controlButtons = new EzBob.Underwriter.ControlButtonsView(
             el: controlButtons
         )
-        @$el.on('shown.bs.tab', () ->
-            $("#spl").css("height", Math.max($('.profile-person-info').height() + $('.profile-loan-info').height() + 20, $('.profile-tabs .tabbable').height() + 40) + "px").trigger("resize");
-        )
+
+        $("#spl").css("height", @$el.height() + 120).trigger("resize")
         this
 
     events:

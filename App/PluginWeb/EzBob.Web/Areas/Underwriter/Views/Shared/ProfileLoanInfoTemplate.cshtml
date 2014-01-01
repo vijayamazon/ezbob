@@ -277,7 +277,7 @@
 </script>
 
 <script id="collection-status-items-template" type="text/template">
-	<select id="collection-status-items" class="selectheight">
+	<select id="collection-status-items" class="selectheight form-control">
 		<%_.each(statuses, function(status){%>
 			<option value="<%=status.Id%>"><%=status.Name%></option>
 		<%});%>
@@ -297,7 +297,7 @@
 </script>
 
 <script id="fraud-status-items-template" type="text/template">
-	<select id="fraud-status-items" class="selectheight">
+	<select id="fraud-status-items" class="selectheight form-control">
 		<option value="0">OK</option>
 		<option value="1">Fishy</option>
 		<option value="2">Fraud suspect</option>
@@ -311,11 +311,11 @@
 	<div class="control-group">
 		<label class="control-label">Description:</label>
 		<div class="controls">
-			<textarea id="collectionDescription" name="collectionDescription" />
+			<textarea class="form-control" id="collectionDescription" name="collectionDescription" />
 		</div>
 	</div>
 	<label class="default-customer-status-warning">
 		Saving this status will also effect the loan options
 	</label>
-	<a href="#" class="uploadFiles btn">Upload files</a>
+	<a href="#" class="uploadFiles btn btn-primary">Upload files</a>
 </script>

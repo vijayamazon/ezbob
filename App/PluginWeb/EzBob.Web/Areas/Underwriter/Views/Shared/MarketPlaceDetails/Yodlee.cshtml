@@ -43,7 +43,6 @@
                 </tr>
             </thead>
             <tbody>
-                
                 <%for(var cat in obj) {%>
                 <% var style = '', isPound = true;
                    if(cat[0] == '5' || cat[0] == '9' || cat[0] == '6' || cat[0] == 'a') { continue; /*skip average and num of transactions*/ }
@@ -110,17 +109,26 @@
         <hr />
         <div class="well" style="width: 570px">
             <span>Add/Remove Search Words For Yodlee Transactions</span>
+            <div class="form-group">
             <label for="yodleeSearchWordsDdl">Search Words</label>
-            <select id="yodleeSearchWordsDdl" class="form-control selectheight" style="margin-bottom: 0">
-                <option></option>
-                <%for(var word in y.SearchWordsModel.WordsDict) { %>
-                <option value="<%=word%>"><%=y.SearchWordsModel.WordsDict[word]%></option>
-                <%}%>
-            </select>
-            <button class="btn btn-primary yodleeSearchWordsDelete" id="removeYodleeSearchWord">Remove</button>
+                <select id="yodleeSearchWordsDdl" class="form-control selectheight" style="margin-bottom: 0">
+                    <option></option>
+                    <%for(var word in y.SearchWordsModel.WordsDict) { %>
+                    <option value="<%=word%>"><%=y.SearchWordsModel.WordsDict[word]%></option>
+                    <%}%>
+                </select>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary yodleeSearchWordsDelete" id="removeYodleeSearchWord">Remove</button>
+            </div>
             <hr />
-            <input type="text" id="yodleeAddSearchWordTxt" style="margin-bottom: 0" />
-            <button class="btn btn-primary yodleeSearchWordsAdd" id="addYodleeSearchWord">Add</button>
+            <div class="form-group">
+                <label for="yodleeAddSearchWordTxt">Add Word</label>
+                <input type="text" class="form-control" id="yodleeAddSearchWordTxt" style="margin-bottom: 0" />
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary yodleeSearchWordsAdd" id="addYodleeSearchWord">Add</button>
+            </div>
 
         </div>
         <%} else {print('No match was found to the search words');} })();%>
@@ -131,24 +139,24 @@
 {
     <div class="tab-pane" id="yodleetab2">
         <%(function() { if (y.CashFlowReportModel && y.CashFlowReportModel.YodleeCashFlowReportModelDict) { %>
-        <h3 style="width: 800px; text-align: center;">Monthly Activity Summary<br />
+        <h3 style="width: 850px; text-align: center;">Monthly Activity Summary<br />
             <small>monthly as of date <%=EzBob.formatDate(new Date(Date.parse(y.CashFlowReportModel.AsOfDate)))%></small>
         </h3>
-        <div class="well" style="width: 800px; height: 300px; position: relative;">
+        <div class="well" style="width: 850px; height: 350px; position: relative;">
             <div id="yodleeBarGraph" class="jqplot-target" style="width: 800px; height: 300px; position: relative;"></div>
         </div>
         <hr />
-        <h3 style="width: 800px; text-align: center;">Cash Flow High/Low Trends<br />
+        <h3 style="width: 850px; text-align: center;">Cash Flow High/Low Trends<br />
             <small>monthly as of date <%=EzBob.formatDate(new Date(Date.parse(y.CashFlowReportModel.AsOfDate)))%></small>
         </h3>
-        <div class="well" style="width: 800px; height: 300px; position: relative;">
+        <div class="well" style="width: 850px; height: 350px; position: relative;">
             <button class="yodleeReplotGraph btn btn-mini" style="right: 0px; top: 0px; position: absolute;" title="Replot"><i class="fa fa-refresh"></i></button>
-            <button class="yodleeShowTransactionsInRange btn btn-mini" style="right: 0px; top: 25px; position: absolute;" title="Show transactions in range"><i class="fa fa-magnet"></i></button>
+            <button class="yodleeShowTransactionsInRange btn btn-mini" style="right: 0px; top: 35px; position: absolute; z-index: 5;" title="Show transactions in range"><i class="fa fa-magnet"></i></button>
             <div id="yodleeRunningBalanceChart" class="jqplot-target" style="width: 800px; height: 300px; position: relative;"></div>
         </div>
-        
-        <br/>
-        
+
+        <br />
+
         <%} else {print('No data to show charts');} })();%>
     </div>
 }
@@ -195,7 +203,8 @@
 {
     <div class="tab-pane" id="yodleetab4">
         <div class="dataTables_filter" id="range-filter">
-            <label for="date-range"> Filter by date range: <input type="text" id="date-range"/></label>
+            <label for="date-range">Filter by date range:
+                <input type="text" id="date-range" /></label>
         </div>
         <table class="table centered nowrap YodleeTransactionsTable" id="YodleeTransactionsTable">
             <thead class="box">
@@ -217,7 +226,7 @@
                 <%_.each(bank.transactions, function(transaction, j) {%>
                 <%if(transaction.transactionBaseType=='credit'){ %>
                 <tr class="credit">
-                <%}else{%>
+                    <%}else{%>
                 <tr class="debit">
                     <%}%>
                     <td><%=i+1%></td>
@@ -239,15 +248,24 @@
                     <th colspan="9">Total:</th>
                 </tr>
                 <tr class="hide">
-                    <th><input type="text" name="search_acct" value="Search Acct #" class="search_init"></th>
-                    <th><input type="text" name="search_trtype" value="Search Tr Type" class="search_init"></th>
-                    <th><input type="text" name="search_date" value="Search Tr Date" class="search_init"></th>
-                    <th><input type="text" name="search_amount" value="Search Tr Amount" class="search_init"></th>
-                    <th><input type="text" name="search_runningbalance" value="Search Running Balance" class="search_init"></th>
-                    <th><input type="text" name="search_category" value="Search Category" class="search_init"></th>
-                    <th><input type="text" name="search_categorytype" value="Search Category Type" class="search_init"></th>
-                    <th><input type="text" name="search_description" value="Search Description" class="search_init"></th>
-                    <th><input type="text" name="search_status" value="Search Status" class="search_init"></th>
+                    <th>
+                        <input type="text" name="search_acct" value="Search Acct #" class="search_init"></th>
+                    <th>
+                        <input type="text" name="search_trtype" value="Search Tr Type" class="search_init"></th>
+                    <th>
+                        <input type="text" name="search_date" value="Search Tr Date" class="search_init"></th>
+                    <th>
+                        <input type="text" name="search_amount" value="Search Tr Amount" class="search_init"></th>
+                    <th>
+                        <input type="text" name="search_runningbalance" value="Search Running Balance" class="search_init"></th>
+                    <th>
+                        <input type="text" name="search_category" value="Search Category" class="search_init"></th>
+                    <th>
+                        <input type="text" name="search_categorytype" value="Search Category Type" class="search_init"></th>
+                    <th>
+                        <input type="text" name="search_description" value="Search Description" class="search_init"></th>
+                    <th>
+                        <input type="text" name="search_status" value="Search Status" class="search_init"></th>
                 </tr>
             </tfoot>
         </table>
@@ -347,9 +365,8 @@
                 <%for(var gr in rm.GroupRulesDict){ %>
                 <tr class="yodleeSearchWordsRow">
                     <td><%=gr%></td>
-                    <td>
-                        <%for(var r in rm.GroupRulesDict[gr]){ %>
-                            <%=r%> <%if(rm.GroupRulesDict[gr][r]) { print(': '); %>  <%=rm.GroupRulesDict[gr][r]%> <%}%><br/>
+                    <td><%for(var r in rm.GroupRulesDict[gr]){ %>
+                            <%=r%> <%if(rm.GroupRulesDict[gr][r]) { print(': '); %>  <%=rm.GroupRulesDict[gr][r]%> <%}%><br />
                         <%}%>
                     </td>
                 </tr>
@@ -358,29 +375,39 @@
         </table>
         <hr />
         <div class="well" style="width: 570px">
-            <span>Add Rule</span>
-            <label for="yodleeGroup">Group</label>
-            <select id="yodleeGroup" class="form-control selectheight" style="margin-bottom: 0">
-                <option></option>
-                <%for(var i in rm.Groups) { if(!rm.Groups.hasOwnProperty(i)) {continue;} %>
-                <option value="<%=rm.Groups[i].Id%>"><%=rm.Groups[i].Group%> <%if(rm.Groups[i].SubGroup) { print(' - ');%><%=rm.Groups[i].SubGroup%><%}%></option>
-                <%}%>
-            </select>
-            <label for="yodleeRule">Rule</label>
-            <select id="yodleeRule" class="form-control selectheight" style="margin-bottom: 0">
-                <option></option>
-                <%for(var i in rm.Rules) { if(!rm.Rules.hasOwnProperty(i)) {continue;} %>
-                <option value="<%=rm.Rules[i].Id%>"><%=rm.Rules[i].Rule%></option>
-                <%}%>
-            </select>
-            <label for="yodleeLiteral">Literal</label>
-            <input type="text" id="yodleeLiteral" style="margin-bottom: 0" />
-            <br/>
-            <button class="btn btn-primary yodleeRuleAdd" id="yodleeRuleAdd">Add</button>
+            <div class="form-group">
+                <span>Add Rule</span>
+                <label for="yodleeGroup">Group</label>
+                <select id="yodleeGroup" class="form-control selectheight" style="margin-bottom: 0">
+                    <option></option>
+                    <%for(var i in rm.Groups) { if(!rm.Groups.hasOwnProperty(i)) {continue;} %>
+                    <option value="<%=rm.Groups[i].Id%>"><%=rm.Groups[i].Group%> <%if(rm.Groups[i].SubGroup) { print(' - ');%><%=rm.Groups[i].SubGroup%><%}%></option>
+                    <%}%>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="yodleeRule">Rule</label>
+                <select id="yodleeRule" class="form-control selectheight" style="margin-bottom: 0">
+                    <option></option>
+                    <%for(var i in rm.Rules) { if(!rm.Rules.hasOwnProperty(i)) {continue;} %>
+                    <option value="<%=rm.Rules[i].Id%>"><%=rm.Rules[i].Rule%></option>
+                    <%}%>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="yodleeLiteral">Literal</label>
+                <input type="text" id="yodleeLiteral" class="form-control" style="margin-bottom: 0" />
+            </div>
+
+            <div class="form-group">
+                <button class="btn btn-primary yodleeRuleAdd" id="yodleeRuleAdd">Add</button>
+            </div>
+
 
             @*<button class="btn btn-primary yodleeSearchWordsDelete" id="removeYodleeSearchWord">Remove</button>*@
             <hr />
-            
+
 
         </div>
         <%} else {print('No rules available');} })();%>

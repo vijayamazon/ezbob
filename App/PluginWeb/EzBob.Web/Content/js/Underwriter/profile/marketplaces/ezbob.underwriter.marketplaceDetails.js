@@ -62,7 +62,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
             that.renderYodlee();
         }
 
-        $('a[data-toggle="tab"]').on('shown', function (e) {
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
             if ($(e.target).text() == "Charts") {
                 that.yodleeShowGraph();
             }
