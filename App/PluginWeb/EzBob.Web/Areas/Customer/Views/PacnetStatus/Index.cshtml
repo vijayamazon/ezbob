@@ -123,6 +123,7 @@
 
 @section Js
 {
+    <script type='text/javascript' src='https://my.nanorep.com/common/API/conversionUpdate.js?account=ezbob&revenue=@ViewData["Amount"]&orderId=@ViewData["loanNo"]' ></script>
     <script type="text/javascript">
         $(function () {
             var scheduleView = new EzBob.Profile.PaypointLoanScheduleView({ el: $('#schedule'), schedule:  @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(@ViewData["schedule"]))});

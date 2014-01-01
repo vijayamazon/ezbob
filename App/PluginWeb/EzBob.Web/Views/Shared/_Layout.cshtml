@@ -60,7 +60,11 @@
 
     @{
         var isUnderwriter = (Url.Action(null) ?? "").Contains("AdminLogOn");
-        if (!isUnderwriter) { Html.RenderPartial("_LivePerson"); }
+        if (!isUnderwriter) 
+        { 
+            Html.RenderPartial("_LivePerson");
+            Html.RenderPartial("_NanoRep");
+        }
     }
 
     @Html.AntiForgeryTokenNoUserCheck()
