@@ -3,6 +3,7 @@
 	using Ezbob.Database;
 	using System;
 	using System.Data;
+	using Ezbob.Logger;
 	using Models;
 
 	public class Approval
@@ -12,10 +13,13 @@
 		private readonly bool autoApproveIsSilent;
 		private readonly string autoApproveSilentTemplateName;
 		private readonly string autoApproveSilentToAddress;
-		private AConnection Db { get; set; }
+		private readonly AConnection Db;
+		private readonly ASafeLog log;
 
-		public Approval(AutoDecisionRequest request, AConnection oDb) {
+		public Approval(AutoDecisionRequest request, AConnection oDb, ASafeLog oLog)
+		{
 			Db = oDb;
+			log = oLog;
 			this.request = request;
 			DataTable dt = Db.ExecuteReader("GetApprovalConfigs", CommandSpecies.StoredProcedure);
 			DataRow results = dt.Rows[0];

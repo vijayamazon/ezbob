@@ -2,6 +2,7 @@
 {
 	using Ezbob.Database;
 	using System.Data;
+	using Ezbob.Logger;
 
 	public class ReRejection
 	{
@@ -10,10 +11,13 @@
 		private readonly decimal principalPaidAmount;
 		private readonly decimal loanAmountTaken;
 		private readonly AutoDecisionRequest request;
-		private AConnection Db { get; set; }
+		private readonly AConnection Db;
+		private readonly ASafeLog log;
 
-		public ReRejection(AutoDecisionRequest request, AConnection oDb) {
+		public ReRejection(AutoDecisionRequest request, AConnection oDb, ASafeLog oLog)
+		{
 			Db = oDb;
+			log = oLog;
 			this.request = request;
 			DataTable dt = Db.ExecuteReader("GetCustomerDataForReRejection", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", request.CustomerId));
 			DataRow results = dt.Rows[0];

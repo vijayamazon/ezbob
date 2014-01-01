@@ -3,6 +3,7 @@
 	using Ezbob.Database;
 	using System;
 	using System.Data;
+	using Ezbob.Logger;
 
 	public class Rejection
 	{
@@ -17,10 +18,13 @@
 		private readonly int errorMPsNum;
 		private readonly int loanOfferApprovalNum;
 		private readonly int numOfDefaultAccounts;
-		private AConnection Db { get; set; }
+		private readonly AConnection Db;
+		private readonly ASafeLog log;
 
-		public Rejection(AutoDecisionRequest request, AConnection oDb) {
+		public Rejection(AutoDecisionRequest request, AConnection oDb, ASafeLog oLog)
+		{
 			Db = oDb;
+			log = oLog;
 			this.request = request;
 			DataTable dt = Db.ExecuteReader("GetRejectionConfigs", CommandSpecies.StoredProcedure);
 			DataRow results = dt.Rows[0];

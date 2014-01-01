@@ -3,6 +3,7 @@
 	using Ezbob.Database;
 	using System;
 	using System.Data;
+	using Ezbob.Logger;
 	using Models;
 
 	public class ReApproval
@@ -10,10 +11,13 @@
 		private readonly StrategyHelper strategyHelper = new StrategyHelper();
 		private readonly int autoReApproveMaxNumOfOutstandingLoans;
 		private readonly AutoDecisionRequest request;
-		private AConnection Db { get; set; }
+		private readonly AConnection Db;
+		private readonly ASafeLog log;
 
-		public ReApproval(AutoDecisionRequest request, AConnection oDb) {
+		public ReApproval(AutoDecisionRequest request, AConnection oDb, ASafeLog oLog)
+		{
 			Db = oDb;
+			log = oLog;
 			this.request = request;
 			DataTable dt = Db.ExecuteReader("GetReApprovalConfigs", CommandSpecies.StoredProcedure);
 			DataRow results = dt.Rows[0];
@@ -37,10 +41,26 @@
 			bool loanOfferEmailSendingBanned = Convert.ToBoolean(results["EmailSendingBanned"]);
 			DateTime loanOfferOfferStart = DateTime.Parse(results["OfferStart"].ToString());
 			DateTime loanOfferOfferValidUntil = DateTime.Parse(results["OfferValidUntil"].ToString());
-			int loanOfferSystemCalculatedSum = int.Parse(results["SystemCalculatedSum"].ToString());
-			int loanOfferSumOfChargesOld = int.Parse(results["SumOfChargesOld"].ToString());
-			int loanOfferNumOfMPsAddedOld = int.Parse(results["NumOfMPsAddedOld"].ToString());
-			int loanOfferPrincipalPaidAmountOld = int.Parse(results["PrincipalPaidAmountOld"].ToString());
+			int loanOfferSystemCalculatedSum = 0;
+			if (!int.TryParse(results["SystemCalculatedSum"].ToString(), out loanOfferSystemCalculatedSum))
+			{
+				log.Debug("The parameter 'SystemCalculatedSum' was null, will use 0.");
+			}
+			int loanOfferSumOfChargesOld = 0;
+			if (!int.TryParse(results["SumOfChargesOld"].ToString(), out loanOfferSumOfChargesOld))
+			{
+				log.Debug("The parameter 'SumOfChargesOld' was null, will use 0.");
+			}
+			int loanOfferNumOfMPsAddedOld = 0;
+			if (!int.TryParse(results["NumOfMPsAddedOld"].ToString(), out loanOfferNumOfMPsAddedOld))
+			{
+				log.Debug("The parameter 'NumOfMPsAddedOld' was null, will use 0.");
+			}
+			decimal loanOfferPrincipalPaidAmountOld = 0;
+			if (!decimal.TryParse(results["PrincipalPaidAmountOld"].ToString(), out loanOfferPrincipalPaidAmountOld))
+			{
+				log.Debug("The parameter 'PrincipalPaidAmountOld' was null, will use 0.");
+			}
 
 			if ((request.LoanOfferReApprovalFullAmount > 0 || request.LoanOfferReApprovalRemainingAmount > 0) ||
 				((request.LoanOfferReApprovalFullAmountOld > 0 || request.LoanOfferReApprovalRemainingAmountOld > 0) &&

@@ -309,13 +309,40 @@
 			if (lastOfferDataTable.Rows.Count == 1)
 			{
 				DataRow lastOfferResults = lastOfferDataTable.Rows[0];
-				loanOfferReApprovalFullAmount = decimal.Parse(lastOfferResults["ReApprovalFullAmountNew"].ToString());
-				loanOfferReApprovalRemainingAmount = decimal.Parse(lastOfferResults["ReApprovalRemainingAmount"].ToString());
-				loanOfferReApprovalFullAmountOld = decimal.Parse(lastOfferResults["ReApprovalFullAmountOld"].ToString());
-				loanOfferReApprovalRemainingAmountOld = decimal.Parse(lastOfferResults["ReApprovalRemainingAmountOld"].ToString());
-				loanOfferApr = decimal.Parse(lastOfferResults["APR"].ToString());
+				loanOfferReApprovalFullAmount = 0;
+				if (!decimal.TryParse(lastOfferResults["ReApprovalFullAmountNew"].ToString(), out loanOfferReApprovalFullAmount))
+				{
+					Log.Debug("The parameter 'ReApprovalFullAmountNew' was null, will use 0.");
+				}
+				loanOfferReApprovalRemainingAmount = 0;
+				if (
+					!decimal.TryParse(lastOfferResults["ReApprovalRemainingAmount"].ToString(), out loanOfferReApprovalRemainingAmount))
+				{
+					Log.Debug("The parameter 'ReApprovalRemainingAmount' was null, will use 0.");
+				}
+				loanOfferReApprovalFullAmountOld = 0;
+				if (!decimal.TryParse(lastOfferResults["ReApprovalFullAmountOld"].ToString(), out loanOfferReApprovalFullAmountOld))
+				{
+					Log.Debug("The parameter 'ReApprovalFullAmountOld' was null, will use 0.");
+				}
+				loanOfferReApprovalRemainingAmountOld = 0;
+				if (
+					!decimal.TryParse(lastOfferResults["ReApprovalRemainingAmountOld"].ToString(),
+					                  out loanOfferReApprovalRemainingAmountOld))
+				{
+					Log.Debug("The parameter 'ReApprovalRemainingAmountOld' was null, will use 0.");
+				}
+				loanOfferApr = 0;
+				if (!decimal.TryParse(lastOfferResults["APR"].ToString(), out loanOfferApr))
+				{
+					Log.Debug("The parameter 'APR' was null, will use 0.");
+				}
 				loanOfferRepaymentPeriod = int.Parse(lastOfferResults["RepaymentPeriod"].ToString());
-				loanOfferExpirianRating = int.Parse(lastOfferResults["ExpirianRating"].ToString());
+				loanOfferExpirianRating = 0;
+				if (!int.TryParse(lastOfferResults["ExpirianRating"].ToString(), out loanOfferExpirianRating))
+				{
+					Log.Debug("The parameter 'ExpirianRating' was null, will use 0.");
+				}
 				loanOfferInterestRate = decimal.Parse(lastOfferResults["InterestRate"].ToString());
 				loanOfferUseSetupFee = int.Parse(lastOfferResults["UseSetupFee"].ToString());
 				loanOfferLoanTypeId = int.Parse(lastOfferResults["LoanTypeId"].ToString());
@@ -361,7 +388,7 @@
 			if (appHomeOwner != "Home owner" && maxCapNotHomeOwner < offeredCreditLine)
 				offeredCreditLine = maxCapNotHomeOwner;
 
-			autoDecisionResponse = AutoDecisionMaker.MakeDecision(CreateAutoDecisionRequest(), DB);
+			autoDecisionResponse = AutoDecisionMaker.MakeDecision(CreateAutoDecisionRequest(), DB, Log);
 			modelLoanOffer = autoDecisionResponse.ModelLoanOffer;
 
 			if (underwriterCheck)
