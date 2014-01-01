@@ -137,7 +137,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 			var builder = new CompanyScoreModelBuilder();
 			model.CompanyScore = builder.Create(customer);
 
-			model.ExperianDirectors = new CrossCheckModel(customer).ExperianDirectors;
+			model.ExperianDirectors = CrossCheckModel.GetExperianDirectors(customer);
 
 			model.State = "Ok";
 

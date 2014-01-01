@@ -10,17 +10,18 @@
 	public class CrossCheckController : Controller
 	{
 		private readonly CustomerRepository _customerRepository;
-
-		public CrossCheckController(CustomerRepository customerRepository)
+		private readonly CreditBureauModelBuilder _creditBureauModelBuilder;
+		public CrossCheckController(CustomerRepository customerRepository, CreditBureauModelBuilder creditBureauModelBuilder)
 		{
 			_customerRepository = customerRepository;
+			_creditBureauModelBuilder = creditBureauModelBuilder;
 		}
 
 		[Ajax]
 		[Transactional]
 		public ActionResult Index(int id)
 		{
-			var model = new CrossCheckModel(_customerRepository.Get(id));
+			var model = new CrossCheckModel(_customerRepository.Get(id), _creditBureauModelBuilder);
 			return View(model);
 		}
 

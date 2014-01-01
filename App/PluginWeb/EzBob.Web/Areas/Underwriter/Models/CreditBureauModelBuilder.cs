@@ -66,7 +66,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 			return model;
 		}
 
-		private void GetConsumerInfo(EZBob.DatabaseLib.Model.Database.Customer customer,
+		public void GetConsumerInfo(EZBob.DatabaseLib.Model.Database.Customer customer,
 			bool getFromLog, long? logId, CustomerAddress customerMainAddress, out ConsumerServiceResult result)
 		{
 
@@ -155,7 +155,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 			_customers.Update(customer);
 		}
 
-		protected CreditBureauModel GenerateConsumerModel(int id, ConsumerServiceResult eInfo)
+		public CreditBureauModel GenerateConsumerModel(int id, ConsumerServiceResult eInfo)
 		{
 			double score = (eInfo != null) ? eInfo.BureauScore : 0.0;
 

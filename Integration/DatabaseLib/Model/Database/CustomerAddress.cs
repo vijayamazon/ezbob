@@ -35,6 +35,8 @@ namespace EZBob.DatabaseLib.Model.Database
 		[Newtonsoft.Json.JsonIgnore]
 		public virtual ISet<Zoopla> Zoopla { get; set; }
 		public virtual string ZooplaEstimate { get; set; }
+		public virtual string ZooplaAverage { get; set; }
+		public virtual int ZooplaValue { get; set; }
 		public virtual DateTime? ZooplaUpdateDate { get; set; }
 
 		public virtual string FormattedAddress

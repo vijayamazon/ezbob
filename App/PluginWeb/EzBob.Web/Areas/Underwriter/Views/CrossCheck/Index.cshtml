@@ -240,10 +240,15 @@
     </tr>
     <tr>
         <td><b>Zoopla Estimate</b></td>
-        <td>@getZooplaEstimate(Model.CurrentAddress.ZooplaEstimate, Model.CurrentAddress.ZooplaUpdateDate) <button class="btn btn-mini btn-primary zooplaRecheck" title="Recheck"><i class="fa fa-refresh"></i></button></td>
-        <td></td>
-        <td></td>
-        <td></td>
+        <td colspan="4">@getZooplaEstimate(Model.CurrentAddress.ZooplaEstimate, Model.CurrentAddress.ZooplaAverage, Model.CurrentAddress.ZooplaUpdateDate) <button class="btn btn-mini btn-primary zooplaRecheck" title="Recheck"><i class="fa fa-refresh"></i></button></td>
+    </tr>
+    <tr>
+        <td><b>Mortgage</b></td>
+        <td colspan="4">£@Model.ExperianMortgage.ToString("N0")</td>
+    </tr>
+    <tr>
+        <td><b>Asset Worth</b></td>
+        <td colspan="4">£@Model.AssetWorth.ToString("N0")</td>
     </tr>
 </tbody>
 </table>
@@ -585,13 +590,13 @@
 	}
 }
 
-@helper getZooplaEstimate(string estimate, DateTime? date)
+@helper getZooplaEstimate(string estimate, string avarage, DateTime? date)
 {
     <span>@WebUtility.HtmlDecode(estimate)</span>
     if (date.HasValue)
     {
         <span>, updated: @date.Value.ToString("dd/MM/yyyy")</span>
     }
-
+    <span>(avarage: £@avarage)</span>
 }
  
