@@ -171,20 +171,20 @@ namespace EzBob.Web.Areas.Underwriter.Models
 								  ? "Error"
 								  : eInfo.ExperianResult;
 
-			var checkIcon = "icon-remove-sign";
+			var checkIcon = "icon-white icon-remove-sign";
 			var buttonStyle = "btn-danger";
 			switch (checkStatus)
 			{
 				case "Passed":
-					checkIcon = "icon-ok-sign";
+					checkIcon = "icon-white icon-ok-sign";
 					buttonStyle = "btn-success";
 					break;
 				case "Referred":
-					checkIcon = "icon-question-sign";
+					checkIcon = "icon-white icon-question-sign";
 					buttonStyle = "btn-warning";
 					break;
 				case "Rejected":
-					checkIcon = "icon-remove-sign";
+					checkIcon = "icon-white icon-remove-sign";
 					buttonStyle = "btn-danger";
 					break;
 			}
@@ -937,7 +937,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 				ScoreValuePosition = valPos,
 				ScoreColor = color,
 				CheckStatus = "Passed",
-				CheckIcon = "icon-ok",
+				CheckIcon = "icon-white icon-ok",
 				ButtonStyle = "btn-success"
 			};
 		}
@@ -949,7 +949,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 				Id = id,
 				Score = 0,
 				CheckStatus = "Not Qualified",
-				CheckIcon = "icon-remove-sign",
+				CheckIcon = "icon-white icon-remove-sign",
 				ButtonStyle = "btn-danger",
 				CheckDate = string.Empty,
 				CheckValidity = string.Empty

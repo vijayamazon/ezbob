@@ -33,7 +33,9 @@
                     <div class="tab-pane" id="medal-calculator"></div>
                     <div class="tab-pane" id="loanhistorys"></div>
                     <div class="tab-pane" id="customer-info"></div>
-					<div class="tab-pane" id="company-score"><div id="company-score-list"></div></div>
+                    <div class="tab-pane" id="company-score">
+                        <div id="company-score-list"></div>
+                    </div>
                     <div class="tab-pane" id="messages-tab">
                         <div id="messages" class="clearfix"></div>
                         <div id="alert-docs"></div>
@@ -50,18 +52,18 @@
 </script>
 
 <script id="controls-button-template" type="text/template">
-	<div id="DecisionNotes"></div>
+    <div id="DecisionNotes"></div>
 
     <a class="btn btn-primary back" href="#"><i class="fa fa-arrow-circle-o-left" />Go back</a>
-    <a href="#" class="btn btn-primary" id="ReportBug" data-bug-customer="<%-customerId%>" data-bug-type="Other"><i class="fa fa-bug" />Report Bug</a>    
+    <a href="#" class="btn btn-primary" id="ReportBug" data-bug-customer="<%-customerId%>" data-bug-type="Other"><i class="fa fa-bug" />Report Bug</a>
     <button name="newCreditLineLnk" id="newCreditLineLnkId" class="btn btn-success"><i class="fa fa-circle" />New Credit Line</button>
 
     <div class="pull-right">
-        <button class="btn btn-primary" id="ReturnBtn"><i class="icon-repeat" />Return</button>
-        <button class="btn btn-primary" id="SuspendBtn"><i class="icon-pause" />Suspend</button>
-        <button class="btn btn-primary" id="RejectBtn"><i class="icon-remove-sign" />Reject</button>
-        <button class="btn btn-primary" id="ApproveBtn"><i class="icon-ok-sign" />Approve</button>
-        <button class="btn btn-primary" id="EscalateBtn"><i class="icon-question-sign" />Escalate</button>
+        <button class="btn btn-primary" id="ReturnBtn"><i class="icon-white icon-repeat" />Return</button>
+        <button class="btn btn-primary" id="SuspendBtn"><i class="icon-white icon-pause" />Suspend</button>
+        <button class="btn btn-primary" id="RejectBtn"><i class="icon-white icon-remove-sign" />Reject</button>
+        <button class="btn btn-primary" id="ApproveBtn"><i class="icon-white icon-ok-sign" />Approve</button>
+        <button class="btn btn-primary" id="EscalateBtn"><i class="icon-white icon-question-sign" />Escalate</button>
     </div>
 </script>
 
@@ -101,12 +103,14 @@
                 <textarea class="reason" maxlength="200"></textarea>
             </div>
             <div id="noYodleeReasonDiv" class="hide">
-                <h3 style="line-height: normal !important;margin-top: 15px !important;">Offline user without Yodlee <br/> account - Reason:</h3>
+                <h3 style="line-height: normal !important; margin-top: 15px !important;">Offline user without Yodlee
+                    <br />
+                    account - Reason:</h3>
                 <textarea class="yodleeReason" maxlength="200"></textarea>
             </div>
         </div>
-        
-        
+
+
         <div class="pull-right">
             <input class="btn btn-primary button-ok" type="button" value="OK" />
             <input class="btn btn-primary button-cancel" type="button" value="Cancel" />

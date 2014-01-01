@@ -125,32 +125,32 @@ namespace EzBob.Web.Areas.Underwriter.Models
             switch (state)
             {
                 case LightsState.Passed:
-                    Icon = "icon-ok-sign";
+					Icon = "icon-white icon-ok-sign";
                     ButtonStyle = "btn-success";
                     Caption = "Passed";
                     break;
                 case LightsState.Warning:
-                    Icon = "icon-question-sign";
+					Icon = "icon-white icon-question-sign";
                     ButtonStyle = "btn-warning";
                     Caption = "Warning";
                     break;
                 case LightsState.Reject:
-                    Icon = "icon-remove-sign";
+					Icon = "icon-white icon-remove-sign";
                     ButtonStyle = "btn-danger";
                     Caption = "Reject";
                     break;
                 case LightsState.InProgress:
-                    Icon = "icon-remove-sign";
+					Icon = "icon-white icon-remove-sign";
                     ButtonStyle = "btn-danger btn-more-danger";
                     Caption = "In progress";
                     break;
                 case LightsState.Error:
-                    Icon = "icon-remove-sign";
+					Icon = "icon-white icon-remove-sign";
                     ButtonStyle = "btn-danger btn-more-danger";
                     Caption = "Error";
                     break;
                 case LightsState.NotPerformed:
-                    Icon = "icon-ban-circle";
+					Icon = "icon-white icon-ban-circle";
                     ButtonStyle = "btn";
                     Caption = "Not Performed ";
                     break;

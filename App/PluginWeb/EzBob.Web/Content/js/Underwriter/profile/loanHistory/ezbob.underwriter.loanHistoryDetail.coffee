@@ -22,7 +22,7 @@ class EzBob.Underwriter.LoanDetailsView extends Backbone.Marionette.View
             position: "center"
             draggable: true
             width: "1000"
-            height: "600"
+            height: "900"
             close: ->
                 $(this).dialog "destroy"
                 that.trigger "close"

@@ -240,7 +240,7 @@
     </tr>
     <tr>
         <td><b>Zoopla Estimate</b></td>
-        <td>@getZooplaEstimate(Model.CurrentAddress.ZooplaEstimate, Model.CurrentAddress.ZooplaUpdateDate) <button class="btn btn-mini btn-primary zooplaRecheck" title="Recheck"><i class="icon-refresh"></i></button></td>
+        <td>@getZooplaEstimate(Model.CurrentAddress.ZooplaEstimate, Model.CurrentAddress.ZooplaUpdateDate) <button class="btn btn-mini btn-primary zooplaRecheck" title="Recheck"><i class="fa fa-refresh"></i></button></td>
         <td></td>
         <td></td>
         <td></td>
@@ -329,7 +329,7 @@
 			<td><b>Targeting Status</b></td>
 			<td>
 				<a class="btn btn-mini pull-right @(String.IsNullOrEmpty(companyRefNum) ? "btn-primary" : "btn-success") disabled" style="margin-left: 10px;">
-					<i class="@(String.IsNullOrEmpty(companyRefNum) ? "icon-remove-sign" : "icon-ok-sign")"></i>
+					<i class="@(String.IsNullOrEmpty(companyRefNum) ? "icon-white icon-remove-sign" : "icon-white icon-ok-sign")"></i>
 					@(String.IsNullOrEmpty(companyRefNum) ? "Not performed" : "Performed")
 				</a>
 				<a id="recheck-targeting"

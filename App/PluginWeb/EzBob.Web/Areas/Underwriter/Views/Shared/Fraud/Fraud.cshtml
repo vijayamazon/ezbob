@@ -133,10 +133,10 @@
             <div class="controls">
                 <%if(_.keys(val).length>2){ %>
                 <textarea  disabled="disabled" style="height:40px; resize: none"><%-_.values(val)%></textarea>
-                <button class="btn btn-mini btn-primary remove" data-index="<%-i%>" data-type="@type"><i class="icon-remove"></i></button>
+                <button class="btn btn-mini btn-primary remove" data-index="<%-i%>" data-type="@type"><i class="icon-white icon-remove"></i></button>
                 <%}else{%>
                 <input type="text"  disabled="disabled" value="<%-_.values(val)%>">
-                <button class="btn btn-mini btn-primary remove" data-index="<%-i%>" data-type="@type" style="margin-top: -10px"><i class="icon-remove"></i></button>
+                <button class="btn btn-mini btn-primary remove" data-index="<%-i%>" data-type="@type" style="margin-top: -10px"><i class="icon-white icon-remove"></i></button>
                 <%}%>
                 
             </div>

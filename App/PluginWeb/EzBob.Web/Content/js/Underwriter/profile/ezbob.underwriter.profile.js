@@ -1,4 +1,4 @@
-﻿(function() {
+(function() {
   var root,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -134,6 +134,9 @@
       this.controlButtons = new EzBob.Underwriter.ControlButtonsView({
         el: controlButtons
       });
+      this.$el.on('shown.bs.tab', function() {
+        return $("#spl").css("height", Math.max($('.profile-person-info').height() + $('.profile-loan-info').height() + 20, $('.profile-tabs .tabbable').height() + 40) + "px").trigger("resize");
+      });
       return this;
     };
 
@@ -237,7 +240,7 @@
           parent: this,
           skipPopupForApprovalWithoutAML: this.skipPopupForApprovalWithoutAML
         });
-        EzBob.App.modal.show(approveLoanWithoutAMLDialog);
+        EzBob.App.jqmodal.show(approveLoanWithoutAMLDialog);
         return false;
       }
       return this.CheckCustomerStatusAndCreateApproveDialog();
@@ -250,7 +253,7 @@
           model: this.personalInfoModel,
           parent: this
         });
-        EzBob.App.modal.show(approveLoanForWarningStatusCustomer);
+        EzBob.App.jqmodal.show(approveLoanForWarningStatusCustomer);
         return false;
       }
       return this.CreateApproveDialog();

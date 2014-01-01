@@ -62,7 +62,7 @@ EzBob.Underwriter.IdHubCustomAddressView = Backbone.View.extend({
         return this;
     },
     dlgOpened: function (event, ui) {
-        this.content.parent('.ui-dialog').find('.ui-dialog-buttonset button').addClass('btn');
+        this.content.parent('.ui-dialog').find('.ui-dialog-buttonset button').addClass('btn btn-primary');
     },
     onRunCheck: function () {
 

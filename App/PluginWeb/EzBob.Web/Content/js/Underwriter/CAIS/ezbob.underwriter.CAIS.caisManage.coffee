@@ -126,7 +126,7 @@ class EzBob.Underwriter.CAIS.CaisManageView extends Backbone.Marionette.ItemView
                         'data-id': id 
                     }
                     {
-                        html: "<i class='icon-refresh'></i>Set Status Uploaded"
+                        html: "<i class='fa fa-refresh'></i>Set Status Uploaded"
                         click: (e)-> self.fileUploaded(e)
                         class:'btn btn-primary save-change'
                         'data-id': id 
@@ -134,7 +134,7 @@ class EzBob.Underwriter.CAIS.CaisManageView extends Backbone.Marionette.ItemView
                     {
                         text: "Close"
                         click: -> dialog.dialog('destroy')
-                        class: 'btn'
+                        class: 'btn btn-primary'
                     }
                 ]
             (dialog.find ".cais-file-view").on("keypress keyup keydown", @fileViewChanged)

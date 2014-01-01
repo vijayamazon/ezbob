@@ -1154,6 +1154,12 @@
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.collectionStatus.js">
       <DependentUpon>ezbob.underwriter.collectionStatus.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.loanHistoryDetail.js">
+      <DependentUpon>ezbob.underwriter.loanHistoryDetail.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.loanHistoryDetail.min.js">
+      <DependentUpon>ezbob.underwriter.loanHistoryDetail.coffee</DependentUpon>
+    </Content>
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.loanInfo.js">
       <DependentUpon>ezbob.underwriter.loanInfo.coffee</DependentUpon>
     </Content>
@@ -1575,6 +1581,8 @@
     <None Include="Service References\EzServiceReference\service1.xsd">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="Views\Shared\_NanoRep.cshtml" />
+    <Content Include="Views\Shared\_NanoRepSupport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

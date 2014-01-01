@@ -123,7 +123,9 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
         @controlButtons = new EzBob.Underwriter.ControlButtonsView(
             el: controlButtons
         )
-
+        @$el.on('shown.bs.tab', () ->
+            $("#spl").css("height", Math.max($('.profile-person-info').height() + $('.profile-loan-info').height() + 20, $('.profile-tabs .tabbable').height() + 40) + "px").trigger("resize");
+        )
         this
 
     events:

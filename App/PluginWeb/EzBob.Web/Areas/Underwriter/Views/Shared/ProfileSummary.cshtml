@@ -46,7 +46,9 @@
                 <tbody>
                     <tr>
                         <td width="60%">
-                            <b>Number of stores:</b> &nbsp; &nbsp;<span class="<%-Convert.toBool(mp.IsNew) ? '' : 'hidden-field'%> btn-success btn-mini"><i class="icon-star-empty"></i>new</span>
+                            <b>Number of stores:</b> &nbsp; &nbsp;<span class="<%-Convert.toBool(mp.IsNew) ? '' : 'hidden-field'%> btn-success btn-mini">
+                                                                      <i class="icon-white icon-star-empty"></i>new
+                                                                  </span>
                         </td>
                         <td width="40%">
                             <%-mp!=null ? mp.NumberOfStores : "-"%> 
@@ -99,7 +101,9 @@
                 <tbody>
                     <tr>
                         <td>
-                            <b>Number of payment accounts:</b> <span class="<%-pa.IsNew ? '' : 'hidden-field'%> btn-success btn-small"><i class="icon-star-empty"></i>new</span>
+                            <b>Number of payment accounts:</b> <span class="<%-pa.IsNew ? '' : 'hidden-field'%> btn-success btn-small">
+                                                                   <i class="icon-white icon-star-empty"></i>new
+                                                               </span>
                         </td>
                         <td width="35%">
                             <%-pa!=undefined ? pa.NumberOfPayPalAccounts : "-"%>
@@ -142,7 +146,7 @@
                         if (cb.FinancialAccounts == 0)
                         {
                         cb.Lighter.ButtonStyle="btn-primary";
-                        cb.Lighter.Icon="icon-check";
+                        cb.Lighter.Icon="icon-white icon-check";
                         cb.Lighter.Caption="ThinFile";
                         }
                         %>

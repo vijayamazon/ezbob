@@ -24,19 +24,23 @@
 @helper CaisReports()
 {
     <fieldset>
-        <legend>CAIS reports</legend>
+        <div class="page-title">
+            <h1>
+                CAIS reports
+            </h1>
+        </div>
         <div class="simple-well cais-manage-controls">
-            <button class="generate btn btn-primary"><i class="icon-cog"></i>Generate current reports</button>
-            <button class="download btn btn-primary"><i class="icon-circle-arrow-down"></i>Download selected reports(<span class="reports-count"></span>)</button>
-            <a class="redirect btn btn-primary" href="https://st.uk.experian.com" target="_blank"><i class="icon-globe"></i>Go to expirian sts</a>
+            <button class="generate btn btn-primary"><i class="icon-white icon-cog"></i>Generate current reports</button>
+            <button class="download btn btn-primary"><i class="icon-white icon-circle-arrow-down"></i>Download selected reports(<span class="reports-count"></span>)</button>
+            <a class="redirect btn btn-primary" href="https://st.uk.experian.com" target="_blank"><i class="icon-white icon-globe"></i>Go to expirian sts</a>
         </div>
         
         <table class="table cais-table">
             <thead class="box">
-                @EzForm.RawHeaderCell("Reports history", "","","","","", "","")
+                @EzForm.RawHeaderCell("Reports history", "", "", "", "", "", "", "")
+                @EzForm.RawCellBold("Generation Date", "Name", "Type", "Total account", "Good accounts", "Late accounts", "Defaults", "Upload status")
             </thead>
             <tbody>
-                @EzForm.RawCellBold("Generation Date", "Name", "Type", "Total account", "Good accounts","Late accounts", "Defaults", "Upload status" )
                 <% var currentCollor = "first";%>
                 <% _.each(model, function(val, i){ %>
                 <% 

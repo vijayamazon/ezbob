@@ -131,7 +131,7 @@
 @helper TableRowsOfferApproved () {
     <tr>
         <td><%- offer.UnderwriterDecision %></td>
-        <td class="centered"><button data-id="<%=offer.Id%>" class="btn btn-primary btn-mini show-schedule"><i class="icon-calendar"></i></button></td>
+        <td class="centered"><button data-id="<%=offer.Id%>" class="btn btn-primary btn-mini show-schedule"><i class="fa fa-calendar"></i></button></td>
         <td><%- EzBob.formatDateHumanFull(offer.StartDate) %></td>
         <td><%- EzBob.formatDateHumanFull(offer.EndDate) %></td>
         <td><%- EzBob.formatPounds(offer.Amount) %></td>

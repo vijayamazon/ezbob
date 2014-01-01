@@ -23,11 +23,11 @@
     <tr data-card-id="<%-(@current).Id%>" >
         <td>
             <%if(!(@current).StatusInformation){%>
-                <i class="icon-question-sign" data-title="Not validated"></i>
+                <i class="icon-white icon-question-sign" data-title="Not validated"></i>
             <%} else if((@current).StatusInformation == "OK"){%>
-                <i class="icon-ok" data-title="Validated"></i>
+                <i class="icon-white icon-ok" data-title="Validated"></i>
             <%} else {%>
-                <i class="icon-exclamation-sign" data-title="<%- (@current).StatusInformation %>"></i>
+                <i class="icon-white icon-exclamation-sign" data-title="<%- (@current).StatusInformation %>"></i>
             <%}%>
             <%-(@current).BankAccount%>
         </td>

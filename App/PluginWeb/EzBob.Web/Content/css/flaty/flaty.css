@@ -25,6 +25,7 @@ body {
     font-size: 13px;
     color: #393939;
     -webkit-font-smoothing: antialiased;
+    background-color: #E9F0F9;
 }
 
 ::-moz-selection {background: #3e4349; color: #fff; }
@@ -1691,7 +1692,7 @@ a.btn {
     background-color: #dcdcdc;
 }
 .btn.btn-primary {
-    background-color: #0090ff;
+    background-color: #58b1fc;
 }
 .btn.btn-primary:active,
 .btn.btn-primary.active,

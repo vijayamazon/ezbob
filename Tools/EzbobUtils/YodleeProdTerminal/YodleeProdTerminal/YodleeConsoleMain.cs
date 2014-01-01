@@ -592,7 +592,7 @@ namespace com.yodlee.sampleapps
 
 		public static void Main(string[] args)
 		{
-			YodleeConsoleMain yc = new YodleeConsoleMain();
+			var yc = new YodleeConsoleMain();
 			
 			//var log = new LegacyLog();
 			//var conn = new SqlConnection(log);

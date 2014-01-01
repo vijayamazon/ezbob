@@ -189,18 +189,18 @@
                             <div style="width: 100px;">
 					        <%if(m.IsHistory) { print(EzBob.formatDateWithoutTime(m.History)); } else {%>
 					            <% if (m.Disabled) { %>
-					            <a href="#" class="btn btn-mini btn-success show-tooltip enable-shop %>" data-original-title="Enable" data-placement="top" umi="<%- m.Id %>"><i class="fa fa-play"></i></a>
+                                <a href="#" class="btn btn-mini btn-success show-tooltip enable-shop %>" data-original-title="Enable" data-placement="top" umi="<%- m.Id %>"><i class="fa fa-play"></i></a>
+                                <a href="#" class="btn btn-mini btn-primary" data-bug-type="<%- m.Name %>" data-bug-customer="<%-customerId%>" data-bug-mp="<%-m.Id%>" data-title="Report Bug"><i class="fa fa-bug"></i></a>
 					            <% }
 					            else { %>
 					            <a href="#" class="btn btn-mini btn-primary show-tooltip reCheckMP <%- sShopName.toLowerCase() %>" data-original-title="Recheck" data-placement="top" umi="<%- m.Id %>" marketplacetype="<%- m.Name %>"><i class="fa fa-refresh"></i></a>
-					            <a href="#" class="btn btn-mini btn-primary show-tooltip disable-shop %>" data-original-title="Disable" data-placement="top" umi="<%- m.Id %>"><i class="fa fa-ban"></i></a>
-					            <% if (m.UpdateError && m.Name == 'eBay') { %>
-					            <br />
-					            <button class="btn btn-mini btn-primary show-tooltip renew-token" data-original-title="Recheck" data-placement="top" data-umi="<%- m.Id %>"><i class="fa fa-refresh"></i></button>
-					            <br />
-					            <% } %>
-					            <% } %>
                                 <a href="#" class="btn btn-mini btn-primary" data-bug-type="<%- m.Name %>" data-bug-customer="<%-customerId%>" data-bug-mp="<%-m.Id%>" data-title="Report Bug"><i class="fa fa-bug"></i></a>
+                                <a href="#" class="btn btn-mini btn-primary show-tooltip disable-shop %>" data-original-title="Disable" data-placement="top" umi="<%- m.Id %>"><i class="fa fa-ban"></i></a>
+					            <% if (m.UpdateError && m.Name == 'eBay') { %>
+					            <button class="btn btn-mini btn-primary show-tooltip renew-token" data-original-title="Recheck" data-placement="top" data-umi="<%- m.Id %>"><i class="fa fa-refresh"></i></button>
+					            <% } %>
+					            <% } %>
+                                
                             <%}%>
 					        </div>
 					    </td>
@@ -271,7 +271,6 @@
 					<td><%- m.UpdatingStatus %> <%- m.LastChecked%>
 						<% if(m.UpdateError){%>
 							<button class="btn btn-mini btn-primary mp-error-description" data-title="<%- m.UpdateError %>"><i class="fa fa-comment"></i></button>
-							<br />
 						<%}%>
 					</td>
 				    <td>

@@ -1,4 +1,4 @@
-﻿(function() {
+(function() {
   var root,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -223,7 +223,7 @@
               "class": 'btn btn-primary save-change disabled',
               'data-id': id
             }, {
-              html: "<i class='icon-refresh'></i>Set Status Uploaded",
+              html: "<i class='fa fa-refresh'></i>Set Status Uploaded",
               click: function(e) {
                 return self.fileUploaded(e);
               },
@@ -234,7 +234,7 @@
               click: function() {
                 return dialog.dialog('destroy');
               },
-              "class": 'btn'
+              "class": 'btn btn-primary'
             }
           ]
         });
@@ -265,7 +265,7 @@
         return EzBob.ShowMessage("Error occured", "Something went wrong");
       });
       return xhr.always(function() {
-        return console.log('clicked always', BlockUi("off"));
+        return BlockUi("off");
       });
     };
 

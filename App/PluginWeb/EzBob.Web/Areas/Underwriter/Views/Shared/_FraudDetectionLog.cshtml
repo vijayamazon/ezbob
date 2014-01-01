@@ -3,7 +3,7 @@
 </script>
 
 @helper FraudDetectionLog(){
-    <button class="btn-primary btn" id="recheckFraud"><i class="icon-refresh"></i> Recheck</button><span>  Last check date: <%-checkDate == undefined ? 'Never checked' : EzBob.formatDate(checkDate)%></span>
+    <button class="btn-primary btn" id="recheckFraud"><i class="fa fa-refresh"></i> Recheck</button><span>  Last check date: <%-checkDate == undefined ? 'Never checked' : EzBob.formatDate(checkDate)%></span>
     
     <table class="table centered">
         <thead class="box">

@@ -66,8 +66,8 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
 
     templateHelpers:
         getIcon: ->
-            return "icon-ok"  if @EmailState is "Confirmed" or @EmailState is "ManuallyConfirmed"
-            "icon-question-sign"
+            return "icon-white icon-ok"  if @EmailState is "Confirmed" or @EmailState is "ManuallyConfirmed"
+            "icon-white icon-question-sign"
 
     changeDisabledState: ->
         collectionStatusModel = new EzBob.Underwriter.CollectionStatusModel( 

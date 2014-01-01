@@ -221,7 +221,7 @@
 
     CollectionStatusView.prototype.onRender = function() {
       this.modelBinder.bind(this.model, this.el, this.bindings);
-      this.$el.parents('.ui-dialog').find("button").addClass('btn-back');
+      this.$el.parents('.ui-dialog').find("button").addClass('btn btn-primary btn-back');
       this.$el.find('.collectionFee').autoNumeric({
         'aSep': ',',
         'aDec': '.',
