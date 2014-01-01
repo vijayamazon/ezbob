@@ -192,10 +192,11 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 	    }
 	    
 	    if (predefinedPhone != undefined) {
-		    var movileobj = this.$el.find('#MobilePhone');
-		    movileobj.addClass('disabled');
-		    movileobj.attr("disabled", "disabled");
-		    movileobj.val(predefinedPhone).change().attardi_labels('toggle');
+		    var mobileObj = this.$el.find('#MobilePhone');
+		    mobileObj.addClass('disabled');
+		    mobileObj.attr("disabled", "disabled");
+		    mobileObj.val(predefinedPhone).change().attardi_labels('toggle');
+		    EzBob.Validation.element(this.validator, $(mobileObj));
 		}
 
 		this.readyToProceed = true;
