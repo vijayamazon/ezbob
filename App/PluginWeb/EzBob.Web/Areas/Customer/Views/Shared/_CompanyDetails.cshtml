@@ -187,7 +187,7 @@
 
 <script id="company-data-template" type="text/template">
 	<div class="row-fluid">
-		<h2 class="form_start">Company information</h2> 
+		<h2 class="form_start">Company details</h2> 
 		<div class="offline"></div>
 
 		@using (Html.BeginForm("SaveCompany", "CustomerDetails", new {Area = "Customer"}, FormMethod.Post, new {@class = "CompanyDetailForm"})) {
@@ -335,8 +335,6 @@
 <script id="nonlimitededinfo-template" type="text/template">
 	<input type="hidden" name="NonLimitedRefNum" class="RefNum" />
 
-	<h2 class="form_section">Company details</h2>
-
 	<div class="control-group form_field_container">
 		<div class="controls">
 			<label class="control-label attardi-input">
@@ -404,8 +402,6 @@
 </script>
 
 <script id="limitedinfo-template" type="text/template">
-	<h2 class="form_section">Company details</h2>
-
 	<div class="control-group form_field_container">
 		<div class="controls">
 			<label class="control-label attardi-input">
