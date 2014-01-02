@@ -43,6 +43,9 @@ namespace Reports {
 				CommandSpecies.StoredProcedure
 			);
 
+			foreach (KeyValuePair<int, LoanDateScoreItem> pair in m_oResult)
+				pair.Value.LoadLastScore(m_oDB);
+
 			return m_oResult;
 		} // Run
 

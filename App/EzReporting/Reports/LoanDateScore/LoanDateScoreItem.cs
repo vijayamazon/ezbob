@@ -24,6 +24,7 @@ namespace Reports {
 
 			CustomerID = Convert.ToInt32(oRow["CustomerID"]);
 			m_oLastLoanDate = Convert.ToDateTime(oRow["LoanIssueDate"]);
+			m_sCompanyRefNum = oRow["LimitedRefNum"].ToString();
 
 			m_oLog.Debug("Customer {0} took last loan on {1}", CustomerID, m_oLastLoanDate);
 		} // constructor
@@ -35,22 +36,10 @@ namespace Reports {
 		#region method Add
 
 		public void Add(DbDataReader oRow) {
-			string sXml = oRow["ResponseData"].ToString();
+			XmlDocument doc = ExtractXml(oRow["ResponseData"].ToString());
 
-			var doc = new XmlDocument();
-
-			try {
-				doc.LoadXml(sXml);
-			}
-			catch (Exception e) {
-				m_oLog.Warn(e, "Failed to parse Experian output as XML for customer {0}", CustomerID);
+			if (doc == null)
 				return;
-			} // try
-
-			if (doc.DocumentElement == null) {
-				m_oLog.Warn("Failed to parse Experian output (root node) for customer {0}", CustomerID);
-				return;
-			} // if
 
 			DateTime oInsertDate = Convert.ToDateTime(oRow["InsertDate"]);
 
@@ -70,6 +59,25 @@ namespace Reports {
 		} // Add
 
 		#endregion method Add
+
+		#region method LoadLastScore
+
+		public void LoadLastScore(AConnection oDB) {
+			if ((m_sCompanyName != null) && (m_sCompanyNumber != null) && m_oIncorporationDate.HasValue && m_nCompanyScore.HasValue)
+				return;
+
+			if (string.IsNullOrWhiteSpace(m_sCompanyRefNum))
+				return;
+
+			var sXml = oDB.ExecuteScalar<string>("SELECT TOP 1 JsonPacket FROM MP_ExperianDataCache WHERE CompanyRefNumber = '" + m_sCompanyRefNum + "' ORDER BY LastUpdateDate DESC", CommandSpecies.Text);
+
+			var doc = ExtractXml(sXml);
+
+			if (doc != null)
+				AddCompanyData(doc);
+		} // LoadLastScore
+
+		#endregion method LoadLastScore
 
 		#region method ToOutput
 
@@ -102,6 +110,31 @@ namespace Reports {
 		private DateTime? m_oIncorporationDate;
 		private string m_sCompanyNumber;
 		private string m_sCompanyName;
+
+		private string m_sCompanyRefNum;
+
+		#region method ExtractXml
+
+		private XmlDocument ExtractXml(string sXml) {
+			var doc = new XmlDocument();
+
+			try {
+				doc.LoadXml(sXml);
+			}
+			catch (Exception e) {
+				m_oLog.Warn(e, "Failed to parse Experian output as XML for customer {0}", CustomerID);
+				return null;
+			} // try
+
+			if (doc.DocumentElement == null) {
+				m_oLog.Warn("Failed to parse Experian output (root node) for customer {0}", CustomerID);
+				return null;
+			} // if
+
+			return doc;
+		} // ExtractXml
+
+		#endregion method ExtractXml
 
 		#region method DateFits
 
@@ -139,17 +172,18 @@ namespace Reports {
 
 			if (oNode == null)
 				m_oLog.Warn("Failed to parse Experian output (company number) for customer {0}", CustomerID);
-			else
+			else if (m_sCompanyNumber == null)
 				m_sCompanyNumber = oNode.InnerText;
 
 			oNode = doc.DocumentElement.SelectSingleNode("./REQUEST/DL12/COMPANYNAME");
 
 			if (oNode == null)
 				m_oLog.Warn("Failed to parse Experian output (company name) for customer {0}", CustomerID);
-			else
+			else if (m_sCompanyName == null)
 				m_sCompanyName = oNode.InnerText;
 
-			m_oIncorporationDate = ExtractDate(doc.DocumentElement, "./REQUEST/DL12/DATEINCORP");
+			if (!m_oIncorporationDate.HasValue)
+				m_oIncorporationDate = ExtractDate(doc.DocumentElement, "./REQUEST/DL12/DATEINCORP");
 
 			if (!m_oIncorporationDate.HasValue)
 				m_oLog.Warn("Failed to parse Experian output (incorporation date) for customer {0}", CustomerID);
@@ -160,7 +194,8 @@ namespace Reports {
 				int nCompanyScore;
 
 				if (int.TryParse(oNode.InnerText, out nCompanyScore))
-					m_nCompanyScore = nCompanyScore;
+					if (!m_nCompanyScore.HasValue)
+						m_nCompanyScore = nCompanyScore;
 			} // if
 		} // Add
 

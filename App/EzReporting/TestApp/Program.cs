@@ -16,9 +16,9 @@ namespace TestApp {
 
 			var oDB = new SqlConnection(log);
 
-			TestUiReportExt(oDB, log);
+			// TestUiReportExt(oDB, log);
 
-			// TestLoanDateScore(oDB, log);
+			TestLoanDateScore(oDB, log);
 
 			// TestExperianLimitedCompanyData(oDB, log);
 
