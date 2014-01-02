@@ -37,7 +37,8 @@
 			);
 
 			foreach (DataRow row in dt.Rows) {
-				int marketplaceId = int.Parse(row["Id"].ToString());
+				var sr = new SafeReader(row);
+				int marketplaceId = sr.Int("Id");
 				new UpdateMarketplace(customerId, marketplaceId, m_oDB, m_oLog).Execute();
 			} // foreach
 		} // Execute

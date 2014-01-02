@@ -19,9 +19,9 @@
 			Db = oDb;
 			log = oLog;
 			this.request = request;
-			DataTable dt = Db.ExecuteReader("GetReApprovalConfigs", CommandSpecies.StoredProcedure);
-			DataRow results = dt.Rows[0];
-			autoReApproveMaxNumOfOutstandingLoans = int.Parse(results["AutoReApproveMaxNumOfOutstandingLoans"].ToString());
+			DataTable dt = Db.ExecuteReader("GetReApprovalConfigs", CommandSpecies.StoredProcedure); 
+			var sr = new SafeReader(dt.Rows[0]);
+			autoReApproveMaxNumOfOutstandingLoans = sr.Int("AutoReApproveMaxNumOfOutstandingLoans");
 		}
 
 		public bool MakeDecision(AutoDecisionResponse response)
@@ -37,38 +37,23 @@
 				return false;
 			}
 
-			DataRow results = dt.Rows[0];
-			bool loanOfferEmailSendingBanned = Convert.ToBoolean(results["EmailSendingBanned"]);
-			DateTime loanOfferOfferStart = DateTime.Parse(results["OfferStart"].ToString());
-			DateTime loanOfferOfferValidUntil = DateTime.Parse(results["OfferValidUntil"].ToString());
-			int loanOfferSystemCalculatedSum = 0;
-			if (!int.TryParse(results["SystemCalculatedSum"].ToString(), out loanOfferSystemCalculatedSum))
-			{
-				log.Debug("The parameter 'SystemCalculatedSum' was null, will use 0.");
-			}
-			int loanOfferSumOfChargesOld = 0;
-			if (!int.TryParse(results["SumOfChargesOld"].ToString(), out loanOfferSumOfChargesOld))
-			{
-				log.Debug("The parameter 'SumOfChargesOld' was null, will use 0.");
-			}
-			int loanOfferNumOfMPsAddedOld = 0;
-			if (!int.TryParse(results["NumOfMPsAddedOld"].ToString(), out loanOfferNumOfMPsAddedOld))
-			{
-				log.Debug("The parameter 'NumOfMPsAddedOld' was null, will use 0.");
-			}
-			decimal loanOfferPrincipalPaidAmountOld = 0;
-			if (!decimal.TryParse(results["PrincipalPaidAmountOld"].ToString(), out loanOfferPrincipalPaidAmountOld))
-			{
-				log.Debug("The parameter 'PrincipalPaidAmountOld' was null, will use 0.");
-			}
+			var sr = new SafeReader(dt.Rows[0]);
+			bool loanOfferEmailSendingBanned = sr.Bool("EmailSendingBanned");
+			DateTime loanOfferOfferStart = sr.DateTime("OfferStart");
+			DateTime loanOfferOfferValidUntil = sr.DateTime("OfferValidUntil");
+			int loanOfferSystemCalculatedSum = sr.Int("SystemCalculatedSum");
+			int loanOfferSumOfChargesOld = sr.Int("SumOfChargesOld");
+			int loanOfferNumOfMPsAddedOld = sr.Int("NumOfMPsAddedOld");
+			decimal loanOfferPrincipalPaidAmountOld = sr.Decimal("PrincipalPaidAmountOld");
 
 			if ((request.LoanOfferReApprovalFullAmount > 0 || request.LoanOfferReApprovalRemainingAmount > 0) ||
 				((request.LoanOfferReApprovalFullAmountOld > 0 || request.LoanOfferReApprovalRemainingAmountOld > 0) &&
 			     loanOfferPrincipalPaidAmountOld == 0 && loanOfferSumOfChargesOld == 0 &&
 			     loanOfferNumOfMPsAddedOld == 0))
 			{
-				dt = Db.ExecuteReader("GetAvailableFunds", CommandSpecies.StoredProcedure);
-				decimal availableFunds = decimal.Parse(dt.Rows[0]["AvailableFunds"].ToString());
+				dt = Db.ExecuteReader("GetAvailableFunds", CommandSpecies.StoredProcedure); 
+				sr = new SafeReader(dt.Rows[0]);
+				decimal availableFunds = sr.Decimal("AvailableFunds");
 				if (availableFunds > loanOfferSystemCalculatedSum)
 				{
 					int numOfOutstandingLoans = strategyHelper.GetOutstandingLoansNum(request.CustomerId);

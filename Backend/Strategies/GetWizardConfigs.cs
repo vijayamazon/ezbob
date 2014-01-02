@@ -29,10 +29,10 @@
 
 		public override void Execute() {
 			DataTable dt = DB.ExecuteReader("GetWizardConfigs", CommandSpecies.StoredProcedure);
-			DataRow row = dt.Rows[0];
+			var sr = new SafeReader(dt.Rows[0]);
 
-			IsSmsValidationActive = Convert.ToBoolean(row["IsSmsValidationActive"]);
-			NumberOfMobileCodeAttempts = int.Parse(row["NumberOfMobileCodeAttempts"].ToString());
+			IsSmsValidationActive = sr.Bool("IsSmsValidationActive");
+			NumberOfMobileCodeAttempts = sr.Int("NumberOfMobileCodeAttempts");
 		} // Execute
 
 		#endregion property Execute

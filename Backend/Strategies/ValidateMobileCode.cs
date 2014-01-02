@@ -36,7 +36,8 @@
 				new QueryParameter("Phone", mobilePhone),
 				new QueryParameter("Code", mobileCode));
 
-			isValidatedSuccessfully = Convert.ToBoolean(dt.Rows[0]["Success"]);
+			var sr = new SafeReader(dt.Rows[0]);
+			isValidatedSuccessfully = sr.Bool("Success");
 		} // Execute
 
 		#endregion property Execute

@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Globalization;
-using Ezbob.Database;
-using Ezbob.Logger;
-using PaymentServices.PayPoint;
+﻿namespace EzBob.Backend.Strategies {
+	using System;
+	using System.Collections.Generic;
+	using System.Data;
+	using System.Globalization;
+	using Ezbob.Database;
+	using Ezbob.Logger;
+	using PaymentServices.PayPoint;
 
-namespace EzBob.Backend.Strategies {
 	public class SetLateLoanStatus : AStrategy {
 		#region public
 
@@ -16,18 +16,18 @@ namespace EzBob.Backend.Strategies {
 			mailer = new StrategiesMailer(DB, Log);
 
 			DataTable configsDataTable = DB.ExecuteReader("SetLateLoanStatusGetConfigs", CommandSpecies.StoredProcedure);
-			DataRow configsResult = configsDataTable.Rows[0];
+			var sr = new SafeReader(configsDataTable.Rows[0]);
 
-			collectionPeriod1 = int.Parse(configsResult["CollectionPeriod1"].ToString());
-			collectionPeriod2 = int.Parse(configsResult["CollectionPeriod2"].ToString());
-			collectionPeriod3 = int.Parse(configsResult["CollectionPeriod3"].ToString());
-			latePaymentCharge = int.Parse(configsResult["LatePaymentCharge"].ToString());
-			latePaymentChargeId = int.Parse(configsResult["LatePaymentChargeId"].ToString());
-			partialPaymentCharge = int.Parse(configsResult["PartialPaymentCharge"].ToString());
-			partialPaymentChargeId = int.Parse(configsResult["PartialPaymentChargeId"].ToString());
-			administrationCharge = int.Parse(configsResult["AdministrationCharge"].ToString());
-			administrationChargeId = int.Parse(configsResult["AdministrationChargeId"].ToString());
-			amountToChargeFrom = int.Parse(configsResult["AmountToChargeFrom"].ToString());
+			collectionPeriod1 = sr.Int("CollectionPeriod1");
+			collectionPeriod2 = sr.Int("CollectionPeriod2");
+			collectionPeriod3 = sr.Int("CollectionPeriod3");
+			latePaymentCharge = sr.Int("LatePaymentCharge");
+			latePaymentChargeId = sr.Int("LatePaymentChargeId");
+			partialPaymentCharge = sr.Int("PartialPaymentCharge");
+			partialPaymentChargeId = sr.Int("PartialPaymentChargeId");
+			administrationCharge = sr.Int("AdministrationCharge");
+			administrationChargeId = sr.Int("AdministrationChargeId");
+			amountToChargeFrom = sr.Int("AmountToChargeFrom");
 
 			loanIdPrev = -1;
 		} // constructor
@@ -50,16 +50,17 @@ namespace EzBob.Backend.Strategies {
 			DataTable lateForCollectionDataTable = DB.ExecuteReader("GetLateForCollection", CommandSpecies.StoredProcedure);
 
 			foreach (DataRow row in lateForCollectionDataTable.Rows) {
-				DateTime date = DateTime.Parse(row["Date"].ToString());
-				decimal amountDue = decimal.Parse(row["AmountDue"].ToString());
-				int loanId = int.Parse(row["LoanId"].ToString());
-				decimal interest = decimal.Parse(row["Interest"].ToString());
-				string mail = row["email"].ToString();
-				string firstName = row["FirstName"].ToString();
-				string refNum = row["RefNum"].ToString();
-				DateTime customInstallmentDate;
+				var sr = new SafeReader(row);
+				DateTime date = sr.DateTime("Date");
+				decimal amountDue = sr.Decimal("AmountDue");
+				int loanId = sr.Int("LoanId");
+				decimal interest = sr.Decimal("Interest");
+				string mail = sr.String("email");
+				string firstName = sr.String("FirstName");
+				string refNum = sr.String("RefNum");
+				DateTime customInstallmentDate = sr.DateTime("CustomInstallmentDate");
 
-				if (DateTime.TryParse(row["CustomInstallmentDate"].ToString(), out customInstallmentDate)) {
+				if (customInstallmentDate != default(DateTime)) {
 					if (date < customInstallmentDate)
 						date = customInstallmentDate;
 				} // if
@@ -184,11 +185,12 @@ namespace EzBob.Backend.Strategies {
 			DataTable loansToCollectDataTable = DB.ExecuteReader("GetLoansToCollect", CommandSpecies.StoredProcedure);
 
 			foreach (DataRow row in loansToCollectDataTable.Rows) {
-				int id = int.Parse(row["id"].ToString());
-				int loanId = int.Parse(row["LoanId"].ToString());
-				bool isLastInstallment = Convert.ToBoolean(row["LastInstallment"]);
-				int customerId = int.Parse(row["CustomerId"].ToString());
-				DateTime customInstallmentDate = DateTime.Parse(row["CustomInstallmentDate"].ToString());
+				var sr = new SafeReader(row);
+				int id = sr.Int("id");
+				int loanId = sr.Int("LoanId");
+				bool isLastInstallment = sr.Bool("LastInstallment");
+				int customerId = sr.Int("CustomerId");
+				DateTime customInstallmentDate = sr.DateTime("CustomInstallmentDate");
 
 				if (!isLastInstallment) {
 					decimal amountDue = new PayPointApi().GetAmountToPay(id);

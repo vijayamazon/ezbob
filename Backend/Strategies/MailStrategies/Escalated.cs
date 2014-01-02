@@ -32,13 +32,13 @@ namespace EzBob.Backend.Strategies.MailStrategies {
 			if (dt.Rows.Count < 1)
 				throw new StrategyException(this, "failed to load escalation data from customer " + CustomerData);
 
-			DataRow results = dt.Rows[0];
+			var sr = new SafeReader(dt.Rows[0]);
 
-			string escalationReason = results["EscalationReason"].ToString();
-			string underwriterName = results["UnderwriterName"].ToString();
-			DateTime registrationDate = DateTime.Parse(results["GreetingMailSentDate"].ToString());
-			string medal = results["MedalType"].ToString();
-			string systemDecision = results["SystemDecision"].ToString();
+			string escalationReason = sr.String("EscalationReason");
+			string underwriterName = sr.String("UnderwriterName");
+			DateTime registrationDate = sr.DateTime("GreetingMailSentDate");
+			string medal = sr.String("MedalType");
+			string systemDecision = sr.String("SystemDecision");
 
 			Variables = new Dictionary<string, string> {
 				{"userID", CustomerId.ToString(CultureInfo.InvariantCulture)},

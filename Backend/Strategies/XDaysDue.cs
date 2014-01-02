@@ -30,12 +30,13 @@
 			DataTable dt = DB.ExecuteReader("GetCustomersFiveDaysDue", CommandSpecies.StoredProcedure);
 
 			foreach (DataRow row in dt.Rows) {
-				int loanScheduleId = int.Parse(row["id"].ToString());
-				decimal amountDue = decimal.Parse(row["AmountDue"].ToString());
-				string firstName = row["FirstName"].ToString();
-				string mail = row["Email"].ToString();
-				DateTime sceduledDate = DateTime.Parse(row["SceduledDate"].ToString());
-				string creditCard = row["CreditCardNo"].ToString();
+				var sr = new SafeReader(row);
+				int loanScheduleId = sr.Int("id");
+				decimal amountDue = sr.Decimal("AmountDue");
+				string firstName = sr.String("FirstName");
+				string mail = sr.String("Email");
+				DateTime sceduledDate = sr.DateTime("SceduledDate");
+				string creditCard = sr.String("CreditCardNo");
 
 				string subject = string.Format("Dear {0}, your ezbob monthly automatic loan re-payment is due in 5 days", firstName);
 
@@ -58,12 +59,13 @@
 			dt = DB.ExecuteReader("GetCustomersTwoDaysDue", CommandSpecies.StoredProcedure);
 
 			foreach (DataRow row in dt.Rows) {
-				int loanScheduleId = int.Parse(row["id"].ToString());
-				decimal amountDue = decimal.Parse(row["AmountDue"].ToString());
-				string firstName = row["FirstName"].ToString();
-				string mail = row["Email"].ToString();
-				DateTime sceduledDate = DateTime.Parse(row["SceduledDate"].ToString());
-				string creditCard = row["CreditCardNo"].ToString();
+				var sr = new SafeReader(row);
+				int loanScheduleId = sr.Int("id");
+				decimal amountDue = sr.Decimal("AmountDue");
+				string firstName = sr.String("FirstName");
+				string mail = sr.String("Email");
+				DateTime sceduledDate = sr.DateTime("SceduledDate");
+				string creditCard = sr.String("CreditCardNo");
 
 				string subject = string.Format("Dear {0}, your ezbob monthly automatic loan re-payment is due in 48 hours", firstName);
 

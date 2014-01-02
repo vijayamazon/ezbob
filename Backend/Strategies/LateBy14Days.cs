@@ -18,20 +18,21 @@ namespace EzBob.Backend.Strategies {
 			DataTable dt = DB.ExecuteReader("GetLateBy14DaysAndUpdate", CommandSpecies.StoredProcedure);
 
 			foreach (DataRow row in dt.Rows) {
-				bool is14DaysLate = Convert.ToBoolean(row["Is14DaysLate"]);
+				var sr = new SafeReader(row);
+				bool is14DaysLate = sr.Bool("Is14DaysLate");
 
 				if (is14DaysLate)
 					continue;
 
-				int loanId = int.Parse(row["LoanId"].ToString());
-				string signDate = row["SignDate"].ToString();
-				string firstName = row["FirstName"].ToString();
-				decimal loanAmount = decimal.Parse(row["LoanAmount"].ToString());
-				decimal principal = decimal.Parse(row["Principal"].ToString());
-				decimal interest = decimal.Parse(row["Interest"].ToString());
-				decimal fees = decimal.Parse(row["Fees"].ToString());
-				decimal total = decimal.Parse(row["Total"].ToString());
-				string mail = row["Email"].ToString();
+				int loanId = sr.Int("LoanId");
+				string signDate = sr.String("SignDate");
+				string firstName = sr.String("FirstName");
+				decimal loanAmount = sr.Decimal("LoanAmount");
+				decimal principal = sr.Decimal("Principal");
+				decimal interest = sr.Decimal("Interest");
+				decimal fees = sr.Decimal("Fees");
+				decimal total = sr.Decimal("Total");
+				string mail = sr.String("Email");
 
 				var variables = new Dictionary<string, string> {
 					{"FirstName", firstName},

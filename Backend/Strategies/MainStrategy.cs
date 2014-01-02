@@ -186,17 +186,18 @@
 
 					foreach (DataRow row in dt.Rows)
 					{
-						int appDirId = int.Parse(row["DirId"].ToString());
-						string dirLine1 = row["DirLine1"].ToString();
-						string dirLine2 = row["DirLine2"].ToString();
-						string dirLine3 = row["DirLine3"].ToString();
-						string dirLine4 = row["DirLine4"].ToString();
-						string dirLine5 = row["DirLine5"].ToString();
-						string dirLine6 = row["DirLine6"].ToString();
-						string appDirName = row["DirName"].ToString();
-						string appDirSurname = row["DirSurname"].ToString();
-						DateTime dirBirthdate = DateTime.Parse(row["DirDateOfBirth"].ToString());
-						string dirGender = row["DirGender"].ToString();
+						var sr = new SafeReader(row);
+						int appDirId = sr.Int("DirId");
+						string dirLine1 = sr.String("DirLine1");
+						string dirLine2 = sr.String("DirLine2");
+						string dirLine3 = sr.String("DirLine3");
+						string dirLine4 = sr.String("DirLine4");
+						string dirLine5 = sr.String("DirLine5");
+						string dirLine6 = sr.String("DirLine6");
+						string appDirName = sr.String("DirName");
+						string appDirSurname = sr.String("DirSurname");
+						DateTime dirBirthdate = sr.DateTime("DirDateOfBirth");
+						string dirGender = sr.String("DirGender");
 
 						if (string.IsNullOrEmpty(appDirName) || string.IsNullOrEmpty(appDirSurname))
 							continue;
@@ -213,7 +214,7 @@
 
 				AmlAndBwa();
 
-				DB.ExecuteReader(
+				DB.ExecuteNonQuery(
 					"UpdateExperianBWA_AML",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("CustomerId", customerId),
@@ -227,30 +228,21 @@
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId)
 			);
-
-			DataRow scoreCardResults = scoreCardDataTable.Rows[0];
-			MaritalStatus maritalStatus = (MaritalStatus)Enum.Parse(typeof(MaritalStatus), scoreCardResults["MaritalStatus"].ToString());
-			string maxFeedbackRaw = scoreCardResults["MaxFeedback"].ToString();
-			int modelMaxFeedback;
-
-			if (string.IsNullOrEmpty(maxFeedbackRaw))
-			{
-				Log.Info("No feedback information exists. Will use {0}.", defaultFeedbackValue);
-				modelMaxFeedback = defaultFeedbackValue;
-			}
-			else
-				modelMaxFeedback = int.Parse(maxFeedbackRaw);
-
-			int modelMPsNumber = int.Parse(scoreCardResults["MPsNumber"].ToString());
-			int modelEzbobSeniority = int.Parse(scoreCardResults["EZBOBSeniority"].ToString());
-			int modelOnTimeLoans = int.Parse(scoreCardResults["OnTimeLoans"].ToString());
-			int modelLatePayments = int.Parse(scoreCardResults["LatePayments"].ToString());
-			int modelEarlyPayments = int.Parse(scoreCardResults["EarlyPayments"].ToString());
+			
+			var scoreCardResults = new SafeReader(scoreCardDataTable.Rows[0]);
+			MaritalStatus maritalStatus = (MaritalStatus)Enum.Parse(typeof(MaritalStatus), scoreCardResults.String("MaritalStatus")); // TODO: parse this safely
+			int modelMaxFeedback = scoreCardResults.IntWithDefault("MaxFeedback", 20000);
+			
+			int modelMPsNumber = scoreCardResults.Int("MPsNumber");
+			int modelEzbobSeniority = scoreCardResults.Int("EZBOBSeniority");
+			int modelOnTimeLoans = scoreCardResults.Int("OnTimeLoans");
+			int modelLatePayments = scoreCardResults.Int("LatePayments");
+			int modelEarlyPayments = scoreCardResults.Int("EarlyPayments");
 
 			bool firstRepaymentDatePassed = false;
 
-			DateTime modelFirstRepaymentDate;
-			if (DateTime.TryParse(scoreCardResults["FirstRepaymentDate"].ToString(), out modelFirstRepaymentDate))
+			DateTime modelFirstRepaymentDate = scoreCardResults.DateTime("FirstRepaymentDate");
+			if (modelFirstRepaymentDate != default(DateTime))
 			{
 				firstRepaymentDatePassed = modelFirstRepaymentDate < DateTime.UtcNow;
 			}
@@ -297,8 +289,8 @@
 				new QueryParameter("Amount", rejectDefaultsAmount)
 			);
 
-			DataRow defaultAccountsNumResults = defaultAccountsNumDataTable.Rows[0];
-			numOfDefaultAccounts = int.Parse(defaultAccountsNumResults["NumOfDefaultAccounts"].ToString());
+			var defaultAccountsNumResults = new SafeReader(defaultAccountsNumDataTable.Rows[0]);
+			numOfDefaultAccounts = defaultAccountsNumResults.Int("NumOfDefaultAccounts");
 
 			DataTable lastOfferDataTable = DB.ExecuteReader(
 				"GetLastOfferForAutomatedDecision",
@@ -308,48 +300,21 @@
 
 			if (lastOfferDataTable.Rows.Count == 1)
 			{
-				DataRow lastOfferResults = lastOfferDataTable.Rows[0];
-				loanOfferReApprovalFullAmount = 0;
-				if (!decimal.TryParse(lastOfferResults["ReApprovalFullAmountNew"].ToString(), out loanOfferReApprovalFullAmount))
-				{
-					Log.Debug("The parameter 'ReApprovalFullAmountNew' was null, will use 0.");
-				}
-				loanOfferReApprovalRemainingAmount = 0;
-				if (
-					!decimal.TryParse(lastOfferResults["ReApprovalRemainingAmount"].ToString(), out loanOfferReApprovalRemainingAmount))
-				{
-					Log.Debug("The parameter 'ReApprovalRemainingAmount' was null, will use 0.");
-				}
-				loanOfferReApprovalFullAmountOld = 0;
-				if (!decimal.TryParse(lastOfferResults["ReApprovalFullAmountOld"].ToString(), out loanOfferReApprovalFullAmountOld))
-				{
-					Log.Debug("The parameter 'ReApprovalFullAmountOld' was null, will use 0.");
-				}
-				loanOfferReApprovalRemainingAmountOld = 0;
-				if (
-					!decimal.TryParse(lastOfferResults["ReApprovalRemainingAmountOld"].ToString(),
-					                  out loanOfferReApprovalRemainingAmountOld))
-				{
-					Log.Debug("The parameter 'ReApprovalRemainingAmountOld' was null, will use 0.");
-				}
-				loanOfferApr = 0;
-				if (!decimal.TryParse(lastOfferResults["APR"].ToString(), out loanOfferApr))
-				{
-					Log.Debug("The parameter 'APR' was null, will use 0.");
-				}
-				loanOfferRepaymentPeriod = int.Parse(lastOfferResults["RepaymentPeriod"].ToString());
-				loanOfferExpirianRating = 0;
-				if (!int.TryParse(lastOfferResults["ExpirianRating"].ToString(), out loanOfferExpirianRating))
-				{
-					Log.Debug("The parameter 'ExpirianRating' was null, will use 0.");
-				}
-				loanOfferInterestRate = decimal.Parse(lastOfferResults["InterestRate"].ToString());
-				loanOfferUseSetupFee = int.Parse(lastOfferResults["UseSetupFee"].ToString());
-				loanOfferLoanTypeId = int.Parse(lastOfferResults["LoanTypeId"].ToString());
-				loanOfferIsLoanTypeSelectionAllowed = int.Parse(lastOfferResults["IsLoanTypeSelectionAllowed"].ToString());
-				loanOfferDiscountPlanId = int.Parse(lastOfferResults["DiscountPlanId"].ToString());
-				loanSourceId = int.Parse(lastOfferResults["LoanSourceID"].ToString());
-				isCustomerRepaymentPeriodSelectionAllowed = int.Parse(lastOfferResults["IsCustomerRepaymentPeriodSelectionAllowed"].ToString());
+				var lastOfferResults = new SafeReader(lastOfferDataTable.Rows[0]);
+				loanOfferReApprovalFullAmount = lastOfferResults.Decimal("ReApprovalFullAmountNew");
+				loanOfferReApprovalRemainingAmount = lastOfferResults.Decimal("ReApprovalRemainingAmount");
+				loanOfferReApprovalFullAmountOld = lastOfferResults.Decimal("ReApprovalFullAmountOld");
+				loanOfferReApprovalRemainingAmountOld = lastOfferResults.Decimal("ReApprovalRemainingAmountOld");
+				loanOfferApr = lastOfferResults.Decimal("APR");
+				loanOfferRepaymentPeriod = lastOfferResults.Int("RepaymentPeriod");
+				loanOfferExpirianRating = lastOfferResults.Int("ExpirianRating");
+				loanOfferInterestRate = lastOfferResults.Decimal("InterestRate");
+				loanOfferUseSetupFee = lastOfferResults.Int("UseSetupFee");
+				loanOfferLoanTypeId = lastOfferResults.Int("LoanTypeId");
+				loanOfferIsLoanTypeSelectionAllowed = lastOfferResults.Int("IsLoanTypeSelectionAllowed");
+				loanOfferDiscountPlanId = lastOfferResults.Int("DiscountPlanId");
+				loanSourceId = lastOfferResults.Int("LoanSourceID");
+				isCustomerRepaymentPeriodSelectionAllowed = lastOfferResults.Int("IsCustomerRepaymentPeriodSelectionAllowed");
 			}
 
 			DataTable basicInterestRateDataTable = DB.ExecuteReader(
@@ -358,8 +323,8 @@
 				new QueryParameter("Score", inintialExperianConsumerScore)
 			);
 
-			DataRow basicInterestRateRow = basicInterestRateDataTable.Rows[0];
-			loanIntrestBase = decimal.Parse(basicInterestRateRow["LoanIntrestBase"].ToString());
+			var basicInterestRateRow = new SafeReader(basicInterestRateDataTable.Rows[0]);
+			loanIntrestBase = basicInterestRateRow.Decimal("LoanIntrestBase");
 
 			if (loanOfferReApprovalRemainingAmount < 1000) // TODO: make this 1000 configurable
 				loanOfferReApprovalRemainingAmount = 0;
@@ -794,27 +759,27 @@
 		private void GetPersonalInfo()
 		{
 			DataTable dt = DB.ExecuteReader("MainStrategyGetPersonalInfo", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
-			DataRow results = dt.Rows[0];
+			var results = new SafeReader(dt.Rows[0]);
 
-			customerStatusIsEnabled = Convert.ToBoolean(results["CustomerStatusIsEnabled"]);
-			customerStatusIsWarning = Convert.ToBoolean(results["CustomerStatusIsWarning"]);
-			isOffline = Convert.ToBoolean(results["IsOffline"]);
-			appEmail = results["CustomerEmail"].ToString();
-			companyType = results["CompanyType"].ToString();
-			appLimitedRefNum = results["LimitedRefNum"].ToString();
-			appNonLimitedRefNum = results["NonLimitedRefNum"].ToString();
-			appFirstName = results["FirstName"].ToString();
-			appSurname = results["Surname"].ToString();
-			appGender = results["Gender"].ToString();
-			appDateOfBirth = DateTime.Parse(results["DateOfBirth"].ToString());
-			appHomeOwner = results["HomeOwner"].ToString();
-			allMPsNum = int.Parse(results["NumOfMps"].ToString());
-			appTimeAtAddress = int.Parse(results["TimeAtAddress"].ToString());
-			appAccountNumber = results["AccountNumber"].ToString();
-			appSortCode = results["SortCode"].ToString();
-			appRegistrationDate = DateTime.Parse(results["RegistrationDate"].ToString());
-			appBankAccountType = results["BankAccountType"].ToString();
-			int numOfLoans = int.Parse(results["NumOfLoans"].ToString());
+			customerStatusIsEnabled = results.Bool("CustomerStatusIsEnabled");
+			customerStatusIsWarning = results.Bool("CustomerStatusIsWarning");
+			isOffline = results.Bool("IsOffline");
+			appEmail = results.String("CustomerEmail");
+			companyType = results.String("CompanyType");
+			appLimitedRefNum = results.String("LimitedRefNum");
+			appNonLimitedRefNum = results.String("NonLimitedRefNum");
+			appFirstName = results.String("FirstName");
+			appSurname = results.String("Surname");
+			appGender = results.String("Gender");
+			appDateOfBirth = results.DateTime("DateOfBirth");
+			appHomeOwner = results.String("HomeOwner");
+			allMPsNum = results.Int("NumOfMps");
+			appTimeAtAddress = results.Int("TimeAtAddress");
+			appAccountNumber = results.String("AccountNumber");
+			appSortCode = results.String("SortCode");
+			appRegistrationDate = results.DateTime("RegistrationDate");
+			appBankAccountType = results.String("BankAccountType");
+			int numOfLoans = results.Int("NumOfLoans");
 			isFirstLoan = numOfLoans == 0;
 		} // GetPersonalInfo
 
@@ -874,19 +839,19 @@
 		private void GetAddresses()
 		{
 			DataTable dt = DB.ExecuteReader("GetCustomerAddresses", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
-			DataRow addressesResults = dt.Rows[0];
-			appLine1 = addressesResults["Line1"].ToString();
-			appLine2 = addressesResults["Line2"].ToString();
-			appLine3 = addressesResults["Line3"].ToString();
-			appLine4 = addressesResults["Line4"].ToString();
-			appLine5 = addressesResults["Line5"].ToString();
-			appLine6 = addressesResults["Line6"].ToString();
-			appLine1Prev = addressesResults["Line1Prev"].ToString();
-			appLine2Prev = addressesResults["Line2Prev"].ToString();
-			appLine3Prev = addressesResults["Line3Prev"].ToString();
-			appLine4Prev = addressesResults["Line4Prev"].ToString();
-			appLine5Prev = addressesResults["Line5Prev"].ToString();
-			appLine6Prev = addressesResults["Line6Prev"].ToString();
+			var addressesResults = new SafeReader(dt.Rows[0]);
+			appLine1 = addressesResults.String("Line1");
+			appLine2 = addressesResults.String("Line2");
+			appLine3 = addressesResults.String("Line3");
+			appLine4 = addressesResults.String("Line4");
+			appLine5 = addressesResults.String("Line5");
+			appLine6 = addressesResults.String("Line6");
+			appLine1Prev = addressesResults.String("Line1Prev");
+			appLine2Prev = addressesResults.String("Line2Prev");
+			appLine3Prev = addressesResults.String("Line3Prev");
+			appLine4Prev = addressesResults.String("Line4Prev");
+			appLine5Prev = addressesResults.String("Line5Prev");
+			appLine6Prev = addressesResults.String("Line6Prev");
 		} // GetAddresses
 
 		#endregion GetAddresses
@@ -1131,7 +1096,8 @@
 			if (useCustomIdHubAddress == 1)
 			{
 				DataTable dt = DB.ExecuteReader("GetPrevBwaResult", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
-				experianBwaResult = dt.Rows[0]["BWAResult"].ToString();
+				var sr = new SafeReader(dt.Rows[0]);
+				experianBwaResult = sr.String("BWAResult");
 			}
 			else
 			{
@@ -1346,9 +1312,8 @@
 				new QueryParameter("CustomerId", customerId)
 			);
 
-			DataRow result = dt.Rows[0];
-
-			bool isUpdated = Convert.ToBoolean(result["IsUpdated"]);
+			var sr = new SafeReader(dt.Rows[0]);
+			bool isUpdated = sr.Bool("IsUpdated");
 
 			DateTime startWaitingTime = DateTime.UtcNow;
 
@@ -1365,8 +1330,8 @@
 					new QueryParameter("CustomerId", customerId)
 				);
 
-				result = dt.Rows[0];
-				isUpdated = bool.Parse(result["IsUpdated"].ToString());
+				sr = new SafeReader(dt.Rows[0]);
+				isUpdated = sr.Bool("IsUpdated");
 			} // while
 
 			return true;

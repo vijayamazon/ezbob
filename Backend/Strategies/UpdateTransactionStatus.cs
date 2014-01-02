@@ -26,13 +26,14 @@
 			DataTable dt = DB.ExecuteReader("GetPacnetTransactions", CommandSpecies.StoredProcedure);
 			var service = ObjectFactory.GetInstance<IPacnetService>();
 			foreach (DataRow row in dt.Rows) {
-				int customerId = int.Parse(row["CustomerId"].ToString());
-				string trackingNumber = row["TrackingNumber"].ToString();
+				var sr = new SafeReader(row);
+				int customerId = sr.Int("CustomerId");
+				string trackingNumber = sr.String("TrackingNumber");
 				
 				PacnetReturnData result = service.CheckStatus(customerId, trackingNumber);
 
 				string newStatus;
-				string description = row["allDescriptions"].ToString();
+				string description = sr.String("allDescriptions");
 
 				if (string.IsNullOrEmpty(result.Status)) {
 					newStatus = "Error";

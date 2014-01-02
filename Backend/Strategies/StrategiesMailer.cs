@@ -19,9 +19,9 @@
 			Log = new SafeLog(oLog);
 
 			DataTable dt = Db.ExecuteReader("GetMails", CommandSpecies.StoredProcedure);
-			DataRow results = dt.Rows[0];
-			ezbobCopyTo = results["ToAddress"].ToString();
-			ezbobCopyCc = results["CcAddress"].ToString();
+			var sr = new SafeReader(dt.Rows[0]);
+			ezbobCopyTo = sr.String("ToAddress");
+			ezbobCopyCc = sr.String("CcAddress");
 		} // constructor
 
 		#endregion constructor

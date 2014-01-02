@@ -18,14 +18,14 @@
 			if (dt.Rows.Count != 1)
 				throw new Exception("Failed to find a customer by id " + customerId);
 
-			DataRow results = dt.Rows[0];
+			var sr = new SafeReader(dt.Rows[0]);
 
-			FirstName = results["FirstName"].ToString();
-			Surname = results["Surname"].ToString();
-			FullName = results["FullName"].ToString();
-			Mail = results["Mail"].ToString();
-			IsOffline = Convert.ToBoolean(results["IsOffline"]);
-			NumOfLoans = int.Parse(results["NumOfLoans"].ToString());
+			FirstName = sr.String("FirstName");
+			Surname = sr.String("Surname");
+			FullName = sr.String("FullName");
+			Mail = sr.String("Mail");
+			IsOffline = sr.Bool("IsOffline");
+			NumOfLoans = sr.Int("NumOfLoans");
 		} // constructor
 
 		#endregion constructor

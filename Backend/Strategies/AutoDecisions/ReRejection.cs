@@ -20,11 +20,11 @@
 			log = oLog;
 			this.request = request;
 			DataTable dt = Db.ExecuteReader("GetCustomerDataForReRejection", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", request.CustomerId));
-			DataRow results = dt.Rows[0];
-			newCustomerReReject = int.Parse(results["NewCustomer_ReReject"].ToString());
-			oldCustomerReReject = int.Parse(results["OldCustomer_ReReject"].ToString());
-			principalPaidAmount = decimal.Parse(results["PrincipalPaidAmount"].ToString());
-			loanAmountTaken = decimal.Parse(results["LoanAmountTaken"].ToString());
+			var sr = new SafeReader(dt.Rows[0]);
+			newCustomerReReject = sr.Int("NewCustomer_ReReject");
+			oldCustomerReReject = sr.Int("OldCustomer_ReReject");
+			principalPaidAmount = sr.Decimal("PrincipalPaidAmount");
+			loanAmountTaken = sr.Decimal("LoanAmountTaken");
 		}
 
 		public bool MakeDecision(AutoDecisionResponse response)

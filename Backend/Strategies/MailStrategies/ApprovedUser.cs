@@ -1,11 +1,11 @@
-﻿	using System;
+﻿namespace EzBob.Backend.Strategies.MailStrategies {
+	using System;
 	using System.Data;
 	using System.Globalization;
 	using System.Collections.Generic;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
-namespace EzBob.Backend.Strategies.MailStrategies {
 	public class ApprovedUser : AMailStrategyBase {
 		#region constructor
 
@@ -31,10 +31,10 @@ namespace EzBob.Backend.Strategies.MailStrategies {
 			if (dt.Rows.Count < 1)
 				throw new StrategyException(this, "no approval data found for customer " + CustomerData);
 
-			DataRow results = dt.Rows[0];
-			int numOfApprovals = int.Parse(results["NumOfApprovals"].ToString());
-			DateTime applyForLoan = DateTime.Parse(results["ApplyForLoan"].ToString());
-			DateTime validFor = DateTime.Parse(results["ValidFor"].ToString());
+			var sr = new SafeReader(dt.Rows[0]);
+			int numOfApprovals = sr.Int("NumOfApprovals");
+			DateTime applyForLoan = sr.DateTime("ApplyForLoan");
+			DateTime validFor = sr.DateTime("ValidFor");
 
 			double validHours = (validFor - applyForLoan).TotalHours;
 

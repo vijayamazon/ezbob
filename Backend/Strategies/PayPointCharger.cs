@@ -31,10 +31,8 @@ namespace EzBob.Backend.Strategies {
 			mailer = new StrategiesMailer(DB, Log);
 
 			DataTable configsDataTable = DB.ExecuteReader("PayPointChargerGetConfigs", CommandSpecies.StoredProcedure);
-
-			DataRow configsResult = configsDataTable.Rows[0];
-
-			amountToChargeFrom = int.Parse(configsResult["AmountToChargeFrom"].ToString());
+			var sr = new SafeReader(configsDataTable.Rows[0]);
+			amountToChargeFrom = sr.Int("AmountToChargeFrom");
 		} // constructor
 
 		#endregion constructor
@@ -65,15 +63,16 @@ namespace EzBob.Backend.Strategies {
 		#region method HandleOnePayment
 
 		private void HandleOnePayment(DataRow row) {
-			int loanScheduleId = int.Parse(row["id"].ToString());
-			int loanId = int.Parse(row["LoanId"].ToString());
-			string firstName = row["FirstName"].ToString();
-			int customerId = int.Parse(row["CustomerId"].ToString());
-			string customerMail = row["Email"].ToString();
-			string fullname = row["Fullname"].ToString();
-			bool reductionFee = Convert.ToBoolean(row["ReductionFee"]);
-			string refNum = row["RefNum"].ToString();
-			bool lastInstallment = Convert.ToBoolean(row["LastInstallment"]);
+			var sr = new SafeReader(row);
+			int loanScheduleId = sr.Int("id");
+			int loanId = sr.Int("LoanId");
+			string firstName = sr.String("FirstName");
+			int customerId = sr.Int("CustomerId");
+			string customerMail = sr.String("Email");
+			string fullname = sr.String("Fullname");
+			bool reductionFee = sr.Bool("ReductionFee");
+			string refNum = sr.String("RefNum");
+			bool lastInstallment = sr.Bool("LastInstallment");
 
 			decimal amountDue = payPointApi.GetAmountToPay(loanScheduleId);
 
@@ -183,9 +182,9 @@ namespace EzBob.Backend.Strategies {
 				new QueryParameter("LoanId", loanId)
 			);
 
-			DataRow result = dt.Rows[0];
+			var sr = new SafeReader(dt.Rows[0]);
 
-			string loanStatus = result["Status"].ToString();
+			string loanStatus = sr.String("Status");
 
 			if (loanStatus == "PaidOff") {
 				var variables = new Dictionary<string, string> {

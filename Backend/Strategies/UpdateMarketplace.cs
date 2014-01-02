@@ -52,9 +52,9 @@
 				new QueryParameter("MarketplaceId", marketplaceId)
 			);
 
-			DataRow result = dt.Rows[0];
-			string marketplaceName = result["Name"].ToString();
-			bool disabled = Convert.ToBoolean(result["Disabled"]);
+			var sr = new SafeReader(dt.Rows[0]);
+			string marketplaceName = sr.String("Name");
+			bool disabled = sr.Bool("Disabled");
 
 			if (disabled)
 				return;

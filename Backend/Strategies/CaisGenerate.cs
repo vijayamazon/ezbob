@@ -16,10 +16,9 @@ namespace EzBob.Backend.Strategies {
 			mailer = new StrategiesMailer(DB, Log);
 
 			DataTable dt = DB.ExecuteReader("GetCaisFoldersPaths", CommandSpecies.StoredProcedure);
-			DataRow results = dt.Rows[0];
-
-			caisPath = results["CaisPath"].ToString();
-			caisPath2 = results["CaisPath2"].ToString();
+			var sr = new SafeReader(dt.Rows[0]);
+			caisPath = sr.String("CaisPath");
+			caisPath2 = sr.String("CaisPath2");
 			this.underwriterId = underwriterId;
 		}
 
@@ -53,39 +52,41 @@ namespace EzBob.Backend.Strategies {
 
 			DataTable dt = DB.ExecuteReader("GetCaisData", CommandSpecies.StoredProcedure);
 			foreach (DataRow row in dt.Rows) {
-				int loanId = int.Parse(row["loanID"].ToString());
-				DateTime startDate = DateTime.Parse(row["StartDate"].ToString());
-				DateTime dateClose = DateTime.Parse(row["DateClose"].ToString());
-				decimal currentBalance = decimal.Parse(row["CurrentBalance"].ToString());
-				string gender = row["Gender"].ToString();
-				string firstName = row["FirstName"].ToString();
-				string middleInitial = row["MiddleInitial"].ToString();
-				string surname = row["Surname"].ToString();
-				string refNumber = row["RefNumber"].ToString();
-				string line1 = row["Line1"].ToString();
-				string line2 = row["Line2"].ToString();
-				string line3 = row["Line3"].ToString();
-				string town = row["Town"].ToString();
-				string county = row["County"].ToString();
-				string postcode = row["Postcode"].ToString();
-				DateTime dateOfBirth = DateTime.Parse(row["DateOfBirth"].ToString());
+				var sr = new SafeReader(row);
+				int loanId = sr.Int("loanID");
+				DateTime startDate = sr.DateTime("StartDate");
+				DateTime dateClose = sr.DateTime("DateClose");
+				decimal currentBalance = sr.Decimal("CurrentBalance");
+				string gender = sr.String("Gender");
+				string firstName = sr.String("FirstName");
+				string middleInitial = sr.String("MiddleInitial");
+				string surname = sr.String("Surname");
+				string refNumber = sr.String("RefNumber");
+				string line1 = sr.String("Line1");
+				string line2 = sr.String("Line2");
+				string line3 = sr.String("Line3");
+				string town = sr.String("Town");
+				string county = sr.String("County");
+				string postcode = sr.String("Postcode");
+				DateTime dateOfBirth = sr.DateTime("DateOfBirth");
 
 				DateTime? minLsDate = null;
-				DateTime tmp;
-				if (DateTime.TryParse(row["MinLSDate"].ToString(), out tmp)) {
+				DateTime tmp = sr.DateTime("MinLSDate");
+				if (tmp != default(DateTime))
+				{
 					minLsDate = tmp;
 				}
-				decimal loanAmount = decimal.Parse(row["LoanAmount"].ToString());
-				int scheduledRepayments = int.Parse(row["ScheduledRepayments"].ToString());
-				string companyType = row["CompanyType"].ToString();
-				string limitedRefNum = row["LimitedRefNum"].ToString();
-				string nonLimitedRefNum = row["NonLimitedRefNum"].ToString();
-				string customerState = row["CustomerState"].ToString();
-				string sortCode = row["SortCode"].ToString();
-				bool isDefaulted = Convert.ToBoolean(row["IsDefaulted"]);
-				string caisAccountStatus = row["CaisAccountStatus"].ToString();
-				bool customerStatusIsEnabled = Convert.ToBoolean(row["CustomerStatusIsEnabled"]);
-				string maritalStatus = row["MaritalStatus"].ToString();
+				decimal loanAmount = sr.Decimal("LoanAmount");
+				int scheduledRepayments = sr.Int("ScheduledRepayments");
+				string companyType = sr.String("CompanyType");
+				string limitedRefNum = sr.String("LimitedRefNum");
+				string nonLimitedRefNum = sr.String("NonLimitedRefNum");
+				string customerState = sr.String("CustomerState");
+				string sortCode = sr.String("SortCode");
+				bool isDefaulted = sr.Bool("IsDefaulted");
+				string caisAccountStatus = sr.String("CaisAccountStatus");
+				bool customerStatusIsEnabled = sr.Bool("CustomerStatusIsEnabled");
+				string maritalStatus = sr.String("MaritalStatus");
 
 				string genderPrefix;
 				if (gender == "M") {

@@ -27,16 +27,16 @@
 			log = oLog;
 			this.request = request;
 			DataTable dt = Db.ExecuteReader("GetRejectionConfigs", CommandSpecies.StoredProcedure);
-			DataRow results = dt.Rows[0];
+			var sr = new SafeReader(dt.Rows[0]);
 
-			autoRejectionExceptionAnualTurnover = int.Parse(results["AutoRejectionException_AnualTurnover"].ToString());
-			rejectDefaultsCreditScore = int.Parse(results["Reject_Defaults_CreditScore"].ToString());
-			rejectMinimalSeniority = int.Parse(results["Reject_Minimal_Seniority"].ToString());
-			lowCreditScore = int.Parse(results["LowCreditScore"].ToString());
-			rejectDefaultsAccountsNum = int.Parse(results["Reject_Defaults_AccountsNum"].ToString());
-			autoRejectionExceptionCreditScore = int.Parse(results["AutoRejectionException_CreditScore"].ToString());
-			int rejectDefaultsMonths = int.Parse(results["Reject_Defaults_MonthsNum"].ToString());
-			int rejectDefaultsAmount = int.Parse(results["Reject_Defaults_Amount"].ToString());
+			autoRejectionExceptionAnualTurnover = sr.Int("AutoRejectionException_AnualTurnover");
+			rejectDefaultsCreditScore = sr.Int("Reject_Defaults_CreditScore");
+			rejectMinimalSeniority = sr.Int("Reject_Minimal_Seniority");
+			lowCreditScore = sr.Int("LowCreditScore");
+			rejectDefaultsAccountsNum = sr.Int("Reject_Defaults_AccountsNum");
+			autoRejectionExceptionCreditScore = sr.Int("AutoRejectionException_CreditScore");
+			int rejectDefaultsMonths = sr.Int("Reject_Defaults_MonthsNum");
+			int rejectDefaultsAmount = sr.Int("Reject_Defaults_Amount");
 
 			dt = Db.ExecuteReader(
 				"GetCustomerRejectionData",
@@ -46,12 +46,12 @@
 				new QueryParameter("Reject_Defaults_Amount", rejectDefaultsAmount)
 			);
 
-			results = dt.Rows[0];
+			sr = new SafeReader(dt.Rows[0]);
 
-			hasAccountingAccounts = Convert.ToBoolean(results["HasAccountingAccounts"]);
-			errorMPsNum = int.Parse(results["ErrorMPsNum"].ToString());
-			loanOfferApprovalNum = int.Parse(results["ApprovalNum"].ToString());
-			numOfDefaultAccounts = int.Parse(results["NumOfDefaultAccounts"].ToString());
+			hasAccountingAccounts = sr.Bool("HasAccountingAccounts");
+			errorMPsNum = sr.Int("ErrorMPsNum");
+			loanOfferApprovalNum = sr.Int("ApprovalNum");
+			numOfDefaultAccounts = sr.Int("NumOfDefaultAccounts");
 		}
 
 		private bool IsException()
@@ -77,11 +77,11 @@
 				new QueryParameter("CustomerId", request.CustomerId)
 			);
 
-			DataRow results = dt.Rows[0];
+			var sr = new SafeReader(dt.Rows[0]);
 
-			response.PayPalNumberOfStores = int.Parse(results["PayPal_NumberOfStores"].ToString());
-			response.PayPalTotalSumOfOrders3M = decimal.Parse(results["PayPal_TotalSumOfOrders3M"].ToString());
-			response.PayPalTotalSumOfOrders1Y = decimal.Parse(results["PayPal_TotalSumOfOrders1Y"].ToString());
+			response.PayPalNumberOfStores = sr.Int("PayPal_NumberOfStores");
+			response.PayPalTotalSumOfOrders3M = sr.Decimal("PayPal_TotalSumOfOrders3M");
+			response.PayPalTotalSumOfOrders1Y = sr.Decimal("PayPal_TotalSumOfOrders1Y");
 
 			if (request.InitialExperianConsumerScore < rejectDefaultsCreditScore &&
 				numOfDefaultAccounts >= rejectDefaultsAccountsNum)
