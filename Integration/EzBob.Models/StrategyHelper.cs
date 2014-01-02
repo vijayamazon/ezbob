@@ -558,7 +558,6 @@
 			{
 				log.ErrorFormat("Failed sending alert mail - silent auto approval. Exception:{0}", e);
 			}
-
 		}
 
 		public void GetZooplaData(int customerId, bool reCheck = false)
@@ -567,7 +566,7 @@
 			var customerAddress = customer.AddressInfo.PersonalAddress.FirstOrDefault();
 			if (customerAddress != null)
 			{
-				if (customerAddress.Zoopla.Any() || reCheck)
+				if (!customerAddress.Zoopla.Any() || reCheck)
 				{
 					var zooplaApi = new ZooplaApi();
 					try
