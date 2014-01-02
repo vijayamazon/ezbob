@@ -458,6 +458,7 @@
     <Content Include="Content\css\customer.css" />
     <Content Include="Content\css\flaty\bootstrap-responsive.min.css" />
     <Content Include="Content\css\flaty\bootstrap.min.css" />
+    <Content Include="Content\css\flaty\bootstrap3-modal-patch.css" />
     <Content Include="Content\css\flaty\dataTables.bootstrap.css" />
     <Content Include="Content\css\flaty\DT_bootstrap.css" />
     <Content Include="Content\css\flaty\flaty-responsive.css" />

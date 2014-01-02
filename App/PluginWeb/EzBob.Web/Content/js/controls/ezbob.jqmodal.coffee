@@ -24,7 +24,6 @@ class EzBob.JqModalRegion extends  Backbone.Marionette.Region
         @dialog.one 'dialogclose', =>
             @close()
 
-        #todo
         @dialog.find('.ui-dialog').addClass('box')
         @dialog.find('.ui-dialog-titlebar').addClass('box-title')
 
