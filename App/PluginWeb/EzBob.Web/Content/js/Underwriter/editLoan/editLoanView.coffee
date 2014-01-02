@@ -3,7 +3,8 @@ root.EzBob = root.EzBob or {}
 
 class EzBob.EditLoanView extends Backbone.Marionette.ItemView
     template: "#loan_editor_template"
-    scheduleTemplate: _.template($("#loan_editor_schedule_template").html())
+    scheduleTemplate: if($("#loan_editor_schedule_template").length > 0) then _.template($("#loan_editor_schedule_template").html()) else null
+        
 
     initialize: ->
         @bindTo @model, "change sync", @renderRegions, this

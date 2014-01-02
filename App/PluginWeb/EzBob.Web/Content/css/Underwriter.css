@@ -355,6 +355,11 @@ a.ezbob-logo-login {
     vertical-align: middle;
     margin-top: -5px;
 }
+
+.btn.btn-login {
+    background-color: #58b1fc;
+    color: white;
+}
 .roleImg {
     margin-top: -5px;
 }
