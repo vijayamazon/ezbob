@@ -24,13 +24,21 @@ namespace EzBob.Backend.Strategies.MailStrategies {
 		#region method SetTemplateAndSubjectAndVariables
 
 		protected override void SetTemplateAndSubjectAndVariables() {
+			if (CustomerData.IsOffline)
+			{
+				TemplateName = "Greeting - Offline";
+				Subject = "ezbob – Growing your business in one click";
+			}
+			else
+			{
+				Subject = "Thank you for registering with ezbob!";
+				TemplateName = "Greeting";
+			}
+
 			Variables = new Dictionary<string, string> {
 				{"Email", CustomerData.Mail},
 				{"ConfirmEmailAddress", confirmEmailAddress}
 			};
-
-			Subject = "Thank you for registering with ezbob!";
-			TemplateName = "Greeting";
 		} // SetTemplateAndSubjectAndVariables
 
 		#endregion method SetTemplateAndSubjectAndVariables
