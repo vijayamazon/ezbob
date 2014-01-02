@@ -248,7 +248,17 @@
     </tr>
     <tr>
         <td><b>Asset Worth</b></td>
-        <td colspan="4">£@Model.AssetWorth.ToString("N0")</td>
+        <td colspan="4">
+            @if (@Model.Application.ResidentialStatus.Contains("Home owner"))
+            {
+                @Html.Raw("£")
+                @Model.AssetWorth.ToString("N0")
+            }
+            else
+            {
+               @Html.Raw("Not home owner")
+            }
+        </td>
     </tr>
 </tbody>
 </table>
