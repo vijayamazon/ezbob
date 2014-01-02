@@ -37,6 +37,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="SafeParser.cs" />
     <Compile Include="OrdinalNumber.cs" />
     <Compile Include="PostcodeToRegion.cs" />
     <Compile Include="ProgressCounter.cs" />

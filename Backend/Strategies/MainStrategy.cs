@@ -766,25 +766,25 @@
 		{
 			DataTable dt = DB.ExecuteReader("MainStrategyGetConfigs", CommandSpecies.StoredProcedure);
 			DataRow results = dt.Rows[0];
-
-			rejectDefaultsCreditScore = int.Parse(results["Reject_Defaults_CreditScore"].ToString());
-			rejectDefaultsAccountsNum = int.Parse(results["Reject_Defaults_AccountsNum"].ToString());
-			rejectMinimalSeniority = int.Parse(results["Reject_Minimal_Seniority"].ToString());
-			rejectDefaultsMonthsNum = int.Parse(results["Reject_Defaults_MonthsNum"].ToString());
-			rejectDefaultsAmount = int.Parse(results["Reject_Defaults_Amount"].ToString());
+			var sr = new SafeReader(results);
+			rejectDefaultsCreditScore = sr.Int("Reject_Defaults_CreditScore");
+			rejectDefaultsAccountsNum = sr.Int("Reject_Defaults_AccountsNum");
+			rejectMinimalSeniority = sr.Int("Reject_Minimal_Seniority");
+			rejectDefaultsMonthsNum = sr.Int("Reject_Defaults_MonthsNum");
+			rejectDefaultsAmount = sr.Int("Reject_Defaults_Amount");
 			bwaBusinessCheck = results["BWABusinessCheck"].ToString();
-			enableAutomaticApproval = Convert.ToBoolean(results["EnableAutomaticApproval"]);
-			enableAutomaticReApproval = Convert.ToBoolean(results["EnableAutomaticReApproval"]);
-			enableAutomaticRejection = Convert.ToBoolean(results["EnableAutomaticRejection"]);
-			enableAutomaticReRejection = Convert.ToBoolean(results["EnableAutomaticReRejection"]);
-			maxCapHomeOwner = int.Parse(results["MaxCapHomeOwner"].ToString());
-			maxCapNotHomeOwner = int.Parse(results["MaxCapNotHomeOwner"].ToString());
-			lowCreditScore = int.Parse(results["LowCreditScore"].ToString());
-			lowTotalAnnualTurnover = int.Parse(results["LowTotalAnnualTurnover"].ToString());
-			lowTotalThreeMonthTurnover = int.Parse(results["LowTotalThreeMonthTurnover"].ToString());
-			defaultFeedbackValue = int.Parse(results["DefaultFeedbackValue"].ToString());
-			totalTimeToWaitForMarketplacesUpdate = int.Parse(results["TotalTimeToWaitForMarketplacesUpdate"].ToString());
-			intervalWaitForMarketplacesUpdate = int.Parse(results["IntervalWaitForMarketplacesUpdate"].ToString());
+			enableAutomaticApproval = sr.Bool("EnableAutomaticApproval");
+			enableAutomaticReApproval = sr.Bool("EnableAutomaticReApproval");
+			enableAutomaticRejection = sr.Bool("EnableAutomaticRejection");
+			enableAutomaticReRejection = sr.Bool("EnableAutomaticReRejection");
+			maxCapHomeOwner = sr.Int("MaxCapHomeOwner");
+			maxCapNotHomeOwner = sr.Int("MaxCapNotHomeOwner");
+			lowCreditScore = sr.Int("LowCreditScore");
+			lowTotalAnnualTurnover = sr.Int("LowTotalAnnualTurnover");
+			lowTotalThreeMonthTurnover = sr.Int("LowTotalThreeMonthTurnover");
+			defaultFeedbackValue = sr.Int("DefaultFeedbackValue");
+			totalTimeToWaitForMarketplacesUpdate = sr.Int("TotalTimeToWaitForMarketplacesUpdate");
+			intervalWaitForMarketplacesUpdate = sr.Int("IntervalWaitForMarketplacesUpdate");
 		} // ReadConfigurations
 
 		#endregion method ReadConfigurations
