@@ -1,24 +1,74 @@
-﻿namespace Ezbob.Database 
-{
+﻿namespace Ezbob.Database {
 	using System;
 	using System.Data;
+	using System.Data.Common;
 	using Utils;
+	using Utils.ParsedValue;
 
-	public class SafeReader
-	{
-		private readonly DataRow row;
+	public class SafeReader {
+		private readonly DataRow m_oRow;
+		private readonly DbDataReader m_oReader;
 		private readonly SafeParser safeParser = new SafeParser();
 
-		public SafeReader(DataRow row)
-		{
-			this.row = row;
-		}
+		public SafeReader(DataRow oRow) {
+			m_oRow = oRow;
+			m_oReader = null;
+		} // constructor
 
-		public int IntWithDefault(string index, int defaultValue)
+		public SafeReader(DbDataReader oReader) {
+			m_oReader = oReader;
+			m_oRow = null;
+		} // constructor
+
+		public ParsedValue this[string index, object oDefault = null] {
+			get {
+				return new ParsedValue(ColumnOrDefault(index, oDefault), oDefault);
+			} // get
+		} // indexer
+
+		public ParsedValue this[int index, object oDefault = null] {
+			get {
+				return new ParsedValue(ColumnOrDefault(index, oDefault), oDefault);
+			} // get
+		} // indexer
+
+		private object ColumnOrDefault(string sIdx, object oDefault) {
+			if (!ReferenceEquals(m_oRow, null))
+				return m_oRow.Table.Columns.Contains(sIdx) ? m_oRow[sIdx] : oDefault;
+
+			if (!ReferenceEquals(m_oReader, null)) {
+				try {
+					return m_oReader[sIdx];
+				}
+				catch (Exception) {
+					return oDefault;
+				} // try
+			} // try
+
+			throw new NullReferenceException("Neither row nor DB reader specified.");
+		} // ColumnOrDefault
+
+		private object ColumnOrDefault(int nIdx, object oDefault) {
+			if (!ReferenceEquals(m_oRow, null))
+				return ((0 <= nIdx) && (nIdx < m_oRow.Table.Columns.Count)) ? m_oRow[nIdx] : oDefault;
+
+			if (!ReferenceEquals(m_oReader, null)) {
+				try {
+					return m_oReader[nIdx];
+				}
+				catch (Exception) {
+					return oDefault;
+				} // try
+			} // try
+
+			throw new NullReferenceException("Neither row nor DB reader specified.");
+		} // ColumnOrDefault
+
+		public int Int(string index, int defaultValue)
 		{
-			if (row.Table.Columns.Contains(index))
+			if (m_oRow.Table.Columns.Contains(index))
 			{
-				return safeParser.GetIntWithDefault(row[index], defaultValue);
+				return safeParser.GetInt(m_oRow[index], defaultValue);
 			}
 
 			return defaultValue;
@@ -26,19 +76,19 @@
 
 		public int Int(string index)
 		{
-			if (row.Table.Columns.Contains(index))
+			if (m_oRow.Table.Columns.Contains(index))
 			{
-				return safeParser.GetInt(row[index]);
+				return safeParser.GetInt(m_oRow[index]);
 			}
 
 			return default(int);
 		}
 
-		public decimal DecimalWithDefault(string index, decimal defaultValue)
+		public decimal Decimal(string index, decimal defaultValue)
 		{
-			if (row.Table.Columns.Contains(index))
+			if (m_oRow.Table.Columns.Contains(index))
 			{
-				return safeParser.GetDecimalWithDefault(row[index], defaultValue);
+				return safeParser.GetDecimal(m_oRow[index], defaultValue);
 			}
 
 			return defaultValue;
@@ -46,19 +96,19 @@
 
 		public decimal Decimal(string index)
 		{
-			if (row.Table.Columns.Contains(index))
+			if (m_oRow.Table.Columns.Contains(index))
 			{
-				return safeParser.GetDecimal(row[index]);
+				return safeParser.GetDecimal(m_oRow[index]);
 			}
 
 			return default(decimal);
 		}
 
-		public bool BoolWithDefault(string index, bool defaultValue)
+		public bool Bool(string index, bool defaultValue)
 		{
-			if (row.Table.Columns.Contains(index))
+			if (m_oRow.Table.Columns.Contains(index))
 			{
-			return safeParser.GetBoolWithDefault(row[index], defaultValue);
+			return safeParser.GetBool(m_oRow[index], defaultValue);
 			}
 
 			return defaultValue;
@@ -66,19 +116,19 @@
 
 		public bool Bool(string index)
 		{
-			if (row.Table.Columns.Contains(index))
+			if (m_oRow.Table.Columns.Contains(index))
 			{
-			return safeParser.GetBool(row[index]);
+			return safeParser.GetBool(m_oRow[index]);
 			}
 
 			return default(bool);
 		}
 
-		public DateTime DateTimeWithDefault(string index, DateTime defaultValue)
+		public DateTime DateTime(string index, DateTime defaultValue)
 		{
-			if (row.Table.Columns.Contains(index))
+			if (m_oRow.Table.Columns.Contains(index))
 			{
-			return safeParser.GetDateTimeWithDefault(row[index], defaultValue);
+			return safeParser.GetDateTime(m_oRow[index], defaultValue);
 			}
 
 			return defaultValue;
@@ -86,19 +136,19 @@
 
 		public DateTime DateTime(string index)
 		{
-			if (row.Table.Columns.Contains(index))
+			if (m_oRow.Table.Columns.Contains(index))
 			{
-				return safeParser.GetDateTime(row[index]);
+				return safeParser.GetDateTime(m_oRow[index]);
 			}
 
 			return default(DateTime);
 		}
 
-		public string StringWithDefault(string index, string defaultValue)
+		public string String(string index, string defaultValue)
 		{
-			if (row.Table.Columns.Contains(index))
+			if (m_oRow.Table.Columns.Contains(index))
 			{
-				return row[index].ToString();
+				return m_oRow[index].ToString();
 			}
 
 			return defaultValue;
@@ -106,9 +156,9 @@
 
 		public string String(string index)
 		{
-			if (row.Table.Columns.Contains(index))
+			if (m_oRow.Table.Columns.Contains(index))
 			{
-				return row[index].ToString();
+				return m_oRow[index].ToString();
 			}
 
 			return default(string);

@@ -8,17 +8,25 @@ using Html;
 using Reports;
 
 namespace TestApp {
+	using System.Data.Common;
+
 	class Program {
 		#region method Main
+
+		private static ASafeLog ms_oLog;
 
 		static void Main(string[] args) {
 			var log = new ConsoleLog(new LegacyLog());
 
+			ms_oLog = log;
+
 			var oDB = new SqlConnection(log);
+
+			TestParsedValues(oDB, log);
 
 			// TestUiReportExt(oDB, log);
 
-			TestLoanDateScore(oDB, log);
+			// TestLoanDateScore(oDB, log);
 
 			// TestExperianLimitedCompanyData(oDB, log);
 
@@ -38,6 +46,48 @@ namespace TestApp {
 		} // Main
 
 		#endregion method Main
+
+		#region TestParsedValues
+
+		private static void TestParsedValues(AConnection oDB, ASafeLog oLog) {
+			DataTable tbl = oDB.ExecuteReader("SELECT Id, Name, IsOffline, GreetingMailSentDate FROM Customer ORDER BY Id", CommandSpecies.Text);
+
+			oLog.Info("Using row - begin");
+
+			foreach (DataRow row in tbl.Rows) {
+				var sr = new SafeReader(row);
+
+				int nCustomerID = sr["Id"];
+				string sName = sr["Name"];
+				bool bIsOffline = sr[2];
+				DateTime dt = sr["GreetingMailSentDate", new DateTime(2014, 12, 12)];
+
+				oLog.Info("{0}: {1} - {2} {3}", nCustomerID, sName, bIsOffline, dt);
+			} // foreach
+
+			tbl.Dispose();
+
+			oLog.Info("Using row - end");
+
+			oLog.Info("Using reader - begin");
+			oDB.ForEachRow(TestParsedValuesPrint, "SELECT Id, Name, IsOffline, GreetingMailSentDate FROM Customer ORDER BY Id", CommandSpecies.Text);
+			oLog.Info("Using reader - end");
+		} // TestParsedValues
+
+		private static ActionResult TestParsedValuesPrint(DbDataReader row, bool bRowsetStarts) {
+			var sr = new SafeReader(row);
+
+			int nCustomerID = sr["Id"];
+			string sName = sr["Name"];
+			bool bIsOffline = sr["IsOffline"];
+			DateTime dt = sr["GreetingMailSentDate"];
+
+			ms_oLog.Info("{0}: {1} - {2} {3}", nCustomerID, sName, bIsOffline, dt);
+
+			return ActionResult.Continue;
+		} // TestParsedValuesPrint
+
+		#endregion TestParsedValues
 
 		#region method TestUiReportExt
 

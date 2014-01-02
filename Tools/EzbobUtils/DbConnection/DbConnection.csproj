@@ -57,8 +57,6 @@
     </Compile>
     <Compile Include="SafeReader.cs" />
     <Compile Include="DbException.cs" />
-    <Compile Include="ExtractedValue\ADbValue.cs" />
-    <Compile Include="ExtractedValue\DbValue.cs" />
     <Compile Include="IConnection.cs" />
     <Compile Include="AConnection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
