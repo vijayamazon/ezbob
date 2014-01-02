@@ -6,7 +6,7 @@
 	{
 		public int GetIntWithDefault(object obj, int defaultValue)
 		{
-			if (obj == null)
+			if (ReferenceEquals(obj, null))
 			{
 				return defaultValue;
 			}
@@ -27,7 +27,7 @@
 
 		public decimal GetDecimalWithDefault(object obj, decimal defaultValue)
 		{
-			if (obj == null)
+			if (ReferenceEquals(obj, null))
 			{
 				return defaultValue;
 			}
@@ -48,7 +48,7 @@
 
 		public bool GetBoolWithDefault(object obj, bool defaultValue)
 		{
-			if (obj == null)
+			if (ReferenceEquals(obj, null))
 			{
 				return defaultValue;
 			}
@@ -69,7 +69,7 @@
 
 		public DateTime GetDateTimeWithDefault(object obj, DateTime defaultValue)
 		{
-			if (obj == null)
+			if (ReferenceEquals(obj, null))
 			{
 				return defaultValue;
 			}

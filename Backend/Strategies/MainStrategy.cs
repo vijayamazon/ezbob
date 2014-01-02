@@ -772,7 +772,7 @@
 			rejectMinimalSeniority = sr.Int("Reject_Minimal_Seniority");
 			rejectDefaultsMonthsNum = sr.Int("Reject_Defaults_MonthsNum");
 			rejectDefaultsAmount = sr.Int("Reject_Defaults_Amount");
-			bwaBusinessCheck = results["BWABusinessCheck"].ToString();
+			bwaBusinessCheck = sr.String("BWABusinessCheck");
 			enableAutomaticApproval = sr.Bool("EnableAutomaticApproval");
 			enableAutomaticReApproval = sr.Bool("EnableAutomaticReApproval");
 			enableAutomaticRejection = sr.Bool("EnableAutomaticRejection");
