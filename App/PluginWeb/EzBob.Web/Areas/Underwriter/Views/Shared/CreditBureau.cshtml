@@ -59,7 +59,7 @@
 
 @helper BureauSummary(string checkStatus, string checkIcon, string buttonStyle, string score, string borrowerType, string checkDate, string checkValidity, string creditBureauDirectorId = null)
 {
-    <div class="">
+    <div class="row col-md-12">
         <div class="span6 control-group form-horizontal">
             @ButtonStatus(checkStatus, checkIcon, buttonStyle)
             <a href="#" class="btn btn-mini btn-primary" data-bug-type="ExpConsumer" data-credit-bureau-director-id="@Html.Raw(@creditBureauDirectorId)" data-bug-customer="<%=experianInfo.Id%>" style="float:right"><i class="fa fa-bug"></i></a>
@@ -116,7 +116,7 @@
                 @BureauSummary("<%-experianInfo.CheckStatus%>", "<%-experianInfo.CheckIcon%>", "<%-experianInfo.ButtonStyle%>",
                                "<%-experianInfo.Score%>", "<%-experianInfo.BorrowerType%>",
                                "<%-experianInfo.CheckDate%>", "<%-experianInfo.CheckValidity%>")
-                <div class="">
+                <div class="row col-md-12">
                     <div class="span6">
                         <table class="table">
                             <tbody>
@@ -398,7 +398,7 @@
         </div>
         <div id="collapseExperianRequestFailed" class="accordion-body collapse">
             <div class="accordion-inner">
-                <div class="">
+                <div class="col-md-12">
                     <div class="span8">
                         <ul>
                             <% _.each(experianInfo.ErrorList, function(errMessage){ %>
