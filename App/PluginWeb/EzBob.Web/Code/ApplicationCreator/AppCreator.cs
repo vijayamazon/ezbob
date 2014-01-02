@@ -151,10 +151,18 @@ namespace EzBob.Web.Code.ApplicationCreator {
 			}
 		}
 
-		public void Evaluate(int underwriterId, User user, NewCreditLineOption newCreditLineOption, int avoidAutomaticDescison, bool isUnderwriterForced = false) {
+		public void Evaluate(int underwriterId, User user, NewCreditLineOption newCreditLineOption, int avoidAutomaticDescison, bool isUnderwriterForced, bool isSync)
+		{
 			if (useNewMainStrategy) {
 				if (!isUnderwriterForced) {
-					ServiceClient.MainStrategy1(underwriterId, user.Id, newCreditLineOption, avoidAutomaticDescison);
+					if (isSync)
+					{
+						ServiceClient.MainStrategySync1(underwriterId, user.Id, newCreditLineOption, avoidAutomaticDescison);
+					}
+					else
+					{
+						ServiceClient.MainStrategy1(underwriterId, user.Id, newCreditLineOption, avoidAutomaticDescison);
+					}
 				}
 				else {
 					ServiceClient.MainStrategy2(underwriterId, user.Id, newCreditLineOption, avoidAutomaticDescison, true);

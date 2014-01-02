@@ -120,7 +120,7 @@
 
 			_crBuilder.CreateCashRequest(customer);
 			_creator.EmailUnderReview(_context.User, customer.PersonalInfo.FirstName, customer.Name);
-			_creator.Evaluate(_context.User.Id, _context.User, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, Convert.ToInt32(customer.IsAvoid));
+			_creator.Evaluate(_context.User.Id, _context.User, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, Convert.ToInt32(customer.IsAvoid), false, false);
 
 			if (!customer.IsTest)
 				_creator.FraudChecker(_context.User);

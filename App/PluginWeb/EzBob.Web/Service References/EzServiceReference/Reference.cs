@@ -510,6 +510,9 @@ namespace EzBob.Web.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy3", ReplyAction="http://tempuri.org/IEzService/MainStrategy3Response")]
         EzBob.Web.EzServiceReference.ActionMetaData MainStrategy3(int uderwriterId, int customerId, int checkType, string houseNumber, string houseName, string street, string district, string town, string county, string postcode, string bankAccount, string sortCode, int avoidAutoDescison);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategySync1", ReplyAction="http://tempuri.org/IEzService/MainStrategySync1Response")]
+        EzBob.Web.EzServiceReference.ActionMetaData MainStrategySync1(int underwriterId, int customerId, EzBob.Web.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GenerateMobileCode", ReplyAction="http://tempuri.org/IEzService/GenerateMobileCodeResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData GenerateMobileCode(string phone);
         
@@ -689,6 +692,10 @@ namespace EzBob.Web.EzServiceReference {
         
         public EzBob.Web.EzServiceReference.ActionMetaData MainStrategy3(int uderwriterId, int customerId, int checkType, string houseNumber, string houseName, string street, string district, string town, string county, string postcode, string bankAccount, string sortCode, int avoidAutoDescison) {
             return base.Channel.MainStrategy3(uderwriterId, customerId, checkType, houseNumber, houseName, street, district, town, county, postcode, bankAccount, sortCode, avoidAutoDescison);
+        }
+        
+        public EzBob.Web.EzServiceReference.ActionMetaData MainStrategySync1(int underwriterId, int customerId, EzBob.Web.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
+            return base.Channel.MainStrategySync1(underwriterId, customerId, newCreditLine, avoidAutoDescison);
         }
         
         public EzBob.Web.EzServiceReference.ActionMetaData GenerateMobileCode(string phone) {

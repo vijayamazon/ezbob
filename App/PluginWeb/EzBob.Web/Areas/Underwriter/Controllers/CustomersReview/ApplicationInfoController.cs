@@ -35,6 +35,7 @@
 		private readonly ICustomerStatusHistoryRepository customerStatusHistoryRepository;
 		private readonly ILoanSourceRepository _loanSources;
 		private readonly IUsersRepository _users;
+		private readonly bool useNewMainStrategy;
 
 		private static readonly ILog Log = LogManager.GetLogger(typeof (ApplicationInfoController));
 
@@ -73,6 +74,7 @@
 			this.customerStatusHistoryRepository = customerStatusHistoryRepository;
 			_loanSources = loanSources;
 			_users = users;
+			useNewMainStrategy = this.configurationVariablesRepository.GetByNameAsBool("UseNewMainStrategy");
 		}
 
 		[Ajax]
@@ -423,12 +425,15 @@
 
 	        var underwriter = _users.GetUserByLogin(User.Identity.Name);
 
-            _crBuilder.ForceEvaluate(underwriter.Id, customer, (NewCreditLineOption) newCreditLineOption, false);
+            _crBuilder.ForceEvaluate(underwriter.Id, customer, (NewCreditLineOption) newCreditLineOption, false, true);
 
-            customer.CreditResult = null;
-			customer.OfferStart = cashRequest.OfferStart;
-			customer.OfferValidUntil = cashRequest.OfferValidUntil;
-            return this.JsonNet(new { Message = "The evaluation has been started. Please refresh this application after a while..." });
+	        if (!useNewMainStrategy)
+	        {
+		        customer.CreditResult = null;
+		        customer.OfferStart = cashRequest.OfferStart;
+		        customer.OfferValidUntil = cashRequest.OfferValidUntil;
+	        }
+	        return this.JsonNet(new { Message = "The evaluation has been started. Please refresh this application after a while..." });
         }
 
         [HttpPost]

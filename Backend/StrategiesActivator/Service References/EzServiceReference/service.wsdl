@@ -321,6 +321,12 @@
   <wsdl:message name="IEzService_MainStrategy3_OutputMessage">
     <wsdl:part name="parameters" element="tns:MainStrategy3Response" />
   </wsdl:message>
+  <wsdl:message name="IEzService_MainStrategySync1_InputMessage">
+    <wsdl:part name="parameters" element="tns:MainStrategySync1" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_MainStrategySync1_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MainStrategySync1Response" />
+  </wsdl:message>
   <wsdl:message name="IEzService_GenerateMobileCode_InputMessage">
     <wsdl:part name="parameters" element="tns:GenerateMobileCode" />
   </wsdl:message>
@@ -505,6 +511,10 @@
     <wsdl:operation name="MainStrategy3">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MainStrategy3" message="tns:IEzService_MainStrategy3_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MainStrategy3Response" message="tns:IEzService_MainStrategy3_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="MainStrategySync1">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MainStrategySync1" message="tns:IEzService_MainStrategySync1_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MainStrategySync1Response" message="tns:IEzService_MainStrategySync1_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GenerateMobileCode">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GenerateMobileCode" message="tns:IEzService_GenerateMobileCode_InputMessage" />
@@ -897,6 +907,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="MainStrategySync1">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/MainStrategySync1" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GenerateMobileCode">
       <soap12:operation soapAction="http://tempuri.org/IEzService/GenerateMobileCode" style="document" />
       <wsdl:input>
@@ -927,20 +946,20 @@
   </wsdl:binding>
   <wsdl:service name="EzServiceImplementation">
     <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
-      <soap12:address location="net.tcp://alexbo-pc:7081/" />
+      <soap12:address location="net.tcp://yulys-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://yulys-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>alexbo-pc\alexbo</Upn>
+          <Upn>yulys-PC\yulys</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IEzService" binding="tns:NetTcpBinding_IEzService">
-      <soap12:address location="net.tcp://alexbo-pc:7081/" />
+      <soap12:address location="net.tcp://yulys-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://yulys-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>alexbo-pc\alexbo</Upn>
+          <Upn>yulys-PC\yulys</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

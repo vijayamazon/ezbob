@@ -48,7 +48,7 @@
 
 	        var underwriter = _users.GetUserByLogin(User.Identity.Name);
 
-            _creator.Evaluate(underwriter.Id, _users.Get(id), NewCreditLineOption.UpdateEverythingExceptMp, Convert.ToInt32(customer.IsAvoid), true);
+			_creator.Evaluate(underwriter.Id, _users.Get(id), NewCreditLineOption.UpdateEverythingExceptMp, Convert.ToInt32(customer.IsAvoid), true, false);
             return this.JsonNet(new { Message = "The evaluation has been started. Please refresh this application after a while..." });
         }
 

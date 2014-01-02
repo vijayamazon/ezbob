@@ -17,7 +17,7 @@ namespace EzBob.Web.Code.ApplicationCreator
         void PasswordChanged(User user, string firstName, string password);
         void PasswordRestored(User user, string emailTo, string firstName,  string password);
         void CustomerMarketPlaceAdded(Customer user, int umi);
-        void Evaluate(int underwriterId, User user, NewCreditLineOption runNewCreditLine, int avoidAutomaticDescison, bool isUnderwriterForced = false);
+        void Evaluate(int underwriterId, User user, NewCreditLineOption runNewCreditLine, int avoidAutomaticDescison, bool isUnderwriterForced, bool isSync);
         void EvaluateWithIdHubCustomAddress(int underwriterId, User user, int checkType, string houseNumber, string houseName, string street,
                                        string district, string town, string county, string postcode, string bankAccount, string sortCode, int avoidAutomaticDescison);
         void GetCashFailed(User user, string firstName);

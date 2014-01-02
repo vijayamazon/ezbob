@@ -403,6 +403,11 @@ namespace EzService {
 			return Execute(customerId, underwriterId, typeof(MainStrategy), customerId, checkType, houseNumber, houseName, street, district, town, county, postcode, bankAccount, sortCode, avoidAutoDescison);
 		} // MainStrategy3
 
+		public ActionMetaData MainStrategySync1(int underwriterId, int customerId, NewCreditLineOption newCreditLine, int avoidAutoDescison)
+		{
+			return ExecuteSync(null, customerId, underwriterId, typeof(MainStrategy), customerId, newCreditLine, avoidAutoDescison);
+		} // MainStrategySync1
+
 		public ActionMetaData GenerateMobileCode(string phone)
 		{
 			var strategyInstance = new GenerateMobileCode(phone, DB, Log);
