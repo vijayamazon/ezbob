@@ -230,18 +230,18 @@
 			);
 			
 			var scoreCardResults = new SafeReader(scoreCardDataTable.Rows[0]);
-			MaritalStatus maritalStatus = (MaritalStatus)Enum.Parse(typeof(MaritalStatus), scoreCardResults.String("MaritalStatus")); // TODO: parse this safely
+			MaritalStatus maritalStatus = (MaritalStatus)Enum.Parse(typeof(MaritalStatus), (string)scoreCardResults["MaritalStatus"]); // TODO: parse this safely
 			int modelMaxFeedback = scoreCardResults.IntWithDefault("MaxFeedback", 20000);
 			
-			int modelMPsNumber = scoreCardResults.Int("MPsNumber");
-			int modelEzbobSeniority = scoreCardResults.Int("EZBOBSeniority");
-			int modelOnTimeLoans = scoreCardResults.Int("OnTimeLoans");
-			int modelLatePayments = scoreCardResults.Int("LatePayments");
-			int modelEarlyPayments = scoreCardResults.Int("EarlyPayments");
+			int modelMPsNumber = scoreCardResults["MPsNumber"];
+			int modelEzbobSeniority = scoreCardResults["EZBOBSeniority"];
+			int modelOnTimeLoans = scoreCardResults["OnTimeLoans"];
+			int modelLatePayments = scoreCardResults["LatePayments"];
+			int modelEarlyPayments = scoreCardResults["EarlyPayments"];
 
 			bool firstRepaymentDatePassed = false;
 
-			DateTime modelFirstRepaymentDate = scoreCardResults.DateTime("FirstRepaymentDate");
+			DateTime modelFirstRepaymentDate = scoreCardResults["FirstRepaymentDate"];
 			if (modelFirstRepaymentDate != default(DateTime))
 			{
 				firstRepaymentDatePassed = modelFirstRepaymentDate < DateTime.UtcNow;

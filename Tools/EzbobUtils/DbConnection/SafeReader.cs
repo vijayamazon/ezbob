@@ -2,13 +2,12 @@
 	using System;
 	using System.Data;
 	using System.Data.Common;
-	using Utils;
 	using Utils.ParsedValue;
 
 	public class SafeReader {
-		private readonly DataRow m_oRow;
-		private readonly DbDataReader m_oReader;
-		private readonly SafeParser safeParser = new SafeParser();
+		#region public
+
+		#region constructor
 
 		public SafeReader(DataRow oRow) {
 			m_oRow = oRow;
@@ -19,6 +18,62 @@
 			m_oReader = oReader;
 			m_oRow = null;
 		} // constructor
+
+		#endregion constructor
+
+		#region indexer wrappers
+
+		#region method Bool
+
+		public bool Bool(string index) {
+			return this[index, default(bool)];
+		} // Bool
+
+		#endregion method Bool
+
+		#region method Int
+
+		public int Int(string index) {
+			return this[index, default(int)];
+		} // Int
+
+		#endregion method Int
+
+		#region method IntWithDefault
+
+		public int IntWithDefault(string index, int defaultValue) {
+			return this[index, defaultValue];
+		} // IntWithDefault
+
+		#endregion method IntWithDefault
+
+		#region method Decimal
+
+		public decimal Decimal(string index) {
+			return this[index, default(Decimal)];
+		} // Decimal
+
+		#endregion method Decimal
+
+		#region method DateTime
+
+		public DateTime DateTime(string index) {
+			return this[index, default(DateTime)];
+		} // DateTime
+
+		#endregion method DateTime
+
+		#region method String
+
+		public string String(string index, string sDefault = null) {
+			return this[index, sDefault];
+		} // String
+
+		#endregion method String
+
+		#endregion indexer wrappers
+
+		#region indexer
 
 		public ParsedValue this[string index, object oDefault = null] {
 			get {
@@ -31,6 +86,14 @@
 				return new ParsedValue(ColumnOrDefault(index, oDefault), oDefault);
 			} // get
 		} // indexer
+
+		#endregion indexer
+
+		#endregion public
+
+		#region private
+
+		#region method ColumnOrDefault
 
 		private object ColumnOrDefault(string sIdx, object oDefault) {
 			if (!ReferenceEquals(m_oRow, null))
@@ -64,104 +127,11 @@
 			throw new NullReferenceException("Neither row nor DB reader specified.");
 		} // ColumnOrDefault
 
-		public int Int(string index, int defaultValue)
-		{
-			if (m_oRow.Table.Columns.Contains(index))
-			{
-				return safeParser.GetInt(m_oRow[index], defaultValue);
-			}
+		#endregion method ColumnOrDefault
 
-			return defaultValue;
-		}
+		private readonly DataRow m_oRow;
+		private readonly DbDataReader m_oReader;
 
-		public int Int(string index)
-		{
-			if (m_oRow.Table.Columns.Contains(index))
-			{
-				return safeParser.GetInt(m_oRow[index]);
-			}
-
-			return default(int);
-		}
-
-		public decimal Decimal(string index, decimal defaultValue)
-		{
-			if (m_oRow.Table.Columns.Contains(index))
-			{
-				return safeParser.GetDecimal(m_oRow[index], defaultValue);
-			}
-
-			return defaultValue;
-		}
-
-		public decimal Decimal(string index)
-		{
-			if (m_oRow.Table.Columns.Contains(index))
-			{
-				return safeParser.GetDecimal(m_oRow[index]);
-			}
-
-			return default(decimal);
-		}
-
-		public bool Bool(string index, bool defaultValue)
-		{
-			if (m_oRow.Table.Columns.Contains(index))
-			{
-			return safeParser.GetBool(m_oRow[index], defaultValue);
-			}
-
-			return defaultValue;
-		}
-
-		public bool Bool(string index)
-		{
-			if (m_oRow.Table.Columns.Contains(index))
-			{
-			return safeParser.GetBool(m_oRow[index]);
-			}
-
-			return default(bool);
-		}
-
-		public DateTime DateTime(string index, DateTime defaultValue)
-		{
-			if (m_oRow.Table.Columns.Contains(index))
-			{
-			return safeParser.GetDateTime(m_oRow[index], defaultValue);
-			}
-
-			return defaultValue;
-		}
-
-		public DateTime DateTime(string index)
-		{
-			if (m_oRow.Table.Columns.Contains(index))
-			{
-				return safeParser.GetDateTime(m_oRow[index]);
-			}
-
-			return default(DateTime);
-		}
-
-		public string String(string index, string defaultValue)
-		{
-			if (m_oRow.Table.Columns.Contains(index))
-			{
-				return m_oRow[index].ToString();
-			}
-
-			return defaultValue;
-		}
-
-		public string String(string index)
-		{
-			if (m_oRow.Table.Columns.Contains(index))
-			{
-				return m_oRow[index].ToString();
-			}
-
-			return default(string);
-		}
-	}
-}
+		#endregion private
+	} // class SafeReader
+} // namespace
