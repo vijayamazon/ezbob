@@ -53,10 +53,9 @@
             
         }
 
-        public void Evaluate(int underwriterId, User user, NewCreditLineOption runNewCreditLine, int avoidAutomaticDescison, bool isUnderwriterForced = false)
-        {
-            
-        }
+		public void Evaluate(int underwriterId, User user, NewCreditLineOption runNewCreditLine, int avoidAutomaticDescison, bool isUnderwriterForced, bool isSync)
+		{
+		}
 
         public void EvaluateWithIdHubCustomAddress(int underwriterId, User user, int checkType, string houseNumber, string houseName, string street,
                                                    string district, string town, string county, string postcode, string bankAccount,
