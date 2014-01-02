@@ -53,7 +53,7 @@
             
         }
 
-		public void Evaluate(int underwriterId, User user, NewCreditLineOption runNewCreditLine, int avoidAutomaticDescison, bool isUnderwriterForced, bool isSync)
+        public void Evaluate(int underwriterId, User user, NewCreditLineOption runNewCreditLine, int avoidAutomaticDescison, bool isUnderwriterForced = false, bool isSync = false)
 		{
 		}
 
