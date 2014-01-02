@@ -197,7 +197,7 @@
                                 <a href="#" class="btn btn-mini btn-primary" data-bug-type="<%- m.Name %>" data-bug-customer="<%-customerId%>" data-bug-mp="<%-m.Id%>" data-title="Report Bug"><i class="fa fa-bug"></i></a>
                                 <a href="#" class="btn btn-mini btn-primary show-tooltip disable-shop %>" data-original-title="Disable" data-placement="top" umi="<%- m.Id %>"><i class="fa fa-ban"></i></a>
 					            <% if (m.UpdateError && m.Name == 'eBay') { %>
-					            <button class="btn btn-mini btn-primary show-tooltip renew-token" data-original-title="Recheck" data-placement="top" data-umi="<%- m.Id %>"><i class="fa fa-retweet"></i></button>
+					            <button class="btn btn-mini btn-primary show-tooltip renew-token" data-original-title="Renew token" data-placement="top" data-umi="<%- m.Id %>"><i class="fa fa-retweet"></i></button>
 					            <% } %>
 					            <% } %>
                                 
@@ -276,20 +276,20 @@
 				    <td>
 				        <%if(m.IsHistory) { print(EzBob.formatDateWithoutTime(m.History)); } else {%>
 				            <% if (m.Disabled) { %>
-				            <a href="#" class="btn btn-mini btn-success enable-shop %>" umi="<%- m.Id %>"><i class="fa fa-play"></i></a>
+				            <a href="#" class="btn btn-mini btn-success enable-shop %>" data-original-title="Enable" data-placement="top" umi="<%- m.Id %>"><i class="fa fa-play"></i></a>
 				            <% }
 				            else {
 				            if (m.Name.toLowerCase() === 'paypal') {%>
 				            <a href="#" class="btn btn-mini reCheck-paypal btn-primary" umi="<%- m.PaymentAccountBasic.id %>"><i class="fa fa-repeat"></i></a>
 				            <a href="#" class="btn btn-mini btn-primary" data-bug-type="PayPal" data-bug-customer="<%- customerId %>" data-bug-mp="<%- m.Id %>"><i class="fa fa-bug"></i></a>
 				            <% } else if (m.Name.toLowerCase() !== 'yodlee') { %>
-				            <a href="#" class="btn btn-mini btn-primary reCheckMP <%- sShopName.toLowerCase() %>" umi="<%- m.Id %>" marketplacetype="<%- m.Name %>"><i class="fa fa-refresh"></i></a>
+				            <a href="#" class="btn btn-mini btn-primary reCheckMP <%- sShopName.toLowerCase() %>" umi="<%- m.Id %>" data-original-title="Recheck" data-placement="top" marketplacetype="<%- m.Name %>"><i class="fa fa-refresh"></i></a>
 				            <a href="#" class="btn btn-mini btn-primary" data-bug-type="<%- m.Name %>" data-bug-customer="<%-customerId%>" data-bug-mp="<%-m.Id%>" data-title="Report Bug"><i class="fa fa-bug"></i></a>
 				            <% } else { %>
-				            <a href='@Url.Action("TryRecheckYodlee", "MarketPlaces", new { Area = "Underwriter" }, "https")/?umi=<%- m.Id %>' target="_blank" class="tryRecheckYodlee btn btn-mini btn-primary" data-mp-id="<%-m.id%>"><i class="fa fa-refresh"></i></a>
+				            <a href='@Url.Action("TryRecheckYodlee", "MarketPlaces", new { Area = "Underwriter" }, "https")/?umi=<%- m.Id %>' target="_blank" data-original-title="Recheck" data-placement="top" class="tryRecheckYodlee btn btn-mini btn-primary" data-mp-id="<%-m.id%>"><i class="fa fa-refresh"></i></a>
 				            <a href="#" class="btn btn-mini btn-primary" data-bug-type="<%- m.Name %>" data-bug-customer="<%-customerId%>" data-bug-mp="<%-m.Id%>" data-title="Report Bug"><i class="fa fa-bug"></i></a>
 				            <% } %>
-				            <a href="#" class="btn btn-mini btn-primary disable-shop %>" umi="<%- m.Id %>"><i class="fa fa-ban"></i></a>
+				            <a href="#" class="btn btn-mini btn-primary disable-shop %>"  data-original-title="Disable" data-placement="top" umi="<%- m.Id %>"><i class="fa fa-ban"></i></a>
 				            <% } %>
                         <% } %>
 				    </td>

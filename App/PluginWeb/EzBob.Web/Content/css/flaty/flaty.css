@@ -2326,8 +2326,13 @@ a.btn {
     display: none;
 }
 /* Tooltip  ------------------------------------------ */
-.tooltip .tooltip-inner {
+/*.tooltip .tooltip-inner {
     border-radius: 0;
+}*/
+
+.tooltip .tooltip-inner {
+    white-space: pre-wrap;
+    max-width:500px;
 }
 
 /* Popover ------------------------------------------ */

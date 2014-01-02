@@ -47,6 +47,10 @@ class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
     onRender: ->
         @$el.find('.mp-error-description').tooltip(({placement: "bottom"}));
         @$el.find('a[data-bug-type]').tooltip({title: 'Report bug'});
+        _.each(@$el.find('[data-original-title]'), (elem) ->
+            $(elem).tooltip({title: elem.getAttribute('data-original-title')});
+        )
+
         if @detailView!= undefined
             @detailView.render()
 
