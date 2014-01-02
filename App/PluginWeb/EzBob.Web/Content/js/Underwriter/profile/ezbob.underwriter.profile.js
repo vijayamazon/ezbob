@@ -16,10 +16,7 @@
     }
 
     ProfileView.prototype.initialize = function() {
-      this.template = _.template($("#profile-template-main").html());
-      return this.$el.on('shown.bs.tab', function() {
-        return $("#spl").css("height", Math.max($('.profile-person-info').height() + $('.profile-loan-info').height() + 20, $('.profile-tabs .tabbable').height() + 40) + "px").trigger("resize");
-      });
+      return this.template = _.template($("#profile-template-main").html());
     };
 
     ProfileView.prototype.render = function() {
@@ -137,7 +134,6 @@
       this.controlButtons = new EzBob.Underwriter.ControlButtonsView({
         el: controlButtons
       });
-      $("#spl").css("height", this.$el.height() + 120).trigger("resize");
       return this;
     };
 

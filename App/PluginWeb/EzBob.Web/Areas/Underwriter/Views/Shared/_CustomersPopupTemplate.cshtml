@@ -46,13 +46,13 @@
                         <% if (val.Type != "Yodlee"){%>
                         <div  class="pull-right">
                             <button class="recheck-mp btn btn-primary <%-val.Status =='Updating' ? 'disabled' : '' %>" data-mp-id="<%-val.id%>">
-                                <i class="icon-white icon-repeat"></i> Recheck
+                                <i class="fa fa-repeat"></i> Recheck
                             </button>
                         </div>
                         <%} else {%>
                         <div  class="pull-right">
                             <a href='@Url.Action("TryRecheckYodlee","MarketPlaces", new { Area = "Underwriter" }, "https")/?umi=<%-val.id%>' target="_blank" class="recheck-yodlee btn btn-primary <%-val.Status =='Updating' ? 'disabled' : '' %>" data-mp-id="<%-val.id%>">
-                                <i class="icon-white icon-repeat"></i>Try Recheck
+                                <i class="fa fa-repeat"></i>Try Recheck
                             </a>
                         </div>
                         <%}%>
@@ -82,7 +82,7 @@
                     <td>
                         <div  class="pull-right">
                             <button id="recheck-main-strat" class="btn btn-primary <%-(sm == null || sm.StrategyStatus =='Running' || isWizardFinished === false) ? 'disabled' : '' %>">
-                                <i class="icon-white icon-repeat"></i> Recheck
+                                <i class="fa fa-repeat"></i> Recheck
                             </button>
                         </div>
                     </td>

@@ -334,7 +334,7 @@
 			<td><b>Targeting Status</b></td>
 			<td>
 				<a class="btn btn-mini pull-right @(String.IsNullOrEmpty(companyRefNum) ? "btn-primary" : "btn-success") disabled" style="margin-left: 10px;">
-					<i class="@(String.IsNullOrEmpty(companyRefNum) ? "icon-white icon-remove-sign" : "icon-white icon-ok-sign")"></i>
+					<i class="@(String.IsNullOrEmpty(companyRefNum) ? "fa fa-times" : "fa fa-check")"></i>
 					@(String.IsNullOrEmpty(companyRefNum) ? "Not performed" : "Performed")
 				</a>
 				<a id="recheck-targeting"

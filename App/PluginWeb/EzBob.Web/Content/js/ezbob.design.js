@@ -544,17 +544,17 @@ EzBob.UpdateBugsIcon = function (element, state) {
     element = element.find('i');
     switch (state) {
         case "New":
-            iconClass = "icon-white icon-tag";
+            iconClass = "fa fa-tag";
             state = "Report"; // for use in tooltip title
             break;
         case "Closed":
-            iconClass = "icon-white icon-ok";
+            iconClass = "fa fa-check";
             break;
         case "Reopened":
-            iconClass = "icon-white icon-repeat";
+            iconClass = "fa fa-repeat";
             break;
         case "Opened":
-            iconClass = "icon-white icon-remove";
+            iconClass = "fa fa-times";
             break;
         default:
             iconClass = "";

@@ -25,9 +25,9 @@ EzBob.Underwriter.ExperianInfoView = Backbone.View.extend({
         "click #RunAMLBWACheckBtn": "RunAMLBWACheckBtn",
         "click #RunBWACheckBtn, #RunBWAReCheckBtn": "RunBWACheckBtn",
         "click .btn-download": "downloadConsent",
-        "click .check-history tr:not(:eq(0),:eq(1))": "CheckHistoryClicked"
+        "click .check-history tr:not(:eq(0),:eq(1))": "CheckHistoryClicked",
     },
-
+    
     CheckHistoryClicked: function(e) {
         var $el = $(e.currentTarget);
         var id = $el.find("td:eq(0)").text();

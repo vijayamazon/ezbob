@@ -1687,13 +1687,20 @@ a.btn {
     background-color: #dcdcdc;
 }
 .btn.btn-primary {
-    background-color: #58b1fc;
+    background-color: transparent;
+    color: #58b1fc;
+    border: #58b1fc 1px solid;
 }
 .btn.btn-primary:active,
 .btn.btn-primary.active,
 .btn-group.open .btn.btn-primary.dropdown-toggle,
 .btn.btn-primary:hover {
     background-color: #017cdb;
+    color: white !important;
+}
+.btn.btn-primary.disabled, .btn.btn-primary[disabled="disabled"] {
+    color: #888;
+    border: #888 1px solid;
 }
 .btn.btn-info {
     background-color: #5ab4da;
@@ -1795,7 +1802,6 @@ a.btn {
 .btn.btn-success,
 .btn.btn-warning,
 .btn.btn-info,
-.btn.btn-primary,
 .btn.btn-inverse,
 .btn.btn-danger,
 .btn.btn-pink,
@@ -1805,6 +1811,7 @@ a.btn {
 .btn.btn-gray {
     color: #fff;
 }
+
 .btn.btn-inverse > .caret,
 .btn.btn-pink > .caret,
 .btn.btn-yellow > .caret,

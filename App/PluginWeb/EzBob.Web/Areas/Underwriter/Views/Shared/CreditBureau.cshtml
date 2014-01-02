@@ -35,7 +35,7 @@
 @helper ScoreMark(string score, string scorePos, string valPos, string color, string align)
 {
     var backDivStyle = "height: 50px; width: 128px; position: relative; left: " + scorePos + "background-color: " + color;
-    var scoreDivStyle = "height: 50px; width: 120px; background-color: white; position: relative; font-size: 48px; "
+    var scoreDivStyle = "height: 50px; width: 120px; background-color: #E9F0F9; position: relative; font-size: 48px; "
         + " color: " + color
         + " left: " + valPos
         + " text-align: " + align;
@@ -59,7 +59,7 @@
 
 @helper BureauSummary(string checkStatus, string checkIcon, string buttonStyle, string score, string borrowerType, string checkDate, string checkValidity, string creditBureauDirectorId = null)
 {
-    <div class="row">
+    <div class="">
         <div class="span6 control-group form-horizontal">
             @ButtonStatus(checkStatus, checkIcon, buttonStyle)
             <a href="#" class="btn btn-mini btn-primary" data-bug-type="ExpConsumer" data-credit-bureau-director-id="@Html.Raw(@creditBureauDirectorId)" data-bug-customer="<%=experianInfo.Id%>" style="float:right"><i class="fa fa-bug"></i></a>
@@ -116,7 +116,7 @@
                 @BureauSummary("<%-experianInfo.CheckStatus%>", "<%-experianInfo.CheckIcon%>", "<%-experianInfo.ButtonStyle%>",
                                "<%-experianInfo.Score%>", "<%-experianInfo.BorrowerType%>",
                                "<%-experianInfo.CheckDate%>", "<%-experianInfo.CheckValidity%>")
-                <div class="row">
+                <div class="">
                     <div class="span6">
                         <table class="table">
                             <tbody>
@@ -398,7 +398,7 @@
         </div>
         <div id="collapseExperianRequestFailed" class="accordion-body collapse">
             <div class="accordion-inner">
-                <div class="row">
+                <div class="">
                     <div class="span8">
                         <ul>
                             <% _.each(experianInfo.ErrorList, function(errMessage){ %>
