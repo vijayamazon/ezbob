@@ -73,18 +73,30 @@
 					var papi = new PayPointApi();
 					bool applyLateCharge = papi.ApplyLateCharge(feeAmount, loanId, feeType);
 
-					if (applyLateCharge) {
-						string subject = string.Format("Dear {0}, your payment of £{1} is {2} days past due. You will be charged a late fee", firstName, amountDue, daysBetween);
-						string templateName = feeAmount >= partialPaymentCharge ? "Mandrill - Late fee was added (7D late)" : "Mandrill - Late fee was added (14D late)";
+					if (applyLateCharge)
+					{
+						DataTable dt = DB.ExecuteReader("ShouldStopSendingLateMails", new QueryParameter("LoanId", loanId));
+						var safeReader = new SafeReader(dt.Rows[0]);
+						bool shouldStopSendingLateMails = safeReader["StopSendingEmails"];
+						if (shouldStopSendingLateMails)
+						{
+							string subject =
+								string.Format("Dear {0}, your payment of £{1} is {2} days past due. You will be charged a late fee", firstName,
+								              amountDue, daysBetween);
+							string templateName = feeAmount >= partialPaymentCharge
+								                      ? "Mandrill - Late fee was added (7D late)"
+								                      : "Mandrill - Late fee was added (14D late)";
 
-						var variables = new Dictionary<string, string> {
-							{"FirstName", firstName},
-							{"ScheduledAmount", amountDue.ToString(CultureInfo.InvariantCulture)},
-							{"RefNum", refNum},
-							{"FeeAmount", feeAmount.ToString(CultureInfo.InvariantCulture)}
-						};
+							var variables = new Dictionary<string, string>
+								{
+									{"FirstName", firstName},
+									{"ScheduledAmount", amountDue.ToString(CultureInfo.InvariantCulture)},
+									{"RefNum", refNum},
+									{"FeeAmount", feeAmount.ToString(CultureInfo.InvariantCulture)}
+								};
 
-						mailer.SendToCustomerAndEzbob(variables, mail, templateName, subject);
+							mailer.SendToCustomerAndEzbob(variables, mail, templateName, subject);
+						}
 					} // if
 				} // if
 

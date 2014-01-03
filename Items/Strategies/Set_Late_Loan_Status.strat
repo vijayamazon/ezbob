@@ -6,15 +6,16 @@
     <NodeElement Name="Admin charge?" NodeId="Comparison5094752" />
     <NodeElement Name="AmountDue &gt;= Threshold" NodeId="Comparison66996147" />
     <NodeElement Name="Assignment" NodeId="AssignmentB21799703" />
+    <NodeElement Name="Comparison" NodeId="Comparison58244613" />
     <NodeElement Name="ConfigurationVariables" NodeId="DataSourceNodeScalar15879623" />
-    <NodeElement Name="Counter=NULL" NodeId="AssignmentB39254496" />
     <NodeElement Name="Counter=NULL" NodeId="AssignmentB41820978" />
+    <NodeElement Name="Counter=NULL" NodeId="AssignmentB39254496" />
     <NodeElement Name="DaysBetween" NodeId="AssignmentB9528291" />
     <NodeElement Name="Delinquency calculation" NodeId="ConditionalAssignment46415143" />
     <NodeElement Name="fee exists" NodeId="Comparison35831362" />
     <NodeElement Name="Fee=0" NodeId="MultiAssignmentB13607715" />
-    <NodeElement Name="Get data from selected row" NodeId="GetRowDataNode45306373" />
     <NodeElement Name="Get data from selected row" NodeId="GetRowDataNode46952641" />
+    <NodeElement Name="Get data from selected row" NodeId="GetRowDataNode45306373" />
     <NodeElement Name="GetAllStillToPayLoanSchedules" NodeId="DataSourceBehavioral34977455" />
     <NodeElement Name="GetLateForCollection" NodeId="DataSourceBehavioral36776090" />
     <NodeElement Name="If to use custom Date" NodeId="ConditionalAssignment45726372" />
@@ -22,25 +23,26 @@
     <NodeElement Name="Is Last Instalment" NodeId="Comparison32449728" />
     <NodeElement Name="Late Charges" NodeId="ConditionalAssignment17467873" />
     <NodeElement Name="LoanScheduleStatus = Late" NodeId="AssignmentB33513147" />
-    <NodeElement Name="Mail Node" NodeId="MailNode38340602" />
-    <NodeElement Name="Mail Node" NodeId="MailNode10063389" />
-    <NodeElement Name="Mail Node" NodeId="MailNode12319514" />
-    <NodeElement Name="Mail Node" NodeId="MailNode29798052" />
     <NodeElement Name="Mail Node" NodeId="MailNode62773080" />
-    <NodeElement Name="Mail_addresses" NodeId="CreditProduct20777609" />
-    <NodeElement Name="Mail_addresses" NodeId="CreditProduct24528150" />
+    <NodeElement Name="Mail Node" NodeId="MailNode29798052" />
+    <NodeElement Name="Mail Node" NodeId="MailNode12319514" />
+    <NodeElement Name="Mail Node" NodeId="MailNode10063389" />
+    <NodeElement Name="Mail Node" NodeId="MailNode38340602" />
     <NodeElement Name="Mail_addresses" NodeId="CreditProduct24708790" />
-    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB65441374" />
+    <NodeElement Name="Mail_addresses" NodeId="CreditProduct24528150" />
+    <NodeElement Name="Mail_addresses" NodeId="CreditProduct20777609" />
     <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB16157182" />
-    <NodeElement Name="Read Next Row" NodeId="ReadNextNode47545443" />
+    <NodeElement Name="Multi-Assignment" NodeId="MultiAssignmentB65441374" />
     <NodeElement Name="Read Next Row" NodeId="ReadNextNode12957567" />
-    <NodeElement Name="Script" NodeId="ScriptNode46765253" />
+    <NodeElement Name="Read Next Row" NodeId="ReadNextNode47545443" />
     <NodeElement Name="Script" NodeId="ScriptNode18492716" />
+    <NodeElement Name="Script" NodeId="ScriptNode46765253" />
+    <NodeElement Name="ShouldStopSendingLateMails" NodeId="DataSourceNodeScalar28625159" />
     <NodeElement Name="Start Node" NodeId="StartNode13728158" />
     <NodeElement Name="Stop Node" NodeId="StopNode56444563" />
     <NodeElement Name="Str -&gt; Num" NodeId="ScriptNode2842423" />
-    <NodeElement Name="Subject" NodeId="AssignmentB41900654" />
     <NodeElement Name="Subject" NodeId="AssignmentB31129877" />
+    <NodeElement Name="Subject" NodeId="AssignmentB41900654" />
     <NodeElement Name="UpdateCollection" NodeId="DataSourceNodeScalar61392767" />
     <NodeElement Name="UpdateLoanScheduleCustomDate" NodeId="DataSourceNodeScalar1727937" />
     <NodeElement Name="UpdateLoanScheduleStatus" NodeId="DataSourceNodeScalar21129301" />
@@ -1733,6 +1735,80 @@
       <TypeName>WorkflowObjects.NodeMail</TypeName>
       <PrototypeName />
     </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName>Next</DefaultPinName>
+      <Description />
+      <DisplayName>ShouldStopSendingLateMails</DisplayName>
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;
+&lt;NodeParameters xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+  &lt;DataSourceName&gt;ShouldStopSendingLateMails+Ejh22OS/q2MVDEKu4F+xA==&lt;/DataSourceName&gt;
+  &lt;DataSourceType&gt;ExternalDatabase&lt;/DataSourceType&gt;
+  &lt;UseMultipleLayersForInput&gt;false&lt;/UseMultipleLayersForInput&gt;
+  &lt;UseMultipleLayersForOutput&gt;false&lt;/UseMultipleLayersForOutput&gt;
+  &lt;Fields&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;StopSendingEmails&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;Number&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;DataTypeString&gt;System.Int32&lt;/DataTypeString&gt;
+      &lt;DatasourceTypeString&gt;Int&lt;/DatasourceTypeString&gt;
+      &lt;Direction&gt;Output&lt;/Direction&gt;
+      &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+    &lt;DataSourceParam&gt;
+      &lt;Id&gt;0&lt;/Id&gt;
+      &lt;ParentId&gt;0&lt;/ParentId&gt;
+      &lt;UseVariable xsi:nil="true" /&gt;
+      &lt;Name&gt;LoanId&lt;/Name&gt;
+      &lt;Description /&gt;
+      &lt;TypeString&gt;Number&lt;/TypeString&gt;
+      &lt;ConstraintString /&gt;
+      &lt;DictionaryId xsi:nil="true" /&gt;
+      &lt;DefaultValue /&gt;
+      &lt;Direction&gt;Input&lt;/Direction&gt;
+      &lt;IsColumnType&gt;false&lt;/IsColumnType&gt;
+      &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
+    &lt;/DataSourceParam&gt;
+  &lt;/Fields&gt;
+  &lt;FixIncorrectConstrainedValues&gt;false&lt;/FixIncorrectConstrainedValues&gt;
+  &lt;KeyVariableType&gt;Numeric&lt;/KeyVariableType&gt;
+&lt;/NodeParameters&gt;</InitialValue>
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>DataSourceNodeScalar28625159</Name>
+      <PointF>
+        <X>663.7126</X>
+        <Y>656</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeDataSourceApplication</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
+    <NodeDescriptor Modification="">
+      <AssemblyString />
+      <DefaultPinName />
+      <Description />
+      <DisplayName>Comparison</DisplayName>
+      <InitialValue />
+      <IsBreakpointActive>false</IsBreakpointActive>
+      <IsInSimulationMode>false</IsInSimulationMode>
+      <Name>Comparison58244613</Name>
+      <PointF>
+        <X>707.5971</X>
+        <Y>736</Y>
+      </PointF>
+      <SuperNodeName />
+      <TypeName>WorkflowObjects.NodeComparer</TypeName>
+      <PrototypeName />
+    </NodeDescriptor>
   </NodeDescriptors>
   <VariableDescriptors>
     <VariableDescriptor>
@@ -2914,6 +2990,18 @@
     <VariableDescriptor>
       <OwnerName>Set_Late_Loan_Status</OwnerName>
       <Name>DaysBEtweeenCustomAndSchedule</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Set_Late_Loan_Status</OwnerName>
+      <Name>StopSendingEmails</Name>
       <TypeName>System.Double</TypeName>
       <InitialValue>0</InitialValue>
       <DefaultValue />
@@ -5203,6 +5291,78 @@
       <SignatureRequired>false</SignatureRequired>
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar28625159</OwnerName>
+      <Name>StopSendingEmails</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar28625159</OwnerName>
+      <Name>LoanId</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar28625159</OwnerName>
+      <Name>DataSourceName</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description>Variable for setting name of Data Source that will be used in current node</Description>
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>DataSourceNodeScalar28625159</OwnerName>
+      <Name>ScortoInternalErrorMessage</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>true</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison58244613</OwnerName>
+      <Name>Expression</Name>
+      <TypeName>System.String</TypeName>
+      <InitialValue>StopSendingEmails = 0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>Comparison58244613</OwnerName>
+      <Name>Comparison58244613StopSendingEmails</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
   </VariableDescriptors>
   <VariableConstraintDescriptors />
   <NodeConnectionDescriptors>
@@ -5712,19 +5872,14 @@
     <NodeConnectionDescriptor>
       <SourceNodeName>Comparison5782396</SourceNodeName>
       <SourceNodeOutletName>Yes</SourceNodeOutletName>
-      <TargetNodeName>Comparison5094752</TargetNodeName>
+      <TargetNodeName>DataSourceNodeScalar28625159</TargetNodeName>
       <SuperNodeName />
       <Caption>Yes</Caption>
       <SignatureRequired>false</SignatureRequired>
       <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
       <DisplayColor>-16744448</DisplayColor>
       <ShowSignature>false</ShowSignature>
-      <IntermediatePoints>
-        <PointF>
-          <X>740</X>
-          <Y>700</Y>
-        </PointF>
-      </IntermediatePoints>
+      <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
       <SourceNodeName>Comparison5782396</SourceNodeName>
@@ -5930,6 +6085,42 @@
       <SignatureRequired>false</SignatureRequired>
       <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
       <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>DataSourceNodeScalar28625159</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>Comparison58244613</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Next</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16776961</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>Comparison58244613</SourceNodeName>
+      <SourceNodeOutletName>Yes</SourceNodeOutletName>
+      <TargetNodeName>Comparison5094752</TargetNodeName>
+      <SuperNodeName />
+      <Caption>Yes</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-16744448</DisplayColor>
+      <ShowSignature>false</ShowSignature>
+      <IntermediatePoints />
+    </NodeConnectionDescriptor>
+    <NodeConnectionDescriptor>
+      <SourceNodeName>Comparison58244613</SourceNodeName>
+      <SourceNodeOutletName>No</SourceNodeOutletName>
+      <TargetNodeName>ConditionalAssignment46415143</TargetNodeName>
+      <SuperNodeName />
+      <Caption>No</Caption>
+      <SignatureRequired>false</SignatureRequired>
+      <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
+      <DisplayColor>-65536</DisplayColor>
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints />
     </NodeConnectionDescriptor>
@@ -7015,6 +7206,36 @@
       <TargetVariableOwnerName>Comparison66996147</TargetVariableOwnerName>
       <TargetVariableName>Comparison66996147Prev_CustomInstallmentDateScalar</TargetVariableName>
     </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
+      <SourceVariableName>LoanIdScalar</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar28625159</TargetVariableOwnerName>
+      <TargetVariableName>LoanId</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
+      <SourceVariableName>DataSourceName</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar28625159</TargetVariableOwnerName>
+      <TargetVariableName>DataSourceName</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
+      <SourceVariableName>ScortoInternalErrorMessage</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar28625159</TargetVariableOwnerName>
+      <TargetVariableName>ScortoInternalErrorMessage</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
+      <SourceVariableName>StopSendingEmails</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceNodeScalar28625159</TargetVariableOwnerName>
+      <TargetVariableName>StopSendingEmails</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>Set_Late_Loan_Status</SourceVariableOwnerName>
+      <SourceVariableName>StopSendingEmails</SourceVariableName>
+      <TargetVariableOwnerName>Comparison58244613</TargetVariableOwnerName>
+      <TargetVariableName>Comparison58244613StopSendingEmails</TargetVariableName>
+    </VariableConnectionDescriptor>
   </VariableConnectionDescriptors>
   <SigningNodeDescriptors>
     <SigningNodeDescriptor>
@@ -7347,6 +7568,22 @@
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
       <OwnerName>MailNode10063389</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>DataSourceNodeScalar28625159</OwnerName>
+      <SigningVariables />
+      <CheckingVariables />
+      <VariablesWithoutSignature />
+      <SigningOutlets />
+      <SignatureRequired>false</SignatureRequired>
+    </SigningNodeDescriptor>
+    <SigningNodeDescriptor>
+      <OwnerName>Comparison58244613</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
