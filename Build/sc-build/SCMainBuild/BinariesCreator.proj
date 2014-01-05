@@ -107,8 +107,8 @@
 		<Copy SourceFiles="$(Src)\Lib\Scorto.Core\Scorto.Maven.Mixed.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
 		<Copy SourceFiles="$(Src)\Lib\Scorto.Core\Scorto.Maven.Application.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>		
 		<Copy SourceFiles="$(Src)\Integration\Amazon\AmazonServiceLib\bin\$(BuildConfiguration)\AmazonServiceLib.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
-		<Copy SourceFiles="$(Src)\Integration\Amazon\AmazonLib\bin\$(BuildConfiguration)\AmazonLib.dll" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<Copy SourceFiles="$(Src)\Integration\Amazon\AmazonDbLib\bin\$(BuildConfiguration)\AmazonDbLib.dll" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
+		<Copy SourceFiles="$(Src)\Integration\Amazon\AmazonLib\bin\$(BuildConfiguration)\AmazonLib.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
+		<Copy SourceFiles="$(Src)\Integration\Amazon\AmazonDbLib\bin\$(BuildConfiguration)\AmazonDbLib.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
 		<Copy SourceFiles="$(Src)\Integration\eBay\eBayServiceLib\bin\$(BuildConfiguration)\eBayServiceLib.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
 		<Copy SourceFiles="$(Src)\Integration\ExperianLib\bin\$(BuildConfiguration)\ExperianLib.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
 		<Copy SourceFiles="$(Src)\Integration\EzBob.Configuration\bin\$(BuildConfiguration)\EzBob.Configuration.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
