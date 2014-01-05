@@ -84,9 +84,10 @@ class EzBob.StoreInfoBaseView extends Backbone.View
             if @stores[key].button.shops.length == 0 && @stores[key].mandatory
                 foundAllMandatories = false
 
-        $(@storeList).find(".back-store").hide() if not @model.get("isProfile")
+        isProfile = @model.get("isProfile")
+        $(@storeList).find(".back-store").hide() if not isProfile
 
-        canContinue = @model.get("isProfile") or ((hasFilledShops and (!hasEbay or (hasEbay and hasPaypal)) and foundAllMandatories) or (@isOffline and @allowFinishOfflineWizardWithoutMarketplaces) or (!@isOffline and @allowFinishOnlineWizardWithoutMarketplaces))
+        canContinue = isProfile or ((hasFilledShops and (!hasEbay or (hasEbay and hasPaypal)) and foundAllMandatories) or (@isOffline and @allowFinishOfflineWizardWithoutMarketplaces) or (!@isOffline and @allowFinishOnlineWizardWithoutMarketplaces))
         @storeList.find('.continue').toggleClass 'disabled', !canContinue
         @handleMandatoryText(hasFilledShops, canContinue, ebayPaypalRuleMessageVisible)
         
@@ -102,7 +103,17 @@ class EzBob.StoreInfoBaseView extends Backbone.View
         @storeList.find(sShow).show()
         @storeList.find(sRemove).remove()
 
-        for shop in sortedShopsByNumOfShops when shop.active 
+        if isProfile
+            sShow = ".profile_message"
+            sRemove = ".wizard_message"
+        else
+            sShow = ".wizard_message"
+            sRemove = ".profile_message"
+
+        @storeList.find(sShow).show()
+        @storeList.find(sRemove).remove()
+
+        for shop in sortedShopsByNumOfShops when shop.active
             shop.button.render().$el.appendTo accountsList
 
         @storeList.appendTo @$el

@@ -16,8 +16,9 @@
 
         <div style="display: none;" class="online_entry_message">To be approved for a loan, link at least one account. The more accounts you link, the more funds you can borrow.</div>
 
-        <div style="display: none;" class="offline_entry_message">As part of your application process we require you to upload or link your VAT payment history. We use your VAT returns to analyse your business performance and to better assess your funding needs.</div>
-
+        <div style="display: none;" class="offline_entry_message wizard_message">As part of your application process we require you to upload or link your VAT payment history. We use your VAT returns to analyse your business performance and to better assess your funding needs.</div>
+        
+        <div style="display: none;" class="offline_entry_message profile_message">Link the accounts you use so <strong>ezbob</strong> can automatically evaluate your business and grant you the funds required.</div>
         @if ((string)ViewContext.RouteData.Values["controller"] == "Wizard")
         {
             <div class="eBayPaypalRule hide">Paypal account must be added in order to continue.</div>
@@ -47,7 +48,7 @@
             <a id="link_account_implicit_back" style="display: none;" class="hide" ui-event-control-id="link-account:implicit_back"></a>
         </div>
         
-        <div class="hmrc-why-question offline_entry_message">
+        <div style="display: none;" class="hmrc-why-question offline_entry_message wizard_message">
             <div class="hmrc-question"></div>
             <div class="hmrc-why">Why do we need this? In order to properly evaluate your business and help your business achieve its goals. This is 100% secure.</div>
         </div>

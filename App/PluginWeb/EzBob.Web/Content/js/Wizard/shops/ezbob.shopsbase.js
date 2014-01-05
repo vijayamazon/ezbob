@@ -90,7 +90,7 @@
     };
 
     StoreInfoBaseView.prototype.render = function() {
-      var accountsList, canContinue, ebayPaypalRuleMessageVisible, foundAllMandatories, hasEbay, hasFilledShops, hasHmrc, hasPaypal, key, sRemove, sShow, shop, sortedShopsByNumOfShops, sortedShopsByPriority, that, _i, _j, _len, _len1, _ref;
+      var accountsList, canContinue, ebayPaypalRuleMessageVisible, foundAllMandatories, hasEbay, hasFilledShops, hasHmrc, hasPaypal, isProfile, key, sRemove, sShow, shop, sortedShopsByNumOfShops, sortedShopsByPriority, that, _i, _j, _len, _len1, _ref;
       hasHmrc = this.stores.HMRC.button.shops.length > 0;
       sShow = '';
       sRemove = '';
@@ -115,10 +115,11 @@
           foundAllMandatories = false;
         }
       }
-      if (!this.model.get("isProfile")) {
+      isProfile = this.model.get("isProfile");
+      if (!isProfile) {
         $(this.storeList).find(".back-store").hide();
       }
-      canContinue = this.model.get("isProfile") || ((hasFilledShops && (!hasEbay || (hasEbay && hasPaypal)) && foundAllMandatories) || (this.isOffline && this.allowFinishOfflineWizardWithoutMarketplaces) || (!this.isOffline && this.allowFinishOnlineWizardWithoutMarketplaces));
+      canContinue = isProfile || ((hasFilledShops && (!hasEbay || (hasEbay && hasPaypal)) && foundAllMandatories) || (this.isOffline && this.allowFinishOfflineWizardWithoutMarketplaces) || (!this.isOffline && this.allowFinishOnlineWizardWithoutMarketplaces));
       this.storeList.find('.continue').toggleClass('disabled', !canContinue);
       this.handleMandatoryText(hasFilledShops, canContinue, ebayPaypalRuleMessageVisible);
       if (this.isOffline) {
@@ -131,6 +132,15 @@
       } else {
         sShow = '.online_entry_message';
         sRemove = '.offline_entry_message';
+      }
+      this.storeList.find(sShow).show();
+      this.storeList.find(sRemove).remove();
+      if (isProfile) {
+        sShow = ".profile_message";
+        sRemove = ".wizard_message";
+      } else {
+        sShow = ".wizard_message";
+        sRemove = ".profile_message";
       }
       this.storeList.find(sShow).show();
       this.storeList.find(sRemove).remove();
