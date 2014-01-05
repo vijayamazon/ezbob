@@ -1,13 +1,17 @@
 ﻿namespace EzBob.Backend.Strategies {
 	using System;
+	using System.Data;
 	using System.Globalization;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using Twilio;
 
 	public class GenerateMobileCode : AStrategy
 	{
 		private readonly string mobilePhone;
-		private string code;
+		private string accountSid;
+		private string authToken;
+		private string fromNumber;
 
 		#region constructor
 
@@ -15,6 +19,7 @@
 			: base(oDb, oLog)
 		{
 			this.mobilePhone = mobilePhone;
+			ReadConfigurations();
 		} // constructor
 
 		#endregion constructor
@@ -31,18 +36,30 @@
 
 		public override void Execute() {
 			var random = new Random();
-			code = (100000 + random.Next(899999)).ToString(CultureInfo.InvariantCulture);
+			string code = (100000 + random.Next(899999)).ToString(CultureInfo.InvariantCulture);
 
 			DB.ExecuteNonQuery("StoreMobileCode", CommandSpecies.StoredProcedure,
 				new QueryParameter("Phone", mobilePhone),
 				new QueryParameter("Code", code));
+			
+			var twilio = new TwilioRestClient(accountSid, authToken);
+
+			string content = string.Format("Your authentication code is:{0}", code);
+			// it is working with mobilePhone = "+972544771676"
+			var message = twilio.SendSmsMessage(fromNumber, mobilePhone, content, "");
+			Log.Info("Sms message sent to '{0}'. Sid:'{1}'", mobilePhone, message.Sid);
 		} // Execute
 
-		#endregion property Execute
-
-		public string GetCode()
+		private void ReadConfigurations()
 		{
-			return code;
+			DataTable dt = DB.ExecuteReader("GetTwilioConfigs", CommandSpecies.StoredProcedure);
+			DataRow results = dt.Rows[0];
+			var sr = new SafeReader(results);
+			accountSid = sr["TwilioAccountSid"];
+			authToken = sr["TwilioAuthToken"];
+			fromNumber = sr["TwilioSendingNumber"];
 		}
+
+		#endregion property Execute
 	} // class GenerateMobileCode
 } // namespace

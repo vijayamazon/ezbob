@@ -59,9 +59,6 @@
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="Twilio.Api">
-      <HintPath>..\..\..\Lib\3rdparty\Twilio.3.5.14\Twilio.Api.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionMetaData.cs" />

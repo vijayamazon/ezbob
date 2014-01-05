@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.ServiceModel;
-using System.Threading;
-using EzBob.Backend.Strategies;
-using EzBob.Backend.Strategies.MailStrategies;
-using Ezbob.Database;
-using Ezbob.Logger;
-
-namespace EzService {
-	using Twilio;
+﻿namespace EzService {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Reflection;
+	using System.ServiceModel;
+	using System.Threading;
+	using EzBob.Backend.Strategies;
+	using EzBob.Backend.Strategies.MailStrategies;
+	using Ezbob.Database;
+	using Ezbob.Logger;
 
 	[ServiceBehavior(
 		InstanceContextMode = InstanceContextMode.PerCall,
@@ -412,15 +410,6 @@ namespace EzService {
 		{
 			var strategyInstance = new GenerateMobileCode(phone, DB, Log);
 			var result = ExecuteSync(strategyInstance, null, null, typeof(GenerateMobileCode), phone);
-
-			string accountSid = "ACcc682df6341371ee27ada6858025490b"; // Get from config and use prod credentials
-			string authToken = "fab0b8bd342443ff44497273b4ba2aa1"; // Get from config and use prod credentials
-			string fromNumber = "+17542276490"; // Get from config and use prod credentials
-			var twilio = new TwilioRestClient(accountSid, authToken);
-
-			// TODO: test sending the sms with Emma
-			var message = twilio.SendSmsMessage(fromNumber, "+972544771676"/*phone*/, string.Format("Your authentication code is:{0}", strategyInstance.GetCode()), "");
-			Log.Info("Sms message sent to '{0}'. Sid:'{1}'", phone, message.Sid);
 			return result;
 		}
 
