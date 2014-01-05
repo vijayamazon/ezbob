@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="UnitTest" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<!--
+	<PropertyGroup>
+		<MSBuildCommunityTasksPath Condition="'$(MSBuildCommunityTasksPath)' == ''">..\libs\</MSBuildCommunityTasksPath>
+	</PropertyGroup>
+
+	<Import Project="..\libs\MSBuild.Community.Tasks.Targets"/>
+	-->
 
 	<!-- Use cmd line utility to run test for the list of assemblies --> 
 	<Target Name="UnitTest">
