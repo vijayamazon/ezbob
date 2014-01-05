@@ -18,7 +18,7 @@ class EzBob.BoundItemView  extends Backbone.Marionette.ItemView
         position: "center"
         draggable: false
         dialogClass: "bugs-popup"
-        width: 500
+        width: 700
 
     save: ->
         @trigger 'save'

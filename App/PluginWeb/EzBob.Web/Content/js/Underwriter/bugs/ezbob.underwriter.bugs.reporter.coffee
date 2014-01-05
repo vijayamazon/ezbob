@@ -37,8 +37,8 @@ class EzBob.Underwriter.ReportBugView  extends EzBob.BoundItemView
 
 class EzBob.Underwriter.EditBugView extends EzBob.BoundItemView
     events:
-        'click .btn-danger' : 'closeBug'
-        'click .btn-warning': 'reopenBug'
+        'click .closeBug' : 'closeBug'
+        'click .reopenBug': 'reopenBug'
         'click  [data-dismiss="modal"]': "closed"
 
     template: '#bug-edit-template'
@@ -57,10 +57,10 @@ class EzBob.Underwriter.EditBugView extends EzBob.BoundItemView
             selector: "textarea[name='closeDescription']"
         State: [
             {selector: "textarea", converter: @::notEqConverter('Closed'), elAttribute: 'enabled'},
-            {selector: ".btn-danger", converter: @::notEqConverter('Closed'), elAttribute: 'displayed'},
+            {selector: ".closeBug", converter: @::notEqConverter('Closed'), elAttribute: 'displayed'},
             {selector: ".underwriter-closed", converter: @::eqConverter('Closed'), elAttribute: 'displayed'},
-            {selector: ".btn-warning", converter: @::eqConverter('Closed'), elAttribute: 'displayed'},
-            {selector: ".btn-primary", converter: @::notEqConverter('Closed'), elAttribute: 'enabled'}
+            {selector: ".reopenBug", converter: @::eqConverter('Closed'), elAttribute: 'displayed'},
+            {selector: ".saveBug", converter: @::notEqConverter('Closed'), elAttribute: 'enabled'}
         ]
 
     closeBug: ->
@@ -74,16 +74,20 @@ class EzBob.Underwriter.EditBugView extends EzBob.BoundItemView
         @trigger "closed"
 
 $('body').on 'click', 'a[data-bug-type]', (e) ->
+    
     $e = $(e.currentTarget)
     bugType = $e.data 'bug-type'
     bugMP = $e.data 'bug-mp'
     bugCustomer = $e.data 'bug-customer'
     director = $e.data 'credit-bureau-director-id'
 
+    console.log 'clicked', $e, bugCustomer
+
     return false unless bugType? && bugCustomer?
 
     xhr = $.getJSON "#{window.gRootPath}Underwriter/Bugs/TryGet", {MP: bugMP, CustomerId: bugCustomer, BugType: bugType, Director: director}
     xhr.done (data) =>
+        console.log('return', data)
         return if (data?.error)
 
         view = null

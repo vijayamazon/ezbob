@@ -98,8 +98,8 @@
     }
 
     EditBugView.prototype.events = {
-      'click .btn-danger': 'closeBug',
-      'click .btn-warning': 'reopenBug',
+      'click .closeBug': 'closeBug',
+      'click .reopenBug': 'reopenBug',
       'click  [data-dismiss="modal"]': "closed"
     };
 
@@ -130,7 +130,7 @@
           converter: EditBugView.prototype.notEqConverter('Closed'),
           elAttribute: 'enabled'
         }, {
-          selector: ".btn-danger",
+          selector: ".closeBug",
           converter: EditBugView.prototype.notEqConverter('Closed'),
           elAttribute: 'displayed'
         }, {
@@ -138,11 +138,11 @@
           converter: EditBugView.prototype.eqConverter('Closed'),
           elAttribute: 'displayed'
         }, {
-          selector: ".btn-warning",
+          selector: ".reopenBug",
           converter: EditBugView.prototype.eqConverter('Closed'),
           elAttribute: 'displayed'
         }, {
-          selector: ".btn-primary",
+          selector: ".saveBug",
           converter: EditBugView.prototype.notEqConverter('Closed'),
           elAttribute: 'enabled'
         }
@@ -174,6 +174,7 @@
     bugMP = $e.data('bug-mp');
     bugCustomer = $e.data('bug-customer');
     director = $e.data('credit-bureau-director-id');
+    console.log('clicked', $e, bugCustomer);
     if (!((bugType != null) && (bugCustomer != null))) {
       return false;
     }
@@ -185,6 +186,7 @@
     });
     xhr.done(function(data) {
       var model, view;
+      console.log('return', data);
       if ((data != null ? data.error : void 0)) {
         return;
       }
