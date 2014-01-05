@@ -80,9 +80,9 @@
 						bool shouldStopSendingLateMails = safeReader["StopSendingEmails"];
 						if (shouldStopSendingLateMails)
 						{
-							string subject =
-								string.Format("Dear {0}, your payment of £{1} is {2} days past due. You will be charged a late fee", firstName,
-								              amountDue, daysBetween);
+							string subject = feeAmount >= partialPaymentCharge ?
+								string.Format("Dear {0}, you are over {1} days late on your loan repayments", firstName, daysBetween) :
+								string.Format("Dear {0}, your payment of £{1} is {2} days past due. You will be charged a late fee", firstName, amountDue, daysBetween);
 							string templateName = feeAmount >= partialPaymentCharge
 								                      ? "Mandrill - Late fee was added (7D late)"
 								                      : "Mandrill - Late fee was added (14D late)";
