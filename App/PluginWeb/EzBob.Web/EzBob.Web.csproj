@@ -494,6 +494,7 @@
     <Content Include="Content\css\images\bank_details.png" />
     <Content Include="Content\css\images\beta_ribbon.png" />
     <Content Include="Content\css\images\body_bg.jpg" />
+    <Content Include="Content\css\images\button-question-icon.png" />
     <Content Include="Content\css\images\cb\controls.png" />
     <Content Include="Content\css\images\cb\controls_old.png" />
     <Content Include="Content\css\images\cb\loading.gif" />

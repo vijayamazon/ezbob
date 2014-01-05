@@ -32,15 +32,27 @@ namespace ExperianLib.Ebusiness {
 			if (Owners == null)
 				Owners = new SortedSet<string>();
 
-			var node = root.XPathSelectElement("./REQUEST/DL23/ULTPARREGNUM");
+			var node = root.XPathSelectElement("./REQUEST/DN10/BUSINESSNAME");
+			if (node != null) CompanyName = node.Value;
 
-			if (node != null)
-				Owners.Add(node.Value.Trim());
+			node = root.XPathSelectElement("./REQUEST/DN10/BUSADDR1");
+			if (node != null) AddressLine1 = node.Value;
 
-			IEnumerable<XElement> oNodes = root.XPathSelectElements("./REQUEST/DL23/SHAREHLDS/SHLDREGNUM");
+			node = root.XPathSelectElement("./REQUEST/DN10/BUSADDR2");
+			if (node != null) AddressLine2 = node.Value;
 
-			foreach (XElement oNode in oNodes)
-				Owners.Add(oNode.Value.Trim());
+			node = root.XPathSelectElement("./REQUEST/DN10/BUSADDR3");
+			if (node != null) AddressLine3 = node.Value;
+
+			node = root.XPathSelectElement("./REQUEST/DN10/BUSADDR4");
+			if (node != null) AddressLine4 = node.Value;
+
+			node = root.XPathSelectElement("./REQUEST/DN10/BUSADDR5");
+			if (node != null) AddressLine5 = node.Value;
+
+			node = root.XPathSelectElement("./REQUEST/DN10/BUSPOSTCODE");
+			if (node != null) PostCode = node.Value;
+			
 		} // Parse
 
 		#endregion protected

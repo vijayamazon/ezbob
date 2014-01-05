@@ -86,7 +86,7 @@
 				string caisAccountStatus = sr["CaisAccountStatus"];
 				bool customerStatusIsEnabled = sr["CustomerStatusIsEnabled"];
 				string maritalStatus = sr["MaritalStatus"];
-
+				int customerId = sr["CustomerId"];
 				string genderPrefix;
 				if (gender == "M") {
 					genderPrefix = "Mr.";
@@ -143,21 +143,48 @@
 						consumerDefaultsCounter++;
 					}
 				}
-				else {
+				else
+				{
+					var service = new ExperianLib.Ebusiness.EBusinessService();
 					if (companyType == "Limited" || companyType == "PShip" || companyType == "LLP") {
 						companyTypeCode = "L";
 						companyRefNum = limitedRefNum;
+						var res = service.GetLimitedBusinessData(limitedRefNum, customerId, true);
+						if(!string.IsNullOrEmpty(res.CompanyName)) fullName = res.CompanyName;
+						if (!string.IsNullOrEmpty(res.PostCode))
+						{
+							line1 = res.AddressLine1;
+							line23 = res.AddressLine2;
+							town = res.AddressLine3;
+							county = res.AddressLine4;
+							postcode = res.PostCode;
+						}
 					}
-					else if (companyType == "PShip3P" || companyType == "SoleTrader") {
+ 					else if (companyType == "PShip3P" || companyType == "SoleTrader") {
 						companyTypeCode = "N";
 						companyRefNum = nonLimitedRefNum;
-					}
+						var res = service.GetLimitedBusinessData(nonLimitedRefNum, customerId, true);
+ 						if (!string.IsNullOrEmpty(res.CompanyName))
+ 						{
+ 							fullName = res.CompanyName;
+ 						}
+ 						if (!string.IsNullOrEmpty(res.PostCode))
+ 						{
+ 							line1 = res.AddressLine1;
+ 							line23 = res.AddressLine2 + " " + res.AddressLine3;
+ 							town = res.AddressLine4;
+ 							county = res.AddressLine5;
+ 							postcode = res.PostCode;
+ 						}
+ 					}
 
 					var cais = CaisFileManager.GetBusinessCaisFileData();
 					cais.Header.CompanyPortfolioName = "Orange Money";
 					cais.Header.CreditCardBehaviouralSharingFlag = "";
 					cais.Header.DateOfCreation = DateTime.UtcNow;
 					cais.Header.SourceCode = 721;
+
+
 
 					var record = CreateBusinessRecord(accountNumber, fullName, line1, line23, town, county, postcode, startDate, dateClose, scheduledRepayments, currentBalance, transferredToCollectionFlag, sortCode);
 

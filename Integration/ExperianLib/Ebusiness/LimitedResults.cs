@@ -42,6 +42,43 @@ namespace ExperianLib.Ebusiness {
 			if (node != null)
 				ExistingBusinessLoans = Convert.ToDecimal(node.Value);
 
+
+			node = root.XPathSelectElement("./REQUEST/DL12/COMPANYNAME");
+			if (node != null)
+			{
+				CompanyName = node.Value;
+			}
+
+			node = root.XPathSelectElement("./REQUEST/DL12/REGADDR1");
+			if (node != null)
+			{
+				AddressLine1 = node.Value;
+			}
+
+			node = root.XPathSelectElement("./REQUEST/DL12/REGADDR2");
+			if (node != null)
+			{
+				AddressLine2 = node.Value;
+			}
+
+			node = root.XPathSelectElement("./REQUEST/DL12/REGADDR3");
+			if (node != null)
+			{
+				AddressLine3 = node.Value;
+			}
+
+			node = root.XPathSelectElement("./REQUEST/DL12/REGADDR4");
+			if (node != null)
+			{
+				AddressLine4 = node.Value;
+			}
+
+			node = root.XPathSelectElement("./REQUEST/DL12/REGPOSTCODE");
+			if (node != null)
+			{
+				PostCode = node.Value;
+			}
+
 			if (Owners == null)
 				Owners = new SortedSet<string>();
 
