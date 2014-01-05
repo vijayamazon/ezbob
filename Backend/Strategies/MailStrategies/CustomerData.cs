@@ -20,12 +20,12 @@
 
 			var sr = new SafeReader(dt.Rows[0]);
 
-			FirstName = sr.String("FirstName");
-			Surname = sr.String("Surname");
-			FullName = sr.String("FullName");
-			Mail = sr.String("Mail");
-			IsOffline = sr.Bool("IsOffline");
-			NumOfLoans = sr.Int("NumOfLoans");
+			FirstName = sr["FirstName"];
+			Surname = sr["Surname"];
+			FullName = sr["FullName"];
+			Mail = sr["Mail"];
+			IsOffline = sr["IsOffline"];
+			NumOfLoans = sr["NumOfLoans"];
 		} // constructor
 
 		#endregion constructor

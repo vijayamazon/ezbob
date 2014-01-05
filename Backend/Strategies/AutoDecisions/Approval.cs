@@ -24,9 +24,9 @@
 			DataTable dt = Db.ExecuteReader("GetApprovalConfigs", CommandSpecies.StoredProcedure);
 			var sr = new SafeReader(dt.Rows[0]);
 
-			autoApproveIsSilent = sr.Bool("AutoApproveIsSilent");
-			autoApproveSilentTemplateName = sr.String("AutoApproveSilentTemplateName");
-			autoApproveSilentToAddress = sr.String("AutoApproveSilentToAddress");
+			autoApproveIsSilent = sr["AutoApproveIsSilent"];
+			autoApproveSilentTemplateName = sr["AutoApproveSilentTemplateName"];
+			autoApproveSilentToAddress = sr["AutoApproveSilentToAddress"];
 		} // constructor
 
 		public bool MakeDecision(AutoDecisionResponse response)
@@ -39,7 +39,7 @@
 				{
 					DataTable dt = Db.ExecuteReader("GetAvailableFunds", CommandSpecies.StoredProcedure);
 					var sr = new SafeReader(dt.Rows[0]);
-					decimal availableFunds = sr.Decimal("AvailableFunds");
+					decimal availableFunds = sr["AvailableFunds"];
 
 					if (availableFunds > response.AutoApproveAmount)
 					{
@@ -60,9 +60,9 @@
 							);
 
 							sr = new SafeReader(dt.Rows[0]);
-							bool loanOfferEmailSendingBanned = sr.Bool("EmailSendingBanned");
-							DateTime loanOfferOfferStart = sr.DateTime("OfferStart");
-							DateTime loanOfferOfferValidUntil = sr.DateTime("OfferValidUntil");
+							bool loanOfferEmailSendingBanned = sr["EmailSendingBanned"];
+							DateTime loanOfferOfferStart = sr["OfferStart"];
+							DateTime loanOfferOfferValidUntil = sr["OfferValidUntil"];
 
 							response.CreditResult = "Approved";
 							response.UserStatus = "Approved";

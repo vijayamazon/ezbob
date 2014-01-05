@@ -20,8 +20,8 @@
 
 			DataTable dt = Db.ExecuteReader("GetMails", CommandSpecies.StoredProcedure);
 			var sr = new SafeReader(dt.Rows[0]);
-			ezbobCopyTo = sr.String("ToAddress");
-			ezbobCopyCc = sr.String("CcAddress");
+			ezbobCopyTo = sr["ToAddress"];
+			ezbobCopyCc = sr["CcAddress"];
 		} // constructor
 
 		#endregion constructor

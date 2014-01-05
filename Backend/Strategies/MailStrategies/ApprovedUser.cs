@@ -32,9 +32,9 @@
 				throw new StrategyException(this, "no approval data found for customer " + CustomerData);
 
 			var sr = new SafeReader(dt.Rows[0]);
-			int numOfApprovals = sr.Int("NumOfApprovals");
-			DateTime applyForLoan = sr.DateTime("ApplyForLoan");
-			DateTime validFor = sr.DateTime("ValidFor");
+			int numOfApprovals = sr["NumOfApprovals"];
+			DateTime applyForLoan = sr["ApplyForLoan"];
+			DateTime validFor = sr["ValidFor"];
 
 			double validHours = (validFor - applyForLoan).TotalHours;
 

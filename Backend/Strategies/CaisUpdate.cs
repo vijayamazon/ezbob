@@ -19,8 +19,8 @@
 		public override void Execute() {
 			DataTable dt = DB.ExecuteReader("GetCaisFileData", CommandSpecies.StoredProcedure, new QueryParameter("CaisId", caisId));
 			var sr = new SafeReader(dt.Rows[0]);
-			string fileName = sr.String("FileName");
-			string dirName = sr.String("DirName");
+			string fileName = sr["FileName"];
+			string dirName = sr["DirName"];
 
 			var unzippedFileContent = strategyHelper.GetCAISFileById(caisId);
 			File.WriteAllText(string.Format("{0}\\{1}", dirName, fileName), unzippedFileContent, Encoding.ASCII);

@@ -27,13 +27,13 @@
 			var service = ObjectFactory.GetInstance<IPacnetService>();
 			foreach (DataRow row in dt.Rows) {
 				var sr = new SafeReader(row);
-				int customerId = sr.Int("CustomerId");
-				string trackingNumber = sr.String("TrackingNumber");
+				int customerId = sr["CustomerId"];
+				string trackingNumber = sr["TrackingNumber"];
 				
 				PacnetReturnData result = service.CheckStatus(customerId, trackingNumber);
 
 				string newStatus;
-				string description = sr.String("allDescriptions");
+				string description = sr["allDescriptions"];
 
 				if (string.IsNullOrEmpty(result.Status)) {
 					newStatus = "Error";

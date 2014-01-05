@@ -1,14 +1,13 @@
-﻿using Ezbob.Database;
-using Ezbob.Logger;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Globalization;
-using System.IO;
-using ExperianLib.CaisFile;
-
-namespace EzBob.Backend.Strategies {
+﻿namespace EzBob.Backend.Strategies {
 	using Models;
+	using Ezbob.Database;
+	using Ezbob.Logger;
+	using System;
+	using System.Collections.Generic;
+	using System.Data;
+	using System.Globalization;
+	using System.IO;
+	using ExperianLib.CaisFile;
 
 	public class CaisGenerate : AStrategy {
 		public CaisGenerate(int underwriterId, AConnection oDb, ASafeLog oLog)
@@ -17,8 +16,8 @@ namespace EzBob.Backend.Strategies {
 
 			DataTable dt = DB.ExecuteReader("GetCaisFoldersPaths", CommandSpecies.StoredProcedure);
 			var sr = new SafeReader(dt.Rows[0]);
-			caisPath = sr.String("CaisPath");
-			caisPath2 = sr.String("CaisPath2");
+			caisPath = sr["CaisPath"];
+			caisPath2 = sr["CaisPath2"];
 			this.underwriterId = underwriterId;
 		}
 
@@ -53,40 +52,40 @@ namespace EzBob.Backend.Strategies {
 			DataTable dt = DB.ExecuteReader("GetCaisData", CommandSpecies.StoredProcedure);
 			foreach (DataRow row in dt.Rows) {
 				var sr = new SafeReader(row);
-				int loanId = sr.Int("loanID");
-				DateTime startDate = sr.DateTime("StartDate");
-				DateTime dateClose = sr.DateTime("DateClose");
-				decimal currentBalance = sr.Decimal("CurrentBalance");
-				string gender = sr.String("Gender");
-				string firstName = sr.String("FirstName");
-				string middleInitial = sr.String("MiddleInitial");
-				string surname = sr.String("Surname");
-				string refNumber = sr.String("RefNumber");
-				string line1 = sr.String("Line1");
-				string line2 = sr.String("Line2");
-				string line3 = sr.String("Line3");
-				string town = sr.String("Town");
-				string county = sr.String("County");
-				string postcode = sr.String("Postcode");
-				DateTime dateOfBirth = sr.DateTime("DateOfBirth");
+				int loanId = sr["loanID"];
+				DateTime startDate = sr["StartDate"];
+				DateTime dateClose = sr["DateClose"];
+				decimal currentBalance = sr["CurrentBalance"];
+				string gender = sr["Gender"];
+				string firstName = sr["FirstName"];
+				string middleInitial = sr["MiddleInitial"];
+				string surname = sr["Surname"];
+				string refNumber = sr["RefNumber"];
+				string line1 = sr["Line1"];
+				string line2 = sr["Line2"];
+				string line3 = sr["Line3"];
+				string town = sr["Town"];
+				string county = sr["County"];
+				string postcode = sr["Postcode"];
+				DateTime dateOfBirth = sr["DateOfBirth"];
 
 				DateTime? minLsDate = null;
-				DateTime tmp = sr.DateTime("MinLSDate");
+				DateTime tmp = sr["MinLSDate"];
 				if (tmp != default(DateTime))
 				{
 					minLsDate = tmp;
 				}
-				decimal loanAmount = sr.Decimal("LoanAmount");
-				int scheduledRepayments = sr.Int("ScheduledRepayments");
-				string companyType = sr.String("CompanyType");
-				string limitedRefNum = sr.String("LimitedRefNum");
-				string nonLimitedRefNum = sr.String("NonLimitedRefNum");
-				string customerState = sr.String("CustomerState");
-				string sortCode = sr.String("SortCode");
-				bool isDefaulted = sr.Bool("IsDefaulted");
-				string caisAccountStatus = sr.String("CaisAccountStatus");
-				bool customerStatusIsEnabled = sr.Bool("CustomerStatusIsEnabled");
-				string maritalStatus = sr.String("MaritalStatus");
+				decimal loanAmount = sr["LoanAmount"];
+				int scheduledRepayments = sr["ScheduledRepayments"];
+				string companyType = sr["CompanyType"];
+				string limitedRefNum = sr["LimitedRefNum"];
+				string nonLimitedRefNum = sr["NonLimitedRefNum"];
+				string customerState = sr["CustomerState"];
+				string sortCode = sr["SortCode"];
+				bool isDefaulted = sr["IsDefaulted"];
+				string caisAccountStatus = sr["CaisAccountStatus"];
+				bool customerStatusIsEnabled = sr["CustomerStatusIsEnabled"];
+				string maritalStatus = sr["MaritalStatus"];
 
 				string genderPrefix;
 				if (gender == "M") {

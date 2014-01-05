@@ -18,16 +18,16 @@
 			DataTable configsDataTable = DB.ExecuteReader("SetLateLoanStatusGetConfigs", CommandSpecies.StoredProcedure);
 			var sr = new SafeReader(configsDataTable.Rows[0]);
 
-			collectionPeriod1 = sr.Int("CollectionPeriod1");
-			collectionPeriod2 = sr.Int("CollectionPeriod2");
-			collectionPeriod3 = sr.Int("CollectionPeriod3");
-			latePaymentCharge = sr.Int("LatePaymentCharge");
-			latePaymentChargeId = sr.Int("LatePaymentChargeId");
-			partialPaymentCharge = sr.Int("PartialPaymentCharge");
-			partialPaymentChargeId = sr.Int("PartialPaymentChargeId");
-			administrationCharge = sr.Int("AdministrationCharge");
-			administrationChargeId = sr.Int("AdministrationChargeId");
-			amountToChargeFrom = sr.Int("AmountToChargeFrom");
+			collectionPeriod1 = sr["CollectionPeriod1"];
+			collectionPeriod2 = sr["CollectionPeriod2"];
+			collectionPeriod3 = sr["CollectionPeriod3"];
+			latePaymentCharge = sr["LatePaymentCharge"];
+			latePaymentChargeId = sr["LatePaymentChargeId"];
+			partialPaymentCharge = sr["PartialPaymentCharge"];
+			partialPaymentChargeId = sr["PartialPaymentChargeId"];
+			administrationCharge = sr["AdministrationCharge"];
+			administrationChargeId = sr["AdministrationChargeId"];
+			amountToChargeFrom = sr["AmountToChargeFrom"];
 
 			loanIdPrev = -1;
 		} // constructor
@@ -51,14 +51,14 @@
 
 			foreach (DataRow row in lateForCollectionDataTable.Rows) {
 				var sr = new SafeReader(row);
-				DateTime date = sr.DateTime("Date");
-				decimal amountDue = sr.Decimal("AmountDue");
-				int loanId = sr.Int("LoanId");
-				decimal interest = sr.Decimal("Interest");
-				string mail = sr.String("email");
-				string firstName = sr.String("FirstName");
-				string refNum = sr.String("RefNum");
-				DateTime customInstallmentDate = sr.DateTime("CustomInstallmentDate");
+				DateTime date = sr["Date"];
+				decimal amountDue = sr["AmountDue"];
+				int loanId = sr["LoanId"];
+				decimal interest = sr["Interest"];
+				string mail = sr["email"];
+				string firstName = sr["FirstName"];
+				string refNum = sr["RefNum"];
+				DateTime customInstallmentDate = sr["CustomInstallmentDate"];
 
 				if (customInstallmentDate != default(DateTime)) {
 					if (date < customInstallmentDate)
@@ -198,11 +198,11 @@
 
 			foreach (DataRow row in loansToCollectDataTable.Rows) {
 				var sr = new SafeReader(row);
-				int id = sr.Int("id");
-				int loanId = sr.Int("LoanId");
-				bool isLastInstallment = sr.Bool("LastInstallment");
-				int customerId = sr.Int("CustomerId");
-				DateTime customInstallmentDate = sr.DateTime("CustomInstallmentDate");
+				int id = sr["id"];
+				int loanId = sr["LoanId"];
+				bool isLastInstallment = sr["LastInstallment"];
+				int customerId = sr["CustomerId"];
+				DateTime customInstallmentDate = sr["CustomInstallmentDate"];
 
 				if (!isLastInstallment) {
 					decimal amountDue = new PayPointApi().GetAmountToPay(id);
@@ -241,16 +241,16 @@
 		#region properties
 
 		private readonly StrategiesMailer mailer;
-		private int collectionPeriod1;
-		private int collectionPeriod2;
-		private int collectionPeriod3;
-		private int latePaymentCharge;
-		private int latePaymentChargeId;
-		private int partialPaymentCharge;
-		private int partialPaymentChargeId;
-		private int administrationCharge;
-		private int administrationChargeId;
-		private int amountToChargeFrom;
+		private readonly int collectionPeriod1;
+		private readonly int collectionPeriod2;
+		private readonly int collectionPeriod3;
+		private readonly int latePaymentCharge;
+		private readonly int latePaymentChargeId;
+		private readonly int partialPaymentCharge;
+		private readonly int partialPaymentChargeId;
+		private readonly int administrationCharge;
+		private readonly int administrationChargeId;
+		private readonly int amountToChargeFrom;
 		private int loanIdPrev;
 		private decimal late30;
 		private decimal late60;

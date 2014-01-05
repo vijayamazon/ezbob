@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Globalization;
-using Ezbob.Database;
-using Ezbob.Logger;
-using PaymentServices.PayPoint;
-
-namespace EzBob.Backend.Strategies {
+﻿namespace EzBob.Backend.Strategies {
 	using Web.Code;
+	using System;
+	using System.Collections.Generic;
+	using System.Data;
+	using System.Globalization;
+	using Ezbob.Database;
+	using Ezbob.Logger;
+	using PaymentServices.PayPoint;
 
 	#region class AutoPaymentResult
 
@@ -32,7 +31,7 @@ namespace EzBob.Backend.Strategies {
 
 			DataTable configsDataTable = DB.ExecuteReader("PayPointChargerGetConfigs", CommandSpecies.StoredProcedure);
 			var sr = new SafeReader(configsDataTable.Rows[0]);
-			amountToChargeFrom = sr.Int("AmountToChargeFrom");
+			amountToChargeFrom = sr["AmountToChargeFrom"];
 		} // constructor
 
 		#endregion constructor
@@ -64,15 +63,15 @@ namespace EzBob.Backend.Strategies {
 
 		private void HandleOnePayment(DataRow row) {
 			var sr = new SafeReader(row);
-			int loanScheduleId = sr.Int("id");
-			int loanId = sr.Int("LoanId");
-			string firstName = sr.String("FirstName");
-			int customerId = sr.Int("CustomerId");
-			string customerMail = sr.String("Email");
-			string fullname = sr.String("Fullname");
-			bool reductionFee = sr.Bool("ReductionFee");
-			string refNum = sr.String("RefNum");
-			bool lastInstallment = sr.Bool("LastInstallment");
+			int loanScheduleId = sr["id"];
+			int loanId = sr["LoanId"];
+			string firstName = sr["FirstName"];
+			int customerId = sr["CustomerId"];
+			string customerMail = sr["Email"];
+			string fullname = sr["Fullname"];
+			bool reductionFee = sr["ReductionFee"];
+			string refNum = sr["RefNum"];
+			bool lastInstallment = sr["LastInstallment"];
 
 			decimal amountDue = payPointApi.GetAmountToPay(loanScheduleId);
 
@@ -184,7 +183,7 @@ namespace EzBob.Backend.Strategies {
 
 			var sr = new SafeReader(dt.Rows[0]);
 
-			string loanStatus = sr.String("Status");
+			string loanStatus = sr["Status"];
 
 			if (loanStatus == "PaidOff") {
 				var variables = new Dictionary<string, string> {

@@ -34,11 +34,11 @@ namespace EzBob.Backend.Strategies.MailStrategies {
 
 			var sr = new SafeReader(dt.Rows[0]);
 
-			string escalationReason = sr.String("EscalationReason");
-			string underwriterName = sr.String("UnderwriterName");
-			DateTime registrationDate = sr.DateTime("GreetingMailSentDate");
-			string medal = sr.String("MedalType");
-			string systemDecision = sr.String("SystemDecision");
+			string escalationReason = sr["EscalationReason"];
+			string underwriterName = sr["UnderwriterName"];
+			DateTime registrationDate = sr["GreetingMailSentDate"];
+			string medal = sr["MedalType"];
+			string systemDecision = sr["SystemDecision"];
 
 			Variables = new Dictionary<string, string> {
 				{"userID", CustomerId.ToString(CultureInfo.InvariantCulture)},

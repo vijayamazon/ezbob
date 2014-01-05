@@ -1,5 +1,4 @@
 ﻿namespace EzBob.Backend.Strategies {
-	using System;
 	using System.Data;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -37,7 +36,7 @@
 				new QueryParameter("Code", mobileCode));
 
 			var sr = new SafeReader(dt.Rows[0]);
-			isValidatedSuccessfully = sr.Bool("Success");
+			isValidatedSuccessfully = sr["Success"];
 		} // Execute
 
 		#endregion property Execute

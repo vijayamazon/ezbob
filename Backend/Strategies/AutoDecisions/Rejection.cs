@@ -1,7 +1,6 @@
 ﻿namespace EzBob.Backend.Strategies.AutoDecisions
 {
 	using Ezbob.Database;
-	using System;
 	using System.Data;
 	using Ezbob.Logger;
 
@@ -29,14 +28,14 @@
 			DataTable dt = Db.ExecuteReader("GetRejectionConfigs", CommandSpecies.StoredProcedure);
 			var sr = new SafeReader(dt.Rows[0]);
 
-			autoRejectionExceptionAnualTurnover = sr.Int("AutoRejectionException_AnualTurnover");
-			rejectDefaultsCreditScore = sr.Int("Reject_Defaults_CreditScore");
-			rejectMinimalSeniority = sr.Int("Reject_Minimal_Seniority");
-			lowCreditScore = sr.Int("LowCreditScore");
-			rejectDefaultsAccountsNum = sr.Int("Reject_Defaults_AccountsNum");
-			autoRejectionExceptionCreditScore = sr.Int("AutoRejectionException_CreditScore");
-			int rejectDefaultsMonths = sr.Int("Reject_Defaults_MonthsNum");
-			int rejectDefaultsAmount = sr.Int("Reject_Defaults_Amount");
+			autoRejectionExceptionAnualTurnover = sr["AutoRejectionException_AnualTurnover"];
+			rejectDefaultsCreditScore = sr["Reject_Defaults_CreditScore"];
+			rejectMinimalSeniority = sr["Reject_Minimal_Seniority"];
+			lowCreditScore = sr["LowCreditScore"];
+			rejectDefaultsAccountsNum = sr["Reject_Defaults_AccountsNum"];
+			autoRejectionExceptionCreditScore = sr["AutoRejectionException_CreditScore"];
+			int rejectDefaultsMonths = sr["Reject_Defaults_MonthsNum"];
+			int rejectDefaultsAmount = sr["Reject_Defaults_Amount"];
 
 			dt = Db.ExecuteReader(
 				"GetCustomerRejectionData",
@@ -48,10 +47,10 @@
 
 			sr = new SafeReader(dt.Rows[0]);
 
-			hasAccountingAccounts = sr.Bool("HasAccountingAccounts");
-			errorMPsNum = sr.Int("ErrorMPsNum");
-			loanOfferApprovalNum = sr.Int("ApprovalNum");
-			numOfDefaultAccounts = sr.Int("NumOfDefaultAccounts");
+			hasAccountingAccounts = sr["HasAccountingAccounts"];
+			errorMPsNum = sr["ErrorMPsNum"];
+			loanOfferApprovalNum = sr["ApprovalNum"];
+			numOfDefaultAccounts = sr["NumOfDefaultAccounts"];
 		}
 
 		private bool IsException()
@@ -79,9 +78,9 @@
 
 			var sr = new SafeReader(dt.Rows[0]);
 
-			response.PayPalNumberOfStores = sr.Int("PayPal_NumberOfStores");
-			response.PayPalTotalSumOfOrders3M = sr.Decimal("PayPal_TotalSumOfOrders3M");
-			response.PayPalTotalSumOfOrders1Y = sr.Decimal("PayPal_TotalSumOfOrders1Y");
+			response.PayPalNumberOfStores = sr["PayPal_NumberOfStores"];
+			response.PayPalTotalSumOfOrders3M = sr["PayPal_TotalSumOfOrders3M"];
+			response.PayPalTotalSumOfOrders1Y = sr["PayPal_TotalSumOfOrders1Y"];
 
 			if (request.InitialExperianConsumerScore < rejectDefaultsCreditScore &&
 				numOfDefaultAccounts >= rejectDefaultsAccountsNum)

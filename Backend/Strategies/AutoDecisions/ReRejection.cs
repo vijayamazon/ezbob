@@ -21,10 +21,10 @@
 			this.request = request;
 			DataTable dt = Db.ExecuteReader("GetCustomerDataForReRejection", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", request.CustomerId));
 			var sr = new SafeReader(dt.Rows[0]);
-			newCustomerReReject = sr.Int("NewCustomer_ReReject");
-			oldCustomerReReject = sr.Int("OldCustomer_ReReject");
-			principalPaidAmount = sr.Decimal("PrincipalPaidAmount");
-			loanAmountTaken = sr.Decimal("LoanAmountTaken");
+			newCustomerReReject = sr["NewCustomer_ReReject"];
+			oldCustomerReReject = sr["OldCustomer_ReReject"];
+			principalPaidAmount = sr["PrincipalPaidAmount"];
+			loanAmountTaken = sr["LoanAmountTaken"];
 		}
 
 		public bool MakeDecision(AutoDecisionResponse response)

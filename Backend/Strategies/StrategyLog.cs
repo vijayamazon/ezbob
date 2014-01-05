@@ -1,7 +1,7 @@
-﻿using System;
-using Ezbob.Logger;
+﻿namespace EzBob.Backend.Strategies {
+	using System;
+	using Ezbob.Logger;
 
-namespace EzBob.Backend.Strategies {
 	#region class StrategyLog
 
 	public class StrategyLog : ASafeLog {

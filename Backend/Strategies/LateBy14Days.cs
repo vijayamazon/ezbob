@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Globalization;
-using Ezbob.Database;
-using Ezbob.Logger;
+﻿namespace EzBob.Backend.Strategies {
+	using System.Collections.Generic;
+	using System.Data;
+	using System.Globalization;
+	using Ezbob.Database;
+	using Ezbob.Logger;
 
-namespace EzBob.Backend.Strategies {
 	public class LateBy14Days : AStrategy {
 		public LateBy14Days(AConnection oDb, ASafeLog oLog)
 			: base(oDb, oLog) {
@@ -19,20 +18,20 @@ namespace EzBob.Backend.Strategies {
 
 			foreach (DataRow row in dt.Rows) {
 				var sr = new SafeReader(row);
-				bool is14DaysLate = sr.Bool("Is14DaysLate");
+				bool is14DaysLate = sr["Is14DaysLate"];
 
 				if (is14DaysLate)
 					continue;
 
-				int loanId = sr.Int("LoanId");
-				string signDate = sr.String("SignDate");
-				string firstName = sr.String("FirstName");
-				decimal loanAmount = sr.Decimal("LoanAmount");
-				decimal principal = sr.Decimal("Principal");
-				decimal interest = sr.Decimal("Interest");
-				decimal fees = sr.Decimal("Fees");
-				decimal total = sr.Decimal("Total");
-				string mail = sr.String("Email");
+				int loanId = sr["LoanId"];
+				string signDate = sr["SignDate"];
+				string firstName = sr["FirstName"];
+				decimal loanAmount = sr["LoanAmount"];
+				decimal principal = sr["Principal"];
+				decimal interest = sr["Interest"];
+				decimal fees = sr["Fees"];
+				decimal total = sr["Total"];
+				string mail = sr["Email"];
 
 				var variables = new Dictionary<string, string> {
 					{"FirstName", firstName},

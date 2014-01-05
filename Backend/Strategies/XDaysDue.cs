@@ -31,12 +31,12 @@
 
 			foreach (DataRow row in dt.Rows) {
 				var sr = new SafeReader(row);
-				int loanScheduleId = sr.Int("id");
-				decimal amountDue = sr.Decimal("AmountDue");
-				string firstName = sr.String("FirstName");
-				string mail = sr.String("Email");
-				DateTime sceduledDate = sr.DateTime("SceduledDate");
-				string creditCard = sr.String("CreditCardNo");
+				int loanScheduleId = sr["id"];
+				decimal amountDue = sr["AmountDue"];
+				string firstName = sr["FirstName"];
+				string mail = sr["Email"];
+				DateTime sceduledDate = sr["SceduledDate"];
+				string creditCard = sr["CreditCardNo"];
 
 				string subject = string.Format("Dear {0}, your ezbob monthly automatic loan re-payment is due in 5 days", firstName);
 
@@ -60,12 +60,12 @@
 
 			foreach (DataRow row in dt.Rows) {
 				var sr = new SafeReader(row);
-				int loanScheduleId = sr.Int("id");
-				decimal amountDue = sr.Decimal("AmountDue");
-				string firstName = sr.String("FirstName");
-				string mail = sr.String("Email");
-				DateTime sceduledDate = sr.DateTime("SceduledDate");
-				string creditCard = sr.String("CreditCardNo");
+				int loanScheduleId = sr["id"];
+				decimal amountDue = sr["AmountDue"];
+				string firstName = sr["FirstName"];
+				string mail = sr["Email"];
+				DateTime sceduledDate = sr["SceduledDate"];
+				string creditCard = sr["CreditCardNo"];
 
 				string subject = string.Format("Dear {0}, your ezbob monthly automatic loan re-payment is due in 48 hours", firstName);
 

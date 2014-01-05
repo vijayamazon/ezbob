@@ -21,7 +21,7 @@
 			this.request = request;
 			DataTable dt = Db.ExecuteReader("GetReApprovalConfigs", CommandSpecies.StoredProcedure); 
 			var sr = new SafeReader(dt.Rows[0]);
-			autoReApproveMaxNumOfOutstandingLoans = sr.Int("AutoReApproveMaxNumOfOutstandingLoans");
+			autoReApproveMaxNumOfOutstandingLoans = sr["AutoReApproveMaxNumOfOutstandingLoans"];
 		}
 
 		public bool MakeDecision(AutoDecisionResponse response)
@@ -38,13 +38,13 @@
 			}
 
 			var sr = new SafeReader(dt.Rows[0]);
-			bool loanOfferEmailSendingBanned = sr.Bool("EmailSendingBanned");
-			DateTime loanOfferOfferStart = sr.DateTime("OfferStart");
-			DateTime loanOfferOfferValidUntil = sr.DateTime("OfferValidUntil");
-			int loanOfferSystemCalculatedSum = sr.Int("SystemCalculatedSum");
-			int loanOfferSumOfChargesOld = sr.Int("SumOfChargesOld");
-			int loanOfferNumOfMPsAddedOld = sr.Int("NumOfMPsAddedOld");
-			decimal loanOfferPrincipalPaidAmountOld = sr.Decimal("PrincipalPaidAmountOld");
+			bool loanOfferEmailSendingBanned = sr["EmailSendingBanned"];
+			DateTime loanOfferOfferStart = sr["OfferStart"];
+			DateTime loanOfferOfferValidUntil = sr["OfferValidUntil"];
+			int loanOfferSystemCalculatedSum = sr["SystemCalculatedSum"];
+			int loanOfferSumOfChargesOld = sr["SumOfChargesOld"];
+			int loanOfferNumOfMPsAddedOld = sr["NumOfMPsAddedOld"];
+			decimal loanOfferPrincipalPaidAmountOld = sr["PrincipalPaidAmountOld"];
 
 			if ((request.LoanOfferReApprovalFullAmount > 0 || request.LoanOfferReApprovalRemainingAmount > 0) ||
 				((request.LoanOfferReApprovalFullAmountOld > 0 || request.LoanOfferReApprovalRemainingAmountOld > 0) &&
@@ -53,7 +53,7 @@
 			{
 				dt = Db.ExecuteReader("GetAvailableFunds", CommandSpecies.StoredProcedure); 
 				sr = new SafeReader(dt.Rows[0]);
-				decimal availableFunds = sr.Decimal("AvailableFunds");
+				decimal availableFunds = sr["AvailableFunds"];
 				if (availableFunds > loanOfferSystemCalculatedSum)
 				{
 					int numOfOutstandingLoans = strategyHelper.GetOutstandingLoansNum(request.CustomerId);

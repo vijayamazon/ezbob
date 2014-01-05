@@ -53,8 +53,8 @@
 			);
 
 			var sr = new SafeReader(dt.Rows[0]);
-			string marketplaceName = sr.String("Name");
-			bool disabled = sr.Bool("Disabled");
+			string marketplaceName = sr["Name"];
+			bool disabled = sr["Disabled"];
 
 			if (disabled)
 				return;

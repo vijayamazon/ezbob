@@ -1,10 +1,8 @@
 ﻿namespace EzBob.Backend.Strategies 
 {
 	using System.Data;
-	using EZBob.DatabaseLib;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using StructureMap;
 
 	public class UpdateMarketplaces : AStrategy {
 		#region public
@@ -38,7 +36,7 @@
 
 			foreach (DataRow row in dt.Rows) {
 				var sr = new SafeReader(row);
-				int marketplaceId = sr.Int("Id");
+				int marketplaceId = sr["Id"];
 				new UpdateMarketplace(customerId, marketplaceId, m_oDB, m_oLog).Execute();
 			} // foreach
 		} // Execute

@@ -1,8 +1,8 @@
-﻿using System;
-using Ezbob.Database;
-using Ezbob.Logger;
+﻿namespace EzBob.Backend.Strategies {
+	using System;
+	using Ezbob.Database;
+	using Ezbob.Logger;
 
-namespace EzBob.Backend.Strategies {
 	#region class AStrategy
 
 	public abstract class AStrategy {
