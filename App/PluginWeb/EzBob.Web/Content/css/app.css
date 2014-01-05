@@ -466,6 +466,38 @@ div.shop-connected {
     }
 
 
+.hmrc-or {
+    padding-bottom: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 20%;
+    font-size: 3.2em;
+    font-weight: bold;
+}
+.hmrc-why-question {
+    margin-top: 60px;
+    width: 70%;
+}
+.hmrc-question {
+    background: url(images/button-question-icon.png) no-repeat 0 0;
+    -moz-background-size: contain;
+    -o-background-size: contain;
+    -webkit-background-size: contain;
+    background-size: contain;
+    background-position: left center;
+
+    width: 72px;
+    height: 72px;
+    float: left;
+    display: inline-block;
+}
+
+.hmrc-why {
+    /*color: #29ABE2;*/
+    margin-left: 50px;
+    padding-left: 50px;
+}
+
 .BankContainer {
     width: 580px;
 }

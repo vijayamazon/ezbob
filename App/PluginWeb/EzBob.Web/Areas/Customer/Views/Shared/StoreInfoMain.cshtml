@@ -1,9 +1,9 @@
 ﻿@model dynamic
 <script id="store-info" type="text/template">
-	<div>
-		<h2 class="form_start">Link Accounts</h2>
+    <div>
+        <h2 class="form_start">Link Accounts</h2>
 
-		@*This ebay pixel code is commented out now in phase 1 but will be uncommented later - do not delete
+        @*This ebay pixel code is commented out now in phase 1 but will be uncommented later - do not delete
 		@{
 			var config = ObjectFactory.GetInstance<IEzBobConfiguration>();
 			bool ebayPixelEnabled = config.EbayPixelEnabled;
@@ -14,37 +14,42 @@
 			}
 		}*@
 
-		<div style="display: none;" id="online_entry_message">To be approved for a loan, link at least one account. The more accounts you link, the more funds you can borrow.</div>
+        <div style="display: none;" class="online_entry_message">To be approved for a loan, link at least one account. The more accounts you link, the more funds you can borrow.</div>
 
-		<div style="display: none;" id="offline_entry_message">You must <strong>link</strong> or <strong>upload</strong> your
-			<span class="green btn" onclick="EzBob.App.trigger('ct:storebase.shops.connect', 'HMRC')" ui-event-control-id="link-account:add_hmrc_at_the_top">HM Revenue &amp; Customs</span>
-			account data<br />to be approved for a loan.
-		</div>
+        <div style="display: none;" class="offline_entry_message">As part of your application process we require you to upload or link your VAT payment history. We use your VAT returns to analyse your business performance and to better assess your funding needs.</div>
 
-		<div style="display: none;" id="plain_offline_entry_message">The more you link, the more funds you can get.</div>
+        @if ((string)ViewContext.RouteData.Values["controller"] == "Wizard")
+        {
+            <div class="eBayPaypalRule hide">Paypal account must be added in order to continue.</div>
+        }
 
-		@if ((string)ViewContext.RouteData.Values["controller"] == "Wizard") {
-			<div class="eBayPaypalRule hide">Paypal account must be added in order to continue.</div>
-		}
+        <div class="AddMoreRule hide">Please add more accounts in order to continue.</div>
 
-		<div class="AddMoreRule hide">Please add more accounts in order to continue.</div>
+        <div class="accounts-list row-fluid"></div>
 
-		<div class="accounts-list row-fluid"></div>
+        
+        <div style="display: none;" class="online_entry_message">
+            <div>A minimum of <span class="importantnumber">£10,000</span> annual turnover is required to get a loan offer</div>
+            <div>Link more accounts to be approved for a loan</div>
+        </div>
 
-		<div>A minimum of <span class="importantnumber">£10,000</span> annual turnover is required to get a loan offer</div>
-		<div>Link more accounts to be approved for a loan</div>
+        <div style="padding-bottom: 50px; margin-top: 10px;" class="cunt-button source">
+            @if ((string)ViewContext.RouteData.Values["controller"] == "Wizard")
+            {
+                <div class="eBayPaypalRule hide">Paypal account must be added in order to continue.</div>
+            }
 
-		<div style="padding-bottom: 50px; margin-top: 10px;" class="cunt-button source">
-			@if ((string)ViewContext.RouteData.Values["controller"] == "Wizard") {
-				<div class="eBayPaypalRule hide">Paypal account must be added in order to continue.</div>
-			}
-
-			<div class="AddMoreRule hide">Please add more accounts in order to continue.</div>
-		</div>
-		<div class="attardi-button cunt-button">
+            <div class="AddMoreRule hide">Please add more accounts in order to continue.</div>
+        </div>
+        <div class="attardi-button cunt-button">
             <button class="back-store rc-button grey pull-right">Back</button>
-			<a class="btn-continue rc-button green continue disabled alignright" ui-event-control-id="link-account:submit">Continue</a>
-			<a id="link_account_implicit_back" style="display: none;" class="hide" ui-event-control-id="link-account:implicit_back"></a>
-		</div>
-	</div>
+            <a class="btn-continue rc-button green continue disabled alignright" ui-event-control-id="link-account:submit">Continue</a>
+            <a id="link_account_implicit_back" style="display: none;" class="hide" ui-event-control-id="link-account:implicit_back"></a>
+        </div>
+        
+        <div class="hmrc-why-question offline_entry_message">
+            <div class="hmrc-question"></div>
+            <div class="hmrc-why">Why do we need this? In order to properly evaluate your business and help your business achieve its goals. This is 100% secure.</div>
+        </div>
+    </div>
 </script>

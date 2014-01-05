@@ -405,8 +405,8 @@
 				"HasUploadFiles": true,
 				"UploadFilesHandler": "HandleUploadedHmrcVatReturn",
 				"Notes": [
-					"<p><strong>Don't have an online HMRC account? Upload your VAT return reports</strong></p>",
-					"<div><input type=\"button\" class=\"upload-files button orange\" value=\"Upload\" ui-event-control-id=\"link-account:upload-files\"></div>"
+					"<h2 class=\"hmrc-or\">or</h2><h2 style=\"padding-left: 0\">Upload VAT files</h2><p style=\"margin-top: -15px;\">Upload a copy of your last 5 VAT returns; only upload files titled <strong>Printed Copy of Submitted VAT return for your records</strong> which you should have received automatically from the HMRC. Files can be uploaded in any order of dates.</p><p>Don\'t have the file? ask your accountant for them, it will take him 5 minutes to send them to you.</p>",
+					"<div><input type=\"button\" class=\"upload-files rc-button green\" value=\"Upload\" ui-event-control-id=\"link-account:upload-files\"></div>"
 				],
 				"OnBeforeLink": [
 					"if (bUploadMode) {",

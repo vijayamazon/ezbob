@@ -94,21 +94,6 @@
       hasHmrc = this.stores.HMRC.button.shops.length > 0;
       sShow = '';
       sRemove = '';
-      if (this.isOffline) {
-        if (hasHmrc) {
-          sShow = '#plain_offline_entry_message';
-          sRemove = '#offline_entry_message, #online_entry_message';
-        } else {
-          sShow = '#offline_entry_message';
-          sRemove = '#plain_offline_entry_message, #online_entry_message';
-        }
-        this.storeList.find('.importantnumber').text('£150,000');
-      } else {
-        sShow = '#online_entry_message';
-        sRemove = '#plain_offline_entry_message, #offline_entry_message';
-      }
-      this.storeList.find(sShow).show();
-      this.storeList.find(sRemove).remove();
       that = this;
       accountsList = this.storeList.find(".accounts-list");
       sortedShopsByPriority = _.sortBy(this.stores, function(s) {
@@ -136,6 +121,19 @@
       canContinue = this.model.get("isProfile") || ((hasFilledShops && (!hasEbay || (hasEbay && hasPaypal)) && foundAllMandatories) || (this.isOffline && this.allowFinishOfflineWizardWithoutMarketplaces) || (!this.isOffline && this.allowFinishOnlineWizardWithoutMarketplaces));
       this.storeList.find('.continue').toggleClass('disabled', !canContinue);
       this.handleMandatoryText(hasFilledShops, canContinue, ebayPaypalRuleMessageVisible);
+      if (this.isOffline) {
+        sShow = '.offline_entry_message';
+        sRemove = '.online_entry_message';
+        if (!hasHmrc) {
+          this.storeList.find('.btn-continue').text("Skip, I\'ll do it later").removeClass('disabled');
+        }
+        this.storeList.find('.importantnumber').text('£150,000');
+      } else {
+        sShow = '.online_entry_message';
+        sRemove = '.offline_entry_message';
+      }
+      this.storeList.find(sShow).show();
+      this.storeList.find(sRemove).remove();
       for (_j = 0, _len1 = sortedShopsByNumOfShops.length; _j < _len1; _j++) {
         shop = sortedShopsByNumOfShops[_j];
         if (shop.active) {

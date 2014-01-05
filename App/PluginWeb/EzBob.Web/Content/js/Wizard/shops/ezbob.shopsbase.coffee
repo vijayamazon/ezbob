@@ -65,22 +65,6 @@ class EzBob.StoreInfoBaseView extends Backbone.View
         sShow = ''
         sRemove = ''
 
-        if @isOffline
-            if hasHmrc
-                sShow = '#plain_offline_entry_message'
-                sRemove = '#offline_entry_message, #online_entry_message'
-            else
-                sShow = '#offline_entry_message'
-                sRemove = '#plain_offline_entry_message, #online_entry_message'
-
-            @storeList.find('.importantnumber').text '£150,000'
-        else
-            sShow = '#online_entry_message'
-            sRemove = '#plain_offline_entry_message, #offline_entry_message'
-
-        @storeList.find(sShow).show()
-        @storeList.find(sRemove).remove()
-
         that = this
         accountsList = @storeList.find(".accounts-list")
 
@@ -106,6 +90,18 @@ class EzBob.StoreInfoBaseView extends Backbone.View
         @storeList.find('.continue').toggleClass 'disabled', !canContinue
         @handleMandatoryText(hasFilledShops, canContinue, ebayPaypalRuleMessageVisible)
         
+        if @isOffline
+            sShow = '.offline_entry_message'
+            sRemove = '.online_entry_message'
+            @storeList.find('.btn-continue').text("Skip, I\'ll do it later").removeClass('disabled') if not hasHmrc
+            @storeList.find('.importantnumber').text '£150,000'
+        else
+            sShow = '.online_entry_message'
+            sRemove = '.offline_entry_message'
+
+        @storeList.find(sShow).show()
+        @storeList.find(sRemove).remove()
+
         for shop in sortedShopsByNumOfShops when shop.active 
             shop.button.render().$el.appendTo accountsList
 

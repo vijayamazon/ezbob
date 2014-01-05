@@ -1,53 +1,74 @@
 ﻿@using Integration.ChannelGrabberConfig
 @model dynamic
-@foreach (KeyValuePair<string, VendorInfo> vip in Configuration.Instance.Vendors) {
-	VendorInfo vi = vip.Value;
+@foreach (KeyValuePair<string, VendorInfo> vip in Configuration.Instance.Vendors)
+{
+    VendorInfo vi = vip.Value;
 
-	var sTemplateID = new HtmlString(vi.Name + "AccountInfoTemplate");
-	var sFormID = new HtmlString(vi.Name.ToLower() + "Account");
+    var sTemplateID = new HtmlString(vi.Name + "AccountInfoTemplate");
+    var sFormID = new HtmlString(vi.Name.ToLower() + "Account");
 
-	<script id="@sTemplateID" type="text/template">
-		<div class="row-fluid">
-			<div class="wizard-top-notification">
-				<h2 class="form_start">Please Enter @vi.DisplayName Credentials</h2>
-			</div>
-			<form id="@sFormID" class="cg-link-account-form">
-				<div class="clearfix">
-					@foreach (FieldInfo fi in vi.ClientSide.LinkForm.Fields) {
-						switch (fi.Type) {
-						case "Text":
-										@EzForm.InputText(vi.Name.ToLower() + "_" + fi.PropertyName.ToLower(), fi.Caption, "", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "link-account:cg_account_property")
-							break;
+    <script id="@sTemplateID" type="text/template">
+        <div class="row-fluid">
+            <div class="wizard-top-notification">
+                @if (@vi.DisplayName == "HMRC")
+                {
+                    <h2 class="form_start">Link your @vi.DisplayName online account</h2>
+                }
+                else
+                {
+                    <h2 class="form_start">Please Enter @vi.DisplayName Credentials</h2>
+                }
+            </div>
+            <form id="@sFormID" class="cg-link-account-form">
+                <div class="clearfix">
+                    @foreach (FieldInfo fi in vi.ClientSide.LinkForm.Fields)
+                    {
+                        switch (fi.Type)
+                        {
+                            case "Text":
+                        @EzForm.InputText(vi.Name.ToLower() + "_" + fi.PropertyName.ToLower(), fi.Caption, "", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "link-account:cg_account_property")
+                                break;
 
-						case "Password":
-										@EzForm.Password(vi.Name.ToLower() + "_" + fi.PropertyName.ToLower(), fi.Caption, "", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "link-account:cg_account_password")
-							break;
+                            case "Password":
+                        @EzForm.Password(vi.Name.ToLower() + "_" + fi.PropertyName.ToLower(), fi.Caption, "", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "link-account:cg_account_password")
+                                break;
 
-						default:
-							throw new Exception("Unsupported field type: " + fi.Type);
-						} // switch
-					}
+                            default:
+                                throw new Exception("Unsupported field type: " + fi.Type);
+                        } // switch
+                    }
 
-					@{ WriteLiteral(string.Join("", vi.ClientSide.LinkForm.Notes)); }
 
-					<div class="form_buttons_container">
-						<div class="attardi-button">
-							<a href="#" class="rc-button green disabled connect-account" ui-event-control-id="link-account:cg_connect">Link Account</a>
-							<a href="#" class="back rc-button grey" ui-event-control-id="link-account:cg_back">Back</a>
-						</div>
-					</div>
 
-					@if (@vi.DisplayName == "HMRC") {
-						<img class="eu_explanation" src="@Url.Content("~/Content/css/images/eu_explanation.png")"/>
-					}
-				</div>
+                    <div class="form_buttons_container">
+                        <div class="attardi-button">
+                            <a href="#" class="rc-button green disabled connect-account" ui-event-control-id="link-account:cg_connect">Link Account</a>
+                            @if (@vi.DisplayName != "HMRC")
+                            {
+                                <a href="#" class="back rc-button grey" ui-event-control-id="link-account:cg_back">Back</a>
+                            }
+                        </div>
+                    </div>
 
-				@if (vi.ClientSide.LinkForm.HasUploadFiles) {
-					<div id="upload-files-form">
-						<iframe></iframe>
-					</div>
-				}
-			</form>
-		</div>
-	</script>
+                    @{ WriteLiteral(string.Join("", vi.ClientSide.LinkForm.Notes)); }
+
+                    @if (@vi.DisplayName == "HMRC")
+                    {
+                        <div class="form_buttons_container" style="margin-top: 60px;">
+                            <div class="attardi-button">
+                                <a href="#" class="back rc-button grey" ui-event-control-id="link-account:cg_back">Back</a>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                @if (vi.ClientSide.LinkForm.HasUploadFiles)
+                {
+                    <div id="upload-files-form">
+                        <iframe></iframe>
+                    </div>
+                }
+            </form>
+        </div>
+    </script>
 }
