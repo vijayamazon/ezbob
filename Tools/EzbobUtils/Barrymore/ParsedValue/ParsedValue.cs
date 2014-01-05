@@ -16,7 +16,6 @@
 		#endregion constructor
 
 		#region interface IConvertible and type cast operators
-// ReSharper disable EmptyGeneralCatchClause
 
 		public TypeCode GetTypeCode() {
 			return Type.GetTypeCode(m_oValue.GetType());
@@ -28,9 +27,20 @@
 			return val.ToBoolean(); 
 		} // operator bool
 
-		public bool ToBoolean(IFormatProvider provider = null) {
-			try { return Convert.ToBoolean(m_oValue, provider); } catch (Exception) {}
-			return Convert.ToBoolean(m_oDefault, provider);
+		public bool ToBoolean(IFormatProvider provider = null)
+		{
+			bool parsedValue;
+			if (bool.TryParse(m_oValue.ToString(), out parsedValue))
+			{
+				return parsedValue;
+			}
+
+			if (ReferenceEquals(m_oDefault, null) || !bool.TryParse(m_oDefault.ToString(), out parsedValue))
+			{
+				return false;
+			}
+
+			return parsedValue;
 		} // ToBoolean
 
 		#endregion to boolean
@@ -41,9 +51,20 @@
 			return val.ToChar();
 		} // operator char
 
-		public char ToChar(IFormatProvider provider = null) {
-			try { return Convert.ToChar(m_oValue, provider); } catch (Exception) {}
-			return Convert.ToChar(m_oDefault, provider);
+		public char ToChar(IFormatProvider provider = null) 
+		{
+			char parsedValue;
+			if (char.TryParse(m_oValue.ToString(), out parsedValue))
+			{
+				return parsedValue;
+			}
+
+			if (ReferenceEquals(m_oDefault, null) || !char.TryParse(m_oDefault.ToString(), out parsedValue))
+			{
+				return default(char);
+			}
+
+			return parsedValue;
 		} // ToChar
 
 		#endregion to char
@@ -54,9 +75,20 @@
 			return val.ToSByte();
 		} // operator sbyte
 
-		public sbyte ToSByte(IFormatProvider provider = null) {
-			try { return Convert.ToSByte(m_oValue, provider); } catch (Exception) {}
-			return Convert.ToSByte(m_oDefault, provider);
+		public sbyte ToSByte(IFormatProvider provider = null) 
+		{
+			sbyte parsedValue;
+			if (sbyte.TryParse(m_oValue.ToString(), out parsedValue))
+			{
+				return parsedValue;
+			}
+
+			if (ReferenceEquals(m_oDefault, null) || !sbyte.TryParse(m_oDefault.ToString(), out parsedValue))
+			{
+				return default(sbyte);
+			}
+
+			return parsedValue;
 		} // ToSByte
 
 		#endregion to sbyte
@@ -67,9 +99,20 @@
 			return val.ToByte(); 
 		} // operator byte
 
-		public byte ToByte(IFormatProvider provider = null) {
-			try { return Convert.ToByte(m_oValue, provider); } catch (Exception) {}
-			return Convert.ToByte(m_oDefault, provider);
+		public byte ToByte(IFormatProvider provider = null) 
+		{
+			byte parsedValue;
+			if (byte.TryParse(m_oValue.ToString(), out parsedValue))
+			{
+				return parsedValue;
+			}
+
+			if (ReferenceEquals(m_oDefault, null) || !byte.TryParse(m_oDefault.ToString(), out parsedValue))
+			{
+				return default(byte);
+			}
+
+			return parsedValue;
 		} // ToByte
 
 		#endregion to byte
@@ -80,9 +123,20 @@
 			return val.ToInt16();
 		} // operator short
 
-		public short ToInt16(IFormatProvider provider = null) {
-			try { return Convert.ToInt16(m_oValue, provider); } catch (Exception) {}
-			return Convert.ToInt16(m_oDefault, provider);
+		public short ToInt16(IFormatProvider provider = null) 
+		{
+			short parsedValue;
+			if (short.TryParse(m_oValue.ToString(), out parsedValue))
+			{
+				return parsedValue;
+			}
+
+			if (ReferenceEquals(m_oDefault, null) || !short.TryParse(m_oDefault.ToString(), out parsedValue))
+			{
+				return 0;
+			}
+
+			return parsedValue;
 		} // ToInt16
 
 		#endregion to short
@@ -93,9 +147,20 @@
 			return val.ToUInt16();
 		} // operator ushort
 
-		public ushort ToUInt16(IFormatProvider provider = null) {
-			try { return Convert.ToUInt16(m_oValue, provider); } catch (Exception) {}
-			return Convert.ToUInt16(m_oDefault, provider);
+		public ushort ToUInt16(IFormatProvider provider = null) 
+		{
+			ushort parsedValue;
+			if (ushort.TryParse(m_oValue.ToString(), out parsedValue))
+			{
+				return parsedValue;
+			}
+
+			if (ReferenceEquals(m_oDefault, null) || !ushort.TryParse(m_oDefault.ToString(), out parsedValue))
+			{
+				return 0;
+			}
+
+			return parsedValue;
 		} // ToUInt16
 
 		#endregion to ushort
@@ -106,9 +171,20 @@
 			return val.ToInt32();
 		} // operator int
 
-		public int ToInt32(IFormatProvider provider = null) {
-			try { return Convert.ToInt32(m_oValue, provider); } catch (Exception) {}
-			return Convert.ToInt32(m_oDefault, provider);
+		public int ToInt32(IFormatProvider provider = null) 
+		{
+			int parsedValue;
+			if (int.TryParse(m_oValue.ToString(), out parsedValue))
+			{
+				return parsedValue;
+			}
+
+			if (ReferenceEquals(m_oDefault, null) || !int.TryParse(m_oDefault.ToString(), out parsedValue))
+			{
+				return 0;
+			}
+
+			return parsedValue;
 		} // ToInt32
 
 		#endregion to int
@@ -119,9 +195,20 @@
 			return val.ToUInt32();
 		} // operator uint
 
-		public uint ToUInt32(IFormatProvider provider = null) {
-			try { return Convert.ToUInt32(m_oValue, provider); } catch (Exception) {}
-			return Convert.ToUInt32(m_oDefault, provider);
+		public uint ToUInt32(IFormatProvider provider = null) 
+		{
+			uint parsedValue;
+			if (uint.TryParse(m_oValue.ToString(), out parsedValue))
+			{
+				return parsedValue;
+			}
+
+			if (ReferenceEquals(m_oDefault, null) || !uint.TryParse(m_oDefault.ToString(), out parsedValue))
+			{
+				return 0;
+			}
+
+			return parsedValue;
 		} // ToUInt32
 
 		#endregion to uint
@@ -132,9 +219,20 @@
 			return val.ToInt64();
 		} // operator long
 
-		public long ToInt64(IFormatProvider provider = null) {
-			try { return Convert.ToInt64(m_oValue, provider); } catch (Exception) {}
-			return Convert.ToInt64(m_oDefault, provider);
+		public long ToInt64(IFormatProvider provider = null) 
+		{
+			long parsedValue;
+			if (long.TryParse(m_oValue.ToString(), out parsedValue))
+			{
+				return parsedValue;
+			}
+
+			if (ReferenceEquals(m_oDefault, null) || !long.TryParse(m_oDefault.ToString(), out parsedValue))
+			{
+				return 0;
+			}
+
+			return parsedValue;
 		} // ToInt64
 
 		#endregion to long
@@ -145,9 +243,20 @@
 			return val.ToUInt64();
 		} // operator ulong
 
-		public ulong ToUInt64(IFormatProvider provider = null) {
-			try { return Convert.ToUInt64(m_oValue, provider); } catch (Exception) {}
-			return Convert.ToUInt64(m_oDefault, provider);
+		public ulong ToUInt64(IFormatProvider provider = null)
+		{
+			ulong parsedValue;
+			if (ulong.TryParse(m_oValue.ToString(), out parsedValue))
+			{
+				return parsedValue;
+			}
+
+			if (ReferenceEquals(m_oDefault, null) || !ulong.TryParse(m_oDefault.ToString(), out parsedValue))
+			{
+				return 0;
+			}
+
+			return parsedValue;
 		} // ToUInt64
 
 		#endregion to ulong
@@ -158,9 +267,20 @@
 			return val.ToSingle();
 		} // operator float
 
-		public float ToSingle(IFormatProvider provider = null) {
-			try { return Convert.ToUInt64(m_oValue, provider); } catch (Exception) {}
-			return Convert.ToUInt64(m_oDefault, provider);
+		public float ToSingle(IFormatProvider provider = null) 
+		{
+			float parsedValue;
+			if (float.TryParse(m_oValue.ToString(), out parsedValue))
+			{
+				return parsedValue;
+			}
+
+			if (ReferenceEquals(m_oDefault, null) || !float.TryParse(m_oDefault.ToString(), out parsedValue))
+			{
+				return 0;
+			}
+
+			return parsedValue;
 		} // ToSingle
 
 		#endregion to float
@@ -171,9 +291,20 @@
 			return val.ToDouble();
 		} // operator double
 
-		public double ToDouble(IFormatProvider provider = null) {
-			try { return Convert.ToDouble(m_oValue, provider); } catch (Exception) {}
-			return Convert.ToDouble(m_oDefault, provider);
+		public double ToDouble(IFormatProvider provider = null) 
+		{
+			double parsedValue;
+			if (double.TryParse(m_oValue.ToString(), out parsedValue))
+			{
+				return parsedValue;
+			}
+
+			if (ReferenceEquals(m_oDefault, null) || !double.TryParse(m_oDefault.ToString(), out parsedValue))
+			{
+				return 0;
+			}
+
+			return parsedValue;
 		} // ToDouble
 
 		#endregion to double
@@ -184,9 +315,20 @@
 			return val.ToDecimal();
 		} // operator decimal
 
-		public decimal ToDecimal(IFormatProvider provider = null) {
-			try { return Convert.ToDecimal(m_oValue, provider); } catch (Exception) {}
-			return Convert.ToDecimal(m_oDefault, provider);
+		public decimal ToDecimal(IFormatProvider provider = null) 
+		{
+			decimal parsedValue;
+			if (decimal.TryParse(m_oValue.ToString(), out parsedValue))
+			{
+				return parsedValue;
+			}
+
+			if (ReferenceEquals(m_oDefault, null) || !decimal.TryParse(m_oDefault.ToString(), out parsedValue))
+			{
+				return 0;
+			}
+
+			return parsedValue;
 		} // ToDecimal
 
 		#endregion to decimal
@@ -197,9 +339,20 @@
 			return val.ToDateTime();
 		} // operator DateTime
 
-		public DateTime ToDateTime(IFormatProvider provider = null) {
-			try { return Convert.ToDateTime(m_oValue, provider); } catch (Exception) {}
-			return Convert.ToDateTime(m_oDefault, provider);
+		public DateTime ToDateTime(IFormatProvider provider = null) 
+		{
+			DateTime parsedValue;
+			if (DateTime.TryParse(m_oValue.ToString(), out parsedValue))
+			{
+				return parsedValue;
+			}
+
+			if (ReferenceEquals(m_oDefault, null) || !DateTime.TryParse(m_oDefault.ToString(), out parsedValue))
+			{
+				return default(DateTime);
+			}
+
+			return parsedValue;
 		} // ToDateTime
 
 		#endregion to datetime
@@ -210,18 +363,17 @@
 			return val.ToString();
 		} // operator string
 
-		public string ToString(IFormatProvider provider = null) {
-			try { return Convert.ToString(m_oValue, provider); } catch (Exception) {}
-			return Convert.ToString(m_oDefault, provider);
+		public string ToString(IFormatProvider provider = null)
+		{
+			return m_oValue.ToString();
 		} // ToString
 
 		#endregion to string
 
 		public object ToType(Type conversionType, IFormatProvider provider = null) {
-			throw new NotImplementedException("Cannot convert " + this.GetType() + " to " + conversionType);
+			throw new NotImplementedException("Cannot convert " + GetType() + " to " + conversionType);
 		} // ToType
 
-// ReSharper restore EmptyGeneralCatchClause
 		#endregion interface IConvertible and type cast operators
 
 		#endregion public
