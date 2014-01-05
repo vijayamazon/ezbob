@@ -11,28 +11,12 @@ namespace EzBob.Web.Controllers
 
         public ActionResult Index()
         {
-            return View(true);
+            return View(model: "Prod");
         }
 
         public ViewResult DownloadPage()
         {
             return View();
-        }
-
-        public ActionResult DownloadProdTemplate()
-        {
-            var html = RenderRazorViewToString(@"Index", true);
-            var bytes = Encoding.UTF8.GetBytes(html);
-            return File(bytes, "text/plain", "ezbob-template.html");
-
-        }
-
-		public ActionResult DownloadTestTemplate()
-        {
-            var html = RenderRazorViewToString(@"Index", false);
-            var bytes = Encoding.UTF8.GetBytes(html);
-            return File(bytes, "text/plain", "ezbob-template-test.html");
-
         }
 
         public string RenderRazorViewToString(string viewName, object model)
@@ -47,5 +31,19 @@ namespace EzBob.Web.Controllers
                 return sw.GetStringBuilder().ToString();
             }
         }
+
+	    public ActionResult DownloadTemplate(string type)
+	    {
+			var html = RenderRazorViewToString(@"Index", type);
+			var bytes = Encoding.UTF8.GetBytes(html);
+		    switch (type)
+		    {
+				case "Prod":
+					return File(bytes, "text/plain", "ezbob-template.html");
+				default:
+					return File(bytes, "text/plain", "ezbob-template-test.html");
+		    }
+			
+	    }
     }
 }

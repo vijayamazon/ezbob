@@ -4,22 +4,27 @@
 }
 
 @using EzBob.Web.Infrastructure
-@model bool
+@model string
 
 @section head{
-    @if (Model == true)
+    @switch (Model)
     {
-        <!--prod-->
-        <!-- base href="https://app.ezbob.com/" / -->
-        <!--local-->
-        <base href="https://localhost:44300" />
-    }
-    else
-    {
-        <!--qa-->
-        <!-- base href="https://192.168.120.11" /-->
-        <!--local-->
-        <base href="https://localhost:44300" />
+        case "Prod":
+            <!--prod-->
+            <base href="https://app.ezbob.com/" />
+            break;
+        case "Qa":
+            <!--qa-->
+            <base href="https://192.168.120.11" />
+            break;
+        case "Dev":
+            <!--local-->
+            <base href="https://localhost:44300" />
+            break;
+        default:
+            <!--prod-->
+            <base href="https://app.ezbob.com/" />
+            break;
     }
 
     <script type="text/javascript">
