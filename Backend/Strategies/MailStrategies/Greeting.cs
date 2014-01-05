@@ -27,7 +27,7 @@ namespace EzBob.Backend.Strategies.MailStrategies {
 			if (CustomerData.IsOffline)
 			{
 				TemplateName = "Greeting - Offline";
-				Subject = "ezbob – Growing your business in one click";
+				Subject = "ezbob - Growing your business in one click";
 			}
 			else
 			{
