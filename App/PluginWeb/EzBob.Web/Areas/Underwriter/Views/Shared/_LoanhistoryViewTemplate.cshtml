@@ -176,20 +176,21 @@
     <div class="modal-body">
         
         <form id="payment-form" class="form-horizontal" action="/" method="POST">
-				@EzForm.Select("paymentMethod", "Payment method", paymentMethods, "form-control selectheight")
+				@EzForm.Select("paymentMethod", "Payment method", paymentMethods, "form-control")
 				@EzForm.InputTextUnderwriter("totalSumPaid", "Total sum paid", "")
 				@EzForm.DateInputUnderwriter("paymentDate", "Date", false, new[] {DateTime.Now.AddYears(-1), DateTime.Now.AddYears(1), DateTime.Now})
 				@EzForm.InputTextUnderwriter("fees", "Fees", "", "text", isDisabled: true)
 				@EzForm.InputTextUnderwriter("interest", "Interest", "", "text", isDisabled: true)
 				@EzForm.InputTextUnderwriter("principal", "Principal", "", "text", isDisabled: true)
 				@EzForm.CheckBox("sendemail", "Send confirmation email")
-				@EzForm.TextAreaSmall("description", "Description", "")
+				@EzForm.TextAreaSmall("description", "Description", "", "form-control")
         </form>
         
-        <a href="#" class="uploadFiles">Upload files</a>
+        
     </div>
     
     <div class="pull-right">
+        <a href="#" class="btn btn-primary uploadFiles">Upload files</a>
         <button class="btn btn-primary confirm">OK</button>
     </div>
 }

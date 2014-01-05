@@ -41,8 +41,9 @@
                     <div class="controls calculated-status">
                         <label for="CalculatedStatus">
                             CAIS calculated status
-                            <input id="CalculatedStatus" readonly="readonly" name="CalculatedStatus" type="text" value="<%-CalculatedStatus%>" />
+                            
                         </label>
+                        <input id="CalculatedStatus" readonly="readonly" name="CalculatedStatus" type="text" value="<%-CalculatedStatus%>" class="form-control" />
                     </div>
 
                     @EzForm.SelectAdvanced("CaisAccountStatus", "Manual CAIS status", new Dictionary<string, string>

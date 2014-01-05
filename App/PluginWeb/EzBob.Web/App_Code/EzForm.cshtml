@@ -4,7 +4,7 @@
 @*Renders select*@
 @helper Select(string id, string caption, IEnumerable<string> values, string css = "", string placeHolder = "")
 {
-    <div class="control-group">
+    <div class="form-group">
         <label class="control-label" for="@id">@caption</label>
         <div class="controls">
             <select id="@id" name="@id" class="selectheight @css" data-placeholder="@placeHolder" >
@@ -214,10 +214,10 @@
 
 @helper TextAreaSmall(string id, string caption, string value, string css = "")
 {
-    <div class="control-group">
+    <div class="form-group">
         <label for="@id" class="control-label">@caption</label>
         <div class="controls">
-            <textarea id="@id" name="@id" rows="5" cols="10" class="@css" style=" resize: none; ">@value</textarea>
+            <textarea id="@id" name="@id" rows="5" cols="10" class="@css" style=" resize: none; " >@value</textarea>
         </div>
     </div>
 }
@@ -397,11 +397,11 @@
     var validationClass = required ? "requiredDate" : "";
     var identificator = new HtmlString(name);
 
-    <div class="control-group">
+    <div class="form-group">
 
         <label for="day" class="control-label">@title</label>
         <div class="controls ezDateTime">
-            <select name="day" style="width: 60px;" class="form-control selectheight">
+            <select name="day" style="width: 33%;" class="form-control selectheight">
                 <option value="-">-</option>
                 @{ for (var i = 1; i <= 31; i++)
                    {
@@ -413,7 +413,7 @@
                    } }
             </select>
 
-            <select name="month" style="width: 70px;" class="form-control selectheight">
+            <select name="month" style="width: 32%;" class="form-control selectheight">
                 <option value="-">-</option>
                 @{ for (var i = 1; i <= 12; i++)
                    {
@@ -426,7 +426,7 @@
                 }
             </select>
 
-            <select name="year" style="width: 80px;" class="form-control selectheight">
+            <select name="year" style="width: 32%;" class="form-control selectheight">
                 <option value="-">-</option>
                 @{
                     var minYear = (minMaxDefaultDate == null) ? 1900 : minMaxDefaultDate[0].Year;
