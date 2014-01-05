@@ -24,21 +24,17 @@
 		#region to boolean
 
 		public static implicit operator bool(ParsedValue val) {
-			return val.ToBoolean(); 
+			return ReferenceEquals(val, null) ? default(bool) : val.ToBoolean();
 		} // operator bool
 
-		public bool ToBoolean(IFormatProvider provider = null)
-		{
+		public bool ToBoolean(IFormatProvider provider = null) {
 			bool parsedValue;
-			if (bool.TryParse(m_oValue.ToString(), out parsedValue))
-			{
+
+			if (!ReferenceEquals(m_oValue, null) && bool.TryParse(m_oValue.ToString(), out parsedValue))
 				return parsedValue;
-			}
 
 			if (ReferenceEquals(m_oDefault, null) || !bool.TryParse(m_oDefault.ToString(), out parsedValue))
-			{
 				return false;
-			}
 
 			return parsedValue;
 		} // ToBoolean
@@ -48,21 +44,17 @@
 		#region to char
 
 		public static implicit operator char(ParsedValue val) {
-			return val.ToChar();
+			return ReferenceEquals(val, null) ? default(char) : val.ToChar();
 		} // operator char
 
-		public char ToChar(IFormatProvider provider = null) 
-		{
+		public char ToChar(IFormatProvider provider = null) {
 			char parsedValue;
-			if (char.TryParse(m_oValue.ToString(), out parsedValue))
-			{
+
+			if (!ReferenceEquals(m_oValue, null) && char.TryParse(m_oValue.ToString(), out parsedValue))
 				return parsedValue;
-			}
 
 			if (ReferenceEquals(m_oDefault, null) || !char.TryParse(m_oDefault.ToString(), out parsedValue))
-			{
 				return default(char);
-			}
 
 			return parsedValue;
 		} // ToChar
@@ -72,21 +64,17 @@
 		#region to sbyte
 
 		public static implicit operator sbyte(ParsedValue val) {
-			return val.ToSByte();
+			return ReferenceEquals(val, null) ? default(sbyte) : val.ToSByte();
 		} // operator sbyte
 
-		public sbyte ToSByte(IFormatProvider provider = null) 
-		{
+		public sbyte ToSByte(IFormatProvider provider = null) {
 			sbyte parsedValue;
-			if (sbyte.TryParse(m_oValue.ToString(), out parsedValue))
-			{
+
+			if (!ReferenceEquals(m_oValue, null) && sbyte.TryParse(m_oValue.ToString(), out parsedValue))
 				return parsedValue;
-			}
 
 			if (ReferenceEquals(m_oDefault, null) || !sbyte.TryParse(m_oDefault.ToString(), out parsedValue))
-			{
 				return default(sbyte);
-			}
 
 			return parsedValue;
 		} // ToSByte
@@ -96,21 +84,17 @@
 		#region to byte
 
 		public static implicit operator byte(ParsedValue val) {
-			return val.ToByte(); 
+			return ReferenceEquals(val, null) ? default(byte) : val.ToByte();
 		} // operator byte
 
-		public byte ToByte(IFormatProvider provider = null) 
-		{
+		public byte ToByte(IFormatProvider provider = null) {
 			byte parsedValue;
-			if (byte.TryParse(m_oValue.ToString(), out parsedValue))
-			{
+
+			if (!ReferenceEquals(m_oValue, null) && byte.TryParse(m_oValue.ToString(), out parsedValue))
 				return parsedValue;
-			}
 
 			if (ReferenceEquals(m_oDefault, null) || !byte.TryParse(m_oDefault.ToString(), out parsedValue))
-			{
 				return default(byte);
-			}
 
 			return parsedValue;
 		} // ToByte
@@ -120,21 +104,17 @@
 		#region to short
 
 		public static implicit operator short(ParsedValue val) {
-			return val.ToInt16();
+			return ReferenceEquals(val, null) ? default(short) : val.ToInt16();
 		} // operator short
 
-		public short ToInt16(IFormatProvider provider = null) 
-		{
+		public short ToInt16(IFormatProvider provider = null) {
 			short parsedValue;
-			if (short.TryParse(m_oValue.ToString(), out parsedValue))
-			{
+
+			if (!ReferenceEquals(m_oValue, null) && short.TryParse(m_oValue.ToString(), out parsedValue))
 				return parsedValue;
-			}
 
 			if (ReferenceEquals(m_oDefault, null) || !short.TryParse(m_oDefault.ToString(), out parsedValue))
-			{
 				return 0;
-			}
 
 			return parsedValue;
 		} // ToInt16
@@ -144,21 +124,17 @@
 		#region to ushort
 
 		public static implicit operator ushort(ParsedValue val) {
-			return val.ToUInt16();
+			return ReferenceEquals(val, null) ? default(ushort) : val.ToUInt16();
 		} // operator ushort
 
-		public ushort ToUInt16(IFormatProvider provider = null) 
-		{
+		public ushort ToUInt16(IFormatProvider provider = null) {
 			ushort parsedValue;
-			if (ushort.TryParse(m_oValue.ToString(), out parsedValue))
-			{
+
+			if (!ReferenceEquals(m_oValue, null) && ushort.TryParse(m_oValue.ToString(), out parsedValue))
 				return parsedValue;
-			}
 
 			if (ReferenceEquals(m_oDefault, null) || !ushort.TryParse(m_oDefault.ToString(), out parsedValue))
-			{
 				return 0;
-			}
 
 			return parsedValue;
 		} // ToUInt16
@@ -168,21 +144,17 @@
 		#region to int
 
 		public static implicit operator int(ParsedValue val) {
-			return val.ToInt32();
+			return ReferenceEquals(val, null) ? default(int) : val.ToInt32();
 		} // operator int
 
-		public int ToInt32(IFormatProvider provider = null) 
-		{
+		public int ToInt32(IFormatProvider provider = null) {
 			int parsedValue;
-			if (int.TryParse(m_oValue.ToString(), out parsedValue))
-			{
+
+			if (!ReferenceEquals(m_oValue, null) && int.TryParse(m_oValue.ToString(), out parsedValue))
 				return parsedValue;
-			}
 
 			if (ReferenceEquals(m_oDefault, null) || !int.TryParse(m_oDefault.ToString(), out parsedValue))
-			{
 				return 0;
-			}
 
 			return parsedValue;
 		} // ToInt32
@@ -192,21 +164,17 @@
 		#region to uint
 
 		public static implicit operator uint(ParsedValue val) {
-			return val.ToUInt32();
+			return ReferenceEquals(val, null) ? default(uint) : val.ToUInt32();
 		} // operator uint
 
-		public uint ToUInt32(IFormatProvider provider = null) 
-		{
+		public uint ToUInt32(IFormatProvider provider = null) {
 			uint parsedValue;
-			if (uint.TryParse(m_oValue.ToString(), out parsedValue))
-			{
+
+			if (!ReferenceEquals(m_oValue, null) && uint.TryParse(m_oValue.ToString(), out parsedValue))
 				return parsedValue;
-			}
 
 			if (ReferenceEquals(m_oDefault, null) || !uint.TryParse(m_oDefault.ToString(), out parsedValue))
-			{
 				return 0;
-			}
 
 			return parsedValue;
 		} // ToUInt32
@@ -216,21 +184,17 @@
 		#region to long
 
 		public static implicit operator long(ParsedValue val) {
-			return val.ToInt64();
+			return ReferenceEquals(val, null) ? default(long) : val.ToInt64();
 		} // operator long
 
-		public long ToInt64(IFormatProvider provider = null) 
-		{
+		public long ToInt64(IFormatProvider provider = null) {
 			long parsedValue;
-			if (long.TryParse(m_oValue.ToString(), out parsedValue))
-			{
+
+			if (!ReferenceEquals(m_oValue, null) && long.TryParse(m_oValue.ToString(), out parsedValue))
 				return parsedValue;
-			}
 
 			if (ReferenceEquals(m_oDefault, null) || !long.TryParse(m_oDefault.ToString(), out parsedValue))
-			{
 				return 0;
-			}
 
 			return parsedValue;
 		} // ToInt64
@@ -240,21 +204,17 @@
 		#region to ulong
 
 		public static implicit operator ulong(ParsedValue val) {
-			return val.ToUInt64();
+			return ReferenceEquals(val, null) ? default(ulong) : val.ToUInt64();
 		} // operator ulong
 
-		public ulong ToUInt64(IFormatProvider provider = null)
-		{
+		public ulong ToUInt64(IFormatProvider provider = null) {
 			ulong parsedValue;
-			if (ulong.TryParse(m_oValue.ToString(), out parsedValue))
-			{
+
+			if (!ReferenceEquals(m_oValue, null) && ulong.TryParse(m_oValue.ToString(), out parsedValue))
 				return parsedValue;
-			}
 
 			if (ReferenceEquals(m_oDefault, null) || !ulong.TryParse(m_oDefault.ToString(), out parsedValue))
-			{
 				return 0;
-			}
 
 			return parsedValue;
 		} // ToUInt64
@@ -264,21 +224,17 @@
 		#region to float
 
 		public static implicit operator float(ParsedValue val) {
-			return val.ToSingle();
+			return ReferenceEquals(val, null) ? default(float) : val.ToSingle();
 		} // operator float
 
-		public float ToSingle(IFormatProvider provider = null) 
-		{
+		public float ToSingle(IFormatProvider provider = null) {
 			float parsedValue;
-			if (float.TryParse(m_oValue.ToString(), out parsedValue))
-			{
+
+			if (!ReferenceEquals(m_oValue, null) && float.TryParse(m_oValue.ToString(), out parsedValue))
 				return parsedValue;
-			}
 
 			if (ReferenceEquals(m_oDefault, null) || !float.TryParse(m_oDefault.ToString(), out parsedValue))
-			{
 				return 0;
-			}
 
 			return parsedValue;
 		} // ToSingle
@@ -288,21 +244,17 @@
 		#region to double
 
 		public static implicit operator double(ParsedValue val) {
-			return val.ToDouble();
+			return ReferenceEquals(val, null) ? default(double) : val.ToDouble();
 		} // operator double
 
-		public double ToDouble(IFormatProvider provider = null) 
-		{
+		public double ToDouble(IFormatProvider provider = null) {
 			double parsedValue;
-			if (double.TryParse(m_oValue.ToString(), out parsedValue))
-			{
+
+			if (!ReferenceEquals(m_oValue, null) && double.TryParse(m_oValue.ToString(), out parsedValue))
 				return parsedValue;
-			}
 
 			if (ReferenceEquals(m_oDefault, null) || !double.TryParse(m_oDefault.ToString(), out parsedValue))
-			{
 				return 0;
-			}
 
 			return parsedValue;
 		} // ToDouble
@@ -312,21 +264,17 @@
 		#region to decimal
 
 		public static implicit operator decimal(ParsedValue val) {
-			return val.ToDecimal();
+			return ReferenceEquals(val, null) ? default(decimal) : val.ToDecimal();
 		} // operator decimal
 
-		public decimal ToDecimal(IFormatProvider provider = null) 
-		{
+		public decimal ToDecimal(IFormatProvider provider = null) {
 			decimal parsedValue;
-			if (decimal.TryParse(m_oValue.ToString(), out parsedValue))
-			{
+
+			if (!ReferenceEquals(m_oValue, null) && decimal.TryParse(m_oValue.ToString(), out parsedValue))
 				return parsedValue;
-			}
 
 			if (ReferenceEquals(m_oDefault, null) || !decimal.TryParse(m_oDefault.ToString(), out parsedValue))
-			{
 				return 0;
-			}
 
 			return parsedValue;
 		} // ToDecimal
@@ -336,21 +284,17 @@
 		#region to datetime
 
 		public static implicit operator DateTime(ParsedValue val) {
-			return val.ToDateTime();
+			return ReferenceEquals(val, null) ? default(DateTime) : val.ToDateTime();
 		} // operator DateTime
 
-		public DateTime ToDateTime(IFormatProvider provider = null) 
-		{
+		public DateTime ToDateTime(IFormatProvider provider = null) {
 			DateTime parsedValue;
-			if (DateTime.TryParse(m_oValue.ToString(), out parsedValue))
-			{
+
+			if (!ReferenceEquals(m_oValue, null) && DateTime.TryParse(m_oValue.ToString(), out parsedValue))
 				return parsedValue;
-			}
 
 			if (ReferenceEquals(m_oDefault, null) || !DateTime.TryParse(m_oDefault.ToString(), out parsedValue))
-			{
 				return default(DateTime);
-			}
 
 			return parsedValue;
 		} // ToDateTime
@@ -360,12 +304,17 @@
 		#region to string
 
 		public static implicit operator string(ParsedValue val) {
-			return val.ToString();
+			return ReferenceEquals(val, null) ? default(string) : val.ToString();
 		} // operator string
 
-		public string ToString(IFormatProvider provider = null)
-		{
-			return m_oValue.ToString();
+		public string ToString(IFormatProvider provider = null) {
+			if (!ReferenceEquals(m_oValue, null))
+				return m_oValue.ToString();
+
+			if (!ReferenceEquals(m_oDefault, null))
+				return m_oDefault.ToString();
+
+			return string.Empty;
 		} // ToString
 
 		#endregion to string
