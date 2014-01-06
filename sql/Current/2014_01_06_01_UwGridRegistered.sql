@@ -9,7 +9,7 @@ AS
 SELECT
 	c.Id AS CustomerID,
 	c.Name AS Email,
-	(CASE w.TheLastOne WHEN 1 THEN 'registered' ELSE 'credit calculation' END) AS UserStatus,
+	(CASE w.TheLastOne WHEN 1 THEN 'credit calculation' ELSE 'registered' END) AS UserStatus,
 	c.GreetingMailSentDate AS RegDate,
 	ISNULL(t.Name, '') AS MpTypeName,
 	(CASE
