@@ -140,7 +140,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
             aLengthMenu: [[10, 25, 50, 100, 200, -1], [10, 25, 50, 100, 200, "All"]],
             iDisplayLength: -1,
             asSorting: [],
-            aoColumns: [{ sType: "numeric" }, { sType: "string" }, { sType: "date-uk" }, { sType: "formatted-num" }, { sType: "formatted-num" }, { sType: "string" }, { sType: "string" }, { sType: "string" }, { sType: "string" }, { sType: "string" }],
+            aoColumns: [{ sType: "numeric" }, { sType: "string" }, { sType: "date-uk" }, { sType: "formatted-num" }, { sType: "formatted-num" }, { sType: "string" },{ sType: "string" }, { sType: "string" }, { sType: "string" }, { sType: "string" }, { sType: "string" }],
             "fnFooterCallback": function (nRow, aaData, iStart, iEnd, aiDisplay) {
                 //calculate totals per selection
                 //var iTotalMarket = 0;
@@ -377,13 +377,12 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
             //////////////////////////////////////////////////////////////////////////////////////////
             var minDay = cashModel.MinDateDict;
             var maxDay = cashModel.MaxDateDict;
-            var income = cashFlow["0Total Income"];
-            var expenses = cashFlow["1Total Expenses"];
-            var numOfTransactionsIncome = cashFlow["5Num Of Transactions"];
-            var numOfTransactionsExpenses = cashFlow["9Num Of Transactions"];
-            var averageIncome = cashFlow["6Average Income"];
-            var averageExpenses = cashFlow["aAverage Expenses"];
-
+            var income = cashFlow["0aTotal Income"];
+            var expenses = cashFlow["0bTotal Expenses"];
+            var numOfTransactionsIncome = cashFlow["cNum Of Transactions"];
+            var numOfTransactionsExpenses = cashFlow["eNum Of Transactions"];
+            var averageIncome = cashFlow["dAverage Income"];
+            var averageExpenses = cashFlow["fAverage Expenses"];
             var ticks = [];
             var incomeBar = [];
             var expensesBar = [];

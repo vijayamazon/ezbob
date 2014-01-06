@@ -44,30 +44,21 @@
             </thead>
             <tbody>
                 <%for(var cat in obj) {%>
-                <% var style = '', isPound = true;
-                   if(cat[0] == '5' || cat[0] == '9' || cat[0] == '6' || cat[0] == 'a') { continue; /*skip average and num of transactions*/ }
-                   if(cat[0] == '0' || cat[0] == '1' || cat[0] == '2' || cat.slice(-1) == '1') {style = 'font-weight: bold;';}
+                <% var style = '', isPound = true, isMajor = true;
+                   if(cat[0] == 'c' || cat[0] == 'd' || cat[0] == 'e' || cat[0] == 'f') { continue; /*skip average and num of transactions*/ }
+                   if(cat[1] == 'a' || cat[1] == 'b' || cat[1] == 'c') {style = 'font-weight: bold;';} else { isMajor = false; }
                 %>
                 <tr style="<%=style%>">
-                    <td><%=cat.slice(-1) == '1' ? cat.substr(1, cat.length-2) : cat.substr(1, cat.length-1)%></td>
+                    <td><%=cat.substr(2, cat.length-2)%></td>
                     <%for (var month in obj[cat]) { %>
                     <%var css = "";
-                    if(cat[0] == '2' && obj[cat][month] < 0){ css='debit';}
-                    if(cat[0] == '2' && obj[cat][month] >= 0){ css='credit';}
+                    if(cat[1] == 'c' && obj[cat][month] < 0){ css='debit';}
+                    if(cat[1] == 'c' && obj[cat][month] >= 0){ css='credit';}
                     %>
                     <td class="<%=css%>"><%= obj[cat][month] == 0 ? '-' : (isPound ? EzBob.formatPoundsAsInt(obj[cat][month]) : parseInt(obj[cat][month]))  %></td>
                     <%}/*for*/%>
                 </tr>
-                <%if(cat[0]=='2'){%>
-                <tr>
-                    <td colspan="<%=count%>"><b>Income</b></td>
-                </tr>
-                <%}/*if*/%>
-                <%if(cat[0]=='6'){%>
-                    <tr>
-                        <td colspan="<%=count%>"><b>Expenses</b></td>
-                    </tr>
-                <%}/*if*/%>
+                <%if(cat[1] == 'c') {%><tr><td colspan="<%=count%>"></td></tr> <%}%>
                 <%}/*for*/%>
             </tbody>
         </table>
@@ -215,6 +206,7 @@
                     <th>Tr Amount £</th>
                     <th>Running Balance End Of Day £<i class="icon-white icon-info-sign" data-yodlee-calculated=""></i></th>
                     <th>Tr Group</th>
+                    <th>Tr SubGroup</th>
                     <th>Category</th>
                     <th>Category Type</th>
                     <th>Description</th>
@@ -234,7 +226,8 @@
                     <td><%-transaction.transactionDate!=undefined ? EzBob.formatDateWithoutTime(transaction.transactionDate) : "-"%></td>
                     <td style="text-align: right"><%-transaction.transactionAmount!=undefined ? EzBob.formatPoundsAsInt(transaction.transactionAmount) : "-"%></td>
                     <td style="text-align: right"><%-transaction.runningBalance!=undefined ? EzBob.formatPoundsAsInt(transaction.runningBalance) : "-"%></td>
-                    <td><%-transaction.ezbobCategory!=undefined ? transaction.ezbobCategory : "-"%></td>
+                    <td><%-transaction.ezbobGroup!=undefined ? transaction.ezbobGroup : "-"%></td>
+                    <td><%-transaction.ezbobSubGroup!=undefined ? transaction.ezbobSubGroup : "-"%></td>
                     <td><%-transaction.categoryName!=undefined ? transaction.categoryName : "-"%></td>
                     <td><%-transaction.categoryType!=undefined ? transaction.categoryType : "-"%></td>
                     <td><%-transaction.description!=undefined ? transaction.description : "-"%></td>

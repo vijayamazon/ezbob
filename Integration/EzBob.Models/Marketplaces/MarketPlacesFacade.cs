@@ -98,12 +98,12 @@
 			
 			var bankStat = hmrcData.BankStatement;
 
-			bankStat.Revenues /= (double)vatRevenues;
-			bankStat.Opex /= (double) vatOpex;
+			bankStat.Revenues = vatRevenues == 0M ? bankStat.Revenues : bankStat.Revenues / (double)vatRevenues;
+			bankStat.Opex = Math.Abs(vatOpex == 0M ? bankStat.Opex : bankStat.Opex / (double)vatOpex);
 			bankStat.TotalValueAdded = bankStat.Revenues - bankStat.Opex;
 			bankStat.PercentOfRevenues = Math.Abs(bankStat.Revenues - 0) < 0.01 ? 0 : bankStat.TotalValueAdded/bankStat.Revenues;
-			bankStat.Ebida = bankStat.TotalValueAdded - (bankStat.Salaries + bankStat.Tax);
-			bankStat.FreeCashFlow = bankStat.Ebida - bankStat.ActualLoansRepayment;
+			bankStat.Ebida = bankStat.TotalValueAdded + (bankStat.Salaries + bankStat.Tax);
+			bankStat.FreeCashFlow = bankStat.Ebida + bankStat.ActualLoansRepayment;
 
 			if (bankStat.PeriodMonthsNum == 0) return annualized;
 			const int year = 12;
@@ -111,12 +111,12 @@
 			annualized.Revenues = (bankStat.Revenues / bankStat.PeriodMonthsNum * year);
 			annualized.Opex = (bankStat.Opex / bankStat.PeriodMonthsNum * year);
 			annualized.TotalValueAdded = annualized.Revenues - annualized.Opex;
-			annualized.PercentOfRevenues = annualized.TotalValueAdded / annualized.Revenues;
+			annualized.PercentOfRevenues = Math.Abs(annualized.Revenues) < 0.01 ? 0 : annualized.TotalValueAdded / annualized.Revenues;
 			annualized.Salaries = (bankStat.Salaries / bankStat.PeriodMonthsNum * year);
 			annualized.Tax = (bankStat.Tax / bankStat.PeriodMonthsNum * year);
-			annualized.Ebida = annualized.TotalValueAdded - (annualized.Salaries + annualized.Tax);
+			annualized.Ebida = annualized.TotalValueAdded + (annualized.Salaries + annualized.Tax);
 			annualized.ActualLoansRepayment = (bankStat.ActualLoansRepayment / bankStat.PeriodMonthsNum * year);
-			annualized.FreeCashFlow = annualized.Ebida - annualized.ActualLoansRepayment;
+			annualized.FreeCashFlow = annualized.Ebida + annualized.ActualLoansRepayment;
 			return annualized;
 		}
 

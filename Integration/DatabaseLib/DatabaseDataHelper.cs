@@ -1891,8 +1891,6 @@ namespace EZBob.DatabaseLib
 								hasDetailsSpecified = bankTransaction.hasDetailsSpecified,
 								transactionId = bankTransaction.transactionId,
 								transactionCategoryId = bankTransaction.transactionCategory.CategoryId,
-								siteCategoryType = bankTransaction.siteCategoryType,
-								siteCategory = bankTransaction.siteCategory,
 								classUpdationSource = bankTransaction.classUpdationSource,
 								lastCategorised = bankTransaction.lastCategorised,
 								transactionDate = new YDate { date = bankTransaction.transactionDate },
@@ -1909,7 +1907,7 @@ namespace EZBob.DatabaseLib
 											currencyCode = bankTransaction.runningBalanceCurrency
 										},
 								userDescription = bankTransaction.userDescription,
-								customCategoryId = bankTransaction.customCategoryId,
+								
 								customCategoryIdSpecified = bankTransaction.customCategoryIdSpecified,
 								memo = bankTransaction.memo,
 								parentId = bankTransaction.parentId,
@@ -1927,7 +1925,10 @@ namespace EZBob.DatabaseLib
 											amount = bankTransaction.calcRunningBalance,
 											currencyCode = bankTransaction.calcRunningBalanceCurrency
 										},
-								category = bankTransaction.ezbobCategory == null ? "-" : bankTransaction.ezbobCategory.Group + " " + bankTransaction.ezbobCategory.SubGroup,
+								siteCategoryType = bankTransaction.ezbobCategory.SubGroup,
+								siteCategory = bankTransaction.ezbobCategory.Group,
+								customCategoryId = bankTransaction.ezbobCategory.Priority,
+								//category = bankTransaction.ezbobCategory == null ? "-" : (bankTransaction.ezbobCategory.Group + (string.IsNullOrEmpty(bankTransaction.ezbobCategory.SubGroup) ? "" : "_" + bankTransaction.ezbobCategory.SubGroup)),
 								link = bankTransaction.link,
 								postDate = new YDate { date = bankTransaction.postDate },
 								prevTransactionCategoryId = bankTransaction.prevTransactionCategoryId,

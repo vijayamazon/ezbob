@@ -8,7 +8,8 @@ namespace EzBob.Models.Marketplaces
 		{
 			transactionBaseType = "-";
 			transactionDate = new DateTime();
-			ezbobCategory = "-";
+			ezbobGroup = "-";
+			ezbobSubGroup = "-";
 			categoryName = "-";
 			categoryType = "-";
 			transactionAmount = null;
@@ -19,7 +20,8 @@ namespace EzBob.Models.Marketplaces
 
 		public string transactionBaseType { get; set; }
 		public DateTime transactionDate { get; set; }
-		public string ezbobCategory { get; set; }
+		public string ezbobGroup { get; set; }
+		public string ezbobSubGroup { get; set; }
 		public string categoryName { get; set; }
 		public string categoryType { get; set; }
 		public double? transactionAmount { get; set; }
@@ -27,6 +29,7 @@ namespace EzBob.Models.Marketplaces
 		public double? runningBalance { get; set; }
 		public string transactionStatus { get; set; }
 		public long? bankTransactionId { get; set; }
+		public long ezbobGroupPriority { get; set; }
 		
 	}
 }

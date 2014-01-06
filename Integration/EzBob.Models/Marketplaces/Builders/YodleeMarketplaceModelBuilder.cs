@@ -147,7 +147,9 @@ namespace EzBob.Models.Marketplaces.Builders
 															 transaction.postDate.date ?? transaction.transactionDate.date).Value : (double?)null,
 														 transactionStatus = transaction.transactionStatus,
 														 bankTransactionId = transaction.bankTransactionId,
-														 ezbobCategory = transaction.category
+														 ezbobGroup = transaction.siteCategory,
+														 ezbobSubGroup = transaction.siteCategoryType,
+														 ezbobGroupPriority = transaction.customCategoryId.HasValue ? transaction.customCategoryId.Value : 0
 													 };
 					transactions.Add(yodleeTransactionModel);
 				}

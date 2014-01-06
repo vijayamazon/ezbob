@@ -206,7 +206,7 @@ namespace EzBob.PayPalServiceLib
 						needToRetry = _CommonInternalErrors.Any(exFail.HasErrorWithCode);
 					}
 
-					WriteLog(string.Format("PayPalService TransactionSearch Error ({0}): {1} ", userId, ex.Message), ex);
+					WriteLoggerHelper.Write(string.Format("PayPalService TransactionSearch Error ({0}): need to retry: {2} \n {1} ", userId, ex.Message, needToRetry), WriteLogType.Error, null, ex);
 				}
 			}
 
