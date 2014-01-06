@@ -159,7 +159,15 @@
 				}
 				catch (PayPointException ex)
 				{
-					Log.Error(ex);
+					if (ex.PaypointData.Code == "N")
+					{
+						Log.Warn(ex);
+					}
+					else
+					{
+						Log.Error(ex);
+					}
+					
 					loan.Transactions.Add(new PaypointTransaction()
 						{
 							Amount = amount,
