@@ -1084,7 +1084,7 @@ hr.margin-0  {margin: 0;}
 
 }
 .table-advance thead {
-    background: #efefef;
+    background: #B6D1F2;
     border-left: 4px solid #efefef;
 }
 .table-advance i[class^="fa-"] {
@@ -1103,14 +1103,14 @@ hr.margin-0  {margin: 0;}
 .table-advance th,
 .table-advance td {
     border-top: 0;
-    color: #888;
+    /*color: #888;*/
 }
 
 .table thead > tr > th > a.sort-asc,
 .table thead > tr > th > a.sort-desc {
     display: block;
     position: relative;
-    color: #888;
+    /*color: #888;*/
     padding-right: 15px;
 }
 .table thead > tr > th > a.sort-asc:after {

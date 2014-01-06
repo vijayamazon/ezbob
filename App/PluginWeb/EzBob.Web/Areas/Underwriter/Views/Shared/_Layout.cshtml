@@ -22,7 +22,7 @@
 
 <body class="@Html.Action("PermissionClasses", "Helper", new { Area = "Underwriter" }) @Html.Action("RolesClasses", "Helper", new { Area = "Underwriter" }) skin-blue">
     @Html.AntiForgeryTokenNoUserCheck()
-    
+
     @{
         var sRoleImageUrl = Url.Content("~/Content/img/roles/crm.png");
         var sRoleImageTitle = "CRM";
@@ -49,145 +49,149 @@
         {
         }
     }
-    
+
     @{if (!string.IsNullOrEmpty(userName))
       {
         <div class="navbar navbar-blue" id="navbar">
-        <button type="button" class="navbar-toggle navbar-btn collapsed" data-toggle="collapse" data-target="#sidebar">
-            <span class="fa fa-bars"></span>
-        </button>
-        
-        <a class="navbar-brand" href="#">
-            @{
+            <button type="button" class="navbar-toggle navbar-btn collapsed" data-toggle="collapse" data-target="#sidebar">
+                <span class="fa fa-bars"></span>
+            </button>
+
+            <a class="navbar-brand" href="#">
+                @{
                 
-                <img data-title="@sRoleImageTitle" class="roleImg" src="@sRoleImageUrl"/>  @userName
-            }
-        </a>
-        <ul class="nav flaty-nav">
-            <li id="liApplications">
-                <a id="gotoCustomerId" href='@Url.Action("Index", "Customers")#'>Customers</a>
-            </li>
-            <li id="liClient">
-                <a href='#'>Find</a>
-            </li>
-            <li id="liReports" class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reports</a>
-                <ul class="dropdown-menu">
-                    <li id="liCustomerReports">
-                        @{
+                    <img data-title="@sRoleImageTitle" class="roleImg" src="@sRoleImageUrl"/>  @userName
+                }
+            </a>
+            <ul class="nav flaty-nav">
+                <li id="liApplications">
+                    <a id="gotoCustomerId" href='@Url.Action("Index", "Customers")#'>Customers</a>
+                </li>
+                <li id="liClient">
+                    <a href='#'>Find</a>
+                </li>
+                <li id="liReports" class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">Reports</a>
+                    <ul class="dropdown-menu">
+                        <li id="liCustomerReports">
+                            @{
           var configurationVariablesRepository = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
           var reportsIp = configurationVariablesRepository.GetByName("ReportsSite").Value;
-                            <a href="@reportsIp" target="_blank">Reports Site</a>
-                        }
-                    </li>
-                    <li id="liPerformenceReportPerUnderWriter">
-                        <a href='@Url.Action("PerformenceReportPerUnderWriter", "Reports", new { Area = "Underwriter" })'>Performence Report / Underwriter</a>
-                    </li>
-                    <li id="liPerformenceReportPerMedal">
-                        <a href='@Url.Action("PerformenceReportPerMedal", "Reports", new { Area = "Underwriter" })'>Performence Report / Medal</a>
-                    </li>
-                    <li id="liExposureReportPerUnderwriter">
-                        <a href='@Url.Action("ExposureReportPerUnderwriter", "Reports", new { Area = "Underwriter" })'>Exposure Report / Underwriter</a>
-                    </li>
-                    <li id="liExposureReportPerMedal">
-                        <a href='@Url.Action("ExposureReportPerMedal", "Reports", new { Area = "Underwriter" })'>Exposure Report / Medal</a>
-                    </li>
-                    <li id="liMedalStatisticReport">
-                        <a href='@Url.Action("MedalStatisticReport", "Reports", new { Area = "Underwriter" })'>Medal Statistic</a>
-                    </li>
-                    <li id="liDaily">
-                        <a href='@Url.Action("DailyReport", "Reports", new { Area = "Underwriter" })'>Daily Report</a>
-                    </li>
-                    <li id="liExtendedDaily">
-                        <a href='@Url.Action("ExpectationReport", "Reports", new { Area = "Underwriter" })'>Expectation Report</a>
-                    </li>
-                </ul>
-            </li>
-            <li id="liSupport">
-                <a href='Customers#support'>Support</a>
-            </li>
-            <li id="liFraud">
-                <a href='Customers#fraud'>Fraud</a>
-            </li>
-            <li id="liCAIS">
-                <a href="@Url.Action("Index", "CAIS")">CAIS</a>
-            </li>
-            <li id="liAutomation">
-                <a href="Customers#automation">Automation</a>
-            </li>
-            <li id="liStrategySettings">
-                <a href="Customers#settings">Settings</a>
-            </li>
-        </ul>
-        <ul class="nav pull-right">
-            <li>
-                <a href="#" class="ezbob-logo"></a>
-            </li>
-            <li>
-                <div id="theme-setting">
-                    <a href="#"><i class="fa fa-gears fa fa-2x"></i></a>
-                    <ul>
-                        <li>
-                            <span>Skin</span>
-                            <ul class="colors" data-target="body" data-prefix="skin-">
-                                <li class="active"><a class="blue" href="#"></a></li>
-                                <li><a class="red" href="#"></a></li>
-                                <li><a class="green" href="#"></a></li>
-                                <li><a class="orange" href="#"></a></li>
-                                <li><a class="yellow" href="#"></a></li>
-                                <li><a class="pink" href="#"></a></li>
-                                <li><a class="magenta" href="#"></a></li>
-                                <li><a class="gray" href="#"></a></li>
-                                <li><a class="black" href="#"></a></li>
-                            </ul>
+                                <a href="@reportsIp" target="_blank">Reports Site</a>
+                            }
                         </li>
-                        <li>
-                            <span>Navbar</span>
-                            <ul class="colors" data-target="#navbar" data-prefix="navbar-">
-                                <li class="active"><a class="blue" href="#"></a></li>
-                                <li><a class="red" href="#"></a></li>
-                                <li><a class="green" href="#"></a></li>
-                                <li><a class="orange" href="#"></a></li>
-                                <li><a class="yellow" href="#"></a></li>
-                                <li><a class="pink" href="#"></a></li>
-                                <li><a class="magenta" href="#"></a></li>
-                                <li><a class="gray" href="#"></a></li>
-                                <li><a class="black" href="#"></a></li>
-                            </ul>
+                        <li id="liPerformenceReportPerUnderWriter">
+                            <a href='@Url.Action("PerformenceReportPerUnderWriter", "Reports", new { Area = "Underwriter" })'>Performence Report / Underwriter</a>
                         </li>
-                        <li>
-                            <span>Sidebar</span>
-                            <ul class="colors" data-target="#main-container" data-prefix="sidebar-">
-                                <li class="active"><a class="blue" href="#"></a></li>
-                                <li><a class="red" href="#"></a></li>
-                                <li><a class="green" href="#"></a></li>
-                                <li><a class="orange" href="#"></a></li>
-                                <li><a class="yellow" href="#"></a></li>
-                                <li><a class="pink" href="#"></a></li>
-                                <li><a class="magenta" href="#"></a></li>
-                                <li><a class="gray" href="#"></a></li>
-                                <li><a class="black" href="#"></a></li>
-                            </ul>
+                        <li id="liPerformenceReportPerMedal">
+                            <a href='@Url.Action("PerformenceReportPerMedal", "Reports", new { Area = "Underwriter" })'>Performence Report / Medal</a>
                         </li>
-                        <li>
-                            <span></span>
-                            <a data-target="navbar" href="#"><i class="fa fa-square-o"></i> Fixed Navbar</a>
-                            <a class="hidden-inline-xs" data-target="sidebar" href="#"><i class="fa fa-square-o"></i> Fixed Sidebar</a>
+                        <li id="liExposureReportPerUnderwriter">
+                            <a href='@Url.Action("ExposureReportPerUnderwriter", "Reports", new { Area = "Underwriter" })'>Exposure Report / Underwriter</a>
+                        </li>
+                        <li id="liExposureReportPerMedal">
+                            <a href='@Url.Action("ExposureReportPerMedal", "Reports", new { Area = "Underwriter" })'>Exposure Report / Medal</a>
+                        </li>
+                        <li id="liMedalStatisticReport">
+                            <a href='@Url.Action("MedalStatisticReport", "Reports", new { Area = "Underwriter" })'>Medal Statistic</a>
+                        </li>
+                        <li id="liDaily">
+                            <a href='@Url.Action("DailyReport", "Reports", new { Area = "Underwriter" })'>Daily Report</a>
+                        </li>
+                        <li id="liExtendedDaily">
+                            <a href='@Url.Action("ExpectationReport", "Reports", new { Area = "Underwriter" })'>Expectation Report</a>
                         </li>
                     </ul>
-                </div>
-            </li>
-            <li>
-                @Html.ActionLink("Log out", "LogOff", "Account", new { Area = "", isUnderwriterPage = true }, new { })
-            </li>
-        </ul>
-    </div>
+                </li>
+                <li id="liSupport">
+                    <a href='Customers#support'>Support</a>
+                </li>
+                <li id="liFraud">
+                    <a href='Customers#fraud'>Fraud</a>
+                </li>
+                <li id="liCAIS">
+                    <a href="@Url.Action("Index", "CAIS")">CAIS</a>
+                </li>
+                <li id="liAutomation">
+                    <a href="Customers#automation">Automation</a>
+                </li>
+                <li id="liStrategySettings">
+                    <a href="Customers#settings">Settings</a>
+                </li>
+            </ul>
+            <ul class="nav pull-right">
+                <li>
+                    <a href="#" class="ezbob-logo"></a>
+                </li>
+                <li>
+                    <div id="theme-setting">
+                        <a href="#"><i class="fa fa-gears fa fa-2x"></i></a>
+                        <ul>
+                            <li>
+                                <span>Skin</span>
+                                <ul class="colors" data-target="body" data-prefix="skin-">
+                                    <li class="active"><a class="blue" href="#"></a></li>
+                                    <li><a class="red" href="#"></a></li>
+                                    <li><a class="green" href="#"></a></li>
+                                    <li><a class="orange" href="#"></a></li>
+                                    <li><a class="yellow" href="#"></a></li>
+                                    <li><a class="pink" href="#"></a></li>
+                                    <li><a class="magenta" href="#"></a></li>
+                                    <li><a class="gray" href="#"></a></li>
+                                    <li><a class="black" href="#"></a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <span>Navbar</span>
+                                <ul class="colors" data-target="#navbar" data-prefix="navbar-">
+                                    <li class="active"><a class="blue" href="#"></a></li>
+                                    <li><a class="red" href="#"></a></li>
+                                    <li><a class="green" href="#"></a></li>
+                                    <li><a class="orange" href="#"></a></li>
+                                    <li><a class="yellow" href="#"></a></li>
+                                    <li><a class="pink" href="#"></a></li>
+                                    <li><a class="magenta" href="#"></a></li>
+                                    <li><a class="gray" href="#"></a></li>
+                                    <li><a class="black" href="#"></a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <span>Sidebar</span>
+                                <ul class="colors" data-target="#main-container" data-prefix="sidebar-">
+                                    <li class="active"><a class="blue" href="#"></a></li>
+                                    <li><a class="red" href="#"></a></li>
+                                    <li><a class="green" href="#"></a></li>
+                                    <li><a class="orange" href="#"></a></li>
+                                    <li><a class="yellow" href="#"></a></li>
+                                    <li><a class="pink" href="#"></a></li>
+                                    <li><a class="magenta" href="#"></a></li>
+                                    <li><a class="gray" href="#"></a></li>
+                                    <li><a class="black" href="#"></a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a data-target="navbar" href="#"><i class="fa fa-square-o"></i>Fixed Navbar</a>
+                            </li>
+                            <li>
+                                <a data-target="sidebar" href="#"><i class="fa fa-square-o"></i>Fixed Sidebar</a>
+                            </li>
+                            <li>
+                                <a data-target="table" href="#"><i class="fa fa-square-o"></i>Striped Table</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li>
+                    @Html.ActionLink("Log out", "LogOff", "Account", new { Area = "", isUnderwriterPage = true }, new { })
+                </li>
+            </ul>
+        </div>
       }
     }
     <div class="container" id="main-container">
         @RenderBody()
     </div>
-    
+
     <a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i class="fa fa-chevron-up"></i></a>
     <script type="text/javascript">
         window.gRootPath = '@Url.Content("~/")';

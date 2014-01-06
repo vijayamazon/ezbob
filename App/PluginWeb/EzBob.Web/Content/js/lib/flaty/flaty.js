@@ -1,4 +1,4 @@
-$(function() {
+$(function () {
 
     //Handel user layout settings using cookie
     function handleUserLayoutSetting() {
@@ -18,6 +18,11 @@ $(function() {
         //Fixed navbar
         if ($.cookie('navbar-fixed') == 'true') {
             $('#navbar').addClass('navbar-fixed');
+        }
+
+        //Striped Table
+        if ($.cookie('table-fixed') == 'true') {
+            $('table.table:not(.table-advance)').addClass('table-advance');
         }
 
         var color_skin = $.cookie('skin-color');
@@ -41,14 +46,13 @@ $(function() {
     }
     //If you want to handle skin color by server-side code, don't forget to comment next line  
     handleUserLayoutSetting();
-
     //Disable certain links
     $('a[href^=#]').click(function (e) {
         e.preventDefault()
     });
 
     //slimScroll to fixed height tags
-    $('.nice-scroll, .slimScroll').slimScroll({touchScrollStep: 30});
+    $('.nice-scroll, .slimScroll').slimScroll({ touchScrollStep: 30 });
 
     //Add animation to notification and messages icon, if they have any new item
     var badge = $('.flaty-nav .dropdown-toggle > .fa-bell + .badge')
@@ -61,7 +65,7 @@ $(function() {
     }
 
     //---------------- Tooltip & Popover --------------------//
-    $('.show-tooltip').tooltip({container: 'body', delay: {show:500}});
+    $('.show-tooltip').tooltip({ container: 'body', delay: { show: 500 } });
     $('.show-popover').popover();
 
     //---------------- Syntax Highlighter --------------------//
@@ -69,7 +73,7 @@ $(function() {
 
     //---------------- Sidebar -------------------------------//
     //Scrollable fixed sidebar
-    var scrollableSidebar = function() {
+    var scrollableSidebar = function () {
         if ($('#sidebar.sidebar-fixed').size() == 0) {
             $('#sidebar .nav').css('height', 'auto');
             return;
@@ -79,11 +83,11 @@ $(function() {
             return;
         }
         var winHeight = $(window).height() - 90;
-        $('#sidebar.sidebar-fixed .nav').slimScroll({height: winHeight + 'px', position: 'left'});
+        $('#sidebar.sidebar-fixed .nav').slimScroll({ height: winHeight + 'px', position: 'left' });
     }
     scrollableSidebar();
     //Submenu dropdown
-    $('#sidebar a.dropdown-toggle').click(function() {
+    $('#sidebar a.dropdown-toggle').click(function () {
         var submenu = $(this).next('.submenu');
         var arrow = $(this).children('.arrow');
         if (arrow.hasClass('fa-angle-right')) {
@@ -92,8 +96,8 @@ $(function() {
         else {
             arrow.addClass('anim-turn-90');
         }
-        submenu.slideToggle(400, function(){
-            if($(this).is(":hidden")) {
+        submenu.slideToggle(400, function () {
+            if ($(this).is(":hidden")) {
                 arrow.attr('class', 'arrow fa fa-angle-right');
             } else {
                 arrow.attr('class', 'arrow fa fa-angle-down');
@@ -104,7 +108,7 @@ $(function() {
 
     //Collapse button
     $('#sidebar.sidebar-collapsed #sidebar-collapse > i').attr('class', 'fa fa-angle-double-right');
-    $('#sidebar-collapse').click(function(){
+    $('#sidebar-collapse').click(function () {
         $('#sidebar').toggleClass('sidebar-collapsed');
         if ($('#sidebar').hasClass('sidebar-collapsed')) {
             $('#sidebar-collapse > i').attr('class', 'fa fa-angle-double-right');
@@ -124,14 +128,14 @@ $(function() {
     });
 
     //Search Form
-    $('#sidebar .search-form').click(function(){
+    $('#sidebar .search-form').click(function () {
         $('#sidebar .search-form input[type="text"]').focus();
     });
     $('#sidebar .nav > li.active > a > .arrow').removeClass('fa-angle-right').addClass('fa-angle-down');
 
     //---------------- Horizontal Menu -------------------------------//
     if ($('#nav-horizontal')) {
-        var horizontalNavHandler = function() {
+        var horizontalNavHandler = function () {
             var w = $(window).width();
             if (w > 979) {
                 $('#nav-horizontal').removeClass('nav-xs');
@@ -142,14 +146,14 @@ $(function() {
                 $('#nav-horizontal .arrow').removeClass('fa-caret-down').addClass('fa-angle-right');
             }
         }
-        $(window).resize(function(){
+        $(window).resize(function () {
             horizontalNavHandler();
         });
         horizontalNavHandler();
     }
 
     //Horizontal menu dropdown
-    $('#nav-horizontal a.dropdown-toggle').click(function() {
+    $('#nav-horizontal a.dropdown-toggle').click(function () {
         var submenu = $(this).next('.dropdown-menu');
         var arrow = $(this).children('.arrow');
         if ($('#nav-horizontal.nav-xs').size() > 0) {
@@ -163,9 +167,9 @@ $(function() {
         if ($('#nav-horizontal.nav-xs').size() == 0) {
             $('#nav-horizontal > li > .dropdown-menu').not(submenu).slideUp(400);
         }
-        submenu.slideToggle(400, function(){
+        submenu.slideToggle(400, function () {
             if ($('#nav-horizontal.nav-xs').size() > 0) {
-                if($(this).is(":hidden")) {
+                if ($(this).is(":hidden")) {
                     arrow.attr('class', 'arrow fa fa-angle-right');
                 } else {
                     arrow.attr('class', 'arrow fa fa-angle-down');
@@ -177,9 +181,9 @@ $(function() {
 
     //------------------ Theme Setting --------------------//
     //Toggle showing theme setting box
-    $('#theme-setting > a').click(function(){
-        $(this).next().animate({width:'toggle'}, 500, function(){
-            if($(this).is(":hidden")) {
+    $('#theme-setting > a').click(function () {
+        $(this).next().animate({ width: 'toggle' }, 500, function () {
+            if ($(this).is(":hidden")) {
                 $('#theme-setting > a > i').attr('class', 'fa fa-gears fa-2x');
             } else {
                 $('#theme-setting > a > i').attr('class', 'fa fa-times fa-2x');
@@ -188,7 +192,7 @@ $(function() {
         $(this).next().css('display', 'inline-block');
     });
     //Change skin and colors
-    $('#theme-setting ul.colors a').click(function(){
+    $('#theme-setting ul.colors a').click(function () {
         var parent_li = $(this).parent().get(0);
         var parent_ul = $(parent_li).parent().get(0);
         var target = $(parent_ul).data('target');
@@ -215,22 +219,22 @@ $(function() {
     });
     //Handel selected color
     var theme_colors = ["blue", "red", "green", "orange", "yellow", "pink", "magenta", "gray", "black"];
-    $.each(theme_colors, function(k, v) {
+    $.each(theme_colors, function (k, v) {
         if ($('body').hasClass('skin-' + v)) {
             $('#theme-setting ul.colors > li').removeClass('active');
-            $('#theme-setting ul.colors > li:has(a.'+ v +')').addClass('active');
+            $('#theme-setting ul.colors > li:has(a.' + v + ')').addClass('active');
         }
     });
 
-    $.each(theme_colors, function(k, v) {
+    $.each(theme_colors, function (k, v) {
         if ($('#navbar').hasClass('navbar-' + v)) {
             $('#theme-setting ul[data-prefix="navbar-"] > li').removeClass('active');
-            $('#theme-setting ul[data-prefix="navbar-"] > li:has(a.'+ v +')').addClass('active');
+            $('#theme-setting ul[data-prefix="navbar-"] > li:has(a.' + v + ')').addClass('active');
         }
 
         if ($('#main-container').hasClass('sidebar-' + v)) {
             $('#theme-setting ul[data-prefix="sidebar-"] > li').removeClass('active');
-            $('#theme-setting ul[data-prefix="sidebar-"] > li:has(a.'+ v +')').addClass('active');
+            $('#theme-setting ul[data-prefix="sidebar-"] > li:has(a.' + v + ')').addClass('active');
         }
     });
     //Handle fixed navbar & sidebar
@@ -240,7 +244,7 @@ $(function() {
     if ($('#navbar').hasClass('navbar-fixed')) {
         $('#theme-setting > ul > li > a[data-target="navbar"] > i').attr('class', 'fa fa-check-square-o green')
     }
-    $('#theme-setting > ul > li > a').click(function(){
+    $('#theme-setting > ul > li > a').click(function () {
         var target = $(this).data('target');
         var check = $(this).children('i');
         if (check.hasClass('fa-square-o')) {
@@ -258,10 +262,18 @@ $(function() {
             }
             scrollableSidebar();
         }
+        if (target == "table") {
+            if (check.hasClass('fa-square-o')) {
+                $("table.table").removeClass("table-advance");
+
+            } else {
+                $("table.table").addClass("table-advance");
+            }
+        }
     });
 
     //-------------------------- Boxes -----------------------------//
-    $('.box .box-tool > a').click(function(e) {
+    $('.box .box-tool > a').click(function (e) {
         if ($(this).data('action') == undefined) {
             return;
         }
@@ -270,8 +282,8 @@ $(function() {
         switch (action) {
             case 'collapse':
                 $(btn).children('i').addClass('anim-turn180');
-                $(this).parents('.box').children('.box-content').slideToggle(500, function(){
-                    if($(this).is(":hidden")) {
+                $(this).parents('.box').children('.box-content').slideToggle(500, function () {
+                    if ($(this).is(":hidden")) {
                         $(btn).children('i').attr('class', 'fa fa-chevron-down');
                     } else {
                         $(btn).children('i').attr('class', 'fa fa-chevron-up');
@@ -279,7 +291,7 @@ $(function() {
                 });
                 break;
             case 'close':
-                $(this).parents('.box').fadeOut(500, function(){
+                $(this).parents('.box').fadeOut(500, function () {
                     $(this).parent().remove();
                 })
                 break;
@@ -292,11 +304,11 @@ $(function() {
 
     //-------------------------- Mail Page -----------------------------//
     //Collapse and Uncollapse
-    $('.mail-messages .msg-collapse > a').click(function(e){
+    $('.mail-messages .msg-collapse > a').click(function (e) {
         $(this).children('i').addClass('anim-turn180');
-        $(this).parents('li').find('.mail-msg-container').slideToggle(500, function(){
+        $(this).parents('li').find('.mail-msg-container').slideToggle(500, function () {
             var i = $(this).parents('li').find('.msg-collapse > a').children('i');
-            if($(this).is(':hidden')) {
+            if ($(this).is(':hidden')) {
                 $(i).attr('class', 'fa fa-chevron-down');
             } else {
                 $(i).attr('class', 'fa fa-chevron-up');
@@ -305,12 +317,12 @@ $(function() {
     });
 
     //Star and Unstar
-    $('.mail-content i.fa-star').click(function(){
+    $('.mail-content i.fa-star').click(function () {
         $(this).toggleClass('starred');
     });
 
     //Check All and Uncheck All message in mail list
-    $('.mail-toolbar > li:first-child > input[type="checkbox"]').change(function() {
+    $('.mail-toolbar > li:first-child > input[type="checkbox"]').change(function () {
         var check = false;
         if ($(this).is(':checked')) {
             check = true;
@@ -326,7 +338,7 @@ $(function() {
     });
 
     //Add .checked class to selected rows
-    $('.mail-list .ml-left > input[type="checkbox"]').change(function(){
+    $('.mail-list .ml-left > input[type="checkbox"]').change(function () {
         if ($(this).is(':checked')) {
             $(this).parents('li').addClass('checked');
         }
@@ -336,14 +348,14 @@ $(function() {
     })
 
     //--------------------- Go Top Button ---------------------//
-    $(window).scroll(function(){
+    $(window).scroll(function () {
         if ($(this).scrollTop() > 100) {
             $('#btn-scrollup').fadeIn();
         } else {
             $('#btn-scrollup').fadeOut();
         }
     });
-    $('#btn-scrollup').click(function(){
+    $('#btn-scrollup').click(function () {
         $("html, body").animate({ scrollTop: 0 }, 600);
         return false;
     });
@@ -353,17 +365,17 @@ $(function() {
         var tileMoveDuration = 1500;
         var tileDefaultStop = 5000;
 
-        var tileGoUp = function(el, stop1, stop2, height) {
-            $(el).children('.tile').animate({top: '-='+ height +'px'}, tileMoveDuration);
-            setTimeout(function(){ tileGoDown(el, stop1, stop2, height); }, stop2 + tileMoveDuration);
+        var tileGoUp = function (el, stop1, stop2, height) {
+            $(el).children('.tile').animate({ top: '-=' + height + 'px' }, tileMoveDuration);
+            setTimeout(function () { tileGoDown(el, stop1, stop2, height); }, stop2 + tileMoveDuration);
         }
 
-        var tileGoDown = function(el, stop1, stop2, height) {
-            $(el).children('.tile').animate({top: '+='+ height +'px'}, tileMoveDuration);
-            setTimeout(function(){ tileGoUp(el, stop1, stop2, height); }, stop1 + tileMoveDuration);
+        var tileGoDown = function (el, stop1, stop2, height) {
+            $(el).children('.tile').animate({ top: '+=' + height + 'px' }, tileMoveDuration);
+            setTimeout(function () { tileGoUp(el, stop1, stop2, height); }, stop1 + tileMoveDuration);
         }
 
-        $('.tile-active').each(function(index, el){
+        $('.tile-active').each(function (index, el) {
             var tile1, tile2, stop1, stop2, height;
 
             tile1 = $(this).children('.tile').first();
@@ -379,13 +391,13 @@ $(function() {
                 stop2 = tileDefaultStop;
             }
 
-            setTimeout(function(){ tileGoUp(el, stop1, stop2, height); }, stop1);
+            setTimeout(function () { tileGoUp(el, stop1, stop2, height); }, stop1);
         });
     }
 
     //------------------------- Table --------------------------//
     //Check all and uncheck all table rows
-    $('.table > thead > tr > th:first-child > input[type="checkbox"]').change(function() {
+    $('.table > thead > tr > th:first-child > input[type="checkbox"]').change(function () {
         var check = false;
         if ($(this).is(':checked')) {
             check = true;
@@ -393,7 +405,7 @@ $(function() {
         $(this).parents('thead').next().find('tr > td:first-child > input[type="checkbox"]').prop('checked', check);
     })
 
-    $('.table > tbody > tr > td:first-child > input[type="checkbox"]').change(function() {
+    $('.table > tbody > tr > td:first-child > input[type="checkbox"]').change(function () {
         var check = false;
         if ($(this).is(':checked')) {
             check = true;
@@ -404,7 +416,7 @@ $(function() {
     })
 
     //------------------------ Data Table -----------------------//
-    
+
     if (jQuery().dataTable) {
         $('#table1').dataTable({
             "aLengthMenu": [
@@ -440,7 +452,7 @@ $(function() {
             width: "100%"
         });
     }
-    
+
     //--------------- Password Strength Indicator ----------------//
     if (jQuery().pwstrength) {
         $('input[data-action="pwindicator"]').pwstrength();
@@ -468,7 +480,7 @@ $(function() {
             showMeridian: false
         });
     }
-    
+
     //------------------------ Date Picker ------------------------//
     if (jQuery().datepicker) {
         $('.date-picker').datepicker();
@@ -487,14 +499,14 @@ $(function() {
 
     //------------------------------ Form validation --------------------------//
     if (jQuery().validate) {
-        var removeSuccessClass = function(e) {
+        var removeSuccessClass = function (e) {
             $(e).closest('.form-group').removeClass('has-success');
         }
         var $validator = $('#validation-form').validate({
             errorElement: 'span', //default input error message container
             errorClass: 'help-block', // default input error message class
-            errorPlacement: function(error, element) {
-                if(element.parent('.input-group').length) {
+            errorPlacement: function (error, element) {
+                if (element.parent('.input-group').length) {
                     error.insertAfter(element.parent());
                 } else {
                     error.insertAfter(element);
@@ -504,7 +516,7 @@ $(function() {
             ignore: "",
 
             invalidHandler: function (event, validator) { //display error alert on form submit              
-                
+
             },
 
             highlight: function (element) { // hightlight error inputs
@@ -513,7 +525,7 @@ $(function() {
 
             unhighlight: function (element) { // revert the change dony by hightlight
                 $(element).closest('.form-group').removeClass('has-error'); // set error class to the control group
-                setTimeout(function(){removeSuccessClass(element);}, 3000);
+                setTimeout(function () { removeSuccessClass(element); }, 3000);
             },
 
             success: function (label) {
@@ -524,7 +536,7 @@ $(function() {
 
     //---------------------------- prettyPhoto -------------------------------//
     if (jQuery().prettyPhoto) {
-        $(".gallery a[rel^='prettyPhoto']").prettyPhoto({social_tools:'', hideflash: true});
+        $(".gallery a[rel^='prettyPhoto']").prettyPhoto({ social_tools: '', hideflash: true });
     }
 
 });
