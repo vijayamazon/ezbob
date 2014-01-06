@@ -92,6 +92,7 @@
 					<button class="btn btn-mini btn-primary" name="editEmail"><i class="fa fa-pencil"></i></button>
 				</td>
 			</tr>
+
 			@RawCell("Segment Type", "<%- SegmentType %>")
 
 			<tr>
@@ -103,7 +104,16 @@
 			@RawCell("Daytime Phone #", "<%- DaytimePhone %>")
 
 			@RawCell("Cart", "<%- Medal %>")
-			@RawCell("Ref Source", "<%- ReferenceSource || '-' %>")
+			
+            <tr>
+				<td>Ref Source</td>
+				<td>
+                    <%- ReferenceSource ? (ReferenceSource.length <= 20 ? ReferenceSource : ReferenceSource.substring(0,17)+'...') : '-' %>
+					<i data-title="<%- ReferenceSource %>" class="tltp icon-question-sign"></i>
+				</td>
+			</tr>
+
+
 			@RawCell("A/B Testing", "<%- ABTesting || '-' %>")
 			@RawCell("User score", "<%- CreditScore %>")
 			@RawCell("Reg date", "<%- EzBob.formatDate(RegistrationDate) %>")
