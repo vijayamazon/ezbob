@@ -1693,7 +1693,8 @@ a.btn {
 .btn.btn-primary:active,
 .btn.btn-primary.active,
 .btn-group.open .btn.btn-primary.dropdown-toggle,
-.btn.btn-primary:hover {
+.btn.btn-primary:hover,
+.btn.btn-primary.hover{
     background-color: #017cdb;
     color: white !important;
 }
