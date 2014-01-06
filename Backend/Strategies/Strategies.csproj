@@ -55,7 +55,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="Twilio.Api">
-      <HintPath>..\..\App\EzService\EzService\bin\Debug\Twilio.Api.dll</HintPath>
+      <HintPath>..\..\Lib\3rdparty\Twilio.3.5.14\Twilio.Api.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
