@@ -726,8 +726,15 @@ EzBob.formatPoundsWithBrackets = function (val) {
 
 //formats date for user from utc asp.net date
 EzBob.formatDate = function (date) {
-    if (!date) return "";
-    return moment.utc(date).local().format("MMM DD, YYYY");
+	if (!date)
+		return '';
+
+	var oMoment = moment.utc(date).local();
+
+	if (oMoment.year() === 1 && oMoment.months() === 0 && oMoment.date() === 1)
+		return '';
+
+    return oMoment.format("MMM DD, YYYY");
 };
 
 //formats date for user from utc asp.net date

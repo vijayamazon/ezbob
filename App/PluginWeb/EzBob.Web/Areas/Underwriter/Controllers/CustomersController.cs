@@ -8,6 +8,8 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 	using Code.ApplicationCreator;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
+	using Ezbob.Database;
+	using Ezbob.Logger;
 	using NHibernate;
 	using NHibernate.Linq;
 	using Scorto.Web;
@@ -15,6 +17,8 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 	using Models;
 	using Code;
 	using Infrastructure.csrf;
+	using log4net;
+	using ActionResult = Ezbob.Database.ActionResult;
 
 	public class CustomersController : Controller {
 		#region public
@@ -31,8 +35,11 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 			IWorkplaceContext context,
 			LoanLimit limit,
 			MarketPlaceRepository mpType,
-			UnderwriterRecentCustomersRepository underwriterRecentCustomersRepository)
-		{
+			UnderwriterRecentCustomersRepository underwriterRecentCustomersRepository
+		) {
+			m_oLog = new SafeILog(LogManager.GetLogger(typeof(CustomersController)));
+			m_oDB = DbConnectionGenerator.Get();
+
 			_context = context;
 			_session = session;
 			_customers = customers;
@@ -43,19 +50,6 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 			_config = config;
 
 			_customerStatusesRepository = customerStatusesRepository;
-
-			if (statusIndex2Name == null) {
-				statusIndex2Name = new Dictionary<int, string>();
-
-				foreach (CustomerStatuses status in _customerStatusesRepository.GetAll().ToList()) {
-					statusIndex2Name.Add(status.Id, status.Name);
-
-					if (status.Name == "Default")
-						defaultIndex = status.Id;
-					else if (status.Name == "Legal")
-						legalIndex = status.Id;
-				} // foreach
-			} // if
 
 			this.underwriterRecentCustomersRepository = underwriterRecentCustomersRepository;
 		} // constructor
@@ -85,9 +79,8 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
 		[HttpGet]
-		[Transactional]
-		public JsonNetResult GridWaiting(bool includeTestCustomers) {
-			return GridWaitingEscalated(includeTestCustomers, CreditResultStatus.WaitingForDecision);
+		public JsonResult GridWaiting(bool includeTestCustomers) {
+			return LoadGrid("UwGridWaiting", includeTestCustomers, () => new GridWaitingRow());
 		} // GridWaiting
 
 		#endregion method GridWaiting
@@ -97,9 +90,8 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
 		[HttpGet]
-		[Transactional]
-		public JsonNetResult GridEscalated(bool includeTestCustomers) {
-			return GridWaitingEscalated(includeTestCustomers, CreditResultStatus.Escalated);
+		public JsonResult GridEscalated(bool includeTestCustomers) {
+			return LoadGrid("UwGridEscalated", includeTestCustomers, () => new GridEscalatedRow());
 		} // GridEscalated
 
 		#endregion method GridEscalated
@@ -109,52 +101,19 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
 		[HttpGet]
-		[Transactional]
-		public JsonNetResult GridPending(bool includeTestCustomers) {
-			return GridWaitingEscalated(includeTestCustomers, CreditResultStatus.ApprovedPending);
+		public JsonResult GridPending(bool includeTestCustomers) {
+			return LoadGrid("UwGridPending", includeTestCustomers, () => new GridPendingRow());
 		} // GridPending
 
 		#endregion method GridPending
-
-		#region method GridWaitingEscalated
-
-		private JsonNetResult GridWaitingEscalated(bool bIncludeTestCustomers, CreditResultStatus nStatus) {
-			var aryOutput = new List<object>();
-
-			IEnumerable<Customer> oRelevant = RelevantCustomers(bIncludeTestCustomers, c => (c.CreditResult == nStatus));
-
-			foreach (var oCustomer in oRelevant) {
-				var oRow = new Dictionary<string, object>();
-
-				SetCommonGridFields(oRow, oCustomer);
-
-				oRow["CurrentStatus"] = oCustomer.LastStatus;
-				oRow["OSBalance"] = oCustomer.OutstandingBalance;
-
-				if (nStatus == CreditResultStatus.Escalated) {
-					oRow["EscalationDate"] = oCustomer.DateEscalated;
-					oRow["Underwriter"] = oCustomer.UnderwriterName;
-					oRow["Reason"] = oCustomer.EscalationReason;
-				}
-				else if (nStatus == CreditResultStatus.ApprovedPending)
-					oRow["Pending"] = oCustomer.PendingStatus.ToString();
-
-				aryOutput.Add(oRow);
-			} // foreach
-
-			return this.JsonNet(new { aaData = aryOutput });
-		} // GridWaitingEscalated
-
-		#endregion method GridWaitingEscalated
 
 		#region method GridApproved
 
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
 		[HttpGet]
-		[Transactional]
-		public JsonNetResult GridApproved(bool includeTestCustomers) {
-			return GridApprovedLate(includeTestCustomers, CreditResultStatus.Approved);
+		public JsonResult GridApproved(bool includeTestCustomers) {
+			return LoadGrid("UwGridApproved", includeTestCustomers, () => new GridApprovedRow());
 		} // GridApproved
 
 		#endregion method GridApproved
@@ -164,79 +123,19 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
 		[HttpGet]
-		[Transactional]
-		public JsonNetResult GridLate(bool includeTestCustomers) {
-			return GridApprovedLate(includeTestCustomers, CreditResultStatus.Late);
+		public JsonResult GridLate(bool includeTestCustomers) {
+			return LoadGrid("UwGridLate", includeTestCustomers, () => new GridLateRow());
 		} // GridLate
 
 		#endregion method GridLate
-
-		#region method GridApprovedLate
-
-		private JsonNetResult GridApprovedLate(bool bIncludeTestCustomers, CreditResultStatus nStatus) {
-			var aryOutput = new List<object>();
-
-			IEnumerable<Customer> oRelevant = RelevantCustomers(bIncludeTestCustomers, c => (c.CreditResult == nStatus));
-
-			foreach (var oCustomer in oRelevant) {
-				var oRow = new Dictionary<string, object>();
-
-				SetCommonGridFields(oRow, oCustomer);
-
-				oRow["ApproveDate"] = oCustomer.DateApproved;
-				oRow["ApprovedSum"] = oCustomer.ManagerApprovedSum;
-				oRow["AmountTaken"] = oCustomer.AmountTaken;
-				oRow["ApprovesNum"] = oCustomer.NumApproves;
-				oRow["RejectsNum"] = oCustomer.NumRejects;
-
-				if (nStatus == CreditResultStatus.Approved)
-					oRow["OfferExpireDate"] = oCustomer.OfferValidUntil;
-				else if (nStatus == CreditResultStatus.Late) {
-					oRow["OSBalance"] = oCustomer.OutstandingBalance;
-					oRow["LatePaymentDate"] = oCustomer.DateOfLate;
-					oRow["LatePaymentAmount"] = oCustomer.LateAmount;
-					oRow["Delinquency"] = oCustomer.Delinquency;
-					oRow["CRMstatus"] = oCustomer.LatestCRMstatus ?? string.Empty;
-					oRow["CRMcomment"] = oCustomer.LatestCRMComment ?? string.Empty;
-				} // if
-
-				aryOutput.Add(oRow);
-			} // foreach
-
-			return this.JsonNet(new { aaData = aryOutput });
-		} // GridApprovedLate
-
-		#endregion method GridApprovedLate
 
 		#region method GridLoans
 
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
 		[HttpGet]
-		[Transactional]
-		public JsonNetResult GridLoans(bool includeTestCustomers) {
-			var aryOutput = new List<object>();
-
-			IEnumerable<Customer> oRelevant = RelevantCustomers(includeTestCustomers, c => (c.Loans.Count > 0));
-
-			foreach (var oCustomer in oRelevant) {
-				var oRow = new Dictionary<string, object>();
-
-				SetCommonGridFields(oRow, oCustomer, bCalcAmount: false);
-
-				oRow["FirstLoanDate"] = oCustomer.FirstLoanDate;
-				oRow["LastLoanDate"] = oCustomer.LastLoanDate;
-				oRow["LastLoanAmount"] = oCustomer.LastLoanAmount;
-				oRow["AmountTaken"] = oCustomer.AmountTaken;
-				oRow["TotalPrincipalRepaid"] = oCustomer.TotalPrincipalRepaid;
-				oRow["OSBalance"] = oCustomer.OutstandingBalance;
-				oRow["NextRepaymentDate"] = oCustomer.NextRepaymentDate;
-				oRow["CustomerStatus"] = oCustomer.CustomerStatus;
-
-				aryOutput.Add(oRow);
-			} // foreach
-
-			return this.JsonNet(new { aaData = aryOutput });
+		public JsonResult GridLoans(bool includeTestCustomers) {
+			return LoadGrid("UwGridLoans", includeTestCustomers, () => new GridLoansRow());
 		} // GridLoans
 
 		#endregion method GridLoans
@@ -246,30 +145,8 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
 		[HttpGet]
-		[Transactional]
-		public JsonNetResult GridSales(bool includeTestCustomers) {
-			var aryOutput = new List<object>();
-
-			IEnumerable<Customer> oRelevant = RelevantCustomers(
-				includeTestCustomers,
-				c => ((c.ManagerApprovedSum > c.AmountTaken) && (c.LatestCRMstatus != "NoSale" || c.LatestCRMstatus == null))
-			);
-
-			foreach (var oCustomer in oRelevant) {
-				var oRow = new Dictionary<string, object>();
-
-				SetCommonGridFields(oRow, oCustomer, bCart: false, bCalcAmount: false);
-
-				SetSalesCollectionFields(oRow, oCustomer);
-
-				oRow["ApprovedSum"] = oCustomer.ManagerApprovedSum;
-				oRow["OfferDate"] = oCustomer.OfferDate;
-				oRow["Interactions"] = oCustomer.AmountOfInteractions;
-
-				aryOutput.Add(oRow);
-			} // foreach
-
-			return this.JsonNet(new { aaData = aryOutput });
+		public JsonResult GridSales(bool includeTestCustomers) {
+			return LoadGrid("UwGridSales", includeTestCustomers, () => new GridSalesRow());
 		} // GridSales
 
 		#endregion method GridSales
@@ -279,28 +156,8 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
 		[HttpGet]
-		[Transactional]
-		public JsonNetResult GridCollection(bool includeTestCustomers) {
-			var aryOutput = new List<object>();
-
-			IEnumerable<Customer> oRelevant = RelevantCustomers(
-				includeTestCustomers,
-				c => ((c.CollectionStatus.CurrentStatus.Id == legalIndex) || (c.CollectionStatus.CurrentStatus.Id == defaultIndex))
-			);
-
-			foreach (var oCustomer in oRelevant) {
-				var oRow = new Dictionary<string, object>();
-
-				SetCommonGridFields(oRow, oCustomer, bCart: false, bCalcAmount: false);
-
-				SetSalesCollectionFields(oRow, oCustomer);
-
-				oRow["CollectionStatus"] = oCustomer.CollectionStatus.CurrentStatus.Name;
-
-				aryOutput.Add(oRow);
-			} // foreach
-
-			return this.JsonNet(new { aaData = aryOutput });
+		public JsonResult GridCollection(bool includeTestCustomers) {
+			return LoadGrid("UwGridCollection", includeTestCustomers, () => new GridCollectionRow());
 		} // GridCollection
 
 		#endregion method GridCollection
@@ -310,30 +167,8 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
 		[HttpGet]
-		[Transactional]
-		public JsonNetResult GridRejected(bool includeTestCustomers) {
-			var aryOutput = new List<object>();
-
-			IEnumerable<Customer> oRelevant = RelevantCustomers(
-				includeTestCustomers,
-				c => (c.CreditResult == CreditResultStatus.Rejected)
-			);
-
-			foreach (var oCustomer in oRelevant) {
-				var oRow = new Dictionary<string, object>();
-
-				SetCommonGridFields(oRow, oCustomer, bCalcAmount: false);
-
-				oRow["DateRejected"] = oCustomer.DateRejected;
-				oRow["Reason"] = oCustomer.RejectedReason;
-				oRow["ApprovesNum"] = oCustomer.NumApproves;
-				oRow["RejectsNum"] = oCustomer.NumRejects;
-				oRow["OSBalance"] = oCustomer.OutstandingBalance;
-
-				aryOutput.Add(oRow);
-			} // foreach
-
-			return this.JsonNet(new { aaData = aryOutput });
+		public JsonResult GridRejected(bool includeTestCustomers) {
+			return LoadGrid("UwGridRejected", includeTestCustomers, () => new GridRejectedRow());
 		} // GridRejected
 
 		#endregion method GridRejected
@@ -343,33 +178,9 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
 		[HttpGet]
-		[Transactional]
-		public JsonNetResult GridOffline(bool includeTestCustomers)
-		{
-			var aryOutput = new List<object>();
-
-			IEnumerable<Customer> oRelevant = RelevantCustomers(
-				includeTestCustomers,
-				c => (c.SegmentType() == "Offline")
-			);
-
-			foreach (var oCustomer in oRelevant)
-			{
-				var oRow = new Dictionary<string, object>();
-				
-				oRow["Id"] = oCustomer.Id;
-				oRow["RegDate"] = oCustomer.GreetingMailSentDate;
-				oRow["Cart"] = oCustomer.Medal.HasValue ? oCustomer.Medal.Value.ToString() : "";
-				oRow["MP_List"] = oCustomer.MpList;
-				oRow["Name"] = oCustomer.PersonalInfo == null ? "" : oCustomer.PersonalInfo.Fullname;
-				oRow["Email"] = oCustomer.Name;
-				oRow["WizardStep"] = oCustomer.WizardStep.Name;
-
-				aryOutput.Add(oRow);
-			} // foreach
-
-			return this.JsonNet(new { aaData = aryOutput });
-		} // GridRejected
+		public JsonResult GridOffline(bool includeTestCustomers) {
+			return LoadGrid("UwGridOffline", includeTestCustomers, () => new GridOfflineRow());
+		} // GridOffline
 
 		#endregion method GridOffline
 
@@ -378,27 +189,8 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
 		[HttpGet]
-		[Transactional]
-		public JsonNetResult GridAll(bool includeTestCustomers) {
-			var aryOutput = new List<object>();
-
-			IEnumerable<Customer> oRelevant = RelevantCustomers(
-				includeTestCustomers,
-				c => (c.CreditResult != null)
-			);
-
-			foreach (var oCustomer in oRelevant) {
-				var oRow = new Dictionary<string, object>();
-
-				SetCommonGridFields(oRow, oCustomer);
-
-				oRow["ApprovedSum"] = oCustomer.ManagerApprovedSum;
-				oRow["OSBalance"] = oCustomer.OutstandingBalance;
-
-				aryOutput.Add(oRow);
-			} // foreach
-
-			return this.JsonNet(new { aaData = aryOutput });
+		public JsonResult GridAll(bool includeTestCustomers) {
+			return LoadGrid("UwGridAll", includeTestCustomers, () => new GridAllRow());
 		} // GridAll
 
 		#endregion method GridAll
@@ -408,99 +200,63 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
 		[HttpGet]
-		[Transactional]
-		public JsonNetResult GridRegistered(bool includeTestCustomers, bool includeAllCustomers) {
-			var aryOutput = new List<object>();
-
-			IEnumerable<Customer> oRelevant = RelevantCustomers(
-				includeTestCustomers,
-				c => ((c.CreditResult == null) && (includeAllCustomers || c.GreetingMailSentDate >= DateTime.Today.AddDays(-7)))
-			);
-
-			foreach (var oCustomer in oRelevant) {
-				var oRow = new Dictionary<string, object>();
-
-				oRow["UserId"] = oCustomer.Id;
-				oRow["Email"] = oCustomer.Name;
-
-				oRow["UserStatus"] = oCustomer.WizardStep.TheLastOne ? "credit calculation" : "registered";
-
-				oRow["RegDate"] = oCustomer.GreetingMailSentDate;
-				oRow["MP_Statuses"] = oCustomer.RegisteredMpStatuses;
-
-				oRow["WizardStep"] = oCustomer.WizardStep.Name;
-
-				oRow["SegmentType"] = oCustomer.SegmentType();
-				oRow["IsWasLate"] = oCustomer.IsWasLateName();
-
-				aryOutput.Add(oRow);
-			} // foreach
-
-			return this.JsonNet(new { aaData = aryOutput });
+		public JsonResult GridRegistered(bool includeTestCustomers, bool includeAllCustomers) {
+			return LoadGrid("UwGridRegistered", includeTestCustomers, includeAllCustomers, () => new GridRegisteredRow());
 		} // GridRegistered
 
 		#endregion method GridRegistered
 
-		#region private grid fields setters
+		#region method LoadGrid
 
-		#region method SetSalesCollectionFields
+		private JsonResult LoadGrid(string sSpName, bool bIncludeTestCustomers, Func<AGridRowBase> oFactory) {
+			return LoadGrid(sSpName, bIncludeTestCustomers, oFactory, null);
+		} // LoadGrid
 
-		private void SetSalesCollectionFields(Dictionary<string, object> oRow, Customer oCustomer) {
-			oRow["MobilePhone"] = oCustomer.PersonalInfo == null ? string.Empty : (oCustomer.PersonalInfo.MobilePhone ?? string.Empty);
-			oRow["DaytimePhone"] = oCustomer.PersonalInfo == null ? string.Empty : (oCustomer.PersonalInfo.DaytimePhone ?? string.Empty);
-			oRow["AmountTaken"] = oCustomer.AmountTaken;
-			oRow["OSBalance"] = oCustomer.OutstandingBalance;
-			oRow["CRMstatus"] = oCustomer.LatestCRMstatus ?? string.Empty;
-			oRow["CRMcomment"] = oCustomer.LatestCRMComment ?? string.Empty;
-		} // SetSalesCollectionFields
+		private JsonResult LoadGrid(string sSpName, bool bIncludeTestCustomers, bool bIncludeAllCustomers, Func<AGridRowBase> oFactory) {
+			return LoadGrid(sSpName, bIncludeTestCustomers, oFactory, bIncludeAllCustomers);
+		} // LoadGrid
 
-		#endregion method SetSalesCollectionFields
+		private JsonResult LoadGrid(string sSpName, bool bIncludeTestCustomers, Func<AGridRowBase> oFactory, bool? bIncludeAllCustomers) {
+			var oRes = new SortedDictionary<int, AGridRowBase>();
 
-		#region method SetCommonGridFields
+			var args = new List<QueryParameter> {
+				new QueryParameter("@WithTest", bIncludeTestCustomers)
+			};
 
-		private void SetCommonGridFields(Dictionary<string, object> oRow, Customer oCustomer, bool bCalcAmount = true, bool bCart = true) {
-			oRow["Id"] = oCustomer.Id;
+			if (bIncludeAllCustomers.HasValue)
+				args.Add(new QueryParameter("@WithAll", bIncludeAllCustomers));
 
-			if (bCart) {
-				oRow["Cart"] = oCustomer.Medal.HasValue ? oCustomer.Medal.Value.ToString() : "";
-				oRow["MP_List"] = oCustomer.MpList;
-				oRow["ApplyDate"] = oCustomer.OfferStart;
-				oRow["RegDate"] = oCustomer.GreetingMailSentDate;
-			} // if
+			m_oDB.ForEachRowSafe(
+				(sr, bRowSetStarts) => {
+					int nCustomerID = sr["CustomerID"];
 
-			oRow["CustomerStatus"] = oCustomer.CustomerStatus;
-			oRow["Name"] = oCustomer.PersonalInfo == null ? "" : oCustomer.PersonalInfo.Fullname;
-			oRow["Email"] = oCustomer.Name;
+					if (oRes.ContainsKey(nCustomerID))
+						oRes[nCustomerID].Add(sr);
+					else {
+						AGridRowBase r = oFactory();
+						r.Init(nCustomerID, sr);
 
-			if (bCalcAmount)
-				oRow["CalcAmount"] = oCustomer.SystemCalculatedSum;
+						if (r.IsValid())
+							oRes[nCustomerID] = r;
+					} // if
 
-			oRow["SegmentType"] = oCustomer.SegmentType();
+					return ActionResult.Continue;
+				},
+				sSpName,
+				CommandSpecies.StoredProcedure,
+				args.ToArray()
+			); // foreach
 
-			oRow["IsWasLate"] = oCustomer.IsWasLateName();
-		} // SetCommonGridFields
+			m_oLog.Debug("{0}: traversing done.", sSpName);
 
-		#endregion method SetCommonGridFields
+			var j = Json(new { aaData = oRes.Values }, JsonRequestBehavior.AllowGet);
 
-		#region method RelevantCustomers
+			m_oLog.Debug("{0}: converted to json.", sSpName);
 
-		private IEnumerable<Customer> RelevantCustomers(bool bIncludeTestCustomers, Func<Customer, bool> fCustomFilter) {
-			var oResult = new List<Customer>();
+			return j;
+		} // LoadGrid
 
-// ReSharper disable LoopCanBeConvertedToQuery
-			// The following loop cannot be converted to linq expression because nhibernate cannot convert
-			// custom filter to SQL thus throwing a run time exception.
-			foreach (var oCustomer in _customers.GetAll().Where(c => bIncludeTestCustomers || !c.IsTest))
-				if (fCustomFilter(oCustomer))
-					oResult.Add(oCustomer);
-// ReSharper restore LoopCanBeConvertedToQuery
-
-			return oResult;
-		} // RelevantCustomers
-
-		#endregion method RelevantCustomers
-
-		#endregion private grid fields setters
+		#endregion method LoadGrid
 
 		#endregion underwriter grids
 
@@ -742,11 +498,11 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 		private readonly MarketPlaceRepository _mpType;
 		private readonly IEzBobConfiguration _config;
 
-		private readonly Dictionary<int, string> statusIndex2Name;
-		private readonly int defaultIndex = -1;
-		private readonly int legalIndex = -1;
 		private readonly CustomerStatusesRepository _customerStatusesRepository;
 		private readonly IUnderwriterRecentCustomersRepository underwriterRecentCustomersRepository;
+
+		private readonly ASafeLog m_oLog;
+		private readonly AConnection m_oDB;
 
 		#endregion properties
 

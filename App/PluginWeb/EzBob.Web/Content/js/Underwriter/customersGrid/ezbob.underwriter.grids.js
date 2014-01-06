@@ -76,10 +76,10 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 				});
 			} // if has id
 
-		    if (oData.IsWasLate) {
-		        //$(oTR).addClass(oData.IsWasLate);
-		        $(oTR).addClass("table-flag-red");
-		    }
+			if (oData.IsWasLate) {
+				//$(oTR).addClass(oData.IsWasLate);
+				$(oTR).addClass("table-flag-red");
+			} // if
 		}; // fnRowCallback
 
 		var sWaitingColumns = '#Id,Cart,MP_List,Name,Email,^ApplyDate,^RegDate,CurrentStatus,$CalcAmount,$OSBalance,SegmentType';
@@ -211,7 +211,7 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 			aoColumns: this.extractColumns(oGridProperties),
 
 			aLengthMenu: [[-1, 10, 25, 50, 100], ['all', 10, 25, 50, 100]],
-			iDisplayLength: -1,
+			iDisplayLength: 10,
 
 			sPaginationType: 'bootstrap',
 			bJQueryUI: false,

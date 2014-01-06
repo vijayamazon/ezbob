@@ -76,6 +76,27 @@ namespace Ezbob.Database {
 
 		#endregion method ForEachRow
 
+		#region method ForEachRowSafe
+
+		public void ForEachRowSafe(Func<SafeReader, bool, ActionResult> oAction, string sQuery, params QueryParameter[] aryParams) {
+			if (ReferenceEquals(oAction, null))
+				throw new DbException("Callback action not specified in 'ForEachRow' call.");
+
+			ForEachRowSafe(oAction, sQuery, CommandSpecies.Auto, aryParams);
+		} // ForEachRowSafe
+
+		public void ForEachRowSafe(Func<SafeReader, bool, ActionResult> oAction, string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
+			if (ReferenceEquals(oAction, null))
+				throw new DbException("Callback action not specified in 'ForEachRow' call.");
+
+			Run(	
+				(oReader, bRowSetStart) => oAction(new SafeReader(oReader), bRowSetStart),
+				ExecMode.ForEachRow, nSpecies, sQuery, aryParams
+			);
+		} // ForEachRowSafe
+
+		#endregion method ForEachRowSafe
+
 		public abstract string DateToString(DateTime oDate);
 
 		#endregion IConnection implementation
@@ -305,31 +326,10 @@ namespace Ezbob.Database {
 							} // ExecMode.NonQuery
 
 							case ExecMode.ForEachRow: {
-								var oReader = command.ExecuteReader();
-								PublishRunningTime(nLogVerbosityLevel, spName, sArgsForLog, guid, sw);
-
-								bool bStop = false;
-
-								do {
-									if (!oReader.HasRows)
-										continue;
-
-									bool bRowSetStart = true;
-
-									while (oReader.Read()) {
-										ActionResult nResult = oAction(oReader, bRowSetStart);
-
-										if (nResult == ActionResult.SkipCurrent)
-											break;
-
-										if (nResult == ActionResult.SkipAll) {
-											bStop = true;
-											break;
-										} // if
-
-										bRowSetStart = false;
-									} // while has rows in current set
-								} while (!bStop && oReader.NextResult());
+								command.ForEachRow(
+									oAction,
+									() => PublishRunningTime(nLogVerbosityLevel, spName, sArgsForLog, guid, sw)
+								);
 
 								return null;
 							} // ExecMode.ForEachRow
@@ -347,7 +347,7 @@ namespace Ezbob.Database {
 			} // try
 		} // Run
 
-		#endregion method Retry
+		#endregion method Run
 
 		#region method PublishRunningTime
 
