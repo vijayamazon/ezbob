@@ -14,7 +14,8 @@ AS
 		INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
 	GROUP BY
 		c.Id,
-		c.LimitedRefNum
+		c.LimitedRefNum,
+		c.NonLimitedRefNum
 	ORDER BY
 		c.Id
 

@@ -48,7 +48,10 @@ EzBob.Popup = Backbone.View.extend({
 
 	events: {
 		'click input.postCodeBtnOk': 'PostCodeBtnOk',
+		'click input.postCodeBtnManualInputOk': 'PostCodeBtnManualInputOk',
+		'click input.postCodeBtnNotFound': 'PostCodeBtnNotFound',
 		'click input.postCodeBtnCancel': 'PostCodeBtnCancel',
+		'click input.postCodeBtnManualInputCancel': 'PostCodeBtnCancel',
 		'change .postCode': 'SearchByPostcode',
 		'click    .matchingAddressList': 'AddressesListClicked',
 		'dblclick .matchingAddressList': 'AddressesListDoubleClicked',
@@ -158,6 +161,11 @@ EzBob.Popup = Backbone.View.extend({
 			return;
 		} // if
 
+		if (id === 'NOTFOUND') {
+			this.PostCodeBtnNotFound();
+			return;
+		} // if
+
 		var addressModel = null;
 
 		var oDummyResults = $('.dummy_address_search_result');
@@ -177,9 +185,34 @@ EzBob.Popup = Backbone.View.extend({
 		this.unbind();
 	}, // PostCodeBtnOk
 
+	PostCodeBtnManualInputOk: function () {
+		var addressModel = null;
+
+		var oDummyResults = $('.dummy_address_search_result');
+
+		if (oDummyResults.length > 0) {
+			addressModel = $.parseJSON($('.by_id', oDummyResults.first()).html());
+			addressModel.Line3 = 'Found by postcode ' + this.$el.find('.postCode').val();
+		} // if dummy
+
+		this.model.add(addressModel);
+
+		this.$el.dialog('close');
+		this.remove();
+		this.unbind();
+	}, // PostCodeBtnManualInputOk
+
 	PostCodeBtnCancel: function () {
 		this.$el.dialog('close');
 	}, // PostCodeBtnCancel
+
+	PostCodeBtnNotFound: function() {
+		var self = this;
+
+		this.$el.find('.address-selector-block').fadeOut('slow', function() {
+			self.$el.find('.address-input-block').fadeIn('slow').removeClass('hide');
+		});
+	}, // PostCodeBtnNotFound
 
 	SearchByPostcode: function () {
 		var postCode = this.$el.find('.postCode').val();
@@ -234,7 +267,12 @@ EzBob.Popup = Backbone.View.extend({
 				return;
 			}
 
-			console.log('address data records');
+			data.Records.push({
+				Id: 'NOTFOUND',
+				L: 'Address is not listed',
+			});
+
+			console.log('address data records', data.Records);
 
 			oOnSuccess(data.Records);
 		}); // on success
