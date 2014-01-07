@@ -64,7 +64,8 @@ namespace EzBob.Web.Controllers
 			ITestCustomerRepository testCustomers,
 			IConfigurationVariablesRepository configurationVariables,
 			ICustomerStatusesRepository customerStatusesRepository, ICustomerReasonRepository reasons, ICustomerSourceOfRepaymentRepository sources
-		) {
+		)
+		{
 			_helper = helper;
 			_membershipProvider = membershipProvider;
 			_users = users;
@@ -390,7 +391,7 @@ namespace EzBob.Web.Controllers
 						RefNumber = g.GenerateForCustomer(),
 						WizardStep = _helper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.SignUp),
 						CollectionStatus =
-							new CollectionStatus {CurrentStatus = _customerStatusesRepository.GetByName("Enabled")},
+							new CollectionStatus { CurrentStatus = _customerStatusesRepository.GetByName("Enabled") },
 						IsTest = isAutomaticTest,
 						IsOffline = false,
 						PromoCode = promoCode,
@@ -555,20 +556,25 @@ namespace EzBob.Web.Controllers
 		{
 			var nFilter = TargetResults.LegalStatus.DontCare;
 
-			switch (filter.ToUpper()) {
-			case "L":
-				nFilter = TargetResults.LegalStatus.Limited;
-				break;
+			switch (filter.ToUpper())
+			{
+				case "L":
+					nFilter = TargetResults.LegalStatus.Limited;
+					break;
 
-			case "N":
-				nFilter = TargetResults.LegalStatus.NonLimited;
-				break;
+				case "N":
+					nFilter = TargetResults.LegalStatus.NonLimited;
+					break;
 			} // switch
 
 			try
 			{
 				var service = new EBusinessService();
 				var result = service.TargetBusiness(companyName, postcode, _context.UserId, nFilter, refNum);
+				if (result.Targets.Any())
+				{
+					result.Targets.Insert(0, new CompanyInfo {BusName  = "Company not found below", AddrLine1 = " ", BusRefNum = "NotFound" });
+				}
 				return this.JsonNet(result.Targets);
 			}
 			catch (Exception e)

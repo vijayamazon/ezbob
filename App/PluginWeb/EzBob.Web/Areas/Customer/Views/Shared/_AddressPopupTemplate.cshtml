@@ -1,11 +1,9 @@
 ﻿<div id="address-popup" title="Address search by Postcode" style="overflow: visible">
     <input class="postCode" name="postCode" type="hidden" />
-    <div class="well">
-        <ul class="matchingAddressList" disabled="disabled" tabindex="128">
-        </ul>
-        <div style="margin-left: 90px; height: 45px;">
-            <input class="postCodeBtnCancel button orange pull-right" type="button" value="Cancel" ui-event-control-id="address-form:address-cancelled" />
-            <input class="postCodeBtnOk button orange pull-right" type="button" value="OK" disabled="disabled" ui-event-control-id="address-form:address-selected" />            
-        </div>
+    <ul class="matchingAddressList" disabled="disabled" tabindex="128">
+    </ul>
+    <div>
+        <input class="postCodeBtnCancel rc-button green pull-right" type="button" value="Cancel" ui-event-control-id="address-form:address-cancelled" />
+        <input class="postCodeBtnOk rc-button green pull-right" type="button" value="OK" disabled="disabled" ui-event-control-id="address-form:address-selected" />
     </div>
 </div>

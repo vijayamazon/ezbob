@@ -31,22 +31,20 @@ input[type='radio'], input[type='checkbox'] { box-shadow: none; }
 /*targets*/
 
 .targets {
-    -moz-border-radius: 5px;
-    -webkit-border-radius: 5px;
     background-color: white;
-    border: solid 1px #CCC;
-    border-radius: 5px;
     height: 300px;
     list-style: none outside none;
     margin-left: -10px;
     overflow-y: auto;
     padding: 5px 0;
-    width: 340px;
+    outline-color: transparent;
 }
-
+.targets li:first-child {
+    background-image: url('../img/cross.png');
+}
 .targets li {
     background-image: url('../img/company.png');
-    background-position: 5% 50%;
+    background-position: 10px 50%;
     background-repeat: no-repeat;
     color: #333;
     cursor: pointer;

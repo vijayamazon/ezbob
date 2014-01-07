@@ -123,7 +123,7 @@ namespace ExperianLib.Ebusiness
 
 			Log.InfoFormat("Checking cache for refNumber={0}...", refNumber);
 
-			var cacheVal = (from c in repo.GetAll() where c.CompanyRefNumber == refNumber select c).FirstOrDefault();
+			var cacheVal = repo.GetAll().FirstOrDefault(c => c.CompanyRefNumber == refNumber);
 
 			if (cacheVal != null)
 			{
