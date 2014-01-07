@@ -25,21 +25,14 @@ class EzBob.Underwriter.Bugs extends Backbone.Collection
 class EzBob.Underwriter.ReportBugView  extends EzBob.BoundItemView
     template: '#bug-report-template'
 
-    events:
-        'click  [data-dismiss="modal"]': "closed"
-
     bindings:
         TextOpened:
             selector: "textarea[name='description']"
-
-    closed: ->
-        @trigger "closed"
 
 class EzBob.Underwriter.EditBugView extends EzBob.BoundItemView
     events:
         'click .closeBug' : 'closeBug'
         'click .reopenBug': 'reopenBug'
-        'click  [data-dismiss="modal"]': "closed"
 
     template: '#bug-edit-template'
 
@@ -69,9 +62,6 @@ class EzBob.Underwriter.EditBugView extends EzBob.BoundItemView
 
     reopenBug: ->
         @trigger "reopenBug"
-
-    closed: ->
-        @trigger "closed"
 
 $('body').on 'click', 'a[data-bug-type]', (e) ->
     
