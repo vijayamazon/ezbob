@@ -30,7 +30,7 @@
 
 			var oTcpBinding = new NetTcpBinding();
 			oTcpBinding.Security.Mode = SecurityMode.Transport;
-			oTcpBinding.Security.Transport.ClientCredentialType = TcpClientCredentialType.Windows;
+			oTcpBinding.Security.Transport.ClientCredentialType = TcpClientCredentialType.None;
 
 			serviceClient = new EzServiceClient(
 				oTcpBinding,
