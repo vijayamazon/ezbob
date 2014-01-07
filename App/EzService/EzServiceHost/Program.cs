@@ -30,6 +30,7 @@ using ISession = NHibernate.ISession;
 namespace EzServiceHost {
 	using EzBob.Configuration;
 	using EzServiceConfigurationLoader;
+	using ActionResult = Ezbob.Database.ActionResult;
 
 	public class Program : IHost {
 		#region public
@@ -138,7 +139,7 @@ namespace EzServiceHost {
 			bool bShowHelp = false;
 
 			var oArgs = new OptionSet {
-				{ "n|name=", "this service host instance NAME (which is used to search DB)", v => m_sInstanceName = v },
+				{ "n|name=", "this service host instance (NAME) (which is used to search DB)", v => m_sInstanceName = v },
 				{ "h|help",  "show this message and exit", v => bShowHelp = v != null },
 			};
 
@@ -147,6 +148,18 @@ namespace EzServiceHost {
 			if (bShowHelp) {
 				Usage(oArgs, null);
 				return false;
+			} // if
+
+			if (string.IsNullOrWhiteSpace(m_sInstanceName)) {
+				m_oDB.ForEachRowSafe(
+					(sr, bRowSetStarts) => {
+						m_sInstanceName = sr["InstanceName"];
+						return ActionResult.SkipAll;
+					},
+					"EzServiceGetDefaultInstance",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("@Argument", System.Environment.MachineName)
+				);
 			} // if
 
 			if (string.IsNullOrWhiteSpace(m_sInstanceName))
@@ -160,14 +173,14 @@ namespace EzServiceHost {
 		#region method Init
 
 		private bool Init() {
-			if (!InitInstanceName())
-				return false;
-
 			var env = new Ezbob.Context.Environment(m_oLog);
 			m_oDB = new SqlConnection(env, m_oLog);
 
 			if (m_oDB == null)
 				throw new Exception("Failed to create a DB connection.");
+
+			if (!InitInstanceName())
+				return false;
 
 			m_oCfg = new Configuration(m_sInstanceName, m_oDB, m_oLog);
 

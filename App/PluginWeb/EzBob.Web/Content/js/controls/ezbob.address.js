@@ -33,10 +33,10 @@ EzBob.Popup = Backbone.View.extend({
 
 		this.$el.dialog({
 			autoOpen: true,
-			title: 'Select Address',
+			title: 'Select address',
 			modal: true,
-			resizable: false,
-			width: 390
+			resizable: true,
+			width: 400
 		});
 
 		this.addressList = this.$el.find('.matchingAddressList');
@@ -233,6 +233,8 @@ EzBob.Popup = Backbone.View.extend({
 				that.addressList.append($('<li></li>').val(0).html('Not found'));
 				return;
 			}
+
+			console.log('address data records');
 
 			oOnSuccess(data.Records);
 		}); // on success
