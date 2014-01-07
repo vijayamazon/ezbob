@@ -56,7 +56,7 @@ namespace Reports {
 		public void ToOutput(string sFileName) {
 			var fout = new StreamWriter(sFileName, false, Encoding.UTF8);
 
-			fout.WriteLine("Customer ID;Last Loan Date;Incorporation date;Company score;Company Score Date;NDSPCII;NDSPCII Date;Company reg #;Company name");
+			fout.WriteLine("Customer ID;Last Loan Date;Incorporation date;Company score;Company Score Date;NDSPCII;NDSPCII Date;Company reg #;Company name;Credit limit");
 
 			foreach (KeyValuePair<int, LoanDateScoreItem> pair in m_oResult)
 				pair.Value.ToOutput(fout);

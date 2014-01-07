@@ -22,11 +22,11 @@ namespace TestApp {
 
 			var oDB = new SqlConnection(log);
 
-			TestParsedValues(oDB, log);
+			// TestParsedValues(oDB, log);
 
 			// TestUiReportExt(oDB, log);
 
-			// TestLoanDateScore(oDB, log);
+			TestLoanDateScore(oDB, log);
 
 			// TestExperianLimitedCompanyData(oDB, log);
 

@@ -63,7 +63,7 @@ namespace Reports {
 		#region method LoadLastScore
 
 		public void LoadLastScore(AConnection oDB) {
-			if ((m_sCompanyName != null) && (m_sCompanyNumber != null) && m_oIncorporationDate.HasValue && m_nCompanyScore.HasValue)
+			if (!ReferenceEquals(m_sCompanyName, null) && !ReferenceEquals(m_sCompanyNumber, null) && m_oIncorporationDate.HasValue && m_nCompanyScore.HasValue && !ReferenceEquals(m_sCreditLimit, null))
 				return;
 
 			if (string.IsNullOrWhiteSpace(m_sCompanyRefNum))
@@ -87,7 +87,7 @@ namespace Reports {
 				(m_oIncorporationDate.HasValue ? m_oIncorporationDate.Value.ToString("yyyy-MM-dd") : ""),
 				m_nCompanyScore.ToString(), (m_oCompanyDataDate.HasValue ? m_oCompanyDataDate.Value.ToString("yyyy-MM-dd") : ""),
 				m_nNdspcii.ToString(), (m_oNdspciiDataDate.HasValue ? m_oNdspciiDataDate.Value.ToString("yyyy-MM-dd") : ""),
-				m_sCompanyNumber, m_sCompanyName
+				m_sCompanyNumber, m_sCompanyName, m_sCreditLimit
 			}));
 		} // ToOutput
 
@@ -110,6 +110,7 @@ namespace Reports {
 		private DateTime? m_oIncorporationDate;
 		private string m_sCompanyNumber;
 		private string m_sCompanyName;
+		private string m_sCreditLimit;
 
 		private string m_sCompanyRefNum;
 
@@ -197,6 +198,10 @@ namespace Reports {
 					if (!m_nCompanyScore.HasValue)
 						m_nCompanyScore = nCompanyScore;
 			} // if
+
+			oNode = doc.DocumentElement.SelectSingleNode("./REQUEST/DL78/CREDITLIMIT");
+			if (!ReferenceEquals(oNode, null) && ReferenceEquals(m_sCreditLimit, null))
+				m_sCreditLimit = oNode.InnerText;
 		} // Add
 
 		#endregion method AddCompanyData
