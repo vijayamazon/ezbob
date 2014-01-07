@@ -159,15 +159,6 @@
 				}
 				catch (PayPointException ex)
 				{
-					if (ex.PaypointData.Code == "N")
-					{
-						Log.Warn(ex);
-					}
-					else
-					{
-						Log.Error(ex);
-					}
-					
 					loan.Transactions.Add(new PaypointTransaction()
 						{
 							Amount = amount,
@@ -189,7 +180,10 @@
 			}
 			catch (Exception e)
 			{
-				Log.Error(e);
+				if (!(e is PayPointException))
+				{
+					Log.Error(e);
+				}
 				if (payPointReturnData == null)
 					payPointReturnData = new PayPointReturnData { Error = e.Message };
 				installments.Dispose();
@@ -203,6 +197,10 @@
 			try
 			{
 				return RepeatTransactionEx(transactionId, amount);
+			}
+			catch (PayPointException ex)
+			{
+				return new PayPointReturnData { Error = ex.Message };
 			}
 			catch (Exception ex)
 			{

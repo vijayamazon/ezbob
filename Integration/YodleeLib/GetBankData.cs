@@ -116,7 +116,7 @@ namespace YodleeLib
 				object[] acctHistories = itemData.accountHistory;
 				if (acctHistories == null || acctHistories.Length == 0)
 				{
-					error += "\tNo Account History";
+					//error += "\tNo Account History";
 				}
 				else
 				{
