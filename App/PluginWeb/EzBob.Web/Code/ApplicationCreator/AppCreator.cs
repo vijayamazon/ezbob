@@ -35,8 +35,18 @@ namespace EzBob.Web.Code.ApplicationCreator {
 				useNewCaisStrategies = configurationVariablesRepository.GetByNameAsBool("UseNewCaisStrategies");
 				useNewFraudCheckerStrategy = configurationVariablesRepository.GetByNameAsBool("UseNewFraudCheckerStrategy");
 				useNewMainStrategy = configurationVariablesRepository.GetByNameAsBool("UseNewMainStrategy");
+				try
+				{
+					_wizardConfigs = ServiceClient.GetWizardConfigs();
+				}
+				catch (Exception ex)
+				{
+					_wizardConfigs = new WizardConfigsActionResult();
+					Log.ErrorFormat("GetWizardConfigs {0}", ex);
+				}
+				
 			}
-						  }
+		}
 
 		public void AfterSignup(User user, string address) {
 			if (useNewMailStrategies) {
@@ -65,7 +75,7 @@ namespace EzBob.Web.Code.ApplicationCreator {
 
 		public WizardConfigsActionResult GetWizardConfigs()
 		{
-			return ServiceClient.GetWizardConfigs();
+			return _wizardConfigs;
 		}
 
 		public void CashTransfered(User user, string firstName, decimal cashAmount, decimal setUpFee, int loanId) {
@@ -601,5 +611,6 @@ namespace EzBob.Web.Code.ApplicationCreator {
 		private static bool useNewMainStrategy;
 		private static bool useNewCaisStrategies;
 		private static bool readConfig = false;
+		private static WizardConfigsActionResult _wizardConfigs;
 	} // class AppCreator
 } // namespace
