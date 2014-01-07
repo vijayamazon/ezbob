@@ -14,7 +14,7 @@
         <% _.each(paymentAccounts.PayPointCards, function(pp, i){%>
         <tr>
             <td>
-                <% if(pp.IsDefault){%><i class="icon-white icon-ok"></i><%}%>
+                <% if(pp.IsDefault){%><i class="icon-ok"></i><%}%>
                 <%- EzBob.formatDateHumanFull(pp.DateAdded) %>
             </td>
             <td><%- pp.TransactionId %></td>
