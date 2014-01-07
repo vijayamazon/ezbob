@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Reports {
-	using System.Data.Common;
 	using System.Globalization;
 	using System.IO;
 	using System.Xml;
@@ -19,12 +18,15 @@ namespace Reports {
 
 		#region constructor
 
-		public LoanDateScoreItem(DbDataReader oRow, ASafeLog oLog) {
+		public LoanDateScoreItem(SafeReader oRow, ASafeLog oLog) {
 			m_oLog = new SafeLog(oLog);
 
-			CustomerID = Convert.ToInt32(oRow["CustomerID"]);
-			m_oLastLoanDate = Convert.ToDateTime(oRow["LoanIssueDate"]);
-			m_sCompanyRefNum = oRow["LimitedRefNum"].ToString();
+			CustomerID = oRow["CustomerID"];
+			m_oLastLoanDate = oRow["LoanIssueDate"];
+			m_sCompanyRefNum = oRow["LimitedRefNum"];
+
+			if (string.IsNullOrWhiteSpace(m_sCompanyRefNum))
+				m_sCompanyRefNum = oRow["NonLimitedRefNum"];
 
 			m_oLog.Debug("Customer {0} took last loan on {1}", CustomerID, m_oLastLoanDate);
 		} // constructor
@@ -35,15 +37,15 @@ namespace Reports {
 
 		#region method Add
 
-		public void Add(DbDataReader oRow) {
-			XmlDocument doc = ExtractXml(oRow["ResponseData"].ToString());
+		public void Add(SafeReader oRow) {
+			XmlDocument doc = ExtractXml(oRow["ResponseData"]);
 
 			if (doc == null)
 				return;
 
-			DateTime oInsertDate = Convert.ToDateTime(oRow["InsertDate"]);
+			DateTime oInsertDate = oRow["InsertDate"];
 
-			string sServiceType = oRow["ServiceType"].ToString();
+			string sServiceType = oRow["ServiceType"];
 
 			switch (sServiceType) {
 			case "Consumer Request":
@@ -52,6 +54,11 @@ namespace Reports {
 				break;
 
 			case "E-SeriesLimitedData":
+				if (DateFits(ref m_oCompanyDataDate, oInsertDate))
+					AddLtdData(doc);
+				break;
+
+			case "E-SeriesNonLimitedData":
 				if (DateFits(ref m_oCompanyDataDate, oInsertDate))
 					AddCompanyData(doc);
 				break;
@@ -73,8 +80,10 @@ namespace Reports {
 
 			var doc = ExtractXml(sXml);
 
-			if (doc != null)
+			if (doc != null) {
+				AddLtdData(doc);
 				AddCompanyData(doc);
+			} // if
 		} // LoadLastScore
 
 		#endregion method LoadLastScore
@@ -87,7 +96,7 @@ namespace Reports {
 				(m_oIncorporationDate.HasValue ? m_oIncorporationDate.Value.ToString("yyyy-MM-dd") : ""),
 				m_nCompanyScore.ToString(), (m_oCompanyDataDate.HasValue ? m_oCompanyDataDate.Value.ToString("yyyy-MM-dd") : ""),
 				m_nNdspcii.ToString(), (m_oNdspciiDataDate.HasValue ? m_oNdspciiDataDate.Value.ToString("yyyy-MM-dd") : ""),
-				m_sCompanyNumber, m_sCompanyName, m_sCreditLimit
+				m_sCompanyNumber, m_sCompanyName, m_sCreditLimit, m_sNonLimDelphiScore, m_sNonLimDefaultChance, m_sNonLimStabilityOdds
 			}));
 		} // ToOutput
 
@@ -98,6 +107,7 @@ namespace Reports {
 		#region private
 
 		private readonly DateTime m_oLastLoanDate;
+		private readonly string m_sCompanyRefNum;
 
 		private readonly ASafeLog m_oLog;
 
@@ -112,7 +122,9 @@ namespace Reports {
 		private string m_sCompanyName;
 		private string m_sCreditLimit;
 
-		private string m_sCompanyRefNum;
+		private string m_sNonLimDelphiScore;
+		private string m_sNonLimDefaultChance;
+		private string m_sNonLimStabilityOdds;
 
 		#region method ExtractXml
 
@@ -166,9 +178,9 @@ namespace Reports {
 
 		#endregion method AddNdspciiData
 
-		#region method AddCompanyData
+		#region method AddLtdData
 
-		private void AddCompanyData(XmlDocument doc) {
+		private void AddLtdData(XmlDocument doc) {
 			XmlNode oNode = doc.DocumentElement.SelectSingleNode("./REQUEST/DL12/REGNUMBER");
 
 			if (oNode == null)
@@ -202,7 +214,28 @@ namespace Reports {
 			oNode = doc.DocumentElement.SelectSingleNode("./REQUEST/DL78/CREDITLIMIT");
 			if (!ReferenceEquals(oNode, null) && ReferenceEquals(m_sCreditLimit, null))
 				m_sCreditLimit = oNode.InnerText;
-		} // Add
+		} // AddLtdData
+
+		#endregion method AddLtdData
+
+		#region method AddCompanyData
+
+		private void AddCompanyData(XmlDocument doc) {
+			XmlNode oNode = doc.DocumentElement.SelectSingleNode("./REQUEST/DN73/NLCDSCORE");
+
+			if (!ReferenceEquals(oNode, null))
+				m_sNonLimDelphiScore = oNode.InnerText;
+
+			oNode = doc.DocumentElement.SelectSingleNode("./REQUEST/DN73/PDSCORE");
+
+			if (!ReferenceEquals(oNode, null))
+				m_sNonLimDefaultChance = oNode.InnerText;
+
+			oNode = doc.DocumentElement.SelectSingleNode("./REQUEST/DN73/STABILITYODDS");
+
+			if (!ReferenceEquals(oNode, null))
+				m_sNonLimStabilityOdds = oNode.InnerText;
+		} // AddCompanyData
 
 		#endregion method AddCompanyData
 

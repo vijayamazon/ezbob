@@ -30,14 +30,14 @@ namespace Reports {
 		public SortedDictionary<int, LoanDateScoreItem>  Run() {
 			m_oResult = new SortedDictionary<int, LoanDateScoreItem>();
 
-			m_oDB.ForEachRow(
+			m_oDB.ForEachRowSafe(
 				HandleLoanDateRow,
 				"RptLoanDateScore",
 				CommandSpecies.StoredProcedure
 			);
 
 
-			m_oDB.ForEachRow(
+			m_oDB.ForEachRowSafe(
 				HandleCompanyRow,
 				"RptLoanDateScoreNDSPCII",
 				CommandSpecies.StoredProcedure
@@ -56,7 +56,11 @@ namespace Reports {
 		public void ToOutput(string sFileName) {
 			var fout = new StreamWriter(sFileName, false, Encoding.UTF8);
 
-			fout.WriteLine("Customer ID;Last Loan Date;Incorporation date;Company score;Company Score Date;NDSPCII;NDSPCII Date;Company reg #;Company name;Credit limit");
+			fout.WriteLine("{0}{1}{2}",
+				"Customer ID;Last Loan Date;Incorporation date;Company score;Company Score Date;",
+				"NDSPCII;NDSPCII Date;Company reg #;Company name;Credit limit;",
+				"NL Commercial Delphi Score;Probability of Default Score;Stability Odds"
+			);
 
 			foreach (KeyValuePair<int, LoanDateScoreItem> pair in m_oResult)
 				pair.Value.ToOutput(fout);
@@ -78,7 +82,7 @@ namespace Reports {
 
 		#region method HandleLoanDateRow
 
-		private ActionResult HandleLoanDateRow(DbDataReader oRow, bool bStartOfRowset) {
+		private ActionResult HandleLoanDateRow(SafeReader oRow, bool bStartOfRowset) {
 			var oItem = new LoanDateScoreItem(oRow, this);
 
 			m_oResult[oItem.CustomerID] = oItem;
@@ -90,8 +94,8 @@ namespace Reports {
 
 		#region method HandleCompanyRow
 
-		private ActionResult HandleCompanyRow(DbDataReader oRow, bool bStartOfRowset) {
-			int nCustomerID = Convert.ToInt32(oRow["CustomerID"]);
+		private ActionResult HandleCompanyRow(SafeReader oRow, bool bStartOfRowset) {
+			int nCustomerID = oRow["CustomerID"];
 
 			if (m_oResult.ContainsKey(nCustomerID))
 				m_oResult[nCustomerID].Add(oRow);
