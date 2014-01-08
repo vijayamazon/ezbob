@@ -55,6 +55,9 @@ EzBob.Underwriter.CompanyScoreView = Backbone.View.extend({
 			collapsible: true,
 			active: this.activePanel
 		});
+
+	    this.list.addClass('box');
+	    this.list.find('.ui-state-default').addClass('box-title');
 	},
 	
 	hideAccordion: function() {
