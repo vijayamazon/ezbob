@@ -1,7 +1,5 @@
 EzBob.handleUserLayoutSetting = function () {
-    console.log('handle');
     if (typeof cookie_not_handle_user_settings != 'undefined' && cookie_not_handle_user_settings == true) {
-        console.log('not handle');
         return;
     }
     //Collapsed sidebar
@@ -22,7 +20,6 @@ EzBob.handleUserLayoutSetting = function () {
     //Striped Table
     if ($.cookie('table-fixed') == 'true') {
         setTimeout(function () {
-            console.log('stripped');
             $('table.table:not(.table-advance)').addClass('table-advance');
         }, 1000);
     }
