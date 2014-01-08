@@ -17,13 +17,13 @@
 		#region method SetTemplateAndSubjectAndVariables
 
 		protected override void SetTemplateAndSubjectAndVariables() {
-			Subject = "RestorePassword";
+			Subject = "Your ezbob password has been restored";
 			TemplateName = "Mandrill - EZBOB password was restored";
 
 			Variables = new Dictionary<string, string> {
 				{"ProfilePage", "https://app.ezbob.com/Account/LogOn"},
 				{"Password", password},
-				{"FirstName", CustomerData.FirstName}
+				{"FirstName", string.IsNullOrEmpty(CustomerData.FirstName) ? "Dear customer" : CustomerData.FirstName }
 			};
 		} // SetTemplateAndSubjectAndVariables
 
