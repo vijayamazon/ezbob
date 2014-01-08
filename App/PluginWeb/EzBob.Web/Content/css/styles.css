@@ -66,6 +66,12 @@
     padding-top: 5px;
     padding-bottom: 5px;
 }
+
+#address-popup .address-block-buttons {
+	position: absolute;
+	bottom: 0;
+}
+
 /* ----------- */
 .postCodeBtnOk,.postCodeBtnCancel {
     margin-top: 10px;

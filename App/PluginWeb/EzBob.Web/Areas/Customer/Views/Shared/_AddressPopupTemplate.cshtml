@@ -1,15 +1,13 @@
-﻿<div id="address-popup" title="Address search by Postcode" style="overflow: visible">
+﻿<div id="address-popup" title="Address search by Postcode">
 	<input class="postCode" name="postCode" type="hidden" />
+
 	<div class="address-selector-block">
-    <ul class="matchingAddressList" disabled="disabled" tabindex="128">
-    </ul>
-    <div>
-        <input class="postCodeBtnCancel rc-button green pull-right" type="button" value="Cancel" ui-event-control-id="address-form:address-cancelled" />
-			<input class="postCodeBtnNotFound rc-button green pull-right" type="button" value="Not found" ui-event-control-id="address-form:address-not-found" />
-        <input class="postCodeBtnOk rc-button green pull-right" type="button" value="OK" disabled="disabled" ui-event-control-id="address-form:address-selected" />
-		</div>
+		<ul class="matchingAddressList" disabled="disabled" tabindex="128"></ul>
 	</div>
-	<div class="well address-input-block hide">
+
+	<div class="address-input-block hide">
+		<br/>
+
 		<div class="control-group form_field_container">
 			<div class="controls">
 				<label class="attardi-input">
@@ -25,7 +23,7 @@
 				<label class="attardi-input">
 					<span>Line 2</span>
 					<input type="text" class="line2 form_field" ui-event-control-id="address-form:manual-input-line2" />
-					<img class="field_status required" />
+					<img class="field_status" />
 				</label>
 			</div>
 		</div>
@@ -35,7 +33,7 @@
 				<label class="attardi-input">
 					<span>Line 3</span>
 					<input type="text" class="line3 form_field" ui-event-control-id="address-form:manual-input-line3" />
-					<img class="field_status required" />
+					<img class="field_status" />
 				</label>
 			</div>
 		</div>
@@ -54,7 +52,7 @@
 			<div class="controls">
 				<label class="attardi-input">
 					<span>Postcode</span>
-					<input type="text" class="zipcode form_field" ui-event-control-id="address-form:manual-input-zipcode" />
+					<input type="text" disabled="disabled" readonly="" class="zipcode form_field" ui-event-control-id="address-form:manual-input-zipcode" />
 					<img class="field_status required" />
 				</label>
 			</div>
@@ -65,7 +63,7 @@
 				<label class="attardi-input">
 					<span>Country</span>
 					<input type="text" class="country form_field" ui-event-control-id="address-form:manual-input-country" />
-					<img class="field_status required" />
+					<img class="field_status" />
 				</label>
 			</div>
 		</div>
@@ -75,14 +73,9 @@
 				<label class="attardi-input">
 					<span>P.O. box</span>
 					<input type="text" class="pobox form_field" ui-event-control-id="address-form:manual-input-pobox" />
-					<img class="field_status required" />
+					<img class="field_status" />
 				</label>
 			</div>
-		</div>
-
-		<div style="height: 45px;">
-			<input class="postCodeBtnManualInputCancel button orange pull-right" type="button" value="Cancel" ui-event-control-id="address-form:address-manual-input-cancelled" />
-			<input class="postCodeBtnManualInputOk button orange pull-right" type="button" value="OK" disabled="disabled" ui-event-control-id="address-form:address-manual-input-selected" />
 		</div>
 	</div>
 </div>

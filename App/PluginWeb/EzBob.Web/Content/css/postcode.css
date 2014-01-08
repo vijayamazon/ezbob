@@ -1,4 +1,6 @@
-﻿.matchingAddressList li
+﻿.address-dialog-widget { overflow: auto !important; }
+
+.matchingAddressList li
 {
     background-image: url('../img/house.png');
     background-repeat: no-repeat;
@@ -8,6 +10,8 @@
     font-weight: bold;
     color: #333;
 }
+
+.matchingAddressList li.not-found-item { margin-top: 2em; }
 
 .matchingAddressList li:hover,
 .matchingAddressList li[selected] {
@@ -24,8 +28,6 @@
     list-style: none outside none;
     margin-left: -10px;
     padding: 5px 0;
-    height: 300px;
-    overflow-y: auto;
     position: relative;
     outline-color: transparent;
 }
