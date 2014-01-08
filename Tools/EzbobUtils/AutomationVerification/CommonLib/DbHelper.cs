@@ -217,5 +217,16 @@ namespace CommonLib
 			var conn = new SqlConnection(_log);
 			return conn.ExecuteScalar<decimal>("AV_GetMedalRate", new QueryParameter("@CustomerId", customerId));
 		}
+
+		public bool IsOffline(int customerId)
+		{
+			var conn = new SqlConnection(_log);
+			var dt = conn.ExecuteReader("AV_IsCustomerOffline", new QueryParameter("@CustomerId", customerId));
+			if (dt.Rows.Count == 0)
+			{
+				return false;
+			}
+			return bool.Parse(dt.Rows[0]["IsOffline"].ToString());
+		}
 	}
 }

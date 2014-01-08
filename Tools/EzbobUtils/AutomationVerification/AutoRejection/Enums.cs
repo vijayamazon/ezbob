@@ -52,5 +52,6 @@
 		AutoReApprove,
 		AutoReject,
 		AutoReReject,
+		IsOffline
 	}
 }

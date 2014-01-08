@@ -67,5 +67,16 @@
 			var des = arr.IsAutoApproved(14223, out reason, out amount);
 			Assert.AreEqual(false, des);
 		}
+
+		[Test]
+		public void testIsOffline()
+		{
+			var db = new DbHelper(Log);
+			var isOffline = db.IsOffline(25);
+			Assert.AreEqual(false, isOffline);
+
+			isOffline = db.IsOffline(14183);
+			Assert.AreEqual(true, isOffline);
+		}
 	}
 }

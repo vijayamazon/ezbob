@@ -209,6 +209,19 @@
 			{
 				var autoDecisionsDict = new Dictionary<DecisionType, AutoDecision>();
 				string reason;
+				if (db.IsOffline(autoDecision.CustomerId))
+				{
+					autoDecisionsDict.Add(DecisionType.IsOffline, new AutoDecision
+					{
+						CashRequestId = autoDecision.CashRequestId,
+						CustomerId = autoDecision.CustomerId,
+						SystemDecision = Decision.Manual,
+						Comment = "Offline Customer, no auto rules"
+					});
+					verificationDecisions.Add(autoDecision.CashRequestId, autoDecisionsDict);
+					continue;
+				}
+
 				bool isAutoRejected = aj.IsAutoRejected(autoDecision.CustomerId, out reason);
 				autoDecisionsDict.Add(DecisionType.AutoReject, new AutoDecision
 					{
