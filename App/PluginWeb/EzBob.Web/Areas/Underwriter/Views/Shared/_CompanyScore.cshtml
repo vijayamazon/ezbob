@@ -312,13 +312,13 @@
 				var oChartData = [];
 				var oSeriesKeys = {};
 
-				var sDivChartID = 'chart' + oMetaData.ID;
+				var sDivChartID = 'chart' + oMetaData.ID + ('' + Math.random()).replace(/\./, '') + '' + (new Date()).getTime();
 				var sParentDivChartID = 'parent_' + sDivChartID;
 
 				%><table class="<%- sTableWidthClass %> table">
 					<thead  class="box">
-                        <tr class="box-title"><th><%- i %></th></tr>
-                    </thead>
+						<tr class="box-title"><th><%- i %></th></tr>
+					</thead>
 					<tbody><tr><td id="<%- sParentDivChartID %>" style="padding-top:40px"></td></tr></tbody>
 				</table><%
 
