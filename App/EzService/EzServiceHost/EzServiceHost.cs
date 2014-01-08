@@ -19,8 +19,6 @@ namespace EzServiceHost {
 			m_oData = oData;
 
 			var oTcpBinding = new NetTcpBinding();
-			oTcpBinding.Security.Mode = SecurityMode.None;
-			oTcpBinding.Security.Transport.ClientCredentialType = TcpClientCredentialType.None;
 
 			AddServiceEndpoint(typeof(IEzServiceAdmin), oTcpBinding, m_oCfg.AdminEndpointAddress);
 

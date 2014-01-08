@@ -554,8 +554,6 @@ namespace EzBob.Web.Code.ApplicationCreator {
 						cfg.Init();
 
 						var oTcpBinding = new NetTcpBinding();
-						oTcpBinding.Security.Mode = SecurityMode.None;
-						oTcpBinding.Security.Transport.ClientCredentialType = TcpClientCredentialType.None;
 
 						m_oServiceClient = new EzServiceClient(
 							oTcpBinding, // TODO: HTTPS...
