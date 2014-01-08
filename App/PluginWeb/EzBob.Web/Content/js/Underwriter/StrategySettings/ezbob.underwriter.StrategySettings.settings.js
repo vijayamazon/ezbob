@@ -1,4 +1,4 @@
-﻿(function() {
+(function() {
   var root,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -22,12 +22,12 @@
     };
 
     StrategySettingsView.prototype.render = function() {
-      var charges, experian, general;
-      console.clear();
+      var campaign, charges, experian, general;
       this.$el.html(this.template());
       general = this.$el.find("#general-settings");
       charges = this.$el.find("#charges-settings");
       experian = this.$el.find("#experian-settings");
+      campaign = this.$el.find("#campaign-settings");
       this.generalModel = new EzBob.Underwriter.SettingsGeneralModel();
       this.generalView = new EzBob.Underwriter.SettingsGeneralView({
         el: general,
@@ -39,10 +39,16 @@
         model: this.chargesModel
       });
       this.experianModel = new EzBob.Underwriter.Settings.ExperianModel();
-      return this.experianView = new EzBob.Underwriter.Settings.ExperianView({
+      this.experianView = new EzBob.Underwriter.Settings.ExperianView({
         el: experian,
         model: this.experianModel
       });
+      this.campaignModel = new EzBob.Underwriter.Settings.CampaignModel();
+      this.campaignView = new EzBob.Underwriter.Settings.CampaignView({
+        el: campaign,
+        model: this.campaignModel
+      });
+      return EzBob.handleUserLayoutSetting();
     };
 
     StrategySettingsView.prototype.show = function(type) {

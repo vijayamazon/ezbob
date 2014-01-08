@@ -1,51 +1,64 @@
+EzBob.handleUserLayoutSetting = function () {
+    console.log('handle');
+    if (typeof cookie_not_handle_user_settings != 'undefined' && cookie_not_handle_user_settings == true) {
+        console.log('not handle');
+        return;
+    }
+    //Collapsed sidebar
+    if ($.cookie('sidebar-collapsed') == 'true') {
+        $('#sidebar').addClass('sidebar-collapsed');
+    }
+
+    //Fixed sidebar
+    if ($.cookie('sidebar-fixed') == 'true') {
+        $('#sidebar').addClass('sidebar-fixed');
+    }
+
+    //Fixed navbar
+    if ($.cookie('navbar-fixed') == 'true') {
+        $('#navbar').addClass('navbar-fixed');
+    }
+
+    //Striped Table
+    if ($.cookie('table-fixed') == 'true') {
+        setTimeout(function () {
+            console.log('stripped');
+            $('table.table:not(.table-advance)').addClass('table-advance');
+        }, 1000);
+    }
+    
+    //White background
+    if ($.cookie('whitebg-fixed') == 'true') {
+        $('body').addClass('white-bg');
+    }
+    
+
+    var color_skin = $.cookie('skin-color');
+    var color_sidebar = $.cookie('sidebar-color');
+    var color_navbar = $.cookie('navbar-color');
+
+    //Skin color
+    if (color_skin !== undefined) {
+        $('body').addClass('skin-' + color_skin);
+    }
+
+    //Sidebar color
+    if (color_sidebar !== undefined) {
+        $('#main-container').addClass('sidebar-' + color_sidebar);
+    }
+
+    //Navbar color
+    if (color_navbar !== undefined) {
+        $('#navbar').addClass('navbar-' + color_navbar);
+    }
+};
+
 $(function () {
 
     //Handel user layout settings using cookie
-    function handleUserLayoutSetting() {
-        if (typeof cookie_not_handle_user_settings != 'undefined' && cookie_not_handle_user_settings == true) {
-            return;
-        }
-        //Collapsed sidebar
-        if ($.cookie('sidebar-collapsed') == 'true') {
-            $('#sidebar').addClass('sidebar-collapsed');
-        }
-
-        //Fixed sidebar
-        if ($.cookie('sidebar-fixed') == 'true') {
-            $('#sidebar').addClass('sidebar-fixed');
-        }
-
-        //Fixed navbar
-        if ($.cookie('navbar-fixed') == 'true') {
-            $('#navbar').addClass('navbar-fixed');
-        }
-
-        //Striped Table
-        if ($.cookie('table-fixed') == 'true') {
-            $('table.table:not(.table-advance)').addClass('table-advance');
-        }
-
-        var color_skin = $.cookie('skin-color');
-        var color_sidebar = $.cookie('sidebar-color');
-        var color_navbar = $.cookie('navbar-color');
-
-        //Skin color
-        if (color_skin !== undefined) {
-            $('body').addClass('skin-' + color_skin);
-        }
-
-        //Sidebar color
-        if (color_sidebar !== undefined) {
-            $('#main-container').addClass('sidebar-' + color_sidebar);
-        }
-
-        //Navbar color
-        if (color_navbar !== undefined) {
-            $('#navbar').addClass('navbar-' + color_navbar);
-        }
-    }
+    
     //If you want to handle skin color by server-side code, don't forget to comment next line  
-    handleUserLayoutSetting();
+    EzBob.handleUserLayoutSetting();
     //Disable certain links
     $('a[href^=#]').click(function (e) {
         e.preventDefault()
@@ -268,6 +281,14 @@ $(function () {
 
             } else {
                 $("table.table").addClass("table-advance");
+            }
+        }
+        if (target == "whitebg") {
+            if (check.hasClass('fa-square-o')) {
+                $("body").removeClass("white-bg");
+
+            } else {
+                $("body").addClass("white-bg");
             }
         }
     });

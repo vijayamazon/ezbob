@@ -123,7 +123,8 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
         @controlButtons = new EzBob.Underwriter.ControlButtonsView(
             el: controlButtons
         )
-
+        
+        EzBob.handleUserLayoutSetting()
         this
 
     events:
@@ -346,6 +347,7 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
             customerId: id
         )
         @controlButtons.render()
+        EzBob.handleUserLayoutSetting()
 
     hide: ->
         @$el.hide()

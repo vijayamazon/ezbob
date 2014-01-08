@@ -134,6 +134,7 @@
       this.controlButtons = new EzBob.Underwriter.ControlButtonsView({
         el: controlButtons
       });
+      EzBob.handleUserLayoutSetting();
       return this;
     };
 

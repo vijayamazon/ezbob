@@ -25,6 +25,7 @@ class EzBob.Underwriter.SupportView extends Backbone.Marionette.ItemView
         arrow.show()
         arrow.removeClass().addClass(if @model.get('sortType') == 'asc' then 'arrow icon-arrow-up' else 'arrow icon-arrow-down')
         BlockUi("off")
+        EzBob.handleUserLayoutSetting()
 
     sortClicked: (e) ->
         BlockUi("on")

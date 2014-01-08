@@ -40,6 +40,7 @@ class EzBob.Underwriter.SettingsAutomationView extends Backbone.Marionette.ItemV
 
     show: (type) ->
         this.$el.show()
+        EzBob.handleUserLayoutSetting()
 
     hide: () ->
         this.$el.hide()

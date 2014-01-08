@@ -33,6 +33,9 @@ class EzBob.Underwriter.StrategySettingsView extends Backbone.View
             el: campaign
             model: @campaignModel
         )
+
+        EzBob.handleUserLayoutSetting()
+
     show: (type) ->
         this.$el.show()
 
