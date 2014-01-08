@@ -222,7 +222,7 @@ namespace EzBobTest
 		[Test]
 		public void SendEmailVerification()
 		{
-			var s = new SendEmailVerification(3060, "dfg", m_oDB, m_oLog);
+			var s = new SendEmailVerification(3060, "fakeemail", "dfg", m_oDB, m_oLog);
 			s.Execute();
 		}
 
