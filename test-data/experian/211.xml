@@ -1,0 +1,2562 @@
+<?xml version="1.0" encoding="utf-8"?>
+<OutputRoot xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Output xmlns="http://schema.uk.experian.com/experian/cems/msgs/v1.1/ConsumerData">
+    <Applicant xmlns="">
+      <ApplicantIdentifier>1</ApplicantIdentifier>
+      <Name>
+        <Forename>Martin</Forename>
+        <Surname>Young</Surname>
+      </Name>
+      <Gender>M</Gender>
+      <DateOfBirth>
+        <CCYY>1969</CCYY>
+        <MM>3</MM>
+        <DD>17</DD>
+      </DateOfBirth>
+      <FormattedName> M Young</FormattedName>
+      <FormattedDOB>17/03/1969</FormattedDOB>
+      <Age>
+        <Years>44</Years>
+        <Months>7</Months>
+      </Age>
+    </Applicant>
+    <ConsumerSummary xmlns="">
+      <PremiumValueData>
+        <TPD>
+          <NDHHO>N</NDHHO>
+        </TPD>
+        <CII>
+          <NDSPCII> 10</NDSPCII>
+          <NDSPACII>  1</NDSPACII>
+        </CII>
+        <Mosaic>
+          <EA4M01>  7037</EA4M01>
+          <EA4M02>  1481</EA4M02>
+          <EA4M03>   214</EA4M03>
+          <EA4M04>   100</EA4M04>
+          <EA4M05>   948</EA4M05>
+          <EA4M06>   484</EA4M06>
+          <EA4M07>    75</EA4M07>
+          <EA4M08>000000</EA4M08>
+          <EA4M09>000000</EA4M09>
+          <EA4M10>000000</EA4M10>
+          <EA4M11>     0</EA4M11>
+          <EA4M12>     0</EA4M12>
+          <EA4T01>5</EA4T01>
+          <EA5T01>   0</EA5T01>
+          <EA5T02>  10</EA5T02>
+          <NDG01> 2</NDG01>
+          <EA4N01>   1191</EA4N01>
+          <EA4N02>  -2777</EA4N02>
+          <EA4N03>    446</EA4N03>
+          <EA4N04>   -931</EA4N04>
+          <EA4N05>   3007</EA4N05>
+          <NDG02>  907</NDG02>
+          <NDG03>    25</NDG03>
+          <NDG04>   417</NDG04>
+          <NDG05>   138</NDG05>
+          <NDG06>   417</NDG06>
+          <NDG07>  1250</NDG07>
+          <NDG08>     0</NDG08>
+          <NDG09>     0</NDG09>
+          <NDG10>     0</NDG10>
+          <NDG11>     0</NDG11>
+          <NDG12>  6250</NDG12>
+        </Mosaic>
+        <Scoring>
+          <NDSI21>91BWN</NDSI21>
+          <E5S01>1</E5S01>
+          <E5S02>1</E5S02>
+          <E5S041>91</E5S041>
+          <E5S051>  986</E5S051>
+          <E5S042>0</E5S042>
+          <E5S052> -999</E5S052>
+          <E5S043>  0</E5S043>
+          <E5S053> -999</E5S053>
+          <NDHHOSCORE> -999</NDHHOSCORE>
+          <NDVALSCORE>    0</NDVALSCORE>
+        </Scoring>
+        <AddrLink>
+          <NDLNK01>N</NDLNK01>
+        </AddrLink>
+        <Director>
+          <NDDIRSP>N</NDDIRSP>
+          <NDDIRSPA>N</NDDIRSPA>
+        </Director>
+        <AgeDoB>
+          <NDDOB>
+            <DD>17</DD>
+            <MM>3</MM>
+            <YY>69</YY>
+          </NDDOB>
+          <EA5S01> 44</EA5S01>
+          <EA4S01> 0</EA4S01>
+          <EA4S03> 0</EA4S03>
+          <EA4S05> 0</EA4S05>
+          <EA4S07> 0</EA4S07>
+        </AgeDoB>
+        <ImpairedCH />
+        <AdditDelphiBlocks>
+          <APACSCCBehavrlData>
+            <CCDATASUPPLIED>Y</CCDATASUPPLIED>
+            <NOMPMNPRL3M>  4</NOMPMNPRL3M>
+            <PTBRL3MNPRL3M>     2</PTBRL3MNPRL3M>
+            <PTBRL6MNPRL6M>     2</PTBRL6MNPRL6M>
+            <NOCAL1M>  0</NOCAL1M>
+            <NOCAL3M>  0</NOCAL3M>
+            <NOMLVCAL1M>  0</NOMLVCAL1M>
+            <NOMLVCAL3M>  0</NOMLVCAL3M>
+            <CLUCLIL6M>-99999</CLUCLIL6M>
+            <CLUCLIL6MNPRL6M>-99999</CLUCLIL6MNPRL6M>
+            <CLUNPRL1M>    77</CLUNPRL1M>
+            <NOCLDL3M>  0</NOCLDL3M>
+            <NOASBNPRL1M>  5</NOASBNPRL1M>
+          </APACSCCBehavrlData>
+          <Utilisationblock>
+            <SPA01>    564</SPA01>
+            <SPA02>  22056</SPA02>
+            <SPA03>    564</SPA03>
+            <SPA04>  21730</SPA04>
+            <SPA05>     -2</SPA05>
+            <SPA06>    326</SPA06>
+            <SPA07>  22056</SPA07>
+            <SPA08>     -2</SPA08>
+            <SPA09>     -2</SPA09>
+            <SPA10>     -2</SPA10>
+            <SPB111>  6</SPB111>
+            <SPB112>  5</SPB112>
+            <SPB113>  3</SPB113>
+            <SPB114>  5</SPB114>
+            <SPB115>  0</SPB115>
+            <SPB116>  5</SPB116>
+            <SPB117>  5</SPB117>
+            <SPB218>   97</SPB218>
+            <SPB219> 9998</SPB219>
+            <SPB220>   97</SPB220>
+            <SPB221> 9997</SPB221>
+            <SPB322>     0</SPB322>
+            <SPB323>  1308</SPB323>
+            <SPC24>N </SPC24>
+            <SPD25>  0</SPD25>
+            <SPE126> -2</SPE126>
+            <SPE127> -2</SPE127>
+            <SPE128>     -2</SPE128>
+            <SPF129>  4</SPF129>
+            <SPF130>  2</SPF130>
+            <SPF131>  0</SPF131>
+            <SPF232>  28400</SPF232>
+            <SPF233>  12000</SPF233>
+            <SPF334>   88</SPF334>
+            <SPF335>   77</SPF335>
+            <SPF336>   19</SPF336>
+            <SPG37> 184</SPG37>
+            <SPG38> 101</SPG38>
+            <SPH39>      0</SPH39>
+            <SPH40>      0</SPH40>
+            <SPH41>      0</SPH41>
+            <SPCIICHECKDIGIT>       0</SPCIICHECKDIGIT>
+            <SPAA01>     -2</SPAA01>
+            <SPAA02>   1339</SPAA02>
+            <SPAA03>     -2</SPAA03>
+            <SPAA04>      0</SPAA04>
+            <SPAA05>     -2</SPAA05>
+            <SPAA06>   1339</SPAA06>
+            <SPAA07>   1339</SPAA07>
+            <SPAA08>     -2</SPAA08>
+            <SPAA09>     -2</SPAA09>
+            <SPAA10>     -2</SPAA10>
+            <SPAB111>  1</SPAB111>
+            <SPAB112>  1</SPAB112>
+            <SPAB113>  1</SPAB113>
+            <SPAB114>  0</SPAB114>
+            <SPAB115>  1</SPAB115>
+            <SPAB116>  2</SPAB116>
+            <SPAB117>  2</SPAB117>
+            <SPAB218> 9998</SPAB218>
+            <SPAB219> 9998</SPAB219>
+            <SPAB220> 9998</SPAB220>
+            <SPAB221> 9999</SPAB221>
+            <SPAB322>     0</SPAB322>
+            <SPAB323>     0</SPAB323>
+            <SPAC24>N </SPAC24>
+            <SPAD25>  0</SPAD25>
+            <SPAE126> -2</SPAE126>
+            <SPAE127> -2</SPAE127>
+            <SPAE128>     -2</SPAE128>
+            <SPAF129> -2</SPAF129>
+            <SPAF130> -2</SPAF130>
+            <SPAF131> -2</SPAF131>
+            <SPAF232>   9000</SPAF232>
+            <SPAF233>   9000</SPAF233>
+            <SPAF334>    0</SPAF334>
+            <SPAF335>    0</SPAF335>
+            <SPAF336> 9999</SPAF336>
+            <SPAG37> 134</SPAG37>
+            <SPAG38>  81</SPAG38>
+            <SPAH39>      0</SPAH39>
+            <SPAH40>      0</SPAH40>
+            <SPAH41>      0</SPAH41>
+            <SPACIICHECKDIGIT>       0</SPACIICHECKDIGIT>
+          </Utilisationblock>
+          <NeverPaidDefsBlock />
+          <TelecommsBlock />
+          <BespokeBlock />
+        </AdditDelphiBlocks>
+      </PremiumValueData>
+      <Summary>
+        <ElectoralRoll>
+          <E4Q01>1</E4Q01>
+          <E4Q02>1</E4Q02>
+          <E4Q03>7</E4Q03>
+          <E4Q04>7</E4Q04>
+          <E4Q05>5</E4Q05>
+          <E4Q06>5</E4Q06>
+          <E4Q07>  0</E4Q07>
+          <E4Q08>0</E4Q08>
+          <E4Q09>5</E4Q09>
+          <E4Q10>5</E4Q10>
+          <E4Q11>  0</E4Q11>
+          <E4Q12>  0</E4Q12>
+          <E4Q13>5</E4Q13>
+          <E4Q14>5</E4Q14>
+          <E4Q15>0</E4Q15>
+          <E4Q16>0</E4Q16>
+          <E4Q17>2</E4Q17>
+          <E4Q18>2</E4Q18>
+          <E4R01>1</E4R01>
+          <E4R02>ME1 3AB</E4R02>
+          <EA4R01PM>0</EA4R01PM>
+          <EA4R01CJ>0</EA4R01CJ>
+          <EA4R01PJ>0</EA4R01PJ>
+          <NDERL01> 0</NDERL01>
+          <NDERL02> 0</NDERL02>
+          <EA2Q01>3</EA2Q01>
+          <EA2Q02>  0</EA2Q02>
+          <NDERLMACA>C</NDERLMACA>
+          <EA5U01> 1</EA5U01>
+          <EA5U02> 0</EA5U02>
+        </ElectoralRoll>
+        <PublicInfo>
+          <E1A01> 0</E1A01>
+          <E1A02>   0</E1A02>
+          <E1A03>  0</E1A03>
+          <EA1C01>N</EA1C01>
+          <EA1D01> 0</EA1D01>
+          <EA1D02>   0</EA1D02>
+          <EA1D03>  0</EA1D03>
+          <E2G01> 0</E2G01>
+          <E2G02>   0</E2G02>
+          <E2G03>  0</E2G03>
+          <EA2I01>N</EA2I01>
+          <EA2J01> 0</EA2J01>
+          <EA2J02>   0</EA2J02>
+          <EA2J03>  0</EA2J03>
+          <EA4Q06>N</EA4Q06>
+          <SPBRPRESENT>N</SPBRPRESENT>
+          <SPABRPRESENT>N</SPABRPRESENT>
+        </PublicInfo>
+        <CAIS>
+          <E1A04> 0</E1A04>
+          <E1A05>   0</E1A05>
+          <E1A06>  0</E1A06>
+          <E1A07> 3</E1A07>
+          <E1A08> 0</E1A08>
+          <E1A09> 0</E1A09>
+          <E1A10>   0</E1A10>
+          <E1A11>  0</E1A11>
+          <E1B01> 0</E1B01>
+          <E1B02>   0</E1B02>
+          <E1B03>U</E1B03>
+          <E1B04>   6</E1B04>
+          <E1B05>0</E1B05>
+          <E1B06> 215</E1B06>
+          <E1B07>U</E1B07>
+          <E1B08>0</E1B08>
+          <E1B09> 7</E1B09>
+          <E1B10> 221</E1B10>
+          <E1B11> 198</E1B11>
+          <E1B12> 0</E1B12>
+          <E1B13> 0</E1B13>
+          <NDECC01>  13</NDECC01>
+          <NDECC02> 436</NDECC02>
+          <NDECC03> 1</NDECC03>
+          <NDECC04> 998</NDECC04>
+          <NDECC07> 92</NDECC07>
+          <NDECC08>   1</NDECC08>
+          <E1C01>N</E1C01>
+          <E1C02> 0</E1C02>
+          <E1C03>   0</E1C03>
+          <E1C04> 0</E1C04>
+          <E1C05> 0</E1C05>
+          <E1C06> 0</E1C06>
+          <EA1B02> 0</EA1B02>
+          <E1D01> 0</E1D01>
+          <E1D02> 0</E1D02>
+          <E1D03> 0</E1D03>
+          <E1D04> 0</E1D04>
+          <NDHAC01>  1</NDHAC01>
+          <NDHAC02>  1</NDHAC02>
+          <NDHAC03>  1</NDHAC03>
+          <NDHAC04>  1</NDHAC04>
+          <NDHAC05>  1</NDHAC05>
+          <NDHAC09>  1</NDHAC09>
+          <NDINC01> 3</NDINC01>
+          <EA1F01>1</EA1F01>
+          <EA1F02>N</EA1F02>
+          <EA1F03>N</EA1F03>
+          <E2G04> 0</E2G04>
+          <E2G05>   0</E2G05>
+          <E2G06>  0</E2G06>
+          <E2G07> 2</E2G07>
+          <E2G08> 1</E2G08>
+          <E2G09> 0</E2G09>
+          <E2G10>   0</E2G10>
+          <E2G11>  0</E2G11>
+          <E2H01> 0</E2H01>
+          <E2H02>   0</E2H02>
+          <E2H03>N</E2H03>
+          <E2H04>   0</E2H04>
+          <E2H05>0</E2H05>
+          <E2H06>  14</E2H06>
+          <E2H07>0</E2H07>
+          <E2H08>0</E2H08>
+          <E2H09> 2</E2H09>
+          <E2H10>  14</E2H10>
+          <E2H11>   0</E2H11>
+          <E2H12> 0</E2H12>
+          <E2H13> 0</E2H13>
+          <NDECC05>   0</NDECC05>
+          <NDECC09>  0</NDECC09>
+          <NDECC10>   0</NDECC10>
+          <E2I01>N</E2I01>
+          <E2I02> 0</E2I02>
+          <E2I03>   0</E2I03>
+          <E2I04> 0</E2I04>
+          <E2I05> 0</E2I05>
+          <E2I06> 0</E2I06>
+          <EA2H02> 0</EA2H02>
+          <E2J01> 0</E2J01>
+          <E2J02> 0</E2J02>
+          <E2J03> 0</E2J03>
+          <E2J04> 0</E2J04>
+          <NDHAC10>  0</NDHAC10>
+          <NDHAC06>  0</NDHAC06>
+          <NDHAC07>  1</NDHAC07>
+          <NDHAC08>  1</NDHAC08>
+          <NDINC02> 0</NDINC02>
+          <EA2L01>1</EA2L01>
+          <EA2L02>0</EA2L02>
+          <EA2L03>N</EA2L03>
+          <NDECC06> 469</NDECC06>
+          <NDINC03> 5</NDINC03>
+        </CAIS>
+        <CAPS>
+          <E1E01> 0</E1E01>
+          <E1E02> 1</E1E02>
+          <EA1B01> 0</EA1B01>
+          <NDPSD01> 0</NDPSD01>
+          <NDPSD02> 0</NDPSD02>
+          <NDPSD03> 0</NDPSD03>
+          <NDPSD04> 0</NDPSD04>
+          <NDPSD05> 1</NDPSD05>
+          <NDPSD06> 0</NDPSD06>
+          <EA1E01> 0</EA1E01>
+          <EA1E02> 1</EA1E02>
+          <EA1E03> 0</EA1E03>
+          <EA1E04> 0</EA1E04>
+          <E2K01> 1</E2K01>
+          <E2K02> 2</E2K02>
+          <EA2H01> 0</EA2H01>
+          <NDPSD07> 0</NDPSD07>
+          <NDPSD08> 0</NDPSD08>
+          <NDPSD09> 1</NDPSD09>
+          <NDPSD10> 0</NDPSD10>
+          <EA2K01> 1</EA2K01>
+          <EA2K02> 2</EA2K02>
+          <EA2K03> 0</EA2K03>
+          <EA2K04> 0</EA2K04>
+          <NDPSD11> 3</NDPSD11>
+        </CAPS>
+        <CIFAS>
+          <EA1A01>N</EA1A01>
+          <EA2G01>N</EA2G01>
+          <EA4P01>N</EA4P01>
+        </CIFAS>
+        <CML>
+          <EA1C02>N</EA1C02>
+          <EA2I02>N</EA2I02>
+        </CML>
+        <GAIN>
+          <EA1G01>N</EA1G01>
+          <EA1G02>N</EA1G02>
+          <EA2M01>N</EA2M01>
+        </GAIN>
+        <NOC>
+          <EA4Q07>N</EA4Q07>
+          <EA4Q08>N</EA4Q08>
+          <EA4Q09>N</EA4Q09>
+          <EA4Q10>N</EA4Q10>
+          <EA4Q11>N</EA4Q11>
+          <EA4Q01>N</EA4Q01>
+          <EA4Q02>N</EA4Q02>
+          <EA4Q03>N</EA4Q03>
+          <EA4Q04>N</EA4Q04>
+          <EA4Q05>N</EA4Q05>
+        </NOC>
+        <TPD>
+          <NDOPTOUT>N</NDOPTOUT>
+        </TPD>
+      </Summary>
+    </ConsumerSummary>
+    <Control xmlns="">
+      <ExperianReference>VKZPC6R7DM</ExperianReference>
+    </Control>
+    <FullConsumerData xmlns="">
+      <ConsumerDataSummary>
+        <SummaryDetails>
+          <DataOverflow>N</DataOverflow>
+          <NoCCount>0</NoCCount>
+          <LocationConfirmCnt>1</LocationConfirmCnt>
+          <PublicInfoSummary>
+            <Number>0</Number>
+          </PublicInfoSummary>
+          <CAISSummary>
+            <Number>15</Number>
+            <WorstCurrent>0</WorstCurrent>
+            <WorstHistorical>1</WorstHistorical>
+            <TotalBalance>£220320  </TotalBalance>
+            <GoneAway>N</GoneAway>
+            <CAISPrevSearches>
+              <NumberUpTo3Months>1</NumberUpTo3Months>
+              <Num3To6Months>2</Num3To6Months>
+              <Num6To12Months>0</Num6To12Months>
+              <TotalNumber>3</TotalNumber>
+            </CAISPrevSearches>
+          </CAISSummary>
+          <SummaryFlags>
+            <CIFAS>N</CIFAS>
+            <CML>N</CML>
+            <PreviousOccupant>N</PreviousOccupant>
+            <NoConfirmAtPrevLoc>N</NoConfirmAtPrevLoc>
+            <Arrangement>N</Arrangement>
+            <ReportedDeceased>N</ReportedDeceased>
+            <ReportedGoneAway>N</ReportedGoneAway>
+            <ClaimedOnCreditIns>N</ClaimedOnCreditIns>
+            <DebtManagement>N</DebtManagement>
+            <AccountQuery>N</AccountQuery>
+            <Recourse>N</Recourse>
+            <VoluntaryTerm>N</VoluntaryTerm>
+            <PartSettle>N</PartSettle>
+            <DebtAssign>N</DebtAssign>
+            <OwnAccount>N</OwnAccount>
+            <OwnSearch>N</OwnSearch>
+            <PreviousLocation>N</PreviousLocation>
+            <AdditionalLocation>N</AdditionalLocation>
+            <ForwardLocation>Y</ForwardLocation>
+          </SummaryFlags>
+          <LocationConfirm>
+            <Location>C</Location>
+            <Level>1</Level>
+            <Source>V</Source>
+          </LocationConfirm>
+        </SummaryDetails>
+      </ConsumerDataSummary>
+      <ConsumerData>
+        <VotersRollLocation>
+          <LocationIndicator>C</LocationIndicator>
+          <ApplicantIndicator>1</ApplicantIndicator>
+          <VRollStreetDetails>
+            <Location>
+              <Street>PRIESTFIELDS</Street>
+              <PostTown>ROCHESTER</PostTown>
+              <County>KENT</County>
+              <Postcode>ME1 3AB</Postcode>
+            </Location>
+            <StreetMatchLevel>4</StreetMatchLevel>
+            <InformationSource>N</InformationSource>
+            <MOSCAICCode>55</MOSCAICCode>
+            <PAFDistrictNumber>1</PAFDistrictNumber>
+            <SegmentIDNumber>1</SegmentIDNumber>
+            <ACORNCode>99</ACORNCode>
+            <BatchNumber>09400260</BatchNumber>
+          </VRollStreetDetails>
+        </VotersRollLocation>
+        <VotersRollPerson>
+          <LocationIndicator>C</LocationIndicator>
+          <ApplicantIndicator>1</ApplicantIndicator>
+          <VRollPersonDetails>
+            <Name>
+              <Forename>ALLISON</Forename>
+              <MiddleName>C</MiddleName>
+              <Surname>YOUNG</Surname>
+            </Name>
+            <MatchDetails>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>2</BureauRefCategory>
+              <MatchTo>3</MatchTo>
+              <MatchType>F</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <Sex>F</Sex>
+            <SegmentIDNumber>1</SegmentIDNumber>
+            <SurnameReg>2006</SurnameReg>
+            <DatesRegLeft>062006</DatesRegLeft>
+            <HouseNumber>23</HouseNumber>
+          </VRollPersonDetails>
+          <VRollPersonDetails>
+            <Name>
+              <Forename>MARTIN</Forename>
+              <MiddleName>H</MiddleName>
+              <Surname>YOUNG</Surname>
+            </Name>
+            <MatchDetails>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <Sex>M</Sex>
+            <SegmentIDNumber>1</SegmentIDNumber>
+            <SurnameReg>2006</SurnameReg>
+            <DatesRegLeft>062006</DatesRegLeft>
+            <HouseNumber>23</HouseNumber>
+          </VRollPersonDetails>
+        </VotersRollPerson>
+        <Association>
+          <LocationIndicator>C</LocationIndicator>
+          <ApplicantIndicator>1</ApplicantIndicator>
+          <AssociationDetails>
+            <InformationDate>
+              <CCYY>2013</CCYY>
+              <MM>4</MM>
+              <DD>21</DD>
+            </InformationDate>
+            <Location>
+              <HouseNumber>23</HouseNumber>
+              <Street>PRIESTFIELDS</Street>
+              <PostTown>ROCHESTER</PostTown>
+              <County>KENT</County>
+              <Postcode>ME1 3AB</Postcode>
+            </Location>
+            <AssociateName>
+              <Title>MRS</Title>
+              <Forename>ALLISON</Forename>
+              <MiddleName>C</MiddleName>
+              <Surname>YOUNG</Surname>
+            </AssociateName>
+            <Name>
+              <Title>MR</Title>
+              <Forename>MARTIN</Forename>
+              <MiddleName>H</MiddleName>
+              <Surname>YOUNG</Surname>
+            </Name>
+            <DoBAssociateOrAlias>
+              <CCYY>1968</CCYY>
+              <MM>11</MM>
+              <DD>4</DD>
+            </DoBAssociateOrAlias>
+            <DateOfBirth>
+              <CCYY>1969</CCYY>
+              <MM>3</MM>
+              <DD>17</DD>
+            </DateOfBirth>
+            <Source>J</Source>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+            </MatchDetails>
+            <InformationType>F</InformationType>
+            <CompanyType>06</CompanyType>
+            <InformationSource>C</InformationSource>
+          </AssociationDetails>
+        </Association>
+        <CAIS>
+          <LocationIndicator>C</LocationIndicator>
+          <ApplicantIndicator>1</ApplicantIndicator>
+          <CAISDetails>
+            <Name>
+              <Title>MR</Title>
+              <Forename>MARTIN</Forename>
+              <MiddleName>H</MiddleName>
+              <Surname>YOUNG</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2006</CCYY>
+              <MM>3</MM>
+              <DD>17</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseNumber>23</HouseNumber>
+              <Street>PRIEST FIELDS</Street>
+              <PostTown>ROCHESTER</PostTown>
+              <County>KENT</County>
+              <Postcode>ME1 3AB</Postcode>
+            </Location>
+            <SettlementDate>
+              <CCYY>2008</CCYY>
+              <MM>3</MM>
+              <DD>17</DD>
+            </SettlementDate>
+            <LastUpdatedDate>
+              <CCYY>2008</CCYY>
+              <MM>4</MM>
+              <DD>13</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1969</CCYY>
+              <MM>3</MM>
+              <DD>17</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <CreditLimit />
+            <Balance>
+              <Narrative>S</Narrative>
+            </Balance>
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>000000000000</AccountStatusCodes>
+            <Status1To2>0</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>25</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>0</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>24</RepaymentPeriod>
+            <Sex>M</Sex>
+            <AccountStatus>S</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <CompanyType>01</CompanyType>
+            <AccountType>02</AccountType>
+          </CAISDetails>
+          <CAISDetails>
+            <Name>
+              <Title>MR</Title>
+              <Forename>MARTIN</Forename>
+              <MiddleName>H</MiddleName>
+              <Surname>YOUNG</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2005</CCYY>
+              <MM>9</MM>
+              <DD>8</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseNumber>23</HouseNumber>
+              <Street>PRIEST FIELDS</Street>
+              <PostTown>ROCHESTER</PostTown>
+              <County>KENT</County>
+              <Postcode>ME1 3AB</Postcode>
+            </Location>
+            <LastUpdatedDate>
+              <CCYY>2013</CCYY>
+              <MM>10</MM>
+              <DD>6</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1969</CCYY>
+              <MM>3</MM>
+              <DD>17</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <CreditLimit>
+              <Amount>£500     </Amount>
+              <Caption>O</Caption>
+            </CreditLimit>
+            <Balance>
+              <Amount>£326     </Amount>
+              <Caption>O</Caption>
+            </Balance>
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>000000000000</AccountStatusCodes>
+            <Status1To2>0</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>36</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>0</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>0</RepaymentPeriod>
+            <Sex>M</Sex>
+            <AccountStatus>A</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <CompanyType>01</CompanyType>
+            <AccountType>15</AccountType>
+          </CAISDetails>
+          <CAISDetails>
+            <Name>
+              <Title>MISS</Title>
+              <Forename>ALISON</Forename>
+              <Surname>YOUNG</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2005</CCYY>
+              <MM>5</MM>
+              <DD>7</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseNumber>23</HouseNumber>
+              <Street>PRIEST FIELDS</Street>
+              <PostTown>ROCHESTER</PostTown>
+              <County>KENT</County>
+              <Postcode>ME13AB</Postcode>
+            </Location>
+            <SettlementDate>
+              <CCYY>2012</CCYY>
+              <MM>12</MM>
+              <DD>25</DD>
+            </SettlementDate>
+            <LastUpdatedDate>
+              <CCYY>2013</CCYY>
+              <MM>2</MM>
+              <DD>10</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1968</CCYY>
+              <MM>11</MM>
+              <DD>4</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>2</BureauRefCategory>
+              <MatchTo>3</MatchTo>
+              <MatchType>F</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <CreditLimit />
+            <Balance>
+              <Narrative>S</Narrative>
+            </Balance>
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>000000000000</AccountStatusCodes>
+            <Status1To2>0</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>36</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>0</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>0</RepaymentPeriod>
+            <Sex>F</Sex>
+            <PaymentFrequency>M</PaymentFrequency>
+            <AccountStatus>S</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <CompanyType>17</CompanyType>
+            <AccountType>18</AccountType>
+          </CAISDetails>
+          <CAISDetails>
+            <Name>
+              <Title>MRS</Title>
+              <Forename>ALLISON</Forename>
+              <Surname>YOUNG</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2011</CCYY>
+              <MM>4</MM>
+              <DD>20</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseNumber>23</HouseNumber>
+              <Street>PRIEST FIELDS</Street>
+              <PostTown>ROCHESTER</PostTown>
+              <County>KENT</County>
+              <Postcode>ME1 3AB</Postcode>
+            </Location>
+            <SettlementDate>
+              <CCYY>2012</CCYY>
+              <MM>7</MM>
+              <DD>17</DD>
+            </SettlementDate>
+            <LastUpdatedDate>
+              <CCYY>2012</CCYY>
+              <MM>8</MM>
+              <DD>12</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1968</CCYY>
+              <MM>11</MM>
+              <DD>4</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>2</BureauRefCategory>
+              <MatchTo>3</MatchTo>
+              <MatchType>F</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <CreditLimit />
+            <Balance>
+              <Narrative>S</Narrative>
+            </Balance>
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>000000000000</AccountStatusCodes>
+            <Status1To2>0</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>16</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>0</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>0</RepaymentPeriod>
+            <Sex>F</Sex>
+            <PaymentFrequency>M</PaymentFrequency>
+            <AccountStatus>S</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <CompanyType>10</CompanyType>
+            <AccountType>40</AccountType>
+          </CAISDetails>
+          <CAISDetails>
+            <Name>
+              <Title>MR</Title>
+              <Forename>MARTIN</Forename>
+              <MiddleName>H</MiddleName>
+              <Surname>YOUNG</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2007</CCYY>
+              <MM>4</MM>
+              <DD>25</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseNumber>23</HouseNumber>
+              <Street>PRIEST FIELDS</Street>
+              <PostTown>ROCHESTER</PostTown>
+              <County>KENT</County>
+              <Postcode>ME1 3AB</Postcode>
+            </Location>
+            <SettlementDate>
+              <CCYY>2010</CCYY>
+              <MM>5</MM>
+              <DD>5</DD>
+            </SettlementDate>
+            <LastUpdatedDate>
+              <CCYY>2010</CCYY>
+              <MM>5</MM>
+              <DD>9</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1969</CCYY>
+              <MM>3</MM>
+              <DD>17</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <CreditLimit />
+            <Balance>
+              <Narrative>S</Narrative>
+            </Balance>
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>000000000000</AccountStatusCodes>
+            <Status1To2>0</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>36</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>0</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>36</RepaymentPeriod>
+            <Payment>£427  </Payment>
+            <Sex>M</Sex>
+            <AccountStatus>S</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <CompanyType>01</CompanyType>
+            <AccountType>02</AccountType>
+          </CAISDetails>
+          <CAISDetails>
+            <Name>
+              <Title>MR</Title>
+              <Forename>MARTIN</Forename>
+              <MiddleName>H</MiddleName>
+              <Surname>YOUNG</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2010</CCYY>
+              <MM>3</MM>
+              <DD>31</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseNumber>23</HouseNumber>
+              <Street>PRIEST FIELDS</Street>
+              <PostTown>ROCHESTER</PostTown>
+              <County>KENT</County>
+              <Postcode>ME1 3AB</Postcode>
+            </Location>
+            <SettlementDate>
+              <CCYY>2012</CCYY>
+              <MM>5</MM>
+              <DD>1</DD>
+            </SettlementDate>
+            <LastUpdatedDate>
+              <CCYY>2012</CCYY>
+              <MM>5</MM>
+              <DD>6</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1969</CCYY>
+              <MM>3</MM>
+              <DD>17</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <CreditLimit />
+            <Balance>
+              <Narrative>S</Narrative>
+            </Balance>
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>000000000000</AccountStatusCodes>
+            <Status1To2>4</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>25</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>1</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>24</RepaymentPeriod>
+            <Payment>£449  </Payment>
+            <Sex>M</Sex>
+            <AccountStatus>S</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <CompanyType>01</CompanyType>
+            <AccountType>02</AccountType>
+          </CAISDetails>
+          <CAISDetails>
+            <Name>
+              <Title>MR</Title>
+              <Forename>MARTIN</Forename>
+              <MiddleName>H</MiddleName>
+              <Surname>YOUNG</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2006</CCYY>
+              <MM>3</MM>
+              <DD>24</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseNumber>23</HouseNumber>
+              <Street>PRIEST FIELDS</Street>
+              <PostTown>ROCHESTER</PostTown>
+              <County>KENT</County>
+              <Postcode>ME1 3AB</Postcode>
+            </Location>
+            <LastUpdatedDate>
+              <CCYY>2013</CCYY>
+              <MM>10</MM>
+              <DD>20</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1969</CCYY>
+              <MM>3</MM>
+              <DD>17</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <JointAccount>M</JointAccount>
+            <CreditLimit />
+            <Balance>
+              <Amount>£196932  </Amount>
+            </Balance>
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>000000000000</AccountStatusCodes>
+            <Status1To2>0</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>36</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>0</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>324</RepaymentPeriod>
+            <Payment>£1308 </Payment>
+            <Sex>M</Sex>
+            <AccountStatus>A</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <CompanyType>01</CompanyType>
+            <AccountType>03</AccountType>
+          </CAISDetails>
+          <CAISDetails>
+            <Name>
+              <Title>MRS</Title>
+              <Forename>ALLISON</Forename>
+              <MiddleName>C</MiddleName>
+              <Surname>YOUNG</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2006</CCYY>
+              <MM>3</MM>
+              <DD>24</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseNumber>23</HouseNumber>
+              <Street>PRIEST FIELDS</Street>
+              <PostTown>ROCHESTER</PostTown>
+              <County>KENT</County>
+              <Postcode>ME1 3AB</Postcode>
+            </Location>
+            <LastUpdatedDate>
+              <CCYY>2013</CCYY>
+              <MM>10</MM>
+              <DD>20</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1968</CCYY>
+              <MM>11</MM>
+              <DD>4</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>2</BureauRefCategory>
+              <MatchTo>3</MatchTo>
+              <MatchType>F</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <JointAccount>J</JointAccount>
+            <CreditLimit />
+            <Balance>
+              <Amount>£196932  </Amount>
+            </Balance>
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>000000000000</AccountStatusCodes>
+            <Status1To2>0</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>36</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>0</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>324</RepaymentPeriod>
+            <Payment>£1308 </Payment>
+            <Sex>F</Sex>
+            <AccountStatus>A</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <CompanyType>01</CompanyType>
+            <AccountType>03</AccountType>
+          </CAISDetails>
+          <CAISDetails>
+            <Name>
+              <Title>MRS</Title>
+              <Forename>ALLISON</Forename>
+              <MiddleName>C</MiddleName>
+              <Surname>YOUNG</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2009</CCYY>
+              <MM>3</MM>
+              <DD>28</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseNumber>23,</HouseNumber>
+              <Street>PRIEST FIELDS</Street>
+              <PostTown>ROCHESTER</PostTown>
+              <County>KENT</County>
+              <Postcode>ME13AB</Postcode>
+            </Location>
+            <LastUpdatedDate>
+              <CCYY>2013</CCYY>
+              <MM>10</MM>
+              <DD>6</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1968</CCYY>
+              <MM>11</MM>
+              <DD>4</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>2</BureauRefCategory>
+              <MatchTo>3</MatchTo>
+              <MatchType>F</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <CreditLimit>
+              <Amount>£9000    </Amount>
+              <Caption>C</Caption>
+            </CreditLimit>
+            <Balance>
+              <Amount>£7      -</Amount>
+            </Balance>
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>000000000000</AccountStatusCodes>
+            <Status1To2>0</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>36</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>0</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>0</RepaymentPeriod>
+            <Sex>F</Sex>
+            <PaymentFrequency>M</PaymentFrequency>
+            <AccountStatus>A</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <CompanyType>09</CompanyType>
+            <AccountType>05</AccountType>
+          </CAISDetails>
+          <CAISDetails>
+            <Name>
+              <Title>MRS</Title>
+              <Forename>ALLISON</Forename>
+              <MiddleName>C</MiddleName>
+              <Surname>YOUNG</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2002</CCYY>
+              <MM>9</MM>
+              <DD>20</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseNumber>23</HouseNumber>
+              <Street>PRIEST FIELDS</Street>
+              <PostTown>ROCHESTER</PostTown>
+              <County>KENT</County>
+              <Postcode>ME1 3AB</Postcode>
+            </Location>
+            <LastUpdatedDate>
+              <CCYY>2013</CCYY>
+              <MM>10</MM>
+              <DD>20</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1968</CCYY>
+              <MM>11</MM>
+              <DD>4</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>2</BureauRefCategory>
+              <MatchTo>3</MatchTo>
+              <MatchType>F</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <CreditLimit>
+              <Amount>£3500    </Amount>
+              <Caption>O</Caption>
+            </CreditLimit>
+            <Balance>
+              <Amount>£1339    </Amount>
+              <Caption>O</Caption>
+            </Balance>
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>000000000000</AccountStatusCodes>
+            <Status1To2>0</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>36</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>0</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>0</RepaymentPeriod>
+            <Sex>F</Sex>
+            <AccountStatus>A</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <CompanyType>01</CompanyType>
+            <AccountType>15</AccountType>
+          </CAISDetails>
+        </CAIS>
+        <CAIS>
+          <LocationIndicator>C</LocationIndicator>
+          <ApplicantIndicator>1</ApplicantIndicator>
+          <CAISDetails>
+            <Name>
+              <Title>MR</Title>
+              <Forename>MARTIN</Forename>
+              <MiddleName>H</MiddleName>
+              <Surname>YOUNG</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2002</CCYY>
+              <MM>2</MM>
+              <DD>20</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseNumber>23</HouseNumber>
+              <Street>PRIEST FIELDS</Street>
+              <PostTown>ROCHESTER</PostTown>
+              <County>KENT</County>
+              <Postcode>ME1 3AB</Postcode>
+            </Location>
+            <LastUpdatedDate>
+              <CCYY>2013</CCYY>
+              <MM>10</MM>
+              <DD>6</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1969</CCYY>
+              <MM>3</MM>
+              <DD>17</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <CreditLimit>
+              <Amount>£2500    </Amount>
+              <Caption>C</Caption>
+            </CreditLimit>
+            <Balance>
+              <Amount>£1558    </Amount>
+            </Balance>
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>000000000000</AccountStatusCodes>
+            <Status1To2>0</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>36</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>0</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>0</RepaymentPeriod>
+            <Sex>M</Sex>
+            <AccountStatus>A</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <NumAccountBalances>12</NumAccountBalances>
+            <AccountBalances>
+              <AccountBalance>0001558</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0001576</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0001592</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0001610</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0001628</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0001645</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0001663</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0001682</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0001700</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0001718</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0001737</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0001755</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <NumCardHistories>12</NumCardHistories>
+            <CardHistories>
+              <PrevStatementBal>0001575</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000032</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0001591</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000032</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0001609</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000033</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0001627</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000033</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0001644</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000033</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0001662</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000034</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0001681</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000034</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0001699</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000034</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0001717</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000035</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0001736</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000034</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0001754</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000035</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0001773</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000035</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0002000</CreditLimitChange>
+              <CreditLimitDate>
+                <CreditLimitDateMM>10</CreditLimitDateMM>
+              </CreditLimitDate>
+            </CredLimitHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0002100</CreditLimitChange>
+              <CreditLimitDate>
+                <CreditLimitDateMM>12</CreditLimitDateMM>
+              </CreditLimitDate>
+            </CredLimitHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0002200</CreditLimitChange>
+              <CreditLimitDate>
+                <CreditLimitDateMM>07</CreditLimitDateMM>
+              </CreditLimitDate>
+            </CredLimitHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0009000</CreditLimitChange>
+              <CreditLimitDate>
+                <CreditLimitDateMM>06</CreditLimitDateMM>
+              </CreditLimitDate>
+            </CredLimitHistories>
+            <CompanyType>01</CompanyType>
+            <AccountType>05</AccountType>
+          </CAISDetails>
+          <CAISDetails>
+            <Name>
+              <Title>MR</Title>
+              <Forename>MARTIN</Forename>
+              <MiddleName>H</MiddleName>
+              <Surname>YOUNG</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2003</CCYY>
+              <MM>8</MM>
+              <DD>15</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseNumber>23</HouseNumber>
+              <Street>PRIEST FIELDS</Street>
+              <PostTown>ROCHESTER</PostTown>
+              <County>KENT</County>
+              <Postcode>ME1 3AB</Postcode>
+            </Location>
+            <LastUpdatedDate>
+              <CCYY>2013</CCYY>
+              <MM>10</MM>
+              <DD>6</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1969</CCYY>
+              <MM>3</MM>
+              <DD>17</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <CreditLimit>
+              <Amount>£10000   </Amount>
+              <Caption>C</Caption>
+            </CreditLimit>
+            <Balance>
+              <Amount>£8573    </Amount>
+            </Balance>
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>000000000000</AccountStatusCodes>
+            <Status1To2>0</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>36</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>0</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>0</RepaymentPeriod>
+            <Sex>M</Sex>
+            <AccountStatus>A</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <NumAccountBalances>12</NumAccountBalances>
+            <AccountBalances>
+              <AccountBalance>0008573</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0008599</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0008605</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0008640</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0008663</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0008675</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0008698</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0008732</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0008744</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0008767</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0008793</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0008799</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <NumCardHistories>12</NumCardHistories>
+            <CardHistories>
+              <PrevStatementBal>0008599</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000195</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0008605</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000193</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0008640</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000194</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0008663</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000194</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0008675</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000195</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0008698</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000195</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0008732</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000196</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0008744</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000196</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0008767</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000197</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0008793</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000200</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0008799</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000197</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0008837</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000201</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0000000</CreditLimitChange>
+              <CreditLimitDate />
+            </CredLimitHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0000000</CreditLimitChange>
+              <CreditLimitDate />
+            </CredLimitHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0000000</CreditLimitChange>
+              <CreditLimitDate />
+            </CredLimitHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0000000</CreditLimitChange>
+              <CreditLimitDate />
+            </CredLimitHistories>
+            <CompanyType>09</CompanyType>
+            <AccountType>05</AccountType>
+          </CAISDetails>
+          <CAISDetails>
+            <Name>
+              <Title>MR</Title>
+              <Forename>MARTIN</Forename>
+              <MiddleName>H</MiddleName>
+              <Surname>YOUNG</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2001</CCYY>
+              <MM>7</MM>
+              <DD>17</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseNumber>23</HouseNumber>
+              <Street>PRIEST FIELDS</Street>
+              <PostTown>ROCHESTER</PostTown>
+              <County>KENT</County>
+              <Postcode>ME1 3AB</Postcode>
+            </Location>
+            <LastUpdatedDate>
+              <CCYY>2013</CCYY>
+              <MM>10</MM>
+              <DD>6</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1969</CCYY>
+              <MM>3</MM>
+              <DD>17</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <CreditLimit>
+              <Amount>£12000   </Amount>
+              <Caption>C</Caption>
+            </CreditLimit>
+            <Balance>
+              <Amount>£10517   </Amount>
+            </Balance>
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>000000000000</AccountStatusCodes>
+            <Status1To2>0</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>36</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>0</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>0</RepaymentPeriod>
+            <Sex>M</Sex>
+            <AccountStatus>A</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <NumAccountBalances>12</NumAccountBalances>
+            <AccountBalances>
+              <AccountBalance>0010517</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0010548</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0010561</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0010604</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0010617</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0010655</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0010686</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0010729</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0010749</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0010780</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0010813</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0010827</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <NumCardHistories>12</NumCardHistories>
+            <CardHistories>
+              <PrevStatementBal>0010548</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000210</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0010561</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000211</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0010604</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000212</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0010617</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000212</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0010655</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000213</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0010686</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000213</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0010729</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000214</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0010749</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000214</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0010780</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000215</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0010813</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000216</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0010827</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000216</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0010871</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000217</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0010700</CreditLimitChange>
+              <CreditLimitDate>
+                <CreditLimitDateMM>07</CreditLimitDateMM>
+              </CreditLimitDate>
+            </CredLimitHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0009300</CreditLimitChange>
+              <CreditLimitDate>
+                <CreditLimitDateMM>08</CreditLimitDateMM>
+              </CreditLimitDate>
+            </CredLimitHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0008400</CreditLimitChange>
+              <CreditLimitDate>
+                <CreditLimitDateMM>10</CreditLimitDateMM>
+              </CreditLimitDate>
+            </CredLimitHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0007300</CreditLimitChange>
+              <CreditLimitDate>
+                <CreditLimitDateMM>12</CreditLimitDateMM>
+              </CreditLimitDate>
+            </CredLimitHistories>
+            <CompanyType>09</CompanyType>
+            <AccountType>05</AccountType>
+          </CAISDetails>
+          <CAISDetails>
+            <Name>
+              <Title>MR</Title>
+              <Forename>MARTIN</Forename>
+              <MiddleName>H</MiddleName>
+              <Surname>YOUNG</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>1998</CCYY>
+              <MM>7</MM>
+              <DD>9</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseNumber>23</HouseNumber>
+              <Street>PRIEST FIELD</Street>
+              <PostTown>ROCHESTER</PostTown>
+              <County>KENT</County>
+              <Postcode>ME1 3AB</Postcode>
+            </Location>
+            <LastUpdatedDate>
+              <CCYY>2013</CCYY>
+              <MM>10</MM>
+              <DD>6</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1969</CCYY>
+              <MM>3</MM>
+              <DD>17</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>3</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <CreditLimit>
+              <Amount>£900     </Amount>
+              <Caption>C</Caption>
+            </CreditLimit>
+            <Balance>
+              <Amount>£518     </Amount>
+            </Balance>
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>000000000000</AccountStatusCodes>
+            <Status1To2>0</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>36</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>0</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>0</RepaymentPeriod>
+            <Sex>M</Sex>
+            <AccountStatus>A</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <NumAccountBalances>12</NumAccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000518</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000523</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000528</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000533</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000538</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000543</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000547</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000553</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000557</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000635</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000640</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000646</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <NumCardHistories>12</NumCardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000523</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000014</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000528</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000014</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000533</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000014</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000538</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000014</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000543</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000014</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000547</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000014</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000553</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000014</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000557</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000014</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000635</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000100</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000640</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000016</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000646</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000017</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000652</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000017</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0006200</CreditLimitChange>
+              <CreditLimitDate>
+                <CreditLimitDateMM>12</CreditLimitDateMM>
+              </CreditLimitDate>
+            </CredLimitHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0004800</CreditLimitChange>
+              <CreditLimitDate>
+                <CreditLimitDateMM>05</CreditLimitDateMM>
+              </CreditLimitDate>
+            </CredLimitHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0002400</CreditLimitChange>
+              <CreditLimitDate>
+                <CreditLimitDateMM>10</CreditLimitDateMM>
+              </CreditLimitDate>
+            </CredLimitHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0002000</CreditLimitChange>
+              <CreditLimitDate>
+                <CreditLimitDateMM>03</CreditLimitDateMM>
+              </CreditLimitDate>
+            </CredLimitHistories>
+            <CompanyType>09</CompanyType>
+            <AccountType>05</AccountType>
+          </CAISDetails>
+          <CAISDetails>
+            <Name>
+              <Title>MR</Title>
+              <Forename>MARTIN</Forename>
+              <MiddleName>H</MiddleName>
+              <Surname>YOUNG</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2013</CCYY>
+              <MM>6</MM>
+              <DD>14</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseNumber>23</HouseNumber>
+              <Street>PRIEST FIELDS</Street>
+              <PostTown>ROCHESTER</PostTown>
+              <County>KENT</County>
+              <Postcode>ME1 3AB</Postcode>
+            </Location>
+            <LastUpdatedDate>
+              <CCYY>2013</CCYY>
+              <MM>10</MM>
+              <DD>6</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1969</CCYY>
+              <MM>3</MM>
+              <DD>17</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <CreditLimit>
+              <Amount>£3000    </Amount>
+              <Caption>C</Caption>
+            </CreditLimit>
+            <Balance>
+              <Amount>£564     </Amount>
+            </Balance>
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>000U        </AccountStatusCodes>
+            <Status1To2>0</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>4</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>U</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>0</RepaymentPeriod>
+            <Sex>M</Sex>
+            <PaymentFrequency>M</PaymentFrequency>
+            <AccountStatus>A</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <NumAccountBalances>4</NumAccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000564</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000331</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000345</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000202</AccountBalance>
+              <Status>U</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000000</AccountBalance>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000000</AccountBalance>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000000</AccountBalance>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000000</AccountBalance>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000000</AccountBalance>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000000</AccountBalance>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000000</AccountBalance>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000000</AccountBalance>
+            </AccountBalances>
+            <NumCardHistories>4</NumCardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000062</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000062</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000287</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000000</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000000</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000000</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000000</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000000</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000000</PrevStatementBal>
+              <PromotionalRate>0</PromotionalRate>
+              <PaymentAmount>0000000</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>0</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000000</PrevStatementBal>
+              <PromotionalRate>0</PromotionalRate>
+              <PaymentAmount>0000000</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>0</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000000</PrevStatementBal>
+              <PromotionalRate>0</PromotionalRate>
+              <PaymentAmount>0000000</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>0</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000000</PrevStatementBal>
+              <PromotionalRate>0</PromotionalRate>
+              <PaymentAmount>0000000</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>0</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000000</PrevStatementBal>
+              <PromotionalRate>0</PromotionalRate>
+              <PaymentAmount>0000000</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>0</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000000</PrevStatementBal>
+              <PromotionalRate>0</PromotionalRate>
+              <PaymentAmount>0000000</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>0</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000000</PrevStatementBal>
+              <PromotionalRate>0</PromotionalRate>
+              <PaymentAmount>0000000</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>0</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000000</PrevStatementBal>
+              <PromotionalRate>0</PromotionalRate>
+              <PaymentAmount>0000000</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>0</PaymentCode>
+            </CardHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0000000</CreditLimitChange>
+              <CreditLimitDate />
+            </CredLimitHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0000000</CreditLimitChange>
+              <CreditLimitDate />
+            </CredLimitHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0000000</CreditLimitChange>
+              <CreditLimitDate />
+            </CredLimitHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0000000</CreditLimitChange>
+              <CreditLimitDate />
+            </CredLimitHistories>
+            <CompanyType>09</CompanyType>
+            <AccountType>05</AccountType>
+          </CAISDetails>
+        </CAIS>
+        <PreviousApplication>
+          <LocationIndicator>C</LocationIndicator>
+          <ApplicantIndicator>1</ApplicantIndicator>
+          <PrevApplnDetails>
+            <TimeAtLocation>
+              <Years>06</Years>
+              <Months>06</Months>
+            </TimeAtLocation>
+            <Location>
+              <HouseNumber>23</HouseNumber>
+              <Street>PRIESTFIELDS</Street>
+              <PostTown>ROCHESTER</PostTown>
+              <County>KENT</County>
+              <Postcode>ME1 3AB</Postcode>
+            </Location>
+            <ApplicationDate>
+              <CCYY>2013</CCYY>
+              <MM>10</MM>
+              <DD>20</DD>
+            </ApplicationDate>
+            <Name>
+              <Title>MRS</Title>
+              <Forename>ALLISON</Forename>
+              <MiddleName>C</MiddleName>
+              <Surname>YOUNG</Surname>
+            </Name>
+            <DateOfBirth>
+              <CCYY>1968</CCYY>
+              <MM>11</MM>
+              <DD>4</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>2</BureauRefCategory>
+              <MatchTo>3</MatchTo>
+              <MatchType>F</MatchType>
+            </MatchDetails>
+            <ApplicationType>CC</ApplicationType>
+            <JointApplicant>C</JointApplicant>
+            <CompanyType>06</CompanyType>
+            <AccountNumber>00000</AccountNumber>
+          </PrevApplnDetails>
+          <PrevApplnDetails>
+            <TimeAtLocation>
+              <Years>06</Years>
+              <Months>03</Months>
+            </TimeAtLocation>
+            <Location>
+              <HouseNumber>23</HouseNumber>
+              <Street>PRIESTFIELDS</Street>
+              <PostTown>ROCHESTER</PostTown>
+              <County>KENT</County>
+              <Postcode>ME1 3AB</Postcode>
+            </Location>
+            <ApplicationDate>
+              <CCYY>2013</CCYY>
+              <MM>7</MM>
+              <DD>3</DD>
+            </ApplicationDate>
+            <Name>
+              <Title>MRS</Title>
+              <Forename>ALLISON</Forename>
+              <MiddleName>CLARE</MiddleName>
+              <Surname>YOUNG</Surname>
+            </Name>
+            <DateOfBirth>
+              <CCYY>1968</CCYY>
+              <MM>11</MM>
+              <DD>4</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>2</BureauRefCategory>
+              <MatchTo>3</MatchTo>
+              <MatchType>F</MatchType>
+            </MatchDetails>
+            <ApplicationType>HP</ApplicationType>
+            <JointApplicant>C</JointApplicant>
+            <CompanyType>24</CompanyType>
+            <AccountNumber>00000</AccountNumber>
+          </PrevApplnDetails>
+          <PrevApplnDetails>
+            <TimeAtLocation>
+              <Years>06</Years>
+              <Months>03</Months>
+            </TimeAtLocation>
+            <Location>
+              <HouseNumber>23</HouseNumber>
+              <Street>PRIESTFIELDS</Street>
+              <PostTown>ROCHESTER</PostTown>
+              <County>KENT</County>
+              <Postcode>ME1 3AB</Postcode>
+            </Location>
+            <ApplicationDate>
+              <CCYY>2013</CCYY>
+              <MM>6</MM>
+              <DD>14</DD>
+            </ApplicationDate>
+            <Name>
+              <Title>MR</Title>
+              <Forename>MARTIN</Forename>
+              <MiddleName>H</MiddleName>
+              <Surname>YOUNG</Surname>
+            </Name>
+            <DateOfBirth>
+              <CCYY>1969</CCYY>
+              <MM>3</MM>
+              <DD>17</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <ApplicationType>CC</ApplicationType>
+            <JointApplicant>C</JointApplicant>
+            <CompanyType>06</CompanyType>
+            <AccountNumber>00000</AccountNumber>
+          </PrevApplnDetails>
+        </PreviousApplication>
+        <LocationLink>
+          <LocationCode>01</LocationCode>
+          <ApplicantIndicator>1</ApplicantIndicator>
+          <LocationLinkDetails>
+            <Location>
+              <HouseNumber>43</HouseNumber>
+              <Street>QUAINTON STREET</Street>
+              <PostTown>LONDON NW10</PostTown>
+              <Postcode>NW100BG</Postcode>
+            </Location>
+            <Name>
+              <Title>MR</Title>
+              <Forename>MARTIN</Forename>
+              <Surname>YOUNG</Surname>
+            </Name>
+            <LocationLinkDate>
+              <CCYY>2013</CCYY>
+              <MM>9</MM>
+              <DD>29</DD>
+            </LocationLinkDate>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <LocationLinkInd>N</LocationLinkInd>
+            <RelatedSegmentNum>00</RelatedSegmentNum>
+            <LocationKey>0043QUAINSTRNW10LOND</LocationKey>
+            <RMC>0000420</RMC>
+            <Region>7</Region>
+            <LevelNumber>0</LevelNumber>
+            <LocationLinkNumber>1</LocationLinkNumber>
+            <LocationLinkCaption>THIS ADDRESS IS LINKED FROM THE CURRENT ADDRESS ON 09/2013                      </LocationLinkCaption>
+            <InformationSource>N</InformationSource>
+            <SourceOfData>P</SourceOfData>
+            <SuperSearchFlag>Y</SuperSearchFlag>
+          </LocationLinkDetails>
+        </LocationLink>
+      </ConsumerData>
+      <ControlDetails>
+        <AccountNumber>E8371</AccountNumber>
+        <CAISSource>402</CAISSource>
+        <CMLCode>000</CMLCode>
+        <SearchDate>
+          <CCYY>2013</CCYY>
+          <MM>10</MM>
+          <DD>28</DD>
+        </SearchDate>
+        <SearchTime>130827</SearchTime>
+      </ControlDetails>
+    </FullConsumerData>
+    <LocationDetails xmlns="">
+      <LocationIdentifier>1</LocationIdentifier>
+      <UKLocation>
+        <HouseNumber>23</HouseNumber>
+        <Street>PRIESTFIELDS</Street>
+        <PostTown>ROCHESTER</PostTown>
+        <County>KENT</County>
+        <Postcode>ME1 3AB</Postcode>
+        <SharedLetterbox>N</SharedLetterbox>
+      </UKLocation>
+      <RMC>0157100</RMC>
+      <RegionNumber>7</RegionNumber>
+      <MultiLineLocation>
+        <LocationLine1>23,PRIESTFIELDS</LocationLine1>
+        <LocationLine2>ROCHESTER</LocationLine2>
+        <LocationLine3>KENT</LocationLine3>
+        <LocationLine4>ME13AB</LocationLine4>
+      </MultiLineLocation>
+      <FormattedLocation>23, Priestfields, Rochester, Kent, ME13AB</FormattedLocation>
+    </LocationDetails>
+    <Residency xmlns="">
+      <ApplicantIdentifier>1</ApplicantIdentifier>
+      <LocationIdentifier>1</LocationIdentifier>
+      <LocationCode>01</LocationCode>
+      <TimeAt>
+        <Years>3</Years>
+        <Months>9</Months>
+      </TimeAt>
+      <ResidencyDateFrom>
+        <CCYY>2010</CCYY>
+        <MM>1</MM>
+        <DD>1</DD>
+      </ResidencyDateFrom>
+      <ResidencyDateTo>
+        <CCYY>2013</CCYY>
+        <MM>10</MM>
+        <DD>28</DD>
+      </ResidencyDateTo>
+      <VRConfirmation>
+        <Confirmed>Y</Confirmed>
+        <YrsERSP>07</YrsERSP>
+        <YrsERSF>07</YrsERSF>
+      </VRConfirmation>
+    </Residency>
+    <ThirdPartyData xmlns="">
+      <OutcomeCode />
+      <OptOut>N</OptOut>
+      <TransientAssocs>N</TransientAssocs>
+      <HHOAllowed>N</HHOAllowed>
+      <OptoutValidCutOff />
+    </ThirdPartyData>
+  </Output>
+</OutputRoot>

@@ -59,6 +59,12 @@ EzBob.Underwriter.IdHubCustomAddressView = Backbone.View.extend({
             this.tbSortCode.attr('readonly', 'readonly');
         }
 
+	    if (this.model.get('CurAddressIsManual'))
+		    this.content.find('.current-address').addClass('manually-entered-address').attr('title', 'Customer has entered this address manually.');
+
+	    if (this.model.get('PrevAddressIsManual'))
+		    this.content.find('.previous-address').addClass('manually-entered-address').attr('title', 'Customer has entered this address manually.');
+
         return this;
     },
     dlgOpened: function (event, ui) {

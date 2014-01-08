@@ -22,6 +22,16 @@
     </tr>
 }
 
+@helper RawCellClass(params Tuple<string, string>[] arguments)
+{
+    <tr>
+        @foreach (Tuple<string, string> s in arguments)
+        {
+            <td @if (!string.IsNullOrWhiteSpace(s.Item2)) { WriteLiteral("class=\"" + s.Item2 + "\""); }>@Html.Raw(s.Item1)</td>
+        }
+    </tr>
+}
+
 @helper RawCellCentered(params string[] arguments)
 {
     <tr>
@@ -863,13 +873,13 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @RawCell("Address Line 1", "<%- customAddress.CurAddressLine1 %>", "<%- customAddress.PrevAddressLine1 %>")
-                                @RawCell("Address Line 2", "<%- customAddress.CurAddressLine2 %>", "<%- customAddress.PrevAddressLine2 %>")
-                                @RawCell("Address Line 3", "<%- customAddress.CurAddressLine3 %>", "<%- customAddress.PrevAddressLine3 %>")
-                                @RawCell("Town", "<%- customAddress.CurAddressTown %>", "<%- customAddress.PrevAddressTown %>")
-                                @RawCell("County", "<%- customAddress.CurAddressCounty %>", "<%- customAddress.PrevAddressCounty %>")
-                                @RawCell("Postcode", "<%- customAddress.CurAddressPostcode %>", "<%- customAddress.PrevAddressPostcode %>")
-                                @RawCell("Country", "<%- customAddress.CurAddressCountry %>", "<%- customAddress.PrevAddressCountry %>")
+                                @RawCellClass(new Tuple<string, string>("Address Line 1", ""), new Tuple<string, string>("<%- customAddress.CurAddressLine1 %>", "current-address"), new Tuple<string, string>("<%- customAddress.PrevAddressLine1 %>", "previous-address"))
+                                @RawCellClass(new Tuple<string, string>("Address Line 2", ""), new Tuple<string, string>("<%- customAddress.CurAddressLine2 %>", "current-address"), new Tuple<string, string>("<%- customAddress.PrevAddressLine2 %>", "previous-address"))
+                                @RawCellClass(new Tuple<string, string>("Address Line 3", ""), new Tuple<string, string>("<%- customAddress.CurAddressLine3 %>", "current-address"), new Tuple<string, string>("<%- customAddress.PrevAddressLine3 %>", "previous-address"))
+                                @RawCellClass(new Tuple<string, string>("Town", ""), new Tuple<string, string>("<%- customAddress.CurAddressTown %>", "current-address"), new Tuple<string, string>("<%- customAddress.PrevAddressTown %>", "previous-address"))
+                                @RawCellClass(new Tuple<string, string>("County", ""), new Tuple<string, string>("<%- customAddress.CurAddressCounty %>", "current-address"), new Tuple<string, string>("<%- customAddress.PrevAddressCounty %>", "previous-address"))
+                                @RawCellClass(new Tuple<string, string>("Postcode", ""), new Tuple<string, string>("<%- customAddress.CurAddressPostcode %>", "current-address"), new Tuple<string, string>("<%- customAddress.PrevAddressPostcode %>", "previous-address"))
+                                @RawCellClass(new Tuple<string, string>("Country", ""), new Tuple<string, string>("<%- customAddress.CurAddressCountry %>", "current-address"), new Tuple<string, string>("<%- customAddress.PrevAddressCountry %>", "previous-address"))
                             </tbody>
                         </table>
                     </fieldset>

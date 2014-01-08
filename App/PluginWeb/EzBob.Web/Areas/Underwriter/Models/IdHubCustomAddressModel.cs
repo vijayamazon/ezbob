@@ -15,7 +15,8 @@ namespace EzBob.Web.Areas.Underwriter.Models
         public string Gender { get; set; }
         public string DateOfBirth { get; set; }
 
-        public string CurAddressLine1 { get; set; }
+	    public bool CurAddressIsManual { get; set; }
+	    public string CurAddressLine1 { get; set; }
         public string CurAddressLine2 { get; set; }
         public string CurAddressLine3 { get; set; }
         public string CurAddressTown { get; set; }
@@ -23,6 +24,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
         public string CurAddressPostcode { get; set; }
         public string CurAddressCountry { get; set; }
 
+	    public bool PrevAddressIsManual { get; set; }
         public string PrevAddressLine1 { get; set; }
         public string PrevAddressLine2 { get; set; }
         public string PrevAddressLine3 { get; set; }

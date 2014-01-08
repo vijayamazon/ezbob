@@ -31,6 +31,8 @@
 		sNameTitle = "No data in Experian directors list.";
 		break;
 	} // switch
+
+	string sManualAddressTitle = "Customer has entered this address manually.";
 }
 
 <h3>Summary</h3>
@@ -184,49 +186,49 @@
 <tbody>
 	<tr>
 		<td><b>Line1</b><b class="marking pull-right  @Model.CrossCheckStatus.Line1"></b></td>
-		<td>@Model.CurrentAddress.Line1</td>
+		<td @if (Model.CurrentAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@Model.CurrentAddress.Line1</td>
 		<td>@Model.PrevAddress.Line1</td>
 		<td>@Model.EBay.SellerInfo.SellerPaymentAddress.Street</td>
 		<td>@Model.PayPalAddress.Line1</td>
 	</tr>
 	<tr>
 		<td><b>Line2</b><b class="marking pull-right  @Model.CrossCheckStatus.Line2"></b></td>
-		<td>@Model.CurrentAddress.Line2</td>
+		<td @if (Model.CurrentAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@Model.CurrentAddress.Line2</td>
 		<td>@Model.PrevAddress.Line2</td>
 		<td>@Model.EBay.SellerInfo.SellerPaymentAddress.Street1</td>
 		<td>@Model.PayPalAddress.Line2</td>
 	</tr>
 	<tr>
 		<td><b>Line3</b></td>
-		<td>@Model.CurrentAddress.Line3</td>
+		<td @if (Model.CurrentAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@Model.CurrentAddress.Line3</td>
 		<td>@Model.PrevAddress.Line3</td>
 		<td>@Model.EBay.SellerInfo.SellerPaymentAddress.Street2</td>
 		<td>@Model.PayPalAddress.Line3</td>
 	</tr>
 	<tr>
 		<td><b>Town</b><b class="marking pull-right  @Model.CrossCheckStatus.Town"></b></td>
-		<td>@Model.CurrentAddress.Town</td>
+		<td @if (Model.CurrentAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@Model.CurrentAddress.Town</td>
 		<td>@Model.PrevAddress.Town</td>
 		<td>@Model.EBay.SellerInfo.SellerPaymentAddress.CityName</td>
 		<td>@Model.PayPalAddress.Town</td>
 	</tr>
 	<tr>
 		<td><b>County</b><b class="marking pull-right @Model.CrossCheckStatus.County"></b></td>
-		<td>@Model.CurrentAddress.County</td>
+		<td @if (Model.CurrentAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@Model.CurrentAddress.County</td>
 		<td>@Model.PrevAddress.County</td>
 		<td>@Model.EBay.SellerInfo.SellerPaymentAddress.County</td>
 		<td>@Model.PayPalAddress.County</td>
 	</tr>
 	<tr>
 		<td><b>Postcode</b><b class="marking pull-right  @Model.CrossCheckStatus.Postcode"></b></td>
-		<td>@Model.CurrentAddress.Postcode</td>
+		<td @if (Model.CurrentAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@Model.CurrentAddress.Postcode</td>
 		<td>@Model.PrevAddress.Postcode</td>
 		<td>@Model.EBay.SellerInfo.SellerPaymentAddress.PostalCode</td>
 		<td>@Model.PayPalAddress.Postcode</td>
 	</tr>
     <tr>
         <td><b>Country</b><b class="marking pull-right @Model.CrossCheckStatus.Country"></b></td>
-        <td>@Model.CurrentAddress.Country</td>
+        <td @if (Model.CurrentAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@Model.CurrentAddress.Country</td>
         <td>@Model.PrevAddress.Country</td>
         <td>@Model.EBay.SellerInfo.SellerPaymentAddress.CountryName</td>
         <td>@Model.PayPalAddress.Country</td>
@@ -281,31 +283,31 @@
             else {
                 <tr>
                     <td><b>Line1</b></td>
-                    <td>@Model.OtherPropertyAddress.Line1</td>
+                    <td @if (Model.OtherPropertyAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@Model.OtherPropertyAddress.Line1</td>
                 </tr>
                 <tr>
                     <td><b>Line2</b></td>
-                    <td>@Model.OtherPropertyAddress.Line2</td>
+                    <td @if (Model.OtherPropertyAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@Model.OtherPropertyAddress.Line2</td>
                 </tr>
                 <tr>
                     <td><b>Line3</b></td>
-                    <td>@Model.OtherPropertyAddress.Line3</td>
+                    <td @if (Model.OtherPropertyAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@Model.OtherPropertyAddress.Line3</td>
                 </tr>
                 <tr>
                     <td><b>Town</b></td>
-                    <td>@Model.OtherPropertyAddress.Town</td>
+                    <td @if (Model.OtherPropertyAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@Model.OtherPropertyAddress.Town</td>
                 </tr>
                 <tr>
                     <td><b>County</b></td>
-                    <td>@Model.OtherPropertyAddress.County</td>
+                    <td @if (Model.OtherPropertyAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@Model.OtherPropertyAddress.County</td>
                 </tr>
                 <tr>
                     <td><b>Postcode</b></td>
-                    <td>@Model.OtherPropertyAddress.Postcode</td>
+                    <td @if (Model.OtherPropertyAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@Model.OtherPropertyAddress.Postcode</td>
                 </tr>
                 <tr>
                     <td><b>Country</b></td>
-                    <td>@Model.OtherPropertyAddress.Country</td>
+                    <td @if (Model.OtherPropertyAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@Model.OtherPropertyAddress.Country</td>
                 </tr>
             }
         </tbody>
@@ -395,31 +397,31 @@
 			<td><b>Company Address</b><b class="marking pull-right checkoutcome"></b></td>
 			@{
 				string sCrossCheckCompanyAddress = "";
-				string[] aryCrossCheckCompanyAddress = null;
+				CustomerAddress oCompanyAddress = null;
 
 				switch (Model.Customer.PersonalInfo.TypeOfBusiness) {
 				case TypeOfBusiness.LLP:
 				case TypeOfBusiness.Limited:
-					aryCrossCheckCompanyAddress = Model.Customer.AddressInfo.LimitedCompanyAddress.OrderBy(x => x.AddressId).LastOrDefault().AddressArray();
+					oCompanyAddress = Model.Customer.AddressInfo.LimitedCompanyAddress.OrderBy(x => x.AddressId).LastOrDefault();
 					break;
 					
 				case TypeOfBusiness.PShip:
 				case TypeOfBusiness.PShip3P:
 				case TypeOfBusiness.SoleTrader:
-					aryCrossCheckCompanyAddress = Model.Customer.AddressInfo.NonLimitedCompanyAddress.OrderBy(x => x.AddressId).LastOrDefault().AddressArray();
+					oCompanyAddress = Model.Customer.AddressInfo.NonLimitedCompanyAddress.OrderBy(x => x.AddressId).LastOrDefault();
 					break;
 				} // switch
 
-				if (aryCrossCheckCompanyAddress != null) {
+				if (oCompanyAddress != null) {
 					sCrossCheckCompanyAddress = string.Join("\n",
-						aryCrossCheckCompanyAddress
+						oCompanyAddress.AddressArray()
 						.Where(s => !string.IsNullOrWhiteSpace(s))
 						.Select(s => s.Replace(".", "").Trim())
 						.Where(s => !string.IsNullOrWhiteSpace(s))
 					).ToUpper();
 				} // if
 			}
-			<td class="application">@sCrossCheckCompanyAddress</td>
+			<td class="application" @if ((oCompanyAddress != null) && oCompanyAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@sCrossCheckCompanyAddress</td>
 			<td class="experian"></td>
 			<td class="hmrc"></td>
 		</tr>
@@ -541,35 +543,35 @@
 			</tr>
 			<tr>
 				<td><b>Organisation</b></td>
-				<td>@address.Organisation</td>
+				<td @if (address.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@address.Organisation</td>
 			</tr>
 			<tr>
 				<td><b>Line1</b></td>
-				<td>@address.Line1</td>
+				<td @if (address.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@address.Line1</td>
 			</tr>
 			<tr>
 				<td><b>Line2</b></td>
-				<td>@address.Line2</td>
+				<td @if (address.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@address.Line2</td>
 			</tr>
 			<tr>
 				<td><b>Line3</b></td>
-				<td>@address.Line3</td>
+				<td @if (address.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@address.Line3</td>
 			</tr>
 			<tr>
 				<td><b>Town</b></td>
-				<td>@address.Town</td>
+				<td @if (address.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@address.Town</td>
 			</tr>
 			<tr>
 				<td><b>County</b></td>
-				<td>@address.County</td>
+				<td @if (address.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@address.County</td>
 			</tr>
 			<tr>
 				<td><b>Postcode</b></td>
-				<td>@address.Postcode</td>
+				<td @if (address.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@address.Postcode</td>
 			</tr>
 			<tr>
 				<td><b>Country</b></td>
-				<td>@address.Country</td>
+				<td @if (address.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@address.Country</td>
 			</tr>
 		</tbody>
 		</table>

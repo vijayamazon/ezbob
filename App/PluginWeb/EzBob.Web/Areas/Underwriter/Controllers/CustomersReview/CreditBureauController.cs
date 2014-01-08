@@ -88,8 +88,8 @@
             }
 
             var customerMainAddress = customer.AddressInfo.PersonalAddress.FirstOrDefault();
-            if(customerMainAddress != null)
-            {
+            if(customerMainAddress != null) {
+	            model.CurAddressIsManual = customerMainAddress.Id.StartsWith("MANUAL");
                 model.CurAddressLine1 = customerMainAddress.Line1 ?? string.Empty;
                 model.CurAddressLine2 = customerMainAddress.Line2 ?? string.Empty;
                 model.CurAddressLine3 = customerMainAddress.Line3 ?? string.Empty;
@@ -100,8 +100,8 @@
             }
 
             var customerPrevAddress = customer.AddressInfo.PrevPersonAddresses.FirstOrDefault();
-            if (customerPrevAddress != null)
-            {
+            if (customerPrevAddress != null) {
+	            model.PrevAddressIsManual = customerPrevAddress.Id.StartsWith("MANUAL");
                 model.PrevAddressLine1 = customerPrevAddress.Line1 ?? string.Empty;
                 model.PrevAddressLine2 = customerPrevAddress.Line2 ?? string.Empty;
                 model.PrevAddressLine3 = customerPrevAddress.Line3 ?? string.Empty;
