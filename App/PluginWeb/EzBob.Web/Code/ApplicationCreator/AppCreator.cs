@@ -357,7 +357,7 @@ namespace EzBob.Web.Code.ApplicationCreator {
 
 		public void SendEmailVerification(User user, Customer customer, string address) {
 			if (useNewMailStrategies) {
-				ServiceClient.SendEmailVerification(user.Id, address);
+				ServiceClient.SendEmailVerification(user.Id, customer.Name, address);
 			}
 			else {
 				var strategyParameters = new[] {

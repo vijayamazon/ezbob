@@ -333,8 +333,8 @@
 			return Execute(customerId, null, typeof (RequestCashWithoutTakenLoan), customerId);
 		} // RequestCashWithoutTakenLoan
 
-		public ActionMetaData SendEmailVerification(int customerId, string address) {
-			return Execute(customerId, customerId, typeof (SendEmailVerification), customerId, address);
+		public ActionMetaData SendEmailVerification(int customerId, string email, string address) {
+			return Execute(customerId, customerId, typeof(SendEmailVerification), customerId, email, address);
 		} // SendEmailVerification
 
 		public ActionMetaData ThreeInvalidAttempts(int customerId, string password) {

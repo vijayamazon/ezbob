@@ -6,8 +6,9 @@
 	public class SendEmailVerification : AMailStrategyBase {
 		#region constructor
 
-		public SendEmailVerification(int customerId, string address, AConnection oDb, ASafeLog oLog) : base(customerId, true, oDb, oLog) {
+		public SendEmailVerification(int customerId, string email, string address, AConnection oDb, ASafeLog oLog) : base(customerId, true, oDb, oLog) {
 			this.address = address;
+			this.email = email;
 		} // constructor
 
 		#endregion constructor
@@ -23,7 +24,7 @@
 			Variables = new Dictionary<string, string>
 				{
 					{"FirstName", CustomerData.FirstName},
-					{"Email", CustomerData.Mail},
+					{"Email", email},
 					{"ConfirmEmailAddress", address}
 				};
 		} // SetTemplateAndSubjectAndVariables
@@ -31,5 +32,6 @@
 		#endregion method SetTemplateAndSubjectAndVariables
 
 		private readonly string address;
+		private readonly string email;
 	} // class SendEmailVerification
 } // namespace

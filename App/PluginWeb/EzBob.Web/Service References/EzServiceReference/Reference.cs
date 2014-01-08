@@ -460,7 +460,7 @@ namespace EzBob.Web.EzServiceReference {
         EzBob.Web.EzServiceReference.ActionMetaData RequestCashWithoutTakenLoan(int customerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SendEmailVerification", ReplyAction="http://tempuri.org/IEzService/SendEmailVerificationResponse")]
-        EzBob.Web.EzServiceReference.ActionMetaData SendEmailVerification(int customerId, string address);
+        EzBob.Web.EzServiceReference.ActionMetaData SendEmailVerification(int customerId, string email, string address);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ThreeInvalidAttempts", ReplyAction="http://tempuri.org/IEzService/ThreeInvalidAttemptsResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData ThreeInvalidAttempts(int customerId, string password);
@@ -626,8 +626,8 @@ namespace EzBob.Web.EzServiceReference {
             return base.Channel.RequestCashWithoutTakenLoan(customerId);
         }
         
-        public EzBob.Web.EzServiceReference.ActionMetaData SendEmailVerification(int customerId, string address) {
-            return base.Channel.SendEmailVerification(customerId, address);
+        public EzBob.Web.EzServiceReference.ActionMetaData SendEmailVerification(int customerId, string email, string address) {
+            return base.Channel.SendEmailVerification(customerId, email, address);
         }
         
         public EzBob.Web.EzServiceReference.ActionMetaData ThreeInvalidAttempts(int customerId, string password) {

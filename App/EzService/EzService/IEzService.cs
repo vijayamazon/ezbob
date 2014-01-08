@@ -65,7 +65,7 @@ namespace EzService {
 		ActionMetaData RequestCashWithoutTakenLoan(int customerId);
 
 		[OperationContract]
-		ActionMetaData SendEmailVerification(int customerId, string address);
+		ActionMetaData SendEmailVerification(int customerId, string email, string address);
 
 		[OperationContract]
 		ActionMetaData ThreeInvalidAttempts(int customerId, string password);

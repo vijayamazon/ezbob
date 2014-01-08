@@ -552,10 +552,10 @@ namespace StrategiesActivator.EzServiceReference {
         System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> RequestCashWithoutTakenLoanAsync(int customerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SendEmailVerification", ReplyAction="http://tempuri.org/IEzService/SendEmailVerificationResponse")]
-        StrategiesActivator.EzServiceReference.ActionMetaData SendEmailVerification(int customerId, string address);
+        StrategiesActivator.EzServiceReference.ActionMetaData SendEmailVerification(int customerId, string email, string address);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SendEmailVerification", ReplyAction="http://tempuri.org/IEzService/SendEmailVerificationResponse")]
-        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> SendEmailVerificationAsync(int customerId, string address);
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> SendEmailVerificationAsync(int customerId, string email, string address);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ThreeInvalidAttempts", ReplyAction="http://tempuri.org/IEzService/ThreeInvalidAttemptsResponse")]
         StrategiesActivator.EzServiceReference.ActionMetaData ThreeInvalidAttempts(int customerId, string password);
@@ -857,12 +857,12 @@ namespace StrategiesActivator.EzServiceReference {
             return base.Channel.RequestCashWithoutTakenLoanAsync(customerId);
         }
         
-        public StrategiesActivator.EzServiceReference.ActionMetaData SendEmailVerification(int customerId, string address) {
-            return base.Channel.SendEmailVerification(customerId, address);
+        public StrategiesActivator.EzServiceReference.ActionMetaData SendEmailVerification(int customerId, string email, string address) {
+            return base.Channel.SendEmailVerification(customerId, email, address);
         }
         
-        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> SendEmailVerificationAsync(int customerId, string address) {
-            return base.Channel.SendEmailVerificationAsync(customerId, address);
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> SendEmailVerificationAsync(int customerId, string email, string address) {
+            return base.Channel.SendEmailVerificationAsync(customerId, email, address);
         }
         
         public StrategiesActivator.EzServiceReference.ActionMetaData ThreeInvalidAttempts(int customerId, string password) {
