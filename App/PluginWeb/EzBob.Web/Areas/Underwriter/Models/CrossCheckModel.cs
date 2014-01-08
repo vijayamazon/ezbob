@@ -31,6 +31,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		public SortedDictionary<string, int> ExperianDirectors { get; set; }
 
 		public int ExperianMortgage { get; set; }
+		public int ExperianMortgageCount { get; set; }
 		public int AssetWorth { get; set; }
 
 		static CrossCheckModel()
@@ -103,7 +104,10 @@ namespace EzBob.Web.Areas.Underwriter.Models
 						if (int.TryParse(experian.ConsumerAccountsOverview.Balance_Mtg, out mtg))
 						{
 							ExperianMortgage = mtg;
-							
+						}
+						if (int.TryParse(experian.ConsumerAccountsOverview.OpenAccounts_Mtg, out mtg))
+						{
+							ExperianMortgageCount = mtg;
 						}
 
 					}

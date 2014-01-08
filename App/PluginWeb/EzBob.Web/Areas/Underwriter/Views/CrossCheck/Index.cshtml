@@ -242,14 +242,14 @@
     </tr>
     <tr>
         <td><b>Zoopla Estimate</b></td>
-        <td colspan="4">@getZooplaEstimate(Model.CurrentAddress.ZooplaEstimate, Model.CurrentAddress.ZooplaAverage, Model.CurrentAddress.ZooplaUpdateDate) <button class="btn btn-mini btn-primary zooplaRecheck" title="Recheck"><i class="fa fa-refresh"></i></button></td>
+        <td colspan="4">@GetZooplaEstimate(Model.CurrentAddress.ZooplaEstimate, Model.CurrentAddress.ZooplaAverage, Model.CurrentAddress.ZooplaUpdateDate) <button class="btn btn-mini btn-primary zooplaRecheck" title="Recheck"><i class="fa fa-refresh"></i></button></td>
     </tr>
     <tr>
         <td><b>Mortgage</b></td>
-        <td colspan="4">£@Model.ExperianMortgage.ToString("N0")</td>
+        <td colspan="4">@GetMortgage()</td>
     </tr>
     <tr>
-        <td><b>Asset Worth</b></td>
+        <td><b>Property net worth</b></td>
         <td colspan="4">
             @if (@Model.Application.ResidentialStatus.Contains("Home owner"))
             {
@@ -602,7 +602,7 @@
 	}
 }
 
-@helper getZooplaEstimate(string estimate, string avarage, DateTime? date)
+@helper GetZooplaEstimate(string estimate, string avarage, DateTime? date)
 {
     <span>@WebUtility.HtmlDecode(estimate)</span>
     if (date.HasValue)
@@ -612,3 +612,10 @@
     <span>(avarage: £@avarage)</span>
 }
  
+@helper GetMortgage(){
+    <span>£@Model.ExperianMortgage.ToString("N0")</span>
+    if (Model.ExperianMortgageCount > 0)
+    {
+      <span>(@Model.ExperianMortgageCount)</span>
+    } 
+}
