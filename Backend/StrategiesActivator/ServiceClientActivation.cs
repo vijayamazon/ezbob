@@ -289,12 +289,12 @@
 		[Activation]
 		private void SendEmailVerification() {
 			int customerId;
-			if (args.Length != 4 || !int.TryParse(args[1], out customerId)) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> SendEmailVerification <CustomerId> <email> <address>");
+			if (args.Length != 3 || !int.TryParse(args[1], out customerId)) {
+				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> SendEmailVerification <CustomerId> <address>");
 				return;
 			}
 
-			serviceClient.SendEmailVerification(customerId, args[2], args[3]);
+			serviceClient.SendEmailVerification(customerId,"", args[2]);
 		}
 
 		[Activation]

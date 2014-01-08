@@ -6,22 +6,43 @@ EzBob.companyTargets = Backbone.View.extend({
         this.jsonModel = options.model;
     },
     events: {
-        "click .btnTargetOk": "btnOkClick",
-        "click .btnTargetNotFound": "btnNotFoundClick",
-        "click .btnTargetCancel": "btnCancelClick",
         'dblclick .targets': 'targetsDoubleClicked',
         'click .targets': 'targetsClicked',
     },
+  
     render: function () {
         this.$el.html(this.template());
         var that = this;
 
         this.$el.dialog({
             autoOpen: true,
-            title: "Please Choose Company",
+            title: "Select company",
             modal: true,
             resizable: true,
-            width: 400
+            width: 920,
+            minWidth: 500,
+            height: 500,
+            minHeight:200,
+            buttons: [
+                {
+                    text: 'Not found',
+                    'class': 'addr-button green',
+                    click: function () { that.btnNotFoundClick(); },
+                    'ui-event-control-id': 'company-target:not-found',
+                },
+                {
+                    text: 'Cancel',
+                    'class': 'addr-button green',
+                    click: function () { that.btnCancelClick(); },
+                    'ui-event-control-id': 'company-target:cancel',
+                },
+                {
+                    text: 'OK',
+                    'class': 'addr-button green btnTargetOk disabled',
+                    click: function () { that.btnOkClick(); },
+                    'ui-event-control-id': 'company-target:ok',
+                }
+            ]
         });
 
         this.targetsList = this.$el.find(".targets");
@@ -45,7 +66,7 @@ EzBob.companyTargets = Backbone.View.extend({
     },
     targetsClicked: function (evt) {
         EzBob.UiAction.saveOne(EzBob.UiAction.evtClick(), evt.target);
-        $('.btnTargetOk').removeAttr('disabled');
+        $('.btnTargetOk').removeClass('disabled');
     }, 
     targetsDoubleClicked: function(evt) {
         this.targetsClicked(evt);
@@ -53,6 +74,8 @@ EzBob.companyTargets = Backbone.View.extend({
         this.btnOkClick();
     },
     btnOkClick: function () {
+        //if (this.$el.find('.btnTargetOk').hasClass('disabled')) return false;
+        
         if (this.targetsList.attr('data') == null || this.targetsList.attr('data') == 0) {
             this.targetsList.css("border", "1px solid red");
         } else {

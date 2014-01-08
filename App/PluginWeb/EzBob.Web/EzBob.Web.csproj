@@ -602,6 +602,7 @@
     <Content Include="Content\img\basket-gold-32.png" />
     <Content Include="Content\img\basket-platinum-32.png" />
     <Content Include="Content\img\basket-silver-32.png" />
+    <Content Include="Content\img\business.png" />
     <Content Include="Content\img\calendar-late.png" />
     <Content Include="Content\img\check-min.png" />
     <Content Include="Content\img\businessguardianange.png" />

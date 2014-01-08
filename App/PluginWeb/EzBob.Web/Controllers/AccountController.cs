@@ -573,8 +573,19 @@ namespace EzBob.Web.Controllers
 				var result = service.TargetBusiness(companyName, postcode, _context.UserId, nFilter, refNum);
 				if (result.Targets.Any())
 				{
-					result.Targets.Insert(0, new CompanyInfo {BusName  = "Company not found below", AddrLine1 = " ", BusRefNum = "NotFound" });
+					foreach (var t in result.Targets)
+					{
+						t.BusName = string.IsNullOrEmpty(t.BusName) ? string.Empty : System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(t.BusName.ToLower());
+						t.AddrLine1 = string.IsNullOrEmpty(t.AddrLine1) ? string.Empty : System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(t.AddrLine1.ToLower());
+						t.AddrLine2 = string.IsNullOrEmpty(t.AddrLine2) ? string.Empty : System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(t.AddrLine2.ToLower());
+						t.AddrLine3 = string.IsNullOrEmpty(t.AddrLine3) ? string.Empty : System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(t.AddrLine3.ToLower());
+						t.AddrLine4 = string.IsNullOrEmpty(t.AddrLine4) ? string.Empty : System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(t.AddrLine4.ToLower());
+					}
+					result.Targets.Add(new CompanyInfo {BusName  = "Company not found", BusRefNum = "NotFound" });
 				}
+
+				
+				
 				return this.JsonNet(result.Targets);
 			}
 			catch (Exception e)

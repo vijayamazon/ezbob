@@ -32,25 +32,35 @@ input[type='radio'], input[type='checkbox'] { box-shadow: none; }
 
 .targets {
     background-color: white;
-    height: 300px;
     list-style: none outside none;
     margin-left: -10px;
-    overflow-y: auto;
     padding: 5px 0;
     outline-color: transparent;
 }
-.targets li:first-child {
-    background-image: url('../img/cross.png');
-}
-.targets li {
-    background-image: url('../img/company.png');
-    background-position: 10px 50%;
-    background-repeat: no-repeat;
-    color: #333;
-    cursor: pointer;
-    font-weight: bold;
-    padding: 7px 0 7px 4em;
-}
+    .targets li:last-child {
+        background-image: url('../img/cross.png');
+        -moz-background-size: initial;
+        -o-background-size: initial;
+        -webkit-background-size: initial;
+        background-size: initial;
+        background-position: 18px 50%;
+    }
+    .targets li {
+        background-image: url('../img/business.png');
+        background-position: 10px 50%;
+        background-repeat: no-repeat;
+        -moz-background-size: contain;
+        -o-background-size: contain;
+        -webkit-background-size: contain;
+        background-size: contain;
+        color: #333;
+        cursor: pointer;
+        font-weight: bold;
+        padding: 0 0 0 4em;
+        margin-bottom: 0;
+        vertical-align: middle;
+        line-height: 40px;
+    }
 
 .btnOk:disabled, .btnCancel:disabled { opacity: 0.5; }
 
