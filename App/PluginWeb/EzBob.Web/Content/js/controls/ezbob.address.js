@@ -40,10 +40,17 @@ EzBob.Popup = Backbone.View.extend({
 			resizable: true,
 			width: 550,
 			minWidth: 550,
-			height: 550,
-			minHeight: 550,
+			height: 580,
+			minHeight: 580,
 			closeOnEscape: true,
 		});
+
+		$('body, .ui-widget-overlay').addClass('address-dialog-no-overflow');
+
+		var oWidget = this.$el.dialog('widget');
+
+		oWidget.find('.ui-dialog-title').addClass('address-dialog-title');
+		oWidget.find('.ui-dialog-titlebar').addClass('address-dialog-titlebar');
 
 		this.addressList = this.$el.find('.matchingAddressList');
 
@@ -106,6 +113,10 @@ EzBob.Popup = Backbone.View.extend({
 		} // switch
 
 		this.$el.dialog('option', 'buttons', oButtons);
+
+		var oWidget = this.$el.dialog('widget');
+
+		oWidget.find('.ui-dialog-buttonpane').addClass('address-dialog-buttonpane');
 
 		EzBob.UiAction.registerView(this);
 	}, // setDialogButtons
@@ -272,6 +283,7 @@ EzBob.Popup = Backbone.View.extend({
 		this.$el.dialog('close');
 		this.remove();
 		this.unbind();
+		$('body').removeClass('address-dialog-no-overflow');
 	}, // PostCodeBtnOk
 
 	PostCodeBtnManualInputOk: function () {
@@ -306,10 +318,14 @@ EzBob.Popup = Backbone.View.extend({
 		this.$el.dialog('close');
 		this.remove();
 		this.unbind();
+		$('body').removeClass('address-dialog-no-overflow');
 	}, // PostCodeBtnManualInputOk
 
 	PostCodeBtnCancel: function () {
 		this.$el.dialog('close');
+		this.remove();
+		this.unbind();
+		$('body').removeClass('address-dialog-no-overflow');
 	}, // PostCodeBtnCancel
 
 	PostCodeBtnNotFound: function() {

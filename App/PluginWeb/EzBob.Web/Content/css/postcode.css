@@ -1,14 +1,35 @@
 ﻿.address-dialog-widget { overflow: auto !important; }
 
+.address-dialog-titlebar {
+	border: 0 !important;
+}
+
+.address-dialog-no-overflow { overflow: hidden !important; }
+
+.address-dialog-title {
+	font-size: 32px !important;
+	line-height: 40px !important;
+	color: #7bb224 !important;
+	font-weight: normal !important;
+}
+
+.address-dialog-buttonpane {
+	border: 0 !important;
+	background-color: transparent !important;
+}
+
 .matchingAddressList li
 {
     background-image: url('../img/house.png');
     background-repeat: no-repeat;
     background-position: 10px 50%;
-    padding: 7px 0 7px 4em;
     cursor: pointer;
     font-weight: bold;
     color: #333;
+	padding: 0 0 0 4em;
+    margin-bottom: 0;
+    vertical-align: middle;
+    line-height: 40px;
 }
 
 .matchingAddressList li.not-found-item { margin-top: 2em; }
