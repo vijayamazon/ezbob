@@ -657,7 +657,7 @@
                                 <%
                                 _.each(model.AccountsInformation, function(ai,index){
                                 %>
-                                <div style="overflow: scroll;">
+                                <div style="overflow: auto;">
                                     <h2>Account #<%=index+1%></h2>
                                     <table class="table" style="margin-bottom: 0;">
                                         <thead class="box">
@@ -893,7 +893,7 @@
                     <%if(experianInfo.AccountsInformation) {
                         _.each(experianInfo.AccountsInformation, function(ai, index){
                         %>
-                        <div style="overflow: scroll;">
+                        <div style="overflow: auto;">
                             <h2>Account #<%=index+1%></h2>
                             <table class="table" style="margin-bottom: 0; padding: 4px;">
                                 <thead class="box">

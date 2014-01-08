@@ -406,7 +406,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 								continue;
 
 							var jointAcc = caisDetails.JointAccount;
-							if (((accStatus == "D") || (accStatus == "A")) && jointAcc != "J")
+							if (((accStatus == "D") || (accStatus == "A")) && jointAcc != "J" && matchTo == MatchTo.FinancialAccounts_MainApplicant)
 							{
 								accounts[accType]++;
 								var ws = caisDetails.WorstStatus;
