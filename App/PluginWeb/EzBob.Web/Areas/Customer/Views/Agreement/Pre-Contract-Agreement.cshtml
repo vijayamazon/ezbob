@@ -159,8 +159,10 @@
             Other costs deriving from the credit agreement
         </td>
         <td>
-            We charge a set-up fee equal to 0.8% of the loan amount (but in no case less than
-            £30.00) and this is deducted from the loan amount actually deposited in your bank account;
+            We charge a set-up fee equal to
+            {{#IsBrokerFee}} {{SetupFee}} {{/IsBrokerFee}}
+            {{^IsBrokerFee}}{{SetupFeePercent}}% of the loan amount (but in no case less than {{SetupFeeAmount}}){{/IsBrokerFee}}
+             and this is deducted from the loan amount actually deposited in your bank account;
              we charge you interest on the entire loan amount (including the set-up fee).
         </td>
     </tr>

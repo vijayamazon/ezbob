@@ -117,7 +117,7 @@
         4.1 Interest is payable at the following interest rates, calculated on the daily balance of the loan outstanding and collected in arrears:
 
             {{#FormattedSchedules}}
-            <p  style="text-align: justify" > MONTH {{Iterration}}: Rate of interest {{InterestRate}}% per month. Fixed </p>
+            <p  style="text-align: justify; margin-left: 60px;" > MONTH {{Iterration}}: Rate of interest {{InterestRate}}% per month. Fixed </p>
             {{/FormattedSchedules}}
 
                 
@@ -136,8 +136,10 @@
         5.1 The Customer shall pay to the Creditor:-
         <dl>
             <dd><p  style="text-align: justify; margin-left: 90px;" >
-                (a) A set-up fee of 0.8% of the loan amount ( but not less than £30) and this will
-                be deducted from the loan amount deposited in your account and interest will be charged on the loan amount (including the set-up fee); and</p></dd>
+                    (a) A set-up fee of 
+                    {{#IsBrokerFee}} {{SetupFee}} {{/IsBrokerFee}}
+                    {{^IsBrokerFee}}{{SetupFeePercent}}% of the loan amount (but not less than {{SetupFeeAmount}}){{/IsBrokerFee}} and this will
+                    be deducted from the loan amount deposited in your account and interest will be charged on the loan amount (including the set-up fee); and</p></dd>
             <dd><p  style="text-align: justify; margin-left: 90px;" >
                 (b) any expenses incurred by the Creditor in enforcing or preserving its rights
                 under this Agreement and the Security with interest thereon at the rate applicable

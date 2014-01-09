@@ -107,6 +107,7 @@
     <Compile Include="Model\Database\UnderwriterRecentCustomers.cs" />
     <Compile Include="Model\Database\UnderwriterRecentCustomersMap.cs" />
     <Compile Include="Model\Fraud\FraudRequest.cs" />
+    <Compile Include="Model\Loans\BrokerSetupFeeMap.cs" />
     <Compile Include="Model\Loans\LoanLegal.cs" />
     <Compile Include="Model\Loans\LoanMap.cs" />
     <Compile Include="Model\Loans\LoanSource.cs" />

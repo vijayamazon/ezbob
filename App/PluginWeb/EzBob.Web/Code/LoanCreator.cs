@@ -57,29 +57,22 @@
 		public Loan CreateLoan(Customer cus, decimal loanAmount, PayPointCard card, DateTime now)
 		{
 			ValidateCustomer(cus);
-
 			ValidateAmount(loanAmount, cus);
-
 			ValidateOffer(cus);
-
 			ValidateLoanDelay(cus, now, TimeSpan.FromMinutes(1));
-
-			var fee = 0M;
 
 			var cr = cus.LastCashRequest;
 
-			if (!cr.HasLoans && cr.UseSetupFee)
-			{
-				var calculator = new SetupFeeCalculator();
-				fee = calculator.Calculate(loanAmount);
-			}
+			var calculator = new SetupFeeCalculator(cr.UseSetupFee, cr.UseBrokerSetupFee);
+			var fee = calculator.Calculate(loanAmount);
+
 
 			var transfered = loanAmount - fee;
 			PacnetReturnData ret;
 			if (PacnetSafeGuard(cus, transfered))
 			{
 				ret = SendMoney(cus, transfered);
-			    VerifyAvailableFunds(transfered);
+				VerifyAvailableFunds(transfered);
 			}
 			else
 			{
@@ -121,11 +114,11 @@
 			cus.CreditSum = cus.CreditSum - loanAmount;
 
 			if (fee > 0) cus.SetupFee = fee;
-			
+
 			_agreementsGenerator.RenderAgreements(loan, true);
 
 			_loanHistoryRepository.Save(new LoanHistory(loan, now));
-			
+
 			_session.Flush();
 
 			_appCreator.CashTransfered(_context.User, cus.PersonalInfo.FirstName, transfered, fee, loan.Id);
@@ -181,10 +174,10 @@
 			cus.ValidateOfferDate();
 		}
 
-        public virtual void VerifyAvailableFunds(decimal transfered)
-	    {
-            _availableFundsValidator.VerifyAvailableFunds(transfered);
-	    }
+		public virtual void VerifyAvailableFunds(decimal transfered)
+		{
+			_availableFundsValidator.VerifyAvailableFunds(transfered);
+		}
 
 		public virtual void ValidateCustomer(Customer cus)
 		{

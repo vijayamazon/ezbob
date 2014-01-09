@@ -12,6 +12,7 @@
 [name="offerValidUntilDateChangeButton"],
 [name="interestRateChangeButton"],
 [name="setupFeeEditButton"],
+[name="brokerSetupFeeEditButton"],
 #ApproveBtn,
 #RejectBtn,
 #EscalateBtn,
@@ -121,6 +122,7 @@ a[data-bug-type],
 .permission-CreditLineFields [name="offerValidUntilDateChangeButton"],
 .permission-CreditLineFields [name="interestRateChangeButton"],
 .permission-CreditLineFields [name="setupFeeEditButton"],
+.permission-CreditLineFields [name="brokerSetupFeeEditButton"],
 .permission-CreditLineFields [name="isLoanTypeSelectionAllowed"] {
     display: inline-block;
     visibility: visible;

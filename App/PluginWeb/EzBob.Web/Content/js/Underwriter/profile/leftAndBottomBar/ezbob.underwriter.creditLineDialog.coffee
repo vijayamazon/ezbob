@@ -73,6 +73,7 @@ class EzBob.Underwriter.CreditLineDialog extends Backbone.Marionette.ItemView
             offerStart                  : m.StartingFromDate
             offerValidUntil             : m.OfferValidateUntil
             useSetupFee                 : m.UseSetupFee
+            useBrokerSetupFee           : m.UseBrokerSetupFee
             allowSendingEmail           : m.AllowSendingEmail
             isLoanTypeSelectionAllowed  : m.IsLoanTypeSelectionAllowed
         return data
@@ -92,6 +93,8 @@ class EzBob.Underwriter.CreditLineDialog extends Backbone.Marionette.ItemView
             selector: "input[name='offerValidUntil']"
         UseSetupFee:
             selector:"input[name='enableSetupFee']"
+        UseBrokerSetupFee:
+            selector:"input[name='enableBrokerSetupFee']"
         AllowSendingEmail:
             selector: "input[name='allowSendingEmail']"
         IsLoanTypeSelectionAllowed:

@@ -42,6 +42,7 @@
       "click [name='clearPacnetManualButton']": "clearPacnetManual",
       "click [name='editDetails']": "editDetails",
       "click [name='setupFeeEditButton']": "editSetupFee",
+      "click [name='brokerSetupFeeEditButton']": "editBrokerSetupFee",
       "click [name='newCreditLineBtn']": "runNewCreditLine",
       'click [name="allowSendingEmail"]': 'allowSendingEmail',
       'click [name="loanType"]': 'loanType',
@@ -73,7 +74,7 @@
         model: this.model,
         propertyName: "StartingFromDate",
         title: "Starting date edit",
-        width: 350,
+        width: 400,
         postValueName: "date",
         url: "Underwriter/ApplicationInfo/ChangeStartingDate",
         data: {
@@ -92,7 +93,7 @@
         model: this.model,
         propertyName: "RepaymentPerion",
         title: "Repayment period edit",
-        width: 350,
+        width: 400,
         postValueName: "period",
         url: "Underwriter/ApplicationInfo/ChangeCashRequestRepaymentPeriod",
         data: {
@@ -109,7 +110,7 @@
         model: this.model,
         propertyName: "OfferedCreditLine",
         title: "Offer credit line edit",
-        width: 350,
+        width: 400,
         postValueName: "amount",
         url: "Underwriter/ApplicationInfo/ChangeCashRequestOpenCreditLine",
         data: {
@@ -130,7 +131,7 @@
       d = new EzBob.Dialogs.PacentManual({
         model: this.model,
         title: "Pacnet Balance - Add Manual Funds",
-        width: 350,
+        width: 400,
         postValueName: "amount",
         url: "Underwriter/ApplicationInfo/SavePacnetManual",
         data: {
@@ -152,7 +153,7 @@
         model: this.model,
         propertyName: "UseSetupFee",
         title: "Pacnet Balance - Clear Manual Funds",
-        width: 350,
+        width: 400,
         checkboxName: "I am sure",
         postValueName: "isSure",
         url: "Underwriter/ApplicationInfo/DisableTodaysPacnetManual",
@@ -172,7 +173,7 @@
         model: this.model,
         propertyName: "InterestRate",
         title: "Interest rate edit",
-        width: 350,
+        width: 400,
         postValueName: "interestRate",
         url: "Underwriter/ApplicationInfo/ChangeCashRequestInterestRate",
         data: {
@@ -188,7 +189,7 @@
         model: this.model,
         propertyName: "Details",
         title: "Details edit",
-        width: 350,
+        width: 400,
         postValueName: "details",
         url: "Underwriter/ApplicationInfo/SaveDetails",
         data: {
@@ -204,10 +205,27 @@
         model: this.model,
         propertyName: "UseSetupFee",
         title: "Setup Fee",
-        width: 350,
+        width: 400,
         postValueName: "enbaled",
         checkboxName: "Enable Setup Fee",
         url: "Underwriter/ApplicationInfo/ChangeSetupFee",
+        data: {
+          id: this.model.get("CashRequestId")
+        }
+      });
+      d.render();
+    };
+
+    LoanInfoView.prototype.editBrokerSetupFee = function() {
+      var d;
+      d = new EzBob.Dialogs.CheckBoxEdit({
+        model: this.model,
+        propertyName: "UseBrokerSetupFee",
+        title: "Broker Commission",
+        width: 400,
+        postValueName: "enbaled",
+        checkboxName: "Enable broker commission",
+        url: "Underwriter/ApplicationInfo/ChangeBrokerSetupFee",
         data: {
           id: this.model.get("CashRequestId")
         }
@@ -249,7 +267,7 @@
         model: this.model,
         propertyName: "AllowSendingEmail",
         title: "Allow sending emails",
-        width: 350,
+        width: 400,
         postValueName: "enbaled",
         checkboxName: "Allow",
         url: "Underwriter/ApplicationInfo/AllowSendingEmails",
@@ -267,7 +285,7 @@
         model: this.model,
         propertyName: "IsLoanTypeSelectionAllowed",
         title: "Customer selection",
-        width: 350,
+        width: 400,
         postValueName: "loanTypeSelection",
         comboValues: [
           {
@@ -309,7 +327,7 @@
         model: this.model,
         propertyName: "LoanTypeId",
         title: "Loan type",
-        width: 350,
+        width: 400,
         comboValues: this.model.get('LoanTypes'),
         postValueName: "LoanType",
         url: "Underwriter/ApplicationInfo/LoanType",
@@ -330,7 +348,7 @@
         model: this.model,
         propertyName: "LoanSource.LoanSourceID",
         title: "Loan source",
-        width: 350,
+        width: 400,
         comboValues: _.map(this.model.get('AllLoanSources'), function(ls) {
           return {
             value: ls.Id,
@@ -418,7 +436,7 @@
         model: this.model,
         propertyName: "DiscountPlanId",
         title: "Discount Plan",
-        width: 350,
+        width: 400,
         comboValues: _.map(this.model.get('DiscountPlans'), function(v) {
           return {
             value: v.Id,

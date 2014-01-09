@@ -46,6 +46,9 @@ namespace EzBob.Web.Areas.Customer.Models
         public decimal InterestRate { get; set; }
         public double APR { get; set; }
         public string SetupFee { get; set; }
+		public bool IsBrokerFee { get; set; }
+		public string SetupFeeAmount { get; set; }
+		public string SetupFeePercent { get; set; }
         public  int Term;
 
         public CustomerModel  Customer  { get; set; }

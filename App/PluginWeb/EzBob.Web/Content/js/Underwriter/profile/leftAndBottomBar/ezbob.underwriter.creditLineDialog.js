@@ -43,9 +43,8 @@
         title: "Credit Line",
         position: "center",
         draggable: false,
-        width: "73%",
-        height: Math.max(window.innerHeight * 0.9, 600),
-        dialogClass: "creditline-popup"
+        dialogClass: "creditline-popup",
+        width: 840
       };
     };
 
@@ -112,6 +111,7 @@
         offerStart: m.StartingFromDate,
         offerValidUntil: m.OfferValidateUntil,
         useSetupFee: m.UseSetupFee,
+        useBrokerSetupFee: m.UseBrokerSetupFee,
         allowSendingEmail: m.AllowSendingEmail,
         isLoanTypeSelectionAllowed: m.IsLoanTypeSelectionAllowed
       };
@@ -135,6 +135,9 @@
       },
       UseSetupFee: {
         selector: "input[name='enableSetupFee']"
+      },
+      UseBrokerSetupFee: {
+        selector: "input[name='enableBrokerSetupFee']"
       },
       AllowSendingEmail: {
         selector: "input[name='allowSendingEmail']"

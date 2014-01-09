@@ -193,9 +193,11 @@
 			<%}%>
 	
 			<%if(m.Editable){%>
-				@RawCellWithButtonNear("Enable Setup fee:", "<%= m.UseSetupFee ? 'Yes' : 'No' %>", "setupFeeEditButton")
+				@RawCellWithButtonNear("Enable setup fee:", "<%= m.UseSetupFee ? 'Yes' : 'No' %>", "setupFeeEditButton")
+                @RawCellWithButtonNear("Enable broker commission:", "<%= m.UseBrokerSetupFee ? 'Yes' : 'No' %>", "brokerSetupFeeEditButton")
 			<%} else{%>
 				@RawCell("Setup fee:", "<%= m.UseSetupFee ? 'Enabled' : 'Disabled' %>")
+                @RawCell("Broker commission:", "<%= m.UseBrokerSetupFee ? 'Enabled' : 'Disabled' %>")
 			<%}%>
 	
 			<tr>
