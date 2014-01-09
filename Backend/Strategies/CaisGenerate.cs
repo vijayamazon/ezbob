@@ -238,7 +238,7 @@
 				daysBetween = (int)(DateTime.UtcNow - minLsDate.Value).TotalDays;
 			}
 
-			if (string.IsNullOrEmpty(caisAccountStatus) && caisAccountStatus != "Calculated value") {
+			if (!string.IsNullOrEmpty(caisAccountStatus) && caisAccountStatus != "Calculated value") {
 				return caisAccountStatus;
 			}
 
