@@ -210,6 +210,8 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 			sAjaxSource: this.gridSrcUrl(oGridProperties),
 			aoColumns: this.extractColumns(oGridProperties),
 
+			bDeferRender: true,
+
 			aLengthMenu: [[-1, 10, 25, 50, 100], ['all', 10, 25, 50, 100]],
 			iDisplayLength: 50,
 
