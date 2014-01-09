@@ -581,7 +581,10 @@ namespace EzBob.Web.Controllers
 						t.AddrLine3 = string.IsNullOrEmpty(t.AddrLine3) ? string.Empty : System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(t.AddrLine3.ToLower());
 						t.AddrLine4 = string.IsNullOrEmpty(t.AddrLine4) ? string.Empty : System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(t.AddrLine4.ToLower());
 					}
-					result.Targets.Add(new CompanyInfo {BusName  = "Company not found", BusRefNum = "NotFound" });
+					if (result.Targets.Count > 1)
+					{
+						result.Targets.Add(new CompanyInfo {BusName = "Company not found", BusRefNum = "skip"});
+					}
 				}
 
 				

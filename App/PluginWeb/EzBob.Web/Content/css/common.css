@@ -44,15 +44,16 @@ input[type='radio'], input[type='checkbox'] { box-shadow: none; }
         -webkit-background-size: initial;
         background-size: initial;
         background-position: 18px 50%;
+        margin-top: 2em;
     }
     .targets li {
         background-image: url('../img/business.png');
         background-position: 10px 50%;
         background-repeat: no-repeat;
-        -moz-background-size: contain;
-        -o-background-size: contain;
-        -webkit-background-size: contain;
-        background-size: contain;
+        -moz-background-size: 30px;
+        -o-background-size: 30px;
+        -webkit-background-size: 30px;
+        background-size: 30px;
         color: #333;
         cursor: pointer;
         font-weight: bold;

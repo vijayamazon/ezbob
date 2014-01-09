@@ -25,7 +25,7 @@ EzBob.companyTargets = Backbone.View.extend({
             minHeight:200,
             buttons: [
                 {
-                    text: 'Not found',
+                    text: 'Skip',
                     'class': 'addr-button green',
                     click: function () { that.btnNotFoundClick(); },
                     'ui-event-control-id': 'company-target:not-found',
@@ -44,6 +44,16 @@ EzBob.companyTargets = Backbone.View.extend({
                 }
             ]
         });
+
+
+        $('body, .ui-widget-overlay').addClass('address-dialog-no-overflow');
+
+        var oWidget = this.$el.dialog('widget');
+
+        oWidget.find('.ui-dialog-title').addClass('address-dialog-title');
+        oWidget.find('.ui-dialog-titlebar').addClass('address-dialog-titlebar');
+        oWidget.find('.ui-dialog-buttonpane').addClass('address-dialog-buttonpane');
+        EzBob.UiAction.registerView(this);
 
         this.targetsList = this.$el.find(".targets");
 
@@ -79,16 +89,20 @@ EzBob.companyTargets = Backbone.View.extend({
         if (this.targetsList.attr('data') == null || this.targetsList.attr('data') == 0) {
             this.targetsList.css("border", "1px solid red");
         } else {
-            this.trigger("BusRefNumGetted", this.targetsList.attr('data'));
+            if (this.targetsList.attr('data') == 'skip') {
+                this.trigger("BusRefNumGetted", "NotFound");
+            } else {
+                this.trigger("BusRefNumGetted", this.targetsList.attr('data'));
+            }
             this.btnCancelClick();
         }
     },
     btnNotFoundClick: function () {
         this.trigger("BusRefNumGetted", "NotFound");
-        console.log("not found");
         this.btnCancelClick();
     },
     btnCancelClick: function () {
         this.$el.dialog("close");
+        $('body').removeClass('address-dialog-no-overflow');
     }
 });
