@@ -432,6 +432,11 @@
 				};
 		}
 
+		public ActionMetaData UpdateCurrencyRates()
+		{
+			return Execute(null, null, typeof(UpdateCurrencyRates));
+		}
+
 		#endregion IEzService exposed methods
 
 		#region method IDisposable.Dispose

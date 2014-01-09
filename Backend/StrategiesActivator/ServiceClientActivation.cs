@@ -471,7 +471,18 @@
 			Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> MainStrategy <Underwriter ID> <customerId> <checkType> <houseNumber> <houseName> <street> <district> <town> <county> <postcode> <bankAccount> <sortCode> <avoidAutoDescison>");
 		}
 
-// ReSharper restore UnusedMember.Local
+		[Activation]
+		private void UpdateCurrencyRates()
+		{
+			if (args.Length != 1)
+			{
+				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> UpdateCurrencyRates");
+				return;
+			}
+
+			serviceClient.UpdateCurrencyRates();
+		}
+
 		#endregion strategy activators
 	}
 }

@@ -521,6 +521,9 @@ namespace EzBob.Web.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetWizardConfigs", ReplyAction="http://tempuri.org/IEzService/GetWizardConfigsResponse")]
         EzBob.Web.EzServiceReference.WizardConfigsActionResult GetWizardConfigs();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateCurrencyRates", ReplyAction="http://tempuri.org/IEzService/UpdateCurrencyRatesResponse")]
+        EzBob.Web.EzServiceReference.ActionMetaData UpdateCurrencyRates();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -708,6 +711,10 @@ namespace EzBob.Web.EzServiceReference {
         
         public EzBob.Web.EzServiceReference.WizardConfigsActionResult GetWizardConfigs() {
             return base.Channel.GetWizardConfigs();
+        }
+        
+        public EzBob.Web.EzServiceReference.ActionMetaData UpdateCurrencyRates() {
+            return base.Channel.UpdateCurrencyRates();
         }
     }
 }

@@ -665,4 +665,16 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="UpdateCurrencyRates">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="UpdateCurrencyRatesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q50="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="UpdateCurrencyRatesResult" nillable="true" type="q50:ActionMetaData" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
 </xs:schema>

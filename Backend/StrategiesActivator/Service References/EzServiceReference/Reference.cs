@@ -676,6 +676,12 @@ namespace StrategiesActivator.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetWizardConfigs", ReplyAction="http://tempuri.org/IEzService/GetWizardConfigsResponse")]
         System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.WizardConfigsActionResult> GetWizardConfigsAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateCurrencyRates", ReplyAction="http://tempuri.org/IEzService/UpdateCurrencyRatesResponse")]
+        StrategiesActivator.EzServiceReference.ActionMetaData UpdateCurrencyRates();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateCurrencyRates", ReplyAction="http://tempuri.org/IEzService/UpdateCurrencyRatesResponse")]
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> UpdateCurrencyRatesAsync();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -1023,6 +1029,14 @@ namespace StrategiesActivator.EzServiceReference {
         
         public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.WizardConfigsActionResult> GetWizardConfigsAsync() {
             return base.Channel.GetWizardConfigsAsync();
+        }
+        
+        public StrategiesActivator.EzServiceReference.ActionMetaData UpdateCurrencyRates() {
+            return base.Channel.UpdateCurrencyRates();
+        }
+        
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> UpdateCurrencyRatesAsync() {
+            return base.Channel.UpdateCurrencyRatesAsync();
         }
     }
 }

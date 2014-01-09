@@ -126,6 +126,9 @@ namespace EzService {
 
 		[OperationContract]
 		WizardConfigsActionResult GetWizardConfigs();
+
+		[OperationContract]
+		ActionMetaData UpdateCurrencyRates();
 	} // interface IEzService
 
 	#endregion interface IEzService

@@ -71,6 +71,7 @@
     <Compile Include="AutoDecisions\ReApproval.cs" />
     <Compile Include="AutoDecisions\ReRejection.cs" />
     <Compile Include="CaisUpdate.cs" />
+    <Compile Include="UpdateCurrencyRates.cs" />
     <Compile Include="GetWizardConfigs.cs" />
     <Compile Include="ValidateMobileCode.cs" />
     <Compile Include="GenerateMobileCode.cs" />
@@ -144,6 +145,10 @@
     <ProjectReference Include="..\..\Integration\CommonLib\CommonLib.csproj">
       <Project>{aedbfbbd-ba7d-4582-afca-6ecf8af33c98}</Project>
       <Name>CommonLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Integration\CustomSchedulers\CustomSchedulers.csproj">
+      <Project>{47D73896-1B70-4347-BEB5-A0AD94A45421}</Project>
+      <Name>CustomSchedulers</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Integration\DatabaseLib\DatabaseLib.csproj">
       <Project>{fa67314a-0560-41d4-bc19-6524663e9d0d}</Project>
