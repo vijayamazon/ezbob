@@ -75,6 +75,10 @@
       <Project>{90CC3A5F-5BEA-4C13-82B7-992ADC41F854}</Project>
       <Name>ValueIntervals</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ReportAuthenticationLib\ReportAuthenticationLib.csproj">
+      <Project>{DC269D61-60E1-47D7-9A57-BC5CDE7456D5}</Project>
+      <Name>ReportAuthenticationLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Reports\Reports.csproj">
       <Project>{fbd0f86b-fc06-418a-80a1-ada19e973a7e}</Project>
       <Name>Reports</Name>

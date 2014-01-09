@@ -18,42 +18,24 @@ DIV#divAdminArea DIV#AdminLeftPane INPUT.ReportButton {
 	height: 48px !important;
 }
 
-TABLE#tblReportUserMap { float: left; }
+TABLE.tblReportUserMap TBODY TR:hover {
+	background-color: antiquewhite;
+}
 
-TABLE#tblReportUserMap CAPTION {
-	font-weight: bold;
-	font-size: large;
+TABLE.tblReportUserMap TBODY TR TD {
+	padding: 0.5em;
+	vertical-align: middle;
 	text-align: center;
-	margin-bottom: 0.3.em;
+	cursor: pointer;
 }
 
-TABLE#tblReportUserMap THEAD TR {
-	background-color: #9ab1d1;
-	color: #fff;
+TABLE.tblReportUserMap TBODY TR TD img.map-icon {
+	width: 16px;
+	height: 16px;
+	border: 0;
 }
 
-TABLE#tblReportUserMap THEAD TR TH {
-	padding: 0.5em;
-	vertical-align: middle;
-	border: 1px solid #ddd;
-}
+div#divReportUserMapSection { float: left; }
 
-TABLE#tblReportUserMap TBODY TR { background-color: white; }
-
-TABLE#tblReportUserMap TBODY TR TH {
-	padding: 0.5em;
-	vertical-align: middle;
-	border: 1px solid #ddd;
-	text-align: left;
-}
-
-TABLE#tblReportUserMap TBODY TR TD {
-	padding: 0.5em;
-	vertical-align: middle;
-	border: 1px solid #ddd;
-	text-align: center;
-}
-
-TABLE#tblReportUserMap TBODY TR TD.checked {
-	background-color: #bfffcf;
-}
+div#divPendingActions,
+textarea#txtPendingActionList { display: none; }

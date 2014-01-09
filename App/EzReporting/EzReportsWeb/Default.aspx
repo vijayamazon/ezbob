@@ -11,6 +11,7 @@
 
 	<link rel="stylesheet" href="css/combined.css" />
 	<%= Default.IsAdmin() ? "<link rel=stylesheet href=\"css/admin.css\" />" : "" %>
+	<%= Default.IsAdmin() ? "<link rel=stylesheet href=\"css/jquery.dataTables.css\" />" : "" %>
 	<%= Report.GetStyle().ToString() %>
 
 	<script src="js/jquery.js"></script>
@@ -99,7 +100,24 @@
 				<asp:ImageButton ID="btnAdminDropUser" runat="server" OnClick="btnAdminDropUser_Click" ImageUrl="~/images/show_report.png" CssClass="center ReportButton" />
 			</div>
 
-			<asp:Table runat="server" ID="tblReportUserMap"></asp:Table>
+			<div id="divReportUserMapSection">
+				<div id="divReportUserMap"></div>
+
+				<div id="divPendingActions">
+					<h3>Pending actions
+					<asp:ImageButton ID="btnPerformPendingActions" runat="server" OnClick="btnPerformPendingActions_Click" ImageUrl="~/images/show_report.png" CssClass="center ReportButton" />
+					</h3>
+
+					<div id="divPendingActionList"></div>
+					<textarea id="txtPendingActionList" runat="server"></textarea>
+				</div>
+			</div>	
+
+			<div style="display: none;">
+				<textarea id="txtReportList" runat="server"></textarea>
+				<textarea id="txtUserList" runat="server"></textarea>
+				<textarea id="txtReportUserMap" runat="server"></textarea>
+			</div>
 		</div>
 		<asp:CheckBox runat="server" ID="chkIsAdmin" />
 	</form>

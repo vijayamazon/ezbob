@@ -14,6 +14,9 @@ using Reports;
 using CheckBox = System.Web.UI.WebControls.CheckBox;
 
 namespace EzReportsWeb {
+	using System.Text;
+	using System.Web.Script.Serialization;
+
 	public partial class Default : Page {
 		private static WebReportHandler reportHandler;
 		private static ASafeLog log;
@@ -291,6 +294,49 @@ namespace EzReportsWeb {
 			InitAdminArea(oDB, log);
 		} // btnAdminDropUser_Click
 
+		protected void btnPerformPendingActions_Click(object sender, EventArgs e) {
+			divAdminMsg.InnerText = "Performing task...";
+
+			var aryActions = txtPendingActionList.Value.Split('\n');
+
+			try {
+				foreach (string sActionCode in aryActions) {
+					var ary = sActionCode.Split(',');
+
+					if (ary.Length != 3)
+						continue;
+
+					int nUserID;
+					int nReportID;
+					int nEnabled;
+
+					if (!int.TryParse(ary[0], out nUserID))
+						continue;
+
+					if (!int.TryParse(ary[1], out nReportID))
+						continue;
+
+					if (!int.TryParse(ary[2], out nEnabled))
+						continue;
+
+					oDB.ExecuteNonQuery(
+						"RptSetUserReportMap",
+						CommandSpecies.StoredProcedure,
+						new QueryParameter("@UserID", nUserID),
+						new QueryParameter("@ReportID", nReportID),
+						new QueryParameter("@Enabled", nEnabled)
+						);
+				} // foreach
+
+				divAdminMsg.InnerText = "User-report mapping has been updated.";
+			}
+			catch(Exception ex) {
+				divAdminMsg.InnerText = string.Format("Action failed: {0}", ex.Message);
+			} // try
+
+			InitAdminArea(oDB, log);
+		} // btnPerformPendingActions_Click
+
 		private void InitAdminArea(AConnection oDB, ASafeLog log, bool bIsPostBack = false) {
 			DataTable oDbUsers = oDB.ExecuteReader("SELECT Id, Name FROM ReportUsers ORDER BY Name", CommandSpecies.Text);
 
@@ -322,73 +368,58 @@ namespace EzReportsWeb {
 		} // FillUserDropDowns
 
 		private void SetReportUserMap(AConnection oDB, SortedDictionary<string, int> oUsers) {
-			DataTable oDbMap = oDB.ExecuteReader("SELECT UserID, ReportID FROM ReportsUsersMap ORDER BY ReportID", CommandSpecies.Text);
+			var os = new List<object>();
+			var jss = new JavaScriptSerializer();
 
-			var oMap = new SortedDictionary<int, SortedDictionary<int, int>>();
+			oDB.ForEachRowSafe(
+				(sr, bRowsetStart) => {
+					int nUserID = sr["UserID"];
+					int nReportID = sr["ReportID"];
 
-			foreach (DataRow row in oDbMap.Rows) {
-				int nUserID = Convert.ToInt32(row["UserID"]);
-				int nReportID = Convert.ToInt32(row["ReportID"]);
+					os.Add(new { reportId = nReportID, userId = nUserID });
 
-				if (!oMap.ContainsKey(nReportID))
-					oMap[nReportID] = new SortedDictionary<int, int>();
+					return ActionResult.Continue;
+				},
 
-				oMap[nReportID][nUserID] = 1;
-			} // for each row
+				"SELECT UserID, ReportID FROM ReportsUsersMap ORDER BY ReportID",
+				CommandSpecies.Text
+			);
 
-			tblReportUserMap.Caption = "Report - User Map";
+			txtReportUserMap.Value = jss.Serialize(os);
 
-			tblReportUserMap.Rows.Clear();
+			var lst = new SortedDictionary<string, string>();
 
-			var oHeaderRow = new TableHeaderRow { TableSection = TableRowSection.TableHeader };
-			tblReportUserMap.Rows.Add(oHeaderRow);
+			oDB.ForEachRowSafe(
+				(sr, bRowsetStart) => {
+					int nReportID = sr["Id"];
+					string sReportName = sr["Title"];
 
-			oHeaderRow.Cells.Add(new TableHeaderCell());
+					lst[nReportID.ToString()] = sReportName;
 
-			foreach (KeyValuePair<string, int> pair in oUsers)
-				oHeaderRow.Cells.Add(new TableHeaderCell { Text = pair.Key.Replace(" ", "<br>") });
+					return ActionResult.Continue;
+				},
+				"SELECT Id, Title FROM ReportScheduler ORDER BY Title",
+				CommandSpecies.Text
+			);
 
-			DataTable oDbReports = oDB.ExecuteReader("SELECT Id, Title FROM ReportScheduler ORDER BY Title", CommandSpecies.Text);
+			txtReportList.Value = new JavaScriptSerializer().Serialize(lst);
 
-			string sRowClass = "odd";
+			lst.Clear();
 
-			foreach (DataRow row in oDbReports.Rows) {
-				int nReportID = Convert.ToInt32(row["Id"]);
-				string sReportTitle = row["Title"].ToString();
+			oDB.ForEachRowSafe(
+				(sr, bRowsetStart) => {
+					int nUserID = sr["Id"];
+					string sUserName = sr["Name"];
 
-				var oReportRow = new TableRow { TableSection = TableRowSection.TableBody };
-				tblReportUserMap.Rows.Add(oReportRow);
+					lst[nUserID.ToString()] = sUserName;
 
-				oReportRow.CssClass = sRowClass;
+					return ActionResult.Continue;
+				},
+				"SELECT Id, Name FROM ReportUsers",
+				CommandSpecies.Text
+			);
 
-				sRowClass = (sRowClass == "odd") ? "even" : "odd";
-
-				oReportRow.Cells.Add(new TableHeaderCell { Text = sReportTitle.Replace(" ", "<br>") });
-
-				foreach (KeyValuePair<string, int> pair in oUsers) {
-					int nUserID = pair.Value;
-					string sUserName = pair.Key;
-					bool bAllowed = oMap.ContainsKey(nReportID) && oMap[nReportID].ContainsKey(nUserID);
-
-					var oCell = new TableCell();
-					oReportRow.Cells.Add(oCell);
-
-					var oChk = new CheckBox();
-					oCell.Controls.Add(oChk);
-
-					if (bAllowed)
-						oCell.CssClass = "checked";
-
-					oCell.ToolTip = sReportTitle + " to " + sUserName;
-					oChk.Checked = bAllowed;
-					oChk.AutoPostBack = true;
-
-					oChk.Attributes["userid"] = nUserID.ToString();
-					oChk.Attributes["reportid"] = nReportID.ToString();
-
-					oChk.CheckedChanged += ReportPermissionTrigger;
-				} // for each user
-			} // for each report row
+			txtUserList.Value = jss.Serialize(lst);
 		} // SetReportUserMap
 
 		protected void ReportPermissionTrigger(object sender, EventArgs args) {

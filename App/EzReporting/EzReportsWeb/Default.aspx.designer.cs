@@ -274,13 +274,49 @@ namespace EzReportsWeb {
         protected global::System.Web.UI.WebControls.ImageButton btnAdminDropUser;
         
         /// <summary>
-        /// tblReportUserMap control.
+        /// btnPerformPendingActions control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Table tblReportUserMap;
+        protected global::System.Web.UI.WebControls.ImageButton btnPerformPendingActions;
+        
+        /// <summary>
+        /// txtPendingActionList control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTextArea txtPendingActionList;
+        
+        /// <summary>
+        /// txtReportList control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTextArea txtReportList;
+        
+        /// <summary>
+        /// txtUserList control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTextArea txtUserList;
+        
+        /// <summary>
+        /// txtReportUserMap control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlTextArea txtReportUserMap;
         
         /// <summary>
         /// chkIsAdmin control.

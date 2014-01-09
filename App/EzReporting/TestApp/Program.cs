@@ -26,7 +26,7 @@ namespace TestApp {
 
 			// TestUiReportExt(oDB, log);
 
-			TestLoanDateScore(oDB, log);
+			// TestLoanDateScore(oDB, log);
 
 			// TestExperianLimitedCompanyData(oDB, log);
 
