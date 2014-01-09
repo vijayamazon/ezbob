@@ -4,12 +4,12 @@
   <Description>Generates Experian report and stores it on the disk. Trigger - 1.Once a month (28th) 2.Underwriter-&gt;CAIS-&gt;Generate button</Description>
   <Workspace Name="CAIS_NO_Upload">
     <NodeElement Name="Account Number" NodeId="MultiAssignmentB32624764" />
-    <NodeElement Name="Assignment" NodeId="AssignmentB12268704" />
     <NodeElement Name="Assignment" NodeId="AssignmentB66097328" />
+    <NodeElement Name="Assignment" NodeId="AssignmentB12268704" />
     <NodeElement Name="Business" NodeId="ScriptNode57477797" />
     <NodeElement Name="Business Counter" NodeId="ConditionalAssignment9785067" />
-    <NodeElement Name="Close Files" NodeId="ScriptNode38605574" />
     <NodeElement Name="Close Files" NodeId="ScriptNode62435929" />
+    <NodeElement Name="Close Files" NodeId="ScriptNode38605574" />
     <NodeElement Name="Company type" NodeId="ConditionalAssignment23814038" />
     <NodeElement Name="Comparison" NodeId="Comparison16159142" />
     <NodeElement Name="Conditional Assignment" NodeId="ConditionalAssignment23892180" />
@@ -20,7 +20,7 @@
     <NodeElement Name="File Path, Name and Type" NodeId="MultiAssignmentB23018869" />
     <NodeElement Name="Folder Creation" NodeId="ScriptNode20822872" />
     <NodeElement Name="Get data from row" NodeId="GetRowDataNode4733890" />
-    <NodeElement Name="Get_CAIS_data" NodeId="DataSourceBehavioral35614854" />
+    <NodeElement Name="Get_CAIS_data" NodeId="DataSourceBehavioral22721246" />
     <NodeElement Name="GET_CAIS_File_Data" NodeId="DataSourceNodeScalar64892033" />
     <NodeElement Name="Get_CAIS_Folders_Paths" NodeId="DataSourceNodeScalar37560342" />
     <NodeElement Name="Mail Node" NodeId="MailNode14931696" />
@@ -99,13 +99,13 @@
       <DefaultPinName />
       <Description />
       <DisplayName>Conditional Assignment</DisplayName>
-      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;conditionalAssignments&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;true //set 0 to CAIS flag&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;CAISflag := NULL&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;SceduledRepaymentsScalar &amp;lt;&amp;gt; 0&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;MonthlyPaymentScalar := LoanAmountScalar / SceduledRepaymentsScalar&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment&gt;&lt;assignment&gt;MonthlyPaymentScalar := 0&lt;/assignment&gt;&lt;/negativeAssignment&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;AccountStatus &amp;lt;&amp;gt; "8" AND CloseDateScalar &amp;gt; StartDateScalar&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;CurrentBalanceScalar := 0&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;CustomerStatusScalar = "Collection"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;TransferredToCollectionFlag := "Y"&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment&gt;&lt;assignment&gt;TransferredToCollectionFlag := ""&lt;/assignment&gt;&lt;/negativeAssignment&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;//Manual CAIS Flag selected
+      <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;conditionalAssignments&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;true //set 0 to CAIS flag&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;CAISflag := NULL&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;ScheduledRepaymentsScalar1 &amp;lt;&amp;gt; 0&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;MonthlyPaymentScalar := LoanAmountScalar / ScheduledRepaymentsScalar1&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment&gt;&lt;assignment&gt;MonthlyPaymentScalar := 0&lt;/assignment&gt;&lt;/negativeAssignment&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;AccountStatus &amp;lt;&amp;gt; "8" AND CloseDateScalar &amp;gt; StartDateScalar&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;CurrentBalanceScalar := 0&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;CustomerStatusScalar = "Collection"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;TransferredToCollectionFlag := "Y"&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment&gt;&lt;assignment&gt;TransferredToCollectionFlag := ""&lt;/assignment&gt;&lt;/negativeAssignment&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;//Manual CAIS Flag selected
 ManualCaisFlagScalar &amp;lt;&amp;gt; NULL AND ManualCaisFlagScalar &amp;lt;&amp;gt; "Calculated value"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;CAISflag := ManualCaisFlagScalar&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;/conditionalAssignments&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>ConditionalAssignment23892180</Name>
       <PointF>
-        <X>1058.59326</X>
+        <X>1058.59314</X>
         <Y>256</Y>
       </PointF>
       <SuperNodeName />
@@ -292,7 +292,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <DisplayName>Status Codes</DisplayName>
       <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;&lt;conditionalAssignments&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;CloseDateScalar &amp;gt; StartDateScalar
 //AND DAYSBETWEEN(CloseDateScalar,NOW()) &amp;gt; 60
-&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;AccountStatus := "0"&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;CloseDateScalar &amp;lt; StartDateScalar AND DaysBetween &amp;lt;= 30&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;AccountStatus := "0"&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;CloseDateScalar &amp;lt; StartDateScalar AND DaysBetween &amp;gt; 30 AND DaysBetween &amp;lt;= 60&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;AccountStatus := "1"&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;CloseDateScalar &amp;lt; StartDateScalar AND DaysBetween &amp;gt; 60 AND DaysBetween &amp;lt;= 90&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;AccountStatus := "2"&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;CloseDateScalar &amp;lt; StartDateScalar AND DaysBetween &amp;gt; 90  AND DaysBetween &amp;lt;= 120&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;AccountStatus := "3"&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;CloseDateScalar &amp;lt; StartDateScalar AND DaysBetween &amp;gt; 120 AND DaysBetween &amp;lt;= 150&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;AccountStatus := "4"&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;CloseDateScalar &amp;lt; StartDateScalar AND DaysBetween &amp;gt; 150 AND DaysBetween &amp;lt;= 180&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;AccountStatus := "5"&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;CloseDateScalar &amp;lt; StartDateScalar AND DaysBetween &amp;gt; 180 &lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;AccountStatus := "6"&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;CloseDateScalar &amp;lt; StartDateScalar AND IsDefaultedScalar = 1&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;AccountStatus := "8"&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;CloseDateScalar &amp;lt; StartDateScalar AND CustomerStatusIsEnabledScalar=0&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;AccountStatus := "8"&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;AccountStatus = "8"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;OriginalDefaultBalance := CurrentBalanceScalar&lt;/assignment&gt;&lt;assignment&gt;CloseDateScalar := NOW()&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment&gt;&lt;assignment&gt;OriginalDefaultBalance := 0&lt;/assignment&gt;&lt;/negativeAssignment&gt;&lt;/conditionalAssignment&gt;&lt;/conditionalAssignments&gt;</InitialValue>
+&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;AccountStatus := "0"&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;CloseDateScalar &amp;lt; StartDateScalar AND DaysBetween &amp;lt;= 30&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;AccountStatus := "0"&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;CloseDateScalar &amp;lt; StartDateScalar AND DaysBetween &amp;gt; 30 AND DaysBetween &amp;lt;= 60&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;AccountStatus := "1"&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;CloseDateScalar &amp;lt; StartDateScalar AND DaysBetween &amp;gt; 60 AND DaysBetween &amp;lt;= 90&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;AccountStatus := "2"&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;CloseDateScalar &amp;lt; StartDateScalar AND DaysBetween &amp;gt; 90  AND DaysBetween &amp;lt;= 120&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;AccountStatus := "3"&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;CloseDateScalar &amp;lt; StartDateScalar AND DaysBetween &amp;gt; 120 AND DaysBetween &amp;lt;= 150&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;AccountStatus := "4"&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;CloseDateScalar &amp;lt; StartDateScalar AND DaysBetween &amp;gt; 150 AND DaysBetween &amp;lt;= 180&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;AccountStatus := "5"&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;CloseDateScalar &amp;lt; StartDateScalar AND DaysBetween &amp;gt; 180 &lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;AccountStatus := "6"&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;CloseDateScalar &amp;lt; StartDateScalar AND IsDefaultedScalar = "True"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;AccountStatus := "8"&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;CloseDateScalar &amp;lt; StartDateScalar  AND CustomerStatusIsEnabledScalar="False"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;AccountStatus := "8"&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment /&gt;&lt;/conditionalAssignment&gt;&lt;conditionalAssignment&gt;&lt;condition&gt;AccountStatus = "8"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assignment&gt;OriginalDefaultBalance := CurrentBalanceScalar&lt;/assignment&gt;&lt;assignment&gt;CloseDateScalar := NOW()&lt;/assignment&gt;&lt;/positiveAssignment&gt;&lt;negativeAssignment&gt;&lt;assignment&gt;OriginalDefaultBalance := 0&lt;/assignment&gt;&lt;/negativeAssignment&gt;&lt;/conditionalAssignment&gt;&lt;/conditionalAssignments&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
       <Name>ConditionalAssignment6295723</Name>
@@ -743,7 +743,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <DisplayName>Get_CAIS_data</DisplayName>
       <InitialValue>&lt;?xml version="1.0" encoding="utf-16"?&gt;
 &lt;NodeParameters xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
-  &lt;DataSourceName&gt;Get_CAIS_dataxxGiNFRRhpcB8K+IdKzNdQ==&lt;/DataSourceName&gt;
+  &lt;DataSourceName&gt;Get_CAIS_datadcp41JDjIgycJ2Sqaq/SjQ==&lt;/DataSourceName&gt;
   &lt;DataSourceType&gt;ExternalDatabase&lt;/DataSourceType&gt;
   &lt;UseMultipleLayersForInput&gt;false&lt;/UseMultipleLayersForInput&gt;
   &lt;UseMultipleLayersForOutput&gt;false&lt;/UseMultipleLayersForOutput&gt;
@@ -1088,7 +1088,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       &lt;Id&gt;0&lt;/Id&gt;
       &lt;ParentId&gt;0&lt;/ParentId&gt;
       &lt;UseVariable xsi:nil="true" /&gt;
-      &lt;Name&gt;SceduledRepayments&lt;/Name&gt;
+      &lt;Name&gt;ScheduledRepayments&lt;/Name&gt;
       &lt;Description /&gt;
       &lt;TypeString&gt;Number&lt;/TypeString&gt;
       &lt;ConstraintString /&gt;
@@ -1186,12 +1186,12 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       &lt;UseVariable xsi:nil="true" /&gt;
       &lt;Name&gt;IsDefaulted&lt;/Name&gt;
       &lt;Description /&gt;
-      &lt;TypeString&gt;Number&lt;/TypeString&gt;
-      &lt;ConstraintString /&gt;
+      &lt;TypeString&gt;String&lt;/TypeString&gt;
+      &lt;ConstraintString&gt;True;False&lt;/ConstraintString&gt;
       &lt;DictionaryId xsi:nil="true" /&gt;
       &lt;DefaultValue /&gt;
-      &lt;DataTypeString&gt;System.Int32&lt;/DataTypeString&gt;
-      &lt;DatasourceTypeString&gt;Int&lt;/DatasourceTypeString&gt;
+      &lt;DataTypeString&gt;System.Boolean&lt;/DataTypeString&gt;
+      &lt;DatasourceTypeString&gt;Bit&lt;/DatasourceTypeString&gt;
       &lt;Direction&gt;Output&lt;/Direction&gt;
       &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
       &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
@@ -1218,12 +1218,12 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       &lt;UseVariable xsi:nil="true" /&gt;
       &lt;Name&gt;CustomerStatusIsEnabled&lt;/Name&gt;
       &lt;Description /&gt;
-      &lt;TypeString&gt;Number&lt;/TypeString&gt;
-      &lt;ConstraintString /&gt;
+      &lt;TypeString&gt;String&lt;/TypeString&gt;
+      &lt;ConstraintString&gt;True;False&lt;/ConstraintString&gt;
       &lt;DictionaryId xsi:nil="true" /&gt;
       &lt;DefaultValue /&gt;
-      &lt;DataTypeString&gt;System.Int32&lt;/DataTypeString&gt;
-      &lt;DatasourceTypeString&gt;Int&lt;/DatasourceTypeString&gt;
+      &lt;DataTypeString&gt;System.Boolean&lt;/DataTypeString&gt;
+      &lt;DatasourceTypeString&gt;Bit&lt;/DatasourceTypeString&gt;
       &lt;Direction&gt;Output&lt;/Direction&gt;
       &lt;IsColumnType&gt;true&lt;/IsColumnType&gt;
       &lt;IsParentLevel&gt;false&lt;/IsParentLevel&gt;
@@ -1266,7 +1266,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
 &lt;/NodeParameters&gt;</InitialValue>
       <IsBreakpointActive>false</IsBreakpointActive>
       <IsInSimulationMode>false</IsInSimulationMode>
-      <Name>DataSourceBehavioral35614854</Name>
+      <Name>DataSourceBehavioral22721246</Name>
       <PointF>
         <X>218.538742</X>
         <Y>16</Y>
@@ -1903,18 +1903,6 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     </VariableDescriptor>
     <VariableDescriptor>
       <OwnerName>CAIS_NO_Upload</OwnerName>
-      <Name>SceduledRepaymentsScalar</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>false</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>CAIS_NO_Upload</OwnerName>
       <Name>MonthlyPaymentScalar</Name>
       <TypeName>System.Double</TypeName>
       <InitialValue>0</InitialValue>
@@ -2144,8 +2132,8 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     <VariableDescriptor>
       <OwnerName>CAIS_NO_Upload</OwnerName>
       <Name>IsDefaulted</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
+      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
+      <InitialValue>True;WorkflowObjects.VariableColumnReferenceString;IsDefaulted</InitialValue>
       <DefaultValue />
       <Description />
       <IsInput>false</IsInput>
@@ -2156,8 +2144,8 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     <VariableDescriptor>
       <OwnerName>CAIS_NO_Upload</OwnerName>
       <Name>IsDefaultedScalar</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
       <DefaultValue />
       <Description />
       <IsInput>false</IsInput>
@@ -2624,8 +2612,8 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     <VariableDescriptor>
       <OwnerName>CAIS_NO_Upload</OwnerName>
       <Name>CustomerStatusIsEnabled</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
+      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
+      <InitialValue>True;WorkflowObjects.VariableColumnReferenceString;IsDefaulted</InitialValue>
       <DefaultValue />
       <Description />
       <IsInput>false</IsInput>
@@ -2636,8 +2624,8 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     <VariableDescriptor>
       <OwnerName>CAIS_NO_Upload</OwnerName>
       <Name>CustomerStatusIsEnabledScalar</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
       <DefaultValue />
       <Description />
       <IsInput>false</IsInput>
@@ -2662,6 +2650,18 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <Name>MaritalStatus</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
       <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>false</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>CAIS_NO_Upload</OwnerName>
+      <Name>ScheduledRepaymentsScalar1</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
       <DefaultValue />
       <Description />
       <IsInput>false</IsInput>
@@ -2971,18 +2971,6 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     </VariableDescriptor>
     <VariableDescriptor>
       <OwnerName>GetRowDataNode4733890</OwnerName>
-      <Name>SceduledRepaymentsScalar</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
-      <DefaultValue />
-      <Description />
-      <IsInput>true</IsInput>
-      <IsOutput>false</IsOutput>
-      <SignatureRequired>false</SignatureRequired>
-      <IsNullable>false</IsNullable>
-    </VariableDescriptor>
-    <VariableDescriptor>
-      <OwnerName>GetRowDataNode4733890</OwnerName>
       <Name>CompanyType</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -3044,8 +3032,8 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     <VariableDescriptor>
       <OwnerName>GetRowDataNode4733890</OwnerName>
       <Name>IsDefaultedScalar</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
       <DefaultValue />
       <Description />
       <IsInput>true</IsInput>
@@ -3092,8 +3080,8 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     <VariableDescriptor>
       <OwnerName>GetRowDataNode4733890</OwnerName>
       <Name>CustomerStatusIsEnabledScalar</Name>
-      <TypeName>System.Double</TypeName>
-      <InitialValue>0</InitialValue>
+      <TypeName>System.String</TypeName>
+      <InitialValue />
       <DefaultValue />
       <Description />
       <IsInput>true</IsInput>
@@ -3106,6 +3094,18 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <Name>MaritalStatusScalar</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
+      <DefaultValue />
+      <Description />
+      <IsInput>true</IsInput>
+      <IsOutput>false</IsOutput>
+      <SignatureRequired>false</SignatureRequired>
+      <IsNullable>false</IsNullable>
+    </VariableDescriptor>
+    <VariableDescriptor>
+      <OwnerName>GetRowDataNode4733890</OwnerName>
+      <Name>ScheduledRepaymentsScalar1</Name>
+      <TypeName>System.Double</TypeName>
+      <InitialValue>0</InitialValue>
       <DefaultValue />
       <Description />
       <IsInput>true</IsInput>
@@ -3440,8 +3440,8 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     <VariableDescriptor>
       <OwnerName>GetRowDataNode4733890</OwnerName>
       <Name>IsDefaulted</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
+      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
+      <InitialValue>True;WorkflowObjects.VariableColumnReferenceString;IsDefaulted</InitialValue>
       <DefaultValue />
       <Description />
       <IsInput>false</IsInput>
@@ -3488,8 +3488,8 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     <VariableDescriptor>
       <OwnerName>GetRowDataNode4733890</OwnerName>
       <Name>CustomerStatusIsEnabled</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
+      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
+      <InitialValue>True;WorkflowObjects.VariableColumnReferenceString;IsDefaulted</InitialValue>
       <DefaultValue />
       <Description />
       <IsInput>false</IsInput>
@@ -3870,7 +3870,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral35614854</OwnerName>
+      <OwnerName>DataSourceBehavioral22721246</OwnerName>
       <Name>loanID</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
       <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
@@ -3882,7 +3882,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral35614854</OwnerName>
+      <OwnerName>DataSourceBehavioral22721246</OwnerName>
       <Name>CustomerId</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
       <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
@@ -3894,7 +3894,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral35614854</OwnerName>
+      <OwnerName>DataSourceBehavioral22721246</OwnerName>
       <Name>StartDate</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceDate</TypeName>
       <InitialValue>0;WorkflowObjects.VariableColumnReferenceDate;;</InitialValue>
@@ -3906,7 +3906,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral35614854</OwnerName>
+      <OwnerName>DataSourceBehavioral22721246</OwnerName>
       <Name>DateClose</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceDate</TypeName>
       <InitialValue>0;WorkflowObjects.VariableColumnReferenceDate;;</InitialValue>
@@ -3918,7 +3918,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral35614854</OwnerName>
+      <OwnerName>DataSourceBehavioral22721246</OwnerName>
       <Name>MaxDelinquencyDays</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
       <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
@@ -3930,7 +3930,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral35614854</OwnerName>
+      <OwnerName>DataSourceBehavioral22721246</OwnerName>
       <Name>RepaymentPeriod</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
       <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
@@ -3942,7 +3942,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral35614854</OwnerName>
+      <OwnerName>DataSourceBehavioral22721246</OwnerName>
       <Name>CurrentBalance</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
       <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
@@ -3954,7 +3954,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral35614854</OwnerName>
+      <OwnerName>DataSourceBehavioral22721246</OwnerName>
       <Name>Gender</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
       <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
@@ -3966,7 +3966,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral35614854</OwnerName>
+      <OwnerName>DataSourceBehavioral22721246</OwnerName>
       <Name>FirstName</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
       <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
@@ -3978,7 +3978,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral35614854</OwnerName>
+      <OwnerName>DataSourceBehavioral22721246</OwnerName>
       <Name>MiddleInitial</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
       <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
@@ -3990,7 +3990,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral35614854</OwnerName>
+      <OwnerName>DataSourceBehavioral22721246</OwnerName>
       <Name>Surname</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
       <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
@@ -4002,7 +4002,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral35614854</OwnerName>
+      <OwnerName>DataSourceBehavioral22721246</OwnerName>
       <Name>RefNumber</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
       <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
@@ -4014,7 +4014,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral35614854</OwnerName>
+      <OwnerName>DataSourceBehavioral22721246</OwnerName>
       <Name>Line1</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
       <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
@@ -4026,7 +4026,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral35614854</OwnerName>
+      <OwnerName>DataSourceBehavioral22721246</OwnerName>
       <Name>Line2</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
       <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
@@ -4038,7 +4038,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral35614854</OwnerName>
+      <OwnerName>DataSourceBehavioral22721246</OwnerName>
       <Name>Line3</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
       <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
@@ -4050,7 +4050,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral35614854</OwnerName>
+      <OwnerName>DataSourceBehavioral22721246</OwnerName>
       <Name>Town</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
       <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
@@ -4062,7 +4062,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral35614854</OwnerName>
+      <OwnerName>DataSourceBehavioral22721246</OwnerName>
       <Name>County</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
       <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
@@ -4074,7 +4074,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral35614854</OwnerName>
+      <OwnerName>DataSourceBehavioral22721246</OwnerName>
       <Name>Postcode</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
       <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
@@ -4086,7 +4086,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral35614854</OwnerName>
+      <OwnerName>DataSourceBehavioral22721246</OwnerName>
       <Name>DateOfBirth</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceDate</TypeName>
       <InitialValue>0;WorkflowObjects.VariableColumnReferenceDate;;</InitialValue>
@@ -4098,7 +4098,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral35614854</OwnerName>
+      <OwnerName>DataSourceBehavioral22721246</OwnerName>
       <Name>MinLSDate</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceDate</TypeName>
       <InitialValue>0;WorkflowObjects.VariableColumnReferenceDate;;</InitialValue>
@@ -4110,7 +4110,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral35614854</OwnerName>
+      <OwnerName>DataSourceBehavioral22721246</OwnerName>
       <Name>LoanAmount</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
       <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
@@ -4122,8 +4122,8 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral35614854</OwnerName>
-      <Name>SceduledRepayments</Name>
+      <OwnerName>DataSourceBehavioral22721246</OwnerName>
+      <Name>ScheduledRepayments</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
       <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
       <DefaultValue />
@@ -4134,7 +4134,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral35614854</OwnerName>
+      <OwnerName>DataSourceBehavioral22721246</OwnerName>
       <Name>CompanyType</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
       <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
@@ -4146,7 +4146,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral35614854</OwnerName>
+      <OwnerName>DataSourceBehavioral22721246</OwnerName>
       <Name>LimitedRefNum</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
       <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
@@ -4158,7 +4158,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral35614854</OwnerName>
+      <OwnerName>DataSourceBehavioral22721246</OwnerName>
       <Name>NonLimitedRefNum</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
       <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
@@ -4170,7 +4170,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral35614854</OwnerName>
+      <OwnerName>DataSourceBehavioral22721246</OwnerName>
       <Name>CustomerState</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
       <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
@@ -4182,7 +4182,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral35614854</OwnerName>
+      <OwnerName>DataSourceBehavioral22721246</OwnerName>
       <Name>SortCode</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
       <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
@@ -4194,11 +4194,11 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral35614854</OwnerName>
+      <OwnerName>DataSourceBehavioral22721246</OwnerName>
       <Name>IsDefaulted</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
-      <DefaultValue />
+      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
+      <InitialValue>True;WorkflowObjects.VariableColumnReferenceString;IsDefaulted;True;False</InitialValue>
+      <DefaultValue>True</DefaultValue>
       <Description />
       <IsInput>false</IsInput>
       <IsOutput>true</IsOutput>
@@ -4206,7 +4206,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral35614854</OwnerName>
+      <OwnerName>DataSourceBehavioral22721246</OwnerName>
       <Name>CaisAccountStatus</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
       <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
@@ -4218,10 +4218,10 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral35614854</OwnerName>
+      <OwnerName>DataSourceBehavioral22721246</OwnerName>
       <Name>CustomerStatusIsEnabled</Name>
-      <TypeName>WorkflowObjects.VariableColumnReferenceNumeric</TypeName>
-      <InitialValue>0;WorkflowObjects.VariableColumnReferenceNumeric;;</InitialValue>
+      <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
+      <InitialValue>;WorkflowObjects.VariableColumnReferenceString;IsDefaulted;True;False</InitialValue>
       <DefaultValue />
       <Description />
       <IsInput>false</IsInput>
@@ -4230,7 +4230,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral35614854</OwnerName>
+      <OwnerName>DataSourceBehavioral22721246</OwnerName>
       <Name>MaritalStatus</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
       <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
@@ -4242,7 +4242,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral35614854</OwnerName>
+      <OwnerName>DataSourceBehavioral22721246</OwnerName>
       <Name>ManualCaisFlag</Name>
       <TypeName>WorkflowObjects.VariableColumnReferenceString</TypeName>
       <InitialValue>0;WorkflowObjects.VariableColumnReferenceString;;</InitialValue>
@@ -4254,7 +4254,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral35614854</OwnerName>
+      <OwnerName>DataSourceBehavioral22721246</OwnerName>
       <Name>@OutputDataLayerName</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -4266,7 +4266,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral35614854</OwnerName>
+      <OwnerName>DataSourceBehavioral22721246</OwnerName>
       <Name>DataSourceName</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -4278,7 +4278,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
     <VariableDescriptor>
-      <OwnerName>DataSourceBehavioral35614854</OwnerName>
+      <OwnerName>DataSourceBehavioral22721246</OwnerName>
       <Name>ScortoInternalErrorMessage</Name>
       <TypeName>System.String</TypeName>
       <InitialValue />
@@ -4290,7 +4290,13 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IsNullable>false</IsNullable>
     </VariableDescriptor>
   </VariableDescriptors>
-  <VariableConstraintDescriptors />
+  <VariableConstraintDescriptors>
+    <VariableConstraintDescriptor>
+      <ConstraintName>IsDefaulted</ConstraintName>
+      <VariableTypeName>System.String</VariableTypeName>
+      <Constraint>True;False</Constraint>
+    </VariableConstraintDescriptor>
+  </VariableConstraintDescriptors>
   <NodeConnectionDescriptors>
     <NodeConnectionDescriptor>
       <SourceNodeName>StartNode35329809</SourceNodeName>
@@ -4305,14 +4311,14 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>DataSourceBehavioral35614854</SourceNodeName>
-      <SourceNodeOutletName>Next</SourceNodeOutletName>
-      <TargetNodeName>AssignmentB12268704</TargetNodeName>
+      <SourceNodeName>Comparison16159142</SourceNodeName>
+      <SourceNodeOutletName>No</SourceNodeOutletName>
+      <TargetNodeName>DataSourceBehavioral22721246</TargetNodeName>
       <SuperNodeName />
-      <Caption>Next</Caption>
+      <Caption>No</Caption>
       <SignatureRequired>false</SignatureRequired>
       <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
-      <DisplayColor>-16776961</DisplayColor>
+      <DisplayColor>-65536</DisplayColor>
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints />
     </NodeConnectionDescriptor>
@@ -4682,14 +4688,14 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <IntermediatePoints />
     </NodeConnectionDescriptor>
     <NodeConnectionDescriptor>
-      <SourceNodeName>Comparison16159142</SourceNodeName>
-      <SourceNodeOutletName>No</SourceNodeOutletName>
-      <TargetNodeName>DataSourceBehavioral35614854</TargetNodeName>
+      <SourceNodeName>DataSourceBehavioral22721246</SourceNodeName>
+      <SourceNodeOutletName>Next</SourceNodeOutletName>
+      <TargetNodeName>AssignmentB12268704</TargetNodeName>
       <SuperNodeName />
-      <Caption>No</Caption>
+      <Caption>Next</Caption>
       <SignatureRequired>false</SignatureRequired>
       <DestinationNodeReadonlyMode>false</DestinationNodeReadonlyMode>
-      <DisplayColor>-65536</DisplayColor>
+      <DisplayColor>-16776961</DisplayColor>
       <ShowSignature>false</ShowSignature>
       <IntermediatePoints />
     </NodeConnectionDescriptor>
@@ -4722,103 +4728,103 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>DataSourceName</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral35614854</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral22721246</TargetVariableOwnerName>
       <TargetVariableName>DataSourceName</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>CustomerId</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral35614854</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral22721246</TargetVariableOwnerName>
       <TargetVariableName>CustomerId</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>StartDate</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral35614854</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral22721246</TargetVariableOwnerName>
       <TargetVariableName>StartDate</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>CurrentBalance</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral35614854</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral22721246</TargetVariableOwnerName>
       <TargetVariableName>CurrentBalance</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>Gender</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral35614854</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral22721246</TargetVariableOwnerName>
       <TargetVariableName>Gender</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>FirstName</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral35614854</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral22721246</TargetVariableOwnerName>
       <TargetVariableName>FirstName</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>MiddleInitial</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral35614854</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral22721246</TargetVariableOwnerName>
       <TargetVariableName>MiddleInitial</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>Surname</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral35614854</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral22721246</TargetVariableOwnerName>
       <TargetVariableName>Surname</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>RefNumber</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral35614854</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral22721246</TargetVariableOwnerName>
       <TargetVariableName>RefNumber</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>Line1</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral35614854</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral22721246</TargetVariableOwnerName>
       <TargetVariableName>Line1</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>Line2</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral35614854</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral22721246</TargetVariableOwnerName>
       <TargetVariableName>Line2</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>Line3</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral35614854</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral22721246</TargetVariableOwnerName>
       <TargetVariableName>Line3</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>Town</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral35614854</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral22721246</TargetVariableOwnerName>
       <TargetVariableName>Town</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>County</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral35614854</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral22721246</TargetVariableOwnerName>
       <TargetVariableName>County</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>Postcode</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral35614854</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral22721246</TargetVariableOwnerName>
       <TargetVariableName>Postcode</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>DateOfBirth</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral35614854</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral22721246</TargetVariableOwnerName>
       <TargetVariableName>DateOfBirth</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>ScortoInternalErrorMessage</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral35614854</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral22721246</TargetVariableOwnerName>
       <TargetVariableName>ScortoInternalErrorMessage</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
@@ -4932,25 +4938,25 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>loanID</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral35614854</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral22721246</TargetVariableOwnerName>
       <TargetVariableName>loanID</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>CloseDate</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral35614854</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral22721246</TargetVariableOwnerName>
       <TargetVariableName>DateClose</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>MaxDelinquencyDays</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral35614854</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral22721246</TargetVariableOwnerName>
       <TargetVariableName>MaxDelinquencyDays</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>LoanAmount</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral35614854</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral22721246</TargetVariableOwnerName>
       <TargetVariableName>LoanAmount</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
@@ -4973,38 +4979,32 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
-      <SourceVariableName>SceduledRepayments</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral35614854</TargetVariableOwnerName>
-      <TargetVariableName>SceduledRepayments</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>CompanyTypeColumn</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral35614854</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral22721246</TargetVariableOwnerName>
       <TargetVariableName>CompanyType</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>LimitedRefNum</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral35614854</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral22721246</TargetVariableOwnerName>
       <TargetVariableName>LimitedRefNum</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>NonLimitedRefNum</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral35614854</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral22721246</TargetVariableOwnerName>
       <TargetVariableName>NonLimitedRefNum</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>CustomerState</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral35614854</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral22721246</TargetVariableOwnerName>
       <TargetVariableName>CustomerState</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>SortCode</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral35614854</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral22721246</TargetVariableOwnerName>
       <TargetVariableName>SortCode</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
@@ -5040,32 +5040,14 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>RepaymentPeriod</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral35614854</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral22721246</TargetVariableOwnerName>
       <TargetVariableName>RepaymentPeriod</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
-      <SourceVariableName>IsDefaulted</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral35614854</TargetVariableOwnerName>
-      <TargetVariableName>IsDefaulted</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
-      <SourceVariableName>IsDefaulted</SourceVariableName>
-      <TargetVariableOwnerName>GetRowDataNode4733890</TargetVariableOwnerName>
-      <TargetVariableName>IsDefaultedScalar</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>ManualCaisAccountStatus</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral35614854</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral22721246</TargetVariableOwnerName>
       <TargetVariableName>CaisAccountStatus</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
-      <SourceVariableName>SceduledRepayments</SourceVariableName>
-      <TargetVariableOwnerName>GetRowDataNode4733890</TargetVariableOwnerName>
-      <TargetVariableName>SceduledRepaymentsScalar</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
@@ -5088,7 +5070,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>new_OutputDataLayerName</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral35614854</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral22721246</TargetVariableOwnerName>
       <TargetVariableName>@OutputDataLayerName</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
@@ -5106,7 +5088,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>ManualCaisFlag</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral35614854</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral22721246</TargetVariableOwnerName>
       <TargetVariableName>ManualCaisFlag</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
@@ -5118,7 +5100,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>MinLSDate</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral35614854</TargetVariableOwnerName>
+      <TargetVariableOwnerName>DataSourceBehavioral22721246</TargetVariableOwnerName>
       <TargetVariableName>MinLSDate</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
@@ -5273,9 +5255,21 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
-      <SourceVariableName>CustomerStatusIsEnabled</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral35614854</TargetVariableOwnerName>
-      <TargetVariableName>CustomerStatusIsEnabled</TargetVariableName>
+      <SourceVariableName>MaritalStatus</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceBehavioral22721246</TargetVariableOwnerName>
+      <TargetVariableName>MaritalStatus</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
+      <SourceVariableName>MaritalStatus</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode4733890</TargetVariableOwnerName>
+      <TargetVariableName>MaritalStatusScalar</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
+      <SourceVariableName>IsDefaulted</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode4733890</TargetVariableOwnerName>
+      <TargetVariableName>IsDefaultedScalar</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
@@ -5285,15 +5279,27 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
-      <SourceVariableName>MaritalStatus</SourceVariableName>
-      <TargetVariableOwnerName>DataSourceBehavioral35614854</TargetVariableOwnerName>
-      <TargetVariableName>MaritalStatus</TargetVariableName>
+      <SourceVariableName>SceduledRepayments</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode4733890</TargetVariableOwnerName>
+      <TargetVariableName>ScheduledRepaymentsScalar1</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
-      <SourceVariableName>MaritalStatus</SourceVariableName>
-      <TargetVariableOwnerName>GetRowDataNode4733890</TargetVariableOwnerName>
-      <TargetVariableName>MaritalStatusScalar</TargetVariableName>
+      <SourceVariableName>SceduledRepayments</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceBehavioral22721246</TargetVariableOwnerName>
+      <TargetVariableName>ScheduledRepayments</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
+      <SourceVariableName>IsDefaulted</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceBehavioral22721246</TargetVariableOwnerName>
+      <TargetVariableName>IsDefaulted</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
+      <SourceVariableName>CustomerStatusIsEnabled</SourceVariableName>
+      <TargetVariableOwnerName>DataSourceBehavioral22721246</TargetVariableOwnerName>
+      <TargetVariableName>CustomerStatusIsEnabled</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
@@ -5453,18 +5459,6 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
-      <SourceVariableName>IsDefaultedScalar</SourceVariableName>
-      <TargetVariableOwnerName>GetRowDataNode4733890</TargetVariableOwnerName>
-      <TargetVariableName>IsDefaulted</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
-      <SourceVariableName>SceduledRepaymentsScalar</SourceVariableName>
-      <TargetVariableOwnerName>GetRowDataNode4733890</TargetVariableOwnerName>
-      <TargetVariableName>SceduledRepayments</TargetVariableName>
-    </VariableConnectionDescriptor>
-    <VariableConnectionDescriptor>
-      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>ManualCaisFlagScalar</SourceVariableName>
       <TargetVariableOwnerName>GetRowDataNode4733890</TargetVariableOwnerName>
       <TargetVariableName>ManualCaisFlag</TargetVariableName>
@@ -5483,15 +5477,27 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
+      <SourceVariableName>MaritalStatusScalar</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode4733890</TargetVariableOwnerName>
+      <TargetVariableName>MaritalStatus</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
+      <SourceVariableName>IsDefaultedScalar</SourceVariableName>
+      <TargetVariableOwnerName>GetRowDataNode4733890</TargetVariableOwnerName>
+      <TargetVariableName>IsDefaulted</TargetVariableName>
+    </VariableConnectionDescriptor>
+    <VariableConnectionDescriptor>
+      <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
       <SourceVariableName>CustomerStatusIsEnabledScalar</SourceVariableName>
       <TargetVariableOwnerName>GetRowDataNode4733890</TargetVariableOwnerName>
       <TargetVariableName>CustomerStatusIsEnabled</TargetVariableName>
     </VariableConnectionDescriptor>
     <VariableConnectionDescriptor>
       <SourceVariableOwnerName>CAIS_NO_Upload</SourceVariableOwnerName>
-      <SourceVariableName>MaritalStatusScalar</SourceVariableName>
+      <SourceVariableName>ScheduledRepaymentsScalar1</SourceVariableName>
       <TargetVariableOwnerName>GetRowDataNode4733890</TargetVariableOwnerName>
-      <TargetVariableName>MaritalStatus</TargetVariableName>
+      <TargetVariableName>SceduledRepayments</TargetVariableName>
     </VariableConnectionDescriptor>
   </VariableConnectionDescriptors>
   <SigningNodeDescriptors>
@@ -5744,7 +5750,7 @@ CompanyType = "SoleTrader"&lt;/condition&gt;&lt;positiveAssignment&gt;&lt;assign
       <SignatureRequired>false</SignatureRequired>
     </SigningNodeDescriptor>
     <SigningNodeDescriptor>
-      <OwnerName>DataSourceBehavioral35614854</OwnerName>
+      <OwnerName>DataSourceBehavioral22721246</OwnerName>
       <SigningVariables />
       <CheckingVariables />
       <VariablesWithoutSignature />
@@ -5779,7 +5785,7 @@ if StartDateScalar &gt; CloseDateScalar:
 else:
   account.CloseDate=CloseDateScalar
 account.MonthlyPayment=Convert.ToInt32(MonthlyPaymentScalar)
-account.RepaymentPeriod=Convert.ToInt32(SceduledRepaymentsScalar)
+account.RepaymentPeriod=Convert.ToInt32(ScheduledRepaymentsScalar1)
 account.CurrentBalance=Convert.ToInt32(CurrentBalanceScalar)
 account.CreditBalanceIndicator= ""
 account.AccountStatus=AccountStatus
@@ -5890,7 +5896,7 @@ if StartDateScalar &gt; CloseDateScalar:
 else:
   record.CloseDateofAgreement=CloseDateScalar
 record.MonthlyPayment = Convert.ToInt32(MonthlyPaymentScalar)
-record.RepaymentPeriod = Convert.ToInt32(SceduledRepaymentsScalar)
+record.RepaymentPeriod = Convert.ToInt32(ScheduledRepaymentsScalar1)
 record.CurrentBalance = Convert.ToInt32(CurrentBalanceScalar)
 record.CreditBalanceIndicator = ""
 record.AccountStatus = AccountStatus
