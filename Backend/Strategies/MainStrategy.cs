@@ -321,6 +321,7 @@
 				loanOfferDiscountPlanId = lastOfferResults["DiscountPlanId"];
 				loanSourceId = lastOfferResults["LoanSourceID"];
 				isCustomerRepaymentPeriodSelectionAllowed = lastOfferResults["IsCustomerRepaymentPeriodSelectionAllowed"];
+				useBrokerSetupFee = lastOfferResults["UseBrokerSetupFee"];
 			}
 
 			DataTable basicInterestRateDataTable = DB.ExecuteReader(
@@ -491,7 +492,8 @@
 						new QueryParameter("DiscountPlanId", loanOfferDiscountPlanId),
 						new QueryParameter("ExperianRating", loanOfferExpirianRating),
 						new QueryParameter("LoanSourceId", loanSourceId),
-						new QueryParameter("IsCustomerRepaymentPeriodSelectionAllowed", isCustomerRepaymentPeriodSelectionAllowed)
+						new QueryParameter("IsCustomerRepaymentPeriodSelectionAllowed", isCustomerRepaymentPeriodSelectionAllowed),
+						new QueryParameter("UseBrokerSetupFee", useBrokerSetupFee)
 					);
 
 					var variables = new Dictionary<string, string> {
@@ -698,6 +700,7 @@
 		private int loanOfferLoanTypeId;
 		private int loanOfferIsLoanTypeSelectionAllowed;
 		private int loanOfferDiscountPlanId;
+		private bool useBrokerSetupFee;
 		private int loanSourceId;
 		private int isCustomerRepaymentPeriodSelectionAllowed;
 		private decimal loanIntrestBase;
