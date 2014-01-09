@@ -1,4 +1,4 @@
-﻿(function() {
+(function() {
   var root;
 
   root = typeof exports !== "undefined" && exports !== null ? exports : this;
@@ -37,7 +37,7 @@
         title: "Are you sure?",
         modal: true,
         resizable: true,
-        width: this.dlgWidth || 520,
+        width: this.dlgWidth || 550,
         height: this.dlgHeight || 300,
         dialogClass: "functionsPopup",
         open: _.bind(this.onShow, this)
@@ -215,12 +215,18 @@
         id: this.model.get("CashRequestId")
       }).done(function(data) {
         var scheduleView;
+        if (!data.success) {
+          EzBob.ShowMessage(data.error, 'Error occured');
+          that.$el.dialog('close');
+          return;
+        }
         scheduleView = new EzBob.LoanScheduleView({
           el: that.$el.find(".loan-schedule"),
           schedule: data,
           isShowGift: false,
           isShowExportBlock: false,
-          isShowExceedMaxInterestForSource: true
+          isShowExceedMaxInterestForSource: true,
+          manualAddressWarning: data.ManualAddressWarning
         });
         scheduleView.render();
         return that.$el.find("#loan-schedule .simple-well").hide();

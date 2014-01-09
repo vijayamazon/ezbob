@@ -857,6 +857,23 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual bool CciMark { get; set; }
 
 		public virtual string GoogleCookie { get; set; }
+
+		public virtual string ManualAddressWarning() {
+			var oResult = new List<CustomerAddressType>();
+
+			foreach (var ai in AddressInfo.AllAddresses)
+				if (ai.Id.StartsWith("MANUAL"))
+					oResult.Add(ai.AddressType);
+
+			if (oResult.Count < 1)
+				return string.Empty;
+			
+			return string.Format(
+				"Customer has entered manually the following address type{0}: {1}.",
+				oResult.Count == 1 ? "" : "s",
+				string.Join(", ", oResult)
+			);
+		} // ManualAddressWarning
 	} // class Customer
 
 	#endregion class Customer

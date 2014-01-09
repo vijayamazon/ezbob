@@ -80,9 +80,13 @@
 	<a href="#" class="pull-right print-link excel-link">Export to Excel</a>
 	<a href="#" style="margin-right: 20px;" class="pull-right pdf-link">Export to PDF</a>
 	<% } %>
-	
+
 	<% if (bAtLeastOneExceeds) { %>
 	<h3 class="red at-least-one-exceeds-max-rate-for-source">Interest for at least one month exceeds max interest for this loan source.</h3>
+	<% } %>
+
+	<% if (ManualAddressWarning) { %>
+	<h3 class="red"><%- ManualAddressWarning %></h3>
 	<% } %>
 <% })(); %>
 </script>

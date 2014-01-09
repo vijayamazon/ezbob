@@ -22,6 +22,7 @@ class EzBob.LoanScheduleView extends Backbone.Marionette.ItemView
             isShowExceedMaxInterestForSource: @options.isShowExceedMaxInterestForSource
             MaxInterestForSource: @options.schedule.MaxInterestForSource
             LoanSourceName: @options.schedule.LoanSourceName
+            ManualAddressWarning: @options.ManualAddressWarning
         }
 
         if data.MaxInterestForSource is null

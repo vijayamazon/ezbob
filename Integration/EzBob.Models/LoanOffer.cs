@@ -31,8 +31,9 @@
         public LoanOfferDetails Details { get; set; }
 		public decimal? MaxInterestForSource { get; set; }
 		public string LoanSourceName { get; set; }
+	    public string ManualAddressWarning { get; set; }
 
-        private static readonly RepaymentCalculator _repaymentCalculator = new RepaymentCalculator();
+	    private static readonly RepaymentCalculator _repaymentCalculator = new RepaymentCalculator();
 
         public static LoanOffer InitFromLoan(Loan loan, double calculateApr,  AgreementModel agreement, CashRequest cr)
         {
@@ -65,7 +66,8 @@
                             Date = loan.Date
                         },
                     MaxInterestForSource = loan.LoanSource == null ? null : loan.LoanSource.MaxInterest,
-					LoanSourceName = loan.LoanSource == null ? "" : loan.LoanSource.Name
+					LoanSourceName = loan.LoanSource == null ? "" : loan.LoanSource.Name,
+					ManualAddressWarning = loan.Customer.ManualAddressWarning(),
                 };
 
             return offer;
