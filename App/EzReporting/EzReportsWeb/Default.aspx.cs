@@ -387,14 +387,14 @@ namespace EzReportsWeb {
 
 			txtReportUserMap.Value = jss.Serialize(os);
 
-			var lst = new SortedDictionary<string, string>();
+			var aryReports = new List<object>();
 
 			oDB.ForEachRowSafe(
 				(sr, bRowsetStart) => {
 					int nReportID = sr["Id"];
 					string sReportName = sr["Title"];
 
-					lst[nReportID.ToString()] = sReportName;
+					aryReports.Add(new { id = nReportID, name = sReportName });
 
 					return ActionResult.Continue;
 				},
@@ -402,49 +402,14 @@ namespace EzReportsWeb {
 				CommandSpecies.Text
 			);
 
-			txtReportList.Value = new JavaScriptSerializer().Serialize(lst);
+			txtReportList.Value = new JavaScriptSerializer().Serialize(aryReports);
 
-			lst.Clear();
+			var aryUsers = new List<object>();
 
-			oDB.ForEachRowSafe(
-				(sr, bRowsetStart) => {
-					int nUserID = sr["Id"];
-					string sUserName = sr["Name"];
+			foreach (KeyValuePair<string, int> kv in oUsers)
+				aryUsers.Add(new { id = kv.Value, name = kv.Key });
 
-					lst[nUserID.ToString()] = sUserName;
-
-					return ActionResult.Continue;
-				},
-				"SELECT Id, Name FROM ReportUsers",
-				CommandSpecies.Text
-			);
-
-			txtUserList.Value = jss.Serialize(lst);
+			txtUserList.Value = jss.Serialize(aryUsers);
 		} // SetReportUserMap
-
-		protected void ReportPermissionTrigger(object sender, EventArgs args) {
-			var oTarget = (CheckBox)sender;
-
-			int nUserID = Convert.ToInt32(oTarget.Attributes["userid"]);
-			int nReportID = Convert.ToInt32(oTarget.Attributes["reportid"]);
-
-			string sQuery = oTarget.Checked
-				? "INSERT INTO ReportsUsersMap (UserID, ReportID) VALUES (@UserID, @ReportID)"
-				: "DELETE FROM ReportsUsersMap WHERE UserID = @UserID AND ReportID = @ReportID";
-
-			oDB.ExecuteNonQuery(sQuery,
-				CommandSpecies.Text,
-				new QueryParameter("@UserID", nUserID),
-				new QueryParameter("@ReportID", nReportID)
-			);
-
-			divAdminMsg.InnerText = oTarget.Checked
-				? "Permission granted"
-				: "Permission dropped";
-
-			((TableCell)oTarget.Parent).CssClass = oTarget.Checked
-				? "checked"
-				: "";
-		} // ReportPermissionTrigger
 	} // class Default
 } // namespace EzReportsWeb

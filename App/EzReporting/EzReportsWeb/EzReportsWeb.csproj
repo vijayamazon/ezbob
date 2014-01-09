@@ -81,6 +81,8 @@
     <Content Include="images\back_disabled.png" />
     <Content Include="images\back_enabled.png" />
     <Content Include="images\back_enabled_hover.png" />
+    <Content Include="images\cross-pending.png" />
+    <Content Include="images\cross.png" />
     <Content Include="images\ezbob_logo.png" />
     <Content Include="images\favicon32x32.png" />
     <Content Include="images\forward_disabled.png" />
@@ -89,6 +91,8 @@
     <Content Include="images\nav_bg.png" />
     <Content Include="images\nav_bg2.png" />
     <Content Include="images\nav_bg3.png" />
+    <Content Include="images\ok-pending.png" />
+    <Content Include="images\ok.png" />
     <Content Include="images\show_report.png" />
     <Content Include="images\sort_asc.png" />
     <Content Include="images\sort_asc_disabled.png" />

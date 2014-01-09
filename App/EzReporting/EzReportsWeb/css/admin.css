@@ -18,6 +18,8 @@ DIV#divAdminArea DIV#AdminLeftPane INPUT.ReportButton {
 	height: 48px !important;
 }
 
+div#divReportUserMap { float: left; }
+
 TABLE.tblReportUserMap TBODY TR:hover {
 	background-color: antiquewhite;
 }

@@ -52,8 +52,11 @@ function InitReportUserMap() {
 		oMap[nReportID][ru.userId] = 1;
 	} // for
 
-	var oUsers = $.parseJSON($('#txtUserList').val());
-	var oReports = $.parseJSON($('#txtReportList').val());
+	var aryUsers = $.parseJSON($('#txtUserList').val());
+	var aryReports = $.parseJSON($('#txtReportList').val());
+
+	var oUsers = {};
+	var oReports = {};
 
 	var aryFields = [{
 		mData: 'reportName',
@@ -61,31 +64,34 @@ function InitReportUserMap() {
 		sCellType: 'th',
 	}];
 
-	for (var i in oUsers) {
+	for (var i = 0; i < aryUsers.length; i++) {
+		var usr = aryUsers[i];
+
+		oUsers[usr.id] = usr.name;
+
 		oThead.append($('<th></th>'));
 		oTbody.append($('<td></td>'));
 
 		aryFields.push({
-			mData: i,
-			sTitle: oUsers[i],
+			mData: usr.id,
+			sTitle: usr.name.replace(/\s+/, '<br>'),
 			sCellType: 'td',
 		});
 	} // for each user
 
 	var aaData = [];
 
-	for (var rptIdx in oReports) {
-		var rpt = oReports[rptIdx];
+	for (var i = 0; i < aryReports.length; i++) {
+		var rpt = aryReports[i];
 
-		var oRow = { reportId: rptIdx, reportName: rpt };
+		oReports[rpt.id] = rpt.name;
 
-		var oMapEntry = oMap[rptIdx];
+		var oRow = { reportId: rpt.id, reportName: rpt.name };
 
-		for (var usrIdx in oUsers) {
-			var usr = oUsers[usrIdx];
+		var oMapEntry = oMap[rpt.id];
 
+		for (var usrIdx in oUsers)
 			oRow[usrIdx] = (oMapEntry && oMapEntry[usrIdx]) ? true : false;
-		} // for each user
 
 		aaData.push(oRow);
 	} // for each report
@@ -108,8 +114,6 @@ function InitReportUserMap() {
 		bJQueryUI: false,
 
 		fnRowCallback: function(oTR, aryData, nDisplayIdx, nDisplayIdxFull) {
-			console.log(oTR, aryData, nDisplayIdx, nDisplayIdxFull);
-
 			var nReportID = aryData.reportId;
 
 			for (var i = 1; i < aryFields.length; i++) {
@@ -120,60 +124,61 @@ function InitReportUserMap() {
 
 				var bSelected = aryData[nUserID];
 
-				oTD.empty().attr(
-					'data-title', 'Executing of "' + oReports[nReportID] + '" by ' + oUsers[nUserID]
-				);
-
-				oTD.attr({
-					title: oTD.attr('data-title'),
-					id: 'td_map_' + nUserID + '_' + nReportID,
-					'data-checked': bSelected ? 1 : 0
-				})
-				.append(
-					$('<img class=map-icon>').attr('src', 'images/' + (bSelected ? 'ok' : 'cross') + '.png')
-				).click(function(evt) {
-					$('#divPendingActions').show();
-
-					var oTD = $(evt.currentTarget);
-
-					var sID = oTD.attr('id');
-
-					var ary = sID.match(/^td_map_(\d+)_(\d+)$/);
-
-					if (!ary || !ary[1] || !ary[2])
-						return;
-
-					var nUserID = parseInt(ary[1]);
-					var nReportID = parseInt(ary[2]);
-
-					var bNewValue = parseInt(oTD.attr('data-checked')) ? 0 : 1;
-
-					oTD.attr({
-						'data-checked': bNewValue,
-						title: oTD.attr('data-title') + ' (PENDING)',
-					});
-
-					$('.map-icon', oTD).attr('src', 'images/' + (bNewValue ? 'ok' : 'cross') + '-pending.png');
-
-					var oBase = $('#divPendingActionList');
-
-					var sActionKey = 'action_' + nUserID + '_' + nReportID;
-
-					$('div[data-action-key="' + sActionKey + '"]', oBase).remove();
-
-					oBase.append(
-						$('<div></div>').attr({
-							'data-action-key': sActionKey,
-							'data-action-details': nUserID + ',' + nReportID + ',' + (bNewValue ? '1' : '0')
-						}).text((bNewValue ? 'En' : 'Dis') + 'able executing of "' + oReports[nReportID] + '" by ' + oUsers[nUserID])
+				if (!oTD.attr('id')) {
+					oTD.empty().attr(
+						'data-title', 'Executing of "' + oReports[nReportID] + '" by ' + oUsers[nUserID]
 					);
 
-					var sActions = '';
+					oTD.attr({
+						title: oTD.attr('data-title'),
+						id: 'td_map_' + nUserID + '_' + nReportID,
+						'data-checked': bSelected ? 1 : 0
+					}) .append(
+						$('<img class=map-icon>').attr('src', 'images/' + (bSelected ? 'ok' : 'cross') + '.png')
+					).click(function(evt) {
+						$('#divPendingActions').show();
 
-					$('div[data-action-key]', oBase).each(function() { sActions += "\n" + $(this).attr('data-action-details'); });
+						var oTD = $(evt.currentTarget);
 
-					$('#txtPendingActionList').val($.trim(sActions));
-				});
+						var sID = oTD.attr('id');
+
+						var ary = sID.match(/^td_map_(\d+)_(\d+)$/);
+
+						if (!ary || !ary[1] || !ary[2])
+							return;
+
+						var nUserID = parseInt(ary[1]);
+						var nReportID = parseInt(ary[2]);
+
+						var bNewValue = parseInt(oTD.attr('data-checked')) ? 0 : 1;
+
+						oTD.attr({
+							'data-checked': bNewValue,
+							title: oTD.attr('data-title') + ' (PENDING)',
+						});
+
+						$('.map-icon', oTD).attr('src', 'images/' + (bNewValue ? 'ok' : 'cross') + '-pending.png');
+
+						var oBase = $('#divPendingActionList');
+
+						var sActionKey = 'action_' + nUserID + '_' + nReportID;
+
+						$('div[data-action-key="' + sActionKey + '"]', oBase).remove();
+
+						oBase.append(
+							$('<div></div>').attr({
+								'data-action-key': sActionKey,
+								'data-action-details': nUserID + ',' + nReportID + ',' + (bNewValue ? '1' : '0')
+							}).text((bNewValue ? 'En' : 'Dis') + 'able executing of "' + oReports[nReportID] + '" by ' + oUsers[nUserID])
+						);
+
+						var sActions = '';
+
+						$('div[data-action-key]', oBase).each(function() { sActions += "\n" + $(this).attr('data-action-details'); });
+
+						$('#txtPendingActionList').val($.trim(sActions));
+					}); // on click
+				} // if oTD has no id
 			} // for
 		}, // fnRowCallback
 
