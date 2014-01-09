@@ -63,7 +63,7 @@
 		} // Execute
 
 		#region strategy activators
-// ReSharper disable UnusedMember.Local
+		// ReSharper disable UnusedMember.Local
 
 		[Activation]
 		private void Greeting() {
@@ -482,6 +482,19 @@
 
 			serviceClient.UpdateCurrencyRates();
 		}
+
+		[Activation]
+		private void UpdateLoanInterest()
+		{
+			if (args.Length != 1)
+			{
+				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> UpdateLoanInterest");
+				return;
+			}
+
+			serviceClient.UpdateLoanInterest();
+		}
+		// ReSharper restore UnusedMember.Local
 
 		#endregion strategy activators
 	}

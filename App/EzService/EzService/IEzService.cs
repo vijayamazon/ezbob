@@ -129,6 +129,9 @@ namespace EzService {
 
 		[OperationContract]
 		ActionMetaData UpdateCurrencyRates();
+
+		[OperationContract]
+		ActionMetaData UpdateLoanInterest();
 	} // interface IEzService
 
 	#endregion interface IEzService

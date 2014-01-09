@@ -437,6 +437,11 @@
 			return Execute(null, null, typeof(UpdateCurrencyRates));
 		}
 
+		public ActionMetaData UpdateLoanInterest()
+		{
+			return Execute(null, null, typeof(UpdateLoanInterest));
+		}
+
 		#endregion IEzService exposed methods
 
 		#region method IDisposable.Dispose
