@@ -245,6 +245,9 @@ EzBob.Popup = Backbone.View.extend({
 	AddressesListClicked: function (evt) {
 		EzBob.UiAction.saveOne(EzBob.UiAction.evtClick(), evt.target);
 		$('.postCodeBtnOk').removeAttr('disabled').removeClass('disabled');
+
+		if ($(evt.target).hasClass('not-found-item'))
+			this.PostCodeBtnOk();
 	}, // AddressesListClicked
 
 	AddressesListDoubleClicked: function (evt) {
