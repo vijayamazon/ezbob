@@ -852,7 +852,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 
 		public virtual string IsWasLateName() {
 			return PaymentDemenaor == PaymentdemeanorType.Ok ? "" : "iswaslate";
-		} // IsWasLateName
+		} // IsWasLateName 
 
 		public virtual bool CciMark { get; set; }
 
