@@ -25,6 +25,16 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
 		    return false;
 		});
+		xhr.always(function () {
+
+		    if (that.twilioEnabled) {
+		        that.$el.find('#twilioDiv').show();
+		    } else {
+		        that.$el.find('#captchaDiv').show();
+		    }
+
+		    return false;
+		});
 	},
 
 	events: {
@@ -140,8 +150,8 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 	    }
 	    var that = this;
 	    var xhr = $.post(window.gRootPath + "Account/GenerateMobileCode", { mobilePhone: this.$el.find('.phonenumber').val() });
-	    xhr.done(function (res) {
-	        if (res == "True") {
+	    xhr.done(function (isError) {
+	        if (isError == "True") {
 	            EzBob.App.trigger('error', "Error sending code, please authenticate using captcha");
 	            that.$el.find('#twilioDiv').hide();
 	            that.$el.find('#captchaDiv').show();

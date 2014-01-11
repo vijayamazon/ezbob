@@ -75,6 +75,13 @@
 			string content = string.Format("Your authentication code is:{0}", code);
 			// it is working with mobilePhone = "+972544771676" (use "+447866530634" for farley to test it after getting prod account)
 			var message = twilio.SendSmsMessage(fromNumber, mobilePhone, content, "");
+			if (message.Status == null)
+			{
+				IsError = true;
+				Log.Warn(string.Format("Failed sending SMS to number:{0}", mobilePhone));
+				return;
+			}
+
 			Log.Info("Sms message sent to '{0}'. Sid:'{1}'", mobilePhone, message.Sid);
 		}
 
