@@ -9,7 +9,7 @@ namespace EzBob.Web.Code.ApplicationCreator
 	public interface IAppCreator
     {
         void AfterSignup(User user, string address);
-		void GenerateMobileCode(string mobilePhone);
+		bool GenerateMobileCode(string mobilePhone);
 		bool ValidateMobileCode(string mobilePhone, string mobileCode);
 		WizardConfigsActionResult GetWizardConfigs();
         void CashTransfered(User user, string firstName, decimal cashAmount, decimal setUpFee, int loanId);

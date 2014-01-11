@@ -14,8 +14,9 @@
             
         }
 
-		public void GenerateMobileCode(string mobilePhone)
+		public bool GenerateMobileCode(string mobilePhone)
 		{
+			return true;
 		}
 
 		public bool ValidateMobileCode(string mobilePhone, string mobileCode)

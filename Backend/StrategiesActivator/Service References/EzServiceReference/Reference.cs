@@ -660,10 +660,10 @@ namespace StrategiesActivator.EzServiceReference {
         System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> MainStrategySync1Async(int underwriterId, int customerId, StrategiesActivator.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GenerateMobileCode", ReplyAction="http://tempuri.org/IEzService/GenerateMobileCodeResponse")]
-        StrategiesActivator.EzServiceReference.ActionMetaData GenerateMobileCode(string phone);
+        StrategiesActivator.EzServiceReference.BoolActionResult GenerateMobileCode(string phone);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GenerateMobileCode", ReplyAction="http://tempuri.org/IEzService/GenerateMobileCodeResponse")]
-        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> GenerateMobileCodeAsync(string phone);
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BoolActionResult> GenerateMobileCodeAsync(string phone);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ValidateMobileCode", ReplyAction="http://tempuri.org/IEzService/ValidateMobileCodeResponse")]
         StrategiesActivator.EzServiceReference.BoolActionResult ValidateMobileCode(string phone, string code);
@@ -1013,11 +1013,11 @@ namespace StrategiesActivator.EzServiceReference {
             return base.Channel.MainStrategySync1Async(underwriterId, customerId, newCreditLine, avoidAutoDescison);
         }
         
-        public StrategiesActivator.EzServiceReference.ActionMetaData GenerateMobileCode(string phone) {
+        public StrategiesActivator.EzServiceReference.BoolActionResult GenerateMobileCode(string phone) {
             return base.Channel.GenerateMobileCode(phone);
         }
         
-        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> GenerateMobileCodeAsync(string phone) {
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BoolActionResult> GenerateMobileCodeAsync(string phone) {
             return base.Channel.GenerateMobileCodeAsync(phone);
         }
         

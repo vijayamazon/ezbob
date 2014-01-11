@@ -138,10 +138,17 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 	        this.twilioEnabled = false;
 	        return false;
 	    }
-	    
+	    var that = this;
 	    var xhr = $.post(window.gRootPath + "Account/GenerateMobileCode", { mobilePhone: this.$el.find('.phonenumber').val() });
-	    xhr.done(function () {
-	        EzBob.App.trigger('info', "Code was sent to mobile");
+	    xhr.done(function (res) {
+	        if (res == "True") {
+	            EzBob.App.trigger('error', "Error sending code, please authenticate using captcha");
+	            that.$el.find('#twilioDiv').hide();
+	            that.$el.find('#captchaDiv').show();
+	            that.twilioEnabled = false;
+	        } else {
+	            EzBob.App.trigger('info', "Code was sent to mobile");
+	        }
 
 	        return false;
 	    });

@@ -642,13 +642,12 @@ namespace EzBob.Web.Controllers
 													  .Select(x => x.ErrorMessage))
 					});
 		}
-
-
+		
 		[Ajax]
 		[HttpPost]
-		public void GenerateMobileCode(string mobilePhone)
+		public bool GenerateMobileCode(string mobilePhone)
 		{
-			_appCreator.GenerateMobileCode(mobilePhone);
+			return _appCreator.GenerateMobileCode(mobilePhone);
 		}
 	}
 }

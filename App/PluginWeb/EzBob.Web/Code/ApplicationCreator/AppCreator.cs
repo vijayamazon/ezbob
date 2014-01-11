@@ -62,9 +62,9 @@ namespace EzBob.Web.Code.ApplicationCreator {
 			}
 		}
 
-		public void GenerateMobileCode(string mobilePhone)
+		public bool GenerateMobileCode(string mobilePhone)
 		{
-			ServiceClient.GenerateMobileCode(mobilePhone);
+			return ServiceClient.GenerateMobileCode(mobilePhone).Value;
 		}
 		
 		public bool ValidateMobileCode(string mobilePhone, string mobileCode)

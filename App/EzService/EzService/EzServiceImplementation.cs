@@ -406,11 +406,11 @@
 			return ExecuteSync(null, customerId, underwriterId, typeof(MainStrategy), customerId, newCreditLine, avoidAutoDescison);
 		} // MainStrategySync1
 
-		public ActionMetaData GenerateMobileCode(string phone)
+		public BoolActionResult GenerateMobileCode(string phone)
 		{
 			var strategyInstance = new GenerateMobileCode(phone, DB, Log);
 			var result = ExecuteSync(strategyInstance, null, null, typeof(GenerateMobileCode), phone);
-			return result;
+			return new BoolActionResult { MetaData = result, Value = strategyInstance.IsError };
 		}
 
 		public BoolActionResult ValidateMobileCode(string phone, string code)

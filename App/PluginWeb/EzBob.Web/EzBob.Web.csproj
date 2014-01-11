@@ -1314,10 +1314,10 @@
     <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.ActionMetaData.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
-    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.StringListActionResult.datasource">
+    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.BoolActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
-    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.BoolActionResult.datasource">
+    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.StringListActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
     <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.WizardConfigsActionResult.datasource">

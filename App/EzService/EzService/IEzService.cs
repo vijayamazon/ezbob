@@ -119,7 +119,7 @@ namespace EzService {
 		ActionMetaData MainStrategySync1(int underwriterId, int customerId, NewCreditLineOption newCreditLine, int avoidAutoDescison);
 		
 		[OperationContract]
-		ActionMetaData GenerateMobileCode(string phone);
+		BoolActionResult GenerateMobileCode(string phone);
 
 		[OperationContract]
 		BoolActionResult ValidateMobileCode(string phone, string code);

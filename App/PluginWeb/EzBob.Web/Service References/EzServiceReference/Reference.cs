@@ -514,7 +514,7 @@ namespace EzBob.Web.EzServiceReference {
         EzBob.Web.EzServiceReference.ActionMetaData MainStrategySync1(int underwriterId, int customerId, EzBob.Web.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GenerateMobileCode", ReplyAction="http://tempuri.org/IEzService/GenerateMobileCodeResponse")]
-        EzBob.Web.EzServiceReference.ActionMetaData GenerateMobileCode(string phone);
+        EzBob.Web.EzServiceReference.BoolActionResult GenerateMobileCode(string phone);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ValidateMobileCode", ReplyAction="http://tempuri.org/IEzService/ValidateMobileCodeResponse")]
         EzBob.Web.EzServiceReference.BoolActionResult ValidateMobileCode(string phone, string code);
@@ -704,7 +704,7 @@ namespace EzBob.Web.EzServiceReference {
             return base.Channel.MainStrategySync1(underwriterId, customerId, newCreditLine, avoidAutoDescison);
         }
         
-        public EzBob.Web.EzServiceReference.ActionMetaData GenerateMobileCode(string phone) {
+        public EzBob.Web.EzServiceReference.BoolActionResult GenerateMobileCode(string phone) {
             return base.Channel.GenerateMobileCode(phone);
         }
         

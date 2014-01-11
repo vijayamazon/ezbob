@@ -12,6 +12,8 @@
 		private string accountSid;
 		private string authToken;
 		private string fromNumber;
+		private int maxPerDay;
+		private int maxPerNumber;
 		private const string UkMobilePrefix = "+44";
 
 		#region constructor
@@ -35,21 +37,46 @@
 
 		#region property Execute
 
-		public override void Execute() {
+		public override void Execute()
+		{
+			DataTable dt = DB.ExecuteReader("GetCurrentMobileCodeCount", CommandSpecies.StoredProcedure, new QueryParameter("Phone", mobilePhone));
+			var results = new SafeReader(dt.Rows[0]);
+			
+			int sentToday = results["SentToday"];
+			int sentNumber = results["SentToNumber"];
+			if (maxPerDay <= sentToday)
+			{
+				IsError = true;
+				Log.Warn(string.Format("Reached max number of daily SMS messages ({0}). SMS not sent", maxPerDay));
+				return;
+			}
+
+			if (maxPerNumber <= sentNumber)
+			{
+				IsError = true;
+				Log.Warn(string.Format("Reached max number of SMS messages ({0}) to number:{1}. SMS not sent", maxPerNumber, mobilePhone));
+				return;
+			}
+
+			GenerateCodeAndSend();
+		} // Execute
+
+		private void GenerateCodeAndSend()
+		{
 			var random = new Random();
 			string code = (100000 + random.Next(899999)).ToString(CultureInfo.InvariantCulture);
 
 			DB.ExecuteNonQuery("StoreMobileCode", CommandSpecies.StoredProcedure,
 				new QueryParameter("Phone", mobilePhone),
 				new QueryParameter("Code", code));
-			
+
 			var twilio = new TwilioRestClient(accountSid, authToken);
 
 			string content = string.Format("Your authentication code is:{0}", code);
 			// it is working with mobilePhone = "+972544771676" (use "+447866530634" for farley to test it after getting prod account)
 			var message = twilio.SendSmsMessage(fromNumber, mobilePhone, content, "");
 			Log.Info("Sms message sent to '{0}'. Sid:'{1}'", mobilePhone, message.Sid);
-		} // Execute
+		}
 
 		private void ReadConfigurations()
 		{
@@ -59,7 +86,11 @@
 			accountSid = sr["TwilioAccountSid"];
 			authToken = sr["TwilioAuthToken"];
 			fromNumber = sr["TwilioSendingNumber"];
+			maxPerDay = sr["MaxPerDay"];
+			maxPerNumber = sr["MaxPerNumber"];
 		}
+
+		public bool IsError { get; private set; }
 
 		#endregion property Execute
 	} // class GenerateMobileCode
