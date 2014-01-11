@@ -44,31 +44,29 @@
             var realInterestCost = loan.LoanAmount == 0 ? 0 : totalInterest / loan.LoanAmount;
             var timestamp = DateTime.UtcNow.Ticks;
 
-            var offer = new LoanOffer()
-                {
-                    Schedule = loan.Schedule.Select(s => LoanScheduleItemModel.FromLoanScheduleItem(s)).ToArray(),
-                    Apr = apr,
-                    SetupFee = loan.SetupFee,
-                    Total = total,
-                    RealInterestCost = realInterestCost,
-                    LoanAmount = loan.LoanAmount,
-                    TimeStamp = timestamp,
-                    TotalInterest = totalInterest,
-                    TotalPrincipal = totalPrincipal,
-                    Agreement = agreement,
-                    Details = new LoanOfferDetails
-                        {
-                            InterestRate = cr.InterestRate,
-                            RepaymentPeriod = _repaymentCalculator.ReCalculateRepaymentPeriod(cr),
-                            OfferedCreditLine = totalPrincipal,
-                            LoanType = cr.LoanType.Name,
-                            IsModified = !string.IsNullOrEmpty(cr.LoanTemplate),
-                            Date = loan.Date
-                        },
-                    MaxInterestForSource = loan.LoanSource == null ? null : loan.LoanSource.MaxInterest,
-					LoanSourceName = loan.LoanSource == null ? "" : loan.LoanSource.Name,
-					ManualAddressWarning = loan.Customer.ManualAddressWarning(),
-                };
+	        var offer = new LoanOffer();
+			offer.Schedule = loan.Schedule.Select(s => LoanScheduleItemModel.FromLoanScheduleItem(s)).ToArray();
+			offer.Apr = apr;
+			offer.SetupFee = loan.SetupFee;
+			offer.Total = total;
+			offer.RealInterestCost = realInterestCost;
+			offer.LoanAmount = loan.LoanAmount;
+			offer.TimeStamp = timestamp;
+			offer.TotalInterest = totalInterest;
+			offer.TotalPrincipal = totalPrincipal;
+			offer.Agreement = agreement;
+			offer.Details = new LoanOfferDetails
+				{
+					InterestRate = cr.InterestRate,
+					RepaymentPeriod = _repaymentCalculator.ReCalculateRepaymentPeriod(cr),
+					OfferedCreditLine = totalPrincipal,
+					LoanType = cr.LoanType.Name,
+					IsModified = !string.IsNullOrEmpty(cr.LoanTemplate),
+					Date = loan.Date
+				};
+			offer.MaxInterestForSource = loan.LoanSource == null ? null : loan.LoanSource.MaxInterest;
+			offer.LoanSourceName = loan.LoanSource == null ? "" : loan.LoanSource.Name;
+			offer.ManualAddressWarning = cr.Customer.ManualAddressWarning();
 
             return offer;
         }

@@ -177,7 +177,7 @@ EzBob.Underwriter.ApproveDialog = EzBob.Underwriter.FunctionsDialogView.extend(
         $.getJSON(window.gRootPath + "Underwriter/Schedule/Calculate",
             id: @model.get("CashRequestId")
         ).done (data) ->
-            unless data.success
+            if data.hasOwnProperty('success') and not data.success
                 EzBob.ShowMessage data.error, 'Error occured'
                 that.$el.dialog 'close'
                 return
@@ -188,7 +188,7 @@ EzBob.Underwriter.ApproveDialog = EzBob.Underwriter.FunctionsDialogView.extend(
                 isShowGift: false
                 isShowExportBlock:false
                 isShowExceedMaxInterestForSource: true
-                manualAddressWarning: data.ManualAddressWarning
+                ManualAddressWarning: data.ManualAddressWarning
             )
             scheduleView.render()
             that.$el.find("#loan-schedule .simple-well").hide()

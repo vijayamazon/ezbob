@@ -215,7 +215,7 @@
         id: this.model.get("CashRequestId")
       }).done(function(data) {
         var scheduleView;
-        if (!data.success) {
+        if (data.hasOwnProperty('success') && !data.success) {
           EzBob.ShowMessage(data.error, 'Error occured');
           that.$el.dialog('close');
           return;
@@ -226,7 +226,7 @@
           isShowGift: false,
           isShowExportBlock: false,
           isShowExceedMaxInterestForSource: true,
-          manualAddressWarning: data.ManualAddressWarning
+          ManualAddressWarning: data.ManualAddressWarning
         });
         scheduleView.render();
         return that.$el.find("#loan-schedule .simple-well").hide();
