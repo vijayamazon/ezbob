@@ -47,7 +47,7 @@ namespace EzBob.Web.Models {
 
 		private void AddOwners(CompanyScoreModel oPossession, string sGroupName, string sCompanyNumberField, string sCompanyNameField) {
 			if (oPossession.dataset.ContainsKey(sGroupName)) {
-				List<SortedDictionary<string, string>> aryShareholders = oPossession.dataset[sGroupName].Data;
+				List<ParsedDataItem> aryShareholders = oPossession.dataset[sGroupName].Data;
 
 				foreach (var oShareholder in aryShareholders) {
 					if (oShareholder.ContainsKey(sCompanyNumberField)) {

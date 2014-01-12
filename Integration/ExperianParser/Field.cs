@@ -5,7 +5,7 @@ using Ezbob.Logger;
 namespace Ezbob.ExperianParser {
 	#region class Field
 
-	class Field {
+	public class Field {
 		#region public
 
 		#region constructor

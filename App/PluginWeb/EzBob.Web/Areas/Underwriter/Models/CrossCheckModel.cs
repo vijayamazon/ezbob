@@ -176,7 +176,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 			{
 				foreach (var pair in oParseResult.Dataset)
 				{
-					foreach (SortedDictionary<string, string> di in pair.Value.Data)
+					foreach (ParsedDataItem di in pair.Value.Data)
 					{
 						string sFullName = DetailsToName(di["FirstName"], di["MidName1"], di["MidName2"], di["LastName"]);
 

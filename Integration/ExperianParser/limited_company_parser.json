@@ -756,11 +756,12 @@
 		]
 	},
 	{
-		"Name": "Limited Company Mortages",
+		"Name": "Limited Company Mortgages",
 
 		"PathToParent": "./REQUEST/DL65",
 
 		"MetaData": {
+			"ID": "DL65",
 			"DisplayDirection": "horizontal",
 			"UnlimitedWidth": true,
 			"Sorting": "Alterations to the order,Total Amount of Debenture Secured,*"
@@ -808,7 +809,41 @@
 			{ "SourcePath": "./REGULATINGPROVNS", "Targets": [{ "Name": "Regulating provisions" }] },
 			{ "SourcePath": "./ALTERATIONSTOORDER", "Targets": [{ "Name": "Alterations to the order" }] },
 			{ "SourcePath": "./PROPERTYRELDFROMCHGE", "Targets": [{ "Name": "Property released from the charge" }] },
-			{ "SourcePath": "./AMTCHARGEINCRD", "Targets": [{ "Name": "Amount charge increased" }] }
+			{ "SourcePath": "./AMTCHARGEINCRD", "Targets": [{ "Name": "Amount charge increased" }] },
+
+			{ "SourcePath": "./CREATIONDATE-YYYY", "Targets": [{ "Name": "Creation date", "Position": 2, "Prefix": " " }] },
+			{ "SourcePath": "./CREATIONDATE-MM",   "Targets": [{ "Name": "Creation date", "Position": 0, "Transformation": { "Types": [ "monthname" ] } }] },
+			{ "SourcePath": "./CREATIONDATE-DD",   "Targets": [{ "Name": "Creation date", "Position": 1, "Prefix": " " }] },
+
+			{ "SourcePath": "./DATEFULLYSATD-YYYY", "Targets": [{ "Name": "Date fully satisfied", "Position": 2, "Prefix": " " }] },
+			{ "SourcePath": "./DATEFULLYSATD-MM",   "Targets": [{ "Name": "Date fully satisfied", "Position": 0, "Transformation": { "Types": [ "monthname" ] } }] },
+			{ "SourcePath": "./DATEFULLYSATD-DD",   "Targets": [{ "Name": "Date fully satisfied", "Position": 1, "Prefix": " " }] },
+
+			{ "SourcePath": "./FULLYSATDINDICATOR", "Targets": [
+				{ "Name": "Fully satisfied indicator" },
+				{ "Name": "Fully satisfied indicator", "Position": 1, "Prefix": " - ", "Transformation": {
+					"Types": [ "map" ],
+					"Map": {
+						"F": "Fully satisfied",
+						"N": "Not satisfied"
+					}
+				}}
+			]},
+
+			{ "SourcePath": "./NUMPARTIALSATNDATES", "Targets": [{ "Name": "Number of partial satisfaction dates" }] },
+			{ "SourcePath": "./NUMPARTIALSATNDATAITEMS", "Targets": [{ "Name": "Number of partial satisfaction data items" }] }
+		],
+
+		"Children": [
+			{
+				"Name": "Limited Company Mortgages Details",
+
+				"PathToParent": "./LENDERDETAILS",
+
+				"Fields": [
+					{ "SourcePath": "./LENDERNAME", "Targets": [{ "Name": "Lender name" }] }
+				]
+			}
 		]
 	}
 ]

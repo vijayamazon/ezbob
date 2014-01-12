@@ -33,35 +33,6 @@ namespace Ezbob.ExperianParser {
 
 		#endregion method LoadConfiguration
 
-		#region method Parse
-
-		public List<SortedDictionary<string, string>> Parse(string sFileName) {
-			Info("Experian parser: request to read data from {0}", sFileName ?? "--null--");
-
-			var doc = new XmlDocument();
-
-			doc.LoadXml(ReadFile(sFileName, "data file"));
-
-			return Parse(doc.DocumentElement);
-		} // Parse
-
-		public List<SortedDictionary<string, string>> Parse(XmlDocument doc) {
-			return Parse(doc.DocumentElement);
-		} // Parse
-
-		public List<SortedDictionary<string, string>> Parse(XmlNode oRoot) {
-			if (oRoot == null)
-				throw new OwnException("XML root node is not specified.");
-				
-			var oData = new List<SortedDictionary<string, string>>();
-
-			m_oGroups.ForEach(grp => grp.Parse(oRoot, oData, this));
-
-			return oData;
-		} // Parse
-
-		#endregion method Parse
-
 		#region method NamedParse
 
 		public Dictionary<string, ParsedData> NamedParse(string sFileName) {
@@ -85,12 +56,10 @@ namespace Ezbob.ExperianParser {
 			var oResult = new Dictionary<string, ParsedData>();
 
 			m_oGroups.ForEach(grp => {
-				var oGroupData = new ParsedData();
+				var oGroupData = new ParsedData(grp);
 				oResult[grp.Name] = oGroupData;
 
-				grp.FillParsedData(oGroupData);
-
-				grp.Parse(oRoot, oGroupData.Data, this);
+				oGroupData.Parse(oRoot, this);
 			});
 
 			return oResult;

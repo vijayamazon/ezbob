@@ -55,6 +55,7 @@
     <Compile Include="FieldGroup.cs" />
     <Compile Include="OutputFieldBuilder.cs" />
     <Compile Include="ParsedData.cs" />
+    <Compile Include="ParsedDataItem.cs" />
     <Compile Include="Parser.cs" />
     <Compile Include="ParsingResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

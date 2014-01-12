@@ -21,7 +21,7 @@ namespace Ezbob.ExperianParser {
 
 	#region class Transformation
 
-	class Transformation {
+	public class Transformation {
 		#region public
 
 		#region constructor

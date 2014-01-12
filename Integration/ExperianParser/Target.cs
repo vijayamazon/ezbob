@@ -4,7 +4,7 @@ using Ezbob.Logger;
 namespace Ezbob.ExperianParser {
 	#region class Target
 
-	class Target {
+	public class Target {
 		#region public
 
 		#region constructor

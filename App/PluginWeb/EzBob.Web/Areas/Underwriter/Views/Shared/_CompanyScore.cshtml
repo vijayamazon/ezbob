@@ -111,36 +111,36 @@
 				var nTotal = 0;
 
 				for (var j = 0; j < aryData.length; j++)
-					nTotal +=  parseInt(aryData[j]['Description of Shareholding']);
+					nTotal +=  parseInt(aryData[j].Values['Description of Shareholding']);
 
 				// console.log('total =', nTotal);
 
 				if (nTotal != 0) {
 					for (var j = 0; j < aryData.length; j++)
-						aryData[j]['% of Shareholding'] = EzBob.formatPercents(aryData[j]['Description of Shareholding'] / nTotal);
+						aryData[j].Values['% of Shareholding'] = EzBob.formatPercents(aryData[j].Values['Description of Shareholding'] / nTotal);
 				} // if total
 			} // if
 
 			if (oMetaData.ID == 'DL41') {
 				%><div class=tab-content><table class="<%- sTableWidthClass %> table">
 					<thead class="box">
-                        <tr class="box-title">
-                            <th colspan=4><%- i %></th>
-                        </tr>
-                        <tr class="box-title">
-                            <th></th>
-                            <th>Company</th>
-                            <th>Industry</th>
-                            <th></th>
-                        </tr>
-                    </thead>
+						<tr class="box-title">
+							<th colspan=4><%- i %></th>
+						</tr>
+						<tr class="box-title">
+							<th></th>
+							<th>Company</th>
+							<th>Industry</th>
+							<th></th>
+						</tr>
+					</thead>
 					<tbody><%
 						var aryCompany = {};
 						var aryIndustry = {};
 
 						var sSupplierPaymentPattern = '';
 
-						var obj = aryData[0];
+						var obj = aryData[0].Values;
 
 						for (var fld in obj) {
 							if (fld == 'Supplier Payment Pattern') {
@@ -304,8 +304,8 @@
 			}
 			else if (oMetaData.ID == 'DL99') {
 				aryData.sort(function(a, b) {
-					var oA = Date.parse(a['ticks-Accounts Date']);
-					var oB = Date.parse(b['ticks-Accounts Date']);
+					var oA = Date.parse(a.Values['ticks-Accounts Date']);
+					var oB = Date.parse(b.Values['ticks-Accounts Date']);
 					return oA - oB;
 				});
 
@@ -326,7 +326,7 @@
 				// console.log('sorting order', oSortingOrder);
 
 				for (var j = 0; j < aryData.length; j++) {
-					var obj = aryData[j];
+					var obj = aryData[j].Values;
 	
 					var oDataItem = { tick: null, data: {} };
 
@@ -423,41 +423,44 @@
 							tooltipOffset: -10,
 							tooltipAxes: 'y',
 							showMarker: false,
-                            bringSeriesToFront: true,
-                            useAxesFormatters: true,
-                            tooltipFormatString: "£ %'d"
+							bringSeriesToFront: true,
+							useAxesFormatters: true,
+							tooltipFormatString: "£ %'d"
 						},
-                        seriesDefaults: {
-                            trendline: {
-                                show: false
-                            },
-                            pointLabels: {
-                                show: false,
-                            }
-                        },
-                        
+						seriesDefaults: {
+							trendline: {
+								show: false
+							},
+							pointLabels: {
+								show: false,
+							}
+						},
 					}); // jqplot
 	
 					$('#' + sDivChartID).appendTo('#' + sParentDivChartID);
 				});
 			}
 			else if (oMetaData.DisplayDirection == 'horizontal') {
-				var arySortOrder = OrderFieldsForSorting(aryData[0], oMetaData.Sorting);
+				var arySortOrder = OrderFieldsForSorting(aryData[0].Values, oMetaData.Sorting);
 
 				%><div class=tab-content><table class="<%- sTableWidthClass %> table">
 				<thead  class="box">
-                    <tr class="box-title">
-                        <th colspan="<%= arySortOrder.length %>"><%= i %></th>
-                    </tr>
-                    <tr class="box-title">
-                        <%for (var j = 0; j < arySortOrder.length; j++) {
-					        %><th><%- arySortOrder[j] %></th><%
-				        }%>
-                    </tr>
+					<tr class="box-title">
+						<th colspan="<%= arySortOrder.length %>"><%= i %></th>
+					</tr>
+					<tr class="box-title"><%
+						for (var j = 0; j < arySortOrder.length; j++) {
+							%><th><%- arySortOrder[j] %></th><%
+						}
+
+						if (oMetaData.ID === 'DL65') {
+							%><th>Lender names</th><%
+						}
+					%></tr>
 				</thead>
                 <tbody><%
 				for (var j = 0; j < aryData.length; j++) {
-					var obj = aryData[j];
+					var obj = aryData[j].Values;
 
 					print('<tr>');
 
@@ -466,18 +469,47 @@
 						%><td><% DrawFormatted(obj[fld], fld, oMetaData.ID) %></td><%
 					} // for each field
 
+					if (oMetaData.ID === 'DL65') {
+						var aryLenderNames = [];
+						var oChildren = aryData[j].Children;
+
+						if (oChildren && oChildren['Limited Company Mortgages Details']) {
+							var oDetails = oChildren['Limited Company Mortgages Details'].Data;
+
+							for (var k = 0; k < oDetails.length; k++)
+								aryLenderNames.push(oDetails[k].Values['Lender name']);
+						} // if
+
+						var sLenderNames = '';
+						
+						switch (aryLenderNames.length) {
+						case 0:
+							break;
+
+						case 1:
+							sLenderNames = aryLenderNames[0];
+							break;
+
+						default:
+							sLenderNames = '<ul><li>' + aryLenderNames.join('<li>') + '</ul>';
+							break;
+						} // switch
+
+						%><td><% print(sLenderNames); %></td><%
+					} // if DL65
+
 					print('</tr>');
 				} // for each group output
 				%></tbody></table></div><%
 			}
 			else {
-				var arySortOrder = OrderFieldsForSorting(aryData[0], oMetaData.Sorting);
+				var arySortOrder = OrderFieldsForSorting(aryData[0].Values, oMetaData.Sorting);
 
 				%><div class=tab-content><table class="<%- sTableWidthClass %> table">
 				<thead  class="box"><tr class="box-title"><th colspan=2><%= i %></th></tr></thead>
 				<tbody><%
 				for (var j = 0; j < aryData.length; j++) {
-					var obj = aryData[j];
+					var obj = aryData[j].Values;
 
 					for (var t = 0; t < arySortOrder.length; t++) {
 						var fld = arySortOrder[t];

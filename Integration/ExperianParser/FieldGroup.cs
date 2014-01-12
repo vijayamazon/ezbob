@@ -6,13 +6,13 @@ using Ezbob.Logger;
 namespace Ezbob.ExperianParser {
 	#region class FieldGroup
 
-	class FieldGroup {
+	public class FieldGroup {
 		#region public
 
 		#region constructor
 
 		public FieldGroup() {
-			m_oOutputFieldBuilders = new SortedDictionary<string, OutputFieldBuilder>();
+			OutputFieldBuilders = new SortedDictionary<string, OutputFieldBuilder>();
 		} // constructor
 
 		#endregion constructor
@@ -22,9 +22,21 @@ namespace Ezbob.ExperianParser {
 		public string Name { get; set; }
 		public string PathToParent { get; set; }
 		public List<Field> Fields { get; set; }
-		public Dictionary<string, string> MetaData { get; set; } 
+		public Dictionary<string, string> MetaData { get; set; }
+
+		public List<FieldGroup> Children { get; set; }
+
+		public SortedDictionary<string, OutputFieldBuilder> OutputFieldBuilders { get; private set; }
 
 		#endregion configuration
+
+		#region method HasChildren
+
+		public bool HasChildren() {
+			return !ReferenceEquals(Children, null) && (Children.Count > 0);
+		} // HasChildren
+
+		#endregion method HasChildren
 
 		#region method Validate
 
@@ -32,11 +44,14 @@ namespace Ezbob.ExperianParser {
 			if (string.IsNullOrWhiteSpace(Name))
 				throw new OwnException("Field group name not specified.");
 
-			m_oOutputFieldBuilders.Clear();
+			OutputFieldBuilders.Clear();
 
 			PathToParent = (PathToParent ?? "").Trim();
 
 			Fields.ForEach(f => f.Validate(this, log));
+
+			if (HasChildren())
+				Children.ForEach(c => c.Validate(log));
 		} // Validate
 
 		#endregion method Validate
@@ -58,83 +73,18 @@ namespace Ezbob.ExperianParser {
 
 		#endregion method Log
 
-		#region method Parse
-
-		public void Parse(XmlNode oRoot, List<SortedDictionary<string, string>> oOutput, ASafeLog log) {
-			var oLog = new SafeLog(log);
-
-			oLog.Debug("Parsing group {0}", Name);
-
-			if (!string.IsNullOrWhiteSpace(PathToParent)) {
-				XmlNodeList lst = oRoot.SelectNodes(PathToParent);
-
-				if (lst != null) {
-					oLog.Debug("{0} nodes found matching PathToParent", lst.Count);
-
-					foreach (XmlNode oNode in lst)
-						ParseOne(oNode, oOutput);
-				} // if nodes found
-			} // if path to parent specified
-			else
-				ParseOne(oRoot, oOutput);
-		} // Parse
-
-		#endregion method Parse
-
 		#region method AddOutputFieldBuilder
 
 		public void AddOutputFieldBuilder(Target oTarget) {
-			if (m_oOutputFieldBuilders.ContainsKey(oTarget.Name))
-				m_oOutputFieldBuilders[oTarget.Name].Add(oTarget);
+			if (OutputFieldBuilders.ContainsKey(oTarget.Name))
+				OutputFieldBuilders[oTarget.Name].Add(oTarget);
 			else
-				m_oOutputFieldBuilders[oTarget.Name] = new OutputFieldBuilder(oTarget);
+				OutputFieldBuilders[oTarget.Name] = new OutputFieldBuilder(oTarget);
 		} // AddOutputFieldBuilder
 
 		#endregion method AddOutputFieldBuilder
 
-		#region method FillParsedData
-
-		public void FillParsedData(ParsedData oData) {
-			oData.GroupName = Name;
-
-			if (MetaData != null)
-				foreach (KeyValuePair<string, string> pair in MetaData)
-					oData.MetaData[pair.Key] = pair.Value;
-		} // FillParsedData
-
-		#endregion method FillParsedData
-
 		#endregion public
-
-		#region private
-
-		#region method ParseOne
-
-		private void ParseOne(XmlNode oNode, List<SortedDictionary<string, string>> oOutput) {
-			var oData = new SortedDictionary<string, string>();
-
-			foreach (KeyValuePair<string, OutputFieldBuilder> pair in m_oOutputFieldBuilders)
-				pair.Value.Clear();
-
-			foreach (Field fld in Fields) {
-				XmlNode oValue = oNode.SelectSingleNode(fld.SourcePath);
-
-				string sValue = (oValue == null) ? null : oValue.InnerText;
-
-				fld.SetValue(sValue);
-			} // for each field
-
-			foreach (KeyValuePair<string, OutputFieldBuilder> pair in m_oOutputFieldBuilders)
-				oData[pair.Key] = pair.Value.Build();
-
-			oOutput.Add(oData);
-		} // ParseOne
-
-		#endregion method ParseOne
-
-		private readonly SortedDictionary<string, OutputFieldBuilder> m_oOutputFieldBuilders;
-
-		#endregion private
 	} // class FieldGroup
 
 	#endregion class FieldGroup

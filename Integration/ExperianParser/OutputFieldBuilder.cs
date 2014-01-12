@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Ezbob.ExperianParser {
 	#region class OutputFieldBuilder
 
-	class OutputFieldBuilder {
+	public class OutputFieldBuilder {
 		#region public
 
 		#region constructor
