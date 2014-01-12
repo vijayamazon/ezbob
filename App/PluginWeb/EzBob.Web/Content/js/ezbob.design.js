@@ -810,6 +810,12 @@ EzBob.formatPercents0 = function (numerator, denominator) {
     return EzBob.formatIntWithCommas(parseInt(num * 100)) + "%";
 };
 
+EzBob.formatPercentsWithDecimals = function (num, precision) {
+    if (num == null || num === "") return "";
+    var p = precision || 2;
+    return $.fn.autoNumeric.Format(undefined, EzBob.roundNumber(num * 100, p)) + "%";
+};
+
 EzBob.formatLoanType = function (loanTypeSelection, loanType) {
     return loanType;
 }; // formatLoanType

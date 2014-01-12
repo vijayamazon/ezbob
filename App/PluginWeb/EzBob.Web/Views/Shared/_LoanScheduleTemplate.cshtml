@@ -44,7 +44,7 @@
 					<td><%-EzBob.formatDateHumanFull(line.Date)%></td>
 					<td><%-EzBob.formatPounds(line.LoanRepayment)%></td>
 					<td><%-EzBob.formatPounds(line.Interest)%></td>
-					<td<% if (bExceeds) { print(' class=red title="Interest rate for this month exceeds max rate for loan source."'); } %>><%-EzBob.formatPercents1(line.InterestRate)%></td>
+					<td<% if (bExceeds) { print(' class=red title="Interest rate for this month exceeds max rate for loan source."'); } %>><%-EzBob.formatPercentsWithDecimals(line.InterestRate)%></td>
 
 					<td style="text-align: center"><%
 						var fee = setupFee > 0 && i == 0 ? setupFee : 0;
