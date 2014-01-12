@@ -133,7 +133,6 @@
     <Compile Include="EKM\ConvertOrderToOrderItemFixture.cs" />
     <Compile Include="EncryptorFxiture.cs" />
     <Compile Include="IntegrationTestBase.cs" />
-    <Compile Include="InterestUpdater\LoanUpdaterFixture.cs" />
     <Compile Include="LoanCreatorTests\CustomerStateValidationFixture.cs" />
     <Compile Include="LoanCreatorTests\LoanCreatorFixture.cs" />
     <Compile Include="LoanCreatorTests\LoanCreatorFixtureBase.cs" />
@@ -288,10 +287,6 @@
     <ProjectReference Include="..\..\..\Integration\YodleeLib\YodleeLib.csproj">
       <Project>{241A8BAF-F486-44B9-93BD-BAA5CA8091F3}</Project>
       <Name>YodleeLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\ScheduledServices\ScheduledServices.csproj">
-      <Project>{4284AAB9-C033-4F22-B3F3-D4AD74A121C2}</Project>
-      <Name>ScheduledServices</Name>
     </ProjectReference>
     <ProjectReference Include="..\EzBob.Web\EzBob.Web.csproj">
       <Project>{829AA60E-CC9F-4BE6-95E1-BC7990147D15}</Project>

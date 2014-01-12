@@ -7,17 +7,16 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
 	using EzBob.Web.Areas.Customer.Models;
-	using NHibernate;
 	using StructureMap;
 
     public class LoanRepaymentScheduleCalculator : ILoanRepaymentScheduleCalculator
     {
 		// private static readonly ILog _log = LogManager.GetLogger(typeof(LoanRepaymentScheduleCalculator));
-        private Loan _loan;
+        private readonly Loan _loan;
         private DateTime _term;
-        private IList<LoanScheduleItem> _schedule;
-        private List<PaypointTransaction> _payments;
-        private List<LoanCharge> _charges;
+        private readonly IList<LoanScheduleItem> _schedule;
+        private readonly List<PaypointTransaction> _payments;
+        private readonly List<LoanCharge> _charges;
 
 
         //state variables
@@ -79,45 +78,33 @@
 
         private DateTime _prevInstallmentDate = DateTime.MinValue;
 
-        private decimal _amountToChargeFrom = 0;
+        private readonly decimal _amountToChargeFrom = 0;
+        
 
-	    public LoanRepaymentScheduleCalculator(int loanId, DateTime? term)
-	    {
-		    var session = ObjectFactory.GetInstance<ISessionFactory>().OpenSession();
-			var loans = new LoanRepository(session);
-			Loan loan = loans.GetAll().First(l => l.Id == loanId);
-			ConstructorWork(loan, term);
-	    }
+        public LoanRepaymentScheduleCalculator(Loan loan, DateTime? term, IConfigurationVariablesRepository configVariables = null)
+        {
+            _loan = loan;
+            _schedule = loan.Schedule;
+            _payments = loan.TransactionsWithPaypointSuccesefull;
+            _charges = loan.Charges.OrderBy(x => x.Date).ToList();
 
-	    public LoanRepaymentScheduleCalculator(Loan loan, DateTime? term, IConfigurationVariablesRepository configVariables = null)
-	    {
-		    ConstructorWork(loan, term, configVariables);
-	    }
+            _term = (term ?? DateTime.UtcNow).Date;
 
-		private void ConstructorWork(Loan loan, DateTime? term, IConfigurationVariablesRepository configVariables = null)
-	    {
-			_loan = loan;
-			_schedule = loan.Schedule;
-			_payments = loan.TransactionsWithPaypointSuccesefull;
-			_charges = loan.Charges.OrderBy(x => x.Date).ToList();
+            _eventDayStart = new LoanRepaymentScheduleCalculatorEvent(_term);
+            _eventDayEnd = new LoanRepaymentScheduleCalculatorEvent(_term.AddHours(23).AddMinutes(59).AddSeconds(59));
 
-			_term = (term ?? DateTime.UtcNow).Date;
+            if (configVariables == null)
+            {
+                configVariables = ObjectFactory.TryGetInstance<IConfigurationVariablesRepository>();
+            }
 
-			_eventDayStart = new LoanRepaymentScheduleCalculatorEvent(_term);
-			_eventDayEnd = new LoanRepaymentScheduleCalculatorEvent(_term.AddHours(23).AddMinutes(59).AddSeconds(59));
+            if (configVariables != null)
+            {
+                _amountToChargeFrom = configVariables.GetByNameAsDecimal("AmountToChargeFrom");
+            }
 
-			if (configVariables == null)
-			{
-				configVariables = ObjectFactory.TryGetInstance<IConfigurationVariablesRepository>();
-			}
-
-			if (configVariables != null)
-			{
-				_amountToChargeFrom = configVariables.GetByNameAsDecimal("AmountToChargeFrom");
-			}
-
-			Init();
-	    }
+            Init();
+        }
 
         private void Init()
         {
@@ -254,12 +241,6 @@
             _eventDayEnd.Action = null;
             return item;
         }
-
-		public decimal GetInterest()
-		{
-			LoanScheduleItem tmp = GetState();
-			return tmp.Interest;
-		}
 
         private void Recalculate()
         {

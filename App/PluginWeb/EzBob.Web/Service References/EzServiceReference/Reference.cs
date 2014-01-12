@@ -524,9 +524,6 @@ namespace EzBob.Web.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateCurrencyRates", ReplyAction="http://tempuri.org/IEzService/UpdateCurrencyRatesResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData UpdateCurrencyRates();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateLoanInterest", ReplyAction="http://tempuri.org/IEzService/UpdateLoanInterestResponse")]
-        EzBob.Web.EzServiceReference.ActionMetaData UpdateLoanInterest();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -718,10 +715,6 @@ namespace EzBob.Web.EzServiceReference {
         
         public EzBob.Web.EzServiceReference.ActionMetaData UpdateCurrencyRates() {
             return base.Channel.UpdateCurrencyRates();
-        }
-        
-        public EzBob.Web.EzServiceReference.ActionMetaData UpdateLoanInterest() {
-            return base.Channel.UpdateLoanInterest();
         }
     }
 }

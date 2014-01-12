@@ -351,12 +351,6 @@
   <wsdl:message name="IEzService_UpdateCurrencyRates_OutputMessage">
     <wsdl:part name="parameters" element="tns:UpdateCurrencyRatesResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_UpdateLoanInterest_InputMessage">
-    <wsdl:part name="parameters" element="tns:UpdateLoanInterest" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_UpdateLoanInterest_OutputMessage">
-    <wsdl:part name="parameters" element="tns:UpdateLoanInterestResponse" />
-  </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/Shutdown" message="tns:IEzServiceAdmin_Shutdown_InputMessage" />
@@ -543,10 +537,6 @@
     <wsdl:operation name="UpdateCurrencyRates">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateCurrencyRates" message="tns:IEzService_UpdateCurrencyRates_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UpdateCurrencyRatesResponse" message="tns:IEzService_UpdateCurrencyRates_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="UpdateLoanInterest">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateLoanInterest" message="tns:IEzService_UpdateLoanInterest_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UpdateLoanInterestResponse" message="tns:IEzService_UpdateLoanInterest_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
@@ -965,15 +955,6 @@
     </wsdl:operation>
     <wsdl:operation name="UpdateCurrencyRates">
       <soap12:operation soapAction="http://tempuri.org/IEzService/UpdateCurrencyRates" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="UpdateLoanInterest">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/UpdateLoanInterest" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
