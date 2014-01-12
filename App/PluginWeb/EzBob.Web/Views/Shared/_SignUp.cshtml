@@ -78,6 +78,14 @@
         </label>
     </div>
     
+    <div class="form_field_container">
+        <label class ="attardi-input">
+            <span>Promotional code (optional)</span>
+            <input type="text" class="form_field" name="promoCode" id="promoCode" ui-event-control-id="signup:promo-code"/>
+            <img id="promoCodeImage" class="field_status"/>
+        </label>
+    </div>
+    
     if (isOffline)
     {
         <h2 class="form_start">Requested loan</h2>
@@ -137,16 +145,6 @@
                 <span>Other source of repayment</span>
                 <input type="text" name="otherCustomerSourceOfRepayment" id="otherCustomerSourceOfRepayment" tabindex="10" class="form_field" ui-event-control-id="signup:other-repayment-source" />
                 <img id="otherCustomerSourceOfRepaymentImage" class="field_status required"/>
-            </label>
-        </div>
-    }
-    else
-    {
-        <div class="form_field_container">
-            <label class ="attardi-input">
-                <span>Promotional code (optional)</span>
-                <input type="text" class="form_field" name="promoCode" id="promoCode" ui-event-control-id="signup:promo-code"/>
-                <img id="promoCodeImage" class="field_status"/>
             </label>
         </div>
     }
