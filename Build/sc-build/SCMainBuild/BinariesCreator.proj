@@ -39,7 +39,7 @@
 		<MultiCopy CopyFrom="$(Src)\sql\Bash\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(Database)\sql\Bash\" />
 		
 		<MultiCopy CopyFrom="$(Src)\Backend\StrategiesActivator\bin\debug\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ServicesFolder)\StrategiesActivator\" />
-		<MultiCopy CopyFrom="$(Src)\App\EzService\EzServiceHost\bin\Debug\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ServicesFolder)\EzService\" />
+		<MultiCopy CopyFrom="$(Src)\App\EzService\EzServiceHost\bin\Debug\" CopyTo="$(BuildBin)\%(Edition.Identity)\EzServiceHost\" />
 		
 		<ItemGroup><SqlRelatedFiles Include="$(Src)\sql\*.*"/></ItemGroup>
 		<Copy SourceFiles="@(SqlRelatedFiles)" DestinationFolder="$(BuildBin)\%(Edition.Identity)\$(Database)\sql\" SkipUnchangedFiles="true" />
