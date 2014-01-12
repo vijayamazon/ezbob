@@ -94,7 +94,11 @@ class EzBob.StoreInfoBaseView extends Backbone.View
         if @isOffline
             sShow = '.offline_entry_message'
             sRemove = '.online_entry_message'
-            @storeList.find('.btn-continue').text("Skip, I\'ll do it later").removeClass('disabled') if not hasHmrc
+            if(hasHmrc)
+                @storeList.find('.btn-continue').text("Continue").removeClass('disabled')
+            else
+                @storeList.find('.btn-continue').text("Skip, I\'ll do it later").removeClass('disabled')
+
             @storeList.find('.importantnumber').text '£150,000'
         else
             sShow = '.online_entry_message'
