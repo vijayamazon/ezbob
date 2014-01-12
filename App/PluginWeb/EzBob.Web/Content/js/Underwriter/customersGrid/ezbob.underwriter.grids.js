@@ -156,6 +156,7 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 	events: {
 		'click #include-test-customers': 'reloadActive',
 		'click #include-all-customers': 'reloadActive',
+		'click .reload-button': 'reloadActive',
 	}, // events
 
 	render: function() {
@@ -223,12 +224,16 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 			aaSorting: [[ 0, 'desc' ]],
 
 			bAutoWidth: true,
-			sDom: '<"top"f>tr<"bottom"<"col-md-4"l><"col-md-4"i><"col-md-4"p>><"clear">'
-			
+			sDom: '<"top"<"dataTables_top_right"if>>tr<"bottom"<"col-md-6"l><"col-md-6 dataTables_bottom_right"p>><"clear">'
 		}); // create data table
 
-	    this.$el.find('.active .box .box-title .dataTables_filter').remove();
-	    this.$el.find('.top .dataTables_filter').appendTo(this.$el.find('.active .box .box-title'));
+		this.$el.find('.active .box .box-title .dataTables_top_right, .reload-button').remove();
+
+		this.$el.find('.dataTables_top_right, .dataTables_bottom_right').prepend(
+			$('#reload-button-template').clone().attr('id', '').removeClass('hide').addClass('reload-button')
+		);
+
+		this.$el.find('.top .dataTables_top_right').appendTo(this.$el.find('.active .box .box-title'));
 	}, // loadGrid
 
 	gridSrcUrl: function(oGridProperties) {

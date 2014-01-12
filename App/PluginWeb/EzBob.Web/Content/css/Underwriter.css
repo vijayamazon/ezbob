@@ -875,3 +875,11 @@ div#DecisionNotes {
 }
 
 .manually-entered-address { font-style: italic; }
+
+.dataTables_top_right { float: right; }
+
+.dataTables_top_right > div { display: inline-block; margin-left: 1em; }
+
+.dataTables_top_right > div.dataTables_info { padding-top: 7px !important; }
+
+.reload-button { float: right; padding: 4px 12px; border: 1px solid #dddddd; line-height: 20px; margin-left: 1em; }
