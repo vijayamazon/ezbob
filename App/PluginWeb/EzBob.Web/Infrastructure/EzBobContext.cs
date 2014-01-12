@@ -57,7 +57,7 @@ namespace EzBob.Web.Infrastructure
         {
             get
             {
-                var cookie = HttpContext.Current.Request.Cookies["_ScortoSession_"];
+                var cookie = HttpContext.Current.Request.Cookies["_EzbobSession_"];
                 if (cookie != null)
                 {
                     string sid = cookie.Value;
@@ -67,10 +67,10 @@ namespace EzBob.Web.Infrastructure
             }
             set
             {
-                var httpCookie = new HttpCookie("_ScortoSession_", value) {HttpOnly = true, Secure = true};
+				var httpCookie = new HttpCookie("_EzbobSession_", value) { HttpOnly = true, Secure = true };
                 if(value == null)
                 {
-                    httpCookie.Expires = DateTime.Now.AddDays(-1d);
+                    httpCookie.Expires = DateTime.UtcNow.AddDays(-1);
                 }
                 HttpContext.Current.Response.SetCookie(httpCookie);
             }
