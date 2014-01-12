@@ -84,7 +84,6 @@
 				string sortCode = sr["SortCode"];
 				bool isDefaulted = sr["IsDefaulted"];
 				string caisAccountStatus = sr["CaisAccountStatus"];
-				bool customerStatusIsEnabled = sr["CustomerStatusIsEnabled"];
 				string maritalStatus = sr["MaritalStatus"];
 				int customerId = sr["CustomerId"];
 				string genderPrefix;
@@ -95,7 +94,7 @@
 					genderPrefix = maritalStatus == "Married" ? "Mrs." : "Ms.";
 				}
 
-				accountStatus = GetAccountStatus(minLsDate, caisAccountStatus, dateClose, startDate, isDefaulted, customerStatusIsEnabled);
+				accountStatus = GetAccountStatus(minLsDate, caisAccountStatus, dateClose, startDate, isDefaulted);
 
 				if (accountStatus == "8") {
 					originalDefaultBalance = currentBalance;
@@ -228,8 +227,7 @@
 			CaisFileManager.RemoveCaisFileData();
 		}
 
-		private string GetAccountStatus(DateTime? minLsDate, string caisAccountStatus, DateTime dateClose, DateTime startDate, bool isDefaulted,
-							  bool customerStatusIsEnabled) {
+		private string GetAccountStatus(DateTime? minLsDate, string caisAccountStatus, DateTime dateClose, DateTime startDate, bool isDefaulted) {
 			int daysBetween;
 			if (!minLsDate.HasValue) {
 				daysBetween = 0;
@@ -243,7 +241,7 @@
 			}
 
 			if (dateClose < startDate) {
-				if (isDefaulted || !customerStatusIsEnabled) {
+				if (isDefaulted) {
 					return "8";
 				}
 				if (daysBetween > 180) {
