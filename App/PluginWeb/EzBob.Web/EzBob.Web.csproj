@@ -386,7 +386,6 @@
     <Compile Include="Code\LoanDetailsBuilder.cs" />
     <Compile Include="Code\PayPal\PersonalData.cs" />
     <Compile Include="Code\RefNumberGenerator.cs" />
-    <Compile Include="Code\UnderwriterGridResult.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -990,7 +989,6 @@
     <Content Include="Content\css\bootstrap.css" />
     <Content Include="Content\css\datepicker.css" />
     <Content Include="Content\css\ellipsis-xbl.xml" />
-    <Content Include="Content\css\ui.jqgrid.css" />
     <Content Include="Content\css\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\css\images\ui-bg_glass_55_fbf9ee_1x400.png" />
     <Content Include="Content\css\images\ui-bg_glass_65_ffffff_1x400.png" />
@@ -1440,10 +1438,7 @@
     <Content Include="Content\js\lib\backbone.js" />
     <Content Include="Content\js\lib\chosen.jquery.js" />
     <Content Include="Content\js\lib\coin-slider.js" />
-    <Content Include="Content\js\lib\grid.locale-en.js" />
-    <Content Include="Content\js\lib\jqgridHelpers.js" />
     <Content Include="Content\js\lib\jquery.ba-throttle-debounce.js" />
-    <Content Include="Content\js\lib\jquery.jqGrid.src.js" />
     <Content Include="Content\js\lib\jquery.maskedinput-1.2.2.js" />
     <Content Include="Content\js\lib\jquery.numeric.js" />
     <Content Include="Content\js\lib\jquery.placeholder.js" />

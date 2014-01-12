@@ -524,14 +524,6 @@ a.ezbob-logo-login {
 
 #grids-view tbody td.grid-item-Cart { text-align: center; }
 */
-.customer-grids {
-    margin-left: 117px;
-    position: absolute;
-    bottom: 0;
-    top: 41px;
-    right: 5px;
-    left: 0;
-}
 
 .with-border {
     border: 1px solid #aaa;
@@ -653,7 +645,7 @@ i.paypal { background-image: url(../img/mp-icons-32/icon-paypal-32.png); }
     border-radius: 1px;
 }
 
-.customer-grids .ui-widget-header, .customer-grids .ui-jqgrid-sortable {
+.customer-grids .ui-widget-header {
     font-size: 11px;
 }
 
@@ -671,7 +663,6 @@ span.active {
     left: 0;
 }
 
-/*disable default jqGrid loading popup*/
 .loading.ui-state-default.ui-state-active {
     visibility: hidden;
 }
