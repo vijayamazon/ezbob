@@ -73,7 +73,6 @@
 			var twilio = new TwilioRestClient(accountSid, authToken);
 
 			string content = string.Format("Your authentication code is:{0}", code);
-			// it is working with mobilePhone = "+972544771676" (use "+447866530634" for farley to test it after getting prod account)
 			var message = twilio.SendSmsMessage(fromNumber, mobilePhone, content, "");
 			if (message.Status == null)
 			{
