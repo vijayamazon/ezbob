@@ -63,6 +63,7 @@ EzBob.LimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 		} // if
 
 		this.$el.find(".addressCaption").hide();
+		this.$el.find("#LimitedCompanyNumber").withoutSpaces();
 
 		var oFieldStatusIcons = this.$el.find('IMG.field_status');
 		oFieldStatusIcons.filter('.required').field_status({ required: true });
