@@ -24,8 +24,6 @@ robocopy Integration\PayPal\PayPalLib\bin\Debug\ c:\ezbobSrv\ /e
 
 robocopy Integration\YodleeLib\bin\Debug\ c:\ezbobSrv\ /e
 
-robocopy App\service\Servicestarter\bin\Debug\ c:\ezbobSrv\ /e
-
 robocopy Integration\PaymentServices\bin\Debug\ c:\ezbobSrv\ /e
 
 robocopy App\ScheduledServices\bin\Debug\ c:\ezbobSrv\ /e
