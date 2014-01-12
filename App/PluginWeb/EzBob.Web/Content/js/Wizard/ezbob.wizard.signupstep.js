@@ -80,7 +80,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
 		fixSelectValidate(this.$el.find('select'));
 
-		if (this.showOfflineHelp && (EzBob.getCookie('isoffline') === 'yes')) {
+		if (this.showOfflineHelp && (docCookies.getItem('isoffline') === 'yes')) {
 			this.showOfflineHelp = false;
 
 			var oDialog = this.$el.find('#offline_help');

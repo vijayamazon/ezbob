@@ -59,7 +59,7 @@ EzBob.WizardView = Backbone.View.extend({
 		if ((this.customer.get('Id')) !== 0)
 			HeartOfActivity();
 
-		if (!this.customer.get('IsOffline') && (EzBob.getCookie('isoffline') === 'yes'))
+		if (!this.customer.get('IsOffline') && (docCookies.getItem('isoffline') === 'yes'))
 			this.customer.set('IsOffline', true);
 
 		var modelArgs = {

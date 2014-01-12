@@ -931,6 +931,7 @@
     <Content Include="Content\js\lib\Backbone.ModelBinder.js" />
     <Content Include="Content\js\lib\bootstrap-modal.js" />
     <Content Include="Content\js\lib\bootstrap-modalmanager.js" />
+    <Content Include="Content\js\lib\cookies.js" />
     <Content Include="Content\js\lib\flaty\bootstrap3.js" />
     <Content Include="Content\js\lib\flaty\dataTables.bootstrap.js" />
     <Content Include="Content\js\lib\flaty\DT_bootstrap.js" />

@@ -93,50 +93,63 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 
 		this.gridProperties = {
 			waiting: new GridProperties({
+				icon: 'envelope-o',
+				title: 'Waiting for decision',
 				action: 'GridWaiting',
 				columns: sWaitingColumns,
 			}), // waiting
 			escalated: new GridProperties({
+				icon: 'arrow-up',
 				action: 'GridEscalated',
 				columns: sWaitingColumns + ',^EscalationDate,Underwriter,Reason',
 			}), // escalated
 			pending: new GridProperties({
+				icon: 'clock-o',
 				action: 'GridPending',
 				columns: sWaitingColumns + ',Pending',
 			}), // pending
 			approved: new GridProperties({
+				icon: 'thumbs-o-up',
 				action: 'GridApproved',
 				columns: approvedLateColumns(true),
 			}), // approved
 			loans: new GridProperties({
+				icon: 'gbp',
 				action: 'GridLoans',
 				columns: '#Id,Cart,MP_List,Name,Email,^RegDate,^ApplyDate,^FirstLoanDate,^LastLoanDate,$LastLoanAmount,$AmountTaken,$TotalPrincipalRepaid,$OSBalance,^NextRepaymentDate,CustomerStatus,SegmentType',
 			}), // loans
 			sales: new GridProperties({
+				icon: 'phone',
 				action: 'GridSales',
 				columns: '#Id,Email,Name,MobilePhone,DaytimePhone,$ApprovedSum,$AmountTaken,^OfferDate,$OSBalance,CRMstatus,CRMcomment,#Interactions,SegmentType',
 			}), // sales
 			collection: new GridProperties({
+				icon: 'rocket',
 				action: 'GridCollection',
 				columns: '#Id,Email,Name,MobilePhone,DaytimePhone,$AmountTaken,$OSBalance,CRMstatus,CRMcomment,CollectionStatus,SegmentType',
 			}), // collection
 			late: new GridProperties({
+				icon: 'flag',
 				action: 'GridLate',
 				columns: approvedLateColumns(false),
 			}), // late
 			rejected: new GridProperties({
+				icon: 'thumbs-o-down',
 				action: 'GridRejected',
 				columns: '#Id,Cart,MP_List,Name,Email,^ApplyDate,^RegDate,^DateRejected,Reason,#RejectsNum,#ApprovesNum,$OSBalance,SegmentType',
 			}), // rejected
 			offline: new GridProperties({
+				icon: 'briefcase',
 			    action: 'GridOffline',
 			    columns: '#Id,^RegDate,Cart,MP_List,Name,Email,WizardStep'
 			}), // offline
 			all: new GridProperties({
+				icon: 'female',
 				action: 'GridAll',
 				columns: '#Id,Cart,MP_List,Name,Email,^RegDate,^ApplyDate,CustomerStatus,$CalcAmount,$ApprovedSum,$OSBalance,SegmentType',
 			}), // all
 			registered: new GridProperties({
+				icon: 'bars',
 				action: 'GridRegistered',
 				columns: '#UserId,Email,UserStatus,^RegDate,MP_Statuses,WizardStep,SegmentType',
 				fnRowCallback: function(oTR, oData, iDisplayIndex, iDisplayIndexFull) {
@@ -189,6 +202,8 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 		if (this.router)
 			this.router.navigate('#customers/' + sGridName);
 
+		docCookies.setItem('uw_grids_last_shown', sGridName, Infinity);
+
 		this.toggleAllCustomers(sGridName);
 
 		this.tabLinks().closest('li').filter('.active').removeClass('active');
@@ -205,11 +220,18 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 		if (!oGridProperties.name)
 			oGridProperties.name = sGridName;
 
+		if (!oGridProperties.title)
+			oGridProperties.title = sGridName.charAt(0).toUpperCase() + sGridName.slice(1);
+
 		this.$el.find('#' + sGridName + '-grid .grid-data').dataTable({
 			bDestroy: true,
 			bProcessing: true,
 			sAjaxSource: this.gridSrcUrl(oGridProperties),
 			aoColumns: this.extractColumns(oGridProperties),
+
+			sCookiePrefix: 'uw_grid_' + sGridName + '_',
+			iCookieDuration: 60 * 60 * 24 * 7, // 7 days - in seconds
+			bStateSave: true,
 
 			bDeferRender: true,
 
@@ -224,16 +246,14 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 			aaSorting: [[ 0, 'desc' ]],
 
 			bAutoWidth: true,
-			sDom: '<"top"<"dataTables_top_right"if>>tr<"bottom"<"col-md-6"l><"col-md-6 dataTables_bottom_right"p>><"clear">'
+			sDom: '<"top"<"box"<"box-title"<"dataTables_top_right"if><"dataTables_top_left">>>>tr<"bottom"<"col-md-6"l><"col-md-6 dataTables_bottom_right"p>><"clear">'
 		}); // create data table
-
-		this.$el.find('.active .box .box-title .dataTables_top_right, .reload-button').remove();
 
 		this.$el.find('.dataTables_top_right, .dataTables_bottom_right').prepend(
 			$('#reload-button-template').clone().attr('id', '').removeClass('hide').addClass('reload-button')
 		);
 
-		this.$el.find('.top .dataTables_top_right').appendTo(this.$el.find('.active .box .box-title'));
+		this.$el.find('.dataTables_top_left').append('<h3><i class="fa fa-' + oGridProperties.icon + '"></i>' + oGridProperties.title + '</h3>');
 	}, // loadGrid
 
 	gridSrcUrl: function(oGridProperties) {
