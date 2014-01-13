@@ -867,10 +867,50 @@ div#DecisionNotes {
 
 .manually-entered-address { font-style: italic; }
 
+.dataTables_top_left h3 { display: inline; }
+
 .dataTables_top_right { float: right; }
 
 .dataTables_top_right > div { display: inline-block; margin-left: 1em; }
 
 .dataTables_top_right > div.dataTables_info { padding-top: 7px !important; }
 
+#logbook-show-new-entry-form { padding: 4px 12px; border: 1px solid #dddddd; line-height: 20px; margin-left: 1em; }
+
 .reload-button { float: right; padding: 4px 12px; border: 1px solid #dddddd; line-height: 20px; margin-left: 1em; }
+
+div#logbook-new-entry-form {
+	border: 1px solid #dddddd;
+	padding: 1em;
+	position: relative;
+	margin-bottom: 2em;
+	border-radius: 10px;
+	height: 240px;
+}
+
+div#logbook-new-entry-form div.left-column {
+	float: left;
+	width: 15%;
+}
+
+div#logbook-new-entry-form h3 {
+	margin-bottom: 1em;
+}
+
+div#logbook-new-entry-form select#logbook-new-entry-type {
+	height: 32px;
+	display: block;
+	margin-bottom: 1em;
+}
+
+div#logbook-new-entry-form button {
+	display: block;
+	margin: 0 auto 1em auto;
+}
+
+div#logbook-new-entry-form textarea#logbook-new-entry {
+	padding: 4px;
+	width: 83%;
+	height: 210px;
+	display: block;
+}

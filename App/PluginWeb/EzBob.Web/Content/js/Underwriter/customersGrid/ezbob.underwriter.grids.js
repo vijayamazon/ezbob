@@ -52,9 +52,15 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 	initialize: function(options) {
 		this.router = null;
 
+		this.loadLogbookEntryTypeList();
+
 		function GridProperties(opts) {
 			_.extend(this, opts);
 		} // GridProperties
+
+		GridProperties.prototype.AddToTitle = function() { return null; };
+
+		GridProperties.prototype.OnAfterRender = function() { };
 
 		GridProperties.prototype.fnRowCallback = function(oTR, oData, iDisplayIndex, iDisplayIndexFull) {
 			if (oData.hasOwnProperty('Cart'))
@@ -140,8 +146,8 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 			}), // rejected
 			offline: new GridProperties({
 				icon: 'briefcase',
-			    action: 'GridOffline',
-			    columns: '#Id,^RegDate,Cart,MP_List,Name,Email,WizardStep'
+				action: 'GridOffline',
+				columns: '#Id,^RegDate,Cart,MP_List,Name,Email,WizardStep'
 			}), // offline
 			all: new GridProperties({
 				icon: 'female',
@@ -163,6 +169,25 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 						$(oTR).addClass(oData.IsWasLate);
 				}, // fnRowCallback
 			}), // registered
+			logbook: new GridProperties({
+				icon: 'file-text-o',
+				action: 'GridLogbook',
+				columns: '#EntryID,LogbookEntryTypeDescription,FullName,^EntryTime,EntryContent',
+				AddToTitle: function() {
+					return $('#reload-button-template')
+						.clone()
+						.text('Add new entry')
+						.attr('id', 'logbook-show-new-entry-form')
+						.removeClass('hide');
+				}, // AddToTitle
+				OnAfterRender: function(oView, sTableContainer) {
+					oView.$el.find(sTableContainer + ' #logbook-show-new-entry-form')
+						.toggleClass(
+							'hide',
+							!oView.$el.find(sTableContainer + ' #logbook-new-entry-form').hasClass('hide')
+						);
+				}, // OnAfterRender
+			}), // logbook
 		}; // gridProperties
 	}, // initialize
 
@@ -170,7 +195,80 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 		'click #include-test-customers': 'reloadActive',
 		'click #include-all-customers': 'reloadActive',
 		'click .reload-button': 'reloadActive',
+		'click #logbook-show-new-entry-form': 'showNewLogbookEntryForm',
+		'click #logbook-new-entry-cancel': 'hideNewLogbookEntryForm',
+		'click #logbook-new-entry-save': 'submitNewLogbookEntryForm',
 	}, // events
+
+	submitNewLogbookEntryForm: function() {
+		var nEntryType = $('#logbook-new-entry-type').val();
+
+		if (nEntryType === '') {
+			$('#logbook-new-entry-type').focus();
+			return;
+		} // if
+
+		var sMsg = $.trim($('#logbook-new-entry').val());
+
+		if (sMsg === '') {
+			$('#logbook-new-entry').focus();
+			return;
+		} // if
+
+		BlockUi();
+
+		var self = this;
+
+		$.post(window.gRootPath + 'Underwriter/Customers/AddLogbookEntry', { type: nEntryType, content: sMsg }, 'json')
+			.done(function(data) {
+				self.handleNewLogbookSaved(data.success, data.msg);
+			}) // on success
+			.fail(function() {
+				self.handleNewLogbookSaved(false, 'Failed to save an entry.');
+			}); // on fail
+	}, // submitNewLogbookEntryForm
+
+	handleNewLogbookSaved: function(bSuccess, sMsg) {
+		UnBlockUi();
+
+		if (bSuccess) {
+			EzBob.ShowMessageTimeout(sMsg || 'New entry has been logged successfully.', 'Success', 2);
+
+			this.hideNewLogbookEntryForm();
+			this.reloadActive();
+		}
+		else
+			EzBob.ShowMessage(sMsg || 'Failed to save an entry.', 'Error');
+	}, // handleNewLogbookSaved
+
+	showNewLogbookEntryForm: function() {
+		$('#logbook-new-entry-form').slideDown('slow').removeClass('hide');
+		$('#logbook-show-new-entry-form').addClass('hide');
+		$('#logbook-new-entry-type').focus();
+	}, // showNewLogbookEntryForm
+
+	hideNewLogbookEntryForm: function() {
+		$('#logbook-new-entry-form').slideUp('slow').addClass('hide');
+		$('#logbook-show-new-entry-form').removeClass('hide');
+
+		$('#logbook-new-entry-type').val('');
+		$('#logbook-new-entry').val('');
+	}, // hideNewLogbookEntryForm
+
+	loadLogbookEntryTypeList: function() {
+		$.getJSON(
+			window.gRootPath + 'Underwriter/Customers/LoadLogbookEntryTypeList',
+			function(data) {
+				var oSelect = $('#logbook-new-entry-type');
+
+				$.each(data, function(idx, oEntryType) {
+					oSelect.append(
+						$('<option></option>').val(oEntryType.ID).text(oEntryType.Description)
+					);
+				}); // for each
+			} // onsuccess
+		);
+	}, // loadLogbookEntryTypeList
 
 	render: function() {
 		var self = this;
@@ -223,7 +321,9 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 		if (!oGridProperties.title)
 			oGridProperties.title = sGridName.charAt(0).toUpperCase() + sGridName.slice(1);
 
-		this.$el.find('#' + sGridName + '-grid .grid-data').dataTable({
+		var sTableContainer = '#' + sGridName + '-grid';
+
+		this.$el.find(sTableContainer + ' .grid-data').dataTable({
 			bDestroy: true,
 			bProcessing: true,
 			sAjaxSource: this.gridSrcUrl(oGridProperties),
@@ -249,11 +349,22 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 			sDom: '<"top"<"box"<"box-title"<"dataTables_top_right"if><"dataTables_top_left">>>>tr<"bottom"<"col-md-6"l><"col-md-6 dataTables_bottom_right"p>><"clear">'
 		}); // create data table
 
-		this.$el.find('.dataTables_top_right, .dataTables_bottom_right').prepend(
-			$('#reload-button-template').clone().attr('id', '').removeClass('hide').addClass('reload-button')
-		);
+		var oTableTitle = this.$el.find(sTableContainer + ' .dataTables_top_left');
 
-		this.$el.find('.dataTables_top_left').append('<h3><i class="fa fa-' + oGridProperties.icon + '"></i>' + oGridProperties.title + '</h3>');
+		if ($('h3', oTableTitle).length < 1) {
+			this.$el.find(sTableContainer + ' .dataTables_top_right,' + sTableContainer + ' .dataTables_bottom_right').prepend(
+				$('#reload-button-template').clone().attr('id', '').removeClass('hide').addClass('reload-button')
+			);
+
+			oTableTitle.append('<h3><i class="fa fa-' + oGridProperties.icon + '"></i>' + oGridProperties.title + '</h3>');
+
+			var oAdditional = oGridProperties.AddToTitle();
+
+			if (oAdditional)
+				oTableTitle.append(oAdditional);
+		} // if
+
+		oGridProperties.OnAfterRender(this, sTableContainer);
 	}, // loadGrid
 
 	gridSrcUrl: function(oGridProperties) {

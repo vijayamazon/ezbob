@@ -38,6 +38,7 @@
                     </label>
                 </div>
             </li>
+            <li><a href="#logbook-grid" data-toggle="tab"><i class="fa fa-file-text-o"></i><span>Logbook</span></a></li>
         </ul>
         <div id="sidebar-collapse" class="visible-lg">
             <i class="fa fa-angle-double-left"></i>
@@ -513,6 +514,45 @@
                             <tr>
                                 <td></td>
                                 <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="tab-pane" id="logbook-grid">
+				<div id="logbook-new-entry-form" class="hide">
+					<div class="left-column">
+						<h3>New entry</h3>
+
+						<div>Entry type</div>
+						<select id="logbook-new-entry-type" tabindex="1">
+							<option></option>
+						</select>
+
+						<button type="button" id="logbook-new-entry-save" class="btn btn-primary" tabindex="3">Save</button>
+						<button type="button" id="logbook-new-entry-cancel" class="btn" tabindex="4">Cancel</button>
+					</div>
+
+					<textarea id="logbook-new-entry" placeholder="Entry content" tabindex="2"></textarea>
+				</div>
+                <div class="table-responsive table-big" >
+                    <table class="table grid-data">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Type</th>
+                                <th>Author</th>
+                                <th>Time</th>
+                                <th>Content</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
                                 <td></td>
                                 <td></td>
                                 <td></td>

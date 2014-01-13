@@ -9,6 +9,7 @@ using Reports;
 
 namespace TestApp {
 	using System.Data.Common;
+	using Ezbob.Context;
 
 	class Program {
 		#region method Main
@@ -20,15 +21,17 @@ namespace TestApp {
 
 			ms_oLog = log;
 
-			var oDB = new SqlConnection(log);
+			// Ezbob.Context.Environment env = new Environment(Name.Production, oLog: log);
+
+			var oDB = new SqlConnection(env, log);
 
 			// TestParsedValues(oDB, log);
 
 			// TestUiReportExt(oDB, log);
 
-			TestLoanDateScore(oDB, log);
+			// TestLoanDateScore(oDB, log);
 
-			// TestExperianLimitedCompanyData(oDB, log);
+			TestExperianLimitedCompanyData(oDB, log);
 
 			// TestUiReport(oDB, log);
 

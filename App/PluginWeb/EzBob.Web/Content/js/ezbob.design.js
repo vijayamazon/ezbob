@@ -615,55 +615,111 @@ EzBob.formatNumberLength = function (num, length) {
     return r;
 };
 
-EzBob.ShowMessage = function (message, title, cbOk, okText, cbCancel, cancelText) {
-    var modalpopup = $('<div/>');
-    modalpopup.html(message);
+EzBob.ShowMessage = function(message, title, cbOk, okText, cbCancel, cancelText) {
+	return EzBob.ShowMessageTimeout(message, title, 0, cbOk, okText, cbCancel, cancelText);
+}; // EzBob.ShowMessage
 
-    var buttonModel = [{
-        text: okText || "OK",
-        click: function () {
-            if (typeof (cbOk) == 'function') {
-                var okFunc = cbOk();
-                okFunc = okFunc != undefined ? okFunc : true;
-                if (okFunc) $(this).dialog("close");
-            } else {
-                $(this).dialog("close");
-            }
-        },
-        "class": "ok-button"
-    }];
-    if (cbCancel != undefined || cancelText != undefined) {
-        buttonModel.push({
-            click: function () {
-                if (typeof (cbCancel) == 'function') {
-                    cbCancel();
-                }
-                $(this).dialog("close");
-            },
-            text: cancelText
-        });
-    }
-    modalpopup.dialog(
-        {
-            title: title,
-            width: 350,
-            modal: true,
-            draggable: document.location.href.indexOf("Underwriter") > -1, //enable for underwriter
-            resizable: document.location.href.indexOf("Underwriter") > -1, // -//-
-            buttons: buttonModel,
-            dialogClass: "confirmationDialog",
-            zIndex: 3999,
-            close: function () {
-                modalpopup.remove();
-                $(this).remove();
-            }
+EzBob.ShowMessageTimeout = function (message, title, timeout, cbOk, okText, cbCancel, cancelText) {
+	var modalpopup = $('<div/>');
+	modalpopup.html(message);
 
-        });
-    //added ezbob style
-    modalpopup.parents('.ui-dialog').find("button").addClass('btn btn-primary');
+	var buttonModel = [{
+		text: okText || 'OK',
 
-    return modalpopup;
-};
+		click: function() {
+			if (typeof (cbOk) === 'function') {
+				var okFunc = cbOk();
+
+				okFunc = (okFunc !== undefined) ? okFunc : true;
+
+				if (okFunc)
+					$(this).dialog('close');
+			} else
+				$(this).dialog('close');
+		},
+
+		'class': 'ok-button',
+	}];
+
+	if (cbCancel != undefined || cancelText != undefined) {
+		buttonModel.push({
+			click: function() {
+				if (typeof (cbCancel) === 'function')
+					cbCancel();
+
+				$(this).dialog('close');
+			},
+
+			text: cancelText
+		});
+	} // if
+
+	var nTimeout = parseInt(timeout || 0);
+	if (isNaN(nTimeout))
+		nTimeout = 0;
+
+	var fOnOpen;
+
+	if (nTimeout <= 0) {
+		fOnOpen = function() {};
+	}
+	else {
+		modalpopup.attr('data-time-to-close', nTimeout - 1);
+
+		var fTimeoutFunc = (function(modalpopup) {
+			return function() {
+				if (!modalpopup)
+					return;
+
+				if (!modalpopup.hasClass('ui-dialog-content'))
+					return;
+
+				var nTime = parseInt(modalpopup.attr('data-time-to-close'));
+
+				if (isNaN(nTime)) {
+					modalpopup.dialog('close');
+					return;
+				} // if
+
+				if (nTime <= 0) {
+					modalpopup.dialog('close');
+					return;
+				} // if
+
+				modalpopup.attr('data-time-to-close', nTime - 1);
+				$('.ok-button', modalpopup.dialog('widget')).text((okText || 'OK') + ' (' + nTime + ')');
+
+				setTimeout(fTimeoutFunc, 1000);
+			};
+		})(modalpopup); // fTimeoutFunc
+
+		fOnOpen = function() {
+			$('.ok-button', modalpopup.dialog('widget')).text((okText || 'OK') + ' (' + nTimeout + ')');
+			setTimeout(fTimeoutFunc, 1000);
+		};
+	} // if
+
+	modalpopup.dialog({
+		title: title,
+		width: 350,
+		modal: true,
+		draggable: document.location.href.indexOf("Underwriter") > -1, // enable for underwriter
+		resizable: document.location.href.indexOf("Underwriter") > -1, // -"-
+		buttons: buttonModel,
+		dialogClass: "confirmationDialog",
+		zIndex: 3999,
+		open: fOnOpen,
+		close: function() {
+			modalpopup.remove();
+			$(this).remove();
+		}, // close
+	});
+
+	//added ezbob style
+	modalpopup.parents('.ui-dialog').find("button").addClass('btn btn-primary');
+
+	return modalpopup;
+}; // EzBob.ShowMessageTimeout
 
 EzBob.moneyFormat = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '£ ', mDec: '2', vMax: '999999999999999', vMin: '-999999999999999', 'aNeg': '-' };
 EzBob.moneyFormat1 = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '£ ', mDec: '1', vMax: '999999999999999' };

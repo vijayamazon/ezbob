@@ -17,6 +17,7 @@
 	using NHibernate;
 	using Scorto.Web;
 	using EzServiceReference;
+	using log4net;
 
 	#region class CustomerDetailsController
 
@@ -114,18 +115,33 @@
 		public JsonNetResult WizardComplete() {
 			var customer = _context.Customer;
 
+			ms_oLog.DebugFormat("Customer {1} ({0}): has completed wizard.", customer.Id, customer.PersonalInfo.Fullname);
+
 			customer.WizardStep = _helper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.AllStep);
 			
 			_session.Flush();
 
+			ms_oLog.DebugFormat("Customer {1} ({0}): wizard step has been updated.", customer.Id, customer.PersonalInfo.Fullname);
+
 			_crBuilder.CreateCashRequest(customer);
+
+			ms_oLog.DebugFormat("Customer {1} ({0}): cash request created.", customer.Id, customer.PersonalInfo.Fullname);
+
 			_creator.EmailUnderReview(_context.User, customer.PersonalInfo.FirstName, customer.Name);
+
+			ms_oLog.DebugFormat("Customer {1} ({0}): email under review started.", customer.Id, customer.PersonalInfo.Fullname);
+
 			_creator.Evaluate(_context.User.Id, _context.User, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, Convert.ToInt32(customer.IsAvoid), false, false);
 
-			if (!customer.IsTest)
+			ms_oLog.DebugFormat("Customer {1} ({0}): main strategy started.", customer.Id, customer.PersonalInfo.Fullname);
+
+			if (!customer.IsTest) {
 				_creator.FraudChecker(_context.User);
+				ms_oLog.DebugFormat("Customer {1} ({0}): fraud check started.", customer.Id, customer.PersonalInfo.Fullname);
+			} // if
 
 			_concentAgreementHelper.Save(customer, DateTime.UtcNow);
+			ms_oLog.DebugFormat("Customer {1} ({0}): consent agreement saved.", customer.Id, customer.PersonalInfo.Fullname);
 
 			return this.JsonNet(new { });
 		} // WizardComplete
@@ -673,7 +689,8 @@
 		private readonly ISession _session;
 		private readonly CashRequestBuilder _crBuilder;
 		private readonly IConcentAgreementHelper _concentAgreementHelper = new ConcentAgreementHelper();
-        private readonly DatabaseDataHelper _helper;
+		private readonly DatabaseDataHelper _helper;
+		private static readonly ILog ms_oLog = LogManager.GetLogger(typeof (CustomerDetailsController));
 
 		#endregion private properties
 

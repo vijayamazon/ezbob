@@ -6,6 +6,18 @@
 			<h2>Welcome back!</h2>
 			@Html.TextBoxFor(x => x.ReturnUrl, new { type = "hidden" })
 
+			@{
+				var oForgottenAttr = new Dictionary<string, Object>();
+				oForgottenAttr["ui-event-control-id"] = "login:forgotten_password";
+
+				var oSignupRouteValues = new RouteValueDictionary();
+				oSignupRouteValues["Area"] = "Customer";
+				
+				var oSignupAttr = new Dictionary<string, Object>();
+				oSignupAttr["ui-event-control-id"] = "login:signup";
+			}
+			<p style="font-weight: bold;">@Html.ActionLink("Forgotten password", "ForgotPassword", "Account", new RouteValueDictionary(), oForgottenAttr) | @Html.ActionLink("Sign up", "Index", "Wizard", oSignupRouteValues, oSignupAttr)</p>
+
 			@EzForm.InputText("UserName", "Email address", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "login:user_name")
 			@EzForm.Password("Password", "Password", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "login:password")
 
@@ -21,17 +33,6 @@
 					<input type="submit" value="Login" class="rc-button green login-btn disabled" id="loginSubmit" ui-event-control-id="login:submit" />
 				</div>
 			</div>
-			@{
-				var oForgottenAttr = new Dictionary<string, Object>();
-				oForgottenAttr["ui-event-control-id"] = "login:forgotten_password";
-
-				var oSignupRouteValues = new RouteValueDictionary();
-				oSignupRouteValues["Area"] = "Customer";
-				
-				var oSignupAttr = new Dictionary<string, Object>();
-				oSignupAttr["ui-event-control-id"] = "login:signup";
-			}
-			<p>@Html.ActionLink("Forgotten password", "ForgotPassword", "Account", new RouteValueDictionary(), oForgottenAttr) | @Html.ActionLink("Sign up", "Index", "Wizard", oSignupRouteValues, oSignupAttr)</p>
 		</section>
 	</section>
 	<aside class="customer-sidebar login">

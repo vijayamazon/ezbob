@@ -7,14 +7,34 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 
 	#region abstract classes
 
+	#region class AGridRow
+
+	internal abstract class AGridRow {
+		public abstract string RowIDFieldName();
+
+		public abstract void Init(long nRowID, SafeReader oRow);
+
+		public abstract void Add(SafeReader oRow);
+
+		#region method IsValid
+
+		public virtual bool IsValid() {
+			return true;
+		} // IsValid
+
+		#endregion method IsValid
+	} // AGridRow
+
+	#endregion class AGridRow
+
 	#region class AGridRowBase
 
-	internal abstract class AGridRowBase {
+	internal abstract class AGridRowBase : AGridRow {
 		#region public
 
 		#region method Init
 
-		public virtual void Init(int nCustomerID, SafeReader oRow) {
+		public override void Init(long nCustomerID, SafeReader oRow) {
 			Id = nCustomerID;
 			Email = oRow["Email"];
 
@@ -23,12 +43,12 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 
 		#endregion method Init
 
-		public virtual int Id { get; private set; }
+		public virtual long Id { get; private set; }
 		public virtual string Email { get; private set; }
 
 		#region methjod Add
 
-		public virtual void Add(SafeReader oRow) {
+		public override void Add(SafeReader oRow) {
 			string sMp = oRow["MpTypeName"];
 
 			if (string.IsNullOrWhiteSpace(sMp))
@@ -44,13 +64,13 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 
 		#endregion methjod Add
 
-		#region method IsValid
+		#region method RowIDFieldName
 
-		public virtual bool IsValid() {
-			return true;
-		} // IsValid
+		public override string RowIDFieldName() {
+			return "CustomerID";
+		} // RowIDFieldName
 
-		#endregion method IsValid
+		#endregion method RowIDFieldName
 
 		#endregion public
 
@@ -77,7 +97,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 	#region class AGridRowCommon
 
 	internal abstract class AGridRowCommon : AGridRowBase {
-		public override void Init(int nCustomerID, SafeReader oRow) {
+		public override void Init(long nCustomerID, SafeReader oRow) {
 			base.Init(nCustomerID, oRow);
 
 			CustomerStatus = oRow["CustomerStatus"];
@@ -97,7 +117,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 	#region class AGridRowCommonCart
 
 	internal abstract class AGridRowCommonCart : AGridRowCommon {
-		public override void Init(int nCustomerID, SafeReader oRow) {
+		public override void Init(long nCustomerID, SafeReader oRow) {
 			base.Init(nCustomerID, oRow);
 
 			Cart = oRow["Medal"];
@@ -116,7 +136,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 	#region class AGridRowCommonFull
 
 	internal abstract class AGridRowCommonFull : AGridRowCommonCart {
-		public override void Init(int nCustomerID, SafeReader oRow) {
+		public override void Init(long nCustomerID, SafeReader oRow) {
 			base.Init(nCustomerID, oRow);
 
 			CalcAmount = oRow["CalcAmount"];
@@ -132,7 +152,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 	internal abstract class AGridRowSalesCollection : AGridRowCommon {
 		#region method Init
 
-		public override void Init(int nCustomerID, SafeReader oRow) {
+		public override void Init(long nCustomerID, SafeReader oRow) {
 			base.Init(nCustomerID, oRow);
 
 			MobilePhone = oRow["MobilePhone"];
@@ -160,7 +180,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 	internal abstract class AGridApprovedLate : AGridRowCommonFull {
 		#region method Init
 
-		public override void Init(int nCustomerID, SafeReader oRow) {
+		public override void Init(long nCustomerID, SafeReader oRow) {
 			base.Init(nCustomerID, oRow);
 
 			ApproveDate = oRow["ApproveDate"];
@@ -188,7 +208,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 	#region class GridOfflineRow
 
 	class GridOfflineRow : AGridRowBase {
-		public override void Init(int nCustomerID, SafeReader oRow) {
+		public override void Init(long nCustomerID, SafeReader oRow) {
 			base.Init(nCustomerID, oRow);
 
 			RegDate = oRow["RegDate"];
@@ -209,7 +229,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 	#region class GridAllRow
 
 	internal class GridAllRow : AGridRowCommonFull {
-		public override void Init(int nCustomerID, SafeReader oRow) {
+		public override void Init(long nCustomerID, SafeReader oRow) {
 			base.Init(nCustomerID, oRow);
 
 			ApprovedSum = oRow["ApprovedSum"];
@@ -238,7 +258,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 
 		#region method Init
 
-		public override void Init(int nCustomerID, SafeReader oRow) {
+		public override void Init(long nCustomerID, SafeReader oRow) {
 			base.Init(nCustomerID, oRow);
 
 			UserStatus = oRow["UserStatus"];
@@ -278,7 +298,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 
 		#endregion method Add
 
-		public virtual int UserId { get { return Id; } }
+		public virtual long UserId { get { return Id; } }
 
 		public virtual string UserStatus { get; private set; }
 
@@ -308,7 +328,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 	internal class GridRejectedRow : AGridRowCommonCart {
 		#region method Init
 
-		public override void Init(int nCustomerID, SafeReader oRow) {
+		public override void Init(long nCustomerID, SafeReader oRow) {
 			base.Init(nCustomerID, oRow);
 
 			DateRejected = oRow["DateRejected"];
@@ -334,7 +354,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 	internal class GridCollectionRow : AGridRowSalesCollection {
 		#region method Init
 
-		public override void Init(int nCustomerID, SafeReader oRow) {
+		public override void Init(long nCustomerID, SafeReader oRow) {
 			base.Init(nCustomerID, oRow);
 
 			CollectionStatus = oRow["CollectionStatus"];
@@ -352,7 +372,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 	internal class GridSalesRow : AGridRowSalesCollection {
 		#region method Init
 
-		public override void Init(int nCustomerID, SafeReader oRow) {
+		public override void Init(long nCustomerID, SafeReader oRow) {
 			base.Init(nCustomerID, oRow);
 
 			ApprovedSum = oRow["ApprovedSum"];
@@ -388,7 +408,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 	internal class GridLoansRow : AGridRowCommonCart {
 		#region method Init
 
-		public override void Init(int nCustomerID, SafeReader oRow) {
+		public override void Init(long nCustomerID, SafeReader oRow) {
 			LastLoanAmount = oRow["LastLoanAmount"];
 
 			if (!IsValid())
@@ -432,7 +452,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 	internal class GridApprovedRow : AGridApprovedLate {
 		#region method Init
 
-		public override void Init(int nCustomerID, SafeReader oRow) {
+		public override void Init(long nCustomerID, SafeReader oRow) {
 			base.Init(nCustomerID, oRow);
 
 			OfferExpireDate = oRow["OfferExpireDate"];
@@ -450,7 +470,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 	internal class GridLateRow : AGridApprovedLate {
 		#region method Init
 
-		public override void Init(int nCustomerID, SafeReader oRow) {
+		public override void Init(long nCustomerID, SafeReader oRow) {
 			base.Init(nCustomerID, oRow);
 
 			OSBalance = oRow["OSBalance"];
@@ -478,7 +498,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 	internal class GridWaitingRow : AGridRowCommonFull {
 		#region method Init
 
-		public override void Init(int nCustomerID, SafeReader oRow) {
+		public override void Init(long nCustomerID, SafeReader oRow) {
 			base.Init(nCustomerID, oRow);
 
 			CurrentStatus = oRow["CurrentStatus"];
@@ -498,7 +518,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 	internal class GridEscalatedRow : GridWaitingRow {
 		#region method Init
 
-		public override void Init(int nCustomerID, SafeReader oRow) {
+		public override void Init(long nCustomerID, SafeReader oRow) {
 			base.Init(nCustomerID, oRow);
 
 			EscalationDate = oRow["EscalationDate"];
@@ -520,7 +540,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 	internal class GridPendingRow : GridWaitingRow {
 		#region method Init
 
-		public override void Init(int nCustomerID, SafeReader oRow) {
+		public override void Init(long nCustomerID, SafeReader oRow) {
 			base.Init(nCustomerID, oRow);
 
 			Pending = oRow["Pending"];
@@ -532,6 +552,46 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 	} // class GridPendingRow
 
 	#endregion class GridPendingRow
+
+	#region class GridLogbookRow
+
+	internal class GridLogbookRow : AGridRow {
+		#region RowIDFieldName
+
+		public override string RowIDFieldName() {
+			return "EntryID";
+		} // RowIDFieldName
+
+		#endregion RowIDFieldName
+
+		public virtual long EntryID { get; private set; }
+		public virtual string LogbookEntryTypeDescription { get; private set; }
+		public virtual string FullName { get; private set; }
+		public virtual DateTime EntryTime { get; private set; }
+		public virtual string EntryContent { get; private set; }
+
+		#region method Init
+
+		public override void Init(long nRowID, SafeReader oRow) {
+			EntryID = nRowID;
+			LogbookEntryTypeDescription = oRow["LogbookEntryTypeDescription"];	
+			FullName = oRow["FullName"];	
+			EntryTime = oRow["EntryTime"];	
+			EntryContent = oRow["EntryContent"];
+		} // Init
+
+		#endregion method Init
+
+		#region method Add
+
+		public override void Add(SafeReader oRow) {
+			// nothing to do here
+		} // Add
+
+		#endregion method Add
+	} // GridLogbookRow
+
+	#endregion class GridLogbookRow
 
 	#endregion concrete classes
 } // namespace

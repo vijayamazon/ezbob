@@ -72,6 +72,76 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 
 		#endregion method Index
 
+		#region method AddLogbookEntry
+
+		[ValidateJsonAntiForgeryToken]
+		[Ajax]
+		[HttpPost]
+		public JsonResult AddLogbookEntry(int type, string content) {
+			bool bSuccess = false;
+			string sMsg = string.Empty;
+
+			try {
+				if (string.IsNullOrWhiteSpace(content))
+					throw new Exception("Content is empty.");
+
+				var context = ObjectFactory.GetInstance<IWorkplaceContext>();
+
+				m_oDB.ExecuteNonQuery(
+					"LogbookAdd",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("@LogbookEntryTypeID", type),
+					new QueryParameter("@UserID", context.User.Id),
+					new QueryParameter("@EntryContent", content)
+				);
+
+				bSuccess = true;
+			}
+			catch (Exception e) {
+				bSuccess = false;
+				sMsg = e.Message;
+			} // try
+
+			return Json(new { success = bSuccess, msg = sMsg });
+		} // AddLogbookEntry
+
+		#endregion method AddLogbookEntry
+
+		#region method LoadLogbookEntryTypeList
+
+		[ValidateJsonAntiForgeryToken]
+		[Ajax]
+		[HttpGet]
+		public JsonResult LoadLogbookEntryTypeList() {
+			var oRes = new List<object>();
+
+			const string sSpName = "LogbookEntryTypeList";
+
+			m_oDB.ForEachRowSafe(
+				(sr, bRowSetStarts) => {
+					oRes.Add(new {
+						ID = (int)sr["LogbookEntryTypeID"],
+						Name = (string)sr["LogbookEntryType"],
+						Description = (string)sr["LogbookEntryTypeDescription"],
+					});
+
+					return ActionResult.Continue;
+				},
+				sSpName,
+				CommandSpecies.StoredProcedure
+			); // foreach
+
+			m_oLog.Debug("{0}: traversing done.", sSpName);
+
+			var j = Json(oRes, JsonRequestBehavior.AllowGet);
+
+			m_oLog.Debug("{0}: converted to json.", sSpName);
+
+			return j;
+		} // LoadLogbookEntryTypeList
+
+		#endregion method LoadLogbookEntryTypeList
+
 		#region underwriter grids
 
 		#region method GridWaiting
@@ -206,18 +276,29 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 
 		#endregion method GridRegistered
 
+		#region method GridLogbook
+
+		[ValidateJsonAntiForgeryToken]
+		[Ajax]
+		[HttpGet]
+		public JsonResult GridLogbook(bool includeTestCustomers) {
+			return LoadGrid("UwGridLogbook", includeTestCustomers, () => new GridLogbookRow());
+		} // GridLogbook
+
+		#endregion method GridLogbook
+
 		#region method LoadGrid
 
-		private JsonResult LoadGrid(string sSpName, bool bIncludeTestCustomers, Func<AGridRowBase> oFactory) {
+		private JsonResult LoadGrid(string sSpName, bool bIncludeTestCustomers, Func<AGridRow> oFactory) {
 			return LoadGrid(sSpName, bIncludeTestCustomers, oFactory, null);
 		} // LoadGrid
 
-		private JsonResult LoadGrid(string sSpName, bool bIncludeTestCustomers, bool bIncludeAllCustomers, Func<AGridRowBase> oFactory) {
+		private JsonResult LoadGrid(string sSpName, bool bIncludeTestCustomers, bool bIncludeAllCustomers, Func<AGridRow> oFactory) {
 			return LoadGrid(sSpName, bIncludeTestCustomers, oFactory, bIncludeAllCustomers);
 		} // LoadGrid
 
-		private JsonResult LoadGrid(string sSpName, bool bIncludeTestCustomers, Func<AGridRowBase> oFactory, bool? bIncludeAllCustomers) {
-			var oRes = new SortedDictionary<int, AGridRowBase>();
+		private JsonResult LoadGrid(string sSpName, bool bIncludeTestCustomers, Func<AGridRow> oFactory, bool? bIncludeAllCustomers) {
+			var oRes = new SortedDictionary<long, AGridRow>();
 
 			var args = new List<QueryParameter> {
 				new QueryParameter("@WithTest", bIncludeTestCustomers)
@@ -228,16 +309,17 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 
 			m_oDB.ForEachRowSafe(
 				(sr, bRowSetStarts) => {
-					int nCustomerID = sr["CustomerID"];
+					AGridRow r = oFactory();
 
-					if (oRes.ContainsKey(nCustomerID))
-						oRes[nCustomerID].Add(sr);
+					long nRowID = sr[r.RowIDFieldName()];
+
+					if (oRes.ContainsKey(nRowID))
+						oRes[nRowID].Add(sr);
 					else {
-						AGridRowBase r = oFactory();
-						r.Init(nCustomerID, sr);
+						r.Init(nRowID, sr);
 
 						if (r.IsValid())
-							oRes[nCustomerID] = r;
+							oRes[nRowID] = r;
 					} // if
 
 					return ActionResult.Continue;
