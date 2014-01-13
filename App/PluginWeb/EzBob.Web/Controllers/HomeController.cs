@@ -9,34 +9,29 @@
 	using ExperianLib;
 	using EzServiceReference;
 	using Scorto.Web;
+	using log4net;
 	using ActionResult = System.Web.Mvc.ActionResult;
 
 	public class HomeController : Controller
-    {
+	{
+		private static readonly ILog log = LogManager.GetLogger(typeof(HomeController));
 		private readonly AskvilleRepository askvilleRepository;
-		private readonly IAppCreator appCreator;
 		private readonly WizardConfigsActionResult wizardConfigsActionResult;
+		private bool sessionInitialized;
 
 		public HomeController(AskvilleRepository askvilleRepository, IAppCreator appCreator)
         {
             this.askvilleRepository = askvilleRepository;
-			this.appCreator = appCreator;
 
 			wizardConfigsActionResult = appCreator.GetWizardConfigs();
+			log.Info("Got configs");
         }
-
-		private bool sessionInitialized;
 
         public ActionResult Index(string sourceref = "", string shop = "", string ezbobab = "", string offline = "", string invite = "")
         {
             Session["Shop"] = shop;
 
-			if (!sessionInitialized)
-			{
-				Session["IsSmsValidationActive"] = wizardConfigsActionResult.IsSmsValidationActive;
-				Session["NumberOfMobileCodeAttempts"] = wizardConfigsActionResult.NumberOfMobileCodeAttempts;
-				sessionInitialized = true;
-			}
+			InitSession();
 
             if(!string.IsNullOrEmpty(sourceref))
             {
@@ -70,7 +65,18 @@
             return RedirectToActionPermanent("Index", User.Identity.IsAuthenticated ? "Profile" : "Wizard", new {Area = "Customer"});
         }
 
-        [Transactional]
+		private void InitSession()
+		{
+			if (!sessionInitialized)
+			{
+				Session["IsSmsValidationActive"] = wizardConfigsActionResult.IsSmsValidationActive;
+				Session["NumberOfMobileCodeAttempts"] = wizardConfigsActionResult.NumberOfMobileCodeAttempts;
+				sessionInitialized = true;
+			}
+			log.Info("Initialized session configs");
+		}
+
+		[Transactional]
         public ActionResult ActivateStore(string id, bool? approve )
         {
             if (approve != null)
@@ -92,12 +98,7 @@
 		[HttpPost]
 		public JsonNetResult GetTwilioConfig()
 		{
-			if (!sessionInitialized)
-			{
-				Session["IsSmsValidationActive"] = wizardConfigsActionResult.IsSmsValidationActive;
-				Session["NumberOfMobileCodeAttempts"] = wizardConfigsActionResult.NumberOfMobileCodeAttempts;
-				sessionInitialized = true;
-			}
+			InitSession();
 			return this.JsonNet(new { isSmsValidationActive = Session["IsSmsValidationActive"], numberOfMobileCodeAttempts = Session["NumberOfMobileCodeAttempts"] });
 		}
     }
