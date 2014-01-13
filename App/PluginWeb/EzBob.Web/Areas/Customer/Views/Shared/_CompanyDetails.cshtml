@@ -193,19 +193,16 @@
 		@using (Html.BeginForm("SaveCompany", "CustomerDetails", new {Area = "Customer"}, FormMethod.Post, new {@class = "CompanyDetailForm"})) {
 		    <div class="control-group form_field_container">
 				<div class="controls">
-					<label class="attardi-input">
-						<span>Type of business</span>
-						<select class="form_field" id="TypeOfBusiness" name="TypeOfBusiness" ui-event-control-id="personal-info:type_of_business" >
-							<option></option>
-							<option value="Entrepreneur">Sole trader (not Inc.)</option>
-							<option value="SoleTrader">Sole trader (Inc.)</option>
-							<option value="PShip3P">Partnership (Up to 3)</option>
-							<option value="PShip">Partnership (More than 3)</option>
-							<option value="Limited">Limited company</option>
-							<option value="LLP">LLP</option>
-						</select>
-					    <img id="TypeOfBusinessImage" class="field_status required" />
-                    </label>
+					<span class="type-of-business-caption">Type of business</span>
+					<select class="type-of-business-form_field" id="TypeOfBusiness" name="TypeOfBusiness" size="6" ui-event-control-id="personal-info:type_of_business" >
+						<option value="Entrepreneur">Sole trader (not Inc.)</option>
+						<option value="SoleTrader">Sole trader (Inc.)</option>
+						<option value="PShip3P">Partnership (Up to 3)</option>
+						<option value="PShip">Partnership (More than 3)</option>
+						<option value="Limited">Limited company</option>
+						<option value="LLP">LLP</option>
+					</select>
+					<img id="TypeOfBusinessImage" class="field_status required" />
 				</div>
 			</div>
 
