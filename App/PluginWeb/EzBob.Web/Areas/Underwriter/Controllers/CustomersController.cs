@@ -401,22 +401,31 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 
 		[HttpGet]
 		[Ajax]
-		public JsonNetResult GetCounters(bool isTest) {
+		public JsonNetResult GetCounters(bool isTest, bool isAll) {
 			int nWaiting = 0;
 			int nPending = 0;
 			int nRegistered = 0;
 			int nEscalated = 0;
 
-			var oRelevantCustomers = _customers.GetAll().Where(c =>
-				(isTest || !c.IsTest)
-				&&
-				(
-					((c.CreditResult == null) && c.WizardStep.TheLastOne) ||
-					(c.CreditResult == CreditResultStatus.Escalated) ||
-					(c.CreditResult == CreditResultStatus.WaitingForDecision) ||
-					(c.CreditResult == CreditResultStatus.ApprovedPending)
-				)
-			);
+			IQueryable<Customer> allCustomers = _customers.GetAll();
+			IQueryable<Customer> oRelevantCustomers;
+			if (!isAll)
+			{
+				oRelevantCustomers = allCustomers.Where(c =>
+				    (isTest || !c.IsTest)
+				    &&
+				    (
+					    ((c.CreditResult == null) && c.WizardStep.TheLastOne) ||
+					    (c.CreditResult == CreditResultStatus.Escalated) ||
+					    (c.CreditResult == CreditResultStatus.WaitingForDecision) ||
+					    (c.CreditResult == CreditResultStatus.ApprovedPending)
+				    )
+				);
+			}
+			else
+			{
+				oRelevantCustomers = allCustomers;
+			}
 
 			foreach (var oCustomer in oRelevantCustomers) {
 				switch (oCustomer.CreditResult) {
@@ -437,7 +446,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 					break;
 				} // switch
 			} // for each
-
+			
 			return this.JsonNet(new List<CustomersCountersModel> {
 				new CustomersCountersModel { Count = nWaiting,    Name = "waiting" },
 				new CustomersCountersModel { Count = nPending,    Name = "pending" },

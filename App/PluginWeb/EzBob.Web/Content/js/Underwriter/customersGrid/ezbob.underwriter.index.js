@@ -3,7 +3,9 @@
 	var counterTimer;
 
 	function updateCounters() {
-		var xhr = $.get(window.gRootPath + 'Underwriter/Customers/GetCounters', { isTest: EzBob.Config.isTest });
+	    var isTestChecked = $('#include-test-customers:checked').length > 0;
+	    var isAllChecked = $('#include-all-customers:visible:checked').length > 0;
+	    var xhr = $.get(window.gRootPath + 'Underwriter/Customers/GetCounters', { isTest: isTestChecked, isAll: isAllChecked });
 		xhr.done(function(response) {
 			_.each(response, function(val) {
 				$('#' + val.Name + '-count').text(val.Count);
