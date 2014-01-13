@@ -583,28 +583,6 @@
 			}
 			return null;
 		}
-		private WizardConfigsActionResult WizardConfigs()
-		{
-			lock (initServiceLock)
-			{
-				if (_wizardConfigs != null)
-				{
-					return _wizardConfigs;
-				}
-
-				try
-				{
-					_wizardConfigs = ServiceClient.GetWizardConfigs();
-				}
-				catch (Exception ex)
-				{
-					_wizardConfigs = new WizardConfigsActionResult();
-					Log.ErrorFormat("GetWizardConfigs {0}", ex);
-				}
-			}
-
-			return _wizardConfigs;
-		}
 
 		private WizardConfigsActionResult WizardConfigs()
 		{
