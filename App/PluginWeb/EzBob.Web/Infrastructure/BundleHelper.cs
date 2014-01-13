@@ -123,7 +123,6 @@ namespace EzBob.Web.Infrastructure
 				.Add("~/Content/js/lib/alertify.js")
 				.Add("~/Content/js/lib/notifications.js")
 				.Add("~/Content/js/lib/jquery.zclip.js")
-				.Add("~/Content/js/lib/grid.locale-en.js")
 				.Add("~/Content/js/lib/jquery.form.js")
 				.Add("~/Content/js/lib/splitter.js")
 				.Add("~/Content/js/lib/attardi.labels.js")
