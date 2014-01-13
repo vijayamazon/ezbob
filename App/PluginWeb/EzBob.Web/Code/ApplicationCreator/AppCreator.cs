@@ -35,16 +35,6 @@ namespace EzBob.Web.Code.ApplicationCreator {
 				useNewCaisStrategies = configurationVariablesRepository.GetByNameAsBool("UseNewCaisStrategies");
 				useNewFraudCheckerStrategy = configurationVariablesRepository.GetByNameAsBool("UseNewFraudCheckerStrategy");
 				useNewMainStrategy = configurationVariablesRepository.GetByNameAsBool("UseNewMainStrategy");
-				try
-				{
-					_wizardConfigs = ServiceClient.GetWizardConfigs();
-				}
-				catch (Exception ex)
-				{
-					_wizardConfigs = new WizardConfigsActionResult();
-					Log.ErrorFormat("GetWizardConfigs {0}", ex);
-				}
-				
 			}
 		}
 
@@ -75,7 +65,7 @@ namespace EzBob.Web.Code.ApplicationCreator {
 
 		public WizardConfigsActionResult GetWizardConfigs()
 		{
-			return _wizardConfigs;
+			return WizardConfigs();
 		}
 
 		public void CashTransfered(User user, string firstName, decimal cashAmount, decimal setUpFee, int loanId) {
@@ -595,6 +585,29 @@ namespace EzBob.Web.Code.ApplicationCreator {
 			return null;
 		}
 
+		private WizardConfigsActionResult WizardConfigs()
+		{
+			lock (initServiceLock)
+			{
+				if (_wizardConfigs != null)
+				{
+					return _wizardConfigs;
+				}
+
+				try
+				{
+					_wizardConfigs = ServiceClient.GetWizardConfigs();
+				}
+				catch (Exception ex)
+				{
+					_wizardConfigs = new WizardConfigsActionResult();
+					Log.ErrorFormat("GetWizardConfigs {0}", ex);
+				}
+			}
+
+			return _wizardConfigs;
+		}
+
 		private readonly IStrategyRepository _strategies;
 		private readonly IEzBobConfiguration _config;
 		private readonly IUsersRepository _users;
@@ -610,5 +623,6 @@ namespace EzBob.Web.Code.ApplicationCreator {
 		private static bool useNewCaisStrategies;
 		private static bool readConfig = false;
 		private static WizardConfigsActionResult _wizardConfigs;
+		private static readonly object initServiceLock = new object();
 	} // class AppCreator
 } // namespace
