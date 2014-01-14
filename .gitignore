@@ -89,3 +89,4 @@ App/clients/Maven/ExperianParser.dll
 App/clients/Maven/Logger.dll
 App/PluginWeb/EzBob.Web/Properties/PublishProfiles/EzBob.Release.pubxml.user
 App/PluginWeb/EzBob.Web/Properties/PublishProfiles/EzBob.Test.pubxml.user
+App/EzReporting/EzReportsWeb/bin/*
