@@ -15,17 +15,13 @@
 			get { return "Experian company check"; }
 		} // Name
 
-		public override void Execute() {
-			if (companyType == "Entrepreneur")
-			{
-				Log.Info("Skipping experian company check for customer:{0} because he is an entrepreneur", customerId);
-				return;
-			}
-
+		public override void Execute()
+		{
 			DataTable dt = DB.ExecuteReader("GetCompanyRefNumbers", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
 			var results = new SafeReader(dt.Rows[0]);
 
 			companyType = results["CompanyType"];
+
 			if (companyType == "Entrepreneur")
 			{
 				Log.Info("Skipping experian company check for customer:{0} because he is an entrepreneur", customerId);
