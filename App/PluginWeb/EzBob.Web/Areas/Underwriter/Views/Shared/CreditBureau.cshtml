@@ -44,13 +44,13 @@
 
 @helper ScoreMark(string score, string scorePos, string valPos, string color, string align)
 {
-    var backDivStyle = "height: 50px; width: 128px; position: relative; left: " + scorePos + "background-color: " + color;
-    var scoreDivStyle = "height: 50px; width: 120px; background-color: #E9F0F9; position: relative; font-size: 48px; "
+    var backDivStyle = "height: 50px; width: 8px; display: inline-block; position:relative; left: " + scorePos + "background-color: " + color;
+    var scoreDivStyle = "height: 50px; width: 120px; display: inline-block; position: relative; font-size: 48px; " 
         + " color: " + color
         + " left: " + valPos
         + " text-align: " + align;
     <div style="height: 50px;">
-        @Html.Raw("<div style=\"" + backDivStyle + "\">" + "<div style=\"" + scoreDivStyle + "\">" + score + "</div></div>")
+        @Html.Raw("<div style=\"" + backDivStyle + "\"></div>" + "<div style=\"" + scoreDivStyle + "\">" + score + "</div>")
     </div>
     <div style="height: 100px;">
         <img src="@Url.Content("~/Content/img/scoreband.png")" />

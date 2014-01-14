@@ -39,10 +39,10 @@ namespace EzBob.Web.Code.ReportGenerator
                 worksheet.Cells[row, column + 1].PutValue("£ " + FormattingUtils.FormatMiddle(item.LoanRepayment));
                 worksheet.Cells[row, column + 2].PutValue("£ " + FormattingUtils.FormatMiddle(item.Interest));
                 worksheet.Cells[row, column + 3].PutValue(FormattingUtils.FormatMiddle(item.InterestRate * 100) + "%");
-                var fee =loanOffer.SetupFee > 0 && i == 0 ? loanOffer.SetupFee : 0;
+                var fee =loanOffer.SetupFee > 0 && i == 1 ? loanOffer.SetupFee : 0;
                 if (item.Fees>0) fee += item.Fees;
                 var res = fee != 0 ? "£ " + FormattingUtils.FormatPounds(fee) : "-";
-                var res1 = loanOffer.SetupFee>0 && i == 0 ? "*" : string.Empty;
+                var res1 = loanOffer.SetupFee>0 && i == 1 ? "*" : string.Empty;
                 worksheet.Cells[row, column + 4].PutValue(res + res1);
                 //worksheet.Cells.Merge(row, column + 5, 1, 3);
                 worksheet.Cells[row, column + 5].PutValue("£ " + FormattingUtils.FormatMiddle(item.AmountDue));
