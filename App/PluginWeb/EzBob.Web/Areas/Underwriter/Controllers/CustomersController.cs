@@ -483,17 +483,13 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 
 		[HttpGet]
 		[Ajax]
-		public JsonNetResult GetCounters(bool isTest, bool isAll) {
+		public JsonNetResult GetCounters(bool isTest) {
 			int nWaiting = 0;
 			int nPending = 0;
 			int nRegistered = 0;
 			int nEscalated = 0;
 
-			IQueryable<Customer> allCustomers = _customers.GetAll();
-			IQueryable<Customer> oRelevantCustomers;
-			if (!isAll)
-			{
-				oRelevantCustomers = allCustomers.Where(c =>
+			IQueryable<Customer> allCustomers = _customers.GetAll().Where(c =>
 				    (isTest || !c.IsTest)
 				    &&
 				    (
@@ -503,13 +499,9 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 					    (c.CreditResult == CreditResultStatus.ApprovedPending)
 				    )
 				);
-			}
-			else
-			{
-				oRelevantCustomers = allCustomers;
-			}
 
-			foreach (var oCustomer in oRelevantCustomers) {
+			foreach (var oCustomer in allCustomers)
+			{
 				switch (oCustomer.CreditResult) {
 				case null:
 					nRegistered++;
