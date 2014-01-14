@@ -1,5 +1,7 @@
 namespace EZBob.DatabaseLib.Model.Database
 {
+	using System.Collections.Generic;
+	using System.Linq;
 	using FluentNHibernate.Mapping;
 	using Iesi.Collections.Generic;
 	using NHibernate.Type;
@@ -24,45 +26,30 @@ namespace EZBob.DatabaseLib.Model.Database
 		public virtual string ExperianRefNum { get; set; }
 		public virtual string ExperianCompanyName { get; set; }
 		
-		private ISet<CustomerAddress> _companyAddress = new HashedSet<CustomerAddress>();
-		public virtual ISet<CustomerAddress> CompanyAddress
+		private Iesi.Collections.Generic.ISet<CustomerAddress> _companyAddress = new HashedSet<CustomerAddress>();
+		public virtual Iesi.Collections.Generic.ISet<CustomerAddress> CompanyAddress
 		{
 			get { return _companyAddress; }
 			set { _companyAddress = value; }
 		} //CompanyAddress
 
-		private ISet<CustomerAddress> _experianCompanyAddress = new HashedSet<CustomerAddress>();
-		public virtual ISet<CustomerAddress> ExperianCompanyAddress
+		private Iesi.Collections.Generic.ISet<CustomerAddress> _experianCompanyAddress = new HashedSet<CustomerAddress>();
+		public virtual Iesi.Collections.Generic.ISet<CustomerAddress> ExperianCompanyAddress
 		{
 			get { return _experianCompanyAddress; }
 			set { _experianCompanyAddress = value; }
 		} //CompanyAddress
 
-		private ISet<CompanyEmployeeCount> _companyEmployeeCount = new HashedSet<CompanyEmployeeCount>();
-		public virtual ISet<CompanyEmployeeCount> CompanyEmployeeCount
+		private Iesi.Collections.Generic.ISet<CompanyEmployeeCount> _companyEmployeeCount = new HashedSet<CompanyEmployeeCount>();
+		public virtual Iesi.Collections.Generic.ISet<CompanyEmployeeCount> CompanyEmployeeCount
 		{
 			get { return _companyEmployeeCount; }
 			set { _companyEmployeeCount = value; }
 		} // CompanyEmployeeCount
 
-		private ISet<Director> _directors = new HashedSet<Director>();
-		public Company(){}
-		public Company(CompanyInfo companyInfo)
-		{
-			TypeOfBusiness = companyInfo.TypeOfBusiness;
-			CompanyName = companyInfo.CompanyName;
-			CompanyNumber = companyInfo.CompanyNumber;
-			TimeAtAddress= companyInfo.TimeAtAddress;
-			BusinessPhone= companyInfo.BusinessPhone;
-			PropertyOwnedByCompany= companyInfo.PropertyOwnedByCompany;
-			YearsInCompany= companyInfo.YearsInCompany;
-			RentMonthLeft= companyInfo.RentMonthLeft;
-			CapitalExpenditure= companyInfo.CapitalExpenditure;
-			ExperianRefNum= companyInfo.ExperianRefNum;
-			ExperianCompanyName = companyInfo.ExperianCompanyName;
-		}
-
-		public virtual ISet<Director> Directors
+		private Iesi.Collections.Generic.ISet<Director> _directors = new HashedSet<Director>();
+		
+		public virtual Iesi.Collections.Generic.ISet<Director> Directors
 		{
 			get { return _directors; }
 			set { _directors = value; }
@@ -72,7 +59,7 @@ namespace EZBob.DatabaseLib.Model.Database
 
 	#endregion class Company
 
-	#region ComapnyMap
+	#region CompanyMap
 	public class CompanyMap : ClassMap<Company>
 	{
 		public CompanyMap()
@@ -193,19 +180,5 @@ namespace EZBob.DatabaseLib.Model.Database
 
 	#endregion class TypeOfBusinessExtenstions
 
-	public class CompanyInfo
-	{
-		public TypeOfBusiness TypeOfBusiness { get; set; }
-		public string CompanyNumber { get; set; }
-		public string CompanyName { get; set; }
-		public int? TimeAtAddress { get; set; }
-		public string TimeInBusiness { get; set; }
-		public string BusinessPhone { get; set; }
-		public bool? PropertyOwnedByCompany { get; set; }
-		public string YearsInCompany { get; set; }
-		public string RentMonthLeft { get; set; }
-		public double? CapitalExpenditure { get; set; }
-		public string ExperianRefNum { get; set; }
-		public string ExperianCompanyName { get; set; }
-	}
+	
 } // namespace

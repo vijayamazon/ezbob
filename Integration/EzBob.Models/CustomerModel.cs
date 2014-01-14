@@ -127,27 +127,42 @@ namespace EzBob.Web.Areas.Customer.Models
 		public string FriendTookALoan { get; set; }
 	}
 
+
 	public class CompanyInfoMap
 	{
+		public TypeOfBusiness TypeOfBusiness { get; set; }
 		public string CompanyNumber { get; set; }
 		public string CompanyName { get; set; }
 		public int? TimeAtAddress { get; set; }
+		public string TimeInBusiness { get; set; }
 		public string BusinessPhone { get; set; }
+		public bool? PropertyOwnedByCompany { get; set; }
+		public string YearsInCompany { get; set; }
+		public string RentMonthLeft { get; set; }
+		public double? CapitalExpenditure { get; set; }
+		public string ExperianRefNum { get; set; }
+		public string ExperianCompanyName { get; set; }
 
 		public virtual DirectorModel[] Directors { get; set; }
 
 		public static CompanyInfoMap FromCompany(Company company)
 		{
-			if(company == null) return new CompanyInfoMap();
+			if (company == null) return new CompanyInfoMap();
 			return new CompanyInfoMap
-					   {
-						   CompanyNumber = company.CompanyNumber,
-						   CompanyName = company.CompanyName,
-						   TimeAtAddress = company.TimeAtAddress,
-						   BusinessPhone = company.BusinessPhone,
-						   Directors = company.Directors.Select(d => DirectorModel.FromDirector(d, new List<Director>(company.Directors))).ToArray()
-					   };
+			{
+				CompanyNumber = company.CompanyNumber,
+				CompanyName = company.ExperianCompanyName ?? company.CompanyName,
+				TimeAtAddress = company.TimeAtAddress,
+				BusinessPhone = company.BusinessPhone,
+				TypeOfBusiness = company.TypeOfBusiness,
+				TimeInBusiness = company.TimeInBusiness,
+				PropertyOwnedByCompany = company.PropertyOwnedByCompany,
+				YearsInCompany = company.YearsInCompany,
+				RentMonthLeft = company.RentMonthLeft,
+				CapitalExpenditure = company.CapitalExpenditure,
+
+				Directors = company.Directors.Select(d => DirectorModel.FromDirector(d, new List<Director>(company.Directors))).ToArray()
+			};
 		}
 	}
-
 }

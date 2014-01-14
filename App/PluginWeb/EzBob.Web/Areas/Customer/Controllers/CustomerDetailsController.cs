@@ -10,6 +10,7 @@
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
+	using ExperianLib.Ebusiness;
 	using Models;
 	using Code;
 	using Infrastructure;
@@ -143,7 +144,8 @@
 
 			ms_oLog.DebugFormat("Customer {1} ({0}): main strategy started.", customer.Id, customer.PersonalInfo.Fullname);
 
-			if (!customer.IsTest) {
+			if (!customer.IsTest)
+			{
 				_creator.FraudChecker(_context.User);
 				ms_oLog.DebugFormat("Customer {1} ({0}): fraud check started.", customer.Id, customer.PersonalInfo.Fullname);
 			} // if
@@ -174,7 +176,7 @@
 			List<DirectorModel> limitedDirectors,
 			List<DirectorModel> nonLimitedDirectors,
 			CompanyEmployeeCountInfo companyEmployeeCountInfo,
-			ExperianLib.Ebusiness.CompanyInfo experianInfo
+			CompanyInfo experianInfo
 		)
 		{
 			var customer = _context.Customer;
@@ -284,7 +286,8 @@
 			List<CustomerAddress> nonLimitedCompanyAddress,
 			List<DirectorAddressModel>[] directorAddress,
 			List<CustomerAddress> otherPropertyAddress
-		) {
+		)
+		{
 			var customer = _context.Customer;
 
 			var oldPersonalInfo = PersonalInfoEditHistoryParametersBuilder(customer);
@@ -303,7 +306,8 @@
 				CustomerAddressType.PersonalAddress
 			);
 
-			if (otherPropertyAddress != null) {
+			if (otherPropertyAddress != null)
+			{
 				MakeAddress(
 					otherPropertyAddress,
 					addressInfo.OtherPropertyAddress,
@@ -511,10 +515,10 @@
 		#endregion static method UpdateAddresses
 
 		#region static method ProcessCompanyInfo
-		private void ProcessCompanyInfoTemporary(TypeOfBusiness type, LimitedInfo limitedInfo, NonLimitedInfo nonLimitedInfo, CompanyAdditionalInfo companyAdditionalInfo, List<CustomerAddress> limitedCompanyAddress, List<CustomerAddress> nonLimitedCompanyAddress, List<DirectorModel> limitedDirectors, List<DirectorModel> nonLimitedDirectors,CompanyEmployeeCountInfo companyEmployeeCount, ExperianLib.Ebusiness.CompanyInfo experianInfo, Customer customer)
+		private void ProcessCompanyInfoTemporary(TypeOfBusiness type, LimitedInfo limitedInfo, NonLimitedInfo nonLimitedInfo, CompanyAdditionalInfo companyAdditionalInfo, List<CustomerAddress> limitedCompanyAddress, List<CustomerAddress> nonLimitedCompanyAddress, List<DirectorModel> limitedDirectors, List<DirectorModel> nonLimitedDirectors, CompanyEmployeeCountInfo companyEmployeeCount, CompanyInfo experianInfo, Customer customer)
 		{
 
-			CompanyInfo companyInfo;
+			CompanyInfoMap companyData;
 			List<CustomerAddress> companyAddress;
 			List<DirectorModel> companyDirectors;
 			var experianAddress = new List<CustomerAddress>
@@ -535,7 +539,7 @@
 			switch (type.Reduce())
 			{
 				case TypeOfBusinessReduced.Limited:
-					companyInfo = new CompanyInfo
+					companyData = new CompanyInfoMap
 						{
 							BusinessPhone = limitedInfo.LimitedBusinessPhone,
 							CapitalExpenditure = companyAdditionalInfo.CapitalExpenditure,
@@ -545,13 +549,13 @@
 							RentMonthLeft = companyAdditionalInfo.RentMonthsLeft,
 							TypeOfBusiness = type,
 							TimeAtAddress = limitedInfo.LimitedTimeAtAddress,
-							YearsInCompany = companyAdditionalInfo.YearsInCompany
+							YearsInCompany = companyAdditionalInfo.YearsInCompany,
 						};
 					companyAddress = limitedCompanyAddress;
 					companyDirectors = limitedDirectors;
 					break;
 				case TypeOfBusinessReduced.NonLimited:
-					companyInfo = new CompanyInfo
+					companyData = new CompanyInfoMap
 						{
 							BusinessPhone = nonLimitedInfo.NonLimitedBusinessPhone,
 							CapitalExpenditure = companyAdditionalInfo.CapitalExpenditure,
@@ -570,28 +574,38 @@
 					return;
 			}
 
-			ProcessCompanyInfo(companyInfo,companyAddress,experianAddress, companyDirectors,companyEmployeeCount, experianInfo, customer);
-			
+			ProcessCompanyInfo(companyData, companyAddress, experianAddress, companyDirectors, companyEmployeeCount, experianInfo, customer);
+
 
 		} // SaveCompany
 
 		private static void ProcessCompanyInfo(
-			CompanyInfo companyInfo,
+			CompanyInfoMap companyData,
 			ICollection<CustomerAddress> companyAddress,
 			ICollection<CustomerAddress> experianCompanyAddress,
 			IEnumerable<DirectorModel> directors,
 			CompanyEmployeeCountInfo companyEmployeeCount,
-			ExperianLib.Ebusiness.CompanyInfo experianInfo,
+			CompanyInfo experianInfo,
 			Customer customer
 		)
 		{
 			if (customer.Companies == null) customer.Companies = new List<Company>();
 
-			var company = new Company(companyInfo)
+			var company = new Company
 				{
 					Customer = customer,
 					ExperianCompanyName = experianInfo.BusName,
-					ExperianRefNum = experianInfo.BusRefNum
+					ExperianRefNum = experianInfo.BusRefNum,
+					TypeOfBusiness = companyData.TypeOfBusiness,
+					CompanyName = companyData.CompanyName,
+					CompanyNumber = companyData.CompanyNumber,
+					TimeAtAddress = companyData.TimeAtAddress,
+					TimeInBusiness = companyData.TimeInBusiness,
+					BusinessPhone = companyData.BusinessPhone,
+					PropertyOwnedByCompany = companyData.PropertyOwnedByCompany,
+					YearsInCompany = companyData.YearsInCompany,
+					RentMonthLeft = companyData.RentMonthLeft,
+					CapitalExpenditure = companyData.CapitalExpenditure,
 				};
 
 			if (directors != null)
@@ -649,7 +663,7 @@
 					};
 				foreach (var val in experianCompanyAddress)
 				{
-					val.AddressType = CustomerAddressType.ExperianCompanyAddress; 
+					val.AddressType = CustomerAddressType.ExperianCompanyAddress;
 					val.Customer = customer;
 					val.Company = company;
 				} // foreach
@@ -807,7 +821,7 @@
 		private readonly CashRequestBuilder _crBuilder;
 		private readonly IConcentAgreementHelper _concentAgreementHelper = new ConcentAgreementHelper();
 		private readonly DatabaseDataHelper _helper;
-		private static readonly ILog ms_oLog = LogManager.GetLogger(typeof (CustomerDetailsController));
+		private static readonly ILog ms_oLog = LogManager.GetLogger(typeof(CustomerDetailsController));
 
 		#endregion private properties
 
