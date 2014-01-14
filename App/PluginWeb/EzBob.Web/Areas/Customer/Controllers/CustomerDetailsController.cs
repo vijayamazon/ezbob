@@ -98,8 +98,10 @@
 			var customer = _context.Customer;
 
 			customer.WizardStep = _helper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.Marketplace);
-			
+
 			_session.Flush();
+
+			ms_oLog.DebugFormat("Customer {1} ({0}): wizard step has been updated to:2", customer.Id, customer.PersonalInfo.Fullname);
 
 			return this.JsonNet(new { });
 		} // LinkAccountsComplete
@@ -195,6 +197,8 @@
 
 			customer.WizardStep = _helper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.CompanyDetails);
 
+			ms_oLog.DebugFormat("Customer {1} ({0}): wizard step has been updated to:6", customer.Id, customer.PersonalInfo.Fullname);
+
 			if (customer.IsOffline) {
 				customer.CompanyEmployeeCount.Add(new CompanyEmployeeCount {
 					BottomEarningEmployeeCount = companyEmployeeCountInfo.BottomEarningEmployeeCount,
@@ -264,6 +268,8 @@
 			);
 
 			customer.WizardStep = _helper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.PersonalDetails);
+
+			ms_oLog.DebugFormat("Customer {1} ({0}): wizard step has been updated to:5", customer.Id, customer.PersonalInfo.Fullname);
 
 			_session.Flush();
 
