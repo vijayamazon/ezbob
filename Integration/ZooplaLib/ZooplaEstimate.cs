@@ -36,11 +36,16 @@
 				return estimate;
 			}
 
-			string nextPage;
+			string nextPage = "one page";
 			do
 			{
-				nextPage = doc.DocumentNode.SelectSingleNode("//div[@class = 'paginate bg-muted']/a[last()]").InnerText;
-				var href = doc.DocumentNode.SelectSingleNode("//div[@class = 'paginate bg-muted']/a[last()]").Attributes["href"].Value;
+				var nextPageNode = doc.DocumentNode.SelectSingleNode("//div[@class = 'paginate bg-muted']/a[last()]");
+				string href = null;
+				if (nextPageNode != null)
+				{
+					nextPage = nextPageNode.InnerText;
+					href = nextPageNode.Attributes["href"].Value;
+				}
 				if (nextPage == "Next")
 				{
 					var nextResponse = Session.GetAsync(href).Result;
