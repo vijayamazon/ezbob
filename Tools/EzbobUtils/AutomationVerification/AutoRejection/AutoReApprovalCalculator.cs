@@ -70,7 +70,7 @@
 					return false;
 				}
 
-				if (!reApprovalData.NewDataSourceAdded)
+				if (reApprovalData.NewDataSourceAdded)
 				{
 					reason = string.Format("No ReApprove. Old client. No new data source was added");
 					return false;
