@@ -48,7 +48,8 @@
 			string dirPath2 = caisPath2 + "\\" + timeString;
 			Directory.CreateDirectory(dirPath);
 			Directory.CreateDirectory(dirPath2);
-			var service = new ExperianLib.Ebusiness.EBusinessService();
+			//Talk to stas about this comment
+			//var service = new ExperianLib.Ebusiness.EBusinessService();
 			DataTable dt = DB.ExecuteReader("GetCaisData", CommandSpecies.StoredProcedure);
 			foreach (DataRow row in dt.Rows) {
 				var sr = new SafeReader(row);
@@ -67,8 +68,10 @@
 				string town = sr["Town"];
 				string county = sr["County"];
 				string postcode = sr["Postcode"];
-				DateTime dateOfBirth = sr["DateOfBirth"];
-
+				string dateOfBirthStr = sr["DateOfBirth"];
+				string[] dateOfBirthStrArr = dateOfBirthStr.Split('-');
+				var dateOfBirth = new DateTime(int.Parse(dateOfBirthStrArr[2]), int.Parse(dateOfBirthStrArr[0]), int.Parse(dateOfBirthStrArr[1]));
+				
 				DateTime? minLsDate = null;
 				DateTime tmp = sr["MinLSDate"];
 				if (tmp != default(DateTime))
@@ -85,7 +88,6 @@
 				bool isDefaulted = sr["IsDefaulted"];
 				string caisAccountStatus = sr["CaisAccountStatus"];
 				string maritalStatus = sr["MaritalStatus"];
-				int customerId = sr["CustomerId"];
 				string genderPrefix;
 				if (gender == "M") {
 					genderPrefix = "Mr.";
@@ -93,15 +95,24 @@
 				else {
 					genderPrefix = maritalStatus == "Married" ? "Mrs." : "Ms.";
 				}
-
-				accountStatus = GetAccountStatus(minLsDate, caisAccountStatus, dateClose, startDate, isDefaulted);
-
-				if (accountStatus == "8") {
-					originalDefaultBalance = currentBalance;
-					dateClose = DateTime.UtcNow;
+				
+				if (!string.IsNullOrEmpty(caisAccountStatus) && caisAccountStatus != "Calculated value")
+				{
+					accountStatus = caisAccountStatus;
 				}
-				else {
-					originalDefaultBalance = 0;
+				else
+				{
+					accountStatus = GetAccountStatus(minLsDate, caisAccountStatus, dateClose, startDate, isDefaulted);
+					
+					if (accountStatus == "8")
+					{
+						originalDefaultBalance = currentBalance;
+						dateClose = DateTime.UtcNow;
+					}
+					else
+					{
+						originalDefaultBalance = 0;
+					}
 				}
 
 				string line23 = string.Format("{0} {1}", line2, line3);
@@ -120,7 +131,7 @@
 
 				string transferredToCollectionFlag = customerState == "Collection" ? "Y" : string.Empty;
 				string accountNumber = refNumber + loanId;
-
+				
 				if (companyType == "Entrepreneur") {
 					var file = CaisFileManager.GetCaisFileData();
 					var h = file.Header;
@@ -144,6 +155,7 @@
 				}
 				else
 				{
+/*
 					switch (companyType)
 					{
 						case "LLP":
@@ -185,15 +197,50 @@
 							}
 							break;
 					}
+*/
+					// Check this comment out with Stas
+					//var service = new ExperianLib.Ebusiness.EBusinessService();
+					if (companyType == "Limited" || companyType == "PShip" || companyType == "LLP") {
+						companyTypeCode = "L";
+						companyRefNum = limitedRefNum;
+						//var res = service.GetLimitedBusinessData(limitedRefNum, customerId, true);
+
+						// The mismatch is here
+						//if(!string.IsNullOrEmpty(res.CompanyName)) fullName = res.CompanyName;
+						//if (!string.IsNullOrEmpty(res.PostCode))
+						//{
+						//	line1 = res.AddressLine1;
+						//	line23 = res.AddressLine2;
+						//	town = res.AddressLine3;
+						//	county = res.AddressLine4;
+						//	postcode = res.PostCode;
+						//}
+					}
+ 					else if (companyType == "PShip3P" || companyType == "SoleTrader") {
+						companyTypeCode = "N";
+						companyRefNum = nonLimitedRefNum;
+						//var res = service.GetLimitedBusinessData(nonLimitedRefNum, customerId, true);
+						//if (!string.IsNullOrEmpty(res.CompanyName))
+						//{
+						//	fullName = res.CompanyName;
+						//}
+						//if (!string.IsNullOrEmpty(res.PostCode))
+						//{
+						//	line1 = res.AddressLine1;
+						//	line23 = res.AddressLine2 + " " + res.AddressLine3;
+						//	town = res.AddressLine4;
+						//	county = res.AddressLine5;
+						//	postcode = res.PostCode;
+						//}
+ 					}
 
 					var cais = CaisFileManager.GetBusinessCaisFileData();
 					cais.Header.CompanyPortfolioName = "Orange Money";
 					cais.Header.CreditCardBehaviouralSharingFlag = "";
 					cais.Header.DateOfCreation = DateTime.UtcNow;
 					cais.Header.SourceCode = 721;
-					
-					var record = CreateBusinessRecord(accountNumber, fullName, line1, line23, town, county, postcode, startDate, dateClose, scheduledRepayments, currentBalance, transferredToCollectionFlag, sortCode);
 
+					var record = CreateBusinessRecord(accountNumber, fullName, line1, line23, town, county, postcode, startDate, dateClose, scheduledRepayments, currentBalance, transferredToCollectionFlag, sortCode);
 					cais.Accounts.Add(record);
 
 					businessCounter++;
@@ -241,10 +288,6 @@
 			}
 			else {
 				daysBetween = (int)(DateTime.UtcNow - minLsDate.Value).TotalDays;
-			}
-
-			if (!string.IsNullOrEmpty(caisAccountStatus) && caisAccountStatus != "Calculated value") {
-				return caisAccountStatus;
 			}
 
 			if (dateClose < startDate) {
