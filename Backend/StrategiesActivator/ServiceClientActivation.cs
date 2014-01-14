@@ -472,6 +472,21 @@
 		}
 
 		[Activation]
+		private void MainStrategySync()
+		{
+			int underwriterId;
+			int customerId, avoidAutoDescison;
+			NewCreditLineOption newCreditLineOption;
+			if (int.TryParse(args[1], out underwriterId) && int.TryParse(args[2], out customerId) && Enum.TryParse(args[3], out newCreditLineOption) && int.TryParse(args[4], out avoidAutoDescison))
+			{
+				serviceClient.MainStrategySync1(underwriterId, customerId, newCreditLineOption, avoidAutoDescison);
+				return;
+			}
+
+			Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> MainStrategySync <Underwriter ID> <customerId> <newCreditLineOption> <avoidAutoDescison>");
+		}
+
+		[Activation]
 		private void UpdateCurrencyRates()
 		{
 			if (args.Length != 1)
