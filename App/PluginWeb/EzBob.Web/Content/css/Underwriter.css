@@ -473,7 +473,11 @@ a.ezbob-logo-login {
 }
 
 .roleImg {
-    margin-top: -5px;
+    margin-top: -9px;
+	height: 40px;
+	width: 40px;
+	display: inline-block;
+	margin-right: 0.32em;
 }
 
 /*

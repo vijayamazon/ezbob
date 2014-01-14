@@ -28,12 +28,17 @@
         var sRoleImageTitle = "CRM";
         var userName = "";
 	    var userId = 0;
+	    var userEmail = "";
         try
         {
             var context = ObjectFactory.GetInstance<IWorkplaceContext>();
             var user = context.User;
+
             userName = user.FullName ?? user.Name;
 	        userId = user.Id;
+	        userEmail = user.EMail;
+
+
             if (user.Roles.Any(r => r.Name == "manager"))
             {
                 sRoleImageUrl = Url.Content("~/Content/img/roles/manager.png");
@@ -60,10 +65,7 @@
             </button>
 
             <a class="navbar-brand" href="#" id="uw-name-and-icon" data-uw-id="@userId">
-                @{
-                
-                    <img data-title="@sRoleImageTitle" class="roleImg" src="@sRoleImageUrl"/>  @userName
-                }
+                <img data-title="@sRoleImageTitle" class="roleImg" src="@Ezbob.Utils.Gravatar.Url(userEmail, sRoleImageUrl, 40)"/>@userName
             </a>
             <ul class="nav flaty-nav">
                 <li id="liApplications">
