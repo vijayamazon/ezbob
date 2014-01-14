@@ -300,7 +300,7 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 		if (this.router)
 			this.router.navigate('#customers/' + sGridName);
 
-		docCookies.setItem('uw_grids_last_shown', sGridName, Infinity);
+		localStorage.setItem('uw_grids_last_shown-' + $('#uw-name-and-icon').attr('data-uw-id'), sGridName);
 
 		this.toggleAllCustomers(sGridName);
 
@@ -329,10 +329,6 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 			sAjaxSource: this.gridSrcUrl(oGridProperties),
 			aoColumns: this.extractColumns(oGridProperties),
 
-			sCookiePrefix: 'uw_grid_' + sGridName + '_',
-			iCookieDuration: 60 * 60 * 24 * 7, // 7 days - in seconds
-			bStateSave: true,
-
 			bDeferRender: true,
 
 			aLengthMenu: [[-1, 10, 25, 50, 100], ['all', 10, 25, 50, 100]],
@@ -346,7 +342,21 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 			aaSorting: [[ 0, 'desc' ]],
 
 			bAutoWidth: true,
-			sDom: '<"top"<"box"<"box-title"<"dataTables_top_right"if><"dataTables_top_left">>>>tr<"bottom"<"col-md-6"l><"col-md-6 dataTables_bottom_right"p>><"clear">'
+			sDom: '<"top"<"box"<"box-title"<"dataTables_top_right"if><"dataTables_top_left">>>>tr<"bottom"<"col-md-6"l><"col-md-6 dataTables_bottom_right"p>><"clear">',
+
+			bStateSave: true,
+
+			fnStateSave: function (oSettings, oData) {
+				var sKey = 'uw-grid-state-' + $('#uw-name-and-icon').attr('data-uw-id') + '-' + sGridName;
+				localStorage.setItem(sKey, JSON.stringify(oData));
+			}, // fnStateSave
+
+			fnStateLoad: function (oSettings) {
+				var sKey = 'uw-grid-state-' + $('#uw-name-and-icon').attr('data-uw-id') + '-' + sGridName;
+				var sData = localStorage.getItem(sKey);
+				var oData = sData ? JSON.parse(sData) : null;
+				return oData;
+			}, // fnStateLoad
 		}); // create data table
 
 		var oTableTitle = this.$el.find(sTableContainer + ' .dataTables_top_left');

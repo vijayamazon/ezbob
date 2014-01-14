@@ -27,11 +27,13 @@
         var sRoleImageUrl = Url.Content("~/Content/img/roles/crm.png");
         var sRoleImageTitle = "CRM";
         var userName = "";
+	    var userId = 0;
         try
         {
             var context = ObjectFactory.GetInstance<IWorkplaceContext>();
             var user = context.User;
             userName = user.FullName ?? user.Name;
+	        userId = user.Id;
             if (user.Roles.Any(r => r.Name == "manager"))
             {
                 sRoleImageUrl = Url.Content("~/Content/img/roles/manager.png");
@@ -57,7 +59,7 @@
                 <span class="fa fa-bars"></span>
             </button>
 
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="#" id="uw-name-and-icon" data-uw-id="@userId">
                 @{
                 
                     <img data-title="@sRoleImageTitle" class="roleImg" src="@sRoleImageUrl"/>  @userName

@@ -90,9 +90,9 @@
 
 		customers: function(type) {
 			if (!type)
-				type = docCookies.getItem('uw_grids_last_shown');
+				type = localStorage.getItem('uw_grids_last_shown-' + $('#uw-name-and-icon').attr('data-uw-id'));
 
-			counterTimer = counterTimer || setInterval(updateCounters, 30000);
+			counterTimer = counterTimer || setInterval(updateCounters, 5000);
 
 			this.handleRoute('grids', null, type);
 		}, // customers
