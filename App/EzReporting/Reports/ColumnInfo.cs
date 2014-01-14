@@ -8,7 +8,8 @@ namespace Reports {
 		Percent,
 		CssClass,
 		ID,
-		Other
+		Other,
+		UserID,
 	} // enum ValueType
 
 	#endregion enum ValueType
@@ -35,6 +36,11 @@ namespace Reports {
 			case '$':
 				FieldName = FieldName.Substring(1);
 				ValueType = ValueType.Currency;
+				break;
+
+			case '#':
+				FieldName = FieldName.Substring(1);
+				ValueType = ValueType.UserID;
 				break;
 
 			case '!':
@@ -92,6 +98,7 @@ namespace Reports {
 			case ValueType.Currency:
 				return "C" + nPrecision;
 
+			case ValueType.UserID:
 			case ValueType.ID:
 				return "G" + nPrecision;
 

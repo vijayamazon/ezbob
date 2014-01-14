@@ -100,7 +100,21 @@ namespace Reports {
 							oTr.Append(oTd);
 
 							if (IsNumber(oValue)) {
-								oTd.Add<Class>("R").Append(new Text(NumStr(oValue, col.Format(IsInt(oValue) ? 0 : 2))));
+								ATag oInnerTag = new Text(NumStr(oValue, col.Format(IsInt(oValue) ? 0 : 2)));
+
+								if (col.ValueType == ValueType.UserID) {
+									var oLink = new A();
+									
+									oLink.Append(oInnerTag);
+									oLink.Target.Append("_blank");
+									oLink.Href.Append("https://" + UnderwriterSite + "/UnderWriter/Customers?customerid=" + oValue);
+									oLink.Alt.Append("Open this customer in underwriter.");
+									oLink.Title.Append("Open this customer in underwriter.");
+
+									oInnerTag = oLink;
+								} // if user id
+
+								oTd.Add<Class>("R").Append(oInnerTag);
 
 								if (oColumnTypes != null)
 									oColumnTypes[columnIndex] = "formatted-num";
@@ -452,6 +466,30 @@ namespace Reports {
 		#endregion protected
 
 		#region private
+
+		#region property UnderwriterSite
+
+		private string UnderwriterSite {
+			get {
+				if (string.IsNullOrWhiteSpace(m_sUnderwriterSite)) {
+					DB.ForEachRowSafe(
+						(sr, bRowsetStart) => {
+							m_sUnderwriterSite = sr["Value"];
+							return ActionResult.SkipAll;
+						},
+						"LoadConfigurationVariable",
+						CommandSpecies.StoredProcedure,
+						new QueryParameter("@CfgVarName", "UnderwriterSite")
+					);
+				} // if
+
+				return m_sUnderwriterSite;
+			} // get
+		} // UnderwriterSite
+
+		private string m_sUnderwriterSite;
+
+		#endregion property UnderwriterSite
 
 		#region method GetHeaderAndFields
 

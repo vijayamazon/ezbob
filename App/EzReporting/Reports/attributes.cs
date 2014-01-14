@@ -33,9 +33,11 @@ namespace Html.Attributes {
 		public SortedSet<string> RawValues { get; private set; }
 	} // Style
 
+	public class Alt : AAttribute { protected override string Name { get { return "alt"; } } }
+
 	public class Src : AAttribute { protected override string Name { get { return "src"; } } }
 
-	public class Alt : AAttribute { protected override string Name { get { return "alt"; } } }
+	public class Target : AAttribute { protected override string Name { get { return "target"; } } }
 
 	public class Title : AAttribute { protected override string Name { get { return "title"; } } }
 

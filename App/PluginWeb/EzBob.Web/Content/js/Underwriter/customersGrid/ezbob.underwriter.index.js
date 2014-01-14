@@ -3,9 +3,10 @@
 	var counterTimer;
 
 	function updateCounters() {
-	    var isTestChecked = $('#include-test-customers:checked').length > 0;
-	    var isAllChecked = $('#include-all-customers:visible:checked').length > 0;
-	    var xhr = $.get(window.gRootPath + 'Underwriter/Customers/GetCounters', { isTest: isTestChecked, isAll: isAllChecked });
+		var isTestChecked = $('#include-test-customers:checked').length > 0;
+		var isAllChecked = $('#include-all-customers:visible:checked').length > 0;
+		var xhr = $.get(window.gRootPath + 'Underwriter/Customers/GetCounters', { isTest: isTestChecked, isAll: isAllChecked });
+
 		xhr.done(function(response) {
 			_.each(response, function(val) {
 				$('#' + val.Name + '-count').text(val.Count);
@@ -13,7 +14,7 @@
 		});
 	} // updateCounters
 
-	var underwriterRouter = Backbone.Router.extend({
+	var TUnderwriterRouter = Backbone.Router.extend({
 		initialize: function() {
 			this.views = {
 				grids: {
@@ -91,7 +92,7 @@
 			if (!type)
 				type = docCookies.getItem('uw_grids_last_shown');
 
-			counterTimer = counterTimer || setInterval(updateCounters, 5000);
+			counterTimer = counterTimer || setInterval(updateCounters, 30000);
 
 			this.handleRoute('grids', null, type);
 		}, // customers
@@ -132,9 +133,9 @@
 
 			this.views.profile.view.showed = false;
 		}, // hideAll
-	}); // underwriterRouter
+	}); // TUnderwriterRouter
 
-	var oRouter = new underwriterRouter();
+	var oRouter = new TUnderwriterRouter();
 
 	oRouter.views.grids.view.router = oRouter;
 
@@ -178,8 +179,6 @@
 		}); // on fetch done
 	}); // on rechecked
 
-	// if (window.location.hash != '') { $('a[href="' + window.location.hash + '"]').tab('show'); }
-
 	var recentCustomersModel = new EzBob.Underwriter.RecentCustomersModel();
 
 	recentCustomersModel.fetch().done(function() {
@@ -196,4 +195,9 @@
 			return false;
 		});
 	}); // recent customers model fetch done
+
+	var aryInitialCustomerID = window.location.search.match(/[\?&]customerid=(\d+)/);
+
+	if (aryInitialCustomerID)
+		oRouter.navigate('#profile/' + aryInitialCustomerID[1], { trigger: true });
 })();

@@ -22,8 +22,9 @@ namespace TestApp {
 			ms_oLog = log;
 
 			// Ezbob.Context.Environment env = new Environment(Name.Production, oLog: log);
+			// var oDB = new SqlConnection(env, log);
 
-			var oDB = new SqlConnection(env, log);
+			var oDB = new SqlConnection(log);
 
 			// TestParsedValues(oDB, log);
 
