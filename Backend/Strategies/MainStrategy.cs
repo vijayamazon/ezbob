@@ -157,8 +157,24 @@
 			{
 				if (wasMainStrategyExecutedBefore)
 				{
-					var experianCompanyChecker = new ExperianCompanyCheck(customerId, DB, Log);
-					experianCompanyChecker.Execute();
+					if (companyType == "Entrepreneur")
+					{
+						Log.Info("Skipping experian company check for customer:{0} because he is an entrepreneur", customerId);
+					}
+					else
+					{
+						bool isLimited = companyType == "Limited" || companyType == "LLP";
+						string companyRefNumber = isLimited ? limitedRefNum : nonLimitedRefNum;
+						var experianCompanyChecker = new ExperianCompanyCheck(customerId, isLimited, companyRefNumber, DB, Log);
+						experianCompanyChecker.Execute();
+					}
+				}
+				else
+				{
+					if (!WaitForExperianCompanyCheckToFinishUpdates())
+					{
+						Log.Info("No data exist from experian company check for customer:{0}.", customerId);
+					}
 				}
 
 				GetAddresses();
@@ -656,6 +672,8 @@
 		private int defaultFeedbackValue;
 		private int totalTimeToWaitForMarketplacesUpdate;
 		private int intervalWaitForMarketplacesUpdate;
+		private int totalTimeToWaitForExperianCompanyCheck;
+		private int intervalWaitForExperianCompanyCheck;
 
 		// Loaded from DB per customer
 		private bool customerStatusIsEnabled;
@@ -663,6 +681,8 @@
 		private bool isOffline;
 		private string appEmail;
 		private string companyType;
+		private string limitedRefNum;
+		private string nonLimitedRefNum;
 		private string appFirstName;
 		private string appSurname;
 		private DateTime appDateOfBirth;
@@ -762,6 +782,8 @@
 			defaultFeedbackValue = sr["DefaultFeedbackValue"];
 			totalTimeToWaitForMarketplacesUpdate = sr["TotalTimeToWaitForMarketplacesUpdate"];
 			intervalWaitForMarketplacesUpdate = sr["IntervalWaitForMarketplacesUpdate"];
+			totalTimeToWaitForExperianCompanyCheck = sr["TotalTimeToWaitForExperianCompanyCheck"];
+			intervalWaitForExperianCompanyCheck = sr["IntervalWaitForExperianCompanyCheck"];
 		} // ReadConfigurations
 
 		#endregion method ReadConfigurations
@@ -778,6 +800,8 @@
 			isOffline = results["IsOffline"];
 			appEmail = results["CustomerEmail"];
 			companyType = results["CompanyType"];
+			limitedRefNum = results["LimitedRefNum"];
+			nonLimitedRefNum = results["NonLimitedRefNum"];
 			wasMainStrategyExecutedBefore = results["MainStrategyExecutedBefore"];
 			appFirstName = results["FirstName"];
 			appSurname = results["Surname"];
@@ -1287,6 +1311,44 @@
 		} // WaitForMarketplacesToFinishUpdates
 
 		#endregion method WaitForMarketplacesToFinishUpdates
+
+
+		private bool WaitForExperianCompanyCheckToFinishUpdates()
+		{
+			bool isLimited = companyType == "Limited" || companyType == "LLP";
+			string companyRefNumber = isLimited ? limitedRefNum : nonLimitedRefNum;
+
+
+			DataTable dt = DB.ExecuteReader(
+				"GetIsCompanyDataUpdated",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CompanyRefNumber", companyRefNumber)
+			);
+
+			var sr = new SafeReader(dt.Rows[0]);
+			bool isUpdated = sr["IsUpdated"];
+
+			DateTime startWaitingTime = DateTime.UtcNow;
+
+			while (!isUpdated)
+			{
+				if ((DateTime.UtcNow - startWaitingTime).TotalSeconds > totalTimeToWaitForExperianCompanyCheck)
+					return false;
+
+				Thread.Sleep(intervalWaitForExperianCompanyCheck);
+
+				dt = DB.ExecuteReader(
+					"GetIsCompanyDataUpdated",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("CompanyRefNumber", companyRefNumber)
+				);
+
+				sr = new SafeReader(dt.Rows[0]);
+				isUpdated = sr["IsUpdated"];
+			} // while
+
+			return true;
+		} // WaitForExperianCompanyCheckToFinishUpdates
 
 		#endregion private
 	} // class MainStrategy

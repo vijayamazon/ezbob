@@ -1,14 +1,15 @@
 ﻿namespace EzBob.Backend.Strategies {
-	using System.Data;
 	using ExperianLib.Ebusiness;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
 	public class ExperianCompanyCheck : AStrategy {
-		public ExperianCompanyCheck(int customerId, AConnection oDb, ASafeLog oLog)
+		public ExperianCompanyCheck(int customerId, bool isLimited, string companyRefNumber, AConnection oDb, ASafeLog oLog)
 			: base(oDb, oLog)
 		{
 			this.customerId = customerId;
+			this.isLimited = isLimited;
+			this.companyRefNumber = companyRefNumber;
 		} // constructor
 
 		public override string Name {
@@ -16,25 +17,6 @@
 		} // Name
 
 		public override void Execute()
-		{
-			DataTable dt = DB.ExecuteReader("GetCompanyRefNumbers", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
-			var results = new SafeReader(dt.Rows[0]);
-
-			companyType = results["CompanyType"];
-
-			if (companyType == "Entrepreneur")
-			{
-				Log.Info("Skipping experian company check for customer:{0} because he is an entrepreneur", customerId);
-				return;
-			}
-
-			isLimited = companyType == "Limited" || companyType == "LLP";
-			companyRefNumber = isLimited ? results["LimitedRefNum"] : results["NonLimitedRefNum"];
-
-			UpdateCompanyScore();
-		} // Execute
-		
-		private void UpdateCompanyScore()
 		{
 			string experianError = null;
 			decimal experianBureauScore = 0;
@@ -53,7 +35,7 @@
 				}
 				else
 				{
-					experianData = service.GetNotLimitedBusinessData(companyRefNumber, customerId); 
+					experianData = service.GetNotLimitedBusinessData(companyRefNumber, customerId);
 				}
 
 				if (!experianData.IsError)
@@ -74,11 +56,10 @@
 					new QueryParameter("ExperianScore", experianBureauScore),
 					new QueryParameter("CustomerId", customerId)
 				);
-		}
+		} // Execute
 
 		private readonly int customerId;
-		private bool isLimited;
-		private string companyType;
-		private string companyRefNumber;
+		private readonly bool isLimited;
+		private readonly string companyRefNumber;
 	} // class ExperianCompanyCheck
 } // namespace
