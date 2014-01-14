@@ -442,11 +442,15 @@
 			}
 			else if (oMetaData.DisplayDirection == 'horizontal') {
 				var arySortOrder = OrderFieldsForSorting(aryData[0].Values, oMetaData.Sorting);
+	
+				var nColspan = arySortOrder.length;
+				if (oMetaData.ID === 'DL65')
+					nColspan++;
 
 				%><div class=tab-content><table class="<%- sTableWidthClass %> table">
 				<thead  class="box">
 					<tr class="box-title">
-						<th colspan="<%= arySortOrder.length %>"><%= i %></th>
+						<th colspan="<%- nColspan %>"><%= i %></th>
 					</tr>
 					<tr class="box-title"><%
 						for (var j = 0; j < arySortOrder.length; j++) {
