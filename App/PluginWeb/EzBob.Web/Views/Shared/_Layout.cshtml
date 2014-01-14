@@ -55,7 +55,7 @@
     @{Html.RenderPartial("security_template");}
 </head>
 
-<body auth="@authCookie">
+<body auth="@authCookie" data-offline="@Session["isoffline"]">
     @RenderSection("afterHead", false)
 
     @{

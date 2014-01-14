@@ -11,7 +11,7 @@
     string captchamode = config.CaptchaMode;
     bool ebayPixelEnabled = config.EbayPixelEnabled;
     bool instructionsEnabled = config.WizardInstructionsEnabled;
-    bool isOffline = @Request.Cookies["isoffline"] != null && @Request.Cookies["isoffline"].Value == "yes";
+    bool isOffline = (string)Session["isoffline"] == "yes";
 
     bool twilioEnabled = Convert.ToBoolean(@Session["IsSmsValidationActive"]);
     string captchaVisibilityClass = "";

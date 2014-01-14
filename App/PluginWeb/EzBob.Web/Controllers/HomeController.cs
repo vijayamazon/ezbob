@@ -50,17 +50,10 @@
                 Response.Cookies.Add(cookie);
             }
 
-			Session["isoffline"] = "";
+			Session["isoffline"] = "no";
 
-            if ((offline ?? "").Trim().ToLower().Equals("yes")) {
-                var cookie = new HttpCookie("isoffline", "yes") { Expires = DateTime.Now.AddMonths(3), HttpOnly = false, Secure = true };
-                Response.Cookies.Add(cookie);
+            if ((offline ?? "").Trim().ToLower().Equals("yes"))
 				Session["isoffline"] = "yes";
-            }
-			else {
-                var cookie = new HttpCookie("isoffline", "no") { Expires = DateTime.Now.AddMonths(3), HttpOnly = false, Secure = true };
-                Response.Cookies.Add(cookie);
-            }
 
             return RedirectToActionPermanent("Index", User.Identity.IsAuthenticated ? "Profile" : "Wizard", new {Area = "Customer"});
         }

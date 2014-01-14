@@ -306,7 +306,10 @@ namespace EzBob.Web.Controllers
 			_sessionManager.EndSession(_context.SessionId);
 			_context.SessionId = null;
 			FormsAuthentication.SignOut();
-			Response.Cookies.Add(new HttpCookie("isoffline") { Expires = DateTime.Now.AddYears(-32), HttpOnly = false, Secure = true });
+
+			if (Request.Cookies.AllKeys.Contains("isoffline"))
+				Response.Cookies.Add(new HttpCookie("isoffline") { Expires = DateTime.Now.AddYears(-32), HttpOnly = false, Secure = true });
+
 			return !isUnderwriterPage ? (ActionResult)Redirect(@"http://www.ezbob.com") :
 				RedirectToAction("Index", "Customers", new { Area = "Underwriter" });
 		}
@@ -440,8 +443,7 @@ namespace EzBob.Web.Controllers
 					customer.IsTest = true;
 				}
 
-				if (Request.Cookies["isoffline"] != null)
-					customer.IsOffline = Request.Cookies["isoffline"].Value.Trim().ToLower() == "yes";
+				customer.IsOffline = Session["isoffline"] == "yes";
 
 				_customers.Save(customer);
 
