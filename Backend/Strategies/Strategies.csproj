@@ -75,6 +75,7 @@
     <Compile Include="AutoDecisions\ReApproval.cs" />
     <Compile Include="AutoDecisions\ReRejection.cs" />
     <Compile Include="CaisUpdate.cs" />
+    <Compile Include="ExperianCompanyCheck.cs" />
     <Compile Include="UpdateCurrencyRates.cs" />
     <Compile Include="GetWizardConfigs.cs" />
     <Compile Include="ValidateMobileCode.cs" />

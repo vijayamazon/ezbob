@@ -11,7 +11,6 @@
 	using System.Threading;
 	using EZBob.DatabaseLib.Model.Database;
 	using ExperianLib;
-	using ExperianLib.Ebusiness;
 	using ExperianLib.IdIdentityHub;
 	using EzBobIntegration.Web_References.Consumer;
 	using Ezbob.Database;
@@ -156,7 +155,12 @@
 
 			if (newCreditLineOption != NewCreditLineOption.SkipEverything)
 			{
-				UpdateCompanyScore();
+				if (wasMainStrategyExecutedBefore)
+				{
+					var experianCompanyChecker = new ExperianCompanyCheck(customerId, DB, Log);
+					experianCompanyChecker.Execute();
+				}
+
 				GetAddresses();
 
 				string experianConsumerError;
@@ -659,8 +663,6 @@
 		private bool isOffline;
 		private string appEmail;
 		private string companyType;
-		private string appLimitedRefNum;
-		private string appNonLimitedRefNum;
 		private string appFirstName;
 		private string appSurname;
 		private DateTime appDateOfBirth;
@@ -671,6 +673,7 @@
 		private string appSortCode;
 		private DateTime appRegistrationDate;
 		private string appBankAccountType;
+		private bool wasMainStrategyExecutedBefore;
 
 		// Validated as used
 		private string appLine1;
@@ -775,8 +778,7 @@
 			isOffline = results["IsOffline"];
 			appEmail = results["CustomerEmail"];
 			companyType = results["CompanyType"];
-			appLimitedRefNum = results["LimitedRefNum"];
-			appNonLimitedRefNum = results["NonLimitedRefNum"];
+			wasMainStrategyExecutedBefore = results["MainStrategyExecutedBefore"];
 			appFirstName = results["FirstName"];
 			appSurname = results["Surname"];
 			appGender = results["Gender"];
@@ -864,68 +866,6 @@
 		} // GetAddresses
 
 		#endregion GetAddresses
-
-		#region method UpdateCompanyScore
-
-		private void UpdateCompanyScore()
-		{
-			if (companyType == "Limited" || companyType == "LLP")
-			{
-				string experianLimitedError = null;
-				decimal experianBureauScoreLimited = 0;
-
-				if (string.IsNullOrEmpty(appLimitedRefNum))
-					experianLimitedError = "RefNumber is empty";
-				else
-				{
-					var service = new EBusinessService();
-					LimitedResults limitedData = service.GetLimitedBusinessData(appLimitedRefNum, customerId);
-
-					if (!limitedData.IsError)
-						experianBureauScoreLimited = limitedData.BureauScore;
-					else
-						experianLimitedError = limitedData.Error;
-				} // if
-
-				DB.ExecuteNonQuery(
-					"UpdateExperianBusiness",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("CompanyRefNumber", appLimitedRefNum),
-					new QueryParameter("ExperianError", experianLimitedError),
-					new QueryParameter("ExperianScore", experianBureauScoreLimited),
-					new QueryParameter("CustomerId", customerId)
-				);
-			}
-			else if (companyType == "PShip3P" || companyType == "PShip" || companyType == "SoleTrader")
-			{
-				string experianNonLimitedError = null;
-				decimal experianBureauScoreNonLimited = 0;
-
-				if (string.IsNullOrEmpty(appNonLimitedRefNum))
-					experianNonLimitedError = "RefNumber is empty";
-				else
-				{
-					var service = new EBusinessService();
-					var nonlimitedData = service.GetNotLimitedBusinessData(appNonLimitedRefNum, customerId);
-
-					if (!nonlimitedData.IsError)
-						experianBureauScoreNonLimited = nonlimitedData.BureauScore;
-					else
-						experianNonLimitedError = nonlimitedData.Error;
-				} // if
-
-				DB.ExecuteNonQuery(
-					"UpdateExperianBusiness",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("CompanyRefNumber", appNonLimitedRefNum),
-					new QueryParameter("ExperianError", experianNonLimitedError),
-					new QueryParameter("ExperianScore", experianBureauScoreNonLimited),
-					new QueryParameter("CustomerId", customerId)
-				);
-			} // if
-		} // UpdateCompanyScore
-
-		#endregion method UpdateCompanyScore
 
 		#region method SendRejectionExplanationMail
 
