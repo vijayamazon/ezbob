@@ -28,6 +28,7 @@ namespace EzBob.Web.Controllers
 	using Scorto.Security.UserManagement.Sessions;
 	using Scorto.Web;
 	using log4net;
+	using CompanyInfo = ExperianLib.Ebusiness.CompanyInfo;
 
 	public class AccountController : Controller
 	{

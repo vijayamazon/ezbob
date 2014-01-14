@@ -43,26 +43,8 @@
 			_yodleeSearchWords.Add(string.Format("{0}{1}", CustomerSurname, customer.PersonalInfo.Surname));
 
 			//Add directors surnames
-			var directors = new List<string>();
-			switch (customer.PersonalInfo.TypeOfBusiness.Reduce())
-			{
-				case TypeOfBusinessReduced.Limited:
-					if (customer.LimitedInfo != null && customer.LimitedInfo.Directors.Any())
-					{
-						directors = customer.LimitedInfo.Directors.Select(d => d.Surname).ToList();
-					}
-					break;
-				case TypeOfBusinessReduced.NonLimited:
-					if (customer.NonLimitedInfo != null && customer.NonLimitedInfo.Directors.Any())
-					{
-						directors = customer.NonLimitedInfo.Directors.Select(d => d.Surname).ToList();
-					}
-					break;
-				case TypeOfBusinessReduced.Personal:
-				default:
-					break;
-			}
-
+			var directors = customer.Companies.SelectMany(x => x.Directors).Select(d => d.Surname).ToList();
+			
 			foreach (var director in directors)
 			{
 				_yodleeSearchWords.Add(string.Format("{0}{1}", DirectorSurname, director));

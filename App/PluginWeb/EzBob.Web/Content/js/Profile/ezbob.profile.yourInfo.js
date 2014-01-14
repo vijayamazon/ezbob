@@ -37,13 +37,13 @@
 
     YourInfoMainView.prototype.setInputReadOnly = function(isReadOnly) {
       this.$el.find('.personEditInput').attr('readonly', isReadOnly).attr('modifed', !isReadOnly);
-      this.$el.find('.addAddressInput').attr('modifed', !isReadOnly);
+      this.$el.find('#PersonalAddress .addAddressInput').attr('modifed', !isReadOnly);
       if (isReadOnly) {
-        this.$el.find('.submit-personal, .cancel, .addAddressInput, .addAddress, .removeAddress, .attardi-input, .required').hide();
+        this.$el.find('.submit-personal, .cancel, .addAddressInput,#PersonalAddress .addAddress, .removeAddress, .attardi-input, .required').hide();
         this.$el.find('textarea').removeClass('form_field').css('margin-top', 0);
         return this.$el.find('.edit-personal').show();
       } else {
-        this.$el.find('.submit-personal, .cancel, .removeAddress').show();
+        this.$el.find('.submit-personal, .cancel,#PersonalAddress .removeAddress').show();
         return this.$el.find('.edit-personal').hide();
       }
     };
@@ -60,12 +60,12 @@
       }
       typeOfBusinessName = this.model.get('BusinessTypeReduced');
       if (typeOfBusinessName === 'Limited') {
-        address = this.model.get('LimitedCompanyAddress');
+        address = this.model.get('CompanyAddress');
         if (address.length < 1) {
           return false;
         }
       } else if (typeOfBusinessName === 'NonLimited') {
-        address = this.model.get('NonLimitedCompanyAddress');
+        address = this.model.get('CompanyAddress');
         if (address.length < 1) {
           return false;
         }
@@ -99,9 +99,9 @@
       this.setInvalidAddressLabel(this.model.get('PersonalAddress'), '#PersonalAddress');
       typeOfBusinessName = this.model.get('BusinessTypeReduced');
       if (typeOfBusinessName === 'Limited') {
-        this.setInvalidAddressLabel(this.model.get('LimitedCompanyAddress'), '#LimitedCompanyAddress');
+        this.setInvalidAddressLabel(this.model.get('CompanyAddress'), '#LimitedCompanyAddress');
       } else if (typeOfBusinessName === 'NonLimited') {
-        this.setInvalidAddressLabel(this.model.get('NonLimitedCompanyAddress'), '#NonLimitedAddress');
+        this.setInvalidAddressLabel(this.model.get('CompanyAddress'), '#NonLimitedAddress');
       }
       self = this;
       if (this.model.get(typeOfBusinessName + 'Info')) {
@@ -198,7 +198,7 @@
       view = new EzBob.Profile.NonLimitedInfoView({
         model: this.model
       });
-      this.model.get('NonLimitedCompanyAddress').on('all', this.addressModelChange, this);
+      this.model.get('CompanyAddress').on('all', this.addressModelChange, this);
       return this.company.show(view);
     };
 
@@ -207,7 +207,7 @@
       view = new EzBob.Profile.LimitedInfoView({
         model: this.model
       });
-      this.model.get('LimitedCompanyAddress').on('all', this.addressModelChange, this);
+      this.model.get('CompanyAddress').on('all', this.addressModelChange, this);
       return this.company.show(view);
     };
 
@@ -232,8 +232,7 @@
 
     PersonalInfoView.prototype.onRender = function() {
       var address, otherAddress;
-      console.log('@personAddress is', this.personAddress);
-      console.log('@personAddress.$el is', this.personAddress.getEl(this.personAddress.el));
+      console.log('model', this.model);
       address = new EzBob.AddressView({
         model: this.model.get('PersonalAddress'),
         name: 'PersonalAddress',
@@ -279,14 +278,14 @@
     NonLimitedInfoView.prototype.onRender = function() {
       var address, directorView, directors;
       address = new EzBob.AddressView({
-        model: this.model.get('NonLimitedCompanyAddress'),
+        model: this.model.get('CompanyAddress'),
         name: 'NonLimitedCompanyAddress',
         max: 10,
         isShowClear: true,
         uiEventControlIdPrefix: this.nonlimitedAddress.getEl(this.nonlimitedAddress.el).attr('data-ui-event-control-id-prefix')
       });
       this.nonlimitedAddress.show(address);
-      directors = this.model.get('NonLimitedInfo').Directors;
+      directors = this.model.get('CompanyInfo').Directors;
       if (directors !== null && directors.length !== 0) {
         directorView = new EzBob.Profile.DirectorCompositeView({
           collection: new EzBob.Directors(directors)
@@ -322,15 +321,17 @@
 
     LimitedInfoView.prototype.onRender = function() {
       var address, directorView, directors;
+      console.log('comapny', this.model.get('CompanyAddress'));
+      console.log('personal', this.model.get('PersonalAddress'));
       address = new EzBob.AddressView({
-        model: this.model.get('LimitedCompanyAddress'),
+        model: this.model.get('CompanyAddress'),
         name: 'LimitedCompanyAddress',
         max: 10,
         isShowClear: true,
         uiEventControlIdPrefix: this.limitedAddress.getEl(this.limitedAddress.el).attr('data-ui-event-control-id-prefix')
       });
       this.limitedAddress.show(address);
-      directors = this.model.get('LimitedInfo').Directors;
+      directors = this.model.get('CompanyInfo').Directors;
       if (directors !== null && directors.length !== 0) {
         directorView = new EzBob.Profile.DirectorCompositeView({
           collection: new EzBob.Directors(directors)

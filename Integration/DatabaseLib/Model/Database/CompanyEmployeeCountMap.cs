@@ -9,6 +9,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 
 			Id(x => x.Id).GeneratedBy.Native();
 			References(x => x.Customer, "CustomerId");
+			References(x => x.Company, "CompanyId");
 			Map(x => x.Created).CustomType<UtcDateTimeType>();
 			Map(x => x.EmployeeCount);
 			Map(x => x.TopEarningEmployeeCount);

@@ -59,7 +59,7 @@ EzBob.companyTargets = Backbone.View.extend({
 
         $.each(this.jsonModel, function (i, val) {
             that.targetsList.append($('<li></li>')
-                    .attr("data", val.BusRefNum)
+                    .attr("data", i)
                     .html(
                             val.BusName + ", " + val.BusRefNum +
                             (val.PostCode  ? (", " + val.PostCode)  : "") +
@@ -86,19 +86,15 @@ EzBob.companyTargets = Backbone.View.extend({
     btnOkClick: function () {
         //if (this.$el.find('.btnTargetOk').hasClass('disabled')) return false;
         
-        if (this.targetsList.attr('data') == null || this.targetsList.attr('data') == 0) {
+        if (this.targetsList.attr('data') == null) {
             this.targetsList.css("border", "1px solid red");
         } else {
-            if (this.targetsList.attr('data') == 'skip') {
-                this.trigger("BusRefNumGetted", "NotFound");
-            } else {
-                this.trigger("BusRefNumGetted", this.targetsList.attr('data'));
-            }
+            this.trigger("BusRefNumGetted", this.jsonModel[this.targetsList.attr('data')]);
             this.btnCancelClick();
         }
     },
     btnNotFoundClick: function () {
-        this.trigger("BusRefNumGetted", "NotFound");
+        this.trigger("BusRefNumGetted", null);
         this.btnCancelClick();
     },
     btnCancelClick: function () {

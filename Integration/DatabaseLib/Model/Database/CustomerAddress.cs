@@ -12,6 +12,8 @@ namespace EZBob.DatabaseLib.Model.Database
 		public virtual Customer Customer { get; set; }
 		[Newtonsoft.Json.JsonIgnore]
 		public virtual Director Director { get; set; }
+		[Newtonsoft.Json.JsonIgnore]
+		public virtual Company Company { get; set; }
 
 		public virtual int AddressId { get; set; }
 		public virtual CustomerAddressType AddressType { get; set; }
@@ -100,6 +102,7 @@ namespace EZBob.DatabaseLib.Model.Database.Mappings
 			Map(x => x.Udprn).Column("Udprn").Length(200);
 			References(x => x.Director, "DirectorId");
 			References(x => x.Customer, "CustomerId");
+			References(x => x.Company, "CompanyId");
 
 			HasMany<Zoopla>(x => x.Zoopla)
 				.AsSet()

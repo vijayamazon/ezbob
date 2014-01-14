@@ -50,7 +50,7 @@ namespace FraudChecker
 				InternalFirstMiddleLastNameCheck(customer, customerPortion, fraudDetections, true);
 				InternalLastNameDobCheck(fraudDetections, customerPortion, customer);
 				InternalPhoneCheck(fraudDetections, customerPortion, customer);
-				InternalPhoneFromMpCheck(fraudDetections,customerPortion, customer);
+				InternalPhoneFromMpCheck(fraudDetections, customerPortion, customer);
 				InternalCompanyNameCheck(customer, fraudDetections, customerPortion);
 				InternalBankAccountCheck(fraudDetections, customerPortion, customer);
 				InternalIpCheck(fraudDetections, customerPortion, customer);
@@ -96,7 +96,7 @@ namespace FraudChecker
 		}
 
 
-		private void InternalPhoneFromMpCheck(ICollection<FraudDetection> fraudDetections,IEnumerable<Customer> customerPortion, Customer customer)
+		private void InternalPhoneFromMpCheck(ICollection<FraudDetection> fraudDetections, IEnumerable<Customer> customerPortion, Customer customer)
 		{
 			//check from customer marketplaces info
 			var customerPhones = new Dictionary<string, string>();
@@ -113,7 +113,7 @@ namespace FraudChecker
 							{
 								customerPhones.Add("Ebay phone" + ebayUserData.Id, ebayUserData.RegistrationAddress.Phone.Replace(" ", ""));
 							}
-								
+
 							if (ebayUserData.RegistrationAddress != null && !string.IsNullOrEmpty(ebayUserData.RegistrationAddress.Phone2))
 							{
 								customerPhones.Add("Ebay phone 2" + ebayUserData.Id, ebayUserData.RegistrationAddress.Phone2.Replace(" ", ""));
@@ -133,13 +133,13 @@ namespace FraudChecker
 			var mpPhoneDetections = new Dictionary<Customer, List<MpPhone>>();
 			foreach (var cd in customerPortion)
 			{
-				if(cd == customer) continue;
+				if (cd == customer) continue;
 				foreach (var mp in cd.CustomerMarketPlaces)
 				{
 					if (mp.PersonalInfo != null && !string.IsNullOrEmpty(mp.PersonalInfo.Phone) && mp.PersonalInfo.Phone.Trim() != "0")
 					{
 						Helper.AddValue(mpPhoneDetections, cd, "Pay Pal", mp.PersonalInfo.Phone.Replace(" ", ""));
-						
+
 					}
 
 					if (mp.EbayUserData != null)
@@ -160,7 +160,7 @@ namespace FraudChecker
 							}
 						}
 					}
-					
+
 				}
 			}
 
@@ -178,7 +178,7 @@ namespace FraudChecker
 							fraudDetections.Add(Helper.CreateDetection(mpPhone.MpType, customer, cd,
 																	   Regex.Replace(customerPhone.Key, @"[\d]", string.Empty), null, phone));
 						}
-					}	
+					}
 				}
 			}
 		}
@@ -192,6 +192,7 @@ namespace FraudChecker
 			//check from customer info
 			foreach (var cd in customerPortion)
 			{
+				var company = cd.Companies.FirstOrDefault();
 				foreach (var customerPhone in customerPhones)
 				{
 					if (cd.PersonalInfo == null) continue;
@@ -207,20 +208,22 @@ namespace FraudChecker
 						fraudDetections.Add(Helper.CreateDetection("Customer MobilePhone", customer, cd, customerPhone.Key,
 															null, phone));
 					}
-					switch (cd.PersonalInfo.TypeOfBusiness.Reduce())
+
+					if (company == null) continue;
+					switch (company.TypeOfBusiness.Reduce())
 					{
 						case TypeOfBusinessReduced.Limited:
-							if (cd.LimitedInfo.LimitedBusinessPhone == phone)
+							if (company.BusinessPhone == phone)
 							{
 								fraudDetections.Add(Helper.CreateDetection("Customer LimitedBusinessPhone", customer, cd,
-																	customerPhone.Key, null, phone));
+																		   customerPhone.Key, null, phone));
 							}
 							break;
 						case TypeOfBusinessReduced.NonLimited:
-							if (cd.NonLimitedInfo.NonLimitedBusinessPhone == phone)
+							if (company.BusinessPhone == phone)
 							{
 								fraudDetections.Add(Helper.CreateDetection("Customer NonLimitedBusinessPhone", customer, cd,
-																	customerPhone.Key, null, phone));
+																		   customerPhone.Key, null, phone));
 							}
 							break;
 					}
@@ -284,19 +287,19 @@ namespace FraudChecker
 		private void InternalYodleeMpCheck(IEnumerable<MP_CustomerMarketPlace> customerYodlees, Customer customer, List<FraudDetection> fraudDetections)
 		{
 			var yodlees = _session.Query<MP_YodleeOrderItem>()
-			                      .Where(
-				                      i =>
-				                      i.Order.CustomerMarketPlace.Customer != customer &&
-				                      i.Order.CustomerMarketPlace.Customer.IsTest == false)
-			                      .Select(i => new
-				                      {
-					                      Name = i.accountName,
-					                      Number = i.accountNumber,
-					                      CustomerId = i.Order.CustomerMarketPlace.Customer.Id
-				                      })
-			                      .ToList()
-			                      .Distinct();
-			                      
+								  .Where(
+									  i =>
+									  i.Order.CustomerMarketPlace.Customer != customer &&
+									  i.Order.CustomerMarketPlace.Customer.IsTest == false)
+								  .Select(i => new
+									  {
+										  Name = i.accountName,
+										  Number = i.accountNumber,
+										  CustomerId = i.Order.CustomerMarketPlace.Customer.Id
+									  })
+								  .ToList()
+								  .Distinct();
+
 
 			var customerYodleesItems =
 				customerYodlees.SelectMany(y => y.YodleeOrders)
@@ -318,7 +321,7 @@ namespace FraudChecker
 					from cm in customerYodleesItems
 					where m.Name == cm.Name && m.Number == cm.Number
 					select
-						Helper.CreateDetection("Customer Bank Account Name And Number", customer,_session.Query<Customer>().FirstOrDefault(c => c.Id == m.CustomerId), "Customer Bank Account Name And Number",
+						Helper.CreateDetection("Customer Bank Account Name And Number", customer, _session.Query<Customer>().FirstOrDefault(c => c.Id == m.CustomerId), "Customer Bank Account Name And Number",
 										null, string.Format("{0}: {1}", m.Name, m.Number)));
 			}
 		}
@@ -405,23 +408,22 @@ namespace FraudChecker
 													 IEnumerable<Customer> customerPortion)
 		{
 			//Name of company
-			var typeOfBussiness = customer.PersonalInfo.TypeOfBusiness.Reduce();
-			var companyName = typeOfBussiness == TypeOfBusinessReduced.NonLimited
-								  ? customer.NonLimitedInfo.NonLimitedCompanyName
-								  : customer.LimitedInfo.LimitedCompanyName;
-			if (string.IsNullOrEmpty(companyName)) return;
-			fraudDetections.AddRange(
-				from c in customerPortion
-				where c.WizardStep.TheLastOne && c.PersonalInfo != null
-				where
-					((c.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited
-						  ? c.LimitedInfo.LimitedCompanyName
-						  : c.NonLimitedInfo.NonLimitedCompanyName) ?? "").ToLower() == companyName.ToLower()
-				select
-					Helper.CreateDetection("Customer CompanyName", customer, c,
-									"Customer CompanyName",
-									null,
-									string.Format("{0}", companyName)));
+			var company = customer.Companies.FirstOrDefault();
+			if (company != null)
+			{
+				var companyName = company.CompanyName;
+				if (string.IsNullOrEmpty(companyName)) return;
+				fraudDetections.AddRange(
+					from c in customerPortion
+					where c.WizardStep.TheLastOne && c.Companies.Any()
+					where
+						(c.Companies.First().CompanyName ?? "").ToLower() == companyName.ToLower()
+					select
+						Helper.CreateDetection("Customer CompanyName", customer, c,
+						                       "Customer CompanyName",
+						                       null,
+						                       string.Format("{0}", companyName)));
+			}
 		}
 
 		private static void InternalLastNameDobCheck(List<FraudDetection> fraudDetections,

@@ -29,11 +29,10 @@ EzBob.CustomerModel = Backbone.Model.extend({
         this.set('PersonalAddress', new EzBob.AddressModels(this.get('PersonalAddress')));
         this.set('PrevPersonAddresses', new EzBob.AddressModels(this.get('PrevPersonAddresses')));
         this.set('OtherPropertyAddress', new EzBob.AddressModels(this.get('OtherPropertyAddress')));
-        this.set('LimitedCompanyAddress', new EzBob.AddressModels(this.get('LimitedAddress')));
-        this.set('NonLimitedCompanyAddress', new EzBob.AddressModels(this.get('NonLimitedAddress')));
+        this.set('CompanyAddress', new EzBob.AddressModels(this.get('CompanyAddress')));
 
-        this.set('LimitedDirectors', new EzBob.Directors(this.get('LimitedDirectors')));
-        this.set('NonLimitedDirectors', new EzBob.Directors(this.get('NonLimitedDirectors')));
+        //this.set('LimitedDirectors', new EzBob.Directors(this.get('LimitedDirectors')));
+        //this.set('NonLimitedDirectors', new EzBob.Directors(this.get('NonLimitedDirectors')));
 
         this.set('hasLateLoans', this.hasLateLoans());
         this.set('hasLoans', this.get('Loans').length > 0);

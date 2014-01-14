@@ -138,14 +138,14 @@
             <label class="control-label">
                 Registration #</label>
             <div class="controls">
-                <input type="text" value="<%-LimitedInfo.LimitedCompanyNumber%>" readonly="readonly" class="form_field"/>
+                <input type="text" value="<%-CompanyInfo.CompanyNumber%>" readonly="readonly" class="form_field"/>
             </div>
         </div>
         <div class="control-group">
             <label class="control-label">
                 Company Name</label>
             <div class="controls">
-                <input type="text" value="<%-LimitedInfo.LimitedCompanyName%>" readonly="readonly" class="form_field"/>
+                <input type="text" value="<%-CompanyInfo.CompanyName%>" readonly="readonly" class="form_field"/>
             </div>
         </div>
         <div class="controls">
@@ -153,12 +153,12 @@
                     @EzForm.AddressInput("LimitedCompanyAddress", "Address", "limited")
                 </div>
         </div>    
-        <%if(LimitedInfo.LimitedBusinessPhone != null){%>
+        <%if(CompanyInfo.BusinessPhone != null){%>
         <div class="control-group">
             <label class="control-label">
                 Business phone #</label>
             <div class="controls">
-                <input class ="personEditInput phonenumber form_field" id="BusinessPhone" name="BusinessPhone" type="text" value="<%-LimitedInfo.LimitedBusinessPhone%>" readonly="readonly"  />
+                <input class ="personEditInput phonenumber form_field" id="BusinessPhone" name="BusinessPhone" type="text" value="<%-CompanyInfo.BusinessPhone%>" readonly="readonly"  />
             </div>
         </div>
         <%}%>
@@ -178,7 +178,7 @@
             <label class="control-label">
                 Company Name</label>
             <div class="controls">
-                <input type="text" value="<%-NonLimitedInfo.NonLimitedCompanyName%>" class="form_field" readonly="readonly" />
+                <input type="text" value="<%-CompanyInfo.CompanyInfoCompanyName%>" class="form_field" readonly="readonly" />
             </div>
         </div>
         <div class="controls">
@@ -190,22 +190,22 @@
             <label class="control-label">
                 Time at address</label>
             <div class="controls">
-                <input type="text" value="<%-NonLimitedInfo.NonLimitedTimeAtAddress%> years" class="form_field" readonly="readonly" />
+                <input type="text" value="<%-CompanyInfo.TimeAtAddress%> years" class="form_field" readonly="readonly" />
             </div>
         </div>
         <div class="control-group">
             <label class="control-label">
                 Time in business</label>
             <div class="controls">
-                <input type="text" value="<%-NonLimitedInfo.NonLimitedTimeInBusiness%>  years" class="form_field" readonly="readonly" />
+                <input type="text" value="<%-CompanyInfo.TimeInBusiness%>  years" class="form_field" readonly="readonly" />
             </div>
         </div>
-        <%if(NonLimitedInfo.NonLimitedBusinessPhone != null){%>
+        <%if(CompanyInfo.BusinessPhone != null){%>
         <div class="control-group">
             <label class="control-label">
                 Business phone #</label>
             <div class="controls">
-                <input class ="personEditInput phonenumber form_field" name="BusinessPhone" type="text" value="<%-NonLimitedInfo.NonLimitedBusinessPhone%>" readonly="readonly"  />
+                <input class ="personEditInput phonenumber form_field" name="BusinessPhone" type="text" value="<%-CompanyInfo.BusinessPhone%>" readonly="readonly"  />
             </div>
         </div>
         <%}%>

@@ -89,20 +89,30 @@
 		[Ajax]
 		[Transactional]
 		[HttpPost]
-		public void SaveRefNum(int customerId, string companyRefNum)
+		public void SaveTargetingData(int customerId, string companyRefNum, string companyName, string addr1, string addr2, string addr3, string addr4, string postcode)
 		{
 			var customer = _customerRepository.Get(customerId);
-
-			switch (customer.PersonalInfo.TypeOfBusiness.Reduce())
+			var company = customer.Companies.FirstOrDefault();
+			if (company != null)
 			{
-				case TypeOfBusinessReduced.NonLimited:
-					customer.NonLimitedInfo.NonLimitedRefNum = companyRefNum;
-					break;
-				case TypeOfBusinessReduced.Limited:
-					customer.LimitedInfo.LimitedRefNum = companyRefNum;
-					break;
+				company.ExperianRefNum = companyRefNum;
+				company.ExperianCompanyName = companyName;
+				if (!string.IsNullOrEmpty(postcode))
+				{
+					company.ExperianCompanyAddress.Add(new CustomerAddress
+						{
+							AddressType = CustomerAddressType.ExperianCompanyAddress,
+							Company = company,
+							Customer = customer,
+							Line1 = addr1,
+							Line2 = addr2,
+							Line3 = addr3,
+							Town = addr4,
+							Postcode = postcode,
+						});
+				}
 			}
-
+			
 			_customerRepository.Update(customer);
 		}
 	}

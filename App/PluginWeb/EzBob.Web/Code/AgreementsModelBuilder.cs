@@ -39,26 +39,17 @@ namespace EzBob.Web.Code.Agreements
 			var now = DateTime.UtcNow;
 
 			if (customer.LastCashRequest == null && loan == null) throw new ArgumentException("LastCashRequest or Loan is required");
-
-			var cashRequest = loan.CashRequest;
-
-			var useSetupFee = cashRequest.UseSetupFee;
-			var useBrokerSetupFee = cashRequest.UseBrokerSetupFee;
-
-			var feeCalculator = new SetupFeeCalculator(useSetupFee, useBrokerSetupFee);
-			var fee = feeCalculator.Calculate(amount);
-
-
-			var apr = _aprCalc.Calculate(amount, loan.Schedule, fee, loan.Date);
-			return GenerateAgreementModel(customer, loan, fee, now, apr);
+			
+			var apr = _aprCalc.Calculate(amount, loan.Schedule, loan.SetupFee, loan.Date);
+			return GenerateAgreementModel(customer, loan, now, apr);
 		}
 
 		public virtual AgreementModel ReBuild(Customer customer, Loan loan)
 		{
-			return GenerateAgreementModel(customer, loan, loan.SetupFee, loan.Date, (double)loan.APR);
+			return GenerateAgreementModel(customer, loan, loan.Date, (double)loan.APR);
 		}
 
-		private AgreementModel GenerateAgreementModel(Customer customer, Loan loan, decimal fee, DateTime now, double apr)
+		private AgreementModel GenerateAgreementModel(Customer customer, Loan loan, DateTime now, double apr)
 		{
 			var model = new AgreementModel();
 
@@ -67,17 +58,17 @@ namespace EzBob.Web.Code.Agreements
 			model.TypeOfBusinessName = model.Customer.CustomerPersonalInfo.TypeOfBusinessName;
 
 			var businessType = model.Customer.CustomerPersonalInfo.TypeOfBusiness;
-
-			if (businessType.Reduce() == TypeOfBusinessReduced.Limited)
+			var company = customer.Companies.FirstOrDefault();
+			if (businessType.Reduce() != TypeOfBusinessReduced.Limited && company != null)
 			{
-				model.CompanyName = model.Customer.LimitedInfo.LimitedCompanyName;
-				model.CompanyNumber = model.Customer.LimitedInfo.LimitedCompanyNumber;
-				model.Address = model.Customer.LimitedAddress.FirstOrDefault();
+				model.CompanyName = company.ExperianCompanyName ?? company.CompanyName;
+				model.CompanyNumber = company.ExperianRefNum ?? company.CompanyNumber;
+				model.Address = company.ExperianCompanyAddress.LastOrDefault() ?? company.CompanyAddress.LastOrDefault();
 			}
-			else if (businessType.Reduce() == TypeOfBusinessReduced.NonLimited)
+			else if (businessType.Reduce() == TypeOfBusinessReduced.NonLimited && company != null)
 			{
-				model.CompanyName = model.Customer.NonLimitedInfo.NonLimitedCompanyName;
-				model.Address = model.Customer.NonLimitedAddress.FirstOrDefault();
+				model.CompanyName = company.ExperianCompanyName ?? company.CompanyName;
+				model.Address = company.ExperianCompanyAddress.LastOrDefault() ?? company.CompanyAddress.LastOrDefault();
 			}
 
 			model.CustomerAddress = model.Customer.PersonalAddress.FirstOrDefault();
@@ -85,12 +76,12 @@ namespace EzBob.Web.Code.Agreements
 			model.CompanyAdress = model.Address.GetFormatted();
 			model.PersonAddress = model.CustomerAddress.GetFormatted();
 
-			CalculateTotal(fee, loan.Schedule.ToList(), model);
+			CalculateTotal(loan.SetupFee, loan.Schedule.ToList(), model);
 
 			model.CurentDate = FormattingUtils.FormatDateTimeToString(now);
 			model.CurrentDate = now;
 
-			model.FormattedSchedules = CreateSchedule(loan.LoanAmount, loan.Schedule.ToList(), loan.Date, loan.SetupFee);
+			model.FormattedSchedules = CreateSchedule(loan.Schedule.ToList());
 
 			model.InterestRate = loan.InterestRate * 100;
 			model.SetupFee = FormattingUtils.NumericFormats(loan.SetupFee);
@@ -126,7 +117,7 @@ namespace EzBob.Web.Code.Agreements
 			return model;
 		}
 
-		private IList<FormattedSchedule> CreateSchedule(decimal loanAmount, List<LoanScheduleItem> schedule, DateTime loanDate, decimal setupFee)
+		private IList<FormattedSchedule> CreateSchedule(IEnumerable<LoanScheduleItem> schedule)
 		{
 			return schedule.Select((installment, i) => new FormattedSchedule
 			{
@@ -138,7 +129,6 @@ namespace EzBob.Web.Code.Agreements
 				StringNumber = FormattingUtils.ConvertingNumberToWords(i + 1),
 				InterestRate = string.Format("{0:0.0}", installment.InterestRate * 100),
 				Iterration = i + 1,
-				//AprMonthRate = string.Format("{0:0.0}", _aprCalc.CalculateMonthly(loanAmount, schedule, i, setupFee, loanDate))
 			}).ToList();
 		}
 

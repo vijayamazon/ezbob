@@ -14,61 +14,61 @@
 	using log4net;
 
 	public class ProfileSummaryModelBuilder
-    {
-        private readonly IDecisionHistoryRepository _decisions;
-        private readonly MarketPlacesFacade _mpFacade;
+	{
+		private readonly IDecisionHistoryRepository _decisions;
+		private readonly MarketPlacesFacade _mpFacade;
 
-        public ProfileSummaryModelBuilder(IDecisionHistoryRepository decisions, MarketPlacesFacade mpFacade)
-        {
-            _decisions = decisions;
-            _mpFacade = mpFacade;
-        }
+		public ProfileSummaryModelBuilder(IDecisionHistoryRepository decisions, MarketPlacesFacade mpFacade)
+		{
+			_decisions = decisions;
+			_mpFacade = mpFacade;
+		}
 
 
-        private static readonly ILog Log = LogManager.GetLogger(typeof(ProfileSummaryModelBuilder));
+		private static readonly ILog Log = LogManager.GetLogger(typeof(ProfileSummaryModelBuilder));
 
-        public ProfileSummaryModel CreateProfile(Customer customer)
-        {
-            var summary = new ProfileSummaryModel {Id = customer.Id, IsOffline = customer.IsOffline};
-            BuildMarketplaces(customer, summary);
-            BuildCreditBureau(customer, summary);
-            BuildPaymentAccounts(customer, summary);
-            AddDecisionHistory(summary, customer);
+		public ProfileSummaryModel CreateProfile(Customer customer)
+		{
+			var summary = new ProfileSummaryModel { Id = customer.Id, IsOffline = customer.IsOffline };
+			BuildMarketplaces(customer, summary);
+			BuildCreditBureau(customer, summary);
+			BuildPaymentAccounts(customer, summary);
+			AddDecisionHistory(summary, customer);
 
-	        if (summary.IsOffline)
-	        {
-		        BuildRequestedLoan(summary, customer);
-	        }
-	        
+			if (summary.IsOffline)
+			{
+				BuildRequestedLoan(summary, customer);
+			}
+
 			summary.AffordabilityAnalysis =
-                    new AffordabilityAnalysis
-                    {
-                        CashAvailabilityOrDeficits = "Not implemented now",
-                        EzBobMonthlyRepayment = Money(GetRepaymentAmount(customer))
-                    };
-            summary.LoanActivity = CreateLoanActivity(customer);
-            summary.AmlBwa =
-                new AmlBwa
-                {
-                    Aml = customer.AMLResult,
-                    Bwa = customer.BWAResult,
-                    Lighter = new Lighter(ObtainAmlState(customer))
-                };
-            summary.FraudCheck = new FraudCheck
-                {
-                    Status = customer.Fraud.ToString(),
-                    
-                };
-            summary.OverallTurnOver = customer.PersonalInfo.OverallTurnOver;
-            summary.WebSiteTurnOver = customer.PersonalInfo.WebSiteTurnOver;
-            summary.Comment = customer.Comment;
+					new AffordabilityAnalysis
+					{
+						CashAvailabilityOrDeficits = "Not implemented now",
+						EzBobMonthlyRepayment = Money(GetRepaymentAmount(customer))
+					};
+			summary.LoanActivity = CreateLoanActivity(customer);
+			summary.AmlBwa =
+				new AmlBwa
+				{
+					Aml = customer.AMLResult,
+					Bwa = customer.BWAResult,
+					Lighter = new Lighter(ObtainAmlState(customer))
+				};
+			summary.FraudCheck = new FraudCheck
+				{
+					Status = customer.Fraud.ToString(),
 
-			summary.CompanyEmployeeCountInfo = new CompanyEmployeeCountInfo(customer);
-			summary.CompanyAdditionalInfo = customer.CompanyAdditionalInfo ?? new CompanyAdditionalInfo();
+				};
+			summary.OverallTurnOver = customer.PersonalInfo.OverallTurnOver;
+			summary.WebSiteTurnOver = customer.PersonalInfo.WebSiteTurnOver;
+			summary.Comment = customer.Comment;
+
+			summary.CompanyEmployeeCountInfo = new CompanyEmployeeCountInfo(customer.Companies.FirstOrDefault());
+			summary.CompanyInfo = CompanyInfoMap.FromCompany(customer.Companies.FirstOrDefault());
 			summary.IsOffline = customer.IsOffline;
 
-            return summary;
-        }
+			return summary;
+		}
 
 		private static void BuildRequestedLoan(ProfileSummaryModel summary, Customer customer)
 		{
@@ -85,182 +85,183 @@
 			}
 			summary.RequestedLoan = rl;
 		}
-        private static void BuildCreditBureau(Customer customer, ProfileSummaryModel summary)
-        {
-            var creditBureau = new CreditBureau();
-            var consumerSrv = new ConsumerService();
+		private static void BuildCreditBureau(Customer customer, ProfileSummaryModel summary)
+		{
+			var creditBureau = new CreditBureau();
+			var consumerSrv = new ConsumerService();
 
-            try
-            {
-                var loc = new EzBobIntegration.Web_References.Consumer.InputLocationDetailsMultiLineLocation();
-                if (customer.AddressInfo.PersonalAddress.Any())
-                {
-                    var customerMainAddress = customer.AddressInfo.PersonalAddress.First();
+			try
+			{
+				var loc = new EzBobIntegration.Web_References.Consumer.InputLocationDetailsMultiLineLocation();
+				if (customer.AddressInfo.PersonalAddress.Any())
+				{
+					var customerMainAddress = customer.AddressInfo.PersonalAddress.First();
 
-                    loc.LocationLine1 = customerMainAddress.Line1;
-                    loc.LocationLine2 = customerMainAddress.Line2;
-                    loc.LocationLine3 = customerMainAddress.Line3;
-                    loc.LocationLine4 = customerMainAddress.Town;
-                    loc.LocationLine5 = customerMainAddress.County;
-                    loc.LocationLine6 = customerMainAddress.Postcode;
-                }
-                var result = consumerSrv.GetConsumerInfo(customer.PersonalInfo.FirstName, customer.PersonalInfo.Surname,
-                    customer.PersonalInfo.Gender.ToString(), // should be Gender
-                    customer.PersonalInfo.DateOfBirth, null, loc, "PL", customer.Id, 0, true);
+					loc.LocationLine1 = customerMainAddress.Line1;
+					loc.LocationLine2 = customerMainAddress.Line2;
+					loc.LocationLine3 = customerMainAddress.Line3;
+					loc.LocationLine4 = customerMainAddress.Town;
+					loc.LocationLine5 = customerMainAddress.County;
+					loc.LocationLine6 = customerMainAddress.Postcode;
+				}
+				var result = consumerSrv.GetConsumerInfo(customer.PersonalInfo.FirstName, customer.PersonalInfo.Surname,
+					customer.PersonalInfo.Gender.ToString(), // should be Gender
+					customer.PersonalInfo.DateOfBirth, null, loc, "PL", customer.Id, 0, true);
 
-                if (result != null)
-                {
-                    creditBureau.CreditBureauScore = result.BureauScore;
-                    creditBureau.TotalDebt = result.TotalAccountBalances;
-                    creditBureau.TotalMonthlyRepayments = result.SumOfRepayements;
-                    creditBureau.CreditCardBalances = result.CreditCardBalances;
+				if (result != null)
+				{
+					creditBureau.CreditBureauScore = result.BureauScore;
+					creditBureau.TotalDebt = result.TotalAccountBalances;
+					creditBureau.TotalMonthlyRepayments = result.SumOfRepayements;
+					creditBureau.CreditCardBalances = result.CreditCardBalances;
                     creditBureau.BorrowerType =
                         TypeOfBusinessExtenstions.TypeOfBussinessForWeb(customer.PersonalInfo.TypeOfBusiness);
-                    //creditBureau.Lighter = new Lighter(ObtainCreditBureauState(result.ExperianResult));
-                    creditBureau.FinancialAccounts = customer.FinancialAccounts;
-                    var isHasFinancialAccout = false;
-                    Utils.TryRead(() => isHasFinancialAccout = result.Output.Output.FullConsumerData.ConsumerData.CAIS.Any(x=>x.CAISDetails.Any()));
-                    creditBureau.ThinFile = !isHasFinancialAccout ? "Yes" : "No";
-                }
-                else
-                {
-                    creditBureau.ThinFile = "N/A";
-                }
 
-            }
-            catch (Exception e)
-            {
-                Log.Error(e);
-            }
+					//creditBureau.Lighter = new Lighter(ObtainCreditBureauState(result.ExperianResult));
+					creditBureau.FinancialAccounts = customer.FinancialAccounts;
+					var isHasFinancialAccout = false;
+					Utils.TryRead(() => isHasFinancialAccout = result.Output.Output.FullConsumerData.ConsumerData.CAIS.Any(x => x.CAISDetails.Any()));
+					creditBureau.ThinFile = !isHasFinancialAccout ? "Yes" : "No";
+				}
+				else
+				{
+					creditBureau.ThinFile = "N/A";
+				}
 
-            summary.CreditBureau = creditBureau;
-        }
+			}
+			catch (Exception e)
+			{
+				Log.Error(e);
+			}
 
-        private decimal GetRepaymentAmount(Customer customer)
-        {
-            var customerSchedule = customer.Loans
-                .Where(x => x.Status == LoanStatus.Late || x.Status == LoanStatus.Live)
-                .Select(x => x.Schedule)
-                .ToList();
+			summary.CreditBureau = creditBureau;
+		}
 
-            var monthlyRepaymentSum = customerSchedule.Sum(x => x.Sum(y => y.AmountDue));
-            var count = customerSchedule.Count();
-            var repaymentAmount = count != 0 ? monthlyRepaymentSum / count : 0;
-            return repaymentAmount;
-        }
+		private decimal GetRepaymentAmount(Customer customer)
+		{
+			var customerSchedule = customer.Loans
+				.Where(x => x.Status == LoanStatus.Late || x.Status == LoanStatus.Live)
+				.Select(x => x.Schedule)
+				.ToList();
 
-        private void BuildMarketplaces(Customer customer, ProfileSummaryModel summary)
-        {
-            double? anualTurnOver = 0;
+			var monthlyRepaymentSum = customerSchedule.Sum(x => x.Sum(y => y.AmountDue));
+			var count = customerSchedule.Count();
+			var repaymentAmount = count != 0 ? monthlyRepaymentSum / count : 0;
+			return repaymentAmount;
+		}
 
-            double? totalPositiveReviews = 0;
-            double? totalNegativeReviews = 0;
-            double? totalNeutralReviews = 0;
-            var inventory = 0d;
-            var marketplacesAll = customer.CustomerMarketPlaces
-                .Where(mp => mp.Marketplace.IsPaymentAccount == false).ToList();
-            var marketplaces =
-                marketplacesAll.Where(mp => mp.Disabled == false && string.IsNullOrEmpty(mp.UpdateError)).ToList();
-            var isNewExist = marketplacesAll.Any(mp => mp.IsNew);
+		private void BuildMarketplaces(Customer customer, ProfileSummaryModel summary)
+		{
+			double? anualTurnOver = 0;
 
-            foreach (var mp in marketplaces)
-            {
-                var analisysFunction = RetrieveDataHelper.GetAnalysisValuesByCustomerMarketPlace(mp.Id);
-                var av = analisysFunction.Data
-                    .FirstOrDefault(x => x.Key == analisysFunction.Data.Max(y => y.Key)).Value;
+			double? totalPositiveReviews = 0;
+			double? totalNegativeReviews = 0;
+			double? totalNeutralReviews = 0;
+			var inventory = 0d;
+			var marketplacesAll = customer.CustomerMarketPlaces
+				.Where(mp => mp.Marketplace.IsPaymentAccount == false).ToList();
+			var marketplaces =
+				marketplacesAll.Where(mp => mp.Disabled == false && string.IsNullOrEmpty(mp.UpdateError)).ToList();
+			var isNewExist = marketplacesAll.Any(mp => mp.IsNew);
 
-                var lastAnualTurnover = av != null
-                    ? av.LastOrDefault(
-                        x =>
-                            x.ParameterName == "Total Sum of Orders" && x.TimePeriod.TimePeriodType <= TimePeriodEnum.Year)
-                    : null;
-                anualTurnOver += lastAnualTurnover != null
-                    ? Double.Parse(lastAnualTurnover.Value.ToString(), CultureInfo.InvariantCulture)
-                    : 0;
+			foreach (var mp in marketplaces)
+			{
+				var analisysFunction = RetrieveDataHelper.GetAnalysisValuesByCustomerMarketPlace(mp.Id);
+				var av = analisysFunction.Data
+					.FirstOrDefault(x => x.Key == analisysFunction.Data.Max(y => y.Key)).Value;
 
-                inventory += av != null
-                    ? av.Where(
-                        x =>
-                            x.ParameterName == "Total Value of Inventory" &&
-                            x.TimePeriod.TimePeriodType == TimePeriodEnum.Lifetime)
-                        .Sum(x => Double.Parse(x.Value.ToString(), CultureInfo.InvariantCulture))
-                    : 0;
+				var lastAnualTurnover = av != null
+					? av.LastOrDefault(
+						x =>
+							x.ParameterName == "Total Sum of Orders" && x.TimePeriod.TimePeriodType <= TimePeriodEnum.Year)
+					: null;
+				anualTurnOver += lastAnualTurnover != null
+					? Double.Parse(lastAnualTurnover.Value.ToString(), CultureInfo.InvariantCulture)
+					: 0;
 
-                var isAmazon = mp.Marketplace.Name == "Amazon";
-                var amazonFeedback = mp.AmazonFeedback.LastOrDefault();
-                var ebayFeedBack = mp.EbayFeedback.LastOrDefault();
+				inventory += av != null
+					? av.Where(
+						x =>
+							x.ParameterName == "Total Value of Inventory" &&
+							x.TimePeriod.TimePeriodType == TimePeriodEnum.Lifetime)
+						.Sum(x => Double.Parse(x.Value.ToString(), CultureInfo.InvariantCulture))
+					: 0;
 
-                var feedbackByPeriodAmazon = amazonFeedback != null
-                    ? amazonFeedback.FeedbackByPeriodItems.FirstOrDefault(x => x.TimePeriod.Id == 4)
-                    : null;
-                var feedbackByPeriodEbay = ebayFeedBack != null
-                    ? ebayFeedBack.FeedbackByPeriodItems.FirstOrDefault(x => x.TimePeriod.Id == 4)
-                    : null;
+				var isAmazon = mp.Marketplace.Name == "Amazon";
+				var amazonFeedback = mp.AmazonFeedback.LastOrDefault();
+				var ebayFeedBack = mp.EbayFeedback.LastOrDefault();
 
-                totalNegativeReviews += isAmazon
-                    ? (feedbackByPeriodAmazon != null ? feedbackByPeriodAmazon.Negative : 0)
-                    : (feedbackByPeriodEbay != null ? feedbackByPeriodEbay.Negative : 0);
-                totalPositiveReviews += isAmazon
-                    ? (feedbackByPeriodAmazon != null ? feedbackByPeriodAmazon.Positive : 0)
-                    : (feedbackByPeriodEbay != null ? feedbackByPeriodEbay.Positive : 0);
-                totalNeutralReviews += isAmazon
-                    ? (feedbackByPeriodAmazon != null ? feedbackByPeriodAmazon.Neutral : 0)
-                    : (feedbackByPeriodEbay != null ? feedbackByPeriodEbay.Neutral : 0);
-            }
+				var feedbackByPeriodAmazon = amazonFeedback != null
+					? amazonFeedback.FeedbackByPeriodItems.FirstOrDefault(x => x.TimePeriod.Id == 4)
+					: null;
+				var feedbackByPeriodEbay = ebayFeedBack != null
+					? ebayFeedBack.FeedbackByPeriodItems.FirstOrDefault(x => x.TimePeriod.Id == 4)
+					: null;
 
-            var totalReviews = totalNegativeReviews + totalPositiveReviews + totalNeutralReviews;
+				totalNegativeReviews += isAmazon
+					? (feedbackByPeriodAmazon != null ? feedbackByPeriodAmazon.Negative : 0)
+					: (feedbackByPeriodEbay != null ? feedbackByPeriodEbay.Negative : 0);
+				totalPositiveReviews += isAmazon
+					? (feedbackByPeriodAmazon != null ? feedbackByPeriodAmazon.Positive : 0)
+					: (feedbackByPeriodEbay != null ? feedbackByPeriodEbay.Positive : 0);
+				totalNeutralReviews += isAmazon
+					? (feedbackByPeriodAmazon != null ? feedbackByPeriodAmazon.Neutral : 0)
+					: (feedbackByPeriodEbay != null ? feedbackByPeriodEbay.Neutral : 0);
+			}
 
-            summary.MarketPlaces =
-                new MarketPlaces
-                {
-                    NumberOfStores = String.Format("{0} / {1}", marketplaces.Count, marketplacesAll.Count),
-                    AnualTurnOver = anualTurnOver,
-                    Inventory = Money(inventory),
-                    Seniority = Money(GetSeniority(customer, false)),
-                    TotalPositiveReviews =
-                        String.Format("{0:0.#} ({1:0.#}%)", totalPositiveReviews,
-                            (totalReviews != 0 ? totalPositiveReviews/totalReviews*100 : 0)),
-                    Lighter = new Lighter(ObtainMarketPlacesState(marketplaces)),
-                    IsNew = isNewExist 
-                };
-        }
+			var totalReviews = totalNegativeReviews + totalPositiveReviews + totalNeutralReviews;
 
-        private void BuildPaymentAccounts(Customer customer, ProfileSummaryModel summary)
-        {
-            var paymentAccounts = customer.GetPaymentAccounts();
-            summary.PaymentAccounts =
-                new PaymentAccounts
-                {
-                    NumberOfPayPalAccounts = String.Format("{0}", paymentAccounts.Count()),
-                    Balance = "Not implemented now",
-                    NetExpences = String.Format("{0}", paymentAccounts.Sum(x => x.TotalNetOutPayments)),
-                    NetIncome = paymentAccounts.Sum(x => x.TotalNetInPayments),
-                    Lighter = new Lighter(ObtainPaymentsAccountsState(customer)),
-                    Seniority = Money(GetSeniority(customer, true)),
-                    IsNew =  paymentAccounts.Any(x=>x.IsNew)
-                };
-        }
+			summary.MarketPlaces =
+				new MarketPlaces
+				{
+					NumberOfStores = String.Format("{0} / {1}", marketplaces.Count, marketplacesAll.Count),
+					AnualTurnOver = anualTurnOver,
+					Inventory = Money(inventory),
+					Seniority = Money(GetSeniority(customer, false)),
+					TotalPositiveReviews =
+						String.Format("{0:0.#} ({1:0.#}%)", totalPositiveReviews,
+							(totalReviews != 0 ? totalPositiveReviews / totalReviews * 100 : 0)),
+					Lighter = new Lighter(ObtainMarketPlacesState(marketplaces)),
+					IsNew = isNewExist
+				};
+		}
 
-        private double GetSeniority(Customer customer, bool isPaymentAccountOnly)
-        {
-            var marketplacesSeniority = _mpFacade.MarketplacesSeniority(customer, false, isPaymentAccountOnly);
-            var minAccountAge = DateTime.UtcNow - marketplacesSeniority;
-            var minAccountAgeTotalMonth = minAccountAge.TotalDays/30;
-            return minAccountAgeTotalMonth;
-        }
+		private void BuildPaymentAccounts(Customer customer, ProfileSummaryModel summary)
+		{
+			var paymentAccounts = customer.GetPaymentAccounts();
+			summary.PaymentAccounts =
+				new PaymentAccounts
+				{
+					NumberOfPayPalAccounts = String.Format("{0}", paymentAccounts.Count()),
+					Balance = "Not implemented now",
+					NetExpences = String.Format("{0}", paymentAccounts.Sum(x => x.TotalNetOutPayments)),
+					NetIncome = paymentAccounts.Sum(x => x.TotalNetInPayments),
+					Lighter = new Lighter(ObtainPaymentsAccountsState(customer)),
+					Seniority = Money(GetSeniority(customer, true)),
+					IsNew = paymentAccounts.Any(x => x.IsNew)
+				};
+		}
 
-        private LoanActivity CreateLoanActivity(Customer customer)
-        {
-            var previousLoans = customer.Loans.Count(x => x.DateClosed != null);
-            var currentBalance = customer.Loans.Sum(x => x.Balance);
-            var latePayments = customer.Loans.Sum(x => x.PastDues);
-            var interest = customer.Loans.Where(l => l.Status == LoanStatus.Late).Sum(l => l.InterestDue);
-            var collection = customer.Loans.Where(x => x.IsDefaulted).Sum(x => x.PastDues);
-            var lateStatus = customer.PaymentDemenaor.ToString();
-            
-            int currentLateDays = 0;
-	        DateTime now = DateTime.UtcNow;
-	        var lateLoans = customer.Loans.Where(l => l.Status == LoanStatus.Late);
+		private double GetSeniority(Customer customer, bool isPaymentAccountOnly)
+		{
+			var marketplacesSeniority = _mpFacade.MarketplacesSeniority(customer, false, isPaymentAccountOnly);
+			var minAccountAge = DateTime.UtcNow - marketplacesSeniority;
+			var minAccountAgeTotalMonth = minAccountAge.TotalDays / 30;
+			return minAccountAgeTotalMonth;
+		}
+
+		private LoanActivity CreateLoanActivity(Customer customer)
+		{
+			var previousLoans = customer.Loans.Count(x => x.DateClosed != null);
+			var currentBalance = customer.Loans.Sum(x => x.Balance);
+			var latePayments = customer.Loans.Sum(x => x.PastDues);
+			var interest = customer.Loans.Where(l => l.Status == LoanStatus.Late).Sum(l => l.InterestDue);
+			var collection = customer.Loans.Where(x => x.IsDefaulted).Sum(x => x.PastDues);
+			var lateStatus = customer.PaymentDemenaor.ToString();
+
+			int currentLateDays = 0;
+			DateTime now = DateTime.UtcNow;
+			var lateLoans = customer.Loans.Where(l => l.Status == LoanStatus.Late);
 			foreach (Loan l in lateLoans)
 			{
 				foreach (LoanScheduleItem ls in l.Schedule)
@@ -273,100 +274,100 @@
 				}
 			}
 
-            var totalFees =
-                (from l in customer.Loans
-                    from c in l.Charges
-                    where c.State != "Expired"
-                    where c.Amount > 0
-                    select c.Amount).Sum();
-            var feesCount =
-                (from l in customer.Loans
-                    from c in l.Charges
-                    where c.State != "Expired"
-                    where c.Amount > 0
-                    select c.Amount).Count();
+			var totalFees =
+				(from l in customer.Loans
+				 from c in l.Charges
+				 where c.State != "Expired"
+				 where c.Amount > 0
+				 select c.Amount).Sum();
+			var feesCount =
+				(from l in customer.Loans
+				 from c in l.Charges
+				 where c.State != "Expired"
+				 where c.Amount > 0
+				 select c.Amount).Count();
 
-            return new LoanActivity
-                {
-                    PreviousLoans = Money(previousLoans),
-                    CurrentBalance = Money(currentBalance),
-                    LatePaymentsSum = Money(latePayments),
-                    Collection = Money(collection),
-                    LateInterest = Money((decimal) interest),
-                    Lighter = new Lighter(ObtainLoanActivityState(latePayments, collection)),
+			return new LoanActivity
+				{
+					PreviousLoans = Money(previousLoans),
+					CurrentBalance = Money(currentBalance),
+					LatePaymentsSum = Money(latePayments),
+					Collection = Money(collection),
+					LateInterest = Money((decimal)interest),
+					Lighter = new Lighter(ObtainLoanActivityState(latePayments, collection)),
 					CurrentLateDays = currentLateDays.ToString(CultureInfo.InvariantCulture),
-                    PaymentDemeanor = lateStatus,
-                    TotalFees = Money(totalFees),
-                    FeesCount = Money(feesCount)
-                };
-        }
+					PaymentDemeanor = lateStatus,
+					TotalFees = Money(totalFees),
+					FeesCount = Money(feesCount)
+				};
+		}
 
-        private static string Money(decimal amount)
-        {
-            return String.Format("{0:0.#}", amount);
-        }
+		private static string Money(decimal amount)
+		{
+			return String.Format("{0:0.#}", amount);
+		}
 
-        private static string Money(double amount)
-        {
-            return Money((decimal)amount);
-        }
+		private static string Money(double amount)
+		{
+			return Money((decimal)amount);
+		}
 
-        private static string Money(int amount)
-        {
-            return Money((decimal)amount);
-        }
+		private static string Money(int amount)
+		{
+			return Money((decimal)amount);
+		}
 
-        private void AddDecisionHistory(ProfileSummaryModel summary, Customer customer)
-        {
-            summary.DecisionHistory = _decisions.ByCustomer(customer).Select(DecisionHistoryModel.Create).OrderBy(x => x.Date).ToList();
-        }
-
-
-        private LightsState ObtainLoanActivityState(decimal latePayments, decimal collection)
-        {
-            if (collection > 0)
-                return LightsState.Reject;
-            if (latePayments > 0)
-                return LightsState.Warning;
-            return LightsState.Passed;
-        }
-
-        private LightsState ObtainMarketPlacesState(List<MP_CustomerMarketPlace> marketplaces)
-        {
-            if (marketplaces.Any(x => (!String.IsNullOrEmpty(x.UpdateError))))
-            {
-                return LightsState.Error;
-            }
-
-            if (marketplaces.Any(x => x.UpdatingStart != null && x.UpdatingEnd == null))
-            {
-                return LightsState.InProgress;
-            }
-
-            return LightsState.Passed;
-        }
+		private void AddDecisionHistory(ProfileSummaryModel summary, Customer customer)
+		{
+			summary.DecisionHistory = _decisions.ByCustomer(customer).Select(DecisionHistoryModel.Create).OrderBy(x => x.Date).ToList();
+		}
 
 
-        private LightsState ObtainAmlState(Customer customer)
-        {
-            if (customer.AMLResult == "Rejected" || customer.BWAResult == "Rejected")
-                return LightsState.Reject;
-            if (customer.AMLResult == "Warning" || customer.BWAResult == "Warning")
-                return LightsState.Warning;
-            if (customer.AMLResult == "Not performed" || customer.BWAResult == "Not performed")
-                return LightsState.NotPerformed;
+		private LightsState ObtainLoanActivityState(decimal latePayments, decimal collection)
+		{
+			if (collection > 0)
+				return LightsState.Reject;
+			if (latePayments > 0)
+				return LightsState.Warning;
+			return LightsState.Passed;
+		}
 
-            return LightsState.Passed;
-        }
+		private LightsState ObtainMarketPlacesState(List<MP_CustomerMarketPlace> marketplaces)
+		{
+			if (marketplaces.Any(x => (!String.IsNullOrEmpty(x.UpdateError))))
+			{
+				return LightsState.Error;
+			}
 
-        private LightsState ObtainPaymentsAccountsState(Customer customer)
-        {
-            if (customer.BWAResult == "Warning")
-                return LightsState.Warning;
-            if (customer.BWAResult == "Rejected")
-                return LightsState.Warning;
+			if (marketplaces.Any(x => x.UpdatingStart != null && x.UpdatingEnd == null))
+			{
+				return LightsState.InProgress;
+			}
 
-            return LightsState.Passed;
-        }
-    }
+			return LightsState.Passed;
+		}
+
+
+		private LightsState ObtainAmlState(Customer customer)
+		{
+			if (customer.AMLResult == "Rejected" || customer.BWAResult == "Rejected")
+				return LightsState.Reject;
+			if (customer.AMLResult == "Warning" || customer.BWAResult == "Warning")
+				return LightsState.Warning;
+			if (customer.AMLResult == "Not performed" || customer.BWAResult == "Not performed")
+				return LightsState.NotPerformed;
+
+			return LightsState.Passed;
+		}
+
+		private LightsState ObtainPaymentsAccountsState(Customer customer)
+		{
+			if (customer.BWAResult == "Warning")
+				return LightsState.Warning;
+			if (customer.BWAResult == "Rejected")
+				return LightsState.Warning;
+
+			return LightsState.Passed;
+		}
+	}
 }

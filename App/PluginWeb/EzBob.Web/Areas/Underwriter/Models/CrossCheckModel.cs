@@ -60,7 +60,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		public CrossCheckModel(EZBob.DatabaseLib.Model.Database.Customer customer, CreditBureauModelBuilder creditBureauModelBuilder)
 		{
 			Customer = customer;
-			if (Customer.CompanyAdditionalInfo == null) Customer.CompanyAdditionalInfo = new CompanyAdditionalInfo();
+			if (!Customer.Companies.Any()) Customer.Companies.Add(new Company());
 
 			Application = new PersonalInfo();
 			EBay = new PersonalInfo();
@@ -93,30 +93,30 @@ namespace EzBob.Web.Areas.Underwriter.Models
 				}
 				current.ZooplaValue = intVal;
 				int mtg = 0;
-				ConsumerServiceResult result;
 				try
 				{
+					ConsumerServiceResult result;
 					creditBureauModelBuilder.GetConsumerInfo(customer, false, null, current, out result);
 					var experian = creditBureauModelBuilder.GenerateConsumerModel(customer.Id, result);
 					if (experian != null && experian.ConsumerAccountsOverview != null &&
 					    !string.IsNullOrEmpty(experian.ConsumerAccountsOverview.Balance_Mtg))
 					{
-						if (int.TryParse(experian.ConsumerAccountsOverview.Balance_Mtg, out mtg))
-						{
-							ExperianMortgage = mtg;
-						}
 						if (int.TryParse(experian.ConsumerAccountsOverview.OpenAccounts_Mtg, out mtg))
 						{
 							ExperianMortgageCount = mtg;
 						}
-
+						int mtgCount = 0;
+						if (int.TryParse(experian.ConsumerAccountsOverview.Balance_Mtg, out mtgCount))
+						{
+							ExperianMortgage = mtgCount;
+						}
 					}
 				}catch{}
 
 				AssetWorth = current.ZooplaValue - mtg;
 			}
 			var prev = customer.AddressInfo.PrevPersonAddresses.FirstOrDefault(x => x.AddressType == CustomerAddressType.PrevPersonAddresses);
-			if (current != null) CurrentAddress = current;
+			CurrentAddress = current;
 			if (prev != null) PrevAddress = prev;
 			if (customer.PersonalInfo != null)
 			{
@@ -154,14 +154,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 				PayPalAddress = Mapper.Map<MP_PayPalPersonalInfo, CustomerAddress>(paypal.PersonalInfo);
 			}
 
-			if (customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.NonLimited)
-			{
-				Directors.AddRange(customer.NonLimitedInfo.Directors);
-			}
-			if (customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited)
-			{
-				Directors.AddRange(customer.LimitedInfo.Directors);
-			}
+			Directors.AddRange(customer.Companies.SelectMany(x => x.Directors));
 
 			CrossCheckStatus.BuildMarkerStatusForPersonalInfo(Application, PayPal, EBay);
 			CrossCheckStatus.BuildMarkerStatusForCustomerAddress(CurrentAddress, EBayAddress, PayPalAddress);

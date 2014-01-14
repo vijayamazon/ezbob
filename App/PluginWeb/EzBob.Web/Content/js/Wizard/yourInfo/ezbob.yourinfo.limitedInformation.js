@@ -36,13 +36,13 @@ EzBob.LimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 
 		var oAddressContainer = this.$el.find('#LimitedCompanyAddress');
 		var limitedAddressView = new EzBob.AddressView({
-			model: this.model.get('LimitedCompanyAddress').reset(),
+			model: this.model.get('CompanyAddress').reset(),
 			name: "LimitedCompanyAddress",
 			max: 1,
 			uiEventControlIdPrefix: oAddressContainer.attr('data-ui-event-control-id-prefix'),
 		});
 		limitedAddressView.render().$el.appendTo(oAddressContainer);
-		this.model.get('LimitedCompanyAddress').on("all", this.LimitedCompanyAddressChanged, this);
+		this.model.get('CompanyAddress').on("all", this.LimitedCompanyAddressChanged, this);
 		EzBob.Validation.addressErrorPlacement(limitedAddressView.$el, limitedAddressView.model);
         
 		if (this.model.get('IsOffline')) {

@@ -15,6 +15,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 
 		public virtual int Id { get; set; }
 		public virtual Customer Customer { get; set; }
+		public virtual Company Company { get; set; }
 		public virtual DateTime Created { get; set; }
 		public virtual int EmployeeCount { get; set; }
 		public virtual int? TopEarningEmployeeCount { get; set; }
@@ -32,9 +33,12 @@ namespace EZBob.DatabaseLib.Model.Database {
 			HasData = false;
 		} // constructor
 
-		public CompanyEmployeeCountInfo(Customer oCustomer) : this() {
+		public CompanyEmployeeCountInfo(Company oCompany) : this()
+		{
+			if (oCompany == null) return;
+
 			var cec =
-				oCustomer.CompanyEmployeeCount.OrderBy(x => x.Created).LastOrDefault()
+				oCompany.CompanyEmployeeCount.OrderBy(x => x.Created).LastOrDefault()
 				?? new CompanyEmployeeCount();
 
 			Created                    = cec.Created;

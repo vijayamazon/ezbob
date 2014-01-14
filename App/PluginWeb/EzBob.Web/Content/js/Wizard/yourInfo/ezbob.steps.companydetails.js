@@ -203,11 +203,7 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 
         return false;
     },
-
-    setRefNum: function (refNum) {
-        $('.RefNum').val(refNum);
-    }, // setRefNum
-
+    
     handleTargeting: function (form, action, data, postcode, companyName, sCompanyFilter, refNum) {
         var that = this;
 
@@ -227,17 +223,17 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
                             EzBob.App.trigger('warning', 'Company ' + companyName + ' ' + postcode+ ' was not found. Please check your input and try again.');
                             that.targetingTries++;
                         } else {
-                            that.saveTargeting("NotFound", action, form);
+                            that.saveTargeting(null, action, form);
                         }
                         break;
                     case 1:
-                        that.saveTargeting(reqData[0].BusRefNum, action, form);
+                        that.saveTargeting(reqData[0], action, form);
                         break;
                     default:
                         var companyTargets = new EzBob.companyTargets({ model: reqData });
                         companyTargets.render();
-                        companyTargets.on('BusRefNumGetted', function (busRefNum) {
-                            that.saveTargeting(busRefNum, action, form);
+                        companyTargets.on('BusRefNumGetted', function (targetingData) {
+                            that.saveTargeting(targetingData, action, form);
                         });
                         break;
                 } // switch reqData.length
@@ -248,9 +244,19 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
             UnBlockUi();
         });
     }, // handleTargeting
-    saveTargeting: function (companyRefNum, action, form) {
-        this.setRefNum(companyRefNum);
+    saveTargeting: function (targetingData, action, form) {
         var data = form.serializeArray();
+        if (targetingData) {
+            data.push({ name: "AddrLine1", value: targetingData.AddrLine1 });
+            data.push({ name: "AddrLine2", value: targetingData.AddrLine2 });
+            data.push({ name: "AddrLine3", value: targetingData.AddrLine3 });
+            data.push({ name: "AddrLine4", value: targetingData.AddrLine4 });
+            data.push({ name: "PostCode", value: targetingData.PostCode });
+            data.push({ name: "BusName", value: targetingData.BusName });
+            data.push({ name: "BusRefNum", value: targetingData.BusRefNum });
+        } else {
+            data.push({ name: "BusRefNum", value: "NotFound" });
+        }
         this.saveDataRequest(action, data);
     },
     saveDataRequest: function (action, data) {

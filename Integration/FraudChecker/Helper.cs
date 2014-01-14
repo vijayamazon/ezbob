@@ -55,18 +55,13 @@ namespace FraudChecker
             {
                 return retVal;
             }
-            var typeOfBussiness = customer.PersonalInfo.TypeOfBusiness.Reduce();
-            if (typeOfBussiness != TypeOfBusinessReduced.Personal)
-            {
-				if (typeOfBussiness == TypeOfBusinessReduced.Limited && !string.IsNullOrEmpty(customer.LimitedInfo.LimitedBusinessPhone))
-                {
-                    retVal.Add("LimitedBusinessPhone", customer.LimitedInfo.LimitedBusinessPhone);
-                }
-				else if (typeOfBussiness == TypeOfBusinessReduced.NonLimited && !string.IsNullOrEmpty(customer.NonLimitedInfo.NonLimitedBusinessPhone))
-                {
-                    retVal.Add("NonLimitedBusinessPhone", customer.NonLimitedInfo.NonLimitedBusinessPhone);
-                }
-            }
+	        
+			var businessPhones = customer.Companies.Select(x => x.BusinessPhone).ToList();
+	        foreach (var businessPhone in businessPhones)
+	        {
+		        retVal.Add("BusinessPhone", businessPhone);
+	        }
+            
             if (customer.PersonalInfo != null && !string.IsNullOrEmpty(customer.PersonalInfo.DaytimePhone))
                 retVal.Add("DaytimePhone", customer.PersonalInfo.DaytimePhone);
 

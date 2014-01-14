@@ -4,6 +4,8 @@ using EZBob.DatabaseLib.Model.Database;
 
 namespace EzBob.Web.Areas.Underwriter.Models
 {
+	using Customer.Models;
+
 	public class BaseProfileSummaryModel
 	{
 		public Lighter Lighter { get; set; }
@@ -97,7 +99,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		public bool IsOffline { get; set; }
 		public CustomerRequestedLoanModel RequestedLoan { get; set; }
 		public CompanyEmployeeCountInfo CompanyEmployeeCountInfo { get; set; }
-		public CompanyAdditionalInfo CompanyAdditionalInfo { get; set; }
+		public CompanyInfoMap CompanyInfo { get; set; }
 	}
 
 	public class FraudCheck

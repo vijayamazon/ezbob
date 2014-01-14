@@ -630,10 +630,12 @@ namespace EzBob.Web.Areas.Underwriter.Models
 										 bool getFromLog = false, long? logId = null)
 		{
 			var srv = new EBusinessService();
-			switch (customer.PersonalInfo.TypeOfBusiness.Reduce())
+			var company = customer.Companies.FirstOrDefault();
+			if(company == null) return;
+			switch (company.TypeOfBusiness.Reduce())
 			{
 				case TypeOfBusinessReduced.Limited:
-					var limitedBusinessData = srv.GetLimitedBusinessData(customer.LimitedInfo.LimitedRefNum, customer.Id,
+					var limitedBusinessData = srv.GetLimitedBusinessData(company.ExperianRefNum, customer.Id,
 																					true);
 					if (limitedBusinessData.LastCheckDate.HasValue &&
 						(DateTime.Now - limitedBusinessData.LastCheckDate.Value).TotalDays >= _config.UpdateBusinessDataPeriodDays)
@@ -641,23 +643,23 @@ namespace EzBob.Web.Areas.Underwriter.Models
 						limitedBusinessData.IsDataExpired = true;
 					}
 					AppendLimitedInfo(model, limitedBusinessData);
-					model.BorrowerType = customer.PersonalInfo.TypeOfBusiness.ToString();
-					model.CompanyName = customer.LimitedInfo.LimitedCompanyName;
-					model.directorsModels = GenerateDirectorsModels(customer, customer.LimitedInfo.Directors, getFromLog, logId);
+					model.BorrowerType = company.TypeOfBusiness.ToString();
+					model.CompanyName = company.CompanyName;
+					model.directorsModels = GenerateDirectorsModels(customer, company.Directors, getFromLog, logId);
 					break;
 				case TypeOfBusinessReduced.NonLimited:
 
 					var notLimitedBusinessData = srv.GetNotLimitedBusinessData(
-						customer.NonLimitedInfo.NonLimitedRefNum, customer.Id, true);
+						company.ExperianRefNum, customer.Id, true);
 					if (notLimitedBusinessData.LastCheckDate.HasValue &&
 						(DateTime.Now - notLimitedBusinessData.LastCheckDate.Value).TotalDays >= _config.UpdateBusinessDataPeriodDays)
 					{
 						notLimitedBusinessData.IsDataExpired = true;
 					}
 					AppendNonLimitedInfo(model, notLimitedBusinessData);
-					model.BorrowerType = customer.PersonalInfo.TypeOfBusiness.ToString();
-					model.CompanyName = customer.NonLimitedInfo.NonLimitedCompanyName;
-					model.directorsModels = GenerateDirectorsModels(customer, customer.NonLimitedInfo.Directors, getFromLog, logId);
+					model.BorrowerType = company.TypeOfBusiness.ToString();
+					model.CompanyName = company.CompanyName;
+					model.directorsModels = GenerateDirectorsModels(customer, company.Directors, getFromLog, logId);
 					break;
 			}
 		}
@@ -904,7 +906,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 
 			int barPos = s * (barWidth + spaceWidth);
 			int scorePos = (s < barCount / 2) ? barPos : barPos - 120;
-			int valPos = (s < barCount / 2) ? 8 : 0;
+			int valPos = (s < barCount / 2) ? barPos : barPos - 120;
 			align = (s < barCount / 2) ? "left" : "right";
 
 			position = string.Format("{0}px;", scorePos);

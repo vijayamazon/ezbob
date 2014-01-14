@@ -36,7 +36,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 			Map(x => x.ApplyCount, "ApplyCount");
 			HasMany(x => x.ScoringResults).KeyColumn("CustomerId").Cascade.All();
 
-			HasMany(x => x.CompanyEmployeeCount).KeyColumn("CustomerId").Cascade.All();
+			
 
 			Map(x => x.DateEscalated).CustomType<UtcDateTimeType>();
 			Map(x => x.DateApproved).CustomType<UtcDateTimeType>();
@@ -58,42 +58,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 			Map(x => x.PayPointErrorsCount).Nullable();
 			Map(x => x.BWAResult).Length(100);
 			Map(x => x.AMLResult).Length(100);
-
-			Component(x => x.LimitedInfo, m => {
-				m.Map(x => x.LimitedCompanyNumber).Length(255);
-				m.Map(x => x.LimitedCompanyName).Length(255);
-				m.Map(x => x.LimitedTimeAtAddress);
-				m.Map(x => x.LimitedConsentToSearch);
-				m.Map(x => x.LimitedBusinessPhone).Length(50);
-				m.HasMany(x => x.Directors)
-					.AsSet()
-					.KeyColumn("CustomerId")
-					.Cascade.All()
-					.Cache.ReadWrite().Region("LongTerm").ReadWrite();
-				m.Map(x => x.LimitedRefNum).Length(250);
-			});
-
-			Component(x => x.NonLimitedInfo, m => {
-				m.Map(x => x.NonLimitedCompanyName).Length(255);
-				m.Map(x => x.NonLimitedTimeInBusiness).Length(255);
-				m.Map(x => x.NonLimitedTimeAtAddress);
-				m.Map(x => x.NonLimitedBusinessPhone).Length(50);
-				m.Map(x => x.NonLimitedConsentToSearch);
-				m.HasMany(x => x.Directors)
-					.AsSet()
-					.KeyColumn("CustomerId")
-					.Cascade.All()
-					.Cache.ReadWrite().Region("LongTerm").ReadWrite();
-				m.Map(x => x.NonLimitedRefNum).Length(250);
-			});
-
-			Component(x => x.CompanyAdditionalInfo, m => {
-				m.Map(x => x.PropertyOwnedByCompany);
-				m.Map(x => x.YearsInCompany).Length(50);
-				m.Map(x => x.RentMonthsLeft).Length(50);
-				m.Map(x => x.CapitalExpenditure);
-			});
-
+			
 			Component(x => x.PersonalInfo, m => {
 				m.Map(x => x.FirstName).Length(255);
 				m.Map(x => x.MiddleInitial).Length(255);
@@ -125,38 +90,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 				 .KeyColumn("customerId")
 				 .Where("addressType=" + Convert.ToInt32(CustomerAddressType.PrevPersonAddresses))
 				 .Cascade.AllDeleteOrphan()
-				 .Inverse()
-				 .Cache.ReadWrite().Region("LongTerm").ReadWrite();
-
-				m.HasMany(x => x.LimitedCompanyAddress)
-				 .AsSet()
-				 .KeyColumn("customerId")
-				 .Where("addressType=" + Convert.ToInt32(CustomerAddressType.LimitedCompanyAddress))
-				 .Cascade.All()
-				 .Inverse()
-				 .Cache.ReadWrite().Region("LongTerm").ReadWrite();
-
-				m.HasMany(x => x.LimitedCompanyAddressPrev)
-				 .AsSet()
-				 .KeyColumn("customerId")
-				 .Where("addressType=" + Convert.ToInt32(CustomerAddressType.LimitedCompanyAddressPrev))
-				 .Cascade.All()
-				 .Inverse()
-				 .Cache.ReadWrite().Region("LongTerm").ReadWrite();
-
-				m.HasMany(x => x.NonLimitedCompanyAddress)
-				 .AsSet()
-				 .KeyColumn("customerId")
-				 .Where("addressType=" + Convert.ToInt32(CustomerAddressType.NonLimitedCompanyAddress))
-				 .Cascade.All()
-				 .Inverse()
-				 .Cache.ReadWrite().Region("LongTerm").ReadWrite();
-
-				m.HasMany(x => x.NonLimitedCompanyAddressPrev)
-				 .AsSet()
-				 .KeyColumn("customerId")
-				 .Where("addressType=" + Convert.ToInt32(CustomerAddressType.NonLimitedCompanyAddressPrev))
-				 .Cascade.All()
 				 .Inverse()
 				 .Cache.ReadWrite().Region("LongTerm").ReadWrite();
 
@@ -356,13 +289,11 @@ namespace EZBob.DatabaseLib.Model.Database {
 				.Cascade.All()
 				.Inverse();
 
-			/*
-			HasOne(x => x.CustomerRequestedLoan)
-				.Cascade.SaveUpdate()
-				.Constrained()
-				.PropertyRef(x => x.Customer)
-				.Fetch.Join();
-			*/
+			HasMany(x => x.Companies)
+				.AsBag()
+				.KeyColumn("CustomerId")
+				.Cascade.All()
+				.Inverse();
 
 			Map(x => x.CciMark);
 			Map(x => x.GoogleCookie).Length(300);

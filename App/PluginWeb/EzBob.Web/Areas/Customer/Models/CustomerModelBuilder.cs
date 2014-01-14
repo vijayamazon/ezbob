@@ -61,8 +61,8 @@ namespace EzBob.Web.Areas.Customer.Models
             customerModel.CustomerPersonalInfo = customer.PersonalInfo;
             customerModel.BusinessTypeReduced = customerModel.CustomerPersonalInfo == null ?
                 TypeOfBusinessReduced.Personal.ToString() : customer.PersonalInfo.TypeOfBusiness.Reduce().ToString();
-
-			customerModel.BirthDateYMD = customerModel.CustomerPersonalInfo == null
+			
+            customerModel.BirthDateYMD = customerModel.CustomerPersonalInfo == null
 				? "" : customerModel.CustomerPersonalInfo.BirthDateYMD();
 
             customerModel.bankAccountAdded = customer.HasBankAccount;
@@ -142,20 +142,22 @@ namespace EzBob.Web.Areas.Customer.Models
 
             customerModel.GreetingMailSentDate = customer.GreetingMailSentDate;
 
-            customerModel.LimitedInfo = LimitedInfoMap.FromLimitedInfo(customer.LimitedInfo);
+			var company = customer.Companies.FirstOrDefault();
+			if (company != null)
+			{
+				customerModel.CompanyInfo = CompanyInfoMap.FromCompany(company);
+				customerModel.CompanyAddress = company.CompanyAddress.ToArray();
+			}
 
-            customerModel.NonLimitedInfo = NonLimitedInfoMap.FromLimitedInfo(customer.NonLimitedInfo);
 
             if (customer.AddressInfo != null)
             {
                 customerModel.PersonalAddress = customer.AddressInfo.PersonalAddress.ToArray();
 	            customerModel.PrevPersonAddresses = customer.AddressInfo.PrevPersonAddresses.ToArray();
-                customerModel.LimitedAddress = customer.AddressInfo.LimitedCompanyAddress.ToArray();
-                customerModel.NonLimitedAddress = customer.AddressInfo.NonLimitedCompanyAddress.ToArray();
                 customerModel.OtherPropertyAddress = customer.AddressInfo.OtherPropertyAddress.ToArray();
             }
 
-			customerModel.CompanyEmployeeCountInfo = new CompanyEmployeeCountInfo(customer);
+			customerModel.CompanyEmployeeCountInfo = new CompanyEmployeeCountInfo(customer.Companies.FirstOrDefault());
 
             customerModel.ApplyCount = customer.ApplyCount;
             customerModel.CreditCardNo = customer.CreditCardNo;

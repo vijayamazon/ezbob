@@ -259,9 +259,9 @@ EzBob.Underwriter.CrossCheckView = Backbone.View.extend({
         } // switch
 
         return _.map(
-			_.filter(aryRawAddress, function (s) { return $.trim(s) != ''; }),
-			function (s) { return $.trim(s); }
-		).join('\n').toUpperCase();
+            _.filter(aryRawAddress, function(s) { return $.trim(s) != ''; }),
+            function(s) { return $.trim(s); }
+        ).join('\n').toUpperCase();
     }, // address
 
     name: function (sRawName) {
@@ -269,18 +269,18 @@ EzBob.Underwriter.CrossCheckView = Backbone.View.extend({
             return '';
 
         return _.map(
-			_.filter(
-				$.trim(sRawName).split(/ |\t|\n|\r/), function (s) { return $.trim(s) != ''; }
-			),
-			function (s) { return $.trim(s).toUpperCase(); }
-		).join(' ');
+            _.filter(
+                $.trim(sRawName).split(/ |\t|\n|\r/), function(s) { return $.trim(s) != ''; }
+            ),
+            function(s) { return $.trim(s).toUpperCase(); }
+        ).join(' ');
     }, // name
 
     events: {
         "click #recheck-targeting": "recheckTargeting",
         "click #zoopla": "showZoopla",
         "click .zooplaRecheck": "recheckZoopla",
-        "click #landregistry" : "showLandRegistry"
+        "click #landregistry": "showLandRegistry"
     }, // events
 
     recheckZoopla: function () {
@@ -314,11 +314,11 @@ EzBob.Underwriter.CrossCheckView = Backbone.View.extend({
     }, // showZoopla
     recheckTargeting: function (e) {
         var el = $(e.currentTarget),
-			postcode = el.attr("data-postcode"),
-			companyName = el.attr("data-company-name"),
-			companyLegalStatus = el.attr('data-company-legal-status'),
+            postcode = el.attr("data-postcode"),
+            companyName = el.attr("data-company-name"),
+            companyLegalStatus = el.attr('data-company-legal-status'),
             companyNum = el.attr('data-company-number'),
-			that = this;
+            that = this;
 
         if (el.hasClass("disabled"))
             return false;
@@ -328,48 +328,60 @@ EzBob.Underwriter.CrossCheckView = Backbone.View.extend({
         BlockUi("On");
 
         $.get(window.gRootPath + "Account/CheckingCompany", { companyName: companyName, postcode: postcode, filter: companyLegalStatus, refNum: companyNum })
-		.success(function (reqData) {
-		    if (reqData == undefined || reqData.success === false)
-		        EzBob.ShowMessage("Targeting service is not responding", "Error", null, "OK");
-		    else {
-		        switch (reqData.length) {
-		            case 0:
-		                EzBob.ShowMessage("Company was not found by post code.", "Warning", null, "OK");
-		                $("#recheck-targeting").removeClass("disabled");
-		                break;
+            .success(function(reqData) {
+                if (reqData == undefined || reqData.success === false)
+                    EzBob.ShowMessage("Targeting service is not responding", "Error", null, "OK");
+                else {
+                    switch (reqData.length) {
+                    case 0:
+                        EzBob.ShowMessage("Company was not found by name, post code, type, and company number (limited).", "Warning", null, "OK");
+                        $("#recheck-targeting").removeClass("disabled");
+                        break;
+                    case 1:
+                        that.saveTargetingData(reqData[0]);
+                        break;
+                    default:
+                        var companyTargets = new EzBob.companyTargets({ model: reqData });
 
-		            case 1:
-		                that.saveRefNum(reqData[0].BusRefNum);
-		                break;
+                        companyTargets.render();
 
-		            default:
-		                var companyTargets = new EzBob.companyTargets({ model: reqData });
+                        companyTargets.on("BusRefNumGetted", function(targetingData) {
+                            that.saveTargetingData(targetingData);
+                        });
 
-		                companyTargets.render();
-
-		                companyTargets.on("BusRefNumGetted", function (busRefNum) {
-		                    that.saveRefNum(busRefNum);
-		                });
-
-		                break;
-		        } // switch
-		    } // if
-		}).complete(function () {
-		    BlockUi("Off");
-		});;
+                        break;
+                    } // switch
+                } // if
+            }).complete(function() {
+                BlockUi("Off");
+            });
 
         return false;
     }, // recheckTargeting
 
-    saveRefNum: function (refnum) {
+    saveTargetingData: function (targetingData) {
         var that = this;
-        $.post(window.gRootPath + "Underwriter/CrossCheck/SaveRefNum", { customerId: this.model.customerId, companyRefNum: refnum })
-		.done(function () {
-		    EzBob.ShowMessage("Company Ref Number was updated", "Updated successfully", null, "OK");
-		})
-		.complete(function () {
-		    $("#recheck-targeting").removeClass("disabled");
-		    that.render(that.model);
-		});
-    }, // saveRefNum
+        if (!targetingData || targetingData.BusRefNum == 'skip') {
+            targetingData.BusRefNum = 'NotFound';
+            targetingData.BusName = 'Company not found';
+        }
+        $.post(window.gRootPath + "Underwriter/CrossCheck/SaveTargetingData",
+            {
+                customerId: this.model.customerId,
+                companyRefNum: targetingData.BusRefNum,
+                companyName: targetingData.BusName,
+                addr1: targetingData.AddrLine1,
+                addr2: targetingData.AddrLine2,
+                addr3: targetingData.AddrLine3,
+                addr4: targetingData.AddrLine4,
+                postcode: targetingData.PostCode,
+            })
+            .done(function() {
+                EzBob.ShowMessage("Company Info was updated", "Updated successfully", null, "OK");
+            })
+            .complete(function() {
+                $("#recheck-targeting").removeClass("disabled");
+                that.render(that.model);
+            });
+    }, // saveTargetingData
 }); // EzBob.Underwriter.CrossCheckView

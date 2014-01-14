@@ -315,12 +315,22 @@
 }
 
 @{
-    var companyRefNum = (Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited ? Model.Customer.LimitedInfo.LimitedRefNum : Model.Customer.NonLimitedInfo.NonLimitedRefNum);
-    var companyNum = (Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited ? Model.Customer.LimitedInfo.LimitedCompanyNumber : null);
+    string companyRefNum = null, companyNum = null, companyName = null;
+    Iesi.Collections.Generic.ISet<CustomerAddress> postcode = null;
+    bool propertyOwnedByCompany = false;
+    var company = Model.Customer.Companies.FirstOrDefault();
+    
     var companyType = (Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited ? "L" : "N");
-    var postcode = (Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited ? Model.Customer.AddressInfo.LimitedCompanyAddress : Model.Customer.AddressInfo.NonLimitedCompanyAddress);
-    var companyName = (Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited ? Model.Customer.LimitedInfo.LimitedCompanyName : Model.Customer.NonLimitedInfo.NonLimitedCompanyName);
-    bool propertyOwnedByCompany = Model.Customer.CompanyAdditionalInfo != null && Model.Customer.CompanyAdditionalInfo.PropertyOwnedByCompany.HasValue && Model.Customer.CompanyAdditionalInfo.PropertyOwnedByCompany.Value;
+    
+    if (company != null)
+    {
+        companyRefNum = company.ExperianRefNum;
+        companyNum = company.CompanyNumber;
+        postcode = company.CompanyAddress; //todo experian
+        companyName = company.CompanyName; //todo experian
+        propertyOwnedByCompany = company.PropertyOwnedByCompany.HasValue ? company.PropertyOwnedByCompany.Value : false;
+    }
+    
 }
 
 <h3 id="cross-check-business-info-section">Business info</h3>
@@ -372,7 +382,7 @@
 		if (Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.NonLimited) {
 		<tr>
 			<td><b>Time In Business</b></td>
-			<td>@Model.Customer.NonLimitedInfo.NonLimitedTimeInBusiness</td>
+			<td>@(company != null ? company.TimeInBusiness : "")</td>
 			<td></td>
 			<td class="hmrc"></td>
 		</tr>
@@ -381,7 +391,7 @@
 		if (Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited) {
 		<tr>
 			<td><b>Company Number</b></td>
-			<td>@Model.Customer.LimitedInfo.LimitedCompanyNumber</td>
+			<td>@(companyNum ?? "")</td>
 			<td></td>
 			<td class="hmrc"></td>
 		</tr>
@@ -389,7 +399,7 @@
 
 		<tr id="cross-check-company-name">
 			<td><b>Company Name</b><b class="marking pull-right checkoutcome"></b></td>
-			<td class="application">@((Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited ? Model.Customer.LimitedInfo.LimitedCompanyName ?? "" : Model.Customer.NonLimitedInfo.NonLimitedCompanyName ?? "").ToUpper())</td>
+			<td class="application">@((companyName ?? "").ToUpper())</td>
 			<td class="experian"></td>
 			<td class="hmrc"></td>
 		</tr>
@@ -402,13 +412,13 @@
 				switch (Model.Customer.PersonalInfo.TypeOfBusiness) {
 				case TypeOfBusiness.LLP:
 				case TypeOfBusiness.Limited:
-					oCompanyAddress = Model.Customer.AddressInfo.LimitedCompanyAddress.OrderBy(x => x.AddressId).LastOrDefault();
+					oCompanyAddress = company.CompanyAddress.OrderBy(x => x.AddressId).LastOrDefault();
 					break;
 					
 				case TypeOfBusiness.PShip:
 				case TypeOfBusiness.PShip3P:
 				case TypeOfBusiness.SoleTrader:
-					oCompanyAddress = Model.Customer.AddressInfo.NonLimitedCompanyAddress.OrderBy(x => x.AddressId).LastOrDefault();
+					oCompanyAddress = company.CompanyAddress.OrderBy(x => x.AddressId).LastOrDefault();
 					break;
 				} // switch
 
@@ -427,19 +437,13 @@
 		</tr>
 		<tr>
 			<td><b>Time At Address</b></td>
-			<td>@(Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited ? Model.Customer.LimitedInfo.LimitedTimeAtAddress : Model.Customer.NonLimitedInfo.NonLimitedTimeAtAddress)</td>
-			<td></td>
-			<td class="hmrc"></td>
-		</tr>
-		<tr>
-			<td><b>Consent To Search</b></td>
-			<td>@(Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited ? Model.Customer.LimitedInfo.LimitedConsentToSearch : Model.Customer.NonLimitedInfo.NonLimitedConsentToSearch)</td>
+			<td>@(company != null ? company.TimeAtAddress : null)</td>
 			<td></td>
 			<td class="hmrc"></td>
 		</tr>
 		<tr>
 			<td><b>Business Phone</b></td>
-			<td>@(Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited ? Model.Customer.LimitedInfo.LimitedBusinessPhone : Model.Customer.NonLimitedInfo.NonLimitedBusinessPhone)</td>
+			<td>@(company != null ? company.BusinessPhone : "")</td>
 			<td></td>
 			<td class="hmrc"></td>
 		</tr>
@@ -455,13 +459,13 @@
 			if (!propertyOwnedByCompany) {
 				<tr>
 					<td><b>How many years in the property</b></td>
-					<td>@(Model.Customer.CompanyAdditionalInfo.YearsInCompany)</td>
+					<td>@(company.YearsInCompany)</td>
 					<td></td>
 					<td class="hmrc"></td>
 				</tr>
 				<tr>
 					<td><b>How many month are left for the rent contract</b></td>
-					<td>@(Model.Customer.CompanyAdditionalInfo.RentMonthsLeft)</td>
+					<td>@(company.RentMonthLeft)</td>
 					<td></td>
 					<td class="hmrc"></td>
 				</tr>

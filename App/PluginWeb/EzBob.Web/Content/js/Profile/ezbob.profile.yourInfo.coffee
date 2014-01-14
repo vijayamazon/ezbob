@@ -20,14 +20,14 @@ class EzBob.Profile.YourInfoMainView extends Backbone.Marionette.Layout
 
     setInputReadOnly:(isReadOnly) ->
         @.$el.find('.personEditInput').attr('readonly', isReadOnly).attr('modifed', !isReadOnly)
-        @.$el.find('.addAddressInput').attr('modifed', !isReadOnly)
+        @.$el.find('#PersonalAddress .addAddressInput').attr('modifed', !isReadOnly)
 
         if isReadOnly
-            @.$el.find('.submit-personal, .cancel, .addAddressInput, .addAddress, .removeAddress, .attardi-input, .required').hide()
+            @.$el.find('.submit-personal, .cancel, .addAddressInput,#PersonalAddress .addAddress, .removeAddress, .attardi-input, .required').hide()
             @.$el.find('textarea').removeClass('form_field').css('margin-top', 0)
             @.$el.find('.edit-personal').show()
          else 
-            @.$el.find('.submit-personal, .cancel, .removeAddress').show()
+            @.$el.find('.submit-personal, .cancel,#PersonalAddress .removeAddress').show()
             @.$el.find('.edit-personal').hide()
 
     editPersonalViewShow: ->
@@ -41,11 +41,11 @@ class EzBob.Profile.YourInfoMainView extends Backbone.Marionette.Layout
         typeOfBusinessName = @model.get 'BusinessTypeReduced'
 
         if typeOfBusinessName == 'Limited'
-            address = @model.get 'LimitedCompanyAddress'
+            address = @model.get 'CompanyAddress'
             if address.length < 1
                 return false
         else if typeOfBusinessName == 'NonLimited'
-            address = @model.get 'NonLimitedCompanyAddress'
+            address = @model.get 'CompanyAddress'
             if address.length < 1
                 return false
 
@@ -75,9 +75,9 @@ class EzBob.Profile.YourInfoMainView extends Backbone.Marionette.Layout
         typeOfBusinessName = @model.get 'BusinessTypeReduced'
 
         if typeOfBusinessName == 'Limited'
-            @setInvalidAddressLabel @model.get('LimitedCompanyAddress'), '#LimitedCompanyAddress'
+            @setInvalidAddressLabel @model.get('CompanyAddress'), '#LimitedCompanyAddress'
         else if typeOfBusinessName == 'NonLimited'
-            @setInvalidAddressLabel @model.get('NonLimitedCompanyAddress'), '#NonLimitedAddress'
+            @setInvalidAddressLabel @model.get('CompanyAddress'), '#NonLimitedAddress'
 
         self = @
 
@@ -155,12 +155,12 @@ class EzBob.Profile.YourInfoMainView extends Backbone.Marionette.Layout
 
     renderNonLimited: ->
         view = new EzBob.Profile.NonLimitedInfoView({ model: @model });
-        @model.get('NonLimitedCompanyAddress').on 'all', @addressModelChange, @
+        @model.get('CompanyAddress').on 'all', @addressModelChange, @
         @company.show(view)
 
     renderLimited: ->
         view = new EzBob.Profile.LimitedInfoView({ model: @model });
-        @model.get('LimitedCompanyAddress').on 'all', @addressModelChange, @
+        @model.get('CompanyAddress').on 'all', @addressModelChange, @
         @company.show(view)
 
 class EzBob.Profile.PersonalInfoView extends Backbone.Marionette.Layout
@@ -171,6 +171,7 @@ class EzBob.Profile.PersonalInfoView extends Backbone.Marionette.Layout
         otherPropertyAddress: '#OtherPropertyAddress'
 
     onRender: ->
+        console.log('model', @model)
         address = new EzBob.AddressView({
             model: @model.get('PersonalAddress'),
             name: 'PersonalAddress',
@@ -202,8 +203,9 @@ class EzBob.Profile.NonLimitedInfoView extends Backbone.Marionette.Layout
         director: '.director-container' 
 
     onRender: ->
+        
         address = new EzBob.AddressView({
-            model: @model.get('NonLimitedCompanyAddress'),
+            model: @model.get('CompanyAddress'),
             name: 'NonLimitedCompanyAddress',
             max: 10,
             isShowClear: true,
@@ -211,7 +213,7 @@ class EzBob.Profile.NonLimitedInfoView extends Backbone.Marionette.Layout
         })
         @nonlimitedAddress.show(address)
 
-        directors = @model.get('NonLimitedInfo').Directors;
+        directors = @model.get('CompanyInfo').Directors;
 
         if directors isnt null and directors.length isnt 0
             directorView = new EzBob.Profile.DirectorCompositeView ({collection: new EzBob.Directors(directors)}) 
@@ -232,8 +234,10 @@ class EzBob.Profile.LimitedInfoView extends Backbone.Marionette.Layout
         director: '.director-container' 
 
     onRender: ->
+        console.log('comapny', @model.get('CompanyAddress'))
+        console.log('personal', @model.get('PersonalAddress'))
         address = new EzBob.AddressView({
-            model: @model.get('LimitedCompanyAddress'),
+            model: @model.get('CompanyAddress'),
             name: 'LimitedCompanyAddress',
             max: 10,
             isShowClear: true,
@@ -241,7 +245,7 @@ class EzBob.Profile.LimitedInfoView extends Backbone.Marionette.Layout
         })
         @limitedAddress.show(address)
         
-        directors = @model.get('LimitedInfo').Directors;
+        directors = @model.get('CompanyInfo').Directors;
 
         if directors isnt null and directors.length isnt 0
             directorView = new EzBob.Profile.DirectorCompositeView ({collection: new EzBob.Directors(directors)}) 
