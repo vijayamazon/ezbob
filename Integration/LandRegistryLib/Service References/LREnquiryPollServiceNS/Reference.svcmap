@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="48f6617c-b6e4-417a-84d5-aa53b65a9694" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="https://businessgateway.landregistry.gov.uk/b2b/BGSoapEngine/EnquiryByPropertyDescriptionV2_0PollWebService?wsdl" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="EnquiryByPropertyDescriptionV2_0PollWebService.wsdl" MetadataType="Wsdl" ID="e126607b-1c46-4b6d-83c6-707ec910e995" SourceId="1" SourceUrl="https://businessgateway.landregistry.gov.uk/b2b/BGSoapEngine/EnquiryByPropertyDescriptionV2_0PollWebService/WEB-INF/wsdl/SearchByPropertyDescriptionV2_0PollRequestService.wsdl" />
+    <MetadataFile FileName="ResponseSearchByPropertyDescriptionV2_0.xsd" MetadataType="Schema" ID="cab3c4cc-bf90-4021-9855-fa864bfa32f9" SourceId="1" SourceUrl="https://businessgateway.landregistry.gov.uk/b2b/BGSoapEngine/EnquiryByPropertyDescriptionV2_0PollWebService/WEB-INF/wsdl/ResponseSearchByPropertyDescriptionV2_0.xsd" />
+    <MetadataFile FileName="PollRequest.xsd" MetadataType="Schema" ID="5fc4e3cd-94b3-4ee6-82ba-7c39c6fed571" SourceId="1" SourceUrl="https://businessgateway.landregistry.gov.uk/b2b/BGSoapEngine/EnquiryByPropertyDescriptionV2_0PollWebService/WEB-INF/wsdl/PollRequest.xsd" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

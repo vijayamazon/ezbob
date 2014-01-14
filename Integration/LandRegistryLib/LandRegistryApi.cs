@@ -15,26 +15,26 @@ namespace LandRegistryLib
 		public LandRegistryDataModel EnquiryByPropertyDescription(string buildingNumber, string streetName, string cityName, string postCode)
 		{
 			var model = new LandRegistryDataModel { RequestType = LandRegistryRequestType.EnquiryByPropertyDescription };
-			using (var client = new LREnquiryServiceTestNS.PropertyDescriptionEnquiryV2_0ServiceClient())
+			using (var client = new LREnquiryServiceNS.PropertyDescriptionEnquiryV2_0ServiceClient())
 			{
 				client.ChannelFactory.Endpoint.Behaviors.Add(new HMLRBGMessageEndpointBehavior("BGUser001", "landreg001"));
 				ServicePointManager.Expect100Continue = true;
 				ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3;
 
-				var request = new LREnquiryServiceTestNS.RequestSearchByPropertyDescriptionV2_0Type
+				var request = new LREnquiryServiceNS.RequestSearchByPropertyDescriptionV2_0Type
 					{
 						ID =
-							new LREnquiryServiceTestNS.Q1IdentifierType
+							new LREnquiryServiceNS.Q1IdentifierType
 								{
-									MessageID = new LREnquiryServiceTestNS.Q1TextType { Value = "012345" }
+									MessageID = new LREnquiryServiceNS.Q1TextType { Value = "012345" }
 								},
-						Product = new LREnquiryServiceTestNS.Q1ProductType
+						Product = new LREnquiryServiceNS.Q1ProductType
 							{
-								ExternalReference = new LREnquiryServiceTestNS.Q1ExternalReferenceType { Reference = "12345" },
-								CustomerReference = new LREnquiryServiceTestNS.Q1CustomerReferenceType { Reference = "23456" },
-								SubjectProperty = new LREnquiryServiceTestNS.Q1SubjectPropertyType
+								ExternalReference = new LREnquiryServiceNS.Q1ExternalReferenceType { Reference = "12345" },
+								CustomerReference = new LREnquiryServiceNS.Q1CustomerReferenceType { Reference = "23456" },
+								SubjectProperty = new LREnquiryServiceNS.Q1SubjectPropertyType
 									{
-										Address = new LREnquiryServiceTestNS.Q1AddressType()
+										Address = new LREnquiryServiceNS.Q1AddressType
 											{
 												BuildingName = null,
 												BuildingNumber = "27", // buildingNumber
@@ -47,18 +47,18 @@ namespace LandRegistryLib
 					};
 
 				model.Request = SerializeObject(request);
-				LREnquiryServiceTestNS.ResponseSearchByPropertyDescriptionV2_0Type response;
+				LREnquiryServiceNS.ResponseSearchByPropertyDescriptionV2_0Type Response;
 				try
 				{
-					response = client.searchProperties(request);
-					model.Response = SerializeObject(response);
-					model.ResponseType = GetResponseType((int) response.GatewayResponse.TypeCode.Value);
+					Response = client.searchProperties(request);
+					model.Response = SerializeObject(Response);
+					model.ResponseType = GetResponseType((int) Response.GatewayResponse.TypeCode.Value);
 				}
 				catch (Exception ex)
 				{
 					Log.ErrorFormat("{0}", ex);
 					model.Error = ex.Message;
-					//File.WriteAllText("resex3.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
+					//File.WriteAllText("Resex3.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
 				}
 
 				return model;
@@ -69,33 +69,33 @@ namespace LandRegistryLib
 		{
 			var model = new LandRegistryDataModel { RequestType = LandRegistryRequestType.EnquiryByPropertyDescriptionPoll };
 
-			using (var client = new LREnquiryPollServiceTestNS.PropertyDescriptionEnquiryV2_0PollServiceClient())
+			using (var client = new LREnquiryPollServiceNS.PropertyDescriptionEnquiryV2_0PollServiceClient())
 			{
 				client.ChannelFactory.Endpoint.Behaviors.Add(new HMLRBGMessageEndpointBehavior("BGUser001", "landreg001"));
 				// create a request object
-				var pollRequest = new LREnquiryPollServiceTestNS.PollRequestType
+				var pollRequest = new LREnquiryPollServiceNS.PollRequestType
 					{
-						ID = new LREnquiryPollServiceTestNS.Q1IdentifierType
+						ID = new LREnquiryPollServiceNS.Q1IdentifierType
 							{
-								MessageID = new LREnquiryPollServiceTestNS.MessageIDTextType
+								MessageID = new LREnquiryPollServiceNS.MessageIDTextType
 									{
 										Value = "pollST500681" //PollId
 									}
 							}
 					};
 				model.Request = SerializeObject(pollRequest);
-				LREnquiryPollServiceTestNS.ResponseSearchByPropertyDescriptionV2_0Type response;
+				LREnquiryPollServiceNS.ResponseSearchByPropertyDescriptionV2_0Type Response;
 				try
 				{
-					response = client.getResponse(pollRequest);
-					model.Response = SerializeObject(response);
-					model.ResponseType = GetResponseType((int)response.GatewayResponse.TypeCode.Value);
+					Response = client.getResponse(pollRequest);
+					model.Response = SerializeObject(Response);
+					model.ResponseType = GetResponseType((int)Response.GatewayResponse.TypeCode.Value);
 				}
 				catch (Exception ex)
 				{
 					Log.ErrorFormat("{0}", ex);
 					model.Error = ex.Message;
-					//File.WriteAllText("resex1c.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
+					//File.WriteAllText("Resex1c.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
 				}
 			}
 			return model;
@@ -106,51 +106,51 @@ namespace LandRegistryLib
 			var model = new LandRegistryDataModel { RequestType = LandRegistryRequestType.RegisterExtractService };
 
 			// create an instance of the client
-			using (var client = new LRRESServiceTestNS.OCWithSummaryV2_1ServiceClient())
+			using (var client = new LRResServiceNS.OCWithSummaryV2_1ServiceClient())
 			{
 				client.ChannelFactory.Endpoint.Behaviors.Add(new HMLRBGMessageEndpointBehavior("BGUser001", "LandReg001"));
 				// create a request object
-				var request = new LRRESServiceTestNS.RequestOCWithSummaryV2_0Type
+				var request = new LRResServiceNS.RequestOCWithSummaryV2_0Type
 				{
-					ID = new LRRESServiceTestNS.Q1IdentifierType
+					ID = new LRResServiceNS.Q1IdentifierType
 						{
-							MessageID = new LRRESServiceTestNS.Q1TextType
+							MessageID = new LRResServiceNS.Q1TextType
 								{
 									Value = "170100"
 								}
 						},
-					Product = new LRRESServiceTestNS.Q1ProductType
+					Product = new LRResServiceNS.Q1ProductType
 					{
-						ExternalReference = new LRRESServiceTestNS.Q1ExternalReferenceType { Reference = "Ext_ref" },
-						CustomerReference = new LRRESServiceTestNS.Q1CustomerReferenceType { Reference = "Bguser1" },
-						TitleKnownOfficialCopy = new LRRESServiceTestNS.Q1TitleKnownOfficialCopyType
+						ExternalReference = new LRResServiceNS.Q1ExternalReferenceType { Reference = "Ext_ref" },
+						CustomerReference = new LRResServiceNS.Q1CustomerReferenceType { Reference = "Bguser1" },
+						TitleKnownOfficialCopy = new LRResServiceNS.Q1TitleKnownOfficialCopyType
 							{
-								ContinueIfTitleIsClosedAndContinuedIndicator = new LRRESServiceTestNS.IndicatorType { Value = false },
-								NotifyIfPendingFirstRegistrationIndicator = new LRRESServiceTestNS.IndicatorType { Value = false },
-								NotifyIfPendingApplicationIndicator = new LRRESServiceTestNS.IndicatorType { Value = false },
-								SendBackDatedIndicator = new LRRESServiceTestNS.IndicatorType { Value = false },
-								ContinueIfActualFeeExceedsExpectedFeeIndicator = new LRRESServiceTestNS.IndicatorType { Value = false },
-								IncludeTitlePlanIndicator = new LRRESServiceTestNS.IndicatorType { Value = true },
+								ContinueIfTitleIsClosedAndContinuedIndicator = new LRResServiceNS.IndicatorType { Value = false },
+								NotifyIfPendingFirstRegistrationIndicator = new LRResServiceNS.IndicatorType { Value = false },
+								NotifyIfPendingApplicationIndicator = new LRResServiceNS.IndicatorType { Value = false },
+								SendBackDatedIndicator = new LRResServiceNS.IndicatorType { Value = false },
+								ContinueIfActualFeeExceedsExpectedFeeIndicator = new LRResServiceNS.IndicatorType { Value = false },
+								IncludeTitlePlanIndicator = new LRResServiceNS.IndicatorType { Value = true },
 							},
-						SubjectProperty = new LRRESServiceTestNS.Q1SubjectPropertyType { TitleNumber = new LRRESServiceTestNS.Q2TextType { Value = "GR506405" /*titleNumber*/} }
+						SubjectProperty = new LRResServiceNS.Q1SubjectPropertyType { TitleNumber = new LRResServiceNS.Q2TextType { Value = "GR506405" /*titleNumber*/} }
 					}
 				};
 
 				model.Request = SerializeObject(request);
 				try
 				{
-					LRRESServiceTestNS.ResponseOCWithSummaryV2_1Type response = client.performOCWithSummary(request);
-					//File.WriteAllBytes(string.Format("{0}_{1}.zip", titleNumber, DateTime.Today.Ticks), response.GatewayResponse.Results.Attachment.EmbeddedFileBinaryObject.Value);
-					response.GatewayResponse.Results.Attachment = null;
-					model.Response = SerializeObject(response);
-					model.ResponseType = GetResponseType((int)response.GatewayResponse.TypeCode.Value);
+					LRResServiceNS.ResponseOCWithSummaryV2_1Type Response = client.performOCWithSummary(request);
+					//File.WriteAllBytes(string.Format("{0}_{1}.zip", titleNumber, DateTime.Today.Ticks), Response.GatewayResponse.Results.Attachment.EmbeddedFileBinaryObject.Value);
+					Response.GatewayResponse.Results.Attachment = null;
+					model.Response = SerializeObject(Response);
+					model.ResponseType = GetResponseType((int)Response.GatewayResponse.TypeCode.Value);
 					
 				}
 				catch (Exception ex)
 				{
 					Log.ErrorFormat("{0}", ex);
 					model.Error = ex.Message;
-					//File.WriteAllText("resex1c.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
+					//File.WriteAllText("Resex1c.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
 				}
 			}
 			return model;
@@ -161,15 +161,15 @@ namespace LandRegistryLib
 			var model = new LandRegistryDataModel { RequestType = LandRegistryRequestType.RegisterExtractServicePoll };
 
 			// create an instance of the client
-			using (var client = new LRRESPollServiceTestNS.OCWithSummaryV2_0PollServiceClient())
+			using (var client = new LRResPollServiceNS.OCWithSummaryV2_0PollServiceClient())
 			{
 				client.ChannelFactory.Endpoint.Behaviors.Add(new HMLRBGMessageEndpointBehavior("BGUser001", "landreg001"));
 				// create a request object
-				var request = new LRRESPollServiceTestNS.PollRequestType()
+				var request = new LRResPollServiceNS.PollRequestType()
 				{
-					ID = new LRRESPollServiceTestNS.Q1IdentifierType
+					ID = new LRResPollServiceNS.Q1IdentifierType
 					{
-						MessageID = new LRRESPollServiceTestNS.MessageIDTextType
+						MessageID = new LRResPollServiceNS.MessageIDTextType
 							{
 								Value = "170108" //pollId
 							}
@@ -179,23 +179,23 @@ namespace LandRegistryLib
 				model.Request = SerializeObject(request);
 				try
 				{
-					LRRESPollServiceTestNS.ResponseOCWithSummaryV2_0Type response = client.getResponse(request);
-					if (response.GatewayResponse.Results != null && 
-						response.GatewayResponse.Results.Attachment != null &&
-					    response.GatewayResponse.Results.Attachment.EmbeddedFileBinaryObject != null)
+					LRResPollServiceNS.ResponseOCWithSummaryV2_0Type Response = client.getResponse(request);
+					if (Response.GatewayResponse.Results != null && 
+						Response.GatewayResponse.Results.Attachment != null &&
+					    Response.GatewayResponse.Results.Attachment.EmbeddedFileBinaryObject != null)
 					{
-						//File.WriteAllBytes(string.Format("{0}_{1}.zip", pollId, DateTime.Today.Ticks), response.GatewayResponse.Results.Attachment.EmbeddedFileBinaryObject.Value);
-						response.GatewayResponse.Results.Attachment = null;
+						//File.WriteAllBytes(string.Format("{0}_{1}.zip", pollId, DateTime.Today.Ticks), Response.GatewayResponse.Results.Attachment.EmbeddedFileBinaryObject.Value);
+						Response.GatewayResponse.Results.Attachment = null;
 					}
 					
-					model.Response = SerializeObject(response);
-					model.ResponseType = GetResponseType((int)response.GatewayResponse.TypeCode.Value);
+					model.Response = SerializeObject(Response);
+					model.ResponseType = GetResponseType((int)Response.GatewayResponse.TypeCode.Value);
 				}
 				catch (Exception ex)
 				{
 					Log.ErrorFormat("{0}", ex);
 					model.Error = ex.Message;
-					//File.WriteAllText("resex1c.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
+					//File.WriteAllText("Resex1c.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
 				}
 			}
 			return model;

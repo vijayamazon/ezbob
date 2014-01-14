@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="98660d2e-6927-479e-8e70-84130cc5d895" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="https://businessgateway.landregistry.gov.uk/b2b/BGSoapEngine/OfficialCopyWithSummaryV2_0PollRequestWebService?wsdl" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="PollRequest.xsd" MetadataType="Schema" ID="73d6b164-003a-4f7b-9824-e368a3bc529e" SourceId="1" SourceUrl="https://businessgateway.landregistry.gov.uk/b2b/BGSoapEngine/OfficialCopyWithSummaryV2_0PollRequestWebService/WEB-INF/wsdl/PollRequest.xsd" />
+    <MetadataFile FileName="ResponseOCWithSummaryV2_0.xsd" MetadataType="Schema" ID="d87b7e88-4198-43c7-82f8-383e3b612fe5" SourceId="1" SourceUrl="https://businessgateway.landregistry.gov.uk/b2b/BGSoapEngine/OfficialCopyWithSummaryV2_0PollRequestWebService/WEB-INF/wsdl/ResponseOCWithSummaryV2_0.xsd" />
+    <MetadataFile FileName="OfficialCopyWithSummaryV2_0PollRequestWebService.wsdl" MetadataType="Wsdl" ID="0edc43ba-a2ff-468a-9f3b-c88f2f9f8d8c" SourceId="1" SourceUrl="https://businessgateway.landregistry.gov.uk/b2b/BGSoapEngine/OfficialCopyWithSummaryV2_0PollRequestWebService/WEB-INF/wsdl/OCWithSummaryV2_0PollRequestService.wsdl" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

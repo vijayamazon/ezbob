@@ -49,11 +49,22 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Behaviour.cs" />
+    <Compile Include="LandRegistryTestApi.cs" />
     <Compile Include="LandRegistryApi.cs" />
     <Compile Include="LandRegistryDataModel.cs" />
     <Compile Include="LandRegistryTestFixure.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service References\LREnquiryPollServiceNS\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Service References\LREnquiryPollServiceTestNS\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\LREnquiryServiceNS\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
@@ -68,6 +79,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="Service References\LRResPollServiceNS\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\LRResServiceNS\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Service References\LRRESServiceTestNS\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -76,6 +97,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Service References\LREnquiryPollServiceNS\EnquiryByPropertyDescriptionV2_0PollWebService.wsdl" />
+    <None Include="Service References\LREnquiryPollServiceNS\LandRegistryLib.LREnquiryPollServiceNS.ResponseSearchByPropertyDescriptionV2_0Type.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\LREnquiryPollServiceNS\PollRequest.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\LREnquiryPollServiceNS\ResponseSearchByPropertyDescriptionV2_0.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\LREnquiryPollServiceTestNS\EnquiryByPropertyDescriptionV2_0PollWebService.wsdl" />
     <None Include="Service References\LREnquiryPollServiceTestNS\LandRegistryLib.LREnquiryPollServiceTestNS.ResponseSearchByPropertyDescriptionV2_0Type.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
@@ -84,6 +115,16 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\LREnquiryPollServiceTestNS\ResponseSearchByPropertyDescriptionV2_0.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\LREnquiryServiceNS\EnquiryByPropertyDescriptionV2_0WebService.wsdl" />
+    <None Include="Service References\LREnquiryServiceNS\LandRegistryLib.LREnquiryServiceNS.ResponseSearchByPropertyDescriptionV2_0Type.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\LREnquiryServiceNS\RequestSearchByPropertyDescriptionV2_0.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\LREnquiryServiceNS\ResponseSearchByPropertyDescriptionV2_0.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\LREnquiryServiceTestNS\EnquiryByPropertyDescriptionV2_0WebService.wsdl" />
@@ -99,11 +140,31 @@
     <None Include="Service References\LRRESPollServiceTestNS\LandRegistryLib.LRRESPollServiceTestNS.ResponseOCWithSummaryV2_0Type.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\LRResPollServiceNS\LandRegistryLib.LRResPollServiceNS.ResponseOCWithSummaryV2_0Type.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\LRRESPollServiceTestNS\OfficialCopyWithSummaryV2_0PollRequestWebService.wsdl" />
     <None Include="Service References\LRRESPollServiceTestNS\PollRequest.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\LRResPollServiceNS\OfficialCopyWithSummaryV2_0PollRequestWebService.wsdl" />
+    <None Include="Service References\LRResPollServiceNS\PollRequest.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\LRRESPollServiceTestNS\ResponseOCWithSummaryV2_0.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\LRResPollServiceNS\ResponseOCWithSummaryV2_0.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\LRResServiceNS\LandRegistryLib.LRResServiceNS.ResponseOCWithSummaryV2_1Type.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\LRResServiceNS\OfficialCopyWithSummaryV2_1WebService.wsdl" />
+    <None Include="Service References\LRResServiceNS\RequestOCWithSummaryV2_0.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\LRResServiceNS\ResponseOCWithSummaryV2_1.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\LRRESServiceTestNS\LandRegistryLib.LRRESServiceTestNS.ResponseOCWithSummaryV2_1Type.datasource">
@@ -121,9 +182,13 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <WCFMetadataStorage Include="Service References\LREnquiryPollServiceNS\" />
     <WCFMetadataStorage Include="Service References\LREnquiryPollServiceTestNS\" />
+    <WCFMetadataStorage Include="Service References\LREnquiryServiceNS\" />
     <WCFMetadataStorage Include="Service References\LREnquiryServiceTestNS\" />
     <WCFMetadataStorage Include="Service References\LRRESPollServiceTestNS\" />
+    <WCFMetadataStorage Include="Service References\LRResPollServiceNS\" />
+    <WCFMetadataStorage Include="Service References\LRResServiceNS\" />
     <WCFMetadataStorage Include="Service References\LRRESServiceTestNS\" />
   </ItemGroup>
   <ItemGroup>
@@ -163,10 +228,58 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Service References\LREnquiryServiceNS\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="Service References\LRRESPollServiceTestNS\configuration91.svcinfo" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Service References\LREnquiryServiceNS\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\LREnquiryServiceNS\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\LREnquiryPollServiceNS\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\LREnquiryPollServiceNS\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\LREnquiryPollServiceNS\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\LRResServiceNS\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\LRResServiceNS\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\LRResServiceNS\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\LRResPollServiceNS\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="Service References\LRRESPollServiceTestNS\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\LRResPollServiceNS\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\LRResPollServiceNS\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="Service References\LRRESPollServiceTestNS\Reference.svcmap">
