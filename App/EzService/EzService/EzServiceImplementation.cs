@@ -287,7 +287,7 @@
 
 		public ActionMetaData MoreAmlAndBwaInformation(int userId, int customerId) {
 			return Execute(customerId, userId, typeof(MoreAmlAndBwaInformation), customerId);
-		} // MoreAmLandBwaInformation
+		} // MoreAmlAndBwaInformation
 
 		public ActionMetaData MoreAmlInformation(int userId, int customerId) {
 			return Execute(customerId, userId, typeof (MoreAmlInformation), customerId);

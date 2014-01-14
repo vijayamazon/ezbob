@@ -143,7 +143,7 @@ namespace EzBobTest
 		}
 
 		[Test]
-		public void MoreAmLandBwaInformation()
+		public void MoreAmlAndBwaInformation()
 		{
 			var s = new MoreAmlAndBwaInformation(3060, m_oDB, m_oLog);
 			s.Execute();
