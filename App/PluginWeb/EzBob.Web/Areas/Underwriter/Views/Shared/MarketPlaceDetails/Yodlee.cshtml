@@ -218,9 +218,9 @@
                 <%_.each(bank.transactions, function(transaction, j) {%>
                 <%if(transaction.transactionBaseType=='credit'){ %>
                 <tr class="credit">
-                    <%}else{%>
+                <%}else{%>
                 <tr class="debit">
-                    <%}%>
+                <%}%>
                     <td><%=i+1%></td>
                     <td><%-transaction.transactionBaseType!=undefined ? transaction.transactionBaseType : "-"%></td>
                     <td><%-transaction.transactionDate!=undefined ? EzBob.formatDateWithoutTime(transaction.transactionDate) : "-"%></td>
@@ -230,7 +230,7 @@
                     <td><%-transaction.ezbobSubGroup!=undefined ? transaction.ezbobSubGroup : "-"%></td>
                     <td><%-transaction.categoryName!=undefined ? transaction.categoryName : "-"%></td>
                     <td><%-transaction.categoryType!=undefined ? transaction.categoryType : "-"%></td>
-                    <td><%-transaction.description!=undefined ? transaction.description : "-"%></td>
+                    <td><%=transaction.description!=undefined ? transaction.description : "-"%></td>
                     <td><%-transaction.transactionStatus!=undefined ? transaction.transactionStatus : "-"%></td>
                 </tr>
                 <%});%>
@@ -396,12 +396,7 @@
             <div class="form-group">
                 <button class="btn btn-primary yodleeRuleAdd" id="yodleeRuleAdd">Add</button>
             </div>
-
-
-            @*<button class="btn btn-primary yodleeSearchWordsDelete" id="removeYodleeSearchWord">Remove</button>*@
             <hr />
-
-
         </div>
         <%} else {print('No rules available');} })();%>
     </div>
