@@ -43,6 +43,7 @@ namespace Reports {
 					lre.TypeOfLoan = lse.ApprovedType;
 					lre.CustomerSelection = lse.IsLoanTypeSelectionAllowed ? 1 : 0;
 					lre.DiscountPlan = lse.DiscountPlanName;
+					lre.Offline = lse.IsOffline ? "offline" : "online";
 					lre.LoanID = lse.IsLoanIssued ? lse.LoanID : (int?)null;
 					lre.ClientID = lse.CustomerID;
 					lre.ClientName = lse.CustomerName;
@@ -189,6 +190,7 @@ namespace Reports {
 			sheet.Cells["C"  + nRowNumber].Value = lre.TypeOfLoan;
 			sheet.Cells["D"  + nRowNumber].Value = lre.CustomerSelection;
 			sheet.Cells["E"  + nRowNumber].Value = lre.DiscountPlan;
+			sheet.Cells["F"  + nRowNumber].Value = lre.Offline;
 			sheet.Cells["G"  + nRowNumber].Value = lre.LoanID;
 			sheet.Cells["I"  + nRowNumber].Value = lre.ClientID;
 			sheet.Cells["J"  + nRowNumber].Value = lre.ClientName;
@@ -322,31 +324,35 @@ namespace Reports {
 
 			Data = new SortedDictionary<int, List<LoanStatsDataEntry>>();
 
-			DataTable dataTable = m_oDB.ExecuteReader("RptLoanStats_CashRequests", CommandSpecies.StoredProcedure);
-
 			Debug("Loan Stats: processing raw data...");
 
 			var oCounter = new ProgressCounter("Loan Stats: {0} rows processed", this);
 
 			LoanStatsDataEntry oCurrent = null;
 
-			foreach (DataRow row in (InternalDataCollectionBase)dataTable.Rows) {
-				if (oCurrent == null)
-					oCurrent = CreateEntry(row);
-				else {
-					int nCustomerID = Convert.ToInt32(row["CustomerID"]);
+			m_oDB.ForEachRowSafe(
+				(sr, bRowsetStart) => {
+					if (oCurrent == null)
+						oCurrent = CreateEntry(sr);
+					else {
+						int nCustomerID = sr["CustomerID"];
 
-					if (oCurrent.CustomerID == nCustomerID)
-						oCurrent.Update(row);
-					else
-						oCurrent = CreateEntry(row);
-				} // if
+						if (oCurrent.CustomerID == nCustomerID)
+							oCurrent.Update(sr);
+						else
+							oCurrent = CreateEntry(sr);
+					} // if
 
-				if (oCurrent.LoanID != 0)
-					oCurrent = null;
+					if (oCurrent.LoanID != 0)
+						oCurrent = null;
 
-				++oCounter;
-			} // for
+					++oCounter;
+
+					return ActionResult.Continue;
+				},
+				"RptLoanStats_CashRequests",
+				CommandSpecies.StoredProcedure
+			);
 
 			oCounter.Log();
 
@@ -368,8 +374,8 @@ namespace Reports {
 
 		#region method CreateEntry
 
-		private LoanStatsDataEntry CreateEntry(DataRow row) {
-			var lse = new LoanStatsDataEntry(row);
+		private LoanStatsDataEntry CreateEntry(SafeReader sr) {
+			var lse = new LoanStatsDataEntry(sr);
 
 			if (!Data.ContainsKey(lse.CustomerID))
 				Data[lse.CustomerID] = new List<LoanStatsDataEntry>();

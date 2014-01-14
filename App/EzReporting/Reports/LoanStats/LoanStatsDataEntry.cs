@@ -1,11 +1,11 @@
-﻿using EZBob.DatabaseLib.Model.Database;
-using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Globalization;
+﻿namespace Reports {
+	using EZBob.DatabaseLib.Model.Database;
+	using Newtonsoft.Json.Linq;
+	using System;
+	using System.Collections.Generic;
+	using System.Globalization;
+	using Ezbob.Database;
 
-namespace Reports {
 	internal class LoanStatsDataEntry {
 		#region public
 
@@ -15,6 +15,7 @@ namespace Reports {
 		public string ApprovedType { get; private set; }
 		public bool IsLoanTypeSelectionAllowed { get; private set; }
 		public string DiscountPlanName { get; private set; }
+		public bool IsOffline { get; private set; }
 		public string CustomerName { get; private set; }
 		public DateTime FirstDecisionDate { get; private set; }
 		public DateTime LastDecisionDate { get; private set; }
@@ -39,18 +40,18 @@ namespace Reports {
 
 		#region properties - calculated
 
-		public bool IsLoanIssued { get { return this.LoanID != 0; } }
-		public bool IsNewClient { get { return this.LoanSeqNo == 1; } }
+		public bool IsLoanIssued { get { return LoanID != 0; } }
+		public bool IsNewClient { get { return LoanSeqNo == 1; } }
 		public int LoanSeqNo { get; set; }
 
 		#endregion properties - calculated
 
 		#region consturctor
 
-		public LoanStatsDataEntry(DataRow row) {
+		public LoanStatsDataEntry(SafeReader sr) {
 			RequestIDHistory = new List<int>();
 			LoanTerm = 0;
-			Update(row);
+			Update(sr);
 			FirstDecisionDate = LastDecisionDate;
 		} // consturctor
 
@@ -58,12 +59,12 @@ namespace Reports {
 
 		#region method Update
 
-		public void Update(DataRow row) {
-			CustomerID = Convert.ToInt32(row["CustomerID"]);
+		public void Update(SafeReader sr) {
+			CustomerID = sr["CustomerID"];
 
-			RequestIDHistory.Add(Convert.ToInt32(row["RequestID"]));
+			RequestIDHistory.Add(sr["RequestID"]);
 
-			string sLoanType = row["LoanType"].ToString().ToLower();
+			string sLoanType = sr["LoanType"].ToString().ToLower();
 
 			switch (sLoanType) {
 			case "standardloantype":
@@ -76,34 +77,34 @@ namespace Reports {
 				throw new ArgumentOutOfRangeException("Unsupported loan type: " + sLoanType);
 			} // switch
 
-			IsLoanTypeSelectionAllowed = Convert.ToBoolean(row["IsLoanTypeSelectionAllowed"]);
-			DiscountPlanName = row["DiscountPlanName"].ToString();
-			CustomerName = row["CustomerName"].ToString();
-			LastDecisionDate = Convert.ToDateTime(row["DecisionDate"]);
-			ApprovedSum = Convert.ToDecimal(row["ApprovedSum"]);
-			ApprovedRate = Convert.ToDecimal(row["ApprovedRate"]);
-			CreditScore = Convert.ToInt32(row["CreditScore"]);
-			AnnualTurnover = Convert.ToInt32(row["AnnualTurnover"]);
+			IsLoanTypeSelectionAllowed = sr["IsLoanTypeSelectionAllowed"];
+			DiscountPlanName = sr["DiscountPlanName"];
+			IsOffline = sr["IsOffline"];
+			CustomerName = sr["CustomerName"];
+			LastDecisionDate = sr["DecisionDate"];
+			ApprovedSum = sr["ApprovedSum"];
+			ApprovedRate = sr["ApprovedRate"];
+			CreditScore = sr["CreditScore"];
+			AnnualTurnover = sr["AnnualTurnover"];
 
-			string sMedalType = row["MedalType"].ToString();
+			string sMedalType = sr["MedalType"];
 			if (string.IsNullOrEmpty(sMedalType))
 				sMedalType = Medal.Silver.ToString();
 
 			Medal = (Medal)Enum.Parse(typeof(Medal), sMedalType);
 
-			Gender = (Gender)Enum.Parse(typeof(Gender), row["Gender"].ToString());
-			BirthDate = Convert.ToDateTime(row["DateOfBirth"]);
-			MaritalStatus = (MaritalStatus)Enum.Parse(typeof(MaritalStatus), row["MaritalStatus"].ToString());
-			ResidentialStatus = row["ResidentialStatus"].ToString();
-			TypeOfBusiness = (TypeOfBusiness)Enum.Parse(typeof(TypeOfBusiness), row["TypeOfBusiness"].ToString());
-			ReferenceSource = row["ReferenceSource"].ToString();
-			LoanID = Convert.ToInt32(row["LoanID"]);
-			LoanAmount = Convert.ToDecimal(row["LoanAmount"]);
-			IssueDate = Convert.ToDateTime(row["LoanIssueDate"]);
+			Gender = (Gender)Enum.Parse(typeof(Gender), sr["Gender"]);
+			BirthDate = sr["DateOfBirth"];
+			MaritalStatus = (MaritalStatus)Enum.Parse(typeof(MaritalStatus), sr["MaritalStatus"]);
+			ResidentialStatus = sr["ResidentialStatus"];
+			TypeOfBusiness = (TypeOfBusiness)Enum.Parse(typeof(TypeOfBusiness), sr["TypeOfBusiness"]);
+			ReferenceSource = sr["ReferenceSource"];
+			LoanID = sr["LoanID"];
+			LoanAmount = sr["LoanAmount"];
+			IssueDate = sr["LoanIssueDate"];
 
 			if (LoanID != 0) {
-				string sAgreementModel = row["AgreementModel"].ToString();
-				JObject jo = JObject.Parse(sAgreementModel);
+				JObject jo = JObject.Parse(sr["AgreementModel"]);
 				LoanTerm = (int)jo["Term"];
 			} // if
 		} // Update

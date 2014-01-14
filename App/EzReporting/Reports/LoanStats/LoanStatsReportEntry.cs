@@ -13,6 +13,7 @@ namespace Reports {
 		public string TypeOfLoan { get; set; }
 		public int CustomerSelection { get; set; }
 		public string DiscountPlan { get; set; }
+		public string Offline { get; set; }
 		public int? LoanID { get; set; }
 		public int ClientID { get; set; }
 		public string ClientName { get; set; }
