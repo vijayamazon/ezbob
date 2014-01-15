@@ -8,7 +8,7 @@
     if(data.error) {%>
         <h3><%-data.error%></h3>
     <%} else {%>
-    <div class="span8">
+    <div class="span5">
         <table class="table rright">
             <thead class="box">
                 <tr class="box-title">
@@ -58,7 +58,7 @@
         <img src="<%-data.HomeValuesGraphUrl%>" />
         <a href="<%-data.PricesUrl%>" class="btn btn-primary" target="_blank">Go to Zoopla <i class="fa fa-info-circle" data-zoopla=""></i></a>
     </div>
-    <div class="span8">
+    <div class="span5">
         <img src="<%-data.ValueRangesGraphUrl%>" />
         <img src="<%-data.ValueTrendGraphUrl%>" />
         <img src="http://maps.googleapis.com/maps/api/streetview?size=640x640&sensor=false&location=<%-data.CustomerAddress.FormattedAddress%>" />

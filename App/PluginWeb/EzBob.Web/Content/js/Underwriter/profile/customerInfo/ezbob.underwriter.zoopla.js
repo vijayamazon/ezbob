@@ -16,10 +16,9 @@ EzBob.ZooplaView = Backbone.Marionette.View.extend({
             modal: true,
             resizable: false,
             title: "Zoopla",
-            position: "center",
+            position: "top",
             draggable: false,
-            width: "73%",
-            height: Math.max(window.innerHeight * 0.9, 600),
+            width: "1200",
             dialogClass: "zoopla"
         };
     },
