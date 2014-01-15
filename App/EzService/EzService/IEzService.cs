@@ -107,6 +107,9 @@ namespace EzService {
 		ActionMetaData XDaysDue();
 
 		[OperationContract]
+		ActionMetaData CheckExperianCompany(int customerId);
+
+		[OperationContract]
 		ActionMetaData MainStrategy1(int uderwriterId, int customerId, NewCreditLineOption newCreditLine, int avoidAutoDescison);
 
 		[OperationContract]

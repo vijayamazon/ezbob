@@ -125,6 +125,11 @@
             
         }
 
+		public void PerformCompanyCheck(int customerId)
+		{
+			
+		}
+
         public void EmailRolloverAdded(Customer customer, decimal amount, DateTime expireDate)
         {
             

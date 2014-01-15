@@ -200,7 +200,9 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
             this.handleTargeting(form, action, data, postcode, companyName, sCompanyFilter, refNum);
         else
             this.saveDataRequest(action, data);
-
+        
+        $.post("" + window.gRootPath + "Customer/CompanyDetails/PerformCompanyCheck", { customerId: this.model.get('Id') });
+        
         return false;
     },
     

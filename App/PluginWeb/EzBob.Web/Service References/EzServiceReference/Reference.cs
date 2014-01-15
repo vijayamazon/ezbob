@@ -501,6 +501,9 @@ namespace EzBob.Web.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/XDaysDue", ReplyAction="http://tempuri.org/IEzService/XDaysDueResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData XDaysDue();
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckExperianCompany", ReplyAction="http://tempuri.org/IEzService/CheckExperianCompanyResponse")]
+        EzBob.Web.EzServiceReference.ActionMetaData CheckExperianCompany(int customerId);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy1", ReplyAction="http://tempuri.org/IEzService/MainStrategy1Response")]
         EzBob.Web.EzServiceReference.ActionMetaData MainStrategy1(int uderwriterId, int customerId, EzBob.Web.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison);
         
@@ -683,6 +686,10 @@ namespace EzBob.Web.EzServiceReference {
         
         public EzBob.Web.EzServiceReference.ActionMetaData XDaysDue() {
             return base.Channel.XDaysDue();
+        }
+        
+        public EzBob.Web.EzServiceReference.ActionMetaData CheckExperianCompany(int customerId) {
+            return base.Channel.CheckExperianCompany(customerId);
         }
         
         public EzBob.Web.EzServiceReference.ActionMetaData MainStrategy1(int uderwriterId, int customerId, EzBob.Web.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison) {

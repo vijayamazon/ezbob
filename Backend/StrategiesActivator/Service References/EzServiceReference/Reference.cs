@@ -635,6 +635,12 @@ namespace StrategiesActivator.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/XDaysDue", ReplyAction="http://tempuri.org/IEzService/XDaysDueResponse")]
         System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> XDaysDueAsync();
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckExperianCompany", ReplyAction="http://tempuri.org/IEzService/CheckExperianCompanyResponse")]
+        StrategiesActivator.EzServiceReference.ActionMetaData CheckExperianCompany(int customerId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckExperianCompany", ReplyAction="http://tempuri.org/IEzService/CheckExperianCompanyResponse")]
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> CheckExperianCompanyAsync(int customerId);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy1", ReplyAction="http://tempuri.org/IEzService/MainStrategy1Response")]
         StrategiesActivator.EzServiceReference.ActionMetaData MainStrategy1(int uderwriterId, int customerId, StrategiesActivator.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison);
         
@@ -973,6 +979,14 @@ namespace StrategiesActivator.EzServiceReference {
         
         public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> XDaysDueAsync() {
             return base.Channel.XDaysDueAsync();
+        }
+        
+        public StrategiesActivator.EzServiceReference.ActionMetaData CheckExperianCompany(int customerId) {
+            return base.Channel.CheckExperianCompany(customerId);
+        }
+        
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> CheckExperianCompanyAsync(int customerId) {
+            return base.Channel.CheckExperianCompanyAsync(customerId);
         }
         
         public StrategiesActivator.EzServiceReference.ActionMetaData MainStrategy1(int uderwriterId, int customerId, StrategiesActivator.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison) {

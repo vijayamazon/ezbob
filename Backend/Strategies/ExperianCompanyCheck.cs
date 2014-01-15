@@ -1,15 +1,22 @@
 ﻿namespace EzBob.Backend.Strategies {
+	using System.Data;
 	using ExperianLib.Ebusiness;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
 	public class ExperianCompanyCheck : AStrategy {
-		public ExperianCompanyCheck(int customerId, bool isLimited, string companyRefNumber, AConnection oDb, ASafeLog oLog)
+		public ExperianCompanyCheck(int customerId, AConnection oDb, ASafeLog oLog)
 			: base(oDb, oLog)
 		{
 			this.customerId = customerId;
-			this.isLimited = isLimited;
-			this.companyRefNumber = companyRefNumber;
+
+			DataTable dt = DB.ExecuteReader("GetCompanyData", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
+			var sr = new SafeReader(dt.Rows[0]);
+
+			string companyType = sr["CompanyType"];
+			companyNumber = sr["CompanyNumber"];
+
+			isLimited = companyType == "Limited" || companyType == "LLP";
 		} // constructor
 
 		public override string Name {
@@ -21,7 +28,7 @@
 			string experianError = null;
 			decimal experianBureauScore = 0;
 
-			if (string.IsNullOrEmpty(companyRefNumber))
+			if (string.IsNullOrEmpty(companyNumber))
 			{
 				experianError = "RefNumber is empty";
 			}
@@ -31,11 +38,11 @@
 				BusinessReturnData experianData;
 				if (isLimited)
 				{
-					experianData = service.GetLimitedBusinessData(companyRefNumber, customerId);
+					experianData = service.GetLimitedBusinessData(companyNumber, customerId);
 				}
 				else
 				{
-					experianData = service.GetNotLimitedBusinessData(companyRefNumber, customerId);
+					experianData = service.GetNotLimitedBusinessData(companyNumber, customerId);
 				}
 
 				if (!experianData.IsError)
@@ -51,7 +58,7 @@
 			DB.ExecuteNonQuery(
 					"UpdateExperianBusiness",
 					CommandSpecies.StoredProcedure,
-					new QueryParameter("CompanyRefNumber", companyRefNumber),
+					new QueryParameter("CompanyRefNumber", companyNumber),
 					new QueryParameter("ExperianError", experianError),
 					new QueryParameter("ExperianScore", experianBureauScore),
 					new QueryParameter("CustomerId", customerId)
@@ -60,6 +67,6 @@
 
 		private readonly int customerId;
 		private readonly bool isLimited;
-		private readonly string companyRefNumber;
+		private readonly string companyNumber;
 	} // class ExperianCompanyCheck
 } // namespace

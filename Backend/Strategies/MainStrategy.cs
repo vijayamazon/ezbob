@@ -163,9 +163,7 @@
 					}
 					else
 					{
-						bool isLimited = companyType == "Limited" || companyType == "LLP";
-						string companyRefNumber = isLimited ? limitedRefNum : nonLimitedRefNum;
-						var experianCompanyChecker = new ExperianCompanyCheck(customerId, isLimited, companyRefNumber, DB, Log);
+						var experianCompanyChecker = new ExperianCompanyCheck(customerId, DB, Log);
 						experianCompanyChecker.Execute();
 					}
 				}

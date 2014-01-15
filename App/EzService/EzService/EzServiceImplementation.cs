@@ -356,11 +356,11 @@
 		public ActionMetaData FirstOfMonthStatusNotifier() {
 			return Execute(null, null, typeof (FirstOfMonthStatusNotifier));
 		} // FirstOfMonthStatusNotifier
-
+		
 		public ActionMetaData FraudChecker(int customerId) {
 			return Execute(customerId, null, typeof (FraudChecker), customerId);
 		} // FraudChecker
-
+		
 		public ActionMetaData LateBy14Days() {
 			return Execute(null, null, typeof (LateBy14Days));
 		} // LateBy14Days
@@ -388,6 +388,11 @@
 		public ActionMetaData XDaysDue() {
 			return Execute(null, null, typeof (XDaysDue));
 		} // XDaysDue
+
+		public ActionMetaData CheckExperianCompany(int customerId)
+		{
+			return Execute(customerId, null, typeof(ExperianCompanyCheck), customerId);
+		} // CheckExperianCompany
 
 		public ActionMetaData MainStrategy1(int underwriterId, int customerId, NewCreditLineOption newCreditLine, int avoidAutoDescison) {
 			return Execute(customerId, underwriterId, typeof(MainStrategy), customerId, newCreditLine, avoidAutoDescison);
