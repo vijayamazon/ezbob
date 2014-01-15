@@ -28,8 +28,8 @@
 	<Target Name="ProjectToBuildConfig" >
 		<ItemGroup>
 			<ProjectToBuild Include="$(Src)\ezbob.sln"/>
-			<ProjectToBuild Include="$(Src)\App\EzAutoResponder\EzAutoResponder.sln"/>
 			<!--
+			<ProjectToBuild Include="$(Src)\App\EzAutoResponder\EzAutoResponder.sln"/>
 			<ProjectToBuild Include="$(Src)\app\admin\admin.sln"/>
 			<ProjectToBuild Include="$(Src)\app\agents\agents.sln"/>
 			<ProjectToBuild Include="$(Src)\app\auditor\auditor.sln"/>
