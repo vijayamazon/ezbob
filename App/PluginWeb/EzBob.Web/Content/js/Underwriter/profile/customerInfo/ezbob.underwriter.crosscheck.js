@@ -213,9 +213,9 @@ EzBob.Underwriter.CrossCheckView = Backbone.View.extend({
 
         var oCompanyID = oCompanyIdList[0];
 
-        this.$el.find('#cross-check-company-name .experian').text($.trim(oCompanyID['Company Name']));
+        this.$el.find('#cross-check-company-name .experian').text($.trim(oCompanyID.Values['Company Name']));
 
-        this.$el.find('#cross-check-company-address .experian').text(this.address(oCompanyID['Office Address']));
+        this.$el.find('#cross-check-company-address .experian').text(this.address(oCompanyID.Values['Office Address']));
     }, // setExperianData
 
     loadExperian: function (sDatumID) {
