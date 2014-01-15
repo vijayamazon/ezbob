@@ -244,7 +244,7 @@
 
 				int amount = 0;
 
-				bool isAutoReApproved = ara.IsAutoReApproved(autoDecision.CustomerId, out reason, out amount);
+				bool isAutoReApproved = ara.IsAutoReApproved(autoDecision.CustomerId, autoDecision.CashRequestId, out reason, out amount);
 				autoDecisionsDict.Add(DecisionType.AutoReApprove, new AutoDecision
 				{
 					CashRequestId = autoDecision.CashRequestId,

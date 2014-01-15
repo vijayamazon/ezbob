@@ -17,12 +17,15 @@
 			var dbHelper = new DbHelper(_log);
 			var rerejectionData = dbHelper.GetReRejectionData(customerId);
 			
+			var days = rerejectionData.ManualRejectDate.HasValue ? (rerejectionData.ManualRejectDate.Value.AddDays(Constants.ManualDecisionDateRangeDays) - DateTime.UtcNow).Days : 0;
+
 			if (rerejectionData.IsNewClient)
 			{
 				if (rerejectionData.ManualRejectDate.HasValue && rerejectionData.ManualRejectDate.Value.AddDays(Constants.ManualDecisionDateRangeDays) >= DateTime.UtcNow &&
 				    !rerejectionData.NewDataSourceAdded)
 				{
-					reason = "ReRejection. New Client. Application within min date range and no new data sources added";
+					
+					reason = string.Format("ReRejection. New Client. Application within min date range ({0} days, manual decision date {1}) and no new data sources added", days, rerejectionData.ManualRejectDate.Value.ToString("dd/MM/yyyy"));
 					return true;
 				}
 			}
@@ -33,7 +36,7 @@
 					!rerejectionData.NewDataSourceAdded && 
 					repaymentPercent < Constants.MinRepaidPrincipalPercent)
 				{
-					reason = "ReRejection. Old Client. Application within min date range and no new data sources added and not repaid min principal amount";
+					reason = string.Format("ReRejection. Old Client. Application within min date range ({0} days, manual decision date {2}) and no new data sources added and not repaid min principal amount ({1}% repaid)", days, repaymentPercent * 100, rerejectionData.ManualRejectDate.Value.ToString("dd/MM/yyyy"));
 					return true;
 				}
 			}

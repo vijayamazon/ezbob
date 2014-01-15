@@ -13,10 +13,10 @@
 			_log = log;
 		}
 
-		public bool IsAutoReApproved(int customerId, out string reason, out int amount)
+		public bool IsAutoReApproved(int customerId, int cashRequestId, out string reason, out int amount)
 		{
 			var dbHelper = new DbHelper(_log);
-			var reApprovalData = dbHelper.GetReApprovalData(customerId);
+			var reApprovalData = dbHelper.GetReApprovalData(customerId, cashRequestId);
 			amount = 0;
 			decimal remainingAmount = 0;
 			if (!reApprovalData.ManualApproveDate.HasValue)

@@ -54,7 +54,7 @@
 			var arr = new AutoReApprovalCalculator(Log);
 			string reason;
 			int amount = 0;
-			var des = arr.IsAutoReApproved(14223, out reason, out amount);
+			var des = arr.IsAutoReApproved(14223,0, out reason, out amount);
 			Assert.AreEqual(false, des);
 		}
 
