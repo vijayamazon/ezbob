@@ -50,7 +50,7 @@ App/clients/Auditor/Auditor.mdb
 App/service/agent/Play.dll
 App/service/agent/Volusion.dll
 App/EzReporting/~$ReportingDoc.docx
-App/EzReporting/EzReportsWeb/bin/
+App/EzReporting/EzReportsWeb/bin
 App/EzReporting/EzReportToEMail/bin
 App/EzReporting/EzReportToEMail/obj
 App/EzReporting/ReportAuthenticationLib/bin
@@ -64,7 +64,6 @@ App/Utils/EzEnvironment/obj
 App/EzReporting/EzReportsWeb/Properties/PublishProfiles/EzReportingWeb2.pubxml
 App/EzReporting/EzReportsWeb/Properties/PublishProfiles/EzReportingWeb2.pubxml.user
 *.DotSettings
-App/EzReporting/EzReportsWeb/bin/*
 App/clients/Maven/AmazonDbLib.dll
 App/clients/Maven/AmazonLib.dll
 App/clients/Maven/CommonLib.dll
@@ -89,5 +88,3 @@ App/clients/Maven/ExperianParser.dll
 App/clients/Maven/Logger.dll
 App/PluginWeb/EzBob.Web/Properties/PublishProfiles/EzBob.Release.pubxml.user
 App/PluginWeb/EzBob.Web/Properties/PublishProfiles/EzBob.Test.pubxml.user
-App/EzReporting/EzReportsWeb/bin/*
-App/EzReporting/EzReportsWeb/bin/*
