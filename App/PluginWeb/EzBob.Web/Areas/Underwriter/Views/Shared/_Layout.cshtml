@@ -24,7 +24,7 @@
     @Html.AntiForgeryTokenNoUserCheck()
 
     @{
-        var sRoleImageUrl = Url.Content("~/Content/img/roles/crm.png");
+        var sRoleImageUrl = "crm.png";
         var sRoleImageTitle = "CRM";
         var userName = "";
 	    var userId = 0;
@@ -41,12 +41,12 @@
 
             if (user.Roles.Any(r => r.Name == "manager"))
             {
-                sRoleImageUrl = Url.Content("~/Content/img/roles/manager.png");
+                sRoleImageUrl = "manager.png";
                 sRoleImageTitle = "Manager";
             }
             else if (user.Roles.Any(r => r.Name == "Underwriter"))
             {
-                sRoleImageUrl = Url.Content("~/Content/img/roles/underwriter.png");
+                sRoleImageUrl = "underwriter.png";
                 sRoleImageTitle = "Underwriter";
             }
 
@@ -55,6 +55,8 @@
         catch
         {
         }
+
+	    sRoleImageUrl = "https://app.ezbob.com/Content/img/roles/" + sRoleImageUrl;
     }
 
     @{if (!string.IsNullOrEmpty(userName))
