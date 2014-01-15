@@ -48,8 +48,7 @@
 			string dirPath2 = caisPath2 + "\\" + timeString;
 			Directory.CreateDirectory(dirPath);
 			Directory.CreateDirectory(dirPath2);
-			//Talk to stas about this comment
-			//var service = new ExperianLib.Ebusiness.EBusinessService();
+			var service = new ExperianLib.Ebusiness.EBusinessService();
 			DataTable dt = DB.ExecuteReader("GetCaisData", CommandSpecies.StoredProcedure);
 			foreach (DataRow row in dt.Rows) {
 				var sr = new SafeReader(row);
@@ -86,6 +85,7 @@
 				bool isDefaulted = sr["IsDefaulted"];
 				string caisAccountStatus = sr["CaisAccountStatus"];
 				string maritalStatus = sr["MaritalStatus"];
+				int customerId = sr["CustomerId"];
 				string genderPrefix;
 				if (gender == "M") {
 					genderPrefix = "Mr.";
@@ -153,7 +153,7 @@
 				}
 				else
 				{
-/*
+
 					switch (companyType)
 					{
 						case "LLP":
@@ -195,43 +195,7 @@
 							}
 							break;
 					}
-*/
-					// Check this comment out with Stas
-					//var service = new ExperianLib.Ebusiness.EBusinessService();
-					if (companyType == "Limited" || companyType == "PShip" || companyType == "LLP") {
-						companyTypeCode = "L";
-						companyRefNum = limitedRefNum;
-						//var res = service.GetLimitedBusinessData(limitedRefNum, customerId, true);
-
-						// The mismatch is here
-						//if(!string.IsNullOrEmpty(res.CompanyName)) fullName = res.CompanyName;
-						//if (!string.IsNullOrEmpty(res.PostCode))
-						//{
-						//	line1 = res.AddressLine1;
-						//	line23 = res.AddressLine2;
-						//	town = res.AddressLine3;
-						//	county = res.AddressLine4;
-						//	postcode = res.PostCode;
-						//}
-					}
- 					else if (companyType == "PShip3P" || companyType == "SoleTrader") {
-						companyTypeCode = "N";
-						companyRefNum = nonLimitedRefNum;
-						//var res = service.GetLimitedBusinessData(nonLimitedRefNum, customerId, true);
-						//if (!string.IsNullOrEmpty(res.CompanyName))
-						//{
-						//	fullName = res.CompanyName;
-						//}
-						//if (!string.IsNullOrEmpty(res.PostCode))
-						//{
-						//	line1 = res.AddressLine1;
-						//	line23 = res.AddressLine2 + " " + res.AddressLine3;
-						//	town = res.AddressLine4;
-						//	county = res.AddressLine5;
-						//	postcode = res.PostCode;
-						//}
- 					}
-
+					
 					var cais = CaisFileManager.GetBusinessCaisFileData();
 					cais.Header.CompanyPortfolioName = "Orange Money";
 					cais.Header.CreditCardBehaviouralSharingFlag = "";
