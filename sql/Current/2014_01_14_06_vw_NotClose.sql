@@ -114,7 +114,8 @@ BEGIN
 		CONVERT(BIT, IsDefaulted) AS IsDefaulted,
 		CaisAccountStatus,
 		MaritalStatus,
-		CustomerId
+		CustomerId,
+		ManualCaisFlag
 	FROM 
 		vw_NotClose
 END

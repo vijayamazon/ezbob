@@ -68,6 +68,7 @@
 				string county = sr["County"];
 				string postcode = sr["Postcode"];
 				DateTime dateOfBirth = sr["DateOfBirth"];
+				string manualCaisFlag = sr["ManualCaisFlag"];
 				
 				DateTime? minLsDate = null;
 				DateTime tmp = sr["MinLSDate"];
@@ -100,7 +101,7 @@
 				}
 				else
 				{
-					accountStatus = GetAccountStatus(minLsDate, caisAccountStatus, dateClose, startDate, isDefaulted);
+					accountStatus = GetAccountStatus(minLsDate, dateClose, startDate, isDefaulted);
 					
 					if (accountStatus == "8")
 					{
@@ -129,6 +130,12 @@
 
 				string transferredToCollectionFlag = customerState == "Collection" ? "Y" : string.Empty;
 				string accountNumber = refNumber + loanId;
+
+				string caisFlag = null;
+				if (!string.IsNullOrEmpty(manualCaisFlag) && manualCaisFlag != "Calculated value")
+				{
+					caisFlag = manualCaisFlag;
+				}
 				
 				if (companyType == "Entrepreneur") {
 					var file = CaisFileManager.GetCaisFileData();
@@ -139,7 +146,7 @@
 					h.OverdraftReportingCutOff = 0;
 					h.IsCardsBehaviouralSharing = false;
 
-					var account = CreateConsumerRecord(accountNumber, startDate, dateClose, scheduledRepayments, currentBalance, fullName, line1, line23, town, county, postcode, dateOfBirth, transferredToCollectionFlag);
+					var account = CreateConsumerRecord(accountNumber, startDate, dateClose, scheduledRepayments, currentBalance, fullName, line1, line23, town, county, postcode, dateOfBirth, transferredToCollectionFlag, caisFlag);
 
 					file.Accounts.Add(account);
 
@@ -243,7 +250,7 @@
 			CaisFileManager.RemoveCaisFileData();
 		}
 
-		private string GetAccountStatus(DateTime? minLsDate, string caisAccountStatus, DateTime dateClose, DateTime startDate, bool isDefaulted) {
+		private string GetAccountStatus(DateTime? minLsDate, DateTime dateClose, DateTime startDate, bool isDefaulted) {
 			int daysBetween;
 			if (!minLsDate.HasValue) {
 				daysBetween = 0;
@@ -285,7 +292,7 @@
 		private AccountRecord CreateConsumerRecord(string accountNumber, DateTime startDate, DateTime dateClose, int scheduledRepayments,
 											decimal currentBalance, string fullName, string line1, string line23, string town,
 											string county, string postcode, DateTime dateOfBirth,
-											string transferredToCollectionFlag) {
+											string transferredToCollectionFlag, string caisFlag) {
 			// TODO: investigate if we need all the assigments to 0 and empty strings
 			var account = new AccountRecord {
 				AccountNumber = accountNumber,
@@ -308,7 +315,7 @@
 				PromotionActivityFlag = string.Empty,
 				TransientAssociationFlag = string.Empty,
 				AirtimeFlag = string.Empty,
-				FlagSettings = null,
+				FlagSettings = caisFlag,
 				NameAndAddress = new NameAndAddressData {
 					Name = fullName,
 					AddressLine1 = line1,
