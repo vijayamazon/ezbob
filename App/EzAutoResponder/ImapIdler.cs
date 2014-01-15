@@ -9,6 +9,7 @@
 	using MailBee;
 	using MailBee.ImapMail;
 	using MailBee.Mime;
+	using Mailer;
 
 	public class ImapIdler
 	{
@@ -55,7 +56,7 @@
 			catch (MailBeeLicenseException e)
 			{
 				_eventLog.WriteEntry(string.Format("License key is invalid: {0}", e), EventLogEntryType.Error);
-				Mailer.Mailer.SendMail(address, password, "EzAutoresonder Error", e.ToString(), "stasdes@gmail.com");
+				Mailer.SendMail(address, password, "EzAutoresonder Error", e.ToString(), "stasdes@gmail.com");
 			} // try
 
 			_imap = new Imap { SslMode = MailBee.Security.SslStartupMode.OnConnect };

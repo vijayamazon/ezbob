@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logger", "..\..\Tools\Ezbob
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbConnection", "..\..\Tools\EzbobUtils\DbConnection\DbConnection.csproj", "{270BAF49-7F7D-4220-91A2-D8F5BF16B3E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mailer", "..\..\Tools\EzbobUtils\Mailer\Mailer.csproj", "{68180204-5112-43AF-9D83-E5CDD39F93A0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mailer", "..\EzReporting\Mailer\Mailer.csproj", "{68180204-5112-43AF-9D83-E5CDD39F93A0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
