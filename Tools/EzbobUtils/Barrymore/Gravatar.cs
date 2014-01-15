@@ -11,7 +11,7 @@
 		public static string Url(string sEmail, string sDefaultImgUrl = null, int nImgSize = 0) {
 			var os = new StringBuilder();
 
-			os.AppendFormat("https://secure.gravatar.com/avatar/{0}", MiscUtils.MD5(sEmail.Trim().ToLower()).ToLower());
+			os.AppendFormat("https://secure.gravatar.com/avatar/{0}", MiscUtils.MD5((sEmail ?? string.Empty).Trim().ToLower()).ToLower());
 
 			string sSeparator = "?";
 
