@@ -883,6 +883,8 @@
     <Content Include="Content\img\summery.jpg" />
     <Content Include="Content\img\thank-you.png" />
     <Content Include="Content\img\tray.png" />
+    <Content Include="Content\img\trustpilot-ezbob-cartless.png" />
+    <Content Include="Content\img\trustpilot-ezbob.png" />
     <Content Include="Content\img\Tutorial\amazon1.jpg" />
     <Content Include="Content\img\Tutorial\amazon2.jpg" />
     <Content Include="Content\img\Tutorial\amazon3.jpg" />
