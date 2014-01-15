@@ -60,8 +60,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		public CrossCheckModel(EZBob.DatabaseLib.Model.Database.Customer customer, CreditBureauModelBuilder creditBureauModelBuilder)
 		{
 			Customer = customer;
-			if (!Customer.Companies.Any()) Customer.Companies.Add(new Company());
-
+			
 			Application = new PersonalInfo();
 			EBay = new PersonalInfo();
 			PayPal = new PersonalInfo();
