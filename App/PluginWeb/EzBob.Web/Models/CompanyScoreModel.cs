@@ -16,7 +16,23 @@ namespace EzBob.Web.Models {
 
 		public string company_ref_num { get; set; }
 
-		public List<CompanyScoreModel> Owners { get; set; }
+		public CompanyScoreModel[] Owners { get { return ReferenceEquals(m_oOwners, null) ? null : m_oOwners.ToArray(); } }
+
+		public void AddOwner(CompanyScoreModel oOwner) {
+			if (ReferenceEquals(m_oSavedOwners, null)) {
+				m_oSavedOwners = new SortedSet<string>();
+				m_oOwners = new List<CompanyScoreModel>();
+			} // if
+
+			if (m_oSavedOwners.Contains(oOwner.company_ref_num))
+				return;
+
+			m_oSavedOwners.Add(oOwner.company_ref_num);
+			m_oOwners.Add(oOwner);
+		} // AddOwner
+
+		private SortedSet<string> m_oSavedOwners;
+		private List<CompanyScoreModel> m_oOwners;
 	} // CompanyScoreModel
 
 	public class CompanyScoreModelBuilder {
@@ -63,10 +79,7 @@ namespace EzBob.Web.Models {
 							);
 
 							if (oOwner.result == CompanyScoreModel.Ok) {
-								if (oPossession.Owners == null)
-									oPossession.Owners = new List<CompanyScoreModel>();
-
-								oPossession.Owners.Add(oOwner);
+								oPossession.AddOwner(oOwner);
 							} // if owner was found
 						} // if company number is not empty
 					} // if owner has a company number
