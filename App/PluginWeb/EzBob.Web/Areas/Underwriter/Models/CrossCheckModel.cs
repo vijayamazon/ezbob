@@ -92,28 +92,27 @@ namespace EzBob.Web.Areas.Underwriter.Models
 					intVal = zoopla.AverageSoldPrice1Year;
 				}
 				current.ZooplaValue = intVal;
-				int mtg = 0;
-				ConsumerServiceResult result;
+				
 				try
 				{
+					ConsumerServiceResult result;
 					creditBureauModelBuilder.GetConsumerInfo(customer, false, null, current, out result);
 					var experian = creditBureauModelBuilder.GenerateConsumerModel(customer.Id, result);
-					if (experian != null && experian.ConsumerAccountsOverview != null &&
-					    !string.IsNullOrEmpty(experian.ConsumerAccountsOverview.Balance_Mtg))
+					if (experian != null && experian.ConsumerAccountsOverview != null)
 					{
-						if (int.TryParse(experian.ConsumerAccountsOverview.Balance_Mtg, out mtg))
-						{
-							ExperianMortgage = mtg;
-						}
-						if (int.TryParse(experian.ConsumerAccountsOverview.OpenAccounts_Mtg, out mtg))
-						{
-							ExperianMortgageCount = mtg;
-						}
+						int mtg = 0;
+						int.TryParse(experian.ConsumerAccountsOverview.Balance_Mtg, out mtg);
+						ExperianMortgage = mtg;
 
+						int mtgCount = 0;
+						int.TryParse(experian.ConsumerAccountsOverview.OpenAccounts_Mtg, out mtgCount);
+						ExperianMortgageCount = mtgCount;
 					}
-				}catch{}
+				}
+				catch { }
 
-				AssetWorth = current.ZooplaValue - mtg;
+				AssetWorth = current.ZooplaValue - ExperianMortgage;
+
 			}
 			var prev = customer.AddressInfo.PrevPersonAddresses.FirstOrDefault(x => x.AddressType == CustomerAddressType.PrevPersonAddresses);
 			if (current != null) CurrentAddress = current;
