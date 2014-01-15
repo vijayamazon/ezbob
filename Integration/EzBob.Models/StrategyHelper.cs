@@ -606,12 +606,24 @@
 			}
 		}
 
-		public string GetLandRegistryDate(int customerId, bool recheck = false)
+		public LandRegistryResModel GetLandRegistryDate(int customerId, bool recheck = false, bool stub = true)
 		{
+			
 			//todo implement the logic to retrieve enquiry data, retrieve res data store to db
-			var lr = new LandRegistryApi();
-			var data = lr.Res(null);
-			return data.Response;
+			if (stub)
+			{
+				var lr = new LandRegistryTestApi();
+				var data = lr.Res(null);
+				return data.Res;
+			}
+			else
+			{
+				var lr = new LandRegistryApi();
+				var data = lr.Res(null);
+				return data.Res;
+			}
 		}
+
+
 	}
 }

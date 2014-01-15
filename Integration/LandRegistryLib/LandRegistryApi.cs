@@ -17,7 +17,7 @@ namespace LandRegistryLib
 			var model = new LandRegistryDataModel { RequestType = LandRegistryRequestType.EnquiryByPropertyDescription };
 			using (var client = new LREnquiryServiceNS.PropertyDescriptionEnquiryV2_0ServiceClient())
 			{
-				client.ChannelFactory.Endpoint.Behaviors.Add(new HMLRBGMessageEndpointBehavior("BGUser001", "landreg001"));
+				client.ChannelFactory.Endpoint.Behaviors.Add(new HMLRBGMessageEndpointBehavior("SDulman3000", "Ezbob2013$LR"));
 				ServicePointManager.Expect100Continue = true;
 				ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3;
 

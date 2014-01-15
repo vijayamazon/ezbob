@@ -12,11 +12,12 @@ EzBob.LandRegistryView = Backbone.Marionette.View.extend({
     jqoptions: function () {
         return {
             modal: true,
-            resizable: false,
+            resizable: true,
             title: "Land Registry",
-            position: "center",
-            draggable: false,
-            dialogClass: "landregistry"
+            position: "top",
+            draggable: true,
+            dialogClass: "landregistry",
+            width: "90%"
         };
     },
 });

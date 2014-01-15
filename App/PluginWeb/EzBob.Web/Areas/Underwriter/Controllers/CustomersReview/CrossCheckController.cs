@@ -72,13 +72,12 @@
 				return this.JsonNet(new { error = "address not found" });
 			}
 			
-			string landregistry = null;// address.LandRegistry.LastOrDefault();
+			LandRegistryLib.LandRegistryResModel landregistry = null;// address.LandRegistry.LastOrDefault();
 
 			if (landregistry == null || recheck)
 			{
 				var sh = new StrategyHelper();
 				landregistry = sh.GetLandRegistryDate(customerId, recheck);
-				//landregistry = address.Zoopla.LastOrDefault();
 				if (landregistry == null)
 					return this.JsonNet(new { error = "land registry info not found" });
 			}

@@ -7,8 +7,69 @@
     var data = this.model;
     if(data.error) {%>
         <h3><%-data.error%></h3>
-    <%} else { %>
-    <pre class="highlight"><code class="language-xml"><%-data.response%></code></pre>
+    <%} else { console.log(data); %>
+    @*<pre class="highlight"><code class="language-xml"><%-data.response%></code></pre>*@
+    <div>Actual Price: <%=data.response.ActualPrice%></div>
+    <div>Official Copy Date: <%=data.response.OfficialCopyDateTime%></div>
+
+    <table class="box">
+        <thead class="box-title">
+            <tr>
+                <td colspan="2">Proprietors</td>
+            </tr>
+        </thead>
+        <tbody>
+            <%_.each(data.response.RegisteredProprietorParties, function(p) {%>
+            <tr>
+                <td>Name</td>
+                <td><%=p.ProprietorName%></td>
+            </tr>
+            <%});%>
+        </tbody>
+    </table>
+    <table class="box">
+        <thead class="box-title">
+            <tr>
+                <td colspan="2">Restrictions</td>
+            </tr>
+            <tr>
+                <td>Type</td>
+                <td>Description</td>
+            </tr>
+        </thead>
+        <tbody>
+            <%_.each(data.response.Restrictions, function(r) {%>
+            <tr>
+                <td><%=r.Type%></td>
+                <td><%=r.Description%></td>
+            </tr>
+            <%});%>
+        </tbody>
+    </table>
+    <table class="box">
+        <thead class="box-title">
+            <tr>
+                <td colspan="5">Charges</td>
+            </tr>
+            <tr>
+                <td>Charge Date</td>
+                <td>Proprietor Date</td>
+                <td>Proprietor Description</td>
+                <td>Proprietor Name</td>
+                <td>Description</td>
+            </tr>
+        </thead>
+        <tbody>
+            <%_.each(data.response.Charges, function(c) {%>
+            <tr>
+                <td><%=c.ChargeDate%></td>
+                <td><%=c.ChargeProprietorDate%></td>
+                <td><%=c.ChargeProprietorDescription%></td>
+                <td><%=c.ChargeProprietorName%></td>
+                <td><%=c.Description%></td>
+            </tr>
+            <%});%>
+        </tbody>
+    </table>
     <%}%>
 </script>
-

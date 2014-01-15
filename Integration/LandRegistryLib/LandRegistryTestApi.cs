@@ -2,10 +2,12 @@
 
 namespace LandRegistryLib
 {
+	using System.Collections.Generic;
 	using System.IO;
 	using System.Net;
 	using System.Xml;
 	using System.Xml.Serialization;
+	using LRRESServiceTestNS;
 	using log4net;
 
 	public class LandRegistryTestApi
@@ -144,7 +146,9 @@ namespace LandRegistryLib
 					response.GatewayResponse.Results.Attachment = null;
 					model.Response = SerializeObject(response);
 					model.ResponseType = GetResponseType((int)response.GatewayResponse.TypeCode.Value);
-					
+					var builder = new ResModelBuilder();
+					model.Res = builder.BuildResModel(response);
+
 				}
 				catch (Exception ex)
 				{
@@ -155,6 +159,8 @@ namespace LandRegistryLib
 			}
 			return model;
 		}
+
+		
 
 		public LandRegistryDataModel ResPoll(string pollId)
 		{
