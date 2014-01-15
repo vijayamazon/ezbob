@@ -719,23 +719,26 @@
 		"PathToParent": "./REQUEST/DL99",
 
 		"MetaData": {
-			"ID": "DL99",
-			"Sorting": "chart-Total Current Assets,chart-Net Assets,chart-Bank Overdraft,chart-Other Short-Term Loans,chart-Total Current Liabilities,chart-Other Long-Term Loans,chart-Total Shareholders Funds"
+			"ID": "DL99"
 		},
 
 		"Fields": [
-			{ "SourcePath": "./TOTALCURRASSETS", "Targets": [{ "Name": "chart-Total Current Assets", "Transformation": { "Types": [ "money" ] } }] },
-			{ "SourcePath": "./NETASSETS", "Targets": [{ "Name": "chart-Net Assets", "Transformation": { "Types": [ "money" ] } }] },
-			{ "SourcePath": "./TOTALSHAREFUND", "Targets": [{ "Name": "chart-Total Shareholders Funds", "Transformation": { "Types": [ "money" ] } }] },
-			{ "SourcePath": "./BANKOVERDRAFT", "Targets": [{ "Name": "chart-Bank Overdraft", "Transformation": { "Types": [ "money" ] } }] },
-			{ "SourcePath": "./FINOTHLOANS", "Targets": [{ "Name": "chart-Other Short-Term Loans", "Transformation": { "Types": [ "money" ] } }] },
-			{ "SourcePath": "./TOTALCURRLBLTS", "Targets": [{ "Name": "chart-Total Current Liabilities", "Transformation": { "Types": [ "money" ] } }] },
-			{ "SourcePath": "./FINLBLTSOTHLOANS", "Targets": [{ "Name": "chart-Other Long-Term Loans", "Transformation": { "Types": [ "money" ] } }] },
-			{ "SourcePath": "./DATEOFACCOUNTS-YYYY", "Targets": [{ "Name": "ticks-Accounts Date", "Position": 2, "Prefix": " " }] },
-			{ "SourcePath": "./DATEOFACCOUNTS-MM",   "Targets": [{ "Name": "ticks-Accounts Date", "Position": 0, "Transformation": { "Types": [ "monthname" ] } }] },
-			{ "SourcePath": "./DATEOFACCOUNTS-DD",   "Targets": [{ "Name": "ticks-Accounts Date", "Position": 1, "Prefix": " " }] },
-			{ "SourcePath": "./CURRENCY", "Targets": [{ "Name": "Currency" }] },
-			{ "SourcePath": "./DISCNOEMPLOYEES", "Targets": [{ "Name": "Number of Employees" }] }
+			{ "SourcePath": "./DATEOFACCOUNTS-YYYY", "Targets": [{ "Name": "Date", "Position": 2, "Prefix": " " }] },
+			{ "SourcePath": "./DATEOFACCOUNTS-MM",   "Targets": [{ "Name": "Date", "Position": 0, "Transformation": { "Types": [ "monthname" ] } }] },
+			{ "SourcePath": "./DATEOFACCOUNTS-DD",   "Targets": [{ "Name": "Date", "Position": 1, "Prefix": " " }] },
+
+			{ "SourcePath": "./TOTALCASH", "Targets": [{ "Name": "TotalCash", "Transformation": { "Types": [ "money" ] } }] },
+			{ "SourcePath": "./DEBTORS", "Targets": [{ "Name": "Debtors", "Transformation": { "Types": [ "money" ] } }] },
+			{ "SourcePath": "./PREPAYACCRUALS", "Targets": [{ "Name": "PrepayAccRuals", "Transformation": { "Types": [ "money" ] } }] },
+			{ "SourcePath": "./DEBTORSGROUPLOANS", "Targets": [{ "Name": "DebtorsGroupLoans", "Transformation": { "Types": [ "money" ] } }] },
+			{ "SourcePath": "./DEBTORSDIRLOANS", "Targets": [{ "Name": "DebtorsDirLoans", "Transformation": { "Types": [ "money" ] } }] },
+			{ "SourcePath": "./OTHDEBTORS", "Targets": [{ "Name": "OtherDebtors", "Transformation": { "Types": [ "money" ] } }] },
+			{ "SourcePath": "./INVENTORIES", "Targets": [{ "Name": "Inventories", "Transformation": { "Types": [ "money" ] } }] },
+			{ "SourcePath": "./TNGBLASSETS", "Targets": [{ "Name": "TngblAssets", "Transformation": { "Types": [ "money" ] } }] },
+			{ "SourcePath": "./TOTALCURRLBLTS", "Targets": [{ "Name": "TotalCurrLblts", "Transformation": { "Types": [ "money" ] } }] },
+			{ "SourcePath": "./TOTALNONCURR", "Targets": [{ "Name": "TotalNonCurr", "Transformation": { "Types": [ "money" ] } }] },
+			{ "SourcePath": "./TOTALSHAREFUND", "Targets": [{ "Name": "TotalShareFund", "Transformation": { "Types": [ "money" ] } }] },
+			{ "SourcePath": "./INTNGBLASSETS", "Targets": [{ "Name": "InTngblAssets", "Transformation": { "Types": [ "money" ] } }] }
 		]
 	},
 	{

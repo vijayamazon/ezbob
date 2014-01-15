@@ -304,13 +304,23 @@
 			}
 			else if (oMetaData.ID == 'DL99') {
 				aryData.sort(function(a, b) {
-					var oA = Date.parse(a.Values['ticks-Accounts Date']);
-					var oB = Date.parse(b.Values['ticks-Accounts Date']);
+					var oA = Date.parse(a.Values['Date']);
+					var oB = Date.parse(b.Values['Date']);
 					return oA - oB;
 				});
 
 				var oChartData = [];
-				var oSeriesKeys = {};
+
+				var oSeriesKeys = {
+					Cash: 1,
+					'A/R': 2,
+					Inventory: 3,
+					'Fixed assets': 4,
+					'Total short term liabilities': 5,
+					'Total long term liabilities': 6,
+					'Tangible equity': 7,
+					'Adjusted profit': 8,
+				};
 
 				var sDivChartID = 'chart' + oMetaData.ID + ('' + Math.random()).replace(/\./, '') + '' + (new Date()).getTime();
 				var sParentDivChartID = 'parent_' + sDivChartID;
@@ -322,31 +332,34 @@
 					<tbody><tr><td id="<%- sParentDivChartID %>" style="padding-top:40px"></td></tr></tbody>
 				</table><%
 
-				var oSortingOrder = ExtractSortingOrder(oMetaData.Sorting);
-				// console.log('sorting order', oSortingOrder);
-
 				for (var j = 0; j < aryData.length; j++) {
 					var obj = aryData[j].Values;
-	
-					var oDataItem = { tick: null, data: {} };
 
-					for (var k in obj) {
-						if (k.indexOf('ticks-') == 0)
-							oDataItem.tick = obj[k];
-						else if (k.indexOf('chart-') == 0) {
-							var sKey = k.substr(6);
-							oDataItem.data[sKey] = EzBob.poundToInt(obj[k]);
-							if (!oSeriesKeys[sKey]) {
-								if (!oSortingOrder.hasOwnProperty(k))
-									throw 'No sorting order specified for ' + k;
+					var raw = {};
+					for (var k in obj)
+						if (k !== 'Date')
+							raw[k] =  EzBob.poundToNum(obj[k]);
 
-								oSeriesKeys[sKey] = oSortingOrder[k] + 1;
-							} // if
-						} // if
-					} // for
+					// console.log('aryData[' + j + '] =', obj, '->', raw);
 
-					oChartData.push(oDataItem);
+					oChartData.push({ tick: obj.Date, data: {
+						Cash: raw.TotalCash,
+						'A/R': raw.Debtors - (raw.PrepayAccRuals + raw.DebtorsGroupLoans + raw.DebtorsDirLoans + raw.OtherDebtors),
+						Inventory: raw.Inventories,
+						'Fixed assets': raw.TngblAssets,
+						'Total short term liabilities': raw.TotalCurrLblts,
+						'Total long term liabilities': raw.TotalNonCurr,
+						'Tangible equity': raw.TotalShareFund - raw.InTngblAssets,
+						'Adjusted profit': 8,
+					}});
 				} // for each group output
+
+				for (var j = 1; j < oChartData.length; j++) {
+					oChartData[j].data['Adjusted profit'] =
+						oChartData[j].data['Tangible equity'] -
+						oChartData[j - 1].data['Tangible equity'] +
+						oChartData[j - 1].data['Fixed assets'] / 5;
+				} // for
 	
 				$('body').append(
 					$('<div></div>').attr('id', sDivChartID).css({ width: '1200px', height: '600px', display: 'block' })
@@ -356,6 +369,7 @@
 
 				onAfterRender.push(function() {
 					var aryLabels = [];
+
 					for (var sSeriesName in oSeriesKeys) {
 						aryLabels[oSeriesKeys[sSeriesName] - 1] = { 
 							label: sSeriesName,
@@ -425,7 +439,10 @@
 							showMarker: false,
 							bringSeriesToFront: true,
 							useAxesFormatters: true,
-							tooltipFormatString: "£ %'d"
+							tooltipFormatString: "£ %'d",
+							tooltipContentEditor: function(str, seriesIndex, pointIndex, plot) {
+								return aryLabels[seriesIndex].label + ': ' + str;
+							},
 						},
 						seriesDefaults: {
 							trendline: {
@@ -438,7 +455,7 @@
 					}); // jqplot
 	
 					$('#' + sDivChartID).appendTo('#' + sParentDivChartID);
-				});
+				}); // onAfterRender.push
 			}
 			else if (oMetaData.DisplayDirection == 'horizontal') {
 				var arySortOrder = OrderFieldsForSorting(aryData[0].Values, oMetaData.Sorting);

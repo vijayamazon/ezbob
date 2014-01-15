@@ -1376,3 +1376,8 @@ EzBob.validateLoanLegalForm = function (el) {
 EzBob.poundToInt = function (sNumWithPounds) {
     return parseInt(sNumWithPounds.replace(/[^0-9\.-]/g, ''));
 };
+
+EzBob.poundToNum = function (sNumWithPounds) {
+	var x = parseFloat(sNumWithPounds.replace(/[^0-9\.-]/g, ''));
+	return isNaN(x) ? 0.0 : x;
+};
