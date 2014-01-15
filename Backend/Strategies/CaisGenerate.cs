@@ -68,9 +68,7 @@
 				string town = sr["Town"];
 				string county = sr["County"];
 				string postcode = sr["Postcode"];
-				string dateOfBirthStr = sr["DateOfBirth"];
-				string[] dateOfBirthStrArr = dateOfBirthStr.Split('-');
-				var dateOfBirth = new DateTime(int.Parse(dateOfBirthStrArr[2]), int.Parse(dateOfBirthStrArr[0]), int.Parse(dateOfBirthStrArr[1]));
+				DateTime dateOfBirth = sr["DateOfBirth"];
 				
 				DateTime? minLsDate = null;
 				DateTime tmp = sr["MinLSDate"];

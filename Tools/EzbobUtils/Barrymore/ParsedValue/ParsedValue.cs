@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Utils.ParsedValue {
 	using System;
+	using System.Globalization;
 
 	#region class ParsedValue
 
@@ -290,13 +291,33 @@
 		public DateTime ToDateTime(IFormatProvider provider = null) {
 			DateTime parsedValue;
 
-			if (!ReferenceEquals(m_oValue, null) && DateTime.TryParse(m_oValue.ToString(), out parsedValue))
-				return parsedValue;
+			if (!ReferenceEquals(m_oValue, null))
+			{
+				if (m_oValue is DateTime)
+				{
+					return (DateTime)m_oValue;
+				}
 
-			if (ReferenceEquals(m_oDefault, null) || !DateTime.TryParse(m_oDefault.ToString(), out parsedValue))
-				return default(DateTime);
+				if (DateTime.TryParse(m_oValue.ToString(), out parsedValue))
+				{
+					return parsedValue;
+				}
+			}
 
-			return parsedValue;
+			if (!ReferenceEquals(m_oDefault, null))
+			{
+				if (m_oDefault is DateTime)
+				{
+					return (DateTime)m_oDefault;
+				}
+
+				if (DateTime.TryParse(m_oDefault.ToString(), out parsedValue))
+				{
+					return parsedValue;
+				}
+			}
+
+			return default(DateTime);
 		} // ToDateTime
 
 		#endregion to datetime
