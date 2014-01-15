@@ -727,18 +727,20 @@
 			{ "SourcePath": "./DATEOFACCOUNTS-MM",   "Targets": [{ "Name": "Date", "Position": 0, "Transformation": { "Types": [ "monthname" ] } }] },
 			{ "SourcePath": "./DATEOFACCOUNTS-DD",   "Targets": [{ "Name": "Date", "Position": 1, "Prefix": " " }] },
 
-			{ "SourcePath": "./TOTALCASH", "Targets": [{ "Name": "TotalCash", "Transformation": { "Types": [ "money" ] } }] },
+			{ "SourcePath": "./CREDDIRLOANS", "Targets": [{ "Name": "CredDirLoans", "Transformation": { "Types": [ "money" ] } }] },
 			{ "SourcePath": "./DEBTORS", "Targets": [{ "Name": "Debtors", "Transformation": { "Types": [ "money" ] } }] },
-			{ "SourcePath": "./PREPAYACCRUALS", "Targets": [{ "Name": "PrepayAccRuals", "Transformation": { "Types": [ "money" ] } }] },
-			{ "SourcePath": "./DEBTORSGROUPLOANS", "Targets": [{ "Name": "DebtorsGroupLoans", "Transformation": { "Types": [ "money" ] } }] },
 			{ "SourcePath": "./DEBTORSDIRLOANS", "Targets": [{ "Name": "DebtorsDirLoans", "Transformation": { "Types": [ "money" ] } }] },
-			{ "SourcePath": "./OTHDEBTORS", "Targets": [{ "Name": "OtherDebtors", "Transformation": { "Types": [ "money" ] } }] },
+			{ "SourcePath": "./DEBTORSGROUPLOANS", "Targets": [{ "Name": "DebtorsGroupLoans", "Transformation": { "Types": [ "money" ] } }] },
+			{ "SourcePath": "./INTNGBLASSETS", "Targets": [{ "Name": "InTngblAssets", "Transformation": { "Types": [ "money" ] } }] },
 			{ "SourcePath": "./INVENTORIES", "Targets": [{ "Name": "Inventories", "Transformation": { "Types": [ "money" ] } }] },
+			{ "SourcePath": "./ONCLDIRLOANS", "Targets": [{ "Name": "OnClDirLoans", "Transformation": { "Types": [ "money" ] } }] },
+			{ "SourcePath": "./OTHDEBTORS", "Targets": [{ "Name": "OtherDebtors", "Transformation": { "Types": [ "money" ] } }] },
+			{ "SourcePath": "./PREPAYACCRUALS", "Targets": [{ "Name": "PrepayAccRuals", "Transformation": { "Types": [ "money" ] } }] },
 			{ "SourcePath": "./TNGBLASSETS", "Targets": [{ "Name": "TngblAssets", "Transformation": { "Types": [ "money" ] } }] },
+			{ "SourcePath": "./TOTALCASH", "Targets": [{ "Name": "TotalCash", "Transformation": { "Types": [ "money" ] } }] },
 			{ "SourcePath": "./TOTALCURRLBLTS", "Targets": [{ "Name": "TotalCurrLblts", "Transformation": { "Types": [ "money" ] } }] },
 			{ "SourcePath": "./TOTALNONCURR", "Targets": [{ "Name": "TotalNonCurr", "Transformation": { "Types": [ "money" ] } }] },
-			{ "SourcePath": "./TOTALSHAREFUND", "Targets": [{ "Name": "TotalShareFund", "Transformation": { "Types": [ "money" ] } }] },
-			{ "SourcePath": "./INTNGBLASSETS", "Targets": [{ "Name": "InTngblAssets", "Transformation": { "Types": [ "money" ] } }] }
+			{ "SourcePath": "./TOTALSHAREFUND", "Targets": [{ "Name": "TotalShareFund", "Transformation": { "Types": [ "money" ] } }] }
 		]
 	},
 	{

@@ -349,7 +349,7 @@
 						'Fixed assets': raw.TngblAssets,
 						'Total short term liabilities': raw.TotalCurrLblts,
 						'Total long term liabilities': raw.TotalNonCurr,
-						'Tangible equity': raw.TotalShareFund - raw.InTngblAssets,
+						'Tangible equity': raw.TotalShareFund - raw.InTngblAssets + raw.DebtorsDirLoans + raw.CredDirLoans + raw.OnClDirLoans,
 						'Adjusted profit': 8,
 					}});
 				} // for each group output
