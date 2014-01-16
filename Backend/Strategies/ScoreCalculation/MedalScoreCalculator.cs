@@ -389,7 +389,11 @@
 
 		private void PrintDict(ScoreMedalOffer scoreMedal, Dictionary<Parameter, Weight> dict)
 		{
-			m_oLog.Info("medal: {0} points: {4} result: {1}%, offer: {2} £ at  {3}%", scoreMedal.Medal, scoreMedal.ScoreResult * 100, scoreMedal.MaxOffer, scoreMedal.MaxOfferPercent * 100, scoreMedal.ScorePoints);
+			m_oLog.Info("medal: {0} points: {4} result: {1}%, offer: {2} £ at  {3}% \n ResultMaxPoints: {4} \n ResultWeights: {5}", 
+				scoreMedal.Medal, scoreMedal.ScoreResult * 100, 
+				scoreMedal.MaxOffer, 
+				scoreMedal.MaxOfferPercent * 100, 
+				scoreMedal.ScorePoints, scoreMedal.ResultMaxPoints, scoreMedal.ResultWeigts);
 			decimal s1 = 0M, s2 = 0M, s3 = 0M, s4 = 0M, s5 = 0M, s6 = 0M, s7 = 0M, s8 = 0M, s9 = 0M, s10 = 0M, s11 = 0M;
 			foreach (var weight in dict)
 			{

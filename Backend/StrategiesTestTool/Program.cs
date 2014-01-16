@@ -1,22 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace StrategiesTestTool
+﻿namespace StrategiesTestTool
 {
+	using System;
+	using EZBob.DatabaseLib.Model.Database;
 	using EzBob.Backend.Strategies.ScoreCalculation;
+	using Ezbob.Logger;
 
 	class Program
 	{
 		static void Main(string[] args)
 		{
-			Usage();
 			if (args.Length < 2)
 			{
 				Console.WriteLine("Not enough parameter");
 				Usage();
+				return;
 			}
 			switch (args[0])
 			{
@@ -29,27 +26,29 @@ namespace StrategiesTestTool
 						int experianScore = int.Parse(args[2]);
 						decimal mpSeniorityYears = decimal.Parse(args[3]);
 						decimal positiveFeedbackCount = decimal.Parse(args[4]);
-						MaritalStatus maritalStatus = (MaritalStatus) int.Parse(args[5]);
-						Gender gender = (Gender) int.Parse(args[6]);
+						var maritalStatus = (MaritalStatus) int.Parse(args[5]);
+						var gender = (Gender) int.Parse(args[6]);
 						int numberOfStores = int.Parse(args[7]);
 						bool firstRepaymentDatePassed = bool.Parse(args[8]);
 						decimal ezbobSeniority = decimal.Parse(args[9]);
 						int ezbobNumOfLoans = int.Parse(args[10]);
 						int ezbobNumOfLateRepayments = int.Parse(args[11]);
 						int ezbobNumOfEarlyReayments = int.Parse(args[12]);
-						var msc = new MedalScoreCalculator();
-						msc.CalculateMedalScore(annualTurnover,
-						                        experianScore,
-						                        mpSeniorityYears,
-						                        positiveFeedbackCount,
-						                        maritalStatus,
-						                        gender,
-						                        numberOfStores,
-						                        firstRepaymentDatePassed,
-						                        ezbobSeniority,
-						                        ezbobNumOfLoans,
-						                        ezbobNumOfLateRepayments,
-						                        ezbobNumOfEarlyReayments);
+						
+						var msc = new MedalScoreCalculator(new ConsoleLog());
+						var response = msc.CalculateMedalScore(annualTurnover,
+						                                       experianScore,
+						                                       mpSeniorityYears,
+						                                       positiveFeedbackCount,
+						                                       maritalStatus,
+						                                       gender,
+						                                       numberOfStores,
+						                                       firstRepaymentDatePassed,
+						                                       ezbobSeniority,
+						                                       ezbobNumOfLoans,
+						                                       ezbobNumOfLateRepayments,
+						                                       ezbobNumOfEarlyReayments);
+
 					}
 					catch (Exception ex)
 					{

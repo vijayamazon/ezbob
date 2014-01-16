@@ -125,6 +125,7 @@
 		<MultiCopy CopyFrom="$(Src)\Integration\Payment\ManualPacnetApp\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\Pacnet\"/>
 		<MultiCopy CopyFrom="$(Src)\Integration\ExperianStandAlone\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\Experian\"/>
 		<MultiCopy CopyFrom="$(Src)\App\EzAutoResponder\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\EzAutoreponder\"/>
+		<MultiCopy CopyFrom="$(Src)\Backend\StrategiesTestTool\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\ScoringModelTestTool\"/>
 		
 		<WriteLinesToFile ContinueOnError="true" File="$(BuildBin)\%(Edition.Identity)\label=$(CCNetLabel).txt" Lines="Build label is $(CCNetLabel)" Overwrite="true"/>
 	</Target>
