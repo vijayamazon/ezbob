@@ -95,13 +95,14 @@
 				dt.Columns.Add("VerificationDecision", typeof (string));
 				dt.Columns.Add("VerificationComment", typeof (string));
 				dt.Columns.Add("SystemCalculatedSum", typeof (int));
-				dt.Columns.Add("VerificationCalculatedSum", typeof (int));
+				dt.Columns.Add("SystemApprovedSum", typeof(int));
+				dt.Columns.Add("VerificationApprovedSum", typeof (int));
 				dt.Columns.Add("Css", typeof (string));
 
 				foreach (var vr in reportRows)
 				{
 					dt.Rows.Add(vr.CashRequestId, vr.CustomerId, vr.SystemDecision, vr.SystemComment, vr.VerificationDecision,
-						vr.VerificationComment, vr.SystemCalculatedSum, vr.VerificationCalculatedSum, vr.IsMatch ? "Successful" : "Failed unmatched");
+						vr.VerificationComment, vr.SystemCalculatedSum, vr.SystemApprovedSum, vr.VerificationApprovedSum, vr.IsMatch ? "Successful" : "Failed unmatched");
 				}
 
 				return dt;
@@ -157,7 +158,8 @@
 							VerificationDecision = Decision.Manual,
 							VerificationComment = sb.ToString(),
 							SystemCalculatedSum = systemDecisions[cashRequest].SystemCalculatedSum,
-							VerificationCalculatedSum = 0,
+							SystemApprovedSum = systemDecisions[cashRequest].SystemApprovedSum,
+							VerificationApprovedSum = 0,
 							IsMatch = true
 						});
 					}
@@ -187,7 +189,8 @@
 					VerificationDecision = verificationDesicion.SystemDecision,
 					VerificationComment = verificationDesicion.Comment,
 					SystemCalculatedSum = systemDecision.SystemCalculatedSum,
-					VerificationCalculatedSum = verificationDesicion.SystemCalculatedSum,
+					SystemApprovedSum = systemDecision.SystemApprovedSum,
+					VerificationApprovedSum = verificationDesicion.SystemCalculatedSum,
 					IsMatch = systemDecision.SystemDecision == verificationDesicion.SystemDecision
 				});
 			//}
@@ -285,6 +288,7 @@
 						SystemDecision = (Decision)Enum.Parse(typeof(Decision), row["SystemDecision"].ToString()),
 						SystemDecisionDate = DateTime.Parse(row["SystemDecisionDate"].ToString()),
 						SystemCalculatedSum = int.Parse(row["SystemCalculatedSum"].ToString()),
+						SystemApprovedSum = (row["ManagerApprovedSum"] == null || string.IsNullOrEmpty(row["ManagerApprovedSum"].ToString())) ? 0 : int.Parse(row["ManagerApprovedSum"].ToString()),
 						MedalType = (Medal)Enum.Parse(typeof(Medal), row["MedalType"].ToString()),
 						RepaymentPeriod = int.Parse(row["RepaymentPeriod"].ToString()),
 						ScorePoints = double.Parse(row["ScorePoints"].ToString()),

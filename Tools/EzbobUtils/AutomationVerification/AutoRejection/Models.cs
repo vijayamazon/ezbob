@@ -62,6 +62,7 @@
 		public Decision SystemDecision { get; set; }
 		public DateTime SystemDecisionDate { get; set; }
 		public int SystemCalculatedSum { get; set; }
+		public int SystemApprovedSum { get; set; }
 		public Medal MedalType { get; set; }
 		public int RepaymentPeriod { get; set; }
 		public double ScorePoints { get; set; }
@@ -81,7 +82,8 @@
 		public string SystemComment { get; set; }
 		public string VerificationComment { get; set; }
 		public int SystemCalculatedSum { get; set; }
-		public int VerificationCalculatedSum { get; set; }
+		public int SystemApprovedSum { get; set; }
+		public int VerificationApprovedSum { get; set; }
 		public bool IsMatch { get; set; }
 	}
 }

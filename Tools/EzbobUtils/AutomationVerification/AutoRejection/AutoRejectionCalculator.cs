@@ -55,13 +55,13 @@
 			//Do not apply to clients with total annual turnover above £250,000
 			if (anualTurnover >= _const.NoRejectIfTotalAnnualTurnoverAbove)
 			{
-				reason = string.Format("Not Rejected. Total Annual Turnover Above {0}", _const.NoRejectIfTotalAnnualTurnoverAbove);
+				reason = string.Format("Not Rejected. Total Annual Turnover Above {0} ({1})", _const.NoRejectIfTotalAnnualTurnoverAbove, anualTurnover);
 				return false;
 			}
 			//Do not apply to clients with credit score above 900.
 			if (experianScore >= _const.NoRejectIfCreditScoreAbove)
 			{
-				reason = string.Format("Not Rejected. Credit Score Above {0}", _const.NoRejectIfCreditScoreAbove);
+				reason = string.Format("Not Rejected. Credit Score Above {0} ({1})", _const.NoRejectIfCreditScoreAbove, experianScore);
 				return false;
 			}
 			//Do not apply to clients with 2 directors, of which at least 1 has a score above 800 ???(on hold)
@@ -71,7 +71,7 @@
 
 			if (experianScore < _const.MinCreditScore)
 			{
-				reason = string.Format("Rejected. Credit Score Below {0}", _const.MinCreditScore);
+				reason = string.Format("Rejected. Credit Score Below {0} ({1})", _const.MinCreditScore, experianScore);
 				return true;
 			}
 
@@ -80,14 +80,14 @@
 
 			if (anualTurnover < _const.MinAnnualTurnover)
 			{
-				reason = string.Format("Rejected. Annual Turnover Below {0}", _const.MinAnnualTurnover);
+				reason = string.Format("Rejected. Annual Turnover Below {0} ({1})", _const.MinAnnualTurnover, anualTurnover);
 				return true;
 			}
 			//b Total 3-month turnover is less than 2.000 GBP
 			var threeMonthTurnover = AnalysisFunctionsHelper.GetTurnoverForPeriod(mps, TimePeriodEnum.Month3,_log);
 			if (threeMonthTurnover < _const.MinThreeMonthTurnover)
 			{
-				reason = string.Format("Rejected. 3 Month Turnover Below {0}", _const.MinThreeMonthTurnover);
+				reason = string.Format("Rejected. 3 Month Turnover Below {0} ({1})", _const.MinThreeMonthTurnover, threeMonthTurnover);
 				return true;
 			}
 
@@ -95,7 +95,7 @@
 			//a for clients with credit score below 800: at least 1 default in amount of 300+ GBP on any of the financial accounts in the last 24 months
 			if (experianScore < _const.DefaultScoreBelow && hasDefaultAccounts)
 			{
-				reason = string.Format("Rejected. Has Default Account");
+				reason = string.Format("Rejected. Has Default Account And credit score below {0} ({1})",_const.DefaultScoreBelow, experianScore);
 				return true;
 			}
 			//b for clients with credit score between 600 - 800: at least 1 default in amount of 300+ GBP on any of the financial accounts in the last 12 months. ???(no need)
@@ -105,7 +105,7 @@
 			int seniority = MarketPlacesHelper.GetMarketPlacesSeniority(mps);
 			if (seniority < _const.MinMarketPlaceSeniorityDays)
 			{
-				reason = string.Format("Rejected. MP Seniority below {0}", _const.MinMarketPlaceSeniorityDays);
+				reason = string.Format("Rejected. MP Seniority below {0} ({1})", _const.MinMarketPlaceSeniorityDays, seniority);
 				return true;
 			}
 

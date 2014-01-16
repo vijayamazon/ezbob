@@ -196,7 +196,9 @@ namespace CommonLib
 		public ReApprovalData GetReApprovalData(int customerId, int cashRequestId)
 		{
 			var conn = new SqlConnection(_log);
-			var sqlData = conn.ExecuteReader("AV_ReApprovalData", new QueryParameter("@CustomerId", customerId), new QueryParameter("@CashRequestId", cashRequestId));
+			var sqlData = conn.ExecuteReader("AV_ReApprovalData", 
+				new QueryParameter("@CustomerId", customerId), 
+				new QueryParameter("@CashRequestId", cashRequestId));
 
 			var data = new ReApprovalData
 			{
