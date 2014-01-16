@@ -10,9 +10,7 @@
 	using System.Linq;
 	using System.Threading;
 	using EZBob.DatabaseLib.Model.Database;
-	using ExperianLib;
 	using ExperianLib.IdIdentityHub;
-	using EzBobIntegration.Web_References.Consumer;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
@@ -182,12 +180,9 @@
 					}
 					experianConsumerScore = strat.Score;
 				}
-				else
+				else if (!WaitForExperianConsumerCheckToFinishUpdates())
 				{
-					if (!WaitForExperianConsumerCheckToFinishUpdates())
-					{
-						Log.Info("No data exist from experian consumer check for customer:{0}.", customerId);
-					}
+					Log.Info("No data exist from experian consumer check for customer:{0}.", customerId);
 				}
 
 				minExperianScore = experianConsumerScore;
@@ -226,12 +221,9 @@
 							dirStrat.Execute();
 							experianConsumerScore = dirStrat.Score;
 						}
-						else
+						else if (!WaitForExperianConsumerCheckToFinishUpdates(appDirId))
 						{
-							if (!WaitForExperianConsumerCheckToFinishUpdates())
-							{
-								Log.Info("No data exist from experian consumer check for director:{0}.", appDirId);
-							}
+							Log.Info("No data exist from experian consumer check for director:{0}.", appDirId);
 						}
 
 						if (experianConsumerScore > 0 && experianConsumerScore < minExperianScore)
@@ -681,6 +673,8 @@
 		private int intervalWaitForMarketplacesUpdate;
 		private int totalTimeToWaitForExperianCompanyCheck;
 		private int intervalWaitForExperianCompanyCheck;
+		private int totalTimeToWaitForExperianConsumerCheck;
+		private int intervalWaitForExperianConsumerCheck;
 
 		// Loaded from DB per customer
 		private bool customerStatusIsEnabled;
@@ -789,6 +783,8 @@
 			intervalWaitForMarketplacesUpdate = sr["IntervalWaitForMarketplacesUpdate"];
 			totalTimeToWaitForExperianCompanyCheck = sr["TotalTimeToWaitForExperianCompanyCheck"];
 			intervalWaitForExperianCompanyCheck = sr["IntervalWaitForExperianCompanyCheck"];
+			totalTimeToWaitForExperianConsumerCheck = sr["TotalTimeToWaitForExperianConsumerCheck"];
+			intervalWaitForExperianConsumerCheck = sr["IntervalWaitForExperianConsumerCheck"];
 		} // ReadConfigurations
 
 		#endregion method ReadConfigurations
@@ -1229,45 +1225,58 @@
 		} // CreateAmlResultFromAuthenticationReuslts
 
 		#endregion method CreateAmlResultFromAuthenticationReuslts
-
-		#region method WaitForMarketplacesToFinishUpdates
-
+		
 		private bool WaitForMarketplacesToFinishUpdates()
 		{
-			DataTable dt = DB.ExecuteReader(
-				"MP_CustomerMarketplacesIsUpdated",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId)
-			);
+			return WaitForUpdateToFinish(GetIsMarketPlacesUpdated, totalTimeToWaitForMarketplacesUpdate, intervalWaitForMarketplacesUpdate);
+		} // WaitForMarketplacesToFinishUpdates
+		
+		private bool WaitForExperianCompanyCheckToFinishUpdates()
+		{
+			if (string.IsNullOrEmpty(experianRefNum))
+			{
+				return true;
+			}
 
-			var sr = new SafeReader(dt.Rows[0]);
-			bool isUpdated = sr["IsUpdated"];
+			return WaitForUpdateToFinish(GetIsExperianCompanyUpdated, totalTimeToWaitForExperianCompanyCheck, intervalWaitForExperianCompanyCheck);
+		} // WaitForExperianCompanyCheckToFinishUpdates
 
+		private bool WaitForExperianConsumerCheckToFinishUpdates(int directorId = 0)
+		{
+			return WaitForUpdateToFinish(() => GetIsExperianConsumerUpdated(directorId), totalTimeToWaitForExperianConsumerCheck, intervalWaitForExperianConsumerCheck);
+		} // WaitForExperianConsumerCheckToFinishUpdates
+
+		private bool WaitForUpdateToFinish(Func<bool> function, int totalSecondsToWait, int intervalBetweenCheck)
+		{
 			DateTime startWaitingTime = DateTime.UtcNow;
-
+			bool isUpdated = false;
 			while (!isUpdated)
 			{
-				if ((DateTime.UtcNow - startWaitingTime).TotalSeconds > totalTimeToWaitForMarketplacesUpdate)
+				isUpdated = function();
+
+				if (isUpdated)
+					return true;
+
+				if ((DateTime.UtcNow - startWaitingTime).TotalSeconds > totalSecondsToWait)
 					return false;
 
-				Thread.Sleep(intervalWaitForMarketplacesUpdate);
-
-				dt = DB.ExecuteReader(
-					"MP_CustomerMarketplacesIsUpdated",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("CustomerId", customerId)
-				);
-
-				sr = new SafeReader(dt.Rows[0]);
-				isUpdated = sr["IsUpdated"];
+				Thread.Sleep(intervalBetweenCheck);
 			} // while
 
 			return true;
-		} // WaitForMarketplacesToFinishUpdates
+		}
 
-		#endregion method WaitForMarketplacesToFinishUpdates
+		private bool GetIsExperianConsumerUpdated(int directorId = 0)
+		{
+			DataTable dt = DB.ExecuteReader("GetIsConsumerDataUpdated", CommandSpecies.StoredProcedure,
+					new QueryParameter("CustomerId", customerId),
+					new QueryParameter("DirectorId", directorId));
 
-		private bool WaitForExperianCompanyCheckToFinishUpdates()
+			var sr = new SafeReader(dt.Rows[0]);
+			return sr["IsUpdated"];
+		}
+
+		private bool GetIsExperianCompanyUpdated()
 		{
 			DataTable dt = DB.ExecuteReader(
 				"GetIsCompanyDataUpdated",
@@ -1276,37 +1285,20 @@
 			);
 
 			var sr = new SafeReader(dt.Rows[0]);
-			bool isUpdated = sr["IsUpdated"];
+			return sr["IsUpdated"];
+		}
 
-			DateTime startWaitingTime = DateTime.UtcNow;
-
-			while (!isUpdated)
-			{
-				if ((DateTime.UtcNow - startWaitingTime).TotalSeconds > totalTimeToWaitForExperianCompanyCheck)
-					return false;
-
-				Thread.Sleep(intervalWaitForExperianCompanyCheck);
-
-				dt = DB.ExecuteReader(
-					"GetIsCompanyDataUpdated",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("CompanyRefNumber", experianRefNum)
-				);
-
-				sr = new SafeReader(dt.Rows[0]);
-				isUpdated = sr["IsUpdated"];
-			} // while
-
-			return true;
-		} // WaitForExperianCompanyCheckToFinishUpdates
-
-		private bool WaitForExperianConsumerCheckToFinishUpdates()
+		private bool GetIsMarketPlacesUpdated()
 		{
-			// TODO: logic for waiting
-			// Maybe should wait for multiple requests
+			DataTable dt = DB.ExecuteReader(
+				"MP_CustomerMarketplacesIsUpdated",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", customerId)
+			);
 
-			return true;
-		} // WaitForExperianConsumerCheckToFinishUpdates
+			var sr = new SafeReader(dt.Rows[0]);
+			return sr["IsUpdated"];
+		}
 
 		#endregion private
 	} // class MainStrategy
