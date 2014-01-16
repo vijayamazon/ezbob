@@ -25,10 +25,13 @@ namespace Reports {
 		#region method GetScheduledReportsList
 
 		public static SortedDictionary<string, Report> GetScheduledReportsList(AConnection oDB) {
-			if (ms_tblReports == null)
-				LoadReportList(oDB);
+			var oTbl = oDB.ExecuteReader(
+				ReportListStoredProc,
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("@RptType", "")
+			);
 
-			return FillReportArgs(oDB, ms_tblReports);
+			return FillReportArgs(oDB, oTbl);
 		} // GetScheduledReportsList
 
 		#endregion method GetScheduledReportsList
@@ -63,15 +66,18 @@ namespace Reports {
 		} // constructor
 
 		public Report(AConnection oDB, string sReportTypeName) : this() {
-			if (ms_tblReports == null)
-				LoadReportList(oDB, sReportTypeName);
+			var oTbl = oDB.ExecuteReader(
+				ReportListStoredProc,
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("@RptType", sReportTypeName)
+			);
 
-			if ((ms_tblReports == null) || (ms_tblReports.Rows.Count == 0))
+			if ((oTbl == null) || (oTbl.Rows.Count == 0))
 				throw new Exception(string.Format("Failed to load report list from DB while looking for {0}", sReportTypeName));
 
 			bool bFound = false;
 
-			foreach (DataRow row in ms_tblReports.Rows) {
+			foreach (DataRow row in oTbl.Rows) {
 				if (row["Type"].ToString() == sReportTypeName) {
 					Init(row);
 					bFound = true;
@@ -264,23 +270,6 @@ namespace Reports {
 
 		#region private static
 
-		#region method LoadReportList
-
-		private static void LoadReportList(AConnection oDB, string sReportTypeName = "") {
-			if (ms_tblReports != null) {
-				ms_tblReports.Dispose();
-				ms_tblReports = null;
-			} // if
-
-			ms_tblReports = oDB.ExecuteReader(
-				ReportListStoredProc,
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("@RptType", sReportTypeName ?? "")
-			);
-		} // LoadReportList
-
-		#endregion method LoadReportList
-
 		#region method LoadReportArgs
 
 		private static DataTable LoadReportArgs(AConnection oDB, string sReportTypeName = null) {
@@ -336,8 +325,6 @@ namespace Reports {
 		} // FillReportArgs 
 
 		#endregion method FillReportArgs
-
-		private static DataTable ms_tblReports;
 
 		#endregion private static
 	} // class Report
