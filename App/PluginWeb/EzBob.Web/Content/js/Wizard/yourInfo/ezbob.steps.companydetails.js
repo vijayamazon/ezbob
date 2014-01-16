@@ -196,19 +196,16 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
                 break;
         } // switch type of business
 
+        debugger;
         if (typeOfBussiness !== 'Entrepreneur' && EzBob.Config.TargetsEnabled)
-            this.handleTargeting(form, action, data, postcode, companyName, sCompanyFilter, refNum);
+            this.handleTargeting(form, action, data, postcode, companyName, sCompanyFilter, refNum, typeOfBussiness);
         else
-            this.saveDataRequest(action, data);
-
-        if (typeOfBussiness !== 'Entrepreneur') {
-            $.post("" + window.gRootPath + "Customer/Experian/PerformCompanyCheck", { customerId: this.model.get('Id') });
-        }
+            this.saveDataRequest(action, data, typeOfBussiness);
         
         return false;
     },
     
-    handleTargeting: function (form, action, data, postcode, companyName, sCompanyFilter, refNum) {
+    handleTargeting: function (form, action, data, postcode, companyName, sCompanyFilter, refNum, typeOfBussiness) {
         var that = this;
 
         var req = $.get(window.gRootPath + 'Account/CheckingCompany', { companyName: companyName, postcode: postcode, filter: sCompanyFilter, refNum: refNum });
@@ -245,6 +242,9 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
         }); // on done
 
         req.always(function () {
+            if (typeOfBussiness !== 'Entrepreneur') {
+                $.post("" + window.gRootPath + "Customer/Experian/PerformCompanyCheck", { customerId: that.model.get('Id') });
+            }
             UnBlockUi();
         });
     }, // handleTargeting
@@ -263,7 +263,7 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
         }
         this.saveDataRequest(action, data);
     },
-    saveDataRequest: function (action, data) {
+    saveDataRequest: function (action, data, typeOfBussiness) {
         BlockUi();
 
         var that = this;
@@ -300,6 +300,9 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
         });
 
         request.complete(function () {
+            if (typeOfBussiness !== 'Entrepreneur') {
+                $.post("" + window.gRootPath + "Customer/Experian/PerformCompanyCheck", { customerId: that.model.get('Id') });
+            }
             UnBlockUi();
         });
     }, // saveDataRequest
