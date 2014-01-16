@@ -11,6 +11,15 @@
 			this.customerId = customerId;
 
 			DataTable dt = DB.ExecuteReader("GetCompanyData", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
+
+			if (dt.Rows.Count == 0)
+			{
+				Log.Info("Can't find company data for customer:{0}. The customer is probably an entrepreneur");
+				return;
+			}
+
+			foundCompany = true;
+
 			var sr = new SafeReader(dt.Rows[0]);
 
 			string companyType = sr["CompanyType"];
@@ -25,6 +34,12 @@
 
 		public override void Execute()
 		{
+			if (!foundCompany)
+			{
+				Log.Info("Can't execute Experian company check for customer with no company");
+				return;
+			}
+
 			string experianError = null;
 			decimal experianBureauScore = 0;
 
@@ -66,6 +81,7 @@
 		} // Execute
 
 		private readonly int customerId;
+		private readonly bool foundCompany;
 		private readonly bool isLimited;
 		private readonly string companyNumber;
 	} // class ExperianCompanyCheck

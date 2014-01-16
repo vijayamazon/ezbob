@@ -157,15 +157,8 @@
 			{
 				if (wasMainStrategyExecutedBefore)
 				{
-					if (companyType == "Entrepreneur")
-					{
-						Log.Info("Skipping experian company check for customer:{0} because he is an entrepreneur", customerId);
-					}
-					else
-					{
-						var experianCompanyChecker = new ExperianCompanyCheck(customerId, DB, Log);
-						experianCompanyChecker.Execute();
-					}
+					var experianCompanyChecker = new ExperianCompanyCheck(customerId, DB, Log);
+					experianCompanyChecker.Execute();
 				}
 				else
 				{
@@ -177,22 +170,28 @@
 
 				GetAddresses();
 
-				string experianConsumerError;
-				string experianConsumerErrorPrev = null;
+				if (wasMainStrategyExecutedBefore)
+				{
+					var strat = new ExperianConsumerCheck(customerId, appFirstName, appSurname, appGender, appDateOfBirth, 0, appLine1, appLine2, appLine3, appLine4, appLine5, appLine6, DB, Log);
+					strat.Execute();
 
-				GetConsumerInfo(appFirstName, appSurname, appGender, appDateOfBirth, 0, appLine1, appLine2, appLine3, appLine4, appLine5, appLine6, out experianConsumerError);
-
-				if (!string.IsNullOrEmpty(experianConsumerError) && appTimeAtAddress == 1 && !string.IsNullOrEmpty(appLine6Prev))
-					GetConsumerInfo(appFirstName, appSurname, appGender, appDateOfBirth, 0, appLine1Prev, appLine2Prev, appLine3Prev, appLine4Prev, appLine5Prev, appLine6Prev, out experianConsumerErrorPrev);
-
-				if (experianBirthDate.Year == 1900 && experianBirthDate.Month == 1 && experianBirthDate.Day == 1)
-					experianBirthDate = appDateOfBirth;
+					if (!string.IsNullOrEmpty(strat.Error) && appTimeAtAddress == 1 && !string.IsNullOrEmpty(appLine6Prev))
+					{
+						strat = new ExperianConsumerCheck(customerId, appFirstName, appSurname, appGender, appDateOfBirth, 0, appLine1Prev, appLine2Prev, appLine3Prev, appLine4Prev, appLine5Prev, appLine6Prev, DB, Log);
+						strat.Execute();
+					}
+					experianConsumerScore = strat.Score;
+				}
+				else
+				{
+					if (!WaitForExperianConsumerCheckToFinishUpdates())
+					{
+						Log.Info("No data exist from experian consumer check for customer:{0}.", customerId);
+					}
+				}
 
 				minExperianScore = experianConsumerScore;
 				inintialExperianConsumerScore = experianConsumerScore;
-
-				UpdateExperianConsumer(appFirstName, appSurname, appLine6, experianConsumerError, experianConsumerScore, 0);
-				UpdateExperianConsumer(appFirstName, appSurname, appLine6Prev, experianConsumerErrorPrev, experianConsumerScore, 0);
 
 				if (companyType != "Entrepreneur")
 				{
@@ -220,13 +219,23 @@
 						if (string.IsNullOrEmpty(appDirName) || string.IsNullOrEmpty(appDirSurname))
 							continue;
 
-						string experianDirectorError;
-						GetConsumerInfo(appDirName, appDirSurname, dirGender, dirBirthdate, appDirId, dirLine1, dirLine2, dirLine3, dirLine4, dirLine5, dirLine6, out experianDirectorError);
+						if (wasMainStrategyExecutedBefore)
+						{
+							var dirStrat = new ExperianConsumerCheck(customerId, appDirName, appDirSurname, dirGender, dirBirthdate, appDirId,
+							                                         dirLine1, dirLine2, dirLine3, dirLine4, dirLine5, dirLine6, DB, Log);
+							dirStrat.Execute();
+							experianConsumerScore = dirStrat.Score;
+						}
+						else
+						{
+							if (!WaitForExperianConsumerCheckToFinishUpdates())
+							{
+								Log.Info("No data exist from experian consumer check for director:{0}.", appDirId);
+							}
+						}
 
 						if (experianConsumerScore > 0 && experianConsumerScore < minExperianScore)
 							minExperianScore = experianConsumerScore;
-
-						UpdateExperianConsumer(appDirName, appDirSurname, dirLine6, experianDirectorError, experianConsumerScore, appDirId);
 					} // foreach
 				} // if
 
@@ -708,7 +717,6 @@
 		private string appLine6Prev;
 		private int minExperianScore;
 		private int experianConsumerScore;
-		private DateTime experianBirthDate = new DateTime(1900, 1, 1);
 		private int allMPsNum;
 		private AutoDecisionResponse autoDecisionResponse;
 		private int numOfDefaultAccounts;
@@ -817,55 +825,6 @@
 		} // GetPersonalInfo
 
 		#endregion method GetPersonalInfo
-
-		#region method UpdateExperianConsumer
-
-		private void UpdateExperianConsumer(string firstName, string surname, string postCode, string error, int score, int directorId)
-		{
-			DB.ExecuteNonQuery(
-				"UpdateExperianConsumer",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("Name", firstName),
-				new QueryParameter("Surname", surname),
-				new QueryParameter("PostCode", postCode),
-				new QueryParameter("ExperianError", error),
-				new QueryParameter("ExperianScore", score),
-				new QueryParameter("CustomerId", customerId),
-				new QueryParameter("DirectorId", directorId)
-			);
-		} // UpdateExperianConsumer
-
-		#endregion method UpdateExperianConsumer
-
-		#region method GetConsumerInfo
-
-		private void GetConsumerInfo(string firstName, string surname, string gender, DateTime birthDate, int directorId, string line1, string line2, string line3, string line4, string line5, string line6, out string error)
-		{
-			var consumerService = new ConsumerService();
-
-			var location = new InputLocationDetailsMultiLineLocation
-			{
-				LocationLine1 = line1,
-				LocationLine2 = line2,
-				LocationLine3 = line3,
-				LocationLine4 = line4,
-				LocationLine5 = line5,
-				LocationLine6 = line6
-			};
-
-			ConsumerServiceResult result = consumerService.GetConsumerInfo(firstName, surname, gender, birthDate, null, location, "PL", customerId, directorId);
-
-			if (result.IsError)
-				error = result.Error;
-			else
-			{
-				experianConsumerScore = (int)result.BureauScore;
-				experianBirthDate = result.BirthDate;
-				error = null;
-			}
-		} // GetConsumerInfo
-
-		#endregion method GetConsumerInfo
 
 		#region GetAddresses
 
@@ -1310,13 +1269,11 @@
 
 		#endregion method WaitForMarketplacesToFinishUpdates
 
-
 		private bool WaitForExperianCompanyCheckToFinishUpdates()
 		{
 			bool isLimited = companyType == "Limited" || companyType == "LLP";
 			string companyRefNumber = isLimited ? limitedRefNum : nonLimitedRefNum;
-
-
+			
 			DataTable dt = DB.ExecuteReader(
 				"GetIsCompanyDataUpdated",
 				CommandSpecies.StoredProcedure,
@@ -1347,6 +1304,14 @@
 
 			return true;
 		} // WaitForExperianCompanyCheckToFinishUpdates
+
+		private bool WaitForExperianConsumerCheckToFinishUpdates()
+		{
+			// TODO: logic for waiting
+			// Maybe should wait for multiple requests
+
+			return true;
+		} // WaitForExperianConsumerCheckToFinishUpdates
 
 		#endregion private
 	} // class MainStrategy
