@@ -16,7 +16,7 @@ AS
 BEGIN
 	SELECT
 		TypeOfBusiness AS CompanyType,		
-		CompanyNumber
+		ExperianRefNum
 	FROM
 		Company
 	WHERE

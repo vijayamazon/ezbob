@@ -23,7 +23,7 @@
 			var sr = new SafeReader(dt.Rows[0]);
 
 			string companyType = sr["CompanyType"];
-			companyNumber = sr["CompanyNumber"];
+			experianRefNum = sr["ExperianRefNum"];
 
 			isLimited = companyType == "Limited" || companyType == "LLP";
 		} // constructor
@@ -43,7 +43,7 @@
 			string experianError = null;
 			decimal experianBureauScore = 0;
 
-			if (string.IsNullOrEmpty(companyNumber))
+			if (string.IsNullOrEmpty(experianRefNum))
 			{
 				experianError = "RefNumber is empty";
 			}
@@ -53,11 +53,11 @@
 				BusinessReturnData experianData;
 				if (isLimited)
 				{
-					experianData = service.GetLimitedBusinessData(companyNumber, customerId);
+					experianData = service.GetLimitedBusinessData(experianRefNum, customerId);
 				}
 				else
 				{
-					experianData = service.GetNotLimitedBusinessData(companyNumber, customerId);
+					experianData = service.GetNotLimitedBusinessData(experianRefNum, customerId);
 				}
 
 				if (!experianData.IsError)
@@ -73,7 +73,7 @@
 			DB.ExecuteNonQuery(
 					"UpdateExperianBusiness",
 					CommandSpecies.StoredProcedure,
-					new QueryParameter("CompanyRefNumber", companyNumber),
+					new QueryParameter("CompanyRefNumber", experianRefNum),
 					new QueryParameter("ExperianError", experianError),
 					new QueryParameter("ExperianScore", experianBureauScore),
 					new QueryParameter("CustomerId", customerId)
@@ -83,6 +83,6 @@
 		private readonly int customerId;
 		private readonly bool foundCompany;
 		private readonly bool isLimited;
-		private readonly string companyNumber;
+		private readonly string experianRefNum;
 	} // class ExperianCompanyCheck
 } // namespace
