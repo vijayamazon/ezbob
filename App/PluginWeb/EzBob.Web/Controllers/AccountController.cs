@@ -399,7 +399,8 @@ namespace EzBob.Web.Controllers
 						IsOffline = false,
 						PromoCode = promoCode,
 						CustomerInviteFriend = new List<CustomerInviteFriend>(),
-						PersonalInfo = new PersonalInfo { MobilePhone = mobilePhone }
+						PersonalInfo = new PersonalInfo { MobilePhone = mobilePhone },
+						TrustPilotStatus = _helper.TrustPilotStatusRepository.Find(TrustPilotStauses.Nether),
 					};
 
 				var sourceref = Request.Cookies["sourceref"];
