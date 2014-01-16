@@ -504,6 +504,9 @@ namespace EzBob.Web.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckExperianCompany", ReplyAction="http://tempuri.org/IEzService/CheckExperianCompanyResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData CheckExperianCompany(int customerId);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckExperianConsumer", ReplyAction="http://tempuri.org/IEzService/CheckExperianConsumerResponse")]
+        EzBob.Web.EzServiceReference.ActionMetaData CheckExperianConsumer(int customerId, string firstName, string surname, string gender, System.DateTime birthDate, int directorId, string line1, string line2, string line3, string line4, string line5, string line6);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy1", ReplyAction="http://tempuri.org/IEzService/MainStrategy1Response")]
         EzBob.Web.EzServiceReference.ActionMetaData MainStrategy1(int uderwriterId, int customerId, EzBob.Web.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison);
         
@@ -690,6 +693,10 @@ namespace EzBob.Web.EzServiceReference {
         
         public EzBob.Web.EzServiceReference.ActionMetaData CheckExperianCompany(int customerId) {
             return base.Channel.CheckExperianCompany(customerId);
+        }
+        
+        public EzBob.Web.EzServiceReference.ActionMetaData CheckExperianConsumer(int customerId, string firstName, string surname, string gender, System.DateTime birthDate, int directorId, string line1, string line2, string line3, string line4, string line5, string line6) {
+            return base.Channel.CheckExperianConsumer(customerId, firstName, surname, gender, birthDate, directorId, line1, line2, line3, line4, line5, line6);
         }
         
         public EzBob.Web.EzServiceReference.ActionMetaData MainStrategy1(int uderwriterId, int customerId, EzBob.Web.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison) {

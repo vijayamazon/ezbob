@@ -1,6 +1,7 @@
 ﻿using System.ServiceModel;
 
 namespace EzService {
+	using System;
 	using EzBob.Backend.Strategies;
 
 	#region interface IEzService
@@ -108,6 +109,9 @@ namespace EzService {
 
 		[OperationContract]
 		ActionMetaData CheckExperianCompany(int customerId);
+
+		[OperationContract]
+		ActionMetaData CheckExperianConsumer(int customerId, string firstName, string surname, string gender, DateTime birthDate, int directorId, string line1, string line2, string line3, string line4, string line5, string line6);
 
 		[OperationContract]
 		ActionMetaData MainStrategy1(int uderwriterId, int customerId, NewCreditLineOption newCreditLine, int avoidAutoDescison);

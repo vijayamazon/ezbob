@@ -497,6 +497,34 @@
 
 			serviceClient.UpdateCurrencyRates();
 		}
+
+		[Activation]
+		private void CheckExperianCompany()
+		{
+			int customerId;
+			if (args.Length != 2 || !int.TryParse(args[1], out customerId))
+			{
+				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> CheckExperianCompany <CustomerId>");
+				return;
+			}
+
+			serviceClient.CheckExperianCompany(customerId);
+		}
+
+		[Activation]
+		private void CheckExperianConsumer()
+		{
+			int customerId, directorId;
+			DateTime birthDate;
+				
+			if (args.Length != 13 || !int.TryParse(args[1], out customerId) || !DateTime.TryParse(args[5], out birthDate) || !int.TryParse(args[6], out directorId))
+			{
+				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> CheckExperianConsumer <CustomerId> <FirstName> <Surname> <Gender> <BirthDate> <DirectorId> <Line1> <Line2> <Line3> <Line4> <Line5> <Line6>");
+				return;
+			}
+
+			serviceClient.CheckExperianConsumer(customerId, args[2], args[3], args[4], birthDate, directorId, args[7], args[8], args[9], args[10], args[11], args[12]);
+		}
 		// ReSharper restore UnusedMember.Local
 
 		#endregion strategy activators

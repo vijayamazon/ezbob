@@ -309,6 +309,12 @@
   <wsdl:message name="IEzService_CheckExperianCompany_OutputMessage">
     <wsdl:part name="parameters" element="tns:CheckExperianCompanyResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_CheckExperianConsumer_InputMessage">
+    <wsdl:part name="parameters" element="tns:CheckExperianConsumer" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CheckExperianConsumer_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CheckExperianConsumerResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_MainStrategy1_InputMessage">
     <wsdl:part name="parameters" element="tns:MainStrategy1" />
   </wsdl:message>
@@ -515,6 +521,10 @@
     <wsdl:operation name="CheckExperianCompany">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CheckExperianCompany" message="tns:IEzService_CheckExperianCompany_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CheckExperianCompanyResponse" message="tns:IEzService_CheckExperianCompany_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CheckExperianConsumer">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CheckExperianConsumer" message="tns:IEzService_CheckExperianConsumer_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CheckExperianConsumerResponse" message="tns:IEzService_CheckExperianConsumer_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="MainStrategy1">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MainStrategy1" message="tns:IEzService_MainStrategy1_InputMessage" />
@@ -902,6 +912,15 @@
     </wsdl:operation>
     <wsdl:operation name="CheckExperianCompany">
       <soap12:operation soapAction="http://tempuri.org/IEzService/CheckExperianCompany" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CheckExperianConsumer">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/CheckExperianConsumer" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
