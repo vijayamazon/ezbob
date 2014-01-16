@@ -165,7 +165,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 			public List<BugModel> Bugs { get; set; }
 			public string State { get; set; }
 			public CompanyScoreModel CompanyScore { get; set; }
-			public SortedDictionary<string, int> ExperianDirectors { get; set; }
+			public SortedSet<string> ExperianDirectors { get; set; }
 		}
 
 	}

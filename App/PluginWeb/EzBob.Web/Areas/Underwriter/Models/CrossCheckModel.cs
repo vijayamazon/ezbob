@@ -28,7 +28,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 
 		public List<Director> Directors { get; set; }
 		public EZBob.DatabaseLib.Model.Database.Customer Customer { get; set; }
-		public SortedDictionary<string, int> ExperianDirectors { get; set; }
+		public SortedSet<string> ExperianDirectors { get; set; }
 
 		public int ExperianMortgage { get; set; }
 		public int ExperianMortgageCount { get; set; }
@@ -156,9 +156,9 @@ namespace EzBob.Web.Areas.Underwriter.Models
 			CrossCheckStatus.BuildMarkerStatusForCustomerAddress(CurrentAddress, EBayAddress, PayPalAddress);
 		}
 
-		public static SortedDictionary<string, int> GetExperianDirectors(EZBob.DatabaseLib.Model.Database.Customer customer)
+		public static SortedSet<string> GetExperianDirectors(EZBob.DatabaseLib.Model.Database.Customer customer)
 		{
-			SortedDictionary<string, int> experianDirectors = null ;
+			SortedSet<string> experianDirectors = null;
 			ParseExperianResult oParseResult = customer.ParseExperian(DBConfigurationValues.Instance.DirectorInfoParserConfiguration);
 
 			if (oParseResult.ParsingResult == ParsingResult.Ok)
@@ -172,9 +172,9 @@ namespace EzBob.Web.Areas.Underwriter.Models
 						if (sFullName != string.Empty)
 						{
 							if (experianDirectors == null)
-								experianDirectors = new SortedDictionary<string, int>();
+								experianDirectors = new SortedSet<string>();
 
-							experianDirectors.Add(sFullName, 1);
+							experianDirectors.Add(sFullName);
 						} // if
 					} // for each director
 				} // for each group
@@ -190,7 +190,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 			if (ExperianDirectors == null)
 				return TriState.NoData;
 
-			return ExperianDirectors.ContainsKey(DetailsToName(oInfo)) ? TriState.Yes : TriState.No;
+			return ExperianDirectors.Contains(DetailsToName(oInfo)) ? TriState.Yes : TriState.No;
 		} // IsExperianDirector
 
 		public TriState IsExperianDirector(Director oInfo)
@@ -198,7 +198,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 			if (ExperianDirectors == null)
 				return TriState.NoData;
 
-			return ExperianDirectors.ContainsKey(DetailsToName(oInfo)) ? TriState.Yes : TriState.No;
+			return ExperianDirectors.Contains(DetailsToName(oInfo)) ? TriState.Yes : TriState.No;
 		} // IsExperianDirector
 
 		private string DetailsToName(PersonalInfo oInfo)

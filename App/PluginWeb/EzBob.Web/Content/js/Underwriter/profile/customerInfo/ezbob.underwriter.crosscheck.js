@@ -81,7 +81,7 @@ EzBob.Underwriter.CrossCheckView = Backbone.View.extend({
         var oExperian = {};
         var nExperianCount = 0;
 
-        _.each(this.experianDirectors, function (nDummyValue, sDirectorName) {
+        _.each(this.experianDirectors, function (sDirectorName) {
             var sName = self.name(sDirectorName.toUpperCase());
 
             if (!sName)
