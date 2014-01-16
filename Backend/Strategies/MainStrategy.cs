@@ -688,8 +688,7 @@
 		private bool isOffline;
 		private string appEmail;
 		private string companyType;
-		private string limitedRefNum;
-		private string nonLimitedRefNum;
+		private string experianRefNum;
 		private string appFirstName;
 		private string appSurname;
 		private DateTime appDateOfBirth;
@@ -806,8 +805,7 @@
 			isOffline = results["IsOffline"];
 			appEmail = results["CustomerEmail"];
 			companyType = results["CompanyType"];
-			limitedRefNum = results["LimitedRefNum"];
-			nonLimitedRefNum = results["NonLimitedRefNum"];
+			experianRefNum = results["ExperianRefNum"];
 			wasMainStrategyExecutedBefore = results["MainStrategyExecutedBefore"];
 			appFirstName = results["FirstName"];
 			appSurname = results["Surname"];
@@ -1271,13 +1269,10 @@
 
 		private bool WaitForExperianCompanyCheckToFinishUpdates()
 		{
-			bool isLimited = companyType == "Limited" || companyType == "LLP";
-			string companyRefNumber = isLimited ? limitedRefNum : nonLimitedRefNum;
-			
 			DataTable dt = DB.ExecuteReader(
 				"GetIsCompanyDataUpdated",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CompanyRefNumber", companyRefNumber)
+				new QueryParameter("CompanyRefNumber", experianRefNum)
 			);
 
 			var sr = new SafeReader(dt.Rows[0]);
@@ -1295,7 +1290,7 @@
 				dt = DB.ExecuteReader(
 					"GetIsCompanyDataUpdated",
 					CommandSpecies.StoredProcedure,
-					new QueryParameter("CompanyRefNumber", companyRefNumber)
+					new QueryParameter("CompanyRefNumber", experianRefNum)
 				);
 
 				sr = new SafeReader(dt.Rows[0]);

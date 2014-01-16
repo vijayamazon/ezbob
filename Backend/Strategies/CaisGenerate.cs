@@ -79,8 +79,7 @@
 				decimal loanAmount = sr["LoanAmount"];
 				int scheduledRepayments = sr["ScheduledRepayments"];
 				string companyType = sr["CompanyType"];
-				string limitedRefNum = sr["LimitedRefNum"];
-				string nonLimitedRefNum = sr["NonLimitedRefNum"];
+				string experianRefNum = sr["ExperianRefNum"];
 				string customerState = sr["CustomerState"];
 				string sortCode = sr["SortCode"];
 				bool isDefaulted = sr["IsDefaulted"];
@@ -167,8 +166,7 @@
 						case "Limited":
 							{
 								companyTypeCode = "L";
-								companyRefNum = limitedRefNum;
-								var res = service.GetLimitedBusinessData(limitedRefNum, customerId, true);
+								var res = service.GetLimitedBusinessData(experianRefNum, customerId, true);
 								if(!string.IsNullOrEmpty(res.CompanyName)) fullName = res.CompanyName;
 								if (!string.IsNullOrEmpty(res.PostCode))
 								{
@@ -185,8 +183,7 @@
 						case "PShip3P":
 							{
 								companyTypeCode = "N";
-								companyRefNum = nonLimitedRefNum;
-								var res = service.GetNotLimitedBusinessData(nonLimitedRefNum, customerId, true);
+								var res = service.GetNotLimitedBusinessData(experianRefNum, customerId, true);
 								if (!string.IsNullOrEmpty(res.CompanyName))
 								{
 									fullName = res.CompanyName;
@@ -209,7 +206,7 @@
 					cais.Header.DateOfCreation = DateTime.UtcNow;
 					cais.Header.SourceCode = 721;
 
-					var record = CreateBusinessRecord(accountNumber, fullName, line1, line23, town, county, postcode, startDate, dateClose, scheduledRepayments, currentBalance, transferredToCollectionFlag, sortCode);
+					var record = CreateBusinessRecord(accountNumber, fullName, line1, line23, town, county, postcode, startDate, dateClose, scheduledRepayments, currentBalance, transferredToCollectionFlag, sortCode, experianRefNum);
 					cais.Accounts.Add(record);
 
 					businessCounter++;
@@ -343,7 +340,8 @@
 		private BusinessAccountRecord CreateBusinessRecord(string accountNumber, string fullName, string line1, string line23,
 													string town, string county, string postcode, DateTime startDate,
 													DateTime dateClose, int scheduledRepayments, decimal currentBalance,
-													string transferredToCollectionFlag, string sortCode) {
+													string transferredToCollectionFlag, string sortCode, string experianRefNum)
+		{
 			// TODO: investigate if we need all the assigments to 0 and empty strings
 			var record = new BusinessAccountRecord {
 				AccountNumber = accountNumber,
@@ -351,7 +349,7 @@
 				LimitedNonlimitedAndOtherFlag = companyTypeCode,
 				AddressType = string.Empty,
 				NameChange = "N",
-				CompanyRegisteredNumberBusinessNumber = companyRefNum,
+				CompanyRegisteredNumberBusinessNumber = experianRefNum,
 				SICCode = 0,
 				VATNumber = string.Empty,
 				YearBusinessStarted = 0,
@@ -453,7 +451,6 @@
 		private int consumerGoodCounter;
 		private int consumerDefaultsCounter;
 		private string companyTypeCode;
-		private string companyRefNum;
 		private readonly int underwriterId;
 	} // CaisGenerator
 } // namespace
