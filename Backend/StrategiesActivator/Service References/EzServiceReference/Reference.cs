@@ -642,10 +642,10 @@ namespace StrategiesActivator.EzServiceReference {
         System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> CheckExperianCompanyAsync(int customerId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckExperianConsumer", ReplyAction="http://tempuri.org/IEzService/CheckExperianConsumerResponse")]
-        StrategiesActivator.EzServiceReference.ActionMetaData CheckExperianConsumer(int customerId, string firstName, string surname, string gender, System.DateTime birthDate, int directorId, string line1, string line2, string line3, string line4, string line5, string line6);
+        StrategiesActivator.EzServiceReference.ActionMetaData CheckExperianConsumer(int customerId, int directorId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckExperianConsumer", ReplyAction="http://tempuri.org/IEzService/CheckExperianConsumerResponse")]
-        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> CheckExperianConsumerAsync(int customerId, string firstName, string surname, string gender, System.DateTime birthDate, int directorId, string line1, string line2, string line3, string line4, string line5, string line6);
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> CheckExperianConsumerAsync(int customerId, int directorId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy1", ReplyAction="http://tempuri.org/IEzService/MainStrategy1Response")]
         StrategiesActivator.EzServiceReference.ActionMetaData MainStrategy1(int uderwriterId, int customerId, StrategiesActivator.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison);
@@ -995,12 +995,12 @@ namespace StrategiesActivator.EzServiceReference {
             return base.Channel.CheckExperianCompanyAsync(customerId);
         }
         
-        public StrategiesActivator.EzServiceReference.ActionMetaData CheckExperianConsumer(int customerId, string firstName, string surname, string gender, System.DateTime birthDate, int directorId, string line1, string line2, string line3, string line4, string line5, string line6) {
-            return base.Channel.CheckExperianConsumer(customerId, firstName, surname, gender, birthDate, directorId, line1, line2, line3, line4, line5, line6);
+        public StrategiesActivator.EzServiceReference.ActionMetaData CheckExperianConsumer(int customerId, int directorId) {
+            return base.Channel.CheckExperianConsumer(customerId, directorId);
         }
         
-        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> CheckExperianConsumerAsync(int customerId, string firstName, string surname, string gender, System.DateTime birthDate, int directorId, string line1, string line2, string line3, string line4, string line5, string line6) {
-            return base.Channel.CheckExperianConsumerAsync(customerId, firstName, surname, gender, birthDate, directorId, line1, line2, line3, line4, line5, line6);
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> CheckExperianConsumerAsync(int customerId, int directorId) {
+            return base.Channel.CheckExperianConsumerAsync(customerId, directorId);
         }
         
         public StrategiesActivator.EzServiceReference.ActionMetaData MainStrategy1(int uderwriterId, int customerId, StrategiesActivator.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison) {

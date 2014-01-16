@@ -1,28 +1,27 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers
 {
+	using System;
 	using System.Web.Mvc;
 	using Code.ApplicationCreator;
 	using Infrastructure.csrf;
 	using Scorto.Web;
 	using log4net;
 
-	#region class CompanyDetailsController
+	#region class ExperianController
 
-	public class CompanyDetailsController : Controller
+	public class ExperianController : Controller
 	{
 		#region public
 
 		#region constructor
 
-		public CompanyDetailsController(IAppCreator creator)
+		public ExperianController(IAppCreator creator)
 		{
 			this.creator = creator;
 		} // constructor
 
 		#endregion constructor
-
-		#region method PerformCompanyCheck
-
+		
 		[Transactional]
 		[Ajax]
 		[HttpPost]
@@ -33,18 +32,27 @@
 
 			return this.JsonNet(new { });
 		} // PerformCompanyCheck
+		
+		[Transactional]
+		[Ajax]
+		[HttpPost]
+		[ValidateJsonAntiForgeryToken]
+		public JsonNetResult PerformConsumerCheck(int customerId)
+		{
+			creator.PerformConsumerCheck(customerId, 0);
 
-		#endregion method PerformCompanyCheck
+			return this.JsonNet(new { });
+		} // PerformCompanyCheck
 		
 		#region private properties
 
-		private static readonly ILog log = LogManager.GetLogger(typeof(CompanyDetailsController));
+		private static readonly ILog log = LogManager.GetLogger(typeof(ExperianController));
 		private readonly IAppCreator creator;
 
 		#endregion private properties
 
 		#endregion private
-	} // class CompanyDetailsController
+	} // class ExperianController
 
-	#endregion class CompanyDetailsController
+	#endregion class ExperianController
 } // namespace EzBob.Web.Areas.Customer.Controllers

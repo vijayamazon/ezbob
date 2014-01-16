@@ -515,15 +515,14 @@
 		private void CheckExperianConsumer()
 		{
 			int customerId, directorId;
-			DateTime birthDate;
 				
-			if (args.Length != 13 || !int.TryParse(args[1], out customerId) || !DateTime.TryParse(args[5], out birthDate) || !int.TryParse(args[6], out directorId))
+			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !int.TryParse(args[2], out directorId))
 			{
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> CheckExperianConsumer <CustomerId> <FirstName> <Surname> <Gender> <BirthDate> <DirectorId> <Line1> <Line2> <Line3> <Line4> <Line5> <Line6>");
+				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> CheckExperianConsumer <CustomerId> <DirectorId>");
 				return;
 			}
 
-			serviceClient.CheckExperianConsumer(customerId, args[2], args[3], args[4], birthDate, directorId, args[7], args[8], args[9], args[10], args[11], args[12]);
+			serviceClient.CheckExperianConsumer(customerId, directorId);
 		}
 		// ReSharper restore UnusedMember.Local
 

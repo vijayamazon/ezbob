@@ -130,6 +130,11 @@
 			
 		}
 
+		public void PerformConsumerCheck(int customerId, int directorId)
+		{
+			
+		}
+
         public void EmailRolloverAdded(Customer customer, decimal amount, DateTime expireDate)
         {
             

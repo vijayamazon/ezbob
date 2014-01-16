@@ -170,14 +170,9 @@
 
 				if (wasMainStrategyExecutedBefore)
 				{
-					var strat = new ExperianConsumerCheck(customerId, appFirstName, appSurname, appGender, appDateOfBirth, 0, appLine1, appLine2, appLine3, appLine4, appLine5, appLine6, DB, Log);
+					var strat = new ExperianConsumerCheck(customerId, 0, DB, Log);
 					strat.Execute();
-
-					if (!string.IsNullOrEmpty(strat.Error) && appTimeAtAddress == 1 && !string.IsNullOrEmpty(appLine6Prev))
-					{
-						strat = new ExperianConsumerCheck(customerId, appFirstName, appSurname, appGender, appDateOfBirth, 0, appLine1Prev, appLine2Prev, appLine3Prev, appLine4Prev, appLine5Prev, appLine6Prev, DB, Log);
-						strat.Execute();
-					}
+					
 					experianConsumerScore = strat.Score;
 				}
 				else if (!WaitForExperianConsumerCheckToFinishUpdates())
@@ -191,7 +186,7 @@
 				if (companyType != "Entrepreneur")
 				{
 					DataTable dt = DB.ExecuteReader(
-						"GetDirectorsAddresses",
+						"GetCustomerDirectorsForConsumerCheck",
 						CommandSpecies.StoredProcedure,
 						new QueryParameter("CustomerId", customerId)
 					);
@@ -200,24 +195,15 @@
 					{
 						var sr = new SafeReader(row);
 						int appDirId = sr["DirId"];
-						string dirLine1 = sr["DirLine1"];
-						string dirLine2 = sr["DirLine2"];
-						string dirLine3 = sr["DirLine3"];
-						string dirLine4 = sr["DirLine4"];
-						string dirLine5 = sr["DirLine5"];
-						string dirLine6 = sr["DirLine6"];
 						string appDirName = sr["DirName"];
 						string appDirSurname = sr["DirSurname"];
-						DateTime dirBirthdate = sr["DirDateOfBirth"];
-						string dirGender = sr["DirGender"];
 
 						if (string.IsNullOrEmpty(appDirName) || string.IsNullOrEmpty(appDirSurname))
 							continue;
 
 						if (wasMainStrategyExecutedBefore)
 						{
-							var dirStrat = new ExperianConsumerCheck(customerId, appDirName, appDirSurname, dirGender, dirBirthdate, appDirId,
-							                                         dirLine1, dirLine2, dirLine3, dirLine4, dirLine5, dirLine6, DB, Log);
+							var dirStrat = new ExperianConsumerCheck(customerId, appDirId, DB, Log);
 							dirStrat.Execute();
 							experianConsumerScore = dirStrat.Score;
 						}
@@ -1266,7 +1252,7 @@
 			return true;
 		}
 
-		private bool GetIsExperianConsumerUpdated(int directorId = 0)
+		private bool GetIsExperianConsumerUpdated(int directorId)
 		{
 			DataTable dt = DB.ExecuteReader("GetIsConsumerDataUpdated", CommandSpecies.StoredProcedure,
 					new QueryParameter("CustomerId", customerId),

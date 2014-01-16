@@ -202,7 +202,7 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
             this.saveDataRequest(action, data);
 
         if (typeOfBussiness !== 'Entrepreneur') {
-            $.post("" + window.gRootPath + "Customer/CompanyDetails/PerformCompanyCheck", { customerId: this.model.get('Id') });
+            $.post("" + window.gRootPath + "Customer/Experian/PerformCompanyCheck", { customerId: this.model.get('Id') });
         }
         
         return false;

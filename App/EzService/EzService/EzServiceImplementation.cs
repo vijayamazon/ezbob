@@ -394,12 +394,9 @@
 			return Execute(customerId, null, typeof(ExperianCompanyCheck), customerId);
 		} // CheckExperianCompany
 
-		public ActionMetaData CheckExperianConsumer(int customerId, string firstName, string surname, string gender,
-		                                     DateTime birthDate, int directorId, string line1, string line2, string line3,
-		                                     string line4, string line5, string line6)
+		public ActionMetaData CheckExperianConsumer(int customerId, int directorId)
 		{
-			return Execute(customerId, null, typeof (ExperianConsumerCheck), customerId, firstName, surname, gender, birthDate,
-			               directorId, line1, line2, line3, line4, line5, line6);
+			return Execute(customerId, null, typeof (ExperianConsumerCheck), customerId, directorId);
 		}
 
 		public ActionMetaData MainStrategy1(int underwriterId, int customerId, NewCreditLineOption newCreditLine, int avoidAutoDescison) {

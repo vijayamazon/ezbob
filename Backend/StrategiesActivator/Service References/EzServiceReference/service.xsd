@@ -564,17 +564,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="customerId" type="xs:int" />
-        <xs:element minOccurs="0" name="firstName" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="surname" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="gender" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="birthDate" type="xs:dateTime" />
         <xs:element minOccurs="0" name="directorId" type="xs:int" />
-        <xs:element minOccurs="0" name="line1" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="line2" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="line3" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="line4" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="line5" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="line6" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

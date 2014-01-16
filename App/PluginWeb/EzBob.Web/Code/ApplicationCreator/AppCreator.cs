@@ -399,6 +399,11 @@
 			ServiceClient.CheckExperianCompany(customerId);
 		}
 
+		public void PerformConsumerCheck(int customerId, int directorId)
+		{
+			ServiceClient.CheckExperianConsumer(customerId, directorId);
+		}
+
 		public void EmailRolloverAdded(Customer customer, decimal amount, DateTime expireDate) {
 			if (useNewMailStrategies) {
 				ServiceClient.EmailRolloverAdded(customer.Id, amount);

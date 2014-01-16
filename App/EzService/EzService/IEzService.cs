@@ -111,7 +111,7 @@ namespace EzService {
 		ActionMetaData CheckExperianCompany(int customerId);
 
 		[OperationContract]
-		ActionMetaData CheckExperianConsumer(int customerId, string firstName, string surname, string gender, DateTime birthDate, int directorId, string line1, string line2, string line3, string line4, string line5, string line6);
+		ActionMetaData CheckExperianConsumer(int customerId, int directorId);
 
 		[OperationContract]
 		ActionMetaData MainStrategy1(int uderwriterId, int customerId, NewCreditLineOption newCreditLine, int avoidAutoDescison);

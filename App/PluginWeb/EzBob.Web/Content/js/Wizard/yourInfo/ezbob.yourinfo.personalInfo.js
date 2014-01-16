@@ -250,7 +250,8 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 		var form = this.$el.find('form.PersonalDetailsForm');
 		var request = $.post(form.attr('action'), form.serializeArray());
 
-		request.success(function(res) {
+		request.success(function (res) {
+		    $.post("" + window.gRootPath + "Customer/Experian/PerformConsumerCheck", { customerId: this.model.get('Id') });
 			scrollTop();
 
 			if (res.error) {
