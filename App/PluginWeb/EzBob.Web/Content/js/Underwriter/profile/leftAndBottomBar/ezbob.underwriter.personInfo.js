@@ -1,4 +1,4 @@
-﻿(function() {
+(function() {
   var root,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -66,7 +66,29 @@
       "click [name=\"isTestEditButton\"]": "isTestEditButton",
       "click [name=\"avoidAutomaticDecisionButton\"]": "avoidAutomaticDecisionButton",
       "click [name=\"changeFraudStatusManualy\"]": "changeFraudStatusManualyClicked",
-      'click button.cci-mark-toggle': 'toggleCciMark'
+      'click button.cci-mark-toggle': 'toggleCciMark',
+      'click [name="TrustPilotStatusUpdate"]': 'updateTrustPilotStatus'
+    };
+
+    PersonInfoView.prototype.updateTrustPilotStatus = function() {
+      var d,
+        _this = this;
+      d = new EzBob.Dialogs.ComboEdit({
+        model: this.model,
+        propertyName: 'TrustPilotStatusName',
+        title: 'Trust Pilot Status',
+        width: 500,
+        postValueName: 'status',
+        comboValues: this.model.get('TrustPilotStatusList'),
+        url: "Underwriter/ApplicationInfo/UpdateTrustPilotStatus",
+        data: {
+          id: this.model.get('Id')
+        }
+      });
+      d.render();
+      d.on('done', function() {
+        return _this.model.fetch();
+      });
     };
 
     PersonInfoView.prototype.changeFraudStatusManualyClicked = function() {
@@ -129,10 +151,9 @@
             status: newStatus
           });
           return xhr.done(function(result) {
-            var disabled, isWarning, xhr2;
+            var isWarning, xhr2;
             BlockUi("on");
             isWarning = result;
-            disabled = waiting || !isStatusEnabled;
             that.model.set('Disabled', newStatus);
             that.model.set('IsWarning', isWarning);
             xhr2 = $.post("" + window.gRootPath + "Underwriter/ApplicationInfo/LogStatusChange", {
@@ -171,6 +192,7 @@
         model: this.model,
         propertyName: "IsAvoid",
         title: "Manual Decision",
+        width: 350,
         postValueName: "enbaled",
         checkboxName: "Enable Manual Decision",
         url: "Underwriter/ApplicationInfo/AvoidAutomaticDecision",
@@ -200,7 +222,7 @@
       view = new EzBob.EmailEditView({
         model: this.model
       });
-      EzBob.App.modal.show(view);
+      EzBob.App.jqmodal.show(view);
       view.on("showed", function() {
         return view.$el.find("input").focus();
       });

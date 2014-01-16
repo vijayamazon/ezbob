@@ -13,6 +13,7 @@ using PaymentServices.Calculators;
 namespace EzBob.Web.Areas.Customer.Models
 {
 	using System.Collections.Generic;
+	using Configuration;
 
 	public class CustomerModelBuilder
 	{
@@ -216,6 +217,10 @@ namespace EzBob.Web.Areas.Customer.Models
 			var isDefault = customer.CollectionStatus != null && customer.CollectionStatus.CurrentStatus != null &&
 			                 customer.CollectionStatus.CurrentStatus.Name == "Default";
 			customerModel.Perks = isDefault ? null : _perksRepository.GetActivePerk();
+
+			customerModel.TrustPilotStatusID = customer.TrustPilotStatus.ID;
+			customerModel.TrustPilotReviewEnabled = DBConfigurationValues.Instance.TrustPilotReviewEnabled;
+
             return customerModel;
         }
 

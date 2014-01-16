@@ -118,11 +118,11 @@ namespace EZBob.DatabaseLib
 		private readonly UiEventRepository _uiEventRepository;
 
 		private readonly WizardStepRepository _wizardStepRepository;
+		private readonly TrustPilotStatusRepository _trustPilotStatusRepository;
 
 		#endregion repositories
 
-		public DatabaseDataHelper(ISession session)
-		{
+		public DatabaseDataHelper(ISession session) {
 			_session = session;
 
 			_MarketPlaceRepository = new MarketPlaceRepository(session);
@@ -166,6 +166,7 @@ namespace EZBob.DatabaseLib
 			_uiEventRepository = new UiEventRepository(session);
 
 			_wizardStepRepository = new WizardStepRepository(session);
+			_trustPilotStatusRepository = new TrustPilotStatusRepository(session);
 		} // constructor
 
 		#region UI related
@@ -258,6 +259,8 @@ namespace EZBob.DatabaseLib
 		} // WizardSteps
 
 		#endregion property WizardSteps
+
+		public TrustPilotStatusRepository TrustPilotStatusRepository { get { return _trustPilotStatusRepository; } }
 
 		public LoanTransactionMethodRepository LoanTransactionMethodRepository { get { return _loanTransactionMethodRepository; } }
 

@@ -297,6 +297,8 @@ namespace EZBob.DatabaseLib.Model.Database {
 
 			Map(x => x.CciMark);
 			Map(x => x.GoogleCookie).Length(300);
+
+			References(x => x.TrustPilotStatus, "TrustPilotStatusID");
 		} // constructor
 	} // class CustomerMap
 } // namespace EZBob.DatabaseLib.Model.Database

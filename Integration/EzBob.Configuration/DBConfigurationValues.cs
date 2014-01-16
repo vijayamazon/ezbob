@@ -22,6 +22,7 @@ namespace EzBob.Configuration {
 		ChannelGrabberRejectPolicy,
 		CompanyScoreParserConfiguration,
 		DirectorInfoParserConfiguration,
+		TrustPilotReviewEnabled,
 	} // enum Variables
 
 	public enum ChannelGrabberRejectPolicy {
@@ -51,8 +52,6 @@ namespace EzBob.Configuration {
 
 		#endregion Instance
 
-		private static readonly ILog ms_oLog = LogManager.GetLogger(typeof(DBConfigurationValues));
-
 		#region properties
 
 		public bool DisplayEarnedPoints { get { return RawDisplayEarnedPoints == "1"; } }
@@ -67,6 +66,16 @@ namespace EzBob.Configuration {
 
 		public string CompanyScoreParserConfiguration { get { return RawCompanyScoreParserConfiguration; } }
 		public string DirectorInfoParserConfiguration { get { return RawDirectorInfoParserConfiguration; } }
+		public bool TrustPilotReviewEnabled { get {
+			switch (RawTrustPilotReviewEnabled.ToLower()) {
+			case "true":
+			case "1":
+			case "yes":
+				return true;
+			} // switch
+
+			return false;
+		}} // TrustPilotReviewEnabled
 
 		#endregion properties
 
@@ -87,6 +96,7 @@ namespace EzBob.Configuration {
 		public string RawChannelGrabberRejectPolicy { get { return this[Variables.ChannelGrabberRejectPolicy]; } }
 		public string RawCompanyScoreParserConfiguration { get { return this[Variables.CompanyScoreParserConfiguration]; } }
 		public string RawDirectorInfoParserConfiguration { get { return this[Variables.DirectorInfoParserConfiguration]; } }
+		public string RawTrustPilotReviewEnabled { get { return this[Variables.TrustPilotReviewEnabled]; } }
 
 		#endregion raw properties
 
@@ -131,6 +141,8 @@ namespace EzBob.Configuration {
 		} // constructor
 
 		#endregion constructor
+
+		private static readonly ILog ms_oLog = LogManager.GetLogger(typeof(DBConfigurationValues));
 
 		#endregion private
 	} // class DBConfigurationValues

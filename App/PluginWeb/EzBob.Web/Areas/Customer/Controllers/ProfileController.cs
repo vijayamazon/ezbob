@@ -5,6 +5,7 @@
 	using Code.ApplicationCreator;
 	using CommonLib.Security;
 	using EKM;
+	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
 	using EzServiceReference;
 	using Models;
@@ -72,6 +73,27 @@
 			var details = _customerModelBuilder.BuildWizardModel(_context.Customer);
 			return this.JsonNet(details);
 		}
+
+		[Transactional]
+		[Ajax]
+		[HttpPost]
+		[ValidateJsonAntiForgeryToken]
+		public JsonNetResult ClaimsTrustPilotReview() {
+			var customer = _context.Customer;
+
+			if (customer == null)
+				return this.JsonNet(new { status = "error", error = "Customer not found." });
+
+			if (ReferenceEquals(customer.TrustPilotStatus, null) || customer.TrustPilotStatus.IsMe(TrustPilotStauses.Nether)) {
+				var oHelper = ObjectFactory.GetInstance<DatabaseDataHelper>();
+
+				customer.TrustPilotStatus = oHelper.TrustPilotStatusRepository.Find(TrustPilotStauses.Claims);
+
+				_session.Flush();
+			} // if
+
+			return this.JsonNet(new { status = "ok", error = "" });
+		} // ClaimsTrustPilotReview
 
 		[Transactional]
 		[Ajax]

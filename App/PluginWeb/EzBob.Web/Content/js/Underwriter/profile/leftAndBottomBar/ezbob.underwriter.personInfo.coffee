@@ -47,6 +47,25 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
         "click [name=\"avoidAutomaticDecisionButton\"]": "avoidAutomaticDecisionButton"
         "click [name=\"changeFraudStatusManualy\"]": "changeFraudStatusManualyClicked"
         'click button.cci-mark-toggle': 'toggleCciMark'
+        'click [name="TrustPilotStatusUpdate"]': 'updateTrustPilotStatus'
+
+    updateTrustPilotStatus: ->
+        d = new EzBob.Dialogs.ComboEdit
+            model: @model
+            propertyName: 'TrustPilotStatusName'
+            title: 'Trust Pilot Status'
+            width: 500
+            postValueName: 'status'
+            comboValues: @model.get 'TrustPilotStatusList'
+            url: "Underwriter/ApplicationInfo/UpdateTrustPilotStatus"
+            data: { id: @model.get('Id') }
+
+        d.render()
+
+        d.on( 'done', =>
+            @model.fetch()
+        )
+        return
 
     changeFraudStatusManualyClicked: ->
         fraudStatusModel = new EzBob.Underwriter.FraudStatusModel( 

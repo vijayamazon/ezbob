@@ -111,6 +111,8 @@ namespace EzBob.Web.Areas.Customer.Models
 		public string LastSavedWizardStep { get; set; }
 		public string Perks { get; set; }
 
+		public int TrustPilotStatusID { get; set; }
+		public bool TrustPilotReviewEnabled { get; set; }
 	} // class CustomerModel
 
 	public class SimpleMarketPlaceModel

@@ -100,6 +100,19 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 		if (sState !== 'apply' && sState !== 'bad' && sState !== 'disabled')
 			return;
 
+		if (this.customer.get('TrustPilotReviewEnabled')) {
+			var nTrustPilotStatusID = this.customer.get('TrustPilotStatusID');
+
+			if (nTrustPilotStatusID === 0) {
+				this.openTrustPilotDlg();
+				return;
+			} // if never left review
+		} // if review enabled
+
+		this.doApplyForALoan();
+	}, // applyForALoan
+
+	openTrustPilotDlg: function() {
 		var self = this;
 
 		this.$el.find('.trustpilot-ezbob').dialog({
@@ -123,25 +136,31 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 					oImg.attr('src', sSrc);
 				} // if
 
-				$('a.trustpilot-rate', me).click(function() { me.dialog('close'); self.trustpilotRate(); });
-				$('a.trustpilot-skip', me).click(function() { me.dialog('close'); self.doApplyForALoan(); });
+				$('a.trustpilot-rate', me).click(function() {
+					me.dialog('close');
+					window.open('http://www.trustpilot.com/evaluate/ezbob.com');
+					self.doApplyForALoan(true);
+				});
+
+				$('a.trustpilot-skip', me).click(function() {
+					me.dialog('close');
+					self.doApplyForALoan();
+				});
 
 				$('*:focus', me).blur();
 			}, // on open
 		}); // dialog
-	}, // applyForALoan
+	}, // openTrustPilotDlg
 
-	trustpilotRate: function() {
-		window.open('http://www.trustpilot.com/evaluate/ezbob.com');
-		this.doApplyForALoan();
-	}, // trustpilotRate
-
-	doApplyForALoan: function() {
+	doApplyForALoan: function(bClaims) {
 		var that = this;
 
 		this.trigger('applyForLoan');
 
 		BlockUi('on');
+
+		if (bClaims)
+			$.post(window.gRootPath + 'Customer/Profile/ClaimsTrustPilotReview');
 
 		$.post(window.gRootPath + 'Customer/Profile/ApplyForALoan')
 			.done(function(result) {
@@ -178,6 +197,8 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 		this.$el.html(this.templates[state](data));
 
 		this.$el.find('button').popover({ placement: 'top' });
+
+		EzBob.UiAction.registerView(this);
 
 		return this;
 	}, // render

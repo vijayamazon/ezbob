@@ -225,7 +225,7 @@ var EzBob = EzBob || {};
 		save: function (evt) {
 			// console.log('ui event save(', evt.type, $(evt.target).attr('ui-event-control-id'), evt.target, evt.data.saveValue, ')');
 
-			var oElm = $(evt.target);
+			var oElm = $(evt.currentTarget);
 
 			var oControlName = oElm.attr('ui-event-control-id');
 

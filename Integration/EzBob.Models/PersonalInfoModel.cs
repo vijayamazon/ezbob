@@ -3,9 +3,11 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using ApplicationMng.Model;
+	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
 	using NHibernate;
 	using CommonLib;
+	using StructureMap;
 
 	public class PersonalInfoModel {
 		public int Id { get; set; }
@@ -120,11 +122,35 @@
 				ActiveCampaign = activeCampaigns.Aggregate((i, j) => i + ", " + j);
 
 			CciMark = customer.CciMark;
+
+			TrustPilotStatusDescription = customer.TrustPilotStatus.Description;
+			TrustPilotStatusName = customer.TrustPilotStatus.Name;
 		} // InitFromCustomer
 
 		public bool IsTest { get; set; }
 		public bool IsAvoid { get; set; }
 		public string SegmentType { get; set; }
 		public bool CciMark { get; set; }
+
+		public string TrustPilotStatusDescription { get; set; }
+		public string TrustPilotStatusName { get; set; }
+
+		public List<object> TrustPilotStatusList {
+			get {
+				if (m_oTrustPilotStatusList != null)
+					return m_oTrustPilotStatusList;
+
+				m_oTrustPilotStatusList = new List<object>();
+
+				var oHelper = ObjectFactory.GetInstance<DatabaseDataHelper>();
+
+				foreach (TrustPilotStatus tsp in oHelper.TrustPilotStatusRepository.GetAll())
+					m_oTrustPilotStatusList.Add(new { value = tsp.Name, text = tsp.Description });
+
+				return m_oTrustPilotStatusList;
+			} // get
+		} // TrustPilotSatusList
+
+		private List<object> m_oTrustPilotStatusList;
 	} // class PersonalInfoModel
 } // namespace
