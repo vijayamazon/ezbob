@@ -239,10 +239,10 @@ namespace LandRegistryLib
 			switch (value)
 			{
 				case 1:
-					type = LandRegistryResponseType.Poll;
+					type = LandRegistryResponseType.Acknowledgement;
 					break;
 				case 2:
-					type = LandRegistryResponseType.Error;
+					type = LandRegistryResponseType.Rejection;
 					break;
 				case 3:
 					type = LandRegistryResponseType.Success;

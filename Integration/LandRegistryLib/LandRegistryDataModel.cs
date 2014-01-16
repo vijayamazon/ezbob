@@ -13,6 +13,7 @@
 		public string FilePath { get; set; }
 		public string Error { get; set; }
 		public LandRegistryResModel Res { get; set; }
+		public LandRegistryAcknowledgementModel Acknowledgement { get; set; }
 	}
 
 	public enum LandRegistryRequestType
@@ -25,10 +26,24 @@
 
 	public enum LandRegistryResponseType
 	{
-		Poll,
-		Error,
-		Success,
+		Acknowledgement,//10
+		Rejection,//20
+		Success,//30
 		Unkown
+	}
+
+	public class LandRegistryAcknowledgementModel
+	{
+		public DateTime PollDate { get; set; }
+		public string Description { get; set; }
+		public string UniqueId { get; set; }
+	}
+
+	public class LandRegistryRejectionModel
+	{
+		public DateTime PollDate { get; set; }
+		public string Description { get; set; }
+		public string UniqueId { get; set; }
 	}
 
 	public class LandRegistryResModel

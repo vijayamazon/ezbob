@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Behaviour.cs" />
+    <Compile Include="EnquiryError.cs" />
     <Compile Include="LandRegistryTestApi.cs" />
     <Compile Include="LandRegistryApi.cs" />
     <Compile Include="LandRegistryDataModel.cs" />

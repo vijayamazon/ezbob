@@ -12,7 +12,7 @@ namespace LandRegistryLib
 	{
 		private static readonly ILog Log = LogManager.GetLogger(typeof(LandRegistryApi));
 
-		public LandRegistryDataModel EnquiryByPropertyDescription(string buildingNumber, string streetName, string cityName, string postCode)
+		public LandRegistryDataModel EnquiryByPropertyDescription(string buildingNumber, string streetName, string cityName, string postCode, string customerId = "1")
 		{
 			var model = new LandRegistryDataModel { RequestType = LandRegistryRequestType.EnquiryByPropertyDescription };
 			using (var client = new LREnquiryServiceNS.PropertyDescriptionEnquiryV2_0ServiceClient())
@@ -30,8 +30,8 @@ namespace LandRegistryLib
 								},
 						Product = new LREnquiryServiceNS.Q1ProductType
 							{
-								ExternalReference = new LREnquiryServiceNS.Q1ExternalReferenceType { Reference = "12345" },
-								CustomerReference = new LREnquiryServiceNS.Q1CustomerReferenceType { Reference = "23456" },
+								ExternalReference = new LREnquiryServiceNS.Q1ExternalReferenceType { Reference = string.Format("ezbob{0}", customerId) },
+								CustomerReference = new LREnquiryServiceNS.Q1CustomerReferenceType { Reference = customerId },
 								SubjectProperty = new LREnquiryServiceNS.Q1SubjectPropertyType
 									{
 										Address = new LREnquiryServiceNS.Q1AddressType
@@ -52,7 +52,7 @@ namespace LandRegistryLib
 				{
 					Response = client.searchProperties(request);
 					model.Response = SerializeObject(Response);
-					model.ResponseType = GetResponseType((int) Response.GatewayResponse.TypeCode.Value);
+					model.ResponseType = GetResponseType((int)Response.GatewayResponse.TypeCode.Value);
 				}
 				catch (Exception ex)
 				{
@@ -64,7 +64,7 @@ namespace LandRegistryLib
 				return model;
 			}
 		}
-		
+
 		public LandRegistryDataModel EnquiryByPropertyDescriptionPoll(string pollId)
 		{
 			var model = new LandRegistryDataModel { RequestType = LandRegistryRequestType.EnquiryByPropertyDescriptionPoll };
@@ -139,12 +139,33 @@ namespace LandRegistryLib
 				model.Request = SerializeObject(request);
 				try
 				{
-					LRResServiceNS.ResponseOCWithSummaryV2_1Type Response = client.performOCWithSummary(request);
+					LRResServiceNS.ResponseOCWithSummaryV2_1Type response = client.performOCWithSummary(request);
 					//File.WriteAllBytes(string.Format("{0}_{1}.zip", titleNumber, DateTime.Today.Ticks), Response.GatewayResponse.Results.Attachment.EmbeddedFileBinaryObject.Value);
-					Response.GatewayResponse.Results.Attachment = null;
-					model.Response = SerializeObject(Response);
-					model.ResponseType = GetResponseType((int)Response.GatewayResponse.TypeCode.Value);
-					
+					response.GatewayResponse.Results.Attachment = null;
+					model.Response = SerializeObject(response);
+					model.ResponseType = GetResponseType((int)response.GatewayResponse.TypeCode.Value);
+
+					switch (model.ResponseType)
+					{
+						case LandRegistryResponseType.Acknowledgement:
+							model.Acknowledgement = new LandRegistryAcknowledgementModel
+								{
+									PollDate = response.GatewayResponse.Acknowledgement.AcknowledgementDetails.ExpectedResponseDateTime.Value,
+									Description = response.GatewayResponse.Acknowledgement.AcknowledgementDetails.MessageDescription.Value,
+									UniqueId = response.GatewayResponse.Acknowledgement.AcknowledgementDetails.UniqueID.Value
+								};
+							break;
+						case LandRegistryResponseType.Rejection:
+
+							break;
+							case LandRegistryResponseType.Success:
+							break;
+						case LandRegistryResponseType.Unkown:
+						default:
+							break;
+					}
+
+
 				}
 				catch (Exception ex)
 				{
@@ -180,14 +201,14 @@ namespace LandRegistryLib
 				try
 				{
 					LRResPollServiceNS.ResponseOCWithSummaryV2_0Type Response = client.getResponse(request);
-					if (Response.GatewayResponse.Results != null && 
+					if (Response.GatewayResponse.Results != null &&
 						Response.GatewayResponse.Results.Attachment != null &&
-					    Response.GatewayResponse.Results.Attachment.EmbeddedFileBinaryObject != null)
+						Response.GatewayResponse.Results.Attachment.EmbeddedFileBinaryObject != null)
 					{
 						//File.WriteAllBytes(string.Format("{0}_{1}.zip", pollId, DateTime.Today.Ticks), Response.GatewayResponse.Results.Attachment.EmbeddedFileBinaryObject.Value);
 						Response.GatewayResponse.Results.Attachment = null;
 					}
-					
+
 					model.Response = SerializeObject(Response);
 					model.ResponseType = GetResponseType((int)Response.GatewayResponse.TypeCode.Value);
 				}
@@ -233,12 +254,15 @@ namespace LandRegistryLib
 			switch (value)
 			{
 				case 1:
-					type = LandRegistryResponseType.Poll;
+				case 10:
+					type = LandRegistryResponseType.Acknowledgement;
 					break;
 				case 2:
-					type = LandRegistryResponseType.Error;
+				case 20:
+					type = LandRegistryResponseType.Rejection;
 					break;
 				case 3:
+				case 30:
 					type = LandRegistryResponseType.Success;
 					break;
 				default:

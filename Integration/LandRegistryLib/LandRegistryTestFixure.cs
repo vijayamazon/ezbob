@@ -46,7 +46,7 @@
 		{
 			var model = LrTest.ResPoll(null);
 			Assert.NotNull(model.Response);
-			Assert.AreEqual(LandRegistryResponseType.Poll, model.ResponseType);
+			Assert.AreEqual(LandRegistryResponseType.Acknowledgement, model.ResponseType);
 		}
 	}
 }
