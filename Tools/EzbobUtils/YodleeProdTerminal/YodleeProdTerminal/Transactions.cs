@@ -9,6 +9,7 @@ using com.yodlee.sampleapps.datatypes;
 namespace com.yodlee.sampleapps
 {
     using System.IO;
+    using System.Linq;
     using System.Xml;
     using System.Xml.Serialization;
 
@@ -395,10 +396,20 @@ namespace com.yodlee.sampleapps
                         }
                         System.Console.WriteLine("\n");
                     }
-                    searchHit = searchHit - 10;
+	        	    
+	        	    searchHit = searchHit - 10;
                     startRange = endRange + 1;
                     endRange = endRange + 10;
                 }
+
+				if (txSearchResult.transactions.Any())
+				{
+					Console.WriteLine("first trn date {1}, last trn date {0}",
+									  txSearchResult.transactions.First().postDate ??
+									  txSearchResult.transactions.First().transactionDate,
+									  txSearchResult.transactions.Last().postDate ??
+									  txSearchResult.transactions.Last().transactionDate);
+				}
             } else {
                 System.Console.WriteLine("ERROR: Unable to get user transaction\n");
             }
