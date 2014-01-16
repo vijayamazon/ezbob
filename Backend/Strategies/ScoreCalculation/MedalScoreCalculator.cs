@@ -66,7 +66,7 @@
 					Medal = medal,
 					ScorePoints = scoreSum * 100,
 					ScoreResult = score,
-					MaxOffer = (int)((int)medal * annualTurnover * GetRange(Constants.DecisionPercentRanges, experianScore).OfferPercent / 100),
+					MaxOffer = (int)Math.Round((int)((int)medal * annualTurnover * GetRange(Constants.DecisionPercentRanges, experianScore).OfferPercent / 100) / 100d, 0) * 100 ,
 					MaxOfferPercent = GetRange(Constants.OfferPercentRanges, experianScore).OfferPercent,
 					AcDescriptors = "Experian score;Marketplace seniority;Marital status;Positive feedback count;Other;Annual turnover;Number of stores;EZBOB seniority;EZBOB number of loans;EZBOB previous late payments;EZBOB previous early payments",
 					AcParameters = BuildParameters(dict),
@@ -389,11 +389,18 @@
 
 		private void PrintDict(ScoreMedalOffer scoreMedal, Dictionary<Parameter, Weight> dict)
 		{
-			m_oLog.Info("medal: {0} points: {4} result: {1}%, offer: {2} £ at  {3}% \n ResultMaxPoints: {4} \n ResultWeights: {5}", 
-				scoreMedal.Medal, scoreMedal.ScoreResult * 100, 
-				scoreMedal.MaxOffer, 
+			m_oLog.Info("Medal Results: \n\n");
+			m_oLog.Info("medal: {0} points: {4} result: {1}%, offer: {2} £ at  {3}% \n ResultMaxPoints: {4} \n ResultWeights: {5} \n ACDescriptors: {6} \n AcParameters: {7} \n\n",
+				scoreMedal.Medal,
+				ToShort(scoreMedal.ScoreResult * 100), 
+				scoreMedal.MaxOffer,
 				scoreMedal.MaxOfferPercent * 100, 
-				scoreMedal.ScorePoints, scoreMedal.ResultMaxPoints, scoreMedal.ResultWeigts);
+				ToShort(scoreMedal.ScorePoints),
+				scoreMedal.ResultMaxPoints,
+				scoreMedal.ResultWeigts, 
+				scoreMedal.AcDescriptors, 
+				scoreMedal.AcParameters);
+
 			decimal s1 = 0M, s2 = 0M, s3 = 0M, s4 = 0M, s5 = 0M, s6 = 0M, s7 = 0M, s8 = 0M, s9 = 0M, s10 = 0M, s11 = 0M;
 			foreach (var weight in dict)
 			{
@@ -405,10 +412,10 @@
 					ToPercent(weight.Value.FinalWeight),
 					ToPercent(weight.Value.MinimumScore / 100),
 					ToPercent(weight.Value.MaximumScore / 100),
-					weight.Value.MinimumGrade,
-					weight.Value.MaximumGrade,
-					weight.Value.Grade,
-					String.Format("{0}", weight.Value.Score).PadRight(50));
+					ToShort(weight.Value.MinimumGrade),
+					ToShort(weight.Value.MaximumGrade),
+					ToShort(weight.Value.Grade),
+					ToShort(weight.Value.Score).PadRight(50));
 				s1 += weight.Value.FinalWeightFixedWeightParameter;
 				s2 += weight.Value.StandardWeightFixedWeightParameter;
 				s3 += weight.Value.StandardWeightAdjustableWeightParameter;
@@ -421,16 +428,21 @@
 				s10 += weight.Value.Score;
 				s11 += weight.Value.Grade;
 			}
-			m_oLog.Info("--------------------------------------------------------------------");
+			m_oLog.Info("---------------------------------------------------------------------------------------------------------------------------------------------------------------");
 			m_oLog.Info("{0}| {10}| {11}| {1}| {2}| {3}| {4}| {5}| {6}| {7}| {8}| {9}", "Sum".PadRight(25),
 				ToPercent(s1), ToPercent(s2), ToPercent(s3), ToPercent(s4), ToPercent(s5),
-							  ToPercent(s6 / 100), ToPercent(s7 / 100), s8, s9, s11, s10.ToString().PadRight(50));
+							  ToPercent(s6 / 100), ToPercent(s7 / 100), ToShort(s8), ToShort(s9), ToShort(s11), ToShort(s10).PadRight(50));
 
 		}
 
 		private string ToPercent(decimal val)
 		{
 			return String.Format("{0:F2}", val * 100).PadRight(6);
+		}
+
+		private string ToShort(decimal val)
+		{
+			return String.Format("{0:F2}", val).PadRight(6);
 		}
 	}
 
