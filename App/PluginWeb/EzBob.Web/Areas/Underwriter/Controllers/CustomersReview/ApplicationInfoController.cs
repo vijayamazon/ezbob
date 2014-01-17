@@ -469,10 +469,9 @@
 			var cashRequest = _crBuilder.CreateCashRequest(customer);
 			cashRequest.LoanType = _loanTypes.GetDefault();
 
-			// TODO: investigate why shouldn't these be done
-			//customer.CreditResult = null;
-			//customer.OfferStart = cashRequest.OfferStart;
-			//customer.OfferValidUntil = cashRequest.OfferValidUntil;
+			customer.CreditResult = null;
+			customer.OfferStart = cashRequest.OfferStart;
+			customer.OfferValidUntil = cashRequest.OfferValidUntil;
 
 			return this.JsonNet(new {});
 		}
