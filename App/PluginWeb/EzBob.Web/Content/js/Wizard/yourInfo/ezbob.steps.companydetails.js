@@ -196,7 +196,6 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
                 break;
         } // switch type of business
 
-        debugger;
         if (typeOfBussiness !== 'Entrepreneur' && EzBob.Config.TargetsEnabled)
             this.handleTargeting(form, action, data, postcode, companyName, sCompanyFilter, refNum, typeOfBussiness);
         else
@@ -224,17 +223,17 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
                             EzBob.App.trigger('warning', 'Company ' + companyName + ' ' + postcode+ ' was not found. Please check your input and try again.');
                             that.targetingTries++;
                         } else {
-                            that.saveTargeting(null, action, form);
+                            that.saveTargeting(null, action, form, typeOfBussiness);
                         }
                         break;
                     case 1:
-                        that.saveTargeting(reqData[0], action, form);
+                        that.saveTargeting(reqData[0], action, form, typeOfBussiness);
                         break;
                     default:
                         var companyTargets = new EzBob.companyTargets({ model: reqData });
                         companyTargets.render();
                         companyTargets.on('BusRefNumGetted', function (targetingData) {
-                            that.saveTargeting(targetingData, action, form);
+                            that.saveTargeting(targetingData, action, form, typeOfBussiness);
                         });
                         break;
                 } // switch reqData.length
@@ -242,13 +241,11 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
         }); // on done
 
         req.always(function () {
-            if (typeOfBussiness !== 'Entrepreneur') {
-                $.post("" + window.gRootPath + "Customer/Experian/PerformCompanyCheck", { customerId: that.model.get('Id') });
-            }
             UnBlockUi();
         });
     }, // handleTargeting
-    saveTargeting: function (targetingData, action, form) {
+    saveTargeting: function (targetingData, action, form, typeOfBussiness) {
+        var that = this;
         var data = form.serializeArray();
         if (targetingData) {
             data.push({ name: "AddrLine1", value: targetingData.AddrLine1 });
@@ -298,7 +295,6 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
                 that.trigger('next');
             });
         });
-
         request.complete(function () {
             if (typeOfBussiness !== 'Entrepreneur') {
                 $.post("" + window.gRootPath + "Customer/Experian/PerformCompanyCheck", { customerId: that.model.get('Id') });
