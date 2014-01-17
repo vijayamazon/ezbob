@@ -211,13 +211,37 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         false
 
     RunCustomerCheck: (newCreditLineOption )->
+        that = this
         BlockUi "on"
         $.post(window.gRootPath + "Underwriter/ApplicationInfo/RunNewCreditLine",
             Id: @model.get("CustomerId")
             NewCreditLineOption : newCreditLineOption
         ).done((response) =>
-            updater = new ModelUpdater(@personalInfo, 'IsMainStratFinished')
-            updater.start()
+            if (response.Message == "Go to new mode")
+                $.post(window.gRootPath + "Underwriter/ApplicationInfo/RunNewCreditLineNewMode1",
+                    Id: that.model.get("CustomerId")
+                    NewCreditLineOption : newCreditLineOption
+                )
+                .done((innerResponse) =>
+                    $.post(window.gRootPath + "Underwriter/ApplicationInfo/RunNewCreditLineNewMode2",
+                        Id: that.model.get("CustomerId")
+                        NewCreditLineOption : newCreditLineOption
+                    ).done((innerResponse2) =>
+                        that.personalInfo.fetch().done(() =>
+                            BlockUi 'off'
+                            if that.personalInfo.get('CreditResult') != "WaitingForDecision"
+                                EzBob.App.vent.trigger('newCreditLine:pass')
+                                return
+                            if that.personalInfo.get('StrategyError') != null and that.personalInfo.get('StrategyError') != ''
+                                EzBob.App.vent.trigger('newCreditLine:error', that.personalInfo.get('StrategyError'))
+                            else
+                                EzBob.App.vent.trigger('newCreditLine:done')
+                        )
+                    )
+                )
+            else
+                updater = new ModelUpdater(@personalInfo, 'IsMainStratFinished')
+                updater.start()
         ).fail (data) ->
             console.error data.responseText
 

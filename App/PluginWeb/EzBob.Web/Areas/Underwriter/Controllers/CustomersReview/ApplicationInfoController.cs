@@ -431,6 +431,11 @@
 		[ValidateJsonAntiForgeryToken]
 		[Permission(Name = "NewCreditLineButton")]
 		public JsonNetResult RunNewCreditLine(int Id, int newCreditLineOption) {
+			if (useNewMainStrategy)
+			{
+				return this.JsonNet(new {Message = "Go to new mode"});
+			}
+
 			if (!_config.SkipServiceOnNewCreditLine) {
 				var anyApps = _applications.StratagyIsRunning(Id, _config.ScoringResultStrategyName);
 				if (anyApps)
@@ -446,14 +451,45 @@
 
 			_crBuilder.ForceEvaluate(underwriter.Id, customer, (NewCreditLineOption)newCreditLineOption, false, true);
 
-			if (!useNewMainStrategy) {
-				customer.CreditResult = null;
-				customer.OfferStart = cashRequest.OfferStart;
-				customer.OfferValidUntil = cashRequest.OfferValidUntil;
-			}
+			customer.CreditResult = null;
+			customer.OfferStart = cashRequest.OfferStart;
+			customer.OfferValidUntil = cashRequest.OfferValidUntil;
 			return this.JsonNet(new { Message = "The evaluation has been started. Please refresh this application after a while..." });
 		}
 
+		[HttpPost]
+		[Transactional]
+		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		[Permission(Name = "NewCreditLineButton")]
+		public JsonNetResult RunNewCreditLineNewMode1(int Id, int newCreditLineOption)
+		{
+			var customer = _customerRepository.Get(Id);
+
+			var cashRequest = _crBuilder.CreateCashRequest(customer);
+			cashRequest.LoanType = _loanTypes.GetDefault();
+
+			// TODO: investigate why shouldn't these be done
+			//customer.CreditResult = null;
+			//customer.OfferStart = cashRequest.OfferStart;
+			//customer.OfferValidUntil = cashRequest.OfferValidUntil;
+
+			return this.JsonNet(new {});
+		}
+
+		[HttpPost]
+		[Transactional]
+		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		[Permission(Name = "NewCreditLineButton")]
+		public JsonNetResult RunNewCreditLineNewMode2(int Id, int newCreditLineOption)
+		{
+			var customer = _customerRepository.Get(Id);
+			var underwriter = _users.GetUserByLogin(User.Identity.Name);
+			_crBuilder.ForceEvaluate(underwriter.Id, customer, (NewCreditLineOption)newCreditLineOption, false, true);
+			return this.JsonNet(new { });
+		}
+		
 		[HttpPost, Transactional, Ajax, ValidateJsonAntiForgeryToken]
 		public JsonNetResult ChangeCreditLine(long id, int loanType, double amount, decimal interestRate, int repaymentPeriod, string offerStart, string offerValidUntil, bool useSetupFee, bool useBrokerSetupFee, bool allowSendingEmail, int isLoanTypeSelectionAllowed, int discountPlan) {
 			var cr = _cashRequestsRepository.Get(id);

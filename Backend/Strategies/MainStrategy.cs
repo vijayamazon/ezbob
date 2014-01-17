@@ -158,12 +158,9 @@
 					var experianCompanyChecker = new ExperianCompanyCheck(customerId, DB, Log);
 					experianCompanyChecker.Execute();
 				}
-				else
+				else if (!WaitForExperianCompanyCheckToFinishUpdates())
 				{
-					if (!WaitForExperianCompanyCheckToFinishUpdates())
-					{
-						Log.Info("No data exist from experian company check for customer:{0}.", customerId);
-					}
+					Log.Info("No data exist from experian company check for customer:{0}.", customerId);
 				}
 
 				GetAddresses();
