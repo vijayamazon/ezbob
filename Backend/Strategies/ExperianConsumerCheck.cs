@@ -16,7 +16,7 @@
 			this.directorId = directorId;
 
 			GetAddresses();
-			DataTable dt = DB.ExecuteReader("GetPersonalInfoForConsumerCheck", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", directorId == 0 ? customerId : directorId));
+			DataTable dt = DB.ExecuteReader("GetPersonalInfoForConsumerCheck", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId), new QueryParameter("DirectorId", directorId));
 			var results = new SafeReader(dt.Rows[0]);
 			firstName = results["FirstName"];
 			surname = results["Surname"];

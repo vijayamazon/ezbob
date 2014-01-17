@@ -62,7 +62,10 @@ namespace EZBob.DatabaseLib.Model.Database
 
 namespace EZBob.DatabaseLib.Model.Database.Mapping
 {
-    public class DirectorModelMap : ClassMap<Director>
+	using ApplicationMng.Repository;
+	using NHibernate;
+
+	public class DirectorModelMap : ClassMap<Director>
     {
         public DirectorModelMap()
         {
@@ -126,4 +129,11 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping
                 });
         }
     }
+
+	public class DirectorRepository : NHibernateRepositoryBase<Director>
+	{
+		public DirectorRepository(ISession session) : base(session)
+		{
+		}
+	}
 }
