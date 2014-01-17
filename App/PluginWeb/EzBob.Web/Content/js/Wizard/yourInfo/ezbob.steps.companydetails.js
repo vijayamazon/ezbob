@@ -297,7 +297,7 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
         });
         request.complete(function () {
             if (typeOfBussiness !== 'Entrepreneur') {
-                $.post("" + window.gRootPath + "Customer/Experian/PerformCompanyCheck", { customerId: that.model.get('Id') });
+                $.post("" + window.gRootPath + "Customer/Experian/PerformCompanyCheck", {  });
             }
             UnBlockUi();
         });

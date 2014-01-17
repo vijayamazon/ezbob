@@ -3,6 +3,7 @@
 	using System;
 	using System.Web.Mvc;
 	using Code.ApplicationCreator;
+	using Infrastructure;
 	using Infrastructure.csrf;
 	using Scorto.Web;
 	using log4net;
@@ -15,9 +16,11 @@
 
 		#region constructor
 
-		public ExperianController(IAppCreator creator)
+		public ExperianController(IAppCreator creator, IEzbobWorkplaceContext context)
 		{
 			this.creator = creator;
+
+			this.context = context;
 		} // constructor
 
 		#endregion constructor
@@ -26,9 +29,9 @@
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
-		public JsonNetResult PerformCompanyCheck(int customerId)
+		public JsonNetResult PerformCompanyCheck()
 		{
-			creator.PerformCompanyCheck(customerId);
+			creator.PerformCompanyCheck(context.Customer.Id);
 
 			return this.JsonNet(new { });
 		} // PerformCompanyCheck
@@ -37,9 +40,9 @@
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
-		public JsonNetResult PerformConsumerCheck(int customerId)
+		public JsonNetResult PerformConsumerCheck()
 		{
-			creator.PerformConsumerCheck(customerId, 0);
+			creator.PerformConsumerCheck(context.Customer.Id, 0);
 
 			return this.JsonNet(new { });
 		} // PerformCompanyCheck
@@ -48,6 +51,7 @@
 
 		private static readonly ILog log = LogManager.GetLogger(typeof(ExperianController));
 		private readonly IAppCreator creator;
+		private readonly IEzbobWorkplaceContext context;
 
 		#endregion private properties
 
