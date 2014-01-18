@@ -141,8 +141,8 @@
 				AmlAndBwa();
 			} // if
 
+			decimal loanInterestBase = GetBaseInterest();
 			decimal scoringResult = CalculateScoreAndMedal();
-
 			GetLastCashRequestData();
 
 			autoDecisionResponse = AutoDecisionMaker.MakeDecision(CreateAutoDecisionRequest(), DB, Log);
@@ -157,39 +157,7 @@
 				return;
 			} // if
 
-			DB.ExecuteNonQuery(
-				"UpdateScoringResultsNew",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId),
-				new QueryParameter("CreditResult", autoDecisionResponse.CreditResult),
-				new QueryParameter("SystemDecision", autoDecisionResponse.SystemDecision),
-				new QueryParameter("Status", autoDecisionResponse.UserStatus),
-				new QueryParameter("Medal", medalType),
-				new QueryParameter("ApplyForLoan", autoDecisionResponse.AppApplyForLoan),
-				new QueryParameter("ValidFor", autoDecisionResponse.AppValidFor)
-			);
-
-			DataTable basicInterestRateDataTable = DB.ExecuteReader(
-				"GetBasicInterestRate",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("Score", initialExperianConsumerScore)
-			);
-			var basicInterestRateRow = new SafeReader(basicInterestRateDataTable.Rows[0]);
-			decimal loanInterestBase = basicInterestRateRow["LoanIntrestBase"];
-
-			DB.ExecuteNonQuery(
-				"UpdateCashRequests",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId),
-				new QueryParameter("SystemCalculatedAmount", modelLoanOffer),
-				new QueryParameter("ManagerApprovedSum", offeredCreditLine),
-				new QueryParameter("SystemDecision", autoDecisionResponse.SystemDecision),
-				new QueryParameter("MedalType", medalType),
-				new QueryParameter("ScorePoints", scoringResult),
-				new QueryParameter("ExpirianRating", experianConsumerScore),
-				new QueryParameter("AnualTurnover", totalSumOfOrders1YTotal),
-				new QueryParameter("InterestRate", loanInterestBase)
-			);
+			UpdateCustomerAndCashRequest(scoringResult, loanInterestBase);
 
 			if (autoDecisionResponse.UserStatus == "Approved")
 			{
@@ -233,6 +201,46 @@
 			} // if
 
 			SetEndTimestamp();
+		}
+
+		private void UpdateCustomerAndCashRequest(decimal scoringResult, decimal loanInterestBase)
+		{
+			DB.ExecuteNonQuery(
+				"UpdateScoringResultsNew",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", customerId),
+				new QueryParameter("CreditResult", autoDecisionResponse.CreditResult),
+				new QueryParameter("SystemDecision", autoDecisionResponse.SystemDecision),
+				new QueryParameter("Status", autoDecisionResponse.UserStatus),
+				new QueryParameter("Medal", medalType),
+				new QueryParameter("ApplyForLoan", autoDecisionResponse.AppApplyForLoan),
+				new QueryParameter("ValidFor", autoDecisionResponse.AppValidFor)
+				);
+
+			DB.ExecuteNonQuery(
+				"UpdateCashRequests",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", customerId),
+				new QueryParameter("SystemCalculatedAmount", modelLoanOffer),
+				new QueryParameter("ManagerApprovedSum", offeredCreditLine),
+				new QueryParameter("SystemDecision", autoDecisionResponse.SystemDecision),
+				new QueryParameter("MedalType", medalType),
+				new QueryParameter("ScorePoints", scoringResult),
+				new QueryParameter("ExpirianRating", experianConsumerScore),
+				new QueryParameter("AnualTurnover", totalSumOfOrders1YTotal),
+				new QueryParameter("InterestRate", loanInterestBase)
+				);
+		}
+
+		private decimal GetBaseInterest()
+		{
+			DataTable basicInterestRateDataTable = DB.ExecuteReader(
+				"GetBasicInterestRate",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("Score", initialExperianConsumerScore)
+			);
+			var basicInterestRateRow = new SafeReader(basicInterestRateDataTable.Rows[0]);
+			return basicInterestRateRow["LoanIntrestBase"];
 		}
 
 		private void SendWaitingForDecisionMail()
@@ -795,6 +803,7 @@
 			appSortCode = results["SortCode"];
 			appRegistrationDate = results["RegistrationDate"];
 			appBankAccountType = results["BankAccountType"];
+			initialExperianConsumerScore = results["PrevExperianConsumerScore"];
 			int numOfLoans = results["NumOfLoans"];
 			isFirstLoan = numOfLoans == 0;
 		} // GetPersonalInfo
@@ -899,83 +908,28 @@
 		} // CreateAutoDecisionRequest
 
 		#endregion method CreateAutoDecisionRequest
-
-		#region method AmlAndBwa
-
+		
 		private void AmlAndBwa()
 		{
-			AccountVerificationResults accountVerificationResults;
-			AuthenticationResults authenticationResults;
+			GetAmlAndBwaData();
+			CalculateAmlResult();
+			CalculateBwaResult();
+			SaveAmlAndBwaResults();
+		}
 
-			if (useCustomIdHubAddress != 0)
-			{
-				if (useCustomIdHubAddress != 2)
-				{
-					authenticationResults = idHubService.AuthenticateForcedWithCustomAddress(appFirstName, null, appSurname, appGender, appDateOfBirth, idhubHouseNumber, idhubHouseName, idhubStreet, idhubDistrict, idhubTown, idhubCounty, idhubPostCode, customerId);
-					CreateAmlResultFromAuthenticationReuslts(authenticationResults);
-
-					if (useCustomIdHubAddress != 1)
-					{
-						if (ShouldRunBwa())
-						{
-							accountVerificationResults = idHubService.AccountVerificationForcedWithCustomAddress(
-								appFirstName, null, appSurname, appGender,
-								appDateOfBirth, idhubHouseNumber, idhubHouseName,
-								idhubStreet, idhubDistrict, idhubTown, idhubCounty,
-								idhubPostCode, idhubBranchCode, idhubAccountNumber,
-								customerId
-							);
-
-							CreateBwaResultFromAccountVerificationResults(accountVerificationResults);
-						} // if
-					} // if
-				}
-				else
-				{
-					accountVerificationResults = idHubService.AccountVerificationForcedWithCustomAddress(
-						appFirstName, null, appSurname, appGender,
-						appDateOfBirth, idhubHouseNumber, idhubHouseName,
-						idhubStreet, idhubDistrict, idhubTown, idhubCounty,
-						idhubPostCode, idhubBranchCode, idhubAccountNumber,
-						customerId
-					);
-
-					CreateBwaResultFromAccountVerificationResults(accountVerificationResults);
-				} // if
-			}
-			else
-			{
-				authenticationResults = idHubService.Authenticate(
-					appFirstName, null, appSurname,
-					appGender, appDateOfBirth, appLine1,
-					appLine2, appLine3, appLine4, null,
-					appLine6, customerId
+		private void SaveAmlAndBwaResults()
+		{
+			DB.ExecuteNonQuery(
+				"UpdateExperianBWA_AML",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", customerId),
+				new QueryParameter("BWAResult", experianBwaResult),
+				new QueryParameter("AMLResult", experianAmlResult)
 				);
+		}
 
-				CreateAmlResultFromAuthenticationReuslts(authenticationResults);
-
-				accountVerificationResults = idHubService.AccountVerification(appFirstName, null, appSurname, appGender, appDateOfBirth, appLine1, appLine2, appLine3, appLine4, null, appLine6, appSortCode, appAccountNumber, customerId);
-
-				CreateBwaResultFromAccountVerificationResults(accountVerificationResults);
-
-				if (experianAmlError != "" && appTimeAtAddress == 1 && appLine6Prev != null)
-				{
-					authenticationResults = idHubService.Authenticate(
-						appFirstName, null, appSurname, appGender, appDateOfBirth,
-						appLine1Prev, appLine2Prev, appLine3Prev, appLine4Prev, null,
-						appLine6Prev, customerId
-					);
-
-					CreateAmlResultFromAuthenticationReuslts(authenticationResults);
-				}
-
-				if (experianBwaError != "" && appTimeAtAddress == 1 && appLine6Prev != null)
-				{
-					accountVerificationResults = idHubService.AccountVerification(appFirstName, null, appSurname, appGender, appDateOfBirth, appLine1Prev, appLine2Prev, appLine3Prev, appLine4Prev, null, appLine6Prev, appSortCode, appAccountNumber, customerId);
-					CreateBwaResultFromAccountVerificationResults(accountVerificationResults);
-				}
-			} // if
-
+		private void CalculateAmlResult()
+		{
 			if (experianAmlError != "")
 				experianAmlResult = "Warning";
 			else
@@ -983,34 +937,37 @@
 				if (experianAmlAuthentication < 40 && experianAmlResult == "Rejected")
 				{
 					experianAmlWarning = experianAmlWarning +
-						"#1,Authentication < 40 (" +
-						experianAmlAuthentication +
-						")||" +
-						CpExperianActionsAmlAuthentication +
-						";";
+					                     "#1,Authentication < 40 (" +
+					                     experianAmlAuthentication +
+					                     ")||" +
+					                     CpExperianActionsAmlAuthentication +
+					                     ";";
 				}
 				else
 				{
 					experianAmlPassed = experianAmlPassed +
-						"#1,Authentication >= 40 (" +
-						experianAmlAuthentication +
-						"];";
+					                    "#1,Authentication >= 40 (" +
+					                    experianAmlAuthentication +
+					                    "];";
 				} // if
 
 				if (experianAmlAuthentication < 40 && experianAmlResult != "Rejected")
 				{
 					experianAmlWarning = experianAmlWarning +
-						"#1,Authentication < 40 (" +
-						experianAmlAuthentication + ")||" +
-						CpExperianActionsAmlAuthentication +
-						";";
+					                     "#1,Authentication < 40 (" +
+					                     experianAmlAuthentication + ")||" +
+					                     CpExperianActionsAmlAuthentication +
+					                     ";";
 
 					experianAmlResult = "Warning";
 				}
 				else
 					experianAmlPassed = experianAmlPassed + "#1,Authentication >= 40 (" + experianAmlAuthentication + "];";
 			} // if
+		}
 
+		private void CalculateBwaResult()
+		{
 			if (useCustomIdHubAddress == 1)
 			{
 				DataTable dt = DB.ExecuteReader("GetPrevBwaResult", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
@@ -1116,17 +1073,79 @@
 					} // if
 				} // if
 			} // if
+		}
 
-			DB.ExecuteNonQuery(
-				"UpdateExperianBWA_AML",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId),
-				new QueryParameter("BWAResult", experianBwaResult),
-				new QueryParameter("AMLResult", experianAmlResult)
-			);
-		} // AmlAndBwa
+		private void GetAmlAndBwaData()
+		{
+			if (useCustomIdHubAddress != 0)
+			{
+				if (useCustomIdHubAddress != 2)
+				{
+					GetAmlCustom();
+					if (useCustomIdHubAddress != 1 && ShouldRunBwa())
+					{
+						GetBwaCustom();
+					} // if
+				}
+				else
+				{
+					GetBwaCustom();
+				} // if
+			}
+			else
+			{
+				GetAml(appLine1, appLine2, appLine3, appLine4, appLine6);
+				GetBwa(appLine1, appLine2, appLine3, appLine4, appLine6);
 
-		#endregion method AmlAndBwa
+				if (appTimeAtAddress == 1 && appLine6Prev != null)
+				{
+					if (experianAmlError != "")
+					{
+						GetAml(appLine1Prev, appLine2Prev, appLine3Prev, appLine4Prev, appLine6Prev);
+					}
+
+					if (experianBwaError != "")
+					{
+						GetBwa(appLine1Prev, appLine2Prev, appLine3Prev, appLine4Prev, appLine6Prev);
+					}
+				}
+			} // if
+		}
+
+		private void GetAmlCustom()
+		{
+			AuthenticationResults authenticationResults = idHubService.AuthenticateForcedWithCustomAddress(
+				appFirstName, null, appSurname, appGender, appDateOfBirth, idhubHouseNumber, idhubHouseName, idhubStreet,
+				idhubDistrict, idhubTown, idhubCounty, idhubPostCode, customerId);
+			CreateAmlResultFromAuthenticationReuslts(authenticationResults);
+		}
+
+		private void GetBwaCustom()
+		{
+			AccountVerificationResults accountVerificationResults = idHubService.AccountVerificationForcedWithCustomAddress(
+				appFirstName, null, appSurname, appGender, appDateOfBirth, idhubHouseNumber, idhubHouseName, idhubStreet,
+				idhubDistrict, idhubTown, idhubCounty, idhubPostCode, idhubBranchCode, idhubAccountNumber, customerId);
+
+			CreateBwaResultFromAccountVerificationResults(accountVerificationResults);
+		}
+
+		private void GetBwa(string line1, string line2, string line3, string line4, string line6)
+		{
+			AccountVerificationResults accountVerificationResults = idHubService.AccountVerification(
+				appFirstName, null, appSurname, appGender, appDateOfBirth, line1, line2,
+				line3, line4, null, line6, appSortCode, appAccountNumber, customerId);
+
+			CreateBwaResultFromAccountVerificationResults(accountVerificationResults);
+		}
+
+		private void GetAml(string line1, string line2, string line3, string line4, string line6)
+		{
+			AuthenticationResults authenticationResults = idHubService.Authenticate(
+				appFirstName, null, appSurname, appGender, appDateOfBirth, 
+				line1, line2, line3, line4, null, line6, customerId);
+
+			CreateAmlResultFromAuthenticationReuslts(authenticationResults);
+		}
 
 		#region method ShouldRunBwa
 
