@@ -38,7 +38,6 @@
 
 				response.UserStatus = "Rejected";
 				response.SystemDecision = "Reject";
-				response.ModelLoanOffer = 0;
 				return true;
 			}
 

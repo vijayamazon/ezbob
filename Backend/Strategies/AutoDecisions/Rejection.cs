@@ -121,7 +121,6 @@
 			response.CreditResult = request.EnableAutomaticRejection ? "WaitingForDecision" : "Rejected";
 			response.UserStatus = "Rejected";
 			response.SystemDecision = "Reject";
-			response.ModelLoanOffer = 0;
 
 			return true;
 		}

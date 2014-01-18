@@ -112,199 +112,277 @@
 		public override string Name { get { return "Main strategy"; } } // Name
 
 		#endregion property Name
-
-		#region method Execute
-
+		
 		public override void Execute()
 		{
 			ReadConfigurations();
 			GetPersonalInfo();
 			strategyHelper.GetZooplaData(customerId);
 
-			if (!customerStatusIsEnabled || customerStatusIsWarning)
+			SetAutoDecisionAvailability();
+
+			if (!MakeSureMpDataIsSufficient())
 			{
-				enableAutomaticReApproval = false;
-				enableAutomaticApproval = false;
-			} // if
-
-			if (isOffline)
-			{
-				enableAutomaticReApproval = false;
-				enableAutomaticApproval = false;
-				enableAutomaticReRejection = false;
-				enableAutomaticRejection = false;
-			} // if
-
-			if (newCreditLineOption != NewCreditLineOption.SkipEverything && newCreditLineOption != NewCreditLineOption.UpdateEverythingExceptMp)
-			{
-				if (!WaitForMarketplacesToFinishUpdates())
-				{
-					var variables = new Dictionary<string, string> {
-						{"UserEmail", appEmail},
-						{"CustomerID", customerId.ToString(CultureInfo.InvariantCulture)},
-						{"ApplicationID", appEmail}
-					};
-
-					mailer.SendToEzbob(variables, "Mandrill - No Information about shops", "No information about customer marketplace");
-
-					return;
-				} // if
-			} // if
+				return;
+			}
 
 			if (newCreditLineOption != NewCreditLineOption.SkipEverything)
 			{
-				if (wasMainStrategyExecutedBefore)
-				{
-					var experianCompanyChecker = new ExperianCompanyCheck(customerId, DB, Log);
-					experianCompanyChecker.Execute();
-				}
-				else if (!WaitForExperianCompanyCheckToFinishUpdates())
-				{
-					Log.Info("No data exist from experian company check for customer:{0}.", customerId);
-				}
-
+				PerformCompanyExperianCheck();
 				GetAddresses();
 
-				if (wasMainStrategyExecutedBefore)
-				{
-					var strat = new ExperianConsumerCheck(customerId, 0, DB, Log);
-					strat.Execute();
-					
-					experianConsumerScore = strat.Score;
-				}
-				else if (!WaitForExperianConsumerCheckToFinishUpdates())
-				{
-					Log.Info("No data exist from experian consumer check for customer:{0}.", customerId);
-				}
+				PerformConsumerExperianCheck();
 
 				minExperianScore = experianConsumerScore;
-				inintialExperianConsumerScore = experianConsumerScore;
+				initialExperianConsumerScore = experianConsumerScore;
 
-				if (companyType != "Entrepreneur")
-				{
-					DataTable dt = DB.ExecuteReader(
-						"GetCustomerDirectorsForConsumerCheck",
-						CommandSpecies.StoredProcedure,
-						new QueryParameter("CustomerId", customerId)
-					);
-
-					foreach (DataRow row in dt.Rows)
-					{
-						var sr = new SafeReader(row);
-						int appDirId = sr["DirId"];
-						string appDirName = sr["DirName"];
-						string appDirSurname = sr["DirSurname"];
-
-						if (string.IsNullOrEmpty(appDirName) || string.IsNullOrEmpty(appDirSurname))
-							continue;
-
-						if (wasMainStrategyExecutedBefore)
-						{
-							var dirStrat = new ExperianConsumerCheck(customerId, appDirId, DB, Log);
-							dirStrat.Execute();
-							experianConsumerScore = dirStrat.Score;
-						}
-						else if (!WaitForExperianConsumerCheckToFinishUpdates(appDirId))
-						{
-							Log.Info("No data exist from experian consumer check for director:{0}.", appDirId);
-						}
-
-						if (experianConsumerScore > 0 && experianConsumerScore < minExperianScore)
-							minExperianScore = experianConsumerScore;
-					} // foreach
-				} // if
+				PerformExperianConsumerCheckForDirectors();
 
 				AmlAndBwa();
-
-				DB.ExecuteNonQuery(
-					"UpdateExperianBWA_AML",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("CustomerId", customerId),
-					new QueryParameter("BWAResult", experianBwaResult),
-					new QueryParameter("AMLResult", experianAmlResult)
-				);
 			} // if
 
-			DataTable scoreCardDataTable = DB.ExecuteReader(
-				"GetScoreCardData",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId)
-			);
-			
-			var scoreCardResults = new SafeReader(scoreCardDataTable.Rows[0]);
-			string maritalStatusStr = scoreCardResults["MaritalStatus"];
-			MaritalStatus maritalStatus;
-			if (!Enum.TryParse(maritalStatusStr, true, out maritalStatus))
-			{
-				Log.Warn("Cant parse marital status:{0}. Will use 'Other'", maritalStatusStr);
-				maritalStatus = MaritalStatus.Other;
-			}
-			int modelMaxFeedback = scoreCardResults.IntWithDefault("MaxFeedback", defaultFeedbackValue);
-			
-			int modelMPsNumber = scoreCardResults["MPsNumber"];
-			int modelEzbobSeniority = scoreCardResults["EZBOBSeniority"];
-			int modelOnTimeLoans = scoreCardResults["OnTimeLoans"];
-			int modelLatePayments = scoreCardResults["LatePayments"];
-			int modelEarlyPayments = scoreCardResults["EarlyPayments"];
+			decimal scoringResult = CalculateScoreAndMedal();
 
-			bool firstRepaymentDatePassed = false;
+			GetLastCashRequestData();
 
-			DateTime modelFirstRepaymentDate = scoreCardResults["FirstRepaymentDate"];
-			if (modelFirstRepaymentDate != default(DateTime))
+			autoDecisionResponse = AutoDecisionMaker.MakeDecision(CreateAutoDecisionRequest(), DB, Log);
+			if (autoDecisionResponse.SystemDecision == "Reject")
 			{
-				firstRepaymentDatePassed = modelFirstRepaymentDate < DateTime.UtcNow;
+				modelLoanOffer = 0;
 			}
 
-			totalSumOfOrders1YTotal = strategyHelper.GetAnualTurnOverByCustomer(customerId);
-			totalSumOfOrders3MTotal = strategyHelper.GetTotalSumOfOrders3M(customerId);
-			marketplaceSeniorityDays = strategyHelper.MarketplaceSeniority(customerId);
-			decimal totalSumOfOrdersForLoanOffer = (decimal)strategyHelper.GetTotalSumOfOrdersForLoanOffer(customerId);
-
-			ScoreMedalOffer scoringResult = medalScoreCalculator.CalculateMedalScore(totalSumOfOrdersForLoanOffer, minExperianScore, (decimal)marketplaceSeniorityDays / 365, modelMaxFeedback, maritalStatus, appGender == "M" ? Gender.M : Gender.F, modelMPsNumber, firstRepaymentDatePassed, modelEzbobSeniority, modelOnTimeLoans, modelLatePayments, modelEarlyPayments);
-			modelLoanOffer = scoringResult.MaxOffer;
-
-			medalType = scoringResult.Medal;
+			if (underwriterCheck)
+			{
+				SetEndTimestamp();
+				return;
+			} // if
 
 			DB.ExecuteNonQuery(
-				"CustomerScoringResult_Insert",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("pCustomerId", customerId),
-				new QueryParameter("pAC_Parameters", scoringResult.AcParameters),
-				new QueryParameter("AC_Descriptors", scoringResult.AcDescriptors),
-				new QueryParameter("Result_Weight", scoringResult.ResultWeigts),
-				new QueryParameter("pResult_MAXPossiblePoints", scoringResult.ResultMaxPoints),
-				new QueryParameter("pMedal", scoringResult.Medal),
-				new QueryParameter("pScorePoints", scoringResult.ScorePoints),
-				new QueryParameter("pScoreResult", scoringResult.ScoreResult)
-			);
-
-			if (newCreditLineOption == NewCreditLineOption.SkipEverything ||
-				newCreditLineOption == NewCreditLineOption.UpdateEverythingExceptMp ||
-				newCreditLineOption == NewCreditLineOption.UpdateEverythingAndGoToManualDecision ||
-				avoidAutomaticDescison == 1)
-				{
-					enableAutomaticApproval = false;
-					enableAutomaticReApproval = false;
-					enableAutomaticRejection = false;
-					enableAutomaticReRejection = false;
-				}
-
-			DataTable defaultAccountsNumDataTable = DB.ExecuteReader(
-				"GetNumberOfDefaultAccounts",
+				"UpdateScoringResultsNew",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId),
-				new QueryParameter("Months", rejectDefaultsMonthsNum),
-				new QueryParameter("Amount", rejectDefaultsAmount)
+				new QueryParameter("CreditResult", autoDecisionResponse.CreditResult),
+				new QueryParameter("SystemDecision", autoDecisionResponse.SystemDecision),
+				new QueryParameter("Status", autoDecisionResponse.UserStatus),
+				new QueryParameter("Medal", medalType),
+				new QueryParameter("ApplyForLoan", autoDecisionResponse.AppApplyForLoan),
+				new QueryParameter("ValidFor", autoDecisionResponse.AppValidFor)
 			);
 
-			var defaultAccountsNumResults = new SafeReader(defaultAccountsNumDataTable.Rows[0]);
-			numOfDefaultAccounts = defaultAccountsNumResults["NumOfDefaultAccounts"];
+			DataTable basicInterestRateDataTable = DB.ExecuteReader(
+				"GetBasicInterestRate",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("Score", initialExperianConsumerScore)
+			);
+			var basicInterestRateRow = new SafeReader(basicInterestRateDataTable.Rows[0]);
+			decimal loanInterestBase = basicInterestRateRow["LoanIntrestBase"];
 
+			DB.ExecuteNonQuery(
+				"UpdateCashRequests",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", customerId),
+				new QueryParameter("SystemCalculatedAmount", modelLoanOffer),
+				new QueryParameter("ManagerApprovedSum", offeredCreditLine),
+				new QueryParameter("SystemDecision", autoDecisionResponse.SystemDecision),
+				new QueryParameter("MedalType", medalType),
+				new QueryParameter("ScorePoints", scoringResult),
+				new QueryParameter("ExpirianRating", experianConsumerScore),
+				new QueryParameter("AnualTurnover", totalSumOfOrders1YTotal),
+				new QueryParameter("InterestRate", loanInterestBase)
+			);
+
+			if (autoDecisionResponse.UserStatus == "Approved")
+			{
+				if (autoDecisionResponse.IsAutoApproval)
+				{
+					UpdateApprovalData();
+					SendApprovalMails();
+					strategyHelper.AddApproveIntoDecisionHistory(customerId, "Auto Approval");
+				}
+				else
+				{
+					UpdateReApprovalData();
+					SendReApprovalMails();
+					if (enableAutomaticReApproval)
+					{
+						strategyHelper.AddApproveIntoDecisionHistory(customerId, "Auto Re-Approval");
+					} // if
+				} // if
+			}
+			else if (autoDecisionResponse.UserStatus == "Rejected")
+			{
+				if ((autoDecisionResponse.IsReRejected && !enableAutomaticReRejection) || (!autoDecisionResponse.IsReRejected && !enableAutomaticRejection))
+					SendRejectionExplanationMail(autoDecisionResponse.IsReRejected ? "User was automatically Re-Rejected" : "User was automatically Rejected");
+				else
+				{
+					const string rejectionSubject = "Sorry, ezbob cannot make you a loan offer at this time";
+					SendRejectionExplanationMail(rejectionSubject);
+
+					var variables = new Dictionary<string, string> {
+						{"FirstName", appFirstName},
+						{"EzbobAccount", "https://app.ezbob.com/Customer/Profile"}
+					};
+
+					mailer.SendToCustomerAndEzbob(variables, appEmail, "Mandrill - Rejection email", rejectionSubject);
+					strategyHelper.AddRejectIntoDecisionHistory(customerId, autoDecisionResponse.AutoRejectReason);
+				} // if
+			}
+			else
+			{
+				SendWaitingForDecisionMail();
+			} // if
+
+			SetEndTimestamp();
+		}
+
+		private void SendWaitingForDecisionMail()
+		{
+			var variables = new Dictionary<string, string>
+				{
+					{"RegistrationDate", appRegistrationDate.ToString(CultureInfo.InvariantCulture)},
+					{"userID", customerId.ToString(CultureInfo.InvariantCulture)},
+					{"Name", appEmail},
+					{"FirstName", appFirstName},
+					{"Surname", appSurname},
+					{"MP_Counter", allMPsNum.ToString(CultureInfo.InvariantCulture)},
+					{"MedalType", medalType.ToString()},
+					{"SystemDecision", autoDecisionResponse.SystemDecision}
+				};
+
+			mailer.SendToEzbob(variables, "Mandrill - User is waiting for decision", "User is now waiting for decision");
+		}
+
+		private void SendReApprovalMails()
+		{
+			var variables = new Dictionary<string, string>
+				{
+					{"ApprovedReApproved", "Re-Approved"},
+					{"RegistrationDate", appRegistrationDate.ToString(CultureInfo.InvariantCulture)},
+					{"userID", customerId.ToString(CultureInfo.InvariantCulture)},
+					{"Name", appEmail},
+					{"FirstName", appFirstName},
+					{"Surname", appSurname},
+					{"MP_Counter", allMPsNum.ToString(CultureInfo.InvariantCulture)},
+					{"MedalType", medalType.ToString()},
+					{"SystemDecision", autoDecisionResponse.SystemDecision},
+					{"ApprovalAmount", loanOfferReApprovalSum.ToString(CultureInfo.InvariantCulture)},
+					{"RepaymentPeriod", loanOfferRepaymentPeriod.ToString(CultureInfo.InvariantCulture)},
+					{"InterestRate", loanOfferInterestRate.ToString(CultureInfo.InvariantCulture)},
+					{
+						"OfferValidUntil",
+						autoDecisionResponse.AppValidFor.HasValue
+							? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture)
+							: string.Empty
+					}
+				};
+
+			mailer.SendToEzbob(variables, "Mandrill - User is approved or re-approved", "User was automatically Re-Approved");
+
+			if (enableAutomaticReApproval)
+			{
+				var customerMailVariables = new Dictionary<string, string>
+					{
+						{"FirstName", appFirstName},
+						{"LoanAmount", loanOfferReApprovalSum.ToString(CultureInfo.InvariantCulture)}
+					};
+
+				mailer.SendToCustomerAndEzbob(
+					customerMailVariables,
+					appEmail,
+					"Mandrill - Approval (not 1st time)",
+					"Congratulations " + appFirstName + ", £" + loanOfferReApprovalSum + " is available to fund your business today"
+					);
+			}
+		}
+
+		private void UpdateReApprovalData()
+		{
+			DB.ExecuteNonQuery(
+				"UpdateCashRequestsReApproval",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", customerId),
+				new QueryParameter("UnderwriterDecision", autoDecisionResponse.UserStatus),
+				new QueryParameter("ManagerApprovedSum", loanOfferReApprovalSum),
+				new QueryParameter("APR", loanOfferApr),
+				new QueryParameter("RepaymentPeriod", loanOfferRepaymentPeriod),
+				new QueryParameter("InterestRate", loanOfferInterestRate),
+				new QueryParameter("UseSetupFee", loanOfferUseSetupFee),
+				new QueryParameter("OfferValidDays", autoDecisionResponse.LoanOfferOfferValidDays),
+				new QueryParameter("EmailSendingBanned", autoDecisionResponse.LoanOfferEmailSendingBannedNew),
+				new QueryParameter("LoanTypeId", loanOfferLoanTypeId),
+				new QueryParameter("UnderwriterComment", autoDecisionResponse.LoanOfferUnderwriterComment),
+				new QueryParameter("IsLoanTypeSelectionAllowed", loanOfferIsLoanTypeSelectionAllowed),
+				new QueryParameter("DiscountPlanId", loanOfferDiscountPlanId),
+				new QueryParameter("ExperianRating", loanOfferExpirianRating),
+				new QueryParameter("LoanSourceId", loanSourceId),
+				new QueryParameter("IsCustomerRepaymentPeriodSelectionAllowed", isCustomerRepaymentPeriodSelectionAllowed),
+				new QueryParameter("UseBrokerSetupFee", useBrokerSetupFee)
+				);
+		}
+
+		private void SendApprovalMails()
+		{
+			var variables = new Dictionary<string, string>
+				{
+					{"ApprovedReApproved", "Approved"},
+					{"RegistrationDate", appRegistrationDate.ToString(CultureInfo.InvariantCulture)},
+					{"userID", customerId.ToString(CultureInfo.InvariantCulture)},
+					{"Name", appEmail},
+					{"FirstName", appFirstName},
+					{"Surname", appSurname},
+					{"MP_Counter", allMPsNum.ToString(CultureInfo.InvariantCulture)},
+					{"MedalType", medalType.ToString()},
+					{"SystemDecision", autoDecisionResponse.SystemDecision},
+					{"ApprovalAmount", loanOfferReApprovalSum.ToString(CultureInfo.InvariantCulture)},
+					{"RepaymentPeriod", loanOfferRepaymentPeriod.ToString(CultureInfo.InvariantCulture)},
+					{"InterestRate", loanOfferInterestRate.ToString(CultureInfo.InvariantCulture)},
+					{
+						"OfferValidUntil",
+						autoDecisionResponse.AppValidFor.HasValue
+							? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture)
+							: string.Empty
+					}
+				};
+
+			mailer.SendToEzbob(variables, "Mandrill - User is approved or re-approved", "User was automatically approved");
+
+			var customerMailVariables = new Dictionary<string, string>
+				{
+					{"FirstName", appFirstName},
+					{"LoanAmount", autoDecisionResponse.AutoApproveAmount.ToString(CultureInfo.InvariantCulture)}
+				};
+
+			mailer.SendToCustomerAndEzbob(
+				customerMailVariables,
+				appEmail,
+				isFirstLoan ? "Mandrill - Approval (1st time)" : "Mandrill - Approval (not 1st time)",
+				"Congratulations " + appFirstName + ", £" + autoDecisionResponse.AutoApproveAmount +
+				" is available to fund your business today"
+				);
+		}
+
+		private void UpdateApprovalData()
+		{
+			DB.ExecuteNonQuery(
+				"UpdateAutoApproval",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", customerId),
+				new QueryParameter("AutoApproveAmount", autoDecisionResponse.AutoApproveAmount)
+				);
+		}
+
+		private void SetEndTimestamp()
+		{
+			DB.ExecuteNonQuery("Update_Main_Strat_Finish_Date", CommandSpecies.StoredProcedure, new QueryParameter("UserId", customerId));
+		}
+
+		private void GetLastCashRequestData()
+		{
 			DataTable lastOfferDataTable = DB.ExecuteReader(
 				"GetLastOfferForAutomatedDecision",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId)
-			);
+				);
 
 			if (lastOfferDataTable.Rows.Count == 1)
 			{
@@ -324,22 +402,13 @@
 				loanSourceId = lastOfferResults["LoanSourceID"];
 				isCustomerRepaymentPeriodSelectionAllowed = lastOfferResults["IsCustomerRepaymentPeriodSelectionAllowed"];
 				useBrokerSetupFee = lastOfferResults["UseBrokerSetupFee"];
+
+				if (loanOfferReApprovalRemainingAmount < 1000) // TODO: make this 1000 configurable
+					loanOfferReApprovalRemainingAmount = 0;
+
+				if (loanOfferReApprovalRemainingAmountOld < 500) // TODO: make this 500 configurable
+					loanOfferReApprovalRemainingAmountOld = 0;
 			}
-
-			DataTable basicInterestRateDataTable = DB.ExecuteReader(
-				"GetBasicInterestRate",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("Score", inintialExperianConsumerScore)
-			);
-
-			var basicInterestRateRow = new SafeReader(basicInterestRateDataTable.Rows[0]);
-			loanIntrestBase = basicInterestRateRow["LoanIntrestBase"];
-
-			if (loanOfferReApprovalRemainingAmount < 1000) // TODO: make this 1000 configurable
-				loanOfferReApprovalRemainingAmount = 0;
-
-			if (loanOfferReApprovalRemainingAmountOld < 500) // TODO: make this 500 configurable
-				loanOfferReApprovalRemainingAmountOld = 0;
 
 			loanOfferReApprovalSum = new decimal[] {
 				loanOfferReApprovalFullAmount,
@@ -361,241 +430,171 @@
 
 			if (appHomeOwner != "Home owner" && maxCapNotHomeOwner < offeredCreditLine)
 				offeredCreditLine = maxCapNotHomeOwner;
+		}
 
-			autoDecisionResponse = AutoDecisionMaker.MakeDecision(CreateAutoDecisionRequest(), DB, Log);
-			modelLoanOffer = autoDecisionResponse.ModelLoanOffer;
+		private decimal CalculateScoreAndMedal()
+		{
+			DataTable scoreCardDataTable = DB.ExecuteReader(
+				"GetScoreCardData",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", customerId)
+			);
 
-			if (underwriterCheck)
+			var scoreCardResults = new SafeReader(scoreCardDataTable.Rows[0]);
+			string maritalStatusStr = scoreCardResults["MaritalStatus"];
+			MaritalStatus maritalStatus;
+			if (!Enum.TryParse(maritalStatusStr, true, out maritalStatus))
 			{
-				DB.ExecuteNonQuery(
-					"Update_Main_Strat_Finish_Date",
+				Log.Warn("Cant parse marital status:{0}. Will use 'Other'", maritalStatusStr);
+				maritalStatus = MaritalStatus.Other;
+			}
+			int modelMaxFeedback = scoreCardResults.IntWithDefault("MaxFeedback", defaultFeedbackValue);
+
+			int modelMPsNumber = scoreCardResults["MPsNumber"];
+			int modelEzbobSeniority = scoreCardResults["EZBOBSeniority"];
+			int modelOnTimeLoans = scoreCardResults["OnTimeLoans"];
+			int modelLatePayments = scoreCardResults["LatePayments"];
+			int modelEarlyPayments = scoreCardResults["EarlyPayments"];
+
+			bool firstRepaymentDatePassed = false;
+
+			DateTime modelFirstRepaymentDate = scoreCardResults["FirstRepaymentDate"];
+			if (modelFirstRepaymentDate != default(DateTime))
+			{
+				firstRepaymentDatePassed = modelFirstRepaymentDate < DateTime.UtcNow;
+			}
+
+			totalSumOfOrders1YTotal = strategyHelper.GetAnualTurnOverByCustomer(customerId);
+			marketplaceSeniorityDays = strategyHelper.MarketplaceSeniority(customerId);
+			decimal totalSumOfOrdersForLoanOffer = (decimal)strategyHelper.GetTotalSumOfOrdersForLoanOffer(customerId);
+
+			ScoreMedalOffer scoringResult = medalScoreCalculator.CalculateMedalScore(totalSumOfOrdersForLoanOffer, minExperianScore, (decimal)marketplaceSeniorityDays / 365, modelMaxFeedback, maritalStatus, appGender == "M" ? Gender.M : Gender.F, modelMPsNumber, firstRepaymentDatePassed, modelEzbobSeniority, modelOnTimeLoans, modelLatePayments, modelEarlyPayments);
+			modelLoanOffer = scoringResult.MaxOffer;
+
+			medalType = scoringResult.Medal;
+
+			DB.ExecuteNonQuery(
+				"CustomerScoringResult_Insert",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("pCustomerId", customerId),
+				new QueryParameter("pAC_Parameters", scoringResult.AcParameters),
+				new QueryParameter("AC_Descriptors", scoringResult.AcDescriptors),
+				new QueryParameter("Result_Weight", scoringResult.ResultWeigts),
+				new QueryParameter("pResult_MAXPossiblePoints", scoringResult.ResultMaxPoints),
+				new QueryParameter("pMedal", scoringResult.Medal),
+				new QueryParameter("pScorePoints", scoringResult.ScorePoints),
+				new QueryParameter("pScoreResult", scoringResult.ScoreResult)
+			);
+
+			return scoringResult.ScoreResult;
+		}
+
+		private void PerformExperianConsumerCheckForDirectors()
+		{
+			if (companyType != "Entrepreneur")
+			{
+				DataTable dt = DB.ExecuteReader(
+					"GetCustomerDirectorsForConsumerCheck",
 					CommandSpecies.StoredProcedure,
-					new QueryParameter("UserId", customerId)
-				);
-
-				return;
-			} // if
-
-			DB.ExecuteNonQuery(
-				"UpdateScoringResultsNew",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId),
-				new QueryParameter("CreditResult", autoDecisionResponse.CreditResult),
-				new QueryParameter("SystemDecision", autoDecisionResponse.SystemDecision),
-				new QueryParameter("Status", autoDecisionResponse.UserStatus),
-				new QueryParameter("Medal", medalType),
-				new QueryParameter("ApplyForLoan", autoDecisionResponse.AppApplyForLoan),
-				new QueryParameter("ValidFor", autoDecisionResponse.AppValidFor)
-			);
-
-			DB.ExecuteNonQuery(
-				"UpdateCashRequests",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId),
-				new QueryParameter("SystemCalculatedAmount", modelLoanOffer),
-				new QueryParameter("ManagerApprovedSum", offeredCreditLine),
-				new QueryParameter("SystemDecision", autoDecisionResponse.SystemDecision),
-				new QueryParameter("MedalType", medalType),
-				new QueryParameter("ScorePoints", scoringResult.ScoreResult),
-				new QueryParameter("ExpirianRating", experianConsumerScore),
-				new QueryParameter("AnualTurnover", totalSumOfOrders1YTotal),
-				new QueryParameter("InterestRate", loanIntrestBase)
-			);
-
-			if (autoDecisionResponse.UserStatus == "Approved")
-			{
-				if (autoDecisionResponse.IsAutoApproval)
-				{
-					DB.ExecuteNonQuery(
-						"UpdateAutoApproval",
-						CommandSpecies.StoredProcedure,
-						new QueryParameter("CustomerId", customerId),
-						new QueryParameter("AutoApproveAmount", autoDecisionResponse.AutoApproveAmount)
+					new QueryParameter("CustomerId", customerId)
 					);
 
-					var variables = new Dictionary<string, string> {
-						{"ApprovedReApproved", "Approved"},
-						{"RegistrationDate", appRegistrationDate.ToString(CultureInfo.InvariantCulture)},
-						{"userID", customerId.ToString(CultureInfo.InvariantCulture)},
-						{"Name", appEmail},
-						{"FirstName", appFirstName},
-						{"Surname", appSurname},
-						{"MP_Counter", allMPsNum.ToString(CultureInfo.InvariantCulture)},
-						{"MedalType", medalType.ToString()},
-						{"SystemDecision", autoDecisionResponse.SystemDecision},
-						{"ApprovalAmount", loanOfferReApprovalSum.ToString(CultureInfo.InvariantCulture)},
-						{"RepaymentPeriod", loanOfferRepaymentPeriod.ToString(CultureInfo.InvariantCulture)},
-						{"InterestRate", loanOfferInterestRate.ToString(CultureInfo.InvariantCulture)},
-						{"OfferValidUntil", autoDecisionResponse.AppValidFor.HasValue ? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture) : string.Empty}
-					};
+				foreach (DataRow row in dt.Rows)
+				{
+					var sr = new SafeReader(row);
+					int appDirId = sr["DirId"];
+					string appDirName = sr["DirName"];
+					string appDirSurname = sr["DirSurname"];
 
-					mailer.SendToEzbob(variables, "Mandrill - User is approved or re-approved", "User was automatically approved");
+					if (string.IsNullOrEmpty(appDirName) || string.IsNullOrEmpty(appDirSurname))
+						continue;
 
-					if (isFirstLoan)
-					{
-						var customerMailVariables = new Dictionary<string, string> {
-							{"FirstName", appFirstName},
-							{"LoanAmount", autoDecisionResponse.AutoApproveAmount.ToString(CultureInfo.InvariantCulture)}
-						};
+					PerformConsumerExperianCheck(appDirId);
 
-						mailer.SendToCustomerAndEzbob(
-							customerMailVariables,
-							appEmail,
-							"Mandrill - Approval (1st time)",
-							"Congratulations " + appFirstName + ", £" + autoDecisionResponse.AutoApproveAmount + " is available to fund your business today"
-						);
+					if (experianConsumerScore > 0 && experianConsumerScore < minExperianScore)
+						minExperianScore = experianConsumerScore;
+				} // foreach
+			} // if
+		}
 
-						strategyHelper.AddApproveIntoDecisionHistory(customerId, "Auto Approval");
-						DB.ExecuteNonQuery(
-							"Update_Main_Strat_Finish_Date",
-							CommandSpecies.StoredProcedure,
-							new QueryParameter("UserId", customerId)
-						);
-					}
-					else
-					{
-						var customerMailVariables = new Dictionary<string, string> {
-							{"FirstName", appFirstName},
-							{"LoanAmount", autoDecisionResponse.AutoApproveAmount.ToString(CultureInfo.InvariantCulture)}
-						};
-
-						mailer.SendToCustomerAndEzbob(
-							customerMailVariables,
-							appEmail,
-							"Mandrill - Approval (not 1st time)",
-							"Congratulations " + appFirstName + ", £" + autoDecisionResponse.AutoApproveAmount + " is available to fund your business today"
-						);
-
-						strategyHelper.AddApproveIntoDecisionHistory(customerId, "AutoApproval");
-						DB.ExecuteNonQuery(
-							"Update_Main_Strat_Finish_Date",
-							CommandSpecies.StoredProcedure,
-							new QueryParameter("UserId", customerId)
-						);
-					} // if
+		private void PerformConsumerExperianCheck(int directorId = 0)
+		{
+			if (wasMainStrategyExecutedBefore)
+			{
+				var strat = new ExperianConsumerCheck(customerId, directorId, DB, Log);
+				strat.Execute();
+				experianConsumerScore = strat.Score;
+			}
+			else if (!WaitForExperianConsumerCheckToFinishUpdates(directorId))
+			{
+				if (directorId == 0)
+				{
+					Log.Info("No data exist from experian consumer check for customer:{0}.", customerId);
 				}
 				else
 				{
-					DB.ExecuteNonQuery(
-						"UpdateCashRequestsReApproval",
-						CommandSpecies.StoredProcedure,
-						new QueryParameter("CustomerId", customerId),
-						new QueryParameter("UnderwriterDecision", autoDecisionResponse.UserStatus),
-						new QueryParameter("ManagerApprovedSum", loanOfferReApprovalSum),
-						new QueryParameter("APR", loanOfferApr),
-						new QueryParameter("RepaymentPeriod", loanOfferRepaymentPeriod),
-						new QueryParameter("InterestRate", loanOfferInterestRate),
-						new QueryParameter("UseSetupFee", loanOfferUseSetupFee),
-						new QueryParameter("OfferValidDays", autoDecisionResponse.LoanOfferOfferValidDays),
-						new QueryParameter("EmailSendingBanned", autoDecisionResponse.LoanOfferEmailSendingBannedNew),
-						new QueryParameter("LoanTypeId", loanOfferLoanTypeId),
-						new QueryParameter("UnderwriterComment", autoDecisionResponse.LoanOfferUnderwriterComment),
-						new QueryParameter("IsLoanTypeSelectionAllowed", loanOfferIsLoanTypeSelectionAllowed),
-						new QueryParameter("DiscountPlanId", loanOfferDiscountPlanId),
-						new QueryParameter("ExperianRating", loanOfferExpirianRating),
-						new QueryParameter("LoanSourceId", loanSourceId),
-						new QueryParameter("IsCustomerRepaymentPeriodSelectionAllowed", isCustomerRepaymentPeriodSelectionAllowed),
-						new QueryParameter("UseBrokerSetupFee", useBrokerSetupFee)
-					);
-
-					var variables = new Dictionary<string, string> {
-						{"ApprovedReApproved", "Re-Approved"},
-						{"RegistrationDate", appRegistrationDate.ToString(CultureInfo.InvariantCulture)},
-						{"userID", customerId.ToString(CultureInfo.InvariantCulture)},
-						{"Name", appEmail},
-						{"FirstName", appFirstName},
-						{"Surname", appSurname},
-						{"MP_Counter", allMPsNum.ToString(CultureInfo.InvariantCulture)},
-						{"MedalType", medalType.ToString()},
-						{"SystemDecision", autoDecisionResponse.SystemDecision},
-						{"ApprovalAmount", loanOfferReApprovalSum.ToString(CultureInfo.InvariantCulture)},
-						{"RepaymentPeriod", loanOfferRepaymentPeriod.ToString(CultureInfo.InvariantCulture)},
-						{"InterestRate", loanOfferInterestRate.ToString(CultureInfo.InvariantCulture)},
-						{"OfferValidUntil", autoDecisionResponse.AppValidFor.HasValue ? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture) : string.Empty}
-					};
-
-					mailer.SendToEzbob(variables, "Mandrill - User is approved or re-approved", "User was automatically Re-Approved");
-
-					if (!enableAutomaticReApproval)
-					{
-						DB.ExecuteNonQuery(
-							"Update_Main_Strat_Finish_Date",
-							CommandSpecies.StoredProcedure,
-							new QueryParameter("UserId", customerId)
-						);
-					}
-					else
-					{
-						var customerMailVariables = new Dictionary<string, string> {
-							{"FirstName", appFirstName},
-							{"LoanAmount", loanOfferReApprovalSum.ToString(CultureInfo.InvariantCulture)}
-						};
-
-						mailer.SendToCustomerAndEzbob(
-							customerMailVariables,
-							appEmail,
-							"Mandrill - Approval (not 1st time)", "Congratulations " + appFirstName + ", £" + loanOfferReApprovalSum + " is available to fund your business today"
-						);
-
-						strategyHelper.AddApproveIntoDecisionHistory(customerId, "Auto Re-Approval");
-
-						DB.ExecuteNonQuery(
-							"Update_Main_Strat_Finish_Date",
-							CommandSpecies.StoredProcedure,
-							new QueryParameter("UserId", customerId)
-						);
-					} // if
-				} // if
+					Log.Info("No data exist from experian consumer check for director:{0}.", directorId);
+				}
 			}
-			else if (autoDecisionResponse.UserStatus == "Rejected")
+		}
+
+		private void PerformCompanyExperianCheck()
+		{
+			if (wasMainStrategyExecutedBefore)
 			{
-				if ((autoDecisionResponse.IsReRejected && !enableAutomaticReRejection) || (!autoDecisionResponse.IsReRejected && !enableAutomaticRejection))
-					SendRejectionExplanationMail(autoDecisionResponse.IsReRejected ? "User was automatically Re-Rejected" : "User was automatically Rejected");
-				else
+				var experianCompanyChecker = new ExperianCompanyCheck(customerId, DB, Log);
+				experianCompanyChecker.Execute();
+			}
+			else if (!WaitForExperianCompanyCheckToFinishUpdates())
+			{
+				Log.Info("No data exist from experian company check for customer:{0}.", customerId);
+			}
+		}
+
+		private bool MakeSureMpDataIsSufficient()
+		{
+			bool shouldExpectMpDta = newCreditLineOption != NewCreditLineOption.SkipEverything &&
+			                         newCreditLineOption != NewCreditLineOption.UpdateEverythingExceptMp;
+			if (shouldExpectMpDta)
+			{
+				if (!WaitForMarketplacesToFinishUpdates())
 				{
-					const string rejectionSubject = "Sorry, ezbob cannot make you a loan offer at this time";
-					SendRejectionExplanationMail(rejectionSubject);
-
 					var variables = new Dictionary<string, string> {
-						{"FirstName", appFirstName},
-						{"EzbobAccount", "https://app.ezbob.com/Customer/Profile"}
+						{"UserEmail", appEmail},
+						{"CustomerID", customerId.ToString(CultureInfo.InvariantCulture)},
+						{"ApplicationID", appEmail}
 					};
 
-					mailer.SendToCustomerAndEzbob(variables, appEmail, "Mandrill - Rejection email", rejectionSubject);
-					strategyHelper.AddRejectIntoDecisionHistory(customerId, autoDecisionResponse.AutoRejectReason);
+					mailer.SendToEzbob(variables, "Mandrill - No Information about shops", "No information about customer marketplace");
+
+					return false;
 				} // if
-
-				DB.ExecuteNonQuery(
-					"Update_Main_Strat_Finish_Date",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("UserId", customerId)
-				);
-			}
-			else
-			{
-				var variables = new Dictionary<string, string> {
-					{"RegistrationDate", appRegistrationDate.ToString(CultureInfo.InvariantCulture)},
-					{"userID", customerId.ToString(CultureInfo.InvariantCulture)},
-					{"Name", appEmail},
-					{"FirstName", appFirstName},
-					{"Surname", appSurname},
-					{"MP_Counter", allMPsNum.ToString(CultureInfo.InvariantCulture)},
-					{"MedalType", medalType.ToString()},
-					{"SystemDecision", autoDecisionResponse.SystemDecision}
-				};
-
-				mailer.SendToEzbob(variables, "Mandrill - User is waiting for decision", "User is now waiting for decision");
-
-				DB.ExecuteNonQuery(
-					"Update_Main_Strat_Finish_Date",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("UserId", customerId)
-				);
 			} // if
-		} // Execute
 
-		#endregion method Execute
+			return true;
+		}
 
+		private void SetAutoDecisionAvailability()
+		{
+			if (!customerStatusIsEnabled || customerStatusIsWarning)
+			{
+				enableAutomaticReApproval = false;
+				enableAutomaticApproval = false;
+			} // if
+			
+			if (isOffline || 
+				newCreditLineOption == NewCreditLineOption.SkipEverything ||
+				newCreditLineOption == NewCreditLineOption.UpdateEverythingExceptMp ||
+				newCreditLineOption == NewCreditLineOption.UpdateEverythingAndGoToManualDecision ||
+				avoidAutomaticDescison == 1)
+			{
+				enableAutomaticApproval = false;
+				enableAutomaticReApproval = false;
+				enableAutomaticRejection = false;
+				enableAutomaticReRejection = false;
+			}
+		}
+		
 		#endregion public
 
 		#region private
@@ -708,14 +707,13 @@
 		private bool useBrokerSetupFee;
 		private int loanSourceId;
 		private int isCustomerRepaymentPeriodSelectionAllowed;
-		private decimal loanIntrestBase;
 		private decimal loanOfferReApprovalSum;
 		private decimal loanOfferReApprovalFullAmount;
 		private decimal loanOfferReApprovalRemainingAmount;
 		private decimal loanOfferReApprovalFullAmountOld;
 		private decimal loanOfferReApprovalRemainingAmountOld;
 		private int offeredCreditLine;
-		private double inintialExperianConsumerScore;
+		private double initialExperianConsumerScore;
 		private double marketplaceSeniorityDays;
 		private double totalSumOfOrders3MTotal;
 		private int modelLoanOffer;
@@ -829,6 +827,20 @@
 
 		private void SendRejectionExplanationMail(string subject)
 		{
+			// TODO: set inside auto decision and get here instead of calculating again
+			DataTable defaultAccountsNumDataTable = DB.ExecuteReader(
+				"GetNumberOfDefaultAccounts",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", customerId),
+				new QueryParameter("Months", rejectDefaultsMonthsNum),
+				new QueryParameter("Amount", rejectDefaultsAmount)
+			);
+
+			var defaultAccountsNumResults = new SafeReader(defaultAccountsNumDataTable.Rows[0]);
+			numOfDefaultAccounts = defaultAccountsNumResults["NumOfDefaultAccounts"];
+
+			totalSumOfOrders3MTotal = strategyHelper.GetTotalSumOfOrders3M(customerId);
+
 			var variables = new Dictionary<string, string> {
 				{"RegistrationDate", appRegistrationDate.ToString(CultureInfo.InvariantCulture)},
 				{"userID", customerId.ToString(CultureInfo.InvariantCulture)},
@@ -838,7 +850,7 @@
 				{"MP_Counter", allMPsNum.ToString(CultureInfo.InvariantCulture)},
 				{"MedalType", medalType.ToString()},
 				{"SystemDecision", autoDecisionResponse.SystemDecision},
-				{"ExperianConsumerScore", inintialExperianConsumerScore.ToString(CultureInfo.InvariantCulture)},
+				{"ExperianConsumerScore", initialExperianConsumerScore.ToString(CultureInfo.InvariantCulture)},
 				{"CVExperianConsumerScore", lowCreditScore.ToString(CultureInfo.InvariantCulture)},
 				{"TotalAnnualTurnover", totalSumOfOrders1YTotal.ToString(CultureInfo.InvariantCulture)},
 				{"CVTotalAnnualTurnover", lowTotalAnnualTurnover.ToString(CultureInfo.InvariantCulture)},
@@ -872,8 +884,7 @@
 				EnableAutomaticReApproval = enableAutomaticReApproval,
 				EnableAutomaticRejection = enableAutomaticRejection,
 				EnableAutomaticReRejection = enableAutomaticReRejection,
-				InitialExperianConsumerScore = inintialExperianConsumerScore,
-				ModelLoanOffer = modelLoanOffer,
+				InitialExperianConsumerScore = initialExperianConsumerScore,
 				IsReRejected = false,
 				LoanOfferReApprovalFullAmountOld = loanOfferReApprovalFullAmountOld,
 				LoanOfferReApprovalFullAmount = loanOfferReApprovalFullAmount,
@@ -1105,6 +1116,14 @@
 					} // if
 				} // if
 			} // if
+
+			DB.ExecuteNonQuery(
+				"UpdateExperianBWA_AML",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", customerId),
+				new QueryParameter("BWAResult", experianBwaResult),
+				new QueryParameter("AMLResult", experianAmlResult)
+			);
 		} // AmlAndBwa
 
 		#endregion method AmlAndBwa

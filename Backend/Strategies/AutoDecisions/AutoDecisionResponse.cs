@@ -7,7 +7,6 @@
 		public AutoDecisionResponse(AutoDecisionRequest request)
 		{
 			IsReRejected = request.IsReRejected;
-			ModelLoanOffer = request.ModelLoanOffer;
 		}
 
 		public bool IsReRejected { get; set; }
@@ -15,7 +14,6 @@
 		public string CreditResult { get; set; }
 		public string UserStatus { get; set; }
 		public string SystemDecision { get; set; }
-		public int ModelLoanOffer { get; set; }
 		public string LoanOfferUnderwriterComment { get; set; }
 		public double LoanOfferOfferValidDays { get; set; }
 		public DateTime? AppApplyForLoan { get; set; }

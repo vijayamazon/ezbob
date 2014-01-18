@@ -20,6 +20,5 @@
 		public double TotalSumOfOrders1YTotal { get; set; }
 		public double TotalSumOfOrders3MTotal { get; set; }
 		public bool IsReRejected { get; set; }
-		public int ModelLoanOffer { get; set; }
 	}
 }
