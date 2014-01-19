@@ -1541,4 +1541,15 @@ td.account-logo {
     .source {
         font-size: 11px;
     }
+
+    .lpchat-container {
+        display: none !important;
+        visibility: hidden;
+    }
+    aside.customer-sidebar {
+        display: none !important;
+        visibility: hidden;
+    }
+
+
 }

@@ -11,7 +11,7 @@ namespace EZBob.DatabaseLib.DatabaseWrapper.AccountInfo
 		DateTime SubmittedDate { get; }
 		string PaymentMethod { get; }
 		bool PastDue { get; }
-		double CurrentBalance { get; }
+		double? CurrentBalance { get; }
 		DateTime? CreditCardModifyDate { get; }
 		string CreditCardInfo { get; }
 		DateTime? CreditCardExpiration { get; }

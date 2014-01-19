@@ -60,7 +60,7 @@
 
     @{
         var isUnderwriter = (Url.Action(null) ?? "").Contains("AdminLogOn");
-        if (!isUnderwriter) 
+        if (!isUnderwriter && !Request.Browser.IsMobileDevice)
         { 
             Html.RenderPartial("_LivePerson");
             Html.RenderPartial("_NanoRep");
