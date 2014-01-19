@@ -2,26 +2,29 @@
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Data;
 	using ExperianLib.IdIdentityHub;
+	using Ezbob.Database;
+	using Ezbob.Logger;
 
-	public class AmlChecker
+	public class AmlChecker : AStrategy
 	{
 		private readonly IdHubService idHubService = new IdHubService();
-		private readonly int timeAtAddress;
-		private readonly string line1Current;
-		private readonly string line2Current;
-		private readonly string line3Current;
-		private readonly string line4Current;
-		private readonly string line6Current;
-		private readonly string line1Prev;
-		private readonly string line2Prev;
-		private readonly string line3Prev;
-		private readonly string line4Prev;
-		private readonly string line6Prev;
-		private readonly string firstName;
-		private readonly string surname;
-		private readonly string gender;
-		private readonly DateTime dateOfBirth;
+		private int timeAtAddress;
+		private string line1Current;
+		private string line2Current;
+		private string line3Current;
+		private string line4Current;
+		private string line6Current;
+		private string line1Prev;
+		private string line2Prev;
+		private string line3Prev;
+		private string line4Prev;
+		private string line6Prev;
+		private string firstName;
+		private string surname;
+		private string gender;
+		private DateTime dateOfBirth;
 		private readonly bool isCustom;
 		private readonly int customerId;
 		private readonly string idhubHouseNumber;
@@ -31,6 +34,7 @@
 		private readonly string idhubTown;
 		private readonly string idhubCounty;
 		private readonly string idhubPostCode;
+		public string Result { get; private set; }
 
 		private readonly Dictionary<string, bool> warningRules = new Dictionary<string, bool>
 			{
@@ -47,38 +51,22 @@
 				{"U0134", false}
 			};
 
-		public AmlChecker(int customerId, string firstName, string surname, string gender, DateTime dateOfBirth,
-			string line1Current, string line2Current, string line3Current, string line4Current, string line6Current,
-			string line1Prev, string line2Prev, string line3Prev, string line4Prev, string line6Prev, int timeAtAddress)
+		public AmlChecker(int customerId, AConnection oDb, ASafeLog oLog)
+			: base(oDb, oLog)
 		{
 			this.customerId = customerId;
-			this.timeAtAddress = timeAtAddress;
-			this.line1Current = line1Current;
-			this.line2Current = line2Current;
-			this.line3Current = line3Current;
-			this.line4Current = line4Current;
-			this.line6Current = line6Current;
-			this.line1Prev = line1Prev;
-			this.line2Prev = line2Prev;
-			this.line3Prev = line3Prev;
-			this.line4Prev = line4Prev;
-			this.line6Prev = line6Prev;
-			this.firstName = firstName;
-			this.surname = surname;
-			this.gender = gender;
-			this.dateOfBirth = dateOfBirth;
+			GetPersonalInfo();
+			GetAddresses();
 		}
 
-		public AmlChecker(int customerId, string firstName, string surname, string gender, DateTime dateOfBirth,
-			string idhubHouseNumber, string idhubHouseName, string idhubStreet,
-			string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode)
+		public AmlChecker(int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet, string idhubDistrict, string idhubTown, 
+			string idhubCounty, string idhubPostCode, AConnection oDb, ASafeLog oLog)
+			: base(oDb, oLog)
 		{
 			isCustom = true;
 			this.customerId = customerId;
-			this.firstName = firstName;
-			this.surname = surname;
-			this.gender = gender;
-			this.dateOfBirth = dateOfBirth;
+			GetPersonalInfo();
+
 			this.idhubHouseNumber = idhubHouseNumber;
 			this.idhubHouseName = idhubHouseName;
 			this.idhubStreet = idhubStreet;
@@ -87,17 +75,23 @@
 			this.idhubCounty = idhubCounty;
 			this.idhubPostCode = idhubPostCode;
 		}
+		
+		public override string Name
+		{
+			get { return "AML check"; }
+		} // Name
 
-		public string Check()
+		public override void Execute()
 		{
 			string result;
 			decimal authentication;
 			bool hasError = isCustom ? GetAmlDataCustom(out result, out authentication) : GetAmlData(out result, out authentication);
-			
-			if (hasError || authentication < 40)
-				return "Warning";
 
-			return result;
+			Result = result;
+			if (hasError || authentication < 40)
+			{
+				Result = "Warning";
+			}
 		}
 
 		private bool GetAmlData(out string result, out decimal authentication)
@@ -133,7 +127,7 @@
 		{
 			if (results.HasError)
 			{
-				//Log.Info("Error getting aml data. error:{0}", results.Error);
+				Log.Info("Error getting aml data. error:{0}", results.Error);
 				result = string.Empty;
 				authentication = 0;
 				return true;
@@ -152,5 +146,33 @@
 
 			return false;
 		} // CreateAmlResultFromAuthenticationReuslts
+
+		private void GetAddresses()
+		{
+			DataTable dt = DB.ExecuteReader("GetCustomerAddresses", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
+			var addressesResults = new SafeReader(dt.Rows[0]);
+			line1Current = addressesResults["Line1"];
+			line2Current = addressesResults["Line2"];
+			line3Current = addressesResults["Line3"];
+			line4Current = addressesResults["Line4"];
+			line6Current = addressesResults["Line6"];
+			line1Prev = addressesResults["Line1Prev"];
+			line2Prev = addressesResults["Line2Prev"];
+			line3Prev = addressesResults["Line3Prev"];
+			line4Prev = addressesResults["Line4Prev"];
+			line6Prev = addressesResults["Line6Prev"];
+		}
+
+		private void GetPersonalInfo()
+		{
+			DataTable dt = DB.ExecuteReader("MainStrategyGetPersonalInfo", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
+			var results = new SafeReader(dt.Rows[0]);
+
+			firstName = results["FirstName"];
+			surname = results["Surname"];
+			gender = results["Gender"];
+			dateOfBirth = results["DateOfBirth"];
+			timeAtAddress = results["TimeAtAddress"];
+		}
 	}
 }

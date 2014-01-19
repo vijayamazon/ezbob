@@ -10,7 +10,6 @@
 	using System.Linq;
 	using System.Threading;
 	using EZBob.DatabaseLib.Model.Database;
-	using ExperianLib.IdIdentityHub;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
@@ -129,8 +128,6 @@
 			if (newCreditLineOption != NewCreditLineOption.SkipEverything)
 			{
 				PerformCompanyExperianCheck();
-				GetAddresses();
-
 				PerformConsumerExperianCheck();
 
 				minExperianScore = experianConsumerScore;
@@ -663,27 +660,14 @@
 		private string experianRefNum;
 		private string appFirstName;
 		private string appSurname;
-		private DateTime appDateOfBirth;
 		private string appGender;
 		private string appHomeOwner;
-		private int appTimeAtAddress;
 		private string appAccountNumber;
 		private string appSortCode;
 		private DateTime appRegistrationDate;
 		private string appBankAccountType;
 		private bool wasMainStrategyExecutedBefore;
 
-		// Validated as used
-		private string appLine1;
-		private string appLine2;
-		private string appLine3;
-		private string appLine4;
-		private string appLine6;
-		private string appLine1Prev;
-		private string appLine2Prev;
-		private string appLine3Prev;
-		private string appLine4Prev;
-		private string appLine6Prev;
 		private int minExperianScore;
 		private int experianConsumerScore;
 		private int allMPsNum;
@@ -766,10 +750,8 @@
 			appFirstName = results["FirstName"];
 			appSurname = results["Surname"];
 			appGender = results["Gender"];
-			appDateOfBirth = results["DateOfBirth"];
 			appHomeOwner = results["HomeOwner"];
 			allMPsNum = results["NumOfMps"];
-			appTimeAtAddress = results["TimeAtAddress"];
 			appAccountNumber = results["AccountNumber"];
 			appSortCode = results["SortCode"];
 			appRegistrationDate = results["RegistrationDate"];
@@ -780,27 +762,7 @@
 		} // GetPersonalInfo
 
 		#endregion method GetPersonalInfo
-
-		#region GetAddresses
-
-		private void GetAddresses()
-		{
-			DataTable dt = DB.ExecuteReader("GetCustomerAddresses", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
-			var addressesResults = new SafeReader(dt.Rows[0]);
-			appLine1 = addressesResults["Line1"];
-			appLine2 = addressesResults["Line2"];
-			appLine3 = addressesResults["Line3"];
-			appLine4 = addressesResults["Line4"];
-			appLine6 = addressesResults["Line6"];
-			appLine1Prev = addressesResults["Line1Prev"];
-			appLine2Prev = addressesResults["Line2Prev"];
-			appLine3Prev = addressesResults["Line3Prev"];
-			appLine4Prev = addressesResults["Line4Prev"];
-			appLine6Prev = addressesResults["Line6Prev"];
-		} // GetAddresses
-
-		#endregion GetAddresses
-
+		
 		#region method SendRejectionExplanationMail
 
 		private void SendRejectionExplanationMail(string subject)
@@ -889,11 +851,9 @@
 		{
 			if (useCustomIdHubAddress == 0)
 			{
-				var bwaChecker = new BwaChecker(customerId, appFirstName, appSurname, appGender, appDateOfBirth, appBankAccountType,
-				                                appLine1, appLine2, appLine3, appLine4, appLine6,
-				                                appLine1Prev, appLine2Prev, appLine3Prev, appLine4Prev, appLine6Prev, appTimeAtAddress);
-
-				return bwaChecker.Check();
+				var bwaChecker = new BwaChecker(customerId, DB, Log);
+				bwaChecker.Execute();
+				return bwaChecker.Result;
 			}
 			
 			if (useCustomIdHubAddress == 1)
@@ -906,12 +866,10 @@
 			
 			if (useCustomIdHubAddress == 2 || (useCustomIdHubAddress != 1 && ShouldRunBwa()))
 			{
-				var bwaChecker = new BwaChecker(customerId, appFirstName, appSurname, appGender, appDateOfBirth, appBankAccountType,
-				                                idhubHouseNumber, idhubHouseName, idhubStreet,
-				                                idhubDistrict, idhubTown, idhubCounty, idhubPostCode, idhubBranchCode,
-				                                idhubAccountNumber);
-
-				return bwaChecker.Check();
+				var bwaChecker = new BwaChecker(customerId, idhubHouseNumber, idhubHouseName, idhubStreet, idhubDistrict, idhubTown, 
+					idhubCounty, idhubPostCode, idhubBranchCode, idhubAccountNumber, DB, Log);
+				bwaChecker.Execute();
+				return bwaChecker.Result;
 			}
 
 			return null;
@@ -921,19 +879,17 @@
 		{
 			if (useCustomIdHubAddress == 0)
 			{
-				var amlChecker = new AmlChecker(customerId, appFirstName, appSurname, appGender, appDateOfBirth,
-				                                appLine1, appLine2, appLine3, appLine4, appLine6,
-				                                appLine1Prev, appLine2Prev, appLine3Prev, appLine4Prev, appLine6Prev, appTimeAtAddress);
-
-				return amlChecker.Check();
+				var amlChecker = new AmlChecker(customerId, DB, Log);
+				amlChecker.Execute();
+				return amlChecker.Result;
 			}
 			
 			if (useCustomIdHubAddress != 2)
 			{
-				var amlChecker = new AmlChecker(customerId, appFirstName, appSurname, appGender, appDateOfBirth,
-				                                idhubHouseNumber, idhubHouseName, idhubStreet, idhubDistrict, idhubTown, idhubCounty,
-				                                idhubPostCode);
-				return amlChecker.Check();
+				var amlChecker = new AmlChecker(customerId, idhubHouseNumber, idhubHouseName, idhubStreet, idhubDistrict, idhubTown, 
+					idhubCounty, idhubPostCode, DB, Log);
+				amlChecker.Execute();
+				return amlChecker.Result;
 			}
 
 			return null;

@@ -1,78 +1,65 @@
 ﻿namespace EzBob.Backend.Strategies
 {
 	using System;
+	using System.Data;
 	using ExperianLib.IdIdentityHub;
+	using Ezbob.Database;
+	using Ezbob.Logger;
 
-	public class BwaChecker
+	public class BwaChecker : AStrategy
 	{
 		private readonly IdHubService idHubService = new IdHubService();
 		private readonly bool isCustom;
-		private readonly int timeAtAddress;
-		private readonly string line1Current;
-		private readonly string line2Current;
-		private readonly string line3Current;
-		private readonly string line4Current;
-		private readonly string line6Current;
-		private readonly string line1Prev;
-		private readonly string line2Prev;
-		private readonly string line3Prev;
-		private readonly string line4Prev;
-		private readonly string line6Prev;
-		private readonly string firstName;
-		private readonly string surname;
-		private readonly string gender;
-		private readonly DateTime dateOfBirth;
+		private int timeAtAddress;
+		private string line1Current;
+		private string line2Current;
+		private string line3Current;
+		private string line4Current;
+		private string line6Current;
+		private string line1Prev;
+		private string line2Prev;
+		private string line3Prev;
+		private string line4Prev;
+		private string line6Prev;
+		private string firstName;
+		private string surname;
+		private string gender;
+		private DateTime dateOfBirth;
 		private readonly int customerId;
+		private string bankAccountType;
 		private string sortCode;
 		private string accountNumber;
-		private string idhubHouseNumber;
-		private string idhubHouseName;
-		private string idhubStreet;
-		private string idhubDistrict;
-		private string idhubTown;
-		private string idhubCounty;
-		private string idhubPostCode;
-		private string idhubBranchCode;
-		private string idhubAccountNumber;
+		private readonly string idhubHouseNumber;
+		private readonly string idhubHouseName;
+		private readonly string idhubStreet;
+		private readonly string idhubDistrict;
+		private readonly string idhubTown;
+		private readonly string idhubCounty;
+		private readonly string idhubPostCode;
+		private readonly string idhubBranchCode;
+		private readonly string idhubAccountNumber;
 		private string experianBwaAccountStatus;
 		private decimal experianBwaNameScore;
 		private decimal experianBwaAddressScore;
-		private string bankAccountType;
 
-		public BwaChecker(int customerId, string firstName, string surname, string gender, DateTime dateOfBirth, string bankAccountType,
-			string line1Current, string line2Current, string line3Current, string line4Current, string line6Current,
-			string line1Prev, string line2Prev, string line3Prev, string line4Prev, string line6Prev,
-			int timeAtAddress)
+		public string Result { get; private set; }
+
+		public BwaChecker(int customerId, AConnection oDb, ASafeLog oLog)
+			: base(oDb, oLog)
 		{
 			this.customerId = customerId;
-			this.timeAtAddress = timeAtAddress;
-			this.line1Current = line1Current;
-			this.line2Current = line2Current;
-			this.line3Current = line3Current;
-			this.line4Current = line4Current;
-			this.line6Current = line6Current;
-			this.line1Prev = line1Prev;
-			this.line2Prev = line2Prev;
-			this.line3Prev = line3Prev;
-			this.line4Prev = line4Prev;
-			this.line6Prev = line6Prev;
-			this.firstName = firstName;
-			this.surname = surname;
-			this.gender = gender;
-			this.dateOfBirth = dateOfBirth;
-			this.bankAccountType = bankAccountType;
+			GetPersonalInfo();
+			GetAddresses();
 		}
 
-		public BwaChecker(int customerId, string firstName, string surname, string gender, DateTime dateOfBirth, string bankAccountType,
-			string idhubHouseNumber, string idhubHouseName, string idhubStreet,
-			string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode, string idhubBranchCode, string idhubAccountNumber)
+		public BwaChecker(int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet, string idhubDistrict, string idhubTown, 
+			string idhubCounty, string idhubPostCode, string idhubBranchCode, string idhubAccountNumber, AConnection oDb, ASafeLog oLog)
+			: base(oDb, oLog)
 		{
 			isCustom = true;
 			this.customerId = customerId;
-			this.firstName = firstName;
-			this.surname = surname;
-			this.gender = gender;
-			this.dateOfBirth = dateOfBirth;
+			GetPersonalInfo();
+
 			this.idhubHouseNumber = idhubHouseNumber;
 			this.idhubHouseName = idhubHouseName;
 			this.idhubStreet = idhubStreet;
@@ -82,14 +69,18 @@
 			this.idhubPostCode = idhubPostCode;
 			this.idhubBranchCode = idhubBranchCode;
 			this.idhubAccountNumber = idhubAccountNumber;
-			this.bankAccountType = bankAccountType;
 		}
 
-		public string Check()
+		public override string Name
+		{
+			get { return "BWA check"; }
+		} // Name
+
+		public override void Execute()
 		{
 			bool hasError = isCustom ? GetBwaDataCustom() : GetBwaData();
 
-			return CalculateBwaResult(hasError);
+			Result = CalculateBwaResult(hasError);
 		}
 
 		private bool GetBwaData()
@@ -126,7 +117,7 @@
 		{
 			if (!results.HasError)
 			{
-				//Log.Info("account status: {0}, name score: {1}, address score: {2}", results.AccountStatus, results.NameScore, results.AddressScore);
+				Log.Info("account status: {0}, name score: {1}, address score: {2}", results.AccountStatus, results.NameScore, results.AddressScore);
 				experianBwaAccountStatus = results.AccountStatus;
 				experianBwaNameScore = results.NameScore;
 				experianBwaAddressScore = results.AddressScore;
@@ -162,6 +153,37 @@
 			}
 
 			return "Passed";
+		}
+
+		private void GetAddresses()
+		{
+			DataTable dt = DB.ExecuteReader("GetCustomerAddresses", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
+			var addressesResults = new SafeReader(dt.Rows[0]);
+			line1Current = addressesResults["Line1"];
+			line2Current = addressesResults["Line2"];
+			line3Current = addressesResults["Line3"];
+			line4Current = addressesResults["Line4"];
+			line6Current = addressesResults["Line6"];
+			line1Prev = addressesResults["Line1Prev"];
+			line2Prev = addressesResults["Line2Prev"];
+			line3Prev = addressesResults["Line3Prev"];
+			line4Prev = addressesResults["Line4Prev"];
+			line6Prev = addressesResults["Line6Prev"];
+		}
+
+		private void GetPersonalInfo()
+		{
+			DataTable dt = DB.ExecuteReader("MainStrategyGetPersonalInfo", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
+			var results = new SafeReader(dt.Rows[0]);
+
+			firstName = results["FirstName"];
+			surname = results["Surname"];
+			gender = results["Gender"];
+			dateOfBirth = results["DateOfBirth"];
+			timeAtAddress = results["TimeAtAddress"];
+			accountNumber = results["AccountNumber"];
+			sortCode = results["SortCode"];
+			bankAccountType = results["BankAccountType"];
 		}
 	}
 }
