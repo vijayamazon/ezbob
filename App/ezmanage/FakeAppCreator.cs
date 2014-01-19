@@ -127,12 +127,17 @@
 
 		public void PerformCompanyCheck(int customerId)
 		{
-			
+
 		}
 
 		public void PerformConsumerCheck(int customerId, int directorId)
 		{
 			
+		}
+
+		public void PerformAmlCheck(int customerId)
+		{
+
 		}
 
         public void EmailRolloverAdded(Customer customer, decimal amount, DateTime expireDate)

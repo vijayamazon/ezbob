@@ -34,7 +34,6 @@
 		private readonly string idhubTown;
 		private readonly string idhubCounty;
 		private readonly string idhubPostCode;
-		public string Result { get; private set; }
 
 		private readonly Dictionary<string, bool> warningRules = new Dictionary<string, bool>
 			{
@@ -87,11 +86,14 @@
 			decimal authentication;
 			bool hasError = isCustom ? GetAmlDataCustom(out result, out authentication) : GetAmlData(out result, out authentication);
 
-			Result = result;
 			if (hasError || authentication < 40)
 			{
-				Result = "Warning";
+				result = "Warning";
 			}
+
+			DB.ExecuteNonQuery("UpdateAmlResult", CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", customerId),
+				new QueryParameter("AmlResult", result));
 		}
 
 		private bool GetAmlData(out string result, out decimal authentication)

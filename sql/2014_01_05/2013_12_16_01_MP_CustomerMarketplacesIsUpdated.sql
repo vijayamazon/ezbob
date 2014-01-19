@@ -23,8 +23,8 @@ BEGIN
 		  cmp.UpdatingEnd IS NULL))
 	
 	IF @notUpdatedCount > 0
-		SELECT 0 AS IsUpdated
+		SELECT CAST (1 AS BIT) AS IsUpdated
 	ELSE
-		SELECT 1 AS IsUpdated
+		SELECT CAST (0 AS BIT) AS IsUpdated
 END
 GO

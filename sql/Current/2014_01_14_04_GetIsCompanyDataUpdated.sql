@@ -19,8 +19,8 @@ BEGIN
 	SELECT @LastUpdateTime = LastUpdateDate FROM MP_ExperianDataCache WHERE CompanyRefNumber = @CompanyRefNumber 
 	
 	IF @Today = @LastUpdateTime
-		SELECT 1
+		SELECT CAST (1 AS BIT) AS IsUpdated
 	ELSE
-		SELECT 0	
+		SELECT CAST (0 AS BIT) AS IsUpdated	
 END
 GO

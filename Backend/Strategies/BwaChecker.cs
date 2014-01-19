@@ -42,8 +42,6 @@
 		private decimal experianBwaNameScore;
 		private decimal experianBwaAddressScore;
 
-		public string Result { get; private set; }
-
 		public BwaChecker(int customerId, AConnection oDb, ASafeLog oLog)
 			: base(oDb, oLog)
 		{
@@ -80,7 +78,11 @@
 		{
 			bool hasError = isCustom ? GetBwaDataCustom() : GetBwaData();
 
-			Result = CalculateBwaResult(hasError);
+			string result = CalculateBwaResult(hasError);
+
+			DB.ExecuteNonQuery("UpdateBwaResult", CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", customerId),
+				new QueryParameter("BwaResult", result));
 		}
 
 		private bool GetBwaData()

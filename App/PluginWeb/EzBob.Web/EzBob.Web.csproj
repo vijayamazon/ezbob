@@ -218,6 +218,7 @@
     <Compile Include="Areas\Customer\Controllers\AccountSettingsController.cs" />
     <Compile Include="Areas\Customer\Controllers\AgreementController.cs" />
     <Compile Include="Areas\Customer\Controllers\CGMPUniqChecker.cs" />
+    <Compile Include="Areas\Customer\Controllers\AmlController.cs" />
     <Compile Include="Areas\Customer\Controllers\ExperianController.cs" />
     <Compile Include="Areas\Customer\Controllers\MarketPlacesController.cs" />
     <Compile Include="Areas\Customer\Controllers\WhatsNewController.cs" />

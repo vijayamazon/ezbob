@@ -135,7 +135,8 @@
 
 				PerformExperianConsumerCheckForDirectors();
 
-				AmlAndBwa();
+				GetAml();
+				GetBwa();
 			} // if
 
 			decimal loanInterestBase = GetBaseInterest();
@@ -650,6 +651,8 @@
 		private int intervalWaitForExperianCompanyCheck;
 		private int totalTimeToWaitForExperianConsumerCheck;
 		private int intervalWaitForExperianConsumerCheck;
+		private int totalTimeToWaitForAmlCheck;
+		private int intervalWaitForAmlCheck;
 
 		// Loaded from DB per customer
 		private bool customerStatusIsEnabled;
@@ -729,6 +732,8 @@
 			intervalWaitForExperianCompanyCheck = sr["IntervalWaitForExperianCompanyCheck"];
 			totalTimeToWaitForExperianConsumerCheck = sr["TotalTimeToWaitForExperianConsumerCheck"];
 			intervalWaitForExperianConsumerCheck = sr["IntervalWaitForExperianConsumerCheck"];
+			totalTimeToWaitForAmlCheck = sr["TotalTimeToWaitForAmlCheck"];
+			intervalWaitForAmlCheck = sr["IntervalWaitForAmlCheck"];
 		} // ReadConfigurations
 
 		#endregion method ReadConfigurations
@@ -840,28 +845,12 @@
 
 		#endregion method CreateAutoDecisionRequest
 		
-		private void AmlAndBwa()
-		{
-			string amlResult = GetAml();
-			string bwaResult = GetBwa();
-			SaveAmlAndBwaResults(amlResult, bwaResult);
-		}
-
-		private string GetBwa()
+		private void GetBwa()
 		{
 			if (useCustomIdHubAddress == 0)
 			{
 				var bwaChecker = new BwaChecker(customerId, DB, Log);
 				bwaChecker.Execute();
-				return bwaChecker.Result;
-			}
-			
-			if (useCustomIdHubAddress == 1)
-			{
-				DataTable dt = DB.ExecuteReader("GetPrevBwaResult", CommandSpecies.StoredProcedure,
-				                                new QueryParameter("CustomerId", customerId));
-				var sr = new SafeReader(dt.Rows[0]);
-				return sr["BWAResult"];
 			}
 			
 			if (useCustomIdHubAddress == 2 || (useCustomIdHubAddress != 1 && ShouldRunBwa()))
@@ -869,41 +858,30 @@
 				var bwaChecker = new BwaChecker(customerId, idhubHouseNumber, idhubHouseName, idhubStreet, idhubDistrict, idhubTown, 
 					idhubCounty, idhubPostCode, idhubBranchCode, idhubAccountNumber, DB, Log);
 				bwaChecker.Execute();
-				return bwaChecker.Result;
 			}
-
-			return null;
 		}
 
-		private string GetAml()
+		private void GetAml()
 		{
-			if (useCustomIdHubAddress == 0)
+			if (wasMainStrategyExecutedBefore)
 			{
-				var amlChecker = new AmlChecker(customerId, DB, Log);
-				amlChecker.Execute();
-				return amlChecker.Result;
+				if (useCustomIdHubAddress == 0)
+				{
+					var amlChecker = new AmlChecker(customerId, DB, Log);
+					amlChecker.Execute();
+				}
+
+				if (useCustomIdHubAddress != 2)
+				{
+					var amlChecker = new AmlChecker(customerId, idhubHouseNumber, idhubHouseName, idhubStreet, idhubDistrict, idhubTown,
+					                                idhubCounty, idhubPostCode, DB, Log);
+					amlChecker.Execute();
+				}
 			}
-			
-			if (useCustomIdHubAddress != 2)
+			else if (!WaitForAmlToFinishUpdates())
 			{
-				var amlChecker = new AmlChecker(customerId, idhubHouseNumber, idhubHouseName, idhubStreet, idhubDistrict, idhubTown, 
-					idhubCounty, idhubPostCode, DB, Log);
-				amlChecker.Execute();
-				return amlChecker.Result;
+				Log.Info("No AML data exist for customer:{0}.", customerId);
 			}
-
-			return null;
-		}
-
-		private void SaveAmlAndBwaResults(string amlResult, string bwaResult)
-		{
-			DB.ExecuteNonQuery(
-				"UpdateExperianBWA_AML",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId),
-				new QueryParameter("BWAResult", bwaResult),
-				new QueryParameter("AMLResult", amlResult)
-				);
 		}
 
 		#region method ShouldRunBwa
@@ -935,6 +913,11 @@
 			return WaitForUpdateToFinish(() => GetIsExperianConsumerUpdated(directorId), totalTimeToWaitForExperianConsumerCheck, intervalWaitForExperianConsumerCheck);
 		} // WaitForExperianConsumerCheckToFinishUpdates
 
+		private bool WaitForAmlToFinishUpdates()
+		{
+			return WaitForUpdateToFinish(GetIsAmlUpdated, totalTimeToWaitForAmlCheck, intervalWaitForAmlCheck);
+		} // WaitForMarketplacesToFinishUpdates
+
 		private bool WaitForUpdateToFinish(Func<bool> function, int totalSecondsToWait, int intervalBetweenCheck)
 		{
 			DateTime startWaitingTime = DateTime.UtcNow;
@@ -965,6 +948,17 @@
 			return sr["IsUpdated"];
 		}
 
+		private bool GetIsAmlUpdated()
+		{
+			DataTable dt = DB.ExecuteReader(
+				"GetIsAmlUpdated",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", customerId)
+			);
+
+			var sr = new SafeReader(dt.Rows[0]);
+			return sr["IsUpdated"];
+		}
 		private bool GetIsExperianCompanyUpdated()
 		{
 			DataTable dt = DB.ExecuteReader(

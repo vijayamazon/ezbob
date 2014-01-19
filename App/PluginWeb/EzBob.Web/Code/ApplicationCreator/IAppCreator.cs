@@ -34,6 +34,7 @@ namespace EzBob.Web.Code.ApplicationCreator
 		void UpdateAllMarketplaces(Customer customer);
 		void PerformCompanyCheck(int customerId);
 		void PerformConsumerCheck(int customerId, int directorId);
+		void PerformAmlCheck(int customerId);
         void EmailRolloverAdded(Customer customer, decimal amount, DateTime expireDate);
         void RenewEbayToken(Customer customer, string marketplaceName, string url);
         void Escalated(Customer customer);

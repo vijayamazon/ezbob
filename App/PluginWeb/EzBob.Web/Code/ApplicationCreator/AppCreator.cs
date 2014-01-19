@@ -404,6 +404,11 @@
 			ServiceClient.CheckExperianConsumer(customerId, directorId);
 		}
 
+		public void PerformAmlCheck(int customerId)
+		{
+			ServiceClient.CheckAml(customerId);
+		}
+
 		public void EmailRolloverAdded(Customer customer, decimal amount, DateTime expireDate) {
 			if (useNewMailStrategies) {
 				ServiceClient.EmailRolloverAdded(customer.Id, amount);

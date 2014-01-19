@@ -5,8 +5,19 @@ END
 
 IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='IntervalWaitForExperianConsumerCheck')
 BEGIN
-	INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('IntervalWaitForExperianConsumerCheck', '30000', 'Interval to wait for  experian consumer check in milliseconds')
+	INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('IntervalWaitForExperianConsumerCheck', '30000', 'Interval to wait for experian consumer check in milliseconds')
 END
+
+IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='TotalTimeToWaitForAmlCheck')
+BEGIN
+	INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('TotalTimeToWaitForAmlCheck', '60', 'Total time to wait for AML check in seconds')
+END
+
+IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='IntervalWaitForAmlCheck')
+BEGIN
+	INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('IntervalWaitForAmlCheck', '30000', 'Interval to wait for AML check in milliseconds')
+END
+
 
 GO
 
@@ -42,6 +53,8 @@ BEGIN
 		(SELECT Value FROM ConfigurationVariables WHERE Name = 'TotalTimeToWaitForExperianCompanyCheck') AS TotalTimeToWaitForExperianCompanyCheck,
 		(SELECT Value FROM ConfigurationVariables WHERE Name = 'IntervalWaitForExperianCompanyCheck') AS IntervalWaitForExperianCompanyCheck,
 		(SELECT Value FROM ConfigurationVariables WHERE Name = 'TotalTimeToWaitForExperianConsumerCheck') AS TotalTimeToWaitForExperianConsumerCheck,
-		(SELECT Value FROM ConfigurationVariables WHERE Name = 'IntervalWaitForExperianConsumerCheck') AS IntervalWaitForExperianConsumerCheck
+		(SELECT Value FROM ConfigurationVariables WHERE Name = 'IntervalWaitForExperianConsumerCheck') AS IntervalWaitForExperianConsumerCheck,
+		(SELECT Value FROM ConfigurationVariables WHERE Name = 'TotalTimeToWaitForAmlCheck') AS TotalTimeToWaitForAmlCheck,
+		(SELECT Value FROM ConfigurationVariables WHERE Name = 'IntervalWaitForAmlCheck') AS IntervalWaitForAmlCheck
 END
 GO
