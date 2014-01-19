@@ -53,20 +53,16 @@ class EzBob.StoreInfoBaseView extends Backbone.View
                 $('#EarnedPoints').text data.EarnedPointsStr
 
     shopConnected: (name) ->
-        that = @
-        @model.safeFetch().done ->
-            that.stores[name].button.update(that.model.get('mpAccounts'))
-            that.updateEarnedPoints()
-            that.render()
+        @model.safeFetch().done =>
+            @stores[name].button.update(@model.get('mpAccounts'))
+            @updateEarnedPoints()
+            @render()
 
     render: ->
         hasHmrc = @stores.HMRC.button.shops.length > 0
 
         sShow = ''
         sRemove = ''
-
-        that = this
-        accountsList = @storeList.find(".accounts-list")
 
         sortedShopsByPriority = _.sortBy(@stores, (s) -> s.priority)
         sortedShopsByNumOfShops = _.sortBy(sortedShopsByPriority, (s) -> -s.button.shops.length)
@@ -117,6 +113,7 @@ class EzBob.StoreInfoBaseView extends Backbone.View
         @storeList.find(sShow).show()
         @storeList.find(sRemove).remove()
 
+        accountsList = @storeList.find(".accounts-list")
         for shop in sortedShopsByNumOfShops when shop.active
             shop.button.render().$el.appendTo accountsList
 

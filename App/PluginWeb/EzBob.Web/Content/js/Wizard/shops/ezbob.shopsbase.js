@@ -80,22 +80,19 @@
     };
 
     StoreInfoBaseView.prototype.shopConnected = function(name) {
-      var that;
-      that = this;
+      var _this = this;
       return this.model.safeFetch().done(function() {
-        that.stores[name].button.update(that.model.get('mpAccounts'));
-        that.updateEarnedPoints();
-        return that.render();
+        _this.stores[name].button.update(_this.model.get('mpAccounts'));
+        _this.updateEarnedPoints();
+        return _this.render();
       });
     };
 
     StoreInfoBaseView.prototype.render = function() {
-      var accountsList, canContinue, ebayPaypalRuleMessageVisible, foundAllMandatories, hasEbay, hasFilledShops, hasHmrc, hasPaypal, isProfile, key, sRemove, sShow, shop, sortedShopsByNumOfShops, sortedShopsByPriority, that, _i, _j, _len, _len1, _ref;
+      var accountsList, canContinue, ebayPaypalRuleMessageVisible, foundAllMandatories, hasEbay, hasFilledShops, hasHmrc, hasPaypal, isProfile, key, sRemove, sShow, shop, sortedShopsByNumOfShops, sortedShopsByPriority, _i, _j, _len, _len1, _ref;
       hasHmrc = this.stores.HMRC.button.shops.length > 0;
       sShow = '';
       sRemove = '';
-      that = this;
-      accountsList = this.storeList.find(".accounts-list");
       sortedShopsByPriority = _.sortBy(this.stores, function(s) {
         return s.priority;
       });
@@ -125,7 +122,9 @@
       if (this.isOffline) {
         sShow = '.offline_entry_message';
         sRemove = '.online_entry_message';
-        if (!hasHmrc) {
+        if (hasHmrc) {
+          this.storeList.find('.btn-continue').text("Continue").removeClass('disabled');
+        } else {
           this.storeList.find('.btn-continue').text("Skip, I\'ll do it later").removeClass('disabled');
         }
         this.storeList.find('.importantnumber').text('£150,000');
@@ -144,6 +143,7 @@
       }
       this.storeList.find(sShow).show();
       this.storeList.find(sRemove).remove();
+      accountsList = this.storeList.find(".accounts-list");
       for (_j = 0, _len1 = sortedShopsByNumOfShops.length; _j < _len1; _j++) {
         shop = sortedShopsByNumOfShops[_j];
         if (shop.active) {

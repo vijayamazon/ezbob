@@ -1,9 +1,9 @@
 @echo off
 
-rem Kell all running EzServiceHost instances
+rem Kill all running EzServiceHost instances
 taskkill /IM EzServiceHost.exe
 
-rem Kell all running iisexpress and iisexpresstray instances
+rem Kill all running iisexpress and iisexpresstray instances
 taskkill /IM iisexpress*
 
 rem EzServiceHost build output
