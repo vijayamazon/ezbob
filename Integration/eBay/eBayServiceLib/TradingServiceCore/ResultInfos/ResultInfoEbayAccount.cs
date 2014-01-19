@@ -29,7 +29,7 @@ namespace EzBob.eBayServiceLib.TradingServiceCore.ResultInfos
 
 	    public double? CurrentBalance
 	    {
-			get { return _response.AccountSummary == null ? 0d : _response.AccountSummary.CurrentBalance.Value; }
+			get { return _response.AccountSummary == null || _response.AccountSummary.CurrentBalance == null  ? 0d : _response.AccountSummary.CurrentBalance.Value; }
 	    }
 
 	    public DateTime? CreditCardModifyDate
