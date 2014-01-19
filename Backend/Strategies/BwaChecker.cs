@@ -173,7 +173,7 @@
 
 		private void GetPersonalInfo()
 		{
-			DataTable dt = DB.ExecuteReader("MainStrategyGetPersonalInfo", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
+			DataTable dt = DB.ExecuteReader("GetPersonalInfo", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
 			var results = new SafeReader(dt.Rows[0]);
 
 			firstName = results["FirstName"];
