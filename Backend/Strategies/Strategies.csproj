@@ -67,6 +67,7 @@
       <Link>ScoreCalculation\customer_enums.cs</Link>
     </Compile>
     <Compile Include="AStrategy.cs" />
+    <Compile Include="AmlChecker.cs" />
     <Compile Include="AutoDecisions\Approval.cs" />
     <Compile Include="AutoDecisions\AutoDecisionMaker.cs" />
     <Compile Include="AutoDecisions\AutoDecisionResponse.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="AutoDecisions\ReApproval.cs" />
     <Compile Include="AutoDecisions\ReRejection.cs" />
     <Compile Include="CaisUpdate.cs" />
+    <Compile Include="BwaChecker.cs" />
     <Compile Include="ExperianConsumerCheck.cs" />
     <Compile Include="ExperianCompanyCheck.cs" />
     <Compile Include="UpdateCurrencyRates.cs" />

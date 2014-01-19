@@ -612,20 +612,8 @@
 		// Helpers
 		private readonly StrategiesMailer mailer;
 		private readonly StrategyHelper strategyHelper = new StrategyHelper();
-		private readonly IdHubService idHubService = new IdHubService();
 		private readonly MedalScoreCalculator medalScoreCalculator;
-
-		// Consts
-		private const string CpExperianActionsAmlMortality = "The underwriter will need to clarify that the applicant is actually alive (can be a tricky discussion!) and get copies of proof of identity";
-		private const string CpExperianActionsAmlAccommodationAddress = "If this is a personal address then reject";
-		private const string CpExperianActionsAmlRedirection = "Contact client and confirm reason for redirection. Why is this person’s mail being redirected? Might be a legitimate way of doing e-business";
-		private const string CpExperianActionsAmlInconsistencies = "The underwriter will need to ask the applicant for copies of proof of Identity";
-		private const string CpExperianActionsAmlpep = "The underwriter needs to confirm that the applicant is not a politician or relative of a politician with the same surname";
-		private const string CpExperianActionsAmlAuthentication = "The underwriter will need to ask the applicant for copies of proof of Identity";
-		private const string CpExperianActionsBwaNameError = "Underwriter to confirm the account details by asking for copy of statement";
-		private const string CpExperianActionsBwaAccountStatus = "Underwriter to confirm the account details by asking for copy of statement";
-		private const string CpExperianActionsBwaAddressError = "Underwriter to confirm the account details by asking for copy of statement";
-
+		
 		// Inputs
 		private readonly int customerId;
 		private readonly NewCreditLineOption newCreditLineOption;
@@ -690,13 +678,11 @@
 		private string appLine2;
 		private string appLine3;
 		private string appLine4;
-		private string appLine5;
 		private string appLine6;
 		private string appLine1Prev;
 		private string appLine2Prev;
 		private string appLine3Prev;
 		private string appLine4Prev;
-		private string appLine5Prev;
 		private string appLine6Prev;
 		private int minExperianScore;
 		private int experianConsumerScore;
@@ -727,22 +713,7 @@
 		private int modelLoanOffer;
 		private double totalSumOfOrders1YTotal;
 		private bool isFirstLoan;
-
-		// AML & BWA
-		private decimal experianAmlAuthentication;
-		private string experianAmlResult;
-		private string experianAmlWarning;
-		private string experianAmlReject;
-		private string experianBwaResult;
-		private string experianBwaWarning;
-		private string experianBwaPassed;
-		private string experianBwaAccountStatus;
-		private decimal experianBwaNameScore;
-		private decimal experianBwaAddressScore;
-		private string experianBwaError;
-		private string experianAmlPassed;
-		private string experianAmlError;
-
+		
 		#endregion properties
 
 		#region method ReadConfigurations
@@ -820,13 +791,11 @@
 			appLine2 = addressesResults["Line2"];
 			appLine3 = addressesResults["Line3"];
 			appLine4 = addressesResults["Line4"];
-			appLine5 = addressesResults["Line5"];
 			appLine6 = addressesResults["Line6"];
 			appLine1Prev = addressesResults["Line1Prev"];
 			appLine2Prev = addressesResults["Line2Prev"];
 			appLine3Prev = addressesResults["Line3Prev"];
 			appLine4Prev = addressesResults["Line4Prev"];
-			appLine5Prev = addressesResults["Line5Prev"];
 			appLine6Prev = addressesResults["Line6Prev"];
 		} // GetAddresses
 
@@ -911,240 +880,74 @@
 		
 		private void AmlAndBwa()
 		{
-			GetAmlAndBwaData();
-			CalculateAmlResult();
-			CalculateBwaResult();
-			SaveAmlAndBwaResults();
+			string amlResult = GetAml();
+			string bwaResult = GetBwa();
+			SaveAmlAndBwaResults(amlResult, bwaResult);
 		}
 
-		private void SaveAmlAndBwaResults()
+		private string GetBwa()
+		{
+			if (useCustomIdHubAddress == 0)
+			{
+				var bwaChecker = new BwaChecker(customerId, appFirstName, appSurname, appGender, appDateOfBirth, appBankAccountType,
+				                                appLine1, appLine2, appLine3, appLine4, appLine6,
+				                                appLine1Prev, appLine2Prev, appLine3Prev, appLine4Prev, appLine6Prev, appTimeAtAddress);
+
+				return bwaChecker.Check();
+			}
+			
+			if (useCustomIdHubAddress == 1)
+			{
+				DataTable dt = DB.ExecuteReader("GetPrevBwaResult", CommandSpecies.StoredProcedure,
+				                                new QueryParameter("CustomerId", customerId));
+				var sr = new SafeReader(dt.Rows[0]);
+				return sr["BWAResult"];
+			}
+			
+			if (useCustomIdHubAddress == 2 || (useCustomIdHubAddress != 1 && ShouldRunBwa()))
+			{
+				var bwaChecker = new BwaChecker(customerId, appFirstName, appSurname, appGender, appDateOfBirth, appBankAccountType,
+				                                idhubHouseNumber, idhubHouseName, idhubStreet,
+				                                idhubDistrict, idhubTown, idhubCounty, idhubPostCode, idhubBranchCode,
+				                                idhubAccountNumber);
+
+				return bwaChecker.Check();
+			}
+
+			return null;
+		}
+
+		private string GetAml()
+		{
+			if (useCustomIdHubAddress == 0)
+			{
+				var amlChecker = new AmlChecker(customerId, appFirstName, appSurname, appGender, appDateOfBirth,
+				                                appLine1, appLine2, appLine3, appLine4, appLine6,
+				                                appLine1Prev, appLine2Prev, appLine3Prev, appLine4Prev, appLine6Prev, appTimeAtAddress);
+
+				return amlChecker.Check();
+			}
+			
+			if (useCustomIdHubAddress != 2)
+			{
+				var amlChecker = new AmlChecker(customerId, appFirstName, appSurname, appGender, appDateOfBirth,
+				                                idhubHouseNumber, idhubHouseName, idhubStreet, idhubDistrict, idhubTown, idhubCounty,
+				                                idhubPostCode);
+				return amlChecker.Check();
+			}
+
+			return null;
+		}
+
+		private void SaveAmlAndBwaResults(string amlResult, string bwaResult)
 		{
 			DB.ExecuteNonQuery(
 				"UpdateExperianBWA_AML",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId),
-				new QueryParameter("BWAResult", experianBwaResult),
-				new QueryParameter("AMLResult", experianAmlResult)
+				new QueryParameter("BWAResult", bwaResult),
+				new QueryParameter("AMLResult", amlResult)
 				);
-		}
-
-		private void CalculateAmlResult()
-		{
-			if (experianAmlError != "")
-				experianAmlResult = "Warning";
-			else
-			{
-				if (experianAmlAuthentication < 40 && experianAmlResult == "Rejected")
-				{
-					experianAmlWarning = experianAmlWarning +
-					                     "#1,Authentication < 40 (" +
-					                     experianAmlAuthentication +
-					                     ")||" +
-					                     CpExperianActionsAmlAuthentication +
-					                     ";";
-				}
-				else
-				{
-					experianAmlPassed = experianAmlPassed +
-					                    "#1,Authentication >= 40 (" +
-					                    experianAmlAuthentication +
-					                    "];";
-				} // if
-
-				if (experianAmlAuthentication < 40 && experianAmlResult != "Rejected")
-				{
-					experianAmlWarning = experianAmlWarning +
-					                     "#1,Authentication < 40 (" +
-					                     experianAmlAuthentication + ")||" +
-					                     CpExperianActionsAmlAuthentication +
-					                     ";";
-
-					experianAmlResult = "Warning";
-				}
-				else
-					experianAmlPassed = experianAmlPassed + "#1,Authentication >= 40 (" + experianAmlAuthentication + "];";
-			} // if
-		}
-
-		private void CalculateBwaResult()
-		{
-			if (useCustomIdHubAddress == 1)
-			{
-				DataTable dt = DB.ExecuteReader("GetPrevBwaResult", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
-				var sr = new SafeReader(dt.Rows[0]);
-				experianBwaResult = sr["BWAResult"];
-			}
-			else
-			{
-				if (appSortCode == null && appAccountNumber == null)
-					experianBwaResult = "Not performed";
-				else
-				{
-					if (experianBwaError != "")
-						experianBwaResult = "Warning";
-					else
-					{
-						if (appBankAccountType == "Business")
-							experianBwaResult = "Not performed";
-						else
-						{
-							experianBwaResult = "Passed";
-
-							if (experianBwaAccountStatus == "No Match")
-							{
-								experianBwaWarning = experianBwaWarning + "#1, Account Status = No Match||" + CpExperianActionsBwaAccountStatus + ";";
-								experianBwaResult = "Warning";
-							}
-							else
-								experianBwaPassed = experianBwaPassed + "#1, Account Status != No Match;";
-
-							if (experianBwaAccountStatus == "Unable to check")
-							{
-								experianBwaWarning = experianBwaWarning + "#1, Account Status = Unable to check||" + CpExperianActionsBwaAccountStatus + ";";
-								experianBwaResult = "Warning";
-							}
-							else
-								experianBwaPassed = experianBwaPassed + "#1, Account Status != Unable to check;";
-
-							if (experianBwaNameScore == 1)
-							{
-								experianBwaWarning = experianBwaWarning + "#2, Name error = 1||" + CpExperianActionsBwaNameError + ";";
-								experianBwaResult = "Warning";
-							}
-							else
-								experianBwaPassed = experianBwaPassed + "#2, Name error != 1;";
-
-							if (experianBwaNameScore == 2)
-							{
-								experianBwaWarning = experianBwaWarning + "#2, Name error = 2||" + CpExperianActionsBwaNameError + ";";
-								experianBwaResult = "Warning";
-							}
-							else
-								experianBwaPassed = experianBwaPassed + "#2, Name error != 2;";
-
-							if (experianBwaNameScore == 3)
-							{
-								experianBwaWarning = experianBwaWarning + "#2, Name error = 3||" + CpExperianActionsBwaNameError + ";";
-								experianBwaResult = "Warning";
-							}
-							else
-								experianBwaPassed = experianBwaPassed + "#2, Name error != 3;";
-
-							if (experianBwaNameScore == 4)
-							{
-								experianBwaWarning = experianBwaWarning + "#2, Name error = 4||" + CpExperianActionsBwaNameError + ";";
-								experianBwaResult = "Warning";
-							}
-							else
-								experianBwaPassed = experianBwaPassed + "#2, Name error != 4;";
-
-							if (experianBwaAddressScore == 1)
-							{
-								experianBwaWarning = experianBwaWarning + "#3, Address error = 1||" + CpExperianActionsBwaAddressError + ";";
-								experianBwaResult = "Warning";
-							}
-							else
-								experianBwaPassed = experianBwaPassed + "#3, Address error != 1;";
-
-							if (experianBwaAddressScore == 2)
-							{
-								experianBwaWarning = experianBwaWarning + "#3, Address error = 2||" + CpExperianActionsBwaAddressError + ";";
-								experianBwaResult = "Warning";
-							}
-							else
-								experianBwaPassed = experianBwaPassed + "#3, Address error != 2;";
-
-							if (experianBwaAddressScore == 3)
-							{
-								experianBwaWarning = experianBwaWarning + "#3, Address error = 3||" + CpExperianActionsBwaAddressError + ";";
-								experianBwaResult = "Warning";
-							}
-							else
-								experianBwaPassed = experianBwaPassed + "#3, Address error != 3;";
-
-							if (experianBwaAddressScore == 4)
-							{
-								experianBwaWarning = experianBwaWarning + "#3, Address error = 4||" + CpExperianActionsBwaAddressError + ";";
-								experianBwaResult = "Warning";
-							}
-							else
-								experianBwaPassed = experianBwaPassed + "#3, Address error != 4;";
-						} // if
-					} // if
-				} // if
-			} // if
-		}
-
-		private void GetAmlAndBwaData()
-		{
-			if (useCustomIdHubAddress != 0)
-			{
-				if (useCustomIdHubAddress != 2)
-				{
-					GetAmlCustom();
-					if (useCustomIdHubAddress != 1 && ShouldRunBwa())
-					{
-						GetBwaCustom();
-					} // if
-				}
-				else
-				{
-					GetBwaCustom();
-				} // if
-			}
-			else
-			{
-				GetAml(appLine1, appLine2, appLine3, appLine4, appLine6);
-				GetBwa(appLine1, appLine2, appLine3, appLine4, appLine6);
-
-				if (appTimeAtAddress == 1 && appLine6Prev != null)
-				{
-					if (experianAmlError != "")
-					{
-						GetAml(appLine1Prev, appLine2Prev, appLine3Prev, appLine4Prev, appLine6Prev);
-					}
-
-					if (experianBwaError != "")
-					{
-						GetBwa(appLine1Prev, appLine2Prev, appLine3Prev, appLine4Prev, appLine6Prev);
-					}
-				}
-			} // if
-		}
-
-		private void GetAmlCustom()
-		{
-			AuthenticationResults authenticationResults = idHubService.AuthenticateForcedWithCustomAddress(
-				appFirstName, null, appSurname, appGender, appDateOfBirth, idhubHouseNumber, idhubHouseName, idhubStreet,
-				idhubDistrict, idhubTown, idhubCounty, idhubPostCode, customerId);
-			CreateAmlResultFromAuthenticationReuslts(authenticationResults);
-		}
-
-		private void GetBwaCustom()
-		{
-			AccountVerificationResults accountVerificationResults = idHubService.AccountVerificationForcedWithCustomAddress(
-				appFirstName, null, appSurname, appGender, appDateOfBirth, idhubHouseNumber, idhubHouseName, idhubStreet,
-				idhubDistrict, idhubTown, idhubCounty, idhubPostCode, idhubBranchCode, idhubAccountNumber, customerId);
-
-			CreateBwaResultFromAccountVerificationResults(accountVerificationResults);
-		}
-
-		private void GetBwa(string line1, string line2, string line3, string line4, string line6)
-		{
-			AccountVerificationResults accountVerificationResults = idHubService.AccountVerification(
-				appFirstName, null, appSurname, appGender, appDateOfBirth, line1, line2,
-				line3, line4, null, line6, appSortCode, appAccountNumber, customerId);
-
-			CreateBwaResultFromAccountVerificationResults(accountVerificationResults);
-		}
-
-		private void GetAml(string line1, string line2, string line3, string line4, string line6)
-		{
-			AuthenticationResults authenticationResults = idHubService.Authenticate(
-				appFirstName, null, appSurname, appGender, appDateOfBirth, 
-				line1, line2, line3, line4, null, line6, customerId);
-
-			CreateAmlResultFromAuthenticationReuslts(authenticationResults);
 		}
 
 		#region method ShouldRunBwa
@@ -1155,97 +958,6 @@
 		} // ShouldRunBwa
 
 		#endregion method ShouldRunBwa
-
-		#region method CreateBwaResultFromAccountVerificationResults
-
-		private void CreateBwaResultFromAccountVerificationResults(AccountVerificationResults results)
-		{
-			if (!results.HasError)
-			{
-				Log.Info("account status: {0}, name score: {1}, address score: {2}", results.AccountStatus, results.NameScore, results.AddressScore);
-				experianBwaAccountStatus = results.AccountStatus;
-				experianBwaNameScore = results.NameScore;
-				experianBwaAddressScore = results.AddressScore;
-			}
-			else
-				experianBwaError = results.Error;
-		} // CreateBwaResultFromAccountVerificationResults
-
-		#endregion method CreateBwaResultFromAccountVerificationResults
-
-		#region method CreateAmlResultFromAuthenticationReuslts
-
-		private void CreateAmlResultFromAuthenticationReuslts(AuthenticationResults results)
-		{
-			if (!results.HasError)
-			{
-				experianAmlAuthentication = results.AuthenticationIndexType;
-				experianAmlResult = "Passed";
-
-				foreach (var returnedHrp in results.ReturnedHRP)
-				{
-					if (returnedHrp.HighRiskPolRuleID == "U001")
-					{
-						experianAmlWarning += "#2, Mortality||" + CpExperianActionsAmlMortality + ";";
-						experianAmlResult = "Warning";
-					}
-					else if (returnedHrp.HighRiskPolRuleID == "U004")
-					{
-						experianAmlWarning += "#3, Accommodation address||" + CpExperianActionsAmlAccommodationAddress + ";";
-						experianAmlResult = "Warning";
-					}
-					else if (returnedHrp.HighRiskPolRuleID == "U007")
-						experianAmlReject += "#4, Developed Identity;";
-					else if (returnedHrp.HighRiskPolRuleID == "U013")
-					{
-						experianAmlWarning += "#5, Redirection||" + CpExperianActionsAmlRedirection + ";";
-						experianAmlResult = "Warning";
-					}
-					else if (returnedHrp.HighRiskPolRuleID == "U015" || returnedHrp.HighRiskPolRuleID == "U131" ||
-							 returnedHrp.HighRiskPolRuleID == "U133" || returnedHrp.HighRiskPolRuleID == "U135")
-					{
-						experianAmlReject += "#6, Sanctions;";
-						experianAmlResult = "Warning";
-					}
-					else if (returnedHrp.HighRiskPolRuleID == "U018")
-					{
-						experianAmlWarning += "#7, Inconsistencies||" + CpExperianActionsAmlInconsistencies + ";";
-						experianAmlResult = "Warning";
-					}
-					else if (returnedHrp.HighRiskPolRuleID == "U0132" || returnedHrp.HighRiskPolRuleID == "U0134")
-					{
-						experianAmlWarning += "#8, PEP||" + CpExperianActionsAmlpep + ";";
-						experianAmlResult = "Warning";
-					}
-					else if (returnedHrp.HighRiskPolRuleID == "U007")
-					{
-						experianAmlReject += "#4, Developed Identity;";
-						experianAmlResult = "Rejected";
-					}
-					else if (returnedHrp.HighRiskPolRuleID != "U001")
-						experianAmlPassed += "#2, NO Mortality;";
-					else if (returnedHrp.HighRiskPolRuleID != "U004")
-						experianAmlPassed += "#3, NO Accommodation address;";
-					else if (returnedHrp.HighRiskPolRuleID != "U007")
-						experianAmlPassed += "#4, NO Developed Identity;";
-					else if (returnedHrp.HighRiskPolRuleID != "U013")
-						experianAmlPassed += "#5, NO Redirection;";
-					else if (returnedHrp.HighRiskPolRuleID != "U015" || returnedHrp.HighRiskPolRuleID == "U131" ||
-							 returnedHrp.HighRiskPolRuleID == "U133" || returnedHrp.HighRiskPolRuleID == "U135")
-						experianAmlPassed += "#6, NO Sanctions;";
-					else if (returnedHrp.HighRiskPolRuleID != "U018")
-						experianAmlPassed += "#7, NO Inconsistencies;";
-					else if (returnedHrp.HighRiskPolRuleID != "U0132" || returnedHrp.HighRiskPolRuleID == "U0134")
-						experianAmlPassed += "#8, NO PEP;";
-					else if (returnedHrp.HighRiskPolRuleID != "U007")
-						experianAmlPassed += "#4, NO Developed Identity;";
-				} // foreach
-			} // if
-			else
-				experianAmlError = results.Error;
-		} // CreateAmlResultFromAuthenticationReuslts
-
-		#endregion method CreateAmlResultFromAuthenticationReuslts
 		
 		private bool WaitForMarketplacesToFinishUpdates()
 		{
