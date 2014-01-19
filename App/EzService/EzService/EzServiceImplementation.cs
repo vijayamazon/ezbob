@@ -399,6 +399,31 @@
 			return Execute(customerId, null, typeof (ExperianConsumerCheck), customerId, directorId);
 		}
 
+		public ActionMetaData CheckAml(int customerId)
+		{
+			return Execute(customerId, null, typeof(AmlChecker), customerId);
+		}
+
+		public ActionMetaData CheckAmlCustom(int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet,
+		                              string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode)
+		{
+			return Execute(customerId, null, typeof(AmlChecker), customerId, idhubHouseNumber, idhubHouseName, idhubStreet,
+		                              idhubDistrict, idhubTown, idhubCounty, idhubPostCode);
+		}
+
+		public ActionMetaData CheckBwa(int customerId)
+		{
+			return Execute(customerId, null, typeof(BwaChecker), customerId);
+		}
+
+		public ActionMetaData CheckBwaCustom(int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet,
+		                              string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode,
+		                              string idhubBranchCode, string idhubAccountNumber)
+		{
+			return Execute(customerId, null, typeof(BwaChecker), customerId, idhubHouseNumber, idhubHouseName, idhubStreet,
+									  idhubDistrict, idhubTown, idhubCounty, idhubPostCode, idhubBranchCode, idhubAccountNumber);
+		}
+
 		public ActionMetaData MainStrategy1(int underwriterId, int customerId, NewCreditLineOption newCreditLine, int avoidAutoDescison) {
 			return Execute(customerId, underwriterId, typeof(MainStrategy), customerId, newCreditLine, avoidAutoDescison);
 		} // MainStrategy1
@@ -546,7 +571,7 @@
 
 			try
 			{
-				Log.Debug("Executing " + oStrategyType + " started...");
+				Log.Debug("Executing " + oStrategyType + " started in sync...");
 
 				amd = NewSync(oStrategyType.ToString(), comment: string.Join("; ", args), nCustomerID: nCustomerID, nUserID: nUserID);
 
@@ -569,7 +594,7 @@
 				{
 					instance.Execute();
 
-					Log.Debug("Executing " + oStrategyType + " complete.");
+					Log.Debug("Executing " + oStrategyType + " complete in sync.");
 
 					SaveActionStatus(amd, ActionStatus.Done);
 				}
@@ -582,8 +607,6 @@
 				} // try
 
 				SaveActionStatus(amd, ActionStatus.Launched);
-				
-				Log.Debug("Executing " + oStrategyType + " started on another thread.");
 
 				return amd;
 			}

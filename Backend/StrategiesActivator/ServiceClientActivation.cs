@@ -477,7 +477,7 @@
 			int underwriterId;
 			int customerId, avoidAutoDescison;
 			NewCreditLineOption newCreditLineOption;
-			if (int.TryParse(args[1], out underwriterId) && int.TryParse(args[2], out customerId) && Enum.TryParse(args[3], out newCreditLineOption) && int.TryParse(args[4], out avoidAutoDescison))
+			if (args.Length == 5 && int.TryParse(args[1], out underwriterId) && int.TryParse(args[2], out customerId) && Enum.TryParse(args[3], out newCreditLineOption) && int.TryParse(args[4], out avoidAutoDescison))
 			{
 				serviceClient.MainStrategySync1(underwriterId, customerId, newCreditLineOption, avoidAutoDescison);
 				return;
@@ -515,7 +515,7 @@
 		private void CheckExperianConsumer()
 		{
 			int customerId, directorId;
-				
+
 			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !int.TryParse(args[2], out directorId))
 			{
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> CheckExperianConsumer <CustomerId> <DirectorId>");
@@ -523,6 +523,51 @@
 			}
 
 			serviceClient.CheckExperianConsumer(customerId, directorId);
+		}
+
+		[Activation]
+		private void AmlChecker()
+		{
+			int customerId;
+
+			if (args.Length == 2  && int.TryParse(args[1], out customerId))
+			{
+				serviceClient.CheckAml(customerId);
+				return;
+			}
+
+			if (args.Length == 9 && int.TryParse(args[1], out customerId))
+			{
+				serviceClient.CheckAmlCustom(customerId, args[2], args[3], args[4], args[5], args[6], args[7], args[8]);
+				return;
+			}
+
+			Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> AmlChecker <CustomerId>");
+			Console.WriteLine("OR");
+			Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> AmlChecker <CustomerId> <idhubHouseNumber> <idhubHouseName> <idhubStreet> <idhubDistrict> <idhubTown> <idhubCounty> <idhubPostCode>");
+
+		}
+
+		[Activation]
+		private void BwaChecker()
+		{
+			int customerId;
+
+			if (args.Length == 2 && int.TryParse(args[1], out customerId))
+			{
+				serviceClient.CheckBwa(customerId);
+				return;
+			}
+
+			if (args.Length == 11 && int.TryParse(args[1], out customerId))
+			{
+				serviceClient.CheckBwaCustom(customerId, args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10]);
+				return;
+			}
+
+			Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> BwaChecker <CustomerId>");
+			Console.WriteLine("OR");
+			Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> BwaChecker <CustomerId> <idhubHouseNumber> <idhubHouseName> <idhubStreet> <idhubDistrict> <idhubTown> <idhubCounty> <idhubPostCode> <idhubBranchCode> <idhubAccountNumber>");
 		}
 		// ReSharper restore UnusedMember.Local
 

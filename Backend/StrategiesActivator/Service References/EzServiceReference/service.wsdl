@@ -315,6 +315,30 @@
   <wsdl:message name="IEzService_CheckExperianConsumer_OutputMessage">
     <wsdl:part name="parameters" element="tns:CheckExperianConsumerResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_CheckAml_InputMessage">
+    <wsdl:part name="parameters" element="tns:CheckAml" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CheckAml_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CheckAmlResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CheckAmlCustom_InputMessage">
+    <wsdl:part name="parameters" element="tns:CheckAmlCustom" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CheckAmlCustom_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CheckAmlCustomResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CheckBwa_InputMessage">
+    <wsdl:part name="parameters" element="tns:CheckBwa" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CheckBwa_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CheckBwaResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CheckBwaCustom_InputMessage">
+    <wsdl:part name="parameters" element="tns:CheckBwaCustom" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CheckBwaCustom_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CheckBwaCustomResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_MainStrategy1_InputMessage">
     <wsdl:part name="parameters" element="tns:MainStrategy1" />
   </wsdl:message>
@@ -525,6 +549,22 @@
     <wsdl:operation name="CheckExperianConsumer">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CheckExperianConsumer" message="tns:IEzService_CheckExperianConsumer_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CheckExperianConsumerResponse" message="tns:IEzService_CheckExperianConsumer_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CheckAml">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CheckAml" message="tns:IEzService_CheckAml_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CheckAmlResponse" message="tns:IEzService_CheckAml_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CheckAmlCustom">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CheckAmlCustom" message="tns:IEzService_CheckAmlCustom_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CheckAmlCustomResponse" message="tns:IEzService_CheckAmlCustom_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CheckBwa">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CheckBwa" message="tns:IEzService_CheckBwa_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CheckBwaResponse" message="tns:IEzService_CheckBwa_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CheckBwaCustom">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CheckBwaCustom" message="tns:IEzService_CheckBwaCustom_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CheckBwaCustomResponse" message="tns:IEzService_CheckBwaCustom_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="MainStrategy1">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MainStrategy1" message="tns:IEzService_MainStrategy1_InputMessage" />
@@ -921,6 +961,42 @@
     </wsdl:operation>
     <wsdl:operation name="CheckExperianConsumer">
       <soap12:operation soapAction="http://tempuri.org/IEzService/CheckExperianConsumer" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CheckAml">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/CheckAml" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CheckAmlCustom">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/CheckAmlCustom" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CheckBwa">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/CheckBwa" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CheckBwaCustom">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/CheckBwaCustom" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

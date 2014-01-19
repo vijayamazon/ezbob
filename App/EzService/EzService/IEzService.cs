@@ -114,6 +114,18 @@ namespace EzService {
 		ActionMetaData CheckExperianConsumer(int customerId, int directorId);
 
 		[OperationContract]
+		ActionMetaData CheckAml(int customerId);
+
+		[OperationContract]
+		ActionMetaData CheckAmlCustom(int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet, string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode);
+
+		[OperationContract]
+		ActionMetaData CheckBwa(int customerId);
+
+		[OperationContract]
+		ActionMetaData CheckBwaCustom(int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet, string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode, string idhubBranchCode, string idhubAccountNumber);
+
+		[OperationContract]
 		ActionMetaData MainStrategy1(int uderwriterId, int customerId, NewCreditLineOption newCreditLine, int avoidAutoDescison);
 
 		[OperationContract]
