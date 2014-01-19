@@ -5,26 +5,23 @@
 	using Models;
 	using NHibernate;
 	using Scorto.Web;
+	using StructureMap;
 
 	public class CustomerInfoController : Controller
 	{
-		private readonly ICustomerRepository _customers;
-		private readonly ISession _session;
-
-		public CustomerInfoController(ICustomerRepository customers, ISession session)
-		{
-			_customers = customers;
-			_session = session;
-		}
-
 		[Ajax]
 		[HttpGet]
 		[Transactional]
 		public JsonNetResult Index(int id)
 		{
-			var customer = _customers.Get(id);
+			var newSession = ObjectFactory.GetInstance<ISession>();
+			newSession.Clear();
+			newSession.CacheMode = CacheMode.Ignore;
+
+			var newCustomers = new CustomerRepository(newSession);
+			var customer = newCustomers.Get(id);
 			var model = new PersonalInfoModel();
-			model.InitFromCustomer(customer, _session);
+			model.InitFromCustomer(customer, newSession);
 			return this.JsonNet(model);
 		}
 	}
