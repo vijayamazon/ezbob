@@ -26,6 +26,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         "click [name='editDetails']"                        : "editDetails"
         "click [name='setupFeeEditButton']"                 : "editSetupFee"
         "click [name='brokerSetupFeeEditButton']"           : "editBrokerSetupFee"
+        "click [name='manualSetupFeeEditButton']"           : "editManualSetupFee"
         "click [name='newCreditLineBtn']"                   : "runNewCreditLine"
         'click [name="allowSendingEmail"]'                  : 'allowSendingEmail'
         'click [name="loanType"]'                           : 'loanType'
@@ -172,7 +173,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         d = new EzBob.Dialogs.CheckBoxEdit(
             model: @model
             propertyName: "UseSetupFee"
-            title: "Setup Fee"
+            title: "Setup fee"
             width: 400
             postValueName: "enbaled"
             checkboxName: "Enable Setup Fee"
@@ -196,6 +197,9 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
                 id: @model.get("CashRequestId")
         )
         d.render()
+        return
+    editManualSetupFee: ->
+        console.log('todo')
         return
 
     runNewCreditLine: (e) ->

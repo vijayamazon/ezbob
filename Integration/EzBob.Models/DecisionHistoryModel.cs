@@ -14,6 +14,8 @@ namespace EzBob.Web.Areas.Underwriter.Models
 
 		public bool UseSetupFee { get; set; }
 		public bool UseBrokerSetupFee { get; set; }
+		public int? ManualSetupFeeAmount { get; set; }
+		public decimal? ManualSetupFeePercent { get; set; }
 		public decimal InterestRate { get; set; }
 		public int RepaymentPeriod { get; set; }
 		public decimal ApprovedSum { get; set; }
@@ -44,6 +46,8 @@ namespace EzBob.Web.Areas.Underwriter.Models
 				dm.RepaymentPeriod = _repaymentCalculator.ReCalculateRepaymentPeriod(item.CashRequest);
 				dm.InterestRate = item.CashRequest.InterestRate;
 				dm.UseSetupFee = item.CashRequest.UseSetupFee;
+				dm.ManualSetupFeeAmount = item.CashRequest.ManualSetupFeeAmount;
+				dm.ManualSetupFeePercent = item.CashRequest.ManualSetupFeePercent;
 				dm.UseBrokerSetupFee = item.CashRequest.UseBrokerSetupFee;
 				dm.ApprovedSum = item.CashRequest.ApprovedSum();
 				dm.IsLoanTypeSelectionAllowed = item.CashRequest.IsLoanTypeSelectionAllowed;

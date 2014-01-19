@@ -160,8 +160,11 @@
         </td>
         <td>
             We charge a set-up fee equal to
-            {{#IsBrokerFee}} {{SetupFee}} {{/IsBrokerFee}}
-            {{^IsBrokerFee}}{{SetupFeePercent}}% of the loan amount (but in no case less than {{SetupFeeAmount}}){{/IsBrokerFee}}
+            {{#IsManualSetupFee}} {{ManualSetupFee}} {{/IsManualSetupFee}}
+            {{^IsManualSetupFee}}
+                {{#IsBrokerFee}} {{SetupFee}} {{/IsBrokerFee}}
+                {{^IsBrokerFee}} {{SetupFeePercent}}% of the loan amount (but in no case less than {{SetupFeeAmount}}){{/IsBrokerFee}}
+            {{/IsManualSetupFee}}
              and this is deducted from the loan amount actually deposited in your bank account;
              we charge you interest on the entire loan amount (including the set-up fee).
         </td>

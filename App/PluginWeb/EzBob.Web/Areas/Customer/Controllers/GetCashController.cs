@@ -71,7 +71,7 @@
 
 			DateTime lastDateOfPayment = DateTime.UtcNow.AddMonths(cr.RepaymentPeriod);
 
-			var fee = (new SetupFeeCalculator(cr.UseSetupFee, cr.UseBrokerSetupFee)).Calculate(loan_amount);
+			var fee = (new SetupFeeCalculator(cr.UseSetupFee, cr.UseBrokerSetupFee, cr.ManualSetupFeeAmount, cr.ManualSetupFeePercent)).Calculate(loan_amount);
 
 			string callback = Url.Action("PayPointCallback", "GetCash",
 										 new

@@ -137,9 +137,12 @@
         <dl>
             <dd><p  style="text-align: justify; margin-left: 90px;" >
                     (a) A set-up fee of 
-                    {{#IsBrokerFee}} {{SetupFee}} {{/IsBrokerFee}}
-                    {{^IsBrokerFee}}{{SetupFeePercent}}% of the loan amount (but not less than {{SetupFeeAmount}}){{/IsBrokerFee}} and this will
-                    be deducted from the loan amount deposited in your account and interest will be charged on the loan amount (including the set-up fee); and</p></dd>
+                    {{#IsManualSetupFee}} {{ManualSetupFee}} {{/IsManualSetupFee}}
+                    {{^IsManualSetupFee}}
+                        {{#IsBrokerFee}} {{SetupFee}} {{/IsBrokerFee}}
+                        {{^IsBrokerFee}}{{SetupFeePercent}}% of the loan amount (but not less than {{SetupFeeAmount}}){{/IsBrokerFee}}
+                    {{/IsManualSetupFee}}
+                    and this will be deducted from the loan amount deposited in your account and interest will be charged on the loan amount (including the set-up fee); and</p></dd>
             <dd><p  style="text-align: justify; margin-left: 90px;" >
                 (b) any expenses incurred by the Creditor in enforcing or preserving its rights
                 under this Agreement and the Security with interest thereon at the rate applicable

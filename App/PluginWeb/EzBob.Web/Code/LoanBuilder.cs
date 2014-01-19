@@ -25,7 +25,7 @@ namespace EzBob.Web.Code
 
 		private static Loan CreateNewLoan(CashRequest cr, decimal amount, DateTime now, int interestOnlyTerm = 0)
 		{
-			var sfc = new SetupFeeCalculator(cr.UseSetupFee, cr.UseBrokerSetupFee);
+			var sfc = new SetupFeeCalculator(cr.UseSetupFee, cr.UseBrokerSetupFee, cr.ManualSetupFeeAmount, cr.ManualSetupFeePercent);
 			var setupFee = sfc.Calculate(amount);
 
 			var calculator = new LoanScheduleCalculator { Interest = cr.InterestRate, Term = cr.RepaymentPeriod };

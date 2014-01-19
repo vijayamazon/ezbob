@@ -49,6 +49,8 @@ namespace EzBob.Web.Areas.Customer.Models
 		public bool IsBrokerFee { get; set; }
 		public string SetupFeeAmount { get; set; }
 		public string SetupFeePercent { get; set; }
+		public bool IsManualSetupFee { get; set; }
+		public string ManualSetupFee { get; set; }
         public  int Term;
 
         public CustomerModel  Customer  { get; set; }

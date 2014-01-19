@@ -63,7 +63,7 @@
 
 			var cr = cus.LastCashRequest;
 
-			var calculator = new SetupFeeCalculator(cr.UseSetupFee, cr.UseBrokerSetupFee);
+			var calculator = new SetupFeeCalculator(cr.UseSetupFee, cr.UseBrokerSetupFee, cr.ManualSetupFeeAmount, cr.ManualSetupFeePercent);
 			var fee = calculator.Calculate(loanAmount);
 
 

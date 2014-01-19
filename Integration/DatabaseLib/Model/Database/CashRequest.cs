@@ -53,6 +53,10 @@ namespace EZBob.DatabaseLib.Model.Database
         }
 
 		public virtual bool UseBrokerSetupFee { get; set; }
+		
+		public virtual int? ManualSetupFeeAmount { get; set; }
+		public virtual decimal? ManualSetupFeePercent { get; set; }
+
 	    public virtual bool IsSure { get; set; }
 
         public virtual decimal ApprovedSum()

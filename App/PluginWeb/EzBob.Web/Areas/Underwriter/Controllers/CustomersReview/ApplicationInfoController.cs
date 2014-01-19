@@ -282,6 +282,16 @@
 			Log.DebugFormat("CashRequest({0}).UseBrokerSetupFee = {1}", id, enbaled);
 		}
 
+		[HttpPost, Transactional, ValidateJsonAntiForgeryToken, Ajax, Permission(Name = "CreditLineFields")]
+		public void ChangeManualSetupFee(long id, int? manualAmount, decimal? manualPercent)
+		{
+			var cr = _cashRequestsRepository.Get(id);
+			cr.ManualSetupFeeAmount = manualAmount;
+			cr.ManualSetupFeePercent = manualPercent;
+			cr.LoanTemplate = null;
+			Log.DebugFormat("CashRequest({0}).ManualSetupFee amount: {1} percent: {2}", id, manualAmount, manualPercent);
+		}
+
 		[HttpPost]
 		[Transactional]
 		[ValidateJsonAntiForgeryToken]
@@ -490,7 +500,8 @@
 		}
 		
 		[HttpPost, Transactional, Ajax, ValidateJsonAntiForgeryToken]
-		public JsonNetResult ChangeCreditLine(long id, int loanType, double amount, decimal interestRate, int repaymentPeriod, string offerStart, string offerValidUntil, bool useSetupFee, bool useBrokerSetupFee, bool allowSendingEmail, int isLoanTypeSelectionAllowed, int discountPlan) {
+		public JsonNetResult ChangeCreditLine(long id, int loanType, double amount, decimal interestRate, int repaymentPeriod, string offerStart, string offerValidUntil, bool useSetupFee, bool useBrokerSetupFee, bool allowSendingEmail, int isLoanTypeSelectionAllowed, int discountPlan, int? manualSetupFeeAmount, decimal? manualSetupFeePercent)
+		{
 			var cr = _cashRequestsRepository.Get(id);
 			var loanT = _loanTypes.Get(loanType);
 			cr.LoanType = loanT;
@@ -502,6 +513,9 @@
 
 			cr.UseSetupFee = useSetupFee;
 			cr.UseBrokerSetupFee = useBrokerSetupFee;
+			cr.ManualSetupFeeAmount = manualSetupFeeAmount;
+			cr.ManualSetupFeePercent = manualSetupFeePercent;
+
 			cr.EmailSendingBanned = !allowSendingEmail;
 			cr.LoanTemplate = null;
 			cr.IsLoanTypeSelectionAllowed = isLoanTypeSelectionAllowed;

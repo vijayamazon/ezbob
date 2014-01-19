@@ -13,7 +13,9 @@
 
 		private readonly bool _setupFee;
 		private readonly bool _brokerFee;
-		public SetupFeeCalculator(bool setupFee, bool brokerFee)
+		private readonly int? _manualAmount;
+		private readonly decimal? _manualPercent;
+		public SetupFeeCalculator(bool setupFee, bool brokerFee, int? manualAmount, decimal? manualPercent)
 		{
 			var configVariables = ObjectFactory.TryGetInstance<IConfigurationVariablesRepository>();
 
@@ -22,10 +24,18 @@
 			_useMax = configVariables.GetByNameAsBool("SetupFeeMaxFixedPercent");
 			_setupFee = setupFee;
 			_brokerFee = brokerFee;
+			_manualAmount = manualAmount;
+			_manualPercent = manualPercent;
 		}
 
 		public decimal Calculate(decimal amount)
 		{
+			if (_manualAmount.HasValue || _manualPercent.HasValue)
+			{
+				return Math.Max(Math.Floor(amount*(_manualPercent.HasValue ? _manualPercent.Value : 0M)*0.01M),
+				                _manualAmount.HasValue ? _manualAmount.Value : 0);
+			}
+
 			if (_brokerFee)
 			{
 				return CalculateBroker(amount);
@@ -47,5 +57,7 @@
 			var brokerFeeRepository = ObjectFactory.GetInstance<BrokerSetupFeeMapRepository>();
 			return brokerFeeRepository.GetFee((int)amount);
 		}
+
+		
 	}
 }

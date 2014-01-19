@@ -89,7 +89,9 @@ namespace EzBob.Web.Code.Agreements
 			var configVariables = ObjectFactory.TryGetInstance<IConfigurationVariablesRepository>();
 			model.SetupFeeAmount = FormattingUtils.NumericFormats(configVariables.GetByNameAsInt("SetupFeeFixed"));
 			model.SetupFeePercent = configVariables.GetByName("SetupFeePercent").Value;
-
+			bool isManualSetupFee;
+			model.ManualSetupFee = SetupFeeText(loan.CashRequest.ManualSetupFeeAmount, loan.CashRequest.ManualSetupFeePercent, out isManualSetupFee);
+			model.IsManualSetupFee = isManualSetupFee;
 			model.APR = apr;
 
 			var start = loan.Schedule.First().Date.AddMonths(-1);
@@ -115,6 +117,27 @@ namespace EzBob.Web.Code.Agreements
 
 			model.TotalPrincipalWithSetupFee = FormattingUtils.NumericFormats(loan.Schedule.Sum(a => a.LoanRepayment) - loan.SetupFee);
 			return model;
+		}
+
+		private string SetupFeeText(int? amount, decimal? percent, out bool isManualSetupFee)
+		{
+			isManualSetupFee = true;
+			if (amount.HasValue && percent.HasValue)
+			{
+				return string.Format("{1}% of the loan amount (but in no case less than {0})", FormattingUtils.NumericFormats(amount.Value), percent.Value);
+			}
+
+			if (amount.HasValue)
+			{
+				return string.Format("{0}", FormattingUtils.NumericFormats(amount.Value));
+			}
+
+			if (percent.HasValue)
+			{
+				return string.Format("{0}% of the loan amount", percent.Value);
+			}
+			isManualSetupFee = false;
+			return null;
 		}
 
 		private IList<FormattedSchedule> CreateSchedule(IEnumerable<LoanScheduleItem> schedule)
