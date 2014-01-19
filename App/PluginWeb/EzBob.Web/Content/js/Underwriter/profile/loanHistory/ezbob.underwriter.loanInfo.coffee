@@ -26,7 +26,8 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         "click [name='editDetails']"                        : "editDetails"
         "click [name='setupFeeEditButton']"                 : "editSetupFee"
         "click [name='brokerSetupFeeEditButton']"           : "editBrokerSetupFee"
-        "click [name='manualSetupFeeEditButton']"           : "editManualSetupFee"
+        "click [name='manualSetupFeeEditAmountButton']"           : "editManualSetupFeeAmount"
+        "click [name='manualSetupFeeEditPercentButton']"           : "editManualSetupFeePercent"
         "click [name='newCreditLineBtn']"                   : "runNewCreditLine"
         'click [name="allowSendingEmail"]'                  : 'allowSendingEmail'
         'click [name="loanType"]'                           : 'loanType'
@@ -198,8 +199,32 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         )
         d.render()
         return
-    editManualSetupFee: ->
-        console.log('todo')
+    editManualSetupFeeAmount: ->
+        d = new EzBob.Dialogs.IntegerEdit(
+            model: @model
+            propertyName: "ManualSetupFeeAmount"
+            title: "Manual setup fee amount edit"
+            width: 400
+            postValueName: "manualAmount"
+            url: "Underwriter/ApplicationInfo/ChangeManualSetupFeeAmount"
+            data:
+                id: @model.get("CashRequestId")
+        )
+        d.render()
+        return
+
+    editManualSetupFeePercent: ->
+        d = new EzBob.Dialogs.PercentsEdit(
+            model: @model
+            propertyName: "ManualSetupFeePercent"
+            title: "Manual setup fee percent edit"
+            width: 400
+            postValueName: "manualPercent"
+            url: "Underwriter/ApplicationInfo/ChangeManualSetupFeePercent"
+            data:
+                id: @model.get("CashRequestId")
+        )
+        d.render()
         return
 
     runNewCreditLine: (e) ->

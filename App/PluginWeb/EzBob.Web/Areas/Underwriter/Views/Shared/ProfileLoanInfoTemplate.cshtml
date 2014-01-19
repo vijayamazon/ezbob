@@ -195,21 +195,27 @@
                     "Interest Rate",
                     "<%- EzBob.formatPercents(m.InterestRate) %>",
                     sRawHtmlUnder: "<div class=\"hide red interest-exceeds-max-by-loan-source\">Interest rate exceeds max rate for this loan source.</div>"
-                    )
+				     )
             <%}%>
-	
-			<%if(m.Editable){%>
-				@RawCellWithButtonNear("Enable setup fee:", "<%= m.UseSetupFee ? 'Yes' : 'No' %>", "setupFeeEditButton")
+            <%if(m.Editable){%>
+            @RawCellWithButtonNear("Enable setup fee:", "<%= m.UseSetupFee ? 'Yes' : 'No' %>", "setupFeeEditButton")
             @RawCellWithButtonNear("Enable broker commission:", "<%= m.UseBrokerSetupFee ? 'Yes' : 'No' %>", "brokerSetupFeeEditButton")
-            @RawCellWithButtonNear("Manual setup fee:", "£ <%= m.ManualSetupFeeAmount %> | <%= m.ManualSetupFeeAmount %> %", "manualSetupFeeEditButton")
             <%} else{%>
-				@RawCell("Setup fee:", "<%= m.UseSetupFee ? 'Enabled' : 'Disabled' %>")
+            @RawCell("Setup fee:", "<%= m.UseSetupFee ? 'Enabled' : 'Disabled' %>")
             @RawCell("Broker commission:", "<%= m.UseBrokerSetupFee ? 'Enabled' : 'Disabled' %>")
-            @RawCell("Manual setup fee:", "£ <%= m.ManualSetupFeeAmount %> | <%= m.ManualSetupFeeAmount %> %")
             <%}%>
-	
-			<tr>
-                <td class="<%- m.FundsAvailableUnderLimitClass %>">Funds avaliable</td>
+    
+            <tr>
+                <td>Manual setup fee:</td>
+                <td>
+                    <span>£ <%= m.ManualSetupFeeAmount %> | <%= m.ManualSetupFeePercent ? EzBob.formatPercents(m.ManualSetupFeePercent) : '%' %></span>
+                    <button class="btn btn-mini btn-primary couple_buttons" name="manualSetupFeeEditAmountButton"><i class="fa fa-gbp"></i></button>
+                    <button class="btn btn-mini btn-primary couple_buttons" name="manualSetupFeeEditPercentButton">%</button>
+                </td>
+            </tr>
+
+            <tr>
+                <td class="<%- m.FundsAvailableUnderLimitClass %>">Funds available:</td>
                 <td class="<%- m.FundsAvailableUnderLimitClass %>">
                     <span>£ <%- m.FundsAvaliable %></span>
                     <button class="btn btn-mini btn-primary couple_buttons" name="openPacnetManualButton"><i class="fa fa-plus"></i></button>

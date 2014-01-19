@@ -112,6 +112,8 @@
         offerValidUntil: m.OfferValidateUntil,
         useSetupFee: m.UseSetupFee,
         useBrokerSetupFee: m.UseBrokerSetupFee,
+        manualSetupFeeAmount: m.ManualSetupFeeAmount,
+        manualSetupFeePercent: m.ManualSetupFeePercent,
         allowSendingEmail: m.AllowSendingEmail,
         isLoanTypeSelectionAllowed: m.IsLoanTypeSelectionAllowed
       };
@@ -149,6 +151,13 @@
       LoanTypeId: "select[name='loan-type']",
       amount: {
         selector: "#offeredCreditLine",
+        converter: EzBob.BindingConverters.moneyFormat
+      },
+      ManualSetupFeePercent: {
+        selector: "input[name='manualSetupFeePercent']"
+      },
+      ManualSetupFeeAmount: {
+        selector: "input[name='manualSetupFeeAmount']",
         converter: EzBob.BindingConverters.moneyFormat
       }
     };
@@ -192,6 +201,14 @@
           offerValidUntil: {
             required: true,
             dateCheck: true
+          },
+          manualSetupFeeAmount: {
+            autonumericMin: 0,
+            required: false
+          },
+          manualSetupFeePercent: {
+            autonumericMin: 0,
+            required: false
           }
         },
         messages: {
@@ -207,6 +224,12 @@
           },
           offerValidUntil: {
             dateCheck: "Incorrect Date, please insert date in format DD/MM/YYYY, for example 21/06/2012"
+          },
+          manualSetupFeeAmount: {
+            autonumericMin: "Can't be negative."
+          },
+          manualSetupFeePercent: {
+            autonumericMin: "Can't be negative."
           }
         },
         errorPlacement: EzBob.Validation.errorPlacement,

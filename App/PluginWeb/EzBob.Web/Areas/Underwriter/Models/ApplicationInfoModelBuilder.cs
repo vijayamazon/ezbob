@@ -57,7 +57,12 @@ namespace EzBob.Web.Areas.Underwriter.Models
             {
                 model.InterestRate = cr.InterestRate;
                 model.CashRequestId = cr.Id;
-                model.UseSetupFee = cr.UseSetupFee;
+                
+				model.UseSetupFee = cr.UseSetupFee;
+				model.UseBrokerSetupFee = cr.UseBrokerSetupFee;
+				model.ManualSetupFeeAmount = cr.ManualSetupFeeAmount;
+				model.ManualSetupFeePercent = cr.ManualSetupFeePercent;
+
                 model.AllowSendingEmail = !cr.EmailSendingBanned;
 
                 var loanType = cr.LoanType ?? _loanTypes.GetDefault();

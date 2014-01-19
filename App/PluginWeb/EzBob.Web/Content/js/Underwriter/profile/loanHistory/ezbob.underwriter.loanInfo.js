@@ -43,7 +43,8 @@
       "click [name='editDetails']": "editDetails",
       "click [name='setupFeeEditButton']": "editSetupFee",
       "click [name='brokerSetupFeeEditButton']": "editBrokerSetupFee",
-      "click [name='manualSetupFeeEditButton']": "editManualSetupFee",
+      "click [name='manualSetupFeeEditAmountButton']": "editManualSetupFeeAmount",
+      "click [name='manualSetupFeeEditPercentButton']": "editManualSetupFeePercent",
       "click [name='newCreditLineBtn']": "runNewCreditLine",
       'click [name="allowSendingEmail"]': 'allowSendingEmail',
       'click [name="loanType"]': 'loanType',
@@ -234,8 +235,36 @@
       d.render();
     };
 
-    LoanInfoView.prototype.editManualSetupFee = function() {
-      console.log('todo');
+    LoanInfoView.prototype.editManualSetupFeeAmount = function() {
+      var d;
+      d = new EzBob.Dialogs.IntegerEdit({
+        model: this.model,
+        propertyName: "ManualSetupFeeAmount",
+        title: "Manual setup fee amount edit",
+        width: 400,
+        postValueName: "manualAmount",
+        url: "Underwriter/ApplicationInfo/ChangeManualSetupFeeAmount",
+        data: {
+          id: this.model.get("CashRequestId")
+        }
+      });
+      d.render();
+    };
+
+    LoanInfoView.prototype.editManualSetupFeePercent = function() {
+      var d;
+      d = new EzBob.Dialogs.PercentsEdit({
+        model: this.model,
+        propertyName: "ManualSetupFeePercent",
+        title: "Manual setup fee percent edit",
+        width: 400,
+        postValueName: "manualPercent",
+        url: "Underwriter/ApplicationInfo/ChangeManualSetupFeePercent",
+        data: {
+          id: this.model.get("CashRequestId")
+        }
+      });
+      d.render();
     };
 
     LoanInfoView.prototype.runNewCreditLine = function(e) {

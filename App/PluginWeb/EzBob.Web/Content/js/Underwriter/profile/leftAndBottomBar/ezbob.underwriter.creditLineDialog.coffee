@@ -54,8 +54,8 @@ class EzBob.Underwriter.CreditLineDialog extends Backbone.Marionette.ItemView
 
     save:-> 
         return unless @ui.form.valid()
+        
         postData = @getPostData()
-
         action = "#{window.gRootPath}Underwriter/ApplicationInfo/ChangeCreditLine"
         post = $.post action, postData
         post.done => @model.fetch()
@@ -74,13 +74,13 @@ class EzBob.Underwriter.CreditLineDialog extends Backbone.Marionette.ItemView
             offerValidUntil             : m.OfferValidateUntil
             useSetupFee                 : m.UseSetupFee
             useBrokerSetupFee           : m.UseBrokerSetupFee
+            manualSetupFeeAmount        : m.ManualSetupFeeAmount
+            manualSetupFeePercent       : m.ManualSetupFeePercent
             allowSendingEmail           : m.AllowSendingEmail
             isLoanTypeSelectionAllowed  : m.IsLoanTypeSelectionAllowed
         return data
             
     bindings:
-       # OfferedCreditLine:
-        #    selector: "input[name='offeredCreditLine']"
         InterestRate:
             selector: "input[name='interestRate']"
             converter: EzBob.BindingConverters.percentsFormat
@@ -103,6 +103,11 @@ class EzBob.Underwriter.CreditLineDialog extends Backbone.Marionette.ItemView
         LoanTypeId: "select[name='loan-type']"
         amount:
             selector: "#offeredCreditLine"
+            converter: EzBob.BindingConverters.moneyFormat
+        ManualSetupFeePercent:
+            selector: "input[name='manualSetupFeePercent']"
+        ManualSetupFeeAmount:
+            selector: "input[name='manualSetupFeeAmount']"
             converter: EzBob.BindingConverters.moneyFormat
 
 
@@ -141,17 +146,29 @@ class EzBob.Underwriter.CreditLineDialog extends Backbone.Marionette.ItemView
                 offerValidUntil:
                     required:true
                     dateCheck: true
+                
+                manualSetupFeeAmount:
+                    autonumericMin: 0
+                    required: false
+                manualSetupFeePercent:
+                    autonumericMin: 0
+                    required: false
+
+
              messages:
                 interestRate:
                     autonumericMin: "Interest Rate is below limit."
                     autonumericMax: "Interest Rate is above limit."
                 repaymentPeriod:
                     autonumericMin: "Repayment Period is below limit."
-
                 startingFromDate:
                     dateCheck:"Incorrect Date, please insert date in format DD/MM/YYYY, for example 21/06/2012"
                 offerValidUntil:
                     dateCheck: "Incorrect Date, please insert date in format DD/MM/YYYY, for example 21/06/2012"
+                manualSetupFeeAmount:
+                    autonumericMin: "Can't be negative."
+                manualSetupFeePercent:
+                    autonumericMin: "Can't be negative."
 
             errorPlacement: EzBob.Validation.errorPlacement,
             unhighlight: EzBob.Validation.unhighlight

@@ -283,14 +283,23 @@
 		}
 
 		[HttpPost, Transactional, ValidateJsonAntiForgeryToken, Ajax, Permission(Name = "CreditLineFields")]
-		public void ChangeManualSetupFee(long id, int? manualAmount, decimal? manualPercent)
+		public void ChangeManualSetupFeePercent(long id, decimal? manualPercent)
+		{
+			var cr = _cashRequestsRepository.Get(id);
+			cr.ManualSetupFeePercent = manualPercent / 100;
+			cr.LoanTemplate = null;
+			Log.DebugFormat("CashRequest({0}).ManualSetupFee percent: {1}", id, cr.ManualSetupFeePercent);
+		}
+
+		[HttpPost, Transactional, ValidateJsonAntiForgeryToken, Ajax, Permission(Name = "CreditLineFields")]
+		public void ChangeManualSetupFeeAmount(long id, int? manualAmount)
 		{
 			var cr = _cashRequestsRepository.Get(id);
 			cr.ManualSetupFeeAmount = manualAmount;
-			cr.ManualSetupFeePercent = manualPercent;
 			cr.LoanTemplate = null;
-			Log.DebugFormat("CashRequest({0}).ManualSetupFee amount: {1} percent: {2}", id, manualAmount, manualPercent);
+			Log.DebugFormat("CashRequest({0}).ManualSetupFee amount: {1}", id, manualAmount);
 		}
+
 
 		[HttpPost]
 		[Transactional]
@@ -514,7 +523,7 @@
 			cr.UseSetupFee = useSetupFee;
 			cr.UseBrokerSetupFee = useBrokerSetupFee;
 			cr.ManualSetupFeeAmount = manualSetupFeeAmount;
-			cr.ManualSetupFeePercent = manualSetupFeePercent;
+			cr.ManualSetupFeePercent = (manualSetupFeeAmount != null && manualSetupFeePercent.HasValue && manualSetupFeeAmount.Value > 0M) ? manualSetupFeeAmount.Value : (decimal?)null;
 
 			cr.EmailSendingBanned = !allowSendingEmail;
 			cr.LoanTemplate = null;

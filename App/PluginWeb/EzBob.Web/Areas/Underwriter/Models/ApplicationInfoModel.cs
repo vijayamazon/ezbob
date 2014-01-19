@@ -23,6 +23,10 @@ namespace EzBob.Web.Areas.Underwriter.Models
         public bool Editable { get; set; }
         public long CashRequestId { get; set; }
         public bool UseSetupFee { get; set; }
+		public bool UseBrokerSetupFee { get; set; }
+		public int? ManualSetupFeeAmount { get; set; }
+		public decimal? ManualSetupFeePercent { get; set; }
+
         public decimal SetupFee { get; set; }
         public bool IsTest { get; set; }
 
