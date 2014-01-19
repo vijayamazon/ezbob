@@ -2228,43 +2228,49 @@ namespace EZBob.DatabaseLib
 			}
 
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
-
-			var accountData = new MP_EbayUserAccountData
+			try
 			{
-				CustomerMarketPlace = customerMarketPlace,
-				Created = data.SubmittedDate.ToUniversalTime(),
-				Currency = data.Currency,
-				Id = 0,
-				PaymentMethod = data.PaymentMethod,
-				AccountId = data.AccountId,
-				AccountState = data.AccountState,
-				AmountPastDueValue = data.AmountPastDueValue,
-				BankAccountInfo = data.BankAccountInfo,
-				BankModifyDate = data.BankModifyDate,
-				CreditCardExpiration = data.CreditCardExpiration,
-				CreditCardInfo = data.CreditCardInfo,
-				CreditCardModifyDate = data.CreditCardModifyDate,
-				CurrentBalance = data.CurrentBalance,
-				PastDue = data.PastDue,
-				HistoryRecord = historyRecord
-			};
+				var accountData = new MP_EbayUserAccountData
+					{
+						CustomerMarketPlace = customerMarketPlace,
+						Created = data.SubmittedDate.ToUniversalTime(),
+						Currency = data.Currency,
+						Id = 0,
+						PaymentMethod = data.PaymentMethod,
+						AccountId = data.AccountId,
+						AccountState = data.AccountState,
+						AmountPastDueValue = data.AmountPastDueValue,
+						BankAccountInfo = data.BankAccountInfo,
+						BankModifyDate = data.BankModifyDate,
+						CreditCardExpiration = data.CreditCardExpiration,
+						CreditCardInfo = data.CreditCardInfo,
+						CreditCardModifyDate = data.CreditCardModifyDate,
+						CurrentBalance = data.CurrentBalance,
+						PastDue = data.PastDue,
+						HistoryRecord = historyRecord
+					};
 
-			if (data.AdditionalAccount != null && data.AdditionalAccount.Length > 0)
-			{
-				data.AdditionalAccount.ForEach(
+				if (data.AdditionalAccount != null && data.AdditionalAccount.Length > 0)
+				{
+					data.AdditionalAccount.ForEach(
 						a => accountData.EbayUserAdditionalAccountData.Add(
 							new MP_EbayUserAdditionalAccountData
-							{
-								Currency = a.Currency,
-								AccountCode = a.AccountCode,
-								Balance = a.Balance.Value,
-								EbayUserAccountData = accountData
-							}));
+								{
+									Currency = a.Currency,
+									AccountCode = a.AccountCode,
+									Balance = a.Balance.Value,
+									EbayUserAccountData = accountData
+								}));
+				}
+
+				customerMarketPlace.EbayUserAccountData.Add(accountData);
+
+				_CustomerMarketplaceRepository.Update(customerMarketPlace);
 			}
-
-			customerMarketPlace.EbayUserAccountData.Add(accountData);
-
-			_CustomerMarketplaceRepository.Update(customerMarketPlace);
+			catch (Exception ex)
+			{
+				WriteToLog("StoreEbayUserData: failed to store data", WriteLogType.Error, ex);
+			}
 		}
 
 		public void StoreEbayFeedbackData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, DatabaseEbayFeedbackData data, MP_CustomerMarketplaceUpdatingHistory historyRecord)

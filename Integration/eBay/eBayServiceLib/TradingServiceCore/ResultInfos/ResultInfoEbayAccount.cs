@@ -27,7 +27,7 @@ namespace EzBob.eBayServiceLib.TradingServiceCore.ResultInfos
 			get { return _response.AccountSummary != null && _response.AccountSummary.PastDue; }
 	    }
 
-	    public double CurrentBalance
+	    public double? CurrentBalance
 	    {
 			get { return _response.AccountSummary == null ? 0d : _response.AccountSummary.CurrentBalance.Value; }
 	    }
