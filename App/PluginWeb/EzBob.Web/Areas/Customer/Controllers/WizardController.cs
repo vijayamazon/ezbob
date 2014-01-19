@@ -6,6 +6,7 @@
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
 	using CommonLib;
+	using EZBob.DatabaseLib.Model.Marketplaces;
 	using Models;
 	using Infrastructure;
 	using Infrastructure.Filters;
@@ -60,6 +61,10 @@
 
 			ViewData["MarketPlaces"] = _session
 				.Query<MP_MarketplaceType>()
+				.ToArray();
+
+			ViewData["MarketPlaceGroups"] = _session
+				.Query<MP_MarketplaceGroup>()
 				.ToArray();
 
             var wizardModel = _customerModelBuilder.BuildWizardModel(_context.Customer);

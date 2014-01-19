@@ -7,6 +7,7 @@
 	using EKM;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Marketplaces;
 	using EzServiceReference;
 	using Models;
 	using Code;
@@ -59,6 +60,10 @@
 
 			ViewData["MarketPlaces"] = _session
 				.Query<MP_MarketplaceType>()
+				.ToArray();
+
+			ViewData["MarketPlaceGroups"] = _session
+				.Query<MP_MarketplaceGroup>()
 				.ToArray();
 
 			return View("Index", wizardModel);

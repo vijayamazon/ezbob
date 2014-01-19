@@ -39,6 +39,7 @@
 		EzBob.Config.CaptchaMode = '@ViewData["CaptchaMode"]';
 
 		EzBob.Config.MarketPlaces = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewData["MarketPlaces"]));
+		EzBob.Config.MarketPlaceGroups = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewData["MarketPlaceGroups"]));
 
 		SetCaptchaMode();
 

@@ -243,24 +243,12 @@ ul.documents {
     margin-top: 7px;
 }
 
-.source_help, .source_no_help {
-    margin-top: 7px;
-    border: none;
-}
-
 .source {
     margin: 0;
     margin-bottom: 20px;
 }
 
-.source_header, .source_header_on {
-    padding-right: 10px;
-    border: 1px #ccc solid;
-}
-
-.source_header_on {
-    background: #e8fcc6;
-}
+.source_header_on { background: #e8fcc6; }
 
 .source_description {
     padding: 10px;
@@ -315,6 +303,7 @@ div.shop-connected {
     display: inline-block;
 }
 
+    .marketplace-button.new-ribbon,
     .source_labels.new-ribbon {
         background: url(images/new_ribbon.png) no-repeat 0 0;
         height: 25px;
@@ -324,6 +313,7 @@ div.shop-connected {
         margin-top: -1px;
     }
 
+    .marketplace-button.beta-ribbon,
     .source_labels.beta-ribbon {
         background: url(images/beta_ribbon.png) no-repeat 0 0;
         height: 25px;
@@ -1318,6 +1308,34 @@ td.account-logo {
     width: 187px;
 }
 
+.marketplace-group {
+	width: 100%;
+	clear: both;
+	display: block;
+}
+
+.marketplace-button {
+	float: left;
+	margin: 0 1em 1em 0;
+	border: 1px solid #dddddd;
+	width: 190px;
+	height: 60px;
+	background-image: url('images/accounts/plus.png');
+	background-repeat: no-repeat;
+	background-position: 5px 15px;
+	box-sizing: border-box;
+}
+
+.marketplace-button-full { background-color: #e8fcc6; }
+
+.marketplace-button-empty { background-color: transparent; }
+
+.marketplace-button img { margin-top: 10px; margin-left: 30px; }
+
+.marketplace-button-EKM img { margin-top: 15px; }
+
+.marketplace-button a { display: block; height: 50px; width: 180px; } 
+
 @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
 
     html, body {
@@ -1553,3 +1571,4 @@ td.account-logo {
 
 
 }
+

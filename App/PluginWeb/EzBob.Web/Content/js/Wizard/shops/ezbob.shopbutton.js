@@ -1,4 +1,4 @@
-﻿(function() {
+(function() {
   var root,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -30,32 +30,52 @@
       var data;
       data = {
         name: this.name,
-        logoText: this.logoText,
-        shopClass: this.shopClass,
-        shops: [],
-        ribbon: this.ribbon,
-        shopNames: ""
+        shopClass: this.shopClass
       };
-      if (this.shops) {
-        data.shops = this.shops;
-        data.shopNames = _.pluck(this.shops, "displayName").join(", ");
-      }
       return data;
     };
 
     StoreButtonView.prototype.onRender = function() {
-      this.$el.find('.tooltipdiv').tooltip();
-      return this.$el.find('.source_help').colorbox({
-        inline: true,
-        transition: 'none',
-        onClosed: function() {
-          var oBackLink;
-          oBackLink = $('#link_account_implicit_back');
-          if (oBackLink.length) {
-            return EzBob.UiAction.saveOne('click', oBackLink);
-          }
-        }
-      });
+      var btn, oHelpWindowTemplate, oLinks, sTitle;
+      btn = this.$el.find('.marketplace-button-' + this.shopClass);
+      this.$el.removeClass('marketplace-button-full marketplace-button-empty');
+      sTitle = (this.shops.length || 'No') + ' account' + (this.shops.length === 1 ? '' : 's') + ' linked. Click to link ';
+      if (this.shops.length) {
+        this.$el.addClass('marketplace-button-full');
+        sTitle += 'more.';
+      } else {
+        this.$el.addClass('marketplace-button-empty');
+        sTitle += 'one.';
+      }
+      this.$el.attr('title', sTitle);
+      switch (this.shopClass) {
+        case 'eBay':
+        case 'paypal':
+        case 'FreeAgent':
+        case 'Sage':
+          oHelpWindowTemplate = _.template($('#store-button-help-window-template').html());
+          this.$el.append(oHelpWindowTemplate(this.serializeData()));
+          oLinks = JSON.parse($('#store-button-help-window-links').html());
+          this.$el.find('.help-window-continue-link').attr('href', oLinks[this.shopClass]);
+          btn.attr('href', '#' + this.shopClass + '_help');
+          return btn.colorbox({
+            inline: true,
+            transition: 'none',
+            onClosed: function() {
+              var oBackLink;
+              oBackLink = $('#link_account_implicit_back');
+              if (oBackLink.length) {
+                return EzBob.UiAction.saveOne('click', oBackLink);
+              }
+            }
+          });
+        default:
+          return btn.click((function(arg) {
+            return function() {
+              return EzBob.App.trigger('ct:storebase.shops.connect', arg);
+            };
+          })(this.shopClass));
+      }
     };
 
     StoreButtonView.prototype.isAddingAllowed = function() {

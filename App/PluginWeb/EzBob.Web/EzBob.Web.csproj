@@ -486,6 +486,7 @@
     <Content Include="Content\css\images\accounts\paypal.png" />
     <Content Include="Content\css\images\accounts\paypoint.png" />
     <Content Include="Content\css\images\accounts\play.png" />
+    <Content Include="Content\css\images\accounts\plus.png" />
     <Content Include="Content\css\images\accounts\prestashop.png" />
     <Content Include="Content\css\images\accounts\sage.png" />
     <Content Include="Content\css\images\accounts\shopify.png" />
@@ -1290,14 +1291,8 @@
     <Content Include="Content\js\Wizard\shops\ezbob.shops.sage.js">
       <DependentUpon>ezbob.shops.sage.coffee</DependentUpon>
     </Content>
-    <Content Include="Content\js\Wizard\shops\ezbob.shopsbase.js">
-      <DependentUpon>ezbob.shopsbase.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\Wizard\shops\ezbob.shops.yodlee.js">
       <DependentUpon>ezbob.shops.yodlee.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Wizard\shops\ezbob.shopsbase.min.js">
-      <DependentUpon>ezbob.shopsbase.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Wizard\wizardStepSequence.js" />
     <Content Include="Content\js\Wizard\ezbob.wizardStepsModel.js" />
@@ -1520,7 +1515,6 @@
     <Content Include="Content\js\Underwriter\profile\messages\ezbob.undewriter.messages.js" />
     <Content Include="Content\js\Profile\ApplyForLoan\ezbob.accounts.bank.js" />
     <Content Include="Content\js\controls\ezbob.address.js" />
-    <Content Include="Content\js\Wizard\accounts\ezbob.accounts.js" />
     <Content Include="Content\js\Wizard\accounts\ezbob.accounts.paypal.js" />
     <Content Include="Content\js\controls\ezbob.notifications.js" />
     <Content Include="Content\js\Wizard\ezbob.ct.bindShopToCT.js" />
@@ -1818,7 +1812,6 @@
     <Content Include="Areas\Customer\Views\Shared\_Wizard.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\StoreButton.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\PayPalInstructions.cshtml" />
-    <Content Include="Areas\Customer\Views\PaymentAccounts\Index.cshtml" />
     <Content Include="Areas\Customer\Views\PaymentAccounts\Success.cshtml" />
     <Content Include="Areas\Customer\Views\Wizard\Index.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\_SignUpTemplate.cshtml" />
@@ -1934,7 +1927,6 @@
     <Content Include="Content\js\Wizard\ezbob.wizard.shops.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.paypoint.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.amazon.coffee" />
-    <Content Include="Content\js\Wizard\shops\ezbob.shopsbase.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.yodlee.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.freeagent.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.cg.coffee" />

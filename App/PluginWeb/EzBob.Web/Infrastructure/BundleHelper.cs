@@ -322,7 +322,6 @@ namespace EzBob.Web.Infrastructure
 				.Add("~/Content/js/Wizard/ezbob.wizardView.js")
 				.Add("~/Content/js/Wizard/ezbob.thankyoupage.js")
 				.Add("~/Content/js/Wizard/shops/ezbob.shopbutton.coffee")
-				.Add("~/Content/js/Wizard/shops/ezbob.shopsbase.coffee")
 				.Add("~/Content/js/Wizard/ezbob.ct.bindShopToCT.js")
 				.Add("~/Content/js/Wizard/shops/ezbob.shops.ebay.js")
 				.Add("~/Content/js/Wizard/shops/ezbob.shops.amazon.coffee")
@@ -335,7 +334,6 @@ namespace EzBob.Web.Infrastructure
 				.Add("~/Content/js/Wizard/shops/ezbob.shops.paypoint.coffee")
 				.Add("~/Content/js/Wizard/ezbob.wizard.shops.coffee")
 				.Add("~/Content/js/Wizard/accounts/ezbob.accounts.paypal.js")
-				.Add("~/Content/js/Wizard/accounts/ezbob.accounts.js")
 				.Add("~/Content/js/Wizard/ezbob.wizard.signupstep.js")
 				.Add("~/Content/js/Wizard/yourInfo/ezbob.yourinfo.personalInfoBase.js")
 				.Add("~/Content/js/Wizard/yourInfo/ezbob.yourinfo.limitedInformation.js")
@@ -348,16 +346,6 @@ namespace EzBob.Web.Infrastructure
 				.Add("~/Content/js/controls/ezbob.address.js")
 				.Add("~/Content/js/Wizard/yourInfo/ezbob.yourIno.consent.agreement.coffee")
 				.MvcRender("~/Content/js/min/wizard_#.js");
-		}
-
-		public static MvcHtmlString RenderAccountsJs()
-		{
-			return Bundle.JavaScript()
-				.Add("~/Content/js/Wizard/shops/ezbob.shopbutton.coffee")
-				.Add("~/Content/js/Wizard/shops/ezbob.shopsbase.coffee")
-				.Add("~/Content/js/Wizard/accounts/ezbob.accounts.paypal.js")
-				.Add("~/Content/js/Wizard/accounts/ezbob.accounts.js")
-				.MvcRender("~/Content/js/min/account_#.js");
 		}
 
 		public static MvcHtmlString RenderProfileJs()
@@ -385,7 +373,6 @@ namespace EzBob.Web.Infrastructure
 				.Add("~/Content/js/Profile/ezbob.profile.getCash.js")
 				.Add("~/Content/js/Profile/ezbob.profile.signWidget.js")
 				.Add("~/Content/js/Wizard/shops/ezbob.shopbutton.coffee")
-				.Add("~/Content/js/Wizard/shops/ezbob.shopsbase.coffee")
 				.Add("~/Content/js/Wizard/ezbob.ct.bindShopToCT.js")
 				.Add("~/Content/js/Wizard/shops/ezbob.shops.ebay.js")
 				.Add("~/Content/js/Wizard/shops/ezbob.shops.amazon.coffee")
@@ -399,7 +386,6 @@ namespace EzBob.Web.Infrastructure
 				.Add("~/Content/js/Wizard/ezbob.wizardStepsModel.js")
 				.Add("~/Content/js/Wizard/ezbob.wizard.shops.coffee")
 				.Add("~/Content/js/Wizard/accounts/ezbob.accounts.paypal.js")
-				.Add("~/Content/js/Wizard/accounts/ezbob.accounts.js")
 				
 				//Profile
 				.Add("~/Content/js/Profile/ezbob.profile.smallNotification.js")

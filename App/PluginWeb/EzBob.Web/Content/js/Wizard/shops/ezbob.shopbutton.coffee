@@ -13,28 +13,52 @@ class EzBob.StoreButtonView extends Backbone.Marionette.ItemView
     serializeData: ->
         data = 
             name: @name
-            logoText: @logoText
             shopClass: @shopClass
-            shops: []
-            ribbon: @ribbon
-            shopNames: ""
 
-        if @shops
-            data.shops = @shops
-            data.shopNames = _.pluck(@shops,"displayName").join(", ")
         return data
 
     onRender: ->
-        @$el.find('.tooltipdiv').tooltip()
-        @$el.find('.source_help').colorbox({ inline:true, transition: 'none', onClosed: ->
-            oBackLink = $ '#link_account_implicit_back'
+        btn = @$el.find '.marketplace-button-' + @shopClass
 
-            if oBackLink.length
-                EzBob.UiAction.saveOne 'click', oBackLink
-        });
+        @$el.removeClass 'marketplace-button-full marketplace-button-empty'
+
+        sTitle = (@shops.length || 'No') + ' account' + (if @shops.length == 1 then '' else 's') + ' linked. Click to link '
+
+        if @shops.length
+            @$el.addClass('marketplace-button-full')
+            sTitle += 'more.'
+        else
+            @$el.addClass 'marketplace-button-empty'
+            sTitle += 'one.'
+
+        @$el.attr 'title', sTitle
+
+        switch @shopClass
+            when 'eBay', 'paypal', 'FreeAgent', 'Sage'
+                oHelpWindowTemplate = _.template($('#store-button-help-window-template').html());
+                @$el.append oHelpWindowTemplate @serializeData()
+
+                oLinks = JSON.parse $('#store-button-help-window-links').html()
+                @$el.find('.help-window-continue-link').attr 'href', oLinks[@shopClass]
+
+                btn.attr 'href', '#' + @shopClass + '_help'
+
+                btn.colorbox({ inline:true, transition: 'none', onClosed: ->
+                    oBackLink = $ '#link_account_implicit_back'
+
+                    if oBackLink.length
+                        EzBob.UiAction.saveOne 'click', oBackLink
+                });
+            else
+                btn.click(
+                    ((arg) ->
+                        return -> EzBob.App.trigger 'ct:storebase.shops.connect', arg
+                    )(@shopClass)
+                )
+        # end of switch
+    # end of onRender
 
     isAddingAllowed: -> return true
 
     update: (data) ->
         @shops = if data then @shops = _.where(data, {MpName: @name}) else []
-

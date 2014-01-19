@@ -816,7 +816,9 @@ table.payment-schedule-table td{font-size: 16px;}
 .early-payment-form .radio .money { margin-left: 25px;}
 
 #profile-content .stores-view .next { display: none!important;}
-#profile-content .stores-view { width: 70%; }
+
+#profile-content .stores-view { width: 100%; }
+
 .cash-question h3{
     margin-top: 40px;
 }

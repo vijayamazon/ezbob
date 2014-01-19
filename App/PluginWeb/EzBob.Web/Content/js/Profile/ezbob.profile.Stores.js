@@ -50,6 +50,9 @@ EzBob.Profile.StoresView = Backbone.View.extend({
         this.content.show();
         this.storeInfoView.$el.hide();
         this.storeInfoView.$el.find(".next ").hide();
+
+        this.addStore();
+
         return this;
     },
 

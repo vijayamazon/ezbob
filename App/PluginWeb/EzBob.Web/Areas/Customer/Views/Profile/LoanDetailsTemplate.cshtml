@@ -133,12 +133,12 @@
                         address = customer.PersonalAddress.toJSON()[0];
                     break;
                     case 'Limited':
-                        address = customer.LimitedAddress[0];
-                        companyName = customer.LimitedInfo.LimitedCompanyName || '' + "<br />";
+                        address = customer.CompanyAddress[0];
+                        companyName = 'LIMITED company name<br />'; // customer.LimitedInfo.LimitedCompanyName || '' + "<br />";
                     break;
                     case 'NonLimited':
-                        address =  customer.NonLimitedAddress[0];
-                        companyName = customer.NonLimitedInfo.NonLimitedCompanyName  || '' + "<br />";
+                        address =  customer.CompanyAddress[0];
+                        companyName = 'NON LIMITED company name<br />'; // customer.NonLimitedInfo.NonLimitedCompanyName  || '' + "<br />";
                     break;
                 }
             %>

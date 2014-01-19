@@ -58,11 +58,6 @@
 			_payPalConfig = ObjectFactory.GetInstance<IPayPalConfig>();
 		}
 
-		public ActionResult Index()
-		{
-			return View();
-		}
-
 		[Transactional]
 		public ViewResult Success(string request_token, string verification_code)
 		{
