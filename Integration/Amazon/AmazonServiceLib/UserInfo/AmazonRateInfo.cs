@@ -69,28 +69,28 @@ namespace EzBob.AmazonServiceLib.UserInfo
 
 		private Task<double> GetRating(Task<HtmlNode> sellerPage)
 		{
-            return sellerPage.ContinueWith( tdoc =>
-                        {
-                            var stars = 0d;
-                            var doc = tdoc.Result;
-				            var extract = doc.QuerySelectorAll( "div.feedbackMeanRating b" ).ToArray();
-					        if ( extract.Length == 0 )
-					        {
-						        var extract2 = doc.QuerySelectorAll( "div.justLaunchedBlock" ).ToArray();
-						        if ( extract2.Length == 0 )
-						        {
-							        throw new NotImplementedException();
-						        }
-					        }
-					        else
-					        {
-						        var textRating = extract[0].InnerText;
-						        stars = Convert.ToDouble( textRating, CultureInfo.InvariantCulture );
-					        }
-				            //var textTotalVotes = extract[1].InnerText;
-					        return stars;
-				        }
-                );
+			return sellerPage.ContinueWith(tdoc =>
+				{
+					var stars = 0d;
+					var doc = tdoc.Result;
+					var extract = doc.QuerySelectorAll("div.feedbackMeanRating b").ToArray();
+					if (extract.Length == 0)
+					{
+						// We don't know how to parse rating from doc
+						return stars;
+
+						//var extract2 = doc.QuerySelectorAll( "div.justLaunchedBlock" ).ToArray();
+						//if ( extract2.Length == 0 )
+						//{
+						//	throw new NotImplementedException();
+						//}
+					}
+
+					var textRating = extract[0].InnerText;
+					stars = Convert.ToDouble(textRating, CultureInfo.InvariantCulture);
+					return stars;
+				}
+				);
 		}
 
 		private Task<string> GetName(Task<HtmlNode> sellerPage)
