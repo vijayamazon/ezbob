@@ -15,7 +15,6 @@
 		public JsonNetResult Index(int id)
 		{
 			var newSession = ObjectFactory.GetInstance<ISession>();
-			newSession.Clear();
 			newSession.CacheMode = CacheMode.Ignore;
 
 			var newCustomers = new CustomerRepository(newSession);
