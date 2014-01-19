@@ -78,27 +78,27 @@
 
 			//var runningBalance = transaction.runningBalance.HasValue ? transaction.runningBalance.Value: 0;
 
-			Add(cat, amount, yearmonth);
-			Add(major,isCredit ? amount : -amount, yearmonth);
+			Add(cat, amount, isCredit, yearmonth);
+			Add(major, amount, isCredit, yearmonth);
 			UpdateMinMaxDay(yearmonth, date);
-			Add(cat, amount, TotalColumn);
-			Add(major, isCredit ? amount : -amount, TotalColumn);
+			Add(cat, amount, isCredit, TotalColumn);
+			Add(major, amount, isCredit, TotalColumn);
 
 			//Calc Total Row
 			Add(isCredit
 					? string.Format("{0}{1}", TotalCredit, TotalIncomeCat)
-					: string.Format("{0}{1}", TotalDedit, TotalExpensesCat), amount, yearmonth);
+					: string.Format("{0}{1}", TotalDedit, TotalExpensesCat), amount, isCredit, yearmonth);
 			Add(isCredit
 					? string.Format("{0}{1}", TotalCredit, TotalIncomeCat)
-					: string.Format("{0}{1}", TotalDedit, TotalExpensesCat), amount, TotalColumn);
+					: string.Format("{0}{1}", TotalDedit, TotalExpensesCat), amount, isCredit, TotalColumn);
 
 			//Calc Num Of Transactions Row
 			Add(isCredit
 					? string.Format("{0}{1}", NumTransCredit, NumOfTransactionsCat)
-					: string.Format("{0}{1}", NumTransDedit, NumOfTransactionsCat), 1, yearmonth);
+					: string.Format("{0}{1}", NumTransDedit, NumOfTransactionsCat), 1, true, yearmonth);
 			Add(isCredit
 					? string.Format("{0}{1}", NumTransCredit, NumOfTransactionsCat)
-					: string.Format("{0}{1}", NumTransDedit, NumOfTransactionsCat), 1, TotalColumn);
+					: string.Format("{0}{1}", NumTransDedit, NumOfTransactionsCat), 1, true, TotalColumn);
 
 			var monthAgo = DateTime.Today.AddMonths(-1);
 			if (date >= monthAgo)
@@ -179,7 +179,7 @@
 									 string.Format("{0}{1}", TotalDedit, TotalExpensesCat));
 			}
 		}
-		
+
 
 		private void AddIfMissing(string catPrefix, string cat)
 		{
@@ -197,7 +197,7 @@
 
 			foreach (var yearmonth in totalIncomeRow.Keys)
 			{
-				Add(netCashFlowCat, totalIncomeRow[yearmonth] - totalExpensesRow[yearmonth], yearmonth);
+				Add(netCashFlowCat, totalIncomeRow[yearmonth] + totalExpensesRow[yearmonth], true, yearmonth);
 			}
 		}
 
@@ -210,11 +210,11 @@
 			{
 				if (numOfTransRow[yearmonth] != 0)
 				{
-					Add(averageCat, totalRow[yearmonth] / numOfTransRow[yearmonth], yearmonth);
+					Add(averageCat, totalRow[yearmonth] / numOfTransRow[yearmonth], true, yearmonth);
 				}
 				else
 				{
-					Add(averageCat, 0, yearmonth);
+					Add(averageCat, 0, true, yearmonth);
 				}
 			}
 		}
@@ -236,14 +236,14 @@
 
 			if (otherList.Count > 0)
 			{
-				Add(otherCat, 0, TotalColumn);
+				Add(otherCat, 0, true, TotalColumn);
 			}
 
 			foreach (var other in otherList)
 			{
 				foreach (var cat in yodlee.YodleeCashFlowReportModelDict[other])
 				{
-					Sum(otherCat, cat.Key, cat.Value);
+					Sum(otherCat, cat.Key, cat.Value, true);
 				}
 			}
 
@@ -253,20 +253,23 @@
 			}
 		}
 
-		private void Add(string cat, double amount, int yearmonth)
+		private void Add(string cat, double amount, bool isCredit, int yearmonth)
 		{
 			if (!yodlee.YodleeCashFlowReportModelDict.ContainsKey(cat))
 			{
 				yodlee.YodleeCashFlowReportModelDict[cat] = new SortedDictionary<int, double>();
 			}
 
-			Sum(cat, yearmonth, amount);
+			Sum(cat, yearmonth, amount, isCredit);
 		}
 
-		private void Sum(string cat, int yearmonth, double amount)
+		private void Sum(string cat, int yearmonth, double amount, bool isCredit)
 		{
 			var x = yodlee.YodleeCashFlowReportModelDict[cat];
-
+			if (!isCredit)
+			{
+				amount = -amount;
+			}
 			if (!x.ContainsKey(yearmonth))
 			{
 				x[yearmonth] = amount;
