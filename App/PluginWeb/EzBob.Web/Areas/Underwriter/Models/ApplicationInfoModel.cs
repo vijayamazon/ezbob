@@ -30,7 +30,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
         public decimal SetupFee { get; set; }
         public bool IsTest { get; set; }
 
-		public bool IsOffline { get; set; }
+		public bool? IsOffline { get; set; }
 		public bool HasYodlee { get; set; }
         
 		public bool IsAvoid { get; set; }

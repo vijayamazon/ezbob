@@ -96,7 +96,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		public decimal? OverallTurnOver { get; set; }
 		public decimal? WebSiteTurnOver { get; set; }
 
-		public bool IsOffline { get; set; }
+		public bool? IsOffline { get; set; }
 		public CustomerRequestedLoanModel RequestedLoan { get; set; }
 		public CompanyEmployeeCountInfo CompanyEmployeeCountInfo { get; set; }
 		public CompanyInfoMap CompanyInfo { get; set; }

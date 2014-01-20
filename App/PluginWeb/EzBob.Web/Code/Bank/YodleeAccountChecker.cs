@@ -18,7 +18,7 @@
 
 		public void Check(Customer customer, string accountNumber, string sortcode, string bankAccountType)
 		{
-			if (!customer.IsOffline)
+			if (customer.IsOffline.HasValue && !customer.IsOffline.Value)
 			{
 				return;
 			}

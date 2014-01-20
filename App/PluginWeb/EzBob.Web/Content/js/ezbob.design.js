@@ -1076,8 +1076,6 @@ EzBob.validateRestorePasswordForm = function (el) {
 
 EzBob.validatePersonalDetailsForm = function (el) {
     var e = el || $(".PersonalDetailsForm");
-    var oIsOffline = e.find('.offline');
-    var isOffline = oIsOffline.length > 0;
 
     return e.validate({
         rules: {
@@ -1090,8 +1088,6 @@ EzBob.validatePersonalDetailsForm = function (el) {
             Gender: { required: true },
             MaritalStatus: { required: true },
             TimeAtAddress: { required: true },
-            ConsentToSearch: { required: true },
-            OwnOtherProperty: { required: isOffline }
         },
         messages: {
             DateOfBirth: { yearLimit: "The number of full year should be more then 18 year" },
@@ -1104,31 +1100,8 @@ EzBob.validatePersonalDetailsForm = function (el) {
         },
         errorPlacement: EzBob.Validation.errorPlacement,
         unhighlight: EzBob.Validation.unhighlightFS,
-        highlight: EzBob.Validation.highlightFS
-    });
-};
-
-EzBob.validateCompanyDetailsMetaData = function (el) {
-    var e = el || $(".CompanyDetailForm");
-    var oIsOffline = e.find('.offline');
-    var isOffline = oIsOffline.length > 0;
-
-    var turnoverRegex = isOffline ? '' : "^(?!£ 0.00$)";
-
-    return e.validate({
-        rules: {
-            TypeOfBusiness: { required: true },
-            OverallTurnOver: { required: true, defaultInvalidPounds: true, regex: turnoverRegex },
-            WebSiteTurnOver: { required: true, defaultInvalidPounds: true, regex: turnoverRegex },
-        },
-        messages: {
-            TimeAtAddress: { regex: "This field is required" },
-            OverallTurnOver: { defaultInvalidPounds: "This field is required", regex: "This field is required" },
-            WebSiteTurnOver: { defaultInvalidPounds: "This field is required", regex: "This field is required" }
-        },
-        errorPlacement: EzBob.Validation.errorPlacement,
-        unhighlight: EzBob.Validation.unhighlightFS,
-        highlight: EzBob.Validation.highlightFS
+        highlight: EzBob.Validation.highlightFS,
+        ignore: ":not(:visible)"
     });
 };
 
@@ -1139,15 +1112,10 @@ EzBob.validateLimitedCompanyDetailForm = function (el) {
             //limited company info
             LimitedCompanyNumber: { required: true, maxlength: 255, regex: "^[a-zA-Z0-9]+$" },
             LimitedCompanyName: { required: true, minlength: 2 },
-            LimitedBusinessPhone: { required: true, regex: "^0[0-9]{10}$" },
-            PropertyOwnedByCompany: { required: true },
             CapitalExpenditure: { required: true, defaultInvalidPounds: true },
-            YearsInCompany: { required: true },
-            RentMonthsLeft: { required: true },
             TotalMonthlySalary: { required: true, defaultInvalidPounds: true, regex: "^(?!£ 0.00$)" },
         },
         messages: {
-            LimitedBusinessPhone: { regex: "Please enter a valid UK number" },
             LimitedCompanyNumber: { regex: "Please enter a valid company number" },
             CapitalExpenditure: { defaultInvalidPounds: "This field is required" },
             TotalMonthlySalary: { defaultInvalidPounds: "This field is required", regex: "This field is required" },
@@ -1166,16 +1134,10 @@ EzBob.validateNonLimitedCompanyDetailForm = function (el) {
             //Non limited company info
             NonLimitedCompanyName: { required: true, minlength: 2 },
             NonLimitedTimeInBusiness: { required: true },
-            NonLimitedTimeAtAddress: { required: true, digits: true },
-            NonLimitedBusinessPhone: { required: true, regex: "^0[0-9]{10}$" },
-            PropertyOwnedByCompany: { required: true },
             CapitalExpenditure: { required: true, defaultInvalidPounds: true },
-            YearsInCompany: { required: true },
-            RentMonthsLeft: { required: true },
             TotalMonthlySalary: { required: true, defaultInvalidPounds: true, regex: "^(?!£ 0.00$)" },
         },
         messages: {
-            NonLimitedBusinessPhone: { regex: "Please enter a valid UK number" },
             CapitalExpenditure: { defaultInvalidPounds: "This field is required" },
             TotalMonthlySalary: { defaultInvalidPounds: "This field is required", regex: "This field is required" },
         },

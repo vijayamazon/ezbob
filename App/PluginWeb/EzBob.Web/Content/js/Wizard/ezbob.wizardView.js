@@ -59,12 +59,9 @@ EzBob.WizardView = Backbone.View.extend({
 		if ((this.customer.get('Id')) !== 0)
 			HeartOfActivity();
 
-		if (!this.customer.get('IsOffline') && ($('body').attr('data-offline') === 'yes'))
-			this.customer.set('IsOffline', true);
-
+		
 		var modelArgs = {
 			mpAccounts: this.customer.get('mpAccounts'),
-			isOffline: this.customer.get('IsOffline'),
 			isProfile: this.customer.get('IsProfile'),
 		};
 
@@ -101,7 +98,7 @@ EzBob.WizardView = Backbone.View.extend({
 		this.stepsByName = {};
 		this.stepsOrderByName = {};
 
-		var sSequenceName = this.customer.get('IsOffline') ? 'offline' : 'online';
+	    var sSequenceName = 'offline'; // todo make one
 
 		for (var i = 0; i < oConfiguredStepSequence[sSequenceName].length; i++) {
 			var oStep = oConfiguredStepSequence[sSequenceName][i];

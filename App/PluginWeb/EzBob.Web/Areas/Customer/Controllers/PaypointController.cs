@@ -59,7 +59,7 @@
 
 	            var oCustomer = _context.User == null ? null : _customerRepository.Get(_context.User.Id);
 
-                var url = _payPointFacade.GeneratePaymentUrl(oCustomer != null && oCustomer.IsOffline, amount, callback);
+                var url = _payPointFacade.GeneratePaymentUrl(oCustomer != null && oCustomer.IsOffline.HasValue && oCustomer.IsOffline.Value, amount, callback);
 
                 _logRepository.Log(_context.UserId, DateTime.Now, "Paypoint Pay Redirect to " + url, "Successful", "");
 

@@ -180,7 +180,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public string LimitedCompanyNumber { get; set; }
 		public string LimitedCompanyName { get; set; }
 		public int? LimitedTimeAtAddress { get; set; }
-		public bool? LimitedConsentToSearch { get; set; }
 		public string LimitedBusinessPhone { get; set; }
 
 		#region property Directors
@@ -204,7 +203,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public string NonLimitedCompanyName { get; set; }
 		public string NonLimitedTimeInBusiness { get; set; }
 		public int? NonLimitedTimeAtAddress { get; set; }
-		public bool? NonLimitedConsentToSearch { get; set; }
 		public string NonLimitedBusinessPhone { get; set; }
 
 		#region property Directors
@@ -224,6 +222,13 @@ namespace EZBob.DatabaseLib.Model.Database {
 	#region class CompanyAdditionalInfo
 
 	public class CompanyAdditionalInfo {
+		public string TypeOfBusiness { get; set; }
+		public decimal? OverallTurnOver{ get; set; }
+		public string IndustryType { get; set; }
+		public bool PartBusinessOnline { get; set; }
+		public bool DirectorCheck { get; set; }
+		public bool ConsentToSearch { get; set; }
+
 		public bool? PropertyOwnedByCompany { get; set; }
 		public string YearsInCompany { get; set; }
 		public string RentMonthsLeft { get; set; }
@@ -533,7 +538,9 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual bool IsAvoid { get; set; }
 		public virtual CardInfo CurrentCard { get; set; }
 		public virtual string ABTesting { get; set; }
-		public virtual bool IsOffline { get; set; }
+		public virtual bool? IsOffline { get; set; }
+		public virtual bool? IsDirector { get; set; }
+		public virtual bool? ConsentToSearch { get; set; }
 		public virtual IList<CustomerSession> Session { get; set; }
 
 		public virtual WizardStep WizardStep { get; set; }
@@ -752,7 +759,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 		} // GetHashCode
 
 		public virtual string SegmentType() {
-			return IsOffline ? "Offline" : "Online";
+			return IsOffline.HasValue ? (IsOffline.Value ? "Offline" : "Online") : "Unknown";
 		} // SegmentType
 
 		public virtual string IsWasLateName() {

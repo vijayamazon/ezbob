@@ -35,7 +35,7 @@
 			BuildPaymentAccounts(customer, summary);
 			AddDecisionHistory(summary, customer);
 
-			if (summary.IsOffline)
+			if (summary.IsOffline.HasValue && summary.IsOffline.Value)
 			{
 				BuildRequestedLoan(summary, customer);
 			}

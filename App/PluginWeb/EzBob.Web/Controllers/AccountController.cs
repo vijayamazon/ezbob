@@ -307,9 +307,6 @@ namespace EzBob.Web.Controllers
 			_context.SessionId = null;
 			FormsAuthentication.SignOut();
 
-			if (Request.Cookies.AllKeys.Contains("isoffline"))
-				Response.Cookies.Add(new HttpCookie("isoffline") { Expires = DateTime.Now.AddYears(-32), HttpOnly = false, Secure = true });
-
 			return !isUnderwriterPage ? (ActionResult)Redirect(@"http://www.ezbob.com") :
 				RedirectToAction("Index", "Customers", new { Area = "Underwriter" });
 		}
@@ -320,7 +317,7 @@ namespace EzBob.Web.Controllers
 		[ActionName("SignUp")]
 		[ValidateJsonAntiForgeryToken]
 		[CaptchaValidationFilter]
-		public JsonNetResult SignUpAjax(User model, string signupPass1, string signupPass2, string securityQuestion, string promoCode, double? amount, int? customerReason, int? customerSourceOfRepayment, string otherCustomerReason, string otherCustomerSourceOfRepayment, string mobilePhone, string mobileCode)
+		public JsonNetResult SignUpAjax(User model, string signupPass1, string signupPass2, string securityQuestion, string promoCode, double? amount, string mobilePhone, string mobileCode)
 		{
 			if (!ModelState.IsValid)
 			{
@@ -333,7 +330,7 @@ namespace EzBob.Web.Controllers
 			try
 			{
 				var customerIp = Request.ServerVariables["REMOTE_ADDR"];
-				SignUpInternal(model, signupPass1, signupPass2, securityQuestion, promoCode, amount, customerReason, customerSourceOfRepayment, otherCustomerReason, otherCustomerSourceOfRepayment, mobilePhone, mobileCode);
+				SignUpInternal(model, signupPass1, signupPass2, securityQuestion, promoCode, amount, mobilePhone, mobileCode);
 				FormsAuthentication.SetAuthCookie(model.EMail, false);
 
 				var user = _users.GetUserByLogin(model.EMail);
@@ -357,7 +354,7 @@ namespace EzBob.Web.Controllers
 			}
 		}
 
-		private void SignUpInternal(User model, string signupPass1, string signupPass2, string securityQuestion, string promoCode, double? amount, int? customerReason, int? customerSourceOfRepayment, string otherCustomerReason, string otherCustomerSourceOfRepayment, string mobilePhone, string mobileCode)
+		private void SignUpInternal(User model, string signupPass1, string signupPass2, string securityQuestion, string promoCode, double? amount, string mobilePhone, string mobileCode)
 		{
 			MembershipCreateStatus status;
 
@@ -396,7 +393,7 @@ namespace EzBob.Web.Controllers
 						CollectionStatus =
 							new CollectionStatus { CurrentStatus = _customerStatusesRepository.GetByName("Enabled") },
 						IsTest = isAutomaticTest,
-						IsOffline = false,
+						IsOffline = (bool?)null,
 						PromoCode = promoCode,
 						CustomerInviteFriend = new List<CustomerInviteFriend>(),
 						PersonalInfo = new PersonalInfo { MobilePhone = mobilePhone },
@@ -444,24 +441,17 @@ namespace EzBob.Web.Controllers
 					customer.IsTest = true;
 				}
 
-				customer.IsOffline = Session["isoffline"] == "yes";
-
 				_customers.Save(customer);
 
-				if (customer.IsOffline)
-				{
-					customer.CustomerRequestedLoan = new List<CustomerRequestedLoan>();
-					customer.CustomerRequestedLoan.Add(new CustomerRequestedLoan
-						{
-							Customer = customer,
-							Amount = amount,
-							Created = DateTime.UtcNow,
-							CustomerReason = customerReason.HasValue ? _reasons.Get(customerReason) : null,
-							CustomerSourceOfRepayment = customerSourceOfRepayment.HasValue ? _sources.Get(customerSourceOfRepayment) : null,
-							OtherReason = otherCustomerReason,
-							OtherSourceOfRepayment = otherCustomerSourceOfRepayment
-						});
-				}
+				customer.CustomerRequestedLoan = new List<CustomerRequestedLoan>
+					{
+						new CustomerRequestedLoan
+							{
+								Customer = customer,
+								Amount = amount,
+								Created = DateTime.UtcNow,
+							}
+					};
 
 				_appCreator.AfterSignup(user, link);
 			}
@@ -586,12 +576,12 @@ namespace EzBob.Web.Controllers
 					}
 					if (result.Targets.Count > 1)
 					{
-						result.Targets.Add(new CompanyInfo {BusName = "Company not found", BusRefNum = "skip"});
+						result.Targets.Add(new CompanyInfo { BusName = "Company not found", BusRefNum = "skip" });
 					}
 				}
 
-				
-				
+
+
 				return this.JsonNet(result.Targets);
 			}
 			catch (Exception e)
@@ -645,7 +635,7 @@ namespace EzBob.Web.Controllers
 													  .Select(x => x.ErrorMessage))
 					});
 		}
-		
+
 		[Ajax]
 		[HttpPost]
 		public bool GenerateMobileCode(string mobilePhone)

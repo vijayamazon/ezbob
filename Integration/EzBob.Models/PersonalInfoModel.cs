@@ -52,7 +52,7 @@
 
 			Id = customer.Id;
 			IsTest = customer.IsTest;
-			SegmentType = customer.IsOffline ? "Offline" : "Online";
+			SegmentType = customer.SegmentType();
 			IsAvoid = customer.IsAvoid;
 
 			FraudCheckStatus = customer.FraudStatus.Description();

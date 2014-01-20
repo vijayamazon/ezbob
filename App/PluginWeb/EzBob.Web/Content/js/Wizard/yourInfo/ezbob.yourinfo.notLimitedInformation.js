@@ -1,117 +1,102 @@
 ﻿var EzBob = EzBob || {};
 
 EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
-	initialize: function() {
-		this.constructor.__super__.initialize.call(this);
-		this.template = _.template($('#nonlimitededinfo-template').html());
-		this.ViewName = "NonLimited";
-		this.companyAddressValidator = false;
+    initialize: function () {
+        this.constructor.__super__.initialize.call(this);
+        this.template = _.template($('#nonlimitededinfo-template').html());
+        this.ViewName = "NonLimited";
+        this.companyAddressValidator = false;
 
-		this.parentView = this.options.parentView;
+        this.parentView = this.options.parentView;
+    }, // initialize
 
-		this.events = _.extend({}, this.events, {
-			'change #NonLimitedPropertyOwnedByCompany': 'propertyOwnedByCompanyChanged',
-		});
-	}, // initialize
+    readyToContinue: function() {
+        return this.companyAddressValidator &&
+            this.directorsView.validateAddresses() &&
+            (!this.employeeCountView || this.employeeCountView.isValid());
+    }, // readyToContinue
 
-	readyToContinue: function() {
-		return this.companyAddressValidator &&
-			(this.model.get('IsOffline') || this.directorsView.validateAddresses()) &&
-			(!this.employeeCountView || this.employeeCountView.isValid());
-	}, // readyToContinue
+    inputChanged: function () {
+        this.parentView.inputChanged();
+    }, // inputChanged
 
-	inputChanged: function() {
-		this.parentView.inputChanged();
-	}, // inputChanged
+    propertyOwnedByCompanyChanged: function (event) {
+        var toToggle = this.$el.find('#NonLimitedPropertyOwnedByCompany').val() !== 'false';
+        this.$el.find('.additionalCompanyAddressQuestions').toggleClass('hide', toToggle);
+        this.inputChanged(event);
+    }, // propertyOwnedByCompanyChanged
 
-	propertyOwnedByCompanyChanged: function(event) {
-		var toToggle = this.$el.find('#NonLimitedPropertyOwnedByCompany').val() !== 'false';
-		this.$el.find('.additionalCompanyAddressQuestions').toggleClass('hide', toToggle);
-		this.inputChanged(event);
-	}, // propertyOwnedByCompanyChanged
+    next: function (e) {
+        var $el = $(e.currentTarget);
 
-	next: function(e) {
-		var $el = $(e.currentTarget);
+        if ($el.hasClass("disabled"))
+            return false;
 
-		if ($el.hasClass("disabled"))
-			return false;
+        this.trigger('next');
+        return false;
+    }, // next
 
-		this.trigger('next');
-		return false;
-	}, // next
+    render: function () {
+        var self = this;
+        this.constructor.__super__.render.call(this);
 
-	render: function() {
-		var self = this;
-		this.constructor.__super__.render.call(this);
+        var oAddressContainer = this.$el.find('#NonLimitedCompanyAddress');
+        var nonLimitedAddressView = new EzBob.AddressView({
+            model: this.model.get('CompanyAddress').reset(),
+            name: "NonLimitedCompanyAddress",
+            max: 1,
+            uiEventControlIdPrefix: oAddressContainer.attr('data-ui-event-control-id-prefix'),
+        });
+        nonLimitedAddressView.render().$el.appendTo(oAddressContainer);
+        this.model.get('CompanyAddress').on("all", this.NonLimitedCompanyAddressChanged, this);
+        EzBob.Validation.addressErrorPlacement(nonLimitedAddressView.$el, nonLimitedAddressView.model);
 
-		var oAddressContainer = this.$el.find('#NonLimitedCompanyAddress');
-		var nonLimitedAddressView = new EzBob.AddressView({
-			model: this.model.get('CompanyAddress').reset(),
-			name: "NonLimitedCompanyAddress",
-			max: 1,
-			uiEventControlIdPrefix: oAddressContainer.attr('data-ui-event-control-id-prefix'),
-		});
-		nonLimitedAddressView.render().$el.appendTo(oAddressContainer);
-		this.model.get('CompanyAddress').on("all", this.NonLimitedCompanyAddressChanged, this);
-		EzBob.Validation.addressErrorPlacement(nonLimitedAddressView.$el, nonLimitedAddressView.model);
-        
-		if (this.model.get('IsOffline')) {
-			this.employeeCountView = new EzBob.EmployeeCountView({
-				model: this.model,
-				onchange: $.proxy(self.inputChanged, self),
-				prefix: "NonLimited"
-			});
-			this.employeeCountView.render().$el.appendTo(this.$el.find('.employee-count'));
-		}
-		else {
-		    this.directorsView = new EzBob.DirectorMainView({ model: this.model.get('NonLimitedDirectors'), name: "nonlimitedDirectors", });
-		    this.directorsView.on("director:change", this.inputChanged, this);
-		    this.directorsView.on("director:addressChanged", this.inputChanged, this);
-		    this.directorsView.render().$el.appendTo(this.$el.find('.directors'));
-			this.$el.find('.offline').remove();
-			this.employeeCountView = null;
-		} // if
+        this.employeeCountView = new EzBob.EmployeeCountView({
+            model: this.model,
+            onchange: $.proxy(self.inputChanged, self),
+            prefix: "NonLimited"
+        });
+        this.employeeCountView.render().$el.appendTo(this.$el.find('.employee-count'));
 
-		this.$el.find(".addressCaption").hide();
+        this.directorsView = new EzBob.DirectorMainView({ model: this.model.get('NonLimitedDirectors'), name: "nonlimitedDirectors", });
+        this.directorsView.on("director:change", this.inputChanged, this);
+        this.directorsView.on("director:addressChanged", this.inputChanged, this);
+        this.directorsView.render().$el.appendTo(this.$el.find('.directors'));
 
-		var oFieldStatusIcons = this.$el.find('IMG.field_status');
-		oFieldStatusIcons.filter('.required').field_status({ required: true });
-		oFieldStatusIcons.not('.required').field_status({ required: false });
+        this.$el.find(".addressCaption").hide();
 
-		EzBob.UiAction.registerView(this);
+        var oFieldStatusIcons = this.$el.find('IMG.field_status');
+        oFieldStatusIcons.filter('.required').field_status({ required: true });
+        oFieldStatusIcons.not('.required').field_status({ required: false });
 
-		return this;
-	}, // render
+        EzBob.UiAction.registerView(this);
 
-	getValidator: function() {
-		return EzBob.validateNonLimitedCompanyDetailForm;
-	}, // getValidator
+        return this;
+    }, // render
 
-	NonLimitedCompanyAddressChanged: function(evt, oModel) {
-		this.companyAddressValidator = oModel.collection && oModel.collection.length > 0;
-		this.inputChanged();
-		this.clearAddressError("#NonLimitedCompanyAddress");
-	}, // NonLimitedCompanyAddressChanged
+    getValidator: function () {
+        return EzBob.validateNonLimitedCompanyDetailForm;
+    }, // getValidator
 
-	ownValidationRules: function() {
-		return {
-			NonLimitedCompanyName: { required: true, minlength: 2 },
-			NonLimitedTimeInBusiness: { required: true },
-			NonLimitedTimeAtAddress: { required: true, digits: true },
-			NonLimitedBusinessPhone: { required: true, regex: "^0[0-9]{10}$" },
-			PropertyOwnedByCompany: { required: true },
-			CapitalExpenditure: { required: true, defaultInvalidPounds: true },
-			YearsInCompany: { required: true },
-			RentMonthsLeft: { required: true },
-			TotalMonthlySalary: { required: true, defaultInvalidPounds: true, regex: "^(?!£ 0.00$)" },
-		};
-	}, // ownValidationRules
+    NonLimitedCompanyAddressChanged: function (evt, oModel) {
+        this.companyAddressValidator = oModel.collection && oModel.collection.length > 0;
+        this.inputChanged();
+        this.clearAddressError("#NonLimitedCompanyAddress");
+    }, // NonLimitedCompanyAddressChanged
 
-	ownValidationMessages: function() {
-		return {
-		    NonLimitedBusinessPhone: { regex: "Please enter a valid UK number" },
-		    CapitalExpenditure: { defaultInvalidPounds: "This field is required" },
-		    TotalMonthlySalary: { defaultInvalidPounds: "This field is required", regex: "This field is required" },
-		};
-	}, // ownValidationMessages
+    ownValidationRules: function () {
+        return {
+            NonLimitedCompanyName: { required: true, minlength: 2 },
+            NonLimitedTimeInBusiness: { required: true },
+            CapitalExpenditure: { required: true, defaultInvalidPounds: true },
+            TotalMonthlySalary: { required: true, defaultInvalidPounds: true, regex: "^(?!£ 0.00$)" },
+        };
+    }, // ownValidationRules
+
+    ownValidationMessages: function () {
+        return {
+            CapitalExpenditure: { defaultInvalidPounds: "This field is required" },
+            TotalMonthlySalary: { defaultInvalidPounds: "This field is required", regex: "This field is required" },
+        };
+    }, // ownValidationMessages
 });

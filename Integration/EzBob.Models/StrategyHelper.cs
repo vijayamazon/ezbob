@@ -253,7 +253,7 @@
 
 		private bool CheckCustomerType(Customer customer)
 		{
-			if (customer.IsOffline)
+			if (customer.IsOffline.HasValue && customer.IsOffline.Value)
 			{
 				log.InfoFormat("No auto approval: Offline customer");
 				return false;

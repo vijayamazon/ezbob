@@ -96,7 +96,7 @@ namespace EzBob.Web.Areas.Customer.Models
 
 		public long LoyaltyPoints { get; set; }
 
-		public bool IsOffline { get; set; }
+		public bool? IsOffline { get; set; }
 
 		public bool IsProfile { get; set; }
 

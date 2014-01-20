@@ -12,8 +12,8 @@
     var showGetSatisfaction = controller == "Wizard" && config.GetSatisfactionEnabled;
     var authCookie = Request.IsAuthenticated ? "auth" : "";
 
-	var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
-	var configVars = oDBHelper.ConfigurationVariables;
+    var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
+    var configVars = oDBHelper.ConfigurationVariables;
 }
 <!DOCTYPE html>
 <html>
@@ -22,12 +22,12 @@
     @{ Html.RenderPartial("_FrameKiller"); }
 
     @RenderSection("head", false)
-    
+
     @if (controller == "Wizard")
     {
-        <meta name="description" content="Online sellers sign up for a free account to apply for an ecommerce business loan. Funds can be in your account within 30 minutes."/>
+        <meta name="description" content="Online sellers sign up for a free account to apply for an ecommerce business loan. Funds can be in your account within 30 minutes." />
     }
-    
+
     <title>@ViewBag.Title</title>
 
     <meta name="webutation-site-verification" content="webutation66c78d618b360eb461a120920e8ab3a3" />
@@ -55,40 +55,25 @@
     @{Html.RenderPartial("security_template");}
 </head>
 
-<body auth="@authCookie" data-offline="@Session["isoffline"]">
+<body auth="@authCookie">
     @RenderSection("afterHead", false)
 
     @{
         var isUnderwriter = (Url.Action(null) ?? "").Contains("AdminLogOn");
         if (!isUnderwriter && !Request.Browser.IsMobileDevice)
-        { 
+        {
             Html.RenderPartial("_LivePerson");
             Html.RenderPartial("_NanoRep");
         }
     }
 
     @Html.AntiForgeryTokenNoUserCheck()
-    
+
     <div id="wrapper">
         @{ Html.RenderPartial("_TopButtons"); }
         <header>
             <div class="inner">
-				@{
-					var sLogoClassExt = "online";
-
-					if (!string.IsNullOrEmpty(User.Identity.Name)) {
-						var oCustomer = oDBHelper.FindCustomerByEmail(User.Identity.Name);
-
-						if ((oCustomer != null) && oCustomer.IsOffline) {
-							sLogoClassExt = "offline";
-						}
-					}
-					else if (Session["isoffline"] == "yes") {
-						sLogoClassExt = "offline";
-					}
-				}
-
-                <a href="http://www.ezbob.com" class="ezbob_logo ezbob_logo_@{ WriteLiteral(sLogoClassExt); } indent_text" id="ezbob_logo" title="Fast business loans">EZBob - Fast Business Loans</a>
+                <a href="http://www.ezbob.com" class="ezbob_logo ezbob_logo_online indent_text" id="ezbob_logo" title="Fast business loans">EZBob - Fast Business Loans</a>
                 <div class="clear"></div>
             </div>
         </header>
@@ -103,7 +88,7 @@
         </div>
         <div class="push"></div>
     </div>
-    
+
     <!--wraper-->
     <footer>
         @{ Html.RenderPartial("_Copyright"); }
@@ -137,11 +122,7 @@
     <div style="display: none;" class="hide" id="cg-account-model-template">@JsonConvert.SerializeObject(new Integration.ChannelGrabberFrontend.AccountModel())</div>
     <div style="display: none;" class="hide" id="cg-account-list">@JsonConvert.SerializeObject(Configuration.Instance.Vendors)</div>
     <div style="display: none;" class="hide" id="current-server-time-zone">@DateTimeOffset.Now.ToString("zzz", CultureInfo.InvariantCulture)</div>
-	<div style="display: none;" class="hide" id="allowFinishWizardWithoutMarketplaces"
-		online="@configVars.GetByNameAsBool("AllowFinishOnlineWizardWithoutMarketplaces")"
-		offline="@configVars.GetByNameAsBool("AllowFinishOfflineWizardWithoutMarketplaces")"
-	></div>
-	<div style="display: none;" class="hide" id="wizard-step-sequence">@oDBHelper.WizardStepSequence</div>
-	<div style="display: none;" class="hide" id="yodlee-banks">@oDBHelper.YodleeBanks</div>
+    <div style="display: none;" class="hide" id="wizard-step-sequence">@oDBHelper.WizardStepSequence</div>
+    <div style="display: none;" class="hide" id="yodlee-banks">@oDBHelper.YodleeBanks</div>
 </body>
 </html>

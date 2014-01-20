@@ -42,7 +42,8 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 
         this.events = _.extend({}, this.events, {
             'click .btn-continue': 'next',
-
+            'click label[for="ConsentToSearch"] a': 'showConsent',
+            
             'focus #OverallTurnOver': 'overallTurnOverFocus',
             'focus #WebSiteTurnOver': 'webSiteTurnOverFocus',
 
@@ -62,6 +63,19 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
         this.readyToProceed = false;
     }, // initialize
 
+    showConsent: function () {
+        var consentAgreementModel = new EzBob.ConsentAgreementModel({
+            id: this.model.get('Id'),
+            firstName: this.$el.find('input[name="FirstName"]').val(),
+            middleInitial: this.$el.find('input[name="MiddleInitial"]').val(),
+            surname: this.$el.find('input[name="Surname"]').val()
+        });
+
+        var consentAgreement = new EzBob.ConsentAgreement({ model: consentAgreementModel });
+        EzBob.App.modal.show(consentAgreement);
+        return false;
+    }, // showConsent
+    
     inputChanged: function (evt) {
         if (evt && (evt.type === 'change') && (evt.target.id === 'TypeOfBusiness'))
             this.typeOfBusinessChanged();
@@ -135,13 +149,8 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 
         this.$el.find('.cashInput').moneyFormat();
 
-        if (!this.model.get('IsOffline'))
-            this.$el.find('.offline').remove();
-        else {
-            this.$el.find('.notoffline').remove();
-            this.$el.find('#TypeOfBusiness').val('Limited').change().attardi_labels('toggle');
-            this.$el.find('#TypeOfBusinessImage').field_status('set', 'ok');
-        } // if
+        this.$el.find('#TypeOfBusiness').val('Limited').change().attardi_labels('toggle');
+        this.$el.find('#TypeOfBusinessImage').field_status('set', 'ok');
 
         this.readyToProceed = true;
         return this;
@@ -149,24 +158,33 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 
     ownValidationRules: function () {
         var overallRegex = "^(?!£ 0.00$)";
-        var turnoverRegex = this.model.get('IsOffline') ? "^(£ 0.00$)|" + overallRegex : overallRegex;
 
         return {
             TypeOfBusiness: { required: true },
+            IndustryType: { required: true },
+            ConsentToSearch: { required: true },
+            DirectorCheck: { required: true },
             OverallTurnOver: { required: true, defaultInvalidPounds: true, regex: overallRegex },
-            WebSiteTurnOver: { required: true, defaultInvalidPounds: true, regex: turnoverRegex },
         };
     }, // ownValidationRules
 
     ownValidationMessages: function () {
         return {
-            TimeAtAddress: { regex: "This field is required" },
             OverallTurnOver: { defaultInvalidPounds: "This field is required", regex: "This field is required" },
-            WebSiteTurnOver: { defaultInvalidPounds: "This field is required", regex: "This field is required" },
         };
     }, // ownValidationMessages
 
     next: function (e) {
+        if ($('#TypeOfBusiness').val() == "Entrepreneur") {
+            if (!$('input[name="ConsentToSearch"]').prop('Checked')) {
+                EzBob.App.trigger('error', 'You must agree to terms and conditions in order to continue.');
+            }
+        } else {
+            if (!$('input[name="DirectorCheck"]').prop('Checked') || !$('input[name="ConsentToSearch"]').prop('Checked')) {
+                EzBob.App.trigger('error', 'You must agree to director and consent in order to continue.');
+            }
+        }
+        
         if ($('.btn-continue').hasClass('disabled'))
             return false;
 
@@ -200,10 +218,10 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
             this.handleTargeting(form, action, data, postcode, companyName, sCompanyFilter, refNum, typeOfBussiness);
         else
             this.saveDataRequest(action, data, typeOfBussiness);
-        
+
         return false;
     },
-    
+
     handleTargeting: function (form, action, data, postcode, companyName, sCompanyFilter, refNum, typeOfBussiness) {
         var that = this;
 
@@ -220,7 +238,7 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
                 switch (reqData.length) {
                     case 0:
                         if (that.targetingTries == 0) {
-                            EzBob.App.trigger('warning', 'Company ' + companyName + ' ' + postcode+ ' was not found. Please check your input and try again.');
+                            EzBob.App.trigger('warning', 'Company ' + companyName + ' ' + postcode + ' was not found. Please check your input and try again.');
                             that.targetingTries++;
                         } else {
                             that.saveTargeting(null, action, form, typeOfBussiness);
@@ -267,8 +285,15 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
         if (this.$el.find('#OverallTurnOver').is(":visible")) {
             _.find(data, function (d) { return d.name === 'OverallTurnOver'; }).value = this.$el.find('#OverallTurnOver').autoNumericGet();
         }
-        if (this.$el.find('#WebSiteTurnOver').is(":visible")) {
-            _.find(data, function (d) { return d.name === 'WebSiteTurnOver'; }).value = this.$el.find('#WebSiteTurnOver').autoNumericGet();
+        
+        if (this.$el.find('#ConsentToSearch').is(":checked")) {
+            _.find(data, function (d) { return d.name === 'ConsentToSearch'; }).value = true;
+        }
+        if (this.$el.find('#PartBusinessOnline').is(":checked")) {
+            _.find(data, function (d) { return d.name === 'PartBusinessOnline'; }).value = true;
+        }
+        if (this.$el.find('#DirectorCheck').is(":checked")) {
+            _.find(data, function (d) { return d.name === 'DirectorCheck'; }).value = true;
         }
 
         var totalMonthlySalary = _.find(data, function (d) { return d.name === 'TotalMonthlySalary'; });
@@ -279,6 +304,8 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
         if (capitalExpenditure)
             capitalExpenditure.value = this.$el.find('#CapitalExpenditure').autoNumericGet();
 
+        console.log('data', data);
+        debugger;
         var request = $.post(action, data);
 
         request.success(function (res) {
@@ -300,7 +327,7 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
                 $.post("" + window.gRootPath + "Customer/Experian/PerformCompanyCheck", {});
                 $.post("" + window.gRootPath + "Customer/Experian/PerformConsumerCheckForDirectors", {});
             }
-            
+
             UnBlockUi();
         });
     }, // saveDataRequest

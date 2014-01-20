@@ -39,7 +39,7 @@
 				throw new ArgumentNullException("personalInfo." + "FirstName");
 
 			if (string.IsNullOrEmpty(personalInfo.Surname))
-				throw new ArgumentNullException("personalInfo.S" + "urname");
+				throw new ArgumentNullException("personalInfo." + "Surname");
 		} // ValidatePersonalInfo
 
 		[NonAction]
@@ -165,9 +165,6 @@
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
 		public JsonNetResult SaveCompany(
-			string TypeOfBusiness,
-			decimal? WebSiteTurnOver,
-			decimal? OverallTurnOver,
 			LimitedInfo limitedInfo,
 			NonLimitedInfo nonLimitedInfo,
 			CompanyAdditionalInfo companyAdditionalInfo,
@@ -183,16 +180,27 @@
 
 			TypeOfBusiness nBusinessType;
 
-			if (!Enum.TryParse(TypeOfBusiness, true, out nBusinessType))
-				return this.JsonNet(new { error = "Failed to parse business type: " + TypeOfBusiness });
+			if (!Enum.TryParse(companyAdditionalInfo.TypeOfBusiness, true, out nBusinessType))
+				return this.JsonNet(new { error = "Failed to parse business type: " + companyAdditionalInfo.TypeOfBusiness });
 
 			if (customer.PersonalInfo == null)
 				customer.PersonalInfo = new PersonalInfo();
 
 
 			customer.PersonalInfo.TypeOfBusiness = nBusinessType;
-			customer.PersonalInfo.WebSiteTurnOver = WebSiteTurnOver;
-			customer.PersonalInfo.OverallTurnOver = OverallTurnOver;
+			customer.PersonalInfo.OverallTurnOver = companyAdditionalInfo.OverallTurnOver;
+
+			if (companyAdditionalInfo.IndustryType == "online" || companyAdditionalInfo.PartBusinessOnline)
+			{
+				customer.IsOffline = false;
+			}
+			else
+			{
+				customer.IsOffline = true;
+			}
+
+			customer.ConsentToSearch = companyAdditionalInfo.ConsentToSearch;
+			customer.IsDirector = companyAdditionalInfo.DirectorCheck;
 
 			ProcessCompanyInfoTemporary(nBusinessType, limitedInfo, nonLimitedInfo, companyAdditionalInfo, limitedCompanyAddress, nonLimitedCompanyAddress, limitedDirectors, nonLimitedDirectors, companyEmployeeCountInfo, experianInfo, customer);
 
@@ -218,8 +226,7 @@
 			PersonalInfo personalInfo,
 			List<CustomerAddress> personalAddress,
 			List<CustomerAddress> prevPersonAddresses,
-			string dateOfBirth,
-			List<CustomerAddress> otherPropertyAddress
+			string dateOfBirth
 		)
 		{
 			var customer = _context.Customer;
@@ -229,12 +236,10 @@
 			personalInfo.DateOfBirth = DateTime.ParseExact(dateOfBirth, "d/M/yyyy", CultureInfo.InvariantCulture);
 			personalInfo.Surname = UppercaseWords(personalInfo.Surname.Trim());
 			personalInfo.FirstName = UppercaseWords(personalInfo.FirstName.Trim());
-			personalInfo.MiddleInitial = string.IsNullOrEmpty(personalInfo.MiddleInitial) ? "" : UppercaseWords(personalInfo.MiddleInitial.Trim());
-			personalInfo.Fullname = string.Format("{0} {1} {2}", personalInfo.FirstName, personalInfo.Surname, personalInfo.MiddleInitial);
+			personalInfo.Fullname = string.Format("{0} {1}", personalInfo.FirstName, personalInfo.Surname);
 
 			if (customer.PersonalInfo != null)
 			{
-				personalInfo.WebSiteTurnOver = customer.PersonalInfo.WebSiteTurnOver;
 				personalInfo.OverallTurnOver = customer.PersonalInfo.OverallTurnOver;
 			} // if
 
@@ -250,12 +255,6 @@
 				customer, prevPersonAddresses, customer.AddressInfo.PrevPersonAddresses,
 				CustomerAddressType.PrevPersonAddresses,
 				lst => customer.AddressInfo.PrevPersonAddresses = lst
-			);
-
-			UpdateAddresses(
-				customer, otherPropertyAddress, customer.AddressInfo.OtherPropertyAddress,
-				CustomerAddressType.OtherPropertyAddress,
-				lst => customer.AddressInfo.OtherPropertyAddress = lst
 			);
 
 			customer.WizardStep = _helper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.PersonalDetails);
@@ -671,21 +670,17 @@
 				company.ExperianCompanyAddress = new HashedSet<CustomerAddress>(experianCompanyAddress);
 			}
 
-			if (customer.IsOffline)
+			company.CompanyEmployeeCount.Add(new CompanyEmployeeCount
 			{
-				company.CompanyEmployeeCount.Add(new CompanyEmployeeCount
-				{
-					BottomEarningEmployeeCount = companyEmployeeCount.BottomEarningEmployeeCount,
-					Created = DateTime.UtcNow,
-					Customer = customer,
-					EmployeeCount = companyEmployeeCount.EmployeeCount,
-					EmployeeCountChange = companyEmployeeCount.EmployeeCountChange,
-					TopEarningEmployeeCount = companyEmployeeCount.TopEarningEmployeeCount,
-					TotalMonthlySalary = companyEmployeeCount.TotalMonthlySalary,
-					Company = company
-				});
-			} // if
-
+				BottomEarningEmployeeCount = companyEmployeeCount.BottomEarningEmployeeCount,
+				Created = DateTime.UtcNow,
+				Customer = customer,
+				EmployeeCount = companyEmployeeCount.EmployeeCount,
+				EmployeeCountChange = companyEmployeeCount.EmployeeCountChange,
+				TopEarningEmployeeCount = companyEmployeeCount.TopEarningEmployeeCount,
+				TotalMonthlySalary = companyEmployeeCount.TotalMonthlySalary,
+				Company = company
+			});
 
 			customer.Companies.Add(company);
 
