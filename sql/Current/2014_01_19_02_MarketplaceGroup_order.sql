@@ -8,8 +8,12 @@ BEGIN
 	ALTER TABLE MP_MarketplaceGroup ADD PriorityOffline INT NOT NULL CONSTRAINT DF_MarketplaceGroup_PrioOff DEFAULT(0)
 	ALTER TABLE MP_MarketplaceGroup ADD TimestampCounter ROWVERSION
 	
-	ALTER TABLE MP_MarketplaceGroup ADD DisplayName NVARCHAR(255) NOT NULL CONSTRAINT DF_MarketplaceGroup_DisplayName DEFAULT('')
-	
+	ALTER TABLE MP_MarketplaceGroup ADD DisplayName NVARCHAR(255) NOT NULL CONSTRAINT DF_MarketplaceGroup_DisplayName DEFAULT('')	
+END
+GO
+
+IF NOT EXISTS (SELECT * FROM syscolumns WHERE id = OBJECT_ID('MP_MarketplaceGroup') AND name = 'ActiveWizardOnline')
+BEGIN
 	UPDATE MP_MarketplaceGroup SET DisplayName = 'Accounting software' WHERE Name = 'Accounting'
 	UPDATE MP_MarketplaceGroup SET DisplayName = 'Online marketplaces' WHERE Name = 'Shop'
 	UPDATE MP_MarketplaceGroup SET DisplayName = 'Banks' WHERE Name = 'Bank'
