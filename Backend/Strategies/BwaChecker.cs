@@ -87,6 +87,9 @@
 
 		private bool GetBwaData()
 		{
+			Log.Info("Starting bwa check with params: FirstName={0} Surname={1} Gender={2} DateOfBirth={3} Line1={4} Line2={5} Line3={6} Line4={7} Line6={8} PrevLine1={9} PrevLine2={10} PrevLine3={11} PrevLine4={12} PrevLine6={13}",
+				firstName, surname, gender, dateOfBirth, line1Current, line2Current, line3Current, line4Current, line6Current,
+				line1Prev, line2Prev, line3Prev, line4Prev, line6Prev);
 			bool hasError = GetBwa(line1Current, line2Current, line3Current, line4Current, line6Current);
 
 			if (hasError && timeAtAddress == 1 && line6Prev != null)
@@ -108,6 +111,9 @@
 
 		private bool GetBwaDataCustom()
 		{
+			Log.Info("Starting custom bwa check with params: FirstName={0} Surname={1} Gender={2} DateOfBirth={3} idhubHouseNumber={4} idhubHouseName={5} idhubStreet={6} idhubDistrict={7} idhubTown={8} idhubCounty={9} idhubPostCode={10} idhubBranchCode={11} idhubAccountNumber={12}",
+				firstName, surname, gender, dateOfBirth, idhubHouseNumber, idhubHouseName, idhubStreet,
+				idhubDistrict, idhubTown, idhubCounty, idhubPostCode, idhubBranchCode, idhubAccountNumber);
 			AccountVerificationResults accountVerificationResults = idHubService.AccountVerificationForcedWithCustomAddress(
 				firstName, null, surname, gender, dateOfBirth, idhubHouseNumber, idhubHouseName, idhubStreet,
 				idhubDistrict, idhubTown, idhubCounty, idhubPostCode, idhubBranchCode, idhubAccountNumber, customerId);

@@ -139,8 +139,16 @@
 				GetBwa();
 			} // if
 
-			decimal loanInterestBase = GetBaseInterest();
 			decimal scoringResult = CalculateScoreAndMedal();
+			
+			if (underwriterCheck)
+			{
+				SetEndTimestamp();
+				return;
+			} // if
+
+			decimal loanInterestBase = GetBaseInterest();
+
 			GetLastCashRequestData();
 
 			autoDecisionResponse = AutoDecisionMaker.MakeDecision(CreateAutoDecisionRequest(), DB, Log);
@@ -148,12 +156,6 @@
 			{
 				modelLoanOffer = 0;
 			}
-
-			if (underwriterCheck)
-			{
-				SetEndTimestamp();
-				return;
-			} // if
 
 			UpdateCustomerAndCashRequest(scoringResult, loanInterestBase);
 

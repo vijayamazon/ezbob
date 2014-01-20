@@ -50,6 +50,9 @@
 
 		public override void Execute()
 		{
+			Log.Info("Starting consumer check with params: FirstName={0} Surname={1} Gender={2} DateOfBirth={3} Line1={4} Line2={5} Line3={6} Line4={7} Line5={8} Line6={9} PrevLine1={10} PrevLine2={11} PrevLine3={12} PrevLine4={13} PrevLine5={14} PrevLine6={15}",
+				firstName, surname, gender, birthDate, currentAddressLine1, currentAddressLine2, currentAddressLine3, currentAddressLine4, currentAddressLine5, currentAddressLine6,
+				prevAddressLine1, prevAddressLine2, prevAddressLine3, prevAddressLine4, prevAddressLine5, prevAddressLine6);
 			GetConsumerInfoAndSave(currentAddressLine1, currentAddressLine2, currentAddressLine3, currentAddressLine4, currentAddressLine5, currentAddressLine6);
 
 			if (!string.IsNullOrEmpty(error) && CanUsePrevAddress())

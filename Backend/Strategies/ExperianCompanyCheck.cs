@@ -34,6 +34,7 @@
 
 		public override void Execute()
 		{
+			Log.Info("Starting company check with params: IsLimited={0} ExperianRefNum={1}", isLimited, experianRefNum);
 			if (!foundCompany)
 			{
 				Log.Info("Can't execute Experian company check for customer with no company");

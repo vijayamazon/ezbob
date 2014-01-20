@@ -98,6 +98,9 @@
 
 		private bool GetAmlData(out string result, out decimal authentication)
 		{
+			Log.Info("Starting aml check with params: FirstName={0} Surname={1} Gender={2} DateOfBirth={3} Line1={4} Line2={5} Line3={6} Line4={7} Line6={8} PrevLine1={9} PrevLine2={10 PrevLine3={11} PrevLine4={12} PrevLine6={13}",
+				firstName, surname, gender, dateOfBirth, line1Current, line2Current, line3Current, line4Current, line6Current,
+				line1Prev, line2Prev, line3Prev, line4Prev, line6Prev);
 			bool hasError = GetAml(line1Current, line2Current, line3Current, line4Current, line6Current, out result, out authentication);
 
 			if (hasError && timeAtAddress == 1 && line6Prev != null)
@@ -110,6 +113,9 @@
 
 		private bool GetAmlDataCustom(out string result, out decimal authentication)
 		{
+			Log.Info("Starting custom aml check with params: FirstName={0} Surname={1} Gender={2} DateOfBirth={3} idhubHouseNumber={4} idhubHouseName={5} idhubStreet={6} idhubDistrict={7} idhubTown={8} idhubCounty={9} idhubPostCode={10}",
+				firstName, surname, gender, dateOfBirth, idhubHouseNumber, idhubHouseName, idhubStreet,
+				idhubDistrict, idhubTown, idhubCounty, idhubPostCode);
 			AuthenticationResults authenticationResults = idHubService.AuthenticateForcedWithCustomAddress(
 				firstName, null, surname, gender, dateOfBirth, idhubHouseNumber, idhubHouseName, idhubStreet,
 				idhubDistrict, idhubTown, idhubCounty, idhubPostCode, customerId);
