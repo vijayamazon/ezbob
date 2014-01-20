@@ -1285,6 +1285,9 @@
     <Content Include="Content\js\Wizard\shops\ezbob.shops.freeagent.js">
       <DependentUpon>ezbob.shops.freeagent.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.hmrc.js">
+      <DependentUpon>ezbob.shops.hmrc.coffee</DependentUpon>
+    </Content>
     <Content Include="Content\js\Wizard\shops\ezbob.shops.js">
       <DependentUpon>ezbob.shops.coffee</DependentUpon>
     </Content>
@@ -1308,6 +1311,8 @@
       <DependentUpon>ezbob.underwriter.fraud.js</DependentUpon>
     </Content>
     <Content Include="Content\js\Underwriter\NewCreditLine\ezbob.underwriter.newCreditLine.coffee" />
+    <Content Include="Areas\Customer\Views\Shared\Shops\HMRCAccountInfoTemplate.cshtml" />
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.hmrc.coffee" />
     <None Include="Service References\EzServiceReference\configuration91.svcinfo" />
     <None Include="Service References\EzServiceReference\configuration.svcinfo" />
     <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.ActionMetaData.datasource">
@@ -1336,7 +1341,7 @@
     <Content Include="Areas\Customer\Views\Shared\SideBars\_Bottom.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\_StepsDashboard.cshtml" />
     <Content Include="Areas\Customer\Views\Profile\ApplyForLoanTopTemplate.cshtml" />
-    <Content Include="Areas\Customer\Views\Shared\Shops\CGAccoutInfoTemplate.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\Shops\CGAccountInfoTemplate.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\Shops\YodleeAccoutInfoTemplate.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\MarketPlaceDetails\Ebay.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\MarketPlaceDetails\Amazon.cshtml" />

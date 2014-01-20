@@ -1277,6 +1277,20 @@ EzBob.validatePayPointShopForm = function (el) {
     });
 };
 
+EzBob.validateHmrcLinkForm = function (el) {
+    var e = el || $('form');
+
+    return e.validate({
+        rules: {
+            hmrc_user_id: { required: true, minlength: 2, maxlength: 300 },
+            hmrc_password: { required: true, minlength: 2, maxlength: 300 }
+        },
+        errorPlacement: EzBob.Validation.errorPlacement,
+        unhighlight: EzBob.Validation.unhighlightFS,
+        highlight: EzBob.Validation.highlightFS
+    });
+};
+
 EzBob.validateCGShopForm = function (el, accountType) {
     var v = {
         rules: {},

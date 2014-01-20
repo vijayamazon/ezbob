@@ -1,0 +1,83 @@
+﻿<script id="HMRCAccountInfoTemplate" type="text/template">
+    <div id="initialDiv" class="row-fluid">
+        <div class="wizard-top-notification">
+            <label>As part of your application process we require you to upload or link your VAT payment history. We use your VAT returns to analyse your business performance</label>
+        </div>
+        <form id="hmrcAccount" class="cg-link-account-form">
+            <div class="clearfix">
+                <div class="form_buttons_container">
+                    <div class="attardi-button">
+                        <a href="#" class="rc-button green linkButton" ui-event-control-id="link-account:hmrc_connect">Link</a>
+                        <a style="margin-right:30%" href="#" class="rc-button green uploadButton" ui-event-control-id="link-account:hmrc_upload">Upload</a>
+                    </div>
+                </div>
+
+                <div class="form_buttons_container" style="margin-top: 60px;">
+                    <div class="attardi-button">
+                        <a href="#" class="back rc-button grey hmrcBack" ui-event-control-id="link-account:hmrc_back">Back</a>
+                    </div>
+                </div>
+            </div>
+    
+            <div class="hmrc-why-question offline_entry_message wizard_message">
+                <div class="hmrc-question"></div>
+                <div class="hmrc-why">Why do we need this? In order to properly evaluate your business and help your business achieve its goals. This is 100% secure.</div>
+            </div>
+        </form>
+    </div>
+    
+    
+    <div id="linkAccountDiv" class="row-fluid hide">
+        <div class="wizard-top-notification">
+            <div>
+                <h2 class="form_start">HMRC link</h2>    
+                <div style="float:right" class="hmrc-question"></div>
+            </div>
+            <label style="margin-top:0px">As part of your application process we require you to upload or link your VAT payment history. We use your VAT returns to analyse your business performance</label>
+    
+        </div>
+    
+        <form id="hmrcLinkAccount" class="cg-link-account-form">
+            @EzForm.InputText("hmrc_user_id", "User ID", "", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "link-account:hmrc_user_id")
+            @EzForm.Password("hmrc_password", "Password", "", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "link-account:hmrc_password")
+            <div class="clearfix">
+
+                <div class="form_buttons_container" style="margin-top: 60px;">
+                    <div class="attardi-button">
+                        <a href="#" class="rc-button green disabled connect-account" ui-event-control-id="link-account:hmrc_connect">Link Account</a>
+                        <a href="#" class="back rc-button grey linkAccountBack" ui-event-control-id="link-account:hmrc_link_account_back">Back</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    
+    <div id="uploadFilesDiv" class="row-fluid hide">
+        <div class="wizard-top-notification">
+            <div>
+                <h2 class="form_start">HMRC upload</h2>    
+                <div style="float:right" class="hmrc-question"></div>
+            </div>
+        </div>
+        <label style="margin-top:0px">Upload a copy of your last 5 VAT returns. Only upload files titled <b>Printed Copy of Submitted VAT return for your records</b> which you should have received automatically from the HMRC.</label>
+        <label style="margin-top:0px">Files can be uploaded in any order of dates</label>
+    
+        <form id="hmrcuploadFiles" class="cg-link-account-form">
+            <div class="clearfix">
+                <a href="#" class="rc-button green select-vat" ui-event-control-id="link-account:hmrc_select_vat">Select VAT files</a>
+                <label style="margin-top:0px">See VAT file example</label>
+                <label style="margin-top:0px">Do not have the file? Ask your accountant for them, it will take him 5 minutes to send them to you.</label>
+                <div id="upload-files-form">
+                    <iframe></iframe>
+                </div>
+
+                <div class="form_buttons_container" style="margin-top: 60px;">
+                    <div class="attardi-button">
+                        <a href="#" class="back rc-button grey uploadFilesBack" ui-event-control-id="link-account:hmrc_upload_files_back">Back</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</script>

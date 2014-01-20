@@ -61,10 +61,16 @@
           accountType: accountTypeName
         });
         this[lc + 'Accounts'] = acc;
-        this[lc + 'AccountInfoView'] = new EzBob.CGAccountInfoView({
-          model: acc,
-          accountType: accountTypeName
-        });
+        if (lc === 'hmrc') {
+          this[lc + 'AccountInfoView'] = new EzBob.HMRCAccountInfoView({
+            model: acc
+          });
+        } else {
+          this[lc + 'AccountInfoView'] = new EzBob.CGAccountInfoView({
+            model: acc,
+            accountType: accountTypeName
+          });
+        }
       }
       this.stores = {
         "eBay": {
