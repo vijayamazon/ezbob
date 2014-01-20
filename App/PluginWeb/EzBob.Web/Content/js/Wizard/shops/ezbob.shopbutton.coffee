@@ -18,7 +18,7 @@ class EzBob.StoreButtonView extends Backbone.Marionette.ItemView
         return data
 
     onRender: ->
-        btn = @$el.find '.marketplace-button-' + @shopClass
+        btn = @$el.find '.marketplace-button-account-' + @shopClass
 
         @$el.removeClass 'marketplace-button-full marketplace-button-empty'
 

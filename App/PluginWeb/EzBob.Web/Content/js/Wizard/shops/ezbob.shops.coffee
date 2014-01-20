@@ -10,7 +10,8 @@ class EzBob.StoreInfoView extends Backbone.View
     initialize: ->
         @ebayStores = new EzBob.EbayStoreModels()
         @EbayStoreView = new EzBob.EbayStoreInfoView()
-        @ebayStores.on "reset change", @marketplacesChanged, this
+        @ebayStores.on "reset 
+        change", @marketplacesChanged, this
 
         @amazonMarketplaces = new EzBob.AmazonStoreModels()
         @AmazonStoreInfoView = new EzBob.AmazonStoreInfoView()
@@ -96,8 +97,9 @@ class EzBob.StoreInfoView extends Backbone.View
     # end of initialize
 
     events:
-        "click a.connect-store": "close"
-        "click a.continue": "next"
+        'click a.connect-store': 'close'
+        'click a.continue': 'next'
+        'click .btn-showmore': 'showMoreAccounts'
 
     render: ->
         hasHmrc = @stores.HMRC.button.shops.length > 0
@@ -132,9 +134,16 @@ class EzBob.StoreInfoView extends Backbone.View
             sRemove = '.online_entry_message'
 
             @storeList.find('.importantnumber').text '£150,000'
+
+            if @isProfile
+                @storeList.find('.btn-showmore').remove()
+            else
+                @storeList.find('.btn-showmore').show()
         else
             sShow = '.online_entry_message'
             sRemove = '.offline_entry_message'
+
+            @storeList.find('.btn-showmore').remove()
 
         @storeList.find(sShow).show()
         @storeList.find(sRemove).remove()
@@ -149,7 +158,7 @@ class EzBob.StoreInfoView extends Backbone.View
         @storeList.find(sShow).show()
         @storeList.find(sRemove).remove()
 
-        accountsList = @storeList.find(".accounts-list")
+        accountsList = @storeList.find('.accounts-list')
 
         accountsList.empty()
 
@@ -168,22 +177,32 @@ class EzBob.StoreInfoView extends Backbone.View
         for grp in relevantMpGroups
             if bFirst
                 bFirst = false
-                sTitleClass = 'first'
+                sGroupClass = 'first'
             else
-                sTitleClass = 'following'
+                sGroupClass = 'following'
 
-            grpui = @storeList.find('.marketplace-group-template').clone().removeClass('marketplace-group-template hide').appendTo accountsList
-            $('.group-title', grpui).addClass(sTitleClass
-            
-            
-            
-            
-            ).text grp.DisplayName
+            grpui = @storeList
+                .find('.marketplace-group-template')
+                .clone()
+                .removeClass('marketplace-group-template hide')
+                .addClass(sGroupClass)
+                .appendTo(accountsList)
+
+            $('.group-title', grpui).text grp.DisplayName
             @mpGroups[grp.Id].ui = grpui
 
         for shop in sortedShopsByNumOfShops when shop.active
             oTarget = if @mpGroups[shop.groupid] and @mpGroups[shop.groupid].ui then @mpGroups[shop.groupid].ui else accountsList
-            shop.button.render().$el.addClass('marketplace-button').appendTo oTarget
+
+            if @isProfile
+                sBtnClass = 'marketplace-button-profile'
+            else
+                sBtnClass = @extractBtnClass oTarget
+
+            shop.button.render().$el.addClass('marketplace-button ' + sBtnClass).appendTo oTarget
+
+        if @isOffline and not @isProfile
+            @storeList.find('.marketplace-button-more, .marketplace-group.following').hide()
 
         @storeList.appendTo @$el
 
@@ -196,11 +215,28 @@ class EzBob.StoreInfoView extends Backbone.View
         this
     # end of render
 
+    showMoreAccounts: ->
+        @storeList.find('.btn-showmore').remove()
+        @storeList.find('.marketplace-button-more, .marketplace-group.following').show()
+    # end of showMoreAccounts
+
+    extractBtnClass: (jqTarget) ->
+        sClass = jqTarget.attr('data-last-button-class') || 'pull-right'
+
+        sClass = if sClass == 'pull-right' then 'pull-left' else 'pull-right'
+
+        jqTarget.attr 'data-last-button-class', sClass
+
+        sClass += ' marketplace-button-' + if $('.marketplace-button-less', jqTarget).length < 2 then 'less' else 'more'
+
+        sClass
+    # end of extractBtnClass
+
     marketplacesChanged: ->
         @$el.find(".wizard-top-notification h2").text "Add more shops to get more cash!"  if @ebayStores.length > 0 or @amazonMarketplaces.length > 0
 
     connect: (storeName) ->
-        EzBob.CT.recordEvent "ct:storebase." + @name + ".connect", storeName
+        EzBob.CT.recordEvent "ct:storebase.shops.connect", storeName
         @$el.find(">div").hide()
         storeView = @stores[storeName].view
         storeView.render().$el.appendTo @$el
@@ -213,6 +249,8 @@ class EzBob.StoreInfoView extends Backbone.View
         @oldTitle = $(document).attr("title")
         @setDocumentTitle storeView
         @setFocus storeName
+
+        event.preventDefault()
         false
 
     setFocus: (storeName) ->

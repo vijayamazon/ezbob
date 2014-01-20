@@ -26,7 +26,7 @@
 
       this.ebayStores = new EzBob.EbayStoreModels();
       this.EbayStoreView = new EzBob.EbayStoreInfoView();
-      this.ebayStores.on("reset change", this.marketplacesChanged, this);
+      this.ebayStores.on("reset         change", this.marketplacesChanged, this);
       this.amazonMarketplaces = new EzBob.AmazonStoreModels();
       this.AmazonStoreInfoView = new EzBob.AmazonStoreInfoView();
       this.amazonMarketplaces.on("reset change", this.marketplacesChanged, this);
@@ -147,12 +147,13 @@
     };
 
     StoreInfoView.prototype.events = {
-      "click a.connect-store": "close",
-      "click a.continue": "next"
+      'click a.connect-store': 'close',
+      'click a.continue': 'next',
+      'click .btn-showmore': 'showMoreAccounts'
     };
 
     StoreInfoView.prototype.render = function() {
-      var accountsList, bFirst, canContinue, ebayPaypalRuleMessageVisible, foundAllMandatories, grp, grpid, grpui, hasEbay, hasFilledShops, hasHmrc, hasPaypal, key, oTarget, relevantMpGroups, sActiveField, sPriorityField, sRemove, sShow, sTitleClass, shop, sortedShopsByNumOfShops, sortedShopsByPriority, _i, _j, _k, _len, _len1, _len2, _ref1, _ref2;
+      var accountsList, bFirst, canContinue, ebayPaypalRuleMessageVisible, foundAllMandatories, grp, grpid, grpui, hasEbay, hasFilledShops, hasHmrc, hasPaypal, key, oTarget, relevantMpGroups, sActiveField, sBtnClass, sGroupClass, sPriorityField, sRemove, sShow, shop, sortedShopsByNumOfShops, sortedShopsByPriority, _i, _j, _k, _len, _len1, _len2, _ref, _ref1;
 
       hasHmrc = this.stores.HMRC.button.shops.length > 0;
       sShow = '';
@@ -184,9 +185,15 @@
         sShow = '.offline_entry_message';
         sRemove = '.online_entry_message';
         this.storeList.find('.importantnumber').text('£150,000');
+        if (this.isProfile) {
+          this.storeList.find('.btn-showmore').remove();
+        } else {
+          this.storeList.find('.btn-showmore').show();
+        }
       } else {
         sShow = '.online_entry_message';
         sRemove = '.offline_entry_message';
+        this.storeList.find('.btn-showmore').remove();
       }
       this.storeList.find(sShow).show();
       this.storeList.find(sRemove).remove();
@@ -199,7 +206,7 @@
       }
       this.storeList.find(sShow).show();
       this.storeList.find(sRemove).remove();
-      accountsList = this.storeList.find(".accounts-list");
+      accountsList = this.storeList.find('.accounts-list');
       accountsList.empty();
       sActiveField = 'Active' + (this.isProfile ? 'Dashboard' : 'Wizard') + (this.isOffline ? 'Offline' : 'Online');
       sPriorityField = 'Priority' + (this.isOffline ? 'Offline' : 'Online');
@@ -219,12 +226,12 @@
         grp = relevantMpGroups[_j];
         if (bFirst) {
           bFirst = false;
-          sTitleClass = 'first';
+          sGroupClass = 'first';
         } else {
-          sTitleClass = 'following';
+          sGroupClass = 'following';
         }
-        grpui = this.storeList.find('.marketplace-group-template').clone().removeClass('marketplace-group-template hide').appendTo(accountsList);
-        $('.group-title', grpui).addClass(sTitleClass).text(grp.DisplayName);
+        grpui = this.storeList.find('.marketplace-group-template').clone().removeClass('marketplace-group-template hide').addClass(sGroupClass).appendTo(accountsList);
+        $('.group-title', grpui).text(grp.DisplayName);
         this.mpGroups[grp.Id].ui = grpui;
       }
       for (_k = 0, _len2 = sortedShopsByNumOfShops.length; _k < _len2; _k++) {
@@ -233,7 +240,15 @@
           continue;
         }
         oTarget = this.mpGroups[shop.groupid] && this.mpGroups[shop.groupid].ui ? this.mpGroups[shop.groupid].ui : accountsList;
-        shop.button.render().$el.addClass('marketplace-button').appendTo(oTarget);
+        if (this.isProfile) {
+          sBtnClass = 'marketplace-button-profile';
+        } else {
+          sBtnClass = this.extractBtnClass(oTarget);
+        }
+        shop.button.render().$el.addClass('marketplace-button ' + sBtnClass).appendTo(oTarget);
+      }
+      if (this.isOffline && !this.isProfile) {
+        this.storeList.find('.marketplace-button-more, .marketplace-group.following').hide();
       }
       this.storeList.appendTo(this.$el);
       EzBob.UiAction.registerView(this);
@@ -244,6 +259,20 @@
       return this;
     };
 
+    StoreInfoView.prototype.showMoreAccounts = function() {
+      this.storeList.find('.btn-showmore').remove();
+      return this.storeList.find('.marketplace-button-more, .marketplace-group.following').show();
+    };
+
+    StoreInfoView.prototype.extractBtnClass = function(jqTarget) {
+      var sClass;
+      sClass = jqTarget.attr('data-last-button-class') || 'pull-right';
+      sClass = sClass === 'pull-right' ? 'pull-left' : 'pull-right';
+      jqTarget.attr('data-last-button-class', sClass);
+      sClass += ' marketplace-button-' + ($('.marketplace-button-less', jqTarget).length < 2 ? 'less' : 'more');
+      return sClass;
+    };
+
     StoreInfoView.prototype.marketplacesChanged = function() {
       if (this.ebayStores.length > 0 || this.amazonMarketplaces.length > 0) {
         return this.$el.find(".wizard-top-notification h2").text("Add more shops to get more cash!");
@@ -252,8 +281,7 @@
 
     StoreInfoView.prototype.connect = function(storeName) {
       var oFieldStatusIcons, storeView;
-
-      EzBob.CT.recordEvent("ct:storebase." + this.name + ".connect", storeName);
+      EzBob.CT.recordEvent("ct:storebase.shops.connect", storeName);
       this.$el.find(">div").hide();
       storeView = this.stores[storeName].view;
       storeView.render().$el.appendTo(this.$el);
@@ -268,6 +296,7 @@
       this.oldTitle = $(document).attr("title");
       this.setDocumentTitle(storeView);
       this.setFocus(storeName);
+      event.preventDefault();
       return false;
     };
 

@@ -1314,29 +1314,53 @@ td.account-logo {
 	display: block;
 }
 
+.marketplace-group.following .group-title { padding-top: 1.5em; }
+
 .marketplace-button {
-	float: left;
-	margin: 0 1em 1em 0;
-	border: 1px solid #dddddd;
-	width: 190px;
+	margin-bottom: 17px;
+	width: 49%;
 	height: 60px;
-	background-image: url('images/accounts/plus.png');
-	background-repeat: no-repeat;
-	background-position: 5px 15px;
 	box-sizing: border-box;
+	border-radius: 5px;
+	display: table;
 }
 
-.marketplace-button-full { background-color: #e8fcc6; }
+.marketplace-button:hover {
+	border: 1px solid #e8fcc6;
+	border-radius: 10px;
+	background-color: white;
+	background-color: rgba(255, 255, 0, 0.1);
 
-.marketplace-button-empty { background-color: transparent; }
+	-moz-box-shadow: 0 0 10px 3px #e8fcc6, 0 0 20px 3px yellow;
+	-webkit-box-shadow: 0 0 10px 3px #e8fcc6, 0 0 20px 3px yellow;
+	box-shadow: 0 0 10px 3px #e8fcc6, 0 0 20px 3px yellow;
+}
 
-.marketplace-button img { margin-top: 10px; margin-left: 30px; }
+.marketplace-button-profile {
+	float: left;
+	margin-right: 17px;
+	width: 280px !important;
+}
 
-.marketplace-button-EKM img { margin-top: 15px; }
+.marketplace-button-full {
+	background-color: #e8fcc6;
+	border: 1px solid #e8fcc6;
+}
 
-.marketplace-button a { display: block; height: 50px; width: 180px; } 
+.marketplace-button-empty {
+	background-color: transparent;
+	border: 1px solid #dddddd;
+}
+
+.marketplace-button a { height: 60px; width: 100%; display: table-cell; text-align: center; vertical-align: middle; }
+
+.marketplace-button a img { vertical-align: middle; }
 
 @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+
+	.marketplace-button { width: 95%; float: left; }
+
+	.marketplace-button a { width: 95%; }
 
     html, body {
         padding: 0;
