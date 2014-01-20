@@ -1,5 +1,5 @@
 (function() {
-  var root, _ref,
+  var root,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -8,11 +8,11 @@
   root.EzBob = root.EzBob || {};
 
   EzBob.StoreInfoView = (function(_super) {
+
     __extends(StoreInfoView, _super);
 
     function StoreInfoView() {
-      _ref = StoreInfoView.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return StoreInfoView.__super__.constructor.apply(this, arguments);
     }
 
     StoreInfoView.prototype.attributes = {
@@ -22,8 +22,7 @@
     StoreInfoView.prototype.isOffline = false;
 
     StoreInfoView.prototype.initialize = function() {
-      var acc, accountTypeName, aryCGAccounts, grp, ignore, j, lc, name, ordpi, store, storeTypeName, vendorInfo, _i, _j, _len, _len1, _ref1, _ref2, _ref3;
-
+      var acc, accountTypeName, aryCGAccounts, grp, ignore, j, lc, name, ordpi, store, storeTypeName, vendorInfo, _i, _j, _len, _len1, _ref, _ref1, _ref2;
       this.ebayStores = new EzBob.EbayStoreModels();
       this.EbayStoreView = new EzBob.EbayStoreInfoView();
       this.ebayStores.on("reset         change", this.marketplacesChanged, this);
@@ -103,15 +102,15 @@
       this.isOffline = this.model.get('isOffline');
       this.isProfile = this.model.get('isProfile');
       this.mpGroups = {};
-      _ref1 = EzBob.Config.MarketPlaceGroups;
-      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-        grp = _ref1[_i];
+      _ref = EzBob.Config.MarketPlaceGroups;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        grp = _ref[_i];
         this.mpGroups[grp.Id] = grp;
         grp.ui = null;
       }
-      _ref2 = EzBob.Config.MarketPlaces;
-      for (_j = 0, _len1 = _ref2.length; _j < _len1; _j++) {
-        j = _ref2[_j];
+      _ref1 = EzBob.Config.MarketPlaces;
+      for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+        j = _ref1[_j];
         storeTypeName = j.Name === "Pay Pal" ? "paypal" : j.Name;
         if (this.stores[storeTypeName]) {
           this.stores[storeTypeName].active = this.isProfile ? (this.isOffline ? j.ActiveDashboardOffline : j.ActiveDashboardOnline) : (this.isOffline ? j.ActiveWizardOffline : j.ActiveWizardOnline);
@@ -135,9 +134,9 @@
         ordpi: ordpi
       }));
       this.isReady = false;
-      _ref3 = this.stores;
-      for (name in _ref3) {
-        store = _ref3[name];
+      _ref2 = this.stores;
+      for (name in _ref2) {
+        store = _ref2[name];
         store.button.on("selected", this.connect, this);
         store.view.on("completed", _.bind(this.completed, this, store.button.name));
         store.view.on("back", this.back, this);
@@ -153,9 +152,7 @@
     };
 
     StoreInfoView.prototype.render = function() {
-      var accountsList, bFirst, canContinue, ebayPaypalRuleMessageVisible, foundAllMandatories, grp, grpid, grpui, hasEbay, hasFilledShops, hasHmrc, hasPaypal, key, oTarget, relevantMpGroups, sActiveField, sBtnClass, sGroupClass, sPriorityField, sRemove, sShow, shop, sortedShopsByNumOfShops, sortedShopsByPriority, _i, _j, _k, _len, _len1, _len2, _ref, _ref1;
-
-      hasHmrc = this.stores.HMRC.button.shops.length > 0;
+      var accountsList, bFirst, canContinue, ebayPaypalRuleMessageVisible, foundAllMandatories, grp, grpid, grpui, hasEbay, hasFilledShops, hasPaypal, key, oTarget, relevantMpGroups, sActiveField, sBtnClass, sGroupClass, sPriorityField, sRemove, sShow, shop, sortedShopsByNumOfShops, sortedShopsByPriority, _i, _j, _k, _len, _len1, _len2, _ref, _ref1;
       sShow = '';
       sRemove = '';
       sortedShopsByPriority = _.sortBy(this.stores, function(s) {
@@ -170,9 +167,9 @@
       ebayPaypalRuleMessageVisible = hasEbay && !hasPaypal;
       this.$el.find(".eBayPaypalRule").toggleClass("hide", !ebayPaypalRuleMessageVisible);
       foundAllMandatories = true;
-      _ref1 = Object.keys(this.stores);
-      for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-        key = _ref1[_i];
+      _ref = Object.keys(this.stores);
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        key = _ref[_i];
         if (this.stores[key].button.shops.length === 0 && this.stores[key].mandatory) {
           foundAllMandatories = false;
         }
@@ -211,9 +208,9 @@
       sActiveField = 'Active' + (this.isProfile ? 'Dashboard' : 'Wizard') + (this.isOffline ? 'Offline' : 'Online');
       sPriorityField = 'Priority' + (this.isOffline ? 'Offline' : 'Online');
       relevantMpGroups = [];
-      _ref2 = this.mpGroups;
-      for (grpid in _ref2) {
-        grp = _ref2[grpid];
+      _ref1 = this.mpGroups;
+      for (grpid in _ref1) {
+        grp = _ref1[grpid];
         if (grp[sActiveField]) {
           relevantMpGroups.push(grp);
         }
@@ -302,7 +299,6 @@
 
     StoreInfoView.prototype.setFocus = function(storeName) {
       var aryCGAccounts;
-
       $.colorbox.close();
       switch (storeName) {
         case "EKM":
@@ -319,7 +315,6 @@
 
     StoreInfoView.prototype.setDocumentTitle = function(view) {
       var title;
-
       title = view.getDocumentTitle();
       if (title) {
         return $(document).attr("title", "Step 2: " + title + " | EZBOB");
@@ -372,7 +367,6 @@
 
     StoreInfoView.prototype.shopConnected = function(name) {
       var _this = this;
-
       return this.model.safeFetch().done(function() {
         _this.stores[name].button.update(_this.model.get('mpAccounts'));
         _this.updateEarnedPoints();
@@ -381,15 +375,14 @@
     };
 
     StoreInfoView.prototype.handleMandatoryText = function(hasFilledShops, canContinue, ebayPaypalRuleMessageVisible) {
-      var first, foundAllMandatories, key, shouldHide, text, _i, _len, _ref1;
-
+      var first, foundAllMandatories, key, shouldHide, text, _i, _len, _ref;
       shouldHide = !hasFilledShops || canContinue || ebayPaypalRuleMessageVisible;
       if (!shouldHide) {
         first = true;
         text = 'Please add the following accounts in order to continue: ';
-        _ref1 = Object.keys(this.stores);
-        for (_i = 0, _len = _ref1.length; _i < _len; _i++) {
-          key = _ref1[_i];
+        _ref = Object.keys(this.stores);
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          key = _ref[_i];
           if (this.stores[key].button.shops.length === 0 && this.stores[key].mandatory) {
             foundAllMandatories = false;
             if (!first) {

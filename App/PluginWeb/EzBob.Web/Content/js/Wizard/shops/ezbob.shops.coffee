@@ -102,8 +102,6 @@ class EzBob.StoreInfoView extends Backbone.View
         'click .btn-showmore': 'showMoreAccounts'
 
     render: ->
-        hasHmrc = @stores.HMRC.button.shops.length > 0
-
         sShow = ''
         sRemove = ''
 
