@@ -80,10 +80,6 @@ class EzBob.StoreInfoView extends Backbone.View
                 @stores[storeTypeName].button.ribbon = if j.Ribbon then j.Ribbon else ""
                 @stores[storeTypeName].mandatory = if @isOffline then j.MandatoryOffline else j.MandatoryOnline
                 @stores[storeTypeName].groupid = if j.Group? then j.Group.Id else 0
-        
-        if(!@isProfile)
-            @allowFinishOnlineWizardWithoutMarketplaces = $('#allowFinishWizardWithoutMarketplaces').attr('online').toLowerCase() == 'true'
-            @allowFinishOfflineWizardWithoutMarketplaces = $('#allowFinishWizardWithoutMarketplaces').attr('offline').toLowerCase() == 'true'
 
         if typeof ordpi is 'undefined'
             ordpi = Math.random() * 10000000000000000
@@ -106,59 +102,9 @@ class EzBob.StoreInfoView extends Backbone.View
         'click .btn-showmore': 'showMoreAccounts'
 
     render: ->
-        sShow = ''
-        sRemove = ''
+        @canContinue()
 
-        sortedShopsByPriority = _.sortBy(@stores, (s) -> s.priority)
-        sortedShopsByNumOfShops = _.sortBy(sortedShopsByPriority, (s) -> -s.button.shops.length)
-
-        hasFilledShops = sortedShopsByNumOfShops[0].button.shops.length > 0
-
-        hasEbay = @stores.eBay.button.shops.length > 0
-        hasPaypal = @stores.paypal.button.shops.length > 0
-
-        ebayPaypalRuleMessageVisible = hasEbay and !hasPaypal
-        @$el.find(".eBayPaypalRule").toggleClass("hide", !ebayPaypalRuleMessageVisible)
-
-        foundAllMandatories = true
-        for key in Object.keys(@stores)
-            if @stores[key].button.shops.length == 0 && @stores[key].mandatory
-                foundAllMandatories = false
-
-        $(@storeList).find(".back-store").remove() # .hide() if not @isProfile
-
-        canContinue = @isProfile or ((hasFilledShops and (!hasEbay or (hasEbay and hasPaypal)) and foundAllMandatories) or (@isOffline and @allowFinishOfflineWizardWithoutMarketplaces) or (!@isOffline and @allowFinishOnlineWizardWithoutMarketplaces))
-        @storeList.find('.continue').toggleClass 'disabled', !canContinue
-        @handleMandatoryText(hasFilledShops, canContinue, ebayPaypalRuleMessageVisible)
-        
-        if @isOffline
-            sShow = '.offline_entry_message'
-            sRemove = '.online_entry_message'
-
-            @storeList.find('.importantnumber').text '£150,000'
-
-            if @isProfile
-                @storeList.find('.btn-showmore').remove()
-            else
-                @storeList.find('.btn-showmore').show()
-        else
-            sShow = '.online_entry_message'
-            sRemove = '.offline_entry_message'
-
-            @storeList.find('.btn-showmore').remove()
-
-        @storeList.find(sShow).show()
-        @storeList.find(sRemove).remove()
-
-        if @isProfile
-            sShow = ".profile_message"
-            sRemove = ".wizard_message"
-        else
-            sShow = ".wizard_message"
-            sRemove = ".profile_message"
-
-        @storeList.find(sShow).show()
-        @storeList.find(sRemove).remove()
+        @showOrRemove()
 
         accountsList = @storeList.find('.accounts-list')
 
@@ -193,7 +139,8 @@ class EzBob.StoreInfoView extends Backbone.View
             $('.group-title', grpui).text grp.DisplayName
             @mpGroups[grp.Id].ui = grpui
 
-        for shop in sortedShopsByNumOfShops when shop.active
+        sortedShopsByPriority = _.sortBy(@stores, (s) -> s.priority)
+        for shop in sortedShopsByPriority when shop.active
             oTarget = if @mpGroups[shop.groupid] and @mpGroups[shop.groupid].ui then @mpGroups[shop.groupid].ui else accountsList
 
             if @isProfile
@@ -217,8 +164,74 @@ class EzBob.StoreInfoView extends Backbone.View
         this
     # end of render
 
+    showOrRemove: ->
+        $(@storeList).find('.back-store').remove() # .hide() if not @isProfile
+
+        sShow = ''
+        sRemove = ''
+
+        if @isOffline
+            sShow = '.offline_entry_message'
+            sRemove = '.online_entry_message'
+
+            @storeList.find('.importantnumber').text '£150,000'
+
+            if @isProfile
+                @storeList.find('.btn-showmore').remove()
+                @storeList.find('.AddMoreRuleBottom').removeClass 'hide'
+            else
+                @storeList.find('.btn-showmore').show()
+        else
+            sShow = '.online_entry_message'
+            sRemove = '.offline_entry_message'
+
+            @storeList.find('.btn-showmore').remove()
+            @storeList.find('.AddMoreRuleBottom').removeClass 'hide'
+
+        @storeList.find(sShow).show()
+        @storeList.find(sRemove).remove()
+
+        if @isProfile
+            sShow = '.profile_message'
+            sRemove = '.wizard_message'
+        else
+            sShow = '.wizard_message'
+            sRemove = '.profile_message'
+
+        @storeList.find(sShow).show()
+        @storeList.find(sRemove).remove()
+    # end of showOrRemove
+    
+    canContinue: ->
+        hasFilledShops = false
+        for mpType, oStore of @stores
+            if oStore.button.shops.length
+                hasFilledShops = true
+                break
+
+        hasEbay = @stores.eBay.button.shops.length > 0
+        hasPaypal = @stores.paypal.button.shops.length > 0
+
+        @$el.find('.eBayPaypalRule').toggleClass 'hide', not (hasEbay and !hasPaypal)
+
+        canContinue = false
+
+        if @isProfile
+            canContinue = true
+        else
+            if hasFilledShops and (!hasEbay or (hasEbay and hasPaypal))
+                canContinue = true
+            else
+                sAttrName = if @isOffline then 'offline' else 'online'
+                canContinue = $('#allowFinishWizardWithoutMarketplaces').attr(sAttrName).toLowerCase() == 'true'
+
+        @storeList.find('.continue').toggleClass 'disabled', not canContinue
+        @storeList.find('.AddMoreRule').toggleClass 'hide', canContinue
+    # end of canContinue
+
     showMoreAccounts: ->
         @storeList.find('.btn-showmore').remove()
+        @storeList.find('.AddMoreRuleBottom').removeClass 'hide'
         @storeList.find('.marketplace-button-more, .marketplace-group.following').show()
     # end of showMoreAccounts
 
@@ -311,21 +324,3 @@ class EzBob.StoreInfoView extends Backbone.View
             @stores[name].button.update(@model.get('mpAccounts'))
             @updateEarnedPoints()
             @render()
-
-    handleMandatoryText: (hasFilledShops, canContinue, ebayPaypalRuleMessageVisible) ->
-        shouldHide = !hasFilledShops or canContinue or ebayPaypalRuleMessageVisible
-
-        if !shouldHide
-            first = true
-            text = 'Please add the following accounts in order to continue: '
-            for key in Object.keys(@stores)
-                if @stores[key].button.shops.length == 0 && @stores[key].mandatory
-                    foundAllMandatories = false
-                    if !first
-                        text += ', '
-                    first = false
-                    text += key
-
-            @storeList.find('.AddMoreRule').text text
-
-        @storeList.find('.AddMoreRule').toggleClass 'hide', shouldHide

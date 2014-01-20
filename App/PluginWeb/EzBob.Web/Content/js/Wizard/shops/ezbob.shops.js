@@ -131,10 +131,6 @@
           this.stores[storeTypeName].groupid = j.Group != null ? j.Group.Id : 0;
         }
       }
-      if (!this.isProfile) {
-        this.allowFinishOnlineWizardWithoutMarketplaces = $('#allowFinishWizardWithoutMarketplaces').attr('online').toLowerCase() === 'true';
-        this.allowFinishOfflineWizardWithoutMarketplaces = $('#allowFinishWizardWithoutMarketplaces').attr('offline').toLowerCase() === 'true';
-      }
       if (typeof ordpi === 'undefined') {
         ordpi = Math.random() * 10000000000000000;
       }
@@ -160,65 +156,17 @@
     };
 
     StoreInfoView.prototype.render = function() {
-      var accountsList, bFirst, canContinue, ebayPaypalRuleMessageVisible, foundAllMandatories, grp, grpid, grpui, hasEbay, hasFilledShops, hasPaypal, key, oTarget, relevantMpGroups, sActiveField, sBtnClass, sGroupClass, sPriorityField, sRemove, sShow, shop, sortedShopsByNumOfShops, sortedShopsByPriority, _i, _j, _k, _len, _len1, _len2, _ref, _ref1;
-      sShow = '';
-      sRemove = '';
-      sortedShopsByPriority = _.sortBy(this.stores, function(s) {
-        return s.priority;
-      });
-      sortedShopsByNumOfShops = _.sortBy(sortedShopsByPriority, function(s) {
-        return -s.button.shops.length;
-      });
-      hasFilledShops = sortedShopsByNumOfShops[0].button.shops.length > 0;
-      hasEbay = this.stores.eBay.button.shops.length > 0;
-      hasPaypal = this.stores.paypal.button.shops.length > 0;
-      ebayPaypalRuleMessageVisible = hasEbay && !hasPaypal;
-      this.$el.find(".eBayPaypalRule").toggleClass("hide", !ebayPaypalRuleMessageVisible);
-      foundAllMandatories = true;
-      _ref = Object.keys(this.stores);
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        key = _ref[_i];
-        if (this.stores[key].button.shops.length === 0 && this.stores[key].mandatory) {
-          foundAllMandatories = false;
-        }
-      }
-      $(this.storeList).find(".back-store").remove();
-      canContinue = this.isProfile || ((hasFilledShops && (!hasEbay || (hasEbay && hasPaypal)) && foundAllMandatories) || (this.isOffline && this.allowFinishOfflineWizardWithoutMarketplaces) || (!this.isOffline && this.allowFinishOnlineWizardWithoutMarketplaces));
-      this.storeList.find('.continue').toggleClass('disabled', !canContinue);
-      this.handleMandatoryText(hasFilledShops, canContinue, ebayPaypalRuleMessageVisible);
-      if (this.isOffline) {
-        sShow = '.offline_entry_message';
-        sRemove = '.online_entry_message';
-        this.storeList.find('.importantnumber').text('£150,000');
-        if (this.isProfile) {
-          this.storeList.find('.btn-showmore').remove();
-        } else {
-          this.storeList.find('.btn-showmore').show();
-        }
-      } else {
-        sShow = '.online_entry_message';
-        sRemove = '.offline_entry_message';
-        this.storeList.find('.btn-showmore').remove();
-      }
-      this.storeList.find(sShow).show();
-      this.storeList.find(sRemove).remove();
-      if (this.isProfile) {
-        sShow = ".profile_message";
-        sRemove = ".wizard_message";
-      } else {
-        sShow = ".wizard_message";
-        sRemove = ".profile_message";
-      }
-      this.storeList.find(sShow).show();
-      this.storeList.find(sRemove).remove();
+      var accountsList, bFirst, grp, grpid, grpui, oTarget, relevantMpGroups, sActiveField, sBtnClass, sGroupClass, sPriorityField, shop, sortedShopsByPriority, _i, _j, _len, _len1, _ref;
+      this.canContinue();
+      this.showOrRemove();
       accountsList = this.storeList.find('.accounts-list');
       accountsList.empty();
       sActiveField = 'Active' + (this.isProfile ? 'Dashboard' : 'Wizard') + (this.isOffline ? 'Offline' : 'Online');
       sPriorityField = 'Priority' + (this.isOffline ? 'Offline' : 'Online');
       relevantMpGroups = [];
-      _ref1 = this.mpGroups;
-      for (grpid in _ref1) {
-        grp = _ref1[grpid];
+      _ref = this.mpGroups;
+      for (grpid in _ref) {
+        grp = _ref[grpid];
         if (grp[sActiveField]) {
           relevantMpGroups.push(grp);
         }
@@ -227,8 +175,8 @@
         return g[sPriorityField];
       });
       bFirst = true;
-      for (_j = 0, _len1 = relevantMpGroups.length; _j < _len1; _j++) {
-        grp = relevantMpGroups[_j];
+      for (_i = 0, _len = relevantMpGroups.length; _i < _len; _i++) {
+        grp = relevantMpGroups[_i];
         if (bFirst) {
           bFirst = false;
           sGroupClass = 'first';
@@ -239,8 +187,11 @@
         $('.group-title', grpui).text(grp.DisplayName);
         this.mpGroups[grp.Id].ui = grpui;
       }
-      for (_k = 0, _len2 = sortedShopsByNumOfShops.length; _k < _len2; _k++) {
-        shop = sortedShopsByNumOfShops[_k];
+      sortedShopsByPriority = _.sortBy(this.stores, function(s) {
+        return s.priority;
+      });
+      for (_j = 0, _len1 = sortedShopsByPriority.length; _j < _len1; _j++) {
+        shop = sortedShopsByPriority[_j];
         if (!shop.active) {
           continue;
         }
@@ -264,8 +215,72 @@
       return this;
     };
 
+    StoreInfoView.prototype.showOrRemove = function() {
+      var sRemove, sShow;
+      $(this.storeList).find('.back-store').remove();
+      sShow = '';
+      sRemove = '';
+      if (this.isOffline) {
+        sShow = '.offline_entry_message';
+        sRemove = '.online_entry_message';
+        this.storeList.find('.importantnumber').text('£150,000');
+        if (this.isProfile) {
+          this.storeList.find('.btn-showmore').remove();
+          this.storeList.find('.AddMoreRuleBottom').removeClass('hide');
+        } else {
+          this.storeList.find('.btn-showmore').show();
+        }
+      } else {
+        sShow = '.online_entry_message';
+        sRemove = '.offline_entry_message';
+        this.storeList.find('.btn-showmore').remove();
+        this.storeList.find('.AddMoreRuleBottom').removeClass('hide');
+      }
+      this.storeList.find(sShow).show();
+      this.storeList.find(sRemove).remove();
+      if (this.isProfile) {
+        sShow = '.profile_message';
+        sRemove = '.wizard_message';
+      } else {
+        sShow = '.wizard_message';
+        sRemove = '.profile_message';
+      }
+      this.storeList.find(sShow).show();
+      return this.storeList.find(sRemove).remove();
+    };
+
+    StoreInfoView.prototype.canContinue = function() {
+      var canContinue, hasEbay, hasFilledShops, hasPaypal, mpType, oStore, sAttrName, _ref;
+      hasFilledShops = false;
+      _ref = this.stores;
+      for (mpType in _ref) {
+        oStore = _ref[mpType];
+        if (oStore.button.shops.length) {
+          hasFilledShops = true;
+          break;
+        }
+      }
+      hasEbay = this.stores.eBay.button.shops.length > 0;
+      hasPaypal = this.stores.paypal.button.shops.length > 0;
+      this.$el.find('.eBayPaypalRule').toggleClass('hide', !(hasEbay && !hasPaypal));
+      canContinue = false;
+      if (this.isProfile) {
+        canContinue = true;
+      } else {
+        if (hasFilledShops && (!hasEbay || (hasEbay && hasPaypal))) {
+          canContinue = true;
+        } else {
+          sAttrName = this.isOffline ? 'offline' : 'online';
+          canContinue = $('#allowFinishWizardWithoutMarketplaces').attr(sAttrName).toLowerCase() === 'true';
+        }
+      }
+      this.storeList.find('.continue').toggleClass('disabled', !canContinue);
+      return this.storeList.find('.AddMoreRule').toggleClass('hide', canContinue);
+    };
+
     StoreInfoView.prototype.showMoreAccounts = function() {
       this.storeList.find('.btn-showmore').remove();
+      this.storeList.find('.AddMoreRuleBottom').removeClass('hide');
       return this.storeList.find('.marketplace-button-more, .marketplace-group.following').show();
     };
 
@@ -380,29 +395,6 @@
         _this.updateEarnedPoints();
         return _this.render();
       });
-    };
-
-    StoreInfoView.prototype.handleMandatoryText = function(hasFilledShops, canContinue, ebayPaypalRuleMessageVisible) {
-      var first, foundAllMandatories, key, shouldHide, text, _i, _len, _ref;
-      shouldHide = !hasFilledShops || canContinue || ebayPaypalRuleMessageVisible;
-      if (!shouldHide) {
-        first = true;
-        text = 'Please add the following accounts in order to continue: ';
-        _ref = Object.keys(this.stores);
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          key = _ref[_i];
-          if (this.stores[key].button.shops.length === 0 && this.stores[key].mandatory) {
-            foundAllMandatories = false;
-            if (!first) {
-              text += ', ';
-            }
-            first = false;
-            text += key;
-          }
-        }
-        this.storeList.find('.AddMoreRule').text(text);
-      }
-      return this.storeList.find('.AddMoreRule').toggleClass('hide', shouldHide);
     };
 
     return StoreInfoView;

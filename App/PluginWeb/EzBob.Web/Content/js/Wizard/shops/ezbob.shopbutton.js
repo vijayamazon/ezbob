@@ -37,7 +37,7 @@
 
     StoreButtonView.prototype.onRender = function() {
       var btn, oHelpWindowTemplate, oLinks, sTitle;
-      btn = this.$el.find('.marketplace-button-' + this.shopClass);
+      btn = this.$el.find('.marketplace-button-account-' + this.shopClass);
       this.$el.removeClass('marketplace-button-full marketplace-button-empty');
       sTitle = (this.shops.length || 'No') + ' account' + (this.shops.length === 1 ? '' : 's') + ' linked. Click to link ';
       if (this.shops.length) {
@@ -58,7 +58,7 @@
           oLinks = JSON.parse($('#store-button-help-window-links').html());
           this.$el.find('.help-window-continue-link').attr('href', oLinks[this.shopClass]);
           btn.attr('href', '#' + this.shopClass + '_help');
-          return btn.colorbox({
+          btn.colorbox({
             inline: true,
             transition: 'none',
             onClosed: function() {
@@ -69,13 +69,25 @@
               }
             }
           });
+          break;
         default:
-          return btn.click((function(arg) {
+          btn.click((function(arg) {
             return function() {
               return EzBob.App.trigger('ct:storebase.shops.connect', arg);
             };
           })(this.shopClass));
       }
+      return btn.hover((function(evt) {
+        return $('.onhover', this).animate({
+          top: 0,
+          opacity: 1
+        }, 'fast');
+      }), (function(evt) {
+        return $('.onhover', this).animate({
+          top: '60px',
+          opacity: 0
+        }, 'fast');
+      }));
     };
 
     StoreButtonView.prototype.isAddingAllowed = function() {

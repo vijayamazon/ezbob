@@ -63,11 +63,11 @@ EzBob.WizardView = Backbone.View.extend({
 		var modelArgs = {
 			mpAccounts: this.customer.get('mpAccounts'),
 			isProfile: this.customer.get('IsProfile'),
+			isOffline: this.customer.get('IsOffline'),
 		};
 
 		var storeInfoStepModel = new EzBob.StoreInfoStepModel(modelArgs);
-		
-	    
+
 		var oWss = {
 			views: {
 				signup: new EzBob.QuickSignUpStepView({ model: this.customer }),

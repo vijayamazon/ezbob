@@ -56,6 +56,11 @@ class EzBob.StoreButtonView extends Backbone.Marionette.ItemView
                     )(@shopClass)
                 )
         # end of switch
+
+        btn.hover(
+            ((evt) -> $('.onhover', this).animate({ top: 0,      opacity: 1 }, 'fast')),
+            ((evt) -> $('.onhover', this).animate({ top: '60px', opacity: 0 }, 'fast'))
+        )
     # end of onRender
 
     isAddingAllowed: -> return true
