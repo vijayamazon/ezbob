@@ -279,12 +279,15 @@
 						                                x.Rule.Id == (int) YodleeRule.DontIncludeLiteralWord) &&
 						                               x.Literal == literal.Trim().ToLowerInvariant())))
 				{
-					_yodleeGroupRuleMapRepository.Save(new MP_YodleeGroupRuleMap()
+					_yodleeGroupRuleMapRepository.Save(new MP_YodleeGroupRuleMap
 						{
 							Group = oGroup,
 							Rule = oRule,
 							Literal = literal.Trim().ToLowerInvariant()
 						});
+
+					var t = new YodleeTransactionRepository(_session);
+					t.RemoveEzbobCategorization();
 				}
 			}
 		}

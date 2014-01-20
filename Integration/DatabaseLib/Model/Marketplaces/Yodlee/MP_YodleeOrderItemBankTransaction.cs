@@ -105,3 +105,24 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.Yodlee
 		public virtual MP_YodleeGroup ezbobCategory { get; set; }
 	}
 }
+
+namespace EZBob.DatabaseLib.Model.Database.Repository
+{
+	using ApplicationMng.Repository;
+	using Marketplaces.Yodlee;
+	using NHibernate;
+
+	public class YodleeTransactionRepository : NHibernateRepositoryBase<MP_YodleeOrderItemBankTransaction>
+	{
+		public YodleeTransactionRepository(ISession session)
+			: base(session)
+		{
+		}
+
+		public void RemoveEzbobCategorization()
+		{
+			var q = _session.CreateSQLQuery("UPDATE MP_YodleeOrderItemBankTransaction SET ezbobCategory = NULL");
+			q.ExecuteUpdate();
+		}
+	}
+}
