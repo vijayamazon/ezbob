@@ -232,7 +232,6 @@
 
     PersonalInfoView.prototype.onRender = function() {
       var address, otherAddress;
-      console.log('model', this.model);
       address = new EzBob.AddressView({
         model: this.model.get('PersonalAddress'),
         name: 'PersonalAddress',
@@ -321,8 +320,6 @@
 
     LimitedInfoView.prototype.onRender = function() {
       var address, directorView, directors;
-      console.log('comapny', this.model.get('CompanyAddress'));
-      console.log('personal', this.model.get('PersonalAddress'));
       address = new EzBob.AddressView({
         model: this.model.get('CompanyAddress'),
         name: 'LimitedCompanyAddress',

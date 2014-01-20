@@ -80,9 +80,10 @@ class EzBob.StoreInfoView extends Backbone.View
                 @stores[storeTypeName].button.ribbon = if j.Ribbon then j.Ribbon else ""
                 @stores[storeTypeName].mandatory = if @isOffline then j.MandatoryOffline else j.MandatoryOnline
                 @stores[storeTypeName].groupid = if j.Group? then j.Group.Id else 0
-
-        @allowFinishOnlineWizardWithoutMarketplaces = $('#allowFinishWizardWithoutMarketplaces').attr('online').toLowerCase() == 'true'
-        @allowFinishOfflineWizardWithoutMarketplaces = $('#allowFinishWizardWithoutMarketplaces').attr('offline').toLowerCase() == 'true'
+        
+        if(!@isProfile)
+            @allowFinishOnlineWizardWithoutMarketplaces = $('#allowFinishWizardWithoutMarketplaces').attr('online').toLowerCase() == 'true'
+            @allowFinishOfflineWizardWithoutMarketplaces = $('#allowFinishWizardWithoutMarketplaces').attr('offline').toLowerCase() == 'true'
 
         if typeof ordpi is 'undefined'
             ordpi = Math.random() * 10000000000000000

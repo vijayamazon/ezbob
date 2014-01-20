@@ -1,7 +1,10 @@
 ﻿@using System.Globalization
+@using EZBob.DatabaseLib
+@using EzBob.CommonLib
 @using EzBob.Web.Areas.Customer.Models
 @using EzBob.Web.Infrastructure
 @using EzBob.Web.Models
+@using StructureMap
 @model EzBob.Web.Areas.Customer.Models.CustomerModel
 @{
 	Layout = "~/Views/Shared/_Layout.cshtml";
@@ -9,6 +12,8 @@
 	var config = ViewData["Config"] as IEzBobConfiguration;
 	var customer = (CustomerModel)Model;
 	customer.IsProfile = false;
+    var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
+    var configVars = oDBHelper.ConfigurationVariables;
 }
 
 @section head{
@@ -17,6 +22,9 @@
 <div class="row-fluid wizard-wrapper">
 	<div id="wizard"></div>
 </div>
+
+<div style="display: none;" class="hide" id="allowFinishWizardWithoutMarketplaces" online="@configVars.GetByNameAsBool("AllowFinishOnlineWizardWithoutMarketplaces")" offline="@configVars.GetByNameAsBool("AllowFinishOfflineWizardWithoutMarketplaces")"></div>
+<div style="display: none;" class="hide" id="wizard-step-sequence">@oDBHelper.WizardStepSequence</div>
 
 @section Js{
 	@{Html.RenderPartial("_SignUpTemplate");}

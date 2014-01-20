@@ -171,7 +171,6 @@ class EzBob.Profile.PersonalInfoView extends Backbone.Marionette.Layout
         otherPropertyAddress: '#OtherPropertyAddress'
 
     onRender: ->
-        console.log('model', @model)
         address = new EzBob.AddressView({
             model: @model.get('PersonalAddress'),
             name: 'PersonalAddress',
@@ -234,8 +233,6 @@ class EzBob.Profile.LimitedInfoView extends Backbone.Marionette.Layout
         director: '.director-container' 
 
     onRender: ->
-        console.log('comapny', @model.get('CompanyAddress'))
-        console.log('personal', @model.get('PersonalAddress'))
         address = new EzBob.AddressView({
             model: @model.get('CompanyAddress'),
             name: 'LimitedCompanyAddress',

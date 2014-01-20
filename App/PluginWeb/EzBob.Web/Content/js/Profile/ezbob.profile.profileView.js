@@ -55,7 +55,9 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
             window.location.href = "#GetCash";
         }
         */
-
+        if (this.customer.get('hasLoans')) {
+            window.location.href = "#AccountActivity";
+        }
         return this;
     },
     loanDetails: function (id) {
@@ -241,7 +243,7 @@ EzBob.Profile.ProfileRouter = Backbone.Router.extend({
 
     routes: {
         //"AccountSummary": "accountSummary",
-        "": "accountActivity",
+        "": "yourStores",
         "AccountActivity": "accountActivity",
         "YourDetails": "YourDetails",
         "YourStores": "yourStores",

@@ -131,8 +131,10 @@
           this.stores[storeTypeName].groupid = j.Group != null ? j.Group.Id : 0;
         }
       }
-      this.allowFinishOnlineWizardWithoutMarketplaces = $('#allowFinishWizardWithoutMarketplaces').attr('online').toLowerCase() === 'true';
-      this.allowFinishOfflineWizardWithoutMarketplaces = $('#allowFinishWizardWithoutMarketplaces').attr('offline').toLowerCase() === 'true';
+      if (!this.isProfile) {
+        this.allowFinishOnlineWizardWithoutMarketplaces = $('#allowFinishWizardWithoutMarketplaces').attr('online').toLowerCase() === 'true';
+        this.allowFinishOfflineWizardWithoutMarketplaces = $('#allowFinishWizardWithoutMarketplaces').attr('offline').toLowerCase() === 'true';
+      }
       if (typeof ordpi === 'undefined') {
         ordpi = Math.random() * 10000000000000000;
       }
