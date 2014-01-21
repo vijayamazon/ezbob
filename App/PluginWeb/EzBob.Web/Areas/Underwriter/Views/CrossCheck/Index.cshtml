@@ -66,7 +66,7 @@
 <tbody>
 	<tr>
 		<td><b>E-Mail</b><b class="marking pull-right @Model.CrossCheckStatus.Email"></b></td>
-		<td class="cross-check-customer-email" isoffline="@{ WriteLiteral(Model.Customer.IsOffline ? "y" : "n"); }">@Model.Application.Email</td>
+		<td class="cross-check-customer-email" isoffline="@{ WriteLiteral(Model.Customer.SegmentType() == "Offline"  ? "y" : "n"); }">@Model.Application.Email</td>
 		<td>@Model.EBay.Email</td>
 		<td>@Model.PayPal.Email</td>
 	</tr>
@@ -265,7 +265,7 @@
 </tbody>
 </table>
 
-@if (Model.Customer.IsOffline) {
+@if (Model.Customer.SegmentType() == "Offline") {
     <table class="table centered squeezed">
         <thead class="box">
             <tr class="box-title">
@@ -448,7 +448,7 @@
 			<td class="hmrc"></td>
 		</tr>
 
-		if (Model.Customer.IsOffline) {
+		if (Model.Customer.SegmentType() == "Offline") {
 			<tr>
 				<td><b>Property owned by company</b></td>
 				<td>@(propertyOwnedByCompany ? "Yes" : "No")</td>
