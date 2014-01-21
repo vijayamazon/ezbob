@@ -52,6 +52,8 @@
     };
 
     HMRCAccountInfoView.prototype.linkAccount = function() {
+      this.activeForm = this.$el.find('#hmrcLinkAccountForm');
+      this.validator = EzBob.validateHmrcLinkForm(this.activeForm);
       this.$el.find('#linkAccountDiv').show();
       return this.$el.find('#initialDiv').hide();
     };
@@ -127,6 +129,10 @@
         EzBob.App.trigger('info', 'HMRC Account Added Successfully');
         _this.$el.find('#hmrc_user_id').val("");
         _this.$el.find('#hmrc_password').val("");
+        _this.$el.find('#linkAccountDiv').hide();
+        _this.$el.find('#initialDiv').show();
+        _this.activeForm = _this.$el.find('#hmrcLinkAccountForm');
+        _this.validator = EzBob.validateHmrcLinkForm(_this.activeForm);
         _this.inputChanged();
         _this.trigger('completed');
         return _this.trigger('back');

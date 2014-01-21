@@ -33,6 +33,8 @@ class EzBob.HMRCAccountInfoView extends Backbone.Marionette.ItemView
         @$el.find('a.connect-account-help').toggleClass('disabled', !enabled)
         
     linkAccount: ->
+        @activeForm = @$el.find('#hmrcLinkAccountForm')
+        @validator = EzBob.validateHmrcLinkForm(@activeForm)
         @$el.find('#linkAccountDiv').show()
         @$el.find('#initialDiv').hide()
 
@@ -100,6 +102,12 @@ class EzBob.HMRCAccountInfoView extends Backbone.Marionette.ItemView
             
             @$el.find('#hmrc_user_id').val("") 
             @$el.find('#hmrc_password').val("") 
+
+            @$el.find('#linkAccountDiv').hide()
+            @$el.find('#initialDiv').show()
+        
+            @activeForm = @$el.find('#hmrcLinkAccountForm')
+            @validator = EzBob.validateHmrcLinkForm(@activeForm)
 
             @inputChanged()
             @trigger('completed');
