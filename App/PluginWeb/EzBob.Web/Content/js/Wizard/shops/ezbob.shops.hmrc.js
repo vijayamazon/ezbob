@@ -24,7 +24,10 @@
       'click a.linkAccountBack': 'linkAccountBack',
       'click a.uploadFilesBack': 'uploadFilesBack',
       'click a.connect-account': 'connect',
-      'click a.select-vat': 'selectVatFiles'
+      'click a.connect-account-help': 'connect',
+      'click a.select-vat': 'selectVatFiles',
+      'click #linkHelpButton': 'getLinkHelp',
+      'click a.linkHelpBack': 'linkHelpBack'
     };
 
     HMRCAccountInfoView.prototype.initialize = function(options) {
@@ -41,7 +44,8 @@
         this.validator = EzBob.validateHmrcLinkForm(this.$el.find('#hmrcLinkAccount'));
       }
       enabled = EzBob.Validation.checkForm(EzBob.validateHmrcLinkForm(this.$el.find('#hmrcLinkAccount')));
-      return this.$el.find('a.connect-account').toggleClass('disabled', !enabled);
+      this.$el.find('a.connect-account').toggleClass('disabled', !enabled);
+      return this.$el.find('a.connect-account-help').toggleClass('disabled', !enabled);
     };
 
     HMRCAccountInfoView.prototype.linkAccount = function() {
@@ -50,8 +54,6 @@
     };
 
     HMRCAccountInfoView.prototype.uploadFiles = function() {
-      console.log('dsfgdfgh');
-      debugger;
       this.$el.find('#uploadFilesDiv').show();
       return this.$el.find('#initialDiv').hide();
     };
@@ -92,7 +94,7 @@
       if (this.$el.find('a.connect-account').hasClass('disabled')) {
         return false;
       }
-      accountModel = this.buildModel;
+      accountModel = this.buildModel();
       if (!accountModel) {
         EzBob.App.trigger('error', 'HMRC Account Data Validation Error');
         return false;
@@ -137,7 +139,6 @@
       accountModel['name'] = this.$el.find('#hmrc_user_id').val();
       accountModel['password'] = this.$el.find('#hmrc_password').val();
       delete accountModel.id;
-      console.log(accountModel);
       return accountModel;
     };
 
@@ -155,7 +156,7 @@
         sModelKey += Math.floor(Math.random() * 1000);
       }
       window[sModelKey] = function() {
-        return _this.buildModel;
+        return _this.buildModel();
       };
       window[sKey] = function(sResult) {
         var oResult;
@@ -190,6 +191,18 @@
         closeOnEscape: false
       });
       return false;
+    };
+
+    HMRCAccountInfoView.prototype.getLinkHelp = function() {
+      document.getElementById('hmrc_fields_link_help_wrapper').appendChild(document.getElementById('hmrc_fields'));
+      this.$el.find('#linkAccountDiv').hide();
+      return this.$el.find('#linkHelpDiv').show();
+    };
+
+    HMRCAccountInfoView.prototype.linkHelpBack = function() {
+      document.getElementById('hmrc_fields_link_wrapper').appendChild(document.getElementById('hmrc_fields'));
+      this.$el.find('#linkAccountDiv').show();
+      return this.$el.find('#linkHelpDiv').hide();
     };
 
     return HMRCAccountInfoView;

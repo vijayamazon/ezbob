@@ -11,7 +11,10 @@ class EzBob.HMRCAccountInfoView extends Backbone.Marionette.ItemView
         'click a.linkAccountBack': 'linkAccountBack'
         'click a.uploadFilesBack': 'uploadFilesBack'
         'click a.connect-account': 'connect'
+        'click a.connect-account-help': 'connect'
         'click a.select-vat': 'selectVatFiles'
+        'click #linkHelpButton': 'getLinkHelp'
+        'click a.linkHelpBack': 'linkHelpBack'
 
     initialize: (options) ->
         @uploadFilesDlg = null
@@ -24,14 +27,13 @@ class EzBob.HMRCAccountInfoView extends Backbone.Marionette.ItemView
             @validator = EzBob.validateHmrcLinkForm(this.$el.find('#hmrcLinkAccount'))
         enabled = EzBob.Validation.checkForm(EzBob.validateHmrcLinkForm(this.$el.find('#hmrcLinkAccount')))
         @$el.find('a.connect-account').toggleClass('disabled', !enabled)
+        @$el.find('a.connect-account-help').toggleClass('disabled', !enabled)
         
     linkAccount: ->
         @$el.find('#linkAccountDiv').show()
         @$el.find('#initialDiv').hide()
 
     uploadFiles: ->
-        console.log('dsfgdfgh')
-        debugger
         @$el.find('#uploadFilesDiv').show()
         @$el.find('#initialDiv').hide()
         
@@ -59,10 +61,10 @@ class EzBob.HMRCAccountInfoView extends Backbone.Marionette.ItemView
         if not EzBob.Validation.checkForm(@validator)
             @validator.form()
             return false
-
+            
         return false if @$el.find('a.connect-account').hasClass('disabled')
         
-        accountModel = @buildModel
+        accountModel = @buildModel()
         
         if not accountModel
             EzBob.App.trigger 'error', 'HMRC Account Data Validation Error'
@@ -111,7 +113,6 @@ class EzBob.HMRCAccountInfoView extends Backbone.Marionette.ItemView
         accountModel['password'] = @$el.find('#hmrc_password').val()
 
         delete accountModel.id
-        console.log accountModel
         return accountModel
 
     selectVatFiles: (evt) ->
@@ -127,7 +128,7 @@ class EzBob.HMRCAccountInfoView extends Backbone.Marionette.ItemView
             sModelKey += Math.floor(Math.random() * 1000)
             
         window[sModelKey] = =>
-            return @buildModel
+            return @buildModel()
 
         window[sKey] = (sResult) =>
             delete window[sKey]
@@ -166,4 +167,12 @@ class EzBob.HMRCAccountInfoView extends Backbone.Marionette.ItemView
 
         false
 
+    getLinkHelp: ->
+        document.getElementById('hmrc_fields_link_help_wrapper').appendChild(document.getElementById('hmrc_fields'));
+        @$el.find('#linkAccountDiv').hide()
+        @$el.find('#linkHelpDiv').show()
    
+    linkHelpBack: ->
+        document.getElementById('hmrc_fields_link_wrapper').appendChild(document.getElementById('hmrc_fields'));
+        @$el.find('#linkAccountDiv').show()
+        @$el.find('#linkHelpDiv').hide()
