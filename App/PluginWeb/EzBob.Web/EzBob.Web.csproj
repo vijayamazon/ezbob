@@ -614,6 +614,9 @@
     <Content Include="Content\img\ecommerce bytes.png" />
     <Content Include="Content\img\excel.png" />
     <Content Include="Content\img\free-gift-icon.png" />
+    <Content Include="Content\img\hmrc_login_sample.png" />
+    <Content Include="Content\img\hmrc_vat_sample.png" />
+    <Content Include="Content\img\hmrc_white_font.png" />
     <Content Include="Content\img\house-icons\house-green.png" />
     <Content Include="Content\img\house-icons\house-grey-green-roof.png" />
     <Content Include="Content\img\house-icons\house-grey.png" />

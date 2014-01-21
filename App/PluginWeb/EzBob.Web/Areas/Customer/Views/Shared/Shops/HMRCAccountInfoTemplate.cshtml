@@ -57,28 +57,6 @@
         </form>
     </div>
     
-    
-    <div id="linkHelpDiv" class="row-fluid hide">
-        <label style="margin-top:0px">Welcome to HMRC Online services</label>
-        <label style="margin-top:0px">Existing users</label>
-        <label style="margin-top:0px">If you are already signed up to use HM Revenue & Customs (HMRC) Online Services and have a Government Gateway account, please enter your User ID and password, then click the 'Login' button below.</label>
-        <label style="margin-top:0px"><b>Please note:</b> Fields are not case sensitive.</label>
-    
-        <form id="hmrcLinkHelpForm" class="cg-link-account-form">
-            <div id="hmrc_fields_link_help_wrapper">
-            </div>
-            <div class="clearfix">
-
-                <div class="form_buttons_container" style="margin-top: 60px;">
-                    <div class="attardi-button">
-                        <a href="#" class="rc-button green disabled connect-account-help" ui-event-control-id="link-account:hmrc_connectx">Link Account</a>
-                        <a href="#" class="back rc-button grey linkHelpBack" ui-event-control-id="link-account:hmrc_link_help_back">Back</a>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-    
     <div id="uploadFilesDiv" class="row-fluid hide">
         <div class="wizard-top-notification">
             <div>
@@ -107,20 +85,18 @@
         </form>
     </div>
     
-    <div id="uploadHelpDiv" class="row-fluid hide">
-        <label style="margin-top:0px">Example document</label>
-    
-        <form class="cg-link-account-form">
-            <label>Put hmrc sample image here... </label>
-            <div class="clearfix">
-
-                <div class="form_buttons_container" style="margin-top: 60px;">
-                    <div class="attardi-button">
-                        <a href="#" class="back rc-button grey uploadHelpBack" ui-event-control-id="link-account:hmrc_upload_help_back">Back</a>
-                    </div>
-                </div>
-            </div>
-        </form>
+    <div class="hide">
+    <div id="hmrcLinkHelpPopup" class="help_window">
+        <img src="../../../../../Content/img/hmrc_login_sample.png"/>
     </div>
+    </div>
+    
+    <div class="hide">
+    <div id="hmrcUploadHelpPopup" class="help_window">
+        <img src="../../../../../Content/img/hmrc_vat_sample.png"/>
+    </div>
+    </div>
+    
+</div>
 
 </script>

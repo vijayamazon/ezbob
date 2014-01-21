@@ -27,9 +27,7 @@
       'click a.connect-account-help': 'connect',
       'click a.select-vat': 'selectVatFiles',
       'click #linkHelpButton': 'getLinkHelp',
-      'click #uploadHelpButton': 'getUploadHelp',
-      'click a.linkHelpBack': 'linkHelpBack',
-      'click a.uploadHelpBack': 'uploadHelpBack'
+      'click #uploadHelpButton': 'getUploadHelp'
     };
 
     HMRCAccountInfoView.prototype.initialize = function(options) {
@@ -204,29 +202,33 @@
     };
 
     HMRCAccountInfoView.prototype.getLinkHelp = function() {
-      document.getElementById('hmrc_fields_link_help_wrapper').appendChild(document.getElementById('hmrc_fields'));
-      this.activeForm = this.$el.find('#hmrcLinkHelpForm');
-      this.validator = EzBob.validateHmrcLinkForm(this.activeForm);
-      this.$el.find('#linkAccountDiv').hide();
-      return this.$el.find('#linkHelpDiv').show();
-    };
+      var oDialog;
 
-    HMRCAccountInfoView.prototype.linkHelpBack = function() {
-      document.getElementById('hmrc_fields_link_wrapper').appendChild(document.getElementById('hmrc_fields'));
-      this.activeForm = this.$el.find('#hmrcLinkAccountForm');
-      this.validator = EzBob.validateHmrcLinkForm(this.activeForm);
-      this.$el.find('#linkAccountDiv').show();
-      return this.$el.find('#linkHelpDiv').hide();
+      oDialog = $('#hmrcLinkHelpPopup');
+      if (oDialog.length > 0) {
+        return $.colorbox({
+          inline: true,
+          transition: 'none',
+          open: true,
+          href: oDialog,
+          width: '20%'
+        });
+      }
     };
 
     HMRCAccountInfoView.prototype.getUploadHelp = function() {
-      this.$el.find('#uploadFilesDiv').hide();
-      return this.$el.find('#uploadHelpDiv').show();
-    };
+      var oDialog;
 
-    HMRCAccountInfoView.prototype.uploadHelpBack = function() {
-      this.$el.find('#uploadHelpDiv').hide();
-      return this.$el.find('#uploadFilesDiv').show();
+      oDialog = $('#hmrcUploadHelpPopup');
+      if (oDialog.length > 0) {
+        return $.colorbox({
+          inline: true,
+          transition: 'none',
+          open: true,
+          href: oDialog,
+          width: '35%'
+        });
+      }
     };
 
     return HMRCAccountInfoView;

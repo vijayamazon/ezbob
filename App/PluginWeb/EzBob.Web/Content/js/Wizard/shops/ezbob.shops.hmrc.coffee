@@ -15,8 +15,6 @@ class EzBob.HMRCAccountInfoView extends Backbone.Marionette.ItemView
         'click a.select-vat': 'selectVatFiles'
         'click #linkHelpButton': 'getLinkHelp'
         'click #uploadHelpButton': 'getUploadHelp'
-        'click a.linkHelpBack': 'linkHelpBack'
-        'click a.uploadHelpBack': 'uploadHelpBack'
 
     initialize: (options) ->
         @uploadFilesDlg = null
@@ -180,23 +178,13 @@ class EzBob.HMRCAccountInfoView extends Backbone.Marionette.ItemView
         false
 
     getLinkHelp: ->
-        document.getElementById('hmrc_fields_link_help_wrapper').appendChild(document.getElementById('hmrc_fields'));
-        @activeForm = @$el.find('#hmrcLinkHelpForm')
-        @validator = EzBob.validateHmrcLinkForm(@activeForm)
-        @$el.find('#linkAccountDiv').hide()
-        @$el.find('#linkHelpDiv').show()
-   
-    linkHelpBack: ->
-        document.getElementById('hmrc_fields_link_wrapper').appendChild(document.getElementById('hmrc_fields'));
-        @activeForm = @$el.find('#hmrcLinkAccountForm')
-        @validator = EzBob.validateHmrcLinkForm(@activeForm)
-        @$el.find('#linkAccountDiv').show()
-        @$el.find('#linkHelpDiv').hide()
+        oDialog = $('#hmrcLinkHelpPopup');
+        if (oDialog.length > 0)
+            $.colorbox({ inline: true, transition: 'none', open: true, href: oDialog, width: '20%' })
 
     getUploadHelp: ->
-        @$el.find('#uploadFilesDiv').hide()
-        @$el.find('#uploadHelpDiv').show()
+        oDialog = $('#hmrcUploadHelpPopup');
+        if (oDialog.length > 0)
+            $.colorbox({ inline: true, transition: 'none', open: true, href: oDialog, width: '35%' })
+        
 
-    uploadHelpBack: ->        
-        @$el.find('#uploadHelpDiv').hide()
-        @$el.find('#uploadFilesDiv').show()
