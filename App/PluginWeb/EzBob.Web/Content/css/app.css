@@ -1326,17 +1326,6 @@ td.account-logo {
 	position: relative;
 }
 
-.marketplace-button:hover {
-	border: 1px solid #e8fcc6;
-	border-radius: 10px;
-	background-color: white;
-	background-color: rgba(255, 255, 0, 0.1);
-
-	-moz-box-shadow: 0 0 10px 3px #e8fcc6, 0 0 20px 3px yellow;
-	-webkit-box-shadow: 0 0 10px 3px #e8fcc6, 0 0 20px 3px yellow;
-	box-shadow: 0 0 10px 3px #e8fcc6, 0 0 20px 3px yellow;
-}
-
 .marketplace-button-profile {
 	float: left;
 	margin-right: 17px;
@@ -1372,7 +1361,7 @@ td.account-logo {
 	position: absolute;
 	top: 60px;
 	left: 0;
-	border-radius: 10px;
+	border-radius: 5px;
 	background-color: #e8fcc6;
 	background-color: rgba(123, 188, 36, 0.8);
 	color: white;

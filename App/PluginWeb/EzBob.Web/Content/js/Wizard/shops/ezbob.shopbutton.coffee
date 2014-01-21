@@ -58,8 +58,8 @@ class EzBob.StoreButtonView extends Backbone.Marionette.ItemView
         # end of switch
 
         btn.hover(
-            ((evt) -> $('.onhover', this).animate({ top: 0,      opacity: 1 }, 'fast')),
-            ((evt) -> $('.onhover', this).animate({ top: '60px', opacity: 0 }, 'fast'))
+            ((evt) -> $('.onhover', this).animate({ top: 0,      opacity: 1 })),
+            ((evt) -> $('.onhover', this).animate({ top: '60px', opacity: 0 }))
         )
     # end of onRender
 
