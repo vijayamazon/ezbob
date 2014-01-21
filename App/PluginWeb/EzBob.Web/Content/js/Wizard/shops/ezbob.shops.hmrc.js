@@ -27,23 +27,26 @@
       'click a.connect-account-help': 'connect',
       'click a.select-vat': 'selectVatFiles',
       'click #linkHelpButton': 'getLinkHelp',
-      'click a.linkHelpBack': 'linkHelpBack'
+      'click #uploadHelpButton': 'getUploadHelp',
+      'click a.linkHelpBack': 'linkHelpBack',
+      'click a.uploadHelpBack': 'uploadHelpBack'
     };
 
     HMRCAccountInfoView.prototype.initialize = function(options) {
       this.uploadFilesDlg = null;
       this.accountType = 'HMRC';
       this.template = '#' + this.accountType + 'AccountInfoTemplate';
-      return this.validator = void 0;
+      return this.activeForm = void 0;
     };
 
     HMRCAccountInfoView.prototype.inputChanged = function() {
       var enabled;
 
-      if (this.validator === void 0) {
-        this.validator = EzBob.validateHmrcLinkForm(this.$el.find('#hmrcLinkAccount'));
+      if (this.activeForm === void 0) {
+        this.activeForm = this.$el.find('#hmrcLinkAccountForm');
+        this.validator = EzBob.validateHmrcLinkForm(this.activeForm);
       }
-      enabled = EzBob.Validation.checkForm(EzBob.validateHmrcLinkForm(this.$el.find('#hmrcLinkAccount')));
+      enabled = EzBob.Validation.checkForm(this.validator);
       this.$el.find('a.connect-account').toggleClass('disabled', !enabled);
       return this.$el.find('a.connect-account-help').toggleClass('disabled', !enabled);
     };
@@ -84,8 +87,9 @@
       var acc, accountModel, xhr,
         _this = this;
 
-      if (this.validator === void 0) {
-        this.validator = EzBob.validateHmrcLinkForm(this.$el.find('#hmrcLinkAccount'));
+      if (this.activeForm === void 0) {
+        this.activeForm = this.$el.find('#hmrcLinkAccountForm');
+        this.validator = EzBob.validateHmrcLinkForm(this.activeForm);
       }
       if (!EzBob.Validation.checkForm(this.validator)) {
         this.validator.form();
@@ -195,14 +199,28 @@
 
     HMRCAccountInfoView.prototype.getLinkHelp = function() {
       document.getElementById('hmrc_fields_link_help_wrapper').appendChild(document.getElementById('hmrc_fields'));
+      this.activeForm = this.$el.find('#hmrcLinkHelpForm');
+      this.validator = EzBob.validateHmrcLinkForm(this.activeForm);
       this.$el.find('#linkAccountDiv').hide();
       return this.$el.find('#linkHelpDiv').show();
     };
 
     HMRCAccountInfoView.prototype.linkHelpBack = function() {
       document.getElementById('hmrc_fields_link_wrapper').appendChild(document.getElementById('hmrc_fields'));
+      this.activeForm = this.$el.find('#hmrcLinkAccountForm');
+      this.validator = EzBob.validateHmrcLinkForm(this.activeForm);
       this.$el.find('#linkAccountDiv').show();
       return this.$el.find('#linkHelpDiv').hide();
+    };
+
+    HMRCAccountInfoView.prototype.getUploadHelp = function() {
+      this.$el.find('#uploadFilesDiv').hide();
+      return this.$el.find('#uploadHelpDiv').show();
+    };
+
+    HMRCAccountInfoView.prototype.uploadHelpBack = function() {
+      this.$el.find('#uploadHelpDiv').hide();
+      return this.$el.find('#uploadFilesDiv').show();
     };
 
     return HMRCAccountInfoView;

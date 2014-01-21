@@ -37,7 +37,7 @@
     
         </div>
     
-        <form id="hmrcLinkAccount" class="cg-link-account-form">
+        <form id="hmrcLinkAccountForm" class="cg-link-account-form">
             <div id="hmrc_fields_link_wrapper">
     
                 <div id="hmrc_fields">
@@ -64,7 +64,7 @@
         <label style="margin-top:0px">If you are already signed up to use HM Revenue & Customs (HMRC) Online Services and have a Government Gateway account, please enter your User ID and password, then click the 'Login' button below.</label>
         <label style="margin-top:0px"><b>Please note:</b> Fields are not case sensitive.</label>
     
-        <form id="hmrcLinkAccount" class="cg-link-account-form">
+        <form id="hmrcLinkHelpForm" class="cg-link-account-form">
             <div id="hmrc_fields_link_help_wrapper">
             </div>
             <div class="clearfix">
@@ -83,7 +83,7 @@
         <div class="wizard-top-notification">
             <div>
                 <h2 class="form_start">HMRC upload</h2>    
-                <div style="float:right" class="hmrc-question"></div>
+                <div style="float:right" id="uploadHelpButton" class="hmrc-question"></div>
             </div>
         </div>
         <label style="margin-top:0px">Upload a copy of your last 5 VAT returns. Only upload files titled <b>Printed Copy of Submitted VAT return for your records</b> which you should have received automatically from the HMRC.</label>
@@ -101,6 +101,22 @@
                 <div class="form_buttons_container" style="margin-top: 60px;">
                     <div class="attardi-button">
                         <a href="#" class="back rc-button grey uploadFilesBack" ui-event-control-id="link-account:hmrc_upload_files_back">Back</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    
+    <div id="uploadHelpDiv" class="row-fluid hide">
+        <label style="margin-top:0px">Example document</label>
+    
+        <form class="cg-link-account-form">
+            <label>Put hmrc sample image here... </label>
+            <div class="clearfix">
+
+                <div class="form_buttons_container" style="margin-top: 60px;">
+                    <div class="attardi-button">
+                        <a href="#" class="back rc-button grey uploadHelpBack" ui-event-control-id="link-account:hmrc_upload_help_back">Back</a>
                     </div>
                 </div>
             </div>

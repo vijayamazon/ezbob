@@ -14,18 +14,21 @@ class EzBob.HMRCAccountInfoView extends Backbone.Marionette.ItemView
         'click a.connect-account-help': 'connect'
         'click a.select-vat': 'selectVatFiles'
         'click #linkHelpButton': 'getLinkHelp'
+        'click #uploadHelpButton': 'getUploadHelp'
         'click a.linkHelpBack': 'linkHelpBack'
+        'click a.uploadHelpBack': 'uploadHelpBack'
 
     initialize: (options) ->
         @uploadFilesDlg = null
         @accountType = 'HMRC'
         @template = '#' + @accountType + 'AccountInfoTemplate'
-        @validator = undefined
+        @activeForm = undefined
 
     inputChanged: ->
-        if (@validator == undefined)
-            @validator = EzBob.validateHmrcLinkForm(this.$el.find('#hmrcLinkAccount'))
-        enabled = EzBob.Validation.checkForm(EzBob.validateHmrcLinkForm(this.$el.find('#hmrcLinkAccount')))
+        if (@activeForm == undefined)
+            @activeForm = @$el.find('#hmrcLinkAccountForm')
+            @validator = EzBob.validateHmrcLinkForm(@activeForm)
+        enabled = EzBob.Validation.checkForm(@validator)
         @$el.find('a.connect-account').toggleClass('disabled', !enabled)
         @$el.find('a.connect-account-help').toggleClass('disabled', !enabled)
         
@@ -56,8 +59,9 @@ class EzBob.HMRCAccountInfoView extends Backbone.Marionette.ItemView
         'Link HMRC Account'
 
     connect: ->
-        if (@validator == undefined)
-            @validator = EzBob.validateHmrcLinkForm(this.$el.find('#hmrcLinkAccount'))
+        if (@activeForm == undefined)
+            @activeForm = @$el.find('#hmrcLinkAccountForm')
+            @validator = EzBob.validateHmrcLinkForm(@activeForm)
         if not EzBob.Validation.checkForm(@validator)
             @validator.form()
             return false
@@ -169,10 +173,22 @@ class EzBob.HMRCAccountInfoView extends Backbone.Marionette.ItemView
 
     getLinkHelp: ->
         document.getElementById('hmrc_fields_link_help_wrapper').appendChild(document.getElementById('hmrc_fields'));
+        @activeForm = @$el.find('#hmrcLinkHelpForm')
+        @validator = EzBob.validateHmrcLinkForm(@activeForm)
         @$el.find('#linkAccountDiv').hide()
         @$el.find('#linkHelpDiv').show()
    
     linkHelpBack: ->
         document.getElementById('hmrc_fields_link_wrapper').appendChild(document.getElementById('hmrc_fields'));
+        @activeForm = @$el.find('#hmrcLinkAccountForm')
+        @validator = EzBob.validateHmrcLinkForm(@activeForm)
         @$el.find('#linkAccountDiv').show()
         @$el.find('#linkHelpDiv').hide()
+
+    getUploadHelp: ->
+        @$el.find('#uploadFilesDiv').hide()
+        @$el.find('#uploadHelpDiv').show()
+
+    uploadHelpBack: ->        
+        @$el.find('#uploadHelpDiv').hide()
+        @$el.find('#uploadFilesDiv').show()
