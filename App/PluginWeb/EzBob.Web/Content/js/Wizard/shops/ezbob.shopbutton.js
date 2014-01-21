@@ -81,12 +81,12 @@
         return $('.onhover', this).animate({
           top: 0,
           opacity: 1
-        }, 'fast');
+        });
       }), (function(evt) {
         return $('.onhover', this).animate({
           top: '60px',
           opacity: 0
-        }, 'fast');
+        });
       }));
     };
 
