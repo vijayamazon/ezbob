@@ -79,7 +79,8 @@
     <Compile Include="BwaChecker.cs" />
     <Compile Include="ExperianConsumerCheck.cs" />
     <Compile Include="ExperianCompanyCheck.cs" />
-    <Compile Include="QuickOffer.cs" />
+    <Compile Include="QuickOffer\QuickOffer.cs" />
+    <Compile Include="QuickOffer\QuickOfferData.cs" />
     <Compile Include="UpdateCurrencyRates.cs" />
     <Compile Include="GetWizardConfigs.cs" />
     <Compile Include="ValidateMobileCode.cs" />

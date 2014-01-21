@@ -7,6 +7,7 @@
 	using System.Threading;
 	using EzBob.Backend.Strategies;
 	using EzBob.Backend.Strategies.MailStrategies;
+	using EzBob.Backend.Strategies.QuickOffer;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
