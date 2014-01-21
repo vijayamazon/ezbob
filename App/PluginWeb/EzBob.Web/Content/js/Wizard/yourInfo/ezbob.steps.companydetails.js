@@ -304,8 +304,6 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
         if (capitalExpenditure)
             capitalExpenditure.value = this.$el.find('#CapitalExpenditure').autoNumericGet();
 
-        console.log('data', data);
-        debugger;
         var request = $.post(action, data);
 
         request.success(function (res) {

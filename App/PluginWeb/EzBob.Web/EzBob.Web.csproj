@@ -905,6 +905,9 @@
     <Content Include="Content\js\App\ezbob.GA.js">
       <DependentUpon>ezbob.GA.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\App\ezbob.GA.min.js">
+      <DependentUpon>ezbob.GA.coffee</DependentUpon>
+    </Content>
     <Content Include="Content\js\App\ezbob.validation.js" />
     <Content Include="Content\js\controls\ezbob.BoundItemView.min.js">
       <DependentUpon>ezbob.BoundItemView.coffee</DependentUpon>
@@ -1245,7 +1248,6 @@
     <Content Include="Content\js\Underwriter\Support\ezbob.underwriter.support.min.js">
       <DependentUpon>ezbob.underwriter.support.coffee</DependentUpon>
     </Content>
-    <Content Include="Content\js\Wizard\ezbob.thankyoupage.js" />
     <Content Include="Content\js\Wizard\ezbob.wizard.shops.min.js">
       <DependentUpon>ezbob.wizard.shops.coffee</DependentUpon>
     </Content>

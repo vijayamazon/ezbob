@@ -74,7 +74,6 @@ EzBob.WizardView = Backbone.View.extend({
 				link: new EzBob.StoreInfoStepView({ model: storeInfoStepModel }),
 				details: new EzBob.PersonalInformationStepView({ model: this.customer }),
 				companydetails: new EzBob.CompanyDetailsStepView({ model: this.customer }),
-				success: new EzBob.ThankYouWizardPage({ model: this.customer }),
 			}
 		};
 

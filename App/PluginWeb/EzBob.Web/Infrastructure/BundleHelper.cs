@@ -320,7 +320,6 @@ namespace EzBob.Web.Infrastructure
 				.Add("~/Content/js/Wizard/wizardStepSequence.js")
 				.Add("~/Content/js/Wizard/ezbob.wizardStepsModel.js")
 				.Add("~/Content/js/Wizard/ezbob.wizardView.js")
-				.Add("~/Content/js/Wizard/ezbob.thankyoupage.js")
 				.Add("~/Content/js/Wizard/shops/ezbob.shopbutton.coffee")
 				.Add("~/Content/js/Wizard/ezbob.ct.bindShopToCT.js")
 				.Add("~/Content/js/Wizard/shops/ezbob.shops.ebay.js")

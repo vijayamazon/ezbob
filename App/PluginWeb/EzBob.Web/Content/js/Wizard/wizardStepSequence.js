@@ -75,16 +75,6 @@ EzBob.WizardStepSequence = function(args) {
 		showTitleInWizardSteps: true,
 	};
 
-	var oSuccessStep = {
-		name: 'success',
-		documentTitle: 'Wizard complete: welcome to EZBOB',
-		title: 'Complete',
-		trackPage: '/Customer/Wizard/Success',
-		marketingStrKey: 'MarketingWizardStepDone',
-		showTitleInWizardSteps: false,
-		onFocus: function() { $.post(window.gRootPath + 'CustomerDetails/WizardComplete'); },
-	};
-
 	var lst = {};
 	lst[oShopInfoStep.name]       = oShopInfoStep;
 	lst[oYourDetailsStep.name]    = oYourDetailsStep;
@@ -112,9 +102,7 @@ EzBob.WizardStepSequence = function(args) {
 
 	this.online.push(new EzBob.WizardStepInfo(oSignupStep,  this.online.length,   0, args.views));
 	PushSteps('online');
-	this.online.push(new EzBob.WizardStepInfo(oSuccessStep, this.online.length, 100, args.views));
 
 	this.offline.push(new EzBob.WizardStepInfo(oSignupStep,  this.offline.length,   0, args.views));
 	PushSteps('offline');
-	this.offline.push(new EzBob.WizardStepInfo(oSuccessStep, this.offline.length, 100, args.views));
 }; // EzBob.WizardStepSequence

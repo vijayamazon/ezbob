@@ -108,8 +108,9 @@
 			_session.Flush();
 
 			ms_oLog.DebugFormat("Customer {1} ({0}): wizard step has been updated to:2", customer.Id, customer.PersonalInfo.Fullname);
-
-			return this.JsonNet(new { });
+			
+			WizardComplete();
+			return this.JsonNet(new {});
 		} // LinkAccountsComplete
 
 		#endregion method LinkAccountsComplete
@@ -122,6 +123,8 @@
 		[ValidateJsonAntiForgeryToken]
 		public JsonNetResult WizardComplete()
 		{
+			TempData.Add("WizardComplete",true);
+
 			var customer = _context.Customer;
 
 			ms_oLog.DebugFormat("Customer {1} ({0}): has completed wizard.", customer.Id, customer.PersonalInfo.Fullname);
@@ -153,6 +156,7 @@
 			_concentAgreementHelper.Save(customer, DateTime.UtcNow);
 			ms_oLog.DebugFormat("Customer {1} ({0}): consent agreement saved.", customer.Id, customer.PersonalInfo.Fullname);
 
+			
 			return this.JsonNet(new { });
 		} // WizardComplete
 

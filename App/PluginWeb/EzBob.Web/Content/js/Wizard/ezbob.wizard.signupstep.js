@@ -44,8 +44,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
 		'change input': 'inputChanged',
 		'keyup  input': 'inputChanged',
-
-		'change select': 'inputChanged',
+        'change select': 'inputChanged',
 
 		'focus #amount': 'amountFocused',
 	    
@@ -102,11 +101,6 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
 	inputChanged: function(evt) {
 		this.setFieldStatusNotRequired(evt, 'promoCode');
-		this.setFieldStatusNotRequired(evt, 'amount');
-
-		this.toggleOtherSelect(evt, 'customerReason', '#otherReasonDiv');
-		this.toggleOtherSelect(evt, 'customerSourceOfRepayment', '#otherSourceDiv');
-
 		var enabled = EzBob.Validation.checkForm(this.validator);
 		$('#signupSubmitButton').toggleClass('disabled', !enabled);
 	},
@@ -122,18 +116,6 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 		} // if
 	},
 
-	toggleOtherSelect: function(evt, el, div) {
-		if (evt && evt.target.id === el) {
-			var other = false;
-			if ($(evt.target).find('option:selected').text() === 'Other') {
-				other = true;
-			}
-			$(div).toggleClass('hide', !other);
-		}
-
-		return false;
-	},
-	
 	generateMobileCode: function () {
 	    if ($('#generateMobileCode').hasClass('disabled')) {
 	        return false;

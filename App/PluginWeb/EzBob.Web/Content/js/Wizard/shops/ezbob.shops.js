@@ -367,8 +367,8 @@
         return;
       }
       $.post(window.gRootPath + 'CustomerDetails/LinkAccountsComplete');
-      this.trigger("next");
       EzBob.App.trigger("clear");
+      EzBob.App.GA.trackEventReditect(window.gRootPath + 'Customer/Profile/Index', 'Wizard Complete', 'Go To account', 'Awaiting Approval');
       return false;
     };
 

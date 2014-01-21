@@ -21,3 +21,4 @@ class EzBob.GATest
         console.log "Track Event: #{category}:#{action}:#{opt_label}"
     trackEventReditect:(url, category, action, opt_label, opt_value, opt_noninteraction) ->
         console.log "Track Event: #{category}:#{action}:#{opt_label} Url: %s", url
+        setTimeout((-> window.location = url), 500)
