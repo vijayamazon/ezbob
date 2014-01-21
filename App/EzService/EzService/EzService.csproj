@@ -64,6 +64,7 @@
     <Compile Include="ActionMetaData.cs" />
     <Compile Include="ActionResult.cs" />
     <Compile Include="BoolActionResult.cs" />
+    <Compile Include="DecimalActionResult.cs" />
     <Compile Include="NewCreditLineOption.cs" />
     <Compile Include="SafeValue.cs" />
     <Compile Include="StringListActionResult.cs" />

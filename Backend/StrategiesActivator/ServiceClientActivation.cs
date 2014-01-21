@@ -77,6 +77,23 @@
 		}
 
 		[Activation]
+		private void GetWizardConfigs() {
+			serviceClient.GetWizardConfigs();
+		}
+
+		[Activation]
+		private void QuickOffer() {
+			int customerId;
+
+			if (args.Length != 2 || !int.TryParse(args[1], out customerId)) {
+				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> QuickOffer <CustomerId>");
+				return;
+			}
+
+			serviceClient.QuickOffer(customerId);
+		} // QuickOffer
+
+		[Activation]
 		private void ApprovedUser() {
 			int underwriterId;
 			int customerId;

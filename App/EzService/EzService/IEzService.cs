@@ -148,6 +148,9 @@ namespace EzService {
 
 		[OperationContract]
 		ActionMetaData UpdateCurrencyRates();
+
+		[OperationContract]
+		DecimalActionResult QuickOffer(int customerId);
 	} // interface IEzService
 
 	#endregion interface IEzService

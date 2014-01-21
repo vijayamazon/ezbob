@@ -237,8 +237,6 @@ namespace EzService {
 
 		public void Save() {
 			lock (m_oLockSave) {
-				m_oLog.Debug("Saving action status of {0} to DB...", this);
-
 				try {
 					m_oDB.ExecuteNonQuery("EzServiceSaveActionMetaData",
 						CommandSpecies.StoredProcedure,
@@ -253,8 +251,6 @@ namespace EzService {
 						new QueryParameter("@UserID", UserID.HasValue ? UserID.Value : (int?)null),
 						new QueryParameter("@CustomerID", CustomerID.HasValue ? CustomerID.Value : (int?)null)
 					);
-
-					m_oLog.Debug("Saving action status of {0} to DB complete.", this);
 				}
 				catch (Exception e) {
 					m_oLog.Alert(e, "Failed to save action status of {0} to DB.", this);
