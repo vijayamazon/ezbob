@@ -314,14 +314,18 @@
 
         $(function() {
             @{ object wc; string wizardComplete = "false";}
-            @{ TempData.TryGetValue("WizardComplete", out wc); }
+            @{ if (TempData.TryGetValue("WizardComplete", out wc))
+               {
+                   TempData.Clear();
+               } 
+            }
             @if (wc != null)
             {
                 wizardComplete = wc.ToString().ToLower();
             }
 
             var finishedWizard = @wizardComplete;
-            if (!finishedWizard)
+            if (finishedWizard)
             {
                 var oDialog = $('#thankyou_help');
                 if (oDialog.length > 0)

@@ -9,7 +9,6 @@ EzBob.App.GA = new EzBob.GA();
 
 EzBob.App.addRegions({
     modal: EzBob.ModalRegion,
-    modal2: EzBob.ModalRegion2,
     jqmodal: EzBob.JqModalRegion
 });
 
