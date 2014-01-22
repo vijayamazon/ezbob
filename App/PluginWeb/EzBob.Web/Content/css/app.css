@@ -1313,6 +1313,8 @@ td.account-logo {
 	display: block;
 }
 
+.marketplace-group .group-title { color: #7bb224; }
+
 .marketplace-group.following .group-title { padding-top: 1.5em; }
 
 .marketplace-button {
