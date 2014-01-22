@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers
 {
 	using System.Linq;
+	using System.Web;
 	using System.Web.Mvc;
 	using ApplicationMng.Repository;
 	using EZBob.DatabaseLib;
@@ -16,6 +17,7 @@
 	using NHibernate;
 	using NHibernate.Linq;
 	using EZBob.DatabaseLib.Model.Database.Repository;
+	using log4net;
 
 	public class WizardController : Controller
     {
@@ -86,5 +88,23 @@
 
 			return this.JsonNet(new { EarnedPointsStr = sPoints });
 		} // EarnedPointsStr
-    }
+
+		/*
+		[HttpPost]
+		[Transactional]
+		public JsonNetResult DropzoneUploadTest() {
+			ILog log = LogManager.GetLogger(typeof (WizardController));
+
+			log.DebugFormat("{0} files arrived.", Request.Files.Count);
+
+			for (int i = 0; i < Request.Files.Count; i++) {
+				HttpPostedFileBase oFile = Request.Files[i];
+
+				log.DebugFormat("File {0}: {1}", i, oFile.FileName);
+			} // for
+
+			return this.JsonNet(new { result = "ok" });
+		}
+		*/
+	}
 }

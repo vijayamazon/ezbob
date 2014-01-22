@@ -16,6 +16,7 @@ namespace EzBob.Web.Infrastructure
 		{
 			return Bundle.JavaScript()
 				.Add("~/Content/js/lib/jquery-1.8.3.js")
+				.Add("~/Content/js/lib/dropzone.js")
 				.Add("~/Content/js/lib/jquery.scrollTo.js")
 				.Add("~/Content/js/lib/jquery.blockUI.js")
 				.Add("~/Content/js/lib/jquery.mousewheel.js")
