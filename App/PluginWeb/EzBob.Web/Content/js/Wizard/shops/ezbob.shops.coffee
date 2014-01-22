@@ -326,7 +326,7 @@ class EzBob.StoreInfoView extends Backbone.View
                 $('#EarnedPoints').text data.EarnedPointsStr
 
     shopConnected: (name) ->
-        @model.safeFetch().done =>
+        @model.get('customer').safeFetch().done =>
             @stores[name].button.update(@fromCustomer 'mpAccounts')
             @updateEarnedPoints()
             @render()

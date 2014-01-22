@@ -9,7 +9,7 @@
 
 	#region class QuickOfferData
 
-	class QuickOfferData {
+	internal class QuickOfferData {
 		#region public
 
 		#region constructor
@@ -17,7 +17,9 @@
 		public QuickOfferData(ASafeLog oLog) {
 			Log = new SafeLog(oLog);
 			IsValid = false;
-		} // constructor
+		}
+
+		// constructor
 
 		#endregion constructor
 
@@ -38,7 +40,9 @@
 			LastName = oReader["LastName"];
 
 			Validate();
-		} // Load
+		}
+
+		// Load
 
 		#endregion method Load
 
@@ -53,7 +57,9 @@
 		public decimal? Calculate() {
 			// TODO
 			return null;
-		} // Calculate
+		}
+
+		// Calculate
 
 		#endregion method Calculate
 
@@ -77,6 +83,7 @@
 		private string LastName;
 
 		private int Aml;
+		private int BusinessScore;
 
 		private readonly SafeLog Log;
 
@@ -85,35 +92,8 @@
 		#region method Validate
 
 		private void Validate() {
-			if (CustomerID == 0) {
-				Log.Debug("QuickOffer.Validate: customer id not set.");
+			if (!AreLoadedValid())
 				return;
-			} // if
-
-			if (string.IsNullOrWhiteSpace(CompanyRefNum)) {
-				Log.Debug("QuickOffer.Validate: company ref number not set.");
-				return;
-			} // if
-
-			if (string.IsNullOrWhiteSpace(AmlData)) {
-				Log.Debug("QuickOffer.Validate: AML data not set.");
-				return;
-			} // if
-
-			if (string.IsNullOrWhiteSpace(CompanyData)) {
-				Log.Debug("QuickOffer.Validate: company Experian data not set.");
-				return;
-			} // if
-
-			if (string.IsNullOrWhiteSpace(FirstName)) {
-				Log.Debug("QuickOffer.Validate: customer first name not set.");
-				return;
-			} // if
-
-			if (string.IsNullOrWhiteSpace(LastName)) {
-				Log.Debug("QuickOffer.Validate: customer last name not set.");
-				return;
-			} // if
 
 			DetectAml();
 			if (Aml <= 70) {
@@ -128,10 +108,82 @@
 				return;
 			} // if
 
+			DetectBusinessScore(oCompanyInfo);
+			if (BusinessScore < 31) {
+				Log.Debug("QuickOffer.Validate: business score is too low.");
+				return;
+			} // if
+
 			IsValid = true;
-		} // Validate
+		}
+
+		// Validate
 
 		#endregion method Validate
+
+		#region method DetectBusinessScore
+
+		private void DetectBusinessScore(XmlNode oCompanyInfo) {
+			var oPath = new NameList("REQUEST", "DL76", "RISKSCORE");
+
+			XmlNode oNode = oCompanyInfo.Offspring(oPath);
+
+			if (ReferenceEquals(oNode, null)) {
+				Log.Alert("Could not find business score tag {0} in company data.", oPath);
+				return;
+			} // if
+
+			int nScore;
+
+			if (!int.TryParse(oNode.InnerText, out nScore)) {
+				Log.Alert("Failed to parse business score content '{0}' as int.", oNode.InnerText);
+				return;
+			} // if
+
+			BusinessScore = nScore;
+
+			Log.Debug("Business score is {0}.", BusinessScore);
+		} // DetectBusinessScore
+
+		#endregion method DetectBusinessScore
+
+		#region method AreLoadedValid
+
+		private bool AreLoadedValid() {
+			if (CustomerID == 0) {
+				Log.Debug("QuickOffer.Validate: customer id not set.");
+				return false;
+			} // if
+
+			if (string.IsNullOrWhiteSpace(CompanyRefNum)) {
+				Log.Debug("QuickOffer.Validate: company ref number not set.");
+				return false;
+			} // if
+
+			if (string.IsNullOrWhiteSpace(AmlData)) {
+				Log.Debug("QuickOffer.Validate: AML data not set.");
+				return false;
+			} // if
+
+			if (string.IsNullOrWhiteSpace(CompanyData)) {
+				Log.Debug("QuickOffer.Validate: company Experian data not set.");
+				return false;
+			} // if
+
+			if (string.IsNullOrWhiteSpace(FirstName)) {
+				Log.Debug("QuickOffer.Validate: customer first name not set.");
+				return false;
+			} // if
+
+			if (string.IsNullOrWhiteSpace(LastName)) {
+				Log.Debug("QuickOffer.Validate: customer last name not set.");
+				return false;
+			} // if
+
+			return true;
+		} // AreLoadedValid
+
+		#endregion method AreLoadedValid
 
 		#region method IsDirector
 
@@ -157,8 +209,10 @@
 				if (ReferenceEquals(oLastName, null))
 					continue;
 
-				if ((oFirstName.InnerText.Trim().ToLower() == sFirstName) && (oLastName.InnerText.Trim().ToLower() == sLastName))
+				if ((oFirstName.InnerText.Trim().ToLower() == sFirstName) && (oLastName.InnerText.Trim().ToLower() == sLastName)) {
+					Log.Debug("QuickOffer.Validate: the customer is confirmed as a director of this company.");
 					return true;
+				} // if
 			} // for each director
 
 			Log.Debug("QuickOffer.Validate: customer name not found in director list.");

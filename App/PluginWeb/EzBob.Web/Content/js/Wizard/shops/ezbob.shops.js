@@ -404,7 +404,7 @@
 
     StoreInfoView.prototype.shopConnected = function(name) {
       var _this = this;
-      return this.model.safeFetch().done(function() {
+      return this.model.get('customer').safeFetch().done(function() {
         _this.stores[name].button.update(_this.fromCustomer('mpAccounts'));
         _this.updateEarnedPoints();
         return _this.render();

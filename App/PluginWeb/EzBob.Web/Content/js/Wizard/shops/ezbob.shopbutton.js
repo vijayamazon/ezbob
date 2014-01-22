@@ -19,7 +19,6 @@
 
     StoreButtonView.prototype.initialize = function(options) {
       this.name = options.name;
-      console.log('name', this.name, 'opts', options);
       this.mpAccounts = options.mpAccounts.get('customer').get('mpAccounts');
       this.shops = this.mpAccounts ? this.shops = _.where(this.mpAccounts, {
         MpName: this.name
