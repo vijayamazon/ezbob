@@ -21,7 +21,15 @@ class EzBob.HMRCAccountInfoView extends Backbone.Marionette.ItemView
         @accountType = 'HMRC'
         @template = '#' + @accountType + 'AccountInfoTemplate'
         @activeForm = undefined
-        
+
+    render: ->
+        super()
+
+        @$el.find('#hmrcAccountUpload').dropzone()
+
+        @
+    # end of render
+
     inputChanged: ->
         if (@activeForm == undefined)
             @activeForm = @$el.find('#hmrcLinkAccountForm')
