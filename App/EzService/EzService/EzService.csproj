@@ -86,6 +86,10 @@
       <Project>{7E526927-9849-4E6E-BBFF-D0D780F81A05}</Project>
       <Name>Strategies</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\FraudChecker\FraudChecker.csproj">
+      <Project>{EDC99346-E59D-44B7-BDD0-A08CD3D56941}</Project>
+      <Name>FraudChecker</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Tools\EzbobUtils\DbConnection\DbConnection.csproj">
       <Project>{270baf49-7f7d-4220-91a2-d8f5bf16b3e4}</Project>
       <Name>DbConnection</Name>

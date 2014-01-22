@@ -4,8 +4,9 @@
 	using global::FraudChecker;
 
 	public class FraudChecker : AStrategy {
-		public FraudChecker(int customerId, AConnection oDb, ASafeLog oLog) : base(oDb, oLog) {
+		public FraudChecker(int customerId, FraudMode mode, AConnection oDb, ASafeLog oLog) : base(oDb, oLog) {
 			this.customerId = customerId;
+			this.mode = mode;
 		} // constructor
 
 		public override string Name {
@@ -14,9 +15,10 @@
 
 		public override void Execute() {
 			var checker = new FraudDetectionChecker();
-			checker.Check(customerId);
+			checker.Check(customerId, mode);
 		} // Execute
 
 		private readonly int customerId;
+		private readonly FraudMode mode;
 	} // class FraudChecker
 } // namespace

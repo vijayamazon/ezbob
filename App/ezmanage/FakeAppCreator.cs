@@ -6,6 +6,7 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EzBob.Web.Code.ApplicationCreator;
 	using EzBob.Web.EzServiceReference;
+	using FraudChecker;
 
 	public class FakeAppCreator : IAppCreator
     {
@@ -178,7 +179,7 @@
         }
 
 
-		public void FraudChecker(User user)
+		public void FraudChecker(User user, FraudMode mode)
 		{
 			
 		}

@@ -7,6 +7,7 @@ using StructureMap;
 
 namespace FraudChecker
 {
+	using System.Linq;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Iesi.Collections.Generic;
 
@@ -30,17 +31,18 @@ namespace FraudChecker
 		/// run fraud all checks
 		/// </summary>
 		/// <param name="customerId">Customer.Id for check</param>
+		/// <param name="mode">Mode to check</param>
 		/// <returns></returns>
-		public string Check(int customerId)
+		public bool Check(int customerId, FraudMode mode = FraudMode.FullCheck)
 		{
 			var startDate = DateTime.UtcNow;
 			var detections = new List<FraudDetection>();
-			detections.AddRange(_internalChecker.InternalSystemDecision(customerId));
+			detections.AddRange(_internalChecker.InternalSystemDecision(customerId, mode));
 			detections.AddRange(_externalChecker.ExternalSystemDecision(customerId));
 			detections.AddRange(_bussinessChecker.SpecialBussinesRulesSystemDecision(customerId));
 
 			SaveToDb(detections, startDate, customerId);
-			return Helper.PrepareResultForOutput(detections);
+			return detections.Any();
 		}
 
 		private void SaveToDb(IList<FraudDetection> fraudDetections, DateTime startDate, int customerId)

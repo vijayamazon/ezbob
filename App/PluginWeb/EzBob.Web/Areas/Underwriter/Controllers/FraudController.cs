@@ -4,7 +4,6 @@ using EZBob.DatabaseLib.Model.Database.Repository;
 using EZBob.DatabaseLib.Model.Fraud;
 using EZBob.DatabaseLib.Repository;
 using EzBob.Web.Areas.Underwriter.Models.Fraud; 
-using FraudChecker;
 using Scorto.Web;
 
 namespace EzBob.Web.Areas.Underwriter.Controllers
@@ -18,14 +17,6 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         {
             _fraudUserRepository = fraudUserRepository;
             _mpType = mpType;
-        }
-
-        [Ajax]
-        [Transactional]
-        public string RunCheck(int id)
-        {
-            var fraudChecker = new FraudDetectionChecker();
-            return fraudChecker.Check(id);
         }
 
         [HttpGet]

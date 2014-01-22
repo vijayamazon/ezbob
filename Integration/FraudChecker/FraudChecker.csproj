@@ -59,6 +59,7 @@
     <Compile Include="ExternalChecker.cs" />
     <Compile Include="FraudDetectionChecker.cs" />
     <Compile Include="FraudDetectionModel.cs" />
+    <Compile Include="FraudMode.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="InternalChecker.cs" />
     <Compile Include="MpPhone.cs" />

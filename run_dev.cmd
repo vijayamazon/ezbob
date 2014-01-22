@@ -24,8 +24,14 @@ cd %SOURCE_PATH%
 copy /Y *.* %TARGET_PATH%
 
 rem Start EzServiceHost minimised
+echo service start
 start /MIN /D %TARGET_PATH% %TARGET_PATH%\EzServiceHost.exe
 
 rem Start iisexpress minimised
+echo iis start
 start /MIN /D "C:\Program Files (x86)\IIS Express" iisexpress.exe /config:"%USERPROFILE%\Documents\IISExpress\config\applicationhost.config" /site:"EzBob.Web" /apppool:"Clr4IntegratedAppPool"
+
+
+cd ../../../../.. 
+
 

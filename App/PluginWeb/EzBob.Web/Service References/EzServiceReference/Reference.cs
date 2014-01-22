@@ -518,7 +518,7 @@ namespace EzBob.Web.EzServiceReference {
         EzBob.Web.EzServiceReference.ActionMetaData FirstOfMonthStatusNotifier();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FraudChecker", ReplyAction="http://tempuri.org/IEzService/FraudCheckerResponse")]
-        EzBob.Web.EzServiceReference.ActionMetaData FraudChecker(int customerId);
+        EzBob.Web.EzServiceReference.ActionMetaData FraudChecker(int customerId, FraudChecker.FraudMode mode);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LateBy14Days", ReplyAction="http://tempuri.org/IEzService/LateBy14DaysResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData LateBy14Days();
@@ -714,8 +714,8 @@ namespace EzBob.Web.EzServiceReference {
             return base.Channel.FirstOfMonthStatusNotifier();
         }
         
-        public EzBob.Web.EzServiceReference.ActionMetaData FraudChecker(int customerId) {
-            return base.Channel.FraudChecker(customerId);
+        public EzBob.Web.EzServiceReference.ActionMetaData FraudChecker(int customerId, FraudChecker.FraudMode mode) {
+            return base.Channel.FraudChecker(customerId, mode);
         }
         
         public EzBob.Web.EzServiceReference.ActionMetaData LateBy14Days() {

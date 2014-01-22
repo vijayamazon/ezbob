@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ApplicationMng.Model;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Repository;
 using EZBob.DatabaseLib.Model.Fraud;
@@ -10,11 +9,11 @@ using log4net;
 using NHibernate;
 using NHibernate.Linq;
 using StructureMap;
-using EZBob.DatabaseLib.Model.Marketplaces.Yodlee;
 
 namespace FraudChecker
 {
 	using System.Text.RegularExpressions;
+	using NHibernate.Criterion;
 
 
 	public class InternalChecker
@@ -27,65 +26,86 @@ namespace FraudChecker
 			_session = ObjectFactory.GetInstance<ISession>();
 		}
 
-		public List<FraudDetection> InternalSystemDecision(int customerId)
+		public List<FraudDetection> InternalSystemDecision(int customerId, FraudMode mode)
 		{
 			Log.InfoFormat("Starting fraud internal system check for customerId={0}", customerId);
 			var customer = _session.Get<Customer>(customerId);
 			if (customer == null)
 				throw new Exception("Customer not found");
-			if (!customer.WizardStep.TheLastOne)
-				throw new Exception(string.Format("Customer {0} not successfully  registered", customer.Id));
+			//if (!customer.WizardStep.TheLastOne)
+			//	throw new Exception(string.Format("Customer {0} not successfully  registered", customer.Id));
 
 			var fraudDetections = new List<FraudDetection>();
 
-			const int pageSize = 50;
-			var customers = _session.QueryOver<Customer>().Where(x => !x.IsTest && x.Id != customerId);
-			var customerCount = customers.RowCount();
-			var iterationCount = customerCount / pageSize;
-
-			for (var i = 0; i <= iterationCount; i++)
+			var customerIds = _session.CreateSQLQuery("EXEC FraudGetDetections " + customerId).List<int>().ToArray();
+			var customers = _session.QueryOver<Customer>().Where(x => x.Id.IsIn(customerIds)).List<Customer>();
+			if (customers.Any())
 			{
-				var customerPortion = customers.Skip(i * pageSize).Take(pageSize).List<Customer>();
-				InternalFirstMiddleLastNameCheck(customer, customerPortion, fraudDetections);
-				InternalFirstMiddleLastNameCheck(customer, customerPortion, fraudDetections, true);
-				InternalLastNameDobCheck(fraudDetections, customerPortion, customer);
-				InternalPhoneCheck(fraudDetections, customerPortion, customer);
-				InternalPhoneFromMpCheck(fraudDetections, customerPortion, customer);
-				InternalCompanyNameCheck(customer, fraudDetections, customerPortion);
-				InternalBankAccountCheck(fraudDetections, customerPortion, customer);
-				InternalIpCheck(fraudDetections, customerPortion, customer);
-			}
-			InternalDobLess21(customer, fraudDetections);
+				Log.DebugFormat("Num of potential fraud customers: {0}", customers.Count());
 
-			//Director
-			var directorCount = _session.QueryOver<Director>().RowCount();
-			iterationCount = directorCount / pageSize;
-			for (var i = 0; i <= iterationCount; i++)
+				switch (mode)
+				{
+					case FraudMode.PersonalDetaisCheck:
+						PersonalCheck(customer, customers, fraudDetections);
+						break;
+					case FraudMode.CompanyDetailsCheck:
+						CompanyCheck(customer, customers, fraudDetections);
+						break;
+					case FraudMode.MarketplacesCheck:
+						MpCheck(customer, customers, fraudDetections);
+						break;
+					case FraudMode.FullCheck:
+						PersonalCheck(customer, customers, fraudDetections);
+						CompanyCheck(customer, customers, fraudDetections);
+						MpCheck(customer, customers, fraudDetections);
+						InternalBankAccountCheck(fraudDetections, customers, customer);
+						break;
+				}
+			}
+			else
 			{
-				var directorPortion = _session.QueryOver<Director>().Skip(i * pageSize).Take(pageSize).List<Director>();
-				InternalDirectorFirstMiddleLastNameCheck(fraudDetections, directorPortion, customer);
-				InternalDirectorFirstMiddleLastNameCheck(fraudDetections, directorPortion, customer, true);
+				Log.DebugFormat("None of the customers match any of parameters");
 			}
-
-			InternalAddressCheck(customer, fraudDetections);
-			InternalLastNamePostcodeCheck(fraudDetections, customer);
-			InternalLastNameRawPostcodeCheck(fraudDetections, customer);
-			InternalShopCheck(customer, fraudDetections);
 
 			Log.InfoFormat("Finish fraud internal system check for customerId={0}", customerId);
 			return fraudDetections;
 		}
 
+		private void PersonalCheck(Customer customer, IList<Customer> customers, List<FraudDetection> fraudDetections)
+		{
+			InternalFirstMiddleLastNameCheck(customer, customers, fraudDetections);
+			InternalFirstMiddleLastNameCheck(customer, customers, fraudDetections, true);
+			InternalLastNameDobCheck(fraudDetections, customers, customer);
+			InternalPhoneCheck(fraudDetections, customers, customer);
+			InternalAddressCheck(customer, fraudDetections, customers);
+			InternalLastNamePostcodeCheck(fraudDetections, customer, customers);
+			InternalLastNameRawPostcodeCheck(fraudDetections, customer, customers);
+			InternalIpCheck(fraudDetections, customers, customer);
+			InternalDobLess21(customer, fraudDetections);
+		}
+
+		private void CompanyCheck(Customer customer, IList<Customer> customers, List<FraudDetection> fraudDetections)
+		{
+			InternalCompanyNameCheck(customer, fraudDetections, customers);
+			InternalDirectorFirstMiddleLastNameCheck(fraudDetections, customers, customer);
+			InternalDirectorFirstMiddleLastNameCheck(fraudDetections, customers, customer, true);
+		}
+
+		private void MpCheck(Customer customer, IList<Customer> customers, List<FraudDetection> fraudDetections)
+		{
+			InternalShopCheck(customer, fraudDetections, customers);
+			InternalPhoneFromMpCheck(fraudDetections, customers, customer);
+		}
+
 		//---------------------------------------------------------------------------------------------------
 
-		private void InternalLastNameRawPostcodeCheck(List<FraudDetection> fraudDetections, Customer customer)
+		private void InternalLastNameRawPostcodeCheck(List<FraudDetection> fraudDetections, Customer customer, IEnumerable<Customer> customers)
 		{
 			var customerAddresses = customer.AddressInfo.AllAddresses.ToList();
 			var postcodes = customerAddresses.Select(a => a.Rawpostcode).ToList();
 
 			fraudDetections.AddRange(
-				from ca in _session.Query<CustomerAddress>().Where(address => postcodes.Contains(address.Rawpostcode))
-				where ca.Customer.IsTest == false || ca.Director.Customer.IsTest == false
+				from ca in customers.SelectMany(c => c.AddressInfo.AllAddresses).Where(address => postcodes.Contains(address.Rawpostcode))
 				where ca.Customer != customer
 				where ca.Customer.WizardStep.TheLastOne
 				where ca.Customer.PersonalInfo.Surname == customer.PersonalInfo.Surname
@@ -231,14 +251,13 @@ namespace FraudChecker
 			}
 		}
 
-		private void InternalLastNamePostcodeCheck(List<FraudDetection> fraudDetections, Customer customer)
+		private void InternalLastNamePostcodeCheck(List<FraudDetection> fraudDetections, Customer customer, IEnumerable<Customer> customers)
 		{
 			var customerAddresses = customer.AddressInfo.AllAddresses.ToList();
 			var postcodes = customerAddresses.Select(a => a.Postcode).ToList();
 
 			fraudDetections.AddRange(
-				from ca in _session.Query<CustomerAddress>().Where(address => postcodes.Contains(address.Postcode))
-				where ca.Customer.IsTest == false || ca.Director.Customer.IsTest == false
+				from ca in customers.SelectMany(c => c.AddressInfo.AllAddresses).Where(address => postcodes.Contains(address.Postcode))
 				where ca.Customer != customer
 				where ca.Customer.WizardStep.TheLastOne
 				where ca.Customer.PersonalInfo.Surname == customer.PersonalInfo.Surname
@@ -248,58 +267,39 @@ namespace FraudChecker
 									null, string.Format("{0}: {1}", ca.Postcode, customer.PersonalInfo.Surname)));
 		}
 
-		private void InternalShopCheck(Customer customer, List<FraudDetection> fraudDetections)
+		private void InternalShopCheck(Customer customer, List<FraudDetection> fraudDetections, IList<Customer> customers)
 		{
 			//Shop ID
-			const int pageSize = 500;
-			var customerMps = _session.QueryOver<MP_CustomerMarketPlace>().Where(x => x.Customer == customer).List<MP_CustomerMarketPlace>();
-			var mps = from cmp in _session.Query<MP_CustomerMarketPlace>()
-					  where cmp.Customer != customer
-					  where cmp.Customer.IsTest == false
-					  where cmp.Marketplace.Name != "Yodlee"
-					  where cmp.Marketplace.Name != "Sage"
-					  select cmp;
-			var mpCount = mps.Count();
-			var iterationCount = mpCount / pageSize;
+			var customerMps = customer.CustomerMarketPlaces.Select(m => m.DisplayName).ToList();
 
-			for (var i = 0; i <= iterationCount; i++)
-			{
-				var mpPortion = mps.Skip(i * pageSize).Take(pageSize).ToList();
+			var mps = customers.SelectMany(c => c.CustomerMarketPlaces).Where(m => m.Marketplace.Name != "Yodlee" && m.Marketplace.Name != "Sage").ToList();
 
-				fraudDetections.AddRange(
-					from m in mpPortion
-					from cm in customerMps
-					where m.DisplayName == cm.DisplayName
-					select
-						Helper.CreateDetection("Customer Marketplace Name", customer, m.Customer, "Customer Marketplace Name",
-										null, string.Format("{0}: {1}", m.Marketplace.Name, m.DisplayName)));
-			}
+			fraudDetections.AddRange(
+				from m in mps
+				from cm in customerMps
+				where m.DisplayName == cm
+				select
+					Helper.CreateDetection("Customer Marketplace Name", customer, m.Customer, "Customer Marketplace Name",
+									null, string.Format("{0}: {1}", m.Marketplace.Name, m.DisplayName)));
 
-			var yodlees = customerMps.Where(x => x.Marketplace.Name == "Yodlee").ToList();
+			var yodlees = customer.CustomerMarketPlaces.Where(x => x.Marketplace.Name == "Yodlee").ToList();
 			if (yodlees.Any())
 			{
-				InternalYodleeMpCheck(yodlees, customer, fraudDetections);
+				InternalYodleeMpCheck(yodlees, customer, fraudDetections, customers.ToList());
 			}
 
 			//TODO Sage Check (not using sage mp name (always the same))
 		}
 
-		private void InternalYodleeMpCheck(IEnumerable<MP_CustomerMarketPlace> customerYodlees, Customer customer, List<FraudDetection> fraudDetections)
+		private void InternalYodleeMpCheck(IEnumerable<MP_CustomerMarketPlace> customerYodlees, Customer customer, List<FraudDetection> fraudDetections, IEnumerable<Customer> customers)
 		{
-			var yodlees = _session.Query<MP_YodleeOrderItem>()
-								  .Where(
-									  i =>
-									  i.Order.CustomerMarketPlace.Customer != customer &&
-									  i.Order.CustomerMarketPlace.Customer.IsTest == false)
-								  .Select(i => new
-									  {
-										  Name = i.accountName,
-										  Number = i.accountNumber,
-										  CustomerId = i.Order.CustomerMarketPlace.Customer.Id
-									  })
-								  .ToList()
-								  .Distinct();
-
+			var yodlees = customers
+				.SelectMany(c => c.CustomerMarketPlaces).Where(x => x.Marketplace.Name == "Yodlee")
+				.SelectMany(y => y.YodleeOrders)
+				.SelectMany(o => o.OrderItems)
+				.Select(i => new { Name = i.accountName, Number = i.accountNumber, CustomerId = i.Order.CustomerMarketPlace.Customer.Id })
+				.Distinct()
+				.ToList();
 
 			var customerYodleesItems =
 				customerYodlees.SelectMany(y => y.YodleeOrders)
@@ -308,36 +308,21 @@ namespace FraudChecker
 							   .Distinct()
 							   .ToList();
 
-			var mpCount = yodlees.Count();
-			const int pageSize = 500;
-			var iterationCount = mpCount / pageSize;
-
-			for (var i = 0; i <= iterationCount; i++)
-			{
-				var mpPortion = yodlees.Skip(i * pageSize).Take(pageSize).ToList();
-
-				fraudDetections.AddRange(
-					from m in mpPortion
-					from cm in customerYodleesItems
-					where m.Name == cm.Name && m.Number == cm.Number
-					select
-						Helper.CreateDetection("Customer Bank Account Name And Number", customer, _session.Query<Customer>().FirstOrDefault(c => c.Id == m.CustomerId), "Customer Bank Account Name And Number",
-										null, string.Format("{0}: {1}", m.Name, m.Number)));
-			}
+			fraudDetections.AddRange(
+				from m in yodlees
+				from cm in customerYodleesItems
+				where m.Name == cm.Name && m.Number == cm.Number
+				select
+					Helper.CreateDetection("Customer Bank Account Name And Number", customer, _session.Query<Customer>().FirstOrDefault(c => c.Id == m.CustomerId), "Customer Bank Account Name And Number",
+									null, string.Format("{0}: {1}", m.Name, m.Number)));
 		}
 
-		private IEnumerable<CustomerAddress> GetAddressesOfOtherCustomers(Customer customer)
-		{
-			var otherAddresses = _session.Query<CustomerAddress>().Where(x => (x.Customer.IsTest == false && x.Customer != customer) || (x.Director.Customer.IsTest == false && x.Director.Customer != customer)).ToList();
-			return otherAddresses;
-		}
-
-		private void InternalAddressCheck(Customer customer, List<FraudDetection> fraudDetections)
+		private void InternalAddressCheck(Customer customer, List<FraudDetection> fraudDetections, IEnumerable<Customer> customers)
 		{
 			//Address (any of home, business, directors, previous addresses)
-			var customerAddresses = customer.AddressInfo.AllAddresses.ToList();
+			var customerAddresses = customer.AddressInfo.AllAddresses;
 			var postcodes = customerAddresses.Select(a => a.Postcode).ToList();
-			var addresses = GetAddressesOfOtherCustomers(customer).Where(address => postcodes.Contains(address.Postcode));
+			var addresses = customers.SelectMany(c => c.AddressInfo.AllAddresses).Where(address => postcodes.Contains(address.Postcode));
 
 			fraudDetections.AddRange(
 				from ca in customerAddresses
@@ -355,10 +340,11 @@ namespace FraudChecker
 		}
 
 		private static void InternalDirectorFirstMiddleLastNameCheck(List<FraudDetection> fraudDetections,
-																	 IEnumerable<Director> directorPortion,
+																	 IEnumerable<Customer> customers,
 																	 Customer customer,
 																	 bool isSkipLast = false)
 		{
+			var directorPortion = customers.SelectMany(c => c.Companies).SelectMany(cc => cc.Directors).ToList();
 			// First + Middle + Last
 			fraudDetections.AddRange(
 				from d in directorPortion
@@ -420,9 +406,9 @@ namespace FraudChecker
 						(c.Companies.First().CompanyName ?? "").ToLower() == companyName.ToLower()
 					select
 						Helper.CreateDetection("Customer CompanyName", customer, c,
-						                       "Customer CompanyName",
-						                       null,
-						                       string.Format("{0}", companyName)));
+											   "Customer CompanyName",
+											   null,
+											   string.Format("{0}", companyName)));
 			}
 		}
 

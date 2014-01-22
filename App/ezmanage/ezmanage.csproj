@@ -121,6 +121,10 @@
       <Project>{0b94f193-9310-4a4d-98b2-3a55c851c6ad}</Project>
       <Name>EzBob.Signals</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Integration\FraudChecker\FraudChecker.csproj">
+      <Project>{edc99346-e59d-44b7-bdd0-a08cd3d56941}</Project>
+      <Name>FraudChecker</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Integration\PaymentServices\PaymentServices.csproj">
       <Project>{544a1fd5-76d3-4b73-97dd-0c7aa32f66c2}</Project>
       <Name>PaymentServices</Name>

@@ -26,8 +26,8 @@ namespace FraudChecker
 		{
 			Log.InfoFormat("Starting fraud external system check for customerId={0}", customerId);
 			var customer = _session.Load<Customer>(customerId);
-			if (!customer.WizardStep.TheLastOne)
-				throw new Exception(string.Format("Customer {0} not successfully  registered", customer.Id));
+			//if (!customer.WizardStep.TheLastOne)
+			//	throw new Exception(string.Format("Customer {0} not successfully  registered", customer.Id));
 
 			var fraudDetections = new List<FraudDetection>();
 

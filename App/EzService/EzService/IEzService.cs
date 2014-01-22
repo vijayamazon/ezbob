@@ -3,6 +3,7 @@
 namespace EzService {
 	using System;
 	using EzBob.Backend.Strategies;
+	using FraudChecker;
 
 	#region interface IEzService
 
@@ -84,7 +85,7 @@ namespace EzService {
 		ActionMetaData FirstOfMonthStatusNotifier();
 
 		[OperationContract]
-		ActionMetaData FraudChecker(int customerId);
+		ActionMetaData FraudChecker(int customerId, FraudMode mode);
 
 		[OperationContract]
 		ActionMetaData LateBy14Days();

@@ -9,6 +9,7 @@
 	using ApplicationMng.Repository;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
+	using FraudChecker;
 	using Infrastructure;
 	using Scorto.Strategy;
 	using log4net;
@@ -494,9 +495,9 @@
 			}
 		}
 
-		public void FraudChecker(User user) {
+		public void FraudChecker(User user, FraudMode mode) {
 			if (useNewFraudCheckerStrategy) {
-				ServiceClient.FraudChecker(user.Id);
+				ServiceClient.FraudChecker(user.Id, mode);
 			}
 			else {
 				var strategyParameters = new[] {

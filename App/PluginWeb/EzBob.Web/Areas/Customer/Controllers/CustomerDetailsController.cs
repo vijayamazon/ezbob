@@ -11,6 +11,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using ExperianLib.Ebusiness;
+	using FraudChecker;
 	using Models;
 	using Code;
 	using Infrastructure;
@@ -149,7 +150,7 @@
 
 			if (!customer.IsTest)
 			{
-				_creator.FraudChecker(_context.User);
+				_creator.FraudChecker(_context.User, FraudMode.FullCheck);
 				ms_oLog.DebugFormat("Customer {1} ({0}): fraud check started.", customer.Id, customer.PersonalInfo.Fullname);
 			} // if
 

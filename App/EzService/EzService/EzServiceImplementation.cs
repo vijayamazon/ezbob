@@ -10,6 +10,7 @@
 	using EzBob.Backend.Strategies.QuickOffer;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using FraudChecker;
 
 	[ServiceBehavior(
 		InstanceContextMode = InstanceContextMode.PerCall,
@@ -358,8 +359,8 @@
 			return Execute(null, null, typeof(FirstOfMonthStatusNotifier));
 		} // FirstOfMonthStatusNotifier
 
-		public ActionMetaData FraudChecker(int customerId) {
-			return Execute(customerId, null, typeof(FraudChecker), customerId);
+		public ActionMetaData FraudChecker(int customerId, FraudMode mode) {
+			return Execute(customerId, null, typeof (FraudChecker), customerId, mode);
 		} // FraudChecker
 
 		public ActionMetaData LateBy14Days() {

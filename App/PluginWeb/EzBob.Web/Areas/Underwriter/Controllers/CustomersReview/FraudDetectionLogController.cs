@@ -12,6 +12,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 	using ApplicationMng.Repository;
 	using Code.ApplicationCreator;
 	using EZBob.DatabaseLib.Model.Database.Repository;
+	using FraudChecker;
 	using NHibernate;
 
 	public class FraudDetectionLogController : Controller
@@ -46,7 +47,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 		public JsonNetResult Recheck(int customerId)
 		{
 			var user = _usersRepository.Get(customerId);
-			_appCreator.FraudChecker(user);
+			_appCreator.FraudChecker(user, FraudMode.FullCheck);
 			return this.JsonNet(new { success = true });
 		}
 	}
