@@ -146,7 +146,7 @@ class EzBob.Profile.YourInfoMainView extends Backbone.Marionette.Layout
         @validator = EzBob.validateYourInfoEditForm(@ui.form)
         @.$el.find('.phonenumber').numericOnly(11);
         @.$el.find('.cashInput').numericOnly(15);
-        $('input.form_field_address_lookup').css 'margin-left', '3px'
+        $('input.form_field_right_side').css 'margin-left', '3px'
 
     renderPersonal: ->
         personalInfoView = new EzBob.Profile.PersonalInfoView({ model: @model })
