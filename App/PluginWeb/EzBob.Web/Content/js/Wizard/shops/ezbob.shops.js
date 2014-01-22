@@ -40,7 +40,7 @@
       var acc, accountTypeName, aryCGAccounts, ignore, lc, ordpi, vendorInfo;
       this.ebayStores = new EzBob.EbayStoreModels();
       this.EbayStoreView = new EzBob.EbayStoreInfoView();
-      this.ebayStores.on("reset         change", this.marketplacesChanged, this);
+      this.ebayStores.on("reset change", this.marketplacesChanged, this);
       this.amazonMarketplaces = new EzBob.AmazonStoreModels();
       this.AmazonStoreInfoView = new EzBob.AmazonStoreInfoView();
       this.amazonMarketplaces.on("reset change", this.marketplacesChanged, this);
@@ -405,7 +405,7 @@
     StoreInfoView.prototype.shopConnected = function(name) {
       var _this = this;
       return this.model.safeFetch().done(function() {
-        _this.stores[name].button.update(_this.model.get('mpAccounts'));
+        _this.stores[name].button.update(_this.fromCustomer('mpAccounts'));
         _this.updateEarnedPoints();
         return _this.render();
       });

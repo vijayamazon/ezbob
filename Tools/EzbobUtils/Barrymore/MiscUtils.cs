@@ -1,5 +1,7 @@
 ﻿namespace Ezbob.Utils {
+	using System;
 	using System.Text;
+	using System.Xml;
 
 	#region class Utils
 

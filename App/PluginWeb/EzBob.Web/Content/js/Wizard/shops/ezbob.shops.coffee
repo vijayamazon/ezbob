@@ -17,8 +17,7 @@ class EzBob.StoreInfoView extends Backbone.View
     initialize: ->
         @ebayStores = new EzBob.EbayStoreModels()
         @EbayStoreView = new EzBob.EbayStoreInfoView()
-        @ebayStores.on "reset 
-        change", @marketplacesChanged, this
+        @ebayStores.on "reset change", @marketplacesChanged, this
 
         @amazonMarketplaces = new EzBob.AmazonStoreModels()
         @AmazonStoreInfoView = new EzBob.AmazonStoreInfoView()
@@ -328,6 +327,6 @@ class EzBob.StoreInfoView extends Backbone.View
 
     shopConnected: (name) ->
         @model.safeFetch().done =>
-            @stores[name].button.update(@model.get('mpAccounts'))
+            @stores[name].button.update(@fromCustomer 'mpAccounts')
             @updateEarnedPoints()
             @render()

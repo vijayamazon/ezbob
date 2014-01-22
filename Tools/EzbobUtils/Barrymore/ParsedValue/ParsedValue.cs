@@ -1,6 +1,5 @@
 ﻿namespace Ezbob.Utils.ParsedValue {
 	using System;
-	using System.Globalization;
 
 	#region class ParsedValue
 
