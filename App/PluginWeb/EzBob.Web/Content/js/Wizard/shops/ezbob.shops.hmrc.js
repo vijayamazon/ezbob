@@ -19,15 +19,15 @@
       'change input': 'inputChanged',
       'keyup input': 'inputChanged',
       'click a.hmrcBack': 'back',
-      'click a.linkButton': 'linkAccount',
-      'click a.uploadButton': 'uploadFiles',
+      'click span.uploadSpan': 'uploadFiles',
       'click a.linkAccountBack': 'linkAccountBack',
       'click a.uploadFilesBack': 'uploadFilesBack',
       'click a.connect-account': 'connect',
       'click a.connect-account-help': 'connect',
       'click a.select-vat': 'selectVatFiles',
       'click #linkHelpButton': 'getLinkHelp',
-      'click #uploadHelpButton': 'getUploadHelp'
+      'click #uploadHelpButton': 'getUploadHelp',
+      'click span.linkSpan': 'linkAccount'
     };
 
     HMRCAccountInfoView.prototype.initialize = function(options) {

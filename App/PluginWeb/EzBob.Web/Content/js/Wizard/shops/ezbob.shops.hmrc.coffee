@@ -6,8 +6,7 @@ class EzBob.HMRCAccountInfoView extends Backbone.Marionette.ItemView
         'change input': 'inputChanged'
         'keyup input': 'inputChanged'
         'click a.hmrcBack': 'back'
-        'click a.linkButton' : 'linkAccount'
-        'click a.uploadButton' : 'uploadFiles'
+        'click span.uploadSpan' : 'uploadFiles'
         'click a.linkAccountBack': 'linkAccountBack'
         'click a.uploadFilesBack': 'uploadFilesBack'
         'click a.connect-account': 'connect'
@@ -15,13 +14,14 @@ class EzBob.HMRCAccountInfoView extends Backbone.Marionette.ItemView
         'click a.select-vat': 'selectVatFiles'
         'click #linkHelpButton': 'getLinkHelp'
         'click #uploadHelpButton': 'getUploadHelp'
+        'click span.linkSpan' : 'linkAccount'
 
     initialize: (options) ->
         @uploadFilesDlg = null
         @accountType = 'HMRC'
         @template = '#' + @accountType + 'AccountInfoTemplate'
         @activeForm = undefined
-
+        
     inputChanged: ->
         if (@activeForm == undefined)
             @activeForm = @$el.find('#hmrcLinkAccountForm')

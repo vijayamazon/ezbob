@@ -480,6 +480,16 @@ blockquote{margin:0 0 20px 0; padding:10px; border:1px #ccc solid; font-style:it
 	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#4e7d0e', endColorstr='#7db72f');
 }
 
+.turquoise {
+    border: 5px solid #007676;
+}
+.turquoise:hover {
+    border: 5px solid #00A3A3;
+}
+.turquoise:active {
+    border: 5px solid #009999;
+}
+
 .grey {
 	color: #e9e9e9!important;
 	border: solid 1px #555;
