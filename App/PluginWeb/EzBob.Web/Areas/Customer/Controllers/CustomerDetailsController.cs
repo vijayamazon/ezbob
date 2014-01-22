@@ -184,18 +184,26 @@
 			var customer = _context.Customer;
 
 			TypeOfBusiness nBusinessType;
-
+			IndustryType eIndustryType;
+			VatReporting eVatReporing;
 			if (!Enum.TryParse(companyAdditionalInfo.TypeOfBusiness, true, out nBusinessType))
 				return this.JsonNet(new { error = "Failed to parse business type: " + companyAdditionalInfo.TypeOfBusiness });
+
+			if (!Enum.TryParse(companyAdditionalInfo.IndustryType, true, out eIndustryType))
+				return this.JsonNet(new { error = "Failed to parse industry type: " + companyAdditionalInfo.IndustryType });
+
+			if (!Enum.TryParse(companyAdditionalInfo.VatReporting, true, out eVatReporing))
+				return this.JsonNet(new { error = "Failed to parse VAT reporting: " + companyAdditionalInfo.VatReporting });
 
 			if (customer.PersonalInfo == null)
 				customer.PersonalInfo = new PersonalInfo();
 
 
 			customer.PersonalInfo.TypeOfBusiness = nBusinessType;
+			customer.PersonalInfo.IndustryType = eIndustryType;
 			customer.PersonalInfo.OverallTurnOver = companyAdditionalInfo.OverallTurnOver;
 
-			if (companyAdditionalInfo.IndustryType == "online" || companyAdditionalInfo.PartBusinessOnline)
+			if (eIndustryType == IndustryType.HighStreetOrOnlineRetail || companyAdditionalInfo.PartBusinessOnline)
 			{
 				customer.IsOffline = false;
 			}
@@ -204,10 +212,22 @@
 				customer.IsOffline = true;
 			}
 
-			customer.ConsentToSearch = companyAdditionalInfo.ConsentToSearch;
+			
 			customer.IsDirector = companyAdditionalInfo.DirectorCheck;
 
-			ProcessCompanyInfoTemporary(nBusinessType, limitedInfo, nonLimitedInfo, companyAdditionalInfo, limitedCompanyAddress, nonLimitedCompanyAddress, limitedDirectors, nonLimitedDirectors, companyEmployeeCountInfo, experianInfo, customer);
+			ProcessCompanyInfoTemporary(
+				nBusinessType, 
+				eVatReporing, 
+				limitedInfo, 
+				nonLimitedInfo, 
+				companyAdditionalInfo, 
+				limitedCompanyAddress, 
+				nonLimitedCompanyAddress, 
+				limitedDirectors, 
+				nonLimitedDirectors, 
+				companyEmployeeCountInfo, 
+				experianInfo, 
+				customer);
 
 			customer.WizardStep = _helper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.CompanyDetails);
 
@@ -243,6 +263,7 @@
 			personalInfo.FirstName = UppercaseWords(personalInfo.FirstName.Trim());
 			personalInfo.Fullname = string.Format("{0} {1}", personalInfo.FirstName, personalInfo.Surname);
 
+			customer.ConsentToSearch = personalInfo.ConsentToSearch;
 			if (customer.PersonalInfo != null)
 			{
 				personalInfo.OverallTurnOver = customer.PersonalInfo.OverallTurnOver;
@@ -519,7 +540,18 @@
 		#endregion static method UpdateAddresses
 
 		#region static method ProcessCompanyInfo
-		private void ProcessCompanyInfoTemporary(TypeOfBusiness type, LimitedInfo limitedInfo, NonLimitedInfo nonLimitedInfo, CompanyAdditionalInfo companyAdditionalInfo, List<CustomerAddress> limitedCompanyAddress, List<CustomerAddress> nonLimitedCompanyAddress, List<DirectorModel> limitedDirectors, List<DirectorModel> nonLimitedDirectors, CompanyEmployeeCountInfo companyEmployeeCount, CompanyInfo experianInfo, Customer customer)
+		private void ProcessCompanyInfoTemporary(
+			TypeOfBusiness businessType,
+			VatReporting vat, 
+			LimitedInfo limitedInfo, 
+			NonLimitedInfo nonLimitedInfo,
+			CompanyAdditionalInfo companyAdditionalInfo, 
+			List<CustomerAddress> limitedCompanyAddress, 
+			List<CustomerAddress> nonLimitedCompanyAddress, 
+			List<DirectorModel> limitedDirectors, 
+			List<DirectorModel> nonLimitedDirectors, 
+			CompanyEmployeeCountInfo companyEmployeeCount, 
+			CompanyInfo experianInfo, Customer customer)
 		{
 
 			CompanyInfoMap companyData;
@@ -540,7 +572,7 @@
 						}
 				};
 
-			switch (type.Reduce())
+			switch (businessType.Reduce())
 			{
 				case TypeOfBusinessReduced.Limited:
 					companyData = new CompanyInfoMap
@@ -551,9 +583,10 @@
 							CompanyName = limitedInfo.LimitedCompanyName,
 							PropertyOwnedByCompany = companyAdditionalInfo.PropertyOwnedByCompany,
 							RentMonthLeft = companyAdditionalInfo.RentMonthsLeft,
-							TypeOfBusiness = type,
+							TypeOfBusiness = businessType,
 							TimeAtAddress = limitedInfo.LimitedTimeAtAddress,
 							YearsInCompany = companyAdditionalInfo.YearsInCompany,
+							VatReporting = vat
 						};
 					companyAddress = limitedCompanyAddress;
 					companyDirectors = limitedDirectors;
@@ -566,10 +599,11 @@
 							CompanyName = nonLimitedInfo.NonLimitedCompanyName,
 							PropertyOwnedByCompany = companyAdditionalInfo.PropertyOwnedByCompany,
 							RentMonthLeft = companyAdditionalInfo.RentMonthsLeft,
-							TypeOfBusiness = type,
+							TypeOfBusiness = businessType,
 							TimeAtAddress = nonLimitedInfo.NonLimitedTimeAtAddress,
 							YearsInCompany = companyAdditionalInfo.YearsInCompany,
-							TimeInBusiness = nonLimitedInfo.NonLimitedTimeInBusiness
+							TimeInBusiness = nonLimitedInfo.NonLimitedTimeInBusiness,
+							VatReporting = vat
 						};
 					companyAddress = nonLimitedCompanyAddress;
 					companyDirectors = nonLimitedDirectors;
@@ -610,6 +644,7 @@
 					YearsInCompany = companyData.YearsInCompany,
 					RentMonthLeft = companyData.RentMonthLeft,
 					CapitalExpenditure = companyData.CapitalExpenditure,
+					VatReporting = companyData.VatReporting
 				};
 
 			if (directors != null)
@@ -738,7 +773,7 @@
 		private void AddAddressInfoToHistory(
 			IEnumerable<CustomerAddress> oldAddress,
 			IList<CustomerAddress> newAddress,
-			EZBob.DatabaseLib.Model.Database.Customer customer,
+			Customer customer,
 			string fieldName
 		)
 		{

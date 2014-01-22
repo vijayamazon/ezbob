@@ -1,7 +1,5 @@
 namespace EZBob.DatabaseLib.Model.Database
 {
-	using System.Collections.Generic;
-	using System.Linq;
 	using FluentNHibernate.Mapping;
 	using Iesi.Collections.Generic;
 	using NHibernate.Type;
@@ -14,6 +12,7 @@ namespace EZBob.DatabaseLib.Model.Database
 		public virtual int Id { get; set; }
 		public virtual Customer Customer { get; set; }
 		public virtual TypeOfBusiness TypeOfBusiness { get; set; }
+		public virtual VatReporting VatReporting { get; set; }
 		public virtual string CompanyNumber { get; set; }
 		public virtual string CompanyName { get; set; }
 		public virtual int? TimeAtAddress { get; set; }
@@ -26,30 +25,30 @@ namespace EZBob.DatabaseLib.Model.Database
 		public virtual string ExperianRefNum { get; set; }
 		public virtual string ExperianCompanyName { get; set; }
 		
-		private Iesi.Collections.Generic.ISet<CustomerAddress> _companyAddress = new HashedSet<CustomerAddress>();
-		public virtual Iesi.Collections.Generic.ISet<CustomerAddress> CompanyAddress
+		private ISet<CustomerAddress> _companyAddress = new HashedSet<CustomerAddress>();
+		public virtual ISet<CustomerAddress> CompanyAddress
 		{
 			get { return _companyAddress; }
 			set { _companyAddress = value; }
 		} //CompanyAddress
 
-		private Iesi.Collections.Generic.ISet<CustomerAddress> _experianCompanyAddress = new HashedSet<CustomerAddress>();
-		public virtual Iesi.Collections.Generic.ISet<CustomerAddress> ExperianCompanyAddress
+		private ISet<CustomerAddress> _experianCompanyAddress = new HashedSet<CustomerAddress>();
+		public virtual ISet<CustomerAddress> ExperianCompanyAddress
 		{
 			get { return _experianCompanyAddress; }
 			set { _experianCompanyAddress = value; }
 		} //CompanyAddress
 
-		private Iesi.Collections.Generic.ISet<CompanyEmployeeCount> _companyEmployeeCount = new HashedSet<CompanyEmployeeCount>();
-		public virtual Iesi.Collections.Generic.ISet<CompanyEmployeeCount> CompanyEmployeeCount
+		private ISet<CompanyEmployeeCount> _companyEmployeeCount = new HashedSet<CompanyEmployeeCount>();
+		public virtual ISet<CompanyEmployeeCount> CompanyEmployeeCount
 		{
 			get { return _companyEmployeeCount; }
 			set { _companyEmployeeCount = value; }
 		} // CompanyEmployeeCount
 
-		private Iesi.Collections.Generic.ISet<Director> _directors = new HashedSet<Director>();
+		private ISet<Director> _directors = new HashedSet<Director>();
 		
-		public virtual Iesi.Collections.Generic.ISet<Director> Directors
+		public virtual ISet<Director> Directors
 		{
 			get { return _directors; }
 			set { _directors = value; }
@@ -70,6 +69,7 @@ namespace EZBob.DatabaseLib.Model.Database
 			Id(x => x.Id);
 			References(x => x.Customer, "CustomerId");
 			Map(x => x.TypeOfBusiness).CustomType<TypeOfBusinessType>();
+			Map(x => x.VatReporting).CustomType<VatReportingType>();
 			Map(x => x.CompanyNumber).Length(100);
 			Map(x => x.CompanyName).Length(300);
 			Map(x => x.TimeAtAddress);
@@ -117,6 +117,10 @@ namespace EZBob.DatabaseLib.Model.Database
 	#region enum TypeOfBusinessReduced
 
 	public class TypeOfBusinessType : EnumStringType<TypeOfBusiness> { }
+	
+	public class IndustryTypeType : EnumStringType<IndustryType> { }
+
+	public class VatReportingType: EnumStringType<VatReporting> { }
 
 	public enum TypeOfBusinessReduced
 	{

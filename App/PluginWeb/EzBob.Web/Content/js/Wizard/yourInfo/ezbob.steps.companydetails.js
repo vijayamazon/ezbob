@@ -42,7 +42,7 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 
         this.events = _.extend({}, this.events, {
             'click .btn-continue': 'next',
-            'click label[for="ConsentToSearch"] a': 'showConsent',
+            
             
             'focus #OverallTurnOver': 'overallTurnOverFocus',
             'focus #WebSiteTurnOver': 'webSiteTurnOverFocus',
@@ -63,23 +63,15 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
         this.readyToProceed = false;
     }, // initialize
 
-    showConsent: function () {
-        var consentAgreementModel = new EzBob.ConsentAgreementModel({
-            id: this.model.get('Id'),
-            firstName: this.$el.find('input[name="FirstName"]').val(),
-            middleInitial: this.$el.find('input[name="MiddleInitial"]').val(),
-            surname: this.$el.find('input[name="Surname"]').val()
-        });
-
-        var consentAgreement = new EzBob.ConsentAgreement({ model: consentAgreementModel });
-        EzBob.App.modal.show(consentAgreement);
-        return false;
-    }, // showConsent
-    
     inputChanged: function (evt) {
         if (evt && (evt.type === 'change') && (evt.target.id === 'TypeOfBusiness'))
             this.typeOfBusinessChanged();
-
+        if (evt && (evt.type === 'change') && (evt.target.id === 'IndustryType')) {
+            if (this.$el.find("#IndustryType").val() == 4) {
+                this.$el.find("#PartBusinessOnline").attr("checked", "checked");
+            }
+        }
+        
         var enabled = this.validator.checkForm();
 
         if (enabled && this.CompanyView)
@@ -157,31 +149,24 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
     }, // render
 
     ownValidationRules: function () {
-        var overallRegex = "^(?!£ 0.00$)";
-
         return {
             TypeOfBusiness: { required: true },
             IndustryType: { required: true },
-            ConsentToSearch: { required: true },
             DirectorCheck: { required: true },
-            OverallTurnOver: { required: true, defaultInvalidPounds: true, regex: overallRegex },
+            VatReporting: { required: true },
         };
     }, // ownValidationRules
 
     ownValidationMessages: function () {
         return {
-            OverallTurnOver: { defaultInvalidPounds: "This field is required", regex: "This field is required" },
+
         };
     }, // ownValidationMessages
 
     next: function (e) {
-        if ($('#TypeOfBusiness').val() == "Entrepreneur") {
-            if (!$('input[name="ConsentToSearch"]').prop('Checked')) {
-                EzBob.App.trigger('error', 'You must agree to terms and conditions in order to continue.');
-            }
-        } else {
-            if (!$('input[name="DirectorCheck"]').prop('Checked') || !$('input[name="ConsentToSearch"]').prop('Checked')) {
-                EzBob.App.trigger('error', 'You must agree to director and consent in order to continue.');
+        if ($('#TypeOfBusiness').val() != "Entrepreneur") {
+            if (!this.$el.find('input#DirectorCheck').is(":checked")) {
+                EzBob.App.trigger('error', 'You must agree to director constraint in order to continue.');
             }
         }
         
@@ -285,10 +270,7 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
         if (this.$el.find('#OverallTurnOver').is(":visible")) {
             _.find(data, function (d) { return d.name === 'OverallTurnOver'; }).value = this.$el.find('#OverallTurnOver').autoNumericGet();
         }
-        
-        if (this.$el.find('#ConsentToSearch').is(":checked")) {
-            _.find(data, function (d) { return d.name === 'ConsentToSearch'; }).value = true;
-        }
+
         if (this.$el.find('#PartBusinessOnline').is(":checked")) {
             _.find(data, function (d) { return d.name === 'PartBusinessOnline'; }).value = true;
         }

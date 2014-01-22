@@ -1088,6 +1088,7 @@ EzBob.validatePersonalDetailsForm = function (el) {
             Gender: { required: true },
             MaritalStatus: { required: true },
             TimeAtAddress: { required: true },
+            ConsentToSearch: { required: true },
         },
         messages: {
             DateOfBirth: { yearLimit: "The number of full year should be more then 18 year" },

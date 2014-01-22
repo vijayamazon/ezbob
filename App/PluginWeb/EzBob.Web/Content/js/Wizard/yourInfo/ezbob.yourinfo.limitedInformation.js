@@ -86,6 +86,7 @@ EzBob.LimitedInformationView = EzBob.YourInformationStepViewBase.extend({
             LimitedCompanyName: { required: true, minlength: 2 },
             CapitalExpenditure: { required: true, defaultInvalidPounds: true },
             TotalMonthlySalary: { required: true, defaultInvalidPounds: true, regex: "^(?!£ 0.00$)" },
+            OverallTurnOver: { required: true, defaultInvalidPounds: true, regex: "^(?!£ 0.00$)" },
         };
     }, // ownValidationRules
 
@@ -94,6 +95,7 @@ EzBob.LimitedInformationView = EzBob.YourInformationStepViewBase.extend({
             LimitedCompanyNumber: { regex: "Please enter a valid company number" },
             CapitalExpenditure: { defaultInvalidPounds: "This field is required" },
             TotalMonthlySalary: { defaultInvalidPounds: "This field is required", regex: "This field is required" },
+            OverallTurnOver: { defaultInvalidPounds: "This field is required", regex: "This field is required" },
         };
     }, // ownValidationMessages
 });

@@ -10,6 +10,7 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
         this.events = _.extend({}, this.events, {
             'change #TimeAtAddress': 'personalTimeAtAddressChanged',
             'change #ResidentialStatus': 'residentialStatusChanged',
+            'click label[for="ConsentToSearch"] a': 'showConsent',
             
             'change input': 'inputChanged',
             'focusout input': 'inputChanged',
@@ -26,6 +27,19 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
         this.constructor.__super__.initialize.call(this);
     }, // initialize
 
+    showConsent: function () {
+        var consentAgreementModel = new EzBob.ConsentAgreementModel({
+            id: this.model.get('Id'),
+            firstName: this.$el.find('input[name="FirstName"]').val(),
+            middleInitial: this.$el.find('input[name="MiddleInitial"]').val(),
+            surname: this.$el.find('input[name="Surname"]').val()
+        });
+
+        var consentAgreement = new EzBob.ConsentAgreement({ model: consentAgreementModel });
+        EzBob.App.modal.show(consentAgreement);
+        return false;
+    }, // showConsent
+    
     inputChanged: function (event) {
         var el = event ? $(event.currentTarget) : null;
 
@@ -179,7 +193,13 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
         var self = this;
 
         var form = this.$el.find('form.PersonalDetailsForm');
-        var request = $.post(form.attr('action'), form.serializeArray());
+        var data = form.serializeArray();
+        
+        if (this.$el.find('#ConsentToSearch').is(":checked")) {
+            _.find(data, function (d) { return d.name === 'ConsentToSearch'; }).value = true;
+        }
+        
+        var request = $.post(form.attr('action'), data);
 
         request.success(function (res) {
             $.post("" + window.gRootPath + "Customer/Experian/PerformConsumerCheck", {});

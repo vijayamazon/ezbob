@@ -133,6 +133,7 @@ namespace EzBob.Web.Areas.Customer.Models
 	public class CompanyInfoMap
 	{
 		public TypeOfBusiness TypeOfBusiness { get; set; }
+		public VatReporting VatReporting { get; set; }
 		public string CompanyNumber { get; set; }
 		public string CompanyName { get; set; }
 		public int? TimeAtAddress { get; set; }
@@ -162,7 +163,7 @@ namespace EzBob.Web.Areas.Customer.Models
 				YearsInCompany = company.YearsInCompany,
 				RentMonthLeft = company.RentMonthLeft,
 				CapitalExpenditure = company.CapitalExpenditure,
-
+				VatReporting = company.VatReporting,
 				Directors = company.Directors.Select(d => DirectorModel.FromDirector(d, new List<Director>(company.Directors))).ToArray()
 			};
 		}

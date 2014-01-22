@@ -90,6 +90,7 @@ EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
             NonLimitedTimeInBusiness: { required: true },
             CapitalExpenditure: { required: true, defaultInvalidPounds: true },
             TotalMonthlySalary: { required: true, defaultInvalidPounds: true, regex: "^(?!£ 0.00$)" },
+            OverallTurnOver: { required: true, defaultInvalidPounds: true, regex: "^(?!£ 0.00$)" },
         };
     }, // ownValidationRules
 
@@ -97,6 +98,7 @@ EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
         return {
             CapitalExpenditure: { defaultInvalidPounds: "This field is required" },
             TotalMonthlySalary: { defaultInvalidPounds: "This field is required", regex: "This field is required" },
+            OverallTurnOver: { defaultInvalidPounds: "This field is required", regex: "This field is required" },
         };
     }, // ownValidationMessages
 });

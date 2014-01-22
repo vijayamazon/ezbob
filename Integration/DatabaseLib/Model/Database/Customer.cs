@@ -225,10 +225,10 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public string TypeOfBusiness { get; set; }
 		public decimal? OverallTurnOver{ get; set; }
 		public string IndustryType { get; set; }
+		public string VatReporting { get; set; }
 		public bool PartBusinessOnline { get; set; }
 		public bool DirectorCheck { get; set; }
-		public bool ConsentToSearch { get; set; }
-
+		
 		public bool? PropertyOwnedByCompany { get; set; }
 		public string YearsInCompany { get; set; }
 		public string RentMonthsLeft { get; set; }
@@ -259,11 +259,12 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public MaritalStatus MaritalStatus { get; set; }
 		public TypeOfBusiness TypeOfBusiness { get; set; }
 		public string TypeOfBusinessName { get { return TypeOfBusiness.ToString(); } }
+		public IndustryType IndustryType { get; set; }
 		public string DaytimePhone { get; set; }
 		public string MobilePhone { get; set; }
 		public decimal? OverallTurnOver { get; set; }
 		public decimal? WebSiteTurnOver { get; set; }
-
+		public bool ConsentToSearch { get; set; }
 		public string BirthDateYMD() {
 			return DateOfBirth.HasValue ? DateOfBirth.Value.ToString("yyyy-M-d", CultureInfo.InvariantCulture) : "";
 		} // BirthDateYMD
