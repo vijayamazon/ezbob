@@ -125,6 +125,8 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 	    }
 	    EzBob.App.trigger('clear');
 	    $('#mobileCodeDiv').show();
+	    $('#generateMobileCode').val('Resend activation code');
+
 	    this.activatedCode = true;
 
 	    this.mobileCodesSent++;
