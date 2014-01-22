@@ -82,8 +82,6 @@
         </label>
     </div>
     
-    <h2 class="form_start">Requested loan</h2>
-    
     <div class="form_field_container">
         <label class="attardi-input">
             <span>Requested loan amount</span>
@@ -98,19 +96,18 @@
             <div class="form_field_container">
                 <label class ="attardi-input">
                     <span>Mobile phone</span>
-                    <input type="text" class="phonenumber form_field" name="mobilePhone" id="mobilePhone" tabindex="11" ui-event-control-id="signup:mobile-phone"/>
+                    <input type="text" class="phonenumber form_field_address form_field" name="mobilePhone" id="mobilePhone" tabindex="11" ui-event-control-id="signup:mobile-phone"/>
                     <img id="mobilePhoneImage" class="field_status required"/>
+                    <input id="generateMobileCode" class="btn green form_field_address_lookup disabled" type="button" value="Send activation code" ui-event-control-id="signup:generate-mobile-code" />
                 </label>
             </div>
     
-            <input id="generateMobileCode" class="btn green bottom-25-margin disabled" type="button" value="Get authentication code" ui-event-control-id="signup:generate-mobile-code" />
-            <input id="switchToCaptcha" class="btn green bottom-25-margin" type="button" value="Skip authentication code" ui-event-control-id="signup:switch-to-captcha" />
-    
-            <div class="form_field_container">
+            <div id="mobileCodeDiv" class="form_field_container hide">
                 <label class ="attardi-input">
                     <span>Mobile phone authentication code</span>
-                    <input type="text" class="phonenumbercode form_field" name="mobileCode" id="mobileCode" tabindex="12" ui-event-control-id="signup:mobile-code"/>
+                    <input type="text" class="phonenumbercode form_field_address form_field" name="mobileCode" id="mobileCode" tabindex="12" ui-event-control-id="signup:mobile-code"/>
                     <img id="mobileCodeImage" class="field_status required"/>
+                    <input id="switchToCaptcha" class="btn green form_field_address_lookup" type="button" value="Did not recieve code" ui-event-control-id="signup:switch-to-captcha" />
                 </label>
             </div>
         </div>
