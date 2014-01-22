@@ -6,7 +6,8 @@ class EzBob.StoreButtonView extends Backbone.Marionette.ItemView
 
     initialize: (options) ->
         @name = options.name
-        @mpAccounts = options.mpAccounts.get('mpAccounts')
+        console.log 'name', @name, 'opts', options
+        @mpAccounts = options.mpAccounts.get('customer').get('mpAccounts')
         @shops = if @mpAccounts then @shops = _.where(@mpAccounts, {MpName: @name}) else []
         @shopClass = options.name.replace(' ', '')
 
@@ -22,7 +23,7 @@ class EzBob.StoreButtonView extends Backbone.Marionette.ItemView
 
         @$el.removeClass 'marketplace-button-full marketplace-button-empty'
 
-        sTitle = (@shops.length || 'No') + ' account' + (if @shops.length == 1 then '' else 's') + ' linked. Click to link '
+        sTitle = (if @shops.length then 'Some' else 'No') + ' accounts linked. Click to link '
 
         if @shops.length
             @$el.addClass('marketplace-button-full')
@@ -57,7 +58,7 @@ class EzBob.StoreButtonView extends Backbone.Marionette.ItemView
                 )
         # end of switch
 
-        btn.hover(
+        btn.hoverIntent(
             ((evt) -> $('.onhover', this).animate({ top: 0,      opacity: 1 })),
             ((evt) -> $('.onhover', this).animate({ top: '60px', opacity: 0 }))
         )

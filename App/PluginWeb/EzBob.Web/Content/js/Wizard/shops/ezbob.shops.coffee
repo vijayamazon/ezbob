@@ -5,7 +5,14 @@ class EzBob.StoreInfoView extends Backbone.View
     attributes:
         class: "stores-view"
 
-    isOffline: false
+    isOffline: -> @fromCustomer 'IsOffline'
+
+    isProfile: -> @fromCustomer 'IsProfile'
+
+    fromCustomer: (sPropName) ->
+        oCustomer = @model.get 'customer'
+        return false unless oCustomer
+        return oCustomer.get sPropName
 
     initialize: ->
         @ebayStores = new EzBob.EbayStoreModels()
@@ -62,38 +69,13 @@ class EzBob.StoreInfoView extends Backbone.View
             @stores[accountTypeName] =
                 view: this[lc + 'AccountInfoView']
 
-        @isOffline = @model.get 'isOffline'
-        @isProfile = @model.get 'isProfile'
-
-        @mpGroups = {}
-        for grp in EzBob.Config.MarketPlaceGroups
-            @mpGroups[grp.Id] = grp
-            grp.ui = null
-
-        for j in EzBob.Config.MarketPlaces
-            storeTypeName = if j.Name == "Pay Pal" then "paypal" else j.Name
-            if @stores[storeTypeName]
-                @stores[storeTypeName].active = if @isProfile then (if @isOffline then j.ActiveDashboardOffline else j.ActiveDashboardOnline) else (if @isOffline then j.ActiveWizardOffline else j.ActiveWizardOnline)
-                @stores[storeTypeName].priority = if @isOffline then j.PriorityOffline else j.PriorityOnline
-                @stores[storeTypeName].ribbon = if j.Ribbon then j.Ribbon else ""
-                @stores[storeTypeName].button = new EzBob.StoreButtonView({ name: storeTypeName, mpAccounts: @model })
-                @stores[storeTypeName].button.ribbon = if j.Ribbon then j.Ribbon else ""
-                @stores[storeTypeName].mandatory = if @isOffline then j.MandatoryOffline else j.MandatoryOnline
-                @stores[storeTypeName].groupid = if j.Group? then j.Group.Id else 0
-
         if typeof ordpi is 'undefined'
             ordpi = Math.random() * 10000000000000000
         @storeList = $(_.template($("#store-info").html(), {ordpi : ordpi}))
-        
-        @isReady = false
-
-        for name, store of @stores
-            store.button.on "selected", @connect, this
-            store.view.on "completed", _.bind(@completed, this, store.button.name)
-            store.view.on "back", @back, this
-            store.button.on "ready", @ready, this
 
         EzBob.App.on 'ct:storebase.shops.connect', @connect, @
+
+        @isReady = false
     # end of initialize
 
     events:
@@ -102,6 +84,28 @@ class EzBob.StoreInfoView extends Backbone.View
         'click .btn-showmore': 'showMoreAccounts'
 
     render: ->
+        @mpGroups = {}
+        for grp in EzBob.Config.MarketPlaceGroups
+            @mpGroups[grp.Id] = grp
+            grp.ui = null
+
+        for j in EzBob.Config.MarketPlaces
+            storeTypeName = if j.Name == "Pay Pal" then "paypal" else j.Name
+            if @stores[storeTypeName]
+                @stores[storeTypeName].active = if @isProfile() then (if @isOffline() then j.ActiveDashboardOffline else j.ActiveDashboardOnline) else (if @isOffline() then j.ActiveWizardOffline else j.ActiveWizardOnline)
+                @stores[storeTypeName].priority = if @isOffline() then j.PriorityOffline else j.PriorityOnline
+                @stores[storeTypeName].ribbon = if j.Ribbon then j.Ribbon else ""
+                @stores[storeTypeName].button = new EzBob.StoreButtonView({ name: storeTypeName, mpAccounts: @model })
+                @stores[storeTypeName].button.ribbon = if j.Ribbon then j.Ribbon else ""
+                @stores[storeTypeName].mandatory = if @isOffline() then j.MandatoryOffline else j.MandatoryOnline
+                @stores[storeTypeName].groupid = if j.Group? then j.Group.Id else 0
+
+        for name, store of @stores
+            store.button.on "selected", @connect, this
+            store.view.on "completed", _.bind(@completed, this, store.button.name)
+            store.view.on "back", @back, this
+            store.button.on "ready", @ready, this
+
         @canContinue()
 
         @showOrRemove()
@@ -110,8 +114,8 @@ class EzBob.StoreInfoView extends Backbone.View
 
         accountsList.empty()
 
-        sActiveField = 'Active' + (if @isProfile then 'Dashboard' else 'Wizard') + (if @isOffline then 'Offline' else 'Online')
-        sPriorityField = 'Priority' + (if @isOffline then 'Offline' else 'Online')
+        sActiveField = 'Active' + (if @isProfile() then 'Dashboard' else 'Wizard') + (if @isOffline() then 'Offline' else 'Online')
+        sPriorityField = 'Priority' + (if @isOffline() then 'Offline' else 'Online')
 
         relevantMpGroups = []
 
@@ -143,14 +147,14 @@ class EzBob.StoreInfoView extends Backbone.View
         for shop in sortedShopsByPriority when shop.active
             oTarget = if @mpGroups[shop.groupid] and @mpGroups[shop.groupid].ui then @mpGroups[shop.groupid].ui else accountsList
 
-            if @isProfile
+            if @isProfile()
                 sBtnClass = 'marketplace-button-profile'
             else
                 sBtnClass = @extractBtnClass oTarget
 
             shop.button.render().$el.addClass('marketplace-button ' + sBtnClass).appendTo oTarget
 
-        if @isOffline and not @isProfile
+        if @isOffline() and not @isProfile()
             @storeList.find('.marketplace-button-more, .marketplace-group.following').hide()
 
         @storeList.appendTo @$el
@@ -165,19 +169,21 @@ class EzBob.StoreInfoView extends Backbone.View
     # end of render
 
     showOrRemove: ->
-        $(@storeList).find('.back-store').remove() # .hide() if not @isProfile
+        $(@storeList).find('.back-store').remove() # .hide() if not @isProfile()
 
         sShow = ''
         sRemove = ''
 
-        if @isOffline
+        @storeList.find('.btn-showmore').show()
+
+        if @isOffline()
             sShow = '.offline_entry_message'
             sRemove = '.online_entry_message'
 
             @storeList.find('.importantnumber').text '£150,000'
 
-            if @isProfile
-                @storeList.find('.btn-showmore').remove()
+            if @isProfile()
+                @storeList.find('.btn-showmore').hide()
                 @storeList.find('.AddMoreRuleBottom').removeClass 'hide'
             else
                 @storeList.find('.btn-showmore').show()
@@ -185,13 +191,13 @@ class EzBob.StoreInfoView extends Backbone.View
             sShow = '.online_entry_message'
             sRemove = '.offline_entry_message'
 
-            @storeList.find('.btn-showmore').remove()
+            @storeList.find('.btn-showmore').hide()
             @storeList.find('.AddMoreRuleBottom').removeClass 'hide'
 
         @storeList.find(sShow).show()
         @storeList.find(sRemove).remove()
 
-        if @isProfile
+        if @isProfile()
             sShow = '.profile_message'
             sRemove = '.wizard_message'
         else
@@ -216,13 +222,13 @@ class EzBob.StoreInfoView extends Backbone.View
 
         canContinue = false
 
-        if @isProfile
+        if @isProfile()
             canContinue = true
         else
             if hasFilledShops and (!hasEbay or (hasEbay and hasPaypal))
                 canContinue = true
             else
-                sAttrName = if @isOffline then 'offline' else 'online'
+                sAttrName = if @isOffline() then 'offline' else 'online'
                 canContinue = $('#allowFinishWizardWithoutMarketplaces').attr(sAttrName).toLowerCase() == 'true'
 
         @storeList.find('.continue').toggleClass 'disabled', not canContinue
@@ -230,7 +236,7 @@ class EzBob.StoreInfoView extends Backbone.View
     # end of canContinue
 
     showMoreAccounts: ->
-        @storeList.find('.btn-showmore').remove()
+        @storeList.find('.btn-showmore').hide()
         @storeList.find('.AddMoreRuleBottom').removeClass 'hide'
         @storeList.find('.marketplace-button-more, .marketplace-group.following').show()
     # end of showMoreAccounts

@@ -59,14 +59,7 @@ EzBob.WizardView = Backbone.View.extend({
 		if ((this.customer.get('Id')) !== 0)
 			HeartOfActivity();
 
-		
-		var modelArgs = {
-			mpAccounts: this.customer.get('mpAccounts'),
-			isProfile: this.customer.get('IsProfile'),
-			isOffline: this.customer.get('IsOffline'),
-		};
-
-		var storeInfoStepModel = new EzBob.StoreInfoStepModel(modelArgs);
+		var storeInfoStepModel = new EzBob.StoreInfoStepModel(this.customer);
 
 		var oWss = {
 			views: {

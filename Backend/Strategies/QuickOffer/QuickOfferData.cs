@@ -11,8 +11,8 @@
 		#region constructor
 
 		public QuickOfferData(ASafeLog oLog) {
-			m_oLog = new SafeLog(oLog);
-
+			Log = new SafeLog(oLog);
+			IsValid = false;
 		} // constructor
 
 		#endregion constructor
@@ -30,17 +30,17 @@
 			PersonalScore = oReader["PersonalScore"];
 			CompanyID = oReader["CompanyID"];
 			CompanyData = oReader["CompanyData"];
+
+			Validate();
 		} // Load
 
 		#endregion method Load
 
-		#region method IsValid
+		#region property IsValid
 
-		public bool IsValid() {
-			return CustomerID > 0;
-		} // IsValid
+		public bool IsValid { get; private set; } // IsValid
 
-		#endregion method IsValid
+		#endregion property IsValid
 
 		#region method Calculate
 
@@ -55,6 +55,8 @@
 
 		#region private
 
+		#region properties
+
 		private int CustomerID;
 		private bool IsOffline;
 		private string CompanyRefNum;
@@ -66,7 +68,15 @@
 		private long CompanyID;
 		private string CompanyData;
 
-		private SafeLog m_oLog;
+		private SafeLog Log;
+
+		#endregion properties
+
+		#region method Validate
+
+		private void Validate() {} // Validate
+
+		#endregion method Validate
 
 		#endregion private
 	} // class QuickOfferData

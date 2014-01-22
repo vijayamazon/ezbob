@@ -5,13 +5,7 @@ EzBob.Profile.StoresView = Backbone.View.extend({
     initialize: function () {
         this.template = _.template($('#stores-template').html());
 
-        var modelArgs = {
-            mpAccounts: this.model.get('mpAccounts'),
-            isOffline: this.model.get('IsOffline'),
-            isProfile: this.model.get('IsProfile'),
-        };
-
-        this.storeInfoStepModel = new EzBob.StoreInfoStepModel(modelArgs);
+        this.storeInfoStepModel = new EzBob.StoreInfoStepModel(this.model);
 
         this.storeInfoView = new EzBob.StoreInfoView({ model: this.storeInfoStepModel });
 

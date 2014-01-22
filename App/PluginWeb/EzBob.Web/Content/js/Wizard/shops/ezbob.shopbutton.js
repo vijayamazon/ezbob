@@ -19,7 +19,8 @@
 
     StoreButtonView.prototype.initialize = function(options) {
       this.name = options.name;
-      this.mpAccounts = options.mpAccounts.get('mpAccounts');
+      console.log('name', this.name, 'opts', options);
+      this.mpAccounts = options.mpAccounts.get('customer').get('mpAccounts');
       this.shops = this.mpAccounts ? this.shops = _.where(this.mpAccounts, {
         MpName: this.name
       }) : [];
@@ -39,7 +40,7 @@
       var btn, oHelpWindowTemplate, oLinks, sTitle;
       btn = this.$el.find('.marketplace-button-account-' + this.shopClass);
       this.$el.removeClass('marketplace-button-full marketplace-button-empty');
-      sTitle = (this.shops.length || 'No') + ' account' + (this.shops.length === 1 ? '' : 's') + ' linked. Click to link ';
+      sTitle = (this.shops.length ? 'Some' : 'No') + ' accounts linked. Click to link ';
       if (this.shops.length) {
         this.$el.addClass('marketplace-button-full');
         sTitle += 'more.';
@@ -77,7 +78,7 @@
             };
           })(this.shopClass));
       }
-      return btn.hover((function(evt) {
+      return btn.hoverIntent((function(evt) {
         return $('.onhover', this).animate({
           top: 0,
           opacity: 1

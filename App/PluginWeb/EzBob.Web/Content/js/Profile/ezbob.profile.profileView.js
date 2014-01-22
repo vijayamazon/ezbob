@@ -31,7 +31,7 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
         this.processingMessageView.on('getCash', this.getCash, this);
         this.processingMessageView.on('payEarly', this.makePayment, this);
 
-        this.router = new EzBob.Profile.ProfileRouter(options);
+        this.router = new EzBob.Profile.ProfileRouter(this.customer);
         this.router.on("details", this.loanDetails, this);
         this.router.on("getCash", this.getCash, this);
         this.router.on("payEarly", this.makePayment, this);

@@ -6,9 +6,10 @@ class EzBob.StoreInfoStepModel extends EzBob.WizardStepModel
 
   initialize: (options) ->
     @set
-      isOffline: options.isOffline
-      isProfile: options.isProfile
-      stores: options.mpAccounts
+        customer: options
+        isOffline: options.IsOffline
+        isProfile: options.IsProfile
+        stores: options.mpAccounts
 
   getStores: ->
     stores = []

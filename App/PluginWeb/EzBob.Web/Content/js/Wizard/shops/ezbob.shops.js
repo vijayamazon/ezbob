@@ -19,10 +19,25 @@
       "class": "stores-view"
     };
 
-    StoreInfoView.prototype.isOffline = false;
+    StoreInfoView.prototype.isOffline = function() {
+      return this.fromCustomer('IsOffline');
+    };
+
+    StoreInfoView.prototype.isProfile = function() {
+      return this.fromCustomer('IsProfile');
+    };
+
+    StoreInfoView.prototype.fromCustomer = function(sPropName) {
+      var oCustomer;
+      oCustomer = this.model.get('customer');
+      if (!oCustomer) {
+        return false;
+      }
+      return oCustomer.get(sPropName);
+    };
 
     StoreInfoView.prototype.initialize = function() {
-      var acc, accountTypeName, aryCGAccounts, grp, ignore, j, lc, name, ordpi, store, storeTypeName, vendorInfo, _i, _j, _len, _len1, _ref, _ref1, _ref2;
+      var acc, accountTypeName, aryCGAccounts, ignore, lc, ordpi, vendorInfo;
       this.ebayStores = new EzBob.EbayStoreModels();
       this.EbayStoreView = new EzBob.EbayStoreInfoView();
       this.ebayStores.on("reset         change", this.marketplacesChanged, this);
@@ -105,8 +120,24 @@
           view: this[lc + 'AccountInfoView']
         };
       }
-      this.isOffline = this.model.get('isOffline');
-      this.isProfile = this.model.get('isProfile');
+      if (typeof ordpi === 'undefined') {
+        ordpi = Math.random() * 10000000000000000;
+      }
+      this.storeList = $(_.template($("#store-info").html(), {
+        ordpi: ordpi
+      }));
+      EzBob.App.on('ct:storebase.shops.connect', this.connect, this);
+      return this.isReady = false;
+    };
+
+    StoreInfoView.prototype.events = {
+      'click a.connect-store': 'close',
+      'click a.continue': 'next',
+      'click .btn-showmore': 'showMoreAccounts'
+    };
+
+    StoreInfoView.prototype.render = function() {
+      var accountsList, bFirst, grp, grpid, grpui, j, name, oTarget, relevantMpGroups, sActiveField, sBtnClass, sGroupClass, sPriorityField, shop, sortedShopsByPriority, store, storeTypeName, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2, _ref3;
       this.mpGroups = {};
       _ref = EzBob.Config.MarketPlaceGroups;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -119,25 +150,18 @@
         j = _ref1[_j];
         storeTypeName = j.Name === "Pay Pal" ? "paypal" : j.Name;
         if (this.stores[storeTypeName]) {
-          this.stores[storeTypeName].active = this.isProfile ? (this.isOffline ? j.ActiveDashboardOffline : j.ActiveDashboardOnline) : (this.isOffline ? j.ActiveWizardOffline : j.ActiveWizardOnline);
-          this.stores[storeTypeName].priority = this.isOffline ? j.PriorityOffline : j.PriorityOnline;
+          this.stores[storeTypeName].active = this.isProfile() ? (this.isOffline() ? j.ActiveDashboardOffline : j.ActiveDashboardOnline) : (this.isOffline() ? j.ActiveWizardOffline : j.ActiveWizardOnline);
+          this.stores[storeTypeName].priority = this.isOffline() ? j.PriorityOffline : j.PriorityOnline;
           this.stores[storeTypeName].ribbon = j.Ribbon ? j.Ribbon : "";
           this.stores[storeTypeName].button = new EzBob.StoreButtonView({
             name: storeTypeName,
             mpAccounts: this.model
           });
           this.stores[storeTypeName].button.ribbon = j.Ribbon ? j.Ribbon : "";
-          this.stores[storeTypeName].mandatory = this.isOffline ? j.MandatoryOffline : j.MandatoryOnline;
+          this.stores[storeTypeName].mandatory = this.isOffline() ? j.MandatoryOffline : j.MandatoryOnline;
           this.stores[storeTypeName].groupid = j.Group != null ? j.Group.Id : 0;
         }
       }
-      if (typeof ordpi === 'undefined') {
-        ordpi = Math.random() * 10000000000000000;
-      }
-      this.storeList = $(_.template($("#store-info").html(), {
-        ordpi: ordpi
-      }));
-      this.isReady = false;
       _ref2 = this.stores;
       for (name in _ref2) {
         store = _ref2[name];
@@ -146,27 +170,16 @@
         store.view.on("back", this.back, this);
         store.button.on("ready", this.ready, this);
       }
-      return EzBob.App.on('ct:storebase.shops.connect', this.connect, this);
-    };
-
-    StoreInfoView.prototype.events = {
-      'click a.connect-store': 'close',
-      'click a.continue': 'next',
-      'click .btn-showmore': 'showMoreAccounts'
-    };
-
-    StoreInfoView.prototype.render = function() {
-      var accountsList, bFirst, grp, grpid, grpui, oTarget, relevantMpGroups, sActiveField, sBtnClass, sGroupClass, sPriorityField, shop, sortedShopsByPriority, _i, _j, _len, _len1, _ref;
       this.canContinue();
       this.showOrRemove();
       accountsList = this.storeList.find('.accounts-list');
       accountsList.empty();
-      sActiveField = 'Active' + (this.isProfile ? 'Dashboard' : 'Wizard') + (this.isOffline ? 'Offline' : 'Online');
-      sPriorityField = 'Priority' + (this.isOffline ? 'Offline' : 'Online');
+      sActiveField = 'Active' + (this.isProfile() ? 'Dashboard' : 'Wizard') + (this.isOffline() ? 'Offline' : 'Online');
+      sPriorityField = 'Priority' + (this.isOffline() ? 'Offline' : 'Online');
       relevantMpGroups = [];
-      _ref = this.mpGroups;
-      for (grpid in _ref) {
-        grp = _ref[grpid];
+      _ref3 = this.mpGroups;
+      for (grpid in _ref3) {
+        grp = _ref3[grpid];
         if (grp[sActiveField]) {
           relevantMpGroups.push(grp);
         }
@@ -175,8 +188,8 @@
         return g[sPriorityField];
       });
       bFirst = true;
-      for (_i = 0, _len = relevantMpGroups.length; _i < _len; _i++) {
-        grp = relevantMpGroups[_i];
+      for (_k = 0, _len2 = relevantMpGroups.length; _k < _len2; _k++) {
+        grp = relevantMpGroups[_k];
         if (bFirst) {
           bFirst = false;
           sGroupClass = 'first';
@@ -190,20 +203,20 @@
       sortedShopsByPriority = _.sortBy(this.stores, function(s) {
         return s.priority;
       });
-      for (_j = 0, _len1 = sortedShopsByPriority.length; _j < _len1; _j++) {
-        shop = sortedShopsByPriority[_j];
+      for (_l = 0, _len3 = sortedShopsByPriority.length; _l < _len3; _l++) {
+        shop = sortedShopsByPriority[_l];
         if (!shop.active) {
           continue;
         }
         oTarget = this.mpGroups[shop.groupid] && this.mpGroups[shop.groupid].ui ? this.mpGroups[shop.groupid].ui : accountsList;
-        if (this.isProfile) {
+        if (this.isProfile()) {
           sBtnClass = 'marketplace-button-profile';
         } else {
           sBtnClass = this.extractBtnClass(oTarget);
         }
         shop.button.render().$el.addClass('marketplace-button ' + sBtnClass).appendTo(oTarget);
       }
-      if (this.isOffline && !this.isProfile) {
+      if (this.isOffline() && !this.isProfile()) {
         this.storeList.find('.marketplace-button-more, .marketplace-group.following').hide();
       }
       this.storeList.appendTo(this.$el);
@@ -220,12 +233,13 @@
       $(this.storeList).find('.back-store').remove();
       sShow = '';
       sRemove = '';
-      if (this.isOffline) {
+      this.storeList.find('.btn-showmore').show();
+      if (this.isOffline()) {
         sShow = '.offline_entry_message';
         sRemove = '.online_entry_message';
         this.storeList.find('.importantnumber').text('£150,000');
-        if (this.isProfile) {
-          this.storeList.find('.btn-showmore').remove();
+        if (this.isProfile()) {
+          this.storeList.find('.btn-showmore').hide();
           this.storeList.find('.AddMoreRuleBottom').removeClass('hide');
         } else {
           this.storeList.find('.btn-showmore').show();
@@ -233,12 +247,12 @@
       } else {
         sShow = '.online_entry_message';
         sRemove = '.offline_entry_message';
-        this.storeList.find('.btn-showmore').remove();
+        this.storeList.find('.btn-showmore').hide();
         this.storeList.find('.AddMoreRuleBottom').removeClass('hide');
       }
       this.storeList.find(sShow).show();
       this.storeList.find(sRemove).remove();
-      if (this.isProfile) {
+      if (this.isProfile()) {
         sShow = '.profile_message';
         sRemove = '.wizard_message';
       } else {
@@ -264,13 +278,13 @@
       hasPaypal = this.stores.paypal.button.shops.length > 0;
       this.$el.find('.eBayPaypalRule').toggleClass('hide', !(hasEbay && !hasPaypal));
       canContinue = false;
-      if (this.isProfile) {
+      if (this.isProfile()) {
         canContinue = true;
       } else {
         if (hasFilledShops && (!hasEbay || (hasEbay && hasPaypal))) {
           canContinue = true;
         } else {
-          sAttrName = this.isOffline ? 'offline' : 'online';
+          sAttrName = this.isOffline() ? 'offline' : 'online';
           canContinue = $('#allowFinishWizardWithoutMarketplaces').attr(sAttrName).toLowerCase() === 'true';
         }
       }
@@ -279,7 +293,7 @@
     };
 
     StoreInfoView.prototype.showMoreAccounts = function() {
-      this.storeList.find('.btn-showmore').remove();
+      this.storeList.find('.btn-showmore').hide();
       this.storeList.find('.AddMoreRuleBottom').removeClass('hide');
       return this.storeList.find('.marketplace-button-more, .marketplace-group.following').show();
     };
