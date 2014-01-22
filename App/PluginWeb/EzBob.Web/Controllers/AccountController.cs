@@ -317,23 +317,23 @@ namespace EzBob.Web.Controllers
 		[ActionName("SignUp")]
 		[ValidateJsonAntiForgeryToken]
 		[CaptchaValidationFilter]
-		public JsonNetResult SignUpAjax(User model, string signupPass1, string signupPass2, string securityQuestion, string promoCode, double? amount, string mobilePhone, string mobileCode)
+		public JsonNetResult SignUpAjax(string email, string signupPass1, string signupPass2, string securityQuestion, string securityAnswer, string promoCode, double? amount, string mobilePhone, string mobileCode, bool switchedToCaptcha)
 		{
 			if (!ModelState.IsValid)
 			{
 				return GetModelStateErrors(ModelState);
 			}
-			if (model.SecurityAnswer.Length > 199)
+			if (securityAnswer.Length > 199)
 			{
 				throw new Exception("Maximum answer length is 199 characters");
 			}
 			try
 			{
 				var customerIp = Request.ServerVariables["REMOTE_ADDR"];
-				SignUpInternal(model, signupPass1, signupPass2, securityQuestion, promoCode, amount, mobilePhone, mobileCode);
-				FormsAuthentication.SetAuthCookie(model.EMail, false);
+				SignUpInternal(email, signupPass1, signupPass2, securityQuestion, securityAnswer, promoCode, amount, mobilePhone, mobileCode, switchedToCaptcha);
+				FormsAuthentication.SetAuthCookie(email, false);
 
-				var user = _users.GetUserByLogin(model.EMail);
+				var user = _users.GetUserByLogin(email);
 				_sessionIpLog.AddSessionIpLog(new CustomerSession()
 							{
 								CustomerId = user.Id,
@@ -354,11 +354,11 @@ namespace EzBob.Web.Controllers
 			}
 		}
 
-		private void SignUpInternal(User model, string signupPass1, string signupPass2, string securityQuestion, string promoCode, double? amount, string mobilePhone, string mobileCode)
+		private void SignUpInternal(string email, string signupPass1, string signupPass2, string securityQuestion, string securityAnswer, string promoCode, double? amount, string mobilePhone, string mobileCode, bool switchedToCaptcha)
 		{
 			MembershipCreateStatus status;
 
-			if (string.IsNullOrEmpty(model.EMail)) throw new Exception(DbStrings.NotValidEmailAddress);
+			if (string.IsNullOrEmpty(email)) throw new Exception(DbStrings.NotValidEmailAddress);
 			if (!string.Equals(signupPass1, signupPass2)) throw new Exception(DbStrings.PasswordDoesNotMatch);
 
 			var maxPassLength = _config.PasswordPolicyType == "hard" ? 7 : 6;
@@ -368,7 +368,7 @@ namespace EzBob.Web.Controllers
 			}
 
 			bool isTwilioEnabled = Convert.ToBoolean(@Session["IsSmsValidationActive"]);
-			if (isTwilioEnabled)
+			if (isTwilioEnabled && !switchedToCaptcha)
 			{
 				bool isCorrect = _appCreator.ValidateMobileCode(mobilePhone, mobileCode);
 				if (!isCorrect)
@@ -377,15 +377,15 @@ namespace EzBob.Web.Controllers
 				}
 			}
 
-			_membershipProvider.CreateUser(model.EMail, signupPass1, model.EMail, securityQuestion, model.SecurityAnswer, false, null, out status);
+			_membershipProvider.CreateUser(email, signupPass1, email, securityQuestion, securityAnswer, false, null, out status);
 			if (status == MembershipCreateStatus.Success)
 			{
-				var user = _users.GetUserByLogin(model.EMail);
+				var user = _users.GetUserByLogin(email);
 				var g = new RefNumberGenerator(_customers);
-				var isAutomaticTest = IsAutomaticTest(model.EMail);
+				var isAutomaticTest = IsAutomaticTest(email);
 				var customer = new Customer
 					{
-						Name = model.EMail,
+						Name = email,
 						Id = user.Id,
 						Status = Status.Registered,
 						RefNumber = g.GenerateForCustomer(),

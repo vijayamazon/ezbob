@@ -12,6 +12,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 		this.on('ready', this.ready, this);
 		this.model.on('change:loggedIn', this.render, this);
 
+	    this.switchedToCaptcha = false;
 		this.showOfflineHelp = true;
 		this.readyToProceed = false;
 		this.mobileCodesSent = 0;
@@ -166,6 +167,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 	    this.$el.find('#twilioDiv').hide();
 	    this.$el.find('#captchaDiv').show();
 	    this.twilioEnabled = false;
+	    this.switchedToCaptcha = true;
 	    return false;
 	},
 	
@@ -174,9 +176,13 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 			return false;
 
 		this.blockBtn(true);
+
+	    var mobilePhone = '', mobileCode = '';
 	    
-        if (this.twilioEnabled) {
-            this.model.set('twilioPhone', this.$el.find('.phonenumber').val());
+	    if (this.twilioEnabled) {
+	        mobilePhone = $('#mobilePhone').val();
+	        mobileCode = $('#mobileCode').val();
+	        this.model.set('twilioPhone', mobilePhone);
         }
 
 		if (this.model.get('loggedIn')) {
@@ -195,9 +201,18 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 		var amount = _.find(data, function(d) { return d.name === 'amount'; });
 		if (amount) { amount.value = this.$el.find('#amount').autoNumericGet(); }
 
-	    
-
-		var xhr = $.post(this.form.attr('action'), data);
+	    var xhr = $.post(this.form.attr('action'), {
+	        email: $('#Email').val(),
+	        signupPass1: $('#signupPass1').val(),
+	        signupPass2: $('#signupPass2').val(),
+	        securityQuestion: $('#securityQuestion').val(),
+	        securityAnswer: $('#SecurityAnswer').val(),
+	        promoCode: $('#promoCode').val(),
+	        amount: $('#amount').val(),
+	        mobilePhone: mobilePhone,
+	        mobileCode: mobileCode,
+	        switchedToCaptcha: this.switchedToCaptcha
+	    });
 
 		var that = this;
 
