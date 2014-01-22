@@ -6,7 +6,6 @@ class EzBob.StoreButtonView extends Backbone.Marionette.ItemView
 
     initialize: (options) ->
         @name = options.name
-        console.log 'name', @name, 'opts', options
         @mpAccounts = options.mpAccounts.get('customer').get('mpAccounts')
         @shops = if @mpAccounts then @shops = _.where(@mpAccounts, {MpName: @name}) else []
         @shopClass = options.name.replace(' ', '')
