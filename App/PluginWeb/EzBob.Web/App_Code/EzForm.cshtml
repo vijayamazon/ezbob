@@ -366,7 +366,7 @@
                     @{
                         var minYear = (minMaxDefaultDate == null) ? 1900 : minMaxDefaultDate[0].Year;
                         var maxYear = (minMaxDefaultDate == null) ? DateTime.Now.Year - 18 : minMaxDefaultDate[1].Year;
-                        for (var i = minYear; i <= maxYear; i++)
+                        for (var i = maxYear; i >= minYear; i--)
                         {
                         <option
 								@if (minMaxDefaultDate != null && minMaxDefaultDate[2].Year == i)
