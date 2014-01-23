@@ -12,7 +12,7 @@ namespace EZBob.DatabaseLib.Model.Database
 		public virtual int Id { get; set; }
 		public virtual Customer Customer { get; set; }
 		public virtual TypeOfBusiness TypeOfBusiness { get; set; }
-		public virtual VatReporting VatReporting { get; set; }
+		public virtual VatReporting? VatReporting { get; set; }
 		public virtual string CompanyNumber { get; set; }
 		public virtual string CompanyName { get; set; }
 		public virtual int? TimeAtAddress { get; set; }

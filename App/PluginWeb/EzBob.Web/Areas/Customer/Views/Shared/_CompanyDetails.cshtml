@@ -181,7 +181,7 @@
             <div class="control-group form_field_container OverallTurnOver hide">
                 <div class="controls cashControlls">
                     <label class="attardi-input">
-                        <span>Total annul revenue</span>
+                        <span>Total annual revenue</span>
                         <input id="OverallTurnOver" name="OverallTurnOver" type="text" class="cashInput form_field" ui-event-control-id="company-info:overall_turnover" />
                         <img id="OverallTurnOverImage" class="field_status required" />
                     </label>
@@ -214,7 +214,7 @@
 
         <div class="add-director-container">
             <div class="wizard-director-text">Adding the details of additional directors may improve the offer you receive.</div>
-            <input id="addDirector" class="rc-button green" type="button" value="Add" ui-event-control-id="company-info:add_director" />
+            <input id="addDirector" class="button green" type="button" value="Add" ui-event-control-id="company-info:add_director" />
         </div>
     </div>
 </script>
@@ -346,7 +346,7 @@
     <%_.each(directors, function(director, i){%>
         <div class="Directors">
             <div class="add-director-container">
-                <h1 class="form_start" preffix="<%-preffix%>" seqno="<%=i%>">Director #<%=i+1%><a style="float: right; margin-bottom: 7px" number="<%=i+1%>" href="#" class="removeDirector rc-button green" ui-event-control-id="company-info:remove_director">Remove</a></h1>
+                <h1 class="form_start" preffix="<%-preffix%>" seqno="<%=i%>">Director #<%=i+1%><a style="float: right; margin-bottom: 7px" number="<%=i+1%>" href="#" class="removeDirector button green" ui-event-control-id="company-info:remove_director">Remove</a></h1>
             </div>
             
             <div class="control-group form_field_container">

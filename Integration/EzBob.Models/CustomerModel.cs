@@ -133,7 +133,7 @@ namespace EzBob.Web.Areas.Customer.Models
 	public class CompanyInfoMap
 	{
 		public TypeOfBusiness TypeOfBusiness { get; set; }
-		public VatReporting VatReporting { get; set; }
+		public VatReporting? VatReporting { get; set; }
 		public string CompanyNumber { get; set; }
 		public string CompanyName { get; set; }
 		public int? TimeAtAddress { get; set; }

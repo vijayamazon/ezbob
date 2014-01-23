@@ -259,7 +259,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public MaritalStatus MaritalStatus { get; set; }
 		public TypeOfBusiness TypeOfBusiness { get; set; }
 		public string TypeOfBusinessName { get { return TypeOfBusiness.ToString(); } }
-		public IndustryType IndustryType { get; set; }
+		public IndustryType? IndustryType { get; set; }
 		public string DaytimePhone { get; set; }
 		public string MobilePhone { get; set; }
 		public decimal? OverallTurnOver { get; set; }
