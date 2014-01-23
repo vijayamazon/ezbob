@@ -174,3 +174,287 @@ li.active > .progress_tip {
         display: block;
     }
 */
+
+/*@media screen {*/
+
+#header {
+    position: relative;
+    width: 960px;
+    height: 72px;
+    background: #eceff1;
+    margin: 0 auto;
+}
+
+.eu-menu {
+    width: 100px;
+    height: 80px;
+    color: #ffffff;
+    font-size: 10px;
+    text-align: center;
+    background: #283897;
+    padding: 10px;
+    position: absolute;
+    top: 0;
+    right: 120px;
+    border-bottom-right-radius: 15px;
+    -moz-border-radius-bottomright: 15px;
+    border-bottom-left-radius: 15px;
+    -moz-border-radius-bottomleft: 15px;
+    z-index: 99999;
+}
+
+
+ul#menu {
+    position: absolute;
+    top: 10px;
+    right: 430px;
+    z-index: 99999;
+}
+
+    ul#menu li {
+        display: inline;
+        list-style: none;
+        margin: 0 6px;
+    }
+
+
+ul#user-menu {
+    position: absolute;
+    top: 19px;
+    right: 5px;
+}
+
+    ul#user-menu li {
+        display: inline;
+        list-style: none;
+        margin: 0 3px;
+        font-weight: bold;
+        font-size: 14px;
+        border-radius: 15px;
+        line-height: 30px;
+        padding: 5px 12px;
+    }
+
+        ul#user-menu li.sign-up {
+            background: #ec8b0b;
+        }
+
+            ul#user-menu li.sign-up a {
+                text-align: center;
+                color: #ffffff;
+            }
+
+        ul#user-menu li.login {
+            background: #d4d4d4;
+        }
+
+            ul#user-menu li.login a {
+                text-align: center;
+                color: #000000;
+            }
+
+    ul#user-menu a:hover {
+        text-decoration: underline;
+    }
+
+img.newlogo {
+    position: absolute;
+    top: 20px;
+    left: 130px;
+    width: 13%;
+    height: auto;
+}
+
+.header-phone {
+    position: absolute;
+    right: 250px;
+    top: 26px;
+    font-weight: bold;
+}
+
+.wizard-steps {
+    background-color: #ec8b0b;
+}
+
+    .wizard-steps .progress-time {
+        font-size: 24px;
+        text-align: center;
+        color: #fff;
+        margin-bottom: 10px;
+        padding-top: 30px;
+        padding-bottom: 10px;
+    }
+
+        .wizard-steps .progress-time .progress-time-remainig {
+            /*color: #7bb224;*/
+            font-style: italic;
+        }
+
+.progress-circle {
+    width: 50px;
+    height: 50px;
+    -webkit-border-radius: 25px;
+    -moz-border-radius: 25px;
+    border-radius: 25px;
+    background-color: #fff;
+    font-size: 25px;
+    font-weight: bold;
+    text-align: center;
+    vertical-align: middle;
+    margin-top: 5px;
+    display: table-cell;
+    border: white 1px solid;
+}
+
+.progress-line {
+    content: "";
+    background-color: #fff;
+    z-index: -1;
+    margin-top: -30px;
+    height: 10px;
+    width: 100%;
+    position: absolute;
+}
+
+ul.application_steps {
+    overflow: hidden;
+    list-style: none;
+}
+
+    ul.application_steps li:last-child .progress-line {
+        display: none;
+    }
+    /*ul.application_steps:before {
+        content: "";
+        background-color: #40a9bc;
+        position: absolute;
+        top: 180px;
+        left: 0px;
+        right: 110px;
+        width: 690px;
+        height: 10px;
+        z-index: 1;
+        margin: 0 auto;
+    }*/
+
+
+    ul.application_steps li {
+        float: left;
+        font-style: italic;
+        font-size: 16px;
+        position: relative;
+        width: 30%;
+        z-index: 2;
+        overflow: hidden;
+    }
+
+        ul.application_steps li:last-child {
+            width: 10%;
+        }
+
+        ul.application_steps li.current {
+            /*background: url(images/current_arrow.png) no-repeat 15px 15px;*/
+            color: #577fa5;
+            font-weight: bold;
+        }
+
+            ul.application_steps li.current .progress-line .progress-line-current {
+                background-color: lightblue;
+                width: 20%;
+                height: 100%;
+                position: absolute;
+                left: 30px;
+                top: 0;
+            }
+
+            ul.application_steps li.current .progress-circle {
+                background-color: lightblue;
+                border: lightblue 1px solid;
+            }
+
+    ul.application_steps .timer > #slice {
+        position: absolute;
+        width: 1em;
+        height: 1em;
+        clip: rect(0px,1em,1em,0.5em);
+    }
+
+    ul.application_steps .timer {
+        position: relative;
+        font-size: 45px;
+        width: 1em;
+        height: 1em;
+        z-index: 2;
+    }
+
+    ul.application_steps .timer > #slice.gt50 {
+        clip: rect(auto, auto, auto, auto);
+    }
+
+    ul.application_steps .timer > #slice > .pie {
+        border: 0.1em solid #c0c0c0;
+        position: absolute;
+        width: 0.8em; /* 1 - (2 * border width) */
+        height: 0.8em; /* 1 - (2 * border width) */
+        clip: rect(0em,0.5em,1em,0em);
+        -moz-border-radius: 0.5em;
+        -webkit-border-radius: 0.5em;
+        border-radius: 0.5em;
+    }
+
+        ul.application_steps .timer > #slice > .pie.fill {
+            -moz-transform: rotate(180deg) !important;
+            -webkit-transform: rotate(180deg) !important;
+            -o-transform: rotate(180deg) !important;
+            transform: rotate(180deg) !important;
+        }
+
+    ul.application_steps .timer.fill > .percent {
+        display: none;
+    }
+
+    ul.application_steps .timer.fill > #slice > .pie {
+        border: transparent;
+        background-color: #c0c0c0;
+        width: 1em;
+        height: 1em;
+    }
+
+
+    ul.application_steps li.complete {
+        /*background: url(images/tick.png) no-repeat 12px 18px;*/
+        color: #497307;
+    }
+
+        ul.application_steps li.complete .progress-line {
+            background-color: #7cfc00;
+        }
+
+        ul.application_steps li.complete .progress-circle {
+            background-color: #7cfc00;
+            border: #7cfc00 1px solid;
+        }
+
+
+
+    ul.application_steps li .step_label {
+        display: block;
+        line-height: 17px;
+        padding-bottom: 5px;
+    }
+
+    ul.application_steps li .progress_tip {
+        /*background: url(images/progress_tip.png) no-repeat 0 0;*/
+        width: 115px;
+        height: 27px;
+        padding: 9px 0 0 15px;
+        font-size: 12px;
+        color: #fff;
+        text-shadow: 0 1px 1px #C60;
+        position: absolute;
+        bottom: -33px;
+        left: 0;
+    }
+
+
+/*}*/

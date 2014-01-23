@@ -688,52 +688,6 @@ select.SubBank {
         font-size: 40px;
     }
 
-ul.application_steps {
-    margin: 0 0 10px 0;
-    overflow: hidden;
-    list-style: none;
-}
-
-    ul.application_steps li {
-        float: left;
-        background: url(images/arrow.png) 15px 13px no-repeat;
-        padding: 10px 35px 10px 40px;
-        font-style: italic;
-        font-size: 16px;
-        margin: 0 5px 0 0;
-        position: relative;
-    }
-
-        ul.application_steps li.current {
-            background: url(images/current_arrow.png) no-repeat 15px 15px;
-            color: #577fa5;
-            font-weight: bold;
-        }
-
-        ul.application_steps li.complete {
-            background: url(images/tick.png) no-repeat 12px 18px;
-            color: #497307;
-        }
-
-        ul.application_steps li .step_label {
-            display: block;
-            margin-left: 5px;
-            line-height: 17px;
-        }
-
-        ul.application_steps li .progress_tip {
-            background: url(images/progress_tip.png) no-repeat 0 0;
-            width: 115px;
-            height: 27px;
-            padding: 9px 0 0 15px;
-            font-size: 12px;
-            color: #fff;
-            text-shadow: 0 1px 1px #C60;
-            position: absolute;
-            bottom: -33px;
-            left: 0;
-        }
-
 input[disabled], select[disabled], textarea[disabled], input[readonly], select[readonly], textarea[readonly] {
     background-color: #eee;
     border: 1px #ccc solid;
