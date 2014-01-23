@@ -124,8 +124,8 @@
 		[ValidateJsonAntiForgeryToken]
 		public JsonNetResult WizardComplete()
 		{
-			TempData.Add("WizardComplete",true);
-
+			Session["WizardComplete"] = true;
+			TempData["WizardComplete"] = true;
 			var customer = _context.Customer;
 
 			ms_oLog.DebugFormat("Customer {1} ({0}): has completed wizard.", customer.Id, customer.PersonalInfo.Fullname);
@@ -185,15 +185,12 @@
 
 			TypeOfBusiness nBusinessType;
 			IndustryType eIndustryType;
-			VatReporting eVatReporing;
+
 			if (!Enum.TryParse(companyAdditionalInfo.TypeOfBusiness, true, out nBusinessType))
 				return this.JsonNet(new { error = "Failed to parse business type: " + companyAdditionalInfo.TypeOfBusiness });
 
 			if (!Enum.TryParse(companyAdditionalInfo.IndustryType, true, out eIndustryType))
 				return this.JsonNet(new { error = "Failed to parse industry type: " + companyAdditionalInfo.IndustryType });
-
-			if (!Enum.TryParse(companyAdditionalInfo.VatReporting, true, out eVatReporing))
-				return this.JsonNet(new { error = "Failed to parse VAT reporting: " + companyAdditionalInfo.VatReporting });
 
 			if (customer.PersonalInfo == null)
 				customer.PersonalInfo = new PersonalInfo();
@@ -217,7 +214,7 @@
 
 			ProcessCompanyInfoTemporary(
 				nBusinessType, 
-				eVatReporing, 
+				companyAdditionalInfo.VatReporting, 
 				limitedInfo, 
 				nonLimitedInfo, 
 				companyAdditionalInfo, 
@@ -542,7 +539,7 @@
 		#region static method ProcessCompanyInfo
 		private void ProcessCompanyInfoTemporary(
 			TypeOfBusiness businessType,
-			VatReporting vat, 
+			string vat, 
 			LimitedInfo limitedInfo, 
 			NonLimitedInfo nonLimitedInfo,
 			CompanyAdditionalInfo companyAdditionalInfo, 
@@ -586,7 +583,6 @@
 							TypeOfBusiness = businessType,
 							TimeAtAddress = limitedInfo.LimitedTimeAtAddress,
 							YearsInCompany = companyAdditionalInfo.YearsInCompany,
-							VatReporting = vat
 						};
 					companyAddress = limitedCompanyAddress;
 					companyDirectors = limitedDirectors;
@@ -603,7 +599,6 @@
 							TimeAtAddress = nonLimitedInfo.NonLimitedTimeAtAddress,
 							YearsInCompany = companyAdditionalInfo.YearsInCompany,
 							TimeInBusiness = nonLimitedInfo.NonLimitedTimeInBusiness,
-							VatReporting = vat
 						};
 					companyAddress = nonLimitedCompanyAddress;
 					companyDirectors = nonLimitedDirectors;
@@ -611,6 +606,8 @@
 				default:
 					return;
 			}
+
+			companyData.VatReporting = vat != null ? (VatReporting?)Enum.Parse(typeof(VatReporting), vat) : null;
 
 			ProcessCompanyInfo(companyData, companyAddress, experianAddress, companyDirectors, companyEmployeeCount, experianInfo, customer);
 

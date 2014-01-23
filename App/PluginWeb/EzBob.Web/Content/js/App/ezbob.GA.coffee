@@ -10,8 +10,9 @@ class EzBob.GA
 
     trackEventReditect:(url, category, action, opt_label, opt_value, opt_noninteraction) ->
         _gaq.push(['_trackEvent', category, action, opt_label, opt_value, opt_noninteraction])
-        _gaq.push ->
-            window.location = url
+        #_gaq.push ->
+        #    $.post(url, {wizardComplete : true})
+            #window.location = url
         setTimeout((-> window.location = url), 500)
 
 class EzBob.GATest

@@ -55,7 +55,7 @@
 		[Transactional]
 		public ViewResult Index()
 		{
-			var wizardModel = new WizardModel() { Customer = _customerModelBuilder.BuildWizardModel(_context.Customer), Config = _config };
+			var wizardModel = new WizardModel { Customer = _customerModelBuilder.BuildWizardModel(_context.Customer), Config = _config };
 			ViewData["ShowChangePasswordPage"] = _context.User.IsPasswordRestored;
 
 			ViewData["MarketPlaces"] = _session
@@ -65,6 +65,11 @@
 			ViewData["MarketPlaceGroups"] = _session
 				.Query<MP_MarketplaceGroup>()
 				.ToArray();
+			
+			bool wizardComplete = (TempData["WizardComplete"] != null && (bool)TempData["WizardComplete"]) || (Session["WizardComplete"] != null && (bool)Session["WizardComplete"]);
+			ViewData["WizardComplete"] = wizardComplete;
+			Session["WizardComplete"] = false;
+			TempData["WizardComplete"] = false;
 
 			return View("Index", wizardModel);
 		}

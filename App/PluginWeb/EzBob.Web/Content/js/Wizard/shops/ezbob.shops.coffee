@@ -310,11 +310,13 @@ class EzBob.StoreInfoView extends Backbone.View
         false
 
     next: ->
-        return if @$el.find(".continue").hasClass("disabled")
-        $.post window.gRootPath + 'CustomerDetails/LinkAccountsComplete'
+        btn = @$el.find(".continue")
+        return if btn.hasClass("disabled")
+        xhr = $.post window.gRootPath + 'CustomerDetails/LinkAccountsComplete'
         #@trigger "next"
-        EzBob.App.trigger "clear"
-        EzBob.App.GA.trackEventReditect(window.gRootPath + 'Customer/Profile/Index', 'Wizard Complete', 'Go To account', 'Awaiting Approval')
+        xhr.done ->
+            EzBob.App.trigger "clear"
+            EzBob.App.GA.trackEventReditect(window.gRootPath + 'Customer/Profile/Index', 'Wizard Complete', 'Go To account', 'Awaiting Approval')
         false
 
     ready: (name) ->

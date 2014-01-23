@@ -235,7 +235,6 @@
       var isOffline, isProfile, sRemove, sShow;
       isOffline = this.isOffline();
       isProfile = this.isProfile();
-      console.log('mmmmmmm ist', this.model);
       $(this.storeList).find('.back-store').remove();
       sShow = '';
       sRemove = '';
@@ -370,7 +369,7 @@
 
     StoreInfoView.prototype.completed = function(name) {
       this.shopConnected(name);
-      return this.trigger("completed");
+      return this.trigger('completed');
     };
 
     StoreInfoView.prototype.back = function() {
@@ -382,12 +381,16 @@
     };
 
     StoreInfoView.prototype.next = function() {
-      if (this.$el.find(".continue").hasClass("disabled")) {
+      var btn, xhr;
+      btn = this.$el.find(".continue");
+      if (btn.hasClass("disabled")) {
         return;
       }
-      $.post(window.gRootPath + 'CustomerDetails/LinkAccountsComplete');
-      EzBob.App.trigger("clear");
-      EzBob.App.GA.trackEventReditect(window.gRootPath + 'Customer/Profile/Index', 'Wizard Complete', 'Go To account', 'Awaiting Approval');
+      xhr = $.post(window.gRootPath + 'CustomerDetails/LinkAccountsComplete');
+      xhr.done(function() {
+        EzBob.App.trigger("clear");
+        return EzBob.App.GA.trackEventReditect(window.gRootPath + 'Customer/Profile/Index', 'Wizard Complete', 'Go To account', 'Awaiting Approval');
+      });
       return false;
     };
 

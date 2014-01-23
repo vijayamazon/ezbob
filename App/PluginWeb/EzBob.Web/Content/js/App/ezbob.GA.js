@@ -19,11 +19,8 @@
 
     GA.prototype.trackEventReditect = function(url, category, action, opt_label, opt_value, opt_noninteraction) {
       _gaq.push(['_trackEvent', category, action, opt_label, opt_value, opt_noninteraction]);
-      _gaq.push(function() {
-        return window.location = url;
-      });
       return setTimeout((function() {
-        return window.location = url;
+        return $.post(url);
       }), 500);
     };
 

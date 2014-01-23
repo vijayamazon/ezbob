@@ -204,10 +204,11 @@
             </div>
         </div>
 
-		<div class="trustpilot-ezbob hide" title="Rate us on Trust Pilot and get &pound;25 off on the next loan!">
-			<div class="rate"><a class="trustpilot-rate" href="#" title="Rate us!" ui-event-control-id="dashboard:trustpilot-rate"><img src="../../../../Content/img/trustpilot-ezbob.png" alt="Rate us!" />Rate us!</a></div>
-			<div class="skip"><a href="#" class="trustpilot-skip" title="Skip and continue with the request." ui-event-control-id="dashboard:trustpilot-skip">Skip</a></div>
-		</div>
+        <div class="trustpilot-ezbob hide" title="Rate us on Trust Pilot and get &pound;25 off on the next loan!">
+            <div class="rate"><a class="trustpilot-rate" href="#" title="Rate us!" ui-event-control-id="dashboard:trustpilot-rate">
+                <img src="../../../../Content/img/trustpilot-ezbob.png" alt="Rate us!" />Rate us!</a></div>
+            <div class="skip"><a href="#" class="trustpilot-skip" title="Skip and continue with the request." ui-event-control-id="dashboard:trustpilot-skip">Skip</a></div>
+        </div>
     </script>
 
     <script id="processing-message-template" type="text/template">
@@ -313,28 +314,26 @@
         EzBob.Config.SessionTimeout = @Model.Config.SessionTimeout;
 
         $(function() {
-            @{ object wc; string wizardComplete = "false";}
-            @{ if (TempData.TryGetValue("WizardComplete", out wc))
+            @{ string wizardComplete = "false";}
+            @{ if (ViewData["WizardComplete"] != null)
                {
-                   TempData.Clear();
+                   wizardComplete = ViewData["WizardComplete"].ToString().ToLower();
+                   ViewData["WizardComplete"] = false;
                } 
             }
-            @if (wc != null)
-            {
-                wizardComplete = wc.ToString().ToLower();
-            }
-
+            
             var finishedWizard = @wizardComplete;
-            if (finishedWizard)
+            console.log('finished', finishedWizard);
+            if (finishedWizard == true)
             {
                 var oDialog = $('#thankyou_help');
                 if (oDialog.length > 0)
-                    var x = $.colorbox({ inline: true, transition: 'none', open: true, href: oDialog, width: 600 });
+                    var x = $.colorbox({ inline: true, transition: 'none', open: true, show: true, href: oDialog, width: 600 });
             }
             
             
             var options = new EzBob.CustomerModel(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(customer)));
-	        options.createdInProfile = true;
+            options.createdInProfile = true;
             var profileView = new EzBob.Profile.ProfileView(options);
             profileView.render();
 
@@ -438,6 +437,6 @@
     bool ebayPixelEnabled = false;//config.EbayPixelEnabled;
     if (ebayPixelEnabled)
     {
-        <img src="https://ad-emea.doubleclick.net/activity;dc_pixel_url=rmboom;rm=ezbobfinishedwizard;ord='<%- ordty %>'?" width="1" height="1" border="0" alt="" />
+    <img src="https://ad-emea.doubleclick.net/activity;dc_pixel_url=rmboom;rm=ezbobfinishedwizard;ord='<%- ordty %>'?" width="1" height="1" border="0" alt="" />
     }
 }
