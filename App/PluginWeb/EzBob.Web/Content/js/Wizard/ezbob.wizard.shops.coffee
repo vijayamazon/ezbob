@@ -24,7 +24,6 @@ class EzBob.StoreInfoStepModel extends EzBob.WizardStepModel
 
     return stores
 
-
 class EzBob.StoreInfoStepView extends Backbone.View
   initialize: ->
     @readyToProceed = false

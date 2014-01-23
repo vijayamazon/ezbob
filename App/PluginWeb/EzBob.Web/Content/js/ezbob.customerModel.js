@@ -21,9 +21,9 @@ EzBob.Rollovers = Backbone.Collection.extend({
 EzBob.CustomerModel = Backbone.Model.extend({
     initialize: function () {
         this.init();
+	    this.createdInProfile = false;
     },
     init: function () {
-
         this.set('Loans', new EzBob.Loans(this.get('Loans')));
 
         this.set('PersonalAddress', new EzBob.AddressModels(this.get('PersonalAddress')));

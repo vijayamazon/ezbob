@@ -33,6 +33,9 @@
       if (!oCustomer) {
         return false;
       }
+      if (sPropName === 'IsProfile') {
+        return oCustomer.createdInProfile;
+      }
       return oCustomer.get(sPropName);
     };
 
@@ -229,16 +232,19 @@
     };
 
     StoreInfoView.prototype.showOrRemove = function() {
-      var sRemove, sShow;
+      var isOffline, isProfile, sRemove, sShow;
+      isOffline = this.isOffline();
+      isProfile = this.isProfile();
+      console.log('mmmmmmm ist', this.model);
       $(this.storeList).find('.back-store').remove();
       sShow = '';
       sRemove = '';
       this.storeList.find('.btn-showmore').show();
-      if (this.isOffline()) {
+      if (isOffline) {
         sShow = '.offline_entry_message';
         sRemove = '.online_entry_message';
         this.storeList.find('.importantnumber').text('£150,000');
-        if (this.isProfile()) {
+        if (isProfile) {
           this.storeList.find('.btn-showmore').hide();
           this.storeList.find('.AddMoreRuleBottom').removeClass('hide');
         } else {
@@ -252,7 +258,7 @@
       }
       this.storeList.find(sShow).show();
       this.storeList.find(sRemove).remove();
-      if (this.isProfile()) {
+      if (isProfile) {
         sShow = '.profile_message';
         sRemove = '.wizard_message';
       } else {
@@ -261,6 +267,12 @@
       }
       this.storeList.find(sShow).show();
       return this.storeList.find(sRemove).remove();
+    };
+
+    StoreInfoView.prototype.showMoreAccounts = function() {
+      this.storeList.find('.btn-showmore').hide();
+      this.storeList.find('.AddMoreRuleBottom').removeClass('hide');
+      return this.storeList.find('.marketplace-button-more, .marketplace-group.following').show();
     };
 
     StoreInfoView.prototype.canContinue = function() {
@@ -290,12 +302,6 @@
       }
       this.storeList.find('.continue').toggleClass('disabled', !canContinue);
       return this.storeList.find('.AddMoreRule').toggleClass('hide', canContinue);
-    };
-
-    StoreInfoView.prototype.showMoreAccounts = function() {
-      this.storeList.find('.btn-showmore').hide();
-      this.storeList.find('.AddMoreRuleBottom').removeClass('hide');
-      return this.storeList.find('.marketplace-button-more, .marketplace-group.following').show();
     };
 
     StoreInfoView.prototype.extractBtnClass = function(jqTarget) {
@@ -364,7 +370,6 @@
 
     StoreInfoView.prototype.completed = function(name) {
       this.shopConnected(name);
-      this.render();
       return this.trigger("completed");
     };
 

@@ -12,6 +12,7 @@ class EzBob.StoreInfoView extends Backbone.View
     fromCustomer: (sPropName) ->
         oCustomer = @model.get 'customer'
         return false unless oCustomer
+        return oCustomer.createdInProfile if sPropName == 'IsProfile'
         return oCustomer.get sPropName
 
     initialize: ->
@@ -168,20 +169,23 @@ class EzBob.StoreInfoView extends Backbone.View
     # end of render
 
     showOrRemove: ->
-        $(@storeList).find('.back-store').remove() # .hide() if not @isProfile()
+        isOffline = @isOffline()
+        isProfile = @isProfile()
+
+        $(@storeList).find('.back-store').remove() # .hide() if not isProfile
 
         sShow = ''
         sRemove = ''
 
         @storeList.find('.btn-showmore').show()
 
-        if @isOffline()
+        if isOffline
             sShow = '.offline_entry_message'
             sRemove = '.online_entry_message'
 
             @storeList.find('.importantnumber').text '£150,000'
 
-            if @isProfile()
+            if isProfile
                 @storeList.find('.btn-showmore').hide()
                 @storeList.find('.AddMoreRuleBottom').removeClass 'hide'
             else
@@ -196,7 +200,7 @@ class EzBob.StoreInfoView extends Backbone.View
         @storeList.find(sShow).show()
         @storeList.find(sRemove).remove()
 
-        if @isProfile()
+        if isProfile
             sShow = '.profile_message'
             sRemove = '.wizard_message'
         else
@@ -207,6 +211,12 @@ class EzBob.StoreInfoView extends Backbone.View
         @storeList.find(sRemove).remove()
     # end of showOrRemove
     
+    showMoreAccounts: ->
+        @storeList.find('.btn-showmore').hide()
+        @storeList.find('.AddMoreRuleBottom').removeClass 'hide'
+        @storeList.find('.marketplace-button-more, .marketplace-group.following').show()
+    # end of showMoreAccounts
+
     canContinue: ->
         hasFilledShops = false
         for mpType, oStore of @stores
@@ -233,12 +243,6 @@ class EzBob.StoreInfoView extends Backbone.View
         @storeList.find('.continue').toggleClass 'disabled', not canContinue
         @storeList.find('.AddMoreRule').toggleClass 'hide', canContinue
     # end of canContinue
-
-    showMoreAccounts: ->
-        @storeList.find('.btn-showmore').hide()
-        @storeList.find('.AddMoreRuleBottom').removeClass 'hide'
-        @storeList.find('.marketplace-button-more, .marketplace-group.following').show()
-    # end of showMoreAccounts
 
     extractBtnClass: (jqTarget) ->
         sClass = jqTarget.attr('data-last-button-class') || 'pull-right'
@@ -296,8 +300,7 @@ class EzBob.StoreInfoView extends Backbone.View
 
     completed: (name) ->
         @shopConnected(name)
-        @render()
-        @trigger "completed"
+        @trigger 'completed'
 
     back: ->
         @$el.find(">div").hide()
