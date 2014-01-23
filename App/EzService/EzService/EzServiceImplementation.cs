@@ -462,7 +462,8 @@
 			return new WizardConfigsActionResult {
 				MetaData = result,
 				IsSmsValidationActive = strategyInstance.IsSmsValidationActive,
-				NumberOfMobileCodeAttempts = strategyInstance.NumberOfMobileCodeAttempts
+				NumberOfMobileCodeAttempts = strategyInstance.NumberOfMobileCodeAttempts,
+				AllowInsertingMobileCodeWithoutGeneration = strategyInstance.AllowInsertingMobileCodeWithoutGeneration
 			};
 		} // GetWizardConfigs
 

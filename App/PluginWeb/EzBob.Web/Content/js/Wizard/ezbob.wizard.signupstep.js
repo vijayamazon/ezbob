@@ -17,6 +17,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         this.readyToProceed = false;
         this.activatedCode = false;
         this.mobileCodesSent = 0;
+        this.showMobileCode = false;
 
         var that = this;
 
@@ -24,12 +25,17 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         xhr.done(function (res) {
             that.twilioEnabled = res.isSmsValidationActive;
             that.numberOfMobileCodeAttempts = res.numberOfMobileCodeAttempts + 1;
-
+            if (res.allowInsertingMobileCodeWithoutGeneration) {
+                that.showMobileCode = true;
+            }
             return false;
         });
         xhr.always(function () {
 
             if (that.twilioEnabled) {
+                if (!that.showMobileCode) {
+                    that.$el.find('#mobileCodeDiv').hide();
+                }
                 that.$el.find('#twilioDiv').show();
             } else {
                 that.$el.find('#captchaDiv').show();
@@ -78,7 +84,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
         this.$el.find('.phonenumber').numericOnly(11);
         this.$el.find('.phonenumbercode').numericOnly(6);
-
+        
         fixSelectValidate(this.$el.find('select'));
 
         if (this.showOfflineHelp && ($('body').attr('data-offline') === 'yes')) {
@@ -124,8 +130,6 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
             return false;
         }
         EzBob.App.trigger('clear');
-        $('#mobileCodeDiv').show();
-        $('#generateMobileCode').val('Resend activation code');
 
         this.activatedCode = true;
 
@@ -151,6 +155,12 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
             return false;
         });
+        xhr.always(function() {
+            debugger;
+            that.$el.find('#mobileCodeDiv').show();
+            that.$el.find('#switchToCaptcha').removeClass('disabled');
+            that.$el.find('#generateMobileCode').val('Resend activation code');
+        });
 
         return false;
     },
@@ -169,6 +179,9 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
     },
 
     switchToCaptcha: function () {
+        if (this.$el.find('#switchToCaptcha').hasClass('disabled'))
+            return false;
+        
         EzBob.App.trigger('clear');
         this.$el.find('#twilioDiv').hide();
         this.$el.find('#captchaDiv').show();

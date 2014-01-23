@@ -60,6 +60,7 @@
 			{
 				Session["IsSmsValidationActive"] = wizardConfigsActionResult.IsSmsValidationActive;
 				Session["NumberOfMobileCodeAttempts"] = wizardConfigsActionResult.NumberOfMobileCodeAttempts;
+				Session["AllowInsertingMobileCodeWithoutGeneration"] = wizardConfigsActionResult.AllowInsertingMobileCodeWithoutGeneration;
 				sessionInitialized = true;
 			}
 			log.Info("Initialized session configs");
@@ -88,7 +89,8 @@
 		public JsonNetResult GetTwilioConfig()
 		{
 			InitSession();
-			return this.JsonNet(new { isSmsValidationActive = Session["IsSmsValidationActive"], numberOfMobileCodeAttempts = Session["NumberOfMobileCodeAttempts"] });
+			return this.JsonNet(new { isSmsValidationActive = Session["IsSmsValidationActive"], numberOfMobileCodeAttempts = Session["NumberOfMobileCodeAttempts"], 
+				allowInsertingMobileCodeWithoutGeneration = Session["AllowInsertingMobileCodeWithoutGeneration"] });
 		}
 	}
 }

@@ -790,7 +790,7 @@
   <xs:element name="QuickOfferResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q57="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="QuickOfferResult" nillable="true" type="q57:DecimalActionResult" />
+        <xs:element xmlns:q58="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="QuickOfferResult" nillable="true" type="q58:DecimalActionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
