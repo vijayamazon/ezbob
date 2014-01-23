@@ -21,7 +21,7 @@
 		public GenerateMobileCode(string mobilePhone, AConnection oDb, ASafeLog oLog)
 			: base(oDb, oLog)
 		{
-			this.mobilePhone = string.Format("{0}{1}", UkMobilePrefix, mobilePhone.Substring(1));
+			this.mobilePhone = mobilePhone;
 			ReadConfigurations();
 		} // constructor
 
@@ -73,15 +73,16 @@
 			var twilio = new TwilioRestClient(accountSid, authToken);
 
 			string content = string.Format("Your authentication code is:{0}", code);
-			var message = twilio.SendSmsMessage(fromNumber, mobilePhone, content, "");
+			string sendMobilePhone = string.Format("{0}{1}", UkMobilePrefix, mobilePhone.Substring(1));
+			var message = twilio.SendSmsMessage(fromNumber, sendMobilePhone, content, "");
 			if (message.Status == null)
 			{
 				IsError = true;
-				Log.Warn(string.Format("Failed sending SMS to number:{0}", mobilePhone));
+				Log.Warn(string.Format("Failed sending SMS to number:{0}", sendMobilePhone));
 				return;
 			}
 
-			Log.Info("Sms message sent to '{0}'. Sid:'{1}'", mobilePhone, message.Sid);
+			Log.Info("Sms message sent to '{0}'. Sid:'{1}'", sendMobilePhone, message.Sid);
 		}
 
 		private void ReadConfigurations()
