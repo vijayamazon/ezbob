@@ -468,6 +468,49 @@ div.shop-connected {
     margin-top: 60px;
     width: 70%;
 }
+
+.hmrc-question-button, .hmrc-question-sign {
+    background: url(../img/hmrc_question.png) no-repeat 0 0;
+    -moz-background-size: contain;
+    -o-background-size: contain;
+    -webkit-background-size: contain;
+    background-size: contain;
+    background-position: left center;
+    border-radius: 50%;
+    width: 72px;
+    height: 72px;
+    float: left;
+    display: inline-block;
+}
+
+.hmrc-question-button:hover {
+    background: url(../img/hmrc_question_hover.png) no-repeat 0 0;
+    -moz-background-size: contain;
+    -o-background-size: contain;
+    -webkit-background-size: contain;
+    background-size: contain;
+    background-position: left center;
+    border-radius: 50%;
+    width: 72px;
+    height: 72px;
+    float: left;
+    display: inline-block;
+}
+
+.hmrc-question-button:active {
+    background: url(../img/hmrc_question_active.png) no-repeat 0 0;
+    -moz-background-size: contain;
+    -o-background-size: contain;
+    -webkit-background-size: contain;
+    background-size: contain;
+    background-position: left center;
+    border-radius: 50%;
+    width: 72px;
+    height: 72px;
+    float: left;
+    display: inline-block;
+}
+
 .hmrc-question {
     background: url(images/button-question-icon.png) no-repeat 0 0;
     -moz-background-size: contain;
