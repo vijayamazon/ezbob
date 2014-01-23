@@ -280,6 +280,7 @@ namespace EzBob.Web.Infrastructure
 				.Add("~/Content/css/attardi.labels.css")
 				.Add("~/Content/css/loan-type-selector.css")
 				.Add("~/Content/css/amount-period-sliders.css")
+				.Add("~/Content/css/dropzone.css")
 				.MvcRender("~/Content/css/min/customer_#.css");
 		}
 
@@ -307,6 +308,7 @@ namespace EzBob.Web.Infrastructure
 				.Add("~/Content/css/attardi.labels.css")
 				.Add("~/Content/css/loan-type-selector.css")
 				.Add("~/Content/css/amount-period-sliders.css")
+				.Add("~/Content/css/dropzone.css")
 				.MvcRender("~/Content/css/min/profile_combined_#.css");
 		}
 
