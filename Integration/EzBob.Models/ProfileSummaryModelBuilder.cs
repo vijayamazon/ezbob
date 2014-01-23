@@ -35,10 +35,8 @@
 			BuildPaymentAccounts(customer, summary);
 			AddDecisionHistory(summary, customer);
 
-			if (summary.IsOffline.HasValue && summary.IsOffline.Value)
-			{
-				BuildRequestedLoan(summary, customer);
-			}
+
+			BuildRequestedLoan(summary, customer);
 
 			summary.AffordabilityAnalysis =
 					new AffordabilityAnalysis
@@ -114,8 +112,8 @@
 					creditBureau.TotalDebt = result.TotalAccountBalances;
 					creditBureau.TotalMonthlyRepayments = result.SumOfRepayements;
 					creditBureau.CreditCardBalances = result.CreditCardBalances;
-                    creditBureau.BorrowerType =
-                        TypeOfBusinessExtenstions.TypeOfBussinessForWeb(customer.PersonalInfo.TypeOfBusiness);
+					creditBureau.BorrowerType =
+						TypeOfBusinessExtenstions.TypeOfBussinessForWeb(customer.PersonalInfo.TypeOfBusiness);
 
 					//creditBureau.Lighter = new Lighter(ObtainCreditBureauState(result.ExperianResult));
 					creditBureau.FinancialAccounts = customer.FinancialAccounts;

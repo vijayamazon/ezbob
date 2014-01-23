@@ -7,13 +7,13 @@
 @helper ButtonLights(string buttonStyle, string icon, string caption, string onClick = "")
 {
     onClick = string.IsNullOrEmpty(onClick) ? "" : onClick + ";window.scrollTop();";
-    <button class="btn btn-xs @Html.Raw(buttonStyle) pull-right" onclick="@Html.Raw(onClick)"><i class="@Html.Raw(icon)"></i> @Html.Raw(caption)</button>
+    <button class="btn btn-xs @Html.Raw(buttonStyle) pull-right" onclick="@Html.Raw(onClick)"><i class="@Html.Raw(icon)"></i>@Html.Raw(caption)</button>
 }
 
 @helper ProfileSummary()
-    {
+{
     <text>
-         <% 
+    <% 
         var mp = m.MarketPlaces || {}, 
         pa = m.PaymentAccounts || {}, 
         aa = m.AffordabilityAnalysis || {}, 
@@ -47,43 +47,38 @@
                     <tr>
                         <td width="60%">
                             <b>Number of stores:</b> &nbsp; &nbsp;<span class="<%-Convert.toBool(mp.IsNew) ? '' : 'hidden-field'%> btn-success btn-mini">
-                                                                      <i class="icon-white icon-star-empty"></i>new
-                                                                  </span>
+                                <i class="icon-white icon-star-empty"></i>new
+                            </span>
                         </td>
-                        <td width="40%">
-                            <%-mp!=null ? mp.NumberOfStores : "-"%> 
+                        <td width="40%"><%-mp!=null ? mp.NumberOfStores : "-"%> 
                         </td>
                     </tr>
                     <tr>
                         <td>
                             <b>Annual Turnover £:</b>
                         </td>
-                        <td>
-                            <%-mp!=null ? EzBob.formatPoundsNoDecimals( mp.AnualTurnOver, true ) : "-"%>
+                        <td><%-mp!=null ? EzBob.formatPoundsNoDecimals( mp.AnualTurnOver, true ) : "-"%>
                         </td>
                     </tr>
                     <tr>
                         <td>
                             <b>Inventory £:</b>
                         </td>
-                        <td>
-                            <%-mp!=null ? EzBob.formatPoundsNoDecimals(mp.Inventory, true ) : "-"%>
+                        <td><%-mp!=null ? EzBob.formatPoundsNoDecimals(mp.Inventory, true ) : "-"%>
                         </td>
                     </tr>
                     <tr>
                         <td>
                             <b>Total positive reviews:</b>
                         </td>
-                        <td>
-                            <%-mp!=null ? mp.TotalPositiveReviews : "-"%>
+                        <td><%-mp!=null ? mp.TotalPositiveReviews : "-"%>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <b>Seniority:</b>   
+                            <b>Seniority:</b>
                         </td>
-                        <td>
-                            <%-mp!=null ? EzBob.SeniorityFormat(mp.Seniority) : "-"%>
+                        <td><%-mp!=null ? EzBob.SeniorityFormat(mp.Seniority) : "-"%>
                         </td>
                     </tr>
                     @EzTable.RawCell(Html, "<b>Overall Turnover</b>", "<%- EzBob.formatPoundsNoDecimals(m.OverallTurnOver) %>")
@@ -102,35 +97,31 @@
                     <tr>
                         <td>
                             <b>Number of payment accounts:</b> <span class="<%-pa.IsNew ? '' : 'hidden-field'%> btn-success btn-small">
-                                                                   <i class="icon-white icon-star-empty"></i>new
-                                                               </span>
+                                <i class="icon-white icon-star-empty"></i>new
+                            </span>
                         </td>
-                        <td width="35%">
-                            <%-pa!=undefined ? pa.NumberOfPayPalAccounts : "-"%>
+                        <td width="35%"><%-pa!=undefined ? pa.NumberOfPayPalAccounts : "-"%>
                         </td>
                     </tr>
                     <tr>
                         <td>
                             <b>Net income £:</b>
                         </td>
-                        <td>
-                            <%-pa!=undefined ? GBPValues( pa.NetIncome, true ) : "-"%>
+                        <td><%-pa!=undefined ? GBPValues( pa.NetIncome, true ) : "-"%>
                         </td>
                     </tr>
                     <tr>
                         <td>
                             <b>Net Expenses £:</b>
                         </td>
-                        <td>  
-                            <%-pa!=undefined ? GBPValues(  pa.NetExpences, true ) : "-"%>
+                        <td><%-pa!=undefined ? GBPValues(  pa.NetExpences, true ) : "-"%>
                         </td>
                     </tr>
                     <tr>
                         <td>
-                            <b>Seniority:</b>   
+                            <b>Seniority:</b>
                         </td>
-                        <td>
-                            <%-mp!=null ? EzBob.SeniorityFormat(pa.Seniority) : "-"%>
+                        <td><%-mp!=null ? EzBob.SeniorityFormat(pa.Seniority) : "-"%>
                         </td>
                     </tr>
                 </tbody>
@@ -159,19 +150,17 @@
                         <td>
                             <b>Credit bureau score:</b>
                         </td>
-                        <td width="40%">
-                            <%-cb!=null ? cb.CreditBureauScore : "-"%>
+                        <td width="40%"><%-cb!=null ? cb.CreditBureauScore : "-"%>
                         </td>
                         <td>
-                            <a href="#" class="btn btn-mini btn-primary" data-bug-type="CreditBureauScore" data-bug-customer="<%-m.Id%>" ><i class="fa fa-bug"></i></a>
+                            <a href="#" class="btn btn-mini btn-primary" data-bug-type="CreditBureauScore" data-bug-customer="<%-m.Id%>"><i class="fa fa-bug"></i></a>
                         </td>
                     </tr>
                     <tr>
                         <td>
                             <b>Total debt £:</b>
                         </td>
-                        <td>
-                            <%-cb!=null ? GBPValues( cb.TotalDebt, true ) : "-"%>
+                        <td><%-cb!=null ? GBPValues( cb.TotalDebt, true ) : "-"%>
                         </td>
                         <td>
                             <a href="#" class="btn btn-mini btn-primary" data-bug-type="TotalDebt" data-bug-customer="<%-m.Id%>"><i class="fa fa-bug"></i></a>
@@ -181,8 +170,7 @@
                         <td>
                             <b>Total monthly repayments £:</b>
                         </td>
-                        <td>
-                            <%-cb!=null ? GBPValues( cb.TotalMonthlyRepayments, true ) : "-"%>
+                        <td><%-cb!=null ? GBPValues( cb.TotalMonthlyRepayments, true ) : "-"%>
                         </td>
                         <td>
                             <a href="#" class="btn btn-mini btn-primary" data-bug-type="TotalMonthlyRepayments" data-bug-customer="<%-m.Id%>"><i class="fa fa-bug"></i></a>
@@ -192,8 +180,7 @@
                         <td>
                             <b>Credit Card Balances £:</b>
                         </td>
-                        <td>
-                            <%-cb!=null ? GBPValues( cb.CreditCardBalances, true ) : "-"%>
+                        <td><%-cb!=null ? GBPValues( cb.CreditCardBalances, true ) : "-"%>
                         </td>
                         <td>
                             <a href="#" class="btn btn-mini btn-primary" data-bug-type="CreditCardBalances" data-bug-customer="<%-m.Id%>"><i class="fa fa-bug"></i></a>
@@ -203,19 +190,17 @@
                         <td>
                             <b>Borrower Type:</b>
                         </td>
-                        <td>
-                            <%-cb!=null ? cb.BorrowerType : "-"%>
+                        <td><%-cb!=null ? cb.BorrowerType : "-"%>
                         </td>
                         <td>
                             <a href="#" class="btn btn-mini btn-primary" data-bug-type="BorrowerType" data-bug-customer="<%-m.Id%>"><i class="fa fa-bug"></i></a>
                         </td>
                     </tr>
-                    <tr>                   
+                    <tr>
                         <td>
                             <b>Thin File:</b>
                         </td>
-                        <td>
-                            <%- cb.ThinFile %>
+                        <td><%- cb.ThinFile %>
                         </td>
                         <td>
                             <a href="#" class="btn btn-mini btn-primary" data-bug-type="ActiveFinancialAccounts" data-bug-customer="<%-m.Id%>"><i class="fa fa-bug"></i></a>
@@ -236,24 +221,21 @@
                         <td>
                             <b>Bank Acc. Check:</b>
                         </td>
-                        <td width="40%">
-                            <%-ab!=null ? ab.Bwa : "-"%>
+                        <td width="40%"><%-ab!=null ? ab.Bwa : "-"%>
                         </td>
                     </tr>
                     <tr>
                         <td>
                             <b>AML:</b>
                         </td>
-                        <td>
-                            <%-ab!=null ? ab.Aml : "-"%>
+                        <td><%-ab!=null ? ab.Aml : "-"%>
                         </td>
                     </tr>
                     <tr>
                         <td>
                             <b>Fraud:</b>
                         </td>
-                        <td>
-                            <%-ab!=null ? ab.Fraud : "-"%>
+                        <td><%-ab!=null ? ab.Fraud : "-"%>
                         </td>
                     </tr>
                 </tbody>
@@ -273,16 +255,14 @@
                         <td>
                             <b>Previous Loans:</b>
                         </td>
-                        <td width="40%">
-                            <%-la!=null ? la.PreviousLoans : "-"%>
+                        <td width="40%"><%-la!=null ? la.PreviousLoans : "-"%>
                         </td>
                     </tr>
                     <tr>
                         <td>
                             <b>Current Balance £:</b>
                         </td>
-                        <td>
-                            <%-la!=null ? GBPValues( la.CurrentBalance, true) : "-"%>
+                        <td><%-la!=null ? GBPValues( la.CurrentBalance, true) : "-"%>
                         </td>
                     </tr>
                     @*<tr>
@@ -297,49 +277,44 @@
                         <td>
                             <b>Collection:</b>
                         </td>
-                        <td>
-                            <%-la!=null ? GBPValues( la.Collection, true) : "-"%>
+                        <td><%-la!=null ? GBPValues( la.Collection, true) : "-"%>
                         </td>
                     </tr>
                     <tr>
                         <td>
                             <b>Late Interest:</b>
                         </td>
-                        <td>
-                            <%-la!=null ? GBPValues( la.LateInterest, true) : "-"%>
+                        <td><%-la!=null ? GBPValues( la.LateInterest, true) : "-"%>
                         </td>
                     </tr>
                     <tr>
-                    <td>
-                        <b>Payment demeanor:</b>
-                    </td>
-                    <td>
-                        <%-la!=null ? la.PaymentDemeanor : "-"%>
-                    </td>
-                    <tr>
                         <td>
-                            <b>Current late days:</b>
+                            <b>Payment demeanor:</b>
                         </td>
-                        <td>
-                            <%-la!=null ? la.CurrentLateDays : "-"%>
+                        <td><%-la!=null ? la.PaymentDemeanor : "-"%>
                         </td>
-                    </tr>
+                        <tr>
+                            <td>
+                                <b>Current late days:</b>
+                            </td>
+                            <td><%-la!=null ? la.CurrentLateDays : "-"%>
+                            </td>
+                        </tr>
                     <tr>
                         <td>
                             <b>Fees applied:</b>
                         </td>
-                        <td>
-                            <%-la!=null ? la.FeesCount : "-"%> (<%-la!=null ? GBPValues(la.TotalFees, true) : "-"%>)
+                        <td><%-la!=null ? la.FeesCount : "-"%> (<%-la!=null ? GBPValues(la.TotalFees, true) : "-"%>)
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <div class="span6 offline">
+        <div class="span6">
             <table class="table rright">
                 <thead class="box">
                     <tr class="box-title">
-                        <th colspan="2">Offline Requested Loan</th>
+                        <th colspan="2">Requested Loan</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -347,75 +322,80 @@
                         <td>
                             <b>Requested Amount:</b>
                         </td>
-                        <td width="65%">
-                            <%-rl!=null ? EzBob.formatPoundsNoDecimals(rl.Amount, true) : "-"%>
+                        <td width="65%"><%-rl!=null ? EzBob.formatPoundsNoDecimals(rl.Amount, true) : "-"%>
                         </td>
                     </tr>
+                    <%if(rl.CustomerReason){%>
                     <tr>
                         <td>
                             <b>Reason:</b>
                         </td>
-                        <td>
-                            <%if(rl) {print(rl.CustomerReason); if(rl.OtherReason) {print("(" + rl.OtherReason + ")");}}else{print("-");}%>
+                        <td><%if(rl) {print(rl.CustomerReason); if(rl.OtherReason) {print("(" + rl.OtherReason + ")");}}else{print("-");}%>
                         </td>
                     </tr>
                     <tr>
                         <td>
                             <b>Source Of Repayment:</b>
                         </td>
-                        <td>
-                            <%if(rl) {print(rl.CustomerSourceOfRepayment); if(rl.OtherSourceOfRepayment) {print("(" + rl.OtherSourceOfRepayment + ")");}}else{print("-");}%>
+                        <td><%if(rl) {print(rl.CustomerSourceOfRepayment); if(rl.OtherSourceOfRepayment) {print("(" + rl.OtherSourceOfRepayment + ")");}}else{print("-");}%>
                         </td>
                     </tr>
+                    <%}%>
                 </tbody>
             </table>
         </div>
-		<div class="span6 offline">
-			<table class="table rright">
-				<thead class="box">
-					<tr class="box-title">
-						<th colspan="2">Company Employee Count</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr><td><b>Reported on:</b></td><td><%- EzBob.formatDate(cec.Created) %></td></tr>
-
-					<tr>
-						<td><b>Current Number of Employees:</b></td>
-						<td><%- cec.EmployeeCount %></td>
-					</tr>
-
-					<tr>
-						<td><b>Number of Employees Earning (Gross Salary) over £41,450 Per Annum:</b></td>
-						<td><%- cec.TopEarningEmployeeCount %></td>
-					</tr>
-
-					<tr>
-						<td><b>Number of Employees Earning (Gross Salary) less than £9,440 Per Annum:</b></td>
-						<td><%- cec.BottomEarningEmployeeCount %></td>
-					</tr>
-
-				    <tr>
-				        <td><b>Change in the Number of Employees in Last 12 Months:</b></td>
-				        <td><%- cec.EmployeeCountChange %></td>
-				    </tr>
-                    
-				    <tr>
-				        <td><b>Total Monthly Salary Expenditure (inc tax & NI):</b></td>
-				        <td><%- EzBob.formatPoundsAsInt(cec.TotalMonthlySalary) %></td>
-				    </tr>
+        <div class="span6">
+            <table class="table rright">
+                <thead class="box">
+                    <tr class="box-title">
+                        <th colspan="2">Company Employee Count</th>
+                    </tr>
+                </thead>
+                <tbody>
                     <tr>
-				        <td><b>Amount of capital expenditure in the last 12 months (excl. vat):</b></td>
-				        <td><%- EzBob.formatPoundsAsInt(cai.CapitalExpenditure) %></td>
-				    </tr>
-				</tbody>
-			</table>
-		</div>
-	</div>
+                        <td><b>Reported on:</b></td>
+                        <td><%- EzBob.formatDate(cec.Created) %></td>
+                    </tr>
+
+                    <tr>
+                        <td><b>Current Number of Employees:</b></td>
+                        <td><%- cec.EmployeeCount %></td>
+                    </tr>
+                    <%if(cec.TopEarningEmployeeCount){%>
+					<tr>
+                        <td><b>Number of Employees Earning (Gross Salary) over £41,450 Per Annum:</b></td>
+                        <td><%- cec.TopEarningEmployeeCount %></td>
+                    </tr>
+
+                    <tr>
+                        <td><b>Number of Employees Earning (Gross Salary) less than £9,440 Per Annum:</b></td>
+                        <td><%- cec.BottomEarningEmployeeCount %></td>
+                    </tr>
+
+                    <tr>
+                        <td><b>Change in the Number of Employees in Last 12 Months:</b></td>
+                        <td><%- cec.EmployeeCountChange %></td>
+                    </tr>
+
+                    <tr>
+                        <td><b>Amount of capital expenditure in the last 12 months (excl. vat):</b></td>
+                        <td><%- EzBob.formatPoundsAsInt(cai.CapitalExpenditure) %></td>
+                    </tr>
+                    <%}%>
+				    <tr>
+                        <td><b>Total Monthly Salary Expenditure (inc tax & NI):</b></td>
+                        <td><%- EzBob.formatPoundsAsInt(cec.TotalMonthlySalary) %></td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
     @ShowDecisionsHistory()
 }
 
-@helper ShowDecisionsHistory(){
+@helper ShowDecisionsHistory()
+{
     <div class="row-fluid">
         <div class="span12">
             <%
@@ -427,41 +407,41 @@
                 <table class="table centered">
                     <thead class="box">
                         <tr class="box-title">
-                            <th> Action </th>
-                            <th style="width: 100px;"> Date </th>
-                            <th> ApprovedSum </th>
-                            <th> Interest </th>
-                            <th> Repayment Period </th>
-                            <th> Loan Type </th>
-                            <th> Use SetupFee </th>
-                            <th> Discount Plan </th>
-                            <th> Customer Selection </th>
-                            <th> Loan Source </th>
-                            <th> Underwriter </th>
-                            <th> Comment </th>
-                            <th> ID </th>
+                            <th>Action </th>
+                            <th style="width: 100px;">Date </th>
+                            <th>ApprovedSum </th>
+                            <th>Interest </th>
+                            <th>Repayment Period </th>
+                            <th>Loan Type </th>
+                            <th>Use SetupFee </th>
+                            <th>Discount Plan </th>
+                            <th>Customer Selection </th>
+                            <th>Loan Source </th>
+                            <th>Underwriter </th>
+                            <th>Comment </th>
+                            <th>ID </th>
                         </tr>
                     </thead>
                     <tbody>
                         <%_.each(m.DecisionHistory, function(d){%>
                         <tr>
-                                <td><%- d.Action %></td>
-                                <td><%- EzBob.formatDate(d.Date) %></td>
+                            <td><%- d.Action %></td>
+                            <td><%- EzBob.formatDate(d.Date) %></td>
                             <% if (d.Action == "Reject") {%>
                                 <td colspan="8"></td>
                             <%} else {%>
                                 <td><%- EzBob.formatPounds(d.ApprovedSum) %></td>
-                                <td><%- EzBob.formatPercents(d.InterestRate) %></td>
-                                <td><%- d.RepaymentPeriod %></td>
-                                <td><%- EzBob.formatLoanType(d.IsLoanTypeSelectionAllowed, d.LoanType) %></td>
-                                <td><%- (d.ManualSetupFeeAmount || d.ManualSetupFeePercent) ? 'Manual' : (d.UseBrokerSetupFee ? 'Broker' : (d.UseSetupFee ? 'Setup Fee' : 'No')) %></td>
-                                <td><%- d.DiscountPlan %></td>
-                                <td><%- EzBob.formatLoanTypeSelection(d.IsLoanTypeSelectionAllowed) %></td>
-                                <td><%- d.LoanSourceName %></td>
+                            <td><%- EzBob.formatPercents(d.InterestRate) %></td>
+                            <td><%- d.RepaymentPeriod %></td>
+                            <td><%- EzBob.formatLoanType(d.IsLoanTypeSelectionAllowed, d.LoanType) %></td>
+                            <td><%- (d.ManualSetupFeeAmount || d.ManualSetupFeePercent) ? 'Manual' : (d.UseBrokerSetupFee ? 'Broker' : (d.UseSetupFee ? 'Setup Fee' : 'No')) %></td>
+                            <td><%- d.DiscountPlan %></td>
+                            <td><%- EzBob.formatLoanTypeSelection(d.IsLoanTypeSelectionAllowed) %></td>
+                            <td><%- d.LoanSourceName %></td>
                             <%}%>
                                 <td><%- d.UnderwriterName %></td>
-                                <td><%- d.Comment %></td>
-                                <td><%- d.Id %></td>
+                            <td><%- d.Comment %></td>
+                            <td><%- d.Id %></td>
                         </tr>
                         <%});%>
                     </tbody>

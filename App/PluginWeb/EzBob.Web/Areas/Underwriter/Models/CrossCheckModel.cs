@@ -77,7 +77,9 @@ namespace EzBob.Web.Areas.Underwriter.Models
 			OtherPropertyAddress = customer.AddressInfo.OtherPropertyAddress.FirstOrDefault(x => x.AddressType == CustomerAddressType.OtherPropertyAddress);
 
 			var current = customer.AddressInfo.PersonalAddress.FirstOrDefault(x => x.AddressType == CustomerAddressType.PersonalAddress);
-			var zoopla = current.Zoopla.LastOrDefault();
+			Zoopla zoopla = null;
+			if(current != null) zoopla = current.Zoopla.LastOrDefault();
+
 			if (zoopla != null)
 			{
 				current.ZooplaEstimate = zoopla.ZooplaEstimate;
