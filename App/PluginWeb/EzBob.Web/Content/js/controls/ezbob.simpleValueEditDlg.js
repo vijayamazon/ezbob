@@ -28,7 +28,7 @@ EzBob.Dialogs.SimpleValueEdit = Backbone.View.extend({
             close: _.bind(this.dlgClosed, this),
             buttons: {
                 'Save': _.bind(this.onSave, this)
-            }
+            },
         });
 
         this.setElement(dialog);
@@ -43,12 +43,12 @@ EzBob.Dialogs.SimpleValueEdit = Backbone.View.extend({
     },
     dlgOpened: function (event, ui) {
         this.$el.parent('.ui-dialog').find('.ui-dialog-buttonset button').addClass('btn btn-primary');
-        this.onDialogOpened(event, ui);
+        this.onDialogOpened(event, ui, this.options.required);
     },
     dlgClosed: function () {
         this.$el.empty();
     },
-    onDialogOpened: function(event, ui){
+    onDialogOpened: function(event, ui, required){
     },
     onSave: function () {
         var f = this.$el,
@@ -126,14 +126,14 @@ EzBob.Dialogs.DateEdit = EzBob.Dialogs.SimpleValueEdit.extend({
 });
 
 EzBob.Dialogs.IntegerEdit = EzBob.Dialogs.SimpleValueEdit.extend({
-    onDialogOpened: function(event, ui){
+    onDialogOpened: function (event, ui, required) {
         var d = $(event.target);
         d.validator = d.validate({
             rules: {
                 simpleValueEdit: {
-                    required: true,
+                    required: required,
                     digits: true,
-                    min: 1
+                    //min: 1
                 }
             }
         });
@@ -171,6 +171,16 @@ EzBob.Dialogs.PercentsEdit = EzBob.Dialogs.AutonumericEdit.extend({
     },
     onBeforeValuePassedToEditor: function (val) {
         return val*100;
+    },
+    onDialogOpened: function (event, ui, required) {
+        var d = $(event.target);
+        d.validator = d.validate({
+            rules: {
+                simpleValueEdit: {
+                    required: required,
+                }
+            }
+        });
     }
 });
 

@@ -30,10 +30,13 @@
 
 		public decimal Calculate(decimal amount)
 		{
-			if (_manualAmount.HasValue || _manualPercent.HasValue)
+			if (_setupFee || _brokerFee)
 			{
-				return Math.Max(Math.Floor(amount*(_manualPercent.HasValue ? _manualPercent.Value : 0M)*0.01M),
-				                _manualAmount.HasValue ? _manualAmount.Value : 0);
+				if (_manualAmount.HasValue || _manualPercent.HasValue)
+				{
+					return Math.Max(Math.Floor(amount*(_manualPercent.HasValue ? _manualPercent.Value : 0M)),
+					                _manualAmount.HasValue ? _manualAmount.Value : 0);
+				}
 			}
 
 			if (_brokerFee)

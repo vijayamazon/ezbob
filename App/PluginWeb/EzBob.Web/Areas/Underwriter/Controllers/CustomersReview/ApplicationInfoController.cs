@@ -286,7 +286,14 @@
 		public void ChangeManualSetupFeePercent(long id, decimal? manualPercent)
 		{
 			var cr = _cashRequestsRepository.Get(id);
-			cr.ManualSetupFeePercent = manualPercent / 100;
+			if (manualPercent.HasValue && manualPercent > 0)
+			{
+				cr.ManualSetupFeePercent = manualPercent.Value * 0.01M;
+			}
+			else
+			{
+				cr.ManualSetupFeePercent = null;
+			}
 			cr.LoanTemplate = null;
 			Log.DebugFormat("CashRequest({0}).ManualSetupFee percent: {1}", id, cr.ManualSetupFeePercent);
 		}

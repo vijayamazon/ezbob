@@ -26,8 +26,8 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         "click [name='editDetails']"                        : "editDetails"
         "click [name='setupFeeEditButton']"                 : "editSetupFee"
         "click [name='brokerSetupFeeEditButton']"           : "editBrokerSetupFee"
-        "click [name='manualSetupFeeEditAmountButton']"           : "editManualSetupFeeAmount"
-        "click [name='manualSetupFeeEditPercentButton']"           : "editManualSetupFeePercent"
+        "click [name='manualSetupFeeEditAmountButton']"     : "editManualSetupFeeAmount"
+        "click [name='manualSetupFeeEditPercentButton']"    : "editManualSetupFeePercent"
         "click [name='newCreditLineBtn']"                   : "runNewCreditLine"
         'click [name="allowSendingEmail"]'                  : 'allowSendingEmail'
         'click [name="loanType"]'                           : 'loanType'
@@ -77,6 +77,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
             url: "Underwriter/ApplicationInfo/ChangeCashRequestRepaymentPeriod"
             data:
                 id: @model.get("CashRequestId")
+            required: true
         )
         d.render()
         return
@@ -152,6 +153,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
             url: "Underwriter/ApplicationInfo/ChangeCashRequestInterestRate"
             data:
                 id: @model.get("CashRequestId")
+            required: true
         )
         d.render()
         return
@@ -209,6 +211,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
             url: "Underwriter/ApplicationInfo/ChangeManualSetupFeeAmount"
             data:
                 id: @model.get("CashRequestId")
+            required: false
         )
         d.render()
         return
@@ -223,6 +226,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
             url: "Underwriter/ApplicationInfo/ChangeManualSetupFeePercent"
             data:
                 id: @model.get("CashRequestId")
+            required: false
         )
         d.render()
         return

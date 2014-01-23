@@ -100,7 +100,8 @@
         url: "Underwriter/ApplicationInfo/ChangeCashRequestRepaymentPeriod",
         data: {
           id: this.model.get("CashRequestId")
-        }
+        },
+        required: true
       });
       d.render();
     };
@@ -180,7 +181,8 @@
         url: "Underwriter/ApplicationInfo/ChangeCashRequestInterestRate",
         data: {
           id: this.model.get("CashRequestId")
-        }
+        },
+        required: true
       });
       d.render();
     };
@@ -246,7 +248,8 @@
         url: "Underwriter/ApplicationInfo/ChangeManualSetupFeeAmount",
         data: {
           id: this.model.get("CashRequestId")
-        }
+        },
+        required: false
       });
       d.render();
     };
@@ -262,7 +265,8 @@
         url: "Underwriter/ApplicationInfo/ChangeManualSetupFeePercent",
         data: {
           id: this.model.get("CashRequestId")
-        }
+        },
+        required: false
       });
       d.render();
     };
