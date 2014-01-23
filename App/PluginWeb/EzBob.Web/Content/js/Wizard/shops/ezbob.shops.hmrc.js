@@ -1,5 +1,5 @@
 (function() {
-  var root,
+  var root, _ref,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -8,18 +8,18 @@
   root.EzBob = root.EzBob || {};
 
   EzBob.HMRCAccountInfoView = (function(_super) {
-
     __extends(HMRCAccountInfoView, _super);
 
     function HMRCAccountInfoView() {
-      return HMRCAccountInfoView.__super__.constructor.apply(this, arguments);
+      _ref = HMRCAccountInfoView.__super__.constructor.apply(this, arguments);
+      return _ref;
     }
 
     HMRCAccountInfoView.prototype.events = {
       'change input': 'inputChanged',
       'keyup input': 'inputChanged',
       'click a.hmrcBack': 'back',
-      'click span.uploadSpan': 'uploadFiles',
+      'click div.hmrcUploadButton': 'uploadFiles',
       'click a.linkAccountBack': 'linkAccountBack',
       'click a.uploadFilesBack': 'uploadFilesBack',
       'click a.connect-account': 'connect',
@@ -27,7 +27,7 @@
       'click a.select-vat': 'selectVatFiles',
       'click #linkHelpButton': 'getLinkHelp',
       'click #uploadHelpButton': 'getUploadHelp',
-      'click span.linkSpan': 'linkAccount'
+      'click div.hmrcLinkButton': 'linkAccount'
     };
 
     HMRCAccountInfoView.prototype.initialize = function(options) {
@@ -45,6 +45,7 @@
 
     HMRCAccountInfoView.prototype.inputChanged = function() {
       var enabled;
+
       if (this.activeForm === void 0) {
         this.activeForm = this.$el.find('#hmrcLinkAccountForm');
         this.validator = EzBob.validateHmrcLinkForm(this.activeForm);
@@ -91,6 +92,7 @@
     HMRCAccountInfoView.prototype.connect = function() {
       var acc, accountModel, xhr,
         _this = this;
+
       if (this.activeForm === void 0) {
         this.activeForm = this.$el.find('#hmrcLinkAccountForm');
         this.validator = EzBob.validateHmrcLinkForm(this.activeForm);
@@ -144,6 +146,7 @@
 
     HMRCAccountInfoView.prototype.buildModel = function() {
       var accountModel;
+
       accountModel = $.parseJSON($('div#cg-account-model-template').text());
       accountModel.accountTypeName = 'HMRC';
       accountModel['login'] = this.$el.find('#hmrc_user_id').val();
@@ -156,6 +159,7 @@
     HMRCAccountInfoView.prototype.selectVatFiles = function(evt) {
       var sKey, sModelKey,
         _this = this;
+
       evt.preventDefault();
       sKey = 'f' + (new Date()).getTime() + 'x' + Math.floor(Math.random() * 1000000000);
       sModelKey = 'model' + (new Date()).getTime() + 'x' + Math.floor(Math.random() * 1000000000);
@@ -170,6 +174,7 @@
       };
       window[sKey] = function(sResult) {
         var oResult;
+
         delete window[sKey];
         delete window[sModelKey];
         _this.uploadFileDlg.dialog('close');
@@ -204,6 +209,7 @@
 
     HMRCAccountInfoView.prototype.getLinkHelp = function() {
       var oDialog;
+
       oDialog = $('#hmrcLinkHelpPopup');
       if (oDialog.length > 0) {
         return $.colorbox({
@@ -218,6 +224,7 @@
 
     HMRCAccountInfoView.prototype.getUploadHelp = function() {
       var oDialog;
+
       oDialog = $('#hmrcUploadHelpPopup');
       if (oDialog.length > 0) {
         return $.colorbox({

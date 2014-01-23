@@ -6,7 +6,7 @@ class EzBob.HMRCAccountInfoView extends Backbone.Marionette.ItemView
         'change input': 'inputChanged'
         'keyup input': 'inputChanged'
         'click a.hmrcBack': 'back'
-        'click span.uploadSpan' : 'uploadFiles'
+        'click div.hmrcUploadButton' : 'uploadFiles'
         'click a.linkAccountBack': 'linkAccountBack'
         'click a.uploadFilesBack': 'uploadFilesBack'
         'click a.connect-account': 'connect'
@@ -14,7 +14,7 @@ class EzBob.HMRCAccountInfoView extends Backbone.Marionette.ItemView
         'click a.select-vat': 'selectVatFiles'
         'click #linkHelpButton': 'getLinkHelp'
         'click #uploadHelpButton': 'getUploadHelp'
-        'click span.linkSpan' : 'linkAccount'
+        'click div.hmrcLinkButton' : 'linkAccount'
 
     initialize: (options) ->
         @uploadFilesDlg = null

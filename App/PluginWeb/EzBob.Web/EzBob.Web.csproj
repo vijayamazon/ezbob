@@ -614,6 +614,12 @@
     <Content Include="Content\img\ecommerce bytes.png" />
     <Content Include="Content\img\excel.png" />
     <Content Include="Content\img\free-gift-icon.png" />
+    <Content Include="Content\img\hmrc_button_link.png" />
+    <Content Include="Content\img\hmrc_button_link_active.png" />
+    <Content Include="Content\img\hmrc_button_link_hover.png" />
+    <Content Include="Content\img\hmrc_button_upload.png" />
+    <Content Include="Content\img\hmrc_button_upload_active.png" />
+    <Content Include="Content\img\hmrc_button_upload_hover.png" />
     <Content Include="Content\img\hmrc_login_sample.png" />
     <Content Include="Content\img\hmrc_vat_sample.png" />
     <Content Include="Content\img\hmrc_white_font.png" />
