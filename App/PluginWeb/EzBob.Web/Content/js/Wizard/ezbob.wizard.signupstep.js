@@ -134,7 +134,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 	        EzBob.App.trigger('warning', "Switching to authentication via captcha");
 	        this.$el.find('#twilioDiv').hide();
 	        this.$el.find('#captchaDiv').show();
-	        this.switchToCaptcha = true;
+	        this.switchedToCaptcha = true;
 	        return false;
 	    }
 	    var that = this;
@@ -144,7 +144,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 	            EzBob.App.trigger('error', "Error sending code, please authenticate using captcha");
 	            that.$el.find('#twilioDiv').hide();
 	            that.$el.find('#captchaDiv').show();
-	            that.switchToCaptcha = true;
+	            that.switchedToCaptcha = true;
 	        } else {
 	            EzBob.App.trigger('info', "Code was sent to mobile");
 	        }
