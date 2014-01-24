@@ -68,11 +68,11 @@
         <label style="margin-top:0px;display:-webkit-inline-box;">Upload a copy of your last 5 VAT returns. Only upload files titled <b>Printed Copy of Submitted VAT return for your records</b> which you should have received automatically from the HMRC.</label>
         <label style="margin-top:0px;display:-webkit-inline-box;">Files can be uploaded in any order of dates</label>
 
-        <form id="hmrcAccountUpload" class="dropzone" action="/some/thing"></form>
+        <form id="hmrcAccountUpload" class="dropzone newVatFilesUpload" action="/some/thing"></form>
 
         <form id="hmrcuploadFiles" class="cg-link-account-form">
             <div class="clearfix">
-                <a href="#" class="rc-button green select-vat" ui-event-control-id="link-account:hmrc_select_vat">Select VAT files</a>
+                <a href="#" class="rc-button green select-vat oldVatFilesUpload" ui-event-control-id="link-account:hmrc_select_vat">Select VAT files</a>
                 <label style="margin-top:0px">See VAT file example</label>
                 <label style="margin-top:0px">Do not have the file? Ask your accountant for them, it will take him 5 minutes to send them to you.</label>
                 <div id="upload-files-form">
@@ -81,6 +81,7 @@
 
                 <div class="form_buttons_container" style="margin-top: 60px;">
                     <div class="attardi-button">
+                        <a href="#" class="back rc-button green newVatFilesUpload disabled" ui-event-control-id="link-account:hmrc_upload_files_do_upload">Back</a>
                         <a href="#" class="back rc-button grey uploadFilesBack" ui-event-control-id="link-account:hmrc_upload_files_back">Back</a>
                     </div>
                 </div>

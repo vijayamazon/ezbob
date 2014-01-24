@@ -110,7 +110,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
     inputChanged: function (evt) {
         this.setFieldStatusNotRequired(evt, 'promoCode');
         var enabled = EzBob.Validation.checkForm(this.validator);
-        enabled = enabled && (!this.twilioEnabled || this.activatedCode);
+        enabled = enabled && (!this.twilioEnabled || this.activatedCode || this.showMobileCode);
         $('#signupSubmitButton').toggleClass('disabled', !enabled);
     },
 

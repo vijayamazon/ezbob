@@ -34,7 +34,9 @@
       this.uploadFilesDlg = null;
       this.accountType = 'HMRC';
       this.template = '#' + this.accountType + 'AccountInfoTemplate';
-      return this.activeForm = void 0;
+      this.activeForm = void 0;
+      this.isOldInternetExplorer = 'Microsoft Internet Explorer' === navigator.appName && navigator.appVersion.indexOf("MSIE 1") === -1;
+      return this.isOldInternetExplorer = true;
     };
 
     HMRCAccountInfoView.prototype.render = function() {
@@ -64,7 +66,12 @@
 
     HMRCAccountInfoView.prototype.uploadFiles = function() {
       this.$el.find('#uploadFilesDiv').show();
-      return this.$el.find('#initialDiv').hide();
+      this.$el.find('#initialDiv').hide();
+      if (this.isOldInternetExplorer) {
+        return this.$el.find('.newVatFilesUpload').hide();
+      } else {
+        return this.$el.find('.oldVatFilesUpload').hide();
+      }
     };
 
     HMRCAccountInfoView.prototype.back = function() {

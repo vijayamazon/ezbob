@@ -21,6 +21,8 @@ class EzBob.HMRCAccountInfoView extends Backbone.Marionette.ItemView
         @accountType = 'HMRC'
         @template = '#' + @accountType + 'AccountInfoTemplate'
         @activeForm = undefined
+        @isOldInternetExplorer = 'Microsoft Internet Explorer' == navigator.appName && navigator.appVersion.indexOf("MSIE 1") == -1
+        @isOldInternetExplorer = true #Temporary till the new upload is implemented
 
     render: ->
         super()
@@ -47,6 +49,10 @@ class EzBob.HMRCAccountInfoView extends Backbone.Marionette.ItemView
     uploadFiles: ->
         @$el.find('#uploadFilesDiv').show()
         @$el.find('#initialDiv').hide()
+        if @isOldInternetExplorer
+            @$el.find('.newVatFilesUpload').hide()
+        else
+            @$el.find('.oldVatFilesUpload').hide()
         
     back: ->
         @trigger 'back'
