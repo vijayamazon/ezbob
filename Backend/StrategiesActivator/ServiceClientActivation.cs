@@ -370,12 +370,14 @@
 		[Activation]
 		private void FraudChecker() {
 			int customerId;
-			if (args.Length != 2 || !int.TryParse(args[1], out customerId)) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> FraudChecker <CustomerId>");
+			FraudMode fraudMode;
+			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !Enum.TryParse(args[2], out fraudMode))
+			{
+				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> FraudChecker <CustomerId> <FraudMode>");
 				return;
 			}
 
-			serviceClient.FraudChecker(customerId);
+			serviceClient.FraudChecker(customerId, fraudMode);
 		}
 
 		[Activation]
