@@ -14,7 +14,8 @@ class EzBob.HMRCAccountInfoView extends Backbone.Marionette.ItemView
         'click a.select-vat': 'selectVatFiles'
         'click #linkHelpButton': 'getLinkHelp'
         'click #uploadHelpButton': 'getUploadHelp'
-        'click div.hmrcLinkButton' : 'linkAccount'
+        'click div.hmrcLinkButton': 'linkAccount'
+        'click a.newVatFilesUploadButton': 'doUploadFiles'
 
     initialize: (options) ->
         @uploadFilesDlg = null
@@ -26,6 +27,14 @@ class EzBob.HMRCAccountInfoView extends Backbone.Marionette.ItemView
 
     render: ->
         super()
+        that = this
+
+        Dropzone.options.hmrcAccountUpload = init: ->
+            #addRemoveLinks: true
+            @on "complete", (file) ->
+                if @getUploadingFiles().length is 0 and @getQueuedFiles().length is 0
+                    enabled = @getAcceptedFiles() != 0
+                    that.$el.find('a.newVatFilesUploadButton').toggleClass('disabled', !enabled)
 
         @$el.find('#hmrcAccountUpload').dropzone()
 
@@ -54,6 +63,14 @@ class EzBob.HMRCAccountInfoView extends Backbone.Marionette.ItemView
         else
             @$el.find('.oldVatFilesUpload').hide()
         
+    doUploadFiles: ->
+        xhr = $.post(window.gRootPath + "Hmrc/UploadFiles")
+        xhr.done () ->
+            #TODO
+
+        xhr.always ->
+            #TODO
+
     back: ->
         @trigger 'back'
         false

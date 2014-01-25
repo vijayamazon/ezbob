@@ -27,7 +27,8 @@
       'click a.select-vat': 'selectVatFiles',
       'click #linkHelpButton': 'getLinkHelp',
       'click #uploadHelpButton': 'getUploadHelp',
-      'click div.hmrcLinkButton': 'linkAccount'
+      'click div.hmrcLinkButton': 'linkAccount',
+      'click a.newVatFilesUploadButton': 'doUploadFiles'
     };
 
     HMRCAccountInfoView.prototype.initialize = function(options) {
@@ -40,7 +41,22 @@
     };
 
     HMRCAccountInfoView.prototype.render = function() {
+      var that;
+
       HMRCAccountInfoView.__super__.render.call(this);
+      that = this;
+      Dropzone.options.hmrcAccountUpload = {
+        init: function() {
+          return this.on("complete", function(file) {
+            var enabled;
+
+            if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
+              enabled = this.getAcceptedFiles() !== 0;
+              return that.$el.find('a.newVatFilesUploadButton').toggleClass('disabled', !enabled);
+            }
+          });
+        }
+      };
       this.$el.find('#hmrcAccountUpload').dropzone();
       return this;
     };
@@ -72,6 +88,14 @@
       } else {
         return this.$el.find('.oldVatFilesUpload').hide();
       }
+    };
+
+    HMRCAccountInfoView.prototype.doUploadFiles = function() {
+      var xhr;
+
+      xhr = $.post(window.gRootPath + "Hmrc/UploadFiles");
+      xhr.done(function() {});
+      return xhr.always(function() {});
     };
 
     HMRCAccountInfoView.prototype.back = function() {
