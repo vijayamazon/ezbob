@@ -76,7 +76,15 @@
 				.Id;
 
 			log.Info("Fetching company data...");
-			var freeAgentCompany = FreeAgentConnector.GetCompany(accessTokenContainer.access_token);
+			FreeAgentCompany freeAgentCompany = null;
+			try
+			{
+				freeAgentCompany = FreeAgentConnector.GetCompany(accessTokenContainer.access_token);
+			}
+			catch (Exception ex)
+			{
+				log.ErrorFormat("Error getting FreeAgent's company. Will use customer mail as the account display name: {0}", ex);
+			}
 
 			var securityData = new FreeAgentSecurityInfo
 			{
@@ -86,7 +94,7 @@
 				TokenType = accessTokenContainer.token_type,
 				RefreshToken = accessTokenContainer.refresh_token,
 				MarketplaceId = marketPlaceId,
-				Name = freeAgentCompany.name,
+				Name = freeAgentCompany != null ? freeAgentCompany.name : _customer.Name,
 				ValidUntil = DateTime.UtcNow.AddSeconds(accessTokenContainer.expires_in - 60)
 			};
 
