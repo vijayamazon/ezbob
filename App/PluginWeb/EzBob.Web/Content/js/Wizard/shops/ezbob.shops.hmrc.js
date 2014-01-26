@@ -28,7 +28,8 @@
       'click #linkHelpButton': 'getLinkHelp',
       'click #uploadHelpButton': 'getUploadHelp',
       'click div.hmrcLinkButton': 'linkAccount',
-      'click a.newVatFilesUploadButton': 'doUploadFiles'
+      'click a.newVatFilesUploadButton': 'doUploadFiles',
+      'click #seeExampleLink': 'getUploadHelp'
     };
 
     HMRCAccountInfoView.prototype.initialize = function(options) {

@@ -477,6 +477,7 @@ div.shop-connected {
     background-size: contain;
     background-position: left center;
     border-radius: 50%;
+    cursor: pointer;
     width: 40px;
     height: 40px;
     float: left;
@@ -491,6 +492,7 @@ div.shop-connected {
     background-size: contain;
     background-position: left center;
     border-radius: 50%;
+    cursor: pointer;
     width: 40px;
     height: 40px;
     float: left;
