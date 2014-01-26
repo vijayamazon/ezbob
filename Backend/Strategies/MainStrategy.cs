@@ -151,6 +151,8 @@
 
 			GetLastCashRequestData();
 
+			CalcAndCapOffer();
+
 			autoDecisionResponse = AutoDecisionMaker.MakeDecision(CreateAutoDecisionRequest(), DB, Log);
 			if (autoDecisionResponse.SystemDecision == "Reject")
 			{
@@ -203,6 +205,36 @@
 			SetEndTimestamp();
 		}
 
+		private void CalcAndCapOffer()
+		{
+			if (loanOfferReApprovalRemainingAmount < 1000) // TODO: make this 1000 configurable
+				loanOfferReApprovalRemainingAmount = 0;
+
+			if (loanOfferReApprovalRemainingAmountOld < 500) // TODO: make this 500 configurable
+				loanOfferReApprovalRemainingAmountOld = 0;
+			loanOfferReApprovalSum = new decimal[]
+				{
+					loanOfferReApprovalFullAmount,
+					loanOfferReApprovalRemainingAmount,
+					loanOfferReApprovalFullAmountOld,
+					loanOfferReApprovalRemainingAmountOld
+				}.Max();
+
+			offeredCreditLine = modelLoanOffer;
+
+			if (appHomeOwner == "Home owner" && maxCapHomeOwner < loanOfferReApprovalSum)
+				loanOfferReApprovalSum = maxCapHomeOwner;
+
+			if (appHomeOwner != "Home owner" && maxCapNotHomeOwner < loanOfferReApprovalSum)
+				loanOfferReApprovalSum = maxCapNotHomeOwner;
+
+			if (appHomeOwner == "Home owner" && maxCapHomeOwner < offeredCreditLine)
+				offeredCreditLine = maxCapHomeOwner;
+
+			if (appHomeOwner != "Home owner" && maxCapNotHomeOwner < offeredCreditLine)
+				offeredCreditLine = maxCapNotHomeOwner;
+		}
+
 		private void UpdateCustomerAndCashRequest(decimal scoringResult, decimal loanInterestBase)
 		{
 			DB.ExecuteNonQuery(
@@ -218,7 +250,7 @@
 				);
 
 			DB.ExecuteNonQuery(
-				"UpdateCashRequests",
+				"UpdateCashRequestsNew",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId),
 				new QueryParameter("SystemCalculatedAmount", modelLoanOffer),
@@ -228,7 +260,9 @@
 				new QueryParameter("ScorePoints", scoringResult),
 				new QueryParameter("ExpirianRating", experianConsumerScore),
 				new QueryParameter("AnualTurnover", totalSumOfOrders1YTotal),
-				new QueryParameter("InterestRate", loanInterestBase)
+				new QueryParameter("InterestRate", loanInterestBase),
+				new QueryParameter("ManualSetupFeeAmount", manualSetupFeeAmount),
+				new QueryParameter("ManualSetupFeePercent", manualSetupFeePercent)
 				);
 		}
 
@@ -410,34 +444,9 @@
 				loanSourceId = lastOfferResults["LoanSourceID"];
 				isCustomerRepaymentPeriodSelectionAllowed = lastOfferResults["IsCustomerRepaymentPeriodSelectionAllowed"];
 				useBrokerSetupFee = lastOfferResults["UseBrokerSetupFee"];
-
-				if (loanOfferReApprovalRemainingAmount < 1000) // TODO: make this 1000 configurable
-					loanOfferReApprovalRemainingAmount = 0;
-
-				if (loanOfferReApprovalRemainingAmountOld < 500) // TODO: make this 500 configurable
-					loanOfferReApprovalRemainingAmountOld = 0;
+				manualSetupFeeAmount = lastOfferResults["ManualSetupFeeAmount"];
+				manualSetupFeePercent = lastOfferResults["ManualSetupFeePercent"];
 			}
-
-			loanOfferReApprovalSum = new decimal[] {
-				loanOfferReApprovalFullAmount,
-				loanOfferReApprovalRemainingAmount,
-				loanOfferReApprovalFullAmountOld,
-				loanOfferReApprovalRemainingAmountOld
-			}.Max();
-
-			offeredCreditLine = modelLoanOffer;
-
-			if (appHomeOwner == "Home owner" && maxCapHomeOwner < loanOfferReApprovalSum)
-				loanOfferReApprovalSum = maxCapHomeOwner;
-
-			if (appHomeOwner != "Home owner" && maxCapNotHomeOwner < loanOfferReApprovalSum)
-				loanOfferReApprovalSum = maxCapNotHomeOwner;
-
-			if (appHomeOwner == "Home owner" && maxCapHomeOwner < offeredCreditLine)
-				offeredCreditLine = maxCapHomeOwner;
-
-			if (appHomeOwner != "Home owner" && maxCapNotHomeOwner < offeredCreditLine)
-				offeredCreditLine = maxCapNotHomeOwner;
 		}
 
 		private decimal CalculateScoreAndMedal()
@@ -688,6 +697,8 @@
 		private int loanOfferIsLoanTypeSelectionAllowed;
 		private int loanOfferDiscountPlanId;
 		private bool useBrokerSetupFee;
+		private int manualSetupFeeAmount;
+		private decimal manualSetupFeePercent;
 		private int loanSourceId;
 		private int isCustomerRepaymentPeriodSelectionAllowed;
 		private decimal loanOfferReApprovalSum;
@@ -862,7 +873,7 @@
 				bwaChecker.Execute();
 			}
 		}
-
+		
 		private void GetAml()
 		{
 			if (wasMainStrategyExecutedBefore)
