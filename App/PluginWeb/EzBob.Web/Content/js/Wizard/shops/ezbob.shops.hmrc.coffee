@@ -217,6 +217,6 @@ class EzBob.HMRCAccountInfoView extends Backbone.Marionette.ItemView
     getUploadHelp: ->
         oDialog = $('#hmrcUploadHelpPopup');
         if (oDialog.length > 0)
-            $.colorbox({ inline: true, transition: 'none', open: true, href: oDialog, width: '35%' })
+            $.colorbox({ inline: true, transition: 'none', open: true, href: oDialog, width: '27%' })
         
 

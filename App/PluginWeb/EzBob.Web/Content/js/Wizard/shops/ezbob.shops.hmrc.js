@@ -264,7 +264,7 @@
           transition: 'none',
           open: true,
           href: oDialog,
-          width: '35%'
+          width: '27%'
         });
       }
     };
