@@ -1,21 +1,21 @@
 ﻿
 <script id="HMRCAccountInfoTemplate" type="text/template">
     <div id="initialDiv" class="row-fluid">
-        <h2 style="float:left" class="form_start">HMRC account</h2>
-        <div class="wizard-top-notification" style="margin-top: 60px;">
+        <h2 class="form_start float_left">HMRC account</h2>
+        <div class="wizard-top-notification hmrc_margin_from_header">
             <label>As part of your application process we require you to upload or link your VAT payment history. We use your VAT returns to analyse your business performance. Please select whether to link or upload your HMRC data.</label>
         </div>
 
         <form id="hmrcAccount" class="cg-link-account-form">
             <div class="clearfix">
-                <div class="form_buttons_container" style="height:204px;margin-top:20px;">
-                    <div class="attardi-button" style="height:204px;">
+                <div class="form_buttons_container hmrc_main_buttons_container">
+                    <div class="attardi-button">
                         <div class="hmrcLinkButton"/>
-                        <div class="hmrcUploadButton"/>                       
+                        <div class="hmrcUploadButton"/>
                     </div>
                 </div>
 
-                <div class="form_buttons_container" style="margin-top: 60px;">
+                <div class="form_buttons_container hmrc_margin_from_header">
                     <div class="attardi-button">
                         <a href="#" class="back rc-button grey hmrcBack" ui-event-control-id="link-account:hmrc_back">Back</a>
                     </div>
@@ -33,24 +33,24 @@
     <div id="linkAccountDiv" class="row-fluid hide">
         <div class="wizard-top-notification">
             <div>
-                <h2 style="float:left" class="form_start">HMRC link</h2>
-                <div style="float:left;margin-left:20px;" id="linkHelpButton" class="hmrc-question-button"></div>
+                <h2 class="form_start float_left">HMRC link</h2>
+                <div id="linkHelpButton" class="hmrc-question-button float_left hmrc_question_button_margin"></div>
             </div>
-            <label style="margin-top:0px;display:-webkit-inline-box;">As part of your application process we require you to upload or link your VAT payment history. We use your VAT returns to analyse your business performance</label>
+            <label class="hmrc_text_in_new_line">As part of your application process we require you to upload or link your VAT payment history. We use your VAT returns to analyse your business performance</label>
     
         </div>
     
         <form id="hmrcLinkAccountForm" class="cg-link-account-form">
             <div id="hmrc_fields_link_wrapper">
     
-                <div id="hmrc_fields" style="margin-top:15px">
+                <div id="hmrc_fields" class="hmrc_fields_margin">
                     @EzForm.InputText("hmrc_user_id", "User ID", "", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "link-account:hmrc_user_id")
                     @EzForm.Password("hmrc_password", "Password", "", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "link-account:hmrc_password")
                 </div>
             </div>
             <div class="clearfix">
 
-                <div class="form_buttons_container" style="margin-top: 60px;">
+                <div class="form_buttons_container hmrc_margin_from_header">
                     <div class="attardi-button">
                         <a href="#" class="rc-button green disabled connect-account" ui-event-control-id="link-account:hmrc_connect">Link Account</a>
                         <a href="#" class="back rc-button grey linkAccountBack" ui-event-control-id="link-account:hmrc_link_account_back">Back</a>
@@ -63,12 +63,12 @@
     <div id="uploadFilesDiv" class="row-fluid hide">
         <div class="wizard-top-notification">
             <div>
-                <h2 style="float:left;" class="form_start">HMRC upload</h2>    
-                <div style="float:left;margin-left:20px;" id="uploadHelpButton" class="hmrc-question-button"></div>
+                <h2 class="form_start float_left">HMRC upload</h2>    
+                <div id="uploadHelpButton" class="hmrc-question-button float_left hmrc_question_button_margin"></div>
             </div>
         </div>
-        <label style="margin-top:0px;display:-webkit-inline-box;">Upload a copy of your last 5 VAT returns. Only upload files titled <b>Printed Copy of Submitted VAT return for your records</b> which you should have received automatically from the HMRC.</label>
-        <label style="margin-top:0px;display:-webkit-inline-box;">Files can be uploaded in any order of dates</label>
+        <label class="hmrc_text_in_new_line">Upload a copy of your last 5 VAT returns. Only upload files titled <b>Printed Copy of Submitted VAT return for your records</b> which you should have received automatically from the HMRC.</label>
+        <label class="hmrc_text_in_new_line">Files can be uploaded in any order of dates</label>
 
         <form id="hmrcAccountUpload" class="dropzone newVatFilesUpload" action="@Url.Action("UploadedFiles", "Hmrc", new { Area = "Customer" })"></form>
         
@@ -76,14 +76,14 @@
             <div class="clearfix">
                 <a href="#" class="rc-button green select-vat oldVatFilesUpload" ui-event-control-id="link-account:hmrc_select_vat">Select VAT files</a>
                 <label/>
-                <a id="seeExampleLink" style="margin-top:0px;text-decoration: underline;cursor: pointer;">See VAT file example</a>
+                <a id="seeExampleLink" class="hmrc_upload_example">See VAT file example</a>
 
-                <label style="margin-top:0px">Do not have the file? Ask your accountant for them, it will take him 5 minutes to send them to you.</label>
+                <label >Do not have the file? Ask your accountant for them, it will take him 5 minutes to send them to you.</label>
                 <div id="upload-files-form">
                     <iframe></iframe>
                 </div>
 
-                <div class="form_buttons_container" style="margin-top: 60px;">
+                <div class="form_buttons_container hmrc_margin_from_header">
                     <div class="attardi-button">
                         <a href="#" class="back rc-button green newVatFilesUpload newVatFilesUploadButton disabled" ui-event-control-id="link-account:hmrc_upload_files_do_upload">Upload</a>
                         <a href="#" class="back rc-button grey uploadFilesBack" ui-event-control-id="link-account:hmrc_upload_files_back">Back</a>

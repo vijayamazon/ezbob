@@ -598,3 +598,29 @@ blockquote{margin:0 0 20px 0; padding:10px; border:1px #ccc solid; font-style:it
 .bold {
     font-weight: bold;
 }
+
+.hmrc_margin_from_header {
+    margin-top: 60px;
+}
+
+.hmrc_main_buttons_container {
+    margin-top: 20px;
+    height: 200px !important;
+}
+
+.hmrc_question_button_margin {
+    margin-left: 20px;
+}
+
+.hmrc_text_in_new_line {
+    display:-webkit-inline-box;
+}
+
+.hmrc_upload_example {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.hmrc_fields_margin {
+    margin-top: 15px;
+}
