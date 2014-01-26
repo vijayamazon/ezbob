@@ -79,7 +79,17 @@
 
 			IRestResponse response = client.Execute(request);
 			var js = new JavaScriptSerializer();
-			var deserializedResponse = (FreeAgentCompanyList)js.Deserialize(response.Content, typeof(FreeAgentCompanyList));
+			FreeAgentCompanyList deserializedResponse;
+			try
+			{
+				deserializedResponse = (FreeAgentCompanyList)js.Deserialize(response.Content, typeof(FreeAgentCompanyList));
+			}
+			catch (Exception e)
+			{
+				log.ErrorFormat("Exception while deserializing company response. Response:{0} Exception:{1}", response.Content, e);
+				throw;
+			}
+
 			if (deserializedResponse != null && deserializedResponse.Company != null)
 			{
 				return deserializedResponse.Company;
