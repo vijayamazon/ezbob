@@ -19,9 +19,9 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.FreeAgent
 		public virtual DateTime? company_start_date { get; set; }
 		public virtual DateTime? freeagent_start_date { get; set; }
 		public virtual DateTime? first_accounting_year_end { get; set; }
-		public virtual int company_registration_number { get; set; }
+		public virtual string company_registration_number { get; set; }
 		public virtual string sales_tax_registration_status { get; set; }
-		public virtual int sales_tax_registration_number { get; set; }
+		public virtual string sales_tax_registration_number { get; set; }
 	}
 
 	public interface IMP_FreeAgentCompanyRepository : IRepository<MP_FreeAgentCompany>

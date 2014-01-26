@@ -20,9 +20,9 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.FreeAgent
 			Map(x => x.company_start_date).CustomType<UtcDateTimeType>();
 			Map(x => x.freeagent_start_date).CustomType<UtcDateTimeType>();
 			Map(x => x.first_accounting_year_end).Length(250);
-			Map(x => x.company_registration_number);
+			Map(x => x.company_registration_number).Length(20);
 			Map(x => x.sales_tax_registration_status).Length(250);
-			Map(x => x.sales_tax_registration_number);
+			Map(x => x.sales_tax_registration_number).Length(20);
 		}
 	}
 }
