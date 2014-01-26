@@ -543,23 +543,6 @@ namespace StrategiesActivator.EzServiceReference {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="FraudMode", Namespace="http://schemas.datacontract.org/2004/07/FraudChecker")]
-    public enum FraudMode : int {
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        FullCheck = 0,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        PersonalDetaisCheck = 1,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        CompanyDetailsCheck = 2,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        MarketplacesCheck = 3,
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="NewCreditLineOption", Namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies")]
     public enum NewCreditLineOption : int {
         
