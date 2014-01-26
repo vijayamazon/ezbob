@@ -159,47 +159,59 @@
 				}
 				else
 				{
-
-					switch (companyType)
+					var target = service.TargetCache(customerId, experianRefNum);
+					if (target != null)
 					{
-						case "LLP":
-						case "Limited":
-							{
-								companyTypeCode = "L";
-								var res = service.GetLimitedBusinessData(experianRefNum, customerId, true);
-								if(!string.IsNullOrEmpty(res.CompanyName)) fullName = res.CompanyName;
-								if (!string.IsNullOrEmpty(res.PostCode))
-								{
-									line1 = res.AddressLine1;
-									line23 = res.AddressLine2;
-									town = res.AddressLine3;
-									county = res.AddressLine4;
-									postcode = res.PostCode;
-								}
-							}
-							break;
-						case "PShip":
-						case "SoleTrader":
-						case "PShip3P":
-							{
-								companyTypeCode = "N";
-								var res = service.GetNotLimitedBusinessData(experianRefNum, customerId, true);
-								if (!string.IsNullOrEmpty(res.CompanyName))
-								{
-									fullName = res.CompanyName;
-								}
-								if (!string.IsNullOrEmpty(res.PostCode))
-								{
-									line1 = res.AddressLine1;
-									line23 = res.AddressLine2 + res.AddressLine3 == null ? "" : " " + res.AddressLine3;
-									town = res.AddressLine4;
-									county = res.AddressLine5;
-									postcode = res.PostCode;
-								}
-							}
-							break;
+						fullName = target.BusName;
+						line1 = target.AddrLine1;
+						line23 = target.AddrLine2;
+						town = target.AddrLine3;
+						county = target.AddrLine4;
+						postcode = target.PostCode;
 					}
-					
+					else
+					{
+						switch (companyType)
+						{
+							case "LLP":
+							case "Limited":
+								{
+									companyTypeCode = "L";
+									var res = service.GetLimitedBusinessData(experianRefNum, customerId, true);
+									if (!string.IsNullOrEmpty(res.CompanyName)) fullName = res.CompanyName;
+									if (!string.IsNullOrEmpty(res.PostCode))
+									{
+										line1 = res.AddressLine1;
+										line23 = res.AddressLine2;
+										town = res.AddressLine3;
+										county = res.AddressLine4;
+										postcode = res.PostCode;
+									}
+								}
+								break;
+							case "PShip":
+							case "SoleTrader":
+							case "PShip3P":
+								{
+									companyTypeCode = "N";
+									var res = service.GetNotLimitedBusinessData(experianRefNum, customerId, true);
+									if (!string.IsNullOrEmpty(res.CompanyName))
+									{
+										fullName = res.CompanyName;
+									}
+									if (!string.IsNullOrEmpty(res.PostCode))
+									{
+										line1 = res.AddressLine1;
+										line23 = res.AddressLine2 + res.AddressLine3 == null ? "" : " " + res.AddressLine3;
+										town = res.AddressLine4;
+										county = res.AddressLine5;
+										postcode = res.PostCode;
+									}
+								}
+								break;
+						}
+					}
+
 					var cais = CaisFileManager.GetBusinessCaisFileData();
 					cais.Header.CompanyPortfolioName = "Orange Money";
 					cais.Header.CreditCardBehaviouralSharingFlag = "";

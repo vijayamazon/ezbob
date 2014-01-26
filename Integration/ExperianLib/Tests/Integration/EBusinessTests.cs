@@ -45,5 +45,14 @@ namespace ExperianLib.Tests.Integration {
 			//var result = service.TargetBusiness("ORANGE", "EC1V 4PW", 14219, TargetResults.LegalStatus.NonLimited, "7852687");
 			Debug.WriteLine("Targeting results: " + JsonConvert.SerializeObject(result));
 		}
+
+		[Test]
+		[Ignore]
+		public void TargetingCacheTest()
+		{
+			var service = new EBusinessService();
+			var result = service.TargetCache(20291, "03795714");
+			Debug.WriteLine("Targeting result: " + JsonConvert.SerializeObject(result));
+		}
 	}
 }

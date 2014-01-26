@@ -190,7 +190,29 @@ namespace ExperianLib.Ebusiness
 			} // using
 		} // GetResource
 
+		public CompanyInfo TargetCache(int customerId, string refNumber)
+		{
+			var repo = ObjectFactory.GetInstance<NHibernateRepositoryBase<MP_ServiceLog>>();
+			var cacheVal = repo.GetAll().Where(c => c.ServiceType == "ESeriesTargeting" && c.Customer.Id == customerId);
+
+			foreach (var cache in cacheVal)
+			{
+				var targets = new TargetResults(cache.ResponseData);
+
+				foreach (var target in targets.Targets)
+				{
+					if (target.BusRefNum == refNumber)
+					{
+						return target;
+					}
+				}
+			}
+			return null;
+		}
+
+
 		private static readonly ILog Log = LogManager.GetLogger(typeof(EBusinessService));
 		private readonly ExperianIntegrationParams _config;
 	} // class EBusinessService
+
 } // namespace
