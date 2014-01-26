@@ -1,34 +1,45 @@
 ﻿@model dynamic
 <div class="wizard-steps">
-	<ul class="application_steps"><%
-		(function() {
-			var nVisibleStepNum = 0;
+    <div class="progress-time"><span>Just <span class="progress-time-remainig"><%=progress%> minutes</span> to complete your application</span></div>
+    <ul class="application_steps">
+        <%
+        (function() {
+        var nVisibleStepNum = 0;
 
-			_.each(steps, function(step, i) {
-				var css = '';
+        _.each(steps, function(step, i) {
+        var css = '';
 
-				if (i == current)
-					css += 'active current ';
+        if (i == current) css += 'current';
 
-				if (i < current)
-					css += 'completed complete ';
+        if (i < current) css += 'complete';
 
-				if (progress == 100)
-					css = 'completed complete ';
+        if (progress == 100) css = 'complete';
 
-				if (step.showTitleInWizardSteps)
-					nVisibleStepNum++;
-				else
-					css += 'hide';
+        if (step.showTitleInWizardSteps)
+        nVisibleStepNum++;
+        else
+        css += 'hide';
 
-				%><li class="<%- css %> " data-step-num="<%= step.num %>">
-					<span class="step_label"><% print(step.title) %></span>
-				</li><%
-			});
-		})();
-	%></ul>
+        %><li class="<%- css %>" data-step-num="<%= step.num %>">
+            <span class="step_label"><% print(step.title) %></span>
+            <div class="progress-circle @*timer fill*@">
+                <div class="percent"><%=(i+1)%></div>
+                @*<div id="slice" class="gt50">
+                    <div class="pie" style="-webkit-transform: rotate(360deg);"></div>
+                    <div class="pie fill" style="-webkit-transform: rotate(360deg);"></div>
+                </div>*@
+            </div>
+            <div class="progress-line">
+                <div class="progress-line-<%-css%>"></div>
+            </div>
+        </li>
+        <%
+        });
+        })();
+        %>
+    </ul>
 
-	<div class="ez_progress_bar active">
+    @*<div class="ez_progress_bar active">
 		<div class="ez_bar bar_step<%= progress %>"><%
 			if(progress > 0) {
 				%><div class="bar_content" style="color: white;"><%= progress %>% Completed</div><%
@@ -37,5 +48,5 @@
 				%><div class="bar_content" style="color: grey;"><%= progress %>% Completed</div><%
 			}
 		%></div>
-	</div>
+	</div>*@
 </div>

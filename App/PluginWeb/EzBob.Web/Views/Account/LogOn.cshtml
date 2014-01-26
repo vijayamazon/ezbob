@@ -33,7 +33,7 @@
             var notifications = new EzBob.NotificationsView({ el: $('.notifications') });
             EzBob.App.trigger('error', '@Html.ValidationMessage("")');
         });
-        $('.login_btn').addClass('hide');
-        $('.signup_btn').removeClass('hide');
+        $('.login_btn').hide();
+        $('.signup_btn').show();
     </script>
 }

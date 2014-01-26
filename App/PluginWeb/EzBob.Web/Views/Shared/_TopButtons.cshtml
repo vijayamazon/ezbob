@@ -3,26 +3,32 @@
     var isAuth = User.Identity.IsAuthenticated;
 }
 
+<div id="header">
+    <a href="http://www.ezbob.com">
+        <img src="@Url.Content("~/Content/img/ezbob-logo-2014.png")" class="newlogo"></a>
 
-<div id="pre_header">
-    <div class="inner_nopadding">
-        <div id="header_description">
-            @if (isAuth)
-            {
-	            <span id="logged-in-user-name">@User.Identity.Name</span>
-                <a href="@Url.Action("LogOff", "Account", new{Area=""})" class="button grey medium_btn">Log off</a>
-            }
-            else
-            {
-                <div class="login_btn">
-                    <span>Already have an account?</span>
-                    <a href="@Url.Action("LogOn", "Account", new{Area=""})" class="button grey medium_btn">Login</a>
-                </div>
-                <div class="signup_btn hide">
-                    <span>Don't have an account?</span>
-                    <a href='@Url.Action("Index", "Wizard", new {Area = "Customer"}, "https")#SignUp' class="button green medium_btn">Sign up</a>
-                </div>
-            }
-        </div>
+    <div class="header-phone">0800-011-4787</div>
+
+    <div class="eu-menu">
+        <img src="@Url.Content("~/Content/img/eu-menu.png")"><br>
+        Authorised by the European Union
     </div>
+
+    <ul id="user-menu">
+        @if (isAuth)
+        {
+            <li class="login">
+                @*<span id="logged-in-user-name">@User.Identity.Name</span>*@
+                <a href="@Url.Action("LogOff", "Account", new { Area = "" })">LOG OFF</a>
+            </li>
+        }
+        else
+        {
+            <li class="login login_btn"><a href="@Url.Action("LogOn", "Account", new { Area = "" })">LOGIN</a></li>
+            <li class="sign-up signup_btn" style="display: none"><a href="@Url.Action("Index", "Wizard", new { Area = "Customer" }, "https")#SignUp">SIGN UP</a></li>
+        }
+
+
+    </ul>
+
 </div>
