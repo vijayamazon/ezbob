@@ -58,13 +58,17 @@
 }
 
 .ezDateTime .attardi-input {
-    width: 26%;
+    width: 27%;
 }
 
 .ezDateTime .attardi-input select {
     width: 96%;
 }
 
+.ezDateTime .fs16 {
+    display: inline-block;
+    width: 14%
+}
 .field_status {
 	vertical-align: top;
 	margin-top: 0.4em;

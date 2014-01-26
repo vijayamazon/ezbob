@@ -348,9 +348,7 @@
 
     StoreInfoView.prototype.extractBtnClass = function(jqTarget) {
       var sClass;
-      sClass = jqTarget.attr('data-last-button-class') || 'pull-right';
-      sClass = sClass === 'pull-right' ? 'pull-left' : 'pull-right';
-      jqTarget.attr('data-last-button-class', sClass);
+      sClass = 'pull-left';
       sClass += ' marketplace-button-' + ($('.marketplace-button-less', jqTarget).length < 2 ? 'less' : 'more');
       return sClass;
     };

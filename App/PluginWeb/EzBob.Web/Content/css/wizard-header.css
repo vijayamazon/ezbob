@@ -179,7 +179,7 @@ li.active > .progress_tip {
 
 #header {
     position: relative;
-    width: 960px;
+    width: 1212px;
     height: 72px;
     background: #eceff1;
     margin: 0 auto;
@@ -273,8 +273,8 @@ img.newlogo {
 }
 
 .wizard-steps {
-    background-color: #eceff1;
-    color: #000;
+    background-color: #5c6373;
+    color: #fff;
 }
 
     .wizard-steps .progress-time {
@@ -286,34 +286,40 @@ img.newlogo {
     }
 
         .wizard-steps .progress-time .progress-time-remainig {
-            /*color: #7bb224;*/
+            color: #7bb224;
             font-style: italic;
         }
 
 .progress-circle {
-    width: 50px;
-    height: 50px;
-    -webkit-border-radius: 25px;
-    -moz-border-radius: 25px;
-    border-radius: 25px;
-    background-color: #fff;
+    width: 34px;
+    height: 34px;
+    -webkit-border-radius: 17px;
+    -moz-border-radius: 17px;
+    border-radius: 17px;
+    background-color: #B9B9B9;
     font-size: 25px;
     font-weight: bold;
     text-align: center;
     vertical-align: middle;
     margin-top: 5px;
-    display: table-cell;
-    border: white 1px solid;
+    border: #B9B9B9 1px solid;
+    color: #5C5C5C;
+    margin-left: 9px;
+}
+
+.progress-circle .percent {
+    padding-top: 2px;
 }
 
 .progress-line {
     content: "";
-    background-color: #fff;
+    background-color: #5B5B5B;
     z-index: -1;
-    margin-top: -30px;
-    height: 10px;
+    margin-top: -22px;
+    height: 6px;
     width: 100%;
     position: absolute;
+    margin-left: 10px;
 }
 
 ul.application_steps {
@@ -346,7 +352,7 @@ ul.application_steps {
         position: relative;
         width: 30%;
         z-index: 2;
-        overflow: hidden;
+        overflow: visible;
     }
 
         ul.application_steps li:last-child {
@@ -358,7 +364,7 @@ ul.application_steps {
         }
 
             ul.application_steps li.current .progress-line .progress-line-current {
-                background-color: lightblue;
+                background-color: #7bb224;
                 width: 20%;
                 height: 100%;
                 position: absolute;
@@ -367,8 +373,9 @@ ul.application_steps {
             }
 
             ul.application_steps li.current .progress-circle {
-                background-color: lightblue;
-                border: lightblue 1px solid;
+                background-color: #e1e1e1;
+                border: #e1e1e1 1px solid;
+                color: #000;
             }
 
     ul.application_steps .timer > #slice {

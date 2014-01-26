@@ -1318,13 +1318,14 @@ td.account-logo {
 
 .marketplace-button {
 	margin-bottom: 17px;
-	width: 49%;
+	width: 31%;
 	height: 60px;
 	box-sizing: border-box;
 	border-radius: 5px;
 	display: table;
 	overflow: hidden;
 	position: relative;
+    margin-right: 10px
 }
 
 .marketplace-button-profile {

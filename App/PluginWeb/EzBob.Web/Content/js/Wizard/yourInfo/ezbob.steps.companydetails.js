@@ -87,6 +87,7 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
         var companyType = this.companyTypes[name];
         if (!companyType) {
             if (this.CompanyView) {
+                this.$el.find('.after-financial-details').html().insertAfter(this.$el.find('.industry-type-div'));
                 this.CompanyView.$el.remove();
                 this.CompanyView = null;
             } // if
@@ -99,6 +100,7 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
         this.$el.find('.WebSiteTurnOver, .OverallTurnOver').removeClass('hide');
 
         if (this.CompanyView && this.CompanyView.ViewName !== companyType.Type) {
+            this.$el.find('.after-financial-details').insertAfter(this.$el.find('.industry-type-div'));
             this.CompanyView.$el.remove();
             this.CompanyView = null;
         } // if
@@ -109,6 +111,7 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
                 this.CompanyView.on('next', this.next, this);
                 this.CompanyView.render();
                 this.CompanyView.$el.appendTo(this.$el.find('.company-full-details'));
+                this.$el.find('.after-financial-details').insertAfter(this.$el.find('.financial-details'));
             } // if can create view
 
             this.inputChanged();

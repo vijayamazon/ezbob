@@ -9,11 +9,11 @@ EzBob.WizardStepInfo = function(basics, nPosition, oProgressAndType, oViewList) 
 	var nType = 0;
 
 	if (oProgressAndType === 0) {
-		nProgress = 0;
+		nProgress = 7;
 		nType = 1;
 	}
-	else if (oProgressAndType === 100) {
-		nProgress = 100;
+	else if (oProgressAndType === 100) { //todo remove
+		nProgress = 0;
 		nType = 4;
 	}
 	else {
@@ -94,7 +94,7 @@ EzBob.WizardStepSequence = function(args) {
 			if (lst[sName])
 				ary.push(sName);
 
-		ary.sort(function(a, b) { return oConfig[a].position - oConfig[b].position; });
+		ary.sort(function(a, b) { return -(oConfig[a].position - oConfig[b].position); });
 
 		for (var i = 0; i < ary.length; i++)
 			oWizard.push(new EzBob.WizardStepInfo(lst[ary[i]], oWizard.length, oConfig[ary[i]], args.views));

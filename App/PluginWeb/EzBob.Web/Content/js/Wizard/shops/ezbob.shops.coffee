@@ -288,11 +288,7 @@ class EzBob.StoreInfoView extends Backbone.View
     # end of canContinue
 
     extractBtnClass: (jqTarget) ->
-        sClass = jqTarget.attr('data-last-button-class') || 'pull-right'
-
-        sClass = if sClass == 'pull-right' then 'pull-left' else 'pull-right'
-
-        jqTarget.attr 'data-last-button-class', sClass
+        sClass = 'pull-left'
 
         sClass += ' marketplace-button-' + if $('.marketplace-button-less', jqTarget).length < 2 then 'less' else 'more'
 
