@@ -1,8 +1,9 @@
 ﻿
 <script id="HMRCAccountInfoTemplate" type="text/template">
     <div id="initialDiv" class="row-fluid">
-        <div class="wizard-top-notification">
-            <label>As part of your application process we require you to upload or link your VAT payment history. We use your VAT returns to analyse your business performance</label>
+        <h2 style="float:left" class="form_start">HMRC account</h2>
+        <div class="wizard-top-notification" style="margin-top: 60px;">
+            <label>As part of your application process we require you to upload or link your VAT payment history. We use your VAT returns to analyse your business performance. Please select whether to link or upload your HMRC data.</label>
         </div>
 
         <form id="hmrcAccount" class="cg-link-account-form">
@@ -32,7 +33,7 @@
     <div id="linkAccountDiv" class="row-fluid hide">
         <div class="wizard-top-notification">
             <div>
-                <h2 style="float:left" class="form_start">HMRC link</h2>    
+                <h2 style="float:left" class="form_start">HMRC link</h2>
                 <div style="float:left;margin-left:20px;" id="linkHelpButton" class="hmrc-question-button"></div>
             </div>
             <label style="margin-top:0px;display:-webkit-inline-box;">As part of your application process we require you to upload or link your VAT payment history. We use your VAT returns to analyse your business performance</label>
@@ -42,7 +43,7 @@
         <form id="hmrcLinkAccountForm" class="cg-link-account-form">
             <div id="hmrc_fields_link_wrapper">
     
-                <div id="hmrc_fields">
+                <div id="hmrc_fields" style="margin-top:15px">
                     @EzForm.InputText("hmrc_user_id", "User ID", "", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "link-account:hmrc_user_id")
                     @EzForm.Password("hmrc_password", "Password", "", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "link-account:hmrc_password")
                 </div>
