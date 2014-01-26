@@ -24,8 +24,8 @@ namespace Reports {
 			DaytimePhone = Retrieve("DaytimePhone");
 			TimeAtAddress = Retrieve<int>("TimeAtAddress");
 			ResidentialStatus = Retrieve("ResidentialStatus");
-			NonLimitedCompanyName = Retrieve("NonLimitedCompanyName");
-			LimitedCompanyName = Retrieve("LimitedCompanyName");
+			CompanyName = Retrieve("CompanyName");
+			
 
 			WizardStep = Retrieve<int>("WizardStep").Value;
 
@@ -45,8 +45,7 @@ namespace Reports {
 		public string DaytimePhone { get; private set; }
 		public int? TimeAtAddress { get; private set; }
 		public string ResidentialStatus { get; private set; }
-		public string NonLimitedCompanyName { get; private set; }
-		public string LimitedCompanyName { get; private set; }
+		public string CompanyName { get; private set; }
 		public int WizardStep { get; private set; }
 
 		public AddressInfo AddressInfo { get; private set; }
@@ -94,7 +93,7 @@ namespace Reports {
 		public override string ToString() {
 			return string.Format(
 				"{13}: {12} {0} {1} {2}, born on {3}, currently {4}, available at {5} or {6}, " +
-				"residual age is {7}, is a {8}, business {9}, unlim name {10}, ltd name {11} " +
+				"residual age is {7}, is a {8}, business {9}, company name {10} " +
 				"addresses {14}, director count {15}, account count {16}",
 				NameTitle(),
 				Value(FirstName),
@@ -106,8 +105,8 @@ namespace Reports {
 				Value(TimeAtAddress),
 				Value(ResidentialStatus),
 				Value(TypeOfBusiness),
-				Value(NonLimitedCompanyName),
-				Value(LimitedCompanyName),
+				Value(CompanyName),
+				"",
 				Segment(),
 				ID,
 				Value(AddressInfo),
@@ -140,7 +139,7 @@ namespace Reports {
 		#region method HasCompanyDetails
 
 		private bool HasCompanyDetails() {
-			EZBob.DatabaseLib.Model.Database.TypeOfBusiness bt;
+			TypeOfBusiness bt;
 
 			if (!EZBob.DatabaseLib.Model.Database.TypeOfBusiness.TryParse(TypeOfBusiness, out bt))
 				return false;
@@ -151,12 +150,10 @@ namespace Reports {
 
 			case EZBob.DatabaseLib.Model.Database.TypeOfBusiness.LLP:
 			case EZBob.DatabaseLib.Model.Database.TypeOfBusiness.Limited:
-				return !string.IsNullOrWhiteSpace(LimitedCompanyName);
-
 			case EZBob.DatabaseLib.Model.Database.TypeOfBusiness.PShip3P:
 			case EZBob.DatabaseLib.Model.Database.TypeOfBusiness.PShip:
 			case EZBob.DatabaseLib.Model.Database.TypeOfBusiness.SoleTrader:
-				return !string.IsNullOrWhiteSpace(NonLimitedCompanyName);
+				return !string.IsNullOrWhiteSpace(CompanyName);
 
 			default:
 				throw new ArgumentOutOfRangeException();

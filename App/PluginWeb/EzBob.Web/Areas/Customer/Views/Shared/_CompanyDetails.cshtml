@@ -124,7 +124,7 @@
                 <div class="control-group form_read_and_accept">
                     <hr />
                     <div class="controls">
-                        <input id="ConsentToSearch" name="ConsentToSearch" type="checkbox" value="false" ui-event-control-id="company-info:consent_to_search" />
+                        <input id="ConsentToSearch" name="ConsentToSearch" type="checkbox" value="false" ui-event-control-id="personal-info:consent_to_search" />
                         <label for="ConsentToSearch" class="editor-label-with-checkbox">I have read and accept the <a>terms and conditions</a> of the credit bureau search</label>
                     </div>
                 </div>
@@ -147,7 +147,7 @@
             <div class="control-group form_field_container">
                 <div class="controls">
                     <span class="type-of-business-caption">Type of business</span>
-                    <select class="type-of-business-form_field" id="TypeOfBusiness" name="TypeOfBusiness" size="6" ui-event-control-id="company-info:type_of_business" autofocus="autofocus">
+                    <select class="type-of-business-form_field" id="TypeOfBusiness" name="TypeOfBusiness" size="6" ui-event-control-id="personal-info:type_of_business" autofocus="autofocus">
                         <option value="Entrepreneur">Sole trader (not Inc.)</option>
                         <option value="SoleTrader">Sole trader (Inc.)</option>
                         <option value="PShip3P">Partnership (Up to 3)</option>
@@ -163,7 +163,7 @@
                 <div class="controls">
                     <label class="control-label attardi-input">
                         <span>Industry type</span>
-                        <select id="IndustryType" name="IndustryType" class="select form_field" ui-event-control-id="company-info:industry_type">
+                        <select id="IndustryType" name="IndustryType" class="select form_field" ui-event-control-id="personal-info:industry_type">
                             <option selected="selected" value=""></option>
                             <option value="0">Automotive</option>
                             <option value="1">Construction</option>
@@ -182,7 +182,7 @@
                 <div class="controls cashControlls">
                     <label class="attardi-input">
                         <span>Total annual revenue</span>
-                        <input id="OverallTurnOver" name="OverallTurnOver" type="text" class="cashInput form_field" ui-event-control-id="company-info:overall_turnover" />
+                        <input id="OverallTurnOver" name="OverallTurnOver" type="text" class="cashInput form_field" ui-event-control-id="personal-info:overall_turnover" />
                         <img id="OverallTurnOverImage" class="field_status required" />
                     </label>
                 </div>
@@ -190,7 +190,7 @@
 
             <div class="control-group form_field_container form_read_and_accept">
                 <div class="controls">
-                    <input id="PartBusinessOnline" name="PartBusinessOnline" type="checkbox" value="false" ui-event-control-id="company-info:part_bussiness_online" />
+                    <input id="PartBusinessOnline" name="PartBusinessOnline" type="checkbox" value="false" ui-event-control-id="personal-info:part_bussiness_online" />
                     <label for="PartBusinessOnline" style="font-weight: normal;" class="editor-label-with-checkbox">Part of my revenue comes from online sales or services</label>
                 </div>
             </div>
@@ -201,7 +201,7 @@
 
     <div class="form_buttons_container">
         <div class="attardi-button">
-            <a href='#' class="btn-continue next rc-button green disabled" ui-event-control-id="company-info:company_continue">Continue</a>
+            <a href='#' class="btn-continue next rc-button green disabled" ui-event-control-id="personal-info:company_continue">Continue</a>
         </div>
     </div>
 </script>
@@ -214,7 +214,7 @@
 
         <div class="add-director-container">
             <div class="wizard-director-text">Adding the details of additional directors may improve the offer you receive.</div>
-            <input id="addDirector" class="button green" type="button" value="Add" ui-event-control-id="company-info:add_director" />
+            <input id="addDirector" class="button green" type="button" value="Add" ui-event-control-id="personal-info:add_director" />
         </div>
     </div>
 </script>
@@ -224,7 +224,7 @@
         <div class="controls">
             <label class="control-label attardi-input">
                 <span>Current # of employees</span>
-                <input id="EmployeeCount" name="EmployeeCount" type="text" class="form_field numeric" min="0" ui-event-control-id="company-info:employee_count" />
+                <input id="EmployeeCount" name="EmployeeCount" type="text" class="form_field numeric" min="0" ui-event-control-id="personal-info:employee_count" />
                 <img id="EmployeeCountImage" class="field_status required" />
             </label>
         </div>
@@ -234,7 +234,7 @@
         <div class="controls">
             <label class="control-label attardi-input">
                 <span>Total monthly salary expenditure (inc tax & NI)</span>
-                <input id="TotalMonthlySalary" name="TotalMonthlySalary" type="text" class="form_field cashInput" ui-event-control-id="company-info:total_monthly_salary" />
+                <input id="TotalMonthlySalary" name="TotalMonthlySalary" type="text" class="form_field cashInput" ui-event-control-id="personal-info:total_monthly_salary" />
                 <img id="TotalMonthlySalaryImage" class="field_status required" />
             </label>
         </div>
@@ -244,7 +244,7 @@
         <div class="controls">
             <label class="control-label attardi-input">
                 <span>VAT reporting</span>
-                <select id="VatReporting" name="VatReporting" class="select form_field" ui-event-control-id="company-info:vat-reporting">
+                <select id="VatReporting" name="VatReporting" class="select form_field" ui-event-control-id="personal-info:vat-reporting">
                     <option selected="selected" value=""></option>
                     <option value="0">The company is not VAT registered</option>
                     <option value="1">I report the VAT online myself</option>
@@ -260,7 +260,7 @@
     <div class="control-group form_read_and_accept">
         <hr />
         <div class="controls">
-            <input id="DirectorCheck" name="DirectorCheck" type="checkbox" value="false" ui-event-control-id="company-info:director_check" />
+            <input id="DirectorCheck" name="DirectorCheck" type="checkbox" value="false" ui-event-control-id="personal-info:director_check" />
             <label for="DirectorCheck" class="editor-label-with-checkbox">I am the director of the company which I have listed in the application. I hereby state that I have the authority to complete the loan application.</label>
         </div>
     </div>
@@ -271,7 +271,7 @@
         <div class="controls">
             <label class="control-label attardi-input">
                 <span>Name</span>
-                <input id="NonLimitedCompanyName" name="NonLimitedCompanyName" type="text" class="form_field" ui-event-control-id="company-info:nonlimited_company_name" />
+                <input id="NonLimitedCompanyName" name="NonLimitedCompanyName" type="text" class="form_field" ui-event-control-id="personal-info:nonlimited_company_name" />
                 <img id="NonLimitedCompanyNameImage" class="field_status required" />
             </label>
         </div>
@@ -283,7 +283,7 @@
         <div class="controls">
             <label class="control-label attardi-input">
                 <span>Time in business</span>
-                <select id="NonLimitedTimeInBusiness" name="NonLimitedTimeInBusiness" class="select form_field" ui-event-control-id="company-info:nonlimited_time_in_business">
+                <select id="NonLimitedTimeInBusiness" name="NonLimitedTimeInBusiness" class="select form_field" ui-event-control-id="personal-info:nonlimited_time_in_business">
                     <option selected="selected" value=""></option>
                     <option value="1">1 year</option>
                     <option value="2">2 years</option>
@@ -311,7 +311,7 @@
         <div class="controls">
             <label class="control-label attardi-input">
                 <span>Registration #</span>
-                <input id="LimitedCompanyNumber" name="LimitedCompanyNumber" type="text" class="form_field" ui-event-control-id="company-info:limited_company_number" />
+                <input id="LimitedCompanyNumber" name="LimitedCompanyNumber" type="text" class="form_field" ui-event-control-id="personal-info:limited_company_number" />
                 <img id="LimitedCompanyNumberImage" class="field_status required" />
             </label>
         </div>
@@ -321,7 +321,7 @@
         <div class="controls">
             <label class="control-label attardi-input">
                 <span>Name</span>
-                <input id="LimitedCompanyName" name="LimitedCompanyName" type="text" class="form_field" ui-event-control-id="company-info:limited_company_name" />
+                <input id="LimitedCompanyName" name="LimitedCompanyName" type="text" class="form_field" ui-event-control-id="personal-info:limited_company_name" />
                 <img id="LimitedCompanyNameImage" class="field_status required" />
             </label>
         </div>
@@ -346,14 +346,14 @@
     <%_.each(directors, function(director, i){%>
         <div class="Directors">
             <div class="add-director-container">
-                <h1 class="form_start" preffix="<%-preffix%>" seqno="<%=i%>">Director #<%=i+1%><a style="float: right; margin-bottom: 7px" number="<%=i+1%>" href="#" class="removeDirector button green" ui-event-control-id="company-info:remove_director">Remove</a></h1>
+                <h1 class="form_start" preffix="<%-preffix%>" seqno="<%=i%>">Director #<%=i+1%><a style="float: right; margin-bottom: 7px" number="<%=i+1%>" href="#" class="removeDirector button green" ui-event-control-id="personal-info:remove_director">Remove</a></h1>
             </div>
             
             <div class="control-group form_field_container">
                 <div class="controls">
                     <label class="control-label attardi-input">
                         <span>Name</span>
-                        <input class="form_field director_name_part" id="<%-preffix%>[<%=i%>].Name" name="<%-preffix%>[<%=i%>].Name" type="text" value="<%- director.Name %>" ui-event-control-id="company-info:director_first_name" />
+                        <input class="form_field director_name_part" id="<%-preffix%>[<%=i%>].Name" name="<%-preffix%>[<%=i%>].Name" type="text" value="<%- director.Name %>" ui-event-control-id="personal-info:director_first_name" />
                         <img id="<%-preffix%>[<%=i%>].NameImage" class="field_status required" />
                     </label>
                 </div>
@@ -363,7 +363,7 @@
                 <div class="controls">
                     <label class="control-label attardi-input">
                         <span>Surname</span>
-                        <input class="form_field director_surname_part" id="<%-preffix%>[<%=i%>].Surname" name="<%-preffix%>[<%=i%>].Surname" type="text" value="<%- director.Surname %>" ui-event-control-id="company-info:director_last_name" />
+                        <input class="form_field director_surname_part" id="<%-preffix%>[<%=i%>].Surname" name="<%-preffix%>[<%=i%>].Surname" type="text" value="<%- director.Surname %>" ui-event-control-id="personal-info:director_last_name" />
                         <img id="<%-preffix%>[<%=i%>].SurnameImage" class="field_status required" />
                     </label>
                 </div>
@@ -383,7 +383,7 @@
                 <div class="controls">
                     <label class="control-label attardi-input">
                         <span>Email</span>
-                        <input class="form_field director_email" id="<%-preffix%>[<%=i%>].Email" name="<%-preffix%>[<%=i%>].Email" type="email" value="<%- director.Email %>" ui-event-control-id="company-info:director_email" />
+                        <input class="form_field director_email" id="<%-preffix%>[<%=i%>].Email" name="<%-preffix%>[<%=i%>].Email" type="email" value="<%- director.Email %>" ui-event-control-id="personal-info:director_email" />
                         <img id="<%-preffix%>[<%=i%>].EmailImage" class="field_status required" />
                     </label>
                 </div>
@@ -393,7 +393,7 @@
                 <div class="controls">
                     <label class="control-label attardi-input">
                         <span>Best contact number</span>
-                        <input class="form_field director_phone phonenumber" id="<%-preffix%>[<%=i%>].Phone" name="<%-preffix%>[<%=i%>].Phone" type="text" value="<%- director.Phone %>" ui-event-control-id="company-info:director_phone" />
+                        <input class="form_field director_phone phonenumber" id="<%-preffix%>[<%=i%>].Phone" name="<%-preffix%>[<%=i%>].Phone" type="text" value="<%- director.Phone %>" ui-event-control-id="personal-info:director_phone" />
                         <img id="<%-preffix%>[<%=i%>].PhoneImage" class="field_status required" />
                     </label>
                 </div>
