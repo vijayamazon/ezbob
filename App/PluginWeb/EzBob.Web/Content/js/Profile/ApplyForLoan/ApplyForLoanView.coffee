@@ -37,6 +37,7 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
     "change .preAgreementTermsRead": "showSubmit"
     "change .agreementTermsRead": "showSubmit"
     "change .euAgreementTermsRead": "showSubmit"
+    "change .directorConsentRead": "showSubmit"
     "click .download": "download"
     "click .print": "print"
 
@@ -106,12 +107,17 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
     if not @isLoanSourceEU
         @$('.eu-agreement-section').hide()
 
-    InitAmountPeriodSliders {
-        container: @$('#loan-sliders'),
-        amount: { min: @model.get('minCash'), max: @model.get('maxCash'), start: @model.get('maxCash'), step: 100 },
-        period: { min: 3, max: 12, start: @model.get('repaymentPeriod'), step: 1, hide: not (@isLoanTypeSelectionAllowed in [ 1, '1' ]) or @isLoanSourceEU },
-        callback: (ignored, sEvent) => @loanSelectionChanged() if sEvent is 'change'
-    }
+    if @model.get 'isCurrentCashRequestFromQuickOffer'
+        @$('.loan-amount-header-start').text 'Confirm loan amount'
+    else
+        @$('.quick-offer-section').hide()
+
+        InitAmountPeriodSliders {
+            container: @$('#loan-sliders'),
+            amount: { min: @model.get('minCash'), max: @model.get('maxCash'), start: @model.get('maxCash'), step: 100 },
+            period: { min: 3, max: 12, start: @model.get('repaymentPeriod'), step: 1, hide: not (@isLoanTypeSelectionAllowed in [ 1, '1' ]) or @isLoanSourceEU },
+            callback: (ignored, sEvent) => @loanSelectionChanged() if sEvent is 'change'
+        }
 
     @neededCashChanged()
 

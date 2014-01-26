@@ -116,6 +116,7 @@ namespace EzBob.Web.Areas.Customer.Models
 		public int TrustPilotStatusID { get; set; }
 		public bool TrustPilotReviewEnabled { get; set; }
 
+		public bool IsCurrentCashRequestFromQuickOffer { get; set; }
 		public QuickOfferModel QuickOffer { get; set; }
 		public decimal RequestedAmount { get; set; }
 	} // class CustomerModel

@@ -1342,6 +1342,7 @@ EzBob.validateLoanLegalForm = function (el) {
             "preAgreementTermsRead": { required: true },
             "agreementTermsRead": { required: true },
             "euAgreementTermsRead": { required: true },
+            "directorConsentRead": { required: true },
         },
         errorPlacement: EzBob.Validation.errorPlacement,
         unhighlight: EzBob.Validation.unhighlightFS,

@@ -138,7 +138,18 @@
       'click a.connect-store': 'close',
       'click a.continue': 'next',
       'click .btn-showmore': 'showMoreAccounts',
-      'click .btn-go-to-link-accounts': 'showLinkAccountsForm'
+      'click .btn-go-to-link-accounts': 'showLinkAccountsForm',
+      'click .btn-take-quick-offer': 'takeQuickOffer'
+    };
+
+    StoreInfoView.prototype.takeQuickOffer = function() {
+      var xhr;
+      xhr = $.post(window.gRootPath + 'CustomerDetails/TakeQuickOffer');
+      xhr.done(function() {
+        EzBob.App.trigger('clear');
+        return EzBob.App.GA.trackEventReditect(window.gRootPath + 'Customer/Profile/Index#GetCash', 'Wizard Complete', 'Go To account', 'Quick Offer Taken');
+      });
+      return false;
     };
 
     StoreInfoView.prototype.showLinkAccountsForm = function() {
@@ -181,6 +192,7 @@
         store.button.on("ready", this.ready, this);
       }
       hasFilledShops = this.canContinue();
+      this.storeList.find('.quick-offer-form, .link-accounts-form').addClass('hide');
       if (this.shouldShowQuickOffer(hasFilledShops)) {
         this.storeList.find('.quick-offer-form').removeClass('hide');
         this.renderQuickOfferForm();
@@ -248,10 +260,18 @@
       return this;
     };
 
-    StoreInfoView.prototype.renderQuickOfferForm = function() {};
+    StoreInfoView.prototype.renderQuickOfferForm = function() {
+      this.storeList.find('.immediate-offer .amount').text(EzBob.formatPounds(this.quickOffer.Amount));
+      this.storeList.find('.immediate-offer .term').text('3 months');
+      this.storeList.find('.immediate-offer .interest-rate .value').text('3.50%');
+      this.storeList.find('.immediate-offer .setup-fee .value').text('1.50%');
+      this.storeList.find('.potential-offer .amount').text(EzBob.formatPounds(this.quickOffer.Amount));
+      this.storeList.find('.potential-offer .term').text('up to 12 months');
+      this.storeList.find('.potential-offer .interest-rate .value').text('x%');
+      return this.storeList.find('.potential-offer .setup-fee .value').text('1.50%');
+    };
 
     StoreInfoView.prototype.shouldShowQuickOffer = function(hasFilledShops) {
-      console.log('the modl ist', this.model);
       if (this.renderExecuted) {
         return false;
       }

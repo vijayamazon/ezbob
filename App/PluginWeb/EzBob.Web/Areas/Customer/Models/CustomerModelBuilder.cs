@@ -193,6 +193,8 @@ namespace EzBob.Web.Areas.Customer.Models
             var cr = cus.LastCashRequest;
             customerModel.IsLoanDetailsFixed = !_changeLoanDetailsModelBuilder.IsAmountChangingAllowed(cr);
 
+			customerModel.IsCurrentCashRequestFromQuickOffer = !ReferenceEquals(cr, null) && !ReferenceEquals(cr.QuickOffer, null);
+
 	        customerModel.LoyaltyPoints = customer.LoyaltyPoints();
 	        customerModel.IsOffline = customer.IsOffline;
 

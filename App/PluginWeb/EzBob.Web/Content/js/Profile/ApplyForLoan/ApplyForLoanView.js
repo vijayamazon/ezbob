@@ -1,4 +1,4 @@
-﻿(function() {
+(function() {
   var root,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     __hasProp = {}.hasOwnProperty,
@@ -50,6 +50,7 @@
       "change .preAgreementTermsRead": "showSubmit",
       "change .agreementTermsRead": "showSubmit",
       "change .euAgreementTermsRead": "showSubmit",
+      "change .directorConsentRead": "showSubmit",
       "click .download": "download",
       "click .print": "print"
     };
@@ -136,27 +137,32 @@
       if (!this.isLoanSourceEU) {
         this.$('.eu-agreement-section').hide();
       }
-      InitAmountPeriodSliders({
-        container: this.$('#loan-sliders'),
-        amount: {
-          min: this.model.get('minCash'),
-          max: this.model.get('maxCash'),
-          start: this.model.get('maxCash'),
-          step: 100
-        },
-        period: {
-          min: 3,
-          max: 12,
-          start: this.model.get('repaymentPeriod'),
-          step: 1,
-          hide: !((_ref1 = this.isLoanTypeSelectionAllowed) === 1 || _ref1 === '1') || this.isLoanSourceEU
-        },
-        callback: function(ignored, sEvent) {
-          if (sEvent === 'change') {
-            return _this.loanSelectionChanged();
+      if (this.model.get('isCurrentCashRequestFromQuickOffer')) {
+        this.$('.loan-amount-header-start').text('Confirm loan amount');
+      } else {
+        this.$('.quick-offer-section').hide();
+        InitAmountPeriodSliders({
+          container: this.$('#loan-sliders'),
+          amount: {
+            min: this.model.get('minCash'),
+            max: this.model.get('maxCash'),
+            start: this.model.get('maxCash'),
+            step: 100
+          },
+          period: {
+            min: 3,
+            max: 12,
+            start: this.model.get('repaymentPeriod'),
+            step: 1,
+            hide: !((_ref1 = this.isLoanTypeSelectionAllowed) === 1 || _ref1 === '1') || this.isLoanSourceEU
+          },
+          callback: function(ignored, sEvent) {
+            if (sEvent === 'change') {
+              return _this.loanSelectionChanged();
+            }
           }
-        }
-      });
+        });
+      }
       this.neededCashChanged();
       this.$el.find("img[rel]").setPopover('right');
       this.$el.find("li[rel]").setPopover('left');

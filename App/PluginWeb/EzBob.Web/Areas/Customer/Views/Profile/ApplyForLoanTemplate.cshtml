@@ -1,147 +1,128 @@
 ﻿@model dynamic
-@helper ApplyForLoanTemplate()
-{
-    <div class="loan-amount-header">
-        <h2 style="margin-top: 8px;">Choose Loan Amount<span class="duration-select-allowed"> And Duration</span></h2>
-        <p><span class="duration-select-allowed">Select between 3 to 12 months. </span>You can always pay the loan early and save on interest.</p>
-    </div>
-
-    <div class="cash-question">
-        <div id="loan-sliders"></div>
-    </div>
-
-    <div id="block-loan-schedule">
-        <div class="loan-schedule">
-        </div>
-    </div>
-
-    <h2 style="margin-top: 40px;">Review And Accept The Agreement</h2>
-
-    <div id="block-agreement">
-        <div class="agreement">
-        </div>
-    </div>
-    
-}
-
-@helper ButtonsTemplate()
-{
-    <a class="btn-continue button orange pull-right submit <%if (!agree) {%>disabled<%}%>" href="url">Continue</a>
-    <a href="#" class="btn-back button grey pull-right">Back</a>
-}
-
 @{Html.RenderPartial("~/Views/Shared/_LoanScheduleTemplate.cshtml"); }
 
 <script id="apply-forloan-template" type="text/template">
-    @ApplyForLoanTemplate()
-    @EuLoanTemplate()
-    @using (Html.BeginForm("LoanLegalSigned", "GetCash", new { Area = "Customer" }, FormMethod.Post, new { @class = "LoanLegal" }))
-    {
-         @AgreementCheckBoxes()
-         @ButtonsTemplate()
-    }
+	<div class="loan-amount-header">
+		<h2 style="margin-top: 8px;"><span class="loan-amount-header-start">Choose loan amount</span><span class="duration-select-allowed"> and duration</span></h2>
+		<p><span class="duration-select-allowed">Select between 3 to 12 months. </span>You can always pay the loan early and save on interest.</p>
+	</div>
+
+	<div class="cash-question">
+		<div id="loan-sliders"></div>
+	</div>
+
+	<div id="block-loan-schedule">
+		<div class="loan-schedule">
+		</div>
+	</div>
+
+	<h2 style="margin-top: 40px;">Review and accept the agreement</h2>
+
+	<div id="block-agreement">
+		<div class="agreement">
+		</div>
+	</div>
+
+	<div class="eu-agreement-section">
+		<div class="overview loan-agreement simple-well clearfix">
+			<div class="eu-agreement-header">
+				<h3 class="eu-agreement-header-text">Your loan will be included in the EU program, please confirm:</h3>
+				<div class="eu-agreement-image"></div>
+			</div>
+			<ol>
+				<li>I Employ less than 10 persons.</li>
+				<li>Annual turnover is less then 1.5M Pounds.</li>
+				<li>Autonomous enterprise – no other enterprise owns more than 25% of the borrower, I do not own more than 25% in another enterprise.</li>
+				<li>Loan is for business purposes.</li>
+				<li>Not involved in the following sectors: arms production and trading; human cloning; tobacco; gambling.</li>
+			</ol>
+		</div>
+
+	</div>
+
+	@using (Html.BeginForm("LoanLegalSigned", "GetCash", new { Area = "Customer" }, FormMethod.Post, new { @class = "LoanLegal" })) {
+		<div class="controls">
+			<label class="checkbox">
+				<input type="checkbox" id="preAgreementTermsRead" class="preAgreementTermsRead" name="preAgreementTermsRead" value="true" />
+				I have read and agree to the agreement terms
+			</label>
+			<label class="checkbox">
+				<input type="checkbox" id="agreementTermsRead" class="agreementTermsRead" name="agreementTermsRead" value="true" />
+				I have read and agree to the guaranty terms
+			</label>
+			<label class="checkbox eu-agreement-section">
+				<input type="checkbox" id="euAgreementTermsRead" name="euAgreementTermsRead" class="euAgreementTermsRead" value="true" />
+				I agree to the EU program terms
+			</label>
+			<label class="checkbox quick-offer-section">
+				<input type="checkbox" id="directorConsentRead" class="directorConsentRead" name="directorConsentRead" value="true" />
+				I have read and agree to the directors' consent declaration
+			</label>
+		</div>
+
+		<a class="btn-continue button orange pull-right submit <%if (!agree) {%>disabled<%}%>" href="url">Continue</a>
+		<a href="#" class="btn-back button grey pull-right">Back</a>
+	}
 </script>
 
 <script id="consumers-agreement-template" type="text/template">
-    @ConsumerAgreementTemplate()
+	<div style="padding-right: 15px;" class="simple-well clearfix">
+		<div class="tabbable">
+			<ul class="nav nav-tabs">
+				<li class="active agreement-tab"><a href="#tab3" data-toggle="tab" page-name="Pre-Contract-Agreement">Pre-Contract</a></li>
+				<li class="agreement-tab"><a href="#tab4" data-toggle="tab" page-name="CreditActAgreement">Contract</a></li>
+			</ul>
+			<div class="tab-content">
+				<div class="tab-pane active" id="tab3">
+					<div class="overview loan-agreement" id="Pre-Contract-Agreement">
+						@{Html.RenderPartial("~/Areas/Customer/Views/Agreement/Pre-Contract-Agreement.cshtml");}
+					</div>
+				</div>
+				<div class="tab-pane" id="tab4">
+					<div class="overview loan-agreement" id="CreditActAgreement">
+						@{Html.RenderPartial("~/Areas/Customer/Views/Agreement/CreditActAgreement.cshtml");}
+					</div>
+				</div>
+			</div>
+		</div>
+		@PrintDownload()
+	</div>
 </script>
-
-@helper ConsumerAgreementTemplate()
-{
-    <div style="padding-right: 15px;" class="simple-well clearfix">
-        <div class="tabbable">
-            <ul class="nav nav-tabs">
-                <li class="active agreement-tab"><a href="#tab3" data-toggle="tab" page-name="Pre-Contract-Agreement">Pre-Contract</a></li>
-                <li class="agreement-tab"><a href="#tab4" data-toggle="tab" page-name="CreditActAgreement">Contract</a></li>
-            </ul>
-            <div class="tab-content">
-                <div class="tab-pane active" id="tab3">
-                    <div class="overview loan-agreement" id="Pre-Contract-Agreement">
-                        @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/Pre-Contract-Agreement.cshtml");}
-                    </div>
-                </div>
-                <div class="tab-pane" id="tab4">
-                    <div class="overview loan-agreement" id="CreditActAgreement">
-                        @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/CreditActAgreement.cshtml");}
-                    </div>
-                </div>
-            </div>
-        </div>
-        @PrintDownload()
-    </div>
-}
 
 <script id="companies-agreement-template" type="text/template">
-    @CompaniesAgreementTemplate()
+	<div style="padding-right: 15px;" class="simple-well clearfix">
+		<div class="tabbable">
+			<ul class="nav nav-tabs">
+				<li class="active agreement-tab"><a href="#tab1" data-toggle="tab" page-name="PrivateCompanyLoanAgreement">Agreement</a></li>
+				<li class="agreement-tab"><a href="#tab2" data-toggle="tab" page-name="GuarantyAgreement">Guaranty</a></li>
+				<li class="quick-offer-directors-tab quick-offer-section"><a href="#tab5" data-toggle="tab" page-name="DirectorsConsentDeclaration">Directors' consent declaration</a></li>
+			</ul>
+			<div class="tab-content">
+				<div class="tab-pane active" id="tab1">
+					<div class="overview loan-agreement" id="PrivateCompanyLoanAgreement">
+						@{Html.RenderPartial("~/Areas/Customer/Views/Agreement/PrivateCompanyLoanAgreement.cshtml");}
+
+					</div>
+				</div>
+				<div class="tab-pane" id="tab2">
+					<div class="overview loan-agreement" id="GuarantyAgreement">
+						@{Html.RenderPartial("~/Areas/Customer/Views/Agreement/GuarantyAgreement.cshtml");}
+					</div>
+				</div>
+				<div class="tab-pane quick-offer-section" id="tab5">
+					<div class="overview loan-agreement" id="DirectorsConsentDeclaration">
+						@{Html.RenderPartial("~/Areas/Customer/Views/Agreement/DirectorsConsentDeclaration.cshtml");}
+					</div>
+				</div>
+			</div>
+		</div>
+		@PrintDownload()
+	</div>
 </script>
 
-@helper CompaniesAgreementTemplate()
-{
-    <div style="padding-right: 15px;" class="simple-well clearfix">
-        <div class="tabbable">
-            <ul class="nav nav-tabs">
-                <li class="active agreement-tab"><a href="#tab1" data-toggle="tab" page-name="PrivateCompanyLoanAgreement">Agreement</a></li>
-                <li class="agreement-tab"><a href="#tab2" data-toggle="tab" page-name="GuarantyAgreement">Guaranty</a></li>
-            </ul>
-            <div class="tab-content">
-                <div class="tab-pane active" id="tab1">
-                    <div class="overview loan-agreement" id="PrivateCompanyLoanAgreement">
-                        @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/PrivateCompanyLoanAgreement.cshtml");}
-
-                    </div>
-                </div>
-                <div class="tab-pane" id="tab2">
-                    <div class="overview loan-agreement" id="GuarantyAgreement">
-                        @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/GuarantyAgreement.cshtml");}
-                    </div>
-                </div>
-            </div>
-        </div>
-        @PrintDownload()
-    </div>
-}
-
-@helper PrintDownload()
-{
-    <div style="padding-top: 25px; padding-right: 25px;">
-        <a href="#" class="pull-right print print-link">Print</a>
-        <a href="#" style="margin-right: 20px;" class="pull-right download pdf-link">Download</a>
-    </div>  
-}
-@helper AgreementCheckBoxes()
-{
-    <div class="controls">
-        <label class="checkbox">
-            <input type="checkbox" id="preAgreementTermsRead" class="preAgreementTermsRead" name="preAgreementTermsRead" value="true"/>
-            I have read and agree to the agreement terms
-        </label>
-        <label class="checkbox">
-            <input type="checkbox" id="agreementTermsRead" class="agreementTermsRead" name="agreementTermsRead" value="true"/>
-            I have read and agree to the guaranty terms
-        </label>
-        <label class="checkbox eu-agreement-section">
-            <input type="checkbox" id="euAgreementTermsRead" name="euAgreementTermsRead" class="euAgreementTermsRead" value="true"/>
-            I agree to the EU program terms
-        </label>
-    </div>
-}
-@helper EuLoanTemplate()
-{
-    <div class="eu-agreement-section">
-        <div class="overview loan-agreement simple-well clearfix">
-            <div class="eu-agreement-header">
-                <h3 class="eu-agreement-header-text">Your loan will be included in the EU program, please confirm:</h3>
-                <div class="eu-agreement-image"></div>
-            </div>
-            <ol>
-                <li>I Employ less than 10 persons.</li>
-                <li>Annual turnover is less then 1.5M Pounds.</li>
-                <li>Autonomous enterprise – no other enterprise owns more than 25% of the borrower, I do not own more than 25% in another enterprise.</li>
-                <li>Loan is for business purposes.</li>
-                <li>Not involved in the following sectors: arms production and trading; human cloning; tobacco; gambling.</li>
-            </ol>
-
-        </div>
-
-    </div>
+@helper PrintDownload() {
+	<div style="padding-top: 25px; padding-right: 25px;">
+		<a href="#" class="pull-right print print-link">Print</a>
+		<a href="#" style="margin-right: 20px;" class="pull-right download pdf-link">Download</a>
+	</div>  
 }

@@ -252,3 +252,48 @@ div.wizard-director-text { font-size: 11pt; color: #585858; }
     color: #acacac !important;
     text-shadow: 0 1px 1px #fff;
 }
+
+.quick-offer-form {
+	width: 95%;
+	position: relative;
+	margin: 0 auto;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.quick-offer-form .quick-offer-form-column {
+	width: 48%;
+	text-align: center;
+	border: 1px solid #dddddd;
+	padding: 0;
+	margin: 0;
+	border-radius: 5px;
+}
+
+.quick-offer-form-column h3 {
+	display: block;
+	width: 100%;
+	border-radius: 5px 5px 0 0;
+	padding: 1em;
+	background-color: #7bb224;
+	color: white;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.quick-offer-form-column a {
+	margin-top: 1em;
+	padding: 1em;
+	text-decoration: underline;
+	cursor: pointer;
+	display: block;
+	background-color: #7bb224;
+	color: white;
+	border-radius: 0 0 5px 5px;
+}
+
+.quick-offer-form-item {
+	margin-top: 1em;
+}

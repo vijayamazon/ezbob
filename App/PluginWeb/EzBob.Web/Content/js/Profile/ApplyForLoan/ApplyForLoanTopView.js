@@ -1,4 +1,4 @@
-﻿(function() {
+(function() {
   var root,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
@@ -45,7 +45,8 @@
         OfferStart: this.customer.get("OfferStart"),
         loanType: this.customer.get("LastApprovedLoanTypeID"),
         repaymentPeriod: this.customer.get("LastApprovedRepaymentPeriod"),
-        isLoanSourceEU: this.customer.get("IsLastApprovedLoanSourceEu")
+        isLoanSourceEU: this.customer.get("IsLastApprovedLoanSourceEu"),
+        isCurrentCashRequestFromQuickOffer: this.customer.get("IsCurrentCashRequestFromQuickOffer")
       });
       this.states = {
         apply: this.createApplyForLoanView,

@@ -116,6 +116,40 @@
 
 		#endregion method LinkAccountsComplete
 
+		#region method TakeQuickOffer
+
+		[Transactional]
+		[Ajax]
+		[HttpPost]
+		[ValidateJsonAntiForgeryToken]
+		public JsonNetResult TakeQuickOffer()
+		{
+			var customer = _context.Customer;
+
+			Session["WizardComplete"] = false;
+			TempData["WizardComplete"] = false;
+
+			ms_oLog.DebugFormat("Customer {1} ({0}): has completed wizard by taking a quick offer.", customer.Id, customer.PersonalInfo.Fullname);
+
+			customer.WizardStep = _helper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.AllStep);
+
+			_session.Flush();
+
+			ms_oLog.DebugFormat("Customer {1} ({0}): wizard step has been updated.", customer.Id, customer.PersonalInfo.Fullname);
+
+			_crBuilder.CreateQuickOfferCashRequest(customer);
+
+			ms_oLog.DebugFormat("Customer {1} ({0}): cash request created.", customer.Id, customer.PersonalInfo.Fullname);
+
+			_concentAgreementHelper.Save(customer, DateTime.UtcNow);
+
+			ms_oLog.DebugFormat("Customer {1} ({0}): consent agreement saved.", customer.Id, customer.PersonalInfo.Fullname);
+
+			return this.JsonNet(new {});
+		} // TakeQuickOffer
+
+		#endregion method TakeQuickOffer
+
 		#region method WizardComplete
 
 		[Transactional]
@@ -157,7 +191,6 @@
 			_concentAgreementHelper.Save(customer, DateTime.UtcNow);
 			ms_oLog.DebugFormat("Customer {1} ({0}): consent agreement saved.", customer.Id, customer.PersonalInfo.Fullname);
 
-			
 			return this.JsonNet(new { });
 		} // WizardComplete
 

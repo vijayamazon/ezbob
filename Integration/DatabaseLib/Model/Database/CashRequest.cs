@@ -90,7 +90,9 @@ namespace EZBob.DatabaseLib.Model.Database
 		public virtual IList<LoanLegal> LoanLegals { get; set; }
 
 		public virtual int AnnualTurnover { get; set; }
-    }
+
+		public virtual QuickOffer QuickOffer { get; set; }
+	} // class CashRequest
 
     public interface ICashRequestRepository : IRepository<CashRequest>
     {

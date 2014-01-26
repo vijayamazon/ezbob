@@ -48,6 +48,8 @@ namespace EZBob.DatabaseLib.Model.Database
 		        .Cascade.All()
 		        .Inverse();
 	        Map(x => x.AnnualTurnover, "AnualTurnover");
-        }
-    }
-}
+
+	        References(x => x.QuickOffer, "QuickOfferID").Nullable().Cascade.All();
+        } // constructor
+    } // class CashRequestMap
+} // namespace

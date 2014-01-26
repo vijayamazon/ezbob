@@ -85,6 +85,17 @@ class EzBob.StoreInfoView extends Backbone.View
         'click a.continue': 'next'
         'click .btn-showmore': 'showMoreAccounts'
         'click .btn-go-to-link-accounts': 'showLinkAccountsForm'
+        'click .btn-take-quick-offer': 'takeQuickOffer'
+
+    takeQuickOffer: ->
+        xhr = $.post window.gRootPath + 'CustomerDetails/TakeQuickOffer'
+
+        xhr.done ->
+            EzBob.App.trigger 'clear'
+            EzBob.App.GA.trackEventReditect(window.gRootPath + 'Customer/Profile#GetCash', 'Wizard Complete', 'Go To account', 'Quick Offer Taken')
+
+        false
+    # end of takeQuickOffer
 
     showLinkAccountsForm: ->
         @storeList.find('.quick-offer-form').remove()
@@ -114,6 +125,8 @@ class EzBob.StoreInfoView extends Backbone.View
             store.button.on "ready", @ready, this
 
         hasFilledShops = @canContinue()
+
+        @storeList.find('.quick-offer-form, .link-accounts-form').addClass 'hide'
 
         if @shouldShowQuickOffer(hasFilledShops)
             @storeList.find('.quick-offer-form').removeClass 'hide'
@@ -187,10 +200,18 @@ class EzBob.StoreInfoView extends Backbone.View
     # end of render
 
     renderQuickOfferForm: ->
+        @storeList.find('.immediate-offer .amount').text EzBob.formatPounds(@quickOffer.Amount)
+        @storeList.find('.immediate-offer .term').text '3 months'
+        @storeList.find('.immediate-offer .interest-rate .value').text '3.50%'
+        @storeList.find('.immediate-offer .setup-fee .value').text '1.50%'
+
+        @storeList.find('.potential-offer .amount').text EzBob.formatPounds(@quickOffer.Amount)
+        @storeList.find('.potential-offer .term').text 'up to 12 months'
+        @storeList.find('.potential-offer .interest-rate .value').text 'x%'
+        @storeList.find('.potential-offer .setup-fee .value').text '1.50%'
+    # end of renderQuickOfferForm
 
     shouldShowQuickOffer: (hasFilledShops) ->
-        console.log 'the modl ist', @model
-
         return false if @renderExecuted
 
         return false if hasFilledShops

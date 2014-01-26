@@ -138,6 +138,12 @@
 		#region method Calculate
 
 		private decimal? Calculate() {
+			const decimal nRoundFactor = 100.0m;
+
+			const decimal nMinOfferValue = 1000.0m;
+			const decimal nMinOfferCap = 7000.0m;
+			const decimal nMinOfferCapPct = 0.15m;
+
 			var oOfferAmountPct = new List<Tuple<int, decimal>>() {
 				new Tuple<int, decimal>(40, 0.012m),
 				new Tuple<int, decimal>(50, 0.016m),
@@ -170,26 +176,26 @@
 
 			Log.Debug("Calculated offer (total current assets * percent) is {0}", nCalculatedOffer.ToString("C2", ci));
 
-			nCalculatedOffer = Math.Truncate(nCalculatedOffer / 100.0m) * 100.0m;
+			nCalculatedOffer = Math.Truncate(nCalculatedOffer / nRoundFactor) * nRoundFactor;
 
 			Log.Debug("Rounded offer is {0}", nCalculatedOffer.ToString("C2", ci));
 
-			if (nCalculatedOffer < 1000.0m) {
-				Log.Debug("The offer is less than {0}, not offering.", (1000.0m).ToString("C2", ci));
+			if (nCalculatedOffer < nMinOfferValue) {
+				Log.Debug("The offer is less than {0}, not offering.", nMinOfferValue.ToString("C2", ci));
 				return null;
 			} // if
 
-			decimal n15pct = RequestedAmount * 0.15m;
-			n15pct = Math.Truncate(n15pct / 100.0m) * 100.0m;
+			decimal nOfferBeforeCap = Math.Truncate(RequestedAmount * nMinOfferCapPct / nRoundFactor) * nRoundFactor;
 
-			decimal nCap = Math.Min(7000.0m, n15pct);
+			decimal nCap = Math.Min(nMinOfferCap, nOfferBeforeCap);
 
 			Log.Debug(
-				"Offer cap is {0} = min({1}, {2} * 15% = {3})",
+				"Offer cap is {0} = min({1}, {2} * {4} = {3})",
 				nCap.ToString("C2", ci),
-				(7000.0m).ToString("C2", ci),
+				nMinOfferCap.ToString("C2", ci),
 				RequestedAmount.ToString("C2", ci),
-				n15pct.ToString("C2", ci)
+				nOfferBeforeCap.ToString("C2", ci),
+				nMinOfferCapPct.ToString("P2", ci)
 			);
 
 			decimal nOffer = Math.Min(nCalculatedOffer, nCap);
