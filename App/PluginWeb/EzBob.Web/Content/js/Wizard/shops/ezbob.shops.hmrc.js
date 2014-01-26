@@ -37,8 +37,7 @@
       this.accountType = 'HMRC';
       this.template = '#' + this.accountType + 'AccountInfoTemplate';
       this.activeForm = void 0;
-      this.isOldInternetExplorer = 'Microsoft Internet Explorer' === navigator.appName && navigator.appVersion.indexOf("MSIE 1") === -1;
-      return this.isOldInternetExplorer = true;
+      return this.isOldInternetExplorer = 'Microsoft Internet Explorer' === navigator.appName && navigator.appVersion.indexOf("MSIE 1") === -1;
     };
 
     HMRCAccountInfoView.prototype.render = function() {

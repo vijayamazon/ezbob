@@ -24,7 +24,6 @@ class EzBob.HMRCAccountInfoView extends Backbone.Marionette.ItemView
         @template = '#' + @accountType + 'AccountInfoTemplate'
         @activeForm = undefined
         @isOldInternetExplorer = 'Microsoft Internet Explorer' == navigator.appName && navigator.appVersion.indexOf("MSIE 1") == -1
-        @isOldInternetExplorer = true #Temporary till the new upload is implemented
 
     render: ->
         super()
