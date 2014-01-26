@@ -1,6 +1,7 @@
 ﻿namespace AutomationCalculator
 {
 	using System.Collections.Generic;
+	using System.Linq;
 	using CommonLib;
 	using Ezbob.Logger;
 
@@ -36,15 +37,17 @@
 			var dbHelper = new DbHelper(_log);
 			var experianScore = dbHelper.GetExperianScore(customerId);
 			var mps = dbHelper.GetCustomerMarketPlaces(customerId);
+			var paymentMps = dbHelper.GetCustomerPaymentMarketPlaces(customerId);
 			var anualTurnover = AnalysisFunctionsHelper.GetTurnoverForPeriod(mps, TimePeriodEnum.Year,_log);
 			var wasApproved = dbHelper.WasApprovedForLoan(customerId);
 			var hasDefaultAccounts = dbHelper.HasDefaultAccounts(customerId, _const.DefaultMinAmount, _const.DefaultMinMonths);
 
-			return IsAutoRejectedCalculator(experianScore, mps, anualTurnover, wasApproved, hasDefaultAccounts, out reason);
+			return IsAutoRejectedCalculator(experianScore, mps, paymentMps, anualTurnover, wasApproved, hasDefaultAccounts, out reason);
 		}
 
-		private bool IsAutoRejectedCalculator(int experianScore, List<MarketPlace> mps, double anualTurnover, bool wasApproved, bool hasDefaultAccounts, out string reason)
+		private bool IsAutoRejectedCalculator(int experianScore, List<MarketPlace> mps, List<string> paymentMps,  double anualTurnover, bool wasApproved, bool hasDefaultAccounts, out string reason)
 		{
+			
 			//0 Exceptions to the rejection rules:
 			//Do not apply to clients that have been approved at least once before (even if the latest decision was rejection)
 			if (wasApproved)
@@ -75,22 +78,32 @@
 				return true;
 			}
 
-			//2  Low turnover, one of the following :
-			//a Total annual turnover is less than 10,000 GBP
-
-			if (anualTurnover < _const.MinAnnualTurnover)
+			
+			//has payment mps
+			bool hasSpecialMps = false;
+			if (paymentMps.Any())
 			{
-				reason = string.Format("Rejected. Annual Turnover Below {0} ({1})", _const.MinAnnualTurnover, anualTurnover);
-				return true;
+				hasSpecialMps = true;
 			}
-			//b Total 3-month turnover is less than 2.000 GBP
-			var threeMonthTurnover = AnalysisFunctionsHelper.GetTurnoverForPeriod(mps, TimePeriodEnum.Month3,_log);
-			if (threeMonthTurnover < _const.MinThreeMonthTurnover)
+			else
 			{
-				reason = string.Format("Rejected. 3 Month Turnover Below {0} ({1})", _const.MinThreeMonthTurnover, threeMonthTurnover);
-				return true;
-			}
+				//2  Low turnover, one of the following :
+				//a Total annual turnover is less than 10,000 GBP
 
+				if (anualTurnover < _const.MinAnnualTurnover)
+				{
+					reason = string.Format("Rejected. Annual Turnover Below {0} ({1})", _const.MinAnnualTurnover, anualTurnover);
+					return true;
+				}
+				//b Total 3-month turnover is less than 2.000 GBP
+				var threeMonthTurnover = AnalysisFunctionsHelper.GetTurnoverForPeriod(mps, TimePeriodEnum.Month3, _log);
+				if (threeMonthTurnover < _const.MinThreeMonthTurnover)
+				{
+					reason = string.Format("Rejected. 3 Month Turnover Below {0} ({1})", _const.MinThreeMonthTurnover,
+					                       threeMonthTurnover);
+					return true;
+				}
+			}
 			//3 Defaults:
 			//a for clients with credit score below 800: at least 1 default in amount of 300+ GBP on any of the financial accounts in the last 24 months
 			if (experianScore < _const.DefaultScoreBelow && hasDefaultAccounts)
@@ -109,7 +122,7 @@
 				return true;
 			}
 
-			reason = "Not Rejected. None of the auto rejection rules match.";
+			reason = string.Format("Not Rejected. None of the auto rejection rules match. {0}", (hasSpecialMps ? "(Has payment mps:)" + string.Join(",",paymentMps) : ""));
 			return false;
 		}
     }

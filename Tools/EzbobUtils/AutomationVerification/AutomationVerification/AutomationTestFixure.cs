@@ -78,5 +78,14 @@
 			isOffline = db.IsOffline(14183);
 			Assert.AreEqual(true, isOffline);
 		}
+
+		[Test]
+		public void testJoin()
+		{
+			var db = new DbHelper(Log);
+			var mps = db.GetCustomerPaymentMarketPlaces(16241);
+			var s = string.Join(",", mps);
+			Assert.IsNotNullOrEmpty(s);
+		}
 	}
 }

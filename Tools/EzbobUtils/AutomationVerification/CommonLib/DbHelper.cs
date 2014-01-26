@@ -4,6 +4,7 @@ using System.Collections.Generic;
 namespace CommonLib
 {
 	using System.Data;
+	using System.Linq;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
@@ -93,6 +94,25 @@ namespace CommonLib
 			{
 				AddMpToList(mps, row);
 			}
+
+			dt.Dispose();
+			return mps;
+
+		}
+
+		/// <summary>
+		/// Retrieve all payment accounts without paypal
+		/// </summary>
+		/// <param name="customerId">Customer Id</param>
+		/// <returns></returns>
+		public List<string> GetCustomerPaymentMarketPlaces(int customerId)
+		{
+
+			var conn = new SqlConnection(_log);
+			var dt = conn.ExecuteReader("AV_GetCustomerPaymentMarketPlaces", new QueryParameter("@CustomerId", customerId));
+
+			var mps = (from DataRow row in dt.Rows 
+					   select row[0].ToString()).ToList();
 
 			dt.Dispose();
 			return mps;
