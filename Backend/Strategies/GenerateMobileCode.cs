@@ -15,6 +15,7 @@
 		private int maxPerDay;
 		private int maxPerNumber;
 		private const string UkMobilePrefix = "+44";
+		private string skipCodeGenerationNumber;
 
 		#region constructor
 
@@ -39,6 +40,12 @@
 
 		public override void Execute()
 		{
+			if (skipCodeGenerationNumber == mobilePhone)
+			{
+				Log.Info("Mobile phone {0} detected. Code won't be generated.", mobilePhone);
+				return;
+			}
+
 			DataTable dt = DB.ExecuteReader("GetCurrentMobileCodeCount", CommandSpecies.StoredProcedure, new QueryParameter("Phone", mobilePhone));
 			var results = new SafeReader(dt.Rows[0]);
 			
@@ -47,14 +54,14 @@
 			if (maxPerDay <= sentToday)
 			{
 				IsError = true;
-				Log.Warn(string.Format("Reached max number of daily SMS messages ({0}). SMS not sent", maxPerDay));
+				Log.Warn("Reached max number of daily SMS messages ({0}). SMS not sent", maxPerDay);
 				return;
 			}
 
 			if (maxPerNumber <= sentNumber)
 			{
 				IsError = true;
-				Log.Warn(string.Format("Reached max number of SMS messages ({0}) to number:{1}. SMS not sent", maxPerNumber, mobilePhone));
+				Log.Warn("Reached max number of SMS messages ({0}) to number:{1}. SMS not sent", maxPerNumber, mobilePhone);
 				return;
 			}
 
@@ -95,6 +102,7 @@
 			fromNumber = sr["TwilioSendingNumber"];
 			maxPerDay = sr["MaxPerDay"];
 			maxPerNumber = sr["MaxPerNumber"];
+			skipCodeGenerationNumber = sr["SkipCodeGenerationNumber"];
 		}
 
 		public bool IsError { get; private set; }

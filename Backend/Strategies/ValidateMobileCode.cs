@@ -8,6 +8,8 @@
 		private readonly string mobilePhone;
 		private readonly string mobileCode;
 		private bool isValidatedSuccessfully;
+		private string skipCodeGenerationNumber;
+		private string skipCodeGenerationNumberCode;
 
 		#region constructor
 
@@ -16,6 +18,7 @@
 		{
 			this.mobilePhone = mobilePhone;
 			this.mobileCode = mobileCode;
+			ReadConfigurations();
 		} // constructor
 
 		#endregion constructor
@@ -30,7 +33,15 @@
 
 		#region property Execute
 
-		public override void Execute() {
+		public override void Execute() 
+		{
+			if (skipCodeGenerationNumber == mobilePhone && skipCodeGenerationNumberCode == mobileCode)
+			{
+				Log.Info("Mobile phone {0} detected. Validation of code won't be done.", mobilePhone);
+				isValidatedSuccessfully = true;
+				return;
+			}
+
 			DataTable dt = DB.ExecuteReader("ValidateMobileCode", CommandSpecies.StoredProcedure,
 				new QueryParameter("Phone", mobilePhone),
 				new QueryParameter("Code", mobileCode));
@@ -40,6 +51,15 @@
 		} // Execute
 
 		#endregion property Execute
+
+		private void ReadConfigurations()
+		{
+			DataTable dt = DB.ExecuteReader("GetTwilioConfigs", CommandSpecies.StoredProcedure);
+			DataRow results = dt.Rows[0];
+			var sr = new SafeReader(results);
+			skipCodeGenerationNumber = sr["SkipCodeGenerationNumber"];
+			skipCodeGenerationNumberCode = sr["SkipCodeGenerationNumberCode"];
+		}
 
 		public bool IsValidatedSuccessfully()
 		{
