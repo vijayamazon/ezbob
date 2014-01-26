@@ -214,11 +214,6 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
             return false;
         } // if
 
-        //var data = this.form.serializeArray();
-        //var amount = _.find(data, function (d) { return d.name === 'amount'; });
-        //if (amount) { amount.value = this.$el.find('#amount').autoNumericGet(); }
-
-        //todo ask Yuly why not use serialize
         var xhr = $.post(this.form.attr('action'), {
             email: $('#Email').val(),
             signupPass1: $('#signupPass1').val(),
