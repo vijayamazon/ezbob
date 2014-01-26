@@ -500,7 +500,6 @@
     <Content Include="Content\css\images\bank_details.png" />
     <Content Include="Content\css\images\beta_ribbon.png" />
     <Content Include="Content\css\images\body_bg.jpg" />
-    <Content Include="Content\css\images\button-question-icon.png" />
     <Content Include="Content\css\images\cb\controls.png" />
     <Content Include="Content\css\images\cb\controls_old.png" />
     <Content Include="Content\css\images\cb\loading.gif" />
@@ -607,6 +606,9 @@
     <Content Include="Content\img\basket-platinum-32.png" />
     <Content Include="Content\img\basket-silver-32.png" />
     <Content Include="Content\img\business.png" />
+    <Content Include="Content\img\button_question_icon.png" />
+    <Content Include="Content\img\button_question_icon_active.png" />
+    <Content Include="Content\img\button_question_icon_hover.png" />
     <Content Include="Content\img\calendar-late.png" />
     <Content Include="Content\img\check-min.png" />
     <Content Include="Content\img\businessguardianange.png" />
