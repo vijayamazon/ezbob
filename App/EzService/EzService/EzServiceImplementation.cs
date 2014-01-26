@@ -471,23 +471,38 @@
 			return Execute(null, null, typeof(UpdateCurrencyRates));
 		} // UpdateCurrencyRates
 
-		public DecimalActionResult QuickOffer(int customerId) {
+		public QuickOfferActionResult QuickOffer(int customerId, bool saveOfferToDB) {
 			try {
-				QuickOffer oStrategy;
-
-				var oResult = ExecuteSync(out oStrategy, customerId, customerId, customerId);
-
-				return new DecimalActionResult {
-					HasValue = oStrategy.Offer.HasValue,
-					Value = oStrategy.Offer.HasValue ? oStrategy.Offer.Value : default(decimal),
-					MetaData = oResult,
-				};
+				return QuickOfferProcedure(customerId, saveOfferToDB);
 			}
 			catch (Exception e) {
 				Log.Alert(e, "Exception during executing Quick offer strategy.");
 				throw new FaultException(e.Message);
 			} // try
 		} // QuickOffer
+
+		public QuickOfferActionResult QuickOfferWithPrerequisites(int customerId, bool saveOfferToDB) {
+			try {
+				Log.Debug("QuickOfferWithPrerequisites: performing consumer check for customer {0}...", customerId);
+				new ExperianConsumerCheck(customerId, 0, DB, Log).Execute();
+
+				Log.Debug("QuickOfferWithPrerequisites: performing company check for customer {0}...", customerId);
+				new ExperianCompanyCheck(customerId, DB, Log).Execute();
+
+				Log.Debug("QuickOfferWithPrerequisites: performing AML check for customer {0}...", customerId);
+				new AmlChecker(customerId, DB, Log).Execute();
+
+				Log.Debug("QuickOfferWithPrerequisites: performing fraud check for customer {0}...", customerId);
+				new FraudChecker(customerId, FraudMode.FullCheck, DB, Log).Execute();
+
+				Log.Debug("QuickOfferWithPrerequisites: performing quick offer calculation for customer {0}...", customerId);
+				return QuickOfferProcedure(customerId, saveOfferToDB);
+			}
+			catch (Exception e) {
+				Log.Alert(e, "Exception during executing QuickOfferWithPrerequisites strategy.");
+				throw new FaultException(e.Message);
+			} // try
+		} // QuickOfferWithPrerequisites
 
 		#endregion IEzService exposed methods
 
@@ -563,7 +578,7 @@
 
 				amd.UnderlyingThread.Start();
 
-				Log.Debug("Executing " + oStrategyType + " started on another thread.");
+				Log.Debug("Executing {0} started on another thread [{1}].", oStrategyType, amd.UnderlyingThread.ManagedThreadId);
 
 				return amd;
 			}
@@ -681,6 +696,22 @@
 		} // CreateActionMetaData
 
 		#endregion method CreateActionMetaData
+
+		#region method QuickOfferProcedure
+
+		private QuickOfferActionResult QuickOfferProcedure(int nCustomerID, bool bSaveOfferToDB) {
+			QuickOffer oStrategy;
+
+			var oResult = ExecuteSync(out oStrategy, nCustomerID, nCustomerID, nCustomerID, bSaveOfferToDB);
+
+			return new QuickOfferActionResult {
+				HasValue = !ReferenceEquals(oStrategy.Offer, null),
+				Value = oStrategy.Offer,
+				MetaData = oResult,
+			};
+		} // QuickOfferProcedure
+
+		#endregion method QuickOfferProcedure
 
 		#region properties and fields
 

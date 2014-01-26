@@ -186,6 +186,7 @@
 			TypeOfBusiness nBusinessType;
 			IndustryType eIndustryType;
 
+
 			if (!Enum.TryParse(companyAdditionalInfo.TypeOfBusiness, true, out nBusinessType))
 				return this.JsonNet(new { error = "Failed to parse business type: " + companyAdditionalInfo.TypeOfBusiness });
 
@@ -194,7 +195,6 @@
 
 			if (customer.PersonalInfo == null)
 				customer.PersonalInfo = new PersonalInfo();
-
 
 			customer.PersonalInfo.TypeOfBusiness = nBusinessType;
 			customer.PersonalInfo.IndustryType = eIndustryType;
@@ -209,7 +209,6 @@
 				customer.IsOffline = true;
 			}
 
-			
 			customer.IsDirector = companyAdditionalInfo.DirectorCheck;
 
 			ProcessCompanyInfoTemporary(
@@ -228,12 +227,23 @@
 
 			customer.WizardStep = _helper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.CompanyDetails);
 
-			ms_oLog.DebugFormat("Customer {1} ({0}): wizard step has been updated to:6", customer.Id, customer.PersonalInfo.Fullname);
-
+			ms_oLog.DebugFormat(
+				"Customer {1} ({0}): wizard step has been updated to: {2}",
+				customer.Id,
+				customer.PersonalInfo.Fullname,
+				ReferenceEquals(customer.WizardStep, null) ? "null" : customer.WizardStep.ToString()
+			);
 
 			_session.Flush();
 
-			return this.JsonNet(new { });
+			try {
+				_creator.QuickOfferWithPrerequisites(customer, true);
+			}
+			catch (Exception e) {
+				ms_oLog.Error("Failed to get a quick offer from the service.", e);
+			} // try
+
+			return this.JsonNet(new {});
 		}
 
 		#endregion method SaveCompany
@@ -282,7 +292,12 @@
 
 			customer.WizardStep = _helper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.PersonalDetails);
 
-			ms_oLog.DebugFormat("Customer {1} ({0}): wizard step has been updated to:5", customer.Id, customer.PersonalInfo.Fullname);
+			ms_oLog.DebugFormat(
+				"Customer {1} ({0}): wizard step has been updated to: {2}",
+				customer.Id,
+				customer.PersonalInfo.Fullname,
+				ReferenceEquals(customer.WizardStep, null) ? "null" : customer.WizardStep.ToString()
+			);
 
 			_session.Flush();
 

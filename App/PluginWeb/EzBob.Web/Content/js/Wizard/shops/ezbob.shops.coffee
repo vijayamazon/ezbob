@@ -16,6 +16,8 @@ class EzBob.StoreInfoView extends Backbone.View
         return oCustomer.get sPropName
 
     initialize: ->
+        @renderExecuted = false
+
         @ebayStores = new EzBob.EbayStoreModels()
         @EbayStoreView = new EzBob.EbayStoreInfoView()
         @ebayStores.on "reset change", @marketplacesChanged, this
@@ -82,6 +84,11 @@ class EzBob.StoreInfoView extends Backbone.View
         'click a.connect-store': 'close'
         'click a.continue': 'next'
         'click .btn-showmore': 'showMoreAccounts'
+        'click .btn-go-to-link-accounts': 'showLinkAccountsForm'
+
+    showLinkAccountsForm: ->
+        @storeList.find('.quick-offer-form').remove()
+        @storeList.find('.link-accounts-form').removeClass 'hide'
 
     render: ->
         @mpGroups = {}
@@ -106,7 +113,15 @@ class EzBob.StoreInfoView extends Backbone.View
             store.view.on "back", @back, this
             store.button.on "ready", @ready, this
 
-        @canContinue()
+        hasFilledShops = @canContinue()
+
+        if @shouldShowQuickOffer(hasFilledShops)
+            @storeList.find('.quick-offer-form').removeClass 'hide'
+            @renderQuickOfferForm()
+        else
+            @storeList.find('.link-accounts-form').removeClass 'hide'
+
+        @renderExecuted = true
 
         @showOrRemove()
 
@@ -157,6 +172,9 @@ class EzBob.StoreInfoView extends Backbone.View
         if @isOffline() and not @isProfile()
             @storeList.find('.marketplace-button-more, .marketplace-group.following').hide()
 
+        if @storeList.find('.marketplace-group.following .marketplace-button-full, .marketplace-button-full.marketplace-button-more').length
+            @showMoreAccounts()
+
         @storeList.appendTo @$el
 
         EzBob.UiAction.registerView @
@@ -167,6 +185,28 @@ class EzBob.StoreInfoView extends Backbone.View
         @$el.find("li[rel]").setPopover "left"
         this
     # end of render
+
+    renderQuickOfferForm: ->
+
+    shouldShowQuickOffer: (hasFilledShops) ->
+        console.log 'the modl ist', @model
+
+        return false if @renderExecuted
+
+        return false if hasFilledShops
+
+        return false if @isProfile()
+
+        @quickOffer = @fromCustomer 'QuickOffer'
+
+        return false unless @quickOffer
+
+        @requestedAmount = @fromCustomer 'RequestedAmount'
+
+        return false unless @requestedAmount
+
+        return moment.utc().diff(moment.utc(@quickOffer.ExpirationDate)) < 0
+    # end of shouldShowQuickOffer
 
     showOrRemove: ->
         isOffline = @isOffline()
@@ -215,6 +255,7 @@ class EzBob.StoreInfoView extends Backbone.View
         @storeList.find('.btn-showmore').hide()
         @storeList.find('.AddMoreRuleBottom').removeClass 'hide'
         @storeList.find('.marketplace-button-more, .marketplace-group.following').show()
+        @storeList.find('.marketplace-button').css 'display', 'table'
     # end of showMoreAccounts
 
     canContinue: ->
@@ -242,6 +283,8 @@ class EzBob.StoreInfoView extends Backbone.View
 
         @storeList.find('.continue').toggleClass 'disabled', not canContinue
         @storeList.find('.AddMoreRule').toggleClass 'hide', canContinue
+
+        hasFilledShops
     # end of canContinue
 
     extractBtnClass: (jqTarget) ->

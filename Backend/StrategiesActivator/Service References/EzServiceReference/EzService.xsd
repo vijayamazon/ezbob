@@ -2,6 +2,7 @@
 <xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.datacontract.org/2004/07/EzService" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/EzService" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Models" />
   <xs:complexType name="ActionMetaData">
     <xs:sequence>
       <xs:element minOccurs="0" name="ActionID" type="ser:guid" />
@@ -106,15 +107,15 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="WizardConfigsActionResult" nillable="true" type="tns:WizardConfigsActionResult" />
-  <xs:complexType name="DecimalActionResult">
+  <xs:complexType name="QuickOfferActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
           <xs:element minOccurs="0" name="HasValue" type="xs:boolean" />
-          <xs:element minOccurs="0" name="Value" type="xs:decimal" />
+          <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/EzBob.Backend.Models" minOccurs="0" name="Value" nillable="true" type="q2:QuickOfferModel" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="DecimalActionResult" nillable="true" type="tns:DecimalActionResult" />
+  <xs:element name="QuickOfferActionResult" nillable="true" type="tns:QuickOfferActionResult" />
 </xs:schema>

@@ -1,10 +1,10 @@
 ﻿namespace EzBob.Backend.Strategies.AutoDecisions
 {
+	using EzBob.Models;
 	using Ezbob.Database;
 	using System;
 	using System.Data;
 	using Ezbob.Logger;
-	using Models;
 
 	public class Approval
 	{

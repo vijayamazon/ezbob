@@ -784,13 +784,29 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="customerId" type="xs:int" />
+        <xs:element minOccurs="0" name="saveOfferToDB" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="QuickOfferResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q58="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="QuickOfferResult" nillable="true" type="q58:DecimalActionResult" />
+        <xs:element xmlns:q58="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="QuickOfferResult" nillable="true" type="q58:QuickOfferActionResult" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="QuickOfferWithPrerequisites">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="customerId" type="xs:int" />
+        <xs:element minOccurs="0" name="saveOfferToDB" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="QuickOfferWithPrerequisitesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q59="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="QuickOfferWithPrerequisitesResult" nillable="true" type="q59:QuickOfferActionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

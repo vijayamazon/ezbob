@@ -60,6 +60,10 @@ namespace Ezbob.Database {
 			if (prm.Type != null)
 				oParam.SqlDbType = (SqlDbType)prm.Type;
 
+			oParam.Direction = prm.Direction;
+
+			prm.UnderlyingParameter = oParam;
+
 			return oParam;
 		} // CreateParameter
 

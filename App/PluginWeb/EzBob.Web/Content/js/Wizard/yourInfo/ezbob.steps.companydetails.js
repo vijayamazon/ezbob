@@ -304,7 +304,6 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
         });
         request.complete(function () {
             if (typeOfBussiness !== 'Entrepreneur') {
-                $.post("" + window.gRootPath + "Customer/Experian/PerformCompanyCheck", {});
                 $.post("" + window.gRootPath + "Customer/Experian/PerformConsumerCheckForDirectors", {});
             }
 

@@ -31,7 +31,7 @@
 
 	#endregion class TrustPilotStatus
 
-	#region TrustPilotStatusMap
+	#region class TrustPilotStatusMap
 
 	public class TrustPilotStatusMap : ClassMap<TrustPilotStatus> {
 		public TrustPilotStatusMap() {

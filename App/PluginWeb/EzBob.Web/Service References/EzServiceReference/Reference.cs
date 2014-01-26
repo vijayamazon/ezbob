@@ -186,7 +186,7 @@ namespace EzBob.Web.EzServiceReference {
     [System.SerializableAttribute()]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.BoolActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.WizardConfigsActionResult))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.DecimalActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.QuickOfferActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.StringListActionResult))]
     public partial class ActionResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
@@ -309,15 +309,15 @@ namespace EzBob.Web.EzServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="DecimalActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="QuickOfferActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
     [System.SerializableAttribute()]
-    public partial class DecimalActionResult : EzBob.Web.EzServiceReference.ActionResult {
+    public partial class QuickOfferActionResult : EzBob.Web.EzServiceReference.ActionResult {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool HasValueField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private decimal ValueField;
+        private EzBob.Backend.Models.QuickOfferModel ValueField;
         
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool HasValue {
@@ -333,12 +333,12 @@ namespace EzBob.Web.EzServiceReference {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public decimal Value {
+        public EzBob.Backend.Models.QuickOfferModel Value {
             get {
                 return this.ValueField;
             }
             set {
-                if ((this.ValueField.Equals(value) != true)) {
+                if ((object.ReferenceEquals(this.ValueField, value) != true)) {
                     this.ValueField = value;
                     this.RaisePropertyChanged("Value");
                 }
@@ -600,7 +600,10 @@ namespace EzBob.Web.EzServiceReference {
         EzBob.Web.EzServiceReference.ActionMetaData UpdateCurrencyRates();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/QuickOffer", ReplyAction="http://tempuri.org/IEzService/QuickOfferResponse")]
-        EzBob.Web.EzServiceReference.DecimalActionResult QuickOffer(int customerId);
+        EzBob.Web.EzServiceReference.QuickOfferActionResult QuickOffer(int customerId, bool saveOfferToDB);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/QuickOfferWithPrerequisites", ReplyAction="http://tempuri.org/IEzService/QuickOfferWithPrerequisitesResponse")]
+        EzBob.Web.EzServiceReference.QuickOfferActionResult QuickOfferWithPrerequisites(int customerId, bool saveOfferToDB);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -818,8 +821,12 @@ namespace EzBob.Web.EzServiceReference {
             return base.Channel.UpdateCurrencyRates();
         }
         
-        public EzBob.Web.EzServiceReference.DecimalActionResult QuickOffer(int customerId) {
-            return base.Channel.QuickOffer(customerId);
+        public EzBob.Web.EzServiceReference.QuickOfferActionResult QuickOffer(int customerId, bool saveOfferToDB) {
+            return base.Channel.QuickOffer(customerId, saveOfferToDB);
+        }
+        
+        public EzBob.Web.EzServiceReference.QuickOfferActionResult QuickOfferWithPrerequisites(int customerId, bool saveOfferToDB) {
+            return base.Channel.QuickOfferWithPrerequisites(customerId, saveOfferToDB);
         }
     }
 }

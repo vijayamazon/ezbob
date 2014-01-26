@@ -1,5 +1,5 @@
 ﻿namespace EzBob.Backend.Strategies {
-	using Models;
+	using EzBob.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 

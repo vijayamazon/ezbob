@@ -2,6 +2,7 @@ namespace EzBob.Web.Code.ApplicationCreator
 {
 	using System;
 	using ApplicationMng.Model;
+	using Backend.Models;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EzServiceReference;
@@ -45,5 +46,7 @@ namespace EzBob.Web.Code.ApplicationCreator
 		void FraudChecker(User user, FraudMode mode);
 		void RequestCashWithoutTakenLoan(Customer customer, string dashboard);
 		void LoanFullyPaid(Loan loan);
+		QuickOfferModel QuickOfferWithPrerequisites(Customer customer, bool saveOfferToDB);
+		QuickOfferModel QuickOffer(Customer customer, bool saveOfferToDB);
 	}
 }

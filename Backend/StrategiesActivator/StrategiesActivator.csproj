@@ -156,6 +156,9 @@
     <None Include="Service References\EzServiceReference\Arrays.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\EzServiceReference\EzBob.Backend.Models.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\EzServiceReference\EzBob.Backend.Strategies.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -178,7 +181,7 @@
     <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.BoolActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.DecimalActionResult.datasource">
+    <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.QuickOfferActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.StringListActionResult.datasource">

@@ -70,6 +70,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -145,6 +146,10 @@
     <Compile Include="StrategyHelper.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Backend\Models\Models.csproj">
+      <Project>{6f7fc0db-e5a4-42ef-91ff-4dfea42a7621}</Project>
+      <Name>Models</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Amazon\AmazonDbLib\AmazonDbLib.csproj">
       <Project>{fd263eb4-a3ef-4447-94b1-de1b308c604b}</Project>
       <Name>AmazonDbLib</Name>

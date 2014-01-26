@@ -103,7 +103,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 
 	public class MaritalStatusType : EnumStringType<MaritalStatus> { }
 
-
 	public class MedalType : CaseInsensitiveEnumStringType<Medal> { }
 
 	#region enum WizardStepType
@@ -334,8 +333,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 	} // class ScoringResult
 
 	#endregion class ScoringResult
-
-
 
 	#region class CollectionStatus
 
@@ -789,6 +786,8 @@ namespace EZBob.DatabaseLib.Model.Database {
 		} // ManualAddressWarning
 
 		public virtual TrustPilotStatus TrustPilotStatus { get; set; }
+
+		public virtual QuickOffer QuickOffer { get; set; }
 	} // class Customer
 
 	#endregion class Customer

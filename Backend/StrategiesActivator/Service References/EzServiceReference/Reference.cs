@@ -186,7 +186,7 @@ namespace StrategiesActivator.EzServiceReference {
     [System.SerializableAttribute()]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.BoolActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.WizardConfigsActionResult))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.DecimalActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.QuickOfferActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.StringListActionResult))]
     public partial class ActionResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
@@ -309,15 +309,15 @@ namespace StrategiesActivator.EzServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="DecimalActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="QuickOfferActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
     [System.SerializableAttribute()]
-    public partial class DecimalActionResult : StrategiesActivator.EzServiceReference.ActionResult {
+    public partial class QuickOfferActionResult : StrategiesActivator.EzServiceReference.ActionResult {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool HasValueField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private decimal ValueField;
+        private StrategiesActivator.EzServiceReference.QuickOfferModel ValueField;
         
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool HasValue {
@@ -333,12 +333,12 @@ namespace StrategiesActivator.EzServiceReference {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public decimal Value {
+        public StrategiesActivator.EzServiceReference.QuickOfferModel Value {
             get {
                 return this.ValueField;
             }
             set {
-                if ((this.ValueField.Equals(value) != true)) {
+                if ((object.ReferenceEquals(this.ValueField, value) != true)) {
                     this.ValueField = value;
                     this.RaisePropertyChanged("Value");
                 }
@@ -367,6 +367,196 @@ namespace StrategiesActivator.EzServiceReference {
                 }
             }
         }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="QuickOfferModel", Namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Models")]
+    [System.SerializableAttribute()]
+    public partial class QuickOfferModel : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int AmlField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal AmountField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int BusinessScoreField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.DateTime CreationDateField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.DateTime ExpirationDateField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int IDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.DateTime IncorporationDateField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal TangibleEquityField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal TotalCurrentAssetsField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Aml {
+            get {
+                return this.AmlField;
+            }
+            set {
+                if ((this.AmlField.Equals(value) != true)) {
+                    this.AmlField = value;
+                    this.RaisePropertyChanged("Aml");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal Amount {
+            get {
+                return this.AmountField;
+            }
+            set {
+                if ((this.AmountField.Equals(value) != true)) {
+                    this.AmountField = value;
+                    this.RaisePropertyChanged("Amount");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int BusinessScore {
+            get {
+                return this.BusinessScoreField;
+            }
+            set {
+                if ((this.BusinessScoreField.Equals(value) != true)) {
+                    this.BusinessScoreField = value;
+                    this.RaisePropertyChanged("BusinessScore");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime CreationDate {
+            get {
+                return this.CreationDateField;
+            }
+            set {
+                if ((this.CreationDateField.Equals(value) != true)) {
+                    this.CreationDateField = value;
+                    this.RaisePropertyChanged("CreationDate");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime ExpirationDate {
+            get {
+                return this.ExpirationDateField;
+            }
+            set {
+                if ((this.ExpirationDateField.Equals(value) != true)) {
+                    this.ExpirationDateField = value;
+                    this.RaisePropertyChanged("ExpirationDate");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int ID {
+            get {
+                return this.IDField;
+            }
+            set {
+                if ((this.IDField.Equals(value) != true)) {
+                    this.IDField = value;
+                    this.RaisePropertyChanged("ID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime IncorporationDate {
+            get {
+                return this.IncorporationDateField;
+            }
+            set {
+                if ((this.IncorporationDateField.Equals(value) != true)) {
+                    this.IncorporationDateField = value;
+                    this.RaisePropertyChanged("IncorporationDate");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal TangibleEquity {
+            get {
+                return this.TangibleEquityField;
+            }
+            set {
+                if ((this.TangibleEquityField.Equals(value) != true)) {
+                    this.TangibleEquityField = value;
+                    this.RaisePropertyChanged("TangibleEquity");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal TotalCurrentAssets {
+            get {
+                return this.TotalCurrentAssetsField;
+            }
+            set {
+                if ((this.TotalCurrentAssetsField.Equals(value) != true)) {
+                    this.TotalCurrentAssetsField = value;
+                    this.RaisePropertyChanged("TotalCurrentAssets");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="FraudMode", Namespace="http://schemas.datacontract.org/2004/07/FraudChecker")]
+    public enum FraudMode : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        FullCheck = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PersonalDetaisCheck = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        CompanyDetailsCheck = 2,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        MarketplacesCheck = 3,
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
@@ -793,10 +983,16 @@ namespace StrategiesActivator.EzServiceReference {
         System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> UpdateCurrencyRatesAsync();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/QuickOffer", ReplyAction="http://tempuri.org/IEzService/QuickOfferResponse")]
-        StrategiesActivator.EzServiceReference.DecimalActionResult QuickOffer(int customerId);
+        StrategiesActivator.EzServiceReference.QuickOfferActionResult QuickOffer(int customerId, bool saveOfferToDB);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/QuickOffer", ReplyAction="http://tempuri.org/IEzService/QuickOfferResponse")]
-        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.DecimalActionResult> QuickOfferAsync(int customerId);
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.QuickOfferActionResult> QuickOfferAsync(int customerId, bool saveOfferToDB);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/QuickOfferWithPrerequisites", ReplyAction="http://tempuri.org/IEzService/QuickOfferWithPrerequisitesResponse")]
+        StrategiesActivator.EzServiceReference.QuickOfferActionResult QuickOfferWithPrerequisites(int customerId, bool saveOfferToDB);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/QuickOfferWithPrerequisites", ReplyAction="http://tempuri.org/IEzService/QuickOfferWithPrerequisitesResponse")]
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.QuickOfferActionResult> QuickOfferWithPrerequisitesAsync(int customerId, bool saveOfferToDB);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -1202,12 +1398,20 @@ namespace StrategiesActivator.EzServiceReference {
             return base.Channel.UpdateCurrencyRatesAsync();
         }
         
-        public StrategiesActivator.EzServiceReference.DecimalActionResult QuickOffer(int customerId) {
-            return base.Channel.QuickOffer(customerId);
+        public StrategiesActivator.EzServiceReference.QuickOfferActionResult QuickOffer(int customerId, bool saveOfferToDB) {
+            return base.Channel.QuickOffer(customerId, saveOfferToDB);
         }
         
-        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.DecimalActionResult> QuickOfferAsync(int customerId) {
-            return base.Channel.QuickOfferAsync(customerId);
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.QuickOfferActionResult> QuickOfferAsync(int customerId, bool saveOfferToDB) {
+            return base.Channel.QuickOfferAsync(customerId, saveOfferToDB);
+        }
+        
+        public StrategiesActivator.EzServiceReference.QuickOfferActionResult QuickOfferWithPrerequisites(int customerId, bool saveOfferToDB) {
+            return base.Channel.QuickOfferWithPrerequisites(customerId, saveOfferToDB);
+        }
+        
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.QuickOfferActionResult> QuickOfferWithPrerequisitesAsync(int customerId, bool saveOfferToDB) {
+            return base.Channel.QuickOfferWithPrerequisitesAsync(customerId, saveOfferToDB);
         }
     }
 }

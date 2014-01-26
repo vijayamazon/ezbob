@@ -49,7 +49,12 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         private LoanOffer GetLoanOffer(long id)
         {
             var cr = _cashRequests.Get(id);
-			
+
+			/*
+	        if (!cr.Customer.OfferStart.HasValue)
+		        cr.Customer.OfferStart = cr.OfferStart;
+			*/
+
             var loan = _loanBuilder.CreateLoan(cr, cr.ApprovedSum(), cr.Customer.OfferStart.Value);
             
             var calc = new LoanRepaymentScheduleCalculator(loan, loan.Date);

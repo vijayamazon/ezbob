@@ -91,6 +91,7 @@
     <Compile Include="Model\Database\CompanyEmployeeCountMap.cs" />
     <Compile Include="Model\Database\Company.cs" />
     <Compile Include="Model\Database\CustomerAddressType.cs" />
+    <Compile Include="Model\Database\QuickOffer.cs" />
     <Compile Include="Model\Database\TrustPilotStatus.cs" />
     <Compile Include="Model\Database\WizardStep.cs" />
     <Compile Include="Model\Database\WhatsNewCustomerMap.cs" />

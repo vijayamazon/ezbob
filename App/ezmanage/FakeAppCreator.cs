@@ -4,6 +4,7 @@
 	using ApplicationMng.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EzBob.Backend.Models;
 	using EzBob.Web.Code.ApplicationCreator;
 	using EzBob.Web.EzServiceReference;
 	using FraudChecker;
@@ -182,6 +183,14 @@
 		public void FraudChecker(User user, FraudMode mode)
 		{
 			
+		}
+
+		public QuickOfferModel QuickOffer(Customer oCustomer, bool saveOfferToDB) {
+			return null;
+		}
+
+		public QuickOfferModel QuickOfferWithPrerequisites(Customer oCustomer, bool saveOfferToDB) {
+			return null;
 		}
 	}
 }

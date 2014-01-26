@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Web.Code.ApplicationCreator {
 	using System.ServiceModel;
+	using Backend.Models;
 	using EzServiceReference;
 	using System;
 	using System.Collections.Generic;
@@ -551,6 +552,30 @@
 				CreateApplication(customer, strategyParameters, "Email Loan Paid Fully");
 			}
 		}
+
+		public QuickOfferModel QuickOffer(Customer oCustomer, bool saveOfferToDB) {
+			try {
+				QuickOfferActionResult oResult = ServiceClient.QuickOffer(oCustomer.Id, saveOfferToDB);
+
+				return oResult.HasValue ? oResult.Value : null;
+			}
+			catch (Exception e) {
+				Log.Error("Failed to receive a quick offer from service.", e);
+				return null;
+			} // try
+		} // QuickOffer
+
+		public QuickOfferModel QuickOfferWithPrerequisites(Customer oCustomer, bool saveOfferToDB) {
+			try {
+				QuickOfferActionResult oResult = ServiceClient.QuickOfferWithPrerequisites(oCustomer.Id, saveOfferToDB);
+
+				return oResult.HasValue ? oResult.Value : null;
+			}
+			catch (Exception e) {
+				Log.Error("Failed to receive a quick offer from service.", e);
+				return null;
+			} // try
+		} // QuickOfferWithPrerequisites
 
 		#region property ServiceClient
 		

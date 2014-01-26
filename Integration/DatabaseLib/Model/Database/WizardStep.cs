@@ -7,6 +7,16 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual bool TheLastOne { get; set; }
 		public virtual string Name { get; set; }
 		public virtual string Description { get; set; }
+
+		public override string ToString() {
+			return string.Format(
+				"{0} ({1}) <{2}> {3}",
+				Name,
+				ID,
+				TheLastOne ? "final" : "not final",
+				Description
+			);
+		} // ToString
 	} // class WizardStep
 
 	public class WizardStepRepository : NHibernateRepositoryBase<WizardStep> {

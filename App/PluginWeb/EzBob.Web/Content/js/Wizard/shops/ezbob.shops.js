@@ -41,6 +41,7 @@
 
     StoreInfoView.prototype.initialize = function() {
       var acc, accountTypeName, aryCGAccounts, ignore, lc, ordpi, vendorInfo;
+      this.renderExecuted = false;
       this.ebayStores = new EzBob.EbayStoreModels();
       this.EbayStoreView = new EzBob.EbayStoreInfoView();
       this.ebayStores.on("reset change", this.marketplacesChanged, this);
@@ -136,11 +137,17 @@
     StoreInfoView.prototype.events = {
       'click a.connect-store': 'close',
       'click a.continue': 'next',
-      'click .btn-showmore': 'showMoreAccounts'
+      'click .btn-showmore': 'showMoreAccounts',
+      'click .btn-go-to-link-accounts': 'showLinkAccountsForm'
+    };
+
+    StoreInfoView.prototype.showLinkAccountsForm = function() {
+      this.storeList.find('.quick-offer-form').remove();
+      return this.storeList.find('.link-accounts-form').removeClass('hide');
     };
 
     StoreInfoView.prototype.render = function() {
-      var accountsList, bFirst, grp, grpid, grpui, j, name, oTarget, relevantMpGroups, sActiveField, sBtnClass, sGroupClass, sPriorityField, shop, sortedShopsByPriority, store, storeTypeName, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2, _ref3;
+      var accountsList, bFirst, grp, grpid, grpui, hasFilledShops, j, name, oTarget, relevantMpGroups, sActiveField, sBtnClass, sGroupClass, sPriorityField, shop, sortedShopsByPriority, store, storeTypeName, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2, _ref3;
       this.mpGroups = {};
       _ref = EzBob.Config.MarketPlaceGroups;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -173,7 +180,14 @@
         store.view.on("back", this.back, this);
         store.button.on("ready", this.ready, this);
       }
-      this.canContinue();
+      hasFilledShops = this.canContinue();
+      if (this.shouldShowQuickOffer(hasFilledShops)) {
+        this.storeList.find('.quick-offer-form').removeClass('hide');
+        this.renderQuickOfferForm();
+      } else {
+        this.storeList.find('.link-accounts-form').removeClass('hide');
+      }
+      this.renderExecuted = true;
       this.showOrRemove();
       accountsList = this.storeList.find('.accounts-list');
       accountsList.empty();
@@ -222,6 +236,9 @@
       if (this.isOffline() && !this.isProfile()) {
         this.storeList.find('.marketplace-button-more, .marketplace-group.following').hide();
       }
+      if (this.storeList.find('.marketplace-group.following .marketplace-button-full, .marketplace-button-full.marketplace-button-more').length) {
+        this.showMoreAccounts();
+      }
       this.storeList.appendTo(this.$el);
       EzBob.UiAction.registerView(this);
       this.amazonMarketplaces.trigger("reset");
@@ -229,6 +246,30 @@
       this.$el.find("img[rel]").setPopover("left");
       this.$el.find("li[rel]").setPopover("left");
       return this;
+    };
+
+    StoreInfoView.prototype.renderQuickOfferForm = function() {};
+
+    StoreInfoView.prototype.shouldShowQuickOffer = function(hasFilledShops) {
+      console.log('the modl ist', this.model);
+      if (this.renderExecuted) {
+        return false;
+      }
+      if (hasFilledShops) {
+        return false;
+      }
+      if (this.isProfile()) {
+        return false;
+      }
+      this.quickOffer = this.fromCustomer('QuickOffer');
+      if (!this.quickOffer) {
+        return false;
+      }
+      this.requestedAmount = this.fromCustomer('RequestedAmount');
+      if (!this.requestedAmount) {
+        return false;
+      }
+      return moment.utc().diff(moment.utc(this.quickOffer.ExpirationDate)) < 0;
     };
 
     StoreInfoView.prototype.showOrRemove = function() {
@@ -271,7 +312,8 @@
     StoreInfoView.prototype.showMoreAccounts = function() {
       this.storeList.find('.btn-showmore').hide();
       this.storeList.find('.AddMoreRuleBottom').removeClass('hide');
-      return this.storeList.find('.marketplace-button-more, .marketplace-group.following').show();
+      this.storeList.find('.marketplace-button-more, .marketplace-group.following').show();
+      return this.storeList.find('.marketplace-button').css('display', 'table');
     };
 
     StoreInfoView.prototype.canContinue = function() {
@@ -300,7 +342,8 @@
         }
       }
       this.storeList.find('.continue').toggleClass('disabled', !canContinue);
-      return this.storeList.find('.AddMoreRule').toggleClass('hide', canContinue);
+      this.storeList.find('.AddMoreRule').toggleClass('hide', canContinue);
+      return hasFilledShops;
     };
 
     StoreInfoView.prototype.extractBtnClass = function(jqTarget) {

@@ -1,7 +1,7 @@
 ﻿namespace EzBob.Backend.Strategies
 {
 	using AutoDecisions;
-	using Models;
+	using EzBob.Models;
 	using ScoreCalculation;
 	using System;
 	using System.Collections.Generic;

@@ -1,12 +1,14 @@
 ﻿namespace EzBob.Backend.Strategies.QuickOffer {
 	using System;
 	using System.Collections.Generic;
+	using System.Data;
 	using System.Globalization;
 	using System.Xml;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils;
 	using Ezbob.Utils.XmlUtils;
+	using Models;
 
 	#region class QuickOfferData
 
@@ -50,9 +52,92 @@
 
 		#endregion property IsValid
 
+		#region method GetOffer
+
+		public QuickOfferModel GetOffer(bool bSaveOfferToDB, AConnection oDB, StrategyLog oLog) {
+			decimal? nOffer = Calculate();
+
+			if (!nOffer.HasValue)
+				return null;
+
+			int nOfferID = default (int);
+
+			if (bSaveOfferToDB) {
+				try {
+					var oID = new QueryParameter("@QuickOfferID") {
+						Type = SqlDbType.Int,
+						Direction = ParameterDirection.Output,
+					};
+
+					oDB.ExecuteNonQuery(
+						"QuickOfferSave",
+						CommandSpecies.StoredProcedure,
+						new QueryParameter("@CustomerID", CustomerID),
+						new QueryParameter("@Amount", nOffer),
+						new QueryParameter("@Aml", Aml),
+						new QueryParameter("@BusinessScore", BusinessScore),
+						new QueryParameter("@IncorporationDate", IncorporationDate),
+						new QueryParameter("@TangibleEquity", TangibleEquity),
+						new QueryParameter("@TotalCurrentAssets", TotalCurrentAssets),
+						oID
+					);
+
+					if (int.TryParse(oID.SafeReturnedValue, out nOfferID))
+						oLog.Msg("Quick offer id is {0}", nOfferID);
+					else
+						oLog.Warn("Failed to parse quick offer id from {0}", oID.Value.ToString());
+				}
+				catch (Exception e) {
+					oLog.Alert("Failed to save a quick offer to DB.", e);
+				} // try
+			} // if
+
+			return new QuickOfferModel {
+				ID = nOfferID,
+				Amount = nOffer.Value,
+				Aml = Aml,
+				BusinessScore = BusinessScore,
+				IncorporationDate = IncorporationDate,
+				TangibleEquity = TangibleEquity,
+				TotalCurrentAssets = TotalCurrentAssets,
+			};
+		} // GetOffer
+
+		#endregion method GetOffer
+
+		#endregion public
+
+		#region private
+
+		#region properties
+
+		private int CustomerID;
+		private decimal RequestedAmount;
+		// private bool IsOffline;
+		private string CompanyRefNum;
+		// private int DefaultCount;
+		// private long AmlID;
+		private string AmlData;
+		// private long PersonalID;
+		// private int PersonalScore;
+		// private long CompanyID;
+		private string CompanyData;
+		private string FirstName;
+		private string LastName;
+
+		private int Aml;
+		private int BusinessScore;
+		private DateTime IncorporationDate;
+		private decimal TangibleEquity;
+		private decimal TotalCurrentAssets;
+
+		private readonly SafeLog Log;
+
+		#endregion properties
+
 		#region method Calculate
 
-		public decimal? Calculate() {
+		private decimal? Calculate() {
 			var oOfferAmountPct = new List<Tuple<int, decimal>>() {
 				new Tuple<int, decimal>(40, 0.012m),
 				new Tuple<int, decimal>(50, 0.016m),
@@ -120,36 +205,6 @@
 		} // Calculate
 
 		#endregion method Calculate
-
-		#endregion public
-
-		#region private
-
-		#region properties
-
-		private int CustomerID;
-		private decimal RequestedAmount;
-		// private bool IsOffline;
-		private string CompanyRefNum;
-		// private int DefaultCount;
-		// private long AmlID;
-		private string AmlData;
-		// private long PersonalID;
-		// private int PersonalScore;
-		// private long CompanyID;
-		private string CompanyData;
-		private string FirstName;
-		private string LastName;
-
-		private int Aml;
-		private int BusinessScore;
-		private DateTime IncorporationDate;
-		private decimal TangibleEquity;
-		private decimal TotalCurrentAssets;
-
-		private readonly SafeLog Log;
-
-		#endregion properties
 
 		#region method Validate
 

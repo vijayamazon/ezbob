@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Backend.Strategies.QuickOffer {
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using Models;
 
 	#region class QuickOffer
 
@@ -9,8 +10,9 @@
 
 		#region constructor
 
-		public QuickOffer(int nCustomerID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public QuickOffer(int nCustomerID, bool bSaveOfferToDB, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			m_nCustomerID = nCustomerID;
+			m_bSaveOfferToDB = bSaveOfferToDB;
 			Offer = null;
 		} // constructor
 
@@ -65,16 +67,16 @@
 				return;
 			} // if
 
-			Offer = qod.Calculate();
+			Offer = qod.GetOffer(m_bSaveOfferToDB, DB, Log);
 
-			Log.Debug("QuickOffer.Execute for customer {0} complete: offer is {1}.", m_nCustomerID, Offer.HasValue ? Offer.Value.ToString() : "alas, nothing");
+			Log.Debug("QuickOffer.Execute for customer {0} complete: offer is {1}.", m_nCustomerID, ReferenceEquals(Offer, null) ? "alas, nothing" : Offer.Amount.ToString());
 		} // Execute
 
 		#endregion method Execute
 
 		#region property Offer
 
-		public decimal? Offer { get; private set; } // Offer
+		public QuickOfferModel Offer { get; private set; } // Offer
 
 		#endregion property Offer
 
@@ -82,7 +84,8 @@
 
 		#region private
 
-		private int m_nCustomerID;
+		private readonly int m_nCustomerID;
+		private readonly bool m_bSaveOfferToDB;
 
 		#endregion private
 	} // class QuickOffer

@@ -13,6 +13,7 @@ using PaymentServices.Calculators;
 namespace EzBob.Web.Areas.Customer.Models
 {
 	using System.Collections.Generic;
+	using Backend.Models;
 	using Configuration;
 
 	public class CustomerModelBuilder
@@ -221,8 +222,30 @@ namespace EzBob.Web.Areas.Customer.Models
 			customerModel.TrustPilotStatusID = customer.TrustPilotStatus.ID;
 			customerModel.TrustPilotReviewEnabled = DBConfigurationValues.Instance.TrustPilotReviewEnabled;
 
+			customerModel.QuickOffer = BuildQuickOfferModel(customer);
+
+			var oRequestedAmount = customer.CustomerRequestedLoan.OrderBy(x => x.Created).LastOrDefault();
+			customerModel.RequestedAmount = ReferenceEquals(oRequestedAmount, null) || !oRequestedAmount.Amount.HasValue ? 0 : (decimal)oRequestedAmount.Amount;
+
             return customerModel;
         }
+
+		private QuickOfferModel BuildQuickOfferModel(EZBob.DatabaseLib.Model.Database.Customer c) {
+			if (ReferenceEquals(c, null) || ReferenceEquals(c.QuickOffer, null) || (c.QuickOffer.ExpirationDate < DateTime.UtcNow))
+				return null;
+
+			return new QuickOfferModel {
+				ID = c.QuickOffer.ID,
+				Amount = c.QuickOffer.Amount,
+				CreationDate = c.QuickOffer.CreationDate,
+				ExpirationDate = c.QuickOffer.ExpirationDate,
+				Aml = c.QuickOffer.Aml,
+				BusinessScore = c.QuickOffer.BusinessScore,
+				IncorporationDate = c.QuickOffer.IncorporationDate,
+				TangibleEquity = c.QuickOffer.TangibleEquity,
+				TotalCurrentAssets = c.QuickOffer.TotalCurrentAssets,
+			};
+		} // BuildQuickOfferModel
 
 		private decimal GetRolloverPayValue(Loan loan)
 		{

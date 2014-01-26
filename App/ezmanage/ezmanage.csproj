@@ -105,6 +105,10 @@
     <Compile Include="EzRegistry.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Backend\Models\Models.csproj">
+      <Project>{6F7FC0DB-E5A4-42EF-91FF-4DFEA42A7621}</Project>
+      <Name>Models</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Integration\CommonLib\CommonLib.csproj">
       <Project>{AEDBFBBD-BA7D-4582-AFCA-6ECF8AF33C98}</Project>
       <Name>CommonLib</Name>

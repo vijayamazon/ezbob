@@ -84,13 +84,27 @@
 		[Activation]
 		private void QuickOffer() {
 			int customerId;
+			bool bSaveOfferToDB;
 
-			if (args.Length != 2 || !int.TryParse(args[1], out customerId)) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> QuickOffer <CustomerId>");
+			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !bool.TryParse(args[2], out bSaveOfferToDB)) {
+				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> QuickOffer <CustomerId> <Save offer to DB>");
 				return;
 			}
 
-			serviceClient.QuickOffer(customerId);
+			serviceClient.QuickOffer(customerId, bSaveOfferToDB);
+		} // QuickOffer
+
+		[Activation]
+		private void QuickOfferWithPrerequisites() {
+			int customerId;
+			bool bSaveOfferToDB;
+
+			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !bool.TryParse(args[2], out bSaveOfferToDB)) {
+				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> QuickOfferWithPrerequisites <CustomerId> <Save offer to DB");
+				return;
+			}
+
+			serviceClient.QuickOfferWithPrerequisites(customerId, bSaveOfferToDB);
 		} // QuickOffer
 
 		[Activation]
@@ -370,14 +384,15 @@
 		[Activation]
 		private void FraudChecker() {
 			int customerId;
-			FraudMode fraudMode;
-			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !Enum.TryParse(args[2], out fraudMode))
-			{
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> FraudChecker <CustomerId> <FraudMode>");
+			FraudMode mode;
+
+			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !FraudMode.TryParse(args[2], true, out mode)) {
+				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> FraudChecker <CustomerId> <Fraud mode>");
+				Console.WriteLine("Fraud mode values: {0}", string.Join(", ", Enum.GetValues(typeof (FraudMode))));
 				return;
 			}
 
-			serviceClient.FraudChecker(customerId, fraudMode);
+			serviceClient.FraudChecker(customerId, mode);
 		}
 
 		[Activation]

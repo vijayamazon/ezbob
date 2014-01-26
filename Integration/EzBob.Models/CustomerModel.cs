@@ -7,6 +7,8 @@ using EzBob.Models;
 
 namespace EzBob.Web.Areas.Customer.Models
 {
+	using Backend.Models;
+
 	[Serializable]
 	public class CustomerModel
 	{
@@ -113,6 +115,9 @@ namespace EzBob.Web.Areas.Customer.Models
 
 		public int TrustPilotStatusID { get; set; }
 		public bool TrustPilotReviewEnabled { get; set; }
+
+		public QuickOfferModel QuickOffer { get; set; }
+		public decimal RequestedAmount { get; set; }
 	} // class CustomerModel
 
 	public class SimpleMarketPlaceModel

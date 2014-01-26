@@ -302,6 +302,8 @@ namespace EZBob.DatabaseLib.Model.Database {
 			Map(x => x.GoogleCookie).Length(300);
 
 			References(x => x.TrustPilotStatus, "TrustPilotStatusID");
+
+			References(x => x.QuickOffer, "QuickOfferID").Nullable().Cascade.All();
 		} // constructor
 	} // class CustomerMap
 } // namespace EZBob.DatabaseLib.Model.Database
