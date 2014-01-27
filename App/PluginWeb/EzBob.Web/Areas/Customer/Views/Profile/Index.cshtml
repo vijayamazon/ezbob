@@ -204,12 +204,27 @@
             </div>
         </div>
 
-        <div class="trustpilot-ezbob hide" title="Rate us on Trust Pilot and get &pound;25 off on the next loan!">
-            <div class="rate"><a class="trustpilot-rate" href="#" title="Rate us!" ui-event-control-id="dashboard:trustpilot-rate">
-                <img src="../../../../Content/img/trustpilot-ezbob.png" alt="Rate us!" />Rate us!</a></div>
-            <div class="skip"><a href="#" class="trustpilot-skip" title="Skip and continue with the request." ui-event-control-id="dashboard:trustpilot-skip">Skip</a></div>
-        </div>
-    </script>
+		<div class="trustpilot-ezbob">
+			<div class="skip">
+				<h3>Rate us on Trustpilot</h3>
+				<a href="#" class="trustpilot-skip" title="Skip and continue with the request." ui-event-control-id="dashboard:trustpilot-skip">
+					<span class="ui-icon ui-icon-closethick">skip</span>
+				</a>
+			</div>
+			
+			<div class="rate">
+				<div class="text">
+					<div>Help us grow</div>
+					<div>ezbob will help</div>
+					<div class=strong>your business</div>
+					<div class=strong>grow too!</div>
+					<a class="text-link trustpilot-rate" href="#" title="Rate us!" ui-event-control-id="dashboard:trustpilot-rate-text">Write a review</a>
+				</div>
+
+				<a class="image-link trustpilot-rate" href="#" title="Rate us!" ui-event-control-id="dashboard:trustpilot-rate-image"><img src="../../../../Content/img/trustpilot.png" alt="Rate us!" /></a>
+			</div>
+		</div>
+	</script>
 
     <script id="processing-message-template" type="text/template">
         <h2 class="header-message <%-cls%>"><%=Message%></h2>

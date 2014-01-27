@@ -118,8 +118,9 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 		this.$el.find('.trustpilot-ezbob').dialog({
 			autoOpen: true,
 			modal: true,
-			width: 720,
+			width: 400,
 			resizable: false,
+			closeOnEscape: false,
 			close: function(evt, ui) {
 				$(this).dialog('destroy');
 				self.$el.append(this);
@@ -127,14 +128,7 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 			open: function(evt, ui) {
 				var me = $(this);
 
-				if (self.model.get('customer').get('IsOffline')) {
-					var oImg = $('div.rate img', me);
-					var sSrc = oImg.attr('src');
-
-					sSrc = sSrc.replace(/\.png$/, '-cartless.png');
-
-					oImg.attr('src', sSrc);
-				} // if
+				$('.ui-dialog-titlebar', me.parent()).hide();
 
 				$('a.trustpilot-rate', me).click(function() {
 					me.dialog('close');
@@ -199,6 +193,8 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 		this.$el.find('button').popover({ placement: 'top' });
 
 		EzBob.UiAction.registerView(this);
+
+		this.$el.find('.trustpilot-ezbob').hide();
 
 		return this;
 	}, // render
