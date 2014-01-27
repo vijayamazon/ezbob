@@ -64,12 +64,22 @@ class EzBob.HMRCAccountInfoView extends Backbone.Marionette.ItemView
             @$el.find('.oldVatFilesUpload').hide()
         
     doUploadFiles: ->
+        that = this
+        BlockUi 'on'
         xhr = $.post(window.gRootPath + "Hmrc/UploadFiles")
-        xhr.done () ->
-            #TODO
+        xhr.done (res) ->
+            if (res.error != undefined)
+                EzBob.App.trigger 'error', 'Failed to Save HMRC Account'
+            else                
+                EzBob.App.trigger 'info', 'HMRC Account Added Successfully'
+                that.trigger('completed');
+                that.trigger 'back'
+
+                that.$el.find('#uploadFilesDiv').hide()
+                that.$el.find('#initialDiv').show()
 
         xhr.always ->
-            #TODO
+            BlockUi 'off'
 
     back: ->
         @trigger 'back'

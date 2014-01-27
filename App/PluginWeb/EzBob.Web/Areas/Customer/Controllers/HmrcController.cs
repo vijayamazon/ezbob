@@ -41,14 +41,49 @@
 		[HttpPost]
 		public ActionResult UploadFiles()
 		{
-			return null;
+			var oState = Session["oState"] as AddAccountState;
+			var model = Session["model"] as AccountModel;
+			var oSeeds = Session["oSeeds"] as Hopper;
+
+			if (oState == null || model == null || oSeeds == null)
+			{
+				return this.JsonNet(new { error = "Failure during files upload"});
+			}
+
+			SaveMarketplace(oState, model);
+
+			if (oState.Error != null)
+			{
+				ViewError = oState.Error;
+				ViewModel = null;
+				return oState.Error;
+			} // if
+
+			ViewModel = JsonConvert.SerializeObject(oState.Model);
+			ViewError = null;
+
+			Connector.SetRunningInWebEnvFlag(model.accountTypeName, oState.CustomerMarketPlace.Id);
+			Connector.SetBackdoorData(model.accountTypeName, oState.CustomerMarketPlace.Id, oSeeds);
+
+			try
+			{
+				oState.CustomerMarketPlace.Marketplace.GetRetrieveDataHelper(_helper).UpdateCustomerMarketplaceFirst(oState.CustomerMarketPlace.Id);
+			}
+			catch (Exception e)
+			{
+				ViewError = CreateError("Account has been linked but error occured while storing uploaded data: " + e.Message);
+				return CreateError("Account has been linked but error occured while storing uploaded data: " + e.Message);
+			} // try
+
+			return this.JsonNet(new {});
 		}
 
 		[HttpPost]
 		public ActionResult UploadedFiles()
 		{
 			Response.AddHeader("x-frame-options", "SAMEORIGIN");
-			var model = new AccountModel { accountTypeName = "HMRC", displayName = _context.Customer.Name, name = _context.Customer.Name };
+			string customerEmail = _context.Customer.Name;
+			var model = new AccountModel { accountTypeName = "HMRC", displayName = customerEmail, name = customerEmail, login = customerEmail, password = "topsecret" };
 
 			AddAccountState oState = ValidateModel(model);
 
@@ -75,30 +110,9 @@
 				return null;
 			} // if
 
-			// TODO: The following code should happen after upload is clicked
-			SaveMarketplace(oState, model);
-
-			if (oState.Error != null)
-			{
-				ViewError = oState.Error;
-				ViewModel = null;
-				return null;
-			} // if
-
-			ViewModel = JsonConvert.SerializeObject(oState.Model);
-			ViewError = null;
-
-			Connector.SetRunningInWebEnvFlag(model.accountTypeName, oState.CustomerMarketPlace.Id);
-			Connector.SetBackdoorData(model.accountTypeName, oState.CustomerMarketPlace.Id, oSeeds);
-
-			try
-			{
-				oState.CustomerMarketPlace.Marketplace.GetRetrieveDataHelper(_helper).UpdateCustomerMarketplaceFirst(oState.CustomerMarketPlace.Id);
-			}
-			catch (Exception e)
-			{
-				ViewError = CreateError("Account has been linked but error occured while storing uploaded data: " + e.Message);
-			} // try
+			Session["oState"] = oState;
+			Session["model"] = model;
+			Session["oSeeds"] = oSeeds;
 
 			return null;
 		}
