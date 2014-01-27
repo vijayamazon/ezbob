@@ -14,6 +14,7 @@ namespace EZBob.DatabaseLib
 	using System.Net;
 	using System.Text.RegularExpressions;
 	using Common;
+	using Ezbob.ExperianParser;
 	using Model.Database.Loans;
 	using DatabaseWrapper;
 	using DatabaseWrapper.AccountInfo;
@@ -122,7 +123,8 @@ namespace EZBob.DatabaseLib
 
 		#endregion repositories
 
-		public DatabaseDataHelper(ISession session) {
+		public DatabaseDataHelper(ISession session)
+		{
 			_session = session;
 
 			_MarketPlaceRepository = new MarketPlaceRepository(session);
@@ -1440,10 +1442,6 @@ namespace EZBob.DatabaseLib
 
 				foreach (var bankTransaction in ordersData.Data[item])
 				{
-					string surname = null;
-					try { surname = customerMarketPlace.Customer.PersonalInfo.Surname; }
-					catch { }
-					var ezbobCategory = CategorizeTransaction(yodleeGroupRepository, yodleeGroupRuleMapRepository, bankTransaction.description, bankTransaction.transactionBaseType, (int)bankTransaction.transactionAmount.amount.Value, customerMarketPlace.Customer.Id, surname);
 					var orderBankTransaction = new MP_YodleeOrderItemBankTransaction
 					{
 						YodleeOrderItem = mpOrderItem,
@@ -1555,7 +1553,6 @@ namespace EZBob.DatabaseLib
 						isMedicalExpenseSpecified = bankTransaction.isMedicalExpenseSpecified,
 						categorizationKeyword = bankTransaction.categorizationKeyword,
 						sourceTransactionType = bankTransaction.sourceTransactionType,
-						ezbobCategory = ezbobCategory
 					};
 					mpOrderItem.OrderItemBankTransactions.Add(orderBankTransaction);
 				}
@@ -1568,15 +1565,49 @@ namespace EZBob.DatabaseLib
 			_CustomerMarketplaceRepository.Update(customerMarketPlace);
 		}
 
-		private MP_YodleeGroup CategorizeTransaction(List<MP_YodleeGroup> yodleeGroupRepository, List<MP_YodleeGroupRuleMap> yodleeGroupRuleMapRepository, string description, string baseType, int amount, int customerId, string customerSurname)
+		private List<string> GetExperianDirectors(Customer customer)
 		{
-			var directorsNames = _session.Query<Director>().Where(d => d.Customer.Id == customerId).Select(d => d.Surname).ToList();
-			if (!string.IsNullOrEmpty(customerSurname))
+
+			var experianDirectors = new List<string>();
+			ParseExperianResult oParseResult =
+				customer.ParseExperian(_ConfigurationVariables.GetByName("DirectorInfoParserConfiguration").Value);
+
+			if (oParseResult.ParsingResult == ParsingResult.Ok)
 			{
-				directorsNames.Add(customerSurname);
+				foreach (var pair in oParseResult.Dataset)
+				{
+					foreach (ParsedDataItem di in pair.Value.Data)
+					{
+						string sFullName = (di["LastName"] ?? "").ToLowerInvariant().Trim();
+						if (!string.IsNullOrEmpty(sFullName))
+						{
+							experianDirectors.Add(sFullName);
+						}
+					}
+				}
 			}
 
-			var category = yodleeGroupRepository.FirstOrDefault(x => x.Id == (int)YodleeGroup.Exception);
+			var company = customer.Companies.FirstOrDefault();
+			if (company != null)
+			{
+				var directorsNames = company.Directors.Select(d => d.Surname.ToLowerInvariant().Trim()).ToList();
+
+				experianDirectors.AddRange(directorsNames);
+			}
+
+			return experianDirectors.Distinct().ToList();
+		}
+
+		private
+			MP_YodleeGroup CategorizeTransaction(List<MP_YodleeGroup> yodleeGroupRepository, List<MP_YodleeGroupRuleMap> yodleeGroupRuleMapRepository, string description, string baseType, int amount, int customerId, string customerSurname, List<string> directors)
+		{
+
+			if (!string.IsNullOrEmpty(customerSurname))
+			{
+				directors.Add(customerSurname);
+			}
+
+			var category = yodleeGroupRepository.FirstOrDefault(x => x.Id == (int)YodleeGroup.RevenuesException);
 
 			if (baseType == "debit")
 			{
@@ -1587,9 +1618,9 @@ namespace EZBob.DatabaseLib
 			{
 				MP_YodleeGroup group = mpYodleeGroup;
 
-				if (group.Id == (int)YodleeGroup.Opex || group.Id == (int)YodleeGroup.Exception) continue;
+				if (group.Id == (int)YodleeGroup.Opex || group.Id == (int)YodleeGroup.RevenuesException) continue;
 
-				var includeLiteral = yodleeGroupRuleMapRepository.Where(x => x.Group == group && x.Rule.Id == (int)YodleeRule.IncludeLiteralWord).Select(x => new { x.Literal, x.IsRegex} ).ToList();
+				var includeLiteral = yodleeGroupRuleMapRepository.Where(x => x.Group == group && x.Rule.Id == (int)YodleeRule.IncludeLiteralWord).Select(x => new { x.Literal, x.IsRegex }).ToList();
 				var dontIncludeLiteral = yodleeGroupRuleMapRepository.Where(x => x.Group == group && x.Rule.Id == (int)YodleeRule.DontIncludeLiteralWord).Select(x => x.Literal).ToList();
 				bool includeDirector = yodleeGroupRuleMapRepository.Any(x => x.Group == group && x.Rule.Id == (int)YodleeRule.IncludeDirector);
 				bool dontIncludeDirector = yodleeGroupRuleMapRepository.Any(x => x.Group == group && x.Rule.Id == (int)YodleeRule.DontIncludeDirector);
@@ -1620,9 +1651,9 @@ namespace EZBob.DatabaseLib
 				bool containsDirector = false;
 				if (includeDirector || dontIncludeDirector)
 				{
-					foreach (var directorsName in directorsNames)
+					foreach (var directorsName in directors)
 					{
-						if (description.Contains(directorsName))
+						if (description.ToLowerInvariant().Contains(directorsName))
 						{
 							containsDirector = true;
 						}
@@ -1672,25 +1703,29 @@ namespace EZBob.DatabaseLib
 			return category;
 		}
 
-		public void CalculateYodleeRunningBalance(IDatabaseCustomerMarketPlace dmp, string sourceId, AmountInfo currentBalance)
+		public List<MP_YodleeOrderItemBankTransaction> CalculateYodleeRunningBalance(IDatabaseCustomerMarketPlace dmp, string sourceId, AmountInfo currentBalance)
 		{
+			_session.Transaction.Begin();
+
 			var mp = GetCustomerMarketPlace(dmp);
 			if (mp == null)
 			{
-				return;
+				return new List<MP_YodleeOrderItemBankTransaction>();
 			}
-
+			var directors = GetExperianDirectors(mp.Customer);
 			var orderItemBankTransactions =
 				mp.YodleeOrders
 				  .SelectMany(yo => yo.OrderItems)
 				  .Where(oi => oi.srcElementId == sourceId)
 				  .SelectMany(oi => oi.OrderItemBankTransactions)
+				  .Where(t => t.isSeidMod.HasValue && t.isSeidMod.Value == 0)
+				  .Distinct(new YodleeTransactionComparer())
 				  .ToList();
 
 			var transactions = orderItemBankTransactions.OrderByDescending(x => (x.postDate ?? x.transactionDate).Value).ToList();//.ThenBy(x => x.bankTransactionId).ToList();
-			if (transactions.Count == 0)
+			if (!transactions.Any())
 			{
-				return;
+				return new List<MP_YodleeOrderItemBankTransaction>();
 			}
 
 			var yodleeGroupRepository = new YodleeGroupRepository(_session).GetAll().ToList();
@@ -1704,19 +1739,16 @@ namespace EZBob.DatabaseLib
 				transactions[0].runningBalanceCurrency = currentBalance.CurrencyCode;
 				currDate = (transactions[0].postDate ?? transactions[0].transactionDate).Value;
 			}
-			else if (transactions[0].ezbobCategory == null)
+
+			if (transactions[0].ezbobCategory == null)
 			{
 				try
 				{
 					transactions[0].ezbobCategory = CategorizeTransaction(yodleeGroupRepository, yodleeGroupRuleMapRepository, transactions[0].description, transactions[0].transactionBaseType,
 															  (int)transactions[0].transactionAmount.Value, mp.Customer.Id,
-															  mp.Customer.PersonalInfo.Surname);
+															  mp.Customer.PersonalInfo.Surname, directors);
 				}
 				catch { }
-			}
-			else
-			{
-				if (transactions[0].ezbobCategory != null) return;
 			}
 
 			for (int i = 1; i < transactions.Count; ++i)
@@ -1727,10 +1759,11 @@ namespace EZBob.DatabaseLib
 					{
 						transactions[i].ezbobCategory = CategorizeTransaction(yodleeGroupRepository, yodleeGroupRuleMapRepository, transactions[i].description, transactions[i].transactionBaseType,
 																  (int)transactions[i].transactionAmount.Value, mp.Customer.Id,
-																  mp.Customer.PersonalInfo.Surname);
+																  mp.Customer.PersonalInfo.Surname, directors);
 					}
 					catch { }
 				}
+
 				if (transactions[i].runningBalance.HasValue)
 				{
 					continue;
@@ -1765,7 +1798,12 @@ namespace EZBob.DatabaseLib
 				}
 			}
 
+			_session.Transaction.Commit();
+			_session.Transaction.Dispose();
 			_session.Flush();
+
+			return transactions;
+
 		}
 
 		public YodleeOrderDictionary GetAllYodleeOrdersData(DateTime history, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
@@ -1775,6 +1813,8 @@ namespace EZBob.DatabaseLib
 			var orders = new YodleeOrderDictionary { Data = new Dictionary<BankData, List<BankTransactionData>>() };
 
 			var mpYodleeOrder = customerMarketPlace.YodleeOrders.LastOrDefault(y => y.Created.Date <= history);
+
+			#region yodlee data retrieve
 			if (mpYodleeOrder != null)
 			{
 				var orderItems = mpYodleeOrder.OrderItems.Where(x => x.isSeidMod.HasValue && x.isSeidMod.Value == 0);
@@ -1783,165 +1823,162 @@ namespace EZBob.DatabaseLib
 				{
 					var bankData = new BankData
 						{
-							isSeidFromDataSource = item.isSeidFromDataSource,
-							isSeidFromDataSourceSpecified = item.isSeidFromDataSourceSpecified,
-							isSeidMod = item.isSeidMod,
-							isSeidModSpecified = item.isSeidModSpecified,
-							acctTypeId = item.acctTypeId,
-							acctTypeIdSpecified = item.acctTypeIdSpecified,
+							//isSeidFromDataSource = item.isSeidFromDataSource,
+							//isSeidFromDataSourceSpecified = item.isSeidFromDataSourceSpecified,
+							//isSeidMod = item.isSeidMod,
+							//isSeidModSpecified = item.isSeidModSpecified,
+							//acctTypeId = item.acctTypeId,
+							//acctTypeIdSpecified = item.acctTypeIdSpecified,
 							acctType = item.acctType,
-							localizedAcctType = item.localizedAcctType,
+							//localizedAcctType = item.localizedAcctType,
 							srcElementId = item.srcElementId,
-							individualInformationId = item.individualInformationId,
-							individualInformationIdSpecified = item.individualInformationIdSpecified,
+							//individualInformationId = item.individualInformationId,
+							//individualInformationIdSpecified = item.individualInformationIdSpecified,
 							bankAccountId = item.bankAccountId,
-							bankAccountIdSpecified = item.bankAccountIdSpecified,
-							customName = item.customName,
+							//bankAccountIdSpecified = item.bankAccountIdSpecified,
+							//customName = item.customName,
 							customDescription = item.customDescription,
 							isDeleted = item.isDeleted,
-							isDeletedSpecified = item.isDeletedSpecified,
+							//isDeletedSpecified = item.isDeletedSpecified,
 							lastUpdated = item.lastUpdated,
-							lastUpdatedSpecified = item.lastUpdatedSpecified,
-							hasDetails = item.hasDetails,
-							hasDetailsSpecified = item.hasDetailsSpecified,
-							interestRate = item.interestRate,
-							interestRateSpecified = item.interestRateSpecified,
+							//lastUpdatedSpecified = item.lastUpdatedSpecified,
+							//hasDetails = item.hasDetails,
+							//hasDetailsSpecified = item.hasDetailsSpecified,
+							//interestRate = item.interestRate,
+							//interestRateSpecified = item.interestRateSpecified,
 							accountNumber = item.accountNumber,
-							link = item.link,
+							//link = item.link,
 							accountHolder = item.accountHolder,
-							tranListToDate = new YDate { date = item.tranListToDate },
-							tranListFromDate = new YDate { date = item.tranListFromDate },
+							//tranListToDate = new YDate { date = item.tranListToDate },
+							//tranListFromDate = new YDate { date = item.tranListFromDate },
 							availableBalance = new YMoney { amount = item.availableBalance, currencyCode = item.availableBalanceCurrency },
 							currentBalance = new YMoney { amount = item.currentBalance, currencyCode = item.currentBalanceCurrency },
-							interestEarnedYtd = new YMoney { amount = item.interestEarnedYtd, currencyCode = item.interestEarnedYtdCurrency },
-							prevYrInterest = new YMoney { amount = item.prevYrInterest, currencyCode = item.prevYrInterestCurrency },
+							//interestEarnedYtd = new YMoney { amount = item.interestEarnedYtd, currencyCode = item.interestEarnedYtdCurrency },
+							//prevYrInterest = new YMoney { amount = item.prevYrInterest, currencyCode = item.prevYrInterestCurrency },
 							overdraftProtection = new YMoney { amount = item.overdraftProtection, currencyCode = item.overdraftProtectionCurrency },
-							term = item.term,
+							//term = item.term,
 							accountName = item.accountName,
-							annualPercentYield = item.annualPercentYield,
-							annualPercentYieldSpecified = item.annualPercentYieldSpecified,
+							//annualPercentYield = item.annualPercentYield,
+							//annualPercentYieldSpecified = item.annualPercentYieldSpecified,
 							routingNumber = item.routingNumber,
-							maturityDate = new YDate { date = item.maturityDate },
+							//maturityDate = new YDate { date = item.maturityDate },
 							asOfDate = new YDate { date = item.asOfDate },
-							accountNicknameAtSrcSite = item.accountNicknameAtSrcSite,
-							isPaperlessStmtOn = item.isPaperlessStmtOn,
-							isPaperlessStmtOnSpecified = item.isPaperlessStmtOnSpecified,
-							siteAccountStatusSpecified = item.siteAccountStatusSpecified,
-							created = item.created,
-							createdSpecified = item.createdSpecified,
-							nomineeName = item.nomineeName,
+							//accountNicknameAtSrcSite = item.accountNicknameAtSrcSite,
+							//isPaperlessStmtOn = item.isPaperlessStmtOn,
+							//isPaperlessStmtOnSpecified = item.isPaperlessStmtOnSpecified,
+							//siteAccountStatusSpecified = item.siteAccountStatusSpecified,
+							//created = item.created,
+							//createdSpecified = item.createdSpecified,
+							//nomineeName = item.nomineeName,
 							secondaryAccountHolderName = item.secondaryAccountHolderName,
-							accountOpenDate = new YDate { date = item.accountOpenDate },
-							accountCloseDate = new YDate { date = item.accountCloseDate },
-							maturityAmount = new YMoney { amount = item.maturityAmount, currencyCode = item.maturityAmountCurrency },
-							taxesWithheldYtd = new YMoney { amount = item.taxesWithheldYtd, currencyCode = item.taxesWithheldYtdCurrency },
-							taxesPaidYtd = new YMoney { amount = item.taxesPaidYtd, currencyCode = item.taxesPaidYtdCurrency },
-							budgetBalance = new YMoney { amount = item.budgetBalance, currencyCode = item.budgetBalanceCurrency },
-							straightBalance = new YMoney { amount = item.straightBalance, currencyCode = item.straightBalanceCurrency },
-							accountClassificationSpecified = item.accountClassificationSpecified,
+							//accountOpenDate = new YDate { date = item.accountOpenDate },
+							//accountCloseDate = new YDate { date = item.accountCloseDate },
+							//maturityAmount = new YMoney { amount = item.maturityAmount, currencyCode = item.maturityAmountCurrency },
+							//taxesWithheldYtd = new YMoney { amount = item.taxesWithheldYtd, currencyCode = item.taxesWithheldYtdCurrency },
+							//taxesPaidYtd = new YMoney { amount = item.taxesPaidYtd, currencyCode = item.taxesPaidYtdCurrency },
+							//budgetBalance = new YMoney { amount = item.budgetBalance, currencyCode = item.budgetBalanceCurrency },
+							//straightBalance = new YMoney { amount = item.straightBalance, currencyCode = item.straightBalanceCurrency },
+							//accountClassificationSpecified = item.accountClassificationSpecified,
 						};
 
-					if (item.currentBalance.HasValue)
-					{
-						CalculateYodleeRunningBalance(databaseCustomerMarketPlace, item.srcElementId,
-																		 _CurrencyConvertor.ConvertToBaseCurrency(
-																			 item.currentBalanceCurrency, item.currentBalance.Value,
-																			 item.asOfDate));
-					}
+					var currentBalance = item.currentBalance == null ? 0 : item.currentBalance.Value;
+					var currentBalanceCurrency = string.IsNullOrEmpty(item.currentBalanceCurrency) ? "GBP" : item.currentBalanceCurrency;
+					
+					var transactions = CalculateYodleeRunningBalance(databaseCustomerMarketPlace, item.srcElementId,
+																	 _CurrencyConvertor.ConvertToBaseCurrency(
+																		 currentBalanceCurrency, currentBalance,
+																		 item.asOfDate));
+
 
 					//Not Retrieving Seid transactions as they seem to be duplicated data
-					var bankTransactionsDataList = customerMarketPlace
-						.YodleeOrders
-						.SelectMany(x => x.OrderItems)
-						.Where(oi => oi.srcElementId == bankData.srcElementId)
-						.SelectMany(b => b.OrderItemBankTransactions)
+					var bankTransactionsDataList = transactions
 						.Where(t =>
 							((t.transactionDate.HasValue && t.transactionDate.Value.Date <= history) ||
 							(t.postDate.HasValue && t.postDate.Value.Date <= history))
-							&& (t.isSeidMod.HasValue && t.isSeidMod == 0)) 
+							&& (t.isSeidMod.HasValue && t.isSeidMod == 0))
 						.Select(bankTransaction => new BankTransactionData
 							{
-								isSeidFromDataSource = bankTransaction.isSeidFromDataSource,
-								isSeidFromDataSourceSpecified = bankTransaction.isSeidFromDataSourceSpecified,
+								//isSeidFromDataSource = bankTransaction.isSeidFromDataSource,
+								//isSeidFromDataSourceSpecified = bankTransaction.isSeidFromDataSourceSpecified,
 								isSeidMod = bankTransaction.isSeidMod,
-								isSeidModSpecified = bankTransaction.isSeidModSpecified,
+								//isSeidModSpecified = bankTransaction.isSeidModSpecified,
 								srcElementId = bankTransaction.srcElementId,
-								transactionTypeId = bankTransaction.transactionTypeId,
-								transactionTypeIdSpecified = bankTransaction.transactionTypeIdSpecified,
-								transactionType = bankTransaction.transactionType,
-								localizedTransactionType = bankTransaction.localizedTransactionType,
+								//transactionTypeId = bankTransaction.transactionTypeId,
+								//transactionTypeIdSpecified = bankTransaction.transactionTypeIdSpecified,
+								//transactionType = bankTransaction.transactionType,
+								//localizedTransactionType = bankTransaction.localizedTransactionType,
 								transactionStatusId = bankTransaction.transactionStatusId,
-								transactionStatusIdSpecified = bankTransaction.transactionStatusIdSpecified,
+								//transactionStatusIdSpecified = bankTransaction.transactionStatusIdSpecified,
 								transactionStatus = bankTransaction.transactionStatus,
-								localizedTransactionStatus = bankTransaction.localizedTransactionStatus,
+								//localizedTransactionStatus = bankTransaction.localizedTransactionStatus,
 								transactionBaseTypeId = bankTransaction.transactionBaseTypeId,
-								transactionBaseTypeIdSpecified = bankTransaction.transactionBaseTypeIdSpecified,
+								//transactionBaseTypeIdSpecified = bankTransaction.transactionBaseTypeIdSpecified,
 								transactionBaseType = bankTransaction.transactionBaseType,
-								localizedTransactionBaseType = bankTransaction.localizedTransactionBaseType,
-								categoryId = bankTransaction.categoryId,
-								categoryIdSpecified = bankTransaction.categoryIdSpecified,
+								//localizedTransactionBaseType = bankTransaction.localizedTransactionBaseType,
+								//categoryId = bankTransaction.categoryId,
+								//categoryIdSpecified = bankTransaction.categoryIdSpecified,
 								bankTransactionId = bankTransaction.bankTransactionId,
-								bankTransactionIdSpecified = bankTransaction.bankTransactionIdSpecified,
-								bankAccountId = bankTransaction.bankAccountId,
-								bankAccountIdSpecified = bankTransaction.bankAccountIdSpecified,
-								bankStatementId = bankTransaction.bankStatementId,
-								bankStatementIdSpecified = bankTransaction.bankStatementIdSpecified,
+								//bankTransactionIdSpecified = bankTransaction.bankTransactionIdSpecified,
+								//bankAccountId = bankTransaction.bankAccountId,
+								//bankAccountIdSpecified = bankTransaction.bankAccountIdSpecified,
+								//bankStatementId = bankTransaction.bankStatementId,
+								//bankStatementIdSpecified = bankTransaction.bankStatementIdSpecified,
 								isDeleted = bankTransaction.isDeleted,
-								isDeletedSpecified = bankTransaction.isDeletedSpecified,
-								lastUpdated = bankTransaction.lastUpdated,
-								lastUpdatedSpecified = bankTransaction.lastUpdatedSpecified,
-								hasDetails = bankTransaction.hasDetails,
-								hasDetailsSpecified = bankTransaction.hasDetailsSpecified,
-								transactionId = bankTransaction.transactionId,
-								transactionCategoryId = bankTransaction.transactionCategory.CategoryId,
-								classUpdationSource = bankTransaction.classUpdationSource,
-								lastCategorised = bankTransaction.lastCategorised,
+								//isDeletedSpecified = bankTransaction.isDeletedSpecified,
+								//lastUpdated = bankTransaction.lastUpdated,
+								//lastUpdatedSpecified = bankTransaction.lastUpdatedSpecified,
+								//hasDetails = bankTransaction.hasDetails,
+								//hasDetailsSpecified = bankTransaction.hasDetailsSpecified,
+								//transactionId = bankTransaction.transactionId,
+								//transactionCategoryId = bankTransaction.transactionCategory.CategoryId,
+								//classUpdationSource = bankTransaction.classUpdationSource,
+								//lastCategorised = bankTransaction.lastCategorised,
 								transactionDate = new YDate { date = bankTransaction.transactionDate },
-								isReimbursable = bankTransaction.isReimbursable,
-								isReimbursableSpecified = bankTransaction.isReimbursableSpecified,
-								mcCode = bankTransaction.mcCode,
-								prevLastCategorised = bankTransaction.prevLastCategorised,
-								prevLastCategorisedSpecified = bankTransaction.prevLastCategorisedSpecified,
-								naicsCode = bankTransaction.naicsCode,
+								//isReimbursable = bankTransaction.isReimbursable,
+								//isReimbursableSpecified = bankTransaction.isReimbursableSpecified,
+								//mcCode = bankTransaction.mcCode,
+								//prevLastCategorised = bankTransaction.prevLastCategorised,
+								//prevLastCategorisedSpecified = bankTransaction.prevLastCategorisedSpecified,
+								//naicsCode = bankTransaction.naicsCode,
 								runningBalance =
 									new YMoney
 										{
 											amount = bankTransaction.runningBalance,
 											currencyCode = bankTransaction.runningBalanceCurrency
 										},
-								userDescription = bankTransaction.userDescription,
-								
-								customCategoryIdSpecified = bankTransaction.customCategoryIdSpecified,
+								//userDescription = bankTransaction.userDescription,
+
+								//customCategoryIdSpecified = bankTransaction.customCategoryIdSpecified,
 								memo = bankTransaction.memo,
-								parentId = bankTransaction.parentId,
-								parentIdSpecified = bankTransaction.parentIdSpecified,
-								isOlbUserDesc = bankTransaction.isOlbUserDesc,
-								isOlbUserDescSpecified = bankTransaction.isOlbUserDescSpecified,
-								categorisationSourceId = bankTransaction.categorisationSourceId,
-								plainTextDescription = bankTransaction.plainTextDescription,
-								splitType = bankTransaction.splitType,
-								categoryLevelId = bankTransaction.categoryLevelId,
-								categoryLevelIdSpecified = bankTransaction.categoryLevelIdSpecified,
-								calcRunningBalance =
-									new YMoney
-										{
-											amount = bankTransaction.calcRunningBalance,
-											currencyCode = bankTransaction.calcRunningBalanceCurrency
-										},
-								siteCategoryType = bankTransaction.ezbobCategory.SubGroup,
-								siteCategory = bankTransaction.ezbobCategory.Group,
-								customCategoryId = bankTransaction.ezbobCategory.Priority,
+								//parentId = bankTransaction.parentId,
+								//parentIdSpecified = bankTransaction.parentIdSpecified,
+								//isOlbUserDesc = bankTransaction.isOlbUserDesc,
+								//isOlbUserDescSpecified = bankTransaction.isOlbUserDescSpecified,
+								//categorisationSourceId = bankTransaction.categorisationSourceId,
+								//plainTextDescription = bankTransaction.plainTextDescription,
+								//splitType = bankTransaction.splitType,
+								//categoryLevelId = bankTransaction.categoryLevelId,
+								//categoryLevelIdSpecified = bankTransaction.categoryLevelIdSpecified,
+								//calcRunningBalance =
+								//	new YMoney
+								//		{
+								//			amount = bankTransaction.calcRunningBalance,
+								//			currencyCode = bankTransaction.calcRunningBalanceCurrency
+								//		},
+								siteCategoryType = bankTransaction.ezbobCategory != null ? bankTransaction.ezbobCategory.SubGroup : null,
+								siteCategory = bankTransaction.ezbobCategory != null ? bankTransaction.ezbobCategory.Group : null,
+								customCategoryId = bankTransaction.ezbobCategory != null ? bankTransaction.ezbobCategory.Priority : (long?)null,
 								//category = bankTransaction.ezbobCategory == null ? "-" : (bankTransaction.ezbobCategory.Group + (string.IsNullOrEmpty(bankTransaction.ezbobCategory.SubGroup) ? "" : "_" + bankTransaction.ezbobCategory.SubGroup)),
-								link = bankTransaction.link,
+								//link = bankTransaction.link,
 								postDate = new YDate { date = bankTransaction.postDate },
-								prevTransactionCategoryId = bankTransaction.prevTransactionCategoryId,
-								prevTransactionCategoryIdSpecified = bankTransaction.prevTransactionCategoryIdSpecified,
-								isBusinessExpense = bankTransaction.isBusinessExpense,
-								isBusinessExpenseSpecified = bankTransaction.isBusinessExpenseSpecified,
-								descriptionViewPref = bankTransaction.descriptionViewPref,
-								descriptionViewPrefSpecified = bankTransaction.descriptionViewPrefSpecified,
-								prevCategorisationSourceId = bankTransaction.prevCategorisationSourceId,
-								prevCategorisationSourceIdSpecified = bankTransaction.prevCategorisationSourceIdSpecified,
+								//prevTransactionCategoryId = bankTransaction.prevTransactionCategoryId,
+								//prevTransactionCategoryIdSpecified = bankTransaction.prevTransactionCategoryIdSpecified,
+								//isBusinessExpense = bankTransaction.isBusinessExpense,
+								//isBusinessExpenseSpecified = bankTransaction.isBusinessExpenseSpecified,
+								//descriptionViewPref = bankTransaction.descriptionViewPref,
+								//descriptionViewPrefSpecified = bankTransaction.descriptionViewPrefSpecified,
+								//prevCategorisationSourceId = bankTransaction.prevCategorisationSourceId,
+								//prevCategorisationSourceIdSpecified = bankTransaction.prevCategorisationSourceIdSpecified,
 								transactionAmount =
 									new YMoney
 										{
@@ -1952,13 +1989,12 @@ namespace EZBob.DatabaseLib
 								transactionPostingOrderSpecified = bankTransaction.transactionPostingOrderSpecified,
 								checkNumber = bankTransaction.checkNumber,
 								description = bankTransaction.description,
-								isTaxDeductible = bankTransaction.isTaxDeductible,
-								isTaxDeductibleSpecified = bankTransaction.isTaxDeductibleSpecified,
-								isMedicalExpense = bankTransaction.isMedicalExpense,
-								isMedicalExpenseSpecified = bankTransaction.isMedicalExpenseSpecified,
-								categorizationKeyword = bankTransaction.categorizationKeyword,
-								sourceTransactionType = bankTransaction.sourceTransactionType,
-
+								//isTaxDeductible = bankTransaction.isTaxDeductible,
+								//isTaxDeductibleSpecified = bankTransaction.isTaxDeductibleSpecified,
+								//isMedicalExpense = bankTransaction.isMedicalExpense,
+								//isMedicalExpenseSpecified = bankTransaction.isMedicalExpenseSpecified,
+								//categorizationKeyword = bankTransaction.categorizationKeyword,
+								//sourceTransactionType = bankTransaction.sourceTransactionType,
 							})
 
 						.Distinct(new YodleeOrderComparer())
@@ -1967,6 +2003,7 @@ namespace EZBob.DatabaseLib
 					orders.Data.Add(bankData, bankTransactionsDataList);
 				}
 			}
+			#endregion
 
 			return orders;
 		}

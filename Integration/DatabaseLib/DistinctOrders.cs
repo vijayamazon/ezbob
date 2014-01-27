@@ -184,5 +184,17 @@
 		} // HashCode
 	} // class YodleeOrderComparer
 
+	class YodleeTransactionComparer: AOrderComparer<MP_YodleeOrderItemBankTransaction>
+	{
+		public override bool AreEqual(MP_YodleeOrderItemBankTransaction a, MP_YodleeOrderItemBankTransaction b)
+		{
+			return a.srcElementId == b.srcElementId;
+		}
+
+		public override int HashCode(MP_YodleeOrderItemBankTransaction a)
+		{
+			return a.srcElementId.GetHashCode();
+		}
+	}
 	#endregion class YodleeOrderComparer
 } // namespace EZBob.DatabaseLib

@@ -93,8 +93,8 @@
 				}
 			}
 
-			var vatRevenues = 1 + (box6 == 0 && box3 == 0 ? 0 : (box3 / (box6 + box3)));
-			var vatOpex = 1 + (box7 == 0 && box4 == 0 ? 0 : (box4 / (box7 + box4)));
+			var vatRevenues = 1 + (box6 == 0 ? 0 : (box3 / (box6)));
+			var vatOpex = 1 + (box7 == 0 ? 0 : (box4 / (box7)));
 			
 			var bankStat = hmrcData.BankStatement;
 

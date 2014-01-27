@@ -13,8 +13,9 @@
 		CorporateTax = 7,
 		LoanRepaymentsReceipt = 8,
 		LoanRepaymentsRepayment = 9,
-		Exception = 10,
-		VAT = 11
+		RevenuesException = 10,
+		VAT = 11,
+		DirectorsWithdraw = 12
 	}
 
 	[Serializable]
