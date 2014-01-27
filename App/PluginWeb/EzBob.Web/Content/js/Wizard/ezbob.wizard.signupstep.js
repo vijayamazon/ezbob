@@ -159,6 +159,9 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
             that.$el.find('#mobileCodeDiv').show();
             that.$el.find('#switchToCaptcha').removeClass('disabled');
             that.$el.find('#generateMobileCode').val('Resend activation code');
+            if (document.getElementById('generateMobileCode') == document.activeElement) {
+                document.getElementById('mobileCode').focus();
+            }
         });
 
         return false;
