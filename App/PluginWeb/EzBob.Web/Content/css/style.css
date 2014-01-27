@@ -513,6 +513,9 @@ blockquote{margin:0 0 20px 0; padding:10px; border:1px #ccc solid; font-style:it
 }
 .hmrcLinkButton:active {
     background:url(../img/hmrc_button_link_active.png) no-repeat 0 0;
+    -moz-background-size: contain;
+    -o-background-size: contain;
+    background-size: contain;
 }
 .hmrcUploadButton {
     background: url(../img/hmrc_button_upload.png) no-repeat 0 0;
@@ -531,6 +534,9 @@ blockquote{margin:0 0 20px 0; padding:10px; border:1px #ccc solid; font-style:it
 }
 .hmrcUploadButton:active {
     background:url(../img/hmrc_button_upload_active.png) no-repeat 0 0;
+    -moz-background-size: contain;
+    -o-background-size: contain;
+    background-size: contain;
 }
 
 .grey {
