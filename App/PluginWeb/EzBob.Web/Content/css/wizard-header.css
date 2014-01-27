@@ -185,6 +185,10 @@ li.active > .progress_tip {
     margin: 0 auto;
 }
 
+#logged-in-user-name {
+    right: 50% !important;
+}
+
 .eu-menu {
     width: 100px;
     height: 80px;

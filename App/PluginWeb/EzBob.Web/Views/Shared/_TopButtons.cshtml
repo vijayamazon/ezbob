@@ -6,7 +6,8 @@
 <div id="header">
     <a href="http://www.ezbob.com">
         <img src="@Url.Content("~/Content/img/ezbob-logo-2014.png")" class="newlogo"></a>
-
+    
+    <span id="logged-in-user-name" class="header-phone">@User.Identity.Name</span>
     <div class="header-phone">0800-011-4787</div>
 
     <div class="eu-menu">
@@ -18,7 +19,7 @@
         @if (isAuth)
         {
             <li class="login">
-                @*<span id="logged-in-user-name">@User.Identity.Name</span>*@
+                
                 <a href="@Url.Action("LogOff", "Account", new { Area = "" })">LOG OFF</a>
             </li>
         }
