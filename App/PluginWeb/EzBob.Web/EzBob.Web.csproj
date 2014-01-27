@@ -1338,6 +1338,7 @@
     <Content Include="Content\js\Underwriter\NewCreditLine\ezbob.underwriter.newCreditLine.coffee" />
     <Content Include="Areas\Customer\Views\Shared\Shops\HMRCAccountInfoTemplate.cshtml" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.hmrc.coffee" />
+    <Content Include="Areas\Customer\Views\Agreement\DirectorsConsentDeclaration.cshtml" />
     <None Include="Service References\EzServiceReference\configuration91.svcinfo" />
     <None Include="Service References\EzServiceReference\configuration.svcinfo" />
     <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.ActionMetaData.datasource">
