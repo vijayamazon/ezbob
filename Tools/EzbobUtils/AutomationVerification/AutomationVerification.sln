@@ -11,8 +11,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logger", "..\Logger\Logger.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomationCalculator", "AutoRejection\AutomationCalculator.csproj", "{D7B3530E-4038-446D-A25A-45D6DF5B6D45}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonLib", "CommonLib\CommonLib.csproj", "{60154E0C-26A0-410D-80C8-ED09507AF2B6}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzbobScoringModelCalculator", "EzbobScoringModelCalculator\EzbobScoringModelCalculator.csproj", "{E20B81C9-A226-4463-A2E3-7D2B576A0DA8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutomationVerification", "AutomationVerification\AutomationVerification.csproj", "{87D86A46-A199-4D0A-A597-7769B7578533}"
@@ -51,10 +49,6 @@ Global
 		{D7B3530E-4038-446D-A25A-45D6DF5B6D45}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D7B3530E-4038-446D-A25A-45D6DF5B6D45}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D7B3530E-4038-446D-A25A-45D6DF5B6D45}.Release|Any CPU.Build.0 = Release|Any CPU
-		{60154E0C-26A0-410D-80C8-ED09507AF2B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{60154E0C-26A0-410D-80C8-ED09507AF2B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{60154E0C-26A0-410D-80C8-ED09507AF2B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{60154E0C-26A0-410D-80C8-ED09507AF2B6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E20B81C9-A226-4463-A2E3-7D2B576A0DA8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E20B81C9-A226-4463-A2E3-7D2B576A0DA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E20B81C9-A226-4463-A2E3-7D2B576A0DA8}.Release|Any CPU.ActiveCfg = Release|Any CPU

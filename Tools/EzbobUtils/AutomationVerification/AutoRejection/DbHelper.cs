@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace CommonLib
+﻿namespace AutomationCalculator
 {
+	using System;
+	using System.Collections.Generic;
 	using System.Data;
 	using System.Linq;
 	using Ezbob.Database;
@@ -197,10 +196,10 @@ namespace CommonLib
 			return conn.ExecuteReader("AV_GetAutomaticDecisions", new QueryParameter("@DateStart", from), new QueryParameter("@DateEnd", to));
 		}
 
-		public ReRejectionData GetReRejectionData(int customerId)
+		public ReRejectionData GetReRejectionData(int customerId, int cashRequestId)
 		{
 			var conn = new SqlConnection(_log);
-			var sqlData = conn.ExecuteReader("AV_ReRejectionData", new QueryParameter("@CustomerId", customerId));
+			var sqlData = conn.ExecuteReader("AV_ReRejectionData", new QueryParameter("@CustomerId", customerId), new QueryParameter("@CashRequestId", cashRequestId));
 
 			var data = new ReRejectionData
 				{
@@ -208,7 +207,8 @@ namespace CommonLib
 					IsNewClient = bool.Parse(sqlData.Rows[0]["IsNewClient"].ToString()),
 					NewDataSourceAdded = bool.Parse(sqlData.Rows[0]["NewDataSourceAdded"].ToString()),
 					LoanAmount = int.Parse(sqlData.Rows[0]["LoanAmount"].ToString()),
-					RepaidAmount = decimal.Parse(sqlData.Rows[0]["RepaidAmount"].ToString())
+					RepaidAmount = decimal.Parse(sqlData.Rows[0]["RepaidAmount"].ToString()),
+					AutomaticDecisionDate = string.IsNullOrEmpty(sqlData.Rows[0]["AutomaticDecisionDate"].ToString()) ? DateTime.UtcNow : DateTime.Parse(sqlData.Rows[0]["AutomaticDecisionDate"].ToString())
 				};
 			return data;
 		}

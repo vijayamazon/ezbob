@@ -48,19 +48,25 @@
     <Compile Include="AutoReRejectionCalculator.cs" />
     <Compile Include="AutoApprovalCalculator.cs" />
     <Compile Include="AutoReApprovalCalculator.cs" />
+    <Compile Include="DbHelper.cs" />
     <Compile Include="Enums.cs" />
+    <Compile Include="MarketPlacesHelper.cs" />
     <Compile Include="MedalScoreCalculator.cs" />
     <Compile Include="Models.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\DbConnection\DbConnection.csproj">
+      <Project>{270baf49-7f7d-4220-91a2-d8f5bf16b3e4}</Project>
+      <Name>DbConnection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\EzEnvironment\EzEnvironment.csproj">
+      <Project>{b91eb116-94eb-416b-9422-d3ba97993163}</Project>
+      <Name>EzEnvironment</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Logger\Logger.csproj">
       <Project>{f92ca169-9532-4c4d-8d84-6f48ace5719c}</Project>
       <Name>Logger</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\CommonLib\CommonLib.csproj">
-      <Project>{60154e0c-26a0-410d-80c8-ed09507af2b6}</Project>
-      <Name>CommonLib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

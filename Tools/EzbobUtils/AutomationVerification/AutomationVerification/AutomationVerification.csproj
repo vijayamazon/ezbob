@@ -93,10 +93,6 @@
       <Project>{d7b3530e-4038-446d-a25a-45d6df5b6d45}</Project>
       <Name>AutomationCalculator</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CommonLib\CommonLib.csproj">
-      <Project>{60154e0c-26a0-410d-80c8-ed09507af2b6}</Project>
-      <Name>CommonLib</Name>
-    </ProjectReference>
     <ProjectReference Include="..\EzbobScoringModelCalculator\EzbobScoringModelCalculator.csproj">
       <Project>{e20b81c9-a226-4463-a2e3-7d2b576a0da8}</Project>
       <Name>EzbobScoringModelCalculator</Name>

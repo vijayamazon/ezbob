@@ -2,7 +2,6 @@
 {
 	using System.Collections.Generic;
 	using System.Linq;
-	using CommonLib;
 	using Ezbob.Logger;
 
 	public class AutoRejectionCalculator
@@ -38,7 +37,7 @@
 			var experianScore = dbHelper.GetExperianScore(customerId);
 			var mps = dbHelper.GetCustomerMarketPlaces(customerId);
 			var paymentMps = dbHelper.GetCustomerPaymentMarketPlaces(customerId);
-			var anualTurnover = AnalysisFunctionsHelper.GetTurnoverForPeriod(mps, TimePeriodEnum.Year,_log);
+			var anualTurnover = MarketPlacesHelper.GetTurnoverForPeriod(mps, TimePeriodEnum.Year, _log);
 			var wasApproved = dbHelper.WasApprovedForLoan(customerId);
 			var hasDefaultAccounts = dbHelper.HasDefaultAccounts(customerId, _const.DefaultMinAmount, _const.DefaultMinMonths);
 
@@ -96,7 +95,7 @@
 					return true;
 				}
 				//b Total 3-month turnover is less than 2.000 GBP
-				var threeMonthTurnover = AnalysisFunctionsHelper.GetTurnoverForPeriod(mps, TimePeriodEnum.Month3, _log);
+				var threeMonthTurnover = MarketPlacesHelper.GetTurnoverForPeriod(mps, TimePeriodEnum.Month3, _log);
 				if (threeMonthTurnover < _const.MinThreeMonthTurnover)
 				{
 					reason = string.Format("Rejected. 3 Month Turnover Below {0} ({1})", _const.MinThreeMonthTurnover,

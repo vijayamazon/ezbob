@@ -1,7 +1,6 @@
 ﻿namespace AutomationCalculator
 {
 	using System;
-	using CommonLib;
 	using Ezbob.Logger;
 
 	public class AutoApprovalCalculator
@@ -18,9 +17,9 @@
 			var dbHelper = new DbHelper(_log);
 			var experianScore = dbHelper.GetExperianScore(customerId);
 			var mps = dbHelper.GetCustomerMarketPlaces(customerId);
-			var anualTurnover = AnalysisFunctionsHelper.GetTurnoverForPeriod(mps, TimePeriodEnum.Year, _log);
-			var quarterTurnover = AnalysisFunctionsHelper.GetTurnoverForPeriod(mps, TimePeriodEnum.Month3, _log);
-			var lastTurnover = AnalysisFunctionsHelper.GetTurnoverForPeriod(mps, TimePeriodEnum.Month, _log);
+			var anualTurnover = MarketPlacesHelper.GetTurnoverForPeriod(mps, TimePeriodEnum.Year, _log);
+			var quarterTurnover = MarketPlacesHelper.GetTurnoverForPeriod(mps, TimePeriodEnum.Month3, _log);
+			var lastTurnover = MarketPlacesHelper.GetTurnoverForPeriod(mps, TimePeriodEnum.Month, _log);
 			var hasDefaultAccounts = dbHelper.HasDefaultAccounts(customerId, 0, 12);
 			var seniorityMonth = MarketPlacesHelper.GetMarketPlacesSeniority(mps) / 12;
 			var birthDate = dbHelper.GetCustomerBirthDate(customerId);

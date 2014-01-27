@@ -6,7 +6,6 @@
 	using System.Globalization;
 	using System.Text;
 	using AutomationCalculator;
-	using CommonLib;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Html.Tags;
@@ -236,7 +235,7 @@
 
 
 				
-				bool isAutoReRejected = arr.IsAutoReRejected(autoDecision.CustomerId, out reason);
+				bool isAutoReRejected = arr.IsAutoReRejected(autoDecision.CustomerId, autoDecision.CashRequestId, out reason);
 				autoDecisionsDict.Add(DecisionType.AutoReReject, new AutoDecision
 				{
 					CashRequestId = autoDecision.CashRequestId,

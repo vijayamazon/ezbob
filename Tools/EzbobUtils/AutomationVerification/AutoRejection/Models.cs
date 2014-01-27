@@ -86,4 +86,68 @@
 		public int VerificationApprovedSum { get; set; }
 		public bool IsMatch { get; set; }
 	}
+
+	public class MarketPlace
+	{
+		public int Id { get; set; }
+		public string Name { get; set; }
+		public string Type { get; set; }
+		public DateTime? OriginationDate { get; set; }
+	}
+
+	public class AnalysisFunction
+	{
+		public DateTime Updated { get; set; }
+		public string Function { get; set; }
+		public TimePeriodEnum TimePeriod { get; set; }
+		public double Value { get; set; }
+		public string MarketPlaceName { get; set; }
+	}
+
+	public static class AnalysisFunctionIncome
+	{
+		public static string[] IncomeFunctions =
+			{
+				"TotalIncome",
+				"TotalNetInPayments",
+				"TotalSumOfOrders"
+			};
+	}
+
+	public class ReRejectionData
+	{
+		public DateTime? ManualRejectDate { get; set; }
+		public DateTime AutomaticDecisionDate { get; set; }
+		public bool IsNewClient { get; set; }
+		public bool NewDataSourceAdded { get; set; }
+		public decimal RepaidAmount { get; set; }
+		public int LoanAmount { get; set; }
+	}
+
+	public class RejectionConstants
+	{
+		public int MinCreditScore { get; set; }
+		public int MinAnnualTurnover { get; set; }
+		public int MinThreeMonthTurnover { get; set; }
+		public int DefaultScoreBelow { get; set; }
+		public int DefaultMinAmount { get; set; }
+		public int DefaultMinMonths { get; set; }
+		public int MinMarketPlaceSeniorityDays { get; set; }
+		public int NoRejectIfTotalAnnualTurnoverAbove { get; set; }
+		public int NoRejectIfCreditScoreAbove { get; set; }
+	}
+
+	public class ReApprovalData
+	{
+		public DateTime? ManualApproveDate { get; set; }
+		public bool IsNewClient { get; set; }
+		public bool NewDataSourceAdded { get; set; }
+		public int OfferedAmount { get; set; }
+		public int TookAmountLastRequest { get; set; }
+		public bool TookLoanLastRequest { get; set; }
+		public decimal PrincipalRepaymentsSinceOffer { get; set; }
+		public bool WasLate { get; set; }
+	}
+
+	
 }

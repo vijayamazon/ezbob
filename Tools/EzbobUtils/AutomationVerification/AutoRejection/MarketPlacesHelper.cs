@@ -1,20 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace CommonLib
+﻿namespace AutomationCalculator
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
 	using Ezbob.Logger;
 
-	public class AnalysisFunctionsHelper
+	public class MarketPlacesHelper
 	{
+		public static int GetMarketPlacesSeniority(List<MarketPlace> mps)
+		{
+			if (mps.Any() && mps.Any(m => m.OriginationDate.HasValue))
+			{
+				var date = mps.Where(x => x.OriginationDate.HasValue).Max(x => x.OriginationDate.Value);
+				TimeSpan ts = DateTime.Today - date;
+				return (int) ts.TotalDays;
+			}
+			return 0;
+		}
+
 		public static double GetTurnoverForPeriod(List<MarketPlace> mps, TimePeriodEnum timePeriod, ASafeLog log)
 		{
 			double paypal = 0;
 			double ebay = 0;
 			double sum = 0;
 			var dbHelper = new DbHelper(log);
-			
+
 			foreach (var marketPlace in mps)
 			{
 				var afs = dbHelper.GetAnalysisFunctions(marketPlace.Id);
@@ -41,7 +51,5 @@ namespace CommonLib
 			}
 			return sum + Math.Max(paypal, ebay);
 		}
-
-
 	}
 }

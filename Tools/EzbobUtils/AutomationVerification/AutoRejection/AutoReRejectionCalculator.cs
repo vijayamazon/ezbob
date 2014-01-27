@@ -1,7 +1,5 @@
 ﻿namespace AutomationCalculator
 {
-	using System;
-	using CommonLib;
 	using Ezbob.Logger;
 
 	public class AutoReRejectionCalculator
@@ -12,17 +10,18 @@
 			_log = log;
 		}
 
-		public bool IsAutoReRejected(int customerId, out string reason)
+		public bool IsAutoReRejected(int customerId, int cashRequestId, out string reason)
 		{
 			var dbHelper = new DbHelper(_log);
-			var rerejectionData = dbHelper.GetReRejectionData(customerId);
-			
-			var days = rerejectionData.ManualRejectDate.HasValue ? (rerejectionData.ManualRejectDate.Value.AddDays(Constants.ManualDecisionDateRangeDays) - DateTime.UtcNow).Days : 0;
+			var rerejectionData = dbHelper.GetReRejectionData(customerId, cashRequestId);
+
+			var days = rerejectionData.ManualRejectDate.HasValue ? (rerejectionData.AutomaticDecisionDate - rerejectionData.ManualRejectDate.Value).Days : 0;
 
 			if (rerejectionData.IsNewClient)
 			{
-				if (rerejectionData.ManualRejectDate.HasValue && rerejectionData.ManualRejectDate.Value.AddDays(Constants.ManualDecisionDateRangeDays) >= DateTime.UtcNow &&
-				    !rerejectionData.NewDataSourceAdded)
+				if (rerejectionData.ManualRejectDate.HasValue && 
+					days < Constants.ManualDecisionDateRangeDays && 
+					!rerejectionData.NewDataSourceAdded)
 				{
 					
 					reason = string.Format("ReRejection. New Client. Application within min date range ({0} days, manual decision date {1}) and no new data sources added", days, rerejectionData.ManualRejectDate.Value.ToString("dd/MM/yyyy"));
@@ -32,7 +31,8 @@
 			else //Old Client
 			{
 				var repaymentPercent = rerejectionData.RepaidAmount/rerejectionData.LoanAmount;
-				if (rerejectionData.ManualRejectDate.HasValue && rerejectionData.ManualRejectDate.Value.AddDays(Constants.ManualDecisionDateRangeDays) >= DateTime.UtcNow &&
+				if (rerejectionData.ManualRejectDate.HasValue && 
+					days < Constants.ManualDecisionDateRangeDays && 
 					!rerejectionData.NewDataSourceAdded && 
 					repaymentPercent < Constants.MinRepaidPrincipalPercent)
 				{
