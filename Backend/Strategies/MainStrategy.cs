@@ -139,7 +139,7 @@
 				GetBwa();
 			} // if
 
-			decimal scoringResult = CalculateScoreAndMedal();
+			ScoreMedalOffer scoringResult = CalculateScoreAndMedal();
 			
 			if (underwriterCheck)
 			{
@@ -147,8 +147,7 @@
 				return;
 			} // if
 
-			decimal loanInterestBase = GetBaseInterest();
-
+			
 			GetLastCashRequestData();
 
 			CalcAndCapOffer();
@@ -159,7 +158,7 @@
 				modelLoanOffer = 0;
 			}
 
-			UpdateCustomerAndCashRequest(scoringResult, loanInterestBase);
+			UpdateCustomerAndCashRequest(scoringResult.ScoreResult, scoringResult.MaxOfferPercent);
 
 			if (autoDecisionResponse.UserStatus == "Approved")
 			{
@@ -264,17 +263,6 @@
 				new QueryParameter("ManualSetupFeeAmount", manualSetupFeeAmount),
 				new QueryParameter("ManualSetupFeePercent", manualSetupFeePercent)
 				);
-		}
-
-		private decimal GetBaseInterest()
-		{
-			DataTable basicInterestRateDataTable = DB.ExecuteReader(
-				"GetBasicInterestRate",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("Score", initialExperianConsumerScore)
-			);
-			var basicInterestRateRow = new SafeReader(basicInterestRateDataTable.Rows[0]);
-			return basicInterestRateRow["LoanIntrestBase"];
 		}
 
 		private void SendWaitingForDecisionMail()
@@ -449,7 +437,7 @@
 			}
 		}
 
-		private decimal CalculateScoreAndMedal()
+		private ScoreMedalOffer CalculateScoreAndMedal()
 		{
 			DataTable scoreCardDataTable = DB.ExecuteReader(
 				"GetScoreCardData",
@@ -503,7 +491,7 @@
 				new QueryParameter("pScoreResult", scoringResult.ScoreResult)
 			);
 
-			return scoringResult.ScoreResult;
+			return scoringResult;
 		}
 
 		private void PerformExperianConsumerCheckForDirectors()
