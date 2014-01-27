@@ -40,6 +40,7 @@
 			CompanyData = oReader["CompanyData"];
 			FirstName = oReader["FirstName"];
 			LastName = oReader["LastName"];
+			ConsumerData = oReader["ConsumerData"];
 
 			Validate();
 		} // Load
@@ -124,6 +125,7 @@
 		private string CompanyData;
 		private string FirstName;
 		private string LastName;
+		private string ConsumerData;
 
 		private int Aml;
 		private int BusinessScore;
@@ -216,6 +218,9 @@
 
 		private void Validate() {
 			if (!AreLoadedValid())
+				return;
+
+			if (IsThinFile())
 				return;
 
 			DetectAml();
@@ -467,6 +472,11 @@
 				return false;
 			} // if
 
+			if (string.IsNullOrWhiteSpace(ConsumerData)) {
+				Log.Debug("QuickOffer.Validate: consumer data not set.");
+				return false;
+			} // if
+
 			return true;
 		} // AreLoadedValid
 
@@ -543,6 +553,34 @@
 		} // DetectAml
 
 		#endregion method DetectAml
+
+		#region method IsThinFile
+
+		private bool IsThinFile() {
+			XmlNode cd;
+
+			try {
+				cd = Xml.ParseRoot(ConsumerData);
+			}
+			catch (SeldenException e) {
+				Log.Alert(e, "Could not parse consumer data.");
+				return true;
+			} // try
+
+			var oPath = new NameList("Output", "FullConsumerData", "ConsumerData", "CAIS", "CAISDetails");
+
+			var oNode = cd.Offspring(oPath);
+
+			if (ReferenceEquals(oNode, null)) {
+				Log.Debug("CAIS details data not found: this is a thin file.");
+				return true;
+			} // if
+
+			Log.Debug("CAIS details data found: this is NOT a thin file.");
+			return false;
+		} // IsThinFile
+
+		#endregion method IsThinFile
 
 		#endregion private
 	} // class QuickOfferData

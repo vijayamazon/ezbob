@@ -27,19 +27,20 @@
 		#region method Execute
 
 		public override void Execute() {
-			// *  1. Except brokers' clients (source ref is liqcen).
-			// *  2. Limited Company only.
-			// *  3. Offline clients only.
-			// *  4. Min age: 18 years (BirthDate in the latest by LastUpdateDate MP_ExperianDataCache join by CustomerId and Name and Surname).
-			// *  5. Personal score >= 560 (ExperianScore in the latest by LastUpdateDate MP_ExperianDataCache join by CustomerId and Name and Surname).
-			// *  6. No defaults in last two years (ExperianDefaultAccount join CustomerId filter "Date").
-			// +  7. AML > 70 (join by CustomerId, the latest by InsertDate, with ServiceType = 'AML A check' in MP_ServiceLog: innerText of from document element ./ProcessConfigResultsBlock/EIAResultBlock/AuthenticationIndex).
-			// +  8. The applicant should be director of the company (Experian contains ./REQUEST/DL72/DIRFORENAME and ./REQUEST/DL72/DIRSURNAME).
-			// +  9. Business score >= 31 (./REQUEST/DL76/RISKSCORE in MP_ExperianDataCache join by CompanyRefNum).
-			// + 10. Company seniority: 3 years at least (./REQUEST/DL12/DATEINCORP in MP_ExperianDataCache join by CompanyRefNum).
-			// + 11. Tangible equity is positive (from ./REQUEST/DL99/* in MP_ExperianDataCache join by CompanyRefNum).
-			//       DL99 values should be from the latest financial year:
-			//       DATEOFACCOUNTS-YYYY, DATEOFACCOUNTS-MM, DATEOFACCOUNTS-DD
+			// * Except brokers' clients (source ref is liqcen).
+			// * Limited Company only.
+			// * Offline clients only.
+			// * Min age: 18 years (BirthDate in the latest by LastUpdateDate MP_ExperianDataCache join by CustomerId and Name and Surname).
+			// * Personal score >= 560 (ExperianScore in the latest by LastUpdateDate MP_ExperianDataCache join by CustomerId and Name and Surname).
+			// * No defaults in last two years (ExperianDefaultAccount join CustomerId filter "Date").
+			// + "Thick" file only.
+			// + AML > 70 (join by CustomerId, the latest by InsertDate, with ServiceType = 'AML A check' in MP_ServiceLog: innerText of from document element ./ProcessConfigResultsBlock/EIAResultBlock/AuthenticationIndex).
+			// + The applicant should be director of the company (Experian contains ./REQUEST/DL72/DIRFORENAME and ./REQUEST/DL72/DIRSURNAME).
+			// + Business score >= 31 (./REQUEST/DL76/RISKSCORE in MP_ExperianDataCache join by CompanyRefNum).
+			// + Company seniority: 3 years at least (./REQUEST/DL12/DATEINCORP in MP_ExperianDataCache join by CompanyRefNum).
+			// + Tangible equity is positive (from ./REQUEST/DL99/* in MP_ExperianDataCache join by CompanyRefNum).
+			//   DL99 values should be from the latest financial year:
+			//   DATEOFACCOUNTS-YYYY, DATEOFACCOUNTS-MM, DATEOFACCOUNTS-DD
 
 			// Starred items are currently (Jan 22 2014) checked in the stored procedure: if all the conditions are met
 			// it returns one row of data; otherwise it returns nothing.
