@@ -37,8 +37,7 @@
 			_appCreator = appCreator;
 			_session = session;
 		}
-
-
+		
 		[HttpPost]
 		public ActionResult UploadFiles()
 		{
@@ -49,7 +48,7 @@
 		public ActionResult UploadedFiles()
 		{
 			Response.AddHeader("x-frame-options", "SAMEORIGIN");
-			AccountModel model = new AccountModel {accountTypeName = "HMRC", displayName = string.Empty, name = string.Empty};
+			var model = new AccountModel { accountTypeName = "HMRC", displayName = _context.Customer.Name, name = _context.Customer.Name };
 
 			AddAccountState oState = ValidateModel(model);
 
