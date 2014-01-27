@@ -497,52 +497,40 @@ blockquote{margin:0 0 20px 0; padding:10px; border:1px #ccc solid; font-style:it
 }
 
 .hmrcLinkButton {
-    background:url(../img/hmrc_button_link.png) no-repeat 0 0;
-    background-size: 100% auto;
-    width:42%;
-    height:204px;
-    float:left;
+    background: url(../img/hmrc_button_link.png) no-repeat 0 0;
+    -moz-background-size: contain;
+    -o-background-size: contain;
+    background-size: contain;
+    width: 42%;
+    height: 100%;
+    float: left;
 }
 .hmrcLinkButton:hover {
     background:url(../img/hmrc_button_link_hover.png) no-repeat 0 0;
-    background-size: 100% auto;
-    width:42%;
-    height:204px;
-    float:left;
+    -moz-background-size: contain;
+    -o-background-size: contain;
+    background-size: contain;
 }
 .hmrcLinkButton:active {
     background:url(../img/hmrc_button_link_active.png) no-repeat 0 0;
-    background-size: 100% auto;
-    width:42%;
-    height:204px;
-    float:left;
 }
 .hmrcUploadButton {
-    background:url(../img/hmrc_button_upload.png) no-repeat 0 0;
-    background-size: 100% auto;
-    width:42%;
-    height:204px;
-    float:left;
-    margin-left:16%;
-    float:right;
+    background: url(../img/hmrc_button_upload.png) no-repeat 0 0;
+    -moz-background-size: contain;
+    -o-background-size: contain;
+    background-size: contain;
+    width: 42%;
+    height: 100%;
+    float: right;
 }
 .hmrcUploadButton:hover {
     background:url(../img/hmrc_button_upload_hover.png) no-repeat 0 0;
-    background-size: 100% auto;
-    width:42%;
-    height:204px;
-    float:left;
-    margin-left:16%;
-    float:right;
+    -moz-background-size: contain;
+    -o-background-size: contain;
+    background-size: contain;
 }
 .hmrcUploadButton:active {
     background:url(../img/hmrc_button_upload_active.png) no-repeat 0 0;
-    background-size: 100% auto;
-    width:42%;
-    height:204px;
-    float:left;
-    margin-left:16%;
-    float:right;
 }
 
 .grey {

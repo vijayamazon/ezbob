@@ -239,7 +239,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
                 EzBob.App.trigger('clear');
 
                 $.get(window.gRootPath + 'Start/TopButton').done(function (dat) {
-                    $('#pre_header').html(dat);
+                    $('#header').html(dat);
                 });
 
                 that.model.set('loggedIn', true); // triggers 'ready' and 'next'

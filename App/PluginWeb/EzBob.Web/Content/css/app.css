@@ -533,10 +533,6 @@ div.shop-connected {
     padding-left: 50px;
 }
 
-.BankContainer {
-    width: 580px;
-}
-
     .FormRadioCtrl input,
     .BankContainer input {
         margin: -5px 0 0 15px;
@@ -573,7 +569,7 @@ select.SubBank {
 
 .BankContainer a.radio-fx {
     /*padding: 15px;*/
-    width: 45%;
+    width: 49%;
     display: inline-block;
 }
 
