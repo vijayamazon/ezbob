@@ -1,6 +1,5 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers 
 {
-	using Code.ApplicationCreator;
 	using NHibernate;
 	using System;
 	using System.Collections.Generic;
@@ -28,12 +27,12 @@
 			IEzbobWorkplaceContext context,
 			DatabaseDataHelper helper,
 			IRepository<MP_MarketplaceType> mpTypes,
-			ISession session,
-			IAppCreator appCreator) {
+			CGMPUniqChecker mpChecker,
+			ISession session) {
 			_context = context;
 			_helper = helper;
 			_mpTypes = mpTypes;
-			_appCreator = appCreator;
+			_mpChecker = mpChecker;
 			_session = session;
 		}
 		
@@ -56,7 +55,6 @@
 				return oState.Error;
 			} // if
 
-			Connector.SetRunningInWebEnvFlag(model.accountTypeName, oState.CustomerMarketPlace.Id);
 			Connector.SetBackdoorData(model.accountTypeName, oState.CustomerMarketPlace.Id, oSeeds);
 
 			try
@@ -85,12 +83,12 @@
 				return oState.Error;
 			} // if
 
-			Hopper oSeeds = ValidateFiles(Request.Files, oState);
-
-			if (oState.Error != null)
+			string stateError;
+			Hopper oSeeds = ValidateFiles(Request.Files, out stateError);
+			if (stateError != null)
 			{
-				return oState.Error;
-			} // if
+				return CreateError(stateError);
+			}
 
 			if (oSeeds == null)
 			{
@@ -129,8 +127,8 @@
 			} // try
 
 			try {
-				model.Fill();
 				oResult.Marketplace = new DatabaseMarketPlace(model.accountTypeName);
+				_mpChecker.Check(oResult.Marketplace.InternalId, _context.Customer, model.Fill().UniqueID());
 			}
 			catch (MarketPlaceAddedByThisCustomerException ) {
 				oResult.Error = CreateError(DbStrings.StoreAddedByYou);
@@ -156,7 +154,6 @@
 
 				IDatabaseCustomerMarketPlace mp = _helper.SaveOrUpdateCustomerMarketplace(model.name, oState.Marketplace, model, _context.Customer);
 				_session.Flush();
-				_appCreator.CustomerMarketPlaceAdded(_context.Customer, mp.Id);
 
 				oState.CustomerMarketPlace = mp;
 			}
@@ -166,7 +163,9 @@
 			} // try
 		} // SaveMarketplace
 
-		private Hopper ValidateFiles(HttpFileCollectionBase oFiles, AddAccountState oState) {
+		public static Hopper ValidateFiles(HttpFileCollectionBase oFiles, out string stateError)
+		{
+			stateError = null;
 			var oOutput = new Hopper();
 
 			long? nRegistrationNo = null;
@@ -230,7 +229,7 @@
 
 				if (nRegistrationNo.HasValue) {
 					if (nRegistrationNo.Value != oSeeds.RegistrationNo) {
-						oState.Error = CreateError("Inconsistent business registration number.");
+						stateError = "Inconsistent business registration number.";
 						return null;
 					} // if
 				}
@@ -241,7 +240,7 @@
 
 				foreach (DateInterval oInterval in oDateIntervals) {
 					if (oInterval.Intersects(di)) {
-						oState.Error = CreateError("Inconsistent date ranges: " + oInterval + " and " + di);
+						stateError = "Inconsistent date ranges: " + oInterval + " and " + di;
 						return null;
 					} // if
 				} // for each
@@ -273,7 +272,7 @@
 					next = cur;
 
 					if (!prev.IsJustBefore(next)) {
-						oState.Error = CreateError("Inconsequent date ranges: " + prev + " and " + next);
+						stateError = "Inconsequent date ranges: " + prev + " and " + next;
 						return null;
 					} // if
 				} // for each interval
@@ -292,7 +291,7 @@
 		
 		private readonly IEzbobWorkplaceContext _context;
 		private readonly IRepository<MP_MarketplaceType> _mpTypes;
-		private readonly IAppCreator _appCreator;
+		private readonly CGMPUniqChecker _mpChecker;
 		private readonly DatabaseDataHelper _helper;
 		private readonly ISession _session;
 

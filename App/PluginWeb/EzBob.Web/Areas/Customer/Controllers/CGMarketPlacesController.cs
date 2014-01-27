@@ -90,7 +90,13 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 				return View();
 			} // if
 
-			Hopper oSeeds = ValidateFiles(Request.Files, oState);
+			string stateError;
+			Hopper oSeeds = HmrcController.ValidateFiles(Request.Files, out stateError);
+
+			if (stateError != null)
+			{
+				oState.Error = CreateError(stateError);
+			}
 
 			if (oState.Error != null) {
 				ViewError = oState.Error;
@@ -104,7 +110,7 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 				return View();
 			} // if
 
-			SaveMarketplace(oState, model);
+			SaveMarketplace(oState, model, false);
 
 			if (oState.Error != null) {
 				ViewError = oState.Error;
@@ -162,7 +168,7 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 			if (oState.Error != null)
 				return oState.Error;
 
-			SaveMarketplace(oState, model);
+			SaveMarketplace(oState, model, true);
 
 			if (oState.Error != null)
 				return oState.Error;
@@ -279,14 +285,15 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 
 		#region method SaveMarketplace
 
-		private void SaveMarketplace(AddAccountState oState, AccountModel model) {
+		private void SaveMarketplace(AddAccountState oState, AccountModel model, bool shouldUpdateInServer) {
 			try {
 				model.id = _mpTypes.GetAll().First(a => a.InternalId == oState.VendorInfo.Guid()).Id;
 				model.displayName = model.displayName ?? model.name;
 
 				IDatabaseCustomerMarketPlace mp = _helper.SaveOrUpdateCustomerMarketplace(model.name, oState.Marketplace, model, _context.Customer);
 				_session.Flush();
-				_appCreator.CustomerMarketPlaceAdded(_context.Customer, mp.Id);
+				if (shouldUpdateInServer)
+					_appCreator.CustomerMarketPlaceAdded(_context.Customer, mp.Id);
 
 				oState.Model = this.JsonNet(AccountModel.ToModel(mp));
 				oState.CustomerMarketPlace = mp;
@@ -298,127 +305,7 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 		} // SaveMarketplace
 
 		#endregion method SaveMarketplace
-
-		#region method ValidateFiles
-
-		private Hopper ValidateFiles(HttpFileCollectionBase oFiles, AddAccountState oState) {
-			var oOutput = new Hopper();
-
-			long? nRegistrationNo = null;
-			var oDateIntervals = new List<DateInterval>();
-			int nAddedCount = 0;
-
-			for (int i = 0; i < oFiles.Count; i++) {
-				HttpPostedFileBase oFile = oFiles[i];
-
-				if (oFile == null) {
-					Log.DebugFormat("File {0}: not found, ignoring.", i);
-					continue;
-				} // if
-
-				Log.DebugFormat("File {0}, name: {1}", i, oFile.FileName);
-
-				if (oFile.ContentLength == 0) {
-					Log.DebugFormat("File {0}: is empty, ignoring.", i);
-					continue;
-				} // if
-
-				if (oFile.ContentType.Trim().ToLower() != "application/pdf") {
-					Log.DebugFormat("File {0}: is not PDF content type, ignoring.", i);
-					continue;
-				} // if
-
-				var oFileContents = new byte[oFile.ContentLength];
-
-				int nRead = oFile.InputStream.Read(oFileContents, 0, oFile.ContentLength);
-
-				if (nRead != oFile.ContentLength) {
-					Log.WarnFormat("File {0}: failed to read entire file contents, ignoring.", i);
-					continue;
-				} // if
-
-				var smd = new SheafMetaData {
-					BaseFileName = oFile.FileName,
-					DataType = DataType.VatReturn,
-					FileType = FileType.Pdf,
-					Thrasher = null
-				};
-
-				oOutput.Add(smd, oFileContents);
-
-				var vrpt = new VatReturnPdfThrasher(false, new SafeILog(Log));
-				ISeeds oResult = null;
-
-				try {
-					oResult = vrpt.Run(smd, oFileContents);
-				}
-				catch (Exception e) {
-					Log.WarnFormat("Failed to parse file {0} named {1}:", i, oFile.FileName);
-					Log.Warn(e);
-					continue;
-				} // try
-
-				if (oResult == null)
-					continue;
-
-				var oSeeds = (VatReturnSeeds)oResult;
-
-				if (nRegistrationNo.HasValue) {
-					if (nRegistrationNo.Value != oSeeds.RegistrationNo) {
-						oState.Error = CreateError("Inconsistent business registration number.");
-						return null;
-					} // if
-				}
-				else
-					nRegistrationNo = oSeeds.RegistrationNo;
-
-				var di = new DateInterval(oSeeds.DateFrom, oSeeds.DateTo);
-
-				foreach (DateInterval oInterval in oDateIntervals) {
-					if (oInterval.Intersects(di)) {
-						oState.Error = CreateError("Inconsistent date ranges: " + oInterval + " and " + di);
-						return null;
-					} // if
-				} // for each
-
-				oDateIntervals.Add(di);
-				oOutput.Add(smd, oResult);
-				nAddedCount++;
-			} // for
-
-			switch (nAddedCount) {
-			case 0:
-				return null;
-
-			case 1:
-				return oOutput;
-
-			default:
-				oDateIntervals.Sort((a, b) => a.Left.CompareTo(b.Left));
-
-				DateInterval next = null;
-
-				foreach (DateInterval cur in oDateIntervals) {
-					if (next == null) {
-						next = cur;
-						continue;
-					} // if
-
-					DateInterval prev = next;
-					next = cur;
-
-					if (!prev.IsJustBefore(next)) {
-						oState.Error = CreateError("Inconsequent date ranges: " + prev + " and " + next);
-						return null;
-					} // if
-				} // for each interval
-
-				return oOutput;
-			} // switch
-		} // ValidateFiles
-
-		#endregion method ValidateFiles
-
+		
 		#region method CreateError
 
 		private JsonNetResult CreateError(Exception ex) {
