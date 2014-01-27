@@ -19,7 +19,6 @@
 	using Ezbob.ValueIntervals;
 	using Integration.ChannelGrabberConfig;
 	using Integration.ChannelGrabberFrontend;
-	using Newtonsoft.Json;
 	using log4net;
 	using Scorto.Web;
 
@@ -54,13 +53,8 @@
 
 			if (oState.Error != null)
 			{
-				ViewError = oState.Error;
-				ViewModel = null;
 				return oState.Error;
 			} // if
-
-			ViewModel = JsonConvert.SerializeObject(oState.Model);
-			ViewError = null;
 
 			Connector.SetRunningInWebEnvFlag(model.accountTypeName, oState.CustomerMarketPlace.Id);
 			Connector.SetBackdoorData(model.accountTypeName, oState.CustomerMarketPlace.Id, oSeeds);
@@ -71,7 +65,6 @@
 			}
 			catch (Exception e)
 			{
-				ViewError = CreateError("Account has been linked but error occured while storing uploaded data: " + e.Message);
 				return CreateError("Account has been linked but error occured while storing uploaded data: " + e.Message);
 			} // try
 
@@ -89,56 +82,44 @@
 
 			if (oState.Error != null)
 			{
-				ViewError = oState.Error;
-				ViewModel = null;
-				return null;
+				return oState.Error;
 			} // if
 
 			Hopper oSeeds = ValidateFiles(Request.Files, oState);
 
 			if (oState.Error != null)
 			{
-				ViewError = oState.Error;
-				ViewModel = null;
-				return null;
+				return oState.Error;
 			} // if
 
 			if (oSeeds == null)
 			{
-				ViewError = CreateError("No files accepted.");
-				ViewModel = null;
-				return null;
+				return CreateError("No files accepted.");
 			} // if
 
 			Session["oState"] = oState;
 			Session["model"] = model;
 			Session["oSeeds"] = oSeeds;
 
-			return null;
+			return this.JsonNet(new { });
 		}
 
 		private class AddAccountState {
 			public VendorInfo VendorInfo;
-			public AccountData AccountData;
 			public IMarketplaceType Marketplace;
 			public JsonNetResult Error;
-			public JsonNetResult Model;
 			public IDatabaseCustomerMarketPlace CustomerMarketPlace;
 
 			public AddAccountState() {
 				VendorInfo = null;
-				AccountData = null;
 				Marketplace = null;
 				Error = null;
-				Model = null;
 				CustomerMarketPlace = null;
 			}
 		}
 
 		private AddAccountState ValidateModel(AccountModel model) {
-			var oResult = new AddAccountState();
-
-			oResult.VendorInfo = Configuration.Instance.GetVendorInfo(model.accountTypeName);
+			var oResult = new AddAccountState {VendorInfo = Configuration.Instance.GetVendorInfo(model.accountTypeName)};
 
 			if (oResult.VendorInfo == null) {
 				var sError = "Unsupported account type: " + model.accountTypeName;
@@ -148,8 +129,7 @@
 			} // try
 
 			try {
-				oResult.AccountData = model.Fill();
-
+				model.Fill();
 				oResult.Marketplace = new DatabaseMarketPlace(model.accountTypeName);
 			}
 			catch (MarketPlaceAddedByThisCustomerException ) {
@@ -178,7 +158,6 @@
 				_session.Flush();
 				_appCreator.CustomerMarketPlaceAdded(_context.Customer, mp.Id);
 
-				oState.Model = this.JsonNet(AccountModel.ToModel(mp));
 				oState.CustomerMarketPlace = mp;
 			}
 			catch (Exception e) {
@@ -186,7 +165,6 @@
 				oState.Error = CreateError(e);
 			} // try
 		} // SaveMarketplace
-
 
 		private Hopper ValidateFiles(HttpFileCollectionBase oFiles, AddAccountState oState) {
 			var oOutput = new Hopper();
@@ -234,7 +212,7 @@
 				oOutput.Add(smd, oFileContents);
 
 				var vrpt = new VatReturnPdfThrasher(false, new SafeILog(Log));
-				ISeeds oResult = null;
+				ISeeds oResult;
 
 				try {
 					oResult = vrpt.Run(smd, oFileContents);
@@ -311,14 +289,7 @@
 		private JsonNetResult CreateError(string sErrorMsg) {
 			return this.JsonNet(new { error = sErrorMsg });
 		}
-
-		private JsonNetResult ViewError { set {
-			ViewData["error"] = JsonConvert.SerializeObject(value);
-		} } 
-
-		private string ViewModel { set { ViewData["model"] = value ?? "null"; } } // ViewModel
-
-
+		
 		private readonly IEzbobWorkplaceContext _context;
 		private readonly IRepository<MP_MarketplaceType> _mpTypes;
 		private readonly IAppCreator _appCreator;

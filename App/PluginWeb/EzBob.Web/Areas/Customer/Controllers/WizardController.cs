@@ -88,23 +88,5 @@
 
 			return this.JsonNet(new { EarnedPointsStr = sPoints });
 		} // EarnedPointsStr
-
-		/*
-		[HttpPost]
-		[Transactional]
-		public JsonNetResult DropzoneUploadTest() {
-			ILog log = LogManager.GetLogger(typeof (WizardController));
-
-			log.DebugFormat("{0} files arrived.", Request.Files.Count);
-
-			for (int i = 0; i < Request.Files.Count; i++) {
-				HttpPostedFileBase oFile = Request.Files[i];
-
-				log.DebugFormat("File {0}: {1}", i, oFile.FileName);
-			} // for
-
-			return this.JsonNet(new { result = "ok" });
-		}
-		*/
 	}
 }
