@@ -132,6 +132,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\App\EzService\EzServiceConfigurationLoader\EzServiceConfigurationLoader.csproj">
+      <Project>{b030e475-eb48-463d-99de-160179cd5331}</Project>
+      <Name>EzServiceConfigurationLoader</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\App\EzService\EzServiceConfiguration\EzServiceConfiguration.csproj">
+      <Project>{1f4ab740-e9bb-4448-9c4d-22a191c297b9}</Project>
+      <Name>EzServiceConfiguration</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Integration\Amazon\AmazonDbLib\AmazonDbLib.csproj">
       <Project>{fd263eb4-a3ef-4447-94b1-de1b308c604b}</Project>
       <Name>AmazonDbLib</Name>

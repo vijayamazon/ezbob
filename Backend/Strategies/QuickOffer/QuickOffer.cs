@@ -1,4 +1,5 @@
 ﻿namespace EzBob.Backend.Strategies.QuickOffer {
+	using EzServiceConfigurationLoader;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Models;
@@ -46,6 +47,15 @@
 			// it returns one row of data; otherwise it returns nothing.
 
 			// Plussed items are checked in QuickOfferData.Load method.
+
+			var qocfg = new QuickOfferConfiguration(DB, Log);
+
+			qocfg.Init();
+
+			if (!qocfg.Enabled) {
+				Log.Debug("QuickOffer.Execute for customer {0} complete: quick offer is disabled.", m_nCustomerID);
+				return;
+			} // if
 
 			Offer = null;
 

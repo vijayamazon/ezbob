@@ -1,7 +1,5 @@
-﻿using System;
-
-namespace EzServiceConfiguration {
-	public abstract class ConfigurationData {
+﻿namespace EzServiceConfiguration {
+	public abstract class ConfigurationData : AConfigurationData {
 		#region public
 
 		#region configuration details
@@ -42,22 +40,6 @@ namespace EzServiceConfiguration {
 
 		#endregion property AdminEndpointAddress
 
-		#region method Init
-
-		public virtual void Init() {
-			LoadFromDB();
-
-			if (!IsValid())
-				throw new Exception(string.Format("Invalid service configuration for service instance {0} has been loaded from DB.", RequestedInstanceName));
-
-			if (!string.IsNullOrWhiteSpace(InstanceName))
-				InstanceName = RequestedInstanceName;
-
-			WriteToLog();
-		} // Init
-
-		#endregion method Init
-
 		#endregion public
 
 		#region protected
@@ -72,12 +54,31 @@ namespace EzServiceConfiguration {
 
 		protected virtual string RequestedInstanceName { get; private set; }
 
-		protected abstract void LoadFromDB();
-		protected abstract void WriteToLog();
+		#region property InvalidExceptionMessage
+
+		protected override string InvalidExceptionMessage {
+			get {
+				return string.Format(
+					"Invalid service configuration for service instance {0} has been loaded from DB.",
+					RequestedInstanceName
+				);
+			} // get
+		} // InvalidExceptionMessage
+
+		#endregion property InvalidExceptionMessage
+
+		#region method Adjust
+
+		protected override void Adjust() {
+			if (!string.IsNullOrWhiteSpace(InstanceName))
+				InstanceName = RequestedInstanceName;
+		} // Adjust
+
+		#endregion method Adjust
 
 		#region method IsValid
 
-		protected virtual bool IsValid() {
+		protected override bool IsValid() {
 			return
 				!string.IsNullOrEmpty(HostName) &&
 				IsPortValid(AdminPort) &&
