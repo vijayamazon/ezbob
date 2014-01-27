@@ -516,7 +516,7 @@
 		}
 		
 		[HttpPost, Transactional, Ajax, ValidateJsonAntiForgeryToken]
-		public JsonNetResult ChangeCreditLine(long id, int loanType, double amount, decimal interestRate, int repaymentPeriod, string offerStart, string offerValidUntil, bool useSetupFee, bool useBrokerSetupFee, bool allowSendingEmail, int isLoanTypeSelectionAllowed, int discountPlan, int? manualSetupFeeAmount, decimal? manualSetupFeePercent)
+		public JsonNetResult ChangeCreditLine(long id, int loanType, double amount, decimal interestRate, int repaymentPeriod, string offerStart, string offerValidUntil, bool useSetupFee, bool useBrokerSetupFee, bool allowSendingEmail, int isLoanTypeSelectionAllowed, int discountPlan, decimal? manualSetupFeeAmount, decimal? manualSetupFeePercent)
 		{
 			var cr = _cashRequestsRepository.Get(id);
 			var loanT = _loanTypes.Get(loanType);
@@ -529,8 +529,8 @@
 
 			cr.UseSetupFee = useSetupFee;
 			cr.UseBrokerSetupFee = useBrokerSetupFee;
-			cr.ManualSetupFeeAmount = manualSetupFeeAmount;
-			cr.ManualSetupFeePercent = (manualSetupFeeAmount != null && manualSetupFeePercent.HasValue && manualSetupFeeAmount.Value > 0M) ? manualSetupFeeAmount.Value : (decimal?)null;
+			cr.ManualSetupFeeAmount = (int?)manualSetupFeeAmount;
+			cr.ManualSetupFeePercent = manualSetupFeePercent;
 
 			cr.EmailSendingBanned = !allowSendingEmail;
 			cr.LoanTemplate = null;

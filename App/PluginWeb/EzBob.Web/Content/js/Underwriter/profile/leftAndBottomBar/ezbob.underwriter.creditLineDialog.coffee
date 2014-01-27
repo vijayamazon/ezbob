@@ -63,6 +63,7 @@ class EzBob.Underwriter.CreditLineDialog extends Backbone.Marionette.ItemView
     
     getPostData:->
         m = @cloneModel.toJSON()
+        
         data =
             id                          : m.CashRequestId
             loanType                    : m.LoanTypeId
@@ -78,6 +79,9 @@ class EzBob.Underwriter.CreditLineDialog extends Backbone.Marionette.ItemView
             manualSetupFeePercent       : m.ManualSetupFeePercent
             allowSendingEmail           : m.AllowSendingEmail
             isLoanTypeSelectionAllowed  : m.IsLoanTypeSelectionAllowed
+            
+        console.log("m,data",m, data)
+        debugger
         return data
             
     bindings:
@@ -106,6 +110,7 @@ class EzBob.Underwriter.CreditLineDialog extends Backbone.Marionette.ItemView
             converter: EzBob.BindingConverters.moneyFormat
         ManualSetupFeePercent:
             selector: "input[name='manualSetupFeePercent']"
+            converter: EzBob.BindingConverters.percentsFormat
         ManualSetupFeeAmount:
             selector: "input[name='manualSetupFeeAmount']"
             converter: EzBob.BindingConverters.moneyFormat
@@ -114,11 +119,13 @@ class EzBob.Underwriter.CreditLineDialog extends Backbone.Marionette.ItemView
     onRender: -> 
         @modelBinder.bind @cloneModel, @el, @bindings
         @$el.find("#startingFromDate, #offerValidUntil").mask("99/99/9999").datepicker({ autoclose: true, format: 'dd/mm/yyyy' })
-        @$el.find("#offeredCreditLine").autoNumeric (EzBob.moneyFormat)
+        @$el.find("#offeredCreditLine").autoNumeric(EzBob.moneyFormat)
         if(@$el.find("#offeredCreditLine").val() == "-") 
             @$el.find("#offeredCreditLine").val("")
 
         @$el.find("#interestRate").autoNumeric (EzBob.percentFormat)
+        @$el.find("#manualSetupFeePercent").autoNumeric(EzBob.percentFormat)
+        @$el.find("#manualSetupFeeAmount").autoNumeric(EzBob.moneyFormat)
         @$el.find("#repaymentPeriod").numericOnly()
         @setValidator()
         

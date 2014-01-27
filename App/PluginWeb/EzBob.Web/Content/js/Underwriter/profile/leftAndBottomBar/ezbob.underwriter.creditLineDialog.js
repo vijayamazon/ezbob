@@ -117,6 +117,8 @@
         allowSendingEmail: m.AllowSendingEmail,
         isLoanTypeSelectionAllowed: m.IsLoanTypeSelectionAllowed
       };
+      console.log("m,data", m, data);
+      debugger;
       return data;
     };
 
@@ -154,7 +156,8 @@
         converter: EzBob.BindingConverters.moneyFormat
       },
       ManualSetupFeePercent: {
-        selector: "input[name='manualSetupFeePercent']"
+        selector: "input[name='manualSetupFeePercent']",
+        converter: EzBob.BindingConverters.percentsFormat
       },
       ManualSetupFeeAmount: {
         selector: "input[name='manualSetupFeeAmount']",
@@ -173,6 +176,8 @@
         this.$el.find("#offeredCreditLine").val("");
       }
       this.$el.find("#interestRate").autoNumeric(EzBob.percentFormat);
+      this.$el.find("#manualSetupFeePercent").autoNumeric(EzBob.percentFormat);
+      this.$el.find("#manualSetupFeeAmount").autoNumeric(EzBob.moneyFormat);
       this.$el.find("#repaymentPeriod").numericOnly();
       return this.setValidator();
     };

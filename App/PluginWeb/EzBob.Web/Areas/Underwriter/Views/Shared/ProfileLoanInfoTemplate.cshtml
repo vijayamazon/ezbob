@@ -209,8 +209,10 @@
                 <td>Manual setup fee:</td>
                 <td>
                     <span>£ <%= m.ManualSetupFeeAmount %> | <%= m.ManualSetupFeePercent ? EzBob.formatPercents(m.ManualSetupFeePercent) : '%' %></span>
-                    <button class="btn btn-mini btn-primary couple_buttons" name="manualSetupFeeEditAmountButton"><i class="fa fa-gbp"></i></button>
-                    <button class="btn btn-mini btn-primary couple_buttons" name="manualSetupFeeEditPercentButton">%</button>
+                     <%if(m.Editable){%>
+                    <button class="btn btn-mini btn-primary couple_buttons" name="manualSetupFeeEditAmountButton" <%= m.UseSetupFee || m.UseBrokerSetupFee ? '' : 'disabled="disabled"' %> ><i class="fa fa-gbp"></i></button>
+                    <button class="btn btn-mini btn-primary couple_buttons" name="manualSetupFeeEditPercentButton" <%= m.UseSetupFee || m.UseBrokerSetupFee ? '' : 'disabled="disabled"' %> >%</button>
+                    <%}%>
                 </td>
             </tr>
 
