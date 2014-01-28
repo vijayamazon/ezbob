@@ -50,9 +50,9 @@
 			string stateError;
 			Hopper oSeeds = GetProcessedFiles(out stateError);
 
-			if (oState.Error != null)
+			if (stateError != null)
 			{
-				return oState.Error;
+				return CreateError(stateError);
 			} // if
 
 			SaveMarketplace(oState, model);
@@ -403,6 +403,7 @@
 			switch ((int)Session["AddedCount"])
 			{
 				case 0:
+					stateError = "No files were successfully processed";
 					return null;
 
 				case 1:
