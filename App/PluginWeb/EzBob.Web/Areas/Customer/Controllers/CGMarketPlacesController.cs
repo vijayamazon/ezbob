@@ -1,29 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using ApplicationMng.Repository;
-using EZBob.DatabaseLib;
-using EZBob.DatabaseLib.DatabaseWrapper;
-using EZBob.DatabaseLib.Model.Database;
-using EzBob.Configuration;
-using Ezbob.HmrcHarvester;
-using EzBob.Web.Infrastructure;
-using EzBob.Web.Code.MpUniq;
-using EzBob.Web.Models.Strings;
-using Ezbob.Logger;
-using Ezbob.ValueIntervals;
-using Integration.ChannelGrabberConfig;
-using Integration.ChannelGrabberFrontend;
-using Newtonsoft.Json;
-using log4net;
-using Scorto.Web;
-
-namespace EzBob.Web.Areas.Customer.Controllers {
+﻿namespace EzBob.Web.Areas.Customer.Controllers {
 	using Code.ApplicationCreator;
 	using NHibernate;
+	using System;
+	using System.Linq;
+	using System.Web.Mvc;
+	using ApplicationMng.Repository;
+	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.DatabaseWrapper;
+	using EZBob.DatabaseLib.Model.Database;
+	using Configuration;
+	using Ezbob.HmrcHarvester;
+	using Infrastructure;
+	using Code.MpUniq;
+	using Web.Models.Strings;
+	using Integration.ChannelGrabberConfig;
+	using Integration.ChannelGrabberFrontend;
+	using Newtonsoft.Json;
+	using log4net;
+	using Scorto.Web;
 
 	public class CGMarketPlacesController : Controller {
 		#region public
@@ -121,8 +115,7 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 			ViewModel = JsonConvert.SerializeObject(oState.Model);
 			ViewError = null;
 
-			Integration.ChannelGrabberFrontend.Connector.SetRunningInWebEnvFlag(model.accountTypeName, oState.CustomerMarketPlace.Id);
-			Integration.ChannelGrabberFrontend.Connector.SetBackdoorData(model.accountTypeName, oState.CustomerMarketPlace.Id, oSeeds);
+			Connector.SetBackdoorData(model.accountTypeName, oState.CustomerMarketPlace.Id, oSeeds);
 
 			try {
 				oState.CustomerMarketPlace.Marketplace.GetRetrieveDataHelper(_helper).UpdateCustomerMarketplaceFirst(oState.CustomerMarketPlace.Id);

@@ -72,30 +72,22 @@ namespace Integration.ChannelGrabberFrontend {
 			} // try
 
 			AccountData ad = oSecInfo.Fill();
-
-			bool bRunningInWebEnv = Connector.FetchRunningInWebEnvFlag(ad.AccountTypeName(), databaseCustomerMarketPlace.Id, new SafeILog(ms_oLog));
-
-			ms_oLog.DebugFormat(
-				"{0} marketplace with id {1} is {2}running in web env now.",
-				ad.AccountTypeName(), databaseCustomerMarketPlace.Id, bRunningInWebEnv ? "" : "not "
-			);
-
+			
 			switch (ad.VendorInfo.Behaviour) {
 			case Behaviour.Default:
 				// nothing to do here
 				break;
 
 			case Behaviour.HMRC:
-				if (!bRunningInWebEnv) {
-					if ((ad.Login == databaseCustomerMarketPlace.Customer.Name) && (ad.Password == "topsecret")) {
-						ms_oLog.DebugFormat(
-							"{0} account with id {1} was created by uploading files, nothing to update, bailing out.",
-							ad.AccountTypeName(), databaseCustomerMarketPlace.Id
-						);
+				if ((databaseCustomerMarketPlace as MP_CustomerMarketPlace).UpdatingEnd != null)
+				{
+					ms_oLog.DebugFormat(
+						"{0} account with id {1} was created by uploading files, nothing to update, bailing out.",
+						ad.AccountTypeName(), databaseCustomerMarketPlace.Id
+					);
 
-						return;
-					} // if account was created by uploading files
-				} // if not in web env
+					return;
+				} // if account was created by uploading files
 
 				break;
 
