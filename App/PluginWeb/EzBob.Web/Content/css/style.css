@@ -503,7 +503,7 @@ blockquote{margin:0 0 20px 0; padding:10px; border:1px #ccc solid; font-style:it
     -moz-background-size: contain;
     -o-background-size: contain;
     background-size: contain;
-    width: 42%;
+    width: 230px;
     height: 100%;
     float: left;
 }
@@ -524,7 +524,7 @@ blockquote{margin:0 0 20px 0; padding:10px; border:1px #ccc solid; font-style:it
     -moz-background-size: contain;
     -o-background-size: contain;
     background-size: contain;
-    width: 42%;
+    width: 230px;
     height: 100%;
     float: right;
 }
