@@ -67,6 +67,12 @@
 			try
 			{
 				oState.CustomerMarketPlace.Marketplace.GetRetrieveDataHelper(_helper).UpdateCustomerMarketplaceFirst(oState.CustomerMarketPlace.Id);
+				Customer customer = _context.Customer;
+				if (!customer.WizardStep.TheLastOne)
+				{
+					customer.WizardStep = _helper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.Marketplace);
+					Log.DebugFormat("Customer {1} ({0}): wizard step has been updated to :{2}", customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.Marketplace);
+				}
 			}
 			catch (Exception e)
 			{

@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Web.Code.ApplicationCreator {
 	using System.ServiceModel;
 	using Backend.Models;
+	using EZBob.DatabaseLib;
 	using EzServiceReference;
 	using System;
 	using System.Collections.Generic;
@@ -19,10 +20,11 @@
 
 	public class AppCreator : IAppCreator {
 		public AppCreator(IEzBobConfiguration config, IUsersRepository users, ISession session, ApplicationRepository applicationRepository,
-						  IStrategyRepository strategies, ConfigurationVariablesRepository configurationVariablesRepository) {
+			DatabaseDataHelper helper, IStrategyRepository strategies, ConfigurationVariablesRepository configurationVariablesRepository) {
 			_config = config;
 			_users = users;
 			_session = session;
+			_helper = helper;
 			_applicationRepository = applicationRepository;
 			_strategies = strategies;
 			_sm = new StrategyManager();
@@ -139,6 +141,12 @@
 		}
 
 		public void CustomerMarketPlaceAdded(Customer customer, int umi) {
+			if (!customer.WizardStep.TheLastOne)
+			{
+				customer.WizardStep = _helper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.Marketplace);
+				Log.DebugFormat("Customer {1} ({0}): wizard step has been updated to :{2}", customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.Marketplace);
+			}
+
 			if (useNewUpdateMpStrategy) {
 				ServiceClient.UpdateMarketplace(customer.Id, umi);
 			}
@@ -665,6 +673,7 @@
 		private static bool useNewMainStrategy;
 		private static bool useNewCaisStrategies;
 		private static bool readConfig = false;
+		private readonly DatabaseDataHelper _helper;
 		private static WizardConfigsActionResult _wizardConfigs;
 		private static readonly object initServiceLock = new object();
 	} // class AppCreator

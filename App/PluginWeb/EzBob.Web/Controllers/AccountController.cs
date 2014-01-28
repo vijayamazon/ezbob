@@ -399,6 +399,7 @@ namespace EzBob.Web.Controllers
 						PersonalInfo = new PersonalInfo { MobilePhone = mobilePhone },
 						TrustPilotStatus = _helper.TrustPilotStatusRepository.Find(TrustPilotStauses.Nether),
 					};
+				_log.DebugFormat("Customer {1} ({0}): wizard step has been updated to :{2}", customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.SignUp);
 
 				var sourceref = Request.Cookies["sourceref"];
 				if (sourceref != null)
