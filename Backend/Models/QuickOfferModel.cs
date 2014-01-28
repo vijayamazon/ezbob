@@ -35,6 +35,27 @@
 		[DataMember]
 		public decimal TotalCurrentAssets { get; set; }
 
+		[DataMember]
+		public int ImmediateTerm { get; set; }
+
+		[DataMember]
+		public decimal ImmediateInterestRate { get; set; }
+
+		[DataMember]
+		public decimal ImmediateSetupFee { get; set; }
+
+		[DataMember]
+		public decimal PotentialAmount { get; set; }
+
+		[DataMember]
+		public int PotentialTerm { get; set; }
+
+		[DataMember]
+		public decimal PotentialInterestRate { get; set; }
+
+		[DataMember]
+		public decimal PotentialSetupFee { get; set; }
+
 		#endregion public
 	} // class QuickOfferModel
 

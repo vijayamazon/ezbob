@@ -265,14 +265,14 @@
     };
 
     StoreInfoView.prototype.renderQuickOfferForm = function() {
-      this.storeList.find('.immediate-offer .amount').text(EzBob.formatPounds(this.quickOffer.Amount));
-      this.storeList.find('.immediate-offer .term').text('3 months');
-      this.storeList.find('.immediate-offer .interest-rate .value').text('3.50%');
-      this.storeList.find('.immediate-offer .setup-fee .value').text('1.50%');
-      this.storeList.find('.potential-offer .amount').text(EzBob.formatPounds(this.quickOffer.Amount));
-      this.storeList.find('.potential-offer .term').text('up to 12 months');
-      this.storeList.find('.potential-offer .interest-rate .value').text('x%');
-      return this.storeList.find('.potential-offer .setup-fee .value').text('1.50%');
+      this.storeList.find('.immediate-offer .amount').text(EzBob.formatPoundsNoDecimals(this.quickOffer.Amount));
+      this.storeList.find('.immediate-offer .term').text(this.quickOffer.ImmediateTerm + ' months');
+      this.storeList.find('.immediate-offer .interest-rate .value').text(EzBob.formatPercentsWithDecimals(this.quickOffer.ImmediateInterestRate));
+      this.storeList.find('.immediate-offer .setup-fee .value').text(EzBob.formatPercentsWithDecimals(this.quickOffer.ImmediateSetupFee));
+      this.storeList.find('.potential-offer .amount').text(EzBob.formatPoundsNoDecimals(this.quickOffer.PotentialAmount));
+      this.storeList.find('.potential-offer .term').text('up to ' + this.quickOffer.PotentialTerm + ' months');
+      this.storeList.find('.potential-offer .interest-rate .value').text(EzBob.formatPercentsWithDecimals(this.quickOffer.PotentialInterestRate));
+      return this.storeList.find('.potential-offer .setup-fee .value').text(EzBob.formatPercentsWithDecimals(this.quickOffer.PotentialSetupFee));
     };
 
     StoreInfoView.prototype.shouldShowQuickOffer = function(hasFilledShops) {

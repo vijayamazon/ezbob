@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 
 namespace Ezbob.Utils {
+	using System.Linq;
+	using System.Text;
+	using Extensions;
+
 	#region class SortedTable
 
 	public class SortedTable<TRowKey, TColumnKey, TData> {
@@ -11,6 +15,7 @@ namespace Ezbob.Utils {
 
 		public SortedTable() {
 			m_oData = new SortedDictionary<TRowKey, SortedDictionary<TColumnKey, TData>>();
+			ColumnKeys = new SortedSet<TColumnKey>();
 		} // constructor
 
 		#endregion constructor
@@ -66,6 +71,7 @@ namespace Ezbob.Utils {
 				} // if
 
 				oRow[oColumnKey] = value;
+				ColumnKeys.Add(oColumnKey);
 			} // set
 		} // indexer
 
@@ -92,11 +98,134 @@ namespace Ezbob.Utils {
 
 		#endregion method ForEach
 
+		#region property RowKeys
+
+		public SortedSet<TRowKey> RowKeys {
+			get { return new SortedSet<TRowKey>(m_oData.Keys); }
+		} // RowKeys
+
+		#endregion property RowKeys
+
+		#region property ColumnKeys
+
+		public SortedSet<TColumnKey> ColumnKeys { get; private set; }
+
+		#endregion property ColumnKeys
+
+		#region method Clear
+
+		public void Clear() {
+			m_oData.Clear();
+		} // Clear
+
+		#endregion method Clear
+
+		#region property IsEmpty
+
+		public bool IsEmpty {
+			get { return m_oData.Count < 1; }
+		} // IsEmpty
+
+		#endregion property IsEmpty
+
+		#region method ToFormattedString
+
+		public string ToFormattedString(
+			string sTitle = null,
+			char cColSeparator = '|',
+			char cLineChar = '-',
+			char cLineColSeparator = '+',
+			Func<TRowKey, string> oRowKeyToString = null,
+			Func<TColumnKey, string> oColumnKeyToString = null,
+			Func<TData, string> oDataToString = null 
+		) {
+			var oFirstRow = new List<string>();
+			var oOtherRows = new SortedDictionary<TRowKey, List<string>>();
+
+			var oRowKeyStr = new SortedDictionary<TRowKey, string>();
+
+			sTitle = (sTitle ?? string.Empty).Trim();
+
+			string sColSeparator = " " + cColSeparator + " ";
+			string sLineColSeparator = string.Format("{0}{1}{0}", cLineChar, cLineColSeparator);
+
+			int nLength = 0;
+			int nFirstLength = sTitle.Length;
+
+			if (ReferenceEquals(oRowKeyToString, null))
+				oRowKeyToString = x => x.ToString();
+
+			if (ReferenceEquals(oColumnKeyToString, null))
+				oColumnKeyToString = x => x.ToString();
+
+			if (ReferenceEquals(oDataToString, null))
+				oDataToString = x => x.ToString();
+
+			foreach (var oColumnKey in ColumnKeys) {
+				string sKey = oColumnKeyToString(oColumnKey);
+				nLength = nLength.Max(sKey.Length);
+				oFirstRow.Add(sKey);
+			} // foreach key
+
+			ForEachRow((oRowKey, pcts) => {
+				string s = oRowKeyToString(oRowKey);
+				oRowKeyStr[oRowKey] = s;
+				nFirstLength = nFirstLength.Max(s.Length);
+
+				var oRowValues = new List<string>();
+
+				foreach (var pair in pcts) {
+					string sValue = oDataToString(pair.Value);
+					oRowValues.Add(sValue);
+					nLength = nLength.Max(sValue.Length);
+				} // for each value
+
+				oOtherRows[oRowKey] = oRowValues;
+			}); // for each row
+
+			nFirstLength++;
+
+			string sFirstColFormat = string.Format("{{0,{0}}}", nFirstLength);
+			string sOtherColsFormat = string.Format("{{0,{0}}}", nLength);
+
+			var oLine = new StringBuilder();
+			oLine.Append(new string(cLineChar, nFirstLength));
+			for (var i = 0; i < oFirstRow.Count; i++) {
+				oLine.Append(sLineColSeparator);
+				oLine.Append(new string(cLineChar, nLength));
+			} // for
+			oLine.Append(cLineChar);
+
+			string sLine = Environment.NewLine + oLine.ToString() + Environment.NewLine;
+
+			var os = new StringBuilder();
+
+			os.Append(
+				string.Format(sFirstColFormat, sTitle) + sColSeparator +
+				string.Join(sColSeparator, oFirstRow.Select(x => string.Format(sOtherColsFormat, x)))
+			);
+
+			foreach (var pair in oOtherRows) {
+				os.Append(sLine);
+
+				os.Append(
+					string.Format(sFirstColFormat, oRowKeyStr[pair.Key]) + sColSeparator +
+					string.Join(sColSeparator, pair.Value.Select(x => string.Format(sOtherColsFormat, x)))
+				);
+			} // foreach
+
+			os.Append(Environment.NewLine);
+
+			return os.ToString();
+		} // ToFormattedString
+
+		#endregion method ToFormattedString
+
 		#endregion public
 
 		#region private
 
-		private SortedDictionary<TRowKey, SortedDictionary<TColumnKey, TData>> m_oData;
+		private readonly SortedDictionary<TRowKey, SortedDictionary<TColumnKey, TData>> m_oData;
 
 		#endregion private
 	} // class SortedTable

@@ -121,7 +121,7 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
     if @model.get 'isCurrentCashRequestFromQuickOffer'
         @$('.loan-amount-header-start').text 'Confirm loan amount'
     else
-        @$('.quick-offer-section').hide()
+        @$('.quick-offer-section').remove()
 
         InitAmountPeriodSliders {
             container: @$('#loan-sliders'),

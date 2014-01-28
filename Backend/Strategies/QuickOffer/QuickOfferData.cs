@@ -4,11 +4,15 @@
 	using System.Data;
 	using System.Globalization;
 	using System.Xml;
+	using EzServiceConfigurationLoader;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils;
+	using Ezbob.Utils.Extensions;
+	using Ezbob.Utils.JsonUtils;
 	using Ezbob.Utils.XmlUtils;
 	using Models;
+	using Newtonsoft.Json.Linq;
 
 	#region class QuickOfferData
 
@@ -17,9 +21,10 @@
 
 		#region constructor
 
-		public QuickOfferData(ASafeLog oLog) {
+		public QuickOfferData(QuickOfferConfiguration qoc, ASafeLog oLog) {
 			Log = new SafeLog(oLog);
 			IsValid = false;
+			Cfg = qoc;
 		} // constructor
 
 		#endregion constructor
@@ -63,6 +68,27 @@
 
 			int nOfferID = default (int);
 
+			decimal nRequestedAmount = RequestedAmount.Min(Cfg.PotentialMaxAmount);
+
+			var oOffer = new QuickOfferModel {
+				ID = nOfferID,
+				Amount = nOffer.Value,
+				Aml = Aml,
+				BusinessScore = BusinessScore,
+				IncorporationDate = IncorporationDate,
+				TangibleEquity = TangibleEquity,
+				TotalCurrentAssets = TotalCurrentAssets,
+
+				ImmediateTerm = Cfg.ImmediateTermMonths,
+				ImmediateInterestRate = Cfg.ImmediateInterestRate,
+				ImmediateSetupFee = Cfg.ImmediateSetupFee,
+
+				PotentialAmount = nRequestedAmount,
+				PotentialTerm = Cfg.PotentialTermMonths,
+				PotentialInterestRate = Cfg.LoanPct(BusinessScore, nRequestedAmount),
+				PotentialSetupFee = Cfg.PotentialSetupFee,
+			};
+
 			if (bSaveOfferToDB) {
 				try {
 					var oID = new QueryParameter("@QuickOfferID") {
@@ -74,17 +100,27 @@
 						"QuickOfferSave",
 						CommandSpecies.StoredProcedure,
 						new QueryParameter("@CustomerID", CustomerID),
-						new QueryParameter("@Amount", nOffer),
-						new QueryParameter("@Aml", Aml),
-						new QueryParameter("@BusinessScore", BusinessScore),
-						new QueryParameter("@IncorporationDate", IncorporationDate),
-						new QueryParameter("@TangibleEquity", TangibleEquity),
-						new QueryParameter("@TotalCurrentAssets", TotalCurrentAssets),
+						new QueryParameter("@Amount", oOffer.Amount),
+						new QueryParameter("@Aml", oOffer.Aml),
+						new QueryParameter("@BusinessScore", oOffer.BusinessScore),
+						new QueryParameter("@IncorporationDate", oOffer.IncorporationDate),
+						new QueryParameter("@TangibleEquity", oOffer.TangibleEquity),
+						new QueryParameter("@TotalCurrentAssets", oOffer.TotalCurrentAssets),
+
+						new QueryParameter("@ImmediateTerm", oOffer.ImmediateTerm),
+						new QueryParameter("@ImmediateInterestRate", oOffer.ImmediateInterestRate),
+						new QueryParameter("@ImmediateSetupFee", oOffer.ImmediateSetupFee),
+						new QueryParameter("@PotentialAmount", oOffer.PotentialAmount),
+						new QueryParameter("@PotentialTerm", oOffer.PotentialTerm),
+						new QueryParameter("@PotentialInterestRate", oOffer.PotentialInterestRate),
+						new QueryParameter("@PotentialSetupFee", oOffer.PotentialSetupFee),
 						oID
 					);
 
-					if (int.TryParse(oID.SafeReturnedValue, out nOfferID))
+					if (int.TryParse(oID.SafeReturnedValue, out nOfferID)) {
 						oLog.Msg("Quick offer id is {0}", nOfferID);
+						oOffer.ID = nOfferID;
+					}
 					else
 						oLog.Warn("Failed to parse quick offer id from {0}", oID.Value.ToString());
 				}
@@ -93,15 +129,7 @@
 				} // try
 			} // if
 
-			return new QuickOfferModel {
-				ID = nOfferID,
-				Amount = nOffer.Value,
-				Aml = Aml,
-				BusinessScore = BusinessScore,
-				IncorporationDate = IncorporationDate,
-				TangibleEquity = TangibleEquity,
-				TotalCurrentAssets = TotalCurrentAssets,
-			};
+			return oOffer;
 		} // GetOffer
 
 		#endregion method GetOffer
@@ -135,38 +163,17 @@
 
 		private readonly SafeLog Log;
 
+		private readonly QuickOfferConfiguration Cfg;
+
 		#endregion properties
 
 		#region method Calculate
 
 		private decimal? Calculate() {
-			const decimal nRoundFactor = 100.0m;
-
-			const decimal nMinOfferValue = 1000.0m;
-			const decimal nMinOfferCap = 7000.0m;
-			const decimal nMinOfferCapPct = 0.15m;
-
-			var oOfferAmountPct = new List<Tuple<int, decimal>>() {
-				new Tuple<int, decimal>(40, 0.012m),
-				new Tuple<int, decimal>(50, 0.016m),
-				new Tuple<int, decimal>(60, 0.027m),
-				new Tuple<int, decimal>(70, 0.031m),
-				new Tuple<int, decimal>(80, 0.034m),
-				new Tuple<int, decimal>(90, 0.051m),
-				new Tuple<int, decimal>(100, 0.069m),
-			};
-
-			decimal nPct = 0;
-
-			foreach (var oPct in oOfferAmountPct) {
-				if (BusinessScore <= oPct.Item1) {
-					nPct = oPct.Item2;
-					break;
-				} // if
-			} // foreach
+			decimal nPct = Cfg.OfferAmountPct(BusinessScore);
 
 			if (nPct == 0) {
-				Log.Debug("No percent found to business score {0}.", BusinessScore);
+				Log.Debug("No percent found for business score {0}.", BusinessScore);
 				return null;
 			} // if
 
@@ -178,29 +185,29 @@
 
 			Log.Debug("Calculated offer (total current assets * percent) is {0}", nCalculatedOffer.ToString("C2", ci));
 
-			nCalculatedOffer = Math.Truncate(nCalculatedOffer / nRoundFactor) * nRoundFactor;
+			nCalculatedOffer = nCalculatedOffer.DropHundred();
 
 			Log.Debug("Rounded offer is {0}", nCalculatedOffer.ToString("C2", ci));
 
-			if (nCalculatedOffer < nMinOfferValue) {
-				Log.Debug("The offer is less than {0}, not offering.", nMinOfferValue.ToString("C2", ci));
+			if (nCalculatedOffer < Cfg.MinOfferAmount) {
+				Log.Debug("The offer is less than {0}, not offering.", Cfg.MinOfferAmount.ToString("C2", ci));
 				return null;
 			} // if
 
-			decimal nOfferBeforeCap = Math.Truncate(RequestedAmount * nMinOfferCapPct / nRoundFactor) * nRoundFactor;
+			decimal nOfferBeforeCap = (RequestedAmount * Cfg.OfferCapPct).DropHundred();
 
-			decimal nCap = Math.Min(nMinOfferCap, nOfferBeforeCap);
+			decimal nCap = nOfferBeforeCap.Min(Cfg.ImmediateMaxAmount);
 
 			Log.Debug(
 				"Offer cap is {0} = min({1}, {2} * {4} = {3})",
 				nCap.ToString("C2", ci),
-				nMinOfferCap.ToString("C2", ci),
+				Cfg.ImmediateMaxAmount.ToString("C2", ci),
 				RequestedAmount.ToString("C2", ci),
 				nOfferBeforeCap.ToString("C2", ci),
-				nMinOfferCapPct.ToString("P2", ci)
+				Cfg.OfferCapPct.ToString("P2", ci)
 			);
 
-			decimal nOffer = Math.Min(nCalculatedOffer, nCap);
+			decimal nOffer = nCap.Min(nCalculatedOffer);
 
 			Log.Debug(
 				"And the offer is {0} = min({1}, {2})",
@@ -224,7 +231,7 @@
 				return;
 
 			DetectAml();
-			if (Aml <= 70) {
+			if (Aml < Cfg.AmlMin) {
 				Log.Debug("QuickOffer.Validate: AML is too low.");
 				return;
 			} // if
@@ -237,13 +244,13 @@
 			} // if
 
 			DetectBusinessScore(oCompanyInfo);
-			if (BusinessScore < 31) {
+			if (BusinessScore < Cfg.BusinessScoreMin) {
 				Log.Debug("QuickOffer.Validate: business score is too low.");
 				return;
 			} // if
 
 			DetectIncorporationDate(oCompanyInfo);
-			if (DateTime.UtcNow.Subtract(IncorporationDate).TotalDays < 365 * 3) {
+			if (DateTime.UtcNow.Subtract(IncorporationDate).TotalDays < 30.45 * Cfg.CompanySeniorityMonths) {
 				Log.Debug("QuickOffer.Validate: business is too young.");
 				return;
 			} // if
@@ -442,7 +449,7 @@
 				return false;
 			} // if
 
-			if (RequestedAmount < 0) {
+			if (RequestedAmount <= 0) {
 				Log.Debug("QuickOffer.Validate: requested amount is not set.");
 				return false;
 			} // if
@@ -488,7 +495,7 @@
 			var oLust = oCompanyInfo.SelectNodes("./REQUEST/DL72");
 
 			if (ReferenceEquals(oLust, null)) {
-				Log.Debug("QuickOffer.Validate: Experian did not provide any director information.");
+				Log.Debug("Experian did not provide any director information.");
 				return false;
 			} // if
 
@@ -507,12 +514,12 @@
 					continue;
 
 				if ((oFirstName.InnerText.Trim().ToLower() == sFirstName) && (oLastName.InnerText.Trim().ToLower() == sLastName)) {
-					Log.Debug("QuickOffer.Validate: the customer is confirmed as a director of this company.");
+					Log.Debug("The customer is confirmed as a director of this company.");
 					return true;
 				} // if
 			} // for each director
 
-			Log.Debug("QuickOffer.Validate: customer name not found in director list.");
+			Log.Debug("Customer name was not found in director list.");
 			return false;
 		} // IsDirector
 
@@ -557,27 +564,34 @@
 		#region method IsThinFile
 
 		private bool IsThinFile() {
-			XmlNode cd;
+			JObject jo;
 
 			try {
-				cd = Xml.ParseRoot(ConsumerData);
+				jo = JObject.Parse(ConsumerData);
 			}
 			catch (SeldenException e) {
 				Log.Alert(e, "Could not parse consumer data.");
 				return true;
 			} // try
 
-			var oPath = new NameList("Output", "FullConsumerData", "ConsumerData", "CAIS", "CAISDetails");
+			var oPath = new NameList("Output", "FullConsumerData", "ConsumerData", "CAIS");
 
-			var oNode = cd.Offspring(oPath);
+			var oToken = jo.Offspring(oPath);
 
-			if (ReferenceEquals(oNode, null)) {
-				Log.Debug("CAIS details data not found: this is a thin file.");
+			if (ReferenceEquals(oToken, null)) {
+				Log.Debug("CAIS details data not found (CAIS node is missing): this is a thin file.");
 				return true;
 			} // if
 
-			Log.Debug("CAIS details data found: this is NOT a thin file.");
-			return false;
+			foreach (var t in oToken.Children()) {
+				if (!ReferenceEquals(t["CAISDetails"], null)) {
+					Log.Debug("CAIS details data found: this is NOT a thin file.");
+					return false;
+				} // if
+			} // for each
+
+			Log.Debug("CAIS details data not found: this is a thin file.");
+			return true;
 		} // IsThinFile
 
 		#endregion method IsThinFile

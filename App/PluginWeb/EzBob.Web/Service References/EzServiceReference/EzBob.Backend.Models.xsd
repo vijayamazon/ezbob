@@ -8,7 +8,14 @@
       <xs:element minOccurs="0" name="CreationDate" type="xs:dateTime" />
       <xs:element minOccurs="0" name="ExpirationDate" type="xs:dateTime" />
       <xs:element minOccurs="0" name="ID" type="xs:int" />
+      <xs:element minOccurs="0" name="ImmediateInterestRate" type="xs:decimal" />
+      <xs:element minOccurs="0" name="ImmediateSetupFee" type="xs:decimal" />
+      <xs:element minOccurs="0" name="ImmediateTerm" type="xs:int" />
       <xs:element minOccurs="0" name="IncorporationDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="PotentialAmount" type="xs:decimal" />
+      <xs:element minOccurs="0" name="PotentialInterestRate" type="xs:decimal" />
+      <xs:element minOccurs="0" name="PotentialSetupFee" type="xs:decimal" />
+      <xs:element minOccurs="0" name="PotentialTerm" type="xs:int" />
       <xs:element minOccurs="0" name="TangibleEquity" type="xs:decimal" />
       <xs:element minOccurs="0" name="TotalCurrentAssets" type="xs:decimal" />
     </xs:sequence>

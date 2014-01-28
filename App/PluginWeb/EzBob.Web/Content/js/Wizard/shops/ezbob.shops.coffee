@@ -200,15 +200,15 @@ class EzBob.StoreInfoView extends Backbone.View
     # end of render
 
     renderQuickOfferForm: ->
-        @storeList.find('.immediate-offer .amount').text EzBob.formatPounds(@quickOffer.Amount)
-        @storeList.find('.immediate-offer .term').text '3 months'
-        @storeList.find('.immediate-offer .interest-rate .value').text '3.50%'
-        @storeList.find('.immediate-offer .setup-fee .value').text '1.50%'
+        @storeList.find('.immediate-offer .amount').text EzBob.formatPoundsNoDecimals @quickOffer.Amount
+        @storeList.find('.immediate-offer .term').text @quickOffer.ImmediateTerm + ' months'
+        @storeList.find('.immediate-offer .interest-rate .value').text EzBob.formatPercentsWithDecimals @quickOffer.ImmediateInterestRate
+        @storeList.find('.immediate-offer .setup-fee .value').text EzBob.formatPercentsWithDecimals @quickOffer.ImmediateSetupFee
 
-        @storeList.find('.potential-offer .amount').text EzBob.formatPounds(@quickOffer.Amount)
-        @storeList.find('.potential-offer .term').text 'up to 12 months'
-        @storeList.find('.potential-offer .interest-rate .value').text 'x%'
-        @storeList.find('.potential-offer .setup-fee .value').text '1.50%'
+        @storeList.find('.potential-offer .amount').text EzBob.formatPoundsNoDecimals @quickOffer.PotentialAmount
+        @storeList.find('.potential-offer .term').text 'up to ' + @quickOffer.PotentialTerm + ' months'
+        @storeList.find('.potential-offer .interest-rate .value').text EzBob.formatPercentsWithDecimals @quickOffer.PotentialInterestRate
+        @storeList.find('.potential-offer .setup-fee .value').text EzBob.formatPercentsWithDecimals @quickOffer.PotentialSetupFee
     # end of renderQuickOfferForm
 
     shouldShowQuickOffer: (hasFilledShops) ->

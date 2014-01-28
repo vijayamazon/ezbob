@@ -17,6 +17,13 @@
 		public virtual DateTime IncorporationDate { get; set; }
 		public virtual decimal TangibleEquity { get; set; }
 		public virtual decimal TotalCurrentAssets { get; set; }
+		public virtual int ImmediateTerm { get; set; }
+		public virtual decimal ImmediateInterestRate { get; set; }
+		public virtual decimal ImmediateSetupFee { get; set; }
+		public virtual decimal PotentialAmount { get; set; }
+		public virtual int PotentialTerm { get; set; }
+		public virtual decimal PotentialInterestRate { get; set; }
+		public virtual decimal PotentialSetupFee { get; set; }
 
 		#endregion public
 	} // class QuickOffer
@@ -39,6 +46,14 @@
 			Map(x => x.IncorporationDate).CustomType<UtcDateTimeType>();
 			Map(x => x.TangibleEquity);
 			Map(x => x.TotalCurrentAssets);
+
+			Map(x => x.ImmediateTerm);
+			Map(x => x.ImmediateInterestRate);
+			Map(x => x.ImmediateSetupFee);
+			Map(x => x.PotentialAmount);
+			Map(x => x.PotentialTerm);
+			Map(x => x.PotentialInterestRate);
+			Map(x => x.PotentialSetupFee);
 		} // constructor
 	} // class QuickOfferMap
 

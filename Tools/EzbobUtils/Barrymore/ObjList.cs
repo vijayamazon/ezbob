@@ -46,8 +46,12 @@
 
 		#region method ToString
 
+		public virtual string ToString(string sSeparator) {
+			return string.Join(sSeparator, m_oValues);
+		} // ToString
+
 		public override string ToString() {
-			return string.Join(Separator, m_oValues);
+			return ToString(Separator);
 		} // ToString
 
 		#endregion method ToString

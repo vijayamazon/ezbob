@@ -1,10 +1,11 @@
-﻿using System;
-using System.Data;
-using Ezbob.Database;
-using Ezbob.Logger;
-
-namespace EzServiceConfigurationLoader {
+﻿namespace EzServiceConfigurationLoader {
+	using System;
+	using System.Collections.Generic;
 	using System.Globalization;
+	using Ezbob.Utils;
+	using Newtonsoft.Json;
+	using Ezbob.Database;
+	using Ezbob.Logger;
 
 	public class QuickOfferConfiguration : EzServiceConfiguration.QuickOfferConfigurationData {
 		#region public
@@ -14,9 +15,58 @@ namespace EzServiceConfigurationLoader {
 		public QuickOfferConfiguration(AConnection oDB, ASafeLog oLog) {
 			m_oDB = oDB;
 			m_oLog = new SafeLog(oLog);
+			m_bIsLoaded = false;
+			m_oOfferAmountPct = new List<Tuple<int, decimal>>();
+			m_oPriceCalculator = new SortedTable<int, int, decimal>();
 		} // constructor
 
 		#endregion constructor
+
+		#region method OfferAmountPct
+
+		public virtual decimal OfferAmountPct(int nBusinessScore) {
+			foreach (var oPct in m_oOfferAmountPct)
+				if (nBusinessScore <= oPct.Item1)
+					return oPct.Item2;
+
+			return 0;
+		} // OfferAmountPct
+
+		#endregion method OfferAmountPct
+
+		#region method LoanPct
+
+		public virtual decimal LoanPct(int nBusinessScore, decimal nRequestedAmount) {
+			var oScores = m_oPriceCalculator.ColumnKeys;
+
+			if (nBusinessScore >= oScores.Max)
+				return 0.0m;
+
+			var oAmounts = m_oPriceCalculator.RowKeys;
+
+			if (nRequestedAmount >= oAmounts.Max)
+				return 0.0m;
+
+			var nScore = oScores.Min;
+			foreach (var n in oScores) {
+				if (nBusinessScore < n) {
+					nScore = n;
+					break;
+				} // if
+			} // for each score
+
+			var nAmount = oAmounts.Min;
+			foreach (var n in oAmounts) {
+				if (nRequestedAmount < n) {
+					nAmount = n;
+					break;
+				} // if
+			} // for each score
+
+			return m_oPriceCalculator[nAmount, nScore];
+		} // LoanPct
+
+		#endregion method LoanPct
 
 		#endregion public
 
@@ -29,6 +79,8 @@ namespace EzServiceConfigurationLoader {
 
 			m_oDB.ForEachRowSafe(
 				(sr, bRowsetStart) => {
+					m_bIsLoaded = true;
+
 					Enabled = sr["Enabled"];
 					CompanySeniorityMonths = sr["CompanySeniorityMonths"];
 					ApplicantMinAgeYears = sr["ApplicantMinAgeYears"];
@@ -50,6 +102,7 @@ namespace EzServiceConfigurationLoader {
 					PotentialSetupFee = sr["PotentialSetupFee"];
 					OfferAmountCalculator = sr["OfferAmountCalculator"];
 					PriceCalculator = sr["PriceCalculator"];
+
 					return ActionResult.SkipAll;
 				},
 				"QuickOfferLoadConfiguration",
@@ -64,10 +117,38 @@ namespace EzServiceConfigurationLoader {
 		#region method Adjust
 
 		protected override void Adjust() {
-			// TODO
+			m_oOfferAmountPct.Clear();
+
+			SortedDictionary<int, decimal> oap = JsonConvert.DeserializeObject<SortedDictionary<int, decimal>>(OfferAmountCalculator);
+
+			foreach (KeyValuePair<int, decimal> pair in oap)
+				m_oOfferAmountPct.Add(new Tuple<int, decimal>(pair.Key, pair.Value));
+
+			if (m_oOfferAmountPct.Count < 1)
+				throw new Exception(InvalidExceptionMessage, new Exception("Offer amount calculator table is empty."));
+
+			m_oPriceCalculator.Clear();
+
+			SortedDictionary<int, SortedDictionary<int, decimal>> pc = JsonConvert.DeserializeObject<SortedDictionary<int, SortedDictionary<int, decimal>>>(PriceCalculator);
+
+			foreach (KeyValuePair<int, SortedDictionary<int, decimal>> pair in pc) {
+				foreach (KeyValuePair<int, decimal> cell in pair.Value)
+					m_oPriceCalculator[cell.Key, pair.Key] = cell.Value;
+			} // for each row
+
+			if (m_oPriceCalculator.IsEmpty)
+				throw new Exception(InvalidExceptionMessage, new Exception("Price calculator table is empty."));
 		} // Adjust
 
 		#endregion method Adjust
+
+		#region method IsValid
+
+		protected override bool IsValid() {
+			return m_bIsLoaded && base.IsValid();
+		} // IsValid
+
+		#endregion method IsValid
 
 		#region method WriteToLog
 
@@ -96,7 +177,8 @@ namespace EzServiceConfigurationLoader {
 			m_oLog.Debug("Loan term for a potential offer (months): {0}.", PotentialTermMonths);
 			m_oLog.Debug("Setup fee for a potential offer: {0} of the offer.", PotentialSetupFee.ToString("P2"));
 
-			// TODO
+			LogOfferAmountPct();
+			LogPriceCalculator();
 
 			m_oLog.Debug("End of quick offer configuration.");
 		} // WriteToLog
@@ -107,8 +189,74 @@ namespace EzServiceConfigurationLoader {
 
 		#region private
 
+		#region method LogPriceCalculator
+
+		private void LogPriceCalculator() {
+			var ci = new CultureInfo("en-GB", false);
+
+			string sOutput = Environment.NewLine + m_oPriceCalculator.ToFormattedString(
+				"Requested amount / Business score",
+				oRowKeyToString: x => x.ToString("C0", ci),
+				oColumnKeyToString: x => x.ToString("N0", ci),
+				oDataToString: x => x.ToString("P2", ci)
+			) + Environment.NewLine;
+
+			m_oLog.Debug("Price calculator:\n{0}", sOutput);
+		} // LogPriceCalculator
+
+		#endregion method LogPriceCalculator
+
+		#region method LogOfferAmountPct
+
+		private void LogOfferAmountPct() {
+			var oKeys = new List<string>();
+			var oLines = new List<string>();
+			var oValues = new List<string>();
+
+			const string sKeysTitle = " Business score";
+			const string sValuesTitle = " % of total current assets";
+
+			int nLength = Math.Max(sKeysTitle.Length, sValuesTitle.Length);
+
+			string sFormat = string.Format("{{0,{0}}}", nLength);
+
+			oKeys.Add(string.Format(sFormat, sKeysTitle));
+			oLines.Add(new string('-', nLength));
+			oValues.Add(string.Format(sFormat, sValuesTitle));
+
+			foreach (Tuple<int, decimal> tpl in m_oOfferAmountPct) {
+				string sKey = tpl.Item1.ToString("N0");
+				string sValue = tpl.Item2.ToString("P2");
+
+				nLength = Math.Max(sKey.Length, sValue.Length);
+
+				sFormat = string.Format("{{0,{0}}}", nLength);
+
+				oKeys.Add(string.Format(sFormat, sKey));
+				oLines.Add(new string('-', nLength));
+				oValues.Add(string.Format(sFormat, sValue));
+			} // foreach
+
+			string sOutput = Environment.NewLine +
+				string.Join(" | ", oKeys) + Environment.NewLine +
+				string.Join("-+-", oLines) + '-' + Environment.NewLine +
+				string.Join(" | ", oValues) + Environment.NewLine;
+
+			m_oLog.Debug("Offer amount calculator:\n{0}", sOutput);
+		} // LogOfferAmountPct
+
+		#endregion method LogOfferAmountPct
+
 		private readonly AConnection m_oDB;
 		private readonly SafeLog m_oLog;
+		private bool m_bIsLoaded;
+		private readonly List<Tuple<int, decimal>> m_oOfferAmountPct;
+
+		/// <summary>
+		/// Row keys: money, requested amount.
+		/// Column keys: int, business score.
+		/// </summary>
+		private readonly SortedTable<int, int, decimal> m_oPriceCalculator;
 
 		#endregion private
 	} // class Configuration

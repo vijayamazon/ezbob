@@ -2,6 +2,7 @@
 	using EzServiceConfigurationLoader;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using Ezbob.Utils.Extensions;
 	using Models;
 
 	#region class QuickOffer
@@ -61,7 +62,7 @@
 
 			Log.Debug("QuickOffer.Execute started for customer {0}...", m_nCustomerID);
 
-			var qod = new QuickOfferData(Log);
+			var qod = new QuickOfferData(qocfg, Log);
 
 			DB.ForEachRowSafe(
 				(sr, bRowsetStart) => {

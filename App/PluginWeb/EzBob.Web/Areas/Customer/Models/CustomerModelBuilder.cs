@@ -246,6 +246,13 @@ namespace EzBob.Web.Areas.Customer.Models
 				IncorporationDate = c.QuickOffer.IncorporationDate,
 				TangibleEquity = c.QuickOffer.TangibleEquity,
 				TotalCurrentAssets = c.QuickOffer.TotalCurrentAssets,
+				ImmediateTerm = c.QuickOffer.ImmediateTerm,
+				ImmediateInterestRate = c.QuickOffer.ImmediateInterestRate,
+				ImmediateSetupFee = c.QuickOffer.ImmediateSetupFee,
+				PotentialAmount = c.QuickOffer.PotentialAmount,
+				PotentialTerm = c.QuickOffer.PotentialTerm,
+				PotentialInterestRate = c.QuickOffer.PotentialInterestRate,
+				PotentialSetupFee = c.QuickOffer.PotentialSetupFee,
 			};
 		} // BuildQuickOfferModel
 

@@ -33,13 +33,19 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\Lib\3rdparty\Json.NET\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\IntExt.cs" />
+    <Compile Include="Extensions\DecimalExt.cs" />
     <Compile Include="Gravatar.cs" />
+    <Compile Include="JsonUtils\JsonExtensions.cs" />
     <Compile Include="ObjList.cs" />
     <Compile Include="ParsedValue\ParsedValue.cs" />
     <Compile Include="ParsedValue\SafeParser.cs" />

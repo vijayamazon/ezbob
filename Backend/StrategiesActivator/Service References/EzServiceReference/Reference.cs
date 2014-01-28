@@ -397,7 +397,28 @@ namespace StrategiesActivator.EzServiceReference {
         private int IDField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal ImmediateInterestRateField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal ImmediateSetupFeeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int ImmediateTermField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.DateTime IncorporationDateField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal PotentialAmountField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal PotentialInterestRateField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal PotentialSetupFeeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int PotentialTermField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private decimal TangibleEquityField;
@@ -494,6 +515,45 @@ namespace StrategiesActivator.EzServiceReference {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal ImmediateInterestRate {
+            get {
+                return this.ImmediateInterestRateField;
+            }
+            set {
+                if ((this.ImmediateInterestRateField.Equals(value) != true)) {
+                    this.ImmediateInterestRateField = value;
+                    this.RaisePropertyChanged("ImmediateInterestRate");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal ImmediateSetupFee {
+            get {
+                return this.ImmediateSetupFeeField;
+            }
+            set {
+                if ((this.ImmediateSetupFeeField.Equals(value) != true)) {
+                    this.ImmediateSetupFeeField = value;
+                    this.RaisePropertyChanged("ImmediateSetupFee");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int ImmediateTerm {
+            get {
+                return this.ImmediateTermField;
+            }
+            set {
+                if ((this.ImmediateTermField.Equals(value) != true)) {
+                    this.ImmediateTermField = value;
+                    this.RaisePropertyChanged("ImmediateTerm");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
         public System.DateTime IncorporationDate {
             get {
                 return this.IncorporationDateField;
@@ -502,6 +562,58 @@ namespace StrategiesActivator.EzServiceReference {
                 if ((this.IncorporationDateField.Equals(value) != true)) {
                     this.IncorporationDateField = value;
                     this.RaisePropertyChanged("IncorporationDate");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal PotentialAmount {
+            get {
+                return this.PotentialAmountField;
+            }
+            set {
+                if ((this.PotentialAmountField.Equals(value) != true)) {
+                    this.PotentialAmountField = value;
+                    this.RaisePropertyChanged("PotentialAmount");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal PotentialInterestRate {
+            get {
+                return this.PotentialInterestRateField;
+            }
+            set {
+                if ((this.PotentialInterestRateField.Equals(value) != true)) {
+                    this.PotentialInterestRateField = value;
+                    this.RaisePropertyChanged("PotentialInterestRate");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal PotentialSetupFee {
+            get {
+                return this.PotentialSetupFeeField;
+            }
+            set {
+                if ((this.PotentialSetupFeeField.Equals(value) != true)) {
+                    this.PotentialSetupFeeField = value;
+                    this.RaisePropertyChanged("PotentialSetupFee");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int PotentialTerm {
+            get {
+                return this.PotentialTermField;
+            }
+            set {
+                if ((this.PotentialTermField.Equals(value) != true)) {
+                    this.PotentialTermField = value;
+                    this.RaisePropertyChanged("PotentialTerm");
                 }
             }
         }
@@ -541,26 +653,25 @@ namespace StrategiesActivator.EzServiceReference {
             }
         }
     }
-
-	[System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-	[System.Runtime.Serialization.DataContractAttribute(Name = "FraudMode", Namespace = "http://schemas.datacontract.org/2004/07/FraudChecker")]
-	public enum FraudMode : int
-	{
-
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		FullCheck = 0,
-
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		PersonalDetaisCheck = 1,
-
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		CompanyDetailsCheck = 2,
-
-		[System.Runtime.Serialization.EnumMemberAttribute()]
-		MarketplacesCheck = 3,
-	}
-
-	[System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="FraudMode", Namespace="http://schemas.datacontract.org/2004/07/FraudChecker")]
+    public enum FraudMode : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        FullCheck = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PersonalDetaisCheck = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        CompanyDetailsCheck = 2,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        MarketplacesCheck = 3,
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="NewCreditLineOption", Namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies")]
     public enum NewCreditLineOption : int {
         
