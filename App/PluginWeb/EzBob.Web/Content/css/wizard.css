@@ -241,9 +241,10 @@ div.wizard-director-text { font-size: 11pt; color: #585858; }
 }
 
 .type-of-business-form_field {
-     height: auto !important; 
-     width: 96%; 
-     padding: 4px;
+    height: auto !important; 
+    width: 96%; 
+    padding: 4px;
+    font-size: 16px;
 }
 
 .type-of-business-caption {
