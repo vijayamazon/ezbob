@@ -211,13 +211,15 @@ $(function () {
     };
 
     $.fn.withoutSpaces = function () {
-        this.each(function () {
+        return this.each(function () {
             var el = $(this);
-            el.on('keyup change keypress keydown focusin focusout', function (event) {
-                el.val(el.val().replace(/\s+/g, ""));
+            el.on('keyup blur', function () {
+                var regexp = /\s+/g;
+                while (regexp.test(this.value)) {
+                    el.val(el.val().replace(regexp, ""));
+                }
             });
         });
-        return this;
     };
 
     $.fn.moneyFormat = function () {
