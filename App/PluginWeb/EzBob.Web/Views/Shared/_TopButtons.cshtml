@@ -8,19 +8,17 @@
         <a href="http://www.ezbob.com">
             <img src="@Url.Content("~/Content/img/ezbob-logo-2014.png")" class="newlogo"></a>
 
-        <span id="logged-in-user-name" class="header-phone">@User.Identity.Name</span>
         <div class="header-phone">0800-011-4787</div>
 
         <div class="eu-menu">
             <img src="@Url.Content("~/Content/img/eu-menu.png")"><br>
-            Authorised by the European Union
+                                                                 Authorised by the European Union
         </div>
 
         <ul id="user-menu">
             @if (isAuth)
             {
-                <li class="login">
-
+                <li id="logoff-li" class="login">
                     <a href="@Url.Action("LogOff", "Account", new { Area = "" })">LOG OFF</a>
                 </li>
             }

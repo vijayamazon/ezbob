@@ -103,6 +103,16 @@
         @BundleHelper.RenderProfileJs()
     }
     @RenderSection("Js", false)
+    
+    @if (User.Identity.IsAuthenticated)
+    {
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $('#logoff-li').tooltip({ placement: "bottom", title: "@User.Identity.Name" }).tooltip("enable").tooltip('fixTitle');
+            })
+        </script>
+    }
+
     @{ Html.RenderPartial("_ClickTale"); }
     @{ Html.RenderPartial("_AddRoll"); }
     @{
