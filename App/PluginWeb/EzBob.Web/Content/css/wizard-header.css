@@ -336,20 +336,7 @@ ul.application_steps {
     ul.application_steps li:last-child .progress-line {
         display: none;
     }
-    /*ul.application_steps:before {
-        content: "";
-        background-color: #40a9bc;
-        position: absolute;
-        top: 180px;
-        left: 0px;
-        right: 110px;
-        width: 690px;
-        height: 10px;
-        z-index: 1;
-        margin: 0 auto;
-    }*/
-
-
+    
     ul.application_steps li {
         float: left;
         font-size: 16px;
@@ -452,4 +439,27 @@ ul.application_steps {
         padding-bottom: 5px;
     }
 
+    .dashboard-steps {
+        background-color: #5c6373;
+        color: #fff;
+        margin-top: -15px;
+        height: 100px;
+    }
+
+    .dashboard-steps li {
+        background: url(images/arrow.png) no-repeat 15px 0;
+    }
+    .dashboard-steps li.active {
+        background: url(images/current_arrow.png) no-repeat 15px 0;
+    }
+
+    .dashboard-steps li.complete {
+        background: url(images/tick.png) no-repeat 0 5px;
+    }
+
+    .dashboard-steps .step_label {
+        padding-left: 35px;
+    }
+
+    
 /*}*/

@@ -3,9 +3,7 @@
 	<ul class="application_steps">
 		<% _.each(steps, function(step, i) { %>
 		<li data-step-num="<%= i %>" class="<%= step.css %>">
-			<span class="step_label">Step <%= i + 1 %>:
-			</span>
-			<%= step.title %>
+			<span class="step_label">Step <%= i + 1 %>: <br/> <%= step.title %></span>
 		</li>
 		<% }) %>
 	</ul>
