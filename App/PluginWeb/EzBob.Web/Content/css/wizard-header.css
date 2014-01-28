@@ -204,7 +204,7 @@ li.active > .progress_tip {
     -moz-border-radius-bottomright: 15px;
     border-bottom-left-radius: 15px;
     -moz-border-radius-bottomleft: 15px;
-    z-index: 99999;
+    z-index: 2;
 }
 
 
@@ -333,7 +333,7 @@ ul.application_steps {
     padding-bottom: 10px
 }
 
-    ul.application_steps li:last-child .progress-line {
+    ul.application_steps li.last .progress-line {
         display: none;
     }
     
@@ -346,7 +346,7 @@ ul.application_steps {
         overflow: visible;
     }
 
-        ul.application_steps li:last-child {
+        ul.application_steps li.last {
             width: 10%;
         }
 

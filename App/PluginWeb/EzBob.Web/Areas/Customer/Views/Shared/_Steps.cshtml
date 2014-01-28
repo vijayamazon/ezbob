@@ -5,22 +5,21 @@
         <%
         (function() {
         var nVisibleStepNum = 0;
-
+        var last = steps.length - 1;
         _.each(steps, function(step, i) {
         var css = '';
-
+        var lastcss = '';
         if (i == current) css += 'current';
 
         if (i < current) css += 'complete';
 
         if (progress == 100) css = 'complete';
+        if (i==last) lastcss = 'last';
 
-        if (step.showTitleInWizardSteps)
-        nVisibleStepNum++;
-        else
-        css += 'hide';
+        if (step.showTitleInWizardSteps) nVisibleStepNum++;
+        else css += 'hide';
 
-        %><li class="<%- css %>" data-step-num="<%= step.num %>">
+        %><li class="<%- css %> <%-lastcss%>" data-step-num="<%= step.num %>">
             <span class="step_label"><% print(step.title) %></span>
             <div class="progress-circle @*timer fill*@">
                 <div class="percent"><%=(i+1)%></div>
