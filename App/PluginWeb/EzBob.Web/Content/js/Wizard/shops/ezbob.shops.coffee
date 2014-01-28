@@ -372,13 +372,14 @@ class EzBob.StoreInfoView extends Backbone.View
     next: ->
         btn = @$el.find(".continue")
         return if btn.hasClass("disabled")
-        btn.addClass("disabled")
 
+        BlockUi 'on'
         xhr = $.post window.gRootPath + 'CustomerDetails/LinkAccountsComplete'
-        #@trigger "next"
         xhr.done ->
             EzBob.App.trigger "clear"
             EzBob.App.GA.trackEventReditect(window.gRootPath + 'Customer/Profile/Index', 'Wizard Complete', 'Go To account', 'Awaiting Approval')
+        xhr.always ->
+            BlockUi 'off'
         false
 
     ready: (name) ->
