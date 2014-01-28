@@ -15,7 +15,13 @@
 			Assert.AreEqual(LandRegistryResponseType.Success, model.ResponseType);
 		}
 
-
+		[Test]
+		public void test_prod_res()
+		{
+			var model = Lr.Res("DN113900");
+			Assert.NotNull(model.Response);
+			Assert.AreEqual(LandRegistryResponseType.Success, model.ResponseType);
+		}
 
 		[Test]
 		public void test_enquiry()

@@ -26,7 +26,7 @@ namespace LandRegistryLib
 						ID =
 							new LREnquiryServiceNS.Q1IdentifierType
 								{
-									MessageID = new LREnquiryServiceNS.Q1TextType { Value = "012345" }
+									MessageID = new LREnquiryServiceNS.Q1TextType { Value = "ENQREQ" + customerId }
 								},
 						Product = new LREnquiryServiceNS.Q1ProductType
 							{
@@ -71,7 +71,7 @@ namespace LandRegistryLib
 
 			using (var client = new LREnquiryPollServiceNS.PropertyDescriptionEnquiryV2_0PollServiceClient())
 			{
-				client.ChannelFactory.Endpoint.Behaviors.Add(new HMLRBGMessageEndpointBehavior("BGUser001", "landreg001"));
+				client.ChannelFactory.Endpoint.Behaviors.Add(new HMLRBGMessageEndpointBehavior("SDulman3000", "Ezbob2013$LR"));
 				// create a request object
 				var pollRequest = new LREnquiryPollServiceNS.PollRequestType
 					{
@@ -101,14 +101,14 @@ namespace LandRegistryLib
 			return model;
 		}
 
-		public LandRegistryDataModel Res(string titleNumber)
+		public LandRegistryDataModel Res(string titleNumber, string customerId = "1")
 		{
 			var model = new LandRegistryDataModel { RequestType = LandRegistryRequestType.RegisterExtractService };
 
 			// create an instance of the client
 			using (var client = new LRResServiceNS.OCWithSummaryV2_1ServiceClient())
 			{
-				client.ChannelFactory.Endpoint.Behaviors.Add(new HMLRBGMessageEndpointBehavior("BGUser001", "LandReg001"));
+				client.ChannelFactory.Endpoint.Behaviors.Add(new HMLRBGMessageEndpointBehavior("SDulman3000", "Ezbob2013$LR"));
 				// create a request object
 				var request = new LRResServiceNS.RequestOCWithSummaryV2_0Type
 				{
@@ -116,13 +116,13 @@ namespace LandRegistryLib
 						{
 							MessageID = new LRResServiceNS.Q1TextType
 								{
-									Value = "170100"
+									Value = "RESREQ" + customerId
 								}
 						},
 					Product = new LRResServiceNS.Q1ProductType
 					{
-						ExternalReference = new LRResServiceNS.Q1ExternalReferenceType { Reference = "Ext_ref" },
-						CustomerReference = new LRResServiceNS.Q1CustomerReferenceType { Reference = "Bguser1" },
+						ExternalReference = new LRResServiceNS.Q1ExternalReferenceType { Reference = "ezbob" + customerId },
+						CustomerReference = new LRResServiceNS.Q1CustomerReferenceType { Reference = customerId },
 						TitleKnownOfficialCopy = new LRResServiceNS.Q1TitleKnownOfficialCopyType
 							{
 								ContinueIfTitleIsClosedAndContinuedIndicator = new LRResServiceNS.IndicatorType { Value = false },
@@ -132,7 +132,7 @@ namespace LandRegistryLib
 								ContinueIfActualFeeExceedsExpectedFeeIndicator = new LRResServiceNS.IndicatorType { Value = false },
 								IncludeTitlePlanIndicator = new LRResServiceNS.IndicatorType { Value = true },
 							},
-						SubjectProperty = new LRResServiceNS.Q1SubjectPropertyType { TitleNumber = new LRResServiceNS.Q2TextType { Value = "GR506405" /*titleNumber*/} }
+						SubjectProperty = new LRResServiceNS.Q1SubjectPropertyType { TitleNumber = new LRResServiceNS.Q2TextType { Value = titleNumber } }
 					}
 				};
 
@@ -141,7 +141,11 @@ namespace LandRegistryLib
 				{
 					LRResServiceNS.ResponseOCWithSummaryV2_1Type response = client.performOCWithSummary(request);
 					//File.WriteAllBytes(string.Format("{0}_{1}.zip", titleNumber, DateTime.Today.Ticks), Response.GatewayResponse.Results.Attachment.EmbeddedFileBinaryObject.Value);
-					response.GatewayResponse.Results.Attachment = null;
+					try
+					{
+						response.GatewayResponse.Results.Attachment = null;
+					}catch{}
+
 					model.Response = SerializeObject(response);
 					model.ResponseType = GetResponseType((int)response.GatewayResponse.TypeCode.Value);
 
