@@ -23,7 +23,7 @@
 
 			Variables = new Dictionary<string, string> {
 				{"Password", password},
-				{"FirstName", CustomerData.FirstName},
+				{"FirstName", string.IsNullOrEmpty(CustomerData.FirstName) ? "customer" : CustomerData.FirstName},
 				{"ProfilePage", "https://app.ezbob.com/Customer/Profile"},
 				{"NIMRODTELEPHONENUMBER", "+44 800 011 4787"} // TODO: change name of variable here and in mandrill\mailchimp
 			};
