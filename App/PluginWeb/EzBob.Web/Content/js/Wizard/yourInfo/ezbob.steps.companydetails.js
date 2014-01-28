@@ -70,7 +70,6 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
         if (evt && (evt.type === 'change') && (evt.target.id === 'TypeOfBusiness'))
             this.typeOfBusinessChanged();
         if (evt && (evt.type === 'change') && (evt.target.id === 'IndustryType') && !this.partBusinessOnlineChangedByCustomer) {
-            debugger;
             if (this.$el.find("#IndustryType").val() == 4) {
                 this.$el.find("#PartBusinessOnline").attr("checked", "checked");
             } else {
