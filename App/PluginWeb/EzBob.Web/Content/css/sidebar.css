@@ -21,7 +21,7 @@ div.customer-sidebar-content {
         margin-bottom: 22px;
     }
 
-    div.customer-sidebar-content div.item:last-child {
+    div.customer-sidebar-content div.item.last {
         margin-bottom: 0;
     }
 

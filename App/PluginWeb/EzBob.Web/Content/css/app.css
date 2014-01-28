@@ -1384,9 +1384,39 @@ td.account-logo {
         margin: 0;
     }
 
-    #pre_header {
+    #header {
         margin: 0;
-        padding: 0;
+        padding: 0 2px;
+        width: 100%;
+        background-color: #fff;
+    }
+
+    .header-inner {
+        background-color: #eceff1;
+        height: 100%
+    }
+
+    .header-phone {
+        display: none;
+    }
+    img.newlogo {
+        position: absolute;
+        top: 20px;
+        width: 100px;
+        height: auto;
+        left: 0;
+    }
+
+    footer .copyrights-inner {
+        width: 100%;
+        padding: 0 2px;
+    }
+
+    .eu-menu {
+        position: absolute;
+        width: 100px;
+        height: 80px;
+        right: 77px;
     }
 
     div.full_width {
@@ -1493,6 +1523,7 @@ td.account-logo {
     div.form_buttons_container {
         position: relative;
         height: 30px;
+        margin-bottom: 10px;
     }
 
         div.form_buttons_container input.confirm {
@@ -1519,8 +1550,8 @@ td.account-logo {
     }
 
         ul.application_steps li {
-            background: url(images/arrow-m.png) no-repeat;
-            background-position: left center;
+            /*background: url(images/arrow-m.png) no-repeat;
+            background-position: left center;*/
             padding: 10px 0 10px 8px;
             font-weight: bold;
             font-size: 12px;
@@ -1530,13 +1561,13 @@ td.account-logo {
         }
 
             ul.application_steps li.current {
-                background: url(images/current_arrow-m.png) no-repeat;
+                /*background: url(images/current_arrow-m.png) no-repeat;*/
                 background-position: left center;
                 color: #e98511;
             }
 
             ul.application_steps li.complete {
-                background: url(images/tick-m.png) no-repeat;
+                /*background: url(images/tick-m.png) no-repeat;*/
                 background-position: left center;
                 color: #497307;
             }
