@@ -202,6 +202,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StrategiesTestTool", "Backe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Backend\Models\Models.csproj", "{6F7FC0DB-E5A4-42EF-91FF-4DFEA42A7621}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DL99updater", "App\EzReporting\DL99updater\DL99updater.csproj", "{1A82452F-4488-41F1-84CC-BF8CAAF4A839}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1014,6 +1016,16 @@ Global
 		{6F7FC0DB-E5A4-42EF-91FF-4DFEA42A7621}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{6F7FC0DB-E5A4-42EF-91FF-4DFEA42A7621}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{6F7FC0DB-E5A4-42EF-91FF-4DFEA42A7621}.Release|x86.ActiveCfg = Release|Any CPU
+		{1A82452F-4488-41F1-84CC-BF8CAAF4A839}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A82452F-4488-41F1-84CC-BF8CAAF4A839}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A82452F-4488-41F1-84CC-BF8CAAF4A839}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{1A82452F-4488-41F1-84CC-BF8CAAF4A839}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{1A82452F-4488-41F1-84CC-BF8CAAF4A839}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{1A82452F-4488-41F1-84CC-BF8CAAF4A839}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A82452F-4488-41F1-84CC-BF8CAAF4A839}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A82452F-4488-41F1-84CC-BF8CAAF4A839}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{1A82452F-4488-41F1-84CC-BF8CAAF4A839}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{1A82452F-4488-41F1-84CC-BF8CAAF4A839}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1107,6 +1119,7 @@ Global
 		{68180204-5112-43AF-9D83-E5CDD39F93A0} = {B6B0B4B2-0F41-4CC9-92E3-0E61A3AD19A4}
 		{B3DF9B38-5F69-4EC7-99B6-724A0E03B070} = {B6B0B4B2-0F41-4CC9-92E3-0E61A3AD19A4}
 		{93B2B33D-53CD-4B77-895B-6A35DD813967} = {B6B0B4B2-0F41-4CC9-92E3-0E61A3AD19A4}
+		{1A82452F-4488-41F1-84CC-BF8CAAF4A839} = {B6B0B4B2-0F41-4CC9-92E3-0E61A3AD19A4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		VisualSVNWorkingCopyRoot = .
