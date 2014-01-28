@@ -372,6 +372,8 @@ class EzBob.StoreInfoView extends Backbone.View
     next: ->
         btn = @$el.find(".continue")
         return if btn.hasClass("disabled")
+        btn.addClass("disabled")
+
         xhr = $.post window.gRootPath + 'CustomerDetails/LinkAccountsComplete'
         #@trigger "next"
         xhr.done ->
