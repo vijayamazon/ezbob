@@ -290,8 +290,9 @@ img.newlogo {
     }
 
         .wizard-steps .progress-time .progress-time-remainig {
-            color: #7bb224;
+            color: #ec8b0b;
             font-style: italic;
+            font-weight: bold;
         }
 
 .progress-circle {

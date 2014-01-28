@@ -6,9 +6,9 @@
 
 div.customer-sidebar-content {
     margin-top: 50px;
-    width: 100%;
-    /*border: 30px solid #f1f1f1;*/
-    /*border-radius: 10px;*/
+    width: 70%;
+    float: right;
+    overflow: visible;
 }
 
     div.customer-sidebar-content div.item {
@@ -29,13 +29,12 @@ div.customer-sidebar-content {
             position: absolute;
             left: 0;
             top: 0;
-            width: 25%;
             text-align: center;
         }
 
             div.customer-sidebar-content div.item div.icon img.sb-icon {
                 margin-top: 10px;
-                width: 40%;
+                width: 60%;
                 border: 0;
             }
 
