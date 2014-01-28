@@ -61,14 +61,20 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
         this.validator = null;
 
         this.readyToProceed = false;
+        this.partBusinessOnlineChangedByCustomer = false;
     }, // initialize
 
     inputChanged: function (evt) {
+        if (evt && (evt.type === 'change') && (evt.target.id === 'PartBusinessOnline'))
+            this.partBusinessOnlineChangedByCustomer = true;
         if (evt && (evt.type === 'change') && (evt.target.id === 'TypeOfBusiness'))
             this.typeOfBusinessChanged();
-        if (evt && (evt.type === 'change') && (evt.target.id === 'IndustryType')) {
+        if (evt && (evt.type === 'change') && (evt.target.id === 'IndustryType') && !this.partBusinessOnlineChangedByCustomer) {
+            debugger;
             if (this.$el.find("#IndustryType").val() == 4) {
                 this.$el.find("#PartBusinessOnline").attr("checked", "checked");
+            } else {
+                this.$el.find("#PartBusinessOnline").removeAttr('checked');
             }
         }
         
