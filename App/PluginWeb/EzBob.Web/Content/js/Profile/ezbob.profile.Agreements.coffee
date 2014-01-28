@@ -22,18 +22,7 @@ class EzBob.Profile.ConsumersAgreementView extends EzBob.Profile.AgreementViewBa
   getTemplate: ->
     "#consumers-agreement-template"
 
-  events:
-    "change .preAgreementTermsRead": "preAgreementTermsReadChange"
-
-  preAgreementTermsReadChange: ->
-    readPreAgreement = $(".preAgreementTermsRead").is(":checked")
-    @$el.find(".agreementTermsRead").attr "disabled", not readPreAgreement
-    if readPreAgreement
-      @$el.find("a[href=\"#tab4\"]").tab "show"
-    else
-      @$el.find("a[href=\"#tab3\"]").tab "show"
-      @$el.find(".agreementTermsRead").attr "checked", false
-
   render: (data)->
-    @$el.find(".agreementTermsRead").attr("checked", false).attr("disabled", true)
+    $(".company-preAgreement").hide()
+    $(".consumer-preAgreement").show()
     super(data)

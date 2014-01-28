@@ -41,14 +41,16 @@
 	</div>
 
 	@using (Html.BeginForm("LoanLegalSigned", "GetCash", new { Area = "Customer" }, FormMethod.Post, new { @class = "LoanLegal" })) {
-		<div class="controls">
+	    <div class="controls">
 			<label class="checkbox">
 				<input type="checkbox" id="preAgreementTermsRead" class="preAgreementTermsRead" name="preAgreementTermsRead" value="true" />
-				I have read and agree to the agreement terms
+                <span class="company-preAgreement">I have read and agree to the agreement terms</span>
+                <span style="display:none" class="consumer-preAgreement">I have read and agree to the pre-contract terms</span>
 			</label>
 			<label class="checkbox">
 				<input type="checkbox" id="agreementTermsRead" class="agreementTermsRead" name="agreementTermsRead" value="true" />
-				I have read and agree to the guaranty terms
+				<span class="company-preAgreement">I have read and agree to the guaranty terms</span>
+                <span style="display:none" class="consumer-preAgreement">I have read and agree to the contract terms</span>
 			</label>
 			<label class="checkbox eu-agreement-section">
 				<input type="checkbox" id="euAgreementTermsRead" name="euAgreementTermsRead" class="euAgreementTermsRead" value="true" />

@@ -34,7 +34,7 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
 
   events:
     "click .submit": "submit"
-    "change .preAgreementTermsRead": "showSubmit"
+    "change .preAgreementTermsRead": "preAgreementTermsReadChange"
     "change .agreementTermsRead": "showSubmit"
     "change .euAgreementTermsRead": "showSubmit"
     "change .directorConsentRead": "showSubmit"
@@ -45,6 +45,17 @@ class EzBob.Profile.ApplyForLoanView extends Backbone.Marionette.ItemView
     submit: ".submit"
     agreement: ".agreement"
     form: "form"
+
+  preAgreementTermsReadChange: ->
+    readPreAgreement = $(".preAgreementTermsRead").is(":checked")
+    $(".agreementTermsRead").attr "disabled", not readPreAgreement
+    if readPreAgreement
+      @$el.find("a[href=\"#tab4\"]").tab "show"
+    else
+      @$el.find("a[href=\"#tab3\"]").tab "show"
+      $(".agreementTermsRead").attr "checked", false
+    
+    @showSubmit()
 
   loanSelectionChanged: (e) =>
     @currentRepaymentPeriod = @$('#loan-sliders .period-slider').slider 'value'
