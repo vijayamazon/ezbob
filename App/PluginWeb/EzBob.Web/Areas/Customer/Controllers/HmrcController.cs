@@ -41,12 +41,19 @@
 		{
 			var oState = Session["oState"] as AddAccountState;
 			var model = Session["model"] as AccountModel;
-			var oSeeds = Session["oSeeds"] as Hopper;
 
-			if (oState == null || model == null || oSeeds == null)
+			if (oState == null || model == null)
 			{
 				return this.JsonNet(new { error = "Failure during files upload"});
 			}
+
+			string stateError;
+			Hopper oSeeds = GetProcessedFiles(out stateError);
+
+			if (oState.Error != null)
+			{
+				return oState.Error;
+			} // if
 
 			SaveMarketplace(oState, model);
 
@@ -83,21 +90,17 @@
 				return oState.Error;
 			} // if
 
-			string stateError;
-			Hopper oSeeds = ValidateFiles(Request.Files, out stateError);
+			string stateError = ProcessAndStoreFiles(Request.Files);
 			if (stateError != null)
 			{
 				return CreateError(stateError);
 			}
 
-			if (oSeeds == null)
+			if (Session["oState"] == null)
 			{
-				return CreateError("No files accepted.");
-			} // if
-
-			Session["oState"] = oState;
-			Session["model"] = model;
-			Session["oSeeds"] = oSeeds;
+				Session["oState"] = oState;
+				Session["model"] = model;
+			}
 
 			return this.JsonNet(new { });
 		}
@@ -278,6 +281,151 @@
 				} // for each interval
 
 				return oOutput;
+			}
+		}
+
+		public string ProcessAndStoreFiles(HttpFileCollectionBase oFiles)
+		{
+			if (Session["Hopper"] == null)
+			{
+				Session["Hopper"] = new Hopper();
+			}
+			if (Session["AddedCount"] == null)
+			{
+				Session["AddedCount"] = 0;
+			}
+			if (Session["DateIntervals"] == null)
+			{
+				Session["DateIntervals"] = new List<DateInterval>();
+			}
+
+			long? nRegistrationNo = null;
+
+			for (int i = 0; i < oFiles.Count; i++)
+			{
+				HttpPostedFileBase oFile = oFiles[i];
+
+				if (oFile == null)
+				{
+					Log.DebugFormat("File {0}: not found, ignoring.", i);
+					continue;
+				} // if
+
+				Log.DebugFormat("File {0}, name: {1}", i, oFile.FileName);
+
+				if (oFile.ContentLength == 0)
+				{
+					Log.DebugFormat("File {0}: is empty, ignoring.", i);
+					continue;
+				} // if
+
+				if (oFile.ContentType.Trim().ToLower() != "application/pdf")
+				{
+					Log.DebugFormat("File {0}: is not PDF content type, ignoring.", i);
+					continue;
+				} // if
+
+				var oFileContents = new byte[oFile.ContentLength];
+
+				int nRead = oFile.InputStream.Read(oFileContents, 0, oFile.ContentLength);
+
+				if (nRead != oFile.ContentLength)
+				{
+					Log.WarnFormat("File {0}: failed to read entire file contents, ignoring.", i);
+					continue;
+				} // if
+
+				var smd = new SheafMetaData
+				{
+					BaseFileName = oFile.FileName,
+					DataType = DataType.VatReturn,
+					FileType = FileType.Pdf,
+					Thrasher = null
+				};
+
+				(Session["Hopper"] as Hopper).Add(smd, oFileContents);
+
+				var vrpt = new VatReturnPdfThrasher(false, new SafeILog(Log));
+				ISeeds oResult;
+
+				try
+				{
+					oResult = vrpt.Run(smd, oFileContents);
+				}
+				catch (Exception e)
+				{
+					Log.WarnFormat("Failed to parse file {0} named {1}:", i, oFile.FileName);
+					Log.Warn(e);
+					continue;
+				} // try
+
+				if (oResult == null)
+					continue;
+
+				var oSeeds = (VatReturnSeeds)oResult;
+
+				if (nRegistrationNo.HasValue)
+				{
+					if (nRegistrationNo.Value != oSeeds.RegistrationNo)
+					{
+						return "Inconsistent business registration number.";
+					} // if
+				}
+				else
+					nRegistrationNo = oSeeds.RegistrationNo;
+
+				var di = new DateInterval(oSeeds.DateFrom, oSeeds.DateTo);
+
+				foreach (DateInterval oInterval in (Session["DateIntervals"] as List<DateInterval>))
+				{
+					if (oInterval.Intersects(di))
+					{
+						return "Inconsistent date ranges: " + oInterval + " and " + di;
+					} // if
+				} // for each
+
+				(Session["DateIntervals"] as List<DateInterval>).Add(di);
+				(Session["Hopper"] as Hopper).Add(smd, oResult);
+				Session["AddedCount"] = (int)Session["AddedCount"] + 1;
+			} // for
+			return null;
+		}
+
+		public Hopper GetProcessedFiles(out string stateError)
+		{
+			stateError = null;
+			switch ((int)Session["AddedCount"])
+			{
+				case 0:
+					return null;
+
+				case 1:
+					return (Session["Hopper"] as Hopper);
+
+				default:
+					(Session["DateIntervals"] as List<DateInterval>).Sort((a, b) => a.Left.CompareTo(b.Left));
+
+					DateInterval next = null;
+
+					foreach (DateInterval cur in (Session["DateIntervals"] as List<DateInterval>))
+					{
+						if (next == null)
+						{
+							next = cur;
+							continue;
+						} // if
+
+						DateInterval prev = next;
+						next = cur;
+
+						if (!prev.IsJustBefore(next))
+						{
+							stateError = "Inconsequent date ranges: " + prev + " and " + next;
+							return null;
+						} // if
+					} // for each interval
+
+					return (Session["Hopper"] as Hopper);
 			}
 		}
 
