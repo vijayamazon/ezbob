@@ -281,7 +281,7 @@
           inline: true,
           open: true,
           href: oDialog,
-          width: '35%'
+          width: '65%'
         });
       }
     };
