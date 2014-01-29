@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Backend.Strategies.QuickOffer {
 	using System;
+	using EzServiceConfiguration;
 	using EzServiceConfigurationLoader;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -54,7 +55,7 @@
 
 			qocfg.Init();
 
-			if (!qocfg.Enabled) {
+			if (qocfg.Enabled == QuickOfferEnabledStatus.Disabled) {
 				Log.Debug("QuickOffer.Execute for customer {0} complete: quick offer is disabled.", m_nCustomerID);
 				return;
 			} // if

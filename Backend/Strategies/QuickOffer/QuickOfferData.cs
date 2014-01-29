@@ -4,6 +4,7 @@
 	using System.Data;
 	using System.Globalization;
 	using System.Xml;
+	using EzServiceConfiguration;
 	using EzServiceConfigurationLoader;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -46,6 +47,13 @@
 			FirstName = oReader["FirstName"];
 			LastName = oReader["LastName"];
 			ConsumerData = oReader["ConsumerData"];
+
+			Enabled = QuickOfferConfiguration.GetEnabledStatus(oReader["Enabled"]);
+			FundsAvailable = oReader["FundsAvailable"];
+			LoanCount = oReader["LoanCount"];
+			IssuedAmount = oReader["IssuedAmount"];
+			OpenCashRequests = oReader["OpenCashRequests"];
+			ErrorMsg = oReader["ErrorMsg"];
 
 			Validate();
 		} // Load
@@ -155,6 +163,13 @@
 		private string LastName;
 		private string ConsumerData;
 
+		private QuickOfferEnabledStatus Enabled;
+		private decimal FundsAvailable;
+		private int LoanCount;
+		private decimal IssuedAmount;
+		private decimal OpenCashRequests;
+		private string ErrorMsg;
+
 		private int Aml;
 		private int BusinessScore;
 		private DateTime IncorporationDate;
@@ -215,6 +230,15 @@
 				nCalculatedOffer.ToString("C2", ci),
 				nCap.ToString("C2", ci)
 			);
+
+			if (nOffer > FundsAvailable - OpenCashRequests) {
+				Log.Debug(
+					"The offer is withdrawn: not enough funds available: offer = {0}, funds = {1}.",
+					nOffer.ToString("C2", ci),
+					(FundsAvailable - OpenCashRequests).ToString("C2", ci)
+				);
+				return null;
+			} // if
 
 			return nOffer;
 		} // Calculate
@@ -444,43 +468,73 @@
 		#region method AreLoadedValid
 
 		private bool AreLoadedValid() {
+			if (!string.IsNullOrWhiteSpace(ErrorMsg)) {
+				Log.Debug("Error reported when selecting data from DB: {0}", ErrorMsg);
+				return false;
+			} // if
+
+			if (Enabled == QuickOfferEnabledStatus.Disabled) {
+				Log.Debug("Quick offer is disabled.");
+				return false;
+			} // if
+
+			if (FundsAvailable <= 0) {
+				Log.Debug("No funds available.");
+				return false;
+			} // if
+
+			if (FundsAvailable <= OpenCashRequests) {
+				Log.Debug("Too many open cash requests.");
+				return false;
+			} // if
+
+			if (IssuedAmount >= Cfg.MaxIssuedValuePerDay) {
+				Log.Debug("Too much money already issued.");
+				return false;
+			} // if
+
+			if (LoanCount >= Cfg.MaxLoanCountPerDay) {
+				Log.Debug("Too many loans issued.");
+				return false;
+			} // if
+
 			if (CustomerID == 0) {
-				Log.Debug("QuickOffer.Validate: customer id not set.");
+				Log.Debug("Customer id not set.");
 				return false;
 			} // if
 
 			if (RequestedAmount <= 0) {
-				Log.Debug("QuickOffer.Validate: requested amount is not set.");
+				Log.Debug("Requested amount is not set.");
 				return false;
 			} // if
 
 			if (string.IsNullOrWhiteSpace(CompanyRefNum)) {
-				Log.Debug("QuickOffer.Validate: company ref number not set.");
+				Log.Debug("Company ref number not set.");
 				return false;
 			} // if
 
 			if (string.IsNullOrWhiteSpace(AmlData)) {
-				Log.Debug("QuickOffer.Validate: AML data not set.");
+				Log.Debug("AML data not set.");
 				return false;
 			} // if
 
 			if (string.IsNullOrWhiteSpace(CompanyData)) {
-				Log.Debug("QuickOffer.Validate: company Experian data not set.");
+				Log.Debug("Company Experian data not set.");
 				return false;
 			} // if
 
 			if (string.IsNullOrWhiteSpace(FirstName)) {
-				Log.Debug("QuickOffer.Validate: customer first name not set.");
+				Log.Debug("Customer first name not set.");
 				return false;
 			} // if
 
 			if (string.IsNullOrWhiteSpace(LastName)) {
-				Log.Debug("QuickOffer.Validate: customer last name not set.");
+				Log.Debug("Customer last name not set.");
 				return false;
 			} // if
 
 			if (string.IsNullOrWhiteSpace(ConsumerData)) {
-				Log.Debug("QuickOffer.Validate: consumer data not set.");
+				Log.Debug("Consumer data not set.");
 				return false;
 			} // if
 

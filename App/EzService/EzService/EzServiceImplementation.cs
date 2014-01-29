@@ -483,17 +483,11 @@
 
 		public QuickOfferActionResult QuickOfferWithPrerequisites(int customerId, bool saveOfferToDB) {
 			try {
-				Log.Debug("QuickOfferWithPrerequisites: performing consumer check for customer {0}...", customerId);
-				new ExperianConsumerCheck(customerId, 0, DB, Log).Execute();
-
 				Log.Debug("QuickOfferWithPrerequisites: performing company check for customer {0}...", customerId);
 				new ExperianCompanyCheck(customerId, DB, Log).Execute();
 
-				Log.Debug("QuickOfferWithPrerequisites: performing AML check for customer {0}...", customerId);
-				new AmlChecker(customerId, DB, Log).Execute();
-
 				Log.Debug("QuickOfferWithPrerequisites: performing fraud check for customer {0}...", customerId);
-				new FraudChecker(customerId, FraudMode.FullCheck, DB, Log).Execute();
+				new FraudChecker(customerId, FraudMode.CompanyDetailsCheck, DB, Log).Execute();
 
 				Log.Debug("QuickOfferWithPrerequisites: performing quick offer calculation for customer {0}...", customerId);
 				return QuickOfferProcedure(customerId, saveOfferToDB);

@@ -1,10 +1,20 @@
 ﻿namespace EzServiceConfiguration {
+	#region enum QuickOfferEnabledStatus
+
+	public enum QuickOfferEnabledStatus {
+		Disabled = 0,
+		Enabled = 1,
+		Silent = 2,
+	} // enum QuickOfferEnabledStatus
+
+	#endregion enum QuickOfferEnabledStatus
+
 	#region class QuickOfferConfigurationData
 
 	public abstract class QuickOfferConfigurationData : AConfigurationData {
 		#region public
 
-		public virtual bool Enabled { get; protected set; }
+		public virtual QuickOfferEnabledStatus Enabled { get; protected set; }
 		public virtual int CompanySeniorityMonths { get; protected set; }
 		public virtual int ApplicantMinAgeYears { get; protected set; }
 		public virtual int NoDefaultsInLastMonths { get; protected set; }

@@ -2,6 +2,8 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
+	using System.Linq;
+	using EzServiceConfiguration;
 	using Ezbob.Utils;
 	using Newtonsoft.Json;
 	using Ezbob.Database;
@@ -9,6 +11,16 @@
 
 	public class QuickOfferConfiguration : EzServiceConfiguration.QuickOfferConfigurationData {
 		#region public
+
+		#region method GetEnabledStatus
+
+		public static QuickOfferEnabledStatus GetEnabledStatus(int nEnabled) {
+			return Enum.GetValues(typeof (QuickOfferEnabledStatus)).Cast<int>().Any(x => x == nEnabled)
+				? (QuickOfferEnabledStatus)nEnabled
+				: QuickOfferEnabledStatus.Disabled;
+		} // GetEnabledStatus
+
+		#endregion method GetEnabledStatus
 
 		#region constructor
 
@@ -81,7 +93,7 @@
 				(sr, bRowsetStart) => {
 					m_bIsLoaded = true;
 
-					Enabled = sr["Enabled"];
+					Enabled = GetEnabledStatus((int)sr["Enabled"]);
 					CompanySeniorityMonths = sr["CompanySeniorityMonths"];
 					ApplicantMinAgeYears = sr["ApplicantMinAgeYears"];
 					NoDefaultsInLastMonths = sr["NoDefaultsInLastMonths"];
@@ -157,7 +169,7 @@
 
 			var ci = new CultureInfo("en-GB", false);
 
-			m_oLog.Debug("Enabled: {0}.", Enabled ? "yes" : "no");
+			m_oLog.Debug("Enabled: {0}.", Enabled);
 			m_oLog.Debug("Company min seniority (months): {0}.", CompanySeniorityMonths);
 			m_oLog.Debug("Applicant min age (years): {0}.", ApplicantMinAgeYears);
 			m_oLog.Debug("No defaults in last {0} months.", NoDefaultsInLastMonths);
