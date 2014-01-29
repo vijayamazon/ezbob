@@ -1,4 +1,5 @@
 ﻿namespace EzBob.Backend.Strategies.QuickOffer {
+	using System;
 	using EzServiceConfigurationLoader;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -64,15 +65,21 @@
 
 			var qod = new QuickOfferData(qocfg, Log);
 
-			DB.ForEachRowSafe(
-				(sr, bRowsetStart) => {
-					qod.Load(sr);
-					return ActionResult.SkipAll;
-				},
-				"QuickOfferDataLoad", 
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("@CustomerID", m_nCustomerID)
-			);
+			try {
+				DB.ForEachRowSafe(
+					(sr, bRowsetStart) => {
+						qod.Load(sr);
+						return ActionResult.SkipAll;
+					},
+					"QuickOfferDataLoad",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("@CustomerID", m_nCustomerID)
+					);
+			}
+			catch (Exception e) {
+				Log.Alert("Failed to load quick offer calculation data from DB for customer {0}:\n\n{1}\n", m_nCustomerID, e.Message);
+				return;
+			} // try
 
 			if (!qod.IsValid) {
 				Log.Debug("QuickOffer.Execute for customer {0} complete: cannot make an offer based on data loaded from DB.", m_nCustomerID);
