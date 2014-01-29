@@ -1,27 +1,20 @@
-    
-        <center><h4>DIRECTORS' CONSENT DECLARATION</h4></center>
-        <div>
-            <p  style="text-align: justify" >
-                THIS DECLARATION is made and entered into on {{CurentDate}}</p>
-            <p  style="text-align: justify"  style="text-align: justify">
-                In consideration of Orange Money Ltd of 145 – 157, St John Street, London, EC1V
-                4PY, COMPANY NUMBER 7852687, (“the Creditor”) entering into the Loan Agreement,
-                {{Customer.CustomerPersonalInfo.Fullname}} {{PersonAddress}}  (the Guarantor(s) hereby unconditionally and
-                irrevocably and where there is more than one Guarantor, jointly and severally, undertake(s)
-                and guarantee(s) to the Creditor the due and punctual performance and observance
-                by the Principal Debtor of all its obligations, commitments, undertakings, warranties,
-                indemnities and covenants under or pursuant to the Loan Agreement and the due and
-                punctual payment of all sums now or subsequently payable by the Principal Debtor
-                to the Creditor under the Loan Agreement, when the same shall become due and agrees
-                to indemnify the Creditor against all losses, damages, costs and expenses (including
-                legal costs and expenses) which the Creditor may incur or suffer through or arising
-                from any breach by the Principal Debtor of such obligations, commitments, warranties,
-                undertakings, indemnities or covenants. If the Principal Debtor shall default in
-                the payment of any sum under the Loan Agreement, the Guarantor(s) will forthwith
-                on demand by the Creditor pay such sum to the Creditor. Such guarantee and undertaking
-                is a continuing guarantee and undertaking and shall remain in force until all the
-                obligations of the Principal Debtor under the Loan Agreement have been fully performed
-                and all sums payable to the Creditor have been fully paid. The Guarantor(s) agrees
-                and accepts all obligations set out above and detailed below.
-            </p>
-        </div>
+
+<div style="text-align: center;"><h4><u><b>UNANIMOUS WRITTEN CONSENT OF THE BOARD OF DIRECTORS OF {{CompanyName}}</b></u> (the "<b>Company</b>")</h4></div>
+<div>
+    <p style="text-align: justify" >
+        The following, being all of the directors of the Company, acting by unanimous written consent, and having waived any rights to receive notice of a meeting:
+    </p>
+    <p  style="text-align: justify">
+        Having discussed and noted that it is convenient and prudent for the business of the Company to borrow from and enter into loan agreements with Orange Money Limited and to appoint a person who may act on behalf of the Company regarding said loan and agreements, including authority to complete online applications do  adopt the following written resolutions:
+    </p>
+</div>
+<div style="text-align: center;"><h4><u><b>IT WAS RESOLVED</b></u></h4></div>
+<span style="text-align: left;"><h4><u><b>FIRST</b></u></h4> That the Company shall borrow from and enter into a loan agreements with Orange Money Limited with respect to a loan in the original principal amount of up to £{{LoanAmount}} (the "<b>Loan</b>")</span>
+<div style="text-align: left;"><h4><u><b>SECOND</b></u></h4></div> 
+<div> That {{CustomerFullName}} is authorised to sign individually for and on behalf of the  Company and to transact any and all business with Orange Money Limited, to borrow money with or without  security; to assign, transfer, pledge or otherwise charge property of the Company; including granting fixed and floating charges and  charging of receivables.</div>
+<div>Signed:</div>
+@*@foreach (var directorName in directorNames)
+{
+    <div>________________[{{DateOfStamp}}</div>
+    <div>@directorName</div>
+}*@
