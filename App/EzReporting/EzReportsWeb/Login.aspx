@@ -7,8 +7,8 @@
 
 	<link rel="icon" type="image/png" href="~/images/favicon32x32.png" />
 
-	<link rel="stylesheet" href="css/login.css" />
-	<link rel="stylesheet" href="css/combined.css" />
+	<link rel="stylesheet" href="~/css/login.css" />
+	<link rel="stylesheet" href="~/css/combined.css" />
 
 	<script src="js/jquery.js"></script>
 	<script src="js/login.js"></script>

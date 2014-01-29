@@ -9,9 +9,9 @@
 
 	<link rel="icon" type="image/png" href="~/images/favicon32x32.png" />
 
-	<link rel="stylesheet" href="css/combined.css" />
-	<%= Default.IsAdmin() ? "<link rel=stylesheet href=\"css/admin.css\" />" : "" %>
-	<%= Default.IsAdmin() ? "<link rel=stylesheet href=\"css/jquery.dataTables.css\" />" : "" %>
+	<link rel="stylesheet" href="~/css/combined.css" />
+	<%= Default.IsAdmin() ? "<link rel=stylesheet href=\"~/css/admin.css\" />" : "" %>
+	<%= Default.IsAdmin() ? "<link rel=stylesheet href=\"~/css/jquery.dataTables.css\" />" : "" %>
 	<%= Report.GetStyle().ToString() %>
 
 	<script src="js/jquery.js"></script>
@@ -26,9 +26,10 @@
 			<div class="inner_nopadding">
 				<div id="header_description">
 					<a id="aToggleAdminArea" href="#" onclick="ToggleAdminArea()">Administration</a>
-					<asp:Label ID="Label3" runat="server" Text="Welcome "></asp:Label>
-					<asp:LoginName ID="LoginName" runat="server" />
+					<asp:Label ID="Label3" runat="server" Text="Welcome " CssClass="float_left"></asp:Label>
+					<asp:LoginName ID="LoginName" runat="server" CssClass="float_left" />
 					<asp:LoginStatus ID="LoginStatus" runat="server" LogoutAction="Redirect" LogoutPageUrl="~/Default.aspx" CssClass="button grey medium_btn" />
+                    <asp:Button runat="server" ID="ResetBtn" Text="Reset" OnClick="ResetBtn_Click" CssClass="button grey medium_btn"/>
 				</div>
 			</div>
 		</div>
@@ -76,7 +77,7 @@
 				</div>
 			</div>
 			<div class="inner">
-				<a href="http://www.ezbob.com" class="logo_ezbob indent_text" id="ezbob_logo" title="Fast business loans for Ebay and Amazon merchants"></a>
+				<a href="http://www.ezbob.com" class="logo_ezbob indent_text" id="ezbob_logo" title="Fast business loans"></a>
 			</div>
 		</header>
 		<div id="divReportData" runat="server"></div>
