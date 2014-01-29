@@ -107,7 +107,6 @@
       }
       return this.$el.find('.yodlee_help').colorbox({
         inline: true,
-        transition: 'none'
       });
     };
 

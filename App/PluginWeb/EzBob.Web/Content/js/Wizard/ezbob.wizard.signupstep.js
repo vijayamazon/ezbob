@@ -92,7 +92,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
             var oDialog = this.$el.find('#offline_help');
             if (oDialog.length > 0)
-                var x = $.colorbox({ inline: true, transition: 'none', open: true, href: oDialog });
+                var x = $.colorbox({ inline: true, open: true, href: oDialog });
         } // if
 
         var oFieldStatusIcons = this.$el.find('IMG.field_status');

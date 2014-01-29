@@ -9,7 +9,7 @@ class EzBob.Profile.InviteFriendView extends Backbone.Marionette.Layout
         'click .inviteFriendHelp': 'inviteFriendHelpClicked'
 
     inviteFriendHelpClicked: ->
-        @$el.find('.inviteFriendHelp').colorbox({ href: "#inviteFriendHelp", inline: true, transition: 'none', open: true });
+        @$el.find('.inviteFriendHelp').colorbox({ href: "#inviteFriendHelp", inline: true, open: true });
 
     reload: -> 
         @model.fetch()

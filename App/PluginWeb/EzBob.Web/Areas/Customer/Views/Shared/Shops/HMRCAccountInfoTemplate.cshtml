@@ -1,42 +1,38 @@
 ﻿<script id="HMRCAccountInfoTemplate" type="text/template">
     <div id="initialDiv" class="row-fluid">
-        <h2 class="form_start float_left">HMRC account</h2>
-        <div class="wizard-top-notification hmrc_margin_from_header">
+        <h2>HMRC account</h2>
+        <div class="wizard-top-notification">
             <label>As part of your application process we require you to upload or link your VAT payment history. We use your VAT returns to analyse your business performance. Please select whether to link or upload your HMRC data.</label>
         </div>
 
         <form id="hmrcAccount" class="cg-link-account-form">
-            <div class="clearfix">
-                <div class="form_buttons_container hmrc_main_buttons_container">
-                    <div class="attardi-button">
-                        <div class="hmrcLinkButton"/>
-                        <div class="hmrcUploadButton"/>
-                    </div>
-                </div>
+            <div class="hmrc_main_buttons_container">
+                <div class="hmrcLinkButton hmrcButton" />
+                <div class="hmrcUploadButton hmrcButton" />
+            </div>
 
-                <div class="form_buttons_container hmrc_margin_from_header">
-                    <div class="attardi-button">
-                        <a href="#" class="back rc-button grey hmrcBack" ui-event-control-id="link-account:hmrc_back">Back</a>
-                    </div>
+            <div class="form_buttons_container">
+                <div class="attardi-button">
+                    <a href="#" class="back rc-button grey hmrcBack" ui-event-control-id="link-account:hmrc_back">Back</a>
                 </div>
             </div>
-    
+
             <div class="hmrc-why-question offline_entry_message wizard_message">
                 <div id="uploadAndLinkHelpButton" class="hmrc-question-button float_left hmrc_question_button_margin"></div>
                 <div class="hmrc-why">Why do we need this? In order to properly evaluate your business and help your business achieve its goals. This is 100% secure.</div>
             </div>
         </form>
-    </div>    
-    
+    </div>
+
     <div id="linkAccountDiv" class="row-fluid hide">
         <div class="wizard-top-notification">
-            <h2 class="form_start float_left">HMRC link</h2>
-            <label class="hmrc_text_in_new_line">As part of your application process we require you to upload or link your VAT payment history. We use your VAT returns to analyse your business performance</label>
+            <h2>HMRC link</h2>
+            <label>As part of your application process we require you to upload or link your VAT payment history. We use your VAT returns to analyse your business performance</label>
         </div>
-    
+
         <form id="hmrcLinkAccountForm" class="cg-link-account-form">
             <div id="hmrc_fields_link_wrapper">
-    
+
                 <div id="hmrc_fields" class="hmrc_fields_margin">
                     @EzForm.InputText("hmrc_user_id", "User ID", "", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "link-account:hmrc_user_id")
                     @EzForm.Password("hmrc_password", "Password", "", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "link-account:hmrc_password")
@@ -51,27 +47,27 @@
                     </div>
                 </div>
             </div>
-    
+
             <div class="hmrc-why-question offline_entry_message wizard_message">
                 <div id="linkHelpButton" class="hmrc-question-button float_left hmrc_question_button_margin"></div>
                 <div class="hmrc-why">Text from nimrod text from nimrod text from nimrod................................................................</div>
             </div>
         </form>
     </div>
-    
+
     <div id="uploadFilesDiv" class="row-fluid hide">
         <div class="wizard-top-notification">
-            <h2 class="form_start float_left">HMRC upload</h2>
+            <h2>HMRC upload</h2>
+            <label>Upload a copy of your last 5 VAT returns. Only upload files titled <b>Printed Copy of Submitted VAT return for your records</b> which you should have received automatically from the HMRC.</label>
+            <label>Files can be uploaded in any order of dates</label>
         </div>
-        <label class="hmrc_text_in_new_line">Upload a copy of your last 5 VAT returns. Only upload files titled <b>Printed Copy of Submitted VAT return for your records</b> which you should have received automatically from the HMRC.</label>
-        <label class="hmrc_text_in_new_line">Files can be uploaded in any order of dates</label>
 
         <form id="hmrcAccountUpload" class="dropzone newVatFilesUpload" action="@Url.Action("UploadedFiles", "Hmrc", new { Area = "Customer" })"></form>
-        
+
         <form id="hmrcuploadFiles" class="cg-link-account-form">
             <div class="clearfix">
                 <a href="#" class="rc-button green select-vat oldVatFilesUpload" ui-event-control-id="link-account:hmrc_select_vat">Select VAT files</a>
-                <label/>
+                <label />
 
                 <div id="upload-files-form">
                     <iframe></iframe>
@@ -84,30 +80,30 @@
                     </div>
                 </div>
             </div>
-    
+
             <div class="hmrc-why-question offline_entry_message wizard_message">
                 <div id="uploadHelpButton" class="hmrc-question-button float_left hmrc_question_button_margin"></div>
                 <div class="hmrc-why">Do not have the file? Ask your accountant for them, it will take him 5 minutes to send them to you.</div>
             </div>
         </form>
     </div>
-    
+
     <div class="hide">
         <div id="hmrcLinkHelpPopup" class="help_window">
-            <img src="../../../../../Content/img/hmrc_login_sample.png"/>
+            <img src="../../../../../Content/img/hmrc_login_sample.png" />
         </div>
     </div>
-    
+
     <div class="hide">
         <div id="hmrcUploadHelpPopup" class="help_window">
-            <img src="../../../../../Content/img/hmrc_vat_sample.png"/>
+            <img src="../../../../../Content/img/hmrc_vat_sample.png" />
         </div>
     </div>
-    
+
     <div class="hide">
         <div id="hmrcUploadAndLinkHelpPopup" class="help_window">
-            <img src="../../../../../Content/img/hmrc_vat_and_login_sample.png"/>
+            <img src="../../../../../Content/img/hmrc_vat_and_login_sample.png" />
         </div>
     </div>
-</div>
+    </div>
 </script>

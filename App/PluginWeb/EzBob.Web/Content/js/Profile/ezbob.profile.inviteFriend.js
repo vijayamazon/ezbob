@@ -27,7 +27,6 @@
       return this.$el.find('.inviteFriendHelp').colorbox({
         href: "#inviteFriendHelp",
         inline: true,
-        transition: 'none',
         open: true
       });
     };

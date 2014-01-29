@@ -221,16 +221,16 @@ class EzBob.HMRCAccountInfoView extends Backbone.Marionette.ItemView
     getLinkHelp: ->
         oDialog = $('#hmrcLinkHelpPopup');
         if (oDialog.length > 0)
-            $.colorbox({ inline: true, transition: 'none', open: true, href: oDialog, width: '35%' })
+            $.colorbox({ inline: true, open: true, href: oDialog, width: '35%' })
 
     getUploadHelp: ->
         oDialog = $('#hmrcUploadHelpPopup');
         if (oDialog.length > 0)
-            $.colorbox({ inline: true, transition: 'none', open: true, href: oDialog, width:'35%' })
+            $.colorbox({ inline: true, open: true, href: oDialog, width:'35%' })
 
     getUploadAndLinkHelp: ->
         oDialog = $('#hmrcUploadAndLinkHelpPopup');
         if (oDialog.length > 0)
-            $.colorbox({ inline: true, transition: 'none', open: true, href: oDialog, width: '35%' })
+            $.colorbox({ inline: true, open: true, href: oDialog, width: '35%' })
 
 

@@ -43,7 +43,7 @@ class EzBob.StoreButtonView extends Backbone.Marionette.ItemView
 
                 btn.attr 'href', '#' + @shopClass + '_help'
 
-                btn.colorbox({ inline:true, transition: 'none', onClosed: ->
+                btn.colorbox({ inline:true, transition: 'elastic', onClosed: ->
                     oBackLink = $ '#link_account_implicit_back'
 
                     if oBackLink.length

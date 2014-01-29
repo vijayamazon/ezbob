@@ -60,7 +60,7 @@
           btn.attr('href', '#' + this.shopClass + '_help');
           btn.colorbox({
             inline: true,
-            transition: 'none',
+            transition: 'elastic',
             onClosed: function() {
               var oBackLink;
               oBackLink = $('#link_account_implicit_back');

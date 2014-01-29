@@ -13,14 +13,12 @@
             <div class="clearfix">
                 <% if (YodleeBanks) {%>
                 <div class="form_field_container BankContainer">
-                    <br />
                     <% _.each(YodleeBanks.ImageBanks, function (bank, i) { %>
                     <input type="radio" name="Bank" value="<%- bank.parentBankName %>" id="Bank_<%- bank.parentBankName %>" class="hide" />
                     <a class="radio-fx <%- bank.parentBankName %>" href="#" id="<%- bank.parentBankName %>">
                         <span class="<%- bank.parentBankName %> off" ui-event-control-id="link-account:yodlee_choose_<%- bank.parentBankName %>"></span>
                     </a>
                     <% if (i % 2 !== 0) { %>
-                    <br />
                     <% } %>
                     <%});%>
                 </div>

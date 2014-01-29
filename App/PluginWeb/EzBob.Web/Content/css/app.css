@@ -868,7 +868,8 @@ table.dashboard_sources {
 #cboxContent {
     margin-top: 32px;
     overflow: visible;
-    background: #000;
+    /*background: #000;*/
+    border: #000 1px solid;
 }
 
 .cboxIframe {
@@ -881,16 +882,17 @@ table.dashboard_sources {
 }
 
 #cboxLoadedContent {
-    background: #000;
+    /*background: #000;*/
     padding: 1px;
 }
 
 #cboxLoadingGraphic {
-    background: url(images/cb/loading.gif) no-repeat center center;
+    /*background: url(images/cb/loading.gif) no-repeat center center;*/
+    background-color: transparent;
 }
 
 #cboxLoadingOverlay {
-    background: #000;
+    /*background: #000;*/
 }
 
 #cboxTitle {
@@ -1412,10 +1414,7 @@ td.account-logo {
     }
 
     .eu-menu {
-        position: absolute;
-        width: 100px;
-        height: 80px;
-        right: 77px;
+        display: none;
     }
 
     div.full_width {
@@ -1500,11 +1499,34 @@ td.account-logo {
     }
 
     select.form_field {
-        width: 92%px;
+        width: 92%;
         height: 30px;
         padding: 0;
     }
+    .btn.addAddress {
+        width: 40% !important;
+    }
+    .addAddressInput {
+        width: 50% !important;
+    }
+    .ezDateTime .fs16 {
+        display: block !important;
+        width: 100% !important;
+    }
+    .ezDateTime .attardi-input {
+        width: 30% !important;
+    }
 
+    .BankContainer a.radio-fx {
+        display: block !important;
+    }
+
+    .hmrc-why {
+        width: 100%;
+    }
+    .hmrc_main_buttons_container {
+        height: 100px !important;
+    }
     .FormRadioCtrl > span {
         width: 100%;
         display: inline-block;
@@ -1562,32 +1584,21 @@ td.account-logo {
             ul.application_steps li.current {
                 /*background: url(images/current_arrow-m.png) no-repeat;*/
                 background-position: left center;
-                color: #e98511;
+            }
+
+            ul.application_steps li.current .step_label {
+                font-weight: bold;
             }
 
             ul.application_steps li.complete {
                 /*background: url(images/tick-m.png) no-repeat;*/
                 background-position: left center;
-                color: #497307;
             }
 
             ul.application_steps li .step_label {
                 display: block;
                 font-weight: normal;
                 margin-left: 10px;
-            }
-
-            ul.application_steps li .progress_tip {
-                background: url(images/progress_tip.png) no-repeat 0 0;
-                width: 115px;
-                height: 27px;
-                padding: 9px 0 0 15px;
-                font-size: 12px;
-                color: #fff;
-                text-shadow: 0 1px 1px #c60;
-                position: absolute;
-                bottom: -33px;
-                left: 0;
             }
 
     input[disabled], select[disabled], textarea[disabled], input[readonly], select[readonly], textarea[readonly] {

@@ -161,12 +161,12 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 				if (result.hasYodlee) {
 					var url = '' + window.gRootPath + 'Customer/YodleeMarketPlaces/RefreshYodlee';
 					that.$el.find('#refreshYodleeBtn').attr('href', url);
-					that.$el.find('.refresh_yodlee_help').colorbox({ href: '#refresh_yodlee_help', inline: true, transition: 'none', open: true });
+					that.$el.find('.refresh_yodlee_help').colorbox({ href: '#refresh_yodlee_help', inline: true, open: true });
 				} // if
 
 				if (result.hasBadEkm) {
 					that.$el.find('#refresh_ekm_login').val(result.ekm).change();
-					that.$el.find('.refresh_ekm_help').colorbox({ href: '#refresh_ekm_help', inline: true, transition: 'none', open: true });
+					that.$el.find('.refresh_ekm_help').colorbox({ href: '#refresh_ekm_help', inline: true, open: true });
 					return;
 				} // if
 

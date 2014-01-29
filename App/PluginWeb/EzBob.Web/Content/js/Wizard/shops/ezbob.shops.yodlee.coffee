@@ -77,7 +77,7 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
 
     linkAccountClicked: ->
         return false if @$el.find('#yodleeLinkAccountBtn').hasClass('disabled')
-        @$el.find('.yodlee_help').colorbox({ inline:true, transition: 'none' });
+        @$el.find('.yodlee_help').colorbox({ inline:true });
     
     parentBankSelected: (evt)->
         evt.preventDefault()
