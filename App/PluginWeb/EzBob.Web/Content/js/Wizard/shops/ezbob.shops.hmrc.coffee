@@ -16,7 +16,7 @@ class EzBob.HMRCAccountInfoView extends Backbone.Marionette.ItemView
         'click #uploadHelpButton': 'getUploadHelp'
         'click div.hmrcLinkButton': 'linkAccount'
         'click a.newVatFilesUploadButton': 'doUploadFiles'
-        'click #seeExampleLink': 'getUploadHelp'
+        'click #uploadAndLinkHelpButton': 'getUploadAndLinkHelp'
 
     initialize: (options) ->
         @uploadFilesDlg = null
@@ -227,5 +227,10 @@ class EzBob.HMRCAccountInfoView extends Backbone.Marionette.ItemView
         oDialog = $('#hmrcUploadHelpPopup');
         if (oDialog.length > 0)
             $.colorbox({ inline: true, transition: 'none', open: true, href: oDialog, width: '27%' })
-        
+
+    getUploadAndLinkHelp: ->
+        oDialog = $('#hmrcUploadAndLinkHelpPopup');
+        if (oDialog.length > 0)
+            $.colorbox({ inline: true, transition: 'none', open: true, href: oDialog, width: '27%' })
+
 

@@ -629,9 +629,7 @@
     <Content Include="Content\img\hmrc_button_upload_active.png" />
     <Content Include="Content\img\hmrc_button_upload_hover.png" />
     <Content Include="Content\img\hmrc_login_sample.png" />
-    <Content Include="Content\img\hmrc_question.png" />
-    <Content Include="Content\img\hmrc_question_active.png" />
-    <Content Include="Content\img\hmrc_question_hover.png" />
+    <Content Include="Content\img\hmrc_vat_and_login_sample.png" />
     <Content Include="Content\img\hmrc_vat_sample.png" />
     <Content Include="Content\img\house-icons\house-green.png" />
     <Content Include="Content\img\house-icons\house-grey-green-roof.png" />

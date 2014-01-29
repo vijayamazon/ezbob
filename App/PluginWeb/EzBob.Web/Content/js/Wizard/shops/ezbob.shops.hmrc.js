@@ -29,7 +29,7 @@
       'click #uploadHelpButton': 'getUploadHelp',
       'click div.hmrcLinkButton': 'linkAccount',
       'click a.newVatFilesUploadButton': 'doUploadFiles',
-      'click #seeExampleLink': 'getUploadHelp'
+      'click #uploadAndLinkHelpButton': 'getUploadAndLinkHelp'
     };
 
     HMRCAccountInfoView.prototype.initialize = function(options) {
@@ -271,6 +271,21 @@
       var oDialog;
 
       oDialog = $('#hmrcUploadHelpPopup');
+      if (oDialog.length > 0) {
+        return $.colorbox({
+          inline: true,
+          transition: 'none',
+          open: true,
+          href: oDialog,
+          width: '27%'
+        });
+      }
+    };
+
+    HMRCAccountInfoView.prototype.getUploadAndLinkHelp = function() {
+      var oDialog;
+
+      oDialog = $('#hmrcUploadAndLinkHelpPopup');
       if (oDialog.length > 0) {
         return $.colorbox({
           inline: true,
