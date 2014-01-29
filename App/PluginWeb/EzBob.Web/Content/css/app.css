@@ -1258,7 +1258,7 @@ DIV#upload-files-form {
 
 .rc-button {
     display: inline-block;
-    min-width: 30%;
+    min-width: 25%;
     text-align: center;
     color: #444;
     font-size: 16px;
@@ -1279,7 +1279,6 @@ DIV#upload-files-form {
     -webkit-user-select: none;
     user-select: none;
     cursor: default;
-    width: 20% !important;
     outline: none;
     margin-left: 5px;
     box-shadow: none;

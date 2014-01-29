@@ -86,6 +86,12 @@ class EzBob.StoreInfoView extends Backbone.View
         'click .btn-showmore': 'showMoreAccounts'
         'click .btn-go-to-link-accounts': 'showLinkAccountsForm'
         'click .btn-take-quick-offer': 'takeQuickOffer'
+        'click .btn-back-to-quick-offer': 'backToQuickOffer'
+
+    backToQuickOffer: ->
+        @storeList.find('.link-accounts-form').addClass 'hide'
+        @storeList.find('.quick-offer-form').removeClass 'hide'
+    # end of backToQuickOffer
 
     takeQuickOffer: ->
         xhr = $.post window.gRootPath + 'CustomerDetails/TakeQuickOffer'
@@ -98,8 +104,9 @@ class EzBob.StoreInfoView extends Backbone.View
     # end of takeQuickOffer
 
     showLinkAccountsForm: ->
-        @storeList.find('.quick-offer-form').remove()
+        @storeList.find('.quick-offer-form').addClass 'hide'
         @storeList.find('.link-accounts-form').removeClass 'hide'
+    # end of showLinkAccountsForm
 
     render: ->
         @mpGroups = {}
@@ -124,15 +131,22 @@ class EzBob.StoreInfoView extends Backbone.View
             store.view.on "back", @back, this
             store.button.on "ready", @ready, this
 
-        hasFilledShops = @canContinue()
+        @canContinue()
 
-        @storeList.find('.quick-offer-form, .link-accounts-form').addClass 'hide'
-
-        if @shouldShowQuickOffer(hasFilledShops)
-            @storeList.find('.quick-offer-form').removeClass 'hide'
-            @renderQuickOfferForm()
+        if @renderExecuted
+            if @shouldRemoveQuickOffer()
+                @storeList.find('.quick-offer-form, .btn-back-to-quick-offer').remove()
+                @storeList.find('.link-accounts-form').removeClass 'hide'
         else
-            @storeList.find('.link-accounts-form').removeClass 'hide'
+            @storeList.find('.quick-offer-form, .link-accounts-form').addClass 'hide'
+
+            if @shouldShowQuickOffer()
+                @storeList.find('.quick-offer-form').removeClass 'hide'
+                @renderQuickOfferForm()
+            else
+                @storeList.find('.link-accounts-form').removeClass 'hide'
+                if @shouldRemoveQuickOffer()
+                    @storeList.find('.quick-offer-form, .btn-back-to-quick-offer').remove()
 
         @renderExecuted = true
 
@@ -211,11 +225,12 @@ class EzBob.StoreInfoView extends Backbone.View
         @storeList.find('.potential-offer .setup-fee .value').text EzBob.formatPercentsWithDecimals @quickOffer.PotentialSetupFee
     # end of renderQuickOfferForm
 
-    shouldShowQuickOffer: (hasFilledShops) ->
-        return false if @renderExecuted
+    shouldRemoveQuickOffer: () ->
+        return true unless @quickOffer
+        return moment.utc().diff(moment.utc(@quickOffer.ExpirationDate)) > 0
+    # end of shouldRemoveQuickOffer
 
-        return false if hasFilledShops
-
+    shouldShowQuickOffer: () ->
         return false if @isProfile()
 
         @quickOffer = @fromCustomer 'QuickOffer'
