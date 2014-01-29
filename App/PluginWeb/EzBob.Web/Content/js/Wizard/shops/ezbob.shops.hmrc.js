@@ -262,7 +262,7 @@
           transition: 'none',
           open: true,
           href: oDialog,
-          width: '20%'
+          width: '35%'
         });
       }
     };
@@ -277,7 +277,7 @@
           transition: 'none',
           open: true,
           href: oDialog,
-          width: '27%'
+          width: '35%'
         });
       }
     };
@@ -292,7 +292,7 @@
           transition: 'none',
           open: true,
           href: oDialog,
-          width: '27%'
+          width: '35%'
         });
       }
     };
