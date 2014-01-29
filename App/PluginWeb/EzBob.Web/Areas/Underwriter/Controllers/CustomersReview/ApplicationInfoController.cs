@@ -302,7 +302,7 @@
 		public void ChangeManualSetupFeeAmount(long id, int? manualAmount)
 		{
 			var cr = _cashRequestsRepository.Get(id);
-			cr.ManualSetupFeeAmount = manualAmount;
+			cr.ManualSetupFeeAmount = manualAmount.HasValue && manualAmount.Value > 0 ? manualAmount.Value : (int?)null;
 			cr.LoanTemplate = null;
 			Log.DebugFormat("CashRequest({0}).ManualSetupFee amount: {1}", id, manualAmount);
 		}

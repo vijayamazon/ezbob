@@ -141,12 +141,12 @@ EzBob.Dialogs.IntegerEdit = EzBob.Dialogs.SimpleValueEdit.extend({
 });
 
 EzBob.Dialogs.AutonumericEdit = EzBob.Dialogs.SimpleValueEdit.extend({
-    onDialogOpened: function(event, ui){
+    onDialogOpened: function (event, ui, required) {
         var d = $(event.target);
         d.validator = d.validate({
             rules: this.rules || {
                 simpleValueEdit: {
-                    required: true
+                    required: required
                 }
             }
         });

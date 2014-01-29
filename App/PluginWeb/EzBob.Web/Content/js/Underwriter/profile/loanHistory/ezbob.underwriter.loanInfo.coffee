@@ -96,6 +96,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
 
             min: EzBob.Config.XMinLoan
             max: EzBob.Config.MaxLoan
+            required: true
         )
         d.render()
         d.on "done", ->
@@ -116,6 +117,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
 
             min: EzBob.Config.PacnetBalanceMaxManualChange * -1
             max: EzBob.Config.PacnetBalanceMaxManualChange
+            required: true
         )
         d.render()
         d.on "done", ->
@@ -202,7 +204,7 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         d.render()
         return
     editManualSetupFeeAmount: ->
-        d = new EzBob.Dialogs.IntegerEdit(
+        d = new EzBob.Dialogs.PoundsNoDecimalsEdit(
             model: @model
             propertyName: "ManualSetupFeeAmount"
             title: "Manual setup fee amount edit"

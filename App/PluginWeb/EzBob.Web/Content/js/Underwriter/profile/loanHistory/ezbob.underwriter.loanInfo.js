@@ -120,7 +120,8 @@
           id: this.model.get("CashRequestId")
         },
         min: EzBob.Config.XMinLoan,
-        max: EzBob.Config.MaxLoan
+        max: EzBob.Config.MaxLoan,
+        required: true
       });
       d.render();
       d.on("done", function() {
@@ -141,7 +142,8 @@
           limit: EzBob.Config.PacnetBalanceMaxManualChange
         },
         min: EzBob.Config.PacnetBalanceMaxManualChange * -1,
-        max: EzBob.Config.PacnetBalanceMaxManualChange
+        max: EzBob.Config.PacnetBalanceMaxManualChange,
+        required: true
       });
       d.render();
       d.on("done", function() {
@@ -239,7 +241,7 @@
 
     LoanInfoView.prototype.editManualSetupFeeAmount = function() {
       var d;
-      d = new EzBob.Dialogs.IntegerEdit({
+      d = new EzBob.Dialogs.PoundsNoDecimalsEdit({
         model: this.model,
         propertyName: "ManualSetupFeeAmount",
         title: "Manual setup fee amount edit",
