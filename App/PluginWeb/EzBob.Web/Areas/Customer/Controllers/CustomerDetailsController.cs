@@ -103,7 +103,7 @@
 		public JsonNetResult LinkAccountsComplete()
 		{
 			WizardComplete();
-			return this.JsonNet(new {});
+			return this.JsonNet(new { });
 		} // LinkAccountsComplete
 
 		#endregion method LinkAccountsComplete
@@ -137,7 +137,7 @@
 
 			ms_oLog.DebugFormat("Customer {1} ({0}): consent agreement saved.", customer.Id, customer.PersonalInfo.Fullname);
 
-			return this.JsonNet(new {});
+			return this.JsonNet(new { });
 		} // TakeQuickOffer
 
 		#endregion method TakeQuickOffer
@@ -236,31 +236,33 @@
 			customer.IsDirector = companyAdditionalInfo.DirectorCheck;
 
 			ProcessCompanyInfoTemporary(
-				nBusinessType, 
-				companyAdditionalInfo.VatReporting, 
-				limitedInfo, 
-				nonLimitedInfo, 
-				companyAdditionalInfo, 
-				limitedCompanyAddress, 
-				nonLimitedCompanyAddress, 
-				limitedDirectors, 
-				nonLimitedDirectors, 
-				companyEmployeeCountInfo, 
-				experianInfo, 
+				nBusinessType,
+				companyAdditionalInfo.VatReporting,
+				limitedInfo,
+				nonLimitedInfo,
+				companyAdditionalInfo,
+				limitedCompanyAddress,
+				nonLimitedCompanyAddress,
+				limitedDirectors,
+				nonLimitedDirectors,
+				companyEmployeeCountInfo,
+				experianInfo,
 				customer);
 
 			customer.WizardStep = _helper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.CompanyDetails);
 			_session.Flush();
 			ms_oLog.DebugFormat("Customer {1} ({0}): wizard step has been updated to :{2}", customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.CompanyDetails);
 
-			try {
+			try
+			{
 				_creator.QuickOfferWithPrerequisites(customer, true);
 			}
-			catch (Exception e) {
+			catch (Exception e)
+			{
 				ms_oLog.Error("Failed to get a quick offer from the service.", e);
 			} // try
 
-			return this.JsonNet(new {});
+			return this.JsonNet(new { });
 		}
 
 		#endregion method SaveCompany
@@ -564,15 +566,15 @@
 		#region static method ProcessCompanyInfo
 		private void ProcessCompanyInfoTemporary(
 			TypeOfBusiness businessType,
-			string vat, 
-			LimitedInfo limitedInfo, 
+			string vat,
+			LimitedInfo limitedInfo,
 			NonLimitedInfo nonLimitedInfo,
-			CompanyAdditionalInfo companyAdditionalInfo, 
-			List<CustomerAddress> limitedCompanyAddress, 
-			List<CustomerAddress> nonLimitedCompanyAddress, 
-			List<DirectorModel> limitedDirectors, 
-			List<DirectorModel> nonLimitedDirectors, 
-			CompanyEmployeeCountInfo companyEmployeeCount, 
+			CompanyAdditionalInfo companyAdditionalInfo,
+			List<CustomerAddress> limitedCompanyAddress,
+			List<CustomerAddress> nonLimitedCompanyAddress,
+			List<DirectorModel> limitedDirectors,
+			List<DirectorModel> nonLimitedDirectors,
+			CompanyEmployeeCountInfo companyEmployeeCount,
 			CompanyInfo experianInfo, Customer customer)
 		{
 
@@ -649,25 +651,32 @@
 			Customer customer
 		)
 		{
-			if (customer.Companies == null) customer.Companies = new List<Company>();
+			Company company;
+			if (!customer.Companies.Any())
+			{
+				customer.Companies = new List<Company>();
+				company = new Company();
+				customer.Companies.Add(company);
+			}
+			else
+			{
+				company = customer.Companies.First();
+			}
 
-			var company = new Company
-				{
-					Customer = customer,
-					ExperianCompanyName = experianInfo.BusName,
-					ExperianRefNum = experianInfo.BusRefNum,
-					TypeOfBusiness = companyData.TypeOfBusiness,
-					CompanyName = companyData.CompanyName,
-					CompanyNumber = companyData.CompanyNumber,
-					TimeAtAddress = companyData.TimeAtAddress,
-					TimeInBusiness = companyData.TimeInBusiness,
-					BusinessPhone = companyData.BusinessPhone,
-					PropertyOwnedByCompany = companyData.PropertyOwnedByCompany,
-					YearsInCompany = companyData.YearsInCompany,
-					RentMonthLeft = companyData.RentMonthLeft,
-					CapitalExpenditure = companyData.CapitalExpenditure,
-					VatReporting = companyData.VatReporting
-				};
+			company.Customer = customer;
+			company.ExperianCompanyName = experianInfo.BusName;
+			company.ExperianRefNum = experianInfo.BusRefNum;
+			company.TypeOfBusiness = companyData.TypeOfBusiness;
+			company.CompanyName = companyData.CompanyName;
+			company.CompanyNumber = companyData.CompanyNumber;
+			company.TimeAtAddress = companyData.TimeAtAddress;
+			company.TimeInBusiness = companyData.TimeInBusiness;
+			company.BusinessPhone = companyData.BusinessPhone;
+			company.PropertyOwnedByCompany = companyData.PropertyOwnedByCompany;
+			company.YearsInCompany = companyData.YearsInCompany;
+			company.RentMonthLeft = companyData.RentMonthLeft;
+			company.CapitalExpenditure = companyData.CapitalExpenditure;
+			company.VatReporting = companyData.VatReporting;
 
 			if (directors != null)
 			{
@@ -743,9 +752,6 @@
 				TotalMonthlySalary = companyEmployeeCount.TotalMonthlySalary,
 				Company = company
 			});
-
-			customer.Companies.Add(company);
-
 		} // ProcessCompanyInfo
 
 		#endregion static method ProcessCompanyInfo
