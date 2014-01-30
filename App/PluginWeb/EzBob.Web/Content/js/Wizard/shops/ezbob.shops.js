@@ -481,13 +481,16 @@
         return;
       }
       BlockUi('on');
+      btn.addClass('disabled');
       xhr = $.post(window.gRootPath + 'CustomerDetails/LinkAccountsComplete');
       xhr.done(function() {
         EzBob.App.trigger("clear");
         return EzBob.App.GA.trackEventReditect(window.gRootPath + 'Customer/Profile/Index', 'Wizard Complete', 'Go To account', 'Awaiting Approval');
       });
       xhr.always(function() {
-        return BlockUi('off');
+        return setTimeout((function() {
+          return BlockUi('off');
+        }), 500);
       });
       return false;
     };
