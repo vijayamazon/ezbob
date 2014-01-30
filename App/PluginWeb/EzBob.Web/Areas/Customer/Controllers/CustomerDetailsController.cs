@@ -128,7 +128,7 @@
 
 			_session.Flush();
 
-			ms_oLog.DebugFormat("Customer {1} ({0}): wizard step has been updated to :{2}", customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.AllStep);
+			ms_oLog.DebugFormat("Customer {1} ({0}): wizard step has been updated to {2}", customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.AllStep);
 
 			_crBuilder.CreateQuickOfferCashRequest(customer);
 
@@ -161,7 +161,7 @@
 
 			_session.Flush();
 
-			ms_oLog.DebugFormat("Customer {1} ({0}): wizard step has been updated to :{2}", customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.AllStep);
+			ms_oLog.DebugFormat("Customer {1} ({0}): wizard step has been updated to {2}", customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.AllStep);
 			_crBuilder.CreateCashRequest(customer);
 
 			ms_oLog.DebugFormat("Customer {1} ({0}): cash request created.", customer.Id, customer.PersonalInfo.Fullname);
@@ -296,7 +296,7 @@
 
 			customer.WizardStep = _helper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.PersonalDetails);
 			_session.Flush();
-			ms_oLog.DebugFormat("Customer {1} ({0}): wizard step has been updated to :{2}", customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.PersonalDetails);
+			ms_oLog.DebugFormat("Customer {1} ({0}): wizard step has been updated to {2}", customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.PersonalDetails);
 
 			return this.JsonNet(new { });
 		} // Save
@@ -581,71 +581,68 @@
 
 			customer.IsDirector = companyAdditionalInfo.DirectorCheck;
 
-			CompanyInfoMap companyData;
-			List<CustomerAddress> companyAddress;
-			List<DirectorModel> companyDirectors;
-			var experianAddress = new List<CustomerAddress>
-				{
-					new CustomerAddress
-						{
-							AddressType = CustomerAddressType.ExperianCompanyAddress,
-							Organisation = companyAdditionalInfo.ExperianCompanyName,
-							Line1 = companyAdditionalInfo.ExperianCompanyAddrLine1,
-							Line2 = companyAdditionalInfo.ExperianCompanyAddrLine2,
-							Line3 = companyAdditionalInfo.ExperianCompanyAddrLine3,
-							Town = companyAdditionalInfo.ExperianCompanyAddrLine4,
-							Postcode = companyAdditionalInfo.ExperianCompanyPostcode,
+			CompanyInfoMap companyData = null;
+			List<CustomerAddress> companyAddress = null;
+			List<DirectorModel> companyDirectors = null;
 
-						}
+			switch (businessType.Reduce()) {
+			case TypeOfBusinessReduced.Limited:
+				companyData = new CompanyInfoMap {
+					BusinessPhone = limitedInfo.LimitedBusinessPhone,
+					CapitalExpenditure = companyAdditionalInfo.CapitalExpenditure,
+					CompanyNumber = limitedInfo.LimitedCompanyNumber,
+					CompanyName = limitedInfo.LimitedCompanyName,
+					PropertyOwnedByCompany = companyAdditionalInfo.PropertyOwnedByCompany,
+					RentMonthLeft = companyAdditionalInfo.RentMonthsLeft,
+					TypeOfBusiness = businessType,
+					TimeAtAddress = limitedInfo.LimitedTimeAtAddress,
+					YearsInCompany = companyAdditionalInfo.YearsInCompany,
 				};
 
-			switch (businessType.Reduce())
-			{
-				case TypeOfBusinessReduced.Limited:
-					companyData = new CompanyInfoMap
-						{
-							BusinessPhone = limitedInfo.LimitedBusinessPhone,
-							CapitalExpenditure = companyAdditionalInfo.CapitalExpenditure,
-							CompanyNumber = limitedInfo.LimitedCompanyNumber,
-							CompanyName = limitedInfo.LimitedCompanyName,
-							PropertyOwnedByCompany = companyAdditionalInfo.PropertyOwnedByCompany,
-							RentMonthLeft = companyAdditionalInfo.RentMonthsLeft,
-							TypeOfBusiness = businessType,
-							TimeAtAddress = limitedInfo.LimitedTimeAtAddress,
-							YearsInCompany = companyAdditionalInfo.YearsInCompany,
-						};
-					companyAddress = limitedCompanyAddress;
-					companyDirectors = limitedDirectors;
-					break;
-				case TypeOfBusinessReduced.NonLimited:
-					companyData = new CompanyInfoMap
-						{
-							BusinessPhone = nonLimitedInfo.NonLimitedBusinessPhone,
-							CapitalExpenditure = companyAdditionalInfo.CapitalExpenditure,
-							CompanyName = nonLimitedInfo.NonLimitedCompanyName,
-							PropertyOwnedByCompany = companyAdditionalInfo.PropertyOwnedByCompany,
-							RentMonthLeft = companyAdditionalInfo.RentMonthsLeft,
-							TypeOfBusiness = businessType,
-							TimeAtAddress = nonLimitedInfo.NonLimitedTimeAtAddress,
-							YearsInCompany = companyAdditionalInfo.YearsInCompany,
-							TimeInBusiness = nonLimitedInfo.NonLimitedTimeInBusiness,
-						};
-					companyAddress = nonLimitedCompanyAddress;
-					companyDirectors = nonLimitedDirectors;
-					break;
-				default:
-					return;
-			}
+				companyAddress = limitedCompanyAddress;
+				companyDirectors = limitedDirectors;
+				break;
 
-			companyData.VatReporting = vat != null ? (VatReporting?)Enum.Parse(typeof(VatReporting), vat) : null;
+			case TypeOfBusinessReduced.NonLimited:
+				companyData = new CompanyInfoMap {
+					BusinessPhone = nonLimitedInfo.NonLimitedBusinessPhone,
+					CapitalExpenditure = companyAdditionalInfo.CapitalExpenditure,
+					CompanyName = nonLimitedInfo.NonLimitedCompanyName,
+					PropertyOwnedByCompany = companyAdditionalInfo.PropertyOwnedByCompany,
+					RentMonthLeft = companyAdditionalInfo.RentMonthsLeft,
+					TypeOfBusiness = businessType,
+					TimeAtAddress = nonLimitedInfo.NonLimitedTimeAtAddress,
+					YearsInCompany = companyAdditionalInfo.YearsInCompany,
+					TimeInBusiness = nonLimitedInfo.NonLimitedTimeInBusiness,
+				};
 
-			ProcessCompanyInfo(companyData, companyAddress, experianAddress, companyDirectors, companyEmployeeCount, experianInfo, customer);
+				companyAddress = nonLimitedCompanyAddress;
+				companyDirectors = nonLimitedDirectors;
+				break;
+			} // switch
+
+			if (!ReferenceEquals(companyData, null)) {
+				var experianAddress = new List<CustomerAddress> {
+					new CustomerAddress {
+						AddressType = CustomerAddressType.ExperianCompanyAddress,
+						Organisation = companyAdditionalInfo.ExperianCompanyName,
+						Line1 = companyAdditionalInfo.ExperianCompanyAddrLine1,
+						Line2 = companyAdditionalInfo.ExperianCompanyAddrLine2,
+						Line3 = companyAdditionalInfo.ExperianCompanyAddrLine3,
+						Town = companyAdditionalInfo.ExperianCompanyAddrLine4,
+						Postcode = companyAdditionalInfo.ExperianCompanyPostcode,
+					}
+				};
+
+				companyData.VatReporting = vat != null ? (VatReporting?)Enum.Parse(typeof (VatReporting), vat) : null;
+				ProcessCompanyInfo(companyData, companyAddress, experianAddress, companyDirectors, companyEmployeeCount, experianInfo, customer);
+			} // if
 
 			customer.WizardStep = _helper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.CompanyDetails);
 			_session.Flush();
 
 			ms_oLog.DebugFormat(
-				"Customer {1} ({0}): wizard step has been updated to :{2}",
+				"Customer {1} ({0}): wizard step has been updated to {2}",
 				customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.CompanyDetails
 			);
 		} // SaveCompany
