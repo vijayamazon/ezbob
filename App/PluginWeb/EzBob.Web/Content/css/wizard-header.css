@@ -181,8 +181,13 @@ li.active > .progress_tip {
     position: relative;
     width: 1212px;
     height: 72px;
-    background: #eceff1;
+    padding: 0 10px;
     margin: 0 auto;
+}
+
+.header-inner {
+    background: #eceff1;
+    height: 100%;
 }
 
 #logged-in-user-name {
@@ -231,7 +236,7 @@ ul#user-menu {
     ul#user-menu li {
         display: inline;
         list-style: none;
-        margin: 0 3px;
+        margin: 0 7px;
         font-weight: bold;
         font-size: 14px;
         border-radius: 15px;

@@ -48,7 +48,8 @@
     var scoreDivStyle = "height: 50px; width: 120px; display: inline-block; position: relative; font-size: 48px; " 
         + " color: " + color
         + " left: " + valPos
-        + " text-align: " + align;
+        + " text-align: " + "center;"
+        + " float: " + align;
     <div style="height: 50px;">
         @Html.Raw("<div style=\"" + backDivStyle + "\"></div>" + "<div style=\"" + scoreDivStyle + "\">" + score + "</div>")
     </div>

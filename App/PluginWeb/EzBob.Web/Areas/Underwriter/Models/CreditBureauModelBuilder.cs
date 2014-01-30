@@ -907,7 +907,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 			int barPos = s * (barWidth + spaceWidth);
 			int scorePos = (s < barCount / 2) ? barPos : barPos - 120;
 			int valPos = (s < barCount / 2) ? barPos : barPos - 120;
-			align = (s < barCount / 2) ? "left" : "right";
+			align = (s < barCount / 2) ? "none" : "left";
 
 			position = string.Format("{0}px;", scorePos);
 			valPosition = string.Format("{0}px;", valPos);

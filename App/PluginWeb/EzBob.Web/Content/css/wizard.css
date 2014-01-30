@@ -207,7 +207,11 @@ h2.form_section {
 
 div.form_read_and_accept input { margin-top: -5px; }
 
-div.form_read_and_accept label { display: inline; }
+div.form_read_and_accept label{
+     display: inline-block;
+    width: 90%;
+    vertical-align: top; 
+}
 
 
 div.add-director-container #addDirector { position: relative; margin-bottom: 1em; }
