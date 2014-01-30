@@ -177,6 +177,23 @@ ul.list_none
 }
 
 #wizard .notifications > div { width: 95%; }
+.rotate90 {
+    -moz-transform: rotate(-90.0deg); /* FF3.5+ */
+    -o-transform: rotate(-90.0deg); /* Opera 10.5 */
+    -webkit-transform: rotate(-90.0deg);
+    -ms-transform: rotate(-90.0deg);
+    transform: rotate(-90.0deg); /* Saf3.1+, Chrome */
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=0.083); /* IE6,IE7 */
+    -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=0.083)"; /* IE8 */
+    font-size: 35px;
+}
+
+.btn-showmore {
+    width: 100%;
+    margin-bottom: 10px;
+    line-height: normal !important;
+    cursor: pointer !important;
+}
 
 h1.form_start,
 h2.form_start {

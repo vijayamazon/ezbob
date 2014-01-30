@@ -210,6 +210,15 @@ class EzBob.StoreInfoView extends Backbone.View
         @ebayStores.trigger "reset"
         @$el.find("img[rel]").setPopover "left"
         @$el.find("li[rel]").setPopover "left"
+        
+        showMoreBtn = @$el.find('.btn-showmore')
+        showMoreBtn.hoverIntent(
+            ((evt) -> $('.onhover', this).animate({ top: 0,      opacity: 1 })),
+            ((evt) -> $('.onhover', this).animate({ top: '60px', opacity: 0 }))
+        )
+        
+        
+        
         this
     # end of render
 

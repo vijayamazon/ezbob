@@ -1168,6 +1168,9 @@ input[type="color"],
     font-weight: bold;
     margin-top: 0.6em;
 }
+.eBayPaypalRule {
+    color: red;
+}
 
 .cunt-button .eBayPaypalRule,
 .cunt-button .AddMoreRule {

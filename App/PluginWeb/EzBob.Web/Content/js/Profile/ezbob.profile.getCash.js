@@ -118,7 +118,7 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 		this.$el.find('.trustpilot-ezbob').dialog({
 			autoOpen: true,
 			modal: true,
-			width: 400,
+			width: 450,
 			resizable: false,
 			closeOnEscape: false,
 			close: function(evt, ui) {

@@ -543,7 +543,6 @@
     <Content Include="Content\css\images\help\help_paypal.jpg" />
     <Content Include="Content\css\images\help\help_sage.jpg" />
     <Content Include="Content\css\images\help\help_security.png" />
-    <Content Include="Content\css\images\help_ebay.jpg" />
     <Content Include="Content\css\images\invite_chat_bg.png" />
     <Content Include="Content\css\images\live_help.jpg" />
     <Content Include="Content\css\images\lock_64.png" />
@@ -1310,6 +1309,9 @@
       <DependentUpon>ezbob.shops.freeagent.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Wizard\shops\ezbob.shops.hmrc.js">
+      <DependentUpon>ezbob.shops.hmrc.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.hmrc.min.js">
       <DependentUpon>ezbob.shops.hmrc.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Wizard\shops\ezbob.shops.js">

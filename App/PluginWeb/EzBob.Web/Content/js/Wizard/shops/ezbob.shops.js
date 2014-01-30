@@ -164,7 +164,7 @@
     };
 
     StoreInfoView.prototype.render = function() {
-      var accountsList, bFirst, grp, grpid, grpui, j, name, oTarget, relevantMpGroups, sActiveField, sBtnClass, sGroupClass, sPriorityField, shop, sortedShopsByPriority, store, storeTypeName, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2, _ref3;
+      var accountsList, bFirst, grp, grpid, grpui, j, name, oTarget, relevantMpGroups, sActiveField, sBtnClass, sGroupClass, sPriorityField, shop, showMoreBtn, sortedShopsByPriority, store, storeTypeName, _i, _j, _k, _l, _len, _len1, _len2, _len3, _ref, _ref1, _ref2, _ref3;
       this.mpGroups = {};
       _ref = EzBob.Config.MarketPlaceGroups;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -273,6 +273,18 @@
       this.ebayStores.trigger("reset");
       this.$el.find("img[rel]").setPopover("left");
       this.$el.find("li[rel]").setPopover("left");
+      showMoreBtn = this.$el.find('.btn-showmore');
+      showMoreBtn.hoverIntent((function(evt) {
+        return $('.onhover', this).animate({
+          top: 0,
+          opacity: 1
+        });
+      }), (function(evt) {
+        return $('.onhover', this).animate({
+          top: '60px',
+          opacity: 0
+        });
+      }));
       return this;
     };
 

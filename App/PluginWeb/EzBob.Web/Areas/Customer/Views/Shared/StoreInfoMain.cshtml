@@ -2,94 +2,91 @@
 @{ bool bIsWizard = (string)ViewContext.RouteData.Values["controller"] == "Wizard"; }
 
 <script id="store-info" type="text/template">
-	<div>
-		<div class="quick-offer-form hide">
-			<h2 class="form_start">Quick offer</h2>
+    <div>
+        <div class="quick-offer-form hide">
+            <h2 class="form_start">Quick offer</h2>
 
-			<div class="quick-offer-form-column pull-left immediate-offer">
-				<h3>Take now!</h3>
+            <div class="quick-offer-form-column pull-left immediate-offer">
+                <h3>Take now!</h3>
 
-				<div class="amount quick-offer-form-item"></div>
+                <div class="amount quick-offer-form-item"></div>
 
-				<div class="term quick-offer-form-item"></div>
+                <div class="term quick-offer-form-item"></div>
 
-				<div class="interest-rate quick-offer-form-item">Interest rate: <span class="value"></span></div>
+                <div class="interest-rate quick-offer-form-item">Interest rate: <span class="value"></span></div>
 
-				<div class="setup-fee quick-offer-form-item">Setup fee: <span class="value"></span></div>
+                <div class="setup-fee quick-offer-form-item">Setup fee: <span class="value"></span></div>
 
-				<a class="btn-take-quick-offer" ui-event-control-id="link-account:take-quick-offer">Take now</a>
-			</div>
+                <a class="btn-take-quick-offer" ui-event-control-id="link-account:take-quick-offer">Take now</a>
+            </div>
 
-			<div class="quick-offer-form-column pull-right potential-offer">
-				<h3>...or get more</h3>
+            <div class="quick-offer-form-column pull-right potential-offer">
+                <h3>...or get more</h3>
 
-				<div class="amount quick-offer-form-item"></div>
+                <div class="amount quick-offer-form-item"></div>
 
-				<div class="term quick-offer-form-item"></div>
+                <div class="term quick-offer-form-item"></div>
 
-				<div class="interest-rate quick-offer-form-item">Interest rate: <span class="value"></span></div>
+                <div class="interest-rate quick-offer-form-item">Interest rate: <span class="value"></span></div>
 
-				<div class="setup-fee quick-offer-form-item">Setup fee: <span class="value"></span></div>
+                <div class="setup-fee quick-offer-form-item">Setup fee: <span class="value"></span></div>
 
-				<a class="btn-go-to-link-accounts" ui-event-control-id="link-account:go-to-link-accounts">Link accounts</a>
-			</div>
-		</div>
+                <a class="btn-go-to-link-accounts" ui-event-control-id="link-account:go-to-link-accounts">Link accounts</a>
+            </div>
+        </div>
 
-		<div class="link-accounts-form hide">
-			<h2 class="form_start">Link Accounts</h2>
+        <div class="link-accounts-form hide">
+            <h2 class="form_start">Link Accounts</h2>
 
-			@*This ebay pixel code is commented out now in phase 1 but will be uncommented later - do not delete
-			@{
-			var config = ObjectFactory.GetInstance<IEzBobConfiguration>();
-			bool ebayPixelEnabled = config.EbayPixelEnabled;
-			var controller = (string)ViewContext.RouteData.Values["controller"];
+            This ebay pixel code is commented out now in phase 1 but will be uncommented later - do not delete
+            @*@{
+                var config = ObjectFactory.GetInstance<IEzBobConfiguration>();
+                bool ebayPixelEnabled = config.EbayPixelEnabled;
+                var controller = (string)ViewContext.RouteData.Values["controller"];
 
-			if (ebayPixelEnabled && controller == "Wizard") {
-				<img src="https://ad-emea.doubleclick.net/activity;dc_pixel_url=rmboom;rm=ezbobcp;ord='<%- ordpi %>'?" width="1" height="1" border="0" alt="" />
-			}
-			}*@
+                if (ebayPixelEnabled && controller == "Wizard")
+                {
+                <img src="https://ad-emea.doubleclick.net/activity;dc_pixel_url=rmboom;rm=ezbobcp;ord='<%- ordpi %>'?" width="1" height="1" border="0" alt="" />
+                }
+            }*@
 
-			<div style="display: none;" class="online_entry_message">To be approved for a loan, link at least one account. The more accounts you link, the more funds you can borrow.</div>
+            <div style="display: none;" class="online_entry_message">To be approved for a loan, link at least one account. The more accounts you link, the more funds you can borrow.</div>
 
-			<div style="display: none;" class="offline_entry_message wizard_message">As part of your application process we require you to upload or link your VAT payment history. We use your VAT returns to analyse your business performance and to better assess your funding needs.</div>
+            <div style="display: none;" class="offline_entry_message wizard_message">As part of your application process we require you to upload or link you VAT payment history or you bank account data. We use your data to analyse your business performance and to better assess your funding needs.</div>
 
-			<div style="display: none;" class="offline_entry_message profile_message">Link the accounts you use so <strong>ezbob</strong> can automatically evaluate your business and grant you the funds required.</div>
+            <div style="display: none;" class="offline_entry_message profile_message">Add more accounts to improve your <strong>ezbob</strong> rating.</div>
 
-			@if (bIsWizard) { <div class="eBayPaypalRule hide">Paypal account must be added in order to continue.</div> }
+            @if (bIsWizard)
+            { <div class="eBayPaypalRule hide">Paypal account must be added in order to continue.</div> }
 
-			<div class="AddMoreRule hide">Please add one of the following accounts.</div>
+            <div class="accounts-list row-fluid"></div>
 
-			<div class="accounts-list row-fluid"></div>
+            <div style="padding-bottom: 50px; margin-top: 10px;" class="cunt-button source">
+                @if (bIsWizard)
+                { <div class="eBayPaypalRule hide">Paypal account must be added in order to continue.</div> }
+            </div>
+            <div class="marketplace-button" style="width:100% !important">
+                <a class="btn-showmore rc-button hide alignright" ui-event-control-id="link-account:showmore">Show more account types<div class="rotate90">«</div>
+                    <div class="onhover">Show more data source connectors</div>
+                </a>
+            </div>
 
-			<div style="display: none;" class="online_entry_message">
-				<div>A minimum of <span class="importantnumber">£10,000</span> annual turnover is required to get a loan offer</div>
-				<div>Link more accounts to be approved for a loan</div>
-			</div>
+            <div class="attardi-button cunt-button">
+                <button class="back-store rc-button grey pull-right">Back</button>
+                <a class="btn-continue rc-button green continue disabled alignright" ui-event-control-id="link-account:submit">Continue</a>
 
-			<div style="padding-bottom: 50px; margin-top: 10px;" class="cunt-button source">
-				@if (bIsWizard) { <div class="eBayPaypalRule hide">Paypal account must be added in order to continue.</div> }
+                <a class="btn-back-to-quick-offer rc-button green alignright" ui-event-control-id="link-account:back_to_quick_offer">Back</a>
+                <a id="link_account_implicit_back" style="display: none;" class="hide" ui-event-control-id="link-account:implicit_back"></a>
+            </div>
 
-				<div class="AddMoreRuleBottom hide">
-					<div class="AddMoreRule hide">Please add one of the following accounts.</div>
-				</div>
-			</div>
+            <div style="display: none;" class="hmrc-why-question offline_entry_message wizard_message">
+                <div class="hmrc-question-sign"></div>
+                <div class="hmrc-why">Why do we need this? In order to properly evaluate your business and help your business achieve its goals. This is 100% secure.</div>
+            </div>
 
-			<div class="attardi-button cunt-button">
-				<button class="back-store rc-button grey pull-right">Back</button>
-				<a class="btn-continue rc-button green continue disabled alignright" ui-event-control-id="link-account:submit">Continue</a>
-				<a class="btn-showmore rc-button green hide alignright" ui-event-control-id="link-account:showmore">Show more accounts</a>
-				<a class="btn-back-to-quick-offer rc-button green alignright" ui-event-control-id="link-account:back_to_quick_offer">Back</a>
-				<a id="link_account_implicit_back" style="display: none;" class="hide" ui-event-control-id="link-account:implicit_back"></a>
-			</div>
-
-			<div style="display: none;" class="hmrc-why-question offline_entry_message wizard_message">
-            <div class="hmrc-question-sign"></div>
-				<div class="hmrc-why">Why do we need this? In order to properly evaluate your business and help your business achieve its goals. This is 100% secure.</div>
-			</div>
-
-			<div class="marketplace-group-template marketplace-group hide">
-				<h3 class="group-title"></h3>
-			</div>
-		</div>
-	</div>
+            <div class="marketplace-group-template marketplace-group hide">
+                <h3 class="group-title"></h3>
+            </div>
+        </div>
+    </div>
 </script>
