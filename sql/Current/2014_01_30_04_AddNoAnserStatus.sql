@@ -1,0 +1,5 @@
+IF NOT EXISTS (SELECT 1 FROM CRMStatuses WHERE Name='No Answer')
+BEGIN
+	INSERT INTO CRMStatuses VALUES('No Answer')
+END
+GO
