@@ -89,8 +89,11 @@ class EzBob.StoreInfoView extends Backbone.View
         'click .btn-back-to-quick-offer': 'backToQuickOffer'
 
     backToQuickOffer: ->
-        @storeList.find('.link-accounts-form').addClass 'hide'
-        @storeList.find('.quick-offer-form').removeClass 'hide'
+        if @shouldRemoveQuickOffer()
+            @storeList.find('.quick-offer-form, .btn-back-to-quick-offer').remove()
+        else
+            @storeList.find('.link-accounts-form').addClass 'hide'
+            @storeList.find('.quick-offer-form').removeClass 'hide'
     # end of backToQuickOffer
 
     takeQuickOffer: ->

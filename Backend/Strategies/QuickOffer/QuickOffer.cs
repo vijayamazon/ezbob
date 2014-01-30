@@ -1,10 +1,10 @@
 ﻿namespace EzBob.Backend.Strategies.QuickOffer {
 	using System;
+	using System.Text.RegularExpressions;
 	using EzServiceConfiguration;
 	using EzServiceConfigurationLoader;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using Ezbob.Utils.Extensions;
 	using Models;
 
 	#region class QuickOffer
@@ -14,9 +14,10 @@
 
 		#region constructor
 
-		public QuickOffer(int nCustomerID, bool bSaveOfferToDB, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public QuickOffer(int nCustomerID, bool bSaveOfferToDB, bool bHackForTest, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			m_nCustomerID = nCustomerID;
 			m_bSaveOfferToDB = bSaveOfferToDB;
+			m_bHackForTest = bHackForTest;
 			Offer = null;
 		} // constructor
 
@@ -51,6 +52,8 @@
 
 			// Plussed items are checked in QuickOfferData.Load method.
 
+			Log.Debug("QuickOffer.Execute started for customer {0}...", m_nCustomerID);
+
 			var qocfg = new QuickOfferConfiguration(DB, Log);
 
 			qocfg.Init();
@@ -60,9 +63,10 @@
 				return;
 			} // if
 
-			Offer = null;
+			if (m_bHackForTest)
+				HackForTest(qocfg);
 
-			Log.Debug("QuickOffer.Execute started for customer {0}...", m_nCustomerID);
+			Offer = null;
 
 			var qod = new QuickOfferData(qocfg, Log);
 
@@ -104,8 +108,68 @@
 
 		#region private
 
+		#region method HackForTest
+
+		private void HackForTest(QuickOfferConfiguration oCfg) {
+			Log.Debug("QuickOffer.HackForTest for customer {0} started...", m_nCustomerID);
+
+			string sEmail = string.Empty;
+
+			try {
+				DB.ForEachRowSafe(
+					(sr, bRowsetStart) => {
+						sEmail = sr["Email"];
+						return ActionResult.SkipAll;
+					},
+					"LoadCustomerInfo",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("@CustomerID", m_nCustomerID)
+					);
+			}
+			catch (Exception e) {
+				Log.Alert("QuickOffer.HackForTest for customer {0} complete: failed to load customer email.", m_nCustomerID);
+				return;
+			} // try
+
+			var match = Regex.Match(sEmail, @"\+qotest(\d+)@ezbob\.com$", RegexOptions.IgnoreCase);
+
+			if (!match.Success) {
+				Log.Debug("QuickOffer.HackForTest for customer {0} complete: customer email does not match the pattern.", m_nCustomerID);
+				return;
+			} // if
+
+			int nTargetBusinessScore = 0;
+
+			if (!int.TryParse(match.Groups[1].Captures[0].Value, out nTargetBusinessScore)) {
+				Log.Debug("QuickOffer.HackForTest for customer {0} complete: failed to parse requested business score.", m_nCustomerID);
+				return;
+			} // if
+
+			if (nTargetBusinessScore < oCfg.BusinessScoreMin) {
+				Log.Debug("QuickOffer.HackForTest for customer {0} complete: requested business score is less than min business score.", m_nCustomerID);
+				return;
+			} // if
+
+			try {
+				DB.ExecuteNonQuery(
+					"QuickOfferHackForTest",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("@CustomerID", m_nCustomerID),
+					new QueryParameter("@BusinessScore", nTargetBusinessScore)
+				);
+			}
+			catch (Exception e) {
+				Log.Alert("Failed to hack a customer for quick offer test: {0}", e.Message);
+			} // try
+
+			Log.Debug("QuickOffer.HackForTest for customer {0} complete.", m_nCustomerID);
+		} // HackForTest
+
+		#endregion method HackForTest
+
 		private readonly int m_nCustomerID;
 		private readonly bool m_bSaveOfferToDB;
+		private readonly bool m_bHackForTest;
 
 		#endregion private
 	} // class QuickOffer

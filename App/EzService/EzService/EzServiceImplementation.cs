@@ -473,7 +473,7 @@
 
 		public QuickOfferActionResult QuickOffer(int customerId, bool saveOfferToDB) {
 			try {
-				return QuickOfferProcedure(customerId, saveOfferToDB);
+				return QuickOfferProcedure(customerId, saveOfferToDB, false);
 			}
 			catch (Exception e) {
 				Log.Alert(e, "Exception during executing Quick offer strategy.");
@@ -490,7 +490,7 @@
 				new FraudChecker(customerId, FraudMode.CompanyDetailsCheck, DB, Log).Execute();
 
 				Log.Debug("QuickOfferWithPrerequisites: performing quick offer calculation for customer {0}...", customerId);
-				return QuickOfferProcedure(customerId, saveOfferToDB);
+				return QuickOfferProcedure(customerId, saveOfferToDB, true);
 			}
 			catch (Exception e) {
 				Log.Alert(e, "Exception during executing QuickOfferWithPrerequisites strategy.");
@@ -693,10 +693,10 @@
 
 		#region method QuickOfferProcedure
 
-		private QuickOfferActionResult QuickOfferProcedure(int nCustomerID, bool bSaveOfferToDB) {
+		private QuickOfferActionResult QuickOfferProcedure(int nCustomerID, bool bSaveOfferToDB, bool bHackForTest) {
 			QuickOffer oStrategy;
 
-			var oResult = ExecuteSync(out oStrategy, nCustomerID, nCustomerID, nCustomerID, bSaveOfferToDB);
+			var oResult = ExecuteSync(out oStrategy, nCustomerID, nCustomerID, nCustomerID, bSaveOfferToDB, bHackForTest);
 
 			return new QuickOfferActionResult {
 				HasValue = !ReferenceEquals(oStrategy.Offer, null),

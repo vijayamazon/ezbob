@@ -35,7 +35,6 @@
 		public void Load(SafeReader oReader) {
 			CustomerID = oReader["CustomerID"];
 			RequestedAmount = oReader["RequestedAmount"];
-			// IsOffline = oReader["IsOffline"];
 			CompanyRefNum = oReader["CompanyRefNum"];
 			// DefaultCount = oReader["DefaultCount"];
 			// AmlID = oReader["AmlID"];
@@ -97,7 +96,7 @@
 				PotentialSetupFee = Cfg.PotentialSetupFee,
 			};
 
-			if (bSaveOfferToDB) {
+			if (bSaveOfferToDB && (Cfg.Enabled != QuickOfferEnabledStatus.Silent)) {
 				try {
 					var oID = new QueryParameter("@QuickOfferID") {
 						Type = SqlDbType.Int,
@@ -150,7 +149,6 @@
 
 		private int CustomerID;
 		private decimal RequestedAmount;
-		// private bool IsOffline;
 		private string CompanyRefNum;
 		// private int DefaultCount;
 		// private long AmlID;

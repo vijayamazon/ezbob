@@ -144,8 +144,12 @@
     };
 
     StoreInfoView.prototype.backToQuickOffer = function() {
-      this.storeList.find('.link-accounts-form').addClass('hide');
-      return this.storeList.find('.quick-offer-form').removeClass('hide');
+      if (this.shouldRemoveQuickOffer()) {
+        return this.storeList.find('.quick-offer-form, .btn-back-to-quick-offer').remove();
+      } else {
+        this.storeList.find('.link-accounts-form').addClass('hide');
+        return this.storeList.find('.quick-offer-form').removeClass('hide');
+      }
     };
 
     StoreInfoView.prototype.takeQuickOffer = function() {
