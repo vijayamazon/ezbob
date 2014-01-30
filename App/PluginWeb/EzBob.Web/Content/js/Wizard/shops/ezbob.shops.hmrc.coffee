@@ -37,6 +37,12 @@ class EzBob.HMRCAccountInfoView extends Backbone.Marionette.ItemView
                     that.$el.find('a.newVatFilesUploadButton').toggleClass('disabled', !enabled)
 
         @$el.find('#hmrcAccountUpload').dropzone()
+                
+        # To get the animation working use code like
+        #document.getElementById('blabla').hoverIntent(
+        #    ((evt) -> $('.onhover', this).animate({ top: 0,      opacity: 1 })),
+        #    ((evt) -> $('.onhover', this).animate({ top: '60px', opacity: 0 }))
+        #)
 
         @
     # end of render

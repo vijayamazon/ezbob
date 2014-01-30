@@ -6,10 +6,20 @@
         </div>
 
         <form id="hmrcAccount" class="cg-link-account-form">
-            <div class="hmrc_main_buttons_container">
-                <div class="hmrcLinkButton hmrcButton" />
-                <div class="hmrcUploadButton hmrcButton" />
-            </div>
+            <div class="clearfix">
+                <div class="form_buttons_container hmrc_main_buttons_container">
+                    <div class="attardi-button">
+                        @*Replace button with code similar to:
+                        <div class="marketplace-button-empty marketplace-button pull-left marketplace-button-more">
+                            <a href="#" class="marketplace-button-account-HMRC" ui-event-control-id="link-account:add_name_link_HMRC">
+                                <img alt="HMRC" src="/Content/img/hmrc_link_1.png">
+                                <div id="blabla" class="onhover" style="top: 60px; opacity: 0;">Add HMRC</div>
+                            </a>
+                        </div>*@
+                        <div class="hmrcLinkButton"/>
+                        <div class="hmrcUploadButton"/>
+                    </div>
+                </div>
 
             <div class="form_buttons_container">
                 <div class="attardi-button">
@@ -50,7 +60,7 @@
 
             <div class="hmrc-why-question offline_entry_message wizard_message">
                 <div id="linkHelpButton" class="hmrc-question-button float_left hmrc_question_button_margin"></div>
-                <div class="hmrc-why">Text from nimrod text from nimrod text from nimrod................................................................</div>
+                <div class="hmrc-why">Use the same credentials you use to login to the HMRC site, the system reads the accounts to evaluate your business.</div>
             </div>
         </form>
     </div>
@@ -83,7 +93,7 @@
 
             <div class="hmrc-why-question offline_entry_message wizard_message">
                 <div id="uploadHelpButton" class="hmrc-question-button float_left hmrc_question_button_margin"></div>
-                <div class="hmrc-why">Do not have the file? Ask your accountant for them, it will take him 5 minutes to send them to you.</div>
+                <div class="hmrc-why">Press the ? to see a file example. Do not have the file? Ask your accountant for them, it will take him 5 minutes to send them to you.</div>
             </div>
         </form>
     </div>
