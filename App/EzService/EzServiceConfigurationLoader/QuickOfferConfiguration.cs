@@ -36,7 +36,7 @@
 
 		#region method OfferAmountPct
 
-		public virtual decimal OfferAmountPct(int nBusinessScore) {
+		public override decimal OfferAmountPct(int nBusinessScore) {
 			foreach (var oPct in m_oOfferAmountPct)
 				if (nBusinessScore <= oPct.Item1)
 					return oPct.Item2;
@@ -48,7 +48,7 @@
 
 		#region method LoanPct
 
-		public virtual decimal LoanPct(int nBusinessScore, decimal nRequestedAmount) {
+		public override decimal LoanPct(int nBusinessScore, decimal nRequestedAmount) {
 			var oScores = m_oPriceCalculator.ColumnKeys;
 
 			if (nBusinessScore >= oScores.Max)

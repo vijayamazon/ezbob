@@ -22,7 +22,7 @@
 
 		#region constructor
 
-		public QuickOfferData(QuickOfferConfiguration qoc, ASafeLog oLog) {
+		public QuickOfferData(QuickOfferConfigurationData qoc, ASafeLog oLog) {
 			Log = new SafeLog(oLog);
 			IsValid = false;
 			Cfg = qoc;
@@ -176,7 +176,7 @@
 
 		private readonly SafeLog Log;
 
-		private readonly QuickOfferConfiguration Cfg;
+		private readonly QuickOfferConfigurationData Cfg;
 
 		#endregion properties
 

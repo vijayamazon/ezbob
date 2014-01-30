@@ -8,6 +8,7 @@
 	using EzBob.Backend.Strategies;
 	using EzBob.Backend.Strategies.MailStrategies;
 	using EzBob.Backend.Strategies.QuickOffer;
+	using EzServiceConfiguration;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using FraudChecker;
@@ -473,7 +474,7 @@
 
 		public QuickOfferActionResult QuickOffer(int customerId, bool saveOfferToDB) {
 			try {
-				return QuickOfferProcedure(customerId, saveOfferToDB, false);
+				return QuickOfferProcedure(customerId, saveOfferToDB, false, null);
 			}
 			catch (Exception e) {
 				Log.Alert(e, "Exception during executing Quick offer strategy.");
@@ -483,6 +484,19 @@
 
 		public QuickOfferActionResult QuickOfferWithPrerequisites(int customerId, bool saveOfferToDB) {
 			try {
+				var oCfg = EzBob.Backend.Strategies.QuickOffer.QuickOffer.LoadConfiguration(DB, Log);
+
+				if (ReferenceEquals(oCfg, null))
+					throw new Exception("Failed to load quick offer configuration.");
+
+				if (oCfg.Enabled == QuickOfferEnabledStatus.Disabled) {
+					return new QuickOfferActionResult {
+						HasValue = false,
+						Value = null,
+						MetaData = CheckExperianCompany(customerId),
+					};
+				} // if
+
 				Log.Debug("QuickOfferWithPrerequisites: performing company check for customer {0}...", customerId);
 				new ExperianCompanyCheck(customerId, DB, Log).Execute();
 
@@ -490,7 +504,7 @@
 				new FraudChecker(customerId, FraudMode.CompanyDetailsCheck, DB, Log).Execute();
 
 				Log.Debug("QuickOfferWithPrerequisites: performing quick offer calculation for customer {0}...", customerId);
-				return QuickOfferProcedure(customerId, saveOfferToDB, true);
+				return QuickOfferProcedure(customerId, saveOfferToDB, true, oCfg);
 			}
 			catch (Exception e) {
 				Log.Alert(e, "Exception during executing QuickOfferWithPrerequisites strategy.");
@@ -693,10 +707,10 @@
 
 		#region method QuickOfferProcedure
 
-		private QuickOfferActionResult QuickOfferProcedure(int nCustomerID, bool bSaveOfferToDB, bool bHackForTest) {
+		private QuickOfferActionResult QuickOfferProcedure(int nCustomerID, bool bSaveOfferToDB, bool bHackForTest, QuickOfferConfigurationData oCfg) {
 			QuickOffer oStrategy;
 
-			var oResult = ExecuteSync(out oStrategy, nCustomerID, nCustomerID, nCustomerID, bSaveOfferToDB, bHackForTest);
+			var oResult = ExecuteSync(out oStrategy, nCustomerID, nCustomerID, nCustomerID, bSaveOfferToDB, bHackForTest, oCfg);
 
 			return new QuickOfferActionResult {
 				HasValue = !ReferenceEquals(oStrategy.Offer, null),

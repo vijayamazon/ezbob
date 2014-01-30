@@ -36,6 +36,9 @@
 		public virtual string OfferAmountCalculator { get; protected set; }
 		public virtual string PriceCalculator { get; protected set; }
 
+		public abstract decimal OfferAmountPct(int nBusinessScore);
+		public abstract decimal LoanPct(int nBusinessScore, decimal nRequestedAmount);
+
 		#endregion public
 
 		#region protected

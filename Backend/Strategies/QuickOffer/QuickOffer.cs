@@ -12,13 +12,30 @@
 	public class QuickOffer : AStrategy {
 		#region public
 
+		#region method LoadConfiguration
+
+		public static QuickOfferConfigurationData LoadConfiguration(AConnection oDB, ASafeLog oLog) {
+			try {
+				var qocfg = new QuickOfferConfiguration(oDB, oLog);
+				qocfg.Init();
+				return qocfg;
+			}
+			catch (Exception e) {
+				new SafeLog(oLog).Alert(e, "Failed to load quick offer configuration.");
+				return null;
+			} // try
+		} // LoadConfiguration
+
+		#endregion method LoadConfiguration
+
 		#region constructor
 
-		public QuickOffer(int nCustomerID, bool bSaveOfferToDB, bool bHackForTest, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public QuickOffer(int nCustomerID, bool bSaveOfferToDB, bool bHackForTest, QuickOfferConfigurationData oCfg, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			m_nCustomerID = nCustomerID;
 			m_bSaveOfferToDB = bSaveOfferToDB;
 			m_bHackForTest = bHackForTest;
 			Offer = null;
+			m_oCfg = oCfg ?? LoadConfiguration(DB, Log);
 		} // constructor
 
 		#endregion constructor
@@ -54,21 +71,22 @@
 
 			Log.Debug("QuickOffer.Execute started for customer {0}...", m_nCustomerID);
 
-			var qocfg = new QuickOfferConfiguration(DB, Log);
+			if (ReferenceEquals(m_oCfg, null)) {
+				Log.Debug("QuickOffer.Execute for customer {0} complete: configuration not specified.", m_nCustomerID);
+				return;
+			} // if
 
-			qocfg.Init();
-
-			if (qocfg.Enabled == QuickOfferEnabledStatus.Disabled) {
+			if (m_oCfg.Enabled == QuickOfferEnabledStatus.Disabled) {
 				Log.Debug("QuickOffer.Execute for customer {0} complete: quick offer is disabled.", m_nCustomerID);
 				return;
 			} // if
 
 			if (m_bHackForTest)
-				HackForTest(qocfg);
+				HackForTest();
 
 			Offer = null;
 
-			var qod = new QuickOfferData(qocfg, Log);
+			var qod = new QuickOfferData(m_oCfg, Log);
 
 			try {
 				DB.ForEachRowSafe(
@@ -79,7 +97,7 @@
 					"QuickOfferDataLoad",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("@CustomerID", m_nCustomerID)
-					);
+				);
 			}
 			catch (Exception e) {
 				Log.Alert("Failed to load quick offer calculation data from DB for customer {0}:\n\n{1}\n", m_nCustomerID, e.Message);
@@ -110,7 +128,7 @@
 
 		#region method HackForTest
 
-		private void HackForTest(QuickOfferConfiguration oCfg) {
+		private void HackForTest() {
 			Log.Debug("QuickOffer.HackForTest for customer {0} started...", m_nCustomerID);
 
 			string sEmail = string.Empty;
@@ -145,7 +163,7 @@
 				return;
 			} // if
 
-			if (nTargetBusinessScore < oCfg.BusinessScoreMin) {
+			if (nTargetBusinessScore < m_oCfg.BusinessScoreMin) {
 				Log.Debug("QuickOffer.HackForTest for customer {0} complete: requested business score is less than min business score.", m_nCustomerID);
 				return;
 			} // if
@@ -170,6 +188,7 @@
 		private readonly int m_nCustomerID;
 		private readonly bool m_bSaveOfferToDB;
 		private readonly bool m_bHackForTest;
+		private readonly QuickOfferConfigurationData m_oCfg;
 
 		#endregion private
 	} // class QuickOffer
