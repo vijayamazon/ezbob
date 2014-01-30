@@ -14,21 +14,22 @@ using Reports;
 using System.Web.Script.Serialization;
 
 namespace EzReportsWeb {
+
 	public partial class Default : Page {
 		private static WebReportHandler reportHandler;
 		public static ASafeLog Log;
 		private static AConnection oDB;
 		private static bool bIsAdmin;
-
 		public static bool IsAdmin() {
 			return bIsAdmin;
 		} // IsAdmin
 
 		
 		protected void Page_Load(object sender, EventArgs e) {
-			if (!IsPostBack) {
+			if (!IsPostBack)
+			{
+				Log = (ASafeLog)Application["log"];
 				Log = new FileLog("EzReportsWeb", bUtcTimeInName: true, bAppend: true, sPath: @"C:\temp\EzReportsWeb\");
-
 				oDB = new SqlConnection(Log);
 
 				reportHandler = new WebReportHandler(oDB, Log);
@@ -53,7 +54,7 @@ namespace EzReportsWeb {
 			chkIsAdmin.Checked = bIsAdmin;
 
 			if (bIsAdmin)
-				InitAdminArea(oDB, Log, IsPostBack);
+				InitAdminArea(oDB, IsPostBack);
 
 			divAdminMsg.InnerText = string.Empty;
 
@@ -93,6 +94,10 @@ namespace EzReportsWeb {
 
 			var oColumnTypes = new List<string>();
 			Log.Debug("Show report clicked for report: '{0}'", ddlReportTypes.SelectedItem.Text);
+			if (ddlReportTypes.SelectedItem == null)
+			{
+				ResetBtn_Click(sender, e);
+			}
 			ATag data = reportHandler.GetReportData(ddlReportTypes.SelectedItem, rptDef, isDaily, oColumnTypes);
 
 			var aoColumnDefs = oColumnTypes.Select(
@@ -228,7 +233,6 @@ namespace EzReportsWeb {
 			} // if
 
 			var rpta = new ReportAuthenticationLib.ReportAuthentication(oDB, Log);
-
 			try {
 				rpta.AddUserToDb(sUserName, sUserName);
 				divAdminMsg.InnerText = "User has been created.";
@@ -237,7 +241,7 @@ namespace EzReportsWeb {
 				divAdminMsg.InnerText = string.Format("Action failed: {0}", ex.Message);
 			}
 
-			InitAdminArea(oDB, Log);
+			InitAdminArea(oDB);
 		} // btnAdminCreateUser_Click
 
 		protected void btnAdminResetPass_Click(object sender, EventArgs e) {
@@ -267,7 +271,7 @@ namespace EzReportsWeb {
 				divAdminMsg.InnerText = string.Format("Action failed: {0}", ex.Message);
 			}
 
-			InitAdminArea(oDB, Log);
+			InitAdminArea(oDB);
 		} // btnAdminResetPass_Click
 
 		protected void btnAdminDropUser_Click(object sender, EventArgs e) {
@@ -289,7 +293,7 @@ namespace EzReportsWeb {
 				divAdminMsg.InnerText = string.Format("Action failed: {0}", ex.Message);
 			}
 
-			InitAdminArea(oDB, Log);
+			InitAdminArea(oDB);
 		} // btnAdminDropUser_Click
 
 		protected void btnPerformPendingActions_Click(object sender, EventArgs e) {
@@ -332,10 +336,10 @@ namespace EzReportsWeb {
 				divAdminMsg.InnerText = string.Format("Action failed: {0}", ex.Message);
 			} // try
 
-			InitAdminArea(oDB, Log);
+			InitAdminArea(oDB);
 		} // btnPerformPendingActions_Click
 
-		private void InitAdminArea(AConnection oDB, ASafeLog log, bool bIsPostBack = false) {
+		private void InitAdminArea(AConnection oDB, bool bIsPostBack = false) {
 			DataTable oDbUsers = oDB.ExecuteReader("SELECT Id, Name FROM ReportUsers ORDER BY Name", CommandSpecies.Text);
 
 			var oUsers = new SortedDictionary<string, int>();

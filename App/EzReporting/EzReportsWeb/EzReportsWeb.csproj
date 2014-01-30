@@ -78,6 +78,7 @@
     <Content Include="css\combined.css" />
     <Content Include="css\login.css" />
     <Content Include="Default.aspx" />
+    <Content Include="Global.asax" />
     <Content Include="images\back_disabled.png" />
     <Content Include="images\back_enabled.png" />
     <Content Include="images\back_enabled_hover.png" />
@@ -120,6 +121,9 @@
     </Compile>
     <Compile Include="Default.aspx.designer.cs">
       <DependentUpon>Default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Login.aspx.cs">
       <DependentUpon>Login.aspx</DependentUpon>

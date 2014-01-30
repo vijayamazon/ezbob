@@ -10,8 +10,8 @@
 	<link rel="icon" type="image/png" href="~/images/favicon32x32.png" />
 
 	<link rel="stylesheet" href="~/css/combined.css" />
-	<%= Default.IsAdmin() ? "<link rel=stylesheet href=\"~/css/admin.css\" />" : "" %>
-	<%= Default.IsAdmin() ? "<link rel=stylesheet href=\"~/css/jquery.dataTables.css\" />" : "" %>
+	<%= Default.IsAdmin() ? "<link rel=stylesheet href=\"/css/admin.css\" />" : "" %>
+	<%= Default.IsAdmin() ? "<link rel=stylesheet href=\"/css/jquery.dataTables.css\" />" : "" %>
 	<%= Report.GetStyle().ToString() %>
 
 	<script src="js/jquery.js"></script>
