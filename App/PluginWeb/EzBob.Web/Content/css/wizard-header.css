@@ -312,9 +312,9 @@ img.newlogo {
     margin-left: 9px;
 }
 
-.progress-circle .percent {
-    padding-top: 2px;
-}
+    .progress-circle .percent {
+        padding-top: 2px;
+    }
 
 .progress-line {
     content: "";
@@ -331,13 +331,13 @@ ul.application_steps {
     overflow: hidden;
     list-style: none;
     padding-top: 30px;
-    padding-bottom: 10px
+    padding-bottom: 10px;
 }
 
     ul.application_steps li.last .progress-line {
         display: none;
     }
-    
+
     ul.application_steps li {
         float: left;
         font-size: 16px;
@@ -368,6 +368,12 @@ ul.application_steps {
                 background-color: #e1e1e1;
                 border: #e1e1e1 1px solid;
                 color: #000;
+                
+                -moz-transform: scale(1.1);
+                -webkit-transform: scale(1.1);
+                -o-transform: scale(1.1);
+                -ms-transform: scale(1.1);
+                transform: scale(1.1);
             }
 
     ul.application_steps .timer > #slice {
@@ -385,52 +391,53 @@ ul.application_steps {
         z-index: 2;
     }
 
-    ul.application_steps .timer > #slice.gt50 {
-        clip: rect(auto, auto, auto, auto);
-    }
-
-    ul.application_steps .timer > #slice > .pie {
-        border: 0.1em solid #c0c0c0;
-        position: absolute;
-        width: 0.8em; /* 1 - (2 * border width) */
-        height: 0.8em; /* 1 - (2 * border width) */
-        clip: rect(0em,0.5em,1em,0em);
-        -moz-border-radius: 0.5em;
-        -webkit-border-radius: 0.5em;
-        border-radius: 0.5em;
-    }
-
-        ul.application_steps .timer > #slice > .pie.fill {
-            -moz-transform: rotate(180deg) !important;
-            -webkit-transform: rotate(180deg) !important;
-            -o-transform: rotate(180deg) !important;
-            transform: rotate(180deg) !important;
+        ul.application_steps .timer > #slice.gt50 {
+            clip: rect(auto, auto, auto, auto);
         }
 
-    ul.application_steps .timer.fill > .percent {
-        display: none;
-    }
+        ul.application_steps .timer > #slice > .pie {
+            border: 0.1em solid #c0c0c0;
+            position: absolute;
+            width: 0.8em; /* 1 - (2 * border width) */
+            height: 0.8em; /* 1 - (2 * border width) */
+            clip: rect(0em,0.5em,1em,0em);
+            -moz-border-radius: 0.5em;
+            -webkit-border-radius: 0.5em;
+            border-radius: 0.5em;
+        }
 
-    ul.application_steps .timer.fill > #slice > .pie {
-        border: transparent;
-        background-color: #c0c0c0;
-        width: 1em;
-        height: 1em;
-    }
+            ul.application_steps .timer > #slice > .pie.fill {
+                -moz-transform: rotate(180deg) !important;
+                -webkit-transform: rotate(180deg) !important;
+                -o-transform: rotate(180deg) !important;
+                transform: rotate(180deg) !important;
+            }
+
+        ul.application_steps .timer.fill > .percent {
+            display: none;
+        }
+
+        ul.application_steps .timer.fill > #slice > .pie {
+            border: transparent;
+            background-color: #c0c0c0;
+            width: 1em;
+            height: 1em;
+        }
 
 
     ul.application_steps li.complete .progress-circle {
         color: #fff;
     }
 
-        ul.application_steps li.complete .progress-line {
-            background-color: #7bb224;
-        }
+    ul.application_steps li.complete .progress-line-complete {
+        background-color: #7bb224;
+        height: 100%;
+    }
 
-        ul.application_steps li.complete .progress-circle {
-            background-color: #7bb224;
-            border: #7bb224 1px solid;
-        }
+    ul.application_steps li.complete .progress-circle {
+        background-color: #7bb224;
+        border: #7bb224 1px solid;
+    }
 
 
 
@@ -440,27 +447,28 @@ ul.application_steps {
         padding-bottom: 5px;
     }
 
-    .dashboard-steps {
-        background-color: #5c6373;
-        color: #fff;
-        margin-top: -15px;
-        height: 100px;
-    }
+.dashboard-steps {
+    background-color: #5c6373;
+    color: #fff;
+    margin-top: -15px;
+    height: 100px;
+}
 
     .dashboard-steps li {
         background: url(images/arrow.png) no-repeat 15px 0;
     }
-    .dashboard-steps li.active {
-        background: url(images/current_arrow.png) no-repeat 15px 0;
-    }
 
-    .dashboard-steps li.complete {
-        background: url(images/tick.png) no-repeat 0 5px;
-    }
+        .dashboard-steps li.active {
+            background: url(images/current_arrow.png) no-repeat 15px 0;
+        }
+
+        .dashboard-steps li.complete {
+            background: url(images/tick.png) no-repeat 0 5px;
+        }
 
     .dashboard-steps .step_label {
         padding-left: 35px;
     }
 
-    
+
 /*}*/

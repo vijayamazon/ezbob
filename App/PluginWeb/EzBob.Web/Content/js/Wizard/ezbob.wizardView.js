@@ -253,11 +253,24 @@ EzBob.WizardView = Backbone.View.extend({
         if (this.steps[current])
             this.$el.find('.wizard-header').text(this.steps[current].header);
 
-        var $proggressLine = this.$el.find("ul.application_steps li.complete .progress-line").last();
-        //var $proggressCircle = this.$el.find("ul.application_steps li.current .progress-circle");
-        $proggressLine.css("width", 0).show().animate({ width: "100%" }, 1000, function() {
-            //$proggressCircle.hide().css("background-color", "lightblue").fadeIn("slow").show();
+        var $proggressLine = this.$el.find("ul.application_steps li.complete .progress-line-complete").last().css("width", "20%");
+        var $proggressCircle = this.$el.find("ul.application_steps li.current .progress-circle").first();
+        var $proggresLineCurrent = this.$el.find("ul.application_steps li.current .progress-line-current");
+        $proggresLineCurrent.hide().css("width", "0");
+        
+        if (this.$el.find("ul.application_steps li:first").hasClass("current")) {
+            $proggresLineCurrent.show().css("width", "20%");
+        }
+        
+        $proggressLine.show().animate({ width: "100%" }, 1000, function () {
+            $proggressCircle.hide().fadeIn("slow", function () {
+                //.hide().fadeIn("slow"
+                //.css("width", 0).css("height", 0).animate({ width: "34px", height: "34px" }
+                $proggresLineCurrent.show().animate({ width: "20%" }, 1000, function() {
+                });
+            });
         });
+
 
         //todo make it work 
         // var timerFinish = new Date().getTime() + (1 * 1000);
