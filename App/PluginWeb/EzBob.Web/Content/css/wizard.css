@@ -285,15 +285,37 @@ div.wizard-director-text { font-size: 11pt; color: #585858; }
 	box-sizing: border-box;
 }
 
+.quick-offer-form-column .link-container {
+	position: relative;
+	overflow: hidden;
+}
+
 .quick-offer-form-column a {
-	margin-top: 1em;
-	padding: 1em;
-	text-decoration: underline;
-	cursor: pointer;
 	display: block;
-	background-color: #7bb224;
-	color: white;
+	padding: 1em;
+	text-align: center;
+	cursor: pointer;
 	border-radius: 0 0 5px 5px;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.quick-offer-form-column a .onhover {
+	display: none;
+	border-radius: 0 0 5px 5px;
+	background-color: #e8fcc6;
+	background-color: rgba(123, 188, 36, 0.6);
+	color: white;
+	text-shadow: 5px 5px 12px #000000;
+	opacity: 0;
+    /*ie8*/
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+}
+
+.quick-offer-form-column a .onhover  h4 {
+	font-size: 2em;
 }
 
 .quick-offer-form-item {

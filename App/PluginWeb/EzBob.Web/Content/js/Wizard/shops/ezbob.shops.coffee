@@ -145,7 +145,8 @@ class EzBob.StoreInfoView extends Backbone.View
 
             if @shouldShowQuickOffer()
                 @storeList.find('.quick-offer-form').removeClass 'hide'
-                @renderQuickOfferForm()
+                @renderQuickOfferFormImmediate()
+                @renderQuickOfferFormPotential()
             else
                 @storeList.find('.link-accounts-form').removeClass 'hide'
                 if @shouldRemoveQuickOffer()
@@ -215,27 +216,59 @@ class EzBob.StoreInfoView extends Backbone.View
         @$el.find("li[rel]").setPopover "left"
         
         showMoreBtn = @$el.find('.btn-showmore')
-        showMoreBtn.hoverIntent(
+        showMoreBtn.hover(
             ((evt) -> $('.onhover', this).animate({ top: 0,      opacity: 1 })),
             ((evt) -> $('.onhover', this).animate({ top: '60px', opacity: 0 }))
         )
-        
-        
-        
+
         this
     # end of render
 
-    renderQuickOfferForm: ->
+    renderQuickOfferFormImmediate: ->
         @storeList.find('.immediate-offer .amount').text EzBob.formatPoundsNoDecimals @quickOffer.Amount
         @storeList.find('.immediate-offer .term').text @quickOffer.ImmediateTerm + ' months'
         @storeList.find('.immediate-offer .interest-rate .value').text EzBob.formatPercentsWithDecimals @quickOffer.ImmediateInterestRate
         @storeList.find('.immediate-offer .setup-fee .value').text EzBob.formatPercentsWithDecimals @quickOffer.ImmediateSetupFee
 
+        @setQuickOfferFormOnHover @storeList.find('.immediate-offer .btn-take-quick-offer')
+    # end of renderQuickOfferFormImmediate
+
+    renderQuickOfferFormPotential: ->
         @storeList.find('.potential-offer .amount').text EzBob.formatPoundsNoDecimals @quickOffer.PotentialAmount
         @storeList.find('.potential-offer .term').text 'up to ' + @quickOffer.PotentialTerm + ' months'
         @storeList.find('.potential-offer .interest-rate .value').text EzBob.formatPercentsWithDecimals @quickOffer.PotentialInterestRate
         @storeList.find('.potential-offer .setup-fee .value').text EzBob.formatPercentsWithDecimals @quickOffer.PotentialSetupFee
-    # end of renderQuickOfferForm
+
+        @setQuickOfferFormOnHover @storeList.find('.potential-offer .btn-go-to-link-accounts')
+    # end of renderQuickOfferFormPotential
+
+    setQuickOfferFormOnHover: (oLinkBtn) ->
+        oLinkBtn.hover(
+            ((evt) ->
+                oLinkBtn = $ @
+                nHeight = oLinkBtn.outerHeight()
+                nHeight = oLinkBtn.outerWidth()
+
+                onHover = oLinkBtn.parent().find '.onhover'
+
+                onHover.css
+                    position: 'absolute'
+                    top: nHeight
+                    height: nHeight
+                    left: 0
+                    width: nHeight
+                    display: 'block'
+
+                onHover.animate { top: 0, opacity: 1 }
+            ), # on hover in
+            ((evt) ->
+                oLinkBtn = $ @
+                onHover = oLinkBtn.parent().find '.onhover'
+                nHeight = oLinkBtn.outerHeight()
+                onHover.animate { top: nHeight, opacity: 0 }
+            ) # on hover out
+        )
+    # end of setQuickOfferFormOnHover
 
     shouldRemoveQuickOffer: () ->
         return true unless @quickOffer

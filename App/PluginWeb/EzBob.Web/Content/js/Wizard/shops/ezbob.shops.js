@@ -211,7 +211,8 @@
         this.storeList.find('.quick-offer-form, .link-accounts-form').addClass('hide');
         if (this.shouldShowQuickOffer()) {
           this.storeList.find('.quick-offer-form').removeClass('hide');
-          this.renderQuickOfferForm();
+          this.renderQuickOfferFormImmediate();
+          this.renderQuickOfferFormPotential();
         } else {
           this.storeList.find('.link-accounts-form').removeClass('hide');
           if (this.shouldRemoveQuickOffer()) {
@@ -278,7 +279,7 @@
       this.$el.find("img[rel]").setPopover("left");
       this.$el.find("li[rel]").setPopover("left");
       showMoreBtn = this.$el.find('.btn-showmore');
-      showMoreBtn.hoverIntent((function(evt) {
+      showMoreBtn.hover((function(evt) {
         return $('.onhover', this).animate({
           top: 0,
           opacity: 1
@@ -292,15 +293,51 @@
       return this;
     };
 
-    StoreInfoView.prototype.renderQuickOfferForm = function() {
+    StoreInfoView.prototype.renderQuickOfferFormImmediate = function() {
       this.storeList.find('.immediate-offer .amount').text(EzBob.formatPoundsNoDecimals(this.quickOffer.Amount));
       this.storeList.find('.immediate-offer .term').text(this.quickOffer.ImmediateTerm + ' months');
       this.storeList.find('.immediate-offer .interest-rate .value').text(EzBob.formatPercentsWithDecimals(this.quickOffer.ImmediateInterestRate));
       this.storeList.find('.immediate-offer .setup-fee .value').text(EzBob.formatPercentsWithDecimals(this.quickOffer.ImmediateSetupFee));
+      return this.setQuickOfferFormOnHover(this.storeList.find('.immediate-offer .btn-take-quick-offer'));
+    };
+
+    StoreInfoView.prototype.renderQuickOfferFormPotential = function() {
       this.storeList.find('.potential-offer .amount').text(EzBob.formatPoundsNoDecimals(this.quickOffer.PotentialAmount));
       this.storeList.find('.potential-offer .term').text('up to ' + this.quickOffer.PotentialTerm + ' months');
       this.storeList.find('.potential-offer .interest-rate .value').text(EzBob.formatPercentsWithDecimals(this.quickOffer.PotentialInterestRate));
-      return this.storeList.find('.potential-offer .setup-fee .value').text(EzBob.formatPercentsWithDecimals(this.quickOffer.PotentialSetupFee));
+      this.storeList.find('.potential-offer .setup-fee .value').text(EzBob.formatPercentsWithDecimals(this.quickOffer.PotentialSetupFee));
+      return this.setQuickOfferFormOnHover(this.storeList.find('.potential-offer .btn-go-to-link-accounts'));
+    };
+
+    StoreInfoView.prototype.setQuickOfferFormOnHover = function(oLinkBtn) {
+      return oLinkBtn.hover((function(evt) {
+        var nHeight, onHover;
+        oLinkBtn = $(this);
+        nHeight = oLinkBtn.outerHeight();
+        nHeight = oLinkBtn.outerWidth();
+        onHover = oLinkBtn.parent().find('.onhover');
+        onHover.css({
+          position: 'absolute',
+          top: nHeight,
+          height: nHeight,
+          left: 0,
+          width: nHeight,
+          display: 'block'
+        });
+        return onHover.animate({
+          top: 0,
+          opacity: 1
+        });
+      }), (function(evt) {
+        var nHeight, onHover;
+        oLinkBtn = $(this);
+        onHover = oLinkBtn.parent().find('.onhover');
+        nHeight = oLinkBtn.outerHeight();
+        return onHover.animate({
+          top: nHeight,
+          opacity: 0
+        });
+      }));
     };
 
     StoreInfoView.prototype.shouldRemoveQuickOffer = function() {
