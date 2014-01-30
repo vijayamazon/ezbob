@@ -61,21 +61,10 @@
 		public ActionResult HandleUploadedHmrcVatReturn() {
 			Response.AddHeader("x-frame-options", "SAMEORIGIN");
 			ViewData["key"] = Request["key"];
-
-			if (Request["model"] == string.Empty) {
-				ViewModel = null;
-				ViewError = null;
-				return View();
-			} // if
-
-			AccountModel model = JsonConvert.DeserializeObject<AccountModel>(Request["model"]);
-
-			if (model == null) {
-				ViewModel = null;
-				ViewError = null;
-				return View();
-			} // if
-
+			
+			var customerEmail = _context.Customer.Name;
+			var model = new AccountModel { accountTypeName = "HMRC", displayName = customerEmail, name = customerEmail, login = customerEmail, password = "topsecret" };
+			
 			AddAccountState oState = ValidateModel(model);
 
 			if (oState.Error != null) {
