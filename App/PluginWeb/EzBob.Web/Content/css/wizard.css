@@ -176,7 +176,7 @@ ul.list_none
     vertical-align:middle;
 }
 
-#wizard .notifications > div { margin-right: 18px;}
+#wizard .notifications > div { width: 95%; }
 
 h1.form_start,
 h2.form_start {

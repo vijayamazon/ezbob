@@ -64,6 +64,8 @@ class EzBob.HMRCAccountInfoView extends Backbone.Marionette.ItemView
             @$el.find('.oldVatFilesUpload').hide()
         
     doUploadFiles: ->
+        return false if @$el.find('.newVatFilesUpload').hasClass('disabled')
+        
         that = this
         BlockUi 'on'
         xhr = $.post(window.gRootPath + "Hmrc/UploadFiles")
