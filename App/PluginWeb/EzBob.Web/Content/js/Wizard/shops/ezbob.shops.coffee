@@ -145,8 +145,7 @@ class EzBob.StoreInfoView extends Backbone.View
 
             if @shouldShowQuickOffer()
                 @storeList.find('.quick-offer-form').removeClass 'hide'
-                @renderQuickOfferFormImmediate()
-                @renderQuickOfferFormPotential()
+                @renderQuickOfferForm()
             else
                 @storeList.find('.link-accounts-form').removeClass 'hide'
                 if @shouldRemoveQuickOffer()
@@ -224,23 +223,21 @@ class EzBob.StoreInfoView extends Backbone.View
         this
     # end of render
 
-    renderQuickOfferFormImmediate: ->
+    renderQuickOfferForm: ->
         @storeList.find('.immediate-offer .amount').text EzBob.formatPoundsNoDecimals @quickOffer.Amount
         @storeList.find('.immediate-offer .term').text @quickOffer.ImmediateTerm + ' months'
         @storeList.find('.immediate-offer .interest-rate .value').text EzBob.formatPercentsWithDecimals @quickOffer.ImmediateInterestRate
         @storeList.find('.immediate-offer .setup-fee .value').text EzBob.formatPercentsWithDecimals @quickOffer.ImmediateSetupFee
 
         @setQuickOfferFormOnHover @storeList.find('.immediate-offer .btn-take-quick-offer')
-    # end of renderQuickOfferFormImmediate
 
-    renderQuickOfferFormPotential: ->
         @storeList.find('.potential-offer .amount').text EzBob.formatPoundsNoDecimals @quickOffer.PotentialAmount
         @storeList.find('.potential-offer .term').text 'up to ' + @quickOffer.PotentialTerm + ' months'
         @storeList.find('.potential-offer .interest-rate .value').text EzBob.formatPercentsWithDecimals @quickOffer.PotentialInterestRate
         @storeList.find('.potential-offer .setup-fee .value').text EzBob.formatPercentsWithDecimals @quickOffer.PotentialSetupFee
 
         @setQuickOfferFormOnHover @storeList.find('.potential-offer .btn-go-to-link-accounts')
-    # end of renderQuickOfferFormPotential
+    # end of renderQuickOfferForm
 
     setQuickOfferFormOnHover: (oLinkBtn) ->
         oLinkBtn.hover(

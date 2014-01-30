@@ -211,8 +211,7 @@
         this.storeList.find('.quick-offer-form, .link-accounts-form').addClass('hide');
         if (this.shouldShowQuickOffer()) {
           this.storeList.find('.quick-offer-form').removeClass('hide');
-          this.renderQuickOfferFormImmediate();
-          this.renderQuickOfferFormPotential();
+          this.renderQuickOfferForm();
         } else {
           this.storeList.find('.link-accounts-form').removeClass('hide');
           if (this.shouldRemoveQuickOffer()) {
@@ -293,15 +292,12 @@
       return this;
     };
 
-    StoreInfoView.prototype.renderQuickOfferFormImmediate = function() {
+    StoreInfoView.prototype.renderQuickOfferForm = function() {
       this.storeList.find('.immediate-offer .amount').text(EzBob.formatPoundsNoDecimals(this.quickOffer.Amount));
       this.storeList.find('.immediate-offer .term').text(this.quickOffer.ImmediateTerm + ' months');
       this.storeList.find('.immediate-offer .interest-rate .value').text(EzBob.formatPercentsWithDecimals(this.quickOffer.ImmediateInterestRate));
       this.storeList.find('.immediate-offer .setup-fee .value').text(EzBob.formatPercentsWithDecimals(this.quickOffer.ImmediateSetupFee));
-      return this.setQuickOfferFormOnHover(this.storeList.find('.immediate-offer .btn-take-quick-offer'));
-    };
-
-    StoreInfoView.prototype.renderQuickOfferFormPotential = function() {
+      this.setQuickOfferFormOnHover(this.storeList.find('.immediate-offer .btn-take-quick-offer'));
       this.storeList.find('.potential-offer .amount').text(EzBob.formatPoundsNoDecimals(this.quickOffer.PotentialAmount));
       this.storeList.find('.potential-offer .term').text('up to ' + this.quickOffer.PotentialTerm + ' months');
       this.storeList.find('.potential-offer .interest-rate .value').text(EzBob.formatPercentsWithDecimals(this.quickOffer.PotentialInterestRate));
