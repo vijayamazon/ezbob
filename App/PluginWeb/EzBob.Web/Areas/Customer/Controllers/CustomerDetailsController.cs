@@ -6,6 +6,7 @@
 	using System.Globalization;
 	using System.Linq;
 	using System.Web.Mvc;
+	using Backend.Models;
 	using Code.ApplicationCreator;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
@@ -189,7 +190,6 @@
 
 		#region method SaveCompany
 
-		[Transactional]
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
@@ -210,30 +210,11 @@
 			TypeOfBusiness nBusinessType;
 			IndustryType eIndustryType;
 
-
 			if (!Enum.TryParse(companyAdditionalInfo.TypeOfBusiness, true, out nBusinessType))
 				return this.JsonNet(new { error = "Failed to parse business type: " + companyAdditionalInfo.TypeOfBusiness });
 
 			if (!Enum.TryParse(companyAdditionalInfo.IndustryType, true, out eIndustryType))
 				return this.JsonNet(new { error = "Failed to parse industry type: " + companyAdditionalInfo.IndustryType });
-
-			if (customer.PersonalInfo == null)
-				customer.PersonalInfo = new PersonalInfo();
-
-			customer.PersonalInfo.TypeOfBusiness = nBusinessType;
-			customer.PersonalInfo.IndustryType = eIndustryType;
-			customer.PersonalInfo.OverallTurnOver = companyAdditionalInfo.OverallTurnOver;
-
-			if (eIndustryType == IndustryType.HighStreetOrOnlineRetail || companyAdditionalInfo.PartBusinessOnline)
-			{
-				customer.IsOffline = false;
-			}
-			else
-			{
-				customer.IsOffline = true;
-			}
-
-			customer.IsDirector = companyAdditionalInfo.DirectorCheck;
 
 			ProcessCompanyInfoTemporary(
 				nBusinessType,
@@ -247,20 +228,24 @@
 				nonLimitedDirectors,
 				companyEmployeeCountInfo,
 				experianInfo,
-				customer);
+				customer,
+				nBusinessType,
+				eIndustryType
+			);
 
-			customer.WizardStep = _helper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.CompanyDetails);
-			_session.Flush();
-			ms_oLog.DebugFormat("Customer {1} ({0}): wizard step has been updated to :{2}", customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.CompanyDetails);
+			QuickOfferModel qom = null;
 
-			try
-			{
-				_creator.QuickOfferWithPrerequisites(customer, true);
+			try {
+				qom = _creator.QuickOfferWithPrerequisites(customer, true);
 			}
-			catch (Exception e)
-			{
+			catch (Exception e) {
 				ms_oLog.Error("Failed to get a quick offer from the service.", e);
 			} // try
+
+			if (!ReferenceEquals(qom, null)) {
+				ms_oLog.DebugFormat("Quick offer is {0} for customer {1}.", qom.Amount, customer.Id);
+				_session.Refresh(customer);
+			} // if
 
 			return this.JsonNet(new { });
 		}
@@ -564,6 +549,8 @@
 		#endregion static method UpdateAddresses
 
 		#region static method ProcessCompanyInfo
+
+		[Transactional]
 		private void ProcessCompanyInfoTemporary(
 			TypeOfBusiness businessType,
 			string vat,
@@ -575,8 +562,24 @@
 			List<DirectorModel> limitedDirectors,
 			List<DirectorModel> nonLimitedDirectors,
 			CompanyEmployeeCountInfo companyEmployeeCount,
-			CompanyInfo experianInfo, Customer customer)
+			CompanyInfo experianInfo, Customer customer,
+			TypeOfBusiness nBusinessType,
+			IndustryType eIndustryType
+		)
 		{
+			if (customer.PersonalInfo == null)
+				customer.PersonalInfo = new PersonalInfo();
+
+			customer.PersonalInfo.TypeOfBusiness = nBusinessType;
+			customer.PersonalInfo.IndustryType = eIndustryType;
+			customer.PersonalInfo.OverallTurnOver = companyAdditionalInfo.OverallTurnOver;
+
+			if (eIndustryType == IndustryType.HighStreetOrOnlineRetail || companyAdditionalInfo.PartBusinessOnline)
+				customer.IsOffline = false;
+			else
+				customer.IsOffline = true;
+
+			customer.IsDirector = companyAdditionalInfo.DirectorCheck;
 
 			CompanyInfoMap companyData;
 			List<CustomerAddress> companyAddress;
@@ -638,7 +641,13 @@
 
 			ProcessCompanyInfo(companyData, companyAddress, experianAddress, companyDirectors, companyEmployeeCount, experianInfo, customer);
 
+			customer.WizardStep = _helper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.CompanyDetails);
+			_session.Flush();
 
+			ms_oLog.DebugFormat(
+				"Customer {1} ({0}): wizard step has been updated to :{2}",
+				customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.CompanyDetails
+			);
 		} // SaveCompany
 
 		private static void ProcessCompanyInfo(

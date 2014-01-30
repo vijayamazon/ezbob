@@ -78,17 +78,13 @@ namespace EzBob.Web.Code {
 
 			var user = _users.GetAll().FirstOrDefault(x => x.Id == 21); // TODO: do something really really really better than this.
 
-			_historyRepository.LogAction(DecisionActions.Approve, sReason, user, customer);
-
-			// _limit.Check(customer.QuickOffer.Amount); // TODO: enable? disable?
-
 			var cashRequest = new CashRequest {
 				CreationDate = DateTime.UtcNow,
 				Customer = customer,
-				InterestRate = 0.035M, // TODO: from configuration
+				InterestRate = customer.QuickOffer.ImmediateInterestRate,
 				LoanType = loanType,
-				RepaymentPeriod = 3, // TODO: from configuration
-				UseSetupFee = true, // TODO: from configuration
+				RepaymentPeriod = customer.QuickOffer.ImmediateTerm,
+				UseSetupFee = customer.QuickOffer.ImmediateSetupFee > 0,
 				UseBrokerSetupFee = false,
 				DiscountPlan = _discounts.GetDefault(),
 				IsLoanTypeSelectionAllowed = 0,
@@ -97,7 +93,7 @@ namespace EzBob.Web.Code {
 				LoanSource = loanSource, // TODO: can it be EU loan?
 				IsCustomerRepaymentPeriodSelectionAllowed = false,
 
-				ManualSetupFeePercent = 0.015m, // TODO: from configuration
+				ManualSetupFeePercent = customer.QuickOffer.ImmediateSetupFee,
 				SystemCalculatedSum = (double)customer.QuickOffer.Amount,
 				ManagerApprovedSum = (double)customer.QuickOffer.Amount,
 				QuickOffer = customer.QuickOffer,
@@ -123,6 +119,8 @@ namespace EzBob.Web.Code {
 			customer.IsLoanTypeSelectionAllowed = 0;
 
 			// _appCreator.ApprovedUser(user, customer, customer.QuickOffer.Amount); // TODO: enable? disable?
+
+			_historyRepository.LogAction(DecisionActions.Approve, sReason, user, customer);
 
 			return cashRequest;
 		} // CreateQuickOfferCashRequest
