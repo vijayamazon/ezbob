@@ -80,11 +80,12 @@ class EzBob.HMRCAccountInfoView extends Backbone.Marionette.ItemView
                 EzBob.App.trigger 'error', 'Failed to Save HMRC Account'
             else                
                 EzBob.App.trigger 'info', 'HMRC Account Added Successfully'
-                that.trigger('completed');
-                that.trigger 'back'
 
-                that.$el.find('#uploadFilesDiv').hide()
-                that.$el.find('#initialDiv').show()
+            that.trigger('completed');
+            that.trigger 'back'
+
+            that.$el.find('#uploadFilesDiv').hide()
+            that.$el.find('#initialDiv').show()
 
         xhr.always ->
             BlockUi 'off'

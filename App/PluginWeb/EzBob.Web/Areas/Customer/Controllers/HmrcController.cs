@@ -39,13 +39,21 @@
 		[HttpPost]
 		public ActionResult UploadFiles()
 		{
-			var oState = Session["oState"] as AddAccountState;
-			var model = Session["model"] as AccountModel;
-
-			if (oState == null || model == null)
+			string errorDuringUpload = Session["HadErrorInUpload"].ToString();
+			if (errorDuringUpload != string.Empty)
 			{
-				return this.JsonNet(new { error = "Failure during files upload"});
+				return CreateError(errorDuringUpload);
 			}
+
+			string customerEmail = _context.Customer.Name;
+			var model = new AccountModel { accountTypeName = "HMRC", displayName = customerEmail, name = customerEmail, login = customerEmail, password = "topsecret" };
+
+			AddAccountState oState = ValidateModel(model);
+
+			if (oState.Error != null)
+			{
+				return oState.Error;
+			} // if
 
 			string stateError;
 			Hopper oSeeds = GetProcessedFiles(out stateError);
@@ -86,26 +94,14 @@
 		public ActionResult UploadedFiles()
 		{
 			Response.AddHeader("x-frame-options", "SAMEORIGIN");
-			string customerEmail = _context.Customer.Name;
-			var model = new AccountModel { accountTypeName = "HMRC", displayName = customerEmail, name = customerEmail, login = customerEmail, password = "topsecret" };
 
-			AddAccountState oState = ValidateModel(model);
-
-			if (oState.Error != null)
-			{
-				return oState.Error;
-			} // if
+			Session["HadErrorInUpload"] = string.Empty;
 
 			string stateError = ProcessAndStoreFiles(Request.Files);
 			if (stateError != null)
 			{
+				Session["HadErrorInUpload"] = stateError;
 				return CreateError(stateError);
-			}
-
-			if (Session["oState"] == null)
-			{
-				Session["oState"] = oState;
-				Session["model"] = model;
 			}
 
 			return this.JsonNet(new { });

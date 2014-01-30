@@ -101,14 +101,14 @@
       xhr = $.post(window.gRootPath + "Hmrc/UploadFiles");
       xhr.done(function(res) {
         if (res.error !== void 0) {
-          return EzBob.App.trigger('error', 'Failed to Save HMRC Account');
+          EzBob.App.trigger('error', 'Failed to Save HMRC Account');
         } else {
           EzBob.App.trigger('info', 'HMRC Account Added Successfully');
-          that.trigger('completed');
-          that.trigger('back');
-          that.$el.find('#uploadFilesDiv').hide();
-          return that.$el.find('#initialDiv').show();
         }
+        that.trigger('completed');
+        that.trigger('back');
+        that.$el.find('#uploadFilesDiv').hide();
+        return that.$el.find('#initialDiv').show();
       });
       return xhr.always(function() {
         return BlockUi('off');
