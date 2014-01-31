@@ -492,8 +492,8 @@ div.shop-connected {
     background-position: left center;
     border-radius: 50%;
     cursor: pointer;
-    width: 72px;
-    height: 72px;
+    width: 84px;
+    height: 84px;
     float: left;
     display: inline-block;
 }
@@ -529,8 +529,8 @@ div.shop-connected {
 
 .hmrc-why {
     /*color: #29ABE2;*/
-    margin-left: 50px;
-    padding-left: 50px;
+    margin-left: 55px;
+    padding-left: 55px;
 }
 
     .FormRadioCtrl input,

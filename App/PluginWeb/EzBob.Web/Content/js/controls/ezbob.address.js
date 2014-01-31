@@ -441,6 +441,7 @@ EzBob.AddressView = Backbone.View.extend({
 		this.model.on('all', this.render, this);
 		this.name = options.name;
 		this.max = options.max || 5;
+	    this.title = options.title || "Enter postcode";
 		this.isShowClear = options.isShowClear;
 		this.directorId = options.directorId || 0;
 		this.customerId = options.customerId || 0;
@@ -450,7 +451,7 @@ EzBob.AddressView = Backbone.View.extend({
 	render: function () {
 		var self = this;
 
-		this.$el.html(this.template({ addresses: this.model.toJSON(), name: this.name }));
+		this.$el.html(this.template({ addresses: this.model.toJSON(), name: this.name, title: this.title }));
 
 		if (this.uiEventControlIdPrefix) {
 			this.$el.find('[ui-event-control-id]').each(function() {

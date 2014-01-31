@@ -528,18 +528,21 @@ blockquote{margin:0 0 20px 0; padding:10px; border:1px #ccc solid; font-style:it
     -o-background-size: contain;
     background-size: contain;
     float: right;
+    background-position: right top;
 }
 .hmrcUploadButton:hover {
     background:url(../img/hmrc_button_upload_hover.png) no-repeat 0 0;
     -moz-background-size: contain;
     -o-background-size: contain;
     background-size: contain;
+    background-position: right top;
 }
 .hmrcUploadButton:active {
     background:url(../img/hmrc_button_upload_active.png) no-repeat 0 0;
     -moz-background-size: contain;
     -o-background-size: contain;
     background-size: contain;
+    background-position: right top;
 }
 
 .grey {
@@ -619,7 +622,8 @@ blockquote{margin:0 0 20px 0; padding:10px; border:1px #ccc solid; font-style:it
 .hmrc_main_buttons_container {
     margin-top: 20px;
     margin-bottom: 10px;
-    height: 200px;
+    height: 200px !important;
+    width: 96%;
 }
 
 .hmrc_question_button_margin {

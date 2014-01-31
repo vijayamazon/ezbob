@@ -68,7 +68,7 @@
                 <div class="control-group form_field_container">
                     <div class="controls">
                         <label class="control-label attardi-input">
-                            <span>Period of occupation</span>
+                            <span>How long at this address</span>
                             <select id="TimeAtAddress" name="TimeAtAddress" class="TimeAtAddress select form_field" ui-event-control-id="personal-info:time_at_address">
                                 <option selected="selected" value=""></option>
                                 <option value="1">1 year</option>
@@ -147,12 +147,12 @@
                 <div class="controls">
                     <span class="type-of-business-caption">Type of business</span>
                     <select class="type-of-business-form_field" id="TypeOfBusiness" name="TypeOfBusiness" size="6" ui-event-control-id="personal-info:type_of_business" autofocus="autofocus">
-                        <option value="Entrepreneur">Sole trader (not Inc.)</option>
-                        <option value="SoleTrader">Sole trader (Inc.)</option>
-                        <option value="PShip3P">Partnership (Up to 3)</option>
-                        <option value="PShip">Partnership (More than 3)</option>
                         <option value="Limited">Limited company</option>
-                        <option value="LLP">LLP</option>
+                        <option value="LLP">Limited liability partnership</option>
+                        <option value="PShip3P">Partnership (less than three)</option>
+                        <option value="PShip">Partnership (more than three)</option>
+                        <option value="SoleTrader">Sole trader (Inc.)</option>
+                        <option value="Entrepreneur">Sole trader (not Inc.)</option>
                     </select>
                     <img id="TypeOfBusinessImage" class="field_status required" />
                 </div>
@@ -190,7 +190,7 @@
                 <div class="control-group form_field_container form_read_and_accept">
                     <div class="controls">
                         <input id="PartBusinessOnline" name="PartBusinessOnline" type="checkbox" value="false" ui-event-control-id="personal-info:part_bussiness_online" />
-                        <label for="PartBusinessOnline" style="font-weight: normal;" class="editor-label-with-checkbox">Part of my revenue comes from online sales or services</label>
+                        <label for="PartBusinessOnline" style="font-weight: normal;" class="editor-label-with-checkbox">I am an online seller</label>
                     </div>
                 </div>
             </div>
@@ -232,7 +232,7 @@
     <div class="control-group form_field_container">
         <div class="controls">
             <label class="control-label attardi-input">
-                <span>Total monthly salary expenditure (inc tax & NI)</span>
+                <span>Total monthly salary expenditure (inc tax & national insurance)</span>
                 <input id="TotalMonthlySalary" name="TotalMonthlySalary" type="text" class="form_field cashInput" ui-event-control-id="personal-info:total_monthly_salary" />
                 <img id="TotalMonthlySalaryImage" class="field_status required" />
             </label>
@@ -242,7 +242,7 @@
     <div class="control-group form_field_container">
         <div class="controls">
             <label class="control-label attardi-input">
-                <span>VAT reporting</span>
+                <span>Do you report VAT</span>
                 <select id="VatReporting" name="VatReporting" class="select form_field" ui-event-control-id="personal-info:vat-reporting">
                     <option selected="selected" value=""></option>
                     <option value="0">The company is not VAT registered</option>
@@ -268,7 +268,7 @@
     <div class="control-group form_field_container">
         <div class="controls">
             <label class="control-label attardi-input">
-                <span>Name</span>
+                <span>Company name</span>
                 <input id="NonLimitedCompanyName" name="NonLimitedCompanyName" type="text" class="form_field" ui-event-control-id="personal-info:nonlimited_company_name" />
                 <img id="NonLimitedCompanyNameImage" class="field_status required" />
             </label>
@@ -310,7 +310,7 @@
     <div class="control-group form_field_container">
         <div class="controls">
             <label class="control-label attardi-input">
-                <span>Registration #</span>
+                <span>Company registration number</span>
                 <input id="LimitedCompanyNumber" name="LimitedCompanyNumber" type="text" class="form_field" ui-event-control-id="personal-info:limited_company_number" />
                 <img id="LimitedCompanyNumberImage" class="field_status required" />
             </label>
@@ -320,7 +320,7 @@
     <div class="control-group form_field_container">
         <div class="controls">
             <label class="control-label attardi-input">
-                <span>Name</span>
+                <span>Company name</span>
                 <input id="LimitedCompanyName" name="LimitedCompanyName" type="text" class="form_field" ui-event-control-id="personal-info:limited_company_name" />
                 <img id="LimitedCompanyNameImage" class="field_status required" />
             </label>
