@@ -7,16 +7,19 @@
 
         <form id="hmrcAccount" class="cg-link-account-form">
             <div class="hmrc_main_buttons_container">
-                <div class="hmrcLinkButton hmrcButton" />
-                <div class="hmrcUploadButton hmrcButton" />
+                <div id="linkButton" class="marketplace-button-empty marketplace-button hmrc-main-button pull-left marketplace-button-more">
+                    <a href="#" class="hmrcAnimatedButton" ui-event-control-id="link-account:add_name_link_xxx">
+		                <img class="hmrcLinkButton"/>
+		                <div class="onhover">Link</div>
+	                </a>
+                </div>
+                <div id="uploadButton" class="marketplace-button-empty marketplace-button hmrc-main-button pull-left marketplace-button-more">
+                    <a href="#" class="hmrcAnimatedButton" ui-event-control-id="link-account:add_name_link_xxx">
+		                <img class="hmrcUploadButton"/>
+		                <div class="onhover">Upload</div>
+	                </a>
+                </div>
             </div>
-            @*Replace button with code similar to:
-            <div class="marketplace-button-empty marketplace-button pull-left marketplace-button-more">
-                <a href="#" class="marketplace-button-account-HMRC" ui-event-control-id="link-account:add_name_link_HMRC">
-                    <img alt="HMRC" src="/Content/img/hmrc_link_1.png">
-                    <div id="blabla" class="onhover" style="top: 60px; opacity: 0;">Add HMRC</div>
-                </a>
-            </div>*@
 
             <div class="form_buttons_container">
                 <div class="attardi-button">

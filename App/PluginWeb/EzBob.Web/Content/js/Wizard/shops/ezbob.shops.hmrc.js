@@ -19,7 +19,7 @@
       'change input': 'inputChanged',
       'keyup input': 'inputChanged',
       'click a.hmrcBack': 'back',
-      'click div.hmrcUploadButton': 'uploadFiles',
+      'click #uploadButton': 'uploadFiles',
       'click a.linkAccountBack': 'linkAccountBack',
       'click a.uploadFilesBack': 'uploadFilesBack',
       'click a.connect-account': 'connect',
@@ -27,7 +27,7 @@
       'click a.select-vat': 'selectVatFiles',
       'click #linkHelpButton': 'getLinkHelp',
       'click #uploadHelpButton': 'getUploadHelp',
-      'click div.hmrcLinkButton': 'linkAccount',
+      'click #linkButton': 'linkAccount',
       'click a.newVatFilesUploadButton': 'doUploadFiles',
       'click #uploadAndLinkHelpButton': 'getUploadAndLinkHelp'
     };
@@ -41,7 +41,7 @@
     };
 
     HMRCAccountInfoView.prototype.render = function() {
-      var that;
+      var btn, that;
 
       HMRCAccountInfoView.__super__.render.call(this);
       that = this;
@@ -58,6 +58,18 @@
         }
       };
       this.$el.find('#hmrcAccountUpload').dropzone();
+      btn = this.$el.find('.hmrcAnimatedButton');
+      btn.hoverIntent((function(evt) {
+        return $('.onhover', this).animate({
+          top: 0,
+          opacity: 1
+        });
+      }), (function(evt) {
+        return $('.onhover', this).animate({
+          top: '80px',
+          opacity: 0
+        });
+      }));
       return this;
     };
 

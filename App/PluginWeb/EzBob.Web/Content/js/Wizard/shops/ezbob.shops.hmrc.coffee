@@ -6,7 +6,7 @@ class EzBob.HMRCAccountInfoView extends Backbone.Marionette.ItemView
         'change input': 'inputChanged'
         'keyup input': 'inputChanged'
         'click a.hmrcBack': 'back'
-        'click div.hmrcUploadButton' : 'uploadFiles'
+        'click #uploadButton' : 'uploadFiles'
         'click a.linkAccountBack': 'linkAccountBack'
         'click a.uploadFilesBack': 'uploadFilesBack'
         'click a.connect-account': 'connect'
@@ -14,7 +14,7 @@ class EzBob.HMRCAccountInfoView extends Backbone.Marionette.ItemView
         'click a.select-vat': 'selectVatFiles'
         'click #linkHelpButton': 'getLinkHelp'
         'click #uploadHelpButton': 'getUploadHelp'
-        'click div.hmrcLinkButton': 'linkAccount'
+        'click #linkButton': 'linkAccount'
         'click a.newVatFilesUploadButton': 'doUploadFiles'
         'click #uploadAndLinkHelpButton': 'getUploadAndLinkHelp'
 
@@ -37,12 +37,12 @@ class EzBob.HMRCAccountInfoView extends Backbone.Marionette.ItemView
                     that.$el.find('a.newVatFilesUploadButton').toggleClass('disabled', !enabled)
 
         @$el.find('#hmrcAccountUpload').dropzone()
-                
-        # To get the animation working use code like
-        #document.getElementById('blabla').hoverIntent(
-        #    ((evt) -> $('.onhover', this).animate({ top: 0,      opacity: 1 })),
-        #    ((evt) -> $('.onhover', this).animate({ top: '60px', opacity: 0 }))
-        #)
+        
+        btn = @$el.find '.hmrcAnimatedButton'
+        btn.hoverIntent(
+            ((evt) -> $('.onhover', this).animate({ top: 0,      opacity: 1 })),
+            ((evt) -> $('.onhover', this).animate({ top: '80px', opacity: 0 }))
+        )
 
         @
     # end of render

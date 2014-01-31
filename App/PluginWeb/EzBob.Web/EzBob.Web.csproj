@@ -622,11 +622,7 @@
     <Content Include="Content\img\ezbob-logo-big-2014.png" />
     <Content Include="Content\img\free-gift-icon.png" />
     <Content Include="Content\img\hmrc_button_link.png" />
-    <Content Include="Content\img\hmrc_button_link_active.png" />
-    <Content Include="Content\img\hmrc_button_link_hover.png" />
     <Content Include="Content\img\hmrc_button_upload.png" />
-    <Content Include="Content\img\hmrc_button_upload_active.png" />
-    <Content Include="Content\img\hmrc_button_upload_hover.png" />
     <Content Include="Content\img\hmrc_login_sample.png" />
     <Content Include="Content\img\hmrc_vat_and_login_sample.png" />
     <Content Include="Content\img\hmrc_vat_sample.png" />
@@ -1309,9 +1305,6 @@
       <DependentUpon>ezbob.shops.freeagent.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Wizard\shops\ezbob.shops.hmrc.js">
-      <DependentUpon>ezbob.shops.hmrc.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Wizard\shops\ezbob.shops.hmrc.min.js">
       <DependentUpon>ezbob.shops.hmrc.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Wizard\shops\ezbob.shops.js">
