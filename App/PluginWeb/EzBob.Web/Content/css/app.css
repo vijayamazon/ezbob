@@ -1318,7 +1318,7 @@ td.account-logo {
 
 .marketplace-button {
 	margin-bottom: 17px;
-	width: 193px;
+	width: 31%;
 	height: 60px;
 	box-sizing: border-box;
 	border-radius: 5px;
@@ -1330,6 +1330,7 @@ td.account-logo {
 
 .hmrc-main-button {
 	height: 80px;
+	width: 193px;
     margin-right: 0px;
 	margin-bottom: 0px;
     margin-left: 50px;
