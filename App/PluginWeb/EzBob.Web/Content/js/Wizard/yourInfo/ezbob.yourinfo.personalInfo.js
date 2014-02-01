@@ -192,13 +192,20 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 
         var self = this;
 
+        var mobileObj = this.$el.find('#MobilePhone');
+        if (mobileObj.hasClass('disabled')) {
+            mobileObj.removeClass('disabled');
+            mobileObj.attr('disabled', false);
+            mobileObj.val(this.model.get('twilioPhone'));
+        }
+
         var form = this.$el.find('form.PersonalDetailsForm');
         var data = form.serializeArray();
         
         if (this.$el.find('#ConsentToSearch').is(":checked")) {
             _.find(data, function (d) { return d.name === 'ConsentToSearch'; }).value = true;
         }
-        
+
         var request = $.post(form.attr('action'), data);
 
         request.success(function (res) {
