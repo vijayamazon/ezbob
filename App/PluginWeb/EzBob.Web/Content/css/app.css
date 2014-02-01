@@ -1390,8 +1390,8 @@ td.account-logo {
 }
 
 .hmrc-main-button a div.onhover {
-	height: 80px;
-    padding-top: 27px;
+	height: 93px;
+    padding-top: 32px;
 }
 
 @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
