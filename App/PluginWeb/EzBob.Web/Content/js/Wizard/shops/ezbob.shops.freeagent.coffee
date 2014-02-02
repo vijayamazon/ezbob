@@ -1,15 +1,16 @@
 ﻿root = exports ? this
 root.EzBob = root.EzBob or {}
 
-class EzBob.FreeAgentAccountInfoView extends Backbone.View                
+class EzBob.FreeAgentAccountInfoView extends Backbone.View
     initialize: (options) ->
         that = this;
-        window.FreeAgentAccountAdded = (result) ->            
+        window.FreeAgentAccountAdded = (result) ->
             if (result.error)
                 EzBob.App.trigger('error', result.error);
             else
                 EzBob.App.trigger('info', 'Congratulations. Free Agent account was added successfully.');
             
+            $.colorbox.close();
             that.trigger('completed');
             that.trigger('ready');
 
