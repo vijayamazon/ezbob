@@ -361,13 +361,21 @@
             <div class="control-group form_field_container">
                 <div class="controls">
                     <label class="control-label attardi-input">
-                        <span>Name</span>
+                        <span>First Name</span>
                         <input class="form_field director_name_part" id="<%-preffix%>[<%=i%>].Name" name="<%-preffix%>[<%=i%>].Name" type="text" value="<%- director.Name %>" ui-event-control-id="personal-info:director_first_name" />
                         <img id="<%-preffix%>[<%=i%>].NameImage" class="field_status required" />
                     </label>
                 </div>
             </div>
-
+            <div class="control-group form_field_container">
+                <div class="controls">
+                    <label class="control-label attardi-input">
+                        <span>Middle initial</span>
+                        <input class="form_field director_name_part nonrequired alphaOnly" id="<%-preffix%>[<%=i%>].Middle" name="<%-preffix%>[<%=i%>].Middle" type="text" value="<%- director.Middle %>" ui-event-control-id="personal-info:director_middle_name" />
+                        <img id="<%-preffix%>[<%=i%>].MiddleImage" class="field_status" />
+                    </label>
+                </div>
+            </div>
             <div class="control-group form_field_container">
                 <div class="controls">
                     <label class="control-label attardi-input">
