@@ -1705,8 +1705,6 @@ namespace EZBob.DatabaseLib
 
 		public List<MP_YodleeOrderItemBankTransaction> CalculateYodleeRunningBalance(IDatabaseCustomerMarketPlace dmp, string sourceId, AmountInfo currentBalance)
 		{
-			_session.Transaction.Begin();
-
 			var mp = GetCustomerMarketPlace(dmp);
 			if (mp == null)
 			{
@@ -1798,8 +1796,6 @@ namespace EZBob.DatabaseLib
 				}
 			}
 
-			_session.Transaction.Commit();
-			_session.Transaction.Dispose();
 			_session.Flush();
 
 			return transactions;
