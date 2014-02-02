@@ -38,6 +38,7 @@ EzBob.EbayStoreInfoView = Backbone.View.extend({
                         }
                         EzBob.App.trigger('info', result.msg);
                         that.trigger('back');
+                        $.colorbox.close();
                         that.trigger('completed');
                         
                     })
