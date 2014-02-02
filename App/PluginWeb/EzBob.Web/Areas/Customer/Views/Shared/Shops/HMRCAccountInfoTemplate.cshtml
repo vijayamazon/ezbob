@@ -1,7 +1,6 @@
 ﻿<script id="HMRCAccountInfoTemplate" type="text/template">
     <div id="initialDiv" class="row-fluid">
-        <div id="uploadAndLinkInfoButton" class="hmrc-info-button hmrc-info-button-right-margin"/>
-        <h2>HMRC account</h2>
+        <h2>HMRC account<div id="uploadAndLinkInfoButton" class="hmrc-info-button hmrc-info-button-right-margin"></div></h2>
         <div class="wizard-top-notification">
             <h5>You can link your HMRC online account or upload your VAT payment history.</h5>
         </div>
@@ -38,10 +37,8 @@
     </div>
 
     <div id="linkAccountDiv" class="row-fluid hide">
-        <div id="linkInfoButton" class="hmrc-info-button hmrc-info-button-right-margin-link"/>
-        <h2>HMRC link</h2>
-            <h5>Please link your HMRC account by entering your HMRC credentials exactly as used on the HMRC website. To upload the HMRC files, press the back button.</h5>
-        </div>
+        <h2>HMRC link<div id="linkInfoButton" class="hmrc-info-button hmrc-info-button-right-margin-link"></div></h2>
+        <h5>Please link your HMRC account by entering your HMRC credentials exactly as used on the HMRC website. To upload the HMRC files, press the back button.</h5>
 
         <form id="hmrcLinkAccountForm" class="cg-link-account-form">
             <div id="hmrc_fields_link_wrapper">
@@ -69,11 +66,9 @@
     </div>
 
     <div id="uploadFilesDiv" class="row-fluid hide">
-        <div id="uploadInfoButton" class="hmrc-info-button hmrc-info-button-right-margin-upload"/>
-        <h2>HMRC upload</h2>
-            <h5>Upload your last five  VAT returns. Upload files titled “<strong>Printed Copy of Submitted VAT return for your record records</strong>”.</h5>
-        </div>
-
+        <h2>HMRC upload<div id="uploadInfoButton" class="hmrc-info-button hmrc-info-button-right-margin-upload"></div></h2>
+        <h5>Upload your last five  VAT returns. Upload files titled “<strong>Printed Copy of Submitted VAT return for your record records</strong>”.</h5>
+        
         <form id="hmrcAccountUpload" class="dropzone newVatFilesUpload" action="@Url.Action("UploadedFiles", "Hmrc", new { Area = "Customer" })"></form>
 
         <form id="hmrcuploadFiles" class="cg-link-account-form">
