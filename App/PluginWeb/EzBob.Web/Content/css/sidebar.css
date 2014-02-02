@@ -13,12 +13,12 @@ div.customer-sidebar-content {
 
     div.customer-sidebar-content div.item {
         min-height: 70px;
-        padding: 5px;
+        padding: 0 5px;
         color: #5c6373;
         font-size: 12px;
         position: relative;
-        border-bottom: 0px solid #fafafa;
-        margin-bottom: 22px;
+        border-bottom: none;
+        margin-bottom: 0;
     }
 
     div.customer-sidebar-content div.item.last {

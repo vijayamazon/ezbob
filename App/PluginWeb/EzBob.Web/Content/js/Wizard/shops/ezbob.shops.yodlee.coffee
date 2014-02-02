@@ -49,7 +49,7 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
         if (selectedId)
             @$el.find("input[type='radio'][name='Bank']:checked").removeAttr('checked')
             @$el.find(".SubBank:not(.hide)").addClass('hide')
-            @$el.find("a.radio-fx .on").addClass('off').removeClass('on')
+            @$el.find("a.selected-bank").removeClass('selected-bank')
             url = "#{window.gRootPath}Customer/YodleeMarketPlaces/AttachYodlee?csId=#{selectedId}&bankName=#{selectedName}"
             @$el.find("#yodleeContinueBtn").attr("href", url)
             
@@ -82,8 +82,8 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
     parentBankSelected: (evt)->
         evt.preventDefault()
         @$el.find('#Bank_' + evt.currentTarget.id).click()
-        @$el.find('span.on').removeClass('on').addClass('off')
-        $(evt.currentTarget).find('span.off').removeClass('off').addClass('on')
+        @$el.find('a.selected-bank').removeClass('selected-bank')
+        $(evt.currentTarget).addClass('selected-bank')
         @$el.find(".SubBank:not(.hide) option:selected").prop('selected',false)
         @$el.find("#OtherYodleeBanks option").eq(0).prop('selected',true)
         @$el.find("#OtherYodleeBanks").change()

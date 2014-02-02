@@ -16,10 +16,17 @@
                             <input class="form_field" type="text" id="FirstName" name="FirstName" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.FirstName : '' %>" ui-event-control-id="personal-info:first_name" />
                             <img id="FirstNameImage" class="field_status required" />
                         </label>
-
                     </div>
                 </div>
-
+                <div class="control-group form_field_container notoffline">
+                    <div class="controls">
+                        <label class="attardi-input">
+                            <span>Middle name</span>
+                            <input type="text" id="MiddleInitial" name="MiddleInitial" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.MiddleInitial : '' %>" class="form_field alphaOnly" ui-event-control-id="personal-info:middle_name" />
+                            <img id="MiddleNameImage" class="field_status empty" />
+                        </label>
+                    </div>
+                </div>
                 <div class="control-group form_field_container">
                     <div class="controls">
                         <label class="attardi-input">

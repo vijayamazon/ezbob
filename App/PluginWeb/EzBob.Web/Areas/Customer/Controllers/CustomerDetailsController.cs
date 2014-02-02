@@ -272,7 +272,8 @@
 			personalInfo.DateOfBirth = DateTime.ParseExact(dateOfBirth, "d/M/yyyy", CultureInfo.InvariantCulture);
 			personalInfo.Surname = UppercaseWords(personalInfo.Surname.Trim());
 			personalInfo.FirstName = UppercaseWords(personalInfo.FirstName.Trim());
-			personalInfo.Fullname = string.Format("{0} {1}", personalInfo.FirstName, personalInfo.Surname);
+			personalInfo.MiddleInitial = string.IsNullOrEmpty(personalInfo.MiddleInitial) ? "" : UppercaseWords(personalInfo.MiddleInitial.Trim());
+			personalInfo.Fullname = string.Format("{0} {1} {2}", personalInfo.FirstName, personalInfo.Surname, personalInfo.MiddleInitial);
 
 			customer.ConsentToSearch = personalInfo.ConsentToSearch;
 			if (customer.PersonalInfo != null)

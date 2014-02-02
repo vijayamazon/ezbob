@@ -1,4 +1,4 @@
-﻿(function() {
+(function() {
   var root,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     __hasProp = {}.hasOwnProperty,
@@ -70,7 +70,7 @@
       if (selectedId) {
         this.$el.find("input[type='radio'][name='Bank']:checked").removeAttr('checked');
         this.$el.find(".SubBank:not(.hide)").addClass('hide');
-        this.$el.find("a.radio-fx .on").addClass('off').removeClass('on');
+        this.$el.find("a.selected-bank").removeClass('selected-bank');
         url = "" + window.gRootPath + "Customer/YodleeMarketPlaces/AttachYodlee?csId=" + selectedId + "&bankName=" + selectedName;
         this.$el.find("#yodleeContinueBtn").attr("href", url);
         return this.$el.find("#yodleeLinkAccountBtn").removeClass('disabled');
@@ -106,15 +106,15 @@
         return false;
       }
       return this.$el.find('.yodlee_help').colorbox({
-        inline: true,
+        inline: true
       });
     };
 
     YodleeAccountInfoView.prototype.parentBankSelected = function(evt) {
       evt.preventDefault();
       this.$el.find('#Bank_' + evt.currentTarget.id).click();
-      this.$el.find('span.on').removeClass('on').addClass('off');
-      $(evt.currentTarget).find('span.off').removeClass('off').addClass('on');
+      this.$el.find('a.selected-bank').removeClass('selected-bank');
+      $(evt.currentTarget).addClass('selected-bank');
       this.$el.find(".SubBank:not(.hide) option:selected").prop('selected', false);
       this.$el.find("#OtherYodleeBanks option").eq(0).prop('selected', true);
       this.$el.find("#OtherYodleeBanks").change();

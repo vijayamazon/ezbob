@@ -3,22 +3,22 @@
         <div id="uploadAndLinkInfoButton" class="hmrc-info-button hmrc-info-button-right-margin"/>
         <h2>HMRC account</h2>
         <div class="wizard-top-notification">
-            <label>As part of your application process we require you to upload or link your VAT payment history. We use your VAT returns to analyse your business performance. Please select whether to link or upload your HMRC data.</label>
+            <h5>You can link your HMRC online account or upload your VAT payment history.</h5>
         </div>
 
         <form id="hmrcAccount" class="cg-link-account-form">
             <div class="hmrc_main_buttons_container">
                 <div id="linkButton" class="marketplace-button-empty marketplace-button hmrc-main-button pull-left marketplace-button-more">
                     <a href="#" class="hmrcAnimatedButton" ui-event-control-id="link-account:add_name_link_xxx">
-		                <div class="hmrcLinkButton"/>
-		                <div class="onhover">Link</div>
-	                </a>
+                        <div class="hmrcLinkButton" />
+                        <div class="onhover">Link</div>
+                    </a>
                 </div>
                 <div id="uploadButton" class="marketplace-button-empty marketplace-button hmrc-main-button pull-left marketplace-button-more">
                     <a href="#" class="hmrcAnimatedButton" ui-event-control-id="link-account:add_name_link_xxx">
-		                <div class="hmrcUploadButton"/>
-		                <div class="onhover">Upload</div>
-	                </a>
+                        <div class="hmrcUploadButton" />
+                        <div class="onhover">Upload</div>
+                    </a>
                 </div>
             </div>
 
@@ -29,8 +29,10 @@
             </div>
 
             <div class="hmrc-why-question offline_entry_message wizard_message">
-                <div id="uploadAndLinkHelpButton" class="hmrc-question-button float_left hmrc_question_button_margin"></div>
-                <div class="hmrc-why">Why do we need this? In order to properly evaluate your business and help your business achieve its goals. This is 100% secure.</div>
+                <div id="uploadAndLinkHelpButton" class="hmrc-question-button float_left"></div>
+                <div class="hmrc-why">Why do we need this?
+                    <br />
+                    We need your company’s HMRC data to properly evaluate your application.</div>
             </div>
         </form>
     </div>
@@ -38,8 +40,7 @@
     <div id="linkAccountDiv" class="row-fluid hide">
         <div id="linkInfoButton" class="hmrc-info-button hmrc-info-button-right-margin-link"/>
         <h2>HMRC link</h2>
-        <div class="wizard-top-notification">
-            <label>As part of your application process we require you to upload or link your VAT payment history. We use your VAT returns to analyse your business performance</label>
+            <h5>Please link your HMRC account by entering your HMRC credentials exactly as used on the HMRC website. To upload the HMRC files, press the back button.</h5>
         </div>
 
         <form id="hmrcLinkAccountForm" class="cg-link-account-form">
@@ -61,8 +62,8 @@
             </div>
 
             <div class="hmrc-why-question offline_entry_message wizard_message">
-                <div id="linkHelpButton" class="hmrc-question-button float_left hmrc_question_button_margin"></div>
-                <div class="hmrc-why">Use the same credentials you use to login to the HMRC site, the system reads the accounts to evaluate your business.</div>
+                <div id="linkHelpButton" class="hmrc-question-button float_left"></div>
+                <div class="hmrc-why">Your data is not shared with any third party. The system only reads the HMRC data to evaluate your business.</div>
             </div>
         </form>
     </div>
@@ -70,9 +71,7 @@
     <div id="uploadFilesDiv" class="row-fluid hide">
         <div id="uploadInfoButton" class="hmrc-info-button hmrc-info-button-right-margin-upload"/>
         <h2>HMRC upload</h2>
-        <div class="wizard-top-notification">
-            <label>Upload a copy of your last 5 VAT returns. Only upload files titled <b>Printed Copy of Submitted VAT return for your records</b> which you should have received automatically from the HMRC.</label>
-            <label>Files can be uploaded in any order of dates</label>
+            <h5>Upload your last five  VAT returns. Upload files titled “<strong>Printed Copy of Submitted VAT return for your record records</strong>”.</h5>
         </div>
 
         <form id="hmrcAccountUpload" class="dropzone newVatFilesUpload" action="@Url.Action("UploadedFiles", "Hmrc", new { Area = "Customer" })"></form>
@@ -80,7 +79,6 @@
         <form id="hmrcuploadFiles" class="cg-link-account-form">
             <div class="clearfix">
                 <a href="#" class="rc-button green select-vat oldVatFilesUpload" ui-event-control-id="link-account:hmrc_select_vat">Select VAT files</a>
-                <label />
 
                 <div id="upload-files-form">
                     <iframe></iframe>
@@ -94,9 +92,13 @@
                 </div>
             </div>
 
-            <div class="hmrc-why-question offline_entry_message wizard_message">
-                <div id="uploadHelpButton" class="hmrc-question-button float_left hmrc_question_button_margin"></div>
-                <div class="hmrc-why">Press the ? to see a file example. Do not have the file? Ask your accountant for them, it will take him 5 minutes to send them to you.</div>
+            <div class="hmrc-why-question offline_entry_message wizard_message" style="width: 100%;">
+                <div id="uploadHelpButton" class="hmrc-question-button float_left" style="margin-top: 55px;"></div>
+                <div class="hmrc-why">
+                    <p>Don’t know where to locate your last 15 months VAT returns?</p>
+                    <p>You should have received the files directly from the HMRC for your records.  We suggest you  request from your  filing agent or accountant to email your your last 15 months VAT returns.</p>
+                    <p>Remember to mention that you need files titled “Printed Copy of Submitted VAT return for your records” </p>
+                </div>
             </div>
         </form>
     </div>

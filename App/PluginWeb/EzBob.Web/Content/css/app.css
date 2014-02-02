@@ -627,17 +627,15 @@ select.SubBank {
         display: none;
     }
 
-.BankContainer a.radio-fx {
-    /*padding: 15px;*/
-    width: 49%;
-    display: inline-block;
-}
-
 .BankContainer label,
 .SubBank label {
     display: inline;
     font-weight: normal;
     margin-left: 5px;
+}
+
+.BankContainer a.selected-bank {
+    background-color: #e8fcc6;
 }
 
 .BankContainer span {
@@ -654,7 +652,7 @@ select.SubBank {
     }
 
     .BankContainer span.HSBC.on {
-        background-position: -406px -41px;
+        background-position: -406px -40px;
         width: 153px;
     }
 
@@ -664,7 +662,7 @@ select.SubBank {
     }
 
     .BankContainer span.Barclays.on {
-        background-position: -746px -41px;
+        background-position: -746px -40px;
         width: 177px;
     }
 
@@ -674,8 +672,8 @@ select.SubBank {
     }
 
     .BankContainer span.Lloyds.on {
-        background-position: -193px -41px;
-        width: 210px;
+        background-position: -205px -40px;
+        width: 200px;
     }
 
     .BankContainer span.RBS.off {
@@ -684,7 +682,7 @@ select.SubBank {
     }
 
     .BankContainer span.RBS.on {
-        background-position: -653px -41px;
+        background-position: -653px -40px;
         width: 93px;
     }
 
@@ -694,7 +692,7 @@ select.SubBank {
     }
 
     .BankContainer span.Santander.on {
-        background-position: 0 -41px;
+        background-position: 0 -40px;
         width: 193px;
     }
 
@@ -704,7 +702,7 @@ select.SubBank {
     }
 
     .BankContainer span.NatWest.on {
-        background-position: -928px -41px;
+        background-position: -928px -40px;
         width: 165px;
     }
 
@@ -724,7 +722,7 @@ select.SubBank {
     }
 
     .BankContainer span.Halifax.on {
-        background-position: -562px -41px;
+        background-position: -562px -40px;
         width: 88px;
     }
 
@@ -734,7 +732,7 @@ select.SubBank {
     }
 
     .BankContainer span.Nationwide.on {
-        background-position: -1098px -41px;
+        background-position: -1098px -40px;
         width: 180px;
     }
 
@@ -1420,6 +1418,7 @@ td.account-logo {
 	text-align: center;
 	vertical-align: middle;
 	outline-style: none;
+    padding: 5px 0;
 }
 
 .hmrc-main-button a {
@@ -1451,7 +1450,7 @@ td.account-logo {
 }
 
 .hmrc-main-button a div.onhover {
-	height: 93px;
+	height: 103px;
     padding-top: 32px;
 }
 
