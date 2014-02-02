@@ -17,6 +17,9 @@ class EzBob.HMRCAccountInfoView extends Backbone.Marionette.ItemView
         'click #linkButton': 'linkAccount'
         'click a.newVatFilesUploadButton': 'doUploadFiles'
         'click #uploadAndLinkHelpButton': 'getUploadAndLinkHelp'
+        'click #uploadAndLinkInfoButton': 'getUploadAndLinkHelp'
+        'click #linkInfoButton': 'getLinkHelp'
+        'click #uploadInfoButton': 'getUploadHelp'
 
     initialize: (options) ->
         @uploadFilesDlg = null

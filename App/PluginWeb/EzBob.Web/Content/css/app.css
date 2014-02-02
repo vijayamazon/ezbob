@@ -483,6 +483,66 @@ div.shop-connected {
     display: inline-block;
 }
 
+.hmrc-info-button-right-margin {
+    margin-right: 60%;
+}
+
+.hmrc-info-button-right-margin-upload {
+    margin-right: 62%;
+}
+
+.hmrc-info-button-right-margin-link {
+    margin-right: 70%;
+}
+
+.hmrc-info-button {
+    background: url(../img/info.png) no-repeat 0 0;
+    -moz-background-size: contain;
+    -o-background-size: contain;
+    -webkit-background-size: contain;
+    background-size: contain;
+    background-position: left center;
+    border-radius: 50%;
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    float: right;
+    margin-top: 7px;
+    display: inline-block;
+}
+
+.hmrc-info-button:hover {
+    background: url(../img/info_hover.png) no-repeat 0 0;
+    -moz-background-size: contain;
+    -o-background-size: contain;
+    -webkit-background-size: contain;
+    background-size: contain;
+    background-position: left center;
+    border-radius: 50%;
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    float: right;
+    margin-top: 7px;
+    display: inline-block;
+}
+
+.hmrc-info-button:active {
+    background: url(../img/info_active.png) no-repeat 0 0;
+    -moz-background-size: contain;
+    -o-background-size: contain;
+    -webkit-background-size: contain;
+    background-size: contain;
+    background-position: left center;
+    border-radius: 50%;
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    float: right;
+    margin-top: 7px;
+    display: inline-block;
+}
+
 .hmrc-question-button {
     background: url(../img/button_question_icon.png) no-repeat 0 0;
     -moz-background-size: contain;

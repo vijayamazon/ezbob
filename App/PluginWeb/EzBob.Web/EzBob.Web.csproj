@@ -630,6 +630,9 @@
     <Content Include="Content\img\house-icons\house-grey-green-roof.png" />
     <Content Include="Content\img\house-icons\house-grey.png" />
     <Content Include="Content\img\huffingtonpost.jpeg" />
+    <Content Include="Content\img\info.png" />
+    <Content Include="Content\img\info_active.png" />
+    <Content Include="Content\img\info_hover.png" />
     <Content Include="Content\img\logo-amazon-small.png" />
     <Content Include="Content\img\logo_ir.jpg" />
     <Content Include="Content\img\london-the-news.jpg" />
