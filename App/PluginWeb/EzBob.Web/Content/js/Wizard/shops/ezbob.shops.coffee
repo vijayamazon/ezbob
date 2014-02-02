@@ -83,7 +83,7 @@ class EzBob.StoreInfoView extends Backbone.View
     events:
         'click a.connect-store': 'close'
         'click a.continue': 'next'
-        'click .btn-showmore': 'showMoreAccounts'
+        'click .btn-showmore': 'toggleShowMoreAccounts'
         'click .btn-go-to-link-accounts': 'showLinkAccountsForm'
         'click .btn-take-quick-offer': 'takeQuickOffer'
         'click .btn-back-to-quick-offer': 'backToQuickOffer'
@@ -326,12 +326,40 @@ class EzBob.StoreInfoView extends Backbone.View
         @storeList.find(sShow).show()
         @storeList.find(sRemove).remove()
     # end of showOrRemove
-    
+
+    toggleShowMoreAccounts: ->
+        oBtn = @storeList.find('.btn-showmore')
+
+        if oBtn.attr('data-current') is 'more'
+            @showMoreAccounts()
+        else
+            @showLessAccounts()
+    # end of toggleShowMoreAccounts
+
+    showLessAccounts: ->
+        oBtn = @storeList.find('.btn-showmore')
+
+        oBtn.attr 'data-current', 'more'
+        oBtn.find('.caption').text 'Show more account types'
+        oBtn.find('.rotate90').html '&laquo;'
+        oBtn.find('.onhover').text 'Show more data source connectors'
+
+        @storeList.find('.AddMoreRuleBottom').addClass 'hide'
+        @storeList.find('.marketplace-button-more, .marketplace-group.following').hide()
+        @storeList.find('.marketplace-button').not('.show-more, .marketplace-button-less').css 'display', 'none'
+    # end of showLessAccounts
+
     showMoreAccounts: ->
-        @storeList.find('.btn-showmore').hide()
+        oBtn = @storeList.find('.btn-showmore')
+
+        oBtn.attr 'data-current', 'less'
+        oBtn.find('.caption').text 'Show less account types'
+        oBtn.find('.rotate90').html '&raquo;'
+        oBtn.find('.onhover').text 'Show less data source connectors'
+
         @storeList.find('.AddMoreRuleBottom').removeClass 'hide'
         @storeList.find('.marketplace-button-more, .marketplace-group.following').show()
-        @storeList.find('.marketplace-button').css 'display', 'table'
+        @storeList.find('.marketplace-button').not('.show-more').css 'display', 'table'
     # end of showMoreAccounts
 
     canContinue: ->
@@ -366,7 +394,13 @@ class EzBob.StoreInfoView extends Backbone.View
     extractBtnClass: (jqTarget) ->
         sClass = 'pull-left'
 
-        sClass += ' marketplace-button-' + if $('.marketplace-button-less', jqTarget).length < 2 then 'less' else 'more'
+        if $('.marketplace-button-less', jqTarget).length < 2
+            sClass += ' marketplace-button-less'
+        else
+            sClass += ' marketplace-button-more'
+
+            if $('.marketplace-button-more', jqTarget).length is 0
+                sClass += ' marketplace-button-more-first'
 
         sClass
     # end of extractBtnClass

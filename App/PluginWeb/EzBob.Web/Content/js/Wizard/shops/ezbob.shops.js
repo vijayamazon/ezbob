@@ -137,7 +137,7 @@
     StoreInfoView.prototype.events = {
       'click a.connect-store': 'close',
       'click a.continue': 'next',
-      'click .btn-showmore': 'showMoreAccounts',
+      'click .btn-showmore': 'toggleShowMoreAccounts',
       'click .btn-go-to-link-accounts': 'showLinkAccountsForm',
       'click .btn-take-quick-offer': 'takeQuickOffer',
       'click .btn-back-to-quick-offer': 'backToQuickOffer'
@@ -393,11 +393,38 @@
       return this.storeList.find(sRemove).remove();
     };
 
+    StoreInfoView.prototype.toggleShowMoreAccounts = function() {
+      var oBtn;
+      oBtn = this.storeList.find('.btn-showmore');
+      if (oBtn.attr('data-current') === 'more') {
+        return this.showMoreAccounts();
+      } else {
+        return this.showLessAccounts();
+      }
+    };
+
+    StoreInfoView.prototype.showLessAccounts = function() {
+      var oBtn;
+      oBtn = this.storeList.find('.btn-showmore');
+      oBtn.attr('data-current', 'more');
+      oBtn.find('.caption').text('Show more account types');
+      oBtn.find('.rotate90').html('&laquo;');
+      oBtn.find('.onhover').text('Show more data source connectors');
+      this.storeList.find('.AddMoreRuleBottom').addClass('hide');
+      this.storeList.find('.marketplace-button-more, .marketplace-group.following').hide();
+      return this.storeList.find('.marketplace-button').not('.show-more, .marketplace-button-less').css('display', 'none');
+    };
+
     StoreInfoView.prototype.showMoreAccounts = function() {
-      this.storeList.find('.btn-showmore').hide();
+      var oBtn;
+      oBtn = this.storeList.find('.btn-showmore');
+      oBtn.attr('data-current', 'less');
+      oBtn.find('.caption').text('Show less account types');
+      oBtn.find('.rotate90').html('&raquo;');
+      oBtn.find('.onhover').text('Show less data source connectors');
       this.storeList.find('.AddMoreRuleBottom').removeClass('hide');
       this.storeList.find('.marketplace-button-more, .marketplace-group.following').show();
-      return this.storeList.find('.marketplace-button').css('display', 'table');
+      return this.storeList.find('.marketplace-button').not('.show-more').css('display', 'table');
     };
 
     StoreInfoView.prototype.canContinue = function() {
@@ -433,7 +460,14 @@
     StoreInfoView.prototype.extractBtnClass = function(jqTarget) {
       var sClass;
       sClass = 'pull-left';
-      sClass += ' marketplace-button-' + ($('.marketplace-button-less', jqTarget).length < 2 ? 'less' : 'more');
+      if ($('.marketplace-button-less', jqTarget).length < 2) {
+        sClass += ' marketplace-button-less';
+      } else {
+        sClass += ' marketplace-button-more';
+        if ($('.marketplace-button-more', jqTarget).length === 0) {
+          sClass += ' marketplace-button-more-first';
+        }
+      }
       return sClass;
     };
 

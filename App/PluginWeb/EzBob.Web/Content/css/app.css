@@ -1404,6 +1404,10 @@ td.account-logo {
 	overflow: hidden;
 }
 
+.marketplace-group.first .marketplace-button-more-first {
+	clear: left;
+}
+
 .marketplace-button-full {
 	-moz-box-sizing: border-box;
 	-webkit-box-sizing: border-box;

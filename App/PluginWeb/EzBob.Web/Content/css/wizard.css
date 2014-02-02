@@ -177,6 +177,7 @@ ul.list_none
 }
 
 #wizard .notifications > div { width: 95%; }
+
 .rotate90 {
     -moz-transform: rotate(-90.0deg); /* FF3.5+ */
     -o-transform: rotate(-90.0deg); /* Opera 10.5 */
