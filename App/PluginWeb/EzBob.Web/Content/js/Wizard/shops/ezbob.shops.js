@@ -293,15 +293,13 @@
     };
 
     StoreInfoView.prototype.renderQuickOfferForm = function() {
-      this.storeList.find('.immediate-offer .amount').text(EzBob.formatPoundsNoDecimals(this.quickOffer.Amount));
+      this.storeList.find('.immediate-offer .amount, .quick-offer-amount').text(EzBob.formatPoundsNoDecimals(this.quickOffer.Amount));
       this.storeList.find('.immediate-offer .term').text(this.quickOffer.ImmediateTerm + ' months');
       this.storeList.find('.immediate-offer .interest-rate .value').text(EzBob.formatPercentsWithDecimals(this.quickOffer.ImmediateInterestRate));
-      this.storeList.find('.immediate-offer .setup-fee .value').text(EzBob.formatPercentsWithDecimals(this.quickOffer.ImmediateSetupFee));
       this.setQuickOfferFormOnHover(this.storeList.find('.immediate-offer .btn-take-quick-offer'));
       this.storeList.find('.potential-offer .amount').text(EzBob.formatPoundsNoDecimals(this.quickOffer.PotentialAmount));
       this.storeList.find('.potential-offer .term').text('up to ' + this.quickOffer.PotentialTerm + ' months');
       this.storeList.find('.potential-offer .interest-rate .value').text(EzBob.formatPercentsWithDecimals(this.quickOffer.PotentialInterestRate));
-      this.storeList.find('.potential-offer .setup-fee .value').text(EzBob.formatPercentsWithDecimals(this.quickOffer.PotentialSetupFee));
       return this.setQuickOfferFormOnHover(this.storeList.find('.potential-offer .btn-go-to-link-accounts'));
     };
 
@@ -518,7 +516,7 @@
       xhr = $.post(window.gRootPath + 'CustomerDetails/LinkAccountsComplete');
       xhr.done(function() {
         EzBob.App.trigger("clear");
-        return EzBob.App.GA.trackEventReditect(window.gRootPath + 'Customer/Profile/Index', 'Wizard Complete', 'Go To account', 'Awaiting Approval');
+        return EzBob.App.GA.trackEventReditect(window.gRootPath + 'Customer/Profile', 'Wizard Complete', 'Go To account', 'Awaiting Approval');
       });
       xhr.always(function() {
         return setTimeout((function() {

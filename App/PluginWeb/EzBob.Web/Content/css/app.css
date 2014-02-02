@@ -1395,22 +1395,36 @@ td.account-logo {
 }
 
 .marketplace-button-profile {
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
 	float: left;
 	margin-right: 17px;
 	width: 280px !important;
+	overflow: hidden;
 }
 
 .marketplace-button-full {
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
 	background-color: #e8fcc6;
 	border: 1px solid #e8fcc6;
+	overflow: hidden;
 }
 
 .marketplace-button-empty {
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
 	background-color: transparent;
 	border: 1px solid #dddddd;
+	overflow: hidden;
 }
 
 .marketplace-button a {
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 	height: 60px !important;
 	width: 100%;
@@ -1419,6 +1433,7 @@ td.account-logo {
 	vertical-align: middle;
 	outline-style: none;
     padding: 5px 0;
+	overflow: hidden;
 }
 
 .hmrc-main-button a {
@@ -1441,6 +1456,8 @@ td.account-logo {
 	background-color: rgba(123, 188, 36, 0.8);
 	color: white;
 	padding-top: 17px;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
 	box-sizing: border-box;
 	text-shadow: 5px 5px 12px #000000;
 	opacity: 0;

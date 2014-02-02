@@ -42,8 +42,9 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 
         this.events = _.extend({}, this.events, {
             'click .btn-continue': 'next',
-            
-            
+
+			'click .oobts': 'businessTypeSelected',
+
             'focus #OverallTurnOver': 'overallTurnOverFocus',
             'focus #WebSiteTurnOver': 'webSiteTurnOverFocus',
 
@@ -61,22 +62,25 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
         this.validator = null;
 
         this.readyToProceed = false;
-        this.partBusinessOnlineChangedByCustomer = false;
+	    this.curOobts = null;
     }, // initialize
 
+    businessTypeSelected: function(evt) {
+	    // this.$el.find('.after-business-type *').enable();
+
+    	this.$el.find('.oobts').removeClass('orange green').addClass('green');
+
+    	var oBtn = $(evt.currentTarget);
+
+    	oBtn.removeClass('green').addClass('orange');
+
+    	this.curOobts = oBtn.attr('data-oobts');
+    }, // businessTypeSelected
+
     inputChanged: function (evt) {
-        if (evt && (evt.type === 'change') && (evt.target.id === 'PartBusinessOnline'))
-            this.partBusinessOnlineChangedByCustomer = true;
         if (evt && (evt.type === 'change') && (evt.target.id === 'TypeOfBusiness'))
             this.typeOfBusinessChanged();
-        if (evt && (evt.type === 'change') && (evt.target.id === 'IndustryType') && !this.partBusinessOnlineChangedByCustomer) {
-            if (this.$el.find("#IndustryType").val() == 4) {
-                this.$el.find("#PartBusinessOnline").attr("checked", "checked");
-            } else {
-                this.$el.find("#PartBusinessOnline").removeAttr('checked');
-            }
-        }
-        
+
         var enabled = this.validator.checkForm();
 
         if (enabled && this.CompanyView)
@@ -124,6 +128,8 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
         else
             this.CompanyView.$el.show();
 
+    	// if (!this.curOobts) this.$el.find('.after-business-type *').disable();
+
         return false;
     }, // typeOfBusinessChanged
 
@@ -151,6 +157,8 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 
         this.$el.find('#TypeOfBusiness').val('Limited').change().attardi_labels('toggle');
         this.$el.find('#TypeOfBusinessImage').field_status('set', 'ok');
+
+    	// if (!this.curOobts) this.$el.find('.after-business-type *').disable();
 
         this.readyToProceed = true;
         return this;
@@ -279,9 +287,12 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
             _.find(data, function (d) { return d.name === 'OverallTurnOver'; }).value = this.$el.find('#OverallTurnOver').autoNumericGet();
         }
 
-        if (this.$el.find('#PartBusinessOnline').is(":checked")) {
-            _.find(data, function (d) { return d.name === 'PartBusinessOnline'; }).value = true;
-        }
+        var pbo = _.find(data, function(d) { return d.name === 'PartBusinessOnline'; });
+        if (pbo)
+        	pbo.value = this.curOobts === 'online';
+        else
+        	data.push({ name: 'PartBusinessOnline', value: this.curOobts === 'online' });
+
         if (this.$el.find('#DirectorCheck').is(":checked")) {
             _.find(data, function (d) { return d.name === 'DirectorCheck'; }).value = true;
         }

@@ -57,8 +57,15 @@ class EzBob.StoreButtonView extends Backbone.Marionette.ItemView
                 )
         # end of switch
 
+        if $.browser.name.toLowerCase() is 'firefox'
+            sTop = '1px'
+        else if document.all
+            sTop = '2px'
+        else
+            sTop = 0
+
         btn.hoverIntent(
-            ((evt) -> $('.onhover', this).animate({ top: 0,      opacity: 1 })),
+            ((evt) -> $('.onhover', this).animate({ top:   sTop, opacity: 1 })),
             ((evt) -> $('.onhover', this).animate({ top: '60px', opacity: 0 }))
         )
     # end of onRender

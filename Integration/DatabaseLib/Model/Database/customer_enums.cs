@@ -53,13 +53,16 @@ namespace EZBob.DatabaseLib.Model.Database
 	{
 		[Description("The company is not VAT registered")]
 		NotVatRegistered = 0,
-		[Description("I report the VAT online myself")]
+		[Description("I file with HMRC online myself")]
 		VatOnlineMySelf = 1,
-		[Description("An accountant does the reporting online")]
+		[Description("Accountant or filing agent files for the company")]
 		AccountantOnline = 2,
 		[Description("I do not know how the reporting is done")]
 		DontKnow = 3,
-		Other = 4, //online
+		[Description("Other")]
+		Other = 4,
+		[Description("An employee of the company files")]
+		CompanyEmployee = 5,
 	}
 
 	public static class EnumDescription

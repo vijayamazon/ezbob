@@ -36,7 +36,7 @@
     };
 
     StoreButtonView.prototype.onRender = function() {
-      var btn, oHelpWindowTemplate, oLinks, sTitle;
+      var btn, oHelpWindowTemplate, oLinks, sTitle, sTop;
       btn = this.$el.find('.marketplace-button-account-' + this.shopClass);
       this.$el.removeClass('marketplace-button-full marketplace-button-empty');
       sTitle = (this.shops.length ? 'Some' : 'No') + ' accounts linked. Click to link ';
@@ -77,9 +77,16 @@
             };
           })(this.shopClass));
       }
+      if ($.browser.name.toLowerCase() === 'firefox') {
+        sTop = '1px';
+      } else if (document.all) {
+        sTop = '2px';
+      } else {
+        sTop = 0;
+      }
       return btn.hoverIntent((function(evt) {
         return $('.onhover', this).animate({
-          top: 0,
+          top: sTop,
           opacity: 1
         });
       }), (function(evt) {

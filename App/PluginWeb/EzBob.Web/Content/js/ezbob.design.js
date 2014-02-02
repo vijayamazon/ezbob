@@ -283,6 +283,20 @@ $(function () {
         });
         return this;
     };
+
+	$.fn.disable = function() {
+		return this.each(function() {
+			if (typeof this.disabled != "undefined")
+				this.disabled = true;
+		});
+	};
+
+	$.fn.enable = function() {
+		return this.each(function() {
+			if (typeof this.disabled != "undefined")
+				this.disabled = false;
+		});
+	};
 })(jQuery);
 
 //-----------  Helper functions  -----------  
