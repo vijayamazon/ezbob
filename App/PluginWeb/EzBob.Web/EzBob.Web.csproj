@@ -1304,6 +1304,9 @@
     <Content Include="Content\js\Wizard\shops\ezbob.shops.freeagent.js">
       <DependentUpon>ezbob.shops.freeagent.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.freeagent.min.js">
+      <DependentUpon>ezbob.shops.freeagent.coffee</DependentUpon>
+    </Content>
     <Content Include="Content\js\Wizard\shops\ezbob.shops.hmrc.js">
       <DependentUpon>ezbob.shops.hmrc.coffee</DependentUpon>
     </Content>

@@ -100,7 +100,7 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 		if (sState !== 'apply' && sState !== 'bad' && sState !== 'disabled')
 			return;
 
-		if (this.customer.get('TrustPilotReviewEnabled')) {
+		if (this.customer.get('TrustPilotReviewEnabled') && this.customer.get("hasLoans")) {
 			var nTrustPilotStatusID = this.customer.get('TrustPilotStatusID');
 
 			if (nTrustPilotStatusID === 0) {
@@ -118,7 +118,7 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 		this.$el.find('.trustpilot-ezbob').dialog({
 			autoOpen: true,
 			modal: true,
-			width: 450,
+			width: 500,
 			resizable: false,
 			closeOnEscape: false,
 			close: function(evt, ui) {

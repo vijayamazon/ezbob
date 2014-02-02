@@ -1018,6 +1018,7 @@ div.director-container .accordion-inner { padding: 0 !important; margin-left: 15
 .trustpilot-ezbob .rate {
 	width: 100%;
 	display: table;
+    text-align: center;
 }
 
 .trustpilot-ezbob .skip {
@@ -1025,7 +1026,6 @@ div.director-container .accordion-inner { padding: 0 !important; margin-left: 15
 	position: relative;
 	display: table;
 	padding: 0 0 5px 0;
-	border-bottom: 1px solid #dddddd;
 	margin: 0 0 1em 0;
 }
 
@@ -1083,7 +1083,14 @@ div.director-container .accordion-inner { padding: 0 !important; margin-left: 15
 	box-sizing: border-box;
 }
 
-.trustpilot-ezbob a { border: 0; }
+.trustpilot-ezbob a {
+    border: 0;
+    font-weight: bold;
+    font-size: 18px;
+    text-decoration: underline;
+    color: #7bb224;
+
+}
 
 .trustpilot-ezbob img {
 	border: 0;
