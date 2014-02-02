@@ -29,7 +29,10 @@
       'click #uploadHelpButton': 'getUploadHelp',
       'click #linkButton': 'linkAccount',
       'click a.newVatFilesUploadButton': 'doUploadFiles',
-      'click #uploadAndLinkHelpButton': 'getUploadAndLinkHelp'
+      'click #uploadAndLinkHelpButton': 'getUploadAndLinkHelp',
+      'click #uploadAndLinkInfoButton': 'getUploadAndLinkHelp',
+      'click #linkInfoButton': 'getLinkHelp',
+      'click #uploadInfoButton': 'getUploadHelp'
     };
 
     HMRCAccountInfoView.prototype.initialize = function(options) {
