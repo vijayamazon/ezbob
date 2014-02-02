@@ -4,8 +4,10 @@ namespace LandRegistryLib
 {
 	using System.IO;
 	using System.Net;
+	using System.Text;
 	using System.Xml;
 	using System.Xml.Serialization;
+	using LRResServiceNS;
 	using log4net;
 
 	public class LandRegistryApi
@@ -129,10 +131,10 @@ namespace LandRegistryLib
 								NotifyIfPendingFirstRegistrationIndicator = new LRResServiceNS.IndicatorType { Value = false },
 								NotifyIfPendingApplicationIndicator = new LRResServiceNS.IndicatorType { Value = false },
 								SendBackDatedIndicator = new LRResServiceNS.IndicatorType { Value = false },
-								ContinueIfActualFeeExceedsExpectedFeeIndicator = new LRResServiceNS.IndicatorType { Value = false },
+								ContinueIfActualFeeExceedsExpectedFeeIndicator = new LRResServiceNS.IndicatorType { Value = true },
 								IncludeTitlePlanIndicator = new LRResServiceNS.IndicatorType { Value = true },
 							},
-						SubjectProperty = new LRResServiceNS.Q1SubjectPropertyType { TitleNumber = new LRResServiceNS.Q2TextType { Value = titleNumber } }
+						SubjectProperty = new LRResServiceNS.Q1SubjectPropertyType { TitleNumber = new LRResServiceNS.Q2TextType { Value = titleNumber } },
 					}
 				};
 
@@ -140,13 +142,21 @@ namespace LandRegistryLib
 				try
 				{
 					LRResServiceNS.ResponseOCWithSummaryV2_1Type response = client.performOCWithSummary(request);
-					//File.WriteAllBytes(string.Format("{0}_{1}.zip", titleNumber, DateTime.Today.Ticks), Response.GatewayResponse.Results.Attachment.EmbeddedFileBinaryObject.Value);
+
 					try
 					{
+						File.WriteAllBytes(string.Format("c:\\temp\\landregistry\\{0}_{1}.zip", titleNumber, DateTime.UtcNow.Ticks), response.GatewayResponse.Results.Attachment.EmbeddedFileBinaryObject.Value);
 						response.GatewayResponse.Results.Attachment = null;
-					}catch{}
+					}
+					catch { }
 
 					model.Response = SerializeObject(response);
+
+					try
+					{
+						File.WriteAllText(string.Format("c:\\temp\\landregistry\\{0}_{1}.xml", titleNumber, DateTime.UtcNow.Ticks), model.Response);
+					}
+					catch { }
 					model.ResponseType = GetResponseType((int)response.GatewayResponse.TypeCode.Value);
 
 					switch (model.ResponseType)
@@ -162,7 +172,7 @@ namespace LandRegistryLib
 						case LandRegistryResponseType.Rejection:
 
 							break;
-							case LandRegistryResponseType.Success:
+						case LandRegistryResponseType.Success:
 							break;
 						case LandRegistryResponseType.Unkown:
 						default:
@@ -232,18 +242,17 @@ namespace LandRegistryLib
 
 			try
 			{
-				var xmlDocument = new XmlDocument();
 				var serializer = new XmlSerializer(serializableObject.GetType());
-				string xmlString;
-				using (var stream = new MemoryStream())
+				var stream = new MemoryStream();
+
+				using (var xmlTextWriter = new XmlTextWriter(stream, Encoding.UTF8) { Formatting = Formatting.Indented })
 				{
-					serializer.Serialize(stream, serializableObject);
-					stream.Position = 0;
-					xmlDocument.Load(stream);
-					xmlString = xmlDocument.OuterXml;
-					stream.Close();
+					serializer.Serialize(xmlTextWriter, serializableObject);
+					stream = (MemoryStream)xmlTextWriter.BaseStream;
+					string xmlString = new UTF8Encoding().GetString(stream.ToArray());
+					stream.Dispose();
+					return xmlString;
 				}
-				return xmlString;
 			}
 			catch (Exception ex)
 			{
