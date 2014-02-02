@@ -15,13 +15,17 @@ BEGIN
 
 	DECLARE @CompanyRefNum NVARCHAR(50) = 'EB' + RIGHT('00000000' + CONVERT(NVARCHAR, @CustomerID), 8)
 	DECLARE @IncorpDate NVARCHAR(8)
+	DECLARE @tmp1 DATETIME
+	DECLARE @tmp2 NVARCHAR(8)
 
-	SELECT
-		@IncorpDate = FORMAT(DATEADD(month, - qoc.CompanySeniorityMonths - 6, GETUTCDATE()), 'ddMMyyyy', 'en-GB')
+	SELECT @tmp1 = DATEADD(month, - qoc.CompanySeniorityMonths - 6, GETUTCDATE())
 	FROM
 		QuickOfferConfiguration qoc
 	WHERE
 		ID = 1
+		
+	SELECT @tmp2 = convert( NVARCHAR(8) , @tmp1, 112)
+	SELECT @IncorpDate = substring(@tmp2,7,2) + substring(@tmp2,5,2) + substring(@tmp2,1,4)
 
 	INSERT INTO MP_ExperianDataCache
 	SELECT
