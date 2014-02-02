@@ -93,6 +93,10 @@ EzBob.Underwriter.FunctionsDialogView = Backbone.View.extend(
                 EzBob.ShowMessage res.error,"Error occured"
                 that.$el.css "border", "1px solid red"
                 return
+
+            if res.warning
+                EzBob.ShowMessage res.warning, "Warning signaled"
+
             that.$el.dialog "close"
             #refresh grid after decision
             that.trigger "changedSystemDecision"

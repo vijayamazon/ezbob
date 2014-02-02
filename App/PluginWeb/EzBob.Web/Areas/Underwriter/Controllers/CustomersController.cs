@@ -348,7 +348,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 		[HttpPost]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
-		public void ChangeStatus(int id, CreditResultStatus status, string reason) {
+		public JsonResult ChangeStatus(int id, CreditResultStatus status, string reason) {
 			var workplaceContext = ObjectFactory.GetInstance<IWorkplaceContext>();
 			var user = workplaceContext.User;
 			var customer = _customers.GetChecked(id);
@@ -361,6 +361,8 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 			request.UnderwriterDecisionDate = DateTime.UtcNow;
 			request.UnderwriterDecision = status;
 			request.UnderwriterComment = reason;
+
+			string sWarning = string.Empty;
 
 			switch (status) {
 			case CreditResultStatus.Approved:
@@ -380,8 +382,15 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 
 				_historyRepository.LogAction(DecisionActions.Approve, reason, user, customer);
 
-				if (!request.EmailSendingBanned)
-					_appCreator.ApprovedUser(user, customer, sum);
+				if (!request.EmailSendingBanned) {
+					try {
+						_appCreator.ApprovedUser(user, customer, sum);
+					}
+					catch (Exception e) {
+						sWarning = "Failed to send 'approved user' email: " + e.Message;
+						m_oLog.Warn(e, "Failed to send 'approved user' email.");
+					} // try
+				} // if
 
 				break;
 
@@ -394,8 +403,15 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 
 				request.ManagerApprovedSum = null;
 
-				if (!request.EmailSendingBanned)
-					_appCreator.RejectUser(user, customer.Name, customer.Id, customer.PersonalInfo.FirstName);
+				if (!request.EmailSendingBanned) {
+					try {
+						_appCreator.RejectUser(user, customer.Name, customer.Id, customer.PersonalInfo.FirstName);
+					}
+					catch (Exception e) {
+						sWarning = "Failed to send 'reject user' email: " + e.Message;
+						m_oLog.Warn(e, "Failed to send 'reject user' email.");
+					} // try
+				} // if
 
 				break;
 
@@ -404,7 +420,14 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 				customer.DateEscalated = DateTime.UtcNow;
 				customer.EscalationReason = reason;
 				_historyRepository.LogAction(DecisionActions.Escalate, reason, user, customer);
-				_appCreator.Escalated(customer);
+
+				try {
+					_appCreator.Escalated(customer);
+				}
+				catch (Exception e) {
+					sWarning = "Failed to send 'escalated' email: " + e.Message;
+					m_oLog.Warn(e, "Failed to send 'escalated' email.");
+				} // try
 
 				break;
 
@@ -421,6 +444,8 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 
 				break;
 			} // switch
+
+			return Json(new { warning = sWarning });
 		} // ChangeStatus
 
 		#endregion method ChangeStatus

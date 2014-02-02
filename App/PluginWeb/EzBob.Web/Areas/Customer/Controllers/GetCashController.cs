@@ -149,7 +149,12 @@
 
 					_context.Customer.PayPointErrorsCount++;
 
-					_appCreator.GetCashFailed(_context.User, _context.Customer.PersonalInfo.FirstName);
+					try {
+						_appCreator.GetCashFailed(_context.User, _context.Customer.PersonalInfo.FirstName);
+					}
+					catch (Exception e) {
+						_log.Error("Failed to send 'get cash failed' email.", e);
+					} // try
 
 					TempData["code"] = code;
 					TempData["message"] = message;
@@ -200,7 +205,12 @@
 			}
 			catch (PacnetException)
 			{
-				_appCreator.TransferCashFailed(_context.User, _context.Customer.PersonalInfo.FirstName);
+				try {
+					_appCreator.TransferCashFailed(_context.User, _context.Customer.PersonalInfo.FirstName);
+				}
+				catch (Exception e) {
+					_log.Error("Failed to send 'transfer cash failed' email.", e);
+				} // try
 				return RedirectToAction("Error", "Pacnet", new { Area = "Customer" });
 			}
 			catch (TargetInvocationException)
@@ -240,7 +250,12 @@
 				_log.WarnFormat("Name {0} did not passed validation check for {1} {2}", customer,
 								cus.PersonalInfo.Surname,
 								cus.PersonalInfo.Surname);
-				_appCreator.PayPointNameValidationFailed(customer, _context.User, cus);
+				try {
+					_appCreator.PayPointNameValidationFailed(customer, _context.User, cus);
+				}
+				catch (Exception e) {
+					_log.Error("Failed to send 'paypoint name validation failed' email.", e);
+				} // try
 			}
 		}
 

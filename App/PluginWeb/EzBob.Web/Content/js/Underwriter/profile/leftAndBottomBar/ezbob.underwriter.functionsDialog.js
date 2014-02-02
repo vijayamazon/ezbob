@@ -107,6 +107,9 @@
           that.$el.css("border", "1px solid red");
           return;
         }
+        if (res.warning) {
+          EzBob.ShowMessage(res.warning, "Warning signaled");
+        }
         that.$el.dialog("close");
         that.trigger("changedSystemDecision");
         return $(".ui-icon-refresh").click();
