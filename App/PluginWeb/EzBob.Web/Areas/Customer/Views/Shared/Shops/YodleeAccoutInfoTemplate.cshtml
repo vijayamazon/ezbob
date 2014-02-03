@@ -10,18 +10,20 @@
             <h2 class="form_start">Please Select a Bank </h2>
         </div>
         <form id="yodleeAccount">
-            <div class="clearfix">
+            <div class="control-group">
                 <% if (YodleeBanks) {%>
                 <div class="form_field_container BankContainer">
                     <% _.each(YodleeBanks.ImageBanks, function (bank, i) { %>
                     <div class="marketplace-button-empty marketplace-button float_left" style="margin-bottom: 25px;">
-                    <input type="radio" name="Bank" value="<%- bank.parentBankName %>" id="Bank_<%- bank.parentBankName %>" class="hide" />
+                        <input type="radio" name="Bank" value="<%- bank.parentBankName %>" id="Bank_<%- bank.parentBankName %>" class="hide" />
                         <a class="radio-fx <%- bank.parentBankName %>" href="#" id="<%- bank.parentBankName %>">
                             <span class="<%- bank.parentBankName %> on" ui-event-control-id="link-account:yodlee_choose_<%- bank.parentBankName %>"></span>
                         </a>
                     </div>
                     <%});%>
                 </div>
+            </div>
+            <div class="control-group clear">
                 <h3 id="subTypeHeader" class="hide">Select Account Type:</h3>
                 <% _.each(YodleeBanks.ImageBanks, function (bank, i) {%>
                 <select class="form_field_container hide <%- bank.parentBankName %>Container SubBank" size="3" ui-event-control-id="link-account:yodlee_account_type">
@@ -30,26 +32,26 @@
                     <%});%>
                 </select>
                 <%});%>
-                    
-                <div class="control-group form_field_container">
-                    <div class="controls">
-                        <label class="control-label attardi-input">
-                            <span>Other Banks</span>
-                            <select id="OtherYodleeBanks" class="form_field selectheight" ui-event-control-id="link-account:yodlee_chooser">
-                                <option></option>
-                                <% _.each(YodleeBanks.DropDownBanks, function (bank, i) { %>
-                                <option value="<%-bank.csId%>"><%- bank.displayName %></option>
-                                <%});%>
-                            </select>
-                        </label>
-                    </div>
+            </div>
+            <div class="control-group form_field_container">
+                <div class="controls">
+                    <label class="control-label attardi-input">
+                        <span>Other Banks</span>
+                        <select id="OtherYodleeBanks" class="form_field selectheight" ui-event-control-id="link-account:yodlee_chooser">
+                            <option></option>
+                            <% _.each(YodleeBanks.DropDownBanks, function (bank, i) { %>
+                            <option value="<%-bank.csId%>"><%- bank.displayName %></option>
+                            <%});%>
+                        </select>
+                    </label>
                 </div>
-                <%}/*if*/%>
-                <div class="form_buttons_container">
-                    <div class="attardi-button">
-                        <a href="#yodlee_help" class="rc-button green disabled yodlee_help" id="yodleeLinkAccountBtn" ui-event-control-id="link-account:yodlee_connect">Link Account</a>
-                        <a href="#" class="back rc-button grey" ui-event-control-id="link-account:yodlee_back">Back</a>
-                    </div>
+            </div>
+                
+            <%}/*if*/%>
+            <div class="form_buttons_container">
+                <div class="attardi-button">
+                    <a href="#yodlee_help" class="rc-button green disabled yodlee_help" id="yodleeLinkAccountBtn" ui-event-control-id="link-account:yodlee_connect">Link Account</a>
+                    <a href="#" class="back rc-button grey" ui-event-control-id="link-account:yodlee_back">Back</a>
                 </div>
             </div>
 

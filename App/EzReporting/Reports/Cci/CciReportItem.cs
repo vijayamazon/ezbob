@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 
-namespace Reports {
+namespace Reports
+{
 	#region class CciReportItem
 
-	public class CciReportItem {
+	public class CciReportItem
+	{
 		#region public
 
 		#region method CreateTable
 
-		public static DataTable CreateTable() {
+		public static DataTable CreateTable()
+		{
 			var oOutput = new DataTable();
 
 			oOutput.Columns.Add("DebtorType", typeof(string));
@@ -53,42 +56,50 @@ namespace Reports {
 
 		#region constructor
 
-		public CciReportItem(DbDataReader oRow, SortedDictionary<int, decimal> oEarnedInterestList) {
-			int nLoanID = Convert.ToInt32(oRow["LoanID"]);
+		public CciReportItem(DbDataReader oRow, SortedDictionary<int, decimal> oEarnedInterestList)
+		{
+			try
+			{
+				int nLoanID = Convert.ToInt32(oRow["LoanID"]);
+				decimal nEarnedInterest = oEarnedInterestList.ContainsKey(nLoanID) ? oEarnedInterestList[nLoanID] : 0;
 
-			decimal nEarnedInterest = oEarnedInterestList.ContainsKey(nLoanID) ? oEarnedInterestList[nLoanID] : 0;
-
-			DebtorType = oRow["DebtorType"].ToString();
-			LoanType = oRow["LoanType"].ToString();
-			OriginalAmount = Convert.ToDecimal(oRow["OriginalAmount"]);
-			Principal = Convert.ToDecimal(oRow["Principal"]);
-			Fees = Convert.ToDecimal(oRow["Fees"]) - Convert.ToDecimal(oRow["RepaidFees"]);
-			Interest = nEarnedInterest - Convert.ToDecimal(oRow["RepaidInterest"]);
-			LoanRef = oRow["LoanRef"].ToString();
-			DateOfAgreement = AdjustDate(Convert.ToDateTime(oRow["DateOfAgreement"]));
-			DateOfDefault = AdjustDate(Convert.ToDateTime(oRow["DateOfDefault"]));
-			CompanyName = oRow["CompanyName"].ToString();
-			Gender = oRow["Gender"].ToString();
-			FirstName = oRow["FirstName"].ToString();
-			LastName = oRow["LastName"].ToString();
-			DateOfBirth = AdjustDate(Convert.ToDateTime(oRow["DateOfBirth"]));
-			MobilePhone = oRow["MobilePhone"].ToString();
-			DaytimePhone = oRow["DaytimePhone"].ToString();
-			EmailApplicant = oRow["EmailApplicant"].ToString();
-			EbayPhone = oRow["EbayPhone"].ToString();
-			PaypalPhone = oRow["PaypalPhone"].ToString();
-			EmailEbay = oRow["EmailEbay"].ToString();
-			HasOtherEbay = oRow["HasOtherEbay"].ToString();
-			CurrentAddress = oRow["CurrentAddress"].ToString();
-			OfficeAdress = oRow["OfficeAddress"].ToString();
-			ResidentialStatus = oRow["ResidentialStatus"].ToString();
+				DebtorType = oRow["DebtorType"].ToString();
+				LoanType = oRow["LoanType"].ToString();
+				OriginalAmount = Convert.ToDecimal(oRow["OriginalAmount"]);
+				Principal = Convert.ToDecimal(oRow["Principal"]);
+				Fees = Convert.ToDecimal(oRow["Fees"]) - Convert.ToDecimal(oRow["RepaidFees"]);
+				Interest = nEarnedInterest - Convert.ToDecimal(oRow["RepaidInterest"]);
+				LoanRef = oRow["LoanRef"].ToString();
+				DateOfAgreement = AdjustDate(Convert.ToDateTime(oRow["DateOfAgreement"]));
+				DateOfDefault = AdjustDate(Convert.ToDateTime(oRow["DateOfDefault"]));
+				CompanyName = oRow["CompanyName"].ToString();
+				Gender = oRow["Gender"].ToString();
+				FirstName = oRow["FirstName"].ToString();
+				LastName = oRow["LastName"].ToString();
+				DateOfBirth = AdjustDate(Convert.ToDateTime(oRow["DateOfBirth"]));
+				MobilePhone = oRow["MobilePhone"].ToString();
+				DaytimePhone = oRow["DaytimePhone"].ToString();
+				EmailApplicant = oRow["EmailApplicant"].ToString();
+				EbayPhone = oRow["EbayPhone"].ToString();
+				PaypalPhone = oRow["PaypalPhone"].ToString();
+				EmailEbay = oRow["EmailEbay"].ToString();
+				HasOtherEbay = oRow["HasOtherEbay"].ToString();
+				CurrentAddress = oRow["CurrentAddress"].ToString();
+				OfficeAdress = oRow["OfficeAddress"].ToString();
+				ResidentialStatus = oRow["ResidentialStatus"].ToString();
+			}
+			catch (Exception ex)
+			{
+				return;
+			}
 		} // constructor
 
 		#endregion constructor
 
 		#region method ToRow
 
-		public void ToRow(DataTable tbl) {
+		public void ToRow(DataTable tbl)
+		{
 			if (Math.Abs(TotalDue) < 0.01m)
 				return;
 
@@ -151,7 +162,8 @@ namespace Reports {
 
 		#region method AdjustDate
 
-		private static DateTime? AdjustDate(DateTime? oDate) {
+		private static DateTime? AdjustDate(DateTime? oDate)
+		{
 			if (!oDate.HasValue)
 				return null;
 
