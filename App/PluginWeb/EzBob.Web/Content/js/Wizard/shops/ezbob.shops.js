@@ -465,7 +465,7 @@
         sClass += ' marketplace-button-less';
       } else {
         sClass += ' marketplace-button-more';
-        if ($('.marketplace-button-more', jqTarget).length === 0) {
+        if (this.isOffline() && !this.isProfile() && $('.marketplace-button-more', jqTarget).length === 0) {
           sClass += ' marketplace-button-more-first';
         }
       }

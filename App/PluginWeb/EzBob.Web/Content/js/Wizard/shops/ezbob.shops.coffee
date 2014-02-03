@@ -399,7 +399,7 @@ class EzBob.StoreInfoView extends Backbone.View
         else
             sClass += ' marketplace-button-more'
 
-            if $('.marketplace-button-more', jqTarget).length is 0
+            if @isOffline() and not @isProfile() and $('.marketplace-button-more', jqTarget).length is 0
                 sClass += ' marketplace-button-more-first'
 
         sClass
