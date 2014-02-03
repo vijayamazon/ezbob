@@ -5,7 +5,7 @@ var EzBob = EzBob || {};
 		if (!UiActionEvent.prototype.LastSeqNum)
 			UiActionEvent.prototype.LastSeqNum = 0;
 
-		this.userName = $('#logged-in-user-name').text();
+		this.userName = $('body').attr('data-user-name');
 		this.controlName = options.controlName;
 		this.htmlID = options.htmlID;
 		this.actionName = options.type;

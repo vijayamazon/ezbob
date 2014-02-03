@@ -54,7 +54,7 @@
     @{Html.RenderPartial("security_template");}
 </head>
 
-<body auth="@authCookie">
+<body auth="@authCookie" data-user-name="">
     @RenderSection("afterHead", false)
 
     @{
@@ -109,6 +109,7 @@
         <script type="text/javascript">
             $(document).ready(function() {
                 $('#logoff-li').tooltip({ placement: "bottom", title: "@User.Identity.Name" }).tooltip("enable").tooltip('fixTitle');
+	            $('body').attr('data-user-name', '@User.Identity.Name');
             })
         </script>
     }
