@@ -342,7 +342,11 @@ namespace Ezbob.Database {
 				}); // Retry
 			}
 			catch (Exception e) {
-				Error("Error while executing query {0}:\n{1}", guid, e);
+				if (nLogVerbosityLevel == LogVerbosityLevel.Verbose)
+					Error(e, "Error while executing query {0}", guid);
+				else
+					Error(e, "Error while executing query:\n\tid = {0}\n\t{1}{2}", guid, spName, sArgsForLog);
+
 				throw;
 			} // try
 		} // Run
