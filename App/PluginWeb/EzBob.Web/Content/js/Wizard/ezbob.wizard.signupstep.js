@@ -243,7 +243,9 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
                 $.get(window.gRootPath + 'Start/TopButton').done(function (dat) {
                     $('#header').html(dat);
-                    $('#logoff-li').tooltip({ placement: "bottom", title: $('#Email').val() }).tooltip("enable").tooltip('fixTitle');
+	                var sEmail = $('#Email').val();
+                    $('#logoff-li').tooltip({ placement: "bottom", title: sEmail }).tooltip("enable").tooltip('fixTitle');
+	                $('body').attr('data-user-name', sEmail);
                 });
 
                 that.model.set('loggedIn', true); // triggers 'ready' and 'next'
