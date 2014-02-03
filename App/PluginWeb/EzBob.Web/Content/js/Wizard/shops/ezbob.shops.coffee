@@ -39,7 +39,7 @@ class EzBob.StoreInfoView extends Backbone.View
         @PayPointAccountInfoView = new EzBob.PayPointAccountInfoView(model: @PayPointAccounts)
 
         @YodleeAccounts = new EzBob.YodleeAccounts()
-        @YodleeAccountInfoView = new EzBob.YodleeAccountInfoView(model: @YodleeAccounts)
+        @YodleeAccountInfoView = new EzBob.YodleeAccountInfoView(model: @YodleeAccounts, isProfile: @isProfile())
 
         @payPalAccounts = new EzBob.PayPalAccounts(@model.get("paypalAccounts"))
         @PayPalInfoView = new EzBob.PayPalInfoView(model: @payPalAccounts)

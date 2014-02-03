@@ -1,6 +1,5 @@
 (function() {
   var root,
-    __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -13,7 +12,6 @@
     __extends(YodleeAccountInfoView, _super);
 
     function YodleeAccountInfoView() {
-      this.render = __bind(this.render, this);
       return YodleeAccountInfoView.__super__.constructor.apply(this, arguments);
     }
 
@@ -32,6 +30,7 @@
     YodleeAccountInfoView.prototype.initialize = function(options) {
       var that;
       that = this;
+      this.isProfile = options.isProfile;
       window.YodleeAccountAdded = function(result) {
         if (result.error) {
           EzBob.App.trigger('error', result.error);
@@ -60,6 +59,9 @@
     YodleeAccountInfoView.prototype.render = function() {
       YodleeAccountInfoView.__super__.render.call(this);
       EzBob.UiAction.registerView(this);
+      if (this.isProfile) {
+        this.$el.find('.marketplace-button').addClass('marketplace-button-profile');
+      }
       return this;
     };
 

@@ -15,7 +15,7 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
 
     initialize: (options) ->
         that = @;
-
+        @isProfile = options.isProfile
         window.YodleeAccountAdded = (result) ->
             if (result.error)
                 EzBob.App.trigger('error', result.error);
@@ -36,9 +36,10 @@ class EzBob.YodleeAccountInfoView extends Backbone.Marionette.ItemView
             that.attemptsLeft = (that.attemptsLeft || 5) - 1
             return {url: that.$el.find('#yodleeContinueBtn').attr('href'), attemptsLeft: that.attemptsLeft}
 
-    render: =>
+    render: ->
         super()
         EzBob.UiAction.registerView @
+        @$el.find('.marketplace-button').addClass('marketplace-button-profile') if @isProfile
         @
     # end of render
 

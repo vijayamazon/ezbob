@@ -66,7 +66,8 @@
       });
       this.YodleeAccounts = new EzBob.YodleeAccounts();
       this.YodleeAccountInfoView = new EzBob.YodleeAccountInfoView({
-        model: this.YodleeAccounts
+        model: this.YodleeAccounts,
+        isProfile: this.isProfile()
       });
       this.payPalAccounts = new EzBob.PayPalAccounts(this.model.get("paypalAccounts"));
       this.PayPalInfoView = new EzBob.PayPalInfoView({
