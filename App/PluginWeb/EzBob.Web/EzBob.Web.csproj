@@ -216,7 +216,7 @@
     <Compile Include="..\..\..\Common\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="App_Code\EzbobHtmlExtensions.cs" />
+    <Compile Include="Infrastructure\Html\EzbobHtmlExtensions.cs" />
     <Compile Include="Areas\Customer\Controllers\AccountSettingsController.cs" />
     <Compile Include="Areas\Customer\Controllers\AgreementController.cs" />
     <Compile Include="Areas\Customer\Controllers\CGMPUniqChecker.cs" />
