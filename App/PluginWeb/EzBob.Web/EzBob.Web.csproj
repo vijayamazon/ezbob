@@ -335,7 +335,6 @@
     <Compile Include="Areas\Customer\Controllers\PaypointController.cs" />
     <Compile Include="Areas\Customer\Controllers\ProfileController.cs" />
     <Compile Include="Areas\Customer\Controllers\ScheduleController.cs" />
-    <Compile Include="Areas\Customer\Controllers\StartController.cs" />
     <Compile Include="Controllers\PaypointTemplateController.cs" />
     <Compile Include="Areas\Customer\Controllers\WizardController.cs" />
     <Compile Include="Areas\Customer\CustomerAreaRegistration.cs" />
@@ -1993,9 +1992,7 @@
     <Content Include="Views\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Shared\_LoginSimple.cshtml" />
     <Content Include="Views\Shared\_DynamicLogin.cshtml" />
-    <Content Include="Views\Shared\_TopButtons.cshtml" />
     <Content Include="Views\Account\AdminLogOn.cshtml" />
-    <Content Include="Views\Shared\_MyProfile.cshtml" />
     <Content Include="Views\Home\ActivateStore.cshtml" />
     <Content Include="Views\Account\SimpleCaptcha.cshtml" />
     <Content Include="Views\Shared\_ClickTale.cshtml" />
