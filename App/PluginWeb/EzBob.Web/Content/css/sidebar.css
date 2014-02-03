@@ -18,7 +18,7 @@ div.customer-sidebar-content {
         font-size: 12px;
         position: relative;
         border-bottom: none;
-        margin-bottom: 0;
+        margin-bottom: 15px;
     }
 
     div.customer-sidebar-content div.item.last {
