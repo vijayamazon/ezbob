@@ -282,6 +282,7 @@ namespace EzBob.Web.Infrastructure
 				.Add("~/Content/css/loan-type-selector.css")
 				.Add("~/Content/css/amount-period-sliders.css")
 				.Add("~/Content/css/dropzone.css")
+				.Add("~/Content/css/flaty/font-awesome.min.css")
 				.MvcRender("~/Content/css/min/customer_#.css");
 		}
 

@@ -68,13 +68,25 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
     businessTypeSelected: function(evt) {
 	    // this.$el.find('.after-business-type *').enable();
 
-    	this.$el.find('.oobts').removeClass('orange green').addClass('green');
+	    this.$el.find('.oobts').removeClass('oobts-selected');
+
+    	this.$el.find('.oobts i').removeClass('fa-square-o fa-check-square-o').addClass('fa-square-o');
 
     	var oBtn = $(evt.currentTarget);
 
-    	oBtn.removeClass('green').addClass('orange');
+    	oBtn.addClass('oobts-selected').find('i').removeClass('fa-square-o').addClass('fa-check-square-o');
 
     	this.curOobts = oBtn.attr('data-oobts');
+
+	    if (this.model.get('Email').match(/@ezbob\.com$/)) {
+			this.$el.find('.oobts-common').removeClass('oobts-common').addClass('oobts-test-user');
+
+			var self = this;
+
+			window.setTimeout(function() {
+				self.$el.find('.oobts-test-user').removeClass('oobts-test-user').addClass('oobts-common');
+			}, 100);
+		} // if
     }, // businessTypeSelected
 
     inputChanged: function (evt) {

@@ -242,6 +242,8 @@ div.wizard-director-text { font-size: 11pt; color: #585858; }
 }
 
 .type-of-business-form_field {
+	box-sizing: border-box;
+	overflow: hidden;
     height: auto !important; 
     width: 96%; 
     padding: 4px;
@@ -256,6 +258,32 @@ div.wizard-director-text { font-size: 11pt; color: #585858; }
 }
 
 .CompanyDetailForm .oobts {
+	position: relative;
+}
+
+.CompanyDetailForm .oobts-selected {
+	color: #8fc13d;
+	border: 1px solid #8fc13d !important;
+	font-weight: bold;
+}
+
+.CompanyDetailForm .oobts-test-user.oobts-offline i {
+	position: absolute;
+	bottom: 1px;
+	right: 12px;
+}
+
+.CompanyDetailForm .oobts-test-user.oobts-online i {
+	position: absolute;
+	bottom: 1px;
+	left: 12px;
+}
+
+.CompanyDetailForm .oobts i.fa-check-square-o {
+	color: #8FC13D;
+}
+
+.CompanyDetailForm .oobts-common {
 	display: inline-block;
 	width: 47%;
 	-moz-box-sizing: border-box;
@@ -263,6 +291,33 @@ div.wizard-director-text { font-size: 11pt; color: #585858; }
 	box-sizing: border-box;
 	margin-right: 1%; 
 	margin-bottom: 2em;
+	padding: 1em 0;
+	text-align: center;
+	border: 1px solid #dddddd;
+	cursor: pointer;
+	border-radius: 5px;
+}
+
+.CompanyDetailForm .oobts-test-user {
+	display: inline-block;
+	width: 47%;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
+	margin-right: 1%; 
+	margin-bottom: 2em;
+	padding: 1em 0;
+	text-align: center;
+	border: 1px solid #dddddd;
+	cursor: pointer;
+}
+
+.CompanyDetailForm .oobts-test-user.oobts-offline {
+	border-radius: 0 100% 0 100%;
+}
+
+.CompanyDetailForm .oobts-test-user.oobts-online {
+	border-radius: 100% 0 100% 0;
 }
 
 .quick-offer-form {
