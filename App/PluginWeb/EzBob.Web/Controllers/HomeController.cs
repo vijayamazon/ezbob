@@ -61,6 +61,12 @@
 				Session["IsSmsValidationActive"] = wizardConfigsActionResult.IsSmsValidationActive;
 				Session["NumberOfMobileCodeAttempts"] = wizardConfigsActionResult.NumberOfMobileCodeAttempts;
 				Session["AllowInsertingMobileCodeWithoutGeneration"] = wizardConfigsActionResult.AllowInsertingMobileCodeWithoutGeneration;
+
+				Session["HadErrorInUpload"] = string.Empty;
+				Session["Hopper"] = null;
+				Session["AddedCount"] = null;
+				Session["DateIntervals"] = null; 
+				
 				sessionInitialized = true;
 			}
 			log.Info("Initialized session configs");
