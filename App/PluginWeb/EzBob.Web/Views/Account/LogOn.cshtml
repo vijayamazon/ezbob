@@ -25,6 +25,7 @@
 @section Js{
     @BundleHelper.RenderLoginJs();
     @{Html.RenderPartial("_LoginTemplate", Model);}
+
     <script type="text/javascript">
         var loginPage = new EzBob.CustomerLoginView({ el: $('.loginTemplate') });
         loginPage.render();
@@ -34,7 +35,5 @@
             var notifications = new EzBob.NotificationsView({ el: $('.notifications') });
             EzBob.App.trigger('error', '@Html.ValidationMessage("")');
         });
-        $('.login_btn').hide();
-        $('.signup_btn').show();
     </script>
 }

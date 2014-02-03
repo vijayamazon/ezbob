@@ -69,7 +69,27 @@
     @Html.AntiForgeryTokenNoUserCheck()
 
     <div id="wrapper">
-		<div id="header">@{ Html.RenderPartial("_TopButtons"); }</div>
+		<div id="header">
+			<div class="header-inner">
+				<a href="http://www.ezbob.com">
+					<img src="@Url.Content("~/Content/img/ezbob-logo-2014.png")" class="newlogo"></a>
+
+				<div class="header-phone">0800-011-4787</div>
+
+				<div class="eu-menu">
+					<img src="@Url.Content("~/Content/img/eu-menu.png")"><br>
+					Authorised by the European Union
+				</div>
+
+				<ul id="user-menu">
+					<li id="logoff-li" class="login" style="display: none;">
+						<a href="@Url.Action("LogOff", "Account", new { Area = "" })">LOG OFF</a>
+					</li>
+					<li class="login login_btn" style="display: none;"><a href="@Url.Action("LogOn", "Account", new { Area = "" })">LOGIN</a></li>
+					<li class="sign-up signup_btn" style="display: none"><a href="@Url.Action("Index", "Wizard", new { Area = "Customer" }, "https")#SignUp">SIGN UP</a></li>
+				</ul>
+			</div>
+		</div>
 
         <div class="inner main-page">
             <section id="full_width">
@@ -104,15 +124,35 @@
     }
     @RenderSection("Js", false)
     
-    @if (User.Identity.IsAuthenticated)
-    {
-        <script type="text/javascript">
-            $(document).ready(function() {
-                $('#logoff-li').tooltip({ placement: "bottom", title: "@User.Identity.Name" }).tooltip("enable").tooltip('fixTitle');
-	            $('body').attr('data-user-name', '@User.Identity.Name');
-            })
-        </script>
-    }
+	<script type="text/javascript">
+		function ShowHideSignLogOnOff() {
+			if ($('body').attr('data-user-name')) {
+				$('#logoff-li').show();
+				$('#user-menu .login_btn, .signup_btn').hide();
+			}
+			else {
+				$('#logoff-li').hide();
+
+				if ($('.login-form-user-name').length) {
+					$('.login_btn').hide();
+					$('.signup_btn').show();
+				}
+				else {
+					$('.login_btn').show();
+					$('.signup_btn').hide();
+				} // if
+			} // if
+		} // ShowHideSignLogOnOff
+
+		$(document).ready(function() {
+			var sEmail = '@(User.Identity.IsAuthenticated ? User.Identity.Name : "")';
+
+			$('#logoff-li').tooltip({ placement: 'bottom', title: sEmail }).tooltip("enable").tooltip('fixTitle');
+			$('body').attr('data-user-name', sEmail);
+
+			ShowHideSignLogOnOff();
+		});
+	</script>
 
     @{ Html.RenderPartial("_ClickTale"); }
     @{ Html.RenderPartial("_AddRoll"); }

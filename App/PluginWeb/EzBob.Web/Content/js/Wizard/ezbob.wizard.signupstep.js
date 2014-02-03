@@ -241,12 +241,11 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
                 EzBob.App.trigger('customerLoggedIn');
                 EzBob.App.trigger('clear');
 
-                $.get(window.gRootPath + 'Start/TopButton').done(function (dat) {
-                    $('#header').html(dat);
-	                var sEmail = $('#Email').val();
-                    $('#logoff-li').tooltip({ placement: "bottom", title: sEmail }).tooltip("enable").tooltip('fixTitle');
-	                $('body').attr('data-user-name', sEmail);
-                });
+	            var sEmail = $('#Email').val();
+                $('#logoff-li').show().tooltip({ placement: "bottom", title: sEmail }).tooltip("enable").tooltip('fixTitle');
+	            $('body').attr('data-user-name', sEmail);
+
+				ShowHideSignLogOnOff();
 
                 that.model.set('loggedIn', true); // triggers 'ready' and 'next'
                 

@@ -18,7 +18,7 @@
 			}
 			<p style="font-weight: bold;">@Html.ActionLink("Forgotten password", "ForgotPassword", "Account", new RouteValueDictionary(), oForgottenAttr) | @Html.ActionLink("Sign up", "Index", "Wizard", oSignupRouteValues, oSignupAttr)</p>
 
-			@EzForm.InputText("UserName", "Email address", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "login:user_name")
+			@EzForm.InputText("UserName", "Email address", cls: "form_field login-form-user-name", isRequired: true, statusIcon: true, uiEventControlID: "login:user_name")
 			@EzForm.Password("Password", "Password", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "login:password")
 
 			<input name="RememberMe" type="hidden" value="@Model.RememberMe" />
