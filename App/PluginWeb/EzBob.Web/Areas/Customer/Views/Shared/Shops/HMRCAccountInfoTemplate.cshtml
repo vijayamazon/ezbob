@@ -1,6 +1,6 @@
 ﻿<script id="HMRCAccountInfoTemplate" type="text/template">
     <div id="initialDiv" class="row-fluid">
-        <div id="uploadAndLinkInfoButton" class="hmrc-info-button hmrc-info-button-right-margin"/>
+        <div id="uploadAndLinkInfoButton" class="hmrc-info-button hmrc-info-button-right-margin" ui-event-control-id="hmrc:upload_and_link_info_button"/>
         <h2>HMRC account</h2>
         <div class="wizard-top-notification">
             <label>As part of your application process we require you to upload or link your VAT payment history. We use your VAT returns to analyse your business performance. Please select whether to link or upload your HMRC data.</label>
@@ -9,13 +9,13 @@
         <form id="hmrcAccount" class="cg-link-account-form">
             <div class="hmrc_main_buttons_container">
                 <div id="linkButton" class="marketplace-button-empty marketplace-button hmrc-main-button pull-left marketplace-button-more">
-                    <a href="#" class="hmrcAnimatedButton" ui-event-control-id="link-account:add_name_link_xxx">
+                    <a href="#" class="hmrcAnimatedButton" ui-event-control-id="hmrc:link_button">
 		                <div class="hmrcLinkButton"/>
 		                <div class="onhover">Link</div>
 	                </a>
                 </div>
                 <div id="uploadButton" class="marketplace-button-empty marketplace-button hmrc-main-button pull-left marketplace-button-more">
-                    <a href="#" class="hmrcAnimatedButton" ui-event-control-id="link-account:add_name_link_xxx">
+                    <a href="#" class="hmrcAnimatedButton" ui-event-control-id="hmrc:upload_button">
 		                <div class="hmrcUploadButton"/>
 		                <div class="onhover">Upload</div>
 	                </a>
@@ -24,19 +24,19 @@
 
             <div class="form_buttons_container">
                 <div class="attardi-button">
-                    <a href="#" class="back rc-button grey hmrcBack" ui-event-control-id="link-account:hmrc_back">Back</a>
+                    <a href="#" class="back rc-button grey hmrcBack" ui-event-control-id="hmrc:back">Back</a>
                 </div>
             </div>
 
             <div class="hmrc-why-question offline_entry_message wizard_message">
-                <div id="uploadAndLinkHelpButton" class="hmrc-question-button float_left hmrc_question_button_margin"></div>
+                <div id="uploadAndLinkHelpButton" class="hmrc-question-button float_left hmrc_question_button_margin" ui-event-control-id="hmrc:upload_and_link_lower_info_button"></div>
                 <div class="hmrc-why">Why do we need this? In order to properly evaluate your business and help your business achieve its goals. This is 100% secure.</div>
             </div>
         </form>
     </div>
 
     <div id="linkAccountDiv" class="row-fluid hide">
-        <div id="linkInfoButton" class="hmrc-info-button hmrc-info-button-right-margin-link"/>
+        <div id="linkInfoButton" class="hmrc-info-button hmrc-info-button-right-margin-link" ui-event-control-id="hmrc:link_info_button"/>
         <h2>HMRC link</h2>
         <div class="wizard-top-notification">
             <label>As part of your application process we require you to upload or link your VAT payment history. We use your VAT returns to analyse your business performance</label>
@@ -44,58 +44,55 @@
 
         <form id="hmrcLinkAccountForm" class="cg-link-account-form">
             <div id="hmrc_fields_link_wrapper">
-
                 <div id="hmrc_fields" class="hmrc_fields_margin">
-                    @EzForm.InputText("hmrc_user_id", "User ID", "", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "link-account:hmrc_user_id")
-                    @EzForm.Password("hmrc_password", "Password", "", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "link-account:hmrc_password")
+                    @EzForm.InputText("hmrc_user_id", "User ID", "", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "hmrc:user_id")
+                    @EzForm.Password("hmrc_password", "Password", "", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "hmrc:password")
                 </div>
             </div>
             <div class="clearfix">
-
                 <div class="form_buttons_container hmrc_margin_from_header">
                     <div class="attardi-button">
-                        <a href="#" class="rc-button green disabled connect-account" ui-event-control-id="link-account:hmrc_connect">Link Account</a>
-                        <a href="#" class="back rc-button grey linkAccountBack" ui-event-control-id="link-account:hmrc_link_account_back">Back</a>
+                        <a href="#" class="rc-button green disabled connect-account"  ui-event-control-id="hmrc:do_link_button">Link Account</a>
+                        <a href="#" class="back rc-button grey linkAccountBack" ui-event-control-id="hmrc:link_back">Back</a>
                     </div>
                 </div>
             </div>
 
             <div class="hmrc-why-question offline_entry_message wizard_message">
-                <div id="linkHelpButton" class="hmrc-question-button float_left hmrc_question_button_margin"></div>
+                <div id="linkHelpButton" class="hmrc-question-button float_left hmrc_question_button_margin" ui-event-control-id="hmrc:link_info_button_lower"></div>
                 <div class="hmrc-why">Use the same credentials you use to login to the HMRC site, the system reads the accounts to evaluate your business.</div>
             </div>
         </form>
     </div>
 
     <div id="uploadFilesDiv" class="row-fluid hide">
-        <div id="uploadInfoButton" class="hmrc-info-button hmrc-info-button-right-margin-upload"/>
+        <div id="uploadInfoButton" class="hmrc-info-button hmrc-info-button-right-margin-upload" ui-event-control-id="hmrc:upload_info_button"/>
         <h2>HMRC upload</h2>
         <div class="wizard-top-notification">
             <label>Upload a copy of your last 5 VAT returns. Only upload files titled <b>Printed Copy of Submitted VAT return for your records</b> which you should have received automatically from the HMRC.</label>
             <label>Files can be uploaded in any order of dates</label>
         </div>
 
-        <form id="hmrcAccountUpload" class="dropzone newVatFilesUpload" action="@Url.Action("UploadedFiles", "Hmrc", new { Area = "Customer" })"></form>
+        <form id="hmrcAccountUpload" class="dropzone newVatFilesUpload" action="@Url.Action("UploadedFiles", "Hmrc", new { Area = "Customer" })" ui-event-control-id="hmrc:dropzone"></form>
 
         <form id="hmrcuploadFiles" class="cg-link-account-form">
             <div class="clearfix">
-                <a href="#" class="rc-button green select-vat oldVatFilesUpload" ui-event-control-id="link-account:hmrc_select_vat">Select VAT files</a>
+                <a href="#" class="rc-button green select-vat oldVatFilesUpload" ui-event-control-id="hmrc:select_vat">Select VAT files</a>
                 <label />
-
                 <div id="upload-files-form">
                     <iframe></iframe>
                 </div>
 
                 <div class="form_buttons_container hmrc_margin_from_header">
                     <div class="attardi-button">
-                        <a href="#" class="back rc-button green newVatFilesUpload newVatFilesUploadButton disabled" ui-event-control-id="link-account:hmrc_upload_files_do_upload">Upload</a>
-                        <a href="#" class="back rc-button grey uploadFilesBack" ui-event-control-id="link-account:hmrc_upload_files_back">Back</a>
+                        <a href="#" class="back rc-button green newVatFilesUpload newVatFilesUploadButton disabled" ui-event-control-id="hmrc:do_upload">Upload</a>
+                        <a href="#" class="back rc-button grey uploadFilesBack" ui-event-control-id="hmrc:upload_back">Back</a>
                     </div>
                 </div>
             </div>
 
             <div class="hmrc-why-question offline_entry_message wizard_message">
-                <div id="uploadHelpButton" class="hmrc-question-button float_left hmrc_question_button_margin"></div>
+                <div id="uploadHelpButton" class="hmrc-question-button float_left hmrc_question_button_margin" ui-event-control-id="hmrc:upload_info_button_lower"></div>
                 <div class="hmrc-why">Press the ? to see a file example. Do not have the file? Ask your accountant for them, it will take him 5 minutes to send them to you.</div>
             </div>
         </form>
