@@ -71,6 +71,7 @@
   <ItemGroup>
     <None Include="director_info_parser.json" />
     <None Include="limited_company_parser.json" />
+    <None Include="non_limited_company_parser.json" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

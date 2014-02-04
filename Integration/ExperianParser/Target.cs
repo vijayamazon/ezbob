@@ -17,6 +17,7 @@ namespace Ezbob.ExperianParser {
 		public string Name { get; set; }
 		public int Position { get; set; }
 		public string Prefix { get; set; }
+		public string Suffix { get; set; }
 		public Transformation Transformation { get; set; }
 
 		#region method Validate
@@ -26,6 +27,7 @@ namespace Ezbob.ExperianParser {
 				throw new OwnException("Field target name not specified.");
 
 			Prefix = Prefix ?? "";
+			Suffix = Suffix ?? "";
 
 			if (Transformation != null)
 				Transformation.Validate(log);
@@ -38,8 +40,8 @@ namespace Ezbob.ExperianParser {
 		#region method Log
 
 		public void Log(StringBuilder sb, string sLinePrefix) {
-			sb.AppendFormat("{0}Name: {1}\n{0}Position: {2}\n{0}Prefix: {3}\n{0}Transformation: {4}\n",
-				sLinePrefix, Name, Position, Prefix, Transformation == null ? "no" : "yes"
+			sb.AppendFormat("{0}Name: {1}\n{0}Position: {2}\n{0}Prefix: {3}\n{0}Suffix: {5}\n{0}Transformation: {4}\n",
+				sLinePrefix, Name, Position, Prefix, Transformation == null ? "no" : "yes", Suffix
 			);
 
 			if (Transformation != null)
@@ -58,6 +60,9 @@ namespace Ezbob.ExperianParser {
 
 				if (!string.IsNullOrEmpty(Prefix))
 					sResult = Prefix + sResult;
+
+				if (!string.IsNullOrEmpty(Suffix))
+					sResult = sResult + Suffix;
 
 				return sResult;
 			} // get
