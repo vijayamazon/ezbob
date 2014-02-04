@@ -150,27 +150,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 
 	#endregion class BankAccount
 
-	#region class ParseExperianResult
-
-	public class ParseExperianResult : Tuple<Dictionary<string, ParsedData>, ParsingResult, string, string, string> {
-		public Dictionary<string, ParsedData> Dataset { get { return Item1; } } // Dataset
-		public ParsingResult ParsingResult { get { return Item2; } } // ParsingResult
-		public string ErrorMsg { get { return Item3; } } // ErrorMsg
-		public string CompanyRefNum { get { return Item4; } } // CompanyRefNum
-		public string CompanyName { get { return Item5; } } // CompanyName
-
-		public ParseExperianResult(
-			Dictionary<string, ParsedData> dataset,
-			ParsingResult parsingResult,
-			string errorMsg,
-			string companyRefNum,
-			string companyName
-		)
-			: base(dataset, parsingResult, errorMsg, companyRefNum, companyName) { } // constructor
-	} // class ParseExperianResult
-
-	#endregion class ParseExperianResult
-
 	//todo remove classes LimitedInfo/NonLimitedInfo/CompanyAdditionalInfo when new wizard
 	#region class LimitedInfo
 
@@ -693,59 +672,18 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual IList<CustomerInviteFriend> CustomerInviteFriend { get; set; }
 		public virtual IList<Company> Companies { get; set; }
 
-		public static ParseExperianResult ParseExperian(string sCompanyRefNum, string sCompanyName, string sParserConfiguration) {
-			var oLog = LogManager.GetLogger(typeof(Customer));
-
-			if (string.IsNullOrWhiteSpace(sCompanyRefNum)) {
-				string sErrMsg = string.Format("Company ref num not specified.");
-				oLog.Info(sErrMsg);
-				return new ParseExperianResult(null, ParsingResult.NotFound, sErrMsg, null, null);
-			} // if
-
-			var repo =
-				ObjectFactory.GetInstance<NHibernateRepositoryBase<MP_ExperianDataCache>>();
-
-			MP_ExperianDataCache oCachedValue = repo.GetAll().FirstOrDefault(
-				x => x.CompanyRefNumber == sCompanyRefNum
-			);
-
-			if (oCachedValue == null) {
-				string sErrMsg = string.Format("No data found for Company with ref num = {0}", sCompanyRefNum);
-				oLog.Info(sErrMsg);
-				return new ParseExperianResult(null, ParsingResult.NotFound, sErrMsg, null, null);
-			} // if
-
-			var parser = new Ezbob.ExperianParser.Parser(sParserConfiguration, new SafeILog(oLog));
-
-			var doc = new XmlDocument();
-
-			try {
-				doc.LoadXml(oCachedValue.JsonPacket);
-			}
-			catch (Exception e) {
-				string sErrMsg = string.Format("Failed to parse Experian data as XML for Company Score tab with company ref num = {0}", sCompanyRefNum);
-				oLog.Error(sErrMsg, e);
-				return new ParseExperianResult(null, ParsingResult.Fail, sErrMsg, null, null);
-			} // try
-
-			try {
-				Dictionary<string, ParsedData> oParsed = parser.NamedParse(doc);
-				return new ParseExperianResult(oParsed, ParsingResult.Ok, null, sCompanyRefNum, sCompanyName);
-			}
-			catch (Exception e) {
-				string sErrMsg = string.Format("Failed to extract Company Score tab data from Experian data with company ref num = {0}", sCompanyRefNum);
-				oLog.Error(sErrMsg, e);
-				return new ParseExperianResult(null, ParsingResult.Fail, sErrMsg, null, null);
-			} // try
-		} // ParseExperian
-
-		public virtual ParseExperianResult ParseExperian(string sParserConfiguration) {
+		public virtual ExperianParserOutput ParseExperian(ExperianParserFacade.Target nTarget) {
 			var company = Companies.FirstOrDefault();
 
-			if (company != null && company.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited)
-				return ParseExperian(company.ExperianRefNum, company.ExperianCompanyName, sParserConfiguration);
+			if (ReferenceEquals(company, null))
+				return new ExperianParserOutput(null, ParsingResult.Fail, "Customer has no company", null, null, null);
 
-			return new ParseExperianResult(null, ParsingResult.Fail, "No limited company", null, null);
+			return ExperianParserFacade.Invoke(
+				company.ExperianRefNum,
+				company.ExperianCompanyName,
+				nTarget,
+				company.TypeOfBusiness.Reduce()
+			);
 		} // ParseExperian
 
 		public virtual bool Equals(Customer x, Customer y) {

@@ -1,9 +1,8 @@
-﻿using EZBob.DatabaseLib;
-using EzBob.CommonLib;
+﻿using EzBob.CommonLib;
 using StructureMap;
 using log4net;
 
-namespace EzBob.Configuration {
+namespace EZBob.DatabaseLib {
 	#region enum variables
 
 	public enum Variables {
@@ -23,6 +22,8 @@ namespace EzBob.Configuration {
 		CompanyScoreParserConfiguration,
 		DirectorInfoParserConfiguration,
 		TrustPilotReviewEnabled,
+		CompanyScoreNonLimitedParserConfiguration,
+		DirectorInfoNonLimitedParserConfiguration,
 	} // enum Variables
 
 	public enum ChannelGrabberRejectPolicy {
@@ -77,6 +78,9 @@ namespace EzBob.Configuration {
 			return false;
 		}} // TrustPilotReviewEnabled
 
+		public string CompanyScoreNonLimitedParserConfiguration { get { return RawCompanyScoreNonLimitedParserConfiguration; } }
+		public string DirectorInfoNonLimitedParserConfiguration { get { return RawDirectorInfoNonLimitedParserConfiguration; } }
+
 		#endregion properties
 
 		#region raw properties
@@ -97,6 +101,8 @@ namespace EzBob.Configuration {
 		public string RawCompanyScoreParserConfiguration { get { return this[Variables.CompanyScoreParserConfiguration]; } }
 		public string RawDirectorInfoParserConfiguration { get { return this[Variables.DirectorInfoParserConfiguration]; } }
 		public string RawTrustPilotReviewEnabled { get { return this[Variables.TrustPilotReviewEnabled]; } }
+		public string RawCompanyScoreNonLimitedParserConfiguration { get { return this[Variables.CompanyScoreNonLimitedParserConfiguration]; } }
+		public string RawDirectorInfoNonLimitedParserConfiguration { get { return this[Variables.DirectorInfoNonLimitedParserConfiguration]; } }
 
 		#endregion raw properties
 
@@ -148,4 +154,4 @@ namespace EzBob.Configuration {
 	} // class DBConfigurationValues
 
 	#endregion class DBConfigurationValues
-} // namespace EzBob.Configuration
+} // namespace EZBob.DatabaseLib

@@ -14,7 +14,7 @@ namespace EzBob.Web.Areas.Customer.Models
 {
 	using System.Collections.Generic;
 	using Backend.Models;
-	using Configuration;
+	using EZBob.DatabaseLib;
 
 	public class CustomerModelBuilder
 	{

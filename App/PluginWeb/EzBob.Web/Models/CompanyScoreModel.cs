@@ -5,6 +5,8 @@ using EZBob.DatabaseLib.Model.Database;
 using Ezbob.ExperianParser;
 
 namespace EzBob.Web.Models {
+	using EZBob.DatabaseLib;
+
 	public class CompanyScoreModel {
 		public const string Ok = "ok";
 
@@ -37,26 +39,28 @@ namespace EzBob.Web.Models {
 
 	public class CompanyScoreModelBuilder {
 		public CompanyScoreModel Create(Customer customer) {
-			CompanyScoreModel oResult = BuildFromParseResult(
-				customer.ParseExperian(DBConfigurationValues.Instance.CompanyScoreParserConfiguration)
-			);
+			ExperianParserOutput oOutput = customer.ParseExperian(ExperianParserFacade.Target.Company);
+
+			CompanyScoreModel oResult = BuildFromParseResult(oOutput);
 
 			if (oResult.result != CompanyScoreModel.Ok)
 				return oResult;
 
-			AddOwners(
-				oResult,
-				"Limited Company Shareholders",
-				"Registered number of a limited company which is a shareholder",
-				"Description of Shareholder"
-			);
+			if (oOutput.TypeOfBusinessReduced == TypeOfBusinessReduced.Limited) {
+				AddOwners(
+					oResult,
+					"Limited Company Shareholders",
+					"Registered number of a limited company which is a shareholder",
+					"Description of Shareholder"
+					);
 
-			AddOwners(
-				oResult,
-				"Limited Company Ownership Details",
-				"Registered Number of the Current Ultimate Parent Company",
-				"Registered Name of the Current Ultimate Parent Company"
-			);
+				AddOwners(
+					oResult,
+					"Limited Company Ownership Details",
+					"Registered Number of the Current Ultimate Parent Company",
+					"Registered Name of the Current Ultimate Parent Company"
+					);
+			} // if
 
 			return oResult;
 		} // Create
@@ -71,10 +75,11 @@ namespace EzBob.Web.Models {
 
 						if (!string.IsNullOrWhiteSpace(sNumber)) {
 							var oOwner = BuildFromParseResult(
-								Customer.ParseExperian(
+								ExperianParserFacade.Invoke(
 									sNumber,
 									oShareholder[sCompanyNameField] ?? "",
-									DBConfigurationValues.Instance.CompanyScoreParserConfiguration
+									ExperianParserFacade.Target.Company,
+									TypeOfBusinessReduced.Limited
 								)
 							);
 
@@ -87,7 +92,7 @@ namespace EzBob.Web.Models {
 			} // if contains list of owners
 		} // AddOwners
 
-		private CompanyScoreModel BuildFromParseResult(ParseExperianResult oResult) {
+		private CompanyScoreModel BuildFromParseResult(ExperianParserOutput oResult) {
 			switch (oResult.ParsingResult) {
 			case ParsingResult.Ok:
 				return new CompanyScoreModel {

@@ -1569,8 +1569,8 @@ namespace EZBob.DatabaseLib
 		{
 
 			var experianDirectors = new List<string>();
-			ParseExperianResult oParseResult =
-				customer.ParseExperian(_ConfigurationVariables.GetByName("DirectorInfoParserConfiguration").Value);
+			ExperianParserOutput oParseResult =
+				customer.ParseExperian(ExperianParserFacade.Target.Director);
 
 			if (oParseResult.ParsingResult == ParsingResult.Ok)
 			{

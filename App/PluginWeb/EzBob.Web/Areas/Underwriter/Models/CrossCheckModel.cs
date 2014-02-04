@@ -4,7 +4,7 @@ using System.Text;
 using AutoMapper;
 using EZBob.DatabaseLib.Model.Database;
 using System.Linq;
-using EzBob.Configuration;
+using EZBob.DatabaseLib;
 using EzBob.Web.Areas.Customer.Models;
 using Ezbob.ExperianParser;
 
@@ -161,7 +161,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		public static SortedSet<string> GetExperianDirectors(EZBob.DatabaseLib.Model.Database.Customer customer)
 		{
 			SortedSet<string> experianDirectors = null;
-			ParseExperianResult oParseResult = customer.ParseExperian(DBConfigurationValues.Instance.DirectorInfoParserConfiguration);
+			ExperianParserOutput oParseResult = customer.ParseExperian(ExperianParserFacade.Target.Director);
 
 			if (oParseResult.ParsingResult == ParsingResult.Ok)
 			{

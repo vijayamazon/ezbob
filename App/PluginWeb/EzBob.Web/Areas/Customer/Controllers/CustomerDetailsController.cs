@@ -605,6 +605,11 @@
 				break;
 
 			case TypeOfBusinessReduced.NonLimited:
+				companyAddress = nonLimitedCompanyAddress;
+				companyDirectors = nonLimitedDirectors;
+				goto case TypeOfBusinessReduced.Personal;
+
+			case TypeOfBusinessReduced.Personal:
 				companyData = new CompanyInfoMap {
 					BusinessPhone = nonLimitedInfo.NonLimitedBusinessPhone,
 					CapitalExpenditure = companyAdditionalInfo.CapitalExpenditure,
@@ -617,8 +622,6 @@
 					TimeInBusiness = nonLimitedInfo.NonLimitedTimeInBusiness,
 				};
 
-				companyAddress = nonLimitedCompanyAddress;
-				companyDirectors = nonLimitedDirectors;
 				break;
 			} // switch
 
