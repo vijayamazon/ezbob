@@ -150,7 +150,9 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
                 that.$el.find('#captchaDiv').show();
                 that.switchedToCaptcha = true;
             } else {
-                EzBob.App.trigger('info', "Code was sent to mobile");
+                var codeSentObject = that.$el.find('#codeSentLabel');
+                codeSentObject.show();
+                codeSentObject.animate({ opacity: 1 });
             }
 
             return false;
