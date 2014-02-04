@@ -68,6 +68,7 @@
     <Compile Include="PageID.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StatsModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="08a190d7e7b61e5cdfa63301e528134d3699f096-privatekey.p12">

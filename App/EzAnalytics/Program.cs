@@ -112,6 +112,9 @@ namespace EzAnalyticsConsoleClient {
 
 			SaveStats(oStats);
 
+			var sourceStats = FetchBySource();
+
+			SaveStats(sourceStats);
 			Log.Debug("Program.Run complete.");
 		} // Run
 
@@ -192,6 +195,26 @@ namespace EzAnalyticsConsoleClient {
 			Log.Debug("Saving stats complete.");
 		} // SaveStats
 
+		private void SaveStats(List<StatsModel> oStats)
+		{
+			Log.Debug("Saving stats started...");
+
+			var conn = new SqlConnection(Log);
+
+			string dbDate = conn.DateToString(m_oReportDate);
+
+			foreach (var stat in oStats)
+			{
+				conn.ExecuteNonQuery(DbConsts.InsertSiteAnalyticsSP,
+					new QueryParameter(DbConsts.IsaspDate, dbDate),
+					new QueryParameter(DbConsts.IsaspCodeName, stat.Code),
+					new QueryParameter(DbConsts.IsaspValue, stat.Value),
+					new QueryParameter(DbConsts.IsaspSource, stat.Source)
+				);
+			} // for each stat to save
+
+			Log.Debug("Saving stats complete.");
+		}
 		#endregion method SaveStats
 
 		#region method FetchByCountry
@@ -283,6 +306,60 @@ namespace EzAnalyticsConsoleClient {
 			Log.Debug("Fetching by page complete.");
 
 			return oByPage;
+		} // FetchByPage
+
+		#endregion method FetchByPage
+
+		#region method FetchByPage
+
+		private List<StatsModel> FetchBySource()
+		{
+			Log.Debug("Fetching by source started...");
+
+			var oFetcher = new GoogleDataFetcher(
+				m_oService,
+				m_oReportDate,
+				m_oReportDate,
+				new GoogleReportDimensions[] { GoogleReportDimensions.sourceMedium, },
+				new GoogleReportMetrics[] { GoogleReportMetrics.visitors },
+				GoogleDataFetcher.GAString(GoogleReportDimensions.hostname) + "==app.ezbob.com"
+			);
+			var model = new List<StatsModel>(); 
+			List<GoogleDataItem> oFetchResult = oFetcher.Fetch();
+
+			foreach (GoogleDataItem oItem in oFetchResult)
+			{
+				string source = oItem[GoogleReportDimensions.sourceMedium];
+
+				int nVisitors = oItem[GoogleReportMetrics.visitors];
+
+				int nNewVisits = oItem[GoogleReportMetrics.newVisits];
+
+				model.Add(new StatsModel
+					{
+						Code = DbConsts.SourceVisitors,
+						Source = source,
+						Value = nVisitors
+					});
+				model.Add(new StatsModel
+					{
+						Code = DbConsts.SourceVisits,
+						Source = source,
+						Value = nNewVisits
+					});
+					
+				Log.Debug("source: {0}, visitors: {1}, new visits: {2}", source, nVisitors, nNewVisits);
+			} // for each item
+
+			Log.Debug("By page - begin");
+
+			
+
+			Log.Debug("By page - end");
+
+			Log.Debug("Fetching by source complete.");
+
+			return model;
 		} // FetchByPage
 
 		#endregion method FetchByPage

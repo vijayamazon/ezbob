@@ -4,7 +4,8 @@
 	enum GoogleReportDimensions {
 		country,
 		hostname,
-		pagePath
+		pagePath,
+		sourceMedium,
 	} // enum GoogleReportDimensions
 
 	#endregion enum GoogleReportDimensions
