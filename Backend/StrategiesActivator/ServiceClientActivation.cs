@@ -100,7 +100,7 @@
 			bool bSaveOfferToDB;
 
 			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !bool.TryParse(args[2], out bSaveOfferToDB)) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> QuickOfferWithPrerequisites <CustomerId> <Save offer to DB");
+				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> QuickOfferWithPrerequisites <CustomerId> <Save offer to DB>");
 				return;
 			}
 
