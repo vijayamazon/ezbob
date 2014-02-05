@@ -20,7 +20,8 @@
 		TotalSumOfPartiallyPaidSalesInvoices,
 		TotalSumOfPaidPurchaseInvoices,
 		TotalSumOfUnpaidPurchaseInvoices,
-		TotalSumOfPartiallyPaidPurchaseInvoices
+		TotalSumOfPartiallyPaidPurchaseInvoices,
+		TotalSumOfOrdersAnnualized
     }
 
 	internal class SageDatabaseFunctionStorage : DatabaseFunctionStorage<SageDatabaseFunctionType>
@@ -44,6 +45,7 @@
 			CreateFunctionAndAddToCollection(SageDatabaseFunctionType.TotalSumOfPaidPurchaseInvoices, DatabaseValueTypeEnum.Double, "{B04965CF-BECC-46CC-8B26-7C97DFC330D4}");
 			CreateFunctionAndAddToCollection(SageDatabaseFunctionType.TotalSumOfUnpaidPurchaseInvoices, DatabaseValueTypeEnum.Double, "{EDE52DCF-3C08-478C-A7C6-4764501C27F7}");
 			CreateFunctionAndAddToCollection(SageDatabaseFunctionType.TotalSumOfPartiallyPaidPurchaseInvoices, DatabaseValueTypeEnum.Double, "{E785E542-81D2-4B52-8C95-8AD10E1BC5C1}");
+			CreateFunctionAndAddToCollection(SageDatabaseFunctionType.TotalSumOfOrdersAnnualized, DatabaseValueTypeEnum.Double, "{4C128A98-CA62-4B1E-A8AC-39D212209CB6}");
         }
 
 		public static SageDatabaseFunctionStorage Instance
@@ -120,6 +122,10 @@
 
 				case SageDatabaseFunctionType.TotalSumOfPartiallyPaidPurchaseInvoices:
 					displayName = "Total Sum of Partially Paid Purchase Invoices";
+					break;
+
+				case SageDatabaseFunctionType.TotalSumOfOrdersAnnualized:
+					displayName = "Total Sum of Orders Annualized";
 					break;
 				
                 default:

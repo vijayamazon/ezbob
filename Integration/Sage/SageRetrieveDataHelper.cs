@@ -77,7 +77,8 @@
                     SageDatabaseFunctionType.TotalSumOfOrders,
 					SageDatabaseFunctionType.TotalSumOfPaidSalesInvoices,
 					SageDatabaseFunctionType.TotalSumOfUnpaidSalesInvoices,
-					SageDatabaseFunctionType.TotalSumOfPartiallyPaidSalesInvoices
+					SageDatabaseFunctionType.TotalSumOfPartiallyPaidSalesInvoices,
+                    SageDatabaseFunctionType.TotalSumOfOrdersAnnualized
                 };
 			CalculateAndStoreAggregatedData(databaseCustomerMarketPlace, historyRecord, elapsedTimeInfo, "sales invoices",
 											Helper.GetAllSageSalesInvoicesData, new SageSalesInvoiceAggregatorFactory { SagePaymentStatuses = Helper.GetSagePaymentStatuses() },

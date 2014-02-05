@@ -48,6 +48,18 @@ namespace Sage
 			return salesInvoices.Sum(o => (double)o.total_net_amount);
 		}
 
+		private double GetTotalSumOfSalesInvoicesAnnualized(IEnumerable<SageSalesInvoice> invoices)
+		{
+			var invoicesWithExtraInfo = invoices as ReceivedDataListTimeDependentInfo<SageSalesInvoice>;
+			if (invoicesWithExtraInfo == null)
+			{
+				return 0;
+			}
+
+			double sum = GetTotalSumOfSalesInvoices(invoices);
+			return AnnualizeHelper.AnnualizeSum(invoicesWithExtraInfo.TimePeriodType, invoicesWithExtraInfo.SubmittedDate, sum);
+		}
+
 		private double GetTotalSumOfSalesInvoicesWithStatus(IEnumerable<SageSalesInvoice> purchaseInvoices, string statusName)
 		{
 			return purchaseInvoices.Where(o => o.status.HasValue && sagePaymentStatusesMap[o.status.Value] == statusName).Sum(o => (double)o.total_net_amount);
@@ -71,6 +83,9 @@ namespace Sage
 
 				case SageDatabaseFunctionType.TotalSumOfPartiallyPaidSalesInvoices:
 					return GetTotalSumOfSalesInvoicesWithStatus(salesInvoices, "Part Paid");
+
+				case SageDatabaseFunctionType.TotalSumOfOrdersAnnualized:
+					return GetTotalSumOfSalesInvoicesAnnualized(salesInvoices);
 
                 default:
                     throw new NotImplementedException();
