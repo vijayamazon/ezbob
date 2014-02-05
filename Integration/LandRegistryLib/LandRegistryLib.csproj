@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Behaviour.cs" />
     <Compile Include="EnquiryError.cs" />
+    <Compile Include="EnumsHelper.cs" />
     <Compile Include="LandRegistryTestApi.cs" />
     <Compile Include="LandRegistryApi.cs" />
     <Compile Include="LandRegistryDataModel.cs" />
@@ -96,6 +97,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="XmlHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

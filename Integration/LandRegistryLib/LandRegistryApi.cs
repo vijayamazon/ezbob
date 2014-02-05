@@ -1,13 +1,8 @@
-﻿using System;
-
-namespace LandRegistryLib
+﻿namespace LandRegistryLib
 {
+	using System;
 	using System.IO;
 	using System.Net;
-	using System.Text;
-	using System.Xml;
-	using System.Xml.Serialization;
-	using LRResServiceNS;
 	using log4net;
 
 	public class LandRegistryApi
@@ -48,12 +43,12 @@ namespace LandRegistryLib
 							}
 					};
 
-				model.Request = SerializeObject(request);
+				model.Request = XmlHelper.SerializeObject(request);
 				LREnquiryServiceNS.ResponseSearchByPropertyDescriptionV2_0Type Response;
 				try
 				{
 					Response = client.searchProperties(request);
-					model.Response = SerializeObject(Response);
+					model.Response = XmlHelper.SerializeObject(Response);
 					model.ResponseType = GetResponseType((int)Response.GatewayResponse.TypeCode.Value);
 				}
 				catch (Exception ex)
@@ -85,12 +80,12 @@ namespace LandRegistryLib
 									}
 							}
 					};
-				model.Request = SerializeObject(pollRequest);
+				model.Request = XmlHelper.SerializeObject(pollRequest);
 				LREnquiryPollServiceNS.ResponseSearchByPropertyDescriptionV2_0Type Response;
 				try
 				{
 					Response = client.getResponse(pollRequest);
-					model.Response = SerializeObject(Response);
+					model.Response = XmlHelper.SerializeObject(Response);
 					model.ResponseType = GetResponseType((int)Response.GatewayResponse.TypeCode.Value);
 				}
 				catch (Exception ex)
@@ -138,7 +133,7 @@ namespace LandRegistryLib
 					}
 				};
 
-				model.Request = SerializeObject(request);
+				model.Request = XmlHelper.SerializeObject(request);
 				try
 				{
 					LRResServiceNS.ResponseOCWithSummaryV2_1Type response = client.performOCWithSummary(request);
@@ -150,7 +145,7 @@ namespace LandRegistryLib
 					}
 					catch { }
 
-					model.Response = SerializeObject(response);
+					model.Response = XmlHelper.SerializeObject(response);
 
 					try
 					{
@@ -211,7 +206,7 @@ namespace LandRegistryLib
 					},
 				};
 
-				model.Request = SerializeObject(request);
+				model.Request = XmlHelper.SerializeObject(request);
 				try
 				{
 					LRResPollServiceNS.ResponseOCWithSummaryV2_0Type Response = client.getResponse(request);
@@ -223,7 +218,7 @@ namespace LandRegistryLib
 						Response.GatewayResponse.Results.Attachment = null;
 					}
 
-					model.Response = SerializeObject(Response);
+					model.Response = XmlHelper.SerializeObject(Response);
 					model.ResponseType = GetResponseType((int)Response.GatewayResponse.TypeCode.Value);
 				}
 				catch (Exception ex)
@@ -236,30 +231,7 @@ namespace LandRegistryLib
 			return model;
 		}
 
-		private static string SerializeObject<T>(T serializableObject)
-		{
-			if (serializableObject == null) { return null; }
-
-			try
-			{
-				var serializer = new XmlSerializer(serializableObject.GetType());
-				var stream = new MemoryStream();
-
-				using (var xmlTextWriter = new XmlTextWriter(stream, Encoding.UTF8) { Formatting = Formatting.Indented })
-				{
-					serializer.Serialize(xmlTextWriter, serializableObject);
-					stream = (MemoryStream)xmlTextWriter.BaseStream;
-					string xmlString = new UTF8Encoding().GetString(stream.ToArray());
-					stream.Dispose();
-					return xmlString;
-				}
-			}
-			catch (Exception ex)
-			{
-				Log.ErrorFormat("{0}", ex);
-			}
-			return null;
-		}
+		
 
 		private static LandRegistryResponseType GetResponseType(int value)
 		{

@@ -1,13 +1,7 @@
-﻿using System;
-
-namespace LandRegistryLib
+﻿namespace LandRegistryLib
 {
-	using System.Collections.Generic;
-	using System.IO;
+	using System;
 	using System.Net;
-	using System.Xml;
-	using System.Xml.Serialization;
-	using LRRESServiceTestNS;
 	using log4net;
 
 	public class LandRegistryTestApi
@@ -48,12 +42,12 @@ namespace LandRegistryLib
 							}
 					};
 
-				model.Request = SerializeObject(request);
+				model.Request = XmlHelper.SerializeObject(request);
 				LREnquiryServiceTestNS.ResponseSearchByPropertyDescriptionV2_0Type response;
 				try
 				{
 					response = client.searchProperties(request);
-					model.Response = SerializeObject(response);
+					model.Response = XmlHelper.SerializeObject(response);
 					model.ResponseType = GetResponseType((int) response.GatewayResponse.TypeCode.Value);
 				}
 				catch (Exception ex)
@@ -85,12 +79,12 @@ namespace LandRegistryLib
 									}
 							}
 					};
-				model.Request = SerializeObject(pollRequest);
+				model.Request = XmlHelper.SerializeObject(pollRequest);
 				LREnquiryPollServiceTestNS.ResponseSearchByPropertyDescriptionV2_0Type response;
 				try
 				{
 					response = client.getResponse(pollRequest);
-					model.Response = SerializeObject(response);
+					model.Response = XmlHelper.SerializeObject(response);
 					model.ResponseType = GetResponseType((int)response.GatewayResponse.TypeCode.Value);
 				}
 				catch (Exception ex)
@@ -138,16 +132,16 @@ namespace LandRegistryLib
 					}
 				};
 
-				model.Request = SerializeObject(request);
+				model.Request = XmlHelper.SerializeObject(request);
 				try
 				{
 					LRRESServiceTestNS.ResponseOCWithSummaryV2_1Type response = client.performOCWithSummary(request);
 					//File.WriteAllBytes(string.Format("{0}_{1}.zip", titleNumber, DateTime.Today.Ticks), response.GatewayResponse.Results.Attachment.EmbeddedFileBinaryObject.Value);
 					response.GatewayResponse.Results.Attachment = null;
-					model.Response = SerializeObject(response);
+					model.Response = XmlHelper.SerializeObject(response);
 					model.ResponseType = GetResponseType((int)response.GatewayResponse.TypeCode.Value);
 					var builder = new ResModelBuilder();
-					model.Res = builder.BuildResModel(response);
+					//model.Res = builder.BuildResModel(response);
 
 				}
 				catch (Exception ex)
@@ -182,7 +176,7 @@ namespace LandRegistryLib
 					},
 				};
 
-				model.Request = SerializeObject(request);
+				model.Request = XmlHelper.SerializeObject(request);
 				try
 				{
 					LRRESPollServiceTestNS.ResponseOCWithSummaryV2_0Type response = client.getResponse(request);
@@ -193,8 +187,8 @@ namespace LandRegistryLib
 						//File.WriteAllBytes(string.Format("{0}_{1}.zip", pollId, DateTime.Today.Ticks), response.GatewayResponse.Results.Attachment.EmbeddedFileBinaryObject.Value);
 						response.GatewayResponse.Results.Attachment = null;
 					}
-					
-					model.Response = SerializeObject(response);
+
+					model.Response = XmlHelper.SerializeObject(response);
 					model.ResponseType = GetResponseType((int)response.GatewayResponse.TypeCode.Value);
 				}
 				catch (Exception ex)
@@ -206,33 +200,7 @@ namespace LandRegistryLib
 			}
 			return model;
 		}
-
-		private static string SerializeObject<T>(T serializableObject)
-		{
-			if (serializableObject == null) { return null; }
-
-			try
-			{
-				var xmlDocument = new XmlDocument();
-				var serializer = new XmlSerializer(serializableObject.GetType());
-				string xmlString;
-				using (var stream = new MemoryStream())
-				{
-					serializer.Serialize(stream, serializableObject);
-					stream.Position = 0;
-					xmlDocument.Load(stream);
-					xmlString = xmlDocument.OuterXml;
-					stream.Close();
-				}
-				return xmlString;
-			}
-			catch (Exception ex)
-			{
-				Log.ErrorFormat("{0}", ex);
-			}
-			return null;
-		}
-
+		
 		private static LandRegistryResponseType GetResponseType(int value)
 		{
 			LandRegistryResponseType type;
