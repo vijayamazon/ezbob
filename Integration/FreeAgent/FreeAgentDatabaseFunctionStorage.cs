@@ -17,7 +17,8 @@
 		SumOfDraftInvoices,
 		SumOfAdminExpensesCategory,
 		SumOfCostOfSalesExpensesCategory,
-		SumOfGeneralExpensesCategory
+		SumOfGeneralExpensesCategory,
+		TotalSumOfOrdersAnnualized
     }
 
 	internal class FreeAgentDatabaseFunctionStorage : DatabaseFunctionStorage<FreeAgentDatabaseFunctionType>
@@ -38,6 +39,7 @@
 			CreateFunctionAndAddToCollection(FreeAgentDatabaseFunctionType.SumOfAdminExpensesCategory, DatabaseValueTypeEnum.Double, "{25114086-64E1-4A5B-807E-5519BF4D9ED8}");
 			CreateFunctionAndAddToCollection(FreeAgentDatabaseFunctionType.SumOfCostOfSalesExpensesCategory, DatabaseValueTypeEnum.Double, "{83BFA5E1-D8D8-48EF-9DEB-25F5968B7097}");
 			CreateFunctionAndAddToCollection(FreeAgentDatabaseFunctionType.SumOfGeneralExpensesCategory, DatabaseValueTypeEnum.Double, "{AEE87345-0818-4203-9EB0-42F474A4153F}");
+			CreateFunctionAndAddToCollection(FreeAgentDatabaseFunctionType.TotalSumOfOrdersAnnualized, DatabaseValueTypeEnum.Double, "{5466078C-2F06-470E-A74C-C45D34F9147F}");
         }
 
 		public static FreeAgentDatabaseFunctionStorage Instance
@@ -102,6 +104,10 @@
 
 				case FreeAgentDatabaseFunctionType.SumOfGeneralExpensesCategory:
 					displayName = "Sum of general expenses category";
+					break;
+
+				case FreeAgentDatabaseFunctionType.TotalSumOfOrdersAnnualized:
+					displayName = "Total Sum of Orders Annualized";
 					break;
 
                 default:

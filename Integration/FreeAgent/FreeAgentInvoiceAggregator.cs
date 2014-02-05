@@ -35,6 +35,18 @@ namespace FreeAgent
 			return invoices.Sum(o => CurrencyConverter.ConvertToBaseCurrency(o.currency, (double)o.net_value, o.dated_on).Value);
 		}
 
+		private double GetTotalSumOfInvoicesAnnualized(IEnumerable<FreeAgentInvoice> invoices)
+		{
+			var invoicesWithExtraInfo = invoices as ReceivedDataListTimeDependentInfo<FreeAgentInvoice>;
+			if (invoicesWithExtraInfo == null)
+			{
+				return 0;
+			}
+
+			double sum = GetTotalSumOfInvoices(invoices);
+			return AnnualizeHelper.AnnualizeSum(invoicesWithExtraInfo.TimePeriodType, invoicesWithExtraInfo.SubmittedDate, sum);
+		}
+		
 		private double GetSumOfPaidInvoices(IEnumerable<FreeAgentInvoice> invoices)
 		{
 			return invoices.Where(o => o.status == "Paid").Sum(o => CurrencyConverter.ConvertToBaseCurrency(o.currency, (double)o.net_value, o.dated_on).Value);
@@ -76,6 +88,9 @@ namespace FreeAgent
 
 				case FreeAgentDatabaseFunctionType.SumOfDraftInvoices:
 					return GetSumOfDraftInvoices(invoices);
+
+				case FreeAgentDatabaseFunctionType.TotalSumOfOrdersAnnualized:
+					return GetTotalSumOfInvoicesAnnualized(invoices);
 
                 default:
                     throw new NotImplementedException();

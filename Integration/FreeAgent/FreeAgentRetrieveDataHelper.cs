@@ -156,7 +156,6 @@
 				ElapsedDataMemberType.RetrieveDataFromDatabase,
 				() => Helper.GetAllFreeAgentInvoicesData(DateTime.UtcNow, databaseCustomerMarketPlace));
 
-
 			log.InfoFormat("Creating aggregated data for {0} invoices", allInvoices);
 			var invoicesAggregatedData = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
@@ -249,7 +248,8 @@
                     FreeAgentDatabaseFunctionType.SumOfPaidInvoices,
                     FreeAgentDatabaseFunctionType.SumOfOverdueInvoices,
                     FreeAgentDatabaseFunctionType.SumOfOpenInvoices,
-                    FreeAgentDatabaseFunctionType.SumOfDraftInvoices
+                    FreeAgentDatabaseFunctionType.SumOfDraftInvoices,
+                    FreeAgentDatabaseFunctionType.TotalSumOfOrdersAnnualized
                 };
 
 			var updated = invoices.SubmittedDate;

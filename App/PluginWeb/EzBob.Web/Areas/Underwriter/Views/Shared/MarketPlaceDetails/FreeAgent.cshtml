@@ -53,6 +53,17 @@
                         <td><%-ai.TotalSumofOrdersLifetime!=undefined ? GBPValues(ai.TotalSumofOrdersLifetime, true) : "-"%></td>
                     </tr>
                     <tr>
+                        <td>Total invoices (Annualized)</td>
+                        <td><%-ai.TotalSumofOrdersAnnualized1M!=undefined ? EzBob.formatPoundsNoDecimals(ai.TotalSumofOrdersAnnualized1M): "-"%></td>
+                        <td><%-ai.TotalSumofOrdersAnnualized3M!=undefined ? EzBob.formatPoundsNoDecimals(ai.TotalSumofOrdersAnnualized3M): "-"%></td>
+                        <td><%-ai.TotalSumofOrdersAnnualized6M!=undefined ? EzBob.formatPoundsNoDecimals(ai.TotalSumofOrdersAnnualized6M): "-"%></td>
+                        <td><%-ai.TotalSumofOrdersAnnualized12M!=undefined ? EzBob.formatPoundsNoDecimals(ai.TotalSumofOrdersAnnualized12M): "-"%></td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
                         <td>Paid invoices</td>
                         <td><%-ai.Sumofpaidinvoices1M!=undefined ? GBPValues(ai.Sumofpaidinvoices1M, true) : "-"%></td>
                         <td><%-ai.Sumofpaidinvoices3M!=undefined ? GBPValues(ai.Sumofpaidinvoices3M, true) : "-"%></td>
