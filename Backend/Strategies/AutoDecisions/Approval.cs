@@ -9,18 +9,24 @@
 	public class Approval
 	{
 		private readonly StrategyHelper strategyHelper = new StrategyHelper();
-		private readonly AutoDecisionRequest request;
 		private readonly bool autoApproveIsSilent;
 		private readonly string autoApproveSilentTemplateName;
 		private readonly string autoApproveSilentToAddress;
 		private readonly AConnection Db;
+		private readonly int minExperianScore;
+		private readonly int offeredCreditLine;
 		private readonly ASafeLog log;
+		private readonly bool enableAutomaticApproval;
+		private readonly int customerId;
 
-		public Approval(AutoDecisionRequest request, AConnection oDb, ASafeLog oLog)
+		public Approval(int customerId, int minExperianScore, int offeredCreditLine, bool enableAutomaticApproval, AConnection oDb, ASafeLog oLog)
 		{
 			Db = oDb;
 			log = oLog;
-			this.request = request;
+			this.minExperianScore = minExperianScore;
+			this.offeredCreditLine = offeredCreditLine;
+			this.enableAutomaticApproval = enableAutomaticApproval;
+			this.customerId = customerId;
 			DataTable dt = Db.ExecuteReader("GetApprovalConfigs", CommandSpecies.StoredProcedure);
 			var sr = new SafeReader(dt.Rows[0]);
 
@@ -31,9 +37,9 @@
 
 		public bool MakeDecision(AutoDecisionResponse response)
 		{
-			if (request.EnableAutomaticApproval)
+			if (enableAutomaticApproval)
 			{
-				response.AutoApproveAmount = strategyHelper.AutoApproveCheck(request.CustomerId, request.OfferedCreditLine, request.MinExperianScore);
+				response.AutoApproveAmount = strategyHelper.AutoApproveCheck(customerId, offeredCreditLine, minExperianScore);
 
 				if (response.AutoApproveAmount != 0)
 				{
@@ -45,7 +51,7 @@
 					{
 						if (autoApproveIsSilent)
 						{
-							strategyHelper.NotifyAutoApproveSilentMode(request.CustomerId, response.AutoApproveAmount, autoApproveSilentTemplateName, autoApproveSilentToAddress);
+							strategyHelper.NotifyAutoApproveSilentMode(customerId, response.AutoApproveAmount, autoApproveSilentTemplateName, autoApproveSilentToAddress);
 
 							response.CreditResult = "WaitingForDecision";
 							response.UserStatus = "Manual";
@@ -56,7 +62,7 @@
 							dt = Db.ExecuteReader(
 								"GetLastOfferDataForApproval",
 								CommandSpecies.StoredProcedure,
-								new QueryParameter("CustomerId", request.CustomerId)
+								new QueryParameter("CustomerId", customerId)
 							);
 
 							sr = new SafeReader(dt.Rows[0]);

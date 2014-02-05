@@ -5,30 +5,31 @@
 
 	public class AutoDecisionMaker
 	{
-		public static AutoDecisionResponse MakeDecision(AutoDecisionRequest request, AConnection oDb, ASafeLog oLog)
+		public static AutoDecisionResponse MakeDecision(int customerId, int minExperianScore, double totalSumOfOrders1YTotal, double totalSumOfOrders3MTotal, int offeredCreditLine, 
+			double marketplaceSeniorityDays, bool enableAutomaticReRejection, bool enableAutomaticRejection, bool enableAutomaticReApproval, double initialExperianConsumerScore, 
+			bool enableAutomaticApproval, decimal loanOfferReApprovalFullAmount, decimal loanOfferReApprovalRemainingAmount, decimal loanOfferReApprovalFullAmountOld, decimal loanOfferReApprovalRemainingAmountOld, AConnection oDb, ASafeLog oLog)
 		{
-			var autoDecisionResponse = new AutoDecisionResponse(request);
+			var autoDecisionResponse = new AutoDecisionResponse();
 
-			if (new ReRejection(request, oDb, oLog).MakeDecision(autoDecisionResponse))
+			if (new ReRejection(customerId, enableAutomaticReRejection, oDb, oLog).MakeDecision(autoDecisionResponse))
 			{
 				return autoDecisionResponse;
 			}
 
-			if (new ReApproval(request, oDb, oLog).MakeDecision(autoDecisionResponse))
+			if (new ReApproval(customerId, enableAutomaticReApproval, loanOfferReApprovalFullAmount, loanOfferReApprovalRemainingAmount, loanOfferReApprovalFullAmountOld, loanOfferReApprovalRemainingAmountOld, oDb, oLog).MakeDecision(autoDecisionResponse))
 			{
 				return autoDecisionResponse;
 			}
 
-			if (new Approval(request, oDb, oLog).MakeDecision(autoDecisionResponse))
+			if (new Approval(customerId, minExperianScore, offeredCreditLine, enableAutomaticApproval, oDb, oLog).MakeDecision(autoDecisionResponse))
 			{
 				return autoDecisionResponse;
 			}
 
-			if (new Rejection(request, oDb, oLog).MakeDecision(autoDecisionResponse))
+			if (new Rejection(customerId, totalSumOfOrders1YTotal, totalSumOfOrders3MTotal, marketplaceSeniorityDays, enableAutomaticRejection, initialExperianConsumerScore, oDb, oLog).MakeDecision(autoDecisionResponse))
 			{
 				return autoDecisionResponse;
 			}
-
 
 			autoDecisionResponse.CreditResult = "WaitingForDecision";
 			autoDecisionResponse.UserStatus = "Manual";

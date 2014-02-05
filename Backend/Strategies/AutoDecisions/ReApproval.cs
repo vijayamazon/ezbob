@@ -10,15 +10,25 @@
 	{
 		private readonly StrategyHelper strategyHelper = new StrategyHelper();
 		private readonly int autoReApproveMaxNumOfOutstandingLoans;
-		private readonly AutoDecisionRequest request;
 		private readonly AConnection Db;
 		private readonly ASafeLog log;
-
-		public ReApproval(AutoDecisionRequest request, AConnection oDb, ASafeLog oLog)
+		private readonly bool enableAutomaticReApproval;
+		private readonly int customerId;
+		private readonly decimal loanOfferReApprovalFullAmount;
+		private readonly decimal loanOfferReApprovalRemainingAmount;
+		private readonly decimal loanOfferReApprovalFullAmountOld;
+		private readonly decimal loanOfferReApprovalRemainingAmountOld;
+		
+		public ReApproval(int customerId, bool enableAutomaticReApproval, decimal loanOfferReApprovalFullAmount, decimal loanOfferReApprovalRemainingAmount, decimal loanOfferReApprovalFullAmountOld, decimal loanOfferReApprovalRemainingAmountOld, AConnection oDb, ASafeLog oLog)
 		{
 			Db = oDb;
 			log = oLog;
-			this.request = request;
+			this.enableAutomaticReApproval = enableAutomaticReApproval;
+			this.customerId = customerId;
+			this.loanOfferReApprovalFullAmount = loanOfferReApprovalFullAmount;
+			this.loanOfferReApprovalRemainingAmount = loanOfferReApprovalRemainingAmount;
+			this.loanOfferReApprovalFullAmountOld = loanOfferReApprovalFullAmountOld;
+			this.loanOfferReApprovalRemainingAmountOld = loanOfferReApprovalRemainingAmountOld;
 			DataTable dt = Db.ExecuteReader("GetReApprovalConfigs", CommandSpecies.StoredProcedure); 
 			var sr = new SafeReader(dt.Rows[0]);
 			autoReApproveMaxNumOfOutstandingLoans = sr["AutoReApproveMaxNumOfOutstandingLoans"];
@@ -29,7 +39,7 @@
 			DataTable dt = Db.ExecuteReader(
 				"GetLastOfferDataForReApproval",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", request.CustomerId)
+				new QueryParameter("CustomerId", customerId)
 			);
 
 			if (dt.Rows.Count == 0) // Cant reapprove without previous approvals
@@ -46,8 +56,8 @@
 			int loanOfferNumOfMPsAddedOld = sr["NumOfMPsAddedOld"];
 			decimal loanOfferPrincipalPaidAmountOld = sr["PrincipalPaidAmountOld"];
 
-			if ((request.LoanOfferReApprovalFullAmount > 0 || request.LoanOfferReApprovalRemainingAmount > 0) ||
-				((request.LoanOfferReApprovalFullAmountOld > 0 || request.LoanOfferReApprovalRemainingAmountOld > 0) &&
+			if ((loanOfferReApprovalFullAmount > 0 || loanOfferReApprovalRemainingAmount > 0) ||
+				((loanOfferReApprovalFullAmountOld > 0 || loanOfferReApprovalRemainingAmountOld > 0) &&
 			     loanOfferPrincipalPaidAmountOld == 0 && loanOfferSumOfChargesOld == 0 &&
 			     loanOfferNumOfMPsAddedOld == 0))
 			{
@@ -56,7 +66,7 @@
 				decimal availableFunds = sr["AvailableFunds"];
 				if (availableFunds > loanOfferSystemCalculatedSum)
 				{
-					int numOfOutstandingLoans = strategyHelper.GetOutstandingLoansNum(request.CustomerId);
+					int numOfOutstandingLoans = strategyHelper.GetOutstandingLoansNum(customerId);
 					if (numOfOutstandingLoans > autoReApproveMaxNumOfOutstandingLoans)
 					{
 						response.CreditResult = "WaitingForDecision";
@@ -65,7 +75,7 @@
 						return true;
 					}
 
-					response.CreditResult = request.EnableAutomaticReApproval ? "Approved" : "WaitingForDecision";
+					response.CreditResult = enableAutomaticReApproval ? "Approved" : "WaitingForDecision";
 					response.UserStatus = "Approved";
 					response.SystemDecision = "Approve";
 					response.LoanOfferUnderwriterComment = "Auto Re-Approval";

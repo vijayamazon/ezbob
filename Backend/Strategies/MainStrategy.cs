@@ -146,13 +146,13 @@
 				SetEndTimestamp();
 				return;
 			} // if
-
 			
 			GetLastCashRequestData();
 
 			CalcAndCapOffer();
 
-			autoDecisionResponse = AutoDecisionMaker.MakeDecision(CreateAutoDecisionRequest(), DB, Log);
+			autoDecisionResponse = AutoDecisionMaker.MakeDecision(customerId, minExperianScore, totalSumOfOrders1YTotal, totalSumOfOrders3MTotal, offeredCreditLine, marketplaceSeniorityDays, enableAutomaticReRejection, enableAutomaticRejection, enableAutomaticReApproval, initialExperianConsumerScore, enableAutomaticApproval,
+				loanOfferReApprovalFullAmountOld, loanOfferReApprovalFullAmount, loanOfferReApprovalRemainingAmount, loanOfferReApprovalRemainingAmountOld, DB, Log);
 			if (autoDecisionResponse.SystemDecision == "Reject")
 			{
 				modelLoanOffer = 0;
@@ -470,6 +470,7 @@
 			}
 
 			totalSumOfOrders1YTotal = strategyHelper.GetAnualTurnOverByCustomer(customerId);
+			totalSumOfOrders3MTotal = strategyHelper.GetTotalSumOfOrders3M(customerId);
 			marketplaceSeniorityDays = strategyHelper.MarketplaceSeniority(customerId);
 			decimal totalSumOfOrdersForLoanOffer = (decimal)strategyHelper.GetTotalSumOfOrdersForLoanOffer(customerId);
 
@@ -784,9 +785,7 @@
 
 			var defaultAccountsNumResults = new SafeReader(defaultAccountsNumDataTable.Rows[0]);
 			numOfDefaultAccounts = defaultAccountsNumResults["NumOfDefaultAccounts"];
-
-			totalSumOfOrders3MTotal = strategyHelper.GetTotalSumOfOrders3M(customerId);
-
+			
 			var variables = new Dictionary<string, string> {
 				{"RegistrationDate", appRegistrationDate.ToString(CultureInfo.InvariantCulture)},
 				{"userID", customerId.ToString(CultureInfo.InvariantCulture)},
@@ -818,33 +817,6 @@
 		} // SendRejectionExplanationMail
 
 		#endregion method SendRejectionExplanationMail
-
-		#region method CreateAutoDecisionRequest
-
-		private AutoDecisionRequest CreateAutoDecisionRequest()
-		{
-			return new AutoDecisionRequest
-			{
-				CustomerId = customerId,
-				EnableAutomaticApproval = enableAutomaticApproval,
-				EnableAutomaticReApproval = enableAutomaticReApproval,
-				EnableAutomaticRejection = enableAutomaticRejection,
-				EnableAutomaticReRejection = enableAutomaticReRejection,
-				InitialExperianConsumerScore = initialExperianConsumerScore,
-				IsReRejected = false,
-				LoanOfferReApprovalFullAmountOld = loanOfferReApprovalFullAmountOld,
-				LoanOfferReApprovalFullAmount = loanOfferReApprovalFullAmount,
-				LoanOfferReApprovalRemainingAmount = loanOfferReApprovalRemainingAmount,
-				LoanOfferReApprovalRemainingAmountOld = loanOfferReApprovalRemainingAmountOld,
-				LowTotalAnnualTurnover = lowTotalAnnualTurnover,
-				LowTotalThreeMonthTurnover = lowTotalThreeMonthTurnover,
-				MarketplaceSeniorityDays = marketplaceSeniorityDays,
-				MinExperianScore = minExperianScore,
-				OfferedCreditLine = offeredCreditLine
-			};
-		} // CreateAutoDecisionRequest
-
-		#endregion method CreateAutoDecisionRequest
 		
 		private void GetBwa()
 		{

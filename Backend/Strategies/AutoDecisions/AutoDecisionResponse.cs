@@ -4,11 +4,6 @@
 
 	public class AutoDecisionResponse
 	{
-		public AutoDecisionResponse(AutoDecisionRequest request)
-		{
-			IsReRejected = request.IsReRejected;
-		}
-
 		public bool IsReRejected { get; set; }
 		public string AutoRejectReason { get; set; }
 		public string CreditResult { get; set; }
