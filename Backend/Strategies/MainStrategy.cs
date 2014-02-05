@@ -38,18 +38,18 @@
 		public MainStrategy(
 			int customerId,
 			NewCreditLineOption newCreditLine,
-			int avoidAutoDescison,
+			int avoidAutoDecision,
 			AConnection oDb,
 			ASafeLog oLog
 		)
-			: this(customerId, newCreditLine, avoidAutoDescison, false, oDb, oLog)
+			: this(customerId, newCreditLine, avoidAutoDecision, false, oDb, oLog)
 		{
 		} // constructor
 
 		public MainStrategy(
 			int customerId,
 			NewCreditLineOption newCreditLine,
-			int avoidAutoDescison,
+			int avoidAutoDecision,
 			bool isUnderwriterForced,
 			AConnection oDb,
 			ASafeLog oLog
@@ -60,7 +60,7 @@
 			mailer = new StrategiesMailer(DB, Log);
 			this.customerId = customerId;
 			newCreditLineOption = newCreditLine;
-			avoidAutomaticDescison = avoidAutoDescison;
+			avoidAutomaticDecision = avoidAutoDecision;
 			underwriterCheck = isUnderwriterForced;
 		} // constructor
 
@@ -80,7 +80,7 @@
 			string postcode,
 			string bankAccount,
 			string sortCode,
-			int avoidAutoDescison,
+			int avoidAutoDecision,
 			AConnection oDb,
 			ASafeLog oLog
 		)
@@ -99,7 +99,7 @@
 			idhubPostCode = postcode;
 			idhubAccountNumber = bankAccount;
 			idhubBranchCode = sortCode;
-			avoidAutomaticDescison = avoidAutoDescison;
+			avoidAutomaticDecision = avoidAutoDecision;
 		} // constructor
 
 		#endregion constructor - flow #2
@@ -153,6 +153,7 @@
 
 			autoDecisionResponse = AutoDecisionMaker.MakeDecision(customerId, minExperianScore, totalSumOfOrders1YTotal, totalSumOfOrders3MTotal, offeredCreditLine, marketplaceSeniorityDays, enableAutomaticReRejection, enableAutomaticRejection, enableAutomaticReApproval, initialExperianConsumerScore, enableAutomaticApproval,
 				loanOfferReApprovalFullAmountOld, loanOfferReApprovalFullAmount, loanOfferReApprovalRemainingAmount, loanOfferReApprovalRemainingAmountOld, DB, Log);
+			
 			if (autoDecisionResponse.SystemDecision == "Reject")
 			{
 				modelLoanOffer = 0;
@@ -592,7 +593,7 @@
 				newCreditLineOption == NewCreditLineOption.SkipEverything ||
 				newCreditLineOption == NewCreditLineOption.UpdateEverythingExceptMp ||
 				newCreditLineOption == NewCreditLineOption.UpdateEverythingAndGoToManualDecision ||
-				avoidAutomaticDescison == 1)
+				avoidAutomaticDecision == 1)
 			{
 				enableAutomaticApproval = false;
 				enableAutomaticReApproval = false;
@@ -616,7 +617,7 @@
 		private readonly int customerId;
 		private readonly NewCreditLineOption newCreditLineOption;
 		private readonly bool underwriterCheck;
-		private readonly int avoidAutomaticDescison;
+		private readonly int avoidAutomaticDecision;
 		private readonly int useCustomIdHubAddress;
 		private readonly string idhubHouseNumber;
 		private readonly string idhubHouseName;
