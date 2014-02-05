@@ -101,34 +101,55 @@
 
 		public double GetTotalSumOfOrdersForLoanOffer(int customerId)
 		{
-			double year = GetTurnoverForPeriod(customerId, TimePeriodEnum.Year);
-			double month3 = GetTurnoverForPeriod(customerId, TimePeriodEnum.Month3);
-			double month = GetTurnoverForPeriod(customerId, TimePeriodEnum.Month);
+			double year = GetAnnualizedTurnoverForPeriod(customerId, TimePeriodEnum.Year);
+			double month6 = GetAnnualizedTurnoverForPeriod(customerId, TimePeriodEnum.Month6);
+			double month3 = GetAnnualizedTurnoverForPeriod(customerId, TimePeriodEnum.Month3);
+			double month = GetAnnualizedTurnoverForPeriod(customerId, TimePeriodEnum.Month);
 
-			var relevantValueForMonth = new decimal(month * 12);
-			var relevantValueFor3Months = new decimal(month3 * 4);
-			var relevantValueForYear = new decimal(year);
-			string periodUsed;
-			decimal min;
-			if (relevantValueForYear <= relevantValueFor3Months && relevantValueForYear <= relevantValueForMonth)
-			{
-				periodUsed = "1 Year";
-				min = relevantValueForYear;
-			}
-			else if (relevantValueFor3Months <= relevantValueForYear && relevantValueFor3Months <= relevantValueForMonth)
-			{
-				periodUsed = "3 Months";
-				min = relevantValueFor3Months;
-			}
-			else
-			{
-				periodUsed = "1 Month";
-				min = relevantValueForMonth;
-			}
+			double min = Math.Min(year, Math.Min(month6, Math.Min(month3, month)));
+			log.InfoFormat("Calculated annualized turnover. Year:{0} 6Months:{1} 3Months:{2} Month:{3}. Using min:{4}", year, month6, month3, month, min);
+			return min;
+		}
 
-			log.InfoFormat("Calculated total sum of orders for loan offer. Year:{0} 3M:{1}({2} * 4) 1M:{3}({4} * 12) Calculated min:{5} Chosen period:{6}", relevantValueForYear, relevantValueFor3Months, month3, relevantValueForMonth, month, min, periodUsed);
+		public double GetAnnualizedTurnoverForPeriod(int customerId, TimePeriodEnum period)
+		{
+			var customer = _customers.Get(customerId);
+			double sum = 0;
+			double payPalSum = 0;
+			double ebaySum = 0;
+			foreach (var mp in customer.CustomerMarketPlaces.Where(mp => !mp.Disabled && (!mp.Marketplace.IsPaymentAccount || mp.Marketplace.Name == "Pay Pal")))
+			{
+				var analisysFunction = RetrieveDataHelper.GetAnalysisValuesByCustomerMarketPlace(mp.Id);
+				var av = analisysFunction.Data.FirstOrDefault(x => x.Key == analisysFunction.Data.Max(y => y.Key)).Value;
+				if (av != null)
+				{
+					string parameterName;
+					if (period == TimePeriodEnum.Month || period == TimePeriodEnum.Month3 || period == TimePeriodEnum.Month6)
+					{
+						parameterName = mp.Marketplace.Name == "Pay Pal" ? "Total Net In Payments Annualized" : "Total Sum of Orders Annualized";
+					}
+					else
+					{
+						parameterName = mp.Marketplace.Name == "Pay Pal" ? "Total Net In Payments" : "Total Sum of Orders";
+					}
+					var relevantTurnover = av.LastOrDefault(x => x.ParameterName == parameterName && x.TimePeriod.TimePeriodType <= period);
 
-			return (double)min;
+					double currentTurnover = Convert.ToDouble(relevantTurnover != null ? relevantTurnover.Value : 0);
+					if (mp.Marketplace.Name == "Pay Pal")
+					{
+						payPalSum += currentTurnover;
+					}
+					else if (mp.Marketplace.Name == "eBay")
+					{
+						ebaySum += currentTurnover;
+					}
+					else
+					{
+						sum += currentTurnover;
+					}
+				}
+			}
+			return sum + Math.Max(payPalSum, ebaySum);
 		}
 
 		public void AddRejectIntoDecisionHistory(int customerId, string comment)
