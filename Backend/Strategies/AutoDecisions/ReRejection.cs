@@ -33,6 +33,7 @@
 		{
 			if (newCustomerReReject > 0 || (oldCustomerReReject > 0 && loanAmountTaken * 0.5m >= principalPaidAmount))
 			{
+				Rejection.FillPayPalFiguresForExplanationMail(Db, customerId, response);
 				response.IsReRejected = true;
 				response.AutoRejectReason = "Auto Re-Reject";
 

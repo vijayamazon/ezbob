@@ -84,17 +84,7 @@
 			if (IsException())
 				return false;
 
-			DataTable dt = Db.ExecuteReader(
-				"GetPayPalAggregations",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId)
-			);
-
-			var sr = new SafeReader(dt.Rows[0]);
-
-			response.PayPalNumberOfStores = sr["PayPal_NumberOfStores"];
-			response.PayPalTotalSumOfOrders3M = sr["PayPal_TotalSumOfOrders3M"];
-			response.PayPalTotalSumOfOrders1Y = sr["PayPal_TotalSumOfOrders1Y"];
+			FillPayPalFiguresForExplanationMail(Db, customerId, response);
 
 			if (initialExperianConsumerScore < rejectDefaultsCreditScore &&
 				numOfDefaultAccounts >= rejectDefaultsAccountsNum)
@@ -137,6 +127,21 @@
 			response.SystemDecision = "Reject";
 
 			return true;
+		}
+
+		public static void FillPayPalFiguresForExplanationMail(AConnection db, int customerId, AutoDecisionResponse response)
+		{
+			DataTable dt = db.ExecuteReader(
+				"GetPayPalAggregations",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", customerId)
+				);
+
+			var sr = new SafeReader(dt.Rows[0]);
+
+			response.PayPalNumberOfStores = sr["PayPal_NumberOfStores"];
+			response.PayPalTotalSumOfOrders3M = sr["PayPal_TotalSumOfOrders3M"];
+			response.PayPalTotalSumOfOrders1Y = sr["PayPal_TotalSumOfOrders1Y"];
 		}
 	}
 }
