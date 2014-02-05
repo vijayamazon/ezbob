@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ActionMetaData xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <ExtensionData />
+  <ActionID>9a5226ad-87f1-4d08-83ef-a2adb4b03473</ActionID>
+  <Comment>25; PersonalDetaisCheck</Comment>
+  <CustomerID>25</CustomerID>
+  <IsSynchronous>false</IsSynchronous>
+  <Name>EzBob.Backend.Strategies.FraudChecker</Name>
+  <Status>Launched</Status>
+  <UserID xsi:nil="true" />
+</ActionMetaData>
