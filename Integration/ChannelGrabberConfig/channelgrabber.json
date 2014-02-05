@@ -27,7 +27,8 @@
 			{ "FunctionTypeName": "AverageSumOfOrders",   "ValueTypeName": "Double",  "ID": "{b3c96690-c061-42da-bfba-8176137e149d}" },
 			{ "FunctionTypeName": "NumOfExpenses",        "ValueTypeName": "Integer", "ID": "{C93A575D-F536-456E-8F8F-4D4C745FD868}" },
 			{ "FunctionTypeName": "TotalSumOfExpenses",   "ValueTypeName": "Double",  "ID": "{C45298CD-CAFF-49B0-BEE6-6E8E3281F63C}" },
-			{ "FunctionTypeName": "AverageSumOfExpenses", "ValueTypeName": "Double",  "ID": "{CD2F52DA-8CDC-4302-B76F-562A44F3103A}" }
+			{ "FunctionTypeName": "AverageSumOfExpenses", "ValueTypeName": "Double",  "ID": "{CD2F52DA-8CDC-4302-B76F-562A44F3103A}" },
+			{ "FunctionTypeName": "TotalSumOfOrdersAnnualized", "ValueTypeName": "Double",  "ID": "{98116835-CEC0-451D-9221-BC79882A2409}" }
 		],
 
 		"ClientSide": {
@@ -112,7 +113,8 @@
 			{ "FunctionTypeName": "AverageSumOfOrders",   "ValueTypeName": "Double",  "ID": "{B59DEC6F-38FC-4304-AB7C-6DF60A580A08}" },
 			{ "FunctionTypeName": "NumOfExpenses",        "ValueTypeName": "Integer", "ID": "{C58BC831-5BDB-414A-9C1E-A1EBB31DAC27}" },
 			{ "FunctionTypeName": "TotalSumOfExpenses",   "ValueTypeName": "Double",  "ID": "{C1CFA9FD-AEC9-443E-B04D-3C69F416BA7C}" },
-			{ "FunctionTypeName": "AverageSumOfExpenses", "ValueTypeName": "Double",  "ID": "{C6FDF05A-022D-4F1C-A0E8-F598A220B7C0}" }
+			{ "FunctionTypeName": "AverageSumOfExpenses", "ValueTypeName": "Double",  "ID": "{C6FDF05A-022D-4F1C-A0E8-F598A220B7C0}" },
+			{ "FunctionTypeName": "TotalSumOfOrdersAnnualized", "ValueTypeName": "Double",  "ID": "{81E79DDF-65B1-4E73-B90C-3C4380893B73}" }
 		],
 
 		"ClientSide": {
@@ -181,7 +183,8 @@
 			{ "FunctionTypeName": "AverageSumOfOrders",   "ValueTypeName": "Double",  "ID": "{B1B0C576-1AAC-4CD1-BFA6-CDC081FCB306}" },
 			{ "FunctionTypeName": "NumOfExpenses",        "ValueTypeName": "Integer", "ID": "{C2764AC3-B368-454F-872E-FF2B97A61092}" },
 			{ "FunctionTypeName": "TotalSumOfExpenses",   "ValueTypeName": "Double",  "ID": "{C3DBE341-1A0F-4076-B3F9-6C7460D82D37}" },
-			{ "FunctionTypeName": "AverageSumOfExpenses", "ValueTypeName": "Double",  "ID": "{CD649144-1638-423D-868A-0D7063EF8A7C}" }
+			{ "FunctionTypeName": "AverageSumOfExpenses", "ValueTypeName": "Double",  "ID": "{CD649144-1638-423D-868A-0D7063EF8A7C}" },
+			{ "FunctionTypeName": "TotalSumOfOrdersAnnualized", "ValueTypeName": "Double",  "ID": "{548392C1-AA45-459B-9E65-EFE2A109070B}" }
 		],
 
 		"ClientSide": {
@@ -244,7 +247,8 @@
 			{ "FunctionTypeName": "AverageSumOfOrders",   "ValueTypeName": "Double",  "ID": "{B4EEAA5F-00CB-4AE9-B1C8-2123BA3A3FEC}" },
 			{ "FunctionTypeName": "NumOfExpenses",        "ValueTypeName": "Integer", "ID": "{CBC5655B-6CC2-4D86-ABB7-E37057A5F892}" },
 			{ "FunctionTypeName": "TotalSumOfExpenses",   "ValueTypeName": "Double",  "ID": "{CBA06EBD-E58E-4312-AF61-4AFD07A2C828}" },
-			{ "FunctionTypeName": "AverageSumOfExpenses", "ValueTypeName": "Double",  "ID": "{CA17192B-8B1D-4C15-9157-78CBDD318897}" }
+			{ "FunctionTypeName": "AverageSumOfExpenses", "ValueTypeName": "Double",  "ID": "{CA17192B-8B1D-4C15-9157-78CBDD318897}" },
+			{ "FunctionTypeName": "TotalSumOfOrdersAnnualized", "ValueTypeName": "Double",  "ID": "{2AA83171-13F2-4C05-9B91-A5F4B5336403}" }
 		],
 
 		"ClientSide": {
@@ -322,7 +326,8 @@
 			{ "FunctionTypeName": "AverageSumOfOrders",   "ValueTypeName": "Double",  "ID": "{BBF3F3E8-2317-45E2-9A21-2EFF620936B2}" },
 			{ "FunctionTypeName": "NumOfExpenses",        "ValueTypeName": "Integer", "ID": "{CC16E1DF-B882-4FC4-BD8D-A533A6A98B78}" },
 			{ "FunctionTypeName": "TotalSumOfExpenses",   "ValueTypeName": "Double",  "ID": "{CF7DD5EB-1D6D-4D43-ABEF-FC074A19B0FC}" },
-			{ "FunctionTypeName": "AverageSumOfExpenses", "ValueTypeName": "Double",  "ID": "{C80F2543-CF30-49B9-90D5-5BB77C608B42}" }
+			{ "FunctionTypeName": "AverageSumOfExpenses", "ValueTypeName": "Double",  "ID": "{C80F2543-CF30-49B9-90D5-5BB77C608B42}" },
+			{ "FunctionTypeName": "TotalSumOfOrdersAnnualized", "ValueTypeName": "Double",  "ID": "{D08CD898-ACB6-48F7-B514-4011C00E569F}" }
 		],
 
 		"ClientSide": {
@@ -382,7 +387,8 @@
 			{ "FunctionTypeName": "AverageSumOfOrders",   "ValueTypeName": "Double",  "ID": "{BCA489F8-847A-46EC-BE2D-35ABFEDD0D76}" },
 			{ "FunctionTypeName": "NumOfExpenses",        "ValueTypeName": "Integer", "ID": "{C6847E6E-D4DF-4FD9-B0B4-0BC0235DB428}" },
 			{ "FunctionTypeName": "TotalSumOfExpenses",   "ValueTypeName": "Double",  "ID": "{CCF67CC1-18F5-4547-86A7-5B159C2462A0}" },
-			{ "FunctionTypeName": "AverageSumOfExpenses", "ValueTypeName": "Double",  "ID": "{C206B422-CDB3-4361-89EC-673B5753FA06}" }
+			{ "FunctionTypeName": "AverageSumOfExpenses", "ValueTypeName": "Double",  "ID": "{C206B422-CDB3-4361-89EC-673B5753FA06}" },
+			{ "FunctionTypeName": "TotalSumOfOrdersAnnualized", "ValueTypeName": "Double",  "ID": "{C3AA2A90-DD3E-407E-9016-A5D12798310D}" }
 		],
 
 		"ClientSide": {
@@ -451,7 +457,8 @@
 			{ "FunctionTypeName": "AverageSumOfOrders",   "ValueTypeName": "Double",  "ID": "{BCD30FB2-7C1D-4D50-A0AC-D11FD8477ED0}" },
 			{ "FunctionTypeName": "NumOfExpenses",        "ValueTypeName": "Integer", "ID": "{C8DF63FC-7DB3-4F75-AD40-97A556225042}" },
 			{ "FunctionTypeName": "TotalSumOfExpenses",   "ValueTypeName": "Double",  "ID": "{C3669B1A-9B21-4C31-B535-C7E542DD8BCC}" },
-			{ "FunctionTypeName": "AverageSumOfExpenses", "ValueTypeName": "Double",  "ID": "{C06CCAA8-8946-4B4A-92C3-55AF0FFC2C35}" }
+			{ "FunctionTypeName": "AverageSumOfExpenses", "ValueTypeName": "Double",  "ID": "{C06CCAA8-8946-4B4A-92C3-55AF0FFC2C35}" },
+			{ "FunctionTypeName": "TotalSumOfOrdersAnnualized", "ValueTypeName": "Double",  "ID": "{307BAEE4-73F2-404A-BDE3-0A407B01CE93}" }
 		],
 
 		"ClientSide": {
@@ -523,7 +530,8 @@
 			{ "FunctionTypeName": "AverageSumOfOrders",   "ValueTypeName": "Double",  "ID": "{BCADB388-8C7A-47F6-B6D4-348A390635E8}" },
 			{ "FunctionTypeName": "NumOfExpenses",        "ValueTypeName": "Integer", "ID": "{C64761DB-D075-40A1-ABF7-E07FD07ED11C}" },
 			{ "FunctionTypeName": "TotalSumOfExpenses",   "ValueTypeName": "Double",  "ID": "{C2D5B62B-43CF-4FA1-9128-3242007401FB}" },
-			{ "FunctionTypeName": "AverageSumOfExpenses", "ValueTypeName": "Double",  "ID": "{CCA07C01-88F6-4A53-8CAB-361489DD2E14}" }
+			{ "FunctionTypeName": "AverageSumOfExpenses", "ValueTypeName": "Double",  "ID": "{CCA07C01-88F6-4A53-8CAB-361489DD2E14}" },
+			{ "FunctionTypeName": "TotalSumOfOrdersAnnualized", "ValueTypeName": "Double",  "ID": "{A3B26621-F007-4AF4-B669-3BADFFA2851C}" }
 		],
 
 		"ClientSide": {
@@ -590,7 +598,8 @@
 			{ "FunctionTypeName": "AverageSumOfOrders",   "ValueTypeName": "Double",  "ID": "{B68A64A4-40DA-45D1-9F70-B9010A97C3E7}" },
 			{ "FunctionTypeName": "NumOfExpenses",        "ValueTypeName": "Integer", "ID": "{C94C7DED-4B3B-4598-8D6F-4C6D75D93BFA}" },
 			{ "FunctionTypeName": "TotalSumOfExpenses",   "ValueTypeName": "Double",  "ID": "{C960B241-D67F-453D-BF04-647A0B9C752B}" },
-			{ "FunctionTypeName": "AverageSumOfExpenses", "ValueTypeName": "Double",  "ID": "{C54B4BFD-B5E0-4D0A-8C4E-365EAEB3E584}" }
+			{ "FunctionTypeName": "AverageSumOfExpenses", "ValueTypeName": "Double",  "ID": "{C54B4BFD-B5E0-4D0A-8C4E-365EAEB3E584}" },
+			{ "FunctionTypeName": "TotalSumOfOrdersAnnualized", "ValueTypeName": "Double",  "ID": "{06AEBBE3-2856-4CB3-8939-CD8618701E7A}" }
 		],
 
 		"ClientSide": {

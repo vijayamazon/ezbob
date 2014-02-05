@@ -51,6 +51,9 @@ namespace Integration.ChannelGrabberFrontend {
 			
 			case FunctionType.TotalSumOfExpenses:
 				return GetTotalSumOfExpenses(orders);
+
+			case FunctionType.TotalSumOfOrdersAnnualized:
+				return GetTotalSumOfOrdersAnnualized(orders);
 			
 			default:
 				throw new NotImplementedException();
@@ -88,13 +91,30 @@ namespace Integration.ChannelGrabberFrontend {
 
 		#region method GetTotalSumOfOrders
 
-		private double GetTotalSumOfOrders(IEnumerable<AInternalOrderItem> orders) {
+		private double GetTotalSumOfOrders(IEnumerable<AInternalOrderItem> orders)
+		{
 			return orders
 				.Where(o => ChannelGrabberTypeName(o) == ChannelGrabberOrderItem.TypeName.Order)
 				.Sum(o => ChannelGrabberConvert(o));
 		} // GetTotalSumOfOrders
 
 		#endregion method GetTotalSumOfOrders
+
+		#region method GetTotalSumOfOrdersAnnualized
+
+		private double GetTotalSumOfOrdersAnnualized(IEnumerable<AInternalOrderItem> orders)
+		{
+			var ordersWithExtraInfo = orders as ReceivedDataListTimeDependentInfo<AInternalOrderItem>;
+			if (ordersWithExtraInfo == null)
+			{
+				return 0;
+			}
+
+			double sum = GetTotalSumOfOrders(orders);
+			return AnnualizeHelper.AnnualizeSum(ordersWithExtraInfo.TimePeriodType, ordersWithExtraInfo.SubmittedDate, sum);
+		} // GetTotalSumOfOrdersAnnualized
+
+		#endregion method GetTotalSumOfOrdersAnnualized
 
 		#endregion orders
 

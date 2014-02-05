@@ -93,6 +93,10 @@ namespace Integration.ChannelGrabberFrontend {
 				displayName = "Total Sum of Expenses";
 				break;
 
+			case FunctionType.TotalSumOfOrdersAnnualized:
+				displayName = "Total Sum of Orders Annualized";
+				break;
+
 			default:
 				throw new NotImplementedException();
 			} // switch

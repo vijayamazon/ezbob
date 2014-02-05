@@ -10,7 +10,8 @@ namespace Integration.ChannelGrabberConfig {
 		AverageSumOfOrders,
 		NumOfExpenses,
 		TotalSumOfExpenses,
-		AverageSumOfExpenses
+		AverageSumOfExpenses,
+		TotalSumOfOrdersAnnualized
 	} // enum FunctionType
 
 	#endregion enum FunctionType
