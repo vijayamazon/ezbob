@@ -472,6 +472,11 @@
 			return Execute(null, null, typeof(UpdateCurrencyRates));
 		} // UpdateCurrencyRates
 
+		public ActionMetaData FinishWizard(int customerId)
+		{
+			return Execute(customerId, null, typeof(FinishWizard), customerId);
+		} // FinishWizard
+
 		public QuickOfferActionResult QuickOffer(int customerId, bool saveOfferToDB) {
 			try {
 				return QuickOfferProcedure(customerId, saveOfferToDB, false, null);

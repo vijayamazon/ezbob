@@ -155,6 +155,9 @@ namespace EzService {
 
 		[OperationContract]
 		QuickOfferActionResult QuickOfferWithPrerequisites(int customerId, bool saveOfferToDB);
+		
+		[OperationContract]
+		ActionMetaData FinishWizard(int customerId);
 	} // interface IEzService
 
 	#endregion interface IEzService

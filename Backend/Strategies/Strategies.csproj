@@ -80,6 +80,7 @@
     <Compile Include="AutoDecisions\ReRejection.cs" />
     <Compile Include="CaisUpdate.cs" />
     <Compile Include="BwaChecker.cs" />
+    <Compile Include="FinishWizard.cs" />
     <Compile Include="ExperianConsumerCheck.cs" />
     <Compile Include="ExperianCompanyCheck.cs" />
     <Compile Include="QuickOffer\QuickOffer.cs" />

@@ -603,6 +603,19 @@
 			Console.WriteLine("OR");
 			Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> BwaChecker <CustomerId> <idhubHouseNumber> <idhubHouseName> <idhubStreet> <idhubDistrict> <idhubTown> <idhubCounty> <idhubPostCode> <idhubBranchCode> <idhubAccountNumber>");
 		}
+
+		[Activation]
+		private void FinishWizard()
+		{
+			int customerId;
+			if (args.Length != 2 || !int.TryParse(args[1], out customerId))
+			{
+				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> FinishWizard <CustomerId>");
+				return;
+			}
+
+			serviceClient.FinishWizard(customerId);
+		}
 		// ReSharper restore UnusedMember.Local
 
 		#endregion strategy activators

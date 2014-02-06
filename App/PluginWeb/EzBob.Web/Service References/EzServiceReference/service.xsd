@@ -810,4 +810,18 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="FinishWizard">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="customerId" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="FinishWizardResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q60="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="FinishWizardResult" nillable="true" type="q60:ActionMetaData" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
 </xs:schema>

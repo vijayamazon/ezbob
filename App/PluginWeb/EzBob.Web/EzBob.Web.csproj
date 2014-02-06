@@ -1341,22 +1341,22 @@
     <Content Include="Areas\Customer\Views\Agreement\DirectorsConsentDeclaration.cshtml" />
     <None Include="Service References\EzServiceReference\configuration91.svcinfo" />
     <None Include="Service References\EzServiceReference\configuration.svcinfo" />
+    <None Include="Service References\EzServiceReference\EzBob.Backend.Models.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.ActionMetaData.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
     <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.BoolActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
+    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.QuickOfferActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
     <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.StringListActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
     <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.WizardConfigsActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <None Include="Service References\EzServiceReference\EzBob.Backend.Models.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.QuickOfferActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
     <None Include="Service References\EzServiceReference\FraudChecker.xsd">
