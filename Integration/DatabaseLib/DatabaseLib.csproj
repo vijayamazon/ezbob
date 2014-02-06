@@ -93,6 +93,7 @@
     <Compile Include="Model\Database\CompanyEmployeeCount.cs" />
     <Compile Include="Model\Database\CompanyEmployeeCountMap.cs" />
     <Compile Include="Model\Database\Company.cs" />
+    <Compile Include="Model\Database\LandRegistry.cs" />
     <Compile Include="Model\Database\CustomerAddressType.cs" />
     <Compile Include="Model\Database\QuickOffer.cs" />
     <Compile Include="Model\Database\TrustPilotStatus.cs" />

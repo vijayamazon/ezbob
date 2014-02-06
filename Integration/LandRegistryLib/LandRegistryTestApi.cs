@@ -4,11 +4,11 @@
 	using System.Net;
 	using log4net;
 
-	public class LandRegistryTestApi
+	public class LandRegistryTestApi : ILandRegistryApi
 	{
 		private static readonly ILog Log = LogManager.GetLogger(typeof(LandRegistryApi));
-
-		public LandRegistryDataModel EnquiryByPropertyDescription(string buildingNumber, string streetName, string cityName, string postCode)
+		private readonly LandRegistryModelBuilder _builder = new LandRegistryModelBuilder();
+		public LandRegistryDataModel EnquiryByPropertyDescription(string buildingNumber = null, string streetName = null, string cityName = null, string postCode = null, int customerId = 1)
 		{
 			var model = new LandRegistryDataModel { RequestType = LandRegistryRequestType.EnquiryByPropertyDescription };
 			using (var client = new LREnquiryServiceTestNS.PropertyDescriptionEnquiryV2_0ServiceClient())
@@ -48,7 +48,7 @@
 				{
 					response = client.searchProperties(request);
 					model.Response = XmlHelper.SerializeObject(response);
-					model.ResponseType = GetResponseType((int) response.GatewayResponse.TypeCode.Value);
+					model.ResponseType = _builder.GetResponseType((int)response.GatewayResponse.TypeCode.Value);
 				}
 				catch (Exception ex)
 				{
@@ -85,7 +85,7 @@
 				{
 					response = client.getResponse(pollRequest);
 					model.Response = XmlHelper.SerializeObject(response);
-					model.ResponseType = GetResponseType((int)response.GatewayResponse.TypeCode.Value);
+					model.ResponseType = _builder.GetResponseType((int)response.GatewayResponse.TypeCode.Value);
 				}
 				catch (Exception ex)
 				{
@@ -97,7 +97,7 @@
 			return model;
 		}
 
-		public LandRegistryDataModel Res(string titleNumber)
+		public LandRegistryDataModel Res(string titleNumber, int cusomerId = 1)
 		{
 			var model = new LandRegistryDataModel { RequestType = LandRegistryRequestType.RegisterExtractService };
 
@@ -136,12 +136,12 @@
 				try
 				{
 					LRRESServiceTestNS.ResponseOCWithSummaryV2_1Type response = client.performOCWithSummary(request);
+					
+					//Stream stream = new MemoryStream(response.GatewayResponse.Results.Attachment.EmbeddedFileBinaryObject.Value);
 					//File.WriteAllBytes(string.Format("{0}_{1}.zip", titleNumber, DateTime.Today.Ticks), response.GatewayResponse.Results.Attachment.EmbeddedFileBinaryObject.Value);
 					response.GatewayResponse.Results.Attachment = null;
 					model.Response = XmlHelper.SerializeObject(response);
-					model.ResponseType = GetResponseType((int)response.GatewayResponse.TypeCode.Value);
-					var builder = new ResModelBuilder();
-					//model.Res = builder.BuildResModel(response);
+					model.ResponseType = _builder.GetResponseType((int)response.GatewayResponse.TypeCode.Value);
 
 				}
 				catch (Exception ex)
@@ -189,7 +189,7 @@
 					}
 
 					model.Response = XmlHelper.SerializeObject(response);
-					model.ResponseType = GetResponseType((int)response.GatewayResponse.TypeCode.Value);
+					model.ResponseType = _builder.GetResponseType((int)response.GatewayResponse.TypeCode.Value);
 				}
 				catch (Exception ex)
 				{
@@ -199,27 +199,6 @@
 				}
 			}
 			return model;
-		}
-		
-		private static LandRegistryResponseType GetResponseType(int value)
-		{
-			LandRegistryResponseType type;
-			switch (value)
-			{
-				case 1:
-					type = LandRegistryResponseType.Acknowledgement;
-					break;
-				case 2:
-					type = LandRegistryResponseType.Rejection;
-					break;
-				case 3:
-					type = LandRegistryResponseType.Success;
-					break;
-				default:
-					type = LandRegistryResponseType.Unkown;
-					break;
-			}
-			return type;
 		}
 	}
 }

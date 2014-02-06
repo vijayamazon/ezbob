@@ -627,22 +627,24 @@
 			}
 		}
 
-		public LandRegistryResModel GetLandRegistryDate(int customerId, bool recheck = false, bool stub = true)
+		public LandRegistryResModel GetLandRegistryData(int customerId, bool recheck = false, bool stub = true)
 		{
-			
+			var b = new LandRegistryModelBuilder();
+			var res = XmlHelper.XmlDeserializeFromString<LandRegistryLib.LRResServiceNS.ResponseOCWithSummaryV2_1Type>(LandRegistryTestFixure.TestResBM253452);
+			return b.BuildResModel(res);
 			//todo implement the logic to retrieve enquiry data, retrieve res data store to db
-			if (stub)
-			{
-				var lr = new LandRegistryTestApi();
-				var data = lr.Res(null);
-				return data.Res;
-			}
-			else
-			{
-				var lr = new LandRegistryApi();
-				var data = lr.Res(null);
-				return data.Res;
-			}
+			//if (stub)
+			//{
+			//	var lr = new LandRegistryTestApi();
+			//	var data = lr.Res(null);
+			//	return data.Res;
+			//}
+			//else
+			//{
+			//	var lr = new LandRegistryApi();
+			//	var data = lr.Res(null);
+			//	return data.Res;
+			//}
 		}
 
 

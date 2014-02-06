@@ -4,14 +4,14 @@
 	using NUnit.Framework;
 
 	[TestFixture]
-	class LandRegistryTestFixure
+	public class LandRegistryTestFixure
 	{
 		private static readonly LandRegistryApi Lr = new LandRegistryApi();
 		private static readonly LandRegistryTestApi LrTest = new LandRegistryTestApi();
 		[Test]
 		public void test_prod_enquiry()
 		{
-			var model = Lr.EnquiryByPropertyDescription(null, null, null, null);
+			var model = Lr.EnquiryByPropertyDescription(buildingNumber: "27", streetName: "Church Road", cityName: "Exeter", customerId: 1);
 			Assert.NotNull(model.Response);
 			Assert.AreEqual(LandRegistryResponseType.Success, model.ResponseType);
 		}
@@ -28,7 +28,7 @@
 			SGL348466
 			TGL70137
 			*/
-			var model = Lr.Res("BM253452", "2348");
+			var model = Lr.Res("BM253452", 2348);
 			Assert.NotNull(model.Response);
 			Assert.AreEqual(LandRegistryResponseType.Success, model.ResponseType);
 		}
@@ -36,7 +36,7 @@
 		[Test]
 		public void test_enquiry()
 		{
-			var model = LrTest.EnquiryByPropertyDescription(null, null, null, null);
+			var model = LrTest.EnquiryByPropertyDescription(buildingNumber: "27", streetName: "Church Road", cityName: "Exeter", customerId: 1);
 			Assert.NotNull(model.Response);
 			Assert.AreEqual(LandRegistryResponseType.Success, model.ResponseType);
 		}
@@ -65,15 +65,20 @@
 			Assert.AreEqual(LandRegistryResponseType.Acknowledgement, model.ResponseType);
 		}
 
-
 		[Test]
 		public void test_res_builder()
 		{
 			var responseBM253452 = XmlHelper.XmlDeserializeFromString<LandRegistryLib.LRResServiceNS.ResponseOCWithSummaryV2_1Type>(TestResBM253452);
-			var b = new ResModelBuilder();
+			var b = new LandRegistryModelBuilder();
+
+			var enqModel = b.BuildEnquiryModel(TestEnquiry);
+			Assert.IsNotNull(enqModel);
+			Console.WriteLine(XmlHelper.SerializeObject(enqModel));
+
 			var model = b.BuildResModel(responseBM253452);
 			Assert.IsNotNull(model);
 			Console.WriteLine(XmlHelper.SerializeObject(model));
+
 			var responseHW153409 = XmlHelper.XmlDeserializeFromString<LandRegistryLib.LRResServiceNS.ResponseOCWithSummaryV2_1Type>(TestResHW153409);
 			model = b.BuildResModel(responseHW153409);
 			Assert.IsNotNull(model);
@@ -100,6 +105,45 @@
 			Console.WriteLine(XmlHelper.SerializeObject(model));
 		}
 
+		public const string TestEnquiry = @"<?xml version=""1.0""?>
+<ResponseSearchByPropertyDescriptionV2_0Type xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
+  <GatewayResponse xmlns=""http://www.oscre.org/ns/eReg-Final/2011/ResponseSearchByPropertyDescriptionV2_0"">
+    <TypeCode>30</TypeCode>
+    <Results>
+      <ExternalReference>
+        <Reference>12345</Reference>
+      </ExternalReference>
+      <Title>
+        <TitleNumber>GR518195</TitleNumber>
+        <TenureInformation>
+          <TenureTypeCode>20</TenureTypeCode>
+        </TenureInformation>
+        <Address>
+          <BuildingNumber>27</BuildingNumber>
+          <StreetName>CHURCH ROAD</StreetName>
+          <CityName>EXETER</CityName>
+          <PostcodeZone>
+            <Postcode>EX56 4HY</Postcode>
+          </PostcodeZone>
+        </Address>
+      </Title>
+      <Title>
+        <TitleNumber>GR518197</TitleNumber>
+        <TenureInformation>
+          <TenureTypeCode>20</TenureTypeCode>
+        </TenureInformation>
+        <Address>
+          <BuildingNumber>27</BuildingNumber>
+          <StreetName>CHURCH ROAD</StreetName>
+          <CityName>EXETER</CityName>
+          <PostcodeZone>
+            <Postcode>EX56 4HY</Postcode>
+          </PostcodeZone>
+        </Address>
+      </Title>
+    </Results>
+  </GatewayResponse>
+</ResponseSearchByPropertyDescriptionV2_0Type>";
 
 		public const string TestResBM253452 = @"<?xml version=""1.0"" encoding=""utf-8""?>
 <ResponseOCWithSummaryV2_1Type xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"">

@@ -17,7 +17,7 @@ EzBob.LandRegistryView = Backbone.Marionette.View.extend({
             position: "top",
             draggable: true,
             dialogClass: "landregistry",
-            width: "90%"
+            width: "60%"
         };
     },
 });

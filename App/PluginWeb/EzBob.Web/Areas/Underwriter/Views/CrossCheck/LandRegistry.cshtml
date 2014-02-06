@@ -3,73 +3,155 @@
 }
 
 <script type="text/template" id="landregistry-template">
-    <%
-    var data = this.model;
-    if(data.error) {%>
-        <h3><%-data.error%></h3>
-    <%} else { console.log(data); %>
-    @*<pre class="highlight"><code class="language-xml"><%-data.response%></code></pre>*@
-    <div>Actual Price: <%=data.response.ActualPrice%></div>
-    <div>Official Copy Date: <%=data.response.OfficialCopyDateTime%></div>
+    <div class="tabbable">
+    <% var data = this.model; if(data.error) {%><h3><%-data.error%></h3>
+    <%} else { console.log("lr data",data); %>
+    <div class="tab-content"><span>Title Number: </span><%-data.response.TitleNumber%></div>
+        <div class="tab-content">
+            <%if(data.response.PropertyAddresses.length == 1){%>
+            <div>Property Address: <%=data.response.PropertyAddresses[0].Lines%> <%=data.response.PropertyAddresses[0].PostCode%></div>
+            <%} else {%>
+            <table class="table centered squeezed">
+                <thead class="box">
+                    <tr class="box-title">
+                        <td colspan="2">Property Address</td>
+                    </tr>
+                    <tr class="box-title">
+                        <td>Address</td>
+                        <td>Postcode</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <%_.each(data.response.PropertyAddresses, function(a) {%>
+                    <tr>
+                        <td class="narrow-as-possible"><%=a.Lines%></td>
+                        <td><%=a.PostCode%></td>
+                    </tr>
+                    <%});%>
+                </tbody>
+            </table>
+            <%}%>
+        </div>
+        <div class="tab-content">
+            <%if(data.response.PricePaidInfills && data.response.PricePaidInfills.length>0){%>
+            <table class="table centered squeezed">
+                <thead class="box">
+                    <tr class="box-title">
+                        <td colspan="2">Price Paid</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <%_.each(data.response.PricePaidInfills, function(p) {%>
+                    <tr>
+                        <td class="narrow-as-possible"><%-p.Key%></td>
+                        <td><%=p.Value%></td>
+                    </tr>
+                    <%});%>
+                </tbody>
+            </table>
+            <%} else {%>
+            <div><span>No price paid specified.</span></div>
+            <%}%>
+        </div>
 
-    <table class="table centered squeezed">
-        <thead class="box">
-            <tr class="box-title">
-                <td colspan="2">Proprietors</td>
-            </tr>
-        </thead>
-        <tbody>
-            <%_.each(data.response.RegisteredProprietorParties, function(p) {%>
+        <div class="tab-content">
+            <table class="table centered squeezed">
+                <thead class="box">
+                    <tr class="box-title">
+                        <td>Proprietorship</td>
+                        <td>Current Proprietorship Date: <%-EzBob.formatDate2(data.response.Proprietorship.CurrentProprietorshipDate)%></td>
+                        <td colspan="3"></td>
+                    </tr>
+                    <tr class="box-title">
+                        <td>Type</td>
+                        <td>Party Type</td>
+                        <td>Private Individual Name</td>
+                        <td>Company Name / Registration Number</td>
+                        <td>Proprietorship Addresses</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <%_.each(data.response.Proprietorship.ProprietorshipParties, function(p) {%>
             <tr>
-                <td>Name</td>
-                <td><%=p.ProprietorName%></td>
+                <td><%=p.ProprietorshipType%></td>
+                <td><%=p.ProprietorshipPartyType%></td>
+                <td><%=p.PrivateIndividualForename%> <%=p.PrivateIndividualSurname%></td>
+                <td><%=p.CompanyName%> <%=p.CompanyRegistrationNumber%></td>
+                <td>
+                    <table class="table centered squeezed">
+                        <tbody>
+                            <%_.each(p.ProprietorshipAddresses, function(a) {%>
+                            <tr>
+                                <td><%=a.Lines%></td>
+                                <td><%=a.PostCode%></td>
+                            </tr>
+                            <%});%>
+                        </tbody>
+                    </table>
+                </td>
             </tr>
-            <%});%>
-        </tbody>
-    </table>
-    <table class="table centered squeezed">
-        <thead class="box">
-            <tr class="box-title">
-                <td colspan="2">Restrictions</td>
-            </tr>
-            <tr class="box-title">
-                <td>Type</td>
-                <td>Description</td>
-            </tr>
-        </thead>
-        <tbody>
-            <%_.each(data.response.Restrictions, function(r) {%>
+                    <%});%>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="tab-content">
+            <table class="table centered squeezed">
+                <thead class="box">
+                    <tr class="box-title">
+                        <td colspan="6">Restrictions</td>
+                    </tr>
+                    <tr class="box-title">
+                        <td>Entry Num</td>
+                        <td>Entry Text</td>
+                        <td>Type</td>
+                        <td>SubRegister Code</td>
+                        <td>Schedule Code</td>
+                        <td>In fills</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <%_.each(data.response.Restrictions, function(r) {%>
+                    <tr>
+                        <td><%=r.EntryNumber%></td>
+                        <td><%=r.EntryText%></td>
+                        <td><%=r.Type%></td>
+                        <td><%=r.SubRegisterCode%></td>
+                        <td><%=r.ScheduleCode%></td>
+                        <td>
+                            <table class="table centered squeezed">
+                                <tbody>
+                                    <%_.each(r.Infills, function(i) {%>
+                                    <tr>
+                                        <td><%-i.Key%></td>
+                                        <td><%=i.Value%></td>
+                                    </tr>
+                                    <%});%>
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    <%});%>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="tab-content">
+            <table class="table centered squeezed">
+                <thead class="box">
+                    <tr class="box-title">
+                        <td>Indicators</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <%_.each(data.response.Indicators, function(i) {%>
             <tr>
-                <td><%=r.Type%></td>
-                <td><%=r.Description%></td>
+                <td><%=i%></td>
             </tr>
-            <%});%>
-        </tbody>
-    </table>
-    <table class="table centered squeezed">
-        <thead class="box">
-            <tr class="box-title">
-                <td colspan="5">Charges</td>
-            </tr>
-            <tr class="box-title">
-                <td>Charge Date</td>
-                <td>Proprietor Date</td>
-                <td>Proprietor Description</td>
-                <td>Proprietor Name</td>
-                <td>Description</td>
-            </tr>
-        </thead>
-        <tbody>
-            <%_.each(data.response.Charges, function(c) {%>
-            <tr>
-                <td><%=c.ChargeDate%></td>
-                <td><%=c.ChargeProprietorDate%></td>
-                <td><%=c.ChargeProprietorDescription%></td>
-                <td><%=c.ChargeProprietorName%></td>
-                <td><%=c.Description%></td>
-            </tr>
-            <%});%>
-        </tbody>
-    </table>
-    <%}%>
+                    <%});%>
+                </tbody>
+            </table>
+        </div>
+        <%}%>
+    </div>
 </script>

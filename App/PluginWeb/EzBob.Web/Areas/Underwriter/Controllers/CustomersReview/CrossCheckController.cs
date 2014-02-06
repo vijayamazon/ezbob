@@ -77,7 +77,7 @@
 			if (landregistry == null || recheck)
 			{
 				var sh = new StrategyHelper();
-				landregistry = sh.GetLandRegistryDate(customerId, recheck);
+				landregistry = sh.GetLandRegistryData(customerId, recheck);
 				if (landregistry == null)
 					return this.JsonNet(new { error = "land registry info not found" });
 			}

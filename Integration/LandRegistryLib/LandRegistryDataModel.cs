@@ -10,12 +10,18 @@
 
 		public string Request { get; set; }
 		public LandRegistryRequestType RequestType { get; set; }
+		
 		public string Response { get; set; }
 		public LandRegistryResponseType ResponseType { get; set; }
-		public string FilePath { get; set; }
+
+		public LandRegistryAttachmentModel Attachment { get; set; }
 		public string Error { get; set; }
-		public LandRegistryResModel Res { get; set; }
-		public LandRegistryAcknowledgementModel Acknowledgement { get; set; }
+		
+		public LandRegistryResModel Res { get; set; } //RES full response
+		public LandRegistryEnquiryModel Enquery { get; set; } //Enquiry full response
+
+		public LandRegistryAcknowledgementModel Acknowledgement { get; set; } //poll response
+		public LandRegistryRejectionModel Rejection{get;set;} // error response
 	}
 
 	public enum LandRegistryRequestType
@@ -31,7 +37,7 @@
 		Acknowledgement,//10
 		Rejection,//20
 		Success,//30
-		Unkown
+		Unkown,
 	}
 
 	public enum RestrictionTypeCode //Type of restriction present on the register.
@@ -86,6 +92,12 @@
 		D,
 	}
 
+	public class LandRegistryAttachmentModel
+	{
+		public string FileName { get; set; }
+		public string FilePath { get; set; }
+		public byte[] AttachmentContent { get; set; }
+	}
 	public class LandRegistryAcknowledgementModel
 	{
 		public DateTime PollDate { get; set; }
@@ -95,9 +107,24 @@
 
 	public class LandRegistryRejectionModel
 	{
-		public DateTime PollDate { get; set; }
-		public string Description { get; set; }
-		public string UniqueId { get; set; }
+		public string Reason { get; set; }
+		public string OtherDescription { get; set; }
+	}
+
+	public class LandRegistryEnquiryModel
+	{
+		public List<LandRegistryEnquiryTitle> Titles { get; set; }
+	}
+
+	public class LandRegistryEnquiryTitle
+	{
+		public string TitleNumber { get; set; }
+		public string BuildingName { get; set; }
+		public string SubBuildingName { get; set; }
+		public string BuildingNumber { get; set; }
+		public string StreetName { get; set; }
+		public string CityName { get; set; }
+		public string Postcode { get; set; }
 	}
 
 	public class LandRegistryResModel

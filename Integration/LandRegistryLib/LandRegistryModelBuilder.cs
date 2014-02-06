@@ -1,10 +1,71 @@
 ﻿namespace LandRegistryLib
 {
 	using System.Collections.Generic;
+	using LREnquiryServiceNS;
 	using LRResServiceNS;
+	using Q1AddressType = LRResServiceNS.Q1AddressType;
 
-	public class ResModelBuilder
+	public class LandRegistryModelBuilder
 	{
+
+		public LandRegistryResponseType GetResponseType(int value)
+		{
+			LandRegistryResponseType type;
+			switch (value)
+			{
+				case 1:
+				case 10:
+					type = LandRegistryResponseType.Acknowledgement;
+					break;
+				case 2:
+				case 20:
+					type = LandRegistryResponseType.Rejection;
+					break;
+				case 3:
+				case 30:
+					type = LandRegistryResponseType.Success;
+					break;
+				default:
+					type = LandRegistryResponseType.Unkown;
+					break;
+			}
+			return type;
+		}
+
+		public LandRegistryEnquiryModel BuildEnquiryModel(string responseXml)
+		{
+			var response = XmlHelper.XmlDeserializeFromString<ResponseSearchByPropertyDescriptionV2_0Type>(responseXml);
+			return BuildEnquiryModel(response);
+		}
+
+		public LandRegistryEnquiryModel BuildEnquiryModel(ResponseSearchByPropertyDescriptionV2_0Type response)
+		{
+			var model = new LandRegistryEnquiryModel { Titles = new List<LandRegistryEnquiryTitle>() };
+			var data = response.GatewayResponse.Results;
+
+			foreach (var title in data.Title)
+			{
+				var lrTitle = new LandRegistryEnquiryTitle
+				{
+					TitleNumber = title.TitleNumber == null ? null : title.TitleNumber.Value,
+					Postcode = (title.Address.PostcodeZone == null || title.Address.PostcodeZone.Postcode == null) ? null : title.Address.PostcodeZone.Postcode.Value,
+					BuildingName = title.Address.BuildingName == null ? null : title.Address.BuildingName.Value,
+					CityName = title.Address.CityName== null ? null : title.Address.CityName.Value,
+					BuildingNumber = title.Address.BuildingNumber== null ? null : title.Address.BuildingNumber.Value,
+					StreetName = title.Address.StreetName== null ? null : title.Address.StreetName.Value,
+					SubBuildingName = title.Address.SubBuildingName== null ? null : title.Address.SubBuildingName.Value
+				};
+				model.Titles.Add(lrTitle);
+			}
+			return model;
+		}
+
+		public LandRegistryResModel BuildResModel(string responseXml)
+		{
+			var response = XmlHelper.XmlDeserializeFromString<ResponseOCWithSummaryV2_1Type>(responseXml);
+			return BuildResModel(response);
+		}
+
 		public LandRegistryResModel BuildResModel(ResponseOCWithSummaryV2_1Type response)
 		{
 			var model = new LandRegistryResModel();
@@ -117,7 +178,7 @@
 			return addresses;
 		}
 
-		private List<KeyValuePair<string, string>> GetInfills(object[] infills)
+		private List<KeyValuePair<string, string>> GetInfills(IEnumerable<object> infills)
 		{
 			var lrInfills = new List<KeyValuePair<string, string>>();
 
@@ -130,13 +191,13 @@
 						lrInfills.Add(new KeyValuePair<string, string> { Key = "Amount", Value = ((AmountInfillType)infill).Value });
 						break;
 					case "ChargeDateInfillType":
-						lrInfills.Add(new KeyValuePair<string, string> { Key = "ChargeDate", Value = ((ChargeDateInfillType)infill).Value.ToShortDateString() });
+						lrInfills.Add(new KeyValuePair<string, string> { Key = "ChargeDate", Value = ((ChargeDateInfillType)infill).Value.ToString("DD/MM/YYYY") });
 						break;
 					case "ChargePartyInfillType":
 						lrInfills.Add(new KeyValuePair<string, string> { Key = "ChargeParty", Value = ((ChargePartyInfillType)infill).Value });
 						break;
 					case "DateInfillType":
-						lrInfills.Add(new KeyValuePair<string, string> { Key = "Date", Value = ((DateInfillType)infill).Value.ToShortDateString() });
+						lrInfills.Add(new KeyValuePair<string, string> { Key = "Date", Value = ((DateInfillType)infill).Value.ToString("DD/MM/YYYY") });
 						break;
 					case "DeedDateInfillType":
 						lrInfills.Add(new KeyValuePair<string, string> { Key = "DeedDate", Value = ((DeedDateInfillType)infill).Value });
@@ -184,123 +245,35 @@
 		{
 			var lrIndicators = new List<string>();
 
-			if (indicators.AgreedNoticeIndicator.Value)
-			{
-				lrIndicators.Add(LandRegistryIndicatorText.AgreedNoticeIndicator);
-			}
-			if (indicators.BankruptcyIndicator.Value)
-			{
-				lrIndicators.Add(LandRegistryIndicatorText.BankruptcyIndicator);
-			}
-			if (indicators.CautionIndicator.Value)
-			{
-				lrIndicators.Add(LandRegistryIndicatorText.CautionIndicator);
-			}
-			if (indicators.CCBIIndicator.Value)
-			{
-				lrIndicators.Add(LandRegistryIndicatorText.CCBIIndicator);
-			}
-			if (indicators.ChargeeIndicator.Value)
-			{
-				lrIndicators.Add(LandRegistryIndicatorText.ChargeeIndicator);
-			}
-			if (indicators.ChargeRelatedRestrictionIndicator.Value)
-			{
-				lrIndicators.Add(LandRegistryIndicatorText.ChargeRelatedRestrictionIndicator);
-			}
-			if (indicators.ChargeRestrictionIndicator.Value)
-			{
-				lrIndicators.Add(LandRegistryIndicatorText.ChargeRestrictionIndicator);
-			}
-			if (indicators.CreditorsNoticeIndicator.Value)
-			{
-				lrIndicators.Add(LandRegistryIndicatorText.CreditorsNoticeIndicator);
-			}
-			if (indicators.DeathOfProprietorIndicator.Value)
-			{
-				lrIndicators.Add(LandRegistryIndicatorText.DeathOfProprietorIndicator);
-			}
-			if (indicators.DeedOfPostponementIndicator.Value)
-			{
-				lrIndicators.Add(LandRegistryIndicatorText.DeedOfPostponementIndicator);
-			}
-			if (indicators.DiscountChargeIndicator.Value)
-			{
-				lrIndicators.Add(LandRegistryIndicatorText.DiscountChargeIndicator);
-			}
-			if (indicators.EquitableChargeIndicator.Value)
-			{
-				lrIndicators.Add(LandRegistryIndicatorText.EquitableChargeIndicator);
-			}
-			if (indicators.GreenOutEntryIndicator.Value)
-			{
-				lrIndicators.Add(LandRegistryIndicatorText.GreenOutEntryIndicator);
-			}
-			if (indicators.HomeRightsChangeOfAddressIndicator.Value)
-			{
-				lrIndicators.Add(LandRegistryIndicatorText.HomeRightsChangeOfAddressIndicator);
-			}
-			if (indicators.HomeRightsIndicator.Value)
-			{
-				lrIndicators.Add(LandRegistryIndicatorText.HomeRightsIndicator);
-			}
-			if (indicators.LeaseHoldTitleIndicator.Value)
-			{
-				lrIndicators.Add(LandRegistryIndicatorText.LeaseHoldTitleIndicator);
-			}
-			if (indicators.MultipleChargeIndicator.Value)
-			{
-				lrIndicators.Add(LandRegistryIndicatorText.MultipleChargeIndicator);
-			}
-			if (indicators.NonChargeRestrictionIndicator.Value)
-			{
-				lrIndicators.Add(LandRegistryIndicatorText.NonChargeRestrictionIndicator);
-			}
-			if (indicators.NotedChargeIndicator.Value)
-			{
-				lrIndicators.Add(LandRegistryIndicatorText.NotedChargeIndicator);
-			}
-			if (indicators.PricePaidIndicator.Value)
-			{
-				lrIndicators.Add(LandRegistryIndicatorText.PricePaidIndicator);
-			}
-			if (indicators.PropertyDescriptionNotesIndicator.Value)
-			{
-				lrIndicators.Add(LandRegistryIndicatorText.PropertyDescriptionNotesIndicator);
-			}
-			if (indicators.RentChargeIndicator.Value)
-			{
-				lrIndicators.Add(LandRegistryIndicatorText.RentChargeIndicator);
-			}
-			if (indicators.RightOfPreEmptionIndicator.Value)
-			{
-				lrIndicators.Add(LandRegistryIndicatorText.RightOfPreEmptionIndicator);
-			}
-			if (indicators.ScheduleOfLeasesIndicator.Value)
-			{
-				lrIndicators.Add(LandRegistryIndicatorText.ScheduleOfLeasesIndicator);
-			}
-			if (indicators.SubChargeIndicator.Value)
-			{
-				lrIndicators.Add(LandRegistryIndicatorText.SubChargeIndicator);
-			}
-			if (indicators.UnidentifiedEntryIndicator.Value)
-			{
-				lrIndicators.Add(LandRegistryIndicatorText.UnidentifiedEntryIndicator);
-			}
-			if (indicators.UnilateralNoticeBeneficiaryIndicator.Value)
-			{
-				lrIndicators.Add(LandRegistryIndicatorText.UnilateralNoticeBeneficiaryIndicator);
-			}
-			if (indicators.UnilateralNoticeIndicator.Value)
-			{
-				lrIndicators.Add(LandRegistryIndicatorText.UnilateralNoticeIndicator);
-			}
-			if (indicators.VendorsLienIndicator.Value)
-			{
-				lrIndicators.Add(LandRegistryIndicatorText.VendorsLienIndicator);
-			}
-
+			if (indicators.AgreedNoticeIndicator.Value) { lrIndicators.Add(LandRegistryIndicatorText.AgreedNoticeIndicator); }
+			if (indicators.BankruptcyIndicator.Value) { lrIndicators.Add(LandRegistryIndicatorText.BankruptcyIndicator); }
+			if (indicators.CautionIndicator.Value) { lrIndicators.Add(LandRegistryIndicatorText.CautionIndicator); }
+			if (indicators.CCBIIndicator.Value) { lrIndicators.Add(LandRegistryIndicatorText.CCBIIndicator); }
+			if (indicators.ChargeeIndicator.Value) { lrIndicators.Add(LandRegistryIndicatorText.ChargeeIndicator); }
+			if (indicators.ChargeRelatedRestrictionIndicator.Value) { lrIndicators.Add(LandRegistryIndicatorText.ChargeRelatedRestrictionIndicator); }
+			if (indicators.ChargeRestrictionIndicator.Value) { lrIndicators.Add(LandRegistryIndicatorText.ChargeRestrictionIndicator); }
+			if (indicators.CreditorsNoticeIndicator.Value) { lrIndicators.Add(LandRegistryIndicatorText.CreditorsNoticeIndicator); }
+			if (indicators.DeathOfProprietorIndicator.Value) { lrIndicators.Add(LandRegistryIndicatorText.DeathOfProprietorIndicator); }
+			if (indicators.DeedOfPostponementIndicator.Value) { lrIndicators.Add(LandRegistryIndicatorText.DeedOfPostponementIndicator); }
+			if (indicators.DiscountChargeIndicator.Value) { lrIndicators.Add(LandRegistryIndicatorText.DiscountChargeIndicator); }
+			if (indicators.EquitableChargeIndicator.Value) { lrIndicators.Add(LandRegistryIndicatorText.EquitableChargeIndicator); }
+			if (indicators.GreenOutEntryIndicator.Value) { lrIndicators.Add(LandRegistryIndicatorText.GreenOutEntryIndicator); }
+			if (indicators.HomeRightsChangeOfAddressIndicator.Value) { lrIndicators.Add(LandRegistryIndicatorText.HomeRightsChangeOfAddressIndicator); }
+			if (indicators.HomeRightsIndicator.Value) { lrIndicators.Add(LandRegistryIndicatorText.HomeRightsIndicator); }
+			if (indicators.LeaseHoldTitleIndicator.Value) { lrIndicators.Add(LandRegistryIndicatorText.LeaseHoldTitleIndicator); }
+			if (indicators.MultipleChargeIndicator.Value) { lrIndicators.Add(LandRegistryIndicatorText.MultipleChargeIndicator); }
+			if (indicators.NonChargeRestrictionIndicator.Value) { lrIndicators.Add(LandRegistryIndicatorText.NonChargeRestrictionIndicator); }
+			if (indicators.NotedChargeIndicator.Value) { lrIndicators.Add(LandRegistryIndicatorText.NotedChargeIndicator); }
+			if (indicators.PricePaidIndicator.Value) { lrIndicators.Add(LandRegistryIndicatorText.PricePaidIndicator); }
+			if (indicators.PropertyDescriptionNotesIndicator.Value) { lrIndicators.Add(LandRegistryIndicatorText.PropertyDescriptionNotesIndicator); }
+			if (indicators.RentChargeIndicator.Value) { lrIndicators.Add(LandRegistryIndicatorText.RentChargeIndicator); }
+			if (indicators.RightOfPreEmptionIndicator.Value) { lrIndicators.Add(LandRegistryIndicatorText.RightOfPreEmptionIndicator); }
+			if (indicators.ScheduleOfLeasesIndicator.Value) { lrIndicators.Add(LandRegistryIndicatorText.ScheduleOfLeasesIndicator); }
+			if (indicators.SubChargeIndicator.Value) { lrIndicators.Add(LandRegistryIndicatorText.SubChargeIndicator); }
+			if (indicators.UnidentifiedEntryIndicator.Value) { lrIndicators.Add(LandRegistryIndicatorText.UnidentifiedEntryIndicator); }
+			if (indicators.UnilateralNoticeBeneficiaryIndicator.Value) { lrIndicators.Add(LandRegistryIndicatorText.UnilateralNoticeBeneficiaryIndicator); }
+			if (indicators.UnilateralNoticeIndicator.Value) { lrIndicators.Add(LandRegistryIndicatorText.UnilateralNoticeIndicator); }
+			if (indicators.VendorsLienIndicator.Value) { lrIndicators.Add(LandRegistryIndicatorText.VendorsLienIndicator); }
 			return lrIndicators;
 		}
 	}

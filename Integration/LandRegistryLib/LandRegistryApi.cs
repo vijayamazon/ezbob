@@ -1,15 +1,26 @@
 ﻿namespace LandRegistryLib
 {
 	using System;
+	using System.Globalization;
 	using System.IO;
 	using System.Net;
 	using log4net;
 
-	public class LandRegistryApi
+	public class LandRegistryApi : ILandRegistryApi
 	{
 		private static readonly ILog Log = LogManager.GetLogger(typeof(LandRegistryApi));
+		private readonly LandRegistryModelBuilder _builder = new LandRegistryModelBuilder();
 
-		public LandRegistryDataModel EnquiryByPropertyDescription(string buildingNumber, string streetName, string cityName, string postCode, string customerId = "1")
+		/// <summary>
+		/// Please provide flat/house and postcode OR flat, street and town OR house, street and town.
+		/// </summary>
+		/// <param name="buildingNumber">flat/house</param>
+		/// <param name="streetName">street</param>
+		/// <param name="cityName">town</param>
+		/// <param name="postCode">postcode</param>
+		/// <param name="customerId">customerId</param>
+		/// <returns></returns>
+		public LandRegistryDataModel EnquiryByPropertyDescription(string buildingNumber = null, string streetName = null, string cityName = null, string postCode = null, int customerId = 1)
 		{
 			var model = new LandRegistryDataModel { RequestType = LandRegistryRequestType.EnquiryByPropertyDescription };
 			using (var client = new LREnquiryServiceNS.PropertyDescriptionEnquiryV2_0ServiceClient())
@@ -28,28 +39,53 @@
 						Product = new LREnquiryServiceNS.Q1ProductType
 							{
 								ExternalReference = new LREnquiryServiceNS.Q1ExternalReferenceType { Reference = string.Format("ezbob{0}", customerId) },
-								CustomerReference = new LREnquiryServiceNS.Q1CustomerReferenceType { Reference = customerId },
+								CustomerReference = new LREnquiryServiceNS.Q1CustomerReferenceType { Reference = customerId.ToString(CultureInfo.InvariantCulture) },
 								SubjectProperty = new LREnquiryServiceNS.Q1SubjectPropertyType
 									{
 										Address = new LREnquiryServiceNS.Q1AddressType
 											{
 												BuildingName = null,
-												BuildingNumber = "27", // buildingNumber
-												StreetName = "Church Road", //streetName
-												CityName = "Exeter", //cityName
-												PostcodeZone = null //postCode
+												BuildingNumber = buildingNumber, // buildingNumber
+												StreetName = streetName, //streetName
+												CityName = cityName, //cityName
+												PostcodeZone = postCode //postCode
 											}
 									}
 							}
 					};
 
 				model.Request = XmlHelper.SerializeObject(request);
-				LREnquiryServiceNS.ResponseSearchByPropertyDescriptionV2_0Type Response;
 				try
 				{
-					Response = client.searchProperties(request);
-					model.Response = XmlHelper.SerializeObject(Response);
-					model.ResponseType = GetResponseType((int)Response.GatewayResponse.TypeCode.Value);
+					LREnquiryServiceNS.ResponseSearchByPropertyDescriptionV2_0Type response = client.searchProperties(request);
+					model.Response = XmlHelper.SerializeObject(response);
+					model.ResponseType = _builder.GetResponseType((int)response.GatewayResponse.TypeCode.Value);
+
+					switch (model.ResponseType)
+					{
+						case LandRegistryResponseType.Acknowledgement:
+							model.Acknowledgement = new LandRegistryAcknowledgementModel
+							{
+								PollDate = response.GatewayResponse.Acknowledgement.AcknowledgementDetails.ExpectedResponseDateTime.Value,
+								Description = response.GatewayResponse.Acknowledgement.AcknowledgementDetails.MessageDescription.Value,
+								UniqueId = response.GatewayResponse.Acknowledgement.AcknowledgementDetails.UniqueID.Value
+							};
+							break;
+						case LandRegistryResponseType.Rejection:
+							model.Rejection = new LandRegistryRejectionModel
+							{
+								Reason = response.GatewayResponse.Rejection.RejectionResponse.Reason.Value,
+								OtherDescription = response.GatewayResponse.Rejection.RejectionResponse.OtherDescription.Value
+							};
+							break;
+						case LandRegistryResponseType.Success:
+							model.Enquery = _builder.BuildEnquiryModel(model.Response);
+							break;
+						case LandRegistryResponseType.Unkown:
+						default:
+							break;
+					}
+
 				}
 				catch (Exception ex)
 				{
@@ -76,17 +112,42 @@
 							{
 								MessageID = new LREnquiryPollServiceNS.MessageIDTextType
 									{
-										Value = "pollST500681" //PollId
+										Value = pollId //PollId
 									}
 							}
 					};
 				model.Request = XmlHelper.SerializeObject(pollRequest);
-				LREnquiryPollServiceNS.ResponseSearchByPropertyDescriptionV2_0Type Response;
 				try
 				{
-					Response = client.getResponse(pollRequest);
-					model.Response = XmlHelper.SerializeObject(Response);
-					model.ResponseType = GetResponseType((int)Response.GatewayResponse.TypeCode.Value);
+					LREnquiryPollServiceNS.ResponseSearchByPropertyDescriptionV2_0Type response = client.getResponse(pollRequest);
+					model.Response = XmlHelper.SerializeObject(response);
+					model.ResponseType = _builder.GetResponseType((int)response.GatewayResponse.TypeCode.Value);
+
+					switch (model.ResponseType)
+					{
+						case LandRegistryResponseType.Acknowledgement:
+							model.Acknowledgement = new LandRegistryAcknowledgementModel
+							{
+								PollDate = response.GatewayResponse.Acknowledgement.AcknowledgementDetails.ExpectedResponseDateTime.Value,
+								Description = response.GatewayResponse.Acknowledgement.AcknowledgementDetails.MessageDescription.Value,
+								UniqueId = response.GatewayResponse.Acknowledgement.AcknowledgementDetails.UniqueID.Value
+							};
+							break;
+						case LandRegistryResponseType.Rejection:
+							model.Rejection = new LandRegistryRejectionModel
+							{
+								Reason = response.GatewayResponse.Rejection.RejectionResponse.Reason.Value,
+								OtherDescription = response.GatewayResponse.Rejection.RejectionResponse.OtherDescription.Value
+							};
+							break;
+						case LandRegistryResponseType.Success:
+							model.Enquery = _builder.BuildEnquiryModel(model.Response);
+							break;
+						case LandRegistryResponseType.Unkown:
+						default:
+							break;
+					}
+
 				}
 				catch (Exception ex)
 				{
@@ -98,7 +159,7 @@
 			return model;
 		}
 
-		public LandRegistryDataModel Res(string titleNumber, string customerId = "1")
+		public LandRegistryDataModel Res(string titleNumber, int customerId = 1)
 		{
 			var model = new LandRegistryDataModel { RequestType = LandRegistryRequestType.RegisterExtractService };
 
@@ -119,7 +180,7 @@
 					Product = new LRResServiceNS.Q1ProductType
 					{
 						ExternalReference = new LRResServiceNS.Q1ExternalReferenceType { Reference = "ezbob" + customerId },
-						CustomerReference = new LRResServiceNS.Q1CustomerReferenceType { Reference = customerId },
+						CustomerReference = new LRResServiceNS.Q1CustomerReferenceType { Reference = customerId.ToString(CultureInfo.InvariantCulture) },
 						TitleKnownOfficialCopy = new LRResServiceNS.Q1TitleKnownOfficialCopyType
 							{
 								ContinueIfTitleIsClosedAndContinuedIndicator = new LRResServiceNS.IndicatorType { Value = false },
@@ -138,21 +199,28 @@
 				{
 					LRResServiceNS.ResponseOCWithSummaryV2_1Type response = client.performOCWithSummary(request);
 
+					model.ResponseType = _builder.GetResponseType((int)response.GatewayResponse.TypeCode.Value);
+
 					try
 					{
-						File.WriteAllBytes(string.Format("c:\\temp\\landregistry\\{0}_{1}.zip", titleNumber, DateTime.UtcNow.Ticks), response.GatewayResponse.Results.Attachment.EmbeddedFileBinaryObject.Value);
-						response.GatewayResponse.Results.Attachment = null;
+						if (model.ResponseType == LandRegistryResponseType.Success)
+						{
+							model.Attachment = new LandRegistryAttachmentModel
+								{
+									AttachmentContent = response.GatewayResponse.Results.Attachment.EmbeddedFileBinaryObject.Value,
+									FileName = string.Format("{0}_{1}.zip", titleNumber, DateTime.Today.Ticks),
+									FilePath = string.Format("c:\\temp\\landregistry\\{0}_{1}.zip", titleNumber, DateTime.Today.Ticks)
+								};
+							File.WriteAllBytes(string.Format("c:\\temp\\landregistry\\{0}_{1}.zip", titleNumber, DateTime.UtcNow.Ticks),
+											   response.GatewayResponse.Results.Attachment.EmbeddedFileBinaryObject.Value);
+							response.GatewayResponse.Results.Attachment = null;
+						}
 					}
 					catch { }
 
 					model.Response = XmlHelper.SerializeObject(response);
 
-					try
-					{
-						File.WriteAllText(string.Format("c:\\temp\\landregistry\\{0}_{1}.xml", titleNumber, DateTime.UtcNow.Ticks), model.Response);
-					}
-					catch { }
-					model.ResponseType = GetResponseType((int)response.GatewayResponse.TypeCode.Value);
+
 
 					switch (model.ResponseType)
 					{
@@ -165,9 +233,14 @@
 								};
 							break;
 						case LandRegistryResponseType.Rejection:
-
+							model.Rejection = new LandRegistryRejectionModel
+								{
+									Reason = response.GatewayResponse.Rejection.RejectionResponse.Reason.Value,
+									OtherDescription = response.GatewayResponse.Rejection.RejectionResponse.OtherDescription.Value
+								};
 							break;
 						case LandRegistryResponseType.Success:
+							model.Res = _builder.BuildResModel(response);
 							break;
 						case LandRegistryResponseType.Unkown:
 						default:
@@ -180,7 +253,6 @@
 				{
 					Log.ErrorFormat("{0}", ex);
 					model.Error = ex.Message;
-					//File.WriteAllText("Resex1c.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
 				}
 			}
 			return model;
@@ -195,66 +267,79 @@
 			{
 				client.ChannelFactory.Endpoint.Behaviors.Add(new HMLRBGMessageEndpointBehavior("BGUser001", "landreg001"));
 				// create a request object
-				var request = new LRResPollServiceNS.PollRequestType()
+				var request = new LRResPollServiceNS.PollRequestType
 				{
 					ID = new LRResPollServiceNS.Q1IdentifierType
 					{
 						MessageID = new LRResPollServiceNS.MessageIDTextType
 							{
-								Value = "170108" //pollId
+								Value = pollId //pollId
 							}
 					},
 				};
 
 				model.Request = XmlHelper.SerializeObject(request);
+
 				try
 				{
-					LRResPollServiceNS.ResponseOCWithSummaryV2_0Type Response = client.getResponse(request);
-					if (Response.GatewayResponse.Results != null &&
-						Response.GatewayResponse.Results.Attachment != null &&
-						Response.GatewayResponse.Results.Attachment.EmbeddedFileBinaryObject != null)
+					LRResPollServiceNS.ResponseOCWithSummaryV2_0Type response = client.getResponse(request);
+					model.ResponseType = _builder.GetResponseType((int)response.GatewayResponse.TypeCode.Value);
+
+					if (model.ResponseType == LandRegistryResponseType.Success)
 					{
-						//File.WriteAllBytes(string.Format("{0}_{1}.zip", pollId, DateTime.Today.Ticks), Response.GatewayResponse.Results.Attachment.EmbeddedFileBinaryObject.Value);
-						Response.GatewayResponse.Results.Attachment = null;
+						try
+						{
+							model.Attachment = new LandRegistryAttachmentModel
+								{
+									AttachmentContent = response.GatewayResponse.Results.Attachment.EmbeddedFileBinaryObject.Value,
+									FileName = string.Format("{0}_{1}.zip", pollId, DateTime.Today.Ticks),
+									FilePath = string.Format("c:\\temp\\landregistry\\{0}_{1}.zip", pollId, DateTime.Today.Ticks)
+								};
+							File.WriteAllBytes(string.Format("c:\\temp\\landregistry\\{0}_{1}.zip", pollId, DateTime.Today.Ticks), response.GatewayResponse.Results.Attachment.EmbeddedFileBinaryObject.Value);
+							response.GatewayResponse.Results.Attachment = null;
+						}
+						catch (Exception) { }
 					}
 
-					model.Response = XmlHelper.SerializeObject(Response);
-					model.ResponseType = GetResponseType((int)Response.GatewayResponse.TypeCode.Value);
+					model.Response = XmlHelper.SerializeObject(response);
+
+
+					switch (model.ResponseType)
+					{
+						case LandRegistryResponseType.Acknowledgement:
+							model.Acknowledgement = new LandRegistryAcknowledgementModel
+							{
+								PollDate = response.GatewayResponse.Acknowledgement.AcknowledgementDetails.ExpectedResponseDateTime.Value,
+								Description = response.GatewayResponse.Acknowledgement.AcknowledgementDetails.MessageDescription.Value,
+								UniqueId = response.GatewayResponse.Acknowledgement.AcknowledgementDetails.UniqueID.Value
+							};
+							break;
+						case LandRegistryResponseType.Rejection:
+							model.Rejection = new LandRegistryRejectionModel
+							{
+								Reason = response.GatewayResponse.Rejection.RejectionResponse.Reason.Value,
+								OtherDescription = response.GatewayResponse.Rejection.RejectionResponse.OtherDescription.Value
+							};
+							break;
+						case LandRegistryResponseType.Success:
+							model.Res = _builder.BuildResModel(model.Response);
+							break;
+						case LandRegistryResponseType.Unkown:
+						default:
+							break;
+					}
 				}
 				catch (Exception ex)
 				{
 					Log.ErrorFormat("{0}", ex);
 					model.Error = ex.Message;
-					//File.WriteAllText("Resex1c.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
 				}
 			}
 			return model;
 		}
 
-		
 
-		private static LandRegistryResponseType GetResponseType(int value)
-		{
-			LandRegistryResponseType type;
-			switch (value)
-			{
-				case 1:
-				case 10:
-					type = LandRegistryResponseType.Acknowledgement;
-					break;
-				case 2:
-				case 20:
-					type = LandRegistryResponseType.Rejection;
-					break;
-				case 3:
-				case 30:
-					type = LandRegistryResponseType.Success;
-					break;
-				default:
-					type = LandRegistryResponseType.Unkown;
-					break;
-			}
-			return type;
-		}
+
+		
 	}
 }
