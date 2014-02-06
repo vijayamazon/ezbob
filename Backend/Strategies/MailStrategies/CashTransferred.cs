@@ -15,9 +15,9 @@
 
 		public override string Name { get { return "Cash Transferred"; } }
 
-		#region method SetTemplateAndSubjectAndVariables
+		#region method SetTemplateAndVariables
 
-		protected override void SetTemplateAndSubjectAndVariables() {
+		protected override void SetTemplateAndVariables() {
 			Variables = new Dictionary<string, string> {
 				{"FirstName", CustomerData.FirstName},
 				{"Amount", amount.ToString(CultureInfo.InvariantCulture)}
@@ -25,17 +25,15 @@
 
 			if (CustomerData.NumOfLoans == 1)
 			{
-				Subject = "Welcome to the ezbob family";
 				TemplateName = CustomerData.IsOffline ? "Mandrill - Took Offline Loan (1st loan)" : "Mandrill - Took Loan (1st loan)";
 			}
 			else
 			{
-				Subject = "Thanks for choosing ezbob as your funding partner";
 				TemplateName = CustomerData.IsOffline ? "Mandrill - Took Offline Loan (not 1st loan)" : "Mandrill - Took Loan (not 1st loan)";
 			}
-		} // SetTemplateAndSubjectAndVariables
+		} // SetTemplateAndVariables
 
-		#endregion method SetTemplateAndSubjectAndVariables
+		#endregion method SetTemplateAndVariables
 
 		private readonly decimal amount;
 	} // class CashTransferred

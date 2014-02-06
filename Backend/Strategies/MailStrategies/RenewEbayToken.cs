@@ -15,10 +15,9 @@
 
 		public override string Name { get { return "Renew eBay Token"; } } // Name
 
-		#region method SetTemplateAndSubjectAndVariables
+		#region method SetTemplateAndVariables
 
-		protected override void SetTemplateAndSubjectAndVariables() {
-			Subject = "Please renew your eBay token";
+		protected override void SetTemplateAndVariables() {
 			TemplateName = "Mandrill - Renew your eBay token";
 
 			Variables = new Dictionary<string, string> {
@@ -26,9 +25,9 @@
 				{"eBayName", marketplaceName},
 				{"eBayAddress", eBayAddress}
 			};
-		} // SetTemplateAndSubjectAndVariables
+		} // SetTemplateAndVariables
 
-		#endregion method SetTemplateAndSubjectAndVariables
+		#endregion method SetTemplateAndVariables
 
 		private readonly string marketplaceName;
 		private readonly string eBayAddress;

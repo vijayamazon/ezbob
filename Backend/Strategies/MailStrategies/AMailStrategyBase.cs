@@ -18,11 +18,10 @@ namespace EzBob.Backend.Strategies.MailStrategies {
 				CustomerData = new CustomerData(CustomerId, DB);
 				Log.Debug("loading customer data complete.");
 
-				Log.Debug("setting template and subject variables...");
-				SetTemplateAndSubjectAndVariables();
-				Log.Debug("setting template and subject variables complete.");
+				Log.Debug("setting template and variables...");
+				SetTemplateAndVariables();
+				Log.Debug("setting template and variables complete.");
 
-				Log.Debug("Subject: {0}", Subject);
 				Log.Debug("Template name: {0}", TemplateName);
 				Log.Debug("Customer data: {0}", CustomerData);
 
@@ -30,9 +29,9 @@ namespace EzBob.Backend.Strategies.MailStrategies {
 
 				Log.Debug("sending an email{0} to staff...", sendToCustomer ? " to customer and" : string.Empty);
 				if (sendToCustomer)
-					mailer.SendToCustomerAndEzbob(Variables, CustomerData.Mail, TemplateName, Subject);
+					mailer.SendToCustomerAndEzbob(Variables, CustomerData.Mail, TemplateName);
 				else
-					mailer.SendToEzbob(Variables, TemplateName, Subject);
+					mailer.SendToEzbob(Variables, TemplateName);
 				Log.Debug("sending an email{0} to staff complete.", sendToCustomer ? " to customer and" : string.Empty);
 
 				Log.Debug("performing ActionAtEnd()...");
@@ -65,11 +64,11 @@ namespace EzBob.Backend.Strategies.MailStrategies {
 
 		#endregion constructor
 
-		#region method SetTemplateAndSubjectAndVariables
+		#region method SetTemplateAndVariables
 
-		protected abstract void SetTemplateAndSubjectAndVariables();
+		protected abstract void SetTemplateAndVariables();
 
-		#endregion method SetTemplateAndSubjectAndVariables
+		#endregion method SetTemplateAndVariables
 
 		#region method ActionAtEnd
 
@@ -81,7 +80,6 @@ namespace EzBob.Backend.Strategies.MailStrategies {
 
 		#region properties
 
-		protected string Subject { get; set; }
 		protected string TemplateName { get; set; }
 		protected CustomerData CustomerData { get; set; }
 		protected Dictionary<string, string> Variables { get; set; }

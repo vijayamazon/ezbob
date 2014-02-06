@@ -43,7 +43,7 @@
 					{"Total", total.ToString(CultureInfo.InvariantCulture)}
 				};
 
-				mailer.SendToCustomerAndEzbob(variables, mail, "Mandrill - 14 days notification email", "Please contact us immediately in order to make full payment on all outstanding debts");
+				mailer.SendToCustomerAndEzbob(variables, mail, "Mandrill - 14 days notification email");
 
 				DB.ExecuteNonQuery("SetLateBy14Days", CommandSpecies.StoredProcedure, new QueryParameter("LoanId", loanId));
 			} // for

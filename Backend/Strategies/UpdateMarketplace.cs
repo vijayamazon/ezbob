@@ -116,8 +116,6 @@
 					)
 				) {
 					tokenExpired = true;
-					emailSubject = "eBay token has expired";
-					templateName = "Mandrill - Update MP Error Code";
 
 					var variables = new Dictionary<string, string> {
 						{"userID", customerId.ToString(CultureInfo.InvariantCulture)},
@@ -127,19 +125,16 @@
 						{"ErrorCode", e.Message}
 					};
 
-					mailer.SendToEzbob(variables, templateName, emailSubject);
+					mailer.SendToEzbob(variables, "Mandrill - Update MP Error Code");
 				}
 				else {
-					emailSubject = "ERROR occured when updating Customer Marketplace data";
-					templateName = "Mandrill - UpdateCMP Error";
-
 					var variables = new Dictionary<string, string> {
 						{"userID", customerId.ToString(CultureInfo.InvariantCulture)},
 						{"CustomerMarketPlaceId", marketplaceId.ToString(CultureInfo.InvariantCulture)},
 						{"UpdateCMP_Error", e.Message}
 					};
 
-					mailer.SendToEzbob(variables, templateName, emailSubject);
+					mailer.SendToEzbob(variables, "Mandrill - UpdateCMP Error");
 				} // if
 			} // try
 

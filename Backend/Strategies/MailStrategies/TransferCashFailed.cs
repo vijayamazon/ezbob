@@ -9,17 +9,16 @@
 
 		public override string Name { get { return "Transfer Cash Failed"; } } // Name
 
-		#region method SetTemplateAndSubjectAndVariables
+		#region method SetTemplateAndVariables
 
-		protected override void SetTemplateAndSubjectAndVariables() {
-			Subject = "Bank account couldn’t be verified";
+		protected override void SetTemplateAndVariables() {
 			TemplateName = "Mandrill - Problem with bank account";
 
 			Variables = new Dictionary<string, string> {
 				{"FirstName", CustomerData.FirstName}
 			};
-		} // SetTemplateAndSubjectAndVariables
+		} // SetTemplateAndVariables
 
-		#endregion method SetTemplateAndSubjectAndVariables
+		#endregion method SetTemplateAndVariables
 	} // class 
 } // namespace

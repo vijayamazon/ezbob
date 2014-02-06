@@ -38,8 +38,6 @@
 				DateTime sceduledDate = sr["SceduledDate"];
 				string creditCard = sr["CreditCardNo"];
 
-				string subject = string.Format("Dear {0}, your ezbob monthly automatic loan re-payment is due in 5 days", firstName);
-
 				var variables = new Dictionary<string, string> {
 					{"FirstName", firstName},
 					{"AmountDueScalar", amountDue.ToString(CultureInfo.InvariantCulture)},
@@ -47,7 +45,7 @@
 					{"DebitCard", creditCard}
 				};
 
-				mailer.SendToCustomerAndEzbob(variables, mail, "Mandrill - 5 days notice", subject);
+				mailer.SendToCustomerAndEzbob(variables, mail, "Mandrill - 5 days notice");
 
 				DB.ExecuteNonQuery("UpdateFiveDaysDueMailSent",
 					CommandSpecies.StoredProcedure,
@@ -67,8 +65,6 @@
 				DateTime sceduledDate = sr["SceduledDate"];
 				string creditCard = sr["CreditCardNo"];
 
-				string subject = string.Format("Dear {0}, your ezbob monthly automatic loan re-payment is due in 48 hours", firstName);
-
 				var variables = new Dictionary<string, string> {
 					{"FirstName", firstName},
 					{"AmountDueScalar", amountDue.ToString(CultureInfo.InvariantCulture)},
@@ -76,7 +72,7 @@
 					{"DebitCard", creditCard}
 				};
 
-				mailer.SendToCustomerAndEzbob(variables, mail, "Mandrill - 2 days notice", subject);
+				mailer.SendToCustomerAndEzbob(variables, mail, "Mandrill - 2 days notice");
 
 				DB.ExecuteNonQuery("UpdateTwoDaysDueMailSent",
 					CommandSpecies.StoredProcedure,

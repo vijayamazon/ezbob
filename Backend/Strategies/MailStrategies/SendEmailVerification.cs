@@ -15,10 +15,9 @@
 
 		public override string Name { get { return "SendEmailVerification"; } } // Name
 
-		#region method SetTemplateAndSubjectAndVariables
+		#region method SetTemplateAndVariables
 
-		protected override void SetTemplateAndSubjectAndVariables() {
-			Subject = "Please verify your email";
+		protected override void SetTemplateAndVariables() {
 			TemplateName = "Mandrill - Confirm your email";
 
 			Variables = new Dictionary<string, string>
@@ -27,9 +26,9 @@
 					{"Email", email},
 					{"ConfirmEmailAddress", address}
 				};
-		} // SetTemplateAndSubjectAndVariables
+		} // SetTemplateAndVariables
 
-		#endregion method SetTemplateAndSubjectAndVariables
+		#endregion method SetTemplateAndVariables
 
 		private readonly string address;
 		private readonly string email;

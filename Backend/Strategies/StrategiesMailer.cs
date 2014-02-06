@@ -28,17 +28,17 @@
 
 		#region method SendToCustomerAndEzbob
 
-		public void SendToCustomerAndEzbob(Dictionary<string, string> variables, string toAddress, string templateName, string subject) {
-			SendMailViaMandrill(variables, toAddress, string.Empty, templateName, subject, true);
-			SendToEzbob(variables, templateName, subject);
+		public void SendToCustomerAndEzbob(Dictionary<string, string> variables, string toAddress, string templateName) {
+			SendMailViaMandrill(variables, toAddress, string.Empty, templateName, true);
+			SendToEzbob(variables, templateName);
 		} // SendToCustomerAndEzbob
 
 		#endregion method SendToCustomerAndEzbob
 
 		#region method SendToEzbob
 
-		public void SendToEzbob(Dictionary<string, string> variables, string templateName, string subject) {
-			SendMailViaMandrill(variables, ezbobCopyTo, ezbobCopyCc, templateName, subject, false);
+		public void SendToEzbob(Dictionary<string, string> variables, string templateName) {
+			SendMailViaMandrill(variables, ezbobCopyTo, ezbobCopyCc, templateName, false);
 		} // SendToEzbob
 
 		#endregion method SendToEzbob
@@ -49,15 +49,15 @@
 
 		#region method SendMailViaMandrill
 
-		private void SendMailViaMandrill(Dictionary<string, string> variables, string toAddress, string ccAddress, string templateName, string subject, bool shouldRecord) {
-			var sendStatus = mail.Send(variables, toAddress, templateName, subject, ccAddress);
+		private void SendMailViaMandrill(Dictionary<string, string> variables, string toAddress, string ccAddress, string templateName, bool shouldRecord) {
+			var sendStatus = mail.Send(variables, toAddress, templateName, string.Empty, ccAddress);
 			var renderedHtml = mail.GetRenderedTemplate(variables, templateName);
 
 			if (sendStatus == null || renderedHtml == null)
 				Log.Error("Failed sending mail. template:{0} to:{1} cc:{2}", templateName, toAddress, ccAddress);
 
 			if (shouldRecord) {
-				string filename = string.Format("{0}({1}).docx", subject, DateTime.UtcNow.ToString("yyyy-MM-dd_HH-mm-ss", CultureInfo.InvariantCulture));
+				string filename = string.Format("{0}({1}).docx", templateName, DateTime.UtcNow.ToString("yyyy-MM-dd_HH-mm-ss", CultureInfo.InvariantCulture));
 				Db.ExecuteNonQuery(
 					"RecordMail",
 					CommandSpecies.StoredProcedure,

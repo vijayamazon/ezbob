@@ -19,8 +19,7 @@ namespace EzBob.Backend.Strategies.MailStrategies {
 
 		#region method SetTemplateAndSubjectAndVariables
 
-		protected override void SetTemplateAndSubjectAndVariables() {
-			Subject = "User was Escalated";
+		protected override void SetTemplateAndVariables() {
 			TemplateName = "Mandrill - User was escalated";
 
 			DataTable dt = DB.ExecuteReader(
@@ -51,8 +50,8 @@ namespace EzBob.Backend.Strategies.MailStrategies {
 				{"MedalType", medal},
 				{"SystemDecision", systemDecision}
 			};
-		} //  SetTemplateAndSubjectAndVariables
+		} //  SetTemplateAndVariables
 
-		#endregion method SetTemplateAndSubjectAndVariables
+		#endregion method SetTemplateAndVariables
 	} // class Escalated
 } // namespace

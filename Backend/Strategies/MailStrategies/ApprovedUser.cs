@@ -17,11 +17,9 @@
 
 		public override string Name { get { return "Approved User"; } } // Name
 
-		#region method SetTemplateAndSubjectAndVariables
+		#region method SetTemplateAndVariables
 
-		protected override void SetTemplateAndSubjectAndVariables() {
-			Subject = string.Format("Congratulations {0}, £{1} is available to fund your business today", CustomerData.FirstName, loanAmount);
-
+		protected override void SetTemplateAndVariables() {
 			DataTable dt = DB.ExecuteReader(
 				"GetApprovalData",
 				CommandSpecies.StoredProcedure,
@@ -47,18 +45,18 @@
 			if (CustomerData.IsOffline)
 			{
 				TemplateName = numOfApprovals == 0
-								   ? "Mandrill - Approval Offline (1st time)"
-								   : "Mandrill - Approval Offline (not 1st time)";
+					? "Mandrill - Approval Offline (1st time)"
+					: "Mandrill - Approval Offline (not 1st time)";
 			}
 			else
 			{
 				TemplateName = numOfApprovals == 0
-								   ? "Mandrill - Approval (1st time)"
-								   : "Mandrill - Approval (not 1st time)";
+					? "Mandrill - Approval (1st time)"
+					: "Mandrill - Approval (not 1st time)";
 			}
-		} // SetTemplateAndSubjectAndVariables
+		} // SetTemplateAndVariables
 
-		#endregion method SetTemplateAndSubjectAndVariables
+		#endregion method SetTemplateAndVariables
 
 		private readonly decimal loanAmount;
 	} // class ApprovedUser

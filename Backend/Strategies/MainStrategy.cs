@@ -182,18 +182,17 @@
 			else if (autoDecisionResponse.UserStatus == "Rejected")
 			{
 				if ((autoDecisionResponse.IsReRejected && !enableAutomaticReRejection) || (!autoDecisionResponse.IsReRejected && !enableAutomaticRejection))
-					SendRejectionExplanationMail(autoDecisionResponse.IsReRejected ? "User was automatically Re-Rejected" : "User was automatically Rejected");
+					SendRejectionExplanationMail(autoDecisionResponse.IsReRejected ? "Mandrill - User supposed to be re-rejected by the strategy" : "Mandrill - User supposed to be rejected by the strategy");
 				else
 				{
-					const string rejectionSubject = "Sorry, ezbob cannot make you a loan offer at this time";
-					SendRejectionExplanationMail(rejectionSubject);
+					SendRejectionExplanationMail("Mandrill - User is rejected by the strategy");
 
 					var variables = new Dictionary<string, string> {
 						{"FirstName", appFirstName},
 						{"EzbobAccount", "https://app.ezbob.com/Customer/Profile"}
 					};
 
-					mailer.SendToCustomerAndEzbob(variables, appEmail, "Mandrill - Rejection email", rejectionSubject);
+					mailer.SendToCustomerAndEzbob(variables, appEmail, "Mandrill - Rejection email");
 					strategyHelper.AddRejectIntoDecisionHistory(customerId, autoDecisionResponse.AutoRejectReason);
 				} // if
 			}
@@ -280,7 +279,7 @@
 					{"SystemDecision", autoDecisionResponse.SystemDecision}
 				};
 
-			mailer.SendToEzbob(variables, "Mandrill - User is waiting for decision", "User is now waiting for decision");
+			mailer.SendToEzbob(variables, "Mandrill - User is waiting for decision");
 		}
 
 		private void SendReApprovalMails()
@@ -307,7 +306,7 @@
 					}
 				};
 
-			mailer.SendToEzbob(variables, "Mandrill - User is approved or re-approved", "User was automatically Re-Approved");
+			mailer.SendToEzbob(variables, "Mandrill - User is re-approved");
 
 			if (enableAutomaticReApproval)
 			{
@@ -317,12 +316,7 @@
 						{"LoanAmount", loanOfferReApprovalSum.ToString(CultureInfo.InvariantCulture)}
 					};
 
-				mailer.SendToCustomerAndEzbob(
-					customerMailVariables,
-					appEmail,
-					"Mandrill - Approval (not 1st time)",
-					"Congratulations " + appFirstName + ", £" + loanOfferReApprovalSum + " is available to fund your business today"
-					);
+				mailer.SendToCustomerAndEzbob(customerMailVariables, appEmail, "Mandrill - Approval (not 1st time)");
 			}
 		}
 
@@ -375,7 +369,7 @@
 					}
 				};
 
-			mailer.SendToEzbob(variables, "Mandrill - User is approved or re-approved", "User was automatically approved");
+			mailer.SendToEzbob(variables, "Mandrill - User is approved");
 
 			var customerMailVariables = new Dictionary<string, string>
 				{
@@ -383,13 +377,7 @@
 					{"LoanAmount", autoDecisionResponse.AutoApproveAmount.ToString(CultureInfo.InvariantCulture)}
 				};
 
-			mailer.SendToCustomerAndEzbob(
-				customerMailVariables,
-				appEmail,
-				isFirstLoan ? "Mandrill - Approval (1st time)" : "Mandrill - Approval (not 1st time)",
-				"Congratulations " + appFirstName + ", £" + autoDecisionResponse.AutoApproveAmount +
-				" is available to fund your business today"
-				);
+			mailer.SendToCustomerAndEzbob(customerMailVariables, appEmail, isFirstLoan ? "Mandrill - Approval (1st time)" : "Mandrill - Approval (not 1st time)");
 		}
 
 		private void UpdateApprovalData()
@@ -572,7 +560,7 @@
 						{"ApplicationID", appEmail}
 					};
 
-					mailer.SendToEzbob(variables, "Mandrill - No Information about shops", "No information about customer marketplace");
+					mailer.SendToEzbob(variables, "Mandrill - No Information about shops");
 
 					return false;
 				} // if
@@ -773,7 +761,7 @@
 		
 		#region method SendRejectionExplanationMail
 
-		private void SendRejectionExplanationMail(string subject)
+		private void SendRejectionExplanationMail(string templateName)
 		{
 			// TODO: set inside auto decision and get here instead of calculating again
 			DataTable defaultAccountsNumDataTable = DB.ExecuteReader(
@@ -814,7 +802,7 @@
 				{"SeniorityThreshold", rejectMinimalSeniority.ToString(CultureInfo.InvariantCulture)}
 			};
 
-			mailer.SendToEzbob(variables, "Mandrill - User is rejected by the strategy", subject);
+			mailer.SendToEzbob(variables, templateName);
 		} // SendRejectionExplanationMail
 
 		#endregion method SendRejectionExplanationMail

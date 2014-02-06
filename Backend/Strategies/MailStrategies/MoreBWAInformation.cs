@@ -9,17 +9,16 @@
 
 		public override string Name { get { return "MoreBWAInformation"; } } // Name
 
-		#region method SetTemplateAndSubjectAndVariables
+		#region method SetTemplateAndVariables
 
-		protected override void SetTemplateAndSubjectAndVariables() {
-			Subject = "We require a proof of bank account ownership to make you a loan offer";
+		protected override void SetTemplateAndVariables() {
 			TemplateName = "Mandrill - Application incompleted Bank";
 
 			Variables = new Dictionary<string, string> {
 				{"FirstName", CustomerData.FirstName}
 			};
-		} // SetTemplateAndSubjectAndVariables
+		} // SetTemplateAndVariables
 
-		#endregion method SetTemplateAndSubjectAndVariables
+		#endregion method SetTemplateAndVariables
 	} // class MoreBWAInformation
 } // namespace

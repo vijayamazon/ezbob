@@ -11,17 +11,16 @@
 
 		public override string Name { get { return "More AML and BWA Information"; } } // Name
 
-		#region method SetTemplateAndSubjectAndVariables
+		#region method SetTemplateAndVariables
 
-		protected override void SetTemplateAndSubjectAndVariables() {
-			Subject = "We require a proof of bank account ownership and proof of ID to make you a loan offer";
+		protected override void SetTemplateAndVariables() {
 			TemplateName = "Mandrill - Application incompleted AML & Bank";
 
 			Variables = new Dictionary<string, string> {
 				{"FirstName", CustomerData.FirstName}
 			};
-		} // SetTemplateAndSubjectAndVariables
+		} // SetTemplateAndVariables
 
-		#endregion method SetTemplateAndSubjectAndVariables
+		#endregion method SetTemplateAndVariables
 	} // class MoreAMLandBWAInformation
 } // namespace

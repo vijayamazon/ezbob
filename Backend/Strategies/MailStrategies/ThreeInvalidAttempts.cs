@@ -15,10 +15,9 @@
 
 		public override string Name { get {return "Three Invalid Attempts"; } } // Name
 
-		#region method SetTemplateAndSubjectAndVariables
+		#region method SetTemplateAndVariables
 
-		protected override void SetTemplateAndSubjectAndVariables() {
-			Subject = "Three unsuccessful login attempts to your account have been made.";
+		protected override void SetTemplateAndVariables() {
 			TemplateName = "Mandrill - Temporary password";
 
 			Variables = new Dictionary<string, string> {
@@ -27,9 +26,9 @@
 				{"ProfilePage", "https://app.ezbob.com/Customer/Profile"},
 				{"NIMRODTELEPHONENUMBER", "+44 800 011 4787"} // TODO: change name of variable here and in mandrill\mailchimp
 			};
-		} // SetTemplateAndSubjectAndVariables
+		} // SetTemplateAndVariables
 
-		#endregion method SetTemplateAndSubjectAndVariables
+		#endregion method SetTemplateAndVariables
 
 		private readonly string password;
 	} // class ThreeInvalidAttempts

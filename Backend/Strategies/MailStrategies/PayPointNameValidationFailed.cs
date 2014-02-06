@@ -15,10 +15,9 @@
 
 		public override string Name { get { return "PayPoint Name Validation Failed"; } } // Name
 
-		#region method SetTemplateAndSubjectAndVariables
+		#region method SetTemplateAndVariables
 
-		protected override void SetTemplateAndSubjectAndVariables() {
-			Subject = "PayPoint personal data differs from ezbob application";
+		protected override void SetTemplateAndVariables() {
 			TemplateName = "Mandrill - PayPoint data differs";
 
 			Variables = new Dictionary<string, string> {
@@ -28,9 +27,9 @@
 				{"Surname", CustomerData.Surname},
 				{"PayPointName", cardHodlerName}
 			};
-		} // SetTemplateAndSubjectAndVariables
+		} // SetTemplateAndVariables
 
-		#endregion method SetTemplateAndSubjectAndVariables
+		#endregion method SetTemplateAndVariables
 
 		private readonly string cardHodlerName;
 	} // class PayPointNameValidationFailed

@@ -17,10 +17,9 @@
 
 		public override string Name { get { return "PayPoint Added By Underwriter"; } } // Name
 
-		#region method SetTemplateAndSubjectAndVariables
+		#region method SetTemplateAndVariables
 
-		protected override void SetTemplateAndSubjectAndVariables() {
-			Subject = "Underwriter has added a debit card to the client account";
+		protected override void SetTemplateAndVariables() {
 			TemplateName = "Mandrill - Underwriter added a debit card";
 
 			Variables = new Dictionary<string, string> {
@@ -31,9 +30,9 @@
 				{"ClientName", CustomerData.FullName},
 				{"CardNo", cardno}
 			};
-		} // SetTemplateAndSubjectAndVariables
+		} // SetTemplateAndVariables
 
-		#endregion method SetTemplateAndSubjectAndVariables
+		#endregion method SetTemplateAndVariables
 
 		private readonly int underwriterId;
 		private readonly string cardno;

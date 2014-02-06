@@ -9,10 +9,9 @@
 
 		public override string Name { get { return "Reject User"; } } // Name
 
-		#region method SetTemplateAndSubjectAndVariables
+		#region method SetTemplateAndVariables
 
-		protected override void SetTemplateAndSubjectAndVariables() {
-			Subject = "Sorry, ezbob cannot make you a loan offer at this time";
+		protected override void SetTemplateAndVariables() {
 			TemplateName = "Mandrill - Rejection email";
 
 			Variables = new Dictionary<string, string>
@@ -20,8 +19,8 @@
 					{"FirstName", CustomerData.FirstName},
 					{"EzbobAccount", "https://app.ezbob.com/Customer/Profile"}
 				};
-		} // SetTemplateAndSubjectAndVariables
+		} // SetTemplateAndVariables
 
-		#endregion method SetTemplateAndSubjectAndVariables
+		#endregion method SetTemplateAndVariables
 	} // class RejectUser
 } // namespace

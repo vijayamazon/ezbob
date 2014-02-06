@@ -14,17 +14,16 @@
 
 		public override string Name { get { return "Loan Fully Paid"; } } // Name
 
-		#region method SetTemplateAndSubjectAndVariables
+		#region method SetTemplateAndVariables
 
-		protected override void SetTemplateAndSubjectAndVariables() {
-			Subject = "You have paid your loan off in full.  Benefit from a lower interest cost on your next loan.";
+		protected override void SetTemplateAndVariables() {
 			TemplateName = "Mandrill - Loan paid in full";
 
 			Variables = new Dictionary<string, string> {
 				{"FirstName", CustomerData.FirstName},
 				{"RefNum", loanRefNum}
 			};
-		} // SetTemplateAndSubjectAndVariables
+		} // SetTemplateAndVariables
 
 		#endregion method SetTemplateAndSubjectAndVariables
 

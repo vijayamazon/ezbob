@@ -17,10 +17,9 @@
 
 		public override string Name { get { return "Pay Early"; } } // Name
 
-		#region method SetTemplateAndSubjectAndVariables
+		#region method SetTemplateAndVariables
 
-		protected override void SetTemplateAndSubjectAndVariables() {
-			Subject = string.Format("Dear {0}, your payment of £{1} has been credited to your ezbob account.", CustomerData.FirstName, amount);
+		protected override void SetTemplateAndVariables() {
 			TemplateName = "Mandrill - Repayment confirmation";
 
 			Variables = new Dictionary<string, string> {
@@ -31,7 +30,7 @@
 			};
 		} // SetTemplateAndSubjectAndVariables
 
-		#endregion method SetTemplateAndSubjectAndVariables
+		#endregion method SetTemplateAndVariables
 
 		private readonly decimal amount;
 		private readonly string loanRefNumber;

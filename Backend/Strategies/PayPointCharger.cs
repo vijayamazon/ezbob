@@ -158,8 +158,6 @@
 		#region method SendConfirmationMail
 
 		private void SendConfirmationMail(string firstName, decimal amountDue, string refNum, string customerMail) {
-			string subject = string.Format("Dear {0}, your payment of £{1} has been credited to your ezbob account.", firstName, amountDue);
-
 			var variables = new Dictionary<string, string> {
 				{"AMOUNT", amountDue.ToString(CultureInfo.InvariantCulture)},
 				{"FirstName", firstName},
@@ -167,7 +165,7 @@
 				{"RefNum", refNum}
 			};
 
-			mailer.SendToCustomerAndEzbob(variables, customerMail, "Mandrill - Repayment confirmation", subject);
+			mailer.SendToCustomerAndEzbob(variables, customerMail, "Mandrill - Repayment confirmation");
 		} // SendConfirmationMail
 
 		#endregion method SendConfirmationMail
@@ -191,7 +189,7 @@
 					{"RefNum", refNum}
 				};
 
-				mailer.SendToCustomerAndEzbob(variables, customerMail, "Mandrill - Loan paid in full", "You have paid your loan off in full.  Benefit from a lower interest cost on your next loan.");
+				mailer.SendToCustomerAndEzbob(variables, customerMail, "Mandrill - Loan paid in full");
 			} // if
 		} // SendLoanStatusMail
 
@@ -206,7 +204,7 @@
 				{"DueDate", FormattingUtils.FormatDateToString(DateTime.UtcNow)}
 			};
 
-			mailer.SendToCustomerAndEzbob(variables, customerMail, "Mandrill - Automatic Re-Payment has Failed", "Your Automatic Re-Payment has Failed");
+			mailer.SendToCustomerAndEzbob(variables, customerMail, "Mandrill - Automatic Re-Payment has Failed");
 		} // SendFailureMail
 
 		#endregion method SendFailureMail
@@ -221,7 +219,7 @@
 				{"Amount", initialAmountDue.ToString(CultureInfo.InvariantCulture)}
 			};
 
-			mailer.SendToEzbob(variables, "Mandrill - PayPoint Script Exception", "Script node crash");
+			mailer.SendToEzbob(variables, "Mandrill - PayPoint Script Exception");
 		} // SendExceptionMail
 
 		#endregion method SendExceptionMail

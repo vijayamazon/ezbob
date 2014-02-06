@@ -17,19 +17,18 @@
 
 		public override string Name { get { return "Email Rollover Added"; } }
 
-		#region method SetTemplateAndSubjectAndVariables
+		#region method SetTemplateAndVariables
 
-		protected override void SetTemplateAndSubjectAndVariables() {
-			Subject = "Rollover added";
+		protected override void SetTemplateAndVariables() {
 			TemplateName = "Mandrill - Rollover added";
 
 			Variables = new Dictionary<string, string> {
 				{"FirstName", CustomerData.FirstName},
 				{"RolloverAmount", amount.ToString(CultureInfo.InvariantCulture)}
 			};
-		} // SetTemplateAndSubjectAndVariables
+		} // SetTemplateAndVariables
 
-		#endregion method SetTemplateAndSubjectAndVariables
+		#endregion method SetTemplateAndVariables
 
 		private readonly decimal amount;
 	} // class EmailRolloverAdded

@@ -242,7 +242,7 @@
 					{"CurrDate", DateTime.UtcNow.ToString(CultureInfo.InvariantCulture)},
 					{"Path", dirPath}
 				};
-			mailer.SendToEzbob(variables, "Mandrill - CAIS report", "CAIS Report generated");
+			mailer.SendToEzbob(variables, "Mandrill - CAIS report");
 
 			var businessCaisFileData = CaisFileManager.GetBusinessCaisFileData();
 			businessCaisFileData.WriteToFile(dirPath + "\\F1364.D.COMCAIS.ORMO.DI55CUST.INPUT");

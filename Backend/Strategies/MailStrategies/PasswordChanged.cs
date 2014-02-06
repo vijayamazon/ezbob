@@ -14,19 +14,18 @@
 
 		public override string Name { get { return "Password Changed"; } } // Name
 
-		#region method SetTemplateAndSubjectAndVariables
+		#region method SetTemplateAndVariables
 
-		protected override void SetTemplateAndSubjectAndVariables() {
-			Subject = "Your new ezbob password has been registered.";
+		protected override void SetTemplateAndVariables() {
 			TemplateName = "Mandrill - New password";
 
 			Variables = new Dictionary<string, string> {
 				{"Password", password},
 				{"FirstName", CustomerData.FirstName}
 			};
-		} // SetTemplateAndSubjectAndVariables
+		} // SetTemplateAndVariables
 
-		#endregion method SetTemplateAndSubjectAndVariables
+		#endregion method SetTemplateAndVariables
 
 		private readonly string password;
 	} // class PasswordChanged

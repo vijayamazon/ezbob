@@ -14,10 +14,9 @@
 
 		public override string Name { get { return "Password Restored"; } } // Name
 
-		#region method SetTemplateAndSubjectAndVariables
+		#region method SetTemplateAndVariables
 
-		protected override void SetTemplateAndSubjectAndVariables() {
-			Subject = "Your ezbob password has been restored";
+		protected override void SetTemplateAndVariables() {
 			TemplateName = "Mandrill - EZBOB password was restored";
 
 			Variables = new Dictionary<string, string> {
@@ -25,9 +24,9 @@
 				{"Password", password},
 				{"FirstName", string.IsNullOrEmpty(CustomerData.FirstName) ? "Dear customer" : CustomerData.FirstName }
 			};
-		} // SetTemplateAndSubjectAndVariables
+		} // SetTemplateAndVariables
 
-		#endregion method SetTemplateAndSubjectAndVariables
+		#endregion method SetTemplateAndVariables
 
 		private readonly string password;
 	} // class PasswordRestored

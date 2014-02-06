@@ -9,10 +9,9 @@
 
 		public override string Name { get {return "RequestCashWithoutTakenLoan"; } } // Name
 
-		#region method SetTemplateAndSubjectAndVariables
+		#region method SetTemplateAndVariables
 
-		protected override void SetTemplateAndSubjectAndVariables() {
-			Subject = string.Format("{0}, we are currently re-analysing your business in order to make you a new funding offer.", CustomerData.FirstName);
+		protected override void SetTemplateAndVariables() {
 			TemplateName = "Mandrill - Re-analyzing customer";
 
 			Variables = new Dictionary<string, string> {
@@ -20,6 +19,6 @@
 			};
 		} // SetTemplateAndSubjectAndVariables
 
-		#endregion method SetTemplateAndSubjectAndVariables
+		#endregion method SetTemplateAndVariables
 	} // class RequestCashWithoutTakenLoan
 } // namespace

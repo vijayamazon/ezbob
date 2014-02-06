@@ -13,18 +13,17 @@
 
 		public override string Name { get { return "Get Cash Failed"; } } // Name
 
-		#region method SetTemplateAndSubjectAndVariables
+		#region method SetTemplateAndVariables
 
-		protected override void SetTemplateAndSubjectAndVariables() {
-			Subject = "Get cash - problem with the card";
+		protected override void SetTemplateAndVariables() {
 			TemplateName = "Mandrill - Debit card authorization problem";
 
 			Variables = new Dictionary<string, string> {
 				{"DashboardPage", "https://app.ezbob.com/Customer/Profile"},
 				{"FirstName", CustomerData.FirstName}
 			};
-		} // SetTemplateAndSubjectAndVariables
+		} // SetTemplateAndVariables
 
-		#endregion method SetTemplateAndSubjectAndVariables
+		#endregion method SetTemplateAndVariables
 	} // class GetCashFailed
 } // namespace

@@ -11,14 +11,13 @@
 
 		#region method SetTemplateAndSubjectAndVariables
 
-		protected override void SetTemplateAndSubjectAndVariables() {
-			Subject = "Proof of ID required to make you a loan offer";
+		protected override void SetTemplateAndVariables() {
 			TemplateName = "Mandrill - Application incompleted AML";
 
 			Variables = new Dictionary<string, string> {
 				{"FirstName", CustomerData.FirstName}
 			};
-		} // SetTemplateAndSubjectAndVariables
+		} // SetTemplateAndVariables
 
 		#endregion method SetTemplateAndSubjectAndVariables
 	} // class MoreAMLInformation
