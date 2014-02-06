@@ -321,7 +321,7 @@ namespace EzAnalyticsConsoleClient {
 				m_oReportDate,
 				m_oReportDate,
 				new GoogleReportDimensions[] { GoogleReportDimensions.sourceMedium, },
-				new GoogleReportMetrics[] { GoogleReportMetrics.visitors },
+				new GoogleReportMetrics[] { GoogleReportMetrics.visitors, GoogleReportMetrics.newVisits },
 				GoogleDataFetcher.GAString(GoogleReportDimensions.hostname) + "==app.ezbob.com"
 			);
 			var model = new List<StatsModel>(); 
