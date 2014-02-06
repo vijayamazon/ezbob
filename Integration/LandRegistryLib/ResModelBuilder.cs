@@ -18,18 +18,7 @@
 
 			if (data.PricePaidEntry != null)
 			{
-				foreach (var infill in data.PricePaidEntry.EntryDetails.Infills)
-				{
-					if (infill.GetType() == typeof(AmountInfillType))
-					{
-						model.PricePaidEntryAmount = ((AmountInfillType)infill).Value;
-					}
-
-					if (infill.GetType() == typeof(DateInfillType))
-					{
-						model.PricePaidEntryDate = ((DateInfillType)infill).Value;
-					}
-				}
+				model.PricePaidInfills = GetInfills(data.PricePaidEntry.EntryDetails.Infills);
 			}
 
 			model.PropertyAddresses = GetAddresses(data.PropertyAddress);
@@ -103,63 +92,7 @@
 					lrRestriction.SubRegisterCode = code.DescriptionAttr();
 				}
 
-				lrRestriction.Infills = new List<KeyValuePair<string, string>>();
-
-				foreach (var infill in restriction.Item.EntryDetails.Infills)
-				{
-
-					switch (infill.GetType().Name)
-					{
-						case "AmountInfillType":
-							lrRestriction.Infills.Add(new KeyValuePair<string, string> { Key = "Amount", Value = ((AmountInfillType)infill).Value });
-							break;
-						case "ChargeDateInfillType":
-							lrRestriction.Infills.Add(new KeyValuePair<string, string> { Key = "ChargeDate", Value = ((ChargeDateInfillType)infill).Value.ToShortDateString() });
-							break;
-						case "ChargePartyInfillType":
-							lrRestriction.Infills.Add(new KeyValuePair<string, string> { Key = "ChargeParty", Value = ((ChargePartyInfillType)infill).Value });
-							break;
-						case "DateInfillType":
-							lrRestriction.Infills.Add(new KeyValuePair<string, string> { Key = "Date", Value = ((DateInfillType)infill).Value.ToShortDateString() });
-							break;
-						case "DeedDateInfillType":
-							lrRestriction.Infills.Add(new KeyValuePair<string, string> { Key = "DeedDate", Value = ((DeedDateInfillType)infill).Value });
-							break;
-						case "DeedExtentInfillType":
-							lrRestriction.Infills.Add(new KeyValuePair<string, string> { Key = "DeedExtent", Value = ((DeedExtentInfillType)infill).Value });
-							break;
-						case "DeedPartyInfillType":
-							lrRestriction.Infills.Add(new KeyValuePair<string, string> { Key = "DeedParty", Value = ((DeedPartyInfillType)infill).Value });
-							break;
-						case "DeedTypeInfillType":
-							lrRestriction.Infills.Add(new KeyValuePair<string, string> { Key = "DeedType", Value = ((DeedTypeInfillType)infill).Value });
-							break;
-						case "ExtentOfLandInfillType":
-							lrRestriction.Infills.Add(new KeyValuePair<string, string> { Key = "ExtentOfLand", Value = ((ExtentOfLandInfillType)infill).Value });
-							break;
-						case "MiscTextInfillType":
-							lrRestriction.Infills.Add(new KeyValuePair<string, string> { Key = "MiscellaneousText", Value = ((MiscTextInfillType)infill).Value });
-							break;
-						case "NameInfillType":
-							lrRestriction.Infills.Add(new KeyValuePair<string, string> { Key = "MiscellaneousText", Value = ((NameInfillType)infill).Value });
-							break;
-						case "NoteInfillType":
-							lrRestriction.Infills.Add(new KeyValuePair<string, string> { Key = "MiscellaneousText", Value = ((NoteInfillType)infill).Value });
-							break;
-						case "OptMiscTextInfillType":
-							lrRestriction.Infills.Add(new KeyValuePair<string, string> { Key = "OptionalMiscText", Value = ((OptMiscTextInfillType)infill).Value });
-							break;
-						case "PlansRefInfillType":
-							lrRestriction.Infills.Add(new KeyValuePair<string, string> { Key = "PlansReference", Value = ((PlansRefInfillType)infill).Value });
-							break;
-						case "TitleNumberInfillType":
-							lrRestriction.Infills.Add(new KeyValuePair<string, string> { Key = "TitleNumber", Value = ((TitleNumberInfillType)infill).Value });
-							break;
-						case "VerbatimTextInfillType":
-							lrRestriction.Infills.Add(new KeyValuePair<string, string> { Key = "VerbatimText", Value = ((VerbatimTextInfillType)infill).Value });
-							break;
-					}
-				}
+				lrRestriction.Infills = GetInfills(restriction.Item.EntryDetails.Infills);
 
 				model.Restrictions.Add(lrRestriction);
 			}
@@ -182,6 +115,69 @@
 				addresses.Add(lrAddress);
 			}
 			return addresses;
+		}
+
+		private List<KeyValuePair<string, string>> GetInfills(object[] infills)
+		{
+			var lrInfills = new List<KeyValuePair<string, string>>();
+
+			foreach (var infill in infills)
+			{
+
+				switch (infill.GetType().Name)
+				{
+					case "AmountInfillType":
+						lrInfills.Add(new KeyValuePair<string, string> { Key = "Amount", Value = ((AmountInfillType)infill).Value });
+						break;
+					case "ChargeDateInfillType":
+						lrInfills.Add(new KeyValuePair<string, string> { Key = "ChargeDate", Value = ((ChargeDateInfillType)infill).Value.ToShortDateString() });
+						break;
+					case "ChargePartyInfillType":
+						lrInfills.Add(new KeyValuePair<string, string> { Key = "ChargeParty", Value = ((ChargePartyInfillType)infill).Value });
+						break;
+					case "DateInfillType":
+						lrInfills.Add(new KeyValuePair<string, string> { Key = "Date", Value = ((DateInfillType)infill).Value.ToShortDateString() });
+						break;
+					case "DeedDateInfillType":
+						lrInfills.Add(new KeyValuePair<string, string> { Key = "DeedDate", Value = ((DeedDateInfillType)infill).Value });
+						break;
+					case "DeedExtentInfillType":
+						lrInfills.Add(new KeyValuePair<string, string> { Key = "DeedExtent", Value = ((DeedExtentInfillType)infill).Value });
+						break;
+					case "DeedPartyInfillType":
+						lrInfills.Add(new KeyValuePair<string, string> { Key = "DeedParty", Value = ((DeedPartyInfillType)infill).Value });
+						break;
+					case "DeedTypeInfillType":
+						lrInfills.Add(new KeyValuePair<string, string> { Key = "DeedType", Value = ((DeedTypeInfillType)infill).Value });
+						break;
+					case "ExtentOfLandInfillType":
+						lrInfills.Add(new KeyValuePair<string, string> { Key = "ExtentOfLand", Value = ((ExtentOfLandInfillType)infill).Value });
+						break;
+					case "MiscTextInfillType":
+						lrInfills.Add(new KeyValuePair<string, string> { Key = "MiscellaneousText", Value = ((MiscTextInfillType)infill).Value });
+						break;
+					case "NameInfillType":
+						lrInfills.Add(new KeyValuePair<string, string> { Key = "MiscellaneousText", Value = ((NameInfillType)infill).Value });
+						break;
+					case "NoteInfillType":
+						lrInfills.Add(new KeyValuePair<string, string> { Key = "MiscellaneousText", Value = ((NoteInfillType)infill).Value });
+						break;
+					case "OptMiscTextInfillType":
+						lrInfills.Add(new KeyValuePair<string, string> { Key = "OptionalMiscText", Value = ((OptMiscTextInfillType)infill).Value });
+						break;
+					case "PlansRefInfillType":
+						lrInfills.Add(new KeyValuePair<string, string> { Key = "PlansReference", Value = ((PlansRefInfillType)infill).Value });
+						break;
+					case "TitleNumberInfillType":
+						lrInfills.Add(new KeyValuePair<string, string> { Key = "TitleNumber", Value = ((TitleNumberInfillType)infill).Value });
+						break;
+					case "VerbatimTextInfillType":
+						lrInfills.Add(new KeyValuePair<string, string> { Key = "VerbatimText", Value = ((VerbatimTextInfillType)infill).Value });
+						break;
+				}
+			}
+
+			return lrInfills;
 		}
 
 		private IEnumerable<string> GetIndicators(Q1RegisterEntryIndicatorsType indicators)

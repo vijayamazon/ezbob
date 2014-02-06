@@ -76,13 +76,13 @@
 
 	public enum RestrictionSubRegisterCode
 	{
-		[Description("Property Register")]
+		[Description("A : Property Register")]
 		A,
-		[Description("Proprietorship Register")]
+		[Description("B : Proprietorship Register")]
 		B,
-		[Description("Charges Register")]
+		[Description("C : Charges Register")]
 		C,
-		[Description("Cautioner's Register")]
+		[Description("D : Cautioner's Register")]
 		D,
 	}
 
@@ -104,8 +104,8 @@
 	{
 		public string TitleNumber { get; set; }
 		//public bool CommonholdIndicator { get; set; } //if false indicate (Indicator showing whether the title is commonhold property)
-		public DateTime? PricePaidEntryDate { get; set; }
-		public string PricePaidEntryAmount { get; set; }
+		public List<KeyValuePair<string, string>> PricePaidInfills { get; set; }
+		
 		public List<LandRegistryAddressModel> PropertyAddresses { get; set; }
 
 		public List<string> Indicators { get; set; }
