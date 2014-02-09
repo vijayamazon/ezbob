@@ -38,6 +38,7 @@ namespace EZBob.DatabaseLib
 	using EzBob.CommonLib.TimePeriodLogic;
 	using Model.Marketplaces.Amazon;
 	using NHibernate;
+	using NHibernate.Criterion;
 	using NHibernate.Linq;
 	using Repository;
 	using Scorto.NHibernate.Repository;
@@ -2918,12 +2919,12 @@ namespace EZBob.DatabaseLib
 			public string value { get; private set; }
 			public DateTime afDate { get; private set; }
 
-			public AnalysisFunctionData(IDataReader oReader)
+			public AnalysisFunctionData(object[] val)
 			{
-				fid = new Guid(oReader["fid"].ToString());
-				fpid = new Guid(oReader["fpid"].ToString());
-				value = oReader["value"].ToString();
-				afDate = System.Convert.ToDateTime(oReader["updatingstart"]);
+				fid = (Guid)val[0];
+				fpid = (Guid)val[1];
+				value = (string)val[2];
+				afDate = (DateTime)val[3];
 			} // constructor
 		} // class AnalysisFunctionData
 
@@ -2931,38 +2932,20 @@ namespace EZBob.DatabaseLib
 
 		public Dictionary<DateTime, List<IAnalysisDataParameterInfo>> GetAnalyisisFunctions(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace)
 		{
-			IDbCommand cmd = _session.Connection.CreateCommand();
-			cmd.CommandText = "GetFunctionAnalysisValuesByCustomerMarketPlace";
-			cmd.CommandType = CommandType.StoredProcedure;
-
-			var param = cmd.CreateParameter();
-			param.ParameterName = "@MpID";
-			param.Value = databaseCustomerMarketPlace.Id;
-
-			cmd.Parameters.Add(param);
-
-			_session.Transaction.Enlist(cmd);
-
 			var lst = new List<AnalysisFunctionData>();
 
 			try
 			{
-				IDataReader oReader = cmd.ExecuteReader();
-
-				if (oReader != null)
+				var analysisVals = _session.CreateSQLQuery("EXEC GetFunctionAnalysisValuesByCustomerMarketPlace " + databaseCustomerMarketPlace.Id).List<object[]>();
+				if (analysisVals != null)
 				{
-					while (oReader.Read())
-						lst.Add(new AnalysisFunctionData(oReader));
-
-					oReader.Dispose();
+					lst.AddRange(analysisVals.Select(analysisVal => new AnalysisFunctionData(analysisVal)));
 				} // if readers is not null
 			}
 			catch (Exception e)
 			{
 				_Log.Error(string.Format("Failed to GetAnalyisisFunctions(for mp {0})", databaseCustomerMarketPlace.Id), e);
 			} // try
-
-			cmd.Dispose();
 
 			var oResult = new Dictionary<DateTime, List<IAnalysisDataParameterInfo>>();
 

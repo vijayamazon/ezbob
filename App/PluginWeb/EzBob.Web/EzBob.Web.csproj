@@ -1424,7 +1424,7 @@
     <Content Include="Areas\Underwriter\Views\Shared\AutomationSettings\_CampaignSettings.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\SideBars\_Sidebar.cshtml" />
     <Content Include="Areas\Underwriter\Views\CrossCheck\LandRegistry.cshtml" />
-    <None Include="Content\js\login\ezbob.restorePassword.coffee" />
+    <Content Include="Content\js\login\ezbob.restorePassword.coffee" />
     <Content Include="Content\js\Profile\ezbob.profile.yourInfo.js">
       <DependentUpon>ezbob.profile.yourInfo.coffee</DependentUpon>
     </Content>
@@ -1523,13 +1523,13 @@
     <Content Include="Areas\Customer\Views\Consent\Agreed.cshtml" />
     <Content Include="Areas\Underwriter\Views\Helper\PermissionClasses.cshtml" />
     <Content Include="Areas\Underwriter\Views\Helper\RolesClasses.cshtml" />
-    <None Include="Content\js\controls\ezbob.BoundItemView.coffee" />
+    <Content Include="Content\js\controls\ezbob.BoundItemView.coffee" />
     <Content Include="Content\js\Profile\ApplyForLoan\ApplyForLoanModel.coffee" />
     <Content Include="Content\js\Profile\ApplyForLoan\GetCashConfirmationView.coffee" />
     <Content Include="Content\js\Profile\ApplyForLoan\ThankyouLoanView.coffee" />
     <Content Include="Content\js\Profile\ApplyForLoan\ApplyForLoanView.coffee" />
     <Content Include="Content\js\Profile\ezbob.profile.inviteFriend.coffee" />
-    <None Include="Content\js\Profile\ezbob.profile.Agreements.coffee" />
+    <Content Include="Content\js\Profile\ezbob.profile.Agreements.coffee" />
     <Content Include="Content\js\Profile\ezbob.profile.paypointSchedule.js" />
     <Content Include="Content\js\Profile\ezbob.profile.signWidget.js" />
     <Content Include="Content\js\Profile\ezbob.profile.smallNotification.js" />
@@ -1931,7 +1931,7 @@
     <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.paymentAccounts.coffee" />
     <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.payPalAccountDetails.coffee" />
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.loanHistorys.coffee" />
-    <None Include="Content\js\Profile\ApplyForLoan\ezbob.profile.PayPointCardSelectView.coffee" />
+    <Content Include="Content\js\Profile\ApplyForLoan\ezbob.profile.PayPointCardSelectView.coffee" />
     <Content Include="Content\js\Profile\PayEarly\makeEarlyPaymentModel.coffee" />
     <Content Include="Content\js\Profile\PayEarly\makeEarlyPaymentView.coffee" />
     <Content Include="Content\js\Underwriter\bugs\ezbob.underwriter.bugs.reporter.coffee" />
@@ -1962,8 +1962,8 @@
     <Content Include="Content\js\Underwriter\profile\ezbob.underwriter.customerFullModel.coffee" />
     <Content Include="Content\js\Underwriter\profile\leftAndBottomBar\ezbob.underwriter.ApproveLoanForWarningStatusCustomer.coffee" />
     <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.marketplacesHistory.coffee" />
-    <None Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.addPayPointCardView.coffee" />
-    <None Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.bankAccountDetails.coffee" />
+    <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.addPayPointCardView.coffee" />
+    <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.bankAccountDetails.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shopbutton.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.ekm.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.coffee" />

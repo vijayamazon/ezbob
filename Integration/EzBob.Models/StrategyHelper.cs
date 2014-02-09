@@ -56,27 +56,56 @@
 			serviceLogRepository = ObjectFactory.GetInstance<ServiceLogRepository>();
 		}
 
-		public double GetTurnoverForPeriod(int customerId, TimePeriodEnum period)
+		public double GetAnualTurnOverByCustomer(int customerId)
+		{
+			var analysisVals = GetAnalysisValsForCustomer(customerId);
+			return GetTurnoverForPeriod(analysisVals, TimePeriodEnum.Year);
+		}
+
+		public double GetTotalSumOfOrders3M(int customerId)
+		{
+			var analysisVals = GetAnalysisValsForCustomer(customerId);
+			return GetTurnoverForPeriod(analysisVals, TimePeriodEnum.Month3);
+		}
+
+		public Dictionary<MP_CustomerMarketPlace, List<IAnalysisDataParameterInfo>> GetAnalysisValsForCustomer(
+			int customerId)
 		{
 			var customer = _customers.Get(customerId);
-			double sum = 0;
-			double payPalSum = 0;
-			double ebaySum = 0;
-			foreach (var mp in customer.CustomerMarketPlaces.Where(mp => !mp.Disabled && (!mp.Marketplace.IsPaymentAccount || mp.Marketplace.Name == "Pay Pal")))
+			var mpAnalysis = new Dictionary<MP_CustomerMarketPlace, List<IAnalysisDataParameterInfo>>();
+			foreach (var mp in customer.CustomerMarketPlaces.Where(
+						mp => !mp.Disabled && (!mp.Marketplace.IsPaymentAccount || mp.Marketplace.Name == "Pay Pal")))
 			{
 				var analisysFunction = RetrieveDataHelper.GetAnalysisValuesByCustomerMarketPlace(mp.Id);
 				var av = analisysFunction.Data.FirstOrDefault(x => x.Key == analisysFunction.Data.Max(y => y.Key)).Value;
 				if (av != null)
 				{
-					string parameterName = mp.Marketplace.Name == "Pay Pal" ? "Total Net In Payments" : "Total Sum of Orders";
+					mpAnalysis.Add(mp, av);
+				}
+			}
+
+			return mpAnalysis;
+		}
+
+		public double GetTurnoverForPeriod(Dictionary<MP_CustomerMarketPlace, List<IAnalysisDataParameterInfo>> analysisVals, TimePeriodEnum period)
+		{
+			double sum = 0;
+			double payPalSum = 0;
+			double ebaySum = 0;
+			foreach (var mp in analysisVals)
+			{
+				var av = mp.Value;
+				if (av != null)
+				{
+					string parameterName = mp.Key.Marketplace.Name == "Pay Pal" ? "Total Net In Payments" : "Total Sum of Orders";
 					var relevantTurnover = av.LastOrDefault(x => x.ParameterName == parameterName && x.TimePeriod.TimePeriodType <= period);
 
 					double currentTurnover = Convert.ToDouble(relevantTurnover != null ? relevantTurnover.Value : 0);
-					if (mp.Marketplace.Name == "Pay Pal")
+					if (mp.Key.Marketplace.Name == "Pay Pal")
 					{
 						payPalSum += currentTurnover;
 					}
-					else if (mp.Marketplace.Name == "eBay")
+					else if (mp.Key.Marketplace.Name == "eBay")
 					{
 						ebaySum += currentTurnover;
 					}
@@ -89,57 +118,48 @@
 			return sum + Math.Max(payPalSum, ebaySum);
 		}
 
-		public double GetAnualTurnOverByCustomer(int customerId)
-		{
-			return GetTurnoverForPeriod(customerId, TimePeriodEnum.Year);
-		}
-
-		public double GetTotalSumOfOrders3M(int customerId)
-		{
-			return GetTurnoverForPeriod(customerId, TimePeriodEnum.Month3);
-		}
-
 		public double GetTotalSumOfOrdersForLoanOffer(int customerId)
 		{
-			double year = GetAnnualizedTurnoverForPeriod(customerId, TimePeriodEnum.Year);
-			double month6 = GetAnnualizedTurnoverForPeriod(customerId, TimePeriodEnum.Month6);
-			double month3 = GetAnnualizedTurnoverForPeriod(customerId, TimePeriodEnum.Month3);
-			double month = GetAnnualizedTurnoverForPeriod(customerId, TimePeriodEnum.Month);
+			var analysisVals = GetAnalysisValsForCustomer(customerId);
+
+
+			double year = GetAnnualizedTurnoverForPeriod(analysisVals, TimePeriodEnum.Year);
+			double month6 = GetAnnualizedTurnoverForPeriod(analysisVals, TimePeriodEnum.Month6);
+			double month3 = GetAnnualizedTurnoverForPeriod(analysisVals, TimePeriodEnum.Month3);
+			double month = GetAnnualizedTurnoverForPeriod(analysisVals, TimePeriodEnum.Month);
 
 			double min = Math.Min(year, Math.Min(month6, Math.Min(month3, month)));
 			log.InfoFormat("Calculated annualized turnover. Year:{0} 6Months:{1} 3Months:{2} Month:{3}. Using min:{4}", year, month6, month3, month, min);
 			return min;
 		}
 
-		public double GetAnnualizedTurnoverForPeriod(int customerId, TimePeriodEnum period)
+		public double GetAnnualizedTurnoverForPeriod(Dictionary<MP_CustomerMarketPlace, List<IAnalysisDataParameterInfo>> mpAnalysis, TimePeriodEnum period)
 		{
-			var customer = _customers.Get(customerId);
 			double sum = 0;
 			double payPalSum = 0;
 			double ebaySum = 0;
-			foreach (var mp in customer.CustomerMarketPlaces.Where(mp => !mp.Disabled && (!mp.Marketplace.IsPaymentAccount || mp.Marketplace.Name == "Pay Pal")))
+			foreach (var mp in mpAnalysis)
 			{
-				var analisysFunction = RetrieveDataHelper.GetAnalysisValuesByCustomerMarketPlace(mp.Id);
-				var av = analisysFunction.Data.FirstOrDefault(x => x.Key == analisysFunction.Data.Max(y => y.Key)).Value;
+				var av = mp.Value;
 				if (av != null)
 				{
 					string parameterName;
 					if (period == TimePeriodEnum.Month || period == TimePeriodEnum.Month3 || period == TimePeriodEnum.Month6)
 					{
-						parameterName = mp.Marketplace.Name == "Pay Pal" ? "Total Net In Payments Annualized" : "Total Sum of Orders Annualized";
+						parameterName = mp.Key.Marketplace.Name == "Pay Pal" ? "Total Net In Payments Annualized" : "Total Sum of Orders Annualized";
 					}
 					else
 					{
-						parameterName = mp.Marketplace.Name == "Pay Pal" ? "Total Net In Payments" : "Total Sum of Orders";
+						parameterName = mp.Key.Marketplace.Name == "Pay Pal" ? "Total Net In Payments" : "Total Sum of Orders";
 					}
 					var relevantTurnover = av.LastOrDefault(x => x.ParameterName == parameterName && x.TimePeriod.TimePeriodType <= period);
 
 					double currentTurnover = Convert.ToDouble(relevantTurnover != null ? relevantTurnover.Value : 0);
-					if (mp.Marketplace.Name == "Pay Pal")
+					if (mp.Key.Marketplace.Name == "Pay Pal")
 					{
 						payPalSum += currentTurnover;
 					}
-					else if (mp.Marketplace.Name == "eBay")
+					else if (mp.Key.Marketplace.Name == "eBay")
 					{
 						ebaySum += currentTurnover;
 					}
@@ -334,21 +354,23 @@
 			int autoApproveMinTurnover3M = configurationVariablesRepository.GetByNameAsInt("AutoApproveMinTurnover3M");
 			int autoApproveMinTurnover1Y = configurationVariablesRepository.GetByNameAsInt("AutoApproveMinTurnover1Y");
 
-			int turnover1M = (int)GetTurnoverForPeriod(customerId, TimePeriodEnum.Month);
+			var mpAnalysis = GetAnalysisValsForCustomer(customerId);
+
+			int turnover1M = (int)GetTurnoverForPeriod(mpAnalysis, TimePeriodEnum.Month);
 			if (turnover1M < autoApproveMinTurnover1M)
 			{
 				log.InfoFormat("No auto approval: Minimal 1 month turnover for auto approval is: {0}. Customer 1 month turnover is:{1}", autoApproveMinTurnover1M, turnover1M);
 				return false;
 			}
 
-			int turnover3M = (int)GetTurnoverForPeriod(customerId, TimePeriodEnum.Month3);
+			int turnover3M = (int)GetTurnoverForPeriod(mpAnalysis, TimePeriodEnum.Month3);
 			if (turnover3M < autoApproveMinTurnover3M)
 			{
 				log.InfoFormat("No auto approval: Minimal 3 months turnover for auto approval is: {0}. Customer 3 months turnover is:{1}", autoApproveMinTurnover3M, turnover3M);
 				return false;
 			}
 
-			int turnover1Y = (int)GetTurnoverForPeriod(customerId, TimePeriodEnum.Year);
+			int turnover1Y = (int)GetTurnoverForPeriod(mpAnalysis, TimePeriodEnum.Year);
 			if (turnover1Y < autoApproveMinTurnover1Y)
 			{
 				log.InfoFormat("No auto approval: Minimal 1 year turnover for auto approval is: {0}. Customer 1 year turnover is:{1}", autoApproveMinTurnover1Y, turnover1Y);

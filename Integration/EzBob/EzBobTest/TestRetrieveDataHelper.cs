@@ -6,6 +6,7 @@ namespace EzBobTest
 	using System.Threading;
 	using System.Xml;
 	using EKM;
+	using EzBob.Models;
 	using FreeAgent;
 	using Sage;
 	using EZBob.DatabaseLib;
@@ -122,8 +123,12 @@ namespace EzBobTest
         [Test]
         public void GetAnalysisValuesByCustomerMarketPlace()
         {
-			var data = RetrieveDataHelper.GetAnalysisValuesByCustomerMarketPlace(12235);
-			Console.WriteLine(data.Data.Count);
+			var data = RetrieveDataHelper.GetAnalysisValuesByCustomerMarketPlace(16283);
+
+			var s = new StrategyHelper();
+	        var res = s.GetAnualTurnOverByCustomer(11164);
+	        var res2 = s.GetTotalSumOfOrdersForLoanOffer(11164);
+			Console.WriteLine("{0} {1} {2}",data.Data.Count, res, res2);
         }
 
         [Test]
