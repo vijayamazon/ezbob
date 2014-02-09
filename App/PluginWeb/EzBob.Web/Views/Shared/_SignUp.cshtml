@@ -8,13 +8,6 @@
     string captchamode = config.CaptchaMode;
     bool ebayPixelEnabled = config.EbayPixelEnabled;
     bool instructionsEnabled = config.WizardInstructionsEnabled;
-
-    bool twilioEnabled = Convert.ToBoolean(@Session["IsSmsValidationActive"]);
-    string captchaVisibilityClass = "";
-    if (twilioEnabled)
-    {
-        captchaVisibilityClass = "hide";
-    }
 }
 
 @using (Html.BeginForm("SignUp", "Account", new {Area = ""}, FormMethod.Post, new {@class = "signup clearfix"}))
@@ -90,32 +83,29 @@
         </label>
     </div>
     
-    if (twilioEnabled)
-    {
-        <div id="twilioDiv" class="hide">
-            <div class="form_field_container">
-                <label class ="attardi-input">
-                    <span>Mobile phone</span>
-                    <input type="text" class="phonenumber form_field_left_side form_field" name="mobilePhone" id="mobilePhone" tabindex="11" ui-event-control-id="signup:mobile-phone"/>
+    <div id="twilioDiv" class="hide">
+        <div class="form_field_container">
+            <label class ="attardi-input">
+                <span>Mobile phone</span>
+                <input type="text" class="phonenumber form_field_left_side form_field" name="mobilePhone" id="mobilePhone" tabindex="11" ui-event-control-id="signup:mobile-phone"/>
                     
-                    <label id="codeSentLabel" class="code-sent-style hide">Code sent</label>
-                    <img id="mobilePhoneImage" class="field_status required"/>
-                    <input id="generateMobileCode" class="btn green form_field_right_side_signup_phone disabled" type="button" value="Send activation code" ui-event-control-id="signup:generate-mobile-code" />
-                </label>
-            </div>
-    
-            <div id="mobileCodeDiv" class="form_field_container">
-                <label class ="attardi-input">
-                    <span>Mobile phone authentication code</span>
-                    <input type="text" class="phonenumbercode form_field_left_side form_field" name="mobileCode" id="mobileCode" tabindex="12" ui-event-control-id="signup:mobile-code"/>
-                    <img id="mobileCodeImage" class="field_status required"/>
-                    <input id="switchToCaptcha" class="btn green form_field_right_side_signup_phone disabled" type="button" value="Did not recieve code" ui-event-control-id="signup:switch-to-captcha" />
-                </label>
-            </div>
+                <label id="codeSentLabel" class="code-sent-style hide">Code sent</label>
+                <img id="mobilePhoneImage" class="field_status required"/>
+                <input id="generateMobileCode" class="btn green form_field_right_side_signup_phone disabled" type="button" value="Send activation code" ui-event-control-id="signup:generate-mobile-code" />
+            </label>
         </div>
-    }
     
-    <div id="captchaDiv" class="@captchaVisibilityClass">
+        <div id="mobileCodeDiv" class="form_field_container">
+            <label class ="attardi-input">
+                <span>Mobile phone authentication code</span>
+                <input type="text" class="phonenumbercode form_field_left_side form_field" name="mobileCode" id="mobileCode" tabindex="12" ui-event-control-id="signup:mobile-code"/>
+                <img id="mobileCodeImage" class="field_status required"/>
+                <input id="switchToCaptcha" class="btn green form_field_right_side_signup_phone disabled" type="button" value="Did not recieve code" ui-event-control-id="signup:switch-to-captcha" />
+            </label>
+        </div>
+    </div>
+    
+    <div id="captchaDiv" class="hide">
         <div class="form_field_container">
             @EzForm.Captcha(captchamode)
         </div>
