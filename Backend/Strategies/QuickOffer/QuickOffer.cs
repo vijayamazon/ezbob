@@ -72,12 +72,12 @@
 			Log.Debug("QuickOffer.Execute started for customer {0}...", m_nCustomerID);
 
 			if (ReferenceEquals(m_oCfg, null)) {
-				Log.Debug("QuickOffer.Execute for customer {0} complete: configuration not specified.", m_nCustomerID);
+				Log.Debug("QuickOffer.Execute complete for customer {0}: configuration not specified.", m_nCustomerID);
 				return;
 			} // if
 
 			if (m_oCfg.Enabled == QuickOfferEnabledStatus.Disabled) {
-				Log.Debug("QuickOffer.Execute for customer {0} complete: quick offer is disabled.", m_nCustomerID);
+				Log.Debug("QuickOffer.Execute complete for customer {0}: quick offer is disabled.", m_nCustomerID);
 				return;
 			} // if
 
@@ -100,18 +100,18 @@
 				);
 			}
 			catch (Exception e) {
-				Log.Alert("Failed to load quick offer calculation data from DB for customer {0}:\n\n{1}\n", m_nCustomerID, e.Message);
+				Log.Alert("QuickOffer.Execute complete for customer {0}: failed to load quick offer calculation data from DB:\n\n{1}\n", m_nCustomerID, e.Message);
 				return;
 			} // try
 
 			if (!qod.IsValid) {
-				Log.Debug("QuickOffer.Execute for customer {0} complete: cannot make an offer based on data loaded from DB.", m_nCustomerID);
+				Log.Debug("QuickOffer.Execute complete for customer {0}: cannot make an offer based on data loaded from DB.", m_nCustomerID);
 				return;
 			} // if
 
 			Offer = qod.GetOffer(m_bSaveOfferToDB, DB, Log);
 
-			Log.Debug("QuickOffer.Execute for customer {0} complete: offer is {1}.", m_nCustomerID, ReferenceEquals(Offer, null) ? "alas, nothing" : Offer.Amount.ToString());
+			Log.Debug("QuickOffer.Execute complete for customer {0}: offer is {1}.", m_nCustomerID, ReferenceEquals(Offer, null) ? "alas, nothing" : Offer.Amount.ToString());
 		} // Execute
 
 		#endregion method Execute

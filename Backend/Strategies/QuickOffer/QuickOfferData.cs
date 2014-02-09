@@ -33,26 +33,30 @@
 		#region method Load
 
 		public void Load(SafeReader oReader) {
-			CustomerID = oReader["CustomerID"];
-			RequestedAmount = oReader["RequestedAmount"];
-			CompanyRefNum = oReader["CompanyRefNum"];
-			// DefaultCount = oReader["DefaultCount"];
-			// AmlID = oReader["AmlID"];
-			AmlData = oReader["AmlData"];
-			// PersonalID = oReader["PersonalID"];
-			// PersonalScore = oReader["PersonalScore"];
-			// CompanyID = oReader["CompanyID"];
-			CompanyData = oReader["CompanyData"];
-			FirstName = oReader["FirstName"];
-			LastName = oReader["LastName"];
-			ConsumerData = oReader["ConsumerData"];
+			FatalMsg = oReader["FatalMsg"];
 
-			Enabled = QuickOfferConfiguration.GetEnabledStatus(oReader["Enabled"]);
-			FundsAvailable = oReader["FundsAvailable"];
-			LoanCount = oReader["LoanCount"];
-			IssuedAmount = oReader["IssuedAmount"];
-			OpenCashRequests = oReader["OpenCashRequests"];
-			ErrorMsg = oReader["ErrorMsg"];
+			if (string.IsNullOrWhiteSpace(FatalMsg)) {
+				CustomerID = oReader["CustomerID"];
+				RequestedAmount = oReader["RequestedAmount"];
+				CompanyRefNum = oReader["CompanyRefNum"];
+				// DefaultCount = oReader["DefaultCount"];
+				// AmlID = oReader["AmlID"];
+				AmlData = oReader["AmlData"];
+				// PersonalID = oReader["PersonalID"];
+				// PersonalScore = oReader["PersonalScore"];
+				// CompanyID = oReader["CompanyID"];
+				CompanyData = oReader["CompanyData"];
+				FirstName = oReader["FirstName"];
+				LastName = oReader["LastName"];
+				ConsumerData = oReader["ConsumerData"];
+
+				Enabled = QuickOfferConfiguration.GetEnabledStatus(oReader["Enabled"]);
+				FundsAvailable = oReader["FundsAvailable"];
+				LoanCount = oReader["LoanCount"];
+				IssuedAmount = oReader["IssuedAmount"];
+				OpenCashRequests = oReader["OpenCashRequests"];
+				ErrorMsg = oReader["ErrorMsg"];
+			} // if
 
 			Validate();
 		} // Load
@@ -168,6 +172,8 @@
 		private decimal OpenCashRequests;
 		private string ErrorMsg;
 
+		private string FatalMsg;
+
 		private int Aml;
 		private int BusinessScore;
 		private DateTime IncorporationDate;
@@ -246,6 +252,11 @@
 		#region method Validate
 
 		private void Validate() {
+			if (!string.IsNullOrWhiteSpace(FatalMsg)) {
+				Log.Debug("QuickOffer.Validate: fatal (for quick offer calculation) error reported when selecting data from DB: {0}", FatalMsg);
+				return;
+			} // if
+
 			if (!AreLoadedValid())
 				return;
 
