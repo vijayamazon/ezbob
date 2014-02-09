@@ -1,4 +1,4 @@
-﻿[
+UPDATE ConfigurationVariables SET Value = '[
 	{
 		"Name": "Locality Resolution List Data Group",
 
@@ -458,10 +458,10 @@
 			{ "SourcePath": "./NUMACCSPLACEDFORCOLLTN", "Targets": [{ "Name": "Number of accounts placed for collection" }] },
 			{ "SourcePath": "./VALACCSPLACEDFORCOLLTN", "Targets": [{ "Name": "Value of accounts placed for collection" }] },
 			{ "SourcePath": "./NUMACCSPLACEDFORCOLLTNLST2YRS", "Targets": [{ "Name": "Number of accounts placed for collection in last 2 years" }] },
-			{ "SourcePath": "./AVDBT0-100", "Targets": [{ "Name": "Average days beyond terms for £0-£100" }] },
-			{ "SourcePath": "./AVDBT101-1000", "Targets": [{ "Name": "Average days beyond terms for £101-£1,000" }] },
-			{ "SourcePath": "./AVDBT1001-10000", "Targets": [{ "Name": "Average days beyond terms for £1,001-£10,000" }] },
-			{ "SourcePath": "./AVDBTGREATERTHAN10000", "Targets": [{ "Name": "Average days beyond terms for >£10,000" }] },
+			{ "SourcePath": "./AVDBT0-100", "Targets": [{ "Name": "Average days beyond terms for ?0-?100" }] },
+			{ "SourcePath": "./AVDBT101-1000", "Targets": [{ "Name": "Average days beyond terms for ?101-?1,000" }] },
+			{ "SourcePath": "./AVDBT1001-10000", "Targets": [{ "Name": "Average days beyond terms for ?1,001-?10,000" }] },
+			{ "SourcePath": "./AVDBTGREATERTHAN10000", "Targets": [{ "Name": "Average days beyond terms for >?10,000" }] },
 			{ "SourcePath": "./AVDBTLST3MNTHSDATARTND", "Targets": [{ "Name": "Average days beyond terms for last 3 months of data returned" }] },
 			{ "SourcePath": "./AVDBTLST6MNTHSDATARTND", "Targets": [{ "Name": "Average days beyond terms for last 6 months of data returned" }] },
 			{ "SourcePath": "./AVDBTLST12MNTHSDATARTND", "Targets": [{ "Name": "Average days beyond terms for last 12 months of data returned" }] },
@@ -802,3 +802,5 @@
 		]
 	}
 ]
+' WHERE Name = 'CompanyScoreNonLimitedParserConfiguration'
+GO

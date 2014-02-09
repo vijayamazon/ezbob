@@ -5,54 +5,10 @@
 		"PathToParent": "./REQUEST/DL72",
 
 		"Fields": [
-			{ "SourcePath": "./FOREIGNFLAG", "Targets": [
-				{ "Name": "Foreign Address Flag" },
-				{ "Name": "Foreign Address Flag",
-					"Position": 1,
-					"Prefix": " - ",
-					"Transformation": {
-						"Types": [ "map" ],
-						"Map": {
-							"Y": "Foreign",
-							"N": "Not foreign"
-						}
-					}
-				}
-			]},
-			{ "SourcePath": "./DIRCOMPFLAG", "Targets": [
-				{ "Name": "Director Is a Company Flag" },
-				{
-					"Name": "Director Is a Company Flag",
-					"Position": 1,
-					"Prefix": " - ",
-					"Transformation": {
-						"Types": [ "map" ],
-						"Map": {
-							"Y": "Director is a company",
-							"N": "Director is not a company"
-						}
-					}
-				}
-			]},
-			{ "SourcePath": "./DIRNUMBER", "Targets": [{ "Name": "Director number" }] },
-			{ "SourcePath": "./DIRSHIPLEN", "Targets": [{
-				"Name": "Length of directorship",
-				"Transformation": {
-					"Types": [ "monthsandyears" ]
-				}
-			}] },
-			{ "SourcePath": "./DIRAGE", "Targets": [{ "Name": "Director’s age (Years)" }] },
-			{ "SourcePath": "./NUMCONVICTIONS", "Targets": [{ "Name": "Number of convictions" }] },
-			{ "SourcePath": "./DIRNAMEPREFIX", "Targets": [{ "Name": "NamePrefix" }] },
 			{ "SourcePath": "./DIRFORENAME", "Targets": [{ "Name": "FirstName" }] },
 			{ "SourcePath": "./DIRMIDNAME1", "Targets": [{ "Name": "MidName1" }] },
 			{ "SourcePath": "./DIRMIDNAME2", "Targets": [{ "Name": "MidName2" }] },
-			{ "SourcePath": "./DIRSURNAME", "Targets": [{ "Name": "LastName" }] },
-			{ "SourcePath": "./DIRNAMESUFFIX", "Targets": [{ "Name": "NameSuffix" }] },
-			{ "SourcePath": "./DIRQUALS", "Targets": [{ "Name": "Qualifications" }] },
-			{ "SourcePath": "./DIRTITLE", "Targets": [{ "Name": "Director title" }] },
-			{ "SourcePath": "./DIRCOMPNAME", "Targets": [{ "Name": "Company name" }] },
-			{ "SourcePath": "./DIRCOMPNUM", "Targets": [{ "Name": "Company number" }] }
+			{ "SourcePath": "./DIRSURNAME", "Targets": [{ "Name": "LastName" }] }
 		]
 	}
 ]
