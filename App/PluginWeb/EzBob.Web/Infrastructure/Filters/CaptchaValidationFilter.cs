@@ -46,7 +46,6 @@
 			}
 	        else
 	        {
-
 		        switch (_config.CaptchaMode)
 		        {
 			        case "off":
