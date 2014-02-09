@@ -317,23 +317,23 @@ namespace EzBob.Web.Controllers
 		[ActionName("SignUp")]
 		[ValidateJsonAntiForgeryToken]
 		[CaptchaValidationFilter]
-		public JsonNetResult SignUpAjax(string email, string signupPass1, string signupPass2, string securityQuestion, string securityAnswer, string promoCode, double? amount, string mobilePhone, string mobileCode, bool switchedToCaptcha)
+		public JsonNetResult SignUpAjax(User model, string signupPass1, string signupPass2, string securityQuestion, string promoCode, double? amount, string mobilePhone, string mobileCode, string switchedToCaptcha)
 		{
 			if (!ModelState.IsValid)
 			{
 				return GetModelStateErrors(ModelState);
 			}
-			if (securityAnswer.Length > 199)
+			if (model.SecurityAnswer.Length > 199)
 			{
 				throw new Exception("Maximum answer length is 199 characters");
 			}
 			try
 			{
 				var customerIp = Request.ServerVariables["REMOTE_ADDR"];
-				SignUpInternal(email, signupPass1, signupPass2, securityQuestion, securityAnswer, promoCode, amount, mobilePhone, mobileCode, switchedToCaptcha);
-				FormsAuthentication.SetAuthCookie(email, false);
+				SignUpInternal(model.EMail, signupPass1, signupPass2, securityQuestion, model.SecurityAnswer, promoCode, amount, mobilePhone, mobileCode, switchedToCaptcha == "True");
+				FormsAuthentication.SetAuthCookie(model.EMail, false);
 
-				var user = _users.GetUserByLogin(email);
+				var user = _users.GetUserByLogin(model.EMail);
 				_sessionIpLog.AddSessionIpLog(new CustomerSession()
 							{
 								CustomerId = user.Id,

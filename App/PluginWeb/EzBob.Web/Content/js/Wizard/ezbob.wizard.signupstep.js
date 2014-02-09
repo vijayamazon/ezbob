@@ -218,20 +218,19 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
             this.blockBtn(false);
             return false;
         } // if
+        
+        var data = this.form.serializeArray();
+        var amount = _.find(data, function (d) { return d.name === 'amount'; });
+        if (amount) { amount.value = this.$el.find('#amount').autoNumericGet(); }
 
-        var xhr = $.post(this.form.attr('action'), {
-            email: $('#Email').val(),
-            signupPass1: $('#signupPass1').val(),
-            signupPass2: $('#signupPass2').val(),
-            securityQuestion: $('#securityQuestion').val(),
-            securityAnswer: $('#SecurityAnswer').val(),
-            promoCode: $('#promoCode').val(),
-            amount: this.$el.find('#amount').autoNumericGet(),
-            mobilePhone: mobilePhone,
-            mobileCode: mobileCode,
-            switchedToCaptcha: this.switchedToCaptcha
-        });
-
+        if (this.switchedToCaptcha) {
+            data.push({ name: "switchedToCaptcha", value: "True" });
+        } else {
+            data.push({ name: "switchedToCaptcha", value: "False" });
+        }
+        
+        var xhr = $.post(this.form.attr('action'), data);
+        
         var that = this;
 
         xhr.done(function (result) {
