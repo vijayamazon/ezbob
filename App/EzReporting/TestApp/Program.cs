@@ -21,10 +21,9 @@ namespace TestApp {
 
 			ms_oLog = log;
 
-			// Ezbob.Context.Environment env = new Environment(Name.Production, oLog: log);
-			// var oDB = new SqlConnection(env, log);
-
 			var oDB = new SqlConnection(log);
+
+			TestHashPassword(oDB, log);
 
 			// TestParsedValues(oDB, log);
 
@@ -32,7 +31,7 @@ namespace TestApp {
 
 			// TestLoanDateScore(oDB, log);
 
-			TestExperianLimitedCompanyData(oDB, log);
+			// TestExperianLimitedCompanyData(oDB, log);
 
 			// TestUiReport(oDB, log);
 
@@ -51,7 +50,28 @@ namespace TestApp {
 
 		#endregion method Main
 
-		#region TestParsedValues
+		#region method TestHashPassword
+
+		private static void TestHashPassword(AConnection oDB, ASafeLog oLog) {
+			var aryPasswords = new string[] {
+				null, "", " ",
+				"123456",
+				"jkkasjzdhfkjjk",
+				"lskdfsdlkjfsldkfjsldkfjsldkfjsldkjfsldkfjsdlkfjjdsfsldkjfsldkfjsldkfj",
+				"дер.пароль",
+				"סיסמא סידית ביותר",
+				"email+123@example.com",
+			};
+
+			foreach (string sPassword in aryPasswords) {
+				string sHash = Ezbob.Utils.Security.SecurityUtils.HashPassword(sPassword);
+				oLog.Msg("Password: '{0}', hash size: {1}, hash: {2}\n", sPassword, sHash.Length, sHash);
+			} // for each password
+		} // TestHashPassword
+
+		#endregion method TestHashPassword
+
+		#region method TestParsedValues
 
 		private static void TestParsedValues(AConnection oDB, ASafeLog oLog) {
 			DataTable tbl = oDB.ExecuteReader("SELECT Id, Name, IsOffline, GreetingMailSentDate FROM Customer ORDER BY Id", CommandSpecies.Text);
@@ -91,7 +111,7 @@ namespace TestApp {
 			return ActionResult.Continue;
 		} // TestParsedValuesPrint
 
-		#endregion TestParsedValues
+		#endregion method TestParsedValues
 
 		#region method TestUiReportExt
 
