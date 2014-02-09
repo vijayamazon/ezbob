@@ -7,7 +7,6 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Repository;
 	using ExperianLib;
-	using EzServiceReference;
 	using Scorto.Web;
 	using log4net;
 	using ActionResult = System.Web.Mvc.ActionResult;
@@ -16,22 +15,16 @@
 	{
 		private static readonly ILog log = LogManager.GetLogger(typeof(HomeController));
 		private readonly AskvilleRepository askvilleRepository;
-		private readonly WizardConfigsActionResult wizardConfigsActionResult;
-		private bool sessionInitialized;
 
 		public HomeController(AskvilleRepository askvilleRepository, IAppCreator appCreator)
 		{
 			this.askvilleRepository = askvilleRepository;
-
-			wizardConfigsActionResult = appCreator.GetWizardConfigs();
 			log.Info("Got configs");
 		}
 
 		public ActionResult Index(string sourceref = "", string shop = "", string ezbobab = "", string invite = "")
 		{
 			Session["Shop"] = shop;
-
-			InitSession();
 
 			if (!string.IsNullOrEmpty(sourceref))
 			{
@@ -54,24 +47,6 @@
 			return RedirectToActionPermanent("Index", User.Identity.IsAuthenticated ? "Profile" : "Wizard", new { Area = "Customer" });
 		}
 
-		private void InitSession()
-		{
-			if (!sessionInitialized)
-			{
-				Session["IsSmsValidationActive"] = wizardConfigsActionResult.IsSmsValidationActive;
-				Session["NumberOfMobileCodeAttempts"] = wizardConfigsActionResult.NumberOfMobileCodeAttempts;
-				Session["AllowInsertingMobileCodeWithoutGeneration"] = wizardConfigsActionResult.AllowInsertingMobileCodeWithoutGeneration;
-				
-				Session["HadErrorInUpload"] = string.Empty;
-				Session["Hopper"] = null;
-				Session["AddedCount"] = null;
-				Session["DateIntervals"] = null;
-
-				sessionInitialized = true;
-			}
-			log.Info("Initialized session configs");
-		}
-
 		[Transactional]
 		public ActionResult ActivateStore(string id, bool? approve)
 		{
@@ -89,14 +64,6 @@
 				ViewData["Approve"] = approve;
 			}
 			return View();
-		}
-
-		[HttpPost]
-		public JsonNetResult GetTwilioConfig()
-		{
-			InitSession();
-			return this.JsonNet(new { isSmsValidationActive = Session["IsSmsValidationActive"], numberOfMobileCodeAttempts = Session["NumberOfMobileCodeAttempts"], 
-				allowInsertingMobileCodeWithoutGeneration = Session["AllowInsertingMobileCodeWithoutGeneration"] });
 		}
 	}
 }

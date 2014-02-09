@@ -37,7 +37,7 @@
 	        bool isTwilioEnabled = false; 
 			if (filterContext != null && filterContext.HttpContext != null && filterContext.HttpContext.Session != null)
 	        {
-				isTwilioEnabled = Convert.ToBoolean(filterContext.HttpContext.Session["IsSmsValidationActive"]);
+				isTwilioEnabled = Convert.ToBoolean(filterContext.HttpContext.Session["IsSmsValidationActive"]) && !Convert.ToBoolean(filterContext.HttpContext.Session["SwitchedToCaptcha"]);
 	        }
 
 			if (isTwilioEnabled)

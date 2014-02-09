@@ -19,6 +19,7 @@ namespace EzBob.Web.Controllers
 	using ExperianLib.Ebusiness;
 	using Code;
 	using Code.Email;
+	using EzServiceReference;
 	using Infrastructure;
 	using Infrastructure.Filters;
 	using Infrastructure.Membership;
@@ -28,6 +29,7 @@ namespace EzBob.Web.Controllers
 	using Scorto.Security.UserManagement.Sessions;
 	using Scorto.Web;
 	using log4net;
+	using ActionResult = System.Web.Mvc.ActionResult;
 
 	public class AccountController : Controller
 	{
@@ -45,6 +47,7 @@ namespace EzBob.Web.Controllers
 		private readonly IConfigurationVariablesRepository _configurationVariables;
 		private readonly ICustomerStatusesRepository _customerStatusesRepository;
 		private readonly DatabaseDataHelper _helper;
+		private static bool sessionInitialized;
 
 		private readonly ICustomerReasonRepository _reasons;
 		private readonly ICustomerSourceOfRepaymentRepository _sources;
@@ -580,9 +583,7 @@ namespace EzBob.Web.Controllers
 						result.Targets.Add(new CompanyInfo { BusName = "Company not found", BusRefNum = "skip" });
 					}
 				}
-
-
-
+				
 				return this.JsonNet(result.Targets);
 			}
 			catch (Exception e)
@@ -642,6 +643,48 @@ namespace EzBob.Web.Controllers
 		public bool GenerateMobileCode(string mobilePhone)
 		{
 			return _appCreator.GenerateMobileCode(mobilePhone);
+		}
+
+		[Ajax]
+		[HttpPost]
+		public void SwitchedToCaptcha()
+		{
+			Session["SwitchedToCaptcha"] = true;
+		}
+
+		private void InitSession()
+		{
+			if (sessionInitialized)
+			{
+				return;
+			}
+
+			WizardConfigsActionResult wizardConfigsActionResult = _appCreator.GetWizardConfigs();
+			Session["SwitchedToCaptcha"] = false;
+			Session["IsSmsValidationActive"] = wizardConfigsActionResult.IsSmsValidationActive;
+			Session["NumberOfMobileCodeAttempts"] = wizardConfigsActionResult.NumberOfMobileCodeAttempts;
+			Session["AllowInsertingMobileCodeWithoutGeneration"] = wizardConfigsActionResult.AllowInsertingMobileCodeWithoutGeneration;
+
+			Session["HadErrorInUpload"] = string.Empty;
+			Session["Hopper"] = null;
+			Session["AddedCount"] = null;
+			Session["DateIntervals"] = null;
+
+			sessionInitialized = true;
+			_log.Info("Initialized session configs");
+		}
+
+		[HttpPost]
+		public JsonNetResult GetTwilioConfig()
+		{
+			InitSession();
+			return this.JsonNet(new
+			{
+				isSmsValidationActive = Session["IsSmsValidationActive"],
+				numberOfMobileCodeAttempts = Session["NumberOfMobileCodeAttempts"],
+				allowInsertingMobileCodeWithoutGeneration = Session["AllowInsertingMobileCodeWithoutGeneration"],
+				switchedToCaptcha = Session["SwitchedToCaptcha"]
+			});
 		}
 	}
 }

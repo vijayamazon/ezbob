@@ -18,12 +18,14 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         this.activatedCode = false;
         this.mobileCodesSent = 0;
         this.showMobileCode = false;
+        this.twilioEnabled = false;
 
         var that = this;
 
-        var xhr = $.post(window.gRootPath + "Home/GetTwilioConfig");
+        var xhr = $.post(window.gRootPath + "Account/GetTwilioConfig");
         xhr.done(function (res) {
             that.twilioEnabled = res.isSmsValidationActive;
+            that.switchedToCaptcha = res.switchedToCaptcha;
             that.numberOfMobileCodeAttempts = res.numberOfMobileCodeAttempts + 1;
             if (res.allowInsertingMobileCodeWithoutGeneration) {
                 that.showMobileCode = true;
@@ -139,16 +141,18 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
             this.$el.find('#twilioDiv').hide();
             this.$el.find('#captchaDiv').show();
             this.switchedToCaptcha = true;
+            $.post(window.gRootPath + "Account/SwitchedToCaptcha");
             return false;
         }
         var that = this;
         var xhr = $.post(window.gRootPath + "Account/GenerateMobileCode", { mobilePhone: this.$el.find('.phonenumber').val() });
         xhr.done(function (isError) {
-            if (isError == "True") {
+            if (isError != "False" && (!isError.success || isError.error == "True")) {
                 EzBob.App.trigger('error', "Error sending code, please authenticate using captcha");
                 that.$el.find('#twilioDiv').hide();
                 that.$el.find('#captchaDiv').show();
                 that.switchedToCaptcha = true;
+                $.post(window.gRootPath + "Account/SwitchedToCaptcha");
             } else {
                 var codeSentObject = that.$el.find('#codeSentLabel');
                 codeSentObject.show();
@@ -190,6 +194,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         this.$el.find('#twilioDiv').hide();
         this.$el.find('#captchaDiv').show();
         this.switchedToCaptcha = true;
+        $.post(window.gRootPath + "Account/SwitchedToCaptcha");
         return false;
     },
 
