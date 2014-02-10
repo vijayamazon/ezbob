@@ -458,6 +458,7 @@
     <Content Include="Content\css\amount-period-sliders.css" />
     <Content Include="Content\css\app.css" />
     <Content Include="Content\css\bootstrap-modal.css" />
+    <Content Include="Content\css\broker.css" />
     <Content Include="Content\css\captcha.css" />
     <Content Include="Content\css\choosen\chosen-sprite.png" />
     <Content Include="Content\css\choosen\chosen.css" />
@@ -929,6 +930,8 @@
       <DependentUpon>ezbob.GA.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\App\ezbob.validation.js" />
+    <Content Include="Content\js\Broker\broker.main.js" />
+    <Content Include="Content\js\Broker\broker.router.js" />
     <Content Include="Content\js\controls\ezbob.BoundItemView.min.js">
       <DependentUpon>ezbob.BoundItemView.coffee</DependentUpon>
     </Content>
