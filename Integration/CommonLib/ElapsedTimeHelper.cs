@@ -3,9 +3,12 @@ using System.Diagnostics;
 
 namespace EzBob.CommonLib
 {
+	using log4net;
+
 	public static class ElapsedTimeHelper
 	{
 		private static readonly Stopwatch _Stopwatch;
+		private static readonly ILog Log = LogManager.GetLogger(typeof(ElapsedTimeHelper));
 
 		static ElapsedTimeHelper()
 		{
@@ -14,11 +17,13 @@ namespace EzBob.CommonLib
 
 		public static void CalculateAndStoreElapsedTimeForCallInSeconds( ElapsedTimeInfo elapsedTimeInfo, ElapsedDataMemberType elapsedDataMemberType, Action action )
 		{
+			Log.DebugFormat("{1} {0} begin", elapsedDataMemberType.ToString(), action.Method.Name);
 			CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo, elapsedDataMemberType, () =>
 				                                                                                      {
 					                                                                                      action();
 					                                                                                      return true;
 				                                                                                      } );
+			Log.DebugFormat("{1} {0} end", elapsedDataMemberType.ToString(), action.Method.Name);
 		}
 
 		public static T CalculateAndStoreElapsedTimeForCallInSeconds<T>( ElapsedTimeInfo elapsedTimeInfo, ElapsedDataMemberType elapsedDataMemberType, Func<T> func )

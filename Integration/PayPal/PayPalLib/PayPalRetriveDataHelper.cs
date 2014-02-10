@@ -16,10 +16,13 @@ using StructureMap;
 
 namespace EzBob.PayPal
 {
+	using log4net;
+
 	public class PayPalRetriveDataHelper : MarketplaceRetrieveDataHelperBase<PayPalDatabaseFunctionType>
 	{
 		private readonly IPayPalConfig _Config;
 		private readonly IPayPalMarketplaceSettings _Settings;
+		private static readonly ILog Log = LogManager.GetLogger(typeof(PayPalRetriveDataHelper));
 
 		public PayPalRetriveDataHelper(DatabaseDataHelper helper, DatabaseMarketplaceBase<PayPalDatabaseFunctionType> marketplace)
 			: base(helper, marketplace)
@@ -123,6 +126,10 @@ namespace EzBob.PayPal
 						ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
 										ElapsedDataMemberType.StoreAggregatedData,
 										() => Helper.StoreToDatabaseAggregatedData(databaseCustomerMarketPlace, aggregatedData, historyRecord));
+					}
+					else
+					{
+						Log.DebugFormat("PayPal New transactions list is null, skipping aggregation");
 					}
 					return new UpdateActionResultInfo
 					{

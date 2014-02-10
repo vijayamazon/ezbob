@@ -2090,14 +2090,7 @@ namespace EZBob.DatabaseLib
 						{
 							Transaction = mpTransaction,
 							Created = dataItem.Created,
-							Currency = _CurrencyRateRepository.GetCurrencyOrCreate(
-								(dataItem.FeeAmount != null && dataItem.FeeAmount.CurrencyCode != null)
-									? dataItem.FeeAmount.CurrencyCode
-									: ((dataItem.GrossAmount != null && dataItem.GrossAmount.CurrencyCode != null)
-										   ? dataItem.GrossAmount.CurrencyCode
-										   : ((dataItem.NetAmount != null && dataItem.NetAmount.CurrencyCode != null)
-												  ? dataItem.NetAmount.CurrencyCode
-												  : "GBP"))),
+							Currency = _CurrencyRateRepository.GetCurrencyOrCreate("GBP"),
 							FeeAmount =
 								_CurrencyConvertor.ConvertToBaseCurrency(
 									dataItem.FeeAmount ?? new AmountInfo { CurrencyCode = "GBP", Value = 0 }, dataItem.Created).Value,

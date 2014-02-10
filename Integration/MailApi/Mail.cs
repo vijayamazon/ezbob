@@ -94,7 +94,7 @@ namespace MailApi
             request.AddBody(model);
             var response = _client.Post(request);
 			//Log.DebugFormat("Request: \n {0}", request.Parameters[0]);//to long because of attachments.
-            Log.InfoFormat("Mandrill service call.\n Response: \n {0}", response.Content);
+            Log.InfoFormat("Mandrill service call.\n Response length: \n {0}", response.Content.Length);
 
             if (response.StatusCode == HttpStatusCode.InternalServerError)
             {
@@ -122,7 +122,7 @@ namespace MailApi
             var status = responseDeserialized[0].status.ToLower();
             if (status != "sent" && status != "queued")
             {
-                Log.Warn(responseDeserialized[0].ToString());
+                Log.WarnFormat("status: {0}, {1}", status, responseDeserialized[0]);
                 return "status not 'sent' or 'queued'";
             }
             return "OK";
