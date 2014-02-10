@@ -86,6 +86,7 @@
 		)
 			: base(oDb, oLog)
 		{
+			medalScoreCalculator = new MedalScoreCalculator(oLog);
 			mailer = new StrategiesMailer(DB, Log);
 			this.customerId = customerId;
 			useCustomIdHubAddress = checkType;
