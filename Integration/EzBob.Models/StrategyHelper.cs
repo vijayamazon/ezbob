@@ -649,26 +649,50 @@
 			}
 		}
 
-		public LandRegistryResModel GetLandRegistryData(int customerId, bool recheck = false, bool stub = true)
+		public LandRegistryDataModel GetLandRegistryData(int customerId, string titleNumber, bool recheck = false)
 		{
 			var b = new LandRegistryModelBuilder();
 			var res = XmlHelper.XmlDeserializeFromString<LandRegistryLib.LRResServiceNS.ResponseOCWithSummaryV2_1Type>(LandRegistryTestFixure.TestResBM253452);
-			return b.BuildResModel(res);
+			var model = new LandRegistryDataModel() { Res = b.BuildResModel(res) };
+			return model;
+			
+			
 			//todo implement the logic to retrieve enquiry data, retrieve res data store to db
-			//if (stub)
+			//var isStub = true;
+			//ILandRegistryApi lr;
+			//if (isStub)
 			//{
-			//	var lr = new LandRegistryTestApi();
-			//	var data = lr.Res(null);
-			//	return data.Res;
+			//	lr = new LandRegistryTestApi();
 			//}
 			//else
 			//{
-			//	var lr = new LandRegistryApi();
-			//	var data = lr.Res(null);
-			//	return data.Res;
+			//	lr = new LandRegistryApi();
 			//}
+			//var model = lr.Res(titleNumber, customerId);
+			//return model;
 		}
 
 
+		public LandRegistryDataModel GetLandRegistryEnquiryData(int customerId, string buildingNumber, string streetName, string cityName, string postCode)
+		{
+			var b = new LandRegistryModelBuilder();
+			var model = new LandRegistryDataModel() { Enquery = b.BuildEnquiryModel(LandRegistryTestFixure.TestEnquiry) };
+			return model;
+
+			//todo implement the logic to retrieve enquiry data, retrieve res data store to db
+			//var isStub = true;
+			//ILandRegistryApi lr;
+			//if (isStub)
+			//{
+			//	lr = new LandRegistryTestApi();
+			//}
+			//else
+			//{
+			//	lr = new LandRegistryApi();
+			//}
+
+			//var model = lr.EnquiryByPropertyDescription(buildingNumber, streetName, cityName, postCode, customerId);
+			//return model;
+		}
 	}
 }

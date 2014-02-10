@@ -1,6 +1,6 @@
 ﻿namespace LandRegistryLib
 {
-	interface ILandRegistryApi
+	public interface ILandRegistryApi
 	{
 		LandRegistryDataModel EnquiryByPropertyDescription(string buildingNumber = null, string streetName = null,
 		                                                   string cityName = null, string postCode = null, int customerId = 1);

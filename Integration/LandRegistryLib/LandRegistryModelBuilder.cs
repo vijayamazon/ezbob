@@ -191,13 +191,13 @@
 						lrInfills.Add(new KeyValuePair<string, string> { Key = "Amount", Value = ((AmountInfillType)infill).Value });
 						break;
 					case "ChargeDateInfillType":
-						lrInfills.Add(new KeyValuePair<string, string> { Key = "ChargeDate", Value = ((ChargeDateInfillType)infill).Value.ToString("DD/MM/YYYY") });
+						lrInfills.Add(new KeyValuePair<string, string> { Key = "ChargeDate", Value = ((ChargeDateInfillType)infill).Value.ToString("dd/MM/yyyy") });
 						break;
 					case "ChargePartyInfillType":
 						lrInfills.Add(new KeyValuePair<string, string> { Key = "ChargeParty", Value = ((ChargePartyInfillType)infill).Value });
 						break;
 					case "DateInfillType":
-						lrInfills.Add(new KeyValuePair<string, string> { Key = "Date", Value = ((DateInfillType)infill).Value.ToString("DD/MM/YYYY") });
+						lrInfills.Add(new KeyValuePair<string, string> { Key = "Date", Value = ((DateInfillType)infill).Value.ToString("dd/MM/yyyy") });
 						break;
 					case "DeedDateInfillType":
 						lrInfills.Add(new KeyValuePair<string, string> { Key = "DeedDate", Value = ((DeedDateInfillType)infill).Value });

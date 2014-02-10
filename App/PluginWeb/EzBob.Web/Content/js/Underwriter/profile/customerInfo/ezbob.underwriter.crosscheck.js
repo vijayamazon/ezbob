@@ -280,7 +280,8 @@ EzBob.Underwriter.CrossCheckView = Backbone.View.extend({
         "click #recheck-targeting": "recheckTargeting",
         "click #zoopla": "showZoopla",
         "click .zooplaRecheck": "recheckZoopla",
-        "click #landregistry": "showLandRegistry"
+        "click #landregistry": "showLandRegistry",
+        "click #landregistryEnquiry": "showLandRegistryEnquiry"
     }, // events
 
     recheckZoopla: function () {
@@ -303,15 +304,25 @@ EzBob.Underwriter.CrossCheckView = Backbone.View.extend({
             BlockUi("Off");
         });
     }, // showZoopla
+    showLandRegistryEnquiry: function(el) {
+        BlockUi("On");
+        var lrView = new EzBob.LandRegistryEnquiryView({ model: { postcode: $(el.currentTarget).attr('data-postcode'), customerId: this.model.customerId } });
+        EzBob.App.jqmodal.show(lrView);
+        BlockUi("Off");
+        
+    },
+    showLandRegistryEnquiryResults: function () {
+
+    },
     showLandRegistry: function () {
         BlockUi("On");
 
-        $.get(window.gRootPath + "Underwriter/CrossCheck/LandRegistry/?customerId=" + this.model.customerId + "&recheck=false", function (data) {
+        $.get(window.gRootPath + "Underwriter/CrossCheck/LandRegistry/?customerId=" + this.model.customerId, function (data) {
             var lrView = new EzBob.LandRegistryView({ model: data });
             EzBob.App.jqmodal.show(lrView);
             BlockUi("Off");
         });
-    }, // showZoopla
+    },
     recheckTargeting: function (e) {
         var el = $(e.currentTarget),
             postcode = el.attr("data-postcode"),

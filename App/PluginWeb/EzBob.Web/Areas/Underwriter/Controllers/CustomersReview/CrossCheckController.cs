@@ -49,40 +49,38 @@
 				sh.GetZooplaData(customerId, recheck);
 				zoopla = address.Zoopla.LastOrDefault();
 				if (zoopla == null)
-					return this.JsonNet(new {error = "zoopla info not found"});
+					return this.JsonNet(new { error = "zoopla info not found" });
 			}
 
 			return this.JsonNet(zoopla);
 		}
 
 		[Ajax]
-		[Transactional]
 		[HttpGet]
-		public JsonNetResult LandRegistry(int customerId, bool recheck)
+		public JsonNetResult LandRegistryEnquiry(int customerId, string buildingNumber, string streetName, string cityName, string postCode)
 		{
-			var customer = _customerRepository.Get(customerId);
-			if (customer == null)
-			{
-				return this.JsonNet(new { error = "customer not found" });
-			}
+			var sh = new StrategyHelper();
+			var landregistry = sh.GetLandRegistryEnquiryData(customerId, buildingNumber, streetName, cityName, postCode);
 
-			var address = customer.AddressInfo.PersonalAddress.FirstOrDefault();
-			if (address == null)
-			{
-				return this.JsonNet(new { error = "address not found" });
-			}
-			
-			LandRegistryLib.LandRegistryResModel landregistry = null;// address.LandRegistry.LastOrDefault();
+			return this.JsonNet(new { titles = landregistry.Enquery.Titles, rejection = landregistry.Rejection, ack = landregistry.Acknowledgement });
+		}
 
-			if (landregistry == null || recheck)
+		[Ajax]
+		[HttpGet]
+		public JsonNetResult LandRegistry(int customerId, string titleNumber = null)
+		{
+			LandRegistryLib.LandRegistryDataModel landregistry = null;
+
+			if (landregistry == null)
 			{
 				var sh = new StrategyHelper();
-				landregistry = sh.GetLandRegistryData(customerId, recheck);
+				landregistry = sh.GetLandRegistryData(customerId, titleNumber);
 				if (landregistry == null)
 					return this.JsonNet(new { error = "land registry info not found" });
 			}
 
-			return this.JsonNet(new { response = landregistry} );
+			//todo return the full model 
+			return this.JsonNet(new { response = landregistry.Res, rejection = landregistry.Rejection, ack = landregistry.Acknowledgement });
 		}
 
 		[Ajax]
@@ -111,7 +109,7 @@
 						});
 				}
 			}
-			
+
 			_customerRepository.Update(customer);
 		}
 	}

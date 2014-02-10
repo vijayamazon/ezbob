@@ -918,3 +918,8 @@ div#logbook-new-entry-form textarea#logbook-new-entry {
 	height: 210px;
 	display: block;
 }
+
+.lr-enquiry-results tr:hover {
+    background-color: #dddddd;
+    cursor: pointer;
+}

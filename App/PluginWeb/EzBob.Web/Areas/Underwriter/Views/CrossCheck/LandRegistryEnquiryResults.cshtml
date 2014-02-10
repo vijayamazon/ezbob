@@ -1,0 +1,45 @@
+﻿@{
+    ViewBag.Title = "Land Registry Enquiry Results";
+}
+
+<script type="text/template" id="landregistry-enquiry-results-template">
+    <div class="modal-header">Land Registry Enquiry Results</div>
+    <%if(this.model.rejection){ 
+        print("Error occurred: ");
+        print(this.model.rejection.Reason);
+      } else if(this.model.ack) { 
+        print("Acknowledgment: ");
+        print("this.model.ack.Description");
+      } else{%>
+    <table class="table lr-enquiry-results">
+        <thead class="box">
+            <tr class="box-title">
+                <th>Title number</th>
+                <th>Building name</th>
+                <th>Sub building name</th>
+                <th>Building number</th>
+                <th>Street name</th>
+                <th>City name</th>
+                <th>Postcode</th>
+            </t>
+        </thead>
+        <tbody>
+            <%_.each(this.model.titles, function(title){ %>
+            <tr data-titlenumber="<%=title.TitleNumber%>">
+                <td><%=title.TitleNumber%></td>
+                <td><%=title.BuildingName%></td>
+                <td><%=title.SubBuildingName%></td>
+                <td><%=title.BuildingNumber%></td>
+                <td><%=title.StreetName%></td>
+                <td><%=title.CityName%></td>
+                <td><%=title.Postcode%></td>
+            </tr>
+            <%});%>
+        </tbody>
+    </table>
+    <div class="pull-right">
+            <button class="btn btn-primary btnOk">OK</button>
+    </div>
+   <% } %>
+
+</script>
