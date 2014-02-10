@@ -201,9 +201,9 @@ namespace Ezbob.Database {
 						throw;
 
 					if (e.Number == 1205)
-						Warn("Deadlock, retrying {0}", e);
+						Warn(e, "Deadlock, retrying.");
 					else if (e.Number == -2)
-						Warn("Timeout, retrying {0}", e);
+						Warn(e, "Timeout, retrying.");
 					else
 						throw;
 

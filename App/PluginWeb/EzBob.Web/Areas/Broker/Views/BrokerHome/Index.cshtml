@@ -1,13 +1,537 @@
-﻿@model dynamic
+﻿@using EzBob.Web.Infrastructure.csrf
+@using SquishIt.Framework
+@using SquishIt.Mvc
+@model dynamic
 @{ Layout = null; }
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Broker's home | EZBOB</title>
-	</head>
-	<body>
-		<div>
-			Broker's home
+<head>
+	<script>
+		// Frame killer - start
+
+		(function() {
+			function CTIsPlayback() {
+				try {
+					return parent && parent.WebPlayer;
+				}
+				catch (e) {
+					return false;
+				} // try
+			} // CTIsPlayback
+
+			if (!CTIsPlayback())
+				if (top != self)
+					top.location = location;
+		});
+
+		// Frame killer - end
+	</script>
+
+	<title>Broker's home | EZBOB</title>
+
+	<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+	<meta name="webutation-site-verification" content="webutation66c78d618b360eb461a120920e8ab3a3" />
+	<meta name="msvalidate.01" content="AFD649895CD47944F50BFA0BE7BAB5D8" />
+
+	<!-- favicon - begin -->
+	<link rel="icon shortcut" type="image/png" href="@Url.Content("~/Content/img/favicon32x32.png")" />
+	<!-- for mobile -->
+	<link rel="apple-touch-icon" href="@Url.Content("~/Content/img/favicon57x57.png")" />
+	<link rel="apple-touch-icon" sizes="72x72" href="@Url.Content("~/Content/img/favicon72x72.png")" />
+	<link rel="apple-touch-icon" sizes="114x114" href="@Url.Content("~/Content/img/favicon114x114.png")" />
+	<!--[if IE]>
+	<link rel="shortcut icon" href="@Url.Content("~/favicon.ico")" type="image/vnd.microsoft.icon" />
+	<![endif]-->
+	<!-- favicon - end -->
+
+	<link href="https://fonts.googleapis.com/css?family=Sanchez" rel="stylesheet" type="text/css">
+
+	@{ WriteLiteral(Bundle.Css()
+		.Add("~/Content/css/jquery-ui-1.8.16.custom.css")
+		.Add("~/Content/css/jquery.ui.1.8.16.ie.css")
+		.Add("~/Content/css/bootstrap.css")
+		.Add("~/Content/css/style.css")
+		.Add("~/Content/css/app.css")
+		.Add("~/Content/css/wizard-header.css")
+		.Add("~/Content/css/notifications.css")
+		.Add("~/Content/css/captcha.css")
+		.Add("~/Content/css/postcode.css")
+		.Add("~/Content/css/popover.css")
+		.Add("~/Content/css/choosen/chosen.css")
+		.Add("~/Content/css/attardi.labels.css")
+		.Add("~/Content/css/dropzone.css")
+		.Add("~/Content/css/flaty/font-awesome.min.css")
+		.Add("~/Content/css/broker.css")
+		.MvcRender("~/Content/css/min/broker_#.css"));
+	}
+</head>
+
+<body data-auth="@ViewData["auth"]">
+	@Html.AntiForgeryTokenNoUserCheck()
+
+	<div id="wrapper">
+		<div id="header">
+			<div class="header-inner">
+				<a href="http://www.ezbob.com">
+					<img src="@Url.Content("~/Content/img/ezbob-logo-2014.png")" class="newlogo"></a>
+
+				<div class="header-phone">0800-011-4787</div>
+
+				<div class="eu-menu">
+					<img src="@Url.Content("~/Content/img/eu-menu.png")"><br>
+					Authorised by the European Union
+				</div>
+
+				<ul id="user-menu" class="hide">
+					<li class="menu-btn login log-off"><a href="#">LOG OFF</a></li>
+					<li class="menu-btn login log-in"><a href="#">LOGIN</a></li>
+					<li class="menu-btn sign-up"><a href="#">SIGN UP</a></li>
+				</ul>
+			</div>
 		</div>
-	</body>
+
+		<div class="inner main-page">
+			<section id="full_width" class="broker">
+				<div class="page-section hide section-signup">
+					<form>
+						<h2 class="form-start">Create broker account</h2>
+
+						<div class="form_field_container">
+							<label class="attardi-input">
+								<span>Firm name</span>
+								<input type="text" name="FirmName" id="FirmName" tabindex="1" class="form_field" ui-event-control-id="broker:signup-firm-name" />
+								<img id="FirmNameImage" class="field_status required" />
+							</label>
+						</div>
+
+						<div class="form_field_container">
+							<label class="attardi-input">
+								<span>Firm registration number</span>
+								<input type="text" name="FirmRegNum" id="FirmRegNum" tabindex="2" class="form_field" ui-event-control-id="broker:signup-firm-regnum" />
+								<img id="FirmRegNumImage" class="field_status" />
+							</label>
+						</div>
+
+						<div class="form_field_container">
+							<label class="attardi-input">
+								<span>Contact person name</span>
+								<input type="text" name="ContactName" id="ContactName" tabindex="3" class="form_field" ui-event-control-id="broker:signup-contact-name" />
+								<img id="ContactNameImage" class="field_status required" />
+							</label>
+						</div>
+
+						<div class="form_field_container">
+							<label class="attardi-input">
+								<span>Contact person email</span>
+								<input type="email" name="ContactEmail" id="ContactEmail" tabindex="4" class="form_field" ui-event-control-id="broker:signup-contact-email" />
+								<img id="ContactEmailImage" class="field_status required" />
+							</label>
+						</div>
+
+						<div class="form_field_container">
+							<label class="attardi-input">
+								<span>Contact person mobile phone</span>
+								<input type="text" name="ContactMobile" id="ContactMobile" tabindex="5" class="phonenumber form_field" ui-event-control-id="broker:signup-contact-mobile" />
+								<label id="codeSentLabel" class="code-sent-style hide">Code sent</label>
+								<img id="ContactMobileImage" class="field_status required" />
+								<input id="generateMobileCode" class="btn green form_field_right_side_signup_phone disabled" tabindex="6" type="button" value="Send activation code" ui-event-control-id="broker:signup-generate-mobile-code" />
+							</label>
+						</div>
+
+						<div id="mobileCodeDiv" class="form_field_container">
+							<label class="attardi-input">
+								<span>Mobile phone authentication code</span>
+								<input type="text" class="phonenumbercode form_field_left_side form_field" name="mobileCode" id="mobileCode" tabindex="7" ui-event-control-id="broker:signup-mobile-code" />
+								<img id="mobileCodeImage" class="field_status required" />
+							</label>
+						</div>
+
+						<div class="form_field_container">
+							<label class="attardi-input">
+								<span>Contact person other phone number</span>
+								<input type="text" name="ContactOtherPhone" id="ContactOtherPhone" tabindex="8" class="form_field" ui-event-control-id="broker:signup-contact-other-phone" />
+								<img id="ContactOtherPhoneImage" class="field_status" />
+							</label>
+						</div>
+
+						<div class="form_field_container">
+							<label class="attardi-input">
+								<span>Estimated monthly client amount</span>
+								<input type="text" name="EstimatedMonthlyClientAmount" id="EstimatedMonthlyClientAmount" tabindex="9" class="form_field" ui-event-control-id="broker:signup-estimated-monthly-client-amount" />
+								<img id="EstimatedMonthlyClientAmountImage" class="field_status required" />
+							</label>
+						</div>
+
+						<div id="strength-password-view" class="form_field_container">
+							<label class="attardi-input">
+								<span>Password</span>
+								<input type="password" name="Password" id="Password" tabindex="10" class="form_field" ui-event-control-id="broker:signup-password" />
+								<img id="PasswordImage" class="field_status required" />
+							</label>
+							<p id="message" class="help-block"></p>
+						</div>
+
+						<div class="form_field_container">
+							<label class="attardi-input">
+								<span>Confirm password</span>
+								<input type="password" name="Password2" id="Password2" tabindex="11" class="form_field" ui-event-control-id="broker:signup-confirm-password" />
+								<img id="Password2Image" class="field_status required" />
+							</label>
+						</div>
+
+						<div class="form_buttons_container">
+							<div class="attardi-button">
+								<input type="submit" id="signupSubmitButton" value="Continue" class="rc-button green continue disabled" tabindex="12" ui-event-control-id="broker:signup-submit">
+							</div>
+						</div>
+					</form>
+				</div>
+				<!-- section-signup -->
+
+				<div class="page-section hide section-login">Login</div>
+				<!-- section-login -->
+
+				<div class="page-section hide section-forgot">Restore password</div>
+				<!-- section-forgot -->
+
+				<div class="page-section hide section-customer-list">Customer list</div>
+				<!-- section-customer-list -->
+
+				<div class="page-section hide section-customer-details">Customer details</div>
+				<!-- section-customer-details -->
+
+				<div class="page-section hide section-own-details">Update details</div>
+				<!-- section-update-details -->
+
+				<div class="page-section hide section-forbidden">
+					<h2>You are not authorised to see this page.</h2>
+				</div>
+				<!-- section-forbidden -->
+			</section>
+		</div>
+
+		<div id="modalRegion" class="modal hide fade"></div>
+		<div class="push"></div>
+	</div>
+
+	<footer>
+		<div id="copyrights">
+			<div class="copyrights-inner">
+				<span class='bold'>ezbob</span> is the trading name of Orange Money Ltd. Company No. 7852687 Consumer Credit license: 647816 ICO Registration Number: Z2946778<br>
+				Registered Address: 145 – 157 John Street, London EC1V 4PW Business Address: 39-41 North Road, London N7 9DP<br>
+				&copy;2013 <span class='bold'>ezbob</span> Inc. All rights reserved. Terms, conditions, features, availability, pricing, fees, service & support options subject to change without notice.
+
+		<ul id="menu-sub_footer_menu" class="sub_footer_nav">
+			<li><a href="http://www.ezbob.com/terms-conditions/" target="_blank">Terms &#038; Conditions</a></li>
+			<li><a href="http://www.ezbob.com/about-us/responsible-lending/" target="_blank">Responsible Lending</a></li>
+			<li><a href="http://www.ezbob.com/privacy-cookies/" target="_blank">Privacy &#038; Cookies</a></li>
+			<li><a href="http://www.ezbob.com/blog/" target="_blank">Blog</a></li>
+			<li><a href="http://www.ezbob.com/contact/" target="_blank">Contact</a></li>
+		</ul>
+			</div>
+		</div>
+	</footer>
+
+	<div class='nanorep_loadingData' id='nanoRepProxyContainer' style='position: absolute; top: -500px; left: 0px;'></div>
+
+	<!-- scripts - begin -->
+	<!--[if lt IE 9]>
+<script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+<![endif]-->
+	<script type="text/javascript">
+		// Google analytics - begin
+
+		var _gaq = _gaq || [];
+		_gaq.push(['_require', 'inpage_linkid', '//www.google-analytics.com/plugins/ga/inpage_linkid.js']);
+		_gaq.push(['_setAccount', 'UA-32583191-1']);
+		_gaq.push(['_setDomainName', 'ezbob.com']);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script');
+			ga.type = 'text/javascript';
+			ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
+			var s = document.getElementsByTagName('script')[0];
+			s.parentNode.insertBefore(ga, s);
+		})();
+
+		// Google analytics - end
+
+		// sectpl - begin
+		dn = "www.ezbob.com";
+		lang = "en";
+		tpt = "opaque";
+		vrsn_style = "WW";
+		splash_url = "https://trustsealinfo.verisign.com";
+		rStr = "";
+		seal_url = "https://seal.verisign.com";
+
+		u1 = splash_url + "/splash?form_file=fdf/splash.fdf&dn=" + dn + "&lang=" + lang;
+		u2 = seal_url + "/getseal?at=0&sealid=2&dn=" + dn + "&lang=" + lang + rStr;
+		var sopener;
+
+		function vrsn_splash() {
+			if (sopener && !sopener.closed) {
+				sopener.focus();
+			}
+			else {
+				tbar = "location=yes,status=yes,resizable=yes,scrollbars=yes,width=560,height=500";
+				var sw = window.open(u1, 'VRSN_Splash', tbar);
+				if (sw) {
+					sw.focus();
+					sopener = sw;
+				}
+			}
+		}
+
+		var ver = -1;
+		var v_ua = navigator.userAgent.toLowerCase();
+		var re = new RegExp("msie ([0-9]{1,}[\.0-9]{0,})");
+		if (re.exec(v_ua) !== null) {
+			ver = parseFloat(RegExp.$1);
+		}
+		var v_old_ie = (v_ua.indexOf("msie") != -1);
+		if (v_old_ie) {
+			v_old_ie = ver < 5;
+		}
+
+		function v_mact(e) {
+			var s;
+			if (document.addEventListener) {
+				s = (e.target.name == "seal");
+				if (s) {
+					vrsn_splash();
+					return false;
+				}
+			} else if (document.captureEvents) {
+				var tgt = e.target.toString();
+				s = (tgt.indexOf("splash") != -1);
+				if (s) {
+					vrsn_splash();
+					return false;
+				}
+			}
+			return true;
+		}
+
+		function v_mDown(event) {
+			if (document.addEventListener) {
+				return true;
+			}
+			event = event || window.event;
+			if (event) {
+				if (event.button == 1) {
+					if (v_old_ie) {
+						return true;
+					} else {
+						vrsn_splash();
+						return false;
+					}
+				} else if (event.button == 2) {
+					vrsn_splash();
+					return false;
+				}
+			} else {
+				return true;
+			}
+		}
+
+		if (document.addEventListener) {
+			document.addEventListener('mouseup', v_mact, true);
+		} else {
+			if (document.layers) {
+				document.captureEvents(Event.MOUSEDOWN);
+				document.onmousedown = v_mact;
+			}
+		}
+
+		function v_resized() {
+			if (pageWidth != innerWidth || pageHeight != innerHeight) {
+				self.history.go(0);
+			}
+		}
+
+		if (document.layers) {
+			pageWidth = innerWidth;
+			pageHeight = innerHeight;
+			window.onresize = v_resized;
+		}
+		// sectpl - end
+	</script>
+	@if (!Request.Browser.IsMobileDevice) {
+		<!-- BEGIN LivePerson Monitor. -->
+		<script type="text/javascript">
+			window.lpTag = {
+				site: '13658382',
+				_v: '1.1',
+				protocol: location.protocol,
+				events: {
+					bind: function(app, ev, fn) {
+						lpTag.defer(function() {
+							lpTag.events.bind(app, ev, fn);
+						});
+					},
+					trigger: function(app, ev, json) {
+						lpTag.defer(function() {
+							lpTag.events.trigger(app, ev, json);
+						});
+					}
+				},
+				defer: function(fn) {
+					this._defL = this._defL || [];
+					this._defL.push(fn);
+				},
+				load: function(src, chr, id) {
+					var t = this;
+					setTimeout(function() {
+						t._load(src, chr, id);
+					}, 0);
+				},
+				_load: function(src, chr, id) {
+					var url = src;
+					if (!src) {
+						url = this.protocol + '//' + ((this.ovr && this.ovr.domain) ? this.ovr.domain : 'lptag.liveperson.net') + '/tag/tag.js?site=' + this.site;
+					}
+					var s = document.createElement('script');
+					s.setAttribute('charset', chr ? chr : 'UTF-8');
+					if (id) {
+						s.setAttribute('id', id);
+					}
+					s.setAttribute('src', url);
+					document.getElementsByTagName('head')
+						.item(0)
+						.appendChild(s);
+				},
+				init: function() {
+					this._timing = this._timing || {};
+					this._timing.start = (new Date())
+						.getTime();
+					var that = this;
+					if (window.attachEvent) {
+						window.attachEvent('onload', function() {
+							that._domReady('domReady');
+						});
+					} else {
+						window.addEventListener('DOMContentLoaded', function() {
+							that._domReady('contReady');
+						}, false);
+						window.addEventListener('load', function() {
+							that._domReady('domReady');
+						}, false);
+					}
+					if (typeof (window._lptStop) == 'undefined') {
+						this.load();
+					}
+				},
+				_domReady: function(n) {
+					if (!this.isDom) {
+						this.isDom = true;
+						this.events.trigger('LPT', 'DOM_READY', {
+							t: n
+						});
+					}
+					this._timing[n] = (new Date())
+						.getTime();
+				}
+			};
+			lpTag.init();
+		</script>
+		<!-- END LivePerson Monitor. -->
+
+		<script type='text/javascript'>
+			// NanoRep - begin
+
+			var _nRepData = _nRepData || [];
+			_nRepData['kb'] = '25108251';
+			_nRepData['float'] = {
+				account: 'ezbob',
+				cdcVersion: 3,
+				cdcFrame: '/cdc.html'
+			}
+			/* API here */;
+			(function() {
+				var windowLoadFunc = function() {
+					var _nRepData = window._nRepData || [];
+					_nRepData['windowLoaded'] = true;
+					if (typeof (_nRepData['windowOnload']) === 'function')
+						_nRepData['windowOnload']();
+				};
+
+				if (window.attachEvent)
+					window.attachEvent('onload', windowLoadFunc);
+				else if (window.addEventListener)
+					window.addEventListener('load', windowLoadFunc, false);
+				var sc = document.createElement('script');
+				sc.type = 'text/javascript';
+				sc.async = true;
+				sc.defer = true;
+				sc.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'my.nanorep.com/widget/scripts/float.js';
+				var _head = document.getElementsByTagName('head')[0]; _head.appendChild(sc);
+			})();
+
+			// NanoRep - end
+		</script>
+ }
+	<script type="text/javascript">
+		// AddRoll - begin
+
+		adroll_adv_id = "PLSVG5WCDVB33CAAP2HAAG";
+		adroll_pix_id = "VXRFC42DQVGXFOJMAXOXFA";
+		(function() {
+			var oldonload = window.onload;
+			window.onload = function() {
+				__adroll_loaded = true;
+				var scr = document.createElement("script");
+				var host = (("https:" == document.location.protocol) ? "https://s.adroll.com" : "http://a.adroll.com");
+				scr.setAttribute('async', 'true');
+				scr.type = "text/javascript";
+				scr.src = host + "/j/roundtrip.js";
+				((document.getElementsByTagName('head') || [null])[0] ||
+				 document.getElementsByTagName('script')[0].parentNode).appendChild(scr);
+				if (oldonload) { oldonload() }
+			};
+		}());
+		// AddRoll - end
+	</script>
+	@{ WriteLiteral(Bundle.JavaScript()
+		.Add("~/Content/js/lib/jquery-1.8.3.js")
+		.Add("~/Content/js/lib/jquery.browser.min.js")
+		.Add("~/Content/js/lib/dropzone.js")
+		.Add("~/Content/js/lib/jquery.hoverIntent.min.js")
+		.Add("~/Content/js/lib/jquery.scrollTo.js")
+		.Add("~/Content/js/lib/jquery.blockUI.js")
+		.Add("~/Content/js/lib/jquery.mousewheel.js")
+		.Add("~/Content/js/lib/jquery.jscrollpane.js")
+		.Add("~/Content/js/lib/jquery.validate.js")
+		.Add("~/Content/js/lib/jquery-ui-1.8.24.custom.js")
+		.Add("~/Content/js/lib/jsuri-1.1.1.js")
+		.Add("~/Content/js/lib/cookies.js")
+		.Add("~/Content/js/lib/underscore.js")
+		.Add("~/Content/js/lib/backbone.js")
+		.Add("~/Content/js/lib/moment.js")
+		.Add("~/Content/js/lib/jquery.numeric.js")
+		.Add("~/Content/js/lib/recaptcha_ajax.js")
+		.Add("~/Content/js/lib/autoNumeric-1.7.4.js")
+		.Add("~/Content/js/lib/chosen.jquery.js")
+		.Add("~/Content/js/lib/jquery.maskedinput-1.2.2.js")
+		.Add("~/Content/js/lib/notifications.js")
+		.Add("~/Content/js/lib/coin-slider.js")
+		.Add("~/Content/js/lib/jquery.placeholder.js")
+		.Add("~/Content/js/lib/attardi.labels.js")
+		.Add("~/Content/js/lib/amount-period-sliders.js")
+		.Add("~/Content/js/lib/jquery.field_status.js")
+		.Add("~/Content/js/lib/mousetrap_1.4.0.js")
+		.Add("~/Content/js/lib/jquery.colorbox-min.js")
+		.Add("~/Content/js/App/ezbob.validation.js")
+		.Add("~/Content/js/controls/captcha.js")
+		.Add("~/Content/js/ezbob.csrf.js")
+		.Add("~/Content/js/ezbob.uiaction.js")
+		.Add("~/Content/js/ezbob.strengthPassword.js")
+		.Add("~/Content/js/Broker/broker.router.js")
+		.Add("~/Content/js/Broker/broker.main.js")
+		.MvcRender("~/Content/js/min/jslib_#.js"));
+	}
+	<!-- scripts - end -->
+</body>
 </html>

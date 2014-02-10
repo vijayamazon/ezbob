@@ -15,6 +15,7 @@ namespace EZBob.DatabaseLib
 	using System.Text.RegularExpressions;
 	using Common;
 	using Ezbob.ExperianParser;
+	using Model.Database.Broker;
 	using Model.Database.Loans;
 	using DatabaseWrapper;
 	using DatabaseWrapper.AccountInfo;
@@ -121,11 +122,13 @@ namespace EZBob.DatabaseLib
 
 		private readonly WizardStepRepository _wizardStepRepository;
 		private readonly TrustPilotStatusRepository _trustPilotStatusRepository;
+		private readonly BrokerRepository _brokerRepository; 
 
 		#endregion repositories
 
-		public DatabaseDataHelper(ISession session)
-		{
+		#region constructor
+
+		public DatabaseDataHelper(ISession session) {
 			_session = session;
 
 			_MarketPlaceRepository = new MarketPlaceRepository(session);
@@ -170,7 +173,10 @@ namespace EZBob.DatabaseLib
 
 			_wizardStepRepository = new WizardStepRepository(session);
 			_trustPilotStatusRepository = new TrustPilotStatusRepository(session);
+			_brokerRepository = new BrokerRepository(session);
 		} // constructor
+
+		#endregion constructor
 
 		#region UI related
 
@@ -262,6 +268,8 @@ namespace EZBob.DatabaseLib
 		} // WizardSteps
 
 		#endregion property WizardSteps
+
+		public BrokerRepository BrokerRepository { get { return _brokerRepository; } }
 
 		public TrustPilotStatusRepository TrustPilotStatusRepository { get { return _trustPilotStatusRepository; } }
 
