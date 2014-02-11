@@ -34,7 +34,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         });
         xhr.always(function () {
 
-            if (that.twilioEnabled) {
+            if (that.twilioEnabled && !that.switchedToCaptcha) {
                 if (!that.showMobileCode) {
                     that.$el.find('#mobileCodeDiv').hide();
                 }

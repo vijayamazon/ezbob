@@ -47,10 +47,7 @@ namespace EzBob.Web.Controllers
 		private readonly IConfigurationVariablesRepository _configurationVariables;
 		private readonly ICustomerStatusesRepository _customerStatusesRepository;
 		private readonly DatabaseDataHelper _helper;
-		private static bool sessionInitialized;
-
-		private readonly ICustomerReasonRepository _reasons;
-		private readonly ICustomerSourceOfRepaymentRepository _sources;
+		private static readonly object initSessionLock = new object();
 
 		//------------------------------------------------------------------------
 		public AccountController(
@@ -66,7 +63,7 @@ namespace EzBob.Web.Controllers
 			ICustomerSessionsRepository sessionIpLog,
 			ITestCustomerRepository testCustomers,
 			IConfigurationVariablesRepository configurationVariables,
-			ICustomerStatusesRepository customerStatusesRepository, ICustomerReasonRepository reasons, ICustomerSourceOfRepaymentRepository sources
+			ICustomerStatusesRepository customerStatusesRepository
 		)
 		{
 			_helper = helper;
@@ -82,8 +79,6 @@ namespace EzBob.Web.Controllers
 			_testCustomers = testCustomers;
 			_configurationVariables = configurationVariables;
 			_customerStatusesRepository = customerStatusesRepository;
-			_reasons = reasons;
-			_sources = sources;
 		}
 
 		//------------------------------------------------------------------------
@@ -654,24 +649,36 @@ namespace EzBob.Web.Controllers
 
 		private void InitSession()
 		{
-			if (sessionInitialized)
+			lock (initSessionLock)
 			{
-				return;
+				if (Session["IsInitialized"] != null)
+				{
+					_log.InfoFormat("Session is already initialized");
+					return;
+				}
+
+				_log.InfoFormat("Initializing session");
+				WizardConfigsActionResult wizardConfigsActionResult = _appCreator.GetWizardConfigs();
+				Session["SwitchedToCaptcha"] = false;
+				Session["IsSmsValidationActive"] = wizardConfigsActionResult.IsSmsValidationActive;
+				Session["NumberOfMobileCodeAttempts"] = wizardConfigsActionResult.NumberOfMobileCodeAttempts;
+				Session["AllowInsertingMobileCodeWithoutGeneration"] =
+					wizardConfigsActionResult.AllowInsertingMobileCodeWithoutGeneration;
+
+				_log.InfoFormat("Initialized session");
+				_log.InfoFormat("SwitchedToCaptcha:{0}", Session["SwitchedToCaptcha"]);
+				_log.InfoFormat("IsSmsValidationActive:{0}", Session["IsSmsValidationActive"]);
+				_log.InfoFormat("NumberOfMobileCodeAttempts:{0}", Session["NumberOfMobileCodeAttempts"]);
+				_log.InfoFormat("AllowInsertingMobileCodeWithoutGeneration:{0}",
+				                Session["AllowInsertingMobileCodeWithoutGeneration"]);
+
+				Session["HadErrorInUpload"] = string.Empty;
+				Session["Hopper"] = null;
+				Session["AddedCount"] = null;
+				Session["DateIntervals"] = null;
+
+				Session["IsInitialized"] = true;
 			}
-
-			WizardConfigsActionResult wizardConfigsActionResult = _appCreator.GetWizardConfigs();
-			Session["SwitchedToCaptcha"] = false;
-			Session["IsSmsValidationActive"] = wizardConfigsActionResult.IsSmsValidationActive;
-			Session["NumberOfMobileCodeAttempts"] = wizardConfigsActionResult.NumberOfMobileCodeAttempts;
-			Session["AllowInsertingMobileCodeWithoutGeneration"] = wizardConfigsActionResult.AllowInsertingMobileCodeWithoutGeneration;
-
-			Session["HadErrorInUpload"] = string.Empty;
-			Session["Hopper"] = null;
-			Session["AddedCount"] = null;
-			Session["DateIntervals"] = null;
-
-			sessionInitialized = true;
-			_log.Info("Initialized session configs");
 		}
 
 		[HttpPost]
