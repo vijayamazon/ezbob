@@ -192,55 +192,76 @@
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <td><b>Line1</b><b class="marking pull-right  @Model.CrossCheckStatus.Line1"></b></td>
-            <td @if (Model.CurrentAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@Model.CurrentAddress.Line1</td>
-            <td>@Model.PrevAddress.Line1</td>
-            <td>@Model.EBay.SellerInfo.SellerPaymentAddress.Street</td>
-            <td>@Model.PayPalAddress.Line1</td>
-        </tr>
-        <tr>
-            <td><b>Line2</b><b class="marking pull-right  @Model.CrossCheckStatus.Line2"></b></td>
-            <td @if (Model.CurrentAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@Model.CurrentAddress.Line2</td>
-            <td>@Model.PrevAddress.Line2</td>
-            <td>@Model.EBay.SellerInfo.SellerPaymentAddress.Street1</td>
-            <td>@Model.PayPalAddress.Line2</td>
-        </tr>
-        <tr>
-            <td><b>Line3</b></td>
-            <td @if (Model.CurrentAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@Model.CurrentAddress.Line3</td>
-            <td>@Model.PrevAddress.Line3</td>
-            <td>@Model.EBay.SellerInfo.SellerPaymentAddress.Street2</td>
-            <td>@Model.PayPalAddress.Line3</td>
-        </tr>
-        <tr>
-            <td><b>Town</b><b class="marking pull-right  @Model.CrossCheckStatus.Town"></b></td>
-            <td @if (Model.CurrentAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@Model.CurrentAddress.Town</td>
-            <td>@Model.PrevAddress.Town</td>
-            <td>@Model.EBay.SellerInfo.SellerPaymentAddress.CityName</td>
-            <td>@Model.PayPalAddress.Town</td>
-        </tr>
-        <tr>
-            <td><b>County</b><b class="marking pull-right @Model.CrossCheckStatus.County"></b></td>
-            <td @if (Model.CurrentAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@Model.CurrentAddress.County</td>
-            <td>@Model.PrevAddress.County</td>
-            <td>@Model.EBay.SellerInfo.SellerPaymentAddress.County</td>
-            <td>@Model.PayPalAddress.County</td>
-        </tr>
-        <tr>
-            <td><b>Postcode</b><b class="marking pull-right  @Model.CrossCheckStatus.Postcode"></b></td>
-            <td @if (Model.CurrentAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@Model.CurrentAddress.Postcode</td>
-            <td>@Model.PrevAddress.Postcode</td>
-            <td>@Model.EBay.SellerInfo.SellerPaymentAddress.PostalCode</td>
-            <td>@Model.PayPalAddress.Postcode</td>
-        </tr>
-        <tr>
-            <td><b>Country</b><b class="marking pull-right @Model.CrossCheckStatus.Country"></b></td>
-            <td @if (Model.CurrentAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@Model.CurrentAddress.Country</td>
-            <td>@Model.PrevAddress.Country</td>
-            <td>@Model.EBay.SellerInfo.SellerPaymentAddress.CountryName</td>
-            <td>@Model.PayPalAddress.Country</td>
-        </tr>
+        @if (Model.CurrentAddress != null)
+        {
+            <tr>
+                <td><b>Line1</b><b class="marking pull-right  @Model.CrossCheckStatus.Line1"></b></td>
+                <td @if (Model.CurrentAddress.Id.StartsWith("MANUAL")) { WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\""); }>@Model.CurrentAddress.Line1</td>
+                <td>@Model.PrevAddress.Line1</td>
+                <td>@Model.EBay.SellerInfo.SellerPaymentAddress.Street</td>
+                <td>@Model.PayPalAddress.Line1</td>
+            </tr>
+            <tr>
+                <td><b>Line2</b><b class="marking pull-right  @Model.CrossCheckStatus.Line2"></b></td>
+                <td @if (Model.CurrentAddress.Id.StartsWith("MANUAL"))
+                    {
+                        WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\"");
+                    }>@Model.CurrentAddress.Line2</td>
+                <td>@Model.PrevAddress.Line2</td>
+                <td>@Model.EBay.SellerInfo.SellerPaymentAddress.Street1</td>
+                <td>@Model.PayPalAddress.Line2</td>
+            </tr>
+            <tr>
+                <td><b>Line3</b></td>
+                <td @if (Model.CurrentAddress.Id.StartsWith("MANUAL"))
+                    {
+                        WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\"");
+                    }>@Model.CurrentAddress.Line3</td>
+                <td>@Model.PrevAddress.Line3</td>
+                <td>@Model.EBay.SellerInfo.SellerPaymentAddress.Street2</td>
+                <td>@Model.PayPalAddress.Line3</td>
+            </tr>
+            <tr>
+                <td><b>Town</b><b class="marking pull-right  @Model.CrossCheckStatus.Town"></b></td>
+                <td @if (Model.CurrentAddress.Id.StartsWith("MANUAL"))
+                    {
+                        WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\"");
+                    }>@Model.CurrentAddress.Town</td>
+                <td>@Model.PrevAddress.Town</td>
+                <td>@Model.EBay.SellerInfo.SellerPaymentAddress.CityName</td>
+                <td>@Model.PayPalAddress.Town</td>
+            </tr>
+            <tr>
+                <td><b>County</b><b class="marking pull-right @Model.CrossCheckStatus.County"></b></td>
+                <td @if (Model.CurrentAddress.Id.StartsWith("MANUAL"))
+                    {
+                        WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\"");
+                    }>@Model.CurrentAddress.County</td>
+                <td>@Model.PrevAddress.County</td>
+                <td>@Model.EBay.SellerInfo.SellerPaymentAddress.County</td>
+                <td>@Model.PayPalAddress.County</td>
+            </tr>
+            <tr>
+                <td><b>Postcode</b><b class="marking pull-right  @Model.CrossCheckStatus.Postcode"></b></td>
+                <td @if (Model.CurrentAddress.Id.StartsWith("MANUAL"))
+                    {
+                        WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\"");
+                    }>@Model.CurrentAddress.Postcode</td>
+                <td>@Model.PrevAddress.Postcode</td>
+                <td>@Model.EBay.SellerInfo.SellerPaymentAddress.PostalCode</td>
+                <td>@Model.PayPalAddress.Postcode</td>
+            </tr>
+            <tr>
+                <td><b>Country</b><b class="marking pull-right @Model.CrossCheckStatus.Country"></b></td>
+                <td @if (Model.CurrentAddress.Id.StartsWith("MANUAL"))
+                    {
+                        WriteLiteral("class=manually-entered-address title=\"" + sManualAddressTitle + "\"");
+                    }>@Model.CurrentAddress.Country</td>
+                <td>@Model.PrevAddress.Country</td>
+                <td>@Model.EBay.SellerInfo.SellerPaymentAddress.CountryName</td>
+                <td>@Model.PayPalAddress.Country</td>
+            </tr>
+        }
         <tr>
             <td><b>Zoopla LR Copy Image</b></td>
             <td>@copyAddress("Current", @Model.CurrentAddress)</td>
@@ -250,7 +271,10 @@
         </tr>
         <tr>
             <td><b>Zoopla Estimate</b></td>
-            <td colspan="4">@GetZooplaEstimate(Model.CurrentAddress.ZooplaEstimate, Model.CurrentAddress.ZooplaAverage, Model.CurrentAddress.ZooplaUpdateDate)
+            <td colspan="4">@if (Model.CurrentAddress != null)
+                            {
+                                GetZooplaEstimate(Model.CurrentAddress.ZooplaEstimate, Model.CurrentAddress.ZooplaAverage, Model.CurrentAddress.ZooplaUpdateDate);
+                            }
                 <button class="btn btn-mini btn-primary zooplaRecheck" title="Recheck"><i class="fa fa-refresh"></i></button>
             </td>
         </tr>
@@ -261,7 +285,7 @@
         <tr>
             <td><b>Property net worth</b></td>
             <td colspan="4">
-                @if (@Model.Application.ResidentialStatus.Contains("Home owner"))
+                @if (@Model.Application.ResidentialStatus != null && Model.Application.ResidentialStatus.Contains("Home owner"))
                 {
                     @Html.Raw("£")
                     @Model.AssetWorth.ToString("N0")

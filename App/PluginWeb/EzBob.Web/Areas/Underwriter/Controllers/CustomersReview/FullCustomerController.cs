@@ -80,11 +80,6 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 				return this.JsonNet(model);
 			}
 
-			if (!customer.WizardStep.TheLastOne) {
-				model.State = "NotSuccesfullyRegistred";
-				return this.JsonNet(model);
-			}
-
 			var cr = customer.LastCashRequest;
 
 			var pi = new PersonalInfoModel();

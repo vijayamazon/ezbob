@@ -42,10 +42,6 @@ EzBob.Underwriter.GridTools = {
 	profileLink: function(nCustomerID, sLinkText) {
 		return EzBob.Underwriter.GridTools.withScrollbar('<a class=profileLink title="Open customer profile" href="#profile/' + nCustomerID + '">' + (sLinkText || nCustomerID) + '</a>');
 	}, // profileLink
-
-	profileWithTypeLink: function(nCustomerID, sGridType) {
-		return EzBob.Underwriter.GridTools.withScrollbar('<a class=profileLink href="#profile/' + nCustomerID + '/' + sGridType + '">' + nCustomerID + '</a>');
-	}, // profileWithTypeLink
 }; // EzBob.Underwriter.GridTools
 
 EzBob.Underwriter.GridsView = Backbone.View.extend({
@@ -158,8 +154,8 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 				icon: 'bars',
 				action: 'GridRegistered',
 				columns: '#UserId,Email,UserStatus,^RegDate,MP_Statuses,WizardStep,SegmentType',
-				fnRowCallback: function(oTR, oData, iDisplayIndex, iDisplayIndexFull) {
-					$('.grid-item-UserId', oTR).empty().html(EzBob.Underwriter.GridTools.profileWithTypeLink(oData.UserId, 'registered'));
+				fnRowCallback: function (oTR, oData, iDisplayIndex, iDisplayIndexFull) {
+				    $('.grid-item-UserId', oTR).empty().html(EzBob.Underwriter.GridTools.profileLink(oData.UserId));
 
 					$(oTR).dblclick(function() {
 						location.assign($(oTR).find('.profileLink').first().attr('href'));

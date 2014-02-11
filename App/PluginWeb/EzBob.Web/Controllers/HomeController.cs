@@ -3,7 +3,6 @@
 	using System;
 	using System.Web;
 	using System.Web.Mvc;
-	using Code.ApplicationCreator;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Repository;
 	using ExperianLib;
@@ -16,10 +15,9 @@
 		private static readonly ILog log = LogManager.GetLogger(typeof(HomeController));
 		private readonly AskvilleRepository askvilleRepository;
 
-		public HomeController(AskvilleRepository askvilleRepository, IAppCreator appCreator)
+		public HomeController(AskvilleRepository askvilleRepository)
 		{
 			this.askvilleRepository = askvilleRepository;
-			log.Info("Got configs");
 		}
 
 		public ActionResult Index(string sourceref = "", string shop = "", string ezbobab = "", string invite = "")

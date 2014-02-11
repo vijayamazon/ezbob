@@ -61,7 +61,10 @@ namespace EzBob.Web.Areas.Underwriter.Models
 
 		public CrossCheckTypeStatus GetStatusDayTimePhone(string eBayDaytimePhone, string applicationDaytimePhone, string payPalDaytimePhone, CrossCheckTypeStatus defaultStatus)
 		{
-			applicationDaytimePhone = applicationDaytimePhone.Replace("+3", string.Empty);
+			if (applicationDaytimePhone != null)
+			{
+				applicationDaytimePhone = applicationDaytimePhone.Replace("+3", string.Empty);
+			}
 			return GetTypeStatusForColums(eBayDaytimePhone, applicationDaytimePhone, payPalDaytimePhone);
 		}
 

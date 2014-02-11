@@ -53,7 +53,7 @@
 			'': 'customers',
 			'customers/:type': 'customers',
 			'profile/:id': 'profile',
-			'profile/:id/:type': 'profilePopup',
+			'profile/:id/:type': 'profilePopup', // TODO: Remove this routing as it is no longer used
 			'settings': 'settings',
 			'automation': 'automation',
 			'support': 'support',
@@ -142,6 +142,7 @@
 
 	Backbone.history.start();
 
+    // TODO: Remove this code - we no longer want to refer to /registered, and I think this is 'dead code'
 	oRouter.views.profile.view.on('customerNotFull', function(customerId) {
 		oRouter.navigate('#customers/registered', { trigger: true, replace: true });
 		oRouter.navigate('#profile/' + customerId + '/registered', { trigger: true, replace: true });

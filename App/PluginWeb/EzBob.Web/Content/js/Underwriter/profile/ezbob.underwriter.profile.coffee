@@ -255,10 +255,7 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
                     EzBob.ShowMessage res.error,"Customer id. ##{id} was not found"
                     @router.navigate("", { trigger: true, replace: true });
                     return
-                when "NotSuccesfullyRegistred" 
-                    @trigger "customerNotFull", id
-                    return
-
+            
             @personalInfoModel.set {Id: id}, {silent: true}
             @personalInfoModel.set fullModel.get("PersonalInfoModel"), silent: true
             @personalInfoModel.changeDisabled(true)
