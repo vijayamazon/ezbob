@@ -47,7 +47,6 @@ namespace EzBob.Web.Controllers
 		private readonly IConfigurationVariablesRepository _configurationVariables;
 		private readonly ICustomerStatusesRepository _customerStatusesRepository;
 		private readonly DatabaseDataHelper _helper;
-		private static bool sessionInitialized;
 
 		private readonly ICustomerReasonRepository _reasons;
 		private readonly ICustomerSourceOfRepaymentRepository _sources;
@@ -211,12 +210,12 @@ namespace EzBob.Web.Controllers
 					if (_membershipProvider.ValidateUser(model.UserName, model.Password))
 					{
 						_sessionIpLog.AddSessionIpLog(new CustomerSession()
-							{
-								CustomerId = user.Id,
-								StartSession = DateTime.Now,
-								Ip = customerIp,
-								IsPasswdOk = true
-							});
+						{
+							CustomerId = user.Id,
+							StartSession = DateTime.Now,
+							Ip = customerIp,
+							IsPasswdOk = true
+						});
 
 						user.LoginFailedCount = 0;
 						SetCookie(model);
@@ -338,13 +337,13 @@ namespace EzBob.Web.Controllers
 
 				var user = _users.GetUserByLogin(model.EMail);
 				_sessionIpLog.AddSessionIpLog(new CustomerSession()
-							{
-								CustomerId = user.Id,
-								StartSession = DateTime.Now,
-								Ip = customerIp,
-								IsPasswdOk = true,
-								ErrorMessage = "Registration"
-							});
+				{
+					CustomerId = user.Id,
+					StartSession = DateTime.Now,
+					Ip = customerIp,
+					IsPasswdOk = true,
+					ErrorMessage = "Registration"
+				});
 				return this.JsonNet(new { success = true });
 			}
 			catch (Exception e)
@@ -387,21 +386,21 @@ namespace EzBob.Web.Controllers
 				var g = new RefNumberGenerator(_customers);
 				var isAutomaticTest = IsAutomaticTest(email);
 				var customer = new Customer
-					{
-						Name = email,
-						Id = user.Id,
-						Status = Status.Registered,
-						RefNumber = g.GenerateForCustomer(),
-						WizardStep = _helper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.SignUp),
-						CollectionStatus =
-							new CollectionStatus { CurrentStatus = _customerStatusesRepository.GetByName("Enabled") },
-						IsTest = isAutomaticTest,
-						IsOffline = (bool?)null,
-						PromoCode = promoCode,
-						CustomerInviteFriend = new List<CustomerInviteFriend>(),
-						PersonalInfo = new PersonalInfo { MobilePhone = mobilePhone },
-						TrustPilotStatus = _helper.TrustPilotStatusRepository.Find(TrustPilotStauses.Nether),
-					};
+				{
+					Name = email,
+					Id = user.Id,
+					Status = Status.Registered,
+					RefNumber = g.GenerateForCustomer(),
+					WizardStep = _helper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.SignUp),
+					CollectionStatus =
+						new CollectionStatus { CurrentStatus = _customerStatusesRepository.GetByName("Enabled") },
+					IsTest = isAutomaticTest,
+					IsOffline = (bool?)null,
+					PromoCode = promoCode,
+					CustomerInviteFriend = new List<CustomerInviteFriend>(),
+					PersonalInfo = new PersonalInfo { MobilePhone = mobilePhone },
+					TrustPilotStatus = _helper.TrustPilotStatusRepository.Find(TrustPilotStauses.Nether),
+				};
 				_log.DebugFormat("Customer {1} ({0}): wizard step has been updated to :{2}", customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.SignUp);
 
 				var sourceref = Request.Cookies["sourceref"];
@@ -584,8 +583,6 @@ namespace EzBob.Web.Controllers
 					}
 				}
 
-
-
 				return this.JsonNet(result.Targets);
 			}
 			catch (Exception e)
@@ -632,12 +629,12 @@ namespace EzBob.Web.Controllers
 		{
 			return this.JsonNet(
 				new
-					{
-						result = false,
-						errorMessage = string.Join("; ", modelStateDictionary.Values
-													  .SelectMany(x => x.Errors)
-													  .Select(x => x.ErrorMessage))
-					});
+				{
+					result = false,
+					errorMessage = string.Join("; ", modelStateDictionary.Values
+												  .SelectMany(x => x.Errors)
+												  .Select(x => x.ErrorMessage))
+				});
 		}
 
 		[Ajax]
@@ -656,29 +653,35 @@ namespace EzBob.Web.Controllers
 
 		private void InitSession()
 		{
-			if (sessionInitialized)
+			if (Session["IsSmsValidationActive"] != null)
 			{
+				_log.InfoFormat("Session is already initialized");
 				return;
 			}
 
+			_log.InfoFormat("Initializing session");
 			WizardConfigsActionResult wizardConfigsActionResult = _appCreator.GetWizardConfigs();
 			Session["SwitchedToCaptcha"] = false;
 			Session["IsSmsValidationActive"] = wizardConfigsActionResult.IsSmsValidationActive;
 			Session["NumberOfMobileCodeAttempts"] = wizardConfigsActionResult.NumberOfMobileCodeAttempts;
 			Session["AllowInsertingMobileCodeWithoutGeneration"] = wizardConfigsActionResult.AllowInsertingMobileCodeWithoutGeneration;
 
+			_log.InfoFormat("Initialized session");
+			_log.InfoFormat("SwitchedToCaptcha:{0}", Session["SwitchedToCaptcha"]);
+			_log.InfoFormat("IsSmsValidationActive:{0}", Session["IsSmsValidationActive"]);
+			_log.InfoFormat("NumberOfMobileCodeAttempts:{0}", Session["NumberOfMobileCodeAttempts"]);
+			_log.InfoFormat("AllowInsertingMobileCodeWithoutGeneration:{0}", Session["AllowInsertingMobileCodeWithoutGeneration"]);
+
 			Session["HadErrorInUpload"] = string.Empty;
 			Session["Hopper"] = null;
 			Session["AddedCount"] = null;
 			Session["DateIntervals"] = null;
-
-			sessionInitialized = true;
-			_log.Info("Initialized session configs");
 		}
 
 		[HttpPost]
 		public JsonNetResult GetTwilioConfig()
 		{
+			_log.InfoFormat("Getting twilio configs...");
 			InitSession();
 			return this.JsonNet(new
 			{
