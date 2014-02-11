@@ -16,6 +16,23 @@
 		private static readonly IFreeAgentConfig config = ObjectFactory.GetInstance<IFreeAgentConfig>();
 		private static readonly ILog log = LogManager.GetLogger(typeof(FreeAgentConnector));
 
+		private static bool TryToDeserialize<T>(out T deserializedResult, string responseContent) where T : class
+		{
+			try
+			{
+				var js = new JavaScriptSerializer();
+				deserializedResult = ((T)js.Deserialize(responseContent, typeof(T)));
+			}
+			catch (Exception e)
+			{
+				log.ErrorFormat("Failed parsing response from FreeAgent to type:{0} with exception:{1}. The response:{2}", typeof(T), e, responseContent);
+				deserializedResult = null;
+				return false;
+			}
+
+			return true;
+		}
+
 		public static FreeAgentInvoicesList GetInvoices(string accessToken, int numOfMonths)
 		{
 			string monthPart = numOfMonths == -1 ? string.Empty : string.Format(config.InvoicesRequestMonthPart, numOfMonths);
@@ -26,11 +43,10 @@
 			var client = new RestClient();
 
 			IRestResponse response = client.Execute(request);
-			var js = new JavaScriptSerializer();
 
 			var invoices = new List<FreeAgentInvoice>();
-			var deserializedResponse = ((InvoicesListHelper)js.Deserialize(response.Content, typeof(InvoicesListHelper)));
-			if (deserializedResponse != null && deserializedResponse.Invoices != null)
+			InvoicesListHelper deserializedResponse;
+			if (TryToDeserialize(out deserializedResponse, response.Content) && deserializedResponse != null && deserializedResponse.Invoices != null)
 			{
 				invoices.AddRange(deserializedResponse.Invoices);
 			}
@@ -53,8 +69,7 @@
 				request.AddHeader("Authorization", "Bearer " + accessToken);
 				response = client.Execute(request);
 
-				deserializedResponse = ((InvoicesListHelper)js.Deserialize(response.Content, typeof(InvoicesListHelper)));
-				if (deserializedResponse != null && deserializedResponse.Invoices != null)
+				if (TryToDeserialize(out deserializedResponse, response.Content) && deserializedResponse != null && deserializedResponse.Invoices != null)
 				{
 					invoices.AddRange(deserializedResponse.Invoices);
 				}
@@ -78,19 +93,8 @@
 			var client = new RestClient();
 
 			IRestResponse response = client.Execute(request);
-			var js = new JavaScriptSerializer();
 			FreeAgentCompanyList deserializedResponse;
-			try
-			{
-				deserializedResponse = (FreeAgentCompanyList)js.Deserialize(response.Content, typeof(FreeAgentCompanyList));
-			}
-			catch (Exception e)
-			{
-				log.ErrorFormat("Exception while deserializing company response. Response:{0} Exception:{1}", response.Content, e);
-				throw;
-			}
-
-			if (deserializedResponse != null && deserializedResponse.Company != null)
+			if (TryToDeserialize(out deserializedResponse, response.Content) && deserializedResponse != null && deserializedResponse.Company != null)
 			{
 				return deserializedResponse.Company;
 			}
@@ -113,10 +117,9 @@
 			var client = new RestClient();
 
 			IRestResponse response = client.Execute(request);
-			var js = new JavaScriptSerializer();
-			
-			var deserializedResponse = (FreeAgentUsersList)js.Deserialize(response.Content, typeof(FreeAgentUsersList));
-			if (deserializedResponse != null && deserializedResponse.Users != null)
+
+			FreeAgentUsersList deserializedResponse;
+			if (TryToDeserialize(out deserializedResponse, response.Content) && deserializedResponse != null && deserializedResponse.Users != null)
 			{
 				return deserializedResponse.Users;
 			}
@@ -135,10 +138,9 @@
 			var client = new RestClient();
 
 			IRestResponse response = client.Execute(request);
-			var js = new JavaScriptSerializer();
 			var expenses = new List<FreeAgentExpense>();
-			var deserializedResponse = (((ExpensesListHelper)js.Deserialize(response.Content, typeof(ExpensesListHelper))));
-			if (deserializedResponse != null && deserializedResponse.Expenses != null)
+			ExpensesListHelper deserializedResponse;
+			if (TryToDeserialize(out deserializedResponse, response.Content) && deserializedResponse != null && deserializedResponse.Expenses != null)
 			{
 				expenses.AddRange(deserializedResponse.Expenses);
 			}
@@ -155,8 +157,7 @@
 				request.AddHeader("Authorization", "Bearer " + accessToken);
 				response = client.Execute(request);
 
-				deserializedResponse = (ExpensesListHelper)js.Deserialize(response.Content, typeof(ExpensesListHelper));
-				if (deserializedResponse != null && deserializedResponse.Expenses != null)
+				if (TryToDeserialize(out deserializedResponse, response.Content) && deserializedResponse != null && deserializedResponse.Expenses != null)
 				{
 					expenses.AddRange(deserializedResponse.Expenses);
 				}
@@ -182,8 +183,8 @@
 			IRestResponse response = client.Execute(request);
 			var js = new JavaScriptSerializer();
 
-			var deserializedResponse = (ExpenseCategoriesListHelper)js.Deserialize(response.Content, typeof(ExpenseCategoriesListHelper));
-			if (deserializedResponse != null && deserializedResponse.Category != null)
+			ExpenseCategoriesListHelper deserializedResponse;
+			if (TryToDeserialize(out deserializedResponse, response.Content) && deserializedResponse != null && deserializedResponse.Category != null)
 			{
 				return deserializedResponse.Category;
 			}
