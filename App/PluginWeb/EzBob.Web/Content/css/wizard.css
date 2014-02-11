@@ -389,18 +389,3 @@ div.wizard-director-text { font-size: 11pt; color: #585858; }
 .quick-offer-form-item {
 	margin-top: 1em;
 }
-
-.code-sent-style {
-    margin-left: 50.5%;
-    position: absolute;
-    background-color: #1AB852;
-    height: 14px;
-    margin-top: -31px;
-    color: white;
-    font-weight: normal;
-    font-size: 10px;
-    padding-left: 4px;
-    padding-right: 4px;
-    padding-bottom: 12px;
-    opacity: 0;
-}

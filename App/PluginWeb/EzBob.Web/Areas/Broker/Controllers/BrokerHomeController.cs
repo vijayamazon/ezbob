@@ -1,9 +1,9 @@
 ﻿namespace EzBob.Web.Areas.Broker.Controllers {
 	using System.Web.Mvc;
-	using ApplicationMng.Repository;
 	using Code.ApplicationCreator;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database.Broker;
+	using Infrastructure;
 
 	public class BrokerHomeController : Controller {
 		#region public
@@ -12,10 +12,12 @@
 
 		public BrokerHomeController(
 			DatabaseDataHelper oHelper,
-			IAppCreator oAppCreator
+			IAppCreator oAppCreator,
+			IEzBobConfiguration config
 		) {
 			m_oHelper = oHelper;
 			m_oAppCreator = oAppCreator;
+			m_oConfig = config;
 		} // constructor
 
 		#endregion constructor
@@ -27,6 +29,7 @@
 			const string sAuth = "auth";
 			const string sForbidden = "-";
 
+			ViewData["Config"] = m_oConfig;
 			ViewData[sAuth] = string.Empty;
 
 			if (User.Identity.IsAuthenticated) {
@@ -55,6 +58,7 @@
 
 		private readonly DatabaseDataHelper m_oHelper;
 		private readonly IAppCreator m_oAppCreator;
+		private readonly IEzBobConfiguration m_oConfig;
 
 		#endregion fields
 

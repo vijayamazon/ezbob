@@ -475,7 +475,7 @@ namespace EzBob.Web.Infrastructure
 				.MvcRender("~/Content/js/min/jsPaypojntTemplate_#.js");
 		}
 		
-		private static string GetDbStrings()
+		public static string GetDbStrings()
 		{
 			var strings = ObjectFactory.GetInstance<IDbStringRepository>();
 			Dictionary<string, string> dict = strings.GetAllStrings().ToDictionary(s => s.Key, s => s.Value);

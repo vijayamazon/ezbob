@@ -1,6 +1,19 @@
-﻿$(document).ready(function() {
+﻿EzBob = EzBob || {};
+
+$(document).ready(function() {
+	EzBob.Config = $.extend({}, EzBob.Config, EzBob.LoadedConfig);
+
+	var notifications = new EzBob.NotificationsView({ el: $('.notifications') });
+
 	var oRouter = new EzBob.Broker.Router();
 	Backbone.history.start();
+
+	var sAuth = $('body').attr('data-auth');
+
+	if (sAuth === '-') {
+		oRouter.forbidden();
+		return;
+	} // if
 
 	$('#user-menu .menu-btn').click(function() {
 		event.preventDefault();
@@ -15,13 +28,6 @@
 		else
 			window.location = 'http://www.ezbob.com';
 	});
-
-	var sAuth = $('body').attr('data-auth');
-
-	if (sAuth === '-') {
-		oRouter.forbidden();
-		return;
-	} // if
 
 	var oFieldStatusIcons = $('IMG.field_status');
 	oFieldStatusIcons.filter('.required').field_status({ required: true });

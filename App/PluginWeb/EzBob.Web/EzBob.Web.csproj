@@ -932,6 +932,7 @@
     <Content Include="Content\js\App\ezbob.validation.js" />
     <Content Include="Content\js\Broker\broker.main.js" />
     <Content Include="Content\js\Broker\broker.router.js" />
+    <Content Include="Content\js\Broker\broker.signup.js" />
     <Content Include="Content\js\controls\ezbob.BoundItemView.min.js">
       <DependentUpon>ezbob.BoundItemView.coffee</DependentUpon>
     </Content>

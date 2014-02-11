@@ -11,6 +11,8 @@ EzBob.Broker.Router = Backbone.Router.extend({
 
 	signup: function() {
 		this.show('signup', 'log-in');
+		this.createView('signup', EzBob.Broker.SignupView);
+		this.views.signup.render();
 	}, // signup
 
 	login: function() {
@@ -63,4 +65,12 @@ EzBob.Broker.Router = Backbone.Router.extend({
 	}, // show
 
 	forbiddenSection: function() { return 'forbidden'; }, // forbiddenSection
+
+	createView: function(sViewName, oViewType) {
+		if (!this.views)
+			this.views = {};
+
+		if (!this.views[sViewName])
+			this.views[sViewName] = new oViewType();
+	}, // createView
 }); // EzBob.Broker.Router

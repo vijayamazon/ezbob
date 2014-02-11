@@ -1475,6 +1475,21 @@ td.account-logo {
     padding-top: 32px;
 }
 
+.code-sent-style {
+    margin-left: 50.5%;
+    position: absolute;
+    background-color: #1AB852;
+    height: 14px;
+    margin-top: -31px;
+    color: white;
+    font-weight: normal;
+    font-size: 10px;
+    padding-left: 4px;
+    padding-right: 4px;
+    padding-bottom: 12px;
+    opacity: 0;
+}
+
 @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
 
 	.marketplace-button { width: 95%; float: left; }
