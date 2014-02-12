@@ -152,7 +152,10 @@ namespace EzBob.Web.Areas.Underwriter.Models
 				PayPalAddress = Mapper.Map<MP_PayPalPersonalInfo, CustomerAddress>(paypal.PersonalInfo);
 			}
 
-			Directors.AddRange(customer.Company.Directors);
+			if (customer.Company != null)
+			{
+				Directors.AddRange(customer.Company.Directors);
+			}
 
 			CrossCheckStatus.BuildMarkerStatusForPersonalInfo(Application, PayPal, EBay);
 			CrossCheckStatus.BuildMarkerStatusForCustomerAddress(CurrentAddress, EBayAddress, PayPalAddress);

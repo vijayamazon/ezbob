@@ -76,7 +76,8 @@ class EzBob.Underwriter.goToCustomerId extends Backbone.Marionette.ItemView
                     @addError "Customer id. ##{id} was not found"
                     break;
                 when "NotSuccesfullyRegistred" 
-                    @addError "Customer id ##{id} not successfully registered"
+                    @trigger "ok", id
+                    @dialog.dialog "close"
                     break;
                 when "Ok"
                     @trigger "ok", id

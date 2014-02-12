@@ -1,5 +1,5 @@
 (function() {
-  var root,
+  var root, _ref, _ref1,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -10,11 +10,11 @@
   EzBob.Underwriter = EzBob.Underwriter || {};
 
   EzBob.Underwriter.RecentCustomersModel = (function(_super) {
-
     __extends(RecentCustomersModel, _super);
 
     function RecentCustomersModel() {
-      return RecentCustomersModel.__super__.constructor.apply(this, arguments);
+      _ref = RecentCustomersModel.__super__.constructor.apply(this, arguments);
+      return _ref;
     }
 
     RecentCustomersModel.prototype.url = window.gRootPath + "Underwriter/Customers/GetRecentCustomers";
@@ -24,15 +24,16 @@
   })(Backbone.Model);
 
   EzBob.Underwriter.goToCustomerId = (function(_super) {
-
     __extends(goToCustomerId, _super);
 
     function goToCustomerId() {
-      return goToCustomerId.__super__.constructor.apply(this, arguments);
+      _ref1 = goToCustomerId.__super__.constructor.apply(this, arguments);
+      return _ref1;
     }
 
     goToCustomerId.prototype.initialize = function() {
       var _this = this;
+
       Mousetrap.bind("ctrl+g", function() {
         _this.render();
         return false;
@@ -42,6 +43,7 @@
 
     goToCustomerId.prototype.template = function() {
       var allOptions, customer, el, recentCustomers, _i, _len;
+
       recentCustomers = JSON.parse(localStorage.getItem('RecentCustomers'));
       allOptions = '';
       for (_i = 0, _len = recentCustomers.length; _i < _len; _i++) {
@@ -62,6 +64,7 @@
 
     goToCustomerId.prototype.onRender = function() {
       var _this = this;
+
       this.dialog = EzBob.ShowMessage(this.ui.template, "Customer ID?", (function() {
         return _this.okTrigger();
       }), "OK", null, "Cancel");
@@ -78,6 +81,7 @@
 
     goToCustomerId.prototype.okTrigger = function() {
       var selectVal, val;
+
       val = this.ui.input.val();
       if (!IsInt(val, true)) {
         val = val.substring(0, val.indexOf(','));
@@ -114,6 +118,7 @@
     goToCustomerId.prototype.checkCustomer = function(id) {
       var xhr,
         _this = this;
+
       this.okBtn.attr("disabled", "disabled");
       xhr = $.get("" + window.gRootPath + "Underwriter/Customers/CheckCustomer?customerId=" + id);
       xhr.done(function(res) {
@@ -122,7 +127,8 @@
             _this.addError("Customer id. #" + id + " was not found");
             break;
           case "NotSuccesfullyRegistred":
-            _this.addError("Customer id #" + id + " not successfully registered");
+            _this.trigger("ok", id);
+            _this.dialog.dialog("close");
             break;
           case "Ok":
             _this.trigger("ok", id);
