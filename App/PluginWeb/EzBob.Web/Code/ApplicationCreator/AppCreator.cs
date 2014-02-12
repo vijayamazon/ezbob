@@ -638,25 +638,7 @@
 
 		private WizardConfigsActionResult WizardConfigs()
 		{
-			lock (initServiceLock)
-			{
-				if (_wizardConfigs != null)
-				{
-					return _wizardConfigs;
-				}
-
-				try
-				{
-					_wizardConfigs = ServiceClient.GetWizardConfigs();
-				}
-				catch (Exception ex)
-				{
-					_wizardConfigs = new WizardConfigsActionResult();
-					Log.ErrorFormat("GetWizardConfigs {0}", ex);
-				}
-			}
-
-			return _wizardConfigs;
+			return ServiceClient.GetWizardConfigs();
 		}
 
 		private readonly IStrategyRepository _strategies;
@@ -674,7 +656,5 @@
 		private static bool useNewCaisStrategies;
 		private static bool readConfig = false;
 		private readonly DatabaseDataHelper _helper;
-		private static WizardConfigsActionResult _wizardConfigs;
-		private static readonly object initServiceLock = new object();
 	} // class AppCreator
 } // namespace
