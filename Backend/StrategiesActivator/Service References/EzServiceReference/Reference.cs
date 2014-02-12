@@ -259,26 +259,10 @@ namespace StrategiesActivator.EzServiceReference {
     public partial class WizardConfigsActionResult : StrategiesActivator.EzServiceReference.ActionResult {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private bool AllowInsertingMobileCodeWithoutGenerationField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private bool IsSmsValidationActiveField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private int NumberOfMobileCodeAttemptsField;
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public bool AllowInsertingMobileCodeWithoutGeneration {
-            get {
-                return this.AllowInsertingMobileCodeWithoutGenerationField;
-            }
-            set {
-                if ((this.AllowInsertingMobileCodeWithoutGenerationField.Equals(value) != true)) {
-                    this.AllowInsertingMobileCodeWithoutGenerationField = value;
-                    this.RaisePropertyChanged("AllowInsertingMobileCodeWithoutGeneration");
-                }
-            }
-        }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
         public bool IsSmsValidationActive {

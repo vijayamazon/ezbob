@@ -5,7 +5,6 @@
 
 	public class GetWizardConfigs : AStrategy
 	{
-		public bool AllowInsertingMobileCodeWithoutGeneration { get; set; }
 		public bool IsSmsValidationActive { get; set; }
 		public int NumberOfMobileCodeAttempts { get; set; }
 		#region constructor
@@ -33,7 +32,6 @@
 
 			IsSmsValidationActive = sr["IsSmsValidationActive"];
 			NumberOfMobileCodeAttempts = sr["NumberOfMobileCodeAttempts"];
-			AllowInsertingMobileCodeWithoutGeneration = sr["AllowInsertingMobileCodeWithoutGeneration"];
 		} // Execute
 
 		#endregion property Execute

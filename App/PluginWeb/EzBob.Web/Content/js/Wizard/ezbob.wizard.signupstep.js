@@ -17,7 +17,6 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         this.readyToProceed = false;
         this.activatedCode = false;
         this.mobileCodesSent = 0;
-        this.showMobileCode = false;
         this.twilioEnabled = false;
 
         var that = this;
@@ -27,17 +26,10 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
             that.twilioEnabled = res.isSmsValidationActive;
             that.switchedToCaptcha = res.switchedToCaptcha;
             that.numberOfMobileCodeAttempts = res.numberOfMobileCodeAttempts + 1;
-            if (res.allowInsertingMobileCodeWithoutGeneration) {
-                that.showMobileCode = true;
-            }
             return false;
         });
         xhr.always(function () {
-
             if (that.twilioEnabled && !that.switchedToCaptcha) {
-                if (!that.showMobileCode) {
-                    that.$el.find('#mobileCodeDiv').hide();
-                }
                 that.$el.find('#twilioDiv').show();
             } else {
                 that.$el.find('#captchaDiv').show();
@@ -112,7 +104,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
     inputChanged: function (evt) {
         this.setFieldStatusNotRequired(evt, 'promoCode');
         var enabled = EzBob.Validation.checkForm(this.validator);
-        enabled = enabled && (!this.twilioEnabled || this.activatedCode || this.showMobileCode || this.switchedToCaptcha);
+        enabled = enabled && (!this.twilioEnabled || this.activatedCode || this.switchedToCaptcha);
         $('#signupSubmitButton').toggleClass('disabled', !enabled);
     },
 

@@ -662,15 +662,11 @@ namespace EzBob.Web.Controllers
 				Session["SwitchedToCaptcha"] = false;
 				Session["IsSmsValidationActive"] = wizardConfigsActionResult.IsSmsValidationActive;
 				Session["NumberOfMobileCodeAttempts"] = wizardConfigsActionResult.NumberOfMobileCodeAttempts;
-				Session["AllowInsertingMobileCodeWithoutGeneration"] =
-					wizardConfigsActionResult.AllowInsertingMobileCodeWithoutGeneration;
 
 				_log.InfoFormat("Initialized session");
 				_log.InfoFormat("SwitchedToCaptcha:{0}", Session["SwitchedToCaptcha"]);
 				_log.InfoFormat("IsSmsValidationActive:{0}", Session["IsSmsValidationActive"]);
 				_log.InfoFormat("NumberOfMobileCodeAttempts:{0}", Session["NumberOfMobileCodeAttempts"]);
-				_log.InfoFormat("AllowInsertingMobileCodeWithoutGeneration:{0}",
-				                Session["AllowInsertingMobileCodeWithoutGeneration"]);
 
 				Session["HadErrorInUpload"] = string.Empty;
 				Session["Hopper"] = null;
@@ -689,7 +685,6 @@ namespace EzBob.Web.Controllers
 			{
 				isSmsValidationActive = Session["IsSmsValidationActive"],
 				numberOfMobileCodeAttempts = Session["NumberOfMobileCodeAttempts"],
-				allowInsertingMobileCodeWithoutGeneration = Session["AllowInsertingMobileCodeWithoutGeneration"],
 				switchedToCaptcha = Session["SwitchedToCaptcha"]
 			});
 		}

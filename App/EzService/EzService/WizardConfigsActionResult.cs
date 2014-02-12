@@ -12,9 +12,6 @@ namespace EzService
 
 		[DataMember]
 		public int NumberOfMobileCodeAttempts { get; set; }
-
-		[DataMember]
-		public bool AllowInsertingMobileCodeWithoutGeneration { get; set; }
 	} // class WizardConfigsActionResult
 
 	#endregion class WizardConfigsActionResult
