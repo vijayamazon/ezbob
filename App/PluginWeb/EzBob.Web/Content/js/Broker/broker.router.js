@@ -6,8 +6,14 @@ EzBob.Broker.Router = Backbone.Router.extend({
 		'': 'signup',
 		'signup': 'signup',
 		'login': 'login',
+		'dashboard': 'dashboard',
 		'*z': 'forbidden',
 	},
+
+	logoff: function() {
+		$.post('' + window.gRootPath + 'Broker/BrokerHome/Logoff');
+		window.location = 'http://www.ezbob.com';
+	}, // logoff
 
 	signup: function() {
 		this.show('signup', 'log-in');
@@ -19,9 +25,33 @@ EzBob.Broker.Router = Backbone.Router.extend({
 		this.show('login', 'sign-up');
 	}, // login
 
+	dashboard: function() {
+		if (this.isForbidden()) {
+			this.forbidden();
+			return;
+		} // if
+
+		if (this.getAuth())
+			this.show('dashboard', 'log-off');
+		else
+			this.signup();
+	}, // dashboard
+
 	forbidden: function() {
 		this.show(this.forbiddenSection());
 	}, // forbidden
+
+	isForbidden: function() {
+		return '-' === this.getAuth();
+	}, // isForbidden
+
+	getAuth: function() {
+		return $('body').attr('data-auth');
+	}, // getAuth
+
+	setAuth: function(sAuth) {
+		$('body').attr('data-auth', sAuth || '');
+	}, // setAuth
 
 	show: function(sSectionName, sButtonClass) {
 		sSectionName = sSectionName.toLowerCase();
@@ -30,9 +60,7 @@ EzBob.Broker.Router = Backbone.Router.extend({
 		if (sSectionName === this.forbiddenSection())
 			oSection = $('.section-' + sSectionName);
 		else {
-			var sAuth = $('body').attr('data-auth');
-
-			if (sAuth === '-')
+			if (this.isForbidden())
 				sSectionName = this.forbiddenSection();
 
 			oSection = $('.section-' + sSectionName);
@@ -71,6 +99,6 @@ EzBob.Broker.Router = Backbone.Router.extend({
 			this.views = {};
 
 		if (!this.views[sViewName])
-			this.views[sViewName] = new oViewType();
+			this.views[sViewName] = new oViewType({ router: this, });
 	}, // createView
 }); // EzBob.Broker.Router

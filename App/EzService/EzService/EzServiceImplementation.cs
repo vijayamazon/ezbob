@@ -6,6 +6,7 @@
 	using System.ServiceModel;
 	using System.Threading;
 	using EzBob.Backend.Strategies;
+	using EzBob.Backend.Strategies.Broker;
 	using EzBob.Backend.Strategies.MailStrategies;
 	using EzBob.Backend.Strategies.QuickOffer;
 	using EzServiceConfiguration;
@@ -515,6 +516,32 @@
 				throw new FaultException(e.Message);
 			} // try
 		} // QuickOfferWithPrerequisites
+
+		public ActionMetaData BrokerSignup(
+			string FirmName,
+			string FirmRegNum,
+			string ContactName,
+			string ContactEmail,
+			string ContactMobile,
+			string MobileCode,
+			string ContactOtherPhone,
+			decimal EstimatedMonthlyClientAmount,
+			string Password,
+			string Password2
+		) {
+			return ExecuteSync<BrokerSignup>(null, null,
+				FirmName,
+				FirmRegNum,
+				ContactName,
+				ContactEmail,
+				ContactMobile,
+				MobileCode,
+				ContactOtherPhone,
+				EstimatedMonthlyClientAmount,
+				Password,
+				Password2
+			);
+		} // BrokerSignup
 
 		#endregion IEzService exposed methods
 

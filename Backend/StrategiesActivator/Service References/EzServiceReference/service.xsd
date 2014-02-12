@@ -824,4 +824,27 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="BrokerSignup">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="FirmName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="FirmRegNum" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="ContactName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="ContactEmail" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="ContactMobile" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="MobileCode" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="ContactOtherPhone" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="EstimatedMonthlyClientAmount" type="xs:decimal" />
+        <xs:element minOccurs="0" name="Password" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Password2" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BrokerSignupResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q61="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="BrokerSignupResult" nillable="true" type="q61:ActionMetaData" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
 </xs:schema>

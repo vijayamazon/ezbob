@@ -158,6 +158,20 @@ namespace EzService {
 		
 		[OperationContract]
 		ActionMetaData FinishWizard(int customerId);
+
+		[OperationContract]
+		ActionMetaData BrokerSignup(
+			string FirmName,
+			string FirmRegNum,
+			string ContactName,
+			string ContactEmail,
+			string ContactMobile,
+			string MobileCode,
+			string ContactOtherPhone,
+			decimal EstimatedMonthlyClientAmount,
+			string Password,
+			string Password2
+		);
 	} // interface IEzService
 
 	#endregion interface IEzService

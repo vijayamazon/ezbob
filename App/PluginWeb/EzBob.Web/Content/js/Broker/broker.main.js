@@ -26,7 +26,7 @@ $(document).ready(function() {
 		else if (o.hasClass('sign-up'))
 			oRouter.signup();
 		else
-			window.location = 'http://www.ezbob.com';
+			oRouter.logoff();
 	});
 
 	var oFieldStatusIcons = $('IMG.field_status');

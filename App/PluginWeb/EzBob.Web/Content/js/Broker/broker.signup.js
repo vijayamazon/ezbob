@@ -6,6 +6,8 @@ EzBob.Broker.SignupView = Backbone.View.extend({
 		this.$el = $('.section-signup');
 		this.initValidatorCfg();
 
+		this.router = this.options.router;
+
 		this.passwordStrengthView = new EzBob.StrengthPasswordView({
 			model: new EzBob.StrengthPassword(),
 			el: $('#strength-password-view'),
@@ -15,14 +17,85 @@ EzBob.Broker.SignupView = Backbone.View.extend({
 
 	events: {
 		'click #generateMobileCode': 'generateMobileCode',
+
 		'keyup #ContactMobile': 'mobilePhoneChanged',
+		'paste #ContactMobile': 'mobilePhoneChanged',
+		'cut #ContactMobile': 'mobilePhoneChanged',
+
+		'click #SignupBrokerButton': 'performSignup',
 
 		'change input': 'inputChanged',
 		'keyup  input': 'inputChanged',
 		'change select': 'inputChanged',
 	}, // events
 
+	clear: function() {
+		this.$el.find(
+			'#FirmName, #FirmRegNum, ' +
+			'#ContactName, #ContactEmail, #ContactMobile, #ContactOtherPhone, ' +
+			'#MobileCode, #EstimatedMonthlyClientAmount, #Password, #Password2'
+		).val('').blur();
+
+		this.inputChanged();
+	}, // clear
+
+	performSignup: function() {
+		event.preventDefault();
+		event.stopPropagation();
+
+		var oBtn = this.$el.find('#SignupBrokerButton');
+
+		if (oBtn.hasClass('disabled') || oBtn.attr('disabled') || oBtn.prop('disabled'))
+			return;
+
+		this.setSignupEnabled(false);
+		BlockUi();
+
+		var sEmail = this.$el.find('#ContactEmail').val();
+
+		var oData = this.$el.find('form').serializeArray();
+
+		var amt = _.find(oData, function(d) { return d.name === 'EstimatedMonthlyClientAmount'; });
+		if (amt)
+			amt.value = this.$el.find('#EstimatedMonthlyClientAmount').autoNumericGet();
+
+		var oRequest = $.post('' + window.gRootPath + 'Broker/BrokerHome/Signup', oData);
+
+		var self = this;
+
+		oRequest.success(function(res) {
+			UnBlockUi();
+
+			if (res.success) {
+				EzBob.App.trigger('clear');
+				self.clear();
+				self.router.setAuth(sEmail);
+				self.router.dashboard();
+				return;
+			} // if
+
+			if (res.error)
+				EzBob.App.trigger('error', res.error);
+
+			self.setSignupEnabled(true);
+		}); // on success
+
+		oRequest.fail(function() {
+			UnBlockUi();
+			self.setSignupEnabled(true);
+			EzBob.App.trigger('error', 'Failed to sign up. Please retry.');
+		});
+	}, // performSignup
+
 	render: function() {
+		if (this.router.isForbidden()) {
+			this.clear();
+			this.setSignupEnabled(false);
+			return this;
+		} // if
+
+		this.router.setAuth();
+
 		this.$el.find('#EstimatedMonthlyClientAmount').moneyFormat();
 
 		this.$el.find('.phonenumber').numericOnly(11);
@@ -37,14 +110,34 @@ EzBob.Broker.SignupView = Backbone.View.extend({
 		return this;
 	}, // render
 
+	setSignupEnabled: function(bEnabled) {
+		return this.setSomethingEnabled('#SignupBrokerButton', bEnabled);
+	}, // setSignupEnabled
+
+	setSomethingEnabled: function(sSelector, bEnabled) {
+		var oElm = this.$el.find(sSelector);
+
+		if (bEnabled)
+			oElm.removeClass('disabled').removeAttr('disabled').removeProp('disabled');
+		else
+			oElm.addClass('disabled').attr('disabled', 'disabled').prop('disabled', 'disabled');
+
+		return oElm;
+	}, // setSomethingEnabled
+
 	inputChanged: function(evt) {
-		var enabled = EzBob.Validation.checkForm(this.validator);
-		this.$el.find('#SignupBrokerButton').toggleClass('disabled', !enabled);
+		this.setSignupEnabled(EzBob.Validation.checkForm(this.validator));
 	}, // inputChanged
 
 	mobilePhoneChanged: function() {
-		var isValidPhone = this.validator.check(this.$el.find('#ContactMobile'));
-		$('#generateMobileCode').toggleClass('disabled', !isValidPhone);
+		this.setSomethingEnabled(
+			'#generateMobileCode', this.validator.check(this.$el.find('#ContactMobile'))
+		).val('Send activation code');
+
+		this.$el.find('#MobileCode').val('').blur();
+		this.$el.find('#mobileCodeDiv').hide();
+		this.$el.find('#codeSentLabel').animate({ opacity: 0 }).hide();
+
 		return false;
 	}, // mobilePhoneChanged
 
@@ -120,7 +213,6 @@ EzBob.Broker.SignupView = Backbone.View.extend({
 			errorPlacement: EzBob.Validation.errorPlacement,
 			unhighlight: EzBob.Validation.unhighlightFS,
 			highlight: EzBob.Validation.highlightFS,
-			ignore: ':not(:visible)',
 		});
 	}, // initValidatorCfg
 }); // EzBob.Broker.SignupView

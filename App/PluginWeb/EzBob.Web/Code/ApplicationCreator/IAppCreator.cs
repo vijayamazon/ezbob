@@ -48,5 +48,17 @@ namespace EzBob.Web.Code.ApplicationCreator
 		void LoanFullyPaid(Loan loan);
 		QuickOfferModel QuickOfferWithPrerequisites(Customer customer, bool saveOfferToDB);
 		QuickOfferModel QuickOffer(Customer customer, bool saveOfferToDB);
+		void BrokerSignup(
+			string FirmName,
+			string FirmRegNum,
+			string ContactName,
+			string ContactEmail,
+			string ContactMobile,
+			string MobileCode,
+			string ContactOtherPhone,
+			decimal EstimatedMonthlyClientAmount,
+			string Password,
+			string Password2
+		);
 	}
 }

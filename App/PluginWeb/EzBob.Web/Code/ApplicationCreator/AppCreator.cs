@@ -585,6 +585,32 @@
 			} // try
 		} // QuickOfferWithPrerequisites
 
+		public void BrokerSignup(
+			string FirmName,
+			string FirmRegNum,
+			string ContactName,
+			string ContactEmail,
+			string ContactMobile,
+			string MobileCode,
+			string ContactOtherPhone,
+			decimal EstimatedMonthlyClientAmount,
+			string Password,
+			string Password2
+		) {
+			ServiceClient.BrokerSignup(
+				FirmName,
+				FirmRegNum,
+				ContactName,
+				ContactEmail,
+				ContactMobile,
+				MobileCode,
+				ContactOtherPhone,
+				EstimatedMonthlyClientAmount,
+				Password,
+				Password2
+			);
+		} // BrokerSignup
+
 		#region property ServiceClient
 		
 		private EzServiceClient ServiceClient {
