@@ -58,7 +58,7 @@ namespace EzBob.Web.Code.Agreements
 			model.TypeOfBusinessName = model.Customer.CustomerPersonalInfo.TypeOfBusinessName;
 
 			var businessType = model.Customer.CustomerPersonalInfo.TypeOfBusiness;
-			var company = customer.Companies.FirstOrDefault();
+			var company = customer.Company;
 			if (businessType.Reduce() != TypeOfBusinessReduced.Limited && company != null)
 			{
 				model.CompanyName = company.ExperianCompanyName ?? company.CompanyName;

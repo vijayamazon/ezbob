@@ -61,8 +61,8 @@
 			summary.WebSiteTurnOver = customer.PersonalInfo.WebSiteTurnOver;
 			summary.Comment = customer.Comment;
 
-			summary.CompanyEmployeeCountInfo = new CompanyEmployeeCountInfo(customer.Companies.FirstOrDefault());
-			summary.CompanyInfo = CompanyInfoMap.FromCompany(customer.Companies.FirstOrDefault());
+			summary.CompanyEmployeeCountInfo = new CompanyEmployeeCountInfo(customer.Company);
+			summary.CompanyInfo = CompanyInfoMap.FromCompany(customer.Company);
 			summary.IsOffline = customer.IsOffline;
 
 			return summary;

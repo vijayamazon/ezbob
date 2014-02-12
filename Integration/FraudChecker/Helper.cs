@@ -56,11 +56,8 @@ namespace FraudChecker
                 return retVal;
             }
 	        
-			var businessPhones = customer.Companies.Select(x => x.BusinessPhone).ToList();
-	        foreach (var businessPhone in businessPhones)
-	        {
-		        retVal.Add("BusinessPhone", businessPhone);
-	        }
+			var businessPhone = customer.Company.BusinessPhone;
+	        retVal.Add("BusinessPhone", businessPhone);
             
             if (customer.PersonalInfo != null && !string.IsNullOrEmpty(customer.PersonalInfo.DaytimePhone))
                 retVal.Add("DaytimePhone", customer.PersonalInfo.DaytimePhone);

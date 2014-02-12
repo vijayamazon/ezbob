@@ -10,7 +10,6 @@ namespace EZBob.DatabaseLib.Model.Database
 	public class Company
 	{
 		public virtual int Id { get; set; }
-		public virtual Customer Customer { get; set; }
 		public virtual TypeOfBusiness TypeOfBusiness { get; set; }
 		public virtual VatReporting? VatReporting { get; set; }
 		public virtual string CompanyNumber { get; set; }
@@ -67,7 +66,6 @@ namespace EZBob.DatabaseLib.Model.Database
 			Cache.ReadWrite().Region("LongTerm").ReadWrite();
 
 			Id(x => x.Id);
-			References(x => x.Customer, "CustomerId");
 			Map(x => x.TypeOfBusiness).CustomType<TypeOfBusinessType>();
 			Map(x => x.VatReporting).CustomType<VatReportingType>();
 			Map(x => x.CompanyNumber).Length(100);

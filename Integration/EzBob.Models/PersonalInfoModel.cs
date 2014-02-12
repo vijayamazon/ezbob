@@ -107,7 +107,7 @@
 				StrategyError = session != null ? session.CreateSQLQuery(sql).UniqueResult<string>() : "";
 			} // if
 
-			CompanyEmployeeCountInfo = new CompanyEmployeeCountInfo(customer.Companies.FirstOrDefault());
+			CompanyEmployeeCountInfo = new CompanyEmployeeCountInfo(customer.Company);
 
 			ActiveCampaign = "";
 			var activeCampaigns = customer.ActiveCampaigns

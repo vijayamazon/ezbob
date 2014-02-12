@@ -292,11 +292,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 				.Cascade.All()
 				.Inverse();
 
-			HasMany(x => x.Companies)
-				.AsBag()
-				.KeyColumn("CustomerId")
-				.Cascade.All()
-				.Inverse();
+			References(x => x.Company, "CompanyId").Cascade.All();
 
 			Map(x => x.CciMark);
 			Map(x => x.GoogleCookie).Length(300);

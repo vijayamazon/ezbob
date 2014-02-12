@@ -80,7 +80,8 @@
 			IPersonalInfoHistoryRepository personalInfoHistoryRepository,
 			IAppCreator creator,
 			ISession session,
-			CashRequestBuilder crBuilder
+			CashRequestBuilder crBuilder,
+			ICustomerRepository _customerRepository
 			)
 		{
 			_context = context;
@@ -89,6 +90,7 @@
 			_creator = creator;
 			_session = session;
 			_crBuilder = crBuilder;
+			customerRepository = _customerRepository;
 		}
 
 		// constructor
@@ -352,7 +354,7 @@
 				);
 			} // if
 
-			var company = customer.Companies.FirstOrDefault();
+			var company = customer.Company;
 			if (company != null)
 			{
 				company.BusinessPhone = businessPhone;
@@ -661,19 +663,8 @@
 			Customer customer
 		)
 		{
-			Company company;
-			if (!customer.Companies.Any())
-			{
-				customer.Companies = new List<Company>();
-				company = new Company();
-				customer.Companies.Add(company);
-			}
-			else
-			{
-				company = customer.Companies.First();
-			}
-
-			company.Customer = customer;
+			Company company = new Company();
+			
 			company.ExperianCompanyName = experianInfo.BusName;
 			company.ExperianRefNum = experianInfo.BusRefNum;
 			company.TypeOfBusiness = companyData.TypeOfBusiness;
@@ -687,6 +678,8 @@
 			company.RentMonthLeft = companyData.RentMonthLeft;
 			company.CapitalExpenditure = companyData.CapitalExpenditure;
 			company.VatReporting = companyData.VatReporting;
+			
+			customer.Company = company;
 
 			if (directors != null)
 			{
@@ -860,7 +853,7 @@
 		{
 			string businessPhone = "";
 			IList<CustomerAddress> companyAddress = null;
-			var company = customer.Companies.FirstOrDefault();
+			var company = customer.Company;
 			if (company != null)
 			{
 				businessPhone = company.BusinessPhone;
@@ -894,6 +887,7 @@
 		private readonly CashRequestBuilder _crBuilder;
 		private readonly IConcentAgreementHelper _concentAgreementHelper = new ConcentAgreementHelper();
 		private readonly DatabaseDataHelper _helper;
+		private static ICustomerRepository customerRepository;
 		private static readonly ILog ms_oLog = LogManager.GetLogger(typeof(CustomerDetailsController));
 
 		#endregion private properties

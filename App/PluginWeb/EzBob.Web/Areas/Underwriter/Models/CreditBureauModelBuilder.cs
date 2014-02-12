@@ -630,7 +630,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 										 bool getFromLog = false, long? logId = null)
 		{
 			var srv = new EBusinessService();
-			var company = customer.Companies.FirstOrDefault();
+			var company = customer.Company;
 			if(company == null) return;
 			switch (company.TypeOfBusiness.Reduce())
 			{

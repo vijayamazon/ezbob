@@ -89,7 +89,7 @@
 		public void SaveTargetingData(int customerId, string companyRefNum, string companyName, string addr1, string addr2, string addr3, string addr4, string postcode)
 		{
 			var customer = _customerRepository.Get(customerId);
-			var company = customer.Companies.FirstOrDefault();
+			var company = customer.Company;
 			if (company != null)
 			{
 				company.ExperianRefNum = companyRefNum;

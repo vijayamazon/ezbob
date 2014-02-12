@@ -144,7 +144,7 @@ namespace EzBob.Web.Areas.Customer.Models
 
             customerModel.GreetingMailSentDate = customer.GreetingMailSentDate;
 
-			var company = customer.Companies.FirstOrDefault();
+			var company = customer.Company;
 			if (company != null)
 			{
 				customerModel.CompanyInfo = CompanyInfoMap.FromCompany(company);
@@ -159,7 +159,7 @@ namespace EzBob.Web.Areas.Customer.Models
                 customerModel.OtherPropertyAddress = customer.AddressInfo.OtherPropertyAddress.ToArray();
             }
 
-			customerModel.CompanyEmployeeCountInfo = new CompanyEmployeeCountInfo(customer.Companies.FirstOrDefault());
+			customerModel.CompanyEmployeeCountInfo = new CompanyEmployeeCountInfo(customer.Company);
 
             customerModel.ApplyCount = customer.ApplyCount;
             customerModel.CreditCardNo = customer.CreditCardNo;

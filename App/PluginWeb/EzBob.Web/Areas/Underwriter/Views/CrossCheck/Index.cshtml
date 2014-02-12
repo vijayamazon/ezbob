@@ -355,7 +355,7 @@
     string companyRefNum = null, companyNum = null, companyName = null, industryType = null, vatReporting = null;
     Iesi.Collections.Generic.ISet<CustomerAddress> postcode = null;
     bool propertyOwnedByCompany = false;
-    var company = Model.Customer.Companies.FirstOrDefault();
+    var company = Model.Customer.Company;
 
     var companyType = (Model.Customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited ? "L" : "N");
     industryType = Model.Customer.PersonalInfo.IndustryType.DescriptionAttr<IndustryType?>();

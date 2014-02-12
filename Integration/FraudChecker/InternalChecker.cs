@@ -212,7 +212,7 @@ namespace FraudChecker
 			//check from customer info
 			foreach (var cd in customerPortion)
 			{
-				var company = cd.Companies.FirstOrDefault();
+				var company = cd.Company;
 				foreach (var customerPhone in customerPhones)
 				{
 					if (cd.PersonalInfo == null) continue;
@@ -344,7 +344,7 @@ namespace FraudChecker
 																	 Customer customer,
 																	 bool isSkipLast = false)
 		{
-			var directorPortion = customers.SelectMany(c => c.Companies).SelectMany(cc => cc.Directors).ToList();
+			var directorPortion = customers.SelectMany(c => c.Company.Directors).ToList();
 			// First + Middle + Last
 			fraudDetections.AddRange(
 				from d in directorPortion
@@ -394,16 +394,16 @@ namespace FraudChecker
 													 IEnumerable<Customer> customerPortion)
 		{
 			//Name of company
-			var company = customer.Companies.FirstOrDefault();
+			var company = customer.Company;
 			if (company != null)
 			{
 				var companyName = company.CompanyName;
 				if (string.IsNullOrEmpty(companyName)) return;
 				fraudDetections.AddRange(
 					from c in customerPortion
-					where c.WizardStep.TheLastOne && c.Companies.Any()
+					where c.WizardStep.TheLastOne && c.Company != null
 					where
-						(c.Companies.First().CompanyName ?? "").ToLower() == companyName.ToLower()
+						(c.Company.CompanyName ?? "").ToLower() == companyName.ToLower()
 					select
 						Helper.CreateDetection("Customer CompanyName", customer, c,
 											   "Customer CompanyName",

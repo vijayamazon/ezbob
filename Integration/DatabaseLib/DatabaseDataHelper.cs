@@ -1596,7 +1596,7 @@ namespace EZBob.DatabaseLib
 				}
 			}
 
-			var company = customer.Companies.FirstOrDefault();
+			var company = customer.Company;
 			if (company != null)
 			{
 				var directorsNames = company.Directors.Select(d => d.Surname.ToLowerInvariant().Trim()).ToList();

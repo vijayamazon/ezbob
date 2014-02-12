@@ -43,7 +43,7 @@
 			_yodleeSearchWords.Add(string.Format("{0}{1}", CustomerSurname, customer.PersonalInfo.Surname));
 
 			//Add directors surnames
-			var directors = customer.Companies.SelectMany(x => x.Directors).Select(d => d.Surname).ToList();
+			var directors = customer.Company.Directors.Select(d => d.Surname).ToList();
 			
 			foreach (var director in directors)
 			{

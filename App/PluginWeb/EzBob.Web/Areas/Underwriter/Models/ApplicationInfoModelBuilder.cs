@@ -155,7 +155,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 			model.AMLResult = customer.AMLResult;
 			model.SkipPopupForApprovalWithoutAML = approvalsWithoutAMLRepository.ShouldSkipById(customer.Id);
 
-			var company = customer.Companies.FirstOrDefault();
+			var company = customer.Company;
 			model.EmployeeCount = new CompanyEmployeeCount().EmployeeCount;
 			if (company != null)
 			{

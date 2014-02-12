@@ -64,13 +64,12 @@ namespace FraudChecker
 
 		private void ExternalPhoneCheck(Customer customer, List<FraudDetection> fraudDetections)
 		{
-			var bussinessPhones = customer.Companies.Select(x => new { x.BusinessPhone, TypeOfBusiness = x.TypeOfBusiness.Reduce() }).ToList();
 			var phone = string.Empty;
 			var phoneType = string.Empty;
-			if (bussinessPhones.Any())
+			if (customer.Company != null)
 			{
-				phone = bussinessPhones.First().BusinessPhone;
-				phoneType = bussinessPhones.First().TypeOfBusiness.ToString();
+				phone = customer.Company.BusinessPhone;
+				phoneType = customer.Company.TypeOfBusiness.Reduce().ToString();
 			}
 			//phones check
 
@@ -122,7 +121,7 @@ namespace FraudChecker
 		private void ExternalCompanyCheck(Customer customer, List<FraudDetection> fraudDetections)
 		{
 			//companys check
-			var company = customer.Companies.FirstOrDefault();
+			var company = customer.Company;
 			string companyName = null;
 			if (company != null)
 			{
