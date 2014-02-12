@@ -8,9 +8,7 @@ $(document).ready(function() {
 	var oRouter = new EzBob.Broker.Router();
 	Backbone.history.start();
 
-	var sAuth = $('body').attr('data-auth');
-
-	if (sAuth === '-') {
+	if (oRouter.isForbidden()) {
 		oRouter.forbidden();
 		return;
 	} // if
