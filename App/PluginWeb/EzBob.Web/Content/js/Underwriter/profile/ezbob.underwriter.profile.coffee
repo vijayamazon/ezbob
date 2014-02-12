@@ -355,7 +355,7 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
        
         @$el.find("#SuspendBtn, #RejectBtn, #ApproveBtn, #EscalateBtn, #ReturnBtn").toggleClass "disabled", disabled
         @$el.find("#SuspendBtn, #RejectBtn, #ApproveBtn, #EscalateBtn, #ReturnBtn").hide() if isHideAll
-
+        
         switch creditResult
             when  "WaitingForDecision"
                 @$el.find("#ReturnBtn").hide()
@@ -381,6 +381,14 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
                 @$el.find("#ApproveBtn").hide()
                 @$el.find("#SuspendBtn").hide()
                 @$el.find("#EscalateBtn").hide()
+
+        userStatus = @personalInfoModel.get("UserStatus")
+        if userStatus == 'Registered'
+            @$el.find("#ReturnBtn").hide()
+            @$el.find("#RejectBtn").hide()
+            @$el.find("#ApproveBtn").hide()
+            @$el.find("#SuspendBtn").hide()
+            @$el.find("#EscalateBtn").hide()
 
     updateAlerts: ->
         @alertsModel.fetch()

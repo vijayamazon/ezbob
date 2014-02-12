@@ -491,7 +491,7 @@
     };
 
     ProfileView.prototype.changeDecisionButtonsState = function(isHideAll) {
-      var creditResult, disabled;
+      var creditResult, disabled, userStatus;
 
       disabled = this.personalInfoModel.get("Disabled") === 1;
       creditResult = this.personalInfoModel.get("CreditResult");
@@ -506,7 +506,7 @@
           this.$el.find("#ApproveBtn").show();
           this.$el.find("#SuspendBtn").show();
           if (!escalatedFlag) {
-            return this.$el.find("#EscalateBtn").show();
+            this.$el.find("#EscalateBtn").show();
           }
           break;
         case "Rejected":
@@ -516,19 +516,29 @@
           this.$el.find("#RejectBtn").hide();
           this.$el.find("#ApproveBtn").hide();
           this.$el.find("#SuspendBtn").hide();
-          return this.$el.find("#EscalateBtn").hide();
+          this.$el.find("#EscalateBtn").hide();
+          break;
         case "Escalated":
           this.$el.find("#ReturnBtn").hide();
           this.$el.find("#RejectBtn").show();
           this.$el.find("#ApproveBtn").show();
           this.$el.find("#SuspendBtn").show();
-          return this.$el.find("#EscalateBtn").hide();
+          this.$el.find("#EscalateBtn").hide();
+          break;
         case "ApprovedPending":
           this.$el.find("#ReturnBtn").show();
           this.$el.find("#RejectBtn").hide();
           this.$el.find("#ApproveBtn").hide();
           this.$el.find("#SuspendBtn").hide();
-          return this.$el.find("#EscalateBtn").hide();
+          this.$el.find("#EscalateBtn").hide();
+      }
+      userStatus = this.personalInfoModel.get("UserStatus");
+      if (userStatus === 'Registered') {
+        this.$el.find("#ReturnBtn").hide();
+        this.$el.find("#RejectBtn").hide();
+        this.$el.find("#ApproveBtn").hide();
+        this.$el.find("#SuspendBtn").hide();
+        return this.$el.find("#EscalateBtn").hide();
       }
     };
 
