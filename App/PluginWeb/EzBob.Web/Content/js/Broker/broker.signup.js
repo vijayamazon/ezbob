@@ -96,6 +96,8 @@ EzBob.Broker.SignupView = Backbone.View.extend({
 
 		this.router.setAuth();
 
+		this.$el.find('.customer-sidebar').append($('.common-customer-sidebar'));
+
 		this.$el.find('#EstimatedMonthlyClientAmount').moneyFormat();
 
 		this.$el.find('.phonenumber').numericOnly(11);
@@ -106,6 +108,8 @@ EzBob.Broker.SignupView = Backbone.View.extend({
 		this.inputChanged();
 
 		this.$el.find('#FirmName').focus();
+
+		EzBob.UiAction.registerView(this);
 
 		return this;
 	}, // render

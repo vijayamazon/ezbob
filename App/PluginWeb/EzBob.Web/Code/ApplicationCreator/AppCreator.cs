@@ -611,6 +611,10 @@
 			);
 		} // BrokerSignup
 
+		public void BrokerLogin(string Email, string Password) {
+			ServiceClient.BrokerLogin(Email, Password);
+		} // BrokerLogin
+
 		#region property ServiceClient
 		
 		private EzServiceClient ServiceClient {

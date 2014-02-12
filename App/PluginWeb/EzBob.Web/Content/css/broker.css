@@ -1,1 +1,5 @@
-﻿
+﻿.login-form a {
+	font-weight: bold;
+	margin-bottom: 1em;
+	display: inline-block;
+}

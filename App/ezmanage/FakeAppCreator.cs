@@ -206,5 +206,7 @@
 			string Password2
 		)
 		{}
+
+		public void BrokerLogin(string Email, string Password) {}
 	}
 }

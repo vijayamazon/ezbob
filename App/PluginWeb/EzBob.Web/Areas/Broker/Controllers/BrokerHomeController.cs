@@ -108,6 +108,8 @@
 
 			FormsAuthentication.SetAuthCookie(ContactEmail, true);
 
+			oLog.Debug("Broker signup succeded for: {0}", ContactEmail);
+
 			return Json(new { success = true, error = string.Empty, });
 		} // Signup
 
@@ -130,6 +132,33 @@
 		} // Logoff
 
 		#endregion action Logoff
+
+		#region action Login
+
+		[HttpPost]
+		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		public JsonResult Login(string LoginEmail, string LoginPassword) {
+			ASafeLog oLog = new SafeILog(LogManager.GetLogger(typeof(BrokerHomeController)));
+
+			oLog.Debug("Broker login request: {0}", LoginEmail);
+
+			try {
+				m_oAppCreator.BrokerLogin(LoginEmail, LoginPassword);
+			}
+			catch (Exception e) {
+				oLog.Alert(e, "Failed to login as a broker.");
+				return Json(new { success = false, error = "Failed to login.", });
+			} // try
+
+			FormsAuthentication.SetAuthCookie(LoginEmail, true);
+
+			oLog.Debug("Broker login succeded for: {0}", LoginEmail);
+
+			return Json(new { success = true, error = string.Empty, });
+		} // Login
+
+		#endregion action Login
 
 		#endregion public
 

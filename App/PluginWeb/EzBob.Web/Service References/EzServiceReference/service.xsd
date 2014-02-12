@@ -847,4 +847,19 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="BrokerLogin">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Password" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BrokerLoginResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q62="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="BrokerLoginResult" nillable="true" type="q62:ActionMetaData" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
 </xs:schema>

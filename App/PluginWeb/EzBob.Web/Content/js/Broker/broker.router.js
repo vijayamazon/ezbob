@@ -7,23 +7,60 @@ EzBob.Broker.Router = Backbone.Router.extend({
 		'signup': 'signup',
 		'login': 'login',
 		'dashboard': 'dashboard',
+		'forgotten': 'forgotten',
 		'*z': 'forbidden',
 	},
 
 	logoff: function() {
 		$.post('' + window.gRootPath + 'Broker/BrokerHome/Logoff');
-		window.location = 'http://www.ezbob.com';
+		this.setAuth();
+		this.login();
 	}, // logoff
 
 	signup: function() {
-		this.show('signup', 'log-in');
-		this.createView('signup', EzBob.Broker.SignupView);
-		this.views.signup.render();
+		if (this.isForbidden()) {
+			this.forbidden();
+			return;
+		} // if
+
+		if (this.getAuth())
+			this.show('dashboard', 'log-off');
+		else {
+			this.show('signup', 'log-in');
+			this.createView('signup', EzBob.Broker.SignupView);
+			this.views.signup.render();
+		} // if
 	}, // signup
 
 	login: function() {
-		this.show('login', 'sign-up');
+		if (this.isForbidden()) {
+			this.forbidden();
+			return;
+		} // if
+
+		if (this.getAuth())
+			this.show('dashboard', 'log-off');
+		else {
+			this.show('login', 'sign-up');
+			this.createView('login', EzBob.Broker.LoginView);
+			this.views.login.render();
+		} // if
 	}, // login
+
+	forgotten: function() {
+		if (this.isForbidden()) {
+			this.forbidden();
+			return;
+		} // if
+
+		if (this.getAuth())
+			this.show('dashboard', 'log-off');
+		else {
+			this.show('forgotten', 'sign-up');
+			// this.createView('forgotten', EzBob.Broker.ForgottenView);
+			// this.views.forgotten.render();
+		} // if
+	}, // forgotten
 
 	dashboard: function() {
 		if (this.isForbidden()) {
@@ -34,7 +71,7 @@ EzBob.Broker.Router = Backbone.Router.extend({
 		if (this.getAuth())
 			this.show('dashboard', 'log-off');
 		else
-			this.signup();
+			this.login();
 	}, // dashboard
 
 	forbidden: function() {

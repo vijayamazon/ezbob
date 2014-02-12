@@ -1084,6 +1084,12 @@ namespace StrategiesActivator.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerSignup", ReplyAction="http://tempuri.org/IEzService/BrokerSignupResponse")]
         System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> BrokerSignupAsync(string FirmName, string FirmRegNum, string ContactName, string ContactEmail, string ContactMobile, string MobileCode, string ContactOtherPhone, decimal EstimatedMonthlyClientAmount, string Password, string Password2);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLogin", ReplyAction="http://tempuri.org/IEzService/BrokerLoginResponse")]
+        StrategiesActivator.EzServiceReference.ActionMetaData BrokerLogin(string Email, string Password);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLogin", ReplyAction="http://tempuri.org/IEzService/BrokerLoginResponse")]
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> BrokerLoginAsync(string Email, string Password);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -1519,6 +1525,14 @@ namespace StrategiesActivator.EzServiceReference {
         
         public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> BrokerSignupAsync(string FirmName, string FirmRegNum, string ContactName, string ContactEmail, string ContactMobile, string MobileCode, string ContactOtherPhone, decimal EstimatedMonthlyClientAmount, string Password, string Password2) {
             return base.Channel.BrokerSignupAsync(FirmName, FirmRegNum, ContactName, ContactEmail, ContactMobile, MobileCode, ContactOtherPhone, EstimatedMonthlyClientAmount, Password, Password2);
+        }
+        
+        public StrategiesActivator.EzServiceReference.ActionMetaData BrokerLogin(string Email, string Password) {
+            return base.Channel.BrokerLogin(Email, Password);
+        }
+        
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> BrokerLoginAsync(string Email, string Password) {
+            return base.Channel.BrokerLoginAsync(Email, Password);
         }
     }
 }

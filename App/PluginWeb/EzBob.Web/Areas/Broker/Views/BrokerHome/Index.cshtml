@@ -79,7 +79,7 @@
 				<div class="notifications"></div>
 
 				<div class="page-section hide section-signup">
-					<form class="signup-form" id="content" novalidate="novalidate">
+					<form class="signup-form broker-form" novalidate="novalidate">
 						@{ int nSignupTabIdx = 1; }
 						<h2 class="form-start">Create broker account</h2>
 
@@ -168,21 +168,50 @@
 
 						<div class="form_buttons_container">
 							<div class="attardi-button">
-								<button type="button" id="SignupBrokerButton" class="rc-button green disabled pull-right" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" ui-event-control-id="broker:signup-submit">Continue</button>
+								<button type="submit" id="SignupBrokerButton" class="rc-button green disabled pull-right" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" ui-event-control-id="broker:signup-submit">Sign up</button>
 							</div>
 						</div>
 					</form>
 
-					<aside class="customer-sidebar broker">
-						@{Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_Sidebar.cshtml");}
-					</aside>
+					<aside class="customer-sidebar broker"></aside>
 				</div>
 				<!-- section-signup -->
 
-				<div class="page-section hide section-login">Login</div>
+				<div class="page-section hide section-login">
+					<form class="login-form broker-form" novalidate="novalidate">
+						@{ int nLoginTabIdx = 1; }
+						<h2 class="form-start">Broker login</h2>
+						
+						<a href="#" class="ForgottenPassword">Forgotten password</a> | <a href="#" class="Signup">Sign up</a>
+
+						<div class="form_field_container">
+							<label class="attardi-input">
+								<span>Contact person email</span>
+								<input type="email" name="LoginEmail" id="LoginEmail" tabindex="@{ WriteLiteral(nLoginTabIdx++); }" class="form_field" ui-event-control-id="broker:login-email" />
+								<img id="LoginEmailImage" class="field_status required" />
+							</label>
+						</div>
+
+						<div class="form_field_container">
+							<label class="attardi-input">
+								<span>Password</span>
+								<input type="password" name="LoginPassword" id="LoginPassword" tabindex="@{ WriteLiteral(nLoginTabIdx++); }" class="form_field" ui-event-control-id="broker:login-password" />
+								<img id="LoginPasswordImage" class="field_status required" />
+							</label>
+						</div>
+
+						<div class="form_buttons_container">
+							<div class="attardi-button">
+								<button type="submit" id="LoginBrokerButton" class="rc-button green disabled pull-right" tabindex="@{ WriteLiteral(nLoginTabIdx++); }" ui-event-control-id="broker:login-submit">Login</button>
+							</div>
+						</div>
+					</form>
+
+					<aside class="customer-sidebar broker"></aside>
+				</div>
 				<!-- section-login -->
 
-				<div class="page-section hide section-forgot">Restore password</div>
+				<div class="page-section hide section-forgotten">Restore password</div>
 				<!-- section-forgot -->
 
 				<div class="page-section hide section-dashboard">Customer list and Own details</div>
@@ -206,6 +235,11 @@
 		@{ Html.RenderPartial("_Copyright"); }
 	</footer>
 
+	<div class="hide" style="display: none !important;">
+		<div class="common-customer-sidebar">
+			@{Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_Sidebar.cshtml");}
+		</div>
+	</div>
 	<!-- scripts - begin -->
 <!--[if lt IE 9]>
 <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -262,6 +296,7 @@
 			.Add("~/Content/js/ezbob.uiaction.js")
 			.Add("~/Content/js/ezbob.strengthPassword.js")
 			.AddString(BundleHelper.GetDbStrings())
+			.Add("~/Content/js/Broker/broker.login.js")
 			.Add("~/Content/js/Broker/broker.signup.js")
 			.Add("~/Content/js/Broker/broker.router.js")
 			.Add("~/Content/js/Broker/broker.main.js")

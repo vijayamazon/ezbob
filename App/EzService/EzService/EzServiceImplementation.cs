@@ -543,6 +543,10 @@
 			);
 		} // BrokerSignup
 
+		public ActionMetaData BrokerLogin(string Email, string Password) {
+			return ExecuteSync<BrokerLogin>(null, null, Email, Password);
+		} // BrokerLogin
+
 		#endregion IEzService exposed methods
 
 		#region method IDisposable.Dispose

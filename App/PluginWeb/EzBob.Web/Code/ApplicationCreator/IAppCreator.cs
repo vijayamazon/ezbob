@@ -60,5 +60,6 @@ namespace EzBob.Web.Code.ApplicationCreator
 			string Password,
 			string Password2
 		);
+		void BrokerLogin(string Email, string Password);
 	}
 }

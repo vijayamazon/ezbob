@@ -930,6 +930,7 @@
       <DependentUpon>ezbob.GA.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\App\ezbob.validation.js" />
+    <Content Include="Content\js\Broker\broker.login.js" />
     <Content Include="Content\js\Broker\broker.main.js" />
     <Content Include="Content\js\Broker\broker.router.js" />
     <Content Include="Content\js\Broker\broker.signup.js" />
