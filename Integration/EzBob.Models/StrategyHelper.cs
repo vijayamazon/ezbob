@@ -143,16 +143,21 @@
 				var av = mp.Value;
 				if (av != null)
 				{
-					string parameterName;
+					string annualizedParameterName = mp.Key.Marketplace.Name == "Pay Pal" ? "Total Net In Payments Annualized" : "Total Sum of Orders Annualized";
+					IAnalysisDataParameterInfo relevantTurnover;
 					if (period == TimePeriodEnum.Month || period == TimePeriodEnum.Month3 || period == TimePeriodEnum.Month6)
 					{
-						parameterName = mp.Key.Marketplace.Name == "Pay Pal" ? "Total Net In Payments Annualized" : "Total Sum of Orders Annualized";
+						relevantTurnover = av.LastOrDefault(x => x.ParameterName == annualizedParameterName && x.TimePeriod.TimePeriodType <= period);
 					}
 					else
 					{
-						parameterName = mp.Key.Marketplace.Name == "Pay Pal" ? "Total Net In Payments" : "Total Sum of Orders";
+						string parameterName = mp.Key.Marketplace.Name == "Pay Pal" ? "Total Net In Payments" : "Total Sum of Orders";
+						relevantTurnover = av.LastOrDefault(x => x.ParameterName == parameterName && x.TimePeriod.TimePeriodType == period);
+						if (relevantTurnover == null)
+						{
+							relevantTurnover = av.LastOrDefault(x => x.ParameterName == annualizedParameterName && x.TimePeriod.TimePeriodType <= period);
+						}
 					}
-					var relevantTurnover = av.LastOrDefault(x => x.ParameterName == parameterName && x.TimePeriod.TimePeriodType <= period);
 
 					double currentTurnover = Convert.ToDouble(relevantTurnover != null ? relevantTurnover.Value : 0);
 					if (mp.Key.Marketplace.Name == "Pay Pal")
