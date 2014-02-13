@@ -24,7 +24,7 @@
       this.mail = void 0;
       this.answerEnabled = true;
       this.emailEnabled = false;
-      return this.captchaEnabled = false;
+      return this.captchaEnabled = EzBob.Config.CaptchaMode === 'off';
     };
 
     ResetPasswordView.prototype.focus = null;
@@ -52,6 +52,7 @@
       this.validator = EzBob.validateRestorePasswordForm(this.ui.form);
       this.initStatusIcons();
       $('#email').focus();
+      EzBob.UiAction.registerView(this);
       return this;
     };
 
@@ -87,6 +88,8 @@
           _this.ui.email.closest('div').show();
           $('#captcha').show();
           _this.focus = _this.focusCaptcha;
+          _this.ui.answer.val('');
+          _this.ui.getQuestionBtn.addClass('disabled');
           return false;
         }
         _this.ui.passwordRestoredArea.show();
@@ -97,7 +100,6 @@
         _this.initStatusIcons();
         return _this.focus = _this.focusCaptcha;
       }).always(function(data) {
-        $el.removeClass("disabled");
         _this.ui.email.data("changed", false);
         _this.emailKeyuped();
         return _this.captcha.reload(_this.focus);
@@ -119,7 +121,7 @@
     ResetPasswordView.prototype.inputCaptchaChanged = function() {
       var enabled;
 
-      this.captchaEnabled = EzBob.Validation.element(this.validator, $(this.ui.captcha.selector));
+      this.captchaEnabled = this.validator.check($(this.ui.captcha.selector));
       enabled = this.answerEnabled && this.emailEnabled && this.captchaEnabled;
       return this.ui.getQuestionBtn.toggleClass('disabled', !enabled);
     };
@@ -127,7 +129,7 @@
     ResetPasswordView.prototype.inputEmailChanged = function() {
       var enabled;
 
-      this.emailEnabled = EzBob.Validation.element(this.validator, this.ui.email);
+      this.emailEnabled = this.validator.check(this.ui.email);
       enabled = this.answerEnabled && this.emailEnabled && this.captchaEnabled;
       return this.ui.getQuestionBtn.toggleClass('disabled', !enabled);
     };
@@ -135,7 +137,7 @@
     ResetPasswordView.prototype.inputAnswerChanged = function() {
       var enabled;
 
-      this.answerEnabled = EzBob.Validation.element(this.validator, this.ui.answer);
+      this.answerEnabled = this.validator.check(this.ui.answer);
       enabled = this.answerEnabled && this.emailEnabled && this.captchaEnabled;
       return this.ui.restoreBtn.toggleClass('disabled', !enabled);
     };
@@ -165,6 +167,7 @@
           EzBob.App.trigger('error', response.errorMessage || response.error);
           _this.ui.questionArea.hide();
           _this.focus = _this.focusCaptcha;
+          _this.ui.getQuestionBtn.addClass('disabled');
           return true;
         }
         if (EzBob.isNullOrEmpty(response.question)) {

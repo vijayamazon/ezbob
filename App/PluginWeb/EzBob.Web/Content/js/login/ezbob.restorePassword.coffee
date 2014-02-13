@@ -8,7 +8,7 @@ class EzBob.ResetPasswordView extends Backbone.Marionette.ItemView
     @mail = undefined
     @answerEnabled = true
     @emailEnabled = false
-    @captchaEnabled = false
+    @captchaEnabled = EzBob.Config.CaptchaMode == 'off'
     
   focus:
     null
