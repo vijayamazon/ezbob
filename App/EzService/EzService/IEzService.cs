@@ -175,6 +175,9 @@ namespace EzService {
 
 		[OperationContract]
 		ActionMetaData BrokerLogin(string Email, string Password);
+
+		[OperationContract]
+		ActionMetaData BrokerRestorePassword(string sMobile, string sCode);
 	} // interface IEzService
 
 	#endregion interface IEzService

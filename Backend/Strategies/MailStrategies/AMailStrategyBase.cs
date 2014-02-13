@@ -14,9 +14,7 @@ namespace EzBob.Backend.Strategies.MailStrategies {
 			try {
 				Log.Debug("Execute() started...");
 
-				Log.Debug("loading customer data...");
-				CustomerData = new CustomerData(CustomerId, DB);
-				Log.Debug("loading customer data complete.");
+				LoadCustomerData();
 
 				Log.Debug("setting template and variables...");
 				SetTemplateAndVariables();
@@ -53,8 +51,7 @@ namespace EzBob.Backend.Strategies.MailStrategies {
 
 		#region constructor
 
-		protected AMailStrategyBase(int customerId, bool sendToCustomer, AConnection oDb, ASafeLog oLog)
-			: base(oDb, oLog) {
+		protected AMailStrategyBase(int customerId, bool sendToCustomer, AConnection oDb, ASafeLog oLog) : base(oDb, oLog) {
 			mailer = new StrategiesMailer(DB, Log);
 
 			CustomerId = customerId;
@@ -78,12 +75,26 @@ namespace EzBob.Backend.Strategies.MailStrategies {
 
 		#endregion method ActionAtEnd
 
+		#region method LoadCustomerData
+
+		protected virtual void LoadCustomerData() {
+			Log.Debug("loading customer data...");
+
+			CustomerData = new CustomerData();
+
+			CustomerData.Load(CustomerId, DB);
+
+			Log.Debug("loading customer data complete.");
+		} // LoadCustomerData
+
+		#endregion method LoadCustomerData
+
 		#region properties
 
-		protected string TemplateName { get; set; }
-		protected CustomerData CustomerData { get; set; }
-		protected Dictionary<string, string> Variables { get; set; }
-		protected int CustomerId { get; set; }
+		protected virtual string TemplateName { get; set; }
+		protected virtual CustomerData CustomerData { get; set; }
+		protected virtual Dictionary<string, string> Variables { get; set; }
+		protected virtual int CustomerId { get; set; }
 
 		#endregion properties
 

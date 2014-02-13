@@ -80,11 +80,14 @@
     <Compile Include="AutoDecisions\ReRejection.cs" />
     <Compile Include="Broker\BrokerSignup.cs" />
     <Compile Include="Broker\BrokerLogin.cs" />
+    <Compile Include="Broker\BrokerRestorePassword.cs" />
+    <Compile Include="Broker\BrokerData.cs" />
     <Compile Include="CaisUpdate.cs" />
     <Compile Include="BwaChecker.cs" />
     <Compile Include="FinishWizard.cs" />
     <Compile Include="ExperianConsumerCheck.cs" />
     <Compile Include="ExperianCompanyCheck.cs" />
+    <Compile Include="MailStrategies\BrokerPasswordRestored.cs" />
     <Compile Include="QuickOffer\QuickOffer.cs" />
     <Compile Include="QuickOffer\QuickOfferData.cs" />
     <Compile Include="UpdateCurrencyRates.cs" />

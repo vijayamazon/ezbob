@@ -1,5 +1,25 @@
-﻿.login-form a {
+﻿.broker-form {
+	float: left;
+	width: 62%;
+	line-height: 1.8em;
+	margin-bottom: 1.5em;
+}
+
+.login-form a {
 	font-weight: bold;
 	margin-bottom: 1em;
 	display: inline-block;
+}
+
+footer {
+	clear: both;
+}
+
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+	.broker-form {
+		float: left;
+		width: 100%;
+		line-height: 1.8em;
+		margin-bottom: 1.5em;
+	}
 }

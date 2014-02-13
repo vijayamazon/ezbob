@@ -597,6 +597,9 @@ namespace EzBob.Web.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLogin", ReplyAction="http://tempuri.org/IEzService/BrokerLoginResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData BrokerLogin(string Email, string Password);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerRestorePassword", ReplyAction="http://tempuri.org/IEzService/BrokerRestorePasswordResponse")]
+        EzBob.Web.EzServiceReference.ActionMetaData BrokerRestorePassword(string sMobile, string sCode);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -832,6 +835,10 @@ namespace EzBob.Web.EzServiceReference {
         
         public EzBob.Web.EzServiceReference.ActionMetaData BrokerLogin(string Email, string Password) {
             return base.Channel.BrokerLogin(Email, Password);
+        }
+        
+        public EzBob.Web.EzServiceReference.ActionMetaData BrokerRestorePassword(string sMobile, string sCode) {
+            return base.Channel.BrokerRestorePassword(sMobile, sCode);
         }
     }
 }

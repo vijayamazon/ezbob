@@ -615,6 +615,10 @@
 			ServiceClient.BrokerLogin(Email, Password);
 		} // BrokerLogin
 
+		public void BrokerRestorePassword(string sMobile, string sCode) {
+			ServiceClient.BrokerRestorePassword(sMobile, sCode);
+		} // BrokerRestorePassword
+
 		#region property ServiceClient
 		
 		private EzServiceClient ServiceClient {

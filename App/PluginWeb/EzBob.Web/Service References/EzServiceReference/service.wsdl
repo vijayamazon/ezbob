@@ -419,6 +419,12 @@
   <wsdl:message name="IEzService_BrokerLogin_OutputMessage">
     <wsdl:part name="parameters" element="tns:BrokerLoginResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_BrokerRestorePassword_InputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerRestorePassword" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerRestorePassword_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerRestorePasswordResponse" />
+  </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/Shutdown" message="tns:IEzServiceAdmin_Shutdown_InputMessage" />
@@ -649,6 +655,10 @@
     <wsdl:operation name="BrokerLogin">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerLogin" message="tns:IEzService_BrokerLogin_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerLoginResponse" message="tns:IEzService_BrokerLogin_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BrokerRestorePassword">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerRestorePassword" message="tns:IEzService_BrokerRestorePassword_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerRestorePasswordResponse" message="tns:IEzService_BrokerRestorePassword_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
@@ -1166,6 +1176,15 @@
     </wsdl:operation>
     <wsdl:operation name="BrokerLogin">
       <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerLogin" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BrokerRestorePassword">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerRestorePassword" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

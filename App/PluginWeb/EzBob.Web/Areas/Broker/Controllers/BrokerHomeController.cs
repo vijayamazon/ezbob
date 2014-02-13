@@ -160,6 +160,31 @@
 
 		#endregion action Login
 
+		#region action RestorePassword
+
+		[HttpPost]
+		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		public JsonResult RestorePassword(string ForgottenMobile, string ForgottenMobileCode) {
+			ASafeLog oLog = new SafeILog(LogManager.GetLogger(typeof(BrokerHomeController)));
+
+			oLog.Debug("Broker restore password request: phone # {0} with code {1}", ForgottenMobile, ForgottenMobileCode);
+
+			try {
+				m_oAppCreator.BrokerRestorePassword(ForgottenMobile, ForgottenMobileCode);
+			}
+			catch (Exception e) {
+				oLog.Alert(e, "Failed to restore password for a broker with phone # {0}.", ForgottenMobile);
+				return Json(new { success = false, error = "Failed to restore password.", });
+			} // try
+
+			oLog.Debug("Broker restore password succeded for phone # {0}", ForgottenMobile);
+
+			return Json(new { success = true, error = string.Empty, });
+		} // RestorePassword
+
+		#endregion action RestorePassword
+
 		#endregion public
 
 		#region private

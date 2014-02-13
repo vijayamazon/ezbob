@@ -106,7 +106,7 @@ box-shadow: 0 0 10px #ccc;
 }
 /*-- 2 column layout with side bar --*/
 
-#content, .broker-form {
+#content {
 	float:left;
 	width:62%;
 	line-height:1.8em;

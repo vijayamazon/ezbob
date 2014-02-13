@@ -208,5 +208,7 @@
 		{}
 
 		public void BrokerLogin(string Email, string Password) {}
+
+		public void BrokerRestorePassword(string sMobile, string sCode) {}
 	}
 }

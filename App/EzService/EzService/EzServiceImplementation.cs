@@ -547,6 +547,10 @@
 			return ExecuteSync<BrokerLogin>(null, null, Email, Password);
 		} // BrokerLogin
 
+		public ActionMetaData BrokerRestorePassword(string sMobile, string sCode) {
+			return ExecuteSync<BrokerRestorePassword>(null, null, sMobile, sCode);
+		} // BrokerRestorePassword
+
 		#endregion IEzService exposed methods
 
 		#region method IDisposable.Dispose

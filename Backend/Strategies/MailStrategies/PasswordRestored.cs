@@ -20,13 +20,29 @@
 			TemplateName = "Mandrill - EZBOB password was restored";
 
 			Variables = new Dictionary<string, string> {
-				{"ProfilePage", "https://app.ezbob.com/Account/LogOn"},
+				{"ProfilePage", ProfilePage},
 				{"Password", password},
-				{"FirstName", string.IsNullOrEmpty(CustomerData.FirstName) ? "Dear customer" : CustomerData.FirstName }
+				{"FirstName", string.IsNullOrWhiteSpace(CustomerData.FirstName) ? Salutation : CustomerData.FirstName }
 			};
 		} // SetTemplateAndVariables
 
 		#endregion method SetTemplateAndVariables
+
+		#region property ProfilePage
+
+		protected virtual string ProfilePage {
+			get { return "https://app.ezbob.com/Account/LogOn"; }
+		} // ProfilePage
+
+		#endregion property ProfilePage
+
+		#region property Salutation
+
+		protected virtual string Salutation {
+			get { return "Dear customer"; }
+		} // Salutation
+
+		#endregion property Salutation
 
 		private readonly string password;
 	} // class PasswordRestored

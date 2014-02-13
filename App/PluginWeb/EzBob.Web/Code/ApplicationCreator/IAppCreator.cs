@@ -61,5 +61,7 @@ namespace EzBob.Web.Code.ApplicationCreator
 			string Password2
 		);
 		void BrokerLogin(string Email, string Password);
+
+		void BrokerRestorePassword(string sMobile, string sCode);
 	}
 }

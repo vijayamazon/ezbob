@@ -1557,7 +1557,7 @@ td.account-logo {
         color: #585858;
     }
 
-    #content, .broker-form {
+    #content {
         float: left;
         width: 100%;
         line-height: 1.8em;

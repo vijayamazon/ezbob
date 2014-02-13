@@ -26,9 +26,8 @@ EzBob.Broker.Router = Backbone.Router.extend({
 		if (this.getAuth())
 			this.show('dashboard', 'log-off');
 		else {
-			this.show('signup', 'log-in');
 			this.createView('signup', EzBob.Broker.SignupView);
-			this.views.signup.render();
+			this.show('signup', 'log-in', 'signup');
 		} // if
 	}, // signup
 
@@ -41,9 +40,8 @@ EzBob.Broker.Router = Backbone.Router.extend({
 		if (this.getAuth())
 			this.show('dashboard', 'log-off');
 		else {
-			this.show('login', 'sign-up');
 			this.createView('login', EzBob.Broker.LoginView);
-			this.views.login.render();
+			this.show('login', 'sign-up', 'login');
 		} // if
 	}, // login
 
@@ -56,9 +54,8 @@ EzBob.Broker.Router = Backbone.Router.extend({
 		if (this.getAuth())
 			this.show('dashboard', 'log-off');
 		else {
-			this.show('forgotten', 'sign-up');
-			// this.createView('forgotten', EzBob.Broker.ForgottenView);
-			// this.views.forgotten.render();
+			this.createView('forgotten', EzBob.Broker.ForgottenView);
+			this.show('forgotten', 'sign-up', 'forgotten');
 		} // if
 	}, // forgotten
 
@@ -90,7 +87,7 @@ EzBob.Broker.Router = Backbone.Router.extend({
 		$('body').attr('data-auth', sAuth || '');
 	}, // setAuth
 
-	show: function(sSectionName, sButtonClass) {
+	show: function(sSectionName, sButtonClass, sViewName) {
 		sSectionName = sSectionName.toLowerCase();
 		var oSection;
 
@@ -111,8 +108,34 @@ EzBob.Broker.Router = Backbone.Router.extend({
 		if (sSectionName === this.forbiddenSection())
 			sButtonClass = null;
 
-		$('.page-section').addClass('hide');
-		oSection.removeClass('hide');
+		var self = this;
+
+		var oShowPage = function() {
+			var oView = null;
+
+			if (sViewName && self.views && self.views[sViewName]) {
+				oView = self.views[sViewName];
+
+				if (oView.setSidebar)
+					oView.setSidebar($('.common-customer-sidebar'));
+				
+				oView.render();
+			}
+			else
+				$('#hidden-container').append($('.common-customer-sidebar'));
+
+			oSection.fadeIn(400, function() {
+				if (oView)
+					oView.onFocus();
+			});
+		}; // oShowPage
+
+		var oActive = $('.page-section:visible');
+
+		if (oActive.length)
+			oActive.fadeOut(400, oShowPage);
+		else
+			oShowPage();
 
 		this.navigate(sSectionName);
 

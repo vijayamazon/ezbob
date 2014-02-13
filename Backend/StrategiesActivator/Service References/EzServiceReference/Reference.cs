@@ -1090,6 +1090,12 @@ namespace StrategiesActivator.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLogin", ReplyAction="http://tempuri.org/IEzService/BrokerLoginResponse")]
         System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> BrokerLoginAsync(string Email, string Password);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerRestorePassword", ReplyAction="http://tempuri.org/IEzService/BrokerRestorePasswordResponse")]
+        StrategiesActivator.EzServiceReference.ActionMetaData BrokerRestorePassword(string sMobile, string sCode);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerRestorePassword", ReplyAction="http://tempuri.org/IEzService/BrokerRestorePasswordResponse")]
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> BrokerRestorePasswordAsync(string sMobile, string sCode);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -1533,6 +1539,14 @@ namespace StrategiesActivator.EzServiceReference {
         
         public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> BrokerLoginAsync(string Email, string Password) {
             return base.Channel.BrokerLoginAsync(Email, Password);
+        }
+        
+        public StrategiesActivator.EzServiceReference.ActionMetaData BrokerRestorePassword(string sMobile, string sCode) {
+            return base.Channel.BrokerRestorePassword(sMobile, sCode);
+        }
+        
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> BrokerRestorePasswordAsync(string sMobile, string sCode) {
+            return base.Channel.BrokerRestorePasswordAsync(sMobile, sCode);
         }
     }
 }

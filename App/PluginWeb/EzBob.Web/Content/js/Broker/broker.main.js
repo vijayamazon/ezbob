@@ -3,6 +3,8 @@
 $(document).ready(function() {
 	EzBob.Config = $.extend({}, EzBob.Config, EzBob.LoadedConfig);
 
+	$('.page-section').hide().removeClass('hide');
+
 	var notifications = new EzBob.NotificationsView({ el: $('.notifications') });
 
 	var oRouter = new EzBob.Broker.Router();

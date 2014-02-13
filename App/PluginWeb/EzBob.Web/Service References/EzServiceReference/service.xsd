@@ -862,4 +862,19 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="BrokerRestorePassword">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="sMobile" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="sCode" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BrokerRestorePasswordResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q63="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="BrokerRestorePasswordResult" nillable="true" type="q63:ActionMetaData" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
 </xs:schema>

@@ -4,9 +4,9 @@
 	using Ezbob.Database;
 
 	public class CustomerData {
-		#region constructor
+		#region method Load
 
-		public CustomerData(int customerId, AConnection oDb) {
+		public virtual void Load(int customerId, AConnection oDb) {
 			DataTable dt = oDb.ExecuteReader(
 				"GetBasicCustomerData",
 				CommandSpecies.StoredProcedure,
@@ -26,9 +26,9 @@
 			Mail = sr["Mail"];
 			IsOffline = sr["IsOffline"];
 			NumOfLoans = sr["NumOfLoans"];
-		} // constructor
+		} // Load
 
-		#endregion constructor
+		#endregion method Load
 
 		#region method ToString
 
@@ -49,13 +49,13 @@
 
 		#region properties
 
-		public int Id { get; private set; }
-		public string FirstName { get; private set; }
-		public string Surname { get; private set; }
-		public string FullName { get; private set; }
-		public string Mail { get; private set; }
-		public bool IsOffline { get; private set; }
-		public int NumOfLoans { get; private set; }
+		public virtual int Id { get; protected set; }
+		public virtual string FirstName { get; protected set; }
+		public virtual string Surname { get; protected set; }
+		public virtual string FullName { get; protected set; }
+		public virtual string Mail { get; protected set; }
+		public virtual bool IsOffline { get; protected set; }
+		public virtual int NumOfLoans { get; protected set; }
 
 		#endregion properties
 	} // class CustomerData
