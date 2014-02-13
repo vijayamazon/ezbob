@@ -112,12 +112,18 @@
 		public override string Name { get { return "Main strategy"; } } // Name
 
 		#endregion property Name
+
+		private void GetZooplaData()
+		{
+			Log.Info("Getting zoopla data for customer:{0}", customerId);
+			strategyHelper.GetZooplaData(customerId);
+		}
 		
 		public override void Execute()
 		{
 			ReadConfigurations();
 			GetPersonalInfo();
-			strategyHelper.GetZooplaData(customerId);
+			GetZooplaData();
 
 			SetAutoDecisionAvailability();
 
@@ -207,6 +213,7 @@
 
 		private void CalcAndCapOffer()
 		{
+			Log.Info("Finalizing and capping offer");
 			if (loanOfferReApprovalRemainingAmount < 1000) // TODO: make this 1000 configurable
 				loanOfferReApprovalRemainingAmount = 0;
 
@@ -429,6 +436,7 @@
 
 		private ScoreMedalOffer CalculateScoreAndMedal()
 		{
+			Log.Info("Starting to calculate score and medal");
 			DataTable scoreCardDataTable = DB.ExecuteReader(
 				"GetScoreCardData",
 				CommandSpecies.StoredProcedure,
@@ -459,11 +467,13 @@
 				firstRepaymentDatePassed = modelFirstRepaymentDate < DateTime.UtcNow;
 			}
 
+			Log.Info("Getting turnovers and seniority");
 			totalSumOfOrders1YTotal = strategyHelper.GetAnualTurnOverByCustomer(customerId);
 			totalSumOfOrders3MTotal = strategyHelper.GetTotalSumOfOrders3M(customerId);
 			marketplaceSeniorityDays = strategyHelper.MarketplaceSeniority(customerId);
 			decimal totalSumOfOrdersForLoanOffer = (decimal)strategyHelper.GetTotalSumOfOrdersForLoanOffer(customerId);
-
+			
+			Log.Info("Calculating score & medal");
 			ScoreMedalOffer scoringResult = medalScoreCalculator.CalculateMedalScore(totalSumOfOrdersForLoanOffer, minExperianScore, (decimal)marketplaceSeniorityDays / 365, modelMaxFeedback, maritalStatus, appGender == "M" ? Gender.M : Gender.F, modelMPsNumber, firstRepaymentDatePassed, modelEzbobSeniority, modelOnTimeLoans, modelLatePayments, modelEarlyPayments);
 			modelLoanOffer = scoringResult.MaxOffer;
 
@@ -517,20 +527,14 @@
 		{
 			if (wasMainStrategyExecutedBefore)
 			{
+				Log.Info("Performing experian consumer check");
 				var strat = new ExperianConsumerCheck(customerId, directorId, DB, Log);
 				strat.Execute();
 				experianConsumerScore = strat.Score;
 			}
 			else if (!WaitForExperianConsumerCheckToFinishUpdates(directorId))
 			{
-				if (directorId == 0)
-				{
-					Log.Info("No data exist from experian consumer check for customer:{0}.", customerId);
-				}
-				else
-				{
-					Log.Info("No data exist from experian consumer check for director:{0}.", directorId);
-				}
+				Log.Info("No data exist from experian consumer check for {0}:{1}.", directorId == 0 ? "customer" : "director", customerId);
 			}
 		}
 
@@ -538,6 +542,7 @@
 		{
 			if (wasMainStrategyExecutedBefore)
 			{
+				Log.Info("Performing experian company check");
 				var experianCompanyChecker = new ExperianCompanyCheck(customerId, DB, Log);
 				experianCompanyChecker.Execute();
 			}
@@ -549,12 +554,13 @@
 
 		private bool MakeSureMpDataIsSufficient()
 		{
-			bool shouldExpectMpDta = newCreditLineOption != NewCreditLineOption.SkipEverything &&
+			bool shouldExpectMpData = newCreditLineOption != NewCreditLineOption.SkipEverything &&
 			                         newCreditLineOption != NewCreditLineOption.UpdateEverythingExceptMp;
-			if (shouldExpectMpDta)
+			if (shouldExpectMpData)
 			{
 				if (!WaitForMarketplacesToFinishUpdates())
 				{
+					Log.Info("Waiting for marketplace data ended with error");
 					var variables = new Dictionary<string, string> {
 						{"UserEmail", appEmail},
 						{"CustomerID", customerId.ToString(CultureInfo.InvariantCulture)},
@@ -572,6 +578,7 @@
 
 		private void SetAutoDecisionAvailability()
 		{
+			Log.Info("Setting auto decision availability");
 			if (!customerStatusIsEnabled || customerStatusIsWarning)
 			{
 				enableAutomaticReApproval = false;
@@ -699,6 +706,7 @@
 
 		private void ReadConfigurations()
 		{
+			Log.Info("Getting configurations");
 			DataTable dt = DB.ExecuteReader("MainStrategyGetConfigs", CommandSpecies.StoredProcedure);
 			DataRow results = dt.Rows[0];
 			var sr = new SafeReader(results);
@@ -734,6 +742,7 @@
 
 		private void GetPersonalInfo()
 		{
+			Log.Info("Getting personal info for customer:{0}", customerId);
 			DataTable dt = DB.ExecuteReader("GetPersonalInfo", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
 			var results = new SafeReader(dt.Rows[0]);
 
@@ -812,11 +821,13 @@
 		{
 			if (useCustomIdHubAddress == 0)
 			{
+				Log.Info("Getting BWA for customer: {0}", customerId);
 				var bwaChecker = new BwaChecker(customerId, DB, Log);
 				bwaChecker.Execute();
 			}
 			else if (useCustomIdHubAddress == 2 || (useCustomIdHubAddress != 1 && ShouldRunBwa()))
 			{
+				Log.Info("Getting BWA with custom address for customer: {0}", customerId);
 				var bwaChecker = new BwaChecker(customerId, idhubHouseNumber, idhubHouseName, idhubStreet, idhubDistrict, idhubTown, 
 					idhubCounty, idhubPostCode, idhubBranchCode, idhubAccountNumber, DB, Log);
 				bwaChecker.Execute();
@@ -829,11 +840,13 @@
 			{
 				if (useCustomIdHubAddress == 0)
 				{
+					Log.Info("Getting AML for customer: {0}", customerId);
 					var amlChecker = new AmlChecker(customerId, DB, Log);
 					amlChecker.Execute();
 				}
 				else if (useCustomIdHubAddress != 2)
 				{
+					Log.Info("Getting AML with custom address for customer: {0}", customerId);
 					var amlChecker = new AmlChecker(customerId, idhubHouseNumber, idhubHouseName, idhubStreet, idhubDistrict, idhubTown,
 					                                idhubCounty, idhubPostCode, DB, Log);
 					amlChecker.Execute();
@@ -856,11 +869,13 @@
 		
 		private bool WaitForMarketplacesToFinishUpdates()
 		{
+			Log.Info("Waiting for marketplace data");
 			return WaitForUpdateToFinish(GetIsMarketPlacesUpdated, totalTimeToWaitForMarketplacesUpdate, intervalWaitForMarketplacesUpdate);
 		} // WaitForMarketplacesToFinishUpdates
 		
 		private bool WaitForExperianCompanyCheckToFinishUpdates()
 		{
+			Log.Info("Waiting for experian company check");
 			if (string.IsNullOrEmpty(experianRefNum))
 			{
 				return true;
@@ -871,11 +886,13 @@
 
 		private bool WaitForExperianConsumerCheckToFinishUpdates(int directorId = 0)
 		{
+			Log.Info("Waiting for experian consumer check");
 			return WaitForUpdateToFinish(() => GetIsExperianConsumerUpdated(directorId), totalTimeToWaitForExperianConsumerCheck, intervalWaitForExperianConsumerCheck);
 		} // WaitForExperianConsumerCheckToFinishUpdates
 
 		private bool WaitForAmlToFinishUpdates()
 		{
+			Log.Info("Waiting for AML check");
 			return WaitForUpdateToFinish(GetIsAmlUpdated, totalTimeToWaitForAmlCheck, intervalWaitForAmlCheck);
 		} // WaitForMarketplacesToFinishUpdates
 

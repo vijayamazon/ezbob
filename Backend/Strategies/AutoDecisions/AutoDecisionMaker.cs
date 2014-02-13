@@ -9,6 +9,8 @@
 			double marketplaceSeniorityDays, bool enableAutomaticReRejection, bool enableAutomaticRejection, bool enableAutomaticReApproval, double initialExperianConsumerScore, 
 			bool enableAutomaticApproval, decimal loanOfferReApprovalFullAmount, decimal loanOfferReApprovalRemainingAmount, decimal loanOfferReApprovalFullAmountOld, decimal loanOfferReApprovalRemainingAmountOld, AConnection oDb, ASafeLog oLog)
 		{
+
+			oLog.Info("Starting auto decision");
 			var autoDecisionResponse = new AutoDecisionResponse();
 
 			if (new ReRejection(customerId, enableAutomaticReRejection, oDb, oLog).MakeDecision(autoDecisionResponse))
