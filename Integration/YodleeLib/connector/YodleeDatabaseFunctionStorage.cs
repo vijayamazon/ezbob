@@ -7,7 +7,7 @@
 
 	public enum YodleeDatabaseFunctionType
 	{
-		TotlaIncome,
+		TotalIncome,
 		TotalExpense,
 		NumberOfTransactions,
 		CurrentBalance,
@@ -21,7 +21,7 @@
 		private YodleeDatabaseFunctionStorage()
 			: base(new YodleeDatabaseFunctionTypeConverter())
 		{
-			CreateFunctionAndAddToCollection(YodleeDatabaseFunctionType.TotlaIncome, DatabaseValueTypeEnum.Double, "{4E9ED37D-9D0B-4095-8E72-FDADDD65234D}");
+			CreateFunctionAndAddToCollection(YodleeDatabaseFunctionType.TotalIncome, DatabaseValueTypeEnum.Double, "{4E9ED37D-9D0B-4095-8E72-FDADDD65234D}");
 			CreateFunctionAndAddToCollection(YodleeDatabaseFunctionType.TotalExpense, DatabaseValueTypeEnum.Double, "{57545B4E-017F-4A91-B5CD-96479E14FE08}");
 			CreateFunctionAndAddToCollection(YodleeDatabaseFunctionType.NumberOfTransactions, DatabaseValueTypeEnum.Integer, "{5D61285F-73C8-4645-9108-B23CC2DA8520}");
 			CreateFunctionAndAddToCollection(YodleeDatabaseFunctionType.CurrentBalance, DatabaseValueTypeEnum.Double, "{621290B5-EC51-44A7-AD06-373EDC6367D8}");
@@ -48,7 +48,7 @@
 
 			switch (type)
 			{
-				case YodleeDatabaseFunctionType.TotlaIncome:
+				case YodleeDatabaseFunctionType.TotalIncome:
 					displayName = "Total Income";
 					break;
 

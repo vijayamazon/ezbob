@@ -31,8 +31,8 @@ namespace YodleeLib.connector
 			switch (functionType)
 			{
 
-				case YodleeDatabaseFunctionType.TotlaIncome:
-					return GetTotlaIncome(orders);
+				case YodleeDatabaseFunctionType.TotalIncome:
+					return GetTotalIncome(orders);
 
 				case YodleeDatabaseFunctionType.TotalExpense:
 					return GetTotalExpense(orders);
@@ -70,7 +70,7 @@ namespace YodleeLib.connector
 			return totlalExpense;
 		}
 
-		private double GetTotlaIncome(IEnumerable<YodleeTransactionItem> orders)
+		private double GetTotalIncome(IEnumerable<YodleeTransactionItem> orders)
 		{
 			var totlalExpense =
 					  orders.Where(

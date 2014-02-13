@@ -89,7 +89,7 @@
 			var aggregateTransactionsArray = new[]
 				{
 					YodleeDatabaseFunctionType.TotalExpense,
-					YodleeDatabaseFunctionType.TotlaIncome,
+					YodleeDatabaseFunctionType.TotalIncome,
 					YodleeDatabaseFunctionType.NumberOfTransactions,
 				};
 
