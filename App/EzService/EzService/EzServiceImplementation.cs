@@ -551,6 +551,17 @@
 			return ExecuteSync<BrokerRestorePassword>(null, null, sMobile, sCode);
 		} // BrokerRestorePassword
 
+		public BrokerCustomersActionResult BrokerLoadCustomerList(string sContactEmail) {
+			BrokerLoadCustomerList oIntstance;
+
+			ActionMetaData result = ExecuteSync(out oIntstance, null, null, sContactEmail);
+
+			return new BrokerCustomersActionResult {
+				MetaData = result,
+				Records = oIntstance.Result.Values.ToList(),
+			};
+		} // BrokerLoadCustomerList
+
 		#endregion IEzService exposed methods
 
 		#region method IDisposable.Dispose

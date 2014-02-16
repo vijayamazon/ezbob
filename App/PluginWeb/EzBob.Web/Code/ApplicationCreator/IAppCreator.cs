@@ -1,11 +1,13 @@
 namespace EzBob.Web.Code.ApplicationCreator
 {
 	using System;
+	using System.Collections.Generic;
 	using ApplicationMng.Model;
 	using Backend.Models;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EzServiceReference;
+	using Ezbob.Backend.Models;
 	using FraudChecker;
 
 	public interface IAppCreator
@@ -63,5 +65,7 @@ namespace EzBob.Web.Code.ApplicationCreator
 		void BrokerLogin(string Email, string Password);
 
 		void BrokerRestorePassword(string sMobile, string sCode);
+
+		BrokerCustomerEntry[] BrokerLoadCustomerList(string sContactEmail);
 	}
 }

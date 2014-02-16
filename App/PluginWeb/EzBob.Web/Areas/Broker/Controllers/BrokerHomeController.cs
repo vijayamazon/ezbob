@@ -5,6 +5,7 @@
 	using Code.ApplicationCreator;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database.Broker;
+	using Ezbob.Backend.Models;
 	using Ezbob.Logger;
 	using Infrastructure;
 	using Infrastructure.csrf;
@@ -184,6 +185,38 @@
 		} // RestorePassword
 
 		#endregion action RestorePassword
+
+		#region action LoadCustomers
+
+		[HttpGet]
+		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		public JsonResult LoadCustomers(string sContactEmail) {
+			ASafeLog oLog = new SafeILog(LogManager.GetLogger(typeof(BrokerHomeController)));
+
+			oLog.Debug("Broker load customers request for contact email {0}", sContactEmail);
+
+			if (!User.Identity.IsAuthenticated || (User.Identity.Name != sContactEmail)) {
+				oLog.Debug("Failed to load customers request for contact email {0}: not authenticated or authenticated as other user.", sContactEmail);
+				return Json(new { success = false, error = "Not authorised.", aaData = (BrokerCustomerEntry [])null }, JsonRequestBehavior.AllowGet);
+			} // if
+
+			BrokerCustomerEntry[] oRecords;
+
+			try {
+				oRecords = m_oAppCreator.BrokerLoadCustomerList(sContactEmail);
+			}
+			catch (Exception e) {
+				oLog.Debug("Failed to load customers request for contact email {0}", sContactEmail);
+				return Json(new { success = false, error = "Failed to load customer list.", aaData = new BrokerCustomerEntry [] {} }, JsonRequestBehavior.AllowGet);
+			} // try
+
+			oLog.Debug("Broker load customers request for contact email {0} complete.", sContactEmail);
+
+			return Json(new { success = true, error = string.Empty, aaData = oRecords }, JsonRequestBehavior.AllowGet);
+		} // LoadCustomers
+
+		#endregion action LoadCustomers
 
 		#endregion public
 

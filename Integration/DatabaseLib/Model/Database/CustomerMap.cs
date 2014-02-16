@@ -300,6 +300,8 @@ namespace EZBob.DatabaseLib.Model.Database {
 			References(x => x.TrustPilotStatus, "TrustPilotStatusID");
 
 			References(x => x.QuickOffer, "QuickOfferID").Nullable().Cascade.All();
+
+			References(x => x.Broker, "BrokerID").Cascade.None();
 		} // constructor
 	} // class CustomerMap
 } // namespace EZBob.DatabaseLib.Model.Database

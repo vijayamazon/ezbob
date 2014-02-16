@@ -11,6 +11,7 @@
 	using ApplicationMng.Repository;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
+	using Ezbob.Backend.Models;
 	using FraudChecker;
 	using Infrastructure;
 	using Scorto.Strategy;
@@ -618,6 +619,10 @@
 		public void BrokerRestorePassword(string sMobile, string sCode) {
 			ServiceClient.BrokerRestorePassword(sMobile, sCode);
 		} // BrokerRestorePassword
+
+		public BrokerCustomerEntry[] BrokerLoadCustomerList(string sContactEmail) {
+			return ServiceClient.BrokerLoadCustomerList(sContactEmail).Records;
+		}
 
 		#region property ServiceClient
 		

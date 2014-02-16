@@ -38,12 +38,7 @@ EzBob.Broker.SubmitView = EzBob.Broker.BaseView.extend({
 	onSubmit: function() {}, // onSubmit
 
 	isSubmitEnabled: function() {
-		var oBtn = this.$el.find('#' + this.SubmitBtnID);
-
-		if (oBtn.hasClass('disabled') || oBtn.attr('disabled') || oBtn.prop('disabled'))
-			return false;
-
-		return true;
+		return this.isSomethingEnabled('#' + this.SubmitBtnID);
 	}, // isSubmitEnabled
 
 	setSubmitEnabled: function(bEnabled) {

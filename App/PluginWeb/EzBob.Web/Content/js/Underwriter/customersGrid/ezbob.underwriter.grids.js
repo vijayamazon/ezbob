@@ -2,38 +2,11 @@
 EzBob.Underwriter = EzBob.Underwriter || {};
 
 EzBob.Underwriter.GridTools = {
-	CGAccounts: null,
-
 	showMedalIcon: function(cellval) {
 		var text;
 		text = cellval.text || cellval;
 		return '<i data-toggle=tooltip title="' + text + '" class="' + (text.toLowerCase().replace(/\s/g, '')) + '"></i>';
 	}, // showMedalIcon
-
-	showMPIcon: function(cellval) {
-		if (!EzBob.Underwriter.GridTools.CGAccounts)
-			EzBob.Underwriter.GridTools.CGAccounts = $.parseJSON($('div#cg-account-list').text());
-
-		var className, text;
-		text = cellval || '';
-		className = text.replace(/\s|\d/g, '');
-		className = EzBob.Underwriter.GridTools.CGAccounts[className] ? 'cgaccount' : className.toLowerCase();
-		return '<i data-toggle=tooltip title="' + text + '" class="' + className + '"></i>';
-	}, // showMPIcon
-
-	showMPsIcon: function(cellval) {
-		var mps, retVal;
-
-		mps = cellval || '';
-		mps = mps.split(',').clean('');
-		retVal = '';
-
-		_.each(mps, function(val) {
-			return retVal += EzBob.Underwriter.GridTools.showMPIcon(val);
-		});
-
-		return '<div style="overflow: auto; width: 102%;">' + (retVal + ' ') + '</div>';
-	}, // showMPsIcon
 
 	withScrollbar: function(sContent) {
 		return '<div style="overflow: auto; width: auto;">' + sContent + '</div>';
@@ -63,7 +36,7 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 				$('.grid-item-Cart', oTR).empty().html(EzBob.Underwriter.GridTools.showMedalIcon(oData.Cart));
 
 			if (oData.hasOwnProperty('MP_List'))
-				$('.grid-item-MP_List', oTR).empty().html(EzBob.Underwriter.GridTools.showMPsIcon(oData.MP_List));
+				$('.grid-item-MP_List', oTR).empty().html(EzBob.DataTables.Helper.showMPsIcon(oData.MP_List));
 
 			if (oData.hasOwnProperty('Id')) {
 				$('.grid-item-Id', oTR).empty().html(EzBob.Underwriter.GridTools.profileLink(oData.Id));
@@ -323,7 +296,7 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 			bDestroy: true,
 			bProcessing: true,
 			sAjaxSource: this.gridSrcUrl(oGridProperties),
-			aoColumns: this.extractColumns(oGridProperties),
+			aoColumns: EzBob.DataTables.Helper.extractColumns(oGridProperties.columns),
 
 			bDeferRender: true,
 
@@ -392,72 +365,6 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 			'?includeTestCustomers=' + (bIncludeTest ? 'true' : 'false') +
 			'&includeAllCustomers=' + (bIncludeAll ? 'true' : 'false');
 	}, // gridSrcUrl
-
-	extractColumns: function(oGridProperties) {
-		var aryResult = [];
-
-		var aryNames = oGridProperties.columns.split(',');
-
-		function renderMoney(oData, sAction, oFullSource) {
-			switch (sAction) {
-			case 'display':
-				return EzBob.formatPoundsNoDecimals(oData);
-
-			case 'filter':
-			case 'type':
-			case 'sort':
-			default:
-				return oData;
-			} // switch
-		} // renderMoney
-
-		function renderDate(oData, sAction, oFullSource) {
-			switch (sAction) {
-			case 'display':
-				return EzBob.formatDate(oData);
-
-			case 'filter':
-				return oData + ' ' + EzBob.formatDate(oData);
-
-			case 'type':
-			case 'sort':
-			default:
-				return oData;
-			} // switch
-		} // renderDate
-
-		for (var i = 0; i < aryNames.length; i++) {
-			var sName = aryNames[i];
-
-			if (!sName)
-				continue;
-
-			var oRenderFunc = null;
-			var sClass = '';
-
-			if (sName[0] === '#') {
-				sClass = 'numeric';
-				sName = sName.substr(1);
-			}
-			else if (sName[0] === '$'){
-				sClass = 'numeric';
-				sName = sName.substr(1);
-				oRenderFunc = renderMoney;
-			}
-			else if (sName[0] === '^') {
-				sName = sName.substr(1);
-				oRenderFunc = renderDate;
-			}
-
-			aryResult.push({
-				mData: sName,
-				sClass: sClass + ' grid-item-' + sName,
-				mRender: oRenderFunc,
-			});
-		} // for
-
-		return aryResult;
-	}, // extractColumns
 
 	tabLinks: function () {
 		return this.$el.find('a[data-toggle="tab"]');

@@ -9,7 +9,23 @@ EzBob.Broker.Router = Backbone.Router.extend({
 		'dashboard': 'dashboard',
 		'forgotten': 'forgotten',
 		'*z': 'forbidden',
-	},
+	}, // routes
+
+	initialize: function() {
+		this.setAuth($('body').attr('data-auth'));
+		$('body').removeAttr('data-auth');
+
+		$('#user-menu').hide().removeClass('hide');
+	}, // initialize
+
+	getAuth: function() {
+		return this.authData;
+	}, // getAuth
+
+	setAuth: function(sAuth) {
+		this.authData = sAuth || '';
+		$('#user-menu .log-off').tooltip({ placement: 'bottom', title: this.authData }).tooltip("enable").tooltip('fixTitle');
+	}, // setAuth
 
 	logoff: function() {
 		$.post('' + window.gRootPath + 'Broker/BrokerHome/Logoff');
@@ -24,7 +40,7 @@ EzBob.Broker.Router = Backbone.Router.extend({
 		} // if
 
 		if (this.getAuth())
-			this.show('dashboard', 'log-off');
+			this.showDashboard();
 		else {
 			this.createView('signup', EzBob.Broker.SignupView);
 			this.show('signup', 'log-in', 'signup');
@@ -38,7 +54,7 @@ EzBob.Broker.Router = Backbone.Router.extend({
 		} // if
 
 		if (this.getAuth())
-			this.show('dashboard', 'log-off');
+			this.showDashboard();
 		else {
 			this.createView('login', EzBob.Broker.LoginView);
 			this.show('login', 'sign-up', 'login');
@@ -52,7 +68,7 @@ EzBob.Broker.Router = Backbone.Router.extend({
 		} // if
 
 		if (this.getAuth())
-			this.show('dashboard', 'log-off');
+			this.showDashboard();
 		else {
 			this.createView('forgotten', EzBob.Broker.ForgottenView);
 			this.show('forgotten', 'sign-up', 'forgotten');
@@ -66,10 +82,15 @@ EzBob.Broker.Router = Backbone.Router.extend({
 		} // if
 
 		if (this.getAuth())
-			this.show('dashboard', 'log-off');
+			this.showDashboard();
 		else
 			this.login();
 	}, // dashboard
+
+	showDashboard: function() {
+		this.createView('dashboard', EzBob.Broker.DashboardView);
+		this.show('dashboard', 'log-off', 'dashboard');
+	}, // showDashboard
 
 	forbidden: function() {
 		this.show(this.forbiddenSection());
@@ -78,14 +99,6 @@ EzBob.Broker.Router = Backbone.Router.extend({
 	isForbidden: function() {
 		return '-' === this.getAuth();
 	}, // isForbidden
-
-	getAuth: function() {
-		return $('body').attr('data-auth');
-	}, // getAuth
-
-	setAuth: function(sAuth) {
-		$('body').attr('data-auth', sAuth || '');
-	}, // setAuth
 
 	show: function(sSectionName, sButtonClass, sViewName) {
 		sSectionName = sSectionName.toLowerCase();

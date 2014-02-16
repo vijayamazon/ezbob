@@ -80,10 +80,6 @@ ul.footer_nav li a{font-weight:bold; color:#3a475d; text-decoration:none;}
 ul.footer_nav li a:hover, ul.footer_nav li li a:hover{text-decoration:underline;}
 ul.footer_nav li li{float:none; list-style: disc!important; margin:5px 0 0 0;}
 ul.footer_nav li li a{font-weight:normal;}
-/*-- sub footer navigation --*/
-ul.sub_footer_nav{margin:0; padding:0; list-style:none; overflow:hidden;}
-ul.sub_footer_nav li{float:left; margin:0;}
-ul.sub_footer_nav li a{float:left; display:block; padding:10px 10px 10px 0; color:#fff; text-shadow:0 1px 1px #000;text-decoration: underline;}
 /*-- sub page navigation --*/
 #child_nav{
 	/*border:1px #ccc solid; 
@@ -167,26 +163,6 @@ footer{font-size:12px; padding:10px 0 0 0;}
 .logo_techcrunch {background: url(images/companies/techcrunch.png) 0 0 no-repeat; display: inline-block; width: 179px; height: 27px;}
 .logo_yahoo {background: url(images/companies/yahoo.png) 0 0 no-repeat; display: inline-block; width: 138px; height: 27px;}
 .logo_internet_retailing {background: url(images/companies/internet_retailing.png) 0 0 no-repeat; display: inline-block; width: 167px; height: 31px;}
-/*-- copyrights, right at the bottom of the site --*/
-#copyrights{
-	background: #333333;
-	background: -moz-linear-gradient(top,  #333333 0%, #1f2022 100%);
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#333333), color-stop(100%,#1f2022));
-	background: -webkit-linear-gradient(top,  #333333 0%,#1f2022 100%);
-	background: -o-linear-gradient(top,  #333333 0%,#1f2022 100%);
-	background: -ms-linear-gradient(top,  #333333 0%,#1f2022 100%);
-	background: linear-gradient(to bottom,  #333333 0%,#1f2022 100%);
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#333333', endColorstr='#1f2022',GradientType=0 );
-	color:#fff; text-shadow:0 1px 1px #000; font-size:11px;
-}
-
-.copyrights-inner {
-    width: 960px;
-    margin: 0 auto;
-    padding-bottom: 7px;
-    padding-top: 7px;
-}
-
 /*-- social icons --*/
 ul.social_icons{list-style:none; margin:0; padding:0;}
 ul.social_icons li{float:left; margin:0 10px 10px 0;}
@@ -479,27 +455,6 @@ blockquote{margin:0 0 20px 0; padding:10px; border:1px #ccc solid; font-style:it
 	background: -webkit-gradient(linear, left top, left bottom, from(#0078a5), to(#00adee));
 	background: -moz-linear-gradient(top,  #0078a5,  #00adee);
 	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#0078a5', endColorstr='#00adee');
-}
-
-.green {
-	color: #fff!important;
-	border: solid 1px #538312;
-	background: #64991e;
-	background: -webkit-gradient(linear, left top, left bottom, from(#a4d553), to(#6fa41c));
-	background: -moz-linear-gradient(top,  #a4d553,  #6fa41c);
-	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#a4d553', endColorstr='#6fa41c');
-}
-.green:hover {
-	background: #538018;
-	background: -webkit-gradient(linear, left top, left bottom, from(#6b9d28), to(#436b0c));
-	background: -moz-linear-gradient(top,  #6b9d28,  #436b0c);
-	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#6b9d28', endColorstr='#436b0c');
-}
-.green:active {
-	color: #a9c08c;
-	background: -webkit-gradient(linear, left top, left bottom, from(#4e7d0e), to(#7db72f));
-	background: -moz-linear-gradient(top,  #4e7d0e,  #7db72f);
-	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#4e7d0e', endColorstr='#7db72f');
 }
 
 .hmrcLinkButton {

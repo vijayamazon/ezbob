@@ -724,6 +724,8 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual TrustPilotStatus TrustPilotStatus { get; set; }
 
 		public virtual QuickOffer QuickOffer { get; set; }
+
+		public virtual EZBob.DatabaseLib.Model.Database.Broker.Broker Broker { get; set; }
 	} // class Customer
 
 	#endregion class Customer

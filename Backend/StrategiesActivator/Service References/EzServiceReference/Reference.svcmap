@@ -30,6 +30,7 @@
     <MetadataFile FileName="FraudChecker.xsd" MetadataType="Schema" ID="5fa8ebae-c40b-4974-bc96-601e20f6a046" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="EzBob.Backend.Strategies.xsd" MetadataType="Schema" ID="0bdb0a9b-560d-4e45-abb3-18df5d22be63" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="EzBob.Backend.Models.xsd" MetadataType="Schema" ID="1bccffaa-1616-4229-8946-fb9e0b7e74e7" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
+    <MetadataFile FileName="Ezbob.Backend.Models1.xsd" MetadataType="Schema" ID="409fa278-009a-479d-b11d-340f14a52f7d" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

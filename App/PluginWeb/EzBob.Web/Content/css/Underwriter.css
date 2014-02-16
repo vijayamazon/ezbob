@@ -579,23 +579,6 @@ a.ezbob-logo-login {
     white-space: pre-wrap;
 }
 
-i.amazon,
-i.ekm,
-i.freeagent,
-i.sage,
-i.ebay,
-i.paypal,
-i.cgaccount,
-i.paypoint,
-i.yodlee {
-    display: inline-block;
-    height: 16px;
-    width: 16px;
-    background-repeat: no-repeat;
-    margin: 3px 3px 0;
-    background-image: url(../img/mp-icons-32/shopping-bag-icon-16x16.png );
-}
-
 i.gold,
 i.diamond,
 i.silver,

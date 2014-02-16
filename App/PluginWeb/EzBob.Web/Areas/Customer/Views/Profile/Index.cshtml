@@ -332,7 +332,7 @@
         EzBob.Config.MarketPlaces = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewData["MarketPlaces"]));
         EzBob.Config.MarketPlaceGroups = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(ViewData["MarketPlaceGroups"]));
         EzBob.Config.SessionTimeout = @Model.Config.SessionTimeout;
-        EzBob.Config.CaptchaMode = @Model.Config.CaptchaMode;
+        EzBob.Config.CaptchaMode = '@Model.Config.CaptchaMode';
 
         $(function() {
             @{ string wizardComplete = "false";}

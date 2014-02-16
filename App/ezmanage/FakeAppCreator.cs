@@ -1,12 +1,14 @@
 ﻿namespace ezmanage
 {
 	using System;
+	using System.Collections.Generic;
 	using ApplicationMng.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EzBob.Backend.Models;
 	using EzBob.Web.Code.ApplicationCreator;
 	using EzBob.Web.EzServiceReference;
+	using Ezbob.Backend.Models;
 	using FraudChecker;
 
 	public class FakeAppCreator : IAppCreator
@@ -210,5 +212,9 @@
 		public void BrokerLogin(string Email, string Password) {}
 
 		public void BrokerRestorePassword(string sMobile, string sCode) {}
+
+		public BrokerCustomerEntry[] BrokerLoadCustomerList(string sContactEmail) {
+			return null;
+		}
 	}
 }

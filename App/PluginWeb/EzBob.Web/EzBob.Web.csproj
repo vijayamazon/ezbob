@@ -931,6 +931,7 @@
     </Content>
     <Content Include="Content\js\App\ezbob.validation.js" />
     <Content Include="Content\js\Broker\broker.base.view.js" />
+    <Content Include="Content\js\Broker\broker.dashboard.view.js" />
     <Content Include="Content\js\Broker\broker.forgotten.view.js" />
     <Content Include="Content\js\Broker\broker.login.view.js" />
     <Content Include="Content\js\Broker\broker.main.js" />
@@ -945,6 +946,7 @@
       <DependentUpon>ezbob.jqmodal.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\controls\ezbob.whatsnew.js" />
+    <Content Include="Content\js\EzBob.DataTables.Helper.js" />
     <Content Include="Content\js\ezbob.uiaction.js" />
     <Content Include="Content\js\lib\Backbone.EzBob.js" />
     <Content Include="Content\js\contactUs\ezbo.contactUs.js" />
@@ -1372,6 +1374,12 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
     <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.WizardConfigsActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <None Include="Service References\EzServiceReference\Ezbob.Backend.Models1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.BrokerCustomersActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
     <None Include="Service References\EzServiceReference\FraudChecker.xsd">

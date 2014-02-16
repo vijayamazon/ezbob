@@ -75,6 +75,7 @@
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/FraudChecker" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Models" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" />
     </xsd:schema>
   </wsdl:types>
   <wsdl:message name="IEzServiceAdmin_Shutdown_InputMessage">
@@ -425,6 +426,12 @@
   <wsdl:message name="IEzService_BrokerRestorePassword_OutputMessage">
     <wsdl:part name="parameters" element="tns:BrokerRestorePasswordResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_BrokerLoadCustomerList_InputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerLoadCustomerList" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerLoadCustomerList_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerLoadCustomerListResponse" />
+  </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/Shutdown" message="tns:IEzServiceAdmin_Shutdown_InputMessage" />
@@ -659,6 +666,10 @@
     <wsdl:operation name="BrokerRestorePassword">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerRestorePassword" message="tns:IEzService_BrokerRestorePassword_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerRestorePasswordResponse" message="tns:IEzService_BrokerRestorePassword_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BrokerLoadCustomerList">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerLoadCustomerList" message="tns:IEzService_BrokerLoadCustomerList_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerLoadCustomerListResponse" message="tns:IEzService_BrokerLoadCustomerList_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
@@ -1185,6 +1196,15 @@
     </wsdl:operation>
     <wsdl:operation name="BrokerRestorePassword">
       <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerRestorePassword" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BrokerLoadCustomerList">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerLoadCustomerList" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

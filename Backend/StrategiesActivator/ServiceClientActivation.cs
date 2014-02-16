@@ -616,6 +616,21 @@
 
 			serviceClient.FinishWizard(customerId);
 		}
+
+		[Activation]
+		private void BrokerLoadCustomerList() {
+			if (args.Length != 2) {
+				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> BrokerLoadCustomerList <Contact person email>");
+				return;
+			} // if
+
+			BrokerCustomersActionResult res = serviceClient.BrokerLoadCustomerList(args[1]);
+
+			foreach (var oEntry in res.Records) {
+				Console.WriteLine("ID: {0} Name: {1} {2}", oEntry.CustomerID, oEntry.FirstName, oEntry.LastName);
+			} // for each entry
+		} // BrokerLoadCustomerList
+
 		// ReSharper restore UnusedMember.Local
 
 		#endregion strategy activators

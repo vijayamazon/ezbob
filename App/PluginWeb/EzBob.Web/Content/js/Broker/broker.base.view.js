@@ -10,6 +10,15 @@ EzBob.Broker.BaseView = Backbone.View.extend({
 
 	onFocus: function() {}, // onFocus
 
+	isSomethingEnabled: function(sSelector) {
+		var oElm = this.$el.find(sSelector);
+
+		if (oElm.hasClass('disabled') || oElm.attr('disabled') || oElm.prop('disabled'))
+			return false;
+
+		return true;
+	}, // isSomethingEnabled
+
 	setSomethingEnabled: function(sSelector, bEnabled) {
 		var oElm = this.$el.find(sSelector);
 
