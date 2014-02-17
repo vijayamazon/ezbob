@@ -10,8 +10,6 @@
 		public string UserStatus { get; set; }
 		public string SystemDecision { get; set; }
 		public string LoanOfferUnderwriterComment { get; set; }
-		public double LoanOfferOfferValidDays { get; set; } // TODO: remove it, its usage is fake
-		public DateTime? AppApplyForLoan { get; set; } // TODO: remove it, its usage is fake (always null)
 		public DateTime? AppValidFor { get; set; }
 		public bool LoanOfferEmailSendingBannedNew { get; set; }
 		public bool IsAutoApproval { get; set; }

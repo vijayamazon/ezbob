@@ -74,9 +74,7 @@
 							response.UserStatus = "Approved";
 							response.SystemDecision = "Approve";
 							response.LoanOfferUnderwriterComment = "Auto Approval";
-							response.LoanOfferOfferValidDays = (loanOfferOfferValidUntil - loanOfferOfferStart).TotalDays;
-							response.AppApplyForLoan = null;
-							response.AppValidFor = DateTime.UtcNow.AddDays(response.LoanOfferOfferValidDays);
+							response.AppValidFor = DateTime.UtcNow.AddDays((loanOfferOfferValidUntil - loanOfferOfferStart).TotalDays);
 							response.IsAutoApproval = true;
 							response.LoanOfferEmailSendingBannedNew = loanOfferEmailSendingBanned;
 						}

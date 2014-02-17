@@ -258,7 +258,6 @@
 				new QueryParameter("SystemDecision", autoDecisionResponse.SystemDecision),
 				new QueryParameter("Status", autoDecisionResponse.UserStatus),
 				new QueryParameter("Medal", medalType.ToString()),
-				new QueryParameter("ApplyForLoan", autoDecisionResponse.AppApplyForLoan),
 				new QueryParameter("ValidFor", autoDecisionResponse.AppValidFor)
 				);
 
@@ -346,7 +345,6 @@
 				new QueryParameter("RepaymentPeriod", loanOfferRepaymentPeriod),
 				new QueryParameter("InterestRate", loanOfferInterestRate),
 				new QueryParameter("UseSetupFee", loanOfferUseSetupFee),
-				new QueryParameter("OfferValidDays", autoDecisionResponse.LoanOfferOfferValidDays),
 				new QueryParameter("EmailSendingBanned", autoDecisionResponse.LoanOfferEmailSendingBannedNew),
 				new QueryParameter("LoanTypeId", loanOfferLoanTypeId),
 				new QueryParameter("UnderwriterComment", autoDecisionResponse.LoanOfferUnderwriterComment),
