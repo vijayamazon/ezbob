@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Backend.Strategies.AutoDecisions
 {
 	using System;
+	using System.Data;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
@@ -119,20 +120,25 @@
 
 		private void ReadConfigurations()
 		{
-			personalScoreThresholdWhenNoCompanyScore = 850;
-			personalScoreThreshold = 560;
-			minAge = 18;
-			minAmlScore = 70;
-			minCompanySeniorityDays = 1095;
-			minBusinessScore = 31;
-			belowAverageRiskBusinessScoreMin = 51;
-			belowAverageRiskBusinessScoreMax = 80;
-			belowAverageRiskPersonalScoreMin = 901;
-			belowAverageRiskPersonalScoreMax = 1000;
-			minOffer = 2250;
-			homeOwnerCap = 20000;
-			notHomeOwnerCap = 10000;
-			euCap = 20000;
+			log.Info("Getting configurations");
+			DataTable dt = db.ExecuteReader("GetBankBasedApprovalConfigs", CommandSpecies.StoredProcedure);
+			DataRow results = dt.Rows[0];
+			var sr = new SafeReader(results);
+
+			personalScoreThresholdWhenNoCompanyScore = sr["BankBasedApprovalPersonalScoreThresholdWhenNoCompanyScore"];
+			personalScoreThreshold = sr["BankBasedApprovalPersonalScoreThreshold"];
+			minAge = sr["BankBasedApprovalMinAge"];
+			minAmlScore = sr["BankBasedApprovalMinAmlScore"];
+			minCompanySeniorityDays = sr["BankBasedApprovalMinCompanySeniorityDays"];
+			minBusinessScore = sr["BankBasedApprovalMinBusinessScore"];
+			belowAverageRiskBusinessScoreMin = sr["BankBasedApprovalBelowAverageRiskMinBusinessScore"];
+			belowAverageRiskBusinessScoreMax = sr["BankBasedApprovalBelowAverageRiskMaxBusinessScore"];
+			belowAverageRiskPersonalScoreMin = sr["BankBasedApprovalBelowAverageRiskMinPersonalScore"];
+			belowAverageRiskPersonalScoreMax = sr["BankBasedApprovalBelowAverageRiskMaxPersonalScore"];
+			minOffer = sr["BankBasedApprovalMinOffer"];
+			homeOwnerCap = sr["BankBasedApprovalHomeOwnerCap"];
+			notHomeOwnerCap = sr["BankBasedApprovalNotHomeOwnerCap"];
+			euCap = sr["BankBasedApprovalEuCap"];
 		}
 
 		private void GetPersonalInfo()
