@@ -205,8 +205,7 @@
 
 			try
 			{
-				oRecords = null;
-				//oRecords = m_oAppCreator.BrokerLoadCustomerList(sContactEmail);
+				oRecords = m_oAppCreator.BrokerLoadCustomerList(sContactEmail);
 			}
 			catch (Exception e) {
 				oLog.Debug("Failed to load customers request for contact email {0}", sContactEmail);
