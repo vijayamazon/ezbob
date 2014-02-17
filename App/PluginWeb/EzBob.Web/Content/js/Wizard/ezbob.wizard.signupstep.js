@@ -147,15 +147,13 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
                 $.post(window.gRootPath + "Account/SwitchedToCaptcha");
             } else {
                 var codeSentObject = that.$el.find('#codeSentLabel');
-                codeSentObject.show();
                 codeSentObject.animate({ opacity: 1 });
             }
 
             return false;
         });
-        xhr.always(function() {
+        xhr.always(function () {
             that.$el.find('#mobileCodeDiv').show();
-            that.$el.find('#switchToCaptcha').removeClass('disabled');
             that.$el.find('#generateMobileCode').val('Resend activation code');
             if (document.getElementById('generateMobileCode') == document.activeElement) {
                 document.getElementById('mobileCode').focus();
@@ -168,20 +166,25 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
     mobilePhoneChanged: function () {
         var isValidPhone = this.validator.check(this.$el.find('.phonenumber'));
         var generateCodeButton = $('#generateMobileCode');
-        if (isValidPhone && generateCodeButton.hasClass('disabled')) {
-            generateCodeButton.removeClass('disabled');
+        if (isValidPhone) {
+            if (generateCodeButton.hasClass('disabled')) {
+                generateCodeButton.removeClass('disabled');
+            }
         }
-        else if (!isValidPhone && !generateCodeButton.hasClass('disabled')) {
-            generateCodeButton.addClass('disabled');
+        else {
+            if (!generateCodeButton.hasClass('disabled')) {
+                generateCodeButton.addClass('disabled');
+            }
+            this.$el.find('#mobileCodeDiv').hide();
+            this.$el.find('#generateMobileCode').val('Send activation code');
+            var codeSentObject = this.$el.find('#codeSentLabel');
+            codeSentObject.animate({ opacity: 0 });
         }
 
         return false;
     },
 
     switchToCaptcha: function () {
-        if (this.$el.find('#switchToCaptcha').hasClass('disabled'))
-            return false;
-        
         EzBob.App.trigger('clear');
         this.$el.find('#twilioDiv').hide();
         this.$el.find('#captchaDiv').show();
