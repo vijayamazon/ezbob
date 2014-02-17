@@ -122,16 +122,14 @@
 		public override void Execute()
 		{
 			ReadConfigurations();
+
+			MakeSureMpDataIsSufficient();
+
 			GetPersonalInfo();
 			GetZooplaData();
 
 			SetAutoDecisionAvailability();
-
-			if (!MakeSureMpDataIsSufficient())
-			{
-				return;
-			}
-
+			
 			if (newCreditLineOption != NewCreditLineOption.SkipEverything)
 			{
 				PerformCompanyExperianCheck();
@@ -560,7 +558,7 @@
 			}
 		}
 
-		private bool MakeSureMpDataIsSufficient()
+		private void MakeSureMpDataIsSufficient()
 		{
 			bool shouldExpectMpData = newCreditLineOption != NewCreditLineOption.SkipEverything &&
 			                         newCreditLineOption != NewCreditLineOption.UpdateEverythingExceptMp;
@@ -576,12 +574,8 @@
 					};
 
 					mailer.SendToEzbob(variables, "Mandrill - No Information about shops");
-
-					return false;
 				} // if
 			} // if
-
-			return true;
 		}
 
 		private void SetAutoDecisionAvailability()
