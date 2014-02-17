@@ -40,8 +40,28 @@ footer {
 }
 
 table.customer-list {
-	width: 100%;
+	width: 1190px !important;
+	-moz-box-sizing: border-box;
+	-webkit-box-sizing: border-box;
+	box-sizing: border-box;
 	clear: both;
+}
+
+.section-dashboard .dataTables_top_right { float: right; }
+
+.section-dashboard .dataTables_filter { display: inline; }
+
+.section-dashboard .reload-customer-list {
+	display: inline-block;
+	margin: 0.1em 2em 0 0;
+	padding: 0.2em 3em;
+	background-color: transparent;
+	border: 1px solid #eeeeee;
+	color: black;
+}
+
+.section-dashboard .reload-customer-list:hover {
+	border: 1px solid white;
 }
 
 @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {

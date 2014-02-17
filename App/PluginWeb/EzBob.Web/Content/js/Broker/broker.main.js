@@ -15,7 +15,7 @@ $(document).ready(function() {
 		return;
 	} // if
 
-	$('#user-menu .menu-btn').click(function() {
+	$('#user-menu .menu-btn').click(function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 

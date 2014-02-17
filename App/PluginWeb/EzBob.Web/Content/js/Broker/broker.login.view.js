@@ -23,13 +23,13 @@ EzBob.Broker.LoginView = EzBob.Broker.SubmitView.extend({
 		return evt;
 	}, // events
 
-	forgotten: function() {
+	forgotten: function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		this.router.forgotten();
 	}, // forgotten
 
-	signup: function() {
+	signup: function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 		this.router.signup();

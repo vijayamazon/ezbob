@@ -8,12 +8,8 @@ EzBob.Underwriter.GridTools = {
 		return '<i data-toggle=tooltip title="' + text + '" class="' + (text.toLowerCase().replace(/\s/g, '')) + '"></i>';
 	}, // showMedalIcon
 
-	withScrollbar: function(sContent) {
-		return '<div style="overflow: auto; width: auto;">' + sContent + '</div>';
-	}, // withScrollbar
-
 	profileLink: function(nCustomerID, sLinkText) {
-		return EzBob.Underwriter.GridTools.withScrollbar('<a class=profileLink title="Open customer profile" href="#profile/' + nCustomerID + '">' + (sLinkText || nCustomerID) + '</a>');
+		return EzBob.DataTables.Helper.withScrollbar('<a class=profileLink title="Open customer profile" href="#profile/' + nCustomerID + '">' + (sLinkText || nCustomerID) + '</a>');
 	}, // profileLink
 }; // EzBob.Underwriter.GridTools
 

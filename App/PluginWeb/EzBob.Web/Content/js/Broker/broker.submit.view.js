@@ -22,7 +22,7 @@ EzBob.Broker.SubmitView = EzBob.Broker.BaseView.extend({
 		return evt;
 	}, // events
 
-	doSubmit: function() {
+	doSubmit: function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 

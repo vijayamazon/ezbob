@@ -289,7 +289,17 @@
 				</div>
 				<!-- section-customer-list -->
 
-				<div class="page-section hide section-customer-details">Customer details</div>
+				<div class="page-section hide section-add-customer">Add customer
+					<button type="button" class="back-to-list">Back to customer list</button>
+				</div>
+				<!-- section-add-customer -->
+
+				<div class="page-section hide section-customer-details">
+					<h2 class="form-start">Customer details</h2>
+					
+
+					<button type="button" class="back-to-list">Back to customer list</button>
+				</div>
 				<!-- section-customer-details -->
 
 				<div class="page-section hide section-forbidden">
@@ -371,7 +381,7 @@
 			.Add("~/Content/js/ezbob.design.js")
 			.Add("~/Content/js/ezbob.uiaction.js")
 			.Add("~/Content/js/ezbob.strengthPassword.js")
-			.Add("~/Content/js/lib/jquery.dataTables.min.js")
+			.Add("~/Content/js/lib/jquery.dataTables.js")
 			.Add("~/Content/js/lib/flaty/bootstrap3.js")
 			.Add("~/Content/js/lib/bootstrap-datepicker.js")
 			.Add("~/Content/js/lib/bootstrap-modal.js")
@@ -388,6 +398,8 @@
 			.Add("~/Content/js/Broker/broker.dashboard.view.js")
 			.Add("~/Content/js/Broker/broker.login.view.js")
 			.Add("~/Content/js/Broker/broker.signup.view.js")
+			.Add("~/Content/js/Broker/broker.addcustomer.view.js")
+			.Add("~/Content/js/Broker/broker.customerdetails.view.js")
 			.Add("~/Content/js/Broker/broker.router.js")
 			.Add("~/Content/js/Broker/broker.main.js")
 			.MvcRender("~/Content/js/min/jslib_#.js"));

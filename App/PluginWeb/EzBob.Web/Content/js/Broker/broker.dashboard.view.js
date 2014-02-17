@@ -5,6 +5,8 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 	initialize: function() {
 		EzBob.Broker.DashboardView.__super__.initialize.apply(this, arguments);
 
+		this.theTable = null;
+
 		this.$el = $('.section-dashboard');
 	}, // initialize
 
@@ -12,9 +14,19 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 		var evt = {};
 
 		evt['click #AddNewCustomer'] = 'addNewCustomer';
+		evt['click .reload-customer-list'] = 'reloadCustomerList';
 
 		return evt;
 	}, // events
+
+	clear: function() {
+		EzBob.Broker.DashboardView.__super__.clear.apply(this, arguments);
+
+		if (this.theTable) {
+			this.theTable.fnClearTable();
+			this.theTable = null;
+		} // if
+	}, // clear
 
 	render: function() {
 		if (this.router.isForbidden()) {
@@ -24,20 +36,26 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 
 		EzBob.App.trigger('clear');
 
+		this.reloadCustomerList();
+
+		return this;
+	}, // render
+
+	reloadCustomerList: function() {
+		this.clear();
+
 		var sGridKey = 'brk-grid-state-' + this.router.getAuth() + '-customer-list';
 
-		var sColumns = '#CustomerID,FirstName,LastName,Email,WizardStep,Status,Marketplaces,^ApplyDate,$LoanAmount,^LoanDate';
-
-		this.$el.find('.customer-list').dataTable({
+		this.theTable = this.$el.find('.customer-list').dataTable({
 			bDestroy: true,
 			bProcessing: true,
 			sAjaxSource: '' + window.gRootPath + 'Broker/BrokerHome/LoadCustomers?sContactEmail=' + encodeURIComponent(this.router.getAuth()),
-			aoColumns: EzBob.DataTables.Helper.extractColumns(sColumns),
+			aoColumns: EzBob.DataTables.Helper.extractColumns('#CustomerID,FirstName,LastName,Email,WizardStep,Status,Marketplaces,^ApplyDate,$LoanAmount,^LoanDate'),
 
 			bDeferRender: true,
 
 			aLengthMenu: [[-1, 10, 25, 50, 100], ['all', 10, 25, 50, 100]],
-			iDisplayLength: 50,
+			iDisplayLength: 10,
 
 			sPaginationType: 'bootstrap',
 			bJQueryUI: false,
@@ -46,20 +64,29 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 				if (oData.hasOwnProperty('Marketplaces'))
 					$('.grid-item-Marketplaces', oTR).empty().html(EzBob.DataTables.Helper.showMPsIcon(oData.Marketplaces));
 
-				/*
-				if (oData.hasOwnProperty('Id')) {
-					$('.grid-item-Id', oTR).empty().html(EzBob.Underwriter.GridTools.profileLink(oData.Id));
+				if (oData.hasOwnProperty('CustomerID')) {
+					var sLinkBase = '<a class=profileLink title="Show customer details" href="#customer/' + oData.CustomerID + '">';
 
-					if (oData.hasOwnProperty('Name')) {
-						if (oData.Name)
-							$('.grid-item-Name', oTR).empty().html(EzBob.Underwriter.GridTools.profileLink(oData.Id, oData.Name));
-					} // if has name
+					$('.grid-item-CustomerID', oTR).empty().html(EzBob.DataTables.Helper.withScrollbar(
+						sLinkBase + oData.CustomerID + '</a>'
+					));
+
+					if (oData.hasOwnProperty('FirstName') && oData.FirstName) {
+						$('.grid-item-FirstName', oTR).empty().html(EzBob.DataTables.Helper.withScrollbar(
+							sLinkBase + oData.FirstName + '</a>'
+						));
+					} // if has first name
+
+					if (oData.hasOwnProperty('LastName') && oData.LastName) {
+						$('.grid-item-LastName', oTR).empty().html(EzBob.DataTables.Helper.withScrollbar(
+							sLinkBase + oData.LastName + '</a>'
+						));
+					} // if has last name
 
 					$(oTR).dblclick(function() {
 						location.assign($(oTR).find('.profileLink').first().attr('href'));
 					});
 				} // if has id
-				*/
 			}, // fnRowCallback
 
 			aaSorting: [[ 0, 'desc' ]],
@@ -80,10 +107,12 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 			}, // fnStateLoad
 		});
 
-		return this;
-	}, // render
+		this.$el.find('.dataTables_top_right').append(
+			$('<button type=button class="reload-customer-list" title="Reload customer list">Reload</button>')
+		);
+	}, // reloadCustomerList
 
 	addNewCustomer: function() {
-
+		location.assign('#add');
 	}, // addNewCustomer
 }); // EzBob.Broker.SubmitView

@@ -8,6 +8,8 @@ EzBob.Broker.Router = Backbone.Router.extend({
 		'login': 'login',
 		'dashboard': 'dashboard',
 		'forgotten': 'forgotten',
+		'add': 'addCustomer',
+		'customer/:customerid': 'showCustomer',
 		'*z': 'forbidden',
 	}, // routes
 
@@ -28,6 +30,9 @@ EzBob.Broker.Router = Backbone.Router.extend({
 	}, // setAuth
 
 	logoff: function() {
+		if (this.views.dashboard)
+			this.views.dashboard.clear();
+
 		$.post('' + window.gRootPath + 'Broker/BrokerHome/Logoff');
 		this.setAuth();
 		this.login();
@@ -92,6 +97,37 @@ EzBob.Broker.Router = Backbone.Router.extend({
 		this.show('dashboard', 'log-off', 'dashboard');
 	}, // showDashboard
 
+	addCustomer: function() {
+		if (this.isForbidden()) {
+			this.forbidden();
+			return;
+		} // if
+
+		if (this.getAuth()){
+			this.createView('addCustomer', EzBob.Broker.AddCustomerView);
+			this.show('add-customer', 'log-off', 'addCustomer');
+		}
+		else
+			this.login();
+	}, // addCustomer
+
+	showCustomer: function(customerid) {
+		if (this.isForbidden()) {
+			this.forbidden();
+			return;
+		} // if
+
+		if (this.getAuth()) {
+			if (this.views)
+				this.views.customer = null;
+
+			this.createView('customer', EzBob.Broker.CustomerDetailsView, { customerid: customerid });
+			this.show('customer-details', 'log-off', 'customer');
+		}
+		else
+			this.login();
+	}, // showCustomer
+
 	forbidden: function() {
 		this.show(this.forbiddenSection());
 	}, // forbidden
@@ -150,8 +186,6 @@ EzBob.Broker.Router = Backbone.Router.extend({
 		else
 			oShowPage();
 
-		this.navigate(sSectionName);
-
 		var oMenu = $('#user-menu');
 
 		if (sButtonClass) {
@@ -167,11 +201,13 @@ EzBob.Broker.Router = Backbone.Router.extend({
 
 	forbiddenSection: function() { return 'forbidden'; }, // forbiddenSection
 
-	createView: function(sViewName, oViewType) {
+	createView: function(sViewName, oViewType, oViewTypeArgs) {
 		if (!this.views)
 			this.views = {};
 
-		if (!this.views[sViewName])
-			this.views[sViewName] = new oViewType({ router: this, });
+		if (!this.views[sViewName]) {
+			var oArgs = $.extend({}, oViewTypeArgs || {}, { router: this, });
+			this.views[sViewName] = new oViewType(oArgs);
+		} // if
 	}, // createView
 }); // EzBob.Broker.Router

@@ -5,6 +5,10 @@ EzBob.DataTables = EzBob.DataTables || {};
 EzBob.DataTables.Helper = {
 	CGAccounts: null,
 
+	withScrollbar: function(sContent) {
+		return '<div style="overflow: auto; width: auto;">' + sContent + '</div>';
+	}, // withScrollbar
+
 	extractColumns: function(sColumns) {
 		var aryResult = [];
 
