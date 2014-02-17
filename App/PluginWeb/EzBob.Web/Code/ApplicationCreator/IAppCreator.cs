@@ -66,6 +66,6 @@ namespace EzBob.Web.Code.ApplicationCreator
 
 		void BrokerRestorePassword(string sMobile, string sCode);
 
-		BrokerCustomerEntry[] BrokerLoadCustomerList(string sContactEmail);
+		//BrokerCustomerEntry[] BrokerLoadCustomerList(string sContactEmail);
 	}
 }

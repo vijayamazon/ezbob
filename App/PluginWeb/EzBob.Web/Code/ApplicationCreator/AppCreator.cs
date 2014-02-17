@@ -620,9 +620,9 @@
 			ServiceClient.BrokerRestorePassword(sMobile, sCode);
 		} // BrokerRestorePassword
 
-		public BrokerCustomerEntry[] BrokerLoadCustomerList(string sContactEmail) {
+		/*public BrokerCustomerEntry[] BrokerLoadCustomerList(string sContactEmail) {
 			return ServiceClient.BrokerLoadCustomerList(sContactEmail).Records;
-		}
+		}*/
 
 		#region property ServiceClient
 		
