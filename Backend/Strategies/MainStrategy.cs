@@ -165,6 +165,8 @@
 			{
 				modelLoanOffer = 0;
 			}
+			// update offered loan + term
+
 
 			UpdateCustomerAndCashRequest(scoringResult.ScoreResult, scoringResult.MaxOfferPercent);
 
@@ -175,6 +177,12 @@
 					UpdateApprovalData();
 					SendApprovalMails();
 					strategyHelper.AddApproveIntoDecisionHistory(customerId, "Auto Approval");
+				}
+				else if (autoDecisionResponse.IsAutoBankBasedApproval)
+				{
+					// update cash request
+					// send mail
+					strategyHelper.AddApproveIntoDecisionHistory(customerId, "Auto bank based approval");
 				}
 				else
 				{

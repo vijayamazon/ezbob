@@ -75,6 +75,7 @@
     <Compile Include="AutoDecisions\Approval.cs" />
     <Compile Include="AutoDecisions\AutoDecisionMaker.cs" />
     <Compile Include="AutoDecisions\AutoDecisionResponse.cs" />
+    <Compile Include="AutoDecisions\BankBasedApproval.cs" />
     <Compile Include="AutoDecisions\Rejection.cs" />
     <Compile Include="AutoDecisions\ReApproval.cs" />
     <Compile Include="AutoDecisions\ReRejection.cs" />
