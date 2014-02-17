@@ -44,7 +44,7 @@ EzBob.Broker.MobilePhoneView = EzBob.Broker.SubmitView.extend({
 	}, // mobilePhoneChanged
 
 	generateMobileCode: function() {
-		if ($('#' + this.GenerateCodeBtnID).hasClass('disabled'))
+		if (!this.isSomethingEnabled('#' + this.GenerateCodeBtnID))
 			return false;
 
 		EzBob.App.trigger('clear');
@@ -57,13 +57,13 @@ EzBob.Broker.MobilePhoneView = EzBob.Broker.SubmitView.extend({
 			if (isError !== 'False' && (!isError.success || isError.error === 'True'))
 				EzBob.App.trigger('error', 'Error sending code.');
 			else
-				self.$el.find('#' + self.CodeSentLabelID).show().animate({ opacity: 1 });
+				self.$el.find('#' + self.CodeSentLabelID).removeClass('hide').show().animate({ opacity: 1 });
 
 			return false;
 		});
 
 		xhr.always(function() {
-			self.$el.find('#' + self.MobileCodeSectionID).show();
+			self.$el.find('#' + self.MobileCodeSectionID).removeClass('hide').show();
 			self.$el.find('#' + self.GenerateCodeBtnID).val('Resend activation code');
 
 			if (document.activeElement && ($(document.activeElement).attr('id') === self.GenerateCodeBtnID))

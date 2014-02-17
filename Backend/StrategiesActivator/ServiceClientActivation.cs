@@ -13,6 +13,7 @@
 	public class ServiceClientActivation {
 		private readonly string[] args;
 		private readonly EzServiceClient serviceClient;
+		private readonly EzServiceAdminClient adminClient;
 
 		public ServiceClientActivation(string[] args) {
 			this.args = new string[args.Length - 1];
@@ -31,6 +32,11 @@
 			var oTcpBinding = new NetTcpBinding();
 
 			serviceClient = new EzServiceClient(
+				oTcpBinding,
+				new EndpointAddress(cfg.AdminEndpointAddress)
+			);
+
+			adminClient = new EzServiceAdminClient(
 				oTcpBinding,
 				new EndpointAddress(cfg.AdminEndpointAddress)
 			);
@@ -630,6 +636,30 @@
 				Console.WriteLine("ID: {0} Name: {1} {2}", oEntry.CustomerID, oEntry.FirstName, oEntry.LastName);
 			} // for each entry
 		} // BrokerLoadCustomerList
+
+		[Activation]
+		private void ListActiveActions() {
+			StringListActionResult res = adminClient.ListActiveActions();
+
+			Console.WriteLine(
+				"\nRetriever (i.e. this action):\n\t{{ {0}: {4} [{1}sync] {2}: {3} }}",
+				res.MetaData.ActionID,
+				res.MetaData.IsSynchronous ? "" : "a",
+				res.MetaData.Status,
+				res.MetaData.Comment ?? "-- no comments --",
+				res.MetaData.Name
+			);
+
+			string sKey = "{ " + res.MetaData.ActionID;
+
+			Console.WriteLine("\nList of active actions - begin:\n");
+
+			foreach (string s in res.Records)
+				if (!s.StartsWith(sKey))
+					Console.WriteLine("\t{0}\n", s);
+
+			Console.WriteLine("\nList of active actions - end.");
+		} // ListActiveActions
 
 		// ReSharper restore UnusedMember.Local
 

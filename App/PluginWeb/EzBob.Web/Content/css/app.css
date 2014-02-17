@@ -1475,19 +1475,26 @@ td.account-logo {
     padding-top: 32px;
 }
 
+.code-sent-style-container {
+	width: 60%;
+	max-width: 60%;
+	position: relative;
+}
+
 .code-sent-style {
-    margin-left: 50.5%;
+	top: 6px;
+	right: 4px;
     position: absolute;
     background-color: #1AB852;
-    height: 14px;
-    margin-top: -31px;
     color: white;
     font-weight: normal;
     font-size: 10px;
-    padding-left: 4px;
-    padding-right: 4px;
-    padding-bottom: 12px;
+	line-height: 1px;
+    padding: 12px 4px;
+	display: block;
     opacity: 0;
+	margin: 0;
+	border: 0;
 }
 
 i.amazon,
@@ -1552,6 +1559,28 @@ ul.sub_footer_nav li a{float:left; display:block; padding:10px 10px 10px 0; colo
 	background: -moz-linear-gradient(top,  #4e7d0e,  #7db72f);
 	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#4e7d0e', endColorstr='#7db72f');
 }
+
+input.form_field, textarea.form_field { width: 96%; }
+
+input.form_field, input.form_field_look, select.form_field { height: 36px !important; font-size: 16px !important; font-weight: normal!important;}
+
+textarea.form_field_left_side { height: auto !important; margin: 0; resize: none;width: 96%; }
+
+div.form_read_and_accept { width: 100%; }
+
+select.form_field { width: 96%; height: 38px; padding: 4px; }
+
+select.form_field_date { width: 70%; }
+
+div.form_field_container { margin-bottom: 1.6em; }
+
+input.form_field_left_side { max-width: 60%; }
+
+input.form_field_right_side { float: right;margin-right: 8px; }
+
+input.form_field_right_side { width: 32%; max-width: 180px; height: 36px; }
+
+input.form_field_right_side_signup_phone { float: right; margin-right: 10px; width: 26%;height: 36px; }
 
 @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
 
