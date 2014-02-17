@@ -35,7 +35,7 @@
 		#region property Name
 
 		public override string Name {
-			get { return "Update Marketplaces"; }
+			get { return "Update Marketplace"; }
 		} // Name
 
 		#endregion property Name
@@ -57,10 +57,14 @@
 			bool disabled = sr["Disabled"];
 
 			if (disabled)
+			{
+				Log.Info("MP:{0} is disabled and won't be updated", marketplaceId);
 				return;
+			}
 
 			bool tokenExpired = false;
 
+			Log.Info("Activating retrieve data helper of:{0}", marketplaceName);
 			try {
 				if (null == Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(marketplaceName)) {
 					switch (marketplaceName) {
@@ -103,7 +107,7 @@
 			}
 			catch (Exception e) {
 				errorMessage = e.Message;
-				string emailSubject, templateName;
+				Log.Warn("Exception occured during mp update. id:{0}", marketplaceId);
 
 				if (
 					marketplaceName == "eBay" && (
