@@ -1,21 +1,24 @@
 IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE Name = N'CompanyId' and Object_ID = Object_ID(N'Customer'))
 BEGIN 
 	ALTER TABLE Customer ADD CompanyId INT NULL
-END 
-GO
-
-DECLARE @CompanyId INT, @CustomerId INT
-DECLARE cur CURSOR FOR SELECT Id, CustomerId FROM Company		
-OPEN cur
-FETCH NEXT FROM cur INTO @CompanyId, @CustomerId
-WHILE @@FETCH_STATUS = 0
-BEGIN
-	UPDATE Customer SET CompanyId = @CompanyId WHERE Id = @CustomerId
 	
+	DECLARE @CompanyId INT, @CustomerId INT
+	DECLARE @stmt VARCHAR(MAX)
+	SET @stmt = 
+	'DECLARE cur CURSOR FOR SELECT Id, CustomerId FROM Company		
+	OPEN cur
 	FETCH NEXT FROM cur INTO @CompanyId, @CustomerId
-END
-CLOSE cur
-DEALLOCATE cur
+	WHILE @@FETCH_STATUS = 0
+	BEGIN
+		UPDATE Customer SET CompanyId = @CompanyId WHERE Id = @CustomerId
+		
+		FETCH NEXT FROM cur INTO @CompanyId, @CustomerId
+	END
+	CLOSE cur
+	DEALLOCATE cur'
+	
+	EXEC(@stmt)
+END 
 GO
 	
 IF EXISTS (SELECT 1 FROM sys.columns WHERE Name = N'CustomerId' and Object_ID = Object_ID(N'Company'))
