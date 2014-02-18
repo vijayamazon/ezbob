@@ -218,10 +218,10 @@
 						lrInfills.Add(new KeyValuePair<string, string> { Key = "MiscellaneousText", Value = ((MiscTextInfillType)infill).Value });
 						break;
 					case "NameInfillType":
-						lrInfills.Add(new KeyValuePair<string, string> { Key = "MiscellaneousText", Value = ((NameInfillType)infill).Value });
+						lrInfills.Add(new KeyValuePair<string, string> { Key = "Name", Value = ((NameInfillType)infill).Value });
 						break;
 					case "NoteInfillType":
-						lrInfills.Add(new KeyValuePair<string, string> { Key = "MiscellaneousText", Value = ((NoteInfillType)infill).Value });
+						lrInfills.Add(new KeyValuePair<string, string> { Key = "Note", Value = ((NoteInfillType)infill).Value });
 						break;
 					case "OptMiscTextInfillType":
 						lrInfills.Add(new KeyValuePair<string, string> { Key = "OptionalMiscText", Value = ((OptMiscTextInfillType)infill).Value });
