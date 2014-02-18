@@ -64,6 +64,45 @@ table.customer-list {
 	border: 1px solid white;
 }
 
+.section-customer-details .personal-details-top {
+	width: 100%;
+	font-size: 15px;
+	display: table;
+}
+
+.section-customer-details .personal-details-top .personal-details-top-row {
+	display: table-row;
+}
+
+.section-customer-details .customer-personal-details-container {
+	display: table-cell;
+}
+
+.section-customer-details .customer-personal-details {
+	display: table;
+}
+
+.section-customer-details .customer-personal-details .datum {
+	display: table-row;
+}
+
+.section-customer-details .customer-personal-details .datum .title {
+	display: table-cell;
+	font-weight: bold;
+	padding-right: 1em;
+	padding-bottom: 0.5em;
+	white-space: nowrap;
+}
+
+.section-customer-details .customer-personal-details .datum .value {
+	display: table-cell;
+}
+
+.section-customer-details .dropzone {
+	display: table-cell;
+	width: 50%;
+}
+
 @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
 	.broker-form {
 		float: left;
