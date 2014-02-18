@@ -124,7 +124,7 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 				action: 'GridRegistered',
 				columns: '#UserId,Email,UserStatus,^RegDate,MP_Statuses,WizardStep,SegmentType',
 				fnRowCallback: function (oTR, oData, iDisplayIndex, iDisplayIndexFull) {
-				    $('.grid-item-UserId', oTR).empty().html(EzBob.Underwriter.GridTools.profileLink(oData.UserId));
+					$('.grid-item-UserId', oTR).empty().html(EzBob.Underwriter.GridTools.profileLink(oData.UserId));
 
 					$(oTR).dblclick(function() {
 						location.assign($(oTR).find('.profileLink').first().attr('href'));
@@ -152,6 +152,9 @@ EzBob.Underwriter.GridsView = Backbone.View.extend({
 							!oView.$el.find(sTableContainer + ' #logbook-new-entry-form').hasClass('hide')
 						);
 				}, // OnAfterRender
+				fnRowCallback: function (oTR, oData, iDisplayIndex, iDisplayIndexFull) {
+					$('.grid-item-EntryContent', oTR).empty().html(oData.EntryContent.replace(/\n/g, '<br>'));
+				}, // fnRowCallback
 			}), // logbook
 		}; // gridProperties
 	}, // initialize
