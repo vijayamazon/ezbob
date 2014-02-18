@@ -26,6 +26,7 @@
 			Log = new SafeLog(oLog);
 			IsValid = false;
 			Cfg = qoc;
+			m_oExperianUtils = new ExperianUtils(oLog);
 		} // constructor
 
 		#endregion constructor
@@ -86,7 +87,7 @@
 				Amount = nOffer.Value,
 				Aml = Aml,
 				BusinessScore = BusinessScore,
-				IncorporationDate = IncorporationDate,
+				IncorporationDate = IncorporationDate.Value,
 				TangibleEquity = TangibleEquity,
 				TotalCurrentAssets = TotalCurrentAssets,
 
@@ -176,7 +177,7 @@
 
 		private int Aml;
 		private int BusinessScore;
-		private DateTime IncorporationDate;
+		private DateTime? IncorporationDate;
 		private decimal TangibleEquity;
 		private decimal TotalCurrentAssets;
 
@@ -263,7 +264,7 @@
 			if (IsThinFile())
 				return;
 
-			DetectAml();
+			Aml = m_oExperianUtils.DetectAml(AmlData);
 			if (Aml < Cfg.AmlMin) {
 				Log.Debug("QuickOffer.Validate: AML is too low.");
 				return;
@@ -271,24 +272,37 @@
 
 			XmlNode oCompanyInfo = Xml.ParseRoot(CompanyData);
 
-			if (!IsDirector(oCompanyInfo)) {
+			if (!m_oExperianUtils.IsDirector(oCompanyInfo, FirstName, LastName)) {
 				Log.Debug("QuickOffer.Validate: the customer is not director of this company.");
 				return;
 			} // if
 
-			DetectBusinessScore(oCompanyInfo);
+			BusinessScore = m_oExperianUtils.DetectBusinessScore(oCompanyInfo);
 			if (BusinessScore < Cfg.BusinessScoreMin) {
 				Log.Debug("QuickOffer.Validate: business score is too low.");
 				return;
 			} // if
 
-			DetectIncorporationDate(oCompanyInfo);
-			if (DateTime.UtcNow.Subtract(IncorporationDate).TotalDays < 30.45 * Cfg.CompanySeniorityMonths) {
+			IncorporationDate = m_oExperianUtils.DetectIncorporationDate(oCompanyInfo);
+
+			if (!IncorporationDate.HasValue) {
+				Log.Debug("QuickOffer.Validate: business age cannot be detected.");
+				return;
+			} // if
+
+			if (DateTime.UtcNow.Subtract(IncorporationDate.Value).TotalDays < 30.45 * Cfg.CompanySeniorityMonths) {
 				Log.Debug("QuickOffer.Validate: business is too young.");
 				return;
 			} // if
 
-			DetectTangibleEquity(oCompanyInfo);
+			decimal nTangibleEquity = 0;
+			decimal nTotalCurrentAssets = 0;
+
+			m_oExperianUtils.DetectTangibleEquity(oCompanyInfo, out nTangibleEquity, out nTotalCurrentAssets);
+
+			TangibleEquity = nTangibleEquity;
+			TotalCurrentAssets = nTotalCurrentAssets;
+
 			if (TangibleEquity < 0) {
 				Log.Debug("QuickOffer.Validate: tangible equity is to low.");
 				return;
@@ -298,181 +312,6 @@
 		} // Validate
 
 		#endregion method Validate
-
-		#region method DetectIncorporationDate
-
-		private void DetectIncorporationDate(XmlNode oCompanyInfo) {
-			var oPath = new NameList("REQUEST", "DL12");
-
-			XmlNode oNode = oCompanyInfo.Offspring(oPath);
-
-			if (ReferenceEquals(oNode, null)) {
-				Log.Alert("Could not find incorporation date container tag {0} in company data.", oPath);
-				return;
-			} // if
-
-			DateTime? oDate = ExtractDate(oNode, "DATEINCORP", "incorporation date");
-
-			if (!oDate.HasValue)
-				return;
-
-			IncorporationDate = oDate.Value;
-			Log.Debug("Incorporation date is {0}; current age in days is {1:N}.", IncorporationDate.ToString("MMMM d yyyy"), DateTime.UtcNow.Subtract(IncorporationDate).TotalDays);
-		} // DetectIncorporationDate
-
-		#endregion method DetectIncorporationDate
-
-		#region method DetectTangibleEquity
-
-		private void DetectTangibleEquity(XmlNode oCompanyInfo) {
-			TangibleEquity = -1;
-			TotalCurrentAssets = 0;
-
-			var oLust = oCompanyInfo.SelectNodes("./REQUEST/DL99");
-
-			if (ReferenceEquals(oLust, null)) {
-				Log.Debug("QuickOffer.Validate: Experian did not provide Financial Details IFRS & UK GAAP (DL99).");
-				return;
-			} // if
-
-			XmlNode oCurNode = null;
-			DateTime? oCurDate = null;
-
-			foreach (XmlNode oNode in oLust) {
-				DateTime? oDate = ExtractDate(oNode, "DATEOFACCOUNTS", "accounts date");
-
-				if (!oDate.HasValue)
-					continue;
-
-				if (ReferenceEquals(oCurNode, null) || (oCurDate.Value < oDate.Value)) {
-					oCurNode = oNode;
-					oCurDate = oDate;
-				} // if
-			} // for each DL99
-
-			if (ReferenceEquals(oCurNode, null)) {
-				Log.Debug("QuickOffer.Validate: Financial Details IFRS & UK GAAP (DL99) not found.");
-				return;
-			} // if
-
-			Log.Debug("Calculating tangible equity from data for {0}.", oCurDate.Value.ToString("MMMM d yyyy", CultureInfo.InvariantCulture));
-
-			Action<decimal> oPlus = (x) => TangibleEquity += x;
-			Action<decimal> oMinus = (x) => TangibleEquity -= x;
-			Action<decimal> oSet = (x) => TotalCurrentAssets = x;
-
-			var oTags = new List<Tuple<string, Action<decimal>>> {
-				new Tuple<string, Action<decimal>>("TOTALSHAREFUND", oPlus),
-				new Tuple<string, Action<decimal>>("INTNGBLASSETS", oMinus),
-				new Tuple<string, Action<decimal>>("FINDIRLOANS", oPlus),
-				new Tuple<string, Action<decimal>>("CREDDIRLOANS", oPlus),
-				new Tuple<string, Action<decimal>>("FINLBLTSDIRLOANS", oPlus),
-				new Tuple<string, Action<decimal>>("DEBTORSDIRLOANS", oMinus),
-				new Tuple<string, Action<decimal>>("ONCLDIRLOANS", oPlus),
-				new Tuple<string, Action<decimal>>("CURRDIRLOANS", oMinus),
-				new Tuple<string, Action<decimal>>("TOTALCURRASSETS", oSet),
-			};
-
-			TangibleEquity = 0;
-
-			var ci = new CultureInfo("en-GB", false);
-
-			foreach (var oTag in oTags) {
-				string sTagName = oTag.Item1;
-				Action<decimal> oOperation = oTag.Item2;
-
-				XmlNode oNum = oCurNode[sTagName];
-
-				decimal nValue;
-
-				if (ReferenceEquals(oNum, null)) {
-					Log.Debug("Tag {0} not found, using 0.", sTagName);
-					nValue = 0;
-				}
-				else {
-					if (decimal.TryParse(oNum.InnerText.Trim(), out nValue))
-						Log.Debug("{0} = {1}", sTagName, nValue.ToString("C2", ci));
-					else
-						Log.Debug("Failed to parse tag {0} = '{1}', using 0.", sTagName, oNum.InnerText);
-				} // if
-
-				oOperation(nValue);
-			} // foreach
-
-			Log.Debug("Tangible equity is {0}.", TangibleEquity.ToString("C2", ci));
-			Log.Debug("Total current assets is {0}.", TotalCurrentAssets.ToString("C2", ci));
-		} // DetectTangibleEquity
-
-		#endregion method DetectTangibleEquity
-
-		#region method ExtractDate
-
-		private DateTime? ExtractDate(XmlNode oParent, string sBaseTagName, string sDateDisplayName) {
-			XmlNode oYear = oParent[sBaseTagName + "-YYYY"];
-
-			if (ReferenceEquals(oYear, null)) {
-				Log.Alert("Could not find {0} year tag.", sDateDisplayName);
-				return null;
-			} // if
-
-			XmlNode oMonth = oParent[sBaseTagName + "-MM"];
-
-			if (ReferenceEquals(oMonth, null)) {
-				Log.Alert("Could not find {0} month tag.", sDateDisplayName);
-				return null;
-			} // if
-
-			XmlNode oDay = oParent[sBaseTagName + "-DD"];
-
-			if (ReferenceEquals(oDay, null)) {
-				Log.Alert("Could not find {0} day tag.", sDateDisplayName);
-				return null;
-			} // if
-
-			string sDate = string.Format(
-				"{0}-{1}-{2}",
-				oYear.InnerText.Trim().PadLeft(4, '0'),
-				oMonth.InnerText.Trim().PadLeft(2, '0'),
-				oDay.InnerText.Trim().PadLeft(2, '0')
-			);
-
-			DateTime oDate;
-
-			if (!DateTime.TryParseExact(sDate, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out oDate)) {
-				Log.Alert("Could not find parse {1} from '{0}'.", sDate, sDateDisplayName);
-				return null;
-			} // if
-
-			return oDate;
-		} // ExtractDate
-
-		#endregion method ExtractDate
-
-		#region method DetectBusinessScore
-
-		private void DetectBusinessScore(XmlNode oCompanyInfo) {
-			var oPath = new NameList("REQUEST", "DL76", "RISKSCORE");
-
-			XmlNode oNode = oCompanyInfo.Offspring(oPath);
-
-			if (ReferenceEquals(oNode, null)) {
-				Log.Alert("Could not find business score tag {0} in company data.", oPath);
-				return;
-			} // if
-
-			int nScore;
-
-			if (!int.TryParse(oNode.InnerText, out nScore)) {
-				Log.Alert("Failed to parse business score content '{0}' as int.", oNode.InnerText);
-				return;
-			} // if
-
-			BusinessScore = nScore;
-
-			Log.Debug("Business score is {0}.", BusinessScore);
-		} // DetectBusinessScore
-
-		#endregion method DetectBusinessScore
 
 		#region method AreLoadedValid
 
@@ -552,78 +391,6 @@
 
 		#endregion method AreLoadedValid
 
-		#region method IsDirector
-
-		private bool IsDirector(XmlNode oCompanyInfo) {
-			var oLust = oCompanyInfo.SelectNodes("./REQUEST/DL72");
-
-			if (ReferenceEquals(oLust, null)) {
-				Log.Debug("Experian did not provide any director information.");
-				return false;
-			} // if
-
-			string sFirstName = FirstName.Trim().ToLower();
-			string sLastName = LastName.Trim().ToLower();
-
-			foreach (XmlNode oNode in oLust) {
-				XmlNode oFirstName = oNode["DIRFORENAME"];
-
-				if (ReferenceEquals(oFirstName, null))
-					continue;
-
-				XmlNode oLastName = oNode["DIRSURNAME"];
-
-				if (ReferenceEquals(oLastName, null))
-					continue;
-
-				if ((oFirstName.InnerText.Trim().ToLower() == sFirstName) && (oLastName.InnerText.Trim().ToLower() == sLastName)) {
-					Log.Debug("The customer is confirmed as a director of this company.");
-					return true;
-				} // if
-			} // for each director
-
-			Log.Debug("Customer name was not found in director list.");
-			return false;
-		} // IsDirector
-
-		#endregion method IsDirector
-
-		#region method DetectAml
-
-		private void DetectAml() {
-			XmlNode aml;
-
-			try {
-				aml = Xml.ParseRoot(AmlData);
-			}
-			catch (SeldenException e) {
-				Log.Alert(e, "Could not parse AML data.");
-				return;
-			} // try
-
-			var oPath = new NameList("ProcessConfigResultsBlock", "EIAResultBlock", "AuthenticationIndex");
-
-			XmlNode oNode = aml.Offspring(oPath);
-
-			if (ReferenceEquals(oNode, null)) {
-				Log.Alert("Could not find company score tag {0} in AML data.", oPath);
-				return;
-			} // if
-
-			int nScore;
-
-			if (!int.TryParse(oNode.InnerText, out nScore)) {
-				Log.Alert("Failed to parse company score content '{0}' as int.", oNode.InnerText);
-				return;
-			} // if
-
-			Aml = nScore;
-
-			Log.Debug("AML score is {0}.", Aml);
-		} // DetectAml
-
-		#endregion method DetectAml
-
 		#region method IsThinFile
 
 		private bool IsThinFile() {
@@ -658,6 +425,8 @@
 		} // IsThinFile
 
 		#endregion method IsThinFile
+
+		private readonly ExperianUtils m_oExperianUtils;
 
 		#endregion private
 	} // class QuickOfferData

@@ -86,6 +86,7 @@
     <Compile Include="Broker\BrokerData.cs" />
     <Compile Include="CaisUpdate.cs" />
     <Compile Include="BwaChecker.cs" />
+    <Compile Include="ExperianUtils.cs" />
     <Compile Include="FinishWizard.cs" />
     <Compile Include="ExperianConsumerCheck.cs" />
     <Compile Include="ExperianCompanyCheck.cs" />
