@@ -10,7 +10,7 @@
 		[Test]
 		public void testMedalCalculation()
 		{
-			MedalScoreCalculator msc = new MedalScoreCalculator(new SafeLog());
+			var msc = new MedalScoreCalculator(new SafeLog());
 			var medal = msc.CalculateMedalScore(125000, 740, 8, 10000, MaritalStatus.Married, Gender.M, 0, false, 1.2M, 0, 0, 0);
 
 			Assert.AreEqual(medal.Medal, MedalMultiplier.Silver);
@@ -19,10 +19,30 @@
 		[Test]
 		public void testMedalCalculation2()
 		{
-			MedalScoreCalculator msc = new MedalScoreCalculator(new SafeLog());
+			var msc = new MedalScoreCalculator(new SafeLog());
 			var medal = msc.CalculateMedalScore(125000, 900, 8, 10000, MaritalStatus.Married, Gender.M, 3, false, 0, 0, 0, 0);
 
 			Assert.AreEqual(medal.Medal, MedalMultiplier.Gold);
+		}
+
+		[Test]
+		public void testPrcent()
+		{
+			var msc = new MedalScoreCalculator(new ConsoleLog());
+			var offer = msc.GetRange(Constants.OfferPercentRanges, 0).OfferPercent;
+			Assert.AreEqual(0.07M, offer);
+
+			offer = msc.GetRange(Constants.OfferPercentRanges, 720).OfferPercent;
+			Assert.AreEqual(0.06M, offer);
+
+			offer = msc.GetRange(Constants.OfferPercentRanges, 900).OfferPercent;
+			Assert.AreEqual(0.05M, offer);
+
+			offer = msc.GetRange(Constants.OfferPercentRanges, 1020).OfferPercent;
+			Assert.AreEqual(0.04M, offer);
+
+			offer = msc.GetRange(Constants.OfferPercentRanges, 1220).OfferPercent;
+			Assert.AreEqual(0.03M, offer);
 		}
 	}
 }

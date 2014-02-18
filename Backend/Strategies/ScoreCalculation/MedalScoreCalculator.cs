@@ -28,6 +28,12 @@
 			int ezbobNumOfLateRepayments,
 			int ezbobNumOfEarlyReayments)
 		{
+			m_oLog.Debug(
+				"CalculateMedalScore input params: annualTurnover: {0}, experianScore: {1}, mpSeniorityYears: {2}, positiveFeedbackCount: {3}, maritalStatus: {4}, gender: {5}, numberOfStores: {6}, firstRepaymentDatePassed: {7}, ezbobSeniority: {8}, ezbobNumOfLoans: {9}, ezbobNumOfLateRepayments: {10}, ezbobNumOfEarlyReayments: {11}",
+				annualTurnover, experianScore, mpSeniorityYears, positiveFeedbackCount, maritalStatus, gender, numberOfStores,
+				firstRepaymentDatePassed, ezbobSeniority, ezbobNumOfLoans, ezbobNumOfLateRepayments, ezbobNumOfEarlyReayments);
+
+
 			var dict = new Dictionary<Parameter, Weight> {
 				{Parameter.ExperianScore,            GetExperianScoreWeight(experianScore, firstRepaymentDatePassed)},
 				{Parameter.MpSeniority,              GetMpSeniorityWeight(mpSeniorityYears, firstRepaymentDatePassed)},
@@ -375,7 +381,7 @@
 			return 0;
 		}
 
-		private T GetRange<T>(IEnumerable<T> ranges, decimal value) where T : Range
+		public T GetRange<T>(IEnumerable<T> ranges, decimal value) where T : Range
 		{
 			foreach (var rangeGrage in ranges)
 			{
