@@ -206,7 +206,7 @@ namespace EzBob.Backend.Strategies.ScoreCalculation {
 		#region Decision Percent Range
 
 		public static List<RangeOfferPercent> DecisionPercentRanges = new List<RangeOfferPercent> {
-			new RangeOfferPercent {MinValue = null,MaxValue = 549, OfferPercent = 0.07M },
+			new RangeOfferPercent {MinValue = null,MaxValue = 549, OfferPercent = 0.0M },
 			new RangeOfferPercent {MinValue = 550,MaxValue = 649, OfferPercent = 0.65M },
 			new RangeOfferPercent {MinValue = 650,MaxValue = null, OfferPercent = 1 },
 		};
