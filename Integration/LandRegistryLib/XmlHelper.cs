@@ -17,7 +17,7 @@
 				var serializer = new XmlSerializer(serializableObject.GetType());
 				var stream = new MemoryStream();
 
-				using (var xmlTextWriter = new XmlTextWriter(stream, Encoding.UTF8) { Formatting = Formatting.Indented })
+				using (var xmlTextWriter = new XmlTextWriter(new StreamWriter(stream)) { Formatting = Formatting.Indented, IndentChar = ' '})
 				{
 					serializer.Serialize(xmlTextWriter, serializableObject);
 					stream = (MemoryStream)xmlTextWriter.BaseStream;
@@ -55,21 +55,16 @@
 			try
 			{
 				var xs = new XmlSerializer(typeof(T));
-				var memoryStream = new MemoryStream(StringToUnicodeByteArray(xml));
-				T obj = (T)xs.Deserialize(memoryStream);
-				return obj;
+				using (TextReader sr = new StringReader(xml))
+				{
+					var output = (T) xs.Deserialize(sr);
+					return output;
+				}
 			}
 			catch (Exception ex)
 			{
 				throw ex;
 			}
-		}
-
-		private static Byte[] StringToUnicodeByteArray(string pXmlString)
-		{
-			UnicodeEncoding encoding = new UnicodeEncoding();
-			byte[] byteArray = encoding.GetBytes(pXmlString);
-			return byteArray;
 		}
 	}
 }

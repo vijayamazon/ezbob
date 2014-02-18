@@ -34,7 +34,8 @@
 
 		public LandRegistryEnquiryModel BuildEnquiryModel(string responseXml)
 		{
-			var response = XmlHelper.XmlDeserializeFromString<ResponseSearchByPropertyDescriptionV2_0Type>(responseXml);
+			var response = XmlHelper.DeserializeObject<ResponseSearchByPropertyDescriptionV2_0Type>(responseXml); 
+			//XmlHelper.XmlDeserializeFromString<ResponseSearchByPropertyDescriptionV2_0Type>(responseXml);
 			return BuildEnquiryModel(response);
 		}
 
@@ -168,12 +169,19 @@
 			var addresses = new List<LandRegistryAddressModel>();
 			foreach (var address in propertyAddress)
 			{
-				var lrAddress = new LandRegistryAddressModel { PostCode = address.PostcodeZone.Postcode.Value };
-				foreach (var line in address.AddressLine.Line)
+				var lrAddress = new LandRegistryAddressModel
+					{
+						PostCode =
+							address.PostcodeZone != null && address.PostcodeZone.Postcode != null ? address.PostcodeZone.Postcode.Value : null
+					};
+				if (address.AddressLine != null && address.AddressLine.Line != null)
 				{
-					lrAddress.Lines += " " + line.Value;
+					foreach (var line in address.AddressLine.Line)
+					{
+						lrAddress.Lines += " " + line.Value;
+					}
+					addresses.Add(lrAddress);
 				}
-				addresses.Add(lrAddress);
 			}
 			return addresses;
 		}
@@ -181,6 +189,8 @@
 		private List<KeyValuePair<string, string>> GetInfills(IEnumerable<object> infills)
 		{
 			var lrInfills = new List<KeyValuePair<string, string>>();
+			
+			if (infills == null) return lrInfills;
 
 			foreach (var infill in infills)
 			{

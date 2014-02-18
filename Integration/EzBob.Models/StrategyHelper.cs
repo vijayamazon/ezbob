@@ -656,48 +656,46 @@
 
 		public LandRegistryDataModel GetLandRegistryData(int customerId, string titleNumber, bool recheck = false)
 		{
-			var b = new LandRegistryModelBuilder();
-			var res = XmlHelper.XmlDeserializeFromString<LandRegistryLib.LRResServiceNS.ResponseOCWithSummaryV2_1Type>(LandRegistryTestFixure.TestResBM253452);
-			var model = new LandRegistryDataModel() { Res = b.BuildResModel(res) };
-			return model;
+			var isProd = configurationVariablesRepository.GetByNameAsBool("LandRegistryProd");
+			//var res = XmlHelper.XmlDeserializeFromString<LandRegistryLib.LRResServiceNS.ResponseOCWithSummaryV2_1Type>(LandRegistryTestFixure.TestResBM253452);
+			//var model = new LandRegistryDataModel() { Res = b.BuildResModel(res) };
+			//return model;
 			
 			
 			//todo implement the logic to retrieve enquiry data, retrieve res data store to db
-			//var isStub = true;
-			//ILandRegistryApi lr;
-			//if (isStub)
-			//{
-			//	lr = new LandRegistryTestApi();
-			//}
-			//else
-			//{
-			//	lr = new LandRegistryApi();
-			//}
-			//var model = lr.Res(titleNumber, customerId);
-			//return model;
+			ILandRegistryApi lr;
+			if (isProd)
+			{
+				lr = new LandRegistryApi();
+			}
+			else
+			{
+				lr = new LandRegistryTestApi();
+			}
+			var model = lr.Res(titleNumber, customerId);
+			return model;
 		}
 
 
 		public LandRegistryDataModel GetLandRegistryEnquiryData(int customerId, string buildingNumber, string streetName, string cityName, string postCode)
 		{
-			var b = new LandRegistryModelBuilder();
-			var model = new LandRegistryDataModel() { Enquery = b.BuildEnquiryModel(LandRegistryTestFixure.TestEnquiry) };
-			return model;
+			var isProd = configurationVariablesRepository.GetByNameAsBool("LandRegistryProd");
+			//var model = new LandRegistryDataModel() { Enquery = b.BuildEnquiryModel(LandRegistryTestFixure.TestEnquiry) };
+			//return model;
 
 			//todo implement the logic to retrieve enquiry data, retrieve res data store to db
-			//var isStub = true;
-			//ILandRegistryApi lr;
-			//if (isStub)
-			//{
-			//	lr = new LandRegistryTestApi();
-			//}
-			//else
-			//{
-			//	lr = new LandRegistryApi();
-			//}
+			ILandRegistryApi lr;
+			if (isProd)
+			{
+				lr = new LandRegistryApi();
+			}
+			else
+			{
+				lr = new LandRegistryTestApi();
+			}
 
-			//var model = lr.EnquiryByPropertyDescription(buildingNumber, streetName, cityName, postCode, customerId);
-			//return model;
+			var model = lr.EnquiryByPropertyDescription(buildingNumber, streetName, cityName, postCode, customerId);
+			return model;
 		}
 	}
 }

@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace LandRegistryLib
+﻿namespace LandRegistryLib
 {
+	using System.Collections.Generic;
+
 	public class EnquiryError
 	{
 		public string RuleDescription { get; set; }

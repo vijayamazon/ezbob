@@ -1,6 +1,7 @@
 ﻿namespace LandRegistryLib
 {
 	using System;
+	using System.IO;
 	using System.Net;
 	using log4net;
 
@@ -8,6 +9,7 @@
 	{
 		private static readonly ILog Log = LogManager.GetLogger(typeof(LandRegistryApi));
 		private readonly LandRegistryModelBuilder _builder = new LandRegistryModelBuilder();
+		
 		public LandRegistryDataModel EnquiryByPropertyDescription(string buildingNumber = null, string streetName = null, string cityName = null, string postCode = null, int customerId = 1)
 		{
 			var model = new LandRegistryDataModel { RequestType = LandRegistryRequestType.EnquiryByPropertyDescription };
@@ -44,11 +46,13 @@
 
 				model.Request = XmlHelper.SerializeObject(request);
 				LREnquiryServiceTestNS.ResponseSearchByPropertyDescriptionV2_0Type response;
+				
 				try
 				{
 					response = client.searchProperties(request);
 					model.Response = XmlHelper.SerializeObject(response);
 					model.ResponseType = _builder.GetResponseType((int)response.GatewayResponse.TypeCode.Value);
+					model.Enquery = _builder.BuildEnquiryModel(model.Response);
 				}
 				catch (Exception ex)
 				{
@@ -86,6 +90,7 @@
 					response = client.getResponse(pollRequest);
 					model.Response = XmlHelper.SerializeObject(response);
 					model.ResponseType = _builder.GetResponseType((int)response.GatewayResponse.TypeCode.Value);
+					model.Enquery = _builder.BuildEnquiryModel(model.Response);
 				}
 				catch (Exception ex)
 				{
@@ -137,12 +142,28 @@
 				{
 					LRRESServiceTestNS.ResponseOCWithSummaryV2_1Type response = client.performOCWithSummary(request);
 					
-					//Stream stream = new MemoryStream(response.GatewayResponse.Results.Attachment.EmbeddedFileBinaryObject.Value);
-					//File.WriteAllBytes(string.Format("{0}_{1}.zip", titleNumber, DateTime.Today.Ticks), response.GatewayResponse.Results.Attachment.EmbeddedFileBinaryObject.Value);
+					model.ResponseType = _builder.GetResponseType((int)response.GatewayResponse.TypeCode.Value);
+					try
+					{
+						if (model.ResponseType == LandRegistryResponseType.Success)
+						{
+							model.Attachment = new LandRegistryAttachmentModel
+							{
+								AttachmentContent = response.GatewayResponse.Results.Attachment.EmbeddedFileBinaryObject.Value,
+								FileName = string.Format("{0}_{1}.zip", titleNumber, DateTime.Today.Ticks),
+								FilePath = string.Format("c:\\temp\\landregistry\\{0}_{1}.zip", titleNumber, DateTime.Today.Ticks)
+							};
+							File.WriteAllBytes(string.Format("c:\\temp\\landregistry\\{0}_{1}.zip", titleNumber, DateTime.UtcNow.Ticks),
+											   response.GatewayResponse.Results.Attachment.EmbeddedFileBinaryObject.Value);
+							response.GatewayResponse.Results.Attachment = null;
+						}
+					}
+					catch { }
+
 					response.GatewayResponse.Results.Attachment = null;
 					model.Response = XmlHelper.SerializeObject(response);
-					model.ResponseType = _builder.GetResponseType((int)response.GatewayResponse.TypeCode.Value);
-
+					
+					model.Res = _builder.BuildResModel(model.Response);
 				}
 				catch (Exception ex)
 				{
@@ -190,6 +211,7 @@
 
 					model.Response = XmlHelper.SerializeObject(response);
 					model.ResponseType = _builder.GetResponseType((int)response.GatewayResponse.TypeCode.Value);
+					model.Res = _builder.BuildResModel(model.Response);
 				}
 				catch (Exception ex)
 				{
