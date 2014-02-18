@@ -351,13 +351,14 @@
 						'Total long term liabilities': raw.TotalNonCurr,
 						'Tangible equity': raw.TotalShareFund - raw.InTngblAssets - raw.DebtorsDirLoans + raw.CredDirLoans + raw.OnClDirLoans,
 						'Adjusted profit': 8,
+						'Retained earnings': raw.RetainedEarnings,
 					}});
 				} // for each group output
 
 				for (var j = 1; j < oChartData.length; j++) {
 					oChartData[j].data['Adjusted profit'] =
-						oChartData[j].data['Tangible equity'] -
-						oChartData[j - 1].data['Tangible equity'] +
+						oChartData[j].data['Retained earnings'] -
+						oChartData[j - 1].data['Retained earnings'] +
 						oChartData[j - 1].data['Fixed assets'] / 5;
 				} // for
 	

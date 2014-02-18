@@ -736,6 +736,7 @@
 			{ "SourcePath": "./ONCLDIRLOANS", "Targets": [{ "Name": "OnClDirLoans", "Transformation": { "Types": [ "money" ] } }] },
 			{ "SourcePath": "./OTHDEBTORS", "Targets": [{ "Name": "OtherDebtors", "Transformation": { "Types": [ "money" ] } }] },
 			{ "SourcePath": "./PREPAYACCRUALS", "Targets": [{ "Name": "PrepayAccRuals", "Transformation": { "Types": [ "money" ] } }] },
+			{ "SourcePath": "./RETAINEDEARNINGS", "Targets": [{ "Name": "RetainedEarnings", "Transformation": { "Types": [ "money" ] } }] },
 			{ "SourcePath": "./TNGBLASSETS", "Targets": [{ "Name": "TngblAssets", "Transformation": { "Types": [ "money" ] } }] },
 			{ "SourcePath": "./TOTALCASH", "Targets": [{ "Name": "TotalCash", "Transformation": { "Types": [ "money" ] } }] },
 			{ "SourcePath": "./TOTALCURRLBLTS", "Targets": [{ "Name": "TotalCurrLblts", "Transformation": { "Types": [ "money" ] } }] },
