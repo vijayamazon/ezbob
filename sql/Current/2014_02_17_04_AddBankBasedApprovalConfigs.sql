@@ -68,6 +68,11 @@ BEGIN
 	INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('BankBasedApprovalEuCap', 10000, 'Maximum offer allowed by EU to get via bank based approval')
 END
 
+IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='BankBasedApprovalMinNumberOfDays')
+BEGIN
+	INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('BankBasedApprovalMinNumberOfDays', 85, 'Minimum number of days back that transaction must exist for approval')
+END
+
 GO
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'dbo.GetBankBasedApprovalConfigs') AND type in (N'P', N'PC'))
@@ -94,6 +99,8 @@ BEGIN
 		(SELECT Value FROM ConfigurationVariables WHERE Name = 'BankBasedApprovalMinOffer') AS BankBasedApprovalMinOffer,
 		(SELECT Value FROM ConfigurationVariables WHERE Name = 'BankBasedApprovalHomeOwnerCap') AS BankBasedApprovalHomeOwnerCap,
 		(SELECT Value FROM ConfigurationVariables WHERE Name = 'BankBasedApprovalNotHomeOwnerCap') AS BankBasedApprovalNotHomeOwnerCap,
-		(SELECT Value FROM ConfigurationVariables WHERE Name = 'BankBasedApprovalEuCap') AS BankBasedApprovalEuCap
+		(SELECT Value FROM ConfigurationVariables WHERE Name = 'BankBasedApprovalEuCap') AS BankBasedApprovalEuCap,
+		(SELECT Value FROM ConfigurationVariables WHERE Name = 'OfferValidForHours') AS OfferValidForHours,
+		(SELECT Value FROM ConfigurationVariables WHERE Name = 'BankBasedApprovalMinNumberOfDays') AS BankBasedApprovalMinNumberOfDays		
 END
 GO

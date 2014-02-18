@@ -274,7 +274,8 @@
 				new QueryParameter("AnualTurnover", totalSumOfOrders1YTotal),
 				new QueryParameter("InterestRate", loanInterestBase),
 				new QueryParameter("ManualSetupFeeAmount", manualSetupFeeAmount),
-				new QueryParameter("ManualSetupFeePercent", manualSetupFeePercent)
+				new QueryParameter("ManualSetupFeePercent", manualSetupFeePercent),
+				new QueryParameter("RepaymentPeriod", autoDecisionResponse.RepaymentPeriod)
 				);
 		}
 

@@ -18,5 +18,6 @@
 		public decimal PayPalTotalSumOfOrders3M { get; set; }
 		public decimal PayPalTotalSumOfOrders1Y { get; set; }
 		public int PayPalNumberOfStores { get; set; }
+		public int RepaymentPeriod { get; set; }
 	}
 }

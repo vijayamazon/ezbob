@@ -47,6 +47,13 @@
 		private int loanTerm;
 		private decimal lastQuarterRevenues;
 		private decimal loanOffer;
+		private int offerValidForHours;
+		private DateTime earliestTransactionDate;
+		private int minNumberOfDays;
+		private decimal sumOfLoanTransactions;
+		private int numberOfPayers; // The payers should be parsed from the Description field in the 'bank account transactions' tab
+		private decimal vat; // The vat is in the cashflow tab
+		private decimal annualizedTurnover;
 
 		public BankBasedApproval(int customerId, AConnection db, ASafeLog log)
 		{
@@ -64,17 +71,7 @@
 			{
 				return false;
 			}
-
 			
-			// Implement these as conditions that return false?
-			//no loans received during the period, IF sum of all loan transactions in the period is positive - mandatory
-			//no offer if # of clients/payers (credit transacations) is below 3 - mandatory
-			//no offer if there are more than 1 refunds of VAT (credit VAT transaction) in the period of 3 months - mandatory
-			//Turnover min 37,500 per Quarter - mandatory
-
-
-
-			// Calculate offer
 			loanOffer = CalculateLoanOffer();
 			if (loanOffer < minOffer)
 			{
@@ -89,11 +86,8 @@
 			response.SystemDecision = "Approve";
 			response.LoanOfferUnderwriterComment = "Auto bank based approval";
 			response.IsAutoBankBasedApproval = true;
-			//response.AppValidFor = DateTime.UtcNow.AddDays(response.LoanOfferOfferValidDays); // Should be based on config
-
-			// set these on the response and use in the main strat
-			//response.LoanTerm = loanTerm;
-			//response.Interest = interest;
+			response.AppValidFor = DateTime.UtcNow.AddHours(offerValidForHours);
+			response.RepaymentPeriod = loanTerm;
 
 			return true;
 		}
@@ -139,6 +133,8 @@
 			homeOwnerCap = sr["BankBasedApprovalHomeOwnerCap"];
 			notHomeOwnerCap = sr["BankBasedApprovalNotHomeOwnerCap"];
 			euCap = sr["BankBasedApprovalEuCap"];
+			offerValidForHours = sr["OfferValidForHours"];
+			minNumberOfDays = sr["BankBasedApprovalMinNumberOfDays"];
 		}
 
 		private void GetPersonalInfo()
@@ -157,10 +153,17 @@
 			companyId = 9;
 			isHomeOwner = true;
 			lastQuarterRevenues = 167000;
+			earliestTransactionDate = DateTime.UtcNow;
+			sumOfLoanTransactions = 12345;
+			numberOfPayers = 4;
+			vat = 55;
+			annualizedTurnover = 777;
 		}
 
 		private bool CheckConditionsForApproval()
 		{
+			// TODO: add check that yodlee is the only mp - if not return false
+
 			if (isCustomerViaBroker)
 			{
 				log.Info("No bank based approval since the customer:{0} is via broker", customerId);
@@ -185,7 +188,7 @@
 				return false;
 			}
 
-			if (amlScore <= minAmlScore)
+			if (amlScore < minAmlScore)
 			{
 				log.Info("No bank based approval since the customer:{0} has aml score of:{1} and the minimum is:{2}", customerId, amlScore, minAmlScore);
 				return false;
@@ -232,6 +235,36 @@
 				}
 			}
 
+			if ((DateTime.UtcNow - earliestTransactionDate).TotalDays < minNumberOfDays)
+			{
+				log.Info("No bank based approval since the earliest transaction is less than {0} days old. It is from {1}", minNumberOfDays, earliestTransactionDate);
+				return false;
+			}
+
+			if (sumOfLoanTransactions > 0)
+			{
+				log.Info("No bank based approval since the sum of loan transactions is positive:{0}", sumOfLoanTransactions);
+				return false;
+			}
+
+			if (numberOfPayers < 3) // the 3 should be configurable
+			{
+				// Create table of "special" payers that actually mean more than one like paypal
+				// if the payers dont include a special payer - log and return false
+			}
+
+			if (vat > 0)
+			{
+				log.Info("No bank based approval since the customer has positive vat:{0}", vat);
+				return false;
+			}
+
+			if (annualizedTurnover < 150000) // should be configurable
+			{
+				log.Info("No bank based approval since the annualizeded turnover is {0}. Which is less than minimum:{1}", annualizedTurnover, 150000/*Take from config*/);
+				return false;
+			}
+
 			return true;
 		}
 
@@ -270,7 +303,7 @@
 			Risk risk = GetRisk();
 			switch (risk)
 			{
-				/*Should determine interest too*/
+				/*Should determine interest too??*/
 				case Risk.LowAndMinimum:
 					loanTerm = 12;
 					return lastQuarterRevenues * 0.12m;
