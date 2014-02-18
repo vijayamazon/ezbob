@@ -1,11 +1,11 @@
 IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE Name = N'CompanyId' and Object_ID = Object_ID(N'Customer'))
 BEGIN 
 	ALTER TABLE Customer ADD CompanyId INT NULL
-	
-	DECLARE @CompanyId INT, @CustomerId INT
+		
 	DECLARE @stmt VARCHAR(MAX)
 	SET @stmt = 
-	'DECLARE cur CURSOR FOR SELECT Id, CustomerId FROM Company		
+	'DECLARE @CompanyId INT, @CustomerId INT
+	DECLARE cur CURSOR FOR SELECT Id, CustomerId FROM Company		
 	OPEN cur
 	FETCH NEXT FROM cur INTO @CompanyId, @CustomerId
 	WHILE @@FETCH_STATUS = 0
