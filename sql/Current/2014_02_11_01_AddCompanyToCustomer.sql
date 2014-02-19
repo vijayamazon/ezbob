@@ -23,7 +23,8 @@ GO
 	
 IF EXISTS (SELECT 1 FROM sys.columns WHERE Name = N'CustomerId' and Object_ID = Object_ID(N'Company'))
 BEGIN 
-	-- Column should be dropped
+
+	PRINT 'Column should be dropped'
 	--ALTER TABLE Company DROP FK_Company_Customer
 	--ALTER TABLE Company DROP COLUMN CustomerId
 END 
@@ -110,25 +111,6 @@ BEGIN
 		
 END
 GO
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[FraudGetDetections]') AND type in (N'P', N'PC'))
