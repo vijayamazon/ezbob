@@ -16,6 +16,21 @@
 			
 			medal = msc.CalculateMedalScore(176255, 1201, 6.5M, 1072, MaritalStatus.Married, Gender.M, 3, true, 15, 2, 0, 0);
 			Assert.AreEqual(medal.Medal, MedalMultiplier.Platinum);
+
+			medal = msc.CalculateMedalScore(72214, 951, 6.5M, 1552, MaritalStatus.Married, Gender.M, 3, true, 16.6M, 7, 0, 5);
+			Assert.AreEqual(medal.Medal, MedalMultiplier.Platinum);
+
+			medal = msc.CalculateMedalScore(30678, 939, 2.58M, 100, MaritalStatus.Married, Gender.M, 2, true, 16.4M, 2, 0, 4);
+			Assert.AreEqual(medal.Medal, MedalMultiplier.Gold);
+			//61.5% 2500pound at 5%
+
+			medal = msc.CalculateMedalScore(108916, 1092, 6.25M, 7250, MaritalStatus.Married, Gender.M, 1, true, 15.2M, 5, 0, 5);
+			Assert.AreEqual(medal.Medal, MedalMultiplier.Platinum);
+			//79.3% 10900pounds at 4%
+
+			medal = msc.CalculateMedalScore(555912, 982, 7.08M, 5000, MaritalStatus.Married, Gender.M, 3, true, 14.2M, 1, 0, 0);
+			Assert.AreEqual(medal.Medal, MedalMultiplier.Gold);
+			//53.9% 44500pounds at 5%
 		}
 
 		[Test]
