@@ -77,33 +77,13 @@ namespace Ezbob.Database {
 
 		#endregion method CreateParameter
 
-		#region method Retry
+		#region method CreateRetryer
 
-		protected override T Retry<T>(Func<T> func) {
-			int nCount = RetryCount;
+		protected override Utils.ARetryer CreateRetryer() {
+			return new SqlRetryer(oLog: this);
+		} // CreateRetryer
 
-			while (true) {
-				try {
-					return func();
-				}
-				catch (SqlException e) {
-					--nCount;
-					if (nCount <= 0)
-						throw;
-
-					if (e.Number == 1205)
-						Warn(e, "Deadlock, retrying.");
-					else if (e.Number == -2)
-						Warn(e, "Timeout, retrying.");
-					else
-						throw;
-
-					Thread.Sleep(TimeSpan.FromSeconds(5));
-				} // try
-			} // while
-		} // Retry
-
-		#endregion method Retry
+		#endregion method CreateRetryer
 
 		#endregion protected
 	} // class SqlConnection

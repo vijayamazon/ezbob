@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ARetryer.cs" />
     <Compile Include="Extensions\IntExt.cs" />
     <Compile Include="Extensions\DecimalExt.cs" />
     <Compile Include="Gravatar.cs" />

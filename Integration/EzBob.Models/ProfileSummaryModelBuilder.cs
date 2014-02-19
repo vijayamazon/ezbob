@@ -120,7 +120,14 @@
 					//creditBureau.Lighter = new Lighter(ObtainCreditBureauState(result.ExperianResult));
 					creditBureau.FinancialAccounts = customer.FinancialAccounts;
 					var isHasFinancialAccout = false;
-					Utils.TryRead(() => isHasFinancialAccout = result.Output.Output.FullConsumerData.ConsumerData.CAIS.Any(x => x.CAISDetails.Any()));
+
+					try {
+						isHasFinancialAccout = result.Output.Output.FullConsumerData.ConsumerData.CAIS.Any(x => x.CAISDetails.Any());
+					}
+					catch (Exception ex) {
+						Log.ErrorFormat("Can't read value for isHasFinancialAccount because of exception: {0}", ex.Message);
+					} // try
+
 					creditBureau.ThinFile = !isHasFinancialAccout ? "Yes" : "No";
 				}
 				else

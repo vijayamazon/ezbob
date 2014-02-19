@@ -8,6 +8,7 @@
 	using System.Globalization;
 
 	using Ezbob.Logger;
+	using Utils;
 
 	public abstract class AConnection : SafeLog, IConnection {
 		#region public
@@ -135,6 +136,8 @@
 		protected abstract DbCommand CreateCommand(string sCommand, DbConnection oConnection);
 		protected abstract DbParameter CreateParameter(QueryParameter prm);
 
+		protected abstract ARetryer CreateRetryer();
+
 		#endregion abstract methods
 
 		#region property Env
@@ -177,14 +180,6 @@
 
 		#endregion property ConnectionString
 
-		#region property RetryCount
-
-		protected virtual int RetryCount { get { return 3; } } // RetryCount
-
-		#endregion property RetryCount
-
-		protected abstract T Retry<T>(Func<T> func);  // Retry
-
 		#region enum ExecMode
 
 		protected enum ExecMode {
@@ -220,8 +215,10 @@
 			if (nLogVerbosityLevel == LogVerbosityLevel.Verbose)
 				Debug("Starting to run query:\n\tid = {0}\n\t{1}{2}", guid, spName, sArgsForLog);
 
+			ARetryer oRetryer = CreateRetryer();
+
 			try {
-				return Retry(() => {
+				return oRetryer.Retry<object>(() => {
 					using (var connection = CreateConnection()) {
 						connection.Open();
 
