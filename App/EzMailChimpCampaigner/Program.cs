@@ -10,8 +10,12 @@
 		{
 			try
 			{
-				MailChimpApiControler.LoadClickStatsToDb();
-			    //MailChimpApiControler.StoreStatsToDbFromXml();
+				bool retrieveStats = Boolean.Parse(System.Configuration.ConfigurationManager.AppSettings["retrieveStats"]);
+				if (retrieveStats)
+				{
+					MailChimpApiControler.LoadClickStatsToDb();
+				}
+				//MailChimpApiControler.StoreStatsToDbFromXml();
 			}
 			catch (Exception ex)
 			{
