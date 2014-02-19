@@ -508,50 +508,38 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 
 		[HttpGet]
 		[Ajax]
-		public JsonNetResult GetCounters(bool isTest) {
+		public JsonResult GetCounters(bool isTest) {
 			int nWaiting = 0;
 			int nPending = 0;
 			int nRegistered = 0;
 			int nEscalated = 0;
 
-			IQueryable<Customer> allCustomers = _customers.GetAll().Where(c =>
-				    (isTest || !c.IsTest)
-				    &&
-				    (
-					    ((c.CreditResult == null) && c.WizardStep.TheLastOne) ||
-					    (c.CreditResult == CreditResultStatus.Escalated) ||
-					    (c.CreditResult == CreditResultStatus.WaitingForDecision) ||
-					    (c.CreditResult == CreditResultStatus.ApprovedPending)
-				    )
-				);
+			m_oDB.ForEachRowSafe(
+				(sr, bRowsetStart) => {
+					string sCustomerType = sr["CustomerType"];
 
-			foreach (var oCustomer in allCustomers)
-			{
-				switch (oCustomer.CreditResult) {
-				case null:
-					nRegistered++;
-					break;
+					if (sCustomerType == "Registered")
+						nRegistered = sr["CustomerCount"];
+					else if (sCustomerType == CreditResultStatus.Escalated.ToString())
+						nEscalated = sr["CustomerCount"];
+					else if (sCustomerType == CreditResultStatus.ApprovedPending.ToString())
+						nPending = sr["CustomerCount"];
+					else if (sCustomerType == CreditResultStatus.WaitingForDecision.ToString())
+						nWaiting = sr["CustomerCount"];
 
-				case CreditResultStatus.Escalated:
-					nEscalated++;
-					break;
-				
-				case CreditResultStatus.ApprovedPending:
-					nPending++;
-					break;
-				
-				case CreditResultStatus.WaitingForDecision:
-					nWaiting++;
-					break;
-				} // switch
-			} // for each
+					return ActionResult.Continue;
+				},
+				"UwGetCounters",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("@isTest", isTest)
+			);
 			
-			return this.JsonNet(new List<CustomersCountersModel> {
+			return Json(new List<CustomersCountersModel> {
 				new CustomersCountersModel { Count = nWaiting,    Name = "waiting" },
 				new CustomersCountersModel { Count = nPending,    Name = "pending" },
 				new CustomersCountersModel { Count = nRegistered, Name = "RegisteredCustomers" },
 				new CustomersCountersModel { Count = nEscalated,  Name = "escalated" },
-			});
+			}, JsonRequestBehavior.AllowGet);
 		} // GetCounters
 
 		#endregion method GetCounters
