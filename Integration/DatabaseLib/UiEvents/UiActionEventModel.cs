@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using log4net;
+﻿namespace EZBob.DatabaseLib {
+	using System;
+	using System.Globalization;
+	using System.Text;
+	using log4net;
+	using Ezbob.Database;
 
-namespace EZBob.DatabaseLib {
 	#region class UiActionEventModel
 
 	public class UiActionEventModel {
@@ -19,29 +18,13 @@ namespace EZBob.DatabaseLib {
 
 		#region method Save
 
-		public bool Save(DatabaseDataHelper oHelper, BrowserVersion oBrowserVersion, string sRemoteIP, string sSessionCookie) {
+		public bool Save(AConnection oDB, int nBrowserVersionID, string sRemoteIP, string sSessionCookie, int nRetryCount) {
 			long nRefNum = 0;
 
 			if (!long.TryParse(eventID, out nRefNum)) {
 				ms_oLog.ErrorFormat("Failed to save UI event: cannot parse eventID as long in {0}.", this);
 				return false;
 			} // if
-
-			UiEvent oEvt = oHelper.UiEventRepository.FindByRefNum(nRefNum);
-
-			if (oEvt != null) {
-				ms_oLog.DebugFormat("Not saving UI event: already in DB for {0}.", this);
-				return true;
-			} // if found
-
-			UiAction oAction = oHelper.UiActionRepository.FindByName(actionName);
-
-			if (oAction == null) {
-				ms_oLog.ErrorFormat("Failed to save UI event: action not found in {0}.", this);
-				return false;
-			} // if action not found
-
-			SecurityUser oUser = oHelper.SecurityUserRepository.FindByName(userName);
 
 			DateTime oTime;
 
@@ -50,28 +33,37 @@ namespace EZBob.DatabaseLib {
 				return false;
 			} // if failed to parse time
 
-			UiControl oControl = oHelper.UiControlRepository.FindByName(controlName);
-			if (oControl == null) {
-				oControl = new UiControl { Name = controlName };
-				oHelper.UiControlRepository.SaveOrUpdate(oControl);
-			} // if no control found
+			for (int i = 1; i <= nRetryCount; i++) {
+				try {
+					string sResult = oDB.ExecuteScalar<string>(
+						"UiEventSave",
+						CommandSpecies.StoredProcedure,
+						new QueryParameter("@ActionName", actionName),
+						new QueryParameter("@UserName", userName),
+						new QueryParameter("@ControlName", controlName),
+						new QueryParameter("@EventArgs", eventArgs),
+						new QueryParameter("@BrowserVersionID", nBrowserVersionID),
+						new QueryParameter("@HtmlID", htmlID),
+						new QueryParameter("@RefNum", nRefNum),
+						new QueryParameter("@RemoteIP", sRemoteIP),
+						new QueryParameter("@SessionCookie", sSessionCookie),
+						new QueryParameter("@EventTime", oTime)
+					);
 
-			oEvt = new UiEvent {
-				Arguments = eventArgs,
-				BrowserVersion = oBrowserVersion,
-				HtmlID = htmlID,
-				RefNum = nRefNum,
-				RemoteIP = sRemoteIP,
-				SecurityUser = oUser,
-				SessionCookie = sSessionCookie,
-				Time = oTime,
-				UiAction = oAction,
-				UiControl = oControl,
-			};
+					if (string.IsNullOrWhiteSpace(sResult))
+						return true;
 
-			oHelper.UiEventRepository.SaveOrUpdate(oEvt);
+					ms_oLog.WarnFormat("Failed to save UI event: {0}", sResult);
+				}
+				catch (Exception e) {
+					ms_oLog.Warn("Failed to save UI event.", e);
+				} // try
 
-			return true;
+				if (i < nRetryCount)
+					ms_oLog.Debug("Retrying to save UI event.");
+			} // for
+
+			return false;
 		} // Save
 
 		#endregion method Save

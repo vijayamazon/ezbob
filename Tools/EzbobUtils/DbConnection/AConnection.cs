@@ -1,16 +1,13 @@
-﻿using System;
-using System.Data.Common;
-using System.Data.SqlClient;
-using System.Threading;
-using System.Text;
-using System.Data;
-using System.Diagnostics;
-using System.Configuration;
-
-using Ezbob.Logger;
-
-namespace Ezbob.Database {
+﻿namespace Ezbob.Database {
+	using System;
+	using System.Data.Common;
+	using System.Text;
+	using System.Data;
+	using System.Diagnostics;
+	using System.Configuration;
 	using System.Globalization;
+
+	using Ezbob.Logger;
 
 	public abstract class AConnection : SafeLog, IConnection {
 		#region public
@@ -186,33 +183,7 @@ namespace Ezbob.Database {
 
 		#endregion property RetryCount
 
-		#region method Retry
-
-		protected virtual T Retry<T>(Func<T> func) {
-			int nCount = RetryCount;
-
-			while (true) {
-				try {
-					return func();
-				}
-				catch (SqlException e) {
-					--nCount;
-					if (nCount <= 0)
-						throw;
-
-					if (e.Number == 1205)
-						Warn(e, "Deadlock, retrying.");
-					else if (e.Number == -2)
-						Warn(e, "Timeout, retrying.");
-					else
-						throw;
-
-					Thread.Sleep(TimeSpan.FromSeconds(5));
-				} // try
-			} // while
-		} // Retry
-
-		#endregion method Retry
+		protected abstract T Retry<T>(Func<T> func);  // Retry
 
 		#region enum ExecMode
 

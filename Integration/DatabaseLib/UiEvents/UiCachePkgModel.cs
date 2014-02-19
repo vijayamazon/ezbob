@@ -2,6 +2,8 @@
 using System.Text;
 
 namespace EZBob.DatabaseLib {
+	using Ezbob.Database;
+
 	#region class UiCachePkgModel
 
 	public class UiCachePkgModel {
@@ -35,12 +37,12 @@ namespace EZBob.DatabaseLib {
 
 		#region method Save
 
-		public SaveResult Save(DatabaseDataHelper oHelper, BrowserVersion oBrowserVersion, string sRemoteIP, string sSessionCookie) {
+		public SaveResult Save(AConnection oDB, int nBrowserVersionID, string sRemoteIP, string sSessionCookie, int nRetryCount) {
 			var oResult = new SaveResult(id);
 
 			if (data != null)
 				foreach (UiActionEventModel oEvt in data)
-					oResult.Add(oEvt.eventID, oEvt.Save(oHelper, oBrowserVersion, sRemoteIP, sSessionCookie));
+					oResult.Add(oEvt.eventID, oEvt.Save(oDB, nBrowserVersionID, sRemoteIP, sSessionCookie, nRetryCount));
 
 			return oResult;
 		} // Save

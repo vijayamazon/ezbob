@@ -9,6 +9,10 @@ using StructureMap;
 using log4net;
 
 namespace EzBob.Web.Controllers {
+	using System;
+	using Code;
+	using Ezbob.Database;
+
 	public class UiActionController : Controller {
 		#region public
 
@@ -19,6 +23,8 @@ namespace EzBob.Web.Controllers {
 				(System.Web.Configuration.SessionStateSection)ConfigurationManager.GetSection("system.web/sessionState");
 
 			m_sSessionCookieName = sessionStateSection.CookieName;
+
+			m_oDB = DbConnectionGenerator.Get();
 		} // constructor
 
 		#endregion constructor
@@ -46,12 +52,30 @@ namespace EzBob.Web.Controllers {
 			if (string.IsNullOrEmpty(sRemoteIP))
 				sRemoteIP = "UNKNOWN SOURCE";
 
-			BrowserVersion oBrowserVersion = helper.BrowserVersionRepository.FindByName(version);
+			int nBrowserVersionID = 0;
+			const int nRetryCount = 3;
 
-			if (oBrowserVersion == null) {
-				oBrowserVersion = new BrowserVersion { UserAgent = version };
-				helper.BrowserVersionRepository.SaveOrUpdate(oBrowserVersion);
-			} // if
+			for (int i = 1; i <= nRetryCount; i++) {
+				try {
+					nBrowserVersionID = m_oDB.ExecuteScalar<int>(
+						"UiEventBrowserVersion",
+						CommandSpecies.StoredProcedure,
+						new QueryParameter("@Version", version)
+					);
+				}
+				catch (Exception e) {
+					ms_oLog.Warn("Failed to save browser version.", e);
+				} // try
+
+				if (nBrowserVersionID != 0)
+					break;
+
+				if (i < nRetryCount)
+					ms_oLog.Debug("Retrying to save browser version.");
+			} // for
+
+			if (nBrowserVersionID == 0)
+				return this.JsonNet(new { result = "Failed to save browser version." });
 
 			// ms_oLog.DebugFormat("{1} at {2}: UiActionController.Save(version: {3} - {0}), data:", oBrowserVersion.UserAgent, sSessionID, sRemoteIP, oBrowserVersion.ID );
 
@@ -61,7 +85,7 @@ namespace EzBob.Web.Controllers {
 			foreach (var pair in oHistory) {
 				// ms_oLog.DebugFormat("\tkey: {0} pkg: {1}", pair.Key, pair.Value);
 
-				UiCachePkgModel.SaveResult oResult = pair.Value.Save(helper, oBrowserVersion, sRemoteIP, sSessionID);
+				UiCachePkgModel.SaveResult oResult = pair.Value.Save(m_oDB, nBrowserVersionID, sRemoteIP, sSessionID, nRetryCount);
 
 				if (oResult.Overall())
 					oSavedPackages.Add(pair.Key);
@@ -92,6 +116,7 @@ namespace EzBob.Web.Controllers {
 		#endregion method RemoteIp
 
 		private readonly string m_sSessionCookieName;
+		private readonly AConnection m_oDB;
 		private static readonly ILog ms_oLog = LogManager.GetLogger(typeof(UiActionController));
 
 		#endregion private

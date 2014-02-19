@@ -6,6 +6,8 @@ using System.Globalization;
 using Ezbob.Logger;
 
 namespace Ezbob.Database {
+	using System.Threading;
+
 	#region class SqlConnection
 
 	public class SqlConnection : AConnection {
@@ -74,6 +76,34 @@ namespace Ezbob.Database {
 		} // CreateParameter
 
 		#endregion method CreateParameter
+
+		#region method Retry
+
+		protected override T Retry<T>(Func<T> func) {
+			int nCount = RetryCount;
+
+			while (true) {
+				try {
+					return func();
+				}
+				catch (SqlException e) {
+					--nCount;
+					if (nCount <= 0)
+						throw;
+
+					if (e.Number == 1205)
+						Warn(e, "Deadlock, retrying.");
+					else if (e.Number == -2)
+						Warn(e, "Timeout, retrying.");
+					else
+						throw;
+
+					Thread.Sleep(TimeSpan.FromSeconds(5));
+				} // try
+			} // while
+		} // Retry
+
+		#endregion method Retry
 
 		#endregion protected
 	} // class SqlConnection
