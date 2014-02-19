@@ -184,9 +184,9 @@ namespace EzBob.Backend.Strategies.ScoreCalculation {
 
 		public static List<RangeMedal> MedalRanges = new List<RangeMedal> {
 			new RangeMedal {MinValue = null,MaxValue = 0.4M, Medal = MedalMultiplier.Silver },
-			new RangeMedal {MinValue = 0.4M,MaxValue = 0.6M, Medal = MedalMultiplier.Gold},
-			new RangeMedal {MinValue = 0.6M,MaxValue = 0.8M, Medal = MedalMultiplier.Platinum},
-			new RangeMedal {MinValue = 0.8M,MaxValue = null,Medal = MedalMultiplier.Diamond},
+			new RangeMedal {MinValue = 0.4M,MaxValue = 0.62M, Medal = MedalMultiplier.Gold},
+			new RangeMedal {MinValue = 0.62M,MaxValue = 0.84M, Medal = MedalMultiplier.Platinum},
+			new RangeMedal {MinValue = 0.84M,MaxValue = null,Medal = MedalMultiplier.Diamond},
 		};
 
 		#endregion Medal Range

@@ -298,7 +298,7 @@
 		{
 			var mpSeniorityWeight = new Weight
 				{
-					FinalWeightFixedWeightParameter = Constants.MpSeniorityBaseWeight,
+					FinalWeightFixedWeightParameter = firstRepaymentDatePassed ? Constants.MpSeniorityBaseWeight - Constants.MpSenorityWeightDeduction : Constants.MpSeniorityBaseWeight,
 					StandardWeightFixedWeightParameter = firstRepaymentDatePassed ? Constants.MpSeniorityBaseWeight - Constants.MpSenorityWeightDeduction : Constants.MpSeniorityBaseWeight,
 					StandardWeightAdjustableWeightParameter = 0,
 					DeltaForAdjustableWeightParameter = 0,
