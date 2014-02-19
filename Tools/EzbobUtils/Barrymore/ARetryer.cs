@@ -9,7 +9,7 @@
 
 		#region constructor
 
-		protected ARetryer(int nRetryCount = 3, int nSleepBeforeRetry = 5, ASafeLog oLog = null) {
+		protected ARetryer(int nRetryCount = 1, int nSleepBeforeRetry = 0, ASafeLog oLog = null) {
 			RetryCount = nRetryCount;
 			SleepBeforeRetry = nSleepBeforeRetry;
 			Log = new SafeLog(oLog);

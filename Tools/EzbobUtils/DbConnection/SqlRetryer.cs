@@ -12,7 +12,7 @@
 
 		#region constructor
 
-		public SqlRetryer(int nRetryCount = 3, int nSleepBeforeRetry = 5, ASafeLog oLog = null) : base(nRetryCount, nSleepBeforeRetry, oLog) {
+		public SqlRetryer(int nRetryCount = 3, int nSleepBeforeRetry = 0, ASafeLog oLog = null) : base(nRetryCount, nSleepBeforeRetry, oLog) {
 		} // constructor
 
 		#endregion constructor

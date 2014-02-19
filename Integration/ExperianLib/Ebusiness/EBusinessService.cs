@@ -90,7 +90,8 @@
 			return m_oRetryer.Retry(() => {
 				var repo = ObjectFactory.GetInstance<NHibernateRepositoryBase<MP_ServiceLog>>();
 
-				IQueryable<MP_ServiceLog> oCachedValues = repo.GetAll().Where(c => c.ServiceType == "ESeriesTargeting" && c.Customer.Id == customerId);
+				IQueryable<MP_ServiceLog> oCachedValues =
+					repo.GetAll().Where(c => c.ServiceType == "ESeriesTargeting" && c.Customer.Id == customerId);
 
 				foreach (var oVal in oCachedValues) {
 					var targets = new TargetResults(oVal.ResponseData);
@@ -101,7 +102,7 @@
 				} // for each cached value
 
 				return null;
-			});
+			}, "EBusinessService.TargetCache(" + customerId + ", " + refNumber + ")");
 		} // TargetCache
 
 		#endregion method TargetCache
@@ -183,7 +184,7 @@
 
 				Log.WarnFormat("Company data from cache for refNumber={0} was not found", refNumber);
 				return null;
-			});
+			}, "EBusinessService.CheckCache(" + refNumber + ")");
 		} // CheckCache
 
 		#endregion method CheckCache
@@ -203,7 +204,7 @@
 				cacheVal.JsonPacket = response;
 
 				repo.SaveOrUpdate(cacheVal);
-			});
+			}, "EBusinessService.AddToCache(" + refNumber + ")");
 		} // AddToCache
 
 		#endregion method AddToCache

@@ -674,7 +674,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 
 		public virtual ExperianParserOutput ParseExperian(ExperianParserFacade.Target nTarget) {
 			if (ReferenceEquals(Company, null))
-				return new ExperianParserOutput(null, ParsingResult.Fail, "Customer has no company", null, null, null);
+				return new ExperianParserOutput(null, ParsingResult.NotFound, "Customer has no company", null, null, null);
 
 			return ExperianParserFacade.Invoke(
 				Company.ExperianRefNum,
