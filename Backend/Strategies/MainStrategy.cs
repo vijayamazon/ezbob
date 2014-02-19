@@ -242,7 +242,7 @@
 				new QueryParameter("CreditResult", autoDecisionResponse.CreditResult),
 				new QueryParameter("SystemDecision", autoDecisionResponse.SystemDecision),
 				new QueryParameter("Status", autoDecisionResponse.UserStatus),
-				new QueryParameter("Medal", medalType),
+				new QueryParameter("Medal", medalType.ToString()),
 				new QueryParameter("ApplyForLoan", autoDecisionResponse.AppApplyForLoan),
 				new QueryParameter("ValidFor", autoDecisionResponse.AppValidFor)
 				);
@@ -254,7 +254,7 @@
 				new QueryParameter("SystemCalculatedAmount", modelLoanOffer),
 				new QueryParameter("ManagerApprovedSum", offeredCreditLine),
 				new QueryParameter("SystemDecision", autoDecisionResponse.SystemDecision),
-				new QueryParameter("MedalType", medalType),
+				new QueryParameter("MedalType", medalType.ToString()),
 				new QueryParameter("ScorePoints", scoringResult),
 				new QueryParameter("ExpirianRating", experianConsumerScore),
 				new QueryParameter("AnualTurnover", totalSumOfOrders1YTotal),
