@@ -86,6 +86,7 @@
 		)
 			: base(oDb, oLog)
 		{
+			medalScoreCalculator = new MedalScoreCalculator(oLog);
 			mailer = new StrategiesMailer(DB, Log);
 			this.customerId = customerId;
 			useCustomIdHubAddress = checkType;
@@ -847,8 +848,7 @@
 				var bwaChecker = new BwaChecker(customerId, DB, Log);
 				bwaChecker.Execute();
 			}
-			
-			if (useCustomIdHubAddress == 2 || (useCustomIdHubAddress != 1 && ShouldRunBwa()))
+			else if (useCustomIdHubAddress == 2 || (useCustomIdHubAddress != 1 && ShouldRunBwa()))
 			{
 				var bwaChecker = new BwaChecker(customerId, idhubHouseNumber, idhubHouseName, idhubStreet, idhubDistrict, idhubTown, 
 					idhubCounty, idhubPostCode, idhubBranchCode, idhubAccountNumber, DB, Log);
@@ -865,8 +865,7 @@
 					var amlChecker = new AmlChecker(customerId, DB, Log);
 					amlChecker.Execute();
 				}
-
-				if (useCustomIdHubAddress != 2)
+				else if (useCustomIdHubAddress != 2)
 				{
 					var amlChecker = new AmlChecker(customerId, idhubHouseNumber, idhubHouseName, idhubStreet, idhubDistrict, idhubTown,
 					                                idhubCounty, idhubPostCode, DB, Log);
