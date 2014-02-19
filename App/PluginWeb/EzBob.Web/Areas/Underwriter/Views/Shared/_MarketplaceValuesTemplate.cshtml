@@ -278,11 +278,8 @@
 				            <% if (m.Disabled) { %>
 				            <a href="#" class="btn btn-mini btn-success enable-shop %>" data-original-title="Enable" data-placement="top" umi="<%- m.Id %>"><i class="fa fa-play"></i></a>
 				            <% }
-				            else {
-				            if (m.Name.toLowerCase() === 'paypal') {%>
-				            <a href="#" class="btn btn-mini reCheck-paypal btn-primary" umi="<%- m.PaymentAccountBasic.id %>"><i class="fa fa-repeat"></i></a>
-				            <a href="#" class="btn btn-mini btn-primary" data-bug-type="PayPal" data-bug-customer="<%- customerId %>" data-bug-mp="<%- m.Id %>"><i class="fa fa-bug"></i></a>
-				            <% } else if (m.Name.toLowerCase() !== 'yodlee') { %>
+				            else { 
+				            if (m.Name.toLowerCase() !== 'yodlee') { %>
 				            <a href="#" class="btn btn-mini btn-primary reCheckMP <%- sShopName.toLowerCase() %>" umi="<%- m.Id %>" data-original-title="Recheck" data-placement="top" marketplacetype="<%- m.Name %>"><i class="fa fa-refresh"></i></a>
 				            <a href="#" class="btn btn-mini btn-primary" data-bug-type="<%- m.Name %>" data-bug-customer="<%-customerId%>" data-bug-mp="<%-m.Id%>" data-title="Report Bug"><i class="fa fa-bug"></i></a>
 				            <% } else { %>

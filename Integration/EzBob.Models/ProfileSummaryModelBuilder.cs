@@ -11,6 +11,8 @@
 	using EzBob.Web.Areas.Customer.Models;
 	using EzBob.Web.Areas.Underwriter.Models;
 	using EzBob.Models.Marketplaces;
+	using NHibernate;
+	using StructureMap;
 	using log4net;
 
 	public class ProfileSummaryModelBuilder
@@ -336,15 +338,19 @@
 			{
 				return LightsState.Error;
 			}
-
-			if (marketplaces.Any(x => x.UpdatingStart != null && x.UpdatingEnd == null))
+			
+			var session = ObjectFactory.GetInstance<ISession>();
+			foreach (MP_CustomerMarketPlace mp in marketplaces)
 			{
-				return LightsState.InProgress;
+				string currentState = (string) session.CreateSQLQuery(string.Format("EXEC GetLastMarketplaceStatus {0}, {1}", mp.Customer.Id, mp.Id)).UniqueResult();
+				if (currentState == "In progress")
+				{
+					return LightsState.InProgress;
+				}
 			}
 
 			return LightsState.Passed;
 		}
-
 
 		private LightsState ObtainAmlState(Customer customer)
 		{

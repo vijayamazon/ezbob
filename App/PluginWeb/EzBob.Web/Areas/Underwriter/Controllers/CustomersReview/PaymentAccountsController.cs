@@ -1,17 +1,16 @@
-﻿using System;
-using EZBob.DatabaseLib.Model.Database;
-using EzBob.Models;
-using PostcodeAnywhere;
-using Scorto.Web;
-using System.Linq;
-using System.Web.Mvc;
-using EzBob.Web.Areas.Underwriter.Models;
-using EZBob.DatabaseLib.Model.Database.Repository;
-using EzBob.Web.Areas.Customer.Models;
-
-namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
+﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
+	using NHibernate;
 	using Code.ApplicationCreator;
+	using System;
+	using EZBob.DatabaseLib.Model.Database;
+	using PostcodeAnywhere;
+	using Scorto.Web;
+	using System.Linq;
+	using System.Web.Mvc;
+	using Models;
+	using EZBob.DatabaseLib.Model.Database.Repository;
+	using Customer.Models;
 
 	public class PaymentAccountsController : Controller
     {
@@ -20,14 +19,16 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
         private readonly ISortCodeChecker _sortCodeChecker;
         private readonly IPayPointFacade _payPointFacade;
         private readonly IWorkplaceContext _context;
-        private readonly IAppCreator _appCreator;
+		private readonly IAppCreator _appCreator;
+		private readonly ISession session;
 
         public PaymentAccountsController(CustomerRepository customers,
                                             IAppCreator appCreator,
                                             ICustomerMarketPlaceRepository customerMarketplaces,
                                             ISortCodeChecker sortCodeChecker,
                                             IPayPointFacade payPointFacade,
-                                            IWorkplaceContext context
+											IWorkplaceContext context, 
+											ISession session
                                             )
         {
             _customers = customers;
@@ -35,7 +36,8 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             _customerMarketplaces = customerMarketplaces;
             _sortCodeChecker = sortCodeChecker;
             _payPointFacade = payPointFacade;
-            _context = context;
+			_context = context;
+			this.session = session;
         }
 
         [Ajax]
@@ -127,20 +129,6 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
             customer.SetDefaultCard(card);
 
             return this.JsonNet(new {r = card.Id});
-        }
-
-
-
-        [Ajax]
-        public void ReCheckPaypal(int customerId, int umi)
-        {
-            if (_customerMarketplaces.Get(umi).UpdatingEnd == null)
-            {
-                throw new Exception("Strategy already started");
-            }
-            var customer = _customers.Get(customerId);
-            _customerMarketplaces.ClearUpdatingEnd(umi);
-			_appCreator.CustomerMarketPlaceAdded(customer, umi);
         }
 
         [Ajax]

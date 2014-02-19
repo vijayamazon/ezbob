@@ -12,21 +12,24 @@
 	using Scorto.Web;
 	using EzServiceReference;
 	using ActionResult = System.Web.Mvc.ActionResult;
+	using NHibernate;
 
 	public class ProfileController : Controller
     {
         private readonly ProfileSummaryModelBuilder _summaryModelBuilder;
         private CustomerRepository CustomerRepository { get; set; }
         private readonly IUsersRepository _users;
-        private readonly IAppCreator _creator;
+		private readonly IAppCreator _creator;
+		private readonly ISession session;
 
         public ProfileController(CustomerRepository customerRepository, ProfileSummaryModelBuilder summaryModelBuilder,
-                                 IUsersRepository users, IAppCreator creator)
+								 IUsersRepository users, IAppCreator creator, ISession session)
         {
             _summaryModelBuilder = summaryModelBuilder;
             _users = users;
             _creator = creator;
             CustomerRepository = customerRepository;
+	        this.session = session;
         }
 
         [Ajax]
@@ -49,31 +52,6 @@
             return this.JsonNet(new {Saved = "true"});
         }
 
-        [Ajax]
-        [HttpGet]
-        public JsonNetResult GetRegisteredCustomerInfo(int customerId)
-        {
-            var customer = CustomerRepository.Get(customerId);
-            var mpModel = customer.CustomerMarketPlaces.Select(x => new
-                                                                        {
-                                                                            id = x.Id,
-                                                                            Name = x.DisplayName,
-                                                                            Type = x.Marketplace.Name,
-                                                                            Status = MpUpdatingStatus(x),
-                                                                            StartTime = x.UpdatingStart,
-                                                                            EndTime = x.UpdatingEnd
-                                                                        }).ToList();
-            var strategyModel = new
-                {
-                    StrategyStatus = MainStrategyUpdatingStatus(customer.LastStartedMainStrategy),
-                    StartTime = customer.LastStartedMainStrategy == null ? null  : (DateTime?)customer.LastStartedMainStrategy.CreationDate,
-                    EndTime = customer.LastStartedMainStrategyEndTime
-                };
-
-            var isWizardFinished = customer.PersonalInfo != null;
-            return this.JsonNet(new { mps = mpModel, sm = strategyModel, isWizardFinished, cName = customer.PersonalInfo!=null ? customer.PersonalInfo.Fullname : customer.Name});
-        }
-
         private static string MainStrategyUpdatingStatus(Application app)
         {
             if (app != null &&
@@ -86,17 +64,6 @@
                 return "Finished";
             }
             return "Running";
-        }
-
-        private static string MpUpdatingStatus(MP_CustomerMarketPlace mp)
-        {
-            if (mp.UpdatingStart == null) return "Not started";
-
-            if (mp.UpdatingStart != null && mp.UpdatingEnd == null) return "Updating";
-
-            if (!String.IsNullOrEmpty(mp.UpdateError)) return "Error";
-
-            return "Completed";
         }
 
         [Ajax]

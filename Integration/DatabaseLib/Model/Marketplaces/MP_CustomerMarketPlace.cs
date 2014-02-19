@@ -8,6 +8,8 @@ namespace EZBob.DatabaseLib.Model.Database
 	using Marketplaces.Yodlee;
 	using System;
 	using Iesi.Collections.Generic;
+	using NHibernate;
+	using StructureMap;
 
 	public class MP_CustomerMarketPlace : IDatabaseCustomerMarketPlace
 	{
@@ -101,15 +103,23 @@ namespace EZBob.DatabaseLib.Model.Database
 			}
 			else
 			{
-
-				status = (UpdatingStart != null && UpdatingEnd == null)
-							 ? "In progress"
-							 : (!String.IsNullOrEmpty(UpdateError))
-								   ? "Error"
-								   : "Done";
-				if (UpdatingStart == null)
+				var session = ObjectFactory.GetInstance<ISession>();
+				string currentState = (string)session.CreateSQLQuery(string.Format("EXEC GetLastMarketplaceStatus {0}, {1}", Customer.Id, Id)).UniqueResult();
+				if (currentState == "In progress")
+				{
+					status = "In progress";
+				}
+				else if (!string.IsNullOrEmpty(UpdateError))
+				{
+					status = "Error";
+				}
+				else if (currentState == "Never Started")
 				{
 					status = "Never Started";
+				}
+				else
+				{
+					status = "Done";
 				}
 			}
 			return status;

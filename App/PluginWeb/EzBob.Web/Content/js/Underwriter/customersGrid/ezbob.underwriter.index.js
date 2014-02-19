@@ -53,24 +53,11 @@
 			'': 'customers',
 			'customers/:type': 'customers',
 			'profile/:id': 'profile',
-			'profile/:id/:type': 'profilePopup', // TODO: Remove this routing as it is no longer used
 			'settings': 'settings',
 			'automation': 'automation',
 			'support': 'support',
 			'fraud': 'fraud'
 		}, // routes
-
-		profilePopup: function(id, type) {
-			var profilePopupView = new EzBob.Underwriter.ProfilePopupView({ customerId: id });
-			//profilePopupView.modalOptions = { show: true, keyboard: false, width: 650 };
-
-			var that = this;
-			profilePopupView.on('close', function() {
-				that.navigate('#customers/registered');
-			});
-
-			EzBob.App.jqmodal.show(profilePopupView);
-		}, // profilePopup
 
 		handleRoute: function(sViewName, id, type) {
 			var oView = this.views[sViewName];
