@@ -10,7 +10,7 @@
 		[Test]
 		public void testMedalCalculation()
 		{
-			var msc = new MedalScoreCalculator(new SafeLog());
+			var msc = new MedalScoreCalculator(new ConsoleLog());
 			var medal = msc.CalculateMedalScore(125000, 740, 8, 10000, MaritalStatus.Married, Gender.M, 0, false, 1.2M, 0, 0, 0);
 			Assert.AreEqual(medal.Medal, MedalMultiplier.Silver);
 			
@@ -21,7 +21,7 @@
 		[Test]
 		public void testMedalCalculation2()
 		{
-			var msc = new MedalScoreCalculator(new SafeLog());
+			var msc = new MedalScoreCalculator(new ConsoleLog());
 			var medal = msc.CalculateMedalScore(125000, 900, 8, 10000, MaritalStatus.Married, Gender.M, 3, false, 0, 0, 0, 0);
 
 			Assert.AreEqual(medal.Medal, MedalMultiplier.Gold);
