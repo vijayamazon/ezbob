@@ -46,7 +46,7 @@
 			CompanyEmployeeCountInfo = null;
 		} // constructor
 
-		public void InitFromCustomer(Customer customer, ISession session = null) {
+		public void InitFromCustomer(Customer customer, ISession session) {
 			if (customer == null)
 				return;
 
@@ -104,7 +104,7 @@
 
 			if (app != null) {
 				var sql = string.Format("SELECT top 1 ErrorMsg FROM Application_Application where ApplicationId = {0}", app.Id);
-				StrategyError = session != null ? session.CreateSQLQuery(sql).UniqueResult<string>() : "";
+				StrategyError = session.CreateSQLQuery(sql).UniqueResult<string>();
 			} // if
 
 			CompanyEmployeeCountInfo = new CompanyEmployeeCountInfo(customer.Company);
@@ -125,6 +125,8 @@
 
 			TrustPilotStatusDescription = customer.TrustPilotStatus.Description;
 			TrustPilotStatusName = customer.TrustPilotStatus.Name;
+
+			LastMainStrategyStatus = (string)session.CreateSQLQuery("EXEC GetLastMainStrategyStatus " + customer.Id).UniqueResult();
 		} // InitFromCustomer
 
 		public bool IsTest { get; set; }
@@ -134,6 +136,7 @@
 
 		public string TrustPilotStatusDescription { get; set; }
 		public string TrustPilotStatusName { get; set; }
+		public string LastMainStrategyStatus { get; set; }
 
 		public List<object> TrustPilotStatusList {
 			get {
