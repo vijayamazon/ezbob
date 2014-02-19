@@ -1310,9 +1310,6 @@
     <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.settings.general.js">
       <DependentUpon>ezbob.underwriter.StrategySettings.settings.general.coffee</DependentUpon>
     </Content>
-    <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.settings.general.min.js">
-      <DependentUpon>ezbob.underwriter.StrategySettings.settings.general.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.settings.js">
       <DependentUpon>ezbob.underwriter.StrategySettings.settings.coffee</DependentUpon>
     </Content>

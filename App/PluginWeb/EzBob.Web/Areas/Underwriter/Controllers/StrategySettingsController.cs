@@ -44,14 +44,14 @@
 		public JsonNetResult SettingsGeneral()
 		{
 			var bwaBusinessCheck = _configurationVariablesRepository.GetByName("BWABusinessCheck");
-			var displayEarnedPoints = _configurationVariablesRepository.GetByName("DisplayEarnedPoints");
+			//var displayEarnedPoints = _configurationVariablesRepository.GetByName("DisplayEarnedPoints");
 
 			var st = new
 				{
 					BWABusinessCheck = bwaBusinessCheck.Value,
 					BWABusinessCheckDesc = bwaBusinessCheck.Description,
-					DisplayEarnedPoints = displayEarnedPoints.Value,
-					DisplayEarnedPointsDesc = displayEarnedPoints.Description
+					//DisplayEarnedPoints = displayEarnedPoints.Value,
+					//DisplayEarnedPointsDesc = displayEarnedPoints.Description
 				};
 			return this.JsonNet(st);
 		}
@@ -60,10 +60,10 @@
 		[ValidateJsonAntiForgeryToken]
 		[HttpPost]
 		[Transactional]
-		public JsonNetResult SettingsGeneral(string BWABusinessCheck, string DisplayEarnedPoints)
+		public JsonNetResult SettingsGeneral(string BWABusinessCheck/*, string DisplayEarnedPoints*/)
 		{
 			_configurationVariablesRepository.SetByName("BWABusinessCheck", BWABusinessCheck);
-			_configurationVariablesRepository.SetByName("DisplayEarnedPoints", DisplayEarnedPoints);
+			//_configurationVariablesRepository.SetByName("DisplayEarnedPoints", DisplayEarnedPoints);
 			return SettingsGeneral();
 		}
 

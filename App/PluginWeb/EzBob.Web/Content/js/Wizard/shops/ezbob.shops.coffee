@@ -455,7 +455,7 @@ class EzBob.StoreInfoView extends Backbone.View
         @$el.find(">div").hide()
         @storeList.show()
         $(document).attr "title", @oldTitle
-        @updateEarnedPoints()
+        #@updateEarnedPoints()
         false
 
     next: ->
@@ -478,13 +478,13 @@ class EzBob.StoreInfoView extends Backbone.View
             @isReady = true
             @$el.find(".continue").show()
 
-    updateEarnedPoints: ->
-        $.getJSON("#{window.gRootPath}Customer/Wizard/EarnedPointsStr").done (data) ->
-            if data.EarnedPointsStr
-                $('#EarnedPoints').text data.EarnedPointsStr
+    #updateEarnedPoints: ->
+    #    $.getJSON("#{window.gRootPath}Customer/Wizard/EarnedPointsStr").done (data) ->
+    #        if data.EarnedPointsStr
+    #            $('#EarnedPoints').text data.EarnedPointsStr
 
     shopConnected: (name) ->
         @model.get('customer').safeFetch().done =>
             @stores[name].button.update(@fromCustomer 'mpAccounts')
-            @updateEarnedPoints()
+            #@updateEarnedPoints()
             @render()

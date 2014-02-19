@@ -17,7 +17,7 @@ namespace EZBob.DatabaseLib {
 		CAISPath,
 		CAISPath2,
 		EnableAutomaticRejection,
-		DisplayEarnedPoints,
+		//DisplayEarnedPoints,
 		ChannelGrabberRejectPolicy,
 		CompanyScoreParserConfiguration,
 		DirectorInfoParserConfiguration,
@@ -55,7 +55,7 @@ namespace EZBob.DatabaseLib {
 
 		#region properties
 
-		public bool DisplayEarnedPoints { get { return RawDisplayEarnedPoints == "1"; } }
+		//public bool DisplayEarnedPoints { get { return RawDisplayEarnedPoints == "1"; } }
 
 		public ChannelGrabberRejectPolicy ChannelGrabberRejectPolicy {
 			get {
@@ -96,7 +96,7 @@ namespace EZBob.DatabaseLib {
 		public string RawCAISPath { get { return this[Variables.CAISPath]; } }
 		public string RawCAISPath2 { get { return this[Variables.CAISPath2]; } }
 		public string RawEnableAutomaticRejection { get { return this[Variables.EnableAutomaticRejection]; } }
-		public string RawDisplayEarnedPoints { get { return this[Variables.DisplayEarnedPoints]; } }
+		//public string RawDisplayEarnedPoints { get { return this[Variables.DisplayEarnedPoints]; } }
 		public string RawChannelGrabberRejectPolicy { get { return this[Variables.ChannelGrabberRejectPolicy]; } }
 		public string RawCompanyScoreParserConfiguration { get { return this[Variables.CompanyScoreParserConfiguration]; } }
 		public string RawDirectorInfoParserConfiguration { get { return this[Variables.DirectorInfoParserConfiguration]; } }

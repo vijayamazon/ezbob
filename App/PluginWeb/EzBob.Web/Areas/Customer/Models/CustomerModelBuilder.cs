@@ -195,7 +195,7 @@ namespace EzBob.Web.Areas.Customer.Models
 
 			customerModel.IsCurrentCashRequestFromQuickOffer = !ReferenceEquals(cr, null) && !ReferenceEquals(cr.QuickOffer, null);
 
-	        customerModel.LoyaltyPoints = customer.LoyaltyPoints();
+	        //customerModel.LoyaltyPoints = customer.LoyaltyPoints();
 	        customerModel.IsOffline = customer.IsOffline;
 
 			var inviteFriend = customer.CustomerInviteFriend.FirstOrDefault();

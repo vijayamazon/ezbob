@@ -99,7 +99,7 @@ namespace EZBob.DatabaseLib
 		private readonly ConcurrentDictionary<IMarketplaceType, ConcurrentDictionary<string, MP_EbayAmazonCategory>> _CacheEBayamazonCategory = new ConcurrentDictionary<IMarketplaceType, ConcurrentDictionary<string, MP_EbayAmazonCategory>>();
 		private readonly ConcurrentDictionary<string, MP_EbayAmazonCategory[]> _CacheAmazonCategoryByProductKey = new ConcurrentDictionary<string, MP_EbayAmazonCategory[]>();
 		private readonly ILoanTypeRepository _LoanTypeRepository;
-		private readonly CustomerLoyaltyProgramPointsRepository _CustomerLoyaltyPoints;
+		//private readonly CustomerLoyaltyProgramPointsRepository _CustomerLoyaltyPoints;
 		private readonly MP_FreeAgentCompanyRepository _FreeAgentCompanyRepository;
 		private readonly MP_FreeAgentUsersRepository _FreeAgentUsersRepository;
 		private readonly MP_FreeAgentExpenseCategoryRepository _FreeAgentExpenseCategoryRepository;
@@ -148,7 +148,7 @@ namespace EZBob.DatabaseLib
 			_MP_EbayOrderRepository = new MP_EbayOrderRepository(session);
 			_MP_EbayTransactionsRepository = new MP_EbayTransactionsRepository(session);
 			_LoanTypeRepository = new LoanTypeRepository(session);
-			_CustomerLoyaltyPoints = new CustomerLoyaltyProgramPointsRepository(session);
+			//_CustomerLoyaltyPoints = new CustomerLoyaltyProgramPointsRepository(session);
 			_FreeAgentCompanyRepository = new MP_FreeAgentCompanyRepository(session);
 			_FreeAgentUsersRepository = new MP_FreeAgentUsersRepository(session);
 			_FreeAgentExpenseCategoryRepository = new MP_FreeAgentExpenseCategoryRepository(session);
@@ -279,7 +279,7 @@ namespace EZBob.DatabaseLib
 
 		public ILoanTypeRepository LoanTypeRepository { get { return _LoanTypeRepository; } }
 
-		public CustomerLoyaltyProgramPointsRepository CustomerLoyaltyPoints { get { _session.Evict(_CustomerLoyaltyPoints); return _CustomerLoyaltyPoints; } }
+		//public CustomerLoyaltyProgramPointsRepository CustomerLoyaltyPoints { get { _session.Evict(_CustomerLoyaltyPoints); return _CustomerLoyaltyPoints; } }
 
 		public ICurrencyConvertor CurrencyConverter { get { return _CurrencyConvertor; } }
 

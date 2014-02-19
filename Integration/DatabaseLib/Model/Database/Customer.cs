@@ -652,7 +652,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual bool LoanForCurrentOfferIsTaken {
 			get { return Loans.Select(l => l.CashRequest.Id).Contains(LastCashRequest.Id); }
 		} // LoanForCurrentOfferIsTaken
-
+		/*
 		public virtual long LoyaltyPoints() {
 			var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
 			CustomerLoyaltyProgramPoints p = oDBHelper == null ? null : oDBHelper.CustomerLoyaltyPoints.Get(Id);
@@ -664,7 +664,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 			CustomerLoyaltyProgramPoints p = oDBHelper == null ? null : oDBHelper.CustomerLoyaltyPoints.Get(Id);
 			return p == null ? (DateTime?)null : p.LastActionDate;
 		} // LastLoyaltyProgramActionDate
-
+		*/
 		public virtual string PromoCode { get; set; }
 		public virtual bool? MonthlyStatusEnabled { get; set; }
 

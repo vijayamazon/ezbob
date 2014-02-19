@@ -74,19 +74,19 @@
             return View(wizardModel);
         }       
 
-		[Ajax]
-		[HttpGet]
-		[ValidateJsonAntiForgeryToken]
-		[Transactional]
-		public JsonNetResult EarnedPointsStr() {
-			var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
-			Customer oCustomer = oDBHelper == null ? null : oDBHelper.FindCustomerByEmail(User.Identity.Name.Trim());
-			string sPoints = "";
+		//[Ajax]
+		//[HttpGet]
+		//[ValidateJsonAntiForgeryToken]
+		//[Transactional]
+		//public JsonNetResult EarnedPointsStr() {
+		//	var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
+		//	Customer oCustomer = oDBHelper == null ? null : oDBHelper.FindCustomerByEmail(User.Identity.Name.Trim());
+		//	string sPoints = "";
 
-			if (oCustomer != null)
-				sPoints = string.Format("{0:N0}", oCustomer.LoyaltyPoints());
+		//	if (oCustomer != null)
+		//		sPoints = string.Format("{0:N0}", oCustomer.LoyaltyPoints());
 
-			return this.JsonNet(new { EarnedPointsStr = sPoints });
-		} // EarnedPointsStr
+		//	return this.JsonNet(new { EarnedPointsStr = sPoints });
+		//} // EarnedPointsStr
 	}
 }
