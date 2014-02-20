@@ -28,15 +28,6 @@ namespace Ezbob.Database {
 
 	#endregion enum CommandSpecies
 
-	#region enum LogVerbosityLevel
-
-	public enum LogVerbosityLevel {
-		Compact,
-		Verbose
-	} // enum LogVerbosityLevel
-
-	#endregion enum LogVerbosityLevel
-
 	#region interface IConnection
 
 	public interface IConnection {

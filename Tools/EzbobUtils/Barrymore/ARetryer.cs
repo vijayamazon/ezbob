@@ -2,9 +2,33 @@
 	using System;
 	using Logger;
 
+	#region enum LogVerbosityLevel
+
+	public enum LogVerbosityLevel {
+		Compact,
+		Verbose
+	} // enum LogVerbosityLevel
+
+	#endregion enum LogVerbosityLevel
+
 	#region class ARetryer
 
 	public abstract class ARetryer {
+		#region public
+
+		#region property LogVerbosityLevel
+
+		public virtual LogVerbosityLevel LogVerbosityLevel {
+			get { return m_nLogVerbosityLevel; }
+			set { m_nLogVerbosityLevel = value; }
+		} // LogVerbosityLevel
+
+		private LogVerbosityLevel m_nLogVerbosityLevel;
+
+		#endregion property LogVerbosityLevel
+
+		#endregion public
+
 		#region protected
 
 		#region constructor
@@ -13,6 +37,7 @@
 			RetryCount = nRetryCount;
 			SleepBeforeRetry = nSleepBeforeRetry;
 			Log = new SafeLog(oLog);
+			m_nLogVerbosityLevel = LogVerbosityLevel.Compact;
 		} // constructor
 
 		#endregion constructor

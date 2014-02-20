@@ -29,11 +29,13 @@
 
 			for (int nCount = 1; nCount <= RetryCount; nCount++) {
 				try {
-					Log.Debug("Attempt {0} of {1}: {2}", nCount, RetryCount, sFuncDescription);
+					if (LogVerbosityLevel == LogVerbosityLevel.Verbose)
+						Log.Debug("Attempt {0} of {1}: {2}", nCount, RetryCount, sFuncDescription);
 
 					T res = func();
 
-					Log.Debug("Attempt {0} of {1} succeeded: {2}", nCount, RetryCount, sFuncDescription);
+					if (LogVerbosityLevel == LogVerbosityLevel.Verbose)
+						Log.Debug("Success on attempt {0} of {1}: {2}", nCount, RetryCount, sFuncDescription);
 
 					return res;
 				}
