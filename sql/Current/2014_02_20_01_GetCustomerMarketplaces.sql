@@ -9,6 +9,9 @@ CREATE PROCEDURE [dbo].[GetCustomerMarketplaces]
 	(@CustomerId INT)
 AS
 BEGIN
+	-- Setting the isolation level to avoid deadlocks while 'waiting' in the main strategy
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+	
 	SELECT
 		Id
 	FROM

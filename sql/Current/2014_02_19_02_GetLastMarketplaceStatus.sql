@@ -10,6 +10,9 @@ CREATE PROCEDURE [dbo].[GetLastMarketplaceStatus]
 	 @MarketplaceId INT)
 AS
 BEGIN
+	-- Setting the isolation level to avoid deadlocks while 'waiting' in the main strategy
+	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
+	
 	DECLARE 
 		@MpActionNameId INT,
 		@MpsActionNameId INT, 
