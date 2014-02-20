@@ -2,8 +2,10 @@
 {
 	using System;
 	using System.Data;
+	using System.Xml;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using Ezbob.Utils.XmlUtils;
 
 	public class BankBasedApproval
 	{
@@ -36,16 +38,13 @@
 		private decimal age;
 		private bool hasDefaultInLast2Years;
 		private decimal amlScore;
-		private bool businessScoreExists;
 		private decimal personalScore;
 		private bool isDirectorInExperian;
 		private decimal companySeniorityDays;
 		private decimal tangibleEquity;
 		private int businessScore;
-		private int companyId;
 		private bool isHomeOwner;
 		private int loanTerm;
-		private decimal lastQuarterRevenues;
 		private decimal loanOffer;
 		private int offerValidForHours;
 		private DateTime earliestTransactionDate;
@@ -55,11 +54,14 @@
 		private decimal vat; // The vat is in the cashflow tab
 		private decimal annualizedTurnover;
 
+		private readonly ExperianUtils experianUtils;
+
 		public BankBasedApproval(int customerId, AConnection db, ASafeLog log)
 		{
 			this.db = db;
 			this.log = log;
 			this.customerId = customerId;
+			experianUtils = new ExperianUtils(log);
 			ReadConfigurations();
 			GetPersonalInfo();
 		}
@@ -81,6 +83,13 @@
 
 			CapOffer();
 
+			SetApproval(response);
+
+			return true;
+		}
+
+		private void SetApproval(AutoDecisionResponse response)
+		{
 			response.CreditResult = "Approved";
 			response.UserStatus = "Approved";
 			response.SystemDecision = "Approve";
@@ -88,8 +97,6 @@
 			response.IsAutoBankBasedApproval = true;
 			response.AppValidFor = DateTime.UtcNow.AddHours(offerValidForHours);
 			response.RepaymentPeriod = loanTerm;
-
-			return true;
 		}
 
 		private void CapOffer()
@@ -142,22 +149,36 @@
 			isCustomerViaBroker = false;
 			isOffline = false;
 			age = 19;
-			hasDefaultInLast2Years = false;
-			amlScore = 71;
-			businessScoreExists = false;
-			personalScore = 851;
-			isDirectorInExperian = true;
-			companySeniorityDays = 1200;
-			tangibleEquity = 1;
-			businessScore = 31;
-			companyId = 9;
 			isHomeOwner = true;
-			lastQuarterRevenues = 167000;
 			earliestTransactionDate = DateTime.UtcNow;
 			sumOfLoanTransactions = 12345;
 			numberOfPayers = 4;
 			vat = 55;
 			annualizedTurnover = 777;
+			hasDefaultInLast2Years = false;
+			personalScore = 851;
+
+
+
+			log.Info("Getting personal info for customer:{0}", customerId);
+			DataTable dt = db.ExecuteReader("GetPersonalInfoForBankBasedApproval", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
+			var sr = new SafeReader(dt.Rows[0]);
+
+			string amlData = sr["AmlData"];
+			string firstName = sr["FirstName"];
+			string surame = sr["Surame"];
+			string companyData = sr["CompanyData"];
+
+
+			// Parse experian data
+			decimal totalCurrentAssets;
+			amlScore = experianUtils.DetectAml(amlData);
+			XmlNode companyInfo = Xml.ParseRoot(companyData);
+			isDirectorInExperian = experianUtils.IsDirector(companyInfo, firstName, surame);
+			experianUtils.DetectTangibleEquity(companyInfo, out tangibleEquity, out totalCurrentAssets);
+			DateTime? companyIncorporationDate = experianUtils.DetectIncorporationDate(companyInfo);
+			companySeniorityDays = companyIncorporationDate.HasValue ? (decimal)(DateTime.UtcNow - companyIncorporationDate.Value).TotalDays : 0;
+			businessScore = experianUtils.DetectBusinessScore(companyInfo);
 		}
 
 		private bool CheckConditionsForApproval()
@@ -194,7 +215,7 @@
 				return false;
 			}
 
-			if (businessScoreExists)
+			if (businessScore != 0)
 			{
 				if (!isDirectorInExperian)
 				{
@@ -210,7 +231,7 @@
 
 				if (companySeniorityDays < minCompanySeniorityDays)
 				{
-					log.Info("No bank based approval since the company:{0} has seniority of:{1} and the minimum is:{2}", companyId, companySeniorityDays, minCompanySeniorityDays);
+					log.Info("No bank based approval since the company has seniority of:{0} and the minimum is:{1}", companySeniorityDays, minCompanySeniorityDays);
 					return false;
 				}
 
@@ -270,7 +291,7 @@
 
 		private Risk GetRisk()
 		{
-			if (businessScoreExists)
+			if (businessScore != 0)
 			{
 				if (businessScore >= minBusinessScore && businessScore < belowAverageRiskBusinessScoreMin)
 				{
@@ -303,16 +324,15 @@
 			Risk risk = GetRisk();
 			switch (risk)
 			{
-				/*Should determine interest too??*/
 				case Risk.LowAndMinimum:
 					loanTerm = 12;
-					return lastQuarterRevenues * 0.12m;
+					return annualizedTurnover * 0.03m;
 				case Risk.BelowAverage:
 					loanTerm = 9;
-					return lastQuarterRevenues * 0.09m;
+					return annualizedTurnover * 0.0225m;
 				default: // Risk.AboveAverage
 					loanTerm = 6;
-					return lastQuarterRevenues * 0.06m;
+					return annualizedTurnover * 0.015m;
 
 			}
 		}
