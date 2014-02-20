@@ -178,8 +178,8 @@
 				}
 				else if (autoDecisionResponse.IsAutoBankBasedApproval)
 				{
-					// update cash request
-					// send mail
+					UpdateBankBasedApprovalData();
+					SendBankBasedApprovalMails();
 					strategyHelper.AddApproveIntoDecisionHistory(customerId, "Auto bank based approval");
 				}
 				else
@@ -396,10 +396,56 @@
 		private void UpdateApprovalData()
 		{
 			DB.ExecuteNonQuery(
-				"UpdateAutoApproval",
+				"UpdateBankBasedAutoApproval",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId),
 				new QueryParameter("AutoApproveAmount", autoDecisionResponse.AutoApproveAmount)
+				);
+		}
+
+		private void SendBankBasedApprovalMails()
+		{
+			var variables = new Dictionary<string, string>
+				{
+					{"ApprovedReApproved", "Approved"},
+					{"RegistrationDate", appRegistrationDate.ToString(CultureInfo.InvariantCulture)},
+					{"userID", customerId.ToString(CultureInfo.InvariantCulture)},
+					{"Name", appEmail},
+					{"FirstName", appFirstName},
+					{"Surname", appSurname},
+					{"MP_Counter", allMPsNum.ToString(CultureInfo.InvariantCulture)},
+					{"MedalType", medalType.ToString()},
+					{"SystemDecision", autoDecisionResponse.SystemDecision},
+					{"ApprovalAmount", autoDecisionResponse.BankBasedAutoApproveAmount.ToString(CultureInfo.InvariantCulture)},
+					{"RepaymentPeriod", autoDecisionResponse.RepaymentPeriod.ToString(CultureInfo.InvariantCulture)},
+					{"InterestRate", loanOfferInterestRate.ToString(CultureInfo.InvariantCulture)},
+					{
+						"OfferValidUntil",
+						autoDecisionResponse.AppValidFor.HasValue
+							? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture)
+							: string.Empty
+					}
+				};
+
+			mailer.SendToEzbob(variables, "Mandrill - User is approved");
+
+			var customerMailVariables = new Dictionary<string, string>
+				{
+					{"FirstName", appFirstName},
+					{"LoanAmount", autoDecisionResponse.BankBasedAutoApproveAmount.ToString(CultureInfo.InvariantCulture)}
+				};
+
+			mailer.SendToCustomerAndEzbob(customerMailVariables, appEmail, isFirstLoan ? "Mandrill - Approval (1st time)" : "Mandrill - Approval (not 1st time)");
+		}
+
+		private void UpdateBankBasedApprovalData()
+		{
+			DB.ExecuteNonQuery(
+				"UpdateBankBasedAutoApproval",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", customerId),
+				new QueryParameter("AutoApproveAmount", autoDecisionResponse.BankBasedAutoApproveAmount),
+				new QueryParameter("RepaymentPeriod", autoDecisionResponse.RepaymentPeriod)
 				);
 		}
 

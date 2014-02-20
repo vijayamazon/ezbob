@@ -1,7 +1,9 @@
 ﻿namespace EzBob.Backend.Strategies.AutoDecisions
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Data;
+	using System.Globalization;
 	using System.Xml;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -54,6 +56,11 @@
 		private decimal vat; // The vat is in the cashflow tab
 		private decimal annualizedTurnover;
 
+		private readonly StrategiesMailer mailer;
+		private bool isSilent;
+		private string silentTemplateName;
+		private string silentToAddress;
+
 		private readonly ExperianUtils experianUtils;
 
 		public BankBasedApproval(int customerId, AConnection db, ASafeLog log)
@@ -68,7 +75,6 @@
 
 		public bool MakeDecision(AutoDecisionResponse response)
 		{
-			return false;// Temporary - should not approve until implementation is completed
 			if (!CheckConditionsForApproval())
 			{
 				return false;
@@ -83,9 +89,32 @@
 
 			CapOffer();
 
-			SetApproval(response);
+			if (isSilent)
+			{
+				NotifyAutoApproveSilentMode();
+
+				response.CreditResult = "WaitingForDecision";
+				response.UserStatus = "Manual";
+				response.SystemDecision = "Manual";
+			}
+			else
+			{
+				SetApproval(response);
+			}
 
 			return true;
+		}
+
+		private void NotifyAutoApproveSilentMode()
+		{
+			var vars = new Dictionary<string, string>
+			{
+				{"customerId", customerId.ToString(CultureInfo.InvariantCulture)},
+				{"ApproveAmount", loanOffer.ToString(CultureInfo.InvariantCulture)}
+			};
+
+			log.Info("Sending silent bank based auto approval mail for: customerId={0} ApproveAmount={1}", customerId, loanOffer);
+			mailer.SendMailViaMandrill(vars, silentToAddress, string.Empty, silentTemplateName, false);
 		}
 
 		private void SetApproval(AutoDecisionResponse response)
@@ -97,6 +126,7 @@
 			response.IsAutoBankBasedApproval = true;
 			response.AppValidFor = DateTime.UtcNow.AddHours(offerValidForHours);
 			response.RepaymentPeriod = loanTerm;
+			response.BankBasedAutoApproveAmount = (int)loanOffer;
 		}
 
 		private void CapOffer()
@@ -142,6 +172,9 @@
 			euCap = sr["BankBasedApprovalEuCap"];
 			offerValidForHours = sr["OfferValidForHours"];
 			minNumberOfDays = sr["BankBasedApprovalMinNumberOfDays"];
+			isSilent = sr["BankBasedApprovalIsSilent"];
+			silentTemplateName = sr["BankBasedApprovalSilentTemplateName"];
+			silentToAddress = sr["BankBasedApprovalSilentToAddress"];
 		}
 
 		private void GetPersonalInfo()

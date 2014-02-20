@@ -15,14 +15,14 @@ BEGIN
 		@LastName NVARCHAR(250)
 		
 	SELECT TOP 1
-		@AmlId = l.Id
+		@AmlId = Id
 	FROM
 		MP_ServiceLog
 	WHERE
 		CustomerId = @CustomerId AND
 		ServiceType = 'AML A check'
 	ORDER BY
-		l.InsertDate DESC
+		InsertDate DESC
 				
 	SELECT
 		@FirstName = FirstName,
@@ -37,8 +37,8 @@ BEGIN
 	SELECT
 		(SELECT ResponseData FROM MP_ServiceLog WHERE Id = @AmlId) AS AmlData,
 		@FirstName AS FirstName,
-		@LastName AS Surname,
-		(SELECT JsonPacket FROM MP_ExperianDataCache WHERE Id = @CompanyId) AS CompanyData
+		@LastName AS Surname--,
+		--(SELECT JsonPacket FROM MP_ExperianDataCache WHERE Id = @CompanyId) AS CompanyData
 		
 	
 	

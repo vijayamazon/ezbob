@@ -73,7 +73,23 @@ BEGIN
 	INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('BankBasedApprovalMinNumberOfDays', 85, 'Minimum number of days back that transaction must exist for approval')
 END
 
+IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='BankBasedApprovalIsSilent')
+BEGIN
+	INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('BankBasedApprovalIsSilent', 'True', 'If true then bank based auto approvals will be diverted to manual flow and a mail notification will be sent')
+END
+
+IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='BankBasedApprovalSilentTemplateName')
+BEGIN
+	INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('BankBasedApprovalSilentTemplateName', 'BankBasedApprovalSilentNotification', 'Template name in mandrill for the silent mail')
+END
+
+IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='BankBasedApprovalSilentToAddress')
+BEGIN
+	INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('BankBasedApprovalSilentToAddress', 'yulys@ezbob.com', 'Address for silent mode of bank based auto approval')
+END
+
 GO
+
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'dbo.GetBankBasedApprovalConfigs') AND type in (N'P', N'PC'))
 DROP PROCEDURE dbo.GetBankBasedApprovalConfigs
@@ -101,6 +117,9 @@ BEGIN
 		(SELECT Value FROM ConfigurationVariables WHERE Name = 'BankBasedApprovalNotHomeOwnerCap') AS BankBasedApprovalNotHomeOwnerCap,
 		(SELECT Value FROM ConfigurationVariables WHERE Name = 'BankBasedApprovalEuCap') AS BankBasedApprovalEuCap,
 		(SELECT Value FROM ConfigurationVariables WHERE Name = 'OfferValidForHours') AS OfferValidForHours,
-		(SELECT Value FROM ConfigurationVariables WHERE Name = 'BankBasedApprovalMinNumberOfDays') AS BankBasedApprovalMinNumberOfDays		
+		(SELECT Value FROM ConfigurationVariables WHERE Name = 'BankBasedApprovalMinNumberOfDays') AS BankBasedApprovalMinNumberOfDays,
+		(SELECT CONVERT(BIT, Value) FROM ConfigurationVariables WHERE Name = 'BankBasedApprovalIsSilent') AS BankBasedApprovalIsSilent,
+		(SELECT Value FROM ConfigurationVariables WHERE Name = 'BankBasedApprovalSilentTemplateName') AS BankBasedApprovalSilentTemplateName,
+		(SELECT Value FROM ConfigurationVariables WHERE Name = 'BankBasedApprovalSilentToAddress') AS BankBasedApprovalSilentToAddress		
 END
 GO

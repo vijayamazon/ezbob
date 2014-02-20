@@ -44,12 +44,10 @@
 		#endregion method SendToEzbob
 
 		#endregion public
-
-		#region private
-
+		
 		#region method SendMailViaMandrill
 
-		private void SendMailViaMandrill(Dictionary<string, string> variables, string toAddress, string ccAddress, string templateName, bool shouldRecord) {
+		public void SendMailViaMandrill(Dictionary<string, string> variables, string toAddress, string ccAddress, string templateName, bool shouldRecord) {
 			var sendStatus = mail.Send(variables, toAddress, templateName, string.Empty, ccAddress);
 			var renderedHtml = mail.GetRenderedTemplate(variables, templateName);
 
@@ -70,6 +68,8 @@
 		} // SendMailViaMandrill
 
 		#endregion method SendMailViaMandrill
+
+		#region private
 
 		#region method HtmlToDocxBinary
 

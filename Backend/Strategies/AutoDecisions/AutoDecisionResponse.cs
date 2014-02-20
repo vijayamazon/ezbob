@@ -19,5 +19,6 @@
 		public decimal PayPalTotalSumOfOrders1Y { get; set; }
 		public int PayPalNumberOfStores { get; set; }
 		public int RepaymentPeriod { get; set; }
+		public int BankBasedAutoApproveAmount { get; set; }
 	}
 }
