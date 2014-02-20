@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers
 {
+	using System.Data;
 	using System.Linq;
 	using System.Web.Mvc;
 	using Models;
@@ -16,7 +17,7 @@
             _context = context;
         }
 
-        [Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         public ActionResult Index()
         {
 			var customer = _context.Customer;

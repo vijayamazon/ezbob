@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
+	using System.Data;
 	using System.Web.Mvc;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Models;
@@ -11,7 +12,7 @@
 	{
 		[Ajax]
 		[HttpGet]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonNetResult Index(int id)
 		{
 			var newSession = ObjectFactory.GetInstance<ISession>();

@@ -1,17 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Web.Mvc;
-using System.Linq;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Repository;
-using EZBob.DatabaseLib.Repository;
-using EzBob.Web.Areas.Underwriter.Models;
-using EzBob.Web.Infrastructure.csrf;
-using Scorto.Web;
-using StructureMap;
-
-namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
+﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
-    public class ApiChecksLogController : Controller
+	using System.Data;
+	using System.Web.Mvc;
+	using EZBob.DatabaseLib.Model.Database.Repository;
+	using Models;
+	using Infrastructure.csrf;
+	using Scorto.Web;
+
+	public class ApiChecksLogController : Controller
     {
         private readonly ICustomerRepository _customerRepository;
         private readonly ApiCheckLogBuilder _builder;
@@ -24,7 +20,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 
         [Ajax]
         [HttpGet]
-        [Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         [ValidateJsonAntiForgeryToken]
         public JsonNetResult Index(int id)
         {

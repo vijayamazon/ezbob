@@ -1,9 +1,8 @@
-using EZBob.DatabaseLib;
-
 namespace EzBob.Web.Controllers
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Data;
 	using System.Linq;
 	using System.Web;
 	using System.Web.Mvc;
@@ -29,6 +28,7 @@ namespace EzBob.Web.Controllers
 	using Scorto.Security.UserManagement.Sessions;
 	using Scorto.Web;
 	using log4net;
+	using EZBob.DatabaseLib;
 	using ActionResult = System.Web.Mvc.ActionResult;
 
 	public class AccountController : Controller
@@ -310,7 +310,7 @@ namespace EzBob.Web.Controllers
 		}
 		//------------------------------------------------------------------------
 		[HttpPost]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[Ajax]
 		[ActionName("SignUp")]
 		[ValidateJsonAntiForgeryToken]
@@ -499,7 +499,7 @@ namespace EzBob.Web.Controllers
 		}
 
 		//------------------------------------------------------------------------        
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonNetResult RestorePassword(string email = "", string answer = "")
 		{
 			if (!ModelState.IsValid)

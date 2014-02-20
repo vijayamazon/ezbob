@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers
 {
 	using System;
+	using System.Data;
 	using System.Linq;
 	using System.Text.RegularExpressions;
 	using System.Web.Mvc;
@@ -58,7 +59,7 @@
 			_payPalConfig = ObjectFactory.GetInstance<IPayPalConfig>();
 		}
 
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public ViewResult Success(string request_token, string verification_code)
 		{
 			if (string.IsNullOrEmpty(verification_code) && string.IsNullOrEmpty(request_token))
@@ -104,21 +105,6 @@
 			_creator.CustomerMarketPlaceAdded(_context.Customer, mp.Id);
 
 			return View(permissionsGranted);
-		}
-
-		[Transactional]
-		public JsonResult BasicPersonal()
-		{
-			var customer = _context.Customer;
-			var paypal = new PayPalDatabaseMarketPlace();
-
-			var data = customer.CustomerMarketPlaces.First(m => m.Marketplace.InternalId == paypal.InternalId).SecurityData;
-			var securityData = SerializeDataHelper.DeserializeType<PayPalSecurityData>(data);
-			var perm = securityData.PermissionsGranted;
-			throw new NotImplementedException();
-			//var response = _paypalFacade.GetBasicPersonal(perm);
-
-			//return Json(response, JsonRequestBehavior.AllowGet);
 		}
 
 		public JsonResult GetRequestPermissionsUrl()

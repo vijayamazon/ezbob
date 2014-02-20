@@ -1,29 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using ApplicationMng.Repository;
-using EZBob.DatabaseLib.Model;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Loans;
-using EZBob.DatabaseLib.Model.Database.Repository;
-using EZBob.DatabaseLib.Model.Loans;
-using EZBob.DatabaseLib.Repository;
-using EzBob.Models;
-using EzBob.Web.Areas.Customer.Models;
-using EzBob.Web.Areas.Underwriter.Models;
-using EzBob.Web.Code;
-using EzBob.Web.Code.ReportGenerator;
-using EzBob.Web.Infrastructure;
-using PaymentServices.Calculators;
-using PaymentServices.PayPoint;
-using Scorto.Web;
-using log4net;
-
-
-namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
+﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
+	using System.Data;
 	using Code.ApplicationCreator;
+	using System;
+	using System.Linq;
+	using System.Web.Mvc;
+	using ApplicationMng.Repository;
+	using EZBob.DatabaseLib.Model;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EZBob.DatabaseLib.Model.Database.Repository;
+	using EZBob.DatabaseLib.Model.Loans;
+	using EZBob.DatabaseLib.Repository;
+	using Models;
+	using Code;
+	using Code.ReportGenerator;
+	using Infrastructure;
+	using PaymentServices.Calculators;
+	using PaymentServices.PayPoint;
+	using Scorto.Web;
+	using log4net;
 
 	public class LoanHistoryController : Controller
 	{
@@ -64,16 +60,16 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 
 		[Ajax]
 		[HttpGet]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonNetResult Index(int id)
 		{
-			EZBob.DatabaseLib.Model.Database.Customer customer = _customerRepository.Get(id);
+			Customer customer = _customerRepository.Get(id);
 			return this.JsonNet(new LoansAndOffers(customer));
 		}
 
 		[Ajax]
 		[HttpGet]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonNetResult Details(int customerid, int loanid)
 		{
 			var customer = _customerRepository.Get(customerid);

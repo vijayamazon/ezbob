@@ -1,4 +1,5 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview {
+	using System.Data;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using System;
 	using System.Web.Mvc;
@@ -78,7 +79,7 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpGet]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonNetResult Index(int id) {
 			var customer = _customerRepository.Get(id);
 			var m = new ApplicationInfoModel();
@@ -102,7 +103,7 @@
 		}
 
 		[Ajax]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public void LogStatusChange(int newStatus, int prevStatus, int customerId) {
 			var newEntry = new CustomerStatusHistory();
 			newEntry.Username = User.Identity.Name;
@@ -132,7 +133,7 @@
 		}
 
 		[HttpPost]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[Ajax]
 		public void SaveApproveWithoutAML(int customerId, bool doNotShowAgain) {
 			Log.DebugFormat("Saving approve without AML. Customer:{0} doNotShowAgain = {1}", customerId, doNotShowAgain);
@@ -148,7 +149,7 @@
 		}
 
 		[HttpPost]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[Permission(Name = "PacnetManualButton")]
@@ -165,7 +166,7 @@
 		}
 
 		[HttpPost]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[Permission(Name = "PacnetManualButton")]
@@ -178,7 +179,7 @@
 
 		[HttpPost]
 		[Ajax]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[Permission(Name = "CreditLineFields")]
 		public void LoanType(long id, int loanType) {
 			var cr = _cashRequestsRepository.Get(id);
@@ -191,7 +192,7 @@
 
 		[HttpPost]
 		[Ajax]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonNetResult DiscountPlan(long id, int discountPlanId) {
 			var cr = _cashRequestsRepository.Get(id);
 			var discount = _discounts.Get(discountPlanId);
@@ -203,7 +204,7 @@
 
 		[HttpPost]
 		[Ajax]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonNetResult LoanSource(long id, int LoanSourceID) {
 			var cr = _cashRequestsRepository.Get(id);
 			cr.LoanSource = _loanSources.Get(LoanSourceID);
@@ -221,7 +222,7 @@
 		} // LoanSource
 
 		[HttpPost]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[Permission(Name = "CreditLineFields")]
@@ -236,7 +237,7 @@
 		}
 
 		[HttpPost]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[Permission(Name = "CreditLineFields")]
@@ -251,7 +252,7 @@
 		}
 
 		[HttpPost]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
 		public void SaveDetails(int id, string details) {
@@ -263,7 +264,7 @@
 		}
 
 		[HttpPost]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
 		[Permission(Name = "CreditLineFields")]
@@ -274,7 +275,8 @@
 			Log.DebugFormat("CashRequest({0}).UseSetupFee = {1}", id, enbaled);
 		}
 
-		[HttpPost, Transactional, ValidateJsonAntiForgeryToken, Ajax, Permission(Name = "CreditLineFields")]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		[HttpPost, ValidateJsonAntiForgeryToken, Ajax, Permission(Name = "CreditLineFields")]
 		public void ChangeBrokerSetupFee(long id, bool enbaled) {
 			var cr = _cashRequestsRepository.Get(id);
 			cr.UseBrokerSetupFee = enbaled;
@@ -282,7 +284,8 @@
 			Log.DebugFormat("CashRequest({0}).UseBrokerSetupFee = {1}", id, enbaled);
 		}
 
-		[HttpPost, Transactional, ValidateJsonAntiForgeryToken, Ajax, Permission(Name = "CreditLineFields")]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		[HttpPost, ValidateJsonAntiForgeryToken, Ajax, Permission(Name = "CreditLineFields")]
 		public void ChangeManualSetupFeePercent(long id, decimal? manualPercent)
 		{
 			var cr = _cashRequestsRepository.Get(id);
@@ -298,7 +301,8 @@
 			Log.DebugFormat("CashRequest({0}).ManualSetupFee percent: {1}", id, cr.ManualSetupFeePercent);
 		}
 
-		[HttpPost, Transactional, ValidateJsonAntiForgeryToken, Ajax, Permission(Name = "CreditLineFields")]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		[HttpPost, ValidateJsonAntiForgeryToken, Ajax, Permission(Name = "CreditLineFields")]
 		public void ChangeManualSetupFeeAmount(long id, int? manualAmount)
 		{
 			var cr = _cashRequestsRepository.Get(id);
@@ -309,7 +313,7 @@
 
 
 		[HttpPost]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
 		[Permission(Name = "TestUser")]
@@ -320,7 +324,7 @@
 		}
 
 		[HttpPost]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
 		public JsonNetResult ToggleCciMark(int id) {
@@ -338,7 +342,7 @@
 		} // ToggleCciMark
 
 		[HttpPost]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
 		public JsonNetResult UpdateTrustPilotStatus(int id, string status) {
@@ -372,7 +376,7 @@
 		} // UpdateTrustPilotStatus
 
 		[HttpPost]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
 		[Permission(Name = "CreditLineFields")]
@@ -383,7 +387,7 @@
 		}
 
 		[HttpPost]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
 		[Permission(Name = "CreditLineFields")]
@@ -395,7 +399,7 @@
 		}
 
 		[HttpPost]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
 		[Permission(Name = "CreditLineFields")]
@@ -406,7 +410,7 @@
 		}
 
 		[HttpPost]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
 		[Permission(Name = "CreditLineFields")]
@@ -426,7 +430,7 @@
 
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[Ajax]
 		[Permission(Name = "CreditLineFields")]
 		public void ChangeStartingDate(int id, string date) {

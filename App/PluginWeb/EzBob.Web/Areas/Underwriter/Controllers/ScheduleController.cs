@@ -1,18 +1,17 @@
-﻿using System;
-using System.Linq;
-using System.Web.Mvc;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Repository;
-using EZBob.DatabaseLib.Model.Loans;
-using EzBob.Models;
-using EzBob.Web.Code;
-using EzBob.Web.Code.ReportGenerator;
-using PaymentServices.Calculators;
-using Scorto.Web;
-
-namespace EzBob.Web.Areas.Underwriter.Controllers
+﻿namespace EzBob.Web.Areas.Underwriter.Controllers
 {
-    public class ScheduleController : Controller
+	using System.Data;
+	using System.Web.Mvc;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Repository;
+	using EZBob.DatabaseLib.Model.Loans;
+	using EzBob.Models;
+	using Code;
+	using Code.ReportGenerator;
+	using PaymentServices.Calculators;
+	using Scorto.Web;
+
+	public class ScheduleController : Controller
     {
         private readonly LoanBuilder _loanBuilder;
         private readonly ICashRequestRepository _cashRequests;
@@ -30,7 +29,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         }
 
         [HttpGet]
-        [Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         [Ajax]
         public JsonNetResult Calculate(long id)
         {
@@ -38,7 +37,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             return this.JsonNet(loanOffer);
         }
 
-        [Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         public ActionResult Export(long id, bool isExcel, bool isShowDetails, int customerId)
         {
             var loanOffer = GetLoanOffer(id);

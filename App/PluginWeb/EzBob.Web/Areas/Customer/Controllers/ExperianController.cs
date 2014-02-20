@@ -1,4 +1,5 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers {
+	using System.Data;
 	using System.Web.Mvc;
 	using Code.ApplicationCreator;
 	using EZBob.DatabaseLib.Model.Database;
@@ -25,7 +26,7 @@
 
 		#region method PerformConsumerCheck
 
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
@@ -39,7 +40,7 @@
 
 		#region method PerformConsumerCheckForDirectors
 
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]

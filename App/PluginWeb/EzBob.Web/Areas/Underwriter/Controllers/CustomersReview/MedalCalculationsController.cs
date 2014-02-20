@@ -1,12 +1,13 @@
-﻿using EzBob.Web.Code;
-using Scorto.Web;
-using System.Web.Mvc;
-using EzBob.Web.Areas.Underwriter.Models;
-using EZBob.DatabaseLib.Model.Database.Repository;
-
-namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
+﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
-    public class MedalCalculationsController : Controller
+	using System.Data;
+	using Code;
+	using Scorto.Web;
+	using System.Web.Mvc;
+	using Models;
+	using EZBob.DatabaseLib.Model.Database.Repository;
+
+	public class MedalCalculationsController : Controller
     {
         private readonly CustomerRepository _customerRepository;
        
@@ -17,7 +18,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 
         [Ajax]
         [HttpGet]
-        [Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         public ActionResult Index(int id)
         {
             var customer = _customerRepository.Get(id);

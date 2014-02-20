@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
 	using System;
+	using System.Data;
 	using System.Web.Mvc;
 	using Aspose.Words;
 	using Code.ApplicationCreator;
@@ -76,7 +77,7 @@
             return fs;
         }
 
-        [Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         [HttpPost]
         [Ajax]
         public void MoreAMLInformation(int id)
@@ -88,7 +89,7 @@
             LogPending(customer, PendingStatus.AML);
         }
 
-        [Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         [HttpPost]
         [Ajax]
         public void MoreAMLandBWAInformation(int id)
@@ -100,7 +101,7 @@
             LogPending(customer, PendingStatus.Bank_AML);
         }
 
-        [Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         [HttpPost]
         [Ajax]
         public void MoreBWAInformation(int id)

@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
+	using System.Data;
 	using System.Web.Mvc;
 	using Code.ApplicationCreator;
 	using EZBob.DatabaseLib.Model.Database.Repository;
@@ -17,8 +18,8 @@
 			_appCreator = appCreator;
 			_customerMarketplaces = customerMarketplaces;
 		}
-		
-		[Transactional]
+
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public ViewResult YodleeCallback(int id, string oauth_token = "", string oauth_error_problem = "", string oauth_error_code = "")
 		{
 			if (id == -1)

@@ -1,14 +1,13 @@
-﻿using System.Web.Mvc;
-using EzBob.Web.Areas.Customer.Models;
-using EzBob.Web.Infrastructure;
-using EzBob.Web.Infrastructure.csrf;
-using Scorto.NHibernate.Model;
-using Scorto.Security.UserManagement;
-using Scorto.Web;
-
-namespace EzBob.Web.Areas.Customer.Controllers
+﻿namespace EzBob.Web.Areas.Customer.Controllers
 {
+	using System.Data;
 	using Code.ApplicationCreator;
+	using System.Web.Mvc;
+	using Models;
+	using Infrastructure.csrf;
+	using Scorto.NHibernate.Model;
+	using Scorto.Security.UserManagement;
+	using Scorto.Web;
 
 	public class AccountSettingsController : Controller
     {
@@ -26,7 +25,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
             _appCreator = appCreator;
         }
         //------------------------------------------------------------------------------------
-        [Transactional]
+        [Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         [Ajax]
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
@@ -49,7 +48,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
             return this.JsonNet(new {});
         }
 
-        [Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         [Ajax]
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
@@ -61,8 +60,6 @@ namespace EzBob.Web.Areas.Customer.Controllers
                 _context.User.IsPasswordRestored = false;
 				_appCreator.PasswordChanged(_context.User, _context.User.Name, newPassword);
             }
-
-            
 
             return this.JsonNet(new { status = result.ToString() }); 
         }

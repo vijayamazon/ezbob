@@ -1,14 +1,13 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
 	using System;
+	using System.Data;
 	using System.Web.Mvc;
 	using ApplicationMng.Model;
 	using ApplicationMng.Repository;
 	using Code.ApplicationCreator;
-	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EzBob.Models;
-	using System.Linq;
 	using Scorto.Web;
 	using EzServiceReference;
 	using ActionResult = System.Web.Mvc.ActionResult;
@@ -34,7 +33,7 @@
 
         [Ajax]
         [HttpGet]
-        [Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         public ActionResult Index(int id)
         {
             var customer = CustomerRepository.Get(id);
@@ -44,7 +43,7 @@
 
         [Ajax]
         [HttpPost]
-        [Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         public JsonNetResult SaveComment(string comment, int id)
         {
             var customer = CustomerRepository.Get(id);

@@ -1,22 +1,22 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using ApplicationMng.Repository;
-using EZBob.DatabaseLib.Model.CustomerRelations;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Repository;
-using EZBob.DatabaseLib.Repository;
-using EzBob.Models;
-using EzBob.Models.Marketplaces;
-using EzBob.Web.Areas.Underwriter.Models;
-using EzBob.Web.Models;
-using NHibernate;
-using Scorto.Web;
-using System;
-
-namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
+﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
+	using System.Data;
 	using EZBob.DatabaseLib.Model.Database.Loans;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Web.Mvc;
+	using ApplicationMng.Repository;
+	using EZBob.DatabaseLib.Model.CustomerRelations;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Repository;
+	using EZBob.DatabaseLib.Repository;
+	using EzBob.Models;
+	using EzBob.Models.Marketplaces;
+	using Models;
+	using Web.Models;
+	using NHibernate;
+	using Scorto.Web;
+	using System;
 
 	public class FullCustomerController : Controller
 	{
@@ -66,7 +66,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 		}
 
 		//[Ajax]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[HttpGet]
 		public JsonNetResult Index(int id, string history = null)
 		{

@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
+	using System.Data;
 	using System.Web.Mvc;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
@@ -18,7 +19,7 @@
 		}
 
 		[Ajax]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public ActionResult Index(int id)
 		{
 			var model = new CrossCheckModel(_customerRepository.Get(id), _creditBureauModelBuilder);
@@ -26,7 +27,7 @@
 		}
 
 		[Ajax]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[HttpGet]
 		public JsonNetResult Zoopla(int customerId, bool recheck)
 		{
@@ -84,7 +85,7 @@
 		}
 
 		[Ajax]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[HttpPost]
 		public void SaveTargetingData(int customerId, string companyRefNum, string companyName, string addr1, string addr2, string addr3, string addr4, string postcode)
 		{

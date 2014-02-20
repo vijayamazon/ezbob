@@ -1,4 +1,5 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers {
+	using System.Data;
 	using Code.ApplicationCreator;
 	using NHibernate;
 	using System;
@@ -8,7 +9,6 @@
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.DatabaseWrapper;
 	using EZBob.DatabaseLib.Model.Database;
-	using Configuration;
 	using Ezbob.HmrcHarvester;
 	using Infrastructure;
 	using Code.MpUniq;
@@ -120,9 +120,9 @@
 
 		#region method Accounts (account list by type)
 
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonNetResult Accounts(string atn) {
-			var oVsi = Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(atn);
+			var oVsi = Configuration.Instance.GetVendorInfo(atn);
 
 			return this.JsonNet(_context.Customer
 				.CustomerMarketPlaces
@@ -136,7 +136,7 @@
 
 		#region method Accounts (add new account)
 
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[Ajax]
 		[HttpPost]
 		public JsonNetResult Accounts(AccountModel model) {

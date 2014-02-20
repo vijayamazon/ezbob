@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
+	using System.Data;
 	using NHibernate;
 	using Code.ApplicationCreator;
 	using System;
@@ -42,7 +43,7 @@
 
         [Ajax]
         [HttpGet]
-        [Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         public JsonNetResult Index(int id)
         {
             var customer = _customers.Get(id);
@@ -51,7 +52,7 @@
         }
 
         [Ajax]
-        [Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         public JsonNetResult SetDefaultCard(int customerId, int cardId)
         {
             var customer = _customers.Get(customerId);
@@ -61,7 +62,7 @@
         }
 
         [Ajax]
-        [Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         public JsonNetResult PerformCheckBankAccount(int id, int cardid)
         {
             var customer = _customers.Get(id);
@@ -70,7 +71,7 @@
         }
 
         [Ajax]
-        [Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         public JsonNetResult CheckBankAccount(string bankAccount, string sortCode)
         {
             var card = new CardInfo(bankAccount, sortCode);
@@ -107,7 +108,7 @@
         }
 
         [Ajax]
-        [Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         public JsonNetResult TryAddBankAccount(int customerId, string bankAccount, string sortCode, BankAccountType accountType)
         {
             var customer = _customers.Get(customerId);
@@ -138,7 +139,7 @@
             return this.JsonNet(new { status = _customerMarketplaces.Get(mpId).GetUpdatingStatus() });
         }
 
-        [Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         public RedirectResult AddPayPoint(int id)
         {
             var customer = _customers.Get(id);
@@ -149,7 +150,7 @@
             return Redirect(url);
         }
 
-        [Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         [HttpGet]
         public ActionResult PayPointCallback(bool valid, string trans_id, string code, string auth_code, decimal? amount, string ip, string test_status, string hash, string message, string card_no, string customer, string expiry, int customerId)
         {
@@ -183,7 +184,7 @@
             return View("PayPointAdded", amount ?? 0);
         }
 
-        [Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         [HttpPost]
         public JsonNetResult AddPayPointCard(int customerId, string transactionid, string cardno, DateTime expiredate)
         {
@@ -208,7 +209,7 @@
         }
 
         [Ajax]
-        [Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         [HttpPost]
         public void SetPaypointDefaultCard(string transactionid, int customerId, string cardNo)
         {

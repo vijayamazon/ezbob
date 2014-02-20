@@ -1,26 +1,25 @@
-﻿using System;
-using System.Linq;
-using System.Web.Mvc;
-using EZBob.DatabaseLib;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Repository;
-using EZBob.DatabaseLib.Repository;
-using ExperianLib;
-using EzBob.AmazonLib;
-using EzBob.AmazonServiceLib;
-using EzBob.AmazonServiceLib.ServiceCalls;
-using EzBob.AmazonServiceLib.UserInfo;
-using EzBob.Web.Areas.Customer.Models;
-using EzBob.Web.Code.MpUniq;
-using EzBob.Web.Infrastructure;
-using EzBob.Web.Infrastructure.csrf;
-using EzBob.Web.Models.Strings;
-using NHibernate;
-using Scorto.Web;
-using log4net;
-
-namespace EzBob.Web.Areas.Customer.Controllers
+﻿namespace EzBob.Web.Areas.Customer.Controllers
 {
+	using System;
+	using System.Linq;
+	using System.Web.Mvc;
+	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Repository;
+	using EZBob.DatabaseLib.Repository;
+	using ExperianLib;
+	using AmazonLib;
+	using AmazonServiceLib;
+	using AmazonServiceLib.ServiceCalls;
+	using AmazonServiceLib.UserInfo;
+	using Code.MpUniq;
+	using Infrastructure;
+	using Infrastructure.csrf;
+	using Web.Models.Strings;
+	using NHibernate;
+	using Scorto.Web;
+	using log4net;
+	using System.Data;
 	using Code.ApplicationCreator;
 
 	public class AmazonMarketPlacesController : Controller
@@ -63,7 +62,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
         }
         //--------------------------------------------------------
         [Ajax]
-        [Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         [Authorize]
         public AskvilleStatus Askville(int? customerMarketPlaceId, string merchantId, string marketplaceId, string askvilleGuid = "")
         {
@@ -122,7 +121,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
         
         //--------------------------------------------------------
         [HttpGet]
-        [Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         [Ajax]
         [ValidateJsonAntiForgeryToken]
         [Authorize]
@@ -134,7 +133,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
         //-------------------------------------------------------
         [HttpPost]
         [Authorize]
-        [Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         [Ajax]
         [ValidateJsonAntiForgeryToken]
         public JsonResult ConnectAmazon(string marketplaceId, string merchantId)

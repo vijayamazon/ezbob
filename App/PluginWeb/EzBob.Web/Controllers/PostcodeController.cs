@@ -1,10 +1,11 @@
-﻿using System.Web.Mvc;
-using EzBob.Web.Code.PostCode;
-using EzBob.Web.Infrastructure;
-using Scorto.Web;
-
-namespace EzBob.Web.Controllers
+﻿namespace EzBob.Web.Controllers
 {
+	using System.Data;
+	using System.Web.Mvc;
+	using Code.PostCode;
+	using Infrastructure;
+	using Scorto.Web;
+
 	[Authorize]
     public class PostcodeController : Controller
     {
@@ -18,14 +19,14 @@ namespace EzBob.Web.Controllers
         }
 
         [OutputCache(VaryByParam = "postCode", Duration = 3600 * 24 * 7)]
-        [Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         public JsonNetResult GetAddressFromPostCode(string postCode)
         {
             return this.JsonNet(_facade.GetAddressFromPostCode(_context.Customer, postCode));
         }
 
         [OutputCache(VaryByParam = "id", Duration = 3600 * 24 * 7)]
-        [Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         public JsonNetResult GetFullAddressFromPostCode(string id)
         {
             return this.JsonNet(_facade.GetFullAddressFromPostCode(_context.Customer, id));

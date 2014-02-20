@@ -1,18 +1,19 @@
-﻿using System;
-using System.Linq;
-using System.Web.Mvc;
-using EZBob.DatabaseLib.Repository;
-using EzBob.Models;
-using EzBob.Web.Areas.Customer.Models;
-using EzBob.Web.Code;
-using EzBob.Web.Infrastructure;
-using EzBob.Web.Infrastructure.csrf;
-using PaymentServices.Calculators;
-using Scorto.Web;
-
-namespace EzBob.Web.Areas.Customer.Controllers
+﻿namespace EzBob.Web.Areas.Customer.Controllers
 {
-    public class LoanController : Controller
+	using System.Data;
+	using System;
+	using System.Linq;
+	using System.Web.Mvc;
+	using EZBob.DatabaseLib.Repository;
+	using EzBob.Models;
+	using Models;
+	using Code;
+	using Infrastructure;
+	using Infrastructure.csrf;
+	using PaymentServices.Calculators;
+	using Scorto.Web;
+
+	public class LoanController : Controller
     {
         private readonly IEzbobWorkplaceContext _context;
         private readonly PaymentRolloverRepository _rolloverRepository;
@@ -23,7 +24,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
             _rolloverRepository = rolloverRepository;
         }
 
-        [Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         [ValidateJsonAntiForgeryToken]
         [HttpGet]
         public JsonNetResult Details(int id)

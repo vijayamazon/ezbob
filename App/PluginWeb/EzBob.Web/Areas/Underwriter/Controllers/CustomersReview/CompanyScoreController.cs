@@ -1,13 +1,14 @@
-﻿using System.Web.Mvc;
-using EZBob.DatabaseLib.Model.Database.Repository;
-using EZBob.DatabaseLib.Repository;
-using EzBob.Web.Infrastructure.csrf;
-using EzBob.Web.Models;
-using Scorto.Web;
-using StructureMap;
-using log4net;
+﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview {
+	using System.Data;
+	using System.Web.Mvc;
+	using EZBob.DatabaseLib.Model.Database.Repository;
+	using EZBob.DatabaseLib.Repository;
+	using Infrastructure.csrf;
+	using Web.Models;
+	using Scorto.Web;
+	using StructureMap;
+	using log4net;
 
-namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview {
 	public class CompanyScoreController : Controller {
 		private readonly ICustomerRepository m_oCustomerRepository;
 		private readonly ServiceLogRepository m_oServiceLogRepository;
@@ -21,7 +22,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview {
 
 		[Ajax]
 		[HttpGet]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[ValidateJsonAntiForgeryToken]
 		public JsonNetResult Index(int id) {
 			var customer = m_oCustomerRepository.Get(id);

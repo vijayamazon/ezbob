@@ -1,18 +1,18 @@
-﻿using System;
-using System.Linq;
-using System.Web.Mvc;
-using ApplicationMng.Repository;
-using EZBob.DatabaseLib.Model.Database;
-using EzBob.Web.Infrastructure;
-using Scorto.Web;
-using EKM;
-using EzBob.Web.Code.MpUniq;
-using EzBob.Web.Models.Strings;
-using log4net;
-using NHibernate;
-
-namespace EzBob.Web.Areas.Customer.Controllers
+﻿namespace EzBob.Web.Areas.Customer.Controllers
 {
+	using System;
+	using System.Linq;
+	using System.Web.Mvc;
+	using ApplicationMng.Repository;
+	using EZBob.DatabaseLib.Model.Database;
+	using Infrastructure;
+	using Scorto.Web;
+	using EKM;
+	using Code.MpUniq;
+	using Web.Models.Strings;
+	using log4net;
+	using NHibernate;
+	using System.Data;
 	using Code.ApplicationCreator;
 	using CommonLib.Security;
 	using EZBob.DatabaseLib;
@@ -23,7 +23,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
 		private static readonly ILog Log = LogManager.GetLogger(typeof(EkmMarketPlacesController));
 		private readonly IEzbobWorkplaceContext _context;
 		private readonly IRepository<MP_MarketplaceType> _mpTypes;
-		private readonly EZBob.DatabaseLib.Model.Database.Customer _customer;
+		private readonly Customer _customer;
 		private readonly IMPUniqChecker _mpChecker;
 		private readonly IAppCreator _appCreator;
 		private readonly EkmConnector _validator = new EkmConnector();
@@ -47,7 +47,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
 			_helper = helper;
 		}
 
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonNetResult Accounts()
 		{
 			var oEsi = new EkmServiceInfo();
@@ -60,7 +60,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
 			return this.JsonNet(ekms);
 		}
 
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[Ajax]
 		[HttpPost]
 		public JsonNetResult Accounts(EkmAccountModel model)
@@ -110,7 +110,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
 			}
 		}
 
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[Ajax]
 		[HttpPost]
 		public JsonNetResult Update(string name, string password)

@@ -1,14 +1,15 @@
-﻿using System.Linq;
-using System.Web.Mvc;
-using EZBob.DatabaseLib.Model.Database.Repository;
-using EZBob.DatabaseLib.Model.Fraud;
-using EZBob.DatabaseLib.Repository;
-using EzBob.Web.Areas.Underwriter.Models.Fraud; 
-using Scorto.Web;
-
-namespace EzBob.Web.Areas.Underwriter.Controllers
+﻿namespace EzBob.Web.Areas.Underwriter.Controllers
 {
-    public class FraudController : Controller
+	using System.Data;
+	using System.Linq;
+	using System.Web.Mvc;
+	using EZBob.DatabaseLib.Model.Database.Repository;
+	using EZBob.DatabaseLib.Model.Fraud;
+	using EZBob.DatabaseLib.Repository;
+	using Models.Fraud;
+	using Scorto.Web;
+
+	public class FraudController : Controller
     {
         private readonly FraudUserRepository _fraudUserRepository;
         private readonly MarketPlaceRepository _mpType;
@@ -28,7 +29,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
 
         [HttpPost]
         [Ajax]
-        [Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         public void AddNewUser(FraudModel user)
         {
             var fraudUser = new FraudUser

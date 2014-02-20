@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers
 {
+	using System.Data;
 	using Code.ApplicationCreator;
 	using EZBob.DatabaseLib;
     using EZBob.DatabaseLib.DatabaseWrapper;
@@ -34,7 +35,7 @@
             _helper = helper;
         }
 
-        [Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         public JsonNetResult Accounts()
         {
 			var oEsi = new FreeAgentServiceInfo();
@@ -47,7 +48,7 @@
             return this.JsonNet(freeagents);
         }
 
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public ActionResult AttachFreeAgent()
 		{
 			log.Info("Attaching FreeAgent");
@@ -55,7 +56,7 @@
 			return Redirect(FreeAgentConnector.GetApprovalRequest(callback));
 		}
 
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public ActionResult FreeAgentCallback()
 		{
 			log.Info("Arrived to FreeAgent callback, will try to get access token...");

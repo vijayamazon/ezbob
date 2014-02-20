@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
 	using System;
+	using System.Data;
 	using System.Linq;
 	using System.Web.Mvc;
 	using ApplicationMng.Repository;
@@ -54,7 +55,7 @@
 
         [Ajax]
         [HttpGet]
-        [Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         public JsonNetResult Index(int id, bool getFromLog = false, long? logId = null)
         {
             var customer = _customers.Get(id);
@@ -130,7 +131,7 @@
         }
 
         [HttpPost]
-        [Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         public JsonNetResult RunAmlbwaCheck(int id, int checkType, string houseNumber, string houseName, string street,
                                             string district, string town, string county, string postcode, string bankAccount, string sortCode)
         {

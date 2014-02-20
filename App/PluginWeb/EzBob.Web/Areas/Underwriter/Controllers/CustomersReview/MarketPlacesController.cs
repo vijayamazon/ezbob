@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Data;
 	using System.Linq;
 	using System.Web.Mvc;
 	using Code.ApplicationCreator;
@@ -65,7 +66,7 @@
 
 		[Ajax]
 		[HttpGet]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonNetResult Index(int id, DateTime? history = null)
 		{
 			var customer = _customers.Get(id);
@@ -75,7 +76,7 @@
 
 		[Ajax]
 		[HttpGet]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonNetResult GetTeraPeakOrderItems(int customerMarketPlaceId)
 		{
 			var data = _teraPeakOrderItems.GetTeraPeakOrderItems(customerMarketPlaceId);
@@ -95,9 +96,7 @@
 			return _marketPlaces.GetMarketPlaceModels(customer, history).ToList();
 		}
 
-		//[Ajax]
 		[HttpGet]
-		//[Transactional]
 		public JsonNetResult GetCustomerMarketplacesHistory(int customerId)
 		{
 			var customer = _customers.Get(customerId);
@@ -108,7 +107,7 @@
 
 		[Ajax]
 		[HttpGet]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonNetResult Details(int id)
 		{
 			var cm = _customerMarketplaces.Get(id);
@@ -118,7 +117,7 @@
 
 		[Ajax]
 		[HttpGet]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonNetResult YodleeDetails(int id)
 		{
 			var mp = _customerMarketplaces.Get(id);
@@ -127,7 +126,7 @@
 		}
 
 		[Ajax]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public void ReCheckMarketplaces(int umi)
 		{
 			var mp = _customerMarketplaces.Get(umi);
@@ -158,7 +157,7 @@
 			} // switch
 		} // ReCheckMarketplaces
 
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public ActionResult TryRecheckYodlee(int umi)
 		{
 			var mp = _customerMarketplaces.Get(umi);
@@ -212,7 +211,7 @@
 
 		[Ajax]
 		[HttpGet]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonNetResult CheckForUpdatedStatus(int mpId)
 		{
 			return this.JsonNet(new { status = _customerMarketplaces.Get(mpId).GetUpdatingStatus() });
@@ -220,7 +219,7 @@
 
 		[Ajax]
 		[HttpPost]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public void RenewEbayToken(int umi)
 		{
 			var mp = _customerMarketplaces.Get(umi);
@@ -230,7 +229,7 @@
 
 		[Ajax]
 		[HttpPost]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonNetResult Disable(int umi)
 		{
 			var mp = _customerMarketplaces.Get(umi);
@@ -240,7 +239,7 @@
 
 		[Ajax]
 		[HttpPost]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonNetResult Enable(int umi)
 		{
 			var mp = _customerMarketplaces.Get(umi);
@@ -248,14 +247,14 @@
 			return this.JsonNet(new { });
 		}
 
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[Ajax]
 		public void AddSearchWord(string word)
 		{
 			_yodleeSearchWordsRepository.AddWord(word);
 		}
 
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[Ajax]
 		public void AddYodleeRule(int group, int rule, string literal)
 		{
@@ -293,7 +292,7 @@
 			}
 		}
 
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[Ajax]
 		public void DeleteSearchWord(string word)
 		{

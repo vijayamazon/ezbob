@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Web.Controllers
 {
 	using System;
+	using System.Data;
 	using System.Web;
 	using System.Web.Mvc;
 	using EZBob.DatabaseLib.Model.Database;
@@ -45,7 +46,7 @@
 			return RedirectToActionPermanent("Index", User.Identity.IsAuthenticated ? "Profile" : "Wizard", new { Area = "Customer" });
 		}
 
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public ActionResult ActivateStore(string id, bool? approve)
 		{
 			if (approve != null)

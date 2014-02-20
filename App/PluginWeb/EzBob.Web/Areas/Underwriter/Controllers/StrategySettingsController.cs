@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers
 {
+	using System.Data;
 	using System.Web.Mvc;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
@@ -31,7 +32,7 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpGet]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonNetResult Index()
 		{
 			return this.JsonNet(string.Empty);
@@ -40,7 +41,7 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpGet]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonNetResult SettingsGeneral()
 		{
 			var bwaBusinessCheck = _configurationVariablesRepository.GetByName("BWABusinessCheck");
@@ -59,7 +60,7 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpPost]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonNetResult SettingsGeneral(string BWABusinessCheck/*, string DisplayEarnedPoints*/)
 		{
 			_configurationVariablesRepository.SetByName("BWABusinessCheck", BWABusinessCheck);
@@ -70,7 +71,7 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpGet]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonNetResult SettingsCharges()
 		{
 			var latePaymentCharge = _configurationVariablesRepository.GetByName("LatePaymentCharge");
@@ -101,7 +102,7 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpPost]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonNetResult SettingsCharges(string administrationCharge,
 			string latePaymentCharge,
 			string otherCharge,
@@ -122,7 +123,7 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpGet]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonNetResult AutomationGeneral()
 		{
 			return this.JsonNet(string.Empty);
@@ -131,7 +132,7 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpPost]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonNetResult AutomationGeneral(string[] newSettings)
 		{
 			return this.JsonNet(string.Empty);
@@ -140,7 +141,7 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpGet]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonNetResult AutomationApproval()
 		{
 			var enableAutomaticApproval = _configurationVariablesRepository.GetByName("EnableAutomaticApproval");
@@ -165,7 +166,7 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpPost]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonNetResult AutomationApproval(
 												string EnableAutomaticApproval,
 												string EnableAutomaticReApproval,
@@ -183,7 +184,7 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpGet]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonNetResult AutomationRejection()
 		{
 			var enableAutomaticRejection = _configurationVariablesRepository.GetByName("EnableAutomaticRejection");
@@ -235,7 +236,7 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpPost]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonNetResult AutomationRejection(string EnableAutomaticRejection,
 												 string LowCreditScore,
 												 string Reject_Defaults_AccountsNum,
@@ -293,7 +294,7 @@
 		// ReSharper disable  InconsistentNaming
 		[Ajax]
 		[HttpPost]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonNetResult SettingsExperian(
 
 			string FinancialAccounts_MainApplicant,
@@ -316,7 +317,7 @@
 
 		[Ajax]
 		[HttpGet]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonNetResult SettingsCampaign()
 		{
 			var campaignsList = _campaignRepository
@@ -357,7 +358,7 @@
 
 		[Ajax]
 		[HttpPost]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonNetResult AddCampaign(
 
 			string campaignName,

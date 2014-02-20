@@ -3,6 +3,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Collections.ObjectModel;
+	using System.Data;
 	using System.Globalization;
 	using System.Linq;
 	using System.Web.Mvc;
@@ -99,7 +100,7 @@
 
 		#region method LinkAccountsComplete
 
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
@@ -147,7 +148,7 @@
 
 		#region method WizardComplete
 
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
@@ -256,7 +257,7 @@
 
 		#region method Save
 
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
@@ -311,7 +312,7 @@
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonNetResult Edit(
 			string dayTimePhone,
 			string mobilePhone,
@@ -553,7 +554,7 @@
 
 		#region static method ProcessCompanyInfo
 
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		private void ProcessCompanyInfoTemporary(
 			TypeOfBusiness businessType,
 			string vat,

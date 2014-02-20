@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
 	using System;
+	using System.Data;
 	using System.Web.Mvc;
 	using EZBob.DatabaseLib.Model.CustomerRelations;
 	using EZBob.DatabaseLib.Model.Database.Loans;
@@ -27,7 +28,7 @@
 
 		[Ajax]
 		[HttpGet]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[ValidateJsonAntiForgeryToken]
 		public JsonNetResult Index(int id)
 		{
@@ -38,7 +39,7 @@
 
 		[Ajax]
 		[HttpGet]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[ValidateJsonAntiForgeryToken]
 		public JsonNetResult Actions()
 		{
@@ -48,7 +49,7 @@
 
 		[Ajax]
 		[HttpGet]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[ValidateJsonAntiForgeryToken]
 		public JsonNetResult Statuses()
 		{
@@ -57,7 +58,7 @@
 		}
 
 		[Ajax]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonNetResult SaveEntry(bool isIncoming, int action, int status, string comment, int customerId)
 		{
 			try

@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers
 {
+	using System.Data;
 	using System.Web.Mvc;
 	using Code.ApplicationCreator;
 	using Infrastructure;
@@ -13,8 +14,8 @@
 			this.creator = creator;
 			this.context = context;
 		} // constructor
-		
-		[Transactional]
+
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]

@@ -1,17 +1,20 @@
-﻿using System.Collections.Generic;
-using System.Configuration;
-using System.Web.Configuration;
-using System.Web.Mvc;
-using EZBob.DatabaseLib;
-using Newtonsoft.Json;
-using Scorto.Web;
-using StructureMap;
-using log4net;
+
 
 namespace EzBob.Web.Controllers {
 	using System;
 	using Code;
 	using Ezbob.Database;
+﻿namespace EzBob.Web.Controllers {
+	using System.Data;
+	using System.Collections.Generic;
+	using System.Configuration;
+	using System.Web.Configuration;
+	using System.Web.Mvc;
+	using EZBob.DatabaseLib;
+	using Newtonsoft.Json;
+	using Scorto.Web;
+	using StructureMap;
+	using log4net;
 
 	public class UiActionController : Controller {
 		#region public
@@ -31,7 +34,7 @@ namespace EzBob.Web.Controllers {
 
 		#region method Save
 
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonNetResult Save(string version, string history) {
 			var helper = ObjectFactory.GetInstance<DatabaseDataHelper>();
 

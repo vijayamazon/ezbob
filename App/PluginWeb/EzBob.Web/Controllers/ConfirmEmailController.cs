@@ -1,11 +1,12 @@
-﻿using System;
-using System.Web.Mvc;
-using EzBob.Web.Code.Email;
-using Scorto.Web;
-
-namespace EzBob.Web.Controllers
+﻿namespace EzBob.Web.Controllers
 {
-    public class ConfirmEmailController : Controller
+	using System.Data;
+	using System;
+	using System.Web.Mvc;
+	using Code.Email;
+	using Scorto.Web;
+
+	public class ConfirmEmailController : Controller
     {
         private readonly IEmailConfirmation _confirmation;
 
@@ -14,7 +15,7 @@ namespace EzBob.Web.Controllers
             _confirmation = confirmation;
         }
 
-        [Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         public ViewResult Index(string code)
         {
             try

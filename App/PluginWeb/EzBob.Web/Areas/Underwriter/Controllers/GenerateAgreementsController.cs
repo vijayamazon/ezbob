@@ -1,18 +1,17 @@
-﻿using System;
-using System.Linq;
-using System.Web.Mvc;
-using EZBob.DatabaseLib.Model.Database.Loans;
-using EZBob.DatabaseLib.Model.Database.Repository;
-using EZBob.DatabaseLib.Repository;
-using EzBob.Web.Areas.Customer.Models;
-using EzBob.Web.Code;
-using EzBob.Web.Code.Agreements;
-using Newtonsoft.Json;
-using Scorto.Web;
-
-namespace EzBob.Web.Areas.Underwriter.Controllers
+﻿namespace EzBob.Web.Areas.Underwriter.Controllers
 {
-	using EZBob.DatabaseLib.Model.Database;
+	using System.Data;
+	using System;
+	using System.Linq;
+	using System.Web.Mvc;
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EZBob.DatabaseLib.Model.Database.Repository;
+	using EZBob.DatabaseLib.Repository;
+	using Customer.Models;
+	using Code;
+	using Code.Agreements;
+	using Newtonsoft.Json;
+	using Scorto.Web;
 
 	public class GenerateAgreementsController : Controller
     {
@@ -37,7 +36,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         }
 
         [HttpPost]
-        [Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         public ActionResult Generate()
         {
             var loans = _loanRepository.GetLoansWithoutAgreements();
@@ -50,7 +49,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             return View("Index");
         }
 
-        [Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         [NoCache]
         public RedirectToRouteResult ReloadAgreementsModel()
         {
@@ -66,7 +65,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         }
 
         
-        [Transactional]
+        [Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         [NoCache]
         public RedirectToRouteResult GenerateConsentAgreement()
         {

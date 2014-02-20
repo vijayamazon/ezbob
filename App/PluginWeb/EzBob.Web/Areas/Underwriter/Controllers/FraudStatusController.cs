@@ -1,12 +1,12 @@
-﻿using Scorto.Web;
-using System.Web.Mvc;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Repository;
-
-namespace EzBob.Web.Areas.Underwriter.Controllers
+﻿namespace EzBob.Web.Areas.Underwriter.Controllers
 {
+	using System.Data;
 	using CommonLib;
 	using Models.Fraud;
+	using Scorto.Web;
+	using System.Web.Mvc;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Repository;
 
 	public class FraudStatusController : Controller
 	{
@@ -31,7 +31,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
 		}
 
 		[HttpPost]
-		[Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[Ajax]
 		public JsonNetResult Save(int customerId, int currentStatus)
 		{

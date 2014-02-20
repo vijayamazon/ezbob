@@ -1,23 +1,22 @@
-﻿using System;
-using System.Linq;
-using System.Web.Mvc;
-using EZBob.DatabaseLib;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Repository;
-using EzBob.Web.Areas.Customer.Models;
-using EzBob.Web.Code.MpUniq;
-using EzBob.Web.Infrastructure;
-using EzBob.Web.Infrastructure.csrf;
-using EzBob.Web.Models.Strings;
-using EzBob.eBayLib;
-using EzBob.eBayServiceLib;
-using NHibernate;
-using Scorto.Web;
-using log4net;
-
-namespace EzBob.Web.Areas.Customer.Controllers
+﻿namespace EzBob.Web.Areas.Customer.Controllers
 {
+	using System.Data;
 	using Code.ApplicationCreator;
+	using System;
+	using System.Linq;
+	using System.Web.Mvc;
+	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Model.Database.Repository;
+	using Models;
+	using Code.MpUniq;
+	using Infrastructure;
+	using Infrastructure.csrf;
+	using Web.Models.Strings;
+	using eBayLib;
+	using eBayServiceLib;
+	using NHibernate;
+	using Scorto.Web;
+	using log4net;
 
 	public class EbayMarketPlacesController : Controller
     {
@@ -48,7 +47,7 @@ namespace EzBob.Web.Areas.Customer.Controllers
             _mpChecker = mpChecker;
         }
 
-        [Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         [Ajax]
         [HttpGet]
         [ValidateJsonAntiForgeryToken]

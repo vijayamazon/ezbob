@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
 	using System;
+	using System.Data;
 	using System.Web.Mvc;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
@@ -32,7 +33,7 @@
 
         [Ajax]
         [HttpGet]
-        [Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         public JsonNetResult Index(int loanId)
         {
             var options = _loanOptionsRepository.GetByLoanId(loanId) ?? SetDefaultStatus(loanId);
@@ -56,7 +57,7 @@
             return options;
         }
 
-        [Transactional]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         [Ajax]
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
