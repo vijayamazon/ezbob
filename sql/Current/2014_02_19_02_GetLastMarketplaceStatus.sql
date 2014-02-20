@@ -24,7 +24,16 @@ BEGIN
 	SELECT 
 		@ActionStatusId = ActionStatusId
 	FROM
-		(SELECT row_number() over (partition by CustomerId order by EntryTime desc) rn, * FROM EzServiceActionHistory WHERE ActionNameID IN (@MpActionNameId, @MpsActionNameId) AND CONVERT(VARCHAR(25), Comment) = @CommentToSearch) AS ActionsTable 
+		(
+			SELECT 
+				row_number() over (partition by CustomerId order by EntryTime desc) rn, 
+				ActionStatusId 
+			FROM 
+				EzServiceActionHistory 
+			WHERE 
+				(ActionNameID = @MpActionNameId AND CONVERT(VARCHAR(25), Comment) = @CommentToSearch) OR
+				(ActionNameID = @MpsActionNameId AND CONVERT(VARCHAR(25), Comment) = CONVERT(VARCHAR(10), @CustomerId))
+		) AS ActionsTable 
 	WHERE 
 		ActionsTable.rn = 1
 
@@ -38,6 +47,10 @@ BEGIN
 	IF @CurrentStatus IS NULL
 		SET @CurrentStatus = 'Never Started'
 		
-	SELECT @CurrentStatus
+	SELECT @CurrentStatus AS CurrentStatus
 END
+GO
+
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[MP_CustomerMarketplacesIsUpdated]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [dbo].[MP_CustomerMarketplacesIsUpdated]
 GO

@@ -952,14 +952,31 @@
 
 		private bool GetIsMarketPlacesUpdated()
 		{
-			DataTable dt = DB.ExecuteReader(
-				"MP_CustomerMarketplacesIsUpdated",
+			DataTable marketplacesDataTable = DB.ExecuteReader(
+				"GetCustomerMarketplaces",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId)
 			);
 
-			var sr = new SafeReader(dt.Rows[0]);
-			return sr["IsUpdated"];
+			foreach (DataRow row in marketplacesDataTable.Rows)
+			{
+				var marketplacesSafeReader = new SafeReader(row);
+				int marketplaceId = marketplacesSafeReader["Id"];
+
+				DataTable lastStatusDataTable = DB.ExecuteReader(
+					"GetLastMarketplaceStatus",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("CustomerId", customerId),
+					new QueryParameter("MarketplaceId", marketplaceId)
+				);
+				var lastStatusSafeReader = new SafeReader(lastStatusDataTable.Rows[0]);
+				string lastStatus = lastStatusSafeReader["CurrentStatus"];
+				if (lastStatus != "Done")
+				{
+					return false;
+				}
+			}
+			return true;
 		}
 
 		#endregion private
