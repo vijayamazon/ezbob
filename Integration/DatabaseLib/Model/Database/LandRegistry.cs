@@ -3,7 +3,7 @@ namespace EZBob.DatabaseLib.Model.Database
 	using System;
 	using FluentNHibernate.Mapping;
 	using NHibernate.Type;
-	
+
 	#region class LandRegistry
 
 	public class LandRegistry
@@ -32,7 +32,7 @@ namespace EZBob.DatabaseLib.Model.Database
 
 			Id(x => x.Id);
 			References(x => x.Customer, "CustomerId");
-			
+			Map(x => x.InsertDate).CustomType<UtcDateTimeType>();
 			Map(x => x.Postcode).Length(15);
 			Map(x => x.TitleNumber).Length(20);
 			Map(x => x.RequestType).CustomType<LandRegistryRequestTypeType>();
@@ -42,7 +42,7 @@ namespace EZBob.DatabaseLib.Model.Database
 			Map(x => x.AttachmentPath).Length(300);
 		} // constructor
 	} // class LandRegistryMap
-	#endregion 
+	#endregion
 
 	public class LandRegistryRequestTypeType : EnumStringType<LandRegistryRequestType> { }
 
@@ -50,18 +50,18 @@ namespace EZBob.DatabaseLib.Model.Database
 
 	public enum LandRegistryRequestType
 	{
-		Enquiry,//EnquiryByPropertyDescription
-		EnquiryPoll,//EnquiryByPropertyDescriptionPoll
-		Res,//RegisterExtractService
-		ResPoll,//RegisterExtractServicePoll
+		Enquiry = 1,//EnquiryByPropertyDescription
+		EnquiryPoll = 2,//EnquiryByPropertyDescriptionPoll
+		Res = 3,//RegisterExtractService
+		ResPoll = 4,//RegisterExtractServicePoll
 	} // enum 
-	
+
 	public enum LandRegistryResponseType
 	{
-		Acknowledgement,
-		Rejection,
-		Success,
-		Unkown
+		Acknowledgement = 1,
+		Rejection = 2,
+		Success = 3,
+		Unkown = 4
 	} // enum 
 } // namespace
 
@@ -85,20 +85,32 @@ namespace EZBob.DatabaseLib.Repository
 			return GetAll().Where(x => x.Customer.Id == customer.Id).ToFuture();
 		}
 
-		public LandRegistry GetRes(Customer customer)
+		public LandRegistry GetRes(Customer customer, string titleNumber)
 		{
-			return GetAll().LastOrDefault(x => 
-				x.Customer == customer && 
-				(x.RequestType == LandRegistryRequestType.Res || 
-				 x.RequestType == LandRegistryRequestType.ResPoll));
+			if (!string.IsNullOrEmpty(titleNumber))
+			{
+				return GetAll()
+					.OrderByDescending(x => x.InsertDate)
+					.FirstOrDefault(x => x.Customer == customer &&
+						(x.RequestType == LandRegistryRequestType.Res || x.RequestType == LandRegistryRequestType.ResPoll) &&
+						x.ResponseType == LandRegistryResponseType.Success &&
+						x.TitleNumber == titleNumber);
+			}
+
+			return GetAll()
+					.OrderByDescending(x => x.InsertDate)
+					.FirstOrDefault(x => x.Customer == customer &&
+						(x.RequestType == LandRegistryRequestType.Res || x.RequestType == LandRegistryRequestType.ResPoll) &&
+						x.ResponseType == LandRegistryResponseType.Success);
 		}
 
-		public LandRegistry GetEnquiry(Customer customer)
+		public LandRegistry GetEnquiry(Customer customer, string postCode)
 		{
-			return GetAll().LastOrDefault(x =>
+			return GetAll().OrderByDescending(x => x.InsertDate).FirstOrDefault(x =>
 				x.Customer == customer &&
-				(x.RequestType == LandRegistryRequestType.Enquiry ||
-				 x.RequestType == LandRegistryRequestType.EnquiryPoll));
+				(x.RequestType == LandRegistryRequestType.Enquiry || x.RequestType == LandRegistryRequestType.EnquiryPoll) &&
+				x.ResponseType == LandRegistryResponseType.Success &&
+				x.Postcode == postCode);
 		}
 
 		public LandRegistry GetByTitleNumber(string titleNumber)

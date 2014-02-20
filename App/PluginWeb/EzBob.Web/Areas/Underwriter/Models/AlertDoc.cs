@@ -18,7 +18,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
                            CreateDate = doc.UploadDate,
                            Description = doc.Description,
                            DocName = doc.DocName,
-                           EmployeeName = doc.Employee.Name,
+						   EmployeeName = doc.Employee != null ? doc.Employee.Name : "system",
                            Id = doc.Id
                        };
         }

@@ -7,6 +7,7 @@
 	using System.Linq;
 	using System.Xml.Serialization;
 	using ApplicationMng.Model;
+	using ApplicationMng.Repository;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
@@ -656,13 +657,30 @@
 
 		public LandRegistryDataModel GetLandRegistryData(int customerId, string titleNumber, bool recheck = false)
 		{
+			var customer = _customers.Get(customerId);
+			var lrRepo = ObjectFactory.GetInstance<LandRegistryRepository>();
+
+			//check cash
+			var cache = lrRepo.GetRes(customer, titleNumber);
+			if (cache != null)
+			{
+				var b = new LandRegistryModelBuilder();
+				var cacheModel = new LandRegistryDataModel()
+				{
+					Request = cache.Request,
+					Response = cache.Response,
+					Res = b.BuildResModel(cache.Response)
+				};
+
+				return cacheModel;
+			}
+
 			var isProd = configurationVariablesRepository.GetByNameAsBool("LandRegistryProd");
 			//var res = XmlHelper.XmlDeserializeFromString<LandRegistryLib.LRResServiceNS.ResponseOCWithSummaryV2_1Type>(LandRegistryTestFixure.TestResBM253452);
 			//var model = new LandRegistryDataModel() { Res = b.BuildResModel(res) };
 			//return model;
 			
 			
-			//todo implement the logic to retrieve enquiry data, retrieve res data store to db
 			ILandRegistryApi lr;
 			if (isProd)
 			{
@@ -673,17 +691,62 @@
 				lr = new LandRegistryTestApi();
 			}
 			var model = lr.Res(titleNumber, customerId);
+
+			
+			lrRepo.Save(new LandRegistry
+			{
+				Customer = customer,
+				InsertDate = DateTime.UtcNow,
+				TitleNumber = titleNumber,
+				Request = model.Request,
+				Response = model.Response,
+				RequestType = (EZBob.DatabaseLib.Model.Database.LandRegistryRequestType)(int)model.RequestType,
+				ResponseType = (EZBob.DatabaseLib.Model.Database.LandRegistryResponseType)(int)model.ResponseType,
+			});
+
+			if (model.Attachment != null)
+			{
+				var fileRepo = ObjectFactory.GetInstance<NHibernateRepositoryBase<MP_AlertDocument>>();
+				var doc = new MP_AlertDocument
+				{
+					BinaryBody = model.Attachment.AttachmentContent,
+					Customer = customer,
+					Description = "LandRegistry",
+					UploadDate = DateTime.UtcNow,
+					DocName = model.Attachment.FileName
+				};
+
+				fileRepo.SaveOrUpdate(doc);
+			}
+
 			return model;
 		}
 
 
 		public LandRegistryDataModel GetLandRegistryEnquiryData(int customerId, string buildingNumber, string streetName, string cityName, string postCode)
 		{
+			var customer = _customers.Get(customerId);
+			var lrRepo = ObjectFactory.GetInstance<LandRegistryRepository>();
+
+			//check cash
+			var cache = lrRepo.GetEnquiry(customer, postCode);
+			if (cache != null)
+			{
+				var b = new LandRegistryModelBuilder();
+				var cacheModel = new LandRegistryDataModel()
+					{
+						Request = cache.Request,
+						Response = cache.Response,
+						Enquery = b.BuildEnquiryModel(cache.Response)
+					};
+
+				return cacheModel;
+			}
+
 			var isProd = configurationVariablesRepository.GetByNameAsBool("LandRegistryProd");
 			//var model = new LandRegistryDataModel() { Enquery = b.BuildEnquiryModel(LandRegistryTestFixure.TestEnquiry) };
 			//return model;
 
-			//todo implement the logic to retrieve enquiry data, retrieve res data store to db
 			ILandRegistryApi lr;
 			if (isProd)
 			{
@@ -695,6 +758,18 @@
 			}
 
 			var model = lr.EnquiryByPropertyDescription(buildingNumber, streetName, cityName, postCode, customerId);
+			
+			lrRepo.Save(new LandRegistry
+				{
+					Customer = customer,
+					InsertDate = DateTime.UtcNow,
+					Postcode = postCode,
+					Request = model.Request,
+					Response = model.Response,
+					RequestType = (EZBob.DatabaseLib.Model.Database.LandRegistryRequestType) (int) model.RequestType,
+					ResponseType = (EZBob.DatabaseLib.Model.Database.LandRegistryResponseType) (int) model.ResponseType,
+				});
+
 			return model;
 		}
 	}

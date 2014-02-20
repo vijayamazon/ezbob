@@ -26,18 +26,18 @@
 
 	public enum LandRegistryRequestType
 	{
-		EnquiryByPropertyDescription,
-		EnquiryByPropertyDescriptionPoll,
-		RegisterExtractService,
-		RegisterExtractServicePoll
+		EnquiryByPropertyDescription = 1,
+		EnquiryByPropertyDescriptionPoll = 2,
+		RegisterExtractService = 3,
+		RegisterExtractServicePoll = 4
 	}
 
 	public enum LandRegistryResponseType
 	{
-		Acknowledgement,//10
-		Rejection,//20
-		Success,//30
-		Unkown,
+		Acknowledgement = 1,//10
+		Rejection = 2,//20
+		Success = 3,//30
+		Unkown = 4,
 	}
 
 	public enum RestrictionTypeCode //Type of restriction present on the register.

@@ -72,13 +72,10 @@
 		{
 			LandRegistryLib.LandRegistryDataModel landregistry = null;
 
-			if (landregistry == null)
-			{
 				var sh = new StrategyHelper();
 				landregistry = sh.GetLandRegistryData(customerId, titleNumber);
 				if (landregistry == null)
 					return this.JsonNet(new { error = "land registry info not found" });
-			}
 
 			//todo return the full model 
 			return this.JsonNet(new { response = landregistry.Res, rejection = landregistry.Rejection, ack = landregistry.Acknowledgement });
