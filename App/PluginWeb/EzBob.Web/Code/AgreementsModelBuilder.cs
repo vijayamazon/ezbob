@@ -122,19 +122,19 @@ namespace EzBob.Web.Code.Agreements
 		private string SetupFeeText(int? amount, decimal? percent, out bool isManualSetupFee)
 		{
 			isManualSetupFee = true;
-			if (amount.HasValue && percent.HasValue)
+			if (amount.HasValue && amount > 0 && percent.HasValue && percent > 0)
 			{
-				return string.Format("{1}% of the loan amount (but in no case less than {0})", FormattingUtils.NumericFormats(amount.Value), percent.Value);
+				return string.Format("{1}% of the loan amount (but in no case less than {0})", FormattingUtils.NumericFormats(amount.Value), percent.Value*100);
 			}
 
-			if (amount.HasValue)
+			if (amount.HasValue && amount > 0)
 			{
 				return string.Format("{0}", FormattingUtils.NumericFormats(amount.Value));
 			}
 
-			if (percent.HasValue)
+			if (percent.HasValue && percent > 0)
 			{
-				return string.Format("{0}% of the loan amount", percent.Value);
+				return string.Format("{0}% of the loan amount", percent.Value*100);
 			}
 			isManualSetupFee = false;
 			return null;
