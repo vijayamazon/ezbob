@@ -24,15 +24,15 @@
 			Gender gender,
 			int numberOfStores,
 			bool firstRepaymentDatePassed,
-			decimal ezbobSeniority,
+			decimal ezbobSeniorityMonths,
 			int ezbobNumOfLoans,
 			int ezbobNumOfLateRepayments,
 			int ezbobNumOfEarlyReayments)
 		{
 			m_oLog.Debug(
-				"CalculateMedalScore input params: annualTurnover: {0}, experianScore: {1}, mpSeniorityYears: {2}, positiveFeedbackCount: {3}, maritalStatus: {4}, gender: {5}, numberOfStores: {6}, firstRepaymentDatePassed: {7}, ezbobSeniority: {8}, ezbobNumOfLoans: {9}, ezbobNumOfLateRepayments: {10}, ezbobNumOfEarlyReayments: {11}",
+				"CalculateMedalScore input params: annualTurnover: {0}, experianScore: {1}, mpSeniorityYears: {2}, positiveFeedbackCount: {3}, maritalStatus: {4}, gender: {5}, numberOfStores: {6}, firstRepaymentDatePassed: {7}, ezbobSeniorityMonths: {8}, ezbobNumOfLoans: {9}, ezbobNumOfLateRepayments: {10}, ezbobNumOfEarlyReayments: {11}",
 				annualTurnover, experianScore, mpSeniorityYears, positiveFeedbackCount, maritalStatus, gender, numberOfStores,
-				firstRepaymentDatePassed, ezbobSeniority, ezbobNumOfLoans, ezbobNumOfLateRepayments, ezbobNumOfEarlyReayments);
+				firstRepaymentDatePassed, ezbobSeniorityMonths, ezbobNumOfLoans, ezbobNumOfLateRepayments, ezbobNumOfEarlyReayments);
 
 
 			var dict = new Dictionary<Parameter, Weight> {
@@ -43,7 +43,7 @@
 				{Parameter.Other,                    GetOtherWeight(gender, firstRepaymentDatePassed)},
 				{Parameter.AnnualTurnover,           GetAnnualTurnoverWeight(annualTurnover, firstRepaymentDatePassed)},
 				{Parameter.NumOfStores,              GetNumOfStoresWeight(numberOfStores, firstRepaymentDatePassed)},
-				{Parameter.EzbobSeniority,           GetEzbobSeniorityWeight(ezbobSeniority, firstRepaymentDatePassed)},
+				{Parameter.EzbobSeniority,           GetEzbobSeniorityWeight(ezbobSeniorityMonths, firstRepaymentDatePassed)},
 				{Parameter.EzbobNumOfLoans,          GetEzbobNumOfLoansWeight(ezbobNumOfLoans, firstRepaymentDatePassed)},
 				{Parameter.EzbobNumOfLateRepayments, GetEzbobNumOfLateRepaymentsWeight(ezbobNumOfLateRepayments, firstRepaymentDatePassed)},
 				{Parameter.EzbobNumOfEarlyRepayments,GetEzbobNumOfEarlyRepaymentsWeight(ezbobNumOfEarlyReayments, firstRepaymentDatePassed)}
