@@ -1,16 +1,13 @@
-
-
-namespace EzBob.Web.Controllers {
-	using System;
-	using Code;
-	using Ezbob.Database;
-﻿namespace EzBob.Web.Controllers {
-	using System.Data;
+﻿﻿namespace EzBob.Web.Controllers {
+	﻿using System;
+	﻿using System.Data;
 	using System.Collections.Generic;
 	using System.Configuration;
 	using System.Web.Configuration;
 	using System.Web.Mvc;
+	using Code;
 	using EZBob.DatabaseLib;
+	using Ezbob.Database;
 	using Newtonsoft.Json;
 	using Scorto.Web;
 	using StructureMap;
@@ -23,7 +20,7 @@ namespace EzBob.Web.Controllers {
 
 		public UiActionController() {
 			SessionStateSection sessionStateSection =
-				(System.Web.Configuration.SessionStateSection)ConfigurationManager.GetSection("system.web/sessionState");
+				(SessionStateSection)ConfigurationManager.GetSection("system.web/sessionState");
 
 			m_sSessionCookieName = sessionStateSection.CookieName;
 
