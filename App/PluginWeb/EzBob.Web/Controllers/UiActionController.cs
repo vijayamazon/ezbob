@@ -1,17 +1,15 @@
-﻿﻿namespace EzBob.Web.Controllers {
-	﻿using System;
-	﻿using System.Data;
+﻿namespace EzBob.Web.Controllers {
+	using System;
 	using System.Collections.Generic;
 	using System.Configuration;
 	using System.Web.Configuration;
 	using System.Web.Mvc;
-	using Code;
-	using EZBob.DatabaseLib;
-	using Ezbob.Database;
+
 	using Newtonsoft.Json;
-	using Scorto.Web;
-	using StructureMap;
 	using log4net;
+
+	using Ezbob.Database;
+	using EzBob.Web.Code.UiEvents;
 
 	public class UiActionController : Controller {
 		#region public
@@ -19,27 +17,24 @@
 		#region constructor
 
 		public UiActionController() {
-			SessionStateSection sessionStateSection =
-				(SessionStateSection)ConfigurationManager.GetSection("system.web/sessionState");
+			var sessionStateSection = (SessionStateSection)ConfigurationManager.GetSection("system.web/sessionState");
 
 			m_sSessionCookieName = sessionStateSection.CookieName;
 
-			m_oDB = DbConnectionGenerator.Get();
+			m_oDB = EzBob.Web.Code.DbConnectionGenerator.Get();
 		} // constructor
 
 		#endregion constructor
 
 		#region method Save
 
-		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonNetResult Save(string version, string history) {
-			var helper = ObjectFactory.GetInstance<DatabaseDataHelper>();
-
+		[HttpPost]
+		public JsonResult Save(string version, string history) {
 			Dictionary<string, UiCachePkgModel> oHistory = JsonConvert.DeserializeObject<Dictionary<string, UiCachePkgModel>>(history);
 
 			if ((oHistory == null) || (oHistory.Count < 1)) {
 				ms_oLog.Warn("No data received, nothing done.");
-				return this.JsonNet(new { result = "success" });
+				return Json(new { result = "success" });
 			} // if
 
 			string sSessionID = Request.Cookies[m_sSessionCookieName] == null ? "NO SESSION COOKIE" : (Request.Cookies[m_sSessionCookieName].Value ?? string.Empty).Trim();
@@ -75,7 +70,7 @@
 			} // for
 
 			if (nBrowserVersionID == 0)
-				return this.JsonNet(new { result = "Failed to save browser version." });
+				return Json(new { result = "Failed to save browser version." });
 
 			// ms_oLog.DebugFormat("{1} at {2}: UiActionController.Save(version: {3} - {0}), data:", oBrowserVersion.UserAgent, sSessionID, sRemoteIP, oBrowserVersion.ID );
 
@@ -93,7 +88,7 @@
 					oFailedPackages.Add(oResult);
 			} // for each pkg
 
-			return this.JsonNet(new { result = "success", saved = oSavedPackages, failures = oFailedPackages });
+			return Json(new { result = "success", saved = oSavedPackages, failures = oFailedPackages });
 		} // Save
 
 		#endregion method Save

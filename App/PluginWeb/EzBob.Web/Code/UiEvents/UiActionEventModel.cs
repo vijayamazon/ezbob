@@ -1,4 +1,4 @@
-﻿namespace EZBob.DatabaseLib {
+﻿namespace EzBob.Web.Code.UiEvents {
 	using System;
 	using System.Globalization;
 	using System.Text;

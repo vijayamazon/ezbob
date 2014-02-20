@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Text;
-
-namespace EZBob.DatabaseLib {
+﻿namespace EzBob.Web.Code.UiEvents {
+	using System.Collections.Generic;
+	using System.Text;
 	using Ezbob.Database;
 
 	#region class UiCachePkgModel
