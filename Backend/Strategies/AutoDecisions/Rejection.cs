@@ -122,7 +122,7 @@
 				return false;
 			}
 
-			response.CreditResult = enableAutomaticRejection ? "WaitingForDecision" : "Rejected";
+			response.CreditResult = enableAutomaticRejection ? "Rejected" : "WaitingForDecision";
 			response.UserStatus = "Rejected";
 			response.SystemDecision = "Reject";
 
