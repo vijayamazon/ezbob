@@ -40,7 +40,7 @@
 		private bool isCustomerViaBroker;
 		private bool isOffline;
 		private bool isUnderAge;
-		private bool hasDefaultInLast2Years;
+		private bool hasDefaultAccountsInPeriod;
 		private decimal amlScore;
 		private decimal personalScore;
 		private bool isDirectorInExperian;
@@ -69,6 +69,8 @@
 		private string silentToAddress;
 		private readonly ExperianUtils experianUtils;
 		private DateTime dateOfBirth;
+		private bool isEnabled;
+		private int numOfMonthsToLookForDefaults;
 
 		public BankBasedApproval(int customerId, AConnection db, ASafeLog log)
 		{
@@ -90,14 +92,16 @@
 
 			annualizedTurnover = (decimal)strategyHelper.GetTotalSumOfOrdersForLoanOffer(customerId);
 
-			DataTable dt = db.ExecuteReader("GetPersonalInfoForBankBasedApproval", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
+			DataTable dt = db.ExecuteReader("GetPersonalInfoForBankBasedApproval", CommandSpecies.StoredProcedure, 
+				new QueryParameter("CustomerId", customerId),
+				new QueryParameter("NumOfMonthsToLookForDefaults", numOfMonthsToLookForDefaults));
 			var sr = new SafeReader(dt.Rows[0]);
 
 			string amlData = sr["AmlData"];
 			string firstName = sr["FirstName"];
 			string surame = sr["Surame"];
 			string companyData = sr["CompanyData"];
-			hasDefaultInLast2Years = sr["HasDefaultAccounts"];
+			hasDefaultAccountsInPeriod = sr["HasDefaultAccounts"];
 			isCustomerViaBroker = sr["IsCustomerViaBroker"];
 			hasNonYodleeMarketplace = sr["HasNonYodleeMarketplace"];
 			isOffline = sr["IsOffline"];
@@ -263,10 +267,18 @@
 			silentToAddress = sr["BankBasedApprovalSilentToAddress"];
 			minNumberOfPayers = sr["BankBasedApprovalMinNumberOfPayers"];
 			minAnnualizedTurnover = sr["BankBasedApprovalMinAnnualizedTurnover"];
+			isEnabled = sr["BankBasedApprovalIsEnabled"];
+			numOfMonthsToLookForDefaults = sr["BankBasedApprovalNumOfMonthsToLookForDefaults"];
 		}
 
 		private bool CheckConditionsForApproval()
 		{
+			if (!isEnabled)
+			{
+				log.Info("No bank based approval since it is disabled");
+				return false;
+			}
+
 			if (hasNonYodleeMarketplace)
 			{
 				log.Info("No bank based approval since the customer:{0} has non Yodlee marketplaces", customerId);
@@ -291,9 +303,9 @@
 				return false;
 			}
 
-			if (hasDefaultInLast2Years)
+			if (hasDefaultAccountsInPeriod)
 			{
-				log.Info("No bank based approval since the customer:{0} has defaults in the past 2 years", customerId);
+				log.Info("No bank based approval since the customer:{0} has defaults in the past {1} months", customerId, numOfMonthsToLookForDefaults);
 				return false;
 			}
 

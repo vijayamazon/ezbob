@@ -103,6 +103,11 @@ BEGIN
 	INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('BankBasedApprovalNumOfMonthsToLookForDefaults', '24', 'Number of months back that if defaults exists within them there will be no approval')
 END
 
+IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='BankBasedApprovalIsEnabled')
+BEGIN
+	INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('BankBasedApprovalIsEnabled', 'True', 'Determines if bank based approvals are enabled')
+END
+
 GO
 
 
@@ -137,6 +142,8 @@ BEGIN
 		(SELECT Value FROM ConfigurationVariables WHERE Name = 'BankBasedApprovalSilentTemplateName') AS BankBasedApprovalSilentTemplateName,
 		(SELECT Value FROM ConfigurationVariables WHERE Name = 'BankBasedApprovalSilentToAddress') AS BankBasedApprovalSilentToAddress,
 		(SELECT Value FROM ConfigurationVariables WHERE Name = 'BankBasedMinNumberOfPayers') AS BankBasedMinNumberOfPayers,
-		(SELECT Value FROM ConfigurationVariables WHERE Name = 'BankBasedMinAnnualizedTurnover') AS BankBasedMinAnnualizedTurnover	
+		(SELECT Value FROM ConfigurationVariables WHERE Name = 'BankBasedMinAnnualizedTurnover') AS BankBasedMinAnnualizedTurnover,
+		(SELECT CONVERT(BIT, Value) FROM ConfigurationVariables WHERE Name = 'BankBasedApprovalIsEnabled') AS BankBasedApprovalIsEnabled,
+		(SELECT CONVERT(BIT, Value) FROM ConfigurationVariables WHERE Name = 'BankBasedApprovalNumOfMonthsToLookForDefaults') AS BankBasedApprovalNumOfMonthsToLookForDefaults		
 END
 GO

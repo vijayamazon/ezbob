@@ -6,7 +6,8 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[GetPersonalInfoForBankBasedApproval] 
-	(@CustomerId INT)
+	(@CustomerId INT,
+	 @NumOfMonthsToLookForDefaults INT)
 AS
 BEGIN
 	DECLARE 
@@ -15,7 +16,6 @@ BEGIN
 		@LastName NVARCHAR(250),
 		@DefaultCount INT,
 		@CompanyId INT,
-		@NumOfMonthsToLookForDefaults INT,
 		@ReferenceSource NVARCHAR(200),
 		@HasNonYodleeMarketplace BIT,
 		@IsOffline BIT,
@@ -44,14 +44,7 @@ BEGIN
 	FROM
 		Customer
 	WHERE
-		Id = @CustomerId
-		
-	SELECT
-		@NumOfMonthsToLookForDefaults = Value
-	FROM
-		ConfigurationVariables
-	WHERE
-		Name = 'BankBasedApprovalNumOfMonthsToLookForDefaults'
+		Id = @CustomerId		
 		
 	SELECT
 		@DefaultCount = COUNT(1)
