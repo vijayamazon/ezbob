@@ -86,6 +86,7 @@
 		{
 			log.Info("Getting personal info for customer:{0}", customerId);
 			GetYodleePersonalData();
+			GetYodleePayersData();
 
 			annualizedTurnover = (decimal)strategyHelper.GetTotalSumOfOrdersForLoanOffer(customerId);
 
@@ -118,15 +119,29 @@
 
 		private void GetYodleePersonalData()
 		{
-			// TODO: complete implementation
-			// yodlee specific data
-			earliestTransactionDate = DateTime.UtcNow;
-			sumOfLoanTransactions = 12345;
-			vat = 55; // The vat is in the cashflow tab
+			DataTable dt = db.ExecuteReader("GetPersonalYodleeInfo", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
+			var sr = new SafeReader(dt.Rows[0]);
 
-			// Create SP that fetches all payers
-			numberOfPayers = 4; // The payers should be parsed from the Description field in the 'bank account transactions' tab
-			// fill payerNames
+			earliestTransactionDate = sr["EarliestTransactionDate"];
+
+
+			// TODO: complete implementation
+			sumOfLoanTransactions = 12345; // with group loan (like '%loan')
+			vat = 55; // The vat is in the cashflow tab
+		}
+
+		private void GetYodleePayersData()
+		{
+			DataTable dt = db.ExecuteReader("GetYodleePayersInfo", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
+			foreach (DataRow row in dt.Rows)
+			{
+				var sr = new SafeReader(row);
+				string description = sr["Description"];
+
+				// parse payer from description - remember it and count it
+				payerNames.Add("parsedName");
+				numberOfPayers = 4; // Remove this line
+			}
 		}
 
 		private void GetSpecialPayers()
