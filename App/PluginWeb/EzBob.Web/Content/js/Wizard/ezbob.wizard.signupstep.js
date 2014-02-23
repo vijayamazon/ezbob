@@ -128,7 +128,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         this.activatedCode = true;
 
         this.mobileCodesSent++;
-        if (this.mobileCodesSent == this.numberOfMobileCodeAttempts) {
+        if (this.mobileCodesSent === this.numberOfMobileCodeAttempts) {
             EzBob.App.trigger('warning', "Switching to authentication via captcha");
             this.$el.find('#twilioDiv').hide();
             this.$el.find('#captchaDiv').show();
@@ -139,7 +139,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         var that = this;
         var xhr = $.post(window.gRootPath + "Account/GenerateMobileCode", { mobilePhone: this.$el.find('.phonenumber').val() });
         xhr.done(function (isError) {
-            if (isError != "False" && (!isError.success || isError.error == "True")) {
+            if (isError !== 'False' && (!isError.success || isError.error === 'True')) {
                 EzBob.App.trigger('error', "Error sending code, please authenticate using captcha");
                 that.$el.find('#twilioDiv').hide();
                 that.$el.find('#captchaDiv').show();
@@ -155,7 +155,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         xhr.always(function () {
             that.$el.find('#mobileCodeDiv').show();
             that.$el.find('#generateMobileCode').val('Resend activation code');
-            if (document.getElementById('generateMobileCode') == document.activeElement) {
+            if (document.getElementById('generateMobileCode') === document.activeElement) {
                 document.getElementById('mobileCode').focus();
             }
         });
@@ -228,9 +228,9 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         } else {
             data.push({ name: "switchedToCaptcha", value: "False" });
         }
-        
+
         var xhr = $.post(this.form.attr('action'), data);
-        
+
         var that = this;
 
         xhr.done(function (result) {
@@ -242,11 +242,9 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
                 EzBob.App.trigger('customerLoggedIn');
                 EzBob.App.trigger('clear');
 
-	            var sEmail = $('#Email').val();
-                $('#logoff-li').show().tooltip({ placement: "bottom", title: sEmail }).tooltip("enable").tooltip('fixTitle');
-	            $('body').attr('data-user-name', sEmail);
+                $('body').attr('data-user-name', $('#Email').val());
 
-				ShowHideSignLogOnOff();
+                ShowHideSignLogOnOff();
 
                 that.model.set('loggedIn', true); // triggers 'ready' and 'next'
                 
@@ -279,13 +277,13 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         this.readOnly = true;
         this.$el.find(':input').not(':submit').attr('disabled', 'disabled').attr('readonly', 'readonly').css('disabled');
         var captchaElement = this.$el.find('#captcha');
-        if (captchaElement != undefined) {
+        if (captchaElement)
             captchaElement.hide();
-        }
+
         captchaElement = this.$el.find('.captcha');
-        if (captchaElement != undefined) {
+        if (captchaElement)
             captchaElement.hide();
-        }
+
         this.$el.find(':submit').val('Continue');
         this.$el.find('[name="securityQuestion"]').trigger('liszt:updated');
     },

@@ -126,8 +126,9 @@
     
 	<script type="text/javascript">
 		function ShowHideSignLogOnOff() {
-			if ($('body').attr('data-user-name')) {
-				$('#logoff-li').show();
+			var sEmail = $('body').attr('data-user-name');
+			if (sEmail) {
+				$('#logoff-li').show().tooltip({ placement: 'bottom', title: sEmail }).tooltip("enable").tooltip('fixTitle');
 				$('#user-menu .login_btn, .signup_btn').hide();
 			}
 			else {
@@ -145,11 +146,7 @@
 		} // ShowHideSignLogOnOff
 
 		$(document).ready(function() {
-			var sEmail = '@(User.Identity.IsAuthenticated ? User.Identity.Name : "")';
-
-			$('#logoff-li').tooltip({ placement: 'bottom', title: sEmail }).tooltip("enable").tooltip('fixTitle');
-			$('body').attr('data-user-name', sEmail);
-
+			$('body').attr('data-user-name', '@(User.Identity.IsAuthenticated ? User.Identity.Name : "")');
 			ShowHideSignLogOnOff();
 		});
 	</script>
