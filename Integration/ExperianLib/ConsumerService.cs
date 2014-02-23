@@ -87,12 +87,25 @@
 			bool checkInCacheOnly = false,
 			bool isDirector = false
 		) {
-			try {
+			try
+			{
+				var postcode = GetPostcode(ukLocation, mlLocation);
+
 				//debug mode
 				if (surname.StartsWith("TestSurnameDebugMode") || surname == "TestSurnameOne" || surname == "TestSurnameFile")
+				{
+					var newExperianDataCacheEntry = new MP_ExperianDataCache
+					{
+						Name = firstName,
+						Surname = surname,
+						BirthDate = birthDate,
+						PostCode = postcode,
+						LastUpdateDate = DateTime.UtcNow
+					};
+					_repo.SaveOrUpdate(newExperianDataCacheEntry);
 					return ConsumerDebugResult(surname, birthDate, customerId, checkInCacheOnly);
+				}
 
-				var postcode = GetPostcode(ukLocation, mlLocation);
 				mlLocation = ShifLocation(mlLocation);
 
 				Log.InfoFormat("GetConsumerInfo: checking cache for {2} id {3} firstName: {0}, surname: {1} birthday: {4}, postcode: {5}", firstName, surname, isDirector ? "director" : "customer", isDirector ? directorId : customerId, birthDate, postcode);

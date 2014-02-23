@@ -588,6 +588,12 @@
 			{
 				Log.Info("No data exist from experian consumer check for {0}:{1}.", directorId == 0 ? "customer" : "director", customerId);
 			}
+			else
+			{
+				DataTable dt = DB.ExecuteReader("GetExperianScore", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
+				var sr = new SafeReader(dt.Rows[0]);
+				experianConsumerScore = sr["ExperianScore"];
+			}
 		}
 
 		private void PerformCompanyExperianCheck()
