@@ -7,11 +7,12 @@ namespace EzBob.Models.Marketplaces.Builders
 	using System.Web;
 	using EZBob.DatabaseLib.Common;
 	using EZBob.DatabaseLib.Model.Database;
-	using EzBob.Web.Areas.Customer.Models;
-	using EzBob.Web.Code;
+	using Web.Areas.Customer.Models;
+	using Web.Code;
 	using NHibernate;
 	using CommonLib.TimePeriodLogic;
 	using EZBob.DatabaseLib;
+	using StructureMap;
 	using log4net;
 
 	public class MarketplaceModelBuilder : IMarketplaceModelBuilder
@@ -21,7 +22,7 @@ namespace EzBob.Models.Marketplaces.Builders
 
 		public MarketplaceModelBuilder(ISession session)
 		{
-			_session = session;
+			_session = session ?? ObjectFactory.GetInstance<ISession>();
 		}
 
 		public virtual PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history)

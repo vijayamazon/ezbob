@@ -7,6 +7,8 @@
 	using System.Linq;
 	using System.Xml;
 	using EzBob.Models;
+	using EzBob.Models.Marketplaces.Builders;
+	using EzBob.Models.Marketplaces.Yodlee;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils.XmlUtils;
@@ -87,6 +89,14 @@
 		private void GetPersonalInfo()
 		{
 			log.Info("Getting personal info for customer:{0}", customerId);
+
+			YodleeMarketplaceModelBuilder a = new YodleeMarketplaceModelBuilder();
+			YodleeModel x = a.BuildYodlee(1);
+
+			double sumOfLoans = x.CashFlowReportModel.YodleeCashFlowReportModelDict["5aLoan Repayments"][999999];
+			// Should change "vat"
+			//vat = x.CashFlowReportModel.YodleeCashFlowReportModelDict["vat"][999999];
+
 			GetYodleePersonalData();
 			GetYodleePayersData();
 
@@ -127,10 +137,10 @@
 			var sr = new SafeReader(dt.Rows[0]);
 
 			earliestTransactionDate = sr["EarliestTransactionDate"];
-
+			// TODO: run categorize creation code....
 
 			// TODO: complete implementation
-			sumOfLoanTransactions = 12345; // with group loan (like '%loan')
+			sumOfLoanTransactions = 12345; // with group loan (like '%loan%')
 			vat = 55; // The vat is in the cashflow tab
 		}
 
@@ -145,6 +155,8 @@
 				// parse payer from description - remember it and count it
 				payerNames.Add("parsedName");
 				numberOfPayers = 4; // Remove this line
+
+				//x.banks.ToList()[0].transactions.ToList()[0].description;
 			}
 		}
 

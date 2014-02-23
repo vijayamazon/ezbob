@@ -7,6 +7,7 @@ namespace EzBob.Models.Marketplaces.Builders
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.DatabaseWrapper.Order;
 	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Web.Areas.Customer.Models;
 	using NHibernate.Linq;
 	using Yodlee;
@@ -18,13 +19,15 @@ namespace EzBob.Models.Marketplaces.Builders
 	public class YodleeMarketplaceModelBuilder : MarketplaceModelBuilder
 	{
 		private readonly MP_YodleeTransactionCategoriesRepository _mpYodleeTransactionCategoriesRepository;
+		private readonly CustomerMarketPlaceRepository customerMarketPlaceRepository;
 		private readonly CurrencyConvertor _currencyConvertor;
 		private YodleeModel _yodleeModel;
-		public YodleeMarketplaceModelBuilder(ISession session)
+		public YodleeMarketplaceModelBuilder(ISession session = null)
 			: base(session)
 		{
 			_mpYodleeTransactionCategoriesRepository = new MP_YodleeTransactionCategoriesRepository(_session);
-			_currencyConvertor = new CurrencyConvertor(new CurrencyRateRepository(session));
+			customerMarketPlaceRepository = new CustomerMarketPlaceRepository(_session);
+			_currencyConvertor = new CurrencyConvertor(new CurrencyRateRepository(_session));
 		}
 
 		public override PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history)
@@ -80,9 +83,14 @@ namespace EzBob.Models.Marketplaces.Builders
 			model.Yodlee = _yodleeModel;
 		}
 
+		public YodleeModel BuildYodlee(int mpId)
+		{
+			MP_CustomerMarketPlace mp = customerMarketPlaceRepository.Get(mpId);
+			return BuildYodlee(mp, null);
+		}
+
 		public YodleeModel BuildYodlee(MP_CustomerMarketPlace mp, DateTime? history)
 		{
-			
 			YodleeOrderDictionary yodleeData = null;
 			if (mp.Marketplace.InternalId == new YodleeServiceInfo().InternalId)
 			{
