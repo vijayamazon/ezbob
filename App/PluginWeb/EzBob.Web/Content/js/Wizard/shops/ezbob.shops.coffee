@@ -468,7 +468,7 @@ class EzBob.StoreInfoView extends Backbone.View
         xhr.done ->
             EzBob.App.trigger "clear"
             EzBob.App.GA.trackEventReditect(window.gRootPath + 'Customer/Profile', 'Wizard Complete', 'Go To account', 'Awaiting Approval')
-        xhr.always ->
+        xhr.error ->
             setTimeout((-> BlockUi 'off'), 500)
         false
 
