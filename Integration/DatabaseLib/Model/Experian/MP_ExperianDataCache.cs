@@ -41,21 +41,21 @@ namespace EZBob.DatabaseLib.Model.Database {
 			);
 		} // GetPersonFromCache
 
-		public MP_ExperianDataCache GetCustomerFromCache(int customerId)
+		public MP_ExperianDataCache GetCustomerFromCache(int customerId, string firstName, string surname, DateTime? birthDate, string postcode)
 		{
 			return m_oRetryer.Retry(() =>
 				GetAll()
 					.OrderByDescending(x => x.LastUpdateDate)
-					.FirstOrDefault(c => c.CustomerId == customerId && (c.DirectorId == null || c.DirectorId==0))
+					.FirstOrDefault(c => (c.Name == firstName && c.Surname == surname && c.BirthDate == birthDate && c.PostCode == postcode) || (c.CustomerId == customerId && (c.DirectorId == null || c.DirectorId==0)))
 			);
 		} // GetPersonFromCache
 
-		public MP_ExperianDataCache GetDirectorFromCache(int directorId)
+		public MP_ExperianDataCache GetDirectorFromCache(int directorId, string firstName, string surname, DateTime? birthDate, string postcode)
 		{
 			return m_oRetryer.Retry(() =>
 			                        GetAll()
 				                        .OrderByDescending(x => x.LastUpdateDate)
-				                        .FirstOrDefault(c => c.DirectorId == directorId));
+				                        .FirstOrDefault(c => (c.Name == firstName && c.Surname == surname && c.BirthDate == birthDate && c.PostCode == postcode) || (c.DirectorId == directorId)));
 		} // GetPersonFromCache
 
 		private readonly SqlRetryer m_oRetryer;

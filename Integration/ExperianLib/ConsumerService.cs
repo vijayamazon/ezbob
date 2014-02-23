@@ -92,11 +92,12 @@
 				if (surname.StartsWith("TestSurnameDebugMode") || surname == "TestSurnameOne" || surname == "TestSurnameFile")
 					return ConsumerDebugResult(surname, birthDate, customerId, checkInCacheOnly);
 
-				Log.InfoFormat("GetConsumerInfo: checking cache for firstName={0}, surname={1}...", firstName, surname);
 				var postcode = GetPostcode(ukLocation, mlLocation);
 				mlLocation = ShifLocation(mlLocation);
 
-				MP_ExperianDataCache cachedResponse = isDirector ? _repo.GetDirectorFromCache(directorId) : _repo.GetCustomerFromCache(customerId);
+				Log.InfoFormat("GetConsumerInfo: checking cache for {2} id {3} firstName: {0}, surname: {1} birthday: {4}, postcode: {5}", firstName, surname, isDirector ? "director" : "customer", isDirector ? directorId : customerId, birthDate, postcode);
+				
+				MP_ExperianDataCache cachedResponse = isDirector ? _repo.GetDirectorFromCache(directorId, firstName, surname, birthDate, postcode) : _repo.GetCustomerFromCache(customerId, firstName, surname, birthDate, postcode);
 
 				if (cachedResponse != null) {
 					if (CacheNotExpired(cachedResponse) || checkInCacheOnly)
