@@ -192,6 +192,7 @@ namespace Ezbob.HmrcHarvester {
 				Debug("Harvester running is complete.");
 			}
 			catch (Exception e) {
+				Alert(e, "Exception caught during retrieving HMRC data.");
 				throw new ApiException(e.Message, e);
 			} // try
 		} // Run
@@ -614,6 +615,11 @@ namespace Ezbob.HmrcHarvester {
 			Info("Loading list of submitted VAT returns...");
 
 			HtmlDocument doc = GetPage("/vat-file/trader/" + sUserVatID + "/periods");
+
+			if (doc.DocumentNode.InnerText.IndexOf("There are no returns previously submitted available to view.") >= 0) {
+				Info("There are no returns previously submitted available to view.");
+				return null;
+			} // if
 
 			HtmlNode oListTable = doc.DocumentNode.SelectSingleNode("//*[@id=\"VAT0011\"]/div[2]/table/tbody");
 
