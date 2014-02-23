@@ -100,7 +100,7 @@
 				}
 				else
 				{
-					accountStatus = GetAccountStatus(minLsDate, dateClose, startDate, isDefaulted);
+					accountStatus = GetAccountStatus(minLsDate, dateClose, startDate, isDefaulted, currentBalance);
 					
 					if (accountStatus == "8")
 					{
@@ -259,7 +259,8 @@
 			CaisFileManager.RemoveCaisFileData();
 		}
 
-		private string GetAccountStatus(DateTime? minLsDate, DateTime dateClose, DateTime startDate, bool isDefaulted) {
+		private string GetAccountStatus(DateTime? minLsDate, DateTime dateClose, DateTime startDate, bool isDefaulted, decimal currentBalance)
+		{
 			int daysBetween;
 			if (!minLsDate.HasValue) {
 				daysBetween = 0;
@@ -269,8 +270,10 @@
 			}
 
 			if (dateClose < startDate) {
-				if (isDefaulted) {
-					return "8";
+				if (isDefaulted)
+				{
+					if (currentBalance > 0) {return "8";}
+					else {return "0";}
 				}
 				if (daysBetween > 180) {
 					return "6";
