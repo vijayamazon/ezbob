@@ -260,7 +260,6 @@
     <Compile Include="Areas\Underwriter\Models\CreditBureauModelBuilder.cs" />
     <Compile Include="Areas\Underwriter\Models\Fraud\FraudStatusModel.cs" />
     <Compile Include="Areas\Underwriter\Controllers\GenerateAgreementsController.cs" />
-    <Compile Include="Areas\Underwriter\Controllers\Helper.cs" />
     <Compile Include="Areas\Underwriter\Controllers\LoanAmountPerDay.cs" />
     <Compile Include="Areas\Underwriter\Controllers\LoanEditorController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\Reports\CaisReportsHistoryController.cs" />
@@ -1539,8 +1538,6 @@
     <Content Include="Areas\Underwriter\Views\Shared\_CustomersPopupTemplate.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\Shops\EKMAccoutInfoTemplate.cshtml" />
     <Content Include="Areas\Customer\Views\Consent\Agreed.cshtml" />
-    <Content Include="Areas\Underwriter\Views\Helper\PermissionClasses.cshtml" />
-    <Content Include="Areas\Underwriter\Views\Helper\RolesClasses.cshtml" />
     <Content Include="Content\js\controls\ezbob.BoundItemView.coffee" />
     <Content Include="Content\js\Profile\ApplyForLoan\ApplyForLoanModel.coffee" />
     <Content Include="Content\js\Profile\ApplyForLoan\GetCashConfirmationView.coffee" />

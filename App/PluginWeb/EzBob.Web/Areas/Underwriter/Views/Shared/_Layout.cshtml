@@ -20,7 +20,29 @@
     @BundleHelper.RenderPrintCss()
 </head>
 
-<body class="@Html.Action("PermissionClasses", "Helper", new { Area = "Underwriter" }) @Html.Action("RolesClasses", "Helper", new { Area = "Underwriter" })">
+@{
+	string sBodyClasses = "";
+	string sBodyClassesException = "";
+	
+	try {
+		var context = ObjectFactory.GetInstance<IWorkplaceContext>();
+
+		if (context != null && context.User != null) {
+			string sPermissions = context.User.Permissions == null ? "" : string.Join(" ", context.User.Permissions.Select(p => "permission-" + p.Name));
+			string sRoles = context.User.Roles == null ? "" : string.Join(" ", context.User.Roles.Select(p => "role-" + p.Name));
+			sBodyClasses = sRoles + " " + sPermissions;
+		}
+	}
+	catch (Exception e) {
+		sBodyClassesException = "Error fetching user permissions and roles: " + e.Message;
+	}
+}
+
+<body class="@sBodyClasses">
+	@if (!string.IsNullOrWhiteSpace(sBodyClassesException)) {
+		<div class="red">@sBodyClassesException</div>
+	}
+
     @Html.AntiForgeryTokenNoUserCheck()
 
     @{
