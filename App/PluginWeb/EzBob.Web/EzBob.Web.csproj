@@ -532,9 +532,6 @@
     <Content Include="Content\css\images\ezbob_logo.png" />
     <Content Include="Content\css\images\facebook-icon.png" />
     <Content Include="Content\css\images\fail.png" />
-    <Content Include="Content\css\images\favicon114x114.png" />
-    <Content Include="Content\css\images\favicon57x57.png" />
-    <Content Include="Content\css\images\favicon72x72.png" />
     <Content Include="Content\css\images\footer_bg.png" />
     <Content Include="Content\css\images\freeagent_off.png" />
     <Content Include="Content\css\images\freeagent_on.png" />
