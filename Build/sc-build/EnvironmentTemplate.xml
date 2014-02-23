@@ -504,6 +504,7 @@ T6C7Spa3i/ltRwpQYWeYRRvJGkNUa12VLyTMdYRAAAAAvBLTqmDnMOt2M1IbVhi98uhE0pS2YC+WwInF
         <property name="CaptchaMode" value="simple" />
         <property name="AskvilleEnabled" value="False" />
         <property name="TargetsEnabled" value="False" />
+        <property name="TargetsEnabledEntrepreneur" value="False" />
         <property name="PostcodeAnywhereConfig" value="PostcodeAnywhereConfigEzBob"/>
 		<property name="GetSatisfactionEnabled" value="True" />	
 		<!-- simple, hard -->

@@ -32,6 +32,7 @@ namespace EzBob.Web.Infrastructure
 		bool PayPalEnabled { get; }
 		bool AskvilleEnabled { get; }
 		bool TargetsEnabled { get; }
+		bool TargetsEnabledEntrepreneur { get; }
 		string ApprovedUserStrategyName { get; }
 		string RejectUserStrategyName { get; }
 		string MoreAMLInformationStrategyName { get; }
@@ -206,6 +207,11 @@ namespace EzBob.Web.Infrastructure
 		public bool TargetsEnabled
 		{
 			get { return GetValueWithDefault<bool>("TargetsEnabled", "false"); }
+		}
+
+		public bool TargetsEnabledEntrepreneur
+		{
+			get { return GetValueWithDefault<bool>("TargetsEnabledEntrepreneur", "false"); }
 		}
 
 		public virtual IPostcodeAnywhereConfig PostcodeAnywhereConfig

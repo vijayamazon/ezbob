@@ -78,7 +78,8 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 
 		this.curOobts = oBtn.attr('data-oobts');
 
-		if (this.model.get('Email').match(/@ezbob\.com$/)) {
+		var sEmail = this.model.get('Email');
+		if (sEmail && sEmail.match && sEmail.match(/@ezbob\.com$/)) {
 			this.$el.find('.oobts-common').removeClass('oobts-common').addClass('oobts-test-user');
 
 			var self = this;
@@ -208,17 +209,22 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 			companyName = null,
 			postcode = null,
 			sCompanyFilter = '',
-			refNum = '';
+			refNum = '',
+			bDoTargeting = false;
 
 		if (typeOfBussiness === 'Entrepreneur') {
-			postcode = this.model.get('PersonalAddress').models[0].get('Postcode');
+			if (EzBob.Config.TargetsEnabledEnreprener) {
+				postcode = this.model.get('PersonalAddress').models[0].get('Postcode');
 
-			companyName = (function(model) {
-				var cpi = model.get('CustomerPersonalInfo');
-				return cpi.FirstName + ' ' + cpi.Surname;
-			})(this.model);
+				companyName = (function(model) {
+					var cpi = model.get('CustomerPersonalInfo');
+					return cpi.FirstName + ' ' + cpi.Surname;
+				})(this.model);
 
-			sCompanyFilter = 'N';
+				sCompanyFilter = 'N';
+
+				bDoTargeting = true;
+			} // if
 		}
 		else {
 			switch (this.companyTypes[typeOfBussiness.toLowerCase()].Type) {
@@ -227,16 +233,19 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 					companyName = dataForCompany.LimitedCompanyName;
 					refNum = dataForCompany.LimitedCompanyNumber;
 					sCompanyFilter = 'L';
+					bDoTargeting = true;
 					break;
+
 				case 'NonLimited':
 					postcode = dataForCompany['NonLimitedCompanyAddress[0].Postcode'];
 					companyName = dataForCompany.NonLimitedCompanyName;
 					sCompanyFilter = 'N';
+					bDoTargeting = true;
 					break;
 			} // switch type of business
 		} // if
 
-		if (EzBob.Config.TargetsEnabled)
+		if (EzBob.Config.TargetsEnabled && bDoTargeting)
 			this.handleTargeting(form, action, data, postcode, companyName, sCompanyFilter, refNum, typeOfBussiness);
 		else
 			this.saveDataRequest(action, data, typeOfBussiness);

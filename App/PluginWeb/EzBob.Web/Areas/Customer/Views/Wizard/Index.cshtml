@@ -54,12 +54,9 @@
 
 		EzBob.Config.WizardTopNaviagtionEnabled = @config.WizardTopNaviagtionEnabled.ToString().ToLower(CultureInfo.InvariantCulture);
 
-		EzBob.Config.TargetsEnabled = @if (ViewData["TargetsEnabled"] != null) {
-			@ViewData["TargetsEnabled"].ToString().ToLower(CultureInfo.InvariantCulture)
-		}
-		else {
-			<text>false</text>
-		};
+		EzBob.Config.TargetsEnabled = @ViewData["TargetsEnabled"].ToString().ToLower(CultureInfo.InvariantCulture);
+
+		EzBob.Config.TargetsEnabledEntrepreneur = @ViewData["TargetsEnabledEntrepreneur"].ToString().ToLower(CultureInfo.InvariantCulture);
 
 		EzBob.Config.PayPalEnabled = @config.PayPalEnabled.ToString().ToLower();
 		EzBob.Config.PasswordPolicyType = '@config.PasswordPolicyType.ToLower()';

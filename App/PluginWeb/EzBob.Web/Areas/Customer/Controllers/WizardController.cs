@@ -1,65 +1,55 @@
-﻿namespace EzBob.Web.Areas.Customer.Controllers
-{
+﻿namespace EzBob.Web.Areas.Customer.Controllers {
 	using System.Linq;
-	using System.Web;
 	using System.Web.Mvc;
 	using ApplicationMng.Repository;
-	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
-	using CommonLib;
 	using EZBob.DatabaseLib.Model.Marketplaces;
 	using Models;
 	using Infrastructure;
 	using Infrastructure.Filters;
-	using Infrastructure.csrf;
 	using Scorto.Web;
-	using StructureMap;
 	using NHibernate;
 	using NHibernate.Linq;
 	using EZBob.DatabaseLib.Model.Database.Repository;
-	using log4net;
 
-	public class WizardController : Controller
-    {
-        private readonly IEzbobWorkplaceContext _context;
-        private readonly ISecurityQuestionRepository _questions;
-        private readonly CustomerModelBuilder _customerModelBuilder;
-        private readonly IEzBobConfiguration _config;
-		private readonly ISession _session;
-		private readonly ICustomerReasonRepository _reasons;
-		private readonly ICustomerSourceOfRepaymentRepository _sourcesOfRepayment;
+	public class WizardController : Controller {
+		#region public
 
-        //-------------------------------------------------------------------
-        public WizardController(
+		#region constructor
+
+		public WizardController(
 			IEzbobWorkplaceContext context,
 			ISecurityQuestionRepository questions,
 			CustomerModelBuilder customerModelBuilder,
 			IEzBobConfiguration config,
-			ISession session, 
-			ICustomerReasonRepository customerReasonRepository, 
-			ICustomerSourceOfRepaymentRepository customerSourceOfRepaymentRepository)
-        {
-            _context = context;
-            _questions = questions;
-            _customerModelBuilder = customerModelBuilder;
-            _config = config;
+			ISession session,
+			ICustomerReasonRepository customerReasonRepository,
+			ICustomerSourceOfRepaymentRepository customerSourceOfRepaymentRepository
+		) {
+			_context = context;
+			_questions = questions;
+			_customerModelBuilder = customerModelBuilder;
+			_config = config;
 			_session = session;
-	        _reasons = customerReasonRepository;
-	        _sourcesOfRepayment = customerSourceOfRepaymentRepository;
-        }
+			_reasons = customerReasonRepository;
+			_sourcesOfRepayment = customerSourceOfRepaymentRepository;
+		} // constructor
 
-        //-------------------------------------------------------------------
-        [Transactional]
-        [IsSuccessfullyRegisteredFilter]
-        public ActionResult Index()
-        {
-            ViewData["Questions"] = _questions.GetAll().ToList();
+		#endregion constructor
+
+		#region action Index
+
+		[Transactional]
+		[IsSuccessfullyRegisteredFilter]
+		public ActionResult Index() {
+			ViewData["Questions"] = _questions.GetAll().ToList();
 			ViewData["Reasons"] = _reasons.GetAll().OrderBy(x => x.Id).ToList();
 			ViewData["Sources"] = _sourcesOfRepayment.GetAll().OrderBy(x => x.Id).ToList();
-            ViewData["CaptchaMode"] = _config.CaptchaMode;
-            ViewData["WizardTopNaviagtionEnabled"] = _config.WizardTopNaviagtionEnabled;
-            ViewData["TargetsEnabled"] = _config.TargetsEnabled;
-            ViewData["Config"] = _config;
+			ViewData["CaptchaMode"] = _config.CaptchaMode;
+			ViewData["WizardTopNaviagtionEnabled"] = _config.WizardTopNaviagtionEnabled;
+			ViewData["TargetsEnabled"] = _config.TargetsEnabled;
+			ViewData["TargetsEnabledEntrepreneur"] = _config.TargetsEnabledEntrepreneur;
+			ViewData["Config"] = _config;
 
 			ViewData["MarketPlaces"] = _session
 				.Query<MP_MarketplaceType>()
@@ -69,10 +59,14 @@
 				.Query<MP_MarketplaceGroup>()
 				.ToArray();
 
-            var wizardModel = _customerModelBuilder.BuildWizardModel(_context.Customer);
+			var wizardModel = _customerModelBuilder.BuildWizardModel(_context.Customer);
 
-            return View(wizardModel);
-        }       
+			return View(wizardModel);
+		} // Index
+
+		#endregion action Index
+
+		#region action EarnedPointsStr
 
 		//[Ajax]
 		//[HttpGet]
@@ -88,5 +82,21 @@
 
 		//	return this.JsonNet(new { EarnedPointsStr = sPoints });
 		//} // EarnedPointsStr
-	}
-}
+
+		#endregion action EarnedPointsStr
+
+		#endregion public
+
+		#region private
+
+		private readonly IEzbobWorkplaceContext _context;
+		private readonly ISecurityQuestionRepository _questions;
+		private readonly CustomerModelBuilder _customerModelBuilder;
+		private readonly IEzBobConfiguration _config;
+		private readonly ISession _session;
+		private readonly ICustomerReasonRepository _reasons;
+		private readonly ICustomerSourceOfRepaymentRepository _sourcesOfRepayment;
+
+		#endregion private
+	} // class WizardController
+} // namespace
