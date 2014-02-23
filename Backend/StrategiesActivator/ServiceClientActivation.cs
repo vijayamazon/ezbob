@@ -661,6 +661,34 @@
 			Console.WriteLine("\nList of active actions - end.");
 		} // ListActiveActions
 
+		[Activation]
+		private void TerminateAction() {
+			if (args.Length != 2) {
+				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> TerminateAction <action guid>");
+
+				Console.WriteLine(@"
+A string that contains a GUID in one of the following formats ('d' represents a hexadecimal digit whose case is ignored):
+32 contiguous digits:
+dddddddddddddddddddddddddddddddd
+-or-
+Groups of 8, 4, 4, 4, and 12 digits with hyphens between the groups. The entire GUID can optionally be enclosed in matching braces or parentheses:
+dddddddd-dddd-dddd-dddd-dddddddddddd
+-or-
+{dddddddd-dddd-dddd-dddd-dddddddddddd}
+-or-
+(dddddddd-dddd-dddd-dddd-dddddddddddd)
+-or-
+Groups of 8, 4, and 4 digits, and a subset of eight groups of 2 digits, with each group prefixed by '0x' or '0X', and separated by commas. The entire GUID, as well as the subset, is enclosed in matching braces:
+{0xdddddddd, 0xdddd, 0xdddd,{0xdd,0xdd,0xdd,0xdd,0xdd,0xdd,0xdd,0xdd}}
+All braces, commas, and '0x' prefixes are required. All embedded spaces are ignored. All leading zeros in a group are ignored.
+The digits shown in a group are the maximum number of meaningful digits that can appear in that group. You can specify from 1 to the number of digits shown for a group. The specified digits are assumed to be the low-order digits of the group.
+");
+				return;
+			} // if
+
+			adminClient.Terminate(new Guid(args[1]));
+		} // TerminateAction
+
 		// ReSharper restore UnusedMember.Local
 
 		#endregion strategy activators

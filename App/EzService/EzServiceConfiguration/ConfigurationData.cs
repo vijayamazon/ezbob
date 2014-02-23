@@ -8,6 +8,7 @@
 		public virtual int SleepTimeout { get; protected set; }
 		public virtual int AdminPort { get; protected set; }
 		public virtual int ClientPort { get; protected set; }
+		public virtual int ClientTimeoutSeconds { get; protected set; }
 
 		public virtual string InstanceName { get; protected set; }
 

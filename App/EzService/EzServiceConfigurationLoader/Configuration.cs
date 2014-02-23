@@ -41,6 +41,7 @@ namespace EzServiceConfigurationLoader {
 			AdminPort = Convert.ToInt32(oRow["AdminPort"]);
 			ClientPort = Convert.ToInt32(oRow["ClientPort"]);
 			HostName = oRow["HostName"].ToString();
+			ClientTimeoutSeconds = Convert.ToInt32(oRow["ClientTimeoutSeconds"]);
 
 			oTbl.Dispose();
 
@@ -57,6 +58,7 @@ namespace EzServiceConfigurationLoader {
 			m_oLog.Debug("Main loop sleep time: {0}", SleepTimeout);
 			m_oLog.Debug("Client endpoint address: {0}", ClientEndpointAddress);
 			m_oLog.Debug("Admin endpoint address: {0}", AdminEndpointAddress);
+			m_oLog.Debug("Timeout (seconds): {0}", ClientTimeoutSeconds);
 			m_oLog.Debug("End of service configuration.");
 		} // WriteToLog
 

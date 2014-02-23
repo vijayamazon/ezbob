@@ -639,6 +639,8 @@
 							oTcpBinding, // TODO: HTTPS...
 							new EndpointAddress(cfg.AdminEndpointAddress) // TODO: when HTTPS is ready make it ClientAdminEndpoint
 						);
+
+						m_oServiceClient.InnerChannel.OperationTimeout = TimeSpan.FromSeconds(cfg.ClientTimeoutSeconds);
 					}
 					catch (Exception e) {
 						Log.Debug("Failed to connect to EzService", e);

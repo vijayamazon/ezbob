@@ -24,6 +24,7 @@ namespace EzBob.Web.Code.ApplicationCreator {
 				.AddScalar("AdminPort", NHibernateUtil.Int32)
 				.AddScalar("ClientPort", NHibernateUtil.Int32)
 				.AddScalar("HostName", NHibernateUtil.String)
+				.AddScalar("ClientTimeoutSeconds", NHibernateUtil.Int32)
 				.List();
 
 			if (lst.Count != 1)
@@ -37,6 +38,7 @@ namespace EzBob.Web.Code.ApplicationCreator {
 			AdminPort = Convert.ToInt32(oRow[3]);
 			ClientPort = Convert.ToInt32(oRow[4]);
 			HostName = oRow[5].ToString();
+			ClientTimeoutSeconds = Convert.ToInt32(oRow[6]);
 
 			m_oLog.Debug("Loading service configuration from DB for default service instance on machine {0} complete.", RequestedInstanceName);
 		} // LoadFromDB
@@ -47,6 +49,7 @@ namespace EzBob.Web.Code.ApplicationCreator {
 			m_oLog.Debug("Main loop sleep time: {0}", SleepTimeout);
 			m_oLog.Debug("Client endpoint address: {0}", ClientEndpointAddress);
 			m_oLog.Debug("Admin endpoint address: {0}", AdminEndpointAddress);
+			m_oLog.Debug("Timeout (seconds): {0}", ClientTimeoutSeconds);
 			m_oLog.Debug("End of service configuration.");
 		} // WriteToLog
 
