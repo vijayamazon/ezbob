@@ -4,7 +4,9 @@
 	using System.Collections.Generic;
 	using System.Data;
 	using System.Globalization;
+	using System.Linq;
 	using System.Xml;
+	using EzBob.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils.XmlUtils;
@@ -23,7 +25,7 @@
 		private readonly int customerId;
 		private decimal personalScoreThresholdWhenNoCompanyScore;
 		private decimal personalScoreThreshold;
-		private decimal minAge;
+		private int minAge;
 		private decimal minAmlScore;
 		private decimal minCompanySeniorityDays;
 		private int minBusinessScore;
@@ -37,7 +39,7 @@
 		private int euCap;
 		private bool isCustomerViaBroker;
 		private bool isOffline;
-		private decimal age;
+		private bool isUnderAge;
 		private bool hasDefaultInLast2Years;
 		private decimal amlScore;
 		private decimal personalScore;
@@ -52,16 +54,21 @@
 		private DateTime earliestTransactionDate;
 		private int minNumberOfDays;
 		private decimal sumOfLoanTransactions;
-		private int numberOfPayers; // The payers should be parsed from the Description field in the 'bank account transactions' tab
-		private decimal vat; // The vat is in the cashflow tab
+		private int numberOfPayers;
+		private decimal vat;
 		private decimal annualizedTurnover;
-
+		private decimal minAnnualizedTurnover;
+		private int minNumberOfPayers;
+		private readonly Dictionary<string,bool> specialPayers = new Dictionary<string, bool>();
+		private readonly List<string> payerNames = new List<string>();
+		private bool hasNonYodleeMarketplace;
 		private readonly StrategiesMailer mailer;
+		private readonly StrategyHelper strategyHelper = new StrategyHelper();
 		private bool isSilent;
 		private string silentTemplateName;
 		private string silentToAddress;
-
 		private readonly ExperianUtils experianUtils;
+		private DateTime dateOfBirth;
 
 		public BankBasedApproval(int customerId, AConnection db, ASafeLog log)
 		{
@@ -69,8 +76,72 @@
 			this.log = log;
 			this.customerId = customerId;
 			experianUtils = new ExperianUtils(log);
+			mailer = new StrategiesMailer(db, log);
 			ReadConfigurations();
 			GetPersonalInfo();
+			GetSpecialPayers();
+		}
+
+		private void GetPersonalInfo()
+		{
+			log.Info("Getting personal info for customer:{0}", customerId);
+			GetYodleePersonalData();
+
+			annualizedTurnover = (decimal)strategyHelper.GetTotalSumOfOrdersForLoanOffer(customerId);
+
+			DataTable dt = db.ExecuteReader("GetPersonalInfoForBankBasedApproval", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
+			var sr = new SafeReader(dt.Rows[0]);
+
+			string amlData = sr["AmlData"];
+			string firstName = sr["FirstName"];
+			string surame = sr["Surame"];
+			string companyData = sr["CompanyData"];
+			hasDefaultInLast2Years = sr["HasDefaultAccounts"];
+			isCustomerViaBroker = sr["IsCustomerViaBroker"];
+			hasNonYodleeMarketplace = sr["HasNonYodleeMarketplace"];
+			isOffline = sr["IsOffline"];
+			dateOfBirth = sr["DateOfBirth"];
+			isUnderAge = dateOfBirth.AddYears(minAge) <= DateTime.UtcNow;
+			isHomeOwner = sr["IsHomeOwner"];
+			personalScore = sr["ExperianScore"];
+
+			// Parse experian data
+			decimal totalCurrentAssets;
+			amlScore = experianUtils.DetectAml(amlData);
+			XmlNode companyInfo = Xml.ParseRoot(companyData);
+			isDirectorInExperian = experianUtils.IsDirector(companyInfo, firstName, surame);
+			experianUtils.DetectTangibleEquity(companyInfo, out tangibleEquity, out totalCurrentAssets);
+			DateTime? companyIncorporationDate = experianUtils.DetectIncorporationDate(companyInfo);
+			companySeniorityDays = companyIncorporationDate.HasValue ? (decimal)(DateTime.UtcNow - companyIncorporationDate.Value).TotalDays : 0;
+			businessScore = experianUtils.DetectBusinessScore(companyInfo);
+		}
+
+		private void GetYodleePersonalData()
+		{
+			// TODO: complete implementation
+			// yodlee specific data
+			earliestTransactionDate = DateTime.UtcNow;
+			sumOfLoanTransactions = 12345;
+			vat = 55; // The vat is in the cashflow tab
+
+			// Create SP that fetches all payers
+			numberOfPayers = 4; // The payers should be parsed from the Description field in the 'bank account transactions' tab
+			// fill payerNames
+		}
+
+		private void GetSpecialPayers()
+		{
+			DataTable dt = db.ExecuteReader("GetSpecialPayers", CommandSpecies.StoredProcedure);
+			foreach (DataRow row in dt.Rows)
+			{
+				var sr = new SafeReader(row);
+				string name = sr["Name"];
+
+				if (!string.IsNullOrEmpty(name) && !specialPayers.ContainsKey(name))
+				{
+					specialPayers.Add(name, true);
+				}
+			}
 		}
 
 		public bool MakeDecision(AutoDecisionResponse response)
@@ -175,48 +246,17 @@
 			isSilent = sr["BankBasedApprovalIsSilent"];
 			silentTemplateName = sr["BankBasedApprovalSilentTemplateName"];
 			silentToAddress = sr["BankBasedApprovalSilentToAddress"];
-		}
-
-		private void GetPersonalInfo()
-		{
-			isCustomerViaBroker = false;
-			isOffline = false;
-			age = 19;
-			isHomeOwner = true;
-			earliestTransactionDate = DateTime.UtcNow;
-			sumOfLoanTransactions = 12345;
-			numberOfPayers = 4;
-			vat = 55;
-			annualizedTurnover = 777;
-			hasDefaultInLast2Years = false;
-			personalScore = 851;
-
-
-
-			log.Info("Getting personal info for customer:{0}", customerId);
-			DataTable dt = db.ExecuteReader("GetPersonalInfoForBankBasedApproval", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
-			var sr = new SafeReader(dt.Rows[0]);
-
-			string amlData = sr["AmlData"];
-			string firstName = sr["FirstName"];
-			string surame = sr["Surame"];
-			string companyData = sr["CompanyData"];
-
-
-			// Parse experian data
-			decimal totalCurrentAssets;
-			amlScore = experianUtils.DetectAml(amlData);
-			XmlNode companyInfo = Xml.ParseRoot(companyData);
-			isDirectorInExperian = experianUtils.IsDirector(companyInfo, firstName, surame);
-			experianUtils.DetectTangibleEquity(companyInfo, out tangibleEquity, out totalCurrentAssets);
-			DateTime? companyIncorporationDate = experianUtils.DetectIncorporationDate(companyInfo);
-			companySeniorityDays = companyIncorporationDate.HasValue ? (decimal)(DateTime.UtcNow - companyIncorporationDate.Value).TotalDays : 0;
-			businessScore = experianUtils.DetectBusinessScore(companyInfo);
+			minNumberOfPayers = sr["BankBasedApprovalMinNumberOfPayers"];
+			minAnnualizedTurnover = sr["BankBasedApprovalMinAnnualizedTurnover"];
 		}
 
 		private bool CheckConditionsForApproval()
 		{
-			// TODO: add check that yodlee is the only mp - if not return false
+			if (hasNonYodleeMarketplace)
+			{
+				log.Info("No bank based approval since the customer:{0} has non Yodlee marketplaces", customerId);
+				return false;
+			}
 
 			if (isCustomerViaBroker)
 			{
@@ -230,9 +270,9 @@
 				return false;
 			}
 
-			if (age < minAge)
+			if (isUnderAge)
 			{
-				log.Info("No bank based approval since the customer:{0} is under {1}. Age:{2}", customerId, minAge, age);
+				log.Info("No bank based approval since the customer:{0} is under {1}. Date of birth:{2}", customerId, minAge, dateOfBirth);
 				return false;
 			}
 
@@ -280,13 +320,10 @@
 					return false;
 				}
 			}
-			else
+			else if (personalScore < personalScoreThresholdWhenNoCompanyScore)
 			{
-				if (personalScore < personalScoreThresholdWhenNoCompanyScore)
-				{
-					log.Info("No bank based approval since there is no business score and the customer score is:{1} which is lower than minimum value:{2}", customerId, personalScore, personalScoreThresholdWhenNoCompanyScore);
-					return false;
-				}
+				log.Info("No bank based approval since there is no business score and the customer score is:{1} which is lower than minimum value:{2}", customerId, personalScore, personalScoreThresholdWhenNoCompanyScore);
+				return false;
 			}
 
 			if ((DateTime.UtcNow - earliestTransactionDate).TotalDays < minNumberOfDays)
@@ -301,10 +338,10 @@
 				return false;
 			}
 
-			if (numberOfPayers < 3) // the 3 should be configurable
+			if (numberOfPayers < minNumberOfPayers && !payerNames.Any(payerName => specialPayers.ContainsKey(payerName)))
 			{
-				// Create table of "special" payers that actually mean more than one like paypal
-				// if the payers dont include a special payer - log and return false
+				log.Info("No bank based approval since there are no special payers, and num of payers:{0} is less than minimum:{1}", numberOfPayers, minNumberOfPayers);
+				return false;
 			}
 
 			if (vat > 0)
@@ -313,9 +350,9 @@
 				return false;
 			}
 
-			if (annualizedTurnover < 150000) // should be configurable
+			if (annualizedTurnover < minAnnualizedTurnover)
 			{
-				log.Info("No bank based approval since the annualizeded turnover is {0}. Which is less than minimum:{1}", annualizedTurnover, 150000/*Take from config*/);
+				log.Info("No bank based approval since the annualizeded turnover is {0}. Which is less than minimum:{1}", annualizedTurnover, minAnnualizedTurnover);
 				return false;
 			}
 

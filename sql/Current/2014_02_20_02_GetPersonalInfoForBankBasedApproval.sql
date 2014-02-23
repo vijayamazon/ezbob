@@ -12,7 +12,16 @@ BEGIN
 	DECLARE 
 		@AmlId BIGINT,
 		@FirstName NVARCHAR(250),
-		@LastName NVARCHAR(250)
+		@LastName NVARCHAR(250),
+		@DefaultCount INT,
+		@CompanyId INT,
+		@NumOfMonthsToLookForDefaults INT,
+		@ReferenceSource NVARCHAR(200),
+		@HasNonYodleeMarketplace BIT,
+		@IsOffline BIT,
+		@DateOfBirth DateTime,
+		@ResidentialStatus NVARCHAR(250),
+		@ExperianScore INT
 		
 	SELECT TOP 1
 		@AmlId = Id
@@ -26,22 +35,60 @@ BEGIN
 				
 	SELECT
 		@FirstName = FirstName,
-		@LastName = Surname
+		@LastName = Surname,
+		@CompanyId = CompanyId,
+		@ReferenceSource = ReferenceSource,
+		@IsOffline = IsOffline,
+		@DateOfBirth = DateOfBirth,
+		@ResidentialStatus = ResidentialStatus
 	FROM
 		Customer
 	WHERE
 		Id = @CustomerId
+		
+	SELECT
+		@NumOfMonthsToLookForDefaults = Value
+	FROM
+		ConfigurationVariables
+	WHERE
+		Name = 'BankBasedApprovalNumOfMonthsToLookForDefaults'
+		
+	SELECT
+		@DefaultCount = COUNT(1)
+	FROM
+		ExperianDefaultAccount
+	WHERE
+		CustomerId = @CustomerId AND
+		DATEDIFF(MONTH, Date, GETUTCDATE()) < @NumOfMonthsToLookForDefaults
 	
-
+	IF EXISTS (SELECT 1 FROM MP_CustomerMarketplace, MP_MarketplaceType WHERE CustomerId = @CustomerId AND MarketplaceId = MP_MarketplaceType.Id AND MP_MarketplaceType.Name <> 'Yodlee')
+	BEGIN
+		SELECT @HasNonYodleeMarketplace = 1
+	END
+	ELSE
+	BEGIN
+		SELECT @HasNonYodleeMarketplace = 0
+	END
+	
+	SELECT
+		@ExperianScore = ExperianScore
+	FROM
+		MP_ExperianDataCache
+	WHERE
+		CustomerId = @CustomerId AND
+		DirectorId = 0
 
 	SELECT
 		(SELECT ResponseData FROM MP_ServiceLog WHERE Id = @AmlId) AS AmlData,
 		@FirstName AS FirstName,
-		@LastName AS Surname--,
-		--(SELECT JsonPacket FROM MP_ExperianDataCache WHERE Id = @CompanyId) AS CompanyData
-		
-	
-	
-	
+		@LastName AS Surname,
+		(SELECT JsonPacket FROM MP_ExperianDataCache WHERE Id = @CompanyId) AS CompanyData,
+		CAST((CASE @DefaultCount WHEN 0 THEN 0 ELSE 1 END) AS BIT) AS HasDefaultAccounts,
+		CAST((CASE @ReferenceSource WHEN 'liqcen' THEN 1 ELSE 0 END) AS BIT) AS IsCustomerViaBroker,
+		@HasNonYodleeMarketplace AS HasNonYodleeMarketplace,
+		@IsOffline AS IsOffline,
+		@DateOfBirth AS DateOfBirth,
+		CAST((CASE @ResidentialStatus WHEN 'Home owner' THEN 1 ELSE 0 END) AS BIT) AS IsHomeOwner,
+		@ExperianScore AS ExperianScore	
 END
 GO

@@ -88,6 +88,21 @@ BEGIN
 	INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('BankBasedApprovalSilentToAddress', 'yulys@ezbob.com', 'Address for silent mode of bank based auto approval')
 END
 
+IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='BankBasedApprovalMinNumberOfPayers')
+BEGIN
+	INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('BankBasedApprovalMinNumberOfPayers', '3', 'Minimal number of different payers required for approval')
+END
+
+IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='BankBasedApprovalMinAnnualizedTurnover')
+BEGIN
+	INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('BankBasedApprovalMinAnnualizedTurnover', '150000', 'Minimal turnover required for approval')
+END
+
+IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='BankBasedApprovalNumOfMonthsToLookForDefaults')
+BEGIN
+	INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('BankBasedApprovalNumOfMonthsToLookForDefaults', '24', 'Number of months back that if defaults exists within them there will be no approval')
+END
+
 GO
 
 
@@ -120,6 +135,8 @@ BEGIN
 		(SELECT Value FROM ConfigurationVariables WHERE Name = 'BankBasedApprovalMinNumberOfDays') AS BankBasedApprovalMinNumberOfDays,
 		(SELECT CONVERT(BIT, Value) FROM ConfigurationVariables WHERE Name = 'BankBasedApprovalIsSilent') AS BankBasedApprovalIsSilent,
 		(SELECT Value FROM ConfigurationVariables WHERE Name = 'BankBasedApprovalSilentTemplateName') AS BankBasedApprovalSilentTemplateName,
-		(SELECT Value FROM ConfigurationVariables WHERE Name = 'BankBasedApprovalSilentToAddress') AS BankBasedApprovalSilentToAddress		
+		(SELECT Value FROM ConfigurationVariables WHERE Name = 'BankBasedApprovalSilentToAddress') AS BankBasedApprovalSilentToAddress,
+		(SELECT Value FROM ConfigurationVariables WHERE Name = 'BankBasedMinNumberOfPayers') AS BankBasedMinNumberOfPayers,
+		(SELECT Value FROM ConfigurationVariables WHERE Name = 'BankBasedMinAnnualizedTurnover') AS BankBasedMinAnnualizedTurnover	
 END
 GO
