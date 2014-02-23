@@ -344,7 +344,8 @@ namespace FraudChecker
 																	 Customer customer,
 																	 bool isSkipLast = false)
 		{
-			var directorPortion = customers.SelectMany(c => c.Company.Directors).ToList();
+			
+			var directorPortion = customers.Where(c => c.Company != null).SelectMany(c => c.Company.Directors).ToList();
 			// First + Middle + Last
 			fraudDetections.AddRange(
 				from d in directorPortion
