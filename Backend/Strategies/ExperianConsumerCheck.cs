@@ -80,7 +80,8 @@
 					LocationLine6 = line6
 				};
 
-			ConsumerServiceResult result = consumerService.GetConsumerInfo(firstName, surname, gender, birthDate, null, location, "PL", customerId, directorId);
+			var isDirector = directorId != 0;
+			ConsumerServiceResult result = consumerService.GetConsumerInfo(firstName, surname, gender, birthDate, null, location, "PL", customerId, directorId, isDirector: isDirector);
 
 			if (result.IsError)
 			{

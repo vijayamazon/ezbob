@@ -823,7 +823,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 					}
 					result = consumerSrv.GetConsumerInfo(director.Name, director.Surname,
 												director.Gender.ToString(),
-												director.DateOfBirth, null, dirLoc, "PL", customer.Id, 0, true);
+												director.DateOfBirth, null, dirLoc, "PL", customer.Id, director.Id, true, true);
 				}
 
 				var dirModel = GenerateConsumerModel(-1, result);

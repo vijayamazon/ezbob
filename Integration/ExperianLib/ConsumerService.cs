@@ -84,7 +84,8 @@
 			string applicationType,
 			int customerId,
 			int directorId,
-			bool checkInCacheOnly = false
+			bool checkInCacheOnly = false,
+			bool isDirector = false
 		) {
 			try {
 				//debug mode
@@ -95,7 +96,7 @@
 				var postcode = GetPostcode(ukLocation, mlLocation);
 				mlLocation = ShifLocation(mlLocation);
 
-				var cachedResponse = _repo.GetPersonFromCache(firstName, surname, birthDate, postcode);
+				MP_ExperianDataCache cachedResponse = isDirector ? _repo.GetDirectorFromCache(directorId) : _repo.GetCustomerFromCache(customerId);
 
 				if (cachedResponse != null) {
 					if (CacheNotExpired(cachedResponse) || checkInCacheOnly)

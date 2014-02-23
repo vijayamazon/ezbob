@@ -41,6 +41,23 @@ namespace EZBob.DatabaseLib.Model.Database {
 			);
 		} // GetPersonFromCache
 
+		public MP_ExperianDataCache GetCustomerFromCache(int customerId)
+		{
+			return m_oRetryer.Retry(() =>
+				GetAll()
+					.OrderByDescending(x => x.LastUpdateDate)
+					.FirstOrDefault(c => c.CustomerId == customerId && (c.DirectorId == null || c.DirectorId==0))
+			);
+		} // GetPersonFromCache
+
+		public MP_ExperianDataCache GetDirectorFromCache(int directorId)
+		{
+			return m_oRetryer.Retry(() =>
+			                        GetAll()
+				                        .OrderByDescending(x => x.LastUpdateDate)
+				                        .FirstOrDefault(c => c.DirectorId == directorId));
+		} // GetPersonFromCache
+
 		private readonly SqlRetryer m_oRetryer;
 	} // class ExperianDataCacheRepository
 
