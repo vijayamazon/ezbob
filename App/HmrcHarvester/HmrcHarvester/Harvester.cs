@@ -164,6 +164,9 @@ namespace Ezbob.HmrcHarvester {
 				if (!IsLoggedIn)
 					Login(GetLoginRequestDetails(GetPage("")));
 			}
+			catch (InvalidCredentialsException) {
+				throw;
+			}
 			catch (Exception e) {
 				throw new ApiException(e.Message, e);
 			} // try
@@ -418,7 +421,7 @@ namespace Ezbob.HmrcHarvester {
 					IsLoggedIn = false;
 					Warn("Not logged in: invalid user name or password.");
 					Debug("{0}", sResponse);
-					throw new ClientHarvesterException("Invalid user name or password.");
+					throw new InvalidCredentialsException("Invalid user name or password.");
 
 				default:
 					IsLoggedIn = false;
@@ -427,7 +430,13 @@ namespace Ezbob.HmrcHarvester {
 					throw new HarvesterException("Unexpected title in login response.");
 				} // switch
 			}
+			catch (InvalidCredentialsException) {
+				throw;
+			}
 			catch (ClientHarvesterException) {
+				throw;
+			}
+			catch (HarvesterException) {
 				throw;
 			}
 			catch (Exception e) {
