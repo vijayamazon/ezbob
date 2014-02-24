@@ -664,7 +664,7 @@
         {
             <button class="btn btn-primary" id="zoopla">Zoopla</button>
             <button class="btn btn-primary" id="landregistry">Land Registry</button>
-            <button class="btn btn-primary" id="landregistryEnquiry" data-postcode="@currentAddress.Postcode">Land Registry Enquiry</button>
+            <button class="btn btn-primary" id="landregistryEnquiry" data-postcode="@currentAddress.Postcode" data-address="@currentAddress.FormattedAddress">Land Registry Enquiry</button>
         }
         <button class="btn btn-primary btn-copy" data-address="@currentAddress.FormattedAddress" >@name Copy</button>
         <a class="btn btn-primary" href="http://maps.googleapis.com/maps/api/streetview?size=640x640&sensor=false&location=@Uri.EscapeDataString(currentAddress.FormattedAddress)" target="_blank">@name Image</a>

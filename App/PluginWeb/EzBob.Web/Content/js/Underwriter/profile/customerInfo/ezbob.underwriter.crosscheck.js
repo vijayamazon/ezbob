@@ -306,7 +306,7 @@ EzBob.Underwriter.CrossCheckView = Backbone.View.extend({
     }, // showZoopla
     showLandRegistryEnquiry: function(el) {
         BlockUi("On");
-        var lrView = new EzBob.LandRegistryEnquiryView({ model: { postcode: $(el.currentTarget).attr('data-postcode'), customerId: this.model.customerId } });
+        var lrView = new EzBob.LandRegistryEnquiryView({ model: { postcode: $(el.currentTarget).attr('data-postcode'), address: $(el.currentTarget).attr('data-address'), customerId: this.model.customerId } });
         EzBob.App.jqmodal.show(lrView);
         BlockUi("Off");
         
