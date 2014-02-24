@@ -62,12 +62,19 @@ namespace EzBob.Models.Marketplaces.Builders
 				Disabled = mp.Disabled,
 				IsNew = mp.IsNew,
 				IsHistory = history.HasValue,
-				History = history.HasValue ? history.Value : (DateTime?)null
+				History = history.HasValue ? history.Value : (DateTime?)null,
+				LastTransactionDate = GetLastTransactionDate(mp)
 			};
 
 			InitializeSpecificData(mp, model, history);
 
 			return model;
+		}
+
+		public DateTime? GetLastTransactionDate(MP_CustomerMarketPlace mp)
+		{
+			UpdateLastTransactionDate(mp);
+			return mp.LastTransactionDate;
 		}
 
 		public string GetAccountAge(MP_CustomerMarketPlace mp)
@@ -83,7 +90,21 @@ namespace EzBob.Models.Marketplaces.Builders
 			mp.OriginationDate = mp.OriginationDate ?? GetSeniority(mp);
 		}
 
+		public void UpdateLastTransactionDate(MP_CustomerMarketPlace mp)
+		{
+			mp.LastTransactionDate = (mp.LastTransactionDate == null ||
+			                          (mp.UpdatingEnd.HasValue &&
+			                           mp.LastTransactionDate.Value < mp.UpdatingEnd.Value))
+				                         ? GetLastTransaction(mp)
+				                         : mp.LastTransactionDate;
+		}
+
 		public virtual DateTime? GetSeniority(MP_CustomerMarketPlace mp)
+		{
+			return null;
+		}
+
+		public virtual DateTime? GetLastTransaction(MP_CustomerMarketPlace mp)
 		{
 			return null;
 		}

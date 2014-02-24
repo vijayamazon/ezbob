@@ -147,6 +147,18 @@ namespace EzBob.Models.Marketplaces.Builders
 			return !s.Any() ? (DateTime?)null : s.Min();
 		} // GetSeniority
 
+		public override DateTime? GetLastTransaction(MP_CustomerMarketPlace mp)
+		{
+			if (null == Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(mp.Marketplace.Name))
+				return null;
+
+			var s = _session.Query<MP_ChannelGrabberOrderItem>()
+				.Where(oi => oi.Order.CustomerMarketPlace.Id == mp.Id)
+				.Where(oi => oi.PaymentDate != null)
+				.Max(oi => oi.PaymentDate);
+			return s;
+		} // GetSeniority
+
 		#endregion method GetSeniority
 	} // class ChannelGrabberMarketplaceBuilder
 } // namespace

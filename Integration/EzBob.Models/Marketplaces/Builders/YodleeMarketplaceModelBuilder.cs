@@ -217,5 +217,13 @@ namespace EzBob.Models.Marketplaces.Builders
 				.Select(oi => oi.postDate ?? oi.transactionDate);
 			return !s.Any() ? (DateTime?)null : s.Min();
 		}
+
+		public override DateTime? GetLastTransaction(MP_CustomerMarketPlace mp)
+		{
+			var s = _session.Query<MP_YodleeOrderItemBankTransaction>().Where(t => t.YodleeOrderItem.Order.CustomerMarketPlace.Id == mp.Id)
+				.Where(t => t.postDate.HasValue || t.transactionDate.HasValue)
+				.Max(oi => oi.postDate ?? oi.transactionDate);
+			return s;
+		}
 	}
 }

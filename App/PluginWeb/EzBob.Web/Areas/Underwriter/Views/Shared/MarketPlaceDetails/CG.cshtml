@@ -49,7 +49,8 @@
 			<div class="tab-pane active" id="orders-tab1"><% DrawOneTable(aryOrdersTable) %></div>
 			<% if (bHasExpenses) { %>
 				<div class="tab-pane" id="expenses-tab1"><% DrawOneTable(aryExpensesTable) %></div>
-			<% } %>
+		    <% } %>
+            <div class="last-transaction-date-badge">Last Transaction Date: <%-EzBob.formatDate2(m.LastTransactionDate)%></div>
 		</div>
 		</div><%
 		break;

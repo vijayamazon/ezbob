@@ -145,5 +145,13 @@ namespace EzBob.Models.Marketplaces.Builders
 	        var mpEbayUserData = mp.EbayUserData.FirstOrDefault(e => e.CustomerMarketPlace == mp);
 	        return mpEbayUserData != null ? mpEbayUserData.RegistrationDate : null;
         }
+
+		public override DateTime? GetLastTransaction(MP_CustomerMarketPlace mp)
+		{
+			var s = _session.Query<MP_TeraPeakOrderItem>()
+				.Where(tp => tp.Order.CustomerMarketPlace.Id == mp.Id)
+				.Max(tp => tp.StartDate);
+			return s;
+		}
     }
 }

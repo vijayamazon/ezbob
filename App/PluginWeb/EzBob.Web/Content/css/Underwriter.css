@@ -906,3 +906,15 @@ div#logbook-new-entry-form textarea#logbook-new-entry {
     background-color: #dddddd;
     cursor: pointer;
 }
+
+.last-transaction-date-badge {
+    display: inline-block;
+    margin-top: 7px;
+    padding: 8px;
+    background-color: #fafafa;
+    border: 1px solid #e2dfe6;
+    color: #888;
+    float: right;
+    box-shadow: -1px 0px 2px #eee;
+    text-align: justify;
+}

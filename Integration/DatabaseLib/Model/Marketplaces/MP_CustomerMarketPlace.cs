@@ -87,6 +87,7 @@ namespace EZBob.DatabaseLib.Model.Database
 		/// Date of the first order/transaction for marketplace
 		/// </summary>
 		public virtual DateTime? OriginationDate { get; set; }
+		public virtual DateTime? LastTransactionDate { get; set; }
 
 		public virtual string GetUpdatingStatus(DateTime? history = null)
 		{
@@ -155,12 +156,12 @@ namespace EZBob.DatabaseLib.Model.Database
 				var mpCustomerMarketplaceUpdatingHistory =
 					UpdatingHistory.FirstOrDefault(h => h.UpdatingStart >= history.Value);
 				if (mpCustomerMarketplaceUpdatingHistory != null &&
-				    !string.IsNullOrEmpty(mpCustomerMarketplaceUpdatingHistory.Error))
+					!string.IsNullOrEmpty(mpCustomerMarketplaceUpdatingHistory.Error))
 				{
 					error = mpCustomerMarketplaceUpdatingHistory.Error;
 				}
 			}
-			else {error = UpdateError;}
+			else { error = UpdateError; }
 			return error;
 		}
 	}

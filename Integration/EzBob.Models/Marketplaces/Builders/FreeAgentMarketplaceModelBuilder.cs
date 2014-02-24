@@ -185,5 +185,30 @@ namespace EzBob.Models.Marketplaces.Builders
 
 			return earliest;
 		}
+
+		public override DateTime? GetLastTransaction(MP_CustomerMarketPlace mp)
+		{
+			var invoices = _session.Query<MP_FreeAgentInvoice>()
+				.Where(oi => oi.Request.CustomerMarketPlace.Id == mp.Id)
+				.Where(oi => oi.dated_on != null)
+				.Max(oi => oi.dated_on);
+
+			var expenses = _session.Query<MP_FreeAgentInvoice>()
+				 .Where(oi => oi.Request.CustomerMarketPlace.Id == mp.Id)
+				 .Where(oi => oi.dated_on != null)
+				 .Max(oi => oi.dated_on);
+
+			DateTime? latest = null;
+			if (invoices.HasValue)
+			{
+				latest = invoices;
+			}
+			if ((expenses.HasValue && !latest.HasValue) || (expenses.HasValue && expenses.Value > latest))
+			{
+				latest = expenses;
+			}
+
+			return latest;
+		}
 	}
 }

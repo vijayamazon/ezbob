@@ -80,5 +80,14 @@ namespace EzBob.Models.Marketplaces.Builders
                                            .Select(oi => oi.PurchaseDate);
             return !s.Any() ? (DateTime?)null : s.Min();
         }
+
+		public override DateTime? GetLastTransaction(MP_CustomerMarketPlace mp)
+		{
+			var s = _session.Query<MP_AmazonOrderItem2>()
+										   .Where(oi => oi.Order.CustomerMarketPlace.Id == mp.Id)
+										   .Where(oi => oi.PurchaseDate != null)
+										   .Max(oi => oi.PurchaseDate);
+			return s;
+		}
     }
 }

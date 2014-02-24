@@ -62,5 +62,14 @@ namespace EzBob.Models.Marketplaces.Builders
 				.Select(oi => oi.date);
 			return !s.Any() ? (DateTime?)null : s.Min();
 		}
+
+		public override DateTime? GetLastTransaction(MP_CustomerMarketPlace mp)
+		{
+			var s = _session.Query<MP_PayPointOrderItem>()
+				.Where(oi => oi.Order.CustomerMarketPlace.Id == mp.Id)
+				.Where(oi => oi.date != null)
+				.Max(oi => oi.date);
+			return s;
+		}
 	}
 }

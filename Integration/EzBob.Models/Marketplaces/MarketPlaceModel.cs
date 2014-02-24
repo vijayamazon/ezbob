@@ -20,6 +20,7 @@ using System;
 		public string SellerInfoStoreURL { get; set; }
 		public IEnumerable<string> Categories { get; set; }
 		public string AccountAge { get; set; }
+		public DateTime? LastTransactionDate { get; set; }
 
 		//Amazon
 		public double AmazonSelerRating { get; set; }
