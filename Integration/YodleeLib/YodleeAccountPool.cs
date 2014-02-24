@@ -44,18 +44,49 @@
 
 		public static YodleeAccounts GetAccount(Customer customer, YodleeBanks bank)
 		{
-			lock (accountsLock)
+			YodleeAccounts res = null;
+			bool verifiedAccount = false;
+			int attemptsCounter = 0;
+			while (!verifiedAccount && attemptsCounter < 50)
 			{
-				YodleeAccounts res = accounts[0];
-				accounts.RemoveAt(0);
-				res.Customer = customer;
-				res.Bank = bank;
-				res.CreationDate = DateTime.UtcNow;
-				AccountRepository.SaveOrUpdate(res);
-				log.InfoFormat("Allocated yodlee account: {0} to customer:{1}", res.Id, customer.Id);
-				accounts.Add(CreateUnallocatedAccount());
-				return res;
+				attemptsCounter++;
+				lock (accountsLock)
+				{
+					res = accounts[0];
+					accounts.RemoveAt(0);
+					res.Customer = customer;
+					res.Bank = bank;
+					res.CreationDate = DateTime.UtcNow;
+					AccountRepository.SaveOrUpdate(res);
+					log.InfoFormat("Allocated yodlee account: {0} to customer:{1}", res.Id, customer.Id);
+					accounts.Add(CreateUnallocatedAccount());
+				}
+				log.InfoFormat("Trying to verify Yodlee account:{0}. Attempt number:{1} for customer:{2}", res.Username, attemptsCounter, customer.Id);
+				verifiedAccount = VerifyAccount(res);
 			}
+			return res;
+		}
+
+		private static bool VerifyAccount(YodleeAccounts res)
+		{
+			LoginUser lu = null;
+			try
+			{
+				lu = yodleeMain.LoginUser(res.Username, Encryptor.Decrypt(res.Password));
+			}
+			catch (Exception e)
+			{
+				log.WarnFormat("Exception while trying to verify Yodlee account:{0}. The exception:{1}", res.Username, e);
+			}
+
+			if (lu == null)
+			{
+				log.ErrorFormat("Can't verify Yodlee account:{0}", res.Username);
+				return false;
+			}
+
+			log.ErrorFormat("Verified Yodlee account:{0} successfully", res.Username);
+			return true;
 		}
 	}
 }
