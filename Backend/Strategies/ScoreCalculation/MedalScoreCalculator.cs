@@ -30,7 +30,7 @@
 			int ezbobNumOfEarlyReayments)
 		{
 			m_oLog.Debug(
-				"CalculateMedalScore input params: annualTurnover: {0}, experianScore: {1}, mpSeniorityYears: {2}, positiveFeedbackCount: {3}, maritalStatus: {4}, gender: {5}, numberOfStores: {6}, firstRepaymentDatePassed: {7}, ezbobSeniorityMonths: {8}, ezbobNumOfLoans: {9}, ezbobNumOfLateRepayments: {10}, ezbobNumOfEarlyReayments: {11}",
+				"CalculateMedalScore input params: annualTurnover: {0}, experianScore: {1}, mpSeniorityYears: {2}, positiveFeedbackCount: {3}, maritalStatus: {4}, gender: {5}, numberOfStores(eBay\\Amazon\\PayPal): {6}, firstRepaymentDatePassed: {7}, ezbobSeniorityMonths: {8}, ezbobNumOfLoans: {9}, ezbobNumOfLateRepayments: {10}, ezbobNumOfEarlyReayments: {11}",
 				annualTurnover, experianScore, mpSeniorityYears, positiveFeedbackCount, maritalStatus, gender, numberOfStores,
 				firstRepaymentDatePassed, ezbobSeniorityMonths, ezbobNumOfLoans, ezbobNumOfLateRepayments, ezbobNumOfEarlyReayments);
 
