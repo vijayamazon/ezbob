@@ -4,6 +4,7 @@ namespace EzBob.Web.Controllers
 	using System.Collections.Generic;
 	using System.Data;
 	using System.Linq;
+	using System.Net;
 	using System.Web;
 	using System.Web.Mvc;
 	using System.Web.Security;
@@ -559,26 +560,42 @@ namespace EzBob.Web.Controllers
 					break;
 			} // switch
 
+			var result = new TargetResults(null);
 			try
 			{
 				var service = new EBusinessService();
-				var result = service.TargetBusiness(companyName, postcode, _context.UserId, nFilter, refNum);
+				result = service.TargetBusiness(companyName, postcode, _context.UserId, nFilter, refNum);
 				if (result.Targets.Any())
 				{
 					foreach (var t in result.Targets)
 					{
-						t.BusName = string.IsNullOrEmpty(t.BusName) ? string.Empty : System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(t.BusName.ToLower());
-						t.AddrLine1 = string.IsNullOrEmpty(t.AddrLine1) ? string.Empty : System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(t.AddrLine1.ToLower());
-						t.AddrLine2 = string.IsNullOrEmpty(t.AddrLine2) ? string.Empty : System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(t.AddrLine2.ToLower());
-						t.AddrLine3 = string.IsNullOrEmpty(t.AddrLine3) ? string.Empty : System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(t.AddrLine3.ToLower());
-						t.AddrLine4 = string.IsNullOrEmpty(t.AddrLine4) ? string.Empty : System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(t.AddrLine4.ToLower());
+						t.BusName = string.IsNullOrEmpty(t.BusName)
+							            ? string.Empty
+							            : System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(t.BusName.ToLower());
+						t.AddrLine1 = string.IsNullOrEmpty(t.AddrLine1)
+							              ? string.Empty
+							              : System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(t.AddrLine1.ToLower());
+						t.AddrLine2 = string.IsNullOrEmpty(t.AddrLine2)
+							              ? string.Empty
+							              : System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(t.AddrLine2.ToLower());
+						t.AddrLine3 = string.IsNullOrEmpty(t.AddrLine3)
+							              ? string.Empty
+							              : System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(t.AddrLine3.ToLower());
+						t.AddrLine4 = string.IsNullOrEmpty(t.AddrLine4)
+							              ? string.Empty
+							              : System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(t.AddrLine4.ToLower());
 					}
 					if (result.Targets.Count > 1)
 					{
-						result.Targets.Add(new CompanyInfo { BusName = "Company not found", BusRefNum = "skip" });
+						result.Targets.Add(new CompanyInfo {BusName = "Company not found", BusRefNum = "skip"});
 					}
 				}
-				
+
+				return this.JsonNet(result.Targets);
+			}
+			catch (WebException we)
+			{
+				result.Targets.Add(new CompanyInfo { BusName = "", BusRefNum = "exception"});
 				return this.JsonNet(result.Targets);
 			}
 			catch (Exception e)

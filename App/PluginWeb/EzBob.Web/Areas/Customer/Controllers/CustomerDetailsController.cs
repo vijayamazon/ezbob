@@ -667,7 +667,7 @@
 			Company company = new Company();
 			
 			company.ExperianCompanyName = experianInfo.BusName;
-			company.ExperianRefNum = experianInfo.BusRefNum;
+			company.ExperianRefNum = experianInfo.BusRefNum == "skip" ? "NotFound" : experianInfo.BusRefNum;
 			company.TypeOfBusiness = companyData.TypeOfBusiness;
 			company.CompanyName = companyData.CompanyName;
 			company.CompanyNumber = companyData.CompanyNumber;
