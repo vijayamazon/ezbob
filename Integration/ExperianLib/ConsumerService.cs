@@ -158,6 +158,10 @@
 			var repo = ObjectFactory.GetInstance<NHibernateRepositoryBase<ExperianDefaultAccount>>();
 
 			foreach (var caisData in cais) {
+				if (caisData.CAISDetails == null)
+				{
+					continue;
+				}
 				foreach (var detail in caisData.CAISDetails.Where(detail => detail.AccountStatus == "F")) {
 					int relevantYear, relevantMonth, relevantDay;
 

@@ -123,7 +123,6 @@
 		{
 			var analysisVals = GetAnalysisValsForCustomer(customerId);
 
-
 			double year = GetAnnualizedTurnoverForPeriod(analysisVals, TimePeriodEnum.Year);
 			double month6 = GetAnnualizedTurnoverForPeriod(analysisVals, TimePeriodEnum.Month6);
 			double month3 = GetAnnualizedTurnoverForPeriod(analysisVals, TimePeriodEnum.Month3);
