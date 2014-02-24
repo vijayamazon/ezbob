@@ -62,7 +62,10 @@
         if (!isUnderwriter && !Request.Browser.IsMobileDevice)
         {
             Html.RenderPartial("_LivePerson");
-            Html.RenderPartial("_NanoRep");
+            if (controller == "Wizard")
+            {
+                Html.RenderPartial("_NanoRep");
+            }
         }
     }
 

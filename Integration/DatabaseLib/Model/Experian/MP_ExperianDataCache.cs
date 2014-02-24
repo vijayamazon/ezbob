@@ -46,7 +46,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 			return m_oRetryer.Retry(() =>
 				GetAll()
 					.OrderByDescending(x => x.LastUpdateDate)
-					.FirstOrDefault(c => (c.Name == firstName && c.Surname == surname && c.BirthDate == birthDate && c.PostCode == postcode) || (c.CustomerId == customerId && (c.DirectorId == null || c.DirectorId==0)))
+					.FirstOrDefault(c => (c.Name == firstName && c.Surname == surname && c.BirthDate == birthDate && c.PostCode == postcode) || (c.CustomerId == customerId && (c.DirectorId == null || c.DirectorId==0) && c.CompanyRefNumber == null))
 			);
 		} // GetPersonFromCache
 
@@ -55,7 +55,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 			return m_oRetryer.Retry(() =>
 			                        GetAll()
 				                        .OrderByDescending(x => x.LastUpdateDate)
-				                        .FirstOrDefault(c => (c.Name == firstName && c.Surname == surname && c.BirthDate == birthDate && c.PostCode == postcode) || (c.DirectorId == directorId)));
+				                        .FirstOrDefault(c => (c.Name == firstName && c.Surname == surname && c.BirthDate == birthDate && c.PostCode == postcode) || (c.DirectorId == directorId && c.CompanyRefNumber == null)));
 		} // GetPersonFromCache
 
 		private readonly SqlRetryer m_oRetryer;
