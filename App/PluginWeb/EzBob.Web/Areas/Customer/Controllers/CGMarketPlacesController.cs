@@ -73,13 +73,10 @@
 				return View();
 			} // if
 
-			string stateError;
-			Hopper oSeeds = HmrcController.ValidateFiles(Request.Files, out stateError);
+			HmrcController.ValidateFilesResult oValidateResult = HmrcController.ValidateFiles(Request.Files);
 
-			if (stateError != null)
-			{
-				oState.Error = CreateError(stateError);
-			}
+			if (!string.IsNullOrWhiteSpace(oValidateResult.Error))
+				oState.Error = CreateError(oValidateResult.Error);
 
 			if (oState.Error != null) {
 				ViewError = oState.Error;
@@ -87,7 +84,7 @@
 				return View();
 			} // if
 
-			if (oSeeds == null) {
+			if (oValidateResult.Hopper == null) {
 				ViewError = CreateError("No files accepted.");
 				ViewModel = null;
 				return View();
@@ -104,7 +101,7 @@
 			ViewModel = JsonConvert.SerializeObject(oState.Model);
 			ViewError = null;
 
-			Connector.SetBackdoorData(model.accountTypeName, oState.CustomerMarketPlace.Id, oSeeds);
+			Connector.SetBackdoorData(model.accountTypeName, oState.CustomerMarketPlace.Id, oValidateResult.Hopper);
 
 			try {
 				oState.CustomerMarketPlace.Marketplace.GetRetrieveDataHelper(_helper).UpdateCustomerMarketplaceFirst(oState.CustomerMarketPlace.Id);
