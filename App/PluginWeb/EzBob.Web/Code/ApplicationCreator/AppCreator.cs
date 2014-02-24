@@ -192,6 +192,11 @@
 			}
 		}
 
+		public void ActivateMainStrategy(int underwriterId, int customerId, NewCreditLineOption newCreditLineOption, int avoidAutomaticDescison)
+		{
+			ServiceClient.MainStrategy1(underwriterId, customerId, newCreditLineOption, avoidAutomaticDescison);
+		}
+
 		public void EvaluateWithIdHubCustomAddress(int underwriterId, User user, int checkType, string houseNumber, string houseName, string street,
 												   string district, string town, string county, string postcode, string bankAccount, string sortCode, int avoidAutomaticDescison) {
 			if (useNewMainStrategy) {

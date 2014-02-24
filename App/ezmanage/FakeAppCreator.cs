@@ -216,5 +216,9 @@
 		public BrokerCustomerEntry[] BrokerLoadCustomerList(string sContactEmail) {
 			return null;
 		}
+		public void ActivateMainStrategy(int underwriterId, int customerId, NewCreditLineOption newCreditLineOption, int avoidAutomaticDescison)
+		{
+			
+		}
 	}
 }

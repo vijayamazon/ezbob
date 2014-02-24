@@ -48,6 +48,10 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
         "click [name=\"changeFraudStatusManualy\"]": "changeFraudStatusManualyClicked"
         'click button.cci-mark-toggle': 'toggleCciMark'
         'click [name="TrustPilotStatusUpdate"]': 'updateTrustPilotStatus'
+        'click #MainStrategyHidden': 'activateMainStratgey'
+        
+    activateMainStratgey: ->
+        xhr = $.post "#{window.gRootPath}Underwriter/ApplicationInfo/ActivateMainStrategy", customerId: @model.get('Id')
 
     updateTrustPilotStatus: ->
         d = new EzBob.Dialogs.ComboEdit

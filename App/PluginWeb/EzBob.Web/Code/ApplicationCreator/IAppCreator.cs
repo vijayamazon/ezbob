@@ -67,5 +67,6 @@ namespace EzBob.Web.Code.ApplicationCreator
 		void BrokerRestorePassword(string sMobile, string sCode);
 
 		BrokerCustomerEntry[] BrokerLoadCustomerList(string sContactEmail);
+		void ActivateMainStrategy(int underwriterId, int customerId, NewCreditLineOption runNewCreditLine, int avoidAutomaticDescison);
 	}
 }

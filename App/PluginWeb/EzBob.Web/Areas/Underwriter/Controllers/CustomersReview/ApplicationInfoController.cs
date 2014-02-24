@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview {
 	using System.Data;
+	using Code.ApplicationCreator;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using System;
 	using System.Web.Mvc;
@@ -36,6 +37,8 @@
 		private readonly ILoanSourceRepository _loanSources;
 		private readonly IUsersRepository _users;
 		private readonly bool useNewMainStrategy;
+		private readonly IAppCreator creator;
+		private readonly IEzbobWorkplaceContext context;
 
 		private static readonly ILog Log = LogManager.GetLogger(typeof(ApplicationInfoController));
 
@@ -55,7 +58,9 @@
 			IConfigurationVariablesRepository configurationVariablesRepository,
 			ICustomerStatusHistoryRepository customerStatusHistoryRepository,
 			ILoanSourceRepository loanSources,
-			IUsersRepository users
+			IUsersRepository users,
+			IAppCreator creator,
+			IEzbobWorkplaceContext context
 		) {
 			_customerRepository = customerRepository;
 			_cashRequestsRepository = cashRequestsRepository;
@@ -74,6 +79,8 @@
 			_loanSources = loanSources;
 			_users = users;
 			useNewMainStrategy = this.configurationVariablesRepository.GetByNameAsBool("UseNewMainStrategy");
+			this.creator = creator;
+			this.context = context;
 		}
 
 		[Ajax]
@@ -545,6 +552,14 @@
 			c.OfferStart = cr.OfferStart;
 			c.OfferValidUntil = cr.OfferValidUntil;
 
+			return this.JsonNet(true);
+		}
+
+		[HttpPost, Ajax, ValidateJsonAntiForgeryToken]
+		public JsonNetResult ActivateMainStrategy(int customerId)
+		{
+			int underwriterId = context.User.Id;
+			creator.ActivateMainStrategy(underwriterId, customerId, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, 0);
 			return this.JsonNet(true);
 		}
 	}

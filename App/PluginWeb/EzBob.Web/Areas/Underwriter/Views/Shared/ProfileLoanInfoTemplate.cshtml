@@ -111,7 +111,10 @@
             @RawCell("Daytime Phone #", "<%- DaytimePhone %>")
     
             @RawCell("Cart", "<%- Medal %>")
-            @RawCell("Last Main Strategy Status", "<%- LastMainStrategyStatus %>")
+            <tr>
+		        <td width="10%">Last Main Strategy Status<button id="MainStrategyHidden" class="hide btn btn-mini btn-primary">Activate now</button></td>
+		        <td><%- LastMainStrategyStatus %></td>
+	        </tr>
 
             <tr>
                 <td>Ref Source</td>
@@ -119,7 +122,6 @@
 					<i data-title="<%- ReferenceSource || 'no source ref' %>" class="tltp icon-question-sign"></i>
                 </td>
             </tr>
-
 
             @RawCell("A/B Testing", "<%- ABTesting || '-' %>")
             @RawCell("User score", "<%- CreditScore %>")
