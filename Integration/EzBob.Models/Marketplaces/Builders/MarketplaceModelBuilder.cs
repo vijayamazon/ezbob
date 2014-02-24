@@ -92,9 +92,9 @@ namespace EzBob.Models.Marketplaces.Builders
 
 		public void UpdateLastTransactionDate(MP_CustomerMarketPlace mp)
 		{
-			mp.LastTransactionDate = (mp.LastTransactionDate == null ||
+			mp.LastTransactionDate = (!mp.LastTransactionDate.HasValue ||
 			                          (mp.UpdatingEnd.HasValue &&
-			                           mp.LastTransactionDate.Value < mp.UpdatingEnd.Value))
+			                           mp.LastTransactionDate.Value < mp.UpdatingEnd.Value.AddDays(-2)))
 				                         ? GetLastTransaction(mp)
 				                         : mp.LastTransactionDate;
 		}
