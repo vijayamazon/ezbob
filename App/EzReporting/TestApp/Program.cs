@@ -23,7 +23,9 @@ namespace TestApp {
 
 			var oDB = new SqlConnection(log);
 
-			TestHashPassword(oDB, log);
+			TestEarnedInterestForAudit(oDB, log);
+
+			// TestHashPassword(oDB, log);
 
 			// TestParsedValues(oDB, log);
 
@@ -49,6 +51,24 @@ namespace TestApp {
 		} // Main
 
 		#endregion method Main
+
+		#region method TestEarnedInterestForAudit
+
+		private static void TestEarnedInterestForAudit(AConnection oDB, ASafeLog log) {
+			var ea = new EarnedInterest(
+				oDB,
+				EarnedInterest.WorkingMode.AccountingLoanBalance,
+				new DateTime(2014, 1, 15),
+				new DateTime(2014, 2, 15),
+				log
+			) {
+				VerboseLogging = true
+			};
+
+			ea.Run();
+		} // TestEarnedInterestForAudit
+
+		#endregion method TestEarnedInterest
 
 		#region method TestHashPassword
 

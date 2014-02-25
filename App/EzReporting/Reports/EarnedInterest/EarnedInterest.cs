@@ -37,6 +37,14 @@ namespace Reports {
 			/// and today.
 			/// </summary>
 			CciCustomers,
+
+			/// <summary>
+			/// Calculates earned interest for all the loans that were live
+			/// during report period. For each loan earned interest is from
+			/// the loan issued date (even if it is outside report period)
+			/// till the end of report period.
+			/// </summary>
+			AccountingLoanBalance,
 		} // enum WorkingMode
 
 		#endregion enum WorkingMode
@@ -70,7 +78,7 @@ namespace Reports {
 		public SortedDictionary<int, decimal> Run() {
 			switch (m_nMode) {
 			case WorkingMode.ByIssuedLoans:
-				FillBySp("RptEarnedInterest_IssuedLoans");
+				FillBySp("RptEarnedInterest_IssuedLoans", false, false);
 				break;
 
 			case WorkingMode.ForPeriod:
@@ -78,7 +86,11 @@ namespace Reports {
 				break;
 
 			case WorkingMode.CciCustomers:
-				FillBySp("RptEarnedInterest_CciCustomers");
+				FillBySp("RptEarnedInterest_CciCustomers", false, false);
+				break;
+
+			case WorkingMode.AccountingLoanBalance:
+				FillBySp("RptEarnedInterest_ForPeriod", true, true);
 				break;
 
 			default:
@@ -165,7 +177,7 @@ namespace Reports {
 			foreach (KeyValuePair<int, LoanData> pair in m_oLoans) {
 				InterestFreezePeriods ifp = m_oFreezePeriods.ContainsKey(pair.Key) ? m_oFreezePeriods[pair.Key] : null;
 
-				decimal nInterest = pair.Value.Calculate(m_oDateStart, m_oDateEnd, ifp, VerboseLogging);
+				decimal nInterest = pair.Value.Calculate(m_oDateStart, m_oDateEnd, ifp, VerboseLogging, m_nMode);
 
 				if (nInterest > 0)
 					oRes[pair.Key] = nInterest;
@@ -204,7 +216,7 @@ namespace Reports {
 
 		#region method FillBySp
 
-		private void FillBySp(string sSpName) {
+		private void FillBySp(string sSpName, bool bKeepStartDate, bool bKeepEndDate) {
 			DataTable tbl = m_oDB.ExecuteReader(
 				sSpName,
 				CommandSpecies.StoredProcedure,
@@ -212,22 +224,27 @@ namespace Reports {
 				new QueryParameter("@DateEnd", m_oDateEnd)
 			);
 
-			m_oDateStart = DateTime.Now.AddYears(1980);
-			m_oDateEnd = DateTime.Today.AddDays(1);
+			DateTime oDateStart = DateTime.Now.AddYears(1980);
+
+			if (!bKeepEndDate)
+				m_oDateEnd = DateTime.Today.AddDays(1);
 
 			foreach (DataRow row in tbl.Rows) {
 				int nLoanID = Convert.ToInt32(row[0]);
 				DateTime oDate = Convert.ToDateTime(row[1]);
 				decimal nAmount = Convert.ToDecimal(row[2]);
 
-				if (oDate < m_oDateStart)
-					m_oDateStart = oDate;
+				if (oDate < oDateStart)
+					oDateStart = oDate;
 
 				m_oLoans[nLoanID] = new LoanData(nLoanID, this) {
 					IssueDate = oDate,
 					Amount = nAmount
 				};
 			} // for each row
+
+			if (!bKeepStartDate)
+				m_oDateStart = oDateStart;
 
 			Info("{0} loans, date range: {1} - {2}", m_oLoans.Count, m_oDateStart, m_oDateEnd);
 		} // FillBySp

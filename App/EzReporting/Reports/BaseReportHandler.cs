@@ -8,7 +8,6 @@ using Html;
 using Html.Attributes;
 using Html.Tags;
 using OfficeOpenXml;
-using OfficeOpenXml.Style;
 
 namespace Reports {
 	public class BaseReportHandler : SafeLog {
@@ -104,7 +103,7 @@ namespace Reports {
 
 								if (col.ValueType == ValueType.UserID) {
 									var oLink = new A();
-									
+
 									oLink.Append(oInnerTag);
 									oLink.Target.Append("_blank");
 									oLink.Href.Append("https://" + UnderwriterSite + "/UnderWriter/Customers?customerid=" + oValue);
@@ -112,12 +111,16 @@ namespace Reports {
 									oLink.Title.Append("Open this customer in underwriter.");
 
 									oInnerTag = oLink;
+
+									if (oColumnTypes != null)
+										oColumnTypes[columnIndex] = "user-id";
+								}
+								else {
+									if (oColumnTypes != null)
+										oColumnTypes[columnIndex] = "formatted-num";
 								} // if user id
 
 								oTd.Add<Class>("R").Append(oInnerTag);
-
-								if (oColumnTypes != null)
-									oColumnTypes[columnIndex] = "formatted-num";
 							}
 							else {
 								oTd.Add<Class>("L").Append(new Text(oValue.ToString()));
@@ -287,6 +290,18 @@ namespace Reports {
 
 		#endregion method BuildUiExtReport
 
+		#region method BuildAccountingLoanBalanceReport
+
+		public ATag BuildAccountingLoanBalanceReport(Report report, DateTime today, DateTime tomorrow, List<string> oColumnTypes = null) {
+			KeyValuePair<ReportQuery, DataTable> oData = CreateAccountingLoanBalanceReport(report, today, tomorrow);
+
+			return new Html.Tags.Body().Add<Class>("Body")
+				.Append(new H1().Append(new Text(report.GetTitle(today, oToDate: tomorrow))))
+				.Append(new P().Append(TableReport(oData.Key, oData.Value, oColumnTypes: oColumnTypes)));
+		} // BuildAccountingLoanBalanceReport
+
+		#endregion method BuildAccountingLoanBalanceReport
+
 		#endregion HTML generators
 
 		#region Excel generators
@@ -454,6 +469,16 @@ namespace Reports {
 		} // BuildUiExtXls
 
 		#endregion method BuildUiExtXls
+
+		#region method BuildAccountingLoanBalanceXls
+
+		public ExcelPackage BuildAccountingLoanBalanceXls(Report report, DateTime today, DateTime tomorrow) {
+			KeyValuePair<ReportQuery, DataTable> oData = CreateAccountingLoanBalanceReport(report, today, tomorrow);
+
+			return AddSheetToExcel(oData.Value, report.GetTitle(today, oToDate: tomorrow), "RptEarnedInterest");
+		} // BuildAccountingLoanBalanceXls
+
+		#endregion method BuildAccountingLoanBalanceXls
 
 		#endregion Excel generators
 
@@ -1236,6 +1261,178 @@ namespace Reports {
 		} // CreateUiExtReport
 
 		#endregion method CreateUiExtReport
+
+		#region Accounting Loan Balance
+
+		#region class AccountingLoanBalanceRow
+
+		private class AccountingLoanBalanceRow {
+			#region public
+
+			#region fields
+
+			public DateTime IssueDate;
+			public int ClientID;
+			public int LoanID;
+			public string ClientName;
+			public string ClientEmail;
+			public decimal IssuedAmount;
+			public decimal SetupFee;
+			public string LoanStatus;
+			public decimal EarnedInterest;
+			public decimal EarnedFees;
+			public decimal PaidFees;
+			public decimal CashPaid;
+			public decimal NonCashPaid;
+
+			#endregion fields
+
+			#region constructor
+
+			public AccountingLoanBalanceRow(DataRow oRow, decimal nEarnedInterest) {
+				var sr = new SafeReader(oRow);
+
+				sr.Read
+					.To(out IssueDate)
+					.To(out ClientID)
+					.To(out LoanID)
+					.To(out ClientName)
+					.To(out ClientEmail)
+					.To(out IssuedAmount)
+					.To(out SetupFee)
+					.To(out EarnedFees)
+					.To(out LoanStatus);
+
+				EarnedInterest = nEarnedInterest;
+				PaidFees = 0;
+				CashPaid = 0;
+				NonCashPaid = 0;
+
+				if (SetupFee > 0)
+					IssuedAmount -= SetupFee;
+
+				Update(sr);
+			} // constructor
+
+			#endregion constructor
+
+			#region method Update
+
+			public void Update(DataRow oRow) {
+				Update(new SafeReader(oRow));
+			} // Update
+
+			private void Update(SafeReader sr) {
+				Update(sr["LoanTranMethod"], sr["TotalRepaid"], sr["FeesRepaid"], sr["RolloverRepaid"]);
+			} // Update
+
+			private void Update(string sMethod, decimal nAmount, decimal nFeesRepaid, decimal nRolloverRepaid) {
+				sMethod = sMethod ?? string.Empty;
+
+				if (sMethod.ToLower().StartsWith("non-cash"))
+					NonCashPaid += nAmount;
+				else
+					CashPaid += nAmount;
+
+				EarnedFees += nRolloverRepaid;
+
+				PaidFees += nFeesRepaid + nRolloverRepaid;
+			} // Update
+
+			#endregion method Update
+
+			#region method ToRow
+
+			public void ToRow(DataTable tbl) {
+				tbl.Rows.Add(
+					IssueDate, ClientID, LoanID, ClientName, ClientEmail, LoanStatus,
+					IssuedAmount, SetupFee, EarnedInterest, EarnedFees,
+					PaidFees, CashPaid, NonCashPaid, Balance
+				);
+			} // ToRow
+
+			#endregion method ToRow
+
+			#region method ToTable
+
+			public static DataTable ToTable() {
+				var oOutput = new DataTable();
+
+				oOutput.Columns.Add("IssueDate", typeof(DateTime));
+				oOutput.Columns.Add("ClientID", typeof(int));
+				oOutput.Columns.Add("LoanID", typeof(int));
+				oOutput.Columns.Add("ClientName", typeof(string));
+				oOutput.Columns.Add("ClientEmail", typeof(string));
+				oOutput.Columns.Add("LoanStatus", typeof(string));
+				oOutput.Columns.Add("IssuedAmount", typeof(decimal));
+				oOutput.Columns.Add("SetupFee", typeof(decimal));
+				oOutput.Columns.Add("EarnedInterest", typeof(decimal));
+				oOutput.Columns.Add("EarnedFees", typeof(decimal));
+				oOutput.Columns.Add("PaidFees", typeof(decimal));
+				oOutput.Columns.Add("CashPaid", typeof(decimal));
+				oOutput.Columns.Add("NonCashPaid", typeof(decimal));
+				oOutput.Columns.Add("Balance", typeof(decimal));
+
+				return oOutput;
+			} // ToTable
+
+			#endregion method ToTable
+
+			#endregion public
+
+			#region private
+
+			#region property Balance
+
+			private decimal Balance {
+				get { return IssuedAmount + EarnedInterest + EarnedFees - CashPaid - NonCashPaid; } // get
+			} // Balance
+
+			#endregion property Balance
+
+			#endregion private
+		} // class EarnedInterestRow
+
+		#endregion class EarnedInterestRow
+
+		#region method CreateAccountingLoanBalanceReport
+
+		private KeyValuePair<ReportQuery, DataTable> CreateAccountingLoanBalanceReport(Report report, DateTime today, DateTime tomorrow) {
+			var ea = new EarnedInterest(DB, EarnedInterest.WorkingMode.AccountingLoanBalance, today, tomorrow, this);
+			SortedDictionary<int, decimal> earned = ea.Run();
+
+			var rpt = new ReportQuery(report) {
+				DateStart = today,
+				DateEnd = tomorrow
+			};
+
+			DataTable oData = rpt.Execute(DB);
+
+			var oRows = new SortedDictionary<int, AccountingLoanBalanceRow>();
+
+			foreach (DataRow row in oData.Rows) {
+				int nLoanID = Convert.ToInt32(row["LoanID"]);
+
+				if (!earned.ContainsKey(nLoanID))
+					continue;
+
+				if (oRows.ContainsKey(nLoanID))
+					oRows[nLoanID].Update(row);
+				else
+					oRows[nLoanID] = new AccountingLoanBalanceRow(row, earned[nLoanID]);
+			} // for each earned interest
+
+			DataTable oOutput = AccountingLoanBalanceRow.ToTable();
+
+			foreach (KeyValuePair<int, AccountingLoanBalanceRow> pair in oRows)
+				pair.Value.ToRow(oOutput);
+
+			return new KeyValuePair<ReportQuery, DataTable>(rpt, oOutput);
+		} // CreateAccountingLoanBalanceReport
+
+		#endregion method CreateAccountingLoanBalanceReport
+
+		#endregion Accounting Loan Balance
 
 		#endregion report generators
 

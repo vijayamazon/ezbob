@@ -7,19 +7,68 @@
 	public class SafeReader {
 		#region public
 
+		#region class SafeReaderFluentInterface
+
+		public class SafeReaderFluentInterface {
+			#region public
+
+			#region constructor
+
+			public SafeReaderFluentInterface(SafeReader oReader) {
+				m_oReader = oReader;
+				Reset();
+			} // constructor
+
+			#endregion constructor
+
+			#region method Reset
+
+			public SafeReaderFluentInterface Reset() {
+				m_nIdx = 0;
+				return this;
+			} // Reset
+
+			#endregion method Reset
+
+			#region method To
+
+			public SafeReaderFluentInterface To<T>(out T v) {
+				v = (T)m_oReader[m_nIdx].ToType(typeof(T));
+				m_nIdx++;
+				return this;
+			} // To
+
+			#endregion method To
+
+			#endregion public
+
+			#region private
+
+			private readonly SafeReader m_oReader;
+			private int m_nIdx;
+
+			#endregion private
+		} // SafeReaderFluentInterface
+
+		#endregion class SafeReaderFluentInterface
+
 		#region constructor
 
-		public SafeReader(DataRow oRow) {
-			m_oRow = oRow;
-			m_oReader = null;
+		public SafeReader(DataRow oRow) : this(oRow, null) {
 		} // constructor
 
-		public SafeReader(DbDataReader oReader) {
-			m_oReader = oReader;
-			m_oRow = null;
+		public SafeReader(DbDataReader oReader) : this(null, oReader) {
 		} // constructor
 
 		#endregion constructor
+
+		#region property Read
+
+		public SafeReaderFluentInterface Read {
+			get { return m_oFluent.Reset(); }
+		} // Read
+
+		#endregion property Read
 
 		#region indexer wrappers
 
@@ -93,6 +142,16 @@
 
 		#region private
 
+		#region constructor
+
+		private SafeReader(DataRow oRow, DbDataReader oReader) {
+			m_oReader = oReader;
+			m_oRow = oRow;
+			m_oFluent = new SafeReaderFluentInterface(this);
+		} // constructor
+
+		#endregion constructor
+
 		#region method ColumnOrDefault
 
 		private object ColumnOrDefault(string sIdx, object oDefault) {
@@ -131,6 +190,7 @@
 
 		private readonly DataRow m_oRow;
 		private readonly DbDataReader m_oReader;
+		private readonly SafeReaderFluentInterface m_oFluent;
 
 		#endregion private
 	} // class SafeReader

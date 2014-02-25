@@ -13,11 +13,6 @@
 	<%= Default.IsAdmin() ? "<link rel=stylesheet href=\"/css/admin.css\" />" : "" %>
 	<%= Default.IsAdmin() ? "<link rel=stylesheet href=\"/css/jquery.dataTables.css\" />" : "" %>
 	<%= Report.GetStyle().ToString() %>
-
-	<script src="js/jquery.js"></script>
-	<script src="js/jquery.dataTables.min.js"></script>
-	<script src="js/admin.js"></script>
-	<script src="js/default.js"></script>
 </head>
 
 <body>
@@ -29,7 +24,7 @@
 					<asp:Label ID="Label3" runat="server" Text="Welcome " CssClass="float_left"></asp:Label>
 					<asp:LoginName ID="LoginName" runat="server" CssClass="float_left" />
 					<asp:LoginStatus ID="LoginStatus" runat="server" LogoutAction="Redirect" LogoutPageUrl="~/Default.aspx" CssClass="button grey medium_btn" />
-                    <asp:Button runat="server" ID="ResetBtn" Text="Reset" OnClick="ResetBtn_Click" CssClass="button grey medium_btn"/>
+					<asp:Button runat="server" ID="ResetBtn" Text="Reset" OnClick="ResetBtn_Click" CssClass="button grey medium_btn"/>
 				</div>
 			</div>
 		</div>
@@ -122,5 +117,11 @@
 		</div>
 		<asp:CheckBox runat="server" ID="chkIsAdmin" />
 	</form>
+
+	<script src="js/jquery.js"></script>
+	<script src="js/jquery.dataTables.min.js"></script>
+	<script src="js/moment.js"></script>
+	<script src="js/admin.js"></script>
+	<script src="js/default.js"></script>
 </body>
 </html>

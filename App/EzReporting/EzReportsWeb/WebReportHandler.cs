@@ -54,6 +54,9 @@ namespace EzReportsWeb {
 			case ReportType.RPT_UI_EXT_REPORT:
 				return BuildUiExtReport(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd, oColumnTypes);
 
+			case ReportType.RPT_ACCOUNTING_LOAN_BALANCE:
+				return BuildAccountingLoanBalanceReport(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd, oColumnTypes);
+
 			default:
 				string sReportTitle = report.GetTitle((DateTime)rptDef.DateStart, " ", report.IsDaily ? (DateTime?)null : (DateTime)rptDef.DateEnd);
 
@@ -98,6 +101,9 @@ namespace EzReportsWeb {
 
 			case ReportType.RPT_UI_EXT_REPORT:
 				return BuildUiExtXls(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd);
+
+			case ReportType.RPT_ACCOUNTING_LOAN_BALANCE:
+				return BuildAccountingLoanBalanceXls(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd);
 
 			default:
 				var xlsTitle = report.GetTitle((DateTime)rptDef.DateStart, " ", report.IsDaily ? (DateTime?)null : (DateTime)rptDef.DateEnd);

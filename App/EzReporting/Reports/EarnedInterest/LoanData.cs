@@ -35,12 +35,25 @@ namespace Reports {
 		/// <param name="oDateStart">Requested period start date, inclusive.</param>
 		/// <param name="oDateEnd">Requested period end date, exclusive.</param>
 		/// <param name="ifp">Interest rate freeze periods.</param>
+		/// <param name="bVerboseLogging">Log verbosity level.</param>
+		/// <param name="nMode">Interest calculation mode.</param>
 		/// <returns>Earned interest for the period.</returns>
-		public decimal Calculate(DateTime oDateStart, DateTime oDateEnd, InterestFreezePeriods ifp, bool bVerboseLogging) {
+		public decimal Calculate(
+			DateTime oDateStart,
+			DateTime oDateEnd,
+			InterestFreezePeriods ifp,
+			bool bVerboseLogging,
+			EarnedInterest.WorkingMode nMode
+		) {
 			DateTime oFirstIncomeDay = IssueDate.AddDays(1);
 
 			// A loan starts to produce interest on the next day.
-			DateTime oDayOne = (oDateStart < oFirstIncomeDay) ? oFirstIncomeDay : oDateStart;
+			
+			DateTime oDayOne = (nMode == EarnedInterest.WorkingMode.AccountingLoanBalance)
+				? oFirstIncomeDay
+				: (
+					(oDateStart < oFirstIncomeDay) ? oFirstIncomeDay : oDateStart
+				);
 
 			// List of all the dates during requested period when a loan could produce interest.
 			var oDaysList = new List<PrInterest>();
@@ -65,8 +78,17 @@ namespace Reports {
 
 			PrInterest[] days = oDaysList.Where(pri => pri.Principal > 0).ToArray();
 
-			if (days.Length == 0)
+			if (days.Length == 0) {
+				LogAllDetails(0, "no dates found when the loan produced interest during report period", days, ifp, bVerboseLogging);
 				return 0;
+			} // if
+
+			if (nMode == EarnedInterest.WorkingMode.AccountingLoanBalance) {
+				if (days[days.Length - 1].Date < oDateStart) {
+					LogAllDetails(0, "the loan has been completed before the report period", days, ifp, bVerboseLogging);
+					return 0;
+				} // if loan got repaid before report period
+			} // if ForAudit mode
 
 			InterestData[] aryDates = Schedule.Values.ToArray();
 
@@ -84,29 +106,7 @@ namespace Reports {
 
 			decimal nEarnedInterest = days.Sum(pri => pri.Principal * pri.Interest);
 
-			if (bVerboseLogging) {
-				string sIfp = "none";
-
-				if (ifp != null) {
-					var os = new StringBuilder();
-
-					ifp.ForEach(i => os.AppendFormat("\n\t{0}", i));
-
-					sIfp = os.ToString().Trim();
-				} // if
-
-				Log.Debug("\n\nLoanID: {0}, {1} issued on {2} earned interest is {6}\nSchedule ({7}):\n\t{3}\nFreeze periods ({10}):\n\t{9}\nTransactions ({8}):\n\t{4}\nPer day:\n\t{5}\n\n",
-					LoanID, Amount, IssueDate,
-					string.Join("\n\t", Schedule.Values.Select(v => v.ToString()).ToArray()),
-					string.Join("\n\t", Repayments.Values.Select(v => v.ToString()).ToArray()),
-					string.Join("\n\t", days.Select(pri => pri.ToString()).ToArray()),
-					nEarnedInterest,
-					Schedule.Count,
-					Repayments.Count,
-					sIfp,
-					ifp == null ? 0 : ifp.Count
-				);
-			} // if
+			LogAllDetails(nEarnedInterest, "full details are below", days, ifp, bVerboseLogging);
 
 			return nEarnedInterest;
 		} // Calculate
@@ -114,6 +114,53 @@ namespace Reports {
 		#endregion method Calculate
 
 		#region private
+
+		#region method IfpToString
+
+		private string IfpToString(InterestFreezePeriods ifp) {
+			string sIfp = "none";
+
+			if (ifp != null) {
+				var os = new StringBuilder();
+
+				ifp.ForEach(i => os.AppendFormat("\n\t{0}", i));
+
+				sIfp = os.ToString().Trim();
+			} // if
+
+			return sIfp;
+		} // IfpToString
+
+		#endregion method IfpToString
+
+		#region method LogAllDetails
+
+		private void LogAllDetails(decimal nEarnedInterest, string sMsg, PrInterest[] days, InterestFreezePeriods ifp, bool bVerboseLogging) {
+			if (!bVerboseLogging)
+				return;
+
+			if (string.IsNullOrWhiteSpace(sMsg))
+				sMsg = string.Empty;
+			else
+				sMsg = " - " + sMsg;
+
+			string sDaysList = (nEarnedInterest == 0) ? "none" : string.Join("\n\t", days.Select(pri => pri.ToString()).ToArray());
+
+			Log.Debug("\n\nLoanID: {0}, {1} issued on {2} earned interest is {6}{11}.\nSchedule ({7}):\n\t{3}\nFreeze periods ({10}):\n\t{9}\nTransactions ({8}):\n\t{4}\nPer day:\n\t{5}\n\n",
+				LoanID, Amount, IssueDate,
+				string.Join("\n\t", Schedule.Values.Select(v => v.ToString()).ToArray()),
+				string.Join("\n\t", Repayments.Values.Select(v => v.ToString()).ToArray()),
+				sDaysList,
+				nEarnedInterest,
+				Schedule.Count,
+				Repayments.Count,
+				IfpToString(ifp),
+				ifp == null ? 0 : ifp.Count,
+				sMsg
+			);
+		} // LogAllDetails
+
+		#endregion method LogAllDetails
 
 		#region fields
 

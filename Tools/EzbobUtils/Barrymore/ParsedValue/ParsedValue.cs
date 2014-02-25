@@ -1,9 +1,34 @@
 ﻿namespace Ezbob.Utils.ParsedValue {
 	using System;
+	using System.Collections.Generic;
 
 	#region class ParsedValue
 
 	public class ParsedValue : IConvertible {
+		#region static constructor
+
+		static ParsedValue() {
+			ms_oTypeConvertors = new SortedDictionary<string, Convertor>();
+
+			ms_oTypeConvertors[typeof (bool).ToString()] = ParsedValue.ToBoolean;
+			ms_oTypeConvertors[typeof (char).ToString()] = ParsedValue.ToChar;
+			ms_oTypeConvertors[typeof (sbyte).ToString()] = ParsedValue.ToSByte;
+			ms_oTypeConvertors[typeof (byte).ToString()] = ParsedValue.ToByte;
+			ms_oTypeConvertors[typeof (short).ToString()] = ParsedValue.ToInt16;
+			ms_oTypeConvertors[typeof (ushort).ToString()] = ParsedValue.ToUInt16;
+			ms_oTypeConvertors[typeof (int).ToString()] = ParsedValue.ToInt32;
+			ms_oTypeConvertors[typeof (uint).ToString()] = ParsedValue.ToUInt32;
+			ms_oTypeConvertors[typeof (long).ToString()] = ParsedValue.ToInt64;
+			ms_oTypeConvertors[typeof (ulong).ToString()] = ParsedValue.ToUInt64;
+			ms_oTypeConvertors[typeof (float).ToString()] = ParsedValue.ToSingle;
+			ms_oTypeConvertors[typeof (double).ToString()] = ParsedValue.ToDouble;
+			ms_oTypeConvertors[typeof (decimal).ToString()] = ParsedValue.ToDecimal;
+			ms_oTypeConvertors[typeof (DateTime).ToString()] = ParsedValue.ToDateTime;
+			ms_oTypeConvertors[typeof (string).ToString()] = ParsedValue.ToString;
+		} // static constructor
+
+		#endregion static constructor
+
 		#region public
 
 		#region constructor
@@ -17,15 +42,23 @@
 
 		#region interface IConvertible and type cast operators
 
+		#region GetTypeCode
+
 		public TypeCode GetTypeCode() {
 			return Type.GetTypeCode(m_oValue.GetType());
 		} // GetTypeCode
+
+		#endregion GetTypeCode
 
 		#region to boolean
 
 		public static implicit operator bool(ParsedValue val) {
 			return ReferenceEquals(val, null) ? default(bool) : val.ToBoolean();
 		} // operator bool
+
+		private static void ToBoolean(ParsedValue pv, out object v, IFormatProvider provider = null) {
+			v = pv.ToBoolean(provider);
+		} // ToBoolean
 
 		public bool ToBoolean(IFormatProvider provider = null) {
 			bool parsedValue;
@@ -47,6 +80,10 @@
 			return ReferenceEquals(val, null) ? default(char) : val.ToChar();
 		} // operator char
 
+		private static void ToChar(ParsedValue pv, out object v, IFormatProvider provider = null) {
+			v = pv.ToChar(provider);
+		} // ToChar
+
 		public char ToChar(IFormatProvider provider = null) {
 			char parsedValue;
 
@@ -66,6 +103,10 @@
 		public static implicit operator sbyte(ParsedValue val) {
 			return ReferenceEquals(val, null) ? default(sbyte) : val.ToSByte();
 		} // operator sbyte
+
+		private static void ToSByte(ParsedValue pv, out object v, IFormatProvider provider = null) {
+			v = pv.ToSByte(provider);
+		} // ToSByte
 
 		public sbyte ToSByte(IFormatProvider provider = null) {
 			sbyte parsedValue;
@@ -87,6 +128,10 @@
 			return ReferenceEquals(val, null) ? default(byte) : val.ToByte();
 		} // operator byte
 
+		private static void ToByte(ParsedValue pv, out object v, IFormatProvider provider = null) {
+			v = pv.ToByte(provider);
+		} // ToByte
+
 		public byte ToByte(IFormatProvider provider = null) {
 			byte parsedValue;
 
@@ -106,6 +151,10 @@
 		public static implicit operator short(ParsedValue val) {
 			return ReferenceEquals(val, null) ? default(short) : val.ToInt16();
 		} // operator short
+
+		private static void ToInt16(ParsedValue pv, out object v, IFormatProvider provider = null) {
+			v = pv.ToInt16(provider);
+		} // ToInt16
 
 		public short ToInt16(IFormatProvider provider = null) {
 			short parsedValue;
@@ -127,6 +176,10 @@
 			return ReferenceEquals(val, null) ? default(ushort) : val.ToUInt16();
 		} // operator ushort
 
+		private static void ToUInt16(ParsedValue pv, out object v, IFormatProvider provider = null) {
+			v = pv.ToUInt16(provider);
+		} // ToUInt16
+
 		public ushort ToUInt16(IFormatProvider provider = null) {
 			ushort parsedValue;
 
@@ -146,6 +199,10 @@
 		public static implicit operator int(ParsedValue val) {
 			return ReferenceEquals(val, null) ? default(int) : val.ToInt32();
 		} // operator int
+
+		private static void ToInt32(ParsedValue pv, out object v, IFormatProvider provider = null) {
+			v = pv.ToInt32(provider);
+		} // ToUIn32
 
 		public int ToInt32(IFormatProvider provider = null) {
 			int parsedValue;
@@ -167,6 +224,10 @@
 			return ReferenceEquals(val, null) ? default(uint) : val.ToUInt32();
 		} // operator uint
 
+		private static void ToUInt32(ParsedValue pv, out object v, IFormatProvider provider = null) {
+			v = pv.ToUInt32(provider);
+		} // ToUInt32
+
 		public uint ToUInt32(IFormatProvider provider = null) {
 			uint parsedValue;
 
@@ -186,6 +247,10 @@
 		public static implicit operator long(ParsedValue val) {
 			return ReferenceEquals(val, null) ? default(long) : val.ToInt64();
 		} // operator long
+
+		private static void ToInt64(ParsedValue pv, out object v, IFormatProvider provider = null) {
+			v = pv.ToInt64(provider);
+		} // ToInt64
 
 		public long ToInt64(IFormatProvider provider = null) {
 			long parsedValue;
@@ -207,6 +272,10 @@
 			return ReferenceEquals(val, null) ? default(ulong) : val.ToUInt64();
 		} // operator ulong
 
+		private static void ToUInt64(ParsedValue pv, out object v, IFormatProvider provider = null) {
+			v = pv.ToUInt64(provider);
+		} // ToUInt64
+
 		public ulong ToUInt64(IFormatProvider provider = null) {
 			ulong parsedValue;
 
@@ -226,6 +295,10 @@
 		public static implicit operator float(ParsedValue val) {
 			return ReferenceEquals(val, null) ? default(float) : val.ToSingle();
 		} // operator float
+
+		private static void ToSingle(ParsedValue pv, out object v, IFormatProvider provider = null) {
+			v = pv.ToSingle(provider);
+		} // ToSingle
 
 		public float ToSingle(IFormatProvider provider = null) {
 			float parsedValue;
@@ -247,6 +320,10 @@
 			return ReferenceEquals(val, null) ? default(double) : val.ToDouble();
 		} // operator double
 
+		private static void ToDouble(ParsedValue pv, out object v, IFormatProvider provider = null) {
+			v = pv.ToDouble(provider);
+		} // ToDouble
+
 		public double ToDouble(IFormatProvider provider = null) {
 			double parsedValue;
 
@@ -266,6 +343,10 @@
 		public static implicit operator decimal(ParsedValue val) {
 			return ReferenceEquals(val, null) ? default(decimal) : val.ToDecimal();
 		} // operator decimal
+
+		private static void ToDecimal(ParsedValue pv, out object v, IFormatProvider provider = null) {
+			v = pv.ToDecimal(provider);
+		} // ToDecimal
 
 		public decimal ToDecimal(IFormatProvider provider = null) {
 			decimal parsedValue;
@@ -287,34 +368,28 @@
 			return ReferenceEquals(val, null) ? default(DateTime) : val.ToDateTime();
 		} // operator DateTime
 
+		private static void ToDateTime(ParsedValue pv, out object v, IFormatProvider provider = null) {
+			v = pv.ToDateTime(provider);
+		} // ToDateTime
+
 		public DateTime ToDateTime(IFormatProvider provider = null) {
 			DateTime parsedValue;
 
-			if (!ReferenceEquals(m_oValue, null))
-			{
+			if (!ReferenceEquals(m_oValue, null)) {
 				if (m_oValue is DateTime)
-				{
 					return (DateTime)m_oValue;
-				}
 
 				if (DateTime.TryParse(m_oValue.ToString(), out parsedValue))
-				{
 					return parsedValue;
-				}
-			}
+			} // if
 
-			if (!ReferenceEquals(m_oDefault, null))
-			{
+			if (!ReferenceEquals(m_oDefault, null)) {
 				if (m_oDefault is DateTime)
-				{
 					return (DateTime)m_oDefault;
-				}
 
 				if (DateTime.TryParse(m_oDefault.ToString(), out parsedValue))
-				{
 					return parsedValue;
-				}
-			}
+			} // if
 
 			return default(DateTime);
 		} // ToDateTime
@@ -326,6 +401,10 @@
 		public static implicit operator string(ParsedValue val) {
 			return ReferenceEquals(val, null) ? default(string) : val.ToString();
 		} // operator string
+
+		private static void ToString(ParsedValue pv, out object v, IFormatProvider provider = null) {
+			v = pv.ToString(provider);
+		} // ToString
 
 		public string ToString(IFormatProvider provider = null) {
 			if (!ReferenceEquals(m_oValue, null))
@@ -339,9 +418,26 @@
 
 		#endregion to string
 
+		#region method ToType
+
 		public object ToType(Type conversionType, IFormatProvider provider = null) {
-			throw new NotImplementedException("Cannot convert " + GetType() + " to " + conversionType);
+			if (ReferenceEquals(conversionType, null))
+				throw new NotImplementedException("Cannot convert " + GetType() + " to undefined type.");
+
+			string sTypeName = conversionType.ToString();
+
+			Convertor oConvertor = ms_oTypeConvertors.ContainsKey(sTypeName) ? ms_oTypeConvertors[sTypeName] : null;
+
+			if (oConvertor != null) {
+				object v;
+				oConvertor(this, out v, provider);
+				return v;
+			} // if
+
+			throw new NotImplementedException("Cannot convert " + GetType() + " to " + sTypeName + ".");
 		} // ToType
+
+		#endregion method ToType
 
 		#endregion interface IConvertible and type cast operators
 
@@ -351,6 +447,10 @@
 
 		private readonly object m_oValue;
 		private readonly object m_oDefault;
+
+		private delegate void Convertor(ParsedValue a, out object b, IFormatProvider c);
+
+		private static readonly SortedDictionary<string, Convertor> ms_oTypeConvertors;
 
 		#endregion private
 	} // class ParsedValue

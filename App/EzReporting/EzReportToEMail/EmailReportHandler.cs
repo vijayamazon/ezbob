@@ -130,6 +130,16 @@ namespace EzReportToEMail
 									);
 								break;
 
+							case ReportType.RPT_ACCOUNTING_LOAN_BALANCE:
+								sender.Dispatch(
+									report.Title,
+									dToday,
+									BuildAccountingLoanBalanceReport(report, dToday, dTomorrow),
+									BuildAccountingLoanBalanceXls(report, dToday, dTomorrow),
+									report.ToEmail
+									);
+								break;
+
 							default:
 								HandleGenericReport(report, dToday, sender);
 								break;
