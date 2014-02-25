@@ -90,13 +90,6 @@
 		{
 			log.Info("Getting personal info for customer:{0}", customerId);
 
-			YodleeMarketplaceModelBuilder a = new YodleeMarketplaceModelBuilder();
-			YodleeModel x = a.BuildYodlee(1);
-
-			double sumOfLoans = x.CashFlowReportModel.YodleeCashFlowReportModelDict["5aLoan Repayments"][999999];
-			// Should change "vat"
-			//vat = x.CashFlowReportModel.YodleeCashFlowReportModelDict["vat"][999999];
-
 			GetYodleePersonalData();
 			GetYodleePayersData();
 
@@ -119,6 +112,7 @@
 			isUnderAge = dateOfBirth.AddYears(minAge) <= DateTime.UtcNow;
 			isHomeOwner = sr["IsHomeOwner"];
 			personalScore = sr["ExperianScore"];
+			earliestTransactionDate = sr["EarliestTransactionDate"];
 
 			// Parse experian data
 			decimal totalCurrentAssets;
@@ -133,15 +127,20 @@
 
 		private void GetYodleePersonalData()
 		{
-			DataTable dt = db.ExecuteReader("GetPersonalYodleeInfo", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
-			var sr = new SafeReader(dt.Rows[0]);
+			DataTable dt = db.ExecuteReader(
+				"GetCustomerMarketplaces",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", customerId)
+				);
 
-			earliestTransactionDate = sr["EarliestTransactionDate"];
-			// TODO: run categorize creation code....
-
-			// TODO: complete implementation
-			sumOfLoanTransactions = 12345; // with group loan (like '%loan%')
-			vat = 55; // The vat is in the cashflow tab
+			foreach (DataRow row in dt.Rows)
+			{
+				var sr = new SafeReader(row);
+				int mpId = sr["Id"];
+				YodleeModel yodleeModel = new YodleeMarketplaceModelBuilder().BuildYodlee(mpId);
+				sumOfLoanTransactions += (decimal)yodleeModel.CashFlowReportModel.YodleeCashFlowReportModelDict["5aLoan Repayments"][999999];
+				vat += (decimal)yodleeModel.CashFlowReportModel.YodleeCashFlowReportModelDict["vat"][999999];// Should change "vat"
+			}
 		}
 
 		private void GetYodleePayersData()
@@ -244,11 +243,13 @@
 				loanOffer = notHomeOwnerCap;
 			}
 
-			if (loanOffer > euCap)
+			// Should be done only for eu loans
+			// The offer can be defined as eu only after pricing model implementation - which is not defined yet
+			/*if (isEuLoan && loanOffer > euCap)
 			{
 				log.Info("Capping offer to {0} (Original was:{1}) [EU]", euCap, loanOffer);
 				loanOffer = euCap;
-			}
+			}*/
 		}
 
 		private void ReadConfigurations()

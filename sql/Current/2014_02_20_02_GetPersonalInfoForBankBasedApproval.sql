@@ -21,7 +21,8 @@ BEGIN
 		@IsOffline BIT,
 		@DateOfBirth DateTime,
 		@ResidentialStatus NVARCHAR(250),
-		@ExperianScore INT
+		@ExperianScore INT,
+		@EarliestTransactionDate DATETIME
 		
 	SELECT TOP 1
 		@AmlId = Id
@@ -70,6 +71,37 @@ BEGIN
 	WHERE
 		CustomerId = @CustomerId AND
 		DirectorId = 0
+		
+	SELECT
+		@EarliestTransactionDate = MIN(PostDate)
+	FROM 
+		MP_YodleeOrderItemBankTransaction 
+	WHERE 
+		OrderItemId IN 
+		(
+			SELECT 
+				Id 
+			FROM 
+				MP_YodleeOrderItem 
+			WHERE 
+				OrderId IN 
+				(
+					SELECT 
+						Id 
+					FROM 
+						MP_YodleeOrder 
+					WHERE 
+						CustomerMarketPlaceId IN
+						(
+							SELECT 
+								Id
+							FROM
+								MP_CustomerMarketplace
+							WHERE
+								CustomerId = @CustomerId
+						)
+				)
+		)
 
 	SELECT
 		(SELECT ResponseData FROM MP_ServiceLog WHERE Id = @AmlId) AS AmlData,
@@ -82,6 +114,7 @@ BEGIN
 		@IsOffline AS IsOffline,
 		@DateOfBirth AS DateOfBirth,
 		CAST((CASE @ResidentialStatus WHEN 'Home owner' THEN 1 ELSE 0 END) AS BIT) AS IsHomeOwner,
-		@ExperianScore AS ExperianScore	
+		@ExperianScore AS ExperianScore,
+		ISNULL(@EarliestTransactionDate, GETUTCDATE()) AS EarliestTransactionDate
 END
 GO
