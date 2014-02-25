@@ -126,7 +126,7 @@
 			MakeSureMpDataIsSufficient();
 
 			GetPersonalInfo();
-			GetZooplaData();
+			
 
 			SetAutoDecisionAvailability();
 			
@@ -148,6 +148,7 @@
 			
 			if (underwriterCheck)
 			{
+				GetZooplaData();
 				SetEndTimestamp();
 				return;
 			} // if
@@ -214,6 +215,7 @@
 				SendWaitingForDecisionMail();
 			} // if
 
+			GetZooplaData();
 			SetEndTimestamp();
 		}
 

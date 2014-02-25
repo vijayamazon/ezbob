@@ -610,8 +610,9 @@
 
 		public void GetZooplaData(int customerId, bool reCheck = false)
 		{
-			var customer = _customers.Get(customerId);
-			var customerAddress = customer.AddressInfo.PersonalAddress.FirstOrDefault();
+			var addressRepo = ObjectFactory.GetInstance<CustomerAddressRepository>();
+			var customerAddress = addressRepo.GetAll().FirstOrDefault(a => a.Customer.Id == customerId && a.AddressType == CustomerAddressType.PersonalAddress);
+			
 			if (customerAddress != null)
 			{
 				if (!customerAddress.Zoopla.Any() || reCheck)

@@ -7,6 +7,7 @@
 	using System.Xml.Serialization;
 	using ApplicationMng.Repository;
 	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Experian;
 	using Dictionaries;
 	using EzBob.Configuration;
@@ -143,9 +144,9 @@
 		#region method SaveDefaultAccountIntoDb
 
 		private void SaveDefaultAccountIntoDb(OutputRoot output, int customerId, MP_ServiceLog serviceLog) {
-			var customerRepo = ObjectFactory.GetInstance<NHibernateRepositoryBase<Customer>>();
+			var customerRepo = ObjectFactory.GetInstance<CustomerRepository>();
 
-			var customer = m_oRetryer.Retry(() => customerRepo.Get(customerId));
+			var customer = customerRepo.Get(customerId);
 
 			OutputFullConsumerDataConsumerDataCAIS[] cais = null;
 

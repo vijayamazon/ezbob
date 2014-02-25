@@ -7,7 +7,10 @@ using NHibernate.Linq;
 
 namespace EZBob.DatabaseLib.Model.Database.Repository
 {
-    public interface ICustomerRepository : IRepository<Customer>
+	using Ezbob.Database;
+	using Ezbob.Logger;
+
+	public interface ICustomerRepository : IRepository<Customer>
     {
         Customer Get(int clientId);
         Customer TryGet(int clientId);
@@ -27,7 +30,8 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
 
 		public Customer Get(int clientId)
 		{
-		    var customer = _session.Get<Customer>(clientId);
+			var m_oRetryer = new SqlRetryer(nSleepBeforeRetryMilliseconds: 500);
+		    var customer = m_oRetryer.Retry(() => _session.Get<Customer>(clientId));
 		    if (customer == null)
 		    {
 				throw new InvalidCustomerException( clientId );

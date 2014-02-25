@@ -12,7 +12,9 @@
 
 		#region constructor
 
-		public SqlRetryer(int nRetryCount = 3, int nSleepBeforeRetry = 0, ASafeLog oLog = null) : base(nRetryCount, nSleepBeforeRetry, oLog) {
+		public SqlRetryer(int nRetryCount = 3, int nSleepBeforeRetryMilliseconds = 0, ASafeLog oLog = null)
+			: base(nRetryCount, nSleepBeforeRetryMilliseconds, oLog)
+		{
 		} // constructor
 
 		#endregion constructor
@@ -63,7 +65,7 @@
 
 					if (nCount < RetryCount) {
 						Log.Warn(e, "{2} encountered on attempt {0} of {1}, retrying after {3} seconds.", nCount, RetryCount, sErrName, SleepBeforeRetry);
-						Thread.Sleep(TimeSpan.FromSeconds(SleepBeforeRetry));
+						Thread.Sleep(SleepBeforeRetry);
 					}
 					else
 						Log.Alert(e, "{2} encountered on attempt {0} of {1}, out of retry attempts.", nCount, RetryCount, sErrName);

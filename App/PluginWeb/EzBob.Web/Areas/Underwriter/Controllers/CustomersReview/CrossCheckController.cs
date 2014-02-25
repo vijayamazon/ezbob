@@ -11,11 +11,15 @@
 	public class CrossCheckController : Controller
 	{
 		private readonly CustomerRepository _customerRepository;
+		private readonly CustomerAddressRepository _customerAddressRepository;
 		private readonly CreditBureauModelBuilder _creditBureauModelBuilder;
-		public CrossCheckController(CustomerRepository customerRepository, CreditBureauModelBuilder creditBureauModelBuilder)
+		public CrossCheckController(CustomerRepository customerRepository, 
+			CreditBureauModelBuilder creditBureauModelBuilder, 
+			CustomerAddressRepository customerAddressRepository)
 		{
 			_customerRepository = customerRepository;
 			_creditBureauModelBuilder = creditBureauModelBuilder;
+			_customerAddressRepository = customerAddressRepository;
 		}
 
 		[Ajax]
@@ -31,13 +35,7 @@
 		[HttpGet]
 		public JsonNetResult Zoopla(int customerId, bool recheck)
 		{
-			var customer = _customerRepository.Get(customerId);
-			if (customer == null)
-			{
-				return this.JsonNet(new { error = "customer not found" });
-			}
-
-			var address = customer.AddressInfo.PersonalAddress.FirstOrDefault();
+			var address = _customerAddressRepository.GetAll().FirstOrDefault(a => a.Customer.Id == customerId && a.AddressType == CustomerAddressType.PersonalAddress);
 			if (address == null)
 			{
 				return this.JsonNet(new { error = "address not found" });

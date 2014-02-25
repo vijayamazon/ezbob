@@ -80,7 +80,7 @@ namespace Ezbob.Database {
 		#region method CreateRetryer
 
 		protected override Utils.ARetryer CreateRetryer() {
-			return new SqlRetryer(nRetryCount: 3, nSleepBeforeRetry: 5, oLog: this);
+			return new SqlRetryer(nRetryCount: 3, nSleepBeforeRetryMilliseconds: 5000, oLog: this);
 		} // CreateRetryer
 
 		#endregion method CreateRetryer
