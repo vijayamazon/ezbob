@@ -30,7 +30,8 @@
 			IRepository<MP_MarketplaceType> mpTypes,
 			CGMPUniqChecker mpChecker,
 			ISession session,
-			IAppCreator appCreator) {
+			IAppCreator appCreator
+		) {
 			_context = context;
 			_helper = helper;
 			_mpTypes = mpTypes;
@@ -73,7 +74,16 @@
 				return View();
 			} // if
 
-			HmrcController.ValidateFilesResult oValidateResult = HmrcController.ValidateFiles(Request.Files);
+			int nCustomerID = 0;
+
+			try {
+				nCustomerID = _context.Customer.Id;
+			}
+			catch (Exception e) {
+				Log.Warn("Failed to fetch current customer, files will be saved without customer ID; exception: ", e);
+			} // try
+
+			HmrcController.ValidateFilesResult oValidateResult = HmrcController.ValidateFiles(nCustomerID, Request.Files);
 
 			if (!string.IsNullOrWhiteSpace(oValidateResult.Error))
 				oState.Error = CreateError(oValidateResult.Error);
@@ -108,6 +118,22 @@
 			}
 			catch (Exception e) {
 				ViewError = CreateError("Account has been linked but error occured while storing uploaded data: " + e.Message);
+			} // try
+
+			try {
+				// This is done to insert entries into EzServiceActionHistory
+				_appCreator.CustomerMarketPlaceAdded(_context.Customer, oState.CustomerMarketPlace.Id);
+			}
+			catch (Exception e) {
+				Log.WarnFormat(
+					"Failed to start UpdateMarketplace strategy for customer [{0}: {1}] with marketplace id {2}," +
+					" if this is the only customer marketplace underwriter should run this strategy manually" +
+					" (otherwise Main strategy will be stuck).",
+					_context.Customer.Id,
+					_context.Customer.Name,
+					oState.CustomerMarketPlace.Id
+				);
+				Log.Warn(e);
 			} // try
 
 			return View();

@@ -135,7 +135,8 @@
 
 		#region constructor
 
-		protected AHmrcFileProcessor(HttpFileCollectionBase oFiles) {
+		protected AHmrcFileProcessor(int nCustomerID, HttpFileCollectionBase oFiles) {
+			CustomerID = nCustomerID;
 			FileList = oFiles;
 			Error = null;
 		} // constructor
@@ -151,6 +152,7 @@
 		#region private
 
 		private HttpFileCollectionBase FileList { get; set; } // FileList
+		private int CustomerID { get; set; } // CustomerID
 
 		#region method SaveToDisc
 
@@ -171,7 +173,7 @@
 					} // try
 
 					if (Directory.Exists(sPath)) {
-						string sFileName = Path.Combine(sPath, Guid.NewGuid().ToString("N") + "." + sFileOriginalName);
+						string sFileName = Path.Combine(sPath, Guid.NewGuid().ToString("N") + "." + CustomerID + "." + sFileOriginalName);
 
 						Log.DebugFormat("Saving file {0} as {1}...", sFileOriginalName, sFileName);
 
@@ -202,7 +204,7 @@
 
 		#region constructor
 
-		public SessionHmrcFileProcessor(HttpSessionStateBase oSession, HttpFileCollectionBase oFiles) : base(oFiles) {
+		public SessionHmrcFileProcessor(HttpSessionStateBase oSession, int nCustomerID, HttpFileCollectionBase oFiles) : base(nCustomerID, oFiles) {
 			Session = oSession;
 		} // constructor
 
@@ -273,7 +275,7 @@
 
 		#region constructor
 
-		public LocalHmrcFileProcessor(HttpFileCollectionBase oFiles) : base(oFiles) {
+		public LocalHmrcFileProcessor(int nCustomerID, HttpFileCollectionBase oFiles) : base(nCustomerID, oFiles) {
 		} // constructor
 
 		#endregion constructor

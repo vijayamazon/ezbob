@@ -5,6 +5,7 @@
 	using System.Web;
 	using System.Web.Mvc;
 	using ApplicationMng.Repository;
+	using Code.ApplicationCreator;
 	using Code.MpUniq;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.DatabaseWrapper;
@@ -32,8 +33,8 @@
 
 		#region method ValidateFiles
 
-		public static ValidateFilesResult ValidateFiles(HttpFileCollectionBase oFiles) {
-			var oProcessor = new LocalHmrcFileProcessor(oFiles);
+		public static ValidateFilesResult ValidateFiles(int nCustomerID, HttpFileCollectionBase oFiles) {
+			var oProcessor = new LocalHmrcFileProcessor(nCustomerID, oFiles);
 
 			oProcessor.Run();
 
@@ -49,13 +50,15 @@
 			DatabaseDataHelper helper,
 			IRepository<MP_MarketplaceType> mpTypes,
 			CGMPUniqChecker mpChecker,
-			ISession session
+			ISession session,
+			IAppCreator appCreator
 		) {
 			_context = context;
 			_helper = helper;
 			_mpTypes = mpTypes;
 			_mpChecker = mpChecker;
 			_session = session;
+			_appCreator = appCreator;
 		} // constructor
 
 		#endregion constructor
@@ -97,11 +100,27 @@
 
 				if (!customer.WizardStep.TheLastOne) {
 					customer.WizardStep = _helper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.Marketplace);
-					Log.DebugFormat("Customer {1} ({0}): wizard step has been updated to :{2}", customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.Marketplace);
+					Log.DebugFormat("Customer {1} ({0}): wizard step has been updated to: {2}", customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.Marketplace);
 				} // if
 			}
 			catch (Exception e) {
 				return CreateError("Account has been linked but error occured while storing uploaded data: " + e.Message);
+			} // try
+
+			try {
+				// This is done to insert entries into EzServiceActionHistory
+				_appCreator.CustomerMarketPlaceAdded(_context.Customer, oState.CustomerMarketPlace.Id);
+			}
+			catch (Exception e) {
+				Log.WarnFormat(
+					"Failed to start UpdateMarketplace strategy for customer [{0}: {1}] with marketplace id {2}," +
+					" if this is the only customer marketplace underwriter should run this strategy manually" +
+					" (otherwise Main strategy will be stuck).",
+					_context.Customer.Id,
+					_context.Customer.Name,
+					oState.CustomerMarketPlace.Id
+				);
+				Log.Warn(e);
 			} // try
 
 			return Json(new { });
@@ -117,7 +136,16 @@
 
 			Session["HadErrorInUpload"] = string.Empty;
 
-			var oProcessor = new SessionHmrcFileProcessor(Session, Request.Files);
+			int nCustomerID = 0;
+
+			try {
+				nCustomerID = _context.Customer.Id;
+			}
+			catch (Exception e) {
+				Log.Warn("Failed to fetch current customer, files will be saved without customer ID; exception: ", e);
+			} // try
+
+			var oProcessor = new SessionHmrcFileProcessor(Session, nCustomerID, Request.Files);
 
 			oProcessor.Run();
 
@@ -265,6 +293,7 @@
 		private readonly IRepository<MP_MarketplaceType> _mpTypes;
 		private readonly CGMPUniqChecker _mpChecker;
 		private readonly DatabaseDataHelper _helper;
+		private readonly IAppCreator _appCreator;
 		private readonly ISession _session;
 
 		private static readonly ILog Log = LogManager.GetLogger(typeof(HmrcController));
