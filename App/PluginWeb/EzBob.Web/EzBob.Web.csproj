@@ -500,6 +500,7 @@
     <Content Include="Content\css\images\accounts\shopify.png" />
     <Content Include="Content\css\images\accounts\volusion.png" />
     <Content Include="Content\css\images\accounts\xero.png" />
+    <Content Include="Content\css\images\accounts\yodlee.png" />
     <Content Include="Content\css\images\apply_now.png" />
     <Content Include="Content\css\images\arrow-m.png" />
     <Content Include="Content\css\images\arrow.png" />
@@ -615,6 +616,17 @@
     <Content Include="Content\img\check-min.png" />
     <Content Include="Content\img\businessguardianange.png" />
     <Content Include="Content\img\check-min.png" />
+    <Content Include="Content\img\customer-sidebar\award.png" />
+    <Content Include="Content\img\customer-sidebar\call.png" />
+    <Content Include="Content\img\customer-sidebar\chat.png" />
+    <Content Include="Content\img\customer-sidebar\customer.png" />
+    <Content Include="Content\img\customer-sidebar\email.png" />
+    <Content Include="Content\img\customer-sidebar\fast.png" />
+    <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
+    <Content Include="Content\img\customer-sidebar\mobile.png" />
+    <Content Include="Content\img\customer-sidebar\perks.png" />
+    <Content Include="Content\img\customer-sidebar\prices.png" />
+    <Content Include="Content\img\customer-sidebar\secure.png" />
     <Content Include="Content\img\ebay-small.png" />
     <Content Include="Content\img\ebay.png" />
     <Content Include="Content\img\ecommerce bytes.png" />
@@ -1348,6 +1360,9 @@
     <Content Include="Areas\Broker\Views\BrokerHome\Index.cshtml" />
     <Content Include="Areas\Underwriter\Views\CrossCheck\LandRegistryEnquiry.cshtml" />
     <Content Include="Areas\Underwriter\Views\CrossCheck\LandRegistryEnquiryResults.cshtml" />
+    <None Include="Content\img\customer-sidebar\icons-source\Help.doc" />
+    <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1.psd" />
+    <None Include="Content\img\customer-sidebar\icons-source\Preview Image Set_v1.0.psd" />
     <None Include="Service References\EzServiceReference\configuration91.svcinfo" />
     <None Include="Service References\EzServiceReference\configuration.svcinfo" />
     <None Include="Service References\EzServiceReference\EzBob.Backend.Models.xsd">
