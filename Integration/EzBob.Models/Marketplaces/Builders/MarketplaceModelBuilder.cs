@@ -92,11 +92,13 @@ namespace EzBob.Models.Marketplaces.Builders
 
 		public void UpdateLastTransactionDate(MP_CustomerMarketPlace mp)
 		{
-			mp.LastTransactionDate = (!mp.LastTransactionDate.HasValue ||
-			                          (mp.UpdatingEnd.HasValue &&
-			                           mp.LastTransactionDate.Value < mp.UpdatingEnd.Value.AddDays(-2)))
-				                         ? GetLastTransaction(mp)
-				                         : mp.LastTransactionDate;
+			mp.LastTransactionDate = (
+				!mp.LastTransactionDate.HasValue || (
+					mp.UpdatingEnd.HasValue && mp.LastTransactionDate.Value < mp.UpdatingEnd.Value.AddDays(-2)
+				)
+			)
+			? GetLastTransaction(mp)
+			: mp.LastTransactionDate;
 		}
 
 		public virtual DateTime? GetSeniority(MP_CustomerMarketPlace mp)
