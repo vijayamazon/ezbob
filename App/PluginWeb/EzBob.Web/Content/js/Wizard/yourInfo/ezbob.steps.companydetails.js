@@ -213,7 +213,7 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 			bDoTargeting = false;
 
 		if (typeOfBussiness === 'Entrepreneur') {
-			if (EzBob.Config.TargetsEnabledEnreprener) {
+			if (EzBob.Config.TargetsEnabledEntrepreneur) {
 				postcode = this.model.get('PersonalAddress').models[0].get('Postcode');
 
 				companyName = (function(model) {
