@@ -54,15 +54,19 @@
 				{
 					res = accounts[0];
 					accounts.RemoveAt(0);
-					res.Customer = customer;
 					res.Bank = bank;
 					res.CreationDate = DateTime.UtcNow;
 					AccountRepository.SaveOrUpdate(res);
-					log.InfoFormat("Allocated yodlee account: {0} to customer:{1}", res.Id, customer.Id);
 					accounts.Add(CreateUnallocatedAccount());
 				}
 				log.InfoFormat("Trying to verify Yodlee account:{0}. Attempt number:{1} for customer:{2}", res.Username, attemptsCounter, customer.Id);
 				verifiedAccount = VerifyAccount(res);
+				if (verifiedAccount)
+				{
+					res.Customer = customer;
+					log.InfoFormat("Allocated yodlee account: {0} to customer:{1}", res.Id, customer.Id);
+					AccountRepository.SaveOrUpdate(res);
+				}
 			}
 			return res;
 		}
