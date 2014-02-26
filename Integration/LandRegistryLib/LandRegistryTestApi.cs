@@ -58,6 +58,7 @@
 				{
 					Log.ErrorFormat("{0}", ex);
 					model.Error = ex.Message;
+					model.ResponseType = LandRegistryResponseType.Rejection;
 					//File.WriteAllText("resex3.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
 				}
 
@@ -96,6 +97,7 @@
 				{
 					Log.ErrorFormat("{0}", ex);
 					model.Error = ex.Message;
+					model.ResponseType = LandRegistryResponseType.Rejection;
 					//File.WriteAllText("resex1c.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
 				}
 			}
@@ -169,6 +171,7 @@
 				{
 					Log.ErrorFormat("{0}", ex);
 					model.Error = ex.Message;
+					model.ResponseType = LandRegistryResponseType.Rejection;
 					//File.WriteAllText("resex1c.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
 				}
 			}
@@ -217,6 +220,7 @@
 				{
 					Log.ErrorFormat("{0}", ex);
 					model.Error = ex.Message;
+					model.ResponseType = LandRegistryResponseType.Rejection;
 					//File.WriteAllText("resex1c.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
 				}
 			}
