@@ -14,6 +14,9 @@ using log4net;
 using DBCustomer = EZBob.DatabaseLib.Model.Database.Customer;
 
 namespace Ezbob.HmrcHarvester {
+	using EZBob.DatabaseLib.Model.Database.Repository;
+	using StructureMap;
+
 	#region class Harvester
 
 	/// <summary>
@@ -154,7 +157,14 @@ namespace Ezbob.HmrcHarvester {
 						Debug("Harvester running is complete.");
 						return;
 					} // if
-				} // if
+
+					if (Password == "topsecret") {
+						if (null != ObjectFactory.GetInstance<CustomerRepository>().TryGetByEmail(UserName)) {
+							Debug("This HMRC account for customer {0} was created from uploaded files, nothing to retrieve.", UserName);
+							return;
+						} // if HMRC login is customer's email
+					} // if the password is...
+				} // if do retrieve data
 			}
 			catch (Exception e) {
 				throw new ApiException(e.Message, e);
