@@ -44,9 +44,14 @@ namespace EzBob.Models.Marketplaces.Builders
 
 		public override DateTime? GetLastTransaction(MP_CustomerMarketPlace mp)
 		{
-			return _session.Query<MP_PayPalTransaction>()
-					   .Where(t => t.CustomerMarketPlace.Id == mp.Id)
-					   .SelectMany(x => x.TransactionItems).Max(x => x.Created);
+			var transactionItems = _session.Query<MP_PayPalTransaction>().Where(t => t.CustomerMarketPlace.Id == mp.Id).SelectMany(x => x.TransactionItems);
+
+			if (transactionItems.Count() != 0)
+			{
+				return transactionItems.Max(x => x.Created);
+			}
+
+			return null;
 		}
 
 		protected override void InitializeSpecificData(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history)

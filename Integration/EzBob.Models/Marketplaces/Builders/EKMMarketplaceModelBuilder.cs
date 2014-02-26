@@ -24,11 +24,14 @@ namespace EzBob.Models.Marketplaces.Builders
 
 		public override DateTime? GetLastTransaction(MP_CustomerMarketPlace mp)
 		{
-			var s = _session.Query<MP_EkmOrderItem>()
-				.Where(oi => oi.Order.CustomerMarketPlace.Id == mp.Id)
-				.Where(oi => oi.OrderDate != null)
-				.Max(oi => oi.OrderDate);
-			return s;
+			var s = _session.Query<MP_EkmOrderItem>().Where(oi => oi.Order.CustomerMarketPlace.Id == mp.Id).Where(oi => oi.OrderDate != null);
+
+			if (s.Count() != 0)
+			{
+				return s.Max(oi => oi.OrderDate);
+			}
+
+			return null;
 		}
 	}
 }

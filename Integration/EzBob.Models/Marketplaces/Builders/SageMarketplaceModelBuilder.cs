@@ -170,23 +170,47 @@ namespace EzBob.Models.Marketplaces.Builders
 
 		public override DateTime? GetLastTransaction(MP_CustomerMarketPlace mp)
 		{
+			DateTime? salesInvoices = null;
+			DateTime? purchaseInvoices = null;
+			DateTime? incomes = null;
+			DateTime? expenditures = null;
 			var dates = new List<DateTime?>();
-			var salesInvoices = _session.Query<MP_SageSalesInvoice>()
+
+			var tmpSalesInvoices = _session.Query<MP_SageSalesInvoice>()
 				.Where(oi => oi.Request.CustomerMarketPlace.Id == mp.Id)
-				.Where(oi => oi.date != null)
-				.Max(oi => oi.date);
-			var purchaseInvoices = _session.Query<MP_SagePurchaseInvoice>()
+				.Where(oi => oi.date != null);
+
+			if (tmpSalesInvoices.Count() != 0)
+			{
+				salesInvoices = tmpSalesInvoices.Max(oi => oi.date);
+			}
+
+			var tmpPurchaseInvoices = _session.Query<MP_SagePurchaseInvoice>()
 				.Where(oi => oi.Request.CustomerMarketPlace.Id == mp.Id)
-				.Where(oi => oi.date != null)
-				.Max(oi => oi.date);
-			var incomes = _session.Query<MP_SageIncome>()
+				.Where(oi => oi.date != null);
+
+			if (tmpPurchaseInvoices.Count() != 0)
+			{
+				purchaseInvoices = tmpPurchaseInvoices.Max(oi => oi.date);
+			}
+
+			var tmpIncomes = _session.Query<MP_SageIncome>()
 				.Where(oi => oi.Request.CustomerMarketPlace.Id == mp.Id)
-				.Where(oi => oi.date != null)
-				.Max(oi => oi.date);
-			var expenditures = _session.Query<MP_SageExpenditure>()
+				.Where(oi => oi.date != null);
+
+			if (tmpIncomes.Count() != 0)
+			{
+				incomes = tmpIncomes.Max(oi => oi.date);
+			}
+
+			var tmpExpenditures = _session.Query<MP_SageExpenditure>()
 				.Where(oi => oi.Request.CustomerMarketPlace.Id == mp.Id)
-				.Where(oi => oi.date != null)
-				.Max(oi => oi.date);
+				.Where(oi => oi.date != null);
+
+			if (tmpExpenditures.Count() != 0)
+			{
+				expenditures = tmpExpenditures.Max(oi => oi.date);
+			}
 
 			dates.Add(salesInvoices);
 			dates.Add(purchaseInvoices);

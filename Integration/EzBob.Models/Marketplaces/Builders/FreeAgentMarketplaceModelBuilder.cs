@@ -188,15 +188,25 @@ namespace EzBob.Models.Marketplaces.Builders
 
 		public override DateTime? GetLastTransaction(MP_CustomerMarketPlace mp)
 		{
-			var invoices = _session.Query<MP_FreeAgentInvoice>()
+			DateTime? invoices = null;
+			DateTime? expenses = null;
+			var tmpInvoices = _session.Query<MP_FreeAgentInvoice>()
 				.Where(oi => oi.Request.CustomerMarketPlace.Id == mp.Id)
-				.Where(oi => oi.dated_on != null)
-				.Max(oi => oi.dated_on);
+				.Where(oi => oi.dated_on != null);
 
-			var expenses = _session.Query<MP_FreeAgentInvoice>()
+			if (tmpInvoices.Count() != 0)
+			{
+				invoices = tmpInvoices.Max(oi => oi.dated_on);
+			}
+
+			var tmpExpenses = _session.Query<MP_FreeAgentInvoice>()
 				 .Where(oi => oi.Request.CustomerMarketPlace.Id == mp.Id)
-				 .Where(oi => oi.dated_on != null)
-				 .Max(oi => oi.dated_on);
+				 .Where(oi => oi.dated_on != null);
+
+			if (tmpExpenses.Count() != 0)
+			{
+				expenses = tmpExpenses.Max(oi => oi.dated_on);
+			}
 
 			DateTime? latest = null;
 			if (invoices.HasValue)

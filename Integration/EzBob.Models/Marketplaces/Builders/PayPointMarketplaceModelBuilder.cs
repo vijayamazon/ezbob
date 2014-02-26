@@ -67,9 +67,14 @@ namespace EzBob.Models.Marketplaces.Builders
 		{
 			var s = _session.Query<MP_PayPointOrderItem>()
 				.Where(oi => oi.Order.CustomerMarketPlace.Id == mp.Id)
-				.Where(oi => oi.date != null)
-				.Max(oi => oi.date);
-			return s;
+				.Where(oi => oi.date != null);
+
+			if (s.Count() != 0)
+			{
+				return s.Max(oi => oi.date);
+			}
+
+			return null;
 		}
 	}
 }
