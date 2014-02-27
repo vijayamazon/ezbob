@@ -2,13 +2,127 @@
 	using System;
 	using System.Collections.Generic;
 	using System.IO;
-	using System.Threading;
+	using System.Text;
 	using System.Web;
 	using EZBob.DatabaseLib;
 	using Ezbob.HmrcHarvester;
 	using Ezbob.Logger;
 	using Ezbob.ValueIntervals;
 	using log4net;
+
+	#region class HmrcFileCache
+
+	internal class HmrcFileCache {
+		#region public
+
+		#region method Get
+
+		public static HmrcFileCache Get(HttpSessionStateBase oSession) {
+			return oSession[HmrcFileCache.Name] as HmrcFileCache;
+		} // Get
+
+		#endregion method Get
+
+		#region constructor
+
+		public HmrcFileCache(HttpSessionStateBase oSession = null) {
+			ErrorMsg = string.Empty;
+			Hopper = new Hopper();
+			DateIntervals = new List<DateInterval>();
+
+			if (oSession != null)
+				oSession[HmrcFileCache.Name] = this;
+		} // HmrcFileCache
+
+		#endregion constructor
+
+		#region method SetError
+
+		public void SetError(string sErrorMsg) {
+			Hopper.Clear();
+			DateIntervals.Clear();
+			ErrorMsg = sErrorMsg;
+
+			if (!string.IsNullOrWhiteSpace(ErrorMsg))
+				ms_oLog.WarnFormat("HMRC file cache has been cleaned because of error: {0}", ErrorMsg);
+		} // ClearData
+
+		#endregion method SetError
+
+		#region property ErrorMsg
+
+		public string ErrorMsg {
+			get { return m_sErrorMsg; } // get
+			set { m_sErrorMsg = string.IsNullOrWhiteSpace(value) ? string.Empty : value; }
+		} // ErroMsg
+
+		private string m_sErrorMsg;
+
+		#endregion property ErrorMsg
+
+		#region property Hopper
+
+		public Hopper Hopper { get; private set; } // Hopper
+
+		#endregion property Hopper
+
+		#region property DateIntervals
+
+		public List<DateInterval> DateIntervals { get; private set; } // DateIntervals
+
+		#endregion property Hopper
+
+		#region property AddedCount
+
+		public int AddedCount {
+			get { return DateIntervals.Count; } // get
+		} // AddedCount
+
+		#endregion property AddedCount
+
+		#region method Add
+
+		public void Add(SheafMetaData smd, byte[] oFileContents) {
+			Hopper.Add(smd, oFileContents);
+		} // Add
+
+		public void Add(DateInterval di, SheafMetaData smd, ISeeds oSeeds) {
+			Hopper.Add(smd, oSeeds);
+			DateIntervals.Add(di);
+		} // Add
+
+		#endregion method Add
+
+		#region method ToString
+
+		public override string ToString() {
+			var os = new StringBuilder();
+
+			os.AppendFormat("cache contains {0} file{1}", AddedCount, AddedCount == 1 ? "" : "s");
+
+			if (AddedCount > 0)
+				os.AppendFormat("; date intervals are: {0}", string.Join(", ", DateIntervals));
+
+			if (!string.IsNullOrWhiteSpace(ErrorMsg))
+				os.AppendFormat("; error msg: {0}", ErrorMsg);
+
+			return os.ToString();
+		} // ToString
+
+		#endregion method ToString
+
+		#endregion public
+
+		#region private
+
+		private static readonly ILog ms_oLog = LogManager.GetLogger(typeof (HmrcFileCache));
+
+		private const string Name = "HmrcFileCache";
+
+		#endregion private
+	} // HmrcFileCache
+
+	#endregion class HmrcFileCache
 
 	#region class AHmrcFileProcessor
 
@@ -19,28 +133,19 @@
 
 		public static implicit operator HmrcController.ValidateFilesResult(AHmrcFileProcessor hfp) {
 			return new HmrcController.ValidateFilesResult {
-				Hopper = hfp.Hopper,
-				Error = hfp.Error,
+				Hopper = hfp.FileCache.Hopper,
+				Error = hfp.FileCache.ErrorMsg,
 			};
 		} // operator cast to HmrcController.ValidateFilesResult
 
 		#endregion opertor cast to HmrcController.ValidateFilesResult
 
-		public abstract int AddedCount { get; protected set; } // AddedCount
-		public abstract Hopper Hopper { get; } // Hopper
-
-		#region property Error
-
-		public virtual string Error { get; protected set; } // Error
-
-		#endregion property Error
+		public abstract HmrcFileCache FileCache { get; } // FileCache
 
 		#region method Run
 
 		public virtual void Run() {
-			Error = null;
-
-			AddedCount = 0;
+			FileCache.ErrorMsg = string.Empty;
 
 			long? nRegistrationNo = null;
 
@@ -73,7 +178,7 @@
 					continue;
 				} // if
 
-				SaveToDisc(oFile.FileName, oFileContents);
+				SaveToDisc(CustomerID, oFile.FileName, oFileContents);
 
 				var smd = new SheafMetaData {
 					BaseFileName = oFile.FileName,
@@ -82,7 +187,7 @@
 					Thrasher = null
 				};
 
-				Hopper.Add(smd, oFileContents);
+				FileCache.Add(smd, oFileContents);
 
 				var vrpt = new VatReturnPdfThrasher(false, new SafeILog(Log));
 				ISeeds oResult;
@@ -103,7 +208,7 @@
 
 				if (nRegistrationNo.HasValue) {
 					if (nRegistrationNo.Value != oSeeds.RegistrationNo) {
-						CleanupOnError("Inconsistent business registration number.");
+						FileCache.SetError("Inconsistent business registration number.");
 						return;
 					} // if
 				}
@@ -112,18 +217,18 @@
 
 				var di = new DateInterval(oSeeds.DateFrom, oSeeds.DateTo);
 
-				Log.DebugFormat("There are {0} insterval(s) in DateIntervals.", DateIntervals.Count);
+				Log.DebugFormat("HMRC file cache state before adding file {0}: {1}.", oFile.FileName, FileCache);
 
-				foreach (DateInterval oInterval in DateIntervals) {
+				foreach (DateInterval oInterval in FileCache.DateIntervals) {
 					if (oInterval.Intersects(di)) {
-						CleanupOnError("Inconsistent date ranges: " + oInterval + " and " + di);
+						FileCache.SetError("Inconsistent date ranges: " + oInterval + " and " + di);
 						return;
 					} // if
 				} // for each
 
-				DateIntervals.Add(di);
-				Hopper.Add(smd, oResult);
-				AddedCount++;
+				FileCache.Add(di, smd, oResult);
+
+				Log.DebugFormat("HMRC file cache state after adding file {0}: {1}.", oFile.FileName, FileCache);
 			} // for
 		} // Run
 
@@ -135,17 +240,21 @@
 
 		#region constructor
 
-		protected AHmrcFileProcessor(int nCustomerID, HttpFileCollectionBase oFiles) {
+		protected AHmrcFileProcessor(int nCustomerID, HttpFileCollectionBase oFiles, HttpSessionStateBase oSession = null) {
 			CustomerID = nCustomerID;
 			FileList = oFiles;
-			Error = null;
+			Session = oSession;
 		} // constructor
 
 		#endregion constructor
 
-		protected static readonly ILog Log = LogManager.GetLogger(typeof(AHmrcFileProcessor));
+		#region property Session
 
-		protected abstract List<DateInterval> DateIntervals { get; } // DateIntervals
+		protected virtual HttpSessionStateBase Session { get; private set; } // Session
+
+		#endregion property Session
+
+		protected static readonly ILog Log = LogManager.GetLogger(typeof(AHmrcFileProcessor));
 
 		#endregion protected
 
@@ -154,21 +263,9 @@
 		private HttpFileCollectionBase FileList { get; set; } // FileList
 		private int CustomerID { get; set; } // CustomerID
 
-		#region method CleanupOnError
-
-		private void CleanupOnError(string sErrorMsg) {
-			Hopper.Clean();
-			AddedCount = 0;
-
-			Error = sErrorMsg;
-			Log.WarnFormat("Hopper and AddedCount has been cleaned because of error: {0}", Error);
-		} // CleanupOnError
-
-		#endregion method CleanupOnError
-
 		#region method SaveToDisc
 
-		private void SaveToDisc(string sFileOriginalName, byte[] oFileContents) {
+		private static void SaveToDisc(int nCustomerID, string sFileOriginalName, byte[] oFileContents) {
 			try {
 				Log.DebugFormat("Saving file {0} to disc...", sFileOriginalName);
 
@@ -185,7 +282,7 @@
 					} // try
 
 					if (Directory.Exists(sPath)) {
-						string sFileName = Path.Combine(sPath, Guid.NewGuid().ToString("N") + "." + CustomerID + "." + sFileOriginalName);
+						string sFileName = Path.Combine(sPath, Guid.NewGuid().ToString("N") + "." + nCustomerID + "." + sFileOriginalName);
 
 						Log.DebugFormat("Saving file {0} as {1}...", sFileOriginalName, sFileName);
 
@@ -212,70 +309,27 @@
 	#region class SessionHmrcFileProcessor
 
 	internal class SessionHmrcFileProcessor : AHmrcFileProcessor {
-		#region public
-
 		#region constructor
 
-		public SessionHmrcFileProcessor(HttpSessionStateBase oSession, int nCustomerID, HttpFileCollectionBase oFiles) : base(nCustomerID, oFiles) {
-			Session = oSession;
+		public SessionHmrcFileProcessor(HttpSessionStateBase oSession, int nCustomerID, HttpFileCollectionBase oFiles) : base(nCustomerID, oFiles, oSession) {
 		} // constructor
 
 		#endregion constructor
 
-		#region property AddedCount
+		#region property FileCache
 
-		public override int AddedCount {
+		public override HmrcFileCache FileCache {
 			get {
-				if (Session["AddedCount"] == null)
-					Session["AddedCount"] = 0;
+				HmrcFileCache oFileCache = HmrcFileCache.Get(Session);
 
-				return (int)Session["AddedCount"];
+				if (oFileCache == null)
+					oFileCache = new HmrcFileCache(Session);
+
+				return oFileCache;
 			} // get
+		} // HmrcFileCache
 
-			protected set {
-				Session["AddedCount"] = value;
-			} // set
-		} // AddedCount
-
-		#endregion property AddedCount
-
-		#region property Hopper
-
-		public override Hopper Hopper {
-			get {
-				if (Session["Hopper"] == null)
-					Session["Hopper"] = new Hopper();
-
-				return Session["Hopper"] as Hopper;
-			} // get
-		} // Hopper
-
-		#endregion property Hopper
-
-		#endregion public
-
-		#region protected
-
-		#region property DateIntervals
-
-		protected override List<DateInterval> DateIntervals {
-			get {
-				if (Session["DateIntervals"] == null)
-					Session["DateIntervals"] = new List<DateInterval>();
-
-				return Session["DateIntervals"] as List<DateInterval>;
-			} // get
-		} // DateIntervals
-
-		#endregion property DateIntervals
-
-		#endregion protected
-
-		#region private
-
-		private HttpSessionStateBase Session { get; set; } // Session
-
-		#endregion private
+		#endregion property FileCache
 	} // SessionHmrcFileProcessor
 
 	#endregion class SessionHmrcFileProcessor
@@ -283,8 +337,6 @@
 	#region class LocalHmrcFileProcessor
 
 	internal class LocalHmrcFileProcessor : AHmrcFileProcessor {
-		#region public
-
 		#region constructor
 
 		public LocalHmrcFileProcessor(int nCustomerID, HttpFileCollectionBase oFiles) : base(nCustomerID, oFiles) {
@@ -292,74 +344,37 @@
 
 		#endregion constructor
 
-		#region property AddedCount
+		#region property FileCache
 
-		public override int AddedCount { get; protected set; } // AddedCount
-
-		#endregion property AddedCount
-
-		#region property Hopper
-
-		public override Hopper Hopper {
+		public override HmrcFileCache FileCache {
 			get {
-				if (m_oHopper == null)
-					m_oHopper = new Hopper();
+				if (m_oFileCache == null)
+					m_oFileCache = new HmrcFileCache();
 
-				return m_oHopper;
+				return m_oFileCache;
 			} // get
-		} // Hopper
+		} // HmrcFileCache
 
-		private Hopper m_oHopper;
+		private HmrcFileCache m_oFileCache;
 
-		#endregion property Hopper
+		#endregion property FileCache
 
 		#region method Run
 
 		public override void Run() {
 			base.Run();
 
-			ValidateDateConsequency();
-		} // Run
-
-		#endregion method Run
-
-		#endregion public
-
-		#region protected
-
-		#region property DateIntervals
-
-		protected override List<DateInterval> DateIntervals {
-			get {
-				if (m_oDateIntervals == null)
-					m_oDateIntervals = new List<DateInterval>();
-
-				return m_oDateIntervals;
-			} // get
-		} // DateIntervals
-
-		private List<DateInterval> m_oDateIntervals;
-
-		#endregion property DateIntervals
-
-		#endregion protected
-
-		#region private
-
-		#region method ValidateDateConsequency
-
-		private void ValidateDateConsequency() {
-			if (Error != null)
+			if (!string.IsNullOrWhiteSpace(FileCache.ErrorMsg))
 				return;
 
-			if (AddedCount < 2)
+			if (FileCache.AddedCount < 2)
 				return;
 
-			DateIntervals.Sort((a, b) => a.Left.CompareTo(b.Left));
+			FileCache.DateIntervals.Sort((a, b) => a.Left.CompareTo(b.Left));
 
 			DateInterval next = null;
 
-			foreach (DateInterval cur in DateIntervals) {
+			foreach (DateInterval cur in FileCache.DateIntervals) {
 				if (next == null) {
 					next = cur;
 					continue;
@@ -368,16 +383,15 @@
 				DateInterval prev = next;
 				next = cur;
 
-				if (!prev.IsJustBefore(next)) {
-					Error = "Inconsequent date ranges: " + prev + " and " + next;
-					return;
-				} // if
+				if (prev.IsJustBefore(next))
+					continue;
+
+				FileCache.SetError("Inconsequent date ranges: " + prev + " and " + next);
+				return;
 			} // for each interval
-		} // ValidateDateConsequency
+		} // Run
 
-		#endregion method ValidateDateConsequency
-
-		#endregion private
+		#endregion method Run
 	} // LocalHmrcFileProcessor
 
 	#endregion class LocalHmrcFileProcessor

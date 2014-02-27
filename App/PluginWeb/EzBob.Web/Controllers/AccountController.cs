@@ -685,11 +685,6 @@ namespace EzBob.Web.Controllers
 				_log.InfoFormat("IsSmsValidationActive:{0}", Session["IsSmsValidationActive"]);
 				_log.InfoFormat("NumberOfMobileCodeAttempts:{0}", Session["NumberOfMobileCodeAttempts"]);
 
-				Session["HadErrorInUpload"] = string.Empty;
-				Session["Hopper"] = null;
-				Session["AddedCount"] = null;
-				Session["DateIntervals"] = null;
-
 				Session["IsInitialized"] = true;
 			}
 		}

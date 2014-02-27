@@ -67,10 +67,10 @@
 
 		[HttpPost]
 		public ActionResult UploadFiles() {
-			string errorDuringUpload = Session["HadErrorInUpload"].ToString();
+			HmrcFileCache oFileCache = HmrcFileCache.Get(Session);
 
-			if (errorDuringUpload != string.Empty)
-				return CreateError(errorDuringUpload);
+			if ((oFileCache != null) && !string.IsNullOrWhiteSpace(oFileCache.ErrorMsg))
+				return CreateError(oFileCache.ErrorMsg);
 
 			string customerEmail = _context.Customer.Name;
 			var model = new AccountModel { accountTypeName = "HMRC", displayName = customerEmail, name = customerEmail, login = customerEmail, password = "topsecret" };
@@ -129,8 +129,6 @@
 		public ActionResult UploadedFiles() {
 			Response.AddHeader("x-frame-options", "SAMEORIGIN");
 
-			Session["HadErrorInUpload"] = string.Empty;
-
 			int nCustomerID = 0;
 
 			try {
@@ -144,10 +142,8 @@
 
 			oProcessor.Run();
 
-			if (oProcessor.Error != null) {
-				Session["HadErrorInUpload"] = oProcessor.Error;
-				return CreateError(oProcessor.Error);
-			} // if
+			if (!string.IsNullOrWhiteSpace(oProcessor.FileCache.ErrorMsg))
+				return CreateError(oProcessor.FileCache.ErrorMsg);
 
 			return Json(new { });
 		} // UploadedFiles
@@ -163,20 +159,27 @@
 		private Hopper GetProcessedFiles(out string stateError) {
 			stateError = null;
 
-			switch ((int)Session["AddedCount"]) {
+			HmrcFileCache oFileCache = HmrcFileCache.Get(Session);
+
+			if (oFileCache == null) {
+				stateError = "No files were successfully processed";
+				return null;
+			} // if
+
+			switch (oFileCache.AddedCount) {
 			case 0:
 				stateError = "No files were successfully processed";
 				return null;
 
 			case 1:
-				return (Session["Hopper"] as Hopper);
+				return oFileCache.Hopper;
 
 			default:
-				(Session["DateIntervals"] as List<DateInterval>).Sort((a, b) => a.Left.CompareTo(b.Left));
+				oFileCache.DateIntervals.Sort((a, b) => a.Left.CompareTo(b.Left));
 
 				DateInterval next = null;
 
-				foreach (DateInterval cur in (Session["DateIntervals"] as List<DateInterval>)) {
+				foreach (DateInterval cur in oFileCache.DateIntervals) {
 					if (next == null) {
 						next = cur;
 						continue;
@@ -191,7 +194,7 @@
 					} // if
 				} // for each interval
 
-				return (Session["Hopper"] as Hopper);
+				return oFileCache.Hopper;
 			} // switch
 		} // GetProcessedFiles
 

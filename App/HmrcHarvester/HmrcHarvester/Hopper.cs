@@ -1,23 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
-
-namespace Ezbob.HmrcHarvester {
-	#region class Hopper
+﻿namespace Ezbob.HmrcHarvester {
+	using System;
+	using System.Collections.Generic;
+	using System.Net.Http;
 
 	/// <summary>
 	/// Harvest result (retrieved files and errors).
 	/// </summary>
 	public class Hopper {
-		#region public
-
 		#region constructor
 
 		/// <summary>
 		/// Creates a Hopper object.
 		/// </summary>
 		public Hopper() {
-			Clean();
+			Clear();
 		} // constructor
 
 		#endregion constructor
@@ -98,7 +94,7 @@ namespace Ezbob.HmrcHarvester {
 
 		public void FetchBackdoorData(Hopper oHopper) {
 			lock(this) {
-				Clean();
+				Clear();
 
 				if (oHopper == null)
 					return;
@@ -163,9 +159,9 @@ namespace Ezbob.HmrcHarvester {
 
 		#endregion property Seeds
 
-		#region method Clean
+		#region method Clear
 
-		public void Clean() {
+		public void Clear() {
 			Errors = new SortedDictionary<DataType, SortedDictionary<FileType, SortedDictionary<string, HarvesterError>>>();
 			Files = new SortedDictionary<DataType, SortedDictionary<FileType, SortedDictionary<string, byte[]>>>();
 			Seeds = new SortedDictionary<DataType, SortedDictionary<string, ISeeds>>();
@@ -185,12 +181,8 @@ namespace Ezbob.HmrcHarvester {
 					Files[dt][ft] = new SortedDictionary<string, byte[]>();
 				} // for each file type
 			} // for each data type
-		} // Clean
+		} // Clear
 
-		#endregion method Clean
-
-		#endregion public
+		#endregion method Clear
 	} // class Hopper
-
-	#endregion class Hopper
 } // namespace Ezbob.HmrcHarvester
