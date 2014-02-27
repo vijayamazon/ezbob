@@ -163,13 +163,9 @@ namespace Ezbob.HmrcHarvester {
 
 		#endregion property Seeds
 
-		#endregion public
-
-		#region private
-
 		#region method Clean
 
-		private void Clean() {
+		public void Clean() {
 			Errors = new SortedDictionary<DataType, SortedDictionary<FileType, SortedDictionary<string, HarvesterError>>>();
 			Files = new SortedDictionary<DataType, SortedDictionary<FileType, SortedDictionary<string, byte[]>>>();
 			Seeds = new SortedDictionary<DataType, SortedDictionary<string, ISeeds>>();
@@ -193,7 +189,7 @@ namespace Ezbob.HmrcHarvester {
 
 		#endregion method Clean
 
-		#endregion private
+		#endregion public
 	} // class Hopper
 
 	#endregion class Hopper

@@ -94,21 +94,9 @@
 			Connector.SetBackdoorData(model.accountTypeName, oState.CustomerMarketPlace.Id, oSeeds);
 
 			try {
-				oState.CustomerMarketPlace.Marketplace.GetRetrieveDataHelper(_helper).UpdateCustomerMarketplaceFirst(oState.CustomerMarketPlace.Id);
-
-				Customer customer = _context.Customer;
-
-				if (!customer.WizardStep.TheLastOne) {
-					customer.WizardStep = _helper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.Marketplace);
-					Log.DebugFormat("Customer {1} ({0}): wizard step has been updated to: {2}", customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.Marketplace);
-				} // if
-			}
-			catch (Exception e) {
-				return CreateError("Account has been linked but error occured while storing uploaded data: " + e.Message);
-			} // try
-
-			try {
-				// This is done to insert entries into EzServiceActionHistory
+				// This is done to for two reasons:
+				// 1. update Customer.WizardStep to WizardStepType.Marketplace
+				// 2. insert entries into EzServiceActionHistory
 				_appCreator.CustomerMarketPlaceAdded(_context.Customer, oState.CustomerMarketPlace.Id);
 			}
 			catch (Exception e) {
@@ -121,6 +109,13 @@
 					oState.CustomerMarketPlace.Id
 				);
 				Log.Warn(e);
+			} // try
+
+			try {
+				oState.CustomerMarketPlace.Marketplace.GetRetrieveDataHelper(_helper).UpdateCustomerMarketplaceFirst(oState.CustomerMarketPlace.Id);
+			}
+			catch (Exception e) {
+				return CreateError("Account has been linked but error occured while storing uploaded data: " + e.Message);
 			} // try
 
 			return Json(new { });

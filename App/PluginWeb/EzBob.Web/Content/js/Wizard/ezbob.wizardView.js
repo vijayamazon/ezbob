@@ -121,8 +121,10 @@ EzBob.WizardView = Backbone.View.extend({
 
         var nStepPos = this.stepsOrderByName[sLastSavedStepName];
 
-        if (nStepPos < this.steps.length - 1)
-            this.model.set('current', nStepPos);
+	    if (nStepPos < this.steps.length)
+		    this.model.set('current', nStepPos);
+	    else
+		    this.model.trigger('completed');
     }, // jumpTo
 
     onRoute: function (sEventName) {
@@ -163,13 +165,15 @@ EzBob.WizardView = Backbone.View.extend({
         var current = parseInt(this.model.get('current'), 10),
 			total = parseInt(this.model.get('total'), 10);
 
-        if (total === current - 1)
-            this.model.trigger('completed');
+	    if (current >= total)
+			this.model.trigger('completed');
 
-        ++current;
+	    if (current < total - 1) {
+			++current;
+			this.model.set('current', current);
+		} // if
 
-        this.model.set('current', current);
-        this.router.navTo(current);
+	    this.router.navTo(current);
     }, // next
 
     previous: function () {

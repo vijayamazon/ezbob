@@ -103,8 +103,7 @@
 
 				if (nRegistrationNo.HasValue) {
 					if (nRegistrationNo.Value != oSeeds.RegistrationNo) {
-						Error = "Inconsistent business registration number.";
-						Log.Warn(Error);
+						CleanupOnError("Inconsistent business registration number.");
 						return;
 					} // if
 				}
@@ -113,10 +112,11 @@
 
 				var di = new DateInterval(oSeeds.DateFrom, oSeeds.DateTo);
 
+				Log.DebugFormat("There are {0} insterval(s) in DateIntervals.", DateIntervals.Count);
+
 				foreach (DateInterval oInterval in DateIntervals) {
 					if (oInterval.Intersects(di)) {
-						Error = "Inconsistent date ranges: " + oInterval + " and " + di;
-						Log.Warn(Error);
+						CleanupOnError("Inconsistent date ranges: " + oInterval + " and " + di);
 						return;
 					} // if
 				} // for each
@@ -153,6 +153,18 @@
 
 		private HttpFileCollectionBase FileList { get; set; } // FileList
 		private int CustomerID { get; set; } // CustomerID
+
+		#region method CleanupOnError
+
+		private void CleanupOnError(string sErrorMsg) {
+			Hopper.Clean();
+			AddedCount = 0;
+
+			Error = sErrorMsg;
+			Log.WarnFormat("Hopper and AddedCount has been cleaned because of error: {0}", Error);
+		} // CleanupOnError
+
+		#endregion method CleanupOnError
 
 		#region method SaveToDisc
 

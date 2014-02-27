@@ -142,15 +142,13 @@
 		}
 
 		public void CustomerMarketPlaceAdded(Customer customer, int umi) {
-			if (!customer.WizardStep.TheLastOne)
-			{
+			if (!customer.WizardStep.TheLastOne) {
 				customer.WizardStep = _helper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.Marketplace);
-				Log.DebugFormat("Customer {1} ({0}): wizard step has been updated to :{2}", customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.Marketplace);
-			}
+				Log.DebugFormat("Customer {1} ({0}): wizard step has been updated to: {2}", customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.Marketplace);
+			} // if
 
-			if (useNewUpdateMpStrategy) {
+			if (useNewUpdateMpStrategy)
 				ServiceClient.UpdateMarketplace(customer.Id, umi);
-			}
 			else {
 				var strategyParameters = new[] {
 					new StrategyParameter("umi", umi),
@@ -158,8 +156,8 @@
 					new StrategyParameter("userId", customer.Id)
 				};
 				CreateApplication(customer, strategyParameters, _config.CustomerMarketPlaceStrategyName);
-			}
-		}
+			} // if
+		} // CustomerMarketPlaceAdded
 
 		public void Evaluate(int underwriterId, User user, NewCreditLineOption newCreditLineOption, int avoidAutomaticDescison, bool isUnderwriterForced, bool isSync)
 		{
