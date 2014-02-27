@@ -108,6 +108,11 @@ BEGIN
 	INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('BankBasedApprovalIsEnabled', 'True', 'Determines if bank based approvals are enabled')
 END
 
+IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='BankBasedApprovalNumOfMonthBackForVatCheck')
+BEGIN
+	INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('BankBasedApprovalNumOfMonthBackForVatCheck', '3', 'Determines how far back we check for vat returns')
+END
+
 GO
 
 
@@ -144,6 +149,7 @@ BEGIN
 		(SELECT Value FROM ConfigurationVariables WHERE Name = 'BankBasedMinNumberOfPayers') AS BankBasedMinNumberOfPayers,
 		(SELECT Value FROM ConfigurationVariables WHERE Name = 'BankBasedMinAnnualizedTurnover') AS BankBasedMinAnnualizedTurnover,
 		(SELECT CONVERT(BIT, Value) FROM ConfigurationVariables WHERE Name = 'BankBasedApprovalIsEnabled') AS BankBasedApprovalIsEnabled,
-		(SELECT CONVERT(BIT, Value) FROM ConfigurationVariables WHERE Name = 'BankBasedApprovalNumOfMonthsToLookForDefaults') AS BankBasedApprovalNumOfMonthsToLookForDefaults		
+		(SELECT CONVERT(BIT, Value) FROM ConfigurationVariables WHERE Name = 'BankBasedApprovalNumOfMonthsToLookForDefaults') AS BankBasedApprovalNumOfMonthsToLookForDefaults,
+		(SELECT Value FROM ConfigurationVariables WHERE Name = 'BankBasedApprovalNumOfMonthBackForVatCheck') AS BankBasedApprovalNumOfMonthBackForVatCheck		
 END
 GO

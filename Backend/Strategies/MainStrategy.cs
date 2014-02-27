@@ -164,8 +164,6 @@
 			{
 				modelLoanOffer = 0;
 			}
-			// update offered loan + term
-
 
 			UpdateCustomerAndCashRequest(scoringResult.ScoreResult, scoringResult.MaxOfferPercent);
 

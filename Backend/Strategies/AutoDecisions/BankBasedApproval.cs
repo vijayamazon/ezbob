@@ -57,7 +57,7 @@
 		private int minNumberOfDays;
 		private decimal sumOfLoanTransactions;
 		private int numberOfPayers;
-		private decimal vat;
+		private int numberOfVatReturns;
 		private decimal annualizedTurnover;
 		private decimal minAnnualizedTurnover;
 		private int minNumberOfPayers;
@@ -73,6 +73,8 @@
 		private DateTime dateOfBirth;
 		private bool isEnabled;
 		private int numOfMonthsToLookForDefaults;
+		private int unsettledDefaultCount;
+		private DateTime startTimeForVatCheck;
 
 		public BankBasedApproval(int customerId, AConnection db, ASafeLog log)
 		{
@@ -87,19 +89,17 @@
 		{
 			log.Info("Getting personal info for customer:{0}", customerId);
 
-			GetYodleePersonalData();
+			GetYodleeSums();
 
 			DataTable dt = db.ExecuteReader("GetPersonalInfoForBankBasedApproval", CommandSpecies.StoredProcedure, 
 				new QueryParameter("CustomerId", customerId),
-				new QueryParameter("NumOfMonthsToLookForDefaults", numOfMonthsToLookForDefaults));
+				new QueryParameter("NumOfMonthsToLookForDefaults", numOfMonthsToLookForDefaults),
+				new QueryParameter("StartTimeForVatCheck", startTimeForVatCheck));
 			var sr = new SafeReader(dt.Rows[0]);
 
-			string amlData = sr["AmlData"];
-			string firstName = sr["FirstName"];
-			string surame = sr["Surame"];
-			string companyData = sr["CompanyData"];
 			hasDefaultAccountsInPeriod = sr["HasDefaultAccounts"];
 			isCustomerViaBroker = sr["IsCustomerViaBroker"];
+			unsettledDefaultCount = sr["UnsettledDefaultCount"];
 			hasNonYodleeMarketplace = sr["HasNonYodleeMarketplace"];
 			isOffline = sr["IsOffline"];
 			dateOfBirth = sr["DateOfBirth"];
@@ -108,8 +108,13 @@
 			personalScore = sr["ExperianScore"];
 			earliestTransactionDate = sr["EarliestTransactionDate"];
 			annualizedTurnover = sr["TotalAnnualizedValue"];
+			numberOfVatReturns = sr["NumberOfVatReturns"];
 
 			// Parse experian data
+			string amlData = sr["AmlData"];
+			string firstName = sr["FirstName"];
+			string surame = sr["Surame"];
+			string companyData = sr["CompanyData"];
 			decimal totalCurrentAssets;
 			amlScore = experianUtils.DetectAml(amlData);
 			XmlNode companyInfo = Xml.ParseRoot(companyData);
@@ -120,7 +125,7 @@
 			businessScore = experianUtils.DetectBusinessScore(companyInfo);
 		}
 
-		private void GetYodleePersonalData()
+		private void GetYodleeSums()
 		{
 			DataTable dt = db.ExecuteReader(
 				"GetCustomerMarketplaces",
@@ -139,12 +144,6 @@
 					    yodleeModel.CashFlowReportModel.YodleeCashFlowReportModelDict["5aLoan Repayments"].ContainsKey(999999))
 					{
 						sumOfLoanTransactions += (decimal) yodleeModel.CashFlowReportModel.YodleeCashFlowReportModelDict["5aLoan Repayments"][999999];
-					}
-
-					if (yodleeModel.CashFlowReportModel.YodleeCashFlowReportModelDict.ContainsKey("7aVAT") &&
-						yodleeModel.CashFlowReportModel.YodleeCashFlowReportModelDict["7aVAT"].ContainsKey(999999))
-					{
-						vat += (decimal)yodleeModel.CashFlowReportModel.YodleeCashFlowReportModelDict["7aVAT"][999999];
 					}
 				}
 			}
@@ -306,6 +305,8 @@
 			minAnnualizedTurnover = sr["BankBasedApprovalMinAnnualizedTurnover"];
 			isEnabled = sr["BankBasedApprovalIsEnabled"];
 			numOfMonthsToLookForDefaults = sr["BankBasedApprovalNumOfMonthsToLookForDefaults"];
+			int numOfMonthBackForVatCheck = sr["BankBasedApprovalNumOfMonthBackForVatCheck"];
+			startTimeForVatCheck = DateTime.UtcNow.AddMonths(-1 * numOfMonthBackForVatCheck);
 		}
 
 		private bool CheckConditionsForApproval()
@@ -343,6 +344,12 @@
 			if (hasDefaultAccountsInPeriod)
 			{
 				log.Info("No bank based approval since the customer:{0} has defaults in the past {1} months", customerId, numOfMonthsToLookForDefaults);
+				return false;
+			}
+
+			if (unsettledDefaultCount > 0)
+			{
+				log.Info("No bank based approval since the customer:{0} has {1} unsettled defaults", customerId, unsettledDefaultCount);
 				return false;
 			}
 
@@ -408,9 +415,9 @@
 			//	return false;
 			//}
 
-			if (vat > 0)
+			if (numberOfVatReturns > 0)
 			{
-				log.Info("No bank based approval since the customer has positive vat:{0}", vat);
+				log.Info("No bank based approval since the customer:{0} has {1} vat returns", customerId, numberOfVatReturns);
 				return false;
 			}
 
