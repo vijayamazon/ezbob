@@ -88,7 +88,6 @@
 			log.Info("Getting personal info for customer:{0}", customerId);
 
 			GetYodleePersonalData();
-			GetYodleePayersData();
 
 			DataTable dt = db.ExecuteReader("GetPersonalInfoForBankBasedApproval", CommandSpecies.StoredProcedure, 
 				new QueryParameter("CustomerId", customerId),
@@ -159,11 +158,13 @@
 				var sr = new SafeReader(row);
 				string description = sr["Description"];
 
-				// parse payer from description - remember it and count it
-				payerNames.Add("parsedName");
-				numberOfPayers = 4; // Remove this line
+				string parsedName = string.Empty; // Parse name - logic for this wasn't defined yet
 
-				//x.banks.ToList()[0].transactions.ToList()[0].description;
+				if (!payerNames.Contains(parsedName))
+				{
+					payerNames.Add(parsedName);
+					numberOfPayers++;
+				}
 			}
 		}
 
@@ -188,7 +189,10 @@
 			{
 				ReadConfigurations();
 				GetPersonalInfo();
-				GetSpecialPayers();
+				
+				// Payers code is commented out as it is not completed and not planned to be completed
+				//GetYodleePayersData();
+				//GetSpecialPayers();
 
 				if (!CheckConditionsForApproval())
 				{
@@ -398,11 +402,11 @@
 				return false;
 			}
 
-			if (numberOfPayers < minNumberOfPayers && !payerNames.Any(payerName => specialPayers.ContainsKey(payerName)))
-			{
-				log.Info("No bank based approval since there are no special payers, and num of payers:{0} is less than minimum:{1}", numberOfPayers, minNumberOfPayers);
-				return false;
-			}
+			//if (numberOfPayers < minNumberOfPayers && !payerNames.Any(payerName => specialPayers.ContainsKey(payerName)))
+			//{
+			//	log.Info("No bank based approval since there are no special payers, and num of payers:{0} is less than minimum:{1}", numberOfPayers, minNumberOfPayers);
+			//	return false;
+			//}
 
 			if (vat > 0)
 			{
