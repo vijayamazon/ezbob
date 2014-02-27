@@ -91,6 +91,7 @@
 					YodleeDatabaseFunctionType.TotalExpense,
 					YodleeDatabaseFunctionType.TotalIncome,
 					YodleeDatabaseFunctionType.NumberOfTransactions,
+					YodleeDatabaseFunctionType.TotalIncomeAnnualized
 				};
 
 			var updated = DateTime.UtcNow;//todo:use time from server

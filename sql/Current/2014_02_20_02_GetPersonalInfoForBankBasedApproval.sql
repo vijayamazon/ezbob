@@ -22,7 +22,12 @@ BEGIN
 		@DateOfBirth DateTime,
 		@ResidentialStatus NVARCHAR(250),
 		@ExperianScore INT,
-		@EarliestTransactionDate DATETIME
+		@EarliestTransactionDate DATETIME,
+		@YodleeTotalIncomeAnnualizedId INT,
+		@YodleeMarketplaceTypeId INT,
+		@MarketplaceId INT,
+		@TempAnnualizedValue FLOAT,
+		@TotalAnnualizedValue FLOAT
 		
 	SELECT TOP 1
 		@AmlId = Id
@@ -102,6 +107,31 @@ BEGIN
 						)
 				)
 		)
+			
+	SELECT @YodleeMarketplaceTypeId = Id FROM MP_MarketplaceType WHERE Name = 'Yodlee'
+	SELECT @YodleeTotalIncomeAnnualizedId = Id FROM MP_AnalyisisFunction WHERE Name = 'TotalIncomeAnnualized' AND MarketPlaceId = @YodleeMarketplaceTypeId
+	SET @TotalAnnualizedValue = 0
+
+	DECLARE cur CURSOR FOR 
+		SELECT 
+			Id
+		FROM 
+			MP_CustomerMarketPlace
+		WHERE 
+			CustomerId = @CustomerId AND
+			MarketPlaceId = @YodleeMarketplaceTypeId
+			
+	OPEN cur
+	FETCH NEXT FROM cur INTO @MarketplaceId
+	WHILE @@FETCH_STATUS = 0
+	BEGIN
+		SELECT TOP 1 @TempAnnualizedValue = ValueFloat FROM MP_AnalyisisFunctionValues WHERE CustomerMarketPlaceId = @MarketplaceId AND AnalyisisFunctionId = @YodleeTotalIncomeAnnualizedId ORDER BY Updated,AnalysisFunctionTimePeriodId DESC
+		SET @TotalAnnualizedValue = @TotalAnnualizedValue + @TempAnnualizedValue
+	
+		FETCH NEXT FROM cur INTO @MarketplaceId
+	END
+	CLOSE cur
+	DEALLOCATE cur		
 
 	SELECT
 		(SELECT ResponseData FROM MP_ServiceLog WHERE Id = @AmlId) AS AmlData,
@@ -115,6 +145,7 @@ BEGIN
 		@DateOfBirth AS DateOfBirth,
 		CAST((CASE @ResidentialStatus WHEN 'Home owner' THEN 1 ELSE 0 END) AS BIT) AS IsHomeOwner,
 		@ExperianScore AS ExperianScore,
-		ISNULL(@EarliestTransactionDate, GETUTCDATE()) AS EarliestTransactionDate
+		ISNULL(@EarliestTransactionDate, GETUTCDATE()) AS EarliestTransactionDate,
+		@TotalAnnualizedValue AS TotalAnnualizedValue
 END
 GO

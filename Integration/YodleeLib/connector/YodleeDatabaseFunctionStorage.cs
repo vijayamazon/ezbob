@@ -11,7 +11,8 @@
 		TotalExpense,
 		NumberOfTransactions,
 		CurrentBalance,
-		AvailableBalance
+		AvailableBalance,
+		TotalIncomeAnnualized
 	}
 
 	internal class YodleeDatabaseFunctionStorage : DatabaseFunctionStorage<YodleeDatabaseFunctionType>
@@ -26,6 +27,7 @@
 			CreateFunctionAndAddToCollection(YodleeDatabaseFunctionType.NumberOfTransactions, DatabaseValueTypeEnum.Integer, "{5D61285F-73C8-4645-9108-B23CC2DA8520}");
 			CreateFunctionAndAddToCollection(YodleeDatabaseFunctionType.CurrentBalance, DatabaseValueTypeEnum.Double, "{621290B5-EC51-44A7-AD06-373EDC6367D8}");
 			CreateFunctionAndAddToCollection(YodleeDatabaseFunctionType.AvailableBalance, DatabaseValueTypeEnum.Double, "{598C5ED7-59A5-4905-BFDF-F35EFAA095BA}");
+			CreateFunctionAndAddToCollection(YodleeDatabaseFunctionType.TotalIncomeAnnualized, DatabaseValueTypeEnum.Double, "{A214810C-C936-4F3C-93D3-2A2D966F81B2}");
 		}
 
 		public static YodleeDatabaseFunctionStorage Instance
@@ -65,6 +67,10 @@
 
 				case YodleeDatabaseFunctionType.AvailableBalance:
 					displayName = "Available Balance";
+					break;
+
+				case YodleeDatabaseFunctionType.TotalIncomeAnnualized:
+					displayName = "Total Income Annualized";
 					break;
 
 				default:

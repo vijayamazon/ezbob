@@ -93,8 +93,6 @@
 			GetYodleePersonalData();
 			GetYodleePayersData();
 
-			annualizedTurnover = (decimal)strategyHelper.GetTotalSumOfOrdersForLoanOffer(customerId);
-
 			DataTable dt = db.ExecuteReader("GetPersonalInfoForBankBasedApproval", CommandSpecies.StoredProcedure, 
 				new QueryParameter("CustomerId", customerId),
 				new QueryParameter("NumOfMonthsToLookForDefaults", numOfMonthsToLookForDefaults));
@@ -113,6 +111,7 @@
 			isHomeOwner = sr["IsHomeOwner"];
 			personalScore = sr["ExperianScore"];
 			earliestTransactionDate = sr["EarliestTransactionDate"];
+			annualizedTurnover = sr["TotalAnnualizedValue"];
 
 			// Parse experian data
 			decimal totalCurrentAssets;

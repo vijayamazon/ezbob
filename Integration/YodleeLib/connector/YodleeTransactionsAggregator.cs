@@ -30,7 +30,6 @@ namespace YodleeLib.connector
 		{
 			switch (functionType)
 			{
-
 				case YodleeDatabaseFunctionType.TotalIncome:
 					return GetTotalIncome(orders);
 
@@ -39,6 +38,9 @@ namespace YodleeLib.connector
 
 				case YodleeDatabaseFunctionType.NumberOfTransactions:
 					return GetNumberOfTransactions(orders);
+
+				case YodleeDatabaseFunctionType.TotalIncomeAnnualized:
+					return GetTotalIncomeAnnualized(orders);
 
 				default:
 					throw new NotImplementedException();
@@ -72,7 +74,7 @@ namespace YodleeLib.connector
 
 		private double GetTotalIncome(IEnumerable<YodleeTransactionItem> orders)
 		{
-			var totlalExpense =
+			var totalIncome =
 					  orders.Where(
 						  b =>
 						  b._Data.transactionStatusId.HasValue &&
@@ -87,7 +89,19 @@ namespace YodleeLib.connector
 																  s._Data.transactionAmount.amount.Value,
 																  (s._Data.postDate.date ?? s._Data.transactionDate.date)).Value);
 
-			return totlalExpense;
+			return totalIncome;
+		}
+
+		private double GetTotalIncomeAnnualized(IEnumerable<YodleeTransactionItem> orders)
+		{
+			var ordersWithExtraInfo = orders as ReceivedDataListTimeDependentInfo<YodleeTransactionItem>;
+			if (ordersWithExtraInfo == null)
+			{
+				return 0;
+			}
+
+			double totalSumOfOrders = GetTotalIncome(orders);
+			return AnnualizeHelper.AnnualizeSum(ordersWithExtraInfo.TimePeriodType, ordersWithExtraInfo.SubmittedDate, totalSumOfOrders);
 		}
 	}
 }
