@@ -2,14 +2,15 @@
 	using System;
 	using Logger;
 
-	#region enum LogVerbosityLevel
+	#region class ForceRetryException
 
-	public enum LogVerbosityLevel {
-		Compact,
-		Verbose
-	} // enum LogVerbosityLevel
+	public class ForceRetryException : Exception {
+		public const string Name = "Force retry";
 
-	#endregion enum LogVerbosityLevel
+		public ForceRetryException(string sMsg = null, Exception oInner = null) : base(sMsg ?? "Force retry", oInner) {} // constructor
+	} // class ForceRetryException
+
+	#endregion class ForceRetryException
 
 	#region class ARetryer
 
@@ -33,9 +34,9 @@
 
 		#region constructor
 
-		protected ARetryer(int nRetryCount = 1, int nSleepBeforeRetry = 0, ASafeLog oLog = null) {
+		protected ARetryer(int nRetryCount = 1, int nSleepBeforeRetryMilliseconds = 0, ASafeLog oLog = null) {
 			RetryCount = nRetryCount;
-			SleepBeforeRetry = nSleepBeforeRetry;
+			SleepBeforeRetry = nSleepBeforeRetryMilliseconds;
 			Log = new SafeLog(oLog);
 			m_nLogVerbosityLevel = LogVerbosityLevel.Compact;
 		} // constructor
@@ -55,6 +56,9 @@
 
 		#region property SleepBeforeRetry
 
+		/// <summary>
+		/// In milliseconds.
+		/// </summary>
 		protected virtual int SleepBeforeRetry {
 			get { return m_nSleepBeforeRetry; } // get
 			private set { m_nSleepBeforeRetry = (value < 0) ? 0 : value; } // set
@@ -66,14 +70,18 @@
 
 		#region method Retry
 
-		public virtual void Retry(Action oAction, string sActionDescription = null) {
-			Retry<object>(() => {
-				oAction();
-				return null;
-			}, sActionDescription);
+		public virtual T Retry<T>(Func<T> oFunc, string sActionDescription = null) {
+			if (oFunc == null)
+				throw new ArgumentNullException("oFunc", "Function to retry not specified.");
+
+			T res = default(T);
+
+			Retry(() => { res = oFunc(); }, sActionDescription);
+
+			return res;
 		} // Retry
 
-		public abstract T Retry<T>(Func<T> func, string sFuncDescription = null); // Retry
+		public abstract void Retry(Action func, string sFuncDescription = null); // Retry
 
 		#endregion method Retry
 

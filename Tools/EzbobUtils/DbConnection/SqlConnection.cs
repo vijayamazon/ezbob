@@ -1,12 +1,10 @@
-﻿using System;
-using System.Data;
-using System.Data.Common;
-using System.Data.SqlClient;
-using System.Globalization;
-using Ezbob.Logger;
-
-namespace Ezbob.Database {
-	using System.Threading;
+﻿namespace Ezbob.Database {
+	using System;
+	using System.Data;
+	using System.Data.Common;
+	using System.Data.SqlClient;
+	using System.Globalization;
+	using Ezbob.Logger;
 
 	#region class SqlConnection
 
@@ -80,7 +78,7 @@ namespace Ezbob.Database {
 		#region method CreateRetryer
 
 		protected override Utils.ARetryer CreateRetryer() {
-			return new SqlRetryer(nRetryCount: 3, nSleepBeforeRetryMilliseconds: 5000, oLog: this);
+			return new SqlRetryer(nRetryCount: 3, nSleepBeforeRetryMilliseconds: 500, oLog: this);
 		} // CreateRetryer
 
 		#endregion method CreateRetryer

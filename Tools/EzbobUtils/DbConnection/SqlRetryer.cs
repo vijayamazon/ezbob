@@ -2,8 +2,8 @@
 	using System;
 	using System.Data.SqlClient;
 	using System.Threading;
-	using Logger;
-	using Utils;
+	using Ezbob.Logger;
+	using Ezbob.Utils;
 
 	#region class SqlRetryer
 
@@ -21,29 +21,36 @@
 
 		#region method Retry
 
-		public override T Retry<T>(Func<T> func, string sFuncDescription = null) {
-			if (func == null)
-				throw new ArgumentNullException("func", "Function to retry not specified.");
+		public override void Retry(Action oAction, string sFuncDescription = null) {
+			if (oAction == null)
+				throw new ArgumentNullException("oAction", "Function to retry not specified.");
 
 			Exception ex = null;
+			string sErrName = null;
 
 			sFuncDescription = string.IsNullOrWhiteSpace(sFuncDescription) ? "DB action" : sFuncDescription;
 
 			for (int nCount = 1; nCount <= RetryCount; nCount++) {
 				try {
+					ex = null;
+
 					if (LogVerbosityLevel == LogVerbosityLevel.Verbose)
 						Log.Debug("Attempt {0} of {1}: {2}", nCount, RetryCount, sFuncDescription);
 
-					T res = func();
+					oAction();
 
 					if (LogVerbosityLevel == LogVerbosityLevel.Verbose)
 						Log.Debug("Success on attempt {0} of {1}: {2}", nCount, RetryCount, sFuncDescription);
 
-					return res;
+					return;
+				}
+				catch (ForceRetryException e) {
+					ex = e;
+					sErrName = ForceRetryException.Name;
 				}
 				catch (SqlException e) {
 					ex = e;
-					string sErrName;
+					sErrName = null;
 
 					switch (e.Number) {
 					case 1205:
@@ -58,18 +65,18 @@
 					case 11:
 						sErrName = "Network error";
 						break;
-
-					default:
-						throw;
 					} // switch
-
-					if (nCount < RetryCount) {
-						Log.Warn(e, "{2} encountered on attempt {0} of {1}, retrying after {3} seconds.", nCount, RetryCount, sErrName, SleepBeforeRetry);
-						Thread.Sleep(SleepBeforeRetry);
-					}
-					else
-						Log.Alert(e, "{2} encountered on attempt {0} of {1}, out of retry attempts.", nCount, RetryCount, sErrName);
 				} // try
+
+				if ((sErrName == null) && (ex != null))
+					throw ex;
+
+				if (nCount < RetryCount) {
+					Log.Warn(ex, "{2} encountered on attempt {0} of {1}, retrying after {3} milliseconds.", nCount, RetryCount, sErrName, SleepBeforeRetry);
+					Thread.Sleep(SleepBeforeRetry);
+				}
+				else
+					Log.Alert(ex, "{2} encountered on attempt {0} of {1}, out of retry attempts.", nCount, RetryCount, sErrName);
 			} // for
 
 			if (ex == null)

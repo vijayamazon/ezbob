@@ -16,6 +16,7 @@ namespace Ezbob.Logger {
 		public FileLog(
 			string sAppName = null,
 			bool bAppend = false,
+			bool bUtcDateInName = false,
 			bool bUtcTimeInName = false,
 			string sPath = null,
 			ASafeLog oLog = null
@@ -32,6 +33,8 @@ namespace Ezbob.Logger {
 
 			if (bUtcTimeInName)
 				oFileName.Append(DateTime.UtcNow.ToString(".yyyy-MM-dd.HH-mm-ss", CultureInfo.InvariantCulture));
+			else if (bUtcDateInName)
+				oFileName.Append(DateTime.UtcNow.ToString(".yyyy-MM-dd", CultureInfo.InvariantCulture));
 
 			oFileName.Append(".log");
 

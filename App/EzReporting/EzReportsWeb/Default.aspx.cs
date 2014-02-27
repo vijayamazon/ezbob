@@ -1,33 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using Ezbob.Database;
-using Ezbob.Logger;
-using Html;
-using Reports;
-using System.Web.Script.Serialization;
-
-namespace EzReportsWeb {
+﻿namespace EzReportsWeb {
+	using System;
+	using System.Collections.Generic;
+	using System.Data;
+	using System.Globalization;
+	using System.IO;
+	using System.Linq;
+	using System.Web;
+	using System.Web.UI;
+	using System.Web.UI.WebControls;
+	using Ezbob.Database;
+	using Ezbob.Logger;
+	using Html;
+	using Reports;
+	using System.Web.Script.Serialization;
 
 	public partial class Default : Page {
-		private static WebReportHandler reportHandler;
 		public static ASafeLog Log;
-		private static AConnection oDB;
-		private static bool bIsAdmin;
+
 		public static bool IsAdmin() {
 			return bIsAdmin;
 		} // IsAdmin
 
-		
 		protected void Page_Load(object sender, EventArgs e) {
-			if (!IsPostBack)
-			{
+			if (!IsPostBack) {
 				Log = (ASafeLog)Application["log"];
 				Log = new FileLog("EzReportsWeb", bUtcTimeInName: true, bAppend: true, sPath: @"C:\temp\EzReportsWeb\");
 				oDB = new SqlConnection(Log);
@@ -95,9 +90,8 @@ namespace EzReportsWeb {
 			var oColumnTypes = new List<string>();
 			Log.Debug("Show report clicked for report: '{0}'", ddlReportTypes.SelectedItem.Text);
 			if (ddlReportTypes.SelectedItem == null)
-			{
 				ResetBtn_Click(sender, e);
-			}
+
 			ATag data = reportHandler.GetReportData(ddlReportTypes.SelectedItem, rptDef, isDaily, oColumnTypes);
 
 			var aoColumnDefs = oColumnTypes.Select(
@@ -239,7 +233,7 @@ namespace EzReportsWeb {
 			}
 			catch (Exception ex) {
 				divAdminMsg.InnerText = string.Format("Action failed: {0}", ex.Message);
-			}
+			} // try
 
 			InitAdminArea(oDB);
 		} // btnAdminCreateUser_Click
@@ -269,7 +263,7 @@ namespace EzReportsWeb {
 			}
 			catch (Exception ex) {
 				divAdminMsg.InnerText = string.Format("Action failed: {0}", ex.Message);
-			}
+			} // try
 
 			InitAdminArea(oDB);
 		} // btnAdminResetPass_Click
@@ -291,7 +285,7 @@ namespace EzReportsWeb {
 			}
 			catch (Exception ex) {
 				divAdminMsg.InnerText = string.Format("Action failed: {0}", ex.Message);
-			}
+			} // try
 
 			InitAdminArea(oDB);
 		} // btnAdminDropUser_Click
@@ -412,14 +406,12 @@ namespace EzReportsWeb {
 				aryUsers.Add(new { id = kv.Value, name = kv.Key });
 
 			txtUserList.Value = jss.Serialize(aryUsers);
-		}
+		} // SetReportUserMap
 
-		protected void ResetBtn_Click(object sender, EventArgs e)
-		{
+		protected void ResetBtn_Click(object sender, EventArgs e) {
 			reportHandler = new WebReportHandler(oDB, Log);
 
-			if (reportHandler.ReportList.Count == 0)
-			{
+			if (reportHandler.ReportList.Count == 0) {
 				divFilter.Visible = false;
 				return;
 			} // if
@@ -428,6 +420,10 @@ namespace EzReportsWeb {
 			ddlReportTypes.DataValueField = "Title";
 			ddlReportTypes.DataSource = reportHandler.ReportList.Values;
 			ddlReportTypes.DataBind();
-		} // SetReportUserMap
+		} // ResetBtn_Click
+
+		private static WebReportHandler reportHandler;
+		private static AConnection oDB;
+		private static bool bIsAdmin;
 	} // class Default
 } // namespace EzReportsWeb

@@ -1,15 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using Ezbob.Database;
-using Ezbob.Logger;
-using Ezbob.ValueIntervals;
-using Html;
-using Reports;
+﻿// ReSharper disable UnusedMember.Local
 
 namespace TestApp {
+	using System;
+	using System.Collections.Generic;
+	using System.Data;
 	using System.Data.Common;
+	using System.Data.SqlClient;
+
 	using Ezbob.Context;
+	using Ezbob.Database;
+	using Ezbob.Logger;
+	using Ezbob.Utils;
+	using Ezbob.ValueIntervals;
+	using Html;
+	using Reports;
+	using SqlConnection = Ezbob.Database.SqlConnection;
 
 	class Program {
 		#region method Main
@@ -22,8 +27,11 @@ namespace TestApp {
 			ms_oLog = log;
 
 			var oDB = new SqlConnection(log);
+			oDB.LogVerbosityLevel = LogVerbosityLevel.Verbose;
 
-			TestEarnedInterestForAudit(oDB, log);
+			TestRetryerWithArguments(oDB, log);
+
+			// TestEarnedInterestForAudit(oDB, log);
 
 			// TestHashPassword(oDB, log);
 
@@ -51,6 +59,45 @@ namespace TestApp {
 		} // Main
 
 		#endregion method Main
+
+		#region private static TestRetryerWithArguments
+
+		private static void TestRetryerWithArguments(AConnection oDB, ASafeLog log) {
+			var oRetryer = new SqlRetryer(nRetryCount: 8, nSleepBeforeRetryMilliseconds: 2000, oLog: log) {
+				LogVerbosityLevel = oDB.LogVerbosityLevel
+			};
+
+			ms_nActionTestCounter = 0;
+
+			Action oAction = () => ActionTest(28, "some string", log);
+
+			oRetryer.Retry(oAction, "just a test action for 8 retries");
+
+			var oTwoRetryer = new SqlRetryer(nRetryCount: 2, nSleepBeforeRetryMilliseconds: 2000, oLog: log) {
+				LogVerbosityLevel = oDB.LogVerbosityLevel
+			};
+
+			ms_nActionTestCounter = 0;
+
+			oTwoRetryer.Retry(oAction, "just a test action for 2 retries");
+		} // TestRetryerWithArguments
+
+		private static int ms_nActionTestCounter;
+
+		private static void ActionTest(int x, string s, ASafeLog log) {
+			log.Info("ActionTest started...");
+
+			if (ms_nActionTestCounter < 3) {
+				ms_nActionTestCounter++;
+				throw new ForceRetryException("just a force retry");
+			} // if
+
+			log.Info("ActionTest: x = {0}", x);
+			log.Info("ActionTest: s = {0}", s);
+			log.Info("ActionTest complete.");
+		} // ActionTest
+
+		#endregion private static TestRetryerWithArguments
 
 		#region method TestEarnedInterestForAudit
 
@@ -319,3 +366,5 @@ namespace TestApp {
 		#endregion method TestLoanIntegrity
 	} // class Program
 } // namespace
+
+// ReSharper restore UnusedMember.Local

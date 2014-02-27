@@ -12,4 +12,13 @@
 	} // enum Severity
 
 	#endregion enum Severity
+
+	#region enum LogVerbosityLevel
+
+	public enum LogVerbosityLevel {
+		Compact,
+		Verbose
+	} // enum LogVerbosityLevel
+
+	#endregion enum LogVerbosityLevel
 } // namespace Ezbob.Logger
