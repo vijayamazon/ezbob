@@ -81,9 +81,6 @@
 			this.customerId = customerId;
 			experianUtils = new ExperianUtils(log);
 			mailer = new StrategiesMailer(db, log);
-			ReadConfigurations();
-			GetPersonalInfo();
-			GetSpecialPayers();
 		}
 
 		private void GetPersonalInfo()
@@ -137,8 +134,20 @@
 				var sr = new SafeReader(row);
 				int mpId = sr["Id"];
 				YodleeModel yodleeModel = new YodleeMarketplaceModelBuilder().BuildYodlee(mpId);
-				sumOfLoanTransactions += (decimal)yodleeModel.CashFlowReportModel.YodleeCashFlowReportModelDict["5aLoan Repayments"][999999];
-				vat += (decimal)yodleeModel.CashFlowReportModel.YodleeCashFlowReportModelDict["vat"][999999];// Should change "vat"
+				if (yodleeModel.CashFlowReportModel != null && yodleeModel.CashFlowReportModel.YodleeCashFlowReportModelDict != null)
+				{
+					if (yodleeModel.CashFlowReportModel.YodleeCashFlowReportModelDict.ContainsKey("5aLoan Repayments") &&
+					    yodleeModel.CashFlowReportModel.YodleeCashFlowReportModelDict["5aLoan Repayments"].ContainsKey(999999))
+					{
+						sumOfLoanTransactions += (decimal) yodleeModel.CashFlowReportModel.YodleeCashFlowReportModelDict["5aLoan Repayments"][999999];
+					}
+
+					if (yodleeModel.CashFlowReportModel.YodleeCashFlowReportModelDict.ContainsKey("7aVAT") &&
+						yodleeModel.CashFlowReportModel.YodleeCashFlowReportModelDict["7aVAT"].ContainsKey(999999))
+					{
+						vat += (decimal)yodleeModel.CashFlowReportModel.YodleeCashFlowReportModelDict["7aVAT"][999999];
+					}
+				}
 			}
 		}
 
@@ -175,42 +184,54 @@
 
 		public bool MakeDecision(AutoDecisionResponse response)
 		{
-			if (!CheckConditionsForApproval())
+			try
 			{
-				return false;
-			}
+				ReadConfigurations();
+				GetPersonalInfo();
+				GetSpecialPayers();
+
+				if (!CheckConditionsForApproval())
+				{
+					return false;
+				}
 			
-			loanOffer = CalculateLoanOffer();
-			if (loanOffer < minOffer)
+				loanOffer = CalculateLoanOffer();
+				if (loanOffer < minOffer)
+				{
+					log.Info("No bank based approval since the loan offer is too low:{0} while the minimum is:{1}", loanOffer, minOffer);
+					return false;
+				}
+
+				CapOffer();
+
+				if (isSilent)
+				{
+					NotifyAutoApproveSilentMode();
+
+					response.CreditResult = "WaitingForDecision";
+					response.UserStatus = "Manual";
+					response.SystemDecision = "Manual";
+				}
+				else
+				{
+					SetApproval(response);
+				}
+
+				return true;
+			}
+			catch (Exception e)
 			{
-				log.Info("No bank based approval since the loan offer is too low:{0} while the minimum is:{1}", loanOffer, minOffer);
+				log.Error("Exception during bank based approval:{0}", e);
 				return false;
 			}
-
-			CapOffer();
-
-			if (isSilent)
-			{
-				NotifyAutoApproveSilentMode();
-
-				response.CreditResult = "WaitingForDecision";
-				response.UserStatus = "Manual";
-				response.SystemDecision = "Manual";
-			}
-			else
-			{
-				SetApproval(response);
-			}
-
-			return true;
 		}
 
 		private void NotifyAutoApproveSilentMode()
 		{
 			var vars = new Dictionary<string, string>
 			{
-				{"customerId", customerId.ToString(CultureInfo.InvariantCulture)},
-				{"ApproveAmount", loanOffer.ToString(CultureInfo.InvariantCulture)}
+				{"CustomerId", customerId.ToString(CultureInfo.InvariantCulture)},
+				{"Amount", loanOffer.ToString(CultureInfo.InvariantCulture)}
 			};
 
 			log.Info("Sending silent bank based auto approval mail for: customerId={0} ApproveAmount={1}", customerId, loanOffer);

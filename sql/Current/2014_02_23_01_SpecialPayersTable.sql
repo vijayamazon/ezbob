@@ -1,4 +1,4 @@
-IF OBJECT_ID('Broker') IS NULL
+IF OBJECT_ID('SpecialPayers') IS NULL
 BEGIN
 	CREATE TABLE SpecialPayers 
 	(

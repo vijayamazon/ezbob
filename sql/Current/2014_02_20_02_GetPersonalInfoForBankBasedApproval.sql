@@ -137,7 +137,7 @@ BEGIN
 		(SELECT ResponseData FROM MP_ServiceLog WHERE Id = @AmlId) AS AmlData,
 		@FirstName AS FirstName,
 		@LastName AS Surname,
-		(SELECT JsonPacket FROM MP_ExperianDataCache WHERE Id = @CompanyId) AS CompanyData,
+		(SELECT MP_ExperianDataCache.JsonPacket FROM MP_ExperianDataCache, Company WHERE MP_ExperianDataCache.CompanyRefNumber = Company.CompanyNumber AND Company.Id = @CompanyId) AS CompanyData,
 		CAST((CASE @DefaultCount WHEN 0 THEN 0 ELSE 1 END) AS BIT) AS HasDefaultAccounts,
 		CAST((CASE @ReferenceSource WHEN 'liqcen' THEN 1 ELSE 0 END) AS BIT) AS IsCustomerViaBroker,
 		@HasNonYodleeMarketplace AS HasNonYodleeMarketplace,
