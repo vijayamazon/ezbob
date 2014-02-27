@@ -84,11 +84,7 @@
     @{if (!string.IsNullOrEmpty(userName))
       {
         <div class="navbar navbar-blue" id="navbar">
-            <button type="button" class="navbar-toggle navbar-btn collapsed" data-toggle="collapse" data-target="#sidebar">
-                <span class="fa fa-bars"></span>
-            </button>
-
-            <a class="navbar-brand" href="#" id="uw-name-and-icon" data-uw-id="@userId">
+            <a class="navbar-brand" href="#" id="uw-name-and-icon" data-uw-id="@userId" style="float: left">
                 <img data-title="@sRoleImageTitle" class="roleImg" src="@Ezbob.Utils.Gravatar.Url(userEmail, sRoleImageUrl, 40)"/>@userName
             </a>
             <ul class="nav flaty-nav">
@@ -151,7 +147,7 @@
                 @if (!Request.Browser.IsMobileDevice)
                 {
                     <li>
-                        <a href="#" class="ezbob-logo"></a>
+                        <a href="#" class="ezbob-logo header-logo"></a>
                     </li>
                     <li>
                         <div id="theme-setting">
