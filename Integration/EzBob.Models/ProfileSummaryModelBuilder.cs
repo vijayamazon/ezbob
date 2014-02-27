@@ -350,7 +350,7 @@
 			foreach (MP_CustomerMarketPlace mp in marketplaces)
 			{
 				string currentState = (string) session.CreateSQLQuery(string.Format("EXEC GetLastMarketplaceStatus {0}, {1}", mp.Customer.Id, mp.Id)).UniqueResult();
-				if (currentState == "In progress")
+				if (currentState == "In progress" || currentState == "BG launch")
 				{
 					return LightsState.InProgress;
 				}

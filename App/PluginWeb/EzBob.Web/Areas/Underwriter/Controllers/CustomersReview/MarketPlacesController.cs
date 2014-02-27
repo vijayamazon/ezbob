@@ -132,7 +132,7 @@
 			var mp = _customerMarketplaces.Get(umi);
 
 			string currentState = (string)_session.CreateSQLQuery(string.Format("EXEC GetLastMarketplaceStatus {0}, {1}", mp.Customer.Id, mp.Id)).UniqueResult();
-			if (currentState == "In progress")
+			if (currentState == "In progress" || currentState == "BG launch")
 				throw new Exception("Strategy already started");
 
 			var customer = mp.Customer;

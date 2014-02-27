@@ -106,7 +106,7 @@ namespace EZBob.DatabaseLib.Model.Database
 			{
 				var session = ObjectFactory.GetInstance<ISession>();
 				string currentState = (string)session.CreateSQLQuery(string.Format("EXEC GetLastMarketplaceStatus {0}, {1}", Customer.Id, Id)).UniqueResult();
-				if (currentState == "In progress")
+				if (currentState == "In progress" || currentState == "BG launch")
 				{
 					status = "In progress";
 				}
