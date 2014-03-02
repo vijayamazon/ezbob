@@ -288,12 +288,6 @@
   <wsdl:message name="IEzService_UpdateMarketplace_OutputMessage">
     <wsdl:part name="parameters" element="tns:UpdateMarketplaceResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_UpdateAllMarketplaces_InputMessage">
-    <wsdl:part name="parameters" element="tns:UpdateAllMarketplaces" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_UpdateAllMarketplaces_OutputMessage">
-    <wsdl:part name="parameters" element="tns:UpdateAllMarketplacesResponse" />
-  </wsdl:message>
   <wsdl:message name="IEzService_UpdateTransactionStatus_InputMessage">
     <wsdl:part name="parameters" element="tns:UpdateTransactionStatus" />
   </wsdl:message>
@@ -431,6 +425,18 @@
   </wsdl:message>
   <wsdl:message name="IEzService_BrokerLoadCustomerList_OutputMessage">
     <wsdl:part name="parameters" element="tns:BrokerLoadCustomerListResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LandRegistryEnquiry_InputMessage">
+    <wsdl:part name="parameters" element="tns:LandRegistryEnquiry" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LandRegistryEnquiry_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LandRegistryEnquiryResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LandRegistryRes_InputMessage">
+    <wsdl:part name="parameters" element="tns:LandRegistryRes" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LandRegistryRes_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LandRegistryResResponse" />
   </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
@@ -575,10 +581,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateMarketplace" message="tns:IEzService_UpdateMarketplace_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UpdateMarketplaceResponse" message="tns:IEzService_UpdateMarketplace_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="UpdateAllMarketplaces">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateAllMarketplaces" message="tns:IEzService_UpdateAllMarketplaces_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UpdateAllMarketplacesResponse" message="tns:IEzService_UpdateAllMarketplaces_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="UpdateTransactionStatus">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateTransactionStatus" message="tns:IEzService_UpdateTransactionStatus_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UpdateTransactionStatusResponse" message="tns:IEzService_UpdateTransactionStatus_OutputMessage" />
@@ -670,6 +672,14 @@
     <wsdl:operation name="BrokerLoadCustomerList">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerLoadCustomerList" message="tns:IEzService_BrokerLoadCustomerList_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerLoadCustomerListResponse" message="tns:IEzService_BrokerLoadCustomerList_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LandRegistryEnquiry">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LandRegistryEnquiry" message="tns:IEzService_LandRegistryEnquiry_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LandRegistryEnquiryResponse" message="tns:IEzService_LandRegistryEnquiry_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LandRegistryRes">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LandRegistryRes" message="tns:IEzService_LandRegistryRes_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LandRegistryResResponse" message="tns:IEzService_LandRegistryRes_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
@@ -996,15 +1006,6 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="UpdateAllMarketplaces">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/UpdateAllMarketplaces" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="UpdateTransactionStatus">
       <soap12:operation soapAction="http://tempuri.org/IEzService/UpdateTransactionStatus" style="document" />
       <wsdl:input>
@@ -1212,23 +1213,41 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="LandRegistryEnquiry">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/LandRegistryEnquiry" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LandRegistryRes">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/LandRegistryRes" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="EzServiceImplementation">
     <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
-      <soap12:address location="net.tcp://alexbo-pc:7081/" />
+      <soap12:address location="net.tcp://yulys-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://yulys-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>alexbo-pc\alexbo</Upn>
+          <Upn>yulys-PC\yulys</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IEzService" binding="tns:NetTcpBinding_IEzService">
-      <soap12:address location="net.tcp://alexbo-pc:7081/" />
+      <soap12:address location="net.tcp://yulys-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://yulys-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>alexbo-pc\alexbo</Upn>
+          <Upn>yulys-PC\yulys</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

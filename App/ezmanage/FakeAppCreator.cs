@@ -124,11 +124,6 @@
             
         }
 
-        public void UpdateAllMarketplaces(Customer customer)
-        {
-            
-        }
-
 		public void PerformCompanyCheck(int customerId)
 		{
 

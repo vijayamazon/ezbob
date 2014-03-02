@@ -108,7 +108,6 @@
     <Compile Include="FraudChecker.cs" />
     <Compile Include="Exceptions\StrategyException.cs" />
     <Compile Include="StrategyLog.cs" />
-    <Compile Include="UpdateMarketplaces.cs" />
     <Compile Include="SetLateLoanStatus.cs" />
     <Compile Include="LateBy14Days.cs" />
     <Compile Include="FirstOfMonthStatusNotifier.cs" />

@@ -35,7 +35,6 @@ namespace EzBob.Web.Code.ApplicationCreator
 		void MoreBWAInformation(User user, string email, int userId, string firstName);
 		void SendEmailVerification(User user, Customer customer, string address);
 		void PayPointAddedByUnderwriter(User user, Customer customer, string cardno);
-		void UpdateAllMarketplaces(Customer customer);
 		void PerformCompanyCheck(int customerId);
 		void PerformConsumerCheck(int customerId, int directorId);
 		void PerformAmlCheck(int customerId);

@@ -1,16 +1,14 @@
-﻿using System;
-using System.Linq;
-using ApplicationMng.Repository;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Loans;
-using EZBob.DatabaseLib.Model.Loans;
-using EzBob.Web.Infrastructure;
-using PaymentServices.Calculators;
-
-namespace EzBob.Web.Code {
+﻿namespace EzBob.Web.Code {
 	using ApplicationCreator;
 	using EZBob.DatabaseLib.Model;
 	using EzServiceReference;
+	using System;
+	using System.Linq;
+	using ApplicationMng.Repository;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EZBob.DatabaseLib.Model.Loans;
+	using Infrastructure;
 
 	public class CashRequestBuilder {
 		#region constructor
@@ -139,11 +137,13 @@ namespace EzBob.Web.Code {
 			);
 
 			if (bUpdateMarketplaces) {
-				//UpdateAllMarketplaces не успевает проставить UpdatingEnd = null для того что бы MainStrategy подождала окончание его работы
-				foreach (var val in customer.CustomerMarketPlaces)
-					val.UpdatingEnd = null;
-
-				_creator.UpdateAllMarketplaces(customer);
+				// Update all marketplaces
+				foreach (var mp in customer.CustomerMarketPlaces)
+				{
+					mp.UpdatingEnd = null;
+					var client = _creator.GetServiceClient();
+					client.UpdateMarketplace(customer.Id, mp.Id);
+				}
 			} // if
 
 			_creator.Evaluate(underwriterId, _users.Get(customer.Id), newCreditLineOption, Convert.ToInt32(customer.IsAvoid), isUnderwriterForced, isSync);

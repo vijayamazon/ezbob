@@ -98,10 +98,7 @@ namespace EzService {
 
 		[OperationContract]
 		ActionMetaData UpdateMarketplace(int customerId, int marketplaceId);
-
-		[OperationContract]
-		ActionMetaData UpdateAllMarketplaces(int customerId);
-
+		
 		[OperationContract]
 		ActionMetaData UpdateTransactionStatus();
 

@@ -443,17 +443,6 @@
 		}
 
 		[Activation]
-		private void UpdateAllMarketplaces() {
-			int customerId;
-			if (args.Length != 2 || !int.TryParse(args[1], out customerId)) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> UpdateAllMarketplaces <CustomerId>");
-				return;
-			}
-
-			serviceClient.UpdateAllMarketplaces(customerId);
-		}
-
-		[Activation]
 		private void UpdateTransactionStatus() {
 			if (args.Length != 1) {
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> UpdateTransactionStatus");

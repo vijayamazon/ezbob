@@ -392,22 +392,6 @@
 			}
 		}
 
-		public void UpdateAllMarketplaces(Customer customer)
-		{
-			if (useNewUpdateCustomerMpsStrategy)
-			{
-				ServiceClient.UpdateAllMarketplaces(customer.Id);
-			}
-			else
-			{
-				var strategyParameters = new[] {
-					new StrategyParameter("customerId", customer.Id),
-					new StrategyParameter("userId", customer.Id)
-				};
-				CreateApplication(customer, strategyParameters, _config.UpdateMarketplacesStrategyName);
-			}
-		}
-
 		public void PerformCompanyCheck(int customerId)
 		{
 			ServiceClient.CheckExperianCompany(customerId);

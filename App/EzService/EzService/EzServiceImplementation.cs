@@ -381,10 +381,6 @@
 			return Execute(customerId, null, typeof(UpdateMarketplace), customerId, marketplaceId);
 		} // UpdateMarketplace
 
-		public ActionMetaData UpdateAllMarketplaces(int customerId) {
-			return Execute(customerId, null, typeof(UpdateMarketplaces), customerId);
-		} // UpdateAllMarketplaces
-
 		public ActionMetaData UpdateTransactionStatus() {
 			return Execute(null, null, typeof(UpdateTransactionStatus));
 		} // UpdateTransactionStatus
