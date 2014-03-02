@@ -2,21 +2,27 @@
 {
 	using System.Data;
 	using System.Web.Mvc;
+	using Code.ApplicationCreator;
+	using CommonLib;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
+	using LandRegistryLib;
 	using Models;
 	using Scorto.Web;
 	using System.Linq;
 	using EzBob.Models;
 	public class CrossCheckController : Controller
 	{
+		private readonly IAppCreator _appCreator;
 		private readonly CustomerRepository _customerRepository;
 		private readonly CustomerAddressRepository _customerAddressRepository;
 		private readonly CreditBureauModelBuilder _creditBureauModelBuilder;
 		public CrossCheckController(CustomerRepository customerRepository, 
 			CreditBureauModelBuilder creditBureauModelBuilder, 
-			CustomerAddressRepository customerAddressRepository)
+			CustomerAddressRepository customerAddressRepository,
+			IAppCreator appCreator)
 		{
+			_appCreator = appCreator;
 			_customerRepository = customerRepository;
 			_creditBureauModelBuilder = creditBureauModelBuilder;
 			_customerAddressRepository = customerAddressRepository;
@@ -58,8 +64,9 @@
 		[HttpGet]
 		public JsonNetResult LandRegistryEnquiry(int customerId, string buildingNumber, string streetName, string cityName, string postCode)
 		{
-			var sh = new StrategyHelper();
-			var landregistry = sh.GetLandRegistryEnquiryData(customerId, buildingNumber, streetName, cityName, postCode);
+			var client = _appCreator.GetServiceClient();
+			var landregistryXml = client.LandRegistryEnquiry(customerId, buildingNumber, streetName, cityName, postCode);
+			var landregistry = SerializeDataHelper.DeserializeTypeFromString<LandRegistryDataModel>(landregistryXml);
 
 			return this.JsonNet(new { titles = landregistry.Enquery.Titles, rejection = landregistry.Rejection, ack = landregistry.Acknowledgement });
 		}
@@ -68,11 +75,11 @@
 		[HttpGet]
 		public JsonNetResult LandRegistry(int customerId, string titleNumber = null)
 		{
-			LandRegistryLib.LandRegistryDataModel landregistry = null;
+			var client = _appCreator.GetServiceClient();
+			var landregistryXml = client.LandRegistryRes(customerId, titleNumber);
+			var landregistry = SerializeDataHelper.DeserializeTypeFromString<LandRegistryDataModel>(landregistryXml);
 
-				var sh = new StrategyHelper();
-				landregistry = sh.GetLandRegistryData(customerId, titleNumber);
-				if (landregistry == null)
+			if (landregistry == null)
 					return this.JsonNet(new { error = "land registry info not found" });
 
 			//todo return the full model 

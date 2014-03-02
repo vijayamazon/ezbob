@@ -26,6 +26,7 @@
 
 	public enum LandRegistryRequestType
 	{
+		None = 0,
 		EnquiryByPropertyDescription = 1,
 		EnquiryByPropertyDescriptionPoll = 2,
 		RegisterExtractService = 3,
@@ -34,6 +35,7 @@
 
 	public enum LandRegistryResponseType
 	{
+		None = 0,
 		Acknowledgement = 1,//10
 		Rejection = 2,//20
 		Success = 3,//30

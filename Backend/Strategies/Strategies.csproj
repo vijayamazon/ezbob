@@ -83,6 +83,7 @@
     <Compile Include="AutoDecisions\Rejection.cs" />
     <Compile Include="AutoDecisions\ReApproval.cs" />
     <Compile Include="AutoDecisions\ReRejection.cs" />
+    <Compile Include="LandRegistry.cs" />
     <Compile Include="Broker\BrokerLoadCustomerList.cs" />
     <Compile Include="Broker\BrokerSignup.cs" />
     <Compile Include="Broker\BrokerLogin.cs" />
@@ -223,6 +224,10 @@
     <ProjectReference Include="..\..\Integration\FreeAgent\FreeAgent.csproj">
       <Project>{ee7f496f-963f-4383-b0c2-3bcf9fc15511}</Project>
       <Name>FreeAgent</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Integration\LandRegistryLib\LandRegistryLib.csproj">
+      <Project>{637833c1-b500-4310-be16-f157f15b17c1}</Project>
+      <Name>LandRegistryLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Integration\MailApi\MailApi.csproj">
       <Project>{de254378-4cf8-400c-bcc4-a9af01550350}</Project>

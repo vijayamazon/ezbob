@@ -628,7 +628,11 @@
 		}
 
 		#region property ServiceClient
-		
+		public EzServiceClient GetServiceClient()
+		{
+			return ServiceClient;
+		}
+
 		private EzServiceClient ServiceClient {
 			get {
 				if (ReferenceEquals(m_oServiceClient, null) || (m_oServiceClient.State != CommunicationState.Opened)) {
@@ -636,7 +640,7 @@
 						var cfg = new EzSrvCfgLoader(_session, Log);
 						cfg.Init();
 
-						var oTcpBinding = new NetTcpBinding();
+						var oTcpBinding = new NetTcpBinding { MaxBufferPoolSize = 524288, MaxBufferSize = 65536000, MaxReceivedMessageSize = 65536000};
 
 						m_oServiceClient = new EzServiceClient(
 							oTcpBinding, // TODO: HTTPS...

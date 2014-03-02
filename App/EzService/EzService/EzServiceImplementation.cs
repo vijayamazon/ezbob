@@ -560,7 +560,23 @@
 				MetaData = result,
 				Records = oIntstance.Result.Values.ToList(),
 			};
-		} // BrokerLoadCustomerList
+		}
+
+		public string LandRegistryEnquiry(int customerId, string buildingNumber, string streetName, string cityName, string postCode)
+		{
+			LandRegistryEnquiry oInstance;
+			ActionMetaData result = ExecuteSync<LandRegistryEnquiry>(out oInstance, customerId, null, customerId, buildingNumber, streetName, cityName, postCode);
+			return oInstance.Result;
+		}
+
+		public string LandRegistryRes(int customerId, string titleNumber)
+		{
+			LandRegistryRes oInstance;
+			ActionMetaData result = ExecuteSync<LandRegistryRes>(out oInstance, customerId, null, customerId, titleNumber);
+			return oInstance.Result;
+		}
+
+// BrokerLoadCustomerList
 
 		#endregion IEzService exposed methods
 

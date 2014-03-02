@@ -627,6 +627,12 @@ namespace EzBob.Web.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLoadCustomerList", ReplyAction="http://tempuri.org/IEzService/BrokerLoadCustomerListResponse")]
         EzBob.Web.EzServiceReference.BrokerCustomersActionResult BrokerLoadCustomerList(string sContactEmail);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LandRegistryEnquiry", ReplyAction="http://tempuri.org/IEzService/LandRegistryEnquiryResponse")]
+        string LandRegistryEnquiry(int customerId, string buildingNumber, string streetName, string cityName, string postCode);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LandRegistryRes", ReplyAction="http://tempuri.org/IEzService/LandRegistryResResponse")]
+        string LandRegistryRes(int customerId, string titleNumber);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -870,6 +876,14 @@ namespace EzBob.Web.EzServiceReference {
         
         public EzBob.Web.EzServiceReference.BrokerCustomersActionResult BrokerLoadCustomerList(string sContactEmail) {
             return base.Channel.BrokerLoadCustomerList(sContactEmail);
+        }
+        
+        public string LandRegistryEnquiry(int customerId, string buildingNumber, string streetName, string cityName, string postCode) {
+            return base.Channel.LandRegistryEnquiry(customerId, buildingNumber, streetName, cityName, postCode);
+        }
+        
+        public string LandRegistryRes(int customerId, string titleNumber) {
+            return base.Channel.LandRegistryRes(customerId, titleNumber);
         }
     }
 }
