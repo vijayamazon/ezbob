@@ -28,10 +28,10 @@
 				return autoDecisionResponse;
 			}
 
-			//if (new BankBasedApproval(customerId, oDb, oLog).MakeDecision(autoDecisionResponse))
-			//{
-			//	return autoDecisionResponse;
-			//}
+			if (new BankBasedApproval(customerId, oDb, oLog).MakeDecision(autoDecisionResponse))
+			{
+				return autoDecisionResponse;
+			}
 
 			if (new Rejection(customerId, totalSumOfOrders1YTotal, totalSumOfOrders3MTotal, marketplaceSeniorityDays, enableAutomaticRejection, initialExperianConsumerScore, oDb, oLog).MakeDecision(autoDecisionResponse))
 			{
