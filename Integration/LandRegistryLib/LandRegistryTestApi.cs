@@ -58,12 +58,7 @@
 				catch (Exception ex)
 				{
 					Log.ErrorFormat("{0}", ex);
-					model.Error = ex.Message;
-					while (ex.InnerException != null)
-					{
-						ex = ex.InnerException;
-						model.Error += "\n inner: " + ex.Message;
-					}
+					model.Rejection = new LandRegistryRejectionModel {Reason = ex.Message};
 					model.ResponseType = LandRegistryResponseType.Rejection;
 					//File.WriteAllText("resex3.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
 				}
@@ -102,7 +97,7 @@
 				catch (Exception ex)
 				{
 					Log.ErrorFormat("{0}", ex);
-					model.Error = ex.Message;
+					model.Rejection = new LandRegistryRejectionModel { Reason = ex.Message };
 					model.ResponseType = LandRegistryResponseType.Rejection;
 					//File.WriteAllText("resex1c.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
 				}
@@ -176,12 +171,7 @@
 				catch (Exception ex)
 				{
 					Log.ErrorFormat("{0}", ex);
-					model.Error = ex.Message;
-					while (ex.InnerException != null)
-					{
-						ex = ex.InnerException;
-						model.Error += "\n inner: " + ex.Message;
-					}
+					model.Rejection = new LandRegistryRejectionModel { Reason = ex.Message };
 					model.ResponseType = LandRegistryResponseType.Rejection;
 					//File.WriteAllText("resex1c.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
 				}
@@ -230,7 +220,7 @@
 				catch (Exception ex)
 				{
 					Log.ErrorFormat("{0}", ex);
-					model.Error = ex.Message;
+					model.Rejection = new LandRegistryRejectionModel { Reason = ex.Message };
 					model.ResponseType = LandRegistryResponseType.Rejection;
 					//File.WriteAllText("resex1c.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
 				}

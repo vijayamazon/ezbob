@@ -41,7 +41,7 @@ EzBob.LandRegistryEnquiryView = Backbone.Marionette.View.extend({
         data.push({ name: "customerId", value: this.model.customerId });
         BlockUi("On");
         $.get(window.gRootPath + "Underwriter/CrossCheck/LandRegistryEnquiry", data, function (response) {
-            var enqRes = new EzBob.LandRegistryEnquiryResultsView({ model: response, customerId : that.model.customerId });
+            var enqRes = new EzBob.LandRegistryEnquiryResultsView({ model: response, customerId: that.model.customerId });
             EzBob.App.jqmodal.show(enqRes);
             BlockUi("Off");
         });
@@ -87,6 +87,7 @@ EzBob.LandRegistryEnquiryResultsView = Backbone.Marionette.View.extend({
         BlockUi("On");
         return $.get(window.gRootPath + "Underwriter/CrossCheck/LandRegistry/?customerId=" + this.customerId + "&titleNumber=" + this.titleNumber, function (data) {
             var lrView = new EzBob.LandRegistryView({ model: data });
+            scrollTop();
             EzBob.App.jqmodal.show(lrView);
             BlockUi("Off");
         });

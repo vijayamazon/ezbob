@@ -90,7 +90,7 @@
 				catch (Exception ex)
 				{
 					Log.ErrorFormat("{0}", ex);
-					model.Error = ex.Message;
+					model.Rejection = new LandRegistryRejectionModel { Reason = ex.Message };
 					model.ResponseType = LandRegistryResponseType.Rejection;
 					//File.WriteAllText("Resex3.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
 				}
@@ -153,7 +153,7 @@
 				catch (Exception ex)
 				{
 					Log.ErrorFormat("{0}", ex);
-					model.Error = ex.Message;
+					model.Rejection = new LandRegistryRejectionModel { Reason = ex.Message };
 					model.ResponseType = LandRegistryResponseType.Rejection;
 					//File.WriteAllText("Resex1c.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
 				}
@@ -254,7 +254,7 @@
 				catch (Exception ex)
 				{
 					Log.ErrorFormat("{0}", ex);
-					model.Error = ex.Message;
+					model.Rejection = new LandRegistryRejectionModel { Reason = ex.Message };
 					model.ResponseType = LandRegistryResponseType.Rejection;
 				}
 			}
@@ -335,7 +335,7 @@
 				catch (Exception ex)
 				{
 					Log.ErrorFormat("{0}", ex);
-					model.Error = ex.Message;
+					model.Rejection = new LandRegistryRejectionModel { Reason = ex.Message };
 					model.ResponseType = LandRegistryResponseType.Rejection;
 				}
 			}

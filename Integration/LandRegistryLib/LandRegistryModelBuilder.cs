@@ -32,6 +32,9 @@
 			return type;
 		}
 
+
+
+
 		public LandRegistryEnquiryModel BuildEnquiryModel(string responseXml)
 		{
 			var response = XmlHelper.DeserializeObject<ResponseSearchByPropertyDescriptionV2_0Type>(responseXml); 
@@ -43,7 +46,6 @@
 		{
 			var model = new LandRegistryEnquiryModel { Titles = new List<LandRegistryEnquiryTitle>() };
 			var data = response.GatewayResponse.Results;
-
 			foreach (var title in data.Title)
 			{
 				var lrTitle = new LandRegistryEnquiryTitle
@@ -286,5 +288,15 @@
 			if (indicators.VendorsLienIndicator.Value) { lrIndicators.Add(LandRegistryIndicatorText.VendorsLienIndicator); }
 			return lrIndicators;
 		}
+
+		//public LandRegistryAcknowledgementModel BuildAcknowledgmentModel()
+		//{
+			
+		//}
+
+		//public LandRegistryRejectionModel BuildRejectionModel()
+		//{
+
+		//}
 	}
 }
