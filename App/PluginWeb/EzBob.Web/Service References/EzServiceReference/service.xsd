@@ -888,7 +888,7 @@
   <xs:element name="BrokerLoadCustomerDetailsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q65="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="BrokerLoadCustomerDetailsResult" nillable="true" type="q65:BrokerCustomerDetailsActionResult" />
+        <xs:element xmlns:q64="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="BrokerLoadCustomerDetailsResult" nillable="true" type="q64:BrokerCustomerDetailsActionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

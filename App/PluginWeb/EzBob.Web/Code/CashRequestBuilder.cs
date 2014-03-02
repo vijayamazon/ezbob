@@ -141,8 +141,7 @@
 				foreach (var mp in customer.CustomerMarketPlaces)
 				{
 					mp.UpdatingEnd = null;
-					var client = _creator.GetServiceClient();
-					client.UpdateMarketplace(customer.Id, mp.Id);
+					_creator.ServiceClient.UpdateMarketplace(customer.Id, mp.Id);
 				}
 			} // if
 
