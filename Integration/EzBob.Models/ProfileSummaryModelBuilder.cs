@@ -125,7 +125,7 @@
 						isHasFinancialAccout = result.Output.Output.FullConsumerData.ConsumerData.CAIS.Any(x => x.CAISDetails.Any());
 					}
 					catch (Exception ex) {
-						Log.ErrorFormat("Can't read value for isHasFinancialAccount because of exception: {0}", ex.Message);
+						Log.InfoFormat("Can't read value for isHasFinancialAccount because of exception: {0}", ex.Message);
 					} // try
 
 					creditBureau.ThinFile = !isHasFinancialAccout ? "Yes" : "No";
