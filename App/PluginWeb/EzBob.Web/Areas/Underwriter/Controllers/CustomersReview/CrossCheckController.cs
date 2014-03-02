@@ -64,8 +64,7 @@
 		[HttpGet]
 		public JsonNetResult LandRegistryEnquiry(int customerId, string buildingNumber, string streetName, string cityName, string postCode)
 		{
-			var client = _appCreator.GetServiceClient();
-			var landregistryXml = client.LandRegistryEnquiry(customerId, buildingNumber, streetName, cityName, postCode);
+			var landregistryXml = _appCreator.ServiceClient.LandRegistryEnquiry(customerId, buildingNumber, streetName, cityName, postCode);
 			var landregistry = SerializeDataHelper.DeserializeTypeFromString<LandRegistryDataModel>(landregistryXml);
 
 			return this.JsonNet(new { titles = landregistry.Enquery.Titles, rejection = landregistry.Rejection, ack = landregistry.Acknowledgement });
@@ -75,8 +74,7 @@
 		[HttpGet]
 		public JsonNetResult LandRegistry(int customerId, string titleNumber = null)
 		{
-			var client = _appCreator.GetServiceClient();
-			var landregistryXml = client.LandRegistryRes(customerId, titleNumber);
+			var landregistryXml = _appCreator.ServiceClient.LandRegistryRes(customerId, titleNumber);
 			var landregistry = SerializeDataHelper.DeserializeTypeFromString<LandRegistryDataModel>(landregistryXml);
 
 			if (landregistry == null)

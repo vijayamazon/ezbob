@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Database {
 	using System;
+	using System.Collections.Generic;
 	using System.Data.Common;
 	using System.Text;
 	using System.Data;
@@ -94,6 +95,54 @@
 		} // ForEachRowSafe
 
 		#endregion method ForEachRowSafe
+
+		#region method Fill
+
+		public List<T> Fill<T>(string sQuery, params QueryParameter[] aryParams) where T: ITraversable, new() {
+			return Fill<T>(sQuery, CommandSpecies.Auto, aryParams);
+		} // Fill
+
+		public List<T> Fill<T>(string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) where T : ITraversable, new() {
+			var oResult = new List<T>();
+
+			ForEachRowSafe(
+				(sr, bRowsetStart) => {
+					oResult.Add(sr.Fill<T>());
+					return ActionResult.Continue;
+				},
+				sQuery,
+				nSpecies,
+				aryParams
+			);
+
+			return oResult;
+		} // Fill
+
+		#endregion method Fill
+
+		#region method FillFirst
+
+		public T FillFirst<T>(string sQuery, params QueryParameter[] aryParams) where T: ITraversable, new() {
+			return FillFirst<T>(sQuery, CommandSpecies.Auto, aryParams);
+		} // FillFirst
+
+		public T FillFirst<T>(string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) where T : ITraversable, new() {
+			var oResult = new T();
+
+			ForEachRowSafe(
+				(sr, bRowsetStart) => {
+					sr.Fill(oResult);
+					return ActionResult.SkipAll;
+				},
+				sQuery,
+				nSpecies,
+				aryParams
+			);
+
+			return oResult;
+		} // FillFirst
+
+		#endregion method FillFirst
 
 		public abstract string DateToString(DateTime oDate);
 

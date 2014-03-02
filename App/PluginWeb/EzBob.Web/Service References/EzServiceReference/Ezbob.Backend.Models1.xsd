@@ -21,4 +21,39 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="BrokerCustomerEntry" nillable="true" type="tns:BrokerCustomerEntry" />
+  <xs:complexType name="BrokerCustomerDetails">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="CrmData" nillable="true" type="tns:ArrayOfBrokerCustomerCrmEntry" />
+      <xs:element minOccurs="0" name="PersonalData" nillable="true" type="tns:BrokerCustomerPersonalData" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="BrokerCustomerDetails" nillable="true" type="tns:BrokerCustomerDetails" />
+  <xs:complexType name="ArrayOfBrokerCustomerCrmEntry">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="BrokerCustomerCrmEntry" nillable="true" type="tns:BrokerCustomerCrmEntry" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfBrokerCustomerCrmEntry" nillable="true" type="tns:ArrayOfBrokerCustomerCrmEntry" />
+  <xs:complexType name="BrokerCustomerCrmEntry">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ActionName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Comment" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CrDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="StatusName" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="BrokerCustomerCrmEntry" nillable="true" type="tns:BrokerCustomerCrmEntry" />
+  <xs:complexType name="BrokerCustomerPersonalData">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="address" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="birthdate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="daytimephone" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="gender" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="id" type="xs:int" />
+      <xs:element minOccurs="0" name="maritalstatus" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="mobilephone" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="name" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="BrokerCustomerPersonalData" nillable="true" type="tns:BrokerCustomerPersonalData" />
 </xs:schema>

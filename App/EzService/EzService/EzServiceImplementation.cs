@@ -556,23 +556,30 @@
 				MetaData = result,
 				Records = oIntstance.Result.Values.ToList(),
 			};
-		}
+		} // BrokerRestorePassword
 
-		public string LandRegistryEnquiry(int customerId, string buildingNumber, string streetName, string cityName, string postCode)
-		{
+		public BrokerCustomerDetailsActionResult BrokerLoadCustomerDetails(int nCustomerID, string sContactEmail) {
+			BrokerLoadCustomerDetails oIntstance;
+
+			ActionMetaData result = ExecuteSync(out oIntstance, null, null, nCustomerID, sContactEmail);
+
+			return new BrokerCustomerDetailsActionResult {
+				MetaData = result,
+				Data = oIntstance.Result,
+			};
+		} // BrokerLoadCustomerDetails
+
+		public string LandRegistryEnquiry(int customerId, string buildingNumber, string streetName, string cityName, string postCode) {
 			LandRegistryEnquiry oInstance;
 			ActionMetaData result = ExecuteSync<LandRegistryEnquiry>(out oInstance, customerId, null, customerId, buildingNumber, streetName, cityName, postCode);
 			return oInstance.Result;
-		}
+		} // LandRegistryEnquiry
 
-		public string LandRegistryRes(int customerId, string titleNumber)
-		{
+		public string LandRegistryRes(int customerId, string titleNumber) {
 			LandRegistryRes oInstance;
 			ActionMetaData result = ExecuteSync<LandRegistryRes>(out oInstance, customerId, null, customerId, titleNumber);
 			return oInstance.Result;
-		}
-
-// BrokerLoadCustomerList
+		} // LandRegistryRes
 
 		#endregion IEzService exposed methods
 

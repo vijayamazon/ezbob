@@ -73,6 +73,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\Barrymore\Barrymore.csproj">
+      <Project>{6e34c540-073a-44b1-9bbc-31dac15a6f5e}</Project>
+      <Name>Barrymore</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Tools\EzbobUtils\ConfigurationBase\ConfigurationBase.csproj">
       <Project>{e31f233f-09aa-47c8-a2e0-8e33a87f868d}</Project>
       <Name>ConfigurationBase</Name>

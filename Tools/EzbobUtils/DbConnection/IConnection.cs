@@ -1,8 +1,10 @@
-﻿using System;
-using System.Data;
-using System.Data.Common;
+﻿namespace Ezbob.Database {
+	using System;
+	using System.Collections.Generic;
+	using System.Data;
+	using System.Data.Common;
+	using Ezbob.Utils;
 
-namespace Ezbob.Database {
 	#region enum ActionResult
 
 	public enum ActionResult {
@@ -36,12 +38,16 @@ namespace Ezbob.Database {
 		int ExecuteNonQuery(string sQuery, params QueryParameter[] aryParams);
 		void ForEachRow(Func<DbDataReader, bool, ActionResult> oAction, string sQuery, params QueryParameter[] aryParams);
 		void ForEachRowSafe(Func<SafeReader, bool, ActionResult> oAction, string sQuery, params QueryParameter[] aryParams);
+		List<T> Fill<T>(string sQuery, params QueryParameter[] aryParams) where T: ITraversable, new();
+		T FillFirst<T>(string sQuery, params QueryParameter[] aryParams) where T: ITraversable, new();
 
 		T ExecuteScalar<T>(string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams);
 		DataTable ExecuteReader(string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams);
 		int ExecuteNonQuery(string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams);
 		void ForEachRow(Func<DbDataReader, bool, ActionResult> oAction, string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams);
 		void ForEachRowSafe(Func<SafeReader, bool, ActionResult> oAction, string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams);
+		List<T> Fill<T>(string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) where T: ITraversable, new();
+		T FillFirst<T>(string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) where T: ITraversable, new();
 
 		string DateToString(DateTime oDate);
 	} // IConnection

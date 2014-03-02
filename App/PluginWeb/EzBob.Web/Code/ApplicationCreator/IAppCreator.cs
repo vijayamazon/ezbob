@@ -47,27 +47,8 @@ namespace EzBob.Web.Code.ApplicationCreator
 		void FraudChecker(User user, FraudMode mode);
 		void RequestCashWithoutTakenLoan(Customer customer, string dashboard);
 		void LoanFullyPaid(Loan loan);
-		QuickOfferModel QuickOfferWithPrerequisites(Customer customer, bool saveOfferToDB);
-		QuickOfferModel QuickOffer(Customer customer, bool saveOfferToDB);
-		void BrokerSignup(
-			string FirmName,
-			string FirmRegNum,
-			string ContactName,
-			string ContactEmail,
-			string ContactMobile,
-			string MobileCode,
-			string ContactOtherPhone,
-			decimal EstimatedMonthlyClientAmount,
-			string Password,
-			string Password2
-		);
-		void BrokerLogin(string Email, string Password);
-
-		void BrokerRestorePassword(string sMobile, string sCode);
-
-		BrokerCustomerEntry[] BrokerLoadCustomerList(string sContactEmail);
 		void ActivateMainStrategy(int underwriterId, int customerId, NewCreditLineOption runNewCreditLine, int avoidAutomaticDescison);
 
-		EzServiceClient GetServiceClient();
+		EzServiceClient ServiceClient { get; }
 	}
 }

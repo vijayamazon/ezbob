@@ -42,6 +42,21 @@ EzBob.DataTables.Helper = {
 			} // switch
 		} // renderDate
 
+		function renderDateTime(oData, sAction, oFullSource) {
+			switch (sAction) {
+				case 'display':
+					return EzBob.formatDateTime(oData);
+
+				case 'filter':
+					return oData + ' ' + EzBob.formatDateTime(oData);
+
+				case 'type':
+				case 'sort':
+				default:
+					return oData;
+			} // switch
+		} // renderDateTime
+
 		for (var i = 0; i < aryNames.length; i++) {
 			var sName = aryNames[i];
 
@@ -63,6 +78,10 @@ EzBob.DataTables.Helper = {
 			else if (sName[0] === '^') {
 				sName = sName.substr(1);
 				oRenderFunc = renderDate;
+			}
+			else if (sName[0] === '@') {
+				sName = sName.substr(1);
+				oRenderFunc = renderDateTime;
 			}
 
 			aryResult.push({

@@ -301,27 +301,45 @@
 
 					<div class="personal-details-top">
 						<div class="personal-details-top-row">
-							<div class="customer-personal-details-cell">
+							<div class="customer-personal-details-container">
 								<div class="customer-personal-details">
-									<div class="datum"><span class="title">Name:</span><span class="value" data-field-name="name">Jane Doe</span>
-									</div>
+									<input type="hidden" id="customer-id" class="value" data-field-name="id" />
 
-									<div class="datum"><span class="title">Date of birth:</span><span class="value" data-field-name="birthdate">Aug 16 1986</span></div>
+									<div class="datum"><span class="title">Name:</span><span class="value" data-field-name="name"></span></div>
 
-									<div class="datum"><span class="title">Gender:</span><span class="value" data-field-name="gender">Female</span></div>
+									<div class="datum"><span class="title">Date of birth:</span><span class="value" data-field-name="birthdate"></span></div>
 
-									<div class="datum"><span class="title">Marital status:</span><span class="value" data-field-name="maritalstatus">Married</span></div>
+									<div class="datum"><span class="title">Gender:</span><span class="value" data-field-name="gender"></span></div>
 
-									<div class="datum"><span class="title">Mobile phone #:</span><span class="value" data-field-name="mobilephone">01234567890</span></div>
+									<div class="datum"><span class="title">Marital status:</span><span class="value" data-field-name="maritalstatus"></span></div>
 
-									<div class="datum"><span class="title">Daytime phone #:</span><span class="value" data-field-name="daytimephone">01234567890</span></div>
+									<div class="datum"><span class="title">Mobile phone #:</span><span class="value" data-field-name="mobilephone"></span></div>
 
-									<div class="datum"><span class="title">Address:</span><span class="value" data-field-name="address">River Plate House<br/> 7-11 Finsburry circus st. London</span></div>
+									<div class="datum"><span class="title">Daytime phone #:</span><span class="value" data-field-name="daytimephone"></span></div>
+
+									<div class="datum"><span class="title">Address:</span><span class="value" data-field-name="address"></span></div>
 								</div>
 							</div>
 
 							<form class="dropzone dz-clickable"><div class="dz-message"><span>Drag or click to upload files.</span></div></form>
 						</div>
+					</div>
+
+					<div class="table-responsive table-big">
+						<table class="customer-crm-list table">
+							<thead><tr>
+								<th>Date</th>
+								<th>Action</th>
+								<th>Status</th>
+								<th>Comment</th>
+							</tr></thead>
+							<tbody><tr>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr></tbody>
+						</table>
 					</div>
 				</div>
 				<!-- section-customer-details -->
@@ -394,6 +412,8 @@
 			.Add("~/Content/js/lib/attardi.labels.js")
 			.Add("~/Content/js/lib/amount-period-sliders.js")
 			.Add("~/Content/js/lib/jquery.field_status.js")
+			.Add("~/Content/js/lib/jquery.set_display_value.js")
+			.Add("~/Content/js/lib/jquery.load_display_value.js")
 			.Add("~/Content/js/lib/mousetrap_1.4.0.js")
 			.Add("~/Content/js/lib/jquery.colorbox-min.js")
 			.Add("~/Content/js/App/ezbob.app.js")

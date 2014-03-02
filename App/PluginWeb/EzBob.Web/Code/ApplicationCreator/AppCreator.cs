@@ -612,12 +612,8 @@
 		}
 
 		#region property ServiceClient
-		public EzServiceClient GetServiceClient()
-		{
-			return ServiceClient;
-		}
 
-		private EzServiceClient ServiceClient {
+		public EzServiceClient ServiceClient {
 			get {
 				if (ReferenceEquals(m_oServiceClient, null) || (m_oServiceClient.State != CommunicationState.Opened)) {
 					try {

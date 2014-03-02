@@ -42,6 +42,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BrokerCustomerEntryModel.cs" />
+    <Compile Include="BrokerCustomerCrmEntryModel.cs" />
+    <Compile Include="BrokerCustomerPersonalDataModel.cs" />
+    <Compile Include="BrokerCustomerDetailsModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuickOfferModel.cs" />
   </ItemGroup>

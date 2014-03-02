@@ -188,6 +188,7 @@ namespace EzBob.Web.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.WizardConfigsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.QuickOfferActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.BrokerCustomersActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.BrokerCustomerDetailsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.StringListActionResult))]
     public partial class ActionResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
@@ -349,6 +350,29 @@ namespace EzBob.Web.EzServiceReference {
                 if ((object.ReferenceEquals(this.RecordsField, value) != true)) {
                     this.RecordsField = value;
                     this.RaisePropertyChanged("Records");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="BrokerCustomerDetailsActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class BrokerCustomerDetailsActionResult : EzBob.Web.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private Ezbob.Backend.Models.BrokerCustomerDetails DataField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public Ezbob.Backend.Models.BrokerCustomerDetails Data {
+            get {
+                return this.DataField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DataField, value) != true)) {
+                    this.DataField = value;
+                    this.RaisePropertyChanged("Data");
                 }
             }
         }
@@ -625,6 +649,9 @@ namespace EzBob.Web.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLoadCustomerList", ReplyAction="http://tempuri.org/IEzService/BrokerLoadCustomerListResponse")]
         EzBob.Web.EzServiceReference.BrokerCustomersActionResult BrokerLoadCustomerList(string sContactEmail);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLoadCustomerDetails", ReplyAction="http://tempuri.org/IEzService/BrokerLoadCustomerDetailsResponse")]
+        EzBob.Web.EzServiceReference.BrokerCustomerDetailsActionResult BrokerLoadCustomerDetails(int nCustomerID, string sContactEmail);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LandRegistryEnquiry", ReplyAction="http://tempuri.org/IEzService/LandRegistryEnquiryResponse")]
         string LandRegistryEnquiry(int customerId, string buildingNumber, string streetName, string cityName, string postCode);
         
@@ -869,6 +896,10 @@ namespace EzBob.Web.EzServiceReference {
         
         public EzBob.Web.EzServiceReference.BrokerCustomersActionResult BrokerLoadCustomerList(string sContactEmail) {
             return base.Channel.BrokerLoadCustomerList(sContactEmail);
+        }
+        
+        public EzBob.Web.EzServiceReference.BrokerCustomerDetailsActionResult BrokerLoadCustomerDetails(int nCustomerID, string sContactEmail) {
+            return base.Channel.BrokerLoadCustomerDetails(nCustomerID, sContactEmail);
         }
         
         public string LandRegistryEnquiry(int customerId, string buildingNumber, string streetName, string cityName, string postCode) {

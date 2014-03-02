@@ -93,6 +93,10 @@
       <Project>{7e526927-9849-4e6e-bbff-d0d780f81a05}</Project>
       <Name>Strategies</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Tools\EzbobUtils\Barrymore\Barrymore.csproj">
+      <Project>{6e34c540-073a-44b1-9bbc-31dac15a6f5e}</Project>
+      <Name>Barrymore</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Tools\EzbobUtils\DbConnection\DbConnection.csproj">
       <Project>{270BAF49-7F7D-4220-91A2-D8F5BF16B3E4}</Project>
       <Name>DbConnection</Name>

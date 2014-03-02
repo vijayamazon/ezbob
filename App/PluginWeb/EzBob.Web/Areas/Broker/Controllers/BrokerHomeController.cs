@@ -5,6 +5,7 @@
 	using Code.ApplicationCreator;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database.Broker;
+	using EzServiceReference;
 	using Ezbob.Backend.Models;
 	using Ezbob.Logger;
 	using Infrastructure;
@@ -32,7 +33,7 @@
 		#region action Index (default)
 
 		// GET: /Broker/BrokerHome/
-		public ActionResult Index() {
+		public System.Web.Mvc.ActionResult Index() {
 			const string sAuth = "auth";
 			const string sForbidden = "-";
 
@@ -89,7 +90,7 @@
 			);
 
 			try {
-				m_oAppCreator.BrokerSignup(
+				m_oAppCreator.ServiceClient.BrokerSignup(
 					FirmName,
 					FirmRegNum,
 					ContactName,
@@ -145,7 +146,7 @@
 			oLog.Debug("Broker login request: {0}", LoginEmail);
 
 			try {
-				m_oAppCreator.BrokerLogin(LoginEmail, LoginPassword);
+				m_oAppCreator.ServiceClient.BrokerLogin(LoginEmail, LoginPassword);
 			}
 			catch (Exception e) {
 				oLog.Alert(e, "Failed to login as a broker.");
@@ -172,7 +173,7 @@
 			oLog.Debug("Broker restore password request: phone # {0} with code {1}", ForgottenMobile, ForgottenMobileCode);
 
 			try {
-				m_oAppCreator.BrokerRestorePassword(ForgottenMobile, ForgottenMobileCode);
+				m_oAppCreator.ServiceClient.BrokerRestorePassword(ForgottenMobile, ForgottenMobileCode);
 			}
 			catch (Exception e) {
 				oLog.Alert(e, "Failed to restore password for a broker with phone # {0}.", ForgottenMobile);
@@ -201,23 +202,55 @@
 				return Json(new { success = false, error = "Not authorised.", aaData = (BrokerCustomerEntry [])null }, JsonRequestBehavior.AllowGet);
 			} // if
 
-			BrokerCustomerEntry[] oRecords;
+			BrokerCustomersActionResult oResult;
 
 			try
 			{
-				oRecords = m_oAppCreator.BrokerLoadCustomerList(sContactEmail);
+				oResult = m_oAppCreator.ServiceClient.BrokerLoadCustomerList(sContactEmail);
 			}
 			catch (Exception e) {
-				oLog.Debug("Failed to load customers request for contact email {0}", sContactEmail);
+				oLog.Debug(e, "Failed to load customers request for contact email {0}", sContactEmail);
 				return Json(new { success = false, error = "Failed to load customer list.", aaData = new BrokerCustomerEntry [] {} }, JsonRequestBehavior.AllowGet);
 			} // try
 
 			oLog.Debug("Broker load customers request for contact email {0} complete.", sContactEmail);
 
-			return Json(new { success = true, error = string.Empty, aaData = oRecords }, JsonRequestBehavior.AllowGet);
+			return Json(new { success = true, error = string.Empty, aaData = oResult.Records }, JsonRequestBehavior.AllowGet);
 		} // LoadCustomers
 
 		#endregion action LoadCustomers
+
+		#region action LoadCustomerDetails
+
+		[HttpGet]
+		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		public JsonResult LoadCustomerDetails(int nCustomerID, string sContactEmail) {
+			ASafeLog oLog = new SafeILog(LogManager.GetLogger(typeof(BrokerHomeController)));
+
+			oLog.Debug("Broker load customer details request for customer {1} and contact email {0}", sContactEmail, nCustomerID);
+
+			if (!User.Identity.IsAuthenticated || (User.Identity.Name != sContactEmail)) {
+				oLog.Debug("Failed to load customer details request for customer {1} contact email {0}: not authenticated or authenticated as other user.", sContactEmail, nCustomerID);
+				return Json(new { success = false, error = "Not authorised.", crm_data = (object)null, personal_data = (object)null }, JsonRequestBehavior.AllowGet);
+			} // if
+
+			BrokerCustomerDetailsActionResult oDetails;
+
+			try {
+				oDetails = m_oAppCreator.ServiceClient.BrokerLoadCustomerDetails(nCustomerID, sContactEmail);
+			}
+			catch (Exception e) {
+				oLog.Debug(e, "Failed to load customers request for customer {1} and contact email {0}", sContactEmail, nCustomerID);
+				return Json(new { success = false, error = "Failed to load customer details.", crm_data = (object)null, personal_data = (object)null }, JsonRequestBehavior.AllowGet);
+			} // try
+
+			oLog.Debug("Broker load customer details request for customer {1} and contact email {0} complete.", sContactEmail, nCustomerID);
+
+			return Json(new { success = true, error = string.Empty, crm_data = oDetails.Data.CrmData, personal_data = oDetails.Data.PersonalData, }, JsonRequestBehavior.AllowGet);
+		} // LoadCustomerDetails
+
+		#endregion action LoadCustomerDetails
 
 		#endregion public
 

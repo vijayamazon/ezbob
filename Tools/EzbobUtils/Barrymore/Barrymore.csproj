@@ -54,6 +54,7 @@
     <Compile Include="PostcodeToRegion.cs" />
     <Compile Include="ProgressCounter.cs" />
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="PropertyTraverser.cs" />
     <Compile Include="Security\SecurityUtils.cs" />
     <Compile Include="SeldenException.cs" />
     <Compile Include="SortedTable.cs" />

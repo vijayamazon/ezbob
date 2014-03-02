@@ -180,6 +180,9 @@ namespace EzService {
 		BrokerCustomersActionResult BrokerLoadCustomerList(string sContactEmail);
 
 		[OperationContract]
+		BrokerCustomerDetailsActionResult BrokerLoadCustomerDetails(int nCustomerID, string sContactEmail);
+
+		[OperationContract]
 		string LandRegistryEnquiry(int customerId, string buildingNumber, string streetName, string cityName, string postCode);
 		
 		[OperationContract]

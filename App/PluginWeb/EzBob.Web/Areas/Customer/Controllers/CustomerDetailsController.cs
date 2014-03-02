@@ -236,17 +236,17 @@
 				eIndustryType
 			);
 
-			QuickOfferModel qom = null;
+			QuickOfferActionResult qoar = null;
 
 			try {
-				qom = _creator.QuickOfferWithPrerequisites(customer, true);
+				qoar = _creator.ServiceClient.QuickOfferWithPrerequisites(customer.Id, true);
 			}
 			catch (Exception e) {
 				ms_oLog.Error("Failed to get a quick offer from the service.", e);
 			} // try
 
-			if (!ReferenceEquals(qom, null)) {
-				ms_oLog.DebugFormat("Quick offer is {0} for customer {1}.", qom.Amount, customer.Id);
+			if ((qoar != null) && qoar.HasValue) {
+				ms_oLog.DebugFormat("Quick offer is {0} for customer {1}.", qoar.Value.Amount, customer.Id);
 				_session.Refresh(customer);
 			} // if
 

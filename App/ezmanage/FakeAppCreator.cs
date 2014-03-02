@@ -182,43 +182,11 @@
 			
 		}
 
-		public QuickOfferModel QuickOffer(Customer oCustomer, bool saveOfferToDB) {
-			return null;
-		}
-
-		public QuickOfferModel QuickOfferWithPrerequisites(Customer oCustomer, bool saveOfferToDB) {
-			return null;
-		}
-
-		public void BrokerSignup(
-			string FirmName,
-			string FirmRegNum,
-			string ContactName,
-			string ContactEmail,
-			string ContactMobile,
-			string MobileCode,
-			string ContactOtherPhone,
-			decimal EstimatedMonthlyClientAmount,
-			string Password,
-			string Password2
-		)
-		{}
-
-		public void BrokerLogin(string Email, string Password) {}
-
-		public void BrokerRestorePassword(string sMobile, string sCode) {}
-
-		public BrokerCustomerEntry[] BrokerLoadCustomerList(string sContactEmail) {
-			return null;
-		}
 		public void ActivateMainStrategy(int underwriterId, int customerId, NewCreditLineOption newCreditLineOption, int avoidAutomaticDescison)
 		{
 			
 		}
 
-		public EzServiceClient GetServiceClient()
-		{
-			return null;
-		}
+		public EzServiceClient ServiceClient { get { return null; } }
     }
 }

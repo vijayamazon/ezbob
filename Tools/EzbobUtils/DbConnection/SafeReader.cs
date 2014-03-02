@@ -2,7 +2,9 @@
 	using System;
 	using System.Data;
 	using System.Data.Common;
-	using Utils.ParsedValue;
+	using System.Reflection;
+	using Ezbob.Utils;
+	using Ezbob.Utils.ParsedValue;
 
 	public class SafeReader {
 		#region public
@@ -138,9 +140,29 @@
 
 		#endregion indexer
 
+		#region method Fill
+
+		public T Fill<T>() where T: ITraversable, new() {
+			return PropertyTraverser.Traverse<T>(FillProperty);
+		} // Fill
+
+		public void Fill(ITraversable oInstance) {
+			oInstance.Traverse(FillProperty);
+		} // Fill
+
+		#endregion method Fill
+
 		#endregion public
 
 		#region private
+
+		#region method FillProperty
+
+		private void FillProperty(ITraversable oInstance, PropertyInfo oPropertyInfo) {
+			oPropertyInfo.SetValue(oInstance, this[oPropertyInfo.Name].ToType(oPropertyInfo.PropertyType), null);
+		} // FillProperty
+
+		#endregion method FillProperty
 
 		#region constructor
 

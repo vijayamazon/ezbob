@@ -188,6 +188,7 @@ namespace StrategiesActivator.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.WizardConfigsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.QuickOfferActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.BrokerCustomersActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.BrokerCustomerDetailsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.StringListActionResult))]
     public partial class ActionResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
@@ -349,6 +350,29 @@ namespace StrategiesActivator.EzServiceReference {
                 if ((object.ReferenceEquals(this.RecordsField, value) != true)) {
                     this.RecordsField = value;
                     this.RaisePropertyChanged("Records");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="BrokerCustomerDetailsActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class BrokerCustomerDetailsActionResult : StrategiesActivator.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private StrategiesActivator.EzServiceReference.BrokerCustomerDetails DataField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public StrategiesActivator.EzServiceReference.BrokerCustomerDetails Data {
+            get {
+                return this.DataField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DataField, value) != true)) {
+                    this.DataField = value;
+                    this.RaisePropertyChanged("Data");
                 }
             }
         }
@@ -851,6 +875,317 @@ namespace StrategiesActivator.EzServiceReference {
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="BrokerCustomerDetails", Namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models")]
+    [System.SerializableAttribute()]
+    public partial class BrokerCustomerDetails : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private StrategiesActivator.EzServiceReference.BrokerCustomerCrmEntry[] CrmDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private StrategiesActivator.EzServiceReference.BrokerCustomerPersonalData PersonalDataField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public StrategiesActivator.EzServiceReference.BrokerCustomerCrmEntry[] CrmData {
+            get {
+                return this.CrmDataField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.CrmDataField, value) != true)) {
+                    this.CrmDataField = value;
+                    this.RaisePropertyChanged("CrmData");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public StrategiesActivator.EzServiceReference.BrokerCustomerPersonalData PersonalData {
+            get {
+                return this.PersonalDataField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.PersonalDataField, value) != true)) {
+                    this.PersonalDataField = value;
+                    this.RaisePropertyChanged("PersonalData");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="BrokerCustomerPersonalData", Namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models")]
+    [System.SerializableAttribute()]
+    public partial class BrokerCustomerPersonalData : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string addressField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.DateTime birthdateField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string daytimephoneField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string genderField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int idField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string maritalstatusField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string mobilephoneField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string nameField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string address {
+            get {
+                return this.addressField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.addressField, value) != true)) {
+                    this.addressField = value;
+                    this.RaisePropertyChanged("address");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime birthdate {
+            get {
+                return this.birthdateField;
+            }
+            set {
+                if ((this.birthdateField.Equals(value) != true)) {
+                    this.birthdateField = value;
+                    this.RaisePropertyChanged("birthdate");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string daytimephone {
+            get {
+                return this.daytimephoneField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.daytimephoneField, value) != true)) {
+                    this.daytimephoneField = value;
+                    this.RaisePropertyChanged("daytimephone");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string gender {
+            get {
+                return this.genderField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.genderField, value) != true)) {
+                    this.genderField = value;
+                    this.RaisePropertyChanged("gender");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int id {
+            get {
+                return this.idField;
+            }
+            set {
+                if ((this.idField.Equals(value) != true)) {
+                    this.idField = value;
+                    this.RaisePropertyChanged("id");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string maritalstatus {
+            get {
+                return this.maritalstatusField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.maritalstatusField, value) != true)) {
+                    this.maritalstatusField = value;
+                    this.RaisePropertyChanged("maritalstatus");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string mobilephone {
+            get {
+                return this.mobilephoneField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.mobilephoneField, value) != true)) {
+                    this.mobilephoneField = value;
+                    this.RaisePropertyChanged("mobilephone");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string name {
+            get {
+                return this.nameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.nameField, value) != true)) {
+                    this.nameField = value;
+                    this.RaisePropertyChanged("name");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="BrokerCustomerCrmEntry", Namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models")]
+    [System.SerializableAttribute()]
+    public partial class BrokerCustomerCrmEntry : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ActionNameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string CommentField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.DateTime CrDateField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string StatusNameField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string ActionName {
+            get {
+                return this.ActionNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ActionNameField, value) != true)) {
+                    this.ActionNameField = value;
+                    this.RaisePropertyChanged("ActionName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Comment {
+            get {
+                return this.CommentField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.CommentField, value) != true)) {
+                    this.CommentField = value;
+                    this.RaisePropertyChanged("Comment");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime CrDate {
+            get {
+                return this.CrDateField;
+            }
+            set {
+                if ((this.CrDateField.Equals(value) != true)) {
+                    this.CrDateField = value;
+                    this.RaisePropertyChanged("CrDate");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string StatusName {
+            get {
+                return this.StatusNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.StatusNameField, value) != true)) {
+                    this.StatusNameField = value;
+                    this.RaisePropertyChanged("StatusName");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="FraudMode", Namespace="http://schemas.datacontract.org/2004/07/FraudChecker")]
     public enum FraudMode : int {
@@ -1309,6 +1644,12 @@ namespace StrategiesActivator.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLoadCustomerList", ReplyAction="http://tempuri.org/IEzService/BrokerLoadCustomerListResponse")]
         System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BrokerCustomersActionResult> BrokerLoadCustomerListAsync(string sContactEmail);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLoadCustomerDetails", ReplyAction="http://tempuri.org/IEzService/BrokerLoadCustomerDetailsResponse")]
+        StrategiesActivator.EzServiceReference.BrokerCustomerDetailsActionResult BrokerLoadCustomerDetails(int nCustomerID, string sContactEmail);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLoadCustomerDetails", ReplyAction="http://tempuri.org/IEzService/BrokerLoadCustomerDetailsResponse")]
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BrokerCustomerDetailsActionResult> BrokerLoadCustomerDetailsAsync(int nCustomerID, string sContactEmail);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LandRegistryEnquiry", ReplyAction="http://tempuri.org/IEzService/LandRegistryEnquiryResponse")]
         string LandRegistryEnquiry(int customerId, string buildingNumber, string streetName, string cityName, string postCode);
@@ -1772,6 +2113,14 @@ namespace StrategiesActivator.EzServiceReference {
         
         public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BrokerCustomersActionResult> BrokerLoadCustomerListAsync(string sContactEmail) {
             return base.Channel.BrokerLoadCustomerListAsync(sContactEmail);
+        }
+        
+        public StrategiesActivator.EzServiceReference.BrokerCustomerDetailsActionResult BrokerLoadCustomerDetails(int nCustomerID, string sContactEmail) {
+            return base.Channel.BrokerLoadCustomerDetails(nCustomerID, sContactEmail);
+        }
+        
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BrokerCustomerDetailsActionResult> BrokerLoadCustomerDetailsAsync(int nCustomerID, string sContactEmail) {
+            return base.Channel.BrokerLoadCustomerDetailsAsync(nCustomerID, sContactEmail);
         }
         
         public string LandRegistryEnquiry(int customerId, string buildingNumber, string streetName, string cityName, string postCode) {
