@@ -25,6 +25,7 @@
 	using ZooplaLib;
 	using log4net;
 	using MailApi;
+	using LandRegistryResponseType = LandRegistryLib.LandRegistryResponseType;
 
 	public class StrategyHelper
 	{
@@ -690,37 +691,48 @@
 			{
 				lr = new LandRegistryTestApi();
 			}
-			var model = lr.Res(titleNumber, customerId);
-
-			
-			lrRepo.Save(new LandRegistry
+			LandRegistryDataModel model;
+			if (titleNumber != null)
 			{
-				Customer = customer,
-				InsertDate = DateTime.UtcNow,
-				TitleNumber = titleNumber,
-				Request = model.Request,
-				Response = model.Response,
-				RequestType = (EZBob.DatabaseLib.Model.Database.LandRegistryRequestType)(int)model.RequestType,
-				ResponseType = (EZBob.DatabaseLib.Model.Database.LandRegistryResponseType)(int)model.ResponseType,
-			});
+				model = lr.Res(titleNumber, customerId);
 
-			if (model.Attachment != null)
-			{
-				var fileRepo = ObjectFactory.GetInstance<NHibernateRepositoryBase<MP_AlertDocument>>();
-				var doc = new MP_AlertDocument
+
+				lrRepo.Save(new LandRegistry
+					{
+						Customer = customer,
+						InsertDate = DateTime.UtcNow,
+						TitleNumber = titleNumber,
+						Request = model.Request,
+						Response = model.Response,
+						RequestType = (EZBob.DatabaseLib.Model.Database.LandRegistryRequestType) (int) model.RequestType,
+						ResponseType = (EZBob.DatabaseLib.Model.Database.LandRegistryResponseType) (int) model.ResponseType,
+					});
+
+				if (model.Attachment != null)
 				{
-					BinaryBody = model.Attachment.AttachmentContent,
-					Customer = customer,
-					Description = "LandRegistry",
-					UploadDate = DateTime.UtcNow,
-					DocName = model.Attachment.FileName
-				};
+					var fileRepo = ObjectFactory.GetInstance<NHibernateRepositoryBase<MP_AlertDocument>>();
+					var doc = new MP_AlertDocument
+						{
+							BinaryBody = model.Attachment.AttachmentContent,
+							Customer = customer,
+							Description = "LandRegistry",
+							UploadDate = DateTime.UtcNow,
+							DocName = model.Attachment.FileName
+						};
 
-				fileRepo.SaveOrUpdate(doc);
+					fileRepo.SaveOrUpdate(doc);
 
-				model.Attachment.AttachmentContent = null;
+					model.Attachment.AttachmentContent = null;
+				}
 			}
-
+			else
+			{
+				model = new LandRegistryDataModel
+					{
+						Rejection = new LandRegistryRejectionModel { Reason = "Please perform enquiry first to retrieve title number" },
+						ResponseType = LandRegistryResponseType.Rejection
+					};
+			}
 			return model;
 		}
 
@@ -735,7 +747,7 @@
 			if (cache != null)
 			{
 				var b = new LandRegistryModelBuilder();
-				var cacheModel = new LandRegistryDataModel()
+				var cacheModel = new LandRegistryDataModel
 					{
 						Request = cache.Request,
 						Response = cache.Response,

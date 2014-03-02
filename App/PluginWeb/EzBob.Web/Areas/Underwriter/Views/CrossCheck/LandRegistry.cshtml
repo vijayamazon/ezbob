@@ -4,9 +4,10 @@
 
 <script type="text/template" id="landregistry-template">
     <div class="tabbable">
-    <% var data = this.model; if(data.error) {%><h3><%-data.error%></h3>
+    <% var data = this.model; if(data.rejection) {%><h3><%-data.rejection.Reason%> <br /> <%-data.rejection.OtherDescription%></h3>
+    <%} else if(data.ack) { %><h3>Acknowledgment: <%-data.ack.Description%> <%-data.ack.PollDate%></h3>
     <%} else if(!data.response) { %><h3>Error parsing the data</h3>
-    <%} else { console.log("lr data",data); %>
+    <%} else { %>
     <div class="tab-content"><span>Title Number: </span><%-data.response.TitleNumber%></div>
         <div class="tab-content">
             <%if(data.response.PropertyAddresses.length == 1){%>

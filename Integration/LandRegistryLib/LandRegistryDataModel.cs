@@ -15,7 +15,6 @@
 		public LandRegistryResponseType ResponseType { get; set; }
 
 		public LandRegistryAttachmentModel Attachment { get; set; }
-		public string Error { get; set; }
 		
 		public LandRegistryResModel Res { get; set; } //RES full response
 		public LandRegistryEnquiryModel Enquery { get; set; } //Enquiry full response
