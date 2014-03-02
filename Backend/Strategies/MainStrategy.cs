@@ -522,10 +522,11 @@
 			totalSumOfOrders3MTotal = strategyHelper.GetTotalSumOfOrders3M(customerId);
 			marketplaceSeniorityDays = strategyHelper.MarketplaceSeniority(customerId);
 			decimal totalSumOfOrdersForLoanOffer = (decimal)strategyHelper.GetTotalSumOfOrdersForLoanOffer(customerId);
-			decimal marketPlaceSeniorityMonths = (decimal)marketplaceSeniorityDays / 365 * 12; // It is done this way to fit to the excel
+			decimal marketplaceSeniorityYears = (decimal)marketplaceSeniorityDays / 365; // It is done this way to fit to the excel
+			decimal ezbobSeniorityMonths = (decimal)modelEzbobSeniority * 12 / 365; // It is done this way to fit to the excel
 			
 			Log.Info("Calculating score & medal");
-			ScoreMedalOffer scoringResult = medalScoreCalculator.CalculateMedalScore(totalSumOfOrdersForLoanOffer, minExperianScore, marketPlaceSeniorityMonths, modelMaxFeedback, maritalStatus, appGender == "M" ? Gender.M : Gender.F, modelMPsNumber, firstRepaymentDatePassed, modelEzbobSeniority, modelOnTimeLoans, modelLatePayments, modelEarlyPayments);
+			ScoreMedalOffer scoringResult = medalScoreCalculator.CalculateMedalScore(totalSumOfOrdersForLoanOffer, minExperianScore, marketplaceSeniorityYears, modelMaxFeedback, maritalStatus, appGender == "M" ? Gender.M : Gender.F, modelMPsNumber, firstRepaymentDatePassed, ezbobSeniorityMonths, modelOnTimeLoans, modelLatePayments, modelEarlyPayments);
 			modelLoanOffer = scoringResult.MaxOffer;
 
 			medalType = scoringResult.Medal;
