@@ -126,7 +126,6 @@
 			MakeSureMpDataIsSufficient();
 
 			GetPersonalInfo();
-			
 
 			SetAutoDecisionAvailability();
 			
@@ -1024,7 +1023,7 @@
 				);
 				var lastStatusSafeReader = new SafeReader(lastStatusDataTable.Rows[0]);
 				string lastStatus = lastStatusSafeReader["CurrentStatus"];
-				if (lastStatus != "Done")
+				if (lastStatus != "Done" && lastStatus != "Never Started" && lastStatus != "Finished" && lastStatus != "Failed" && lastStatus != "Terminated")
 				{
 					return false;
 				}
