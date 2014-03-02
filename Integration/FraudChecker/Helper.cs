@@ -55,11 +55,14 @@ namespace FraudChecker
             {
                 return retVal;
             }
-	        
-			var businessPhone = customer.Company.BusinessPhone;
-	        retVal.Add("BusinessPhone", businessPhone);
-            
-            if (customer.PersonalInfo != null && !string.IsNullOrEmpty(customer.PersonalInfo.DaytimePhone))
+
+	        if (customer.Company != null)
+	        {
+		        var businessPhone = customer.Company.BusinessPhone;
+		        retVal.Add("BusinessPhone", businessPhone);
+	        }
+
+	        if (customer.PersonalInfo != null && !string.IsNullOrEmpty(customer.PersonalInfo.DaytimePhone))
                 retVal.Add("DaytimePhone", customer.PersonalInfo.DaytimePhone);
 
             if (customer.PersonalInfo != null && !string.IsNullOrEmpty(customer.PersonalInfo.MobilePhone))
