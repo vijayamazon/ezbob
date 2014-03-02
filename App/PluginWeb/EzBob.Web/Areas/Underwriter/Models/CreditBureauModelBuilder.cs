@@ -569,13 +569,22 @@ namespace EzBob.Web.Areas.Underwriter.Models
 			return model;
 		}
 
-		private static string PrintErrorList(IEnumerable<string> errorList)
+		private static string PrintErrorList(List<string> errorList)
 		{
 			var sb = new StringBuilder();
-			foreach (var error in errorList)
+			if (errorList != null)
 			{
-				sb.Append(error);
+				for (int i = 0; i < errorList.Count; i++)
+				{
+					if (i != 0)
+					{
+						sb.Append(" ");
+					}
+					sb.Append(i + 1).Append(") ");
+					sb.Append(errorList[i]);
+				}
 			}
+
 			return sb.ToString();
 		}
 
