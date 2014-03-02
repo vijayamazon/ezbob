@@ -315,7 +315,7 @@ namespace EzBob.Web.Controllers
 		[Ajax]
 		[ActionName("SignUp")]
 		[ValidateJsonAntiForgeryToken]
-		[CaptchaValidationFilter]
+		[CaptchaValidationFilter(Order = 999999)]
 		public JsonNetResult SignUpAjax(User model, string signupPass1, string signupPass2, string securityQuestion, string promoCode, double? amount, string mobilePhone, string mobileCode, string switchedToCaptcha)
 		{
 			if (!ModelState.IsValid)
@@ -485,7 +485,7 @@ namespace EzBob.Web.Controllers
 		}
 
 		//------------------------------------------------------------------------        
-		[CaptchaValidationFilter]
+		[CaptchaValidationFilter(Order = 999999)]
 		[Ajax]
 		public JsonNetResult QuestionForEmail(string email)
 		{
