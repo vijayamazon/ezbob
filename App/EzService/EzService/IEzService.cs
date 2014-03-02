@@ -181,6 +181,12 @@ namespace EzService {
 
 		[OperationContract]
 		BrokerCustomersActionResult BrokerLoadCustomerList(string sContactEmail);
+
+		[OperationContract]
+		string LandRegistryEnquiry(int customerId, string buildingNumber, string streetName, string cityName, string postCode);
+		
+		[OperationContract]
+		string LandRegistryRes(int customerId, string titleNumber);
 	} // interface IEzService
 
 	#endregion interface IEzService

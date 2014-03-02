@@ -79,9 +79,9 @@
     <Compile Include="WizardConfigsActionResult.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config">
+    <Content Include="App.config">
       <SubType>Designer</SubType>
-    </None>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Backend\Models\Models.csproj">

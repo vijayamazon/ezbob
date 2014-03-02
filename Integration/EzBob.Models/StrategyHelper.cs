@@ -655,7 +655,7 @@
 			}
 		}
 
-		public LandRegistryDataModel GetLandRegistryData(int customerId, string titleNumber, bool recheck = false)
+		public LandRegistryDataModel GetLandRegistryData(int customerId, string titleNumber)
 		{
 			var customer = _customers.Get(customerId);
 			var lrRepo = ObjectFactory.GetInstance<LandRegistryRepository>();
@@ -717,6 +717,8 @@
 				};
 
 				fileRepo.SaveOrUpdate(doc);
+
+				model.Attachment.AttachmentContent = null;
 			}
 
 			return model;

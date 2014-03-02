@@ -220,5 +220,10 @@
 		{
 			
 		}
-	}
+
+		public EzServiceClient GetServiceClient()
+		{
+			return null;
+		}
+    }
 }

@@ -68,5 +68,7 @@ namespace EzBob.Web.Code.ApplicationCreator
 
 		BrokerCustomerEntry[] BrokerLoadCustomerList(string sContactEmail);
 		void ActivateMainStrategy(int underwriterId, int customerId, NewCreditLineOption runNewCreditLine, int avoidAutomaticDescison);
+
+		EzServiceClient GetServiceClient();
 	}
 }
