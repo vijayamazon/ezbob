@@ -1243,11 +1243,20 @@
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.rollover.min.js">
       <DependentUpon>ezbob.underwriter.rollover.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Underwriter\profile\marketplaces\Copy of ezbob.underwriter.marketplacesHistory.js">
+      <DependentUpon>ezbob.underwriter.uploadHmrc.coffee</DependentUpon>
+    </Content>
     <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.marketplaces.js">
       <DependentUpon>ezbob.underwriter.marketplaces.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.marketplacesHistory.js">
       <DependentUpon>ezbob.underwriter.marketplacesHistory.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.uploadHmrc.js">
+      <DependentUpon>ezbob.underwriter.uploadHmrc.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.uploadHmrc.min.js">
+      <DependentUpon>ezbob.underwriter.uploadHmrc.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Underwriter\profile\paymentAccounts\ezbob.underwriter.bankAccountDetails.js">
       <DependentUpon>ezbob.underwriter.bankAccountDetails.coffee</DependentUpon>
@@ -1366,6 +1375,7 @@
     <None Include="Content\img\customer-sidebar\icons-source\Help.doc" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1.psd" />
     <None Include="Content\img\customer-sidebar\icons-source\Preview Image Set_v1.0.psd" />
+    <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.uploadHmrc.coffee" />
     <None Include="Service References\EzServiceReference\configuration91.svcinfo" />
     <None Include="Service References\EzServiceReference\configuration.svcinfo" />
     <None Include="Service References\EzServiceReference\EzBob.Backend.Models.xsd">

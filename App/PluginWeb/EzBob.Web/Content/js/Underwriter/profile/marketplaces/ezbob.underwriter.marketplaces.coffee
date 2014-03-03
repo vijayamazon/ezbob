@@ -64,6 +64,12 @@ class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
             customerId: @model.customerId
         )
 
+        @uploadHmrcView = new EzBob.Underwriter.UploadHmrcView(
+            el: @$el.find("#hmrc-upload")
+            customerId: @model.customerId
+        )
+        
+        @uploadHmrcView.render()
         return this
 
     events:
