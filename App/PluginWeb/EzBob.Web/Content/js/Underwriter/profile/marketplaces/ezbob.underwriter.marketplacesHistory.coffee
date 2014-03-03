@@ -25,6 +25,7 @@ class EzBob.Underwriter.MarketPlacesHistoryView extends Backbone.Marionette.Item
     events:
         "click .showHistoryMarketPlaces": "showHistoryMarketPlacesClicked"
         "click .showCurrentMarketPlaces": "showCurrentMarketPlacesClicked"
+        "click .uploadHmrc": "uploadHmrcClicked"
 
     serializeData: ->
         return {MarketPlacesHistory: @model}
@@ -35,3 +36,6 @@ class EzBob.Underwriter.MarketPlacesHistoryView extends Backbone.Marionette.Item
 
     showCurrentMarketPlacesClicked: ->
         EzBob.App.vent.trigger 'ct:marketplaces.history', null
+        
+    uploadHmrcClicked: ->
+        EzBob.App.vent.trigger 'ct:marketplaces.uploadHmrc'

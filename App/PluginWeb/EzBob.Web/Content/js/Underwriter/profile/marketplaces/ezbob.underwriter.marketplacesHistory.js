@@ -1,4 +1,4 @@
-﻿(function() {
+(function() {
   var root,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -69,7 +69,8 @@
 
     MarketPlacesHistoryView.prototype.events = {
       "click .showHistoryMarketPlaces": "showHistoryMarketPlacesClicked",
-      "click .showCurrentMarketPlaces": "showCurrentMarketPlacesClicked"
+      "click .showCurrentMarketPlaces": "showCurrentMarketPlacesClicked",
+      "click .uploadHmrc": "uploadHmrcClicked"
     };
 
     MarketPlacesHistoryView.prototype.serializeData = function() {
@@ -86,6 +87,10 @@
 
     MarketPlacesHistoryView.prototype.showCurrentMarketPlacesClicked = function() {
       return EzBob.App.vent.trigger('ct:marketplaces.history', null);
+    };
+
+    MarketPlacesHistoryView.prototype.uploadHmrcClicked = function() {
+      return EzBob.App.vent.trigger('ct:marketplaces.uploadHmrc');
     };
 
     return MarketPlacesHistoryView;

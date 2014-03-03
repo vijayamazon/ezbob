@@ -11,10 +11,9 @@ class EzBob.Underwriter.UploadHmrcView extends Backbone.Marionette.ItemView
         "click .uploadHmrc": "uploadHmrcClicked"
         "click .back": "backClicked"
 
-    showCurrentMarketPlacesClicked: ->
-        EzBob.App.vent.trigger 'ct:marketplaces.history', null
 
     uploadHmrcClicked: ->
         
     backClicked: ->
+        EzBob.App.vent.trigger 'ct:marketplaces.uploadHmrcBack'
         

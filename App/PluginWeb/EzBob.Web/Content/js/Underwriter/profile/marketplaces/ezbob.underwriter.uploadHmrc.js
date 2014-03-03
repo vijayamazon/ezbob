@@ -26,13 +26,11 @@
       "click .back": "backClicked"
     };
 
-    UploadHmrcView.prototype.showCurrentMarketPlacesClicked = function() {
-      return EzBob.App.vent.trigger('ct:marketplaces.history', null);
-    };
-
     UploadHmrcView.prototype.uploadHmrcClicked = function() {};
 
-    UploadHmrcView.prototype.backClicked = function() {};
+    UploadHmrcView.prototype.backClicked = function() {
+      return EzBob.App.vent.trigger('ct:marketplaces.uploadHmrcBack');
+    };
 
     return UploadHmrcView;
 

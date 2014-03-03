@@ -1,6 +1,6 @@
 ﻿<script id="marketplace-history-template" type="text/template">
     <h2 id="megah2">Market Places History</h2>
-    
+
     <select class="selectheight" style="margin-bottom: 0px" id="mpHistoryDdl">
         <option></option>
         <%_.each(MarketPlacesHistory.models, function(history, i) {
@@ -17,6 +17,8 @@
 
 <script id="hmrc-upload-template" type="text/template">
     <h2>Upload HMRC</h2>
-    <button class="btn btn-primary uploadHmrc">Upload</button>
-    <button class="btn btn-primary back">Back</button>
+    <div class="pull-right">
+        <button class="btn btn-primary uploadHmrc">Upload</button>
+        <button class="btn btn-primary back">Back</button>
+    </div>
 </script>

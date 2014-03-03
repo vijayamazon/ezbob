@@ -96,7 +96,8 @@
     };
 
     MarketPlacesView.prototype.onRender = function() {
-      var marketplacesHistoryDiv;
+      var marketplacesHistoryDiv, that,
+        _this = this;
       this.$el.find('.mp-error-description').tooltip({
         placement: "bottom"
       });
@@ -120,11 +121,23 @@
         el: marketplacesHistoryDiv,
         customerId: this.model.customerId
       });
-      this.uploadHmrcView = new EzBob.Underwriter.UploadHmrcView({
-        el: this.$el.find("#hmrc-upload"),
-        customerId: this.model.customerId
+      that = this;
+      EzBob.App.vent.on('ct:marketplaces.uploadHmrc', function() {
+        if (!that.uploadHmrcView) {
+          that.uploadHmrcView = new EzBob.Underwriter.UploadHmrcView({
+            el: that.$el.find("#hmrc-upload"),
+            customerId: _this.model.customerId
+          });
+          that.uploadHmrcView.render();
+        } else {
+          that.uploadHmrcView.$el.show();
+        }
+        return $(".mps-tables").hide();
       });
-      this.uploadHmrcView.render();
+      EzBob.App.vent.on('ct:marketplaces.uploadHmrcBack', function() {
+        $(".mps-tables").show();
+        return that.uploadHmrcView.$el.hide();
+      });
       return this;
     };
 
