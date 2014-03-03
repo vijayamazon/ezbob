@@ -498,6 +498,7 @@ hr.margin-0  {margin: 0;}
 #sidebar {
     width: 200px;
     position: absolute;
+    z-index: 5;
 }
 #sidebar:before {
     content: "";
