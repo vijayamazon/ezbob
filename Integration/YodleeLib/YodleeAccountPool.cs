@@ -89,7 +89,7 @@
 				return false;
 			}
 
-			log.ErrorFormat("Verified Yodlee account:{0} successfully", res.Username);
+			log.InfoFormat("Verified Yodlee account:{0} successfully", res.Username);
 			return true;
 		}
 	}

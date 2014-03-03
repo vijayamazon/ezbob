@@ -554,7 +554,6 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 			int.TryParse(term, out id);
 
 			var findResult = _session.Query<Customer>()
-				.Where(x => x.WizardStep.TheLastOne)
 				.Where(c =>
 					c.Id == id || c.Name.Contains(term) ||
 					c.PersonalInfo.Fullname.Contains(term)
