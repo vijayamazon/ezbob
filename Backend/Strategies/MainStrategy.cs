@@ -540,7 +540,7 @@
 				new QueryParameter("AC_Descriptors", scoringResult.AcDescriptors),
 				new QueryParameter("Result_Weight", scoringResult.ResultWeigts),
 				new QueryParameter("pResult_MAXPossiblePoints", scoringResult.ResultMaxPoints),
-				new QueryParameter("pMedal", scoringResult.Medal),
+				new QueryParameter("pMedal", scoringResult.Medal.ToString()),
 				new QueryParameter("pScorePoints", scoringResult.ScorePoints),
 				new QueryParameter("pScoreResult", scoringResult.ScoreResult)
 			);

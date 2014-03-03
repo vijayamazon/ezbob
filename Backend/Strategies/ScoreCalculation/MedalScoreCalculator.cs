@@ -103,7 +103,7 @@
 			var sb = new StringBuilder();
 			foreach (var pair in dict)
 			{
-				sb.Append(pair.Value.Score * 100);
+				sb.Append(pair.Value.FinalWeight * 100);
 				sb.Append("; ");
 			}
 			return sb.ToString();
@@ -114,17 +114,17 @@
 			return
 				string.Format(
 					"ExperianScore ({0});MarketplaceSeniority ({1});MaritalStatus ({2});PositiveFeedbackCount ({3});Gender ({4});AnnualTurnover ({5});NumberOfStores ({6});EZBOBSeniority ({7});EZBOBNumberOfLoans ({8});EZBOBPrevLatePayments ({9});EZBOBPrevEarlyPayments ({10})",
-					dict[Parameter.ExperianScore].FinalWeight * 100,
-					dict[Parameter.MpSeniority].FinalWeight * 100,
-					dict[Parameter.MaritalStatus].FinalWeight * 100,
-					dict[Parameter.PositiveFeedback].FinalWeight * 100,
-					dict[Parameter.Other].FinalWeight * 100,
-					dict[Parameter.AnnualTurnover].FinalWeight * 100,
-					dict[Parameter.NumOfStores].FinalWeight * 100,
-					dict[Parameter.EzbobSeniority].FinalWeight * 100,
-					dict[Parameter.EzbobNumOfLoans].FinalWeight * 100,
-					dict[Parameter.EzbobNumOfLateRepayments].FinalWeight * 100,
-					dict[Parameter.EzbobNumOfEarlyRepayments].FinalWeight * 100);
+					dict[Parameter.ExperianScore].Score * 100,
+					dict[Parameter.MpSeniority].Score * 100,
+					dict[Parameter.MaritalStatus].Score * 100,
+					dict[Parameter.PositiveFeedback].Score * 100,
+					dict[Parameter.Other].Score * 100,
+					dict[Parameter.AnnualTurnover].Score * 100,
+					dict[Parameter.NumOfStores].Score * 100,
+					dict[Parameter.EzbobSeniority].Score * 100,
+					dict[Parameter.EzbobNumOfLoans].Score * 100,
+					dict[Parameter.EzbobNumOfLateRepayments].Score * 100,
+					dict[Parameter.EzbobNumOfEarlyRepayments].Score * 100);
 		}
 
 
