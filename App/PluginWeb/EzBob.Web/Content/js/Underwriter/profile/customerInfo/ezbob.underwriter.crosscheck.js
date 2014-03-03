@@ -319,6 +319,9 @@ EzBob.Underwriter.CrossCheckView = Backbone.View.extend({
 
         $.get(window.gRootPath + "Underwriter/CrossCheck/LandRegistry/?customerId=" + this.model.customerId, function (data) {
             var lrView = new EzBob.LandRegistryView({ model: data });
+            if (data && data.response && data.response.TitleNumber) {
+                scrollTop();
+            }
             EzBob.App.jqmodal.show(lrView);
             BlockUi("Off");
         });
