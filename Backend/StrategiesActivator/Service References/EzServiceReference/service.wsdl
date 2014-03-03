@@ -402,6 +402,18 @@
   <wsdl:message name="IEzService_FinishWizard_OutputMessage">
     <wsdl:part name="parameters" element="tns:FinishWizardResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_CrmLoadLookups_InputMessage">
+    <wsdl:part name="parameters" element="tns:CrmLoadLookups" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CrmLoadLookups_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CrmLoadLookupsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_IsBroker_InputMessage">
+    <wsdl:part name="parameters" element="tns:IsBroker" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_IsBroker_OutputMessage">
+    <wsdl:part name="parameters" element="tns:IsBrokerResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_BrokerSignup_InputMessage">
     <wsdl:part name="parameters" element="tns:BrokerSignup" />
   </wsdl:message>
@@ -662,6 +674,14 @@
     <wsdl:operation name="FinishWizard">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/FinishWizard" message="tns:IEzService_FinishWizard_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/FinishWizardResponse" message="tns:IEzService_FinishWizard_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CrmLoadLookups">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CrmLoadLookups" message="tns:IEzService_CrmLoadLookups_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CrmLoadLookupsResponse" message="tns:IEzService_CrmLoadLookups_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="IsBroker">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/IsBroker" message="tns:IEzService_IsBroker_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/IsBrokerResponse" message="tns:IEzService_IsBroker_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="BrokerSignup">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerSignup" message="tns:IEzService_BrokerSignup_InputMessage" />
@@ -1180,6 +1200,24 @@
     </wsdl:operation>
     <wsdl:operation name="FinishWizard">
       <soap12:operation soapAction="http://tempuri.org/IEzService/FinishWizard" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CrmLoadLookups">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/CrmLoadLookups" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IsBroker">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/IsBroker" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

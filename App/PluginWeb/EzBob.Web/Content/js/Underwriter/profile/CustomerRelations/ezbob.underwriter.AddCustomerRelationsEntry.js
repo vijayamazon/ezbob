@@ -20,19 +20,18 @@
     AddCustomerRelationsEntry.prototype.template = '#add-customer-relations-entry-template';
 
     AddCustomerRelationsEntry.prototype.events = {
-      "keyup textarea": "commentKeyup"
+      'keyup textarea': 'commentKeyup'
     };
 
     AddCustomerRelationsEntry.prototype.jqoptions = function() {
       return {
         modal: true,
         resizable: false,
-        title: "CRM",
-        position: "center",
+        title: 'CRM',
+        position: 'center',
         draggable: false,
-        width: "73%",
-        height: Math.max(window.innerHeight * 0.9, 600),
-        dialogClass: "customer-relations-popup"
+        dialogClass: 'customer-relations-popup',
+        width: 600
       };
     };
 
@@ -42,6 +41,9 @@
         statuses: options.statuses
       });
       this.mainTab = options.mainTab;
+      this.onsave = options.onsave;
+      this.customerId = this.mainTab ? this.mainTab.model.customerId : options.customerId;
+      this.url = options.url || window.gRootPath + 'Underwriter/CustomerRelations/SaveEntry/';
       return AddCustomerRelationsEntry.__super__.initialize.call(this);
     };
 
@@ -52,11 +54,11 @@
     };
 
     AddCustomerRelationsEntry.prototype.commentKeyup = function(el) {
-      return $(el.target).val($(el.target).val().replace(/\r\n|\r|\n/g, "\r\n").slice(0, 1000));
+      return $(el.target).val($(el.target).val().replace(/\r\n|\r|\n/g, '\r\n').slice(0, 1000));
     };
 
     AddCustomerRelationsEntry.prototype.onSave = function() {
-      var that, xhr,
+      var xhr,
         _this = this;
       if (!$('#Incoming_I')[0].checked && !$('#Incoming_O')[0].checked) {
         return false;
@@ -67,25 +69,31 @@
       if ($('#Action')[0].selectedIndex === 0) {
         return false;
       }
-      BlockUi("on");
-      that = this;
-      xhr = $.post("" + window.gRootPath + "Underwriter/CustomerRelations/SaveEntry/", {
+      BlockUi();
+      xhr = $.post(this.url, {
         isIncoming: $('#Incoming_I')[0].checked,
         action: $('#Action')[0].value,
         status: $('#Status')[0].value,
         comment: $('#Comment').val(),
-        customerId: this.mainTab.model.customerId
+        customerId: this.customerId
       });
       xhr.done(function(r) {
-        if (r.error != null) {
-          EzBob.ShowMessage(r.error, "Error");
-          return;
+        UnBlockUi();
+        if (r.success) {
+          if (_this.mainTab) {
+            _this.mainTab.model.fetch();
+          } else if (_this.onsave) {
+            _this.onsave();
+          }
+        } else {
+          if (r.error != null) {
+            EzBob.ShowMessage(r.error, 'Error');
+          }
         }
-        that.mainTab.model.fetch();
         return _this.close();
       });
       xhr.complete(function() {
-        return BlockUi("off");
+        return UnBlockUi();
       });
       return false;
     };

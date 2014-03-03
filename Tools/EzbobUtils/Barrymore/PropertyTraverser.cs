@@ -6,7 +6,11 @@
 
 	#region class TraversableAttribute
 
-	public class TraversableAttribute : Attribute {} // TraversableAttribute
+	[System.AttributeUsage(
+		System.AttributeTargets.Class | System.AttributeTargets.Property,
+		AllowMultiple = false
+	)]
+	public class TraversableAttribute : Attribute { } // TraversableAttribute
 
 	#endregion class TraversableAttribute
 
@@ -32,7 +36,7 @@
 			if (oCreator == null)
 				throw new SeldenException("Type " + typeof (T) + " has no parameterless constructor.");
 
-			T oInstance = (T)oCreator.Invoke(null);
+			var oInstance = (T)oCreator.Invoke(null);
 
 			Traverse(oInstance, oCallback);
 
@@ -53,7 +57,7 @@
 			foreach (PropertyInfo pi in oPropertyList) {
 				object[] oAttrList = pi.GetCustomAttributes(typeof(TraversableAttribute), false);
 
-				if ((oAttrList != null) && (oAttrList.Length > 0))
+				if (oAttrList.Length > 0)
 					oSelected.Add(pi);
 			} // foreach
 

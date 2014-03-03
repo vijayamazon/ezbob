@@ -1,13 +1,9 @@
-﻿using System.Runtime.Serialization;
-
-namespace EzService {
-	#region class ActionResult
+﻿namespace EzService {
+	using System.Runtime.Serialization;
 
 	[DataContract]
 	public abstract class ActionResult {
 		[DataMember]
 		public ActionMetaData MetaData { get; set; }
 	} // struct ActionResult
-
-	#endregion class ActionResult
 } // namespace EzService

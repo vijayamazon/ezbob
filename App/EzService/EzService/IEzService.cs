@@ -1,11 +1,8 @@
 ﻿using System.ServiceModel;
 
 namespace EzService {
-	using System;
 	using EzBob.Backend.Strategies;
 	using FraudChecker;
-
-	#region interface IEzService
 
 	[ServiceContract(SessionMode = SessionMode.Allowed)]
 	public interface IEzService {
@@ -157,6 +154,12 @@ namespace EzService {
 		ActionMetaData FinishWizard(int customerId);
 
 		[OperationContract]
+		CrmLookupsActionResult CrmLoadLookups();
+
+		[OperationContract]
+		BoolActionResult IsBroker(string sContactEmail);
+
+		[OperationContract]
 		ActionMetaData BrokerSignup(
 			string FirmName,
 			string FirmRegNum,
@@ -188,8 +191,6 @@ namespace EzService {
 		[OperationContract]
 		string LandRegistryRes(int customerId, string titleNumber);
 	} // interface IEzService
-
-	#endregion interface IEzService
 } // namespace EzService
 
 

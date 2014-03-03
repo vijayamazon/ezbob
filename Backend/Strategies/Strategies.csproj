@@ -83,7 +83,9 @@
     <Compile Include="AutoDecisions\Rejection.cs" />
     <Compile Include="AutoDecisions\ReApproval.cs" />
     <Compile Include="AutoDecisions\ReRejection.cs" />
+    <Compile Include="Broker\BrokerIsBroker.cs" />
     <Compile Include="Broker\BrokerLoadCustomerDetails.cs" />
+    <Compile Include="CrmLoadLookups.cs" />
     <Compile Include="LandRegistry.cs" />
     <Compile Include="Broker\BrokerLoadCustomerList.cs" />
     <Compile Include="Broker\BrokerSignup.cs" />

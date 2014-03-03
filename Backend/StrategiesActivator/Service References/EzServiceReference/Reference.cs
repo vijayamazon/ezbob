@@ -187,6 +187,7 @@ namespace StrategiesActivator.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.BoolActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.WizardConfigsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.QuickOfferActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.CrmLookupsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.BrokerCustomersActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.BrokerCustomerDetailsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.StringListActionResult))]
@@ -327,6 +328,45 @@ namespace StrategiesActivator.EzServiceReference {
                 if ((object.ReferenceEquals(this.ValueField, value) != true)) {
                     this.ValueField = value;
                     this.RaisePropertyChanged("Value");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="CrmLookupsActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class CrmLookupsActionResult : StrategiesActivator.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Collections.Generic.Dictionary<int, string> ActionsField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Collections.Generic.Dictionary<int, string> StatusesField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Collections.Generic.Dictionary<int, string> Actions {
+            get {
+                return this.ActionsField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ActionsField, value) != true)) {
+                    this.ActionsField = value;
+                    this.RaisePropertyChanged("Actions");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Collections.Generic.Dictionary<int, string> Statuses {
+            get {
+                return this.StatusesField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.StatusesField, value) != true)) {
+                    this.StatusesField = value;
+                    this.RaisePropertyChanged("Statuses");
                 }
             }
         }
@@ -1621,6 +1661,18 @@ namespace StrategiesActivator.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FinishWizard", ReplyAction="http://tempuri.org/IEzService/FinishWizardResponse")]
         System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> FinishWizardAsync(int customerId);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CrmLoadLookups", ReplyAction="http://tempuri.org/IEzService/CrmLoadLookupsResponse")]
+        StrategiesActivator.EzServiceReference.CrmLookupsActionResult CrmLoadLookups();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CrmLoadLookups", ReplyAction="http://tempuri.org/IEzService/CrmLoadLookupsResponse")]
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.CrmLookupsActionResult> CrmLoadLookupsAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/IsBroker", ReplyAction="http://tempuri.org/IEzService/IsBrokerResponse")]
+        StrategiesActivator.EzServiceReference.BoolActionResult IsBroker(string sContactEmail);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/IsBroker", ReplyAction="http://tempuri.org/IEzService/IsBrokerResponse")]
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BoolActionResult> IsBrokerAsync(string sContactEmail);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerSignup", ReplyAction="http://tempuri.org/IEzService/BrokerSignupResponse")]
         StrategiesActivator.EzServiceReference.ActionMetaData BrokerSignup(string FirmName, string FirmRegNum, string ContactName, string ContactEmail, string ContactMobile, string MobileCode, string ContactOtherPhone, decimal EstimatedMonthlyClientAmount, string Password, string Password2);
         
@@ -2081,6 +2133,22 @@ namespace StrategiesActivator.EzServiceReference {
         
         public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> FinishWizardAsync(int customerId) {
             return base.Channel.FinishWizardAsync(customerId);
+        }
+        
+        public StrategiesActivator.EzServiceReference.CrmLookupsActionResult CrmLoadLookups() {
+            return base.Channel.CrmLoadLookups();
+        }
+        
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.CrmLookupsActionResult> CrmLoadLookupsAsync() {
+            return base.Channel.CrmLoadLookupsAsync();
+        }
+        
+        public StrategiesActivator.EzServiceReference.BoolActionResult IsBroker(string sContactEmail) {
+            return base.Channel.IsBroker(sContactEmail);
+        }
+        
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BoolActionResult> IsBrokerAsync(string sContactEmail) {
+            return base.Channel.IsBrokerAsync(sContactEmail);
         }
         
         public StrategiesActivator.EzServiceReference.ActionMetaData BrokerSignup(string FirmName, string FirmRegNum, string ContactName, string ContactEmail, string ContactMobile, string MobileCode, string ContactOtherPhone, decimal EstimatedMonthlyClientAmount, string Password, string Password2) {

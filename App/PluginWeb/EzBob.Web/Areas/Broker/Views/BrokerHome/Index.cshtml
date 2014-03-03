@@ -325,6 +325,10 @@
 						</div>
 					</div>
 
+					<h3 class="crm-title">CRM
+						<button type="button" class="add-crm-note green pull-right rc-button">Add CRM note</button>
+					</h3>
+
 					<div class="table-responsive table-big">
 						<table class="customer-crm-list table">
 							<thead><tr>
@@ -341,6 +345,8 @@
 							</tr></tbody>
 						</table>
 					</div>
+
+					@{Html.RenderPartial("~/Areas/Underwriter/Views/Shared/CustomerRelations/AddCustomerRelationsEntry.cshtml");}
 				</div>
 				<!-- section-customer-details -->
 
@@ -434,6 +440,7 @@
 			.Add("~/Content/js/lib/flaty/DT_Bootstrap.js")
 			.Add("~/Content/js/lib/flaty/flaty.js")
 			.Add("~/Content/js/EzBob.DataTables.Helper.js")
+			.Add("~/Content/js/underwriter/profile/CustomerRelations/ezbob.underwriter.AddCustomerRelationsEntry.coffee")
 			.AddString(BundleHelper.GetDbStrings())
 			.Add("~/Content/js/Broker/broker.base.view.js")
 			.Add("~/Content/js/Broker/broker.submit.view.js")

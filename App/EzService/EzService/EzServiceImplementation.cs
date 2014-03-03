@@ -473,6 +473,8 @@
 			return Execute(customerId, null, typeof(FinishWizard), customerId);
 		} // FinishWizard
 
+		#region Quick offer
+
 		public QuickOfferActionResult QuickOffer(int customerId, bool saveOfferToDB) {
 			try {
 				return QuickOfferProcedure(customerId, saveOfferToDB, false, null);
@@ -512,6 +514,33 @@
 				throw new FaultException(e.Message);
 			} // try
 		} // QuickOfferWithPrerequisites
+
+		#endregion Quick offer
+
+		public CrmLookupsActionResult CrmLoadLookups() {
+			CrmLoadLookups oInstance;
+
+			ActionMetaData oResult = ExecuteSync(out oInstance, null, null);
+
+			return new CrmLookupsActionResult {
+				MetaData = oResult,
+				Actions = oInstance.Actions,
+				Statuses = oInstance.Statuses,
+			};
+		} // CrmLoadLookups
+
+		#region Broker
+
+		public BoolActionResult IsBroker(string sContactEmail) {
+			BrokerIsBroker oInstance;
+
+			ActionMetaData oResult = ExecuteSync(out oInstance, null, null, sContactEmail);
+
+			return new BoolActionResult {
+				MetaData = oResult,
+				Value = oInstance.IsBroker,
+			};
+		} // IsBroker
 
 		public ActionMetaData BrokerSignup(
 			string FirmName,
@@ -569,6 +598,10 @@
 			};
 		} // BrokerLoadCustomerDetails
 
+		#endregion Broker
+
+		#region Land Registry
+
 		public string LandRegistryEnquiry(int customerId, string buildingNumber, string streetName, string cityName, string postCode) {
 			LandRegistryEnquiry oInstance;
 			ActionMetaData result = ExecuteSync<LandRegistryEnquiry>(out oInstance, customerId, null, customerId, buildingNumber, streetName, cityName, postCode);
@@ -580,6 +613,8 @@
 			ActionMetaData result = ExecuteSync<LandRegistryRes>(out oInstance, customerId, null, customerId, titleNumber);
 			return oInstance.Result;
 		} // LandRegistryRes
+
+		#endregion Land Registry
 
 		#endregion IEzService exposed methods
 

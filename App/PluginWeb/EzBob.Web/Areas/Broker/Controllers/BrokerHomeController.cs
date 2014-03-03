@@ -2,16 +2,18 @@
 	using System;
 	using System.Web.Mvc;
 	using System.Web.Security;
-	using Code.ApplicationCreator;
-	using EZBob.DatabaseLib;
-	using EZBob.DatabaseLib.Model.Database.Broker;
-	using EzServiceReference;
+
+	using EzBob.Web.Code.ApplicationCreator;
+	using EzBob.Web.Infrastructure;
+	using EzBob.Web.Infrastructure.csrf;
+
 	using Ezbob.Backend.Models;
 	using Ezbob.Logger;
-	using Infrastructure;
-	using Infrastructure.csrf;
-	using Scorto.Web;
+
+	using EzServiceReference;
+
 	using log4net;
+	using Scorto.Web;
 
 	public class BrokerHomeController : Controller {
 		#region public
@@ -19,11 +21,9 @@
 		#region constructor
 
 		public BrokerHomeController(
-			DatabaseDataHelper oHelper,
 			IAppCreator oAppCreator,
 			IEzBobConfiguration config
 		) {
-			m_oHelper = oHelper;
 			m_oAppCreator = oAppCreator;
 			m_oConfig = config;
 		} // constructor
@@ -41,8 +41,17 @@
 			ViewData[sAuth] = string.Empty;
 
 			if (User.Identity.IsAuthenticated) {
-				Broker brkr = BrokerRepo.Find(User.Identity.Name);
-				ViewData[sAuth] = ReferenceEquals(brkr, null) ? sForbidden : User.Identity.Name;
+				BoolActionResult bar = null;
+
+				try {
+					bar = m_oAppCreator.ServiceClient.IsBroker(User.Identity.Name);
+				}
+				catch (Exception e) {
+					ASafeLog oLog = new SafeILog(LogManager.GetLogger(typeof(BrokerHomeController)));
+					oLog.Warn(e, "Failed to determine validity of broker email {0}", User.Identity.Name);
+				} // try
+
+				ViewData[sAuth] = ((bar != null) && bar.Value) ? User.Identity.Name : sForbidden;
 			} // if
 
 			return View();
@@ -256,17 +265,8 @@
 
 		#region private
 
-		#region property BrokerRepo
-
-		private BrokerRepository BrokerRepo {
-			get { return m_oHelper.BrokerRepository; } // get
-		} // BrokerRepo
-
-		#endregion property BrokerRepo
-
 		#region fields
 
-		private readonly DatabaseDataHelper m_oHelper;
 		private readonly IAppCreator m_oAppCreator;
 		private readonly IEzBobConfiguration m_oConfig;
 

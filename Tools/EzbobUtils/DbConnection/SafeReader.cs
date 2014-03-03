@@ -6,6 +6,37 @@
 	using Ezbob.Utils;
 	using Ezbob.Utils.ParsedValue;
 
+	#region class FieldNameAttribute
+
+	[System.AttributeUsage(
+		System.AttributeTargets.Property,
+		AllowMultiple = false
+	)]
+	public class FieldNameAttribute : Attribute {
+		#region constructor
+
+		public FieldNameAttribute(string sFieldName) {
+			Name = sFieldName;
+		} // constructor
+
+		#endregion constructor
+
+		#region property Name
+
+		public string Name {
+			get { return m_sName; } // get
+			private set { m_sName = string.IsNullOrWhiteSpace(value) ? string.Empty : value; } // set
+		} // Name
+
+		private string m_sName;
+
+		#endregion property Name
+	} // FieldNameAttribute
+
+	#endregion class FieldNameAttribute
+
+	#region class SafeReader
+
 	public class SafeReader {
 		#region public
 
@@ -156,14 +187,6 @@
 
 		#region private
 
-		#region method FillProperty
-
-		private void FillProperty(ITraversable oInstance, PropertyInfo oPropertyInfo) {
-			oPropertyInfo.SetValue(oInstance, this[oPropertyInfo.Name].ToType(oPropertyInfo.PropertyType), null);
-		} // FillProperty
-
-		#endregion method FillProperty
-
 		#region constructor
 
 		private SafeReader(DataRow oRow, DbDataReader oReader) {
@@ -173,6 +196,25 @@
 		} // constructor
 
 		#endregion constructor
+
+		#region method FillProperty
+
+		private void FillProperty(ITraversable oInstance, PropertyInfo oPropertyInfo) {
+			string sFieldName = oPropertyInfo.Name;
+
+			object[] aryAttrList = oPropertyInfo.GetCustomAttributes(typeof (FieldNameAttribute), false);
+
+			if (aryAttrList.Length > 0) {
+				var fna = (FieldNameAttribute)aryAttrList[0];
+
+				if (!string.IsNullOrWhiteSpace(fna.Name))
+					sFieldName = fna.Name;
+			} // if
+
+			oPropertyInfo.SetValue(oInstance, this[sFieldName].ToType(oPropertyInfo.PropertyType), null);
+		} // FillProperty
+
+		#endregion method FillProperty
 
 		#region method ColumnOrDefault
 
@@ -210,10 +252,16 @@
 
 		#endregion method ColumnOrDefault
 
+		#region properties
+
 		private readonly DataRow m_oRow;
 		private readonly DbDataReader m_oReader;
 		private readonly SafeReaderFluentInterface m_oFluent;
 
+		#endregion properties
+
 		#endregion private
 	} // class SafeReader
+
+	#endregion class SafeReader
 } // namespace

@@ -187,6 +187,7 @@ namespace EzBob.Web.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.BoolActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.WizardConfigsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.QuickOfferActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.CrmLookupsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.BrokerCustomersActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.BrokerCustomerDetailsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.StringListActionResult))]
@@ -327,6 +328,45 @@ namespace EzBob.Web.EzServiceReference {
                 if ((object.ReferenceEquals(this.ValueField, value) != true)) {
                     this.ValueField = value;
                     this.RaisePropertyChanged("Value");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="CrmLookupsActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class CrmLookupsActionResult : EzBob.Web.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Collections.Generic.Dictionary<int, string> ActionsField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Collections.Generic.Dictionary<int, string> StatusesField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Collections.Generic.Dictionary<int, string> Actions {
+            get {
+                return this.ActionsField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ActionsField, value) != true)) {
+                    this.ActionsField = value;
+                    this.RaisePropertyChanged("Actions");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Collections.Generic.Dictionary<int, string> Statuses {
+            get {
+                return this.StatusesField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.StatusesField, value) != true)) {
+                    this.StatusesField = value;
+                    this.RaisePropertyChanged("Statuses");
                 }
             }
         }
@@ -637,6 +677,12 @@ namespace EzBob.Web.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FinishWizard", ReplyAction="http://tempuri.org/IEzService/FinishWizardResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData FinishWizard(int customerId);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CrmLoadLookups", ReplyAction="http://tempuri.org/IEzService/CrmLoadLookupsResponse")]
+        EzBob.Web.EzServiceReference.CrmLookupsActionResult CrmLoadLookups();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/IsBroker", ReplyAction="http://tempuri.org/IEzService/IsBrokerResponse")]
+        EzBob.Web.EzServiceReference.BoolActionResult IsBroker(string sContactEmail);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerSignup", ReplyAction="http://tempuri.org/IEzService/BrokerSignupResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData BrokerSignup(string FirmName, string FirmRegNum, string ContactName, string ContactEmail, string ContactMobile, string MobileCode, string ContactOtherPhone, decimal EstimatedMonthlyClientAmount, string Password, string Password2);
         
@@ -880,6 +926,14 @@ namespace EzBob.Web.EzServiceReference {
         
         public EzBob.Web.EzServiceReference.ActionMetaData FinishWizard(int customerId) {
             return base.Channel.FinishWizard(customerId);
+        }
+        
+        public EzBob.Web.EzServiceReference.CrmLookupsActionResult CrmLoadLookups() {
+            return base.Channel.CrmLoadLookups();
+        }
+        
+        public EzBob.Web.EzServiceReference.BoolActionResult IsBroker(string sContactEmail) {
+            return base.Channel.IsBroker(sContactEmail);
         }
         
         public EzBob.Web.EzServiceReference.ActionMetaData BrokerSignup(string FirmName, string FirmRegNum, string ContactName, string ContactEmail, string ContactMobile, string MobileCode, string ContactOtherPhone, decimal EstimatedMonthlyClientAmount, string Password, string Password2) {
