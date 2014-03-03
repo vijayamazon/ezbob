@@ -1243,13 +1243,13 @@
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.rollover.min.js">
       <DependentUpon>ezbob.underwriter.rollover.coffee</DependentUpon>
     </Content>
-    <Content Include="Content\js\Underwriter\profile\marketplaces\Copy of ezbob.underwriter.marketplacesHistory.js">
-      <DependentUpon>ezbob.underwriter.uploadHmrc.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.marketplaces.js">
       <DependentUpon>ezbob.underwriter.marketplaces.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.marketplacesHistory.js">
+      <DependentUpon>ezbob.underwriter.marketplacesHistory.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.marketplacesHistory.min.js">
       <DependentUpon>ezbob.underwriter.marketplacesHistory.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.uploadHmrc.js">
