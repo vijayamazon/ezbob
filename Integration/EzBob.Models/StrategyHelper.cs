@@ -729,7 +729,7 @@
 			{
 				model = new LandRegistryDataModel
 					{
-						Rejection = new LandRegistryRejectionModel { Reason = "Please perform enquiry first to retrieve title number" },
+						Res = new LandRegistryResModel { Rejection = new LandRegistryRejectionModel { Reason = "Please perform enquiry first to retrieve title number" } },
 						ResponseType = LandRegistryResponseType.Rejection
 					};
 			}

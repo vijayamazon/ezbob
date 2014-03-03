@@ -67,7 +67,7 @@
 			var landregistryXml = _appCreator.ServiceClient.LandRegistryEnquiry(customerId, buildingNumber, streetName, cityName, postCode);
 			var landregistry = SerializeDataHelper.DeserializeTypeFromString<LandRegistryDataModel>(landregistryXml);
 
-			return this.JsonNet(new { titles = landregistry.Enquery.Titles, rejection = landregistry.Rejection, ack = landregistry.Acknowledgement });
+			return this.JsonNet(new { titles = landregistry.Enquery.Titles, rejection = landregistry.Enquery.Rejection, ack = landregistry.Enquery.Acknowledgement });
 		}
 
 		[Ajax]
@@ -81,7 +81,7 @@
 					return this.JsonNet(new { error = "land registry info not found" });
 
 			//todo return the full model 
-			return this.JsonNet(new { response = landregistry.Res, rejection = landregistry.Rejection, ack = landregistry.Acknowledgement });
+			return this.JsonNet(new { response = landregistry.Res, rejection = landregistry.Res.Rejection, ack = landregistry.Res.Acknowledgement });
 		}
 
 		[Ajax]

@@ -19,8 +19,7 @@
 		public LandRegistryResModel Res { get; set; } //RES full response
 		public LandRegistryEnquiryModel Enquery { get; set; } //Enquiry full response
 
-		public LandRegistryAcknowledgementModel Acknowledgement { get; set; } //poll response
-		public LandRegistryRejectionModel Rejection{get;set;} // error response
+		
 	}
 
 	public enum LandRegistryRequestType
@@ -114,6 +113,8 @@
 
 	public class LandRegistryEnquiryModel
 	{
+		public LandRegistryAcknowledgementModel Acknowledgement { get; set; } //poll response
+		public LandRegistryRejectionModel Rejection { get; set; } // error response
 		public List<LandRegistryEnquiryTitle> Titles { get; set; }
 	}
 
@@ -130,6 +131,9 @@
 
 	public class LandRegistryResModel
 	{
+		public LandRegistryAcknowledgementModel Acknowledgement { get; set; } //poll response
+		public LandRegistryRejectionModel Rejection { get; set; } // error response
+
 		public string TitleNumber { get; set; }
 		//public bool CommonholdIndicator { get; set; } //if false indicate (Indicator showing whether the title is commonhold property)
 		public List<KeyValuePair<string, string>> PricePaidInfills { get; set; }

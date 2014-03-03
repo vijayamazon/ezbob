@@ -60,37 +60,12 @@
 					LREnquiryServiceNS.ResponseSearchByPropertyDescriptionV2_0Type response = client.searchProperties(request);
 					model.Response = XmlHelper.SerializeObject(response);
 					model.ResponseType = _builder.GetResponseType((int)response.GatewayResponse.TypeCode.Value);
-
-					switch (model.ResponseType)
-					{
-						case LandRegistryResponseType.Acknowledgement:
-							model.Acknowledgement = new LandRegistryAcknowledgementModel
-							{
-								PollDate = response.GatewayResponse.Acknowledgement.AcknowledgementDetails.ExpectedResponseDateTime.Value,
-								Description = response.GatewayResponse.Acknowledgement.AcknowledgementDetails.MessageDescription.Value,
-								UniqueId = response.GatewayResponse.Acknowledgement.AcknowledgementDetails.UniqueID.Value
-							};
-							break;
-						case LandRegistryResponseType.Rejection:
-							model.Rejection = new LandRegistryRejectionModel
-							{
-								Reason = response.GatewayResponse.Rejection.RejectionResponse.Reason.Value,
-								OtherDescription = response.GatewayResponse.Rejection.RejectionResponse.OtherDescription.Value
-							};
-							break;
-						case LandRegistryResponseType.Success:
-							model.Enquery = _builder.BuildEnquiryModel(model.Response);
-							break;
-						case LandRegistryResponseType.Unkown:
-						default:
-							break;
-					}
-
+					model.Enquery = _builder.BuildEnquiryModel(model.Response);
 				}
 				catch (Exception ex)
 				{
 					Log.ErrorFormat("{0}", ex);
-					model.Rejection = new LandRegistryRejectionModel { Reason = ex.Message };
+					model.Enquery = new LandRegistryEnquiryModel { Rejection = new LandRegistryRejectionModel { Reason = ex.Message } };
 					model.ResponseType = LandRegistryResponseType.Rejection;
 					//File.WriteAllText("Resex3.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
 				}
@@ -123,37 +98,12 @@
 					LREnquiryPollServiceNS.ResponseSearchByPropertyDescriptionV2_0Type response = client.getResponse(pollRequest);
 					model.Response = XmlHelper.SerializeObject(response);
 					model.ResponseType = _builder.GetResponseType((int)response.GatewayResponse.TypeCode.Value);
-
-					switch (model.ResponseType)
-					{
-						case LandRegistryResponseType.Acknowledgement:
-							model.Acknowledgement = new LandRegistryAcknowledgementModel
-							{
-								PollDate = response.GatewayResponse.Acknowledgement.AcknowledgementDetails.ExpectedResponseDateTime.Value,
-								Description = response.GatewayResponse.Acknowledgement.AcknowledgementDetails.MessageDescription.Value,
-								UniqueId = response.GatewayResponse.Acknowledgement.AcknowledgementDetails.UniqueID.Value
-							};
-							break;
-						case LandRegistryResponseType.Rejection:
-							model.Rejection = new LandRegistryRejectionModel
-							{
-								Reason = response.GatewayResponse.Rejection.RejectionResponse.Reason.Value,
-								OtherDescription = response.GatewayResponse.Rejection.RejectionResponse.OtherDescription.Value
-							};
-							break;
-						case LandRegistryResponseType.Success:
-							model.Enquery = _builder.BuildEnquiryModel(model.Response);
-							break;
-						case LandRegistryResponseType.Unkown:
-						default:
-							break;
-					}
-
+					model.Enquery = _builder.BuildEnquiryModel(model.Response);
 				}
 				catch (Exception ex)
 				{
 					Log.ErrorFormat("{0}", ex);
-					model.Rejection = new LandRegistryRejectionModel { Reason = ex.Message };
+					model.Enquery = new LandRegistryEnquiryModel { Rejection = new LandRegistryRejectionModel { Reason = ex.Message } };
 					model.ResponseType = LandRegistryResponseType.Rejection;
 					//File.WriteAllText("Resex1c.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
 				}
@@ -221,40 +171,12 @@
 					catch { }
 
 					model.Response = XmlHelper.SerializeObject(response);
-
-
-
-					switch (model.ResponseType)
-					{
-						case LandRegistryResponseType.Acknowledgement:
-							model.Acknowledgement = new LandRegistryAcknowledgementModel
-								{
-									PollDate = response.GatewayResponse.Acknowledgement.AcknowledgementDetails.ExpectedResponseDateTime.Value,
-									Description = response.GatewayResponse.Acknowledgement.AcknowledgementDetails.MessageDescription.Value,
-									UniqueId = response.GatewayResponse.Acknowledgement.AcknowledgementDetails.UniqueID.Value
-								};
-							break;
-						case LandRegistryResponseType.Rejection:
-							model.Rejection = new LandRegistryRejectionModel
-								{
-									Reason = response.GatewayResponse.Rejection.RejectionResponse.Reason.Value,
-									OtherDescription = response.GatewayResponse.Rejection.RejectionResponse.OtherDescription.Value
-								};
-							break;
-						case LandRegistryResponseType.Success:
-							model.Res = _builder.BuildResModel(response);
-							break;
-						case LandRegistryResponseType.Unkown:
-						default:
-							break;
-					}
-
-
+					model.Res = _builder.BuildResModel(response);
 				}
 				catch (Exception ex)
 				{
 					Log.ErrorFormat("{0}", ex);
-					model.Rejection = new LandRegistryRejectionModel { Reason = ex.Message };
+					model.Res = new LandRegistryResModel { Rejection = new LandRegistryRejectionModel { Reason = ex.Message } };
 					model.ResponseType = LandRegistryResponseType.Rejection;
 				}
 			}
@@ -268,7 +190,7 @@
 			// create an instance of the client
 			using (var client = new LRResPollServiceNS.OCWithSummaryV2_0PollServiceClient())
 			{
-				client.ChannelFactory.Endpoint.Behaviors.Add(new HMLRBGMessageEndpointBehavior("BGUser001", "landreg001"));
+				client.ChannelFactory.Endpoint.Behaviors.Add(new HMLRBGMessageEndpointBehavior("SDulman3000", "Ezbob2013$LR"));
 				// create a request object
 				var request = new LRResPollServiceNS.PollRequestType
 				{
@@ -305,37 +227,12 @@
 					}
 
 					model.Response = XmlHelper.SerializeObject(response);
-
-
-					switch (model.ResponseType)
-					{
-						case LandRegistryResponseType.Acknowledgement:
-							model.Acknowledgement = new LandRegistryAcknowledgementModel
-							{
-								PollDate = response.GatewayResponse.Acknowledgement.AcknowledgementDetails.ExpectedResponseDateTime.Value,
-								Description = response.GatewayResponse.Acknowledgement.AcknowledgementDetails.MessageDescription.Value,
-								UniqueId = response.GatewayResponse.Acknowledgement.AcknowledgementDetails.UniqueID.Value
-							};
-							break;
-						case LandRegistryResponseType.Rejection:
-							model.Rejection = new LandRegistryRejectionModel
-							{
-								Reason = response.GatewayResponse.Rejection.RejectionResponse.Reason.Value,
-								OtherDescription = response.GatewayResponse.Rejection.RejectionResponse.OtherDescription.Value
-							};
-							break;
-						case LandRegistryResponseType.Success:
-							model.Res = _builder.BuildResModel(model.Response);
-							break;
-						case LandRegistryResponseType.Unkown:
-						default:
-							break;
-					}
+					model.Res = _builder.BuildResModel(model.Response);
 				}
 				catch (Exception ex)
 				{
 					Log.ErrorFormat("{0}", ex);
-					model.Rejection = new LandRegistryRejectionModel { Reason = ex.Message };
+					model.Res = new LandRegistryResModel { Rejection = new LandRegistryRejectionModel { Reason = ex.Message } };
 					model.ResponseType = LandRegistryResponseType.Rejection;
 				}
 			}
@@ -344,6 +241,6 @@
 
 
 
-		
+
 	}
 }

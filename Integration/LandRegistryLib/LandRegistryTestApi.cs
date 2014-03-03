@@ -58,7 +58,7 @@
 				catch (Exception ex)
 				{
 					Log.ErrorFormat("{0}", ex);
-					model.Rejection = new LandRegistryRejectionModel {Reason = ex.Message};
+					model.Enquery = new LandRegistryEnquiryModel { Rejection = new LandRegistryRejectionModel { Reason = ex.Message } };
 					model.ResponseType = LandRegistryResponseType.Rejection;
 					//File.WriteAllText("resex3.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
 				}
@@ -97,7 +97,7 @@
 				catch (Exception ex)
 				{
 					Log.ErrorFormat("{0}", ex);
-					model.Rejection = new LandRegistryRejectionModel { Reason = ex.Message };
+					model.Enquery = new LandRegistryEnquiryModel { Rejection = new LandRegistryRejectionModel { Reason = ex.Message } };
 					model.ResponseType = LandRegistryResponseType.Rejection;
 					//File.WriteAllText("resex1c.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
 				}
@@ -165,13 +165,12 @@
 
 					response.GatewayResponse.Results.Attachment = null;
 					model.Response = XmlHelper.SerializeObject(response);
-					
 					model.Res = _builder.BuildResModel(model.Response);
 				}
 				catch (Exception ex)
 				{
 					Log.ErrorFormat("{0}", ex);
-					model.Rejection = new LandRegistryRejectionModel { Reason = ex.Message };
+					model.Res = new LandRegistryResModel { Rejection = new LandRegistryRejectionModel { Reason = ex.Message } };
 					model.ResponseType = LandRegistryResponseType.Rejection;
 					//File.WriteAllText("resex1c.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
 				}
@@ -220,7 +219,7 @@
 				catch (Exception ex)
 				{
 					Log.ErrorFormat("{0}", ex);
-					model.Rejection = new LandRegistryRejectionModel { Reason = ex.Message };
+					model.Res = new LandRegistryResModel { Rejection = new LandRegistryRejectionModel { Reason = ex.Message } };
 					model.ResponseType = LandRegistryResponseType.Rejection;
 					//File.WriteAllText("resex1c.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
 				}
