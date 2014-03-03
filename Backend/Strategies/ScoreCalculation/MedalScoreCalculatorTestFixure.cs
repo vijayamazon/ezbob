@@ -31,6 +31,13 @@
 			medal = msc.CalculateMedalScore(555912, 982, 7.08M, 5000, MaritalStatus.Married, Gender.M, 3, true, 14.2M, 1, 0, 0);
 			Assert.AreEqual(medal.Medal, MedalMultiplier.Gold);
 			//53.9% 44500pounds at 5%
+
+			//annualTurnover: 156436.91, experianScore: 946, mpSeniorityYears: 92.64657534246575342465753425, positiveFeedbackCount: 30990, maritalStatus: Married, gender: M, numberOfStores(eBay\Amazon\PayPal): 3, firstRepaymentDatePassed: True, ezbobSeniorityMonths: 264, ezbobNumOfLoans: 0, ezbobNumOfLateRepayments: 0, ezbobNumOfEarlyReayments: 0
+			medal = msc.CalculateMedalScore(156436.91M, 946, 92.64657534246575342465753425M, 30990, MaritalStatus.Married, Gender.M, 3, true, 264M, 0, 0, 0);
+			Assert.AreEqual(medal.Medal, MedalMultiplier.Gold);
+
+
+			
 		}
 
 		[Test]

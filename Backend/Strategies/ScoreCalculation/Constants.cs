@@ -100,7 +100,7 @@ namespace EzBob.Backend.Strategies.ScoreCalculation
 
 		public static readonly List<RangeGrage> MpSeniorityRanges = new List<RangeGrage> {
 			new RangeGrage {MinValue = null,MaxValue = 1, Grade = 2},
-			new RangeGrage {MinValue = 2,MaxValue = 3, Grade = 3},
+			new RangeGrage {MinValue = 1,MaxValue = 4, Grade = 3},
 			new RangeGrage {MinValue = 4,MaxValue = null, Grade = 4},
 		};
 
