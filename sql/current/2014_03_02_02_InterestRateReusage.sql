@@ -7,9 +7,10 @@ GO
 IF NOT EXISTS (SELECT 1 FROM sys.columns WHERE Name = N'ForbiddenForReuse' and Object_ID = Object_ID(N'DiscountPlan'))
 BEGIN 
 	ALTER TABLE DiscountPlan ADD ForbiddenForReuse BIT NOT NULL DEFAULT 0
-	UPDATE DiscountPlan SET ForbiddenForReuse = 1 WHERE Name = 'One month free'
+
 END
 GO
+UPDATE DiscountPlan SET ForbiddenForReuse = 1 WHERE Name = 'One month free'
 
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'dbo.GetLastOfferForAutomatedDecision') AND type in (N'P', N'PC'))
 DROP PROCEDURE dbo.GetLastOfferForAutomatedDecision
