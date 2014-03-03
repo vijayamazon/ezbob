@@ -126,7 +126,8 @@
     AlertDocsView.prototype.create = function(customerId) {
       this.customerId = customerId;
       this.dialogId = "#uploadAlertDocDialog" + customerId;
-      return this.model.customerId = customerId;
+      this.model.customerId = customerId;
+      return console.log('@alertDocs', this.model);
     };
 
     AlertDocsView.prototype.serializeData = function() {
