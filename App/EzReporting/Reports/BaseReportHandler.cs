@@ -10,6 +10,8 @@ using Html.Tags;
 using OfficeOpenXml;
 
 namespace Reports {
+	using Ezbob.Utils;
+
 	public class BaseReportHandler : SafeLog {
 		#region public
 
@@ -1264,6 +1266,28 @@ namespace Reports {
 
 		#region Accounting Loan Balance
 
+		#region class AccountingLoanBalanceRawData
+
+		public class AccountingLoanBalanceRawData : ITraversable {
+			public DateTime IssueDate { get; set; }
+			public int ClientID { get; set; }
+			public int LoanID { get; set; }
+			public string ClientName { get; set; }
+			public string ClientEmail { get; set; }
+			public decimal IssuedAmount { get; set; }
+			public decimal SetupFee { get; set; }
+			public decimal FeesEarned { get; set; }
+			public string LoanStatus { get; set; }
+			public string LoanTranMethod { get; set; }
+			public decimal TotalRepaid { get; set; }
+			public decimal FeesRepaid { get; set; }
+			public decimal RolloverRepaid { get; set; }
+			public int FeesEarnedID { get; set; }
+			public int TransactionID { get; set; }
+		} // AccountingLoanBalanceRawData
+
+		#endregion class AccountingLoanBalanceRawData
+
 		#region class AccountingLoanBalanceRow
 
 		private class AccountingLoanBalanceRow {
@@ -1290,18 +1314,22 @@ namespace Reports {
 			#region constructor
 
 			public AccountingLoanBalanceRow(DataRow oRow, decimal nEarnedInterest) {
+				Transactions = new SortedSet<int>();
+				LoanCharges = new SortedSet<int>();
+
 				var sr = new SafeReader(oRow);
 
-				sr.Read
-					.To(out IssueDate)
-					.To(out ClientID)
-					.To(out LoanID)
-					.To(out ClientName)
-					.To(out ClientEmail)
-					.To(out IssuedAmount)
-					.To(out SetupFee)
-					.To(out EarnedFees)
-					.To(out LoanStatus);
+				AccountingLoanBalanceRawData raw = sr.Fill<AccountingLoanBalanceRawData>();
+
+				IssueDate = raw.IssueDate;
+				ClientID = raw.ClientID;
+				LoanID = raw.LoanID;
+				ClientName = raw.ClientName;
+				ClientEmail = raw.ClientEmail;
+				IssuedAmount = raw.IssuedAmount;
+				SetupFee = raw.SetupFee;
+				EarnedFees = raw.FeesEarned;
+				LoanStatus = raw.LoanStatus;
 
 				EarnedInterest = nEarnedInterest;
 				PaidFees = 0;
@@ -1311,7 +1339,7 @@ namespace Reports {
 				if (SetupFee > 0)
 					IssuedAmount -= SetupFee;
 
-				Update(sr);
+				Update(raw.TransactionID, raw.LoanTranMethod, raw.TotalRepaid, raw.RolloverRepaid, raw.FeesEarnedID, raw.FeesRepaid);
 			} // constructor
 
 			#endregion constructor
@@ -1323,20 +1351,29 @@ namespace Reports {
 			} // Update
 
 			private void Update(SafeReader sr) {
-				Update(sr["LoanTranMethod"], sr["TotalRepaid"], sr["FeesRepaid"], sr["RolloverRepaid"]);
+				Update(sr["TransactionID"], sr["LoanTranMethod"], sr["TotalRepaid"], sr["RolloverRepaid"], sr["FeesEarnedID"], sr["FeesRepaid"]);
 			} // Update
 
-			private void Update(string sMethod, decimal nAmount, decimal nFeesRepaid, decimal nRolloverRepaid) {
-				sMethod = sMethod ?? string.Empty;
+			private void Update(int nTransactionID, string sMethod, decimal nAmount, decimal nRolloverRepaid, int nFeesEarnedID, decimal nFeesRepaid) {
+				if (!LoanCharges.Contains(nFeesEarnedID)) {
+					LoanCharges.Add(nFeesEarnedID);
 
-				if (sMethod.ToLower().StartsWith("non-cash"))
-					NonCashPaid += nAmount;
-				else
-					CashPaid += nAmount;
+					PaidFees += nFeesRepaid;
+				} // if
 
-				EarnedFees += nRolloverRepaid;
+				if (!Transactions.Contains(nTransactionID)) {
+					Transactions.Add(nTransactionID);
 
-				PaidFees += nFeesRepaid + nRolloverRepaid;
+					sMethod = sMethod ?? string.Empty;
+					if (sMethod.ToLower().StartsWith("non-cash"))
+						NonCashPaid += nAmount;
+					else
+						CashPaid += nAmount;
+
+					EarnedFees += nRolloverRepaid;
+
+					PaidFees += nRolloverRepaid;
+				} // if
 			} // Update
 
 			#endregion method Update
@@ -1389,6 +1426,18 @@ namespace Reports {
 			} // Balance
 
 			#endregion property Balance
+
+			#region property Transactions
+
+			private SortedSet<int> Transactions { get; set; }
+
+			#endregion property Transactions
+
+			#region property LoanCharges
+
+			private SortedSet<int> LoanCharges { get; set; }
+
+			#endregion property LoanCharges
 
 			#endregion private
 		} // class EarnedInterestRow
