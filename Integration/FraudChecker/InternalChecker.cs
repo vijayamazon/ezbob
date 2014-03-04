@@ -230,6 +230,8 @@ namespace FraudChecker
 					}
 
 					if (company == null) continue;
+					if (string.IsNullOrEmpty(company.BusinessPhone)) continue;
+
 					switch (company.TypeOfBusiness.Reduce())
 					{
 						case TypeOfBusinessReduced.Limited:
