@@ -82,58 +82,6 @@
       <Project>{1F4AB740-E9BB-4448-9C4D-22A191C297B9}</Project>
       <Name>EzServiceConfiguration</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Integration\Amazon\AmazonDbLib\AmazonDbLib.csproj">
-      <Project>{fd263eb4-a3ef-4447-94b1-de1b308c604b}</Project>
-      <Name>AmazonDbLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Integration\Amazon\AmazonLib\AmazonLib.csproj">
-      <Project>{45eb1597-4c92-4ab8-b615-5206d5a9f472}</Project>
-      <Name>AmazonLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Integration\ChannelGrabberFrontend\ChannelGrabberFrontend.csproj">
-      <Project>{eb0e1f2b-36af-4ec4-b4ce-79bc52f8252b}</Project>
-      <Name>ChannelGrabberFrontend</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Integration\CommonLib\CommonLib.csproj">
-      <Project>{aedbfbbd-ba7d-4582-afca-6ecf8af33c98}</Project>
-      <Name>CommonLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Integration\DatabaseLib\DatabaseLib.csproj">
-      <Project>{fa67314a-0560-41d4-bc19-6524663e9d0d}</Project>
-      <Name>DatabaseLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Integration\eBay\eBayDbLib\eBayDbLib.csproj">
-      <Project>{fb3eac65-ab2b-4a7e-ada5-aae0651caaf6}</Project>
-      <Name>eBayDbLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Integration\eBay\eBayLib\eBayLib.csproj">
-      <Project>{ac296ac1-dd5a-4aa4-a299-dd708e5f1a10}</Project>
-      <Name>eBayLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Integration\EKM\EKM.csproj">
-      <Project>{590c01c7-cf2c-4d5b-a307-3eb7ec61fb0d}</Project>
-      <Name>EKM</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Integration\FreeAgent\FreeAgent.csproj">
-      <Project>{ee7f496f-963f-4383-b0c2-3bcf9fc15511}</Project>
-      <Name>FreeAgent</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Integration\PayPal\PayPalLib\PayPalLib.csproj">
-      <Project>{231243d6-9b1a-43bc-ac7e-fc6ae5ddc006}</Project>
-      <Name>PayPalLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Integration\PayPoint\PayPoint.csproj">
-      <Project>{4e55dfa2-822f-4b94-9105-e77f6ac568db}</Project>
-      <Name>PayPoint</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Integration\Sage\Sage.csproj">
-      <Project>{a4c5e0af-f627-4b08-808c-de8edde725d5}</Project>
-      <Name>Sage</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Integration\YodleeLib\YodleeLib.csproj">
-      <Project>{241a8baf-f486-44b9-93bd-baa5ca8091f3}</Project>
-      <Name>YodleeLib</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Tools\EzbobUtils\Barrymore\Barrymore.csproj">
       <Project>{6e34c540-073a-44b1-9bbc-31dac15a6f5e}</Project>
       <Name>Barrymore</Name>

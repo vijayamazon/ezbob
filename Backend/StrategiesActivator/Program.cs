@@ -1,22 +1,12 @@
 ﻿namespace StrategiesActivator
 {
 	using System;
-	using EKM;
-	using EZBob.DatabaseLib.Model.Database;
-	using EzBob.AmazonLib;
-	using EzBob.PayPal;
-	using EzBob.eBayLib;
-	using FreeAgent;
-	using Integration.ChannelGrabberFrontend;
 	using NHibernate;
-	using PayPoint;
-	using Sage;
 	using Scorto.Configuration.Loader;
 	using Scorto.NHibernate;
 	using Scorto.RegistryScanner;
 	using StructureMap;
 	using StructureMap.Pipeline;
-	using YodleeLib.connector;
 
 	public class Program
     {
@@ -41,16 +31,6 @@
 			EnvironmentConfigurationLoader.AppPathDummy = @"c:\ezbob\app\pluginweb\EzBob.Web\";
 
 			NHibernateManager.FluentAssemblies.Add(typeof(ApplicationMng.Model.Application).Assembly);
-			NHibernateManager.FluentAssemblies.Add(typeof(Customer).Assembly);
-			NHibernateManager.FluentAssemblies.Add(typeof(eBayDatabaseMarketPlace).Assembly);
-			NHibernateManager.FluentAssemblies.Add(typeof(AmazonDatabaseMarketPlace).Assembly);
-			NHibernateManager.FluentAssemblies.Add(typeof(PayPalDatabaseMarketPlace).Assembly);
-			NHibernateManager.FluentAssemblies.Add(typeof(EkmDatabaseMarketPlace).Assembly);
-			NHibernateManager.FluentAssemblies.Add(typeof(DatabaseMarketPlace).Assembly);
-			NHibernateManager.FluentAssemblies.Add(typeof(YodleeDatabaseMarketPlace).Assembly);
-			NHibernateManager.FluentAssemblies.Add(typeof(PayPointDatabaseMarketPlace).Assembly);
-			NHibernateManager.FluentAssemblies.Add(typeof(FreeAgentDatabaseMarketPlace).Assembly);
-			NHibernateManager.FluentAssemblies.Add(typeof(SageDatabaseMarketPlace).Assembly);
 
 			Scanner.Register();
 
