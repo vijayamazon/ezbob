@@ -2,19 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Xml;
 using ApplicationMng.Model;
-using ApplicationMng.Repository;
 using EZBob.DatabaseLib.Model.Database.Loans;
 using EZBob.DatabaseLib.Model.Email;
-using EzBob.CommonLib;
 using Ezbob.ExperianParser;
-using Ezbob.Logger;
 using Iesi.Collections.Generic;
 using NHibernate.Type;
 using Scorto.NHibernate.Types;
-using StructureMap;
-using log4net;
 
 namespace EZBob.DatabaseLib.Model.Database {
 	using System.ComponentModel;
@@ -636,18 +630,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 				return mpStatuses.Any() ? mpStatuses.Aggregate((i, j) => i + ", " + j) : " ";
 			} // get
 		} // RegisteredMpStatuses
-
-		public virtual string MpList { get; set; }
-		public virtual decimal OutstandingBalance { get; set; }
-		public virtual int Delinquency { get; set; }
-		public virtual DateTime? NextRepaymentDate { get; set; }
-		public virtual DateTime? DateOfLate { get; set; }
-		public virtual DateTime? OfferDate { get; set; }
-		public virtual string LatestCRMstatus { get; set; }
-		public virtual string LatestCRMComment { get; set; }
-		public virtual decimal LateAmount { get; set; }
-		public virtual string CustomerStatus { get; set; }
-		public virtual decimal AmountOfInteractions { get; set; }
 
 		public virtual bool LoanForCurrentOfferIsTaken {
 			get { return Loans.Select(l => l.CashRequest.Id).Contains(LastCashRequest.Id); }

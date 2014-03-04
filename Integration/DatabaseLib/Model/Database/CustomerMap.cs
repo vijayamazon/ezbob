@@ -1,5 +1,4 @@
 using System;
-using ApplicationMng.Model;
 using EZBob.DatabaseLib.Model.Email;
 using FluentNHibernate.Mapping;
 using NHibernate.Type;
@@ -188,88 +187,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 			Map(x => x.LastLoanDate).CustomType<UtcDateTimeType>();
 			Map(x => x.LastLoanAmount);
 			Map(x => x.AmountTaken);
-
-			//for better performance some calculated field take out into formula
-			Map(x => x.MpList).Formula(@"dbo.MP_List (Id)").Not.Insert().Not.Update();
-
-			Map(x => x.OutstandingBalance)
-				.Formula("(select ISNULL(sum(l.Balance), 0) from [Loan] l where l.CustomerId = Id)")
-				.Not.Insert()
-				.Not.Update();
-
-			Map(x => x.Delinquency)
-				.Formula(@"(
-					SELECT DATEDIFF(day, ISNULL(MIN(s.[Date]), GETUTCDATE()), GETUTCDATE())
-					FROM [Loan] l LEFT JOIN [LoanSchedule] s ON l.Id = s.LoanId
-					WHERE l.[CustomerId] = Id and s.[Date] <= GETUTCDATE() AND s.[Status] = 'Late')")
-				.Not.Insert()
-				.Not.Update();
-
-			Map(x => x.NextRepaymentDate)
-				.Formula(@"(
-					SELECT top 1 s.[Date]
-					FROM [LoanSchedule] s LEFT JOIN [loan] l ON l.[Id] = s.[LoanId]
-					WHERE l.[CustomerId] = Id AND s.[Status] IN ('StillToPay','Late')
-					ORDER BY s.[Date])"
-				)
-				.Not.Insert()
-				.Not.Update();
-
-			Map(x => x.DateOfLate)
-				.Formula(@"(
-					SELECT MIN(s.[Date])
-					FROM [Loan] l left join [LoanSchedule] s on l.Id = s.[LoanId]
-					WHERE l.[CustomerId] = Id and s.[Date] <= GETUTCDATE() and s.[Status] = 'Late')"
-				)
-				.Not.Insert()
-				.Not.Update();
-
-			Map(x => x.OfferDate)
-				.Formula(
-					@"(select MAX(l.[UnderwriterDecisionDate])from [CashRequests] l where l.IdCustomer = Id)")
-				.Not.Insert()
-				.Not.Update();
-
-			Map(x => x.LatestCRMstatus)
-				.Formula(@"(
-					SELECT TOP 1 ST.NAME
-					FROM [CustomerRelations] AS CR LEFT JOIN [CRMStatuses] AS ST ON CR.StatusId = ST.Id
-					WHERE CR.CustomerId = Id
-					ORDER BY CR.Timestamp DESC)"
-				)
-				.Not.Insert()
-				.Not.Update();
-
-			Map(x => x.LatestCRMComment)
-				.Formula(
-				@"(SELECT TOP 1 CR.Comment FROM [CustomerRelations] AS CR WHERE CR.CustomerId=Id ORDER BY CR.Timestamp DESC)")
-				.Not.Insert()
-				.Not.Update();
-
-			Map(x => x.AmountOfInteractions)
-				.Formula(@"(
-					SELECT COUNT(*)
-					FROM [CashRequests] cr
-					WHERE (GETUTCDATE() - CR.[CreationDate]) < 5
-					AND CR.IdCustomer=Id)"
-				)
-				.Not.Insert()
-				.Not.Update();
-
-			Map(x => x.LateAmount)
-				.Formula(@"(
-					select ISNULL(SUM(s.[LoanRepayment]),0)
-					from [LoanSchedule] s
-					left join [Loan] l on l.[Id] = s.[LoanId]
-					where s.[Status] like 'Late' and l.[CustomerId] = Id)"
-				)
-				.Not.Insert()
-				.Not.Update();
-
-			Map(x => x.CustomerStatus)
-				.Formula("CreditResult")
-				.Not.Insert()
-				.Not.Update();
 
 			Map(x => x.PromoCode);
 			Map(x => x.MonthlyStatusEnabled);
