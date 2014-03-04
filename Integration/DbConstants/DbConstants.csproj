@@ -4,14 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B030E475-EB48-463D-99DE-160179CD5331}</ProjectGuid>
+    <ProjectGuid>{0527009D-A650-4505-9385-49FACA6991CB}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>EzServiceConfigurationLoader</RootNamespace>
-    <AssemblyName>EzServiceConfigurationLoader</AssemblyName>
+    <RootNamespace>DbConstants</RootNamespace>
+    <AssemblyName>DbConstants</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,10 +30,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=4.0.4.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Lib\3rdparty\Json.NET\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -44,31 +39,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Configuration.cs" />
-    <Compile Include="QuickOfferConfiguration.cs" />
+    <Compile Include="customer_enums.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\Tools\EzbobUtils\Barrymore\Barrymore.csproj">
-      <Project>{6e34c540-073a-44b1-9bbc-31dac15a6f5e}</Project>
-      <Name>Barrymore</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Tools\EzbobUtils\DbConnection\DbConnection.csproj">
-      <Project>{270baf49-7f7d-4220-91a2-d8f5bf16b3e4}</Project>
-      <Name>DbConnection</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Tools\EzbobUtils\EzEnvironment\EzEnvironment.csproj">
-      <Project>{b91eb116-94eb-416b-9422-d3ba97993163}</Project>
-      <Name>EzEnvironment</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Tools\EzbobUtils\Logger\Logger.csproj">
-      <Project>{f92ca169-9532-4c4d-8d84-6f48ace5719c}</Project>
-      <Name>Logger</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\EzServiceConfiguration\EzServiceConfiguration.csproj">
-      <Project>{1f4ab740-e9bb-4448-9c4d-22a191c297b9}</Project>
-      <Name>EzServiceConfiguration</Name>
-    </ProjectReference>
+    <Compile Include="WizardStepType.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

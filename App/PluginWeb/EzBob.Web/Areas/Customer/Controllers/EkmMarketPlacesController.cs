@@ -1,10 +1,11 @@
-﻿namespace EzBob.Web.Areas.Customer.Controllers
-{
+﻿namespace EzBob.Web.Areas.Customer.Controllers {
 	using System;
 	using System.Linq;
 	using System.Web.Mvc;
 	using ApplicationMng.Repository;
+	using Code;
 	using EZBob.DatabaseLib.Model.Database;
+	using EzServiceReference;
 	using Infrastructure;
 	using Scorto.Web;
 	using EKM;
@@ -13,7 +14,6 @@
 	using log4net;
 	using NHibernate;
 	using System.Data;
-	using Code.ApplicationCreator;
 	using CommonLib.Security;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.DatabaseWrapper;
@@ -25,7 +25,7 @@
 		private readonly IRepository<MP_MarketplaceType> _mpTypes;
 		private readonly Customer _customer;
 		private readonly IMPUniqChecker _mpChecker;
-		private readonly IAppCreator _appCreator;
+		private readonly EzServiceClient m_oServiceClient;
 		private readonly EkmConnector _validator = new EkmConnector();
 		private readonly ISession _session;
 		private readonly DatabaseDataHelper _helper;
@@ -35,14 +35,13 @@
 			DatabaseDataHelper helper,
 			IRepository<MP_MarketplaceType> mpTypes,
 			IMPUniqChecker mpChecker,
-			IAppCreator appCreator,
-			ISession session)
-		{
+			ISession session
+		) {
 			_context = context;
 			_mpTypes = mpTypes;
 			_customer = context.Customer;
 			_mpChecker = mpChecker;
-			_appCreator = appCreator;
+			m_oServiceClient = ServiceClient.Instance;
 			_session = session;
 			_helper = helper;
 		}
@@ -89,22 +88,19 @@
 
 				_session.Flush();
 
-				_appCreator.CustomerMarketPlaceAdded(customer, mp.Id);
+				m_oServiceClient.UpdateMarketplace(customer.Id, mp.Id, true);
 
 				return this.JsonNet(EkmAccountModel.ToModel(mp));
 			}
-			catch (MarketPlaceAddedByThisCustomerException e)
-			{
+			catch (MarketPlaceAddedByThisCustomerException e) {
 				Log.Debug(e);
 				return this.JsonNet(new { error = DbStrings.StoreAddedByYou });
 			}
-			catch (MarketPlaceIsAlreadyAddedException e)
-			{
+			catch (MarketPlaceIsAlreadyAddedException e) {
 				Log.Debug(e);
 				return this.JsonNet(new { error = DbStrings.StoreAlreadyExistsInDb });
 			}
-			catch (Exception e)
-			{
+			catch (Exception e) {
 				Log.Error(e);
 				return this.JsonNet(new { error = e.Message });
 			}

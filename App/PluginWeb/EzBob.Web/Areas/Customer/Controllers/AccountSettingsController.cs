@@ -1,8 +1,9 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers
 {
 	using System.Data;
-	using Code.ApplicationCreator;
 	using System.Web.Mvc;
+	using Code;
+	using EzServiceReference;
 	using Models;
 	using Infrastructure.csrf;
 	using Scorto.NHibernate.Model;
@@ -14,15 +15,15 @@
         private readonly IWorkplaceContext _context;
         private readonly UserManager _userManager;
         private readonly IPasswordEncoder _passwordEncoder;
-        private readonly IAppCreator _appCreator;
+        private readonly EzServiceClient m_oServiceClient;
 
         //------------------------------------------------------------------------------------
-        public AccountSettingsController(IWorkplaceContext context, UserManager userManager, IPasswordEncoder passwordEncoder, IAppCreator appCreator)
+        public AccountSettingsController(IWorkplaceContext context, UserManager userManager, IPasswordEncoder passwordEncoder)
         {
             _context = context;
             _userManager = userManager;
             _passwordEncoder = passwordEncoder;
-            _appCreator = appCreator;
+	        m_oServiceClient = ServiceClient.Instance;
         }
         //------------------------------------------------------------------------------------
         [Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
@@ -58,7 +59,7 @@
             if (result == ChangePasswordStatus.ChangeOk)
             {
                 _context.User.IsPasswordRestored = false;
-				_appCreator.PasswordChanged(_context.User, _context.User.Name, newPassword);
+				m_oServiceClient.PasswordChanged(_context.User.Id, newPassword);
             }
 
             return this.JsonNet(new { status = result.ToString() }); 

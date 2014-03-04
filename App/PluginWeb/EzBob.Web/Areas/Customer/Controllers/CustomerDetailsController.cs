@@ -7,8 +7,7 @@
 	using System.Globalization;
 	using System.Linq;
 	using System.Web.Mvc;
-	using Backend.Models;
-	using Code.ApplicationCreator;
+	using DbConstants;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
@@ -26,8 +25,7 @@
 
 	#region class CustomerDetailsController
 
-	public class CustomerDetailsController : Controller
-	{
+	public class CustomerDetailsController : Controller {
 		#region public
 
 		#region static method ValidatePersonalInfo
@@ -79,22 +77,18 @@
 			IEzbobWorkplaceContext context,
 			DatabaseDataHelper helper,
 			IPersonalInfoHistoryRepository personalInfoHistoryRepository,
-			IAppCreator creator,
 			ISession session,
 			CashRequestBuilder crBuilder,
 			ICustomerRepository _customerRepository
-			)
-		{
+		) {
 			_context = context;
 			_helper = helper;
 			_personalInfoHistoryRepository = personalInfoHistoryRepository;
-			_creator = creator;
+			m_oServiceClient = ServiceClient.Instance;
 			_session = session;
 			_crBuilder = crBuilder;
 			customerRepository = _customerRepository;
-		}
-
-		// constructor
+		} // constructor
 
 		#endregion constructor
 
@@ -169,17 +163,16 @@
 
 			ms_oLog.DebugFormat("Customer {1} ({0}): cash request created.", customer.Id, customer.PersonalInfo.Fullname);
 
-			_creator.EmailUnderReview(_context.User, customer.PersonalInfo.FirstName, customer.Name);
+			m_oServiceClient.EmailUnderReview(_context.User.Id);
 
 			ms_oLog.DebugFormat("Customer {1} ({0}): email under review started.", customer.Id, customer.PersonalInfo.Fullname);
 
-			_creator.Evaluate(_context.User.Id, _context.User, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, Convert.ToInt32(customer.IsAvoid), false, false);
+			m_oServiceClient.MainStrategy1(_context.User.Id, _context.User.Id, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, Convert.ToInt32(customer.IsAvoid));
 
 			ms_oLog.DebugFormat("Customer {1} ({0}): main strategy started.", customer.Id, customer.PersonalInfo.Fullname);
 
-			if (!customer.IsTest)
-			{
-				_creator.FraudChecker(_context.User, FraudMode.FullCheck);
+			if (!customer.IsTest) {
+				m_oServiceClient.FraudChecker(_context.User.Id, FraudMode.FullCheck);
 				ms_oLog.DebugFormat("Customer {1} ({0}): fraud check started.", customer.Id, customer.PersonalInfo.Fullname);
 			} // if
 
@@ -239,7 +232,7 @@
 			QuickOfferActionResult qoar = null;
 
 			try {
-				qoar = _creator.ServiceClient.QuickOfferWithPrerequisites(customer.Id, true);
+				qoar = m_oServiceClient.QuickOfferWithPrerequisites(customer.Id, true);
 			}
 			catch (Exception e) {
 				ms_oLog.Error("Failed to get a quick offer from the service.", e);
@@ -883,7 +876,7 @@
 
 		private readonly IEzbobWorkplaceContext _context;
 		private readonly IPersonalInfoHistoryRepository _personalInfoHistoryRepository;
-		private readonly IAppCreator _creator;
+		private readonly EzServiceClient m_oServiceClient;
 		private readonly ISession _session;
 		private readonly CashRequestBuilder _crBuilder;
 		private readonly IConcentAgreementHelper _concentAgreementHelper = new ConcentAgreementHelper();

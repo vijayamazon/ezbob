@@ -1,22 +1,20 @@
-﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
-{
+﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview {
 	using System;
 	using System.Data;
 	using System.Web.Mvc;
 	using Aspose.Words;
-	using Code.ApplicationCreator;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Repository;
+	using EzServiceReference;
 	using Signals.RenderAgreements;
 	using Models;
 	using Code;
 	using Scorto.Web;
 	using StructureMap;
 
-    public class MessagesController : Controller
-    {
-        private readonly IAppCreator _appCreator;
+    public class MessagesController : Controller {
+	    private readonly EzServiceClient m_oServiceClient;
         private readonly CustomerRepository _customersRepository;
         private readonly IWorkplaceContext _workplaceContext;
         private readonly IDecisionHistoryRepository _historyRepository;
@@ -24,12 +22,14 @@
         private readonly ExportResultRepository _exportResultRepository;
         private readonly AskvilleRepository _askvilleRepository;
 
-        public MessagesController(CustomerRepository customers, 
-                                  IAppCreator appCreator,
-                                  ExportResultRepository exportResultRepository,
-                                  AskvilleRepository askvilleRepository, IDecisionHistoryRepository historyRepository, MessagesModelBuilder builder)
-        {
-            _appCreator = appCreator;
+        public MessagesController(
+			CustomerRepository customers, 
+            ExportResultRepository exportResultRepository,
+            AskvilleRepository askvilleRepository,
+			IDecisionHistoryRepository historyRepository,
+			MessagesModelBuilder builder
+		) {
+	        m_oServiceClient = ServiceClient.Instance;
             _exportResultRepository = exportResultRepository;
             _askvilleRepository = askvilleRepository;
             _historyRepository = historyRepository;
@@ -83,7 +83,7 @@
         public void MoreAMLInformation(int id)
         {
             var customer = _customersRepository.Get(id);
-            _appCreator.MoreAMLInformation(_workplaceContext.User, customer.Name, customer.Id, customer.PersonalInfo.FirstName);
+            m_oServiceClient.MoreAmlInformation(_workplaceContext.User.Id, customer.Id);
             customer.CreditResult = CreditResultStatus.ApprovedPending;
             customer.PendingStatus = PendingStatus.AML;
             LogPending(customer, PendingStatus.AML);
@@ -95,7 +95,7 @@
         public void MoreAMLandBWAInformation(int id)
         {
             var customer = _customersRepository.Get(id);
-            _appCreator.MoreAMLandBWAInformation(_workplaceContext.User, customer.Name, customer.Id, customer.PersonalInfo.FirstName);
+			m_oServiceClient.MoreAmlAndBwaInformation(_workplaceContext.User.Id, customer.Id);
             customer.CreditResult = CreditResultStatus.ApprovedPending;
             customer.PendingStatus = PendingStatus.Bank_AML;
             LogPending(customer, PendingStatus.Bank_AML);
@@ -107,7 +107,7 @@
         public void MoreBWAInformation(int id)
         {
             var customer = _customersRepository.Get(id);
-            _appCreator.MoreBWAInformation(_workplaceContext.User, customer.Name, customer.Id, customer.PersonalInfo.FirstName);
+			m_oServiceClient.MoreBwaInformation(_workplaceContext.User.Id, customer.Id);
             customer.CreditResult = CreditResultStatus.ApprovedPending;
             customer.PendingStatus = PendingStatus.Bank;
             LogPending(customer, PendingStatus.Bank);

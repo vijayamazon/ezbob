@@ -1,15 +1,15 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers {
 	using System;
-	using System.Collections.Generic;
 	using System.Linq;
 	using System.Web;
 	using System.Web.Mvc;
 	using ApplicationMng.Repository;
-	using Code.ApplicationCreator;
+	using Code;
 	using Code.MpUniq;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.DatabaseWrapper;
 	using EZBob.DatabaseLib.Model.Database;
+	using EzServiceReference;
 	using Ezbob.HmrcHarvester;
 	using Ezbob.ValueIntervals;
 	using Infrastructure;
@@ -18,6 +18,7 @@
 	using log4net;
 	using NHibernate;
 	using Web.Models.Strings;
+	using ActionResult = System.Web.Mvc.ActionResult;
 
 	public class HmrcController : Controller {
 		#region public
@@ -50,15 +51,14 @@
 			DatabaseDataHelper helper,
 			IRepository<MP_MarketplaceType> mpTypes,
 			CGMPUniqChecker mpChecker,
-			ISession session,
-			IAppCreator appCreator
+			ISession session
 		) {
 			_context = context;
 			_helper = helper;
 			_mpTypes = mpTypes;
 			_mpChecker = mpChecker;
 			_session = session;
-			_appCreator = appCreator;
+			m_oServiceClient = ServiceClient.Instance;
 		} // constructor
 
 		#endregion constructor
@@ -97,7 +97,7 @@
 				// This is done to for two reasons:
 				// 1. update Customer.WizardStep to WizardStepType.Marketplace
 				// 2. insert entries into EzServiceActionHistory
-				_appCreator.CustomerMarketPlaceAdded(_context.Customer, oState.CustomerMarketPlace.Id);
+				m_oServiceClient.UpdateMarketplace(_context.Customer.Id, oState.CustomerMarketPlace.Id, true);
 			}
 			catch (Exception e) {
 				Log.WarnFormat(
@@ -291,7 +291,7 @@
 		private readonly IRepository<MP_MarketplaceType> _mpTypes;
 		private readonly CGMPUniqChecker _mpChecker;
 		private readonly DatabaseDataHelper _helper;
-		private readonly IAppCreator _appCreator;
+		private readonly EzServiceClient m_oServiceClient;
 		private readonly ISession _session;
 
 		private static readonly ILog Log = LogManager.GetLogger(typeof(HmrcController));

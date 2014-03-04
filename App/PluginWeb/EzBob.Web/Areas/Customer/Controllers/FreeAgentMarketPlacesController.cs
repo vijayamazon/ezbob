@@ -1,7 +1,7 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers
 {
 	using System.Data;
-	using Code.ApplicationCreator;
+	using Code;
 	using EZBob.DatabaseLib;
     using EZBob.DatabaseLib.DatabaseWrapper;
 	using System;
@@ -9,29 +9,30 @@
 	using System.Web.Mvc;
 	using ApplicationMng.Repository;
 	using EZBob.DatabaseLib.Model.Database;
-    using FreeAgent;
+	using EzServiceReference;
+	using FreeAgent;
 	using Infrastructure;
 	using Scorto.Web;
 	using log4net;
+	using ActionResult = System.Web.Mvc.ActionResult;
 
 	public class FreeAgentMarketPlacesController : Controller
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(FreeAgentMarketPlacesController));
         private readonly IRepository<MP_MarketplaceType> _mpTypes;
         private readonly Customer _customer;
-        private readonly IAppCreator _appCreator;
+        private readonly EzServiceClient m_oServiceClient;
         private readonly DatabaseDataHelper _helper;
 
 
 		public FreeAgentMarketPlacesController(
             IEzbobWorkplaceContext context,
             DatabaseDataHelper helper,
-            IRepository<MP_MarketplaceType> mpTypes,
-            IAppCreator appCreator)
+            IRepository<MP_MarketplaceType> mpTypes)
         {
             _mpTypes = mpTypes;
             _customer = context.Customer;
-            _appCreator = appCreator;
+			m_oServiceClient = ServiceClient.Instance;
             _helper = helper;
         }
 
@@ -104,7 +105,8 @@
 			log.Info("Saving marketplace data...");
 			var marketPlace = _helper.SaveOrUpdateCustomerMarketplace(securityData.Name, freeAgentDatabaseMarketPlace, securityData, _customer);
 
-			_appCreator.CustomerMarketPlaceAdded(_customer, marketPlace.Id);
+			m_oServiceClient.UpdateMarketplace(_customer.Id, marketPlace.Id, true);
+
 			return View(FreeAgentAccountModel.ToModel(marketPlace));
 		}
     }

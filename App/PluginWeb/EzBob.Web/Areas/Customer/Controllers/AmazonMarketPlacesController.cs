@@ -3,6 +3,7 @@
 	using System;
 	using System.Linq;
 	using System.Web.Mvc;
+	using Code;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
@@ -13,6 +14,7 @@
 	using AmazonServiceLib.ServiceCalls;
 	using AmazonServiceLib.UserInfo;
 	using Code.MpUniq;
+	using EzServiceReference;
 	using Infrastructure;
 	using Infrastructure.csrf;
 	using Web.Models.Strings;
@@ -20,13 +22,12 @@
 	using Scorto.Web;
 	using log4net;
 	using System.Data;
-	using Code.ApplicationCreator;
 
 	public class AmazonMarketPlacesController : Controller
     {
         private readonly IEzbobWorkplaceContext _context;
         private readonly DatabaseDataHelper _helper;
-        private readonly IAppCreator _creator;
+		private readonly EzServiceClient m_oServiceClient;
         private readonly ISession _session;
         private readonly IEzBobConfiguration _config;
         private readonly CustomerMarketPlaceRepository _customerMarketPlaceRepository;
@@ -40,7 +41,6 @@
         public AmazonMarketPlacesController(
             IEzbobWorkplaceContext context, 
             DatabaseDataHelper helper, 
-            IAppCreator creator, 
             ISession session, 
             IEzBobConfiguration config, 
             CustomerMarketPlaceRepository customerMarketPlaceRepository, 
@@ -51,7 +51,7 @@
         {
             _context = context;
             _helper = helper;
-            _creator = creator;
+	        m_oServiceClient = ServiceClient.Instance;
             _session = session;
             _config = config;
             _customerMarketPlaceRepository = customerMarketPlaceRepository;
@@ -161,7 +161,7 @@
 				var marketplace = _helper.SaveOrUpdateCustomerMarketplace(sellerInfo.Name, amazon, amazonSecurityInfo, customer, marketplaceId);
 
                 _session.Flush();
-                _creator.CustomerMarketPlaceAdded(_context.Customer, marketplace.Id);
+                m_oServiceClient.UpdateMarketplace(_context.Customer.Id, marketplace.Id, true);
 
                 if (_config.AskvilleEnabled)
                 {

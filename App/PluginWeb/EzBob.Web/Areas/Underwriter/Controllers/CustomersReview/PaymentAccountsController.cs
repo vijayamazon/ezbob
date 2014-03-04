@@ -1,8 +1,9 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
 	using System.Data;
+	using Code;
+	using EzServiceReference;
 	using NHibernate;
-	using Code.ApplicationCreator;
 	using System;
 	using EZBob.DatabaseLib.Model.Database;
 	using PostcodeAnywhere;
@@ -12,6 +13,7 @@
 	using Models;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Customer.Models;
+	using ActionResult = System.Web.Mvc.ActionResult;
 
 	public class PaymentAccountsController : Controller
     {
@@ -20,20 +22,19 @@
         private readonly ISortCodeChecker _sortCodeChecker;
         private readonly IPayPointFacade _payPointFacade;
         private readonly IWorkplaceContext _context;
-		private readonly IAppCreator _appCreator;
+		private readonly EzServiceClient m_oServiceClient;
 		private readonly ISession session;
 
-        public PaymentAccountsController(CustomerRepository customers,
-                                            IAppCreator appCreator,
-                                            ICustomerMarketPlaceRepository customerMarketplaces,
-                                            ISortCodeChecker sortCodeChecker,
-                                            IPayPointFacade payPointFacade,
-											IWorkplaceContext context, 
-											ISession session
-                                            )
-        {
+        public PaymentAccountsController(
+			CustomerRepository customers,
+			ICustomerMarketPlaceRepository customerMarketplaces,
+			ISortCodeChecker sortCodeChecker,
+			IPayPointFacade payPointFacade,
+			IWorkplaceContext context, 
+			ISession session
+		) {
             _customers = customers;
-            _appCreator = appCreator;
+	        m_oServiceClient = ServiceClient.Instance;
             _customerMarketplaces = customerMarketplaces;
             _sortCodeChecker = sortCodeChecker;
             _payPointFacade = payPointFacade;
@@ -205,7 +206,7 @@
                 SetPaypointDefaultCard(transactionid, customer.Id, cardno);
             }
 
-            _appCreator.PayPointAddedByUnderwriter(_context.User, customer, cardno);
+	        m_oServiceClient.PayPointAddedByUnderwriter(customer.Id, cardno, _context.User.FullName, _context.User.Id);
         }
 
         [Ajax]

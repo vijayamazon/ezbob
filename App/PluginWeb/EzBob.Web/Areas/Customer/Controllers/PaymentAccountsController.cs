@@ -5,13 +5,13 @@
 	using System.Linq;
 	using System.Text.RegularExpressions;
 	using System.Web.Mvc;
-	using Code.ApplicationCreator;
+	using Code;
 	using Code.Bank;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.DatabaseWrapper.AccountInfo;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
-	using CommonLib;
+	using EzServiceReference;
 	using PayPal;
 	using PayPalDbLib.Models;
 	using PayPalServiceLib;
@@ -24,13 +24,14 @@
 	using Scorto.Web;
 	using StructureMap;
 	using log4net;
+	using ActionResult = System.Web.Mvc.ActionResult;
 
 	public class PaymentAccountsController : Controller
 	{
 		private readonly DatabaseDataHelper _helper;
 		private readonly CustomerRepository _customers;
 		private readonly IEzbobWorkplaceContext _context;
-		private readonly IAppCreator _creator;
+		private readonly EzServiceClient m_oServiceClient;
 		private readonly ISession _session;
 		private readonly IMPUniqChecker _mpChecker;
 		private readonly ISortCodeChecker _sortCodeChecker;
@@ -42,16 +43,15 @@
 			DatabaseDataHelper helper,
 			CustomerRepository customers,
 			IEzbobWorkplaceContext context,
-			IAppCreator creator,
 			ISession session,
 			IMPUniqChecker mpChecker,
 			ISortCodeChecker sortCodeChecker,
-			IYodleeAccountChecker yodleeAccountChecker)
-		{
+			IYodleeAccountChecker yodleeAccountChecker
+		) {
 			_helper = helper;
 			_customers = customers;
 			_context = context;
-			_creator = creator;
+			m_oServiceClient = ServiceClient.Instance;
 			_session = session;
 			_mpChecker = mpChecker;
 			_sortCodeChecker = sortCodeChecker;
@@ -102,7 +102,7 @@
 			var mp = _helper.SaveOrUpdateCustomerMarketplace(personalData.Email, paypal, securityData, customer);
 			_helper.SaveOrUpdateAcctountInfo(mp, personalData);
 			_session.Flush();
-			_creator.CustomerMarketPlaceAdded(_context.Customer, mp.Id);
+			m_oServiceClient.UpdateMarketplace(_context.Customer.Id, mp.Id, true);
 
 			return View(permissionsGranted);
 		}

@@ -2,11 +2,11 @@
 {
 	using System;
 	using System.Linq;
-	using ApplicationCreator;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
+	using EzServiceReference;
 	using NHibernate;
 	using Areas.Customer.Controllers;
 	using Areas.Customer.Controllers.Exceptions;
@@ -25,7 +25,7 @@
 	{
 		private readonly ILoanHistoryRepository _loanHistoryRepository;
 		private readonly IPacnetService _pacnetService;
-		private readonly IAppCreator _appCreator;
+		private readonly EzServiceClient m_oServiceClient;
 		private readonly IAgreementsGenerator _agreementsGenerator;
 		private readonly IEzbobWorkplaceContext _context;
 		private readonly LoanBuilder _loanBuilder;
@@ -37,25 +37,23 @@
 		public LoanCreator(
 			ILoanHistoryRepository loanHistoryRepository,
 			IPacnetService pacnetService,
-			IAppCreator appCreator,
 			IAgreementsGenerator agreementsGenerator,
 			IEzbobWorkplaceContext context,
 			LoanBuilder loanBuilder,
 			AvailableFundsValidator availableFundsValidator,
-			ISession session)
-		{
+			ISession session
+		) {
 			_loanHistoryRepository = loanHistoryRepository;
 			_pacnetService = pacnetService;
-			_appCreator = appCreator;
+			m_oServiceClient = ServiceClient.Instance;
 			_agreementsGenerator = agreementsGenerator;
 			_context = context;
 			_loanBuilder = loanBuilder;
 			_availableFundsValidator = availableFundsValidator;
 			_session = session;
-		}
+		} // constructor
 
-		public Loan CreateLoan(Customer cus, decimal loanAmount, PayPointCard card, DateTime now)
-		{
+		public Loan CreateLoan(Customer cus, decimal loanAmount, PayPointCard card, DateTime now) {
 			ValidateCustomer(cus);
 			ValidateAmount(loanAmount, cus);
 			ValidateOffer(cus);
@@ -121,7 +119,7 @@
 
 			_session.Flush();
 
-			_appCreator.CashTransfered(_context.User, cus.PersonalInfo.FirstName, transfered, fee, loan.Id);
+			m_oServiceClient.CashTransferred(_context.User.Id, transfered);
 
 			return loan;
 		}

@@ -4,8 +4,9 @@
     using System.Linq;
     using System.Web.Mvc;
     using ApplicationMng.Repository;
-    using Code.ApplicationCreator;
+    using Code;
     using EZBob.DatabaseLib.Model.Database;
+    using EzServiceReference;
     using Infrastructure;
     using Scorto.Web;
     using PayPoint;
@@ -22,7 +23,7 @@
         private readonly IRepository<MP_MarketplaceType> _mpTypes;
         private readonly Customer _customer;
         private readonly IMPUniqChecker _mpChecker;
-        private readonly IAppCreator _appCreator;
+	    private readonly EzServiceClient m_oServiceClient;
         private readonly DatabaseDataHelper _helper;
         private readonly int _payPointMarketTypeId;
 
@@ -30,15 +31,14 @@
             IEzbobWorkplaceContext context,
             DatabaseDataHelper helper, 
             IRepository<MP_MarketplaceType> mpTypes, 
-            IMPUniqChecker mpChecker,
-            IAppCreator appCreator)
+            IMPUniqChecker mpChecker)
         {
             _context = context;
             _helper = helper;
             _mpTypes = mpTypes;
             _customer = context.Customer;
             _mpChecker = mpChecker;
-            _appCreator = appCreator;
+	        m_oServiceClient = ServiceClient.Instance;
 
             var payPointServiceInfo = new PayPointServiceInfo();
             _payPointMarketTypeId = _mpTypes.GetAll().First(a => a.InternalId == payPointServiceInfo.InternalId).Id;
@@ -74,7 +74,7 @@
                 var payPointSecurityInfo = new PayPointSecurityInfo(model.id, model.remotePassword, model.vpnPassword, model.mid);
 
                 var payPoint = _helper.SaveOrUpdateCustomerMarketplace(username, payPointDatabaseMarketPlace, payPointSecurityInfo, customer);
-                _appCreator.CustomerMarketPlaceAdded(customer, payPoint.Id);
+                m_oServiceClient.UpdateMarketplace(customer.Id, payPoint.Id, true);
                 return this.JsonNet(PayPointAccountModel.ToModel(_helper.GetExistsCustomerMarketPlace(username, payPointDatabaseMarketPlace, customer)));
             }
             catch (MarketPlaceAddedByThisCustomerException e)

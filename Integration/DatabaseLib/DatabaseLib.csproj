@@ -112,7 +112,6 @@
     <Compile Include="Model\Database\Customer\CustomerRequestedLoan.cs" />
     <Compile Include="Model\Database\Customer\CustomerReason.cs" />
     <Compile Include="Model\Database\Customer\CustomerSourceOfRepayment.cs" />
-    <Compile Include="Model\Database\customer_enums.cs" />
     <Compile Include="Model\Database\TestCustomer.cs" />
     <Compile Include="Model\Database\UnderwriterRecentCustomers.cs" />
     <Compile Include="Model\Database\UnderwriterRecentCustomersMap.cs" />
@@ -541,6 +540,10 @@
     <ProjectReference Include="..\CommonLib\CommonLib.csproj">
       <Project>{AEDBFBBD-BA7D-4582-AFCA-6ECF8AF33C98}</Project>
       <Name>CommonLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DbConstants\DbConstants.csproj">
+      <Project>{0527009d-a650-4505-9385-49faca6991cb}</Project>
+      <Name>DbConstants</Name>
     </ProjectReference>
     <ProjectReference Include="..\ExperianParser\ExperianParser.csproj">
       <Project>{002cd56a-ba12-48e2-bb40-663e3bcbff3a}</Project>

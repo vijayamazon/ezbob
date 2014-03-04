@@ -1,36 +1,37 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers
 {
-	using Code.ApplicationCreator;
+	using Code;
 	using EZBob.DatabaseLib;
     using EZBob.DatabaseLib.DatabaseWrapper;
 	using System.Linq;
 	using System.Web.Mvc;
 	using ApplicationMng.Repository;
 	using EZBob.DatabaseLib.Model.Database;
-    using Infrastructure;
+	using EzServiceReference;
+	using Infrastructure;
     using Sage;
     using Scorto.Web;
 	using log4net;
+	using ActionResult = System.Web.Mvc.ActionResult;
 
 	public class SageMarketPlacesController : Controller
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(SageMarketPlacesController));
         private readonly IRepository<MP_MarketplaceType> _mpTypes;
         private readonly Customer _customer;
-        private readonly IAppCreator _appCreator;
         private readonly DatabaseDataHelper _helper;
+		private readonly EzServiceClient m_oServiceClient;
 
 		public SageMarketPlacesController(
             IEzbobWorkplaceContext context,
             DatabaseDataHelper helper,
-            IRepository<MP_MarketplaceType> mpTypes,
-            IAppCreator appCreator)
+            IRepository<MP_MarketplaceType> mpTypes)
         {
             _mpTypes = mpTypes;
             _customer = context.Customer;
-            _appCreator = appCreator;
             _helper = helper;
-        }
+			m_oServiceClient = ServiceClient.Instance;
+		}
 
         [Transactional]
         public JsonNetResult Accounts()
@@ -91,7 +92,8 @@
 			var marketPlace = _helper.SaveOrUpdateCustomerMarketplace(accountName, sageDatabaseMarketPlace, securityData, _customer);
 			log.Info("Saved sage marketplace data...");
 
-			_appCreator.CustomerMarketPlaceAdded(_customer, marketPlace.Id);
+			m_oServiceClient.UpdateMarketplace(_customer.Id, marketPlace.Id, true);
+
 			return View(SageAccountModel.ToModel(marketPlace));
 		}
     }

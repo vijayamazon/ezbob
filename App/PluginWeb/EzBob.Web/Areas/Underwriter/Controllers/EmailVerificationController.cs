@@ -1,11 +1,12 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers
 {
 	using System.Data;
-	using Code.ApplicationCreator;
 	using System.Web.Mvc;
 	using ApplicationMng.Repository;
+	using Code;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Code.Email;
+	using EzServiceReference;
 	using Infrastructure;
 	using Scorto.Security.UserManagement;
 	using Scorto.Web;
@@ -14,15 +15,15 @@
     {
         private readonly IEmailConfirmation _confirmation;
         private readonly ICustomerRepository _customers;
-        private readonly IAppCreator _creator;
+		private readonly EzServiceClient m_oServiceClient;
         private readonly IUsersRepository _users;
         private readonly UserManager _userManager;
 
-        public EmailVerificationController(IEmailConfirmation confirmation, ICustomerRepository customers, IAppCreator creator, IUsersRepository users, UserManager userManager)
+        public EmailVerificationController(IEmailConfirmation confirmation, ICustomerRepository customers, IUsersRepository users, UserManager userManager)
         {
             _confirmation = confirmation;
             _customers = customers;
-            _creator = creator;
+	        m_oServiceClient = ServiceClient.Instance;
             _users = users;
             _userManager = userManager;
         }
@@ -46,7 +47,7 @@
             var user = _users.Get(id);
 
             var address = _confirmation.GenerateLink(customer);
-            _creator.SendEmailVerification(user, customer, address);
+            m_oServiceClient.SendEmailVerification(user.Id, customer.Name, address);
             return this.JsonNet(new {});
         }
 
@@ -67,10 +68,10 @@
             {
                 customer.Name = email;
 
-                _creator.PasswordChanged(user, customer.PersonalInfo.FirstName, newPassword);
+                m_oServiceClient.PasswordChanged(user.Id, newPassword);
 
                 var address = _confirmation.GenerateLink(customer);
-                _creator.SendEmailVerification(user, customer, address);
+                m_oServiceClient.SendEmailVerification(user.Id, customer.Name, address);
             }
 
             return this.JsonNet(new {});

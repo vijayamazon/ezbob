@@ -5,9 +5,9 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Web.Mvc;
-	using Code.ApplicationCreator;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
+	using EzServiceReference;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using NHibernate;
@@ -29,7 +29,6 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 			ISession session,
 			CustomerStatusesRepository customerStatusesRepository,
 			CustomerRepository customers,
-			IAppCreator appCreator,
 			IEzBobConfiguration config,
 			IDecisionHistoryRepository historyRepository,
 			IWorkplaceContext context,
@@ -43,7 +42,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 			_context = context;
 			_session = session;
 			_customers = customers;
-			_appCreator = appCreator;
+			m_oServiceClient = ServiceClient.Instance;
 			_historyRepository = historyRepository;
 			_limit = limit;
 			_mpType = mpType;
@@ -384,7 +383,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 
 				if (!request.EmailSendingBanned) {
 					try {
-						_appCreator.ApprovedUser(user, customer, sum);
+						m_oServiceClient.ApprovedUser(user.Id, customer.Id, sum);
 					}
 					catch (Exception e) {
 						sWarning = "Failed to send 'approved user' email: " + e.Message;
@@ -405,7 +404,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 
 				if (!request.EmailSendingBanned) {
 					try {
-						_appCreator.RejectUser(user, customer.Name, customer.Id, customer.PersonalInfo.FirstName);
+						m_oServiceClient.RejectUser(user.Id, customer.Id);
 					}
 					catch (Exception e) {
 						sWarning = "Failed to send 'reject user' email: " + e.Message;
@@ -422,7 +421,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 				_historyRepository.LogAction(DecisionActions.Escalate, reason, user, customer);
 
 				try {
-					_appCreator.Escalated(customer);
+					m_oServiceClient.Escalated(customer.Id);
 				}
 				catch (Exception e) {
 					sWarning = "Failed to send 'escalated' email: " + e.Message;
@@ -586,7 +585,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 
 		private readonly ISession _session;
 		private readonly CustomerRepository _customers;
-		private readonly IAppCreator _appCreator;
+		private readonly EzServiceClient m_oServiceClient;
 		private readonly IDecisionHistoryRepository _historyRepository;
 		private readonly LoanLimit _limit;
 		private readonly IWorkplaceContext _context;

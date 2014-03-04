@@ -10,8 +10,8 @@ namespace EzBob.Web.Controllers
 	using System.Web.Security;
 	using ApplicationMng.Model;
 	using ApplicationMng.Repository;
-	using Code.ApplicationCreator;
 	using DB.Security;
+	using DbConstants;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
@@ -32,13 +32,12 @@ namespace EzBob.Web.Controllers
 	using EZBob.DatabaseLib;
 	using ActionResult = System.Web.Mvc.ActionResult;
 
-	public class AccountController : Controller
-	{
+	public class AccountController : Controller {
 		private static readonly ILog _log = LogManager.GetLogger(typeof(AccountController));
 		private readonly MembershipProvider _membershipProvider;
 		private readonly IUsersRepository _users;
 		private readonly CustomerRepository _customers;
-		private readonly IAppCreator _appCreator;
+		private readonly EzServiceClient m_oServiceClient;
 		private readonly IEzBobConfiguration _config;
 		private readonly ISessionManager _sessionManager;
 		private readonly IEzbobWorkplaceContext _context;
@@ -50,13 +49,11 @@ namespace EzBob.Web.Controllers
 		private readonly DatabaseDataHelper _helper;
 		private static readonly object initSessionLock = new object();
 
-		//------------------------------------------------------------------------
 		public AccountController(
 			DatabaseDataHelper helper,
 			MembershipProvider membershipProvider,
 			IUsersRepository users,
 			CustomerRepository customers,
-			IAppCreator appCreator,
 			IEzBobConfiguration config,
 			ISessionManager sessionManager,
 			IEzbobWorkplaceContext context,
@@ -65,13 +62,12 @@ namespace EzBob.Web.Controllers
 			ITestCustomerRepository testCustomers,
 			IConfigurationVariablesRepository configurationVariables,
 			ICustomerStatusesRepository customerStatusesRepository
-		)
-		{
+		) {
 			_helper = helper;
 			_membershipProvider = membershipProvider;
 			_users = users;
 			_customers = customers;
-			_appCreator = appCreator;
+			m_oServiceClient = ServiceClient.Instance;
 			_config = config;
 			_sessionManager = sessionManager;
 			_context = context;
@@ -153,7 +149,7 @@ namespace EzBob.Web.Controllers
 						//RestorePassword(user.EMail, user.SecurityAnswer);
 
 						var password = _membershipProvider.ResetPassword(user.EMail, "");
-						_appCreator.ThreeInvalidAttempts(user, user.Name, password);
+						m_oServiceClient.ThreeInvalidAttempts(user.Id, password);
 						user.IsPasswordRestored = true;
 						user.LoginFailedCount = 0;
 
@@ -249,7 +245,7 @@ namespace EzBob.Web.Controllers
 						//RestorePassword(user.EMail, user.SecurityAnswer);
 
 						var password = _membershipProvider.ResetPassword(user.EMail, "");
-						_appCreator.ThreeInvalidAttempts(user, user.Name, password);
+						m_oServiceClient.ThreeInvalidAttempts(user.Id, password);
 						user.IsPasswordRestored = true;
 						user.LoginFailedCount = 0;
 
@@ -369,11 +365,9 @@ namespace EzBob.Web.Controllers
 			bool isTwilioEnabled = Convert.ToBoolean(@Session["IsSmsValidationActive"]);
 			if (isTwilioEnabled && !switchedToCaptcha)
 			{
-				bool isCorrect = _appCreator.ValidateMobileCode(mobilePhone, mobileCode);
+				bool isCorrect = m_oServiceClient.ValidateMobileCode(mobilePhone, mobileCode).Value;
 				if (!isCorrect)
-				{
 					throw new Exception("Invalid code");
-				}
 			}
 
 			_membershipProvider.CreateUser(email, signupPass1, email, securityQuestion, securityAnswer, false, null, out status);
@@ -453,7 +447,7 @@ namespace EzBob.Web.Controllers
 							}
 					};
 
-				_appCreator.AfterSignup(user, link);
+				m_oServiceClient.GreetingMailStrategy(user.Id, link);
 			}
 			if (status == MembershipCreateStatus.DuplicateEmail)
 			{
@@ -526,7 +520,7 @@ namespace EzBob.Web.Controllers
 
 			user = _users.GetUserByLogin(email);
 			var customer = _customers.Get(user.Id);
-			_appCreator.PasswordRestored(user, email, customer.PersonalInfo != null ? customer.PersonalInfo.FirstName : "", password);
+			m_oServiceClient.PasswordRestored(user.Id, password);
 			user.IsPasswordRestored = true;
 
 			return this.JsonNet(new { result = true });
@@ -654,7 +648,7 @@ namespace EzBob.Web.Controllers
 		[HttpPost]
 		public bool GenerateMobileCode(string mobilePhone)
 		{
-			return _appCreator.GenerateMobileCode(mobilePhone);
+			return m_oServiceClient.GenerateMobileCode(mobilePhone).Value;
 		}
 
 		[Ajax]
@@ -675,7 +669,7 @@ namespace EzBob.Web.Controllers
 				}
 
 				_log.InfoFormat("Initializing session");
-				WizardConfigsActionResult wizardConfigsActionResult = _appCreator.GetWizardConfigs();
+				WizardConfigsActionResult wizardConfigsActionResult = m_oServiceClient.GetWizardConfigs();
 				Session["SwitchedToCaptcha"] = false;
 				Session["IsSmsValidationActive"] = wizardConfigsActionResult.IsSmsValidationActive;
 				Session["NumberOfMobileCodeAttempts"] = wizardConfigsActionResult.NumberOfMobileCodeAttempts;

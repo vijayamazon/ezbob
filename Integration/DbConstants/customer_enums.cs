@@ -1,16 +1,18 @@
-namespace EZBob.DatabaseLib.Model.Database
-{
-	using System;
+namespace EZBob.DatabaseLib.Model.Database {
 	using System.ComponentModel;
 
-	public enum Gender
-	{
+	#region enum Gender
+
+	public enum Gender {
 		M,
 		F
 	} // enum Gender
 
-	public enum MaritalStatus
-	{
+	#endregion enum Gender
+
+	#region enum MaritalStatus
+
+	public enum MaritalStatus {
 		Married,
 		Single,
 		Divorced,
@@ -18,16 +20,22 @@ namespace EZBob.DatabaseLib.Model.Database
 		Other
 	} // enum MaritalStatus
 
-	public enum Medal
-	{
+	#endregion enum MaritalStatus
+
+	#region enum Medal
+
+	public enum Medal {
 		Silver,
 		Gold,
 		Platinum,
 		Diamond
 	} // enum Medal
 
-	public enum TypeOfBusiness
-	{
+	#endregion enum Medal
+
+	#region enum TypeOfBusiness
+
+	public enum TypeOfBusiness {
 		Entrepreneur = 0, //consumer
 		LLP = 1,          //company
 		PShip3P = 2,      //consumer
@@ -36,8 +44,11 @@ namespace EZBob.DatabaseLib.Model.Database
 		Limited = 5       //company
 	} // enum TypeOfBusiness
 
-	public enum IndustryType
-	{
+	#endregion enum TypeOfBusiness
+
+	#region enum IndustryType
+
+	public enum IndustryType {
 		Automotive = 0,
 		Construction = 1,
 		Education = 2,
@@ -47,10 +58,13 @@ namespace EZBob.DatabaseLib.Model.Database
 		HighStreetOrOnlineRetail = 4, //online
 		Food = 5,
 		Other = 6
-	}
-	
-	public enum VatReporting
-	{
+	} // enum IndustryType
+
+	#endregion enum IndustryType
+
+	#region enum VatReporting
+
+	public enum VatReporting {
 		[Description("The company is not VAT registered")]
 		NotVatRegistered = 0,
 		[Description("I file with HMRC online myself")]
@@ -63,28 +77,30 @@ namespace EZBob.DatabaseLib.Model.Database
 		Other = 4,
 		[Description("An employee of the company files")]
 		CompanyEmployee = 5,
-	}
+	} // enum VatReporting
 
-	public static class EnumDescription
-	{
-		public static string DescriptionAttr<T>(this T source)
-		{
-			try
-			{
+	#endregion enum VatReporting
+
+	#region class EnumDescription
+
+	public static class EnumDescription {
+		public static string DescriptionAttr<T>(this T source) {
+			try {
 				System.Reflection.FieldInfo fi = source.GetType().GetField(source.ToString());
 
-				var attributes = (DescriptionAttribute[]) fi.GetCustomAttributes(
-					typeof (DescriptionAttribute), false);
+				var attributes = (DescriptionAttribute[])fi.GetCustomAttributes(
+					typeof(DescriptionAttribute), false);
 
-				if (attributes.Length > 0) return attributes[0].Description;
+				if (attributes.Length > 0)
+					return attributes[0].Description;
 
 				return source.ToString();
 			}
-			catch
-			{
+			catch {
 				return "-";
-			}
-		}
+			} // try
+		} // DescriptionAttr
+	} // class EnumDescription
 
-	}
+	#endregion class EnumDescription
 } // namespace

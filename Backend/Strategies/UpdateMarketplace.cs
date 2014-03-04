@@ -1,8 +1,8 @@
-﻿namespace EzBob.Backend.Strategies 
-{
+﻿namespace EzBob.Backend.Strategies {
 	using AmazonLib;
 	using PayPal;
 	using eBayLib;
+	using DbConstants;
 	using System;
 	using System.Collections.Generic;
 	using System.Data;
@@ -24,10 +24,11 @@
 
 		#region constructor
 
-		public UpdateMarketplace(int customerId, int marketplaceId, AConnection oDb, ASafeLog oLog) : base(oDb, oLog) {
+		public UpdateMarketplace(int customerId, int marketplaceId, bool doUpdateWizardStep, AConnection oDb, ASafeLog oLog) : base(oDb, oLog) {
 			mailer = new StrategiesMailer(DB, Log);
 			this.customerId = customerId;
 			this.marketplaceId = marketplaceId;
+			m_bDoUpdateWizardStep = doUpdateWizardStep;
 		} // constructor
 
 		#endregion constructor
@@ -40,11 +41,20 @@
 
 		#endregion property Name
 
-		#region method CustomerMarketPlaceAdded
+		#region method Execute
 
 		public override void Execute() {
 			string errorMessage = string.Empty;
 			DateTime startTime = DateTime.UtcNow;
+
+			if (m_bDoUpdateWizardStep) {
+				DB.ExecuteNonQuery(
+					"CustomerSetWizardStepIfNotLast",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("@CustomerID", customerId),
+					new QueryParameter("@NewStepID", (int)WizardStepType.Marketplace)
+				);
+			} // if
 
 			DataTable dt = DB.ExecuteReader(
 				"GetMarketplaceDetailsForUpdate",
@@ -155,9 +165,9 @@
 				new QueryParameter("StartDate", startTime),
 				new QueryParameter("EndDate", DateTime.UtcNow)
 			);
-		} // CustomerMarketPlaceAdded
+		} // Execute
 
-		#endregion method CustomerMarketPlaceAdded
+		#endregion method Execute
 		
 		#endregion public
 
@@ -174,6 +184,7 @@
 		private readonly StrategiesMailer mailer;
 		private readonly int customerId;
 		private readonly int marketplaceId;
+		private readonly bool m_bDoUpdateWizardStep;
 
 		#endregion private
 	} // class UpdateMarketplace

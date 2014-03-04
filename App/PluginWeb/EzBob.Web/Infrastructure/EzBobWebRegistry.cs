@@ -22,7 +22,6 @@ namespace EzBob.Web.Infrastructure
 	using Areas.Customer.Models;
 	using Code;
 	using Code.Agreements;
-	using Code.ApplicationCreator;
 	using Code.Email;
 	using Code.MpUniq;
 	using Code.PostCode;
@@ -61,7 +60,6 @@ namespace EzBob.Web.Infrastructure
 
 			For<IEzBobConfiguration>().Singleton().Use(ezBobConfiguration);
 			For<IPayPalConfig>().Singleton().Use(localRoot.PayPalConfig);
-			For<IAppCreator>().Use<AppCreator>();
 			For<BaseAPIProfile>().Use(() => ProfileProvider.CreateProfile(localRoot.PayPalConfig));
 			For<IEbayMarketplaceTypeConnection>().Use(localRoot.eBayConfig);
 			For<IEbayMarketplaceSettings>().Use(localRoot.eBaySettings);

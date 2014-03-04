@@ -5,7 +5,7 @@
 	using System.Web.Mvc;
 	using ApplicationMng.Model;
 	using ApplicationMng.Repository;
-	using Code.ApplicationCreator;
+	using Code;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EzBob.Models;
 	using Scorto.Web;
@@ -18,15 +18,15 @@
         private readonly ProfileSummaryModelBuilder _summaryModelBuilder;
         private CustomerRepository CustomerRepository { get; set; }
         private readonly IUsersRepository _users;
-		private readonly IAppCreator _creator;
+		private readonly EzServiceClient m_oServiceClient;
 		private readonly ISession session;
 
         public ProfileController(CustomerRepository customerRepository, ProfileSummaryModelBuilder summaryModelBuilder,
-								 IUsersRepository users, IAppCreator creator, ISession session)
+								 IUsersRepository users, ISession session)
         {
             _summaryModelBuilder = summaryModelBuilder;
             _users = users;
-            _creator = creator;
+	        m_oServiceClient = ServiceClient.Instance;
             CustomerRepository = customerRepository;
 	        this.session = session;
         }
@@ -80,7 +80,7 @@
             if (MainStrategyUpdatingStatus(mainStrat) == "Finished")
             {
 				var underwriter = _users.GetUserByLogin(User.Identity.Name);
-                _creator.Evaluate(underwriter.Id, _users.Get(customerId), NewCreditLineOption.UpdateEverythingAndApplyAutoRules, Convert.ToInt32(customer.IsAvoid), false, false);
+				m_oServiceClient.MainStrategy1(underwriter.Id, _users.Get(customerId).Id, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, Convert.ToInt32(customer.IsAvoid));
             }
             else
             {

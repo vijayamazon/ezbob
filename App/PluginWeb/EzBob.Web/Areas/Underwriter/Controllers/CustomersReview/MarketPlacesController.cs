@@ -5,13 +5,14 @@
 	using System.Data;
 	using System.Linq;
 	using System.Web.Mvc;
-	using Code.ApplicationCreator;
+	using Code;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Repository;
 	using EzBob.Models.Marketplaces.Builders;
 	using Models;
 	using EzBob.Models.Marketplaces;
+	using EzServiceReference;
 	using NHibernate;
 	using Scorto.Web;
 	using CommonLib;
@@ -20,7 +21,7 @@
 	using YodleeLib;
 	using YodleeLib.connector;
 	using log4net;
-
+	using ActionResult = System.Web.Mvc.ActionResult;
 
 	public class MarketPlacesController : Controller
 	{
@@ -29,7 +30,6 @@
 		private readonly AnalyisisFunctionValueRepository _functions;
 		private readonly MarketPlacesFacade _marketPlaces;
 		private readonly CustomerMarketPlaceRepository _customerMarketplaces;
-		private readonly IAppCreator _appCreator;
 		private readonly MP_TeraPeakOrderItemRepository _teraPeakOrderItems;
 		private readonly YodleeAccountsRepository _yodleeAccountsRepository;
 		private readonly YodleeSearchWordsRepository _yodleeSearchWordsRepository;
@@ -37,12 +37,12 @@
 		private readonly YodleeRuleRepository _yodleeRuleRepository;
 		private readonly YodleeGroupRuleMapRepository _yodleeGroupRuleMapRepository;
 		private readonly ISession _session;
+		private readonly EzServiceClient m_oServiceClient;
 
 		public MarketPlacesController(CustomerRepository customers,
 			AnalyisisFunctionValueRepository functions,
 			CustomerMarketPlaceRepository customerMarketplaces,
 			MarketPlacesFacade marketPlaces,
-			IAppCreator appCreator,
 			MP_TeraPeakOrderItemRepository teraPeakOrderItems,
 			YodleeAccountsRepository yodleeAccountsRepository,
 			YodleeSearchWordsRepository yodleeSearchWordsRepository,
@@ -53,7 +53,7 @@
 		{
 			_customerMarketplaces = customerMarketplaces;
 			_marketPlaces = marketPlaces;
-			_appCreator = appCreator;
+			m_oServiceClient = ServiceClient.Instance;
 			_functions = functions;
 			_customers = customers;
 			_teraPeakOrderItems = teraPeakOrderItems;
@@ -148,12 +148,12 @@
 				case "Sage":
 				case "PayPoint":
 				case "Pay Pal":
-					_appCreator.CustomerMarketPlaceAdded(customer, umi);
+					m_oServiceClient.UpdateMarketplace(customer.Id, umi, true);
 					break;
 
 				default:
 					if (null != Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(mp.Marketplace.Name))
-						_appCreator.CustomerMarketPlaceAdded(customer, umi);
+						m_oServiceClient.UpdateMarketplace(customer.Id, umi, true);
 					break;
 			} // switch
 		} // ReCheckMarketplaces
@@ -194,7 +194,7 @@
 				{
 					var customer = mp.Customer;
 					_customerMarketplaces.ClearUpdatingEnd(umi);
-					_appCreator.CustomerMarketPlaceAdded(customer, umi);
+					m_oServiceClient.UpdateMarketplace(customer.Id, umi, true);
 					return View(new { success = true });
 				}
 
@@ -224,8 +224,12 @@
 		public void RenewEbayToken(int umi)
 		{
 			var mp = _customerMarketplaces.Get(umi);
-			var url = string.Format("https://app.ezbob.com/Customer/Profile/RenewEbayToken/");
-			_appCreator.RenewEbayToken(mp.Customer, mp.DisplayName, url);
+
+			m_oServiceClient.RenewEbayToken(
+				mp.Customer.Id,
+				mp.DisplayName,
+				"https://app.ezbob.com/Customer/Profile/RenewEbayToken/"
+			);
 		}
 
 		[Ajax]

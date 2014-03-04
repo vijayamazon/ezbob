@@ -2,7 +2,6 @@
 {
 	using System;
 	using System.Web.Mvc;
-	using Code.ApplicationCreator;
 	using CommonLib.Security;
 	using EKM;
 	using EZBob.DatabaseLib;
@@ -22,33 +21,31 @@
 	using System.Linq;
 	using EZBob.DatabaseLib.Model;
 
-	public class ProfileController : Controller
-	{
+	public class ProfileController : Controller {
 		private readonly CustomerModelBuilder _customerModelBuilder;
 		private readonly IEzbobWorkplaceContext _context;
-		private readonly IAppCreator _creator;
+		private readonly EzServiceClient m_oServiceClient;
 		private readonly IEzBobConfiguration _config;
 		private readonly CashRequestBuilder _crBuilder;
 		private readonly ISession _session;
 		private readonly IConfigurationVariablesRepository _configurationVariablesRepository;
-		//----------------------------------------------------------------------
+
 		public ProfileController(
 			CustomerModelBuilder customerModelBuilder,
 			IEzbobWorkplaceContext context,
-			IAppCreator creator,
 			IEzBobConfiguration config,
 			CashRequestBuilder crBuilder,
 			ISession session,
-			IConfigurationVariablesRepository configurationVariablesRepository)
-		{
+			IConfigurationVariablesRepository configurationVariablesRepository
+		) {
 			_customerModelBuilder = customerModelBuilder;
 			_context = context;
-			_creator = creator;
+			m_oServiceClient = ServiceClient.Instance;
 			_config = config;
 			_crBuilder = crBuilder;
 			_session = session;
 			_configurationVariablesRepository = configurationVariablesRepository;
-		}
+		} // constructor
 
 		//----------------------------------------------------------------------
 		[IsSuccessfullyRegisteredFilter]
@@ -144,9 +141,7 @@
 
 			var oldOffer = customer.LastCashRequest;
 			if (oldOffer != null && oldOffer.HasLoans)
-			{
-				_creator.RequestCashWithoutTakenLoan(customer, Url.Action("Index", "Profile", new { Area = "Customer" }));
-			}
+				m_oServiceClient.RequestCashWithoutTakenLoan(customer.Id);
 
 			var cashRequest = _crBuilder.CreateCashRequest(customer);
 
@@ -156,9 +151,7 @@
 			var config = ObjectFactory.GetInstance<IEzBobConfiguration>();
 			bool refreshYodleeEnabled = config.RefreshYodleeEnabled;
 			if (yodlees.Any() && refreshYodleeEnabled)
-			{
 				return this.JsonNet(new { hasYodlee = true });
-			}
 
 			return this.JsonNet(new { });
 		}

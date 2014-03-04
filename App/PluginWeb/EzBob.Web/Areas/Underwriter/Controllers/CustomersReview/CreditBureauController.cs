@@ -5,7 +5,6 @@
 	using System.Linq;
 	using System.Web.Mvc;
 	using ApplicationMng.Repository;
-	using Code.ApplicationCreator;
 	using ExperianLib.IdIdentityHub;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Models;
@@ -18,18 +17,18 @@
 	public class CreditBureauController : Controller
     {
         private readonly CustomerRepository _customers;
-        private readonly IAppCreator _creator;
+		private readonly EzServiceClient m_oServiceClient;
         private readonly IUsersRepository _users;
         private readonly IApplicationRepository _applications;
         private readonly IEzBobConfiguration _config;
         private readonly CreditBureauModelBuilder _creditBureauModelBuilder;
         private readonly ConcentAgreementHelper _concentAgreementHelper;
 
-        public CreditBureauController(CustomerRepository customers, IAppCreator creator,
+        public CreditBureauController(CustomerRepository customers,
                                         IUsersRepository users, IApplicationRepository applications, IEzBobConfiguration config, CreditBureauModelBuilder creditBureauModelBuilder)
         {
             _customers = customers;
-            _creator = creator;
+	        m_oServiceClient = ServiceClient.Instance;
             _users = users;
             _applications = applications;
             _config = config;
@@ -49,7 +48,8 @@
 
 	        var underwriter = _users.GetUserByLogin(User.Identity.Name);
 
-			_creator.Evaluate(underwriter.Id, _users.Get(id), NewCreditLineOption.UpdateEverythingExceptMp, Convert.ToInt32(customer.IsAvoid), true, false);
+			m_oServiceClient.MainStrategy2(underwriter.Id, _users.Get(id).Id, NewCreditLineOption.UpdateEverythingExceptMp, Convert.ToInt32(customer.IsAvoid), true);
+
             return this.JsonNet(new { Message = "The evaluation has been started. Please refresh this application after a while..." });
         }
 
@@ -143,8 +143,8 @@
 
 	        var underwriter = _users.GetUserByLogin(User.Identity.Name);
 
-            _creator.EvaluateWithIdHubCustomAddress(underwriter.Id, _users.Get(id), checkType, houseNumber, houseName, street,
-                                            district, town, county, postcode, bankAccount, sortCode, Convert.ToInt32(customer.IsAvoid));
+			m_oServiceClient.MainStrategy3(underwriter.Id, _users.Get(id).Id, checkType, houseNumber, houseName, street, district, town, county, postcode, bankAccount, sortCode, Convert.ToInt32(customer.IsAvoid));
+
             return this.JsonNet(new { Message = "The evaluation has been started. Please refresh this application after a while..." });
         }
 

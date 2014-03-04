@@ -1542,10 +1542,10 @@ namespace StrategiesActivator.EzServiceReference {
         System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> SetLateLoanStatusAsync();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateMarketplace", ReplyAction="http://tempuri.org/IEzService/UpdateMarketplaceResponse")]
-        StrategiesActivator.EzServiceReference.ActionMetaData UpdateMarketplace(int customerId, int marketplaceId);
+        StrategiesActivator.EzServiceReference.ActionMetaData UpdateMarketplace(int customerId, int marketplaceId, bool doUpdateWizardStep);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateMarketplace", ReplyAction="http://tempuri.org/IEzService/UpdateMarketplaceResponse")]
-        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> UpdateMarketplaceAsync(int customerId, int marketplaceId);
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> UpdateMarketplaceAsync(int customerId, int marketplaceId, bool doUpdateWizardStep);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateTransactionStatus", ReplyAction="http://tempuri.org/IEzService/UpdateTransactionStatusResponse")]
         StrategiesActivator.EzServiceReference.ActionMetaData UpdateTransactionStatus();
@@ -1975,12 +1975,12 @@ namespace StrategiesActivator.EzServiceReference {
             return base.Channel.SetLateLoanStatusAsync();
         }
         
-        public StrategiesActivator.EzServiceReference.ActionMetaData UpdateMarketplace(int customerId, int marketplaceId) {
-            return base.Channel.UpdateMarketplace(customerId, marketplaceId);
+        public StrategiesActivator.EzServiceReference.ActionMetaData UpdateMarketplace(int customerId, int marketplaceId, bool doUpdateWizardStep) {
+            return base.Channel.UpdateMarketplace(customerId, marketplaceId, doUpdateWizardStep);
         }
         
-        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> UpdateMarketplaceAsync(int customerId, int marketplaceId) {
-            return base.Channel.UpdateMarketplaceAsync(customerId, marketplaceId);
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> UpdateMarketplaceAsync(int customerId, int marketplaceId, bool doUpdateWizardStep) {
+            return base.Channel.UpdateMarketplaceAsync(customerId, marketplaceId, doUpdateWizardStep);
         }
         
         public StrategiesActivator.EzServiceReference.ActionMetaData UpdateTransactionStatus() {

@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers {
 	using System.Data;
-	using Code.ApplicationCreator;
+	using EzBob.Web.Code;
+	using EzServiceReference;
 	using NHibernate;
 	using System;
 	using System.Linq;
@@ -18,6 +19,7 @@
 	using Newtonsoft.Json;
 	using log4net;
 	using Scorto.Web;
+	using ActionResult = System.Web.Mvc.ActionResult;
 
 	public class CGMarketPlacesController : Controller {
 		#region public
@@ -29,15 +31,14 @@
 			DatabaseDataHelper helper,
 			IRepository<MP_MarketplaceType> mpTypes,
 			CGMPUniqChecker mpChecker,
-			ISession session,
-			IAppCreator appCreator
+			ISession session
 		) {
 			_context = context;
 			_helper = helper;
 			_mpTypes = mpTypes;
 			_mpChecker = mpChecker;
-			_appCreator = appCreator;
 			_session = session;
+			m_oServiceClient = ServiceClient.Instance;
 		} // constructor
 
 		#endregion constructor
@@ -122,7 +123,7 @@
 
 			try {
 				// This is done to insert entries into EzServiceActionHistory
-				_appCreator.CustomerMarketPlaceAdded(_context.Customer, oState.CustomerMarketPlace.Id);
+				m_oServiceClient.UpdateMarketplace(_context.Customer.Id, oState.CustomerMarketPlace.Id, true);
 			}
 			catch (Exception e) {
 				Log.WarnFormat(
@@ -298,7 +299,7 @@
 				IDatabaseCustomerMarketPlace mp = _helper.SaveOrUpdateCustomerMarketplace(model.name, oState.Marketplace, model, _context.Customer);
 				_session.Flush();
 				if (shouldUpdateInServer)
-					_appCreator.CustomerMarketPlaceAdded(_context.Customer, mp.Id);
+					m_oServiceClient.UpdateMarketplace(_context.Customer.Id, mp.Id, true);
 
 				oState.Model = this.JsonNet(AccountModel.ToModel(mp));
 				oState.CustomerMarketPlace = mp;
@@ -342,7 +343,7 @@
 		private readonly IEzbobWorkplaceContext _context;
 		private readonly IRepository<MP_MarketplaceType> _mpTypes;
 		private readonly CGMPUniqChecker _mpChecker;
-		private readonly IAppCreator _appCreator;
+		private readonly EzServiceClient m_oServiceClient;
 		private readonly DatabaseDataHelper _helper;
 		private readonly ISession _session;
 

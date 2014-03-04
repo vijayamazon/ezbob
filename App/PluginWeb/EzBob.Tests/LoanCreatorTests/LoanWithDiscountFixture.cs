@@ -9,7 +9,9 @@ using StructureMap;
 
 namespace EzBob.Tests.LoanCreatorTests
 {
-    public class LoanWithDiscountFixture : LoanCreatorFixtureBase
+	using DbConstants;
+
+	public class LoanWithDiscountFixture : LoanCreatorFixtureBase
     {
 
         private Customer _customer;

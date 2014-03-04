@@ -4,12 +4,12 @@
 	using System.Linq;
 	using System.Reflection;
 	using System.Web.Mvc;
-	using Code.ApplicationCreator;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using CommonLib;
+	using EzServiceReference;
 	using Models;
 	using Code;
 	using Infrastructure;
@@ -19,9 +19,8 @@
 	using StructureMap;
 	using log4net;
 
-	public class GetCashController : Controller
-	{
-		private readonly IAppCreator _appCreator;
+	public class GetCashController : Controller {
+		private readonly EzServiceClient m_oServiceClient;
 		private readonly IEzbobWorkplaceContext _context;
 		private readonly IPayPointFacade _payPointFacade;
 		private readonly ICustomerNameValidator _validator;
@@ -30,19 +29,17 @@
 		private readonly ICustomerRepository _customerRepository;
 		private readonly ILoanCreator _loanCreator;
 
-		//-------------------------------------------------------------------------------
 		public GetCashController(
 			IEzbobWorkplaceContext context,
 			IPayPointFacade payPointFacade,
-			IAppCreator appCreator,
 			ICustomerNameValidator validator,
 			IPacnetPaypointServiceLogRepository logRepository,
 			ICustomerRepository customerRepository,
-			ILoanCreator loanCreator)
-		{
+			ILoanCreator loanCreator
+		) {
 			_context = context;
 			_payPointFacade = payPointFacade;
-			_appCreator = appCreator;
+			m_oServiceClient = ServiceClient.Instance;
 			_validator = validator;
 			_logRepository = logRepository;
 			_customerRepository = customerRepository;
@@ -150,7 +147,7 @@
 					_context.Customer.PayPointErrorsCount++;
 
 					try {
-						_appCreator.GetCashFailed(_context.User, _context.Customer.PersonalInfo.FirstName);
+						m_oServiceClient.GetCashFailed(_context.User.Id);
 					}
 					catch (Exception e) {
 						_log.Error("Failed to send 'get cash failed' email.", e);
@@ -206,7 +203,7 @@
 			catch (PacnetException)
 			{
 				try {
-					_appCreator.TransferCashFailed(_context.User, _context.Customer.PersonalInfo.FirstName);
+					m_oServiceClient.TransferCashFailed(_context.User.Id);
 				}
 				catch (Exception e) {
 					_log.Error("Failed to send 'transfer cash failed' email.", e);
@@ -251,7 +248,7 @@
 								cus.PersonalInfo.Surname,
 								cus.PersonalInfo.Surname);
 				try {
-					_appCreator.PayPointNameValidationFailed(customer, _context.User, cus);
+					m_oServiceClient.PayPointNameValidationFailed(_context.User.Id, cus.Id, customer);
 				}
 				catch (Exception e) {
 					_log.Error("Failed to send 'paypoint name validation failed' email.", e);

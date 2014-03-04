@@ -1,7 +1,6 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
 	using System.Data;
-	using Code.ApplicationCreator;
 	using System;
 	using System.Linq;
 	using System.Web.Mvc;
@@ -12,6 +11,7 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Loans;
 	using EZBob.DatabaseLib.Repository;
+	using EzServiceReference;
 	using Models;
 	using Code;
 	using Code.ReportGenerator;
@@ -20,11 +20,12 @@
 	using PaymentServices.PayPoint;
 	using Scorto.Web;
 	using log4net;
+	using ActionResult = System.Web.Mvc.ActionResult;
 
 	public class LoanHistoryController : Controller
 	{
 		private static readonly ILog _log = LogManager.GetLogger("LoanHistoryController");
-		private readonly IAppCreator _appCreator;
+		private readonly EzServiceClient m_oServiceClient;
 		private readonly ConfigurationVariablesRepository _configurationVariablesRepository;
 		private readonly IEzbobWorkplaceContext _context;
 		private readonly CustomerRepository _customerRepository;
@@ -39,7 +40,7 @@
 		public LoanHistoryController(CustomerRepository customersRepository,
 									 PaymentRolloverRepository rolloverRepository,
 									 LoanScheduleRepository loanScheduleRepository, IEzbobWorkplaceContext context,
-									 LoanPaymentFacade loanRepaymentFacade, IAppCreator appCreator,
+									 LoanPaymentFacade loanRepaymentFacade,
 									 IPacnetPaypointServiceLogRepository logRepository, LoanRepository loanRepository,
 									 ConfigurationVariablesRepository configurationVariablesRepository,
 									 IUsersRepository users,
@@ -50,7 +51,7 @@
 			_loanScheduleRepository = loanScheduleRepository;
 			_context = context;
 			_loanRepaymentFacade = loanRepaymentFacade;
-			_appCreator = appCreator;
+			m_oServiceClient = ServiceClient.Instance;
 			_logRepository = logRepository;
 			_loanRepository = loanRepository;
 			_configurationVariablesRepository = configurationVariablesRepository;
@@ -159,7 +160,7 @@
 			rolloverModel.Status = RolloverStatus.New;
 			_rolloverRepository.SaveOrUpdate(rolloverModel);
 
-			_appCreator.EmailRolloverAdded(customer, payment, expDate);
+			m_oServiceClient.EmailRolloverAdded(customer.Id, payment);
 		}
 
 		[Ajax]
@@ -212,10 +213,7 @@
 				_loanRepaymentFacade.Recalculate(customer.GetLoan(model.LoanId), DateTime.Now);
 
 				if (model.SendEmail)
-				{
-					_appCreator.PayEarly(_users.Get(customer.Id), date, realAmount, customer.PersonalInfo.FirstName,
-										 customer.GetLoan(model.LoanId).RefNumber);
-				}
+					m_oServiceClient.PayEarly(_users.Get(customer.Id).Id, realAmount, customer.GetLoan(model.LoanId).RefNumber);
 
 				string requestType = string.Format("Manual payment for customer {0}, amount {1}",
 												   customer.PersonalInfo.Fullname, realAmount);

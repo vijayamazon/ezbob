@@ -1,13 +1,13 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers
 {
 	using System.Collections.Generic;
-	using System.Threading;
-	using Code.ApplicationCreator;
+	using Code;
 	using CommonLib;
 	using CommonLib.Security;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.DatabaseWrapper;
 	using EZBob.DatabaseLib.Model.Marketplaces.Yodlee;
+	using EzServiceReference;
 	using Web.Models.Strings;
 	using YodleeLib;
 	using YodleeLib.connector;
@@ -20,6 +20,7 @@
 	using Code.MpUniq;
 	using log4net;
 	using NHibernate;
+	using ActionResult = System.Web.Mvc.ActionResult;
 
 	public class YodleeMarketPlacesController : Controller
 	{
@@ -28,7 +29,7 @@
 		private readonly IRepository<MP_MarketplaceType> _mpTypes;
 		private readonly Customer _customer;
 		private readonly YodleeMpUniqChecker _mpChecker;
-		private readonly IAppCreator _appCreator;
+		private readonly EzServiceClient m_oServiceClient;
 	    private readonly ISession _session;
 		private readonly DatabaseDataHelper _helper;
 
@@ -37,7 +38,6 @@
 			DatabaseDataHelper helper, 
 			IRepository<MP_MarketplaceType> mpTypes,
 			YodleeMpUniqChecker mpChecker,
-			IAppCreator appCreator,
 			ISession session)
 		{
 			_context = context;
@@ -45,7 +45,7 @@
 			_mpTypes = mpTypes;
 			_customer = context.Customer;
 			_mpChecker = mpChecker;
-			_appCreator = appCreator;
+			m_oServiceClient = ServiceClient.Instance;
 			_session = session;
 		}
 
@@ -123,7 +123,7 @@
 
 			Log.InfoFormat("Added or updated yodlee marketplace: {0}", marketPlace.Id);
 			
-			_appCreator.CustomerMarketPlaceAdded(_context.Customer, marketPlace.Id);
+			m_oServiceClient.UpdateMarketplace(_context.Customer.Id, marketPlace.Id, true);
 
 			return View(YodleeAccountModel.ToModel(marketPlace, new YodleeBanksRepository(_session)));
 		}
@@ -206,7 +206,7 @@
 				return View(new { error = "Error occured updating bank account" });
 			}
 
-			_appCreator.CustomerMarketPlaceAdded(_context.Customer, id);
+			m_oServiceClient.UpdateMarketplace(_context.Customer.Id, id, true);
 			return View(new {success = true});
 		}
 	}

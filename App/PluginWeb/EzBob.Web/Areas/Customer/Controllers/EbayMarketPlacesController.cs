@@ -1,12 +1,12 @@
-﻿namespace EzBob.Web.Areas.Customer.Controllers
-{
+﻿namespace EzBob.Web.Areas.Customer.Controllers {
 	using System.Data;
-	using Code.ApplicationCreator;
 	using System;
 	using System.Linq;
 	using System.Web.Mvc;
+	using Code;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database.Repository;
+	using EzServiceReference;
 	using Models;
 	using Code.MpUniq;
 	using Infrastructure;
@@ -26,7 +26,7 @@
         private readonly CustomerRepository _customers;
         private readonly ISession _session;
         private readonly eBayServiceHelper _eBayServiceHelper;
-        private readonly IAppCreator _creator;
+		private readonly EzServiceClient m_oServiceClient;
         private readonly IMPUniqChecker _mpChecker;
 
         public EbayMarketPlacesController(
@@ -35,7 +35,6 @@
             CustomerRepository customers, 
             ISession session, 
             eBayServiceHelper eBayServiceHelper, 
-            IAppCreator creator,
             IMPUniqChecker mpChecker)
         {
             _context = context;
@@ -43,7 +42,7 @@
             _customers = customers;
             _session = session;
             _eBayServiceHelper = eBayServiceHelper;
-            _creator = creator;
+	        m_oServiceClient = ServiceClient.Instance;
             _mpChecker = mpChecker;
         }
 
@@ -165,9 +164,7 @@
                 _session.Flush();
 
                 if (! isUpdate)
-                {
-                    _creator.CustomerMarketPlaceAdded(_context.Customer, mp.Id);
-                }
+                    m_oServiceClient.UpdateMarketplace(_context.Customer.Id, mp.Id, true);
 
                 _customers.SaveOrUpdate(customer); 
 

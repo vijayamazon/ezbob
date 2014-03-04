@@ -1,5 +1,4 @@
 ﻿namespace EzBob.Web.Code {
-	using ApplicationCreator;
 	using EZBob.DatabaseLib.Model;
 	using EzServiceReference;
 	using System;
@@ -16,7 +15,6 @@
 		public CashRequestBuilder(
 			ILoanTypeRepository loanTypes,
 			IDiscountPlanRepository discounts,
-			IAppCreator creator,
 			IUsersRepository users,
 			IEzBobConfiguration config,
 			IConfigurationVariablesRepository configurationVariables,
@@ -24,9 +22,9 @@
 			IDecisionHistoryRepository historyRepository,
 			LoanLimit limit
 		) {
+			m_oServiceClient = ServiceClient.Instance;
 			_loanTypes = loanTypes;
 			_discounts = discounts;
-			_creator = creator;
 			_users = users;
 			_config = config;
 			this.configurationVariables = configurationVariables;
@@ -141,11 +139,18 @@
 				foreach (var mp in customer.CustomerMarketPlaces)
 				{
 					mp.UpdatingEnd = null;
-					_creator.ServiceClient.UpdateMarketplace(customer.Id, mp.Id);
+					m_oServiceClient.UpdateMarketplace(customer.Id, mp.Id, false);
 				}
 			} // if
 
-			_creator.Evaluate(underwriterId, _users.Get(customer.Id), newCreditLineOption, Convert.ToInt32(customer.IsAvoid), isUnderwriterForced, isSync);
+			if (!isUnderwriterForced) {
+				if (isSync)
+					m_oServiceClient.MainStrategySync1(underwriterId, _users.Get(customer.Id).Id, newCreditLineOption, Convert.ToInt32(customer.IsAvoid));
+				else
+					m_oServiceClient.MainStrategy1(underwriterId, _users.Get(customer.Id).Id, newCreditLineOption, Convert.ToInt32(customer.IsAvoid));
+			}
+			else
+				m_oServiceClient.MainStrategy2(underwriterId, _users.Get(customer.Id).Id, newCreditLineOption, Convert.ToInt32(customer.IsAvoid), true);
 		} // ForceEvaluate
 
 		#endregion method ForceEvaluate
@@ -154,13 +159,13 @@
 
 		private readonly ILoanTypeRepository _loanTypes;
 		private readonly IDiscountPlanRepository _discounts;
-		private readonly IAppCreator _creator;
 		private readonly IUsersRepository _users;
 		private readonly IEzBobConfiguration _config;
 		private readonly IConfigurationVariablesRepository configurationVariables;
 		private readonly ILoanSourceRepository _loanSources;
 		private readonly IDecisionHistoryRepository _historyRepository;
 		// private readonly LoanLimit _limit; // TODO: if needed...
+		private readonly EzServiceClient m_oServiceClient;
 
 		#endregion private
 	} // class CashRequestBuilder

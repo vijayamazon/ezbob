@@ -8,7 +8,6 @@
 	using EZBob.DatabaseLib.Model.Loans;
 	using EzBob.Web.Code;
 	using EzBob.Web.Code.Agreements;
-	using EzBob.Web.Code.ApplicationCreator;
 	using NHibernate;
 	using PaymentServices.PacNet;
 
@@ -20,10 +19,10 @@
         private readonly IUsersRepository _users;
 
         public LoanCreatorNoChecks(ILoanHistoryRepository loanHistoryRepository, IPacnetService pacnetService,
-                                   IAppCreator appCreator, IAgreementsGenerator agreementsGenerator,
+                                   IAgreementsGenerator agreementsGenerator,
                                    EzContext context, ICustomerRepository customerRepository, IUsersRepository users,
                                    LoanBuilder loanBuilder, AvailableFundsValidator validator, ISession session)
-			: base(loanHistoryRepository, pacnetService, appCreator, agreementsGenerator, context, loanBuilder, validator, session)
+			: base(loanHistoryRepository, pacnetService, agreementsGenerator, context, loanBuilder, validator, session)
         {
 	        _session = session;
 	        _context = context;

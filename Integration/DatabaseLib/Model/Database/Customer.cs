@@ -1,16 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using ApplicationMng.Model;
-using EZBob.DatabaseLib.Model.Database.Loans;
-using EZBob.DatabaseLib.Model.Email;
-using Ezbob.ExperianParser;
-using Iesi.Collections.Generic;
-using NHibernate.Type;
-using Scorto.NHibernate.Types;
-
 namespace EZBob.DatabaseLib.Model.Database {
+	using System;
+	using System.Collections.Generic;
+	using System.Globalization;
+	using System.Linq;
+	using ApplicationMng.Model;
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EZBob.DatabaseLib.Model.Email;
+	using Ezbob.ExperianParser;
+	using Iesi.Collections.Generic;
+	using NHibernate.Type;
+	using Scorto.NHibernate.Types;
 	using System.ComponentModel;
 
 	#region relevant to Customer class
@@ -98,19 +97,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 	public class MaritalStatusType : EnumStringType<MaritalStatus> { }
 
 	public class MedalType : CaseInsensitiveEnumStringType<Medal> { }
-
-	#region enum WizardStepType
-
-	public enum WizardStepType {
-		SignUp = 1,
-		Marketplace = 2,
-		PaymentAccounts = 3, // just because there are some customers in that state in DB
-		AllStep = 4,
-		PersonalDetails = 5,
-		CompanyDetails = 6,
-	} // enum WizardStepType
-
-	#endregion enum WizardStepType
 
 	#region enum BankAccountType
 

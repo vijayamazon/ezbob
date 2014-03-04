@@ -4,10 +4,11 @@
 	using System.Globalization;
 	using System.Linq;
 	using System.Web.Mvc;
-	using Code.ApplicationCreator;
+	using Code;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.Repository;
+	using EzServiceReference;
 	using Models;
 	using Infrastructure;
 	using Infrastructure.csrf;
@@ -16,12 +17,13 @@
 	using PaymentServices.PayPoint;
 	using Scorto.Web;
 	using log4net;
+	using ActionResult = System.Web.Mvc.ActionResult;
 
-    public class PaypointController : Controller
+	public class PaypointController : Controller
     {
         private readonly IEzbobWorkplaceContext _context;
         private readonly PayPointFacade _payPointFacade;
-        private readonly IAppCreator _appCreator;
+		private readonly EzServiceClient m_oServiceClient;
         private static readonly ILog Log = LogManager.GetLogger("PaypointController");
         private readonly LoanPaymentFacade _loanRepaymentFacade;
         private readonly IPacnetPaypointServiceLogRepository _logRepository;
@@ -29,11 +31,18 @@
         private readonly PayPointApi _paypoint;
 		private readonly ICustomerRepository _customerRepository;
 
-        public PaypointController(IEzbobWorkplaceContext context, PayPointFacade payPointFacade, IAppCreator appCreator, LoanPaymentFacade loanPaymentFacade, IPacnetPaypointServiceLogRepository pacnetPaypointServiceLogRepository, IPaypointTransactionRepository paypointTransactionRepository, PayPointApi paypoint, ICustomerRepository customerRepository)
-        {
+        public PaypointController(
+			IEzbobWorkplaceContext context,
+			PayPointFacade payPointFacade,
+			LoanPaymentFacade loanPaymentFacade,
+			IPacnetPaypointServiceLogRepository pacnetPaypointServiceLogRepository,
+			IPaypointTransactionRepository paypointTransactionRepository,
+			PayPointApi paypoint,
+			ICustomerRepository customerRepository
+		) {
             _context = context;
             _payPointFacade = payPointFacade;
-            _appCreator = appCreator;
+	        m_oServiceClient = ServiceClient.Instance;
             _logRepository = pacnetPaypointServiceLogRepository;
             _paypointTransactionRepository = paypointTransactionRepository;
             _loanRepaymentFacade = loanPaymentFacade;
@@ -239,13 +248,11 @@
         private void SendEmails(int loanId, decimal realAmount, EZBob.DatabaseLib.Model.Database.Customer customer)
         {
             var loan = customer.GetLoan(loanId);
-            
-            _appCreator.PayEarly(_context.User, DateTime.Now, realAmount, customer.PersonalInfo.FirstName, loan.RefNumber);
-            
+
+            m_oServiceClient.PayEarly(_context.User.Id, realAmount, loan.RefNumber);
+
             if (loan.Status == LoanStatus.PaidOff)
-            {
-                _appCreator.LoanFullyPaid(loan);
-            }
+                m_oServiceClient.LoanFullyPaid(customer.Id, loan.RefNumber);
         }
 
         private decimal CalculateRealAmount(string type, int loanId, decimal realAmount)

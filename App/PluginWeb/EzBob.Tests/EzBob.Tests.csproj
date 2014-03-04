@@ -236,6 +236,10 @@
       <Project>{FA67314A-0560-41D4-BC19-6524663E9D0D}</Project>
       <Name>DatabaseLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\DbConstants\DbConstants.csproj">
+      <Project>{0527009d-a650-4505-9385-49faca6991cb}</Project>
+      <Name>DbConstants</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\eBay\eBayLib\eBayLib.csproj">
       <Project>{AC296AC1-DD5A-4AA4-A299-DD708E5F1A10}</Project>
       <Name>eBayLib</Name>

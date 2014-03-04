@@ -1,9 +1,10 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers {
 	using System.Data;
 	using System.Web.Mvc;
-	using Code.ApplicationCreator;
+	using Code;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Mapping;
+	using EzServiceReference;
 	using Infrastructure;
 	using Infrastructure.csrf;
 	using Scorto.Web;
@@ -16,10 +17,10 @@
 
 		#region constructor
 
-		public ExperianController(IAppCreator creator, IEzbobWorkplaceContext context, DirectorRepository directorRepository) {
-			this.creator = creator;
+		public ExperianController(IEzbobWorkplaceContext context, DirectorRepository directorRepository) {
 			this.context = context;
 			this.directorRepository = directorRepository;
+			m_oServiceClient = ServiceClient.Instance;
 		} // constructor
 
 		#endregion constructor
@@ -31,7 +32,7 @@
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
 		public JsonNetResult PerformConsumerCheck() {
-			creator.PerformConsumerCheck(context.Customer.Id, 0);
+			m_oServiceClient.CheckExperianConsumer(context.Customer.Id, 0);
 
 			return this.JsonNet(new { });
 		} // PerformConsumerCheck
@@ -50,7 +51,7 @@
 			IQueryable<Director> directors = directorRepository.GetAll().Where(x => x.Customer.Id == customerId);
 
 			foreach (Director director in directors)
-				creator.PerformConsumerCheck(customerId, director.Id);
+				m_oServiceClient.CheckExperianConsumer(customerId, director.Id);
 
 			return this.JsonNet(new { });
 		} // PerformConsumerCheckForDirectors
@@ -59,9 +60,9 @@
 
 		#region private properties
 
-		private readonly IAppCreator creator;
 		private readonly IEzbobWorkplaceContext context;
 		private readonly DirectorRepository directorRepository;
+		private readonly EzServiceClient m_oServiceClient;
 
 		#endregion private properties
 

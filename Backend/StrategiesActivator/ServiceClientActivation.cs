@@ -434,12 +434,14 @@
 		[Activation]
 		private void CustomerMarketPlaceAdded() {
 			int customerId, marketplaceId;
-			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !int.TryParse(args[2], out marketplaceId)) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> CustomerMarketPlaceAdded <CustomerId> <CustomerMarketplaceId>");
+			bool bUpdateWizardStep;
+			if (args.Length != 4 || !int.TryParse(args[1], out customerId) || !int.TryParse(args[2], out marketplaceId) || !bool.TryParse(args[3], out bUpdateWizardStep)) {
+				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> CustomerMarketPlaceAdded <CustomerId> <CustomerMarketplaceId> <Update customer wizard step>");
+				Console.WriteLine("<Update customer wizard step>: is boolean and means whether to set customer wizard step to Marketplace or not. If wizard step is 'TheLastOne' it is never changed.");
 				return;
 			}
 
-			serviceClient.UpdateMarketplace(customerId, marketplaceId);
+			serviceClient.UpdateMarketplace(customerId, marketplaceId, bUpdateWizardStep);
 		}
 
 		[Activation]

@@ -94,7 +94,7 @@ namespace EzService {
 		ActionMetaData SetLateLoanStatus();
 
 		[OperationContract]
-		ActionMetaData UpdateMarketplace(int customerId, int marketplaceId);
+		ActionMetaData UpdateMarketplace(int customerId, int marketplaceId, bool doUpdateWizardStep);
 		
 		[OperationContract]
 		ActionMetaData UpdateTransactionStatus();
@@ -144,17 +144,23 @@ namespace EzService {
 		[OperationContract]
 		ActionMetaData UpdateCurrencyRates();
 
+		#region Quick offer
+
 		[OperationContract]
 		QuickOfferActionResult QuickOffer(int customerId, bool saveOfferToDB);
 
 		[OperationContract]
 		QuickOfferActionResult QuickOfferWithPrerequisites(int customerId, bool saveOfferToDB);
 		
+		#endregion Quick offer
+
 		[OperationContract]
 		ActionMetaData FinishWizard(int customerId);
 
 		[OperationContract]
 		CrmLookupsActionResult CrmLoadLookups();
+
+		#region Broker
 
 		[OperationContract]
 		BoolActionResult IsBroker(string sContactEmail);
@@ -185,11 +191,17 @@ namespace EzService {
 		[OperationContract]
 		BrokerCustomerDetailsActionResult BrokerLoadCustomerDetails(int nCustomerID, string sContactEmail);
 
+		#endregion Broker
+
+		#region Land Registry
+
 		[OperationContract]
 		string LandRegistryEnquiry(int customerId, string buildingNumber, string streetName, string cityName, string postCode);
 		
 		[OperationContract]
 		string LandRegistryRes(int customerId, string titleNumber);
+
+		#endregion Land Registry
 	} // interface IEzService
 } // namespace EzService
 

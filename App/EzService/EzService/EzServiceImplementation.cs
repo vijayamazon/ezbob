@@ -377,8 +377,8 @@
 			return Execute(null, null, typeof(SetLateLoanStatus));
 		} // SetLateLoanStatus
 
-		public ActionMetaData UpdateMarketplace(int customerId, int marketplaceId) {
-			return Execute(customerId, null, typeof(UpdateMarketplace), customerId, marketplaceId);
+		public ActionMetaData UpdateMarketplace(int customerId, int marketplaceId, bool doUpdateWizardStep) {
+			return Execute(customerId, null, typeof(UpdateMarketplace), customerId, marketplaceId, doUpdateWizardStep);
 		} // UpdateMarketplace
 
 		public ActionMetaData UpdateTransactionStatus() {

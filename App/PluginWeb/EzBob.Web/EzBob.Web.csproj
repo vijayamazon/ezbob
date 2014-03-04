@@ -287,7 +287,6 @@
     <Compile Include="Areas\Underwriter\Models\SupportModel.cs" />
     <Compile Include="Code\AgreementsGenerator.cs" />
     <Compile Include="Code\AgreementsModelBuilder.cs" />
-    <Compile Include="Code\ApplicationCreator\EzSrvCfgLoader.cs" />
     <Compile Include="Code\AvailableFundsValidator.cs" />
     <Compile Include="Code\Bank\YodleeAccountNotFoundException.cs" />
     <Compile Include="Code\Bank\YodleeAccountChecker.cs" />
@@ -389,8 +388,7 @@
     <Compile Include="Areas\Underwriter\Models\Reports\ReportTableColumn.cs" />
     <Compile Include="Areas\Underwriter\Models\Reports\ReportTableModel.cs" />
     <Compile Include="Areas\Underwriter\UnderwriterAreaRegistration.cs" />
-    <Compile Include="Code\ApplicationCreator\AppCreator.cs" />
-    <Compile Include="Code\ApplicationCreator\IAppCreator.cs" />
+    <Compile Include="Code\ServiceClient.cs" />
     <Compile Include="Code\CashRequestBuilder.cs" />
     <Compile Include="Code\LoanDetailsBuilder.cs" />
     <Compile Include="Code\PayPal\PersonalData.cs" />
@@ -1763,6 +1761,10 @@
       <Project>{FA67314A-0560-41D4-BC19-6524663E9D0D}</Project>
       <Name>DatabaseLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\DbConstants\DbConstants.csproj">
+      <Project>{0527009d-a650-4505-9385-49faca6991cb}</Project>
+      <Name>DbConstants</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\eBay\eBayDbLib\eBayDbLib.csproj">
       <Project>{fb3eac65-ab2b-4a7e-ada5-aae0651caaf6}</Project>
       <Name>eBayDbLib</Name>
@@ -1870,6 +1872,10 @@
     <ProjectReference Include="..\..\..\Tools\EzbobUtils\ValueIntervals\ValueIntervals.csproj">
       <Project>{90cc3a5f-5bea-4c13-82b7-992adc41f854}</Project>
       <Name>ValueIntervals</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\EzService\EzServiceConfigurationLoader\EzServiceConfigurationLoader.csproj">
+      <Project>{b030e475-eb48-463d-99de-160179cd5331}</Project>
+      <Name>EzServiceConfigurationLoader</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\EzService\EzServiceConfiguration\EzServiceConfiguration.csproj">
       <Project>{1f4ab740-e9bb-4448-9c4d-22a191c297b9}</Project>
