@@ -12,7 +12,6 @@
 	using log4net;
 	using NHibernate;
 	using System.Data;
-	using Code.ApplicationCreator;
 	using EZBob.DatabaseLib;
 
 	public class CompanyFilesMarketPlacesController : Controller
@@ -22,7 +21,6 @@
 		private readonly IRepository<MP_MarketplaceType> _mpTypes;
 		private readonly Customer _customer;
 		private readonly IMPUniqChecker _mpChecker;
-		private readonly IAppCreator _appCreator;
 		private readonly ISession _session;
 		private readonly DatabaseDataHelper _helper;
 
@@ -31,14 +29,12 @@
 			DatabaseDataHelper helper,
 			IRepository<MP_MarketplaceType> mpTypes,
 			IMPUniqChecker mpChecker,
-			IAppCreator appCreator,
 			ISession session)
 		{
 			_context = context;
 			_mpTypes = mpTypes;
 			_customer = context.Customer;
 			_mpChecker = mpChecker;
-			_appCreator = appCreator;
 			_session = session;
 			_helper = helper;
 		}
