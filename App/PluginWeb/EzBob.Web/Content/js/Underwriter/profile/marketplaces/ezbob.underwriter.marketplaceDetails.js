@@ -390,7 +390,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
 
                 ticks.push(i == '999999' ? 'Total' : minDay[i] + '-' + maxDay[i] + '/' + i.substring(4) + '/' + i.substring(0, 4));
                 incomeBar.push(parseInt(income[i], 10));
-                expensesBar.push(parseInt(expenses[i], 10));
+                expensesBar.push(Math.abs(parseInt(expenses[i]), 10));
                 incomeLabels.push("<p class='yodlee-cashflow-graph-labels'>" + EzBob.formatPoundsAsThousands(income[i], 10) + "<br>A " + EzBob.formatPoundsAsThousands(averageIncome[i], 10) + "<br># " + parseInt(numOfTransactionsIncome[i], 10) + "</p>");
                 expensesLabels.push("<p class='yodlee-cashflow-graph-labels'>" + EzBob.formatPoundsAsThousands(expenses[i], 10) + "<br>A " + EzBob.formatPoundsAsThousands(averageExpenses[i], 10) + "<br># " + parseInt(numOfTransactionsExpenses[i], 10) + "</p>");
             }
