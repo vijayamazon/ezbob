@@ -10,7 +10,7 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Repository;
 	using EzBob.Models.Marketplaces.Builders;
-	using EzBob.Web.Areas.Underwriter.Models;
+	using Models;
 	using EzBob.Models.Marketplaces;
 	using NHibernate;
 	using Scorto.Web;
@@ -37,15 +37,16 @@
 		private readonly YodleeRuleRepository _yodleeRuleRepository;
 		private readonly YodleeGroupRuleMapRepository _yodleeGroupRuleMapRepository;
 		private readonly ISession _session;
-		public MarketPlacesController(CustomerRepository customers, 
-			AnalyisisFunctionValueRepository functions, 
-			CustomerMarketPlaceRepository customerMarketplaces, 
-			MarketPlacesFacade marketPlaces, 
-			IAppCreator appCreator, 
-			MP_TeraPeakOrderItemRepository teraPeakOrderItems, 
-			YodleeAccountsRepository yodleeAccountsRepository, 
-			YodleeSearchWordsRepository yodleeSearchWordsRepository, 
-			YodleeGroupRepository yodleeGroupRepository, 
+
+		public MarketPlacesController(CustomerRepository customers,
+			AnalyisisFunctionValueRepository functions,
+			CustomerMarketPlaceRepository customerMarketplaces,
+			MarketPlacesFacade marketPlaces,
+			IAppCreator appCreator,
+			MP_TeraPeakOrderItemRepository teraPeakOrderItems,
+			YodleeAccountsRepository yodleeAccountsRepository,
+			YodleeSearchWordsRepository yodleeSearchWordsRepository,
+			YodleeGroupRepository yodleeGroupRepository,
 			YodleeRuleRepository yodleeRuleRepository,
 			YodleeGroupRuleMapRepository yodleeGroupRuleMapRepository,
 			ISession session)
@@ -166,7 +167,7 @@
 
 			if (yodleeAccount == null)
 			{
-				return View(new {error = "Yodlee Account was not found"});
+				return View(new { error = "Yodlee Account was not found" });
 			}
 
 			var securityInfo = SerializeDataHelper.DeserializeType<YodleeSecurityInfo>(mp.SecurityData);
@@ -194,9 +195,9 @@
 					var customer = mp.Customer;
 					_customerMarketplaces.ClearUpdatingEnd(umi);
 					_appCreator.CustomerMarketPlaceAdded(customer, umi);
-					return View(new {success = true});
+					return View(new { success = true });
 				}
-				
+
 				return View(new { error = "Account wasn't refreshed successfully" });
 			}
 			else //MFA Account for testing redirecting to Yodlee LAW
@@ -266,18 +267,18 @@
 			{
 				if (
 					(!_yodleeGroupRuleMapRepository.GetAll()
-					                               .Any(
-						                               x =>
-						                               x.Group == oGroup && x.Rule == oRule &&
-						                               x.Rule.Id != (int) YodleeRule.IncludeLiteralWord &&
-						                               x.Rule.Id != (int) YodleeRule.DontIncludeLiteralWord)) ||
+												   .Any(
+													   x =>
+													   x.Group == oGroup && x.Rule == oRule &&
+													   x.Rule.Id != (int)YodleeRule.IncludeLiteralWord &&
+													   x.Rule.Id != (int)YodleeRule.DontIncludeLiteralWord)) ||
 					(!_yodleeGroupRuleMapRepository.GetAll()
-					                               .Any(
-						                               x =>
-						                               x.Group == oGroup && x.Rule == oRule &&
-						                               (x.Rule.Id == (int) YodleeRule.IncludeLiteralWord ||
-						                                x.Rule.Id == (int) YodleeRule.DontIncludeLiteralWord) &&
-						                               x.Literal == literal.Trim().ToLowerInvariant())))
+												   .Any(
+													   x =>
+													   x.Group == oGroup && x.Rule == oRule &&
+													   (x.Rule.Id == (int)YodleeRule.IncludeLiteralWord ||
+														x.Rule.Id == (int)YodleeRule.DontIncludeLiteralWord) &&
+													   x.Literal == literal.Trim().ToLowerInvariant())))
 				{
 					_yodleeGroupRuleMapRepository.Save(new MP_YodleeGroupRuleMap
 						{
