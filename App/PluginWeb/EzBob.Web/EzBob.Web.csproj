@@ -218,6 +218,7 @@
     </Compile>
     <Compile Include="Areas\Broker\BrokerAreaRegistration.cs" />
     <Compile Include="Areas\Broker\Controllers\BrokerHomeController.cs" />
+    <Compile Include="Areas\Customer\Controllers\CompanyFilesMarketPlacesController.cs" />
     <Compile Include="Areas\Customer\Controllers\hmrc_file_processor.cs" />
     <Compile Include="Areas\Underwriter\Controllers\UploadHmrcController.cs" />
     <Compile Include="Code\UiEvents\UiActionEventModel.cs" />
@@ -483,6 +484,7 @@
     <Content Include="Content\css\images\accounts\amazon.png" />
     <Content Include="Content\css\images\accounts\bank.png" />
     <Content Include="Content\css\images\accounts\bigcommerce.png" />
+    <Content Include="Content\css\images\accounts\CompanyFiles.png" />
     <Content Include="Content\css\images\accounts\ebay.png" />
     <Content Include="Content\css\images\accounts\ekm.png" />
     <Content Include="Content\css\images\accounts\etsy.png" />
@@ -622,6 +624,7 @@
     <Content Include="Content\img\customer-sidebar\customer.png" />
     <Content Include="Content\img\customer-sidebar\email.png" />
     <Content Include="Content\img\customer-sidebar\fast.png" />
+    <Content Include="Areas\Customer\Views\Shared\Shops\CompanyFilesAccountInfoTemplate.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />
@@ -1332,6 +1335,12 @@
     <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.settings.min.js">
       <DependentUpon>ezbob.underwriter.StrategySettings.settings.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.companyFiles.js">
+      <DependentUpon>ezbob.shops.companyFiles.coffee</DependentUpon>
+    </Content>
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.companyFiles.min.js">
+      <DependentUpon>ezbob.shops.companyFiles.coffee</DependentUpon>
+    </Content>
     <Content Include="Content\js\Wizard\shops\ezbob.shops.freeagent.js">
       <DependentUpon>ezbob.shops.freeagent.coffee</DependentUpon>
     </Content>
@@ -1375,6 +1384,7 @@
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1.psd" />
     <None Include="Content\img\customer-sidebar\icons-source\Preview Image Set_v1.0.psd" />
     <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.uploadHmrc.coffee" />
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.companyFiles.coffee" />
     <None Include="Service References\EzServiceReference\configuration91.svcinfo" />
     <None Include="Service References\EzServiceReference\configuration.svcinfo" />
     <None Include="Service References\EzServiceReference\EzBob.Backend.Models.xsd">
@@ -1756,6 +1766,10 @@
     <ProjectReference Include="..\..\..\Integration\CommonLib\CommonLib.csproj">
       <Project>{AEDBFBBD-BA7D-4582-AFCA-6ECF8AF33C98}</Project>
       <Name>CommonLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\integration\CompanyFiles\CompanyFiles.csproj">
+      <Project>{80458a21-990f-46ba-bcbb-fb211b5baaac}</Project>
+      <Name>CompanyFiles</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\DatabaseLib\DatabaseLib.csproj">
       <Project>{FA67314A-0560-41D4-BC19-6524663E9D0D}</Project>

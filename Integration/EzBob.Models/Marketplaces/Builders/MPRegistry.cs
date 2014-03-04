@@ -13,6 +13,7 @@ namespace EzBob.Models.Marketplaces.Builders {
 			For<IMarketplaceModelBuilder>().Use<FreeAgentMarketplaceModelBuilder>().Named(typeof(FreeAgentMarketPlaceType).ToString());
 			For<IMarketplaceModelBuilder>().Use<SageMarketplaceModelBuilder>().Named(typeof(SageMarketPlaceType).ToString());
 			For<IMarketplaceModelBuilder>().Use<EkmMarketplaceModelBuilder>().Named(typeof(EKMMarketPlaceType).ToString());
+			For<IMarketplaceModelBuilder>().Use<CompanyFilesMarketplaceModelBuilder>().Named(typeof(CompanyFilesMarketPlaceType).ToString());
 			For<IMarketplaceModelBuilder>().Use<ChannelGrabberMarketplaceModelBuilder>().Named(typeof(ChannelGrabberMarketPlaceType).ToString());
 		} // constructor
 	} // class MPRegistry

@@ -44,6 +44,9 @@ class EzBob.StoreInfoView extends Backbone.View
         @payPalAccounts = new EzBob.PayPalAccounts(@model.get("paypalAccounts"))
         @PayPalInfoView = new EzBob.PayPalInfoView(model: @payPalAccounts)
 
+        @companyFilesAccounts = new EzBob.CompanyFilesAccounts(@model.get("companyUploadAccounts"))
+        @companyFilesAccountInfoView =  new EzBob.CompanyFilesAccountInfoView(model: @companyFilesAccounts)
+
         aryCGAccounts = $.parseJSON $('div#cg-account-list').text()
 
         for accountTypeName, ignore of aryCGAccounts
@@ -64,7 +67,7 @@ class EzBob.StoreInfoView extends Backbone.View
             "Yodlee": view: @YodleeAccountInfoView
             "FreeAgent": view: @FreeAgentAccountInfoView
             "Sage": view: @sageAccountInfoView
-
+            "CompanyFiles": view: @companyFilesAccountInfoView
         for accountTypeName, vendorInfo of aryCGAccounts
             lc = accountTypeName.toLowerCase()
 

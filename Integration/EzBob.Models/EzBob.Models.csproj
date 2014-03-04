@@ -97,6 +97,7 @@
     <Compile Include="EditLoanDetailsModel.cs" />
     <Compile Include="FormattingUtils.cs" />
     <Compile Include="Marketplaces\Builders\ChannelGrabberMarketplaceModelBuilder.cs" />
+    <Compile Include="Marketplaces\Builders\CompanyFilesMarketplaceModelBuilder.cs" />
     <Compile Include="Marketplaces\Builders\EKMMarketplaceModelBuilder.cs" />
     <Compile Include="Marketplaces\Builders\SageMarketplaceModelBuilder.cs" />
     <Compile Include="Marketplaces\Builders\FreeAgentMarketplaceModelBuilder.cs" />

@@ -28,7 +28,7 @@
                     bool ebayPixelEnabled = config.EbayPixelEnabled;
                     if (ebayPixelEnabled)
                     {
-                        <img src="https://ad-emea.doubleclick.net/activity;dc_pixel_url=rmboom;rm=ezbobfinishedwizard;ord='<%- orddb %>'?" width="1" height="1" border="0" alt="" />
+                    <img src="https://ad-emea.doubleclick.net/activity;dc_pixel_url=rmboom;rm=ezbobfinishedwizard;ord='<%- orddb %>'?" width="1" height="1" border="0" alt="" />
                     }
                 }
                 <div class="proccessing-message"></div>
@@ -204,32 +204,34 @@
             </div>
         </div>
 
-		<div class="trustpilot-ezbob">
-			<div class="skip">
-				<h3>Rate us on Trustpilot</h3>
-				<a href="#" class="trustpilot-skip" title="Skip and continue with the request." ui-event-control-id="dashboard:trustpilot-skip">
-					<span class="ui-icon ui-icon-closethick">skip</span>
-				</a>
-			</div>
-			<div class="trust-caption">
-                Thank you for requesting cash,<br /> your request is been processed.
-			</div>
-			<div class="rate">
-				<div class="text">
-					<div>Help us grow,</div>
-					<div>ezbob will help</div>
-					<div class=strong>your business</div>
-					<div class=strong>grow too!</div>
-					
-				</div>
+        <div class="trustpilot-ezbob">
+            <div class="skip">
+                <h3>Rate us on Trustpilot</h3>
+                <a href="#" class="trustpilot-skip" title="Skip and continue with the request." ui-event-control-id="dashboard:trustpilot-skip">
+                    <span class="ui-icon ui-icon-closethick">skip</span>
+                </a>
+            </div>
+            <div class="trust-caption">
+                Thank you for requesting cash,<br />
+                your request is been processed.
+            </div>
+            <div class="rate">
+                <div class="text">
+                    <div>Help us grow,</div>
+                    <div>ezbob will help</div>
+                    <div class="strong">your business</div>
+                    <div class="strong">grow too!</div>
 
-				<a class="image-link trustpilot-rate" href="#" title="Rate us!" ui-event-control-id="dashboard:trustpilot-rate-image"><img src="../../../../Content/img/trustpilot.png" alt="Rate us!" /></a>
-			</div>
+                </div>
+
+                <a class="image-link trustpilot-rate" href="#" title="Rate us!" ui-event-control-id="dashboard:trustpilot-rate-image">
+                    <img src="../../../../Content/img/trustpilot.png" alt="Rate us!" /></a>
+            </div>
             <div class="rate">
                 <a class="text-link trustpilot-rate" href="#" title="Rate us!" ui-event-control-id="dashboard:trustpilot-rate-text">Write a review</a>
             </div>
-		</div>
-	</script>
+        </div>
+    </script>
 
     <script id="processing-message-template" type="text/template">
         <h2 class="header-message <%-cls%>"><%=Message%></h2>
@@ -315,12 +317,13 @@
     @{Html.RenderPartial("PayPalInstructions");}
     @{Html.RenderPartial("InviteFriendTemplate");}
     @{Html.RenderPartial("PerksTemplate");}
-    @{Html.RenderPartial("~/Areas/Customer/Views/Shared/Profile/_PayPointCardSelectViewTemplate.cshtml");}
-    @{Html.RenderPartial("~/Areas/Customer/Views/Shared/Shops/EKMAccoutInfoTemplate.cshtml");}
-    @{Html.RenderPartial("~/Areas/Customer/Views/Shared/Shops/YodleeAccoutInfoTemplate.cshtml");}
-    @{Html.RenderPartial("~/Areas/Customer/Views/Shared/Shops/PayPointAccoutInfoTemplate.cshtml");}
-    @{Html.RenderPartial("~/Areas/Customer/Views/Shared/Shops/CGAccountInfoTemplate.cshtml");}
-    @{Html.RenderPartial("~/Areas/Customer/Views/Shared/Shops/HMRCAccountInfoTemplate.cshtml");}
+    @{Html.RenderPartial("../Shared/Profile/_PayPointCardSelectViewTemplate");}
+    @{Html.RenderPartial("Shops/EKMAccoutInfoTemplate");}
+    @{Html.RenderPartial("Shops/YodleeAccoutInfoTemplate");}
+    @{Html.RenderPartial("Shops/PayPointAccoutInfoTemplate");}
+    @{Html.RenderPartial("Shops/CGAccountInfoTemplate");}
+    @{Html.RenderPartial("Shops/HMRCAccountInfoTemplate");}
+    @{Html.RenderPartial("Shops/CompanyFilesAccountInfoTemplate");}
 
     <script type="text/javascript">
 
