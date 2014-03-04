@@ -371,6 +371,11 @@
 		</div>
 
 		<div style="display: none;" class="hide" id="cg-account-list">@JsonConvert.SerializeObject(Configuration.Instance.Vendors)</div>
+		
+		<div style="display: none;" class="hide" id="crm-lookups">
+			<div class="actions crm-lookup" data-field-name="actions">{}</div>
+			<div class="statuses crm-lookup" data-field-name="statuses">{}</div>
+		</div>
 	</div>
 	<!-- scripts - begin -->
 <!--[if lt IE 9]>
@@ -405,6 +410,7 @@
 			.Add("~/Content/js/lib/underscore.js")
 			.Add("~/Content/js/lib/backbone.js")
 			.Add("~/Content/js/lib/backbone.marionette.js")
+			.Add("~/Content/js/lib/Backbone.ModelBinder.js")
 			.Add("~/Content/js/lib/flaty/bootstrap3.js")
 			.Add("~/Content/js/lib/moment.js")
 			.Add("~/Content/js/lib/jquery.numeric.js")
@@ -422,6 +428,8 @@
 			.Add("~/Content/js/lib/jquery.load_display_value.js")
 			.Add("~/Content/js/lib/mousetrap_1.4.0.js")
 			.Add("~/Content/js/lib/jquery.colorbox-min.js")
+			.Add("~/Content/js/controls/ezbob.modal.js")
+			.Add("~/Content/js/controls/ezbob.jqmodal.coffee")
 			.Add("~/Content/js/App/ezbob.app.js")
 			.Add("~/Content/js/App/ezbob.validation.js")
 			.Add("~/Content/js/controls/captcha.js")
@@ -440,6 +448,7 @@
 			.Add("~/Content/js/lib/flaty/DT_Bootstrap.js")
 			.Add("~/Content/js/lib/flaty/flaty.js")
 			.Add("~/Content/js/EzBob.DataTables.Helper.js")
+			.Add("~/Content/js/controls/ezbob.BoundItemView.coffee")
 			.Add("~/Content/js/underwriter/profile/CustomerRelations/ezbob.underwriter.AddCustomerRelationsEntry.coffee")
 			.AddString(BundleHelper.GetDbStrings())
 			.Add("~/Content/js/Broker/broker.base.view.js")

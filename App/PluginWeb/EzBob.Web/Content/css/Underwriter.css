@@ -320,12 +320,6 @@ table.squeezed tbody tr td {
     color: #797979;
 }
 
-.add-customer-entry-comment-size {
-    width: 515px;
-    height: 80px !important;
-    resize: none;
-}
-
 table.table {
     font-family: Tahoma;
 }

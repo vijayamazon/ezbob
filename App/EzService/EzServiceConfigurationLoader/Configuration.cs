@@ -1,9 +1,9 @@
-﻿using System;
-using System.Data;
-using Ezbob.Database;
-using Ezbob.Logger;
+﻿namespace EzServiceConfigurationLoader {
+	using System;
+	using System.Data;
+	using Ezbob.Database;
+	using Ezbob.Logger;
 
-namespace EzServiceConfigurationLoader {
 	public class Configuration : EzServiceConfiguration.ConfigurationData {
 		#region public
 
@@ -26,9 +26,9 @@ namespace EzServiceConfigurationLoader {
 			m_oLog.Debug("Loading service configuration from DB for service instance {0}...", RequestedInstanceName);
 
 			DataTable oTbl = m_oDB.ExecuteReader(
-				"EzServiceLoadConfiguration",
+				SpName,
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("@InstanceName", RequestedInstanceName)
+				new QueryParameter(ArgName, RequestedInstanceName)
 			);
 
 			if (oTbl.Rows.Count != 1)
@@ -49,6 +49,22 @@ namespace EzServiceConfigurationLoader {
 		} // LoadFromDB
 
 		#endregion method LoadFromDB
+
+		#region property SpName
+
+		protected virtual string SpName {
+			get { return "EzServiceLoadConfiguration"; } // get
+		} // SpName
+
+		#endregion property SpName
+
+		#region property ArgName
+
+		protected virtual string ArgName {
+			get { return "@InstanceName"; } // get
+		} // ArgName
+
+		#endregion property SpName
 
 		#region method WriteToLog
 

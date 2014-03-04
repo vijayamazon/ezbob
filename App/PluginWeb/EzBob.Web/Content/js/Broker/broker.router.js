@@ -33,7 +33,7 @@ EzBob.Broker.Router = Backbone.Router.extend({
 		if (this.views.dashboard)
 			this.views.dashboard.clear();
 
-		$.post('' + window.gRootPath + 'Broker/BrokerHome/Logoff');
+		$.post('' + window.gRootPath + 'Broker/BrokerHome/Logoff?sContactEmail=' + this.getAuth());
 		this.setAuth();
 		this.login();
 	}, // logoff

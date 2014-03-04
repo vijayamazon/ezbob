@@ -15,6 +15,7 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 		var evt = {};
 
 		evt['click .back-to-list'] = 'backToList';
+		evt['click .add-crm-note'] = 'addCrmNote';
 
 		return evt;
 	}, // events
@@ -115,7 +116,34 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 		);
 	}, // reloadData
 
-	backToList: function() {
+	backToList: function(event) {
+		event.preventDefault();
+		event.stopPropagation();
+
 		location.assign('#dashboard');
+
+		return false;
 	}, // backToList
+
+	addCrmNote: function(event) {
+		event.preventDefault();
+		event.stopPropagation();
+
+		var self = this;
+
+		var options = {
+			actions: JSON.parse($('#crm-lookups .actions').text()),
+			statuses: JSON.parse($('#crm-lookups .statuses').text()),
+			url: window.gRootPath + 'Broker/BrokerHome/SaveCrmEntry',
+			onsave: function() { self.reloadData();  },
+			onbeforesave: function(opts) { opts.sContactEmail = self.router.getAuth(); },
+			customerId: this.CustomerID,
+		};
+
+		var view = new EzBob.Underwriter.AddCustomerRelationsEntry(options);
+
+		EzBob.App.jqmodal.show(view);
+
+		return false;
+	}, // addCrmNote
 }); // EzBob.Broker.SubmitView

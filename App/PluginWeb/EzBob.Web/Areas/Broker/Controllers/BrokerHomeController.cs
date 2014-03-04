@@ -1,8 +1,11 @@
 ﻿namespace EzBob.Web.Areas.Broker.Controllers {
 	using System;
+	using System.Collections.Generic;
+	using System.Linq;
 	using System.Web.Mvc;
 	using System.Web.Security;
-	using Code;
+
+	using EzBob.Web.Code;
 	using EzBob.Web.Infrastructure;
 	using EzBob.Web.Infrastructure.csrf;
 
@@ -10,18 +13,19 @@
 	using Ezbob.Logger;
 
 	using EzServiceReference;
-
 	using log4net;
+
 	using Scorto.Web;
+	using StructureMap;
 
 	public class BrokerHomeController : Controller {
 		#region public
 
 		#region constructor
 
-		public BrokerHomeController(IEzBobConfiguration config) {
+		public BrokerHomeController() {
 			m_oServiceClient = ServiceClient.Instance;
-			m_oConfig = config;
+			m_oConfig = ObjectFactory.GetInstance<IEzBobConfiguration>();
 			m_oLog = new SafeILog(LogManager.GetLogger(typeof(BrokerHomeController)));
 		} // constructor
 
@@ -47,7 +51,11 @@
 					m_oLog.Warn(e, "Failed to determine validity of broker email {0}", User.Identity.Name);
 				} // try
 
-				ViewData[sAuth] = ((bar != null) && bar.Value) ? User.Identity.Name : sForbidden;
+				string sAuthenticationResult = ((bar != null) && bar.Value) ? User.Identity.Name : sForbidden;
+
+				ViewData[sAuth] = sAuthenticationResult;
+
+				m_oLog.Info("Broker page sent to browser with authentication result: {0}", sAuthenticationResult);
 			} // if
 
 			return View();
@@ -92,6 +100,11 @@
 				EstimatedMonthlyClientAmount
 			);
 
+			if (User.Identity.IsAuthenticated) {
+				m_oLog.Warn("Signup request with contact email {0}: already authorised as {1}.", ContactEmail, User.Identity.Name);
+				return Json(new { success = false, error = "You are already logged in.", });
+			} // if
+
 			try {
 				m_oServiceClient.BrokerSignup(
 					FirmName,
@@ -125,13 +138,22 @@
 		[HttpPost]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
-		public JsonResult Logoff() {
-			if (User.Identity.IsAuthenticated)
+		public JsonResult Logoff(string sContactEmail) {
+			if (User.Identity.IsAuthenticated && (User.Identity.Name == sContactEmail)) {
 				m_oLog.Debug("Broker {0} signed out.", User.Identity.Name);
 
-			FormsAuthentication.SignOut();
+				FormsAuthentication.SignOut();
 
-			return Json(new { success = true, error = string.Empty, });
+				return Json(new {success = true, error = string.Empty,});
+			} // if
+
+			m_oLog.Warn(
+				"Logoff request with contact email {0} while {1} logged in.",
+				sContactEmail,
+				User.Identity.IsAuthenticated ? "broker " + User.Identity.Name + " is" : "not"
+			);
+
+			return Json(new {success = false, error = string.Empty,});
 		} // Logoff
 
 		#endregion action Logoff
@@ -143,6 +165,11 @@
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult Login(string LoginEmail, string LoginPassword) {
 			m_oLog.Debug("Broker login request: {0}", LoginEmail);
+
+			if (User.Identity.IsAuthenticated) {
+				m_oLog.Warn("Login request with contact email {0}: already authorised as {1}.", LoginEmail, User.Identity.Name);
+				return Json(new { success = false, error = "You are already logged in.", });
+			} // if
 
 			try {
 				m_oServiceClient.BrokerLogin(LoginEmail, LoginPassword);
@@ -169,6 +196,11 @@
 		public JsonResult RestorePassword(string ForgottenMobile, string ForgottenMobileCode) {
 			m_oLog.Debug("Broker restore password request: phone # {0} with code {1}", ForgottenMobile, ForgottenMobileCode);
 
+			if (User.Identity.IsAuthenticated) {
+				m_oLog.Warn("Request with mobile phone {0} and code {1}: already authorised as {2}.", ForgottenMobile, ForgottenMobileCode, User.Identity.Name);
+				return Json(new { success = false, error = "You are already logged in.", });
+			} // if
+
 			try {
 				m_oServiceClient.BrokerRestorePassword(ForgottenMobile, ForgottenMobileCode);
 			}
@@ -192,15 +224,13 @@
 		public JsonResult LoadCustomers(string sContactEmail) {
 			m_oLog.Debug("Broker load customers request for contact email {0}", sContactEmail);
 
-			if (!User.Identity.IsAuthenticated || (User.Identity.Name != sContactEmail)) {
-				m_oLog.Debug("Failed to load customers request for contact email {0}: not authenticated or authenticated as other user.", sContactEmail);
-				return Json(new { success = false, error = "Not authorised.", aaData = (BrokerCustomerEntry [])null }, JsonRequestBehavior.AllowGet);
-			} // if
+			JsonResult oIsAuthResult = IsAuth("Load customers", sContactEmail);
+			if (oIsAuthResult != null)
+				return oIsAuthResult;
 
 			BrokerCustomersActionResult oResult;
 
-			try
-			{
+			try {
 				oResult = m_oServiceClient.BrokerLoadCustomerList(sContactEmail);
 			}
 			catch (Exception e) {
@@ -223,10 +253,9 @@
 		public JsonResult LoadCustomerDetails(int nCustomerID, string sContactEmail) {
 			m_oLog.Debug("Broker load customer details request for customer {1} and contact email {0}", sContactEmail, nCustomerID);
 
-			if (!User.Identity.IsAuthenticated || (User.Identity.Name != sContactEmail)) {
-				m_oLog.Debug("Failed to load customer details request for customer {1} contact email {0}: not authenticated or authenticated as other user.", sContactEmail, nCustomerID);
-				return Json(new { success = false, error = "Not authorised.", crm_data = (object)null, personal_data = (object)null }, JsonRequestBehavior.AllowGet);
-			} // if
+			JsonResult oIsAuthResult = IsAuth("Load customer details for customer " + nCustomerID, sContactEmail);
+			if (oIsAuthResult != null)
+				return oIsAuthResult;
 
 			BrokerCustomerDetailsActionResult oDetails;
 
@@ -265,14 +294,96 @@
 
 			m_oLog.Debug("Broker loading CRM details complete.");
 
-			return Json(new { success = true, error = string.Empty, actions = oLookups.Actions, statuses = oLookups.Statuses, }, JsonRequestBehavior.AllowGet);
+			return Json(new {
+				success = true,
+				error = string.Empty,
+				actions = oLookups.Actions.ToDictionary(pair => pair.Key.ToString(), pair => pair.Value),
+				statuses = oLookups.Statuses.ToDictionary(pair => pair.Key.ToString(), pair => pair.Value),
+			}, JsonRequestBehavior.AllowGet);
 		} // CrmLoadLookups
 
 		#endregion action CrmLoadLookups
 
+		#region action SaveCrmAction
+
+		[HttpPost]
+		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		public JsonResult SaveCrmAction(bool isIncoming, int action, int status, string comment, int customerId, string sContactEmail) {
+			m_oLog.Debug(
+				"\nBroker saving CRM entry started:" +
+				"\n\tis incoming: {0}" +
+				"\n\taction: {1}" +
+				"\n\tstatus: {2}" +
+				"\n\tcustomer id: {3}" +
+				"\n\tcomment: {4}\n",
+				isIncoming, action, status, customerId, comment
+			);
+
+			JsonResult oIsAuthResult = IsAuth("Save CRM entry for customer " + customerId, sContactEmail);
+			if (oIsAuthResult != null)
+				return oIsAuthResult;
+
+			try {
+				// m_oServiceClient.BrokerSaveCrmEntry(isIncoming, action, status, customerId, comment, sContactEmail);
+			}
+			catch (Exception e) {
+				m_oLog.Alert(e,
+					"\nBroker saving CRM entry failed for:" +
+					"\n\tis incoming: {0}" +
+					"\n\taction: {1}" +
+					"\n\tstatus: {2}" +
+					"\n\tcustomer id: {3}\n",
+					isIncoming, action, status, customerId
+				);
+
+				return Json(new {
+					success = false,
+					error = "Failed to save CRM entry."
+				});
+			} // try
+
+			m_oLog.Debug("Broker loading CRM details complete.");
+
+			m_oLog.Alert(
+				"\nBroker saving CRM entry complete for:" +
+				"\n\tis incoming: {0}" +
+				"\n\taction: {1}" +
+				"\n\tstatus: {2}" +
+				"\n\tcustomer id: {3}\n",
+				isIncoming, action, status, customerId
+			);
+
+			return Json(new {
+				success = true,
+				error = string.Empty,
+			});
+		} // SaveCrmAction
+
+		#endregion action SaveCrmAction
+
 		#endregion public
 
 		#region private
+
+		#region method IsAuth
+
+		private JsonResult IsAuth(string sRequestDescription, string sContactEmail) {
+			if (!User.Identity.IsAuthenticated || (User.Identity.Name != sContactEmail)) {
+				m_oLog.Alert(
+					"{0} request with contact email {1}: {2}.",
+					sRequestDescription,
+					sContactEmail,
+					User.Identity.IsAuthenticated ? "authorised as " + User.Identity.Name : "not authenticated"
+				);
+
+				return Json(new { success = false, error = "Not authorised.", }, JsonRequestBehavior.AllowGet);
+			} // if
+
+			return null;
+		} // IsAuth
+
+		#endregion method IsAuth
 
 		#region fields
 

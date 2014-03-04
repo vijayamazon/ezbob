@@ -42,6 +42,7 @@
       });
       this.mainTab = options.mainTab;
       this.onsave = options.onsave;
+      this.onbeforesave = options.onbeforesave;
       this.customerId = this.mainTab ? this.mainTab.model.customerId : options.customerId;
       this.url = options.url || window.gRootPath + 'Underwriter/CustomerRelations/SaveEntry/';
       return AddCustomerRelationsEntry.__super__.initialize.call(this);
@@ -58,7 +59,7 @@
     };
 
     AddCustomerRelationsEntry.prototype.onSave = function() {
-      var xhr,
+      var opts, xhr,
         _this = this;
       if (!$('#Incoming_I')[0].checked && !$('#Incoming_O')[0].checked) {
         return false;
@@ -70,13 +71,17 @@
         return false;
       }
       BlockUi();
-      xhr = $.post(this.url, {
+      opts = {
         isIncoming: $('#Incoming_I')[0].checked,
         action: $('#Action')[0].value,
         status: $('#Status')[0].value,
         comment: $('#Comment').val(),
         customerId: this.customerId
-      });
+      };
+      if (this.onbeforesave) {
+        this.onbeforesave(opts);
+      }
+      xhr = $.post(this.url, opts);
       xhr.done(function(r) {
         UnBlockUi();
         if (r.success) {

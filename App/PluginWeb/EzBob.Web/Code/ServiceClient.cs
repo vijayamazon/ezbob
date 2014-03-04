@@ -14,7 +14,7 @@
 					ILog oLog = LogManager.GetLogger(typeof (ServiceClient));
 
 					try {
-						var cfg = new EzServiceConfigurationLoader.Configuration(
+						var cfg = new EzServiceConfigurationLoader.DefaultConfiguration(
 							System.Environment.MachineName,
 							DbConnectionGenerator.Get(),
 							new SafeILog(oLog)

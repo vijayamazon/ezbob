@@ -45,9 +45,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 			var sFieldName = oElm.attr(oArgs.data_field_attr);
 
 			if (oArgs.callback)
-				oElm.set_display_value(oArgs.callback(sFieldName, oArgs.data_source[sFieldName]));
+				oElm.set_display_value(oArgs.callback(sFieldName, oArgs.data_source[sFieldName]), oArgs.set_text);
 			else
-				oElm.set_display_value(oArgs.data_source[sFieldName] || '');
+				oElm.set_display_value(oArgs.data_source[sFieldName] || '', oArgs.set_text);
 		});
 	}; // main plugin function
 })(jQuery);

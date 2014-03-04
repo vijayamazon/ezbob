@@ -32,4 +32,15 @@ $(document).ready(function() {
 	var oFieldStatusIcons = $('IMG.field_status');
 	oFieldStatusIcons.filter('.required').field_status({ required: true });
 	oFieldStatusIcons.not('.required').field_status({ required: false });
+
+	$.getJSON(window.gRootPath + 'Broker/BrokerHome/CrmLoadLookups', {}, function(oResponse) {
+		if (!oResponse.success)
+			return;
+
+		$('#crm-lookups .crm-lookup').load_display_value({
+			data_source: oResponse,
+			set_text: true,
+			callback: function(sName, oValue) { return JSON.stringify(oValue); },
+		});
+	});
 }); // document.ready

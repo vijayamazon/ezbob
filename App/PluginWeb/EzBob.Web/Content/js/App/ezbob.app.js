@@ -7,12 +7,12 @@ EzBob.App = new EzBob.Application();
 if (EzBob.GA) {
 	EzBob.App.GA = new EzBob.GA();
 	//EzBob.App.GA = new EzBob.GATest();
+} // if
 
 	EzBob.App.addRegions({
 		modal: EzBob.ModalRegion,
 		jqmodal: EzBob.JqModalRegion
 	});
-} // if
 
 EzBob.Config = {
 	CaptchaMode: 'off',

@@ -23,6 +23,7 @@ class EzBob.Underwriter.AddCustomerRelationsEntry extends EzBob.BoundItemView
         @model = new Backbone.Model(actions: options.actions, statuses: options.statuses)
         @mainTab = options.mainTab
         @onsave = options.onsave
+        @onbeforesave = options.onbeforesave
         @customerId = if @mainTab then @mainTab.model.customerId else options.customerId
         @url = options.url or window.gRootPath + 'Underwriter/CustomerRelations/SaveEntry/'
         super()
@@ -45,13 +46,17 @@ class EzBob.Underwriter.AddCustomerRelationsEntry extends EzBob.BoundItemView
 
         BlockUi()
 
-        xhr = $.post @url, {
+        opts =
             isIncoming: $('#Incoming_I')[0].checked,
             action: $('#Action')[0].value,
             status: $('#Status')[0].value,
             comment: $('#Comment').val(),
             customerId: @customerId,
-        }
+
+        if @onbeforesave
+            @onbeforesave opts
+
+        xhr = $.post @url, opts
 
         xhr.done (r) =>
             UnBlockUi()
