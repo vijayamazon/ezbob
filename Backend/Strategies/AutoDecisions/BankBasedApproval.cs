@@ -115,14 +115,17 @@
 			string firstName = sr["FirstName"];
 			string surame = sr["Surame"];
 			string companyData = sr["CompanyData"];
-			decimal totalCurrentAssets;
 			amlScore = experianUtils.DetectAml(amlData);
-			XmlNode companyInfo = Xml.ParseRoot(companyData);
-			isDirectorInExperian = experianUtils.IsDirector(companyInfo, firstName, surame);
-			experianUtils.DetectTangibleEquity(companyInfo, out tangibleEquity, out totalCurrentAssets);
-			DateTime? companyIncorporationDate = experianUtils.DetectIncorporationDate(companyInfo);
-			companySeniorityDays = companyIncorporationDate.HasValue ? (decimal)(DateTime.UtcNow - companyIncorporationDate.Value).TotalDays : 0;
-			businessScore = experianUtils.DetectBusinessScore(companyInfo);
+			if (!string.IsNullOrEmpty(companyData))
+			{
+				decimal totalCurrentAssets;
+				XmlNode companyInfo = Xml.ParseRoot(companyData);
+				isDirectorInExperian = experianUtils.IsDirector(companyInfo, firstName, surame);
+				experianUtils.DetectTangibleEquity(companyInfo, out tangibleEquity, out totalCurrentAssets);
+				DateTime? companyIncorporationDate = experianUtils.DetectIncorporationDate(companyInfo);
+				companySeniorityDays = companyIncorporationDate.HasValue ? (decimal)(DateTime.UtcNow - companyIncorporationDate.Value).TotalDays : 0;
+				businessScore = experianUtils.DetectBusinessScore(companyInfo);
+			}
 		}
 
 		private void GetYodleeSums()
@@ -138,7 +141,7 @@
 				var sr = new SafeReader(row);
 				int mpId = sr["Id"];
 				YodleeModel yodleeModel = new YodleeMarketplaceModelBuilder().BuildYodlee(mpId);
-				if (yodleeModel.CashFlowReportModel != null && yodleeModel.CashFlowReportModel.YodleeCashFlowReportModelDict != null)
+				if (yodleeModel != null && yodleeModel.CashFlowReportModel != null && yodleeModel.CashFlowReportModel.YodleeCashFlowReportModelDict != null)
 				{
 					if (yodleeModel.CashFlowReportModel.YodleeCashFlowReportModelDict.ContainsKey("5aLoan Repayments") &&
 					    yodleeModel.CashFlowReportModel.YodleeCashFlowReportModelDict["5aLoan Repayments"].ContainsKey(999999))
