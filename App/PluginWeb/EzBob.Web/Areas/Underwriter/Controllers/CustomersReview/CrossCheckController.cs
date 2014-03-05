@@ -13,6 +13,7 @@
 	using System.Linq;
 	using EzBob.Models;
 	using ActionResult = System.Web.Mvc.ActionResult;
+	using LandRegistryResponseType = LandRegistryLib.LandRegistryResponseType;
 
 	public class CrossCheckController : Controller {
 		private readonly EzServiceClient m_oServiceClient;
@@ -80,8 +81,8 @@
 			var landregistryXml = m_oServiceClient.LandRegistryRes(customerId, titleNumber);
 			var landregistry = SerializeDataHelper.DeserializeTypeFromString<LandRegistryDataModel>(landregistryXml);
 
-			if (landregistry == null)
-					return this.JsonNet(new { error = "land registry info not found" });
+			if (landregistry.ResponseType == LandRegistryResponseType.None )
+					return this.JsonNet(new { noRes = true });
 
 			//todo return the full model 
 			return this.JsonNet(new { response = landregistry.Res, rejection = landregistry.Res.Rejection, ack = landregistry.Res.Acknowledgement });

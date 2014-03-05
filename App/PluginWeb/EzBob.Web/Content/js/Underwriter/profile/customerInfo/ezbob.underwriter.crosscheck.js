@@ -281,7 +281,6 @@ EzBob.Underwriter.CrossCheckView = Backbone.View.extend({
         "click #zoopla": "showZoopla",
         "click .zooplaRecheck": "recheckZoopla",
         "click #landregistry": "showLandRegistry",
-        "click #landregistryEnquiry": "showLandRegistryEnquiry"
     }, // events
 
     recheckZoopla: function () {
@@ -304,25 +303,26 @@ EzBob.Underwriter.CrossCheckView = Backbone.View.extend({
             BlockUi("Off");
         });
     }, // showZoopla
-    showLandRegistryEnquiry: function(el) {
-        BlockUi("On");
-        var lrView = new EzBob.LandRegistryEnquiryView({ model: { postcode: $(el.currentTarget).attr('data-postcode'), address: $(el.currentTarget).attr('data-address'), customerId: this.model.customerId } });
-        EzBob.App.jqmodal.show(lrView);
-        BlockUi("Off");
-        
-    },
-    showLandRegistryEnquiryResults: function () {
 
-    },
-    showLandRegistry: function () {
+    showLandRegistry: function (el) {
         BlockUi("On");
-
-        $.get(window.gRootPath + "Underwriter/CrossCheck/LandRegistry/?customerId=" + this.model.customerId, function (data) {
-            var lrView = new EzBob.LandRegistryView({ model: data });
-            if (data && data.response && data.response.TitleNumber) {
-                scrollTop();
+        var that = this;
+        var address = $(el.currentTarget).attr('data-address');
+        var postcode = $(el.currentTarget).attr('data-postcode');
+        var xhr = $.get(window.gRootPath + "Underwriter/CrossCheck/LandRegistry/?customerId=" + this.model.customerId);
+        xhr.done(function (data) {
+            if (data.noRes) {
+                var lrEnqView = new EzBob.LandRegistryEnquiryView({ model: { postcode: postcode, address: address, customerId: that.model.customerId } });
+                EzBob.App.jqmodal.show(lrEnqView);
+            } else {
+                var lrView = new EzBob.LandRegistryView({ model: data, address: address, postcode: postcode, customerId: that.model.customerId });
+                if (data && data.response && data.response.TitleNumber) {
+                    scrollTop();
+                }
+                EzBob.App.jqmodal.show(lrView);
             }
-            EzBob.App.jqmodal.show(lrView);
+        });
+        xhr.always(function() {
             BlockUi("Off");
         });
     },

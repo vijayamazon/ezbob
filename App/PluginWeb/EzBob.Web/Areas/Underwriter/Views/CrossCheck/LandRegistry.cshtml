@@ -5,10 +5,14 @@
 <script type="text/template" id="landregistry-template">
     <div class="tabbable">
     <% var data = this.model; if(data.rejection) {%><h3><%-data.rejection.Reason%> <br /> <%-data.rejection.OtherDescription%></h3>
-    <%} else if(data.ack) { %><h3>Acknowledgment: <%-data.ack.Description%> <%-data.ack.PollDate%></h3>
+    <%} else if(data.ack) { %><h3>Acknowledgment: <b>tell developer about it!!!</b><br /> <%-data.ack.Description%> <%-data.ack.PollDate%></h3>
     <%} else if(!data.response) { %><h3>Error parsing the data</h3>
     <%} else { %>
-    <div class="tab-content"><span>Title Number: </span><%-data.response.TitleNumber%></div>
+    <div class="tab-content"><span>Title Number: <%-data.response.TitleNumber%></span>
+        <div class="pull-right">
+            <button class="btn btn-primary anotherEnquiry">Another enquiry</button>
+            <button class="btn btn-primary anotherTitle">Another title</button></div>
+        </div>
         <div class="tab-content">
             <%if(data.response.PropertyAddresses.length == 1){%>
             <div>Property Address: <%=data.response.PropertyAddresses[0].Lines%> <%=data.response.PropertyAddresses[0].PostCode%></div>
@@ -98,6 +102,7 @@
         </div>
 
         <div class="tab-content">
+            <%if(data.response.Restrictions && data.response.Restrictions.length > 0){%>
             <table class="table centered squeezed">
                 <thead class="box">
                     <tr class="box-title">
@@ -136,6 +141,7 @@
                     <%});%>
                 </tbody>
             </table>
+            <%}else{print('No restrictions specified.');}%>
         </div>
 
         <div class="tab-content">

@@ -22,12 +22,30 @@
 		/// <returns></returns>
 		public LandRegistryDataModel EnquiryByPropertyDescription(string buildingNumber = null, string streetName = null, string cityName = null, string postCode = null, int customerId = 1)
 		{
-			var model = new LandRegistryDataModel { RequestType = LandRegistryRequestType.EnquiryByPropertyDescription };
+			var model = new LandRegistryDataModel { RequestType = LandRegistryRequestType.Enquiry };
 			using (var client = new LREnquiryServiceNS.PropertyDescriptionEnquiryV2_0ServiceClient())
 			{
 				client.ChannelFactory.Endpoint.Behaviors.Add(new HMLRBGMessageEndpointBehavior("SDulman3000", "Ezbob2013$LR"));
 				ServicePointManager.Expect100Continue = true;
 				ServicePointManager.SecurityProtocol = SecurityProtocolType.Ssl3;
+
+				var address = new LREnquiryServiceNS.Q1AddressType();
+				if (!string.IsNullOrWhiteSpace(buildingNumber))
+				{
+					address.BuildingNumber = buildingNumber;
+				}
+				if (!string.IsNullOrWhiteSpace(streetName))
+				{
+					address.StreetName = streetName;
+				}
+				if (!string.IsNullOrWhiteSpace(cityName))
+				{
+					address.CityName = cityName;
+				}
+				if (!string.IsNullOrWhiteSpace(postCode))
+				{
+					address.PostcodeZone = postCode;
+				}
 
 				var request = new LREnquiryServiceNS.RequestSearchByPropertyDescriptionV2_0Type
 					{
@@ -42,14 +60,7 @@
 								CustomerReference = new LREnquiryServiceNS.Q1CustomerReferenceType { Reference = customerId.ToString(CultureInfo.InvariantCulture) },
 								SubjectProperty = new LREnquiryServiceNS.Q1SubjectPropertyType
 									{
-										Address = new LREnquiryServiceNS.Q1AddressType
-											{
-												BuildingName = null,
-												BuildingNumber = buildingNumber, // buildingNumber
-												StreetName = streetName, //streetName
-												CityName = cityName, //cityName
-												PostcodeZone = postCode //postCode
-											}
+										Address = address
 									}
 							}
 					};
@@ -67,7 +78,6 @@
 					Log.ErrorFormat("{0}", ex);
 					model.Enquery = new LandRegistryEnquiryModel { Rejection = new LandRegistryRejectionModel { Reason = ex.Message } };
 					model.ResponseType = LandRegistryResponseType.Rejection;
-					//File.WriteAllText("Resex3.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
 				}
 
 				return model;
@@ -76,7 +86,7 @@
 
 		public LandRegistryDataModel EnquiryByPropertyDescriptionPoll(string pollId)
 		{
-			var model = new LandRegistryDataModel { RequestType = LandRegistryRequestType.EnquiryByPropertyDescriptionPoll };
+			var model = new LandRegistryDataModel { RequestType = LandRegistryRequestType.EnquiryPoll };
 
 			using (var client = new LREnquiryPollServiceNS.PropertyDescriptionEnquiryV2_0PollServiceClient())
 			{
@@ -113,7 +123,7 @@
 
 		public LandRegistryDataModel Res(string titleNumber, int customerId = 1)
 		{
-			var model = new LandRegistryDataModel { RequestType = LandRegistryRequestType.RegisterExtractService };
+			var model = new LandRegistryDataModel { RequestType = LandRegistryRequestType.Res };
 
 			// create an instance of the client
 			using (var client = new LRResServiceNS.OCWithSummaryV2_1ServiceClient())
@@ -185,7 +195,7 @@
 
 		public LandRegistryDataModel ResPoll(string pollId)
 		{
-			var model = new LandRegistryDataModel { RequestType = LandRegistryRequestType.RegisterExtractServicePoll };
+			var model = new LandRegistryDataModel { RequestType = LandRegistryRequestType.ResPoll };
 
 			// create an instance of the client
 			using (var client = new LRResPollServiceNS.OCWithSummaryV2_0PollServiceClient())

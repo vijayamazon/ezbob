@@ -12,7 +12,7 @@
 		
 		public LandRegistryDataModel EnquiryByPropertyDescription(string buildingNumber = null, string streetName = null, string cityName = null, string postCode = null, int customerId = 1)
 		{
-			var model = new LandRegistryDataModel { RequestType = LandRegistryRequestType.EnquiryByPropertyDescription };
+			var model = new LandRegistryDataModel { RequestType = LandRegistryRequestType.Enquiry };
 			using (var client = new LREnquiryServiceTestNS.PropertyDescriptionEnquiryV2_0ServiceClient())
 			{
 				client.ChannelFactory.Endpoint.Behaviors.Add(new HMLRBGMessageEndpointBehavior("BGUser001", "landreg001"));
@@ -69,7 +69,7 @@
 		
 		public LandRegistryDataModel EnquiryByPropertyDescriptionPoll(string pollId)
 		{
-			var model = new LandRegistryDataModel { RequestType = LandRegistryRequestType.EnquiryByPropertyDescriptionPoll };
+			var model = new LandRegistryDataModel { RequestType = LandRegistryRequestType.EnquiryPoll };
 
 			using (var client = new LREnquiryPollServiceTestNS.PropertyDescriptionEnquiryV2_0PollServiceClient())
 			{
@@ -107,7 +107,7 @@
 
 		public LandRegistryDataModel Res(string titleNumber, int cusomerId = 1)
 		{
-			var model = new LandRegistryDataModel { RequestType = LandRegistryRequestType.RegisterExtractService };
+			var model = new LandRegistryDataModel { RequestType = LandRegistryRequestType.Res };
 
 			// create an instance of the client
 			using (var client = new LRRESServiceTestNS.OCWithSummaryV2_1ServiceClient())
@@ -182,7 +182,7 @@
 
 		public LandRegistryDataModel ResPoll(string pollId)
 		{
-			var model = new LandRegistryDataModel { RequestType = LandRegistryRequestType.RegisterExtractServicePoll };
+			var model = new LandRegistryDataModel { RequestType = LandRegistryRequestType.ResPoll };
 
 			// create an instance of the client
 			using (var client = new LRRESPollServiceTestNS.OCWithSummaryV2_0PollServiceClient())

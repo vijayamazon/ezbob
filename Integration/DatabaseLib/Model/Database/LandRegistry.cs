@@ -3,6 +3,7 @@ namespace EZBob.DatabaseLib.Model.Database
 	using System;
 	using FluentNHibernate.Mapping;
 	using NHibernate.Type;
+	using LandRegistryLib;
 
 	#region class LandRegistry
 
@@ -48,21 +49,7 @@ namespace EZBob.DatabaseLib.Model.Database
 
 	public class LandRegistryResponseTypeType : EnumStringType<LandRegistryResponseType> { }
 
-	public enum LandRegistryRequestType
-	{
-		Enquiry = 1,//EnquiryByPropertyDescription
-		EnquiryPoll = 2,//EnquiryByPropertyDescriptionPoll
-		Res = 3,//RegisterExtractService
-		ResPoll = 4,//RegisterExtractServicePoll
-	} // enum 
-
-	public enum LandRegistryResponseType
-	{
-		Acknowledgement = 1,
-		Rejection = 2,
-		Success = 3,
-		Unkown = 4
-	} // enum 
+	
 } // namespace
 
 namespace EZBob.DatabaseLib.Repository
@@ -70,6 +57,7 @@ namespace EZBob.DatabaseLib.Repository
 	using System.Collections.Generic;
 	using System.Linq;
 	using ApplicationMng.Repository;
+	using LandRegistryLib;
 	using Model.Database;
 	using NHibernate;
 	using NHibernate.Linq;

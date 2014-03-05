@@ -18,27 +18,25 @@
 		
 		public LandRegistryResModel Res { get; set; } //RES full response
 		public LandRegistryEnquiryModel Enquery { get; set; } //Enquiry full response
-
-		
 	}
 
 	public enum LandRegistryRequestType
 	{
 		None = 0,
-		EnquiryByPropertyDescription = 1,
-		EnquiryByPropertyDescriptionPoll = 2,
-		RegisterExtractService = 3,
-		RegisterExtractServicePoll = 4
-	}
+		Enquiry = 1,//EnquiryByPropertyDescription
+		EnquiryPoll = 2,//EnquiryByPropertyDescriptionPoll
+		Res = 3,//RegisterExtractService
+		ResPoll = 4,//RegisterExtractServicePoll
+	} // enum 
 
 	public enum LandRegistryResponseType
 	{
-		None = 0,
-		Acknowledgement = 1,//10
-		Rejection = 2,//20
-		Success = 3,//30
-		Unkown = 4,
-	}
+		None,
+		Acknowledgement = 1,
+		Rejection = 2,
+		Success = 3,
+		Unkown = 4
+	} // enum 
 
 	public enum RestrictionTypeCode //Type of restriction present on the register.
 	{
