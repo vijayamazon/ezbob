@@ -36,7 +36,7 @@
 
 				ddlReportTypes.DataTextField = "Title";
 				ddlReportTypes.DataValueField = "Title";
-				ddlReportTypes.DataSource = reportHandler.ReportList.Values;
+				ddlReportTypes.DataSource = reportHandler.ReportList.Values.OrderBy(x => x.Title);
 				ddlReportTypes.DataBind();
 			} // if
 
@@ -418,7 +418,7 @@
 
 			ddlReportTypes.DataTextField = "Title";
 			ddlReportTypes.DataValueField = "Title";
-			ddlReportTypes.DataSource = reportHandler.ReportList.Values;
+			ddlReportTypes.DataSource = reportHandler.ReportList.Values.OrderBy(x => x.Title);
 			ddlReportTypes.DataBind();
 		} // ResetBtn_Click
 
