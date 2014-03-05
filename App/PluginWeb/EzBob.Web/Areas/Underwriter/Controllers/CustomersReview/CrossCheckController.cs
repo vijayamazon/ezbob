@@ -11,6 +11,7 @@
 	using Scorto.Web;
 	using System.Linq;
 	using EzBob.Models;
+	
 	public class CrossCheckController : Controller
 	{
 		private readonly IAppCreator _appCreator;
@@ -68,7 +69,7 @@
 			var landregistryXml = client.LandRegistryEnquiry(customerId, buildingNumber, streetName, cityName, postCode);
 			var landregistry = SerializeDataHelper.DeserializeTypeFromString<LandRegistryDataModel>(landregistryXml);
 
-			return this.JsonNet(new { titles = landregistry.Enquery.Titles, rejection = landregistry.Rejection, ack = landregistry.Acknowledgement });
+			return this.JsonNet(new { titles = landregistry.Enquery.Titles, rejection = landregistry.Enquery.Rejection, ack = landregistry.Enquery.Acknowledgement });
 		}
 
 		[Ajax]
@@ -79,11 +80,11 @@
 			var landregistryXml = client.LandRegistryRes(customerId, titleNumber);
 			var landregistry = SerializeDataHelper.DeserializeTypeFromString<LandRegistryDataModel>(landregistryXml);
 
-			if (landregistry == null)
-					return this.JsonNet(new { error = "land registry info not found" });
+			if (landregistry.ResponseType == LandRegistryResponseType.None )
+					return this.JsonNet(new { noRes = true });
 
 			//todo return the full model 
-			return this.JsonNet(new { response = landregistry.Res, rejection = landregistry.Rejection, ack = landregistry.Acknowledgement });
+			return this.JsonNet(new { response = landregistry.Res, rejection = landregistry.Res.Rejection, ack = landregistry.Res.Acknowledgement });
 		}
 
 		[Ajax]

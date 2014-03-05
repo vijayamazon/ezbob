@@ -18,28 +18,25 @@
 		
 		public LandRegistryResModel Res { get; set; } //RES full response
 		public LandRegistryEnquiryModel Enquery { get; set; } //Enquiry full response
-
-		public LandRegistryAcknowledgementModel Acknowledgement { get; set; } //poll response
-		public LandRegistryRejectionModel Rejection{get;set;} // error response
 	}
 
 	public enum LandRegistryRequestType
 	{
 		None = 0,
-		EnquiryByPropertyDescription = 1,
-		EnquiryByPropertyDescriptionPoll = 2,
-		RegisterExtractService = 3,
-		RegisterExtractServicePoll = 4
-	}
+		Enquiry = 1,//EnquiryByPropertyDescription
+		EnquiryPoll = 2,//EnquiryByPropertyDescriptionPoll
+		Res = 3,//RegisterExtractService
+		ResPoll = 4,//RegisterExtractServicePoll
+	} // enum 
 
 	public enum LandRegistryResponseType
 	{
-		None = 0,
-		Acknowledgement = 1,//10
-		Rejection = 2,//20
-		Success = 3,//30
-		Unkown = 4,
-	}
+		None,
+		Acknowledgement = 1,
+		Rejection = 2,
+		Success = 3,
+		Unkown = 4
+	} // enum 
 
 	public enum RestrictionTypeCode //Type of restriction present on the register.
 	{
@@ -114,6 +111,8 @@
 
 	public class LandRegistryEnquiryModel
 	{
+		public LandRegistryAcknowledgementModel Acknowledgement { get; set; } //poll response
+		public LandRegistryRejectionModel Rejection { get; set; } // error response
 		public List<LandRegistryEnquiryTitle> Titles { get; set; }
 	}
 
@@ -130,6 +129,9 @@
 
 	public class LandRegistryResModel
 	{
+		public LandRegistryAcknowledgementModel Acknowledgement { get; set; } //poll response
+		public LandRegistryRejectionModel Rejection { get; set; } // error response
+
 		public string TitleNumber { get; set; }
 		//public bool CommonholdIndicator { get; set; } //if false indicate (Indicator showing whether the title is commonhold property)
 		public List<KeyValuePair<string, string>> PricePaidInfills { get; set; }

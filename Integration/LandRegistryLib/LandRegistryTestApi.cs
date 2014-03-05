@@ -12,7 +12,7 @@
 		
 		public LandRegistryDataModel EnquiryByPropertyDescription(string buildingNumber = null, string streetName = null, string cityName = null, string postCode = null, int customerId = 1)
 		{
-			var model = new LandRegistryDataModel { RequestType = LandRegistryRequestType.EnquiryByPropertyDescription };
+			var model = new LandRegistryDataModel { RequestType = LandRegistryRequestType.Enquiry };
 			using (var client = new LREnquiryServiceTestNS.PropertyDescriptionEnquiryV2_0ServiceClient())
 			{
 				client.ChannelFactory.Endpoint.Behaviors.Add(new HMLRBGMessageEndpointBehavior("BGUser001", "landreg001"));
@@ -58,7 +58,7 @@
 				catch (Exception ex)
 				{
 					Log.ErrorFormat("{0}", ex);
-					model.Rejection = new LandRegistryRejectionModel {Reason = ex.Message};
+					model.Enquery = new LandRegistryEnquiryModel { Rejection = new LandRegistryRejectionModel { Reason = ex.Message } };
 					model.ResponseType = LandRegistryResponseType.Rejection;
 					//File.WriteAllText("resex3.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
 				}
@@ -69,7 +69,7 @@
 		
 		public LandRegistryDataModel EnquiryByPropertyDescriptionPoll(string pollId)
 		{
-			var model = new LandRegistryDataModel { RequestType = LandRegistryRequestType.EnquiryByPropertyDescriptionPoll };
+			var model = new LandRegistryDataModel { RequestType = LandRegistryRequestType.EnquiryPoll };
 
 			using (var client = new LREnquiryPollServiceTestNS.PropertyDescriptionEnquiryV2_0PollServiceClient())
 			{
@@ -97,7 +97,7 @@
 				catch (Exception ex)
 				{
 					Log.ErrorFormat("{0}", ex);
-					model.Rejection = new LandRegistryRejectionModel { Reason = ex.Message };
+					model.Enquery = new LandRegistryEnquiryModel { Rejection = new LandRegistryRejectionModel { Reason = ex.Message } };
 					model.ResponseType = LandRegistryResponseType.Rejection;
 					//File.WriteAllText("resex1c.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
 				}
@@ -107,7 +107,7 @@
 
 		public LandRegistryDataModel Res(string titleNumber, int cusomerId = 1)
 		{
-			var model = new LandRegistryDataModel { RequestType = LandRegistryRequestType.RegisterExtractService };
+			var model = new LandRegistryDataModel { RequestType = LandRegistryRequestType.Res };
 
 			// create an instance of the client
 			using (var client = new LRRESServiceTestNS.OCWithSummaryV2_1ServiceClient())
@@ -165,13 +165,12 @@
 
 					response.GatewayResponse.Results.Attachment = null;
 					model.Response = XmlHelper.SerializeObject(response);
-					
 					model.Res = _builder.BuildResModel(model.Response);
 				}
 				catch (Exception ex)
 				{
 					Log.ErrorFormat("{0}", ex);
-					model.Rejection = new LandRegistryRejectionModel { Reason = ex.Message };
+					model.Res = new LandRegistryResModel { Rejection = new LandRegistryRejectionModel { Reason = ex.Message } };
 					model.ResponseType = LandRegistryResponseType.Rejection;
 					//File.WriteAllText("resex1c.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
 				}
@@ -183,7 +182,7 @@
 
 		public LandRegistryDataModel ResPoll(string pollId)
 		{
-			var model = new LandRegistryDataModel { RequestType = LandRegistryRequestType.RegisterExtractServicePoll };
+			var model = new LandRegistryDataModel { RequestType = LandRegistryRequestType.ResPoll };
 
 			// create an instance of the client
 			using (var client = new LRRESPollServiceTestNS.OCWithSummaryV2_0PollServiceClient())
@@ -220,7 +219,7 @@
 				catch (Exception ex)
 				{
 					Log.ErrorFormat("{0}", ex);
-					model.Rejection = new LandRegistryRejectionModel { Reason = ex.Message };
+					model.Res = new LandRegistryResModel { Rejection = new LandRegistryRejectionModel { Reason = ex.Message } };
 					model.ResponseType = LandRegistryResponseType.Rejection;
 					//File.WriteAllText("resex1c.xml", string.Format("{0} \n {1}", ex.Message, ex.StackTrace));
 				}

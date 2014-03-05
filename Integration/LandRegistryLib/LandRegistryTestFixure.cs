@@ -79,6 +79,14 @@
 			Assert.IsNotNull(model);
 			Console.WriteLine(XmlHelper.SerializeObject(model));
 
+			
+
+			var responseNT147249 = XmlHelper.XmlDeserializeFromString<LandRegistryLib.LRResServiceNS.ResponseOCWithSummaryV2_1Type>(TestResNT147249);
+			model = b.BuildResModel(responseNT147249);
+			Assert.IsNotNull(model);
+			Console.WriteLine(XmlHelper.SerializeObject(model));
+
+
 			var responseHW153409 = XmlHelper.XmlDeserializeFromString<LandRegistryLib.LRResServiceNS.ResponseOCWithSummaryV2_1Type>(TestResHW153409);
 			model = b.BuildResModel(responseHW153409);
 			Assert.IsNotNull(model);
@@ -1410,6 +1418,270 @@
     </Results>
   </GatewayResponse>
 </ResponseOCWithSummaryV2_1Type>";
+
+		public const string TestResNT147249 = @"<?xml version=""1.0"" encoding=""utf-8""?>
+<ResponseOCWithSummaryV2_1Type xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
+  <GatewayResponse xmlns=""http://www.oscre.org/ns/eReg-Final/2011/ResponseOCWithSummaryV2_1"">
+    <TypeCode>30</TypeCode>
+    <Results>
+      <ExternalReference>
+        <Reference>ezbob21337</Reference>
+      </ExternalReference>
+      <ActualPrice>
+        <GrossPriceAmount>6.00</GrossPriceAmount>
+      </ActualPrice>
+      <OCSummaryData>
+        <OfficialCopyDateTime>2014-03-05T08:44:16</OfficialCopyDateTime>
+        <EditionDate>2013-10-10</EditionDate>
+        <PropertyAddress>
+          <PostcodeZone>
+            <Postcode>NG9 2PU</Postcode>
+          </PostcodeZone>
+          <AddressLine>
+            <Line>49 Farfield Avenue</Line>
+            <Line>Beeston</Line>
+            <Line>Nottingham</Line>
+          </AddressLine>
+        </PropertyAddress>
+        <Title>
+          <TitleNumber>NT147249</TitleNumber>
+          <ClassOfTitleCode>10</ClassOfTitleCode>
+          <CommonholdIndicator>false</CommonholdIndicator>
+          <TitleRegistrationDetails>
+            <DistrictName>BROXTOWE</DistrictName>
+            <AdministrativeArea>NOTTINGHAMSHIRE</AdministrativeArea>
+            <LandRegistryOfficeName>Nottingham Office</LandRegistryOfficeName>
+            <LatestEditionDate>2013-10-10</LatestEditionDate>
+            <PostcodeZone>
+              <Postcode>NG9 2PU</Postcode>
+            </PostcodeZone>
+            <RegistrationDate>1982-11-05</RegistrationDate>
+          </TitleRegistrationDetails>
+        </Title>
+        <RegisterEntryIndicators>
+          <AgreedNoticeIndicator>false</AgreedNoticeIndicator>
+          <BankruptcyIndicator>false</BankruptcyIndicator>
+          <CautionIndicator>false</CautionIndicator>
+          <CCBIIndicator>false</CCBIIndicator>
+          <ChargeeIndicator>true</ChargeeIndicator>
+          <ChargeIndicator>true</ChargeIndicator>
+          <ChargeRelatedRestrictionIndicator>false</ChargeRelatedRestrictionIndicator>
+          <ChargeRestrictionIndicator>false</ChargeRestrictionIndicator>
+          <CreditorsNoticeIndicator>false</CreditorsNoticeIndicator>
+          <DeathOfProprietorIndicator>false</DeathOfProprietorIndicator>
+          <DeedOfPostponementIndicator>false</DeedOfPostponementIndicator>
+          <DiscountChargeIndicator>false</DiscountChargeIndicator>
+          <EquitableChargeIndicator>false</EquitableChargeIndicator>
+          <GreenOutEntryIndicator>false</GreenOutEntryIndicator>
+          <HomeRightsChangeOfAddressIndicator>false</HomeRightsChangeOfAddressIndicator>
+          <HomeRightsIndicator>false</HomeRightsIndicator>
+          <LeaseHoldTitleIndicator>false</LeaseHoldTitleIndicator>
+          <MultipleChargeIndicator>false</MultipleChargeIndicator>
+          <NonChargeRestrictionIndicator>false</NonChargeRestrictionIndicator>
+          <NotedChargeIndicator>false</NotedChargeIndicator>
+          <PricePaidIndicator>false</PricePaidIndicator>
+          <PropertyDescriptionNotesIndicator>false</PropertyDescriptionNotesIndicator>
+          <RentChargeIndicator>false</RentChargeIndicator>
+          <RightOfPreEmptionIndicator>false</RightOfPreEmptionIndicator>
+          <ScheduleOfLeasesIndicator>false</ScheduleOfLeasesIndicator>
+          <SubChargeIndicator>false</SubChargeIndicator>
+          <UnidentifiedEntryIndicator>false</UnidentifiedEntryIndicator>
+          <UnilateralNoticeBeneficiaryIndicator>false</UnilateralNoticeBeneficiaryIndicator>
+          <UnilateralNoticeIndicator>false</UnilateralNoticeIndicator>
+          <VendorsLienIndicator>false</VendorsLienIndicator>
+        </RegisterEntryIndicators>
+        <Proprietorship>
+          <CurrentProprietorshipDate>1989-03-09</CurrentProprietorshipDate>
+          <RegisteredProprietorParty>
+            <PrivateIndividual>
+              <Name>
+                <ForenamesName>PAUL</ForenamesName>
+                <SurnameName>STORER</SurnameName>
+              </Name>
+            </PrivateIndividual>
+            <Address>
+              <PostcodeZone>
+                <Postcode>NG9 2PU</Postcode>
+              </PostcodeZone>
+              <AddressLine>
+                <Line>49 Farfield Avenue</Line>
+                <Line>Beeston</Line>
+                <Line>Nottingham</Line>
+              </AddressLine>
+            </Address>
+          </RegisteredProprietorParty>
+          <RegisteredProprietorParty>
+            <PrivateIndividual>
+              <Name>
+                <ForenamesName>JENNY LOUISE</ForenamesName>
+                <SurnameName>STORER</SurnameName>
+              </Name>
+            </PrivateIndividual>
+            <Address>
+              <PostcodeZone>
+                <Postcode>NG9 2PU</Postcode>
+              </PostcodeZone>
+              <AddressLine>
+                <Line>49 Farfield Avenue</Line>
+                <Line>Beeston</Line>
+                <Line>Nottingham</Line>
+              </AddressLine>
+            </Address>
+          </RegisteredProprietorParty>
+        </Proprietorship>
+        <Charge>
+          <ChargeEntry>
+            <ChargeID>1</ChargeID>
+            <ChargeDate>2005-08-31</ChargeDate>
+            <RegisteredCharge>
+              <EntryDetails>
+                <EntryNumber>3</EntryNumber>
+                <EntryText>REGISTERED CHARGE dated 31 August 2005.</EntryText>
+                <RegistrationDate>2005-09-14</RegistrationDate>
+                <SubRegisterCode>C</SubRegisterCode>
+                <Infills>
+                  <ChargeDate>2005-08-31</ChargeDate>
+                </Infills>
+              </EntryDetails>
+            </RegisteredCharge>
+            <ChargeProprietor>
+              <ChargeeParty>
+                <Organization>
+                  <Name>Lloyds Bank PLC</Name>
+                </Organization>
+                <Address>
+                  <PostcodeZone>
+                    <Postcode>GL4 3RL</Postcode>
+                  </PostcodeZone>
+                  <AddressLine>
+                    <Line>Registrations</Line>
+                    <Line>Secured Assets</Line>
+                    <Line>Barnett Way</Line>
+                    <Line>Gloucester</Line>
+                  </AddressLine>
+                </Address>
+              </ChargeeParty>
+              <EntryDetails>
+                <EntryNumber>4</EntryNumber>
+                <EntryText>Proprietor: LLOYDS BANK PLC (Co. Regn. No. 2065) of Registrations, Secured Assets, Barnett Way, Gloucester GL4 3RL.</EntryText>
+                <RegistrationDate>2007-12-24</RegistrationDate>
+                <SubRegisterCode>C</SubRegisterCode>
+              </EntryDetails>
+            </ChargeProprietor>
+          </ChargeEntry>
+        </Charge>
+        <DocumentDetails>
+          <Document>
+            <DocumentType>50</DocumentType>
+            <DocumentDate>2005-08-31</DocumentDate>
+            <EntryNumber>C3</EntryNumber>
+            <EntryNumber>C4</EntryNumber>
+            <PlanOnlyIndicator>false</PlanOnlyIndicator>
+            <RegisterDescription>Charge</RegisterDescription>
+          </Document>
+          <Document>
+            <DocumentType>130</DocumentType>
+            <DocumentDate>1982-10-25</DocumentDate>
+            <EntryNumber>A3</EntryNumber>
+            <EntryNumber>A4</EntryNumber>
+            <EntryNumber>C2</EntryNumber>
+            <PlanOnlyIndicator>false</PlanOnlyIndicator>
+            <RegisterDescription>Transfer</RegisterDescription>
+          </Document>
+        </DocumentDetails>
+      </OCSummaryData>
+      <OCRegisterData>
+        <PropertyRegister>
+          <DistrictDetails>
+            <EntryText>NOTTINGHAMSHIRE : BROXTOWE</EntryText>
+          </DistrictDetails>
+          <RegisterEntry>
+            <EntryNumber>1</EntryNumber>
+            <EntryDate>1982-11-05</EntryDate>
+            <EntryType>Property Description</EntryType>
+            <EntryText>The Freehold land shown edged with red on the plan of the above Title filed at the Registry and being 49 Farfield Avenue, Beeston, Nottingham (NG9 2PU).</EntryText>
+          </RegisterEntry>
+          <RegisterEntry>
+            <EntryNumber>2</EntryNumber>
+            <EntryType>Mines &amp; Minerals - Short Entries</EntryType>
+            <EntryText>The mines and minerals together with ancillary powers of working are excepted.</EntryText>
+          </RegisterEntry>
+          <RegisterEntry>
+            <EntryNumber>3</EntryNumber>
+            <EntryType>Housing/Leasehold Reform Acts, not Parent Title</EntryType>
+            <EntryText>The Transfer dated 25 October 1982 referred to in the Charges Register was made pursuant to Chapter 1 of Part 1 of the Housing Act 1980 and the land has the benefit of and is subject to such easements as are granted and reserved in the said Deed and the easements and rights specified in paragraph 2 of Schedule 2 of the said Act.</EntryText>
+          </RegisterEntry>
+          <RegisterEntry>
+            <EntryNumber>4</EntryNumber>
+            <EntryType>Provisions</EntryType>
+            <EntryText>The Transfer dated 25 October 1982 referred to above contains provisions as to light or air and boundary structures.</EntryText>
+          </RegisterEntry>
+        </PropertyRegister>
+        <ProprietorshipRegister>
+          <RegisterEntry>
+            <EntryNumber>1</EntryNumber>
+            <EntryDate>1989-03-09</EntryDate>
+            <EntryType>Proprietor</EntryType>
+            <EntryText>PROPRIETOR: PAUL STORER and JENNY LOUISE STORER of 49 Farfield Avenue, Beeston, Nottingham NG9 2PU.</EntryText>
+          </RegisterEntry>
+          <RegisterEntry>
+            <EntryNumber>2</EntryNumber>
+            <EntryType>Personal Covenants</EntryType>
+            <EntryText>The Transfer to the proprietor contains a covenant to observe and perform the covenants referred to in the Charges Register and of indemnity in respect thereof.</EntryText>
+          </RegisterEntry>
+        </ProprietorshipRegister>
+        <ChargesRegister>
+          <RegisterEntry>
+            <EntryNumber>1</EntryNumber>
+            <EntryType>Restrictive Covenants/Stipulations - Deed</EntryType>
+            <EntryText>A Conveyance of the land in this title and other land dated 31 July 1920 made between (1) Thomas Harold Readett Bayley and Sir Henry Dennis Readett Bayley (2) Thomas Harold Readett Bayley (3) Sir Henry Dennis Readett Bayley (4) Harold Bayley and Gerald Kenway Hibbert (5) Kate Bayley and (6) The Urban District Council of Beeston (Purchasers) contains covenants details of which are set out in the schedule of restrictive covenants hereto.</EntryText>
+          </RegisterEntry>
+          <RegisterEntry>
+            <EntryNumber>2</EntryNumber>
+            <EntryType>Restrictive Covenants/Stipulations - Deed</EntryType>
+            <EntryText>A Transfer of the land in this title dated 25 October 1982 made between (1) Broxtowe Borough Council and (2) John Everard Carter and Maureen Ann Carter contains restrictive covenants.</EntryText>
+            <EntryText>NOTE: Original filed.</EntryText>
+          </RegisterEntry>
+          <RegisterEntry>
+            <EntryNumber>3</EntryNumber>
+            <EntryDate>2005-09-14</EntryDate>
+            <EntryType>Registered Charges</EntryType>
+            <EntryText>REGISTERED CHARGE dated 31 August 2005.</EntryText>
+          </RegisterEntry>
+          <RegisterEntry>
+            <EntryNumber>4</EntryNumber>
+            <EntryDate>2007-12-24</EntryDate>
+            <EntryType>Chargee</EntryType>
+            <EntryText>Proprietor: LLOYDS BANK PLC (Co. Regn. No. 2065) of Registrations, Secured Assets, Barnett Way, Gloucester GL4 3RL.</EntryText>
+          </RegisterEntry>
+          <Schedule>
+            <ScheduleType>SCHEDULE OF RESTRICTIVE COVENANTS</ScheduleType>
+            <ScheduleEntry>
+              <EntryNumber>1</EntryNumber>
+              <EntryType>Schedule of Restrictive Covenants</EntryType>
+              <EntryText>The following are details of the covenants contained in the Conveyance dated 31 July 1920 referred to in the Charges Register:-</EntryText>
+              <EntryText>The Purchasers for themselves their successors in title and assigns hereby COVENANT with the Vendors in manner expressed in the Second Schedule hereto</EntryText>
+              <EntryText>SECOND SCHEDULE</EntryText>
+              <EntryText>COVENANTS by the Purchasers</EntryText>
+              <EntryText>.........................................................................</EntryText>
+              <EntryText>2. No fence or wall between the building line shewn upon the said plan and Wollaton Road and Abbey Road shewn upon the said plan shall be more than 5 feet in height and no fence or wall in the rear of the said building line shall be less than 5 feet or more than 7 feet in height</EntryText>
+              <EntryText>3. No building or erection except porticoes and bay windows and except a dwarf boundary wall not more than 4 feet in height shall be erected upon the said piece of land hereby conveyed nearer to the said adjoining roads than the said building line and no portico or bay window shall project more than four feet beyond the said building line</EntryText>
+              <EntryText>4. The Purchasers shall not dig use or take from the said piece of land hereby conveyed any clay or soil for the purpose of making bricks or tiles or for any purpose other than and except for making excavations necessary for the buildings and works to be erected and made upon the said piece of land</EntryText>
+              <EntryText>5. No noxious noisome or offensive trade or business shall be carried on upon the said piece of land hereby conveyed or in or upon any buildings to be erected thereon</EntryText>
+              <EntryText>6. No building erected upon the said piece of land hereby conveyed shall be used as a public house or beershop or for the sale of beer wines spirits or other intoxicating liquors whether to be consumed on or off the premises without the consent in writing of the Vendors first had and obtained</EntryText>
+              <EntryText>7. The Purchasers shall pay to the Vendors a proportionate sum per lineal foot of frontage of the said piece of land hereby conveyed to Wollaton Road and Abbey Road aforesaid towards the expense of making forming metalling curbing channelling and surface water draining such roads and of laying down sewers and drains water pipes and gas pipes thereunder and such sum shall be payable on demand and the Purchasers shall from time to time contribute a fair and equal proportion corresponding to the frontage of the said piece of land to such roads towards the expense of repairing and maintaining the said roads and the sewers drains water pipes and gas pipes until the said roads shall be adopted as public highways and the proportion to be so paid by the Purchasers shall in case of difference be settled by the Vendor''s Surveyor whose decision shall be final and all sums payable under this covenant shall be a first charge upon the said piece of land hereby conveyed and shall bear interest from the date of demand until payment at the rate of £5 per centum per annum</EntryText>
+              <EntryText>8. Before commencing to make any street or road upon the said piece of land hereby conveyed the Purchasers shall submit plans thereof to the Vendors for their or their Surveyor''s Approval provided however as in the next clause contained</EntryText>
+              <EntryText>9. Before the Purchasers commence the erection of any buildings on the said piece of land hereby conveyed they shall submit plans thereof to the Vendors for their or their Surveyor''s approval provided that if the Ministry of Health shall approve of the plans to be submitted under this and the preceding clause the Vendors shall also approve the same</EntryText>
+              <EntryText>10. The Purchaser shall not at any time hereafter cut down or mutilate the trees on the Northerly side of the said piece of land hereby conveyed and shewn upon the said plan but shall for ever hereafter maintain the same as a plantation</EntryText>
+              <EntryText>NOTE: The building line referred to does not affect the land in this title.</EntryText>
+            </ScheduleEntry>
+          </Schedule>
+        </ChargesRegister>
+      </OCRegisterData>
+    </Results>
+  </GatewayResponse>
+</ResponseOCWithSummaryV2_1Type>";
+
 		public const string TestResTGL70137 = @"<?xml version=""1.0"" encoding=""utf-8""?>
 <ResponseOCWithSummaryV2_1Type xmlns:xsd=""http://www.w3.org/2001/XMLSchema"" xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"">
   <GatewayResponse xmlns=""http://www.oscre.org/ns/eReg-Final/2011/ResponseOCWithSummaryV2_1"">

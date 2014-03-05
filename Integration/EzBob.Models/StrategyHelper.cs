@@ -613,7 +613,7 @@
 		{
 			var addressRepo = ObjectFactory.GetInstance<CustomerAddressRepository>();
 			var customerAddress = addressRepo.GetAll().FirstOrDefault(a => a.Customer.Id == customerId && a.AddressType == CustomerAddressType.PersonalAddress);
-			
+
 			if (customerAddress != null)
 			{
 				if (!customerAddress.Zoopla.Any() || reCheck)
@@ -670,7 +670,9 @@
 				{
 					Request = cache.Request,
 					Response = cache.Response,
-					Res = b.BuildResModel(cache.Response)
+					Res = b.BuildResModel(cache.Response),
+					RequestType = (LandRegistryLib.LandRegistryRequestType)(int)cache.RequestType,
+					ResponseType = (LandRegistryLib.LandRegistryResponseType)(int)cache.ResponseType
 				};
 
 				return cacheModel;
@@ -680,8 +682,8 @@
 			//var res = XmlHelper.XmlDeserializeFromString<LandRegistryLib.LRResServiceNS.ResponseOCWithSummaryV2_1Type>(LandRegistryTestFixure.TestResBM253452);
 			//var model = new LandRegistryDataModel() { Res = b.BuildResModel(res) };
 			//return model;
-			
-			
+
+
 			ILandRegistryApi lr;
 			if (isProd)
 			{
@@ -691,6 +693,7 @@
 			{
 				lr = new LandRegistryTestApi();
 			}
+
 			LandRegistryDataModel model;
 			if (titleNumber != null)
 			{
@@ -704,8 +707,8 @@
 						TitleNumber = titleNumber,
 						Request = model.Request,
 						Response = model.Response,
-						RequestType = (EZBob.DatabaseLib.Model.Database.LandRegistryRequestType) (int) model.RequestType,
-						ResponseType = (EZBob.DatabaseLib.Model.Database.LandRegistryResponseType) (int) model.ResponseType,
+						RequestType = model.RequestType,
+						ResponseType = model.ResponseType,
 					});
 
 				if (model.Attachment != null)
@@ -729,8 +732,8 @@
 			{
 				model = new LandRegistryDataModel
 					{
-						Rejection = new LandRegistryRejectionModel { Reason = "Please perform enquiry first to retrieve title number" },
-						ResponseType = LandRegistryResponseType.Rejection
+						Res = new LandRegistryResModel { Rejection = new LandRegistryRejectionModel { Reason = "Please perform enquiry first to retrieve title number" } },
+						ResponseType = LandRegistryResponseType.None
 					};
 			}
 			return model;
@@ -744,6 +747,7 @@
 
 			//check cash
 			var cache = lrRepo.GetEnquiry(customer, postCode);
+
 			if (cache != null)
 			{
 				var b = new LandRegistryModelBuilder();
@@ -751,15 +755,15 @@
 					{
 						Request = cache.Request,
 						Response = cache.Response,
-						Enquery = b.BuildEnquiryModel(cache.Response)
+						Enquery = b.BuildEnquiryModel(cache.Response),
+						RequestType = cache.RequestType,
+						ResponseType = cache.ResponseType
 					};
 
 				return cacheModel;
 			}
 
 			var isProd = configurationVariablesRepository.GetByNameAsBool("LandRegistryProd");
-			//var model = new LandRegistryDataModel() { Enquery = b.BuildEnquiryModel(LandRegistryTestFixure.TestEnquiry) };
-			//return model;
 
 			ILandRegistryApi lr;
 			if (isProd)
@@ -772,16 +776,16 @@
 			}
 
 			var model = lr.EnquiryByPropertyDescription(buildingNumber, streetName, cityName, postCode, customerId);
-			
+
 			lrRepo.Save(new LandRegistry
 				{
 					Customer = customer,
 					InsertDate = DateTime.UtcNow,
-					Postcode = postCode,
+					Postcode = string.IsNullOrEmpty(postCode) ? string.Format("{0},{1},{2}", buildingNumber, streetName, cityName) : postCode,
 					Request = model.Request,
 					Response = model.Response,
-					RequestType = (EZBob.DatabaseLib.Model.Database.LandRegistryRequestType) (int) model.RequestType,
-					ResponseType = (EZBob.DatabaseLib.Model.Database.LandRegistryResponseType) (int) model.ResponseType,
+					RequestType = model.RequestType,
+					ResponseType = model.ResponseType,
 				});
 
 			return model;
