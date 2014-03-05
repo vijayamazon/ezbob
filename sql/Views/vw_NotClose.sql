@@ -2,7 +2,7 @@ IF OBJECT_ID (N'dbo.vw_NotClose') IS NOT NULL
 	DROP VIEW dbo.vw_NotClose
 GO
 
-create VIEW [dbo].[vw_NotClose]
+CREATE VIEW [dbo].[vw_NotClose]
 AS
 SELECT l.Id AS loanID
 , l.CustomerId
