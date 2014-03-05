@@ -263,7 +263,7 @@
 				oDetails = m_oServiceClient.BrokerLoadCustomerDetails(nCustomerID, sContactEmail);
 			}
 			catch (Exception e) {
-				m_oLog.Debug(e, "Failed to load customers request for customer {1} and contact email {0}", sContactEmail, nCustomerID);
+				m_oLog.Debug(e, "Failed to load customer details request for customer {1} and contact email {0}", sContactEmail, nCustomerID);
 				return Json(new { success = false, error = "Failed to load customer details.", crm_data = (object)null, personal_data = (object)null }, JsonRequestBehavior.AllowGet);
 			} // try
 
@@ -367,6 +367,69 @@
 		} // SaveCrmEntry
 
 		#endregion action SaveCrmEntry
+
+		#region action LoadCustomerFiles
+
+		[HttpGet]
+		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		public JsonResult LoadCustomerFiles(int nCustomerID, string sContactEmail) {
+			m_oLog.Debug("Broker load customer files request for customer {1} and contact email {0}", sContactEmail, nCustomerID);
+
+			JsonResult oIsAuthResult = IsAuth("Load customer files for customer " + nCustomerID, sContactEmail);
+			if (oIsAuthResult != null)
+				return oIsAuthResult;
+
+			// BrokerCustomerDetailsActionResult oDetails;
+
+			try {
+				// oDetails = m_oServiceClient.BrokerLoadCustomerDetails(nCustomerID, sContactEmail);
+			}
+			catch (Exception e) {
+				m_oLog.Debug(e, "Failed to load customer files request for customer {1} and contact email {0}", sContactEmail, nCustomerID);
+				return Json(new { success = false, error = "Failed to load customer files.", }, JsonRequestBehavior.AllowGet);
+			} // try
+
+			m_oLog.Debug("Broker load customer files request for customer {1} and contact email {0} complete.", sContactEmail, nCustomerID);
+
+			List<string> dummy = new List<string>();
+
+			return Json(new { success = true, error = string.Empty, file_list = dummy, }, JsonRequestBehavior.AllowGet);
+		} // LoadCustomerFiles
+
+		#endregion action LoadCustomerFiles
+
+		#region action HandleUploadFile
+
+		[HttpPost]
+		public JsonResult HandleUploadFile() {
+			string sContactEmail = Request.Headers["ezbob-broker-contact-email"];
+
+			int nCustomerID = 0;
+			int.TryParse(Request.Headers["ezbob-broker-customer-id"], out nCustomerID);
+
+			m_oLog.Debug("Broker upload customer file request for customer {1} and contact email {0}", sContactEmail, nCustomerID);
+
+			JsonResult oIsAuthResult = IsAuth("Upload customer file for customer " + nCustomerID, sContactEmail);
+			if (oIsAuthResult != null)
+				return oIsAuthResult;
+
+			// BrokerCustomerDetailsActionResult oDetails;
+
+			try {
+				// oDetails = m_oServiceClient.BrokerLoadCustomerDetails(nCustomerID, sContactEmail);
+			}
+			catch (Exception e) {
+				m_oLog.Debug(e, "Failed to process upload customer file request for customer {1} and contact email {0}", sContactEmail, nCustomerID);
+				return Json(new { success = false, error = "Failed to upload customer file.", }, JsonRequestBehavior.AllowGet);
+			} // try
+
+			m_oLog.Debug("Broker upload customer file request for customer {1} and contact email {0} complete.", sContactEmail, nCustomerID);
+
+			return Json(new { success = true, error = string.Empty, }, JsonRequestBehavior.AllowGet);
+		} // HandleUploadFile
+
+		#endregion action HandleUploadFile
 
 		#endregion public
 

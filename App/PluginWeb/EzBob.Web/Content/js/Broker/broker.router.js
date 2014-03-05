@@ -26,14 +26,16 @@ EzBob.Broker.Router = Backbone.Router.extend({
 
 	setAuth: function(sAuth) {
 		this.authData = sAuth || '';
-		$('#user-menu .log-off').tooltip({ placement: 'bottom', title: this.authData }).tooltip("enable").tooltip('fixTitle');
+		var oElm = $('#user-menu .log-off');
+		oElm.tooltip('destroy');
+		oElm.tooltip({ placement: 'bottom', title: this.authData }).tooltip('fixTitle').tooltip('enable');
 	}, // setAuth
 
 	logoff: function() {
 		if (this.views.dashboard)
 			this.views.dashboard.clear();
 
-		$.post('' + window.gRootPath + 'Broker/BrokerHome/Logoff?sContactEmail=' + this.getAuth());
+		$.post('' + window.gRootPath + 'Broker/BrokerHome/Logoff?sContactEmail=' + encodeURIComponent(this.getAuth()));
 		this.setAuth();
 		this.login();
 	}, // logoff

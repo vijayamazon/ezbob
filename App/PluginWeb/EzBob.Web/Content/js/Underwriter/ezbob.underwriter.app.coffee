@@ -6,7 +6,7 @@
                 return
             return unless xhr.responseText? or xhr.responseText == "" or typeof xhr.responseText is 'string'
             data = JSON.parse xhr.responseText
-            return unless data.error?
+            return unless data.error
             alertify.error data.error
             console.log data.error
             console.log xhr

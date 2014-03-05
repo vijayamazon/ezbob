@@ -75,9 +75,28 @@ table.customer-list {
 	display: table-row;
 }
 
-.section-customer-details .customer-personal-details-container {
+.section-customer-details .customer-personal-details-container,
+.section-customer-details .customer-files,
+.section-customer-details #customerFilesUploader {
 	display: table-cell;
 	vertical-align: top;
+}
+
+.section-customer-details .customer-personal-details-container {
+	width: 40%;
+}
+
+.section-customer-details .customer-files {
+	width: 40%;
+	padding: 0 1em;
+}
+
+.section-customer-details .customer-files > div {
+	min-height: 100%;
+}
+
+.section-customer-details #customerFilesUploader {
+	width: 20%;
 }
 
 .section-customer-details .customer-personal-details {
@@ -98,11 +117,6 @@ table.customer-list {
 
 .section-customer-details .customer-personal-details .datum .value {
 	display: table-cell;
-}
-
-.section-customer-details .dropzone {
-	display: table-cell;
-	width: 50%;
 }
 
 .section-customer-details .crm-title {

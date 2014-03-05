@@ -67,7 +67,7 @@ class EzBob.Underwriter.AddCustomerRelationsEntry extends EzBob.BoundItemView
                 else if @onsave
                     @onsave()
             else
-                if r.error?
+                if r.error
                     EzBob.ShowMessage(r.error, 'Error')
 
             @close()
