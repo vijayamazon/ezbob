@@ -5,8 +5,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[GetApprovalConfigs] 
-	(@SPParam INT)
+CREATE PROCEDURE [dbo].[GetApprovalConfigs]
 AS
 BEGIN
 	SELECT

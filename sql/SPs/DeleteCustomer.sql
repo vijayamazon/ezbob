@@ -146,7 +146,7 @@ BEGIN TRANSACTION DeleteCustomer
 	DELETE FROM MP_PayPalPersonalInfo WHERE CustomerMarketPlaceId IN 
 		(SELECT Id FROM MP_CustomerMarketPlace WHERE CustomerId = @CustomerID)	
 
-	DELETE FROM MP_PayPalTransactionItem WHERE TransactionId IN 
+	DELETE FROM MP_PayPalTransactionItem2 WHERE TransactionId IN 
 		(SELECT Id FROM MP_PayPalTransaction WHERE CustomerMarketPlaceId IN 
 			(SELECT Id FROM MP_CustomerMarketPlace WHERE CustomerId = @CustomerID))
 
