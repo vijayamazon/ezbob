@@ -2,7 +2,7 @@ IF OBJECT_ID (N'dbo.GetEbayReviews') IS NOT NULL
 	DROP FUNCTION dbo.GetEbayReviews
 GO
 
-CREATE FUNCTION [dbo].[GetEbayReviews]
+CREATE FUNCTION [dbo].[GetEbayReviews]()
 RETURNS TABLE 
 AS
 RETURN 

@@ -2,7 +2,7 @@ IF OBJECT_ID (N'dbo.fnPacnetBalance') IS NOT NULL
 	DROP FUNCTION dbo.fnPacnetBalance
 GO
 
-CREATE FUNCTION [dbo].[fnPacnetBalance]
+CREATE FUNCTION [dbo].[fnPacnetBalance]()
 RETURNS @ResultSet TABLE (
 	[Id]             INT,
 	[PacnetBalance]  DECIMAL(18, 4),

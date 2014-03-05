@@ -2,7 +2,7 @@ IF OBJECT_ID (N'dbo.fn_GetCustomerAdress') IS NOT NULL
 	DROP FUNCTION dbo.fn_GetCustomerAdress
 GO
 
-CREATE FUNCTION [dbo].[fn_GetCustomerAdress]
+CREATE FUNCTION [dbo].[fn_GetCustomerAdress](@CustId INT)
 RETURNS @CustAdress TABLE
 (
 	Line1 VARCHAR (255), 

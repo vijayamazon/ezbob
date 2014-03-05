@@ -2,7 +2,7 @@ IF OBJECT_ID (N'dbo.udfCanQuickOffer') IS NOT NULL
 	DROP FUNCTION dbo.udfCanQuickOffer
 GO
 
-CREATE FUNCTION [dbo].[udfCanQuickOffer]
+CREATE FUNCTION [dbo].[udfCanQuickOffer]()
 RETURNS @out TABLE (
 	Enabled INT NOT NULL,
 	FundsAvailable DECIMAL(18, 4) NULL,

@@ -2,7 +2,7 @@ IF OBJECT_ID (N'dbo.GetAmazonReviews') IS NOT NULL
 	DROP FUNCTION dbo.GetAmazonReviews
 GO
 
-CREATE FUNCTION [dbo].[GetAmazonReviews]
+CREATE FUNCTION [dbo].[GetAmazonReviews]()
 RETURNS TABLE 
 AS
 RETURN 

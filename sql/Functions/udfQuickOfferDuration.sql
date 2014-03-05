@@ -2,7 +2,7 @@ IF OBJECT_ID (N'dbo.udfQuickOfferDuration') IS NOT NULL
 	DROP FUNCTION dbo.udfQuickOfferDuration
 GO
 
-CREATE FUNCTION [dbo].[udfQuickOfferDuration]
+CREATE FUNCTION [dbo].[udfQuickOfferDuration]()
 RETURNS INT
 AS
 BEGIN

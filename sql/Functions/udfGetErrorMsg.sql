@@ -2,7 +2,7 @@ IF OBJECT_ID (N'dbo.udfGetErrorMsg') IS NOT NULL
 	DROP FUNCTION dbo.udfGetErrorMsg
 GO
 
-CREATE FUNCTION [dbo].[udfGetErrorMsg]
+CREATE FUNCTION [dbo].[udfGetErrorMsg]()
 RETURNS NVARCHAR(1024)
 AS
 BEGIN

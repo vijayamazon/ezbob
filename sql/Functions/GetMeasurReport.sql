@@ -2,7 +2,7 @@ IF OBJECT_ID (N'dbo.GetMeasurReport') IS NOT NULL
 	DROP FUNCTION dbo.GetMeasurReport
 GO
 
-CREATE FUNCTION [dbo].[GetMeasurReport]
+CREATE FUNCTION [dbo].[GetMeasurReport]()
 RETURNS TABLE 
 AS
 RETURN 
