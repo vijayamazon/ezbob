@@ -3,7 +3,7 @@
 }
 
 <script type="text/template" id="landregistry-enquiry-results-template">
-    <div class="modal-header">Land Registry Enquiry Results</div>
+    
     <%if(this.model.rejection){ 
         print("Error occurred: ");
         print(this.model.rejection.Reason);
@@ -12,6 +12,7 @@
         print("this.model.ack.Description");
         print("this.model.ack.PollDate");
       } else{%>
+    <div class="modal-header">Land Registry Enquiry Results</div>
     <table class="table lr-enquiry-results">
         <thead class="box">
             <tr class="box-title">
