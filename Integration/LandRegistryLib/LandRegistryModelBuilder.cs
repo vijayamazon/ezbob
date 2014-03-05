@@ -48,19 +48,21 @@
 			var model = new LandRegistryEnquiryModel { Titles = new List<LandRegistryEnquiryTitle>() };
 			if (response.GatewayResponse.Acknowledgement != null)
 			{
+				var ack = response.GatewayResponse.Acknowledgement.AcknowledgementDetails;
 				model.Acknowledgement = new LandRegistryAcknowledgementModel
 				{
-					PollDate = response.GatewayResponse.Acknowledgement.AcknowledgementDetails.ExpectedResponseDateTime.Value,
-					Description = response.GatewayResponse.Acknowledgement.AcknowledgementDetails.MessageDescription.Value,
-					UniqueId = response.GatewayResponse.Acknowledgement.AcknowledgementDetails.UniqueID.Value
+					PollDate = ack.ExpectedResponseDateTime != null ? ack.ExpectedResponseDateTime.Value : new DateTime(1900,01,01),
+					Description = ack.MessageDescription != null ? ack.MessageDescription.Value : null,
+					UniqueId = ack.UniqueID != null ? ack.UniqueID.Value : null
 				};
 			}
 			else if (response.GatewayResponse.Rejection != null)
 			{
+				var rej = response.GatewayResponse.Rejection.RejectionResponse;
 				model.Rejection = new LandRegistryRejectionModel
 				{
-					Reason = response.GatewayResponse.Rejection.RejectionResponse.Reason.Value,
-					OtherDescription = response.GatewayResponse.Rejection.RejectionResponse.OtherDescription.Value
+					Reason = rej.Reason != null ? rej.Reason.Value : "Some error occurred",
+					OtherDescription = rej.OtherDescription != null ? rej.OtherDescription.Value : null
 				};
 			}
 			else
@@ -98,20 +100,22 @@
 			var model = new LandRegistryResModel();
 			if (response.GatewayResponse.Acknowledgement != null)
 			{
+				var ack = response.GatewayResponse.Acknowledgement.AcknowledgementDetails;
 				model.Acknowledgement = new LandRegistryAcknowledgementModel
 				{
-					PollDate = response.GatewayResponse.Acknowledgement.AcknowledgementDetails.ExpectedResponseDateTime.Value,
-					Description = response.GatewayResponse.Acknowledgement.AcknowledgementDetails.MessageDescription.Value,
-					UniqueId = response.GatewayResponse.Acknowledgement.AcknowledgementDetails.UniqueID.Value
+					PollDate = ack.ExpectedResponseDateTime != null ? ack.ExpectedResponseDateTime.Value : new DateTime(1900, 01, 01),
+					Description = ack.MessageDescription != null ? ack.MessageDescription.Value : null,
+					UniqueId = ack.UniqueID != null ? ack.UniqueID.Value : null
 				};
 			}
 			else if (response.GatewayResponse.Rejection != null)
 			{
+				var rej = response.GatewayResponse.Rejection.RejectionResponse;
 				model.Rejection = new LandRegistryRejectionModel
-					{
-						Reason = response.GatewayResponse.Rejection.RejectionResponse.Reason.Value,
-						OtherDescription = response.GatewayResponse.Rejection.RejectionResponse.OtherDescription.Value
-					};
+				{
+					Reason = rej.Reason != null ? rej.Reason.Value : "Some error occurred",
+					OtherDescription = rej.OtherDescription != null ? rej.OtherDescription.Value : null
+				};
 			}
 			else
 			{
