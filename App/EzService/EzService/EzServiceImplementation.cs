@@ -579,10 +579,10 @@
 		public BrokerCustomersActionResult BrokerLoadCustomerList(string sContactEmail) {
 			BrokerLoadCustomerList oIntstance;
 
-			ActionMetaData result = ExecuteSync(out oIntstance, null, null, sContactEmail);
+			ActionMetaData oResult = ExecuteSync(out oIntstance, null, null, sContactEmail);
 
 			return new BrokerCustomersActionResult {
-				MetaData = result,
+				MetaData = oResult,
 				Records = oIntstance.Result.Values.ToList(),
 			};
 		} // BrokerRestorePassword
@@ -590,13 +590,34 @@
 		public BrokerCustomerDetailsActionResult BrokerLoadCustomerDetails(int nCustomerID, string sContactEmail) {
 			BrokerLoadCustomerDetails oIntstance;
 
-			ActionMetaData result = ExecuteSync(out oIntstance, null, null, nCustomerID, sContactEmail);
+			ActionMetaData oResult = ExecuteSync(out oIntstance, nCustomerID, null, nCustomerID, sContactEmail);
 
 			return new BrokerCustomerDetailsActionResult {
-				MetaData = result,
+				MetaData = oResult,
 				Data = oIntstance.Result,
 			};
 		} // BrokerLoadCustomerDetails
+
+		public StringActionResult BrokerSaveCrmEntry(bool bIsIncoming, int nActionID, int nStatusID, string sComment, int nCustomerID, string sContactEmail) {
+			BrokerSaveCrmEntry oInstance;
+
+			ActionMetaData oResult = ExecuteSync(
+				out oInstance,
+				nCustomerID,
+				null,
+				bIsIncoming,
+				nActionID,
+				nStatusID,
+				sComment,
+				nCustomerID,
+				sContactEmail
+			);
+
+			return new StringActionResult {
+				MetaData = oResult,
+				Value = oInstance.ErrorMsg,
+			};
+		} // BrokerSaveCrmEntry
 
 		#endregion Broker
 

@@ -304,28 +304,31 @@
 
 		#endregion action CrmLoadLookups
 
-		#region action SaveCrmAction
+		#region action SaveCrmEntry
 
 		[HttpPost]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
-		public JsonResult SaveCrmAction(bool isIncoming, int action, int status, string comment, int customerId, string sContactEmail) {
+		public JsonResult SaveCrmEntry(bool isIncoming, int action, int status, string comment, int customerId, string sContactEmail) {
 			m_oLog.Debug(
 				"\nBroker saving CRM entry started:" +
 				"\n\tis incoming: {0}" +
 				"\n\taction: {1}" +
 				"\n\tstatus: {2}" +
 				"\n\tcustomer id: {3}" +
-				"\n\tcomment: {4}\n",
-				isIncoming, action, status, customerId, comment
+				"\n\tcontact email: {4}" +
+				"\n\tcomment: {5}\n",
+				isIncoming, action, status, customerId, sContactEmail, comment
 			);
 
 			JsonResult oIsAuthResult = IsAuth("Save CRM entry for customer " + customerId, sContactEmail);
 			if (oIsAuthResult != null)
 				return oIsAuthResult;
 
+			StringActionResult oResult = null;
+
 			try {
-				// m_oServiceClient.BrokerSaveCrmEntry(isIncoming, action, status, customerId, comment, sContactEmail);
+				oResult = m_oServiceClient.BrokerSaveCrmEntry(isIncoming, action, status, comment, customerId, sContactEmail);
 			}
 			catch (Exception e) {
 				m_oLog.Alert(e,
@@ -333,8 +336,9 @@
 					"\n\tis incoming: {0}" +
 					"\n\taction: {1}" +
 					"\n\tstatus: {2}" +
-					"\n\tcustomer id: {3}\n",
-					isIncoming, action, status, customerId
+					"\n\tcustomer id: {3}" +
+					"\n\tcontact email: {4}",
+					isIncoming, action, status, customerId, sContactEmail
 				);
 
 				return Json(new {
@@ -343,24 +347,26 @@
 				});
 			} // try
 
-			m_oLog.Debug("Broker loading CRM details complete.");
-
-			m_oLog.Alert(
-				"\nBroker saving CRM entry complete for:" +
+			m_oLog.Debug(
+				"\nBroker saving CRM entry {5} for:" +
 				"\n\tis incoming: {0}" +
 				"\n\taction: {1}" +
 				"\n\tstatus: {2}" +
-				"\n\tcustomer id: {3}\n",
-				isIncoming, action, status, customerId
+				"\n\tcustomer id: {3}" +
+				"\n\tcontact email: {4}\n" +
+				"\n\terror message: {6}\n",
+				isIncoming, action, status, customerId, sContactEmail,
+				string.IsNullOrWhiteSpace(oResult.Value) ? "complete" : "failed",
+				string.IsNullOrWhiteSpace(oResult.Value) ? "no error" : oResult.Value
 			);
 
 			return Json(new {
-				success = true,
-				error = string.Empty,
+				success = string.IsNullOrWhiteSpace(oResult.Value),
+				error = oResult.Value,
 			});
-		} // SaveCrmAction
+		} // SaveCrmEntry
 
-		#endregion action SaveCrmAction
+		#endregion action SaveCrmEntry
 
 		#endregion public
 

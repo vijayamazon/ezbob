@@ -919,6 +919,25 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="BrokerSaveCrmEntry">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="bIsIncoming" type="xs:boolean" />
+        <xs:element minOccurs="0" name="nActionID" type="xs:int" />
+        <xs:element minOccurs="0" name="nStatusID" type="xs:int" />
+        <xs:element minOccurs="0" name="sComment" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="nCustomerID" type="xs:int" />
+        <xs:element minOccurs="0" name="sContactEmail" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BrokerSaveCrmEntryResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q67="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="BrokerSaveCrmEntryResult" nillable="true" type="q67:StringActionResult" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="LandRegistryEnquiry">
     <xs:complexType>
       <xs:sequence>

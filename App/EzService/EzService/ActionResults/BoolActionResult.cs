@@ -4,8 +4,7 @@
 	#region class BoolActionResult
 
 	[DataContract]
-	public class BoolActionResult : ActionResult
-	{
+	public class BoolActionResult : ActionResult {
 		[DataMember]
 		public bool Value { get; set; }
 	} // class BoolActionResult

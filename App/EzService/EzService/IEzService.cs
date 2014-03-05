@@ -191,6 +191,9 @@ namespace EzService {
 		[OperationContract]
 		BrokerCustomerDetailsActionResult BrokerLoadCustomerDetails(int nCustomerID, string sContactEmail);
 
+		[OperationContract]
+		StringActionResult BrokerSaveCrmEntry(bool bIsIncoming, int nActionID, int nStatusID, string sComment, int nCustomerID, string sContactEmail);
+
 		#endregion Broker
 
 		#region Land Registry

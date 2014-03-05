@@ -141,16 +141,22 @@ namespace Integration.ChannelGrabberConfig {
 				Vendors[v.Name] = v;
 			});
 
-			var sb = new StringBuilder();
+			// You are welcome to add your machine name here.
 
-			sb.AppendFormat("\n****\n\n{0} vendors found:\n\n****\n", Vendors.Count);
+			if (System.Environment.MachineName.StartsWith("stasd"))
+				Debug("\n\n****\n\n{0} vendors found: {1}.\n\n****\n", Vendors.Count, string.Join(", ", Vendors.Keys));
+			else {
+				var sb = new StringBuilder();
 
-			//foreach (KeyValuePair<string, VendorInfo> pair in Vendors)
-			//	sb.AppendFormat("\n{0}\n", pair.Value.ToString());
+				sb.AppendFormat("\n\n****\n\n{0} vendors found: {1}.\n\n****\n", Vendors.Count, string.Join(", ", Vendors.Keys));
 
-			//sb.AppendFormat("\n****\n\nEnd of vendors list\n\n****\n\n", Vendors.Count);
+				foreach (KeyValuePair<string, VendorInfo> pair in Vendors)
+					sb.AppendFormat("\n{0}\n", pair.Value.ToString());
 
-			Debug(sb.ToString());
+				sb.AppendFormat("\n****\n\nEnd of vendors list\n\n****\n\n", Vendors.Count);
+
+				Debug(sb.ToString());
+			} // if
 
 			Debug("Parsing Channel Grabber connectors configuration complete.");
 		} // constructor

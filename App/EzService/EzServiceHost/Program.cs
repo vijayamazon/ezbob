@@ -1,33 +1,33 @@
-﻿using System;
-using System.Diagnostics;
-using System.IO;
-using System.Reflection;
-using System.Text;
-using System.Threading;
-using EKM;
-using EZBob.DatabaseLib.Model.Database;
-using EzBob.AmazonLib;
-using EzBob.PayPal;
-using EzBob.eBayLib;
-using EzService;
-using Ezbob.Database;
-using Ezbob.Logger;
-using FreeAgent;
-using Integration.ChannelGrabberFrontend;
-using NDesk.Options;
-using NHibernate;
-using PayPoint;
-using Sage;
-using Scorto.NHibernate;
-using Scorto.RegistryScanner;
-using StructureMap;
-using StructureMap.Pipeline;
-using YodleeLib.connector;
-using log4net;
-using Scorto.Configuration.Loader;
-using ISession = NHibernate.ISession;
-
-namespace EzServiceHost {
+﻿namespace EzServiceHost {
+	using System;
+	using System.Diagnostics;
+	using System.IO;
+	using System.Reflection;
+	using System.Text;
+	using System.Threading;
+	using EKM;
+	using EZBob.DatabaseLib.Model.Database;
+	using EzBob.AmazonLib;
+	using EzBob.PayPal;
+	using EzBob.eBayLib;
+	using EzService;
+	using Ezbob.Context;
+	using Ezbob.Database;
+	using Ezbob.Logger;
+	using FreeAgent;
+	using Integration.ChannelGrabberFrontend;
+	using NDesk.Options;
+	using NHibernate;
+	using PayPoint;
+	using Sage;
+	using Scorto.NHibernate;
+	using Scorto.RegistryScanner;
+	using StructureMap;
+	using StructureMap.Pipeline;
+	using YodleeLib.connector;
+	using log4net;
+	using Scorto.Configuration.Loader;
+	using ISession = NHibernate.ISession;
 	using EzBob.Configuration;
 	using EzServiceConfigurationLoader;
 	using ActionResult = Ezbob.Database.ActionResult;
@@ -98,12 +98,51 @@ namespace EzServiceHost {
 
 		private Program(string[] args) {
 			m_aryArgs = args;
+			m_oEnv = null;
+
+			try {
+				m_oEnv = new Ezbob.Context.Environment();
+			}
+			catch(Exception e) {
+				throw new NullReferenceException("Failed to determine current environment.", e);
+			} // try
+
+			string sErrorMailRecipient = "";
+
+			switch (m_oEnv.Name) {
+			case Name.Dev:
+				sErrorMailRecipient = m_oEnv.UserName;
+				break;
+
+			case Name.Qa:
+				sErrorMailRecipient = "qa";
+				break;
+
+			case Name.Integration:
+			case Name.Uat:
+				sErrorMailRecipient = "uatmail";
+				break;
+
+			case Name.Production:
+				sErrorMailRecipient = "ProdLogs";
+				break;
+
+			default:
+				throw new ArgumentOutOfRangeException("Unsupported environment name: " + m_oEnv.Name, (Exception)null);
+			} // switch
+
+			sErrorMailRecipient += "@ezbob.com";
+
+			log4net.GlobalContext.Properties["ErrorEmailRecipient"] = sErrorMailRecipient;
 
 			log4net.Config.XmlConfigurator.Configure();
 
 			m_oLog = new SafeILog(LogManager.GetLogger(typeof(EzServiceHost)));
 
 			NotifyStartStop("started");
+
+			m_oLog.Debug("Current environment: {0}", m_oEnv.Context);
+			m_oLog.Debug("Error emails will be sent to: {0}", sErrorMailRecipient);
 
 			EnvironmentConfigurationLoader.AppPathDummy = @"c:\ezbob\app\pluginweb\EzBob.Web\";
 
@@ -173,8 +212,7 @@ namespace EzServiceHost {
 		#region method Init
 
 		private bool Init() {
-			var env = new Ezbob.Context.Environment(m_oLog);
-			m_oDB = new SqlConnection(env, m_oLog);
+			m_oDB = new SqlConnection(m_oEnv, m_oLog);
 
 			if (m_oDB == null)
 				throw new Exception("Failed to create a DB connection.");
@@ -268,6 +306,7 @@ namespace EzServiceHost {
 		private Configuration m_oCfg;
 		private EzServiceHost m_oHost;
 
+		private readonly Ezbob.Context.Environment m_oEnv;
 		private readonly ASafeLog m_oLog;
 		private AConnection m_oDB;
 

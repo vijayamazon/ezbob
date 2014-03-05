@@ -66,6 +66,7 @@
     <Compile Include="ActionResults\BoolActionResult.cs" />
     <Compile Include="ActionResults\BrokerCustomersActionResult.cs" />
     <Compile Include="ActionResults\BrokerCustomerDetailsActionResult.cs" />
+    <Compile Include="ActionResults\StringActionResult.cs" />
     <Compile Include="ActionResults\CrmLookupsActionResult.cs" />
     <Compile Include="ActionResults\QuickOfferActionResult.cs" />
     <Compile Include="ActionResults\DecimalActionResult.cs" />

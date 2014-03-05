@@ -42,7 +42,7 @@ namespace Ezbob.Context {
 
 		public string Context {
 			get {
-				return (Variant ?? "").Trim() == string.Empty
+				return string.IsNullOrWhiteSpace(Variant)
 					? Name.ToString()
 					: string.Format("{0}-{1}", Name, Variant);
 			} // get

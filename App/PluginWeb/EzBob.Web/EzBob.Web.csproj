@@ -1417,6 +1417,9 @@
     <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.CrmLookupsActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
+    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.StringActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
     <None Include="Service References\EzServiceReference\FraudChecker.xsd">
       <SubType>Designer</SubType>
     </None>
