@@ -36,6 +36,10 @@
 		<!-- <MultiCopy CopyFrom="$(Src)\Tools\IncrementalUpdate\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\IncrementalUpdate\"/> -->
 
 		<MultiCopy CopyFrom="$(Src)\sql\current\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(Database)\sql\current\" />
+		<MultiCopy CopyFrom="$(Src)\sql\SPs\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(Database)\sql\SPs\" />
+		<MultiCopy CopyFrom="$(Src)\sql\Views\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(Database)\sql\Views\" />
+		<MultiCopy CopyFrom="$(Src)\sql\Triggers\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(Database)\sql\Triggers\" />
+		<MultiCopy CopyFrom="$(Src)\sql\Functions\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(Database)\sql\Functions\" />
 		<MultiCopy CopyFrom="$(Src)\sql\Bash\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(Database)\sql\Bash\" />
 		
 		<MultiCopy CopyFrom="$(Src)\Backend\StrategiesActivator\bin\debug\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ServicesFolder)\StrategiesActivator\" />
