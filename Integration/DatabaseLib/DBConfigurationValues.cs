@@ -25,6 +25,7 @@ namespace EZBob.DatabaseLib {
 		CompanyScoreNonLimitedParserConfiguration,
 		DirectorInfoNonLimitedParserConfiguration,
 		HmrcUploadedFilesSavePath,
+		CompanyFilesSavePath,
 	} // enum Variables
 
 	public enum ChannelGrabberRejectPolicy {
@@ -106,6 +107,7 @@ namespace EZBob.DatabaseLib {
 		public string RawCompanyScoreNonLimitedParserConfiguration { get { return this[Variables.CompanyScoreNonLimitedParserConfiguration]; } }
 		public string RawDirectorInfoNonLimitedParserConfiguration { get { return this[Variables.DirectorInfoNonLimitedParserConfiguration]; } }
 		public string RawHmrcUploadedFilesSavePath { get { return this[Variables.HmrcUploadedFilesSavePath]; } }
+		public string CompanyFilesSavePath { get { return this[Variables.CompanyFilesSavePath]; } }
 
 		#endregion raw properties
 

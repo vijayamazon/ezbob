@@ -46,8 +46,6 @@
     }
 
     CompanyFilesAccountInfoView.prototype.events = {
-      'change input': 'inputChanged',
-      'keyup input': 'inputChanged',
       'click a.hmrcBack': 'back',
       'click a.connect-account': 'connect'
     };
@@ -58,16 +56,29 @@
       return this.isOldInternetExplorer = 'Microsoft Internet Explorer' === navigator.appName && navigator.appVersion.indexOf("MSIE 1") === -1;
     };
 
+    CompanyFilesAccountInfoView.prototype.ui = {
+      companyFilesUploadZone: "#companyFilesUploadZone",
+      uploadButton: ".connect-account"
+    };
+
     CompanyFilesAccountInfoView.prototype.render = function() {
       var that;
       CompanyFilesAccountInfoView.__super__.render.call(this);
       that = this;
+      Dropzone.options.companyFilesUploadZone = {
+        init: function() {
+          return this.on("complete", function(file) {
+            var enabled;
+            if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
+              enabled = this.getAcceptedFiles() !== 0;
+              return that.ui.uploadButton.toggleClass('disabled', !enabled);
+            }
+          });
+        }
+      };
+      this.ui.companyFilesUploadZone.dropzone();
       return this;
     };
-
-    CompanyFilesAccountInfoView.prototype.inputChanged = function() {};
-
-    CompanyFilesAccountInfoView.prototype.uploadFiles = function() {};
 
     CompanyFilesAccountInfoView.prototype.back = function() {
       this.trigger('back');
@@ -80,7 +91,25 @@
     };
 
     CompanyFilesAccountInfoView.prototype.connect = function() {
-      this.inputChanged();
+      var that, xhr;
+      if (this.ui.uploadButton.hasClass('disabled')) {
+        return false;
+      }
+      that = this;
+      BlockUi('on');
+      xhr = $.post(window.gRootPath + "CompanyFilesMarketPlaces/Connect", {
+        customerId: this.customerId
+      });
+      xhr.done(function(res) {
+        if (res.error !== void 0) {
+          return EzBob.App.trigger('error', 'Failed to upload company files');
+        } else {
+          return EzBob.App.trigger('info', 'Company files uploaded successfully');
+        }
+      });
+      xhr.always(function() {
+        return BlockUi('off');
+      });
       this.trigger('completed');
       this.trigger('back');
       return false;

@@ -445,7 +445,7 @@ class EzBob.StoreInfoView extends Backbone.View
     setDocumentTitle: (view) ->
         title = view.getDocumentTitle()
         if title
-            $(document).attr "title", "Step 2: #{title} | EZBOB"
+            $(document).attr "title", "Step 4: #{title} | EZBOB"
 
     close: ->
         this

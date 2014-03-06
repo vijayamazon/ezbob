@@ -1,14 +1,19 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers
 {
 	using System;
+	using System.IO;
 	using System.Linq;
+	using System.Web;
 	using System.Web.Mvc;
 	using ApplicationMng.Repository;
+	using Code;
 	using CompanyFiles;
+	using EZBob.DatabaseLib.Common;
+	using EZBob.DatabaseLib.DatabaseWrapper;
 	using EZBob.DatabaseLib.Model.Database;
+	using EzServiceReference;
 	using Infrastructure;
 	using Scorto.Web;
-	using Code.MpUniq;
 	using log4net;
 	using NHibernate;
 	using System.Data;
@@ -20,23 +25,22 @@
 		private readonly IEzbobWorkplaceContext _context;
 		private readonly IRepository<MP_MarketplaceType> _mpTypes;
 		private readonly Customer _customer;
-		private readonly IMPUniqChecker _mpChecker;
 		private readonly ISession _session;
 		private readonly DatabaseDataHelper _helper;
+		private readonly EzServiceClient m_oServiceClient;
 
 		public CompanyFilesMarketPlacesController(
 			IEzbobWorkplaceContext context,
 			DatabaseDataHelper helper,
 			IRepository<MP_MarketplaceType> mpTypes,
-			IMPUniqChecker mpChecker,
 			ISession session)
 		{
 			_context = context;
 			_mpTypes = mpTypes;
 			_customer = context.Customer;
-			_mpChecker = mpChecker;
 			_session = session;
 			_helper = helper;
+			m_oServiceClient = ServiceClient.Instance;
 		}
 
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
@@ -51,6 +55,93 @@
 				.ToList();
 			return this.JsonNet(companyFiles);
 		}
+
+		[HttpPost]
+		public System.Web.Mvc.ActionResult UploadedFiles()
+		{
+			Response.AddHeader("x-frame-options", "SAMEORIGIN");
+
+			int nCustomerID = 0;
+
+			try
+			{
+				nCustomerID = _context.Customer.Id;
+			}
+			catch (Exception e)
+			{
+				Log.Warn("Failed to fetch current customer, files will be saved without customer ID; exception: ", e);
+			} // try
+
+			for (int i = 0; i < Request.Files.Count; ++i)
+			{
+				HttpPostedFileBase file = Request.Files[i];
+				SaveToDisc(nCustomerID, file);
+			}
+			return Json(new { });
+		} // UploadedFiles
+
+		[HttpPost]
+		public System.Web.Mvc.ActionResult Connect()
+		{
+			try
+			{
+				var serviceInfo = new CompanyFilesServiceInfo();
+				var name = serviceInfo.DisplayName;
+				var cf = new CompanyFilesDatabaseMarketPlace();
+				var mp = _helper.SaveOrUpdateCustomerMarketplace(name, cf, null, _context.Customer);
+
+				_session.Flush();
+				m_oServiceClient.UpdateMarketplace(_context.Customer.Id, mp.Id, true);
+
+			}
+			catch (Exception e)
+			{
+				Log.Error(e);
+			} // try
+
+			return Json(new { });
+		}
+
+		private void SaveToDisc(int nCustomerID, HttpPostedFileBase file)
+		{
+			try
+			{
+				Log.DebugFormat("Saving file {0} to disc...", file.FileName);
+
+				string sPath = DBConfigurationValues.Instance.CompanyFilesSavePath;
+				DirectoryInfo customerDirectory = null;
+				if (string.IsNullOrWhiteSpace(sPath))
+					Log.Debug("Not saving: operation is disabled (CompanyFilesSavePath is empty).");
+				else
+				{
+					try
+					{
+						var mainDirectory = Directory.CreateDirectory(sPath);
+						customerDirectory = mainDirectory.CreateSubdirectory(nCustomerID.ToString());
+					}
+					catch (Exception e)
+					{
+						Log.Warn("Error while creating directory: ", e);
+					} // try
+
+					if (customerDirectory != null)
+					{
+						string sFileName = Path.Combine(customerDirectory.FullName, Guid.NewGuid().ToString("N") + "." + nCustomerID + "." + file.FileName);
+
+						Log.DebugFormat("Saving file {0} as {1}...", file.FileName, sFileName);
+
+						file.SaveAs(sFileName);
+					}
+
+				} // if
+
+				Log.DebugFormat("Saving file {0} to disc complete.", file.FileName);
+			}
+			catch (Exception e)
+			{
+				Log.Error("Error saving file '" + file.FileName + "' to disc: ", e);
+			} // try
+		} // SaveToDisc
 
 		//[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		//[Ajax]
@@ -101,5 +192,11 @@
 		//		return this.JsonNet(new { error = e.Message });
 		//	}
 		//}
+
+		private JsonResult CreateError(string sErrorMsg)
+		{
+			return Json(new { error = sErrorMsg });
+		} // CreateError
+
 	}
 }
