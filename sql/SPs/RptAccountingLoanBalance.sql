@@ -18,12 +18,14 @@ BEGIN
 	c.Name AS ClientEmail,
 	la.Amount AS IssuedAmount,
 	la.Fees AS SetupFee,
-	ISNULL(SUM(lc.Amount), 0) AS FeesEarned,
+	ISNULL(lc.Amount, 0) AS FeesEarned,
 	l.Status AS LoanStatus,
 	lm.Name AS LoanTranMethod,
-	ISNULL(SUM(ISNULL(t.Amount, 0)), 0) AS TotalRepaid,
-	ISNULL(SUM(ISNULL(t.Fees, 0)), 0) AS FeesRepaid,
-	ISNULL(SUM(ISNULL(t.Rollover, 0)), 0) AS RolloverRepaid
+	ISNULL(t.Amount, 0) AS TotalRepaid,
+	ISNULL(t.Fees, 0) AS FeesRepaid,
+	ISNULL(t.Rollover, 0) AS RolloverRepaid,
+	lc.Id AS FeesEarnedID,
+	t.Id AS TransactionID
 FROM
 	Loan l
 	INNER JOIN Customer c ON l.CustomerID = c.Id
@@ -41,17 +43,9 @@ FROM
 		AND lc.Date < @DateEnd
 	LEFT JOIN LoanTransactionMethod lm
 		ON t.LoanTransactionMethodId = lm.Id
-GROUP BY
-	l.Date,
-	c.Id,
-	l.Id,
-	c.Fullname,
-	c.Name,
-	la.Amount,
-	la.Fees,
-	l.Status,
-	lm.Name
 ORDER BY
-	l.Id
+	l.Id,
+	lc.Id,
+	t.Id
 END
 GO
