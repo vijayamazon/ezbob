@@ -455,6 +455,12 @@ div.shop-connected {
         background-position: left center;
     }
 
+    .source_labels_on.companyfiles {
+        background: url(images/accounts/CompanyFiles.png) no-repeat 0 0;
+        background-size: contain;
+        background-position: left center;
+    }
+    
 
 .hmrc-or {
     padding-bottom: 30px;

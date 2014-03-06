@@ -145,6 +145,7 @@
     <Compile Include="Model\Marketplaces\ChannelGrabber\MP_VatReturnEntry.cs" />
     <Compile Include="Model\Marketplaces\ChannelGrabber\MP_VatReturnEntryNameMap.cs" />
     <Compile Include="Model\Marketplaces\ChannelGrabber\MP_VatReturnEntryName.cs" />
+    <Compile Include="Model\Marketplaces\MP_CompanyFiles.cs" />
     <Compile Include="Model\Marketplaces\MP_MarketplaceGroup.cs" />
     <Compile Include="Model\Marketplaces\PayPal\MP_PayPalTransactionItem2.cs" />
     <Compile Include="Model\Marketplaces\PayPal\MP_PayPalTransactionItem2Map.cs" />

@@ -53,6 +53,9 @@ using System;
 
 		public SageModel Sage { get; set; }
 
+		//Company Files
+		public CompanyFilesModel CompanyFiles { get; set; }
+		
 		public int UWPriority { get; set; }
 
 		public bool Disabled { get; set; }

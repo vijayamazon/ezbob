@@ -625,6 +625,7 @@
     <Content Include="Content\img\customer-sidebar\email.png" />
     <Content Include="Content\img\customer-sidebar\fast.png" />
     <Content Include="Areas\Customer\Views\Shared\Shops\CompanyFilesAccountInfoTemplate.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\MarketPlaceDetails\CompanyFiles.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />

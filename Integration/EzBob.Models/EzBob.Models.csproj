@@ -103,6 +103,7 @@
     <Compile Include="Marketplaces\Builders\FreeAgentMarketplaceModelBuilder.cs" />
     <Compile Include="Marketplaces\Builders\EBayMarketplaceModelBuilder.cs" />
     <Compile Include="Marketplaces\ChannelGrabberHmrcData.cs" />
+    <Compile Include="Marketplaces\CompanyFilesModel.cs" />
     <Compile Include="Marketplaces\IChannelGrabberData.cs" />
     <Compile Include="Marketplaces\MarketPlaceHistoryModel.cs" />
     <Compile Include="Marketplaces\SageModel.cs" />
