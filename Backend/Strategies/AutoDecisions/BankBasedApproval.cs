@@ -115,7 +115,16 @@
 			string firstName = sr["FirstName"];
 			string surame = sr["Surame"];
 			string companyData = sr["CompanyData"];
-			amlScore = experianUtils.DetectAml(amlData);
+
+			if (string.IsNullOrWhiteSpace(amlData))
+			{
+				log.Debug("AML data not set.");
+			}
+			else
+			{
+				amlScore = experianUtils.DetectAml(amlData);
+			}
+
 			if (!string.IsNullOrEmpty(companyData))
 			{
 				decimal totalCurrentAssets;
