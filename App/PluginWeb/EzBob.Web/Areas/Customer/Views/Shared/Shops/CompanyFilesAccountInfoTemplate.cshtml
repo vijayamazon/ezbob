@@ -4,12 +4,13 @@
         <div class="wizard-top-notification">
             <h2 class="form_start">Please upload company files</h2>
         </div>
-        <form id="companyFilesUploadZone" class="dropzone" action="@Url.Action("UploadedFiles", "CompanyFilesMarketPlaces", new { Area = "Customer" })" ui-event-control-id="companyFiles:dropzone"></form>
-        <div class="form_buttons_container">
-            <div class="attardi-button">
-                <a href="#" class="rc-button green disabled connect-account" ui-event-control-id="link-account:company_files">Upload files</a>
-                <a href="#" class="back rc-button grey" ui-event-control-id="link-account:company_files_back">Back</a>
-            </div>
+        <form id="companyFilesUploadZone" class="dropzone" action="@Url.Action("UploadedFiles", "CompanyFilesMarketPlaces", new { Area = "Customer" })" ui-event-control-id="companyFiles:dropzone">
+            <div class="dz-message dz-default"></div>
+        </form>
+        
+        <div class="attardi-button" style="padding-top: 10px;">
+            <a href="#" class="rc-button green disabled connect-account pull-right" ui-event-control-id="link-account:company_files">Upload files</a>
+            <a href="#" class="back rc-button grey pull-right" ui-event-control-id="link-account:company_files_back">Back</a>
         </div>
     </div>
 </script>

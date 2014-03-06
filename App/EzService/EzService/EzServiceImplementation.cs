@@ -633,10 +633,25 @@
 			LandRegistryRes oInstance;
 			ActionMetaData result = ExecuteSync<LandRegistryRes>(out oInstance, customerId, null, customerId, titleNumber);
 			return oInstance.Result;
-		} // LandRegistryRes
+		}// LandRegistryRes
 
 		#endregion Land Registry
 
+		#region Company Files
+
+		public ActionMetaData CompanyFilesUpload(int customerId, string fileName, byte[] fileContext)
+		{
+			return Execute(customerId, null, typeof(SaveCompanyFile), customerId, fileName, fileContext);
+		}
+
+		public byte[] GetCompanyFile(int companyFileId)
+		{
+			GetCompanyFile oInstance;
+			ActionMetaData result = ExecuteSync<GetCompanyFile>(out oInstance, null, null, companyFileId);
+			return oInstance.FileContext;
+		}
+
+		#endregion 
 		#endregion IEzService exposed methods
 
 		#region method IDisposable.Dispose

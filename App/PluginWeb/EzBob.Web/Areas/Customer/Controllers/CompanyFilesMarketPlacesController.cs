@@ -61,21 +61,22 @@
 		{
 			Response.AddHeader("x-frame-options", "SAMEORIGIN");
 
-			int nCustomerID = 0;
-
-			try
-			{
-				nCustomerID = _context.Customer.Id;
-			}
-			catch (Exception e)
-			{
-				Log.Warn("Failed to fetch current customer, files will be saved without customer ID; exception: ", e);
-			} // try
-
 			for (int i = 0; i < Request.Files.Count; ++i)
 			{
 				HttpPostedFileBase file = Request.Files[i];
-				SaveToDisc(nCustomerID, file);
+				if (file != null)
+				{
+					var content = new byte[file.ContentLength];
+
+					int nRead = file.InputStream.Read(content, 0, file.ContentLength);
+
+					if (nRead != file.ContentLength)
+					{
+						Log.WarnFormat("File {0}: failed to read entire file contents, ignoring.", i);
+						continue;
+					} // if
+					ServiceClient.Instance.CompanyFilesUpload(_context.Customer.Id, file.FileName, content);
+				}
 			}
 			return Json(new { });
 		} // UploadedFiles
@@ -102,46 +103,7 @@
 			return Json(new { });
 		}
 
-		private void SaveToDisc(int nCustomerID, HttpPostedFileBase file)
-		{
-			try
-			{
-				Log.DebugFormat("Saving file {0} to disc...", file.FileName);
 
-				string sPath = DBConfigurationValues.Instance.CompanyFilesSavePath;
-				DirectoryInfo customerDirectory = null;
-				if (string.IsNullOrWhiteSpace(sPath))
-					Log.Debug("Not saving: operation is disabled (CompanyFilesSavePath is empty).");
-				else
-				{
-					try
-					{
-						var mainDirectory = Directory.CreateDirectory(sPath);
-						customerDirectory = mainDirectory.CreateSubdirectory(nCustomerID.ToString());
-					}
-					catch (Exception e)
-					{
-						Log.Warn("Error while creating directory: ", e);
-					} // try
-
-					if (customerDirectory != null)
-					{
-						string sFileName = Path.Combine(customerDirectory.FullName, Guid.NewGuid().ToString("N") + "." + nCustomerID + "." + file.FileName);
-
-						Log.DebugFormat("Saving file {0} as {1}...", file.FileName, sFileName);
-
-						file.SaveAs(sFileName);
-					}
-
-				} // if
-
-				Log.DebugFormat("Saving file {0} to disc complete.", file.FileName);
-			}
-			catch (Exception e)
-			{
-				Log.Error("Error saving file '" + file.FileName + "' to disc: ", e);
-			} // try
-		} // SaveToDisc
 
 		//[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		//[Ajax]

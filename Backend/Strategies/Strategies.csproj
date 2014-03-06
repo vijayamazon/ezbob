@@ -83,6 +83,7 @@
     <Compile Include="Broker\BrokerIsBroker.cs" />
     <Compile Include="Broker\BrokerLoadCustomerDetails.cs" />
     <Compile Include="Broker\BrokerSaveCrmEntry.cs" />
+    <Compile Include="CompanyFiles.cs" />
     <Compile Include="CrmLoadLookups.cs" />
     <Compile Include="LandRegistry.cs" />
     <Compile Include="Broker\BrokerLoadCustomerList.cs" />

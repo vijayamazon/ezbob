@@ -53,7 +53,8 @@
     CompanyFilesAccountInfoView.prototype.initialize = function(options) {
       this.accountType = 'CompanyFiles';
       this.template = '#' + this.accountType + 'AccountInfoTemplate';
-      return this.isOldInternetExplorer = 'Microsoft Internet Explorer' === navigator.appName && navigator.appVersion.indexOf("MSIE 1") === -1;
+      this.isOldInternetExplorer = 'Microsoft Internet Explorer' === navigator.appName && navigator.appVersion.indexOf("MSIE 1") === -1;
+      return this.Dropzone = null;
     };
 
     CompanyFilesAccountInfoView.prototype.ui = {
@@ -65,18 +66,7 @@
       var that;
       CompanyFilesAccountInfoView.__super__.render.call(this);
       that = this;
-      Dropzone.options.companyFilesUploadZone = {
-        init: function() {
-          return this.on("complete", function(file) {
-            var enabled;
-            if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
-              enabled = this.getAcceptedFiles() !== 0;
-              return that.ui.uploadButton.toggleClass('disabled', !enabled);
-            }
-          });
-        }
-      };
-      this.ui.companyFilesUploadZone.dropzone();
+      this.initDropzone();
       return this;
     };
 
@@ -88,6 +78,50 @@
     CompanyFilesAccountInfoView.prototype.getDocumentTitle = function() {
       EzBob.App.trigger('clear');
       return 'Upload Company Files';
+    };
+
+    CompanyFilesAccountInfoView.prototype.initDropzone = function() {
+      var self;
+      this.clearDropzone();
+      Dropzone.options.customerFilesUploader = false;
+      self = this;
+      return this.Dropzone = new Dropzone(self.ui.companyFilesUploadZone[0], {
+        init: function() {
+          var oDropzone;
+          oDropzone = this;
+          ({
+            maxFilesize: 10,
+            maxFiles: 10,
+            dictFileTooBig: "File is too big, max file size is 10MB"
+          });
+          oDropzone.on("success", function(oFile, oResponse) {
+            var enabled;
+            if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
+              enabled = this.getAcceptedFiles() !== 0;
+              self.ui.uploadButton.toggleClass('disabled', !enabled);
+            }
+            if (oResponse.success) {
+              EzBob.App.trigger("info", "Upload successful: " + oFile.name);
+            } else if (oResponse.error) {
+              EzBob.App.trigger("error", oResponse.error);
+            }
+          });
+          oDropzone.on("error", function(oFile, sErrorMsg, oXhr) {
+            EzBob.App.trigger("error", "Error uploading " + oFile.name);
+            oDropzone.removeFile(oFile);
+          });
+          return oDropzone.on("maxfilesexceeded", function(o) {
+            EzBob.App.trigger("error", "You can upload up to 10 files");
+          });
+        }
+      });
+    };
+
+    CompanyFilesAccountInfoView.prototype.clearDropzone = function() {
+      if (this.Dropzone) {
+        this.Dropzone.destroy();
+        return this.Dropzone = null;
+      }
     };
 
     CompanyFilesAccountInfoView.prototype.connect = function() {

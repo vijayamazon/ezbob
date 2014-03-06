@@ -203,8 +203,19 @@ namespace EzService {
 		
 		[OperationContract]
 		string LandRegistryRes(int customerId, string titleNumber);
-
+		
 		#endregion Land Registry
+
+		#region Company Files
+
+		[OperationContract]
+		ActionMetaData CompanyFilesUpload(int customerId, string fileName, byte[] fileContext);
+
+		[OperationContract]
+		byte[] GetCompanyFile(int companyFileId);
+
+		#endregion
+
 	} // interface IEzService
 } // namespace EzService
 

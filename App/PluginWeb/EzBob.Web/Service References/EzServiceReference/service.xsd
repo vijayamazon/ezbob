@@ -971,4 +971,34 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="CompanyFilesUpload">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="customerId" type="xs:int" />
+        <xs:element minOccurs="0" name="fileName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="fileContext" nillable="true" type="xs:base64Binary" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CompanyFilesUploadResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q68="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="CompanyFilesUploadResult" nillable="true" type="q68:ActionMetaData" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetCompanyFile">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="companyFileId" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetCompanyFileResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="GetCompanyFileResult" nillable="true" type="xs:base64Binary" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
 </xs:schema>
