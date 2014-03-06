@@ -20,6 +20,7 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 
 		evt['click .back-to-list'] = 'backToList';
 		evt['click .add-crm-note'] = 'addCrmNote';
+		evt['click .download-customer-file'] = 'downloadCustomerFile';
 
 		return evt;
 	}, // events
@@ -137,6 +138,19 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 
 				opts.aaData = oResponse.file_list;
 
+				opts.aoColumns[0].mRender = function(oData, sAction, oFullSource) {
+					switch (sAction) {
+					case 'display':
+						return '<a href="#" class=download-customer-file data-file-id=' + oFullSource.FileID + '>' + (oFullSource.FileDescription || oData) + '</a>';
+
+					case 'filter':
+						return (oFullSource.FileDescription || '') + ' ' + oData;
+
+					default:
+						return oData;
+					} // switch
+				}; // fnRowCallback
+
 				self.FileTable = self.$el.find('.customer-file-list').dataTable(opts);
 			} // on success loading customer details
 		);
@@ -181,6 +195,7 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 		event.preventDefault();
 		event.stopPropagation();
 
+		this.clear();
 		location.assign('#dashboard');
 
 		return false;
@@ -217,10 +232,11 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 
 		this.Dropzone = new Dropzone(this.$el.find('#customerFilesUploader').addClass('dropzone dz-clickable')[0], {
 			url: window.gRootPath + 'Broker/BrokerHome/HandleUploadFile',
-			parallelUploads: 1,
-			uploadMultiple: false,
-			acceptedFiles: 'image/*,application/pdf,.doc,.docx,.odt,.ppt,.pptx,.odp,.xls,.xlsx,.ods',
+			parallelUploads: 4,
+			uploadMultiple: true,
+			acceptedFiles: 'image/*,application/pdf,.doc,.docx,.odt,.ppt,.pptx,.odp,.xls,.xlsx,.ods,.txt',
 			autoProcessQueue: true,
+			maxFilesize: 10,
 			headers: {
 				'ezbob-broker-contact-email': self.router.getAuth(),
 				'ezbob-broker-customer-id': self.CustomerID,
@@ -252,4 +268,16 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 			}, // init
 		});
 	}, // initDropzone
+
+	downloadCustomerFile: function(event) {
+		event.preventDefault();
+		event.stopPropagation();
+
+		window.open(
+			window.gRootPath + 'Broker/BrokerHome/DownloadCustomerFile' +
+			'?nCustomerID=' + this.CustomerID +
+			'&sContactEmail=' + encodeURIComponent(this.router.getAuth()) +
+			'&nFileID=' + encodeURIComponent($(event.currentTarget).attr('data-file-id'))
+		);
+	}, // downloadCustomerFile
 }); // EzBob.Broker.SubmitView

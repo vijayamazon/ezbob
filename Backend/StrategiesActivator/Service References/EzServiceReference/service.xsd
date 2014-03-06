@@ -938,6 +938,54 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="BrokerLoadCustomerFiles">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="nCustomerID" type="xs:int" />
+        <xs:element minOccurs="0" name="sContactEmail" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BrokerLoadCustomerFilesResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q68="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="BrokerLoadCustomerFilesResult" nillable="true" type="q68:BrokerCustomerFilesActionResult" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BrokerDownloadCustomerFile">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="nCustomerID" type="xs:int" />
+        <xs:element minOccurs="0" name="sContactEmail" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="nFileID" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BrokerDownloadCustomerFileResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q69="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="BrokerDownloadCustomerFileResult" nillable="true" type="q69:BrokerCustomerFileContentsActionResult" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BrokerSaveUploadedCustomerFile">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="nCustomerID" type="xs:int" />
+        <xs:element minOccurs="0" name="sContactEmail" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="oFileContents" nillable="true" type="xs:base64Binary" />
+        <xs:element minOccurs="0" name="sFileName" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="BrokerSaveUploadedCustomerFileResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q70="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="BrokerSaveUploadedCustomerFileResult" nillable="true" type="q70:ActionMetaData" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="LandRegistryEnquiry">
     <xs:complexType>
       <xs:sequence>

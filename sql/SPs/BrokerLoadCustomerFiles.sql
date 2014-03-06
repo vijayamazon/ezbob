@@ -1,0 +1,39 @@
+IF OBJECT_ID('BrokerLoadCustomerFiles') IS NULL
+	EXECUTE('CREATE PROCEDURE BrokerLoadCustomerFiles AS SELECT 1')
+GO
+
+ALTER PROCEDURE BrokerLoadCustomerFiles
+@CustomerID INT,
+@ContactEmail NVARCHAR(255)
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	DECLARE @UserID INT
+	DECLARE @BrokerID INT
+
+	SELECT
+		@BrokerID = b.BrokerID,
+		@UserID = b.UserID
+	FROM
+		Broker b
+	WHERE
+		b.ContactEmail = @ContactEmail
+
+	SELECT
+		d.Id AS FileID,
+		d.DocName AS FileName,
+		d.UploadDate,
+		d.Description AS FileDescription
+	FROM
+		MP_AlertDocument d
+		INNER JOIN Customer c
+			ON d.CustomerId = c.Id
+			AND c.Id = @CustomerID
+			AND c.BrokerID = @BrokerID
+	WHERE
+		d.UserId = @UserID
+	ORDER BY
+		d.Description
+END
+GO

@@ -47,6 +47,7 @@
     <Compile Include="Extensions\DecimalExt.cs" />
     <Compile Include="Gravatar.cs" />
     <Compile Include="JsonUtils\JsonExtensions.cs" />
+    <Compile Include="MimeTypeResolver.cs" />
     <Compile Include="ObjList.cs" />
     <Compile Include="ParsedValue\ParsedValue.cs" />
     <Compile Include="ParsedValue\SafeParser.cs" />

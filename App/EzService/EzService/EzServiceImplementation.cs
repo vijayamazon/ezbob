@@ -468,8 +468,7 @@
 			return Execute(null, null, typeof(UpdateCurrencyRates));
 		} // UpdateCurrencyRates
 
-		public ActionMetaData FinishWizard(int customerId)
-		{
+		public ActionMetaData FinishWizard(int customerId) {
 			return Execute(customerId, null, typeof(FinishWizard), customerId);
 		} // FinishWizard
 
@@ -531,6 +530,8 @@
 
 		#region Broker
 
+		#region method IsBroker
+
 		public BoolActionResult IsBroker(string sContactEmail) {
 			BrokerIsBroker oInstance;
 
@@ -541,6 +542,10 @@
 				Value = oInstance.IsBroker,
 			};
 		} // IsBroker
+
+		#endregion method IsBroker
+
+		#region method BrokerSignup
 
 		public ActionMetaData BrokerSignup(
 			string FirmName,
@@ -568,13 +573,25 @@
 			);
 		} // BrokerSignup
 
+		#endregion method BrokerSignup
+
+		#region method BrokerLogin
+
 		public ActionMetaData BrokerLogin(string Email, string Password) {
 			return ExecuteSync<BrokerLogin>(null, null, Email, Password);
 		} // BrokerLogin
 
+		#endregion method BrokerLogin
+
+		#region method BrokerRestorePassword
+
 		public ActionMetaData BrokerRestorePassword(string sMobile, string sCode) {
 			return ExecuteSync<BrokerRestorePassword>(null, null, sMobile, sCode);
 		} // BrokerRestorePassword
+
+		#endregion method BrokerRestorePassword
+
+		#region method BrokerLoadCustomerList
 
 		public BrokerCustomersActionResult BrokerLoadCustomerList(string sContactEmail) {
 			BrokerLoadCustomerList oIntstance;
@@ -587,6 +604,10 @@
 			};
 		} // BrokerRestorePassword
 
+		#endregion method BrokerLoadCustomerList
+
+		#region method BrokerLoadCustomerDetails
+
 		public BrokerCustomerDetailsActionResult BrokerLoadCustomerDetails(int nCustomerID, string sContactEmail) {
 			BrokerLoadCustomerDetails oIntstance;
 
@@ -597,6 +618,10 @@
 				Data = oIntstance.Result,
 			};
 		} // BrokerLoadCustomerDetails
+
+		#endregion method BrokerLoadCustomerDetails
+
+		#region method BrokerSaveCrmEntry
 
 		public StringActionResult BrokerSaveCrmEntry(bool bIsIncoming, int nActionID, int nStatusID, string sComment, int nCustomerID, string sContactEmail) {
 			BrokerSaveCrmEntry oInstance;
@@ -618,6 +643,60 @@
 				Value = oInstance.ErrorMsg,
 			};
 		} // BrokerSaveCrmEntry
+
+		#endregion method BrokerSaveCrmEntry
+
+		#region method BrokerLoadCustomerFiles
+
+		public BrokerCustomerFilesActionResult BrokerLoadCustomerFiles(int nCustomerID, string sContactEmail) {
+			BrokerLoadCustomerFiles oInstance;
+
+			ActionMetaData oResult = ExecuteSync(
+				out oInstance,
+				nCustomerID,
+				null,
+				nCustomerID,
+				sContactEmail
+			);
+
+			return new BrokerCustomerFilesActionResult {
+				MetaData = oResult,
+				Files = oInstance.Files,
+			};
+		} // BrokerLoadCustomerFiles
+
+		#endregion method BrokerLoadCustomerFiles
+
+		#region method BrokerDownloadCustomerFile
+
+		public BrokerCustomerFileContentsActionResult BrokerDownloadCustomerFile(int nCustomerID, string sContactEmail, int nFileID) {
+			BrokerDownloadCustomerFile oInstance;
+
+			ActionMetaData oResult = ExecuteSync(
+				out oInstance,
+				nCustomerID,
+				null,
+				nCustomerID,
+				sContactEmail,
+				nFileID
+			);
+
+			return new BrokerCustomerFileContentsActionResult {
+				MetaData = oResult,
+				Name = oInstance.FileName,
+				Contents = oInstance.Contents,
+			};
+		} // BrokerLoadCustomerFiles
+
+		#endregion method BrokerDownloadCustomerFile
+
+		#region method BrokerSaveUploadedCustomerFile
+
+		public ActionMetaData BrokerSaveUploadedCustomerFile(int nCustomerID, string sContactEmail, byte[] oFileContents, string sFileName) {
+			return ExecuteSync<BrokerSaveUploadedCustomerFile>(nCustomerID, null, nCustomerID, sContactEmail, oFileContents, sFileName);
+		} // BrokerSaveUploadedCustomerFile
+
+		#endregion method BrokerSaveUploadedCustomerFile
 
 		#endregion Broker
 

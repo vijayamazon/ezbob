@@ -191,6 +191,8 @@ namespace StrategiesActivator.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.BrokerCustomersActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.BrokerCustomerDetailsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.StringActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.BrokerCustomerFilesActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.BrokerCustomerFileContentsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.StringListActionResult))]
     public partial class ActionResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
@@ -437,6 +439,68 @@ namespace StrategiesActivator.EzServiceReference {
                 if ((object.ReferenceEquals(this.ValueField, value) != true)) {
                     this.ValueField = value;
                     this.RaisePropertyChanged("Value");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="BrokerCustomerFilesActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class BrokerCustomerFilesActionResult : StrategiesActivator.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private StrategiesActivator.EzServiceReference.BrokerCustomerFile[] FilesField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public StrategiesActivator.EzServiceReference.BrokerCustomerFile[] Files {
+            get {
+                return this.FilesField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.FilesField, value) != true)) {
+                    this.FilesField = value;
+                    this.RaisePropertyChanged("Files");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="BrokerCustomerFileContentsActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class BrokerCustomerFileContentsActionResult : StrategiesActivator.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private byte[] ContentsField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string NameField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public byte[] Contents {
+            get {
+                return this.ContentsField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ContentsField, value) != true)) {
+                    this.ContentsField = value;
+                    this.RaisePropertyChanged("Contents");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Name {
+            get {
+                return this.NameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.NameField, value) != true)) {
+                    this.NameField = value;
+                    this.RaisePropertyChanged("Name");
                 }
             }
         }
@@ -1250,6 +1314,99 @@ namespace StrategiesActivator.EzServiceReference {
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="BrokerCustomerFile", Namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models")]
+    [System.SerializableAttribute()]
+    public partial class BrokerCustomerFile : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string FileDescriptionField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int FileIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string FileNameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.DateTime UploadDateField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string FileDescription {
+            get {
+                return this.FileDescriptionField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.FileDescriptionField, value) != true)) {
+                    this.FileDescriptionField = value;
+                    this.RaisePropertyChanged("FileDescription");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int FileID {
+            get {
+                return this.FileIDField;
+            }
+            set {
+                if ((this.FileIDField.Equals(value) != true)) {
+                    this.FileIDField = value;
+                    this.RaisePropertyChanged("FileID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string FileName {
+            get {
+                return this.FileNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.FileNameField, value) != true)) {
+                    this.FileNameField = value;
+                    this.RaisePropertyChanged("FileName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime UploadDate {
+            get {
+                return this.UploadDateField;
+            }
+            set {
+                if ((this.UploadDateField.Equals(value) != true)) {
+                    this.UploadDateField = value;
+                    this.RaisePropertyChanged("UploadDate");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="FraudMode", Namespace="http://schemas.datacontract.org/2004/07/FraudChecker")]
     public enum FraudMode : int {
@@ -1732,6 +1889,24 @@ namespace StrategiesActivator.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerSaveCrmEntry", ReplyAction="http://tempuri.org/IEzService/BrokerSaveCrmEntryResponse")]
         System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.StringActionResult> BrokerSaveCrmEntryAsync(bool bIsIncoming, int nActionID, int nStatusID, string sComment, int nCustomerID, string sContactEmail);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLoadCustomerFiles", ReplyAction="http://tempuri.org/IEzService/BrokerLoadCustomerFilesResponse")]
+        StrategiesActivator.EzServiceReference.BrokerCustomerFilesActionResult BrokerLoadCustomerFiles(int nCustomerID, string sContactEmail);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLoadCustomerFiles", ReplyAction="http://tempuri.org/IEzService/BrokerLoadCustomerFilesResponse")]
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BrokerCustomerFilesActionResult> BrokerLoadCustomerFilesAsync(int nCustomerID, string sContactEmail);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerDownloadCustomerFile", ReplyAction="http://tempuri.org/IEzService/BrokerDownloadCustomerFileResponse")]
+        StrategiesActivator.EzServiceReference.BrokerCustomerFileContentsActionResult BrokerDownloadCustomerFile(int nCustomerID, string sContactEmail, int nFileID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerDownloadCustomerFile", ReplyAction="http://tempuri.org/IEzService/BrokerDownloadCustomerFileResponse")]
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BrokerCustomerFileContentsActionResult> BrokerDownloadCustomerFileAsync(int nCustomerID, string sContactEmail, int nFileID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerSaveUploadedCustomerFile", ReplyAction="http://tempuri.org/IEzService/BrokerSaveUploadedCustomerFileResponse")]
+        StrategiesActivator.EzServiceReference.ActionMetaData BrokerSaveUploadedCustomerFile(int nCustomerID, string sContactEmail, byte[] oFileContents, string sFileName);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerSaveUploadedCustomerFile", ReplyAction="http://tempuri.org/IEzService/BrokerSaveUploadedCustomerFileResponse")]
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> BrokerSaveUploadedCustomerFileAsync(int nCustomerID, string sContactEmail, byte[] oFileContents, string sFileName);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LandRegistryEnquiry", ReplyAction="http://tempuri.org/IEzService/LandRegistryEnquiryResponse")]
         string LandRegistryEnquiry(int customerId, string buildingNumber, string streetName, string cityName, string postCode);
@@ -2227,6 +2402,30 @@ namespace StrategiesActivator.EzServiceReference {
         
         public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.StringActionResult> BrokerSaveCrmEntryAsync(bool bIsIncoming, int nActionID, int nStatusID, string sComment, int nCustomerID, string sContactEmail) {
             return base.Channel.BrokerSaveCrmEntryAsync(bIsIncoming, nActionID, nStatusID, sComment, nCustomerID, sContactEmail);
+        }
+        
+        public StrategiesActivator.EzServiceReference.BrokerCustomerFilesActionResult BrokerLoadCustomerFiles(int nCustomerID, string sContactEmail) {
+            return base.Channel.BrokerLoadCustomerFiles(nCustomerID, sContactEmail);
+        }
+        
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BrokerCustomerFilesActionResult> BrokerLoadCustomerFilesAsync(int nCustomerID, string sContactEmail) {
+            return base.Channel.BrokerLoadCustomerFilesAsync(nCustomerID, sContactEmail);
+        }
+        
+        public StrategiesActivator.EzServiceReference.BrokerCustomerFileContentsActionResult BrokerDownloadCustomerFile(int nCustomerID, string sContactEmail, int nFileID) {
+            return base.Channel.BrokerDownloadCustomerFile(nCustomerID, sContactEmail, nFileID);
+        }
+        
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BrokerCustomerFileContentsActionResult> BrokerDownloadCustomerFileAsync(int nCustomerID, string sContactEmail, int nFileID) {
+            return base.Channel.BrokerDownloadCustomerFileAsync(nCustomerID, sContactEmail, nFileID);
+        }
+        
+        public StrategiesActivator.EzServiceReference.ActionMetaData BrokerSaveUploadedCustomerFile(int nCustomerID, string sContactEmail, byte[] oFileContents, string sFileName) {
+            return base.Channel.BrokerSaveUploadedCustomerFile(nCustomerID, sContactEmail, oFileContents, sFileName);
+        }
+        
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> BrokerSaveUploadedCustomerFileAsync(int nCustomerID, string sContactEmail, byte[] oFileContents, string sFileName) {
+            return base.Channel.BrokerSaveUploadedCustomerFileAsync(nCustomerID, sContactEmail, oFileContents, sFileName);
         }
         
         public string LandRegistryEnquiry(int customerId, string buildingNumber, string streetName, string cityName, string postCode) {

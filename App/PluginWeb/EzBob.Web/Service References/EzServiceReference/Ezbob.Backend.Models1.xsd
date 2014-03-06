@@ -56,4 +56,19 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="BrokerCustomerPersonalData" nillable="true" type="tns:BrokerCustomerPersonalData" />
+  <xs:complexType name="ArrayOfBrokerCustomerFile">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="BrokerCustomerFile" nillable="true" type="tns:BrokerCustomerFile" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfBrokerCustomerFile" nillable="true" type="tns:ArrayOfBrokerCustomerFile" />
+  <xs:complexType name="BrokerCustomerFile">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="FileDescription" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="FileID" type="xs:int" />
+      <xs:element minOccurs="0" name="FileName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="UploadDate" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="BrokerCustomerFile" nillable="true" type="tns:BrokerCustomerFile" />
 </xs:schema>

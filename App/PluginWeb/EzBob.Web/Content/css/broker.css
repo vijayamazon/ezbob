@@ -83,20 +83,16 @@ table.customer-list {
 }
 
 .section-customer-details .customer-personal-details-container {
-	width: 40%;
+	width: 30%;
 }
 
 .section-customer-details .customer-files {
-	width: 40%;
+	width: 60%;
 	padding: 0 1em;
 }
 
-.section-customer-details .customer-files > div {
-	min-height: 100%;
-}
-
 .section-customer-details #customerFilesUploader {
-	width: 20%;
+	width: 10%;
 }
 
 .section-customer-details .customer-personal-details {

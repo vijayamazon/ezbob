@@ -159,4 +159,25 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="StringActionResult" nillable="true" type="tns:StringActionResult" />
+  <xs:complexType name="BrokerCustomerFilesActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ActionResult">
+        <xs:sequence>
+          <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Files" nillable="true" type="q7:ArrayOfBrokerCustomerFile" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="BrokerCustomerFilesActionResult" nillable="true" type="tns:BrokerCustomerFilesActionResult" />
+  <xs:complexType name="BrokerCustomerFileContentsActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ActionResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Contents" nillable="true" type="xs:base64Binary" />
+          <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="BrokerCustomerFileContentsActionResult" nillable="true" type="tns:BrokerCustomerFileContentsActionResult" />
 </xs:schema>

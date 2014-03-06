@@ -75,34 +75,6 @@
 
 		#endregion class BrokerLoadCustomerDetailsRawData
 
-		#region class BrokerLoadCustomerCrmRawData
-
-		public class BrokerLoadCustomerCrmRawData : ITraversable {
-			#region properties
-
-			public DateTime CrDate { get; set; }
-			public string ActionName { get; set; }
-			public string StatusName { get; set; }
-			public string Comment { get; set; }
-
-			#endregion properties
-
-			#region method ToModel
-
-			public BrokerCustomerCrmEntry ToModel() {
-				return new BrokerCustomerCrmEntry {
-					CrDate = CrDate,
-					ActionName = ActionName,
-					StatusName = StatusName,
-					Comment = Comment,
-				};
-			} // ToModel
-
-			#endregion method ToModel
-		} // class BrokerLoadCustomerCrmRawData
-
-		#endregion class BrokerLoadCustomerCrmRawData
-
 		#region method Execute
 
 		public override void Execute() {
@@ -119,14 +91,11 @@
 
 			raw.ToModel(Result.PersonalData);
 
-			List<BrokerLoadCustomerCrmRawData> lst = DB.Fill<BrokerLoadCustomerCrmRawData>(
+			Result.CrmData = DB.Fill<BrokerCustomerCrmEntry>(
 				"BrokerLoadCustomerCRM",
 				new QueryParameter("@CustomerID", m_nCustomerID),
 				new QueryParameter("@ContactEmail", m_sContactEmail)
 			);
-
-			foreach (BrokerLoadCustomerCrmRawData crm in lst)
-				Result.CrmData.Add(crm.ToModel());
 		} // Execute
 
 		#endregion method Execute

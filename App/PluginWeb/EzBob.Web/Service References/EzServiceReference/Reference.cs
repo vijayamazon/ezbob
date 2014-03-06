@@ -191,6 +191,8 @@ namespace EzBob.Web.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.BrokerCustomersActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.BrokerCustomerDetailsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.StringActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.BrokerCustomerFilesActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.BrokerCustomerFileContentsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.StringListActionResult))]
     public partial class ActionResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
@@ -437,6 +439,68 @@ namespace EzBob.Web.EzServiceReference {
                 if ((object.ReferenceEquals(this.ValueField, value) != true)) {
                     this.ValueField = value;
                     this.RaisePropertyChanged("Value");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="BrokerCustomerFilesActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class BrokerCustomerFilesActionResult : EzBob.Web.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private Ezbob.Backend.Models.BrokerCustomerFile[] FilesField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public Ezbob.Backend.Models.BrokerCustomerFile[] Files {
+            get {
+                return this.FilesField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.FilesField, value) != true)) {
+                    this.FilesField = value;
+                    this.RaisePropertyChanged("Files");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="BrokerCustomerFileContentsActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class BrokerCustomerFileContentsActionResult : EzBob.Web.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private byte[] ContentsField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string NameField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public byte[] Contents {
+            get {
+                return this.ContentsField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ContentsField, value) != true)) {
+                    this.ContentsField = value;
+                    this.RaisePropertyChanged("Contents");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Name {
+            get {
+                return this.NameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.NameField, value) != true)) {
+                    this.NameField = value;
+                    this.RaisePropertyChanged("Name");
                 }
             }
         }
@@ -725,6 +789,15 @@ namespace EzBob.Web.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerSaveCrmEntry", ReplyAction="http://tempuri.org/IEzService/BrokerSaveCrmEntryResponse")]
         EzBob.Web.EzServiceReference.StringActionResult BrokerSaveCrmEntry(bool bIsIncoming, int nActionID, int nStatusID, string sComment, int nCustomerID, string sContactEmail);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLoadCustomerFiles", ReplyAction="http://tempuri.org/IEzService/BrokerLoadCustomerFilesResponse")]
+        EzBob.Web.EzServiceReference.BrokerCustomerFilesActionResult BrokerLoadCustomerFiles(int nCustomerID, string sContactEmail);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerDownloadCustomerFile", ReplyAction="http://tempuri.org/IEzService/BrokerDownloadCustomerFileResponse")]
+        EzBob.Web.EzServiceReference.BrokerCustomerFileContentsActionResult BrokerDownloadCustomerFile(int nCustomerID, string sContactEmail, int nFileID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerSaveUploadedCustomerFile", ReplyAction="http://tempuri.org/IEzService/BrokerSaveUploadedCustomerFileResponse")]
+        EzBob.Web.EzServiceReference.ActionMetaData BrokerSaveUploadedCustomerFile(int nCustomerID, string sContactEmail, byte[] oFileContents, string sFileName);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LandRegistryEnquiry", ReplyAction="http://tempuri.org/IEzService/LandRegistryEnquiryResponse")]
         string LandRegistryEnquiry(int customerId, string buildingNumber, string streetName, string cityName, string postCode);
         
@@ -991,6 +1064,18 @@ namespace EzBob.Web.EzServiceReference {
         
         public EzBob.Web.EzServiceReference.StringActionResult BrokerSaveCrmEntry(bool bIsIncoming, int nActionID, int nStatusID, string sComment, int nCustomerID, string sContactEmail) {
             return base.Channel.BrokerSaveCrmEntry(bIsIncoming, nActionID, nStatusID, sComment, nCustomerID, sContactEmail);
+        }
+        
+        public EzBob.Web.EzServiceReference.BrokerCustomerFilesActionResult BrokerLoadCustomerFiles(int nCustomerID, string sContactEmail) {
+            return base.Channel.BrokerLoadCustomerFiles(nCustomerID, sContactEmail);
+        }
+        
+        public EzBob.Web.EzServiceReference.BrokerCustomerFileContentsActionResult BrokerDownloadCustomerFile(int nCustomerID, string sContactEmail, int nFileID) {
+            return base.Channel.BrokerDownloadCustomerFile(nCustomerID, sContactEmail, nFileID);
+        }
+        
+        public EzBob.Web.EzServiceReference.ActionMetaData BrokerSaveUploadedCustomerFile(int nCustomerID, string sContactEmail, byte[] oFileContents, string sFileName) {
+            return base.Channel.BrokerSaveUploadedCustomerFile(nCustomerID, sContactEmail, oFileContents, sFileName);
         }
         
         public string LandRegistryEnquiry(int customerId, string buildingNumber, string streetName, string cityName, string postCode) {

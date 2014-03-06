@@ -1,37 +1,23 @@
-﻿namespace EzBob.Web.Code
-{
+﻿namespace EzBob.Web.Code {
 	using System;
 	using System.ServiceModel;
 	using EzServiceReference;
 	using Ezbob.Logger;
 	using log4net;
 
-	public class ServiceClient
-	{
+	public class ServiceClient {
 		#region property ServiceClient
-		private static readonly ILog oLog = LogManager.GetLogger(typeof(ServiceClient));
 
-		public static EzServiceClient Instance
-		{
-			
-			get
-			{
-				lock (syncRoot)
-				{
-					if (ReferenceEquals(ms_oServiceClient, null) || (ms_oServiceClient.State != CommunicationState.Opened && ms_oServiceClient.State != CommunicationState.Created)  )
-					{
+		public static EzServiceClient Instance {
+			get {
+				lock (syncRoot) {
+					if (ReferenceEquals(ms_oServiceClient, null) || (ms_oServiceClient.State != CommunicationState.Opened && ms_oServiceClient.State != CommunicationState.Created)) {
 						if (ms_oServiceClient != null)
-						{
 							oLog.DebugFormat("ServiceClient State: {0}", ms_oServiceClient.State);
-						}
 						else
-						{
 							oLog.DebugFormat("ServiceClient is null creating new");
-						}
 
-
-						try
-						{
+						try {
 							var cfg = new EzServiceConfigurationLoader.DefaultConfiguration(
 								System.Environment.MachineName,
 								DbConnectionGenerator.Get(),
@@ -40,12 +26,11 @@
 
 							cfg.Init();
 
-							var oTcpBinding = new NetTcpBinding
-								{
-									MaxBufferPoolSize = 524288,
-									MaxBufferSize = 65536000,
-									MaxReceivedMessageSize = 65536000
-								};
+							var oTcpBinding = new NetTcpBinding {
+								MaxBufferPoolSize = 524288,
+								MaxBufferSize = 65536000,
+								MaxReceivedMessageSize = 65536000
+							};
 
 							ms_oServiceClient = new EzServiceClient(
 								oTcpBinding, // TODO: HTTPS...
@@ -54,8 +39,7 @@
 
 							ms_oServiceClient.InnerChannel.OperationTimeout = TimeSpan.FromSeconds(cfg.ClientTimeoutSeconds);
 						}
-						catch (Exception e)
-						{
+						catch (Exception e) {
 							oLog.Debug("Failed to connect to EzService", e);
 
 							// TODO: save to DB failed request to run it later...
@@ -73,5 +57,7 @@
 		private static object syncRoot = new Object();
 
 		#endregion property ServiceClient
+
+		private static readonly ILog oLog = LogManager.GetLogger(typeof(ServiceClient));
 	} // class ServiceClient
 } // namespace

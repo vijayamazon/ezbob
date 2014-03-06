@@ -450,6 +450,24 @@
   <wsdl:message name="IEzService_BrokerSaveCrmEntry_OutputMessage">
     <wsdl:part name="parameters" element="tns:BrokerSaveCrmEntryResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_BrokerLoadCustomerFiles_InputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerLoadCustomerFiles" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerLoadCustomerFiles_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerLoadCustomerFilesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerDownloadCustomerFile_InputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerDownloadCustomerFile" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerDownloadCustomerFile_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerDownloadCustomerFileResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerSaveUploadedCustomerFile_InputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerSaveUploadedCustomerFile" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerSaveUploadedCustomerFile_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerSaveUploadedCustomerFileResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_LandRegistryEnquiry_InputMessage">
     <wsdl:part name="parameters" element="tns:LandRegistryEnquiry" />
   </wsdl:message>
@@ -724,6 +742,18 @@
     <wsdl:operation name="BrokerSaveCrmEntry">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerSaveCrmEntry" message="tns:IEzService_BrokerSaveCrmEntry_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerSaveCrmEntryResponse" message="tns:IEzService_BrokerSaveCrmEntry_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BrokerLoadCustomerFiles">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerLoadCustomerFiles" message="tns:IEzService_BrokerLoadCustomerFiles_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerLoadCustomerFilesResponse" message="tns:IEzService_BrokerLoadCustomerFiles_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BrokerDownloadCustomerFile">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerDownloadCustomerFile" message="tns:IEzService_BrokerDownloadCustomerFile_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerDownloadCustomerFileResponse" message="tns:IEzService_BrokerDownloadCustomerFile_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BrokerSaveUploadedCustomerFile">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerSaveUploadedCustomerFile" message="tns:IEzService_BrokerSaveUploadedCustomerFile_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerSaveUploadedCustomerFileResponse" message="tns:IEzService_BrokerSaveUploadedCustomerFile_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="LandRegistryEnquiry">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LandRegistryEnquiry" message="tns:IEzService_LandRegistryEnquiry_InputMessage" />
@@ -1302,6 +1332,33 @@
     </wsdl:operation>
     <wsdl:operation name="BrokerSaveCrmEntry">
       <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerSaveCrmEntry" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BrokerLoadCustomerFiles">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerLoadCustomerFiles" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BrokerDownloadCustomerFile">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerDownloadCustomerFile" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BrokerSaveUploadedCustomerFile">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerSaveUploadedCustomerFile" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

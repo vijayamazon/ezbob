@@ -57,7 +57,7 @@
                 Customer = customer,
                 Employee = _context.User,
                 Description = description,
-                UploadDate = DateTime.Now,
+                UploadDate = DateTime.UtcNow,
                 DocName = file.FileName
             };
             

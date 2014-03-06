@@ -1421,6 +1421,12 @@
     <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.StringActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
+    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.BrokerCustomerFilesActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.BrokerCustomerFileContentsActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
     <None Include="Service References\EzServiceReference\FraudChecker.xsd">
       <SubType>Designer</SubType>
     </None>

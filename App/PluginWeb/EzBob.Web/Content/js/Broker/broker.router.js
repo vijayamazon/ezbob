@@ -9,16 +9,43 @@ EzBob.Broker.Router = Backbone.Router.extend({
 		'dashboard': 'dashboard',
 		'forgotten': 'forgotten',
 		'add': 'addCustomer',
-		'customer/:customerid': 'showCustomer',
+		'customer/:customerId': 'showCustomer',
 		'*z': 'forbidden',
 	}, // routes
 
 	initialize: function() {
+		this.returnUrl = null;
+
 		this.setAuth($('body').attr('data-auth'));
 		$('body').removeAttr('data-auth');
 
 		$('#user-menu').hide().removeClass('hide');
 	}, // initialize
+
+	followReturnUrl: function() {
+		if (!this.getReturnUrl()) {
+			var self = this;
+
+			if (this.getAuth())
+				this.setReturnUrl(function() { self.dashboard(); });
+			else
+				this.setReturnUrl(function() { self.login(); });
+		} // if
+
+		var oReturnUrl = this.setReturnUrl(null);
+
+		oReturnUrl();
+	}, // followReturnUrl
+
+	getReturnUrl: function() {
+		return this.returnUrl;
+	}, // getReturnUrl
+
+	setReturnUrl: function(oUrl) {
+		var oReturnUrl = this.returnUrl;
+		this.returnUrl = oUrl;
+		return oReturnUrl;
+	}, // setReturnUrl
 
 	getAuth: function() {
 		return this.authData;
@@ -88,6 +115,9 @@ EzBob.Broker.Router = Backbone.Router.extend({
 			return;
 		} // if
 
+		var self = this;
+		this.setReturnUrl(function() { self.dashboard(); });
+
 		if (this.getAuth())
 			this.showDashboard();
 		else
@@ -105,7 +135,10 @@ EzBob.Broker.Router = Backbone.Router.extend({
 			return;
 		} // if
 
-		if (this.getAuth()){
+		var self = this;
+		this.setReturnUrl(function() { self.addCustomer(); });
+
+		if (this.getAuth()) {
 			this.createView('addCustomer', EzBob.Broker.AddCustomerView);
 			this.show('add-customer', 'log-off', 'addCustomer');
 		}
@@ -113,17 +146,22 @@ EzBob.Broker.Router = Backbone.Router.extend({
 			this.login();
 	}, // addCustomer
 
-	showCustomer: function(customerid) {
+	showCustomer: function(customerId) {
 		if (this.isForbidden()) {
 			this.forbidden();
 			return;
 		} // if
 
+		var self = this;
+		this.setReturnUrl((function(nCustID) {
+			return function() { self.showCustomer(nCustID); };
+		})(customerId));
+
 		if (this.getAuth()) {
 			if (this.views)
 				this.views.customer = null;
 
-			this.createView('customer', EzBob.Broker.CustomerDetailsView, { customerid: customerid });
+			this.createView('customer', EzBob.Broker.CustomerDetailsView, { customerid: customerId });
 			this.show('customer-details', 'log-off', 'customer');
 		}
 		else

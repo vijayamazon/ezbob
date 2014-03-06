@@ -64,8 +64,10 @@
     <Compile Include="ActionMetaData.cs" />
     <Compile Include="ActionResults\ActionResult.cs" />
     <Compile Include="ActionResults\BoolActionResult.cs" />
+    <Compile Include="ActionResults\BrokerCustomerFileContentsActionResult.cs" />
     <Compile Include="ActionResults\BrokerCustomersActionResult.cs" />
     <Compile Include="ActionResults\BrokerCustomerDetailsActionResult.cs" />
+    <Compile Include="ActionResults\BrokerCustomerFilesActionResult.cs" />
     <Compile Include="ActionResults\StringActionResult.cs" />
     <Compile Include="ActionResults\CrmLookupsActionResult.cs" />
     <Compile Include="ActionResults\QuickOfferActionResult.cs" />

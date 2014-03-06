@@ -139,6 +139,12 @@
     <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.BrokerCustomerDetailsActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.BrokerCustomerFileContentsActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.BrokerCustomerFilesActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.BrokerCustomersActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>

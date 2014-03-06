@@ -1,5 +1,4 @@
 ﻿namespace EzBob.Backend.Strategies.Broker {
-	using System;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
@@ -52,7 +51,7 @@
 
 		#region private
 
-		private string m_sContactEmail;
+		private readonly string m_sContactEmail;
 
 		#endregion private
 	} // class BrokerIsBroker

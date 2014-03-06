@@ -45,8 +45,15 @@
     <Compile Include="BrokerCustomerCrmEntryModel.cs" />
     <Compile Include="BrokerCustomerPersonalDataModel.cs" />
     <Compile Include="BrokerCustomerDetailsModel.cs" />
+    <Compile Include="BrokerCustomerFileModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QuickOfferModel.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\Barrymore\Barrymore.csproj">
+      <Project>{6e34c540-073a-44b1-9bbc-31dac15a6f5e}</Project>
+      <Name>Barrymore</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

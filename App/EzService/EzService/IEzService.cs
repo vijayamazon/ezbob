@@ -194,6 +194,15 @@ namespace EzService {
 		[OperationContract]
 		StringActionResult BrokerSaveCrmEntry(bool bIsIncoming, int nActionID, int nStatusID, string sComment, int nCustomerID, string sContactEmail);
 
+		[OperationContract]
+		BrokerCustomerFilesActionResult BrokerLoadCustomerFiles(int nCustomerID, string sContactEmail);
+
+		[OperationContract]
+		BrokerCustomerFileContentsActionResult BrokerDownloadCustomerFile(int nCustomerID, string sContactEmail, int nFileID);
+
+		[OperationContract]
+		ActionMetaData BrokerSaveUploadedCustomerFile(int nCustomerID, string sContactEmail, byte[] oFileContents, string sFileName);
+
 		#endregion Broker
 
 		#region Land Registry
