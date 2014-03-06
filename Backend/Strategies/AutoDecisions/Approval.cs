@@ -9,9 +9,6 @@
 	public class Approval
 	{
 		private readonly StrategyHelper strategyHelper = new StrategyHelper();
-		private readonly bool autoApproveIsSilent;
-		private readonly string autoApproveSilentTemplateName;
-		private readonly string autoApproveSilentToAddress;
 		private readonly AConnection Db;
 		private readonly int minExperianScore;
 		private readonly int offeredCreditLine;
@@ -27,70 +24,78 @@
 			this.offeredCreditLine = offeredCreditLine;
 			this.enableAutomaticApproval = enableAutomaticApproval;
 			this.customerId = customerId;
-			DataTable dt = Db.ExecuteReader("GetApprovalConfigs", CommandSpecies.StoredProcedure);
-			var sr = new SafeReader(dt.Rows[0]);
-
-			autoApproveIsSilent = sr["AutoApproveIsSilent"];
-			autoApproveSilentTemplateName = sr["AutoApproveSilentTemplateName"];
-			autoApproveSilentToAddress = sr["AutoApproveSilentToAddress"];
 		} // constructor
 
 		public bool MakeDecision(AutoDecisionResponse response)
 		{
-			if (enableAutomaticApproval)
+			try
 			{
-				response.AutoApproveAmount = strategyHelper.AutoApproveCheck(customerId, offeredCreditLine, minExperianScore);
+				DataTable configsDataTable = Db.ExecuteReader("GetApprovalConfigs", CommandSpecies.StoredProcedure);
+				var configSafeReader = new SafeReader(configsDataTable.Rows[0]);
 
-				if (response.AutoApproveAmount != 0)
+				bool autoApproveIsSilent = configSafeReader["AutoApproveIsSilent"];
+				string autoApproveSilentTemplateName = configSafeReader["AutoApproveSilentTemplateName"];
+				string autoApproveSilentToAddress = configSafeReader["AutoApproveSilentToAddress"];
+				if (enableAutomaticApproval)
 				{
-					DataTable dt = Db.ExecuteReader("GetAvailableFunds", CommandSpecies.StoredProcedure);
-					var sr = new SafeReader(dt.Rows[0]);
-					decimal availableFunds = sr["AvailableFunds"];
+					response.AutoApproveAmount = strategyHelper.AutoApproveCheck(customerId, offeredCreditLine, minExperianScore);
 
-					if (availableFunds > response.AutoApproveAmount)
+					if (response.AutoApproveAmount != 0)
 					{
-						if (autoApproveIsSilent)
-						{
-							strategyHelper.NotifyAutoApproveSilentMode(customerId, response.AutoApproveAmount, autoApproveSilentTemplateName, autoApproveSilentToAddress);
+						DataTable dt = Db.ExecuteReader("GetAvailableFunds", CommandSpecies.StoredProcedure);
+						var sr = new SafeReader(dt.Rows[0]);
+						decimal availableFunds = sr["AvailableFunds"];
 
+						if (availableFunds > response.AutoApproveAmount)
+						{
+							if (autoApproveIsSilent)
+							{
+								strategyHelper.NotifyAutoApproveSilentMode(customerId, response.AutoApproveAmount, autoApproveSilentTemplateName, autoApproveSilentToAddress);
+
+								response.CreditResult = "WaitingForDecision";
+								response.UserStatus = "Manual";
+								response.SystemDecision = "Manual";
+							}
+							else
+							{
+								dt = Db.ExecuteReader(
+									"GetLastOfferDataForApproval",
+									CommandSpecies.StoredProcedure,
+									new QueryParameter("CustomerId", customerId)
+									);
+
+								sr = new SafeReader(dt.Rows[0]);
+								bool loanOfferEmailSendingBanned = sr["EmailSendingBanned"];
+								DateTime loanOfferOfferStart = sr["OfferStart"];
+								DateTime loanOfferOfferValidUntil = sr["OfferValidUntil"];
+
+								response.CreditResult = "Approved";
+								response.UserStatus = "Approved";
+								response.SystemDecision = "Approve";
+								response.LoanOfferUnderwriterComment = "Auto Approval";
+								response.AppValidFor = DateTime.UtcNow.AddDays((loanOfferOfferValidUntil - loanOfferOfferStart).TotalDays);
+								response.IsAutoApproval = true;
+								response.LoanOfferEmailSendingBannedNew = loanOfferEmailSendingBanned;
+							}
+						}
+						else
+						{
 							response.CreditResult = "WaitingForDecision";
 							response.UserStatus = "Manual";
 							response.SystemDecision = "Manual";
 						}
-						else
-						{
-							dt = Db.ExecuteReader(
-								"GetLastOfferDataForApproval",
-								CommandSpecies.StoredProcedure,
-								new QueryParameter("CustomerId", customerId)
-							);
 
-							sr = new SafeReader(dt.Rows[0]);
-							bool loanOfferEmailSendingBanned = sr["EmailSendingBanned"];
-							DateTime loanOfferOfferStart = sr["OfferStart"];
-							DateTime loanOfferOfferValidUntil = sr["OfferValidUntil"];
-
-							response.CreditResult = "Approved";
-							response.UserStatus = "Approved";
-							response.SystemDecision = "Approve";
-							response.LoanOfferUnderwriterComment = "Auto Approval";
-							response.AppValidFor = DateTime.UtcNow.AddDays((loanOfferOfferValidUntil - loanOfferOfferStart).TotalDays);
-							response.IsAutoApproval = true;
-							response.LoanOfferEmailSendingBannedNew = loanOfferEmailSendingBanned;
-						}
+						return true;
 					}
-					else
-					{
-						response.CreditResult = "WaitingForDecision";
-						response.UserStatus = "Manual";
-						response.SystemDecision = "Manual";
-					}
-
-					return true;
 				}
-			}
 
-			return false;
+				return false;
+			}
+			catch (Exception e)
+			{
+				log.Error("Exception during approval:{0}", e);
+				return false;
+			}
 		}
 	}
 }

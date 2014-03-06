@@ -1,29 +1,30 @@
 ﻿namespace EzBob.Backend.Strategies.AutoDecisions
 {
+	using System;
 	using Ezbob.Database;
 	using System.Data;
 	using Ezbob.Logger;
 
 	public class Rejection
 	{
-		private readonly int autoRejectionExceptionAnualTurnover;
-		private readonly int rejectDefaultsCreditScore;
-		private readonly int rejectMinimalSeniority;
-		private readonly int lowCreditScore;
-		private readonly int rejectDefaultsAccountsNum;
-		private readonly int autoRejectionExceptionCreditScore;
-		private readonly bool hasAccountingAccounts;
-		private readonly int errorMPsNum;
-		private readonly int loanOfferApprovalNum;
-		private readonly int numOfDefaultAccounts;
+		private int autoRejectionExceptionAnualTurnover;
+		private int rejectDefaultsCreditScore;
+		private int rejectMinimalSeniority;
+		private int lowCreditScore;
+		private int rejectDefaultsAccountsNum;
+		private int autoRejectionExceptionCreditScore;
+		private bool hasAccountingAccounts;
+		private int errorMPsNum;
+		private int loanOfferApprovalNum;
+		private int numOfDefaultAccounts;
 		private readonly AConnection Db;
 		private readonly ASafeLog log;
 		private readonly double totalSumOfOrders1YTotal;
 		private readonly double totalSumOfOrders3MTotal;
 		private readonly double marketplaceSeniorityDays;
 		private readonly bool enableAutomaticRejection;
-		private readonly int lowTotalAnnualTurnover;
-		private readonly int lowTotalThreeMonthTurnover;
+		private int lowTotalAnnualTurnover;
+		private int lowTotalThreeMonthTurnover;
 		private readonly double initialExperianConsumerScore;
 		private readonly int customerId;
 
@@ -37,6 +38,23 @@
 			this.enableAutomaticRejection = enableAutomaticRejection;
 			this.initialExperianConsumerScore = initialExperianConsumerScore;
 			this.customerId = customerId;
+		}
+
+		private bool IsException()
+		{
+			if (loanOfferApprovalNum > 0 || totalSumOfOrders1YTotal > autoRejectionExceptionAnualTurnover ||
+				initialExperianConsumerScore > autoRejectionExceptionCreditScore || errorMPsNum > 0 ||
+				(decimal)initialExperianConsumerScore == 0 || hasAccountingAccounts)
+			{
+				return true;
+			}
+
+			return false;
+		}
+
+		private void Init()
+		{
+
 			DataTable dt = Db.ExecuteReader("GetRejectionConfigs", CommandSpecies.StoredProcedure);
 			var sr = new SafeReader(dt.Rows[0]);
 
@@ -67,66 +85,65 @@
 			numOfDefaultAccounts = sr["NumOfDefaultAccounts"];
 		}
 
-		private bool IsException()
-		{
-			if (loanOfferApprovalNum > 0 || totalSumOfOrders1YTotal > autoRejectionExceptionAnualTurnover ||
-				initialExperianConsumerScore > autoRejectionExceptionCreditScore || errorMPsNum > 0 ||
-				(decimal)initialExperianConsumerScore == 0 || hasAccountingAccounts)
-			{
-				return true;
-			}
-
-			return false;
-		}
-
 		public bool MakeDecision(AutoDecisionResponse response)
 		{
-			if (IsException())
+			try
+			{
+				Init();
+				if (IsException())
+					return false;
+
+				FillPayPalFiguresForExplanationMail(Db, customerId, response);
+
+				if (initialExperianConsumerScore < rejectDefaultsCreditScore &&
+				    numOfDefaultAccounts >= rejectDefaultsAccountsNum)
+				{
+					response.AutoRejectReason = "AutoReject: Score & DefaultAccountsNum. Condition not met:" +
+					                            initialExperianConsumerScore +
+					                            " < " + rejectDefaultsCreditScore + " AND " + numOfDefaultAccounts + " >= " +
+					                            rejectDefaultsAccountsNum;
+				}
+				else if (initialExperianConsumerScore < lowCreditScore)
+				{
+					response.AutoRejectReason = "AutoReject: Low score. Condition not met:" + initialExperianConsumerScore + " < " +
+					                            lowCreditScore;
+				}
+				else if (
+					(response.PayPalNumberOfStores == 0 ||
+					 response.PayPalTotalSumOfOrders3M < lowTotalThreeMonthTurnover ||
+					 response.PayPalTotalSumOfOrders1Y < lowTotalAnnualTurnover)
+					&&
+					(totalSumOfOrders3MTotal < lowTotalThreeMonthTurnover || totalSumOfOrders1YTotal < lowTotalAnnualTurnover)
+					)
+				{
+					response.AutoRejectReason = "AutoReject: Totals. Condition not met: (" + response.PayPalNumberOfStores + " < 0 OR" +
+					                            response.PayPalTotalSumOfOrders3M + " < " +
+					                            lowTotalThreeMonthTurnover + " OR " + response.PayPalTotalSumOfOrders1Y + " < " +
+					                            lowTotalAnnualTurnover + ") AND (" + totalSumOfOrders3MTotal + " < " +
+					                            lowTotalThreeMonthTurnover + " OR " + totalSumOfOrders1YTotal + " < " +
+					                            lowTotalAnnualTurnover + ")";
+				}
+				else if (marketplaceSeniorityDays < rejectMinimalSeniority && errorMPsNum == 0)
+				{
+					response.AutoRejectReason = "AutoReject: Seniority. Condition not met: (" + marketplaceSeniorityDays + " < " +
+					                            rejectMinimalSeniority + ")";
+				}
+				else
+				{
+					return false;
+				}
+
+				response.CreditResult = enableAutomaticRejection ? "Rejected" : "WaitingForDecision";
+				response.UserStatus = "Rejected";
+				response.SystemDecision = "Reject";
+
+				return true;
+			}
+			catch (Exception e)
+			{
+				log.Error("Exception during rejection:{0}", e);
 				return false;
-
-			FillPayPalFiguresForExplanationMail(Db, customerId, response);
-
-			if (initialExperianConsumerScore < rejectDefaultsCreditScore &&
-				numOfDefaultAccounts >= rejectDefaultsAccountsNum)
-			{
-				response.AutoRejectReason = "AutoReject: Score & DefaultAccountsNum. Condition not met:" + initialExperianConsumerScore +
-								   " < " + rejectDefaultsCreditScore + " AND " + numOfDefaultAccounts + " >= " +
-								   rejectDefaultsAccountsNum;
 			}
-			else if (initialExperianConsumerScore < lowCreditScore)
-			{
-				response.AutoRejectReason = "AutoReject: Low score. Condition not met:" + initialExperianConsumerScore + " < " +
-								   lowCreditScore;
-			}
-			else if (
-				(response.PayPalNumberOfStores == 0 ||
-				 response.PayPalTotalSumOfOrders3M < lowTotalThreeMonthTurnover || response.PayPalTotalSumOfOrders1Y < lowTotalAnnualTurnover)
-				 &&
-				(totalSumOfOrders3MTotal < lowTotalThreeMonthTurnover || totalSumOfOrders1YTotal < lowTotalAnnualTurnover)
-			   )
-			{
-				response.AutoRejectReason = "AutoReject: Totals. Condition not met: (" + response.PayPalNumberOfStores + " < 0 OR" +
-								response.PayPalTotalSumOfOrders3M + " < " +
-								   lowTotalThreeMonthTurnover + " OR " + response.PayPalTotalSumOfOrders1Y + " < " +
-								   lowTotalAnnualTurnover + ") AND (" + totalSumOfOrders3MTotal + " < " +
-								   lowTotalThreeMonthTurnover + " OR " + totalSumOfOrders1YTotal + " < " +
-								   lowTotalAnnualTurnover + ")";
-			}
-			else if (marketplaceSeniorityDays < rejectMinimalSeniority && errorMPsNum == 0)
-			{
-				response.AutoRejectReason = "AutoReject: Seniority. Condition not met: (" + marketplaceSeniorityDays + " < " +
-								   rejectMinimalSeniority + ")";
-			}
-			else
-			{
-				return false;
-			}
-
-			response.CreditResult = enableAutomaticRejection ? "Rejected" : "WaitingForDecision";
-			response.UserStatus = "Rejected";
-			response.SystemDecision = "Reject";
-
-			return true;
 		}
 
 		public static void FillPayPalFiguresForExplanationMail(AConnection db, int customerId, AutoDecisionResponse response)
