@@ -753,7 +753,7 @@ T6C7Spa3i/ltRwpQYWeYRRvJGkNUa12VLyTMdYRAAAAAvBLTqmDnMOt2M1IbVhi98uhE0pS2YC+WwInF
                 </filter>
             </appender>
             <!-- ADO.NET Appender -->
-            <appender name="AdoNetAppender" type="Log4NetCustomAppenders.ScortoAdoNetAppender,Log4NetCustomAppenders">
+            <appender name="AdoNetAppender" type="Log4NetCustomAppenders.EzbobAdoNetAppender,Log4NetCustomAppenders">
                 <bufferSize value="10" />
                 <ReconnectOnError value="true" />
                 <connectionType value="System.Data.SqlClient.SqlConnection, System.Data, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
