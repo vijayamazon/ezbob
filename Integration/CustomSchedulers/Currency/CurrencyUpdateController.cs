@@ -6,9 +6,9 @@ namespace CustomSchedulers.Currency
 	using System.Linq;
 	using System.Net;
 	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Repository;
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
-	using Scorto.NHibernate.Repository;
 	using StructureMap;
 	using log4net;
 

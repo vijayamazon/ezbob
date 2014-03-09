@@ -1,15 +1,16 @@
 using System;
 using EZBob.DatabaseLib.Common;
-using Scorto.NHibernate.Repository;
 
 namespace EZBob.DatabaseLib
 {
+	using Repository;
+
 	public interface ICurrencyConvertor
 	{
 		AmountInfo ConvertToCurrency(AmountInfo amountInfo, DateTime? purchaseDate, string currencyTo);
-		AmountInfo ConvertToCurrency( string sourceCurrency, double sourceValue, DateTime? purchaseDate, string currencyTo );
-		AmountInfo ConvertToBaseCurrency( AmountInfo amountInfo, DateTime? purchaseDate );
-		AmountInfo ConvertToBaseCurrency( string sourceCurrency, double sourceValue, DateTime? purchaseDate );
+		AmountInfo ConvertToCurrency(string sourceCurrency, double sourceValue, DateTime? purchaseDate, string currencyTo);
+		AmountInfo ConvertToBaseCurrency(AmountInfo amountInfo, DateTime? purchaseDate);
+		AmountInfo ConvertToBaseCurrency(string sourceCurrency, double sourceValue, DateTime? purchaseDate);
 	}
 
 	public class CurrencyConvertor : ICurrencyConvertor
@@ -18,42 +19,42 @@ namespace EZBob.DatabaseLib
 
 		private readonly ICurrencyRateRepository _CurrencyRateRepository;
 
-		public CurrencyConvertor( ICurrencyRateRepository currencyRateRepository )
+		public CurrencyConvertor(ICurrencyRateRepository currencyRateRepository)
 		{
 			_CurrencyRateRepository = currencyRateRepository;
 		}
 
-		public AmountInfo ConvertToBaseCurrency( string sourceCurrency, double sourceValue, DateTime? purchaseDate )
+		public AmountInfo ConvertToBaseCurrency(string sourceCurrency, double sourceValue, DateTime? purchaseDate)
 		{
-			return ConvertToCurrency( sourceCurrency, sourceValue, purchaseDate, BaseCurrency );
+			return ConvertToCurrency(sourceCurrency, sourceValue, purchaseDate, BaseCurrency);
 		}
 
-		public AmountInfo ConvertToBaseCurrency( AmountInfo amountInfo, DateTime? purchaseDate )
+		public AmountInfo ConvertToBaseCurrency(AmountInfo amountInfo, DateTime? purchaseDate)
 		{
 			return ConvertToCurrency(amountInfo, purchaseDate, BaseCurrency);
 		}
 
-		public AmountInfo ConvertToCurrency( string sourceCurrency, double sourceValue, DateTime? purchaseDate, string currencyTo )
+		public AmountInfo ConvertToCurrency(string sourceCurrency, double sourceValue, DateTime? purchaseDate, string currencyTo)
 		{
-			return ConvertToCurrency( new AmountInfo { CurrencyCode = sourceCurrency, Value = sourceValue }, purchaseDate, currencyTo );
+			return ConvertToCurrency(new AmountInfo { CurrencyCode = sourceCurrency, Value = sourceValue }, purchaseDate, currencyTo);
 		}
 
 		public AmountInfo ConvertToCurrency(AmountInfo amountInfo, DateTime? purchaseDate, string currencyTo)
 		{
-			if ( amountInfo == null || string.IsNullOrWhiteSpace( amountInfo.CurrencyCode ) || amountInfo.CurrencyCode == currencyTo )
+			if (amountInfo == null || string.IsNullOrWhiteSpace(amountInfo.CurrencyCode) || amountInfo.CurrencyCode == currencyTo)
 			{
 				return amountInfo;
 			}
 			else
 			{
-				double value = _CurrencyRateRepository.GetCurrencyHistoricalRate( purchaseDate, amountInfo.CurrencyCode );
-				
+				double value = _CurrencyRateRepository.GetCurrencyHistoricalRate(purchaseDate, amountInfo.CurrencyCode);
+
 				return new AmountInfo
 					{
 						CurrencyCode = currencyTo,
-						Value = value == 0 ? 0:  amountInfo.Value / value
+						Value = value == 0 ? 0 : amountInfo.Value / value
 					};
-			}			
+			}
 		}
 	}
 }

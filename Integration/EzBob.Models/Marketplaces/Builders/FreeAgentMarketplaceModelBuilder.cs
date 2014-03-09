@@ -1,6 +1,7 @@
 namespace EzBob.Models.Marketplaces.Builders
 {
 	using System;
+	using EZBob.DatabaseLib.Repository;
 	using NHibernate;
 	using NHibernate.Linq;
 	using System.Collections.Generic;
@@ -10,9 +11,7 @@ namespace EzBob.Models.Marketplaces.Builders
 	using Marketplaces;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
-	using Scorto.NHibernate.Repository;
 	using Web.Areas.Customer.Models;
-	using Web.Areas.Underwriter.Models;
 
 	class FreeAgentMarketplaceModelBuilder : MarketplaceModelBuilder
 	{
@@ -87,7 +86,7 @@ namespace EzBob.Models.Marketplaces.Builders
 
 			return paymentAccountModel;
 		}
-		
+
 		protected override void InitializeSpecificData(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history)
 		{
 			model.FreeAgent = BuildFreeAgent(mp);

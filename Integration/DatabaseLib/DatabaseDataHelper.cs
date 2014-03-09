@@ -42,7 +42,6 @@ namespace EZBob.DatabaseLib
 	using NHibernate.Criterion;
 	using NHibernate.Linq;
 	using Repository;
-	using Scorto.NHibernate.Repository;
 	using StructureMap;
 	using log4net;
 	using Iesi.Collections.Generic;

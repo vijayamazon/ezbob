@@ -14,7 +14,7 @@ namespace EzBob.Models.Marketplaces.Builders
 	using YodleeLib.connector;
 	using EZBob.DatabaseLib.Model.Marketplaces.Yodlee;
 	using NHibernate;
-	using Scorto.NHibernate.Repository;
+	using EZBob.DatabaseLib.Repository;
 
 	public class YodleeMarketplaceModelBuilder : MarketplaceModelBuilder
 	{
