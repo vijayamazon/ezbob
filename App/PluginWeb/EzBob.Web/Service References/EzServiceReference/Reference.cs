@@ -805,7 +805,7 @@ namespace EzBob.Web.EzServiceReference {
         string LandRegistryRes(int customerId, string titleNumber);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CompanyFilesUpload", ReplyAction="http://tempuri.org/IEzService/CompanyFilesUploadResponse")]
-        EzBob.Web.EzServiceReference.ActionMetaData CompanyFilesUpload(int customerId, string fileName, byte[] fileContext);
+        EzBob.Web.EzServiceReference.ActionMetaData CompanyFilesUpload(int customerId, string fileName, byte[] fileContent, string fileContentType);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanyFile", ReplyAction="http://tempuri.org/IEzService/GetCompanyFileResponse")]
         byte[] GetCompanyFile(int companyFileId);
@@ -1086,8 +1086,8 @@ namespace EzBob.Web.EzServiceReference {
             return base.Channel.LandRegistryRes(customerId, titleNumber);
         }
         
-        public EzBob.Web.EzServiceReference.ActionMetaData CompanyFilesUpload(int customerId, string fileName, byte[] fileContext) {
-            return base.Channel.CompanyFilesUpload(customerId, fileName, fileContext);
+        public EzBob.Web.EzServiceReference.ActionMetaData CompanyFilesUpload(int customerId, string fileName, byte[] fileContent, string fileContentType) {
+            return base.Channel.CompanyFilesUpload(customerId, fileName, fileContent, fileContentType);
         }
         
         public byte[] GetCompanyFile(int companyFileId) {

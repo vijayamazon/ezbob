@@ -10,15 +10,17 @@
 	{
 		private int customerId;
 		private string fileName;
-		private byte[] fileContext;
+		private byte[] fileContent;
+		private string fileContentType;
 		private int mpId;
 
-		public SaveCompanyFile(int customerId, string fileName, byte[] fileContext, AConnection oDb, ASafeLog oLog)
+		public SaveCompanyFile(int customerId, string fileName, byte[] fileContent, string fileContentType, AConnection oDb, ASafeLog oLog)
 			: base(oDb, oLog)
 		{
 			this.customerId = customerId;
 			this.fileName = fileName;
-			this.fileContext = fileContext;
+			this.fileContent = fileContent;
+			this.fileContentType = fileContentType;
 		}
 
 		public override string Name
@@ -54,14 +56,15 @@
 
 						Log.Info("Saving file {0} as {1}...", fileName, sFileName);
 
-						File.WriteAllBytes(sFileName, fileContext);
+						File.WriteAllBytes(sFileName, fileContent);
 
 						Log.Info("Saving file metadata {0} {1} {2} {3}", customerId, DateTime.UtcNow, fileName.Length > 300 ? fileName.Substring(0, 300) : fileName, sFileName);
 						DB.ExecuteNonQuery("SaveCompanyFileMetadata", CommandSpecies.StoredProcedure,
 							new QueryParameter("CustomerId", customerId),
 							new QueryParameter("Created", DateTime.UtcNow),
 							new QueryParameter("FileName", fileName.Length > 300 ? fileName.Substring(0, 300) : fileName),
-							new QueryParameter("FilePath", sFileName));
+							new QueryParameter("FilePath", sFileName),
+							new QueryParameter("FileContentType", fileContentType));
 					}
 				} // if
 

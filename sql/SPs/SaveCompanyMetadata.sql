@@ -9,7 +9,8 @@ CREATE PROCEDURE SaveCompanyFileMetadata
 	@CustomerId INT,
 	@Created DATETIME,
 	@FileName NVARCHAR(300),
-	@FilePath NVARCHAR(MAX)
+	@FilePath NVARCHAR(MAX),
+	@FileContentType NVARCHAR(300)
 AS
-	INSERT INTO MP_CompanyFilesMetaData (CustomerId, Created, FileName, FilePath) VALUES (@CustomerId, @Created, @FileName, @FilePath)
+	INSERT INTO MP_CompanyFilesMetaData (CustomerId, Created, FileName, FilePath, FileContentType) VALUES (@CustomerId, @Created, @FileName, @FilePath, @FileContentType)
 GO

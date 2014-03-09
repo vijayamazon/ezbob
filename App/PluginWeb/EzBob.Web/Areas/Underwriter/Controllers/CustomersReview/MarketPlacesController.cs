@@ -38,7 +38,7 @@
 		private readonly YodleeGroupRuleMapRepository _yodleeGroupRuleMapRepository;
 		private readonly ISession _session;
 		private readonly EzServiceClient m_oServiceClient;
-
+		private readonly CompanyFilesMetaDataRepository _companyFiles;
 		public MarketPlacesController(CustomerRepository customers,
 			AnalyisisFunctionValueRepository functions,
 			CustomerMarketPlaceRepository customerMarketplaces,
@@ -49,7 +49,8 @@
 			YodleeGroupRepository yodleeGroupRepository,
 			YodleeRuleRepository yodleeRuleRepository,
 			YodleeGroupRuleMapRepository yodleeGroupRuleMapRepository,
-			ISession session)
+			ISession session, 
+			CompanyFilesMetaDataRepository companyFiles)
 		{
 			_customerMarketplaces = customerMarketplaces;
 			_marketPlaces = marketPlaces;
@@ -63,6 +64,7 @@
 			_yodleeRuleRepository = yodleeRuleRepository;
 			_yodleeGroupRuleMapRepository = yodleeGroupRuleMapRepository;
 			_session = session;
+			_companyFiles = companyFiles;
 		}
 
 		[Ajax]
@@ -302,6 +304,20 @@
 		public void DeleteSearchWord(string word)
 		{
 			_yodleeSearchWordsRepository.DeleteWord(word);
+		}
+
+		public FileResult DownloadCompanyFile(int fileId)
+		{
+
+			var file = ServiceClient.Instance.GetCompanyFile(fileId);
+			var fileMetaData = _companyFiles.Get(fileId);
+			if (file != null && fileMetaData != null)
+			{
+				FileResult fs = new FileContentResult(file, fileMetaData.FileContentType);
+				fs.FileDownloadName = fileMetaData.FileName;
+				return fs;
+			}
+			return null;
 		}
 	}
 }

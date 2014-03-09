@@ -718,9 +718,9 @@
 
 		#region Company Files
 
-		public ActionMetaData CompanyFilesUpload(int customerId, string fileName, byte[] fileContext)
+		public ActionMetaData CompanyFilesUpload(int customerId, string fileName, byte[] fileContent, string fileContentType)
 		{
-			return Execute(customerId, null, typeof(SaveCompanyFile), customerId, fileName, fileContext);
+			return Execute(customerId, null, typeof(SaveCompanyFile), customerId, fileName, fileContent, fileContentType);
 		}
 
 		public byte[] GetCompanyFile(int companyFileId)

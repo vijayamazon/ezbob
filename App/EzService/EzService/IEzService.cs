@@ -218,7 +218,7 @@ namespace EzService {
 		#region Company Files
 
 		[OperationContract]
-		ActionMetaData CompanyFilesUpload(int customerId, string fileName, byte[] fileContext);
+		ActionMetaData CompanyFilesUpload(int customerId, string fileName, byte[] fileContent, string fileContentType);
 
 		[OperationContract]
 		byte[] GetCompanyFile(int companyFileId);

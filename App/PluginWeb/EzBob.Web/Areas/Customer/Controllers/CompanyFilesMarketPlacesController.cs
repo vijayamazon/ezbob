@@ -64,6 +64,7 @@
 			for (int i = 0; i < Request.Files.Count; ++i)
 			{
 				HttpPostedFileBase file = Request.Files[i];
+				
 				if (file != null)
 				{
 					var content = new byte[file.ContentLength];
@@ -75,7 +76,7 @@
 						Log.WarnFormat("File {0}: failed to read entire file contents, ignoring.", i);
 						continue;
 					} // if
-					ServiceClient.Instance.CompanyFilesUpload(_context.Customer.Id, file.FileName, content);
+					ServiceClient.Instance.CompanyFilesUpload(_context.Customer.Id, file.FileName, content, file.ContentType);
 				}
 			}
 			return Json(new { });
@@ -102,63 +103,5 @@
 
 			return Json(new { });
 		}
-
-
-
-		//[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		//[Ajax]
-		//[HttpPost]
-		//public JsonNetResult Accounts(EkmAccountModel model)
-		//{
-		//	string errorMsg;
-		//	if (!_validator.Validate(model.login, model.password, out errorMsg))
-		//	{
-		//		var errorObject = new { error = errorMsg };
-		//		return this.JsonNet(errorObject);
-		//	}
-		//	try
-		//	{
-		//		var customer = _context.Customer;
-		//		var username = model.login;
-		//		var ekm = new EkmDatabaseMarketPlace();
-		//		_mpChecker.Check(ekm.InternalId, customer, username);
-		//		var oEsi = new EkmServiceInfo();
-		//		int marketPlaceId = _mpTypes
-		//			.GetAll()
-		//			.First(a => a.InternalId == oEsi.InternalId)
-		//			.Id;
-
-		//		var ekmSecurityInfo = new EkmSecurityInfo { MarketplaceId = marketPlaceId, Name = username, Password = model.password };
-
-		//		var mp = _helper.SaveOrUpdateCustomerMarketplace(username, ekm, ekmSecurityInfo.Password, customer);
-
-		//		_session.Flush();
-
-		//		_appCreator.CustomerMarketPlaceAdded(customer, mp.Id);
-
-		//		return this.JsonNet(EkmAccountModel.ToModel(mp));
-		//	}
-		//	catch (MarketPlaceAddedByThisCustomerException e)
-		//	{
-		//		Log.Debug(e);
-		//		return this.JsonNet(new { error = DbStrings.StoreAddedByYou });
-		//	}
-		//	catch (MarketPlaceIsAlreadyAddedException e)
-		//	{
-		//		Log.Debug(e);
-		//		return this.JsonNet(new { error = DbStrings.StoreAlreadyExistsInDb });
-		//	}
-		//	catch (Exception e)
-		//	{
-		//		Log.Error(e);
-		//		return this.JsonNet(new { error = e.Message });
-		//	}
-		//}
-
-		private JsonResult CreateError(string sErrorMsg)
-		{
-			return Json(new { error = sErrorMsg });
-		} // CreateError
-
 	}
 }

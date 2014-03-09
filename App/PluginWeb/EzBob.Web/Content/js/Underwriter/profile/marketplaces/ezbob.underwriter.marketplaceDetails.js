@@ -81,7 +81,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
         "click .yodleeReplotGraph": "replotYodleeGraphClicked",
         "click .yodleeAccountsRow": "yodleeAccountsRowClicked",
         "click .yodleeShowTransactionsInRange": "yodleeShowTrnInRangeClicked",
-        "click .yodleeRuleAdd": "yodleeRuleAddClicked"
+        "click .yodleeRuleAdd": "yodleeRuleAddClicked",
     },
     renewTokenClicked: function (e) {
         var umi = $(e.currentTarget).data("umi");

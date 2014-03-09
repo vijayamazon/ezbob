@@ -9,6 +9,7 @@
 			public virtual Customer Customer { get; set; }
 			public virtual string FileName { get; set; }
 			public virtual string FilePath { get; set; }
+			public virtual string FileContentType { get; set; }
 		}
 	}
 
@@ -26,6 +27,7 @@
 				Map(x => x.Created).CustomType<UtcDateTimeType>();
 				Map(x => x.FileName).Length(300);
 				Map(x => x.FilePath);
+				Map(x => x.FileContentType).Length(300);
 				References(x => x.Customer, "CustomerId");
 
 			}
