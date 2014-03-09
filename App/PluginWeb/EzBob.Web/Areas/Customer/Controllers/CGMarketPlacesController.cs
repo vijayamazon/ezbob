@@ -118,7 +118,7 @@
 				oState.CustomerMarketPlace.Marketplace.GetRetrieveDataHelper(_helper).UpdateCustomerMarketplaceFirst(oState.CustomerMarketPlace.Id);
 			}
 			catch (Exception e) {
-				ViewError = CreateError("Account has been linked but error occured while storing uploaded data: " + e.Message);
+				ViewError = CreateError("Account has been linked but error occurred while storing uploaded data: " + e.Message);
 			} // try
 
 			try {
