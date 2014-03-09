@@ -18,7 +18,10 @@ namespace EzServiceHost {
 			m_oCfg = oCfg;
 			m_oData = oData;
 
-			var oTcpBinding = new NetTcpBinding();
+			var oTcpBinding = new NetTcpBinding {
+				MaxReceivedMessageSize = 2147483647,
+				MaxBufferSize = 2147483647,
+			};
 
 			AddServiceEndpoint(typeof(IEzServiceAdmin), oTcpBinding, m_oCfg.AdminEndpointAddress);
 
