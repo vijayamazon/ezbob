@@ -409,7 +409,6 @@
     <Compile Include="Infrastructure\Filters\CaptchaValidationFilter.cs" />
     <Compile Include="Infrastructure\csrf\AntiForgeryHtmlHelper.cs" />
     <Compile Include="Infrastructure\BundleHelper.cs" />
-    <Compile Include="Infrastructure\EzbobCaptchaManager.cs" />
     <Compile Include="Infrastructure\EzBobConfiguration.cs" />
     <Compile Include="Infrastructure\EzBobContext.cs" />
     <Compile Include="Infrastructure\EzBobHandleErrorAttribute.cs" />

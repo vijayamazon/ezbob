@@ -39,7 +39,7 @@
 				        isValid = true;
 				        break;
 			        case "simple":
-						isValid = filterContext.Controller.IsCaptchaVerify(ErrorMessage);
+						isValid = filterContext.Controller.IsCaptchaValid(ErrorMessage);
 				        break;
 			        case "reCaptcha":
 				        var validator = new RecaptchaValidator
