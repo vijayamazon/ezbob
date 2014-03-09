@@ -442,7 +442,6 @@
     <Compile Include="Models\PaymentConfirmationModel.cs" />
     <Compile Include="Models\Strings\DbString.cs" />
     <Compile Include="Models\ForgotPasswordModel.cs" />
-    <Compile Include="Infrastructure\ScortoHttpApplication.cs" />
     <Compile Include="Models\LogOnModel.cs" />
     <Compile Include="Models\Repository\DbStringRepository.cs" />
     <Compile Include="Models\Strings\DbStrings.cs" />
