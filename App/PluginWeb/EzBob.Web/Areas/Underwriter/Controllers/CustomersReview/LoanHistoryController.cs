@@ -11,7 +11,6 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Loans;
 	using EZBob.DatabaseLib.Repository;
-	using EzServiceReference;
 	using Models;
 	using Code;
 	using Code.ReportGenerator;
@@ -25,7 +24,7 @@
 	public class LoanHistoryController : Controller
 	{
 		private static readonly ILog _log = LogManager.GetLogger("LoanHistoryController");
-		private readonly EzServiceClient m_oServiceClient;
+		private readonly ServiceClient m_oServiceClient;
 		private readonly ConfigurationVariablesRepository _configurationVariablesRepository;
 		private readonly IEzbobWorkplaceContext _context;
 		private readonly CustomerRepository _customerRepository;
@@ -51,7 +50,7 @@
 			_loanScheduleRepository = loanScheduleRepository;
 			_context = context;
 			_loanRepaymentFacade = loanRepaymentFacade;
-			m_oServiceClient = ServiceClient.Instance;
+			m_oServiceClient = new ServiceClient();
 			_logRepository = logRepository;
 			_loanRepository = loanRepository;
 			_configurationVariablesRepository = configurationVariablesRepository;
@@ -160,7 +159,7 @@
 			rolloverModel.Status = RolloverStatus.New;
 			_rolloverRepository.SaveOrUpdate(rolloverModel);
 
-			m_oServiceClient.EmailRolloverAdded(customer.Id, payment);
+			m_oServiceClient.Instance.EmailRolloverAdded(customer.Id, payment);
 		}
 
 		[Ajax]
@@ -213,7 +212,7 @@
 				_loanRepaymentFacade.Recalculate(customer.GetLoan(model.LoanId), DateTime.Now);
 
 				if (model.SendEmail)
-					m_oServiceClient.PayEarly(_users.Get(customer.Id).Id, realAmount, customer.GetLoan(model.LoanId).RefNumber);
+					m_oServiceClient.Instance.PayEarly(_users.Get(customer.Id).Id, realAmount, customer.GetLoan(model.LoanId).RefNumber);
 
 				string requestType = string.Format("Manual payment for customer {0}, amount {1}",
 												   customer.PersonalInfo.Fullname, realAmount);

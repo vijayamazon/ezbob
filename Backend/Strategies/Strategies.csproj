@@ -80,6 +80,7 @@
     <Compile Include="AutoDecisions\Rejection.cs" />
     <Compile Include="AutoDecisions\ReApproval.cs" />
     <Compile Include="AutoDecisions\ReRejection.cs" />
+    <Compile Include="Broker\BrokerDeleteCustomerFiles.cs" />
     <Compile Include="Broker\BrokerIsBroker.cs" />
     <Compile Include="Broker\BrokerLoadCustomerDetails.cs" />
     <Compile Include="Broker\BrokerLoadCustomerFiles.cs" />

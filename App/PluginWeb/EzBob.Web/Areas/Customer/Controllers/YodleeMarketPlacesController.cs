@@ -7,7 +7,6 @@
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.DatabaseWrapper;
 	using EZBob.DatabaseLib.Model.Marketplaces.Yodlee;
-	using EzServiceReference;
 	using Web.Models.Strings;
 	using YodleeLib;
 	using YodleeLib.connector;
@@ -29,7 +28,7 @@
 		private readonly IRepository<MP_MarketplaceType> _mpTypes;
 		private readonly Customer _customer;
 		private readonly YodleeMpUniqChecker _mpChecker;
-		private readonly EzServiceClient m_oServiceClient;
+		private readonly ServiceClient m_oServiceClient;
 	    private readonly ISession _session;
 		private readonly DatabaseDataHelper _helper;
 
@@ -45,7 +44,7 @@
 			_mpTypes = mpTypes;
 			_customer = context.Customer;
 			_mpChecker = mpChecker;
-			m_oServiceClient = ServiceClient.Instance;
+			m_oServiceClient = new ServiceClient();
 			_session = session;
 		}
 
@@ -123,7 +122,7 @@
 
 			Log.InfoFormat("Added or updated yodlee marketplace: {0}", marketPlace.Id);
 			
-			m_oServiceClient.UpdateMarketplace(_context.Customer.Id, marketPlace.Id, true);
+			m_oServiceClient.Instance.UpdateMarketplace(_context.Customer.Id, marketPlace.Id, true);
 
 			return View(YodleeAccountModel.ToModel(marketPlace, new YodleeBanksRepository(_session)));
 		}
@@ -206,7 +205,7 @@
 				return View(new { error = "Error occured updating bank account" });
 			}
 
-			m_oServiceClient.UpdateMarketplace(_context.Customer.Id, id, true);
+			m_oServiceClient.Instance.UpdateMarketplace(_context.Customer.Id, id, true);
 			return View(new {success = true});
 		}
 	}

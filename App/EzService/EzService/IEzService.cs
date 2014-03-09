@@ -1,11 +1,12 @@
-﻿using System.ServiceModel;
-
-namespace EzService {
+﻿namespace EzService {
+	using System.ServiceModel;
 	using EzBob.Backend.Strategies;
 	using FraudChecker;
 
 	[ServiceContract(SessionMode = SessionMode.Allowed)]
 	public interface IEzService {
+		#region email strategies
+
 		[OperationContract]
 		ActionMetaData GreetingMailStrategy(int nCustomerID, string sConfirmationEmail);
 
@@ -72,41 +73,29 @@ namespace EzService {
 		[OperationContract]
 		ActionMetaData TransferCashFailed(int customerId);
 
+		#endregion email strategies
+
+		#region CAIS
+
 		[OperationContract]
 		ActionMetaData CaisGenerate(int underwriterId);
 
 		[OperationContract]
 		ActionMetaData CaisUpdate(int userId, int caisId);
 
-		[OperationContract]
-		ActionMetaData FirstOfMonthStatusNotifier();
+		#endregion CAIS
 
-		[OperationContract]
-		ActionMetaData FraudChecker(int customerId, FraudMode mode);
-
-		[OperationContract]
-		ActionMetaData LateBy14Days();
-
-		[OperationContract]
-		ActionMetaData PayPointCharger();
-
-		[OperationContract]
-		ActionMetaData SetLateLoanStatus();
-
-		[OperationContract]
-		ActionMetaData UpdateMarketplace(int customerId, int marketplaceId, bool doUpdateWizardStep);
-		
-		[OperationContract]
-		ActionMetaData UpdateTransactionStatus();
-
-		[OperationContract]
-		ActionMetaData XDaysDue();
+		#region Experian
 
 		[OperationContract]
 		ActionMetaData CheckExperianCompany(int customerId);
 
 		[OperationContract]
 		ActionMetaData CheckExperianConsumer(int customerId, int directorId);
+
+		#endregion Experian
+
+		#region AML and BWA
 
 		[OperationContract]
 		ActionMetaData CheckAml(int customerId);
@@ -120,6 +109,10 @@ namespace EzService {
 		[OperationContract]
 		ActionMetaData CheckBwaCustom(int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet, string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode, string idhubBranchCode, string idhubAccountNumber);
 
+		#endregion AML and BWA
+
+		#region Main
+
 		[OperationContract]
 		ActionMetaData MainStrategy1(int uderwriterId, int customerId, NewCreditLineOption newCreditLine, int avoidAutoDescison);
 
@@ -131,18 +124,18 @@ namespace EzService {
 
 		[OperationContract]
 		ActionMetaData MainStrategySync1(int underwriterId, int customerId, NewCreditLineOption newCreditLine, int avoidAutoDescison);
-		
+
+		#endregion Main
+
+		#region mobile phone code
+
 		[OperationContract]
 		BoolActionResult GenerateMobileCode(string phone);
 
 		[OperationContract]
 		BoolActionResult ValidateMobileCode(string phone, string code);
 
-		[OperationContract]
-		WizardConfigsActionResult GetWizardConfigs();
-
-		[OperationContract]
-		ActionMetaData UpdateCurrencyRates();
+		#endregion mobile phone code
 
 		#region Quick offer
 
@@ -153,12 +146,6 @@ namespace EzService {
 		QuickOfferActionResult QuickOfferWithPrerequisites(int customerId, bool saveOfferToDB);
 		
 		#endregion Quick offer
-
-		[OperationContract]
-		ActionMetaData FinishWizard(int customerId);
-
-		[OperationContract]
-		CrmLookupsActionResult CrmLoadLookups();
 
 		#region Broker
 
@@ -203,6 +190,9 @@ namespace EzService {
 		[OperationContract]
 		ActionMetaData BrokerSaveUploadedCustomerFile(int nCustomerID, string sContactEmail, byte[] oFileContents, string sFileName);
 
+		[OperationContract]
+		ActionMetaData BrokerDeleteCustomerFiles(int nCustomerID, string sContactEmail, int[] aryFileIDs);
+
 		#endregion Broker
 
 		#region Land Registry
@@ -225,6 +215,45 @@ namespace EzService {
 
 		#endregion
 
+		#region other strategies
+
+		[OperationContract]
+		ActionMetaData FirstOfMonthStatusNotifier();
+
+		[OperationContract]
+		ActionMetaData FraudChecker(int customerId, FraudMode mode);
+
+		[OperationContract]
+		ActionMetaData LateBy14Days();
+
+		[OperationContract]
+		ActionMetaData PayPointCharger();
+
+		[OperationContract]
+		ActionMetaData SetLateLoanStatus();
+
+		[OperationContract]
+		ActionMetaData UpdateMarketplace(int customerId, int marketplaceId, bool doUpdateWizardStep);
+		
+		[OperationContract]
+		ActionMetaData UpdateTransactionStatus();
+
+		[OperationContract]
+		ActionMetaData XDaysDue();
+
+		[OperationContract]
+		WizardConfigsActionResult GetWizardConfigs();
+
+		[OperationContract]
+		ActionMetaData UpdateCurrencyRates();
+
+		[OperationContract]
+		ActionMetaData FinishWizard(int customerId);
+
+		[OperationContract]
+		CrmLookupsActionResult CrmLoadLookups();
+
+		#endregion other strategies
 	} // interface IEzService
 } // namespace EzService
 

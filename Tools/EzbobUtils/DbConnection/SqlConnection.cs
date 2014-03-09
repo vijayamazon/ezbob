@@ -60,6 +60,9 @@
 			if (prm.Type != null)
 				oParam.SqlDbType = (SqlDbType)prm.Type;
 
+			if (!string.IsNullOrWhiteSpace(prm.UnderlyingTypeName))
+				oParam.UdtTypeName = prm.UnderlyingTypeName;
+
 			oParam.Direction = prm.Direction;
 
 			prm.UnderlyingParameter = oParam;

@@ -1,4 +1,6 @@
 ﻿namespace EzService {
+	#region using
+
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
@@ -13,6 +15,8 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using FraudChecker;
+
+	#endregion using
 
 	[ServiceBehavior(
 		InstanceContextMode = InstanceContextMode.PerCall,
@@ -261,6 +265,8 @@
 
 		#region IEzService exposed methods
 
+		#region email strategies
+
 		public ActionMetaData GreetingMailStrategy(int nCustomerID, string sConfirmationEmail) {
 			return Execute(nCustomerID, null, typeof(Greeting), nCustomerID, sConfirmationEmail);
 		} // GreetingMailStrategy
@@ -349,6 +355,10 @@
 			return Execute(customerId, null, typeof(TransferCashFailed), customerId);
 		} // TransferCashFailed
 
+		#endregion email strategies
+
+		#region CAIS
+
 		public ActionMetaData CaisGenerate(int underwriterId) {
 			return Execute(null, underwriterId, typeof(CaisGenerate), underwriterId);
 		} // CaisGenerate
@@ -357,37 +367,9 @@
 			return Execute(null, userId, typeof(CaisUpdate), caisId);
 		} // CaisUpdate
 
-		public ActionMetaData FirstOfMonthStatusNotifier() {
-			return Execute(null, null, typeof(FirstOfMonthStatusNotifier));
-		} // FirstOfMonthStatusNotifier
+		#endregion CAIS
 
-		public ActionMetaData FraudChecker(int customerId, FraudMode mode) {
-			return Execute(customerId, null, typeof (FraudChecker), customerId, mode);
-		} // FraudChecker
-
-		public ActionMetaData LateBy14Days() {
-			return Execute(null, null, typeof(LateBy14Days));
-		} // LateBy14Days
-
-		public ActionMetaData PayPointCharger() {
-			return Execute(null, null, typeof(PayPointCharger));
-		} // PayPointCharger
-
-		public ActionMetaData SetLateLoanStatus() {
-			return Execute(null, null, typeof(SetLateLoanStatus));
-		} // SetLateLoanStatus
-
-		public ActionMetaData UpdateMarketplace(int customerId, int marketplaceId, bool doUpdateWizardStep) {
-			return Execute(customerId, null, typeof(UpdateMarketplace), customerId, marketplaceId, doUpdateWizardStep);
-		} // UpdateMarketplace
-
-		public ActionMetaData UpdateTransactionStatus() {
-			return Execute(null, null, typeof(UpdateTransactionStatus));
-		} // UpdateTransactionStatus
-
-		public ActionMetaData XDaysDue() {
-			return Execute(null, null, typeof(XDaysDue));
-		} // XDaysDue
+		#region Experian
 
 		public ActionMetaData CheckExperianCompany(int customerId) {
 			return Execute(customerId, null, typeof(ExperianCompanyCheck), customerId);
@@ -396,6 +378,10 @@
 		public ActionMetaData CheckExperianConsumer(int customerId, int directorId) {
 			return Execute(customerId, null, typeof(ExperianConsumerCheck), customerId, directorId);
 		} // CheckExperianConsumer
+
+		#endregion Experian
+
+		#region AML and BWA
 
 		public ActionMetaData CheckAml(int customerId) {
 			return Execute(customerId, null, typeof(AmlChecker), customerId);
@@ -424,6 +410,10 @@
 			);
 		} // CheckBwaCustom
 
+		#endregion AML and BWA
+
+		#region Main
+
 		public ActionMetaData MainStrategy1(int underwriterId, int customerId, NewCreditLineOption newCreditLine, int avoidAutoDescison) {
 			return Execute(customerId, underwriterId, typeof(MainStrategy), customerId, newCreditLine, avoidAutoDescison);
 		} // MainStrategy1
@@ -440,6 +430,10 @@
 			return ExecuteSync<MainStrategy>(customerId, underwriterId, customerId, newCreditLine, avoidAutoDescison);
 		} // MainStrategySync1
 
+		#endregion Main
+
+		#region mobile phone code
+
 		public BoolActionResult GenerateMobileCode(string phone) {
 			GenerateMobileCode strategyInstance;
 			var result = ExecuteSync(out strategyInstance, null, null, phone);
@@ -452,25 +446,7 @@
 			return new BoolActionResult { MetaData = result, Value = strategyInstance.IsValidatedSuccessfully() };
 		} // ValidateMobileCode
 
-		public WizardConfigsActionResult GetWizardConfigs() {
-			GetWizardConfigs strategyInstance;
-
-			var result = ExecuteSync(out strategyInstance, null, null);
-
-			return new WizardConfigsActionResult {
-				MetaData = result,
-				IsSmsValidationActive = strategyInstance.IsSmsValidationActive,
-				NumberOfMobileCodeAttempts = strategyInstance.NumberOfMobileCodeAttempts
-			};
-		} // GetWizardConfigs
-
-		public ActionMetaData UpdateCurrencyRates() {
-			return Execute(null, null, typeof(UpdateCurrencyRates));
-		} // UpdateCurrencyRates
-
-		public ActionMetaData FinishWizard(int customerId) {
-			return Execute(customerId, null, typeof(FinishWizard), customerId);
-		} // FinishWizard
+		#endregion mobile phone code
 
 		#region Quick offer
 
@@ -515,18 +491,6 @@
 		} // QuickOfferWithPrerequisites
 
 		#endregion Quick offer
-
-		public CrmLookupsActionResult CrmLoadLookups() {
-			CrmLoadLookups oInstance;
-
-			ActionMetaData oResult = ExecuteSync(out oInstance, null, null);
-
-			return new CrmLookupsActionResult {
-				MetaData = oResult,
-				Actions = oInstance.Actions,
-				Statuses = oInstance.Statuses,
-			};
-		} // CrmLoadLookups
 
 		#region Broker
 
@@ -698,6 +662,14 @@
 
 		#endregion method BrokerSaveUploadedCustomerFile
 
+		#region method BrokerDeleteCustomerFiles
+
+		public ActionMetaData BrokerDeleteCustomerFiles(int nCustomerID, string sContactEmail, int[] aryFileIDs) {
+			return ExecuteSync<BrokerDeleteCustomerFiles>(nCustomerID, null, nCustomerID, sContactEmail, aryFileIDs);
+		} // BrokerDeleteCustomerFiles
+
+		#endregion method BrokerDeleteCustomerFiles
+
 		#endregion Broker
 
 		#region Land Registry
@@ -731,6 +703,75 @@
 		}
 
 		#endregion 
+
+		#region other strategies
+
+		public ActionMetaData FirstOfMonthStatusNotifier() {
+			return Execute(null, null, typeof(FirstOfMonthStatusNotifier));
+		} // FirstOfMonthStatusNotifier
+
+		public ActionMetaData FraudChecker(int customerId, FraudMode mode) {
+			return Execute(customerId, null, typeof (FraudChecker), customerId, mode);
+		} // FraudChecker
+
+		public ActionMetaData LateBy14Days() {
+			return Execute(null, null, typeof(LateBy14Days));
+		} // LateBy14Days
+
+		public ActionMetaData PayPointCharger() {
+			return Execute(null, null, typeof(PayPointCharger));
+		} // PayPointCharger
+
+		public ActionMetaData SetLateLoanStatus() {
+			return Execute(null, null, typeof(SetLateLoanStatus));
+		} // SetLateLoanStatus
+
+		public ActionMetaData UpdateMarketplace(int customerId, int marketplaceId, bool doUpdateWizardStep) {
+			return Execute(customerId, null, typeof(UpdateMarketplace), customerId, marketplaceId, doUpdateWizardStep);
+		} // UpdateMarketplace
+
+		public ActionMetaData UpdateTransactionStatus() {
+			return Execute(null, null, typeof(UpdateTransactionStatus));
+		} // UpdateTransactionStatus
+
+		public ActionMetaData XDaysDue() {
+			return Execute(null, null, typeof(XDaysDue));
+		} // XDaysDue
+
+		public CrmLookupsActionResult CrmLoadLookups() {
+			CrmLoadLookups oInstance;
+
+			ActionMetaData oResult = ExecuteSync(out oInstance, null, null);
+
+			return new CrmLookupsActionResult {
+				MetaData = oResult,
+				Actions = oInstance.Actions,
+				Statuses = oInstance.Statuses,
+			};
+		} // CrmLoadLookups
+
+		public WizardConfigsActionResult GetWizardConfigs() {
+			GetWizardConfigs strategyInstance;
+
+			var result = ExecuteSync(out strategyInstance, null, null);
+
+			return new WizardConfigsActionResult {
+				MetaData = result,
+				IsSmsValidationActive = strategyInstance.IsSmsValidationActive,
+				NumberOfMobileCodeAttempts = strategyInstance.NumberOfMobileCodeAttempts
+			};
+		} // GetWizardConfigs
+
+		public ActionMetaData UpdateCurrencyRates() {
+			return Execute(null, null, typeof(UpdateCurrencyRates));
+		} // UpdateCurrencyRates
+
+		public ActionMetaData FinishWizard(int customerId) {
+			return Execute(customerId, null, typeof(FinishWizard), customerId);
+		} // FinishWizard
+
+		#endregion other strategies
+
 		#endregion IEzService exposed methods
 
 		#region method IDisposable.Dispose

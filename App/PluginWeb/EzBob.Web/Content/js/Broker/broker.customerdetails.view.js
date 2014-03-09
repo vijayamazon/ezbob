@@ -21,6 +21,8 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 		evt['click .back-to-list'] = 'backToList';
 		evt['click .add-crm-note'] = 'addCrmNote';
 		evt['click .download-customer-file'] = 'downloadCustomerFile';
+		evt['click .remove-file-mark'] = 'fileMarkChanged';
+		evt['click .delete-selected-files'] = 'deleteSelectedFiles';
 
 		return evt;
 	}, // events
@@ -97,10 +99,8 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 						switch (sFieldName) {
 						case 'birthdate':
 							return EzBob.formatDate(oFieldValue);
-
 						case 'address':
 							return oFieldValue.replace(/\n+/g, '<br />');
-
 						default:
 							return oFieldValue;
 						} // switch
@@ -142,19 +142,100 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 					switch (sAction) {
 					case 'display':
 						return '<a href="#" class=download-customer-file data-file-id=' + oFullSource.FileID + '>' + (oFullSource.FileDescription || oData) + '</a>';
-
 					case 'filter':
 						return (oFullSource.FileDescription || '') + ' ' + oData;
-
 					default:
 						return oData;
 					} // switch
-				}; // fnRowCallback
+				}; // mRender
+
+				opts.aoColumns[1] = {
+					mData: null,
+					sClass: 'center',
+					mRender: function(oData, sAction, oFullSource) {
+						if (sAction === 'display')
+							return '<input type=checkbox class=remove-file-mark data-file-id=' + oFullSource.FileID + '>';
+
+						return '';
+					}, // mRender
+				};
 
 				self.FileTable = self.$el.find('.customer-file-list').dataTable(opts);
+
+				self.$el.find('.customer-files .dataTables_top_right')
+					.prepend(self.setSomethingEnabled(
+						$('<button type=button class="delete-selected-files" title="Delete selected files">Delete</button>'),
+						false
+					));
 			} // on success loading customer details
-		);
+		); // getJSON
 	}, // reloadFileList
+
+	fileMarkChanged: function() {
+		this.setSomethingEnabled('.delete-selected-files', this.$el.find('.remove-file-mark:checked').length > 0);
+	}, // fileMarkChanged
+
+	deleteSelectedFiles: function() {
+		var nSelectedCount = this.$el.find('.remove-file-mark:checked').length;
+
+		if (nSelectedCount < 1)
+			return;
+
+		var sMsg = 'Are you sure to delete ' + nSelectedCount + ' selected file' + ((nSelectedCount === 1) ? '' : 's') + '?';
+
+		var self = this;
+
+		EzBob.ShowMessage(sMsg, 'Please confirm', function() { self.doDeleteSelectedFiles(); }, 'Yes', null, 'No');
+	}, // deleteSelectedFiles
+
+	doDeleteSelectedFiles: function() {
+		var arySelected = [];
+		this.$el.find('.remove-file-mark:checked').each(function() {
+			arySelected.push($(this).attr('data-file-id'));
+		});
+
+		if (arySelected.length < 1)
+			return;
+
+		EzBob.App.trigger('clear');
+
+		BlockUi();
+
+		var self = this;
+
+		var oXhr = $.ajax({
+			type: 'POST',
+			url: window.gRootPath + 'Broker/BrokerHome/DeleteCustomerFiles',
+			traditional: true,
+			data: {
+				nCustomerID: this.CustomerID,
+				sContactEmail: this.router.getAuth(),
+				aryFileIDs: arySelected,
+			}, // data
+			dataType: 'json',
+		});
+
+		oXhr.done = function(oResponse) {
+			if (oResponse.success) {
+				EzBob.App.trigger('info', 'Selected files have been removed.');
+				return;
+			} // if
+
+			if (oResponse.error)
+				EzBob.App.trigger('error', oResponse.error);
+			else
+				EzBob.App.trigger('error', 'Failed to remove selected files.');
+		}; // on success
+
+		oXhr.fail = function() {
+			EzBob.App.trigger('error', 'Failed to remove selected files.');
+		}; // on fail
+
+		oXhr.always = function() {
+			UnBlockUi();
+			self.reloadFileList();
+		}; // always
+	}, // doDeleteSelectedFiles
 
 	initDataTablesOptions: function(sGridKey, sColumns) {
 		sGridKey = 'brk-grid-state-' + this.router.getAuth() + '-customer-' + sGridKey;

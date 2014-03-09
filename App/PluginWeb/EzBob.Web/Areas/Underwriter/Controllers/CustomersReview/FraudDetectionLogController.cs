@@ -4,7 +4,6 @@
 	using Code;
 	using EZBob.DatabaseLib.Repository;
 	using EzBob.Web.Areas.Underwriter.Models;
-	using EzServiceReference;
 	using Scorto.Web;
 	using System;
 	using ApplicationMng.Repository;
@@ -12,13 +11,13 @@
 
 	public class FraudDetectionLogController : Controller {
 		private readonly FraudDetectionRepository _fraudDetectionLog;
-		private readonly EzServiceClient m_oServiceClient;
+		private readonly ServiceClient m_oServiceClient;
 		private readonly IUsersRepository _usersRepository;
 
 		public FraudDetectionLogController(FraudDetectionRepository fraudDetectionLog, IUsersRepository usersRepository)
 		{
 			_fraudDetectionLog = fraudDetectionLog;
-			m_oServiceClient = ServiceClient.Instance;
+			m_oServiceClient = new ServiceClient();
 			_usersRepository = usersRepository;
 		}
 
@@ -41,7 +40,7 @@
 		public JsonNetResult Recheck(int customerId)
 		{
 			var user = _usersRepository.Get(customerId);
-			m_oServiceClient.FraudChecker(user.Id, FraudMode.FullCheck);
+			m_oServiceClient.Instance.FraudChecker(user.Id, FraudMode.FullCheck);
 			return this.JsonNet(new { success = true });
 		}
 	}

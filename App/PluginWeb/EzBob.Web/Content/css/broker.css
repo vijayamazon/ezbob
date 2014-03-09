@@ -49,18 +49,23 @@ table.customer-list {
 
 .section-dashboard .dataTables_top_right { float: right; }
 
-.section-dashboard .dataTables_filter { display: inline; }
+.section-dashboard .dataTables_filter,
+.section-customer-details .customer-files .dataTables_filter
+{ display: inline; }
 
-.section-dashboard .reload-customer-list {
+.section-dashboard .reload-customer-list,
+.section-customer-details .delete-selected-files {
 	display: inline-block;
-	margin: 0.1em 2em 0 0;
+	margin: 0.1em 0 0 1em;
 	padding: 0.2em 3em;
 	background-color: transparent;
 	border: 1px solid #eeeeee;
 	color: black;
+	float: right;
 }
 
-.section-dashboard .reload-customer-list:hover {
+.section-dashboard .reload-customer-list:hover,
+.section-customer-details .delete-selected-files:hover {
 	border: 1px solid white;
 }
 
@@ -118,6 +123,8 @@ table.customer-list {
 .section-customer-details .crm-title {
 	margin-bottom: 1em;
 }
+
+.section-customer-details .center { text-align: center!important; }
 
 @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
 	.broker-form {

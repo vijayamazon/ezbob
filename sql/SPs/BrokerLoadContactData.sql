@@ -1,12 +1,9 @@
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[BrokerLoadContactData]') AND TYPE IN (N'P', N'PC'))
-DROP PROCEDURE [dbo].[BrokerLoadContactData]
+IF OBJECT_ID('BrokerLoadContactData') IS NULL
+	EXECUTE('CREATE PROCEDURE BrokerLoadContactData AS SELECT 1')
 GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[BrokerLoadContactData] 
-	(@BrokerID INT)
+
+ALTER PROCEDURE BrokerLoadContactData
+@BrokerID INT
 AS
 BEGIN
 	SELECT
@@ -19,3 +16,4 @@ BEGIN
 		BrokerID = @BrokerID
 END
 GO
+

@@ -25,7 +25,7 @@
 	{
 		private readonly ILoanHistoryRepository _loanHistoryRepository;
 		private readonly IPacnetService _pacnetService;
-		private readonly EzServiceClient m_oServiceClient;
+		private readonly ServiceClient m_oServiceClient;
 		private readonly IAgreementsGenerator _agreementsGenerator;
 		private readonly IEzbobWorkplaceContext _context;
 		private readonly LoanBuilder _loanBuilder;
@@ -45,7 +45,7 @@
 		) {
 			_loanHistoryRepository = loanHistoryRepository;
 			_pacnetService = pacnetService;
-			m_oServiceClient = ServiceClient.Instance;
+			m_oServiceClient = new ServiceClient();
 			_agreementsGenerator = agreementsGenerator;
 			_context = context;
 			_loanBuilder = loanBuilder;
@@ -119,7 +119,7 @@
 
 			_session.Flush();
 
-			m_oServiceClient.CashTransferred(_context.User.Id, transfered);
+			m_oServiceClient.Instance.CashTransferred(_context.User.Id, transfered);
 
 			return loan;
 		}

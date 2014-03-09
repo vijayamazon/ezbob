@@ -9,7 +9,6 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using CommonLib;
-	using EzServiceReference;
 	using Models;
 	using Code;
 	using Infrastructure;
@@ -20,7 +19,7 @@
 	using log4net;
 
 	public class GetCashController : Controller {
-		private readonly EzServiceClient m_oServiceClient;
+		private readonly ServiceClient m_oServiceClient;
 		private readonly IEzbobWorkplaceContext _context;
 		private readonly IPayPointFacade _payPointFacade;
 		private readonly ICustomerNameValidator _validator;
@@ -39,7 +38,7 @@
 		) {
 			_context = context;
 			_payPointFacade = payPointFacade;
-			m_oServiceClient = ServiceClient.Instance;
+			m_oServiceClient = new ServiceClient();
 			_validator = validator;
 			_logRepository = logRepository;
 			_customerRepository = customerRepository;
@@ -147,7 +146,7 @@
 					_context.Customer.PayPointErrorsCount++;
 
 					try {
-						m_oServiceClient.GetCashFailed(_context.User.Id);
+						m_oServiceClient.Instance.GetCashFailed(_context.User.Id);
 					}
 					catch (Exception e) {
 						_log.Error("Failed to send 'get cash failed' email.", e);
@@ -203,7 +202,7 @@
 			catch (PacnetException)
 			{
 				try {
-					m_oServiceClient.TransferCashFailed(_context.User.Id);
+					m_oServiceClient.Instance.TransferCashFailed(_context.User.Id);
 				}
 				catch (Exception e) {
 					_log.Error("Failed to send 'transfer cash failed' email.", e);
@@ -248,7 +247,7 @@
 								cus.PersonalInfo.Surname,
 								cus.PersonalInfo.Surname);
 				try {
-					m_oServiceClient.PayPointNameValidationFailed(_context.User.Id, cus.Id, customer);
+					m_oServiceClient.Instance.PayPointNameValidationFailed(_context.User.Id, cus.Id, customer);
 				}
 				catch (Exception e) {
 					_log.Error("Failed to send 'paypoint name validation failed' email.", e);

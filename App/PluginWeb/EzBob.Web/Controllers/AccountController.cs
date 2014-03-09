@@ -37,7 +37,7 @@ namespace EzBob.Web.Controllers
 		private readonly MembershipProvider _membershipProvider;
 		private readonly IUsersRepository _users;
 		private readonly CustomerRepository _customers;
-		private readonly EzServiceClient m_oServiceClient;
+		private readonly ServiceClient m_oServiceClient;
 		private readonly IEzBobConfiguration _config;
 		private readonly ISessionManager _sessionManager;
 		private readonly IEzbobWorkplaceContext _context;
@@ -67,7 +67,7 @@ namespace EzBob.Web.Controllers
 			_membershipProvider = membershipProvider;
 			_users = users;
 			_customers = customers;
-			m_oServiceClient = ServiceClient.Instance;
+			m_oServiceClient = new ServiceClient();
 			_config = config;
 			_sessionManager = sessionManager;
 			_context = context;
@@ -149,7 +149,7 @@ namespace EzBob.Web.Controllers
 						//RestorePassword(user.EMail, user.SecurityAnswer);
 
 						var password = _membershipProvider.ResetPassword(user.EMail, "");
-						m_oServiceClient.ThreeInvalidAttempts(user.Id, password);
+						m_oServiceClient.Instance.ThreeInvalidAttempts(user.Id, password);
 						user.IsPasswordRestored = true;
 						user.LoginFailedCount = 0;
 
@@ -245,7 +245,7 @@ namespace EzBob.Web.Controllers
 						//RestorePassword(user.EMail, user.SecurityAnswer);
 
 						var password = _membershipProvider.ResetPassword(user.EMail, "");
-						m_oServiceClient.ThreeInvalidAttempts(user.Id, password);
+						m_oServiceClient.Instance.ThreeInvalidAttempts(user.Id, password);
 						user.IsPasswordRestored = true;
 						user.LoginFailedCount = 0;
 
@@ -365,7 +365,7 @@ namespace EzBob.Web.Controllers
 			bool isTwilioEnabled = Convert.ToBoolean(@Session["IsSmsValidationActive"]);
 			if (isTwilioEnabled && !switchedToCaptcha)
 			{
-				bool isCorrect = m_oServiceClient.ValidateMobileCode(mobilePhone, mobileCode).Value;
+				bool isCorrect = m_oServiceClient.Instance.ValidateMobileCode(mobilePhone, mobileCode).Value;
 				if (!isCorrect)
 					throw new Exception("Invalid code");
 			}
@@ -447,7 +447,7 @@ namespace EzBob.Web.Controllers
 							}
 					};
 
-				m_oServiceClient.GreetingMailStrategy(user.Id, link);
+				m_oServiceClient.Instance.GreetingMailStrategy(user.Id, link);
 			}
 			if (status == MembershipCreateStatus.DuplicateEmail)
 			{
@@ -520,7 +520,7 @@ namespace EzBob.Web.Controllers
 
 			user = _users.GetUserByLogin(email);
 			var customer = _customers.Get(user.Id);
-			m_oServiceClient.PasswordRestored(user.Id, password);
+			m_oServiceClient.Instance.PasswordRestored(user.Id, password);
 			user.IsPasswordRestored = true;
 
 			return this.JsonNet(new { result = true });
@@ -648,7 +648,7 @@ namespace EzBob.Web.Controllers
 		[HttpPost]
 		public bool GenerateMobileCode(string mobilePhone)
 		{
-			return m_oServiceClient.GenerateMobileCode(mobilePhone).Value;
+			return m_oServiceClient.Instance.GenerateMobileCode(mobilePhone).Value;
 		}
 
 		[Ajax]
@@ -669,7 +669,7 @@ namespace EzBob.Web.Controllers
 				}
 
 				_log.InfoFormat("Initializing session");
-				WizardConfigsActionResult wizardConfigsActionResult = m_oServiceClient.GetWizardConfigs();
+				WizardConfigsActionResult wizardConfigsActionResult = m_oServiceClient.Instance.GetWizardConfigs();
 				Session["SwitchedToCaptcha"] = false;
 				Session["IsSmsValidationActive"] = wizardConfigsActionResult.IsSmsValidationActive;
 				Session["NumberOfMobileCodeAttempts"] = wizardConfigsActionResult.NumberOfMobileCodeAttempts;

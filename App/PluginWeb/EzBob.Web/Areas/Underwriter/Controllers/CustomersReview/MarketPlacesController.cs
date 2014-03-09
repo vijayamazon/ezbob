@@ -12,7 +12,6 @@
 	using EzBob.Models.Marketplaces.Builders;
 	using Models;
 	using EzBob.Models.Marketplaces;
-	using EzServiceReference;
 	using NHibernate;
 	using Scorto.Web;
 	using CommonLib;
@@ -37,8 +36,9 @@
 		private readonly YodleeRuleRepository _yodleeRuleRepository;
 		private readonly YodleeGroupRuleMapRepository _yodleeGroupRuleMapRepository;
 		private readonly ISession _session;
-		private readonly EzServiceClient m_oServiceClient;
+		private readonly ServiceClient m_oServiceClient;
 		private readonly CompanyFilesMetaDataRepository _companyFiles;
+
 		public MarketPlacesController(CustomerRepository customers,
 			AnalyisisFunctionValueRepository functions,
 			CustomerMarketPlaceRepository customerMarketplaces,
@@ -54,7 +54,7 @@
 		{
 			_customerMarketplaces = customerMarketplaces;
 			_marketPlaces = marketPlaces;
-			m_oServiceClient = ServiceClient.Instance;
+			m_oServiceClient = new ServiceClient();
 			_functions = functions;
 			_customers = customers;
 			_teraPeakOrderItems = teraPeakOrderItems;
@@ -150,12 +150,12 @@
 				case "Sage":
 				case "PayPoint":
 				case "Pay Pal":
-					m_oServiceClient.UpdateMarketplace(customer.Id, umi, true);
+					m_oServiceClient.Instance.UpdateMarketplace(customer.Id, umi, true);
 					break;
 
 				default:
 					if (null != Integration.ChannelGrabberConfig.Configuration.Instance.GetVendorInfo(mp.Marketplace.Name))
-						m_oServiceClient.UpdateMarketplace(customer.Id, umi, true);
+						m_oServiceClient.Instance.UpdateMarketplace(customer.Id, umi, true);
 					break;
 			} // switch
 		} // ReCheckMarketplaces
@@ -196,7 +196,7 @@
 				{
 					var customer = mp.Customer;
 					_customerMarketplaces.ClearUpdatingEnd(umi);
-					m_oServiceClient.UpdateMarketplace(customer.Id, umi, true);
+					m_oServiceClient.Instance.UpdateMarketplace(customer.Id, umi, true);
 					return View(new { success = true });
 				}
 
@@ -227,7 +227,7 @@
 		{
 			var mp = _customerMarketplaces.Get(umi);
 
-			m_oServiceClient.RenewEbayToken(
+			m_oServiceClient.Instance.RenewEbayToken(
 				mp.Customer.Id,
 				mp.DisplayName,
 				"https://app.ezbob.com/Customer/Profile/RenewEbayToken/"
@@ -308,8 +308,7 @@
 
 		public FileResult DownloadCompanyFile(int fileId)
 		{
-
-			var file = ServiceClient.Instance.GetCompanyFile(fileId);
+			var file = m_oServiceClient.Instance.GetCompanyFile(fileId);
 			var fileMetaData = _companyFiles.Get(fileId);
 			if (file != null && fileMetaData != null)
 			{

@@ -18,17 +18,13 @@
         private readonly ProfileSummaryModelBuilder _summaryModelBuilder;
         private CustomerRepository CustomerRepository { get; set; }
         private readonly IUsersRepository _users;
-		private readonly EzServiceClient m_oServiceClient;
-		private readonly ISession session;
+		private readonly ServiceClient m_oServiceClient;
 
-        public ProfileController(CustomerRepository customerRepository, ProfileSummaryModelBuilder summaryModelBuilder,
-								 IUsersRepository users, ISession session)
-        {
+        public ProfileController(CustomerRepository customerRepository, ProfileSummaryModelBuilder summaryModelBuilder, IUsersRepository users) {
             _summaryModelBuilder = summaryModelBuilder;
             _users = users;
-	        m_oServiceClient = ServiceClient.Instance;
+	        m_oServiceClient = new ServiceClient();
             CustomerRepository = customerRepository;
-	        this.session = session;
         }
 
         [Ajax]
@@ -80,7 +76,7 @@
             if (MainStrategyUpdatingStatus(mainStrat) == "Finished")
             {
 				var underwriter = _users.GetUserByLogin(User.Identity.Name);
-				m_oServiceClient.MainStrategy1(underwriter.Id, _users.Get(customerId).Id, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, Convert.ToInt32(customer.IsAvoid));
+				m_oServiceClient.Instance.MainStrategy1(underwriter.Id, _users.Get(customerId).Id, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, Convert.ToInt32(customer.IsAvoid));
             }
             else
             {

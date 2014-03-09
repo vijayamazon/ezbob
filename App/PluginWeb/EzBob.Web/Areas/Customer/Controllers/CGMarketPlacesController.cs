@@ -1,7 +1,6 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers {
 	using System.Data;
 	using EzBob.Web.Code;
-	using EzServiceReference;
 	using NHibernate;
 	using System;
 	using System.Linq;
@@ -10,7 +9,6 @@
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.DatabaseWrapper;
 	using EZBob.DatabaseLib.Model.Database;
-	using Ezbob.HmrcHarvester;
 	using Infrastructure;
 	using Code.MpUniq;
 	using Web.Models.Strings;
@@ -38,7 +36,7 @@
 			_mpTypes = mpTypes;
 			_mpChecker = mpChecker;
 			_session = session;
-			m_oServiceClient = ServiceClient.Instance;
+			m_oServiceClient = new ServiceClient();
 		} // constructor
 
 		#endregion constructor
@@ -123,7 +121,7 @@
 
 			try {
 				// This is done to insert entries into EzServiceActionHistory
-				m_oServiceClient.UpdateMarketplace(_context.Customer.Id, oState.CustomerMarketPlace.Id, true);
+				m_oServiceClient.Instance.UpdateMarketplace(_context.Customer.Id, oState.CustomerMarketPlace.Id, true);
 			}
 			catch (Exception e) {
 				Log.WarnFormat(
@@ -299,7 +297,7 @@
 				IDatabaseCustomerMarketPlace mp = _helper.SaveOrUpdateCustomerMarketplace(model.name, oState.Marketplace, model, _context.Customer);
 				_session.Flush();
 				if (shouldUpdateInServer)
-					m_oServiceClient.UpdateMarketplace(_context.Customer.Id, mp.Id, true);
+					m_oServiceClient.Instance.UpdateMarketplace(_context.Customer.Id, mp.Id, true);
 
 				oState.Model = this.JsonNet(AccountModel.ToModel(mp));
 				oState.CustomerMarketPlace = mp;
@@ -343,7 +341,7 @@
 		private readonly IEzbobWorkplaceContext _context;
 		private readonly IRepository<MP_MarketplaceType> _mpTypes;
 		private readonly CGMPUniqChecker _mpChecker;
-		private readonly EzServiceClient m_oServiceClient;
+		private readonly ServiceClient m_oServiceClient;
 		private readonly DatabaseDataHelper _helper;
 		private readonly ISession _session;
 

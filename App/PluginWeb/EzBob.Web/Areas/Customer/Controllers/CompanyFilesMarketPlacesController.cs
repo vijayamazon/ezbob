@@ -8,10 +8,7 @@
 	using ApplicationMng.Repository;
 	using Code;
 	using CompanyFiles;
-	using EZBob.DatabaseLib.Common;
-	using EZBob.DatabaseLib.DatabaseWrapper;
 	using EZBob.DatabaseLib.Model.Database;
-	using EzServiceReference;
 	using Infrastructure;
 	using Scorto.Web;
 	using log4net;
@@ -27,7 +24,7 @@
 		private readonly Customer _customer;
 		private readonly ISession _session;
 		private readonly DatabaseDataHelper _helper;
-		private readonly EzServiceClient m_oServiceClient;
+		private readonly ServiceClient m_oServiceClient;
 
 		public CompanyFilesMarketPlacesController(
 			IEzbobWorkplaceContext context,
@@ -40,7 +37,7 @@
 			_customer = context.Customer;
 			_session = session;
 			_helper = helper;
-			m_oServiceClient = ServiceClient.Instance;
+			m_oServiceClient = new ServiceClient();
 		}
 
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
@@ -76,7 +73,7 @@
 						Log.WarnFormat("File {0}: failed to read entire file contents, ignoring.", i);
 						continue;
 					} // if
-					ServiceClient.Instance.CompanyFilesUpload(_context.Customer.Id, file.FileName, content, file.ContentType);
+					m_oServiceClient.Instance.CompanyFilesUpload(_context.Customer.Id, file.FileName, content, file.ContentType);
 				}
 			}
 			return Json(new { });
@@ -93,7 +90,7 @@
 				var mp = _helper.SaveOrUpdateCustomerMarketplace(name, cf, null, _context.Customer);
 
 				_session.Flush();
-				m_oServiceClient.UpdateMarketplace(_context.Customer.Id, mp.Id, true);
+				m_oServiceClient.Instance.UpdateMarketplace(_context.Customer.Id, mp.Id, true);
 
 			}
 			catch (Exception e)

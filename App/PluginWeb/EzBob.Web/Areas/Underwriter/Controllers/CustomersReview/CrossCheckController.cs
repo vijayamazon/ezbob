@@ -6,7 +6,6 @@
 	using CommonLib;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
-	using EzServiceReference;
 	using LandRegistryLib;
 	using Models;
 	using Scorto.Web;
@@ -16,7 +15,7 @@
 	using LandRegistryResponseType = LandRegistryLib.LandRegistryResponseType;
 
 	public class CrossCheckController : Controller {
-		private readonly EzServiceClient m_oServiceClient;
+		private readonly ServiceClient m_oServiceClient;
 		private readonly CustomerRepository _customerRepository;
 		private readonly CustomerAddressRepository _customerAddressRepository;
 		private readonly CreditBureauModelBuilder _creditBureauModelBuilder;
@@ -26,7 +25,7 @@
 			CreditBureauModelBuilder creditBureauModelBuilder, 
 			CustomerAddressRepository customerAddressRepository
 		) {
-			m_oServiceClient = ServiceClient.Instance;
+			m_oServiceClient = new ServiceClient();
 			_customerRepository = customerRepository;
 			_creditBureauModelBuilder = creditBureauModelBuilder;
 			_customerAddressRepository = customerAddressRepository;
@@ -68,7 +67,7 @@
 		[HttpGet]
 		public JsonNetResult LandRegistryEnquiry(int customerId, string buildingNumber, string streetName, string cityName, string postCode)
 		{
-			var landregistryXml = m_oServiceClient.LandRegistryEnquiry(customerId, buildingNumber, streetName, cityName, postCode);
+			var landregistryXml = m_oServiceClient.Instance.LandRegistryEnquiry(customerId, buildingNumber, streetName, cityName, postCode);
 			var landregistry = SerializeDataHelper.DeserializeTypeFromString<LandRegistryDataModel>(landregistryXml);
 
 			return this.JsonNet(new { titles = landregistry.Enquery.Titles, rejection = landregistry.Enquery.Rejection, ack = landregistry.Enquery.Acknowledgement });
@@ -78,7 +77,7 @@
 		[HttpGet]
 		public JsonNetResult LandRegistry(int customerId, string titleNumber = null)
 		{
-			var landregistryXml = m_oServiceClient.LandRegistryRes(customerId, titleNumber);
+			var landregistryXml = m_oServiceClient.Instance.LandRegistryRes(customerId, titleNumber);
 			var landregistry = SerializeDataHelper.DeserializeTypeFromString<LandRegistryDataModel>(landregistryXml);
 
 			if (landregistry.ResponseType == LandRegistryResponseType.None )

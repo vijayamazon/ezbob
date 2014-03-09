@@ -1,8 +1,6 @@
-﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
-{
+﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview {
 	using System.Data;
 	using Code;
-	using EzServiceReference;
 	using NHibernate;
 	using System;
 	using EZBob.DatabaseLib.Model.Database;
@@ -15,14 +13,13 @@
 	using Customer.Models;
 	using ActionResult = System.Web.Mvc.ActionResult;
 
-	public class PaymentAccountsController : Controller
-    {
+	public class PaymentAccountsController : Controller {
         private readonly CustomerRepository _customers;
         private readonly ICustomerMarketPlaceRepository _customerMarketplaces;
         private readonly ISortCodeChecker _sortCodeChecker;
         private readonly IPayPointFacade _payPointFacade;
         private readonly IWorkplaceContext _context;
-		private readonly EzServiceClient m_oServiceClient;
+		private readonly ServiceClient m_oServiceClient;
 		private readonly ISession session;
 
         public PaymentAccountsController(
@@ -34,7 +31,7 @@
 			ISession session
 		) {
             _customers = customers;
-	        m_oServiceClient = ServiceClient.Instance;
+	        m_oServiceClient = new ServiceClient();
             _customerMarketplaces = customerMarketplaces;
             _sortCodeChecker = sortCodeChecker;
             _payPointFacade = payPointFacade;
@@ -206,7 +203,7 @@
                 SetPaypointDefaultCard(transactionid, customer.Id, cardno);
             }
 
-	        m_oServiceClient.PayPointAddedByUnderwriter(customer.Id, cardno, _context.User.FullName, _context.User.Id);
+	        m_oServiceClient.Instance.PayPointAddedByUnderwriter(customer.Id, cardno, _context.User.FullName, _context.User.Id);
         }
 
         [Ajax]

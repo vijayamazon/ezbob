@@ -9,7 +9,6 @@
 	using System.Web.Mvc;
 	using ApplicationMng.Repository;
 	using EZBob.DatabaseLib.Model.Database;
-	using EzServiceReference;
 	using FreeAgent;
 	using Infrastructure;
 	using Scorto.Web;
@@ -21,7 +20,7 @@
         private static readonly ILog log = LogManager.GetLogger(typeof(FreeAgentMarketPlacesController));
         private readonly IRepository<MP_MarketplaceType> _mpTypes;
         private readonly Customer _customer;
-        private readonly EzServiceClient m_oServiceClient;
+        private readonly ServiceClient m_oServiceClient;
         private readonly DatabaseDataHelper _helper;
 
 
@@ -32,7 +31,7 @@
         {
             _mpTypes = mpTypes;
             _customer = context.Customer;
-			m_oServiceClient = ServiceClient.Instance;
+			m_oServiceClient = new ServiceClient();
             _helper = helper;
         }
 
@@ -105,7 +104,7 @@
 			log.Info("Saving marketplace data...");
 			var marketPlace = _helper.SaveOrUpdateCustomerMarketplace(securityData.Name, freeAgentDatabaseMarketPlace, securityData, _customer);
 
-			m_oServiceClient.UpdateMarketplace(_customer.Id, marketPlace.Id, true);
+			m_oServiceClient.Instance.UpdateMarketplace(_customer.Id, marketPlace.Id, true);
 
 			return View(FreeAgentAccountModel.ToModel(marketPlace));
 		}

@@ -9,18 +9,17 @@
 	using ExperianLib.CaisFile;
 	using EzBob.Web.Areas.Underwriter.Models.CAIS;
 	using EzBob.Web.Code;
-	using EzServiceReference;
 	using Scorto.Web;
 	using ActionResult = System.Web.Mvc.ActionResult;
 
 	public class CAISController : Controller {
         private readonly CaisReportsHistoryRepository _caisReportsHistoryRepository;
-		private readonly EzServiceClient m_oServiceClient;
+		private readonly ServiceClient m_oServiceClient;
         private readonly IWorkplaceContext _context;
 
         public CAISController(CaisReportsHistoryRepository caisReportsHistoryRepository, IWorkplaceContext context) {
             _caisReportsHistoryRepository = caisReportsHistoryRepository;
-	        m_oServiceClient = ServiceClient.Instance;
+	        m_oServiceClient = new ServiceClient();
             _context = context;
         }
 
@@ -32,7 +31,7 @@
         [HttpPost]
         public JsonNetResult Generate() {
             try {
-                m_oServiceClient.CaisGenerate(_context.User.Id);
+                m_oServiceClient.Instance.CaisGenerate(_context.User.Id);
             }
             catch (Exception e) {
                 return this.JsonNet(new {error = e});
@@ -71,7 +70,7 @@
         [Transactional]
         public void SaveFileChange(string fileContent, int id) {
             _caisReportsHistoryRepository.UpdateFile(ZipString.Zip(fileContent), id);
-            m_oServiceClient.CaisUpdate(_context.User.Id, id);
+            m_oServiceClient.Instance.CaisUpdate(_context.User.Id, id);
         }
 
 		[Ajax]

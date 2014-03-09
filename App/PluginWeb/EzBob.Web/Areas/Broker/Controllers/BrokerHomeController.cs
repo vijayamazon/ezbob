@@ -4,7 +4,6 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using System.Reflection;
 	using System.Web;
 	using System.Web.Mvc;
 	using System.Web.Security;
@@ -12,16 +11,16 @@
 	using EzBob.Web.Code;
 	using EzBob.Web.Infrastructure;
 	using EzBob.Web.Infrastructure.csrf;
-
+	using EzServiceReference;
 	using Ezbob.Backend.Models;
 	using Ezbob.Logger;
 
-	using EzServiceReference;
 	using Ezbob.Utils;
 	using log4net;
 
 	using Scorto.Web;
 	using StructureMap;
+	using ActionResult = EzServiceReference.ActionResult;
 
 	#endregion using
 
@@ -33,6 +32,7 @@
 		public BrokerHomeController() {
 			m_oConfig = ObjectFactory.GetInstance<IEzBobConfiguration>();
 			m_oLog = new SafeILog(LogManager.GetLogger(typeof(BrokerHomeController)));
+			m_oServiceClient = new ServiceClient();
 		} // constructor
 
 		#endregion constructor
@@ -51,7 +51,7 @@
 				BoolActionResult bar = null;
 
 				try {
-					bar = ServiceClient.Instance.IsBroker(User.Identity.Name);
+					bar = m_oServiceClient.Instance.IsBroker(User.Identity.Name);
 				}
 				catch (Exception e) {
 					m_oLog.Warn(e, "Failed to determine validity of broker email {0}", User.Identity.Name);
@@ -112,7 +112,7 @@
 			} // if
 
 			try {
-				ServiceClient.Instance.BrokerSignup(
+				m_oServiceClient.Instance.BrokerSignup(
 					FirmName,
 					FirmRegNum,
 					ContactName,
@@ -178,7 +178,7 @@
 			} // if
 
 			try {
-				ServiceClient.Instance.BrokerLogin(LoginEmail, LoginPassword);
+				m_oServiceClient.Instance.BrokerLogin(LoginEmail, LoginPassword);
 			}
 			catch (Exception e) {
 				m_oLog.Alert(e, "Failed to login as a broker.");
@@ -208,7 +208,7 @@
 			} // if
 
 			try {
-				ServiceClient.Instance.BrokerRestorePassword(ForgottenMobile, ForgottenMobileCode);
+				m_oServiceClient.Instance.BrokerRestorePassword(ForgottenMobile, ForgottenMobileCode);
 			}
 			catch (Exception e) {
 				m_oLog.Alert(e, "Failed to restore password for a broker with phone # {0}.", ForgottenMobile);
@@ -237,7 +237,7 @@
 			BrokerCustomersActionResult oResult;
 
 			try {
-				oResult = ServiceClient.Instance.BrokerLoadCustomerList(sContactEmail);
+				oResult = m_oServiceClient.Instance.BrokerLoadCustomerList(sContactEmail);
 			}
 			catch (Exception e) {
 				m_oLog.Alert(e, "Failed to load customers request for contact email {0}", sContactEmail);
@@ -266,7 +266,7 @@
 			BrokerCustomerDetailsActionResult oDetails;
 
 			try {
-				oDetails = ServiceClient.Instance.BrokerLoadCustomerDetails(nCustomerID, sContactEmail);
+				oDetails = m_oServiceClient.Instance.BrokerLoadCustomerDetails(nCustomerID, sContactEmail);
 			}
 			catch (Exception e) {
 				m_oLog.Alert(e, "Failed to load customer details request for customer {1} and contact email {0}", sContactEmail, nCustomerID);
@@ -291,7 +291,7 @@
 			CrmLookupsActionResult oLookups = null;
 
 			try {
-				oLookups = ServiceClient.Instance.CrmLoadLookups();
+				oLookups = m_oServiceClient.Instance.CrmLoadLookups();
 			}
 			catch (Exception e) {
 				m_oLog.Alert(e, "Broker loading CRM details failed.");
@@ -329,7 +329,7 @@
 			StringActionResult oResult = null;
 
 			try {
-				oResult = ServiceClient.Instance.BrokerSaveCrmEntry(isIncoming, action, status, comment, customerId, sContactEmail);
+				oResult = m_oServiceClient.Instance.BrokerSaveCrmEntry(isIncoming, action, status, comment, customerId, sContactEmail);
 			}
 			catch (Exception e) {
 				m_oLog.Alert(e,
@@ -378,7 +378,7 @@
 			BrokerCustomerFilesActionResult oFiles = null;
 
 			try {
-				oFiles = ServiceClient.Instance.BrokerLoadCustomerFiles(nCustomerID, sContactEmail);
+				oFiles = m_oServiceClient.Instance.BrokerLoadCustomerFiles(nCustomerID, sContactEmail);
 			}
 			catch (Exception e) {
 				m_oLog.Alert(e, "Failed to load customer files request for customer {1} and contact email {0}", sContactEmail, nCustomerID);
@@ -439,7 +439,7 @@
 				);
 
 				try {
-					ServiceClient.Instance.BrokerSaveUploadedCustomerFile(nCustomerID, sContactEmail, oFileContents, oFile.FileName);
+					m_oServiceClient.Instance.BrokerSaveUploadedCustomerFile(nCustomerID, sContactEmail, oFileContents, oFile.FileName);
 				}
 				catch (Exception e) {
 					m_oLog.Alert(e, "Failed to save file #{0}: {2} out of {1}.", (i + 1), nFileCount, oFile.FileName);
@@ -467,7 +467,7 @@
 			BrokerCustomerFileContentsActionResult oFile = null;
 
 			try {
-				oFile = ServiceClient.Instance.BrokerDownloadCustomerFile(nCustomerID, sContactEmail, nFileID);
+				oFile = m_oServiceClient.Instance.BrokerDownloadCustomerFile(nCustomerID, sContactEmail, nFileID);
 			}
 			catch (Exception e) {
 				m_oLog.Alert(e, "Failed to download customer file for customer {1} and contact email {0} with file id {2}", sContactEmail, nCustomerID, nFileID);
@@ -494,6 +494,45 @@
 		} // DownloadCustomerFile
 
 		#endregion action DownloadCustomerFile
+
+		#region action DeleteCustomerFiles
+
+		[HttpPost]
+		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		public JsonResult DeleteCustomerFiles(int nCustomerID, string sContactEmail, int[] aryFileIDs) {
+			string sErrorMsg = null;
+
+			if (aryFileIDs == null)
+				sErrorMsg = "list of file ids is null after parsing";
+			else if (aryFileIDs.Length < 1)
+				sErrorMsg = "list of file ids is empty after parsing";
+
+			if (!string.IsNullOrWhiteSpace(sErrorMsg)) {
+				m_oLog.Alert("Failed to delete customer files request for customer {1} and contact email {0}: {2}.", sContactEmail, nCustomerID, sErrorMsg);
+				return new BrokerForJsonResult("Failed to delete customer files.");
+			} // if
+
+			m_oLog.Debug("Broker delete customer files request for customer {1} and contact email {0}; file ids: {2}", sContactEmail, nCustomerID, string.Join(", ", aryFileIDs));
+
+			var oIsAuthResult = IsAuth<BrokerForJsonResult>("Delete customer files for customer " + nCustomerID, sContactEmail);
+			if (oIsAuthResult != null)
+				return oIsAuthResult;
+
+			try {
+				m_oServiceClient.Instance.BrokerDeleteCustomerFiles(nCustomerID, sContactEmail, aryFileIDs);
+			}
+			catch (Exception e) {
+				m_oLog.Alert(e, "Failed to delete customer files request for customer {1} and contact email {0}; file ids: {2}", sContactEmail, nCustomerID, string.Join(", ", aryFileIDs));
+				return new BrokerForJsonResult("Failed to delete customer files.");
+			} // try
+
+			m_oLog.Debug("Broker delete customer files request for customer {1} and contact email {0}; file ids: {2} complete.", sContactEmail, nCustomerID, string.Join(", ", aryFileIDs));
+
+			return new BrokerForJsonResult();
+		} // DeleteCustomerFiles
+
+		#endregion action DeleteCustomerFiles
 
 		#endregion public
 
@@ -526,6 +565,7 @@
 
 		private readonly IEzBobConfiguration m_oConfig;
 		private readonly ASafeLog m_oLog;
+		private readonly ServiceClient m_oServiceClient;
 
 		#endregion fields
 

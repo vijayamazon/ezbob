@@ -14,7 +14,6 @@
 	using AmazonServiceLib.ServiceCalls;
 	using AmazonServiceLib.UserInfo;
 	using Code.MpUniq;
-	using EzServiceReference;
 	using Infrastructure;
 	using Infrastructure.csrf;
 	using Web.Models.Strings;
@@ -27,7 +26,7 @@
     {
         private readonly IEzbobWorkplaceContext _context;
         private readonly DatabaseDataHelper _helper;
-		private readonly EzServiceClient m_oServiceClient;
+		private readonly ServiceClient m_oServiceClient;
         private readonly ISession _session;
         private readonly IEzBobConfiguration _config;
         private readonly CustomerMarketPlaceRepository _customerMarketPlaceRepository;
@@ -51,7 +50,7 @@
         {
             _context = context;
             _helper = helper;
-	        m_oServiceClient = ServiceClient.Instance;
+	        m_oServiceClient = new ServiceClient();
             _session = session;
             _config = config;
             _customerMarketPlaceRepository = customerMarketPlaceRepository;
@@ -161,7 +160,7 @@
 				var marketplace = _helper.SaveOrUpdateCustomerMarketplace(sellerInfo.Name, amazon, amazonSecurityInfo, customer, marketplaceId);
 
                 _session.Flush();
-                m_oServiceClient.UpdateMarketplace(_context.Customer.Id, marketplace.Id, true);
+                m_oServiceClient.Instance.UpdateMarketplace(_context.Customer.Id, marketplace.Id, true);
 
                 if (_config.AskvilleEnabled)
                 {

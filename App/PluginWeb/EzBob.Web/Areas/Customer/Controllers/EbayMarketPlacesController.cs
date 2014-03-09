@@ -6,7 +6,6 @@
 	using Code;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database.Repository;
-	using EzServiceReference;
 	using Models;
 	using Code.MpUniq;
 	using Infrastructure;
@@ -26,7 +25,7 @@
         private readonly CustomerRepository _customers;
         private readonly ISession _session;
         private readonly eBayServiceHelper _eBayServiceHelper;
-		private readonly EzServiceClient m_oServiceClient;
+		private readonly ServiceClient m_oServiceClient;
         private readonly IMPUniqChecker _mpChecker;
 
         public EbayMarketPlacesController(
@@ -42,7 +41,7 @@
             _customers = customers;
             _session = session;
             _eBayServiceHelper = eBayServiceHelper;
-	        m_oServiceClient = ServiceClient.Instance;
+	        m_oServiceClient = new ServiceClient();
             _mpChecker = mpChecker;
         }
 
@@ -164,7 +163,7 @@
                 _session.Flush();
 
                 if (! isUpdate)
-                    m_oServiceClient.UpdateMarketplace(_context.Customer.Id, mp.Id, true);
+                    m_oServiceClient.Instance.UpdateMarketplace(_context.Customer.Id, mp.Id, true);
 
                 _customers.SaveOrUpdate(customer); 
 

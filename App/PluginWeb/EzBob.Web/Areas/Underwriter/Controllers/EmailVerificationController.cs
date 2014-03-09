@@ -6,7 +6,6 @@
 	using Code;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Code.Email;
-	using EzServiceReference;
 	using Infrastructure;
 	using Scorto.Security.UserManagement;
 	using Scorto.Web;
@@ -15,7 +14,7 @@
     {
         private readonly IEmailConfirmation _confirmation;
         private readonly ICustomerRepository _customers;
-		private readonly EzServiceClient m_oServiceClient;
+		private readonly ServiceClient m_oServiceClient;
         private readonly IUsersRepository _users;
         private readonly UserManager _userManager;
 
@@ -23,7 +22,7 @@
         {
             _confirmation = confirmation;
             _customers = customers;
-	        m_oServiceClient = ServiceClient.Instance;
+	        m_oServiceClient = new ServiceClient();
             _users = users;
             _userManager = userManager;
         }
@@ -47,7 +46,7 @@
             var user = _users.Get(id);
 
             var address = _confirmation.GenerateLink(customer);
-            m_oServiceClient.SendEmailVerification(user.Id, customer.Name, address);
+            m_oServiceClient.Instance.SendEmailVerification(user.Id, customer.Name, address);
             return this.JsonNet(new {});
         }
 
@@ -68,10 +67,10 @@
             {
                 customer.Name = email;
 
-                m_oServiceClient.PasswordChanged(user.Id, newPassword);
+                m_oServiceClient.Instance.PasswordChanged(user.Id, newPassword);
 
                 var address = _confirmation.GenerateLink(customer);
-                m_oServiceClient.SendEmailVerification(user.Id, customer.Name, address);
+                m_oServiceClient.Instance.SendEmailVerification(user.Id, customer.Name, address);
             }
 
             return this.JsonNet(new {});

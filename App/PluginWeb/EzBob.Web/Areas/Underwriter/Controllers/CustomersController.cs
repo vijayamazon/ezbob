@@ -7,7 +7,6 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 	using System.Web.Mvc;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
-	using EzServiceReference;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using NHibernate;
@@ -42,7 +41,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 			_context = context;
 			_session = session;
 			_customers = customers;
-			m_oServiceClient = ServiceClient.Instance;
+			m_oServiceClient = new ServiceClient();
 			_historyRepository = historyRepository;
 			_limit = limit;
 			_mpType = mpType;
@@ -383,7 +382,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 
 				if (!request.EmailSendingBanned) {
 					try {
-						m_oServiceClient.ApprovedUser(user.Id, customer.Id, sum);
+						m_oServiceClient.Instance.ApprovedUser(user.Id, customer.Id, sum);
 					}
 					catch (Exception e) {
 						sWarning = "Failed to send 'approved user' email: " + e.Message;
@@ -404,7 +403,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 
 				if (!request.EmailSendingBanned) {
 					try {
-						m_oServiceClient.RejectUser(user.Id, customer.Id);
+						m_oServiceClient.Instance.RejectUser(user.Id, customer.Id);
 					}
 					catch (Exception e) {
 						sWarning = "Failed to send 'reject user' email: " + e.Message;
@@ -421,7 +420,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 				_historyRepository.LogAction(DecisionActions.Escalate, reason, user, customer);
 
 				try {
-					m_oServiceClient.Escalated(customer.Id);
+					m_oServiceClient.Instance.Escalated(customer.Id);
 				}
 				catch (Exception e) {
 					sWarning = "Failed to send 'escalated' email: " + e.Message;
@@ -585,7 +584,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 
 		private readonly ISession _session;
 		private readonly CustomerRepository _customers;
-		private readonly EzServiceClient m_oServiceClient;
+		private readonly ServiceClient m_oServiceClient;
 		private readonly IDecisionHistoryRepository _historyRepository;
 		private readonly LoanLimit _limit;
 		private readonly IWorkplaceContext _context;

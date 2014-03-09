@@ -3,15 +3,14 @@
 	using System.Web.Mvc;
 	using Code;
 	using EZBob.DatabaseLib.Model.Database.Repository;
-	using EzServiceReference;
 	using Scorto.Web;
 
 	public class YodleeRecheckController : Controller {
 		private readonly CustomerMarketPlaceRepository _customerMarketplaces;
-		private readonly EzServiceClient m_oServiceClient;
+		private readonly ServiceClient m_oServiceClient;
 
 		public YodleeRecheckController(CustomerMarketPlaceRepository customerMarketplaces) {
-			m_oServiceClient = ServiceClient.Instance;
+			m_oServiceClient = new ServiceClient();
 			_customerMarketplaces = customerMarketplaces;
 		} // constructor
 
@@ -24,7 +23,7 @@
 				return View(new { error = "Error occured (oauth) " + oauth_error_code + " " + oauth_error_problem });
 
 			var mp = _customerMarketplaces.Get(id);
-			m_oServiceClient.UpdateMarketplace(mp.Customer.Id, mp.Id, true);
+			m_oServiceClient.Instance.UpdateMarketplace(mp.Customer.Id, mp.Id, true);
 			
 			return View(new { error = "test" });
 		} // YodleeCallback

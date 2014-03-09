@@ -5,7 +5,6 @@
 	using ApplicationMng.Repository;
 	using Code;
 	using EZBob.DatabaseLib.Model.Database;
-	using EzServiceReference;
 	using Infrastructure;
 	using Scorto.Web;
 	using EKM;
@@ -25,7 +24,7 @@
 		private readonly IRepository<MP_MarketplaceType> _mpTypes;
 		private readonly Customer _customer;
 		private readonly IMPUniqChecker _mpChecker;
-		private readonly EzServiceClient m_oServiceClient;
+		private readonly ServiceClient m_oServiceClient;
 		private readonly EkmConnector _validator = new EkmConnector();
 		private readonly ISession _session;
 		private readonly DatabaseDataHelper _helper;
@@ -41,7 +40,7 @@
 			_mpTypes = mpTypes;
 			_customer = context.Customer;
 			_mpChecker = mpChecker;
-			m_oServiceClient = ServiceClient.Instance;
+			m_oServiceClient = new ServiceClient();
 			_session = session;
 			_helper = helper;
 		}
@@ -88,7 +87,7 @@
 
 				_session.Flush();
 
-				m_oServiceClient.UpdateMarketplace(customer.Id, mp.Id, true);
+				m_oServiceClient.Instance.UpdateMarketplace(customer.Id, mp.Id, true);
 
 				return this.JsonNet(EkmAccountModel.ToModel(mp));
 			}

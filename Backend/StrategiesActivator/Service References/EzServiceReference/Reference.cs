@@ -185,14 +185,14 @@ namespace StrategiesActivator.EzServiceReference {
     [System.Runtime.Serialization.DataContractAttribute(Name="ActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
     [System.SerializableAttribute()]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.BoolActionResult))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.WizardConfigsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.QuickOfferActionResult))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.CrmLookupsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.BrokerCustomersActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.BrokerCustomerDetailsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.StringActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.BrokerCustomerFilesActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.BrokerCustomerFileContentsActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.WizardConfigsActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.CrmLookupsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.StringListActionResult))]
     public partial class ActionResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
@@ -260,45 +260,6 @@ namespace StrategiesActivator.EzServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="WizardConfigsActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
-    [System.SerializableAttribute()]
-    public partial class WizardConfigsActionResult : StrategiesActivator.EzServiceReference.ActionResult {
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private bool IsSmsValidationActiveField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int NumberOfMobileCodeAttemptsField;
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public bool IsSmsValidationActive {
-            get {
-                return this.IsSmsValidationActiveField;
-            }
-            set {
-                if ((this.IsSmsValidationActiveField.Equals(value) != true)) {
-                    this.IsSmsValidationActiveField = value;
-                    this.RaisePropertyChanged("IsSmsValidationActive");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int NumberOfMobileCodeAttempts {
-            get {
-                return this.NumberOfMobileCodeAttemptsField;
-            }
-            set {
-                if ((this.NumberOfMobileCodeAttemptsField.Equals(value) != true)) {
-                    this.NumberOfMobileCodeAttemptsField = value;
-                    this.RaisePropertyChanged("NumberOfMobileCodeAttempts");
-                }
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="QuickOfferActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
     [System.SerializableAttribute()]
     public partial class QuickOfferActionResult : StrategiesActivator.EzServiceReference.ActionResult {
@@ -331,45 +292,6 @@ namespace StrategiesActivator.EzServiceReference {
                 if ((object.ReferenceEquals(this.ValueField, value) != true)) {
                     this.ValueField = value;
                     this.RaisePropertyChanged("Value");
-                }
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="CrmLookupsActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
-    [System.SerializableAttribute()]
-    public partial class CrmLookupsActionResult : StrategiesActivator.EzServiceReference.ActionResult {
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Collections.Generic.Dictionary<int, string> ActionsField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Collections.Generic.Dictionary<int, string> StatusesField;
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Collections.Generic.Dictionary<int, string> Actions {
-            get {
-                return this.ActionsField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.ActionsField, value) != true)) {
-                    this.ActionsField = value;
-                    this.RaisePropertyChanged("Actions");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Collections.Generic.Dictionary<int, string> Statuses {
-            get {
-                return this.StatusesField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.StatusesField, value) != true)) {
-                    this.StatusesField = value;
-                    this.RaisePropertyChanged("Statuses");
                 }
             }
         }
@@ -501,6 +423,84 @@ namespace StrategiesActivator.EzServiceReference {
                 if ((object.ReferenceEquals(this.NameField, value) != true)) {
                     this.NameField = value;
                     this.RaisePropertyChanged("Name");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="WizardConfigsActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class WizardConfigsActionResult : StrategiesActivator.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool IsSmsValidationActiveField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int NumberOfMobileCodeAttemptsField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool IsSmsValidationActive {
+            get {
+                return this.IsSmsValidationActiveField;
+            }
+            set {
+                if ((this.IsSmsValidationActiveField.Equals(value) != true)) {
+                    this.IsSmsValidationActiveField = value;
+                    this.RaisePropertyChanged("IsSmsValidationActive");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int NumberOfMobileCodeAttempts {
+            get {
+                return this.NumberOfMobileCodeAttemptsField;
+            }
+            set {
+                if ((this.NumberOfMobileCodeAttemptsField.Equals(value) != true)) {
+                    this.NumberOfMobileCodeAttemptsField = value;
+                    this.RaisePropertyChanged("NumberOfMobileCodeAttempts");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="CrmLookupsActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class CrmLookupsActionResult : StrategiesActivator.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Collections.Generic.Dictionary<int, string> ActionsField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Collections.Generic.Dictionary<int, string> StatusesField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Collections.Generic.Dictionary<int, string> Actions {
+            get {
+                return this.ActionsField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ActionsField, value) != true)) {
+                    this.ActionsField = value;
+                    this.RaisePropertyChanged("Actions");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Collections.Generic.Dictionary<int, string> Statuses {
+            get {
+                return this.StatusesField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.StatusesField, value) != true)) {
+                    this.StatusesField = value;
+                    this.RaisePropertyChanged("Statuses");
                 }
             }
         }
@@ -1408,23 +1408,6 @@ namespace StrategiesActivator.EzServiceReference {
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="FraudMode", Namespace="http://schemas.datacontract.org/2004/07/FraudChecker")]
-    public enum FraudMode : int {
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        FullCheck = 0,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        PersonalDetaisCheck = 1,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        CompanyDetailsCheck = 2,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        MarketplacesCheck = 3,
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="NewCreditLineOption", Namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies")]
     public enum NewCreditLineOption : int {
         
@@ -1439,6 +1422,23 @@ namespace StrategiesActivator.EzServiceReference {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         UpdateEverythingAndGoToManualDecision = 4,
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="FraudMode", Namespace="http://schemas.datacontract.org/2004/07/FraudChecker")]
+    public enum FraudMode : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        FullCheck = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        PersonalDetaisCheck = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        CompanyDetailsCheck = 2,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        MarketplacesCheck = 3,
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -1692,54 +1692,6 @@ namespace StrategiesActivator.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CaisUpdate", ReplyAction="http://tempuri.org/IEzService/CaisUpdateResponse")]
         System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> CaisUpdateAsync(int userId, int caisId);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FirstOfMonthStatusNotifier", ReplyAction="http://tempuri.org/IEzService/FirstOfMonthStatusNotifierResponse")]
-        StrategiesActivator.EzServiceReference.ActionMetaData FirstOfMonthStatusNotifier();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FirstOfMonthStatusNotifier", ReplyAction="http://tempuri.org/IEzService/FirstOfMonthStatusNotifierResponse")]
-        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> FirstOfMonthStatusNotifierAsync();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FraudChecker", ReplyAction="http://tempuri.org/IEzService/FraudCheckerResponse")]
-        StrategiesActivator.EzServiceReference.ActionMetaData FraudChecker(int customerId, StrategiesActivator.EzServiceReference.FraudMode mode);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FraudChecker", ReplyAction="http://tempuri.org/IEzService/FraudCheckerResponse")]
-        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> FraudCheckerAsync(int customerId, StrategiesActivator.EzServiceReference.FraudMode mode);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LateBy14Days", ReplyAction="http://tempuri.org/IEzService/LateBy14DaysResponse")]
-        StrategiesActivator.EzServiceReference.ActionMetaData LateBy14Days();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LateBy14Days", ReplyAction="http://tempuri.org/IEzService/LateBy14DaysResponse")]
-        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> LateBy14DaysAsync();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PayPointCharger", ReplyAction="http://tempuri.org/IEzService/PayPointChargerResponse")]
-        StrategiesActivator.EzServiceReference.ActionMetaData PayPointCharger();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PayPointCharger", ReplyAction="http://tempuri.org/IEzService/PayPointChargerResponse")]
-        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> PayPointChargerAsync();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SetLateLoanStatus", ReplyAction="http://tempuri.org/IEzService/SetLateLoanStatusResponse")]
-        StrategiesActivator.EzServiceReference.ActionMetaData SetLateLoanStatus();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SetLateLoanStatus", ReplyAction="http://tempuri.org/IEzService/SetLateLoanStatusResponse")]
-        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> SetLateLoanStatusAsync();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateMarketplace", ReplyAction="http://tempuri.org/IEzService/UpdateMarketplaceResponse")]
-        StrategiesActivator.EzServiceReference.ActionMetaData UpdateMarketplace(int customerId, int marketplaceId, bool doUpdateWizardStep);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateMarketplace", ReplyAction="http://tempuri.org/IEzService/UpdateMarketplaceResponse")]
-        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> UpdateMarketplaceAsync(int customerId, int marketplaceId, bool doUpdateWizardStep);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateTransactionStatus", ReplyAction="http://tempuri.org/IEzService/UpdateTransactionStatusResponse")]
-        StrategiesActivator.EzServiceReference.ActionMetaData UpdateTransactionStatus();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateTransactionStatus", ReplyAction="http://tempuri.org/IEzService/UpdateTransactionStatusResponse")]
-        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> UpdateTransactionStatusAsync();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/XDaysDue", ReplyAction="http://tempuri.org/IEzService/XDaysDueResponse")]
-        StrategiesActivator.EzServiceReference.ActionMetaData XDaysDue();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/XDaysDue", ReplyAction="http://tempuri.org/IEzService/XDaysDueResponse")]
-        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> XDaysDueAsync();
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckExperianCompany", ReplyAction="http://tempuri.org/IEzService/CheckExperianCompanyResponse")]
         StrategiesActivator.EzServiceReference.ActionMetaData CheckExperianCompany(int customerId);
         
@@ -1812,18 +1764,6 @@ namespace StrategiesActivator.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ValidateMobileCode", ReplyAction="http://tempuri.org/IEzService/ValidateMobileCodeResponse")]
         System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BoolActionResult> ValidateMobileCodeAsync(string phone, string code);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetWizardConfigs", ReplyAction="http://tempuri.org/IEzService/GetWizardConfigsResponse")]
-        StrategiesActivator.EzServiceReference.WizardConfigsActionResult GetWizardConfigs();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetWizardConfigs", ReplyAction="http://tempuri.org/IEzService/GetWizardConfigsResponse")]
-        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.WizardConfigsActionResult> GetWizardConfigsAsync();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateCurrencyRates", ReplyAction="http://tempuri.org/IEzService/UpdateCurrencyRatesResponse")]
-        StrategiesActivator.EzServiceReference.ActionMetaData UpdateCurrencyRates();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateCurrencyRates", ReplyAction="http://tempuri.org/IEzService/UpdateCurrencyRatesResponse")]
-        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> UpdateCurrencyRatesAsync();
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/QuickOffer", ReplyAction="http://tempuri.org/IEzService/QuickOfferResponse")]
         StrategiesActivator.EzServiceReference.QuickOfferActionResult QuickOffer(int customerId, bool saveOfferToDB);
         
@@ -1835,18 +1775,6 @@ namespace StrategiesActivator.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/QuickOfferWithPrerequisites", ReplyAction="http://tempuri.org/IEzService/QuickOfferWithPrerequisitesResponse")]
         System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.QuickOfferActionResult> QuickOfferWithPrerequisitesAsync(int customerId, bool saveOfferToDB);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FinishWizard", ReplyAction="http://tempuri.org/IEzService/FinishWizardResponse")]
-        StrategiesActivator.EzServiceReference.ActionMetaData FinishWizard(int customerId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FinishWizard", ReplyAction="http://tempuri.org/IEzService/FinishWizardResponse")]
-        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> FinishWizardAsync(int customerId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CrmLoadLookups", ReplyAction="http://tempuri.org/IEzService/CrmLoadLookupsResponse")]
-        StrategiesActivator.EzServiceReference.CrmLookupsActionResult CrmLoadLookups();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CrmLoadLookups", ReplyAction="http://tempuri.org/IEzService/CrmLoadLookupsResponse")]
-        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.CrmLookupsActionResult> CrmLoadLookupsAsync();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/IsBroker", ReplyAction="http://tempuri.org/IEzService/IsBrokerResponse")]
         StrategiesActivator.EzServiceReference.BoolActionResult IsBroker(string sContactEmail);
@@ -1908,6 +1836,12 @@ namespace StrategiesActivator.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerSaveUploadedCustomerFile", ReplyAction="http://tempuri.org/IEzService/BrokerSaveUploadedCustomerFileResponse")]
         System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> BrokerSaveUploadedCustomerFileAsync(int nCustomerID, string sContactEmail, byte[] oFileContents, string sFileName);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerDeleteCustomerFiles", ReplyAction="http://tempuri.org/IEzService/BrokerDeleteCustomerFilesResponse")]
+        StrategiesActivator.EzServiceReference.ActionMetaData BrokerDeleteCustomerFiles(int nCustomerID, string sContactEmail, int[] aryFileIDs);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerDeleteCustomerFiles", ReplyAction="http://tempuri.org/IEzService/BrokerDeleteCustomerFilesResponse")]
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> BrokerDeleteCustomerFilesAsync(int nCustomerID, string sContactEmail, int[] aryFileIDs);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LandRegistryEnquiry", ReplyAction="http://tempuri.org/IEzService/LandRegistryEnquiryResponse")]
         string LandRegistryEnquiry(int customerId, string buildingNumber, string streetName, string cityName, string postCode);
         
@@ -1919,6 +1853,90 @@ namespace StrategiesActivator.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LandRegistryRes", ReplyAction="http://tempuri.org/IEzService/LandRegistryResResponse")]
         System.Threading.Tasks.Task<string> LandRegistryResAsync(int customerId, string titleNumber);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CompanyFilesUpload", ReplyAction="http://tempuri.org/IEzService/CompanyFilesUploadResponse")]
+        StrategiesActivator.EzServiceReference.ActionMetaData CompanyFilesUpload(int customerId, string fileName, byte[] fileContent, string fileContentType);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CompanyFilesUpload", ReplyAction="http://tempuri.org/IEzService/CompanyFilesUploadResponse")]
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> CompanyFilesUploadAsync(int customerId, string fileName, byte[] fileContent, string fileContentType);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanyFile", ReplyAction="http://tempuri.org/IEzService/GetCompanyFileResponse")]
+        byte[] GetCompanyFile(int companyFileId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanyFile", ReplyAction="http://tempuri.org/IEzService/GetCompanyFileResponse")]
+        System.Threading.Tasks.Task<byte[]> GetCompanyFileAsync(int companyFileId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FirstOfMonthStatusNotifier", ReplyAction="http://tempuri.org/IEzService/FirstOfMonthStatusNotifierResponse")]
+        StrategiesActivator.EzServiceReference.ActionMetaData FirstOfMonthStatusNotifier();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FirstOfMonthStatusNotifier", ReplyAction="http://tempuri.org/IEzService/FirstOfMonthStatusNotifierResponse")]
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> FirstOfMonthStatusNotifierAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FraudChecker", ReplyAction="http://tempuri.org/IEzService/FraudCheckerResponse")]
+        StrategiesActivator.EzServiceReference.ActionMetaData FraudChecker(int customerId, StrategiesActivator.EzServiceReference.FraudMode mode);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FraudChecker", ReplyAction="http://tempuri.org/IEzService/FraudCheckerResponse")]
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> FraudCheckerAsync(int customerId, StrategiesActivator.EzServiceReference.FraudMode mode);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LateBy14Days", ReplyAction="http://tempuri.org/IEzService/LateBy14DaysResponse")]
+        StrategiesActivator.EzServiceReference.ActionMetaData LateBy14Days();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LateBy14Days", ReplyAction="http://tempuri.org/IEzService/LateBy14DaysResponse")]
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> LateBy14DaysAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PayPointCharger", ReplyAction="http://tempuri.org/IEzService/PayPointChargerResponse")]
+        StrategiesActivator.EzServiceReference.ActionMetaData PayPointCharger();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PayPointCharger", ReplyAction="http://tempuri.org/IEzService/PayPointChargerResponse")]
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> PayPointChargerAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SetLateLoanStatus", ReplyAction="http://tempuri.org/IEzService/SetLateLoanStatusResponse")]
+        StrategiesActivator.EzServiceReference.ActionMetaData SetLateLoanStatus();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SetLateLoanStatus", ReplyAction="http://tempuri.org/IEzService/SetLateLoanStatusResponse")]
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> SetLateLoanStatusAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateMarketplace", ReplyAction="http://tempuri.org/IEzService/UpdateMarketplaceResponse")]
+        StrategiesActivator.EzServiceReference.ActionMetaData UpdateMarketplace(int customerId, int marketplaceId, bool doUpdateWizardStep);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateMarketplace", ReplyAction="http://tempuri.org/IEzService/UpdateMarketplaceResponse")]
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> UpdateMarketplaceAsync(int customerId, int marketplaceId, bool doUpdateWizardStep);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateTransactionStatus", ReplyAction="http://tempuri.org/IEzService/UpdateTransactionStatusResponse")]
+        StrategiesActivator.EzServiceReference.ActionMetaData UpdateTransactionStatus();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateTransactionStatus", ReplyAction="http://tempuri.org/IEzService/UpdateTransactionStatusResponse")]
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> UpdateTransactionStatusAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/XDaysDue", ReplyAction="http://tempuri.org/IEzService/XDaysDueResponse")]
+        StrategiesActivator.EzServiceReference.ActionMetaData XDaysDue();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/XDaysDue", ReplyAction="http://tempuri.org/IEzService/XDaysDueResponse")]
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> XDaysDueAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetWizardConfigs", ReplyAction="http://tempuri.org/IEzService/GetWizardConfigsResponse")]
+        StrategiesActivator.EzServiceReference.WizardConfigsActionResult GetWizardConfigs();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetWizardConfigs", ReplyAction="http://tempuri.org/IEzService/GetWizardConfigsResponse")]
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.WizardConfigsActionResult> GetWizardConfigsAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateCurrencyRates", ReplyAction="http://tempuri.org/IEzService/UpdateCurrencyRatesResponse")]
+        StrategiesActivator.EzServiceReference.ActionMetaData UpdateCurrencyRates();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateCurrencyRates", ReplyAction="http://tempuri.org/IEzService/UpdateCurrencyRatesResponse")]
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> UpdateCurrencyRatesAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FinishWizard", ReplyAction="http://tempuri.org/IEzService/FinishWizardResponse")]
+        StrategiesActivator.EzServiceReference.ActionMetaData FinishWizard(int customerId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FinishWizard", ReplyAction="http://tempuri.org/IEzService/FinishWizardResponse")]
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> FinishWizardAsync(int customerId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CrmLoadLookups", ReplyAction="http://tempuri.org/IEzService/CrmLoadLookupsResponse")]
+        StrategiesActivator.EzServiceReference.CrmLookupsActionResult CrmLoadLookups();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CrmLoadLookups", ReplyAction="http://tempuri.org/IEzService/CrmLoadLookupsResponse")]
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.CrmLookupsActionResult> CrmLoadLookupsAsync();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -2140,70 +2158,6 @@ namespace StrategiesActivator.EzServiceReference {
             return base.Channel.CaisUpdateAsync(userId, caisId);
         }
         
-        public StrategiesActivator.EzServiceReference.ActionMetaData FirstOfMonthStatusNotifier() {
-            return base.Channel.FirstOfMonthStatusNotifier();
-        }
-        
-        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> FirstOfMonthStatusNotifierAsync() {
-            return base.Channel.FirstOfMonthStatusNotifierAsync();
-        }
-        
-        public StrategiesActivator.EzServiceReference.ActionMetaData FraudChecker(int customerId, StrategiesActivator.EzServiceReference.FraudMode mode) {
-            return base.Channel.FraudChecker(customerId, mode);
-        }
-        
-        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> FraudCheckerAsync(int customerId, StrategiesActivator.EzServiceReference.FraudMode mode) {
-            return base.Channel.FraudCheckerAsync(customerId, mode);
-        }
-        
-        public StrategiesActivator.EzServiceReference.ActionMetaData LateBy14Days() {
-            return base.Channel.LateBy14Days();
-        }
-        
-        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> LateBy14DaysAsync() {
-            return base.Channel.LateBy14DaysAsync();
-        }
-        
-        public StrategiesActivator.EzServiceReference.ActionMetaData PayPointCharger() {
-            return base.Channel.PayPointCharger();
-        }
-        
-        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> PayPointChargerAsync() {
-            return base.Channel.PayPointChargerAsync();
-        }
-        
-        public StrategiesActivator.EzServiceReference.ActionMetaData SetLateLoanStatus() {
-            return base.Channel.SetLateLoanStatus();
-        }
-        
-        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> SetLateLoanStatusAsync() {
-            return base.Channel.SetLateLoanStatusAsync();
-        }
-        
-        public StrategiesActivator.EzServiceReference.ActionMetaData UpdateMarketplace(int customerId, int marketplaceId, bool doUpdateWizardStep) {
-            return base.Channel.UpdateMarketplace(customerId, marketplaceId, doUpdateWizardStep);
-        }
-        
-        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> UpdateMarketplaceAsync(int customerId, int marketplaceId, bool doUpdateWizardStep) {
-            return base.Channel.UpdateMarketplaceAsync(customerId, marketplaceId, doUpdateWizardStep);
-        }
-        
-        public StrategiesActivator.EzServiceReference.ActionMetaData UpdateTransactionStatus() {
-            return base.Channel.UpdateTransactionStatus();
-        }
-        
-        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> UpdateTransactionStatusAsync() {
-            return base.Channel.UpdateTransactionStatusAsync();
-        }
-        
-        public StrategiesActivator.EzServiceReference.ActionMetaData XDaysDue() {
-            return base.Channel.XDaysDue();
-        }
-        
-        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> XDaysDueAsync() {
-            return base.Channel.XDaysDueAsync();
-        }
-        
         public StrategiesActivator.EzServiceReference.ActionMetaData CheckExperianCompany(int customerId) {
             return base.Channel.CheckExperianCompany(customerId);
         }
@@ -2300,22 +2254,6 @@ namespace StrategiesActivator.EzServiceReference {
             return base.Channel.ValidateMobileCodeAsync(phone, code);
         }
         
-        public StrategiesActivator.EzServiceReference.WizardConfigsActionResult GetWizardConfigs() {
-            return base.Channel.GetWizardConfigs();
-        }
-        
-        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.WizardConfigsActionResult> GetWizardConfigsAsync() {
-            return base.Channel.GetWizardConfigsAsync();
-        }
-        
-        public StrategiesActivator.EzServiceReference.ActionMetaData UpdateCurrencyRates() {
-            return base.Channel.UpdateCurrencyRates();
-        }
-        
-        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> UpdateCurrencyRatesAsync() {
-            return base.Channel.UpdateCurrencyRatesAsync();
-        }
-        
         public StrategiesActivator.EzServiceReference.QuickOfferActionResult QuickOffer(int customerId, bool saveOfferToDB) {
             return base.Channel.QuickOffer(customerId, saveOfferToDB);
         }
@@ -2330,22 +2268,6 @@ namespace StrategiesActivator.EzServiceReference {
         
         public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.QuickOfferActionResult> QuickOfferWithPrerequisitesAsync(int customerId, bool saveOfferToDB) {
             return base.Channel.QuickOfferWithPrerequisitesAsync(customerId, saveOfferToDB);
-        }
-        
-        public StrategiesActivator.EzServiceReference.ActionMetaData FinishWizard(int customerId) {
-            return base.Channel.FinishWizard(customerId);
-        }
-        
-        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> FinishWizardAsync(int customerId) {
-            return base.Channel.FinishWizardAsync(customerId);
-        }
-        
-        public StrategiesActivator.EzServiceReference.CrmLookupsActionResult CrmLoadLookups() {
-            return base.Channel.CrmLoadLookups();
-        }
-        
-        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.CrmLookupsActionResult> CrmLoadLookupsAsync() {
-            return base.Channel.CrmLoadLookupsAsync();
         }
         
         public StrategiesActivator.EzServiceReference.BoolActionResult IsBroker(string sContactEmail) {
@@ -2428,6 +2350,14 @@ namespace StrategiesActivator.EzServiceReference {
             return base.Channel.BrokerSaveUploadedCustomerFileAsync(nCustomerID, sContactEmail, oFileContents, sFileName);
         }
         
+        public StrategiesActivator.EzServiceReference.ActionMetaData BrokerDeleteCustomerFiles(int nCustomerID, string sContactEmail, int[] aryFileIDs) {
+            return base.Channel.BrokerDeleteCustomerFiles(nCustomerID, sContactEmail, aryFileIDs);
+        }
+        
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> BrokerDeleteCustomerFilesAsync(int nCustomerID, string sContactEmail, int[] aryFileIDs) {
+            return base.Channel.BrokerDeleteCustomerFilesAsync(nCustomerID, sContactEmail, aryFileIDs);
+        }
+        
         public string LandRegistryEnquiry(int customerId, string buildingNumber, string streetName, string cityName, string postCode) {
             return base.Channel.LandRegistryEnquiry(customerId, buildingNumber, streetName, cityName, postCode);
         }
@@ -2442,6 +2372,118 @@ namespace StrategiesActivator.EzServiceReference {
         
         public System.Threading.Tasks.Task<string> LandRegistryResAsync(int customerId, string titleNumber) {
             return base.Channel.LandRegistryResAsync(customerId, titleNumber);
+        }
+        
+        public StrategiesActivator.EzServiceReference.ActionMetaData CompanyFilesUpload(int customerId, string fileName, byte[] fileContent, string fileContentType) {
+            return base.Channel.CompanyFilesUpload(customerId, fileName, fileContent, fileContentType);
+        }
+        
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> CompanyFilesUploadAsync(int customerId, string fileName, byte[] fileContent, string fileContentType) {
+            return base.Channel.CompanyFilesUploadAsync(customerId, fileName, fileContent, fileContentType);
+        }
+        
+        public byte[] GetCompanyFile(int companyFileId) {
+            return base.Channel.GetCompanyFile(companyFileId);
+        }
+        
+        public System.Threading.Tasks.Task<byte[]> GetCompanyFileAsync(int companyFileId) {
+            return base.Channel.GetCompanyFileAsync(companyFileId);
+        }
+        
+        public StrategiesActivator.EzServiceReference.ActionMetaData FirstOfMonthStatusNotifier() {
+            return base.Channel.FirstOfMonthStatusNotifier();
+        }
+        
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> FirstOfMonthStatusNotifierAsync() {
+            return base.Channel.FirstOfMonthStatusNotifierAsync();
+        }
+        
+        public StrategiesActivator.EzServiceReference.ActionMetaData FraudChecker(int customerId, StrategiesActivator.EzServiceReference.FraudMode mode) {
+            return base.Channel.FraudChecker(customerId, mode);
+        }
+        
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> FraudCheckerAsync(int customerId, StrategiesActivator.EzServiceReference.FraudMode mode) {
+            return base.Channel.FraudCheckerAsync(customerId, mode);
+        }
+        
+        public StrategiesActivator.EzServiceReference.ActionMetaData LateBy14Days() {
+            return base.Channel.LateBy14Days();
+        }
+        
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> LateBy14DaysAsync() {
+            return base.Channel.LateBy14DaysAsync();
+        }
+        
+        public StrategiesActivator.EzServiceReference.ActionMetaData PayPointCharger() {
+            return base.Channel.PayPointCharger();
+        }
+        
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> PayPointChargerAsync() {
+            return base.Channel.PayPointChargerAsync();
+        }
+        
+        public StrategiesActivator.EzServiceReference.ActionMetaData SetLateLoanStatus() {
+            return base.Channel.SetLateLoanStatus();
+        }
+        
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> SetLateLoanStatusAsync() {
+            return base.Channel.SetLateLoanStatusAsync();
+        }
+        
+        public StrategiesActivator.EzServiceReference.ActionMetaData UpdateMarketplace(int customerId, int marketplaceId, bool doUpdateWizardStep) {
+            return base.Channel.UpdateMarketplace(customerId, marketplaceId, doUpdateWizardStep);
+        }
+        
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> UpdateMarketplaceAsync(int customerId, int marketplaceId, bool doUpdateWizardStep) {
+            return base.Channel.UpdateMarketplaceAsync(customerId, marketplaceId, doUpdateWizardStep);
+        }
+        
+        public StrategiesActivator.EzServiceReference.ActionMetaData UpdateTransactionStatus() {
+            return base.Channel.UpdateTransactionStatus();
+        }
+        
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> UpdateTransactionStatusAsync() {
+            return base.Channel.UpdateTransactionStatusAsync();
+        }
+        
+        public StrategiesActivator.EzServiceReference.ActionMetaData XDaysDue() {
+            return base.Channel.XDaysDue();
+        }
+        
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> XDaysDueAsync() {
+            return base.Channel.XDaysDueAsync();
+        }
+        
+        public StrategiesActivator.EzServiceReference.WizardConfigsActionResult GetWizardConfigs() {
+            return base.Channel.GetWizardConfigs();
+        }
+        
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.WizardConfigsActionResult> GetWizardConfigsAsync() {
+            return base.Channel.GetWizardConfigsAsync();
+        }
+        
+        public StrategiesActivator.EzServiceReference.ActionMetaData UpdateCurrencyRates() {
+            return base.Channel.UpdateCurrencyRates();
+        }
+        
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> UpdateCurrencyRatesAsync() {
+            return base.Channel.UpdateCurrencyRatesAsync();
+        }
+        
+        public StrategiesActivator.EzServiceReference.ActionMetaData FinishWizard(int customerId) {
+            return base.Channel.FinishWizard(customerId);
+        }
+        
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> FinishWizardAsync(int customerId) {
+            return base.Channel.FinishWizardAsync(customerId);
+        }
+        
+        public StrategiesActivator.EzServiceReference.CrmLookupsActionResult CrmLoadLookups() {
+            return base.Channel.CrmLoadLookups();
+        }
+        
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.CrmLookupsActionResult> CrmLoadLookupsAsync() {
+            return base.Channel.CrmLoadLookupsAsync();
         }
     }
 }

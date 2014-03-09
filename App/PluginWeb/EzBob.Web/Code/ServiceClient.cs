@@ -8,21 +8,21 @@
 	public class ServiceClient {
 		#region property ServiceClient
 
-		public static EzServiceClient Instance {
+		public EzServiceClient Instance {
 			get {
-				lock (syncRoot) {
+				lock (ms_oInstanceLock) {
 					if (ReferenceEquals(ms_oServiceClient, null) || (ms_oServiceClient.State != CommunicationState.Opened && ms_oServiceClient.State != CommunicationState.Created)) {
 						if (ms_oServiceClient != null)
-							oLog.DebugFormat("ServiceClient State: {0}", ms_oServiceClient.State);
+							ms_oLog.DebugFormat("ServiceClient State: {0}", ms_oServiceClient.State);
 						else
-							oLog.DebugFormat("ServiceClient is null creating new");
+							ms_oLog.DebugFormat("ServiceClient is null creating new");
 
 						try {
 							var cfg = new EzServiceConfigurationLoader.DefaultConfiguration(
 								System.Environment.MachineName,
 								DbConnectionGenerator.Get(),
-								new SafeILog(oLog)
-								);
+								new SafeILog(ms_oLog)
+							);
 
 							cfg.Init();
 
@@ -35,12 +35,12 @@
 							ms_oServiceClient = new EzServiceClient(
 								oTcpBinding, // TODO: HTTPS...
 								new EndpointAddress(cfg.AdminEndpointAddress) // TODO: when HTTPS is ready make it ClientAdminEndpoint
-								);
+							);
 
 							ms_oServiceClient.InnerChannel.OperationTimeout = TimeSpan.FromSeconds(cfg.ClientTimeoutSeconds);
 						}
 						catch (Exception e) {
-							oLog.Debug("Failed to connect to EzService", e);
+							ms_oLog.Debug("Failed to connect to EzService", e);
 
 							// TODO: save to DB failed request to run it later...
 
@@ -54,10 +54,10 @@
 		} // ServiceClient
 
 		private static volatile EzServiceClient ms_oServiceClient;
-		private static object syncRoot = new Object();
+		private static readonly object ms_oInstanceLock = new Object();
 
 		#endregion property ServiceClient
 
-		private static readonly ILog oLog = LogManager.GetLogger(typeof(ServiceClient));
+		private static readonly ILog ms_oLog = LogManager.GetLogger(typeof(ServiceClient));
 	} // class ServiceClient
 } // namespace

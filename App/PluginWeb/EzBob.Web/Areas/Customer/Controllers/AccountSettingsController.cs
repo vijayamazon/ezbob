@@ -3,7 +3,6 @@
 	using System.Data;
 	using System.Web.Mvc;
 	using Code;
-	using EzServiceReference;
 	using Models;
 	using Infrastructure.csrf;
 	using Scorto.NHibernate.Model;
@@ -15,7 +14,7 @@
         private readonly IWorkplaceContext _context;
         private readonly UserManager _userManager;
         private readonly IPasswordEncoder _passwordEncoder;
-        private readonly EzServiceClient m_oServiceClient;
+        private readonly ServiceClient m_oServiceClient;
 
         //------------------------------------------------------------------------------------
         public AccountSettingsController(IWorkplaceContext context, UserManager userManager, IPasswordEncoder passwordEncoder)
@@ -23,7 +22,7 @@
             _context = context;
             _userManager = userManager;
             _passwordEncoder = passwordEncoder;
-	        m_oServiceClient = ServiceClient.Instance;
+	        m_oServiceClient = new ServiceClient();
         }
         //------------------------------------------------------------------------------------
         [Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
@@ -59,7 +58,7 @@
             if (result == ChangePasswordStatus.ChangeOk)
             {
                 _context.User.IsPasswordRestored = false;
-				m_oServiceClient.PasswordChanged(_context.User.Id, newPassword);
+				m_oServiceClient.Instance.PasswordChanged(_context.User.Id, newPassword);
             }
 
             return this.JsonNet(new { status = result.ToString() }); 

@@ -52,6 +52,7 @@
     <Compile Include="..\..\..\App\EzReporting\VersionInfo.cs">
       <Link>VersionInfo.cs</Link>
     </Compile>
+    <Compile Include="QueryTableParameter.cs" />
     <Compile Include="DbCommandExt.cs" />
     <Compile Include="SafeReader.cs" />
     <Compile Include="DbException.cs" />

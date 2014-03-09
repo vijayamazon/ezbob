@@ -22,7 +22,7 @@
 			IDecisionHistoryRepository historyRepository,
 			LoanLimit limit
 		) {
-			m_oServiceClient = ServiceClient.Instance;
+			m_oServiceClient = new ServiceClient();
 			_loanTypes = loanTypes;
 			_discounts = discounts;
 			_users = users;
@@ -139,18 +139,18 @@
 				foreach (var mp in customer.CustomerMarketPlaces)
 				{
 					mp.UpdatingEnd = null;
-					m_oServiceClient.UpdateMarketplace(customer.Id, mp.Id, false);
+					m_oServiceClient.Instance.UpdateMarketplace(customer.Id, mp.Id, false);
 				}
 			} // if
 
 			if (!isUnderwriterForced) {
 				if (isSync)
-					m_oServiceClient.MainStrategySync1(underwriterId, _users.Get(customer.Id).Id, newCreditLineOption, Convert.ToInt32(customer.IsAvoid));
+					m_oServiceClient.Instance.MainStrategySync1(underwriterId, _users.Get(customer.Id).Id, newCreditLineOption, Convert.ToInt32(customer.IsAvoid));
 				else
-					m_oServiceClient.MainStrategy1(underwriterId, _users.Get(customer.Id).Id, newCreditLineOption, Convert.ToInt32(customer.IsAvoid));
+					m_oServiceClient.Instance.MainStrategy1(underwriterId, _users.Get(customer.Id).Id, newCreditLineOption, Convert.ToInt32(customer.IsAvoid));
 			}
 			else
-				m_oServiceClient.MainStrategy2(underwriterId, _users.Get(customer.Id).Id, newCreditLineOption, Convert.ToInt32(customer.IsAvoid), true);
+				m_oServiceClient.Instance.MainStrategy2(underwriterId, _users.Get(customer.Id).Id, newCreditLineOption, Convert.ToInt32(customer.IsAvoid), true);
 		} // ForceEvaluate
 
 		#endregion method ForceEvaluate
@@ -165,7 +165,7 @@
 		private readonly ILoanSourceRepository _loanSources;
 		private readonly IDecisionHistoryRepository _historyRepository;
 		// private readonly LoanLimit _limit; // TODO: if needed...
-		private readonly EzServiceClient m_oServiceClient;
+		private readonly ServiceClient m_oServiceClient;
 
 		#endregion private
 	} // class CashRequestBuilder

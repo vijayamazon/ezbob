@@ -6,7 +6,6 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Repository;
-	using EzServiceReference;
 	using Signals.RenderAgreements;
 	using Models;
 	using Code;
@@ -14,7 +13,7 @@
 	using StructureMap;
 
     public class MessagesController : Controller {
-	    private readonly EzServiceClient m_oServiceClient;
+	    private readonly ServiceClient m_oServiceClient;
         private readonly CustomerRepository _customersRepository;
         private readonly IWorkplaceContext _workplaceContext;
         private readonly IDecisionHistoryRepository _historyRepository;
@@ -29,7 +28,7 @@
 			IDecisionHistoryRepository historyRepository,
 			MessagesModelBuilder builder
 		) {
-	        m_oServiceClient = ServiceClient.Instance;
+	        m_oServiceClient = new ServiceClient();
             _exportResultRepository = exportResultRepository;
             _askvilleRepository = askvilleRepository;
             _historyRepository = historyRepository;
@@ -83,7 +82,7 @@
         public void MoreAMLInformation(int id)
         {
             var customer = _customersRepository.Get(id);
-            m_oServiceClient.MoreAmlInformation(_workplaceContext.User.Id, customer.Id);
+            m_oServiceClient.Instance.MoreAmlInformation(_workplaceContext.User.Id, customer.Id);
             customer.CreditResult = CreditResultStatus.ApprovedPending;
             customer.PendingStatus = PendingStatus.AML;
             LogPending(customer, PendingStatus.AML);
@@ -95,7 +94,7 @@
         public void MoreAMLandBWAInformation(int id)
         {
             var customer = _customersRepository.Get(id);
-			m_oServiceClient.MoreAmlAndBwaInformation(_workplaceContext.User.Id, customer.Id);
+			m_oServiceClient.Instance.MoreAmlAndBwaInformation(_workplaceContext.User.Id, customer.Id);
             customer.CreditResult = CreditResultStatus.ApprovedPending;
             customer.PendingStatus = PendingStatus.Bank_AML;
             LogPending(customer, PendingStatus.Bank_AML);
@@ -107,7 +106,7 @@
         public void MoreBWAInformation(int id)
         {
             var customer = _customersRepository.Get(id);
-			m_oServiceClient.MoreBwaInformation(_workplaceContext.User.Id, customer.Id);
+			m_oServiceClient.Instance.MoreBwaInformation(_workplaceContext.User.Id, customer.Id);
             customer.CreditResult = CreditResultStatus.ApprovedPending;
             customer.PendingStatus = PendingStatus.Bank;
             LogPending(customer, PendingStatus.Bank);

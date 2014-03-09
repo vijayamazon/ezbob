@@ -7,7 +7,6 @@
 	using System.Web.Mvc;
 	using ApplicationMng.Repository;
 	using EZBob.DatabaseLib.Model.Database;
-	using EzServiceReference;
 	using Infrastructure;
     using Sage;
     using Scorto.Web;
@@ -20,17 +19,17 @@
         private readonly IRepository<MP_MarketplaceType> _mpTypes;
         private readonly Customer _customer;
         private readonly DatabaseDataHelper _helper;
-		private readonly EzServiceClient m_oServiceClient;
+		private readonly ServiceClient m_oServiceClient;
 
 		public SageMarketPlacesController(
             IEzbobWorkplaceContext context,
             DatabaseDataHelper helper,
-            IRepository<MP_MarketplaceType> mpTypes)
-        {
+            IRepository<MP_MarketplaceType> mpTypes
+		) {
             _mpTypes = mpTypes;
             _customer = context.Customer;
             _helper = helper;
-			m_oServiceClient = ServiceClient.Instance;
+			m_oServiceClient = new ServiceClient();
 		}
 
         [Transactional]
@@ -92,7 +91,7 @@
 			var marketPlace = _helper.SaveOrUpdateCustomerMarketplace(accountName, sageDatabaseMarketPlace, securityData, _customer);
 			log.Info("Saved sage marketplace data...");
 
-			m_oServiceClient.UpdateMarketplace(_customer.Id, marketPlace.Id, true);
+			m_oServiceClient.Instance.UpdateMarketplace(_customer.Id, marketPlace.Id, true);
 
 			return View(SageAccountModel.ToModel(marketPlace));
 		}

@@ -24,7 +24,7 @@
 	public class ProfileController : Controller {
 		private readonly CustomerModelBuilder _customerModelBuilder;
 		private readonly IEzbobWorkplaceContext _context;
-		private readonly EzServiceClient m_oServiceClient;
+		private readonly ServiceClient m_oServiceClient;
 		private readonly IEzBobConfiguration _config;
 		private readonly CashRequestBuilder _crBuilder;
 		private readonly ISession _session;
@@ -40,7 +40,7 @@
 		) {
 			_customerModelBuilder = customerModelBuilder;
 			_context = context;
-			m_oServiceClient = ServiceClient.Instance;
+			m_oServiceClient = new ServiceClient();
 			_config = config;
 			_crBuilder = crBuilder;
 			_session = session;
@@ -141,7 +141,7 @@
 
 			var oldOffer = customer.LastCashRequest;
 			if (oldOffer != null && oldOffer.HasLoans)
-				m_oServiceClient.RequestCashWithoutTakenLoan(customer.Id);
+				m_oServiceClient.Instance.RequestCashWithoutTakenLoan(customer.Id);
 
 			var cashRequest = _crBuilder.CreateCashRequest(customer);
 

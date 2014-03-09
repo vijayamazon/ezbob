@@ -84,7 +84,7 @@
 			_context = context;
 			_helper = helper;
 			_personalInfoHistoryRepository = personalInfoHistoryRepository;
-			m_oServiceClient = ServiceClient.Instance;
+			m_oServiceClient = new ServiceClient();
 			_session = session;
 			_crBuilder = crBuilder;
 			customerRepository = _customerRepository;
@@ -163,16 +163,16 @@
 
 			ms_oLog.DebugFormat("Customer {1} ({0}): cash request created.", customer.Id, customer.PersonalInfo.Fullname);
 
-			m_oServiceClient.EmailUnderReview(_context.User.Id);
+			m_oServiceClient.Instance.EmailUnderReview(_context.User.Id);
 
 			ms_oLog.DebugFormat("Customer {1} ({0}): email under review started.", customer.Id, customer.PersonalInfo.Fullname);
 
-			m_oServiceClient.MainStrategy1(_context.User.Id, _context.User.Id, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, Convert.ToInt32(customer.IsAvoid));
+			m_oServiceClient.Instance.MainStrategy1(_context.User.Id, _context.User.Id, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, Convert.ToInt32(customer.IsAvoid));
 
 			ms_oLog.DebugFormat("Customer {1} ({0}): main strategy started.", customer.Id, customer.PersonalInfo.Fullname);
 
 			if (!customer.IsTest) {
-				m_oServiceClient.FraudChecker(_context.User.Id, FraudMode.FullCheck);
+				m_oServiceClient.Instance.FraudChecker(_context.User.Id, FraudMode.FullCheck);
 				ms_oLog.DebugFormat("Customer {1} ({0}): fraud check started.", customer.Id, customer.PersonalInfo.Fullname);
 			} // if
 
@@ -232,7 +232,7 @@
 			QuickOfferActionResult qoar = null;
 
 			try {
-				qoar = m_oServiceClient.QuickOfferWithPrerequisites(customer.Id, true);
+				qoar = m_oServiceClient.Instance.QuickOfferWithPrerequisites(customer.Id, true);
 			}
 			catch (Exception e) {
 				ms_oLog.Error("Failed to get a quick offer from the service.", e);
@@ -876,7 +876,7 @@
 
 		private readonly IEzbobWorkplaceContext _context;
 		private readonly IPersonalInfoHistoryRepository _personalInfoHistoryRepository;
-		private readonly EzServiceClient m_oServiceClient;
+		private readonly ServiceClient m_oServiceClient;
 		private readonly ISession _session;
 		private readonly CashRequestBuilder _crBuilder;
 		private readonly IConcentAgreementHelper _concentAgreementHelper = new ConcentAgreementHelper();

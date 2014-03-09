@@ -17,18 +17,22 @@
 	public class CreditBureauController : Controller
     {
         private readonly CustomerRepository _customers;
-		private readonly EzServiceClient m_oServiceClient;
+		private readonly ServiceClient m_oServiceClient;
         private readonly IUsersRepository _users;
         private readonly IApplicationRepository _applications;
         private readonly IEzBobConfiguration _config;
         private readonly CreditBureauModelBuilder _creditBureauModelBuilder;
         private readonly ConcentAgreementHelper _concentAgreementHelper;
 
-        public CreditBureauController(CustomerRepository customers,
-                                        IUsersRepository users, IApplicationRepository applications, IEzBobConfiguration config, CreditBureauModelBuilder creditBureauModelBuilder)
-        {
+        public CreditBureauController(
+			CustomerRepository customers,
+			IUsersRepository users,
+			IApplicationRepository applications,
+			IEzBobConfiguration config,
+			CreditBureauModelBuilder creditBureauModelBuilder
+		) {
             _customers = customers;
-	        m_oServiceClient = ServiceClient.Instance;
+	        m_oServiceClient = new ServiceClient();
             _users = users;
             _applications = applications;
             _config = config;
@@ -48,7 +52,7 @@
 
 	        var underwriter = _users.GetUserByLogin(User.Identity.Name);
 
-			m_oServiceClient.MainStrategy2(underwriter.Id, _users.Get(id).Id, NewCreditLineOption.UpdateEverythingExceptMp, Convert.ToInt32(customer.IsAvoid), true);
+			m_oServiceClient.Instance.MainStrategy2(underwriter.Id, _users.Get(id).Id, NewCreditLineOption.UpdateEverythingExceptMp, Convert.ToInt32(customer.IsAvoid), true);
 
             return this.JsonNet(new { Message = "The evaluation has been started. Please refresh this application after a while..." });
         }
@@ -143,7 +147,7 @@
 
 	        var underwriter = _users.GetUserByLogin(User.Identity.Name);
 
-			m_oServiceClient.MainStrategy3(underwriter.Id, _users.Get(id).Id, checkType, houseNumber, houseName, street, district, town, county, postcode, bankAccount, sortCode, Convert.ToInt32(customer.IsAvoid));
+			m_oServiceClient.Instance.MainStrategy3(underwriter.Id, _users.Get(id).Id, checkType, houseNumber, houseName, street, district, town, county, postcode, bankAccount, sortCode, Convert.ToInt32(customer.IsAvoid));
 
             return this.JsonNet(new { Message = "The evaluation has been started. Please refresh this application after a while..." });
         }

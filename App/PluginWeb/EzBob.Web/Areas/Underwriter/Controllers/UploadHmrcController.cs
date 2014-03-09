@@ -10,7 +10,6 @@
 	using EZBob.DatabaseLib.DatabaseWrapper;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
-	using EzServiceReference;
 	using Ezbob.HmrcHarvester;
 	using Ezbob.ValueIntervals;
 	using Integration.ChannelGrabberConfig;
@@ -23,7 +22,7 @@
 	public class UploadHmrcController : Controller {
 		private static readonly ILog Log = LogManager.GetLogger(typeof(UploadHmrcController));
 		private readonly CustomerRepository _customers;
-		private readonly EzServiceClient m_oServiceClient;
+		private readonly ServiceClient m_oServiceClient;
 		private readonly IRepository<MP_MarketplaceType> _mpTypes;
 		private readonly ISession _session;
 		private readonly CGMPUniqChecker _mpChecker;
@@ -36,7 +35,7 @@
 			DatabaseDataHelper helper,
 			ISession session
 		) {
-			m_oServiceClient = ServiceClient.Instance;
+			m_oServiceClient = new ServiceClient();
 			_customers = customers;
 			_mpChecker = mpChecker;
 			_helper = helper;
@@ -95,7 +94,7 @@
 				// This is done to for two reasons:
 				// 1. update Customer.WizardStep to WizardStepType.Marketplace
 				// 2. insert entries into EzServiceActionHistory
-				m_oServiceClient.UpdateMarketplace(customer.Id, oState.CustomerMarketPlace.Id, true);
+				m_oServiceClient.Instance.UpdateMarketplace(customer.Id, oState.CustomerMarketPlace.Id, true);
 			}
 			catch (Exception e) {
 				Log.WarnFormat(

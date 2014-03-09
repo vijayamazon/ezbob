@@ -23,7 +23,7 @@
     {
         private readonly IEzbobWorkplaceContext _context;
         private readonly PayPointFacade _payPointFacade;
-		private readonly EzServiceClient m_oServiceClient;
+		private readonly ServiceClient m_oServiceClient;
         private static readonly ILog Log = LogManager.GetLogger("PaypointController");
         private readonly LoanPaymentFacade _loanRepaymentFacade;
         private readonly IPacnetPaypointServiceLogRepository _logRepository;
@@ -42,7 +42,7 @@
 		) {
             _context = context;
             _payPointFacade = payPointFacade;
-	        m_oServiceClient = ServiceClient.Instance;
+	        m_oServiceClient = new ServiceClient();
             _logRepository = pacnetPaypointServiceLogRepository;
             _paypointTransactionRepository = paypointTransactionRepository;
             _loanRepaymentFacade = loanPaymentFacade;
@@ -249,10 +249,10 @@
         {
             var loan = customer.GetLoan(loanId);
 
-            m_oServiceClient.PayEarly(_context.User.Id, realAmount, loan.RefNumber);
+            m_oServiceClient.Instance.PayEarly(_context.User.Id, realAmount, loan.RefNumber);
 
             if (loan.Status == LoanStatus.PaidOff)
-                m_oServiceClient.LoanFullyPaid(customer.Id, loan.RefNumber);
+                m_oServiceClient.Instance.LoanFullyPaid(customer.Id, loan.RefNumber);
         }
 
         private decimal CalculateRealAmount(string type, int loanId, decimal realAmount)

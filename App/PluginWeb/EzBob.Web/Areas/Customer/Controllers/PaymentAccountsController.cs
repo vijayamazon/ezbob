@@ -11,7 +11,6 @@
 	using EZBob.DatabaseLib.DatabaseWrapper.AccountInfo;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
-	using EzServiceReference;
 	using PayPal;
 	using PayPalDbLib.Models;
 	using PayPalServiceLib;
@@ -31,7 +30,7 @@
 		private readonly DatabaseDataHelper _helper;
 		private readonly CustomerRepository _customers;
 		private readonly IEzbobWorkplaceContext _context;
-		private readonly EzServiceClient m_oServiceClient;
+		private readonly ServiceClient m_oServiceClient;
 		private readonly ISession _session;
 		private readonly IMPUniqChecker _mpChecker;
 		private readonly ISortCodeChecker _sortCodeChecker;
@@ -51,7 +50,7 @@
 			_helper = helper;
 			_customers = customers;
 			_context = context;
-			m_oServiceClient = ServiceClient.Instance;
+			m_oServiceClient = new ServiceClient();
 			_session = session;
 			_mpChecker = mpChecker;
 			_sortCodeChecker = sortCodeChecker;
@@ -102,7 +101,7 @@
 			var mp = _helper.SaveOrUpdateCustomerMarketplace(personalData.Email, paypal, securityData, customer);
 			_helper.SaveOrUpdateAcctountInfo(mp, personalData);
 			_session.Flush();
-			m_oServiceClient.UpdateMarketplace(_context.Customer.Id, mp.Id, true);
+			m_oServiceClient.Instance.UpdateMarketplace(_context.Customer.Id, mp.Id, true);
 
 			return View(permissionsGranted);
 		}

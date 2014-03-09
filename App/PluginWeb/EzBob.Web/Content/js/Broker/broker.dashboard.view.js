@@ -107,7 +107,7 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 			}, // fnStateLoad
 		});
 
-		this.$el.find('.dataTables_top_right').append(
+		this.$el.find('.dataTables_top_right').prepend(
 			$('<button type=button class="reload-customer-list" title="Reload customer list">Reload</button>')
 		);
 	}, // reloadCustomerList

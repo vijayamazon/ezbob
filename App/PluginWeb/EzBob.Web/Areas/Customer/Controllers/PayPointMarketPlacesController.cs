@@ -6,7 +6,6 @@
     using ApplicationMng.Repository;
     using Code;
     using EZBob.DatabaseLib.Model.Database;
-    using EzServiceReference;
     using Infrastructure;
     using Scorto.Web;
     using PayPoint;
@@ -23,7 +22,7 @@
         private readonly IRepository<MP_MarketplaceType> _mpTypes;
         private readonly Customer _customer;
         private readonly IMPUniqChecker _mpChecker;
-	    private readonly EzServiceClient m_oServiceClient;
+	    private readonly ServiceClient m_oServiceClient;
         private readonly DatabaseDataHelper _helper;
         private readonly int _payPointMarketTypeId;
 
@@ -38,7 +37,7 @@
             _mpTypes = mpTypes;
             _customer = context.Customer;
             _mpChecker = mpChecker;
-	        m_oServiceClient = ServiceClient.Instance;
+	        m_oServiceClient = new ServiceClient();
 
             var payPointServiceInfo = new PayPointServiceInfo();
             _payPointMarketTypeId = _mpTypes.GetAll().First(a => a.InternalId == payPointServiceInfo.InternalId).Id;
@@ -74,7 +73,7 @@
                 var payPointSecurityInfo = new PayPointSecurityInfo(model.id, model.remotePassword, model.vpnPassword, model.mid);
 
                 var payPoint = _helper.SaveOrUpdateCustomerMarketplace(username, payPointDatabaseMarketPlace, payPointSecurityInfo, customer);
-                m_oServiceClient.UpdateMarketplace(customer.Id, payPoint.Id, true);
+                m_oServiceClient.Instance.UpdateMarketplace(customer.Id, payPoint.Id, true);
                 return this.JsonNet(PayPointAccountModel.ToModel(_helper.GetExistsCustomerMarketPlace(username, payPointDatabaseMarketPlace, customer)));
             }
             catch (MarketPlaceAddedByThisCustomerException e)

@@ -3,15 +3,16 @@
 	using System.Data;
 	using System.Data.Common;
 
-	#region struct QueryParameter
+	#region class QueryParameter
 
 	public class QueryParameter {
-		public string Name { get; set; }
-		public object Value { get; set; }
-		public int? Size { get; set; }
-		public SqlDbType? Type { get; set; }
-		public ParameterDirection Direction { get; set; }
-		public DbParameter UnderlyingParameter { get; set; }
+		public virtual string Name { get; set; }
+		public virtual object Value { get; set; }
+		public virtual int? Size { get; set; }
+		public virtual SqlDbType? Type { get; set; }
+		public virtual ParameterDirection Direction { get; set; }
+		public virtual DbParameter UnderlyingParameter { get; set; }
+		public virtual string UnderlyingTypeName { get; set; }
 
 		public QueryParameter(string sName, object oValue = null) {
 			Name = sName;
@@ -36,16 +37,16 @@
 			} // switch
 		} // ToString
 
-		public object ReturnedValue {
+		public virtual object ReturnedValue {
 			get {
 				return ReferenceEquals(UnderlyingParameter, null) ? null : UnderlyingParameter.Value;
 			} // get
 		} // ReturnedValue
 
-		public string SafeReturnedValue {
+		public virtual string SafeReturnedValue {
 			get { return (ReturnedValue ?? string.Empty).ToString(); } // get
 		} // SafeReturnedValue
 	} // class QueryParameter
 
-	#endregion struct QueryParameter
+	#endregion class QueryParameter
 } // namespace Ezbob.Database
