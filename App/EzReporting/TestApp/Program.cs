@@ -27,9 +27,10 @@ namespace TestApp {
 			ms_oLog = log;
 
 			var oDB = new SqlConnection(log);
-			oDB.LogVerbosityLevel = LogVerbosityLevel.Verbose;
 
-			TestRetryerWithArguments(oDB, log);
+			// TestVectorSpArgument(oDB, log);
+
+			// TestRetryerWithArguments(oDB, log);
 
 			// TestEarnedInterestForAudit(oDB, log);
 
@@ -60,7 +61,26 @@ namespace TestApp {
 
 		#endregion method Main
 
-		#region private static TestRetryerWithArguments
+		#region method TestVectorSpArgument
+
+		private static void TestVectorSpArgument(AConnection oDB, ASafeLog oLog) {
+			oDB.LogVerbosityLevel = LogVerbosityLevel.Verbose;
+
+			const int nCustomerID = 70;
+			const string sContactEmail = "alexbo+broker@ezbob.com";
+
+			oDB.ExecuteNonQuery(
+				"BrokerDeleteCustomerFiles",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("@CustomerID", nCustomerID),
+				new QueryParameter("@ContactEmail", sContactEmail),
+				oDB.CreateVectorParameter<int>("@FileIDs", 9, 10)
+			);
+		} // TestVectorSpArgument
+
+		#endregion method TestVectorSpArgument
+
+		#region method TestRetryerWithArguments
 
 		private static void TestRetryerWithArguments(AConnection oDB, ASafeLog log) {
 			var oRetryer = new SqlRetryer(nRetryCount: 8, nSleepBeforeRetryMilliseconds: 2000, oLog: log) {
@@ -97,7 +117,7 @@ namespace TestApp {
 			log.Info("ActionTest complete.");
 		} // ActionTest
 
-		#endregion private static TestRetryerWithArguments
+		#endregion method TestRetryerWithArguments
 
 		#region method TestEarnedInterestForAudit
 

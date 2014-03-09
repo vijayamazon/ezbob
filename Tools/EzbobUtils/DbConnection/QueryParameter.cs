@@ -6,13 +6,26 @@
 	#region class QueryParameter
 
 	public class QueryParameter {
-		public virtual string Name { get; set; }
-		public virtual object Value { get; set; }
-		public virtual int? Size { get; set; }
-		public virtual SqlDbType? Type { get; set; }
-		public virtual ParameterDirection Direction { get; set; }
-		public virtual DbParameter UnderlyingParameter { get; set; }
-		public virtual string UnderlyingTypeName { get; set; }
+		public string Name { get; set; }
+		public object Value { get; set; }
+		public int? Size { get; set; }
+		public DbType? Type { get; set; }
+		public ParameterDirection Direction { get; set; }
+		public DbParameter UnderlyingParameter { get; set; }
+		public string UnderlyingTypeName { get; set; }
+
+		public QueryParameter(DbParameter oUnderlyingParameter) {
+			if (ReferenceEquals(oUnderlyingParameter, null))
+				throw new ArgumentNullException("oUnderlyingParameter", "Underlying parameter is null.");
+
+			UnderlyingParameter = oUnderlyingParameter;
+
+			Name = UnderlyingParameter.ParameterName;
+			Value = UnderlyingParameter.Value;
+			Size = UnderlyingParameter.Size;
+			Type = UnderlyingParameter.DbType;
+			Direction = UnderlyingParameter.Direction;
+		} // constructor
 
 		public QueryParameter(string sName, object oValue = null) {
 			Name = sName;
@@ -37,13 +50,13 @@
 			} // switch
 		} // ToString
 
-		public virtual object ReturnedValue {
+		public object ReturnedValue {
 			get {
 				return ReferenceEquals(UnderlyingParameter, null) ? null : UnderlyingParameter.Value;
 			} // get
 		} // ReturnedValue
 
-		public virtual string SafeReturnedValue {
+		public string SafeReturnedValue {
 			get { return (ReturnedValue ?? string.Empty).ToString(); } // get
 		} // SafeReturnedValue
 	} // class QueryParameter

@@ -44,9 +44,9 @@ namespace ReportAuthenticationLib {
 					byte[] key = deriveBytes.GetBytes(20);  // derive a 20-byte key
 
 					m_oDB.ExecuteNonQuery("RptChangePassword",
-						new QueryParameter("@UserName", userName) { Type = SqlDbType.NVarChar, Size = 50 },
-						new QueryParameter("@Password", key) { Type = SqlDbType.VarBinary, Size = 20 * sizeof(byte) },
-						new QueryParameter("@Salt", salt) { Type = SqlDbType.VarBinary, Size = 20 * sizeof(byte) }
+						new QueryParameter("@UserName", userName) { Type = DbType.String, Size = 50 },
+						new QueryParameter("@Password", key) { Type = DbType.Binary, Size = 20 * sizeof(byte) },
+						new QueryParameter("@Salt", salt) { Type = DbType.Binary, Size = 20 * sizeof(byte) }
 					);
 				} // using
 
@@ -66,9 +66,9 @@ namespace ReportAuthenticationLib {
 				byte[] key = deriveBytes.GetBytes(20);  // derive a 20-byte key
 
 				m_oDB.ExecuteNonQuery("RptChangePassword",
-					new QueryParameter("@UserName", userName) { Type = SqlDbType.NVarChar, Size = 50 },
-					new QueryParameter("@Password", key) { Type = SqlDbType.VarBinary, Size = 20 * sizeof (byte) },
-					new QueryParameter("@Salt", salt) { Type = SqlDbType.VarBinary, Size = 20 * sizeof (byte) }
+					new QueryParameter("@UserName", userName) { Type = DbType.String, Size = 50 },
+					new QueryParameter("@Password", key) { Type = DbType.Binary, Size = 20 * sizeof (byte) },
+					new QueryParameter("@Salt", salt) { Type = DbType.Binary, Size = 20 * sizeof (byte) }
 				);
 			} // using
 		} // ResetPassword
@@ -83,10 +83,10 @@ namespace ReportAuthenticationLib {
 				byte[] key = deriveBytes.GetBytes(20);  // derive a 20-byte key
 
 				m_oDB.ExecuteNonQuery("RptAddReportUser",
-					new QueryParameter("@UserName", userName) { Type = SqlDbType.NVarChar, Size = 50 },
-					new QueryParameter("@Name", name) { Type = SqlDbType.NVarChar, Size = 50 },
-					new QueryParameter("@Password", key) { Type = SqlDbType.VarBinary, Size = 20 * sizeof(byte) },
-					new QueryParameter("@Salt", salt) { Type = SqlDbType.VarBinary, Size = 20 * sizeof(byte) }
+					new QueryParameter("@UserName", userName) { Type = DbType.String, Size = 50 },
+					new QueryParameter("@Name", name) { Type = DbType.String, Size = 50 },
+					new QueryParameter("@Password", key) { Type = DbType.Binary, Size = 20 * sizeof(byte) },
+					new QueryParameter("@Salt", salt) { Type = DbType.Binary, Size = 20 * sizeof(byte) }
 				);
 			} // using
 		} // AddUserToDb

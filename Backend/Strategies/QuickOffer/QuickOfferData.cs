@@ -104,7 +104,7 @@
 			if (bSaveOfferToDB && (Cfg.Enabled != QuickOfferEnabledStatus.Silent)) {
 				try {
 					var oID = new QueryParameter("@QuickOfferID") {
-						Type = SqlDbType.Int,
+						Type = DbType.Int32,
 						Direction = ParameterDirection.Output,
 					};
 

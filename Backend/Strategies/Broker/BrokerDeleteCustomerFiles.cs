@@ -38,7 +38,7 @@
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("@CustomerID", m_nCustomerID),
 				new QueryParameter("@ContactEmail", m_sContactEmail),
-				new QueryTableParameter<int>("@FileIDs", "IntList", m_aryFileIDs)
+				DB.CreateVectorParameter<int>("@FileIDs", m_aryFileIDs)
 			);
 		} // Execute
 

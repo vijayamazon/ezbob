@@ -72,6 +72,20 @@
     <Compile Include="ActionResults\CrmLookupsActionResult.cs" />
     <Compile Include="ActionResults\QuickOfferActionResult.cs" />
     <Compile Include="ActionResults\DecimalActionResult.cs" />
+    <Compile Include="EzServiceImplementation\company.files.cs" />
+    <Compile Include="EzServiceImplementation\wizard.cs" />
+    <Compile Include="EzServiceImplementation\land.registry.cs" />
+    <Compile Include="EzServiceImplementation\broker.cs" />
+    <Compile Include="EzServiceImplementation\mobile.phone.code.cs" />
+    <Compile Include="EzServiceImplementation\main.strategy.cs" />
+    <Compile Include="EzServiceImplementation\aml.and.bwa.cs" />
+    <Compile Include="EzServiceImplementation\experian.cs" />
+    <Compile Include="EzServiceImplementation\cais.cs" />
+    <Compile Include="EzServiceImplementation\email.strategies.cs" />
+    <Compile Include="EzServiceImplementation\other.strategies.cs" />
+    <Compile Include="EzServiceImplementation\_implement.IEzServiceAdmin.cs" />
+    <Compile Include="EzServiceImplementation\_main.cs" />
+    <Compile Include="EzServiceImplementation\quick.offer.cs" />
     <Compile Include="NewCreditLineOption.cs" />
     <Compile Include="SafeValue.cs" />
     <Compile Include="ActionResults\StringListActionResult.cs" />
@@ -80,7 +94,6 @@
     <Compile Include="IEzService.cs" />
     <Compile Include="IHost.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="EzServiceImplementation.cs" />
     <Compile Include="ActionResults\WizardConfigsActionResult.cs" />
   </ItemGroup>
   <ItemGroup>

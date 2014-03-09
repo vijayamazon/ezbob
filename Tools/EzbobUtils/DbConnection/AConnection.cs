@@ -144,6 +144,16 @@
 
 		#endregion method FillFirst
 
+		#region method CreateVectorParameter
+
+		public abstract QueryParameter CreateVectorParameter<T>(string sFieldName, IEnumerable<T> oValues);
+
+		public virtual QueryParameter CreateVectorParameter<T>(string sFieldName, params T[] oValues) {
+			return CreateVectorParameter<T>(sFieldName, (IEnumerable<T>)oValues);
+		} // CreateVectorParameter
+
+		#endregion method CreateVectorParameter
+
 		public abstract string DateToString(DateTime oDate);
 
 		#endregion IConnection implementation

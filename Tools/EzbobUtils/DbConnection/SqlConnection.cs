@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Database {
 	using System;
+	using System.Collections.Generic;
 	using System.Data;
 	using System.Data.Common;
 	using System.Data.SqlClient;
@@ -29,6 +30,24 @@
 
 		#endregion method DateToString
 
+		#region method CreateVectorParameter
+
+		public override QueryParameter CreateVectorParameter<T>(string sFieldName, IEnumerable<T> oValues) {
+			var tbl = new DataTable();
+			tbl.Columns.Add(string.Empty, typeof (T));
+
+			if (oValues != null)
+				foreach (T v in oValues)
+					tbl.Rows.Add(v);
+
+			return new QueryParameter(new SqlParameter(sFieldName, SqlDbType.Structured) {
+				Value = tbl,
+				Direction = ParameterDirection.Input,
+			});
+		} // CreateVectorParameter
+
+		#endregion method CreateVectorParameter
+
 		#endregion public
 
 		#region protected
@@ -52,16 +71,19 @@
 		#region method CreateParameter
 
 		protected override DbParameter CreateParameter(QueryParameter prm) {
+			if (!ReferenceEquals(prm.UnderlyingParameter, null) && (prm.UnderlyingParameter is SqlParameter))
+				return prm.UnderlyingParameter;
+
 			var oParam = (SqlParameter)CreateParameter(prm.Name, prm.Value);
 
 			if (prm.Size != null)
-				oParam.Size = (int)prm.Size;
+				oParam.Size = prm.Size.Value;
 
 			if (prm.Type != null)
-				oParam.SqlDbType = (SqlDbType)prm.Type;
+				oParam.DbType = prm.Type.Value;
 
 			if (!string.IsNullOrWhiteSpace(prm.UnderlyingTypeName))
-				oParam.UdtTypeName = prm.UnderlyingTypeName;
+				oParam.TypeName = prm.UnderlyingTypeName;
 
 			oParam.Direction = prm.Direction;
 

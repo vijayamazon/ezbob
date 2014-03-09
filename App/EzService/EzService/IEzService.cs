@@ -5,6 +5,90 @@
 
 	[ServiceContract(SessionMode = SessionMode.Allowed)]
 	public interface IEzService {
+		#region AML and BWA
+
+		[OperationContract]
+		ActionMetaData CheckAml(int customerId);
+
+		[OperationContract]
+		ActionMetaData CheckAmlCustom(int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet, string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode);
+
+		[OperationContract]
+		ActionMetaData CheckBwa(int customerId);
+
+		[OperationContract]
+		ActionMetaData CheckBwaCustom(int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet, string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode, string idhubBranchCode, string idhubAccountNumber);
+
+		#endregion AML and BWA
+
+		#region Broker
+
+		[OperationContract]
+		BoolActionResult IsBroker(string sContactEmail);
+
+		[OperationContract]
+		ActionMetaData BrokerSignup(
+			string FirmName,
+			string FirmRegNum,
+			string ContactName,
+			string ContactEmail,
+			string ContactMobile,
+			string MobileCode,
+			string ContactOtherPhone,
+			decimal EstimatedMonthlyClientAmount,
+			string Password,
+			string Password2
+		);
+
+		[OperationContract]
+		ActionMetaData BrokerLogin(string Email, string Password);
+
+		[OperationContract]
+		ActionMetaData BrokerRestorePassword(string sMobile, string sCode);
+
+		[OperationContract]
+		BrokerCustomersActionResult BrokerLoadCustomerList(string sContactEmail);
+
+		[OperationContract]
+		BrokerCustomerDetailsActionResult BrokerLoadCustomerDetails(int nCustomerID, string sContactEmail);
+
+		[OperationContract]
+		StringActionResult BrokerSaveCrmEntry(bool bIsIncoming, int nActionID, int nStatusID, string sComment, int nCustomerID, string sContactEmail);
+
+		[OperationContract]
+		BrokerCustomerFilesActionResult BrokerLoadCustomerFiles(int nCustomerID, string sContactEmail);
+
+		[OperationContract]
+		BrokerCustomerFileContentsActionResult BrokerDownloadCustomerFile(int nCustomerID, string sContactEmail, int nFileID);
+
+		[OperationContract]
+		ActionMetaData BrokerSaveUploadedCustomerFile(int nCustomerID, string sContactEmail, byte[] oFileContents, string sFileName);
+
+		[OperationContract]
+		ActionMetaData BrokerDeleteCustomerFiles(int nCustomerID, string sContactEmail, int[] aryFileIDs);
+
+		#endregion Broker
+
+		#region CAIS
+
+		[OperationContract]
+		ActionMetaData CaisGenerate(int underwriterId);
+
+		[OperationContract]
+		ActionMetaData CaisUpdate(int userId, int caisId);
+
+		#endregion CAIS
+
+		#region Company Files
+
+		[OperationContract]
+		ActionMetaData CompanyFilesUpload(int customerId, string fileName, byte[] fileContent, string fileContentType);
+
+		[OperationContract]
+		byte[] GetCompanyFile(int companyFileId);
+
+		#endregion
+
 		#region email strategies
 
 		[OperationContract]
@@ -75,16 +159,6 @@
 
 		#endregion email strategies
 
-		#region CAIS
-
-		[OperationContract]
-		ActionMetaData CaisGenerate(int underwriterId);
-
-		[OperationContract]
-		ActionMetaData CaisUpdate(int userId, int caisId);
-
-		#endregion CAIS
-
 		#region Experian
 
 		[OperationContract]
@@ -95,21 +169,15 @@
 
 		#endregion Experian
 
-		#region AML and BWA
+		#region Land Registry
 
 		[OperationContract]
-		ActionMetaData CheckAml(int customerId);
-
+		string LandRegistryEnquiry(int customerId, string buildingNumber, string streetName, string cityName, string postCode);
+		
 		[OperationContract]
-		ActionMetaData CheckAmlCustom(int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet, string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode);
-
-		[OperationContract]
-		ActionMetaData CheckBwa(int customerId);
-
-		[OperationContract]
-		ActionMetaData CheckBwaCustom(int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet, string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode, string idhubBranchCode, string idhubAccountNumber);
-
-		#endregion AML and BWA
+		string LandRegistryRes(int customerId, string titleNumber);
+		
+		#endregion Land Registry
 
 		#region Main
 
@@ -136,84 +204,6 @@
 		BoolActionResult ValidateMobileCode(string phone, string code);
 
 		#endregion mobile phone code
-
-		#region Quick offer
-
-		[OperationContract]
-		QuickOfferActionResult QuickOffer(int customerId, bool saveOfferToDB);
-
-		[OperationContract]
-		QuickOfferActionResult QuickOfferWithPrerequisites(int customerId, bool saveOfferToDB);
-		
-		#endregion Quick offer
-
-		#region Broker
-
-		[OperationContract]
-		BoolActionResult IsBroker(string sContactEmail);
-
-		[OperationContract]
-		ActionMetaData BrokerSignup(
-			string FirmName,
-			string FirmRegNum,
-			string ContactName,
-			string ContactEmail,
-			string ContactMobile,
-			string MobileCode,
-			string ContactOtherPhone,
-			decimal EstimatedMonthlyClientAmount,
-			string Password,
-			string Password2
-		);
-
-		[OperationContract]
-		ActionMetaData BrokerLogin(string Email, string Password);
-
-		[OperationContract]
-		ActionMetaData BrokerRestorePassword(string sMobile, string sCode);
-
-		[OperationContract]
-		BrokerCustomersActionResult BrokerLoadCustomerList(string sContactEmail);
-
-		[OperationContract]
-		BrokerCustomerDetailsActionResult BrokerLoadCustomerDetails(int nCustomerID, string sContactEmail);
-
-		[OperationContract]
-		StringActionResult BrokerSaveCrmEntry(bool bIsIncoming, int nActionID, int nStatusID, string sComment, int nCustomerID, string sContactEmail);
-
-		[OperationContract]
-		BrokerCustomerFilesActionResult BrokerLoadCustomerFiles(int nCustomerID, string sContactEmail);
-
-		[OperationContract]
-		BrokerCustomerFileContentsActionResult BrokerDownloadCustomerFile(int nCustomerID, string sContactEmail, int nFileID);
-
-		[OperationContract]
-		ActionMetaData BrokerSaveUploadedCustomerFile(int nCustomerID, string sContactEmail, byte[] oFileContents, string sFileName);
-
-		[OperationContract]
-		ActionMetaData BrokerDeleteCustomerFiles(int nCustomerID, string sContactEmail, int[] aryFileIDs);
-
-		#endregion Broker
-
-		#region Land Registry
-
-		[OperationContract]
-		string LandRegistryEnquiry(int customerId, string buildingNumber, string streetName, string cityName, string postCode);
-		
-		[OperationContract]
-		string LandRegistryRes(int customerId, string titleNumber);
-		
-		#endregion Land Registry
-
-		#region Company Files
-
-		[OperationContract]
-		ActionMetaData CompanyFilesUpload(int customerId, string fileName, byte[] fileContent, string fileContentType);
-
-		[OperationContract]
-		byte[] GetCompanyFile(int companyFileId);
-
-		#endregion
 
 		#region other strategies
 
@@ -242,18 +232,32 @@
 		ActionMetaData XDaysDue();
 
 		[OperationContract]
-		WizardConfigsActionResult GetWizardConfigs();
-
-		[OperationContract]
 		ActionMetaData UpdateCurrencyRates();
-
-		[OperationContract]
-		ActionMetaData FinishWizard(int customerId);
 
 		[OperationContract]
 		CrmLookupsActionResult CrmLoadLookups();
 
 		#endregion other strategies
+
+		#region Quick offer
+
+		[OperationContract]
+		QuickOfferActionResult QuickOffer(int customerId, bool saveOfferToDB);
+
+		[OperationContract]
+		QuickOfferActionResult QuickOfferWithPrerequisites(int customerId, bool saveOfferToDB);
+		
+		#endregion Quick offer
+
+		#region Wizard
+
+		[OperationContract]
+		WizardConfigsActionResult GetWizardConfigs();
+
+		[OperationContract]
+		ActionMetaData FinishWizard(int customerId);
+
+		#endregion Wizard
 	} // interface IEzService
 } // namespace EzService
 

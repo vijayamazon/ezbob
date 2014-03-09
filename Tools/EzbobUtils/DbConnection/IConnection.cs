@@ -50,6 +50,9 @@
 		T FillFirst<T>(string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) where T: ITraversable, new();
 
 		string DateToString(DateTime oDate);
+
+		QueryParameter CreateVectorParameter<T>(string sFieldName, IEnumerable<T> oValues);
+		QueryParameter CreateVectorParameter<T>(string sFieldName, params T[] oValues);
 	} // IConnection
 
 	#endregion interface IConnection
