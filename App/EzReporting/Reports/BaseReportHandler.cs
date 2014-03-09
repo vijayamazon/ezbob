@@ -166,47 +166,6 @@ namespace Reports {
 
 		#endregion method TableReport
 
-		#region method BuildNewClientReport
-
-		public ATag BuildNewClientReport(Report report, DateTime today) {
-			return new Body().Add<Class>("Body")
-				.Append(new H1().Append(new Text(report.GetTitle(today))))
-				.Append(AdsReport(today))
-				.Append(CustomerReport(today));
-		} // BuildNewClientReport
-
-		#endregion method BuildNewClientReport
-
-		#region method BuildInWizardReport
-
-		public ATag BuildInWizardReport(Report report, DateTime today, DateTime tomorrow) {
-			var rptNewClients = new ReportQuery(report) {
-				StoredProcedure = "RptNewClients",
-				DateStart = today,
-				DateEnd = tomorrow,
-				Columns = GetHeaderAndFields(ReportType.RPT_IN_WIZARD)
-			};
-
-			var rptNewClientsStep1 = new ReportQuery(report) {
-				StoredProcedure = "RptNewClientsStep1",
-				DateStart = today,
-				DateEnd = tomorrow,
-				Columns = rptNewClients.Columns
-			};
-
-			return new Html.Tags.Body().Add<Class>("Body")
-				.Append(new H1().Append(new Text(report.GetTitle(today))))
-				.Append(new P().Append(new Text("Clients that enetered Shops but did not complete:")))
-
-				.Append(new P().Append(TableReport(rptNewClients, true)))
-
-				.Append(new P().Append(new Text("Clients that just enetered their email:")))
-
-				.Append(new P().Append(TableReport(rptNewClientsStep1, true)));
-		} // BuildInWizardReport
-
-		#endregion method BuildInWizardReport
-
 		#region method BuildEarnedInterestReport
 
 		public ATag BuildEarnedInterestReport(Report report, DateTime today, DateTime tomorrow, List<string> oColumnTypes = null) {
@@ -308,33 +267,6 @@ namespace Reports {
 
 		#region Excel generators
 
-		#region method BuildNewClientXls
-
-		public ExcelPackage BuildNewClientXls(Report report, DateTime today) {
-			var title = report.GetTitle(today);
-			var wb = new ExcelPackage();
-
-			try {
-				DataTable dt = DB.ExecuteReader("RptAdsReport", new QueryParameter("@time", DB.DateToString(today)));
-				wb = AddSheetToExcel(dt, title, "RptAdsReport");
-			}
-			catch (Exception e) {
-				Error(e.ToString());
-			} // try
-
-			try {
-				DataTable dt = DB.ExecuteReader("RptCustomerReport", new QueryParameter("@DateStart", DB.DateToString(today)));
-				wb = AddSheetToExcel(dt, title, "RptCustomerReport", String.Empty, wb);
-			}
-			catch (Exception e) {
-				Error(e.ToString());
-			} // try
-
-			return wb;
-		} // BuildNewClientXls
-
-		#endregion method BuildNewClientXls
-
 		#region method BuildPlainedPaymentXls
 
 		public ExcelPackage BuildPlainedPaymentXls(Report report, DateTime today) {
@@ -357,44 +289,6 @@ namespace Reports {
 		} // BuildPlainedPaymentXls
 
 		#endregion method BuildPlainedPaymentXls
-
-		#region method BuildInWizardXls
-
-		public ExcelPackage BuildInWizardXls(Report report, DateTime today, DateTime tomorrow) {
-			var title = report.GetTitle(today);
-			var sometext = String.Empty;
-			var wb = new ExcelPackage();
-
-			try {
-				DataTable dt = DB.ExecuteReader("RptNewClients",
-					new QueryParameter("@DateStart", DB.DateToString(today)),
-					new QueryParameter("@DateEnd", DB.DateToString(tomorrow))
-				);
-
-				sometext = "Clients that entered Shops but did not complete:";
-				wb = AddSheetToExcel(dt, title, "RptNewClients", sometext);
-			}
-			catch (Exception e) {
-				Error(e.ToString());
-			} // try
-
-			try {
-				DataTable dt = DB.ExecuteReader("RptNewClientsStep1",
-					new QueryParameter("@DateStart", DB.DateToString(today)),
-					new QueryParameter("@DateEnd", DB.DateToString(tomorrow))
-				);
-
-				sometext = "Clients that just entered their email:";
-				wb = AddSheetToExcel(dt, title, "RptNewClientsStep1", sometext, wb);
-			}
-			catch (Exception e) {
-				Error(e.ToString());
-			} // try
-
-			return wb;
-		} // BuildInWizardXls
-
-		#endregion method BuildInWizardXls
 
 		#region method BuildEarnedInterestXls
 
@@ -1076,88 +970,6 @@ namespace Reports {
 		#endregion method CreateLoansIssuedReport
 
 		#endregion Loans Issued
-
-		#region method CustomerReport
-
-		private ATag CustomerReport(DateTime today) {
-			Table tbl = new Table();
-
-			try {
-				DataTable dt = DB.ExecuteReader("RptCustomerReport", new QueryParameter("@DateStart", DB.DateToString(today)));
-
-				ATag oTr = new Tr().Add<Class>("HR")
-					.Append(new Th().Append(new Text("Email")))
-					.Append(new Th().Append(new Text("Status")))
-					.Append(new Th().Append(new Text("Wizard Finished")))
-					.Append(new Th().Append(new Text("Account #")))
-					.Append(new Th().Append(new Text("Credit Offer")))
-					.Append(new Th().Append(new Text("Source Ad")));
-
-				oTr.ApplyToChildren<Class>("H");
-
-				tbl.Add<Class>("Report").Append( new Thead().Append(oTr) );
-
-				Tbody tbody = new Tbody();
-				tbl.Append(tbody);
-
-				foreach (DataRow row in dt.Rows) {
-					oTr = new Tr()
-						.Append(new Td().Add<Class>("L").Append(new Text(row["Name"].ToString())))
-						.Append(new Td().Add<Class>("L").Append(new Text(row["Status"].ToString())))
-						.Append(new Td().Add<Class>("L").Append(new Text(row["IsSuccessfullyRegistered"].ToString())))
-						.Append(new Td().Add<Class>("L").Append(new Text(row["AccountNumber"].ToString())))
-						.Append(new Td().Add<Class>("R").Append(new Text(row["CreditSum"].ToString())))
-						.Append(new Td().Add<Class>("L").Append(new Text(row["ReferenceSource"].ToString())));
-
-					tbody.Append(oTr);
-				} // for each data row
-			}
-			catch (Exception e) {
-				Error(e.ToString());
-			}
-
-			return tbl;
-		} // CustomerReport
-
-		#endregion method CustomerReport
-
-		#region method AdsReport
-
-		private ATag AdsReport(DateTime today) {
-			Table tbl = new Table();
-
-			try {
-				DataTable dt = DB.ExecuteReader("RptAdsReport", new QueryParameter("@time", DB.DateToString(today)));
-
-				ATag oTr = new Tr().Add<Class>("HR")
-					.Append(new Th().Append(new Text("Ad Name")))
-					.Append(new Th().Append(new Text("#")))
-					.Append(new Th().Append(new Text("Total Credit Approved")));
-
-				oTr.ApplyToChildren<Class>("H");
-
-				tbl.Add<Class>("Report").Append( new Thead().Append(oTr) );
-
-				Tbody tbody = new Tbody();
-				tbl.Append(tbody);
-
-				foreach (DataRow row in dt.Rows) {
-					oTr = new Tr()
-						.Append(new Td().Add<Class>("L").Append(new Text(row["ReferenceSource"].ToString())))
-						.Append(new Td().Add<Class>("L").Append(new Text(row["TotalUsers"].ToString())))
-						.Append(new Td().Add<Class>("R").Append(new Text(row["TotalCredit"].ToString())));
-
-					tbody.Append(oTr);
-				} // foreach data row
-			}
-			catch (Exception e) {
-				Error(e.ToString());
-			}
-
-			return tbl;
-		} // AdsReport
-
-		#endregion method AdsReport
 
 		#region method PaymentReport
 
