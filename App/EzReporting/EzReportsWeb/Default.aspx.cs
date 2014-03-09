@@ -69,10 +69,8 @@
 					Log.Error("Failed to retrieve is admin \n{0}", ex);
 				}
 			}
-			else
-			{
-				bIsAdmin = (bool)Session["IsAdmin"];
-			}
+		
+			bIsAdmin = (bool)Session["IsAdmin"];
 
 			chkIsAdmin.Checked = bIsAdmin;
 
@@ -398,22 +396,25 @@
 
 		private void InitAdminArea(AConnection oDB, bool bIsPostBack = false)
 		{
-			DataTable oDbUsers = oDB.ExecuteReader("SELECT Id, Name FROM ReportUsers ORDER BY Name", CommandSpecies.Text);
-
-			var oUsers = new SortedDictionary<string, int>();
-
-			foreach (DataRow row in oDbUsers.Rows)
-			{
-				int nUserID = Convert.ToInt32(row["Id"]);
-				string sUserName = row["Name"].ToString();
-
-				oUsers[sUserName] = nUserID;
-			} // for each user row
-
-			SetReportUserMap(oDB, oUsers);
-
 			if (!bIsPostBack)
+			{
+				DataTable oDbUsers = oDB.ExecuteReader("SELECT Id, Name FROM ReportUsers ORDER BY Name", CommandSpecies.Text);
+
+				var oUsers = new SortedDictionary<string, int>();
+
+				foreach (DataRow row in oDbUsers.Rows)
+				{
+					int nUserID = Convert.ToInt32(row["Id"]);
+					string sUserName = row["Name"].ToString();
+
+					oUsers[sUserName] = nUserID;
+				} // for each user row
+
+				SetReportUserMap(oDB, oUsers);
+
+
 				FillUserDropDowns(oUsers);
+			}
 		} // InitAdminArea
 
 		private void FillUserDropDowns(SortedDictionary<string, int> oUsers)

@@ -21,8 +21,8 @@
 			<div class="inner_nopadding">
 				<div id="header_description">
 					<a id="aToggleAdminArea" href="#" onclick="ToggleAdminArea()">Administration</a>
-					<asp:Label ID="Label3" runat="server" Text="Welcome " CssClass="float_left"></asp:Label>
-					<asp:LoginName ID="LoginName" runat="server" CssClass="float_left" />
+					<asp:Label ID="Label3" runat="server" Text="Welcome " ></asp:Label>
+					<asp:LoginName ID="LoginName" runat="server"  />
 					<asp:LoginStatus ID="LoginStatus" runat="server" LogoutAction="Redirect" LogoutPageUrl="~/Default.aspx" CssClass="button grey medium_btn" />
 					<asp:Button runat="server" ID="ResetBtn" Text="Reset" OnClick="ResetBtn_Click" CssClass="button grey medium_btn"/>
 				</div>
@@ -115,7 +115,7 @@
 				<textarea id="txtReportUserMap" runat="server"></textarea>
 			</div>
 		</div>
-		<asp:CheckBox runat="server" ID="chkIsAdmin" Visible="False" />
+		<asp:CheckBox runat="server" ID="chkIsAdmin" />
 	</form>
 
 	<script src="js/jquery.js"></script>
