@@ -27,14 +27,9 @@ namespace EzReportsWeb {
 			report.IsDaily = isDaily;
 
 			switch (report.Type) {
-			case ReportType.RPT_NEW_CLIENT:
-				return BuildNewClientReport(report, (DateTime)rptDef.DateStart);
-
+			
 			case ReportType.RPT_PLANNED_PAYTMENT:
 				return BuildPlainedPaymentReport(report, (DateTime)rptDef.DateStart);
-
-			case ReportType.RPT_IN_WIZARD:
-				return BuildInWizardReport(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd);
 
 			case ReportType.RPT_EARNED_INTEREST:
 				return BuildEarnedInterestReport(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd, oColumnTypes);
@@ -78,14 +73,9 @@ namespace EzReportsWeb {
 			report.IsDaily = isDaily;
 
 			switch (report.Type) {
-			case ReportType.RPT_NEW_CLIENT:
-				return BuildNewClientXls(report, (DateTime)rptDef.DateStart);
-
+			
 			case ReportType.RPT_PLANNED_PAYTMENT:
 				return BuildPlainedPaymentXls(report, (DateTime)rptDef.DateStart);
-
-			case ReportType.RPT_IN_WIZARD:
-				return BuildInWizardXls(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd);
 
 			case ReportType.RPT_EARNED_INTEREST:
 				return BuildEarnedInterestXls(report, (DateTime)rptDef.DateStart, (DateTime)rptDef.DateEnd);

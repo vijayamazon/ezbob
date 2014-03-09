@@ -36,116 +36,103 @@ namespace EzReportToEMail
 			{
 				Parallel.ForEach(reportList.Values, report =>
 					{
-						Debug("Generating {0} report...", report.Title);
-
-						switch (report.Type)
+						try
 						{
-							case ReportType.RPT_NEW_CLIENT:
-								sender.Dispatch(
-									report.Title,
-									dToday,
-									BuildNewClientReport(report, dToday),
-									BuildNewClientXls(report, dToday),
-									report.ToEmail
-									);
-								break;
+							Debug("Generating {0} report...", report.Title);
 
-							case ReportType.RPT_PLANNED_PAYTMENT:
-								sender.Dispatch(
-									report.Title,
-									dToday,
-									BuildPlainedPaymentReport(report, dToday),
-									BuildPlainedPaymentXls(report, dToday),
-									report.ToEmail
-									);
-								break;
+							switch (report.Type)
+							{
+								case ReportType.RPT_PLANNED_PAYTMENT:
+									sender.Dispatch(
+										report.Title,
+										dToday,
+										BuildPlainedPaymentReport(report, dToday),
+										BuildPlainedPaymentXls(report, dToday),
+										report.ToEmail
+										);
+									break;
 
-							case ReportType.RPT_IN_WIZARD:
-								sender.Dispatch(
-									report.Title,
-									dToday,
-									BuildInWizardReport(report, dToday, dTomorrow),
-									BuildInWizardXls(report, dToday, dTomorrow),
-									report.ToEmail
-									);
-								break;
+								case ReportType.RPT_EARNED_INTEREST:
+									sender.Dispatch(
+										report.Title,
+										dToday,
+										BuildEarnedInterestReport(report, dToday, dTomorrow),
+										BuildEarnedInterestXls(report, dToday, dTomorrow),
+										report.ToEmail
+										);
+									break;
 
-							case ReportType.RPT_EARNED_INTEREST:
-								sender.Dispatch(
-									report.Title,
-									dToday,
-									BuildEarnedInterestReport(report, dToday, dTomorrow),
-									BuildEarnedInterestXls(report, dToday, dTomorrow),
-									report.ToEmail
-									);
-								break;
+								case ReportType.RPT_LOANS_GIVEN:
+									sender.Dispatch(
+										report.Title,
+										dToday,
+										BuildLoansIssuedReport(report, dToday, dTomorrow),
+										BuildLoansIssuedXls(report, dToday, dTomorrow),
+										report.ToEmail
+										);
+									break;
 
-							case ReportType.RPT_LOANS_GIVEN:
-								sender.Dispatch(
-									report.Title,
-									dToday,
-									BuildLoansIssuedReport(report, dToday, dTomorrow),
-									BuildLoansIssuedXls(report, dToday, dTomorrow),
-									report.ToEmail
-									);
-								break;
+								case ReportType.RPT_LOAN_STATS:
+									sender.Dispatch(
+										"loan_stats",
+										dToday,
+										null,
+										new LoanStats(DB, this).Xls(),
+										ReportDispatcher.ToDropbox
+										);
+									break;
 
-							case ReportType.RPT_LOAN_STATS:
-								sender.Dispatch(
-									"loan_stats",
-									dToday,
-									null,
-									new LoanStats(DB, this).Xls(),
-									ReportDispatcher.ToDropbox
-									);
-								break;
+								case ReportType.RPT_CCI:
+									sender.Dispatch(
+										report.Title,
+										dToday,
+										BuildCciReport(report, dToday, dTomorrow),
+										BuildCciXls(report, dToday, dTomorrow),
+										report.ToEmail
+										);
+									break;
 
-							case ReportType.RPT_CCI:
-								sender.Dispatch(
-									report.Title,
-									dToday,
-									BuildCciReport(report, dToday, dTomorrow),
-									BuildCciXls(report, dToday, dTomorrow),
-									report.ToEmail
-									);
-								break;
+								case ReportType.RPT_UI_REPORT:
+									sender.Dispatch(
+										report.Title,
+										dToday,
+										BuildUiReport(report, dToday, dTomorrow),
+										BuildUiXls(report, dToday, dTomorrow),
+										report.ToEmail
+										);
+									break;
 
-							case ReportType.RPT_UI_REPORT:
-								sender.Dispatch(
-									report.Title,
-									dToday,
-									BuildUiReport(report, dToday, dTomorrow),
-									BuildUiXls(report, dToday, dTomorrow),
-									report.ToEmail
-									);
-								break;
+								case ReportType.RPT_UI_EXT_REPORT:
+									sender.Dispatch(
+										report.Title,
+										dToday,
+										BuildUiExtReport(report, dToday, dTomorrow),
+										BuildUiExtXls(report, dToday, dTomorrow),
+										report.ToEmail
+										);
+									break;
 
-							case ReportType.RPT_UI_EXT_REPORT:
-								sender.Dispatch(
-									report.Title,
-									dToday,
-									BuildUiExtReport(report, dToday, dTomorrow),
-									BuildUiExtXls(report, dToday, dTomorrow),
-									report.ToEmail
-									);
-								break;
+								case ReportType.RPT_ACCOUNTING_LOAN_BALANCE:
+									sender.Dispatch(
+										report.Title,
+										dToday,
+										BuildAccountingLoanBalanceReport(report, dToday, dTomorrow),
+										BuildAccountingLoanBalanceXls(report, dToday, dTomorrow),
+										report.ToEmail
+										);
+									break;
 
-							case ReportType.RPT_ACCOUNTING_LOAN_BALANCE:
-								sender.Dispatch(
-									report.Title,
-									dToday,
-									BuildAccountingLoanBalanceReport(report, dToday, dTomorrow),
-									BuildAccountingLoanBalanceXls(report, dToday, dTomorrow),
-									report.ToEmail
-									);
-								break;
+								default:
+									HandleGenericReport(report, dToday, sender);
+									break;
+							} // switch
 
-							default:
-								HandleGenericReport(report, dToday, sender);
-								break;
-						} // switch
-
-						Debug("Generating {0} report complete.", report.Title);
+							Debug("Generating {0} report complete.", report.Title);
+						}
+						catch (Exception ex)
+						{
+							Error("Generating {0} report failed \n {1}.", report.Title, ex);
+						}
 					}); // foreach
 			}
 			catch (AggregateException ae)
