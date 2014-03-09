@@ -33,9 +33,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="ApplicationMng">
-      <HintPath>..\..\Lib\Scorto.Core\ApplicationMng.dll</HintPath>
-    </Reference>
     <Reference Include="FluentNHibernate">
       <HintPath>..\..\Lib\3rdparty\Nhibernate\FluentNHibernate.dll</HintPath>
     </Reference>
