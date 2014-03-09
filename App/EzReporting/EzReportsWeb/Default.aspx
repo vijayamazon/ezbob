@@ -115,7 +115,7 @@
 				<textarea id="txtReportUserMap" runat="server"></textarea>
 			</div>
 		</div>
-		<asp:CheckBox runat="server" ID="chkIsAdmin" />
+		<asp:CheckBox runat="server" ID="chkIsAdmin" Visible="False" />
 	</form>
 
 	<script src="js/jquery.js"></script>

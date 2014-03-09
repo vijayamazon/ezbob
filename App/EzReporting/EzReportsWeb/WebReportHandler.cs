@@ -14,11 +14,14 @@ namespace EzReportsWeb {
 			ReportList = Report.GetUserReportsList(oDB, System.Web.HttpContext.Current.User.Identity.Name);
 		} // constructor
 
-		internal ATag GetReportData(System.Web.UI.WebControls.ListItem selectedReport, ReportQuery rptDef, bool isDaily, List<string> oColumnTypes) {
-			Report report = GetReport(selectedReport.Text);
-
+		internal ATag GetReportData(string selectedReport, ReportQuery rptDef, bool isDaily, List<string> oColumnTypes, out bool isError) {
+			Report report = GetReport(selectedReport);
+			isError = false;
 			if (report == null)
-				return new Span().Append(new Text("Error Occured, try later"));
+			{
+				isError = true;
+				return new Span().Append(new Text("Ops something went wrong, retry"));
+			}
 
 			rptDef.Report = report;
 			rptDef.StoredProcedure = report.StoredProcedure;

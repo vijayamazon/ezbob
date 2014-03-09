@@ -91,18 +91,18 @@
 
 			fromDate.Value = fDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
 			toDate.Value = tDate.AddDays(-1).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
-
-			AdjustUIFiltersForReport();
 		} // Page_Load
 
 		protected void ddlReportTypes_OnSelectedIndexChanged(object sender, EventArgs e)
 		{
-			AdjustUIFiltersForReport();
+			Session["SelectedReport"] = ((DropDownList) sender).SelectedValue;
+			AdjustUIFiltersForReport(Session["SelectedReport"].ToString());
 		} // ddlReportTypes_OnSelectedIndexChanged
 
-		private void AdjustUIFiltersForReport()
+		private void AdjustUIFiltersForReport(string selectedReport)
 		{
-			Report rpt = reportHandler.GetReport(ddlReportTypes.SelectedValue);
+
+			Report rpt = reportHandler.GetReport(selectedReport);
 
 			if (rpt == null)
 				return;
@@ -120,10 +120,16 @@
 
 			var oColumnTypes = new List<string>();
 			Log.Debug("Show report clicked for report: '{0}'", ddlReportTypes.SelectedItem.Text);
-			if (ddlReportTypes.SelectedItem == null)
+			if (Session["SelectedReport"] == null)
+			{
+				Session["SelectedReport"] = ddlReportTypes.SelectedItem.Text;
+			}
+			bool isError;
+			ATag data = reportHandler.GetReportData(Session["SelectedReport"].ToString(), rptDef, isDaily, oColumnTypes, out isError);
+			if (isError)
+			{
 				ResetBtn_Click(sender, e);
-
-			ATag data = reportHandler.GetReportData(ddlReportTypes.SelectedItem, rptDef, isDaily, oColumnTypes);
+			}
 
 			var aoColumnDefs = oColumnTypes.Select(
 				sType => string.Format("{{ \"sType\": \"{0}\" }}", sType)
