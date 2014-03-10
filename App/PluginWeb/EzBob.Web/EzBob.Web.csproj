@@ -48,10 +48,6 @@
     <Reference Include="AjaxMin">
       <HintPath>..\..\..\Lib\3rdparty\SquishIt\AjaxMin.dll</HintPath>
     </Reference>
-    <Reference Include="ApplicationMng, Version=6.2.60.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Lib\Scorto.Core\ApplicationMng.dll</HintPath>
-    </Reference>
     <Reference Include="Aspose.Cells">
       <HintPath>..\..\..\Lib\3rdparty\Aspose\Aspose.Cells.dll</HintPath>
     </Reference>

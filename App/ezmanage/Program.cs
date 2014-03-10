@@ -48,11 +48,7 @@ namespace ezmanage
 
         private static void Init()
         {
-            ObjectFactory.Initialize(x =>
-                                         {
-                                             x.AddRegistry<EzRegistry>();
-                                             x.AddRegistry<ApplicationMng.Repository.RepositoryRegistry>();
-                                         });
+            ObjectFactory.Initialize(x => x.AddRegistry<EzRegistry>());
 
 			var lConnectionString = ConfigurationManager.AppSettings["DBConnection"]; //DBConnectionLocal
             DbCommon.Init("DBSQLServer.dll", lConnectionString);

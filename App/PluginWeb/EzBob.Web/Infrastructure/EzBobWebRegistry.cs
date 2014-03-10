@@ -3,7 +3,6 @@ using PayPal.Platform.SDK;
 namespace EzBob.Web.Infrastructure
 {
 	using System.Web.Security;
-	using ApplicationMng.Model.Commands.Player;
 	using Code.Bank;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model;
@@ -56,7 +55,6 @@ namespace EzBob.Web.Infrastructure
 			For<IExposurePerUnderwriterReportRepository>().Use<ExposurePerUnderwriterReportRepository>();
 			For<IMedalStatisticReportRepository>().Use<MedalStatisticReportRepository>();
 			For<IDailyReportRepository>().Use<DailyReportRepository>();
-			For<IPlayer>().Use<PlayerDummy>();
 
 			For<IEzBobConfiguration>().Singleton().Use(ezBobConfiguration);
 			For<IPayPalConfig>().Singleton().Use(localRoot.PayPalConfig);
