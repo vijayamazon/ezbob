@@ -52,7 +52,7 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 	}, // clearDropzone
 
 	clearData: function() {
-		this.$el.find('.customer-personal-details .value').load_display_value({ data_source: {}, });
+		this.$el.find('.value').load_display_value({ data_source: {}, });
 
 		if (this.CrmTable) {
 			this.CrmTable.fnClearTable();
@@ -93,7 +93,7 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 					return;
 				} // if
 
-				self.$el.find('.customer-personal-details .value').load_display_value({
+				self.$el.find('.value').load_display_value({
 					data_source: oResponse.personal_data,
 					callback: function(sFieldName, oFieldValue) {
 						switch (sFieldName) {
@@ -112,6 +112,12 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 				opts.aaData = oResponse.crm_data;
 
 				self.CrmTable = self.$el.find('.customer-crm-list').dataTable(opts);
+
+				var oGroup = self.$el.find('.crm-group');
+				var oCaption = $('.aka-caption', oGroup);
+
+				oCaption.find('.dataTables_filter').remove();
+				oCaption.append($('.dataTables_filter', oGroup));
 			} // on success loading customer details
 		);
 	}, // reloadData
@@ -162,11 +168,16 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 
 				self.FileTable = self.$el.find('.customer-file-list').dataTable(opts);
 
-				self.$el.find('.customer-files .dataTables_top_right')
-					.prepend(self.setSomethingEnabled(
-						$('<button type=button class="delete-selected-files" title="Delete selected files">Delete</button>'),
-						false
-					));
+				var oGroup = self.$el.find('.files-group');
+				var oCaption = $('.aka-caption', oGroup);
+
+				oCaption.find('.dataTables_filter, .delete-selected-files').remove();
+				oCaption.append($('.dataTables_filter', oGroup));
+
+				oCaption.prepend(self.setSomethingEnabled(
+					$('<button type=button class="delete-selected-files" title="Delete selected files">Delete</button>'),
+					false
+				));
 			} // on success loading customer details
 		); // getJSON
 	}, // reloadFileList
@@ -256,7 +267,7 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 			aaSorting: [[0, 'desc']],
 
 			bAutoWidth: true,
-			sDom: '<"top"<"box"<"box-title"<"dataTables_top_right"f><"dataTables_top_left"i>>>>tr<"bottom"<"col-md-6"l><"col-md-6 dataTables_bottom_right"p>><"clear">',
+			sDom: 'ftr<"bottom"<"col-md-6"il><"col-md-6 dataTables_bottom_right"p>><"clear">',
 
 			bStateSave: true,
 

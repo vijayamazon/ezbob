@@ -295,57 +295,64 @@
 				<!-- section-add-customer -->
 
 				<div class="page-section hide section-customer-details">
-					<h2 class="form-start">Customer details
-						<button type="button" class="back-to-list green pull-right rc-button">Back to customer list</button>
-					</h2>
+					<input type="hidden" id="customer-id" class="value" data-field-name="id" />
 
-					<div class="personal-details-top">
-						<div class="personal-details-top-row">
-							<div class="customer-personal-details-container">
-								<div class="customer-personal-details">
-									<input type="hidden" id="customer-id" class="value" data-field-name="id" />
+					<div class="back-to-list-container"><button type="button" class="back-to-list green rc-button">Back to customer list</button></div>
 
-									<div class="datum"><span class="title">Name:</span><span class="value" data-field-name="name"></span></div>
+					<div class="value-group aka-table table-big box">
+						<div class="box-title aka-caption">Customer details</div>
 
-									<div class="datum"><span class="title">Date of birth:</span><span class="value" data-field-name="birthdate"></span></div>
-
-									<div class="datum"><span class="title">Gender:</span><span class="value" data-field-name="gender"></span></div>
-
-									<div class="datum"><span class="title">Marital status:</span><span class="value" data-field-name="maritalstatus"></span></div>
-
-									<div class="datum"><span class="title">Mobile phone #:</span><span class="value" data-field-name="mobilephone"></span></div>
-
-									<div class="datum"><span class="title">Daytime phone #:</span><span class="value" data-field-name="daytimephone"></span></div>
-
-									<div class="datum"><span class="title">Address:</span><span class="value" data-field-name="address"></span></div>
+						<div class="aka-row">
+							<div class="aka-column">
+								<div class="aka-table">
+									<div class="aka-row">
+										<span class="value-title">Name:</span>
+										<span class="value" data-field-name="name"></span>
+									</div>
+									<div class="aka-row">
+										<span class="value-title">Date of birth:</span>
+										<span class="value" data-field-name="birthdate"></span>
+									</div>
+									<div class="aka-row">
+										<span class="value-title">Gender:</span>
+										<span class="value" data-field-name="gender"></span>
+									</div>
 								</div>
 							</div>
 
-							<div class="customer-files">
-								<h3 class="crm-title">Uploaded files</h3>
-								<div class="table-responsive table-big">
-									<table class="customer-file-list table">
-										<thead><tr>
-											<th>File name</th>
-											<th></th>
-										</tr></thead>
-										<tbody><tr>
-											<td></td>
-											<td></td>
-										</tr></tbody>
-									</table>
+							<div class="aka-column">
+								<div class="aka-table">
+									<div class="aka-row">
+										<span class="value-title">Marital status:</span>
+										<span class="value" data-field-name="maritalstatus"></span>
+									</div>
+									<div class="aka-row">
+										<span class="value-title">Mobile phone #:</span>
+										<span class="value" data-field-name="mobilephone"></span>
+									</div>
+									<div class="aka-row">
+										<span class="value-title">Daytime phone #:</span>
+										<span class="value" data-field-name="daytimephone"></span>
+									</div>
 								</div>
 							</div>
 
-							<form id="customerFilesUploader"><div class="dz-message"><span>Drag or click to upload files.</span></div></form>
+							<div class="aka-column">
+								<div class="aka-table">
+									<div class="aka-row">
+										<span class="value-title">Address:</span>
+										<span class="value" data-field-name="address"></span>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 
-					<h3 class="crm-title">CRM
-						<button type="button" class="add-crm-note green pull-right rc-button">Add CRM note</button>
-					</h3>
+					<div class="value-group crm-group aka-table table-big box">
+						<div class="box-title aka-caption">CRM events
+							<button type="button" class="add-crm-note" title="Add CRM note">+</button>
+						</div>
 
-					<div class="table-responsive table-big">
 						<table class="customer-crm-list table">
 							<thead><tr>
 								<th>Date</th>
@@ -360,6 +367,27 @@
 								<td></td>
 							</tr></tbody>
 						</table>
+					</div>
+					
+					<div class="value-group files-group aka-table table-big box">
+						<div class="box-title aka-caption">Customer files</div>
+
+						<div class="aka-row">
+							<div class="aka-column table-responsive">
+								<table class="customer-file-list table">
+									<thead><tr>
+										<th>File name</th>
+										<th></th>
+									</tr></thead>
+									<tbody><tr>
+										<td></td>
+										<td></td>
+									</tr></tbody>
+								</table>
+							</div>
+
+							<form id="customerFilesUploader" class="aka-column"><div class="dz-message"><span>Drag or click to upload files.</span></div></form>
+						</div>
 					</div>
 
 					@{Html.RenderPartial("~/Areas/Underwriter/Views/Shared/CustomerRelations/AddCustomerRelationsEntry.cshtml");}

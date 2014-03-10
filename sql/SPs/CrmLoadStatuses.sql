@@ -1,17 +1,14 @@
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[CrmLoadStatuses]') AND TYPE IN (N'P', N'PC'))
-DROP PROCEDURE [dbo].[CrmLoadStatuses]
+IF OBJECT_ID('CrmLoadStatuses') IS NULL
+	EXECUTE('CREATE PROCEDURE CrmLoadStatuses AS SELECT 1')
 GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[CrmLoadStatuses]
+
+ALTER PROCEDURE CrmLoadStatuses
 AS
 BEGIN
 	SELECT
 		Id AS ID,
 		Name
 	FROM
-		CRMActions
+		CRMStatuses
 END
 GO
