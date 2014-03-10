@@ -611,7 +611,7 @@
 				return;
 			}
 
-			serviceClient.FinishWizard(customerId);
+			serviceClient.FinishWizard(customerId, underwriterId);
 		}
 
 		[Activation]
