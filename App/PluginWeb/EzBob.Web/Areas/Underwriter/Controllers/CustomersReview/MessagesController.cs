@@ -12,10 +12,11 @@
 	using Code;
 	using Scorto.Web;
 	using StructureMap;
+	using EzBob.Web.EzServiceReference;
 
 	public class MessagesController : Controller
 	{
-		private readonly EzServiceClient m_oServiceClient;
+		private readonly ServiceClient m_oServiceClient;
 		private readonly CustomerRepository _customersRepository;
 		private readonly IWorkplaceContext _workplaceContext;
 		private readonly IDecisionHistoryRepository _historyRepository;
@@ -31,7 +32,7 @@
 			MessagesModelBuilder builder
 		)
 		{
-			m_oServiceClient = ServiceClient.Instance;
+			m_oServiceClient = new ServiceClient();
 			_exportResultRepository = exportResultRepository;
 			_askvilleRepository = askvilleRepository;
 			_historyRepository = historyRepository;
@@ -105,7 +106,7 @@
 		public void MoreAMLInformation(int id)
 		{
 			var customer = _customersRepository.Get(id);
-			m_oServiceClient.MoreAmlInformation(_workplaceContext.User.Id, customer.Id);
+			m_oServiceClient.Instance.MoreAmlInformation(_workplaceContext.User.Id, customer.Id);
 			customer.CreditResult = CreditResultStatus.ApprovedPending;
 			customer.PendingStatus = PendingStatus.AML;
 			LogPending(customer, PendingStatus.AML);

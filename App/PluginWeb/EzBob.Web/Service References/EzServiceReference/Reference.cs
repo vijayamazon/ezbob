@@ -185,14 +185,14 @@ namespace EzBob.Web.EzServiceReference {
     [System.Runtime.Serialization.DataContractAttribute(Name="ActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
     [System.SerializableAttribute()]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.BoolActionResult))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.WizardConfigsActionResult))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.QuickOfferActionResult))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.CrmLookupsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.BrokerCustomersActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.BrokerCustomerDetailsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.StringActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.BrokerCustomerFilesActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.BrokerCustomerFileContentsActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.CrmLookupsActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.QuickOfferActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.WizardConfigsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.StringListActionResult))]
     public partial class ActionResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
@@ -253,123 +253,6 @@ namespace EzBob.Web.EzServiceReference {
                 if ((this.ValueField.Equals(value) != true)) {
                     this.ValueField = value;
                     this.RaisePropertyChanged("Value");
-                }
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="WizardConfigsActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
-    [System.SerializableAttribute()]
-    public partial class WizardConfigsActionResult : EzBob.Web.EzServiceReference.ActionResult {
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private bool IsSmsValidationActiveField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int NumberOfMobileCodeAttemptsField;
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public bool IsSmsValidationActive {
-            get {
-                return this.IsSmsValidationActiveField;
-            }
-            set {
-                if ((this.IsSmsValidationActiveField.Equals(value) != true)) {
-                    this.IsSmsValidationActiveField = value;
-                    this.RaisePropertyChanged("IsSmsValidationActive");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int NumberOfMobileCodeAttempts {
-            get {
-                return this.NumberOfMobileCodeAttemptsField;
-            }
-            set {
-                if ((this.NumberOfMobileCodeAttemptsField.Equals(value) != true)) {
-                    this.NumberOfMobileCodeAttemptsField = value;
-                    this.RaisePropertyChanged("NumberOfMobileCodeAttempts");
-                }
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="QuickOfferActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
-    [System.SerializableAttribute()]
-    public partial class QuickOfferActionResult : EzBob.Web.EzServiceReference.ActionResult {
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private bool HasValueField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private EzBob.Backend.Models.QuickOfferModel ValueField;
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public bool HasValue {
-            get {
-                return this.HasValueField;
-            }
-            set {
-                if ((this.HasValueField.Equals(value) != true)) {
-                    this.HasValueField = value;
-                    this.RaisePropertyChanged("HasValue");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public EzBob.Backend.Models.QuickOfferModel Value {
-            get {
-                return this.ValueField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.ValueField, value) != true)) {
-                    this.ValueField = value;
-                    this.RaisePropertyChanged("Value");
-                }
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="CrmLookupsActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
-    [System.SerializableAttribute()]
-    public partial class CrmLookupsActionResult : EzBob.Web.EzServiceReference.ActionResult {
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Collections.Generic.Dictionary<int, string> ActionsField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Collections.Generic.Dictionary<int, string> StatusesField;
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Collections.Generic.Dictionary<int, string> Actions {
-            get {
-                return this.ActionsField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.ActionsField, value) != true)) {
-                    this.ActionsField = value;
-                    this.RaisePropertyChanged("Actions");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Collections.Generic.Dictionary<int, string> Statuses {
-            get {
-                return this.StatusesField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.StatusesField, value) != true)) {
-                    this.StatusesField = value;
-                    this.RaisePropertyChanged("Statuses");
                 }
             }
         }
@@ -508,6 +391,123 @@ namespace EzBob.Web.EzServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="CrmLookupsActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class CrmLookupsActionResult : EzBob.Web.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Collections.Generic.Dictionary<int, string> ActionsField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Collections.Generic.Dictionary<int, string> StatusesField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Collections.Generic.Dictionary<int, string> Actions {
+            get {
+                return this.ActionsField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ActionsField, value) != true)) {
+                    this.ActionsField = value;
+                    this.RaisePropertyChanged("Actions");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Collections.Generic.Dictionary<int, string> Statuses {
+            get {
+                return this.StatusesField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.StatusesField, value) != true)) {
+                    this.StatusesField = value;
+                    this.RaisePropertyChanged("Statuses");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="QuickOfferActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class QuickOfferActionResult : EzBob.Web.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool HasValueField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private EzBob.Backend.Models.QuickOfferModel ValueField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool HasValue {
+            get {
+                return this.HasValueField;
+            }
+            set {
+                if ((this.HasValueField.Equals(value) != true)) {
+                    this.HasValueField = value;
+                    this.RaisePropertyChanged("HasValue");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public EzBob.Backend.Models.QuickOfferModel Value {
+            get {
+                return this.ValueField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ValueField, value) != true)) {
+                    this.ValueField = value;
+                    this.RaisePropertyChanged("Value");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="WizardConfigsActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class WizardConfigsActionResult : EzBob.Web.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool IsSmsValidationActiveField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int NumberOfMobileCodeAttemptsField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool IsSmsValidationActive {
+            get {
+                return this.IsSmsValidationActiveField;
+            }
+            set {
+                if ((this.IsSmsValidationActiveField.Equals(value) != true)) {
+                    this.IsSmsValidationActiveField = value;
+                    this.RaisePropertyChanged("IsSmsValidationActive");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int NumberOfMobileCodeAttempts {
+            get {
+                return this.NumberOfMobileCodeAttemptsField;
+            }
+            set {
+                if ((this.NumberOfMobileCodeAttemptsField.Equals(value) != true)) {
+                    this.NumberOfMobileCodeAttemptsField = value;
+                    this.RaisePropertyChanged("NumberOfMobileCodeAttempts");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="StringListActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
     [System.SerializableAttribute()]
     public partial class StringListActionResult : EzBob.Web.EzServiceReference.ActionResult {
@@ -618,6 +618,63 @@ namespace EzBob.Web.EzServiceReference {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="EzServiceReference.IEzService")]
     public interface IEzService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckAml", ReplyAction="http://tempuri.org/IEzService/CheckAmlResponse")]
+        EzBob.Web.EzServiceReference.ActionMetaData CheckAml(int customerId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckAmlCustom", ReplyAction="http://tempuri.org/IEzService/CheckAmlCustomResponse")]
+        EzBob.Web.EzServiceReference.ActionMetaData CheckAmlCustom(int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet, string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckBwa", ReplyAction="http://tempuri.org/IEzService/CheckBwaResponse")]
+        EzBob.Web.EzServiceReference.ActionMetaData CheckBwa(int customerId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckBwaCustom", ReplyAction="http://tempuri.org/IEzService/CheckBwaCustomResponse")]
+        EzBob.Web.EzServiceReference.ActionMetaData CheckBwaCustom(int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet, string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode, string idhubBranchCode, string idhubAccountNumber);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/IsBroker", ReplyAction="http://tempuri.org/IEzService/IsBrokerResponse")]
+        EzBob.Web.EzServiceReference.BoolActionResult IsBroker(string sContactEmail);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerSignup", ReplyAction="http://tempuri.org/IEzService/BrokerSignupResponse")]
+        EzBob.Web.EzServiceReference.ActionMetaData BrokerSignup(string FirmName, string FirmRegNum, string ContactName, string ContactEmail, string ContactMobile, string MobileCode, string ContactOtherPhone, decimal EstimatedMonthlyClientAmount, string Password, string Password2);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLogin", ReplyAction="http://tempuri.org/IEzService/BrokerLoginResponse")]
+        EzBob.Web.EzServiceReference.ActionMetaData BrokerLogin(string Email, string Password);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerRestorePassword", ReplyAction="http://tempuri.org/IEzService/BrokerRestorePasswordResponse")]
+        EzBob.Web.EzServiceReference.ActionMetaData BrokerRestorePassword(string sMobile, string sCode);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLoadCustomerList", ReplyAction="http://tempuri.org/IEzService/BrokerLoadCustomerListResponse")]
+        EzBob.Web.EzServiceReference.BrokerCustomersActionResult BrokerLoadCustomerList(string sContactEmail);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLoadCustomerDetails", ReplyAction="http://tempuri.org/IEzService/BrokerLoadCustomerDetailsResponse")]
+        EzBob.Web.EzServiceReference.BrokerCustomerDetailsActionResult BrokerLoadCustomerDetails(int nCustomerID, string sContactEmail);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerSaveCrmEntry", ReplyAction="http://tempuri.org/IEzService/BrokerSaveCrmEntryResponse")]
+        EzBob.Web.EzServiceReference.StringActionResult BrokerSaveCrmEntry(bool bIsIncoming, int nActionID, int nStatusID, string sComment, int nCustomerID, string sContactEmail);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLoadCustomerFiles", ReplyAction="http://tempuri.org/IEzService/BrokerLoadCustomerFilesResponse")]
+        EzBob.Web.EzServiceReference.BrokerCustomerFilesActionResult BrokerLoadCustomerFiles(int nCustomerID, string sContactEmail);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerDownloadCustomerFile", ReplyAction="http://tempuri.org/IEzService/BrokerDownloadCustomerFileResponse")]
+        EzBob.Web.EzServiceReference.BrokerCustomerFileContentsActionResult BrokerDownloadCustomerFile(int nCustomerID, string sContactEmail, int nFileID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerSaveUploadedCustomerFile", ReplyAction="http://tempuri.org/IEzService/BrokerSaveUploadedCustomerFileResponse")]
+        EzBob.Web.EzServiceReference.ActionMetaData BrokerSaveUploadedCustomerFile(int nCustomerID, string sContactEmail, byte[] oFileContents, string sFileName);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerDeleteCustomerFiles", ReplyAction="http://tempuri.org/IEzService/BrokerDeleteCustomerFilesResponse")]
+        EzBob.Web.EzServiceReference.ActionMetaData BrokerDeleteCustomerFiles(int nCustomerID, string sContactEmail, int[] aryFileIDs);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CaisGenerate", ReplyAction="http://tempuri.org/IEzService/CaisGenerateResponse")]
+        EzBob.Web.EzServiceReference.ActionMetaData CaisGenerate(int underwriterId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CaisUpdate", ReplyAction="http://tempuri.org/IEzService/CaisUpdateResponse")]
+        EzBob.Web.EzServiceReference.ActionMetaData CaisUpdate(int userId, int caisId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CompanyFilesUpload", ReplyAction="http://tempuri.org/IEzService/CompanyFilesUploadResponse")]
+        EzBob.Web.EzServiceReference.ActionMetaData CompanyFilesUpload(int customerId, string fileName, byte[] fileContent, string fileContentType);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanyFile", ReplyAction="http://tempuri.org/IEzService/GetCompanyFileResponse")]
+        byte[] GetCompanyFile(int companyFileId);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GreetingMailStrategy", ReplyAction="http://tempuri.org/IEzService/GreetingMailStrategyResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData GreetingMailStrategy(int nCustomerID, string sConfirmationEmail);
         
@@ -684,11 +741,35 @@ namespace EzBob.Web.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/TransferCashFailed", ReplyAction="http://tempuri.org/IEzService/TransferCashFailedResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData TransferCashFailed(int customerId);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CaisGenerate", ReplyAction="http://tempuri.org/IEzService/CaisGenerateResponse")]
-        EzBob.Web.EzServiceReference.ActionMetaData CaisGenerate(int underwriterId);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckExperianCompany", ReplyAction="http://tempuri.org/IEzService/CheckExperianCompanyResponse")]
+        EzBob.Web.EzServiceReference.ActionMetaData CheckExperianCompany(int customerId);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CaisUpdate", ReplyAction="http://tempuri.org/IEzService/CaisUpdateResponse")]
-        EzBob.Web.EzServiceReference.ActionMetaData CaisUpdate(int userId, int caisId);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckExperianConsumer", ReplyAction="http://tempuri.org/IEzService/CheckExperianConsumerResponse")]
+        EzBob.Web.EzServiceReference.ActionMetaData CheckExperianConsumer(int customerId, int directorId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LandRegistryEnquiry", ReplyAction="http://tempuri.org/IEzService/LandRegistryEnquiryResponse")]
+        string LandRegistryEnquiry(int customerId, string buildingNumber, string streetName, string cityName, string postCode);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LandRegistryRes", ReplyAction="http://tempuri.org/IEzService/LandRegistryResResponse")]
+        string LandRegistryRes(int customerId, string titleNumber);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy1", ReplyAction="http://tempuri.org/IEzService/MainStrategy1Response")]
+        EzBob.Web.EzServiceReference.ActionMetaData MainStrategy1(int uderwriterId, int customerId, EzBob.Web.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy2", ReplyAction="http://tempuri.org/IEzService/MainStrategy2Response")]
+        EzBob.Web.EzServiceReference.ActionMetaData MainStrategy2(int uderwriterId, int customerId, EzBob.Web.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy3", ReplyAction="http://tempuri.org/IEzService/MainStrategy3Response")]
+        EzBob.Web.EzServiceReference.ActionMetaData MainStrategy3(int uderwriterId, int customerId, int checkType, string houseNumber, string houseName, string street, string district, string town, string county, string postcode, string bankAccount, string sortCode, int avoidAutoDescison);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategySync1", ReplyAction="http://tempuri.org/IEzService/MainStrategySync1Response")]
+        EzBob.Web.EzServiceReference.ActionMetaData MainStrategySync1(int underwriterId, int customerId, EzBob.Web.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GenerateMobileCode", ReplyAction="http://tempuri.org/IEzService/GenerateMobileCodeResponse")]
+        EzBob.Web.EzServiceReference.BoolActionResult GenerateMobileCode(string phone);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ValidateMobileCode", ReplyAction="http://tempuri.org/IEzService/ValidateMobileCodeResponse")]
+        EzBob.Web.EzServiceReference.BoolActionResult ValidateMobileCode(string phone, string code);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FirstOfMonthStatusNotifier", ReplyAction="http://tempuri.org/IEzService/FirstOfMonthStatusNotifierResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData FirstOfMonthStatusNotifier();
@@ -714,47 +795,11 @@ namespace EzBob.Web.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/XDaysDue", ReplyAction="http://tempuri.org/IEzService/XDaysDueResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData XDaysDue();
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckExperianCompany", ReplyAction="http://tempuri.org/IEzService/CheckExperianCompanyResponse")]
-        EzBob.Web.EzServiceReference.ActionMetaData CheckExperianCompany(int customerId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckExperianConsumer", ReplyAction="http://tempuri.org/IEzService/CheckExperianConsumerResponse")]
-        EzBob.Web.EzServiceReference.ActionMetaData CheckExperianConsumer(int customerId, int directorId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckAml", ReplyAction="http://tempuri.org/IEzService/CheckAmlResponse")]
-        EzBob.Web.EzServiceReference.ActionMetaData CheckAml(int customerId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckAmlCustom", ReplyAction="http://tempuri.org/IEzService/CheckAmlCustomResponse")]
-        EzBob.Web.EzServiceReference.ActionMetaData CheckAmlCustom(int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet, string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckBwa", ReplyAction="http://tempuri.org/IEzService/CheckBwaResponse")]
-        EzBob.Web.EzServiceReference.ActionMetaData CheckBwa(int customerId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckBwaCustom", ReplyAction="http://tempuri.org/IEzService/CheckBwaCustomResponse")]
-        EzBob.Web.EzServiceReference.ActionMetaData CheckBwaCustom(int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet, string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode, string idhubBranchCode, string idhubAccountNumber);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy1", ReplyAction="http://tempuri.org/IEzService/MainStrategy1Response")]
-        EzBob.Web.EzServiceReference.ActionMetaData MainStrategy1(int uderwriterId, int customerId, EzBob.Web.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy2", ReplyAction="http://tempuri.org/IEzService/MainStrategy2Response")]
-        EzBob.Web.EzServiceReference.ActionMetaData MainStrategy2(int uderwriterId, int customerId, EzBob.Web.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy3", ReplyAction="http://tempuri.org/IEzService/MainStrategy3Response")]
-        EzBob.Web.EzServiceReference.ActionMetaData MainStrategy3(int uderwriterId, int customerId, int checkType, string houseNumber, string houseName, string street, string district, string town, string county, string postcode, string bankAccount, string sortCode, int avoidAutoDescison);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategySync1", ReplyAction="http://tempuri.org/IEzService/MainStrategySync1Response")]
-        EzBob.Web.EzServiceReference.ActionMetaData MainStrategySync1(int underwriterId, int customerId, EzBob.Web.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GenerateMobileCode", ReplyAction="http://tempuri.org/IEzService/GenerateMobileCodeResponse")]
-        EzBob.Web.EzServiceReference.BoolActionResult GenerateMobileCode(string phone);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ValidateMobileCode", ReplyAction="http://tempuri.org/IEzService/ValidateMobileCodeResponse")]
-        EzBob.Web.EzServiceReference.BoolActionResult ValidateMobileCode(string phone, string code);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetWizardConfigs", ReplyAction="http://tempuri.org/IEzService/GetWizardConfigsResponse")]
-        EzBob.Web.EzServiceReference.WizardConfigsActionResult GetWizardConfigs();
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateCurrencyRates", ReplyAction="http://tempuri.org/IEzService/UpdateCurrencyRatesResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData UpdateCurrencyRates();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CrmLoadLookups", ReplyAction="http://tempuri.org/IEzService/CrmLoadLookupsResponse")]
+        EzBob.Web.EzServiceReference.CrmLookupsActionResult CrmLoadLookups();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/QuickOffer", ReplyAction="http://tempuri.org/IEzService/QuickOfferResponse")]
         EzBob.Web.EzServiceReference.QuickOfferActionResult QuickOffer(int customerId, bool saveOfferToDB);
@@ -762,56 +807,14 @@ namespace EzBob.Web.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/QuickOfferWithPrerequisites", ReplyAction="http://tempuri.org/IEzService/QuickOfferWithPrerequisitesResponse")]
         EzBob.Web.EzServiceReference.QuickOfferActionResult QuickOfferWithPrerequisites(int customerId, bool saveOfferToDB);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetWizardConfigs", ReplyAction="http://tempuri.org/IEzService/GetWizardConfigsResponse")]
+        EzBob.Web.EzServiceReference.WizardConfigsActionResult GetWizardConfigs();
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/FinishWizard", ReplyAction="http://tempuri.org/IEzService/FinishWizardResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData FinishWizard(int customerId);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CrmLoadLookups", ReplyAction="http://tempuri.org/IEzService/CrmLoadLookupsResponse")]
-        EzBob.Web.EzServiceReference.CrmLookupsActionResult CrmLoadLookups();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/IsBroker", ReplyAction="http://tempuri.org/IEzService/IsBrokerResponse")]
-        EzBob.Web.EzServiceReference.BoolActionResult IsBroker(string sContactEmail);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerSignup", ReplyAction="http://tempuri.org/IEzService/BrokerSignupResponse")]
-        EzBob.Web.EzServiceReference.ActionMetaData BrokerSignup(string FirmName, string FirmRegNum, string ContactName, string ContactEmail, string ContactMobile, string MobileCode, string ContactOtherPhone, decimal EstimatedMonthlyClientAmount, string Password, string Password2);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLogin", ReplyAction="http://tempuri.org/IEzService/BrokerLoginResponse")]
-        EzBob.Web.EzServiceReference.ActionMetaData BrokerLogin(string Email, string Password);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerRestorePassword", ReplyAction="http://tempuri.org/IEzService/BrokerRestorePasswordResponse")]
-        EzBob.Web.EzServiceReference.ActionMetaData BrokerRestorePassword(string sMobile, string sCode);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLoadCustomerList", ReplyAction="http://tempuri.org/IEzService/BrokerLoadCustomerListResponse")]
-        EzBob.Web.EzServiceReference.BrokerCustomersActionResult BrokerLoadCustomerList(string sContactEmail);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLoadCustomerDetails", ReplyAction="http://tempuri.org/IEzService/BrokerLoadCustomerDetailsResponse")]
-        EzBob.Web.EzServiceReference.BrokerCustomerDetailsActionResult BrokerLoadCustomerDetails(int nCustomerID, string sContactEmail);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerSaveCrmEntry", ReplyAction="http://tempuri.org/IEzService/BrokerSaveCrmEntryResponse")]
-        EzBob.Web.EzServiceReference.StringActionResult BrokerSaveCrmEntry(bool bIsIncoming, int nActionID, int nStatusID, string sComment, int nCustomerID, string sContactEmail);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLoadCustomerFiles", ReplyAction="http://tempuri.org/IEzService/BrokerLoadCustomerFilesResponse")]
-        EzBob.Web.EzServiceReference.BrokerCustomerFilesActionResult BrokerLoadCustomerFiles(int nCustomerID, string sContactEmail);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerDownloadCustomerFile", ReplyAction="http://tempuri.org/IEzService/BrokerDownloadCustomerFileResponse")]
-        EzBob.Web.EzServiceReference.BrokerCustomerFileContentsActionResult BrokerDownloadCustomerFile(int nCustomerID, string sContactEmail, int nFileID);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerSaveUploadedCustomerFile", ReplyAction="http://tempuri.org/IEzService/BrokerSaveUploadedCustomerFileResponse")]
-        EzBob.Web.EzServiceReference.ActionMetaData BrokerSaveUploadedCustomerFile(int nCustomerID, string sContactEmail, byte[] oFileContents, string sFileName);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LandRegistryEnquiry", ReplyAction="http://tempuri.org/IEzService/LandRegistryEnquiryResponse")]
-        string LandRegistryEnquiry(int customerId, string buildingNumber, string streetName, string cityName, string postCode);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LandRegistryRes", ReplyAction="http://tempuri.org/IEzService/LandRegistryResResponse")]
-        string LandRegistryRes(int customerId, string titleNumber);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CompanyFilesUpload", ReplyAction="http://tempuri.org/IEzService/CompanyFilesUploadResponse")]
-        EzBob.Web.EzServiceReference.ActionMetaData CompanyFilesUpload(int customerId, string fileName, byte[] fileContent, string fileContentType);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanyFile", ReplyAction="http://tempuri.org/IEzService/GetCompanyFileResponse")]
-        byte[] GetCompanyFile(int companyFileId);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SaveAgreement", ReplyAction="http://tempuri.org/IEzService/SaveAgreementResponse")]
-        EzBob.Web.EzServiceReference.ActionMetaData SaveAgreement(int customeId, EzBob.Models.Agreements.AgreementModel model, string refNumber, string name, string template, string path1, string path2);
+        EzBob.Web.EzServiceReference.ActionMetaData SaveAgreement(int customerId, EzBob.Models.Agreements.AgreementModel model, string refNumber, string name, string template, string path1, string path2);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -839,6 +842,82 @@ namespace EzBob.Web.EzServiceReference {
         
         public EzServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
+        }
+        
+        public EzBob.Web.EzServiceReference.ActionMetaData CheckAml(int customerId) {
+            return base.Channel.CheckAml(customerId);
+        }
+        
+        public EzBob.Web.EzServiceReference.ActionMetaData CheckAmlCustom(int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet, string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode) {
+            return base.Channel.CheckAmlCustom(customerId, idhubHouseNumber, idhubHouseName, idhubStreet, idhubDistrict, idhubTown, idhubCounty, idhubPostCode);
+        }
+        
+        public EzBob.Web.EzServiceReference.ActionMetaData CheckBwa(int customerId) {
+            return base.Channel.CheckBwa(customerId);
+        }
+        
+        public EzBob.Web.EzServiceReference.ActionMetaData CheckBwaCustom(int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet, string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode, string idhubBranchCode, string idhubAccountNumber) {
+            return base.Channel.CheckBwaCustom(customerId, idhubHouseNumber, idhubHouseName, idhubStreet, idhubDistrict, idhubTown, idhubCounty, idhubPostCode, idhubBranchCode, idhubAccountNumber);
+        }
+        
+        public EzBob.Web.EzServiceReference.BoolActionResult IsBroker(string sContactEmail) {
+            return base.Channel.IsBroker(sContactEmail);
+        }
+        
+        public EzBob.Web.EzServiceReference.ActionMetaData BrokerSignup(string FirmName, string FirmRegNum, string ContactName, string ContactEmail, string ContactMobile, string MobileCode, string ContactOtherPhone, decimal EstimatedMonthlyClientAmount, string Password, string Password2) {
+            return base.Channel.BrokerSignup(FirmName, FirmRegNum, ContactName, ContactEmail, ContactMobile, MobileCode, ContactOtherPhone, EstimatedMonthlyClientAmount, Password, Password2);
+        }
+        
+        public EzBob.Web.EzServiceReference.ActionMetaData BrokerLogin(string Email, string Password) {
+            return base.Channel.BrokerLogin(Email, Password);
+        }
+        
+        public EzBob.Web.EzServiceReference.ActionMetaData BrokerRestorePassword(string sMobile, string sCode) {
+            return base.Channel.BrokerRestorePassword(sMobile, sCode);
+        }
+        
+        public EzBob.Web.EzServiceReference.BrokerCustomersActionResult BrokerLoadCustomerList(string sContactEmail) {
+            return base.Channel.BrokerLoadCustomerList(sContactEmail);
+        }
+        
+        public EzBob.Web.EzServiceReference.BrokerCustomerDetailsActionResult BrokerLoadCustomerDetails(int nCustomerID, string sContactEmail) {
+            return base.Channel.BrokerLoadCustomerDetails(nCustomerID, sContactEmail);
+        }
+        
+        public EzBob.Web.EzServiceReference.StringActionResult BrokerSaveCrmEntry(bool bIsIncoming, int nActionID, int nStatusID, string sComment, int nCustomerID, string sContactEmail) {
+            return base.Channel.BrokerSaveCrmEntry(bIsIncoming, nActionID, nStatusID, sComment, nCustomerID, sContactEmail);
+        }
+        
+        public EzBob.Web.EzServiceReference.BrokerCustomerFilesActionResult BrokerLoadCustomerFiles(int nCustomerID, string sContactEmail) {
+            return base.Channel.BrokerLoadCustomerFiles(nCustomerID, sContactEmail);
+        }
+        
+        public EzBob.Web.EzServiceReference.BrokerCustomerFileContentsActionResult BrokerDownloadCustomerFile(int nCustomerID, string sContactEmail, int nFileID) {
+            return base.Channel.BrokerDownloadCustomerFile(nCustomerID, sContactEmail, nFileID);
+        }
+        
+        public EzBob.Web.EzServiceReference.ActionMetaData BrokerSaveUploadedCustomerFile(int nCustomerID, string sContactEmail, byte[] oFileContents, string sFileName) {
+            return base.Channel.BrokerSaveUploadedCustomerFile(nCustomerID, sContactEmail, oFileContents, sFileName);
+        }
+        
+        public EzBob.Web.EzServiceReference.ActionMetaData BrokerDeleteCustomerFiles(int nCustomerID, string sContactEmail, int[] aryFileIDs) {
+            return base.Channel.BrokerDeleteCustomerFiles(nCustomerID, sContactEmail, aryFileIDs);
+        }
+        
+        public EzBob.Web.EzServiceReference.ActionMetaData CaisGenerate(int underwriterId) {
+            return base.Channel.CaisGenerate(underwriterId);
+        }
+        
+        public EzBob.Web.EzServiceReference.ActionMetaData CaisUpdate(int userId, int caisId) {
+            return base.Channel.CaisUpdate(userId, caisId);
+        }
+        
+        public EzBob.Web.EzServiceReference.ActionMetaData CompanyFilesUpload(int customerId, string fileName, byte[] fileContent, string fileContentType) {
+            return base.Channel.CompanyFilesUpload(customerId, fileName, fileContent, fileContentType);
+        }
+        
+        public byte[] GetCompanyFile(int companyFileId) {
+            return base.Channel.GetCompanyFile(companyFileId);
         }
         
         public EzBob.Web.EzServiceReference.ActionMetaData GreetingMailStrategy(int nCustomerID, string sConfirmationEmail) {
@@ -929,12 +1008,44 @@ namespace EzBob.Web.EzServiceReference {
             return base.Channel.TransferCashFailed(customerId);
         }
         
-        public EzBob.Web.EzServiceReference.ActionMetaData CaisGenerate(int underwriterId) {
-            return base.Channel.CaisGenerate(underwriterId);
+        public EzBob.Web.EzServiceReference.ActionMetaData CheckExperianCompany(int customerId) {
+            return base.Channel.CheckExperianCompany(customerId);
         }
         
-        public EzBob.Web.EzServiceReference.ActionMetaData CaisUpdate(int userId, int caisId) {
-            return base.Channel.CaisUpdate(userId, caisId);
+        public EzBob.Web.EzServiceReference.ActionMetaData CheckExperianConsumer(int customerId, int directorId) {
+            return base.Channel.CheckExperianConsumer(customerId, directorId);
+        }
+        
+        public string LandRegistryEnquiry(int customerId, string buildingNumber, string streetName, string cityName, string postCode) {
+            return base.Channel.LandRegistryEnquiry(customerId, buildingNumber, streetName, cityName, postCode);
+        }
+        
+        public string LandRegistryRes(int customerId, string titleNumber) {
+            return base.Channel.LandRegistryRes(customerId, titleNumber);
+        }
+        
+        public EzBob.Web.EzServiceReference.ActionMetaData MainStrategy1(int uderwriterId, int customerId, EzBob.Web.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
+            return base.Channel.MainStrategy1(uderwriterId, customerId, newCreditLine, avoidAutoDescison);
+        }
+        
+        public EzBob.Web.EzServiceReference.ActionMetaData MainStrategy2(int uderwriterId, int customerId, EzBob.Web.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced) {
+            return base.Channel.MainStrategy2(uderwriterId, customerId, newCreditLine, avoidAutoDescison, isUnderwriterForced);
+        }
+        
+        public EzBob.Web.EzServiceReference.ActionMetaData MainStrategy3(int uderwriterId, int customerId, int checkType, string houseNumber, string houseName, string street, string district, string town, string county, string postcode, string bankAccount, string sortCode, int avoidAutoDescison) {
+            return base.Channel.MainStrategy3(uderwriterId, customerId, checkType, houseNumber, houseName, street, district, town, county, postcode, bankAccount, sortCode, avoidAutoDescison);
+        }
+        
+        public EzBob.Web.EzServiceReference.ActionMetaData MainStrategySync1(int underwriterId, int customerId, EzBob.Web.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
+            return base.Channel.MainStrategySync1(underwriterId, customerId, newCreditLine, avoidAutoDescison);
+        }
+        
+        public EzBob.Web.EzServiceReference.BoolActionResult GenerateMobileCode(string phone) {
+            return base.Channel.GenerateMobileCode(phone);
+        }
+        
+        public EzBob.Web.EzServiceReference.BoolActionResult ValidateMobileCode(string phone, string code) {
+            return base.Channel.ValidateMobileCode(phone, code);
         }
         
         public EzBob.Web.EzServiceReference.ActionMetaData FirstOfMonthStatusNotifier() {
@@ -969,60 +1080,12 @@ namespace EzBob.Web.EzServiceReference {
             return base.Channel.XDaysDue();
         }
         
-        public EzBob.Web.EzServiceReference.ActionMetaData CheckExperianCompany(int customerId) {
-            return base.Channel.CheckExperianCompany(customerId);
-        }
-        
-        public EzBob.Web.EzServiceReference.ActionMetaData CheckExperianConsumer(int customerId, int directorId) {
-            return base.Channel.CheckExperianConsumer(customerId, directorId);
-        }
-        
-        public EzBob.Web.EzServiceReference.ActionMetaData CheckAml(int customerId) {
-            return base.Channel.CheckAml(customerId);
-        }
-        
-        public EzBob.Web.EzServiceReference.ActionMetaData CheckAmlCustom(int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet, string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode) {
-            return base.Channel.CheckAmlCustom(customerId, idhubHouseNumber, idhubHouseName, idhubStreet, idhubDistrict, idhubTown, idhubCounty, idhubPostCode);
-        }
-        
-        public EzBob.Web.EzServiceReference.ActionMetaData CheckBwa(int customerId) {
-            return base.Channel.CheckBwa(customerId);
-        }
-        
-        public EzBob.Web.EzServiceReference.ActionMetaData CheckBwaCustom(int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet, string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode, string idhubBranchCode, string idhubAccountNumber) {
-            return base.Channel.CheckBwaCustom(customerId, idhubHouseNumber, idhubHouseName, idhubStreet, idhubDistrict, idhubTown, idhubCounty, idhubPostCode, idhubBranchCode, idhubAccountNumber);
-        }
-        
-        public EzBob.Web.EzServiceReference.ActionMetaData MainStrategy1(int uderwriterId, int customerId, EzBob.Web.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
-            return base.Channel.MainStrategy1(uderwriterId, customerId, newCreditLine, avoidAutoDescison);
-        }
-        
-        public EzBob.Web.EzServiceReference.ActionMetaData MainStrategy2(int uderwriterId, int customerId, EzBob.Web.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison, bool isUnderwriterForced) {
-            return base.Channel.MainStrategy2(uderwriterId, customerId, newCreditLine, avoidAutoDescison, isUnderwriterForced);
-        }
-        
-        public EzBob.Web.EzServiceReference.ActionMetaData MainStrategy3(int uderwriterId, int customerId, int checkType, string houseNumber, string houseName, string street, string district, string town, string county, string postcode, string bankAccount, string sortCode, int avoidAutoDescison) {
-            return base.Channel.MainStrategy3(uderwriterId, customerId, checkType, houseNumber, houseName, street, district, town, county, postcode, bankAccount, sortCode, avoidAutoDescison);
-        }
-        
-        public EzBob.Web.EzServiceReference.ActionMetaData MainStrategySync1(int underwriterId, int customerId, EzBob.Web.EzServiceReference.NewCreditLineOption newCreditLine, int avoidAutoDescison) {
-            return base.Channel.MainStrategySync1(underwriterId, customerId, newCreditLine, avoidAutoDescison);
-        }
-        
-        public EzBob.Web.EzServiceReference.BoolActionResult GenerateMobileCode(string phone) {
-            return base.Channel.GenerateMobileCode(phone);
-        }
-        
-        public EzBob.Web.EzServiceReference.BoolActionResult ValidateMobileCode(string phone, string code) {
-            return base.Channel.ValidateMobileCode(phone, code);
-        }
-        
-        public EzBob.Web.EzServiceReference.WizardConfigsActionResult GetWizardConfigs() {
-            return base.Channel.GetWizardConfigs();
-        }
-        
         public EzBob.Web.EzServiceReference.ActionMetaData UpdateCurrencyRates() {
             return base.Channel.UpdateCurrencyRates();
+        }
+        
+        public EzBob.Web.EzServiceReference.CrmLookupsActionResult CrmLoadLookups() {
+            return base.Channel.CrmLoadLookups();
         }
         
         public EzBob.Web.EzServiceReference.QuickOfferActionResult QuickOffer(int customerId, bool saveOfferToDB) {
@@ -1033,72 +1096,16 @@ namespace EzBob.Web.EzServiceReference {
             return base.Channel.QuickOfferWithPrerequisites(customerId, saveOfferToDB);
         }
         
+        public EzBob.Web.EzServiceReference.WizardConfigsActionResult GetWizardConfigs() {
+            return base.Channel.GetWizardConfigs();
+        }
+        
         public EzBob.Web.EzServiceReference.ActionMetaData FinishWizard(int customerId) {
             return base.Channel.FinishWizard(customerId);
         }
         
-        public EzBob.Web.EzServiceReference.CrmLookupsActionResult CrmLoadLookups() {
-            return base.Channel.CrmLoadLookups();
-        }
-        
-        public EzBob.Web.EzServiceReference.BoolActionResult IsBroker(string sContactEmail) {
-            return base.Channel.IsBroker(sContactEmail);
-        }
-        
-        public EzBob.Web.EzServiceReference.ActionMetaData BrokerSignup(string FirmName, string FirmRegNum, string ContactName, string ContactEmail, string ContactMobile, string MobileCode, string ContactOtherPhone, decimal EstimatedMonthlyClientAmount, string Password, string Password2) {
-            return base.Channel.BrokerSignup(FirmName, FirmRegNum, ContactName, ContactEmail, ContactMobile, MobileCode, ContactOtherPhone, EstimatedMonthlyClientAmount, Password, Password2);
-        }
-        
-        public EzBob.Web.EzServiceReference.ActionMetaData BrokerLogin(string Email, string Password) {
-            return base.Channel.BrokerLogin(Email, Password);
-        }
-        
-        public EzBob.Web.EzServiceReference.ActionMetaData BrokerRestorePassword(string sMobile, string sCode) {
-            return base.Channel.BrokerRestorePassword(sMobile, sCode);
-        }
-        
-        public EzBob.Web.EzServiceReference.BrokerCustomersActionResult BrokerLoadCustomerList(string sContactEmail) {
-            return base.Channel.BrokerLoadCustomerList(sContactEmail);
-        }
-        
-        public EzBob.Web.EzServiceReference.BrokerCustomerDetailsActionResult BrokerLoadCustomerDetails(int nCustomerID, string sContactEmail) {
-            return base.Channel.BrokerLoadCustomerDetails(nCustomerID, sContactEmail);
-        }
-        
-        public EzBob.Web.EzServiceReference.StringActionResult BrokerSaveCrmEntry(bool bIsIncoming, int nActionID, int nStatusID, string sComment, int nCustomerID, string sContactEmail) {
-            return base.Channel.BrokerSaveCrmEntry(bIsIncoming, nActionID, nStatusID, sComment, nCustomerID, sContactEmail);
-        }
-        
-        public EzBob.Web.EzServiceReference.BrokerCustomerFilesActionResult BrokerLoadCustomerFiles(int nCustomerID, string sContactEmail) {
-            return base.Channel.BrokerLoadCustomerFiles(nCustomerID, sContactEmail);
-        }
-        
-        public EzBob.Web.EzServiceReference.BrokerCustomerFileContentsActionResult BrokerDownloadCustomerFile(int nCustomerID, string sContactEmail, int nFileID) {
-            return base.Channel.BrokerDownloadCustomerFile(nCustomerID, sContactEmail, nFileID);
-        }
-        
-        public EzBob.Web.EzServiceReference.ActionMetaData BrokerSaveUploadedCustomerFile(int nCustomerID, string sContactEmail, byte[] oFileContents, string sFileName) {
-            return base.Channel.BrokerSaveUploadedCustomerFile(nCustomerID, sContactEmail, oFileContents, sFileName);
-        }
-        
-        public string LandRegistryEnquiry(int customerId, string buildingNumber, string streetName, string cityName, string postCode) {
-            return base.Channel.LandRegistryEnquiry(customerId, buildingNumber, streetName, cityName, postCode);
-        }
-        
-        public string LandRegistryRes(int customerId, string titleNumber) {
-            return base.Channel.LandRegistryRes(customerId, titleNumber);
-        }
-        
-        public EzBob.Web.EzServiceReference.ActionMetaData CompanyFilesUpload(int customerId, string fileName, byte[] fileContent, string fileContentType) {
-            return base.Channel.CompanyFilesUpload(customerId, fileName, fileContent, fileContentType);
-        }
-        
-        public byte[] GetCompanyFile(int companyFileId) {
-            return base.Channel.GetCompanyFile(companyFileId);
-        }
-        
-        public EzBob.Web.EzServiceReference.ActionMetaData SaveAgreement(int customeId, EzBob.Models.Agreements.AgreementModel model, string refNumber, string name, string template, string path1, string path2) {
-            return base.Channel.SaveAgreement(customeId, model, refNumber, name, template, path1, path2);
+        public EzBob.Web.EzServiceReference.ActionMetaData SaveAgreement(int customerId, EzBob.Models.Agreements.AgreementModel model, string refNumber, string name, string template, string path1, string path2) {
+            return base.Channel.SaveAgreement(customerId, model, refNumber, name, template, path1, path2);
         }
     }
 }

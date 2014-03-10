@@ -72,10 +72,10 @@
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzService" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
-      <xsd:import namespace="http://schemas.datacontract.org/2004/07/FraudChecker" />
-      <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies" />
-      <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/FraudChecker" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Models.Agreements" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Web.Areas.Customer.Models" />
     </xsd:schema>
@@ -109,6 +109,120 @@
   </wsdl:message>
   <wsdl:message name="IEzServiceAdmin_WriteToLog_OutputMessage">
     <wsdl:part name="parameters" element="tns:WriteToLogResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CheckAml_InputMessage">
+    <wsdl:part name="parameters" element="tns:CheckAml" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CheckAml_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CheckAmlResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CheckAmlCustom_InputMessage">
+    <wsdl:part name="parameters" element="tns:CheckAmlCustom" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CheckAmlCustom_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CheckAmlCustomResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CheckBwa_InputMessage">
+    <wsdl:part name="parameters" element="tns:CheckBwa" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CheckBwa_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CheckBwaResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CheckBwaCustom_InputMessage">
+    <wsdl:part name="parameters" element="tns:CheckBwaCustom" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CheckBwaCustom_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CheckBwaCustomResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_IsBroker_InputMessage">
+    <wsdl:part name="parameters" element="tns:IsBroker" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_IsBroker_OutputMessage">
+    <wsdl:part name="parameters" element="tns:IsBrokerResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerSignup_InputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerSignup" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerSignup_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerSignupResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerLogin_InputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerLogin" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerLogin_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerLoginResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerRestorePassword_InputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerRestorePassword" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerRestorePassword_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerRestorePasswordResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerLoadCustomerList_InputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerLoadCustomerList" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerLoadCustomerList_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerLoadCustomerListResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerLoadCustomerDetails_InputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerLoadCustomerDetails" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerLoadCustomerDetails_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerLoadCustomerDetailsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerSaveCrmEntry_InputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerSaveCrmEntry" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerSaveCrmEntry_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerSaveCrmEntryResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerLoadCustomerFiles_InputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerLoadCustomerFiles" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerLoadCustomerFiles_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerLoadCustomerFilesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerDownloadCustomerFile_InputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerDownloadCustomerFile" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerDownloadCustomerFile_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerDownloadCustomerFileResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerSaveUploadedCustomerFile_InputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerSaveUploadedCustomerFile" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerSaveUploadedCustomerFile_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerSaveUploadedCustomerFileResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerDeleteCustomerFiles_InputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerDeleteCustomerFiles" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerDeleteCustomerFiles_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerDeleteCustomerFilesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CaisGenerate_InputMessage">
+    <wsdl:part name="parameters" element="tns:CaisGenerate" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CaisGenerate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CaisGenerateResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CaisUpdate_InputMessage">
+    <wsdl:part name="parameters" element="tns:CaisUpdate" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CaisUpdate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CaisUpdateResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CompanyFilesUpload_InputMessage">
+    <wsdl:part name="parameters" element="tns:CompanyFilesUpload" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CompanyFilesUpload_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CompanyFilesUploadResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetCompanyFile_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetCompanyFile" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetCompanyFile_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetCompanyFileResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_GreetingMailStrategy_InputMessage">
     <wsdl:part name="parameters" element="tns:GreetingMailStrategy" />
@@ -242,17 +356,65 @@
   <wsdl:message name="IEzService_TransferCashFailed_OutputMessage">
     <wsdl:part name="parameters" element="tns:TransferCashFailedResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_CaisGenerate_InputMessage">
-    <wsdl:part name="parameters" element="tns:CaisGenerate" />
+  <wsdl:message name="IEzService_CheckExperianCompany_InputMessage">
+    <wsdl:part name="parameters" element="tns:CheckExperianCompany" />
   </wsdl:message>
-  <wsdl:message name="IEzService_CaisGenerate_OutputMessage">
-    <wsdl:part name="parameters" element="tns:CaisGenerateResponse" />
+  <wsdl:message name="IEzService_CheckExperianCompany_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CheckExperianCompanyResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_CaisUpdate_InputMessage">
-    <wsdl:part name="parameters" element="tns:CaisUpdate" />
+  <wsdl:message name="IEzService_CheckExperianConsumer_InputMessage">
+    <wsdl:part name="parameters" element="tns:CheckExperianConsumer" />
   </wsdl:message>
-  <wsdl:message name="IEzService_CaisUpdate_OutputMessage">
-    <wsdl:part name="parameters" element="tns:CaisUpdateResponse" />
+  <wsdl:message name="IEzService_CheckExperianConsumer_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CheckExperianConsumerResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LandRegistryEnquiry_InputMessage">
+    <wsdl:part name="parameters" element="tns:LandRegistryEnquiry" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LandRegistryEnquiry_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LandRegistryEnquiryResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LandRegistryRes_InputMessage">
+    <wsdl:part name="parameters" element="tns:LandRegistryRes" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LandRegistryRes_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LandRegistryResResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_MainStrategy1_InputMessage">
+    <wsdl:part name="parameters" element="tns:MainStrategy1" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_MainStrategy1_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MainStrategy1Response" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_MainStrategy2_InputMessage">
+    <wsdl:part name="parameters" element="tns:MainStrategy2" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_MainStrategy2_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MainStrategy2Response" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_MainStrategy3_InputMessage">
+    <wsdl:part name="parameters" element="tns:MainStrategy3" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_MainStrategy3_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MainStrategy3Response" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_MainStrategySync1_InputMessage">
+    <wsdl:part name="parameters" element="tns:MainStrategySync1" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_MainStrategySync1_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MainStrategySync1Response" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GenerateMobileCode_InputMessage">
+    <wsdl:part name="parameters" element="tns:GenerateMobileCode" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GenerateMobileCode_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GenerateMobileCodeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_ValidateMobileCode_InputMessage">
+    <wsdl:part name="parameters" element="tns:ValidateMobileCode" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_ValidateMobileCode_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ValidateMobileCodeResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_FirstOfMonthStatusNotifier_InputMessage">
     <wsdl:part name="parameters" element="tns:FirstOfMonthStatusNotifier" />
@@ -302,89 +464,17 @@
   <wsdl:message name="IEzService_XDaysDue_OutputMessage">
     <wsdl:part name="parameters" element="tns:XDaysDueResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_CheckExperianCompany_InputMessage">
-    <wsdl:part name="parameters" element="tns:CheckExperianCompany" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_CheckExperianCompany_OutputMessage">
-    <wsdl:part name="parameters" element="tns:CheckExperianCompanyResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_CheckExperianConsumer_InputMessage">
-    <wsdl:part name="parameters" element="tns:CheckExperianConsumer" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_CheckExperianConsumer_OutputMessage">
-    <wsdl:part name="parameters" element="tns:CheckExperianConsumerResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_CheckAml_InputMessage">
-    <wsdl:part name="parameters" element="tns:CheckAml" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_CheckAml_OutputMessage">
-    <wsdl:part name="parameters" element="tns:CheckAmlResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_CheckAmlCustom_InputMessage">
-    <wsdl:part name="parameters" element="tns:CheckAmlCustom" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_CheckAmlCustom_OutputMessage">
-    <wsdl:part name="parameters" element="tns:CheckAmlCustomResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_CheckBwa_InputMessage">
-    <wsdl:part name="parameters" element="tns:CheckBwa" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_CheckBwa_OutputMessage">
-    <wsdl:part name="parameters" element="tns:CheckBwaResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_CheckBwaCustom_InputMessage">
-    <wsdl:part name="parameters" element="tns:CheckBwaCustom" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_CheckBwaCustom_OutputMessage">
-    <wsdl:part name="parameters" element="tns:CheckBwaCustomResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_MainStrategy1_InputMessage">
-    <wsdl:part name="parameters" element="tns:MainStrategy1" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_MainStrategy1_OutputMessage">
-    <wsdl:part name="parameters" element="tns:MainStrategy1Response" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_MainStrategy2_InputMessage">
-    <wsdl:part name="parameters" element="tns:MainStrategy2" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_MainStrategy2_OutputMessage">
-    <wsdl:part name="parameters" element="tns:MainStrategy2Response" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_MainStrategy3_InputMessage">
-    <wsdl:part name="parameters" element="tns:MainStrategy3" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_MainStrategy3_OutputMessage">
-    <wsdl:part name="parameters" element="tns:MainStrategy3Response" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_MainStrategySync1_InputMessage">
-    <wsdl:part name="parameters" element="tns:MainStrategySync1" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_MainStrategySync1_OutputMessage">
-    <wsdl:part name="parameters" element="tns:MainStrategySync1Response" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_GenerateMobileCode_InputMessage">
-    <wsdl:part name="parameters" element="tns:GenerateMobileCode" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_GenerateMobileCode_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GenerateMobileCodeResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_ValidateMobileCode_InputMessage">
-    <wsdl:part name="parameters" element="tns:ValidateMobileCode" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_ValidateMobileCode_OutputMessage">
-    <wsdl:part name="parameters" element="tns:ValidateMobileCodeResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_GetWizardConfigs_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetWizardConfigs" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_GetWizardConfigs_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetWizardConfigsResponse" />
-  </wsdl:message>
   <wsdl:message name="IEzService_UpdateCurrencyRates_InputMessage">
     <wsdl:part name="parameters" element="tns:UpdateCurrencyRates" />
   </wsdl:message>
   <wsdl:message name="IEzService_UpdateCurrencyRates_OutputMessage">
     <wsdl:part name="parameters" element="tns:UpdateCurrencyRatesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CrmLoadLookups_InputMessage">
+    <wsdl:part name="parameters" element="tns:CrmLoadLookups" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CrmLoadLookups_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CrmLoadLookupsResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_QuickOffer_InputMessage">
     <wsdl:part name="parameters" element="tns:QuickOffer" />
@@ -398,101 +488,17 @@
   <wsdl:message name="IEzService_QuickOfferWithPrerequisites_OutputMessage">
     <wsdl:part name="parameters" element="tns:QuickOfferWithPrerequisitesResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_GetWizardConfigs_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetWizardConfigs" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetWizardConfigs_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetWizardConfigsResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_FinishWizard_InputMessage">
     <wsdl:part name="parameters" element="tns:FinishWizard" />
   </wsdl:message>
   <wsdl:message name="IEzService_FinishWizard_OutputMessage">
     <wsdl:part name="parameters" element="tns:FinishWizardResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_CrmLoadLookups_InputMessage">
-    <wsdl:part name="parameters" element="tns:CrmLoadLookups" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_CrmLoadLookups_OutputMessage">
-    <wsdl:part name="parameters" element="tns:CrmLoadLookupsResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_IsBroker_InputMessage">
-    <wsdl:part name="parameters" element="tns:IsBroker" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_IsBroker_OutputMessage">
-    <wsdl:part name="parameters" element="tns:IsBrokerResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_BrokerSignup_InputMessage">
-    <wsdl:part name="parameters" element="tns:BrokerSignup" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_BrokerSignup_OutputMessage">
-    <wsdl:part name="parameters" element="tns:BrokerSignupResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_BrokerLogin_InputMessage">
-    <wsdl:part name="parameters" element="tns:BrokerLogin" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_BrokerLogin_OutputMessage">
-    <wsdl:part name="parameters" element="tns:BrokerLoginResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_BrokerRestorePassword_InputMessage">
-    <wsdl:part name="parameters" element="tns:BrokerRestorePassword" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_BrokerRestorePassword_OutputMessage">
-    <wsdl:part name="parameters" element="tns:BrokerRestorePasswordResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_BrokerLoadCustomerList_InputMessage">
-    <wsdl:part name="parameters" element="tns:BrokerLoadCustomerList" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_BrokerLoadCustomerList_OutputMessage">
-    <wsdl:part name="parameters" element="tns:BrokerLoadCustomerListResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_BrokerLoadCustomerDetails_InputMessage">
-    <wsdl:part name="parameters" element="tns:BrokerLoadCustomerDetails" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_BrokerLoadCustomerDetails_OutputMessage">
-    <wsdl:part name="parameters" element="tns:BrokerLoadCustomerDetailsResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_BrokerSaveCrmEntry_InputMessage">
-    <wsdl:part name="parameters" element="tns:BrokerSaveCrmEntry" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_BrokerSaveCrmEntry_OutputMessage">
-    <wsdl:part name="parameters" element="tns:BrokerSaveCrmEntryResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_BrokerLoadCustomerFiles_InputMessage">
-    <wsdl:part name="parameters" element="tns:BrokerLoadCustomerFiles" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_BrokerLoadCustomerFiles_OutputMessage">
-    <wsdl:part name="parameters" element="tns:BrokerLoadCustomerFilesResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_BrokerDownloadCustomerFile_InputMessage">
-    <wsdl:part name="parameters" element="tns:BrokerDownloadCustomerFile" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_BrokerDownloadCustomerFile_OutputMessage">
-    <wsdl:part name="parameters" element="tns:BrokerDownloadCustomerFileResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_BrokerSaveUploadedCustomerFile_InputMessage">
-    <wsdl:part name="parameters" element="tns:BrokerSaveUploadedCustomerFile" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_BrokerSaveUploadedCustomerFile_OutputMessage">
-    <wsdl:part name="parameters" element="tns:BrokerSaveUploadedCustomerFileResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_LandRegistryEnquiry_InputMessage">
-    <wsdl:part name="parameters" element="tns:LandRegistryEnquiry" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_LandRegistryEnquiry_OutputMessage">
-    <wsdl:part name="parameters" element="tns:LandRegistryEnquiryResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_LandRegistryRes_InputMessage">
-    <wsdl:part name="parameters" element="tns:LandRegistryRes" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_LandRegistryRes_OutputMessage">
-    <wsdl:part name="parameters" element="tns:LandRegistryResResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_CompanyFilesUpload_InputMessage">
-    <wsdl:part name="parameters" element="tns:CompanyFilesUpload" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_CompanyFilesUpload_OutputMessage">
-    <wsdl:part name="parameters" element="tns:CompanyFilesUploadResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_GetCompanyFile_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetCompanyFile" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_GetCompanyFile_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetCompanyFileResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_SaveAgreement_InputMessage">
     <wsdl:part name="parameters" element="tns:SaveAgreement" />
@@ -523,6 +529,82 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IEzService">
+    <wsdl:operation name="CheckAml">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CheckAml" message="tns:IEzService_CheckAml_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CheckAmlResponse" message="tns:IEzService_CheckAml_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CheckAmlCustom">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CheckAmlCustom" message="tns:IEzService_CheckAmlCustom_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CheckAmlCustomResponse" message="tns:IEzService_CheckAmlCustom_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CheckBwa">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CheckBwa" message="tns:IEzService_CheckBwa_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CheckBwaResponse" message="tns:IEzService_CheckBwa_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CheckBwaCustom">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CheckBwaCustom" message="tns:IEzService_CheckBwaCustom_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CheckBwaCustomResponse" message="tns:IEzService_CheckBwaCustom_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="IsBroker">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/IsBroker" message="tns:IEzService_IsBroker_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/IsBrokerResponse" message="tns:IEzService_IsBroker_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BrokerSignup">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerSignup" message="tns:IEzService_BrokerSignup_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerSignupResponse" message="tns:IEzService_BrokerSignup_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BrokerLogin">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerLogin" message="tns:IEzService_BrokerLogin_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerLoginResponse" message="tns:IEzService_BrokerLogin_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BrokerRestorePassword">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerRestorePassword" message="tns:IEzService_BrokerRestorePassword_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerRestorePasswordResponse" message="tns:IEzService_BrokerRestorePassword_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BrokerLoadCustomerList">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerLoadCustomerList" message="tns:IEzService_BrokerLoadCustomerList_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerLoadCustomerListResponse" message="tns:IEzService_BrokerLoadCustomerList_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BrokerLoadCustomerDetails">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerLoadCustomerDetails" message="tns:IEzService_BrokerLoadCustomerDetails_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerLoadCustomerDetailsResponse" message="tns:IEzService_BrokerLoadCustomerDetails_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BrokerSaveCrmEntry">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerSaveCrmEntry" message="tns:IEzService_BrokerSaveCrmEntry_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerSaveCrmEntryResponse" message="tns:IEzService_BrokerSaveCrmEntry_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BrokerLoadCustomerFiles">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerLoadCustomerFiles" message="tns:IEzService_BrokerLoadCustomerFiles_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerLoadCustomerFilesResponse" message="tns:IEzService_BrokerLoadCustomerFiles_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BrokerDownloadCustomerFile">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerDownloadCustomerFile" message="tns:IEzService_BrokerDownloadCustomerFile_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerDownloadCustomerFileResponse" message="tns:IEzService_BrokerDownloadCustomerFile_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BrokerSaveUploadedCustomerFile">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerSaveUploadedCustomerFile" message="tns:IEzService_BrokerSaveUploadedCustomerFile_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerSaveUploadedCustomerFileResponse" message="tns:IEzService_BrokerSaveUploadedCustomerFile_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BrokerDeleteCustomerFiles">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerDeleteCustomerFiles" message="tns:IEzService_BrokerDeleteCustomerFiles_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerDeleteCustomerFilesResponse" message="tns:IEzService_BrokerDeleteCustomerFiles_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CaisGenerate">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CaisGenerate" message="tns:IEzService_CaisGenerate_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CaisGenerateResponse" message="tns:IEzService_CaisGenerate_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CaisUpdate">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CaisUpdate" message="tns:IEzService_CaisUpdate_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CaisUpdateResponse" message="tns:IEzService_CaisUpdate_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CompanyFilesUpload">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CompanyFilesUpload" message="tns:IEzService_CompanyFilesUpload_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CompanyFilesUploadResponse" message="tns:IEzService_CompanyFilesUpload_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCompanyFile">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCompanyFile" message="tns:IEzService_GetCompanyFile_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetCompanyFileResponse" message="tns:IEzService_GetCompanyFile_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="GreetingMailStrategy">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GreetingMailStrategy" message="tns:IEzService_GreetingMailStrategy_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GreetingMailStrategyResponse" message="tns:IEzService_GreetingMailStrategy_OutputMessage" />
@@ -611,13 +693,45 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/TransferCashFailed" message="tns:IEzService_TransferCashFailed_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/TransferCashFailedResponse" message="tns:IEzService_TransferCashFailed_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="CaisGenerate">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CaisGenerate" message="tns:IEzService_CaisGenerate_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CaisGenerateResponse" message="tns:IEzService_CaisGenerate_OutputMessage" />
+    <wsdl:operation name="CheckExperianCompany">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CheckExperianCompany" message="tns:IEzService_CheckExperianCompany_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CheckExperianCompanyResponse" message="tns:IEzService_CheckExperianCompany_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="CaisUpdate">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CaisUpdate" message="tns:IEzService_CaisUpdate_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CaisUpdateResponse" message="tns:IEzService_CaisUpdate_OutputMessage" />
+    <wsdl:operation name="CheckExperianConsumer">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CheckExperianConsumer" message="tns:IEzService_CheckExperianConsumer_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CheckExperianConsumerResponse" message="tns:IEzService_CheckExperianConsumer_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LandRegistryEnquiry">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LandRegistryEnquiry" message="tns:IEzService_LandRegistryEnquiry_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LandRegistryEnquiryResponse" message="tns:IEzService_LandRegistryEnquiry_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LandRegistryRes">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LandRegistryRes" message="tns:IEzService_LandRegistryRes_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LandRegistryResResponse" message="tns:IEzService_LandRegistryRes_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="MainStrategy1">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MainStrategy1" message="tns:IEzService_MainStrategy1_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MainStrategy1Response" message="tns:IEzService_MainStrategy1_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="MainStrategy2">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MainStrategy2" message="tns:IEzService_MainStrategy2_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MainStrategy2Response" message="tns:IEzService_MainStrategy2_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="MainStrategy3">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MainStrategy3" message="tns:IEzService_MainStrategy3_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MainStrategy3Response" message="tns:IEzService_MainStrategy3_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="MainStrategySync1">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MainStrategySync1" message="tns:IEzService_MainStrategySync1_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MainStrategySync1Response" message="tns:IEzService_MainStrategySync1_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GenerateMobileCode">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GenerateMobileCode" message="tns:IEzService_GenerateMobileCode_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GenerateMobileCodeResponse" message="tns:IEzService_GenerateMobileCode_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ValidateMobileCode">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ValidateMobileCode" message="tns:IEzService_ValidateMobileCode_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/ValidateMobileCodeResponse" message="tns:IEzService_ValidateMobileCode_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="FirstOfMonthStatusNotifier">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/FirstOfMonthStatusNotifier" message="tns:IEzService_FirstOfMonthStatusNotifier_InputMessage" />
@@ -651,61 +765,13 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/XDaysDue" message="tns:IEzService_XDaysDue_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/XDaysDueResponse" message="tns:IEzService_XDaysDue_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="CheckExperianCompany">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CheckExperianCompany" message="tns:IEzService_CheckExperianCompany_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CheckExperianCompanyResponse" message="tns:IEzService_CheckExperianCompany_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="CheckExperianConsumer">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CheckExperianConsumer" message="tns:IEzService_CheckExperianConsumer_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CheckExperianConsumerResponse" message="tns:IEzService_CheckExperianConsumer_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="CheckAml">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CheckAml" message="tns:IEzService_CheckAml_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CheckAmlResponse" message="tns:IEzService_CheckAml_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="CheckAmlCustom">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CheckAmlCustom" message="tns:IEzService_CheckAmlCustom_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CheckAmlCustomResponse" message="tns:IEzService_CheckAmlCustom_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="CheckBwa">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CheckBwa" message="tns:IEzService_CheckBwa_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CheckBwaResponse" message="tns:IEzService_CheckBwa_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="CheckBwaCustom">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CheckBwaCustom" message="tns:IEzService_CheckBwaCustom_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CheckBwaCustomResponse" message="tns:IEzService_CheckBwaCustom_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="MainStrategy1">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MainStrategy1" message="tns:IEzService_MainStrategy1_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MainStrategy1Response" message="tns:IEzService_MainStrategy1_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="MainStrategy2">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MainStrategy2" message="tns:IEzService_MainStrategy2_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MainStrategy2Response" message="tns:IEzService_MainStrategy2_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="MainStrategy3">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MainStrategy3" message="tns:IEzService_MainStrategy3_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MainStrategy3Response" message="tns:IEzService_MainStrategy3_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="MainStrategySync1">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MainStrategySync1" message="tns:IEzService_MainStrategySync1_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MainStrategySync1Response" message="tns:IEzService_MainStrategySync1_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GenerateMobileCode">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GenerateMobileCode" message="tns:IEzService_GenerateMobileCode_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GenerateMobileCodeResponse" message="tns:IEzService_GenerateMobileCode_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="ValidateMobileCode">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ValidateMobileCode" message="tns:IEzService_ValidateMobileCode_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/ValidateMobileCodeResponse" message="tns:IEzService_ValidateMobileCode_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetWizardConfigs">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetWizardConfigs" message="tns:IEzService_GetWizardConfigs_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetWizardConfigsResponse" message="tns:IEzService_GetWizardConfigs_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="UpdateCurrencyRates">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateCurrencyRates" message="tns:IEzService_UpdateCurrencyRates_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UpdateCurrencyRatesResponse" message="tns:IEzService_UpdateCurrencyRates_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CrmLoadLookups">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CrmLoadLookups" message="tns:IEzService_CrmLoadLookups_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CrmLoadLookupsResponse" message="tns:IEzService_CrmLoadLookups_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="QuickOffer">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/QuickOffer" message="tns:IEzService_QuickOffer_InputMessage" />
@@ -715,69 +781,13 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/QuickOfferWithPrerequisites" message="tns:IEzService_QuickOfferWithPrerequisites_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/QuickOfferWithPrerequisitesResponse" message="tns:IEzService_QuickOfferWithPrerequisites_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="GetWizardConfigs">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetWizardConfigs" message="tns:IEzService_GetWizardConfigs_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetWizardConfigsResponse" message="tns:IEzService_GetWizardConfigs_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="FinishWizard">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/FinishWizard" message="tns:IEzService_FinishWizard_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/FinishWizardResponse" message="tns:IEzService_FinishWizard_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="CrmLoadLookups">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CrmLoadLookups" message="tns:IEzService_CrmLoadLookups_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CrmLoadLookupsResponse" message="tns:IEzService_CrmLoadLookups_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="IsBroker">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/IsBroker" message="tns:IEzService_IsBroker_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/IsBrokerResponse" message="tns:IEzService_IsBroker_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="BrokerSignup">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerSignup" message="tns:IEzService_BrokerSignup_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerSignupResponse" message="tns:IEzService_BrokerSignup_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="BrokerLogin">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerLogin" message="tns:IEzService_BrokerLogin_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerLoginResponse" message="tns:IEzService_BrokerLogin_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="BrokerRestorePassword">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerRestorePassword" message="tns:IEzService_BrokerRestorePassword_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerRestorePasswordResponse" message="tns:IEzService_BrokerRestorePassword_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="BrokerLoadCustomerList">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerLoadCustomerList" message="tns:IEzService_BrokerLoadCustomerList_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerLoadCustomerListResponse" message="tns:IEzService_BrokerLoadCustomerList_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="BrokerLoadCustomerDetails">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerLoadCustomerDetails" message="tns:IEzService_BrokerLoadCustomerDetails_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerLoadCustomerDetailsResponse" message="tns:IEzService_BrokerLoadCustomerDetails_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="BrokerSaveCrmEntry">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerSaveCrmEntry" message="tns:IEzService_BrokerSaveCrmEntry_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerSaveCrmEntryResponse" message="tns:IEzService_BrokerSaveCrmEntry_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="BrokerLoadCustomerFiles">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerLoadCustomerFiles" message="tns:IEzService_BrokerLoadCustomerFiles_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerLoadCustomerFilesResponse" message="tns:IEzService_BrokerLoadCustomerFiles_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="BrokerDownloadCustomerFile">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerDownloadCustomerFile" message="tns:IEzService_BrokerDownloadCustomerFile_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerDownloadCustomerFileResponse" message="tns:IEzService_BrokerDownloadCustomerFile_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="BrokerSaveUploadedCustomerFile">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerSaveUploadedCustomerFile" message="tns:IEzService_BrokerSaveUploadedCustomerFile_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerSaveUploadedCustomerFileResponse" message="tns:IEzService_BrokerSaveUploadedCustomerFile_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="LandRegistryEnquiry">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LandRegistryEnquiry" message="tns:IEzService_LandRegistryEnquiry_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LandRegistryEnquiryResponse" message="tns:IEzService_LandRegistryEnquiry_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="LandRegistryRes">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LandRegistryRes" message="tns:IEzService_LandRegistryRes_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LandRegistryResResponse" message="tns:IEzService_LandRegistryRes_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="CompanyFilesUpload">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CompanyFilesUpload" message="tns:IEzService_CompanyFilesUpload_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CompanyFilesUploadResponse" message="tns:IEzService_CompanyFilesUpload_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetCompanyFile">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCompanyFile" message="tns:IEzService_GetCompanyFile_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetCompanyFileResponse" message="tns:IEzService_GetCompanyFile_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="SaveAgreement">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SaveAgreement" message="tns:IEzService_SaveAgreement_InputMessage" />
@@ -838,6 +848,177 @@
     <wsp:PolicyReference URI="#NetTcpBinding_IEzService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="CheckAml">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/CheckAml" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CheckAmlCustom">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/CheckAmlCustom" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CheckBwa">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/CheckBwa" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CheckBwaCustom">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/CheckBwaCustom" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IsBroker">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/IsBroker" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BrokerSignup">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerSignup" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BrokerLogin">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerLogin" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BrokerRestorePassword">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerRestorePassword" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BrokerLoadCustomerList">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerLoadCustomerList" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BrokerLoadCustomerDetails">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerLoadCustomerDetails" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BrokerSaveCrmEntry">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerSaveCrmEntry" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BrokerLoadCustomerFiles">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerLoadCustomerFiles" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BrokerDownloadCustomerFile">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerDownloadCustomerFile" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BrokerSaveUploadedCustomerFile">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerSaveUploadedCustomerFile" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BrokerDeleteCustomerFiles">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerDeleteCustomerFiles" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CaisGenerate">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/CaisGenerate" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CaisUpdate">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/CaisUpdate" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CompanyFilesUpload">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/CompanyFilesUpload" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCompanyFile">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/GetCompanyFile" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GreetingMailStrategy">
       <soap12:operation soapAction="http://tempuri.org/IEzService/GreetingMailStrategy" style="document" />
       <wsdl:input>
@@ -1036,8 +1217,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="CaisGenerate">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/CaisGenerate" style="document" />
+    <wsdl:operation name="CheckExperianCompany">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/CheckExperianCompany" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -1045,8 +1226,80 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="CaisUpdate">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/CaisUpdate" style="document" />
+    <wsdl:operation name="CheckExperianConsumer">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/CheckExperianConsumer" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LandRegistryEnquiry">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/LandRegistryEnquiry" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LandRegistryRes">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/LandRegistryRes" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MainStrategy1">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/MainStrategy1" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MainStrategy2">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/MainStrategy2" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MainStrategy3">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/MainStrategy3" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MainStrategySync1">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/MainStrategySync1" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GenerateMobileCode">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/GenerateMobileCode" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ValidateMobileCode">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/ValidateMobileCode" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -1126,125 +1379,17 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="CheckExperianCompany">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/CheckExperianCompany" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="CheckExperianConsumer">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/CheckExperianConsumer" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="CheckAml">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/CheckAml" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="CheckAmlCustom">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/CheckAmlCustom" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="CheckBwa">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/CheckBwa" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="CheckBwaCustom">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/CheckBwaCustom" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="MainStrategy1">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/MainStrategy1" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="MainStrategy2">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/MainStrategy2" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="MainStrategy3">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/MainStrategy3" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="MainStrategySync1">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/MainStrategySync1" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GenerateMobileCode">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/GenerateMobileCode" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="ValidateMobileCode">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/ValidateMobileCode" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetWizardConfigs">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/GetWizardConfigs" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="UpdateCurrencyRates">
       <soap12:operation soapAction="http://tempuri.org/IEzService/UpdateCurrencyRates" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CrmLoadLookups">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/CrmLoadLookups" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -1270,143 +1415,17 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetWizardConfigs">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/GetWizardConfigs" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="FinishWizard">
       <soap12:operation soapAction="http://tempuri.org/IEzService/FinishWizard" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="CrmLoadLookups">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/CrmLoadLookups" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="IsBroker">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/IsBroker" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="BrokerSignup">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerSignup" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="BrokerLogin">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerLogin" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="BrokerRestorePassword">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerRestorePassword" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="BrokerLoadCustomerList">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerLoadCustomerList" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="BrokerLoadCustomerDetails">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerLoadCustomerDetails" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="BrokerSaveCrmEntry">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerSaveCrmEntry" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="BrokerLoadCustomerFiles">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerLoadCustomerFiles" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="BrokerDownloadCustomerFile">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerDownloadCustomerFile" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="BrokerSaveUploadedCustomerFile">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerSaveUploadedCustomerFile" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="LandRegistryEnquiry">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/LandRegistryEnquiry" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="LandRegistryRes">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/LandRegistryRes" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="CompanyFilesUpload">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/CompanyFilesUpload" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetCompanyFile">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/GetCompanyFile" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

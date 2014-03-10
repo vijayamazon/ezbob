@@ -31,11 +31,14 @@
 		private readonly IExperianConsentAgreementRepository _repository;
 		private const string TemlatePath = "\\Areas\\Customer\\Views\\Consent\\";
 		protected RenderAgreementHandlerConfig Config { get; set; }
+		private readonly ServiceClient m_oServiceClient;
 
 		public ConcentAgreementHelper()
 		{
 			_repository = ObjectFactory.GetInstance<ExperianConsentAgreementRepository>();
 			Config = EnvironmentConfiguration.Configuration.GetConfiguration<RenderAgreementHandlerConfig>("RenderAgreementsHandler");
+			m_oServiceClient = new ServiceClient();
+
 		}
 
 		public byte[] Generate(string fullName, DateTime date)
@@ -86,7 +89,7 @@
 			
 			var path1 = Path.Combine(Config.PdfConsentAgreement, fileName);
 			var path2 = Path.Combine(Config.PdfConsentAgreement2, fileName);
-			ServiceClient.Instance.SaveAgreement(customer.Id, model, null, "concent agreement", template, path1, path2);
+			m_oServiceClient.Instance.SaveAgreement(customer.Id, model, null, "concent agreement", template, path1, path2);
 		}
 
 		public void SaveToBase(int id, string template, string fileName)
