@@ -12,7 +12,6 @@
 	using Code;
 	using Scorto.Web;
 	using StructureMap;
-	using EzBob.Web.EzServiceReference;
 
 	public class MessagesController : Controller
 	{
