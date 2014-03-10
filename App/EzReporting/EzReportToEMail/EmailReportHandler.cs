@@ -8,6 +8,8 @@ using Ezbob.Logger;
 
 namespace EzReportToEMail
 {
+	using Html.Attributes;
+
 	#region class EmailReportHandler
 
 	public class EmailReportHandler : BaseReportHandler
@@ -132,6 +134,14 @@ namespace EzReportToEMail
 						catch (Exception ex)
 						{
 							Error("Generating {0} report failed \n {1}.", report.Title, ex);
+							sender.Dispatch("Report to mail tool: error generating report", 
+								DateTime.UtcNow, 
+								new Html.Tags.Body()
+								.Add<Class>("Body")
+								.Append(new H1()
+								.Append(new Text(string.Format("Error Generating/Sending report {0}", report.Title)))),
+								null,
+								"operations@ezbob.com");
 						}
 					}); // foreach
 			}
