@@ -71,6 +71,7 @@
     <Compile Include="Hopper.cs" />
     <Compile Include="ISeeds.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+<Compile Include="..\..\..\Common\CommonAssemblyInfo.cs"><Link>Properties\CommonAssemblyInfo.cs</Link></Compile>
     <Compile Include="RtiTaxMonthSeed.cs" />
     <Compile Include="RtiTaxYearRowData.cs" />
     <Compile Include="RtiTaxYearSeeds.cs" />

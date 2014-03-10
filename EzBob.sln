@@ -162,9 +162,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzWinServiceHost", "App\EzService\EzWinServiceHost\EzWinServiceHost.csproj", "{B594DB05-40F3-4D0E-9D06-E772ACE84EAA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Reporting", "Reporting", "{B6B0B4B2-0F41-4CC9-92E3-0E61A3AD19A4}"
-	ProjectSection(SolutionItems) = preProject
-		App\EzReporting\VersionInfo.cs = App\EzReporting\VersionInfo.cs
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConfigurationBase", "Tools\EzbobUtils\ConfigurationBase\ConfigurationBase.csproj", "{E31F233F-09AA-47C8-A2E0-8E33A87F868D}"
 EndProject

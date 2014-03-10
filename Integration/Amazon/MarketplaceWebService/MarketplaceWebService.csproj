@@ -186,6 +186,7 @@
     <Compile Include="MarketplaceWebService\Model\UpdateReportAcknowledgementsResult.cs" />
     <Compile Include="MarketplaceWebService\Util\*.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+<Compile Include="..\..\..\Common\CommonAssemblyInfo.cs"><Link>Properties\CommonAssemblyInfo.cs</Link></Compile>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

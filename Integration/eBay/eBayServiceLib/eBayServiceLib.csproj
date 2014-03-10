@@ -170,6 +170,7 @@
     <Compile Include="LargeMerchantServiceCore\Requests\ILargeMerchantServiceRequestBase.cs" />
     <Compile Include="LargeMerchantServiceCore\ServiceLogic\LargeMerchantServiceWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+<Compile Include="..\..\..\Common\CommonAssemblyInfo.cs"><Link>Properties\CommonAssemblyInfo.cs</Link></Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>

@@ -68,6 +68,7 @@
     <Compile Include="Model\MandrillException.cs" />
     <Compile Include="Model\RenderTemplateModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+<Compile Include="..\..\Common\CommonAssemblyInfo.cs"><Link>Properties\CommonAssemblyInfo.cs</Link></Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EzBob.Configuration\EzBob.Configuration.csproj">

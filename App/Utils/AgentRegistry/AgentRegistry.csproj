@@ -49,6 +49,7 @@
   <ItemGroup>
     <Compile Include="ServiceRegistry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+<Compile Include="..\..\..\Common\CommonAssemblyInfo.cs"><Link>Properties\CommonAssemblyInfo.cs</Link></Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Integration\DatabaseLib\DatabaseLib.csproj">

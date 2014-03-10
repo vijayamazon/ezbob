@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="Mailer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+<Compile Include="..\..\..\Common\CommonAssemblyInfo.cs"><Link>Properties\CommonAssemblyInfo.cs</Link></Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Tools\EzbobUtils\Logger\Logger.csproj">

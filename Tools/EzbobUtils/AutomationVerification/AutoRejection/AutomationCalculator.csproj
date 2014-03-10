@@ -54,6 +54,7 @@
     <Compile Include="MedalScoreCalculator.cs" />
     <Compile Include="Models.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+<Compile Include="..\..\..\..\Common\CommonAssemblyInfo.cs"><Link>Properties\CommonAssemblyInfo.cs</Link></Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\DbConnection\DbConnection.csproj">

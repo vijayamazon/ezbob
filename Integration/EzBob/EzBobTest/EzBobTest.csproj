@@ -80,6 +80,7 @@
     <Compile Include="TestCurrencyUpdateController.cs" />
     <Compile Include="TestFirstOfMonthStatusStrategyHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+<Compile Include="..\..\..\Common\CommonAssemblyInfo.cs"><Link>Properties\CommonAssemblyInfo.cs</Link></Compile>
     <Compile Include="ErrorRetryingFixture.cs" />
     <Compile Include="TimeBoundaryCalculationTests.cs" />
     <Compile Include="TestRetrieveDataHelper.cs" />
