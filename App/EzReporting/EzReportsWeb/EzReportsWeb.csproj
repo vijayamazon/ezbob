@@ -76,6 +76,18 @@
   <ItemGroup>
     <Content Include="css\admin.css" />
     <Content Include="css\combined.css" />
+    <Content Include="css\images\dataTables\back_disabled.png" />
+    <Content Include="css\images\dataTables\back_enabled.png" />
+    <Content Include="css\images\dataTables\back_enabled_hover.png" />
+    <Content Include="css\images\dataTables\forward_disabled.png" />
+    <Content Include="css\images\dataTables\forward_enabled.png" />
+    <Content Include="css\images\dataTables\forward_enabled_hover.png" />
+    <Content Include="css\images\dataTables\sort_asc.png" />
+    <Content Include="css\images\dataTables\sort_asc_disabled.png" />
+    <Content Include="css\images\dataTables\sort_both.png" />
+    <Content Include="css\images\dataTables\sort_desc.png" />
+    <Content Include="css\images\dataTables\sort_desc_disabled.png" />
+    <Content Include="css\jquery.dataTables.css" />
     <Content Include="css\login.css" />
     <Content Include="Default.aspx" />
     <Content Include="Global.asax" />
