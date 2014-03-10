@@ -4,7 +4,6 @@
 	<Import Project="..\deploy.proj"/>
 	<Import Project="..\Utility.proj"/>
 	<Import Project="..\NUnit.proj"/>
-	<Import Project="..\Publish.proj"/>
 	<Import Project="..\..\libs\Scorto.BuildTasks.tasks"/>
 	<Import Project="..\..\libs\MSBuild.ExtensionPack.tasks"/>
 
