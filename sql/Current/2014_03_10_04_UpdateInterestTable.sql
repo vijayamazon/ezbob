@@ -1,4 +1,7 @@
-EXEC sp_RENAME 'BasicInterestRate.LoanIntrestBase' , 'LoanInterestBase', 'COLUMN'
+IF EXISTS(SELECT 1 FROM sys.columns WHERE [name] = N'LoanIntrestBase' AND [object_id] = OBJECT_ID(N'BasicInterestRate'))
+BEGIN
+    EXEC sp_RENAME 'BasicInterestRate.LoanIntrestBase' , 'LoanInterestBase', 'COLUMN'
+END
 GO
 
 UPDATE BasicInterestRate SET LoanInterestBase = 0.06 WHERE FromScore = 0
