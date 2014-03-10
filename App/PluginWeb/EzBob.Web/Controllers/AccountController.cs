@@ -686,12 +686,26 @@ namespace EzBob.Web.Controllers
 		public JsonNetResult GetTwilioConfig()
 		{
 			InitSession();
+			_log.InfoFormat("Mobile code visibility related values are: IsSmsValidationActive:{0} NumberOfMobileCodeAttempts:{1} SwitchedToCaptcha:{2}",
+				Session["IsSmsValidationActive"], Session["NumberOfMobileCodeAttempts"], Session["SwitchedToCaptcha"]);
 			return this.JsonNet(new
 			{
 				isSmsValidationActive = Session["IsSmsValidationActive"],
 				numberOfMobileCodeAttempts = Session["NumberOfMobileCodeAttempts"],
 				switchedToCaptcha = Session["SwitchedToCaptcha"]
 			});
+		}
+
+		[HttpPost]
+		public void DebugLog_MobileCode()
+		{
+			_log.InfoFormat("The visible object is mobile code");
+		}
+
+		[HttpPost]
+		public void DebugLog_Captcha()
+		{
+			_log.InfoFormat("The visible object is captcha");
 		}
 	}
 }
