@@ -519,7 +519,6 @@ namespace EzBob.Web.Controllers
 			var password = _membershipProvider.ResetPassword(email, "");
 
 			user = _users.GetUserByLogin(email);
-			var customer = _customers.Get(user.Id);
 			m_oServiceClient.Instance.PasswordRestored(user.Id, password);
 			user.IsPasswordRestored = true;
 

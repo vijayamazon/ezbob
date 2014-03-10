@@ -2,6 +2,7 @@
 {
 	using AutoDecisions;
 	using EzBob.Models;
+	using Ezbob.Backend.Models;
 	using ScoreCalculation;
 	using System;
 	using System.Collections.Generic;
@@ -518,15 +519,28 @@
 			}
 
 			Log.Info("Getting turnovers and seniority");
-			totalSumOfOrders1YTotal = strategyHelper.GetAnualTurnOverByCustomer(customerId);
-			totalSumOfOrders3MTotal = strategyHelper.GetTotalSumOfOrders3M(customerId);
-			marketplaceSeniorityDays = strategyHelper.MarketplaceSeniority(customerId);
-			decimal totalSumOfOrdersForLoanOffer = (decimal)strategyHelper.GetTotalSumOfOrdersForLoanOffer(customerId);
-			decimal marketplaceSeniorityYears = (decimal)marketplaceSeniorityDays / 365; // It is done this way to fit to the excel
+			MpsTotals totals = strategyHelper.GetMpsTotals(customerId);
+			totalSumOfOrders1YTotal = totals.TotalSumOfOrders1YTotal;
+			totalSumOfOrders3MTotal = totals.TotalSumOfOrders3MTotal;
+			marketplaceSeniorityDays = totals.MarketplaceSeniorityDays;
+			decimal totalSumOfOrdersForLoanOffer = totals.TotalSumOfOrdersForLoanOffer;
+			decimal marketplaceSeniorityYears = (decimal)totals.MarketplaceSeniorityDays / 365; // It is done this way to fit to the excel
 			decimal ezbobSeniorityMonths = (decimal)modelEzbobSeniority * 12 / 365; // It is done this way to fit to the excel
 			
 			Log.Info("Calculating score & medal");
-			ScoreMedalOffer scoringResult = medalScoreCalculator.CalculateMedalScore(totalSumOfOrdersForLoanOffer, minExperianScore, marketplaceSeniorityYears, modelMaxFeedback, maritalStatus, appGender == "M" ? Gender.M : Gender.F, modelMPsNumber, firstRepaymentDatePassed, ezbobSeniorityMonths, modelOnTimeLoans, modelLatePayments, modelEarlyPayments);
+			ScoreMedalOffer scoringResult = medalScoreCalculator.CalculateMedalScore(totalSumOfOrdersForLoanOffer,
+				minExperianScore, 
+				marketplaceSeniorityYears,
+				modelMaxFeedback, 
+				maritalStatus, 
+				appGender == "M" ? Gender.M : Gender.F,
+				modelMPsNumber, 
+				firstRepaymentDatePassed, 
+				ezbobSeniorityMonths, 
+				modelOnTimeLoans, 
+				modelLatePayments, 
+				modelEarlyPayments);
+
 			modelLoanOffer = scoringResult.MaxOffer;
 
 			medalType = scoringResult.Medal;

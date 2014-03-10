@@ -73,13 +73,13 @@ namespace EZBob.DatabaseLib.Repository
 			return GetAll().Where(x => x.Customer.Id == customer.Id).ToFuture();
 		}
 
-		public LandRegistry GetRes(Customer customer, string titleNumber)
+		public LandRegistry GetRes(int customerId, string titleNumber)
 		{
 			if (!string.IsNullOrEmpty(titleNumber))
 			{
 				return GetAll()
 					.OrderByDescending(x => x.InsertDate)
-					.FirstOrDefault(x => x.Customer == customer &&
+					.FirstOrDefault(x => x.Customer.Id == customerId &&
 						(x.RequestType == LandRegistryRequestType.Res || x.RequestType == LandRegistryRequestType.ResPoll) &&
 						x.ResponseType == LandRegistryResponseType.Success &&
 						x.TitleNumber == titleNumber);
@@ -87,15 +87,15 @@ namespace EZBob.DatabaseLib.Repository
 
 			return GetAll()
 					.OrderByDescending(x => x.InsertDate)
-					.FirstOrDefault(x => x.Customer == customer &&
+					.FirstOrDefault(x => x.Customer.Id == customerId &&
 						(x.RequestType == LandRegistryRequestType.Res || x.RequestType == LandRegistryRequestType.ResPoll) &&
 						x.ResponseType == LandRegistryResponseType.Success);
 		}
 
-		public LandRegistry GetEnquiry(Customer customer, string postCode)
+		public LandRegistry GetEnquiry(int customerId, string postCode)
 		{
 			return GetAll().OrderByDescending(x => x.InsertDate).FirstOrDefault(x =>
-				x.Customer == customer &&
+				x.Customer.Id == customerId &&
 				(x.RequestType == LandRegistryRequestType.Enquiry || x.RequestType == LandRegistryRequestType.EnquiryPoll) &&
 				x.ResponseType == LandRegistryResponseType.Success &&
 				x.Postcode == postCode);

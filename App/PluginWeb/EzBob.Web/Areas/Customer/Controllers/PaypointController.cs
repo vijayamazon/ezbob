@@ -66,7 +66,7 @@
 
                 var callback = Url.Action("Callback", "Paypoint", new {Area = "Customer", loanId, type, username= (_context.User != null ? _context.User.Name : "")}, "https");
 
-	            var oCustomer = _context.User == null ? null : _customerRepository.Get(_context.User.Id);
+	            var oCustomer = _context.Customer;
 
                 var url = _payPointFacade.GeneratePaymentUrl(oCustomer != null && oCustomer.IsOffline.HasValue && oCustomer.IsOffline.Value, amount, callback);
 

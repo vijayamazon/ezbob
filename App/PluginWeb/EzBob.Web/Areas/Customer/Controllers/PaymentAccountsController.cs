@@ -194,8 +194,7 @@
 		{
 			try
 			{
-				int customerId = _context.User.Id;
-				var customer = _customers.Get(customerId);
+				var customer = _context.Customer;
 				if (customer == null)
 				{
 					return this.JsonNet(new { error = "Unknown customer" });

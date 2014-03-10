@@ -6,7 +6,6 @@ using EZBob.DatabaseLib.DatabaseWrapper.Order;
 using EZBob.DatabaseLib.Exceptions;
 using EZBob.DatabaseLib.Model.Database;
 using EzBob.CommonLib;
-using EzBob.CommonLib.TimePeriodLogic;
 
 namespace EZBob.DatabaseLib.Common
 {

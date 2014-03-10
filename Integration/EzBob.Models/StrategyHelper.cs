@@ -17,6 +17,7 @@
 	using EZBob.DatabaseLib.Repository;
 	using CommonLib.TimePeriodLogic;
 	using EzBobIntegration.Web_References.Consumer;
+	using Ezbob.Backend.Models;
 	using LandRegistryLib;
 	using Marketplaces;
 	using Web.Code;
@@ -42,8 +43,10 @@
 		private readonly LoanScheduleTransactionRepository loanScheduleTransactionRepository;
 		private readonly ConfigurationVariablesRepository configurationVariablesRepository;
 		private readonly ServiceLogRepository serviceLogRepository;
+		private readonly CustomerMarketPlaceRepository _marketPlaceRepository;
 		public StrategyHelper()
 		{
+			
 			_session = ObjectFactory.GetInstance<ISession>();
 			_decisionHistory = ObjectFactory.GetInstance<DecisionHistoryRepository>();
 			_customers = ObjectFactory.GetInstance<CustomerRepository>();
@@ -56,6 +59,7 @@
 			loanScheduleTransactionRepository = ObjectFactory.GetInstance<LoanScheduleTransactionRepository>();
 			configurationVariablesRepository = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
 			serviceLogRepository = ObjectFactory.GetInstance<ServiceLogRepository>();
+			_marketPlaceRepository = ObjectFactory.GetInstance<CustomerMarketPlaceRepository>();
 		}
 
 		public double GetAnualTurnOverByCustomer(int customerId)
@@ -73,9 +77,9 @@
 		public Dictionary<MP_CustomerMarketPlace, List<IAnalysisDataParameterInfo>> GetAnalysisValsForCustomer(
 			int customerId)
 		{
-			var customer = _customers.Get(customerId);
+			var mps = _marketPlaceRepository.GetAllByCustomer(customerId);
 			var mpAnalysis = new Dictionary<MP_CustomerMarketPlace, List<IAnalysisDataParameterInfo>>();
-			foreach (var mp in customer.CustomerMarketPlaces.Where(
+			foreach (var mp in mps.Where(
 						mp => !mp.Disabled && (!mp.Marketplace.IsPaymentAccount || mp.Marketplace.Name == "Pay Pal")))
 			{
 				var analisysFunction = RetrieveDataHelper.GetAnalysisValuesByCustomerMarketPlace(mp.Id);
@@ -206,9 +210,8 @@
 			_decisionHistory.LogAction(DecisionActions.Approve, comment, _session.Get<User>(1), customer);
 		}
 
-		public int MarketplaceSeniority(int customerId)
+		public int MarketplaceSeniority(Customer customer)
 		{
-			var customer = _customers.Get(customerId);
 			return Convert.ToInt32((DateTime.UtcNow - _mpFacade.MarketplacesSeniority(customer)).TotalDays);
 		}
 
@@ -228,7 +231,7 @@
 					!CheckExperianScore(minExperianScore) ||
 					!CheckAge(customer) ||
 					!CheckTurnovers(customerId) ||
-					!CheckSeniority(customerId) ||
+					!CheckSeniority(customer) ||
 					!CheckOutstandingOffers() ||
 					!CheckTodaysLoans() ||
 					!CheckTodaysApprovals() ||
@@ -386,11 +389,11 @@
 			return true;
 		}
 
-		private bool CheckSeniority(int customerId)
+		private bool CheckSeniority(Customer customer)
 		{
 			int autoApproveMinMpSeniorityDays = configurationVariablesRepository.GetByNameAsInt("AutoApproveMinMPSeniorityDays");
 
-			int marketplaceSeniorityInDays = MarketplaceSeniority(customerId);
+			int marketplaceSeniorityInDays = MarketplaceSeniority(customer);
 			if (marketplaceSeniorityInDays < autoApproveMinMpSeniorityDays)
 			{
 				log.InfoFormat("No auto approval: Minimal marketplace seniority for auto approval is: {0}. Customer marketplace seniority is:{1}", autoApproveMinMpSeniorityDays, marketplaceSeniorityInDays);
@@ -658,11 +661,10 @@
 
 		public LandRegistryDataModel GetLandRegistryData(int customerId, string titleNumber)
 		{
-			var customer = _customers.Get(customerId);
 			var lrRepo = ObjectFactory.GetInstance<LandRegistryRepository>();
 
 			//check cash
-			var cache = lrRepo.GetRes(customer, titleNumber);
+			var cache = lrRepo.GetRes(customerId, titleNumber);
 			if (cache != null)
 			{
 				var b = new LandRegistryModelBuilder();
@@ -671,18 +673,14 @@
 					Request = cache.Request,
 					Response = cache.Response,
 					Res = b.BuildResModel(cache.Response),
-					RequestType = (LandRegistryLib.LandRegistryRequestType)(int)cache.RequestType,
-					ResponseType = (LandRegistryLib.LandRegistryResponseType)(int)cache.ResponseType
+					RequestType = cache.RequestType,
+					ResponseType = cache.ResponseType
 				};
 
 				return cacheModel;
 			}
 
 			var isProd = configurationVariablesRepository.GetByNameAsBool("LandRegistryProd");
-			//var res = XmlHelper.XmlDeserializeFromString<LandRegistryLib.LRResServiceNS.ResponseOCWithSummaryV2_1Type>(LandRegistryTestFixure.TestResBM253452);
-			//var model = new LandRegistryDataModel() { Res = b.BuildResModel(res) };
-			//return model;
-
 
 			ILandRegistryApi lr;
 			if (isProd)
@@ -698,7 +696,7 @@
 			if (titleNumber != null)
 			{
 				model = lr.Res(titleNumber, customerId);
-
+				var customer = _customers.Get(customerId);
 
 				lrRepo.Save(new LandRegistry
 					{
@@ -742,11 +740,10 @@
 
 		public LandRegistryDataModel GetLandRegistryEnquiryData(int customerId, string buildingNumber, string streetName, string cityName, string postCode)
 		{
-			var customer = _customers.Get(customerId);
 			var lrRepo = ObjectFactory.GetInstance<LandRegistryRepository>();
 
 			//check cash
-			var cache = lrRepo.GetEnquiry(customer, postCode);
+			var cache = lrRepo.GetEnquiry(customerId, postCode);
 
 			if (cache != null)
 			{
@@ -776,7 +773,7 @@
 			}
 
 			var model = lr.EnquiryByPropertyDescription(buildingNumber, streetName, cityName, postCode, customerId);
-
+			var customer = _customers.Get(customerId);
 			lrRepo.Save(new LandRegistry
 				{
 					Customer = customer,
@@ -789,6 +786,19 @@
 				});
 
 			return model;
+		}
+
+		public MpsTotals GetMpsTotals(int customerId)
+		{
+			var customer = _customers.Get(customerId);
+			var totals = new MpsTotals
+				{
+					TotalSumOfOrders1YTotal = GetAnualTurnOverByCustomer(customer.Id),
+					TotalSumOfOrders3MTotal = GetTotalSumOfOrders3M(customer.Id),
+					MarketplaceSeniorityDays = MarketplaceSeniority(customer),
+					TotalSumOfOrdersForLoanOffer = (decimal) GetTotalSumOfOrdersForLoanOffer(customer.Id)
+				};
+			return totals;
 		}
 	}
 }
