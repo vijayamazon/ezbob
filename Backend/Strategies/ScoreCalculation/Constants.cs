@@ -170,16 +170,6 @@ namespace EzBob.Backend.Strategies.ScoreCalculation
 
 		#endregion Medal Range
 
-		#region Decision Percent Range
-
-		public static readonly List<RangeOfferPercent> DecisionPercentRanges = new List<RangeOfferPercent> {
-			new RangeOfferPercent {MinValue = null,MaxValue = 549, OfferPercent = 0.0M },
-			new RangeOfferPercent {MinValue = 550,MaxValue = 649, OfferPercent = 0.65M },
-			new RangeOfferPercent {MinValue = 650,MaxValue = null, OfferPercent = 1 },
-		};
-
-		#endregion Decision Percent Range
-
 		#endregion MedalScoreCalculation
 	} // class Constants
 } // namespace

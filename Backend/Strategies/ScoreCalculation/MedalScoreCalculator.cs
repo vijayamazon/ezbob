@@ -11,7 +11,7 @@
 	public class MedalScoreCalculator
 	{
 		private readonly ASafeLog m_oLog;
-		private AConnection db;
+		private readonly AConnection db;
 
 		public MedalScoreCalculator(AConnection db, ASafeLog oLog)
 		{
@@ -78,7 +78,7 @@
 					Medal = medal,
 					ScorePoints = scoreSum * 100,
 					ScoreResult = score,
-					MaxOffer = (int)Math.Round((int)((int)medal * annualTurnover * GetRange(Constants.DecisionPercentRanges, experianScore).OfferPercent / 100) / 100d, 0) * 100,
+					MaxOffer = (int)Math.Round((int)((int)medal * annualTurnover * GetLoanOfferMultiplier(experianScore) / 100) / 100d, 0) * 100,
 					MaxOfferPercent = GetBasicInterestRate(experianScore),
 					AcDescriptors = "Experian score;Marketplace seniority;Marital status;Positive feedback count;Other;Annual turnover;Number of stores;EZBOB seniority;EZBOB number of loans;EZBOB previous late payments;EZBOB previous early payments",
 					AcParameters = BuildParameters(dict),
@@ -95,6 +95,13 @@
 			DataTable dt = db.ExecuteReader("GetBasicInterestRate", CommandSpecies.StoredProcedure, new QueryParameter("Score", experianScore));
 			var sr = new SafeReader(dt.Rows[0]);
 			return sr["LoanInterestBase"];
+		}
+
+		public decimal GetLoanOfferMultiplier(int experianScore)
+		{
+			DataTable dt = db.ExecuteReader("GetLoanOfferMultiplier", CommandSpecies.StoredProcedure, new QueryParameter("Score", experianScore));
+			var sr = new SafeReader(dt.Rows[0]);
+			return sr["Multiplier"];
 		}
 
 		private string BuildMaxPoints(Dictionary<Parameter, Weight> dict)
