@@ -19,21 +19,13 @@
 		<RemoveDir Directories="$(BuildBin)"/>
 		<!-- Exec Command="unlocker.exe $(BuildBin) /D /S" WorkingDirectory="C:\Program Files\Unlocker\" Condition="Exists('C:\Program Files\Unlocker\Unlocker.exe')" IgnoreExitCode="true"/-->
 		
-		<AppCopy CopyFrom="$(Src)\App\Clients\" CopyTo="$(BuildBin)\%(Edition.Identity)\Clients\"/> 
-		
 		<AppCopy CopyFrom="$(Src)\App\web" CopyTo="$(BuildBin)\%(Edition.Identity)\web\"/> 
 		
 		<!-- <WebCopy CopyFrom="$(Src)\App\pluginweb\pluginwebapp\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(WebFolder)\PluginWebapp\" /> -->
 		<WebCopy CopyFrom="$(Src)\App\pluginweb\EzBob.Web\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(WebFolder)\EzBob.Web\"/>
 		
-		<AppCopy CopyFrom="$(Src)\App\service\agent\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ServicesFolder)\agent\"/>
-		
-		<MultiCopy CopyFrom="$(Src)\Tools\Publisher\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(PublisherFolder)\"/>
-		<MultiCopy CopyFrom="$(Src)\Lib\Publisher\Plug-ins\StrategySchedules\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(PublisherFolder)\"/>
 		<AppCopy CopyFrom="$(Src)\Tools\LogViewer\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\LogViewer\"/>
 		<AppCopy CopyFrom="$(Src)\Tools\EnvironmentConfigValidation\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\EnvironmentConfigValidation\"/>
-
-		<!-- <MultiCopy CopyFrom="$(Src)\Tools\IncrementalUpdate\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\IncrementalUpdate\"/> -->
 
 		<MultiCopy CopyFrom="$(Src)\sql\current\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(Database)\sql\current\" />
 		<MultiCopy CopyFrom="$(Src)\sql\SPs\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(Database)\sql\SPs\" />
@@ -52,78 +44,9 @@
 
 		<MultiCopy CopyFrom="$(Src)\App\ezmanage\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\ezmanage\" />
 		
-		<MultiCopy CopyFrom="$(Src)\Items\" CopyTo="$(BuildBin)\%(Edition.Identity)\Items\"/>
 		<Copy SourceFiles="$(Src)\Build\sc-build\EnvironmentTemplate.xml" DestinationFolder="$(BuildBin)\%(Edition.Identity)\"/>
 		<Copy SourceFiles="$(Src)\Integration\ChannelGrabberConfig\channelgrabber.json" DestinationFolder="$(BuildBin)\%(Edition.Identity)\"/>
-		
-		<MultiCopy CopyFrom="$(Src)\Integration\NodeEzBobLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy CopyFrom="$(Src)\Integration\CustomSchedulers\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy CopyFrom="$(Src)\Integration\EzBob.Signals\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy CopyFrom="$(Src)\Integration\EKM\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy CopyFrom="$(Src)\Integration\Sage\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy CopyFrom="$(Src)\Integration\PayPoint\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy CopyFrom="$(Src)\Integration\ChannelGrabberAPI\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy CopyFrom="$(Src)\Integration\ChannelGrabberConfig\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy CopyFrom="$(Src)\Integration\ChannelGrabberFrontend\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy CopyFrom="$(Src)\Integration\YodleeLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy CopyFrom="$(Src)\Integration\FreeAgent\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy CopyFrom="$(Src)\App\Utils\AgentRegistry\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy CopyFrom="$(Src)\Integration\PaymentServices\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy CopyFrom="$(Src)\App\ScheduledServices\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy CopyFrom="$(Src)\Integration\Ezbob.MailNode.Runtime\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy CopyFrom="$(Src)\Integration\FraudChecker\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy CopyFrom="$(Src)\Integration\ZooplaLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		
-		<!--Stas-->
-		<MultiCopy CopyFrom="$(Src)\Integration\EzBob.Models\bin\$(BuildConfiguration)\EzBob.Models.dll" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy CopyFrom="$(Src)\Integration\Amazon\AmazonLib\bin\$(BuildConfiguration)\AmazonLib.dll" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy CopyFrom="$(Src)\Integration\Amazon\AmazonDbLib\bin\$(BuildConfiguration)\AmazonDbLib.dll" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy CopyFrom="$(Src)\Integration\CommonLib\bin\$(BuildConfiguration)\CommonLib.dll" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy CopyFrom="$(Src)\Integration\eBay\eBayLib\bin\$(BuildConfiguration)\eBayLib.dll" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy CopyFrom="$(Src)\Integration\eBay\eBayDbLib\bin\$(BuildConfiguration)\eBayDbLib.dll" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy CopyFrom="$(Src)\Integration\PayPal\PayPalLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy CopyFrom="$(Src)\Integration\PayPal\PayPalServiceLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy CopyFrom="$(Src)\Integration\DatabaseLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy CopyFrom="$(Src)\Integration\Amazon\AmazonServiceLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy CopyFrom="$(Src)\Integration\Amazon\AmazonLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy CopyFrom="$(Src)\Integration\Amazon\AmazonDbLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy CopyFrom="$(Src)\Integration\eBay\eBayServiceLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy CopyFrom="$(Src)\Integration\ExperianLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy CopyFrom="$(Src)\Integration\EzBob.Configuration\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy CopyFrom="$(Src)\Integration\PayPal\PayPal.Base\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy CopyFrom="$(Src)\Integration\PayPal\PayPal.Permissions\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy CopyFrom="$(Src)\Integration\TeraPeak\TeraPeakServiceLib\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy CopyFrom="$(Src)\Integration\Amazon\FBAInventoryServiceMWS\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy CopyFrom="$(Src)\Integration\EzBob\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy CopyFrom="$(Src)\Integration\EzBob.Configuration\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<MultiCopy CopyFrom="$(Src)\Integration\MailApi\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<!--End Stas-->
-		
-		<Copy SourceFiles="$(Src)\Integration\EzBob.Models\bin\$(BuildConfiguration)\EzBob.Models.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
-		<Copy SourceFiles="$(Src)\Integration\Amazon\AmazonLib\bin\$(BuildConfiguration)\AmazonLib.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
-		<Copy SourceFiles="$(Src)\Integration\Amazon\AmazonDbLib\bin\$(BuildConfiguration)\AmazonDbLib.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
-		<Copy SourceFiles="$(Src)\Integration\CommonLib\bin\$(BuildConfiguration)\CommonLib.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
-		<Copy SourceFiles="$(Src)\Integration\eBay\eBayLib\bin\$(BuildConfiguration)\eBayLib.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
-		<Copy SourceFiles="$(Src)\Integration\eBay\eBayDbLib\bin\$(BuildConfiguration)\eBayDbLib.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
-		<Copy SourceFiles="$(Src)\Integration\PaymentServices\bin\$(BuildConfiguration)\PaymentServices.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
-		<Copy SourceFiles="$(Src)\Integration\PayPal\PayPalLib\bin\$(BuildConfiguration)\PayPalLib.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
-		<Copy SourceFiles="$(Src)\Integration\PayPal\PayPalServiceLib\bin\$(BuildConfiguration)\PayPalServiceLib.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
-		<Copy SourceFiles="$(Src)\Integration\DatabaseLib\bin\$(BuildConfiguration)\DatabaseLib.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
-		<Copy SourceFiles="$(Src)\Lib\Scorto.Core\DefaultSigningProvider.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
-		<Copy SourceFiles="$(Src)\Lib\Scorto.Core\Scorto.Maven.Mixed.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
-		<Copy SourceFiles="$(Src)\Lib\Scorto.Core\Scorto.Maven.Application.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>		
-		<Copy SourceFiles="$(Src)\Integration\Amazon\AmazonServiceLib\bin\$(BuildConfiguration)\AmazonServiceLib.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
-		<Copy SourceFiles="$(Src)\Integration\Amazon\AmazonLib\bin\$(BuildConfiguration)\AmazonLib.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<Copy SourceFiles="$(Src)\Integration\Amazon\AmazonDbLib\bin\$(BuildConfiguration)\AmazonDbLib.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\service\agent\"/>
-		<Copy SourceFiles="$(Src)\Integration\eBay\eBayServiceLib\bin\$(BuildConfiguration)\eBayServiceLib.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
-		<Copy SourceFiles="$(Src)\Integration\ExperianLib\bin\$(BuildConfiguration)\ExperianLib.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
-		<Copy SourceFiles="$(Src)\Integration\EzBob.Configuration\bin\$(BuildConfiguration)\EzBob.Configuration.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
-		<Copy SourceFiles="$(Src)\Integration\GuiNodeEzBobLib\bin\$(BuildConfiguration)\GuiNodeEzBobLib.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
-		<Copy SourceFiles="$(Src)\Integration\NodeEzBobLib\bin\$(BuildConfiguration)\NodeEzBobLib.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
-		<Copy SourceFiles="$(Src)\Integration\PayPal\PayPal.Base\bin\$(BuildConfiguration)\PayPal.Base.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
-		<Copy SourceFiles="$(Src)\Integration\PayPal\PayPal.Permissions\bin\$(BuildConfiguration)\PayPal.Permissions.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
-		<Copy SourceFiles="$(Src)\Integration\TeraPeak\TeraPeakServiceLib\bin\$(BuildConfiguration)\TeraPeakServiceLib.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\Clients\Maven\"/>
-		
+				
 		<AppCopy CopyFrom="$(Src)\Lib\Scorto.Core\" CopyTo="$(BuildBin)\%(Edition.Identity)\libs\"/>
 
 		<MultiCopy CopyFrom="$(Src)\Integration\Amazon\AmazonStandaloneApp\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\Amazon\"/>
