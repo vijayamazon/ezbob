@@ -1,6 +1,5 @@
 <Project ToolsVersion="4.0" DefaultTargets="StartBuild" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
  	<Import Project="BuildMain.proj"/>
-	<Import Project="..\Publish.proj"/>
 	<Import Project="..\LoadTests.proj"/>
 	
 	<!-- build properties-->
@@ -55,7 +54,7 @@
 
 	<Target Name="MakeLoadDeploy">
 		<!--EnvironmentConfigure turn on demand-->
-		<CallTarget Targets="SCStop;LogArchive;Deploy;ConfigureLoadClients;ReCreateDB;AddonDBLoad;ImportDB;SCStart;Publish" />  
+		<CallTarget Targets="SCStop;LogArchive;Deploy;ConfigureLoadClients;ReCreateDB;AddonDBLoad;ImportDB;SCStart" />  
 	</Target>
 	
 	<Target Name="RunTests">

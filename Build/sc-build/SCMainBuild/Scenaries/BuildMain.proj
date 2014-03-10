@@ -16,7 +16,6 @@
 		<WebFolder>websites</WebFolder>
 		<ConfigFolder>configtemplates</ConfigFolder>
 		<ToolsFolder>Tools</ToolsFolder>
-		<PublisherFolder>$(ToolsFolder)\Publisher</PublisherFolder>
 		<SDKFolder>SDK</SDKFolder>
 		<Database>Database</Database>
 	</PropertyGroup>
@@ -29,21 +28,6 @@
 		<ItemGroup>
 			<ProjectToBuild Include="$(Src)\ezbob.sln"/>
 			<ProjectToBuild Include="$(Src)\App\EzAutoResponder\EzAutoResponder.sln"/>
-			<!--
-			<ProjectToBuild Include="$(Src)\app\admin\admin.sln"/>
-			<ProjectToBuild Include="$(Src)\app\agents\agents.sln"/>
-			<ProjectToBuild Include="$(Src)\app\auditor\auditor.sln"/>
-			<ProjectToBuild Include="$(Src)\app\FormsDesigner\FormsDesigner.sln"/>
-			<ProjectToBuild Include="$(Src)\app\pluginweb\pluginweb.sln"/>
-			<ProjectToBuild Include="$(Src)\app\Maven\Maven.sln"/>
-			<ProjectToBuild Include="$(Src)\app\Patron\Patron.sln"/>
-			<ProjectToBuild Include="$(Src)\app\ScortoServices\ScortoScoringServices.sln"/>
-			
-			<ProjectToBuild Include="$(Src)\tools\Publisher\Publisher.sln"/> 
-			<ProjectToBuild Include="$(Src)\tools\LogViewer\LogViewer.sln"/>
-			<ProjectToBuild Include="$(Src)\tools\EnvironmentConfigValidation\EnvironmentConfigValidation.sln"/> 
-			<ProjectToBuild Include="$(Src)\tools\IncrementalUpdate\DBBuilder.sln"/> 
-			-->
 		</ItemGroup>
 	</Target>
 	

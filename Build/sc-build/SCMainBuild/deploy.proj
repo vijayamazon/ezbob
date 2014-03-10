@@ -125,42 +125,7 @@
 		  XPath="/configuration/applicationSettings/NodeDesigner.Properties.Settings/setting[@name='AppCulture']/value"
 		  FilePath="$(ServerBaseFolder)\$(ClientsFolder)\FormsDesigner\FormsDesigner.exe.config"
 		  Value="$(Culture)"/>
-		  
-		<!-- Publisher AppConfig setting -->
-		<XmlUpdate
-		  XPath="/configuration/applicationSettings/Publisher.Settings/setting[@name='UrlPatronBase']/value"
-		  FilePath="$(ServerBaseFolder)\$(PublisherFolder)\Publisher.exe.config"
-		  Value="$(WebBaseUrl)/MasterServer"/>
-		<XmlUpdate
-		  XPath="/configuration/applicationSettings/Publisher.Settings/setting[@name='UrlMavenBase']/value"
-		  FilePath="$(ServerBaseFolder)\$(PublisherFolder)\Publisher.exe.config"
-		  Value="$(WebBaseUrl)/MavenServer"/>
-		<XmlUpdate
-		  XPath="/configuration/applicationSettings/Publisher.Settings/setting[@name='UrlAuthServiceBase']/value"
-		  FilePath="$(ServerBaseFolder)\$(PublisherFolder)\Publisher.exe.config"
-		  Value="$(WebBaseUrl)/AuthenticationServer/"/>
-		<XmlUpdate
-		  XPath="/configuration/applicationSettings/Publisher.Settings/setting[@name='XlsFileName']/value"
-		  FilePath="$(ServerBaseFolder)\$(PublisherFolder)\Publisher.exe.config"
-		  Value="$(BuildBin)\%(Edition.Identity)\Items\TestData.xls"/>
 		
-		<!-- Publisher AppConfig setting -->
-		<XmlUpdate
-		  XPath="/configuration/applicationSettings/Publisher.Settings/setting[@name='UrlPatronBase']/value"
-		  FilePath="$(ServerBaseFolder)\$(PublisherFolder)\Publisher.exe.config"
-		  Value="$(WebBaseUrl)/MasterServer"/>
-		<XmlUpdate
-		  XPath="/configuration/applicationSettings/Publisher.Settings/setting[@name='UrlMavenBase']/value"
-		  FilePath="$(ServerBaseFolder)\$(PublisherFolder)\Publisher.exe.config"
-		  Value="$(WebBaseUrl)/MavenServer"/>
-		<XmlUpdate
-		  XPath="/configuration/applicationSettings/Publisher.Settings/setting[@name='UrlAuthServiceBase']/value"
-		  FilePath="$(ServerBaseFolder)\$(PublisherFolder)\Publisher.exe.config"
-		  Value="$(WebBaseUrl)/AuthenticationServer/"/>
-		<XmlUpdate
-		  XPath="/configuration/applicationSettings/Publisher.Settings/setting[@name='xlsFileName']/value"
-		  FilePath="$(ServerBaseFolder)\$(PublisherFolder)\Publisher.exe.config"
-		  Value="../../Items/TestData.xls"/>
 	</Target>
 
 	<Target Name="EnvironmentConfigure">
