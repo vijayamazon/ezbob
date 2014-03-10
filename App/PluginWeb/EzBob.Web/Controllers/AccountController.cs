@@ -10,7 +10,7 @@ namespace EzBob.Web.Controllers
 	using System.Web.Security;
 	using ApplicationMng.Model;
 	using ApplicationMng.Repository;
-	using DB.Security;
+	using Areas.Customer.Controllers.Exceptions;
 	using DbConstants;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
