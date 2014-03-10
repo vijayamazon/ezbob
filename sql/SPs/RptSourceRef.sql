@@ -127,6 +127,7 @@ BEGIN
 		o.CustomerID,
 		c.GreetingMailSentDate,
 		c.ReferenceSource,
+		c.GoogleCookie,
 		c.WizardStep,
 		r.CreationDate,
 		r.UnderwriterDecision,
