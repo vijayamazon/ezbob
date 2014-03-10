@@ -28,7 +28,7 @@ BEGIN
 		rn = 1 AND
 		CustomerId = @CustomerId
 
-	SELECT @InterestRate = LoanIntrestBase FROM BasicInterestRate WHERE FromScore <= @Score AND ToScore >= @Score
+	SELECT @InterestRate = LoanInterestBase FROM BasicInterestRate WHERE FromScore <= @Score AND ToScore >= @Score
 	IF @InterestRate IS NULL SET @InterestRate=0
 
 	UPDATE CashRequests SET SystemCalculatedSum=@AutoApproveAmount, InterestRate=@InterestRate WHERE IdCustomer=@CustomerId

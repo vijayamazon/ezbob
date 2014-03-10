@@ -1,5 +1,7 @@
 ﻿namespace EzBob.Backend.Strategies.ScoreCalculation
 {
+	using System.Data;
+	using Ezbob.Database;
 	using Ezbob.Logger;
 	using System;
 	using System.Collections.Generic;
@@ -9,10 +11,12 @@
 	public class MedalScoreCalculator
 	{
 		private readonly ASafeLog m_oLog;
+		private AConnection db;
 
-		public MedalScoreCalculator(ASafeLog oLog)
+		public MedalScoreCalculator(AConnection db, ASafeLog oLog)
 		{
 			m_oLog = oLog;
+			this.db = db;
 		}
 
 		public ScoreMedalOffer CalculateMedalScore(
@@ -33,7 +37,6 @@
 				"CalculateMedalScore input params: annualTurnover: {0}, experianScore: {1}, mpSeniorityYears: {2}, positiveFeedbackCount: {3}, maritalStatus: {4}, gender: {5}, numberOfStores(eBay\\Amazon\\PayPal): {6}, firstRepaymentDatePassed: {7}, ezbobSeniorityMonths: {8}, ezbobNumOfLoans: {9}, ezbobNumOfLateRepayments: {10}, ezbobNumOfEarlyReayments: {11}",
 				annualTurnover, experianScore, mpSeniorityYears, positiveFeedbackCount, maritalStatus, gender, numberOfStores,
 				firstRepaymentDatePassed, ezbobSeniorityMonths, ezbobNumOfLoans, ezbobNumOfLateRepayments, ezbobNumOfEarlyReayments);
-
 
 			var dict = new Dictionary<Parameter, Weight> {
 				{Parameter.ExperianScore,            GetExperianScoreWeight(experianScore, firstRepaymentDatePassed)},
@@ -76,7 +79,7 @@
 					ScorePoints = scoreSum * 100,
 					ScoreResult = score,
 					MaxOffer = (int)Math.Round((int)((int)medal * annualTurnover * GetRange(Constants.DecisionPercentRanges, experianScore).OfferPercent / 100) / 100d, 0) * 100,
-					MaxOfferPercent = GetRange(Constants.OfferPercentRanges, experianScore).OfferPercent,
+					MaxOfferPercent = GetBasicInterestRate(experianScore),
 					AcDescriptors = "Experian score;Marketplace seniority;Marital status;Positive feedback count;Other;Annual turnover;Number of stores;EZBOB seniority;EZBOB number of loans;EZBOB previous late payments;EZBOB previous early payments",
 					AcParameters = BuildParameters(dict),
 					ResultWeigts = BuildWeights(dict),
@@ -85,6 +88,13 @@
 
 			PrintDict(smo, dict);
 			return smo;
+		}
+
+		public decimal GetBasicInterestRate(int experianScore)
+		{
+			DataTable dt = db.ExecuteReader("GetBasicInterestRate", CommandSpecies.StoredProcedure, new QueryParameter("Score", experianScore));
+			var sr = new SafeReader(dt.Rows[0]);
+			return sr["LoanInterestBase"];
 		}
 
 		private string BuildMaxPoints(Dictionary<Parameter, Weight> dict)

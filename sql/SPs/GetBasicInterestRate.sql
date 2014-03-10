@@ -10,7 +10,7 @@ CREATE PROCEDURE [dbo].[GetBasicInterestRate]
 AS
 BEGIN
 	SELECT 
-		LoanIntrestBase
+		LoanInterestBase
 	FROM 
 		BasicInterestRate
 	WHERE 

@@ -57,7 +57,7 @@
 		)
 			: base(oDb, oLog)
 		{
-			medalScoreCalculator = new MedalScoreCalculator(oLog);
+			medalScoreCalculator = new MedalScoreCalculator(DB, Log);
 			mailer = new StrategiesMailer(DB, Log);
 			this.customerId = customerId;
 			newCreditLineOption = newCreditLine;
@@ -87,7 +87,7 @@
 		)
 			: base(oDb, oLog)
 		{
-			medalScoreCalculator = new MedalScoreCalculator(oLog);
+			medalScoreCalculator = new MedalScoreCalculator(DB, Log);
 			mailer = new StrategiesMailer(DB, Log);
 			this.customerId = customerId;
 			useCustomIdHubAddress = checkType;

@@ -48,10 +48,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\3rdparty\Nhibernate\NHibernate.dll</HintPath>
     </Reference>
-    <Reference Include="nunit.framework, Version=2.5.3.9345, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Lib\3rdparty\NUnit\nunit.framework.dll</HintPath>
-    </Reference>
     <Reference Include="Nustache.Core, Version=1.12.4.29, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\3rdparty\Nustache\Nustache.Core.dll</HintPath>
@@ -152,7 +148,6 @@
     <Compile Include="ScoreCalculation\Constants.cs" />
     <Compile Include="ScoreCalculation\Enums.cs" />
     <Compile Include="ScoreCalculation\MedalScoreCalculator.cs" />
-    <Compile Include="ScoreCalculation\MedalScoreCalculatorTestFixure.cs" />
     <Compile Include="ScoreCalculation\Models.cs" />
     <Compile Include="StrategiesMailer.cs" />
     <Compile Include="CaisGenerate.cs" />

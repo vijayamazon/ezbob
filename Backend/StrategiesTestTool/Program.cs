@@ -3,6 +3,7 @@
 	using System;
 	using EZBob.DatabaseLib.Model.Database;
 	using EzBob.Backend.Strategies.ScoreCalculation;
+	using Ezbob.Database;
 	using Ezbob.Logger;
 
 	class Program
@@ -15,13 +16,14 @@
 				Usage();
 				return;
 			}
+
+			AConnection db = new SqlConnection(new Ezbob.Context.Environment(), new ConsoleLog());
+
 			switch (args[0])
 			{
 				case "medal":
 					try
 					{
-
-
 						decimal annualTurnover = decimal.Parse(args[1]);
 						int experianScore = int.Parse(args[2]);
 						decimal mpSeniorityYears = decimal.Parse(args[3]);
@@ -35,7 +37,7 @@
 						int ezbobNumOfLateRepayments = int.Parse(args[11]);
 						int ezbobNumOfEarlyReayments = int.Parse(args[12]);
 						
-						var msc = new MedalScoreCalculator(new ConsoleLog());
+						var msc = new MedalScoreCalculator(db, new ConsoleLog());
 						var response = msc.CalculateMedalScore(annualTurnover,
 						                                       experianScore,
 						                                       mpSeniorityYears,
