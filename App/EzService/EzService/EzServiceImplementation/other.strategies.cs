@@ -50,5 +50,10 @@
 		public ActionMetaData UpdateCurrencyRates() {
 			return Execute(null, null, typeof(UpdateCurrencyRates));
 		} // UpdateCurrencyRates
+
+		public ActionMetaData FinishWizard(int customerId, int underwriterId)
+		{
+			return Execute(customerId, underwriterId, typeof(FinishWizard), customerId);
+		} // FinishWizard
 	} // class EzServiceImplementation
 } // namespace EzService

@@ -604,10 +604,10 @@
 		[Activation]
 		private void FinishWizard()
 		{
-			int customerId;
-			if (args.Length != 2 || !int.TryParse(args[1], out customerId))
+			int customerId, underwriterId;
+			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !int.TryParse(args[2], out underwriterId))
 			{
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> FinishWizard <CustomerId>");
+				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> FinishWizard <CustomerId> <UnderwriterId>");
 				return;
 			}
 

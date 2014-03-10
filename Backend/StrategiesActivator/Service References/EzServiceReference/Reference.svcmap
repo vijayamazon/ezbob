@@ -27,10 +27,12 @@
     <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="38db510b-db45-43d9-ae93-eb8aea946059" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="EzService.xsd" MetadataType="Schema" ID="4103cd24-8ca1-4f7c-92ef-f38bc4d5b49e" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="Arrays.xsd" MetadataType="Schema" ID="7d082e0a-9244-4515-9aff-062c593179ce" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
-    <MetadataFile FileName="EzBob.Backend.Strategies.xsd" MetadataType="Schema" ID="0bdb0a9b-560d-4e45-abb3-18df5d22be63" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
-    <MetadataFile FileName="EzBob.Backend.Models.xsd" MetadataType="Schema" ID="1bccffaa-1616-4229-8946-fb9e0b7e74e7" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="Ezbob.Backend.Models1.xsd" MetadataType="Schema" ID="409fa278-009a-479d-b11d-340f14a52f7d" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
+    <MetadataFile FileName="EzBob.Backend.Strategies.xsd" MetadataType="Schema" ID="0bdb0a9b-560d-4e45-abb3-18df5d22be63" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="FraudChecker.xsd" MetadataType="Schema" ID="5fa8ebae-c40b-4974-bc96-601e20f6a046" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
+    <MetadataFile FileName="EzBob.Backend.Models.xsd" MetadataType="Schema" ID="1bccffaa-1616-4229-8946-fb9e0b7e74e7" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
+    <MetadataFile FileName="EzBob.Models.Agreements.xsd" MetadataType="Schema" ID="9fd48d76-b8b3-47a3-b6ca-00e7498a58c8" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
+    <MetadataFile FileName="EzBob.Web.Areas.Customer.Models.xsd" MetadataType="Schema" ID="afbef1e2-779a-4666-a845-51d47460d424" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

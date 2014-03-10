@@ -256,7 +256,7 @@
 		WizardConfigsActionResult GetWizardConfigs();
 
 		[OperationContract]
-		ActionMetaData FinishWizard(int customerId);
+		ActionMetaData FinishWizard(int customerId, int underwriterId);
 
 		#endregion
 

@@ -13,9 +13,5 @@
 				NumberOfMobileCodeAttempts = strategyInstance.NumberOfMobileCodeAttempts
 			};
 		} // GetWizardConfigs
-
-		public ActionMetaData FinishWizard(int customerId) {
-			return Execute(customerId, null, typeof(FinishWizard), customerId);
-		} // FinishWizard
 	} // class EzServiceImplementation
 } // namespace EzService

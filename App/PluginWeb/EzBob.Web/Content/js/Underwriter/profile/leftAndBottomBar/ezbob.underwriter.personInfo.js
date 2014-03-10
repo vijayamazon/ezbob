@@ -70,13 +70,22 @@
       "click [name=\"changeFraudStatusManualy\"]": "changeFraudStatusManualyClicked",
       'click button.cci-mark-toggle': 'toggleCciMark',
       'click [name="TrustPilotStatusUpdate"]': 'updateTrustPilotStatus',
-      'click #MainStrategyHidden': 'activateMainStratgey'
+      'click #MainStrategyHidden': 'activateMainStratgey',
+      'click #FinishWizardHidden': 'activateFinishWizard'
     };
 
     PersonInfoView.prototype.activateMainStratgey = function() {
       var xhr;
 
       return xhr = $.post("" + window.gRootPath + "Underwriter/ApplicationInfo/ActivateMainStrategy", {
+        customerId: this.model.get('Id')
+      });
+    };
+
+    PersonInfoView.prototype.activateFinishWizard = function() {
+      var xhr;
+
+      return xhr = $.post("" + window.gRootPath + "Underwriter/ApplicationInfo/ActivateFinishWizard", {
         customerId: this.model.get('Id')
       });
     };

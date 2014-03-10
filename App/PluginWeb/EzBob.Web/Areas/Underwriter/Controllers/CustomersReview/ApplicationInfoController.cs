@@ -560,5 +560,15 @@
 
 			return this.JsonNet(true);
 		}
+
+		[HttpPost, Ajax, ValidateJsonAntiForgeryToken]
+		public JsonNetResult ActivateFinishWizard(int customerId)
+		{
+			int underwriterId = context.User.Id;
+
+			new ServiceClient().Instance.FinishWizard(customerId, underwriterId);
+
+			return this.JsonNet(true);
+		}
 	}
 }

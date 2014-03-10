@@ -49,9 +49,13 @@ class EzBob.Underwriter.PersonInfoView extends Backbone.Marionette.ItemView
         'click button.cci-mark-toggle': 'toggleCciMark'
         'click [name="TrustPilotStatusUpdate"]': 'updateTrustPilotStatus'
         'click #MainStrategyHidden': 'activateMainStratgey'
+        'click #FinishWizardHidden': 'activateFinishWizard'
         
     activateMainStratgey: ->
         xhr = $.post "#{window.gRootPath}Underwriter/ApplicationInfo/ActivateMainStrategy", customerId: @model.get('Id')
+
+    activateFinishWizard: ->
+        xhr = $.post "#{window.gRootPath}Underwriter/ApplicationInfo/ActivateFinishWizard", customerId: @model.get('Id')
 
     updateTrustPilotStatus: ->
         d = new EzBob.Dialogs.ComboEdit
