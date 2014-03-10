@@ -114,13 +114,14 @@
 			string firstName = sr["FirstName"];
 			string surame = sr["Surame"];
 			string companyData = sr["CompanyData"];
-			if (string.IsNullOrWhiteSpace(amlData))
-			{
-				log.Debug("AML data not set.");
-			}
-			else
+
+			try
 			{
 				amlScore = experianUtils.DetectAml(amlData);
+			}
+			catch (Exception e)
+			{
+				log.Error("Exception while parsing amldata:{0}. The exception:{1}", amlData, e);
 			}
 
 			if (!string.IsNullOrEmpty(companyData))
