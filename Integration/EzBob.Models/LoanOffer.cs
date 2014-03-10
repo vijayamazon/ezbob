@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Linq;
+	using Agreements;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EzBob.Web.Areas.Customer.Models;

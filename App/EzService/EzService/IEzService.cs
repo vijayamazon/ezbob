@@ -1,6 +1,7 @@
 ﻿namespace EzService {
 	using System.ServiceModel;
 	using EzBob.Backend.Strategies;
+	using EzBob.Models.Agreements;
 	using FraudChecker;
 
 	[ServiceContract(SessionMode = SessionMode.Allowed)]
@@ -256,6 +257,13 @@
 
 		[OperationContract]
 		ActionMetaData FinishWizard(int customerId);
+
+		#endregion
+
+		#region Agreements
+
+		[OperationContract]
+		ActionMetaData SaveAgreement(int customeId, AgreementModel model, string refNumber, string name, string template, string path1, string path2);
 
 		#endregion Wizard
 	} // interface IEzService

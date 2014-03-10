@@ -6,6 +6,7 @@
 	using EZBob.DatabaseLib.Model.Loans;
 	using Areas.Customer.Models;
 	using Code.Agreements;
+	using EzBob.Models.Agreements;
 	using Infrastructure;
 	using Newtonsoft.Json;
 

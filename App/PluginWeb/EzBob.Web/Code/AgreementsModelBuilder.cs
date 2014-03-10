@@ -12,6 +12,7 @@ using PaymentServices.Calculators;
 namespace EzBob.Web.Code.Agreements
 {
 	using EZBob.DatabaseLib.Model;
+	using EzBob.Models.Agreements;
 	using StructureMap;
 
 	public class AgreementsModelBuilder
@@ -54,34 +55,36 @@ namespace EzBob.Web.Code.Agreements
 			var model = new AgreementModel();
 
 			model.Schedule = loan.Schedule.Select(LoanScheduleItemModel.FromLoanScheduleItem).ToList();
-			model.Customer = _customerModelBuilder.BuildWizardModel(customer);
-			model.TypeOfBusinessName = model.Customer.CustomerPersonalInfo.TypeOfBusinessName;
 
-			var businessType = model.Customer.CustomerPersonalInfo.TypeOfBusiness;
+			model.CustomerEmail = customer.Name;
+			model.FullName = customer.PersonalInfo.Fullname;
+			model.TypeOfBusinessName = customer.PersonalInfo.TypeOfBusinessName;
+
+			var businessType = customer.PersonalInfo.TypeOfBusiness;
 			var company = customer.Company;
+			CustomerAddress companyAddress = null;
 			if (businessType.Reduce() != TypeOfBusinessReduced.Limited && company != null)
 			{
 				model.CompanyName = company.ExperianCompanyName ?? company.CompanyName;
 				model.CompanyNumber = company.ExperianRefNum ?? company.CompanyNumber;
-				model.Address = company.ExperianCompanyAddress.LastOrDefault() ?? company.CompanyAddress.LastOrDefault();
+				companyAddress = company.ExperianCompanyAddress.LastOrDefault() ?? company.CompanyAddress.LastOrDefault();
+				
 			}
 			else if (businessType.Reduce() == TypeOfBusinessReduced.NonLimited && company != null)
 			{
 				model.CompanyName = company.ExperianCompanyName ?? company.CompanyName;
-				model.Address = company.ExperianCompanyAddress.LastOrDefault() ?? company.CompanyAddress.LastOrDefault();
+				companyAddress = company.ExperianCompanyAddress.LastOrDefault() ?? company.CompanyAddress.LastOrDefault();
 			}
 
-			model.CustomerAddress = model.Customer.PersonalAddress.FirstOrDefault();
-
-			model.CompanyAdress = model.Address.GetFormatted();
-			model.PersonAddress = model.CustomerAddress.GetFormatted();
+			model.CompanyAdress = companyAddress.GetFormatted();
+			model.PersonAddress = customer.AddressInfo.PersonalAddress.FirstOrDefault().GetFormatted();
 
 			CalculateTotal(loan.SetupFee, loan.Schedule.ToList(), model);
 
 			model.CurentDate = FormattingUtils.FormatDateTimeToString(now);
 			model.CurrentDate = now;
 
-			model.FormattedSchedules = CreateSchedule(loan.Schedule.ToList());
+			model.FormattedSchedules = CreateSchedule(loan.Schedule.ToList()).ToList();
 
 			model.InterestRate = loan.InterestRate * 100;
 			model.SetupFee = FormattingUtils.NumericFormats(loan.SetupFee);

@@ -1,8 +1,8 @@
-﻿using Scorto.Configuration;
-
-namespace EzBob.Signals.RenderAgreements
+﻿namespace EzBob.Web.Infrastructure
 {
-    public class RenderAgreementHandlerConfig : ConfigurationRoot
+	using Scorto.Configuration;
+
+	public class RenderAgreementHandlerConfig : ConfigurationRoot
     {
         public string PdfLoanAgreement { get { return GetValue<string>("PdfLoanAgreement"); } }
         public string PdfLoanAgreement2 { get { return GetValue<string>("PdfLoanAgreement2"); } }

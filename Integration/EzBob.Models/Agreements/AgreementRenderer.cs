@@ -1,10 +1,8 @@
-﻿using System.IO;
-using Aspose.Words;
-using EzBob.Web.Areas.Customer.Models;
-using Nustache.Core;
-
-namespace EzBob.Web.Code.Agreements
+﻿namespace EzBob.Models.Agreements
 {
+	using System.IO;
+	using Aspose.Words;
+	using Nustache.Core;
 	using System;
 
 	public class AgreementRenderer

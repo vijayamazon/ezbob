@@ -69,9 +69,6 @@
     <Reference Include="Scorto.Configuration">
       <HintPath>..\..\Lib\Scorto.Core\Scorto.Configuration.dll</HintPath>
     </Reference>
-    <Reference Include="Scorto.Flow.Signal">
-      <HintPath>..\..\Lib\Scorto.Core\Scorto.Flow.Signal.dll</HintPath>
-    </Reference>
     <Reference Include="Scorto.NHibernate">
       <HintPath>..\..\Lib\Scorto.Core\Scorto.NHibernate.dll</HintPath>
     </Reference>
@@ -120,10 +117,6 @@
     <ProjectReference Include="..\..\Integration\EzBob.Models\EzBob.Models.csproj">
       <Project>{66411ff3-aa26-4b45-96d3-56e5e77bb544}</Project>
       <Name>EzBob.Models</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Integration\EzBob.Signals\EzBob.Signals.csproj">
-      <Project>{0b94f193-9310-4a4d-98b2-3a55c851c6ad}</Project>
-      <Name>EzBob.Signals</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Integration\FraudChecker\FraudChecker.csproj">
       <Project>{edc99346-e59d-44b7-bdd0-a08cd3d56941}</Project>

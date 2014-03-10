@@ -52,6 +52,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\3rdparty\NUnit\nunit.framework.dll</HintPath>
     </Reference>
+    <Reference Include="Nustache.Core, Version=1.12.4.29, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\3rdparty\Nustache\Nustache.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Scorto.NHibernate, Version=22.0.0.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\Scorto.Core\Scorto.NHibernate.dll</HintPath>
@@ -71,6 +75,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Agreement.cs" />
     <Compile Include="AStrategy.cs" />
     <Compile Include="AmlChecker.cs" />
     <Compile Include="AutoDecisions\Approval.cs" />
