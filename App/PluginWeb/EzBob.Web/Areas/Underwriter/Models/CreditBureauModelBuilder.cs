@@ -46,6 +46,18 @@ namespace EzBob.Web.Areas.Underwriter.Models
 			Log.DebugFormat("CreditBureauModel Create customerid: {0} hist: {1} histId: {2}", customer.Id, getFromLog, logId);
 			var model = new CreditBureauModel();
 			var customerMainAddress = customer.AddressInfo.PersonalAddress.ToList().FirstOrDefault();
+			
+			//registered customer
+			if (customerMainAddress == null)
+			{
+				model.AmlInfo = new AMLInfo();
+				model.BavInfo = new BankAccountVerificationInfo();
+				model.ConsumerSummaryCharacteristics = new ConsumerSummaryCharacteristics();
+				model.ConsumerAccountsOverview = new ConsumerAccountsOverview();
+				model.Summary = new Summary();
+				return model;
+			}
+
 			try
 			{
 				ConsumerServiceResult result;

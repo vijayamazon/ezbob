@@ -494,7 +494,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 				var customer = _customers.TryGet(recentCustomer.CustomerId);
 
 				if (customer != null)
-					recentCustomersMap.Add(new System.Tuple<int, string>(recentCustomer.CustomerId, string.Format("{0}, {1}, {2}", recentCustomer.CustomerId, customer.PersonalInfo.Fullname, customer.Name)));
+					recentCustomersMap.Add(new System.Tuple<int, string>(recentCustomer.CustomerId, string.Format("{0}, {1}, {2}", recentCustomer.CustomerId, customer.PersonalInfo == null ? null : customer.PersonalInfo.Fullname, customer.Name)));
 			} // for each
 
 			return this.JsonNet(new { RecentCustomers = recentCustomersMap });
