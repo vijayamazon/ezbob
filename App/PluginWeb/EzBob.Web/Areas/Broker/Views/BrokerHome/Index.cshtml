@@ -255,7 +255,7 @@
 
 				<div class="page-section hide section-dashboard">
 					<h2 class="form-start">Customer list
-						<button type="button" id="AddNewCustomer" class="rc-button green pull-right">Add new customer</button>
+						<button type="button" id="AddNewCustomer" class="rc-button green pull-right">Add customer lead</button>
 					</h2>
 					
 					<div class="table-responsive table-big">
@@ -289,8 +289,45 @@
 				</div>
 				<!-- section-customer-list -->
 
-				<div class="page-section hide section-add-customer">Add customer
-					<button type="button" class="back-to-list">Back to customer list</button>
+				<div class="page-section hide section-add-customer">
+					<h2 class="form-start">Add customer lead
+						<button type="button" class="back-to-list rc-button green pull-right">Back to customer list</button>
+					</h2>
+
+					<form class="signup-form broker-form" novalidate="novalidate">
+						@{ int nLeadTabIdx = 1; }
+
+						<div class="form_field_container">
+							<label class="attardi-input">
+								<span>Customer first name</span>
+								<input type="text" name="LeadFirstName" id="LeadFirstName" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" class="form_field" ui-event-control-id="broker:lead-first-name" />
+								<img id="LeadFirstNameImage" class="field_status required" />
+							</label>
+						</div>
+
+						<div class="form_field_container">
+							<label class="attardi-input">
+								<span>Customer surname</span>
+								<input type="text" name="LeadLastName" id="LeadLastName" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" class="form_field" ui-event-control-id="broker:lead-last-name" />
+								<img id="LeadLastNameImage" class="field_status required" />
+							</label>
+						</div>
+
+						<div class="form_field_container">
+							<label class="attardi-input">
+								<span>Customer email</span>
+								<input type="email" name="LeadEmail" id="LeadEmail" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" class="form_field" ui-event-control-id="broker:lead-email" />
+								<img id="LeadEmailImage" class="field_status required" />
+							</label>
+						</div>
+
+						<div class="form_buttons_container">
+							<div class="attardi-button">
+								<button type="submit" id="" class="rc-button green disabled pull-right" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" ui-event-control-id="broker:lead-send-invitation">Send invitation</button>
+								<button type="submit" id="" class="rc-button green disabled pull-left" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" ui-event-control-id="broker:lead-fill-wizard">Fill all details</button>
+							</div>
+						</div>
+					</form>
 				</div>
 				<!-- section-add-customer -->
 

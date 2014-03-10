@@ -8,6 +8,7 @@ EzBob.Broker.Router = Backbone.Router.extend({
 		'login': 'login',
 		'dashboard': 'dashboard',
 		'forgotten': 'forgotten',
+		'ForgotPassword': 'forgotten',
 		'add': 'addCustomer',
 		'customer/:customerId': 'showCustomer',
 		'*z': 'forbidden',
@@ -127,6 +128,7 @@ EzBob.Broker.Router = Backbone.Router.extend({
 	showDashboard: function() {
 		this.createView('dashboard', EzBob.Broker.DashboardView);
 		this.show('dashboard', 'log-off', 'dashboard');
+		this.navigate('dashboard');
 	}, // showDashboard
 
 	addCustomer: function() {
@@ -163,6 +165,7 @@ EzBob.Broker.Router = Backbone.Router.extend({
 
 			this.createView('customer', EzBob.Broker.CustomerDetailsView, { customerid: customerId });
 			this.show('customer-details', 'log-off', 'customer');
+			this.navigate('customer/' + customerId);
 		}
 		else
 			this.login();

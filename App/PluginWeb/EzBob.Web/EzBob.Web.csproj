@@ -210,6 +210,7 @@
     <Compile Include="Areas\Customer\Controllers\Exceptions\UserNotFoundException.cs" />
     <Compile Include="Areas\Customer\Controllers\hmrc_file_processor.cs" />
     <Compile Include="Areas\Underwriter\Controllers\UploadHmrcController.cs" />
+    <Compile Include="Code\BrokerHelper.cs" />
     <Compile Include="Code\UiEvents\UiActionEventModel.cs" />
     <Compile Include="Code\UiEvents\UiCachePkgModel.cs" />
     <Compile Include="Infrastructure\Html\EzbobHtmlExtensions.cs" />
@@ -1090,6 +1091,9 @@
     <Content Include="Areas\Underwriter\Views\Shared\Fraud\Fraud.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\_FraudDetectionLog.cshtml" />
     <Content Include="Areas\Customer\Views\Profile\_YourInfo.cshtml" />
+    <Content Include="Content\js\login\ezbob.login.view.js">
+      <DependentUpon>ezbob.login.view.coffee</DependentUpon>
+    </Content>
     <Content Include="Content\js\login\ezbob.restorePassword.js">
       <DependentUpon>ezbob.restorePassword.coffee</DependentUpon>
     </Content>

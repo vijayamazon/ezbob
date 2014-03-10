@@ -37,7 +37,6 @@ class EzBob.ResetPasswordView extends Backbone.Marionette.ItemView
 
   events:
     "click #getQuestion": "getQuestionBtnClicked"
-    "keyup #email": "emailKeyuped"
     "click #restore": "restoreClicked"
     "keyup #email": "inputEmailChanged"
     "change #email": "inputEmailChanged"
@@ -118,6 +117,10 @@ class EzBob.ResetPasswordView extends Backbone.Marionette.ItemView
     
     $.post("QuestionForEmail", @ui.form.serialize())
         .done (response)=>
+            if response.broker
+                document.location.href = "#{window.gRootPath}Broker#ForgotPassword"
+                return true 
+
             if not EzBob.isNullOrEmpty(response.errorMessage) or not EzBob.isNullOrEmpty(response.error)
                 EzBob.App.trigger 'error', response.errorMessage or response.error
                 @ui.questionArea.hide()

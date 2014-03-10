@@ -1,5 +1,5 @@
 (function() {
-  var root, _ref,
+  var root,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -9,13 +9,16 @@
   root.EzBob = root.EzBob || {};
 
   EzBob.ResetPasswordView = (function(_super) {
+
     __extends(ResetPasswordView, _super);
 
     function ResetPasswordView() {
       this.focusCaptcha = __bind(this.focusCaptcha, this);
+
       this.focusAnswer = __bind(this.focusAnswer, this);
-      this.focusEmail = __bind(this.focusEmail, this);      _ref = ResetPasswordView.__super__.constructor.apply(this, arguments);
-      return _ref;
+
+      this.focusEmail = __bind(this.focusEmail, this);
+      return ResetPasswordView.__super__.constructor.apply(this, arguments);
     }
 
     ResetPasswordView.prototype.template = "#restore-pass-template";
@@ -58,7 +61,6 @@
 
     ResetPasswordView.prototype.events = {
       "click #getQuestion": "getQuestionBtnClicked",
-      "keyup #email": "emailKeyuped",
       "click #restore": "restoreClicked",
       "keyup #email": "inputEmailChanged",
       "change #email": "inputEmailChanged",
@@ -71,7 +73,6 @@
     ResetPasswordView.prototype.restoreClicked = function(e) {
       var $el,
         _this = this;
-
       if (this.ui.restoreBtn.hasClass("disabled")) {
         return false;
       }
@@ -120,7 +121,6 @@
 
     ResetPasswordView.prototype.inputCaptchaChanged = function() {
       var enabled;
-
       this.captchaEnabled = this.validator.check($(this.ui.captcha.selector));
       enabled = this.answerEnabled && this.emailEnabled && this.captchaEnabled;
       return this.ui.getQuestionBtn.toggleClass('disabled', !enabled);
@@ -128,7 +128,6 @@
 
     ResetPasswordView.prototype.inputEmailChanged = function() {
       var enabled;
-
       this.emailEnabled = this.validator.check(this.ui.email);
       enabled = this.answerEnabled && this.emailEnabled && this.captchaEnabled;
       return this.ui.getQuestionBtn.toggleClass('disabled', !enabled);
@@ -136,7 +135,6 @@
 
     ResetPasswordView.prototype.inputAnswerChanged = function() {
       var enabled;
-
       this.answerEnabled = this.validator.check(this.ui.answer);
       enabled = this.answerEnabled && this.emailEnabled && this.captchaEnabled;
       return this.ui.restoreBtn.toggleClass('disabled', !enabled);
@@ -154,7 +152,6 @@
 
     ResetPasswordView.prototype.getQuestionBtnClicked = function() {
       var _this = this;
-
       if (this.ui.getQuestionBtn.hasClass("disabled")) {
         return false;
       }
@@ -163,6 +160,10 @@
       this.ui.questionArea.hide();
       this.focus = null;
       return $.post("QuestionForEmail", this.ui.form.serialize()).done(function(response) {
+        if (response.broker) {
+          document.location.href = "" + window.gRootPath + "Broker#ForgotPassword";
+          return true;
+        }
         if (!EzBob.isNullOrEmpty(response.errorMessage) || !EzBob.isNullOrEmpty(response.error)) {
           EzBob.App.trigger('error', response.errorMessage || response.error);
           _this.ui.questionArea.hide();
@@ -194,7 +195,6 @@
 
     ResetPasswordView.prototype.initStatusIcons = function(e) {
       var oFieldStatusIcons;
-
       oFieldStatusIcons = this.$el.find('IMG.field_status');
       oFieldStatusIcons.filter('.required').field_status({
         required: true

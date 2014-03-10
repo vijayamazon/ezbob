@@ -20,7 +20,6 @@
 
 	using Scorto.Web;
 	using StructureMap;
-	using ActionResult = EzServiceReference.ActionResult;
 
 	#endregion using
 
@@ -33,6 +32,7 @@
 			m_oConfig = ObjectFactory.GetInstance<IEzBobConfiguration>();
 			m_oLog = new SafeILog(LogManager.GetLogger(typeof(BrokerHomeController)));
 			m_oServiceClient = new ServiceClient();
+			m_oHelper = new BrokerHelper(m_oServiceClient, m_oLog);
 		} // constructor
 
 		#endregion constructor
@@ -48,16 +48,7 @@
 			ViewData[sAuth] = string.Empty;
 
 			if (User.Identity.IsAuthenticated) {
-				BoolActionResult bar = null;
-
-				try {
-					bar = m_oServiceClient.Instance.IsBroker(User.Identity.Name);
-				}
-				catch (Exception e) {
-					m_oLog.Warn(e, "Failed to determine validity of broker email {0}", User.Identity.Name);
-				} // try
-
-				string sAuthenticationResult = ((bar != null) && bar.Value) ? User.Identity.Name : sForbidden;
+				string sAuthenticationResult = m_oHelper.IsBroker(User.Identity.Name) ? User.Identity.Name : sForbidden;
 
 				ViewData[sAuth] = sAuthenticationResult;
 
@@ -177,15 +168,8 @@
 				return new BrokerForJsonResult("You are already logged in.");
 			} // if
 
-			try {
-				m_oServiceClient.Instance.BrokerLogin(LoginEmail, LoginPassword);
-			}
-			catch (Exception e) {
-				m_oLog.Alert(e, "Failed to login as a broker.");
+			if (!m_oHelper.TryLogin(LoginEmail, LoginPassword))
 				return new BrokerForJsonResult("Failed to log in.");
-			} // try
-
-			FormsAuthentication.SetAuthCookie(LoginEmail, true);
 
 			m_oLog.Debug("Broker login succeded for: {0}", LoginEmail);
 
@@ -566,6 +550,7 @@
 		private readonly IEzBobConfiguration m_oConfig;
 		private readonly ASafeLog m_oLog;
 		private readonly ServiceClient m_oServiceClient;
+		private readonly BrokerHelper m_oHelper;
 
 		#endregion fields
 

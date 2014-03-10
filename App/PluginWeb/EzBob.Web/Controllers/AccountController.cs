@@ -48,6 +48,7 @@ namespace EzBob.Web.Controllers
 		private readonly ICustomerStatusesRepository _customerStatusesRepository;
 		private readonly DatabaseDataHelper _helper;
 		private static readonly object initSessionLock = new object();
+		private readonly BrokerHelper m_oBrokerHelper;
 
 		public AccountController(
 			DatabaseDataHelper helper,
@@ -76,6 +77,7 @@ namespace EzBob.Web.Controllers
 			_testCustomers = testCustomers;
 			_configurationVariables = configurationVariables;
 			_customerStatusesRepository = customerStatusesRepository;
+			m_oBrokerHelper = new BrokerHelper();
 		}
 
 		//------------------------------------------------------------------------
@@ -162,78 +164,69 @@ namespace EzBob.Web.Controllers
 			// If we got this far, something failed, redisplay form
 			return View(model);
 		}
-		//------------------------------------------------------------------------
-		[HttpPost]
-		public JsonNetResult CustomerLogOn(LogOnModel model)
-		{
 
+		[HttpPost]
+		public JsonNetResult CustomerLogOn(LogOnModel model) {
 			var customerIp = Request.ServerVariables["REMOTE_ADDR"];
 
-
 			string errorMessage = null;
-			if (ModelState.IsValid)
-			{
+
+			if (ModelState.IsValid) {
+				if (m_oBrokerHelper.IsBroker(model.UserName)) {
+					m_oBrokerHelper.TryLogin(model.UserName, model.Password);
+					return this.JsonNet(new { success = true, errorMessage, broker = true });
+				} // if is broker
+
 				var user = _users.GetUserByLogin(model.UserName);
 
 				if (user == null)
-				{
 					errorMessage = @"User not found or incorrect password.";
-				}
-				else
-				{
+				else {
 					var isUnderwriter = user.Roles.Any(r => r.Id == 31 || r.Id == 32 || r.Id == 33);
-					if (!isUnderwriter)
-					{
+
+					if (!isUnderwriter) {
 						var customer = _customers.Get(user.Id);
-						if (customer.CollectionStatus.CurrentStatus.Name == "Disabled")
-						{
+
+						if (customer.CollectionStatus.CurrentStatus.Name == "Disabled") {
 							errorMessage = @"This account is closed, please contact <span class='bold'>ezbob</span> customer care<br/> customercare@ezbob.com";
-							_sessionIpLog.AddSessionIpLog(new CustomerSession()
-							{
+							_sessionIpLog.AddSessionIpLog(new CustomerSession {
 								CustomerId = user.Id,
 								StartSession = DateTime.Now,
 								Ip = customerIp,
 								IsPasswdOk = false,
 								ErrorMessage = errorMessage
 							});
-							return this.JsonNet(new { success = false, errorMessage });
-						}
-					}
 
-					if (_membershipProvider.ValidateUser(model.UserName, model.Password))
-					{
-						_sessionIpLog.AddSessionIpLog(new CustomerSession()
-							{
-								CustomerId = user.Id,
-								StartSession = DateTime.Now,
-								Ip = customerIp,
-								IsPasswdOk = true
-							});
+							return this.JsonNet(new { success = false, errorMessage });
+						} // if user is disabled
+					} // if not underwriter
+
+					if (_membershipProvider.ValidateUser(model.UserName, model.Password)) {
+						_sessionIpLog.AddSessionIpLog(new CustomerSession {
+							CustomerId = user.Id,
+							StartSession = DateTime.Now,
+							Ip = customerIp,
+							IsPasswdOk = true
+						});
 
 						user.LoginFailedCount = 0;
 						SetCookie(model);
 						return this.JsonNet(new { success = true, model });
-					}
-					else
-					{
-						if (user.LoginFailedCount < 3)
-						{
-							_sessionIpLog.AddSessionIpLog(new CustomerSession()
-							{
-								CustomerId = user.Id,
-								StartSession = DateTime.Now,
-								Ip = customerIp,
-								IsPasswdOk = false
-							});
-						}
-					}
+					} // if logged in successfully
 
-					if (user.LoginFailedCount >= 3)
-					{
-						errorMessage =
-							"More than 3 unsuccessful login attempts have been made. Resetting user password";
-						_sessionIpLog.AddSessionIpLog(new CustomerSession()
-						{
+					if (user.LoginFailedCount < 3) {
+						_sessionIpLog.AddSessionIpLog(new CustomerSession {
+							CustomerId = user.Id,
+							StartSession = DateTime.Now,
+							Ip = customerIp,
+							IsPasswdOk = false
+						});
+					} // if login failed count is still ok
+
+					if (user.LoginFailedCount >= 3) {
+						errorMessage = "More than 3 unsuccessful login attempts have been made. Resetting user password";
+
+						_sessionIpLog.AddSessionIpLog(new CustomerSession {
 							CustomerId = user.Id,
 							StartSession = DateTime.Now,
 							Ip = customerIp,
@@ -249,15 +242,12 @@ namespace EzBob.Web.Controllers
 						user.IsPasswordRestored = true;
 						user.LoginFailedCount = 0;
 
-						errorMessage =
-							@"Three unsuccessful login attempts have been made. <span class='bold'>ezbob</span> has issued you with a temporary password. Please check your e-mail.";
+						errorMessage = @"Three unsuccessful login attempts have been made. <span class='bold'>ezbob</span> has issued you with a temporary password. Please check your e-mail.";
 					}
 					else
-					{
 						errorMessage = @"User not found or incorrect password.";
-					}
-				}
-			}
+				} // if user was found by email
+			} // if model is valid
 
 			// If we got this far, something failed, redisplay form
 			return this.JsonNet(new { success = false, errorMessage });
@@ -481,17 +471,19 @@ namespace EzBob.Web.Controllers
 		//------------------------------------------------------------------------        
 		[CaptchaValidationFilter(Order = 999999)]
 		[Ajax]
-		public JsonNetResult QuestionForEmail(string email)
-		{
+		public JsonNetResult QuestionForEmail(string email) {
 			if (!ModelState.IsValid)
-			{
 				return GetModelStateErrors(ModelState);
-			}
+
+			if (m_oBrokerHelper.IsBroker(email))
+				return this.JsonNet(new { broker = true });
+
 			var user = _users.GetAll().FirstOrDefault(x => x.EMail == email || x.Name == email);
+
 			return user == null ?
 				this.JsonNet(new { error = "User : '" + email + "' was not found" }) :
 				this.JsonNet(new { question = user.SecurityQuestion != null ? user.SecurityQuestion.Name : "" });
-		}
+		} // QuestionForEmail
 
 		//------------------------------------------------------------------------        
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
