@@ -3,6 +3,7 @@
 	using ActionResults;
 	using EzBob.Backend.Strategies;
 	using EzBob.Models.Agreements;
+	using Ezbob.Database;
 	using FraudChecker;
 
 	[ServiceContract(SessionMode = SessionMode.Allowed)]
@@ -270,6 +271,9 @@
 
 		[OperationContract]
 		BasicInterestRateActionResult GetBasicInterestRate();
+
+		[OperationContract]
+		DataTableActionResult GetSpResultTable(string spName, params QueryParameter[] parameters);
 	} // interface IEzService
 } // namespace EzService
 

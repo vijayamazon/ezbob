@@ -1,10 +1,22 @@
 ﻿namespace EzService {
-	using System.Collections.Generic;
 	using System.Linq;
 	using ActionResults;
 	using EzBob.Backend.Strategies;
+	using Ezbob.Database;
 
 	partial class EzServiceImplementation {
+		public DataTableActionResult GetSpResultTable(string spName, params QueryParameter[] parameters)
+		{
+			GetSpResultTable strategyInstance;
+			var result = ExecuteSync(out strategyInstance, null, null, spName, parameters);
+
+			return new DataTableActionResult
+			{
+				MetaData = result,
+				DataTable = strategyInstance.Result
+			};
+		} // GetSpResultTable
+
 		public BasicInterestRateActionResult GetBasicInterestRate()
 		{
 			GetBasicInterestRates strategyInstance;
