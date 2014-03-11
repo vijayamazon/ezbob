@@ -1694,6 +1694,7 @@
     <Content Include="Views\Shared\_NanoRep.cshtml" />
     <Content Include="Views\Shared\_NanoRepSupport.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\SideBars\_NanoRepSideBar.cshtml" />
+    <Content Include="Views\Shared\_GoogleTagManager.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
