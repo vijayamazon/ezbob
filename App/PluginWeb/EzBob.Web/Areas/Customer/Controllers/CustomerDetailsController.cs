@@ -28,49 +28,6 @@
 	public class CustomerDetailsController : Controller {
 		#region public
 
-		#region static method ValidatePersonalInfo
-
-		[NonAction]
-		public static void ValidatePersonalInfo(PersonalInfo personalInfo)
-		{
-			if (personalInfo == null)
-				throw new ArgumentNullException("personalInfo");
-
-			if (string.IsNullOrEmpty(personalInfo.FirstName))
-				throw new ArgumentNullException("personalInfo." + "FirstName");
-
-			if (string.IsNullOrEmpty(personalInfo.Surname))
-				throw new ArgumentNullException("personalInfo." + "Surname");
-		} // ValidatePersonalInfo
-
-		[NonAction]
-		static string UppercaseWords(string value)
-		{
-			char[] array = value.ToCharArray();
-			// Handle the first letter in the string.
-			if (array.Length >= 1)
-			{
-				if (char.IsLower(array[0]))
-				{
-					array[0] = char.ToUpper(array[0]);
-				}
-			}
-			// Scan through the letters, checking for spaces.
-			// ... Uppercase the lowercase letters following spaces.
-			for (int i = 1; i < array.Length; i++)
-			{
-				if (array[i - 1] == ' ')
-				{
-					if (char.IsLower(array[i]))
-					{
-						array[i] = char.ToUpper(array[i]);
-					}
-				}
-			}
-			return new string(array);
-		}
-		#endregion static method ValidatePersonalInfo
-
 		#region constructor
 
 		public CustomerDetailsController(
@@ -259,22 +216,20 @@
 			List<CustomerAddress> personalAddress,
 			List<CustomerAddress> prevPersonAddresses,
 			string dateOfBirth
-		)
-		{
+		) {
 			var customer = _context.Customer;
 
-			ValidatePersonalInfo(personalInfo);
+			if (personalInfo == null)
+				throw new ArgumentNullException("personalInfo");
 
 			personalInfo.DateOfBirth = DateTime.ParseExact(dateOfBirth, "d/M/yyyy", CultureInfo.InvariantCulture);
-			personalInfo.Surname = UppercaseWords(personalInfo.Surname.Trim());
-			personalInfo.FirstName = UppercaseWords(personalInfo.FirstName.Trim());
-			personalInfo.MiddleInitial = string.IsNullOrEmpty(personalInfo.MiddleInitial) ? "" : UppercaseWords(personalInfo.MiddleInitial.Trim());
-			personalInfo.Fullname = string.Format("{0} {1} {2}", personalInfo.FirstName, personalInfo.Surname, personalInfo.MiddleInitial);
 
 			customer.ConsentToSearch = personalInfo.ConsentToSearch;
-			if (customer.PersonalInfo != null)
-			{
+			if (customer.PersonalInfo != null) {
 				personalInfo.OverallTurnOver = customer.PersonalInfo.OverallTurnOver;
+				personalInfo.FirstName = customer.PersonalInfo.FirstName;
+				personalInfo.MiddleInitial = customer.PersonalInfo.MiddleInitial;
+				personalInfo.Surname = customer.PersonalInfo.Surname;
 			} // if
 
 			customer.PersonalInfo = personalInfo;

@@ -302,20 +302,29 @@ namespace EzBob.Web.Controllers
 		[ActionName("SignUp")]
 		[ValidateJsonAntiForgeryToken]
 		[CaptchaValidationFilter(Order = 999999)]
-		public JsonNetResult SignUpAjax(User model, string signupPass1, string signupPass2, string securityQuestion, string promoCode, double? amount, string mobilePhone, string mobileCode, string switchedToCaptcha)
-		{
+		public JsonNetResult SignUpAjax(
+			User model,
+			string signupPass1,
+			string signupPass2,
+			string securityQuestion,
+			string promoCode,
+			double? amount,
+			string mobilePhone,
+			string mobileCode,
+			string switchedToCaptcha,
+			string firstName,
+			string middleInitial,
+			string surname
+		) {
 			if (!ModelState.IsValid)
-			{
 				return GetModelStateErrors(ModelState);
-			}
+
 			if (model.SecurityAnswer.Length > 199)
-			{
 				throw new Exception("Maximum answer length is 199 characters");
-			}
-			try
-			{
+
+			try {
 				var customerIp = Request.ServerVariables["REMOTE_ADDR"];
-				SignUpInternal(model.EMail, signupPass1, signupPass2, securityQuestion, model.SecurityAnswer, promoCode, amount, mobilePhone, mobileCode, switchedToCaptcha == "True");
+				SignUpInternal(model.EMail, signupPass1, signupPass2, securityQuestion, model.SecurityAnswer, promoCode, amount, mobilePhone, mobileCode, switchedToCaptcha == "True", firstName, middleInitial, surname);
 				FormsAuthentication.SetAuthCookie(model.EMail, false);
 
 				var user = _users.GetUserByLogin(model.EMail);
@@ -339,111 +348,128 @@ namespace EzBob.Web.Controllers
 			}
 		}
 
-		private void SignUpInternal(string email, string signupPass1, string signupPass2, string securityQuestion, string securityAnswer, string promoCode, double? amount, string mobilePhone, string mobileCode, bool switchedToCaptcha)
-		{
+		private void SignUpInternal(
+			string email,
+			string signupPass1,
+			string signupPass2,
+			string securityQuestion,
+			string securityAnswer,
+			string promoCode,
+			double? amount,
+			string mobilePhone,
+			string mobileCode,
+			bool switchedToCaptcha,
+			string firstName,
+			string middleInitial,
+			string surname
+		) {
 			MembershipCreateStatus status;
 
-			if (string.IsNullOrEmpty(email)) throw new Exception(DbStrings.NotValidEmailAddress);
-			if (!string.Equals(signupPass1, signupPass2)) throw new Exception(DbStrings.PasswordDoesNotMatch);
+			if (string.IsNullOrEmpty(email))
+				throw new Exception(DbStrings.NotValidEmailAddress);
+
+			if (!string.Equals(signupPass1, signupPass2))
+				throw new Exception(DbStrings.PasswordDoesNotMatch);
 
 			var maxPassLength = _config.PasswordPolicyType == "hard" ? 7 : 6;
 			if (signupPass1.Length < maxPassLength)
-			{
 				throw new Exception(DbStrings.NotValidEmailAddress);
-			}
+
+			firstName = (firstName ?? string.Empty).Trim();
+			if (string.IsNullOrWhiteSpace(firstName))
+				throw new Exception("First name is not specified.");
+
+			surname = (surname ?? string.Empty).Trim();
+			if (string.IsNullOrWhiteSpace(surname))
+				throw new Exception("Surname is not specified.");
+
+			middleInitial = (middleInitial ?? string.Empty).Trim();
 
 			bool isTwilioEnabled = Convert.ToBoolean(@Session["IsSmsValidationActive"]);
-			if (isTwilioEnabled && !switchedToCaptcha)
-			{
+			if (isTwilioEnabled && !switchedToCaptcha) {
 				bool isCorrect = m_oServiceClient.Instance.ValidateMobileCode(mobilePhone, mobileCode).Value;
 				if (!isCorrect)
 					throw new Exception("Invalid code");
-			}
+			} // if
 
 			_membershipProvider.CreateUser(email, signupPass1, email, securityQuestion, securityAnswer, false, null, out status);
-			if (status == MembershipCreateStatus.Success)
-			{
+			if (status == MembershipCreateStatus.Success) {
 				var user = _users.GetUserByLogin(email);
 				var g = new RefNumberGenerator(_customers);
 				var isAutomaticTest = IsAutomaticTest(email);
-				var customer = new Customer
-					{
-						Name = email,
-						Id = user.Id,
-						Status = Status.Registered,
-						RefNumber = g.GenerateForCustomer(),
-						WizardStep = _helper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.SignUp),
-						CollectionStatus =
-							new CollectionStatus { CurrentStatus = _customerStatusesRepository.GetByName("Enabled") },
-						IsTest = isAutomaticTest,
-						IsOffline = (bool?)null,
-						PromoCode = promoCode,
-						CustomerInviteFriend = new List<CustomerInviteFriend>(),
-						PersonalInfo = new PersonalInfo { MobilePhone = mobilePhone },
-						TrustPilotStatus = _helper.TrustPilotStatusRepository.Find(TrustPilotStauses.Nether),
-					};
+
+				var customer = new Customer {
+					Name = email,
+					Id = user.Id,
+					Status = Status.Registered,
+					RefNumber = g.GenerateForCustomer(),
+					WizardStep = _helper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.SignUp),
+					CollectionStatus = new CollectionStatus { CurrentStatus = _customerStatusesRepository.GetByName("Enabled") },
+					IsTest = isAutomaticTest,
+					IsOffline = (bool?)null,
+					PromoCode = promoCode,
+					CustomerInviteFriend = new List<CustomerInviteFriend>(),
+					PersonalInfo = new PersonalInfo {
+						MobilePhone = mobilePhone,
+						FirstName = firstName,
+						MiddleInitial = middleInitial,
+						Surname = surname,
+						Fullname = string.Format("{0} {1} {2}", firstName, surname, middleInitial).Trim(),
+					},
+					TrustPilotStatus = _helper.TrustPilotStatusRepository.Find(TrustPilotStauses.Nether),
+				};
+
 				_log.DebugFormat("Customer {1} ({0}): wizard step has been updated to :{2}", customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.SignUp);
 
 				var sourceref = Request.Cookies["sourceref"];
-				if (sourceref != null)
-				{
+				if (sourceref != null) {
 					var cookie = new HttpCookie("sourceref", "") { Expires = DateTime.Now.AddMonths(-1), HttpOnly = true, Secure = true };
 					Response.Cookies.Add(cookie);
 					customer.ReferenceSource = sourceref.Value;
-				}
+				} // if
 
 				var googleCookie = Request.Cookies["__utmz"];
-				if (googleCookie != null)
-				{
+				if (googleCookie != null) {
 					var cookie = new HttpCookie("__utmz", "") { Expires = DateTime.Now.AddMonths(-1), HttpOnly = true, Secure = true };
 					Response.Cookies.Add(cookie);
 					customer.GoogleCookie = googleCookie.Value;
-				}
+				} // if
 
 				var customerInviteFriend = new CustomerInviteFriend(customer);
 				var inviteFriend = Request.Cookies["invite"];
-				if (inviteFriend != null)
-				{
+				if (inviteFriend != null) {
 					var cookie = new HttpCookie("inviteFriend", "") { Expires = DateTime.Now.AddMonths(-1), HttpOnly = true, Secure = true };
 					Response.Cookies.Add(cookie);
 					customerInviteFriend.InvitedByFriendSource = inviteFriend.Value;
-				}
+				} // if
 
 				customer.CustomerInviteFriend.Add(customerInviteFriend);
 				var ezbobab = Request.Cookies["ezbobab"];
-				if (ezbobab != null)
-				{
+				if (ezbobab != null) {
 					var cookie = new HttpCookie("ezbobab", "") { Expires = DateTime.Now.AddMonths(-1), HttpOnly = true, Secure = true };
 					Response.Cookies.Add(cookie);
 					customer.ABTesting = ezbobab.Value;
-				}
+				} // if
 
 				var link = _confirmation.GenerateLink(customer);
 
 				if (Request.Cookies["istest"] != null)
-				{
 					customer.IsTest = true;
-				}
 
 				_customers.Save(customer);
 
-				customer.CustomerRequestedLoan = new List<CustomerRequestedLoan>
-					{
-						new CustomerRequestedLoan
-							{
-								Customer = customer,
-								Amount = amount,
-								Created = DateTime.UtcNow,
-							}
-					};
+				customer.CustomerRequestedLoan = new List<CustomerRequestedLoan> { new CustomerRequestedLoan {
+					Customer = customer,
+					Amount = amount,
+					Created = DateTime.UtcNow,
+				}};
 
 				m_oServiceClient.Instance.GreetingMailStrategy(user.Id, link);
-			}
+			} // if user created successfully
+
 			if (status == MembershipCreateStatus.DuplicateEmail)
-			{
 				throw new Exception("This email is already registered");
-			}
-		}
+		} // SignupInternal
 
 		private bool IsAutomaticTest(string email)
 		{

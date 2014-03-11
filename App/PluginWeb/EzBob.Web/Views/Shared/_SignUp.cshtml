@@ -3,120 +3,151 @@
 @using StructureMap
 @model dynamic
 @{
-    var securityQuestions = @ViewData["Questions"] as List<SecurityQuestion>;
-    var config = ObjectFactory.GetInstance<IEzBobConfiguration>();
-    string captchamode = config.CaptchaMode;
-    bool ebayPixelEnabled = config.EbayPixelEnabled;
-    bool instructionsEnabled = config.WizardInstructionsEnabled;
+	var securityQuestions = @ViewData["Questions"] as List<SecurityQuestion>;
+	var config = ObjectFactory.GetInstance<IEzBobConfiguration>();
+	string captchamode = config.CaptchaMode;
+	bool ebayPixelEnabled = config.EbayPixelEnabled;
+	bool instructionsEnabled = config.WizardInstructionsEnabled;
 }
 
-@using (Html.BeginForm("SignUp", "Account", new {Area = ""}, FormMethod.Post, new {@class = "signup clearfix"}))
-{
-    <h2 class="form_start">Create account</h2>
-    
-    if (ebayPixelEnabled)
-    {
-        <img src="https://ad-emea.doubleclick.net/activity;dc_pixel_url=rmboom;rm=ezbobregister;ord='<%- ordsu %>'?" width="1" height="1" border="0" alt="" />
-    }
-    
+@using (Html.BeginForm("SignUp", "Account", new { Area = "" }, FormMethod.Post, new { @class = "signup clearfix" })) {
+	<h2 class="form_start">Create account</h2>
+
+	if (ebayPixelEnabled) {
+		<img src="https://ad-emea.doubleclick.net/activity;dc_pixel_url=rmboom;rm=ezbobregister;ord='<%- ordsu %>'?" width="1" height="1" border="0" alt="" />
+	}
+
 	<div class="form_field_container">
 		<label class="attardi-input">
 			<span>Email address</span>
-		    <input type="email" name="Email" id="Email" tabindex="1" class="form_field" ui-event-control-id="signup:email" />
-            <img id="EmailImage" class="field_status required"/>
+			<input type="email" name="Email" id="Email" tabindex="1" class="form_field" ui-event-control-id="signup:email" />
+			<img id="EmailImage" class="field_status required" />
 		</label>
 	</div>
 
 	<div id="strength-password-view" class="form_field_container">
-		<label class ="attardi-input">
+		<label class="attardi-input">
 			<span>Password</span>
-		    <input type="password" tabindex="2" class="form_field" name="signupPass1" id="signupPass1" ui-event-control-id="signup:password1" />
-            <img id="Password1Image" class="field_status required"/>
+			<input type="password" tabindex="2" class="form_field" name="signupPass1" id="signupPass1" ui-event-control-id="signup:password1" />
+			<img id="Password1Image" class="field_status required" />
 		</label>
 		<p id="message" class="help-block"></p>
 	</div>
 
 	<div class="form_field_container">
-		<label class ="attardi-input">
+		<label class="attardi-input">
 			<span>Confirm password</span>
-		    <input type="password" tabindex="3" class="form_field" name="signupPass2" id="signupPass2" ui-event-control-id="signup:password2" />
-            <img id="Password2Image" class="field_status required"/>
+			<input type="password" tabindex="3" class="form_field" name="signupPass2" id="signupPass2" ui-event-control-id="signup:password2" />
+			<img id="Password2Image" class="field_status required" />
 		</label>
 	</div>
-    
-    <div class="form_field_container">
+
+	<div class="control-group form_field_container">
+		<div class="controls">
+			<label class="attardi-input">
+				<span>First name</span>
+				<input class="form_field" type="text" id="FirstName" name="FirstName" ui-event-control-id="personal-info:first_name" />
+				<img id="FirstNameImage" class="field_status required" />
+			</label>
+		</div>
+	</div>
+
+	<div class="control-group form_field_container notoffline">
+		<div class="controls">
+			<label class="attardi-input">
+				<span>Middle name</span>
+				<input type="text" id="MiddleInitial" name="MiddleInitial" class="form_field alphaOnly" ui-event-control-id="personal-info:middle_name" />
+				<img id="MiddleNameImage" class="field_status empty" />
+			</label>
+		</div>
+	</div>
+
+	<div class="control-group form_field_container">
+		<div class="controls">
+			<label class="attardi-input">
+				<span>Surname</span>
+				<input id="Surname" type="text" name="Surname" class="form_field" ui-event-control-id="personal-info:last_name" />
+				<img id="SurnameImage" class="field_status required" />
+			</label>
+		</div>
+	</div>
+	<input type="hidden" name="Fullname" />
+
+	<div class="form_field_container">
 		<label class="attardi-input">
 			<span>Secret question</span>
 			<select name="securityQuestion" id="securityQuestion" tabindex="4" class="form_field" ui-event-control-id="signup:security_question">
-			    <option value=""></option>
-			    @if (securityQuestions != null) {
-			        foreach (var item in securityQuestions) {
-			            <option value="@item.Id">@item.Name</option>
-			        } // foreach
-			    } // if
+				<option value=""></option>
+				@if (securityQuestions != null) {
+					foreach (var item in securityQuestions) {
+						<option value="@item.Id">@item.Name</option>
+					} // foreach
+				} // if
 			</select>
-            <img id="SecurityQuestionImage" class="field_status required" />
+			<img id="SecurityQuestionImage" class="field_status required" />
 		</label>
 	</div>
 
-    <div class="form_field_container">
-        <label class="attardi-input">
-            <span>Secret answer</span>
-            <input type="text" name="SecurityAnswer" id="SecurityAnswer" tabindex="5" class="form_field" ui-event-control-id="signup:security-answer" />
-            <img id="SecretAnswerImage" class="field_status required"/>
-        </label>
-    </div>
+	<div class="form_field_container">
+		<label class="attardi-input">
+			<span>Secret answer</span>
+			<input type="text" name="SecurityAnswer" id="SecurityAnswer" tabindex="5" class="form_field" ui-event-control-id="signup:security-answer" />
+			<img id="SecretAnswerImage" class="field_status required" />
+		</label>
+	</div>
 
-    <div class="form_field_container">
-        <label class ="attardi-input">
-            <span>Promotional code (optional)</span>
-            <input type="text" class="form_field" name="promoCode" id="promoCode" ui-event-control-id="signup:promo-code"/>
-            <img id="promoCodeImage" class="field_status"/>
-        </label>
-    </div>
+	<div class="form_field_container">
+		<label class="attardi-input">
+			<span>Promotional code (optional)</span>
+			<input type="text" class="form_field" name="promoCode" id="promoCode" ui-event-control-id="signup:promo-code" />
+			<img id="promoCodeImage" class="field_status" />
+		</label>
+	</div>
 
-    <div class="form_field_container">
-        <label class="attardi-input">
-            <span>Requested loan amount</span>
-            <input type="text" name="amount" id="amount" tabindex="6" class="form_field" ui-event-control-id="signup:requested-amount" />
-            <img id="amountImage" class="field_status required"/>
-        </label>
-    </div>
+	<div class="form_field_container">
+		<label class="attardi-input">
+			<span>Requested loan amount</span>
+			<input type="text" name="amount" id="amount" tabindex="6" class="form_field" ui-event-control-id="signup:requested-amount" />
+			<img id="amountImage" class="field_status required" />
+		</label>
+	</div>
     
-    <div id="twilioDiv" class="hide">
-        <div class="form_field_container">
-            <label class ="attardi-input">
-				<div class="code-sent-style-container"><label id="codeSentLabel" class="code-sent-style">Code sent</label></div>
-                <span>Mobile phone</span>
-                <input type="text" class="phonenumber form_field_left_side form_field" name="mobilePhone" id="mobilePhone" tabindex="11" ui-event-control-id="signup:mobile-phone"/>
-                <img id="mobilePhoneImage" class="field_status required"/>
-                <input id="generateMobileCode" class="btn green form_field_right_side_signup_phone disabled" type="button" value="Send activation code" ui-event-control-id="signup:generate-mobile-code" />
-            </label>
-        </div>
-    
-        <div id="mobileCodeDiv" class="form_field_container hide">
-            <label class ="attardi-input">
-                <span>Mobile phone authentication code</span>
-                <input type="text" class="phonenumbercode form_field_left_side form_field" name="mobileCode" id="mobileCode" tabindex="12" ui-event-control-id="signup:mobile-code"/>
-                <img id="mobileCodeImage" class="field_status required"/>
-                <input id="switchToCaptcha" class="btn green form_field_right_side_signup_phone" type="button" value="Did not recieve code" ui-event-control-id="signup:switch-to-captcha" />
-            </label>
-        </div>
-    </div>
-    
-    <div id="captchaDiv" class="hide">
-        <div class="form_field_container">
-            @EzForm.Captcha(captchamode)
-        </div>
-    </div>
-    
-    <div class="form_buttons_container">
-        <div class="attardi-button">
-            <input type="submit" id="signupSubmitButton" value="Continue" class="rc-button green continue disabled" tabindex="13" ui-event-control-id="signup:submit">
-        </div>
-    </div>
+	<div id="twilioDiv" class="hide">
+		<div class="form_field_container">
+			<label class="attardi-input">
+				<div class="code-sent-style-container">
+					<label id="codeSentLabel" class="code-sent-style">Code sent</label>
+				</div>
+				<span>Mobile phone</span>
+				<input type="text" class="phonenumber form_field_left_side form_field" name="mobilePhone" id="mobilePhone" tabindex="11" ui-event-control-id="signup:mobile-phone" />
+				<img id="mobilePhoneImage" class="field_status required" />
+				<input id="generateMobileCode" class="btn green form_field_right_side_signup_phone disabled" type="button" value="Send activation code" ui-event-control-id="signup:generate-mobile-code" />
+			</label>
+		</div>
 
-    if (instructionsEnabled) {
+		<div id="mobileCodeDiv" class="form_field_container hide">
+			<label class="attardi-input">
+				<span>Mobile phone authentication code</span>
+				<input type="text" class="phonenumbercode form_field_left_side form_field" name="mobileCode" id="mobileCode" tabindex="12" ui-event-control-id="signup:mobile-code" />
+				<img id="mobileCodeImage" class="field_status required" />
+				<input id="switchToCaptcha" class="btn green form_field_right_side_signup_phone" type="button" value="Did not recieve code" ui-event-control-id="signup:switch-to-captcha" />
+			</label>
+		</div>
+	</div>
+    
+	<div id="captchaDiv" class="hide">
+		<div class="form_field_container">
+			@EzForm.Captcha(captchamode)
+		</div>
+	</div>
+
+	<div class="form_buttons_container">
+		<div class="attardi-button">
+			<input type="submit" id="signupSubmitButton" value="Continue" class="rc-button green continue disabled" tabindex="13" ui-event-control-id="signup:submit">
+		</div>
+	</div>
+
+	if (instructionsEnabled) {
 		<div class="hide">
 			<div id="offline_help" class="help_window">
 				<h2>Welcome to the ezbob application process</h2>

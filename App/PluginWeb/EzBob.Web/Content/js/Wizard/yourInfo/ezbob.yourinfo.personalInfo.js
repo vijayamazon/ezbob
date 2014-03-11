@@ -24,15 +24,17 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 
         this.readyToProceed = false;
 
+	    this.model.fetch();
+
         this.constructor.__super__.initialize.call(this);
     }, // initialize
 
     showConsent: function () {
         var consentAgreementModel = new EzBob.ConsentAgreementModel({
             id: this.model.get('Id'),
-            firstName: this.$el.find('input[name="FirstName"]').val(),
-            middleInitial: this.$el.find('input[name="MiddleInitial"]').val(),
-            surname: this.$el.find('input[name="Surname"]').val()
+            firstName: this.model.get('CustomerPersonalInfo').FirstName,
+            middleInitial: this.model.get('CustomerPersonalInfo').MiddleInitial,
+            surname: this.model.get('CustomerPersonalInfo').Surname,
         });
 
         var consentAgreement = new EzBob.ConsentAgreement({ model: consentAgreementModel });
