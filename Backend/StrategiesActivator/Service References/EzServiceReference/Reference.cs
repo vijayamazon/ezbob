@@ -193,6 +193,7 @@ namespace StrategiesActivator.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.CrmLookupsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.QuickOfferActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.WizardConfigsActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.BasicInterestRateActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.StringListActionResult))]
     public partial class ActionResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
@@ -501,6 +502,29 @@ namespace StrategiesActivator.EzServiceReference {
                 if ((this.NumberOfMobileCodeAttemptsField.Equals(value) != true)) {
                     this.NumberOfMobileCodeAttemptsField = value;
                     this.RaisePropertyChanged("NumberOfMobileCodeAttempts");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="BasicInterestRateActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults")]
+    [System.SerializableAttribute()]
+    public partial class BasicInterestRateActionResult : StrategiesActivator.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private StrategiesActivator.EzServiceReference.SingleBasicInterestRate[] BasicInterestRatesField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public StrategiesActivator.EzServiceReference.SingleBasicInterestRate[] BasicInterestRates {
+            get {
+                return this.BasicInterestRatesField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.BasicInterestRatesField, value) != true)) {
+                    this.BasicInterestRatesField = value;
+                    this.RaisePropertyChanged("BasicInterestRates");
                 }
             }
         }
@@ -1393,6 +1417,99 @@ namespace StrategiesActivator.EzServiceReference {
                 if ((this.TotalCurrentAssetsField.Equals(value) != true)) {
                     this.TotalCurrentAssetsField = value;
                     this.RaisePropertyChanged("TotalCurrentAssets");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="SingleBasicInterestRate", Namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults")]
+    [System.SerializableAttribute()]
+    public partial class SingleBasicInterestRate : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int FromScoreField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int IdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int LoanInterestBaseField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int ToScoreField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int FromScore {
+            get {
+                return this.FromScoreField;
+            }
+            set {
+                if ((this.FromScoreField.Equals(value) != true)) {
+                    this.FromScoreField = value;
+                    this.RaisePropertyChanged("FromScore");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Id {
+            get {
+                return this.IdField;
+            }
+            set {
+                if ((this.IdField.Equals(value) != true)) {
+                    this.IdField = value;
+                    this.RaisePropertyChanged("Id");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int LoanInterestBase {
+            get {
+                return this.LoanInterestBaseField;
+            }
+            set {
+                if ((this.LoanInterestBaseField.Equals(value) != true)) {
+                    this.LoanInterestBaseField = value;
+                    this.RaisePropertyChanged("LoanInterestBase");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int ToScore {
+            get {
+                return this.ToScoreField;
+            }
+            set {
+                if ((this.ToScoreField.Equals(value) != true)) {
+                    this.ToScoreField = value;
+                    this.RaisePropertyChanged("ToScore");
                 }
             }
         }
@@ -2930,6 +3047,12 @@ namespace StrategiesActivator.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SaveAgreement", ReplyAction="http://tempuri.org/IEzService/SaveAgreementResponse")]
         System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> SaveAgreementAsync(int customerId, StrategiesActivator.EzServiceReference.AgreementModel model, string refNumber, string name, string template, string path1, string path2);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetBasicInterestRate", ReplyAction="http://tempuri.org/IEzService/GetBasicInterestRateResponse")]
+        StrategiesActivator.EzServiceReference.BasicInterestRateActionResult GetBasicInterestRate();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetBasicInterestRate", ReplyAction="http://tempuri.org/IEzService/GetBasicInterestRateResponse")]
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BasicInterestRateActionResult> GetBasicInterestRateAsync();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -3485,6 +3608,14 @@ namespace StrategiesActivator.EzServiceReference {
         
         public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> SaveAgreementAsync(int customerId, StrategiesActivator.EzServiceReference.AgreementModel model, string refNumber, string name, string template, string path1, string path2) {
             return base.Channel.SaveAgreementAsync(customerId, model, refNumber, name, template, path1, path2);
+        }
+        
+        public StrategiesActivator.EzServiceReference.BasicInterestRateActionResult GetBasicInterestRate() {
+            return base.Channel.GetBasicInterestRate();
+        }
+        
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BasicInterestRateActionResult> GetBasicInterestRateAsync() {
+            return base.Channel.GetBasicInterestRateAsync();
         }
     }
 }

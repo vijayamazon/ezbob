@@ -68,12 +68,14 @@
     <Compile Include="ActionResults\BrokerCustomersActionResult.cs" />
     <Compile Include="ActionResults\BrokerCustomerDetailsActionResult.cs" />
     <Compile Include="ActionResults\BrokerCustomerFilesActionResult.cs" />
+    <Compile Include="ActionResults\BasicInterestRateActionResult.cs" />
     <Compile Include="ActionResults\StringActionResult.cs" />
     <Compile Include="ActionResults\CrmLookupsActionResult.cs" />
     <Compile Include="ActionResults\QuickOfferActionResult.cs" />
     <Compile Include="ActionResults\DecimalActionResult.cs" />
     <Compile Include="EzServiceImplementation\agreement.cs" />
     <Compile Include="EzServiceImplementation\company.files.cs" />
+    <Compile Include="EzServiceImplementation\MiscQueries.cs" />
     <Compile Include="EzServiceImplementation\wizard.cs" />
     <Compile Include="EzServiceImplementation\land.registry.cs" />
     <Compile Include="EzServiceImplementation\broker.cs" />
@@ -95,7 +97,9 @@
     <Compile Include="IEzService.cs" />
     <Compile Include="IHost.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-<Compile Include="..\..\..\Common\CommonAssemblyInfo.cs"><Link>Properties\CommonAssemblyInfo.cs</Link></Compile>
+    <Compile Include="..\..\..\Common\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="ActionResults\WizardConfigsActionResult.cs" />
   </ItemGroup>
   <ItemGroup>

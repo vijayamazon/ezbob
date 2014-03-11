@@ -32,6 +32,7 @@
     <MetadataFile FileName="EzBob.Backend.Models.xsd" MetadataType="Schema" ID="c18e4cb6-4084-4b6c-a62d-7c2b6e2e7f27" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="EzBob.Models.Agreements.xsd" MetadataType="Schema" ID="7fbcfae8-557b-47a0-bdb9-d56dbb57c34c" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="EzBob.Web.Areas.Customer.Models.xsd" MetadataType="Schema" ID="e60663b2-9a7b-4df1-a08c-8ce5d91e2ad3" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
+    <MetadataFile FileName="EzService.ActionResults.xsd" MetadataType="Schema" ID="83cc8ade-63a4-4afb-b423-ac8628102d80" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

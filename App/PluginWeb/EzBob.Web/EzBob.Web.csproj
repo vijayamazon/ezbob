@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -210,7 +210,6 @@
     <Compile Include="Areas\Customer\Controllers\Exceptions\UserNotFoundException.cs" />
     <Compile Include="Areas\Customer\Controllers\hmrc_file_processor.cs" />
     <Compile Include="Areas\Underwriter\Controllers\UploadHmrcController.cs" />
-
     <Compile Include="Areas\Underwriter\Models\LoanOfferRangeModel.cs" />
     <Compile Include="Code\BrokerHelper.cs" />
     <Compile Include="Code\UiEvents\UiActionEventModel.cs" />
@@ -1270,7 +1269,7 @@
     </Content>
     <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.LoanOfferRanges.js">
       <DependentUpon>EzBob.Underwriter.Settings.LoanOfferRanges.coffee</DependentUpon>
-	</Content>
+    </Content>
     <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.Campaign.min.js">
       <DependentUpon>EzBob.Underwriter.Settings.Campaign.coffee</DependentUpon>
     </Content>
@@ -1430,6 +1429,12 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\EzServiceReference\EzBob.Web.Areas.Customer.Models.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.BasicInterestRateActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <None Include="Service References\EzServiceReference\EzService.ActionResults.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\EzServiceReference\FraudChecker.xsd">

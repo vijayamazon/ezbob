@@ -35,5 +35,5 @@
 		} // Execute
 
 		#endregion property Execute
-	} // class GenerateMobileCode
+	} // class GetWizardConfigs
 } // namespace

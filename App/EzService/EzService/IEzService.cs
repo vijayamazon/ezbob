@@ -1,5 +1,6 @@
 ﻿namespace EzService {
 	using System.ServiceModel;
+	using ActionResults;
 	using EzBob.Backend.Strategies;
 	using EzBob.Models.Agreements;
 	using FraudChecker;
@@ -258,14 +259,17 @@
 		[OperationContract]
 		ActionMetaData FinishWizard(int customerId, int underwriterId);
 
-		#endregion
+		#endregion Wizard
 
 		#region Agreements
 
 		[OperationContract]
 		ActionMetaData SaveAgreement(int customerId, AgreementModel model, string refNumber, string name, TemplateModel template, string path1, string path2);
 
-		#endregion Wizard
+		#endregion Agreements
+
+		[OperationContract]
+		BasicInterestRateActionResult GetBasicInterestRate();
 	} // interface IEzService
 } // namespace EzService
 

@@ -6,6 +6,7 @@
   <xs:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/FraudChecker" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Models.Agreements" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults" />
   <xs:element name="Shutdown">
     <xs:complexType>
       <xs:sequence />
@@ -1086,6 +1087,18 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element xmlns:q75="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="SaveAgreementResult" nillable="true" type="q75:ActionMetaData" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetBasicInterestRate">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetBasicInterestRateResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q76="http://schemas.datacontract.org/2004/07/EzService.ActionResults" minOccurs="0" name="GetBasicInterestRateResult" nillable="true" type="q76:BasicInterestRateActionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

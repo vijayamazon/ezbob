@@ -2,6 +2,7 @@
 {
 	using System.Data;
 	using System.Web.Mvc;
+	using Code;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using Infrastructure.csrf;
@@ -14,21 +15,20 @@
 
 	public class StrategySettingsController : Controller
 	{
-
+		private readonly ServiceClient serviceClient;
 		private readonly IConfigurationVariablesRepository _configurationVariablesRepository;
 		private readonly CampaignRepository _campaignRepository;
 		private readonly CampaignTypeRepository _campaignTypeRepository;
 		private readonly CustomerRepository _customerRepository;
-		private readonly BasicInterestRateRepository _basicInterestRateRepository;
 		private static readonly ILog Log = LogManager.GetLogger(typeof(StrategySettingsController));
 
-		public StrategySettingsController(IConfigurationVariablesRepository configurationVariablesRepository, CampaignRepository campaignRepository, CampaignTypeRepository campaignTypeRepository, CustomerRepository customerRepository, BasicInterestRateRepository basicInterestRateRepository)
+		public StrategySettingsController(IConfigurationVariablesRepository configurationVariablesRepository, CampaignRepository campaignRepository, CampaignTypeRepository campaignTypeRepository, CustomerRepository customerRepository)
 		{
 			_configurationVariablesRepository = configurationVariablesRepository;
 			_campaignRepository = campaignRepository;
 			_campaignTypeRepository = campaignTypeRepository;
 			_customerRepository = customerRepository;
-			_basicInterestRateRepository = basicInterestRateRepository;
+			serviceClient = new ServiceClient();
 		}
 
 		[Ajax]
@@ -63,7 +63,7 @@
 		[ValidateJsonAntiForgeryToken]
 		[HttpPost]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonNetResult SettingsGeneral(string BWABusinessCheck/*, string DisplayEarnedPoints*/)//in here
+		public JsonNetResult SettingsGeneral(string BWABusinessCheck/*, string DisplayEarnedPoints*/)
 		{
 			_configurationVariablesRepository.SetByName("BWABusinessCheck", BWABusinessCheck);
 			//_configurationVariablesRepository.SetByName("DisplayEarnedPoints", DisplayEarnedPoints);
@@ -363,9 +363,9 @@
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonNetResult SettingsLoanOfferRanges()
 		{
-			var loanOfferRangesList = _basicInterestRateRepository.GetAll().ToList();
-
-			var loanOfferRanges = loanOfferRangesList
+			var loanOfferRangesList = serviceClient.Instance.GetBasicInterestRate();
+			
+			var loanOfferRanges = loanOfferRangesList.BasicInterestRates
 				.Select(c => new LoanOfferRangeModel
 					{
 						Id = c.Id,
