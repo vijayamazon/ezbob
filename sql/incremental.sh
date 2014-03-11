@@ -1,23 +1,27 @@
 #!/bin/bash
 
-echo Incremental script started...
-
-SCRIPTS_PATH=${1}
-
-if [ ! -d "${SCRIPTS_PATH}" ]
-then
-	echo "Scripts path not found."
-	exit
-fi
-
 DIR="$( cd "$( dirname "${0}" )" && pwd )"
 
 ISQL="${DIR}/osql.exe"
 
+function Say {
+	echo "$@"
+} # Say
+
+SCRIPTS_PATH=${1}
+
+Say Incremental script started with ...
+
+if [ ! -d "${SCRIPTS_PATH}" ]
+then
+	Say "Scripts path not found."
+	exit
+fi
+
 HOSTNAME=`hostname | tr [:upper:] [:lower:]`
 CONF_FILE_NAME=${DIR}/${HOSTNAME}.conf
 
-echo Reading configuration from ${CONF_FILE_NAME}
+Say Reading configuration from ${CONF_FILE_NAME}
 
 while read name val
 do
@@ -26,57 +30,58 @@ done < ${CONF_FILE_NAME}
 
 if [ "x${ODBC}" = "x" ]
 then
-	echo "Database ODBC source not specified."
+	Say "Database ODBC source not specified."
 	exit
 fi
 
 if [ "x${DB}" = "x" ]
 then
-	echo "Database name not specified."
+	Say "Database name not specified."
 	exit
 fi
 
 if [ "x${USER}" = "x" ]
 then
-	echo "Database user not specified."
+	Say "Database user not specified."
 	exit
 fi
 
 if [ "x${PASS}" = "x" ]
 then
-	echo "Database password not specified."
+	Say "Database password not specified."
 	exit
 fi
 
 if [ "x${ISQL}" = "x" ]
 then
-	echo "Query tool path not specified."
+	Say "Query tool path not specified."
 	exit
 fi
 
-echo "Database:   ${DB} via ${ODBC} as ${USER}"
-echo "Query tool: ${ISQL}"
-echo "Source dir: ${SCRIPTS_PATH}"
+Say "Database:   ${DB} via ${ODBC} as ${USER}"
+Say "Query tool: ${ISQL}"
+Say "Source dir: ${SCRIPTS_PATH}"
 
-OUTPUT_FILE=${DIR}/output.tmp.$$.txt
+function ProcessOneFile {
+	local QUERY_FILE=$1
 
-for QUERY_FILE in `ls ${SCRIPTS_PATH}`
-do
+	local OUTPUT_FILE=`dirname "${QUERY_FILE}"`/output.`basename "${QUERY_FILE}"`.txt
+
 	rm -f ${OUTPUT_FILE}
 
-	echo "Running ${QUERY_FILE} ..."
+	Say "Running ${QUERY_FILE} ..."
 
-	${ISQL} -h-1 -n -m 11 -e -u -b -D ${ODBC} -d ${DB} -U ${USER} -P ${PASS} -i ${SCRIPTS_PATH}/${QUERY_FILE} -o ${OUTPUT_FILE}
+	${ISQL} -h-1 -n -m 11 -e -u -b -D ${ODBC} -d ${DB} -U ${USER} -P ${PASS} -i ${QUERY_FILE} -o ${OUTPUT_FILE}
 
-	EXIT_CODE=$?
+	local EXIT_CODE=$?
 
 	if [ "${EXIT_CODE}" -eq "0" ]
 	then
-		echo "Running ${QUERY_FILE} complete."
+		Say "Running ${QUERY_FILE} complete."
 	else
-		echo "Failed with code ${EXIT_CODE} while executing ${QUERY_FILE}."
-		echo "Check file ${OUTPUT_FILE} for details."
-		break
+		Say "Failed with code ${EXIT_CODE} while executing ${QUERY_FILE}."
+		Say "Check file ${OUTPUT_FILE} for details."
+		return
 	fi
 
 	egrep '^Msg' ${OUTPUT_FILE} > /dev/null
@@ -85,14 +90,26 @@ do
 
 	if [ "${EXIT_CODE}" -eq "0" ]
 	then
-		echo "Errors encountered while executing ${QUERY_FILE}."
-		echo "Check file ${OUTPUT_FILE} for details."
-		break
+		Say "Errors encountered while executing ${QUERY_FILE}."
+		Say "Check file ${OUTPUT_FILE} for details."
+		return
 	fi
 
 	rm -f ${OUTPUT_FILE}
-done
+} # ProcessOneFile
 
-echo Incremental script complete.
+function ProcessDirectory {
+	local THE_DIR=$1
+	local QUERY_FILE
+	local MARKER_FILE=${THE_DIR}/last.run.marker.file.txt
 
+	for QUERY_FILE in `${DIR}/Bash/ls ${THE_DIR}/*.sql`
+	do
+		ProcessOneFile "${QUERY_FILE}"
+	done
+} # ProcessDirectory
+
+ProcessDirectory ${SCRIPTS_PATH}
+
+Say Incremental script complete.
 
