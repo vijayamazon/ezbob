@@ -272,8 +272,8 @@
 		[OperationContract]
 		BasicInterestRateActionResult GetBasicInterestRate();
 
-		[OperationContract]
-		DataTableActionResult GetSpResultTable(string spName, params QueryParameter[] parameters);
+		//[OperationContract]
+		//DataTableActionResult GetSpResultTable(string spName, params QueryParameter[] parameters);
 	} // interface IEzService
 } // namespace EzService
 

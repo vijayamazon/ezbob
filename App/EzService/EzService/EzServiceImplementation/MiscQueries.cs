@@ -5,17 +5,17 @@
 	using Ezbob.Database;
 
 	partial class EzServiceImplementation {
-		public DataTableActionResult GetSpResultTable(string spName, params QueryParameter[] parameters)
-		{
-			GetSpResultTable strategyInstance;
-			var result = ExecuteSync(out strategyInstance, null, null, spName, parameters);
+		//public DataTableActionResult GetSpResultTable(string spName, params QueryParameter[] parameters)
+		//{
+		//	GetSpResultTable strategyInstance;
+		//	var result = ExecuteSync(out strategyInstance, null, null, spName, parameters);
 
-			return new DataTableActionResult
-			{
-				MetaData = result,
-				DataTable = strategyInstance.Result
-			};
-		} // GetSpResultTable
+		//	return new DataTableActionResult
+		//	{
+		//		MetaData = result,
+		//		DataTable = strategyInstance.Result
+		//	};
+		//} // GetSpResultTable
 
 		public BasicInterestRateActionResult GetBasicInterestRate()
 		{
