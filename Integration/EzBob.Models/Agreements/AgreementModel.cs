@@ -3,6 +3,17 @@
 	using System;
 	using System.Collections.Generic;
 	using Web.Areas.Customer.Models;
+	
+	[Serializable]
+	public class TemplateModel
+	{
+		public string Template { get; set; }
+
+		public override string ToString()
+		{
+			return "TemplateModel";
+		}
+	}
 
 	[Serializable]
 	public class FormattedSchedule

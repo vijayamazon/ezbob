@@ -44,7 +44,7 @@ namespace EzBob.Web.Code.Agreements
 
 			string path1;
 			string path2;
-
+			TemplateModel template;
 			if (isConsumer)
 			{
 				var preContract = _templates.GetTemplateByName("Pre-Contract-Agreement");
@@ -53,7 +53,8 @@ namespace EzBob.Web.Code.Agreements
 
 				path1 = Path.Combine(Config.PdfLoanAgreement, preContractAgreement.FilePath);
 				path2 = Path.Combine(Config.PdfLoanAgreement2, preContractAgreement.FilePath);
-				m_oServiceClient.Instance.SaveAgreement(loan.Customer.Id, model, loan.RefNumber, "precontract", preContract, path1, path2);
+				template = new TemplateModel {Template = preContract};
+				m_oServiceClient.Instance.SaveAgreement(loan.Customer.Id, model, loan.RefNumber, "precontract", template, path1, path2);
 
 				var contract = _templates.GetTemplateByName("CreditActAgreement");
 				var contractAgreement = new LoanAgreement("Contract", loan, _helper.GetOrCreateLoanAgreementTemplate(contract, 3));
@@ -61,7 +62,8 @@ namespace EzBob.Web.Code.Agreements
 
 				path1 = Path.Combine(Config.PdfLoanAgreement, contractAgreement.FilePath);
 				path2 = Path.Combine(Config.PdfLoanAgreement2, contractAgreement.FilePath);
-				m_oServiceClient.Instance.SaveAgreement(loan.Customer.Id, model, loan.RefNumber, "Contract", contract, path1, path2);
+				template = new TemplateModel { Template = contract };
+				m_oServiceClient.Instance.SaveAgreement(loan.Customer.Id, model, loan.RefNumber, "Contract", template, path1, path2);
 			}
 			else
 			{
@@ -71,7 +73,8 @@ namespace EzBob.Web.Code.Agreements
 
 				path1 = Path.Combine(Config.PdfLoanAgreement, guaranteeAgreement.FilePath);
 				path2 = Path.Combine(Config.PdfLoanAgreement2, guaranteeAgreement.FilePath);
-				m_oServiceClient.Instance.SaveAgreement(loan.Customer.Id, model, loan.RefNumber, "guarantee", guarantee, path1, path2);
+				template = new TemplateModel { Template = guarantee };
+				m_oServiceClient.Instance.SaveAgreement(loan.Customer.Id, model, loan.RefNumber, "guarantee", template, path1, path2);
 
 				var agreement = _templates.GetTemplateByName("PrivateCompanyLoanAgreement");
 				var agreementAgreement = new LoanAgreement("agreement", loan, _helper.GetOrCreateLoanAgreementTemplate(agreement, 4));
@@ -79,7 +82,8 @@ namespace EzBob.Web.Code.Agreements
 
 				path1 = Path.Combine(Config.PdfLoanAgreement, agreementAgreement.FilePath);
 				path2 = Path.Combine(Config.PdfLoanAgreement2, agreementAgreement.FilePath);
-				m_oServiceClient.Instance.SaveAgreement(loan.Customer.Id, model, loan.RefNumber, "agreement", agreement, path1, path2);
+				template = new TemplateModel { Template = agreement };
+				m_oServiceClient.Instance.SaveAgreement(loan.Customer.Id, model, loan.RefNumber, "agreement", template, path1, path2);
 			}
 
 			loan.AgreementModel = JsonConvert.SerializeObject(model);

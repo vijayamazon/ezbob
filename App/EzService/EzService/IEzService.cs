@@ -263,7 +263,7 @@
 		#region Agreements
 
 		[OperationContract]
-		ActionMetaData SaveAgreement(int customerId, AgreementModel model, string refNumber, string name, string template, string path1, string path2);
+		ActionMetaData SaveAgreement(int customerId, AgreementModel model, string refNumber, string name, TemplateModel template, string path1, string path2);
 
 		#endregion Wizard
 	} // interface IEzService

@@ -89,7 +89,7 @@
 			
 			var path1 = Path.Combine(Config.PdfConsentAgreement, fileName);
 			var path2 = Path.Combine(Config.PdfConsentAgreement2, fileName);
-			m_oServiceClient.Instance.SaveAgreement(customer.Id, model, null, "concent agreement", template, path1, path2);
+			m_oServiceClient.Instance.SaveAgreement(customer.Id, model, null, "concent agreement",new TemplateModel{Template = template}, path1, path2);
 		}
 
 		public void SaveToBase(int id, string template, string fileName)

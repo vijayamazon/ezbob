@@ -1076,7 +1076,7 @@
         <xs:element xmlns:q74="http://schemas.datacontract.org/2004/07/EzBob.Models.Agreements" minOccurs="0" name="model" nillable="true" type="q74:AgreementModel" />
         <xs:element minOccurs="0" name="refNumber" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="name" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="template" nillable="true" type="xs:string" />
+        <xs:element xmlns:q75="http://schemas.datacontract.org/2004/07/EzBob.Models.Agreements" minOccurs="0" name="template" nillable="true" type="q75:TemplateModel" />
         <xs:element minOccurs="0" name="path1" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="path2" nillable="true" type="xs:string" />
       </xs:sequence>
@@ -1085,7 +1085,7 @@
   <xs:element name="SaveAgreementResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q75="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="SaveAgreementResult" nillable="true" type="q75:ActionMetaData" />
+        <xs:element xmlns:q76="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="SaveAgreementResult" nillable="true" type="q76:ActionMetaData" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
