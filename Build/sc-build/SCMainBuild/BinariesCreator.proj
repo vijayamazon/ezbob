@@ -19,9 +19,9 @@
 		<RemoveDir Directories="$(BuildBin)"/>
 		<!-- Exec Command="unlocker.exe $(BuildBin) /D /S" WorkingDirectory="C:\Program Files\Unlocker\" Condition="Exists('C:\Program Files\Unlocker\Unlocker.exe')" IgnoreExitCode="true"/-->
 		
+		<AppCopy CopyFrom="$(Src)\App\Clients\Administrator" CopyTo="$(BuildBin)\%(Edition.Identity)\Clients\Administrator"/>
 		<AppCopy CopyFrom="$(Src)\App\web" CopyTo="$(BuildBin)\%(Edition.Identity)\web\"/> 
 		
-		<!-- <WebCopy CopyFrom="$(Src)\App\pluginweb\pluginwebapp\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(WebFolder)\PluginWebapp\" /> -->
 		<WebCopy CopyFrom="$(Src)\App\pluginweb\EzBob.Web\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(WebFolder)\EzBob.Web\"/>
 		
 		<AppCopy CopyFrom="$(Src)\Tools\LogViewer\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\LogViewer\"/>
@@ -47,8 +47,6 @@
 		<Copy SourceFiles="$(Src)\Build\sc-build\EnvironmentTemplate.xml" DestinationFolder="$(BuildBin)\%(Edition.Identity)\"/>
 		<Copy SourceFiles="$(Src)\Integration\ChannelGrabberConfig\channelgrabber.json" DestinationFolder="$(BuildBin)\%(Edition.Identity)\"/>
 				
-		<AppCopy CopyFrom="$(Src)\Lib\Scorto.Core\" CopyTo="$(BuildBin)\%(Edition.Identity)\libs\"/>
-
 		<MultiCopy CopyFrom="$(Src)\Integration\Amazon\AmazonStandaloneApp\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\Amazon\"/>
 		<MultiCopy CopyFrom="$(Src)\Integration\eBay\TeraPeakStandaloneApp\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\eBay\"/>
 		<MultiCopy CopyFrom="$(Src)\Integration\Payment\ManualPacnetApp\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\Pacnet\"/>
