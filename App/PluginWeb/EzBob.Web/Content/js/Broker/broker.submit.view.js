@@ -4,16 +4,24 @@ EzBob.Broker = EzBob.Broker || {};
 EzBob.Broker.SubmitView = EzBob.Broker.BaseView.extend({
 	initialize: function() {
 		EzBob.Broker.SubmitView.__super__.initialize.apply(this, arguments);
+
+		this.SubmitButtons = {};
 	}, // initialize
 
-	initSubmitBtnID: function(sID) {
-		this.SubmitBtnID = sID;
-	}, // initSubmitBtnID
+	initSubmitBtn: function() {
+		var self = this;
+
+		$.each(arguments, function(idx, val) {
+			self.SubmitButtons[val] = 1;
+		});
+	}, // initSubmitBtn
 	
 	events: function() {
 		var evt = {};
 
-		evt['click #' + this.SubmitBtnID] = 'doSubmit';
+		$.each(this.SubmitButtons, function(idx, val) {
+			evt['click ' + idx] = 'doSubmit';
+		});
 
 		evt['change input'] = 'inputChanged';
 		evt['keyup  input'] = 'inputChanged';
@@ -21,6 +29,19 @@ EzBob.Broker.SubmitView = EzBob.Broker.BaseView.extend({
 
 		return evt;
 	}, // events
+
+	submitSelector: function() {
+		var sSelector = '';
+
+		$.each(this.SubmitButtons, function(idx, val) {
+			if (sSelector !== '')
+				sSelector += ', ';
+
+			sSelector += idx;
+		});
+
+		return sSelector;
+	}, // submitSelector
 
 	doSubmit: function(event) {
 		event.preventDefault();
@@ -32,17 +53,17 @@ EzBob.Broker.SubmitView = EzBob.Broker.BaseView.extend({
 		this.setSubmitEnabled(false);
 		BlockUi();
 
-		this.onSubmit();
+		this.onSubmit(event);
 	}, // doSubmit
 
-	onSubmit: function() {}, // onSubmit
+	onSubmit: function(event) {}, // onSubmit
 
 	isSubmitEnabled: function() {
-		return this.isSomethingEnabled('#' + this.SubmitBtnID);
+		return this.isSomethingEnabled(this.submitSelector());
 	}, // isSubmitEnabled
 
 	setSubmitEnabled: function(bEnabled) {
-		return this.setSomethingEnabled('#' + this.SubmitBtnID, bEnabled);
+		return this.setSomethingEnabled(this.submitSelector(), bEnabled).toggleClass('green', bEnabled);
 	}, // setSubmitEnabled
 
 	inputChanged: function(evt) {
@@ -61,7 +82,8 @@ EzBob.Broker.SubmitView = EzBob.Broker.BaseView.extend({
 			return this;
 		} // if
 
-		this.router.setAuth();
+		if (this.setAuthOnRender())
+			this.router.setAuth();
 
 		this.onRender();
 
@@ -71,6 +93,10 @@ EzBob.Broker.SubmitView = EzBob.Broker.BaseView.extend({
 
 		return this;
 	}, // render
+
+	setAuthOnRender: function() {
+		return true;
+	}, // setAuthOnRender
 
 	onRender: function() {}, // onRender
 }); // EzBob.Broker.SubmitView

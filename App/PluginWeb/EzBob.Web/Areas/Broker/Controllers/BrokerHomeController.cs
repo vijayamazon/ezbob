@@ -518,6 +518,33 @@
 
 		#endregion action DeleteCustomerFiles
 
+		#region action AddLead
+
+		[HttpPost]
+		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		public JsonResult AddLead(string LeadFirstName, string LeadLastName, string LeadEmail, string LeadAddMode, string ContactEmail) {
+			m_oLog.Debug("Broker add lead request for contact email {0}: {1} {2}, {3} - {4}.", ContactEmail, LeadFirstName, LeadLastName, LeadEmail, LeadAddMode);
+
+			var oIsAuthResult = IsAuth("Add lead", ContactEmail);
+			if (oIsAuthResult != null)
+				return oIsAuthResult;
+
+			try {
+				// oResult = m_oServiceClient.Instance.BrokerLoadCustomerList(ContactEmail);
+			}
+			catch (Exception e) {
+				m_oLog.Alert(e, "Failed to add lead for contact email {0}: {1} {2}, {3} - {4}.", ContactEmail, LeadFirstName, LeadLastName, LeadEmail, LeadAddMode);
+				return new BrokerForJsonResult("Failed to load customer list.");
+			} // try
+
+			m_oLog.Debug("Broker add lead request for contact email {0}: {1} {2}, {3} - {4} complete.", ContactEmail, LeadFirstName, LeadLastName, LeadEmail, LeadAddMode);
+
+			return new BrokerForJsonResult();
+		} // AddLead
+
+		#endregion action AddLead
+
 		#endregion public
 
 		#region private

@@ -294,7 +294,7 @@
 						<button type="button" class="back-to-list rc-button green pull-right">Back to customer list</button>
 					</h2>
 
-					<form class="signup-form broker-form" novalidate="novalidate">
+					<form class="new-lead-form broker-form" novalidate="novalidate">
 						@{ int nLeadTabIdx = 1; }
 
 						<div class="form_field_container">
@@ -323,8 +323,8 @@
 
 						<div class="form_buttons_container">
 							<div class="attardi-button">
-								<button type="submit" id="" class="rc-button green disabled pull-right" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" ui-event-control-id="broker:lead-send-invitation">Send invitation</button>
-								<button type="submit" id="" class="rc-button green disabled pull-left" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" ui-event-control-id="broker:lead-fill-wizard">Fill all details</button>
+								<button type="submit" id="LeadSendInvitation" class="rc-button green disabled pull-right" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" ui-event-control-id="broker:lead-send-invitation">Send invitation only</button>
+								<button type="submit" id="LeadFillWizard" class="rc-button green disabled pull-left" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" ui-event-control-id="broker:lead-fill-wizard">Fill all the details</button>
 							</div>
 						</div>
 					</form>

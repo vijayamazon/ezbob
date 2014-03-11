@@ -23,11 +23,9 @@ EzBob.Broker.BaseView = Backbone.View.extend({
 		var oElm = (typeof (oSomething) === 'string') ? this.$el.find(oSomething) : oSomething;
 
 		if (bEnabled)
-			oElm.removeClass('disabled').removeAttr('disabled').removeProp('disabled');
+			return oElm.removeClass('disabled').removeAttr('disabled').removeProp('disabled');
 		else
-			oElm.addClass('disabled').attr('disabled', 'disabled').prop('disabled', 'disabled');
-
-		return oElm;
+			return oElm.addClass('disabled').attr('disabled', 'disabled').prop('disabled', 'disabled');
 	}, // setSomethingEnabled
 
 	adjustValidatorCfg: function(oCfg) {}, // adjustValidatorCfg

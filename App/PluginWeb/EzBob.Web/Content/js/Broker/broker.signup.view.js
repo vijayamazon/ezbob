@@ -7,7 +7,7 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 
 		this.$el = $('.section-signup');
 
-		this.initSubmitBtnID('SignupBrokerButton');
+		this.initSubmitBtn('#SignupBrokerButton');
 
 		this.initMobilePhoneFields({
 			PhoneFieldID: 'ContactMobile',
@@ -38,7 +38,7 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 		this.inputChanged();
 	}, // clear
 
-	onSubmit: function() {
+	onSubmit: function(event) {
 		var sEmail = this.$el.find('#ContactEmail').val();
 
 		var oData = this.$el.find('form').serializeArray();

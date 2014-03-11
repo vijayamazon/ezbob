@@ -7,7 +7,7 @@ EzBob.Broker.ForgottenView = EzBob.Broker.MobilePhoneView.extend({
 
 		this.$el = $('.section-forgotten');
 
-		this.initSubmitBtnID('RestorePassBrokerButton');
+		this.initSubmitBtn('#RestorePassBrokerButton');
 
 		this.initMobilePhoneFields({
 			PhoneFieldID: 'ForgottenMobile',
@@ -25,9 +25,7 @@ EzBob.Broker.ForgottenView = EzBob.Broker.MobilePhoneView.extend({
 		this.inputChanged();
 	}, // clear
 
-	onSubmit: function() {
-		console.log(this.$el.find('form').serializeArray());
-
+	onSubmit: function(event) {
 		var oRequest = $.post('' + window.gRootPath + 'Broker/BrokerHome/RestorePassword', this.$el.find('form').serializeArray());
 
 		var self = this;

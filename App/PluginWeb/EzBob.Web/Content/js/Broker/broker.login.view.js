@@ -7,7 +7,7 @@ EzBob.Broker.LoginView = EzBob.Broker.SubmitView.extend({
 
 		this.$el = $('.section-login');
 
-		this.initSubmitBtnID('LoginBrokerButton');
+		this.initSubmitBtn('#LoginBrokerButton');
 
 		this.initValidatorCfg();
 	}, // initialize
@@ -40,7 +40,7 @@ EzBob.Broker.LoginView = EzBob.Broker.SubmitView.extend({
 		this.inputChanged();
 	}, // clear
 
-	onSubmit: function() {
+	onSubmit: function(event) {
 		var sEmail = this.$el.find('#LoginEmail').val();
 
 		var oRequest = $.post('' + window.gRootPath + 'Broker/BrokerHome/Login', this.$el.find('form').serializeArray());

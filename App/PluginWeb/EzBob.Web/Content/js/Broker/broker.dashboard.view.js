@@ -34,8 +34,6 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 			return this;
 		} // if
 
-		EzBob.App.trigger('clear');
-
 		this.reloadCustomerList();
 
 		return this;
