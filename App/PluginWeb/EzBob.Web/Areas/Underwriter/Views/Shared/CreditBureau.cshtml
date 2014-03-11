@@ -795,17 +795,19 @@
     <%
     experianInfo.Summary = experianInfo.Summary || {};
     experianInfo.Summary.ConsumerAccountsOverview = experianInfo.Summary.ConsumerAccountsOverview || {};
+    experianInfo.ConsumerSummaryCharacteristics = experianInfo.ConsumerSummaryCharacteristics || {};
+    experianInfo.ConsumerAccountsOverview = experianInfo.ConsumerAccountsOverview || {};
     %>
     <% if (experianInfo.IsExperianError) { %>
          @DisplayExperianError()
     <% } else { %>
-        <% if (experianInfo.CheckFailed) { %>
-        @DisplayFailedExperianCheck()
-    @RunReCheckButton()
-    <% } else { %>
-        @BureauSummaryForCustomer()
-    @DisplayConsumerData()
-    <% } %>
+        <% if (experianInfo.CheckFailed || experianInfo.CheckStatus=='Error') { %>
+            @DisplayFailedExperianCheck()
+            @RunReCheckButton()
+        <% } else { %>
+            @BureauSummaryForCustomer()
+            @DisplayConsumerData()
+        <% } %>
     <% } %>
     
     <% if(experianInfo.ModelType == "Limited") { %>

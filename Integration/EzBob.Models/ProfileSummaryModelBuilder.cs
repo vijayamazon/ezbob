@@ -104,10 +104,13 @@
 					loc.LocationLine5 = customerMainAddress.County;
 					loc.LocationLine6 = customerMainAddress.Postcode;
 				}
-				var result = consumerSrv.GetConsumerInfo(customer.PersonalInfo.FirstName, customer.PersonalInfo.Surname,
-					customer.PersonalInfo.Gender.ToString(), // should be Gender
-					customer.PersonalInfo.DateOfBirth, null, loc, "PL", customer.Id, 0, true);
-
+				ConsumerServiceResult result = null;
+				if (customer.PersonalInfo != null && !string.IsNullOrEmpty(customer.PersonalInfo.FirstName))
+				{
+					result = consumerSrv.GetConsumerInfo(customer.PersonalInfo.FirstName, customer.PersonalInfo.Surname,
+					   customer.PersonalInfo.Gender.ToString(), // should be Gender
+					   customer.PersonalInfo.DateOfBirth, null, loc, "PL", customer.Id, 0, true);
+				}
 				if (result != null)
 				{
 					creditBureau.CreditBureauScore = result.BureauScore;

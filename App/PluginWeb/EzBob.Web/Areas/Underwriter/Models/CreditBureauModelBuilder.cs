@@ -50,11 +50,8 @@ namespace EzBob.Web.Areas.Underwriter.Models
 			//registered customer
 			if (customerMainAddress == null)
 			{
-				model.AmlInfo = new AMLInfo();
-				model.BavInfo = new BankAccountVerificationInfo();
-				model.ConsumerSummaryCharacteristics = new ConsumerSummaryCharacteristics();
-				model.ConsumerAccountsOverview = new ConsumerAccountsOverview();
-				model.Summary = new Summary();
+				model.CheckStatus = "Error";
+				model.CheckValidity = "Registered customer no address";
 				return model;
 			}
 
