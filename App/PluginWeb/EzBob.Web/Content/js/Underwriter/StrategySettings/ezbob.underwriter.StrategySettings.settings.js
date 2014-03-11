@@ -1,5 +1,5 @@
 (function() {
-  var root,
+  var root, _ref,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -10,11 +10,11 @@
   EzBob.Underwriter = EzBob.Underwriter || {};
 
   EzBob.Underwriter.StrategySettingsView = (function(_super) {
-
     __extends(StrategySettingsView, _super);
 
     function StrategySettingsView() {
-      return StrategySettingsView.__super__.constructor.apply(this, arguments);
+      _ref = StrategySettingsView.__super__.constructor.apply(this, arguments);
+      return _ref;
     }
 
     StrategySettingsView.prototype.initialize = function() {
@@ -22,12 +22,14 @@
     };
 
     StrategySettingsView.prototype.render = function() {
-      var campaign, charges, experian, general;
+      var campaign, charges, experian, general, loanOfferRanges;
+
       this.$el.html(this.template());
       general = this.$el.find("#general-settings");
       charges = this.$el.find("#charges-settings");
       experian = this.$el.find("#experian-settings");
       campaign = this.$el.find("#campaign-settings");
+      loanOfferRanges = this.$el.find("#loan-offer-ranges-settings");
       this.generalModel = new EzBob.Underwriter.SettingsGeneralModel();
       this.generalView = new EzBob.Underwriter.SettingsGeneralView({
         el: general,
@@ -47,6 +49,11 @@
       this.campaignView = new EzBob.Underwriter.Settings.CampaignView({
         el: campaign,
         model: this.campaignModel
+      });
+      this.loanOfferRangesModel = new EzBob.Underwriter.Settings.LoanOfferRangesModel();
+      this.loanOfferRangesView = new EzBob.Underwriter.Settings.LoanOfferRangesView({
+        el: loanOfferRanges,
+        model: this.loanOfferRangesModel
       });
       return EzBob.handleUserLayoutSetting();
     };

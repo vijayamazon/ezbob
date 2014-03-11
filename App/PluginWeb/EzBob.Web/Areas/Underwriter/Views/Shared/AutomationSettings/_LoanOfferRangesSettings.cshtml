@@ -1,0 +1,32 @@
+﻿@using EzBob.Web.Infrastructure.Html
+<script type="text/template" id="loan-offer-ranges-settings-template">
+    <h3>Loan Offer Ranges Settings</h3>
+    <%if(loanOfferRanges && loanOfferRanges.length > 0) {%>
+   
+    <table class="table squeezed">
+        <thead class="box">
+            <tr class="box-title">
+                <th>Start Value</th>
+                <th>End Value</th>
+                <th>Interest</th>
+                <th>Remove</th>
+            </tr>
+        </thead>
+        <tbody>
+            <%_.each(loanOfferRanges, function(loanOfferRange){%>
+            <tr>
+                <td><%= loanOfferRange.StartValue %></td>
+                <td><%= loanOfferRange.EndValue %></td>
+                <td><%= loanOfferRange.Interest %></td>
+                <td>
+                    <button class="btn-link removeRange" style="color: blue;" data-loan-offer-range-id="<%= loanOfferRange.Id %>">Remove</button>
+                </td>
+            </tr>
+            <%});%>
+        </tbody>
+    </table>
+    <%}%>
+   
+    <button class="btn btn-primary addRange">Add Range</button>
+
+</script>

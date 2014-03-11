@@ -19,14 +19,16 @@
 		private readonly CampaignRepository _campaignRepository;
 		private readonly CampaignTypeRepository _campaignTypeRepository;
 		private readonly CustomerRepository _customerRepository;
+		private readonly BasicInterestRateRepository _basicInterestRateRepository;
 		private static readonly ILog Log = LogManager.GetLogger(typeof(StrategySettingsController));
 
-		public StrategySettingsController(IConfigurationVariablesRepository configurationVariablesRepository, CampaignRepository campaignRepository, CampaignTypeRepository campaignTypeRepository, CustomerRepository customerRepository)
+		public StrategySettingsController(IConfigurationVariablesRepository configurationVariablesRepository, CampaignRepository campaignRepository, CampaignTypeRepository campaignTypeRepository, CustomerRepository customerRepository, BasicInterestRateRepository basicInterestRateRepository)
 		{
 			_configurationVariablesRepository = configurationVariablesRepository;
 			_campaignRepository = campaignRepository;
 			_campaignTypeRepository = campaignTypeRepository;
 			_customerRepository = customerRepository;
+			_basicInterestRateRepository = basicInterestRateRepository;
 		}
 
 		[Ajax]
@@ -61,7 +63,7 @@
 		[ValidateJsonAntiForgeryToken]
 		[HttpPost]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonNetResult SettingsGeneral(string BWABusinessCheck/*, string DisplayEarnedPoints*/)
+		public JsonNetResult SettingsGeneral(string BWABusinessCheck/*, string DisplayEarnedPoints*/)//in here
 		{
 			_configurationVariablesRepository.SetByName("BWABusinessCheck", BWABusinessCheck);
 			//_configurationVariablesRepository.SetByName("DisplayEarnedPoints", DisplayEarnedPoints);
@@ -354,6 +356,26 @@
 				.ToList();
 			
 			return this.JsonNet(new { campaigns, campaignTypes });
+		}
+
+		[Ajax]
+		[HttpGet]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		public JsonNetResult SettingsLoanOfferRanges()
+		{
+			var loanOfferRangesList = _basicInterestRateRepository.GetAll().ToList();
+
+			var loanOfferRanges = loanOfferRangesList
+				.Select(c => new LoanOfferRangeModel
+					{
+						Id = c.Id,
+						StartValue = c.FromScore,
+						EndValue = c.ToScore,
+						Interest = c.LoanInterestBase
+					})
+				.ToList();
+
+			return this.JsonNet(new { loanOfferRanges });
 		}
 
 		[Ajax]

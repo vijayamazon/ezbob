@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -210,6 +210,7 @@
     <Compile Include="Areas\Customer\Controllers\Exceptions\UserNotFoundException.cs" />
     <Compile Include="Areas\Customer\Controllers\hmrc_file_processor.cs" />
     <Compile Include="Areas\Underwriter\Controllers\UploadHmrcController.cs" />
+    <Compile Include="Areas\Underwriter\Models\LoanOfferRangeModel.cs" />
     <Compile Include="Code\BrokerHelper.cs" />
     <Compile Include="Code\UiEvents\UiActionEventModel.cs" />
     <Compile Include="Code\UiEvents\UiCachePkgModel.cs" />
@@ -615,6 +616,7 @@
     <Content Include="Content\img\customer-sidebar\fast.png" />
     <Content Include="Areas\Customer\Views\Shared\Shops\CompanyFilesAccountInfoTemplate.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\MarketPlaceDetails\CompanyFiles.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\AutomationSettings\_LoanOfferRangesSettings.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />
@@ -1265,8 +1267,8 @@
     <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.Campaign.js">
       <DependentUpon>EzBob.Underwriter.Settings.Campaign.coffee</DependentUpon>
     </Content>
-    <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.Campaign.min.js">
-      <DependentUpon>EzBob.Underwriter.Settings.Campaign.coffee</DependentUpon>
+    <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.LoanOfferRanges.js">
+      <DependentUpon>EzBob.Underwriter.Settings.LoanOfferRanges.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.automation.approval.js">
       <DependentUpon>ezbob.underwriter.StrategySettings.automation.approval.coffee</DependentUpon>
@@ -1325,9 +1327,6 @@
     <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.settings.js">
       <DependentUpon>ezbob.underwriter.StrategySettings.settings.coffee</DependentUpon>
     </Content>
-    <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.settings.min.js">
-      <DependentUpon>ezbob.underwriter.StrategySettings.settings.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\Wizard\shops\ezbob.shops.companyFiles.js">
       <DependentUpon>ezbob.shops.companyFiles.coffee</DependentUpon>
     </Content>
@@ -1378,6 +1377,7 @@
     <None Include="Content\img\customer-sidebar\icons-source\Preview Image Set_v1.0.psd" />
     <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.uploadHmrc.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.companyFiles.coffee" />
+    <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.LoanOfferRanges.coffee" />
     <None Include="Service References\EzServiceReference\configuration91.svcinfo" />
     <None Include="Service References\EzServiceReference\configuration.svcinfo" />
     <None Include="Service References\EzServiceReference\EzBob.Backend.Models.xsd">
@@ -1694,7 +1694,6 @@
     <Content Include="Views\Shared\_NanoRep.cshtml" />
     <Content Include="Views\Shared\_NanoRepSupport.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\SideBars\_NanoRepSideBar.cshtml" />
-    <Content Include="Views\Shared\_GoogleTagManager.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
