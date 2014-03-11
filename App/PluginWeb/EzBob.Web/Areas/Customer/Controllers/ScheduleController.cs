@@ -1,33 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Web.Mvc;
-using EZBob.DatabaseLib;
-using EZBob.DatabaseLib.Model.Database;
-using EzBob.CommonLib;
-using EzBob.Models;
-using EzBob.Web.Areas.Customer.Models;
-using EzBob.Web.Code;
-using EzBob.Web.Code.Agreements;
-using EzBob.Web.Infrastructure;
-using EzBob.Web.Infrastructure.csrf;
-using PaymentServices.Calculators;
-using Scorto.Web;
-using StructureMap;
+﻿namespace EzBob.Web.Areas.Customer.Controllers {
+	using System;
+	using System.Collections.Generic;
+	using System.Web.Mvc;
+	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Model.Database;
+	using CommonLib;
+	using EzBob.Models;
+	using Code;
+	using Infrastructure;
+	using Infrastructure.csrf;
+	using PaymentServices.Calculators;
+	using Scorto.Web;
+	using StructureMap;
 
-namespace EzBob.Web.Areas.Customer.Controllers {
 	public class ScheduleController : Controller {
 		public static readonly int[] LoanPeriods = { 6, 10 };
 
 		private readonly IEzbobWorkplaceContext _context;
 		private readonly APRCalculator _aprCalc;
-		private readonly EZBob.DatabaseLib.Model.Database.Customer _customer;
-		private readonly CustomerModelBuilder _customerModelBuilder;
+		private readonly Customer _customer;
 		private readonly LoanBuilder _loanBuilder;
 		private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(typeof(ScheduleController));
 
-		public ScheduleController(IEzbobWorkplaceContext context, CustomerModelBuilder customerModelBuilder, LoanBuilder loanBuilder) {
+		public ScheduleController(IEzbobWorkplaceContext context, LoanBuilder loanBuilder) {
 			_context = context;
-			_customerModelBuilder = customerModelBuilder;
 			_loanBuilder = loanBuilder;
 			_customer = _context.Customer;
 			_aprCalc = new APRCalculator();
@@ -101,7 +97,7 @@ namespace EzBob.Web.Areas.Customer.Controllers {
 			var schedule = loan.Schedule;
 			var apr = _aprCalc.Calculate(amount, schedule, loan.SetupFee, loan.Date);
 
-			var b = new AgreementsModelBuilder(_customerModelBuilder);
+			var b = new AgreementsModelBuilder();
 			var agreement = b.Build(_customer, amount, loan);
 			return LoanOffer.InitFromLoan(loan, apr, agreement, cr);
 		} // CalculateLoan

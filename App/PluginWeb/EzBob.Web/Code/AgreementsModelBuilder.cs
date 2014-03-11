@@ -1,30 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using ApplicationMng.Model;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Loans;
-using EZBob.DatabaseLib.Model.Loans;
-using EzBob.Models;
-using EzBob.Web.Areas.Customer.Models;
-using PaymentServices.Calculators;
-
-namespace EzBob.Web.Code.Agreements
+﻿namespace EzBob.Web.Code
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EZBob.DatabaseLib.Model.Loans;
+	using EzBob.Models;
+	using EzBob.Web.Areas.Customer.Models;
+	using PaymentServices.Calculators;
 	using EZBob.DatabaseLib.Model;
 	using EzBob.Models.Agreements;
 	using StructureMap;
 
 	public class AgreementsModelBuilder
 	{
-		private readonly CustomerModelBuilder _customerModelBuilder;
 		private readonly APRCalculator _aprCalc;
 		private readonly RepaymentCalculator _repaymentCalculator = new RepaymentCalculator();
 
-		public AgreementsModelBuilder(CustomerModelBuilder customerModelBuilder)
+		public AgreementsModelBuilder()
 		{
 			_aprCalc = new APRCalculator();
-			_customerModelBuilder = customerModelBuilder;
 		}
 
 

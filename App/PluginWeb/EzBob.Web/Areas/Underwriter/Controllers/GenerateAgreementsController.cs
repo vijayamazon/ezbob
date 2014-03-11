@@ -6,8 +6,6 @@
 	using System.Web.Mvc;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.Repository;
-	using EZBob.DatabaseLib.Repository;
-	using Customer.Models;
 	using Code;
 	using Code.Agreements;
 	using Newtonsoft.Json;
@@ -17,15 +15,13 @@
     {
         private readonly AgreementsGenerator _agreementsGenerator;
         private readonly ILoanRepository _loanRepository;
-        private readonly CustomerModelBuilder _customerModelBuilder;
         private readonly IConcentAgreementHelper _concentAgreementHelper;
         private readonly CustomerRepository _customersRepository;
 
-        public GenerateAgreementsController(AgreementsGenerator agreementsGenerator, ILoanRepository loanRepository, CustomerModelBuilder customerModelBuilder, IExperianConsentAgreementRepository consentAgreementRepository, CustomerRepository customersRepository)
+        public GenerateAgreementsController(AgreementsGenerator agreementsGenerator, ILoanRepository loanRepository, CustomerRepository customersRepository)
         {
             _agreementsGenerator = agreementsGenerator;
             _loanRepository = loanRepository;
-            _customerModelBuilder = customerModelBuilder;
             _concentAgreementHelper = new ConcentAgreementHelper();
             _customersRepository = customersRepository;
         }
@@ -53,7 +49,7 @@
         [NoCache]
         public RedirectToRouteResult ReloadAgreementsModel()
         {
-            var agreementsModelBuilder = new AgreementsModelBuilder(_customerModelBuilder);
+            var agreementsModelBuilder = new AgreementsModelBuilder();
             var loans = _loanRepository.GetAll();
 
             foreach (var loan in loans)
