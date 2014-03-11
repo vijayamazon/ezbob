@@ -15,9 +15,9 @@
         <tbody>
             <%_.each(loanOfferRanges, function(loanOfferRange){%>
             <tr>
-                <td><%= loanOfferRange.StartValue %></td>
-                <td><%= loanOfferRange.EndValue %></td>
-                <td><%= loanOfferRange.Interest %></td>
+                <td><%= loanOfferRange.FromScore %></td>
+                <td><%= loanOfferRange.ToScore %></td>
+                <td><%= loanOfferRange.LoanInterestBase %></td>
                 <td>
                     <button class="btn-link removeRange" style="color: blue;" data-loan-offer-range-id="<%= loanOfferRange.Id %>">Remove</button>
                 </td>

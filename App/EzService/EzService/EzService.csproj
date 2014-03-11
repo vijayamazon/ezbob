@@ -50,6 +50,10 @@
       <HintPath>..\..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=4.0.4.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\3rdparty\Json.NET\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -69,7 +73,7 @@
     <Compile Include="ActionResults\BrokerCustomerDetailsActionResult.cs" />
     <Compile Include="ActionResults\BrokerCustomerFilesActionResult.cs" />
     <Compile Include="ActionResults\BasicInterestRateActionResult.cs" />
-    <Compile Include="ActionResults\DataTableActionResult.cs" />
+    <Compile Include="ActionResults\SerializedDataTableActionResult.cs" />
     <Compile Include="ActionResults\StringActionResult.cs" />
     <Compile Include="ActionResults\CrmLookupsActionResult.cs" />
     <Compile Include="ActionResults\QuickOfferActionResult.cs" />

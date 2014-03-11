@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Backend.Strategies 
 {
+	using System.Collections.Generic;
 	using System.Data;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -7,11 +8,11 @@
 	public class GetSpResultTable : AStrategy
 	{
 		private readonly string spName;
-		private readonly QueryParameter[] parameters;
+		private readonly string[] parameters;
 		public DataTable Result { get; private set; }
 		#region constructor
 
-		public GetSpResultTable(AConnection oDb, ASafeLog oLog, string spName, params QueryParameter[] parameters)
+		public GetSpResultTable(AConnection oDb, ASafeLog oLog, string spName, params string[] parameters)
 			: base(oDb, oLog)
 		{
 			this.parameters = parameters;
@@ -31,7 +32,18 @@
 		#region property Execute
 
 		public override void Execute() {
-			Result = DB.ExecuteReader(spName, CommandSpecies.StoredProcedure, parameters);
+			var sqlParams = new List<QueryParameter>();
+			int counter = 1;
+			if (parameters != null)
+			{
+				while (counter < parameters.Length)
+				{
+					sqlParams.Add(new QueryParameter(parameters[counter - 1], parameters[counter]));
+					counter += 2;
+				}
+			}
+
+			Result = DB.ExecuteReader(spName, CommandSpecies.StoredProcedure, sqlParams.ToArray());
 		} // Execute
 
 		#endregion property Execute

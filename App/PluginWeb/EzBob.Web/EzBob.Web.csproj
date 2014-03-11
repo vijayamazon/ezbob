@@ -1432,7 +1432,7 @@
     <None Include="Service References\EzServiceReference\EzBob.Web.Areas.Customer.Models.xsd">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.BasicInterestRateActionResult.datasource">
+    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.SerializedDataTableActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
     <None Include="Service References\EzServiceReference\EzService.ActionResults.xsd">

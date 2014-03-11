@@ -1,29 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/EzService.ActionResults" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import namespace="http://schemas.datacontract.org/2004/07/EzService" />
-  <xs:complexType name="BasicInterestRateActionResult">
+  <xs:complexType name="SerializedDataTableActionResult">
     <xs:complexContent mixed="false">
       <xs:extension xmlns:q1="http://schemas.datacontract.org/2004/07/EzService" base="q1:ActionResult">
         <xs:sequence>
-          <xs:element minOccurs="0" name="BasicInterestRates" nillable="true" type="tns:ArrayOfSingleBasicInterestRate" />
+          <xs:element minOccurs="0" name="SerializedDataTable" nillable="true" type="xs:string" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="BasicInterestRateActionResult" nillable="true" type="tns:BasicInterestRateActionResult" />
-  <xs:complexType name="ArrayOfSingleBasicInterestRate">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="SingleBasicInterestRate" nillable="true" type="tns:SingleBasicInterestRate" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfSingleBasicInterestRate" nillable="true" type="tns:ArrayOfSingleBasicInterestRate" />
-  <xs:complexType name="SingleBasicInterestRate">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="FromScore" type="xs:int" />
-      <xs:element minOccurs="0" name="Id" type="xs:int" />
-      <xs:element minOccurs="0" name="LoanInterestBase" type="xs:int" />
-      <xs:element minOccurs="0" name="ToScore" type="xs:int" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="SingleBasicInterestRate" nillable="true" type="tns:SingleBasicInterestRate" />
+  <xs:element name="SerializedDataTableActionResult" nillable="true" type="tns:SerializedDataTableActionResult" />
 </xs:schema>

@@ -4,7 +4,7 @@ EzBob.Underwriter = EzBob.Underwriter or {}
 EzBob.Underwriter.Settings = EzBob.Underwriter.Settings or {}
 
 class EzBob.Underwriter.Settings.LoanOfferRangesModel extends Backbone.Model
-    url: window.gRootPath + "Underwriter/StrategySettings/SettingsLoanOfferRanges"
+    url: window.gRootPath + "Underwriter/StrategySettings/SettingsBasicInterestRate"
 
 class EzBob.Underwriter.Settings.LoanOfferRangesView extends Backbone.Marionette.ItemView
     template: "#loan-offer-ranges-settings-template"

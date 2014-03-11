@@ -19,7 +19,7 @@
       return _ref;
     }
 
-    LoanOfferRangesModel.prototype.url = window.gRootPath + "Underwriter/StrategySettings/SettingsLoanOfferRanges";
+    LoanOfferRangesModel.prototype.url = window.gRootPath + "Underwriter/StrategySettings/SettingsBasicInterestRate";
 
     return LoanOfferRangesModel;
 

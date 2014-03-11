@@ -615,6 +615,26 @@
 		}
 
 		[Activation]
+		private void GetSpResultTable()
+		{
+			if (args.Length < 2 || args.Length % 2 != 0)
+			{
+				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> GetSpResultTable <spName> <parameters - should come in couples>");
+				return;
+			}
+
+			string spName = args[1];
+			var parameterList = new List<string>();
+			for (int i = 2; i < args.Length; i++)
+			{
+				parameterList.Add(args[i]);
+			}
+			string[] parameterArgs = parameterList.ToArray();
+
+			serviceClient.GetSpResultTable(spName, parameterArgs);
+		}
+
+		[Activation]
 		private void BrokerLoadCustomerList() {
 			if (args.Length != 2) {
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> BrokerLoadCustomerList <Contact person email>");

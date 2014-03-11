@@ -1,3 +1,4 @@
+/*TODO - remove if serialized is ok
 namespace EzService.ActionResults
 {
 	using System.Collections.Generic;
@@ -25,4 +26,4 @@ namespace EzService.ActionResults
 	} // class BasicInterestRateActionResult
 
 	#endregion class BasicInterestRateActionResult
-} // namespace EzService
+} // namespace EzService*/

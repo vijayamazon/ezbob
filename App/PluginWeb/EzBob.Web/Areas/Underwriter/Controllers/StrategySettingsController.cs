@@ -7,6 +7,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using Infrastructure.csrf;
 	using Models;
+	using Newtonsoft.Json;
 	using Scorto.Web;
 	using System;
 	using System.Linq;
@@ -361,19 +362,11 @@
 		[Ajax]
 		[HttpGet]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonNetResult SettingsLoanOfferRanges()
+		public JsonNetResult SettingsBasicInterestRate()
 		{
-			var loanOfferRangesList = serviceClient.Instance.GetBasicInterestRate();
-
-			var loanOfferRanges = loanOfferRangesList.BasicInterestRates
-				.Select(c => new LoanOfferRangeModel
-					{
-						Id = c.Id,
-						StartValue = c.FromScore,
-						EndValue = c.ToScore,
-						Interest = c.LoanInterestBase
-					})
-				.ToList();
+			var loanOfferRangesList = serviceClient.Instance.GetSpResultTable("GetBasicInterestRates", null);
+			var deserializedArray = JsonConvert.DeserializeObject<LoanOfferRangeModel[]>(loanOfferRangesList.SerializedDataTable);
+			var loanOfferRanges = deserializedArray == null ? null : deserializedArray.ToList();
 
 			return this.JsonNet(new { loanOfferRanges });
 		}

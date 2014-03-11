@@ -1,15 +1,14 @@
 namespace EzService.ActionResults
 {
-	using System.Data;
 	using System.Runtime.Serialization;
 
 	#region class DataTableActionResult
 
 	[DataContract]
-	public class DataTableActionResult : ActionResult
+	public class SerializedDataTableActionResult : ActionResult
 	{
 		[DataMember]
-		public DataTable DataTable { get; set; }
+		public string SerializedDataTable { get; set; }
 	} // class DataTableActionResult
 
 	#endregion class DataTableActionResult

@@ -145,9 +145,6 @@
     <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.ActionMetaData.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.BasicInterestRateActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
     <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.BoolActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
@@ -167,6 +164,9 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.QuickOfferActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.SerializedDataTableActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.StringActionResult.datasource">

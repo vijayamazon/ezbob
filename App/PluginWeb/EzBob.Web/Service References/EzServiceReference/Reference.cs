@@ -193,7 +193,7 @@ namespace EzBob.Web.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.CrmLookupsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.QuickOfferActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.WizardConfigsActionResult))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.BasicInterestRateActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.SerializedDataTableActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.StringListActionResult))]
     public partial class ActionResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
@@ -509,22 +509,22 @@ namespace EzBob.Web.EzServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="BasicInterestRateActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="SerializedDataTableActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults")]
     [System.SerializableAttribute()]
-    public partial class BasicInterestRateActionResult : EzBob.Web.EzServiceReference.ActionResult {
+    public partial class SerializedDataTableActionResult : EzBob.Web.EzServiceReference.ActionResult {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private EzBob.Web.EzServiceReference.SingleBasicInterestRate[] BasicInterestRatesField;
+        private string SerializedDataTableField;
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public EzBob.Web.EzServiceReference.SingleBasicInterestRate[] BasicInterestRates {
+        public string SerializedDataTable {
             get {
-                return this.BasicInterestRatesField;
+                return this.SerializedDataTableField;
             }
             set {
-                if ((object.ReferenceEquals(this.BasicInterestRatesField, value) != true)) {
-                    this.BasicInterestRatesField = value;
-                    this.RaisePropertyChanged("BasicInterestRates");
+                if ((object.ReferenceEquals(this.SerializedDataTableField, value) != true)) {
+                    this.SerializedDataTableField = value;
+                    this.RaisePropertyChanged("SerializedDataTable");
                 }
             }
         }
@@ -549,99 +549,6 @@ namespace EzBob.Web.EzServiceReference {
                     this.RecordsField = value;
                     this.RaisePropertyChanged("Records");
                 }
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="SingleBasicInterestRate", Namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults")]
-    [System.SerializableAttribute()]
-    public partial class SingleBasicInterestRate : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int FromScoreField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int IdField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int LoanInterestBaseField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int ToScoreField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int FromScore {
-            get {
-                return this.FromScoreField;
-            }
-            set {
-                if ((this.FromScoreField.Equals(value) != true)) {
-                    this.FromScoreField = value;
-                    this.RaisePropertyChanged("FromScore");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int Id {
-            get {
-                return this.IdField;
-            }
-            set {
-                if ((this.IdField.Equals(value) != true)) {
-                    this.IdField = value;
-                    this.RaisePropertyChanged("Id");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int LoanInterestBase {
-            get {
-                return this.LoanInterestBaseField;
-            }
-            set {
-                if ((this.LoanInterestBaseField.Equals(value) != true)) {
-                    this.LoanInterestBaseField = value;
-                    this.RaisePropertyChanged("LoanInterestBase");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int ToScore {
-            get {
-                return this.ToScoreField;
-            }
-            set {
-                if ((this.ToScoreField.Equals(value) != true)) {
-                    this.ToScoreField = value;
-                    this.RaisePropertyChanged("ToScore");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
     }
@@ -741,8 +648,8 @@ namespace EzBob.Web.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SaveAgreement", ReplyAction="http://tempuri.org/IEzService/SaveAgreementResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData SaveAgreement(int customerId, EzBob.Models.Agreements.AgreementModel model, string refNumber, string name, EzBob.Models.Agreements.TemplateModel template, string path1, string path2);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetBasicInterestRate", ReplyAction="http://tempuri.org/IEzService/GetBasicInterestRateResponse")]
-        EzBob.Web.EzServiceReference.BasicInterestRateActionResult GetBasicInterestRate();
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetSpResultTable", ReplyAction="http://tempuri.org/IEzService/GetSpResultTableResponse")]
+        EzBob.Web.EzServiceReference.SerializedDataTableActionResult GetSpResultTable(string spName, string[] parameters);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckAml", ReplyAction="http://tempuri.org/IEzService/CheckAmlResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData CheckAml(int customerId);
@@ -972,8 +879,8 @@ namespace EzBob.Web.EzServiceReference {
             return base.Channel.SaveAgreement(customerId, model, refNumber, name, template, path1, path2);
         }
         
-        public EzBob.Web.EzServiceReference.BasicInterestRateActionResult GetBasicInterestRate() {
-            return base.Channel.GetBasicInterestRate();
+        public EzBob.Web.EzServiceReference.SerializedDataTableActionResult GetSpResultTable(string spName, string[] parameters) {
+            return base.Channel.GetSpResultTable(spName, parameters);
         }
         
         public EzBob.Web.EzServiceReference.ActionMetaData CheckAml(int customerId) {

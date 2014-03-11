@@ -180,8 +180,57 @@
 				throw new FaultException(e.Message);
 			} // try
 		} // ExecuteSync
-
 		#endregion method ExecuteSync
+
+		private ActionMetaData ExecuteSyncParamsAtEnd<T>(out T oInstance, int? nCustomerID, int? nUserID, params object[] args) where T : AStrategy
+		{
+			ActionMetaData amd = null;
+
+			try
+			{
+				string sStrategyType = typeof(T).ToString();
+
+				Log.Debug("Executing " + sStrategyType + " started in sync...");
+
+				amd = NewSync(sStrategyType, comment: string.Join("; ", args), nCustomerID: nCustomerID, nUserID: nUserID);
+
+				var oParams = new List<object>();
+				oParams.Add(DB);
+				oParams.Add(Log);
+				oParams.AddRange(args);
+
+				ConstructorInfo oCreator =
+					typeof(T).GetConstructors().FirstOrDefault(ci => ci.GetParameters().Length == oParams.Count);
+
+				if (oCreator == null)
+					throw new Exception("Failed to find a constructor for " + sStrategyType + " with " + oParams.Count + " arguments.");
+
+				Log.Debug(sStrategyType + " constructor found, invoking...");
+
+				oInstance = (T)oCreator.Invoke(oParams.ToArray());
+
+				Log.Debug(sStrategyType + " constructor complete, executing...");
+
+				oInstance.Execute();
+
+				Log.Debug("Executing " + sStrategyType + " complete in sync.");
+
+				SaveActionStatus(amd, ActionStatus.Done);
+
+				return amd;
+			}
+			catch (Exception e)
+			{
+				if (amd != null)
+				{
+					amd.Comment = e.Message;
+					SaveActionStatus(amd, ActionStatus.Failed);
+				} // if
+
+				Log.Alert(e, "Exception during executing " + typeof(T) + " strategy.");
+				throw new FaultException(e.Message);
+			} // try
+		} // ExecuteSyncParamsAtEnd
 
 		#region method SaveActionStatus
 

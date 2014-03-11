@@ -123,11 +123,11 @@
   <wsdl:message name="IEzService_SaveAgreement_OutputMessage">
     <wsdl:part name="parameters" element="tns:SaveAgreementResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_GetBasicInterestRate_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetBasicInterestRate" />
+  <wsdl:message name="IEzService_GetSpResultTable_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetSpResultTable" />
   </wsdl:message>
-  <wsdl:message name="IEzService_GetBasicInterestRate_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetBasicInterestRateResponse" />
+  <wsdl:message name="IEzService_GetSpResultTable_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetSpResultTableResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_CheckAml_InputMessage">
     <wsdl:part name="parameters" element="tns:CheckAml" />
@@ -544,9 +544,9 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SaveAgreement" message="tns:IEzService_SaveAgreement_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SaveAgreementResponse" message="tns:IEzService_SaveAgreement_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="GetBasicInterestRate">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetBasicInterestRate" message="tns:IEzService_GetBasicInterestRate_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetBasicInterestRateResponse" message="tns:IEzService_GetBasicInterestRate_OutputMessage" />
+    <wsdl:operation name="GetSpResultTable">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetSpResultTable" message="tns:IEzService_GetSpResultTable_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetSpResultTableResponse" message="tns:IEzService_GetSpResultTable_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="CheckAml">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CheckAml" message="tns:IEzService_CheckAml_InputMessage" />
@@ -877,8 +877,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="GetBasicInterestRate">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/GetBasicInterestRate" style="document" />
+    <wsdl:operation name="GetSpResultTable">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/GetSpResultTable" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

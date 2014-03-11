@@ -3,7 +3,6 @@
 	using ActionResults;
 	using EzBob.Backend.Strategies;
 	using EzBob.Models.Agreements;
-	using Ezbob.Database;
 	using FraudChecker;
 
 	[ServiceContract(SessionMode = SessionMode.Allowed)]
@@ -269,11 +268,12 @@
 
 		#endregion Agreements
 
+		/*TODO - remove if serialized is ok 
 		[OperationContract]
 		BasicInterestRateActionResult GetBasicInterestRate();
-
-		//[OperationContract]
-		//DataTableActionResult GetSpResultTable(string spName, params QueryParameter[] parameters);
+		*/
+		[OperationContract]
+		SerializedDataTableActionResult GetSpResultTable(string spName, params string[] parameters);
 	} // interface IEzService
 } // namespace EzService
 
