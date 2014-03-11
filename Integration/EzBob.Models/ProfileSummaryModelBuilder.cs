@@ -59,8 +59,8 @@
 					Status = customer.Fraud.ToString(),
 
 				};
-			summary.OverallTurnOver = customer.PersonalInfo.OverallTurnOver;
-			summary.WebSiteTurnOver = customer.PersonalInfo.WebSiteTurnOver;
+			summary.OverallTurnOver = customer.PersonalInfo == null ? null : customer.PersonalInfo.OverallTurnOver;
+			summary.WebSiteTurnOver = customer.PersonalInfo == null ? null : customer.PersonalInfo.WebSiteTurnOver;
 			summary.Comment = customer.Comment;
 
 			summary.CompanyEmployeeCountInfo = new CompanyEmployeeCountInfo(customer.Company);
