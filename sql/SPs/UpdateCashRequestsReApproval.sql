@@ -21,19 +21,20 @@ CREATE PROCEDURE [dbo].[UpdateCashRequestsReApproval]
  @ExperianRating INT,
  @LoanSourceId INT,
  @IsCustomerRepaymentPeriodSelectionAllowed INT,
- @UseBrokerSetupFee BIT)
+ @UseBrokerSetupFee BIT,
+ @Now DATETIME)
 AS
 BEGIN
 	declare @OfferStart Datetime, @OfferValidUntil datetime
-set @OfferStart = GETUTCDATE()
+set @OfferStart = @Now
 DECLARE @ValidForHours INT
 SELECT @ValidForHours = CONVERT(INT, Value) FROM ConfigurationVariables WHERE Name='OfferValidForHours'
-set   @OfferValidUntil = DATEADD(hh, @ValidForHours ,GETUTCDATE())
+set   @OfferValidUntil = DATEADD(hh, @ValidForHours ,@Now)
 
 UPDATE [dbo].[CashRequests]
    SET  
  UnderwriterDecision = @UnderwriterDecision,
- UnderwriterDecisionDate = GETUTCDATE(),
+ UnderwriterDecisionDate = @Now,
  ManagerApprovedSum = @ManagerApprovedSum,
  APR = @APR,
  RepaymentPeriod = @RepaymentPeriod, 

@@ -6,7 +6,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[GetLastOfferForAutomatedDecision] 
-	(@CustomerId INT)
+	(@CustomerId INT, @Now DATETIME)
 AS
 BEGIN
 	DECLARE 
@@ -20,13 +20,11 @@ BEGIN
 		@ManualFundsAdded FLOAT,
 		@InterestRate DECIMAL(18,7),
 		@LoanId INT,
-		@Today DATETIME,
 		@MinInterestRateToReuse DECIMAL(18,7),
 		@TempInterestRate DECIMAL(18,7)
 	
 	SET @InterestRate = -1	
-	SET @Today = GETUTCDATE()
-	
+		
 	-- Cursor for active loans
 	DECLARE cur CURSOR FOR 
 		SELECT 
@@ -48,7 +46,7 @@ BEGIN
 	FETCH NEXT FROM cur INTO @LoanId
 	WHILE @@FETCH_STATUS = 0
 	BEGIN
-		SELECT TOP 1 @TempInterestRate = InterestRate FROM LoanSchedule WHERE LoanId = @LoanId AND Date > @Today ORDER BY Date ASC 
+		SELECT TOP 1 @TempInterestRate = InterestRate FROM LoanSchedule WHERE LoanId = @LoanId AND Date > @Now ORDER BY Date ASC 
 		
 		IF @TempInterestRate IS NULL
 			SELECT TOP 1 @TempInterestRate = InterestRate FROM LoanSchedule WHERE LoanId = @LoanId ORDER BY Date DESC
@@ -188,7 +186,7 @@ BEGIN
 							) AND
 							cr.UnderwriterDecision= 'Approved' AND
 							l.Id IS NULL AND
-							DATEADD(DD, 30, @ManualDecisionDate) >= GETUTCDATE() AND
+							DATEADD(DD, 30, @ManualDecisionDate) >= @Now AND
 							@ManualDecisionDate >= 
 							(
 								SELECT 
@@ -249,7 +247,7 @@ BEGIN
 								FROM 
 									Loan l1
 							) AND 
-							DATEADD(DD, 30, @ManualDecisionDate) >= GETUTCDATE() AND 
+							DATEADD(DD, 30, @ManualDecisionDate) >= @Now AND 
 							@ManualDecisionDate >= 
 							(
 								SELECT 
@@ -316,7 +314,7 @@ BEGIN
 						) AND 
 						cr.HasLoans = 0 AND 
 						l.Id IS NOT NULL AND 
-						DATEADD(DD, 28, @ManualDecisionDate) >= GETUTCDATE()) AS ReApprovalFullAmount
+						DATEADD(DD, 28, @ManualDecisionDate) >= @Now) AS ReApprovalFullAmount
 			)
 	END
 	ELSE 
@@ -362,7 +360,7 @@ BEGIN
 							@ManualDecisionDate >= (SELECT max(created) FROM MP_CustomerMarketPlace WHERE CustomerId=@CustomerId) AND 
 							l.Id IS NOT NULL AND 
 							cr.CreationDate >= (SELECT Min(l1.date) FROM Loan l1) AND 
-							DATEADD(DD, 28, @ManualDecisionDate) >= GETUTCDATE() AND l.Status != 'Late' 
+							DATEADD(DD, 28, @ManualDecisionDate) >= @Now AND l.Status != 'Late' 
 						GROUP BY
 							ManagerApprovedSum
 					) AS ReApprovalRemainingAmountOld

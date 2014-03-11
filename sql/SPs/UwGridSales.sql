@@ -6,7 +6,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[UwGridSales] 
-	(@WithTest BIT)
+	(@WithTest BIT, @Now DATETIME)
 AS
 BEGIN
 	SELECT
@@ -29,7 +29,7 @@ BEGIN
 	(SELECT TOP 1 CR.Comment FROM [CustomerRelations] AS CR WHERE CR.CustomerId=c.Id ORDER BY CR.Timestamp DESC) AS CRMcomment,
 	c.ManagerApprovedSum AS ApprovedSum,
 	(SELECT MAX(l.[UnderwriterDecisionDate]) FROM [CashRequests] l WHERE l.IdCustomer = c.Id) AS OfferDate,
-	(SELECT COUNT(*) FROM [CashRequests] cr WHERE (GETUTCDATE() - CR.[CreationDate]) < 5 AND CR.IdCustomer = c.Id) AS Interactions
+	(SELECT COUNT(*) FROM [CashRequests] cr WHERE (@Now - CR.[CreationDate]) < 5 AND CR.IdCustomer = c.Id) AS Interactions
 FROM
 	Customer c
 	INNER JOIN WizardStepTypes w ON c.WizardStep = w.WizardStepTypeID

@@ -6,15 +6,12 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[Update_Main_Strat_Finish_Date] 
-	(@UserId int)
+	(@UserId int, @Now DATETIME)
 AS
 BEGIN
-	declare @MainStratFinishDate datetime  
-
-set @MainStratFinishDate = GETUTCDATE()
-
+	
 UPDATE [dbo].[Customer]
-   SET [LastStartedMainStrategyEndTime] = @MainStratFinishDate
+   SET [LastStartedMainStrategyEndTime] = @Now
  WHERE Id = @UserId
 
 SET NOCOUNT ON;

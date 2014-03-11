@@ -119,7 +119,7 @@
 			Log.Info("Getting zoopla data for customer:{0}", customerId);
 			strategyHelper.GetZooplaData(customerId);
 		}
-		
+
 		public override void Execute()
 		{
 			ReadConfigurations();
@@ -129,7 +129,7 @@
 			GetPersonalInfo();
 
 			SetAutoDecisionAvailability();
-			
+
 			if (newCreditLineOption != NewCreditLineOption.SkipEverything)
 			{
 				PerformCompanyExperianCheck();
@@ -145,21 +145,21 @@
 			} // if
 
 			ScoreMedalOffer scoringResult = CalculateScoreAndMedal();
-			
+
 			if (underwriterCheck)
 			{
 				GetZooplaData();
 				SetEndTimestamp();
 				return;
 			} // if
-			
+
 			GetLastCashRequestData();
 
 			CalcAndCapOffer();
 
 			autoDecisionResponse = AutoDecisionMaker.MakeDecision(customerId, minExperianScore, totalSumOfOrders1YTotal, totalSumOfOrders3MTotal, offeredCreditLine, marketplaceSeniorityDays, enableAutomaticReRejection, enableAutomaticRejection, enableAutomaticReApproval, initialExperianConsumerScore, enableAutomaticApproval,
 				loanOfferReApprovalFullAmountOld, loanOfferReApprovalFullAmount, loanOfferReApprovalRemainingAmount, loanOfferReApprovalRemainingAmountOld, DB, Log);
-			
+
 			if (autoDecisionResponse.SystemDecision == "Reject")
 			{
 				modelLoanOffer = 0;
@@ -258,7 +258,8 @@
 				new QueryParameter("SystemDecision", autoDecisionResponse.SystemDecision),
 				new QueryParameter("Status", autoDecisionResponse.UserStatus),
 				new QueryParameter("Medal", medalType.ToString()),
-				new QueryParameter("ValidFor", autoDecisionResponse.AppValidFor)
+				new QueryParameter("ValidFor", autoDecisionResponse.AppValidFor),
+				new QueryParameter("Now", DateTime.UtcNow)
 				);
 
 			DB.ExecuteNonQuery(
@@ -275,7 +276,8 @@
 				new QueryParameter("InterestRate", loanInterestBase),
 				new QueryParameter("ManualSetupFeeAmount", manualSetupFeeAmount),
 				new QueryParameter("ManualSetupFeePercent", manualSetupFeePercent),
-				new QueryParameter("RepaymentPeriod", autoDecisionResponse.RepaymentPeriod)
+				new QueryParameter("RepaymentPeriod", autoDecisionResponse.RepaymentPeriod),
+				new QueryParameter("Now", DateTime.UtcNow)
 				);
 		}
 
@@ -354,7 +356,8 @@
 				new QueryParameter("ExperianRating", loanOfferExpirianRating),
 				new QueryParameter("LoanSourceId", loanSourceId),
 				new QueryParameter("IsCustomerRepaymentPeriodSelectionAllowed", isCustomerRepaymentPeriodSelectionAllowed),
-				new QueryParameter("UseBrokerSetupFee", useBrokerSetupFee)
+				new QueryParameter("UseBrokerSetupFee", useBrokerSetupFee),
+				new QueryParameter("Now", DateTime.UtcNow)
 				);
 		}
 
@@ -451,7 +454,10 @@
 
 		private void SetEndTimestamp()
 		{
-			DB.ExecuteNonQuery("Update_Main_Strat_Finish_Date", CommandSpecies.StoredProcedure, new QueryParameter("UserId", customerId));
+			DB.ExecuteNonQuery("Update_Main_Strat_Finish_Date",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("UserId", customerId),
+				new QueryParameter("Now", DateTime.UtcNow));
 		}
 
 		private void GetLastCashRequestData()
@@ -459,7 +465,8 @@
 			DataTable lastOfferDataTable = DB.ExecuteReader(
 				"GetLastOfferForAutomatedDecision",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId)
+				new QueryParameter("CustomerId", customerId),
+				new QueryParameter("Now", DateTime.UtcNow)
 				);
 
 			if (lastOfferDataTable.Rows.Count == 1)
@@ -491,7 +498,8 @@
 			DataTable scoreCardDataTable = DB.ExecuteReader(
 				"GetScoreCardData",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId)
+				new QueryParameter("CustomerId", customerId),
+				new QueryParameter("Today", DateTime.Today)
 			);
 
 			var scoreCardResults = new SafeReader(scoreCardDataTable.Rows[0]);
@@ -526,19 +534,19 @@
 			decimal totalSumOfOrdersForLoanOffer = totals.TotalSumOfOrdersForLoanOffer;
 			decimal marketplaceSeniorityYears = (decimal)totals.MarketplaceSeniorityDays / 365; // It is done this way to fit to the excel
 			decimal ezbobSeniorityMonths = (decimal)modelEzbobSeniority * 12 / 365; // It is done this way to fit to the excel
-			
+
 			Log.Info("Calculating score & medal");
 			ScoreMedalOffer scoringResult = medalScoreCalculator.CalculateMedalScore(totalSumOfOrdersForLoanOffer,
-				minExperianScore, 
+				minExperianScore,
 				marketplaceSeniorityYears,
-				modelMaxFeedback, 
-				maritalStatus, 
+				modelMaxFeedback,
+				maritalStatus,
 				appGender == "M" ? Gender.M : Gender.F,
-				modelMPsNumber, 
-				firstRepaymentDatePassed, 
-				ezbobSeniorityMonths, 
-				modelOnTimeLoans, 
-				modelLatePayments, 
+				modelMPsNumber,
+				firstRepaymentDatePassed,
+				ezbobSeniorityMonths,
+				modelOnTimeLoans,
+				modelLatePayments,
 				modelEarlyPayments);
 
 			modelLoanOffer = scoringResult.MaxOffer;
@@ -627,7 +635,7 @@
 		private void MakeSureMpDataIsSufficient()
 		{
 			bool shouldExpectMpData = newCreditLineOption != NewCreditLineOption.SkipEverything &&
-			                         newCreditLineOption != NewCreditLineOption.UpdateEverythingExceptMp;
+									 newCreditLineOption != NewCreditLineOption.UpdateEverythingExceptMp;
 			if (shouldExpectMpData)
 			{
 				if (!WaitForMarketplacesToFinishUpdates())
@@ -652,8 +660,8 @@
 				enableAutomaticReApproval = false;
 				enableAutomaticApproval = false;
 			} // if
-			
-			if (isOffline || 
+
+			if (isOffline ||
 				newCreditLineOption == NewCreditLineOption.SkipEverything ||
 				newCreditLineOption == NewCreditLineOption.UpdateEverythingExceptMp ||
 				newCreditLineOption == NewCreditLineOption.UpdateEverythingAndGoToManualDecision ||
@@ -665,7 +673,7 @@
 				enableAutomaticReRejection = false;
 			}
 		}
-		
+
 		#endregion public
 
 		#region private
@@ -676,7 +684,7 @@
 		private readonly StrategiesMailer mailer;
 		private readonly StrategyHelper strategyHelper = new StrategyHelper();
 		private readonly MedalScoreCalculator medalScoreCalculator;
-		
+
 		// Inputs
 		private readonly int customerId;
 		private readonly NewCreditLineOption newCreditLineOption;
@@ -767,7 +775,7 @@
 		private int modelLoanOffer;
 		private double totalSumOfOrders1YTotal;
 		private bool isFirstLoan;
-		
+
 		#endregion properties
 
 		#region method ReadConfigurations
@@ -836,7 +844,7 @@
 		} // GetPersonalInfo
 
 		#endregion method GetPersonalInfo
-		
+
 		#region method SendRejectionExplanationMail
 
 		private void SendRejectionExplanationMail(string templateName)
@@ -852,7 +860,7 @@
 
 			var defaultAccountsNumResults = new SafeReader(defaultAccountsNumDataTable.Rows[0]);
 			numOfDefaultAccounts = defaultAccountsNumResults["NumOfDefaultAccounts"];
-			
+
 			var variables = new Dictionary<string, string> {
 				{"RegistrationDate", appRegistrationDate.ToString(CultureInfo.InvariantCulture)},
 				{"userID", customerId.ToString(CultureInfo.InvariantCulture)},
@@ -884,7 +892,7 @@
 		} // SendRejectionExplanationMail
 
 		#endregion method SendRejectionExplanationMail
-		
+
 		private void GetBwa()
 		{
 			if (useCustomIdHubAddress == 0)
@@ -896,12 +904,12 @@
 			else if (useCustomIdHubAddress == 2 || (useCustomIdHubAddress != 1 && ShouldRunBwa()))
 			{
 				Log.Info("Getting BWA with custom address for customer: {0}", customerId);
-				var bwaChecker = new BwaChecker(customerId, idhubHouseNumber, idhubHouseName, idhubStreet, idhubDistrict, idhubTown, 
+				var bwaChecker = new BwaChecker(customerId, idhubHouseNumber, idhubHouseName, idhubStreet, idhubDistrict, idhubTown,
 					idhubCounty, idhubPostCode, idhubBranchCode, idhubAccountNumber, DB, Log);
 				bwaChecker.Execute();
 			}
 		}
-		
+
 		private void GetAml()
 		{
 			if (wasMainStrategyExecutedBefore)
@@ -916,7 +924,7 @@
 				{
 					Log.Info("Getting AML with custom address for customer: {0}", customerId);
 					var amlChecker = new AmlChecker(customerId, idhubHouseNumber, idhubHouseName, idhubStreet, idhubDistrict, idhubTown,
-					                                idhubCounty, idhubPostCode, DB, Log);
+													idhubCounty, idhubPostCode, DB, Log);
 					amlChecker.Execute();
 				}
 			}
@@ -934,13 +942,13 @@
 		} // ShouldRunBwa
 
 		#endregion method ShouldRunBwa
-		
+
 		private bool WaitForMarketplacesToFinishUpdates()
 		{
 			Log.Info("Waiting for marketplace data");
 			return WaitForUpdateToFinish(GetIsMarketPlacesUpdated, totalTimeToWaitForMarketplacesUpdate, intervalWaitForMarketplacesUpdate);
 		} // WaitForMarketplacesToFinishUpdates
-		
+
 		private bool WaitForExperianCompanyCheckToFinishUpdates()
 		{
 			Log.Info("Waiting for experian company check");
@@ -988,7 +996,8 @@
 		{
 			DataTable dt = DB.ExecuteReader("GetIsConsumerDataUpdated", CommandSpecies.StoredProcedure,
 					new QueryParameter("CustomerId", customerId),
-					new QueryParameter("DirectorId", directorId));
+					new QueryParameter("DirectorId", directorId),
+					new QueryParameter("Today", DateTime.Today));
 
 			var sr = new SafeReader(dt.Rows[0]);
 			return sr["IsUpdated"];
@@ -1010,7 +1019,8 @@
 			DataTable dt = DB.ExecuteReader(
 				"GetIsCompanyDataUpdated",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CompanyRefNumber", experianRefNum)
+				new QueryParameter("CompanyRefNumber", experianRefNum),
+				new QueryParameter("Today", DateTime.Today)
 			);
 
 			var sr = new SafeReader(dt.Rows[0]);

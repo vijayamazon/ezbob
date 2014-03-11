@@ -90,10 +90,12 @@
 
 			GetYodleeSums();
 
-			DataTable dt = db.ExecuteReader("GetPersonalInfoForBankBasedApproval", CommandSpecies.StoredProcedure, 
+			DataTable dt = db.ExecuteReader("GetPersonalInfoForBankBasedApproval",
+				CommandSpecies.StoredProcedure, 
 				new QueryParameter("CustomerId", customerId),
 				new QueryParameter("NumOfMonthsToLookForDefaults", numOfMonthsToLookForDefaults),
-				new QueryParameter("StartTimeForVatCheck", startTimeForVatCheck));
+				new QueryParameter("StartTimeForVatCheck", startTimeForVatCheck), 
+				new QueryParameter("Now", DateTime.UtcNow));
 			var sr = new SafeReader(dt.Rows[0]);
 
 			hasDefaultAccountsInPeriod = sr["HasDefaultAccounts"];

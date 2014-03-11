@@ -6,7 +6,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[GetScoreCardData] 
-	(@CustomerId INT)
+	(@CustomerId INT, @Today DATE)
 AS
 BEGIN
 	SELECT
@@ -24,7 +24,7 @@ BEGIN
 			mpt.InternalId IN ('A7120CB7-4C93-459B-9901-0E95E7281B59', 'A4920125-411F-4BB9-A52D-27E8A00D0A3B', '3FA5E327-FCFD-483B-BA5A-DC1815747A28')
 		) AS MPsNumber,
 		-- EZBOB seniority
-		ISNULL(DateDiff(DAY, c.GreetingMailSentDate, GETDATE()), 0) AS EZBOBSeniority,
+		ISNULL(DateDiff(DAY, c.GreetingMailSentDate, @Today), 0) AS EZBOBSeniority,
 		-- EZBOB #of previous ON time loans
 		(
 		SELECT 

@@ -7,15 +7,12 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[GetIsConsumerDataUpdated] 
 	(@CustomerId INT,
-	 @DirectorId INT)
+	 @DirectorId INT, 
+	 @Today DATE)
 AS
 BEGIN
-	DECLARE 
-		@Today DATE,
-		@LastUpdateTime DATE
-	
-	SELECT @Today = getutcdate()
-		
+	DECLARE @LastUpdateTime DATE
+			
 	IF @DirectorId = 0
 	BEGIN
 		SELECT @LastUpdateTime = max(LastUpdateDate) FROM MP_ExperianDataCache WHERE CustomerId = @CustomerId AND (DirectorId IS NULL OR DirectorId = 0)

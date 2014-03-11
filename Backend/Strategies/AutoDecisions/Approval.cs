@@ -61,7 +61,8 @@
 								dt = Db.ExecuteReader(
 									"GetLastOfferDataForApproval",
 									CommandSpecies.StoredProcedure,
-									new QueryParameter("CustomerId", customerId)
+									new QueryParameter("CustomerId", customerId),
+									new QueryParameter("Now", DateTime.UtcNow)
 									);
 
 								sr = new SafeReader(dt.Rows[0]);

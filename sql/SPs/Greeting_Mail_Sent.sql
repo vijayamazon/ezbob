@@ -7,12 +7,13 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[Greeting_Mail_Sent] 
 	(@UserId int,
-@GreetingMailSent int)
+@GreetingMailSent int, 
+@Now DATETIME)
 AS
 BEGIN
 	declare @GreetingMailSentDate datetime  
 
-set @GreetingMailSentDate = GETUTCDATE()
+set @GreetingMailSentDate = @Now
 
 UPDATE [dbo].[Customer]
    SET [GreetingMailSent] = @GreetingMailSent, [GreetingMailSentDate] = @GreetingMailSentDate

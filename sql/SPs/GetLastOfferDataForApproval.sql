@@ -6,7 +6,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[GetLastOfferDataForApproval] 
-	(@CustomerId INT)
+	(@CustomerId INT, @Now DATETIME)
 AS
 BEGIN
 	DECLARE @OfferValidUntil DATETIME, 
@@ -23,9 +23,9 @@ BEGIN
 	IF @OfferStart IS NULL
 	BEGIN
 		DECLARE @ValidForHours INT
-		SELECT @OfferStart = GETUTCDATE()
+		SELECT @OfferStart = @Now
 		SELECT @ValidForHours = CONVERT(INT, Value) FROM ConfigurationVariables WHERE Name='OfferValidForHours'
-		SET @OfferValidUntil = DATEADD(hh, @ValidForHours ,GETUTCDATE()) 
+		SET @OfferValidUntil = DATEADD(hh, @ValidForHours ,@Now) 
 	END	
 	
 	SELECT

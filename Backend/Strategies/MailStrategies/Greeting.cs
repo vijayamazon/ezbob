@@ -3,6 +3,8 @@ using Ezbob.Database;
 using Ezbob.Logger;
 
 namespace EzBob.Backend.Strategies.MailStrategies {
+	using System;
+
 	public class Greeting : AMailStrategyBase {
 		#region public
 
@@ -43,7 +45,8 @@ namespace EzBob.Backend.Strategies.MailStrategies {
 			DB.ExecuteNonQuery("Greeting_Mail_Sent",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("UserId", CustomerId),
-				new QueryParameter("GreetingMailSent", 1)
+				new QueryParameter("GreetingMailSent", 1),
+				new QueryParameter("Now", DateTime.UtcNow)
 			);
 		} // ActionAtEnd
 

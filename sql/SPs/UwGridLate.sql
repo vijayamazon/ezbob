@@ -6,7 +6,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[UwGridLate] 
-	(@WithTest BIT)
+	(@WithTest BIT, @Now DATETIME)
 AS
 BEGIN
 	SELECT
@@ -33,7 +33,7 @@ BEGIN
 		FROM [Loan] l
 		LEFT JOIN [LoanSchedule] s ON l.Id = s.[LoanId]
 		WHERE l.[CustomerId] = c.Id
-		AND s.[Date] <= GETUTCDATE()
+		AND s.[Date] <= @Now
 		AND s.[Status] = 'Late'
 	) AS LatePaymentDate,
 	(
@@ -44,11 +44,11 @@ BEGIN
 		AND l.[CustomerId] = c.Id
 	) AS LatePaymentAmount,
 	(
-		SELECT DATEDIFF(day, ISNULL(MIN(s.[Date]), GETUTCDATE()), GETUTCDATE())
+		SELECT DATEDIFF(day, ISNULL(MIN(s.[Date]), @Now), @Now)
 		FROM [Loan] l
 		LEFT JOIN [LoanSchedule] s ON l.Id = s.LoanId
 		WHERE l.[CustomerId] = c.Id
-		AND s.[Date] <= GETUTCDATE()
+		AND s.[Date] <= @Now
 		AND s.[Status] = 'Late'
 	) AS Delinquency,
 	(

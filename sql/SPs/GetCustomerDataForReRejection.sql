@@ -6,7 +6,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[GetCustomerDataForReRejection] 
-	(@CustomerId INT)
+	(@CustomerId INT, @Now DATETIME)
 AS
 BEGIN
 	DECLARE @ManualDecisionDate DATE
@@ -33,7 +33,7 @@ BEGIN
 			cr.IdUnderwriter IS NOT NULL AND 
 			cr.UnderwriterDecision = 'Rejected' AND 
 			@ManualDecisionDate >= (SELECT cast(max(created) AS DATE) FROM MP_CustomerMarketPlace WHERE CustomerId = @CustomerId) AND 
-			DATEADD(DD, 30, @ManualDecisionDate) >= GETUTCDATE() AND l.Id IS NULL AND 
+			DATEADD(DD, 30, @ManualDecisionDate) >= @Now AND l.Id IS NULL AND 
 			@ManualDecisionDate = (SELECT cast(max(cr.UnderwriterDecisionDate) AS DATE) FROM CashRequests cr WHERE cr.IdCustomer = @CustomerId)
 		) AS NewCustomer_ReReject,
  
@@ -49,7 +49,7 @@ BEGIN
 		cr.IdUnderwriter IS NOT NULL AND 
 		cr.UnderwriterDecision = 'Rejected' AND 
 		@ManualDecisionDate >= (SELECT cast(max(created) AS DATE) FROM MP_CustomerMarketPlace WHERE CustomerId = @CustomerId) AND 
-		DATEADD(DD, 30, @ManualDecisionDate) >= GETUTCDATE() AND 
+		DATEADD(DD, 30, @ManualDecisionDate) >= @Now AND 
 		l.Id IS NOT NULL AND 
 		@ManualDecisionDate = (SELECT cast(max(cr.UnderwriterDecisionDate) AS DATE) FROM CashRequests cr WHERE cr.IdCustomer = @CustomerId) 
 	) AS OldCustomer_ReReject,

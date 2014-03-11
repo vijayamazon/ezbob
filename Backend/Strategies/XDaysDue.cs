@@ -27,7 +27,9 @@
 		#region property Execute
 
 		public override void Execute() {
-			DataTable dt = DB.ExecuteReader("GetCustomersFiveDaysDue", CommandSpecies.StoredProcedure);
+			DataTable dt = DB.ExecuteReader("GetCustomersFiveDaysDue", 
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("Now", DateTime.UtcNow));
 
 			foreach (DataRow row in dt.Rows) {
 				var sr = new SafeReader(row);

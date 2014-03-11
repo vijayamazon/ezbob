@@ -8,7 +8,8 @@ GO
 CREATE PROCEDURE [dbo].[GetPersonalInfoForBankBasedApproval] 
 	(@CustomerId INT,
 	 @NumOfMonthsToLookForDefaults INT,
-	 @StartTimeForVatCheck DATETIME)
+	 @StartTimeForVatCheck DATETIME, 
+	 @Now DATETIME)
 AS
 BEGIN
 	DECLARE 
@@ -62,7 +63,7 @@ BEGIN
 		ExperianDefaultAccount
 	WHERE
 		CustomerId = @CustomerId AND
-		DATEDIFF(MONTH, Date, GETUTCDATE()) < @NumOfMonthsToLookForDefaults
+		DATEDIFF(MONTH, Date, @Now) < @NumOfMonthsToLookForDefaults
 	
 	SELECT 
 		@UnsettledDefaultCount = COUNT(1)
@@ -183,7 +184,7 @@ BEGIN
 		@DateOfBirth AS DateOfBirth,
 		CAST((CASE @ResidentialStatus WHEN 'Home owner' THEN 1 ELSE 0 END) AS BIT) AS IsHomeOwner,
 		@ExperianScore AS ExperianScore,
-		ISNULL(@EarliestTransactionDate, GETUTCDATE()) AS EarliestTransactionDate,
+		ISNULL(@EarliestTransactionDate, @Now) AS EarliestTransactionDate,
 		@TotalAnnualizedValue AS TotalAnnualizedValue,
 		@NumberOfVatReturns AS NumberOfVatReturns
 END

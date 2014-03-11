@@ -6,6 +6,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[GetCustomersFiveDaysDue]
+(@Now DATETIME)
 AS
 BEGIN
 	SELECT 
@@ -26,8 +27,8 @@ BEGIN
 			ls.LoanId = l.Id AND 
 			ls.Status = 'StillToPay' AND 
 			ls.AmountDue > 0 AND 
-			ls.Date  >= GETUTCDATE() AND 
-			convert(date, ls.Date)  <= DateAdd(dd,5 ,GETUTCDATE()) AND 
+			ls.Date  >= @Now AND 
+			convert(date, ls.Date)  <= DateAdd(dd,5 ,@Now) AND 
 			(
 				ls.FiveDaysDueMailSent IS NULL OR 
 				ls.FiveDaysDueMailSent = 0

@@ -17,7 +17,8 @@ CREATE PROCEDURE [dbo].[UpdateCashRequestsNew]
 	@InterestRate DECIMAL(18,4),
 	@ManualSetupFeeAmount INT,
 	@ManualSetupFeePercent DECIMAL(18,4),
-	@RepaymentPeriod INT)
+	@RepaymentPeriod INT,
+	@Now DATETIME)
 AS
 BEGIN
 	DECLARE @MaxId INT
@@ -32,7 +33,7 @@ BEGIN
 			SystemCalculatedSum = @SystemCalculatedAmount,
 			ManagerApprovedSum = @ManagerApprovedSum,
 			SystemDecision = @SystemDecision,
-			SystemDecisionDate= GETUTCDATE(), 
+			SystemDecisionDate= @Now, 
 			MedalType= @MedalType,
 			ScorePoints= @ScorePoints,
 			ExpirianRating = @ExpirianRating,
@@ -52,7 +53,7 @@ BEGIN
 			SystemCalculatedSum = @SystemCalculatedAmount,
 			ManagerApprovedSum = @ManagerApprovedSum,
 			SystemDecision = @SystemDecision,
-			SystemDecisionDate= GETUTCDATE(), 
+			SystemDecisionDate= @Now, 
 			MedalType= @MedalType,
 			ScorePoints= @ScorePoints,
 			ExpirianRating = @ExpirianRating,

@@ -11,14 +11,12 @@ CREATE PROCEDURE [dbo].[UpdateScoringResultsNew]
 	 @SystemDecision VARCHAR(50),
 	 @Status VARCHAR(250),
 	 @Medal NVARCHAR(50),
-	 @ValidFor DATETIME)
+	 @ValidFor DATETIME,
+	 @Now DATETIME)
 AS
 BEGIN
 	DECLARE 
-		@ValidForHours INT,
-		@ApplyForLoan DATETIME
-		
-	SET @ApplyForLoan = GETUTCDATE()
+		@ValidForHours INT
 
 	SELECT 
 		@ValidForHours = CONVERT(INT, Value) 
@@ -27,15 +25,15 @@ BEGIN
 	WHERE 
 		Name='OfferValidForHours'
 
-	IF @ValidFor <  DATEADD(hh,@ValidForHours ,@ApplyForLoan) OR @ValidFor IS NULL
-		SET @ValidFor = DATEADD(hh,@ValidForHours ,GETUTCDATE())
+	IF @ValidFor <  DATEADD(hh,@ValidForHours ,@Now) OR @ValidFor IS NULL
+		SET @ValidFor = DATEADD(hh,@ValidForHours ,@Now)
 
 	UPDATE Customer
 	SET
 		CreditResult = @CreditResult, 
 		Status = @Status,
 		SystemDecision = @SystemDecision,
-		ApplyForLoan= @ApplyForLoan,
+		ApplyForLoan= @Now,
 		ValidFor = @ValidFor, 
 		MedalType= @Medal
 	WHERE 

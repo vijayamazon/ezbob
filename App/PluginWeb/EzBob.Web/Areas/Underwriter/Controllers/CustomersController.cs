@@ -192,7 +192,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 		[Ajax]
 		[HttpGet]
 		public JsonResult GridLate(bool includeTestCustomers) {
-			return LoadGrid("UwGridLate", includeTestCustomers, () => new GridLateRow());
+			return LoadGrid("UwGridLate", includeTestCustomers, () => new GridLateRow(),null, DateTime.UtcNow);
 		} // GridLate
 
 		#endregion method GridLate
@@ -214,7 +214,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 		[Ajax]
 		[HttpGet]
 		public JsonResult GridSales(bool includeTestCustomers) {
-			return LoadGrid("UwGridSales", includeTestCustomers, () => new GridSalesRow());
+			return LoadGrid("UwGridSales", includeTestCustomers, () => new GridSalesRow(), null, DateTime.UtcNow);
 		} // GridSales
 
 		#endregion method GridSales
@@ -295,7 +295,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 			return LoadGrid(sSpName, bIncludeTestCustomers, oFactory, bIncludeAllCustomers);
 		} // LoadGrid
 
-		private JsonResult LoadGrid(string sSpName, bool bIncludeTestCustomers, Func<AGridRow> oFactory, bool? bIncludeAllCustomers) {
+		private JsonResult LoadGrid(string sSpName, bool bIncludeTestCustomers, Func<AGridRow> oFactory, bool? bIncludeAllCustomers, DateTime? now = null) {
 			var oRes = new SortedDictionary<long, AGridRow>();
 
 			var args = new List<QueryParameter> {
@@ -304,6 +304,11 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 
 			if (bIncludeAllCustomers.HasValue)
 				args.Add(new QueryParameter("@WithAll", bIncludeAllCustomers));
+
+			if (now.HasValue)
+			{
+				args.Add(new QueryParameter("@Now", now.Value));
+			}
 
 			m_oDB.ForEachRowSafe(
 				(sr, bRowSetStarts) => {
