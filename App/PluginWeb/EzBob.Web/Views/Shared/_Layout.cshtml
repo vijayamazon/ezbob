@@ -55,6 +55,7 @@
 </head>
 
 <body auth="@authCookie" data-user-name="">
+    @{Html.RenderPartial("_GoogleTagManager");}
     @RenderSection("afterHead", false)
 
     @{
