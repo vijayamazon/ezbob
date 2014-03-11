@@ -172,10 +172,15 @@ namespace EzBob.Web.Controllers
 			string errorMessage = null;
 
 			if (ModelState.IsValid) {
-				if (m_oBrokerHelper.IsBroker(model.UserName)) {
-					m_oBrokerHelper.TryLogin(model.UserName, model.Password);
-					return this.JsonNet(new { success = true, errorMessage, broker = true });
-				} // if is broker
+				try {
+					if (m_oBrokerHelper.IsBroker(model.UserName)) {
+						m_oBrokerHelper.TryLogin(model.UserName, model.Password);
+						return this.JsonNet(new {success = true, broker = true});
+					} // if is broker
+				}
+				catch (Exception e) {
+					_log.Warn("Failed to check whether '" + model.UserName + "' is a broker login, continuing as a customer.", e);
+				} // try
 
 				var user = _users.GetUserByLogin(model.UserName);
 
@@ -501,8 +506,13 @@ namespace EzBob.Web.Controllers
 			if (!ModelState.IsValid)
 				return GetModelStateErrors(ModelState);
 
-			if (m_oBrokerHelper.IsBroker(email))
-				return this.JsonNet(new { broker = true });
+			try {
+				if (m_oBrokerHelper.IsBroker(email))
+					return this.JsonNet(new {broker = true});
+			}
+			catch (Exception e) {
+				_log.Warn("Failed to check whether the email '" + email + "' is a broker email, continuing as a customer.", e);
+			} // try
 
 			var user = _users.GetAll().FirstOrDefault(x => x.EMail == email || x.Name == email);
 

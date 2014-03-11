@@ -256,6 +256,12 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
                 ShowHideSignLogOnOff();
 
+                SetCustomerName(
+					that.$el.find('#FirstName').val(),
+					that.$el.find('#MiddleInitial').val(),
+					that.$el.find('#Surname').val()
+				);
+
                 that.model.set('loggedIn', true); // triggers 'ready' and 'next'
                 
             } else {

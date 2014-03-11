@@ -24,17 +24,19 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 
         this.readyToProceed = false;
 
-	    this.model.fetch();
-
         this.constructor.__super__.initialize.call(this);
     }, // initialize
 
     showConsent: function () {
+    	this.setCustomerName();
+
+    	var oName = GetCustomerName();
+
         var consentAgreementModel = new EzBob.ConsentAgreementModel({
             id: this.model.get('Id'),
-            firstName: this.model.get('CustomerPersonalInfo').FirstName,
-            middleInitial: this.model.get('CustomerPersonalInfo').MiddleInitial,
-            surname: this.model.get('CustomerPersonalInfo').Surname,
+            firstName: oName.firstName,
+            middleInitial: oName.middleInitial,
+            surname: oName.lastName,
         });
 
         var consentAgreement = new EzBob.ConsentAgreement({ model: consentAgreementModel });
@@ -165,9 +167,22 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
             EzBob.Validation.element(this.validator, $(mobileObj));
         }
 
+        this.setCustomerName();
+
         this.readyToProceed = true;
         return this;
     }, // render
+
+    setCustomerName: function() {
+    	var oElm = GetCustomerName();
+
+    	if (!oElm.firstName) {
+    		var obj = this.model.get('CustomerPersonalInfo');
+
+    		if (obj)
+    			SetCustomerName(obj.FirstName, obj.MiddleInitial, obj.Surname);
+    	} // if
+    }, // setCustomerName
 
     personalAddressModelChange: function (e, el) {
         this.inputChanged();

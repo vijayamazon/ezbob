@@ -153,6 +153,24 @@
 			$('body').attr('data-user-name', '@(User.Identity.IsAuthenticated ? User.Identity.Name : "")');
 			ShowHideSignLogOnOff();
 		});
+
+		function SetCustomerName(sFirstName, sMiddleInitial, sLastName) {
+			$('#customer-name').attr({
+				'data-first-name': sFirstName,
+				'data-middle-initial': sMiddleInitial,
+				'data-last-name': sLastName,
+			});
+		} // SetCustomerName
+
+		function GetCustomerName() {
+			var oElm = $('#customer-name');
+
+			return {
+				firstName: oElm.attr('data-first-name'),
+				middleInitial: oElm.attr('data-middle-initial'),
+				lastName: oElm.attr('data-last-name'),
+			};
+		} // GetCustomerName
 	</script>
 
     @{ Html.RenderPartial("_ClickTale"); }
@@ -168,5 +186,6 @@
     <div style="display: none;" class="hide" id="cg-account-list">@JsonConvert.SerializeObject(Configuration.Instance.Vendors)</div>
     <div style="display: none;" class="hide" id="current-server-time-zone">@DateTimeOffset.Now.ToString("zzz", CultureInfo.InvariantCulture)</div>
     <div style="display: none;" class="hide" id="yodlee-banks">@oDBHelper.YodleeBanks</div>
+    <div style="display: none;" class="hide" id="customer-name"></div>
 </body>
 </html>
