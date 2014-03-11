@@ -1,9 +1,10 @@
-IF OBJECT_ID('GetLastMainStrategyStatus') IS NULL
-	EXECUTE('CREATE PROCEDURE GetLastMainStrategyStatus AS SELECT 1')
+IF OBJECT_ID('IsStrategyRunning') IS NULL
+	EXECUTE('CREATE PROCEDURE IsStrategyRunning AS SELECT 1')
 GO
 
-ALTER PROCEDURE GetLastMainStrategyStatus
-@CustomerId INT
+ALTER PROCEDURE IsStrategyRunning
+@CustomerId INT,
+@ActionName NVARCHAR(100)
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -14,9 +15,9 @@ BEGIN
 	DECLARE 
 		@ActionNameId INT, 
 		@ActionStatusId INT,
-		@CurrentStatus VARCHAR(30)
+		@CurrentStatus BIT
 
-	SELECT @ActionNameId = ActionNameId FROM EzServiceActionName WHERE ActionName = 'EzBob.Backend.Strategies.MainStrategy'
+	SELECT @ActionNameId = ActionNameId FROM EzServiceActionName WHERE ActionName = @ActionName
 
 	SELECT TOP 1
 		@ActionStatusId = ActionStatusId
@@ -30,14 +31,14 @@ BEGIN
 		EntryTime DESC
 
 	SELECT 
-		@CurrentStatus = ActionStatusName 
+		@CurrentStatus = IsInProgress 
 	FROM 
 		EzServiceActionStatus 
 	WHERE 
 		ActionStatusID = @ActionStatusId
 	
 	IF @CurrentStatus IS NULL
-		SET @CurrentStatus = 'Never Started'
+		SET @CurrentStatus = 0
 		
 	SELECT @CurrentStatus
 END

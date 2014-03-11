@@ -1,42 +1,54 @@
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GetLastMarketplaceStatus]') AND TYPE IN (N'P', N'PC'))
-DROP PROCEDURE [dbo].[GetLastMarketplaceStatus]
+IF OBJECT_ID('GetLastMarketplaceStatus') IS NULL
+	EXECUTE('CREATE PROCEDURE GetLastMarketplaceStatus AS SELECT 1')
 GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[GetLastMarketplaceStatus] 
-	(@CustomerId INT,
-	 @MarketplaceId INT)
+
+ALTER PROCEDURE GetLastMarketplaceStatus
+@CustomerId INT,
+@MarketplaceId INT
 AS
 BEGIN
+	SET NOCOUNT ON;
+
 	-- Setting the isolation level to avoid deadlocks while 'waiting' in the main strategy
 	SET TRANSACTION ISOLATION LEVEL READ UNCOMMITTED
-	
+
 	DECLARE 
-		@MpActionNameId INT, 
+		@MpActionNameId INT,
+		@MpsActionNameId INT, 
 		@ActionStatusId INT,
 		@CommentToSearch VARCHAR(25),
-		@CurrentStatus VARCHAR(30)
+		@CurrentStatus VARCHAR(30),
+		@ActionID UNIQUEIDENTIFIER
 
 	SELECT @MpActionNameId = ActionNameId FROM EzServiceActionName WHERE ActionName = 'EzBob.Backend.Strategies.UpdateMarketplace'
+	SELECT @MpsActionNameId = ActionNameId FROM EzServiceActionName WHERE ActionName = 'EzBob.Backend.Strategies.UpdateMarketplaces'
 	SELECT @CommentToSearch = CONVERT(VARCHAR(10), @CustomerId) + '; ' + CONVERT(VARCHAR(10), @MarketplaceId)
 		
-	SELECT 
+	SELECT TOP 1
+		@ActionID = ActionID
+	FROM
+		EzServiceActionHistory
+	WHERE 
+		CustomerID = @CustomerId
+		AND
+		ActionStatusID IN (1, 7)
+		AND
+		(
+			(ActionNameID = @MpActionNameId AND CONVERT(VARCHAR(25), Comment) = @CommentToSearch)
+			OR
+			(ActionNameID = @MpsActionNameId)
+		)
+	ORDER BY
+		EntryTime DESC
+
+	SELECT TOP 1
 		@ActionStatusId = ActionStatusId
 	FROM
-		(
-			SELECT 
-				row_number() over (partition by CustomerId order by EntryTime desc) rn, 
-				ActionStatusId 
-			FROM 
-				EzServiceActionHistory 
-			WHERE 
-				ActionNameID = @MpActionNameId AND 
-				CONVERT(VARCHAR(25), Comment) = @CommentToSearch
-		) AS ActionsTable 
+		EzServiceActionHistory
 	WHERE 
-		ActionsTable.rn = 1
+		ActionID = @ActionID
+	ORDER BY
+		EntryTime DESC
 
 	SELECT 
 		@CurrentStatus = ActionStatusName 

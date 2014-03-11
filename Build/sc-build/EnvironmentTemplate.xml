@@ -451,32 +451,6 @@ T6C7Spa3i/ltRwpQYWeYRRvJGkNUa12VLyTMdYRAAAAAvBLTqmDnMOt2M1IbVhi98uhE0pS2YC+WwInF
         <path value="${webDeployFolder}EzBob.Web2\" />
         <property name="ApplicationId" value="1" />
         <property name="LogFile" value="EzBob.Web.log" />
-        <property name="GreetingStrategyName" value="Greeting" />
-        <property name="CashTransferedStrategyName" value="Cash_Transfered" />
-        <!-- <property name="GetCashFailedStrategyName" value="Get_Cash_Failed" /> -->
-        <property name="GetCashFailed4TimesStrategyName" value="Get_Cash_Failed" />
-        <property name="TransferCashFailedStrategyName" value="Transfer_Cash_Failed" />
-        <property name="PayEarlyStrategyName" value="PayEarly" />
-        <property name="PayPointNameValidationFailedStrategyName" value="PayPointNameValidationFailed" />
-        <property name="RestorePasswordStrategyName" value="RestorePassword" />
-        <property name="ApprovedUserStrategyName" value="Approved_User" />
-        <property name="RejectUserStrategyName" value="Rejected_User" />
-        <property name="MoreAMLInformationStrategyName" value="More_AML_Information" />
-        <property name="MoreAMLandBWAStrategyName" value="More_AML_and_BWA_Information" />
-        <property name="MoreBWAInformationStrategyName" value="More_BWA_Information" />
-        <property name="ChangePasswordStrategyName" value="Change_Password" />
-        <property name="ThreeInvalidAttemptsStrategyName" value="Three_Invalid_Attempts_Password" />
-        <property name="ScoringResultStrategyName" value="Main_Strategy" />
-		<property name="FraudCheckerStrategyName" value="FraudChecker" />
-        <property name="CustomerMarketPlaceStrategyName" value="Update Customer Market Place Data" />
-		<property name="UpdateCustomerMarketplacesName" value="Update Customer Data" />
-        <property name="ConfirmationEmailStrategyName" value="ConfirmationEmailStrategy" />
-		<property name="EmailRolloverAddedStrategyName" value="Email Rollover Added" />
-		<property name="RecheckEbayTokenStrategyName" value="ReneweBayToken" />
-        <property name="CustomerEscalatedStrategyName" value="CustomerEscalated" />
-        <property name="ReneweBayTokenStrategyName" value="ReneweBayToken" />
-		<property name="CAISNoUploadStrategyName" value="CAIS_NO_Upload" />
-        <property name="EmailUnderReviewStrategyName" value="Email Under review" />
         <property name="CheckStoreUniqueness" value="True" />
         <property name="WizardTopNaviagtionEnabled" value="False" />
         <property name="LandingPageEnabled" value="False" />

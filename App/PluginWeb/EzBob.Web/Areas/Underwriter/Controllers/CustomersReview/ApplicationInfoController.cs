@@ -470,7 +470,7 @@
 			}
 
 			if (!_config.SkipServiceOnNewCreditLine) {
-				var anyApps = _applications.StratagyIsRunning(Id, _config.ScoringResultStrategyName);
+				var anyApps = StrategyChecker.IsStrategyRunning(Id, true);
 				if (anyApps)
 					return this.JsonNet(new { Message = "The evaluation strategy is already running. Please wait..." });
 			}

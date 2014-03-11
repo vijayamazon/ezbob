@@ -46,7 +46,7 @@
         public JsonNetResult RunCheck(int id)
         {
             var customer = _customers.Get(id);
-            var anyApps = _applications.StratagyIsRunning(id, _config.ScoringResultStrategyName);
+			var anyApps = StrategyChecker.IsStrategyRunning(id, true);
             if (anyApps)
                 return this.JsonNet(new { Message = "The evaluation strategy is already running. Please wait..." });
 
@@ -140,7 +140,7 @@
                                             string district, string town, string county, string postcode, string bankAccount, string sortCode)
         {
             var customer = _customers.Get(id);
-            var isRunning = _applications.StratagyIsRunning(id, _config.ScoringResultStrategyName);
+            var isRunning = StrategyChecker.IsStrategyRunning(id, true);
 
             if (isRunning)
                 return this.JsonNet(new { Message = "The evaluation strategy is already running. Please wait..." });
