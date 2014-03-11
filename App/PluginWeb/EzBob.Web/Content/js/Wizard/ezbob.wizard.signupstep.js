@@ -105,6 +105,14 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
     inputChanged: function (evt) {
         this.setFieldStatusNotRequired(evt, 'promoCode');
+
+        var el = evt ? $(evt.currentTarget) : null;
+
+        if (el && el.attr('id') === 'MiddleInitial' && el.val() === '') {
+            var img = el.closest('div').find('.field_status');
+            img.field_status('set', 'empty', 2);
+        } // if
+
         var enabled = EzBob.Validation.checkForm(this.validator);
         enabled = enabled && (!this.twilioEnabled || this.activatedCode || this.switchedToCaptcha);
         $('#signupSubmitButton').toggleClass('disabled', !enabled);

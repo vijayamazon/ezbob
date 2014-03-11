@@ -43,13 +43,6 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
     }, // showConsent
     
     inputChanged: function (event) {
-        var el = event ? $(event.currentTarget) : null;
-
-        if (el && el.attr('id') === 'MiddleInitial' && el.val() === '') {
-            var img = el.closest('div').find('.field_status');
-            img.field_status('set', 'empty', 2);
-        } // if
-
         var enabled = EzBob.Validation.checkForm(this.validator) &&
 			this.isPrevAddressValid() &&
 			this.isAddressValid();
