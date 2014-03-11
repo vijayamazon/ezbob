@@ -18,6 +18,19 @@ class EzBob.Underwriter.Settings.LoanOfferRangesView extends Backbone.Marionette
     events:
         "click .addRange": "addRange"
         "click .removeRange": "removeRange"
+        "click #SaveBasicInterestRateSettings": "saveBasicInterestRateSettings"
+
+    saveBasicInterestRateSettings: ->
+        BlockUi "on"
+        debugger
+        xhr = $.post "#{window.gRootPath}Underwriter/StrategySettings/SaveBasicInterestRate", serializedModels: JSON.stringify(@model.get('loanOfferRanges'))
+        # @model
+        xhr.done (res) =>
+            if res.error
+                 EzBob.App.trigger('error', res.error)
+        xhr.always ->
+            BlockUi "off"
+        false
 
     removeRange: (rangeId) ->
         #TODO: implement
@@ -28,7 +41,6 @@ class EzBob.Underwriter.Settings.LoanOfferRangesView extends Backbone.Marionette
         return
 
     serializeData: ->
-        debugger
         data = 
             loanOfferRanges: @model.get('loanOfferRanges')
         return data
@@ -41,6 +53,38 @@ class EzBob.Underwriter.Settings.LoanOfferRangesView extends Backbone.Marionette
         if !$("body").hasClass("role-manager") 
             @$el.find("select").addClass("disabled").attr({readonly:"readonly", disabled: "disabled"})
             @$el.find("button").hide()
+            
+        counter = 0
+        found = true
+        while (found)
+            x = @$el.find('#startValue_' + counter)
+            if (x.length == 1)
+                x.autoNumeric()
+            else
+                found = false
+            counter++
+        
+        counter = 0
+        found = true
+        while (found)
+            x = @$el.find('#endValue_' + counter)
+            if (x.length == 1)
+                x.autoNumeric()
+            else
+                found = false
+            counter++
+        
+        counter = 0
+        found = true
+        while (found)
+            x = @$el.find('#interest_' + counter)
+            if (x.length == 1)
+                x.autoNumeric()
+            else
+                found = false
+            counter++
+
+        return false
 
     show: (type) ->
         this.$el.show()

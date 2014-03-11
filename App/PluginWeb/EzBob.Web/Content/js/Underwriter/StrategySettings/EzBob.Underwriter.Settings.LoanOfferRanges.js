@@ -44,7 +44,28 @@
 
     LoanOfferRangesView.prototype.events = {
       "click .addRange": "addRange",
-      "click .removeRange": "removeRange"
+      "click .removeRange": "removeRange",
+      "click #SaveBasicInterestRateSettings": "saveBasicInterestRateSettings"
+    };
+
+    LoanOfferRangesView.prototype.saveBasicInterestRateSettings = function() {
+      var xhr,
+        _this = this;
+
+      BlockUi("on");
+      debugger;
+      xhr = $.post("" + window.gRootPath + "Underwriter/StrategySettings/SaveBasicInterestRate", {
+        serializedModels: JSON.stringify(this.model.get('loanOfferRanges'))
+      });
+      xhr.done(function(res) {
+        if (res.error) {
+          return EzBob.App.trigger('error', res.error);
+        }
+      });
+      xhr.always(function() {
+        return BlockUi("off");
+      });
+      return false;
     };
 
     LoanOfferRangesView.prototype.removeRange = function(rangeId) {};
@@ -52,7 +73,6 @@
     LoanOfferRangesView.prototype.addRange = function(e, range) {};
 
     LoanOfferRangesView.prototype.serializeData = function() {
-      debugger;
       var data;
 
       data = {
@@ -70,13 +90,49 @@
     };
 
     LoanOfferRangesView.prototype.onRender = function() {
+      var counter, found, x;
+
       if (!$("body").hasClass("role-manager")) {
         this.$el.find("select").addClass("disabled").attr({
           readonly: "readonly",
           disabled: "disabled"
         });
-        return this.$el.find("button").hide();
+        this.$el.find("button").hide();
       }
+      counter = 0;
+      found = true;
+      while (found) {
+        x = this.$el.find('#startValue_' + counter);
+        if (x.length === 1) {
+          x.autoNumeric();
+        } else {
+          found = false;
+        }
+        counter++;
+      }
+      counter = 0;
+      found = true;
+      while (found) {
+        x = this.$el.find('#endValue_' + counter);
+        if (x.length === 1) {
+          x.autoNumeric();
+        } else {
+          found = false;
+        }
+        counter++;
+      }
+      counter = 0;
+      found = true;
+      while (found) {
+        x = this.$el.find('#interest_' + counter);
+        if (x.length === 1) {
+          x.autoNumeric();
+        } else {
+          found = false;
+        }
+        counter++;
+      }
+      return false;
     };
 
     LoanOfferRangesView.prototype.show = function(type) {

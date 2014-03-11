@@ -1,6 +1,6 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Models
 {
-	public class LoanOfferRangeModel
+	public class BasicInterestRate
 	{
 		public int Id { get; set; }
 		public int FromScore { get; set; }

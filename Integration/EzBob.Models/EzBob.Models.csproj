@@ -93,6 +93,7 @@
     <Compile Include="DirectorModel.cs" />
     <Compile Include="EditLoanDetailsModel.cs" />
     <Compile Include="FormattingUtils.cs" />
+    <Compile Include="BasicInterestRate.cs" />
     <Compile Include="Marketplaces\Builders\ChannelGrabberMarketplaceModelBuilder.cs" />
     <Compile Include="Marketplaces\Builders\CompanyFilesMarketplaceModelBuilder.cs" />
     <Compile Include="Marketplaces\Builders\EKMMarketplaceModelBuilder.cs" />
@@ -139,7 +140,9 @@
     <Compile Include="ProfileSummaryModel.cs" />
     <Compile Include="ProfileSummaryModelBuilder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-<Compile Include="..\..\Common\CommonAssemblyInfo.cs"><Link>Properties\CommonAssemblyInfo.cs</Link></Compile>
+    <Compile Include="..\..\Common\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="RepaymentCalculator.cs" />
     <Compile Include="SchedultItemModel.cs" />
     <Compile Include="SecurityQuestionModel.cs" />

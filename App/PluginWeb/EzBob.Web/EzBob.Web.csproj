@@ -210,7 +210,6 @@
     <Compile Include="Areas\Customer\Controllers\Exceptions\UserNotFoundException.cs" />
     <Compile Include="Areas\Customer\Controllers\hmrc_file_processor.cs" />
     <Compile Include="Areas\Underwriter\Controllers\UploadHmrcController.cs" />
-    <Compile Include="Areas\Underwriter\Models\LoanOfferRangeModel.cs" />
     <Compile Include="Code\BrokerHelper.cs" />
     <Compile Include="Code\StrategyChecker.cs" />
     <Compile Include="Code\UiEvents\UiActionEventModel.cs" />
@@ -1268,6 +1267,9 @@
     <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.Campaign.js">
       <DependentUpon>EzBob.Underwriter.Settings.Campaign.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.Experian.js">
+      <DependentUpon>EzBob.Underwriter.Settings.Experian.coffee</DependentUpon>
+    </Content>
     <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.LoanOfferRanges.js">
       <DependentUpon>EzBob.Underwriter.Settings.LoanOfferRanges.coffee</DependentUpon>
     </Content>
@@ -1435,6 +1437,9 @@
     <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.SerializedDataTableActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
+    <None Include="Service References\EzServiceReference\EzBob.Web.Areas.Underwriter.Models.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\EzServiceReference\EzService.ActionResults.xsd">
       <SubType>Designer</SubType>
     </None>

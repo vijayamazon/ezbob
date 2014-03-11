@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers
 {
+	using System.Collections.Generic;
 	using System.Data;
 	using System.Web.Mvc;
 	using Code;
@@ -365,10 +366,72 @@
 		public JsonNetResult SettingsBasicInterestRate()
 		{
 			var loanOfferRangesList = serviceClient.Instance.GetSpResultTable("GetBasicInterestRates", null);
-			var deserializedArray = JsonConvert.DeserializeObject<LoanOfferRangeModel[]>(loanOfferRangesList.SerializedDataTable);
+			var deserializedArray = JsonConvert.DeserializeObject<BasicInterestRate[]>(loanOfferRangesList.SerializedDataTable);
 			var loanOfferRanges = deserializedArray == null ? null : deserializedArray.ToList();
 
 			return this.JsonNet(new { loanOfferRanges });
+		}
+
+		[Ajax]
+		[HttpPost]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		public JsonNetResult SaveBasicInterestRate(string serializedModels)
+		{
+			var deserializedModels = JsonConvert.DeserializeObject<List<BasicInterestRate>>(serializedModels);
+			var sortedModels = new SortedDictionary<int, BasicInterestRate>();
+			var sortedList = new List<BasicInterestRate>();
+			foreach (BasicInterestRate model in deserializedModels)
+			{
+				sortedList.Add(model);
+				if (sortedModels.ContainsKey(model.FromScore))
+				{
+					string errorMessage = string.Format("FromScore must be unique:{0}", model.FromScore);
+					Log.WarnFormat(errorMessage);
+					return this.JsonNet(new { error = errorMessage });
+				}
+				sortedModels.Add(model.FromScore, model);
+			}
+			// go over list and sort by fromscore
+			bool isFirst = true;
+			int highestSoFar = 0;
+			foreach (int key in sortedModels.Keys)
+			{
+				BasicInterestRate model = sortedModels[key];
+				if (isFirst)
+				{
+					if (model.FromScore != 0)
+					{
+						const string errorMessage = "FromScore must start at 0";
+						Log.WarnFormat(errorMessage);
+						return this.JsonNet(new { error = errorMessage });
+					}
+					isFirst = false;
+				}
+				else
+				{
+					if (highestSoFar + 1 != model.FromScore)
+					{
+						string errorMessage = string.Format("No range covers the numbers {0}-{1}", highestSoFar + 1, model.FromScore - 1);
+						Log.WarnFormat(errorMessage);
+						return this.JsonNet(new { error = errorMessage });
+					}
+				}
+				highestSoFar = model.ToScore;
+			}
+
+			if (highestSoFar != 100000000)
+			{
+				string errorMessage = string.Format("No range covers the numbers {0}-100000000", highestSoFar);
+				Log.WarnFormat(errorMessage);
+				return this.JsonNet(new { error = errorMessage });
+			}
+
+			serviceClient.Instance.SaveBasicInterestRate(sortedList.ToArray());
+
+			string error = null;
+			
+
+			return this.JsonNet(new { error = error });
 		}
 
 		[Ajax]

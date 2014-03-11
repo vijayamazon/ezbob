@@ -1,8 +1,10 @@
 ﻿namespace EzService {
+	using System.Collections.Generic;
 	using System.ServiceModel;
 	using ActionResults;
 	using EzBob.Backend.Strategies;
 	using EzBob.Models.Agreements;
+	using EzBob.Web.Areas.Underwriter.Models;
 	using FraudChecker;
 
 	[ServiceContract(SessionMode = SessionMode.Allowed)]
@@ -274,6 +276,9 @@
 		*/
 		[OperationContract]
 		SerializedDataTableActionResult GetSpResultTable(string spName, params string[] parameters);
+
+		[OperationContract]
+		ActionMetaData SaveBasicInterestRate(List<BasicInterestRate> basicInterestRates);
 	} // interface IEzService
 } // namespace EzService
 

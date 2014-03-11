@@ -1,6 +1,8 @@
 ﻿namespace EzService {
+	using System.Collections.Generic;
 	using ActionResults;
 	using EzBob.Backend.Strategies;
+	using EzBob.Web.Areas.Underwriter.Models;
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Converters;
 
@@ -17,7 +19,14 @@
 				SerializedDataTable = serializedDataTable
 			};
 		} // GetSpResultTable
-		
+
+		public ActionMetaData SaveBasicInterestRate(List<BasicInterestRate> basicInterestRates)
+		{
+			// clear table sp
+			// foreach insert to table sp
+			return null;
+		}
+
 		/*TODO - remove if serialized is ok
 		public BasicInterestRateActionResult GetBasicInterestRate()
 		{
