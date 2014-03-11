@@ -364,7 +364,7 @@
 		public JsonNetResult SettingsLoanOfferRanges()
 		{
 			var loanOfferRangesList = serviceClient.Instance.GetBasicInterestRate();
-			
+
 			var loanOfferRanges = loanOfferRangesList.BasicInterestRates
 				.Select(c => new LoanOfferRangeModel
 					{

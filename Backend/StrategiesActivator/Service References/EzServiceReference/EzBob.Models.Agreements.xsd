@@ -61,4 +61,10 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="FormattedSchedule" nillable="true" type="tns:FormattedSchedule" />
+  <xs:complexType name="TemplateModel">
+    <xs:sequence>
+      <xs:element name="_x003C_Template_x003E_k__BackingField" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TemplateModel" nillable="true" type="tns:TemplateModel" />
 </xs:schema>
