@@ -55,24 +55,26 @@
         {
             var context = ObjectFactory.GetInstance<IWorkplaceContext>();
             var user = context.User;
-
-            userName = user.FullName ?? user.Name;
-	        userId = user.Id;
-	        userEmail = user.EMail;
-
-
-            if (user.Roles.Any(r => r.Name == "manager"))
+            if (user != null)
             {
-                sRoleImageUrl = "manager.png";
-                sRoleImageTitle = "Manager";
-            }
-            else if (user.Roles.Any(r => r.Name == "Underwriter"))
-            {
-                sRoleImageUrl = "underwriter.png";
-                sRoleImageTitle = "Underwriter";
-            }
+                userName = user.FullName ?? user.Name;
+                userId = user.Id;
+                userEmail = user.EMail;
 
-            sRoleImageTitle = user.Roles.Last().Name;
+
+                if (user.Roles.Any(r => r.Name == "manager"))
+                {
+                    sRoleImageUrl = "manager.png";
+                    sRoleImageTitle = "Manager";
+                }
+                else if (user.Roles.Any(r => r.Name == "Underwriter"))
+                {
+                    sRoleImageUrl = "underwriter.png";
+                    sRoleImageTitle = "Underwriter";
+                }
+
+                sRoleImageTitle = user.Roles.Last().Name;
+            }
         }
         catch
         {
