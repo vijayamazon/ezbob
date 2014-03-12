@@ -31,10 +31,10 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         xhr.always(function () {
             if (that.twilioEnabled && !that.switchedToCaptcha) {
                 that.$el.find('#twilioDiv').show();
-                $.post(window.gRootPath + "Account/DebugLog_MobileCode");
+                $.post(window.gRootPath + "Account/DebugLog_Message", { message: 'The visible object is mobile code' });
             } else {
                 that.$el.find('#captchaDiv').show();
-                $.post(window.gRootPath + "Account/DebugLog_Captcha");
+                $.post(window.gRootPath + "Account/DebugLog_Message", { message: 'The visible object is captcha' });
             }
 
             return false;
@@ -245,6 +245,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
         xhr.done(function (result) {
             if (result.success) {
+                $.post(window.gRootPath + "Account/DebugLog_Message", { message: 'Success' });
                 $('body').attr('auth', 'auth');
 
                 that.$el.find('input[type="password"], input[type="text"]').tooltip('hide');
@@ -265,6 +266,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
                 that.model.set('loggedIn', true); // triggers 'ready' and 'next'
                 
             } else {
+                $.post(window.gRootPath + "Account/DebugLog_Message", { message: result.errorMessage });
                 if (result.errorMessage) EzBob.App.trigger('error', result.errorMessage);
                 if (!that.twilioEnabled || that.switchedToCaptcha) {
                     that.captcha.reload();
@@ -275,6 +277,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         });
 
         xhr.fail(function () {
+            $.post(window.gRootPath + "Account/DebugLog_Message", { message: 'Something went wrong' });
             EzBob.App.trigger('error', 'Something went wrong');
             if (!that.twilioEnabled || that.switchedToCaptcha) {
                 that.captcha.reload();

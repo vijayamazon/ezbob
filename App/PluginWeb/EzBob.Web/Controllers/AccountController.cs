@@ -725,15 +725,9 @@ namespace EzBob.Web.Controllers
 		}
 
 		[HttpPost]
-		public void DebugLog_MobileCode()
+		public void DebugLog_Message(string message)
 		{
-			_log.InfoFormat("The visible object is mobile code");
-		}
-
-		[HttpPost]
-		public void DebugLog_Captcha()
-		{
-			_log.InfoFormat("The visible object is captcha");
+			_log.InfoFormat(message);
 		}
 	}
 }
