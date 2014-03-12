@@ -11,7 +11,7 @@ class EzBob.CompanyFilesAccounts extends Backbone.Collection
 
 class EzBob.CompanyFilesAccountInfoView extends Backbone.Marionette.ItemView
     events:
-        'click a.hmrcBack': 'back'
+        'click a.back': 'back'
         'click a.connect-account': 'connect'
         
     initialize: (options) ->
