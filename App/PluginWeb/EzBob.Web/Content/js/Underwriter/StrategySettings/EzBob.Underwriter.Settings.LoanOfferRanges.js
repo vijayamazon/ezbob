@@ -45,7 +45,8 @@
     LoanOfferRangesView.prototype.events = {
       "click .addRange": "addRange",
       "click .removeRange": "removeRange",
-      "click #SaveBasicInterestRateSettings": "saveBasicInterestRateSettings"
+      "click #SaveBasicInterestRateSettings": "saveBasicInterestRateSettings",
+      "click #CancelBasicInterestRateSettings": "update"
     };
 
     LoanOfferRangesView.prototype.saveBasicInterestRateSettings = function() {
@@ -68,9 +69,16 @@
       return false;
     };
 
-    LoanOfferRangesView.prototype.removeRange = function(rangeId) {};
+    LoanOfferRangesView.prototype.removeRange = function(eventObject) {
+      var rangeId;
 
-    LoanOfferRangesView.prototype.addRange = function(e, range) {};
+      rangeId = eventObject.target.getAttribute('data-loan-offer-range-id');
+      this.$el.find('#basicInterestRateRow_' + rangeId).remove();
+    };
+
+    LoanOfferRangesView.prototype.addRange = function(e, range) {
+      debugger;
+    };
 
     LoanOfferRangesView.prototype.serializeData = function() {
       var data;

@@ -19,6 +19,7 @@ class EzBob.Underwriter.Settings.LoanOfferRangesView extends Backbone.Marionette
         "click .addRange": "addRange"
         "click .removeRange": "removeRange"
         "click #SaveBasicInterestRateSettings": "saveBasicInterestRateSettings"
+        "click #CancelBasicInterestRateSettings": "update"
 
     saveBasicInterestRateSettings: ->
         BlockUi "on"
@@ -32,12 +33,19 @@ class EzBob.Underwriter.Settings.LoanOfferRangesView extends Backbone.Marionette
             BlockUi "off"
         false
 
-    removeRange: (rangeId) ->
-        #TODO: implement
+    removeRange: (eventObject) ->
+        rangeId = eventObject.target.getAttribute('data-loan-offer-range-id')
+        this.$el.find('#basicInterestRateRow_' + rangeId).remove()
+        #TODO: Sync model
         return
 
     addRange: (e, range)->
+        debugger
         #TODO: implement
+        #find last row item
+        # get its id
+        #generate item with id + 1??
+        #TODO:Sync model
         return
 
     serializeData: ->

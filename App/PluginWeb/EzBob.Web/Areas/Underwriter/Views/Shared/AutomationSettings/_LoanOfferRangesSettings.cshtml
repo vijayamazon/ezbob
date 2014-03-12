@@ -14,12 +14,12 @@
         </thead>
         <tbody>
             <%_.each(loanOfferRanges, function(loanOfferRange, i){%>
-            <tr>
-                <td><input type="text" id="startValue_<%=i%>" class="range-field" value="<%= loanOfferRange.FromScore %>"></td>
-                <td><input type="text" id="endValue_<%=i%>" class="range-field" value="<%= loanOfferRange.ToScore %>"></td>
-                <td><input type="text" id="interest_<%=i%>" class="range-field" value="<%= loanOfferRange.LoanInterestBase %>"></td>
+            <tr id="basicInterestRateRow_<%=loanOfferRange.Id%>">
+                <td><input type="text" id="startValue_<%=loanOfferRange.Id%>" class="range-field" value="<%= loanOfferRange.FromScore %>"></td>
+                <td><input type="text" id="endValue_<%=loanOfferRange.Id%>" class="range-field" value="<%= loanOfferRange.ToScore %>"></td>
+                <td><input type="text" id="interest_<%=loanOfferRange.Id%>" class="range-field" value="<%= loanOfferRange.LoanInterestBase %>"></td>
                 <td>
-                    <button class="btn-link removeRange" style="color: blue;" data-loan-offer-range-id="<%= loanOfferRange.Id %>">Remove</button>
+                    <button class="btn btn-primary removeRange" data-loan-offer-range-id="<%= loanOfferRange.Id %>">Remove</button>
                 </td>
             </tr>
             <%});%>
