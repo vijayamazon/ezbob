@@ -99,15 +99,15 @@ class EzBob.Underwriter.Settings.LoanOfferRangesView extends Backbone.Marionette
 
         ranges = @model.get('loanOfferRanges')
         for row in ranges
-            x = @$el.find('#startValue_' + row.Id)
-            if (x.length == 1)
-                x.numericOnly()
-            x = @$el.find('#endValue_' + row.Id)
-            if (x.length == 1)
-                x.numericOnly()
-            x = @$el.find('#interest_' + row.Id)
-            if (x.length == 1)
-                x.autoNumeric(EzBob.percentFormat)
+            fromScoreObject = @$el.find('#startValue_' + row.Id)
+            if (fromScoreObject.length == 1)
+                fromScoreObject.numericOnly()
+            toScoreObject = @$el.find('#endValue_' + row.Id)
+            if (toScoreObject.length == 1)
+                toScoreObject.numericOnly()
+            loanInterestBaseObject = @$el.find('#interest_' + row.Id)
+            if (loanInterestBaseObject.length == 1)
+                loanInterestBaseObject.autoNumeric(EzBob.percentFormat).blur()
 
         return false
 

@@ -161,7 +161,7 @@
     };
 
     LoanOfferRangesView.prototype.onRender = function() {
-      var ranges, row, x, _i, _len;
+      var fromScoreObject, loanInterestBaseObject, ranges, row, toScoreObject, _i, _len;
 
       if (!$("body").hasClass("role-manager")) {
         this.$el.find("select").addClass("disabled").attr({
@@ -173,17 +173,17 @@
       ranges = this.model.get('loanOfferRanges');
       for (_i = 0, _len = ranges.length; _i < _len; _i++) {
         row = ranges[_i];
-        x = this.$el.find('#startValue_' + row.Id);
-        if (x.length === 1) {
-          x.numericOnly();
+        fromScoreObject = this.$el.find('#startValue_' + row.Id);
+        if (fromScoreObject.length === 1) {
+          fromScoreObject.numericOnly();
         }
-        x = this.$el.find('#endValue_' + row.Id);
-        if (x.length === 1) {
-          x.numericOnly();
+        toScoreObject = this.$el.find('#endValue_' + row.Id);
+        if (toScoreObject.length === 1) {
+          toScoreObject.numericOnly();
         }
-        x = this.$el.find('#interest_' + row.Id);
-        if (x.length === 1) {
-          x.autoNumeric(EzBob.percentFormat);
+        loanInterestBaseObject = this.$el.find('#interest_' + row.Id);
+        if (loanInterestBaseObject.length === 1) {
+          loanInterestBaseObject.autoNumeric(EzBob.percentFormat).blur();
         }
       }
       return false;
