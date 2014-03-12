@@ -23,6 +23,15 @@
 
 		#endregion method Get
 
+		#region method Clean
+
+		public static void Clean(HttpSessionStateBase oSession)
+		{
+			oSession[HmrcFileCache.Name] = new HmrcFileCache();
+		} // Get
+
+		#endregion method Clean
+
 		#region constructor
 
 		public HmrcFileCache(HttpSessionStateBase oSession = null) {

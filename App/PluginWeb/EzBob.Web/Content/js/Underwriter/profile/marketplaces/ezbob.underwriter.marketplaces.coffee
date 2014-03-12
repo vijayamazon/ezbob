@@ -65,6 +65,12 @@ class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
         )
 
         that = @
+        
+        EzBob.App.vent.on 'ct:marketplaces.history', () =>
+            if(that.uploadHmrcView) 
+                that.uploadHmrcView.close()
+                that.uploadHmrcView = null
+
         EzBob.App.vent.on 'ct:marketplaces.uploadHmrc', () =>
             if(!that.uploadHmrcView) 
                 that.uploadHmrcView = new EzBob.Underwriter.UploadHmrcView(

@@ -70,7 +70,7 @@
     MarketPlacesHistoryView.prototype.events = {
       "click .showHistoryMarketPlaces": "showHistoryMarketPlacesClicked",
       "click .showCurrentMarketPlaces": "showCurrentMarketPlacesClicked",
-      "click .uploadHmrc": "uploadHmrcClicked"
+      "click .uploadHmrcMp": "uploadHmrcClicked"
     };
 
     MarketPlacesHistoryView.prototype.serializeData = function() {

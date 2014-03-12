@@ -122,6 +122,12 @@
         customerId: this.model.customerId
       });
       that = this;
+      EzBob.App.vent.on('ct:marketplaces.history', function() {
+        if (that.uploadHmrcView) {
+          that.uploadHmrcView.close();
+          return that.uploadHmrcView = null;
+        }
+      });
       EzBob.App.vent.on('ct:marketplaces.uploadHmrc', function() {
         if (!that.uploadHmrcView) {
           that.uploadHmrcView = new EzBob.Underwriter.UploadHmrcView({

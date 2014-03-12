@@ -115,6 +115,7 @@
 				return CreateError("Account has been linked but error occurred while storing uploaded data: " + e.Message);
 			} // try
 
+			HmrcFileCache.Clean(Session);
 			return Json(new { });
 		} // UploadFiles
 

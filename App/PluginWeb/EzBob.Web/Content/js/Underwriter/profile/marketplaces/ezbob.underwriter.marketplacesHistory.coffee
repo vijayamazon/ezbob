@@ -25,7 +25,7 @@ class EzBob.Underwriter.MarketPlacesHistoryView extends Backbone.Marionette.Item
     events:
         "click .showHistoryMarketPlaces": "showHistoryMarketPlacesClicked"
         "click .showCurrentMarketPlaces": "showCurrentMarketPlacesClicked"
-        "click .uploadHmrc": "uploadHmrcClicked"
+        "click .uploadHmrcMp": "uploadHmrcClicked"
 
     serializeData: ->
         return {MarketPlacesHistory: @model}
