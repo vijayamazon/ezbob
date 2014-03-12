@@ -46,7 +46,43 @@
       "click .addRange": "addRange",
       "click .removeRange": "removeRange",
       "click #SaveBasicInterestRateSettings": "saveBasicInterestRateSettings",
-      "click #CancelBasicInterestRateSettings": "update"
+      "click #CancelBasicInterestRateSettings": "update",
+      "change .range-field": "valueChanged"
+    };
+
+    LoanOfferRangesView.prototype.valueChanged = function(eventObject) {
+      var id, newValue, ranges, row, typeIdentifier, _i, _len;
+
+      typeIdentifier = eventObject.target.id.substring(0, 3);
+      if (typeIdentifier === "end") {
+        id = eventObject.target.id.substring(9);
+        newValue = parseInt(eventObject.target.value);
+      }
+      if (typeIdentifier === "sta") {
+        id = eventObject.target.id.substring(11);
+        newValue = parseInt(eventObject.target.value);
+      }
+      if (typeIdentifier === "int") {
+        id = eventObject.target.id.substring(9);
+        newValue = parseFloat(eventObject.target.value);
+      }
+      ranges = this.model.get('loanOfferRanges');
+      for (_i = 0, _len = ranges.length; _i < _len; _i++) {
+        row = ranges[_i];
+        if (row.Id.toString() === id) {
+          if (typeIdentifier === "end") {
+            row.ToScore = newValue;
+          }
+          if (typeIdentifier === "sta") {
+            row.FromScore = newValue;
+          }
+          if (typeIdentifier === "int") {
+            row.LoanInterestBase = newValue;
+          }
+          return false;
+        }
+      }
+      return false;
     };
 
     LoanOfferRangesView.prototype.saveBasicInterestRateSettings = function() {
@@ -54,7 +90,6 @@
         _this = this;
 
       BlockUi("on");
-      debugger;
       xhr = $.post("" + window.gRootPath + "Underwriter/StrategySettings/SaveBasicInterestRate", {
         serializedModels: JSON.stringify(this.model.get('loanOfferRanges'))
       });

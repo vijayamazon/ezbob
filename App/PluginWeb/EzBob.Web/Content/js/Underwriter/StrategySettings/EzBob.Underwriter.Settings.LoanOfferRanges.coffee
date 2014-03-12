@@ -20,12 +20,35 @@ class EzBob.Underwriter.Settings.LoanOfferRangesView extends Backbone.Marionette
         "click .removeRange": "removeRange"
         "click #SaveBasicInterestRateSettings": "saveBasicInterestRateSettings"
         "click #CancelBasicInterestRateSettings": "update"
+        "change .range-field": "valueChanged"
+
+    valueChanged: (eventObject) ->
+        typeIdentifier = eventObject.target.id.substring(0,3)
+        if (typeIdentifier == "end")
+            id = eventObject.target.id.substring(9)
+            newValue = parseInt(eventObject.target.value)
+        if (typeIdentifier == "sta")
+            id = eventObject.target.id.substring(11)
+            newValue = parseInt(eventObject.target.value)
+        if (typeIdentifier == "int")
+            id = eventObject.target.id.substring(9)
+            newValue = parseFloat(eventObject.target.value)
+
+        ranges = @model.get('loanOfferRanges')
+        for row in ranges
+            if (row.Id.toString() == id)
+                if (typeIdentifier == "end")
+                    row.ToScore = newValue
+                if (typeIdentifier == "sta")
+                    row.FromScore = newValue
+                if (typeIdentifier == "int")
+                    row.LoanInterestBase = newValue
+                return false
+        return false
 
     saveBasicInterestRateSettings: ->
         BlockUi "on"
-        debugger
         xhr = $.post "#{window.gRootPath}Underwriter/StrategySettings/SaveBasicInterestRate", serializedModels: JSON.stringify(@model.get('loanOfferRanges'))
-        # @model
         xhr.done (res) =>
             if res.error
                  EzBob.App.trigger('error', res.error)
