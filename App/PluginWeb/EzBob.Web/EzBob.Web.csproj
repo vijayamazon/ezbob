@@ -69,9 +69,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Lib\Scorto.Core\DBCommon.dll</HintPath>
     </Reference>
-    <Reference Include="DBSQLServer">
-      <HintPath>..\..\..\Lib\Scorto.Core\DBSQLServer.dll</HintPath>
-    </Reference>
     <Reference Include="dotless.Core">
       <HintPath>..\..\..\Lib\3rdparty\SquishIt\dotless.Core.dll</HintPath>
     </Reference>
