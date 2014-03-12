@@ -356,12 +356,22 @@
     };
 
     LimitedInfoView.prototype.addDirectorClicked = function() {
-      var addDirector, directorEl;
+      var addDirector, directorEl, oFieldStatusIcons;
       console.log('add director clicked');
       EzBob.App.trigger('add-director');
       directorEl = $('.add-director-container');
-      addDirector = new EzBob.Profile.AddDirectorInfoView().render().$el.appendTo(directorEl);
+      addDirector = new EzBob.Profile.AddDirectorInfoView({
+        model: this.model
+      });
+      addDirector.render().$el.appendTo(directorEl);
       directorEl.show();
+      oFieldStatusIcons = $('.add-director-container IMG.field_status');
+      oFieldStatusIcons.filter('.required').field_status({
+        required: true
+      });
+      oFieldStatusIcons.not('.required').field_status({
+        required: false
+      });
       return false;
     };
 
@@ -460,18 +470,7 @@
     };
 
     AddDirectorInfoView.prototype.render = function() {
-      var oFieldStatusIcons;
-      console.log('rendering');
-      AddDirectorInfoView.__super__.render.call(this);
-      oFieldStatusIcons = this.$el.find('IMG.field_status');
-      oFieldStatusIcons.filter('.required').field_status({
-        required: true
-      });
-      oFieldStatusIcons.not('.required').field_status({
-        required: false
-      });
-      EzBob.UiAction.registerView(this);
-      return console.log('@model', this.model);
+      return AddDirectorInfoView.__super__.render.call(this);
       /*
               address = new EzBob.AddressView({
                   name: "DirectorAddress",
