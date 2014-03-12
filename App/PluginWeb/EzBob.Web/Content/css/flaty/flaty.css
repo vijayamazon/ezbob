@@ -223,6 +223,7 @@ hr.margin-0  {margin: 0;}
     padding-top: 9px;
     height: 40px;
     min-width: 200px;
+    padding-left: 0 !important;
 }
 .navbar .navbar-btn:focus,
 .navbar .navbar-btn {
