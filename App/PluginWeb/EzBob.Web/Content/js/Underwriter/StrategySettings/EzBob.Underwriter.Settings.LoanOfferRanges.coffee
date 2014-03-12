@@ -96,36 +96,18 @@ class EzBob.Underwriter.Settings.LoanOfferRangesView extends Backbone.Marionette
         if !$("body").hasClass("role-manager") 
             @$el.find("select").addClass("disabled").attr({readonly:"readonly", disabled: "disabled"})
             @$el.find("button").hide()
-            
-        counter = 0
-        found = true
-        while (found)
-            x = @$el.find('#startValue_' + counter)
+
+        ranges = @model.get('loanOfferRanges')
+        for row in ranges
+            x = @$el.find('#startValue_' + row.Id)
             if (x.length == 1)
-                x.autoNumeric()
-            else
-                found = false
-            counter++
-        
-        counter = 0
-        found = true
-        while (found)
-            x = @$el.find('#endValue_' + counter)
+                x.numericOnly()
+            x = @$el.find('#endValue_' + row.Id)
             if (x.length == 1)
-                x.autoNumeric()
-            else
-                found = false
-            counter++
-        
-        counter = 0
-        found = true
-        while (found)
-            x = @$el.find('#interest_' + counter)
+                x.numericOnly()
+            x = @$el.find('#interest_' + row.Id)
             if (x.length == 1)
-                x.autoNumeric()
-            else
-                found = false
-            counter++
+                x.autoNumeric(EzBob.percentFormat)
 
         return false
 

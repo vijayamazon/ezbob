@@ -161,7 +161,7 @@
     };
 
     LoanOfferRangesView.prototype.onRender = function() {
-      var counter, found, x;
+      var ranges, row, x, _i, _len;
 
       if (!$("body").hasClass("role-manager")) {
         this.$el.find("select").addClass("disabled").attr({
@@ -170,38 +170,21 @@
         });
         this.$el.find("button").hide();
       }
-      counter = 0;
-      found = true;
-      while (found) {
-        x = this.$el.find('#startValue_' + counter);
+      ranges = this.model.get('loanOfferRanges');
+      for (_i = 0, _len = ranges.length; _i < _len; _i++) {
+        row = ranges[_i];
+        x = this.$el.find('#startValue_' + row.Id);
         if (x.length === 1) {
-          x.autoNumeric();
-        } else {
-          found = false;
+          x.numericOnly();
         }
-        counter++;
-      }
-      counter = 0;
-      found = true;
-      while (found) {
-        x = this.$el.find('#endValue_' + counter);
+        x = this.$el.find('#endValue_' + row.Id);
         if (x.length === 1) {
-          x.autoNumeric();
-        } else {
-          found = false;
+          x.numericOnly();
         }
-        counter++;
-      }
-      counter = 0;
-      found = true;
-      while (found) {
-        x = this.$el.find('#interest_' + counter);
+        x = this.$el.find('#interest_' + row.Id);
         if (x.length === 1) {
-          x.autoNumeric();
-        } else {
-          found = false;
+          x.autoNumeric(EzBob.percentFormat);
         }
-        counter++;
       }
       return false;
     };

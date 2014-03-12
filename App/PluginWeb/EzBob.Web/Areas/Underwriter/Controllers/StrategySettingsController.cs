@@ -369,6 +369,13 @@
 			var loanOfferRangesList = serviceClient.Instance.GetSpResultTable("GetBasicInterestRates", null);
 			var deserializedArray = JsonConvert.DeserializeObject<BasicInterestRate[]>(loanOfferRangesList.SerializedDataTable);
 			var loanOfferRanges = deserializedArray == null ? null : deserializedArray.ToList();
+			if (loanOfferRanges != null)
+			{
+				foreach (BasicInterestRate basicInterestRate in loanOfferRanges)
+				{
+					basicInterestRate.LoanInterestBase *= 100; // Convert to percent
+				}
+			}
 
 			return this.JsonNet(new { loanOfferRanges });
 		}
@@ -392,12 +399,13 @@
 				}
 				sortedModels.Add(model.FromScore, model);
 			}
-			// go over list and sort by fromscore
+
 			bool isFirst = true;
 			int highestSoFar = 0;
 			foreach (int key in sortedModels.Keys)
 			{
 				BasicInterestRate model = sortedModels[key];
+				model.LoanInterestBase /= 100; // Convert to decimal number
 				if (isFirst)
 				{
 					if (model.FromScore != 0)
@@ -410,9 +418,15 @@
 				}
 				else
 				{
-					if (highestSoFar + 1 != model.FromScore)
+					if (highestSoFar + 1 < model.FromScore)
 					{
 						string errorMessage = string.Format("No range covers the numbers {0}-{1}", highestSoFar + 1, model.FromScore - 1);
+						Log.WarnFormat(errorMessage);
+						return this.JsonNet(new { error = errorMessage });
+					}
+					if (highestSoFar + 1 > model.FromScore)
+					{
+						string errorMessage = string.Format("The numbers {0}-{1} are coverered by more than one range", model.FromScore, highestSoFar);
 						Log.WarnFormat(errorMessage);
 						return this.JsonNet(new { error = errorMessage });
 					}
@@ -420,9 +434,16 @@
 				highestSoFar = model.ToScore;
 			}
 
-			if (highestSoFar != 100000000)
+			if (highestSoFar < 100000000)
 			{
 				string errorMessage = string.Format("No range covers the numbers {0}-100000000", highestSoFar);
+				Log.WarnFormat(errorMessage);
+				return this.JsonNet(new { error = errorMessage });
+			}
+			
+			if (highestSoFar > 100000000)
+			{
+				const string errorMessage = "Maximum allowed number is 100000000";
 				Log.WarnFormat(errorMessage);
 				return this.JsonNet(new { error = errorMessage });
 			}
