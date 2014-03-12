@@ -7,6 +7,7 @@ class EzBob.Profile.YourInfoMainView extends Backbone.Marionette.Layout
 
     initialize: ->
         EzBob.App.on 'dash-director-address-change', @directorModelChange, @
+        EzBob.App.on 'add-director', @addDirector, @
 
     events: 
         'click .edit-personal': 'editPersonalViewShow'
@@ -57,6 +58,9 @@ class EzBob.Profile.YourInfoMainView extends Backbone.Marionette.Layout
                     return false
 
         true
+
+    addDirector: ->
+        @ui.form.hide()
 
     directorModelChange: (newModel) ->
         directors = @model.get(@model.get('BusinessTypeReduced') + 'Info').Directors
@@ -231,7 +235,9 @@ class EzBob.Profile.LimitedInfoView extends Backbone.Marionette.Layout
     regions: 
         limitedAddress: '#LimitedCompanyAddress'
         director: '.director-container' 
-
+    events:
+        "click .add-director": "addDirectorClicked"
+        
     onRender: ->
         address = new EzBob.AddressView({
             model: @model.get('CompanyAddress'),
@@ -252,6 +258,14 @@ class EzBob.Profile.LimitedInfoView extends Backbone.Marionette.Layout
             @$el.find('.offline').remove()
 
         @
+
+    addDirectorClicked: ->
+        console.log('add director clicked')
+        EzBob.App.trigger 'add-director'
+        directorEl = $('.add-director-container')
+        addDirector = new EzBob.Profile.AddDirectorInfoView().render().$el.appendTo directorEl
+        directorEl.show()
+        false
 
 class EzBob.Profile.DirectorInfoView extends Backbone.Marionette.Layout
     template: '#director-info-template'
@@ -279,3 +293,31 @@ class EzBob.Profile.DirectorCompositeView extends Backbone.Marionette.CompositeV
     template: '#directors-info'
     itemView: EzBob.Profile.DirectorInfoView
     itemViewContainer:'div'
+
+
+class EzBob.Profile.AddDirectorInfoView extends Backbone.Marionette.ItemView
+    template: '#add-director-info-template'
+    initialize: (options) ->
+        console.log('init', options)
+
+    events:
+        "click .directorBack": "directorBack"
+        "click .addDirector": "directorAdd"
+        "change input": "inputChanged"
+
+
+    addressModelChange: ->
+        EzBob.App.trigger 'dash-director-address-change', @model
+
+    render: ->
+        console.log('rendering')
+        super()
+
+    directorBack: ->
+        
+
+    directorAdd: ->
+        
+
+    inputChanged: ->
+        

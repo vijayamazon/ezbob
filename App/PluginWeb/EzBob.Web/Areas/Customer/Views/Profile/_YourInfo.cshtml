@@ -1,5 +1,4 @@
-﻿@using EZBob.DatabaseLib
-@model dynamic
+﻿@model dynamic
 <script id="your-info-template" type="text/template">
   @using (Html.BeginForm("Edit", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "editYourInfoForm" }))
   {
@@ -21,7 +20,8 @@
         </div>
     </div>
   }
-  </script>
+  <div class="add-director-container" style="display:none;"></div>
+</script>
 
 
 <script id="personal-info-template" type="text/template">
@@ -163,7 +163,7 @@
         </div>
         <%}%>
         <div class="control-group director-container"></div>
-
+            <button class="btn orange add-director">Add Director</button>
         <div class="offline">
             @CompanyCountFields()
         </div>
@@ -209,7 +209,9 @@
             </div>
         </div>
         <%}%>
-        <div class="control-group director-container"></div>
+        <div class="control-group director-container">
+            <button class="btn orange">Add Director</button>
+        </div>
 
 		<div class="offline">
 			@CompanyCountFields()
@@ -237,6 +239,84 @@
 		</div>
 	</div>
 </script> 
+
+<script id="add-director-info-template" type="text/template">
+    <div class="director">
+        <div class="add-director-container">
+            <h2 class="form_start">Add director</h2>
+        </div>
+
+        <div class="control-group form_field_container">
+            <div class="controls">
+                <label class="control-label attardi-input">
+                    <span>First Name</span>
+                    <input class="form_field director_name_part" id="DirectorName" name="DirectorName" type="text" value="" ui-event-control-id="dashboard:director_first_name" />
+                    <img id="DirectorNameImage" class="field_status required" />
+                </label>
+            </div>
+        </div>
+        <div class="control-group form_field_container">
+            <div class="controls">
+                <label class="control-label attardi-input">
+                    <span>Middle initial</span>
+                    <input class="form_field director_name_part nonrequired alphaOnly" id="DirectorMiddle" name="DirectorMiddle" type="text" value="" ui-event-control-id="dashboard:director_middle_name" />
+                    <img id="DirectorMiddleImage" class="field_status" />
+                </label>
+            </div>
+        </div>
+        <div class="control-group form_field_container">
+            <div class="controls">
+                <label class="control-label attardi-input">
+                    <span>Surname</span>
+                    <input class="form_field director_surname_part" id="DirectorSurname" name="DirectorSurname" type="text" value="" ui-event-control-id="dashboard:director_last_name" />
+                    <img id="DirectorSurnameImage" class="field_status required" />
+                </label>
+            </div>
+        </div>
+
+        <div class="control-group form_field_container FormRadioCtrl">
+            <span>
+                <input class="male-director-gender-margin" type="radio" name="DirectorGender" value="M" id="DirectorFormRadioCtrl_M" ui-event-control-id="dashboard:director_gender"><label class="fs16" for="DirectorGenderCtrl_M">Male</label>
+                <input class="gender-margin" type="radio" name="DirectorGender" value="F" id="DirectorFormRadioCtrl_F" ui-event-control-id="dashboard:director_gender"><label class="fs16" for="DirectorGenderCtrl_F">Female</label>
+            </span>
+            <img id="DirectorGenderImage" class="field_status required director_gender_image" />
+        </div>
+
+        @EzForm.DateInput("DirectorDateOfBirth", "Date of Birth", css: "director_date", required: true, statusIcon: true, uiEventControlID: "dashboard:director_birth_date", hiddenFieldAuxClass: "director_birth_date")
+
+        <div class="control-group form_field_container">
+            <div class="controls">
+                <label class="control-label attardi-input">
+                    <span>Email</span>
+                    <input class="form_field director_email" id="DirectorEmail" name="DirectorEmail" type="email" value="" ui-event-control-id="dashboard:director_email" />
+                    <img id="DirectorEmailImage" class="field_status required" />
+                </label>
+            </div>
+        </div>
+
+        <div class="control-group form_field_container">
+            <div class="controls">
+                <label class="control-label attardi-input">
+                    <span>Best contact number</span>
+                    <input class="form_field director_phone phonenumber" id="DirectorPhone" name="DirectorPhone" type="text" value="" ui-event-control-id="dashboard:director_phone" />
+                    <img id="DirectorPhoneImage" class="field_status required" />
+                </label>
+            </div>
+        </div>
+
+        <div class="director_address">
+            @EzForm.AddressInput("Address", "Address", "director")
+        </div>
+        
+        <div class="form_buttons_container">
+            <div class="attardi-button">
+                <a href="#" class="rc-button green addDirector disabled" ui-event-control-id="dashboard:add_director">Link account</a>
+                <button class="rc-button grey directorBack" ui-event-control-id="dashboard:add_director_back">Back</button>
+            </div>
+        </div>
+    </div>
+</script>
+
 
 <script id="directors-info" type="text/template">
         <div class="accordion page-content-frame" id="accordion-faq-signup">

@@ -248,7 +248,7 @@ body .form_field:focus{border:1px #666 solid;}
 
 div.form_buttons_container { position: relative; height: 38px;width: 96%;}
 div.form_buttons_container input, 
-div.form_buttons_container a { float: right; }
+div.form_buttons_container a, div.form_buttons_container button { float: right; }
 
 
 label{display:block; font-weight:bold; margin:0 0 5px 0;}
