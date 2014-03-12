@@ -1511,7 +1511,8 @@ i.ebay,
 i.paypal,
 i.cgaccount,
 i.paypoint,
-i.yodlee {
+i.yodlee,
+i.companyfiles {
     display: inline-block;
     height: 16px;
     width: 16px;

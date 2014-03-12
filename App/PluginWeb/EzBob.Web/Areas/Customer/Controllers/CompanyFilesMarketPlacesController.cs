@@ -1,14 +1,11 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers
 {
 	using System;
-	using System.IO;
 	using System.Linq;
 	using System.Web;
 	using System.Web.Mvc;
-	using ApplicationMng.Repository;
 	using Code;
 	using CompanyFiles;
-	using EZBob.DatabaseLib.DatabaseWrapper;
 	using EZBob.DatabaseLib.Model.Database;
 	using Infrastructure;
 	using Scorto.Web;
@@ -21,7 +18,6 @@
 	{
 		private static readonly ILog Log = LogManager.GetLogger(typeof(EkmMarketPlacesController));
 		private readonly IEzbobWorkplaceContext _context;
-		private readonly IRepository<MP_MarketplaceType> _mpTypes;
 		private readonly Customer _customer;
 		private readonly ISession _session;
 		private readonly DatabaseDataHelper _helper;
@@ -30,11 +26,9 @@
 		public CompanyFilesMarketPlacesController(
 			IEzbobWorkplaceContext context,
 			DatabaseDataHelper helper,
-			IRepository<MP_MarketplaceType> mpTypes,
 			ISession session)
 		{
 			_context = context;
-			_mpTypes = mpTypes;
 			_customer = context.Customer;
 			_session = session;
 			_helper = helper;
@@ -55,7 +49,7 @@
 		}
 
 		[HttpPost]
-		public System.Web.Mvc.ActionResult UploadedFiles()
+		public ActionResult UploadedFiles()
 		{
 			Response.AddHeader("x-frame-options", "SAMEORIGIN");
 
@@ -81,7 +75,7 @@
 		} // UploadedFiles
 
 		[HttpPost]
-		public System.Web.Mvc.ActionResult Connect()
+		public ActionResult Connect()
 		{
 			try
 			{

@@ -230,6 +230,7 @@
 				personalInfo.FirstName = customer.PersonalInfo.FirstName;
 				personalInfo.MiddleInitial = customer.PersonalInfo.MiddleInitial;
 				personalInfo.Surname = customer.PersonalInfo.Surname;
+				personalInfo.Fullname = customer.PersonalInfo.Fullname;
 			} // if
 
 			customer.PersonalInfo = personalInfo;
