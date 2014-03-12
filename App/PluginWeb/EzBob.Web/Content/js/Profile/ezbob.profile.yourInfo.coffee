@@ -8,6 +8,7 @@ class EzBob.Profile.YourInfoMainView extends Backbone.Marionette.Layout
     initialize: ->
         EzBob.App.on 'dash-director-address-change', @directorModelChange, @
         EzBob.App.on 'add-director', @addDirector, @
+        EzBob.App.on 'add-director-back', @addDirectorBack, @
 
     events: 
         'click .edit-personal': 'editPersonalViewShow'
@@ -61,6 +62,9 @@ class EzBob.Profile.YourInfoMainView extends Backbone.Marionette.Layout
 
     addDirector: ->
         @ui.form.hide()
+
+    addDirectorBack: ->
+        @ui.form.show()
 
     directorModelChange: (newModel) ->
         directors = @model.get(@model.get('BusinessTypeReduced') + 'Info').Directors
@@ -300,10 +304,21 @@ class EzBob.Profile.AddDirectorInfoView extends Backbone.Marionette.ItemView
     initialize: (options) ->
         console.log('init', options)
 
+    region:
+        directorAddress : '.director_address'
+
     events:
         "click .directorBack": "directorBack"
         "click .addDirector": "directorAdd"
-        "change input": "inputChanged"
+        'change   input': 'inputChanged'
+        'click    input': 'inputChanged'
+        'focusout input': 'inputChanged'
+        'keyup    input': 'inputChanged'
+
+        'change   select': 'inputChanged'
+        'click    select': 'inputChanged'
+        'focusout select': 'inputChanged'
+        'keyup    select': 'inputChanged'
 
 
     addressModelChange: ->
@@ -312,9 +327,26 @@ class EzBob.Profile.AddDirectorInfoView extends Backbone.Marionette.ItemView
     render: ->
         console.log('rendering')
         super()
-
-    directorBack: ->
         
+        oFieldStatusIcons = @$el.find('IMG.field_status')
+        oFieldStatusIcons.filter('.required').field_status({ required: true })
+        oFieldStatusIcons.not('.required').field_status({ required: false })
+        
+        EzBob.UiAction.registerView(@)
+        
+        console.log('@model',@model)
+        ###
+        address = new EzBob.AddressView({
+            name: "DirectorAddress",
+            max: 10,
+            isShowClear: true,
+        })
+
+        @directorAddress.show(address)
+        ###
+    directorBack: ->
+        @close()
+        EzBob.App.trigger 'add-director-back'
 
     directorAdd: ->
         

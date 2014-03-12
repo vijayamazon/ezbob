@@ -2,7 +2,6 @@ namespace EzBob.Configuration
 {
 	using FreeAgent.Config;
 	using Sage.Config;
-	using YodleeLib.config;
 	using AmazonServiceLib.Config;
 	using PayPalServiceLib;
 	using eBayLib.Config;

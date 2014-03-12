@@ -21,7 +21,8 @@
 
     YourInfoMainView.prototype.initialize = function() {
       EzBob.App.on('dash-director-address-change', this.directorModelChange, this);
-      return EzBob.App.on('add-director', this.addDirector, this);
+      EzBob.App.on('add-director', this.addDirector, this);
+      return EzBob.App.on('add-director-back', this.addDirectorBack, this);
     };
 
     YourInfoMainView.prototype.events = {
@@ -85,6 +86,10 @@
 
     YourInfoMainView.prototype.addDirector = function() {
       return this.ui.form.hide();
+    };
+
+    YourInfoMainView.prototype.addDirectorBack = function() {
+      return this.ui.form.show();
     };
 
     YourInfoMainView.prototype.directorModelChange = function(newModel) {
@@ -433,10 +438,21 @@
       return console.log('init', options);
     };
 
+    AddDirectorInfoView.prototype.region = {
+      directorAddress: '.director_address'
+    };
+
     AddDirectorInfoView.prototype.events = {
       "click .directorBack": "directorBack",
       "click .addDirector": "directorAdd",
-      "change input": "inputChanged"
+      'change   input': 'inputChanged',
+      'click    input': 'inputChanged',
+      'focusout input': 'inputChanged',
+      'keyup    input': 'inputChanged',
+      'change   select': 'inputChanged',
+      'click    select': 'inputChanged',
+      'focusout select': 'inputChanged',
+      'keyup    select': 'inputChanged'
     };
 
     AddDirectorInfoView.prototype.addressModelChange = function() {
@@ -444,11 +460,34 @@
     };
 
     AddDirectorInfoView.prototype.render = function() {
+      var oFieldStatusIcons;
       console.log('rendering');
-      return AddDirectorInfoView.__super__.render.call(this);
+      AddDirectorInfoView.__super__.render.call(this);
+      oFieldStatusIcons = this.$el.find('IMG.field_status');
+      oFieldStatusIcons.filter('.required').field_status({
+        required: true
+      });
+      oFieldStatusIcons.not('.required').field_status({
+        required: false
+      });
+      EzBob.UiAction.registerView(this);
+      return console.log('@model', this.model);
+      /*
+              address = new EzBob.AddressView({
+                  name: "DirectorAddress",
+                  max: 10,
+                  isShowClear: true,
+              })
+      
+              @directorAddress.show(address)
+      */
+
     };
 
-    AddDirectorInfoView.prototype.directorBack = function() {};
+    AddDirectorInfoView.prototype.directorBack = function() {
+      this.close();
+      return EzBob.App.trigger('add-director-back');
+    };
 
     AddDirectorInfoView.prototype.directorAdd = function() {};
 
