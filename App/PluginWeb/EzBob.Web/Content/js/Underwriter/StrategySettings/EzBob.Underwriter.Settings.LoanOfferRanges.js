@@ -70,14 +70,42 @@
     };
 
     LoanOfferRangesView.prototype.removeRange = function(eventObject) {
-      var rangeId;
+      var index, rangeId, ranges, row, _i, _len;
 
       rangeId = eventObject.target.getAttribute('data-loan-offer-range-id');
-      this.$el.find('#basicInterestRateRow_' + rangeId).remove();
+      index = 0;
+      ranges = this.model.get('loanOfferRanges');
+      for (_i = 0, _len = ranges.length; _i < _len; _i++) {
+        row = ranges[_i];
+        if (row.Id.toString() === rangeId) {
+          ranges.splice(index, 1);
+          this.render();
+          return false;
+        }
+        index++;
+      }
     };
 
     LoanOfferRangesView.prototype.addRange = function(e, range) {
-      debugger;
+      var freeId, t, verified;
+
+      freeId = -1;
+      verified = false;
+      while (!verified) {
+        t = this.$el.find('#basicInterestRateRow_' + freeId);
+        if (t.length === 0) {
+          verified = true;
+        } else {
+          freeId--;
+        }
+      }
+      this.model.get('loanOfferRanges').push({
+        FromScore: 0,
+        Id: freeId,
+        ToScore: 0,
+        LoanInterestBase: 0.0
+      });
+      this.render();
     };
 
     LoanOfferRangesView.prototype.serializeData = function() {

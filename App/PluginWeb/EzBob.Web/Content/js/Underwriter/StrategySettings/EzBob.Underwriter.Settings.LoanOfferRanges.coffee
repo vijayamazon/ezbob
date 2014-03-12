@@ -35,17 +35,29 @@ class EzBob.Underwriter.Settings.LoanOfferRangesView extends Backbone.Marionette
 
     removeRange: (eventObject) ->
         rangeId = eventObject.target.getAttribute('data-loan-offer-range-id')
-        this.$el.find('#basicInterestRateRow_' + rangeId).remove()
-        #TODO: Sync model
+        index = 0
+        ranges = @model.get('loanOfferRanges')
+        for row in ranges
+            if (row.Id.toString() == rangeId)
+                ranges.splice(index, 1)
+                @render()
+                return false
+
+            index++
         return
 
     addRange: (e, range)->
-        debugger
-        #TODO: implement
-        #find last row item
-        # get its id
-        #generate item with id + 1??
-        #TODO:Sync model
+        freeId = -1
+        verified = false
+        while (!verified)
+            t = @$el.find('#basicInterestRateRow_' + freeId)
+            if (t.length == 0)
+                verified = true
+            else
+                freeId--
+
+        this.model.get('loanOfferRanges').push( {FromScore: 0, Id: freeId, ToScore: 0, LoanInterestBase:0.0})
+        @render()
         return
 
     serializeData: ->
