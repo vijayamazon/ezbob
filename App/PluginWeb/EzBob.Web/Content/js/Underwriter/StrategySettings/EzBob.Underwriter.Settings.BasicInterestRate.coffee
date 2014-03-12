@@ -3,11 +3,11 @@ root.EzBob = root.EzBob or {}
 EzBob.Underwriter = EzBob.Underwriter or {}
 EzBob.Underwriter.Settings = EzBob.Underwriter.Settings or {}
 
-class EzBob.Underwriter.Settings.LoanOfferRangesModel extends Backbone.Model
+class EzBob.Underwriter.Settings.BasicInterestRateModel extends Backbone.Model
     url: window.gRootPath + "Underwriter/StrategySettings/SettingsBasicInterestRate"
 
-class EzBob.Underwriter.Settings.LoanOfferRangesView extends Backbone.Marionette.ItemView
-    template: "#loan-offer-ranges-settings-template"
+class EzBob.Underwriter.Settings.BasicInterestRateView extends Backbone.Marionette.ItemView
+    template: "#basic-interest-rate-settings-template"
 
     initialize: (options) ->
         @modelBinder = new Backbone.ModelBinder()
@@ -34,7 +34,7 @@ class EzBob.Underwriter.Settings.LoanOfferRangesView extends Backbone.Marionette
             id = eventObject.target.id.substring(9)
             newValue = parseFloat(eventObject.target.value)
 
-        ranges = @model.get('loanOfferRanges')
+        ranges = @model.get('basicInterestRates')
         for row in ranges
             if (row.Id.toString() == id)
                 if (typeIdentifier == "end")
@@ -48,7 +48,7 @@ class EzBob.Underwriter.Settings.LoanOfferRangesView extends Backbone.Marionette
 
     saveBasicInterestRateSettings: ->
         BlockUi "on"
-        xhr = $.post "#{window.gRootPath}Underwriter/StrategySettings/SaveBasicInterestRate", serializedModels: JSON.stringify(@model.get('loanOfferRanges'))
+        xhr = $.post "#{window.gRootPath}Underwriter/StrategySettings/SaveBasicInterestRate", serializedModels: JSON.stringify(@model.get('basicInterestRates'))
         xhr.done (res) =>
             if res.error
                  EzBob.App.trigger('error', res.error)
@@ -57,9 +57,9 @@ class EzBob.Underwriter.Settings.LoanOfferRangesView extends Backbone.Marionette
         false
 
     removeRange: (eventObject) ->
-        rangeId = eventObject.target.getAttribute('data-loan-offer-range-id')
+        rangeId = eventObject.target.getAttribute('basic-interest-rate-id')
         index = 0
-        ranges = @model.get('loanOfferRanges')
+        ranges = @model.get('basicInterestRates')
         for row in ranges
             if (row.Id.toString() == rangeId)
                 ranges.splice(index, 1)
@@ -79,13 +79,12 @@ class EzBob.Underwriter.Settings.LoanOfferRangesView extends Backbone.Marionette
             else
                 freeId--
 
-        this.model.get('loanOfferRanges').push( {FromScore: 0, Id: freeId, ToScore: 0, LoanInterestBase:0.0})
+        this.model.get('basicInterestRates').push( {FromScore: 0, Id: freeId, ToScore: 0, LoanInterestBase:0.0})
         @render()
         return
 
     serializeData: ->
-        data = 
-            loanOfferRanges: @model.get('loanOfferRanges')
+        data = basicInterestRates: @model.get('basicInterestRates')
         return data
 
     update: ->
@@ -96,8 +95,9 @@ class EzBob.Underwriter.Settings.LoanOfferRangesView extends Backbone.Marionette
         if !$("body").hasClass("role-manager") 
             @$el.find("select").addClass("disabled").attr({readonly:"readonly", disabled: "disabled"})
             @$el.find("button").hide()
+            @$el.find("input").addClass("disabled").attr({readonly:"readonly", disabled: "disabled"})
 
-        ranges = @model.get('loanOfferRanges')
+        ranges = @model.get('basicInterestRates')
         for row in ranges
             fromScoreObject = @$el.find('#startValue_' + row.Id)
             if (fromScoreObject.length == 1)

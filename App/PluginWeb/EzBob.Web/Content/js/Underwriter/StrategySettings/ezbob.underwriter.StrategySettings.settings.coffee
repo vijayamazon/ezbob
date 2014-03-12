@@ -12,7 +12,7 @@ class EzBob.Underwriter.StrategySettingsView extends Backbone.View
         charges = @$el.find "#charges-settings"
         experian = @$el.find "#experian-settings"
         campaign = @$el.find "#campaign-settings"
-        loanOfferRanges = @$el.find "#loan-offer-ranges-settings"
+        basicInterestRates = @$el.find "#basic-interest-rate-settings"
 
         @generalModel =  new EzBob.Underwriter.SettingsGeneralModel()
         @generalView =  new EzBob.Underwriter.SettingsGeneralView(
@@ -35,10 +35,10 @@ class EzBob.Underwriter.StrategySettingsView extends Backbone.View
             model: @campaignModel
         )
 
-        @loanOfferRangesModel = new EzBob.Underwriter.Settings.LoanOfferRangesModel()
-        @loanOfferRangesView =  new EzBob.Underwriter.Settings.LoanOfferRangesView(
-            el: loanOfferRanges
-            model: @loanOfferRangesModel
+        @basicInterestRateModel = new EzBob.Underwriter.Settings.BasicInterestRateModel()
+        @basicInterestRateView =  new EzBob.Underwriter.Settings.BasicInterestRateView(
+            el: basicInterestRates
+            model: @basicInterestRateModel
         )
 
         EzBob.handleUserLayoutSetting()

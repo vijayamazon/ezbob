@@ -1,7 +1,7 @@
 ﻿@using EzBob.Web.Infrastructure.Html
-<script type="text/template" id="loan-offer-ranges-settings-template">
+<script type="text/template" id="basic-interest-rate-settings-template">
     <h3>Loan Offer Ranges Settings</h3>
-    <%if(loanOfferRanges && loanOfferRanges.length > 0) {%>
+    <%if(basicInterestRates && basicInterestRates.length > 0) {%>
    
     <table class="table squeezed">
         <thead class="box">
@@ -13,13 +13,13 @@
             </tr>
         </thead>
         <tbody>
-            <%_.each(loanOfferRanges, function(loanOfferRange, i){%>
-            <tr id="basicInterestRateRow_<%=loanOfferRange.Id%>">
-                <td><input type="text" id="startValue_<%=loanOfferRange.Id%>" class="range-field" value="<%= loanOfferRange.FromScore %>"></td>
-                <td><input type="text" id="endValue_<%=loanOfferRange.Id%>" class="range-field" value="<%= loanOfferRange.ToScore %>"></td>
-                <td><input type="text" id="interest_<%=loanOfferRange.Id%>" class="range-field" value="<%= loanOfferRange.LoanInterestBase %>"></td>
+            <%_.each(basicInterestRates, function(basicInterestRate, i){%>
+            <tr id="basicInterestRateRow_<%=basicInterestRate.Id%>">
+                <td><input type="text" id="startValue_<%=basicInterestRate.Id%>" class="range-field" value="<%= basicInterestRate.FromScore %>"></td>
+                <td><input type="text" id="endValue_<%=basicInterestRate.Id%>" class="range-field" value="<%= basicInterestRate.ToScore %>"></td>
+                <td><input type="text" id="interest_<%=basicInterestRate.Id%>" class="range-field" value="<%= basicInterestRate.LoanInterestBase %>"></td>
                 <td>
-                    <button class="btn btn-primary removeRange" data-loan-offer-range-id="<%= loanOfferRange.Id %>">Remove</button>
+                    <button class="btn btn-primary removeRange" basic-interest-rate-id="<%= basicInterestRate.Id %>">Remove</button>
                 </td>
             </tr>
             <%});%>

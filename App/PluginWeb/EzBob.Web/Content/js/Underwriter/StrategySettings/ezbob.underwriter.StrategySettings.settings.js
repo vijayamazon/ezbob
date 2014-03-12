@@ -22,14 +22,14 @@
     };
 
     StrategySettingsView.prototype.render = function() {
-      var campaign, charges, experian, general, loanOfferRanges;
+      var basicInterestRates, campaign, charges, experian, general;
 
       this.$el.html(this.template());
       general = this.$el.find("#general-settings");
       charges = this.$el.find("#charges-settings");
       experian = this.$el.find("#experian-settings");
       campaign = this.$el.find("#campaign-settings");
-      loanOfferRanges = this.$el.find("#loan-offer-ranges-settings");
+      basicInterestRates = this.$el.find("#basic-interest-rate-settings");
       this.generalModel = new EzBob.Underwriter.SettingsGeneralModel();
       this.generalView = new EzBob.Underwriter.SettingsGeneralView({
         el: general,
@@ -50,10 +50,10 @@
         el: campaign,
         model: this.campaignModel
       });
-      this.loanOfferRangesModel = new EzBob.Underwriter.Settings.LoanOfferRangesModel();
-      this.loanOfferRangesView = new EzBob.Underwriter.Settings.LoanOfferRangesView({
-        el: loanOfferRanges,
-        model: this.loanOfferRangesModel
+      this.basicInterestRateModel = new EzBob.Underwriter.Settings.BasicInterestRateModel();
+      this.basicInterestRateView = new EzBob.Underwriter.Settings.BasicInterestRateView({
+        el: basicInterestRates,
+        model: this.basicInterestRateModel
       });
       return EzBob.handleUserLayoutSetting();
     };

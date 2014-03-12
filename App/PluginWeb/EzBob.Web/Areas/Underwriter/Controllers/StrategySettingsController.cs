@@ -366,18 +366,18 @@
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonNetResult SettingsBasicInterestRate()
 		{
-			var loanOfferRangesList = serviceClient.Instance.GetSpResultTable("GetBasicInterestRates", null);
-			var deserializedArray = JsonConvert.DeserializeObject<BasicInterestRate[]>(loanOfferRangesList.SerializedDataTable);
-			var loanOfferRanges = deserializedArray == null ? null : deserializedArray.ToList();
-			if (loanOfferRanges != null)
+			var basicInterestRatesList = serviceClient.Instance.GetSpResultTable("GetBasicInterestRates", null);
+			var deserializedArray = JsonConvert.DeserializeObject<BasicInterestRate[]>(basicInterestRatesList.SerializedDataTable);
+			var basicInterestRates = deserializedArray == null ? null : deserializedArray.ToList();
+			if (basicInterestRates != null)
 			{
-				foreach (BasicInterestRate basicInterestRate in loanOfferRanges)
+				foreach (BasicInterestRate basicInterestRate in basicInterestRates)
 				{
 					basicInterestRate.LoanInterestBase *= 100; // Convert to percent
 				}
 			}
 
-			return this.JsonNet(new { loanOfferRanges });
+			return this.JsonNet(new { basicInterestRates });
 		}
 
 		[Ajax]

@@ -616,7 +616,7 @@
     <Content Include="Content\img\customer-sidebar\fast.png" />
     <Content Include="Areas\Customer\Views\Shared\Shops\CompanyFilesAccountInfoTemplate.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\MarketPlaceDetails\CompanyFiles.cshtml" />
-    <Content Include="Areas\Underwriter\Views\Shared\AutomationSettings\_LoanOfferRangesSettings.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\AutomationSettings\_BasicInterestRateSettings.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />
@@ -1264,14 +1264,14 @@
     <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.summaryInfo.js">
       <DependentUpon>ezbob.underwriter.summaryInfo.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.BasicInterestRate.js">
+      <DependentUpon>EzBob.Underwriter.Settings.BasicInterestRate.coffee</DependentUpon>
+    </Content>
     <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.Campaign.js">
       <DependentUpon>EzBob.Underwriter.Settings.Campaign.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.Experian.js">
       <DependentUpon>EzBob.Underwriter.Settings.Experian.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.LoanOfferRanges.js">
-      <DependentUpon>EzBob.Underwriter.Settings.LoanOfferRanges.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.Campaign.min.js">
       <DependentUpon>EzBob.Underwriter.Settings.Campaign.coffee</DependentUpon>
@@ -1333,9 +1333,6 @@
     <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.settings.js">
       <DependentUpon>ezbob.underwriter.StrategySettings.settings.coffee</DependentUpon>
     </Content>
-    <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.settings.min.js">
-      <DependentUpon>ezbob.underwriter.StrategySettings.settings.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\Wizard\shops\ezbob.shops.companyFiles.js">
       <DependentUpon>ezbob.shops.companyFiles.coffee</DependentUpon>
     </Content>
@@ -1386,7 +1383,7 @@
     <None Include="Content\img\customer-sidebar\icons-source\Preview Image Set_v1.0.psd" />
     <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.uploadHmrc.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.companyFiles.coffee" />
-    <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.LoanOfferRanges.coffee" />
+    <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.BasicInterestRate.coffee" />
     <None Include="Service References\EzServiceReference\configuration91.svcinfo" />
     <None Include="Service References\EzServiceReference\configuration.svcinfo" />
     <None Include="Service References\EzServiceReference\EzBob.Backend.Models.xsd">
