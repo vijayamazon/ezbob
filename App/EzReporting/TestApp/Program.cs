@@ -5,9 +5,7 @@ namespace TestApp {
 	using System.Collections.Generic;
 	using System.Data;
 	using System.Data.Common;
-	using System.Data.SqlClient;
-
-	using Ezbob.Context;
+	using EzBob.Web.Areas.Underwriter.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils;
@@ -27,6 +25,8 @@ namespace TestApp {
 			ms_oLog = log;
 
 			var oDB = new SqlConnection(log);
+
+			TestTableSpArgument(oDB, log);
 
 			// TestVectorSpArgument(oDB, log);
 
@@ -61,21 +61,57 @@ namespace TestApp {
 
 		#endregion method Main
 
+		#region method TestTableSpArgument
+
+		private static void TestTableSpArgument(AConnection oDB, ASafeLog oLog) {
+			oDB.LogVerbosityLevel = LogVerbosityLevel.Verbose;
+
+			var lst = new List<BasicInterestRate> {
+				new BasicInterestRate { FromScore = 1, ToScore = 2, LoanInterestBase = 1.2m, },
+				new BasicInterestRate { FromScore = 2, ToScore = 3, LoanInterestBase = 2.3m, },
+				new BasicInterestRate { FromScore = 3, ToScore = 4, LoanInterestBase = 3.4m, },
+				new BasicInterestRate { FromScore = 4, ToScore = 5, LoanInterestBase = 4.5m, },
+				new BasicInterestRate { FromScore = 5, ToScore = 6, LoanInterestBase = 5.6m, },
+			};
+
+			oLog.Debug("Results - begin:");
+
+			oDB.ForEachRowSafe(
+				(sr, bRowsetStart) => {
+					oLog.Debug("Returned value: {0}, {1}, {2}", (int)sr[0], (int)sr[1], (decimal)sr[2]);
+					return ActionResult.Continue;
+				},
+				"TestIntIntDecimalListType",
+				CommandSpecies.StoredProcedure,
+				oDB.CreateTableParameter<BasicInterestRate>("@TheList", lst, objbir => {
+					var bir = (BasicInterestRate)objbir;
+					return new object[] { bir.FromScore, bir.ToScore, bir.LoanInterestBase, };
+				})
+			);
+
+			oLog.Debug("Results - end");
+		} // TestTableSpArgument
+
+		#endregion method TestTableSpArgument
+
 		#region method TestVectorSpArgument
 
 		private static void TestVectorSpArgument(AConnection oDB, ASafeLog oLog) {
 			oDB.LogVerbosityLevel = LogVerbosityLevel.Verbose;
 
-			const int nCustomerID = 70;
-			const string sContactEmail = "alexbo+broker@ezbob.com";
+			oLog.Debug("Results - begin:");
 
-			oDB.ExecuteNonQuery(
-				"BrokerDeleteCustomerFiles",
+			oDB.ForEachRowSafe(
+				(sr, bRowsetStart) => {
+					oLog.Debug("Returned value: {0}", (int)sr[0]);
+					return ActionResult.Continue;
+				},
+				"TestIntListType",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("@CustomerID", nCustomerID),
-				new QueryParameter("@ContactEmail", sContactEmail),
-				oDB.CreateVectorParameter<int>("@FileIDs", 9, 10)
+				oDB.CreateVectorParameter<int>("@TheList", 1, 2, 2, 2, 5, 5, 38, 1)
 			);
+
+			oLog.Debug("Results - end");
 		} // TestVectorSpArgument
 
 		#endregion method TestVectorSpArgument

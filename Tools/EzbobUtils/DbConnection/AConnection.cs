@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Database {
 	using System;
+	using System.Collections;
 	using System.Collections.Generic;
 	using System.Data.Common;
 	using System.Text;
@@ -146,13 +147,25 @@
 
 		#region method CreateVectorParameter
 
-		public abstract QueryParameter CreateVectorParameter<T>(string sFieldName, IEnumerable<T> oValues);
-
 		public virtual QueryParameter CreateVectorParameter<T>(string sFieldName, params T[] oValues) {
 			return CreateVectorParameter<T>(sFieldName, (IEnumerable<T>)oValues);
 		} // CreateVectorParameter
 
+		public class VectorToTableParameter<T> : ITraversable {
+			public T Value { get; set; } // Value
+		} // class VectorToTableParameter
+
+		public virtual QueryParameter CreateVectorParameter<T>(string sFieldName, IEnumerable<T> oValues) {
+			return CreateTableParameter<VectorToTableParameter<T>>(sFieldName, oValues, oOneValue => new object[] { oOneValue });
+		} // CreateVectorParameter
+
 		#endregion method CreateVectorParameter
+
+		public abstract QueryParameter CreateTableParameter<TColumnInfo>(
+			string sFieldName,
+			IEnumerable oValues,
+			Func<object, object[]> oValueToRow
+		) where TColumnInfo : ITraversable, new();
 
 		public abstract string DateToString(DateTime oDate);
 

@@ -1,11 +1,13 @@
 ﻿namespace Ezbob.Database {
 	using System;
+	using System.Collections;
 	using System.Collections.Generic;
 	using System.Data;
 	using System.Data.Common;
 	using System.Data.SqlClient;
 	using System.Globalization;
 	using Ezbob.Logger;
+	using Utils;
 
 	#region class SqlConnection
 
@@ -30,23 +32,26 @@
 
 		#endregion method DateToString
 
-		#region method CreateVectorParameter
+		#region method CreateTableParameter
 
-		public override QueryParameter CreateVectorParameter<T>(string sFieldName, IEnumerable<T> oValues) {
+		public override QueryParameter CreateTableParameter<TColumnInfo>(string sFieldName, IEnumerable oValues, Func<object, object[]> oValueToRow) {
 			var tbl = new DataTable();
-			tbl.Columns.Add(string.Empty, typeof (T));
+
+			PropertyTraverser.Traverse<TColumnInfo>(
+				(oIgnoredInstance, oPropertyInfo) => tbl.Columns.Add(string.Empty, oPropertyInfo.PropertyType)
+			);
 
 			if (oValues != null)
-				foreach (T v in oValues)
-					tbl.Rows.Add(v);
+				foreach (object v in oValues)
+					tbl.Rows.Add(oValueToRow(v));
 
 			return new QueryParameter(new SqlParameter(sFieldName, SqlDbType.Structured) {
 				Value = tbl,
 				Direction = ParameterDirection.Input,
 			});
-		} // CreateVectorParameter
+		} // CreateTableParameter
 
-		#endregion method CreateVectorParameter
+		#endregion method CreateTableParameter
 
 		#endregion public
 

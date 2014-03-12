@@ -8,7 +8,7 @@
 		public BoolActionResult IsBroker(string sContactEmail) {
 			BrokerIsBroker oInstance;
 
-			ActionMetaData oResult = ExecuteSync(false, out oInstance, null, null, sContactEmail);
+			ActionMetaData oResult = ExecuteSync(out oInstance, null, null, sContactEmail);
 
 			return new BoolActionResult {
 				MetaData = oResult,
@@ -69,7 +69,7 @@
 		public BrokerCustomersActionResult BrokerLoadCustomerList(string sContactEmail) {
 			BrokerLoadCustomerList oIntstance;
 
-			ActionMetaData oResult = ExecuteSync(false, out oIntstance, null, null, sContactEmail);
+			ActionMetaData oResult = ExecuteSync(out oIntstance, null, null, sContactEmail);
 
 			return new BrokerCustomersActionResult {
 				MetaData = oResult,
@@ -84,7 +84,7 @@
 		public BrokerCustomerDetailsActionResult BrokerLoadCustomerDetails(int nCustomerID, string sContactEmail) {
 			BrokerLoadCustomerDetails oIntstance;
 
-			ActionMetaData oResult = ExecuteSync(false, out oIntstance, nCustomerID, null, nCustomerID, sContactEmail);
+			ActionMetaData oResult = ExecuteSync(out oIntstance, nCustomerID, null, nCustomerID, sContactEmail);
 
 			return new BrokerCustomerDetailsActionResult {
 				MetaData = oResult,
@@ -99,7 +99,7 @@
 		public StringActionResult BrokerSaveCrmEntry(bool bIsIncoming, int nActionID, int nStatusID, string sComment, int nCustomerID, string sContactEmail) {
 			BrokerSaveCrmEntry oInstance;
 
-			ActionMetaData oResult = ExecuteSync(false, 
+			ActionMetaData oResult = ExecuteSync(
 				out oInstance,
 				nCustomerID,
 				null,
@@ -124,7 +124,7 @@
 		public BrokerCustomerFilesActionResult BrokerLoadCustomerFiles(int nCustomerID, string sContactEmail) {
 			BrokerLoadCustomerFiles oInstance;
 
-			ActionMetaData oResult = ExecuteSync(false, 
+			ActionMetaData oResult = ExecuteSync(
 				out oInstance,
 				nCustomerID,
 				null,
@@ -145,7 +145,7 @@
 		public BrokerCustomerFileContentsActionResult BrokerDownloadCustomerFile(int nCustomerID, string sContactEmail, int nFileID) {
 			BrokerDownloadCustomerFile oInstance;
 
-			ActionMetaData oResult = ExecuteSync(false, 
+			ActionMetaData oResult = ExecuteSync(
 				out oInstance,
 				nCustomerID,
 				null,

@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Database {
 	using System;
+	using System.Collections;
 	using System.Collections.Generic;
 	using System.Data;
 	using System.Data.Common;
@@ -53,6 +54,12 @@
 
 		QueryParameter CreateVectorParameter<T>(string sFieldName, IEnumerable<T> oValues);
 		QueryParameter CreateVectorParameter<T>(string sFieldName, params T[] oValues);
+
+		QueryParameter CreateTableParameter<TColumnInfo>(
+			string sFieldName,
+			IEnumerable oValues,
+			Func<object, object[]> oValueToRow
+		) where TColumnInfo : ITraversable, new();
 	} // IConnection
 
 	#endregion interface IConnection

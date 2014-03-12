@@ -6,10 +6,7 @@
 
 	#region class TraversableAttribute
 
-	[System.AttributeUsage(
-		System.AttributeTargets.Class | System.AttributeTargets.Property,
-		AllowMultiple = false
-	)]
+	[System.AttributeUsage(System.AttributeTargets.Property, AllowMultiple = false)]
 	public class TraversableAttribute : Attribute { } // TraversableAttribute
 
 	#endregion class TraversableAttribute

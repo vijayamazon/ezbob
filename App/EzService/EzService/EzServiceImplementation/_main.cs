@@ -135,10 +135,10 @@
 
 		private ActionMetaData ExecuteSync<T>(int? nCustomerID, int? nUserID, params object[] args) where T : AStrategy {
 			T oInstance;
-			return ExecuteSync<T>(false, out oInstance, nCustomerID, nUserID, args);
+			return ExecuteSync<T>(out oInstance, nCustomerID, nUserID, args);
 		} // ExecuteSync
 
-		private ActionMetaData ExecuteSync<T>(bool constParamsAtBeginning, out T oInstance, int? nCustomerID, int? nUserID, params object[] args) where T : AStrategy {
+		private ActionMetaData ExecuteSync<T>(out T oInstance, int? nCustomerID, int? nUserID, params object[] args) where T : AStrategy {
 			ActionMetaData amd = null;
 
 			try {
@@ -148,24 +148,28 @@
 
 				amd = NewSync(sStrategyType, comment: string.Join("; ", args), nCustomerID: nCustomerID, nUserID: nUserID);
 
+				int nRequestedParamsCount = args.Length + 2;
+
+				ConstructorInfo oCreator =
+					typeof(T).GetConstructors().FirstOrDefault(ci => ci.GetParameters().Length == nRequestedParamsCount);
+
+				if (oCreator == null)
+					throw new Exception("Failed to find a constructor for " + sStrategyType + " with " + nRequestedParamsCount + " arguments.");
+
+				var aryContructorParamInfos = oCreator.GetParameters();
+				
+				bool bStdParamsFirst =
+					aryContructorParamInfos[0].ParameterType.IsAssignableFrom(typeof(AConnection)) &&
+					aryContructorParamInfos[1].ParameterType.IsAssignableFrom(typeof(ASafeLog));
+
 				List<object> oParams;
-				if (constParamsAtBeginning)
-				{
-					oParams = new List<object>();
-					oParams.Add(DB);
-					oParams.Add(Log);
+
+				if (bStdParamsFirst) {
+					oParams = new List<object> { DB, Log };
 					oParams.AddRange(args);
 				}
 				else
-				{
 					oParams = new List<object>(args) { DB, Log };
-				}
-
-				ConstructorInfo oCreator =
-					typeof(T).GetConstructors().FirstOrDefault(ci => ci.GetParameters().Length == oParams.Count);
-
-				if (oCreator == null)
-					throw new Exception("Failed to find a constructor for " + sStrategyType + " with " + oParams.Count + " arguments.");
 
 				Log.Debug(sStrategyType + " constructor found, invoking...");
 
