@@ -72,7 +72,6 @@
     <Compile Include="ActionResults\BrokerCustomersActionResult.cs" />
     <Compile Include="ActionResults\BrokerCustomerDetailsActionResult.cs" />
     <Compile Include="ActionResults\BrokerCustomerFilesActionResult.cs" />
-    <Compile Include="ActionResults\BasicInterestRateActionResult.cs" />
     <Compile Include="ActionResults\SerializedDataTableActionResult.cs" />
     <Compile Include="ActionResults\StringActionResult.cs" />
     <Compile Include="ActionResults\CrmLookupsActionResult.cs" />

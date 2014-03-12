@@ -38,7 +38,7 @@
 		public CrmLookupsActionResult CrmLoadLookups() {
 			CrmLoadLookups oInstance;
 
-			ActionMetaData oResult = ExecuteSync(out oInstance, null, null);
+			ActionMetaData oResult = ExecuteSync(false, out oInstance, null, null);
 
 			return new CrmLookupsActionResult {
 				MetaData = oResult,

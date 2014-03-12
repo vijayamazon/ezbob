@@ -270,15 +270,11 @@
 
 		#endregion Agreements
 
-		/*TODO - remove if serialized is ok 
-		[OperationContract]
-		BasicInterestRateActionResult GetBasicInterestRate();
-		*/
 		[OperationContract]
 		SerializedDataTableActionResult GetSpResultTable(string spName, params string[] parameters);
 
 		[OperationContract]
-		ActionMetaData SaveBasicInterestRate(List<BasicInterestRate> basicInterestRates);
+		BoolActionResult SaveBasicInterestRate(List<BasicInterestRate> basicInterestRates);
 	} // interface IEzService
 } // namespace EzService
 

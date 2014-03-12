@@ -5,7 +5,7 @@
 		public WizardConfigsActionResult GetWizardConfigs() {
 			GetWizardConfigs strategyInstance;
 
-			var result = ExecuteSync(out strategyInstance, null, null);
+			var result = ExecuteSync(false, out strategyInstance, null, null);
 
 			return new WizardConfigsActionResult {
 				MetaData = result,

@@ -10,7 +10,7 @@
 		public SerializedDataTableActionResult GetSpResultTable(string spName, params string[] parameters)
 		{
 			GetSpResultTable strategyInstance;
-			var result = ExecuteSyncParamsAtEnd(out strategyInstance, null, null, spName, parameters);
+			var result = ExecuteSync(true, out strategyInstance, null, null, spName, parameters);
 
 			string serializedDataTable = JsonConvert.SerializeObject(strategyInstance.Result, new DataTableConverter());
 			return new SerializedDataTableActionResult
@@ -20,26 +20,24 @@
 			};
 		} // GetSpResultTable
 
-		public ActionMetaData SaveBasicInterestRate(List<BasicInterestRate> basicInterestRates)
+		public BoolActionResult SaveBasicInterestRate(List<BasicInterestRate> basicInterestRates)
 		{
-			// clear table sp
-			// foreach insert to table sp
-			return null;
-		}
-
-		/*TODO - remove if serialized is ok
-		public BasicInterestRateActionResult GetBasicInterestRate()
-		{
-			GetBasicInterestRates strategyInstance;
-			var result = ExecuteSync(out strategyInstance, null, null);
-
-			var basicInterestRates = strategyInstance.BasicInterestRates.Select(current => new SingleBasicInterestRate {Id = current.Id, FromScore = current.FromScore, ToScore = current.ToScore, LoanInterestBase = current.LoanInterestBase}).ToList();
-
-			return new BasicInterestRateActionResult
+			string statement = "DELETE FROM BasicInterestRate\n";
+			foreach (BasicInterestRate basicInterestRate in basicInterestRates)
 			{
-				MetaData = result,
-				BasicInterestRates = basicInterestRates
-			};
-		} // GetBasicInterestRate*/
+				statement +=
+					string.Format("INSERT INTO BasicInterestRate (FromScore, ToScore, LoanInterestBase) VALUES ({0}, {1}, {2})\n",
+					              basicInterestRate.FromScore, basicInterestRate.ToScore, basicInterestRate.LoanInterestBase);
+			}
+
+			ExecuteQuery strategyInstance;
+			ActionMetaData result = ExecuteSync(false, out strategyInstance, null, null, statement);
+
+			return new BoolActionResult
+				{
+					MetaData = result,
+					Value = strategyInstance.IsError
+				};
+		}
 	} // class EzServiceImplementation
 } // namespace EzService

@@ -135,7 +135,7 @@
   <xs:element name="SaveBasicInterestRateResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="SaveBasicInterestRateResult" nillable="true" type="q14:ActionMetaData" />
+        <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="SaveBasicInterestRateResult" nillable="true" type="q14:BoolActionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

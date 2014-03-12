@@ -6,6 +6,7 @@
 	using Code;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
+	using EzServiceReference;
 	using Infrastructure.csrf;
 	using Models;
 	using Newtonsoft.Json;
@@ -426,12 +427,8 @@
 				return this.JsonNet(new { error = errorMessage });
 			}
 
-			serviceClient.Instance.SaveBasicInterestRate(sortedList.ToArray());
-
-			string error = null;
-			
-
-			return this.JsonNet(new { error = error });
+			BoolActionResult result = serviceClient.Instance.SaveBasicInterestRate(sortedList.ToArray());
+			return this.JsonNet(new { error = result.Value ? "Error occurred during save" : null });
 		}
 
 		[Ajax]

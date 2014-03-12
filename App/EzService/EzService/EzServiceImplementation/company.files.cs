@@ -8,7 +8,7 @@
 
 		public byte[] GetCompanyFile(int companyFileId) {
 			GetCompanyFile oInstance;
-			ActionMetaData result = ExecuteSync<GetCompanyFile>(out oInstance, null, null, companyFileId);
+			ActionMetaData result = ExecuteSync<GetCompanyFile>(false, out oInstance, null, null, companyFileId);
 			return oInstance.FileContext;
 		} // GetCompanyFile
 	} // class EzServiceImplementation

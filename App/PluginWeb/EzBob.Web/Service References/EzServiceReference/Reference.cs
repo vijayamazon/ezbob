@@ -652,7 +652,7 @@ namespace EzBob.Web.EzServiceReference {
         EzBob.Web.EzServiceReference.SerializedDataTableActionResult GetSpResultTable(string spName, string[] parameters);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SaveBasicInterestRate", ReplyAction="http://tempuri.org/IEzService/SaveBasicInterestRateResponse")]
-        EzBob.Web.EzServiceReference.ActionMetaData SaveBasicInterestRate(EzBob.Web.Areas.Underwriter.Models.BasicInterestRate[] basicInterestRates);
+        EzBob.Web.EzServiceReference.BoolActionResult SaveBasicInterestRate(EzBob.Web.Areas.Underwriter.Models.BasicInterestRate[] basicInterestRates);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckAml", ReplyAction="http://tempuri.org/IEzService/CheckAmlResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData CheckAml(int customerId);
@@ -886,7 +886,7 @@ namespace EzBob.Web.EzServiceReference {
             return base.Channel.GetSpResultTable(spName, parameters);
         }
         
-        public EzBob.Web.EzServiceReference.ActionMetaData SaveBasicInterestRate(EzBob.Web.Areas.Underwriter.Models.BasicInterestRate[] basicInterestRates) {
+        public EzBob.Web.EzServiceReference.BoolActionResult SaveBasicInterestRate(EzBob.Web.Areas.Underwriter.Models.BasicInterestRate[] basicInterestRates) {
             return base.Channel.SaveBasicInterestRate(basicInterestRates);
         }
         

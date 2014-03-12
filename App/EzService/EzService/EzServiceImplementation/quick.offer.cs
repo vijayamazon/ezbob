@@ -60,7 +60,7 @@
 		private QuickOfferActionResult QuickOfferProcedure(int nCustomerID, bool bSaveOfferToDB, bool bHackForTest, QuickOfferConfigurationData oCfg) {
 			QuickOffer oStrategy;
 
-			var oResult = ExecuteSync(out oStrategy, nCustomerID, nCustomerID, nCustomerID, bSaveOfferToDB, bHackForTest, oCfg);
+			var oResult = ExecuteSync(false, out oStrategy, nCustomerID, nCustomerID, nCustomerID, bSaveOfferToDB, bHackForTest, oCfg);
 
 			return new QuickOfferActionResult {
 				HasValue = !ReferenceEquals(oStrategy.Offer, null),
