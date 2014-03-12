@@ -1,8 +1,10 @@
 ﻿namespace EzService {
+	using System;
 	using System.Collections.Generic;
 	using ActionResults;
 	using EzBob.Backend.Strategies;
 	using EzBob.Web.Areas.Underwriter.Models;
+	using Ezbob.Database;
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Converters;
 
@@ -18,21 +20,30 @@
 			};
 		} // GetSpResultTable
 
-		public BoolActionResult SaveBasicInterestRate(List<BasicInterestRate> basicInterestRates) {
-			string statement = "DELETE FROM BasicInterestRate\n";
-
-			foreach (BasicInterestRate basicInterestRate in basicInterestRates) {
-				statement +=
-					string.Format("INSERT INTO BasicInterestRate (FromScore, ToScore, LoanInterestBase) VALUES ({0}, {1}, {2})\n",
-								  basicInterestRate.FromScore, basicInterestRate.ToScore, basicInterestRate.LoanInterestBase);
+		public BoolActionResult SaveBasicInterestRate(List<BasicInterestRate> basicInterestRates)
+		{
+			bool isError = false;
+			try
+			{
+				DB.ExecuteNonQuery(
+				"BasicInterestRate_Refill",
+				CommandSpecies.StoredProcedure,
+				DB.CreateTableParameter<BasicInterestRate>("@TheList", basicInterestRates, objbir =>
+				{
+					var bir = (BasicInterestRate)objbir;
+					return new object[] { bir.FromScore, bir.ToScore, bir.LoanInterestBase, };
+				})
+			);
+			}
+			catch (Exception e)
+			{
+				Log.Error("Exception occurred during execution of BasicInterestRate_Refill. The exception:{0}", e);
+				isError = true;
 			}
 
-			ExecuteQuery strategyInstance;
-			ActionMetaData result = ExecuteSync(out strategyInstance, null, null, statement);
-
-			return new BoolActionResult {
-				MetaData = result,
-				Value = strategyInstance.IsError
+			return new BoolActionResult
+			{
+				Value = isError
 			};
 		}
 	} // class EzServiceImplementation
