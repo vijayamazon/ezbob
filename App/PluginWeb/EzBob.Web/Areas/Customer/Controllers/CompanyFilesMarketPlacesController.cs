@@ -8,6 +8,7 @@
 	using ApplicationMng.Repository;
 	using Code;
 	using CompanyFiles;
+	using EZBob.DatabaseLib.DatabaseWrapper;
 	using EZBob.DatabaseLib.Model.Database;
 	using Infrastructure;
 	using Scorto.Web;
@@ -92,6 +93,7 @@
 				_session.Flush();
 				m_oServiceClient.Instance.UpdateMarketplace(_context.Customer.Id, mp.Id, true);
 
+				mp.Marketplace.GetRetrieveDataHelper(_helper).UpdateCustomerMarketplaceFirst(mp.Id);
 			}
 			catch (Exception e)
 			{

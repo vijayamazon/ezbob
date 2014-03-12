@@ -5,6 +5,7 @@
 	using System.Reflection;
 	using System.Text;
 	using System.Threading;
+	using CompanyFiles;
 	using EKM;
 	using EZBob.DatabaseLib.Model.Database;
 	using EzBob.AmazonLib;
@@ -157,6 +158,7 @@
 			NHibernateManager.FluentAssemblies.Add(typeof(PayPointDatabaseMarketPlace).Assembly);
 			NHibernateManager.FluentAssemblies.Add(typeof(FreeAgentDatabaseMarketPlace).Assembly);
 			NHibernateManager.FluentAssemblies.Add(typeof(SageDatabaseMarketPlace).Assembly);
+			NHibernateManager.FluentAssemblies.Add(typeof(CompanyFilesDatabaseMarketPlace).Assembly);
 
 			Scanner.Register();
 

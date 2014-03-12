@@ -5,6 +5,7 @@ namespace EzBobTest
 	using System.Linq;
 	using System.Threading;
 	using System.Xml;
+	using CompanyFiles;
 	using EKM;
 	using EzBob.Models;
 	using FreeAgent;
@@ -69,6 +70,7 @@ namespace EzBobTest
 			NHibernateManager.FluentAssemblies.Add(typeof(PayPointDatabaseMarketPlace).Assembly);
 			NHibernateManager.FluentAssemblies.Add(typeof(FreeAgentDatabaseMarketPlace).Assembly);
 			NHibernateManager.FluentAssemblies.Add(typeof(SageDatabaseMarketPlace).Assembly);
+			NHibernateManager.FluentAssemblies.Add(typeof(CompanyFilesDatabaseMarketPlace).Assembly);
             Scanner.Register();
             ObjectFactory.Configure(x =>
             {
@@ -141,7 +143,7 @@ namespace EzBobTest
 
 		[Test]
 		public void UpdateCustomerMarketplace() {
-			var umis = new[] { 17284 };
+			var umis = new[] { 18306 };
 
 			//umis.AsParallel().ForAll( UpdateCustomerMarketplace );
 
@@ -303,6 +305,14 @@ namespace EzBobTest
                 return marketPlace.GetRetrieveDataHelper(_Helper) as AmazonRetriveDataHelper;
             }
         }
+
+		[Test]
+		public void CompanyFilesTest()
+		{
+			var marketPlace = ObjectFactory.GetInstance<CompanyFilesDatabaseMarketPlace>();
+            var r = marketPlace.GetRetrieveDataHelper(_Helper) as CompanyFilesRetriveDataHelper;
+			r.UpdateCustomerMarketplaceFirst(18306);
+		}
 
         [Test]
         public void SaveMarketplaceEbay()
