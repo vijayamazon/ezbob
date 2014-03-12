@@ -86,6 +86,7 @@
     <Compile Include="Broker\BrokerLoadCustomerDetails.cs" />
     <Compile Include="Broker\BrokerLoadCustomerFiles.cs" />
     <Compile Include="Broker\BrokerSaveCrmEntry.cs" />
+    <Compile Include="Broker\BrokerAddCustomerLead.cs" />
     <Compile Include="CompanyFiles.cs" />
     <Compile Include="Broker\BrokerDownloadCustomerFile.cs" />
     <Compile Include="Broker\BrokerSaveUploadedCustomerFile.cs" />

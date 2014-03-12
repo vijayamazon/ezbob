@@ -1020,8 +1020,6 @@ EzBob.validateSignUpForm = function (el) {
 
     return e.validate({
         rules: {
-            FirstName: EzBob.Validation.NameValidationObject,
-            Surname: { required: true },
             signupPass1: $.extend({}, passPolicy),
             signupPass2: passPolicy2,
             promoCode: { required: false, maxlength: 30 },
@@ -1097,6 +1095,8 @@ EzBob.validatePersonalDetailsForm = function (el) {
 
     return e.validate({
         rules: {
+            FirstName: EzBob.Validation.NameValidationObject,
+            Surname: { required: true },
             DateOfBirth: { requiredDate: true, yearLimit: 18 },
             DayTimePhone: { required: true, regex: "^0[0-9]{10}$" },
             MobilePhone: { required: true, regex: "^0[0-9]{10}$" },

@@ -9,6 +9,13 @@
 
 	[ServiceContract(SessionMode = SessionMode.Allowed)]
 	public interface IEzService {
+		#region Agreements
+
+		[OperationContract]
+		ActionMetaData SaveAgreement(int customerId, AgreementModel model, string refNumber, string name, TemplateModel template, string path1, string path2);
+
+		#endregion Agreements
+
 		#region AML and BWA
 
 		[OperationContract]
@@ -70,6 +77,9 @@
 
 		[OperationContract]
 		ActionMetaData BrokerDeleteCustomerFiles(int nCustomerID, string sContactEmail, int[] aryFileIDs);
+
+		[OperationContract]
+		ActionMetaData BrokerAddCustomerLead(string sLeadFirstName, string sLeadLastName, string sLeadEmail, string sLeadAddMode, string sContactEmail);
 
 		#endregion Broker
 
@@ -241,6 +251,12 @@
 		[OperationContract]
 		CrmLookupsActionResult CrmLoadLookups();
 
+		[OperationContract]
+		SerializedDataTableActionResult GetSpResultTable(string spName, params string[] parameters);
+
+		[OperationContract]
+		BoolActionResult SaveBasicInterestRate(List<BasicInterestRate> basicInterestRates);
+
 		#endregion other strategies
 
 		#region Quick offer
@@ -262,19 +278,6 @@
 		ActionMetaData FinishWizard(int customerId, int underwriterId);
 
 		#endregion Wizard
-
-		#region Agreements
-
-		[OperationContract]
-		ActionMetaData SaveAgreement(int customerId, AgreementModel model, string refNumber, string name, TemplateModel template, string path1, string path2);
-
-		#endregion Agreements
-
-		[OperationContract]
-		SerializedDataTableActionResult GetSpResultTable(string spName, params string[] parameters);
-
-		[OperationContract]
-		BoolActionResult SaveBasicInterestRate(List<BasicInterestRate> basicInterestRates);
 	} // interface IEzService
 } // namespace EzService
 

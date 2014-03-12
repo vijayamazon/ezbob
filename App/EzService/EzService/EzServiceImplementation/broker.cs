@@ -73,7 +73,8 @@
 
 			return new BrokerCustomersActionResult {
 				MetaData = oResult,
-				Records = oIntstance.Result.Values.ToList(),
+				Customers = oIntstance.Customers.Values.ToList(),
+				Leads = oIntstance.Leads,
 			};
 		} // BrokerRestorePassword
 
@@ -178,5 +179,13 @@
 		} // BrokerDeleteCustomerFiles
 
 		#endregion method BrokerDeleteCustomerFiles
+
+		#region method BrokerAddCustomerLead
+
+		public ActionMetaData BrokerAddCustomerLead(string sLeadFirstName, string sLeadLastName, string sLeadEmail, string sLeadAddMode, string sContactEmail) {
+			return ExecuteSync<BrokerAddCustomerLead>(null, null, sLeadFirstName, sLeadLastName, sLeadEmail, sLeadAddMode, sContactEmail);
+		} // BrokerAddCustomerLead
+
+		#endregion method BrokerAddCustomerLead
 	} // class EzServiceImplementation
 } // namespace EzService

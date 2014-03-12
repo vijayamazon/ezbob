@@ -74,11 +74,11 @@
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Models.Agreements" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Web.Areas.Customer.Models" />
-      <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults" />
-      <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Web.Areas.Underwriter.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/FraudChecker" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Web.Areas.Underwriter.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Models" />
     </xsd:schema>
   </wsdl:types>
@@ -112,29 +112,11 @@
   <wsdl:message name="IEzServiceAdmin_WriteToLog_OutputMessage">
     <wsdl:part name="parameters" element="tns:WriteToLogResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_FinishWizard_InputMessage">
-    <wsdl:part name="parameters" element="tns:FinishWizard" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_FinishWizard_OutputMessage">
-    <wsdl:part name="parameters" element="tns:FinishWizardResponse" />
-  </wsdl:message>
   <wsdl:message name="IEzService_SaveAgreement_InputMessage">
     <wsdl:part name="parameters" element="tns:SaveAgreement" />
   </wsdl:message>
   <wsdl:message name="IEzService_SaveAgreement_OutputMessage">
     <wsdl:part name="parameters" element="tns:SaveAgreementResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_GetSpResultTable_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetSpResultTable" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_GetSpResultTable_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetSpResultTableResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_SaveBasicInterestRate_InputMessage">
-    <wsdl:part name="parameters" element="tns:SaveBasicInterestRate" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_SaveBasicInterestRate_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SaveBasicInterestRateResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_CheckAml_InputMessage">
     <wsdl:part name="parameters" element="tns:CheckAml" />
@@ -225,6 +207,12 @@
   </wsdl:message>
   <wsdl:message name="IEzService_BrokerDeleteCustomerFiles_OutputMessage">
     <wsdl:part name="parameters" element="tns:BrokerDeleteCustomerFilesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerAddCustomerLead_InputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerAddCustomerLead" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerAddCustomerLead_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerAddCustomerLeadResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_CaisGenerate_InputMessage">
     <wsdl:part name="parameters" element="tns:CaisGenerate" />
@@ -502,6 +490,18 @@
   <wsdl:message name="IEzService_CrmLoadLookups_OutputMessage">
     <wsdl:part name="parameters" element="tns:CrmLoadLookupsResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_GetSpResultTable_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetSpResultTable" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetSpResultTable_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetSpResultTableResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_SaveBasicInterestRate_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaveBasicInterestRate" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_SaveBasicInterestRate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaveBasicInterestRateResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_QuickOffer_InputMessage">
     <wsdl:part name="parameters" element="tns:QuickOffer" />
   </wsdl:message>
@@ -519,6 +519,12 @@
   </wsdl:message>
   <wsdl:message name="IEzService_GetWizardConfigs_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetWizardConfigsResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_FinishWizard_InputMessage">
+    <wsdl:part name="parameters" element="tns:FinishWizard" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_FinishWizard_OutputMessage">
+    <wsdl:part name="parameters" element="tns:FinishWizardResponse" />
   </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
@@ -543,21 +549,9 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IEzService">
-    <wsdl:operation name="FinishWizard">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/FinishWizard" message="tns:IEzService_FinishWizard_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/FinishWizardResponse" message="tns:IEzService_FinishWizard_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="SaveAgreement">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SaveAgreement" message="tns:IEzService_SaveAgreement_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SaveAgreementResponse" message="tns:IEzService_SaveAgreement_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="GetSpResultTable">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetSpResultTable" message="tns:IEzService_GetSpResultTable_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetSpResultTableResponse" message="tns:IEzService_GetSpResultTable_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="SaveBasicInterestRate">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SaveBasicInterestRate" message="tns:IEzService_SaveBasicInterestRate_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SaveBasicInterestRateResponse" message="tns:IEzService_SaveBasicInterestRate_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="CheckAml">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CheckAml" message="tns:IEzService_CheckAml_InputMessage" />
@@ -618,6 +612,10 @@
     <wsdl:operation name="BrokerDeleteCustomerFiles">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerDeleteCustomerFiles" message="tns:IEzService_BrokerDeleteCustomerFiles_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerDeleteCustomerFilesResponse" message="tns:IEzService_BrokerDeleteCustomerFiles_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BrokerAddCustomerLead">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerAddCustomerLead" message="tns:IEzService_BrokerAddCustomerLead_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerAddCustomerLeadResponse" message="tns:IEzService_BrokerAddCustomerLead_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="CaisGenerate">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CaisGenerate" message="tns:IEzService_CaisGenerate_InputMessage" />
@@ -803,6 +801,14 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CrmLoadLookups" message="tns:IEzService_CrmLoadLookups_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CrmLoadLookupsResponse" message="tns:IEzService_CrmLoadLookups_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="GetSpResultTable">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetSpResultTable" message="tns:IEzService_GetSpResultTable_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetSpResultTableResponse" message="tns:IEzService_GetSpResultTable_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SaveBasicInterestRate">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SaveBasicInterestRate" message="tns:IEzService_SaveBasicInterestRate_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SaveBasicInterestRateResponse" message="tns:IEzService_SaveBasicInterestRate_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="QuickOffer">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/QuickOffer" message="tns:IEzService_QuickOffer_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/QuickOfferResponse" message="tns:IEzService_QuickOffer_OutputMessage" />
@@ -814,6 +820,10 @@
     <wsdl:operation name="GetWizardConfigs">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetWizardConfigs" message="tns:IEzService_GetWizardConfigs_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetWizardConfigsResponse" message="tns:IEzService_GetWizardConfigs_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="FinishWizard">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/FinishWizard" message="tns:IEzService_FinishWizard_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/FinishWizardResponse" message="tns:IEzService_FinishWizard_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
@@ -870,35 +880,8 @@
     <wsp:PolicyReference URI="#NetTcpBinding_IEzService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
-    <wsdl:operation name="FinishWizard">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/FinishWizard" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="SaveAgreement">
       <soap12:operation soapAction="http://tempuri.org/IEzService/SaveAgreement" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetSpResultTable">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/GetSpResultTable" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="SaveBasicInterestRate">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/SaveBasicInterestRate" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -1034,6 +1017,15 @@
     </wsdl:operation>
     <wsdl:operation name="BrokerDeleteCustomerFiles">
       <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerDeleteCustomerFiles" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BrokerAddCustomerLead">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerAddCustomerLead" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -1455,6 +1447,24 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="GetSpResultTable">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/GetSpResultTable" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveBasicInterestRate">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/SaveBasicInterestRate" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="QuickOffer">
       <soap12:operation soapAction="http://tempuri.org/IEzService/QuickOffer" style="document" />
       <wsdl:input>
@@ -1482,23 +1492,32 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="FinishWizard">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/FinishWizard" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="EzServiceImplementation">
     <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
-      <soap12:address location="net.tcp://yulys-pc:7081/" />
+      <soap12:address location="net.tcp://alexbo-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://yulys-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>yulys-PC\yulys</Upn>
+          <Upn>alexbo-pc\alexbo</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IEzService" binding="tns:NetTcpBinding_IEzService">
-      <soap12:address location="net.tcp://yulys-pc:7081/" />
+      <soap12:address location="net.tcp://alexbo-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://yulys-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>yulys-PC\yulys</Upn>
+          <Upn>alexbo-pc\alexbo</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

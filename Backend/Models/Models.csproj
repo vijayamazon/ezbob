@@ -46,9 +46,12 @@
     <Compile Include="BrokerCustomerPersonalDataModel.cs" />
     <Compile Include="BrokerCustomerDetailsModel.cs" />
     <Compile Include="BrokerCustomerFileModel.cs" />
+    <Compile Include="BrokerLeadEntryModel.cs" />
     <Compile Include="MpsTotals.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-<Compile Include="..\..\Common\CommonAssemblyInfo.cs"><Link>Properties\CommonAssemblyInfo.cs</Link></Compile>
+    <Compile Include="..\..\Common\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="QuickOfferModel.cs" />
   </ItemGroup>
   <ItemGroup>

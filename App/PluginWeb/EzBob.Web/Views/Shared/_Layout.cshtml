@@ -153,24 +153,6 @@
 			$('body').attr('data-user-name', '@(User.Identity.IsAuthenticated ? User.Identity.Name : "")');
 			ShowHideSignLogOnOff();
 		});
-
-		function SetCustomerName(sFirstName, sMiddleInitial, sLastName) {
-			$('#customer-name').attr({
-				'data-first-name': sFirstName,
-				'data-middle-initial': sMiddleInitial,
-				'data-last-name': sLastName,
-			});
-		} // SetCustomerName
-
-		function GetCustomerName() {
-			var oElm = $('#customer-name');
-
-			return {
-				firstName: oElm.attr('data-first-name'),
-				middleInitial: oElm.attr('data-middle-initial'),
-				lastName: oElm.attr('data-last-name'),
-			};
-		} // GetCustomerName
 	</script>
 
     @{ Html.RenderPartial("_ClickTale"); }

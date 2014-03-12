@@ -222,18 +222,22 @@
 			if (personalInfo == null)
 				throw new ArgumentNullException("personalInfo");
 
+			if (string.IsNullOrEmpty(personalInfo.FirstName))
+				throw new ArgumentNullException("personalInfo." + "FirstName");
+
+			if (string.IsNullOrEmpty(personalInfo.Surname))
+				throw new ArgumentNullException("personalInfo." + "Surname");
+
 			personalInfo.DateOfBirth = DateTime.ParseExact(dateOfBirth, "d/M/yyyy", CultureInfo.InvariantCulture);
 
 			customer.ConsentToSearch = personalInfo.ConsentToSearch;
-			if (customer.PersonalInfo != null) {
+
+			if (customer.PersonalInfo != null)
 				personalInfo.OverallTurnOver = customer.PersonalInfo.OverallTurnOver;
-				personalInfo.FirstName = customer.PersonalInfo.FirstName;
-				personalInfo.MiddleInitial = customer.PersonalInfo.MiddleInitial;
-				personalInfo.Surname = customer.PersonalInfo.Surname;
-				personalInfo.Fullname = customer.PersonalInfo.Fullname;
-			} // if
 
 			customer.PersonalInfo = personalInfo;
+
+			personalInfo.Fullname = string.Format("{0} {1} {2}", personalInfo.FirstName, personalInfo.Surname, personalInfo.MiddleInitial).Trim();
 
 			UpdateAddresses(
 				customer, personalAddress, customer.AddressInfo.PersonalAddress,

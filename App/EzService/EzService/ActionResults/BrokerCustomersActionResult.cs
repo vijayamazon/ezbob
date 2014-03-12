@@ -8,7 +8,10 @@
 	[DataContract]
 	public class BrokerCustomersActionResult : ActionResult {
 		[DataMember]
-		public List<BrokerCustomerEntry> Records { get; set; }
+		public List<BrokerCustomerEntry> Customers { get; set; }
+
+		[DataMember]
+		public List<BrokerLeadEntry> Leads { get; set; }
 	} // class BrokerCustomersActionResult
 
 	#endregion class BrokerCustomersActionResult

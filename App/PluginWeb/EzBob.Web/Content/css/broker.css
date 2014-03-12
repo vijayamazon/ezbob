@@ -67,6 +67,11 @@ table.customer-list {
 	border: 1px solid white;
 }
 
+.section-dashboard .grid-item-Email,
+.section-dashboard .grid-item-AddMode {
+	white-space: nowrap;
+}
+
 .section-customer-details .back-to-list-container {
 	margin: 2em 0 1em 0;
 	text-align: right;

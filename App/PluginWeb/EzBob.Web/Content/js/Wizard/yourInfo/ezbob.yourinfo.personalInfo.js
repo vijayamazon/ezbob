@@ -28,15 +28,11 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
     }, // initialize
 
     showConsent: function () {
-    	this.setCustomerName();
-
-    	var oName = GetCustomerName();
-
         var consentAgreementModel = new EzBob.ConsentAgreementModel({
             id: this.model.get('Id'),
-            firstName: oName.firstName,
-            middleInitial: oName.middleInitial,
-            surname: oName.lastName,
+            firstName: this.$el.find('#FirstName').val(),
+            middleInitial: this.$el.find('#MiddleInitial').val(),
+            surname: this.$el.find('#Surname').val()
         });
 
         var consentAgreement = new EzBob.ConsentAgreement({ model: consentAgreementModel });
@@ -44,12 +40,19 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
         return false;
     }, // showConsent
     
-    inputChanged: function (event) {
-        var enabled = EzBob.Validation.checkForm(this.validator) &&
+    inputChanged: function(event) {
+    	var el = event ? $(event.currentTarget) : null;
+
+    	if (el && el.attr('id') === 'MiddleInitial' && el.val() === '') {
+    		var img = el.closest('div').find('.field_status');
+    		img.field_status('set', 'empty', 2);
+    	} // if
+
+    	var enabled = EzBob.Validation.checkForm(this.validator) &&
 			this.isPrevAddressValid() &&
 			this.isAddressValid();
 
-        $('.btn-continue').toggleClass('disabled', !enabled);
+    	$('.btn-continue').toggleClass('disabled', !enabled);
     }, // inputChanged
 
     isAddressValid: function () {
@@ -167,22 +170,9 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
             EzBob.Validation.element(this.validator, $(mobileObj));
         }
 
-        this.setCustomerName();
-
         this.readyToProceed = true;
         return this;
     }, // render
-
-    setCustomerName: function() {
-    	var oElm = GetCustomerName();
-
-    	if (!oElm.firstName) {
-    		var obj = this.model.get('CustomerPersonalInfo');
-
-    		if (obj)
-    			SetCustomerName(obj.FirstName, obj.MiddleInitial, obj.Surname);
-    	} // if
-    }, // setCustomerName
 
     personalAddressModelChange: function (e, el) {
         this.inputChanged();

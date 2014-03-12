@@ -13,7 +13,8 @@
 
 		public BrokerLoadCustomerList(string sContactEmail, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			m_sContactEmail = sContactEmail;
-			Result = new SortedDictionary<int, BrokerCustomerEntry>();
+			Customers = new SortedDictionary<int, BrokerCustomerEntry>();
+			Leads = new List<BrokerLeadEntry>();
 		} // constructor
 
 		#endregion constructor
@@ -33,8 +34,8 @@
 				(sr, bRowsetStart) => {
 					int nCustomerID = sr["CustomerID"];
 
-					if (!Result.ContainsKey(nCustomerID)) {
-						Result[nCustomerID] = new BrokerCustomerEntry {
+					if (!Customers.ContainsKey(nCustomerID)) {
+						Customers[nCustomerID] = new BrokerCustomerEntry {
 							CustomerID = nCustomerID,
 							FirstName = sr["FirstName"],
 							LastName = sr["LastName"],
@@ -45,22 +46,33 @@
 						};
 					} // if
 
-					Result[nCustomerID].AddMpLoan(sr["MpTypeName"], sr["LoanAmount"], sr["LoanDate"]);
+					Customers[nCustomerID].AddMpLoan(sr["MpTypeName"], sr["LoanAmount"], sr["LoanDate"]);
 
 					return ActionResult.Continue;
 				},
 				"BrokerLoadCustomerList",
 				new QueryParameter("@ContactEmail", m_sContactEmail)
 			);
+
+			Leads = DB.Fill<BrokerLeadEntry>(
+				"BrokerLoadLeadList",
+				new QueryParameter("@ContactEmail", m_sContactEmail)
+			);
 		} // Execute
 
 		#endregion method Execute
 
-		#region property Result
+		#region property Customers
 
-		public SortedDictionary<int, BrokerCustomerEntry> Result { get; private set; } // Result
+		public SortedDictionary<int, BrokerCustomerEntry> Customers { get; private set; } // Customers
 
-		#endregion property Result
+		#endregion property Customers
+
+		#region property Leads
+
+		public List<BrokerLeadEntry> Leads { get; private set; } // Leads
+
+		#endregion property Leads
 
 		#endregion public
 

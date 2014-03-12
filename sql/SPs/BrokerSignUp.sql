@@ -29,14 +29,7 @@ BEGIN
 
 	IF @ErrMsg = ''
 	BEGIN
-		IF EXISTS (SELECT * FROM Security_User WHERE Email = @ContactEmail)
-			SET @ErrMsg = 'There is already a customer with such email: ' + @ContactEmail
-	END
-
-	IF @ErrMsg = ''
-	BEGIN
-		IF EXISTS (SELECT * FROM Customer WHERE DaytimePhone = @ContactMobile OR MobilePhone = @ContactMobile)
-			SET @ErrMsg = 'There is already a customer with such phone number: ' + @ContactMobile
+		SET @ErrMsg = dbo.udfCheckContactInfoUniqueness(@ContactEmail, @ContactMobile, DEFAULT, DEFAULT, DEFAULT)
 	END
 
 	IF @ErrMsg = ''

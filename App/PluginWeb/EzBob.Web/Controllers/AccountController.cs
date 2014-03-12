@@ -1,5 +1,4 @@
-namespace EzBob.Web.Controllers
-{
+namespace EzBob.Web.Controllers {
 	using System;
 	using System.Collections.Generic;
 	using System.Data;
@@ -316,10 +315,7 @@ namespace EzBob.Web.Controllers
 			double? amount,
 			string mobilePhone,
 			string mobileCode,
-			string switchedToCaptcha,
-			string firstName,
-			string middleInitial,
-			string surname
+			string switchedToCaptcha
 		) {
 			if (!ModelState.IsValid)
 				return GetModelStateErrors(ModelState);
@@ -329,7 +325,7 @@ namespace EzBob.Web.Controllers
 
 			try {
 				var customerIp = Request.ServerVariables["REMOTE_ADDR"];
-				SignUpInternal(model.EMail, signupPass1, signupPass2, securityQuestion, model.SecurityAnswer, promoCode, amount, mobilePhone, mobileCode, switchedToCaptcha == "True", firstName, middleInitial, surname);
+				SignUpInternal(model.EMail, signupPass1, signupPass2, securityQuestion, model.SecurityAnswer, promoCode, amount, mobilePhone, mobileCode, switchedToCaptcha == "True");
 				FormsAuthentication.SetAuthCookie(model.EMail, false);
 
 				var user = _users.GetUserByLogin(model.EMail);
@@ -363,10 +359,7 @@ namespace EzBob.Web.Controllers
 			double? amount,
 			string mobilePhone,
 			string mobileCode,
-			bool switchedToCaptcha,
-			string firstName,
-			string middleInitial,
-			string surname
+			bool switchedToCaptcha
 		) {
 			MembershipCreateStatus status;
 
@@ -379,16 +372,6 @@ namespace EzBob.Web.Controllers
 			var maxPassLength = _config.PasswordPolicyType == "hard" ? 7 : 6;
 			if (signupPass1.Length < maxPassLength)
 				throw new Exception(DbStrings.NotValidEmailAddress);
-
-			firstName = (firstName ?? string.Empty).Trim();
-			if (string.IsNullOrWhiteSpace(firstName))
-				throw new Exception("First name is not specified.");
-
-			surname = (surname ?? string.Empty).Trim();
-			if (string.IsNullOrWhiteSpace(surname))
-				throw new Exception("Surname is not specified.");
-
-			middleInitial = (middleInitial ?? string.Empty).Trim();
 
 			bool isTwilioEnabled = Convert.ToBoolean(@Session["IsSmsValidationActive"]);
 			if (isTwilioEnabled && !switchedToCaptcha) {
@@ -414,17 +397,11 @@ namespace EzBob.Web.Controllers
 					IsOffline = (bool?)null,
 					PromoCode = promoCode,
 					CustomerInviteFriend = new List<CustomerInviteFriend>(),
-					PersonalInfo = new PersonalInfo {
-						MobilePhone = mobilePhone,
-						FirstName = firstName,
-						MiddleInitial = middleInitial,
-						Surname = surname,
-						Fullname = string.Format("{0} {1} {2}", firstName, surname, middleInitial).Trim(),
-					},
+					PersonalInfo = new PersonalInfo { MobilePhone = mobilePhone, },
 					TrustPilotStatus = _helper.TrustPilotStatusRepository.Find(TrustPilotStauses.Nether),
 				};
 
-				_log.DebugFormat("Customer {1} ({0}): wizard step has been updated to :{2}", customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.SignUp);
+				_log.DebugFormat("Customer ({0}): wizard step has been updated to: {1}", customer.Id, (int)WizardStepType.SignUp);
 
 				var sourceref = Request.Cookies["sourceref"];
 				if (sourceref != null) {

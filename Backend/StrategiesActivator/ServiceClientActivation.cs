@@ -643,9 +643,11 @@
 
 			BrokerCustomersActionResult res = serviceClient.BrokerLoadCustomerList(args[1]);
 
-			foreach (var oEntry in res.Records) {
-				Console.WriteLine("ID: {0} Name: {1} {2}", oEntry.CustomerID, oEntry.FirstName, oEntry.LastName);
-			} // for each entry
+			foreach (var oEntry in res.Customers)
+				Console.WriteLine("Customer ID: {0} Name: {1} {2}", oEntry.CustomerID, oEntry.FirstName, oEntry.LastName);
+
+			foreach (var oEntry in res.Leads)
+				Console.WriteLine("Lead ID: {0} Name: {1} {2}", oEntry.LeadID, oEntry.FirstName, oEntry.LastName);
 		} // BrokerLoadCustomerList
 
 		[Activation]

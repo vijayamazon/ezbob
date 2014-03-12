@@ -286,6 +286,31 @@
 							</tr></tbody>
 						</table>
 					</div>
+
+					<h3>Active leads</h3>
+
+					<div class="table-responsive table-big">
+						<table class="lead-list table">
+							<thead><tr>
+								<th>Id</th>
+								<th>First name</th>
+								<th>Last name</th>
+								<th>Email</th>
+								<th>Type</th>
+								<th>Date created</th>
+								<th>Last invitation sent</th>
+							</tr></thead>
+							<tbody><tr>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+								<td></td>
+							</tr></tbody>
+						</table>
+					</div>
 				</div>
 				<!-- section-customer-list -->
 
@@ -323,8 +348,8 @@
 
 						<div class="form_buttons_container">
 							<div class="attardi-button">
-								<button type="submit" id="LeadSendInvitation" class="rc-button green disabled pull-right" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" ui-event-control-id="broker:lead-send-invitation">Send invitation only</button>
-								<button type="submit" id="LeadFillWizard" class="rc-button green disabled pull-left" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" ui-event-control-id="broker:lead-fill-wizard">Fill all the details</button>
+								<button type="submit" id="LeadSendInvitation" data-add-mode="invitation" class="rc-button disabled pull-right" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" ui-event-control-id="broker:lead-send-invitation">Send invitation only</button>
+								<button type="submit" id="LeadFillWizard" data-add-mode="fill" class="rc-button disabled pull-left" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" ui-event-control-id="broker:lead-fill-wizard">Fill all the details</button>
 							</div>
 						</div>
 					</form>

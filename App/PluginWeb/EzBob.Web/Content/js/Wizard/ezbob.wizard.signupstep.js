@@ -106,13 +106,6 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
     inputChanged: function (evt) {
         this.setFieldStatusNotRequired(evt, 'promoCode');
 
-        var el = evt ? $(evt.currentTarget) : null;
-
-        if (el && el.attr('id') === 'MiddleInitial' && el.val() === '') {
-            var img = el.closest('div').find('.field_status');
-            img.field_status('set', 'empty', 2);
-        } // if
-
         var enabled = EzBob.Validation.checkForm(this.validator);
         enabled = enabled && (!this.twilioEnabled || this.activatedCode || this.switchedToCaptcha);
         $('#signupSubmitButton').toggleClass('disabled', !enabled);
@@ -257,14 +250,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
                 ShowHideSignLogOnOff();
 
-                SetCustomerName(
-					that.$el.find('#FirstName').val(),
-					that.$el.find('#MiddleInitial').val(),
-					that.$el.find('#Surname').val()
-				);
-
                 that.model.set('loggedIn', true); // triggers 'ready' and 'next'
-                
             } else {
                 $.post(window.gRootPath + "Account/DebugLog_Message", { message: result.errorMessage });
                 if (result.errorMessage) EzBob.App.trigger('error', result.errorMessage);

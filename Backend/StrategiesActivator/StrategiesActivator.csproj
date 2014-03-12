@@ -126,6 +126,9 @@
     <None Include="Service References\EzServiceReference\EzBob.Web.Areas.Customer.Models.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\EzServiceReference\EzBob.Web.Areas.Underwriter.Models.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\EzServiceReference\EzService.ActionResults.xsd">
       <SubType>Designer</SubType>
     </None>

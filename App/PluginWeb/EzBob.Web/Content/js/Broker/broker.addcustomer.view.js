@@ -43,13 +43,13 @@ EzBob.Broker.AddCustomerView = EzBob.Broker.SubmitView.extend({
 	onSubmit: function(event) {
 		var oData = this.$el.find('form').serializeArray();
 
-		var sBtnID = $(event.currentTarget).attr('id');
+		var sAddMode = $(event.currentTarget).attr('data-add-mode');
 
 		var sEmail = this.$el.find('#LeadEmail').val();
 
-		switch (sBtnID) {
-		case 'LeadSendInvitation':
-		case 'LeadFillWizard':
+		switch (sAddMode) {
+		case 'invitation':
+		case 'fill':
 			break;
 
 		default:
@@ -57,7 +57,7 @@ EzBob.Broker.AddCustomerView = EzBob.Broker.SubmitView.extend({
 			return;
 		} // switch
 
-		oData.push({ name: 'LeadAddMode', value: sBtnID, });
+		oData.push({ name: 'LeadAddMode', value: sAddMode, });
 		oData.push({ name: 'ContactEmail', value: this.router.getAuth(), });
 
 		var oRequest = $.post('' + window.gRootPath + 'Broker/BrokerHome/AddLead', oData);
@@ -70,7 +70,7 @@ EzBob.Broker.AddCustomerView = EzBob.Broker.SubmitView.extend({
 			if (res.success) {
 				self.clear();
 
-				if (sBtnID === 'LeadFillWizard') {
+				if (sAddMode === 'fill') {
 					BlockUi();
 					location.assign('' + window.gRootPath + 'Broker/BrokerHome/FillWizard?lead=' + encodeURIComponent(sEmail));
 				}

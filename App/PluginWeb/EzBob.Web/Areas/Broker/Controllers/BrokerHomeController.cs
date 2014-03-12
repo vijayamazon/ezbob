@@ -214,7 +214,7 @@
 		public JsonResult LoadCustomers(string sContactEmail) {
 			m_oLog.Debug("Broker load customers request for contact email {0}", sContactEmail);
 
-			var oIsAuthResult = IsAuth<DataTablesBrokerForJsonResult>("Load customers", sContactEmail);
+			var oIsAuthResult = IsAuth<CustomerListBrokerForJsonResult>("Load customers", sContactEmail);
 			if (oIsAuthResult != null)
 				return oIsAuthResult;
 
@@ -225,12 +225,12 @@
 			}
 			catch (Exception e) {
 				m_oLog.Alert(e, "Failed to load customers request for contact email {0}", sContactEmail);
-				return new DataTablesBrokerForJsonResult("Failed to load customer list.");
+				return new CustomerListBrokerForJsonResult("Failed to load customer list.");
 			} // try
 
 			m_oLog.Debug("Broker load customers request for contact email {0} complete.", sContactEmail);
 
-			return new DataTablesBrokerForJsonResult(oData: oResult.Records);
+			return new CustomerListBrokerForJsonResult(oCustomers: oResult.Customers, oLeads: oResult.Leads);
 		} // LoadCustomers
 
 		#endregion action LoadCustomers
@@ -531,11 +531,11 @@
 				return oIsAuthResult;
 
 			try {
-				// oResult = m_oServiceClient.Instance.BrokerLoadCustomerList(ContactEmail);
+				m_oServiceClient.Instance.BrokerAddCustomerLead(LeadFirstName, LeadLastName, LeadEmail, LeadAddMode, ContactEmail);
 			}
 			catch (Exception e) {
 				m_oLog.Alert(e, "Failed to add lead for contact email {0}: {1} {2}, {3} - {4}.", ContactEmail, LeadFirstName, LeadLastName, LeadEmail, LeadAddMode);
-				return new BrokerForJsonResult("Failed to load customer list.");
+				return new BrokerForJsonResult("Failed to add customer lead.");
 			} // try
 
 			m_oLog.Debug("Broker add lead request for contact email {0}: {1} {2}, {3} - {4} complete.", ContactEmail, LeadFirstName, LeadLastName, LeadEmail, LeadAddMode);
@@ -633,17 +633,24 @@
 
 		#endregion class BrokerForJsonResult
 
-		#region class DataTablesBrokerForJsonResult
+		#region class CustomerListBrokerForJsonResult
 
-		public class DataTablesBrokerForJsonResult : BrokerForJsonResult {
-			public DataTablesBrokerForJsonResult(string sErrorMsg = "", bool? bExplicitSuccess = null, BrokerCustomerEntry[] oData = null) : base(sErrorMsg, bExplicitSuccess) {
-				aaData = oData ?? new BrokerCustomerEntry[0];
+		public class CustomerListBrokerForJsonResult : BrokerForJsonResult {
+			public CustomerListBrokerForJsonResult(
+				string sErrorMsg = "",
+				bool? bExplicitSuccess = null,
+				BrokerCustomerEntry[] oCustomers = null,
+				BrokerLeadEntry[] oLeads = null
+			) : base(sErrorMsg, bExplicitSuccess) {
+				customers = oCustomers ?? new BrokerCustomerEntry[0];
+				leads = oLeads ?? new BrokerLeadEntry[0];
 			} // constructor
 
-			public virtual BrokerCustomerEntry[] aaData { get; private set; } // aaData
-		} // DataTablesBrokerForJsonResult
+			public virtual BrokerCustomerEntry[] customers { get; private set; } // customers
+			public virtual BrokerLeadEntry[] leads { get; private set; } // leads
+		} // CustomerListBrokerForJsonResult
 
-		#endregion class DataTablesBrokerForJsonResult
+		#endregion class CustomerListBrokerForJsonResult
 
 		#region class CustomerDetailsBrokerForJsonResult
 
