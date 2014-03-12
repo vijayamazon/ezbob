@@ -92,7 +92,6 @@
     <Compile Include="Broker\BrokerSaveUploadedCustomerFile.cs" />
     <Compile Include="ExecuteQuery.cs" />
     <Compile Include="GetSpResultTable.cs" />
-    <Compile Include="GetBasicInterestRates.cs" />
     <Compile Include="CrmLoadLookups.cs" />
     <Compile Include="LandRegistry.cs" />
     <Compile Include="Broker\BrokerLoadCustomerList.cs" />

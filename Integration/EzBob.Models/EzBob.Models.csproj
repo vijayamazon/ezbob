@@ -86,6 +86,7 @@
     <Compile Include="Agreements\AgreementsTemplatesProvider.cs" />
     <Compile Include="ChangeLoanDetailsModelBuilder.cs" />
     <Compile Include="ConfigurationVariableModel.cs" />
+    <Compile Include="LoanOfferMultiplier.cs" />
     <Compile Include="FirstOfMonthStatusStrategyHelper.cs" />
     <Compile Include="CustomerExtensions.cs" />
     <Compile Include="CustomerModel.cs" />
