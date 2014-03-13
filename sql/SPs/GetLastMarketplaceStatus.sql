@@ -14,30 +14,23 @@ BEGIN
 
 	DECLARE 
 		@MpActionNameId INT,
-		@MpsActionNameId INT, 
 		@ActionStatusId INT,
 		@CommentToSearch VARCHAR(25),
 		@CurrentStatus VARCHAR(30),
 		@ActionID UNIQUEIDENTIFIER
 
 	SELECT @MpActionNameId = ActionNameId FROM EzServiceActionName WHERE ActionName = 'EzBob.Backend.Strategies.UpdateMarketplace'
-	SELECT @MpsActionNameId = ActionNameId FROM EzServiceActionName WHERE ActionName = 'EzBob.Backend.Strategies.UpdateMarketplaces'
-	SELECT @CommentToSearch = CONVERT(VARCHAR(10), @CustomerId) + '; ' + CONVERT(VARCHAR(10), @MarketplaceId) + '%'
+	SELECT @CommentToSearch = CONVERT(VARCHAR(10), @CustomerId) + '; ' + CONVERT(VARCHAR(10), @MarketplaceId) + '; %'
 		
 	SELECT TOP 1
 		@ActionID = ActionID
 	FROM
 		EzServiceActionHistory
 	WHERE 
-		CustomerID = @CustomerId
-		AND
-		ActionStatusID IN (1, 7)
-		AND
-		(
-			(ActionNameID = @MpActionNameId AND CONVERT(VARCHAR(25), Comment) LIKE @CommentToSearch)
-			OR
-			(ActionNameID = @MpsActionNameId)
-		)
+		CustomerID = @CustomerId AND
+		ActionStatusID IN (1, 7) AND
+		ActionNameID = @MpActionNameId AND 
+		CONVERT(VARCHAR(25), Comment) LIKE @CommentToSearch
 	ORDER BY
 		EntryTime DESC
 
