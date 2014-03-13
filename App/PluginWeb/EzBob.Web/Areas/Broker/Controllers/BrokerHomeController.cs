@@ -40,17 +40,17 @@
 		#region action Index (default)
 
 		// GET: /Broker/BrokerHome/
-		public System.Web.Mvc.ActionResult Index() {
-			const string sAuth = "auth";
-			const string sForbidden = "-";
+		public System.Web.Mvc.ActionResult Index(string sErrorOnStart = null) {
+			ViewData[Constant.Config] = m_oConfig;
+			ViewData[Constant.Auth] = string.Empty;
 
-			ViewData["Config"] = m_oConfig;
-			ViewData[sAuth] = string.Empty;
+			if (!string.IsNullOrWhiteSpace(sErrorOnStart))
+				ViewData[Constant.ErrorOnStart] = sErrorOnStart;
 
 			if (User.Identity.IsAuthenticated) {
-				string sAuthenticationResult = m_oHelper.IsBroker(User.Identity.Name) ? User.Identity.Name : sForbidden;
+				string sAuthenticationResult = m_oHelper.IsBroker(User.Identity.Name) ? User.Identity.Name : Constant.Forbidden;
 
-				ViewData[sAuth] = sAuthenticationResult;
+				ViewData[Constant.Auth] = sAuthenticationResult;
 
 				m_oLog.Info("Broker page sent to browser with authentication result: {0}", sAuthenticationResult);
 			} // if
@@ -137,10 +137,7 @@
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult Logoff(string sContactEmail) {
 			if (User.Identity.IsAuthenticated && (User.Identity.Name == sContactEmail)) {
-				m_oLog.Debug("Broker {0} signed out.", User.Identity.Name);
-
-				FormsAuthentication.SignOut();
-
+				m_oHelper.Logoff(User.Identity.Name);
 				return new BrokerForJsonResult();
 			} // if
 
@@ -568,9 +565,52 @@
 			m_oLog.Debug("Broker send invitation request for contact email {0} and lead id {1} complete.", sContactEmail, nLeadID);
 
 			return new BrokerForJsonResult();
-		} // LoadCustomers
+		} // SendInvitation
 
 		#endregion action SendInvitation
+
+		#region action FillWizard
+
+		[HttpGet]
+		public System.Web.Mvc.ActionResult FillWizard(int nLeadID, string sLeadEmail, string sContactEmail) {
+			m_oLog.Debug("Broker fill wizard request for contact email {0} and lead id {1} lead email {2}.", sContactEmail, nLeadID, sLeadEmail);
+
+			var oIsAuthResult = IsAuth<BrokerForJsonResult>("Send invitation", sContactEmail);
+			if (oIsAuthResult != null) {
+				return RedirectToAction("Index", "BrokerHome", new { Area = "Broker", sErrorOnStart = oIsAuthResult.error });
+			} // if
+
+			int nValidatedLeadID = 0;
+			string sCustomerEmail = string.Empty;
+
+			try {
+				nValidatedLeadID = nLeadID;
+				sCustomerEmail = "alexbo+039@ezbob.com";
+				// TODO: sCustomerEmail, nValidatedLeadID = m_oServiceClient.Instance.BrokerLeadCanFillWizard(nLeadID, sLeadEmail, sContactEmail);
+			}
+			catch (Exception e) {
+				m_oLog.Alert(e, "Failed to process fill wizard request for contact email {0} and lead id {1} lead email {2}.", sContactEmail, nLeadID, sLeadEmail);
+				return RedirectToAction("Index", "BrokerHome", new { Area = "Broker", sErrorOnStart = "Could not process fill all the details request." });
+			} // try
+
+			if (nValidatedLeadID < 1) {
+				m_oLog.Warn("Validated lead id is {0}. Source lead id is {1} lead email {2}.", nValidatedLeadID, nLeadID, sLeadEmail);
+				return RedirectToAction("Index", "BrokerHome", new { Area = "Broker", sErrorOnStart = "Could not process fill all the details request." });
+			} // if
+
+			m_oHelper.Logoff(User.Identity.Name);
+			if (!string.IsNullOrWhiteSpace(sCustomerEmail))
+				FormsAuthentication.SetAuthCookie(sCustomerEmail, false);
+
+			Session[Constant.BrokerLeadID] = nValidatedLeadID;
+			Session[Constant.BrokerFillsForCustomer] = Constant.Yes;
+
+			m_oLog.Debug("Broker send invitation request for contact email {0} and lead id {1} lead email {2} complete.", sContactEmail, nLeadID, sLeadEmail);
+
+			return RedirectToAction("Index", "Wizard", new { Area = "Customer" });
+		} // FillWizard
+
+		#endregion action FillWizard
 
 		#endregion public
 

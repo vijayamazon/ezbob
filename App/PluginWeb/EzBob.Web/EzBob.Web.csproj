@@ -214,6 +214,7 @@
     <Compile Include="Code\StrategyChecker.cs" />
     <Compile Include="Code\UiEvents\UiActionEventModel.cs" />
     <Compile Include="Code\UiEvents\UiCachePkgModel.cs" />
+    <Compile Include="Infrastructure\Constant.cs" />
     <Compile Include="Infrastructure\Html\EzbobHtmlExtensions.cs" />
     <Compile Include="Areas\Customer\Controllers\AccountSettingsController.cs" />
     <Compile Include="Areas\Customer\Controllers\AgreementController.cs" />

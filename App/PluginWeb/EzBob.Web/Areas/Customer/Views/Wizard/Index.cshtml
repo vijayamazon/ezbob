@@ -8,7 +8,7 @@
 @{
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Create an EZBOB account";
-    var config = ViewData["Config"] as IEzBobConfiguration;
+    var config = ViewData[Constant.Config] as IEzBobConfiguration;
     var customer = Model;
     customer.IsProfile = false;
     var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;

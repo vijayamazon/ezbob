@@ -7,7 +7,7 @@
 @model dynamic
 @{
 	Layout = null;
-	var config = ViewData["Config"] as IEzBobConfiguration;
+	var config = ViewData[Constant.Config] as IEzBobConfiguration;
 }
 <!DOCTYPE html>
 <html>
@@ -58,7 +58,7 @@
 	}
 </head>
 
-<body data-auth="@ViewData["auth"]">
+<body data-auth="@ViewData[Constant.Auth]" data-error-on-start="@ViewData[Constant.ErrorOnStart]">
 	@Html.AntiForgeryTokenNoUserCheck()
 
 	<div id="wrapper">

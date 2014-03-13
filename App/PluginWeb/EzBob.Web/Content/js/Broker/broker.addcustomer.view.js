@@ -72,7 +72,11 @@ EzBob.Broker.AddCustomerView = EzBob.Broker.SubmitView.extend({
 
 				if (sAddMode === 'fill') {
 					BlockUi();
-					location.assign('' + window.gRootPath + 'Broker/BrokerHome/FillWizard?lead=' + encodeURIComponent(sEmail));
+					location.assign(
+						'' + window.gRootPath + 'Broker/BrokerHome/FillWizard' +
+						'?sLeadEmail=' + encodeURIComponent(sEmail) +
+						'&sContactEmail=' + encodeURIComponent(this.router.getAuth())
+					);
 				}
 				else {
 					EzBob.App.trigger('info', 'A lead has been added.');

@@ -66,8 +66,6 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 			return this;
 		} // if
 
-		EzBob.App.trigger('clear');
-
 		this.reloadData();
 
 		this.reloadFileList();

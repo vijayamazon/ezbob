@@ -184,7 +184,7 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 	}, // initDataTablesOptions
 
 	sendInvitation: function(event) {
-		var nLeadID = parseInt($(event.currentTarget).attr('data-lead-id'));
+		var nLeadID = parseInt($(event.currentTarget).attr('data-lead-id'), 10);
 
 		if (nLeadID < 1)
 			return;
@@ -220,9 +220,15 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 	}, // sendInvitation
 
 	fillWizard: function(event) {
-		var nLeadID = parseInt($(event.currentTarget).attr('data-lead-id'));
+		var nLeadID = parseInt($(event.currentTarget).attr('data-lead-id'), 10);
 
-		if (nLeadID > 0)
-			location.assign('' + window.gRootPath + 'Broker/BrokerHome/FillWizard?leadid=' + nLeadID);
+		if (nLeadID < 1)
+			return;
+
+		location.assign(
+			'' + window.gRootPath + 'Broker/BrokerHome/FillWizard' +
+			'?nLeadID=' + nLeadID +
+			'&sContactEmail=' + encodeURIComponent(this.router.getAuth())
+		);
 	}, // fillWizard
 }); // EzBob.Broker.SubmitView

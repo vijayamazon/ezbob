@@ -49,7 +49,7 @@
 			ViewData["WizardTopNaviagtionEnabled"] = _config.WizardTopNaviagtionEnabled;
 			ViewData["TargetsEnabled"] = _config.TargetsEnabled;
 			ViewData["TargetsEnabledEntrepreneur"] = _config.TargetsEnabledEntrepreneur;
-			ViewData["Config"] = _config;
+			ViewData[Constant.Config] = _config;
 
 			ViewData["MarketPlaces"] = _session
 				.Query<MP_MarketplaceType>()

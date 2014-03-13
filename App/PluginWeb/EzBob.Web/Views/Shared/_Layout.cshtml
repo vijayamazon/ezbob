@@ -95,6 +95,24 @@
 			</div>
 		</div>
 
+		@if (false) { // TODO do something? remove?
+			if (Session[Constant.BrokerLeadID] != null) {
+				int nBrokerLeadID = 0;
+				int.TryParse(Session[Constant.BrokerLeadID].ToString(), out nBrokerLeadID);
+
+				if (nBrokerLeadID > 0) {
+					string sByBroker = Session[Constant.BrokerFillsForCustomer] == Constant.Yes ? "yes" : "no";
+					<div>Broker lead id: @nBrokerLeadID; is filling by broker: @sByBroker</div>
+				}
+				else {
+					<div>Invalid broker lead id: @Session[Constant.BrokerLeadID].</div>
+				}
+			}
+			else {
+				<div>Broker lead id is null.</div>
+			}
+		}
+
         <div class="inner main-page">
             <section id="full_width">
                 @RenderBody()

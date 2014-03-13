@@ -43,4 +43,11 @@ $(document).ready(function() {
 			callback: function(sName, oValue) { return JSON.stringify(oValue); },
 		});
 	});
+
+	var sErrorOnStart = $('body').attr('data-error-on-start');
+
+	if (sErrorOnStart) {
+		$('body').removeAttr('data-error-on-start');
+		EzBob.App.trigger('error', sErrorOnStart);
+	} // if
 }); // document.ready

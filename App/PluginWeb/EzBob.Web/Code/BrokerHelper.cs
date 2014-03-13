@@ -1,8 +1,6 @@
 ﻿namespace EzBob.Web.Code {
 	using System;
-	using System.Web.Mvc;
 	using System.Web.Security;
-	using ApplicationMng.Model;
 	using EzServiceReference;
 	using Ezbob.Logger;
 	using log4net;
@@ -63,6 +61,15 @@
 		} // TryLogin
 
 		#endregion method TryLogin
+
+		#region method Logoff
+
+		public void Logoff(string sCurrentLogin) {
+			m_oLog.Debug("Broker {0} signed out.", sCurrentLogin);
+			FormsAuthentication.SignOut();
+		} // Logoff
+
+		#endregion method Logoff
 
 		#endregion public
 
