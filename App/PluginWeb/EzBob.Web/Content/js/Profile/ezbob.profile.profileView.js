@@ -160,7 +160,7 @@ EzBob.Profile.ProfileRouter = Backbone.Router.extend({
         this.profileWidgets = $('.profile-widgets');
         
         var that = this;
-
+        this.model = options;
         this.stores = new EzBob.Profile.StoresView({ model: options });
 
         this.accounts = new EzBob.Profile.PaymentAccountsView({ model: options });
@@ -243,7 +243,7 @@ EzBob.Profile.ProfileRouter = Backbone.Router.extend({
 
     routes: {
         //"AccountSummary": "accountSummary",
-        "": "yourStores",
+        "": "decide",
         "AccountActivity": "accountActivity",
         "YourDetails": "YourDetails",
         "YourStores": "yourStores",
@@ -259,6 +259,13 @@ EzBob.Profile.ProfileRouter = Backbone.Router.extend({
     //    accountSummary: function () {
     //        this.activate("AccountSummary");
     //    },
+    decide: function() {
+        if (this.model.get('hasLoans')) {
+            this.activate("AccountActivity");
+        } else {
+            this.activate("YourStores");
+        }
+    },
     accountActivity: function () {
         this.activate("AccountActivity");
     },
