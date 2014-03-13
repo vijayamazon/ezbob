@@ -1389,18 +1389,39 @@
     <Content Include="Content\js\Wizard\shops\ezbob.shops.companyFiles.coffee" />
     <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.BasicInterestRate.coffee" />
     <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.LoanOfferMultiplier.coffee" />
-    <None Include="Service References\EzServiceReference\configuration91.svcinfo" />
-    <None Include="Service References\EzServiceReference\configuration.svcinfo" />
-    <None Include="Service References\EzServiceReference\EzBob.Backend.Models.xsd">
-      <SubType>Designer</SubType>
-    </None>
+    <Content Include="Service References\EzServiceReference\configuration91.svcinfo" />
+    <Content Include="Service References\EzServiceReference\configuration.svcinfo" />
     <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.ActionMetaData.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
     <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.BoolActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
+    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.BrokerCustomerDetailsActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.BrokerCustomerFileContentsActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.BrokerCustomerFilesActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.BrokerCustomersActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.CrmLookupsActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.IntActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
     <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.QuickOfferActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.SerializedDataTableActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.StringActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
     <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.StringListActionResult.datasource">
@@ -1409,52 +1430,10 @@
     <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.WizardConfigsActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
-    <None Include="Service References\EzServiceReference\Ezbob.Backend.Models1.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.BrokerCustomersActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.BrokerCustomerDetailsActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.CrmLookupsActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.StringActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.BrokerCustomerFilesActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.BrokerCustomerFileContentsActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <None Include="Service References\EzServiceReference\EzBob.Models.Agreements.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\EzServiceReference\EzBob.Web.Areas.Customer.Models.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.SerializedDataTableActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <None Include="Service References\EzServiceReference\EzBob.Web.Areas.Underwriter.Models.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.IntActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <None Include="Service References\EzServiceReference\EzService.ActionResults.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\EzServiceReference\FraudChecker.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Service References\EzServiceReference\Reference.svcmap">
+    <Content Include="Service References\EzServiceReference\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
+    </Content>
     <Content Include="Views\Shared\_Copyright.cshtml">
       <SubType>Code</SubType>
     </Content>
@@ -1698,26 +1677,47 @@
     <Content Include="Views\Shared\_GetSatisfaction.cshtml" />
     <Content Include="Views\Shared\_LivePerson.cshtml" />
     <Content Include="Views\Shared\security_template.cshtml" />
+    <Content Include="Views\Shared\_NanoRep.cshtml" />
+    <Content Include="Views\Shared\_NanoRepSupport.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\SideBars\_NanoRepSideBar.cshtml" />
+    <Content Include="Views\Shared\_GoogleTagManager.cshtml" />
     <None Include="Service References\EzServiceReference\Arrays.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\EzServiceReference\Ezbob.Backend.Models.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\EzServiceReference\EzBob.Backend.Models1.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\EzServiceReference\EzBob.Backend.Strategies.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\EzServiceReference\EzBob.Models.Agreements.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\EzServiceReference\EzBob.Web.Areas.Customer.Models.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\EzServiceReference\EzBob.Web.Areas.Underwriter.Models.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\EzServiceReference\EzService.ActionResults.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\EzServiceReference\EzService.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\EzServiceReference\service.wsdl" />
+    <None Include="Service References\EzServiceReference\FraudChecker.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="Service References\EzServiceReference\service.wsdl" />
     <None Include="Service References\EzServiceReference\service.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\EzServiceReference\service1.xsd">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="Views\Shared\_NanoRep.cshtml" />
-    <Content Include="Views\Shared\_NanoRepSupport.cshtml" />
-    <Content Include="Areas\Customer\Views\Shared\SideBars\_NanoRepSideBar.cshtml" />
-    <Content Include="Views\Shared\_GoogleTagManager.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -2105,11 +2105,11 @@
     <Content Include="Views\Account\Recaptcha.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadataStorage Include="Service References\EzServiceReference\" />
-  </ItemGroup>
-  <ItemGroup>
     <Folder Include="Areas\Broker\Models\" />
     <Folder Include="Areas\Broker\Views\Shared\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\EzServiceReference\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

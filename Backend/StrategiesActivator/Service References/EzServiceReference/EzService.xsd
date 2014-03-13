@@ -181,4 +181,14 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="WizardConfigsActionResult" nillable="true" type="tns:WizardConfigsActionResult" />
+  <xs:complexType name="IntActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ActionResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Value" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="IntActionResult" nillable="true" type="tns:IntActionResult" />
 </xs:schema>

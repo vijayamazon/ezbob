@@ -96,7 +96,7 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="BoolActionResult" nillable="true" type="tns:BoolActionResult" />
-  <xs:complexType name="StringActionResult">
+  <xs:complexType name="BrokerCustomersActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
@@ -106,8 +106,8 @@
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="StringActionResult" nillable="true" type="tns:StringActionResult" />
-  <xs:complexType name="IntActionResult">
+  <xs:element name="BrokerCustomersActionResult" nillable="true" type="tns:BrokerCustomersActionResult" />
+  <xs:complexType name="BrokerCustomerDetailsActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
@@ -116,28 +116,17 @@
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="IntActionResult" nillable="true" type="tns:IntActionResult" />
-  <xs:complexType name="BrokerCustomersActionResult">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:ActionResult">
-        <xs:sequence>
-          <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Customers" nillable="true" type="q3:ArrayOfBrokerCustomerEntry" />
-          <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Leads" nillable="true" type="q4:ArrayOfBrokerLeadEntry" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="BrokerCustomersActionResult" nillable="true" type="tns:BrokerCustomersActionResult" />
-  <xs:complexType name="BrokerCustomerDetailsActionResult">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:ActionResult">
-        <xs:sequence>
-          <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Data" nillable="true" type="q5:BrokerCustomerDetails" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
   <xs:element name="BrokerCustomerDetailsActionResult" nillable="true" type="tns:BrokerCustomerDetailsActionResult" />
+  <xs:complexType name="StringActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ActionResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Value" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="StringActionResult" nillable="true" type="tns:StringActionResult" />
   <xs:complexType name="BrokerCustomerFilesActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
@@ -192,4 +181,14 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="WizardConfigsActionResult" nillable="true" type="tns:WizardConfigsActionResult" />
+  <xs:complexType name="IntActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ActionResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Value" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="IntActionResult" nillable="true" type="tns:IntActionResult" />
 </xs:schema>
