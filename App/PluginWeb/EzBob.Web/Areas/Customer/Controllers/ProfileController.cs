@@ -106,6 +106,26 @@
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
+		public JsonNetResult GetRefreshInterval()
+		{
+			int refreshInterval = new ServiceClient().Instance.GetCustomerStatusRefreshInterval().Value;
+			return this.JsonNet(new { Interval = refreshInterval });
+		}
+
+		[Transactional]
+		[Ajax]
+		[HttpPost]
+		[ValidateJsonAntiForgeryToken]
+		public JsonNetResult GetCustomerStatus(int customerId)
+		{
+			string state = new ServiceClient().Instance.GetCustomerState(customerId).Value;
+			return this.JsonNet(new { State = state });
+		}
+
+		[Transactional]
+		[Ajax]
+		[HttpPost]
+		[ValidateJsonAntiForgeryToken]
 		public JsonNetResult ApplyForALoan()
 		{
 			var customer = _context.Customer;

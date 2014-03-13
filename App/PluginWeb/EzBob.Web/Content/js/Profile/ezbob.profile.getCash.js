@@ -8,31 +8,27 @@ EzBob.Profile.GetCashModel = Backbone.Model.extend({
 
 		this.isRequestInProgress = false;
 
-		setInterval(function() { that.refresh(); }, 1000);
+	    $.post(window.gRootPath + 'Customer/Profile/GetRefreshInterval')
+	        .done(function(result) {
+	            setInterval(function() { that.refresh(); }, result.Interval);
+	        });
 	}, // initialize
 
-	refresh: function() {
+	refresh: function () {
 		var that = this;
-		var tempCustomer = null;
-
 		if (this.customer.get('state') === 'wait' && !that.isRequestInProgress) {
-			tempCustomer = new EzBob.CustomerModel();
-			tempCustomer.id = that.customer.id;
-			this.isRequestInProgress = true;
-
-			tempCustomer.fetch({
-				success: function() {
-					if (tempCustomer.get('state') !== 'wait') {
-						that.customer.fetch({
-							success: function() {
-								that.isRequestInProgress = false;
-							}
-						});
-						return;
-					}
-					that.isRequestInProgress = false;
-				} // success
-			}); // fetch
+		    $.post(window.gRootPath + 'Customer/Profile/GetCustomerStatus', { customerId: that.customer.get('Id') })
+	            .done(function (result) {
+	                if (result.State !== 'wait') {
+	                    that.customer.fetch({
+	                        success: function () {
+	                            that.isRequestInProgress = false;
+	                        }
+	                    });
+	                    return;
+	                }
+	                that.isRequestInProgress = false;
+	            });
 		} // if
 	}, // refresh
 }); // EzBob.Profile.GetCashModel
@@ -188,6 +184,7 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 		data.offerStart = this.customer.get('OfferStart');
 		data.creditResult = this.customer.get('CreditResult');
 
+	    debugger;
 		this.$el.html(this.templates[state](data));
 
 		this.$el.find('button').popover({ placement: 'top' });

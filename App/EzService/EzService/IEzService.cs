@@ -280,6 +280,12 @@
 		[OperationContract]
 		ActionMetaData FinishWizard(int customerId, int underwriterId);
 
+		[OperationContract]
+		StringActionResult GetCustomerState(int customerId);
+
+		[OperationContract]
+		IntActionResult GetCustomerStatusRefreshInterval();
+
 		#endregion Wizard
 	} // interface IEzService
 } // namespace EzService
