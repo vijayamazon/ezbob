@@ -2746,6 +2746,99 @@ namespace StrategiesActivator.EzServiceReference {
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="LoanOfferMultiplier", Namespace="http://schemas.datacontract.org/2004/07/EzBob.Web.Areas.Underwriter.Models")]
+    [System.SerializableAttribute()]
+    public partial class LoanOfferMultiplier : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int EndScoreField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int IdField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal MultiplierField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int StartScoreField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int EndScore {
+            get {
+                return this.EndScoreField;
+            }
+            set {
+                if ((this.EndScoreField.Equals(value) != true)) {
+                    this.EndScoreField = value;
+                    this.RaisePropertyChanged("EndScore");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Id {
+            get {
+                return this.IdField;
+            }
+            set {
+                if ((this.IdField.Equals(value) != true)) {
+                    this.IdField = value;
+                    this.RaisePropertyChanged("Id");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal Multiplier {
+            get {
+                return this.MultiplierField;
+            }
+            set {
+                if ((this.MultiplierField.Equals(value) != true)) {
+                    this.MultiplierField = value;
+                    this.RaisePropertyChanged("Multiplier");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int StartScore {
+            get {
+                return this.StartScoreField;
+            }
+            set {
+                if ((this.StartScoreField.Equals(value) != true)) {
+                    this.StartScoreField = value;
+                    this.RaisePropertyChanged("StartScore");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="EzServiceReference.IEzServiceAdmin")]
     public interface IEzServiceAdmin {
@@ -3111,6 +3204,12 @@ namespace StrategiesActivator.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/TransferCashFailed", ReplyAction="http://tempuri.org/IEzService/TransferCashFailedResponse")]
         System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> TransferCashFailedAsync(int customerId);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLeadSendInvitation", ReplyAction="http://tempuri.org/IEzService/BrokerLeadSendInvitationResponse")]
+        StrategiesActivator.EzServiceReference.ActionMetaData BrokerLeadSendInvitation(int nLeadID, string sBrokerContactEmail);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLeadSendInvitation", ReplyAction="http://tempuri.org/IEzService/BrokerLeadSendInvitationResponse")]
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> BrokerLeadSendInvitationAsync(int nLeadID, string sBrokerContactEmail);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckExperianCompany", ReplyAction="http://tempuri.org/IEzService/CheckExperianCompanyResponse")]
         StrategiesActivator.EzServiceReference.ActionMetaData CheckExperianCompany(int customerId);
         
@@ -3242,6 +3341,12 @@ namespace StrategiesActivator.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SaveBasicInterestRate", ReplyAction="http://tempuri.org/IEzService/SaveBasicInterestRateResponse")]
         System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BoolActionResult> SaveBasicInterestRateAsync(StrategiesActivator.EzServiceReference.BasicInterestRate[] basicInterestRates);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SaveLoanOfferMultiplier", ReplyAction="http://tempuri.org/IEzService/SaveLoanOfferMultiplierResponse")]
+        StrategiesActivator.EzServiceReference.BoolActionResult SaveLoanOfferMultiplier(StrategiesActivator.EzServiceReference.LoanOfferMultiplier[] loanOfferMultipliers);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SaveLoanOfferMultiplier", ReplyAction="http://tempuri.org/IEzService/SaveLoanOfferMultiplierResponse")]
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BoolActionResult> SaveLoanOfferMultiplierAsync(StrategiesActivator.EzServiceReference.LoanOfferMultiplier[] loanOfferMultipliers);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/QuickOffer", ReplyAction="http://tempuri.org/IEzService/QuickOfferResponse")]
         StrategiesActivator.EzServiceReference.QuickOfferActionResult QuickOffer(int customerId, bool saveOfferToDB);
@@ -3639,6 +3744,14 @@ namespace StrategiesActivator.EzServiceReference {
             return base.Channel.TransferCashFailedAsync(customerId);
         }
         
+        public StrategiesActivator.EzServiceReference.ActionMetaData BrokerLeadSendInvitation(int nLeadID, string sBrokerContactEmail) {
+            return base.Channel.BrokerLeadSendInvitation(nLeadID, sBrokerContactEmail);
+        }
+        
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> BrokerLeadSendInvitationAsync(int nLeadID, string sBrokerContactEmail) {
+            return base.Channel.BrokerLeadSendInvitationAsync(nLeadID, sBrokerContactEmail);
+        }
+        
         public StrategiesActivator.EzServiceReference.ActionMetaData CheckExperianCompany(int customerId) {
             return base.Channel.CheckExperianCompany(customerId);
         }
@@ -3813,6 +3926,14 @@ namespace StrategiesActivator.EzServiceReference {
         
         public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BoolActionResult> SaveBasicInterestRateAsync(StrategiesActivator.EzServiceReference.BasicInterestRate[] basicInterestRates) {
             return base.Channel.SaveBasicInterestRateAsync(basicInterestRates);
+        }
+        
+        public StrategiesActivator.EzServiceReference.BoolActionResult SaveLoanOfferMultiplier(StrategiesActivator.EzServiceReference.LoanOfferMultiplier[] loanOfferMultipliers) {
+            return base.Channel.SaveLoanOfferMultiplier(loanOfferMultipliers);
+        }
+        
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BoolActionResult> SaveLoanOfferMultiplierAsync(StrategiesActivator.EzServiceReference.LoanOfferMultiplier[] loanOfferMultipliers) {
+            return base.Channel.SaveLoanOfferMultiplierAsync(loanOfferMultipliers);
         }
         
         public StrategiesActivator.EzServiceReference.QuickOfferActionResult QuickOffer(int customerId, bool saveOfferToDB) {

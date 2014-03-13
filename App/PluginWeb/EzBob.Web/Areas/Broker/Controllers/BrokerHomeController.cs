@@ -545,6 +545,33 @@
 
 		#endregion action AddLead
 
+		#region action SendInvitation
+
+		[HttpPost]
+		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		public JsonResult SendInvitation(int nLeadID, string sContactEmail) {
+			m_oLog.Debug("Broker send invitation request for contact email {0} and lead id {1}.", sContactEmail, nLeadID);
+
+			var oIsAuthResult = IsAuth<BrokerForJsonResult>("Send invitation", sContactEmail);
+			if (oIsAuthResult != null)
+				return oIsAuthResult;
+
+			try {
+				m_oServiceClient.Instance.BrokerLeadSendInvitation(nLeadID, sContactEmail);
+			}
+			catch (Exception e) {
+				m_oLog.Alert(e, "Failed to send invitation request for contact email {0} and lead id {1}.", sContactEmail, nLeadID);
+				return new BrokerForJsonResult("Failed to send an invitation.");
+			} // try
+
+			m_oLog.Debug("Broker send invitation request for contact email {0} and lead id {1} complete.", sContactEmail, nLeadID);
+
+			return new BrokerForJsonResult();
+		} // LoadCustomers
+
+		#endregion action SendInvitation
+
 		#endregion public
 
 		#region private

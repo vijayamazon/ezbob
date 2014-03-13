@@ -14,6 +14,7 @@ BEGIN
 	DECLARE @ErrMsg NVARCHAR(1024) = ''
 	DECLARE @BrokerID INT
 	DECLARE @BrokerLeadAddModeID INT
+	DECLARE @LeadID INT = 0
 
 	IF @ErrMsg = ''
 	BEGIN
@@ -40,8 +41,10 @@ BEGIN
 	BEGIN
 		INSERT INTO BrokerLeads (BrokerID, CustomerID, FirstName, LastName, Email, DateCreated, BrokerLeadDeletedReasonID, DateDeleted, BrokerLeadAddModeID)
 			VALUES (@BrokerID, NULL, @LeadFirstName, @LeadLastName, @LeadEmail, @DateCreated, NULL, NULL, @BrokerLeadAddModeID)
+
+		SET @LeadID = SCOPE_IDENTITY()
 	END
 
-	SELECT @ErrMsg AS ErrorMsg
+	SELECT @ErrMsg AS ErrorMsg, @LeadID AS LeadID
 END
 GO

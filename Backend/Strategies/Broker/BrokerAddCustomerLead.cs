@@ -2,6 +2,7 @@
 	using System;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using EzBob.Backend.Strategies.MailStrategies;
 
 	public class BrokerAddCustomerLead : AStrategy {
 		#region public
@@ -39,7 +40,15 @@
 				return;
 			} // if
 
-			string sErrorMsg = DB.ExecuteScalar<string>(
+			string sErrorMsg = null;
+			int nLeadID = 0;
+
+			DB.ForEachRowSafe(
+				(sr, bRowsetStart) => {
+					sErrorMsg = sr["ErrorMsg"];
+					nLeadID = sr["LeadID"];
+					return ActionResult.SkipAll;
+				},
 				"BrokerAddCustomerLead",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("@LeadFirstName", m_sLeadFirstName),
@@ -53,7 +62,10 @@
 			if (!string.IsNullOrWhiteSpace(sErrorMsg))
 				throw new Exception(sErrorMsg);
 
-			// TODO: send an email
+			if (nLeadID < 1)
+				throw new Exception("Failed to add a customer lead.");
+
+			new BrokerLeadSendInvitation(nLeadID, m_sContactEmail, DB, Log).Execute();
 		} // Execute
 
 		#endregion method Execute

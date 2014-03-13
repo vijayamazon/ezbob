@@ -6,7 +6,7 @@
 	public class BrokerPasswordRestored : PasswordRestored {
 		#region constructor
 
-		public BrokerPasswordRestored(int customerId, string password, AConnection oDb, ASafeLog oLog) : base(customerId, password, oDb, oLog) {
+		public BrokerPasswordRestored(int nBrokerID, string password, AConnection oDb, ASafeLog oLog) : base(nBrokerID, password, oDb, oLog) {
 		} // constructor
 
 		#endregion constructor
@@ -34,13 +34,27 @@
 		protected override void LoadCustomerData() {
 			Log.Debug("loading broker data...");
 
-			CustomerData = new BrokerData();
+			BrokerData = new BrokerData();
 
-			CustomerData.Load(CustomerId, DB);
+			BrokerData.Load(BrokerID, DB);
 
 			Log.Debug("loading broker data complete.");
 		} // LoadCustomerData
 
 		#endregion method LoadCustomerData
+
+		#region properties
+
+		protected virtual int BrokerID {
+			get { return CustomerId; } // get
+			set { CustomerId = value; } // set
+		} // BrokerID
+
+		protected virtual CustomerData BrokerData {
+			get { return CustomerData; } // get
+			set { CustomerData = value; } // set
+		} // BrokerData
+
+		#endregion properties
 	} // class BrokerPasswordRestored
 } // namespace

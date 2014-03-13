@@ -2,6 +2,8 @@
 	using EzBob.Backend.Strategies.MailStrategies;
 
 	partial class EzServiceImplementation {
+		#region async
+
 		public ActionMetaData GreetingMailStrategy(int nCustomerID, string sConfirmationEmail) {
 			return Execute(nCustomerID, null, typeof(Greeting), nCustomerID, sConfirmationEmail);
 		} // GreetingMailStrategy
@@ -89,5 +91,15 @@
 		public ActionMetaData TransferCashFailed(int customerId) {
 			return Execute(customerId, null, typeof(TransferCashFailed), customerId);
 		} // TransferCashFailed
+
+		#endregion async
+
+		#region sync
+
+		public ActionMetaData BrokerLeadSendInvitation(int nLeadID, string sBrokerContactEmail) {
+			return ExecuteSync<BrokerLeadSendInvitation>(null, null, nLeadID, sBrokerContactEmail);
+		} // BrokerLeadSendInvitation
+
+		#endregion sync
 	} // class EzServiceImplementation
 } // namespace EzService

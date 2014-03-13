@@ -16,6 +16,8 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 
 		evt['click #AddNewCustomer'] = 'addNewCustomer';
 		evt['click .reload-customer-list'] = 'reloadCustomerList';
+		evt['click .lead-send-invitation'] = 'sendInvitation';
+		evt['click .lead-fill-wizard'] = 'fillWizard';
 
 		return evt;
 	}, // events
@@ -97,16 +99,51 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 				);
 
 				var leadTableOpts = self.initDataTablesOptions(
-					'#LeadID,FirstName,LastName,Email,AddMode,^DateCreated,^DateLastInvitationSent',
+					'#LeadID,FirstName,LastName,Email,AddMode,^DateCreated,@DateLastInvitationSent',
 					'brk-grid-state-' + self.router.getAuth() + '-lead-list'
 				);
+
+				leadTableOpts.aoColumns.push({
+					mData: null,
+					sClass: 'center',
+					mRender: function(oData, sAction, oFullSource) {
+						if (sAction !== 'display')
+							return '';
+
+						var sTitle = '';
+						var sCaption = '';
+
+						if (moment([1976, 7]).utc().diff(moment(oFullSource.DateLastInvitationSent)) > 0) {
+							sTitle = 'Send invitation to this lead.';
+							sCaption = 'Send';
+						}
+						else {
+							sTitle = 'Send another invitation to this lead.';
+							sCaption = 'Resend';
+						} // if
+
+						console.log('full src', oFullSource);
+
+						return '<button class=lead-send-invitation data-lead-id=' + oFullSource.LeadID + ' title="' + sTitle + '">' + sCaption + '</button>';
+					}, // mRender
+				});
+
+				leadTableOpts.aoColumns.push({
+					mData: null,
+					sClass: 'center',
+					mRender: function(oData, sAction, oFullSource) {
+						if (sAction === 'display')
+							return '<button class=lead-fill-wizard data-lead-id=' + oFullSource.LeadID + ' title="Fill all the data for this lead.">Fill</button>';
+
+						return '';
+					}, // mRender
+				});
 
 				leadTableOpts.aaData = oResponse.leads;
 
 				self.leadTable = self.$el.find('.lead-list').dataTable(leadTableOpts);
 			} // on success
 		); // get json
-
 	}, // reloadCustomerList
 
 	addNewCustomer: function() {
@@ -145,4 +182,47 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 			}, // fnStateLoad
 		};
 	}, // initDataTablesOptions
+
+	sendInvitation: function(event) {
+		var nLeadID = parseInt($(event.currentTarget).attr('data-lead-id'));
+
+		if (nLeadID < 1)
+			return;
+
+		BlockUi();
+
+		var oRequest = $.post('' + window.gRootPath + 'Broker/BrokerHome/SendInvitation', {
+			nLeadID: nLeadID,
+			sContactEmail: this.router.getAuth(),
+		});
+
+		var self = this;
+
+		oRequest.success(function(res) {
+			UnBlockUi();
+
+			if (res.success) {
+				EzBob.App.trigger('info', 'A invitation has been sent.');
+				self.reloadCustomerList();
+				return;
+			} // if
+
+			if (res.error)
+				EzBob.App.trigger('error', res.error);
+			else
+				EzBob.App.trigger('error', 'Failed to send an invitation.');
+		}); // on success
+
+		oRequest.fail(function() {
+			UnBlockUi();
+			EzBob.App.trigger('error', 'Failed to send an invitation.');
+		});
+	}, // sendInvitation
+
+	fillWizard: function(event) {
+		var nLeadID = parseInt($(event.currentTarget).attr('data-lead-id'));
+
+		if (nLeadID > 0)
+			location.assign('' + window.gRootPath + 'Broker/BrokerHome/FillWizard?leadid=' + nLeadID);
+	}, // fillWizard
 }); // EzBob.Broker.SubmitView

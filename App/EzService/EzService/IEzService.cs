@@ -171,6 +171,9 @@
 		[OperationContract]
 		ActionMetaData TransferCashFailed(int customerId);
 
+		[OperationContract]
+		ActionMetaData BrokerLeadSendInvitation(int nLeadID, string sBrokerContactEmail);
+
 		#endregion email strategies
 
 		#region Experian

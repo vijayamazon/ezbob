@@ -299,8 +299,12 @@
 								<th>Type</th>
 								<th>Date created</th>
 								<th>Last invitation sent</th>
+								<th></th>
+								<th></th>
 							</tr></thead>
 							<tbody><tr>
+								<td></td>
+								<td></td>
 								<td></td>
 								<td></td>
 								<td></td>
@@ -348,8 +352,8 @@
 
 						<div class="form_buttons_container">
 							<div class="attardi-button">
-								<button type="submit" id="LeadSendInvitation" data-add-mode="invitation" class="rc-button disabled pull-right" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" ui-event-control-id="broker:lead-send-invitation">Send invitation only</button>
-								<button type="submit" id="LeadFillWizard" data-add-mode="fill" class="rc-button disabled pull-left" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" ui-event-control-id="broker:lead-fill-wizard">Fill all the details</button>
+								<button type="submit" id="LeadFillWizard" data-add-mode="fill" class="disabled" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" ui-event-control-id="broker:lead-fill-wizard">Fill all the details</button>
+								<button type="submit" id="LeadSendInvitation" data-add-mode="invitation" class="disabled" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" ui-event-control-id="broker:lead-send-invitation">Send invitation only</button>
 							</div>
 						</div>
 					</form>
