@@ -136,13 +136,15 @@
           });
           that.uploadHmrcView.render();
         } else {
+          that.uploadHmrcView.render();
           that.uploadHmrcView.$el.show();
         }
         return $(".mps-tables").hide();
       });
       EzBob.App.vent.on('ct:marketplaces.uploadHmrcBack', function() {
         $(".mps-tables").show();
-        return that.uploadHmrcView.$el.hide();
+        that.uploadHmrcView.close();
+        return that.uploadHmrcView = null;
       });
       return this;
     };

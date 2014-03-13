@@ -17,30 +17,32 @@
 
 		#region method Get
 
-		public static HmrcFileCache Get(HttpSessionStateBase oSession) {
-			return oSession[HmrcFileCache.Name] as HmrcFileCache;
+		public static HmrcFileCache Get(HttpSessionStateBase oSession, string name = StaticName)
+		{
+			return oSession[name] as HmrcFileCache;
 		} // Get
 
 		#endregion method Get
 
 		#region method Clean
 
-		public static void Clean(HttpSessionStateBase oSession)
+		public static void Clean(HttpSessionStateBase oSession, string name = StaticName)
 		{
-			oSession[HmrcFileCache.Name] = new HmrcFileCache();
+			oSession[name] = new HmrcFileCache();
 		} // Get
 
 		#endregion method Clean
 
 		#region constructor
 
-		public HmrcFileCache(HttpSessionStateBase oSession = null) {
+		public HmrcFileCache(HttpSessionStateBase oSession = null, string name = StaticName)
+		{
 			ErrorMsg = string.Empty;
 			Hopper = new Hopper();
 			DateIntervals = new List<DateInterval>();
-
+			Name = name;
 			if (oSession != null)
-				oSession[HmrcFileCache.Name] = this;
+				oSession[Name] = this;
 		} // HmrcFileCache
 
 		#endregion constructor
@@ -126,7 +128,8 @@
 
 		private static readonly ILog ms_oLog = LogManager.GetLogger(typeof (HmrcFileCache));
 
-		private const string Name = "HmrcFileCache";
+		public string Name { get; set; }
+		public const string StaticName = "HmrcFileCache";
 
 		#endregion private
 	} // HmrcFileCache
@@ -317,11 +320,18 @@
 
 	#region class SessionHmrcFileProcessor
 
-	internal class SessionHmrcFileProcessor : AHmrcFileProcessor {
+	internal class SessionHmrcFileProcessor : AHmrcFileProcessor
+	{
+		private readonly string _name;
 		#region constructor
 
-		public SessionHmrcFileProcessor(HttpSessionStateBase oSession, int nCustomerID, HttpFileCollectionBase oFiles) : base(nCustomerID, oFiles, oSession) {
-		} // constructor
+		public SessionHmrcFileProcessor(HttpSessionStateBase oSession, int nCustomerID, HttpFileCollectionBase oFiles, string name = HmrcFileCache.StaticName)
+			: base(nCustomerID, oFiles, oSession)
+		{
+			_name = name;
+		}
+
+		// constructor
 
 		#endregion constructor
 
@@ -329,10 +339,10 @@
 
 		public override HmrcFileCache FileCache {
 			get {
-				HmrcFileCache oFileCache = HmrcFileCache.Get(Session);
+				HmrcFileCache oFileCache = HmrcFileCache.Get(Session, _name);
 
 				if (oFileCache == null)
-					oFileCache = new HmrcFileCache(Session);
+					oFileCache = new HmrcFileCache(Session, _name);
 
 				return oFileCache;
 			} // get

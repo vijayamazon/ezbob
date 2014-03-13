@@ -51,7 +51,7 @@
 				return Json(new { error = "Customer not specified" });
 
 			//var customer = _customers.Get(customerId);
-			var oProcessor = new SessionHmrcFileProcessor(Session, customerId, Request.Files);
+			var oProcessor = new SessionHmrcFileProcessor(Session, customerId, Request.Files, string.Format("HmrcFileCache{0}", customerId));
 
 			oProcessor.Run();
 
@@ -63,7 +63,7 @@
 
 		[HttpPost]
 		public ActionResult UploadFiles(int customerId) {
-			HmrcFileCache oFileCache = HmrcFileCache.Get(Session);
+			HmrcFileCache oFileCache = HmrcFileCache.Get(Session, string.Format("HmrcFileCache{0}", customerId));
 
 			if ((oFileCache != null) && !string.IsNullOrWhiteSpace(oFileCache.ErrorMsg))
 				return CreateError(oFileCache.ErrorMsg);
@@ -78,7 +78,7 @@
 				return oState.Error;
 
 			string stateError;
-			Hopper oSeeds = GetProcessedFiles(out stateError);
+			Hopper oSeeds = GetProcessedFiles(customerId, out stateError);
 
 			if (stateError != null)
 				return CreateError(stateError);
@@ -115,7 +115,7 @@
 				return CreateError("Account has been linked but error occurred while storing uploaded data: " + e.Message);
 			} // try
 
-			HmrcFileCache.Clean(Session);
+			HmrcFileCache.Clean(Session, string.Format("HmrcFileCache{0}", customerId));
 			return Json(new { });
 		} // UploadFiles
 
@@ -164,10 +164,10 @@
 			} // constructor
 		} // class AddAccountState
 
-		private Hopper GetProcessedFiles(out string stateError) {
+		private Hopper GetProcessedFiles(int customerId, out string stateError) {
 			stateError = null;
 
-			HmrcFileCache oFileCache = HmrcFileCache.Get(Session);
+			HmrcFileCache oFileCache = HmrcFileCache.Get(Session, string.Format("HmrcFileCache{0}", customerId));
 
 			if (oFileCache == null) {
 				stateError = "No files were successfully processed";

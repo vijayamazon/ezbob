@@ -79,12 +79,14 @@ class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
                 )
                 that.uploadHmrcView.render()
             else
+                that.uploadHmrcView.render()
                 that.uploadHmrcView.$el.show()
             $(".mps-tables").hide()
             
         EzBob.App.vent.on 'ct:marketplaces.uploadHmrcBack', () =>
             $(".mps-tables").show()
-            that.uploadHmrcView.$el.hide()
+            that.uploadHmrcView.close()
+            that.uploadHmrcView = null
         return this
 
     events:
