@@ -257,6 +257,9 @@
 		[OperationContract]
 		BoolActionResult SaveBasicInterestRate(List<BasicInterestRate> basicInterestRates);
 
+		[OperationContract]
+		BoolActionResult SaveLoanOfferMultiplier(List<LoanOfferMultiplier> loanOfferMultipliers);
+
 		#endregion other strategies
 
 		#region Quick offer

@@ -617,6 +617,7 @@
     <Content Include="Areas\Customer\Views\Shared\Shops\CompanyFilesAccountInfoTemplate.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\MarketPlaceDetails\CompanyFiles.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\AutomationSettings\_BasicInterestRateSettings.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\AutomationSettings\_LoanOfferMultiplierSettings.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />
@@ -1276,6 +1277,9 @@
     <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.Campaign.min.js">
       <DependentUpon>EzBob.Underwriter.Settings.Campaign.coffee</DependentUpon>
     </Content>
+    <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.LoanOfferMultiplier.js">
+      <DependentUpon>EzBob.Underwriter.Settings.LoanOfferMultiplier.coffee</DependentUpon>
+    </Content>
     <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.automation.approval.js">
       <DependentUpon>ezbob.underwriter.StrategySettings.automation.approval.coffee</DependentUpon>
     </Content>
@@ -1384,6 +1388,7 @@
     <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.uploadHmrc.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.companyFiles.coffee" />
     <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.BasicInterestRate.coffee" />
+    <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.LoanOfferMultiplier.coffee" />
     <None Include="Service References\EzServiceReference\configuration91.svcinfo" />
     <None Include="Service References\EzServiceReference\configuration.svcinfo" />
     <None Include="Service References\EzServiceReference\EzBob.Backend.Models.xsd">

@@ -190,6 +190,7 @@ namespace EzBob.Web.Infrastructure
 				.Add("~/Content/js/underwriter/StrategySettings/ezbob.underwriter.StrategySettings.automation.rejection.coffee")
 				.Add("~/Content/js/underwriter/StrategySettings/EzBob.Underwriter.Settings.Campaign.coffee")
 				.Add("~/Content/js/underwriter/StrategySettings/EzBob.Underwriter.Settings.BasicInterestRate.coffee")
+				.Add("~/Content/js/underwriter/StrategySettings/EzBob.Underwriter.Settings.LoanOfferMultiplier.coffee")
 
 				//Customer grid
 				// .Add("~/Content/js/underwriter/customersGrid/ezbob.underwriter.customerGrid.coffee")

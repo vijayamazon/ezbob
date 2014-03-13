@@ -390,7 +390,6 @@
 			var sortedList = new List<BasicInterestRate>();
 			foreach (BasicInterestRate model in deserializedModels)
 			{
-				sortedList.Add(model);
 				if (sortedModels.ContainsKey(model.FromScore))
 				{
 					string errorMessage = string.Format("FromScore must be unique:{0}", model.FromScore);
@@ -405,6 +404,7 @@
 			foreach (int key in sortedModels.Keys)
 			{
 				BasicInterestRate model = sortedModels[key];
+				sortedList.Add(model);
 				model.LoanInterestBase /= 100; // Convert to decimal number
 				if (isFirst)
 				{
@@ -449,6 +449,96 @@
 			}
 
 			BoolActionResult result = serviceClient.Instance.SaveBasicInterestRate(sortedList.ToArray());
+			return this.JsonNet(new { error = result.Value ? "Error occurred during save" : null });
+		}
+		[Ajax]
+		[HttpGet]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		public JsonNetResult SettingsLoanOfferMultiplier()
+		{
+			var loanOfferMultipliersList = serviceClient.Instance.GetSpResultTable("GetLoanOfferMultipliers", null);
+			var deserializedArray = JsonConvert.DeserializeObject<LoanOfferMultiplier[]>(loanOfferMultipliersList.SerializedDataTable);
+			var loanOfferMultipliers = deserializedArray == null ? null : deserializedArray.ToList();
+			if (loanOfferMultipliers != null)
+			{
+				foreach (LoanOfferMultiplier loanOfferMultiplier in loanOfferMultipliers)
+				{
+					loanOfferMultiplier.Multiplier *= 100; // Convert to percent
+				}
+			}
+
+			return this.JsonNet(new { loanOfferMultipliers });
+		}
+
+		[Ajax]
+		[HttpPost]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		public JsonNetResult SaveLoanOfferMultiplier(string serializedModels)
+		{
+			var deserializedModels = JsonConvert.DeserializeObject<List<LoanOfferMultiplier>>(serializedModels);
+			var sortedModels = new SortedDictionary<int, LoanOfferMultiplier>();
+			var sortedList = new List<LoanOfferMultiplier>();
+			foreach (LoanOfferMultiplier model in deserializedModels)
+			{
+				if (sortedModels.ContainsKey(model.StartScore))
+				{
+					string errorMessage = string.Format("StartScore must be unique:{0}", model.StartScore);
+					Log.WarnFormat(errorMessage);
+					return this.JsonNet(new { error = errorMessage });
+				}
+				sortedModels.Add(model.StartScore, model);
+			}
+
+			bool isFirst = true;
+			int highestSoFar = 0;
+			foreach (int key in sortedModels.Keys)
+			{
+				LoanOfferMultiplier model = sortedModels[key];
+				sortedList.Add(model);
+				model.Multiplier /= 100; // Convert to decimal number
+				if (isFirst)
+				{
+					if (model.StartScore != 0)
+					{
+						const string errorMessage = "StartScore must start at 0";
+						Log.WarnFormat(errorMessage);
+						return this.JsonNet(new { error = errorMessage });
+					}
+					isFirst = false;
+				}
+				else
+				{
+					if (highestSoFar + 1 < model.StartScore)
+					{
+						string errorMessage = string.Format("No range covers the numbers {0}-{1}", highestSoFar + 1, model.StartScore - 1);
+						Log.WarnFormat(errorMessage);
+						return this.JsonNet(new { error = errorMessage });
+					}
+					if (highestSoFar + 1 > model.StartScore)
+					{
+						string errorMessage = string.Format("The numbers {0}-{1} are coverered by more than one range", model.StartScore, highestSoFar);
+						Log.WarnFormat(errorMessage);
+						return this.JsonNet(new { error = errorMessage });
+					}
+				}
+				highestSoFar = model.EndScore;
+			}
+
+			if (highestSoFar < 100000000)
+			{
+				string errorMessage = string.Format("No range covers the numbers {0}-100000000", highestSoFar);
+				Log.WarnFormat(errorMessage);
+				return this.JsonNet(new { error = errorMessage });
+			}
+
+			if (highestSoFar > 100000000)
+			{
+				const string errorMessage = "Maximum allowed number is 100000000";
+				Log.WarnFormat(errorMessage);
+				return this.JsonNet(new { error = errorMessage });
+			}
+
+			BoolActionResult result = serviceClient.Instance.SaveLoanOfferMultiplier(sortedList.ToArray());
 			return this.JsonNet(new { error = result.Value ? "Error occurred during save" : null });
 		}
 

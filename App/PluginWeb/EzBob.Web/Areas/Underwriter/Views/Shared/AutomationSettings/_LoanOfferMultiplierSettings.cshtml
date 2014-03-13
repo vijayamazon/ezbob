@@ -1,0 +1,36 @@
+﻿@using EzBob.Web.Infrastructure.Html
+<script type="text/template" id="loan-offer-multiplier-settings-template">
+    <h3>Loan Offer Multiplier Settings</h3>
+    <%if(loanOfferMultipliers && loanOfferMultipliers.length > 0) {%>
+   
+    <table class="table squeezed">
+        <thead class="box">
+            <tr class="box-title">
+                <th>Start Score</th>
+                <th>End Score</th>
+                <th>Multiplier</th>
+                <th>Remove</th>
+            </tr>
+        </thead>
+        <tbody>
+            <%_.each(loanOfferMultipliers, function(loanOfferMultiplier, i){%>
+            <tr id="loanOfferMultiplierRow_<%=loanOfferMultiplier.Id%>">
+                <td><input type="text" id="startScore_<%=loanOfferMultiplier.Id%>" class="range-field" value="<%= loanOfferMultiplier.StartScore %>"></td>
+                <td><input type="text" id="endScore_<%=loanOfferMultiplier.Id%>" class="range-field" value="<%= loanOfferMultiplier.EndScore %>"></td>
+                <td><input type="text" id="multiplier_<%=loanOfferMultiplier.Id%>" class="range-field" value="<%= loanOfferMultiplier.Multiplier %>"></td>
+                <td>
+                    <button class="btn btn-primary removeRange" loan-offer-multiplier-id="<%= loanOfferMultiplier.Id %>">Remove</button>
+                </td>
+            </tr>
+            <%});%>
+        </tbody>
+    </table>
+    <%}%>
+   
+    <button class="btn btn-primary addRange">Add Range</button>
+    <div class="pull-right">
+        <button class="btn btn-primary" id="SaveLoanOfferMultiplierSettings"><i class="fa fa-check-circle" />Save</button>
+        <button class="btn btn-primary" id="CancelLoanOfferMultiplierSettings"><i class="fa fa-refresh" />Reset</button>
+    </div>
+
+</script>

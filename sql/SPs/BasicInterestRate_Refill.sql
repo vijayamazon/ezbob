@@ -2,7 +2,7 @@ IF TYPE_ID('IntIntDecimalList') IS NULL
 	CREATE TYPE IntIntDecimalList AS TABLE (Value1 INT NULL, Value2 INT NULL, Value3 DECIMAL(18, 6) NULL)
 GO
 
-IF OBJECT_ID('TestIntIntDecimalListType') IS NULL
+IF OBJECT_ID('BasicInterestRate_Refill') IS NULL
 	EXECUTE('CREATE PROCEDURE BasicInterestRate_Refill AS SELECT 1')
 GO
 
