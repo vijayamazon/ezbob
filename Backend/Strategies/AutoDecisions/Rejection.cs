@@ -116,7 +116,7 @@
 					(totalSumOfOrders3MTotal < lowTotalThreeMonthTurnover || totalSumOfOrders1YTotal < lowTotalAnnualTurnover)
 					)
 				{
-					response.AutoRejectReason = "AutoReject: Totals. Condition not met: (" + response.PayPalNumberOfStores + " < 0 OR" +
+					response.AutoRejectReason = "AutoReject: Totals. Condition not met: (" + response.PayPalNumberOfStores + " < 0 OR " +
 					                            response.PayPalTotalSumOfOrders3M + " < " +
 					                            lowTotalThreeMonthTurnover + " OR " + response.PayPalTotalSumOfOrders1Y + " < " +
 					                            lowTotalAnnualTurnover + ") AND (" + totalSumOfOrders3MTotal + " < " +
