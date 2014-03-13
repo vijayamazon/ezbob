@@ -12,6 +12,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using ExperianLib.Ebusiness;
+	using EzBob.Models;
 	using FraudChecker;
 	using Models;
 	using Code;

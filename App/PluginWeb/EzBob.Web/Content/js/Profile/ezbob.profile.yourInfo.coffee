@@ -265,14 +265,18 @@ class EzBob.Profile.LimitedInfoView extends Backbone.Marionette.Layout
 
     addDirectorClicked: ->
         console.log('add director clicked')
+        director = new EzBob.DirectorModel()
+        console.log('director', @model)
+        #@model.get('').add(director)
+        console.log('model')
         EzBob.App.trigger 'add-director'
         directorEl = $('.add-director-container')
-        addDirector = new EzBob.Profile.AddDirectorInfoView({ model: @model })
-        addDirector.render().$el.appendTo(directorEl)
-        directorEl.show()
-        oFieldStatusIcons = $('.add-director-container IMG.field_status')
-        oFieldStatusIcons.filter('.required').field_status({ required: true })
-        oFieldStatusIcons.not('.required').field_status({ required: false })
+        if(!@addDirector)
+            @addDirector = new EzBob.Profile.AddDirectorInfoView({ model: director, el: directorEl })
+            @addDirector.render()
+            directorEl.show()
+        else
+            directorEl.show()
         false
 
 class EzBob.Profile.DirectorInfoView extends Backbone.Marionette.Layout
@@ -307,6 +311,7 @@ class EzBob.Profile.AddDirectorInfoView extends Backbone.Marionette.ItemView
     template: '#add-director-info-template'
     initialize: (options) ->
         console.log('init', options)
+        
 
     region:
         directorAddress : '.director_address'
@@ -328,20 +333,37 @@ class EzBob.Profile.AddDirectorInfoView extends Backbone.Marionette.ItemView
     addressModelChange: ->
         EzBob.App.trigger 'dash-director-address-change', @model
 
-    render: ->
-        super()
-        ###
-        address = new EzBob.AddressView({
-            name: "DirectorAddress",
-            max: 10,
-            isShowClear: true,
+    onRender: ->
+        EzBob.UiAction.registerView(@)
+        @$el.find('.ezDateTime').splittedDateTime()
+        @$el.find('.alphaOnly').alphaOnly()
+        @$el.find('.phonenumber').numericOnly(11)
+        @$el.find('.addressCaption').hide()
+        that = @
+        addressElem = 'Address'
+        
+        oAddressContainer = that.$el.find('#' + addressElem)
+        name = 'DirectorAddress'
+        addressView = new EzBob.AddressView({
+            model: that.model.get('DirectorAddress')
+            name: name
+            max: 1
+            uiEventControlIdPrefix: oAddressContainer.attr('data-ui-event-control-id-prefix')
         })
 
-        @directorAddress.show(address)
-        ###
+        that.model.get('DirectorAddress').on('all', ->
+            that.trigger('director:addressChanged')
+        )
+
+        addressView.render().$el.appendTo(oAddressContainer)
+        EzBob.Validation.addressErrorPlacement(addressView.$el, addressView.model)
+        
+        oFieldStatusIcons = @$el.find('IMG.field_status')
+        oFieldStatusIcons.filter('.required').field_status({ required: true })
+        oFieldStatusIcons.not('.required').field_status({ required: false })
+        @
 
     directorBack: ->
-        @close()
         EzBob.App.trigger 'add-director-back'
 
     directorAdd: ->

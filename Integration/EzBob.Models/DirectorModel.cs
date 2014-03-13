@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using ApplicationMng.Model;
-using EZBob.DatabaseLib.Model.Database;
-using EzBob.Web.Code;
-using Iesi.Collections.Generic;
-using System.Linq;
-using log4net;
+﻿namespace EzBob.Models {
 
-namespace EzBob.Web.Areas.Customer.Models {
+	using System;
+	using System.Collections.Generic;
+	using System.Globalization;
+	using EZBob.DatabaseLib.Model.Database;
+	using Web.Code;
+	using Iesi.Collections.Generic;
+	using System.Linq;
+	using log4net;
+
 	public class DirectorModel {
         private static readonly ILog _log = LogManager.GetLogger(typeof(DirectorModel));
 
@@ -39,7 +39,7 @@ namespace EzBob.Web.Areas.Customer.Models {
 					DirectorAddressInfo = new DirectorAddressInfo{
                         AllAddresses = DirectorAddress == null ? null : new HashedSet<CustomerAddress>(DirectorAddress)
                     },
-					Gender = (Gender)Enum.Parse(typeof(EZBob.DatabaseLib.Model.Database.Gender), Gender.ToString()),
+					Gender = (Gender)Enum.Parse(typeof(Gender), Gender.ToString()),
 					Email = Email,
 					Phone = Phone
 				};

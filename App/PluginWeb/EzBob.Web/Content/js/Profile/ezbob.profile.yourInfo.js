@@ -356,22 +356,23 @@
     };
 
     LimitedInfoView.prototype.addDirectorClicked = function() {
-      var addDirector, directorEl, oFieldStatusIcons;
+      var director, directorEl;
       console.log('add director clicked');
+      director = new EzBob.DirectorModel();
+      console.log('director', this.model);
+      console.log('model');
       EzBob.App.trigger('add-director');
       directorEl = $('.add-director-container');
-      addDirector = new EzBob.Profile.AddDirectorInfoView({
-        model: this.model
-      });
-      addDirector.render().$el.appendTo(directorEl);
-      directorEl.show();
-      oFieldStatusIcons = $('.add-director-container IMG.field_status');
-      oFieldStatusIcons.filter('.required').field_status({
-        required: true
-      });
-      oFieldStatusIcons.not('.required').field_status({
-        required: false
-      });
+      if (!this.addDirector) {
+        this.addDirector = new EzBob.Profile.AddDirectorInfoView({
+          model: director,
+          el: directorEl
+        });
+        this.addDirector.render();
+        directorEl.show();
+      } else {
+        directorEl.show();
+      }
       return false;
     };
 
@@ -469,22 +470,39 @@
       return EzBob.App.trigger('dash-director-address-change', this.model);
     };
 
-    AddDirectorInfoView.prototype.render = function() {
-      return AddDirectorInfoView.__super__.render.call(this);
-      /*
-              address = new EzBob.AddressView({
-                  name: "DirectorAddress",
-                  max: 10,
-                  isShowClear: true,
-              })
-      
-              @directorAddress.show(address)
-      */
-
+    AddDirectorInfoView.prototype.onRender = function() {
+      var addressElem, addressView, name, oAddressContainer, oFieldStatusIcons, that;
+      EzBob.UiAction.registerView(this);
+      this.$el.find('.ezDateTime').splittedDateTime();
+      this.$el.find('.alphaOnly').alphaOnly();
+      this.$el.find('.phonenumber').numericOnly(11);
+      this.$el.find('.addressCaption').hide();
+      that = this;
+      addressElem = 'Address';
+      oAddressContainer = that.$el.find('#' + addressElem);
+      name = 'DirectorAddress';
+      addressView = new EzBob.AddressView({
+        model: that.model.get('DirectorAddress'),
+        name: name,
+        max: 1,
+        uiEventControlIdPrefix: oAddressContainer.attr('data-ui-event-control-id-prefix')
+      });
+      that.model.get('DirectorAddress').on('all', function() {
+        return that.trigger('director:addressChanged');
+      });
+      addressView.render().$el.appendTo(oAddressContainer);
+      EzBob.Validation.addressErrorPlacement(addressView.$el, addressView.model);
+      oFieldStatusIcons = this.$el.find('IMG.field_status');
+      oFieldStatusIcons.filter('.required').field_status({
+        required: true
+      });
+      oFieldStatusIcons.not('.required').field_status({
+        required: false
+      });
+      return this;
     };
 
     AddDirectorInfoView.prototype.directorBack = function() {
-      this.close();
       return EzBob.App.trigger('add-director-back');
     };
 
