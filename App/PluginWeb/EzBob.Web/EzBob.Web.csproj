@@ -476,6 +476,7 @@
     <Content Include="Content\css\images\accounts\bank.png" />
     <Content Include="Content\css\images\accounts\bigcommerce.png" />
     <Content Include="Content\css\images\accounts\CompanyFiles.png" />
+    <Content Include="Content\css\images\accounts\CompanyFiles2.png" />
     <Content Include="Content\css\images\accounts\ebay.png" />
     <Content Include="Content\css\images\accounts\ekm.png" />
     <Content Include="Content\css\images\accounts\etsy.png" />
