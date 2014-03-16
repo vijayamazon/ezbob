@@ -25,10 +25,10 @@
 		private readonly bool enableAutomaticRejection;
 		private int lowTotalAnnualTurnover;
 		private int lowTotalThreeMonthTurnover;
-		private readonly double initialExperianConsumerScore;
+		private readonly double maxExperianConsumerScore;
 		private readonly int customerId;
 
-		public Rejection(int customerId, double totalSumOfOrders1YTotal, double totalSumOfOrders3MTotal, double marketplaceSeniorityDays, bool enableAutomaticRejection, double initialExperianConsumerScore, AConnection oDb, ASafeLog oLog)
+		public Rejection(int customerId, double totalSumOfOrders1YTotal, double totalSumOfOrders3MTotal, double marketplaceSeniorityDays, bool enableAutomaticRejection, double maxExperianConsumerScore, AConnection oDb, ASafeLog oLog)
 		{
 			Db = oDb;
 			log = oLog;
@@ -36,15 +36,15 @@
 			this.totalSumOfOrders3MTotal = totalSumOfOrders3MTotal;
 			this.marketplaceSeniorityDays = marketplaceSeniorityDays;
 			this.enableAutomaticRejection = enableAutomaticRejection;
-			this.initialExperianConsumerScore = initialExperianConsumerScore;
+			this.maxExperianConsumerScore = maxExperianConsumerScore;
 			this.customerId = customerId;
 		}
 
 		private bool IsException()
 		{
 			if (loanOfferApprovalNum > 0 || totalSumOfOrders1YTotal > autoRejectionExceptionAnualTurnover ||
-				initialExperianConsumerScore > autoRejectionExceptionCreditScore || errorMPsNum > 0 ||
-				(decimal)initialExperianConsumerScore == 0 || hasAccountingAccounts)
+				maxExperianConsumerScore > autoRejectionExceptionCreditScore || errorMPsNum > 0 ||
+				(decimal)maxExperianConsumerScore == 0 || hasAccountingAccounts)
 			{
 				return true;
 			}
@@ -95,17 +95,17 @@
 
 				FillPayPalFiguresForExplanationMail(Db, customerId, response);
 
-				if (initialExperianConsumerScore < rejectDefaultsCreditScore &&
+				if (maxExperianConsumerScore < rejectDefaultsCreditScore &&
 				    numOfDefaultAccounts >= rejectDefaultsAccountsNum)
 				{
 					response.AutoRejectReason = "AutoReject: Score & DefaultAccountsNum. Condition not met:" +
-					                            initialExperianConsumerScore +
+					                            maxExperianConsumerScore +
 					                            " < " + rejectDefaultsCreditScore + " AND " + numOfDefaultAccounts + " >= " +
 					                            rejectDefaultsAccountsNum;
 				}
-				else if (initialExperianConsumerScore < lowCreditScore)
+				else if (maxExperianConsumerScore < lowCreditScore)
 				{
-					response.AutoRejectReason = "AutoReject: Low score. Condition not met:" + initialExperianConsumerScore + " < " +
+					response.AutoRejectReason = "AutoReject: Low score. Condition not met:" + maxExperianConsumerScore + " < " +
 					                            lowCreditScore;
 				}
 				else if (

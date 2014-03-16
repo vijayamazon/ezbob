@@ -136,6 +136,7 @@
 				PerformConsumerExperianCheck();
 
 				minExperianScore = experianConsumerScore;
+				maxExperianScore = experianConsumerScore;
 				initialExperianConsumerScore = experianConsumerScore;
 
 				PerformExperianConsumerCheckForDirectors();
@@ -157,7 +158,7 @@
 
 			CalcAndCapOffer();
 
-			autoDecisionResponse = AutoDecisionMaker.MakeDecision(customerId, minExperianScore, totalSumOfOrders1YTotal, totalSumOfOrders3MTotal, offeredCreditLine, marketplaceSeniorityDays, enableAutomaticReRejection, enableAutomaticRejection, enableAutomaticReApproval, initialExperianConsumerScore, enableAutomaticApproval,
+			autoDecisionResponse = AutoDecisionMaker.MakeDecision(customerId, minExperianScore, maxExperianScore, totalSumOfOrders1YTotal, totalSumOfOrders3MTotal, offeredCreditLine, marketplaceSeniorityDays, enableAutomaticReRejection, enableAutomaticRejection, enableAutomaticReApproval, enableAutomaticApproval,
 				loanOfferReApprovalFullAmountOld, loanOfferReApprovalFullAmount, loanOfferReApprovalRemainingAmount, loanOfferReApprovalRemainingAmountOld, DB, Log);
 
 			if (autoDecisionResponse.SystemDecision == "Reject")
@@ -593,6 +594,8 @@
 
 					if (experianConsumerScore > 0 && experianConsumerScore < minExperianScore)
 						minExperianScore = experianConsumerScore;
+					if (experianConsumerScore > 0 && experianConsumerScore > maxExperianScore)
+						maxExperianScore = experianConsumerScore;
 				} // foreach
 			} // if
 		}
@@ -745,6 +748,7 @@
 		private bool wasMainStrategyExecutedBefore;
 
 		private int minExperianScore;
+		private int maxExperianScore;
 		private int experianConsumerScore;
 		private int allMPsNum;
 		private AutoDecisionResponse autoDecisionResponse;
