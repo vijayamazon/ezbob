@@ -470,7 +470,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
         var searchWord = $(el.currentTarget).children("td:first").text();
         $('#yodleeTransactionsTabLink').click();
         $('#yodleetab4 .YodleeTransactionsTable [name="search_description"]').val(searchWord).change();
-        $('.YodleeTransactionsTable').dataTable().fnFilter(searchWord, 7); //description id
+        $('.YodleeTransactionsTable').dataTable().fnFilter(searchWord, 9); //description id
     },
     yodleeAccountsRowClicked: function (el) {
         var accountId = $(el.currentTarget).index() + 1;
