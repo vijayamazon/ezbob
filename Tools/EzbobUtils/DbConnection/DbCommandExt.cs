@@ -2,8 +2,6 @@
 	using System;
 	using System.Data.Common;
 
-	#region class DbCommandExt
-
 	public static class DbCommandExt {
 		#region public
 
@@ -22,7 +20,7 @@
 
 		public static void ForEachRowSafe(this DbCommand cmd, Func<SafeReader, bool, ActionResult> oAction, Action oLogExecution = null) {
 			if (ReferenceEquals(oAction, null))
-				throw new DbException("Callback action not specified in 'ForEachRow' call.");
+				throw new DbException("Callback action not specified in 'ForEachRowSafe' call.");
 
 			Run(
 				cmd,
@@ -33,12 +31,32 @@
 
 		#endregion method ForEachRowSafe
 
+		#region method ForEachResult
+
+		public static void ForEachResult<T>(this DbCommand cmd, Func<T, ActionResult> oAction, Action oLogExecution = null) where T: IResultRow, new() {
+			if (ReferenceEquals(oAction, null))
+				throw new DbException("Callback action not specified in 'ForEachResult' call.");
+
+			Run(
+				cmd,
+				(oReader, bRowSetStart) => {
+					var sr = new SafeReader(oReader);
+					T oResult = sr.Fill<T>();
+					oResult.SetIsFirst(bRowSetStart);
+					return oAction(oResult);
+				},
+				oLogExecution
+			);
+		} // ForEachResult
+
+		#endregion method ForEachResult
+
 		#endregion public
 
 		#region private
 
 		private static void Run(DbCommand command, Func<DbDataReader, bool, ActionResult> oAction, Action oLogExecution) {
-			var oReader = command.ExecuteReader();
+			DbDataReader oReader = command.ExecuteReader();
 
 			if (oLogExecution != null)
 				oLogExecution();
@@ -69,6 +87,4 @@
 
 		#endregion private
 	} // class DbCommandExt
-
-	#endregion class DbCommandExt
 } // namespace Ezbob.Database

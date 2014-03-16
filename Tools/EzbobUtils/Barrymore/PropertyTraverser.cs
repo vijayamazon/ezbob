@@ -24,20 +24,24 @@
 	public static class PropertyTraverser {
 		#region public
 
-		public static T Traverse<T>(Action<ITraversable, PropertyInfo> oCallback) where T: ITraversable, new() {
+		public static void Traverse(Type oType, Action<ITraversable, PropertyInfo> oCallback) {
+			if (oType == null)
+				throw new ArgumentNullException("oType", "Type to traverse not specified.");
+
 			if (oCallback == null)
 				throw new ArgumentNullException("oCallback", "Property callback not specified.");
 
-			ConstructorInfo oCreator = typeof (T).GetConstructors().FirstOrDefault(ci => ci.GetParameters().Length == 0);
+			if (null == oType.GetInterface(typeof (ITraversable).ToString()))
+				throw new NotImplementedException("Type " + oType + " does not implement " + typeof (ITraversable));
 
-			if (oCreator == null)
-				throw new SeldenException("Type " + typeof (T) + " has no parameterless constructor.");
+			Traverse(null, oType, oCallback);
+		} // Traverse
 
-			var oInstance = (T)oCreator.Invoke(null);
+		public static void Traverse<T>(Action<ITraversable, PropertyInfo> oCallback) where T: ITraversable {
+			if (oCallback == null)
+				throw new ArgumentNullException("oCallback", "Property callback not specified.");
 
-			Traverse(oInstance, oCallback);
-
-			return oInstance;
+			Traverse(null, typeof(T), oCallback);
 		} // Traverse
 
 		public static void Traverse(this ITraversable oInstance, Action<ITraversable, PropertyInfo> oCallback) {
@@ -47,7 +51,15 @@
 			if (oCallback == null)
 				throw new ArgumentNullException("oCallback", "Property callback not specified.");
 
-			PropertyInfo[] oPropertyList = oInstance.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.SetProperty);
+			Traverse(oInstance, oInstance.GetType(), oCallback);
+		} // Traverse
+
+		#endregion public
+
+		#region private
+
+		private static void Traverse(ITraversable oInstance, Type oRealType, Action<ITraversable, PropertyInfo> oCallback) {
+			PropertyInfo[] oPropertyList = oRealType.GetProperties(BindingFlags.Instance | BindingFlags.Public | BindingFlags.SetProperty);
 
 			var oSelected = new List<PropertyInfo>();
 
@@ -64,14 +76,6 @@
 			foreach (PropertyInfo pi in oSelected)
 				oCallback(oInstance, pi);
 		} // Traverse
-
-		#endregion public
-
-		#region protected
-
-		#endregion protected
-
-		#region private
 
 		#endregion private
 	} // class PropertyTraverser

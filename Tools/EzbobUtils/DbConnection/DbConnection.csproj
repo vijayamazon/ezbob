@@ -49,7 +49,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AResultRow.cs" />
+    <Compile Include="AStoredProcedure.cs" />
     <Compile Include="DbCommandExt.cs" />
+    <Compile Include="IResultRow.cs" />
+    <Compile Include="IStoredProcedure.cs" />
     <Compile Include="SafeReader.cs" />
     <Compile Include="DbException.cs" />
     <Compile Include="IConnection.cs" />
@@ -59,9 +63,9 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="QueryParameter.cs" />
-    <Compile Include="SqlConnection.cs" />
+    <Compile Include="VendorSpecific\SqlConnection.cs" />
     <Compile Include="SqlRetryer.cs" />
-    <Compile Include="StdSqlConnection.cs" />
+    <Compile Include="VendorSpecific\StdSqlConnection.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Barrymore\Barrymore.csproj">

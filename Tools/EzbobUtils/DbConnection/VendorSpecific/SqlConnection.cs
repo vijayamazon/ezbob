@@ -1,7 +1,6 @@
 ﻿namespace Ezbob.Database {
 	using System;
 	using System.Collections;
-	using System.Collections.Generic;
 	using System.Data;
 	using System.Data.Common;
 	using System.Data.SqlClient;
@@ -34,10 +33,11 @@
 
 		#region method CreateTableParameter
 
-		public override QueryParameter CreateTableParameter<TColumnInfo>(string sFieldName, IEnumerable oValues, Func<object, object[]> oValueToRow) {
+		public override QueryParameter CreateTableParameter(Type oColumnInfo, string sFieldName, IEnumerable oValues, Func<object, object[]> oValueToRow, ParameterDirection nDirection = ParameterDirection.Input) {
 			var tbl = new DataTable();
 
-			PropertyTraverser.Traverse<TColumnInfo>(
+			PropertyTraverser.Traverse(
+				oColumnInfo,
 				(oIgnoredInstance, oPropertyInfo) => tbl.Columns.Add(string.Empty, oPropertyInfo.PropertyType)
 			);
 
@@ -47,7 +47,7 @@
 
 			return new QueryParameter(new SqlParameter(sFieldName, SqlDbType.Structured) {
 				Value = tbl,
-				Direction = ParameterDirection.Input,
+				Direction = nDirection,
 			});
 		} // CreateTableParameter
 

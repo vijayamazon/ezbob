@@ -174,7 +174,9 @@
 		#region method Fill
 
 		public T Fill<T>() where T: ITraversable, new() {
-			return PropertyTraverser.Traverse<T>(FillProperty);
+			var oInstance = new T();
+			Fill(oInstance);
+			return oInstance;
 		} // Fill
 
 		public void Fill(ITraversable oInstance) {

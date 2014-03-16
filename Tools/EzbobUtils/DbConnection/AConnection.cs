@@ -97,6 +97,33 @@
 
 		#endregion method ForEachRowSafe
 
+		#region method ForEachResult
+
+		public virtual void ForEachResult<T>(Func<T, ActionResult> oAction, string sQuery, params QueryParameter[] aryParams) where T : IResultRow, new() {
+			ForEachResult<T>(oAction, sQuery, CommandSpecies.Auto, aryParams);
+		} // ForEachResult
+
+		public virtual void ForEachResult<T>(Func<T, ActionResult> oAction, string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) where T : IResultRow, new() {
+			if (ReferenceEquals(oAction, null))
+				throw new DbException("Callback action not specified in 'ForEachResult' call.");
+
+			ForEachRowSafe(
+				(sr, bRowsetStart) => {
+					var oResult = new T();
+					oResult.SetIsFirst(bRowsetStart);
+
+					sr.Fill(oResult);
+
+					return oAction(oResult);
+				},
+				sQuery,
+				nSpecies,
+				aryParams
+			);
+		} // ForEachResult
+
+		#endregion method ForEachResult
+
 		#region method Fill
 
 		public List<T> Fill<T>(string sQuery, params QueryParameter[] aryParams) where T: ITraversable, new() {
@@ -161,11 +188,27 @@
 
 		#endregion method CreateVectorParameter
 
-		public abstract QueryParameter CreateTableParameter<TColumnInfo>(
+		#region method CreateTableParameter
+
+		public virtual QueryParameter CreateTableParameter<TColumnInfo, TSource>(string sFieldName, IEnumerable<TSource> oValues, ParameterDirection nDirection = ParameterDirection.Input)
+			where TColumnInfo : ITraversable, new()
+			where TSource : IParametrisable
+		{
+			return CreateTableParameter<TColumnInfo>(sFieldName, oValues, v => (v as IParametrisable).ToParameter(), nDirection);
+		} // CreateTableParameter
+
+		public virtual QueryParameter CreateTableParameter<TColumnInfo>(
 			string sFieldName,
 			IEnumerable oValues,
-			Func<object, object[]> oValueToRow
-		) where TColumnInfo : ITraversable, new();
+			Func<object, object[]> oValueToRow,
+			ParameterDirection nDirection = ParameterDirection.Input
+		) where TColumnInfo : ITraversable, new() {
+			return CreateTableParameter(typeof (TColumnInfo), sFieldName, oValues, oValueToRow, nDirection);
+		} // CreateTableParameter
+
+		public abstract QueryParameter CreateTableParameter(Type oColumnInfo, string sFieldName, IEnumerable oValues, Func<object, object[]> oValueToRow, ParameterDirection nDirection = ParameterDirection.Input);
+
+		#endregion method CreateTableParameter
 
 		public abstract string DateToString(DateTime oDate);
 
