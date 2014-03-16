@@ -26,6 +26,9 @@ namespace EZBob.DatabaseLib.Model.Database {
 
 	public interface IExperianDataCacheRepository : IRepository<MP_ExperianDataCache> {
 		MP_ExperianDataCache GetPersonFromCache(string firstName, string surname, DateTime? birthDate, string postcode);
+
+		MP_ExperianDataCache GetCustomerFromCache(int customerId, string firstName, string surname, DateTime? birthDate,
+		                                          string postcode);
 	} // interface IExperianDataCacheRepository
 
 	public class ExperianDataCacheRepository : NHibernateRepositoryBase<MP_ExperianDataCache>, IExperianDataCacheRepository {

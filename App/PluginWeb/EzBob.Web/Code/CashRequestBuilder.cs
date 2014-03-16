@@ -20,7 +20,7 @@
 			IConfigurationVariablesRepository configurationVariables,
 			ILoanSourceRepository loanSources,
 			IDecisionHistoryRepository historyRepository,
-			LoanLimit limit
+			IExperianDataCacheRepository experianData
 		) {
 			m_oServiceClient = new ServiceClient();
 			_loanTypes = loanTypes;
@@ -30,7 +30,7 @@
 			this.configurationVariables = configurationVariables;
 			_loanSources = loanSources;
 			_historyRepository = historyRepository;
-			// _limit = limit;
+			_experianData = experianData;
 		} // constructor
 
 		#endregion constructor
@@ -40,6 +40,13 @@
 		public CashRequest CreateCashRequest(Customer customer) {
 			var loanType = _loanTypes.GetDefault();
 			var loanSource = _loanSources.GetDefault();
+			var score = customer.ScoringResults.OrderByDescending(x => x.ScoreDate).FirstOrDefault();
+			var address = customer.AddressInfo.PersonalAddress.FirstOrDefault();
+			var postcode = address != null ? address.Postcode : null;
+			var personInfo = customer.PersonalInfo ?? new PersonalInfo();
+			var experian = _experianData.GetCustomerFromCache(customer.Id, personInfo.FirstName, personInfo.Surname,
+			                                                  personInfo.DateOfBirth, postcode);
+			int? experianScore = experian != null ? experian.ExperianScore : 0;
 
 			var cashRequest = new CashRequest {
 				CreationDate = DateTime.UtcNow,
@@ -54,7 +61,9 @@
 				OfferValidUntil = DateTime.UtcNow.AddDays(1),
 				OfferStart = DateTime.UtcNow,
 				LoanSource = loanSource,
-				IsCustomerRepaymentPeriodSelectionAllowed = loanSource.IsCustomerRepaymentPeriodSelectionAllowed
+				IsCustomerRepaymentPeriodSelectionAllowed = loanSource.IsCustomerRepaymentPeriodSelectionAllowed,
+				ScorePoints = score != null ? score.ScorePoints : 0,
+				ExpirianRating = experianScore
 			};
 
 			customer.CashRequests.Add(cashRequest);
@@ -75,6 +84,7 @@
 			var user = _users.GetAll().FirstOrDefault(x => x.Id == 21); // TODO: do something really really really better than this.
 
 			var cashRequest = new CashRequest {
+				
 				CreationDate = DateTime.UtcNow,
 				Customer = customer,
 				InterestRate = customer.QuickOffer.ImmediateInterestRate,
@@ -156,7 +166,6 @@
 		#endregion method ForceEvaluate
 
 		#region private
-
 		private readonly ILoanTypeRepository _loanTypes;
 		private readonly IDiscountPlanRepository _discounts;
 		private readonly IUsersRepository _users;
@@ -164,9 +173,8 @@
 		private readonly IConfigurationVariablesRepository configurationVariables;
 		private readonly ILoanSourceRepository _loanSources;
 		private readonly IDecisionHistoryRepository _historyRepository;
-		// private readonly LoanLimit _limit; // TODO: if needed...
+		private readonly IExperianDataCacheRepository _experianData;
 		private readonly ServiceClient m_oServiceClient;
-
 		#endregion private
 	} // class CashRequestBuilder
 } // namespace

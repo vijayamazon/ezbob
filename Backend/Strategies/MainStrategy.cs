@@ -354,7 +354,7 @@
 				new QueryParameter("UnderwriterComment", autoDecisionResponse.LoanOfferUnderwriterComment),
 				new QueryParameter("IsLoanTypeSelectionAllowed", loanOfferIsLoanTypeSelectionAllowed),
 				new QueryParameter("DiscountPlanId", loanOfferDiscountPlanId),
-				new QueryParameter("ExperianRating", loanOfferExpirianRating),
+				new QueryParameter("ExperianRating", experianConsumerScore),
 				new QueryParameter("LoanSourceId", loanSourceId),
 				new QueryParameter("IsCustomerRepaymentPeriodSelectionAllowed", isCustomerRepaymentPeriodSelectionAllowed),
 				new QueryParameter("UseBrokerSetupFee", useBrokerSetupFee),
