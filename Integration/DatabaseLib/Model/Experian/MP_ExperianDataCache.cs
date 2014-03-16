@@ -46,7 +46,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 			return m_oRetryer.Retry(() =>
 				GetAll()
 					.OrderByDescending(x => x.LastUpdateDate)
-					.FirstOrDefault(c => (c.Name == firstName && c.Surname == surname && c.BirthDate == birthDate && c.PostCode == postcode) || (c.CustomerId == customerId && (c.DirectorId == null || c.DirectorId==0) && c.CompanyRefNumber == null))
+					.FirstOrDefault(c => ((c.Name == firstName && c.Surname == surname && c.BirthDate == birthDate && c.PostCode == postcode) || (c.CustomerId == customerId && (c.DirectorId == null || c.DirectorId==0)) && c.CompanyRefNumber == null))
 			);
 		} // GetPersonFromCache
 
