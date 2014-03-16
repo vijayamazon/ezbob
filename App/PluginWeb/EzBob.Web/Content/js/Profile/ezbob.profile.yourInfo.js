@@ -22,6 +22,7 @@
     YourInfoMainView.prototype.initialize = function() {
       EzBob.App.on('dash-director-address-change', this.directorModelChange, this);
       EzBob.App.on('add-director', this.addDirector, this);
+      EzBob.App.on('director-added', this.reload, this);
       return EzBob.App.on('add-director-back', this.addDirectorBack, this);
     };
 
@@ -357,10 +358,7 @@
 
     LimitedInfoView.prototype.addDirectorClicked = function() {
       var director, directorEl;
-      console.log('add director clicked');
       director = new EzBob.DirectorModel();
-      console.log('director', this.model);
-      console.log('model');
       EzBob.App.trigger('add-director');
       directorEl = $('.add-director-container');
       if (!this.addDirector) {
@@ -445,10 +443,6 @@
 
     AddDirectorInfoView.prototype.template = '#add-director-info-template';
 
-    AddDirectorInfoView.prototype.initialize = function(options) {
-      return console.log('init', options);
-    };
-
     AddDirectorInfoView.prototype.region = {
       directorAddress: '.director_address'
     };
@@ -476,7 +470,7 @@
     };
 
     AddDirectorInfoView.prototype.onRender = function() {
-      var addressView, name, oAddressContainer, oFieldStatusIcons, that;
+      var name, oAddressContainer, oFieldStatusIcons, that;
       EzBob.UiAction.registerView(this);
       this.$el.find('.ezDateTime').splittedDateTime();
       this.$el.find('.alphaOnly').alphaOnly();
@@ -486,7 +480,7 @@
       that = this;
       oAddressContainer = that.$el.find('#DirectorAddress');
       name = 'DirectorAddress';
-      addressView = new EzBob.AddressView({
+      this.addressView = new EzBob.AddressView({
         model: that.model.get('DirectorAddress'),
         name: name,
         max: 1,
@@ -495,8 +489,8 @@
       that.model.get('DirectorAddress').on('all', function() {
         return that.trigger('director:addressChanged');
       });
-      addressView.render().$el.appendTo(oAddressContainer);
-      EzBob.Validation.addressErrorPlacement(addressView.$el, addressView.model);
+      this.addressView.render().$el.appendTo(oAddressContainer);
+      EzBob.Validation.addressErrorPlacement(this.addressView.$el, this.addressView.model);
       oFieldStatusIcons = this.$el.find('IMG.field_status');
       oFieldStatusIcons.filter('.required').field_status({
         required: true
@@ -511,12 +505,36 @@
       return EzBob.App.trigger('add-director-back');
     };
 
-    AddDirectorInfoView.prototype.directorAdd = function() {};
+    AddDirectorInfoView.prototype.directorAdd = function() {
+      var data, enabled, request;
+      enabled = this.validator.checkForm() && this.addressView.model.length > 0;
+      this.ui.addButton.toggleClass('disabled', !enabled);
+      if (!enabled) {
+        return false;
+      }
+      data = this.ui.form.serializeArray();
+      BlockUi('on');
+      request = $.post(this.ui.form.attr('action'), data);
+      request.done(function(res) {
+        if (res.success) {
+          return EzBob.App.trigger('director-added');
+        } else {
+          if (res.error) {
+            return EzBob.App.trigger('error', res.error);
+          } else {
+            return EzBob.App.trigger('error', 'Error occurred, try again');
+          }
+        }
+      });
+      request.always(function() {
+        return BlockUi('off');
+      });
+      return false;
+    };
 
     AddDirectorInfoView.prototype.inputChanged = function() {
       var enabled;
-      enabled = this.validator.checkForm();
-      console.log('changed', enabled);
+      enabled = this.validator.checkForm() && this.addressView.model.length > 0;
       return this.ui.addButton.toggleClass('disabled', !enabled);
     };
 

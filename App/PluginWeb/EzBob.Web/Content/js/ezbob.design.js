@@ -1227,16 +1227,16 @@ EzBob.validateAddDirectorForm = function (el) {
 
     return e.validate({
         rules: {
-            DirectorName: EzBob.Validation.NameValidationObject,
-            DirectorLastName: {required : true},
-            DirectorGender: { required: true},
-            DirectorDateOfBirth: { requiredDate: true, yearLimit: 18 },
-            DirectorEmail: { required: true, email: true },
-            DirectorPhone: { required: true, regex: "^0[0-9]{10}$" },
+            Name: EzBob.Validation.NameValidationObject,
+            Surname: {required : true},
+            Gender: { required: true},
+            DateOfBirth: { requiredDate: true, yearLimit: 18 },
+            Email: { required: true, email: true },
+            Phone: { required: true, regex: "^0[0-9]{10}$" },
         },
         messages: {
             DateOfBirth: { yearLimit: "The number of full year should be more then 18 year" },
-            DirectorPhone: { regex: "Please enter a valid UK number" },
+            Phone: { regex: "Please enter a valid UK number" },
         },
         errorPlacement: EzBob.Validation.errorPlacement,
         unhighlight: EzBob.Validation.unhighlightFS,

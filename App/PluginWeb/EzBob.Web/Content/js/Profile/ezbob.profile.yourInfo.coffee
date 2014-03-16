@@ -8,6 +8,7 @@ class EzBob.Profile.YourInfoMainView extends Backbone.Marionette.Layout
     initialize: ->
         EzBob.App.on 'dash-director-address-change', @directorModelChange, @
         EzBob.App.on 'add-director', @addDirector, @
+        EzBob.App.on 'director-added', @reload, @
         EzBob.App.on 'add-director-back', @addDirectorBack, @
 
     events: 
@@ -264,11 +265,7 @@ class EzBob.Profile.LimitedInfoView extends Backbone.Marionette.Layout
         @
 
     addDirectorClicked: ->
-        console.log('add director clicked')
         director = new EzBob.DirectorModel()
-        console.log('director', @model)
-        #@model.get('').add(director)
-        console.log('model')
         EzBob.App.trigger 'add-director'
         directorEl = $('.add-director-container')
         if(!@addDirector)
@@ -309,9 +306,6 @@ class EzBob.Profile.DirectorCompositeView extends Backbone.Marionette.CompositeV
 
 class EzBob.Profile.AddDirectorInfoView extends Backbone.Marionette.ItemView
     template: '#add-director-info-template'
-    initialize: (options) ->
-        console.log('init', options)
-        
 
     region:
         directorAddress : '.director_address'
@@ -350,7 +344,7 @@ class EzBob.Profile.AddDirectorInfoView extends Backbone.Marionette.ItemView
         
         oAddressContainer = that.$el.find('#DirectorAddress')
         name = 'DirectorAddress'
-        addressView = new EzBob.AddressView({
+        @addressView = new EzBob.AddressView({
             model: that.model.get('DirectorAddress')
             name: name
             max: 1
@@ -361,8 +355,8 @@ class EzBob.Profile.AddDirectorInfoView extends Backbone.Marionette.ItemView
             that.trigger('director:addressChanged')
         )
 
-        addressView.render().$el.appendTo(oAddressContainer)
-        EzBob.Validation.addressErrorPlacement(addressView.$el, addressView.model)
+        @addressView.render().$el.appendTo(oAddressContainer)
+        EzBob.Validation.addressErrorPlacement(@addressView.$el, @addressView.model)
         
         oFieldStatusIcons = @$el.find('IMG.field_status')
         oFieldStatusIcons.filter('.required').field_status({ required: true })
@@ -373,9 +367,25 @@ class EzBob.Profile.AddDirectorInfoView extends Backbone.Marionette.ItemView
         EzBob.App.trigger 'add-director-back'
 
     directorAdd: ->
-        
+        enabled = @validator.checkForm() && @addressView.model.length > 0
+        @ui.addButton.toggleClass('disabled', !enabled)
+        return false if not enabled
+
+        data = @ui.form.serializeArray()
+        BlockUi('on')
+        request = $.post(@ui.form.attr('action'), data);
+        request.done (res) ->
+            if(res.success)
+                EzBob.App.trigger 'director-added'
+            else
+                if(res.error)
+                    EzBob.App.trigger('error', res.error);
+                else
+                    EzBob.App.trigger('error', 'Error occurred, try again');
+        request.always ->
+            BlockUi('off')
+        false
 
     inputChanged: ->
-        enabled = @validator.checkForm() 
-        console.log('changed', enabled)
+        enabled = @validator.checkForm() && @addressView.model.length > 0
         @ui.addButton.toggleClass('disabled', !enabled)

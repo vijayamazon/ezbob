@@ -264,9 +264,42 @@
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
-		public JsonResult AddDirector(DirectorModel director, List<DirectorAddressModel>[] directorAddress)
+		public JsonResult AddDirector(DirectorModel director)
 		{
+			var customer = _context.Customer;
+			if (customer == null)
+			{
+				return Json(new {error = "Customer not found"});
+			}
+			var dbDirector = director.FromModel();
+			dbDirector.Customer = customer;
+			dbDirector.Company = customer.Company;
 			
+			foreach (var address in dbDirector.DirectorAddressInfo.AllAddresses)
+			{
+				address.Director = dbDirector;
+				address.AddressType = customer.Company.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited ?
+					CustomerAddressType.LimitedDirectorHomeAddress : CustomerAddressType.NonLimitedDirectorHomeAddress;
+			}
+
+			if (customer.Company == null)
+			{
+				return Json(new { error = "Customer don't have a company" });
+			}
+
+			if (customer.Company.Directors.Any())
+			{
+				foreach (var dir in customer.Company.Directors)
+				{
+					if (dir.Name == director.Name && dir.Surname == director.Surname)
+					{
+						return Json(new { error = "This director already added" });
+					}
+				}
+			}
+			customer.Company.Directors.Add(dbDirector);
+
+			_session.Flush();
 			return Json(new {success = true});
 		}
 		#endregion method AddDirector
