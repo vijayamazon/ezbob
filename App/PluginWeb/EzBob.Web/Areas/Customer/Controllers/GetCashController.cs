@@ -137,7 +137,14 @@
 			{
 				if (!valid || code != "A")
 				{
-					_log.ErrorFormat("Invalid transaction. Id = {0}, Code: {1}, Message: {2}", trans_id, code, message);
+					if (code == "N")
+					{
+						_log.WarnFormat("Invalid transaction. Id = {0}, Code: {1}, Message: {2}", trans_id, code, message);
+					}
+					else
+					{
+						_log.ErrorFormat("Invalid transaction. Id = {0}, Code: {1}, Message: {2}", trans_id, code, message);
+					}
 
 					_logRepository.Log(_context.UserId, DateTime.Now, "Paypoint GetCash Callback", "Falied",
 									   String.Format("Invalid transaction. Id = {0}, Code: {1}, Message: {2}", trans_id,
