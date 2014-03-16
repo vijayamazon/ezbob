@@ -193,9 +193,11 @@
 @helper YodleeBankAccountsTransactions()
 {
     <div class="tab-pane" id="yodleetab4">
-        <div class="dataTables_filter" id="range-filter">
+        <div class="dataTables_filter col-md-3" id="range-filter">
             <label for="date-range">Filter by date range:
-                <input type="text" id="date-range" /></label>
+                <input type="text" id="date-range" />
+            </label>
+            <button class="btn btn-mini btn-primary show-tooltip clear-filter" data-original-title="Clear filter" data-placement="bottom"><i class="fa fa-eraser"></i></button>
         </div>
         <table class="table centered nowrap YodleeTransactionsTable" id="YodleeTransactionsTable">
             <thead class="box">

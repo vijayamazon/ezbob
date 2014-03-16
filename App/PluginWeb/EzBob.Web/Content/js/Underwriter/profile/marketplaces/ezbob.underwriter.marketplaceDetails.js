@@ -56,6 +56,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
         this.$el.html(this.template(data));
         this.$el.find('a[data-bug-type]').tooltip({ title: 'Report bug' });
         this.$el.find('i[data-yodlee-calculated]').tooltip({ title: 'Calculated Field' });
+        this.$el.find('.clear-filter').tooltip({ title: 'Clear all filters', placement: 'bottom' });
 
         if (this.shop.get('Name') == 'Yodlee') {
 
@@ -227,6 +228,11 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
             that.$el.find(".YodleeTransactionsTable tfoot input").val("").keyup();
         });
 
+        this.$el.find("button.clear-filter").click(function () {
+            that.$el.find(".YodleeTransactionsTable tfoot input").val("").keyup();
+            that.$el.find("#date-range").val("").keyup();
+            that.$el.find("#YodleeTransactionsTable_filter input").val("").keyup();
+        });
     },
     yodleeShowGraph: function () {
         var cashModel = this.shop.get("Yodlee").CashFlowReportModel;
