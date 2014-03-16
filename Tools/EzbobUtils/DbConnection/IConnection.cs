@@ -58,6 +58,7 @@
 		void ForEachResult<T>(Func<T, ActionResult> oAction, string sQuery, params QueryParameter[] aryParams) where T: IResultRow, new();
 		List<T> Fill<T>(string sQuery, params QueryParameter[] aryParams) where T: ITraversable, new();
 		T FillFirst<T>(string sQuery, params QueryParameter[] aryParams) where T: ITraversable, new();
+		void FillFirst<T>(T oInstance, string sQuery, params QueryParameter[] aryParams) where T : ITraversable;
 
 		T ExecuteScalar<T>(string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams);
 		DataTable ExecuteReader(string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams);
@@ -67,6 +68,7 @@
 		void ForEachResult<T>(Func<T, ActionResult> oAction, string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) where T: IResultRow, new();
 		List<T> Fill<T>(string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) where T: ITraversable, new();
 		T FillFirst<T>(string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) where T: ITraversable, new();
+		void FillFirst<T>(T oInstance, string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) where T : ITraversable;
 
 		string DateToString(DateTime oDate);
 

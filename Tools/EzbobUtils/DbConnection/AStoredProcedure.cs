@@ -142,6 +142,10 @@
 			return DB.FillFirst<T>(GetName(), Species, PrepareParameters());
 		} // FillFirst
 
+		public virtual void FillFirst<T>(T oInstance) where T : ITraversable {
+			DB.FillFirst<T>(oInstance, GetName(), Species, PrepareParameters());
+		} // FillFirst
+
 		#endregion method FillFirst
 
 		#region method ToString

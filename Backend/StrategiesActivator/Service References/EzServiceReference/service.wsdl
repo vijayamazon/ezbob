@@ -214,6 +214,12 @@
   <wsdl:message name="IEzService_BrokerAddCustomerLead_OutputMessage">
     <wsdl:part name="parameters" element="tns:BrokerAddCustomerLeadResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_BrokerLeadCanFillWizard_InputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerLeadCanFillWizard" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerLeadCanFillWizard_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerLeadCanFillWizardResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_CaisGenerate_InputMessage">
     <wsdl:part name="parameters" element="tns:CaisGenerate" />
   </wsdl:message>
@@ -641,6 +647,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerAddCustomerLead" message="tns:IEzService_BrokerAddCustomerLead_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerAddCustomerLeadResponse" message="tns:IEzService_BrokerAddCustomerLead_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="BrokerLeadCanFillWizard">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerLeadCanFillWizard" message="tns:IEzService_BrokerLeadCanFillWizard_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerLeadCanFillWizardResponse" message="tns:IEzService_BrokerLeadCanFillWizard_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="CaisGenerate">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CaisGenerate" message="tns:IEzService_CaisGenerate_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CaisGenerateResponse" message="tns:IEzService_CaisGenerate_OutputMessage" />
@@ -1066,6 +1076,15 @@
     </wsdl:operation>
     <wsdl:operation name="BrokerAddCustomerLead">
       <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerAddCustomerLead" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BrokerLeadCanFillWizard">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerLeadCanFillWizard" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

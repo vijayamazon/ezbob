@@ -81,6 +81,9 @@
 		[OperationContract]
 		ActionMetaData BrokerAddCustomerLead(string sLeadFirstName, string sLeadLastName, string sLeadEmail, string sLeadAddMode, string sContactEmail);
 
+		[OperationContract]
+		BrokerLeadDetailsActionResult BrokerLeadCanFillWizard(int nLeadID, string sLeadEmail, string sContactEmail);
+
 		#endregion Broker
 
 		#region CAIS

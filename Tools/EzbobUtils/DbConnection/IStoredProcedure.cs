@@ -15,5 +15,6 @@
 		void ForEachResult<T>(Func<T, ActionResult> oAction) where T: IResultRow, new();
 		List<T> Fill<T>() where T: ITraversable, new();
 		T FillFirst<T>() where T: ITraversable, new();
+		void FillFirst<T>(T oInstance) where T : ITraversable;
 	} // interface IStoredProcedure
 } // namespace Ezbob.Database

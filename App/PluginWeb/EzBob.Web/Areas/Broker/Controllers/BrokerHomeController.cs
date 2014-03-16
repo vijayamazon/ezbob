@@ -576,33 +576,35 @@
 			m_oLog.Debug("Broker fill wizard request for contact email {0} and lead id {1} lead email {2}.", sContactEmail, nLeadID, sLeadEmail);
 
 			var oIsAuthResult = IsAuth<BrokerForJsonResult>("Send invitation", sContactEmail);
-			if (oIsAuthResult != null) {
+			if (oIsAuthResult != null)
 				return RedirectToAction("Index", "BrokerHome", new { Area = "Broker", sErrorOnStart = oIsAuthResult.error });
+
+			if ((nLeadID > 0) && !string.IsNullOrWhiteSpace(sLeadEmail)) {
+				m_oLog.Warn("Both lead id ({0}) and lead email ({1}) specified while there can be only one.", nLeadID, sLeadEmail);
+				return RedirectToAction("Index", "BrokerHome", new {Area = "Broker", sErrorOnStart = "Could not process fill all the details request."});
 			} // if
 
-			int nValidatedLeadID = 0;
-			string sCustomerEmail = string.Empty;
+			BrokerLeadDetailsActionResult bld = null;
 
 			try {
-				nValidatedLeadID = nLeadID;
-				sCustomerEmail = "alexbo+039@ezbob.com";
-				// TODO: sCustomerEmail, nValidatedLeadID = m_oServiceClient.Instance.BrokerLeadCanFillWizard(nLeadID, sLeadEmail, sContactEmail);
+				bld = m_oServiceClient.Instance.BrokerLeadCanFillWizard(nLeadID, sLeadEmail, sContactEmail);
 			}
 			catch (Exception e) {
 				m_oLog.Alert(e, "Failed to process fill wizard request for contact email {0} and lead id {1} lead email {2}.", sContactEmail, nLeadID, sLeadEmail);
 				return RedirectToAction("Index", "BrokerHome", new { Area = "Broker", sErrorOnStart = "Could not process fill all the details request." });
 			} // try
 
-			if (nValidatedLeadID < 1) {
-				m_oLog.Warn("Validated lead id is {0}. Source lead id is {1} lead email {2}.", nValidatedLeadID, nLeadID, sLeadEmail);
+			if (bld.LeadID < 1) {
+				m_oLog.Warn("Validated lead id is {0}. Source lead id is {1} lead email {2}.", bld.LeadID, nLeadID, sLeadEmail);
 				return RedirectToAction("Index", "BrokerHome", new { Area = "Broker", sErrorOnStart = "Could not process fill all the details request." });
 			} // if
 
 			m_oHelper.Logoff(User.Identity.Name);
-			if (!string.IsNullOrWhiteSpace(sCustomerEmail))
-				FormsAuthentication.SetAuthCookie(sCustomerEmail, false);
+			if (bld.CustomerID > 0)
+				FormsAuthentication.SetAuthCookie(bld.LeadEmail, false);
 
-			Session[Constant.BrokerLeadID] = nValidatedLeadID;
+			Session[Constant.BrokerLeadID] = bld.LeadID;
+			Session[Constant.BrokerLeadEmail] = bld.LeadEmail;
 			Session[Constant.BrokerFillsForCustomer] = Constant.Yes;
 
 			m_oLog.Debug("Broker send invitation request for contact email {0} and lead id {1} lead email {2} complete.", sContactEmail, nLeadID, sLeadEmail);

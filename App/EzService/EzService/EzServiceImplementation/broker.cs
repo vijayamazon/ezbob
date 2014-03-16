@@ -187,5 +187,29 @@
 		} // BrokerAddCustomerLead
 
 		#endregion method BrokerAddCustomerLead
+
+		#region method BrokerLeadCanFillWizard
+
+		public BrokerLeadDetailsActionResult BrokerLeadCanFillWizard(int nLeadID, string sLeadEmail, string sContactEmail) {
+			BrokerLeadCanFillWizard oInstance;
+
+			ActionMetaData oResult = ExecuteSync(
+				out oInstance,
+				null,
+				null,
+				nLeadID,
+				sLeadEmail,
+				sContactEmail
+			);
+
+			return new BrokerLeadDetailsActionResult {
+				LeadID = oInstance.LeadID,
+				CustomerID = oInstance.CustomerID,
+				LeadEmail = oInstance.LeadEmail,
+				MetaData = oResult,
+			};
+		} // BrokerLeadCanFillWizard
+
+		#endregion method BrokerLeadCanFillWizard
 	} // class EzServiceImplementation
 } // namespace EzService

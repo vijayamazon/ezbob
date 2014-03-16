@@ -1,0 +1,19 @@
+﻿namespace EzService {
+	using System.Runtime.Serialization;
+
+	#region class BrokerLeadDetailsActionResult
+
+	[DataContract]
+	public class BrokerLeadDetailsActionResult : ActionResult {
+		[DataMember]
+		public int LeadID { get; set; }
+
+		[DataMember]
+		public string LeadEmail { get; set; }
+
+		[DataMember]
+		public int CustomerID { get; set; }
+	} // class BrokerLeadDetailsActionResult
+
+	#endregion class BrokerLeadDetailsActionResult
+} // namespace EzService

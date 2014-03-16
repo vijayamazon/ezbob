@@ -148,6 +148,18 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="BrokerCustomerFileContentsActionResult" nillable="true" type="tns:BrokerCustomerFileContentsActionResult" />
+  <xs:complexType name="BrokerLeadDetailsActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ActionResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="CustomerID" type="xs:int" />
+          <xs:element minOccurs="0" name="LeadEmail" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="LeadID" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="BrokerLeadDetailsActionResult" nillable="true" type="tns:BrokerLeadDetailsActionResult" />
   <xs:complexType name="CrmLookupsActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">

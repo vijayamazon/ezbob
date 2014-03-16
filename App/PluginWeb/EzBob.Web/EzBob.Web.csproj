@@ -1392,8 +1392,8 @@
     <Content Include="Content\js\Wizard\shops\ezbob.shops.companyFiles.coffee" />
     <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.BasicInterestRate.coffee" />
     <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.LoanOfferMultiplier.coffee" />
-    <Content Include="Service References\EzServiceReference\configuration91.svcinfo" />
-    <Content Include="Service References\EzServiceReference\configuration.svcinfo" />
+    <None Include="Service References\EzServiceReference\configuration91.svcinfo" />
+    <None Include="Service References\EzServiceReference\configuration.svcinfo" />
     <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.ActionMetaData.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
@@ -1433,10 +1433,13 @@
     <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.WizardConfigsActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
-    <Content Include="Service References\EzServiceReference\Reference.svcmap">
+    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.BrokerLeadDetailsActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <None Include="Service References\EzServiceReference\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
-    </Content>
+    </None>
     <Content Include="Views\Shared\_Copyright.cshtml">
       <SubType>Code</SubType>
     </Content>
@@ -1714,7 +1717,7 @@
     <None Include="Service References\EzServiceReference\FraudChecker.xsd">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="Service References\EzServiceReference\service.wsdl" />
+    <None Include="Service References\EzServiceReference\service.wsdl" />
     <None Include="Service References\EzServiceReference\service.xsd">
       <SubType>Designer</SubType>
     </None>

@@ -170,6 +170,22 @@
 			return oResult;
 		} // FillFirst
 
+		public virtual void FillFirst<T>(T oInstatnce, string sQuery, params QueryParameter[] aryParams) where T: ITraversable {
+			FillFirst<T>(oInstatnce, sQuery, CommandSpecies.Auto, aryParams);
+		} // FillFirst
+
+		public virtual void FillFirst<T>(T oInstance, string sQuery, CommandSpecies nSpecies, params QueryParameter[] aryParams) where T : ITraversable {
+			ForEachRowSafe(
+				(sr, bRowsetStart) => {
+					sr.Fill(oInstance);
+					return ActionResult.SkipAll;
+				},
+				sQuery,
+				nSpecies,
+				aryParams
+			);
+		} // FillFirst
+
 		#endregion method FillFirst
 
 		#region method CreateVectorParameter
