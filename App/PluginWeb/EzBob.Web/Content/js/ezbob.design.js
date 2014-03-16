@@ -1222,6 +1222,29 @@ EzBob.validateYourInfoEditForm = function (el) {
     });
 };
 
+EzBob.validateAddDirectorForm = function (el) {
+    var e = el || $(".addDirectorInfoForm");
+
+    return e.validate({
+        rules: {
+            DirectorName: EzBob.Validation.NameValidationObject,
+            DirectorLastName: {required : true},
+            DirectorGender: { required: true},
+            DirectorDateOfBirth: { requiredDate: true, yearLimit: 18 },
+            DirectorEmail: { required: true, email: true },
+            DirectorPhone: { required: true, regex: "^0[0-9]{10}$" },
+        },
+        messages: {
+            DateOfBirth: { yearLimit: "The number of full year should be more then 18 year" },
+            DirectorPhone: { regex: "Please enter a valid UK number" },
+        },
+        errorPlacement: EzBob.Validation.errorPlacement,
+        unhighlight: EzBob.Validation.unhighlightFS,
+        highlight: EzBob.Validation.highlightFS
+    });
+};
+
+
 EzBob.validateRollover = function (el) {
     var e = el || $("#validateRollover");
 

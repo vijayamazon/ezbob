@@ -315,10 +315,14 @@ class EzBob.Profile.AddDirectorInfoView extends Backbone.Marionette.ItemView
 
     region:
         directorAddress : '.director_address'
-    
+    ui:
+        form: ".addDirectorInfoForm"
+        addButton: ".addDirector"
+
     events:
         "click .directorBack": "directorBack"
         "click .addDirector": "directorAdd"
+        
         'change   input': 'inputChanged'
         'click    input': 'inputChanged'
         'focusout input': 'inputChanged'
@@ -339,10 +343,12 @@ class EzBob.Profile.AddDirectorInfoView extends Backbone.Marionette.ItemView
         @$el.find('.alphaOnly').alphaOnly()
         @$el.find('.phonenumber').numericOnly(11)
         @$el.find('.addressCaption').hide()
-        that = @
-        addressElem = 'Address'
         
-        oAddressContainer = that.$el.find('#' + addressElem)
+        @validator = EzBob.validateAddDirectorForm(@ui.form)
+        
+        that = @
+        
+        oAddressContainer = that.$el.find('#DirectorAddress')
         name = 'DirectorAddress'
         addressView = new EzBob.AddressView({
             model: that.model.get('DirectorAddress')
@@ -370,4 +376,6 @@ class EzBob.Profile.AddDirectorInfoView extends Backbone.Marionette.ItemView
         
 
     inputChanged: ->
-        
+        enabled = @validator.checkForm() 
+        console.log('changed', enabled)
+        @ui.addButton.toggleClass('disabled', !enabled)

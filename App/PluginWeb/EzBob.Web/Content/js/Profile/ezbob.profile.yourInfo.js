@@ -453,6 +453,11 @@
       directorAddress: '.director_address'
     };
 
+    AddDirectorInfoView.prototype.ui = {
+      form: ".addDirectorInfoForm",
+      addButton: ".addDirector"
+    };
+
     AddDirectorInfoView.prototype.events = {
       "click .directorBack": "directorBack",
       "click .addDirector": "directorAdd",
@@ -471,15 +476,15 @@
     };
 
     AddDirectorInfoView.prototype.onRender = function() {
-      var addressElem, addressView, name, oAddressContainer, oFieldStatusIcons, that;
+      var addressView, name, oAddressContainer, oFieldStatusIcons, that;
       EzBob.UiAction.registerView(this);
       this.$el.find('.ezDateTime').splittedDateTime();
       this.$el.find('.alphaOnly').alphaOnly();
       this.$el.find('.phonenumber').numericOnly(11);
       this.$el.find('.addressCaption').hide();
+      this.validator = EzBob.validateAddDirectorForm(this.ui.form);
       that = this;
-      addressElem = 'Address';
-      oAddressContainer = that.$el.find('#' + addressElem);
+      oAddressContainer = that.$el.find('#DirectorAddress');
       name = 'DirectorAddress';
       addressView = new EzBob.AddressView({
         model: that.model.get('DirectorAddress'),
@@ -508,7 +513,12 @@
 
     AddDirectorInfoView.prototype.directorAdd = function() {};
 
-    AddDirectorInfoView.prototype.inputChanged = function() {};
+    AddDirectorInfoView.prototype.inputChanged = function() {
+      var enabled;
+      enabled = this.validator.checkForm();
+      console.log('changed', enabled);
+      return this.ui.addButton.toggleClass('disabled', !enabled);
+    };
 
     return AddDirectorInfoView;
 

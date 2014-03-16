@@ -260,7 +260,16 @@
 		} // Save
 
 		#endregion method Save
-
+		#region method AddDirector
+		[Ajax]
+		[HttpPost]
+		[ValidateJsonAntiForgeryToken]
+		public JsonResult AddDirector(DirectorModel director, List<DirectorAddressModel>[] directorAddress)
+		{
+			
+			return Json(new {success = true});
+		}
+		#endregion method AddDirector
 		#region method Edit
 
 		[Ajax]
