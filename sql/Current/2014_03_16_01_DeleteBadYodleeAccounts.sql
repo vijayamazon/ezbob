@@ -1,0 +1,3 @@
+DELETE FROM YodleeAccounts WHERE CustomerId IS NULL AND Id NOT IN (SELECT TOP 5 Id FROM YodleeAccounts WHERE CustomerId IS NULL ORDER BY Id DESC)
+GO
+

@@ -67,6 +67,11 @@
 					log.InfoFormat("Allocated yodlee account: {0} to customer:{1}", res.Id, customer.Id);
 					AccountRepository.SaveOrUpdate(res);
 				}
+				else
+				{
+					log.InfoFormat("Failed to allocate yodlee account: {0} to customer:{1}. The account will be deleted from our DB", res.Id, customer.Id);
+					AccountRepository.Delete(res);
+				}
 			}
 			return res;
 		}

@@ -287,7 +287,7 @@ T6C7Spa3i/ltRwpQYWeYRRvJGkNUa12VLyTMdYRAAAAAvBLTqmDnMOt2M1IbVhi98uhE0pS2YC+WwInF
 		<property name="ApplicationToken" value="1ece74e1ca9e4befbb1b64daba7c4a24" />
 		<property name="AddAccountURL" value="https://lawint.yodlee.com/apps/private-ezbob/addAccounts.pfmlaw.action" />
 		<property name="EditAccountURL" value="https://lawint.yodlee.com/apps/private-ezbob/editSiteCredentials.pfmlaw.action" />
-		<property name="AccountPoolSize" value="10" />
+		<property name="AccountPoolSize" value="30" />
     </module>
 
     <module id="YodleeTrunk">
@@ -302,7 +302,7 @@ T6C7Spa3i/ltRwpQYWeYRRvJGkNUa12VLyTMdYRAAAAAvBLTqmDnMOt2M1IbVhi98uhE0pS2YC+WwInF
 		<property name="ApplicationToken" value="1ece74e1ca9e4befbb1b64daba7c4a24" />
 		<property name="AddAccountURL" value="https://lawint.yodlee.com/apps/private-ezbob/addAccounts.pfmlaw.action" />
 		<property name="EditAccountURL" value="https://lawint.yodlee.com/apps/private-ezbob/editSiteCredentials.pfmlaw.action" />
-		<property name="AccountPoolSize" value="10" />
+		<property name="AccountPoolSize" value="30" />
     </module>
 
 	<module id="YodleeUAT">
@@ -318,7 +318,7 @@ T6C7Spa3i/ltRwpQYWeYRRvJGkNUa12VLyTMdYRAAAAAvBLTqmDnMOt2M1IbVhi98uhE0pS2YC+WwInF
 		<property name="ApplicationToken" value="1ece74e1ca9e4befbb1b64daba7c4a24" />
 		<property name="AddAccountURL" value="https://lawint.yodlee.com/apps/private-ezbob/addAccounts.pfmlaw.action" />
 		<property name="EditAccountURL" value="https://lawint.yodlee.com/apps/private-ezbob/editSiteCredentials.pfmlaw.action" />
-		<property name="AccountPoolSize" value="10" />
+		<property name="AccountPoolSize" value="30" />
     </module>
 	
     <module id="YodleeProduction">
@@ -334,7 +334,7 @@ T6C7Spa3i/ltRwpQYWeYRRvJGkNUa12VLyTMdYRAAAAAvBLTqmDnMOt2M1IbVhi98uhE0pS2YC+WwInF
 		<property name="ApplicationToken" value="1ece74e1ca9e4befbb1b64daba7c4a24" />
 		<property name="AddAccountURL" value="https://lawint.yodlee.com/apps/ezbob/addAccounts.pfmlaw.action" />
 		<property name="EditAccountURL" value="https://lawint.yodlee.com/apps/ezbob/editSiteCredentials.pfmlaw.action" />
-		<property name="AccountPoolSize" value="10" />
+		<property name="AccountPoolSize" value="30" />
     </module>
     <module id="PacNet">
         <property name="SERVICE_TYPE" value="Testing" />
