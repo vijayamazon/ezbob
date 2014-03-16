@@ -62,8 +62,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Lib\3rdparty\CaptchaMVC\CaptchaMVC.dll</HintPath>
     </Reference>
-    <Reference Include="ClickTaleIntegrationModule">
-      <HintPath>..\..\..\Lib\ClickTale\ClickTaleIntegrationModule.dll</HintPath>
+    <Reference Include="ClickTaleIntegrationModule, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\3rdparty\ClickTale\ClickTaleIntegrationModule.dll</HintPath>
     </Reference>
     <Reference Include="DBCommon, Version=6.2.60.0, Culture=neutral, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
