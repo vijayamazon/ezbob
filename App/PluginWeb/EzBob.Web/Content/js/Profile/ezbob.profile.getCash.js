@@ -184,7 +184,6 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 		data.offerStart = this.customer.get('OfferStart');
 		data.creditResult = this.customer.get('CreditResult');
 
-	    debugger;
 		this.$el.html(this.templates[state](data));
 
 		this.$el.find('button').popover({ placement: 'top' });
