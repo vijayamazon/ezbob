@@ -36,9 +36,11 @@
 				bool autoApproveIsSilent = configSafeReader["AutoApproveIsSilent"];
 				string autoApproveSilentTemplateName = configSafeReader["AutoApproveSilentTemplateName"];
 				string autoApproveSilentToAddress = configSafeReader["AutoApproveSilentToAddress"];
+				decimal minLoanAmount = configSafeReader["MinLoanAmount"];
 				if (enableAutomaticApproval)
 				{
 					response.AutoApproveAmount = strategyHelper.AutoApproveCheck(customerId, offeredCreditLine, minExperianScore);
+					response.AutoApproveAmount = (int)(Math.Round(response.AutoApproveAmount / minLoanAmount, 0, MidpointRounding.AwayFromZero) * minLoanAmount);
 
 					if (response.AutoApproveAmount != 0)
 					{

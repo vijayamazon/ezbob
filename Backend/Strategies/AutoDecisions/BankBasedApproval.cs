@@ -74,6 +74,7 @@
 		private int numOfMonthsToLookForDefaults;
 		private int unsettledDefaultCount;
 		private DateTime startTimeForVatCheck;
+		private decimal minLoanAmount;
 
 		public BankBasedApproval(int customerId, AConnection db, ASafeLog log)
 		{
@@ -219,18 +220,35 @@
 				}
 
 				CapOffer();
+				
+				// Round loan offer
+				int roundedLoanOffer = (int) (Math.Round(loanOffer/minLoanAmount, 0, MidpointRounding.AwayFromZero)*minLoanAmount);
+				response.BankBasedAutoApproveAmount = roundedLoanOffer;
 
-				if (isSilent)
+				DataTable dt = db.ExecuteReader("GetAvailableFunds", CommandSpecies.StoredProcedure);
+				var sr = new SafeReader(dt.Rows[0]);
+				decimal availableFunds = sr["AvailableFunds"];
+				if (availableFunds >= response.BankBasedAutoApproveAmount)
 				{
-					NotifyAutoApproveSilentMode();
+					if (isSilent)
+					{
+						NotifyAutoApproveSilentMode();
 
-					response.CreditResult = "WaitingForDecision";
-					response.UserStatus = "Manual";
-					response.SystemDecision = "Manual";
+						response.CreditResult = "WaitingForDecision";
+						response.UserStatus = "Manual";
+						response.SystemDecision = "Manual";
+					}
+					else
+					{
+						SetApproval(response);
+					}
 				}
 				else
 				{
-					SetApproval(response);
+					log.Info("Not enough available funds for bank based approval. Available:{0} required:{1}. Will use manual decision", availableFunds, response.BankBasedAutoApproveAmount);
+					response.CreditResult = "WaitingForDecision";
+					response.UserStatus = "Manual";
+					response.SystemDecision = "Manual";
 				}
 
 				return true;
@@ -263,7 +281,6 @@
 			response.IsAutoBankBasedApproval = true;
 			response.AppValidFor = DateTime.UtcNow.AddHours(offerValidForHours);
 			response.RepaymentPeriod = loanTerm;
-			response.BankBasedAutoApproveAmount = (int)loanOffer;
 		}
 
 		private void CapOffer()
@@ -320,6 +337,7 @@
 			numOfMonthsToLookForDefaults = sr["BankBasedApprovalNumOfMonthsToLookForDefaults"];
 			int numOfMonthBackForVatCheck = sr["BankBasedApprovalNumOfMonthBackForVatCheck"];
 			startTimeForVatCheck = DateTime.UtcNow.AddMonths(-1 * numOfMonthBackForVatCheck);
+			minLoanAmount = sr["MinLoanAmount"];
 		}
 
 		private bool CheckConditionsForApproval()

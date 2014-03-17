@@ -73,6 +73,12 @@
 		#region method GetOffer
 
 		public QuickOfferModel GetOffer(bool bSaveOfferToDB, AConnection oDB, StrategyLog oLog) {
+
+			DataTable dt = oDB.ExecuteReader("GetBankBasedApprovalConfigs", CommandSpecies.StoredProcedure);
+			DataRow results = dt.Rows[0];
+			var sr = new SafeReader(results);
+			minLoanAmount = sr["MinLoanAmount"];
+
 			decimal? nOffer = Calculate();
 
 			if (!nOffer.HasValue)
@@ -172,6 +178,7 @@
 		private decimal IssuedAmount;
 		private decimal OpenCashRequests;
 		private string ErrorMsg;
+		private int minLoanAmount;
 
 		private string FatalMsg;
 
@@ -205,8 +212,7 @@
 
 			Log.Debug("Calculated offer (total current assets * percent) is {0}", nCalculatedOffer.ToString("C2", ci));
 
-			nCalculatedOffer = nCalculatedOffer.DropHundred();
-
+			nCalculatedOffer = (int)(Math.Round(nCalculatedOffer / minLoanAmount, 0, MidpointRounding.AwayFromZero) * minLoanAmount);
 			Log.Debug("Rounded offer is {0}", nCalculatedOffer.ToString("C2", ci));
 
 			if (nCalculatedOffer < Cfg.MinOfferAmount) {

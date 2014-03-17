@@ -78,7 +78,7 @@
 					Medal = medal,
 					ScorePoints = scoreSum * 100,
 					ScoreResult = score,
-					MaxOffer = (int)Math.Round((int)((int)medal * annualTurnover * GetLoanOfferMultiplier(experianScore) / 100) / 100d, 0) * 100,
+					MaxOffer = (int)Math.Round((int)((int)medal * annualTurnover * GetLoanOfferMultiplier(experianScore) / 100) / 100d, 0, MidpointRounding.AwayFromZero) * 100,
 					MaxOfferPercent = GetBasicInterestRate(experianScore),
 					AcDescriptors = "Experian score;Marketplace seniority;Marital status;Positive feedback count;Other;Annual turnover;Number of stores;EZBOB seniority;EZBOB number of loans;EZBOB previous late payments;EZBOB previous early payments",
 					AcParameters = BuildParameters(dict),
