@@ -418,6 +418,7 @@
     <Compile Include="Infrastructure\RenderAgreementHandlerConfig.cs" />
     <Compile Include="Infrastructure\RestfullErrorHandlingAttribute.cs" />
     <Compile Include="Infrastructure\TransactionHelper.cs" />
+    <Compile Include="Infrastructure\WizardBrokerLeadModel.cs" />
     <Compile Include="Infrastructure\XFrameOptionsModule.cs" />
     <Compile Include="Models\AllowedEmail.cs" />
     <Compile Include="Models\CompanyScoreModel.cs" />
@@ -1402,6 +1403,9 @@
     <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.BrokerCustomersActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
+    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.BrokerLeadDetailsActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
     <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.CrmLookupsActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
@@ -1421,9 +1425,6 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
     <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.WizardConfigsActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Content>
-    <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.BrokerLeadDetailsActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
     <None Include="Service References\EzServiceReference\Reference.svcmap">

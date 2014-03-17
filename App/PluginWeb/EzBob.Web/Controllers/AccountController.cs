@@ -13,6 +13,7 @@ namespace EzBob.Web.Controllers {
 	using DbConstants;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Broker;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Repository;
 	using ExperianLib.Ebusiness;
@@ -446,7 +447,12 @@ namespace EzBob.Web.Controllers {
 					Created = DateTime.UtcNow,
 				}};
 
-				m_oServiceClient.Instance.GreetingMailStrategy(user.Id, link);
+				var blm = new WizardBrokerLeadModel(Session);
+
+				if (blm.IsSet)
+					m_oServiceClient.Instance.BrokerLeadAcquireCustomer(customer.Id, blm.LeadID);
+				else
+					m_oServiceClient.Instance.GreetingMailStrategy(user.Id, link);
 			} // if user created successfully
 
 			if (status == MembershipCreateStatus.DuplicateEmail)

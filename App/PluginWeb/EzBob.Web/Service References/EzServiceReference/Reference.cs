@@ -418,6 +418,12 @@ namespace EzBob.Web.EzServiceReference {
         private int CustomerIDField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string FirstNameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string LastNameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string LeadEmailField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -432,6 +438,32 @@ namespace EzBob.Web.EzServiceReference {
                 if ((this.CustomerIDField.Equals(value) != true)) {
                     this.CustomerIDField = value;
                     this.RaisePropertyChanged("CustomerID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string FirstName {
+            get {
+                return this.FirstNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.FirstNameField, value) != true)) {
+                    this.FirstNameField = value;
+                    this.RaisePropertyChanged("FirstName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string LastName {
+            get {
+                return this.LastNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.LastNameField, value) != true)) {
+                    this.LastNameField = value;
+                    this.RaisePropertyChanged("LastName");
                 }
             }
         }
@@ -792,6 +824,15 @@ namespace EzBob.Web.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLeadCanFillWizard", ReplyAction="http://tempuri.org/IEzService/BrokerLeadCanFillWizardResponse")]
         EzBob.Web.EzServiceReference.BrokerLeadDetailsActionResult BrokerLeadCanFillWizard(int nLeadID, string sLeadEmail, string sContactEmail);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLeadAcquireCustomer", ReplyAction="http://tempuri.org/IEzService/BrokerLeadAcquireCustomerResponse")]
+        EzBob.Web.EzServiceReference.ActionMetaData BrokerLeadAcquireCustomer(int nCustomerID, int nLeadID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerCustomerWizardComplete", ReplyAction="http://tempuri.org/IEzService/BrokerCustomerWizardCompleteResponse")]
+        EzBob.Web.EzServiceReference.ActionMetaData BrokerCustomerWizardComplete(int nCustomerID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerBackFromCustomerWizard", ReplyAction="http://tempuri.org/IEzService/BrokerBackFromCustomerWizardResponse")]
+        EzBob.Web.EzServiceReference.StringActionResult BrokerBackFromCustomerWizard(int nLeadID);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CaisGenerate", ReplyAction="http://tempuri.org/IEzService/CaisGenerateResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData CaisGenerate(int underwriterId);
         
@@ -1058,6 +1099,18 @@ namespace EzBob.Web.EzServiceReference {
         
         public EzBob.Web.EzServiceReference.BrokerLeadDetailsActionResult BrokerLeadCanFillWizard(int nLeadID, string sLeadEmail, string sContactEmail) {
             return base.Channel.BrokerLeadCanFillWizard(nLeadID, sLeadEmail, sContactEmail);
+        }
+        
+        public EzBob.Web.EzServiceReference.ActionMetaData BrokerLeadAcquireCustomer(int nCustomerID, int nLeadID) {
+            return base.Channel.BrokerLeadAcquireCustomer(nCustomerID, nLeadID);
+        }
+        
+        public EzBob.Web.EzServiceReference.ActionMetaData BrokerCustomerWizardComplete(int nCustomerID) {
+            return base.Channel.BrokerCustomerWizardComplete(nCustomerID);
+        }
+        
+        public EzBob.Web.EzServiceReference.StringActionResult BrokerBackFromCustomerWizard(int nLeadID) {
+            return base.Channel.BrokerBackFromCustomerWizard(nLeadID);
         }
         
         public EzBob.Web.EzServiceReference.ActionMetaData CaisGenerate(int underwriterId) {

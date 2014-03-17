@@ -4,6 +4,12 @@
 @using StructureMap
 @model dynamic
 
+@{
+	var bml = new WizardBrokerLeadModel(Session);
+	var sInitialFirstName = bml.IsSet ? bml.FirstName : string.Empty;
+	var sInitialLastName = bml.IsSet ? bml.LastName : string.Empty;
+}
+
 <script id="personinfo-template" type="text/template">
     <div class="row-fluid">
         <h2 class="form_start">Personal information</h2>
@@ -15,7 +21,7 @@
 					<div class="controls">
 						<label class="attardi-input">
 							<span>First name</span>
-							<input class="form_field" type="text" id="FirstName" name="FirstName" ui-event-control-id="personal-info:first_name" />
+							<input class="form_field" type="text" id="FirstName" name="FirstName" value="@sInitialFirstName" ui-event-control-id="personal-info:first_name" />
 							<img id="FirstNameImage" class="field_status required" />
 						</label>
 					</div>
@@ -35,7 +41,7 @@
 					<div class="controls">
 						<label class="attardi-input">
 							<span>Surname</span>
-							<input id="Surname" type="text" name="Surname" class="form_field" ui-event-control-id="personal-info:last_name" />
+							<input id="Surname" type="text" name="Surname" class="form_field" value="@sInitialLastName" ui-event-control-id="personal-info:last_name" />
 							<img id="SurnameImage" class="field_status required" />
 						</label>
 					</div>

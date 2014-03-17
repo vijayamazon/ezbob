@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="86023764-479b-43c6-b260-e55b2ebabbec" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="3e5920e4-1698-4c8c-9bb6-9b87bddd25a7" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
     <EnableDataBinding>true</EnableDataBinding>
@@ -21,19 +21,19 @@
     <MetadataSource Address="net.tcp://localhost:7081/mex" Protocol="mex" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="b71387a7-626c-4ebf-b7cc-081c0ca66f20" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
-    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="48624845-7ebb-4b0f-9648-d03017ea9220" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
-    <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="fa56f4ed-8bd8-4230-8004-887638d2a35c" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
-    <MetadataFile FileName="EzService.xsd" MetadataType="Schema" ID="e653bee1-01b6-4405-a00b-d8eb55d15def" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
-    <MetadataFile FileName="Arrays.xsd" MetadataType="Schema" ID="41a6425d-73e6-4c45-a716-f9715e03c43f" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
-    <MetadataFile FileName="EzBob.Models.Agreements.xsd" MetadataType="Schema" ID="a31120cb-f46f-4825-b641-63fc066cc17e" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
-    <MetadataFile FileName="EzBob.Web.Areas.Customer.Models.xsd" MetadataType="Schema" ID="3614dfdd-88a2-4471-b8c0-01112bf76f88" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
-    <MetadataFile FileName="Ezbob.Backend.Models.xsd" MetadataType="Schema" ID="8dc6c22a-0eae-4b7e-a6d8-bfce88b38b34" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
-    <MetadataFile FileName="EzBob.Backend.Strategies.xsd" MetadataType="Schema" ID="f11247f0-5347-46c5-a98b-3e13f6dd4304" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
-    <MetadataFile FileName="FraudChecker.xsd" MetadataType="Schema" ID="4d986c7e-2bb1-4662-8c35-1ce88b1b5b44" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
-    <MetadataFile FileName="EzService.ActionResults.xsd" MetadataType="Schema" ID="3c5bba2d-6b7e-400f-a9a6-809e3e887ac6" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
-    <MetadataFile FileName="EzBob.Web.Areas.Underwriter.Models.xsd" MetadataType="Schema" ID="67d40e44-aaa9-4949-a0c4-861009af28bd" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
-    <MetadataFile FileName="EzBob.Backend.Models1.xsd" MetadataType="Schema" ID="e80bd9b7-4f6b-4530-aee5-2bae055fb85b" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
+    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="68da468f-0b74-4394-8f3a-a5daa4324bca" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
+    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="9e08a626-4861-4fbc-83f0-826d11ef2173" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
+    <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="59da0f6d-802f-4ab0-9cdb-1f3d8cacba6c" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
+    <MetadataFile FileName="EzService.xsd" MetadataType="Schema" ID="95148708-4273-41af-91ef-0939c15f6b0f" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
+    <MetadataFile FileName="Arrays.xsd" MetadataType="Schema" ID="7eaed000-4033-4a07-99b8-fe7dbb43937d" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
+    <MetadataFile FileName="EzBob.Models.Agreements.xsd" MetadataType="Schema" ID="bb393637-1e48-40dc-afb8-2be7db479055" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
+    <MetadataFile FileName="EzBob.Web.Areas.Customer.Models.xsd" MetadataType="Schema" ID="1c78604e-2619-4b75-bde1-f072e88bc1f2" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
+    <MetadataFile FileName="Ezbob.Backend.Models.xsd" MetadataType="Schema" ID="e9785b0a-9ea8-4e93-a99c-24ff1e7ec56e" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
+    <MetadataFile FileName="EzBob.Backend.Strategies.xsd" MetadataType="Schema" ID="a8d5afb5-1978-49fb-b94c-6650e03daf39" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
+    <MetadataFile FileName="FraudChecker.xsd" MetadataType="Schema" ID="2075c7e4-26dd-4567-88c9-19b24174a2b8" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
+    <MetadataFile FileName="EzService.ActionResults.xsd" MetadataType="Schema" ID="65eaebd7-296c-47d2-8f9f-ab20287f58ad" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
+    <MetadataFile FileName="EzBob.Web.Areas.Underwriter.Models.xsd" MetadataType="Schema" ID="164203a0-726a-4900-ad7f-eb080f7bdfcb" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
+    <MetadataFile FileName="EzBob.Backend.Models1.xsd" MetadataType="Schema" ID="3c9f0993-d62c-40e2-acfa-126e0932d71b" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

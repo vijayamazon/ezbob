@@ -42,9 +42,7 @@
 
 		public virtual T ExecuteScalar<T>() {
 			return DB.ExecuteScalar<T>(GetName(), Species, PrepareParameters());
-		}
-
-		// ExecuteScalar
+		} // ExecuteScalar
 
 		#endregion method ExecuteScalar
 
@@ -52,9 +50,7 @@
 
 		public virtual DataTable ExecuteReader() {
 			return DB.ExecuteReader(GetName(), Species, PrepareParameters());
-		}
-
-		// ExecuteReader
+		} // ExecuteReader
 
 		#endregion method ExecuteReader
 
@@ -62,9 +58,7 @@
 
 		public virtual int ExecuteNonQuery() {
 			return DB.ExecuteNonQuery(GetName(), Species, PrepareParameters());
-		}
-
-		// ExecuteNonQuery
+		} // ExecuteNonQuery
 
 		#endregion method ExecuteNonQuery
 
@@ -72,9 +66,7 @@
 
 		public virtual void ForEachRow(Func<DbDataReader, bool, ActionResult> oAction) {
 			DB.ForEachRow(oAction, GetName(), Species, PrepareParameters());
-		}
-
-		// ForEachRow
+		} // ForEachRow
 
 		#endregion method ForEachRow
 
@@ -82,9 +74,7 @@
 
 		public virtual void ForEachRowSafe(Func<SafeReader, bool, ActionResult> oAction) {
 			DB.ForEachRowSafe(oAction, GetName(), Species, PrepareParameters());
-		}
-
-		// ForEachRowSafe
+		} // ForEachRowSafe
 
 		#endregion method ForEachRowSafe
 
@@ -166,6 +156,7 @@
 			if (oDB == null)
 				throw new ArgumentNullException("oDB", "Database connection not specified.");
 
+			m_aryArgs = null;
 			DB = oDB;
 			Log = new SafeLog(oLog);
 			Species = nSpecies;
@@ -220,48 +211,52 @@
 		#region method PrepareParameters
 
 		protected virtual QueryParameter[] PrepareParameters() {
-			var args = new List<QueryParameter>();
+			if (m_aryArgs == null) {
+				var args = new List<QueryParameter>();
 
-			this.Traverse((oInstance, oPropertyInfo) => {
-				object[] oNameAttrList = oPropertyInfo.GetCustomAttributes(typeof(FieldNameAttribute), false);
+				this.Traverse((oInstance, oPropertyInfo) => {
+					object[] oNameAttrList = oPropertyInfo.GetCustomAttributes(typeof (FieldNameAttribute), false);
 
-				string sFieldName = (oNameAttrList.Length > 0) ? ((FieldNameAttribute)oNameAttrList[0]).Name : oPropertyInfo.Name;
+					string sFieldName = (oNameAttrList.Length > 0) ? ((FieldNameAttribute)oNameAttrList[0]).Name : oPropertyInfo.Name;
 
-				object[] oDirAttrList = oPropertyInfo.GetCustomAttributes(typeof(DirectionAttribute), false);
+					object[] oDirAttrList = oPropertyInfo.GetCustomAttributes(typeof (DirectionAttribute), false);
 
-				ParameterDirection nDirection = (oDirAttrList.Length > 0) ? ((DirectionAttribute)oDirAttrList[0]).Direction : ParameterDirection.Input;
+					ParameterDirection nDirection = (oDirAttrList.Length > 0) ? ((DirectionAttribute)oDirAttrList[0]).Direction : ParameterDirection.Input;
 
-				QueryParameter qp = null;
+					QueryParameter qp = null;
 
-				bool bIsSimpleType =
-					(oPropertyInfo.PropertyType == typeof(string)) ||
-					(null == oPropertyInfo.PropertyType.GetInterface(typeof (IEnumerable).ToString()));
+					bool bIsSimpleType =
+						(oPropertyInfo.PropertyType == typeof (string)) ||
+						(null == oPropertyInfo.PropertyType.GetInterface(typeof (IEnumerable).ToString()));
 
-				if (bIsSimpleType) {
-					qp = new QueryParameter(sFieldName, oPropertyInfo.GetValue(oInstance, null)) {
-						Direction = nDirection,
-					};
-				}
-				else {
-					if (null == oPropertyInfo.PropertyType.GetInterface(typeof (ITraversable).ToString()))
-						throw new NotImplementedException("Type " + oPropertyInfo.PropertyType + " does not implement " + typeof (ITraversable));
+					if (bIsSimpleType) {
+						qp = new QueryParameter(sFieldName, oPropertyInfo.GetValue(oInstance, null)) {
+							Direction = nDirection,
+						};
+					}
+					else {
+						if (null == oPropertyInfo.PropertyType.GetInterface(typeof (ITraversable).ToString()))
+							throw new NotImplementedException("Type " + oPropertyInfo.PropertyType + " does not implement " + typeof (ITraversable));
 
-					if (null == oPropertyInfo.PropertyType.GetInterface(typeof (IParametrisable).ToString()))
-						throw new NotImplementedException("Type " + oPropertyInfo.PropertyType + " does not implement " + typeof (IParametrisable));
+						if (null == oPropertyInfo.PropertyType.GetInterface(typeof (IParametrisable).ToString()))
+							throw new NotImplementedException("Type " + oPropertyInfo.PropertyType + " does not implement " + typeof (IParametrisable));
 
-					qp = DB.CreateTableParameter(
-						oPropertyInfo.PropertyType,
-						sFieldName,
-						(IEnumerable)oPropertyInfo.GetValue(oInstance, null),
-						o => ((IParametrisable)o).ToParameter(),
-						nDirection
-					);
-				} // if
+						qp = DB.CreateTableParameter(
+							oPropertyInfo.PropertyType,
+							sFieldName,
+							(IEnumerable)oPropertyInfo.GetValue(oInstance, null),
+							o => ((IParametrisable)o).ToParameter(),
+							nDirection
+							);
+					} // if
 
-				args.Add(qp);
-			});
+					args.Add(qp);
+				});
 
-			return args.ToArray();
+				m_aryArgs = args.ToArray();
+			} // if
+
+			return m_aryArgs;
 		} // PrepareParameters
 
 		#endregion method PrepareParameters
@@ -279,6 +274,12 @@
 		#endregion method GetName
 
 		#endregion protected
+
+		#region private
+
+		private QueryParameter[] m_aryArgs;
+
+		#endregion private
 	} // class AStoredProcedure
 
 	#endregion class AStoredProcedure

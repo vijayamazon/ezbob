@@ -84,6 +84,15 @@
 		[OperationContract]
 		BrokerLeadDetailsActionResult BrokerLeadCanFillWizard(int nLeadID, string sLeadEmail, string sContactEmail);
 
+		[OperationContract]
+		ActionMetaData BrokerLeadAcquireCustomer(int nCustomerID, int nLeadID);
+
+		[OperationContract]
+		ActionMetaData BrokerCustomerWizardComplete(int nCustomerID);
+
+		[OperationContract]
+		StringActionResult BrokerBackFromCustomerWizard(int nLeadID);
+
 		#endregion Broker
 
 		#region CAIS

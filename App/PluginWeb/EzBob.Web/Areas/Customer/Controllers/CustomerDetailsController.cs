@@ -1,5 +1,4 @@
-﻿namespace EzBob.Web.Areas.Customer.Controllers
-{
+﻿namespace EzBob.Web.Areas.Customer.Controllers {
 	using System;
 	using System.Collections.Generic;
 	using System.Collections.ObjectModel;
@@ -7,6 +6,7 @@
 	using System.Globalization;
 	using System.Linq;
 	using System.Web.Mvc;
+	using System.Web.Security;
 	using DbConstants;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
@@ -50,16 +50,47 @@
 
 		#endregion constructor
 
+		#region method Dashboard
+
+		[HttpGet]
+		public System.Web.Mvc.ActionResult Dashboard() {
+			var blm = new WizardBrokerLeadModel(Session);
+
+			int nLeadID = blm.LeadID;
+			blm.Unset();
+
+			if (blm.IsSet) {
+				StringActionResult sar = null;
+
+				try {
+					sar = m_oServiceClient.Instance.BrokerBackFromCustomerWizard(nLeadID);
+				}
+				catch (Exception e) {
+					ms_oLog.Warn("Failed to retrieve broker details, falling back to customer's dashboard.", e);
+				} // try
+
+				if (sar != null) {
+					FormsAuthentication.SignOut();
+					FormsAuthentication.SetAuthCookie(sar.Value, true);
+				} // if
+
+				return RedirectToAction("Index", "BrokerHome", new {Area = "Broker"});
+			} // if
+
+			return RedirectToAction("Index", "Profile", new {Area = "Customer"});
+		} // Dashboard
+
+		#endregion method ToProfile
+
 		#region method LinkAccountsComplete
 
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
-		public JsonNetResult LinkAccountsComplete()
-		{
+		public JsonResult LinkAccountsComplete() {
 			WizardComplete();
-			return this.JsonNet(new { });
+			return Json(new { });
 		} // LinkAccountsComplete
 
 		#endregion method LinkAccountsComplete
@@ -70,8 +101,7 @@
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
-		public JsonNetResult TakeQuickOffer()
-		{
+		public JsonResult TakeQuickOffer() {
 			var customer = _context.Customer;
 
 			Session["WizardComplete"] = false;
@@ -93,7 +123,7 @@
 
 			ms_oLog.DebugFormat("Customer {1} ({0}): consent agreement saved.", customer.Id, customer.PersonalInfo.Fullname);
 
-			return this.JsonNet(new { });
+			return Json(new { });
 		} // TakeQuickOffer
 
 		#endregion method TakeQuickOffer
@@ -104,8 +134,7 @@
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
-		public JsonNetResult WizardComplete()
-		{
+		public JsonResult WizardComplete() {
 			Session["WizardComplete"] = true;
 			TempData["WizardComplete"] = true;
 			var customer = _context.Customer;
@@ -117,11 +146,17 @@
 			_session.Flush();
 
 			ms_oLog.DebugFormat("Customer {1} ({0}): wizard step has been updated to {2}", customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.AllStep);
+
 			_crBuilder.CreateCashRequest(customer);
 
 			ms_oLog.DebugFormat("Customer {1} ({0}): cash request created.", customer.Id, customer.PersonalInfo.Fullname);
 
-			m_oServiceClient.Instance.EmailUnderReview(_context.User.Id);
+			var blm = new WizardBrokerLeadModel(Session);
+
+			if (blm.IsSet)
+				m_oServiceClient.Instance.BrokerCustomerWizardComplete(customer.Id);
+			else
+				m_oServiceClient.Instance.EmailUnderReview(_context.User.Id);
 
 			ms_oLog.DebugFormat("Customer {1} ({0}): email under review started.", customer.Id, customer.PersonalInfo.Fullname);
 
@@ -137,7 +172,7 @@
 			_concentAgreementHelper.Save(customer, DateTime.UtcNow);
 			ms_oLog.DebugFormat("Customer {1} ({0}): consent agreement saved.", customer.Id, customer.PersonalInfo.Fullname);
 
-			return this.JsonNet(new { });
+			return Json(new { });
 		} // WizardComplete
 
 		#endregion method WizardComplete
@@ -147,7 +182,7 @@
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
-		public JsonNetResult SaveCompany(
+		public JsonResult SaveCompany(
 			LimitedInfo limitedInfo,
 			NonLimitedInfo nonLimitedInfo,
 			CompanyAdditionalInfo companyAdditionalInfo,
@@ -157,18 +192,17 @@
 			List<DirectorModel> nonLimitedDirectors,
 			CompanyEmployeeCountInfo companyEmployeeCountInfo,
 			CompanyInfo experianInfo
-		)
-		{
+		) {
 			var customer = _context.Customer;
 
 			TypeOfBusiness nBusinessType;
 			IndustryType eIndustryType;
 
 			if (!Enum.TryParse(companyAdditionalInfo.TypeOfBusiness, true, out nBusinessType))
-				return this.JsonNet(new { error = "Failed to parse business type: " + companyAdditionalInfo.TypeOfBusiness });
+				return Json(new { error = "Failed to parse business type: " + companyAdditionalInfo.TypeOfBusiness });
 
 			if (!Enum.TryParse(companyAdditionalInfo.IndustryType, true, out eIndustryType))
-				return this.JsonNet(new { error = "Failed to parse industry type: " + companyAdditionalInfo.IndustryType });
+				return Json(new { error = "Failed to parse industry type: " + companyAdditionalInfo.IndustryType });
 
 			ProcessCompanyInfoTemporary(
 				nBusinessType,
@@ -201,7 +235,7 @@
 				_session.Refresh(customer);
 			} // if
 
-			return this.JsonNet(new { });
+			return Json(new { });
 		}
 
 		#endregion method SaveCompany
@@ -212,7 +246,7 @@
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
-		public JsonNetResult Save(
+		public JsonResult Save(
 			PersonalInfo personalInfo,
 			List<CustomerAddress> personalAddress,
 			List<CustomerAddress> prevPersonAddresses,
@@ -256,10 +290,11 @@
 			_session.Flush();
 			ms_oLog.DebugFormat("Customer {1} ({0}): wizard step has been updated to {2}", customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.PersonalDetails);
 
-			return this.JsonNet(new { });
+			return Json(new { });
 		} // Save
 
 		#endregion method Save
+
 		#region method AddDirector
 		[Ajax]
 		[HttpPost]
@@ -303,13 +338,14 @@
 			return Json(new {success = true});
 		}
 		#endregion method AddDirector
+
 		#region method Edit
 
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonNetResult Edit(
+		public JsonResult Edit(
 			string dayTimePhone,
 			string mobilePhone,
 			string businessPhone,
@@ -320,8 +356,7 @@
 			List<CustomerAddress> nonLimitedCompanyAddress,
 			List<DirectorAddressModel>[] directorAddress,
 			List<CustomerAddress> otherPropertyAddress
-		)
-		{
+		) {
 			var customer = _context.Customer;
 
 			var oldPersonalInfo = PersonalInfoEditHistoryParametersBuilder(customer);
@@ -340,8 +375,7 @@
 				CustomerAddressType.PersonalAddress
 			);
 
-			if (otherPropertyAddress != null)
-			{
+			if (otherPropertyAddress != null) {
 				MakeAddress(
 					otherPropertyAddress,
 					addressInfo.OtherPropertyAddress,
@@ -353,9 +387,8 @@
 
 			var company = customer.Company;
 			if (company != null)
-			{
 				company.BusinessPhone = businessPhone;
-			}
+
 			/* TODO currently only business phone update available for company/directors
 			if (customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited) {
 				//customer.LimitedInfo.LimitedBusinessPhone = businessPhone;
@@ -415,7 +448,7 @@
 
 			SaveEditHistory(oldPersonalInfo, newPersonalInfo);
 
-			return this.JsonNet(new { });
+			return Json(new { });
 		} // Edit
 
 		#endregion method Edit

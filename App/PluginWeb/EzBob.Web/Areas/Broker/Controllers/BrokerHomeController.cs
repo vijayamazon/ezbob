@@ -40,7 +40,7 @@
 		#region action Index (default)
 
 		// GET: /Broker/BrokerHome/
-		public System.Web.Mvc.ActionResult Index(string sErrorOnStart = null) {
+		public System.Web.Mvc.ViewResult Index(string sErrorOnStart = null) {
 			ViewData[Constant.Config] = m_oConfig;
 			ViewData[Constant.Auth] = string.Empty;
 
@@ -603,11 +603,17 @@
 			if (bld.CustomerID > 0)
 				FormsAuthentication.SetAuthCookie(bld.LeadEmail, false);
 
-			Session[Constant.BrokerLeadID] = bld.LeadID;
-			Session[Constant.BrokerLeadEmail] = bld.LeadEmail;
-			Session[Constant.BrokerFillsForCustomer] = Constant.Yes;
+			// This constructor sets Session data.
+			new WizardBrokerLeadModel(
+				Session,
+				bld.LeadID,
+				bld.LeadEmail, 
+				bld.FirstName,
+				bld.LastName,
+				true
+			);
 
-			m_oLog.Debug("Broker send invitation request for contact email {0} and lead id {1} lead email {2} complete.", sContactEmail, nLeadID, sLeadEmail);
+			m_oLog.Debug("Broker fill wizard request for contact email {0} and lead id {1} lead email {2} complete.", sContactEmail, nLeadID, sLeadEmail);
 
 			return RedirectToAction("Index", "Wizard", new { Area = "Customer" });
 		} // FillWizard

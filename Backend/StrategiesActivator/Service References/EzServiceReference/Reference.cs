@@ -418,6 +418,12 @@ namespace StrategiesActivator.EzServiceReference {
         private int CustomerIDField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string FirstNameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string LastNameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string LeadEmailField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -432,6 +438,32 @@ namespace StrategiesActivator.EzServiceReference {
                 if ((this.CustomerIDField.Equals(value) != true)) {
                     this.CustomerIDField = value;
                     this.RaisePropertyChanged("CustomerID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string FirstName {
+            get {
+                return this.FirstNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.FirstNameField, value) != true)) {
+                    this.FirstNameField = value;
+                    this.RaisePropertyChanged("FirstName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string LastName {
+            get {
+                return this.LastNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.LastNameField, value) != true)) {
+                    this.LastNameField = value;
+                    this.RaisePropertyChanged("LastName");
                 }
             }
         }
@@ -3134,6 +3166,24 @@ namespace StrategiesActivator.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLeadCanFillWizard", ReplyAction="http://tempuri.org/IEzService/BrokerLeadCanFillWizardResponse")]
         System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BrokerLeadDetailsActionResult> BrokerLeadCanFillWizardAsync(int nLeadID, string sLeadEmail, string sContactEmail);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLeadAcquireCustomer", ReplyAction="http://tempuri.org/IEzService/BrokerLeadAcquireCustomerResponse")]
+        StrategiesActivator.EzServiceReference.ActionMetaData BrokerLeadAcquireCustomer(int nCustomerID, int nLeadID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLeadAcquireCustomer", ReplyAction="http://tempuri.org/IEzService/BrokerLeadAcquireCustomerResponse")]
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> BrokerLeadAcquireCustomerAsync(int nCustomerID, int nLeadID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerCustomerWizardComplete", ReplyAction="http://tempuri.org/IEzService/BrokerCustomerWizardCompleteResponse")]
+        StrategiesActivator.EzServiceReference.ActionMetaData BrokerCustomerWizardComplete(int nCustomerID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerCustomerWizardComplete", ReplyAction="http://tempuri.org/IEzService/BrokerCustomerWizardCompleteResponse")]
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> BrokerCustomerWizardCompleteAsync(int nCustomerID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerBackFromCustomerWizard", ReplyAction="http://tempuri.org/IEzService/BrokerBackFromCustomerWizardResponse")]
+        StrategiesActivator.EzServiceReference.StringActionResult BrokerBackFromCustomerWizard(int nLeadID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerBackFromCustomerWizard", ReplyAction="http://tempuri.org/IEzService/BrokerBackFromCustomerWizardResponse")]
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.StringActionResult> BrokerBackFromCustomerWizardAsync(int nLeadID);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CaisGenerate", ReplyAction="http://tempuri.org/IEzService/CaisGenerateResponse")]
         StrategiesActivator.EzServiceReference.ActionMetaData CaisGenerate(int underwriterId);
         
@@ -3640,6 +3690,30 @@ namespace StrategiesActivator.EzServiceReference {
         
         public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BrokerLeadDetailsActionResult> BrokerLeadCanFillWizardAsync(int nLeadID, string sLeadEmail, string sContactEmail) {
             return base.Channel.BrokerLeadCanFillWizardAsync(nLeadID, sLeadEmail, sContactEmail);
+        }
+        
+        public StrategiesActivator.EzServiceReference.ActionMetaData BrokerLeadAcquireCustomer(int nCustomerID, int nLeadID) {
+            return base.Channel.BrokerLeadAcquireCustomer(nCustomerID, nLeadID);
+        }
+        
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> BrokerLeadAcquireCustomerAsync(int nCustomerID, int nLeadID) {
+            return base.Channel.BrokerLeadAcquireCustomerAsync(nCustomerID, nLeadID);
+        }
+        
+        public StrategiesActivator.EzServiceReference.ActionMetaData BrokerCustomerWizardComplete(int nCustomerID) {
+            return base.Channel.BrokerCustomerWizardComplete(nCustomerID);
+        }
+        
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> BrokerCustomerWizardCompleteAsync(int nCustomerID) {
+            return base.Channel.BrokerCustomerWizardCompleteAsync(nCustomerID);
+        }
+        
+        public StrategiesActivator.EzServiceReference.StringActionResult BrokerBackFromCustomerWizard(int nLeadID) {
+            return base.Channel.BrokerBackFromCustomerWizard(nLeadID);
+        }
+        
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.StringActionResult> BrokerBackFromCustomerWizardAsync(int nLeadID) {
+            return base.Channel.BrokerBackFromCustomerWizardAsync(nLeadID);
         }
         
         public StrategiesActivator.EzServiceReference.ActionMetaData CaisGenerate(int underwriterId) {

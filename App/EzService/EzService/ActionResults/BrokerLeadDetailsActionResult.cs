@@ -13,6 +13,12 @@
 
 		[DataMember]
 		public int CustomerID { get; set; }
+
+		[DataMember]
+		public string FirstName { get; set; }
+
+		[DataMember]
+		public string LastName { get; set; }
 	} // class BrokerLeadDetailsActionResult
 
 	#endregion class BrokerLeadDetailsActionResult

@@ -125,6 +125,7 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 
     render: function () {
         this.constructor.__super__.render.call(this);
+
         var oAddressContainer = this.$el.find('#PersonalAddress');
         this.personalAddressView = new EzBob.AddressView({
             model: this.model.get('PersonalAddress'),
@@ -169,6 +170,8 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
             mobileObj.val(predefinedPhone).change().attardi_labels('toggle');
             EzBob.Validation.element(this.validator, $(mobileObj));
         }
+
+	    this.$el.find('#FirstName, #Surname').change().attardi_labels('toggle');
 
         this.readyToProceed = true;
         return this;

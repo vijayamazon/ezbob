@@ -13,6 +13,8 @@ BEGIN
 	DECLARE @CustomerID INT
 	DECLARE @OutLeadID INT
 	DECLARE @OutLeadEmail NVARCHAR(255)
+	DECLARE @OutFirstName NVARCHAR(250)
+	DECLARE @OutLastName NVARCHAR(250)
 
 	IF @ErrMsg = ''
 	BEGIN
@@ -34,7 +36,9 @@ BEGIN
 	BEGIN
 		SELECT
 			@OutLeadEmail = Email,
-			@OutLeadID = BrokerLeadID
+			@OutLeadID = BrokerLeadID,
+			@OutFirstName = FirstName,
+			@OutLastName = LastName
 		FROM
 			BrokerLeads
 		WHERE
@@ -58,7 +62,9 @@ BEGIN
 			SELECT
 				@OutLeadID AS LeadID,
 				@OutLeadEmail AS LeadEmail,
-				@CustomerID AS CustomerID
+				@CustomerID AS CustomerID,
+				@OutFirstName AS FirstName,
+				@OutLastName AS LastName
 	END
 END
 GO

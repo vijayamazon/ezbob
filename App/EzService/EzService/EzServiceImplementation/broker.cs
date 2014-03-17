@@ -206,10 +206,43 @@
 				LeadID = oInstance.LeadID,
 				CustomerID = oInstance.CustomerID,
 				LeadEmail = oInstance.LeadEmail,
+				FirstName = oInstance.FirstName,
+				LastName = oInstance.LastName,
 				MetaData = oResult,
 			};
 		} // BrokerLeadCanFillWizard
 
 		#endregion method BrokerLeadCanFillWizard
+
+		#region method BrokerLeadAcquireCustomer
+
+		public ActionMetaData BrokerLeadAcquireCustomer(int nCustomerID, int nLeadID) {
+			return ExecuteSync<BrokerLeadAcquireCustomer>(nCustomerID, null, nCustomerID, nLeadID);
+		} // BrokerLeadAcquireCustomer
+
+		#endregion method BrokerLeadAcquireCustomer
+
+		#region method BrokerCustomerWizardComplete
+
+		public ActionMetaData BrokerCustomerWizardComplete(int nCustomerID) {
+			return ExecuteSync<BrokerCustomerWizardComplete>(nCustomerID, null, nCustomerID);
+		} // BrokerCustomerWizardComplete
+
+		#endregion method BrokerCustomerWizardComplete
+
+		#region method BrokerBackFromCustomerWizard
+
+		public StringActionResult BrokerBackFromCustomerWizard(int nLeadID) {
+			BrokerBackFromCustomerWizard oInstance;
+
+			ActionMetaData oResult = ExecuteSync(out oInstance, null, null, nLeadID);
+
+			return new StringActionResult {
+				Value = oInstance.ContactEmail,
+				MetaData = oResult,
+			};
+		} // BrokerBackFromCustomerWizard
+
+		#endregion method BrokerBackFromCustomerWizard
 	} // class EzServiceImplementation
 } // namespace EzService

@@ -21,6 +21,10 @@ BEGIN
 	FROM
 		BrokerLeads bl
 		INNER JOIN BrokerLeadAddModes m ON bl.BrokerLeadAddModeID = m.BrokerLeadAddModeID
+	WHERE
+		bl.DateDeleted IS NULL
+		AND
+		bl.BrokerLeadDeletedReasonID IS NULL
 	ORDER BY
 		bl.BrokerLeadID
 END

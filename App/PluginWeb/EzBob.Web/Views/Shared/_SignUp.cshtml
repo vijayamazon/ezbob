@@ -8,6 +8,8 @@
 	string captchamode = config.CaptchaMode;
 	bool ebayPixelEnabled = config.EbayPixelEnabled;
 	bool instructionsEnabled = config.WizardInstructionsEnabled;
+	var bml = new WizardBrokerLeadModel(Session);
+	var sInitialEmail = bml.IsSet ? bml.LeadEmail : string.Empty;
 }
 
 @using (Html.BeginForm("SignUp", "Account", new { Area = "" }, FormMethod.Post, new { @class = "signup clearfix" })) {
@@ -20,7 +22,7 @@
 	<div class="form_field_container">
 		<label class="attardi-input">
 			<span>Email address</span>
-			<input type="email" name="Email" id="Email" tabindex="1" class="form_field" ui-event-control-id="signup:email" />
+			<input type="email" name="Email" id="Email" tabindex="1" class="form_field" value="@sInitialEmail" ui-event-control-id="signup:email" />
 			<img id="EmailImage" class="field_status required" />
 		</label>
 	</div>

@@ -81,13 +81,17 @@
     <Compile Include="AutoDecisions\Rejection.cs" />
     <Compile Include="AutoDecisions\ReApproval.cs" />
     <Compile Include="AutoDecisions\ReRejection.cs" />
+    <Compile Include="Broker\BrokerBackFromCustomerWizard.cs" />
+    <Compile Include="Broker\BrokerCustomerWizardComplete.cs" />
     <Compile Include="Broker\BrokerDeleteCustomerFiles.cs" />
+    <Compile Include="Broker\BrokerDeleteCustomerLead.cs" />
     <Compile Include="Broker\BrokerIsBroker.cs" />
     <Compile Include="Broker\BrokerLoadCustomerDetails.cs" />
     <Compile Include="Broker\BrokerLoadCustomerFiles.cs" />
     <Compile Include="Broker\BrokerSaveCrmEntry.cs" />
     <Compile Include="Broker\BrokerAddCustomerLead.cs" />
     <Compile Include="Broker\BrokerLeadCanFillWizard.cs" />
+    <Compile Include="Broker\BrokerLeadAcquireCustomer.cs" />
     <Compile Include="CompanyFiles.cs" />
     <Compile Include="Broker\BrokerDownloadCustomerFile.cs" />
     <Compile Include="Broker\BrokerSaveUploadedCustomerFile.cs" />
