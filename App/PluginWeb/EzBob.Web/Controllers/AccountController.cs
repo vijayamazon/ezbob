@@ -362,6 +362,7 @@ namespace EzBob.Web.Controllers {
 			bool switchedToCaptcha
 		) {
 			MembershipCreateStatus status;
+			InitSession();
 
 			if (string.IsNullOrEmpty(email))
 				throw new Exception(DbStrings.NotValidEmailAddress);
