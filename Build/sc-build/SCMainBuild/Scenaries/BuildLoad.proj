@@ -24,7 +24,6 @@
 		<EnvId>LoadTest</EnvId>
 		<MainConnectionString>Data Source=vm-loadtest;Initial Catalog=LoadTest;Persist Security Info=True;User ID=sa;Password=sa;Asynchronous Processing=true;MultipleActiveResultSets=True</MainConnectionString>
 		<LoadStatisticsConnection>Data Source=vm-loadtest;Initial Catalog=LoadStatistics;Persist Security Info=True;User ID=sa;Password=sa</LoadStatisticsConnection>
-		<DBCommonFile>DBSQLServer.dll</DBCommonFile>
 		<DbPrefix>mssql</DbPrefix>
 		<Culture>en-US</Culture>
 		<TempStatesPath>d:\loadtests\deploy\TempResults\Db</TempStatesPath>

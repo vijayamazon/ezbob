@@ -20,9 +20,6 @@
 		<!-- ===DataBase=== -->
 		<MainConnectionString>Data Source=qadb\test;Initial Catalog=sssmain;Persist Security Info=True;User ID=SSSServer;Password=sss;Asynchronous Processing=true;MultipleActiveResultSets=True</MainConnectionString>
 		<WarehouseConnectionString>Data Source=ORA10.SCORTO.LOCAL;User Id=warehouse;Password=warehouse;</WarehouseConnectionString>
-		<DBCommonFile>DBSQLServer.dll</DBCommonFile><!--Note: Alt: DBSQLServer.dll, DBOracle.dll, DBDB2.dll-->
-		<DBCommonFileOracle>DBOracle.dll</DBCommonFileOracle>
-		<DBCommonFileMsSql>DBSQLServer.dll</DBCommonFileMsSql>
 		<SkipRecreateDB Condition=" '$(SkipRecreateDB)'=='' ">true</SkipRecreateDB><!--'false' mean ReCreate, other skip-->
 		<CreateDbMsSqlCommand>DropCreateLoad.bat qadb\test sa sa sssmain</CreateDbMsSqlCommand>
 		

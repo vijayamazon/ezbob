@@ -26,7 +26,6 @@
 			<WebBaseUrl>http://rd1:8005</WebBaseUrl>
 			<MainConnectionString>Data Source=vm-mssql;Initial Catalog=sssmain;Persist Security Info=True;User ID=sa;Password=sa;Asynchronous Processing=true;MultipleActiveResultSets=True</MainConnectionString>
 			<WarehouseConnectionString></WarehouseConnectionString>
-			<DBCommonFile>DBSQLServer.dll</DBCommonFile>
 			<DbPrefix>mssql</DbPrefix>
 			<ClickOnceUrl>file://rd1/ClickOnceTrunkMssql</ClickOnceUrl>
 			<TempStatesPath>c:\build\db\mssql</TempStatesPath>
@@ -47,7 +46,6 @@
 			<WebBaseUrl>http://rd1:8009</WebBaseUrl>
 			<MainConnectionString>Data Source=ORA10.SCORTO.LOCAL;User Id=sssmain;Password=sssmain;</MainConnectionString>
 			<WarehouseConnectionString></WarehouseConnectionString>
-			<DBCommonFile>DBOracle.dll</DBCommonFile>
 			<DbPrefix>ora</DbPrefix>
 			<ClickOnceUrl>file://rd1/ClickOnceTrunkOra</ClickOnceUrl>
 			<TempStatesPath>c:\build\db\ora</TempStatesPath>
@@ -83,7 +81,6 @@
 			<WebBaseUrl>http://rd1:9000</WebBaseUrl>
 			<MainConnectionString>Data Source=vm-mssql;Initial Catalog=scstable;Persist Security Info=True;User ID=sa;Password=sa;Asynchronous Processing=true;MultipleActiveResultSets=True</MainConnectionString>
 			<WarehouseConnectionString></WarehouseConnectionString>
-			<DBCommonFile>DBSQLServer.dll</DBCommonFile>
 			<DbPrefix>mssql</DbPrefix>
 			<ClickOnceUrl>file://rd1/ClickOnceStableMssql</ClickOnceUrl>
 			<TempStatesPath>c:\build\db\stable</TempStatesPath>

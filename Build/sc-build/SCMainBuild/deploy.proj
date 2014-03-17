@@ -143,11 +143,7 @@
 						<culture>$(Culture)</culture>
 						<connectionString>$(MainConnectionString)</connectionString>
 						<connectionStringWarehouse>$(WarehouseConnectionString)</connectionStringWarehouse>
-						<libraryPath>$(ServerBaseFolder)\libs\$(DBCommonFile)</libraryPath>
 						<securityDefaultLibPath>$(ServerBaseFolder)\libs\</securityDefaultLibPath>
-						<oracleDBlibraryPath>$(ServerBaseFolder)\libs\DBOracle.dll</oracleDBlibraryPath>
-						<msSqlDBlibraryPath>$(ServerBaseFolder)\libs\DBSQLServer.dll</msSqlDBlibraryPath>
-						<db2DBlibraryPath>$(ServerBaseFolder)\libs\DBDB2.dll</db2DBlibraryPath>
 						<tempDBPath>$(TempStatesPath)</tempDBPath>
 						<tempReportsPath>$(ServerBaseFolder)\TempResults\Reports</tempReportsPath>
 						<HibernateId>NHibernateConfig_$(DbPrefix)</HibernateId>
