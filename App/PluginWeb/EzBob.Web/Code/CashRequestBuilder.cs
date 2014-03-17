@@ -20,7 +20,7 @@
 			IConfigurationVariablesRepository configurationVariables,
 			ILoanSourceRepository loanSources,
 			IDecisionHistoryRepository historyRepository,
-			IExperianDataCacheRepository experianData
+			ExperianDataCacheRepository experianData
 		) {
 			m_oServiceClient = new ServiceClient();
 			_loanTypes = loanTypes;
