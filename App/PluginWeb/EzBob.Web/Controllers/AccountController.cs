@@ -433,13 +433,12 @@ namespace EzBob.Web.Controllers {
 					Response.Cookies.Add(cookie);
 					customer.ABTesting = ezbobab.Value;
 				} // if
-
-				var link = _confirmation.GenerateLink(customer);
-
+				
 				if (Request.Cookies["istest"] != null)
 					customer.IsTest = true;
 
 				_customers.Save(customer);
+				var link = _confirmation.GenerateLink(customer);
 
 				customer.CustomerRequestedLoan = new List<CustomerRequestedLoan> { new CustomerRequestedLoan {
 					Customer = customer,
