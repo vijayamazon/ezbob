@@ -14,10 +14,10 @@
 	using Aspose.Cells;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
-	using EzBob.Web.Areas.Underwriter.Models.Reports;
-	using EzBob.Web.Infrastructure;
-	using EzBob.Web.Infrastructure.Filters;
-	using EzBob.Web.Models;
+	using Areas.Underwriter.Models.Reports;
+	using Infrastructure;
+	using Infrastructure.Filters;
+	using Models;
 	using Scorto.Web;
 	using SquishIt.Less;
 	using SquishIt.MsIeCoffeeScript;
@@ -25,7 +25,6 @@
 	using StructureMap;
 	using NHibernate;
 	using Scorto.Configuration;
-	using Scorto.DBCommon;
 	using Scorto.NHibernate;
 	using Scorto.RegistryScanner;
 	using log4net;
@@ -92,12 +91,6 @@
 				{
 					var configuration = ConfigurationRoot.GetConfiguration();
 					XmlConfigurator.Configure(configuration.XmlElementLog);
-
-					DbLibConfiguration dbLibConfiguration = configuration.DbLib;
-					string libFileName = dbLibConfiguration.LibraryPath;
-					string lconnectionString = dbLibConfiguration.ConnectionString;
-
-					DbCommon.Init(libFileName, lconnectionString);
 
 					if (configuration.NHProfEnabled)
 					{
