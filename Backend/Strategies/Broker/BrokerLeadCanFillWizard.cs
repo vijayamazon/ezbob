@@ -61,22 +61,18 @@
 		#region method Execute
 
 		public override void Execute() {
-			if (string.IsNullOrWhiteSpace(m_sContactEmail))
-				return;
-
-			if ((m_nRequestedLeadID > 0) && !string.IsNullOrWhiteSpace(m_sRequestedLeadEmail))
-				return;
-
 			var sp = new SpBrokerLeadCanFillWizard(DB, Log) {
 				LeadID = m_nRequestedLeadID,
 				LeadEmail = m_sRequestedLeadEmail,
 				ContactEmail = m_sContactEmail,
 			};
 
-			sp.ForEachResult(row => {
-				m_oResultRow = (SpBrokerLeadCanFillWizard.ResultRow)row;
-				return ActionResult.SkipAll;
-			});
+			if (sp.HasValidParameters()) {
+				sp.ForEachResult(row => {
+					m_oResultRow = (SpBrokerLeadCanFillWizard.ResultRow)row;
+					return ActionResult.SkipAll;
+				});
+			} // if
 		} // Execute
 
 		#endregion method Execute
@@ -98,6 +94,20 @@
 			public SpBrokerLeadCanFillWizard(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor
 
 			#endregion constructor
+
+			#region method HasValidParameters
+
+			public override bool HasValidParameters() {
+				if (string.IsNullOrWhiteSpace(ContactEmail))
+					return false;
+
+				if ((LeadID > 0) && !string.IsNullOrWhiteSpace(LeadEmail))
+					return false;
+
+				return true;
+			} // HasValidParameters
+
+			#endregion method HasValidParameters
 
 			#region property LeadID
 

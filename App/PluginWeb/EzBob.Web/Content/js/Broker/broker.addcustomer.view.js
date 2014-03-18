@@ -75,7 +75,7 @@ EzBob.Broker.AddCustomerView = EzBob.Broker.SubmitView.extend({
 					location.assign(
 						'' + window.gRootPath + 'Broker/BrokerHome/FillWizard' +
 						'?sLeadEmail=' + encodeURIComponent(sEmail) +
-						'&sContactEmail=' + encodeURIComponent(this.router.getAuth())
+						'&sContactEmail=' + encodeURIComponent(self.router.getAuth())
 					);
 				}
 				else {

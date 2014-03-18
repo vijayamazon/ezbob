@@ -572,7 +572,9 @@
 		#region action FillWizard
 
 		[HttpGet]
-		public System.Web.Mvc.ActionResult FillWizard(int nLeadID, string sLeadEmail, string sContactEmail) {
+		public System.Web.Mvc.ActionResult FillWizard(int? nLeadID, string sLeadEmail, string sContactEmail) {
+			nLeadID = nLeadID ?? 0;
+
 			m_oLog.Debug("Broker fill wizard request for contact email {0} and lead id {1} lead email {2}.", sContactEmail, nLeadID, sLeadEmail);
 
 			var oIsAuthResult = IsAuth<BrokerForJsonResult>("Send invitation", sContactEmail);
@@ -587,7 +589,7 @@
 			BrokerLeadDetailsActionResult bld = null;
 
 			try {
-				bld = m_oServiceClient.Instance.BrokerLeadCanFillWizard(nLeadID, sLeadEmail, sContactEmail);
+				bld = m_oServiceClient.Instance.BrokerLeadCanFillWizard(nLeadID.Value, sLeadEmail, sContactEmail);
 			}
 			catch (Exception e) {
 				m_oLog.Alert(e, "Failed to process fill wizard request for contact email {0} and lead id {1} lead email {2}.", sContactEmail, nLeadID, sLeadEmail);

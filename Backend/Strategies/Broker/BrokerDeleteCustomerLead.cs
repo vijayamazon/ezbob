@@ -17,6 +17,14 @@
 
 		#endregion constructor
 
+		#region method HasValidParameters
+
+		public override bool HasValidParameters() {
+			return (CustomerID > 0) && !string.IsNullOrWhiteSpace(ReasonCode);
+		} // HasValidParameters
+
+		#endregion method HasValidParameters
+
 		#region property CustomerID
 
 		public int CustomerID { get; set; }

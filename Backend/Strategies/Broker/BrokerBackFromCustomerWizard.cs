@@ -36,7 +36,8 @@
 		#region method Execute
 
 		public override void Execute() {
-			m_oResultRow = m_oSp.FillFirst<BrokerLeadLoadBroker.ResultRow>();
+			if (m_oSp.HasValidParameters())
+				m_oResultRow = m_oSp.FillFirst<BrokerLeadLoadBroker.ResultRow>();
 		} // Execute
 
 		#endregion method Execute
@@ -52,6 +53,10 @@
 
 		private class BrokerLeadLoadBroker : AStoredProcedure {
 			public BrokerLeadLoadBroker(AConnection oDB, ASafeLog oLog = null) : base(oDB, oLog) {} // constructor
+
+			public override bool HasValidParameters() {
+				return LeadID > 0;
+			} // HasValidParameters
 
 			public int LeadID { get; set; } // LeadID
 

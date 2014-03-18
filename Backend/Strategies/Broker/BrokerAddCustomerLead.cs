@@ -10,11 +10,15 @@
 		#region constructor
 
 		public BrokerAddCustomerLead(string sLeadFirstName, string sLeadLastName, string sLeadEmail, string sLeadAddMode, string sContactEmail, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
-			m_sLeadFirstName = sLeadFirstName;
-			m_sLeadLastName = sLeadLastName;
-			m_sLeadEmail = sLeadEmail;
-			m_sLeadAddMode = sLeadAddMode;
-			m_sContactEmail = (sContactEmail ?? string.Empty).Trim();
+			m_oSp = new SpBrokerAddCustomerLead(DB, Log) {
+				LeadFirstName = sLeadFirstName,
+				LeadLastName = sLeadLastName,
+				LeadEmail = sLeadEmail,
+				LeadAddMode = sLeadAddMode,
+				ContactEmail = (sContactEmail ?? string.Empty).Trim(),
+			};
+
+			m_oResultRow = null;
 		} // constructor
 
 		#endregion constructor
@@ -30,42 +34,19 @@
 		#region method Execute
 
 		public override void Execute() {
-			if (
-				string.IsNullOrWhiteSpace(m_sLeadFirstName) ||
-				string.IsNullOrWhiteSpace(m_sLeadLastName) ||
-				string.IsNullOrWhiteSpace(m_sLeadEmail) ||
-				string.IsNullOrWhiteSpace(m_sLeadAddMode) ||
-				string.IsNullOrWhiteSpace(m_sContactEmail)
-			) {
+			if (!m_oSp.HasValidParameters())
 				return;
-			} // if
 
-			string sErrorMsg = null;
-			int nLeadID = 0;
+			m_oResultRow = m_oSp.FillFirst<SpBrokerAddCustomerLead.ResultRow>();
 
-			DB.ForEachRowSafe(
-				(sr, bRowsetStart) => {
-					sErrorMsg = sr["ErrorMsg"];
-					nLeadID = sr["LeadID"];
-					return ActionResult.SkipAll;
-				},
-				"BrokerAddCustomerLead",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("@LeadFirstName", m_sLeadFirstName),
-				new QueryParameter("@LeadLastName", m_sLeadLastName),
-				new QueryParameter("@LeadEmail", m_sLeadEmail),
-				new QueryParameter("@LeadAddMode", m_sLeadAddMode),
-				new QueryParameter("@ContactEmail", m_sContactEmail),
-				new QueryParameter("@DateCreated", DateTime.UtcNow)
-			);
+			if (!string.IsNullOrWhiteSpace(m_oResultRow.ErrorMsg))
+				throw new Exception(m_oResultRow.ErrorMsg);
 
-			if (!string.IsNullOrWhiteSpace(sErrorMsg))
-				throw new Exception(sErrorMsg);
-
-			if (nLeadID < 1)
+			if (m_oResultRow.LeadID < 1)
 				throw new Exception("Failed to add a customer lead.");
 
-			new BrokerLeadSendInvitation(nLeadID, m_sContactEmail, DB, Log).Execute();
+			if (SendEmail)
+				new BrokerLeadSendInvitation(m_oResultRow.LeadID, m_oSp.ContactEmail, DB, Log).Execute();
 		} // Execute
 
 		#endregion method Execute
@@ -74,11 +55,74 @@
 
 		#region private
 
-		private readonly string m_sLeadFirstName;
-		private readonly string m_sLeadLastName;
-		private readonly string m_sLeadEmail;
-		private readonly string m_sLeadAddMode;
-		private readonly string m_sContactEmail;
+		private readonly SpBrokerAddCustomerLead m_oSp;
+		private SpBrokerAddCustomerLead.ResultRow m_oResultRow;
+
+		private bool SendEmail {
+			get { return (m_oResultRow != null) && (m_oResultRow.SendEmail != 0); } // get
+		} // SendEmail
+
+		#region class SpBrokerAddCustomerLead
+
+		private class SpBrokerAddCustomerLead : AStoredProcedure {
+			#region public
+
+			public SpBrokerAddCustomerLead(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor
+
+			public override bool HasValidParameters() {
+				return
+					!string.IsNullOrWhiteSpace(LeadFirstName) &&
+					!string.IsNullOrWhiteSpace(LeadLastName) &&
+					!string.IsNullOrWhiteSpace(LeadEmail) &&
+					!string.IsNullOrWhiteSpace(LeadAddMode) &&
+					!string.IsNullOrWhiteSpace(ContactEmail);
+			} // HasValidParameters
+
+			#region sp arguments
+
+			public string LeadFirstName { get; set; }
+			public string LeadLastName { get; set; }
+			public string LeadEmail { get; set; }
+			public string LeadAddMode { get; set; }
+			public string ContactEmail { get; set; }
+
+			public DateTime DateCreated {
+				get { return DateTime.UtcNow; }
+				set { 
+					// nothing here, but it has to be here.
+				} // set
+			} // DateCreated
+
+			#endregion sp arguments
+
+			#region class ResultRow
+
+			public class ResultRow : AResultRow {
+				public string ErrorMsg { get; set; }
+				public int LeadID { get; set; }
+
+				[FieldName("SendEmailOnCreate")]
+				public int SendEmail { get; set; }
+			} // ResultRow
+
+			#endregion class ResultRow
+
+			#endregion public
+
+			#region protected
+
+			#region method GetName
+
+			protected override string GetName() {
+				return "BrokerAddCustomerLead";
+			} // GetName
+
+			#endregion method GetName
+
+			#endregion protected
+		} // SpBrokerAddCustomerLead
+
+		#endregion class SpBrokerAddCustomerLead
 
 		#endregion private
 	} // class BrokerAddCustomerLead

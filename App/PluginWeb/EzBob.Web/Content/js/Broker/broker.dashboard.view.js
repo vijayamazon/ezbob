@@ -87,6 +87,7 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 						} // if has last name
 
 						$(oTR).dblclick(function() {
+							EzBob.App.trigger('clear');
 							location.assign($(oTR).find('.profileLink').first().attr('href'));
 						});
 					} // if has id
@@ -147,6 +148,7 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 	}, // reloadCustomerList
 
 	addNewCustomer: function() {
+		EzBob.App.trigger('clear');
 		location.assign('#add');
 	}, // addNewCustomer
 

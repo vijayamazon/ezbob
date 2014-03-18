@@ -26,11 +26,11 @@ namespace TestApp {
 
 			var oDB = new SqlConnection(log);
 
-			TestTableSpArgument(oDB, log);
+			// TestTableSpArgument(oDB, log);
 
 			// TestVectorSpArgument(oDB, log);
 
-			// TestRetryerWithArguments(oDB, log);
+			TestRetryerWithArguments(oDB, log);
 
 			// TestEarnedInterestForAudit(oDB, log);
 
@@ -119,17 +119,17 @@ namespace TestApp {
 		#region method TestRetryerWithArguments
 
 		private static void TestRetryerWithArguments(AConnection oDB, ASafeLog log) {
-			var oRetryer = new SqlRetryer(nRetryCount: 8, nSleepBeforeRetryMilliseconds: 2000, oLog: log) {
+			var oRetryer = new SqlRetryer(nRetryCount: 8, nSleepBeforeRetryMilliseconds: 1000, oLog: log) {
 				LogVerbosityLevel = oDB.LogVerbosityLevel
 			};
 
 			ms_nActionTestCounter = 0;
 
-			Action oAction = () => ActionTest(28, "some string", log);
+			Action oAction = () => ActionTest(28, "some string", oDB, log);
 
 			oRetryer.Retry(oAction, "just a test action for 8 retries");
 
-			var oTwoRetryer = new SqlRetryer(nRetryCount: 2, nSleepBeforeRetryMilliseconds: 2000, oLog: log) {
+			var oTwoRetryer = new SqlRetryer(nRetryCount: 2, nSleepBeforeRetryMilliseconds: 1000, oLog: log) {
 				LogVerbosityLevel = oDB.LogVerbosityLevel
 			};
 
@@ -140,8 +140,21 @@ namespace TestApp {
 
 		private static int ms_nActionTestCounter;
 
-		private static void ActionTest(int x, string s, ASafeLog log) {
+		private static void ActionTest(int x, string s, AConnection oDB, ASafeLog log) {
 			log.Info("ActionTest started...");
+
+			var sp = new UpdateBroker(oDB, log);
+			sp.ExecuteNonQuery();
+
+			/*
+
+			var sp = new BrokerLoadCustomerList(oDB, log) { Email = "alexbo+broker@ezbob.com", };
+
+			sp.ForEachResult<BrokerLoadCustomerList.ResultRow>(oRow => {
+				log.Debug("Result row: {0}", oRow);
+				return ActionResult.Continue;
+			});
+			*/
 
 			if (ms_nActionTestCounter < 3) {
 				ms_nActionTestCounter++;
@@ -152,6 +165,53 @@ namespace TestApp {
 			log.Info("ActionTest: s = {0}", s);
 			log.Info("ActionTest complete.");
 		} // ActionTest
+
+		private class UpdateBroker : AStoredProcedure {
+			public UpdateBroker(AConnection oDB, ASafeLog oLog) : base(oDB, oLog, CommandSpecies.Text) {} // constructor
+
+			public override bool HasValidParameters() { return true; }
+
+			protected override string GetName() {
+				return "UPDATE Broker SET FirmRegNum = '034343434' WHERE BrokerID = 2";
+			}
+		}
+
+		private class BrokerLoadCustomerList : AStoredProcedure {
+			public BrokerLoadCustomerList(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor
+
+			public override bool HasValidParameters() { return true; }
+
+			[FieldName("@ContactEmail")]
+			public string Email { get; set; } // Email
+
+			public class ResultRow : AResultRow {
+				public int CustomerID { get; set; }
+				public string FirstName { get; set; }
+				public string LastName { get; set; }
+				public string Email { get; set; }
+				public string WizardStep { get; set; }
+				public string Status { get; set; }
+				public DateTime ApplyDate { get; set; }
+				public string MpTypeName { get; set; }
+				public string LoanAmount { get; set; }
+				public DateTime LoanDate { get; set; }
+
+				public override string ToString() {
+					return string.Join(", ",
+						CustomerID,
+						FirstName,
+						LastName,
+						Email,
+						WizardStep,
+						Status,
+						ApplyDate,
+						MpTypeName,
+						LoanAmount,
+						LoanDate
+					);
+				} // ToString
+			} // class ResultRow
+		} // BrokerLoadCustomerList
 
 		#endregion method TestRetryerWithArguments
 

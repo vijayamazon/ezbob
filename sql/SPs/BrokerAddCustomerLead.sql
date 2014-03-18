@@ -14,6 +14,7 @@ BEGIN
 	DECLARE @ErrMsg NVARCHAR(1024) = ''
 	DECLARE @BrokerID INT
 	DECLARE @BrokerLeadAddModeID INT
+	DECLARE @SendEmail INT = 0
 	DECLARE @LeadID INT = 0
 
 	IF @ErrMsg = ''
@@ -31,7 +32,13 @@ BEGIN
 
 	IF @ErrMsg = ''
 	BEGIN
-		SELECT @BrokerLeadAddModeID = BrokerLeadAddModeID FROM BrokerLeadAddModes WHERE UPPER(BrokerLeadAddModeCode) = UPPER(@LeadAddMode)
+		SELECT
+			@BrokerLeadAddModeID = BrokerLeadAddModeID,
+			@SendEmail = SendEmailOnCreate
+		FROM
+			BrokerLeadAddModes
+		WHERE
+			UPPER(BrokerLeadAddModeCode) = UPPER(@LeadAddMode)
 
 		IF @BrokerLeadAddModeID IS NULL
 			SET @ErrMsg = 'Invalid lead add mode: ' + @LeadAddMode
@@ -45,6 +52,6 @@ BEGIN
 		SET @LeadID = SCOPE_IDENTITY()
 	END
 
-	SELECT @ErrMsg AS ErrorMsg, @LeadID AS LeadID
+	SELECT @ErrMsg AS ErrorMsg, @LeadID AS LeadID, @SendEmail AS SendEmailOnCreate
 END
 GO

@@ -349,97 +349,18 @@
 			ARetryer oRetryer = CreateRetryer();
 			oRetryer.LogVerbosityLevel = this.LogVerbosityLevel;
 
+			DbCommand command = null;
+
 			try {
-				return oRetryer.Retry<object>(() => {
-					using (var connection = CreateConnection()) {
-						connection.Open();
+				command = BuildCommand(spName, nSpecies, aryParams);
 
-						using (var command = CreateCommand(spName, connection)) {
-							switch (nSpecies) {
-							case CommandSpecies.Auto:
-								command.CommandType = aryParams.Length == 0 ? CommandType.Text : CommandType.StoredProcedure;
-								break;
+				object oResult = null;
 
-							case CommandSpecies.StoredProcedure:
-								command.CommandType = CommandType.StoredProcedure;
-								break;
+				oRetryer.Retry(() =>
+					oResult = RunOnce(oAction, nMode, command, nLogVerbosityLevel, spName, sArgsForLog, guid)
+				); // Retry
 
-							case CommandSpecies.Text:
-								command.CommandType = CommandType.Text;
-								break;
-
-							case CommandSpecies.TableDirect:
-								command.CommandType = CommandType.TableDirect;
-								break;
-
-							default:
-								throw new ArgumentOutOfRangeException("nSpecies");
-							} // switch
-
-							foreach (var prm in aryParams)
-								command.Parameters.Add(CreateParameter(prm));
-
-							var sw = new Stopwatch();
-							sw.Start();
-
-							switch (nMode) {
-							case ExecMode.Scalar:
-								object value = command.ExecuteScalar();
-								PublishRunningTime(nLogVerbosityLevel, spName, sArgsForLog, guid, sw);
-								return value;
-
-							case ExecMode.Reader: {
-								var oReader = command.ExecuteReader();
-
-								long nPrevStopwatchValue = sw.ElapsedMilliseconds;
-
-								if (nLogVerbosityLevel == LogVerbosityLevel.Verbose)
-									PublishRunningTime(nLogVerbosityLevel, spName, sArgsForLog, guid, sw);
-
-								var dataTable = new DataTable();
-								dataTable.Load(oReader);
-
-								string sMsg = string.Empty;
-
-								switch (nLogVerbosityLevel) {
-								case LogVerbosityLevel.Compact:
-									sMsg = "completed and data loaded";
-									break;
-
-								case LogVerbosityLevel.Verbose:
-									sMsg = "data loaded";
-									break;
-
-								default:
-									throw new ArgumentOutOfRangeException();
-								} // switch
-
-								PublishRunningTime(nLogVerbosityLevel, spName, sArgsForLog, guid, sw, nPrevStopwatchValue, sMsg);
-								return dataTable;
-							} // ExecMode.Reader
-
-							case ExecMode.NonQuery: {
-								int nResult = command.ExecuteNonQuery();
-								string sResult = ((nResult == 0) || (nResult == -1)) ? "no" : nResult.ToString(CultureInfo.InvariantCulture);
-								PublishRunningTime(nLogVerbosityLevel, spName, sArgsForLog, guid, sw, sAuxMsg: string.Format("- {0} row{1} changed", sResult, nResult == 1 ? "" : "s"));
-								return nResult;
-							} // ExecMode.NonQuery
-
-							case ExecMode.ForEachRow: {
-								command.ForEachRow(
-									oAction,
-									() => PublishRunningTime(nLogVerbosityLevel, spName, sArgsForLog, guid, sw)
-								);
-
-								return null;
-							} // ExecMode.ForEachRow
-
-							default:
-								throw new ArgumentOutOfRangeException("nMode");
-							} // switch
-						} // using command
-					} // using connection
-				}); // Retry
+				return oResult;
 			}
 			catch (Exception e) {
 				if (nLogVerbosityLevel == LogVerbosityLevel.Verbose)
@@ -448,6 +369,13 @@
 					Error(e, "Error while executing query:\n\tid = {0}\n\t{1}{2}", guid, spName, sArgsForLog);
 
 				throw;
+			}
+			finally {
+				if (command != null) {
+					command.Dispose();
+					command = null;
+					Debug("Command has been disposed.");
+				} // if
 			} // try
 		} // Run
 
@@ -493,6 +421,136 @@
 		} // PublishRunnigTime
 
 		#endregion method PublishRunningTime
+
+		#region method BuildCommand
+
+		protected virtual DbCommand BuildCommand(string spName, CommandSpecies nSpecies, params QueryParameter[] aryParams) {
+			DbCommand command = CreateCommand(spName, null);
+				switch (nSpecies) {
+				case CommandSpecies.Auto:
+					command.CommandType = aryParams.Length == 0 ? CommandType.Text : CommandType.StoredProcedure;
+					break;
+
+				case CommandSpecies.StoredProcedure:
+					command.CommandType = CommandType.StoredProcedure;
+					break;
+
+				case CommandSpecies.Text:
+					command.CommandType = CommandType.Text;
+					break;
+
+				case CommandSpecies.TableDirect:
+					command.CommandType = CommandType.TableDirect;
+					break;
+
+				default:
+					throw new ArgumentOutOfRangeException("nSpecies");
+				} // switch
+
+				foreach (var prm in aryParams)
+					command.Parameters.Add(CreateParameter(prm));
+
+			return command;
+		} // BuildCommand
+
+		#endregion method BuildCommand
+
+		#region method RunOnce
+
+		protected virtual object RunOnce(
+			Func<DbDataReader, bool, ActionResult> oAction,
+			ExecMode nMode, 
+			DbCommand command,
+			LogVerbosityLevel nLogVerbosityLevel,
+			string spName,
+			string sArgsForLog,
+			Guid guid
+		) {
+			using (var connection = CreateConnection()) {
+				command.Connection = connection;
+
+				connection.Open();
+
+				var sw = new Stopwatch();
+				sw.Start();
+
+				switch (nMode) {
+				case ExecMode.Scalar:
+					return RunScalar(command, nLogVerbosityLevel, spName, sArgsForLog, guid, sw);
+
+				case ExecMode.Reader:
+					return RunReader(command, nLogVerbosityLevel, spName, sArgsForLog, guid, sw);
+
+				case ExecMode.NonQuery:
+					return RunNonQuery(command, nLogVerbosityLevel, spName, sArgsForLog, guid, sw);
+
+				case ExecMode.ForEachRow: {
+					command.ForEachRow(oAction, () => PublishRunningTime(nLogVerbosityLevel, spName, sArgsForLog, guid, sw));
+					return null;
+				} // ExecMode.ForEachRow
+
+				default:
+					throw new ArgumentOutOfRangeException("nMode");
+				} // switch
+			} // using connection
+		} // RunOnce
+
+		#endregion method RunOnce
+
+		#region method RunScalar
+
+		protected virtual object RunScalar(DbCommand command, LogVerbosityLevel nLogVerbosityLevel, string spName, string sArgsForLog, Guid guid, Stopwatch sw) {
+			object value = command.ExecuteScalar();
+			PublishRunningTime(nLogVerbosityLevel, spName, sArgsForLog, guid, sw);
+			return value;
+		} // RunScalar
+
+		#endregion method RunScalar
+
+		#region method RunReader
+
+		protected virtual DataTable RunReader(DbCommand command, LogVerbosityLevel nLogVerbosityLevel, string spName, string sArgsForLog, Guid guid, Stopwatch sw) {
+			var oReader = command.ExecuteReader();
+
+			long nPrevStopwatchValue = sw.ElapsedMilliseconds;
+
+			if (nLogVerbosityLevel == LogVerbosityLevel.Verbose)
+				PublishRunningTime(nLogVerbosityLevel, spName, sArgsForLog, guid, sw);
+
+			var dataTable = new DataTable();
+			dataTable.Load(oReader);
+
+			string sMsg = string.Empty;
+
+			switch (nLogVerbosityLevel) {
+			case LogVerbosityLevel.Compact:
+				sMsg = "completed and data loaded";
+				break;
+
+			case LogVerbosityLevel.Verbose:
+				sMsg = "data loaded";
+				break;
+
+			default:
+				throw new ArgumentOutOfRangeException();
+			} // switch
+
+			PublishRunningTime(nLogVerbosityLevel, spName, sArgsForLog, guid, sw, nPrevStopwatchValue, sMsg);
+			return dataTable;
+		} // RunReader
+
+		#endregion method RunReader
+
+		#region method RunNonQuery
+
+		protected virtual int RunNonQuery(DbCommand command, LogVerbosityLevel nLogVerbosityLevel, string spName, string sArgsForLog, Guid guid, Stopwatch sw) {
+			int nResult = command.ExecuteNonQuery();
+			string sResult = ((nResult == 0) || (nResult == -1)) ? "no" : nResult.ToString(CultureInfo.InvariantCulture);
+			PublishRunningTime(nLogVerbosityLevel, spName, sArgsForLog, guid, sw, sAuxMsg: string.Format("- {0} row{1} changed", sResult, nResult == 1 ? "" : "s"));
+			return nResult;
+		} // RunNonQuery
+
+		#endregion method RunNonQuery
 
 		#endregion protected
 	} // AConnection

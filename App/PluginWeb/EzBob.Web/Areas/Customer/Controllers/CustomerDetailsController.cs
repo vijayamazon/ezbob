@@ -56,14 +56,11 @@
 		public System.Web.Mvc.ActionResult Dashboard() {
 			var blm = new WizardBrokerLeadModel(Session);
 
-			int nLeadID = blm.LeadID;
-			blm.Unset();
-
 			if (blm.IsSet) {
 				StringActionResult sar = null;
 
 				try {
-					sar = m_oServiceClient.Instance.BrokerBackFromCustomerWizard(nLeadID);
+					sar = m_oServiceClient.Instance.BrokerBackFromCustomerWizard(blm.LeadID);
 				}
 				catch (Exception e) {
 					ms_oLog.Warn("Failed to retrieve broker details, falling back to customer's dashboard.", e);
@@ -72,11 +69,13 @@
 				if (sar != null) {
 					FormsAuthentication.SignOut();
 					FormsAuthentication.SetAuthCookie(sar.Value, true);
-				} // if
 
-				return RedirectToAction("Index", "BrokerHome", new {Area = "Broker"});
+					blm.Unset();
+					return RedirectToAction("Index", "BrokerHome", new {Area = "Broker"});
+				} // if
 			} // if
 
+			blm.Unset();
 			return RedirectToAction("Index", "Profile", new {Area = "Customer"});
 		} // Dashboard
 

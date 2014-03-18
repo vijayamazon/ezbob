@@ -38,9 +38,14 @@
 	public abstract class AStoredProcedure : ITraversable, IStoredProcedure {
 		#region public
 
+		public abstract bool HasValidParameters();
+
 		#region method ExecuteScalar
 
 		public virtual T ExecuteScalar<T>() {
+			if (!HasValidParameters())
+				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
+
 			return DB.ExecuteScalar<T>(GetName(), Species, PrepareParameters());
 		} // ExecuteScalar
 
@@ -49,6 +54,9 @@
 		#region method ExecuteReader
 
 		public virtual DataTable ExecuteReader() {
+			if (!HasValidParameters())
+				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
+
 			return DB.ExecuteReader(GetName(), Species, PrepareParameters());
 		} // ExecuteReader
 
@@ -57,6 +65,9 @@
 		#region method ExecuteNonQuery
 
 		public virtual int ExecuteNonQuery() {
+			if (!HasValidParameters())
+				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
+
 			return DB.ExecuteNonQuery(GetName(), Species, PrepareParameters());
 		} // ExecuteNonQuery
 
@@ -65,6 +76,9 @@
 		#region method ForEachRow
 
 		public virtual void ForEachRow(Func<DbDataReader, bool, ActionResult> oAction) {
+			if (!HasValidParameters())
+				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
+
 			DB.ForEachRow(oAction, GetName(), Species, PrepareParameters());
 		} // ForEachRow
 
@@ -73,6 +87,9 @@
 		#region method ForEachRowSafe
 
 		public virtual void ForEachRowSafe(Func<SafeReader, bool, ActionResult> oAction) {
+			if (!HasValidParameters())
+				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
+
 			DB.ForEachRowSafe(oAction, GetName(), Species, PrepareParameters());
 		} // ForEachRowSafe
 
@@ -81,6 +98,9 @@
 		#region method ForEachResult
 
 		public virtual void ForEachResult(Func<IResultRow, ActionResult> oAction) {
+			if (!HasValidParameters())
+				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
+
 			if (oAction == null)
 				throw new ArgumentNullException("oAction", "No action specified for 'ForEachResult' call.");
 
@@ -113,6 +133,9 @@
 		} // ForEachResult
 
 		public virtual void ForEachResult<T>(Func<T, ActionResult> oAction) where T: IResultRow, new() {
+			if (!HasValidParameters())
+				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
+
 			DB.ForEachResult<T>(oAction, GetName(), Species, PrepareParameters());
 		} // ForEachResult
 
@@ -121,6 +144,9 @@
 		#region method Fill
 
 		public virtual List<T> Fill<T>() where T : ITraversable, new() {
+			if (!HasValidParameters())
+				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
+
 			return DB.Fill<T>(GetName(), Species, PrepareParameters());
 		} // Fill
 
@@ -129,10 +155,16 @@
 		#region method FillFirst
 
 		public virtual T FillFirst<T>() where T: ITraversable, new() {
+			if (!HasValidParameters())
+				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
+
 			return DB.FillFirst<T>(GetName(), Species, PrepareParameters());
 		} // FillFirst
 
 		public virtual void FillFirst<T>(T oInstance) where T : ITraversable {
+			if (!HasValidParameters())
+				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
+
 			DB.FillFirst<T>(oInstance, GetName(), Species, PrepareParameters());
 		} // FillFirst
 

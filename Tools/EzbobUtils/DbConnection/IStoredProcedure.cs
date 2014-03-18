@@ -6,6 +6,7 @@
 	using Ezbob.Utils;
 
 	public interface IStoredProcedure {
+		bool HasValidParameters();
 		T ExecuteScalar<T>();
 		DataTable ExecuteReader();
 		int ExecuteNonQuery();

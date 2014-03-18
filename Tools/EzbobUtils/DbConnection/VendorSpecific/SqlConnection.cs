@@ -68,7 +68,13 @@
 		#region method CreateCommand
 
 		protected override DbCommand CreateCommand(string sCommand, DbConnection oConnection) {
-			return new SqlCommand(sCommand, (System.Data.SqlClient.SqlConnection)oConnection);
+			var oCmd = new SqlCommand();
+			oCmd.CommandText = sCommand;
+
+			if (oConnection != null)
+				oCmd.Connection = (System.Data.SqlClient.SqlConnection)oConnection;
+
+			return oCmd;
 		} // CreateCommand
 
 		#endregion method CreateCommand

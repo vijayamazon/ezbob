@@ -3,6 +3,20 @@
 	using EzBob.Backend.Strategies.Broker;
 
 	partial class EzServiceImplementation {
+		#region async
+
+		#region method BrokerLeadAcquireCustomer
+
+		public ActionMetaData BrokerLeadAcquireCustomer(int nCustomerID, int nLeadID) {
+			return Execute<BrokerLeadAcquireCustomer>(nCustomerID, null, nCustomerID, nLeadID);
+		} // BrokerLeadAcquireCustomer
+
+		#endregion method BrokerLeadAcquireCustomer
+
+		#endregion async
+
+		#region sync
+
 		#region method IsBroker
 
 		public BoolActionResult IsBroker(string sContactEmail) {
@@ -214,14 +228,6 @@
 
 		#endregion method BrokerLeadCanFillWizard
 
-		#region method BrokerLeadAcquireCustomer
-
-		public ActionMetaData BrokerLeadAcquireCustomer(int nCustomerID, int nLeadID) {
-			return ExecuteSync<BrokerLeadAcquireCustomer>(nCustomerID, null, nCustomerID, nLeadID);
-		} // BrokerLeadAcquireCustomer
-
-		#endregion method BrokerLeadAcquireCustomer
-
 		#region method BrokerCustomerWizardComplete
 
 		public ActionMetaData BrokerCustomerWizardComplete(int nCustomerID) {
@@ -244,5 +250,7 @@
 		} // BrokerBackFromCustomerWizard
 
 		#endregion method BrokerBackFromCustomerWizard
+
+		#endregion sync
 	} // class EzServiceImplementation
 } // namespace EzService

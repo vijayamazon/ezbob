@@ -77,6 +77,10 @@
 
 		#region method Execute
 
+		private ActionMetaData Execute<TStrategy>(int? nCustomerID, int? nUserID, params object[] args) where TStrategy : AStrategy {
+			return Execute(nCustomerID, nUserID, typeof (TStrategy), args);
+		} // Execute
+
 		private ActionMetaData Execute(int? nCustomerID, int? nUserID, Type oStrategyType, params object[] args) {
 			ActionMetaData amd = null;
 

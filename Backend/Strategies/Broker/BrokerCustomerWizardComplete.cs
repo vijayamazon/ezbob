@@ -29,7 +29,8 @@
 				ReasonCode = BrokerDeleteCustomerLead.DeleteReasonCode.SignedUp.ToString(),
 			};
 
-			sp.ExecuteNonQuery();
+			if (sp.HasValidParameters())
+				sp.ExecuteNonQuery();
 
 			// TODO: send email
 		} // Execute
