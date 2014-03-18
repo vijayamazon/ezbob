@@ -397,7 +397,7 @@ class EzBob.StoreInfoView extends Backbone.View
     extractBtnClass: (jqTarget) ->
         sClass = 'pull-left'
 
-        if $('.marketplace-button-less', jqTarget).length < 2
+        if $('.marketplace-button-less', jqTarget).length < 3
             sClass += ' marketplace-button-less'
         else
             sClass += ' marketplace-button-more'
