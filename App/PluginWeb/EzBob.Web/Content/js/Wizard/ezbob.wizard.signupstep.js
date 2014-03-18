@@ -19,26 +19,27 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         this.mobileCodesSent = 0;
         this.twilioEnabled = false;
 
-        var that = this;
+		var that = this;
 
-        var xhr = $.post(window.gRootPath + "Account/GetTwilioConfig");
-        xhr.done(function (res) {
-            that.twilioEnabled = res.isSmsValidationActive;
-            that.switchedToCaptcha = res.switchedToCaptcha;
-            that.numberOfMobileCodeAttempts = res.numberOfMobileCodeAttempts + 1;
-            return false;
-        });
-        xhr.always(function () {
-            if (that.twilioEnabled && !that.switchedToCaptcha) {
-                that.$el.find('#twilioDiv').show();
-                $.post(window.gRootPath + "Account/DebugLog_Message", { message: 'The visible object is mobile code' });
-            } else {
-                that.$el.find('#captchaDiv').show();
-                $.post(window.gRootPath + "Account/DebugLog_Message", { message: 'The visible object is captcha' });
-            }
+		var xhr = $.post(window.gRootPath + "Account/GetTwilioConfig");
 
-            return false;
-        });
+		xhr.done(function(res) {
+			that.twilioEnabled = res.isSmsValidationActive;
+			that.switchedToCaptcha = res.switchedToCaptcha;
+			that.numberOfMobileCodeAttempts = res.numberOfMobileCodeAttempts + 1;
+			return false;
+		});
+
+		xhr.always(function() {
+			if (that.twilioEnabled && !that.switchedToCaptcha) {
+				that.$el.find('#twilioDiv').show();
+				$.post(window.gRootPath + "Account/DebugLog_Message", { message: 'The visible object is mobile code' });
+			} else {
+				that.$el.find('#captchaDiv').show();
+				$.post(window.gRootPath + "Account/DebugLog_Message", { message: 'The visible object is captcha' });
+			}
+			return false;
+		});
     },
 
     events: {
@@ -96,6 +97,9 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         oFieldStatusIcons.not('.required').field_status({ required: false });
 
         this.inputChanged();
+
+		if (this.$el.find('.broker-for-customer').length)
+			this.switchToCaptcha();
 
         this.$el.find('#Email').focus();
 

@@ -10,10 +10,11 @@
 	bool instructionsEnabled = config.WizardInstructionsEnabled;
 	var bml = new WizardBrokerLeadModel(Session);
 	var sInitialEmail = bml.IsSet ? bml.LeadEmail : string.Empty;
+	var sBrokerForCustomerIndicator = bml.IsSet ? "broker-for-customer" : string.Empty;
 }
 
 @using (Html.BeginForm("SignUp", "Account", new { Area = "" }, FormMethod.Post, new { @class = "signup clearfix" })) {
-	<h2 class="form_start">Create account</h2>
+	<h2 class="form_start @sBrokerForCustomerIndicator">Create account</h2>
 
 	if (ebayPixelEnabled) {
 		<img src="https://ad-emea.doubleclick.net/activity;dc_pixel_url=rmboom;rm=ezbobregister;ord='<%- ordsu %>'?" width="1" height="1" border="0" alt="" />
