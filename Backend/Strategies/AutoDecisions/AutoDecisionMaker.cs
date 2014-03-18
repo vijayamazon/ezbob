@@ -5,7 +5,7 @@
 
 	public class AutoDecisionMaker
 	{
-		public static AutoDecisionResponse MakeDecision(int customerId, int minExperianScore, int maxExperianScore, double totalSumOfOrders1YTotal, double totalSumOfOrders3MTotal, int offeredCreditLine, 
+		public static AutoDecisionResponse MakeDecision(int customerId, int minExperianScore, int maxExperianScore, double totalSumOfOrders1YTotalForRejection, double totalSumOfOrders3MTotalForRejection, int offeredCreditLine, 
 			double marketplaceSeniorityDays, bool enableAutomaticReRejection, bool enableAutomaticRejection, bool enableAutomaticReApproval, 
 			bool enableAutomaticApproval, decimal loanOfferReApprovalFullAmount, decimal loanOfferReApprovalRemainingAmount, decimal loanOfferReApprovalFullAmountOld, decimal loanOfferReApprovalRemainingAmountOld, AConnection oDb, ASafeLog oLog)
 		{
@@ -33,7 +33,7 @@
 				return autoDecisionResponse;
 			}
 
-			if (new Rejection(customerId, totalSumOfOrders1YTotal, totalSumOfOrders3MTotal, marketplaceSeniorityDays, enableAutomaticRejection, maxExperianScore, oDb, oLog).MakeDecision(autoDecisionResponse))
+			if (new Rejection(customerId, totalSumOfOrders1YTotalForRejection, totalSumOfOrders3MTotalForRejection, marketplaceSeniorityDays, enableAutomaticRejection, maxExperianScore, oDb, oLog).MakeDecision(autoDecisionResponse))
 			{
 				return autoDecisionResponse;
 			}

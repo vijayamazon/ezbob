@@ -13,14 +13,13 @@
 		private int lowCreditScore;
 		private int rejectDefaultsAccountsNum;
 		private int autoRejectionExceptionCreditScore;
-		private bool hasAccountingAccounts;
 		private int errorMPsNum;
 		private int loanOfferApprovalNum;
 		private int numOfDefaultAccounts;
-		private readonly AConnection Db;
+		private readonly AConnection db;
 		private readonly ASafeLog log;
-		private readonly double totalSumOfOrders1YTotal;
-		private readonly double totalSumOfOrders3MTotal;
+		private readonly double totalSumOfOrders1YTotalForRejection;
+		private readonly double totalSumOfOrders3MTotalForRejection;
 		private readonly double marketplaceSeniorityDays;
 		private readonly bool enableAutomaticRejection;
 		private int lowTotalAnnualTurnover;
@@ -28,12 +27,12 @@
 		private readonly double maxExperianConsumerScore;
 		private readonly int customerId;
 
-		public Rejection(int customerId, double totalSumOfOrders1YTotal, double totalSumOfOrders3MTotal, double marketplaceSeniorityDays, bool enableAutomaticRejection, double maxExperianConsumerScore, AConnection oDb, ASafeLog oLog)
+		public Rejection(int customerId, double totalSumOfOrders1YTotalForRejection, double totalSumOfOrders3MTotalForRejection, double marketplaceSeniorityDays, bool enableAutomaticRejection, double maxExperianConsumerScore, AConnection oDb, ASafeLog oLog)
 		{
-			Db = oDb;
+			db = oDb;
 			log = oLog;
-			this.totalSumOfOrders1YTotal = totalSumOfOrders1YTotal;
-			this.totalSumOfOrders3MTotal = totalSumOfOrders3MTotal;
+			this.totalSumOfOrders1YTotalForRejection = totalSumOfOrders1YTotalForRejection;
+			this.totalSumOfOrders3MTotalForRejection = totalSumOfOrders3MTotalForRejection;
 			this.marketplaceSeniorityDays = marketplaceSeniorityDays;
 			this.enableAutomaticRejection = enableAutomaticRejection;
 			this.maxExperianConsumerScore = maxExperianConsumerScore;
@@ -42,9 +41,9 @@
 
 		private bool IsException()
 		{
-			if (loanOfferApprovalNum > 0 || totalSumOfOrders1YTotal > autoRejectionExceptionAnualTurnover ||
+			if (loanOfferApprovalNum > 0 || totalSumOfOrders1YTotalForRejection > autoRejectionExceptionAnualTurnover ||
 				maxExperianConsumerScore > autoRejectionExceptionCreditScore || errorMPsNum > 0 ||
-				(decimal)maxExperianConsumerScore == 0 || hasAccountingAccounts)
+				(decimal)maxExperianConsumerScore == 0)
 			{
 				return true;
 			}
@@ -54,8 +53,7 @@
 
 		private void Init()
 		{
-
-			DataTable dt = Db.ExecuteReader("GetRejectionConfigs", CommandSpecies.StoredProcedure);
+			DataTable dt = db.ExecuteReader("GetRejectionConfigs", CommandSpecies.StoredProcedure);
 			var sr = new SafeReader(dt.Rows[0]);
 
 			autoRejectionExceptionAnualTurnover = sr["AutoRejectionException_AnualTurnover"];
@@ -69,7 +67,7 @@
 			lowTotalAnnualTurnover = sr["LowTotalAnnualTurnover"];
 			lowTotalThreeMonthTurnover = sr["LowTotalThreeMonthTurnover"];
 
-			dt = Db.ExecuteReader(
+			dt = db.ExecuteReader(
 				"GetCustomerRejectionData",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId),
@@ -79,7 +77,6 @@
 
 			sr = new SafeReader(dt.Rows[0]);
 
-			hasAccountingAccounts = sr["HasAccountingAccounts"];
 			errorMPsNum = sr["ErrorMPsNum"];
 			loanOfferApprovalNum = sr["ApprovalNum"];
 			numOfDefaultAccounts = sr["NumOfDefaultAccounts"];
@@ -93,7 +90,7 @@
 				if (IsException())
 					return false;
 
-				FillPayPalFiguresForExplanationMail(Db, customerId, response);
+				FillPayPalFiguresForExplanationMail(db, customerId, response);
 
 				if (maxExperianConsumerScore < rejectDefaultsCreditScore &&
 				    numOfDefaultAccounts >= rejectDefaultsAccountsNum)
@@ -113,17 +110,17 @@
 					 response.PayPalTotalSumOfOrders3M < lowTotalThreeMonthTurnover ||
 					 response.PayPalTotalSumOfOrders1Y < lowTotalAnnualTurnover)
 					&&
-					(totalSumOfOrders3MTotal < lowTotalThreeMonthTurnover || totalSumOfOrders1YTotal < lowTotalAnnualTurnover)
+					(totalSumOfOrders3MTotalForRejection < lowTotalThreeMonthTurnover || totalSumOfOrders1YTotalForRejection < lowTotalAnnualTurnover)
 					)
 				{
 					response.AutoRejectReason = "AutoReject: Totals. Condition not met: (" + response.PayPalNumberOfStores + " < 0 OR " +
 					                            response.PayPalTotalSumOfOrders3M + " < " +
 					                            lowTotalThreeMonthTurnover + " OR " + response.PayPalTotalSumOfOrders1Y + " < " +
-					                            lowTotalAnnualTurnover + ") AND (" + totalSumOfOrders3MTotal + " < " +
-					                            lowTotalThreeMonthTurnover + " OR " + totalSumOfOrders1YTotal + " < " +
+					                            lowTotalAnnualTurnover + ") AND (" + totalSumOfOrders3MTotalForRejection + " < " +
+					                            lowTotalThreeMonthTurnover + " OR " + totalSumOfOrders1YTotalForRejection + " < " +
 					                            lowTotalAnnualTurnover + ")";
 				}
-				else if (marketplaceSeniorityDays < rejectMinimalSeniority && errorMPsNum == 0)
+				else if (marketplaceSeniorityDays < rejectMinimalSeniority)
 				{
 					response.AutoRejectReason = "AutoReject: Seniority. Condition not met: (" + marketplaceSeniorityDays + " < " +
 					                            rejectMinimalSeniority + ")";

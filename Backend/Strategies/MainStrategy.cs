@@ -158,7 +158,7 @@
 
 			CalcAndCapOffer();
 
-			autoDecisionResponse = AutoDecisionMaker.MakeDecision(customerId, minExperianScore, maxExperianScore, totalSumOfOrders1YTotal, totalSumOfOrders3MTotal, offeredCreditLine, marketplaceSeniorityDays, enableAutomaticReRejection, enableAutomaticRejection, enableAutomaticReApproval, enableAutomaticApproval,
+			autoDecisionResponse = AutoDecisionMaker.MakeDecision(customerId, minExperianScore, maxExperianScore, totalSumOfOrders1YTotalForRejection, totalSumOfOrders3MTotalForRejection, offeredCreditLine, marketplaceSeniorityDays, enableAutomaticReRejection, enableAutomaticRejection, enableAutomaticReApproval, enableAutomaticApproval,
 				loanOfferReApprovalFullAmountOld, loanOfferReApprovalFullAmount, loanOfferReApprovalRemainingAmount, loanOfferReApprovalRemainingAmountOld, DB, Log);
 
 			if (autoDecisionResponse.SystemDecision == "Reject")
@@ -531,6 +531,8 @@
 			MpsTotals totals = strategyHelper.GetMpsTotals(customerId);
 			totalSumOfOrders1YTotal = totals.TotalSumOfOrders1YTotal;
 			totalSumOfOrders3MTotal = totals.TotalSumOfOrders3MTotal;
+			totalSumOfOrders1YTotalForRejection = totals.TotalSumOfOrders1YTotalForRejection;
+			totalSumOfOrders3MTotalForRejection = totals.TotalSumOfOrders3MTotalForRejection;
 			marketplaceSeniorityDays = totals.MarketplaceSeniorityDays;
 			decimal totalSumOfOrdersForLoanOffer = totals.TotalSumOfOrdersForLoanOffer;
 			decimal marketplaceSeniorityYears = (decimal)totals.MarketplaceSeniorityDays / 365; // It is done this way to fit to the excel
@@ -778,6 +780,8 @@
 		private double totalSumOfOrders3MTotal;
 		private int modelLoanOffer;
 		private double totalSumOfOrders1YTotal;
+		private double totalSumOfOrders1YTotalForRejection;
+		private double totalSumOfOrders3MTotalForRejection;
 		private bool isFirstLoan;
 
 		#endregion properties

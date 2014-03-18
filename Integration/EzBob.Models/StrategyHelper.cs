@@ -68,6 +68,74 @@
 			return GetTurnoverForPeriod(analysisVals, TimePeriodEnum.Year);
 		}
 
+		private double Get3MTurnoverFromValues(List<IAnalysisDataParameterInfo> av, string mpName)
+		{
+			string annualizedParameterName = mpName == "Pay Pal" ? "Total Net In Payments" : "Total Sum of Orders";
+			IAnalysisDataParameterInfo relevantTurnover = av.LastOrDefault(x => x.ParameterName == annualizedParameterName && x.TimePeriod.TimePeriodType == TimePeriodEnum.Month3) ??
+														  av.LastOrDefault(x => x.ParameterName == annualizedParameterName && x.TimePeriod.TimePeriodType == TimePeriodEnum.Month);
+
+			return Convert.ToDouble(relevantTurnover != null ? relevantTurnover.Value : 0);
+		}
+
+
+		private double GetAnnualizedTurnoverFromValues(List<IAnalysisDataParameterInfo> av, string mpName)
+		{
+			string annualizedParameterName = mpName == "Pay Pal" ? "Total Net In Payments Annualized" : "Total Sum of Orders Annualized";
+			IAnalysisDataParameterInfo relevantTurnover = ((av.LastOrDefault(x => x.ParameterName == annualizedParameterName && x.TimePeriod.TimePeriodType == TimePeriodEnum.Year) ??
+															av.LastOrDefault(x => x.ParameterName == annualizedParameterName && x.TimePeriod.TimePeriodType == TimePeriodEnum.Month6)) ??
+														   av.LastOrDefault(x => x.ParameterName == annualizedParameterName && x.TimePeriod.TimePeriodType == TimePeriodEnum.Month3)) ??
+														  av.LastOrDefault(x => x.ParameterName == annualizedParameterName && x.TimePeriod.TimePeriodType == TimePeriodEnum.Month);
+
+			return Convert.ToDouble(relevantTurnover != null ? relevantTurnover.Value : 0);
+		}
+
+		public double GetTurnoverForRejection(int customerId, Func<List<IAnalysisDataParameterInfo>, string, double> func)
+		{
+			var analysisVals = GetAnalysisValsForCustomer(customerId);
+
+			double bankSum = 0;
+			double vatSum = 0;
+			double accountingSum = 0;
+			double shopsSum = 0;
+			double payPalSum = 0;
+			double ebaySum = 0;
+			foreach (var mp in analysisVals)
+			{
+				List<IAnalysisDataParameterInfo> av = mp.Value;
+				if (av != null)
+				{
+					double currentTurnover = func(av, mp.Key.Marketplace.Name);
+
+					if (mp.Key.Marketplace.Name == "Pay Pal")
+					{
+						payPalSum += currentTurnover;
+					}
+					else if (mp.Key.Marketplace.Name == "eBay")
+					{
+						ebaySum += currentTurnover;
+					}
+					else if (mp.Key.Marketplace.Name == "HMRC")
+					{
+						vatSum += currentTurnover;
+					}
+					else if (mp.Key.Marketplace.Name == "Yodlee")
+					{
+						bankSum += currentTurnover;
+					}
+					else if (mp.Key.Marketplace.IsPaymentAccount)
+					{
+						accountingSum += currentTurnover;
+					}
+					else
+					{
+						shopsSum += currentTurnover;
+					}
+				}
+			}
+
+			return Math.Max(shopsSum + Math.Max(payPalSum, ebaySum), Math.Max(accountingSum, Math.Max(bankSum, vatSum)));
+		}
+
 		public double GetTotalSumOfOrders3M(int customerId)
 		{
 			var analysisVals = GetAnalysisValsForCustomer(customerId);
@@ -796,7 +864,9 @@
 					TotalSumOfOrders1YTotal = GetAnualTurnOverByCustomer(customer.Id),
 					TotalSumOfOrders3MTotal = GetTotalSumOfOrders3M(customer.Id),
 					MarketplaceSeniorityDays = MarketplaceSeniority(customer),
-					TotalSumOfOrdersForLoanOffer = (decimal) GetTotalSumOfOrdersForLoanOffer(customer.Id)
+					TotalSumOfOrdersForLoanOffer = (decimal)GetTotalSumOfOrdersForLoanOffer(customer.Id),
+					TotalSumOfOrders1YTotalForRejection = GetTurnoverForRejection(customer.Id, GetAnnualizedTurnoverFromValues),
+					TotalSumOfOrders3MTotalForRejection = GetTurnoverForRejection(customer.Id, Get3MTurnoverFromValues)
 				};
 			return totals;
 		}
