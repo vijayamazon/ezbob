@@ -3,55 +3,119 @@
 	using EzBob.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using LandRegistryLib;
 
-	public class LandRegistryEnquiry : AStrategy
-	{
-		private int _customerId { get; set; }
-		private string _buildingNumber { get; set; }
-		private string _streetName { get; set; }
-		private string _cityName { get; set; }
-		private string _postCode{ get; set; }
+	#region class LandRegistryEnquiry
 
-		public LandRegistryEnquiry(int customerId, string buildingNumber, string streetName, string cityName, string postCode, AConnection oDB, ASafeLog oLog)
-			: base(oDB, oLog)
-		{
-			_customerId = customerId;
-			_buildingNumber = buildingNumber;
-			_streetName = streetName;
-			_postCode = postCode;
+	public class LandRegistryEnquiry : AStrategy {
+		#region public
+
+		#region constructor
+
+		public LandRegistryEnquiry(
+			int customerId,
+			string buildingNumber,
+			string streetName,
+			string cityName,
+			string postCode,
+			AConnection oDB,
+			ASafeLog oLog
+		) : base(oDB, oLog) {
+			m_nCustomerID = customerId;
+			m_sBuildingNumber = buildingNumber;
+			m_sStreetName = streetName;
+			m_sCityName = cityName;
+			m_sPostCode  = postCode;
 		} // constructor
 
-		
+		#endregion constructor
+
+		#region property Name
+
 		public override string Name { get { return "Land Registry Enquiry"; } } // Name
+
+		#endregion property Name
+
+		#region property Result
+
 		public string Result { get; set; }
-		public override void Execute()
-		{
+
+		#endregion property Result
+
+		#region method Execute
+
+		public override void Execute() {
 			var helper = new StrategyHelper();
-			var response = helper.GetLandRegistryEnquiryData(_customerId, _buildingNumber, _streetName, _cityName, _postCode);
+
+			LandRegistryDataModel response = helper.GetLandRegistryEnquiryData(m_nCustomerID, m_sBuildingNumber, m_sStreetName, m_sCityName, m_sPostCode );
+
 			Result = SerializeDataHelper.SerializeToString(response);
 		} // Execute
-	}
 
-	public class LandRegistryRes : AStrategy
-	{
-		private int _customerId { get; set; }
-		private string _titleNumber { get; set; }
+		#endregion method Execute
 
-		public LandRegistryRes(int customerId, string titleNumber, AConnection oDB, ASafeLog oLog)
-			: base(oDB, oLog)
-		{
-			_customerId = customerId;
-			_titleNumber = titleNumber;
+		#endregion public
+
+		#region private
+
+		private readonly int m_nCustomerID;
+		private readonly string m_sBuildingNumber;
+		private readonly string m_sStreetName;
+		private readonly string m_sCityName;
+		private readonly string m_sPostCode;
+
+		#endregion private
+	} // LandRegistryEnquiry
+
+	#endregion class LandRegistryEnquiry
+
+	#region class LandRegistryRes
+
+	public class LandRegistryRes : AStrategy {
+		#region public
+
+		#region constructor
+
+		public LandRegistryRes(int customerId, string titleNumber, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+			m_nCustomerID = customerId;
+			m_sTitleNumber = titleNumber;
 		} // constructor
 
+		#endregion constructor
+
+		#region property Name
 
 		public override string Name { get { return "Land Registry RES"; } } // Name
+
+		#endregion property Name
+
+		#region property Result
+
 		public string Result { get; set; }
-		public override void Execute()
-		{
+
+		#endregion property Result
+
+		#region method Execute
+
+		public override void Execute() {
 			var helper = new StrategyHelper();
-			var response = helper.GetLandRegistryData(_customerId, _titleNumber);
+
+			LandRegistryDataModel response = helper.GetLandRegistryData(m_nCustomerID, m_sTitleNumber);
+
 			Result = SerializeDataHelper.SerializeToString(response);
 		} // Execute
-	}
+
+		#endregion method Execute
+
+		#endregion public
+
+		#region private
+
+		private readonly int m_nCustomerID;
+		private readonly string m_sTitleNumber;
+
+		#endregion private
+	} // class LandRegistryRes
+
+	#endregion class LandRegistryRes
 } // namespace EzBob.Backend.Strategies.Broker

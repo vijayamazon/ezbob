@@ -58,7 +58,7 @@ EzBob.LandRegistryEnquiryView = Backbone.Marionette.View.extend({
         $.get(window.gRootPath + "Underwriter/CrossCheck/LandRegistryEnquiry", data, function (response) {
             if (response && response.titles && response.titles.length == 1) {
                 $.get(window.gRootPath + "Underwriter/CrossCheck/LandRegistry/?customerId=" + that.model.customerId + "&titleNumber=" + response.titles[0].TitleNumber, function (data) {
-                    var lrView = new EzBob.LandRegistryView({ model: data });
+                    var lrView = new EzBob.LandRegistryView({ model: data, customerId: that.model.customerId });
                     scrollTop();
                     EzBob.App.jqmodal.show(lrView);
                     BlockUi("Off");
@@ -109,9 +109,11 @@ EzBob.LandRegistryEnquiryResultsView = Backbone.Marionette.View.extend({
             return false;
         }
 
+	    var that = this;
+
         BlockUi("On");
         return $.get(window.gRootPath + "Underwriter/CrossCheck/LandRegistry/?customerId=" + this.customerId + "&titleNumber=" + this.titleNumber, function (data) {
-            var lrView = new EzBob.LandRegistryView({ model: data });
+            var lrView = new EzBob.LandRegistryView({ model: data, customerId: that.customerId, });
             scrollTop();
             EzBob.App.jqmodal.show(lrView);
             BlockUi("Off");
@@ -132,12 +134,15 @@ EzBob.LandRegistryEnquiryResultsView = Backbone.Marionette.View.extend({
 
 EzBob.LandRegistryAnotherTitleView = Backbone.Marionette.ItemView.extend({
     template: "#another-title-template",
+
     initialize: function (options) {
         this.customerId = options.customerId;
     },
+
     events: {
         'click .anotherTitleBtn': 'okClicked',
     },
+
     jqoptions: function() {
         return {
             modal: true,
@@ -149,14 +154,22 @@ EzBob.LandRegistryAnotherTitleView = Backbone.Marionette.ItemView.extend({
             dialogClass: "another-title-popup",
         };
     },
+
     okClicked: function () {
         BlockUi("On");
+
+	    console.log('Customer id:', this.customerId, 'title number:', this.$el.find('#titleNumber').val());
+
         var xhr = $.get(window.gRootPath + "Underwriter/CrossCheck/LandRegistry?customerId=" + this.customerId + "&titleNumber=" + this.$el.find('#titleNumber').val());
+
+	    var that = this;
+
         xhr.done(function(data) {
-            var lrView = new EzBob.LandRegistryView({ model: data });
+            var lrView = new EzBob.LandRegistryView({ model: data, customerId: that.customerId, });
             scrollTop();
             EzBob.App.jqmodal.show(lrView);
         });
+
         xhr.always(function() {
             BlockUi("Off");
         });

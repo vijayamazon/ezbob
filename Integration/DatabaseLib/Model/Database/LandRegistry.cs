@@ -1,5 +1,4 @@
-namespace EZBob.DatabaseLib.Model.Database
-{
+namespace EZBob.DatabaseLib.Model.Database {
 	using System;
 	using FluentNHibernate.Mapping;
 	using NHibernate.Type;
@@ -48,12 +47,10 @@ namespace EZBob.DatabaseLib.Model.Database
 	public class LandRegistryRequestTypeType : EnumStringType<LandRegistryRequestType> { }
 
 	public class LandRegistryResponseTypeType : EnumStringType<LandRegistryResponseType> { }
+} // namespace EZBob.DatabaseLib.Model.Database
 
-	
-} // namespace
-
-namespace EZBob.DatabaseLib.Repository
-{
+namespace EZBob.DatabaseLib.Repository {
+	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 	using ApplicationMng.Repository;
@@ -62,51 +59,54 @@ namespace EZBob.DatabaseLib.Repository
 	using NHibernate;
 	using NHibernate.Linq;
 
-	public class LandRegistryRepository : NHibernateRepositoryBase<LandRegistry>
-	{
-		public LandRegistryRepository(ISession session)
-			: base(session)
-		{
-		}
-		public IEnumerable<LandRegistry> GetByCustomer(Customer customer)
-		{
+	public class LandRegistryRepository : NHibernateRepositoryBase<LandRegistry> {
+		public LandRegistryRepository(ISession session) : base(session) { } // constructor
+
+		public IEnumerable<LandRegistry> GetByCustomer(Customer customer) {
 			return GetAll().Where(x => x.Customer.Id == customer.Id).ToFuture();
-		}
+		} // GetByCustomer
 
-		public LandRegistry GetRes(int customerId, string titleNumber)
-		{
-			if (!string.IsNullOrEmpty(titleNumber))
-			{
-				return GetAll()
-					.OrderByDescending(x => x.InsertDate)
-					.FirstOrDefault(x => x.Customer.Id == customerId &&
-						(x.RequestType == LandRegistryRequestType.Res || x.RequestType == LandRegistryRequestType.ResPoll) &&
-						x.ResponseType == LandRegistryResponseType.Success &&
-						x.TitleNumber == titleNumber);
-			}
+		public LandRegistry GetRes(int customerId, string titleNumber) {
+			bool bIsEmptyTitleNumber = string.IsNullOrWhiteSpace(titleNumber);
 
+			Func<LandRegistry, bool> oIsMatch = x => {
+				if (x.Customer.Id != customerId)
+					return false;
+
+				if (!IsResRequest(x))
+					return false;
+
+				if (x.ResponseType != LandRegistryResponseType.Success)
+					return false;
+
+				if (bIsEmptyTitleNumber)
+					return true;
+
+				return x.TitleNumber == titleNumber;
+			}; // oIsMatch
+
+			return GetAll().OrderByDescending(x => x.InsertDate).FirstOrDefault(oIsMatch);
+		} // GetRes
+
+		public LandRegistry GetEnquiry(int customerId, string postCode) {
 			return GetAll()
-					.OrderByDescending(x => x.InsertDate)
-					.FirstOrDefault(x => x.Customer.Id == customerId &&
-						(x.RequestType == LandRegistryRequestType.Res || x.RequestType == LandRegistryRequestType.ResPoll) &&
-						x.ResponseType == LandRegistryResponseType.Success);
-		}
+				.OrderByDescending(x => x.InsertDate)
+				.FirstOrDefault(x =>
+					(x.Customer.Id == customerId) &&
+					(x.RequestType == LandRegistryRequestType.Enquiry || x.RequestType == LandRegistryRequestType.EnquiryPoll) &&
+					(x.ResponseType == LandRegistryResponseType.Success) &&
+					(x.Postcode == postCode)
+				);
+		} // GetEnquiry
 
-		public LandRegistry GetEnquiry(int customerId, string postCode)
-		{
-			return GetAll().OrderByDescending(x => x.InsertDate).FirstOrDefault(x =>
-				x.Customer.Id == customerId &&
-				(x.RequestType == LandRegistryRequestType.Enquiry || x.RequestType == LandRegistryRequestType.EnquiryPoll) &&
-				x.ResponseType == LandRegistryResponseType.Success &&
-				x.Postcode == postCode);
-		}
+		public LandRegistry GetByTitleNumber(string titleNumber) {
+			return GetAll().LastOrDefault(x => x.TitleNumber == titleNumber && IsResRequest(x));
+		} // GetByTitleNumber
 
-		public LandRegistry GetByTitleNumber(string titleNumber)
-		{
-			return GetAll().LastOrDefault(x =>
-				x.TitleNumber == titleNumber &&
-				(x.RequestType == LandRegistryRequestType.Res ||
-				 x.RequestType == LandRegistryRequestType.ResPoll));
-		}
-	}
-}
+		private bool IsResRequest(LandRegistry x) {
+			return
+				(x.RequestType == LandRegistryRequestType.Res) ||
+				(x.RequestType == LandRegistryRequestType.ResPoll);
+		} // IsResRequest
+	} // class LandRegistryRepository
+} // namespace EZBob.DatabaseLib.Repository

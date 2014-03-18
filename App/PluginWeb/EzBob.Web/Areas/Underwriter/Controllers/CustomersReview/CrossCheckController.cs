@@ -1,5 +1,4 @@
-﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
-{
+﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview {
 	using System.Data;
 	using System.Web.Mvc;
 	using Code;
@@ -11,18 +10,18 @@
 	using Scorto.Web;
 	using System.Linq;
 	using EzBob.Models;
+	using log4net;
 	using ActionResult = System.Web.Mvc.ActionResult;
 	using LandRegistryResponseType = LandRegistryLib.LandRegistryResponseType;
 
 	public class CrossCheckController : Controller {
-		private readonly ServiceClient m_oServiceClient;
-		private readonly CustomerRepository _customerRepository;
-		private readonly CustomerAddressRepository _customerAddressRepository;
-		private readonly CreditBureauModelBuilder _creditBureauModelBuilder;
+		#region public
+
+		#region constructor
 
 		public CrossCheckController(
-			CustomerRepository customerRepository, 
-			CreditBureauModelBuilder creditBureauModelBuilder, 
+			CustomerRepository customerRepository,
+			CreditBureauModelBuilder creditBureauModelBuilder,
 			CustomerAddressRepository customerAddressRepository
 		) {
 			m_oServiceClient = new ServiceClient();
@@ -31,90 +30,154 @@
 			_customerAddressRepository = customerAddressRepository;
 		} // constructor
 
+		#endregion constructor
+
+		#region action Index
+
 		[Ajax]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public ActionResult Index(int id)
-		{
+		public ActionResult Index(int id) {
 			var model = new CrossCheckModel(_customerRepository.Get(id), _creditBureauModelBuilder);
 			return View(model);
-		}
+		} // Index
+
+		#endregion action Index
+
+		#region action Zoopla
 
 		[Ajax]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[HttpGet]
-		public JsonNetResult Zoopla(int customerId, bool recheck)
-		{
+		public JsonResult Zoopla(int customerId, bool recheck) {
 			var address = _customerAddressRepository.GetAll().FirstOrDefault(a => a.Customer.Id == customerId && a.AddressType == CustomerAddressType.PersonalAddress);
+
 			if (address == null)
-			{
-				return this.JsonNet(new { error = "address not found" });
-			}
+				return Json(new { error = "address not found" }, JsonRequestBehavior.AllowGet);
+
 			var zoopla = address.Zoopla.LastOrDefault();
 
-			if (zoopla == null || recheck)
-			{
+			if (zoopla == null || recheck) {
 				var sh = new StrategyHelper();
 				sh.GetZooplaData(customerId, recheck);
 				zoopla = address.Zoopla.LastOrDefault();
-				if (zoopla == null)
-					return this.JsonNet(new { error = "zoopla info not found" });
-			}
 
-			return this.JsonNet(zoopla);
-		}
+				if (zoopla == null)
+					return Json(new { error = "zoopla info not found" }, JsonRequestBehavior.AllowGet);
+			} // if
+
+			return Json(zoopla, JsonRequestBehavior.AllowGet);
+		} // Zoopla
+
+		#endregion action Zoopla
+
+		#region Land Registry related
+
+		#region action LandRegistryEnquiry
 
 		[Ajax]
 		[HttpGet]
-		public JsonNetResult LandRegistryEnquiry(int customerId, string buildingNumber, string streetName, string cityName, string postCode)
-		{
+		public JsonResult LandRegistryEnquiry(int customerId, string buildingNumber, string streetName, string cityName, string postCode) {
 			var landregistryXml = m_oServiceClient.Instance.LandRegistryEnquiry(customerId, buildingNumber, streetName, cityName, postCode);
 			var landregistry = SerializeDataHelper.DeserializeTypeFromString<LandRegistryDataModel>(landregistryXml);
 
-			return this.JsonNet(new { titles = landregistry.Enquery.Titles, rejection = landregistry.Enquery.Rejection, ack = landregistry.Enquery.Acknowledgement });
-		}
+			return Json(
+				new {
+					titles = landregistry.Enquery.Titles,
+					rejection = landregistry.Enquery.Rejection,
+					ack = landregistry.Enquery.Acknowledgement
+				},
+				JsonRequestBehavior.AllowGet
+			);
+		} // LandRegistryEnquiry
+
+		#endregion action LandRegistryEnquiry
+
+		#region action LandRegistry
 
 		[Ajax]
 		[HttpGet]
-		public JsonNetResult LandRegistry(int customerId, string titleNumber = null)
-		{
+		public JsonResult LandRegistry(int customerId, string titleNumber = null) {
+			ms_oLog.DebugFormat("Loading Land Registry data for customer id {0} and title number {1}...", customerId, titleNumber ?? "--null--");
+
 			var landregistryXml = m_oServiceClient.Instance.LandRegistryRes(customerId, titleNumber);
+
 			var landregistry = SerializeDataHelper.DeserializeTypeFromString<LandRegistryDataModel>(landregistryXml);
 
-			if (landregistry.ResponseType == LandRegistryResponseType.None )
-					return this.JsonNet(new { noRes = true });
+			if (landregistry.ResponseType == LandRegistryResponseType.None) {
+				ms_oLog.DebugFormat("Loading Land Registry data for customer id {0} and title number {1} completed without result.", customerId, titleNumber ?? "--null--");
+				return Json(new {noRes = true}, JsonRequestBehavior.AllowGet);
+			} // if
+
+			ms_oLog.DebugFormat("Loading Land Registry data for customer id {0} and title number {1} completed successfully.", customerId, titleNumber ?? "--null--");
 
 			//todo return the full model 
-			return this.JsonNet(new { response = landregistry.Res, rejection = landregistry.Res.Rejection, ack = landregistry.Res.Acknowledgement });
-		}
+			return Json(
+				new {
+					response = landregistry.Res,
+					rejection = landregistry.Res.Rejection,
+					ack = landregistry.Res.Acknowledgement
+				},
+				JsonRequestBehavior.AllowGet
+			);
+		} // LandRegistry
+
+		#endregion action LandRegistry
+
+		#endregion Land Registry related
+
+		#region action SaveTargetingData
 
 		[Ajax]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[HttpPost]
-		public void SaveTargetingData(int customerId, string companyRefNum, string companyName, string addr1, string addr2, string addr3, string addr4, string postcode)
-		{
+		public void SaveTargetingData(
+			int customerId,
+			string companyRefNum,
+			string companyName,
+			string addr1,
+			string addr2,
+			string addr3,
+			string addr4,
+			string postcode
+		) {
 			var customer = _customerRepository.Get(customerId);
+
 			var company = customer.Company;
-			if (company != null)
-			{
+
+			if (company != null) {
 				company.ExperianRefNum = companyRefNum;
 				company.ExperianCompanyName = companyName;
-				if (!string.IsNullOrEmpty(postcode))
-				{
-					company.ExperianCompanyAddress.Add(new CustomerAddress
-						{
-							AddressType = CustomerAddressType.ExperianCompanyAddress,
-							Company = company,
-							Customer = customer,
-							Line1 = addr1,
-							Line2 = addr2,
-							Line3 = addr3,
-							Town = addr4,
-							Postcode = postcode,
-						});
-				}
-			}
+
+				if (!string.IsNullOrEmpty(postcode)) {
+					company.ExperianCompanyAddress.Add(new CustomerAddress {
+						AddressType = CustomerAddressType.ExperianCompanyAddress,
+						Company = company,
+						Customer = customer,
+						Line1 = addr1,
+						Line2 = addr2,
+						Line3 = addr3,
+						Town = addr4,
+						Postcode = postcode,
+					});
+				} // postcode is not empty
+			} // if company is not null
 
 			_customerRepository.Update(customer);
-		}
-	}
-}
+		} // SaveTargetingData
+
+		#endregion action SaveTargetingData
+
+		#endregion public
+
+		#region private
+
+		private readonly ServiceClient m_oServiceClient;
+		private readonly CustomerRepository _customerRepository;
+		private readonly CustomerAddressRepository _customerAddressRepository;
+		private readonly CreditBureauModelBuilder _creditBureauModelBuilder;
+
+		private static readonly ILog ms_oLog = LogManager.GetLogger(typeof (CrossCheckController));
+
+		#endregion private
+	} // class CrossCheckController
+} // namespace

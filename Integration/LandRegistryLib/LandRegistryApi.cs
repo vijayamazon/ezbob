@@ -178,7 +178,19 @@
 							response.GatewayResponse.Results.Attachment = null;
 						}
 					}
-					catch { }
+					catch (Exception e) {
+						Log.Warn("Something went terribly not good while saving Land Registry response as attachment.", e);
+					}
+
+					try {
+						Log.DebugFormat(
+							"Title number returned from PROD service is {0}",
+							response.GatewayResponse.Results.OCSummaryData.Title.TitleNumber.Value
+						);
+					}
+					catch (Exception) {
+						Log.Debug("Title number returned from PROD service is: FAILED TO SHOW.");
+					} // try
 
 					model.Response = XmlHelper.SerializeObject(response);
 					model.Res = _builder.BuildResModel(response);
