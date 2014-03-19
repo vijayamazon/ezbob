@@ -44,7 +44,7 @@ namespace EzBob.Web.Infrastructure
 
 			For<ConfigurationRootBob>().Use(bobconfig);
 
-			For<MembershipProvider>().Use<ScortoMembershipProvider>();
+			For<MembershipProvider>().Use<EzbobMembershipProvider>();
 			For<IWorkplaceContext>().Use<EzBobContext>();
 			For<IEzbobWorkplaceContext>().Use<EzBobContext>();
 			For<ICustomerRepository>().Use<CustomerRepository>();

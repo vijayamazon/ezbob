@@ -1,32 +1,40 @@
-﻿using System;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Web;
-using System.Web.Security;
-using ApplicationMng.Repository;
-using Scorto.Configuration;
-using Scorto.NHibernate.Model;
-using Scorto.Security.UserManagement;
-using Scorto.Web;
-using StructureMap;
-using log4net;
-
-namespace EzBob.Web.Infrastructure
+﻿namespace EzBob.Web.Infrastructure
 {
-    public class ScortoMembershipProvider : MembershipProvider
+	using System.Collections.Generic;
+	using System.Globalization;
+	using System.Security.Cryptography;
+	using System.Text;
+	using ApplicationMng.Model;
+	using Iesi.Collections.Generic;
+	using NHibernate;
+	using Scorto.NHibernate.Model;
+	using System;
+	using System.Linq;
+	using System.Text.RegularExpressions;
+	using System.Web;
+	using System.Web.Security;
+	using ApplicationMng.Repository;
+	using Scorto.Configuration;
+	using Scorto.Security.UserManagement;
+	using Scorto.Web;
+	using StructureMap;
+	using log4net;
+	using Scorto.Security.UserManagement.Resources;
+
+	public class EzbobMembershipProvider : MembershipProvider
     {
-        private static readonly ILog Log = LogManager.GetLogger("Scorto.Membership.Provider");
+        private static readonly ILog log = LogManager.GetLogger("EzbobMembershipProvider");
 
         private readonly IWorkplaceContext _context;
         private readonly UserManager _userManager;
         private readonly IRolesRepository _roles;
 
-        public ScortoMembershipProvider()
+        public EzbobMembershipProvider()
         {
             _roles = ObjectFactory.GetInstance<IRolesRepository>();
         }
 
-        public ScortoMembershipProvider(IWorkplaceContext context, UserManager userManager, IRolesRepository roles)
+		public EzbobMembershipProvider(IWorkplaceContext context, UserManager userManager, IRolesRepository roles)
         {
             _context = context;
             _userManager = userManager;
@@ -47,7 +55,7 @@ namespace EzBob.Web.Infrastructure
                 {
                     throw new Exception("Login does not conform to the passwordsecurity policy");
                 }
-                var user = _userManager.UpdateUser(userName, password, email, userName, roles, 0, null, null, null, false, false, false, null, passwordQuestion, passwordAnswer);
+				var user = _userManager.UpdateUser(userName, password, email, userName, roles, 0, null, null, null, false, false, false, null, passwordQuestion, passwordAnswer);
 
                 status = MembershipCreateStatus.Success;
                 return new MembershipUser("SimpleMembershipProvider",
@@ -59,13 +67,13 @@ namespace EzBob.Web.Infrastructure
             }
             catch (UserAlreadyExistsException )
             {
-                Log.WarnFormat("User with email {0} already exists", userName);
+                log.WarnFormat("User with email {0} already exists", userName);
                 status = MembershipCreateStatus.DuplicateEmail;
                 return null;
             }
             catch (Exception e)
             {
-                Log.Error("Failed to Create/Update user", e);
+                log.Error("Failed to Create/Update user", e);
                 status = MembershipCreateStatus.ProviderError;
                 throw;
             }
@@ -140,6 +148,7 @@ namespace EzBob.Web.Infrastructure
 
         public override string GetUserNameByEmail(string email)
         {
+			// can get from db - server side
             var userId = _userManager.GetUserIdByLogin(email);
             return userId == 0 ? null : Convert.ToString(userId);            
         }

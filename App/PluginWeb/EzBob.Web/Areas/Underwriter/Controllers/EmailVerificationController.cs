@@ -58,7 +58,7 @@
             var customer = _customers.Get(id);
             var user = _users.Get(id);
 
-            var provider = new ScortoMembershipProvider();
+            var provider = new EzbobMembershipProvider();
             var newPassword = provider.GenerateSimplePassword(16);
 
             var result = _userManager.ChangeEmailAndPassword(user, email, newPassword);
