@@ -9,8 +9,7 @@ CREATE PROCEDURE [dbo].[GetLastOfferForAutomatedDecision]
 	(@CustomerId INT, @Now DATETIME)
 AS
 BEGIN
-	DECLARE 
-		@RowNum INT,
+	DECLARE
 		@ManualDecisionDate DATETIME,
 		@count INT,
 		@ReApprovalFullAmountNew FLOAT,
@@ -108,8 +107,6 @@ BEGIN
 	BEGIN
 		SET @InterestRate = -1
 	END	
-	
-	SET @RowNum = 2
 
 	SELECT 
 		@ManualDecisionDate = max(cr.UnderwriterDecisionDate)
@@ -147,7 +144,7 @@ BEGIN
 							cr.IdCustomer = @CustomerId
 					) p
 				    WHERE 
-						p.row = @RowNum
+						p.row = 1
 				)
 		) 
 
@@ -182,7 +179,7 @@ BEGIN
 										WHERE 
 											cr.IdCustomer = @CustomerId
 									) p
-								WHERE p.row = @RowNum
+								WHERE p.row = 1
 							) AND
 							cr.UnderwriterDecision= 'Approved' AND
 							l.Id IS NULL AND
@@ -236,7 +233,7 @@ BEGIN
 										cr.IdCustomer = @CustomerId
 								) p
 								WHERE 
-									p.row = @RowNum
+									p.row = 1
 							) AND 
 							cr.UnderwriterDecision = 'Approved' AND 
 							cr.HasLoans = 1 AND 
@@ -300,7 +297,7 @@ BEGIN
 										cr.IdCustomer = @CustomerId
 								) p
 							WHERE 
-								p.row = @RowNum
+								p.row = 1
 						) AND 
 						cr.UnderwriterDecision= 'Approved' AND 
 						@ManualDecisionDate >= 
@@ -354,7 +351,7 @@ BEGIN
 											cr.IdCustomer = @CustomerId
 									) p
 								WHERE 
-									p.row = @RowNum
+									p.row = 1
 							) AND 
 							cr.UnderwriterDecision = 'Approved' AND 
 							@ManualDecisionDate >= (SELECT max(created) FROM MP_CustomerMarketPlace WHERE CustomerId=@CustomerId) AND 
@@ -408,7 +405,7 @@ BEGIN
 					cr.IdCustomer = @CustomerId
 			) p
 			WHERE 
-				p.row = @RowNum
+				p.row = 1
 		)
 END
 GO

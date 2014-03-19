@@ -174,7 +174,7 @@
 				if (autoDecisionResponse.IsAutoApproval)
 				{
 					UpdateApprovalData();
-					SendApprovalMails();
+					SendApprovalMails(scoringResult.MaxOfferPercent);
 					strategyHelper.AddApproveIntoDecisionHistory(customerId, "Auto Approval");
 				}
 				else if (autoDecisionResponse.IsAutoBankBasedApproval)
@@ -355,7 +355,7 @@
 				);
 		}
 
-		private void SendApprovalMails()
+		private void SendApprovalMails(decimal interestRate)
 		{
 			mailer.Send("Mandrill - User is approved", new Dictionary<string, string> {
 				{"ApprovedReApproved", "Approved"},
@@ -367,9 +367,9 @@
 				{"MP_Counter", allMPsNum.ToString(CultureInfo.InvariantCulture)},
 				{"MedalType", medalType.ToString()},
 				{"SystemDecision", autoDecisionResponse.SystemDecision},
-				{"ApprovalAmount", loanOfferReApprovalSum.ToString(CultureInfo.InvariantCulture)},
+				{"ApprovalAmount", autoDecisionResponse.AutoApproveAmount.ToString(CultureInfo.InvariantCulture)},
 				{"RepaymentPeriod", loanOfferRepaymentPeriod.ToString(CultureInfo.InvariantCulture)},
-				{"InterestRate", loanOfferInterestRate.ToString(CultureInfo.InvariantCulture)},
+				{"InterestRate", interestRate.ToString(CultureInfo.InvariantCulture)},
 				{
 					"OfferValidUntil",
 					autoDecisionResponse.AppValidFor.HasValue
