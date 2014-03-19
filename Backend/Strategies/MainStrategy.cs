@@ -400,7 +400,7 @@
 		private void UpdateApprovalData()
 		{
 			DB.ExecuteNonQuery(
-				"UpdateBankBasedAutoApproval",
+				"UpdateAutoApproval",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId),
 				new QueryParameter("AutoApproveAmount", autoDecisionResponse.AutoApproveAmount)
