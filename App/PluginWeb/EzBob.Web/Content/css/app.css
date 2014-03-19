@@ -1596,6 +1596,20 @@ input.form_field_right_side_signup_phone { float: right; margin-right: 10px; wid
     resize: none;
 }
 
+.broker-finish-wizard-later {
+	text-align: center;
+}
+
+.broker-finish-wizard-later .button-container {
+	display: inline-block;
+	text-align: left;
+	background-image: url(../img/big-bob-looks-right.png), url(../img/big-bob.png);
+	background-size: 26px 26px, 26px 26px;
+	background-position: top left, top right;
+	background-repeat: no-repeat;
+	padding: 0 30px;
+}
+
 @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
 
 	.marketplace-button { width: 95%; float: left; }

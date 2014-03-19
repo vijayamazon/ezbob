@@ -622,6 +622,41 @@
 
 		#endregion action FillWizard
 
+		#region action FinishWizardLater
+
+		[HttpGet]
+		public System.Web.Mvc.ActionResult FinishWizardLater() {
+			m_oLog.Debug("Broker fill wizard later request.");
+
+			var blm = new WizardBrokerLeadModel(Session);
+
+			if (blm.IsSet && blm.BrokerFillsForCustomer) {
+				StringActionResult sar = null;
+
+				try {
+					sar = m_oServiceClient.Instance.BrokerBackFromCustomerWizard(blm.LeadID);
+				}
+				catch (Exception e) {
+					m_oLog.Warn("Failed to retrieve broker details, falling back to customer's dashboard.", e);
+				} // try
+
+				if (sar != null) {
+					FormsAuthentication.SignOut();
+					FormsAuthentication.SetAuthCookie(sar.Value, true);
+
+					blm.Unset();
+					return RedirectToAction("Index", "BrokerHome", new {Area = "Broker"});
+				} // if
+			} // if
+
+			m_oLog.Debug("Broker fill wizard later request failed, redirecting back to customer wizard.");
+
+			blm.Unset();
+			return RedirectToAction("Index", "Wizard", new { Area = "Customer" });
+		} // FinishWizardLater
+
+		#endregion action FinishWizardLater
+
 		#endregion public
 
 		#region private

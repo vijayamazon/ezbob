@@ -1,22 +1,86 @@
-﻿@model dynamic
+﻿@using EzBob.Web.Infrastructure
+@model dynamic
 
-@helper Wizard(){
-    <div class="wizard-progress"></div>
-    <section id="content">
-        <div class="row-fluid notifications">
-        </div>
-        <div class='pages'>
-        </div>        
-    </section>
+<script type="text/template" id="wizard-template">
+	<div class="wizard-progress"></div>
+	<section id="content">
+		<div class="row-fluid notifications"></div>
+		<div class='pages'></div>
+	</section>
 	<aside class="customer-sidebar wizard">
 		@{Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_Sidebar.cshtml");}
 	</aside>
-    <div class="clear"/>
-}
-<script type="text/template" id="wizard-template">
-@Wizard()
+	<div class="clear" />
 </script>
 
 <script type="text/template" id="progress-indicator">
-    @{Html.RenderPartial("_Steps");}
+	<div class="wizard-steps">
+		<div class="progress-time"><span>Just <span class="progress-time-remainig"><%=progress%> minutes</span> to complete your application</span></div>
+		<ul class="application_steps"><%
+		(function() {
+			var nVisibleStepNum = 0;
+
+			var last = steps.length - 1;
+
+			_.each(steps, function(step, i) {
+				var css = '';
+				var lastcss = '';
+
+				if (i == current)
+					css += 'current';
+
+				if (i < current)
+					css += 'complete';
+
+				if (progress == 100)
+					css = 'complete';
+
+				if (i == last)
+					lastcss = 'last';
+
+				if (step.showTitleInWizardSteps)
+					nVisibleStepNum++;
+				else
+					css += 'hide';
+
+				%><li class="<%- css %> <%-lastcss%>" data-step-num="<%= step.num %>">
+					<span class="step_label"><% print(step.title) %></span>
+					<div class="progress-circle @*timer fill*@">
+						<div class="percent"><%=(i+1)%></div>
+						@*<div id="slice" class="gt50">
+							<div class="pie" style="-webkit-transform: rotate(360deg);"></div>
+							<div class="pie fill" style="-webkit-transform: rotate(360deg);"></div>
+						</div>*@
+					</div>
+					<div class="progress-line">
+						<div class="progress-line-<%-css%>"></div>
+					</div>
+				</li><%
+			}); // for each step
+		})(); // inline function - local scope
+		%></ul>
+
+		@*<div class="ez_progress_bar active">
+			<div class="ez_bar bar_step<%= progress %>"><%
+				if(progress > 0) {
+					%><div class="bar_content" style="color: white;"><%= progress %>% Completed</div><%
+				}
+				else {
+					%><div class="bar_content" style="color: grey;"><%= progress %>% Completed</div><%
+				}
+			%></div>
+		</div>*@
+	</div>
+
+	@{
+		var blm = new WizardBrokerLeadModel(Session);
+
+		if (blm.IsSet && blm.BrokerFillsForCustomer) {
+		<div class="broker-finish-wizard-later">
+			<div class="button-container" title="Broker performs sign up on behalf of customer.">
+				<button class="green" title="Click to finish sign up process later and return to dashboard.">Finish later</button>
+			</div>
+		</div>
+		}
+	}
 </script>
