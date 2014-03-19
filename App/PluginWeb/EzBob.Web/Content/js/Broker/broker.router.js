@@ -3,7 +3,7 @@ EzBob.Broker = EzBob.Broker || {};
 
 EzBob.Broker.Router = Backbone.Router.extend({
 	routes: {
-		'': 'signup',
+		'': 'signup', // this entry must be the first
 		'signup': 'signup',
 		'login': 'login',
 		'dashboard': 'dashboard',
@@ -11,7 +11,7 @@ EzBob.Broker.Router = Backbone.Router.extend({
 		'ForgotPassword': 'forgotten',
 		'add': 'addCustomer',
 		'customer/:customerId': 'showCustomer',
-		'*z': 'forbidden',
+		'*z': 'dashboard', // this entry must be the last
 	}, // routes
 
 	initialize: function() {

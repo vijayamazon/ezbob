@@ -4,14 +4,26 @@
 	using System.Web.Routing;
 	using EzBob.Web.Code;
 	using StructureMap;
-	using log4net;
 
 	public class IsSuccessfullyRegisteredFilter : ActionFilterAttribute {
 		public override void OnActionExecuting(ActionExecutingContext filterContext) {
 			var workplaceContext = ObjectFactory.GetInstance<IEzbobWorkplaceContext>();
 
-			var isUnderwriter =
-				(workplaceContext.User != null) &&
+			if (workplaceContext.User != null) {
+				var oBrokerHelper = new BrokerHelper();
+
+				if (oBrokerHelper.IsBroker(workplaceContext.User.EMail)) {
+					filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary {
+						{"action", "Index"},
+						{"controller", "BrokerHome"},
+						{"Area", "Broker"}
+					});
+
+					return;
+				} // if
+			} // if
+
+			var isUnderwriter = (workplaceContext.User != null) &&
 				workplaceContext.User.Roles.Any(
 					x => x.Name.ToLower() == "crm" || x.Name.ToLower() == "manager" || x.Name.ToLower() == "Underwriter"
 				);
@@ -24,20 +36,6 @@
 				});
 			}
 			else {
-				if (workplaceContext.User != null) {
-					var oBrokerHelper = new BrokerHelper();
-
-					if (oBrokerHelper.IsBroker(workplaceContext.User.EMail)) {
-						filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary {
-							{"action", "Index"},
-							{"controller", "BrokerHome"},
-							{"Area", "Broker"}
-						});
-
-						return;
-					} // if
-				} // if
-
 				var customer = workplaceContext.Customer;
 
 				if (workplaceContext.Customer == null)

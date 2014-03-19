@@ -1,83 +1,98 @@
-﻿using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Routing;
-using ApplicationMng.Repository;
-using StructureMap;
+﻿namespace EzBob.Web.Infrastructure.Filters {
+	using System.Linq;
+	using System.Web;
+	using System.Web.Mvc;
+	using System.Web.Routing;
+	using ApplicationMng.Repository;
+	using Code;
+	using StructureMap;
 
-namespace EzBob.Web.Infrastructure.Filters
-{
-    public class GlobalAreaAuthorizationFilter : AuthorizeAttribute
-    {
-        private readonly string _areaName;
-        private readonly bool _isAdminPageRedirect;
-        private readonly bool _strict;
-        private readonly string[] _whiteList = new[] { "Wizard", "Start", "HowItWorks", "AboutUs", "WhyEzBob", "AmazonMarketPlaces" };
-        //--------------------------------------------------------------------------
-        public GlobalAreaAuthorizationFilter(string areaName, string roleName, bool isAdminPageRedirect = false, bool strict = false)
-        {
-            _areaName = areaName;
-            Roles = roleName;
-            _isAdminPageRedirect = isAdminPageRedirect;
-            _strict = strict;
-        }
-        //---------------------------------------------------------------------------
-        protected override bool AuthorizeCore(HttpContextBase httpContext)
-        {
-            var routeData = httpContext.Request.RequestContext.RouteData;
-	        if (routeData.Values.Any())
-	        {
-		        var controller = routeData.GetRequiredString("controller");
+	public class GlobalAreaAuthorizationFilter : AuthorizeAttribute {
+		public GlobalAreaAuthorizationFilter(string areaName, string roleName, bool isAdminPageRedirect = false, bool strict = false) {
+			Roles = roleName;
 
-		        if (_whiteList.Contains(controller)) return true;
+			m_sAreaName = areaName;
+			m_bIsAdminPageRedirect = isAdminPageRedirect;
+			m_bIsStrict = strict;
+		} // constructor
 
-		        var area = routeData.DataTokens["area"] as string;
+		protected override bool AuthorizeCore(HttpContextBase httpContext) {
+			var routeData = httpContext.Request.RequestContext.RouteData;
 
-		        if (string.IsNullOrEmpty(area)) return true;
+			if (routeData.Values.Any()) {
+				var controller = routeData.GetRequiredString("controller");
 
-		        if (area != _areaName) return true;
+				if (m_oWhiteList.Contains(controller))
+					return true;
 
-		        if (!base.AuthorizeCore(httpContext)) return false;
+				var area = routeData.DataTokens["area"] as string;
 
-		        var users = UsersRepository();
-		        var user = users.GetUserByLogin(httpContext.User.Identity.Name);
+				if (string.IsNullOrEmpty(area))
+					return true;
 
-		        //if strict mode, do not allow to login users that have more than one role
-		        if (_strict && user.Roles.Count > 1) return false;
-	        }
-	        return true;
-        }
+				if (area != m_sAreaName)
+					return true;
 
-        protected virtual IUsersRepository UsersRepository()
-        {
-            var users = ObjectFactory.GetInstance<IUsersRepository>();
-            return users;
-        }
+				if (!base.AuthorizeCore(httpContext))
+					return false;
 
-        protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
-        {
+				var users = UsersRepository();
+				var user = users.GetUserByLogin(httpContext.User.Identity.Name);
 
-            if (filterContext.HttpContext.Request.IsAjaxRequest())
-            {
-                //use code 423 for ajax request to avoid rederection by forms auth module
-                filterContext.Result = new HttpStatusCodeResult(423);
-                return;
-            }
+				//if strict mode, do not allow to login users that have more than one role
+				if (m_bIsStrict && user.Roles.Count > 1)
+					return false;
+			} // if
 
-            if (_isAdminPageRedirect && _areaName == filterContext.RouteData.DataTokens["area"].ToString())
-            {
-                var redirectRouteDict = new RouteValueDictionary
-                    {
-                        {"action", "AdminLogOn"},
-                        {"controller", "Account"},
-                        {"Area", ""},
-                        {"ReturnUrl", filterContext.HttpContext.Request.RawUrl}
-                    };
-                filterContext.Result = new RedirectToRouteResult(redirectRouteDict);
-            } else
-            {
-                base.HandleUnauthorizedRequest(filterContext);
-            }
-        }
-    }
-}
+			return true;
+		} // AuthorizeCore
+
+		protected virtual IUsersRepository UsersRepository() {
+			return ObjectFactory.GetInstance<IUsersRepository>();
+		} // UsersRepository
+
+		protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext) {
+			if (filterContext.HttpContext.Request.IsAjaxRequest()) {
+				//use code 423 for ajax request to avoid rederection by forms auth module
+				filterContext.Result = new HttpStatusCodeResult(423);
+				return;
+			} // if
+
+			if (m_bIsAdminPageRedirect) {
+				var workplaceContext = ObjectFactory.GetInstance<IEzbobWorkplaceContext>();
+
+				if (workplaceContext.User != null) {
+					var oBrokerHelper = new BrokerHelper();
+
+					if (oBrokerHelper.IsBroker(workplaceContext.User.EMail)) {
+						filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary {
+							{"action", "Index"},
+							{"controller", "BrokerHome"},
+							{"Area", "Broker"}
+						});
+
+						return;
+					} // if
+				} // if
+
+				if (m_sAreaName == filterContext.RouteData.DataTokens["area"].ToString()) {
+					filterContext.Result = new RedirectToRouteResult(new RouteValueDictionary {
+						{"action", "AdminLogOn"},
+						{"controller", "Account"},
+						{"Area", ""},
+						{"ReturnUrl", filterContext.HttpContext.Request.RawUrl}
+					});
+
+					return;
+				} // if
+			} // if
+
+			base.HandleUnauthorizedRequest(filterContext);
+		} // HandleUnauthorizedRequest
+
+		private readonly string m_sAreaName;
+		private readonly bool m_bIsAdminPageRedirect;
+		private readonly bool m_bIsStrict;
+		private readonly string[] m_oWhiteList = new[] { "Wizard", "Start", "HowItWorks", "AboutUs", "WhyEzBob", "AmazonMarketPlaces" };
+	} // class GlobalAreaAuthorizationFilter
+} // namespace
