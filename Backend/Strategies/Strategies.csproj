@@ -103,6 +103,8 @@
     <Compile Include="Broker\BrokerSignup.cs" />
     <Compile Include="Broker\BrokerLogin.cs" />
     <Compile Include="Broker\BrokerRestorePassword.cs" />
+    <Compile Include="MailStrategies\API\Addressee.cs" />
+    <Compile Include="MailStrategies\API\MailMetaData.cs" />
     <Compile Include="MailStrategies\MailRecipientData\BrokerData.cs" />
     <Compile Include="CaisUpdate.cs" />
     <Compile Include="BwaChecker.cs" />
@@ -159,7 +161,7 @@
     <Compile Include="ScoreCalculation\Enums.cs" />
     <Compile Include="ScoreCalculation\MedalScoreCalculator.cs" />
     <Compile Include="ScoreCalculation\Models.cs" />
-    <Compile Include="StrategiesMailer.cs" />
+    <Compile Include="MailStrategies\API\StrategiesMailer.cs" />
     <Compile Include="CaisGenerate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\..\Common\CommonAssemblyInfo.cs">
@@ -299,6 +301,7 @@
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

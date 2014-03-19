@@ -1,10 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Ezbob.Database;
-using Ezbob.Logger;
+﻿namespace EzBob.Backend.Strategies.MailStrategies {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using Ezbob.Database;
+	using Ezbob.Logger;
 
-namespace EzBob.Backend.Strategies.MailStrategies {
+	using EzBob.Backend.Strategies.MailStrategies.API;
+
 	public abstract class AMailStrategyBase : AStrategy {
 		#region public
 
@@ -25,12 +27,11 @@ namespace EzBob.Backend.Strategies.MailStrategies {
 
 				Log.Debug("Variables:\n\t{0}", string.Join("\n\t", Variables.Select(kv => kv.Key + ": " + kv.Value)));
 
-				Log.Debug("sending an email{0} to staff...", sendToCustomer ? " to customer and" : string.Empty);
-				if (sendToCustomer)
-					mailer.SendToCustomerAndEzbob(Variables, CustomerData.Mail, TemplateName);
-				else
-					mailer.SendToEzbob(Variables, TemplateName);
-				Log.Debug("sending an email{0} to staff complete.", sendToCustomer ? " to customer and" : string.Empty);
+				Log.Debug("sending an email{0} to staff...", m_bSendToCustomer ? " to customer and" : string.Empty);
+
+				m_oMailer.Send(TemplateName, Variables, GetCustomerEmail());
+
+				Log.Debug("sending an email{0} to staff complete.", m_bSendToCustomer ? " to customer and" : string.Empty);
 
 				Log.Debug("performing ActionAtEnd()...");
 				ActionAtEnd();
@@ -51,15 +52,23 @@ namespace EzBob.Backend.Strategies.MailStrategies {
 
 		#region constructor
 
-		protected AMailStrategyBase(int customerId, bool sendToCustomer, AConnection oDb, ASafeLog oLog) : base(oDb, oLog) {
-			mailer = new StrategiesMailer(DB, Log);
+		protected AMailStrategyBase(int customerId, bool bSendToCustomer, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+			m_oMailer = new StrategiesMailer(DB, Log);
 
 			CustomerId = customerId;
-			this.sendToCustomer = sendToCustomer;
+			m_bSendToCustomer = bSendToCustomer;
 			Log.Debug("initialisation complete.");
 		} // constructor
 
 		#endregion constructor
+
+		#region method GetCustomerEmail
+
+		protected virtual string GetCustomerEmail() {
+			return m_bSendToCustomer ? null : CustomerData.Mail;
+		} // GetCustomerEmail
+
+		#endregion method GetCustomerEmail
 
 		#region method SetTemplateAndVariables
 
@@ -102,8 +111,8 @@ namespace EzBob.Backend.Strategies.MailStrategies {
 
 		#region private
 
-		private readonly StrategiesMailer mailer;
-		private readonly bool sendToCustomer;
+		private readonly StrategiesMailer m_oMailer;
+		private readonly bool m_bSendToCustomer;
 
 		#endregion private
 	} // class MailStrategyBase

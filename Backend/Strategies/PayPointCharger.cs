@@ -1,4 +1,5 @@
 ﻿namespace EzBob.Backend.Strategies {
+	using MailStrategies.API;
 	using Web.Code;
 	using System;
 	using System.Collections.Generic;
@@ -165,7 +166,7 @@
 				{"RefNum", refNum}
 			};
 
-			mailer.SendToCustomerAndEzbob(variables, customerMail, "Mandrill - Repayment confirmation");
+			mailer.Send("Mandrill - Repayment confirmation", variables, customerMail);
 		} // SendConfirmationMail
 
 		#endregion method SendConfirmationMail
@@ -189,7 +190,7 @@
 					{"RefNum", refNum}
 				};
 
-				mailer.SendToCustomerAndEzbob(variables, customerMail, "Mandrill - Loan paid in full");
+				mailer.Send("Mandrill - Loan paid in full", variables, customerMail);
 			} // if
 		} // SendLoanStatusMail
 
@@ -204,7 +205,7 @@
 				{"DueDate", FormattingUtils.FormatDateToString(DateTime.UtcNow)}
 			};
 
-			mailer.SendToCustomerAndEzbob(variables, customerMail, "Mandrill - Automatic Re-Payment has Failed");
+			mailer.Send("Mandrill - Automatic Re-Payment has Failed", variables, customerMail);
 		} // SendFailureMail
 
 		#endregion method SendFailureMail
@@ -212,14 +213,12 @@
 		#region method SendExceptionMail
 
 		private void SendExceptionMail(decimal initialAmountDue, int customerId, string customerMail, string fullName) {
-			var variables = new Dictionary<string, string> {
+			mailer.Send("Mandrill - PayPoint Script Exception", new Dictionary<string, string> {
 				{"UserID", customerId.ToString(CultureInfo.InvariantCulture)},
 				{"Email", customerMail},
 				{"FullName", fullName},
 				{"Amount", initialAmountDue.ToString(CultureInfo.InvariantCulture)}
-			};
-
-			mailer.SendToEzbob(variables, "Mandrill - PayPoint Script Exception");
+			});
 		} // SendExceptionMail
 
 		#endregion method SendExceptionMail

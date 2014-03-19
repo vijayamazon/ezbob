@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Backend.Strategies {
 	using AmazonLib;
+	using MailStrategies.API;
 	using PayPal;
 	using eBayLib;
 	using DbConstants;
@@ -119,37 +120,38 @@
 				errorMessage = e.Message;
 				Log.Warn("Exception occured during mp update. id:{0}", marketplaceId);
 
-				if (
-					marketplaceName == "eBay" && (
-						e.Message.Contains("16110") ||
-						e.Message.Contains("931") ||
-						e.Message.Contains("932") ||
-						e.Message.Contains("16118") ||
-						e.Message.Contains("16119") ||
-						e.Message.Contains("17470")
-					)
-				) {
+				var variables = new Dictionary<string, string> {
+					{"userID", customerId.ToString(CultureInfo.InvariantCulture)},
+					{"CustomerMarketPlaceId", marketplaceId.ToString(CultureInfo.InvariantCulture)},
+				};
+
+				bool bHasEbayMsgNum = marketplaceName == "eBay" && (
+					e.Message.Contains("16110") ||
+					e.Message.Contains("931") ||
+					e.Message.Contains("932") ||
+					e.Message.Contains("16118") ||
+					e.Message.Contains("16119") ||
+					e.Message.Contains("17470")
+				);
+
+				string sTemplateName;
+
+				if (bHasEbayMsgNum) {
 					tokenExpired = true;
 
-					var variables = new Dictionary<string, string> {
-						{"userID", customerId.ToString(CultureInfo.InvariantCulture)},
-						{"MPType", marketplaceName},
-						{"CustomerMarketPlaceId", marketplaceId.ToString(CultureInfo.InvariantCulture)},
-						{"ErrorMessage", e.Message},
-						{"ErrorCode", e.Message}
-					};
+					variables.Add("MPType", marketplaceName);
+					variables.Add("ErrorMessage", e.Message);
+					variables.Add("ErrorCode", e.Message);
 
-					mailer.SendToEzbob(variables, "Mandrill - Update MP Error Code");
+					sTemplateName = "Mandrill - Update MP Error Code";
 				}
 				else {
-					var variables = new Dictionary<string, string> {
-						{"userID", customerId.ToString(CultureInfo.InvariantCulture)},
-						{"CustomerMarketPlaceId", marketplaceId.ToString(CultureInfo.InvariantCulture)},
-						{"UpdateCMP_Error", e.Message}
-					};
+					variables.Add("UpdateCMP_Error", e.Message);
 
-					mailer.SendToEzbob(variables, "Mandrill - UpdateCMP Error");
+					sTemplateName = "Mandrill - UpdateCMP Error";
 				} // if
+
+				mailer.Send(sTemplateName, variables);
 			} // try
 
 			DB.ExecuteNonQuery("UpdateMPErrorMP",

@@ -8,6 +8,7 @@
 	using System.Globalization;
 	using System.IO;
 	using ExperianLib.CaisFile;
+	using MailStrategies.API;
 
 	public class CaisGenerate : AStrategy {
 		public CaisGenerate(int underwriterId, AConnection oDb, ASafeLog oLog)
@@ -237,12 +238,10 @@
 				);
 			}
 
-			var variables = new Dictionary<string, string>
-				{
-					{"CurrDate", DateTime.UtcNow.ToString(CultureInfo.InvariantCulture)},
-					{"Path", dirPath}
-				};
-			mailer.SendToEzbob(variables, "Mandrill - CAIS report");
+			mailer.Send("Mandrill - CAIS report", new Dictionary<string, string> {
+				{"CurrDate", DateTime.UtcNow.ToString(CultureInfo.InvariantCulture)},
+				{"Path", dirPath}
+			});
 
 			var businessCaisFileData = CaisFileManager.GetBusinessCaisFileData();
 			businessCaisFileData.WriteToFile(dirPath + "\\F1364.D.COMCAIS.ORMO.DI55CUST.INPUT");

@@ -4,6 +4,7 @@
 	using System.Globalization;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using MailStrategies.API;
 
 	public class LateBy14Days : AStrategy {
 		public LateBy14Days(AConnection oDb, ASafeLog oLog)
@@ -43,7 +44,7 @@
 					{"Total", total.ToString(CultureInfo.InvariantCulture)}
 				};
 
-				mailer.SendToCustomerAndEzbob(variables, mail, "Mandrill - 14 days notification email");
+				mailer.Send("Mandrill - 14 days notification email", variables, mail);
 
 				DB.ExecuteNonQuery("SetLateBy14Days", CommandSpecies.StoredProcedure, new QueryParameter("LoanId", loanId));
 			} // for

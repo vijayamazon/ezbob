@@ -11,6 +11,7 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils.XmlUtils;
+	using MailStrategies.API;
 
 	public class BankBasedApproval
 	{
@@ -262,14 +263,13 @@
 
 		private void NotifyAutoApproveSilentMode()
 		{
-			var vars = new Dictionary<string, string>
-			{
-				{"CustomerId", customerId.ToString(CultureInfo.InvariantCulture)},
-				{"Amount", loanOffer.ToString(CultureInfo.InvariantCulture)}
-			};
-
 			log.Info("Sending silent bank based auto approval mail for: customerId={0} ApproveAmount={1}", customerId, loanOffer);
-			mailer.SendMailViaMandrill(vars, silentToAddress, string.Empty, silentTemplateName, false);
+
+			mailer.SendMailViaMandrill(new MailMetaData(silentTemplateName) {
+				{"CustomerId", customerId.ToString(CultureInfo.InvariantCulture)},
+				{"Amount", loanOffer.ToString(CultureInfo.InvariantCulture)},
+				new Addressee(silentToAddress, bShouldRegister: false),
+			});
 		}
 
 		private void SetApproval(AutoDecisionResponse response)

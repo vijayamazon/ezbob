@@ -1,4 +1,5 @@
 ﻿namespace EzBob.Backend.Strategies {
+	using MailStrategies.API;
 	using Web.Code;
 	using System;
 	using System.Collections.Generic;
@@ -47,7 +48,7 @@
 					{"DebitCard", creditCard}
 				};
 
-				mailer.SendToCustomerAndEzbob(variables, mail, "Mandrill - 5 days notice");
+				mailer.Send("Mandrill - 5 days notice", variables, mail);
 
 				DB.ExecuteNonQuery("UpdateFiveDaysDueMailSent",
 					CommandSpecies.StoredProcedure,
@@ -74,7 +75,7 @@
 					{"DebitCard", creditCard}
 				};
 
-				mailer.SendToCustomerAndEzbob(variables, mail, "Mandrill - 2 days notice");
+				mailer.Send("Mandrill - 2 days notice", variables, mail);
 
 				DB.ExecuteNonQuery("UpdateTwoDaysDueMailSent",
 					CommandSpecies.StoredProcedure,

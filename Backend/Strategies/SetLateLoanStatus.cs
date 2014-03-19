@@ -5,6 +5,7 @@
 	using System.Globalization;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using MailStrategies.API;
 	using PaymentServices.PayPoint;
 
 	public class SetLateLoanStatus : AStrategy {
@@ -84,16 +85,15 @@
 								? "Mandrill - Late fee was added (7D late)"
 								: "Mandrill - Late fee was added (14D late)";
 
-							var variables = new Dictionary<string, string>
-								{
-									{"FirstName", firstName},
-									{"ScheduledAmount", amountDue.ToString(CultureInfo.InvariantCulture)},
-									{"RefNum", refNum},
-									{"FeeAmount", feeAmount.ToString(CultureInfo.InvariantCulture)},
-									{"DaysBetween", daysBetween.ToString(CultureInfo.InvariantCulture)}
-								};
+							var variables = new Dictionary<string, string> {
+								{"FirstName", firstName},
+								{"ScheduledAmount", amountDue.ToString(CultureInfo.InvariantCulture)},
+								{"RefNum", refNum},
+								{"FeeAmount", feeAmount.ToString(CultureInfo.InvariantCulture)},
+								{"DaysBetween", daysBetween.ToString(CultureInfo.InvariantCulture)}
+							};
 
-							mailer.SendToCustomerAndEzbob(variables, mail, templateName);
+							mailer.Send(templateName, variables, mail);
 						}
 					} // if
 				} // if
