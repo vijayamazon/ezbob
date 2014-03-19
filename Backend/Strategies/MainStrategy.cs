@@ -330,7 +330,8 @@
 				var customerMailVariables = new Dictionary<string, string>
 					{
 						{"FirstName", appFirstName},
-						{"LoanAmount", loanOfferReApprovalSum.ToString(CultureInfo.InvariantCulture)}
+						{"LoanAmount", loanOfferReApprovalSum.ToString(CultureInfo.InvariantCulture)},
+						{"ValidFor", autoDecisionResponse.AppValidFor.HasValue ? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture) : string.Empty}
 					};
 
 				mailer.SendToCustomerAndEzbob(customerMailVariables, appEmail, "Mandrill - Approval (not 1st time)");
@@ -391,7 +392,8 @@
 			var customerMailVariables = new Dictionary<string, string>
 				{
 					{"FirstName", appFirstName},
-					{"LoanAmount", autoDecisionResponse.AutoApproveAmount.ToString(CultureInfo.InvariantCulture)}
+					{"LoanAmount", autoDecisionResponse.AutoApproveAmount.ToString(CultureInfo.InvariantCulture)},
+					{"ValidFor", autoDecisionResponse.AppValidFor.HasValue ? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture) : string.Empty}
 				};
 
 			mailer.SendToCustomerAndEzbob(customerMailVariables, appEmail, isFirstLoan ? "Mandrill - Approval (1st time)" : "Mandrill - Approval (not 1st time)");
@@ -436,7 +438,8 @@
 			var customerMailVariables = new Dictionary<string, string>
 				{
 					{"FirstName", appFirstName},
-					{"LoanAmount", autoDecisionResponse.BankBasedAutoApproveAmount.ToString(CultureInfo.InvariantCulture)}
+					{"LoanAmount", autoDecisionResponse.BankBasedAutoApproveAmount.ToString(CultureInfo.InvariantCulture)},
+					{"ValidFor", autoDecisionResponse.AppValidFor.HasValue ? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture) : string.Empty}
 				};
 
 			mailer.SendToCustomerAndEzbob(customerMailVariables, appEmail, isFirstLoan ? "Mandrill - Approval (1st time)" : "Mandrill - Approval (not 1st time)");
