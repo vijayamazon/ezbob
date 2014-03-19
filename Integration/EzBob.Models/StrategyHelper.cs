@@ -343,7 +343,7 @@
 				return 0;
 			}
 
-			log.InfoFormat("Decided to auto approve amount:{0}", autoApprovedAmount);
+			log.InfoFormat("Calculated auto approve amount:{0}", autoApprovedAmount);
 			return autoApprovedAmount;
 		}
 

@@ -41,6 +41,7 @@
 				{
 					response.AutoApproveAmount = strategyHelper.AutoApproveCheck(customerId, offeredCreditLine, minExperianScore);
 					response.AutoApproveAmount = (int)(Math.Round(response.AutoApproveAmount / minLoanAmount, 0, MidpointRounding.AwayFromZero) * minLoanAmount);
+					log.Info("Decided to auto approve rounded amount:{0}", response.AutoApproveAmount);
 
 					if (response.AutoApproveAmount != 0)
 					{
