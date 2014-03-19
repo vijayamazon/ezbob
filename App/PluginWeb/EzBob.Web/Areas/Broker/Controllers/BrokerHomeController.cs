@@ -40,17 +40,21 @@
 		#region action Index (default)
 
 		// GET: /Broker/BrokerHome/
-		public System.Web.Mvc.ViewResult Index(string sErrorOnStart = null) {
+		public System.Web.Mvc.ViewResult Index() {
 			ViewData[Constant.Config] = m_oConfig;
-			ViewData[Constant.Auth] = string.Empty;
+			ViewData[Constant.Broker.Auth] = string.Empty;
 
-			if (!string.IsNullOrWhiteSpace(sErrorOnStart))
-				ViewData[Constant.ErrorOnStart] = sErrorOnStart;
+			string sMsgOnStart = (Session[Constant.Broker.MessageOnStart] ?? string.Empty).ToString().Trim();
+
+			if (!string.IsNullOrWhiteSpace(sMsgOnStart)) {
+				ViewData[Constant.Broker.MessageOnStart] = sMsgOnStart;
+				ViewData[Constant.Broker.MessageOnStartSeverity] = (Session[Constant.Broker.MessageOnStartSeverity] ?? string.Empty).ToString();
+			} // if
 
 			if (User.Identity.IsAuthenticated) {
-				string sAuthenticationResult = m_oHelper.IsBroker(User.Identity.Name) ? User.Identity.Name : Constant.Forbidden;
+				string sAuthenticationResult = m_oHelper.IsBroker(User.Identity.Name) ? User.Identity.Name : Constant.Broker.Forbidden;
 
-				ViewData[Constant.Auth] = sAuthenticationResult;
+				ViewData[Constant.Broker.Auth] = sAuthenticationResult;
 
 				m_oLog.Info("Broker page sent to browser with authentication result: {0}", sAuthenticationResult);
 			} // if
@@ -578,12 +582,20 @@
 			m_oLog.Debug("Broker fill wizard request for contact email {0} and lead id {1} lead email {2}.", sContactEmail, nLeadID, sLeadEmail);
 
 			var oIsAuthResult = IsAuth<BrokerForJsonResult>("Send invitation", sContactEmail);
-			if (oIsAuthResult != null)
-				return RedirectToAction("Index", "BrokerHome", new { Area = "Broker", sErrorOnStart = oIsAuthResult.error });
+			if (oIsAuthResult != null) {
+				Session[Constant.Broker.MessageOnStart] = oIsAuthResult.error;
+				Session[Constant.Broker.MessageOnStartSeverity] = Constant.Severity.Error;
+
+				return RedirectToAction("Index", "BrokerHome", new { Area = "Broker", });
+			} // if
 
 			if ((nLeadID > 0) && !string.IsNullOrWhiteSpace(sLeadEmail)) {
 				m_oLog.Warn("Both lead id ({0}) and lead email ({1}) specified while there can be only one.", nLeadID, sLeadEmail);
-				return RedirectToAction("Index", "BrokerHome", new {Area = "Broker", sErrorOnStart = "Could not process fill all the details request."});
+
+				Session[Constant.Broker.MessageOnStart] = "Could not process fill all the details request.";
+				Session[Constant.Broker.MessageOnStartSeverity] = Constant.Severity.Error;
+
+				return RedirectToAction("Index", "BrokerHome", new { Area = "Broker", });
 			} // if
 
 			BrokerLeadDetailsActionResult bld = null;
@@ -593,12 +605,20 @@
 			}
 			catch (Exception e) {
 				m_oLog.Alert(e, "Failed to process fill wizard request for contact email {0} and lead id {1} lead email {2}.", sContactEmail, nLeadID, sLeadEmail);
-				return RedirectToAction("Index", "BrokerHome", new { Area = "Broker", sErrorOnStart = "Could not process fill all the details request." });
+
+				Session[Constant.Broker.MessageOnStart] = "Could not process fill all the details request.";
+				Session[Constant.Broker.MessageOnStartSeverity] = Constant.Severity.Error;
+
+				return RedirectToAction("Index", "BrokerHome", new { Area = "Broker", });
 			} // try
 
 			if (bld.LeadID < 1) {
 				m_oLog.Warn("Validated lead id is {0}. Source lead id is {1} lead email {2}.", bld.LeadID, nLeadID, sLeadEmail);
-				return RedirectToAction("Index", "BrokerHome", new { Area = "Broker", sErrorOnStart = "Could not process fill all the details request." });
+
+				Session[Constant.Broker.MessageOnStart] = "Could not process fill all the details request.";
+				Session[Constant.Broker.MessageOnStartSeverity] = Constant.Severity.Error;
+
+				return RedirectToAction("Index", "BrokerHome", new { Area = "Broker", });
 			} // if
 
 			m_oHelper.Logoff(User.Identity.Name);

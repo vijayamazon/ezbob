@@ -9,11 +9,11 @@
 		public WizardBrokerLeadModel(HttpSessionStateBase oSession) {
 			Session = oSession;
 
-			LeadID = (int)(Session[Constant.BrokerLeadID] ?? 0);
-			LeadEmail = (Session[Constant.BrokerLeadEmail] ?? string.Empty).ToString();
-			BrokerFillsForCustomer = (Session[Constant.BrokerFillsForCustomer] ?? Constant.No).ToString() == Constant.Yes;
-			FirstName = (Session[Constant.BrokerLeadFirstName] ?? string.Empty).ToString();
-			LastName = (Session[Constant.BrokerLeadLastName] ?? string.Empty).ToString();
+			LeadID = (int)(Session[Constant.Broker.LeadID] ?? 0);
+			LeadEmail = (Session[Constant.Broker.LeadEmail] ?? string.Empty).ToString();
+			BrokerFillsForCustomer = (Session[Constant.Broker.FillsForCustomer] ?? Constant.No).ToString() == Constant.Yes;
+			FirstName = (Session[Constant.Broker.LeadFirstName] ?? string.Empty).ToString();
+			LastName = (Session[Constant.Broker.LeadLastName] ?? string.Empty).ToString();
 		} // constructor
 
 		public WizardBrokerLeadModel(
@@ -111,11 +111,11 @@
 		#region method Upload
 
 		private void Upload() {
-			Session[Constant.BrokerLeadID] = LeadID;
-			Session[Constant.BrokerLeadEmail] = LeadEmail;
-			Session[Constant.BrokerLeadFirstName] = FirstName;
-			Session[Constant.BrokerLeadLastName] = LastName;
-			Session[Constant.BrokerFillsForCustomer] = BrokerFillsForCustomer ? Constant.Yes : Constant.No;
+			Session[Constant.Broker.LeadID] = LeadID;
+			Session[Constant.Broker.LeadEmail] = LeadEmail;
+			Session[Constant.Broker.LeadFirstName] = FirstName;
+			Session[Constant.Broker.LeadLastName] = LastName;
+			Session[Constant.Broker.FillsForCustomer] = BrokerFillsForCustomer ? Constant.Yes : Constant.No;
 		} // Upload
 
 		#endregion method Upload

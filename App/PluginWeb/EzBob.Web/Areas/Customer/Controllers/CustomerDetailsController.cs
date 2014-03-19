@@ -56,7 +56,7 @@
 		public System.Web.Mvc.ActionResult Dashboard() {
 			var blm = new WizardBrokerLeadModel(Session);
 
-			if (blm.IsSet) {
+			if (blm.IsSet && blm.BrokerFillsForCustomer) {
 				StringActionResult sar = null;
 
 				try {
@@ -70,13 +70,18 @@
 					FormsAuthentication.SignOut();
 					FormsAuthentication.SetAuthCookie(sar.Value, true);
 
+					Session[Constant.Broker.MessageOnStart] = string.Format(
+						"Customer {0} {1} ({2}) has been created.", blm.FirstName, blm.LastName, blm.LeadEmail
+					);
+					Session[Constant.Broker.MessageOnStartSeverity] = Constant.Severity.Info;
+
 					blm.Unset();
-					return RedirectToAction("Index", "BrokerHome", new {Area = "Broker"});
+					return RedirectToAction("Index", "BrokerHome", new { Area = "Broker", });
 				} // if
 			} // if
 
 			blm.Unset();
-			return RedirectToAction("Index", "Profile", new {Area = "Customer"});
+			return RedirectToAction("Index", "Profile", new { Area = "Customer" });
 		} // Dashboard
 
 		#endregion method ToProfile

@@ -58,7 +58,11 @@
 	}
 </head>
 
-<body data-auth="@ViewData[Constant.Auth]" data-error-on-start="@ViewData[Constant.ErrorOnStart]">
+<body
+	data-auth="@ViewData[Constant.Broker.Auth]"
+	data-msg-on-start="@ViewData[Constant.Broker.MessageOnStart]"
+	data-msg-on-start-severity="@ViewData[Constant.Broker.MessageOnStartSeverity]"
+>
 	@Html.AntiForgeryTokenNoUserCheck()
 
 	<div id="wrapper">

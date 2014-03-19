@@ -44,10 +44,12 @@ $(document).ready(function() {
 		});
 	});
 
-	var sErrorOnStart = $('body').attr('data-error-on-start');
+	var sMsgOnStart = $('body').attr('data-msg-on-start');
 
-	if (sErrorOnStart) {
-		$('body').removeAttr('data-error-on-start');
-		EzBob.App.trigger('error', sErrorOnStart);
+	if (sMsgOnStart) {
+		EzBob.App.trigger($('body').attr('data-msg-on-start-severity') || 'error', sMsgOnStart);
+
+		$('body').removeAttr('data-msg-on-start');
+		$('body').removeAttr('data-msg-on-start-severity');
 	} // if
 }); // document.ready
