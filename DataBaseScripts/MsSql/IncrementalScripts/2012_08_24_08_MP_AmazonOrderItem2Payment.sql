@@ -1,1 +1,0 @@
-ALTER TABLE [MP_AmazonOrderItem2Payment] ALTER COLUMN [OrderItem2Id] int NULL

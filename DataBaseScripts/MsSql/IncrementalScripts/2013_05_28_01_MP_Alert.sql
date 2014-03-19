@@ -1,1 +1,0 @@
-drop table MP_Alert

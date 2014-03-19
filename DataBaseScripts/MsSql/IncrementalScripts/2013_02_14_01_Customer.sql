@@ -1,1 +1,0 @@
-alter table [dbo].[Customer] drop column [SystemCalculatedAmount]

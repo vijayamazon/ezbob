@@ -1,1 +1,0 @@
-ALTER TABLE MP_AnalyisisFunctionValues add [CountMonths] [int] NULL

@@ -1,1 +1,0 @@
-﻿alter table [dbo].[LoanOptions] add unique (LoanId);

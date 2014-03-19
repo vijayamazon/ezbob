@@ -1,1 +1,0 @@
-alter table [dbo].[Customer] add LastStartedMainStrategyEndTime Datetime null

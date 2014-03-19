@@ -1,1 +1,0 @@
-﻿alter table dbo.Bug add CreditBureauDirectorId int NULL

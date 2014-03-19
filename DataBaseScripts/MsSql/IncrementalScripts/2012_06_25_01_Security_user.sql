@@ -1,1 +1,0 @@
-ALTER TABLE Security_User add [IsPasswordRestored] [bit]

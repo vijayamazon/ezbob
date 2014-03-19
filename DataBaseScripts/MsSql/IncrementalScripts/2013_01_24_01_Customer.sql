@@ -1,1 +1,0 @@
-alter table Customer add LastStartedMainStrategyId int null

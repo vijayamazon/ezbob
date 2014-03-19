@@ -1,1 +1,0 @@
-﻿ALTER TABLE Loan ALTER COLUMN Status nvarchar(50) NOT NULL

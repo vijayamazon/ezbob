@@ -1,1 +1,0 @@
-ALTER TABLE MP_MarketplaceType ADD Active BIT NOT NULL DEFAULT 1

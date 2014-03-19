@@ -1,1 +1,0 @@
-alter table PaymentRollover add MounthCount int not null default 1

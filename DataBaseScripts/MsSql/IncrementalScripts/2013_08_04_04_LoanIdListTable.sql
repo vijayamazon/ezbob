@@ -1,7 +1,0 @@
-IF TYPE_ID('LoanIdListTable') IS NOT NULL
-	DROP TYPE LoanIdListTable
-GO
-
-CREATE TYPE LoanIdListTable AS TABLE (LoanID INT NOT NULL)
-GO
-

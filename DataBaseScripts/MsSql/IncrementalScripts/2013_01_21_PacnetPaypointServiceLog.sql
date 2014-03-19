@@ -1,1 +1,0 @@
-alter table PacnetPaypointServiceLog alter column RequestType nvarchar(max)
