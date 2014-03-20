@@ -4,10 +4,10 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
-	public class CashTransferred : AMailStrategyBase {
+	public class CashTransferred : ABrokerMailToo {
 		#region consturctor
 
-		public CashTransferred(int customerId, decimal amount, AConnection oDb, ASafeLog oLog) : base(customerId, true, oDb, oLog) {
+		public CashTransferred(int customerId, decimal amount, AConnection oDb, ASafeLog oLog) : base(customerId, true, oDb, oLog, true) {
 			this.amount = amount;
 		} // constructor
 

@@ -6,7 +6,7 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
-	public class ApprovedUser : AMailStrategyBase {
+	public class ApprovedUser : ABrokerMailToo {
 		#region constructor
 
 		public ApprovedUser(int customerId, decimal loanAmount, AConnection oDb, ASafeLog oLog) : base(customerId, true, oDb, oLog) {

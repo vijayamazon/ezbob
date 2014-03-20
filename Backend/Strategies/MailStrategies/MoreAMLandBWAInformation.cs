@@ -3,7 +3,7 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
-	public class MoreAmlAndBwaInformation : AMailStrategyBase {
+	public class MoreAmlAndBwaInformation : ABrokerMailToo {
 		public MoreAmlAndBwaInformation(int customerId, AConnection oDb, ASafeLog oLog)
 			: base(customerId, true, oDb, oLog)
 		{

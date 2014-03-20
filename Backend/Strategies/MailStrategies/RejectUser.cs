@@ -3,7 +3,7 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
-	public class RejectUser : AMailStrategyBase {
+	public class RejectUser : ABrokerMailToo {
 		public RejectUser(int customerId, AConnection oDb, ASafeLog oLog) : base(customerId, true, oDb, oLog) {
 		} // constructor
 

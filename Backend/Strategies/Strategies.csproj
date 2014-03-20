@@ -104,6 +104,7 @@
     <Compile Include="Broker\BrokerSignup.cs" />
     <Compile Include="Broker\BrokerLogin.cs" />
     <Compile Include="Broker\BrokerRestorePassword.cs" />
+    <Compile Include="MailStrategies\ABrokerMailToo.cs" />
     <Compile Include="MailStrategies\API\Addressee.cs" />
     <Compile Include="MailStrategies\API\MailMetaData.cs" />
     <Compile Include="MailStrategies\Broker\BrokerFillForCustomerComplete.cs" />
