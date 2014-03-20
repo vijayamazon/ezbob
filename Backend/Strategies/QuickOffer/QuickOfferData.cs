@@ -219,8 +219,8 @@
 				Log.Debug("The offer is less than {0}, not offering.", Cfg.MinOfferAmount.ToString("C2", ci));
 				return null;
 			} // if
-
-			decimal nOfferBeforeCap = (RequestedAmount * Cfg.OfferCapPct).DropHundred();
+			
+			decimal nOfferBeforeCap = (int)(Math.Round((RequestedAmount * Cfg.OfferCapPct) / minLoanAmount, 0, MidpointRounding.AwayFromZero) * minLoanAmount);
 
 			decimal nCap = nOfferBeforeCap.Min(Cfg.ImmediateMaxAmount);
 
