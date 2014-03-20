@@ -3,6 +3,8 @@
 	using System.Data;
 	using System.Web.Mvc;
 	using Code;
+	using Infrastructure;
+	using Infrastructure.Membership;
 	using Models;
 	using Infrastructure.csrf;
 	using Scorto.NHibernate.Model;
@@ -12,17 +14,17 @@
 	public class AccountSettingsController : Controller
     {
         private readonly IWorkplaceContext _context;
-        private readonly UserManager _userManager;
         private readonly IPasswordEncoder _passwordEncoder;
         private readonly ServiceClient m_oServiceClient;
+		private readonly EzbobMembershipProvider provider;
 
         //------------------------------------------------------------------------------------
-        public AccountSettingsController(IWorkplaceContext context, UserManager userManager, IPasswordEncoder passwordEncoder)
+        public AccountSettingsController(IWorkplaceContext context, IPasswordEncoder passwordEncoder)
         {
             _context = context;
-            _userManager = userManager;
             _passwordEncoder = passwordEncoder;
 	        m_oServiceClient = new ServiceClient();
+			provider = new EzbobMembershipProvider();
         }
         //------------------------------------------------------------------------------------
         [Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
@@ -54,14 +56,14 @@
         [ValidateJsonAntiForgeryToken]
         public JsonNetResult ChangePassword(string oldPassword, string newPassword)
         {
-            var result = _userManager.ChangePassword(_context.User, oldPassword, newPassword);
-            if (result == ChangePasswordStatus.ChangeOk)
+			bool success = provider.ChangePassword(_context.User.Name, oldPassword, newPassword);
+			if (success)
             {
                 _context.User.IsPasswordRestored = false;
 				m_oServiceClient.Instance.PasswordChanged(_context.User.Id, newPassword);
             }
 
-            return this.JsonNet(new { status = result.ToString() }); 
+			return this.JsonNet(new { status = success ? "ChangeOk" : "SomeError" }); 
         }
 
         [ValidateJsonAntiForgeryToken]
@@ -69,7 +71,7 @@
         [Ajax]
         public string IsEqualsOldPassword(string new_Password)
         {
-            var result = _userManager.IsEqualsOldPassword(_context.User.Name, new_Password);
+            var result = provider.IsEqualsOldPassword(_context.User.Name, new_Password);
             return result ? "false" : "true";
         }
     }

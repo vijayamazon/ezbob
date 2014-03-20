@@ -1,12 +1,10 @@
-﻿namespace EzBob.Web.Infrastructure
+﻿namespace EzBob.Web.Infrastructure.Membership
 {
 	using System.Collections.Generic;
-	using System.Globalization;
 	using System.Security.Cryptography;
 	using System.Text;
 	using ApplicationMng.Model;
 	using Areas.Customer.Controllers.Exceptions;
-	using Iesi.Collections.Generic;
 	using NHibernate;
 	using Scorto.NHibernate.Model;
 	using System;
@@ -15,7 +13,6 @@
 	using System.Web;
 	using System.Web.Security;
 	using ApplicationMng.Repository;
-	using Scorto.Configuration;
 	using Scorto.Security.UserManagement;
 	using Scorto.Web;
 	using StructureMap;
@@ -28,9 +25,7 @@
 		private readonly IUsersRepository usersRepository;
 		private readonly IRolesRepository roles;
 		private readonly SessionRepository sessionRepository;
-
-        private readonly IWorkplaceContext _context;
-        private readonly UserManager _userManager;
+		private readonly IWorkplaceContext context;
 
         public EzbobMembershipProvider()
         {
@@ -39,74 +34,87 @@
 			sessionRepository = ObjectFactory.GetInstance<SessionRepository>();
         }
 
-		public EzbobMembershipProvider(IWorkplaceContext context, UserManager userManager, IRolesRepository roles)
+		public EzbobMembershipProvider(IWorkplaceContext context, IRolesRepository roles)
         {
-            _context = context;
-            _userManager = userManager;
+			this.context = context;
 			this.roles = roles;
 			usersRepository = ObjectFactory.GetInstance<IUsersRepository>();
 			sessionRepository = ObjectFactory.GetInstance<SessionRepository>();
         }
 
-        public override MembershipUser CreateUser(string userName, string password, string email, string passwordQuestion, string passwordAnswer, bool isApproved, object providerUserKey, out MembershipCreateStatus status)
-        {
-            try
-            {
-                var roles = this.roles.GetAll().Where(r => r.Name == "Web").ToList();
-                if(!roles.Any())
-                {
-                    throw new RoleNotFoundException("Web");
-                }
+		public override MembershipUser CreateUser(string userName, string password, string email, string passwordQuestion, string passwordAnswer, bool isApproved, object providerUserKey, out MembershipCreateStatus status)
+		{
+			try
+			{
+				var webRoles = roles.GetAll().Where(r => r.Name == "Web").ToList();
+				if (!webRoles.Any())
+				{
+					throw new RoleNotFoundException("Web");
+				}
 
+				// TODO: should be in configuration
 				string loginValidationStringForWeb = @"(^((([a-z]|\d|[!#\$%'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$)";
 				if (!Regex.IsMatch(userName.ToLower(), loginValidationStringForWeb))
-                {
-                    throw new Exception("Login does not conform to the passwordsecurity policy");
-                }
-				var user = _userManager.UpdateUser(userName, password, email, userName, roles, 0, null, null, null, false, false, false, null, passwordQuestion, passwordAnswer);
+				{
+					throw new Exception("Login does not conform to the passwordsecurity policy");
+				}
 
-				// TODO: replace with
-				//var user = UpdateUser(userName, password, email, userName, roles, 0, null, null, null, false, false, null, passwordQuestion, passwordAnswer);
+				UpdateUser(userName, password, email, userName, webRoles, 0, null, null, null, false, false, null, passwordQuestion, passwordAnswer);
 
-                status = MembershipCreateStatus.Success;
-                return new MembershipUser("SimpleMembershipProvider",
-                                          user.Name,
-                                          user.Id,                                         
-                                          user.EMail,
-                                          "", "", false, false, user.CreationDate, DateTime.MinValue, DateTime.MinValue,
-                                          DateTime.MinValue, DateTime.MinValue);
-            }
-            catch (UserAlreadyExistsException )
-            {
-                log.WarnFormat("User with email {0} already exists", userName);
-                status = MembershipCreateStatus.DuplicateEmail;
-                return null;
-            }
-            catch (Exception e)
-            {
-                log.Error("Failed to Create/Update user", e);
-                status = MembershipCreateStatus.ProviderError;
-                throw;
-            }
-        }        
-
-        public override bool ChangePasswordQuestionAndAnswer(string username, string password, string newPasswordQuestion, string newPasswordAnswer)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override string GetPassword(string username, string answer)
-        {
-            throw new System.NotImplementedException();
-        }
+				status = MembershipCreateStatus.Success;
+				return null;
+			}
+			catch (UserAlreadyExistsException)
+			{
+				log.WarnFormat("User with email {0} already exists", userName);
+				status = MembershipCreateStatus.DuplicateEmail;
+				return null;
+			}
+			catch (Exception e)
+			{
+				log.Error("Failed to Create/Update user", e);
+				status = MembershipCreateStatus.ProviderError;
+				throw;
+			}
+		}
 
         public override bool ChangePassword(string username, string oldPassword, string newPassword)
         {
-            _userManager.ChangePassword(username, oldPassword, newPassword);
-            return true;
+			return InnerChangePassword(username, oldPassword, newPassword);
         }
-        //------------------------------------------------------------------------            
-        public string GenerateSimplePassword(int size) //If you need a strong password that will be used Membership.GeneratePassword
+
+		private bool InnerChangePassword(string userName, string password, string newPassword)
+		{
+			if (!PolicyValidatePassword(password))
+			{
+				return false;
+			}
+			
+			User userByLogin = usersRepository.GetUserByLogin(userName);
+			if (userByLogin.DisablePassChange == true)
+			{
+				return false;
+			}
+
+			if (userByLogin.Password == EncodePassword(password, userByLogin.Name, userByLogin.CreationDate) && userByLogin.IsDeleted != 1)
+			{
+				string encodedNewPassword = EncodePassword(newPassword, userByLogin.Name, userByLogin.CreationDate);
+
+				userByLogin.Password = encodedNewPassword;
+				userByLogin.PassSetTime = DateTime.UtcNow;
+				userByLogin.LoginFailedCount = null;
+				userByLogin.LastBadLogin = null;
+				userByLogin.ForcePassChange = null;
+
+
+				usersRepository.SaveOrUpdate(userByLogin);
+				return true;
+			}
+			
+			return false;
+		}
+
+        public string GenerateSimplePassword(int size)
         {
             const string passwordChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
             string password = "";
@@ -119,154 +127,57 @@
 
             return password;
         }
-        //------------------------------------------------------------------------            
+
         public override string ResetPassword(string username, string question)
         {
             var password = GenerateSimplePassword(8);
-            _userManager.ResetPassword(username, password);
+			InnerResetPassword(username, password);
             return password;
         }
 
-        public override void UpdateUser(MembershipUser user)
-        {
-            throw new System.NotImplementedException();
-        }
+		public void InnerResetPassword(string userName, string password)
+		{
+			if (PolicyValidatePassword(password))
+			{
+				User userByLogin = usersRepository.GetUserByLogin(userName);
+				if (userByLogin.DisablePassChange != true)
+				{
+					string newPassword = EncodePassword(password, userByLogin.Name, userByLogin.CreationDate);
+					userByLogin.Password = newPassword;
+					userByLogin.PassSetTime = DateTime.UtcNow;
+					userByLogin.LoginFailedCount = null;
+					userByLogin.LastBadLogin = null;
+					userByLogin.ForcePassChange = null;
+					usersRepository.SaveOrUpdate(userByLogin);
+				}
+			}
+		}
 
         public override bool ValidateUser(string username, string password)
-		{
-			var res = _userManager.LoginUser(username, password, _context.SecAppId, HttpContext.Current.Request.UserHostAddress);
-			
-			// TODO: replace with
-			//var res = LoginUser(username, password, _context.SecAppId, HttpContext.Current.Request.UserHostAddress);
-            if (res.Result ==  LoginStatus.LoginOk)
+        {
+	        string guid;
+            if (LoginUser(username, password, context.SecAppId, HttpContext.Current.Request.UserHostAddress, out guid))
             {
-                _context.SessionId = res.Guid;
+                context.SessionId = guid;
+	            return true;
             }
-            return res.Result == LoginStatus.LoginOk;
-        }
 
-        public override bool UnlockUser(string userName)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override MembershipUser GetUser(object providerUserKey, bool userIsOnline)
-        {            
-            throw new System.NotImplementedException();
-        }
-
-        public override MembershipUser GetUser(string username, bool userIsOnline)
-        {
-            throw new System.NotImplementedException();
-        }
+	        return false;
+		}
 
         public override string GetUserNameByEmail(string email)
         {
-			// can get from db - server side
-            var userId = _userManager.GetUserIdByLogin(email);
-            return userId == 0 ? null : Convert.ToString(userId);            
+	        var user = usersRepository.GetUserByLogin(email);
+            return user == null ? null : Convert.ToString(user.Id);
         }
 
-        public override bool DeleteUser(string username, bool deleteAllRelatedData)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override MembershipUserCollection GetAllUsers(int pageIndex, int pageSize, out int totalRecords)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override int GetNumberOfUsersOnline()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override MembershipUserCollection FindUsersByName(string usernameToMatch, int pageIndex, int pageSize, out int totalRecords)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override MembershipUserCollection FindUsersByEmail(string emailToMatch, int pageIndex, int pageSize, out int totalRecords)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override bool EnablePasswordRetrieval
-        {
-            get { throw new System.NotImplementedException(); }
-        }
-
-        public override bool EnablePasswordReset
-        {
-            get { throw new System.NotImplementedException(); }
-        }
-
-        public override bool RequiresQuestionAndAnswer
-        {
-            get { throw new System.NotImplementedException(); }
-        }
-
-        public override string ApplicationName
-        {
-            get { throw new System.NotImplementedException(); }
-            set { throw new System.NotImplementedException(); }
-        }
-
-        public override int MaxInvalidPasswordAttempts
-        {
-            get { throw new System.NotImplementedException(); }
-        }
-
-        public override int PasswordAttemptWindow
-        {
-            get { throw new System.NotImplementedException(); }
-        }
-
-        public override bool RequiresUniqueEmail
-        {
-            get { throw new System.NotImplementedException(); }
-        }
-
-        public override MembershipPasswordFormat PasswordFormat
-        {
-            get { throw new System.NotImplementedException(); }
-        }
-
-        public override int MinRequiredPasswordLength
-        {
-            get { throw new System.NotImplementedException(); }
-        }
-
-        public override int MinRequiredNonAlphanumericCharacters
-        {
-            get { throw new System.NotImplementedException(); }
-        }
-
-        public override string PasswordStrengthRegularExpression
-        {
-            get { throw new System.NotImplementedException(); }
-        }
-
-
-
-		public User UpdateUser(string userName, string password, string fullName, string eMail, List<Role> roles, int userId, string certificateThumbprint, string ownerUserName, int? passwordTerm, bool? forcePasswordChange, bool? disablePasswordChange, string domainUserName, string securityQuestion, string securityAnswer)
+		public User UpdateUser(string userName, string password, string fullName, string eMail, List<Role> webRoles, int userId, string certificateThumbprint, string ownerUserName, int? passwordTerm, bool? forcePasswordChange, bool? disablePasswordChange, string domainUserName, string securityQuestion, string securityAnswer)
 		{
 			bool flag = userId == 0;
 			User result;
 			try
 			{
-				ISession instance = ObjectFactory.GetInstance<ISession>();
-				User user;
-				
-				if (flag)
-				{
-					user = new User() {PassSetTime = new DateTime?(DateTime.UtcNow)};
-				}
-				else
-				{
-					user = usersRepository.Get(userId);
-				}
+				User user = flag ? new User {PassSetTime = DateTime.UtcNow} : usersRepository.Get(userId);
 				
 				certificateThumbprint = (string.IsNullOrEmpty(domainUserName) ? certificateThumbprint : null);
 				if (!PolicyValidateLogin(userName.ToLower()))
@@ -280,21 +191,20 @@
 						throw new Exception("Can't validate password");
 					}
 					password = EncodePassword(password, userName, user.CreationDate);
-					//password = EncodeOldPassword(password);
 				}
 
-				if (!this.usersRepository.CheckUserLogin(userId, userName))
+				if (!usersRepository.CheckUserLogin(userId, userName))
 				{
 					throw new UserAlreadyExistsException(string.Format(Security.USER_ALREADY_EXISTS_STR, userName));
 				}
 
-				if (!this.usersRepository.CheckUserDomainName(userId, userName))
+				if (!usersRepository.CheckUserDomainName(userId, userName))
 				{
 					throw new UserAlreadyExistsException(string.Format(Security.SECURITY_USER_NullsTrigger, new object[0]));
 				}
-				HashedSet<Role> hashedSet = new HashedSet<Role>(user.Roles);
+
 				user.Roles.Clear();
-				user.Roles.AddAll(roles);
+				user.Roles.AddAll(webRoles);
 				user.Name = userName;
 				user.FullName = fullName;
 				user.CertificateThumbprint = certificateThumbprint;
@@ -309,7 +219,7 @@
 				user.PassExpPeriod = passwordTerm;
 				if (!string.IsNullOrEmpty(securityQuestion))
 				{
-					user.SecurityQuestion = instance.Load<SecurityQuestion>(Convert.ToInt32(securityQuestion));
+					user.SecurityQuestion = ObjectFactory.GetInstance<ISession>().Load<SecurityQuestion>(Convert.ToInt32(securityQuestion));
 					user.SecurityAnswer = securityAnswer;
 				}
 				user.DisablePassChange = ((disablePasswordChange == true) ? new bool?(true) : null);
@@ -327,6 +237,7 @@
 
 		public bool PolicyValidateLogin(string login)
 		{
+			// TODO: config
 			string s = @"(^[.\-@_a-zA-Z0-9\\]{1,40}$)|(^((([a-z]|\d|[!#\$%'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$)";
 			try
 			{
@@ -341,7 +252,7 @@
 
 		public bool PolicyValidatePassword(string password)
 		{
-			string s = @"(^.{6,}$)";
+			string s = @"(^.{6,}$)"; // TODO: config
 			try
 			{
 				return Regex.IsMatch(password, s);
@@ -355,17 +266,15 @@
 
 		public string EncodePassword(string password, string userName, DateTime creationDate)
 		{
-			HMACSHA1 hMACSHA = new HMACSHA1();
-			hMACSHA.Key = GetKey();
+			var hMacsha = new HMACSHA1 {Key = GetKey()};
 			string s = userName.ToUpperInvariant() + password + creationDate.ToString("dd-MM-yyyy hh:mm:ss");
-			return Convert.ToBase64String(hMACSHA.ComputeHash(Encoding.Unicode.GetBytes(s)));
+			return Convert.ToBase64String(hMacsha.ComputeHash(Encoding.Unicode.GetBytes(s)));
 		}
 
 		public string EncodeOldPassword(string password)
 		{
-			HMACSHA1 hMACSHA = new HMACSHA1();
-			hMACSHA.Key = GetKey();
-			return Convert.ToBase64String(hMACSHA.ComputeHash(Encoding.Unicode.GetBytes(password)));
+			var hMacsha = new HMACSHA1 {Key = GetKey()};
+			return Convert.ToBase64String(hMacsha.ComputeHash(Encoding.Unicode.GetBytes(password)));
 		}
 
 		private byte[] GetKey()
@@ -445,55 +354,40 @@
 			return array;
 		}
 
-		
-        public AuthenticationResult LoginUser(string login, string password, int securityAppId, string hostAddress)
+
+		public bool LoginUser(string login, string password, int securityAppId, string hostAddress, out string guid)
         {
-	        AuthenticationResult result = new AuthenticationResult {
-                SecAppId = securityAppId,
-                Result = LoginStatus.LoginFailed
-            };
+		    User userByLogin = usersRepository.GetUserByLogin(login);
+		    if (userByLogin == null)
+		    {
+			    throw new UserNotFoundException(login);
+		    }
 
-	        try
-	        {
+		    string passwordHash = EncodePassword(password, userByLogin.Name, userByLogin.CreationDate);
+		    string oldModelPasswordHash = EncodeOldPassword(password);
 
-		        User userByLogin = this.usersRepository.GetUserByLogin(login);
-		        if (userByLogin == null)
-		        {
-			        throw new UserNotFoundException(login);
-		        }
-
-		        string passwordHash = this.EncodePassword(password, userByLogin.Name, userByLogin.CreationDate);
-		        string oldModelPasswordHash = this.EncodeOldPassword(password);
-
-				result.Result = this.InnerLoginUser(userByLogin, passwordHash, oldModelPasswordHash);
-				if (result.Result == LoginStatus.LoginOk)
-                {
-					stx(securityAppId, result, userByLogin.Id, hostAddress);
-                }
-                if (result.Result == LoginStatus.LoginFailed)
-                {
-                    //Log4NetExtender.ErrorJournal(, 10, 0, .(), new object[] { userByLogin.get_Name(), ThreadContext.get_Properties().get_Item(.(-2066775471)), ThreadContext.get_Properties().get_Item(.(-2066775482)) });
-                }
-            }
-            catch (Exception exception)
+			if (InnerLoginUser(userByLogin, passwordHash, oldModelPasswordHash))
             {
-				//Log4NetExtender.ErrorJournal(, 10, 0, .(), new object[] { login, ThreadContext.get_Properties().get_Item(.(-2066775471)), ThreadContext.get_Properties().get_Item(.(-2066775482)) });
-				//.Error(exception);
-				//result.Result = LoginStatus.LoginFailed;
-				//result.Message = exception.get_Message();
+				guid = DoLogin(securityAppId, userByLogin.Id, hostAddress);
+	            return true;
             }
-			return result;
+			
+			// TODO: why is this increment here??
+			userByLogin.LoginFailedCount++;
+			usersRepository.SaveOrUpdate(userByLogin);
+
+			guid = string.Empty;
+			return false;
         }
-		private void stx(int stxi, AuthenticationResult etx, int enq, string bs)
+
+		private string DoLogin(int securityAppId, int userId, string hostAddress)
 		{
-			if (!usersRepository.HasAccesTo(enq, stxi))
+			if (!usersRepository.HasAccesTo(userId, securityAppId))
 			{
-				etx.Result = LoginStatus.AccessDenied;
+				return string.Empty;
 			}
-			else
-			{
-				etx.Guid = StartSession(enq, stxi, bs);
-			}
+
+			return StartSession(userId, securityAppId, hostAddress);
 		}
 
 		public string StartSession(int userId, int secAppId, string hostAddress)
@@ -501,32 +395,31 @@
 			SecuritySession session = sessionRepository.CreateNewSession(userId, secAppId);
             session.HostAddress = hostAddress;
             sessionRepository.Save(session);
-            //(1, new SessionStateChangedArguments(session.get_Id(), userId));
             return session.Id;
         }
 
-		public LoginStatus InnerLoginUser(User user, string passwordHash, string oldModelPasswordHash)
+		public bool InnerLoginUser(User user, string passwordHash, string oldModelPasswordHash)
 		{
 			int invalidPasswordAttempts = 3; //TODO: form config
 			int invalidPasswordAttemptsPeriodSeconds = 30; //TODO: form config
 			int invalidPasswordBlockSeconds = 30; //TODO: form config
 			if (user.IsDeleted != 0)
 			{
-				return LoginStatus.LoginLocked;
+				return false;
 			}
 			if (user.DisableDate.HasValue && user.DisableDate.Value < DateTime.UtcNow)
 			{
 				user.IsDeleted = 2;
 				usersRepository.Update(user);
-				return LoginStatus.LoginLocked;
+				return false;
 			}
 			if (user.ForcePassChange.HasValue && user.ForcePassChange.Value) 
 			{
-				return LoginStatus.NeedPasswordChange;
+				return false;
 			}
 			if (user.PassSetTime.HasValue && user.PassExpPeriod.HasValue && user.PassSetTime.Value.Add(TimeSpan.FromSeconds(user.PassExpPeriod.Value)) < DateTime.UtcNow)
 			{
-				return LoginStatus.NeedPasswordChange;
+				return false;
 			}
 			if (user.LastBadLogin.HasValue)
 			{
@@ -542,7 +435,7 @@
 			}
 			if (user.LoginFailedCount.HasValue && user.LoginFailedCount.Value > invalidPasswordAttempts)
 			{
-				return LoginStatus.ExceededMaxLoginAttempts;
+				return false;
 			}
 			if ((user.Password != passwordHash) && (user.Password != oldModelPasswordHash))
 			{
@@ -552,17 +445,148 @@
 
 				if (user.LoginFailedCount.HasValue && user.LoginFailedCount.Value >= invalidPasswordAttempts)
 				{
-					return LoginStatus.ExceededMaxLoginAttempts;
+					return false;
 				}
-				
-				return LoginStatus.LoginFailed;
+
+				return false;
 			}
 			if (user.Password == oldModelPasswordHash)
 			{
 				user.Password = passwordHash;
 				usersRepository.Update(user);
 			}
-			return LoginStatus.LoginOk;
+			return true;
+		}
+
+		public bool IsEqualsOldPassword(string login, string newPassword)
+		{
+			User userByLogin = usersRepository.GetUserByLogin(login);
+			string encodedNewPassword = EncodePassword(newPassword, userByLogin.Name, userByLogin.CreationDate);
+			return userByLogin.Password == encodedNewPassword;
+		}
+
+		public string ChangeEmailAndPassword(User user, string newEmail)
+		{
+			string newPassword = GenerateSimplePassword(16);
+			user.EMail = newEmail;
+			user.Name = newEmail;
+			user.FullName = newEmail;
+			user.Password = EncodePassword(newPassword, user.Name, user.CreationDate);
+			user.PassSetTime = DateTime.UtcNow;
+			usersRepository.SaveOrUpdate(user);
+
+			return newPassword;
+		}
+
+		public override void UpdateUser(MembershipUser user)
+		{
+			throw new NotImplementedException();
+		}
+
+		public override bool UnlockUser(string userName)
+		{
+			throw new NotImplementedException();
+		}
+
+		public override MembershipUser GetUser(object providerUserKey, bool userIsOnline)
+		{
+			throw new NotImplementedException();
+		}
+
+		public override MembershipUser GetUser(string username, bool userIsOnline)
+		{
+			throw new NotImplementedException();
+		}
+
+		public override bool ChangePasswordQuestionAndAnswer(string username, string password, string newPasswordQuestion, string newPasswordAnswer)
+		{
+			throw new NotImplementedException();
+		}
+
+		public override string GetPassword(string username, string answer)
+		{
+			throw new NotImplementedException();
+		}
+
+		public override bool DeleteUser(string username, bool deleteAllRelatedData)
+		{
+			throw new NotImplementedException();
+		}
+
+		public override MembershipUserCollection GetAllUsers(int pageIndex, int pageSize, out int totalRecords)
+		{
+			throw new NotImplementedException();
+		}
+
+		public override int GetNumberOfUsersOnline()
+		{
+			throw new NotImplementedException();
+		}
+
+		public override MembershipUserCollection FindUsersByName(string usernameToMatch, int pageIndex, int pageSize, out int totalRecords)
+		{
+			throw new NotImplementedException();
+		}
+
+		public override MembershipUserCollection FindUsersByEmail(string emailToMatch, int pageIndex, int pageSize, out int totalRecords)
+		{
+			throw new NotImplementedException();
+		}
+
+		public override bool EnablePasswordRetrieval
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public override bool EnablePasswordReset
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public override bool RequiresQuestionAndAnswer
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public override string ApplicationName
+		{
+			get { throw new NotImplementedException(); }
+			set { throw new NotImplementedException(); }
+		}
+
+		public override int MaxInvalidPasswordAttempts
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public override int PasswordAttemptWindow
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public override bool RequiresUniqueEmail
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public override MembershipPasswordFormat PasswordFormat
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public override int MinRequiredPasswordLength
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public override int MinRequiredNonAlphanumericCharacters
+		{
+			get { throw new NotImplementedException(); }
+		}
+
+		public override string PasswordStrengthRegularExpression
+		{
+			get { throw new NotImplementedException(); }
 		}
     }
 }

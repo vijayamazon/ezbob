@@ -15,6 +15,7 @@ namespace EzBob.Web.Infrastructure
 	using AmazonServiceLib.Config;
 	using Configuration;
 	using EzBob.Models.Agreements;
+	using Membership;
 	using PayPalServiceLib;
 	using PayPalServiceLib.Common;
 	using Areas.Customer.Controllers;

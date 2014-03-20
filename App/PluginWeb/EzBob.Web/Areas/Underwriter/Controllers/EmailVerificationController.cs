@@ -7,6 +7,7 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Code.Email;
 	using Infrastructure;
+	using Infrastructure.Membership;
 	using Scorto.Security.UserManagement;
 	using Scorto.Web;
 
@@ -16,15 +17,15 @@
         private readonly ICustomerRepository _customers;
 		private readonly ServiceClient m_oServiceClient;
         private readonly IUsersRepository _users;
-        private readonly UserManager _userManager;
+		private readonly EzbobMembershipProvider provider;
 
-        public EmailVerificationController(IEmailConfirmation confirmation, ICustomerRepository customers, IUsersRepository users, UserManager userManager)
+        public EmailVerificationController(IEmailConfirmation confirmation, ICustomerRepository customers, IUsersRepository users)
         {
             _confirmation = confirmation;
             _customers = customers;
 	        m_oServiceClient = new ServiceClient();
             _users = users;
-            _userManager = userManager;
+			provider = new EzbobMembershipProvider();
         }
 
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
@@ -59,19 +60,12 @@
             var user = _users.Get(id);
 
             var provider = new EzbobMembershipProvider();
-            var newPassword = provider.GenerateSimplePassword(16);
+			string newPassword = provider.ChangeEmailAndPassword(user, email);
 
-            var result = _userManager.ChangeEmailAndPassword(user, email, newPassword);
-            
-            if (result == ChangePasswordStatus.ChangeOk)
-            {
-                customer.Name = email;
-
-                m_oServiceClient.Instance.PasswordChanged(user.Id, newPassword);
-
-                var address = _confirmation.GenerateLink(customer);
-                m_oServiceClient.Instance.SendEmailVerification(user.Id, customer.Name, address);
-            }
+            customer.Name = email;
+            m_oServiceClient.Instance.PasswordChanged(user.Id, newPassword);
+            var address = _confirmation.GenerateLink(customer);
+            m_oServiceClient.Instance.SendEmailVerification(user.Id, customer.Name, address);
 
             return this.JsonNet(new {});
         }
