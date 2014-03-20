@@ -15,14 +15,11 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	SELECT
-		@BrokerID = bl.BrokerID
+		@BrokerID = c.BrokerID
 	FROM
-		BrokerLeads bl
-		INNER JOIN BrokerLeadAddModes m ON bl.BrokerLeadAddModeID = m.BrokerLeadAddModeID
+		Customer c
 	WHERE
-		CustomerID = @CustomerID
-		AND
-		m.SendEmailOnCreate = 0
+		c.Id = @CustomerID
 	
 	------------------------------------------------------------------------------
 
@@ -30,10 +27,10 @@ BEGIN
 		SELECT '' AS ContactEmail
 	ELSE
 		SELECT
-			ContactEmail
+			b.ContactEmail
 		FROM
-			Broker
+			Broker b
 		WHERE
-			BrokerID = @BrokerID
+			b.BrokerID = @BrokerID
 END
 GO
