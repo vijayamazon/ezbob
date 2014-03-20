@@ -15,11 +15,17 @@
 	using System.Web;
 	using System.Web.Security;
 	using ApplicationMng.Repository;
-	using Scorto.Security.UserManagement;
 	using Scorto.Web;
 	using StructureMap;
 	using log4net;
-	using Scorto.Security.UserManagement.Resources;
+
+	public class UserAlreadyExistsException : Exception
+	{
+		public UserAlreadyExistsException(string message)
+			: base(message)
+		{
+		}
+	}
 
 	public class EzbobMembershipProvider : MembershipProvider
     {
@@ -216,14 +222,9 @@
 					password = EncodePassword(password, userName, user.CreationDate);
 				}
 
-				if (!usersRepository.CheckUserLogin(userId, userName))
+				if (!usersRepository.CheckUserLogin(userId, userName) || !usersRepository.CheckUserDomainName(userId, userName))
 				{
-					throw new UserAlreadyExistsException(string.Format(Security.USER_ALREADY_EXISTS_STR, userName));
-				}
-
-				if (!usersRepository.CheckUserDomainName(userId, userName))
-				{
-					throw new UserAlreadyExistsException(string.Format(Security.SECURITY_USER_NullsTrigger, new object[0]));
+					throw new UserAlreadyExistsException(string.Format("The email {0} already exists", userName));
 				}
 
 				user.Roles.Clear();

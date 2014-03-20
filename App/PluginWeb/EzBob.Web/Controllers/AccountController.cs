@@ -25,8 +25,8 @@ namespace EzBob.Web.Controllers {
 	using Infrastructure.csrf;
 	using Models;
 	using Models.Strings;
-	using Scorto.Security.UserManagement.Sessions;
 	using Scorto.Web;
+	using StructureMap;
 	using log4net;
 	using EZBob.DatabaseLib;
 	using ActionResult = System.Web.Mvc.ActionResult;
@@ -38,7 +38,6 @@ namespace EzBob.Web.Controllers {
 		private readonly CustomerRepository _customers;
 		private readonly ServiceClient m_oServiceClient;
 		private readonly IEzBobConfiguration _config;
-		private readonly ISessionManager _sessionManager;
 		private readonly IEzbobWorkplaceContext _context;
 		private readonly IEmailConfirmation _confirmation;
 		private readonly ICustomerSessionsRepository _sessionIpLog;
@@ -48,6 +47,7 @@ namespace EzBob.Web.Controllers {
 		private readonly DatabaseDataHelper _helper;
 		private static readonly object initSessionLock = new object();
 		private readonly BrokerHelper m_oBrokerHelper;
+		private readonly SessionRepository sessionRepository;
 
 		public AccountController(
 			DatabaseDataHelper helper,
@@ -55,7 +55,6 @@ namespace EzBob.Web.Controllers {
 			IUsersRepository users,
 			CustomerRepository customers,
 			IEzBobConfiguration config,
-			ISessionManager sessionManager,
 			IEzbobWorkplaceContext context,
 			IEmailConfirmation confirmation,
 			ICustomerSessionsRepository sessionIpLog,
@@ -69,7 +68,6 @@ namespace EzBob.Web.Controllers {
 			_customers = customers;
 			m_oServiceClient = new ServiceClient();
 			_config = config;
-			_sessionManager = sessionManager;
 			_context = context;
 			_confirmation = confirmation;
 			_sessionIpLog = sessionIpLog;
@@ -77,6 +75,7 @@ namespace EzBob.Web.Controllers {
 			_configurationVariables = configurationVariables;
 			_customerStatusesRepository = customerStatusesRepository;
 			m_oBrokerHelper = new BrokerHelper();
+			sessionRepository = ObjectFactory.GetInstance<SessionRepository>();
 		}
 
 		//------------------------------------------------------------------------
@@ -292,7 +291,13 @@ namespace EzBob.Web.Controllers {
 		//------------------------------------------------------------------------
 		public ActionResult LogOff(bool isUnderwriterPage = false)
 		{
-			_sessionManager.EndSession(_context.SessionId);
+			SecuritySession securitySession = sessionRepository.Get(_context.SessionId);
+			if (securitySession != null)
+			{
+				securitySession.State = 0;
+				sessionRepository.SaveOrUpdate(securitySession);
+			}
+
 			_context.SessionId = null;
 			FormsAuthentication.SignOut();
 

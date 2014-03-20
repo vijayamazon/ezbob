@@ -133,9 +133,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Lib\Scorto.Core\Scorto.RegistryScanner.dll</HintPath>
     </Reference>
-    <Reference Include="Scorto.Security.UserManagement">
-      <HintPath>..\..\..\Lib\Scorto.Core\Scorto.Security.UserManagement.dll</HintPath>
-    </Reference>
     <Reference Include="Scorto.Web">
       <HintPath>..\..\..\Lib\Scorto.Core\Scorto.Web.dll</HintPath>
     </Reference>

@@ -8,7 +8,6 @@
 	using Code.Email;
 	using Infrastructure;
 	using Infrastructure.Membership;
-	using Scorto.Security.UserManagement;
 	using Scorto.Web;
 
 	public class EmailVerificationController : Controller
@@ -59,7 +58,6 @@
             var customer = _customers.Get(id);
             var user = _users.Get(id);
 
-            var provider = new EzbobMembershipProvider();
 			string newPassword = provider.ChangeEmailAndPassword(user, email);
 
             customer.Name = email;
