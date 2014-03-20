@@ -53,12 +53,12 @@
 
 			m_oSp.ExecuteNonQuery();
 
-			// TODO: real template and its arguments
-			TemplateName = "Greeting";
+			TemplateName = "Broker lead invitation";
 
 			Variables = new Dictionary<string, string> {
-				{ "Email", LeadData.Mail },
-				{ "ConfirmEmailAddress", CustomerSite + "?bloken=" + m_oSp.Token.ToString("N") }
+				{ "CustomerName", LeadData.FullName },
+				{ "FirmName", LeadData.FirmName },
+				{ "InvitationLink", CustomerSite + "?bloken=" + m_oSp.Token.ToString("N") }
 			};
 		} // SetTemplateAndVariables
 
@@ -78,8 +78,8 @@
 
 		#region properties
 
-		protected virtual CustomerData LeadData {
-			get { return CustomerData; } // get
+		protected virtual BrokerLeadData LeadData {
+			get { return (BrokerLeadData)CustomerData; } // get
 			set { CustomerData = value; } // set
 		} // LeadData
 

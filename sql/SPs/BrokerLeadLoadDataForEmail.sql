@@ -10,9 +10,11 @@ BEGIN
 	SET NOCOUNT ON;
 
 	DECLARE @BrokerID INT
+	DECLARE @FirmName NVARCHAR(255)
 
 	SELECT
-		@BrokerID = BrokerID
+		@BrokerID = BrokerID,
+		@FirmName = FirmName
 	FROM
 		Broker
 	WHERE
@@ -22,7 +24,8 @@ BEGIN
 		bl.BrokerLeadID AS LeadID,
 		bl.FirstName,
 		bl.LastName,
-		bl.Email
+		bl.Email,
+		@FirmName AS FirmName
 	FROM
 		BrokerLeads bl
 	WHERE
