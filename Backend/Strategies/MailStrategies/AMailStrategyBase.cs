@@ -16,31 +16,30 @@
 			try {
 				Log.Debug("Execute() started...");
 
-				LoadCustomerData();
+				LoadRecipientData();
 
-				Log.Debug("setting template and variables...");
+				Log.Debug("Setting template and variables...");
 				SetTemplateAndVariables();
-				Log.Debug("setting template and variables complete.");
+				Log.Debug("Setting template and variables complete.");
 
 				Log.Debug("Template name: {0}", TemplateName);
 				Log.Debug("Customer data: {0}", CustomerData);
-
 				Log.Debug("Variables:\n\t{0}", string.Join("\n\t", Variables.Select(kv => kv.Key + ": " + kv.Value)));
 
-				Log.Debug("sending an email{0} to staff...", m_bSendToCustomer ? " to customer and" : string.Empty);
+				string[] aryRecipients = GetRecipients() ?? new string[0];
 
-				m_oMailer.Send(TemplateName, Variables, GetCustomerEmail());
+				Log.Debug("Sending an email to staff{0}...", aryRecipients.Length > 0 ? " and " + (aryRecipients.Length) + " other recipient(s)" : string.Empty);
+				m_oMailer.Send(TemplateName, Variables, aryRecipients);
+				Log.Debug("Sending an email to staff{0} complete.", aryRecipients.Length > 0 ? " and " + (aryRecipients.Length) + " other recipient(s)" : string.Empty);
 
-				Log.Debug("sending an email{0} to staff complete.", m_bSendToCustomer ? " to customer and" : string.Empty);
-
-				Log.Debug("performing ActionAtEnd()...");
+				Log.Debug("Performing ActionAtEnd()...");
 				ActionAtEnd();
-				Log.Debug("performing ActionAtEnd() complete.");
+				Log.Debug("Performing ActionAtEnd() complete.");
 
 				Log.Debug("Execute() complete.");
 			}
 			catch (Exception e) {
-				throw new StrategyException(this, "something went terribly wrong during Execute()", e);
+				throw new StrategyException(this, "Something went terribly wrong during Execute() of " + this.GetType(), e);
 			} // try
 		} // Execute
 
@@ -62,11 +61,11 @@
 
 		#endregion constructor
 
-		#region method GetCustomerEmail
+		#region method GetRecipients
 
-		protected virtual string GetCustomerEmail() {
-			return m_bSendToCustomer ? null : CustomerData.Mail;
-		} // GetCustomerEmail
+		protected virtual string[] GetRecipients() {
+			return m_bSendToCustomer ? new string[] { CustomerData.Mail } : new string[0];
+		} // GetRecipients
 
 		#endregion method GetCustomerEmail
 
@@ -84,25 +83,26 @@
 
 		#endregion method ActionAtEnd
 
-		#region method LoadCustomerData
+		#region method LoadRecipientData
 
-		protected virtual void LoadCustomerData() {
-			Log.Debug("loading customer data...");
+		protected virtual void LoadRecipientData() {
+			Log.Debug("Loading customer data...");
 
 			CustomerData = new CustomerData();
 
 			CustomerData.Load(CustomerId, DB);
 
-			Log.Debug("loading customer data complete.");
-		} // LoadCustomerData
+			Log.Debug("Loading customer data complete.");
+		} // LoadRecipientData
 
-		#endregion method LoadCustomerData
+		#endregion method LoadRecipientData
 
 		#region properties
 
 		protected virtual string TemplateName { get; set; }
-		protected virtual CustomerData CustomerData { get; set; }
 		protected virtual Dictionary<string, string> Variables { get; set; }
+
+		protected virtual CustomerData CustomerData { get; set; }
 		protected virtual int CustomerId { get; set; }
 
 		#endregion properties

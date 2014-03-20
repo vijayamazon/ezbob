@@ -57,11 +57,48 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 			{ sContactEmail: this.router.getAuth(), },
 			function(oResponse) {
 				var theTableOpts = self.initDataTablesOptions(
-					'#CustomerID,FirstName,LastName,Email,WizardStep,Status,Marketplaces,^ApplyDate,$LoanAmount,^LoanDate',
+					'#CustomerID,FirstName,LastName,Email,WizardStep,Status,Marketplaces,^ApplyDate,$LoanAmount,LoanDate',
 					'brk-grid-state-' + self.router.getAuth() + '-customer-list'
 				);
 
 				theTableOpts.aaData = oResponse.customers;
+
+				var oSomeTimeAgo = moment([2012, 7]).utc();
+
+				var oStdMoneyRender = theTableOpts.aoColumns[8].mRender;
+
+				theTableOpts.aoColumns[8].mRender = function(oData, sAction, oFullSource) {
+					var oResult = oStdMoneyRender(oData, sAction, oFullSource);
+
+					if (oData > 0)
+						return oResult;
+
+					switch (sAction) {
+						case 'display':
+						case 'filter':
+							return '';
+
+						case 'type':
+						case 'sort':
+						default:
+							return 0;
+					} // switch
+				}; // mRender for LoanAmount
+
+				theTableOpts.aoColumns[9].mRender = function(oData, sAction, oFullSource) {
+					switch (sAction) {
+						case 'display':
+							return (oSomeTimeAgo.diff(moment(oData)) > 0) ? '' : EzBob.formatDate(oData);
+
+						case 'filter':
+							return (oSomeTimeAgo.diff(moment(oData)) > 0) ? '' : oData + ' ' + EzBob.formatDate(oData);
+
+						case 'type':
+						case 'sort':
+						default:
+							return oData;
+					} // switch
+				}; // mRender for LoanDate
 
 				theTableOpts.fnRowCallback = function(oTR, oData, iDisplayIndex, iDisplayIndexFull) {
 					if (oData.hasOwnProperty('Marketplaces'))
@@ -204,7 +241,7 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 			UnBlockUi();
 
 			if (res.success) {
-				EzBob.App.trigger('info', 'A invitation has been sent.');
+				EzBob.App.trigger('info', 'An invitation has been sent.');
 				self.reloadCustomerList();
 				return;
 			} // if

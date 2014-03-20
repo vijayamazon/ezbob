@@ -1,15 +1,14 @@
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[BrokerResetPassword]') AND TYPE IN (N'P', N'PC'))
-DROP PROCEDURE [dbo].[BrokerResetPassword]
+IF OBJECT_ID('BrokerResetPassword') IS NULL
+	EXECUTE('CREATE PROCEDURE BrokerResetPassword AS SELECT 1')
 GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[BrokerResetPassword] 
-	(@ContactMobile NVARCHAR(255),
-@Password NVARCHAR(255))
+
+ALTER PROCEDURE BrokerResetPassword
+@ContactMobile NVARCHAR(255),
+@Password NVARCHAR(255)
 AS
 BEGIN
+	SET NOCOUNT ON;
+
 	DECLARE @ErrMsg NVARCHAR(255) = ''
 	DECLARE @BrokerID INT = 0
 

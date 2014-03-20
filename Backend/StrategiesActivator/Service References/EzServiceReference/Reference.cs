@@ -3184,6 +3184,12 @@ namespace StrategiesActivator.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerBackFromCustomerWizard", ReplyAction="http://tempuri.org/IEzService/BrokerBackFromCustomerWizardResponse")]
         System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.StringActionResult> BrokerBackFromCustomerWizardAsync(int nLeadID);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLeadCheckToken", ReplyAction="http://tempuri.org/IEzService/BrokerLeadCheckTokenResponse")]
+        StrategiesActivator.EzServiceReference.BrokerLeadDetailsActionResult BrokerLeadCheckToken(string sToken);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLeadCheckToken", ReplyAction="http://tempuri.org/IEzService/BrokerLeadCheckTokenResponse")]
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BrokerLeadDetailsActionResult> BrokerLeadCheckTokenAsync(string sToken);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CaisGenerate", ReplyAction="http://tempuri.org/IEzService/CaisGenerateResponse")]
         StrategiesActivator.EzServiceReference.ActionMetaData CaisGenerate(int underwriterId);
         
@@ -3714,6 +3720,14 @@ namespace StrategiesActivator.EzServiceReference {
         
         public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.StringActionResult> BrokerBackFromCustomerWizardAsync(int nLeadID) {
             return base.Channel.BrokerBackFromCustomerWizardAsync(nLeadID);
+        }
+        
+        public StrategiesActivator.EzServiceReference.BrokerLeadDetailsActionResult BrokerLeadCheckToken(string sToken) {
+            return base.Channel.BrokerLeadCheckToken(sToken);
+        }
+        
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BrokerLeadDetailsActionResult> BrokerLeadCheckTokenAsync(string sToken) {
+            return base.Channel.BrokerLeadCheckTokenAsync(sToken);
         }
         
         public StrategiesActivator.EzServiceReference.ActionMetaData CaisGenerate(int underwriterId) {

@@ -238,6 +238,12 @@
   <wsdl:message name="IEzService_BrokerBackFromCustomerWizard_OutputMessage">
     <wsdl:part name="parameters" element="tns:BrokerBackFromCustomerWizardResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_BrokerLeadCheckToken_InputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerLeadCheckToken" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerLeadCheckToken_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerLeadCheckTokenResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_CaisGenerate_InputMessage">
     <wsdl:part name="parameters" element="tns:CaisGenerate" />
   </wsdl:message>
@@ -680,6 +686,10 @@
     <wsdl:operation name="BrokerBackFromCustomerWizard">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerBackFromCustomerWizard" message="tns:IEzService_BrokerBackFromCustomerWizard_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerBackFromCustomerWizardResponse" message="tns:IEzService_BrokerBackFromCustomerWizard_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BrokerLeadCheckToken">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerLeadCheckToken" message="tns:IEzService_BrokerLeadCheckToken_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerLeadCheckTokenResponse" message="tns:IEzService_BrokerLeadCheckToken_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="CaisGenerate">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CaisGenerate" message="tns:IEzService_CaisGenerate_InputMessage" />
@@ -1142,6 +1152,15 @@
     </wsdl:operation>
     <wsdl:operation name="BrokerBackFromCustomerWizard">
       <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerBackFromCustomerWizard" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BrokerLeadCheckToken">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerLeadCheckToken" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

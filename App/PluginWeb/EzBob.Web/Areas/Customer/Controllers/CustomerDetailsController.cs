@@ -56,7 +56,7 @@
 		public System.Web.Mvc.ActionResult Dashboard() {
 			var blm = new WizardBrokerLeadModel(Session);
 
-			if (blm.IsSet && blm.BrokerFillsForCustomer) {
+			if (blm.BrokerFillsForCustomer) {
 				StringActionResult sar = null;
 
 				try {

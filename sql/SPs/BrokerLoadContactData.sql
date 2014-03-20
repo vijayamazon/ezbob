@@ -6,6 +6,8 @@ ALTER PROCEDURE BrokerLoadContactData
 @BrokerID INT
 AS
 BEGIN
+	SET NOCOUNT ON;
+
 	SELECT
 		BrokerID,
 		ContactName,

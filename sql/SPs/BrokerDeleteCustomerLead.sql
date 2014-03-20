@@ -8,6 +8,8 @@ ALTER PROCEDURE BrokerDeleteCustomerLead
 @DateDeleted DATETIME
 AS
 BEGIN
+	SET NOCOUNT ON;
+
 	DECLARE @ReasonID INT
 
 	SELECT

@@ -1,15 +1,14 @@
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[BrokerLoadCustomerCRM]') AND TYPE IN (N'P', N'PC'))
-DROP PROCEDURE [dbo].[BrokerLoadCustomerCRM]
+IF OBJECT_ID('BrokerLoadCustomerCRM') IS NULL
+	EXECUTE('CREATE PROCEDURE BrokerLoadCustomerCRM AS SELECT 1')
 GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[BrokerLoadCustomerCRM] 
-	(@CustomerID INT,
-@ContactEmail NVARCHAR(255))
+
+ALTER PROCEDURE BrokerLoadCustomerCRM
+@CustomerID INT,
+@ContactEmail NVARCHAR(255)
 AS
 BEGIN
+	SET NOCOUNT ON;
+
 	DECLARE @BrokerID INT
 
 	SELECT @BrokerID = BrokerID FROM Broker WHERE ContactEmail = @ContactEmail

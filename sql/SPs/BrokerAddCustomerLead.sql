@@ -11,6 +11,8 @@ ALTER PROCEDURE BrokerAddCustomerLead
 @DateCreated DATETIME
 AS
 BEGIN
+	SET NOCOUNT ON;
+
 	DECLARE @ErrMsg NVARCHAR(1024) = ''
 	DECLARE @BrokerID INT
 	DECLARE @BrokerLeadAddModeID INT

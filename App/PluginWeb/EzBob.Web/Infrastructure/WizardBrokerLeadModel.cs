@@ -1,7 +1,7 @@
 ﻿namespace EzBob.Web.Infrastructure {
 	using System.Web;
 
-	public class WizardBrokerLeadModel {
+	public sealed class WizardBrokerLeadModel {
 		#region public
 
 		#region constructor
@@ -88,7 +88,12 @@
 
 		#region property BrokerFillsForCustomer
 
-		public bool BrokerFillsForCustomer { get; private set; } // BrokerFillsForCustomer
+		public bool BrokerFillsForCustomer {
+			get { return IsSet && m_bBrokerFillsForCustomer; }
+			private set { m_bBrokerFillsForCustomer = value; }
+		} // BrokerFillsForCustomer
+
+		private bool m_bBrokerFillsForCustomer;
 
 		#endregion property BrokerFillsForCustomer
 
@@ -120,13 +125,13 @@
 
 		#endregion method Upload
 
-		#region method IsSet
+		#region method IsLeadSet
 
 		private static bool IsLeadSet(int nLeadID, string sLeadEmail) {
 			return (nLeadID > 0) && !string.IsNullOrWhiteSpace(sLeadEmail);
-		} // IsSet
+		} // IsLeadSet
 
-		#endregion method IsSet
+		#endregion method IsLeadSet
 
 		#endregion private
 	} // class WizardBrokerLeadModel

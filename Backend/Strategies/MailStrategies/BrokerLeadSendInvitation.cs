@@ -9,8 +9,14 @@
 
 		#region constructor
 
-		public BrokerLeadSendInvitation(int nLeadID, string sBrokerContactEmail, AConnection oDB, ASafeLog oLog) : base(nLeadID, true, oDB, oLog) {
+		public BrokerLeadSendInvitation(
+			int nLeadID,
+			string sBrokerContactEmail,
+			AConnection oDB,
+			ASafeLog oLog
+		) : base(nLeadID, true, oDB, oLog) {
 			m_sBrokerContactEmail = sBrokerContactEmail;
+			m_oSp = new BrokerLeadSaveInvitationToken(DB, Log);
 		} // constructor
 
 		#endregion constructor
@@ -25,29 +31,34 @@
 
 		#region protected
 
-		#region method LoadCustomerData
+		#region method LoadRecipientData
 
-		protected override void LoadCustomerData() {
-			Log.Debug("loading broker lead data...");
+		protected override void LoadRecipientData() {
+			Log.Debug("Loading broker lead data...");
 
 			LeadData = new BrokerLeadData(m_sBrokerContactEmail);
 
-			LeadData.Load(CustomerId, DB);
+			LeadData.Load(LeadID, DB);
 
-			Log.Debug("loading broker lead complete.");
-		} // LoadCustomerData
+			Log.Debug("Loading broker lead complete.");
+		} // LoadRecipientData
 
-		#endregion method LoadCustomerData
+		#endregion method LoadRecipientData
 
 		#region method SetTemplateAndVariables
 
-		// TODO: real template and its arguments
 		protected override void SetTemplateAndVariables() {
-			TemplateName = "Greeting - Offline";
+			m_oSp.Token = Guid.NewGuid();
+			m_oSp.LeadID = LeadID;
+
+			m_oSp.ExecuteNonQuery();
+
+			// TODO: real template and its arguments
+			TemplateName = "Greeting";
 
 			Variables = new Dictionary<string, string> {
-				{"Email", CustomerData.Mail},
-				{"ConfirmEmailAddress", "-+-+-+-+-"}
+				{ "Email", LeadData.Mail },
+				{ "ConfirmEmailAddress", CustomerSite + "?bloken=" + m_oSp.Token.ToString("N") }
 			};
 		} // SetTemplateAndVariables
 
@@ -84,6 +95,58 @@
 		#region private
 
 		private readonly string m_sBrokerContactEmail;
+		private readonly BrokerLeadSaveInvitationToken m_oSp;
+
+		#region class BrokerLeadSaveInvitationToken
+
+		private class BrokerLeadSaveInvitationToken : AStoredProcedure {
+			public BrokerLeadSaveInvitationToken(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor
+
+			public int LeadID { get; set; }
+
+			public Guid Token { get; set; }
+
+			public DateTime DateCreated {
+				get { return DateTime.UtcNow; }
+				set { } // keep it here
+			} // DateCreated
+
+			public override bool HasValidParameters() {
+				return (LeadID > 0) && (Token != null) && (Token != Guid.Empty);
+			} // HasValidParameters
+		} // BrokerLeadSaveInvitationToken
+
+		#endregion class BrokerLeadSaveInvitationToken
+
+		#region property CustomerSite
+
+		private string CustomerSite {
+			get {
+				if (string.IsNullOrWhiteSpace(m_sCustomerSite)) {
+					DB.ForEachRowSafe(
+						(sr, bRowsetStart) => {
+							m_sCustomerSite = ((string)sr["Value"] ?? string.Empty).Trim();
+							return ActionResult.SkipAll;
+						},
+						"LoadConfigurationVariable",
+						CommandSpecies.StoredProcedure,
+						new QueryParameter("@CfgVarName", "CustomerSite")
+					);
+
+					if (string.IsNullOrWhiteSpace(m_sCustomerSite))
+						m_sCustomerSite = "https://app.ezbob.com";
+
+					if (m_sCustomerSite.EndsWith("/"))
+						m_sCustomerSite = m_sCustomerSite.Substring(0, m_sCustomerSite.Length - 1);
+				} // if
+
+				return m_sCustomerSite;
+			} // get
+		} // CustomerSite
+
+		private string m_sCustomerSite;
+
+		#endregion property CustomerSite
 
 		#endregion private
 	} // class BrokerLeadSendInvitation

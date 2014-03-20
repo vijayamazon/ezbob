@@ -34,7 +34,7 @@ BEGIN
 
 	IF @CheckBrokerLeads = 1 AND @ErrMsg = ''
 	BEGIN
-		IF EXISTS (SELECT * FROM BrokerLeads WHERE Email = @ContactEmail AND BrokerLeadDeletedReasonID IS NULL)
+		IF EXISTS (SELECT * FROM BrokerLeads WHERE Email = @ContactEmail AND BrokerLeadDeletedReasonID IS NULL AND DateDeleted IS NULL)
 			SET @ErrMsg = 'There is already a lead with such email: ' + @ContactEmail
 	END
 

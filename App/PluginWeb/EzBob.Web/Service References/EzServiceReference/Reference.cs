@@ -833,6 +833,9 @@ namespace EzBob.Web.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerBackFromCustomerWizard", ReplyAction="http://tempuri.org/IEzService/BrokerBackFromCustomerWizardResponse")]
         EzBob.Web.EzServiceReference.StringActionResult BrokerBackFromCustomerWizard(int nLeadID);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLeadCheckToken", ReplyAction="http://tempuri.org/IEzService/BrokerLeadCheckTokenResponse")]
+        EzBob.Web.EzServiceReference.BrokerLeadDetailsActionResult BrokerLeadCheckToken(string sToken);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CaisGenerate", ReplyAction="http://tempuri.org/IEzService/CaisGenerateResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData CaisGenerate(int underwriterId);
         
@@ -1111,6 +1114,10 @@ namespace EzBob.Web.EzServiceReference {
         
         public EzBob.Web.EzServiceReference.StringActionResult BrokerBackFromCustomerWizard(int nLeadID) {
             return base.Channel.BrokerBackFromCustomerWizard(nLeadID);
+        }
+        
+        public EzBob.Web.EzServiceReference.BrokerLeadDetailsActionResult BrokerLeadCheckToken(string sToken) {
+            return base.Channel.BrokerLeadCheckToken(sToken);
         }
         
         public EzBob.Web.EzServiceReference.ActionMetaData CaisGenerate(int underwriterId) {

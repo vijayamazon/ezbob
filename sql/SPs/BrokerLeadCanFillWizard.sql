@@ -8,6 +8,8 @@ ALTER PROCEDURE BrokerLeadCanFillWizard
 @ContactEmail NVARCHAR(255)
 AS
 BEGIN
+	SET NOCOUNT ON;
+
 	DECLARE @BrokerID INT
 	DECLARE @ErrMsg NVARCHAR(1024) = ''
 	DECLARE @CustomerID INT
@@ -48,6 +50,10 @@ BEGIN
 				OR
 				Email = @LeadEmail
 			)
+			AND
+			DateDeleted IS NULL
+			AND
+			BrokerLeadDeletedReasonID IS NULL
 
 		SELECT
 			@CustomerID = Id

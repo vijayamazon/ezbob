@@ -1,5 +1,4 @@
 ﻿namespace EzBob.Backend.Strategies.MailStrategies {
-	using Broker;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
@@ -29,19 +28,19 @@
 
 		#endregion property Salutation
 
-		#region method LoadCustomerData
+		#region method LoadRecipientData
 
-		protected override void LoadCustomerData() {
-			Log.Debug("loading broker data...");
+		protected override void LoadRecipientData() {
+			Log.Debug("Loading broker data...");
 
 			BrokerData = new BrokerData();
 
 			BrokerData.Load(BrokerID, DB);
 
-			Log.Debug("loading broker data complete.");
-		} // LoadCustomerData
+			Log.Debug("Loading broker data complete.");
+		} // LoadRecipientData
 
-		#endregion method LoadCustomerData
+		#endregion method LoadRecipientData
 
 		#region properties
 

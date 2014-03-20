@@ -7,6 +7,8 @@ ALTER PROCEDURE BrokerLeadAcquireCustomer
 @LeadID INT
 AS
 BEGIN
+	SET NOCOUNT ON;
+
 	DECLARE @BrokerID INT
 
 	SELECT
@@ -17,6 +19,10 @@ BEGIN
 		BrokerLeadID = @LeadID
 		AND
 		CustomerID IS NULL
+		AND
+		DateDeleted IS NULL
+		AND
+		BrokerLeadDeletedReasonID IS NULL
 
 	IF @BrokerID IS NOT NULL AND NOT EXISTS (SELECT * FROM Customer WHERE Id = @CustomerID AND BrokerID IS NOT NULL)
 	BEGIN

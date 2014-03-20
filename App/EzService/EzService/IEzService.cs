@@ -93,6 +93,9 @@
 		[OperationContract]
 		StringActionResult BrokerBackFromCustomerWizard(int nLeadID);
 
+		[OperationContract]
+		BrokerLeadDetailsActionResult BrokerLeadCheckToken(string sToken);
+
 		#endregion Broker
 
 		#region CAIS

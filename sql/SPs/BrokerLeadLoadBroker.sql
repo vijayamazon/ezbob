@@ -6,6 +6,8 @@ ALTER PROCEDURE BrokerLeadLoadBroker
 @LeadID INT
 AS
 BEGIN
+	SET NOCOUNT ON;
+
 	DECLARE @BrokerID INT
 	
 	SELECT
@@ -14,6 +16,10 @@ BEGIN
 		BrokerLeads
 	WHERE
 		BrokerLeadID = @LeadID
+		AND
+		DateDeleted IS NULL
+		AND
+		BrokerLeadDeletedReasonID IS NULL
 
 	EXECUTE BrokerLoadContactData @BrokerID
 END

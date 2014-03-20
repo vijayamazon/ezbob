@@ -6,6 +6,8 @@ ALTER PROCEDURE BrokerLeadSetInvitationSetDate
 @LeadID INT,
 @DateInvitationSent DATETIME
 AS
+	SET NOCOUNT ON;
+
 	UPDATE BrokerLeads SET
 		DateLastInvitationSent = @DateInvitationSent
 	WHERE
@@ -15,4 +17,8 @@ AS
 			OR
 			DateLastInvitationSent < @DateInvitationSent
 		)
+		AND
+		DateDeleted IS NULL
+		AND
+		BrokerLeadDeletedReasonID IS NULL
 GO

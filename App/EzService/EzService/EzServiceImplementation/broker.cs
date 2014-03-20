@@ -251,6 +251,25 @@
 
 		#endregion method BrokerBackFromCustomerWizard
 
+		#region method BrokerLeadCheckToken
+
+		public BrokerLeadDetailsActionResult BrokerLeadCheckToken(string sToken) {
+			BrokerLeadCheckToken oInstance;
+
+			ActionMetaData oResult = ExecuteSync(out oInstance, null, null, sToken);
+
+			return new BrokerLeadDetailsActionResult {
+				LeadID = oInstance.LeadID,
+				CustomerID = oInstance.CustomerID,
+				LeadEmail = oInstance.LeadEmail,
+				FirstName = oInstance.FirstName,
+				LastName = oInstance.LastName,
+				MetaData = oResult,
+			};
+		} // BrokerLeadCheckToken
+
+		#endregion method BrokerLeadCheckToken
+
 		#endregion sync
 	} // class EzServiceImplementation
 } // namespace EzService

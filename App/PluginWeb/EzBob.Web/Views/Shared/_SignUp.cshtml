@@ -10,7 +10,7 @@
 	bool instructionsEnabled = config.WizardInstructionsEnabled;
 	var bml = new WizardBrokerLeadModel(Session);
 	var sInitialEmail = bml.IsSet ? bml.LeadEmail : string.Empty;
-	var sBrokerForCustomerIndicator = bml.IsSet ? "broker-for-customer" : string.Empty;
+	var sBrokerForCustomerIndicator = bml.BrokerFillsForCustomer ? "broker-for-customer" : string.Empty;
 }
 
 @using (Html.BeginForm("SignUp", "Account", new { Area = "" }, FormMethod.Post, new { @class = "signup clearfix" })) {

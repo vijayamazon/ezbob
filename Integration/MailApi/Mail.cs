@@ -99,7 +99,7 @@ namespace MailApi
             if (response.StatusCode == HttpStatusCode.InternalServerError)
             {
                 var error = JsonConvert.DeserializeObject<ErrorResponseModel>(response.Content);
-                throw new MandrillException(error, string.Format("InternalServerError. Post failed {0}", path));
+                throw new MandrillException(error, string.Format("InternalServerError. Post failed {0}; response: {1}", path, response.Content));
             }
 
             if (response.StatusCode != HttpStatusCode.OK)
