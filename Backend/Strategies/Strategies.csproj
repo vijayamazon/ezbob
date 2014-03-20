@@ -106,6 +106,7 @@
     <Compile Include="Broker\BrokerRestorePassword.cs" />
     <Compile Include="MailStrategies\API\Addressee.cs" />
     <Compile Include="MailStrategies\API\MailMetaData.cs" />
+    <Compile Include="MailStrategies\Broker\BrokerFillForCustomerComplete.cs" />
     <Compile Include="MailStrategies\MailRecipientData\BrokerData.cs" />
     <Compile Include="CaisUpdate.cs" />
     <Compile Include="BwaChecker.cs" />
@@ -113,8 +114,8 @@
     <Compile Include="FinishWizard.cs" />
     <Compile Include="ExperianConsumerCheck.cs" />
     <Compile Include="ExperianCompanyCheck.cs" />
-    <Compile Include="MailStrategies\BrokerPasswordRestored.cs" />
-    <Compile Include="MailStrategies\BrokerLeadSendInvitation.cs" />
+    <Compile Include="MailStrategies\Broker\BrokerPasswordRestored.cs" />
+    <Compile Include="MailStrategies\Broker\BrokerLeadSendInvitation.cs" />
     <Compile Include="MailStrategies\MailRecipientData\BrokerLeadData.cs" />
     <Compile Include="QuickOffer\QuickOffer.cs" />
     <Compile Include="QuickOffer\QuickOfferData.cs" />

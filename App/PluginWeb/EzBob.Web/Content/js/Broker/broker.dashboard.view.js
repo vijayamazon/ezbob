@@ -63,8 +63,6 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 
 				theTableOpts.aaData = oResponse.customers;
 
-				var oSomeTimeAgo = moment([2012, 7]).utc();
-
 				var oStdMoneyRender = theTableOpts.aoColumns[8].mRender;
 
 				theTableOpts.aoColumns[8].mRender = function(oData, sAction, oFullSource) {
@@ -84,6 +82,8 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 							return 0;
 					} // switch
 				}; // mRender for LoanAmount
+
+				var oSomeTimeAgo = moment([2012, 7]).utc();
 
 				theTableOpts.aoColumns[9].mRender = function(oData, sAction, oFullSource) {
 					switch (sAction) {
@@ -140,6 +140,23 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 					'#LeadID,FirstName,LastName,Email,AddMode,^DateCreated,@DateLastInvitationSent',
 					'brk-grid-state-' + self.router.getAuth() + '-lead-list'
 				);
+
+				var oSomeTimeAgo = moment([2012, 7]).utc();
+
+				leadTableOpts.aoColumns[leadTableOpts.aoColumns.length - 1].mRender = function(oData, sAction, oFullSource) {
+					switch (sAction) {
+						case 'display':
+							return (oSomeTimeAgo.diff(moment(oData)) > 0) ? '' : EzBob.formatDateTime(oData);
+
+						case 'filter':
+							return (oSomeTimeAgo.diff(moment(oData)) > 0) ? '' : oData + ' ' + EzBob.formatDateTime(oData);
+
+						case 'type':
+						case 'sort':
+						default:
+							return oData;
+					} // switch
+				}; // mRender for LoanDate
 
 				leadTableOpts.aoColumns.push({
 					mData: null,

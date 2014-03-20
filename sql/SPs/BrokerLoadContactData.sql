@@ -10,6 +10,7 @@ BEGIN
 
 	SELECT
 		BrokerID,
+		FirmName,
 		ContactName,
 		ContactEmail
 	FROM
@@ -18,4 +19,3 @@ BEGIN
 		BrokerID = @BrokerID
 END
 GO
-

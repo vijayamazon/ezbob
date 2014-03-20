@@ -49,8 +49,8 @@
 			set { CustomerId = value; } // set
 		} // BrokerID
 
-		protected virtual CustomerData BrokerData {
-			get { return CustomerData; } // get
+		protected virtual BrokerData BrokerData {
+			get { return (BrokerData)CustomerData; } // get
 			set { CustomerData = value; } // set
 		} // BrokerData
 

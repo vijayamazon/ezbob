@@ -118,36 +118,6 @@
 
 		#endregion class BrokerLeadSaveInvitationToken
 
-		#region property CustomerSite
-
-		private string CustomerSite {
-			get {
-				if (string.IsNullOrWhiteSpace(m_sCustomerSite)) {
-					DB.ForEachRowSafe(
-						(sr, bRowsetStart) => {
-							m_sCustomerSite = ((string)sr["Value"] ?? string.Empty).Trim();
-							return ActionResult.SkipAll;
-						},
-						"LoadConfigurationVariable",
-						CommandSpecies.StoredProcedure,
-						new QueryParameter("@CfgVarName", "CustomerSite")
-					);
-
-					if (string.IsNullOrWhiteSpace(m_sCustomerSite))
-						m_sCustomerSite = "https://app.ezbob.com";
-
-					if (m_sCustomerSite.EndsWith("/"))
-						m_sCustomerSite = m_sCustomerSite.Substring(0, m_sCustomerSite.Length - 1);
-				} // if
-
-				return m_sCustomerSite;
-			} // get
-		} // CustomerSite
-
-		private string m_sCustomerSite;
-
-		#endregion property CustomerSite
-
 		#endregion private
 	} // class BrokerLeadSendInvitation
 } // namespace

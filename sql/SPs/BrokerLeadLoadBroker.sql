@@ -9,18 +9,23 @@ BEGIN
 	SET NOCOUNT ON;
 
 	DECLARE @BrokerID INT
+	DECLARE @CustomerID INT
 	
 	SELECT
-		@BrokerID = BrokerID
+		@BrokerID = BrokerID,
+		@CustomerID = CustomerID
 	FROM
 		BrokerLeads
 	WHERE
 		BrokerLeadID = @LeadID
-		AND
-		DateDeleted IS NULL
-		AND
-		BrokerLeadDeletedReasonID IS NULL
 
-	EXECUTE BrokerLoadContactData @BrokerID
+	SELECT
+		b.BrokerID,
+		b.ContactEmail AS BrokerContactEmail,
+		@CustomerID AS CustomerID
+	FROM
+		Broker b
+	WHERE
+		b.BrokerID = @BrokerID
 END
 GO

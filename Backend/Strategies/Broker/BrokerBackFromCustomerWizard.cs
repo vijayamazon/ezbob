@@ -1,6 +1,8 @@
 ﻿namespace EzBob.Backend.Strategies.Broker {
+	using System;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using MailStrategies;
 
 	public class BrokerBackFromCustomerWizard : AStrategy {
 		#region public
@@ -28,7 +30,7 @@
 		#region property ContactEmail
 
 		public string ContactEmail {
-			get { return (m_oResultRow == null) ? string.Empty : m_oResultRow.ContactEmail; } // get
+			get { return (m_oResultRow == null) ? string.Empty : m_oResultRow.BrokerContactEmail; } // get
 		} // ContactEmail
 
 		#endregion property ContactEmail
@@ -38,6 +40,12 @@
 		public override void Execute() {
 			if (m_oSp.HasValidParameters())
 				m_oResultRow = m_oSp.FillFirst<BrokerLeadLoadBroker.ResultRow>();
+
+			if (m_oResultRow == null)
+				return;
+
+			if ((m_oResultRow.BrokerID > 0) && (m_oResultRow.CustomerID > 0))
+				new BrokerFillForCustomerComplete(m_oResultRow.BrokerID, m_oResultRow.CustomerID, DB, Log).Execute();
 		} // Execute
 
 		#endregion method Execute
@@ -61,7 +69,9 @@
 			public int LeadID { get; set; } // LeadID
 
 			public class ResultRow : AResultRow {
-				public string ContactEmail { get; set; } // ContactEmail
+				public int BrokerID { get; set; } // BrokerID
+				public string BrokerContactEmail { get; set; } // BrokerContactEmail
+				public int CustomerID { get; set; } // CustomerID
 			} // class ResultRow
 		} // BrokerLeadLoadBroker
 

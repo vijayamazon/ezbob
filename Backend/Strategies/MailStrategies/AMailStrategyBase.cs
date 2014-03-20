@@ -97,6 +97,32 @@
 
 		#endregion method LoadRecipientData
 
+		#region property CustomerSite
+
+		protected virtual string CustomerSite {
+			get {
+				m_sCustomerSite = LoadCfgValue(m_sCustomerSite, "CustomerSite", "https://app.ezbob.com");
+				return m_sCustomerSite;
+			} // get
+		} // CustomerSite
+
+		private string m_sCustomerSite;
+
+		#endregion property CustomerSite
+
+		#region property BrokerSite
+
+		protected virtual string BrokerSite {
+			get {
+				m_sBrokerSite = LoadCfgValue(m_sBrokerSite, "BrokerSite", "https://app.ezbob.com/Broker");
+				return m_sBrokerSite;
+			} // get
+		} // CustomerSite
+
+		private string m_sBrokerSite;
+
+		#endregion property CustomerSite
+
 		#region properties
 
 		protected virtual string TemplateName { get; set; }
@@ -106,6 +132,36 @@
 		protected virtual int CustomerId { get; set; }
 
 		#endregion properties
+
+		#region method LoadCfgValue
+
+		protected virtual string LoadCfgValue(string sCurrentValue, string sName, string sDefault, bool bRemoveLastSlash = true) {
+			if (!string.IsNullOrWhiteSpace(sCurrentValue))
+				return sCurrentValue;
+
+			string sResult = string.Empty;
+
+			DB.ForEachRowSafe(
+				(sr, bRowsetStart) => {
+					sResult = ((string)sr["Value"] ?? string.Empty).Trim();
+					return ActionResult.SkipAll;
+				},
+				"LoadConfigurationVariable",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("@CfgVarName", sName)
+			);
+
+			if (string.IsNullOrWhiteSpace(sResult))
+				sResult = sDefault;
+
+			if (bRemoveLastSlash)
+				while (sResult.EndsWith("/"))
+					sResult = sResult.Substring(0, sResult.Length - 1);
+
+			return sResult;
+		} // LoadCfgValue
+
+		#endregion method LoadCfgValue
 
 		#endregion protected
 

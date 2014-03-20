@@ -17,6 +17,7 @@
 					LastName = sr["ContactName"];
 					FullName = sr["ContactName"];
 					Email = sr["ContactEmail"];
+					FirmName = sr["FirmName"];
 					return ActionResult.SkipAll;
 				},
 				"BrokerLoadContactData",
@@ -46,6 +47,8 @@
 			get { return Mail; } // get
 			protected set { Mail = value; } // set
 		} // LeadID
+
+		public virtual string FirmName { get; set; } // FirmName
 
 		#endregion properties
 	} // class CustomerData
