@@ -5,7 +5,9 @@
 	using System.Text;
 	using ApplicationMng.Model;
 	using Areas.Customer.Controllers.Exceptions;
+	using Code;
 	using NHibernate;
+	using Newtonsoft.Json;
 	using Scorto.NHibernate.Model;
 	using System;
 	using System.Linq;
@@ -21,17 +23,31 @@
 
 	public class EzbobMembershipProvider : MembershipProvider
     {
+		private class EzbobMembershipProviderConfigs
+		{
+			public string LoginValidationStringForWeb { get; set; }
+			public int NumOfInvalidPasswordAttempts { get; set; }
+			public int InvalidPasswordAttemptsPeriodSeconds { get; set; }
+			public int InvalidPasswordBlockSeconds { get; set; }
+			public string PasswordValidity { get; set; }
+			public string LoginValidity { get; set; }
+		}
+
 		private static readonly ILog log = LogManager.GetLogger("EzbobMembershipProvider");
 		private readonly IUsersRepository usersRepository;
 		private readonly IRolesRepository roles;
 		private readonly SessionRepository sessionRepository;
 		private readonly IWorkplaceContext context;
+		private readonly ServiceClient serviceClient;
+		private EzbobMembershipProviderConfigs configs;
 
         public EzbobMembershipProvider()
         {
             roles = ObjectFactory.GetInstance<IRolesRepository>();
 	        usersRepository = ObjectFactory.GetInstance<IUsersRepository>();
 			sessionRepository = ObjectFactory.GetInstance<SessionRepository>();
+			serviceClient = new ServiceClient();
+			ReadConfiguration();
         }
 
 		public EzbobMembershipProvider(IWorkplaceContext context, IRolesRepository roles)
@@ -40,7 +56,16 @@
 			this.roles = roles;
 			usersRepository = ObjectFactory.GetInstance<IUsersRepository>();
 			sessionRepository = ObjectFactory.GetInstance<SessionRepository>();
+			serviceClient = new ServiceClient();
+			ReadConfiguration();
         }
+
+		private void ReadConfiguration()
+		{
+			var basicInterestRatesList = serviceClient.Instance.GetSpResultTable("GetUserManagementConfigs", null);
+			var deserializedArray = JsonConvert.DeserializeObject<EzbobMembershipProviderConfigs[]>(basicInterestRatesList.SerializedDataTable);
+			configs = deserializedArray[0];
+		}
 
 		public override MembershipUser CreateUser(string userName, string password, string email, string passwordQuestion, string passwordAnswer, bool isApproved, object providerUserKey, out MembershipCreateStatus status)
 		{
@@ -52,9 +77,7 @@
 					throw new RoleNotFoundException("Web");
 				}
 
-				// TODO: should be in configuration
-				string loginValidationStringForWeb = @"(^((([a-z]|\d|[!#\$%'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$)";
-				if (!Regex.IsMatch(userName.ToLower(), loginValidationStringForWeb))
+				if (!Regex.IsMatch(userName.ToLower(), configs.LoginValidationStringForWeb))
 				{
 					throw new Exception("Login does not conform to the passwordsecurity policy");
 				}
@@ -237,29 +260,26 @@
 
 		public bool PolicyValidateLogin(string login)
 		{
-			// TODO: config
-			string s = @"(^[.\-@_a-zA-Z0-9\\]{1,40}$)|(^((([a-z]|\d|[!#\$%'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.?$)";
 			try
 			{
-				return Regex.IsMatch(login, s);
+				return Regex.IsMatch(login, configs.LoginValidity);
 			}
 			catch
 			{
-				log.WarnFormat("Login:{0} doesn't match:{1}", login, s);
+				log.WarnFormat("Login:{0} doesn't match:{1}", login, configs.LoginValidity);
 				return false;
 			}
 		}
 
 		public bool PolicyValidatePassword(string password)
 		{
-			string s = @"(^.{6,}$)"; // TODO: config
 			try
 			{
-				return Regex.IsMatch(password, s);
+				return Regex.IsMatch(password, configs.PasswordValidity);
 			}
 			catch
 			{
-				log.WarnFormat("Password:{0} doesn't match:{1}", password, s);
+				log.WarnFormat("Password:{0} doesn't match:{1}", password, configs.PasswordValidity);
 				return false;
 			}
 		}
@@ -400,9 +420,6 @@
 
 		public bool InnerLoginUser(User user, string passwordHash, string oldModelPasswordHash)
 		{
-			int invalidPasswordAttempts = 3; //TODO: form config
-			int invalidPasswordAttemptsPeriodSeconds = 30; //TODO: form config
-			int invalidPasswordBlockSeconds = 30; //TODO: form config
 			if (user.IsDeleted != 0)
 			{
 				return false;
@@ -423,9 +440,9 @@
 			}
 			if (user.LastBadLogin.HasValue)
 			{
-				TimeSpan span = (user.LoginFailedCount.GetValueOrDefault() >= invalidPasswordAttempts) ? 
-					TimeSpan.FromSeconds(invalidPasswordBlockSeconds) : 
-					TimeSpan.FromSeconds(invalidPasswordAttemptsPeriodSeconds);
+				TimeSpan span = (user.LoginFailedCount.GetValueOrDefault() >= configs.NumOfInvalidPasswordAttempts) ? 
+					TimeSpan.FromSeconds(configs.InvalidPasswordBlockSeconds) : 
+					TimeSpan.FromSeconds(configs.InvalidPasswordAttemptsPeriodSeconds);
 				if (DateTime.UtcNow.Subtract(user.LastBadLogin.Value) > span)
 				{
 					user.LastBadLogin = null;
@@ -433,7 +450,7 @@
 					usersRepository.Update(user);
 				}
 			}
-			if (user.LoginFailedCount.HasValue && user.LoginFailedCount.Value > invalidPasswordAttempts)
+			if (user.LoginFailedCount.HasValue && user.LoginFailedCount.Value > configs.NumOfInvalidPasswordAttempts)
 			{
 				return false;
 			}
@@ -443,7 +460,7 @@
 				user.LastBadLogin = DateTime.UtcNow;
 				usersRepository.Update(user);
 
-				if (user.LoginFailedCount.HasValue && user.LoginFailedCount.Value >= invalidPasswordAttempts)
+				if (user.LoginFailedCount.HasValue && user.LoginFailedCount.Value >= configs.NumOfInvalidPasswordAttempts)
 				{
 					return false;
 				}
