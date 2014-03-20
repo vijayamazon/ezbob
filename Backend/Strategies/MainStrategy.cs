@@ -162,6 +162,23 @@
 			autoDecisionResponse = AutoDecisionMaker.MakeDecision(customerId, minExperianScore, maxExperianScore, totalSumOfOrders1YTotalForRejection, totalSumOfOrders3MTotalForRejection, offeredCreditLine, marketplaceSeniorityDays, enableAutomaticReRejection, enableAutomaticRejection, enableAutomaticReApproval, enableAutomaticApproval,
 				loanOfferReApprovalFullAmountOld, loanOfferReApprovalFullAmount, loanOfferReApprovalRemainingAmount, loanOfferReApprovalRemainingAmountOld, DB, Log);
 
+			if (autoDecisionResponse.IsAutoApproval)
+			{
+				modelLoanOffer = autoDecisionResponse.AutoApproveAmount;
+				if (modelLoanOffer < offeredCreditLine)
+				{
+					offeredCreditLine = modelLoanOffer;
+				}
+			}
+			else if (autoDecisionResponse.IsAutoBankBasedApproval)
+			{
+				modelLoanOffer = autoDecisionResponse.BankBasedAutoApproveAmount;
+				if (modelLoanOffer < offeredCreditLine)
+				{
+					offeredCreditLine = modelLoanOffer;
+				}
+			}
+
 			if (autoDecisionResponse.SystemDecision == "Reject")
 			{
 				modelLoanOffer = 0;
