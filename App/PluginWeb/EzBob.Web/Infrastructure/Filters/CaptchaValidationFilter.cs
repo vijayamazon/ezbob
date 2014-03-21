@@ -4,7 +4,6 @@
 	using CaptchaMvc.HtmlHelpers;
 	using Recaptcha;
 	using StructureMap;
-	using System;
 
     public class CaptchaValidationFilter : ActionFilterAttribute
     {
@@ -24,10 +23,9 @@
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-			if (filterContext.HttpContext.Session != null &&
-				filterContext.ActionDescriptor.ActionName == "SignUp" &&
-				Convert.ToBoolean(filterContext.HttpContext.Session["IsSmsValidationActive"]) && 
-				!Convert.ToBoolean(filterContext.HttpContext.Session["SwitchedToCaptcha"]))
+			if (filterContext.ActionDescriptor.ActionName == "SignUp" && 
+				(!filterContext.ActionParameters.ContainsKey("isInCaptchaMode") ||
+					(string)filterContext.ActionParameters["isInCaptchaMode"] != "True"))
 			{
 				isValid = true;
 			}

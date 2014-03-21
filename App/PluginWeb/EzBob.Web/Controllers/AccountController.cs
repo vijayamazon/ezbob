@@ -45,7 +45,6 @@ namespace EzBob.Web.Controllers {
 		private readonly IConfigurationVariablesRepository _configurationVariables;
 		private readonly ICustomerStatusesRepository _customerStatusesRepository;
 		private readonly DatabaseDataHelper _helper;
-		private static readonly object initSessionLock = new object();
 		private readonly BrokerHelper m_oBrokerHelper;
 		private readonly SessionRepository sessionRepository;
 
@@ -129,7 +128,6 @@ namespace EzBob.Web.Controllers {
 					if (!isUnderwriter)
 					{
 						var customer = _customers.Get(user.Id);
-						;
 						if (customer.CollectionStatus.CurrentStatus.Name == "Disabled")
 						{
 							ModelState.AddModelError("",
@@ -320,7 +318,7 @@ namespace EzBob.Web.Controllers {
 			double? amount,
 			string mobilePhone,
 			string mobileCode,
-			string switchedToCaptcha
+			string isInCaptchaMode
 		) {
 			if (!ModelState.IsValid)
 				return GetModelStateErrors(ModelState);
@@ -330,7 +328,7 @@ namespace EzBob.Web.Controllers {
 
 			try {
 				var customerIp = Request.ServerVariables["REMOTE_ADDR"];
-				SignUpInternal(model.EMail, signupPass1, signupPass2, securityQuestion, model.SecurityAnswer, promoCode, amount, mobilePhone, mobileCode, switchedToCaptcha == "True");
+				SignUpInternal(model.EMail, signupPass1, signupPass2, securityQuestion, model.SecurityAnswer, promoCode, amount, mobilePhone, mobileCode, isInCaptchaMode == "True");
 				FormsAuthentication.SetAuthCookie(model.EMail, false);
 
 				var user = _users.GetUserByLogin(model.EMail);
@@ -364,10 +362,9 @@ namespace EzBob.Web.Controllers {
 			double? amount,
 			string mobilePhone,
 			string mobileCode,
-			bool switchedToCaptcha
+			bool isInCaptchaMode
 		) {
 			MembershipCreateStatus status;
-			InitSession();
 
 			if (string.IsNullOrEmpty(email))
 				throw new Exception(DbStrings.NotValidEmailAddress);
@@ -379,8 +376,8 @@ namespace EzBob.Web.Controllers {
 			if (signupPass1.Length < maxPassLength)
 				throw new Exception(DbStrings.NotValidEmailAddress);
 
-			bool isTwilioEnabled = Convert.ToBoolean(@Session["IsSmsValidationActive"]);
-			if (isTwilioEnabled && !switchedToCaptcha) {
+			if (!isInCaptchaMode)
+			{
 				bool isCorrect = m_oServiceClient.Instance.ValidateMobileCode(mobilePhone, mobileCode).Value;
 				if (!isCorrect)
 					throw new Exception("Invalid code");
@@ -664,50 +661,19 @@ namespace EzBob.Web.Controllers {
 		{
 			return m_oServiceClient.Instance.GenerateMobileCode(mobilePhone).Value;
 		}
-
-		[Ajax]
-		[HttpPost]
-		public void SwitchedToCaptcha()
-		{
-			Session["SwitchedToCaptcha"] = true;
-		}
-
-		private void InitSession()
-		{
-			lock (initSessionLock)
-			{
-				if (Session["IsInitialized"] != null)
-				{
-					_log.InfoFormat("Session is already initialized");
-					return;
-				}
-
-				_log.InfoFormat("Initializing session");
-				WizardConfigsActionResult wizardConfigsActionResult = m_oServiceClient.Instance.GetWizardConfigs();
-				Session["SwitchedToCaptcha"] = false;
-				Session["IsSmsValidationActive"] = wizardConfigsActionResult.IsSmsValidationActive;
-				Session["NumberOfMobileCodeAttempts"] = wizardConfigsActionResult.NumberOfMobileCodeAttempts;
-
-				_log.InfoFormat("Initialized session");
-				_log.InfoFormat("SwitchedToCaptcha:{0}", Session["SwitchedToCaptcha"]);
-				_log.InfoFormat("IsSmsValidationActive:{0}", Session["IsSmsValidationActive"]);
-				_log.InfoFormat("NumberOfMobileCodeAttempts:{0}", Session["NumberOfMobileCodeAttempts"]);
-
-				Session["IsInitialized"] = true;
-			}
-		}
-
+		
 		[HttpPost]
 		public JsonNetResult GetTwilioConfig()
 		{
-			InitSession();
-			_log.InfoFormat("Mobile code visibility related values are: IsSmsValidationActive:{0} NumberOfMobileCodeAttempts:{1} SwitchedToCaptcha:{2}",
-				Session["IsSmsValidationActive"], Session["NumberOfMobileCodeAttempts"], Session["SwitchedToCaptcha"]);
+
+			WizardConfigsActionResult wizardConfigsActionResult = m_oServiceClient.Instance.GetWizardConfigs();
+			
+			_log.InfoFormat("Mobile code visibility related values are: IsSmsValidationActive:{0} NumberOfMobileCodeAttempts:{1}",
+				wizardConfigsActionResult.IsSmsValidationActive, wizardConfigsActionResult.NumberOfMobileCodeAttempts);
 			return this.JsonNet(new
 			{
-				isSmsValidationActive = Session["IsSmsValidationActive"],
-				numberOfMobileCodeAttempts = Session["NumberOfMobileCodeAttempts"],
-				switchedToCaptcha = Session["SwitchedToCaptcha"]
+				isSmsValidationActive = wizardConfigsActionResult.IsSmsValidationActive,
+				numberOfMobileCodeAttempts = wizardConfigsActionResult.NumberOfMobileCodeAttempts
 			});
 		}
 

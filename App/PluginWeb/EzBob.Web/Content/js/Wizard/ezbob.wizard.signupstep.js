@@ -12,7 +12,6 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         this.on('ready', this.ready, this);
         this.model.on('change:loggedIn', this.render, this);
 
-        this.switchedToCaptcha = false;
         this.showOfflineHelp = true;
         this.readyToProceed = false;
         this.activatedCode = false;
@@ -24,21 +23,18 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 		var xhr = $.post(window.gRootPath + "Account/GetTwilioConfig");
 
 		xhr.done(function(res) {
-			if (!that.switchedToCaptcha) {
-				that.twilioEnabled = res.isSmsValidationActive;
-				that.switchedToCaptcha = res.switchedToCaptcha;
-				that.numberOfMobileCodeAttempts = res.numberOfMobileCodeAttempts + 1;
-			}
+			that.twilioEnabled = res.isSmsValidationActive;
+			that.numberOfMobileCodeAttempts = res.numberOfMobileCodeAttempts + 1;
 
 			return false;
 		});
 
 		xhr.always(function() {
-			if (that.twilioEnabled && !that.switchedToCaptcha) {
-				that.$el.find('#twilioDiv').show();
+			if (that.twilioEnabled) {
+				that.$el.find('#twilioDiv').removeClass('hide');
 				$.post(window.gRootPath + "Account/DebugLog_Message", { message: 'The visible object is mobile code' });
 			} else {
-				that.$el.find('#captchaDiv').show();
+			    that.$el.find('#captchaDiv').removeClass('hide');
 				$.post(window.gRootPath + "Account/DebugLog_Message", { message: 'The visible object is captcha' });
 			}
 			return false;
@@ -114,7 +110,9 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         this.setFieldStatusNotRequired(evt, 'promoCode');
 
         var enabled = EzBob.Validation.checkForm(this.validator);
-        enabled = enabled && (!this.twilioEnabled || this.activatedCode || this.switchedToCaptcha);
+
+        var isInCaptchaMode = !this.$el.find('#captchaDiv').hasClass('hide');
+        enabled = enabled && (isInCaptchaMode || this.activatedCode);
         $('#signupSubmitButton').toggleClass('disabled', !enabled);
     },
 
@@ -140,10 +138,8 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         this.mobileCodesSent++;
         if (this.mobileCodesSent === this.numberOfMobileCodeAttempts) {
             EzBob.App.trigger('warning', "Switching to authentication via captcha");
-            this.$el.find('#twilioDiv').hide();
-            this.$el.find('#captchaDiv').show();
-            this.switchedToCaptcha = true;
-            $.post(window.gRootPath + "Account/SwitchedToCaptcha");
+            this.$el.find('#twilioDiv').addClass('hide');
+            this.$el.find('#captchaDiv').removeClass('hide');
             return false;
         }
         var that = this;
@@ -151,10 +147,8 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         xhr.done(function (isError) {
             if (isError !== 'False' && (!isError.success || isError.error === 'True')) {
                 EzBob.App.trigger('error', "Error sending code, please authenticate using captcha");
-                that.$el.find('#twilioDiv').hide();
-                that.$el.find('#captchaDiv').show();
-                that.switchedToCaptcha = true;
-                $.post(window.gRootPath + "Account/SwitchedToCaptcha");
+                that.$el.find('#twilioDiv').addClass('hide');
+                that.$el.find('#captchaDiv').removeClass('hide');
             } else {
                 var codeSentObject = that.$el.find('#codeSentLabel');
                 codeSentObject.animate({ opacity: 1 });
@@ -196,10 +190,8 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
     switchToCaptcha: function () {
         EzBob.App.trigger('clear');
-        this.$el.find('#twilioDiv').hide();
-        this.$el.find('#captchaDiv').show();
-        this.switchedToCaptcha = true;
-        $.post(window.gRootPath + "Account/SwitchedToCaptcha");
+        this.$el.find('#twilioDiv').addClass('hide');
+        this.$el.find('#captchaDiv').removeClass('hide');
         return false;
     },
 
@@ -211,7 +203,8 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
         var mobilePhone = '', mobileCode = '';
 
-        if (this.twilioEnabled && !this.switchedToCaptcha) {
+        var isInCaptchaMode = !this.$el.find('#captchaDiv').hasClass('hide');
+        if (!isInCaptchaMode) {
             mobilePhone = $('#mobilePhone').val();
             mobileCode = $('#mobileCode').val();
             this.model.set('twilioPhone', mobilePhone);
@@ -233,11 +226,12 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         var amount = _.find(data, function (d) { return d.name === 'amount'; });
         if (amount) { amount.value = this.$el.find('#amount').autoNumericGet(); }
 
-        if (this.switchedToCaptcha) {
-            data.push({ name: "switchedToCaptcha", value: "True" });
+        if (isInCaptchaMode) {
+            data.push({ name: "isInCaptchaMode", value: "True" });
         } else {
-            data.push({ name: "switchedToCaptcha", value: "False" });
+            data.push({ name: "isInCaptchaMode", value: "False" });
         }
+        
 
         var xhr = $.post(this.form.attr('action'), data);
 
@@ -261,7 +255,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
             } else {
                 $.post(window.gRootPath + "Account/DebugLog_Message", { message: result.errorMessage });
                 if (result.errorMessage) EzBob.App.trigger('error', result.errorMessage);
-                if (!that.twilioEnabled || that.switchedToCaptcha) {
+                if (isInCaptchaMode) {
                     that.captcha.reload();
                 }
                 that.$el.find(':submit').addClass('disabled');
@@ -272,7 +266,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         xhr.fail(function () {
             $.post(window.gRootPath + "Account/DebugLog_Message", { message: 'Something went wrong' });
             EzBob.App.trigger('error', 'Something went wrong');
-            if (!that.twilioEnabled || that.switchedToCaptcha) {
+            if (isInCaptchaMode) {
                 that.captcha.reload();
             }
             that.blockBtn(false);
