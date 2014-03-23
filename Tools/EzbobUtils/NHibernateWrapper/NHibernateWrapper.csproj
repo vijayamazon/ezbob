@@ -181,7 +181,6 @@
     <Compile Include="Email.Accounts\AccountBaseMap.cs" />
     <Compile Include="NHibernate.Mappings\NodeMap.cs" />
     <Compile Include="NHibernate.Model.ApplicationMng.Model\CreditProductSignatureMap.cs" />
-    <Compile Include="NHibernate.Model.ApplicationMng.Model\ExecutionStateMap.cs" />
     <Compile Include="NHibernate.Model.ApplicationMng.Model\PublicNameSignatureMap.cs" />
     <Compile Include="NHibernate.Model.Commands\IPlayerRunner.cs" />
     <Compile Include="NHibernate.Model.Commands\SaveAutonodeData.cs" />
@@ -200,7 +199,6 @@
     <Compile Include="NHibernate.Model\PermissionMap.cs" />
     <Compile Include="NHibernate.Model\PublicNameSignature.cs" />
     <Compile Include="NHibernate.Model\SecurityQuestion.cs" />
-    <Compile Include="NHibernate.Model\Signal.cs" />
     <Compile Include="NHibernate.Model\StrategyScheduleParam.cs" />
     <Compile Include="NHibernate.Repository\AppAttachmentsRepository.cs" />
     <Compile Include="NHibernate.Repository\ApplicationExecutionTypeRepository.cs" />

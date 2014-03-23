@@ -70,14 +70,8 @@ namespace ApplicationMng.Model
 			get;
 			set;
 		}
-		public virtual ISet<Signal> Signal
-		{
-			get;
-			set;
-		}
 		public Application()
 		{
-			this.Signal = new HashedSet<Signal>();
 		}
 	}
 }

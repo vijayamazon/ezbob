@@ -21,7 +21,6 @@ namespace ApplicationMng.Model.Mappings
 			base.Map((Application x) => (object)x.ParentAppID);
 			base.Map((Application x) => x.ExecutionPathBin);
 			base.HasOne<AppAdditionalData>((Application x) => x.AdditionalData).Fetch.Join().Cascade.All();
-			base.HasMany<Signal>((Application application) => application.Signal).AsSet().KeyColumn("ApplicationID").Cascade.All().Inverse();
 		}
 	}
 }
