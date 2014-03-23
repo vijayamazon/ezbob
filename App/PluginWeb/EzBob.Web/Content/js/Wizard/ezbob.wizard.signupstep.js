@@ -17,14 +17,19 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         this.activatedCode = false;
         this.mobileCodesSent = 0;
         this.twilioEnabled = false;
+	    this.switchedToCaptcha = false;
 
 		var that = this;
 
 		var xhr = $.post(window.gRootPath + "Account/GetTwilioConfig");
 
 		xhr.done(function(res) {
-			that.twilioEnabled = res.isSmsValidationActive;
-			that.numberOfMobileCodeAttempts = res.numberOfMobileCodeAttempts + 1;
+			if (that.switchedToCaptcha)
+				that.twilioEnabled = false;
+			else {
+				that.twilioEnabled = res.isSmsValidationActive;
+				that.numberOfMobileCodeAttempts = res.numberOfMobileCodeAttempts + 1;
+			}
 
 			return false;
 		});
@@ -189,6 +194,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
     },
 
     switchToCaptcha: function () {
+	    this.switchedToCaptcha = true;
         EzBob.App.trigger('clear');
         this.$el.find('#twilioDiv').addClass('hide');
         this.$el.find('#captchaDiv').removeClass('hide');
