@@ -25,9 +25,6 @@
     <Optimize>true</Optimize>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DBCommon">
-      <HintPath>..\..\..\Lib\Scorto.Core\DBCommon.dll</HintPath>
-    </Reference>
     <Reference Include="FluentNHibernate">
       <HintPath>..\..\..\Lib\Scorto.Core\FluentNHibernate.dll</HintPath>
     </Reference>
