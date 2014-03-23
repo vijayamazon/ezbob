@@ -392,10 +392,6 @@
 				guid = DoLogin(securityAppId, userByLogin.Id, hostAddress);
 	            return true;
             }
-			
-			// TODO: why is this increment here??
-			userByLogin.LoginFailedCount++;
-			usersRepository.SaveOrUpdate(userByLogin);
 
 			guid = string.Empty;
 			return false;
@@ -457,7 +453,7 @@
 			}
 			if ((user.Password != passwordHash) && (user.Password != oldModelPasswordHash))
 			{
-				user.LoginFailedCount++;
+				user.LoginFailedCount = user.LoginFailedCount.GetValueOrDefault() + 1;
 				user.LastBadLogin = DateTime.UtcNow;
 				usersRepository.Update(user);
 

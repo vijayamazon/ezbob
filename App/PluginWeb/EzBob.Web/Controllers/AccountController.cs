@@ -236,7 +236,6 @@ namespace EzBob.Web.Controllers {
 						});
 
 						_log.InfoFormat(errorMessage);
-						//RestorePassword(user.EMail, user.SecurityAnswer);
 
 						var password = _membershipProvider.ResetPassword(user.EMail, "");
 						m_oServiceClient.Instance.ThreeInvalidAttempts(user.Id, password);
