@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DBCommon">
+      <HintPath>..\..\Lib\Scorto.Core\DBCommon.dll</HintPath>
+    </Reference>
     <Reference Include="DBSQLServer">
       <HintPath>..\..\Lib\Scorto.Core\DBSQLServer.dll</HintPath>
     </Reference>
