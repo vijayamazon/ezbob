@@ -8,7 +8,25 @@ ALTER PROCEDURE GetLastStepCustomers
 @IncludeTest BIT = 0
 AS
 BEGIN
+	SET NOCOUNT ON;
+
+	--------------------------------------------------------------------------
+	--
+	-- Drop temp tables.
+	--
+	--------------------------------------------------------------------------
+
+	IF OBJECT_ID('tempdb..#raw') IS NOT NULL
+		DROP TABLE #raw
+
+	--------------------------------------------------------------------------
+	--
+	-- Load main data.
+	--
+	--------------------------------------------------------------------------
+
 	SELECT DISTINCT
+		c.Id AS CustomerID,
 		c.Name AS eMail,
 		c.FirstName AS FirstName,
 		c.Surname AS SurName,
@@ -17,6 +35,8 @@ BEGIN
 				THEN cr.ManagerApprovedSum
 			ELSE cr.SystemCalculatedSum
 		END AS MaxApproved
+	INTO
+		#raw
 	FROM
 		CashRequests cr
 		INNER JOIN Customer c ON cr.IdCustomer = c.Id AND (@IncludeTest = 0 OR c.IsTest = 0)
@@ -41,5 +61,46 @@ BEGIN
 			OR
 			(cr.IdUnderwriter IS NULL AND CONVERT(DATE, cr.SystemDecisionDate) = @DateStart)
 		)
+
+	--------------------------------------------------------------------------
+	--
+	-- Find broker email (if relevant) and final select.
+	--
+	--------------------------------------------------------------------------
+
+	DECLARE @ids IntList
+
+	INSERT INTO @ids (Value)
+	SELECT
+		CustomerID
+	FROM
+		#raw
+
+	--------------------------------------------------------------------------
+
+	SELECT
+		r.eMail,
+		r.FirstName,
+		r.SurName,
+		r.MaxApproved,
+		b.BrokerEmail
+	FROM
+		#raw r
+		LEFT JOIN dbo.udfBrokerEmailsForCustomerMarketing(@ids) b ON r.CustomerID = b.CustomerID
+
+	--------------------------------------------------------------------------
+	--
+	-- Drop temp tables.
+	--
+	--------------------------------------------------------------------------
+
+	IF OBJECT_ID('tempdb..#raw') IS NOT NULL
+		DROP TABLE #raw
+
+	--------------------------------------------------------------------------
+	--
+	-- The end.
+	--
+	--------------------------------------------------------------------------
 END
 GO

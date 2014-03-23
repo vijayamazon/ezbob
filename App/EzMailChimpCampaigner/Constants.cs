@@ -18,9 +18,9 @@
 			Month
 		}
 
-		public const string GetFirstStepCustomersSp = "GetFirstStepCustomers '{0}','{1}'";
-		public const string GetSecondStepCustomersSp = "GetSecondStepCustomers '{0}','{1}'";
-		public const string GetLastStepCustomersSp = "GetLastStepCustomers '{0}','{1}'";
+		public const string GetFirstStepCustomersSp = "GetFirstStepCustomers";
+		public const string GetSecondStepCustomersSp = "GetSecondStepCustomers";
+		public const string GetLastStepCustomersSp = "GetLastStepCustomers";
 
 		public const string FromEmail = "customercare@ezbob.com";
 		public const string FromEmailName = "EZBOB";

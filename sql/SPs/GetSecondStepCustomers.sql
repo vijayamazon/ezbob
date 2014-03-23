@@ -37,6 +37,9 @@ BEGIN
 	IF OBJECT_ID('tempdb..#temp3') IS NOT NULL
 		DROP TABLE #temp3
 
+	IF OBJECT_ID('tempdb..#raw') IS NOT NULL
+		DROP TABLE #raw
+
 	------------------------------------------------------------------------------
 	--
 	-- SumOfOrders ID
@@ -224,6 +227,7 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	SELECT
+		A.Id AS CustomerID,
 		A.Name AS eMail,
 		-- A.Id AS CustomerId,
 		-- C.Shops AS NumOfStores,
@@ -231,6 +235,8 @@ BEGIN
 		-- SUM(B.AnualSales) AS AnualSales,
 		-- SUM(B.AnualSales) * 0.06 AS ApproximateLoanOfferNotRounded,
 		ROUND((SUM(B.AnualSales) * 0.06) / 100, 0) * 100 AS ApproximateLoanOffer
+	INTO
+		#raw
 	FROM
 		#temp3 A
 		LEFT JOIN #temp2 B ON A.Id = B.Id
@@ -251,6 +257,30 @@ BEGIN
 		A.Name,
 		A.FirstName,
 		A.Surname
+
+	--------------------------------------------------------------------------
+	--
+	-- Find broker email (if relevant) and final select.
+	--
+	--------------------------------------------------------------------------
+
+	DECLARE @ids IntList
+
+	INSERT INTO @ids (Value)
+	SELECT
+		CustomerID
+	FROM
+		#raw
+
+	--------------------------------------------------------------------------
+
+	SELECT
+		r.eMail,
+		r.ApproximateLoanOffer,
+		b.BrokerEmail
+	FROM
+		#raw r
+		LEFT JOIN dbo.udfBrokerEmailsForCustomerMarketing(@ids) b ON r.CustomerID = b.CustomerID
 
 	------------------------------------------------------------------------------
 	--
@@ -278,6 +308,9 @@ BEGIN
 
 	IF OBJECT_ID('tempdb..#temp3') IS NOT NULL
 		DROP TABLE #temp3
+
+	IF OBJECT_ID('tempdb..#raw') IS NOT NULL
+		DROP TABLE #raw
 
 	------------------------------------------------------------------------------
 	--

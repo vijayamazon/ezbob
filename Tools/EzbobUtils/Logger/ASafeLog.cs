@@ -1,12 +1,50 @@
-﻿using System;
-using System.Globalization;
-using System.Text;
+﻿namespace Ezbob.Logger {
+	using System;
+	using System.Diagnostics;
+	using System.Globalization;
+	using System.Reflection;
+	using System.Text;
 
-namespace Ezbob.Logger {
+	#region enum LoggingEvent
+
+	public enum LoggingEvent {
+		Started,
+		Stopped,
+	} // enum LoggingEvent
+
+	#endregion enum LoggingEvent
+
 	#region class ASafeLog
 
 	public abstract class ASafeLog : IDisposable {
 		#region public
+
+		#region method NotifyStartStop
+
+		public virtual void NotifyStart(Severity nSeverity = Severity.Info) {
+			NotifyStartStop(LoggingEvent.Started, Assembly.GetCallingAssembly().GetName(), nSeverity);
+		} // NotifyStart
+
+		public virtual void NotifyStop(Severity nSeverity = Severity.Info) {
+			NotifyStartStop(LoggingEvent.Stopped, Assembly.GetCallingAssembly().GetName(), nSeverity);
+		} // NotifyStart
+
+		protected virtual void NotifyStartStop(LoggingEvent nEvent, AssemblyName oCallingAssemblyName, Severity nSeverity = Severity.Info) {
+			AssemblyName oName = oCallingAssemblyName ?? Assembly.GetCallingAssembly().GetName();
+
+			Say(
+				nSeverity,
+				"Logging {0} for {1} v{5} on {2} as {3} with pid {4}.",
+				nEvent.ToString().ToLower(),
+				oName.FullName,
+				System.Environment.MachineName,
+				System.Environment.UserName,
+				Process.GetCurrentProcess().Id,
+				oName.Version.ToString(4)
+			);
+		} // NotifyStartStop
+
+		#endregion method NotifyStartStop
 
 		#region method Say
 

@@ -1,88 +1,102 @@
-﻿namespace EzMailChimpCampaigner
-{
+﻿namespace EzMailChimpCampaigner {
 	using System;
 	using System.Collections.Generic;
-	using Logger;
+	using Ezbob.Database;
+	using Ezbob.Logger;
 
-	class Program
-	{
-		static void Main()
-		{
-			try
-			{
+	class Program {
+		static void Main(string[] args) {
+			foreach (string sArg in args) {
+				if (sArg == "--include-test") {
+					ms_bIncludeTest = true;
+					break;
+				} // if
+			} // for each
+
+			ms_oLog = new LegacyLog();
+			ms_oLog.NotifyStart();
+
+			ms_oLog.Debug("Include test customers: {0}", ms_bIncludeTest ? "yes" : "no");
+
+			AConnection oDB = new SqlConnection(ms_oLog);
+
+			var oMailChimpApiControler = new MailChimpApiControler(oDB, ms_oLog);
+
+			try {
 				bool retrieveStats = Boolean.Parse(System.Configuration.ConfigurationManager.AppSettings["retrieveStats"]);
+
 				if (retrieveStats)
-				{
-					MailChimpApiControler.LoadClickStatsToDb();
-				}
+					oMailChimpApiControler.LoadClickStatsToDb();
+
 				//MailChimpApiControler.StoreStatsToDbFromXml();
 			}
-			catch (Exception ex)
-			{
-				Logger.ErrorFormat("LoadClickStatsToDb failed {0} {1}", ex, ex.StackTrace);
-			}
-			finally
-			{
-                ExecuteAutomaticMailChimp();
-			}
-			Environment.Exit(0);
-		}
+			catch (Exception ex) {
+				ms_oLog.Error(ex, "LoadClickStatsToDb failed {0}", ex.StackTrace);
+			} // try
 
-		static void ExecuteAutomaticMailChimp()
-		{
+			ExecuteAutomaticMailChimp(oMailChimpApiControler);
+
+			ms_oLog.NotifyStop();
+			Environment.Exit(0);
+		} // Main
+
+		static void ExecuteAutomaticMailChimp(MailChimpApiControler oMailChimpApiControler) {
 			Campaigns.InitCampaignsList();
 
-			foreach (Campaign campaign in Campaigns.CampaignsList)
-			{
-				List<Subscriber> subscriberList = DbCommands.GetSubscriberList(campaign.CampaignType);
-				if (subscriberList.Count == 0)
-				{
-					Logger.DebugFormat("subscriberList is empty {0}", campaign);
+			foreach (Campaign campaign in Campaigns.CampaignsList) {
+				List<Subscriber> subscriberList = oMailChimpApiControler.DbCmd.GetSubscriberList(campaign.CampaignType, ms_bIncludeTest);
+
+				if (subscriberList.Count == 0) {
+					ms_oLog.Debug("subscriberList is empty {0}", campaign);
 					continue;
-				}
+				} // if
 
-				Logger.DebugFormat("subscriberList has {0} customers", subscriberList.Count);
-				PrintSubscrebsList(campaign.Title, subscriberList);
-				MailChimpApiControler.ListBatchSubscribe(campaign.ListId, subscriberList);
-				foreach (Day day in campaign.DayList)
-				{
-					if (day == null) continue;
-					string campaignId = MailChimpApiControler.CreateSegmentedCampaign(campaign.ListId, day.TemplateId, day.Condition, day.Subject, campaign.Title, campaign.CampaignType.ToString());
-					if (!string.IsNullOrEmpty(campaignId))
-					{
-						Logger.DebugFormat("Sending campaign {0}, {1} {2}", campaignId, campaign.Title, day.Condition);
-						MailChimpApiControler.SendCampaign(campaignId);
-					}
-				}
-			}
-		}
+				ms_oLog.Debug("subscriberList has {0} customers", subscriberList.Count);
 
-		static void PrintSubscrebsList(string subject, IEnumerable<Subscriber> list)
-		{
-			Logger.Debug(subject);
-			foreach (Subscriber subscriber in list)
-			{
-				Logger.DebugFormat("Email: {0}\n Loan: {1} Name: {2} DayAfter:{3} Week:{4} TwoWeeks:{5} Month: {6}", subscriber.Email, subscriber.LoanOffer, subscriber.FirstName, subscriber.DayAfter, subscriber.Week, subscriber.TwoWeeks, subscriber.Month);
-				Console.WriteLine("Email: {0}\n Loan: {1} Name: {2} DayAfter:{3} Week:{4} TwoWeeks:{5} Month: {6}", subscriber.Email, subscriber.LoanOffer, subscriber.FirstName, subscriber.DayAfter, subscriber.Week, subscriber.TwoWeeks, subscriber.Month);
-			}
-		}
+				PrintSubscribersList(campaign.Title, subscriberList);
+
+				oMailChimpApiControler.ListBatchSubscribe(campaign.ListId, subscriberList);
+
+				foreach (Day day in campaign.DayList) {
+					if (day == null)
+						continue;
+
+					string campaignId = oMailChimpApiControler.CreateSegmentedCampaign(campaign.ListId, day.TemplateId, day.Condition, day.Subject, campaign.Title, campaign.CampaignType.ToString());
+
+					if (!string.IsNullOrEmpty(campaignId)) {
+						ms_oLog.Debug("Sending campaign {0}, {1} {2}", campaignId, campaign.Title, day.Condition);
+						oMailChimpApiControler.SendCampaign(campaignId);
+					} // fi
+				} // for each day
+			} // for each campaign
+		} // ExecuteAutomaticMailChimp
+
+		static void PrintSubscribersList(string subject, IEnumerable<Subscriber> list) {
+			ms_oLog.Debug(subject);
+
+			foreach (Subscriber subscriber in list) {
+				ms_oLog.Debug(subscriber.ToString());
+				Console.WriteLine(subscriber);
+			} // for each subscriber
+		} // PrintSubscribersList
+
+		private static ASafeLog ms_oLog;
+		private static bool ms_bIncludeTest = false;
 
 		#region Tests
 
-		private static void TestGetSubscribers()
-		{
+		/*private static void TestGetSubscribers() {
 			Campaigns.InitCampaignsList();
 
-			foreach (Campaign campaign in Campaigns.CampaignsList)
-			{
+			foreach (Campaign campaign in Campaigns.CampaignsList) {
 				List<Subscriber> subscriberList = DbCommands.GetSubscriberList(campaign.CampaignType);
-				PrintSubscrebsList(campaign.Title, subscriberList);
+				PrintSubscribersList(campaign.Title, subscriberList);
 			}
 		}
 
-		/*static void Tests()
+		static void Tests()
         {
-            //Logger.Debug.WriteLine((MailChimpApiControler.GetLists())[0].id);
+            //ms_oLog.Debug((MailChimpApiControler.GetLists())[0].id);
             //MailChimpApiControler.testSegment();
             //MailChimpApiControler.printListMergeVars(Constants.LastStepCustomers_ListID);
             //MailChimpApiControler.testSegment();
@@ -122,5 +136,5 @@
             //sw.Close();
         }*/
 		#endregion
-	}
-}
+	} // class Program
+} // namesapce

@@ -43,7 +43,7 @@
 		#region method ExecuteScalar
 
 		public virtual T ExecuteScalar<T>() {
-			if (!HasValidParameters())
+			if (!IsReadyToGo())
 				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
 
 			return DB.ExecuteScalar<T>(GetName(), Species, PrepareParameters());
@@ -54,7 +54,7 @@
 		#region method ExecuteReader
 
 		public virtual DataTable ExecuteReader() {
-			if (!HasValidParameters())
+			if (!IsReadyToGo())
 				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
 
 			return DB.ExecuteReader(GetName(), Species, PrepareParameters());
@@ -65,7 +65,7 @@
 		#region method ExecuteNonQuery
 
 		public virtual int ExecuteNonQuery() {
-			if (!HasValidParameters())
+			if (!IsReadyToGo())
 				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
 
 			return DB.ExecuteNonQuery(GetName(), Species, PrepareParameters());
@@ -76,7 +76,7 @@
 		#region method ForEachRow
 
 		public virtual void ForEachRow(Func<DbDataReader, bool, ActionResult> oAction) {
-			if (!HasValidParameters())
+			if (!IsReadyToGo())
 				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
 
 			DB.ForEachRow(oAction, GetName(), Species, PrepareParameters());
@@ -87,7 +87,7 @@
 		#region method ForEachRowSafe
 
 		public virtual void ForEachRowSafe(Func<SafeReader, bool, ActionResult> oAction) {
-			if (!HasValidParameters())
+			if (!IsReadyToGo())
 				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
 
 			DB.ForEachRowSafe(oAction, GetName(), Species, PrepareParameters());
@@ -98,7 +98,7 @@
 		#region method ForEachResult
 
 		public virtual void ForEachResult(Func<IResultRow, ActionResult> oAction) {
-			if (!HasValidParameters())
+			if (!IsReadyToGo())
 				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
 
 			if (oAction == null)
@@ -133,7 +133,7 @@
 		} // ForEachResult
 
 		public virtual void ForEachResult<T>(Func<T, ActionResult> oAction) where T: IResultRow, new() {
-			if (!HasValidParameters())
+			if (!IsReadyToGo())
 				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
 
 			DB.ForEachResult<T>(oAction, GetName(), Species, PrepareParameters());
@@ -144,7 +144,7 @@
 		#region method Fill
 
 		public virtual List<T> Fill<T>() where T : ITraversable, new() {
-			if (!HasValidParameters())
+			if (!IsReadyToGo())
 				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
 
 			return DB.Fill<T>(GetName(), Species, PrepareParameters());
@@ -155,14 +155,14 @@
 		#region method FillFirst
 
 		public virtual T FillFirst<T>() where T: ITraversable, new() {
-			if (!HasValidParameters())
+			if (!IsReadyToGo())
 				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
 
 			return DB.FillFirst<T>(GetName(), Species, PrepareParameters());
 		} // FillFirst
 
 		public virtual void FillFirst<T>(T oInstance) where T : ITraversable {
-			if (!HasValidParameters())
+			if (!IsReadyToGo())
 				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
 
 			DB.FillFirst<T>(oInstance, GetName(), Species, PrepareParameters());
@@ -184,19 +184,31 @@
 
 		#region constructor
 
-		protected AStoredProcedure(AConnection oDB, ASafeLog oLog = null, CommandSpecies nSpecies = CommandSpecies.StoredProcedure) {
-			if (oDB == null)
-				throw new ArgumentNullException("oDB", "Database connection not specified.");
+		protected AStoredProcedure(ASafeLog oLog, CommandSpecies nSpecies = CommandSpecies.StoredProcedure) : this(null, oLog, nSpecies) {
+		} // constructor
 
+		protected AStoredProcedure(AConnection oDB, ASafeLog oLog = null, CommandSpecies nSpecies = CommandSpecies.StoredProcedure) {
 			m_aryArgs = null;
-			DB = oDB;
 			Log = new SafeLog(oLog);
 			Species = nSpecies;
 
 			CheckDirection();
+
+			DB = oDB;
 		} // constructor
 
 		#endregion constructor
+
+		#region method IsReadyToGo
+
+		protected virtual bool IsReadyToGo() {
+			if (DB == null)
+				throw new ArgumentNullException("Database connection not specified for " + this, (Exception)null);
+
+			return HasValidParameters();
+		} // IsReadyToGo
+
+		#endregion method IsReadyToGo
 
 		#region method CheckDirection
 
@@ -224,7 +236,7 @@
 
 		#region property DB
 
-		protected virtual AConnection DB { get; private set; } // DB
+		protected virtual AConnection DB { get; set; } // DB
 
 		#endregion property DB
 

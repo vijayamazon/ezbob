@@ -19,6 +19,9 @@ BEGIN
 	IF OBJECT_ID('tempdb..#Shops') IS NOT NULL
 		DROP TABLE #Shops
 
+	IF OBJECT_ID('tempdb..#raw') IS NOT NULL
+		DROP TABLE #raw
+
 	--------------------------------------------------------------------------
 	--
 	-- # OF SHOPS PER CUSTOMER
@@ -37,12 +40,15 @@ BEGIN
 
 	--------------------------------------------------------------------------
 	--
-	-- Main request
+	-- Select relevant customers.
 	--
 	--------------------------------------------------------------------------
 
 	SELECT
+		Customer.Id AS CustomerID,
 		Customer.Name AS eMail
+	INTO
+		#raw
 	FROM
 		Customer
 		LEFT JOIN #Shops ON #Shops.CustomerId = Customer.Id
@@ -68,12 +74,38 @@ BEGIN
 
 	--------------------------------------------------------------------------
 	--
+	-- Find broker email (if relevant) and final select.
+	--
+	--------------------------------------------------------------------------
+
+	DECLARE @ids IntList
+
+	INSERT INTO @ids (Value)
+	SELECT
+		CustomerID
+	FROM
+		#raw
+
+	--------------------------------------------------------------------------
+
+	SELECT
+		r.eMail,
+		b.BrokerEmail
+	FROM
+		#raw r
+		LEFT JOIN dbo.udfBrokerEmailsForCustomerMarketing(@ids) b ON r.CustomerID = b.CustomerID
+
+	--------------------------------------------------------------------------
+	--
 	-- Drop temp tables.
 	--
 	--------------------------------------------------------------------------
 
 	IF OBJECT_ID('tempdb..#Shops') IS NOT NULL
 		DROP TABLE #Shops
+
+	IF OBJECT_ID('tempdb..#raw') IS NOT NULL
+		DROP TABLE #raw
 
 	--------------------------------------------------------------------------
 	--

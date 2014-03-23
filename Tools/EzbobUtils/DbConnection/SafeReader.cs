@@ -185,6 +185,22 @@
 
 		#endregion method Fill
 
+		#region property Count
+
+		public int Count {
+			get {
+				if (!ReferenceEquals(m_oRow, null))
+					return m_oRow.Table.Columns.Count;
+
+				if (!ReferenceEquals(m_oReader, null))
+					return m_oReader.FieldCount;
+
+				throw new NullReferenceException("Neither row nor DB reader specified.");
+			} // get
+		} // Count
+
+		#endregion property Count
+
 		#endregion public
 
 		#region private
