@@ -11,7 +11,6 @@
 	using Scorto.Web;
 	using EzServiceReference;
 	using ActionResult = System.Web.Mvc.ActionResult;
-	using NHibernate;
 
 	public class ProfileController : Controller
     {
@@ -47,7 +46,7 @@
             return this.JsonNet(new {Saved = "true"});
         }
 
-        private static string MainStrategyUpdatingStatus(Application app)
+		private static string MainStrategyUpdatingStatus(Application app)
         {
             if (app != null &&
                 (app.State == ApplicationStrategyState.SecurityViolation ||

@@ -19,9 +19,9 @@
 	using Integration.ChannelGrabberFrontend;
 	using NDesk.Options;
 	using NHibernate;
+	using NHibernateWrapper.NHibernate;
 	using PayPoint;
 	using Sage;
-	using Scorto.NHibernate;
 	using Scorto.RegistryScanner;
 	using StructureMap;
 	using StructureMap.Pipeline;

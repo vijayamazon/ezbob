@@ -49,9 +49,6 @@
     <Reference Include="Scorto.Configuration.Loader">
       <HintPath>..\..\Lib\Scorto.Core\Scorto.Configuration.Loader.dll</HintPath>
     </Reference>
-    <Reference Include="Scorto.NHibernate">
-      <HintPath>..\..\Lib\Scorto.Core\Scorto.NHibernate.dll</HintPath>
-    </Reference>
     <Reference Include="StructureMap">
       <HintPath>..\..\Lib\3rdparty\StructureMap\StructureMap.dll</HintPath>
     </Reference>
@@ -113,6 +110,10 @@
     <Compile Include="RequestsQueueCore\EzBobIntegrationWorkflows.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\NHibernateWrapper\NHibernateWrapper.csproj">
+      <Project>{DC706B41-2B3E-4082-B390-51AABAC065D3}</Project>
+      <Name>NHibernateWrapper</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Amazon\AmazonServiceLib\AmazonServiceLib.csproj">
       <Project>{9E536824-37AD-4CC7-B597-11B882091DBD}</Project>
       <Name>AmazonServiceLib</Name>

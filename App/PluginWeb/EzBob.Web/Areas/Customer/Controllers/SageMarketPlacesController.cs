@@ -7,6 +7,7 @@
 	using System.Web.Mvc;
 	using ApplicationMng.Repository;
 	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Infrastructure;
     using Sage;
     using Scorto.Web;
@@ -16,7 +17,7 @@
 	public class SageMarketPlacesController : Controller
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(SageMarketPlacesController));
-        private readonly IRepository<MP_MarketplaceType> _mpTypes;
+		private readonly MarketPlaceRepository _mpTypes;
         private readonly Customer _customer;
         private readonly DatabaseDataHelper _helper;
 		private readonly ServiceClient m_oServiceClient;
@@ -24,7 +25,7 @@
 		public SageMarketPlacesController(
             IEzbobWorkplaceContext context,
             DatabaseDataHelper helper,
-            IRepository<MP_MarketplaceType> mpTypes
+			MarketPlaceRepository mpTypes
 		) {
             _mpTypes = mpTypes;
             _customer = context.Customer;

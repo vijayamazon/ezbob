@@ -1,8 +1,8 @@
-﻿using ApplicationMng.Repository;
-using NHibernate;
-
-namespace EZBob.DatabaseLib.Model.Database.Repository
+﻿namespace EZBob.DatabaseLib.Model.Database.Repository
 {
+	using ApplicationMng.Repository;
+	using NHibernate;
+
     public interface IPersonalInfoHistoryRepository:IRepository<PersonalInfoHistory >
     {
         PersonalInfoHistory Get(int id);
@@ -15,13 +15,9 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
 		{
 		}
 
-
         public PersonalInfoHistory Get(int id)
         {
             return _session.Get<PersonalInfoHistory>(id);
         }
-
- 
     }
-
 }

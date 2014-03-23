@@ -45,10 +45,6 @@
     <Reference Include="Scorto.Configuration.Loader">
       <HintPath>..\..\Lib\Scorto.Core\Scorto.Configuration.Loader.dll</HintPath>
     </Reference>
-    <Reference Include="Scorto.NHibernate, Version=22.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Lib\Scorto.Core\Scorto.NHibernate.dll</HintPath>
-    </Reference>
     <Reference Include="Scorto.RegistryScanner">
       <HintPath>..\..\Lib\Scorto.Core\Scorto.RegistryScanner.dll</HintPath>
     </Reference>
@@ -99,7 +95,9 @@
     <Compile Include="LoginUser.cs" />
     <Compile Include="OAuthBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-<Compile Include="..\..\Common\CommonAssemblyInfo.cs"><Link>Properties\CommonAssemblyInfo.cs</Link></Compile>
+    <Compile Include="..\..\Common\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="StringTokenizer.cs" />
     <Compile Include="YodleeAccountPool.cs" />
     <Compile Include="YodleeMain.cs" />
@@ -107,6 +105,10 @@
     <Compile Include="YodleeTestFixure.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\NHibernateWrapper\NHibernateWrapper.csproj">
+      <Project>{DC706B41-2B3E-4082-B390-51AABAC065D3}</Project>
+      <Name>NHibernateWrapper</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CommonLib\CommonLib.csproj">
       <Project>{aedbfbbd-ba7d-4582-afca-6ecf8af33c98}</Project>
       <Name>CommonLib</Name>

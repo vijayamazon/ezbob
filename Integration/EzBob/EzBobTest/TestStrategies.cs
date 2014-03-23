@@ -18,7 +18,7 @@ namespace EzBobTest
 	using NUnit.Framework;
 	using Scorto.Configuration;
 	using Scorto.Configuration.Loader;
-	using Scorto.NHibernate;
+	using NHibernateWrapper.NHibernate;
 	using Scorto.RegistryScanner;
 	using StructureMap;
 	using StructureMap.Pipeline;

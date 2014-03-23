@@ -1,7 +1,8 @@
 using EZBob.DatabaseLib.Model.Database;
-using Scorto.Web;
 
 namespace EzBob.Web.Infrastructure {
+	using NHibernateWrapper.Web;
+
 	public interface IEzbobWorkplaceContext : IWorkplaceContext {
 		Customer Customer { get; }
 	}

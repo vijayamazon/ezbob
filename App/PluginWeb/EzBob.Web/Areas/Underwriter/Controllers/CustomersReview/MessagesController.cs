@@ -12,6 +12,7 @@
 	using Code;
 	using Scorto.Web;
 	using StructureMap;
+	using NHibernateWrapper.Web;
 
 	public class MessagesController : Controller
 	{

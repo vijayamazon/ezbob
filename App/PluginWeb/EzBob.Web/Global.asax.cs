@@ -25,10 +25,11 @@
 	using StructureMap;
 	using NHibernate;
 	using Scorto.Configuration;
-	using Scorto.NHibernate;
+	using NHibernateWrapper.NHibernate;
 	using Scorto.RegistryScanner;
 	using log4net;
 	using log4net.Config;
+	using NHibernateWrapper.Web;
 
 	public class MvcApplication : HttpApplication
 	{
@@ -163,10 +164,10 @@
 			ModelBinders.Binders.Add(typeof(decimal), new DecimalModelBinder());
 			ModelBinders.Binders.Add(typeof(decimal?), new DecimalModelBinder());
 
-			Scorto.NHibernate.NHibernateManager.FluentAssemblies.Add(typeof(Application).Assembly);
-			Scorto.NHibernate.NHibernateManager.FluentAssemblies.Add(typeof(Customer).Assembly);
-			Scorto.NHibernate.NHibernateManager.FluentAssemblies.Add(typeof(DbString).Assembly);
-			Scorto.NHibernate.NHibernateManager.HbmAssemblies.Add(typeof(PerformencePerUnderwriterDataRow).Assembly);
+			NHibernateWrapper.NHibernate.NHibernateManager.FluentAssemblies.Add(typeof(Application).Assembly);
+			NHibernateWrapper.NHibernate.NHibernateManager.FluentAssemblies.Add(typeof(Customer).Assembly);
+			NHibernateWrapper.NHibernate.NHibernateManager.FluentAssemblies.Add(typeof(DbString).Assembly);
+			NHibernateWrapper.NHibernate.NHibernateManager.HbmAssemblies.Add(typeof(PerformencePerUnderwriterDataRow).Assembly);
 			ControllerBuilder.Current.SetControllerFactory(new StructureMapControllerFactory());
 			InitAspose();
 			ConfigureSquishIt();

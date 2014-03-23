@@ -1,23 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml;
-using EZBob.DatabaseLib.Model.Database;
-using NHibernate;
-using Scorto.Configuration;
-using Scorto.Configuration.Loader;
-using Scorto.NHibernate;
-using Scorto.RegistryScanner;
-using StructureMap;
-using StructureMap.Attributes;
-using StructureMap.Pipeline;
-using log4net.Config;
-
-namespace StandaloneInitializer
+﻿namespace StandaloneInitializer
 {
+	using System;
+	using System.Xml;
+	using EZBob.DatabaseLib.Model.Database;
+	using NHibernate;
+	using Scorto.Configuration;
+	using Scorto.Configuration.Loader;
+	using Scorto.RegistryScanner;
+	using StructureMap;
+	using StructureMap.Attributes;
+	using StructureMap.Pipeline;
+	using log4net.Config;
+	using NHibernateWrapper.NHibernate;
 
-    public abstract class StandaloneApp
+	public abstract class StandaloneApp
     {
         [SetterProperty]
         public ISession Session { get; set; }
@@ -45,7 +41,7 @@ namespace StandaloneInitializer
         public static void Init(string path = @"c:\ezbob\app\pluginweb\EzBob.Web\")
         {
             EnvironmentConfigurationLoader.AppPathDummy = path;
-            NHibernateManager.FluentAssemblies.Add(typeof(ApplicationMng.Model.Application).Assembly);
+			NHibernateManager.FluentAssemblies.Add(typeof(ApplicationMng.Model.Application).Assembly);
             NHibernateManager.FluentAssemblies.Add(typeof(Customer).Assembly);
 
             Scanner.Register();

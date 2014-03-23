@@ -51,9 +51,6 @@
     <Reference Include="nunit.framework, Version=2.5.3.9345, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <HintPath>..\..\Lib\3rdparty\NUnit\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="Scorto.NHibernate">
-      <HintPath>..\..\Lib\Scorto.Core\Scorto.NHibernate.dll</HintPath>
-    </Reference>
     <Reference Include="StructureMap, Version=2.6.3.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\3rdparty\StructureMap\StructureMap.dll</HintPath>
@@ -533,6 +530,10 @@
     <ProjectReference Include="..\..\Tools\EzbobUtils\Logger\Logger.csproj">
       <Project>{F92CA169-9532-4C4D-8D84-6F48ACE5719C}</Project>
       <Name>Logger</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\NHibernateWrapper\NHibernateWrapper.csproj">
+      <Project>{dc706b41-2b3e-4082-b390-51aabac065d3}</Project>
+      <Name>NHibernateWrapper</Name>
     </ProjectReference>
     <ProjectReference Include="..\ChannelGrabberConfig\ChannelGrabberConfig.csproj">
       <Project>{8ad07daa-3f09-4279-a390-17acde79b44f}</Project>

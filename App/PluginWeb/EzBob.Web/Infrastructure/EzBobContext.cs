@@ -1,13 +1,13 @@
-﻿using System;
-using System.Web;
-using ApplicationMng.Model;
-using ApplicationMng.Repository;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Repository;
-using Scorto.NHibernate.Repository;
-
-namespace EzBob.Web.Infrastructure
+﻿namespace EzBob.Web.Infrastructure
 {
+	using System;
+	using System.Web;
+	using ApplicationMng.Model;
+	using ApplicationMng.Repository;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Repository;
+	using NHibernateWrapper.NHibernate.Repository;
+
 	public class EzBobContext : IEzbobWorkplaceContext
 	{
 		private readonly ISecurityApplicationsRepository _apps;
@@ -15,7 +15,7 @@ namespace EzBob.Web.Infrastructure
 		private readonly ICustomerRepository _customers;
 		private SecurityApplication _wp;
 
-		public EzBobContext(ISecurityApplicationsRepository apps, IUsersRepository users, ICustomerRepository customers)
+		public EzBobContext(SecurityApplicationsRepository apps, IUsersRepository users, ICustomerRepository customers)
 		{
 			_apps = apps;
 			_users = users;

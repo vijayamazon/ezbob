@@ -84,9 +84,6 @@
     <Reference Include="Scorto.Configuration.Loader">
       <HintPath>..\..\..\Lib\Scorto.Core\Scorto.Configuration.Loader.dll</HintPath>
     </Reference>
-    <Reference Include="Scorto.NHibernate">
-      <HintPath>..\..\..\Lib\Scorto.Core\Scorto.NHibernate.dll</HintPath>
-    </Reference>
     <Reference Include="Scorto.RegistryScanner, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Lib\Scorto.Core\Scorto.RegistryScanner.dll</HintPath>
@@ -182,7 +179,9 @@
     <Compile Include="PayPointReturnDataFixture.cs" />
     <Compile Include="PostcodeAnywhereTests\CheckFixture.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-<Compile Include="..\..\..\Common\CommonAssemblyInfo.cs"><Link>Properties\CommonAssemblyInfo.cs</Link></Compile>
+    <Compile Include="..\..\..\Common\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="RefNumberFixture.cs" />
     <Compile Include="Serialization\DeserializeFixture.cs" />
     <Compile Include="SerializeDataHelperFixture.cs" />
@@ -292,6 +291,10 @@
     <ProjectReference Include="..\..\..\Integration\YodleeLib\YodleeLib.csproj">
       <Project>{241A8BAF-F486-44B9-93BD-BAA5CA8091F3}</Project>
       <Name>YodleeLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Tools\EzbobUtils\NHibernateWrapper\NHibernateWrapper.csproj">
+      <Project>{dc706b41-2b3e-4082-b390-51aabac065d3}</Project>
+      <Name>NHibernateWrapper</Name>
     </ProjectReference>
     <ProjectReference Include="..\EzBob.Web\EzBob.Web.csproj">
       <Project>{829AA60E-CC9F-4BE6-95E1-BC7990147D15}</Project>

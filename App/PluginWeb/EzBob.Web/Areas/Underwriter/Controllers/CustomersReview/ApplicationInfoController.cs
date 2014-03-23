@@ -21,7 +21,6 @@
 	public class ApplicationInfoController : Controller {
 		private readonly ICustomerRepository _customerRepository;
 		private readonly ICashRequestsRepository _cashRequestsRepository;
-		private readonly IApplicationRepository _applications;
 		private readonly IEzBobConfiguration _config;
 		private readonly ILoanTypeRepository _loanTypes;
 		private readonly LoanLimit _limit;
@@ -44,7 +43,6 @@
 			ICustomerRepository customerRepository,
 			ICustomerStatusesRepository customerStatusesRepository,
 			ICashRequestsRepository cashRequestsRepository,
-			IApplicationRepository applications,
 			IEzBobConfiguration config,
 			ILoanTypeRepository loanTypes,
 			LoanLimit limit,
@@ -61,7 +59,6 @@
 		) {
 			_customerRepository = customerRepository;
 			_cashRequestsRepository = cashRequestsRepository;
-			_applications = applications;
 			_config = config;
 			_loanTypes = loanTypes;
 			_limit = limit;

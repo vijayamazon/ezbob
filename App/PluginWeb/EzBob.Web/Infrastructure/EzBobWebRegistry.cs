@@ -3,6 +3,7 @@ using PayPal.Platform.SDK;
 namespace EzBob.Web.Infrastructure
 {
 	using System.Web.Security;
+	using ApplicationMng.Repository;
 	using Code.Bank;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model;
@@ -30,7 +31,7 @@ namespace EzBob.Web.Infrastructure
 	using MailApi;
 	using PostcodeAnywhere;
 	using Scorto.Configuration;
-	using Scorto.Web;
+	using NHibernateWrapper.Web;
 	using StructureMap.Configuration.DSL;
 	using Sage.Config;
 	using FreeAgent.Config;
@@ -144,6 +145,10 @@ namespace EzBob.Web.Infrastructure
 			For<ICustomerInviteFriendRepository>().Use<CustomerInviteFriendRepository>();
 			For<IWhatsNewCustomerMapRepository>().Use<WhatsNewCustomerMapRepository>();
 			For<IWhatsNewRepository>().Use<WhatsNewRepository>();
+
+			For<IUsersRepository>().Use<UsersRepository>();
+			For<IRolesRepository>().Use<RolesRepository>();
+			For<ISecurityQuestionRepository>().Use<SecurityQuestionRepository>();
 		}
 	}
 }

@@ -6,8 +6,9 @@
 	using Infrastructure.Membership;
 	using Models;
 	using Infrastructure.csrf;
-	using Scorto.NHibernate.Model;
+	using NHibernateWrapper.NHibernate.Model;
 	using Scorto.Web;
+	using NHibernateWrapper.Web;
 
 	public class AccountSettingsController : Controller
     {

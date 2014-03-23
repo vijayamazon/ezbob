@@ -11,7 +11,6 @@ namespace EzBob.Tests
     [TestFixture]
     public class RefNumberFixture : InMemoryDbTestFixtureBase
     {
-
         private ISession _session;
         private CustomerRepository _customers;
 

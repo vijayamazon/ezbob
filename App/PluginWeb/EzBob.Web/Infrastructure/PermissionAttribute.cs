@@ -1,11 +1,10 @@
-﻿using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using Scorto.Web;
-using StructureMap;
-
-namespace EzBob.Web.Infrastructure
+﻿namespace EzBob.Web.Infrastructure
 {
+	using NHibernateWrapper.Web;
+	using StructureMap;
+	using System.Web.Mvc;
+	using System.Linq;
+
     public class PermissionAttribute : AuthorizeAttribute
     {
 

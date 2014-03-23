@@ -1,6 +1,5 @@
-﻿using EzBob.Web.Infrastructure;
-
-namespace EzBob.Web.Areas.Underwriter.Controllers {
+﻿namespace EzBob.Web.Areas.Underwriter.Controllers {
+	using Infrastructure;
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
@@ -17,6 +16,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers {
 	using Code;
 	using Infrastructure.csrf;
 	using log4net;
+	using NHibernateWrapper.Web;
 	using ActionResult = Ezbob.Database.ActionResult;
 
 	public class CustomersController : Controller {

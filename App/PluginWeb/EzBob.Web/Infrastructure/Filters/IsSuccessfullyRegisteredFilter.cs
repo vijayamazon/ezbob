@@ -25,7 +25,7 @@
 
 			var isUnderwriter = (workplaceContext.User != null) &&
 				workplaceContext.User.Roles.Any(
-					x => x.Name.ToLower() == "crm" || x.Name.ToLower() == "manager" || x.Name.ToLower() == "Underwriter"
+					x => x.Name.ToLower() == "crm" || x.Name.ToLower() == "manager" || x.Name.ToLower() == "underwriter"
 				);
 
 			if (isUnderwriter) {

@@ -6,6 +6,7 @@
 	using CommonLib.Security;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.DatabaseWrapper;
+	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Marketplaces.Yodlee;
 	using Web.Models.Strings;
 	using YodleeLib;
@@ -25,7 +26,7 @@
 	{
 		private static readonly ILog Log = LogManager.GetLogger(typeof(YodleeMarketPlacesController));
 		private readonly IEzbobWorkplaceContext _context;
-		private readonly IRepository<MP_MarketplaceType> _mpTypes;
+		private readonly MarketPlaceRepository _mpTypes;
 		private readonly Customer _customer;
 		private readonly YodleeMpUniqChecker _mpChecker;
 		private readonly ServiceClient m_oServiceClient;
@@ -34,8 +35,8 @@
 
 		public YodleeMarketPlacesController(
 			IEzbobWorkplaceContext context,
-			DatabaseDataHelper helper, 
-			IRepository<MP_MarketplaceType> mpTypes,
+			DatabaseDataHelper helper,
+			MarketPlaceRepository mpTypes,
 			YodleeMpUniqChecker mpChecker,
 			ISession session)
 		{

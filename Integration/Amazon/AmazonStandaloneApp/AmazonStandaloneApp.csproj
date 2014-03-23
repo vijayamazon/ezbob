@@ -56,9 +56,6 @@
     <Reference Include="Scorto.Configuration.Plugins">
       <HintPath>..\..\..\Lib\Scorto.Core\Scorto.Configuration.Plugins.dll</HintPath>
     </Reference>
-    <Reference Include="Scorto.NHibernate">
-      <HintPath>..\..\..\Lib\Scorto.Core\Scorto.NHibernate.dll</HintPath>
-    </Reference>
     <Reference Include="Scorto.RegistryScanner">
       <HintPath>..\..\..\Lib\Scorto.Core\Scorto.RegistryScanner.dll</HintPath>
     </Reference>
@@ -77,9 +74,15 @@
     <Compile Include="OrderItemTwo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-<Compile Include="..\..\..\Common\CommonAssemblyInfo.cs"><Link>Properties\CommonAssemblyInfo.cs</Link></Compile>
+    <Compile Include="..\..\..\Common\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Tools\EzbobUtils\NHibernateWrapper\NHibernateWrapper.csproj">
+      <Project>{dc706b41-2b3e-4082-b390-51aabac065d3}</Project>
+      <Name>NHibernateWrapper</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Utils\StandaloneInitializer\StandaloneInitializer.csproj">
       <Project>{3B719D9D-7D14-4499-8EE9-5FDFD604453A}</Project>
       <Name>StandaloneInitializer</Name>

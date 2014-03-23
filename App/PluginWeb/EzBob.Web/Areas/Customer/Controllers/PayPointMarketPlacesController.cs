@@ -6,6 +6,7 @@
     using ApplicationMng.Repository;
     using Code;
     using EZBob.DatabaseLib.Model.Database;
+    using EZBob.DatabaseLib.Model.Database.Repository;
     using Infrastructure;
     using Scorto.Web;
     using PayPoint;
@@ -19,7 +20,7 @@
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(PayPointMarketPlacesController));
         private readonly IEzbobWorkplaceContext _context;
-        private readonly IRepository<MP_MarketplaceType> _mpTypes;
+		private readonly MarketPlaceRepository _mpTypes;
         private readonly Customer _customer;
         private readonly IMPUniqChecker _mpChecker;
 	    private readonly ServiceClient m_oServiceClient;
@@ -28,8 +29,8 @@
 
         public PayPointMarketPlacesController(
             IEzbobWorkplaceContext context,
-            DatabaseDataHelper helper, 
-            IRepository<MP_MarketplaceType> mpTypes, 
+            DatabaseDataHelper helper,
+			MarketPlaceRepository mpTypes, 
             IMPUniqChecker mpChecker)
         {
             _context = context;

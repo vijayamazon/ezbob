@@ -13,7 +13,7 @@
 	using NUnit.Framework;
 	using PayPoint;
 	using Scorto.Configuration;
-	using Scorto.NHibernate;
+	using NHibernateWrapper.NHibernate;
 	using StructureMap;
 	using YodleeLib.connector;
 	using Models.Marketplaces.Builders;

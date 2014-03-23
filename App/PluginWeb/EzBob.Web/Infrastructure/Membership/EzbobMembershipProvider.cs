@@ -8,16 +8,16 @@
 	using Code;
 	using NHibernate;
 	using Newtonsoft.Json;
-	using Scorto.NHibernate.Model;
+	using NHibernateWrapper.NHibernate.Model;
 	using System;
 	using System.Linq;
 	using System.Text.RegularExpressions;
 	using System.Web;
 	using System.Web.Security;
 	using ApplicationMng.Repository;
-	using Scorto.Web;
 	using StructureMap;
 	using log4net;
+	using NHibernateWrapper.Web;
 
 	public class UserAlreadyExistsException : Exception
 	{

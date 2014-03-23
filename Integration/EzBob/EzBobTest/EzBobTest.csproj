@@ -55,9 +55,6 @@
     <Reference Include="Scorto.Configuration.Loader">
       <HintPath>..\..\..\Lib\Scorto.Core\Scorto.Configuration.Loader.dll</HintPath>
     </Reference>
-    <Reference Include="Scorto.NHibernate">
-      <HintPath>..\..\..\Lib\Scorto.Core\Scorto.NHibernate.dll</HintPath>
-    </Reference>
     <Reference Include="Scorto.RegistryScanner">
       <HintPath>..\..\..\Lib\Scorto.Core\Scorto.RegistryScanner.dll</HintPath>
     </Reference>
@@ -111,6 +108,10 @@
     <ProjectReference Include="..\..\..\Tools\EzbobUtils\Logger\Logger.csproj">
       <Project>{F92CA169-9532-4C4D-8D84-6F48ACE5719C}</Project>
       <Name>Logger</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Tools\EzbobUtils\NHibernateWrapper\NHibernateWrapper.csproj">
+      <Project>{dc706b41-2b3e-4082-b390-51aabac065d3}</Project>
+      <Name>NHibernateWrapper</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Amazon\AmazonDbLib\AmazonDbLib.csproj">
       <Project>{FD263EB4-A3EF-4447-94B1-DE1B308C604B}</Project>

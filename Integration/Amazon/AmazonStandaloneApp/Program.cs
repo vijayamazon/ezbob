@@ -10,13 +10,14 @@ using EzBob.AmazonServiceLib.Orders.Model;
 using EzBob.AmazonServiceLib.ServiceCalls;
 using EzBob.CommonLib;
 using NHibernate;
-using Scorto.NHibernate;
 using StandaloneInitializer;
 using StructureMap;
 
 namespace AmazonStandaloneApp
 {
-    class Program
+	using NHibernateWrapper.NHibernate;
+
+	class Program
     {
         static void Main(string[] args)
         {

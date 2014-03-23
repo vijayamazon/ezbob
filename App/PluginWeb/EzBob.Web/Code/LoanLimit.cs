@@ -1,10 +1,10 @@
-﻿using System;
-using System.Linq;
-using EzBob.Web.Infrastructure;
-using Scorto.Web;
-
-namespace EzBob.Web.Code
+﻿namespace EzBob.Web.Code
 {
+	using System;
+	using System.Linq;
+	using Infrastructure;
+	using NHibernateWrapper.Web;
+
     public class LoanLimit
     {
         private readonly IWorkplaceContext _context;

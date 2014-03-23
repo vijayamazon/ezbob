@@ -7,9 +7,10 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Repository;
 	using ExperianLib.CaisFile;
-	using EzBob.Web.Areas.Underwriter.Models.CAIS;
-	using EzBob.Web.Code;
+	using Models.CAIS;
+	using Code;
 	using Scorto.Web;
+	using NHibernateWrapper.Web;
 	using ActionResult = System.Web.Mvc.ActionResult;
 
 	public class CAISController : Controller {

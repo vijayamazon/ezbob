@@ -9,6 +9,7 @@
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.DatabaseWrapper;
 	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Ezbob.HmrcHarvester;
 	using Ezbob.ValueIntervals;
 	using Infrastructure;
@@ -48,7 +49,7 @@
 		public HmrcController(
 			IEzbobWorkplaceContext context,
 			DatabaseDataHelper helper,
-			IRepository<MP_MarketplaceType> mpTypes,
+			MarketPlaceRepository mpTypes,
 			CGMPUniqChecker mpChecker,
 			ISession session
 		) {
@@ -287,7 +288,7 @@
 		#region properties
 
 		private readonly IEzbobWorkplaceContext _context;
-		private readonly IRepository<MP_MarketplaceType> _mpTypes;
+		private readonly MarketPlaceRepository _mpTypes;
 		private readonly CGMPUniqChecker _mpChecker;
 		private readonly DatabaseDataHelper _helper;
 		private readonly ServiceClient m_oServiceClient;

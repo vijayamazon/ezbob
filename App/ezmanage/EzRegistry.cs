@@ -20,7 +20,7 @@
 	using EzBob.Web.Models.Repository;
 	using NHibernate;
 	using PaymentServices.PacNet;
-	using Scorto.Web;
+	using NHibernateWrapper.Web;
 	using StructureMap.Configuration.DSL;
 
 	public class EzRegistry: Registry

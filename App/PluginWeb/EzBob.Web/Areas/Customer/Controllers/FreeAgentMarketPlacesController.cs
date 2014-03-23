@@ -9,6 +9,7 @@
 	using System.Web.Mvc;
 	using ApplicationMng.Repository;
 	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Repository;
 	using FreeAgent;
 	using Infrastructure;
 	using Scorto.Web;
@@ -18,7 +19,7 @@
 	public class FreeAgentMarketPlacesController : Controller
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(FreeAgentMarketPlacesController));
-        private readonly IRepository<MP_MarketplaceType> _mpTypes;
+		private readonly MarketPlaceRepository _mpTypes;
         private readonly Customer _customer;
         private readonly ServiceClient m_oServiceClient;
         private readonly DatabaseDataHelper _helper;
@@ -27,7 +28,7 @@
 		public FreeAgentMarketPlacesController(
             IEzbobWorkplaceContext context,
             DatabaseDataHelper helper,
-            IRepository<MP_MarketplaceType> mpTypes)
+			MarketPlaceRepository mpTypes)
         {
             _mpTypes = mpTypes;
             _customer = context.Customer;

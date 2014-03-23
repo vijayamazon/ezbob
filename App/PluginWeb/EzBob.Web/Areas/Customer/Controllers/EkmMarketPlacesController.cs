@@ -5,6 +5,7 @@
 	using ApplicationMng.Repository;
 	using Code;
 	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Infrastructure;
 	using Scorto.Web;
 	using EKM;
@@ -21,7 +22,7 @@
 	{
 		private static readonly ILog Log = LogManager.GetLogger(typeof(EkmMarketPlacesController));
 		private readonly IEzbobWorkplaceContext _context;
-		private readonly IRepository<MP_MarketplaceType> _mpTypes;
+		private readonly MarketPlaceRepository _mpTypes;
 		private readonly Customer _customer;
 		private readonly IMPUniqChecker _mpChecker;
 		private readonly ServiceClient m_oServiceClient;
@@ -32,7 +33,7 @@
 		public EkmMarketPlacesController(
 			IEzbobWorkplaceContext context,
 			DatabaseDataHelper helper,
-			IRepository<MP_MarketplaceType> mpTypes,
+			MarketPlaceRepository mpTypes,
 			IMPUniqChecker mpChecker,
 			ISession session
 		) {

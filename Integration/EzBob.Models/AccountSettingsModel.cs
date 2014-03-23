@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Scorto.NHibernate.Model;
+using NHibernateWrapper.NHibernate.Model;
 
 namespace EzBob.Web.Areas.Customer.Models
 {

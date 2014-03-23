@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers {
 	using System.Data;
+	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EzBob.Web.Code;
 	using NHibernate;
 	using System;
@@ -27,7 +28,7 @@
 		public CGMarketPlacesController(
 			IEzbobWorkplaceContext context,
 			DatabaseDataHelper helper,
-			IRepository<MP_MarketplaceType> mpTypes,
+			MarketPlaceRepository mpTypes,
 			CGMPUniqChecker mpChecker,
 			ISession session
 		) {
@@ -339,7 +340,7 @@
 		#region fields
 
 		private readonly IEzbobWorkplaceContext _context;
-		private readonly IRepository<MP_MarketplaceType> _mpTypes;
+		private readonly MarketPlaceRepository _mpTypes;
 		private readonly CGMPUniqChecker _mpChecker;
 		private readonly ServiceClient m_oServiceClient;
 		private readonly DatabaseDataHelper _helper;

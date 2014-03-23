@@ -23,7 +23,7 @@
 		private static readonly ILog Log = LogManager.GetLogger(typeof(UploadHmrcController));
 		private readonly CustomerRepository _customers;
 		private readonly ServiceClient m_oServiceClient;
-		private readonly IRepository<MP_MarketplaceType> _mpTypes;
+		private readonly MarketPlaceRepository _mpTypes;
 		private readonly ISession _session;
 		private readonly CGMPUniqChecker _mpChecker;
 		private readonly DatabaseDataHelper _helper;
@@ -31,7 +31,7 @@
 		public UploadHmrcController(
 			CustomerRepository customers,
 			CGMPUniqChecker mpChecker,
-			IRepository<MP_MarketplaceType> mpTypes,
+			MarketPlaceRepository mpTypes,
 			DatabaseDataHelper helper,
 			ISession session
 		) {

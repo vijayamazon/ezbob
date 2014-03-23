@@ -4,12 +4,12 @@ namespace EZBob.DatabaseLib.Model.Database {
 	using System.Globalization;
 	using System.Linq;
 	using ApplicationMng.Model;
-	using EZBob.DatabaseLib.Model.Database.Loans;
-	using EZBob.DatabaseLib.Model.Email;
+	using Loans;
+	using Email;
 	using Ezbob.ExperianParser;
 	using Iesi.Collections.Generic;
 	using NHibernate.Type;
-	using Scorto.NHibernate.Types;
+	using NHibernateWrapper.NHibernate.Types;
 	using System.ComponentModel;
 
 	#region relevant to Customer class

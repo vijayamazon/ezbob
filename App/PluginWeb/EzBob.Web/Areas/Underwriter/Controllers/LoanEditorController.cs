@@ -1,20 +1,20 @@
-﻿using System;
-using System.Globalization;
-using System.Linq;
-using System.Web.Mvc;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Loans;
-using EZBob.DatabaseLib.Model.Loans;
-using EzBob.Models;
-using EzBob.Web.Code;
-using EzBob.Web.Infrastructure;
-using EzBob.Web.Models;
-using PaymentServices.Calculators;
-using Scorto.Web;
-
-namespace EzBob.Web.Areas.Underwriter.Controllers
+﻿namespace EzBob.Web.Areas.Underwriter.Controllers
 {
-    [RestfullErrorHandlingAttribute]
+	using System;
+	using System.Globalization;
+	using System.Linq;
+	using System.Web.Mvc;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EZBob.DatabaseLib.Model.Loans;
+	using EzBob.Models;
+	using Code;
+	using Infrastructure;
+	using PaymentServices.Calculators;
+	using Scorto.Web;
+	using NHibernateWrapper.Web;
+
+	[RestfullErrorHandlingAttribute]
     public class LoanEditorController : Controller
     {
         private readonly ILoanRepository _loans;
