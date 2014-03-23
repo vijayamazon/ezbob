@@ -68,17 +68,11 @@
     <Compile Include="ApplicationMng.Model.Commands\CommandsListMap.cs" />
     <Compile Include="ApplicationMng.Model.Commands\CommandsListSerializationWrapper.cs" />
     <Compile Include="ApplicationMng.Model.Commands\CommandsRepository.cs" />
-    <Compile Include="ApplicationMng.Model.Commands\CreateApp.cs" />
-    <Compile Include="ApplicationMng.Model.Commands\CreateAppMap.cs" />
     <Compile Include="ApplicationMng.Model.Commands\ICommand.cs" />
     <Compile Include="ApplicationMng.Model.Commands\IContext.cs" />
     <Compile Include="ApplicationMng.Model.Commands\ISerializationHelper.cs" />
     <Compile Include="ApplicationMng.Model.Commands\NHCommandsSerializationHelper.cs" />
-    <Compile Include="ApplicationMng.Model.Commands\SaveApp.cs" />
-    <Compile Include="ApplicationMng.Model.Commands\SaveAppMap.cs" />
     <Compile Include="ApplicationMng.Model.Commands\SerializtionHelper.cs" />
-    <Compile Include="ApplicationMng.Model.Commands\SubmitApp.cs" />
-    <Compile Include="ApplicationMng.Model.Commands\SubmitAppMap.cs" />
     <Compile Include="ApplicationMng.Model.Filters\AllAppsFilter.cs" />
     <Compile Include="ApplicationMng.Model.Filters\FilterBase.cs" />
     <Compile Include="ApplicationMng.Model.Filters\FilterBaseMap.cs" />
