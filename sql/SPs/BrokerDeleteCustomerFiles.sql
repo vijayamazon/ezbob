@@ -1,7 +1,3 @@
-IF TYPE_ID('IntList') IS NULL
-	CREATE TYPE IntList AS TABLE (Value INT NULL)
-GO
-
 IF OBJECT_ID('BrokerDeleteCustomerFiles') IS NULL
 	EXECUTE('CREATE PROCEDURE BrokerDeleteCustomerFiles AS SELECT 1')
 GO

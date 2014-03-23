@@ -6,6 +6,8 @@ set BASH=%MY_PATH%Bash\bash.exe
 
 set SCRIPT=%MY_PATH%incremental.sh
 
+set TYPES_PATH=%MY_PATH%types
+
 set QUERIES_PATH=%MY_PATH%current
 set SPS_PATH=%MY_PATH%SPs
 set VIEWS_PATH=%MY_PATH%Views
@@ -13,6 +15,8 @@ set VIEWS_2_PATH=%MY_PATH%Views_2
 set TRIGGERS_PATH=%MY_PATH%Triggers
 set FUNCTIONS_PATH=%MY_PATH%Functions
 set FUNCTIONS_2_PATH=%MY_PATH%Functions_2
+
+%BASH% %SCRIPT% %TYPES_PATH%
 
 %BASH% %SCRIPT% %QUERIES_PATH%
 %BASH% %SCRIPT% %TRIGGERS_PATH%

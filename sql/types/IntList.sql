@@ -1,0 +1,6 @@
+IF TYPE_ID('IntList') IS NULL
+	CREATE TYPE IntList AS TABLE (
+		Value INT NULL
+	)
+GO
+
