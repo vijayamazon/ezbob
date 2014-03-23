@@ -79,9 +79,7 @@
     <Compile Include="ApplicationMng.Model.Filters\MultiStatusFilter.cs" />
     <Compile Include="ApplicationMng.Model.Filters\MultiStatusFilterMap.cs" />
     <Compile Include="ApplicationMng.Model.Mappings\AppAttachmentMap.cs" />
-    <Compile Include="ApplicationMng.Model.Mappings\AppDetailMap.cs" />
     <Compile Include="ApplicationMng.Model.Mappings\AppDetailNameMap.cs" />
-    <Compile Include="ApplicationMng.Model.Mappings\AppHistoryMap.cs" />
     <Compile Include="ApplicationMng.Model.Mappings\ApplicationExecutionTypeMap.cs" />
     <Compile Include="ApplicationMng.Model.Mappings\ApplicationMap.cs" />
     <Compile Include="ApplicationMng.Model.Mappings\BusinessEntityMap.cs" />
@@ -105,9 +103,7 @@
     <Compile Include="ApplicationMng.Model\AppAdditionalDataMap.cs" />
     <Compile Include="ApplicationMng.Model\AppAdditionalDataMapLM.cs" />
     <Compile Include="ApplicationMng.Model\AppAttachment.cs" />
-    <Compile Include="ApplicationMng.Model\AppDetail.cs" />
     <Compile Include="ApplicationMng.Model\AppDetailName.cs" />
-    <Compile Include="ApplicationMng.Model\AppHistory.cs" />
     <Compile Include="ApplicationMng.Model\Application.cs" />
     <Compile Include="ApplicationMng.Model\ApplicationStrategyState.cs" />
     <Compile Include="ApplicationMng.Model\ApplicationSuspendedMap.cs" />
@@ -141,7 +137,6 @@
     <Compile Include="ApplicationMng.Model\SingleRunApplicationMap.cs" />
     <Compile Include="ApplicationMng.Model\Strategy.cs" />
     <Compile Include="ApplicationMng.Model\User.cs" />
-    <Compile Include="ApplicationMng.Repository\AppDetailRepository.cs" />
     <Compile Include="ApplicationMng.Repository\ApplicationRepository.cs" />
     <Compile Include="ApplicationMng.Repository\AttachDocTypeRepository.cs" />
     <Compile Include="ApplicationMng.Repository\ControlHistoryRepository.cs" />
@@ -149,7 +144,6 @@
     <Compile Include="ApplicationMng.Repository\DatasourceRepository.cs" />
     <Compile Include="ApplicationMng.Repository\ExclusiveApplicationRepository.cs" />
     <Compile Include="ApplicationMng.Repository\ExportTemplatesRepository.cs" />
-    <Compile Include="ApplicationMng.Repository\IAppDetailRepository.cs" />
     <Compile Include="ApplicationMng.Repository\IApplicationRepository.cs" />
     <Compile Include="ApplicationMng.Repository\IAttachDocTypeRepository.cs" />
     <Compile Include="ApplicationMng.Repository\IControlHistoryRepository.cs" />
