@@ -46,6 +46,12 @@
 		private readonly IWorkplaceContext context;
 		private readonly ServiceClient serviceClient;
 		private EzbobMembershipProviderConfigs configs;
+		private readonly byte[] hmacsha1Key = new byte[]
+				{
+					217, 197, 36, 73, 245, 170, 52, 86, 16, 196, 190, 197, 158, 222, 60, 108, 212, 45, 234, 232, 27, 169, 165, 13, 12,
+					242, 30, 203, 10, 229, 81, 42, 201, 35, 31, 194, 112, 159, 161, 77, 44, 125, 4, 25, 109, 92, 211, 39, 80, 117, 230,
+					173, 106, 87, 105, 195, 62, 171, 89, 189, 230, 39, 60, 148
+				};
 
         public EzbobMembershipProvider()
         {
@@ -287,94 +293,16 @@
 
 		public string EncodePassword(string password, string userName, DateTime creationDate)
 		{
-			var hMacsha = new HMACSHA1 {Key = GetKey()};
+			var hMacsha = new HMACSHA1 { Key = hmacsha1Key };
 			string s = userName.ToUpperInvariant() + password + creationDate.ToString("dd-MM-yyyy hh:mm:ss");
 			return Convert.ToBase64String(hMacsha.ComputeHash(Encoding.Unicode.GetBytes(s)));
 		}
 
 		public string EncodeOldPassword(string password)
 		{
-			var hMacsha = new HMACSHA1 {Key = GetKey()};
+			var hMacsha = new HMACSHA1 { Key = hmacsha1Key };
 			return Convert.ToBase64String(hMacsha.ComputeHash(Encoding.Unicode.GetBytes(password)));
 		}
-
-		private byte[] GetKey()
-		{
-			byte[] array = new byte[64];
-			array[0] = 217;
-			array[1] = 197;
-			array[2] = 36;
-			array[3] = 73;
-			array[4] = 245;
-			array[5] = 170;
-			array[6] = 52;
-			array[7] = 86;
-			array[8] = 16;
-			array[9] = 196;
-
-			array[10] = 190;
-			array[11] = 197;
-			array[12] = 158;
-			array[13] = 222;
-			array[14] = 60;
-			array[15] = 108;
-			array[16] = 212;
-			array[17] = 45;
-			array[18] = 234;
-			array[19] = 232;
-
-			array[20] = 27;
-			array[21] = 169;
-			array[22] = 165;
-			array[23] = 13;
-			array[24] = 12;
-			array[25] = 242;
-			array[26] = 30;
-			array[27] = 203;
-			array[28] = 10;
-			array[29] = 229;
-
-			array[30] = 81;
-			array[31] = 42;
-			array[32] = 201;
-			array[33] = 35;
-			array[34] = 31;
-			array[35] = 194;
-			array[36] = 112;
-			array[37] = 159;
-			array[38] = 161;
-			array[39] = 77;
-
-			array[40] = 44;
-			array[41] = 125;
-			array[42] = 4;
-			array[43] = 25;
-			array[44] = 109;
-			array[45] = 92;
-			array[46] = 211;
-			array[47] = 39;
-			array[48] = 80;
-			array[49] = 117;
-
-			array[50] = 230;
-			array[51] = 173;
-			array[52] = 106;
-			array[53] = 87;
-			array[54] = 105;
-			array[55] = 195;
-			array[56] = 62;
-			array[57] = 171;
-			array[58] = 89;
-			array[59] = 189;
-
-			array[60] = 230;
-			array[61] = 39;
-			array[62] = 60;
-			array[63] = 148;
-
-			return array;
-		}
-
 
 		public bool LoginUser(string login, string password, int securityAppId, string hostAddress, out string guid)
         {
