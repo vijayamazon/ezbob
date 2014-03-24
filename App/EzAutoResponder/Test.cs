@@ -1,6 +1,4 @@
-﻿using NUnit.Framework;
-
-namespace EzAutoResponder
+﻿namespace EzAutoResponder
 {
 	using System;
 	using System.Collections.Generic;
@@ -10,7 +8,7 @@ namespace EzAutoResponder
 	using MailBee;
 	using MailBee.ImapMail;
 	using MailBee.Mime;
-
+	using NUnit.Framework;
 
 	[TestFixture]
 	public class Test
