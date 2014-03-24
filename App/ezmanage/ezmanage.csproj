@@ -49,13 +49,13 @@
       <HintPath>..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common">
-      <HintPath>..\..\Lib\Scorto.Core\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
+      <HintPath>..\..\Lib\3rdparty\MicrosoftPractices\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Data">
-      <HintPath>..\..\Lib\Scorto.Core\Microsoft.Practices.EnterpriseLibrary.Data.dll</HintPath>
+      <HintPath>..\..\Lib\3rdparty\MicrosoftPractices\Microsoft.Practices.EnterpriseLibrary.Data.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.ObjectBuilder">
-      <HintPath>..\..\Lib\Scorto.Core\Microsoft.Practices.ObjectBuilder.dll</HintPath>
+      <HintPath>..\..\Lib\3rdparty\MicrosoftPractices\Microsoft.Practices.ObjectBuilder.dll</HintPath>
     </Reference>
     <Reference Include="NDesk.Options">
       <HintPath>..\..\Lib\3rdparty\ndesk-options\NDesk.Options.dll</HintPath>

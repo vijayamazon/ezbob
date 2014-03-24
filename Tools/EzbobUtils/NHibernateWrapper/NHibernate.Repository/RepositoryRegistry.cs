@@ -1,7 +1,6 @@
 using ApplicationMng.Repository;
 using NHibernate;
 using StructureMap.Configuration.DSL;
-using System;
 namespace NHibernateWrapper.NHibernate.Repository
 {
 	public class RepositoryRegistry : Registry

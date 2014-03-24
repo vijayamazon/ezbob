@@ -33,7 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net">
-      <HintPath>..\..\Lib\Scorto.Core\log4net.dll</HintPath>
+      <HintPath>..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\..\Lib\3rdparty\Json.NET\Newtonsoft.Json.dll</HintPath>
@@ -62,7 +62,9 @@
     <Compile Include="FieldInfo.cs" />
     <Compile Include="IJsonable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-<Compile Include="..\..\Common\CommonAssemblyInfo.cs"><Link>Properties\CommonAssemblyInfo.cs</Link></Compile>
+    <Compile Include="..\..\Common\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="SecurityData.cs" />
     <Compile Include="VendorInfo.cs" />
   </ItemGroup>

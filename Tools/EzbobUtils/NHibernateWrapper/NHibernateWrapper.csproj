@@ -26,30 +26,30 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="FluentNHibernate">
-      <HintPath>..\..\..\Lib\Scorto.Core\FluentNHibernate.dll</HintPath>
+      <HintPath>..\..\..\Lib\3rdparty\Nhibernate\FluentNHibernate.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate">
-      <HintPath>..\..\..\Lib\Scorto.Core\NHibernate.dll</HintPath>
-    </Reference>
-    <Reference Include="StructureMap">
-      <HintPath>..\..\..\Lib\Scorto.Core\StructureMap.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Data" />
-    <Reference Include="System.Core" />
     <Reference Include="Iesi.Collections">
-      <HintPath>..\..\..\Lib\Scorto.Core\Iesi.Collections.dll</HintPath>
+      <HintPath>..\..\..\Lib\3rdparty\Nhibernate\Iesi.Collections.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
-      <HintPath>..\..\..\Lib\Scorto.Core\log4net.dll</HintPath>
+      <HintPath>..\..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate">
+      <HintPath>..\..\..\Lib\3rdparty\Nhibernate\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="Scorto.Configuration">
+      <HintPath>..\..\..\Lib\Scorto.Core\Scorto.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="Scorto.SystemCalendar.Model">
       <HintPath>..\..\..\Lib\Scorto.Core\Scorto.SystemCalendar.Model.dll</HintPath>
     </Reference>
+    <Reference Include="StructureMap">
+      <HintPath>..\..\..\Lib\3rdparty\StructureMap\StructureMap.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
     <Reference Include="System.Core" />
     <Reference Include="System" />
-    <Reference Include="Scorto.Configuration">
-      <HintPath>..\..\..\Lib\Scorto.Core\Scorto.Configuration.dll</HintPath>
-    </Reference>
     <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />

@@ -73,12 +73,10 @@
     <Reference Include="EcmaScript.NET.modified">
       <HintPath>..\..\..\Lib\3rdparty\SquishIt\EcmaScript.NET.modified.dll</HintPath>
     </Reference>
-    <Reference Include="Ezbob.Backend.Models, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="FluentNHibernate">
       <HintPath>..\..\..\Lib\3rdparty\Nhibernate\FluentNHibernate.dll</HintPath>
     </Reference>
-    <Reference Include="GenericCache, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="GenericCache">
       <HintPath>..\..\..\Lib\Scorto.Core\GenericCache.dll</HintPath>
     </Reference>
     <Reference Include="HibernatingRhinos.Profiler.Appender.v4.0, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0774796e73ebf640, processorArchitecture=MSIL">
@@ -94,9 +92,6 @@
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Practices.ObjectBuilder">
-      <HintPath>..\..\..\Lib\Scorto.Core\Microsoft.Practices.ObjectBuilder.dll</HintPath>
     </Reference>
     <Reference Include="MoreLinq, Version=1.0.11522.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -177,8 +172,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
-    <Reference Include="WorkflowLibrary, Version=6.2.60.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="WorkflowLibrary">
       <HintPath>..\..\..\Lib\Scorto.Core\WorkflowLibrary.dll</HintPath>
     </Reference>
     <Reference Include="Yahoo.Yui.Compressor">

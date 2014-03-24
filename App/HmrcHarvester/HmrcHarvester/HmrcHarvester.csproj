@@ -42,7 +42,7 @@
       <HintPath>..\..\..\Lib\3rdparty\itextsharp\itextsharp.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
-      <HintPath>..\..\..\Lib\Scorto.Core\log4net.dll</HintPath>
+      <HintPath>..\..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
     </Reference>
     <Reference Include="StructureMap, Version=2.6.3.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

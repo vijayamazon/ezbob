@@ -39,7 +39,7 @@
       <HintPath>..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate">
-      <HintPath>..\..\Lib\Scorto.Core\NHibernate.dll</HintPath>
+      <HintPath>..\..\Lib\3rdparty\Nhibernate\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate.Caches.SysCache2">
       <HintPath>..\..\Lib\3rdparty\Nhibernate\NHibernate.Caches.SysCache2.dll</HintPath>

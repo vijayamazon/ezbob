@@ -41,9 +41,6 @@
     <Reference Include="itextsharp">
       <HintPath>..\..\Lib\3rdparty\itextsharp\itextsharp.dll</HintPath>
     </Reference>
-    <Reference Include="log4net">
-      <HintPath>..\..\Lib\Scorto.Core\log4net.dll</HintPath>
-    </Reference>
     <Reference Include="MailBee.NET">
       <HintPath>..\..\Lib\3rdparty\MailBee\MailBee.NET.dll</HintPath>
     </Reference>
@@ -68,7 +65,9 @@
     <Compile Include="ParsePacNetText.cs" />
     <Compile Include="Processor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-<Compile Include="..\..\Common\CommonAssemblyInfo.cs"><Link>Properties\CommonAssemblyInfo.cs</Link></Compile>
+    <Compile Include="..\..\Common\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
