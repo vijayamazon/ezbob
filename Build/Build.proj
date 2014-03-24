@@ -1,0 +1,193 @@
+<Project ToolsVersion="4.0" DefaultTargets="StartBuild" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+	<!-- build properties-->
+	<PropertyGroup>
+		<BuildConfiguration>Debug</BuildConfiguration>
+		<ClientsFolder>clients</ClientsFolder>
+		<ServicesFolder>services</ServicesFolder>
+		<WebFolder>websites</WebFolder>
+		<ConfigFolder>configtemplates</ConfigFolder>
+		<ToolsFolder>Tools</ToolsFolder>
+		<SDKFolder>SDK</SDKFolder>
+		<Database>Database</Database>
+	</PropertyGroup>
+	
+	<ItemGroup>
+		<Edition Include="Standard"><FullName>Standard edition</FullName></Edition>
+	</ItemGroup>	
+	
+	<Target Name="LogOffSessions">
+		<Exec Command="logoff 1" IgnoreExitCode="true"/>
+		<Exec Command="logoff 2" IgnoreExitCode="true"/>
+		<Exec Command="logoff 3" IgnoreExitCode="true"/>
+		<Exec Command="logoff 4" IgnoreExitCode="true"/>
+		<Exec Command="logoff 5" IgnoreExitCode="true"/>
+		<Exec Command="logoff 6" IgnoreExitCode="true"/>
+		<Exec Command="logoff 7" IgnoreExitCode="true"/>
+		<Exec Command="logoff 8" IgnoreExitCode="true"/>
+		<Exec Command="logoff 9" IgnoreExitCode="true"/>
+		<Exec Command="logoff 10" IgnoreExitCode="true"/>
+	</Target>
+	
+	<Target Name="Build">
+		<ItemGroup>
+			<ProjectToBuild Include="$(Src)\ezbob.sln"/>
+			<ProjectToBuild Include="$(Src)\App\EzAutoResponder\EzAutoResponder.sln"/>
+		</ItemGroup>
+		
+		<Copy SourceFiles="$(Src)\Common\CommonAssemblyInfo.cs" DestinationFiles="$(Src)\Common\CommonAssemblyInfo.cs.bak" />
+		<File  TaskAction="Replace" RegexPattern="[\d]+\.[\d]+\.[\d]+\.[\d]+" Files="$(Src)\Common\CommonAssemblyInfo.cs" Replacement="$(ClearedCCNetLabel)" />
+		
+		<Message Text="Build started" />
+		<Message Text="$(Src)" />
+        <MSBuild Projects="@(ProjectToBuild)" Properties="Configuration=$(BuildConfiguration)" Targets="Clean"/>
+		<MSBuild Projects="@(ProjectToBuild)" Properties="Configuration=$(BuildConfiguration)" Targets="Build"/>
+		
+		<Copy SourceFiles="$(Src)\Common\CommonAssemblyInfo.cs.bak" DestinationFiles="$(Src)\Common\CommonAssemblyInfo.cs" />
+		<Delete Files="$(Src)\Common\CommonAssemblyInfo.cs.bak" />
+    </Target>
+	
+	<Target Name="BinaryCreate">
+		<RemoveDir Directories="$(BuildBin)"/>
+		<!-- Exec Command="unlocker.exe $(BuildBin) /D /S" WorkingDirectory="C:\Program Files\Unlocker\" Condition="Exists('C:\Program Files\Unlocker\Unlocker.exe')" IgnoreExitCode="true"/-->
+		
+		<AppCopy CopyFrom="$(Src)\App\web" CopyTo="$(BuildBin)\%(Edition.Identity)\web\"/> 
+		
+		<WebCopy CopyFrom="$(Src)\App\pluginweb\EzBob.Web\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(WebFolder)\EzBob.Web\"/>
+		
+		<AppCopy CopyFrom="$(Src)\Tools\LogViewer\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\LogViewer\"/>
+		<AppCopy CopyFrom="$(Src)\Tools\EnvironmentConfigValidation\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\EnvironmentConfigValidation\"/>
+
+		<Copy SourceFiles="$(Src)\Lib\Scorto.Core\DBSQLServer.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\libs\"/>
+		
+		<MultiCopy CopyFrom="$(Src)\sql\current\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(Database)\sql\current\" />
+		<MultiCopy CopyFrom="$(Src)\sql\SPs\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(Database)\sql\SPs\" />
+		<MultiCopy CopyFrom="$(Src)\sql\Views\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(Database)\sql\Views\" />
+		<MultiCopy CopyFrom="$(Src)\sql\Views_2\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(Database)\sql\Views_2\" />
+		<MultiCopy CopyFrom="$(Src)\sql\Triggers\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(Database)\sql\Triggers\" />
+		<MultiCopy CopyFrom="$(Src)\sql\Functions\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(Database)\sql\Functions\" />
+		<MultiCopy CopyFrom="$(Src)\sql\Functions_2\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(Database)\sql\Functions_2\" />
+		<MultiCopy CopyFrom="$(Src)\sql\Bash\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(Database)\sql\Bash\" />
+		
+		<MultiCopy CopyFrom="$(Src)\Backend\StrategiesActivator\bin\debug\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ServicesFolder)\StrategiesActivator\" />
+		<MultiCopy CopyFrom="$(Src)\App\EzService\EzServiceHost\bin\Debug\" CopyTo="$(BuildBin)\%(Edition.Identity)\EzServiceHost\" />
+		
+		<ItemGroup><SqlRelatedFiles Include="$(Src)\sql\*.*"/></ItemGroup>
+		<Copy SourceFiles="@(SqlRelatedFiles)" DestinationFolder="$(BuildBin)\%(Edition.Identity)\$(Database)\sql\" SkipUnchangedFiles="true" />
+
+		<MultiCopy CopyFrom="$(Src)\App\ezmanage\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\ezmanage\" />
+		
+		<Copy SourceFiles="$(Src)\Build\sc-build\EnvironmentTemplate.xml" DestinationFolder="$(BuildBin)\%(Edition.Identity)\"/>
+		<Copy SourceFiles="$(Src)\Integration\ChannelGrabberConfig\channelgrabber.json" DestinationFolder="$(BuildBin)\%(Edition.Identity)\"/>
+				
+		<MultiCopy CopyFrom="$(Src)\Integration\Amazon\AmazonStandaloneApp\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\Amazon\"/>
+		<MultiCopy CopyFrom="$(Src)\Integration\eBay\TeraPeakStandaloneApp\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\eBay\"/>
+		<MultiCopy CopyFrom="$(Src)\Integration\Payment\ManualPacnetApp\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\Pacnet\"/>
+		<MultiCopy CopyFrom="$(Src)\Integration\ExperianStandAlone\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\Experian\"/>
+		<MultiCopy CopyFrom="$(Src)\App\EzAutoResponder\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\EzAutoreponder\"/>
+		<MultiCopy CopyFrom="$(Src)\Backend\StrategiesTestTool\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\ScoringModelTestTool\"/>
+		
+		<WriteLinesToFile ContinueOnError="true" File="$(BuildBin)\%(Edition.Identity)\label=$(CCNetLabel).txt" Lines="Build label is $(CCNetLabel)" Overwrite="true"/>
+	</Target>
+	
+	<Target Name="UpdateWebConfig">
+       <XmlUpdate FilePath="$(BuildBin)\%(Edition.Identity)\$(WebFolder)\EzBob.Web\Web.config" Xpath="/configuration/system.web/compilation/@debug" Value="false" />
+    </Target>
+	
+	<Target Name="ServiceStop">
+		<Message Text="Stopping ezService..." Importance="high"/>
+		<Exec Command="net stop $(ServiceName)" ContinueOnError="true"/>
+	</Target>
+	
+	<Target Name="WEBStop">
+		<Message Text="Stoping sites..."/>
+		<Exec Command="iisreset /stop" ContinueOnError="true"/>
+		<Message Text="Stoping share server..."/>
+		<Exec Command="net stop server /y" ContinueOnError="true"/>
+	</Target>
+		
+	<Target Name="Deploy">
+		<Message Text="Deleting old deploy folder..." Importance="high"/>
+		
+		<RemoveDir Directories="$(ServerBaseFolder)/Database" />
+		<RemoveDir Directories="$(ServerBaseFolder)/libs" />
+		<RemoveDir Directories="$(ServerBaseFolder)/service" />
+		<RemoveDir Directories="$(ServerBaseFolder)/tools" />
+		<RemoveDir Directories="$(ServerBaseFolder)/web" />
+
+		<!--Exec Command="rd $(ServerBaseFolder) /s/q"/-->
+		<!-- Exec Command="unlocker.exe $(ServerBaseFolder) /D /S" WorkingDirectory="C:\Program Files\Unlocker\" Condition="Exists('C:\Program Files\Unlocker\Unlocker.exe')" IgnoreExitCode="true"/-->
+		<Message Text="Copy files to deploy folder..." Importance="high"/>
+		<Exec Command="xcopy %22$(BuildBin)\$(UsedEdition)%22 $(ServerBaseFolder) /E /C /I /Q /R /Y"/>
+		<Copy SourceFiles="$(BuildBin)\$(UsedEdition)\channelgrabber.json" DestinationFolder="C:\Program Files (x86)\EZBOB\"/>
+	</Target>
+	
+	<Target Name="ConfigureEzManage">
+						  
+		  <!-- EzManage AppConfig setting -->
+		<XmlUpdate
+		  XPath="/configuration/appSettings/add/@value"
+		  FilePath="$(ServerBaseFolder)\$(ToolsFolder)\ezmanage\ezmanage.exe.config"
+		  Value="$(EMConnection)"/>
+	</Target>
+	
+	<Target Name="EnvironmentConfigure">
+			<PropertyGroup>
+				<EnvConfigXml><![CDATA[<data>
+						<culture>$(Culture)</culture>
+						<serverBaseFolder>$(ServerBaseFolder)</serverBaseFolder>
+						<serviceDeployFolder>$(ServerBaseFolder)\$(ServicesFolder)\agent\</serviceDeployFolder>
+						<clientDeployFolder>$(ServerBaseFolder)\$(ClientsFolder)\</clientDeployFolder>
+						<webDeployFolder>$(ServerBaseFolder)\$(WebFolder)\</webDeployFolder>      
+						<serviceName>$(serviceName)</serviceName>      
+						<url>$(WebBaseUrl)</url>
+						<environmentId>$(EnvId)</environmentId>
+						<messageQueuePath></messageQueuePath>
+						<culture>$(Culture)</culture>
+						<connectionString>$(MainConnectionString)</connectionString>
+						<connectionStringWarehouse>$(WarehouseConnectionString)</connectionStringWarehouse>
+						<securityDefaultLibPath>$(ServerBaseFolder)\libs\</securityDefaultLibPath>
+						<tempDBPath>$(TempStatesPath)</tempDBPath>
+						<tempReportsPath>$(ServerBaseFolder)\TempResults\Reports</tempReportsPath>
+						<HibernateId>NHibernateConfig_$(DbPrefix)</HibernateId>
+						<sessionConnectionString>$(SessionConnectionString)</sessionConnectionString>
+						<ToolsFolder>$(ServerBaseFolder)\$(ToolsFolder)</ToolsFolder>
+						<DatabaseDir>$(ServerBaseFolder)\$(Database)</DatabaseDir>
+						<MailSubject>$(MailSubject)</MailSubject>
+						<MandrillConfig>$(MandrillConfig)</MandrillConfig>
+				</data>]]></EnvConfigXml>
+		</PropertyGroup>
+		<TemplateTask TemplatePath = "$(ServerBaseFolder)\EnvironmentTemplate.xml" OutPath = "$(EnvFilePath)"
+                               DataXml = "$(EnvConfigXml)" OutXpath="//environment[@id='$(EnvId)']" /> 
+	</Target>
+	
+	<Target Name="UpdateDB">
+		<Message Text="Update database..." Importance="high"/>
+		<Exec Command="run.cmd" WorkingDirectory="$(ServerBaseFolder)\$(Database)\sql\" />
+	</Target>
+	
+	<Target Name="WEBStart">
+		<Message Text="Starting sites..."/>
+		<Exec Command="iisreset /start" ContinueOnError="true"/>
+		<Message Text="Starting share server..."/>
+		<Exec Command="net start server /y" ContinueOnError="true"/>
+	</Target>
+	
+	<Target Name="ServiceStart">
+		<Message Text="Starting ezService..." Importance="high"/>
+		<Exec Command="net start $(ServiceName)" ContinueOnError="true"/>
+	</Target>
+	
+	<Target Name="DeleteOldBinary">
+		<Message Text="Deleting old binary folder..." Importance="high"/>
+		<RemoveDir Directories="$(BuildBin)" />		
+	</Target>
+	
+	<UsingTask AssemblyFile="Scorto.BuildTasks.dll" TaskName="Scorto.BuildTasks.AppCopy" /> 
+	<UsingTask AssemblyFile="Scorto.BuildTasks.dll" TaskName="Scorto.BuildTasks.WebCopy" /> 
+	<UsingTask AssemblyFile="Scorto.BuildTasks.dll" TaskName="Scorto.BuildTasks.MultiCopy" /> 
+	<UsingTask AssemblyFile="Scorto.BuildTasks.dll" TaskName="Scorto.BuildTasks.TemplateTask" />
+	<UsingTask AssemblyFile="Scorto.BuildTasks.dll" TaskName="Scorto.BuildTasks.XmlUpdate" /> 
+	<UsingTask AssemblyFile="Scorto.BuildTasks.dll" TaskName="Scorto.BuildTasks.UpdateWIs" /> 
+	<UsingTask AssemblyFile="Scorto.BuildTasks.dll" TaskName="Scorto.BuildTasks.LoadReport.LoadReportTask" />
+</Project>
