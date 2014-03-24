@@ -1,15 +1,17 @@
 ﻿namespace EzBob.Backend.Strategies.Broker {
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using MailStrategies;
 
 	public class BrokerLeadAcquireCustomer: AStrategy {
 		#region public
 
 		#region constructor
 
-		public BrokerLeadAcquireCustomer(int nCustomerID, int nLeadID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public BrokerLeadAcquireCustomer(int nCustomerID, int nLeadID, string sEmailConfirmationLink, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			m_nCustomerID = nCustomerID;
 			m_nLeadID = nLeadID;
+			m_sEmailConfirmationLink = sEmailConfirmationLink;
 		} // constructor
 
 		#endregion constructor
@@ -34,6 +36,9 @@
 				new QueryParameter("@CustomerID", m_nCustomerID),
 				new QueryParameter("@LeadID", m_nLeadID)
 			);
+
+			if (!string.IsNullOrWhiteSpace(m_sEmailConfirmationLink))
+				new Greeting(m_nCustomerID, m_sEmailConfirmationLink, DB, Log).Execute();
 		} // Execute
 
 		#endregion method Execute
@@ -44,6 +49,7 @@
 
 		private readonly int m_nCustomerID;
 		private readonly int m_nLeadID;
+		private readonly string m_sEmailConfirmationLink;
 
 		#endregion private
 	} // class BrokerLeadAcquireCustomer

@@ -825,7 +825,7 @@ namespace EzBob.Web.EzServiceReference {
         EzBob.Web.EzServiceReference.BrokerLeadDetailsActionResult BrokerLeadCanFillWizard(int nLeadID, string sLeadEmail, string sContactEmail);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLeadAcquireCustomer", ReplyAction="http://tempuri.org/IEzService/BrokerLeadAcquireCustomerResponse")]
-        EzBob.Web.EzServiceReference.ActionMetaData BrokerLeadAcquireCustomer(int nCustomerID, int nLeadID);
+        EzBob.Web.EzServiceReference.ActionMetaData BrokerLeadAcquireCustomer(int nCustomerID, int nLeadID, string sEmailConfirmationLink);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerCustomerWizardComplete", ReplyAction="http://tempuri.org/IEzService/BrokerCustomerWizardCompleteResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData BrokerCustomerWizardComplete(int nCustomerID);
@@ -1104,8 +1104,8 @@ namespace EzBob.Web.EzServiceReference {
             return base.Channel.BrokerLeadCanFillWizard(nLeadID, sLeadEmail, sContactEmail);
         }
         
-        public EzBob.Web.EzServiceReference.ActionMetaData BrokerLeadAcquireCustomer(int nCustomerID, int nLeadID) {
-            return base.Channel.BrokerLeadAcquireCustomer(nCustomerID, nLeadID);
+        public EzBob.Web.EzServiceReference.ActionMetaData BrokerLeadAcquireCustomer(int nCustomerID, int nLeadID, string sEmailConfirmationLink) {
+            return base.Channel.BrokerLeadAcquireCustomer(nCustomerID, nLeadID, sEmailConfirmationLink);
         }
         
         public EzBob.Web.EzServiceReference.ActionMetaData BrokerCustomerWizardComplete(int nCustomerID) {

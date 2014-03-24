@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Backend.Strategies.Broker {
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using MailStrategies;
 
 	public class BrokerCustomerWizardComplete : AStrategy {
 		#region public
@@ -24,15 +25,12 @@
 		#region method Execute
 
 		public override void Execute() {
-			var sp = new BrokerDeleteCustomerLead(DB, Log) {
+			new EmailUnderReview(m_nCustomerID, DB, Log).Execute();
+
+			new BrokerDeleteCustomerLead(DB, Log) {
 				CustomerID = m_nCustomerID,
 				ReasonCode = BrokerDeleteCustomerLead.DeleteReasonCode.SignedUp.ToString(),
-			};
-
-			if (sp.HasValidParameters())
-				sp.ExecuteNonQuery();
-
-			// TODO: send email
+			}.ExecuteNonQuery();
 		} // Execute
 
 		#endregion method Execute

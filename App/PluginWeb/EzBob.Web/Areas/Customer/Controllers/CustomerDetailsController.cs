@@ -155,12 +155,8 @@
 
 			ms_oLog.DebugFormat("Customer {1} ({0}): cash request created.", customer.Id, customer.PersonalInfo.Fullname);
 
-			var blm = new WizardBrokerLeadModel(Session);
-
-			if (blm.IsSet)
-				m_oServiceClient.Instance.BrokerCustomerWizardComplete(customer.Id);
-			else
-				m_oServiceClient.Instance.EmailUnderReview(_context.User.Id);
+			// Updates broker lead state if needed and sends "Email Under Review".
+			m_oServiceClient.Instance.BrokerCustomerWizardComplete(customer.Id);
 
 			ms_oLog.DebugFormat("Customer {1} ({0}): email under review started.", customer.Id, customer.PersonalInfo.Fullname);
 

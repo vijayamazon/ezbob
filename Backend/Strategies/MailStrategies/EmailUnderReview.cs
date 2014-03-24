@@ -3,11 +3,10 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
-	public class EmailUnderReview : AMailStrategyBase {
+	public class EmailUnderReview : ABrokerMailToo {
 		#region constructor
 
-		public EmailUnderReview(int customerId, AConnection oDb, ASafeLog oLog)
-			: base(customerId, true, oDb, oLog) {
+		public EmailUnderReview(int customerId, AConnection oDb, ASafeLog oLog) : base(customerId, true, oDb, oLog) {
 		} // constructor
 
 		#endregion constructor

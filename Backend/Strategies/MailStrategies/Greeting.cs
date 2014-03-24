@@ -5,13 +5,12 @@ using Ezbob.Logger;
 namespace EzBob.Backend.Strategies.MailStrategies {
 	using System;
 
-	public class Greeting : AMailStrategyBase {
+	public class Greeting : ABrokerMailToo {
 		#region public
 
 		#region constructor
 
-		public Greeting(int customerId, string confirmEmailAddress, AConnection oDb, ASafeLog oLog)
-			: base(customerId, true, oDb, oLog) {
+		public Greeting(int customerId, string confirmEmailAddress, AConnection oDb, ASafeLog oLog) : base(customerId, true, oDb, oLog) {
 			this.confirmEmailAddress = confirmEmailAddress;
 		} // constructor
 
@@ -25,17 +24,14 @@ namespace EzBob.Backend.Strategies.MailStrategies {
 
 		#region method SetTemplateAndVariables
 
-		protected override void SetTemplateAndVariables()
-		{
+		protected override void SetTemplateAndVariables() {
 			TemplateName = CustomerData.IsOffline ? "Greeting - Offline" : "Greeting";
 
 			Variables = new Dictionary<string, string> {
 				{"Email", CustomerData.Mail},
 				{"ConfirmEmailAddress", confirmEmailAddress}
 			};
-		}
-
-		// SetTemplateAndVariables
+		} // SetTemplateAndVariables
 
 		#endregion method SetTemplateAndVariables
 

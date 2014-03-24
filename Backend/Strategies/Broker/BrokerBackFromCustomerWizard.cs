@@ -1,5 +1,4 @@
 ﻿namespace EzBob.Backend.Strategies.Broker {
-	using System;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using MailStrategies;

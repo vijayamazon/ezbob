@@ -385,6 +385,7 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="nCustomerID" type="xs:int" />
         <xs:element minOccurs="0" name="nLeadID" type="xs:int" />
+        <xs:element minOccurs="0" name="sEmailConfirmationLink" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

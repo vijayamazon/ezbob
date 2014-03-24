@@ -163,7 +163,7 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
             }
         }
 
-        if (predefinedPhone != undefined) {
+        if (predefinedPhone) {
             var mobileObj = this.$el.find('#MobilePhone');
             mobileObj.addClass('disabled');
             mobileObj.attr("disabled", "disabled");

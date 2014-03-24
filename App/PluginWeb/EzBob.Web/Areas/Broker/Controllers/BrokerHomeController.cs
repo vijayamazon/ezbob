@@ -49,6 +49,9 @@
 			if (!string.IsNullOrWhiteSpace(sMsgOnStart)) {
 				ViewData[Constant.Broker.MessageOnStart] = sMsgOnStart;
 				ViewData[Constant.Broker.MessageOnStartSeverity] = (Session[Constant.Broker.MessageOnStartSeverity] ?? string.Empty).ToString();
+
+				Session[Constant.Broker.MessageOnStart] = null;
+				Session[Constant.Broker.MessageOnStartSeverity] = null;
 			} // if
 
 			if (User.Identity.IsAuthenticated) {

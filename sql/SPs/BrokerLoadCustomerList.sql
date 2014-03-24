@@ -19,7 +19,7 @@ BEGIN
 		c.Name AS Email,
 		w.WizardStepTypeDescription AS WizardStep,
 		ISNULL(c.CreditResult, 'In process') AS Status,
-		c.ApplyForLoan AS ApplyDate,
+		c.GreetingMailSentDate AS ApplyDate,
 		ISNULL(t.Name, '') AS MpTypeName,
 		ISNULL(l.LoanAmount, 0) AS LoanAmount,
 		l.Date AS LoanDate

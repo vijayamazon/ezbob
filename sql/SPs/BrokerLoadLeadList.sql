@@ -27,6 +27,8 @@ BEGIN
 		bl.DateDeleted IS NULL
 		AND
 		bl.BrokerLeadDeletedReasonID IS NULL
+		AND
+		bl.BrokerID = @BrokerID
 	ORDER BY
 		bl.BrokerLeadID
 END

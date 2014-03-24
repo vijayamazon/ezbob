@@ -62,8 +62,7 @@
 		public override void Execute() {
 			Init();
 
-			if (StoredProc.HasValidParameters())
-				ResultRow = StoredProc.FillFirst<LeadDetailsResultRow>();
+			ResultRow = StoredProc.FillFirst<LeadDetailsResultRow>();
 		} // Execute
 
 		#endregion method Execute

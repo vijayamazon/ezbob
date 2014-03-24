@@ -439,7 +439,7 @@ namespace EzBob.Web.Controllers {
 					customer.IsTest = true;
 
 				_customers.Save(customer);
-				var link = _confirmation.GenerateLink(customer);
+				string link = _confirmation.GenerateLink(customer);
 
 				customer.CustomerRequestedLoan = new List<CustomerRequestedLoan> { new CustomerRequestedLoan {
 					Customer = customer,
@@ -450,7 +450,7 @@ namespace EzBob.Web.Controllers {
 				var blm = new WizardBrokerLeadModel(Session);
 
 				if (blm.IsSet)
-					m_oServiceClient.Instance.BrokerLeadAcquireCustomer(customer.Id, blm.LeadID);
+					m_oServiceClient.Instance.BrokerLeadAcquireCustomer(customer.Id, blm.LeadID, blm.BrokerFillsForCustomer ? string.Empty : link);
 				else
 					m_oServiceClient.Instance.GreetingMailStrategy(user.Id, link);
 			} // if user created successfully

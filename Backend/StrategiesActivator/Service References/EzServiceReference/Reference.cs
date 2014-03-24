@@ -3167,10 +3167,10 @@ namespace StrategiesActivator.EzServiceReference {
         System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BrokerLeadDetailsActionResult> BrokerLeadCanFillWizardAsync(int nLeadID, string sLeadEmail, string sContactEmail);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLeadAcquireCustomer", ReplyAction="http://tempuri.org/IEzService/BrokerLeadAcquireCustomerResponse")]
-        StrategiesActivator.EzServiceReference.ActionMetaData BrokerLeadAcquireCustomer(int nCustomerID, int nLeadID);
+        StrategiesActivator.EzServiceReference.ActionMetaData BrokerLeadAcquireCustomer(int nCustomerID, int nLeadID, string sEmailConfirmationLink);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLeadAcquireCustomer", ReplyAction="http://tempuri.org/IEzService/BrokerLeadAcquireCustomerResponse")]
-        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> BrokerLeadAcquireCustomerAsync(int nCustomerID, int nLeadID);
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> BrokerLeadAcquireCustomerAsync(int nCustomerID, int nLeadID, string sEmailConfirmationLink);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerCustomerWizardComplete", ReplyAction="http://tempuri.org/IEzService/BrokerCustomerWizardCompleteResponse")]
         StrategiesActivator.EzServiceReference.ActionMetaData BrokerCustomerWizardComplete(int nCustomerID);
@@ -3698,12 +3698,12 @@ namespace StrategiesActivator.EzServiceReference {
             return base.Channel.BrokerLeadCanFillWizardAsync(nLeadID, sLeadEmail, sContactEmail);
         }
         
-        public StrategiesActivator.EzServiceReference.ActionMetaData BrokerLeadAcquireCustomer(int nCustomerID, int nLeadID) {
-            return base.Channel.BrokerLeadAcquireCustomer(nCustomerID, nLeadID);
+        public StrategiesActivator.EzServiceReference.ActionMetaData BrokerLeadAcquireCustomer(int nCustomerID, int nLeadID, string sEmailConfirmationLink) {
+            return base.Channel.BrokerLeadAcquireCustomer(nCustomerID, nLeadID, sEmailConfirmationLink);
         }
         
-        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> BrokerLeadAcquireCustomerAsync(int nCustomerID, int nLeadID) {
-            return base.Channel.BrokerLeadAcquireCustomerAsync(nCustomerID, nLeadID);
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> BrokerLeadAcquireCustomerAsync(int nCustomerID, int nLeadID, string sEmailConfirmationLink) {
+            return base.Channel.BrokerLeadAcquireCustomerAsync(nCustomerID, nLeadID, sEmailConfirmationLink);
         }
         
         public StrategiesActivator.EzServiceReference.ActionMetaData BrokerCustomerWizardComplete(int nCustomerID) {

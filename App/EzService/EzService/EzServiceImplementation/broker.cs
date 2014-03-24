@@ -7,11 +7,19 @@
 
 		#region method BrokerLeadAcquireCustomer
 
-		public ActionMetaData BrokerLeadAcquireCustomer(int nCustomerID, int nLeadID) {
-			return Execute<BrokerLeadAcquireCustomer>(nCustomerID, null, nCustomerID, nLeadID);
+		public ActionMetaData BrokerLeadAcquireCustomer(int nCustomerID, int nLeadID, string sEmailConfirmationLink) {
+			return Execute<BrokerLeadAcquireCustomer>(nCustomerID, null, nCustomerID, nLeadID, sEmailConfirmationLink);
 		} // BrokerLeadAcquireCustomer
 
 		#endregion method BrokerLeadAcquireCustomer
+
+		#region method BrokerCustomerWizardComplete
+
+		public ActionMetaData BrokerCustomerWizardComplete(int nCustomerID) {
+			return Execute<BrokerCustomerWizardComplete>(nCustomerID, null, nCustomerID);
+		} // BrokerCustomerWizardComplete
+
+		#endregion method BrokerCustomerWizardComplete
 
 		#endregion async
 
@@ -227,14 +235,6 @@
 		} // BrokerLeadCanFillWizard
 
 		#endregion method BrokerLeadCanFillWizard
-
-		#region method BrokerCustomerWizardComplete
-
-		public ActionMetaData BrokerCustomerWizardComplete(int nCustomerID) {
-			return ExecuteSync<BrokerCustomerWizardComplete>(nCustomerID, null, nCustomerID);
-		} // BrokerCustomerWizardComplete
-
-		#endregion method BrokerCustomerWizardComplete
 
 		#region method BrokerBackFromCustomerWizard
 
