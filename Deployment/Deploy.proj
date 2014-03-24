@@ -22,15 +22,9 @@
 	<Target Name="BinaryCreate">
 		<RemoveDir Directories="$(BuildBin)"/>
 		<!-- Exec Command="unlocker.exe $(BuildBin) /D /S" WorkingDirectory="C:\Program Files\Unlocker\" Condition="Exists('C:\Program Files\Unlocker\Unlocker.exe')" IgnoreExitCode="true"/-->
-		
-		<AppCopy CopyFrom="$(Src)\App\Clients\Administrator" CopyTo="$(BuildBin)\%(Edition.Identity)\Clients\Administrator"/>
-		<AppCopy CopyFrom="$(Src)\App\web" CopyTo="$(BuildBin)\%(Edition.Identity)\web\"/> 
-		
+				
 		<WebCopy CopyFrom="$(Src)\App\pluginweb\EzBob.Web\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(WebFolder)\EzBob.Web\"/>
 		
-		<AppCopy CopyFrom="$(Src)\Tools\LogViewer\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\LogViewer\"/>
-		<AppCopy CopyFrom="$(Src)\Tools\EnvironmentConfigValidation\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\EnvironmentConfigValidation\"/>
-
 		<Copy SourceFiles="$(Src)\Lib\Scorto.Core\DBSQLServer.dll" DestinationFolder="$(BuildBin)\%(Edition.Identity)\libs\"/>
 		
 		<MultiCopy CopyFrom="$(Src)\sql\current\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(Database)\sql\current\" />
@@ -78,7 +72,6 @@
 		<!-- Exec Command="unlocker.exe $(ServerBaseFolder) /D /S" WorkingDirectory="C:\Program Files\Unlocker\" Condition="Exists('C:\Program Files\Unlocker\Unlocker.exe')" IgnoreExitCode="true"/-->
 		<Message Text="Copy files to deploy folder..." Importance="high"/>
 		<Exec Command="xcopy %22$(BuildBin)\$(UsedEdition)%22 $(ServerBaseFolder) /E /C /I /Q /R /Y"/>
-		<Copy SourceFiles="$(BuildBin)\$(UsedEdition)\channelgrabber.json" DestinationFolder="C:\Program Files\EZBOB\"/>
 		<Copy SourceFiles="$(BuildBin)\$(UsedEdition)\channelgrabber.json" DestinationFolder="C:\Program Files (x86)\EZBOB\"/>
 	</Target>
 
@@ -88,21 +81,19 @@
 	</Target>
 
 	<Target Name="SCStop">
-		<Message Text="ScortoStopEnvironment" Importance="high"/>
-		<Message Text="Stoping service..."/>
+		<Message Text="Stopping EzService..." Importance="high"/>
 		<Exec Command="net stop $(ServiceName)" ContinueOnError="true"/>
 	</Target>
 
 	<Target Name="WEBStop">
-		<Message Text="Stoping sites..."/>
+		<Message Text="Stopping sites..."/>
 		<Exec Command="iisreset /stop" ContinueOnError="true"/>
-		<Message Text="Stoping share server..."/>
+		<Message Text="Stopping share server..."/>
 		<Exec Command="net stop server /y" ContinueOnError="true"/>
 	</Target>
 	
 	<Target Name="SCStart">
-		<Message Text="ScortoStartEnvironment" Importance="high"/>
-		<Message Text="Starting service..."/>
+		<Message Text="Starting EzService..." Importance="high"/>
 		<Exec Command="net start $(ServiceName)" ContinueOnError="true"/>
 	</Target>
 
@@ -132,62 +123,11 @@
 	</Target>
 	
 	<Target Name="ConfigureClients">
-				<!-- Maven AppConfig setting -->
-		<XmlUpdate 
-		  XPath="/configuration/applicationSettings/SpecificSettings/ConnectionProfiles/add/@Address"
-		  FilePath="$(ServerBaseFolder)\$(ClientsFolder)\Maven\Maven.exe.config"
-		  Value="$(WebBaseUrl)/MavenServer/Service.asmx"/>
-		<XmlUpdate
-		  XPath="/configuration/applicationSettings/StrategyBuilder.Properties.Settings/setting[@name='AppCulture']/value"
-		  FilePath="$(ServerBaseFolder)\$(ClientsFolder)\Maven\Maven.exe.config"
-		  Value="$(Culture)"/>
-
-		<!-- Master AppConfig setting -->
-		<XmlUpdate
-		  XPath="/configuration/applicationSettings/SpecificSettings/ConnectionProfiles/add/@Address"
-		  FilePath="$(ServerBaseFolder)\$(ClientsFolder)\Master\Master.exe.config"
-		  Value="$(WebBaseUrl)/MasterServer/Service.asmx"/>
-		<XmlUpdate
-		  XPath="/configuration/applicationSettings/Patron.Properties.Settings/setting[@name='AppCulture']/value"
-		  FilePath="$(ServerBaseFolder)\$(ClientsFolder)\Master\Master.exe.config"
-		  Value="$(Culture)"/>
-
-		<!-- Admin AppConfig setting -->
-		<XmlUpdate
-		  XPath="/configuration/applicationSettings/SpecificSettings/ConnectionProfiles/add/@Address"
-		  FilePath="$(ServerBaseFolder)\$(ClientsFolder)\Administrator\Admin.exe.config"
-		  Value="$(WebBaseUrl)/AdminServer/Service.asmx"/>
-		<XmlUpdate
-		  XPath="/configuration/applicationSettings/Admin.Properties.Settings/setting[@name='AppCulture']/value"
-		  FilePath="$(ServerBaseFolder)\$(ClientsFolder)\Administrator\Admin.exe.config"
-		  Value="$(Culture)"/>
-		  
 		  <!-- EzManage AppConfig setting -->
 		<XmlUpdate
 		  XPath="/configuration/appSettings/add/@value"
 		  FilePath="$(ServerBaseFolder)\$(ToolsFolder)\ezmanage\ezmanage.exe.config"
-		  Value="$(EMConnection)"/>
-
-		<!-- Auditor AppConfig setting -->
-		<XmlUpdate
-		  XPath="/configuration/applicationSettings/SpecificSettings/ConnectionProfiles/add/@Address"
-		  FilePath="$(ServerBaseFolder)\$(ClientsFolder)\Auditor\Auditor.exe.config"
-		  Value="$(WebBaseUrl)/AuditorServer/Service.asmx"/>
-		<XmlUpdate
-		  XPath="/configuration/applicationSettings/AuditorApplication.Properties.Settings/setting[@name='AppCulture']/value"
-		  FilePath="$(ServerBaseFolder)\$(ClientsFolder)\Auditor\Auditor.exe.config"
-		  Value="$(Culture)"/>
-		  
-		<!-- FD AppConfig setting -->
-		<XmlUpdate
-		  XPath="/configuration/applicationSettings/SpecificSettings/ConnectionProfiles/add/@Address"
-		  FilePath="$(ServerBaseFolder)\$(ClientsFolder)\FormsDesigner\FormsDesigner.exe.config"
-		  Value="$(WebBaseUrl)/FormsDesignerServer/Service.asmx"/>
-		<XmlUpdate
-		  XPath="/configuration/applicationSettings/NodeDesigner.Properties.Settings/setting[@name='AppCulture']/value"
-		  FilePath="$(ServerBaseFolder)\$(ClientsFolder)\FormsDesigner\FormsDesigner.exe.config"
-		  Value="$(Culture)"/>
-		
+		  Value="$(EMConnection)"/>		
 	</Target>
 
 	<Target Name="EnvironmentConfigure">
@@ -221,25 +161,16 @@
 	</Target>
 	
 	<Target Name="ReleaseCopy">
-			<RemoveDir Directories="c:\Release\Clients"/>
 			<RemoveDir Directories="c:\Release\Database"/>
-			<RemoveDir Directories="c:\Release\Items"/>
 			<RemoveDir Directories="c:\Release\libs"/>
 			<RemoveDir Directories="c:\Release\service"/>
 			<RemoveDir Directories="c:\Release\tools"/>
 			<RemoveDir Directories="c:\Release\web"/>
-			<MultiCopy CopyFrom="$(PathFrom)\clients\" CopyTo="c:\Release\Clients\"/>
-			<MultiCopy CopyFrom="$(PathFrom)\Database\" CopyTo="c:\Release\Database\"/>
-			<MultiCopy CopyFrom="$(PathFrom)\Items\" CopyTo="c:\Release\Items\"/>			
+			<MultiCopy CopyFrom="$(PathFrom)\Database\" CopyTo="c:\Release\Database\"/>	
 			<MultiCopy CopyFrom="$(PathFrom)\libs\" CopyTo="c:\Release\libs\"/>
 			<MultiCopy CopyFrom="$(PathFrom)\service\" CopyTo="c:\Release\service\"/>
 			<MultiCopy CopyFrom="$(PathFrom)\tools\" CopyTo="c:\Release\tools\"/>
 			<MultiCopy CopyFrom="$(PathFrom)\web\" CopyTo="c:\Release\web\"/>
-	</Target>
-	
-	<Target Name="XLSUpdate">
-			<XLSUpdate FilePath="c:\Release\Items\TestData.xls" EmailFrom="ezbob@ezbob.com" Port="587" 
-			SMTPServer="smtp.gmail.com" Auth="1" userName="ezbob@ezbob.com" Pass="ezbob2012" Encrypt="SSL"/>
 	</Target>
 
 	<Target Name="ArchRelease">
@@ -287,23 +218,9 @@
 		<Delete Files="$(Src)\Common\CommonAssemblyInfo.cs.bak" />
 	</Target>
 	
-	<Target Name="UpdateWebConfig">	  
-       <XmlUpdate FilePath="$(BuildBin)\%(Edition.Identity)\$(WebFolder)\AdminServer\Web.config" Xpath="/configuration/system.web/compilation/@debug" Value="false" />
-       <XmlUpdate FilePath="$(BuildBin)\%(Edition.Identity)\$(WebFolder)\AuditorServer\Web.config" Xpath="/configuration/system.web/compilation/@debug" Value="false" />
-       <XmlUpdate FilePath="$(BuildBin)\%(Edition.Identity)\$(WebFolder)\MavenServer\Web.config" Xpath="/configuration/system.web/compilation/@debug" Value="false" />
-       <XmlUpdate FilePath="$(BuildBin)\%(Edition.Identity)\$(WebFolder)\MasterServer\Web.config" Xpath="/configuration/system.web/compilation/@debug" Value="false" />
-       <XmlUpdate FilePath="$(BuildBin)\%(Edition.Identity)\$(WebFolder)\FormsDesignerServer\Web.config" Xpath="/configuration/system.web/compilation/@debug" Value="false" />
+	<Target Name="UpdateWebConfig">
        <XmlUpdate FilePath="$(BuildBin)\%(Edition.Identity)\$(WebFolder)\EzBob.Web\Web.config" Xpath="/configuration/system.web/compilation/@debug" Value="false" />
     </Target>
-
-	<Target Name="TfsUpdate">
-		<UpdateWIs TeamFoundationServerUrl="$(TfsUrl)" BuildId="$(CCNetLabel)" GlobalListName="Builds - $(TfsProject)" Query="SELECT [System.Id], [System.WorkItemType], [System.AssignedTo], [System.Reason], [Microsoft.VSTS.Common.Priority], [System.Title] FROM WorkItems WHERE [System.TeamProject] = '$(TfsProject)'  AND  [System.WorkItemType] = 'Defect'  AND  [System.State] = 'Resolved' ORDER BY [Microsoft.VSTS.Common.Priority], [System.Id]" ContinueOnError="true"/>
-    </Target>
-	
-	<Target Name="CopyStableToDc">
-		<Message Text="Copy release to dc..." Importance="high"/>
-		<Exec Command="xcopy %22$(ServerBaseFolder)%22 \\dc\Releases\ScortoScoringSolutions\InProgress_SSS\$(CCNetLabel) /E /C /I /Q /R /Y" ContinueOnError="true"/>
-	</Target>
 	
 	<!-- Use cmd line utility to run test for the list of assemblies --> 
 	<Target Name="UnitTest">
