@@ -29,7 +29,13 @@
 		<Exec Command="logoff 10" IgnoreExitCode="true"/>
 	</Target>
 	
-	<Target Name="Build">
+	<Target Name="GenerateClearCCNetLabel">
+		<DynamicExecute TaskAction="Run" Outputs="string result" UsingNamespaces="System.Text.RegularExpressions" Code='Match match = Regex.Match("$(CCNetLabel)", "[\\d]+\\.[\\d]+\\.[\\d]+\\.[\\d]+"); if (match.Success) result = match.Value; else result="$(CCNetLabel)";'>
+			<Output TaskParameter="Output1" PropertyName="ClearedCCNetLabel"/>
+		</DynamicExecute>
+	</Target>
+	
+	<Target Name="Build" DependsOnTargets="GenerateClearCCNetLabel">
 		<ItemGroup>
 			<ProjectToBuild Include="$(Src)\ezbob.sln"/>
 			<ProjectToBuild Include="$(Src)\App\EzAutoResponder\EzAutoResponder.sln"/>
