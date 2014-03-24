@@ -197,4 +197,5 @@
 	<UsingTask AssemblyFile="Scorto.BuildTasks.dll" TaskName="Scorto.BuildTasks.UpdateWIs" /> 
 	<UsingTask AssemblyFile="Scorto.BuildTasks.dll" TaskName="Scorto.BuildTasks.LoadReport.LoadReportTask" />
     <UsingTask AssemblyFile="MSBuild.ExtensionPack.dll" TaskName="MSBuild.ExtensionPack.FileSystem.File"/>
+    <UsingTask AssemblyFile="$(ExtensionTasksPath)MSBuild.ExtensionPack.dll" TaskName="MSBuild.ExtensionPack.Framework.DynamicExecute"/>
 </Project>
