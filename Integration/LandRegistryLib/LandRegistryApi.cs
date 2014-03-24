@@ -130,13 +130,16 @@
 			{
 				client.ChannelFactory.Endpoint.Behaviors.Add(new HMLRBGMessageEndpointBehavior("SDulman3000", "Ezbob2013$LR"));
 				// create a request object
+
+				string sMessageID = "RESREQ" + customerId + "-" + Guid.NewGuid().ToString("N");
+
 				var request = new LRResServiceNS.RequestOCWithSummaryV2_0Type
 				{
 					ID = new LRResServiceNS.Q1IdentifierType
 						{
 							MessageID = new LRResServiceNS.Q1TextType
 								{
-									Value = "RESREQ" + customerId
+									Value = sMessageID
 								}
 						},
 					Product = new LRResServiceNS.Q1ProductType
