@@ -44,7 +44,7 @@
 
 		<MultiCopy CopyFrom="$(Src)\App\ezmanage\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\ezmanage\" />
 		
-		<Copy SourceFiles="$(Src)\Build\sc-build\EnvironmentTemplate.xml" DestinationFolder="$(BuildBin)\%(Edition.Identity)\"/>
+		<Copy SourceFiles="$(Src)\Deployment\EnvironmentTemplate.xml" DestinationFolder="$(BuildBin)\%(Edition.Identity)\"/>
 		<Copy SourceFiles="$(Src)\Integration\ChannelGrabberConfig\channelgrabber.json" DestinationFolder="$(BuildBin)\%(Edition.Identity)\"/>
 				
 		<MultiCopy CopyFrom="$(Src)\Integration\Amazon\AmazonStandaloneApp\bin\$(BuildConfiguration)\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ToolsFolder)\Amazon\"/>
@@ -196,10 +196,6 @@
 			<environmentId>mssql2008</environmentId>
 		</data>]]></t>
 	</PropertyGroup>
-	<Target Name="Test">
-		<TemplateTask TemplatePath = "e:\src\SC\Build\CCNET\EnvironmentTemplate.xml" OutPath = "e:\out.xml"
-                               DataXml = "$(t)" /> 
-	</Target>
 	
 	<Target Name="AssemblyInfoUpdate" DependsOnTargets="GenerateClearCCNetLabel" >
 		<Copy SourceFiles="$(Src)\Common\CommonAssemblyInfo.cs" DestinationFiles="$(Src)\Common\CommonAssemblyInfo.cs.bak" />
@@ -279,37 +275,9 @@
 			<ProjectToBuild Include="$(Src)\App\EzAutoResponder\EzAutoResponder.sln"/>
 		</ItemGroup>
 	</Target>
-	
-	<!-- 	rd1 stable  -->
-	<Target Name="StableBuildConfig" >
-		<PropertyGroup>
-			<Src>c:\build\compilation\sc_stable\Sources</Src>
-			<BuildBin>c:\build\compilation\sc_stable\Binaries</BuildBin>
-		</PropertyGroup>
-	</Target>
 
-	<Target Name="StableBuild" DependsOnTargets="StableBuildConfig;CompilationScenario" />
-	<!-- 	rd1 trunk  -->
-	<Target Name="TrunkBuildConfig" >
-		<PropertyGroup>
-			<Src>c:\build\compilation\sc_trunk\Sources</Src>
-			<BuildBin>c:\build\compilation\sc_trunk\Binaries</BuildBin>
-		</PropertyGroup>
-	</Target>
 
-	<Target Name="TrunkBuild" DependsOnTargets="TrunkBuildConfig;CompilationScenario" />
 
-	<!-- 	sss-build trunk continious -->
-	<Target Name="TrunkBuildContiniousConfig" >
-		<PropertyGroup>
-			<Src>c:\build\Continious-trunk\Sources</Src>
-			<NunitLogs>c:\build\Continious-trunk\Nunitlog</NunitLogs>
-		</PropertyGroup>
-	</Target>
-
-	<Target Name="TrunkBuildContinious" DependsOnTargets="TrunkBuildContiniousConfig;ContiniousScenario" />
-
-	<!-- 	compilation  -->
 	<Target Name="CompilationScenario" DependsOnTargets="ProjectToBuildConfig;BeforeBuild;Build;AfterBuild"/>
 	<Target Name="ContiniousScenario" DependsOnTargets="ProjectToBuildConfig;BeforeBuild;Build;AfterBuild"/>
 
