@@ -169,4 +169,32 @@
 		<Message Text="Deleting old binary folder..." Importance="high"/>
 		<RemoveDir Directories="$(BuildBin)" />		
 	</Target>
+	
+	
+	<!-- build properties-->
+	<PropertyGroup>
+		<BuildConfiguration>Debug</BuildConfiguration>
+		<ClientsFolder>clients</ClientsFolder>
+		<ServicesFolder>services</ServicesFolder>
+		<WebFolder>websites</WebFolder>
+		<ConfigFolder>configtemplates</ConfigFolder>
+		<ToolsFolder>Tools</ToolsFolder>
+		<SDKFolder>SDK</SDKFolder>
+		<Database>Database</Database>
+	</PropertyGroup>
+	
+	<ItemGroup>
+		<Edition Include="Standard"><FullName>Standard edition</FullName></Edition>
+	</ItemGroup>
+	
+	<PropertyGroup>
+		<Configuration Condition=" '$(Configuration)' == '' ">
+			Debug
+		</Configuration>
+	</PropertyGroup>
+	
+	<!-- Not used - kept as reference -->
+	<Target Name="RunUnitTests" >
+		<Exec Command="$(Src)\lib\3rdparty\NUnit\nunit-console-x86.exe $(Src)\App\pluginweb\EzBob.Tests\bin\Debug\EzBob.Tests.dll $(Src)\Integration\ExperianLib\bin\debug\ExperianLib.dll $(Src)\Integration\MailApi\bin\debug\MailApi.dll $(Src)\Integration\TeraPeak\TeraPeakServiceLib\bin\debug\TeraPeakServiceLib.dll /xml=$(NunitLogs)/NUnitReport.xml"/>
+	</Target>
 </Project>
