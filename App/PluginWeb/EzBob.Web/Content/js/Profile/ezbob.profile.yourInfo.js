@@ -20,10 +20,7 @@
     YourInfoMainView.prototype.template = '#your-info-template';
 
     YourInfoMainView.prototype.initialize = function() {
-      EzBob.App.on('dash-director-address-change', this.directorModelChange, this);
-      EzBob.App.on('add-director', this.addDirector, this);
-      EzBob.App.on('director-added', this.reload, this);
-      return EzBob.App.on('add-director-back', this.addDirectorBack, this);
+      return EzBob.App.on('dash-director-address-change', this.directorModelChange, this);
     };
 
     YourInfoMainView.prototype.events = {
@@ -55,6 +52,19 @@
       return this.setInputReadOnly(false);
     };
 
+    YourInfoMainView.prototype.onAddingDirector = function() {
+      return this.ui.form.hide();
+    };
+
+    YourInfoMainView.prototype.onDirectorAdded = function() {
+      this.ui.form.hide();
+      return this.reload();
+    };
+
+    YourInfoMainView.prototype.onBackFromDirector = function() {
+      return this.ui.form.show();
+    };
+
     YourInfoMainView.prototype.addressAreValid = function() {
       var address, dir, directors, typeOfBusinessName, _i, _len;
       address = this.model.get('PersonalAddress');
@@ -83,14 +93,6 @@
         }
       }
       return true;
-    };
-
-    YourInfoMainView.prototype.addDirector = function() {
-      return this.ui.form.hide();
-    };
-
-    YourInfoMainView.prototype.addDirectorBack = function() {
-      return this.ui.form.show();
     };
 
     YourInfoMainView.prototype.directorModelChange = function(newModel) {
@@ -216,7 +218,8 @@
     YourInfoMainView.prototype.renderLimited = function() {
       var view;
       view = new EzBob.Profile.LimitedInfoView({
-        model: this.model
+        model: this.model,
+        parentView: this
       });
       this.model.get('CompanyAddress').on('all', this.addressModelChange, this);
       return this.company.show(view);
@@ -324,6 +327,10 @@
 
     LimitedInfoView.prototype.template = '#limited-info-template';
 
+    LimitedInfoView.prototype.initialize = function(options) {
+      return this.parentView = options.parentView;
+    };
+
     LimitedInfoView.prototype.regions = {
       limitedAddress: '#LimitedCompanyAddress',
       director: '.director-container'
@@ -356,21 +363,28 @@
       return this;
     };
 
-    LimitedInfoView.prototype.addDirectorClicked = function() {
-      var director, directorEl;
+    LimitedInfoView.prototype.addDirectorClicked = function(event) {
+      var director, directorEl,
+        _this = this;
+      event.stopPropagation();
+      event.preventDefault();
+      this.parentView.onAddingDirector();
       director = new EzBob.DirectorModel();
-      EzBob.App.trigger('add-director');
       directorEl = $('.add-director-container');
       if (!this.addDirector) {
         this.addDirector = new EzBob.AddDirectorInfoView({
           model: director,
           el: directorEl
         });
+        this.addDirector.setBackHandler((function() {
+          return _this.parentView.onBackFromDirector();
+        }));
+        this.addDirector.setSuccessHandler((function() {
+          return _this.parentView.onDirectorAdded();
+        }));
         this.addDirector.render();
-        directorEl.show();
-      } else {
-        directorEl.show();
       }
+      directorEl.show();
       return false;
     };
 

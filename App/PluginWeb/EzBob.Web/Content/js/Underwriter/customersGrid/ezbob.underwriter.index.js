@@ -53,10 +53,14 @@
 			'': 'customers',
 			'customers/:type': 'customers',
 			'profile/:id': 'profile',
+			'profile/:id/': 'profile',
+			'profile/:id/:section': 'profile',
+			'profile/:id/:section/': 'profile',
 			'settings': 'settings',
 			'automation': 'automation',
 			'support': 'support',
-			'fraud': 'fraud'
+			'fraud': 'fraud',
+			'*z': 'customers',
 		}, // routes
 
 		handleRoute: function(sViewName, id, type) {
@@ -83,13 +87,16 @@
 			this.handleRoute('grids', null, type);
 		}, // customers
 
-		profile: function(id, type) {
+		profile: function(id, section) {
 			clearInterval(counterTimer);
 			counterTimer = null;
 
-			this.handleRoute('profile', id, type);
+			this.handleRoute('profile', id);
 
 			this.views.profile.view.showed = true;
+
+			this.views.profile.view.setState(id, section);
+			this.views.profile.view.restoreState();
 		}, // profile
 
 		settings: function() {
@@ -128,12 +135,6 @@
 	oRouter.views.profile.view.router = oRouter;
 
 	Backbone.history.start();
-
-    // TODO: Remove this code - we no longer want to refer to /registered, and I think this is 'dead code'
-	oRouter.views.profile.view.on('customerNotFull', function(customerId) {
-		oRouter.navigate('#customers/registered', { trigger: true, replace: true });
-		oRouter.navigate('#profile/' + customerId + '/registered', { trigger: true, replace: true });
-	});
 
 	oRouter.views.support.view.on('rechecked', function(options) {
 		var umi = options.umi;

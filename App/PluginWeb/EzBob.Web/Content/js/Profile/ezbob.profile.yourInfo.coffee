@@ -7,9 +7,6 @@ class EzBob.Profile.YourInfoMainView extends Backbone.Marionette.Layout
 
     initialize: ->
         EzBob.App.on 'dash-director-address-change', @directorModelChange, @
-        EzBob.App.on 'add-director', @addDirector, @
-        EzBob.App.on 'director-added', @reload, @
-        EzBob.App.on 'add-director-back', @addDirectorBack, @
 
     events: 
         'click .edit-personal': 'editPersonalViewShow'
@@ -36,6 +33,16 @@ class EzBob.Profile.YourInfoMainView extends Backbone.Marionette.Layout
     editPersonalViewShow: ->
         @setInputReadOnly false
 
+    onAddingDirector: ->
+        @ui.form.hide()
+
+    onDirectorAdded: ->
+        @ui.form.hide()
+        @reload()
+
+    onBackFromDirector: ->
+        @ui.form.show()
+
     addressAreValid: ->
         address = @model.get 'PersonalAddress'
         if address.length < 1
@@ -60,12 +67,6 @@ class EzBob.Profile.YourInfoMainView extends Backbone.Marionette.Layout
                     return false
 
         true
-
-    addDirector: ->
-        @ui.form.hide()
-
-    addDirectorBack: ->
-        @ui.form.show()
 
     directorModelChange: (newModel) ->
         directors = @model.get(@model.get('BusinessTypeReduced') + 'Info').Directors
@@ -168,7 +169,7 @@ class EzBob.Profile.YourInfoMainView extends Backbone.Marionette.Layout
         @company.show(view)
 
     renderLimited: ->
-        view = new EzBob.Profile.LimitedInfoView({ model: @model });
+        view = new EzBob.Profile.LimitedInfoView({ model: @model, parentView: @ });
         @model.get('CompanyAddress').on 'all', @addressModelChange, @
         @company.show(view)
 
@@ -237,12 +238,16 @@ class EzBob.Profile.NonLimitedInfoView extends Backbone.Marionette.Layout
 class EzBob.Profile.LimitedInfoView extends Backbone.Marionette.Layout
     template: '#limited-info-template'
 
+    initialize: (options) ->
+        @parentView = options.parentView
+
     regions: 
         limitedAddress: '#LimitedCompanyAddress'
         director: '.director-container' 
+
     events:
         "click .add-director": "addDirectorClicked"
-        
+
     onRender: ->
         address = new EzBob.AddressView({
             model: @model.get('CompanyAddress'),
@@ -264,16 +269,22 @@ class EzBob.Profile.LimitedInfoView extends Backbone.Marionette.Layout
 
         @
 
-    addDirectorClicked: ->
+    addDirectorClicked: (event) ->
+        event.stopPropagation()
+        event.preventDefault()
+
+        @parentView.onAddingDirector()
+
         director = new EzBob.DirectorModel()
-        EzBob.App.trigger 'add-director'
         directorEl = $('.add-director-container')
+
         if(!@addDirector)
             @addDirector = new EzBob.AddDirectorInfoView({ model: director, el: directorEl })
+            @addDirector.setBackHandler ( => @parentView.onBackFromDirector() )
+            @addDirector.setSuccessHandler ( => @parentView.onDirectorAdded() )
             @addDirector.render()
-            directorEl.show()
-        else
-            directorEl.show()
+
+        directorEl.show()
         false
 
 class EzBob.Profile.DirectorInfoView extends Backbone.Marionette.Layout

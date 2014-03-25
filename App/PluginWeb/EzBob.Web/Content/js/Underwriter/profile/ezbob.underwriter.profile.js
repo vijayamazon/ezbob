@@ -135,7 +135,25 @@
         el: controlButtons
       });
       EzBob.handleUserLayoutSetting();
+      this.$el.find('.profile-tabs a[data-toggle="tab"]').on('shown.bs.tab', (function(e) {
+        return _this.lastShownProfileSection = $(e.target).attr('href').substr(1);
+      }));
       return this;
+    };
+
+    ProfileView.prototype.setState = function(nCustomerID, sSection) {
+      this.lastShownCustomerID = nCustomerID;
+      if (!sSection) {
+        sSection = this.$el.find('.profile-tabs a[data-toggle="tab"]:first').attr('href').substr(1);
+      }
+      return this.lastShownProfileSection = sSection;
+    };
+
+    ProfileView.prototype.restoreState = function() {
+      if (!this.lastShownProfileSection) {
+        this.lastShownProfileSection = this.$el.find('.profile-tabs a[data-toggle="tab"]:first').attr('href').substr(1);
+      }
+      return this.$el.find('.profile-tabs a[data-toggle="tab"]').filter('[href="#' + this.lastShownProfileSection + '"]').tab('show');
     };
 
     ProfileView.prototype.events = {
@@ -147,8 +165,11 @@
       'click .add-director': 'addDirectorClicked'
     };
 
-    ProfileView.prototype.addDirectorClicked = function() {
-      var director, directorEl;
+    ProfileView.prototype.addDirectorClicked = function(event) {
+      var director, directorEl,
+        _this = this;
+      event.stopPropagation();
+      event.preventDefault();
       director = new EzBob.DirectorModel();
       directorEl = this.$el.find('.add-director-container');
       if (!this.addDirector) {
@@ -156,6 +177,9 @@
           model: director,
           el: directorEl
         });
+        this.addDirector.setBackHandler((function() {
+          return _this.$el.find('.add-director-container').hide();
+        }));
         this.addDirector.render();
       }
       directorEl.show();

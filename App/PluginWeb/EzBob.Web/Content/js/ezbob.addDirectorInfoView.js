@@ -66,7 +66,7 @@ EzBob.AddDirectorInfoView = Backbone.Marionette.ItemView.extend({
 	}, // onRender
 
 	directorBack: function() {
-		return EzBob.App.trigger('add-director-back');
+		this.trigger(this.backEvtName());
 	}, // directorBack
 
 	directorAdd: function() {
@@ -83,21 +83,28 @@ EzBob.AddDirectorInfoView = Backbone.Marionette.ItemView.extend({
 
 		var request = $.post(this.ui.form.attr('action'), data);
 
-		request.done(function(res) {
+		var self = this;
 
+		request.done(function(res) {
 			if (res.success)
-				return EzBob.App.trigger('director-added');
+				self.trigger(self.successEvtName());
 			else {
 				if (res.error)
-					return EzBob.App.trigger('error', res.error);
+					EzBob.App.trigger('error', res.error);
 				else
-					return EzBob.App.trigger('error', 'Error occurred, try again');
+					EzBob.App.trigger('error', 'Error occurred, try again');
+
+				self.trigger(self.failEvtName());
 			} // if
-		});
+		}); // on success
+
+		request.fail(function() {
+			self.trigger(self.failEvtName());
+		}); // on fail
 
 		request.always(function() {
-			return BlockUi('off');
-		});
+			BlockUi('off');
+		}); // always
 
 		return false;
 	}, // directorAdd
@@ -106,4 +113,23 @@ EzBob.AddDirectorInfoView = Backbone.Marionette.ItemView.extend({
 		var enabled = this.validator.checkForm() && this.addressView.model.length > 0;
 		return this.ui.addButton.toggleClass('disabled', !enabled);
 	}, // inputChanged
+
+	backEvtName: function() { return 'go-back'; }, // backEvtName
+	successEvtName: function() { return 'success'; }, // successEvtName
+	failEvtName: function() { return 'fail'; }, // failEvtName
+
+	setBackHandler: function(oHandler) {
+		if (oHandler && (typeof oHandler === 'function'))
+			this.on(this.backEvtName(), oHandler);
+	}, // setBackHandler
+
+	setSuccessHandler: function(oHandler) {
+		if (oHandler && (typeof oHandler === 'function'))
+			this.on(this.successEvtName(), oHandler);
+	}, // setSuccessHandler
+
+	setFailHandler: function(oHandler) {
+		if (oHandler && (typeof oHandler === 'function'))
+			this.on(this.failEvtName(), oHandler);
+	}, // setFailHandler
 }); // EzBob.AddDirectorInfoView

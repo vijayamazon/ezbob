@@ -123,9 +123,31 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
         @controlButtons = new EzBob.Underwriter.ControlButtonsView(
             el: controlButtons
         )
-        
+
         EzBob.handleUserLayoutSetting()
+
+        @$el.find('.profile-tabs a[data-toggle="tab"]').on('shown.bs.tab', ((e) =>
+            @lastShownProfileSection = $(e.target).attr('href').substr(1)
+        ))
+
         this
+    # end of render
+
+    setState: (nCustomerID, sSection) ->
+        @lastShownCustomerID = nCustomerID
+
+        unless sSection
+            sSection = @$el.find('.profile-tabs a[data-toggle="tab"]:first').attr('href').substr(1)
+
+        @lastShownProfileSection = sSection
+    # end of setState
+
+    restoreState: ->
+        unless @lastShownProfileSection
+            @lastShownProfileSection = @$el.find('.profile-tabs a[data-toggle="tab"]:first').attr('href').substr(1)
+
+        @$el.find('.profile-tabs a[data-toggle="tab"]').filter('[href="#' + @lastShownProfileSection + '"]').tab('show')
+    # end of restoreState
 
     events:
         "click #RejectBtn": "RejectBtnClick"
@@ -135,13 +157,17 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
         "click #ReturnBtn": "ReturnBtnClick"
         'click .add-director': 'addDirectorClicked'
 
-    addDirectorClicked: ->
+    addDirectorClicked: (event) ->
+        event.stopPropagation()
+        event.preventDefault()
+
         director = new EzBob.DirectorModel()
 
         directorEl = @$el.find '.add-director-container'
 
         unless @addDirector
             @addDirector = new EzBob.AddDirectorInfoView({ model: director, el: directorEl })
+            @addDirector.setBackHandler ( => @$el.find('.add-director-container').hide() )
             @addDirector.render()
 
         directorEl.show()
