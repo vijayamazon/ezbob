@@ -8,7 +8,6 @@ namespace NHibernateWrapper.NHibernate.Repository
 		public RepositoryRegistry()
 		{
 			base.For(typeof(IRepository<>)).Use(typeof(NHibernateRepositoryBase<>));
-			base.For<IApplicationRepository>().Use<ApplicationRepository>();
 			base.For<IPublicNameRepository>().Use<PublicNameRepository>();
 			base.For<IAttachDocTypeRepository>().Use<AttachDocTypeRepository>();
 			base.For<IStrategyRepository>().Use<StrategyRepository>();

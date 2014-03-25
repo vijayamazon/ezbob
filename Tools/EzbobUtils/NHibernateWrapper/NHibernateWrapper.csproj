@@ -134,14 +134,11 @@
     <Compile Include="ApplicationMng.Model\SingleRunApplicationMap.cs" />
     <Compile Include="ApplicationMng.Model\Strategy.cs" />
     <Compile Include="ApplicationMng.Model\User.cs" />
-    <Compile Include="ApplicationMng.Repository\ApplicationRepository.cs" />
     <Compile Include="ApplicationMng.Repository\AttachDocTypeRepository.cs" />
     <Compile Include="ApplicationMng.Repository\ControlHistoryRepository.cs" />
     <Compile Include="ApplicationMng.Repository\DatasourceNotFoundException.cs" />
     <Compile Include="ApplicationMng.Repository\DatasourceRepository.cs" />
-    <Compile Include="ApplicationMng.Repository\ExclusiveApplicationRepository.cs" />
     <Compile Include="ApplicationMng.Repository\ExportTemplatesRepository.cs" />
-    <Compile Include="ApplicationMng.Repository\IApplicationRepository.cs" />
     <Compile Include="ApplicationMng.Repository\IAttachDocTypeRepository.cs" />
     <Compile Include="ApplicationMng.Repository\IControlHistoryRepository.cs" />
     <Compile Include="ApplicationMng.Repository\IMenuRepository.cs" />
@@ -202,7 +199,6 @@
     <Compile Include="NHibernate.Repository\PublicNameStrategyRepository.cs" />
     <Compile Include="NHibernate.Repository\RepositoryRegistry.cs" />
     <Compile Include="NHibernate.Repository\SecurityApplicationsRepository.cs" />
-    <Compile Include="NHibernate.Repository\SingleRunApplicationRepository.cs" />
     <Compile Include="NHibernate.Repository\StrategyScheduleItemRepository.cs" />
     <Compile Include="NHibernate.Types\CaseInsensitiveEnumStringType.cs" />
     <Compile Include="NHibernate\NHibernateManager.cs" />
