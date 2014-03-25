@@ -7,6 +7,8 @@ using EzService;
 using EzServiceConfigurationLoader;
 
 namespace EzServiceHost {
+	using EzService.EzServiceImplementation;
+
 	#region class EzServiceHost
 
 	class EzServiceHost : ServiceHost {

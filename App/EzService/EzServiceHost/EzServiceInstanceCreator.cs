@@ -4,6 +4,8 @@ using System.ServiceModel.Dispatcher;
 using EzService;
 
 namespace EzServiceHost {
+	using EzService.EzServiceImplementation;
+
 	#region class EzServiceInstanceCreator
 
 	class EzServiceInstanceCreator : IInstanceProvider {

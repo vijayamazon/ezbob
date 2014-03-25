@@ -1,4 +1,4 @@
-﻿namespace EzService
+﻿namespace EzService.EzServiceImplementation
 {
 	using EzBob.Backend.Strategies;
 	using EzBob.Models.Agreements;

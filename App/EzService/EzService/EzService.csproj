@@ -81,6 +81,7 @@
     <Compile Include="ActionResults\DecimalActionResult.cs" />
     <Compile Include="EzServiceImplementation\agreement.cs" />
     <Compile Include="EzServiceImplementation\company.files.cs" />
+    <Compile Include="EzServiceImplementation\UserManagement.cs" />
     <Compile Include="EzServiceImplementation\MiscQueries.cs" />
     <Compile Include="EzServiceImplementation\wizard.cs" />
     <Compile Include="EzServiceImplementation\land.registry.cs" />

@@ -580,6 +580,12 @@
   <wsdl:message name="IEzService_GetCustomerStatusRefreshInterval_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetCustomerStatusRefreshIntervalResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_CreateUnderwriter_InputMessage">
+    <wsdl:part name="parameters" element="tns:CreateUnderwriter" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CreateUnderwriter_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CreateUnderwriterResponse" />
+  </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/Shutdown" message="tns:IEzServiceAdmin_Shutdown_InputMessage" />
@@ -914,6 +920,10 @@
     <wsdl:operation name="GetCustomerStatusRefreshInterval">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCustomerStatusRefreshInterval" message="tns:IEzService_GetCustomerStatusRefreshInterval_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetCustomerStatusRefreshIntervalResponse" message="tns:IEzService_GetCustomerStatusRefreshInterval_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CreateUnderwriter">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CreateUnderwriter" message="tns:IEzService_CreateUnderwriter_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CreateUnderwriterResponse" message="tns:IEzService_CreateUnderwriter_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
@@ -1672,23 +1682,32 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="CreateUnderwriter">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/CreateUnderwriter" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:service name="EzServiceImplementation">
     <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
-      <soap12:address location="net.tcp://alexbo-pc:7081/" />
+      <soap12:address location="net.tcp://yulys-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://yulys-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>alexbo-pc\alexbo</Upn>
+          <Upn>yulys-PC\yulys</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IEzService" binding="tns:NetTcpBinding_IEzService">
-      <soap12:address location="net.tcp://alexbo-pc:7081/" />
+      <soap12:address location="net.tcp://yulys-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://yulys-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>alexbo-pc\alexbo</Upn>
+          <Upn>yulys-PC\yulys</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

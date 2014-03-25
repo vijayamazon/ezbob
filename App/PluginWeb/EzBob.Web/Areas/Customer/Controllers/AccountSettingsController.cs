@@ -3,6 +3,7 @@
 	using System.Data;
 	using System.Web.Mvc;
 	using Code;
+	using Ezbob.Utils;
 	using Infrastructure.Membership;
 	using Models;
 	using Infrastructure.csrf;
@@ -31,7 +32,7 @@
         {
             var user = context.User;
 
-			var passwordHash = provider.EncodePassword(password, user.Name, user.CreationDate);
+			var passwordHash = PasswordEncryptor.EncodePassword(password, user.Name, user.CreationDate);
             if (user.Password != passwordHash)
             {
                 return this.JsonNet(new { error = "Incorrect password" });

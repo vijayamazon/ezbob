@@ -305,6 +305,9 @@
 		IntActionResult GetCustomerStatusRefreshInterval();
 
 		#endregion Wizard
+
+		[OperationContract]
+		ActionMetaData CreateUnderwriter(string name, string password, string role);
 	} // interface IEzService
 } // namespace EzService
 

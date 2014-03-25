@@ -1,8 +1,8 @@
-﻿namespace EzService {
+﻿namespace EzService.EzServiceImplementation {
 	using System;
 	using System.Collections.Generic;
 	using System.Data;
-	using ActionResults;
+	using EzService.ActionResults;
 	using EzBob.Backend.Strategies;
 	using EzBob.Web.Areas.Underwriter.Models;
 	using Ezbob.Database;

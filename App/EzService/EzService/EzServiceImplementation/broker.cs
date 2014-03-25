@@ -1,4 +1,4 @@
-﻿namespace EzService {
+﻿namespace EzService.EzServiceImplementation {
 	using System.Linq;
 	using EzBob.Backend.Strategies.Broker;
 

@@ -1,4 +1,4 @@
-﻿namespace EzService {
+﻿namespace EzService.EzServiceImplementation {
 	using EzBob.Backend.Strategies.MailStrategies;
 
 	partial class EzServiceImplementation {

@@ -635,6 +635,18 @@
 		}
 
 		[Activation]
+		private void CreateUnderwriter()
+		{
+			if (args.Length != 4)
+			{
+				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> CreateUnderwriter <Name> <Password> <RoleName>");
+				return;
+			}
+
+			serviceClient.CreateUnderwriter(args[1], args[2], args[3]);
+		}
+
+		[Activation]
 		private void BrokerLoadCustomerList() {
 			if (args.Length != 2) {
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> BrokerLoadCustomerList <Contact person email>");

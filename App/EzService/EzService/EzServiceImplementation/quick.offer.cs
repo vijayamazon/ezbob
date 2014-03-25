@@ -1,4 +1,4 @@
-﻿namespace EzService {
+﻿namespace EzService.EzServiceImplementation {
 	using System;
 	using System.ServiceModel;
 	using EzBob.Backend.Strategies;

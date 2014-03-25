@@ -73,6 +73,7 @@
     <Reference Include="EcmaScript.NET.modified">
       <HintPath>..\..\..\Lib\3rdparty\SquishIt\EcmaScript.NET.modified.dll</HintPath>
     </Reference>
+    <Reference Include="Ezbob.Backend.Models, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL" />
     <Reference Include="FluentNHibernate">
       <HintPath>..\..\..\Lib\3rdparty\Nhibernate\FluentNHibernate.dll</HintPath>
     </Reference>

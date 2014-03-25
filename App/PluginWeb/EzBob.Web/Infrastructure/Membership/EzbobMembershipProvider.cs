@@ -6,6 +6,7 @@
 	using ApplicationMng.Model;
 	using Areas.Customer.Controllers.Exceptions;
 	using Code;
+	using Ezbob.Utils;
 	using NHibernate;
 	using Newtonsoft.Json;
 	using NHibernateWrapper.NHibernate.Model;
@@ -46,12 +47,6 @@
 		private readonly IWorkplaceContext context;
 		private readonly ServiceClient serviceClient;
 		private EzbobMembershipProviderConfigs configs;
-		private readonly byte[] hmacsha1Key = new byte[]
-				{
-					217, 197, 36, 73, 245, 170, 52, 86, 16, 196, 190, 197, 158, 222, 60, 108, 212, 45, 234, 232, 27, 169, 165, 13, 12,
-					242, 30, 203, 10, 229, 81, 42, 201, 35, 31, 194, 112, 159, 161, 77, 44, 125, 4, 25, 109, 92, 211, 39, 80, 117, 230,
-					173, 106, 87, 105, 195, 62, 171, 89, 189, 230, 39, 60, 148
-				};
 
         public EzbobMembershipProvider()
         {
@@ -131,9 +126,9 @@
 				return false;
 			}
 
-			if (userByLogin.Password == EncodePassword(password, userByLogin.Name, userByLogin.CreationDate) && userByLogin.IsDeleted != 1)
+			if (userByLogin.Password == PasswordEncryptor.EncodePassword(password, userByLogin.Name, userByLogin.CreationDate) && userByLogin.IsDeleted != 1)
 			{
-				string encodedNewPassword = EncodePassword(newPassword, userByLogin.Name, userByLogin.CreationDate);
+				string encodedNewPassword = PasswordEncryptor.EncodePassword(newPassword, userByLogin.Name, userByLogin.CreationDate);
 
 				userByLogin.Password = encodedNewPassword;
 				userByLogin.PassSetTime = DateTime.UtcNow;
@@ -177,7 +172,7 @@
 				User userByLogin = usersRepository.GetUserByLogin(userName);
 				if (userByLogin.DisablePassChange != true)
 				{
-					string newPassword = EncodePassword(password, userByLogin.Name, userByLogin.CreationDate);
+					string newPassword = PasswordEncryptor.EncodePassword(password, userByLogin.Name, userByLogin.CreationDate);
 					userByLogin.Password = newPassword;
 					userByLogin.PassSetTime = DateTime.UtcNow;
 					userByLogin.LoginFailedCount = null;
@@ -225,7 +220,7 @@
 					{
 						throw new Exception("Can't validate password");
 					}
-					password = EncodePassword(password, userName, user.CreationDate);
+					password = PasswordEncryptor.EncodePassword(password, userName, user.CreationDate);
 				}
 
 				if (!usersRepository.CheckUserLogin(userId, userName) || !usersRepository.CheckUserDomainName(userId, userName))
@@ -291,19 +286,6 @@
 			}
 		}
 
-		public string EncodePassword(string password, string userName, DateTime creationDate)
-		{
-			var hMacsha = new HMACSHA1 { Key = hmacsha1Key };
-			string s = userName.ToUpperInvariant() + password + creationDate.ToString("dd-MM-yyyy hh:mm:ss");
-			return Convert.ToBase64String(hMacsha.ComputeHash(Encoding.Unicode.GetBytes(s)));
-		}
-
-		public string EncodeOldPassword(string password)
-		{
-			var hMacsha = new HMACSHA1 { Key = hmacsha1Key };
-			return Convert.ToBase64String(hMacsha.ComputeHash(Encoding.Unicode.GetBytes(password)));
-		}
-
 		public bool LoginUser(string login, string password, int securityAppId, string hostAddress, out string guid)
         {
 		    User userByLogin = usersRepository.GetUserByLogin(login);
@@ -312,8 +294,8 @@
 			    throw new UserNotFoundException(login);
 		    }
 
-		    string passwordHash = EncodePassword(password, userByLogin.Name, userByLogin.CreationDate);
-		    string oldModelPasswordHash = EncodeOldPassword(password);
+			string passwordHash = PasswordEncryptor.EncodePassword(password, userByLogin.Name, userByLogin.CreationDate);
+			string oldModelPasswordHash = PasswordEncryptor.EncodeOldPassword(password);
 
 			if (InnerLoginUser(userByLogin, passwordHash, oldModelPasswordHash))
             {
@@ -403,7 +385,7 @@
 		public bool IsEqualsOldPassword(string login, string newPassword)
 		{
 			User userByLogin = usersRepository.GetUserByLogin(login);
-			string encodedNewPassword = EncodePassword(newPassword, userByLogin.Name, userByLogin.CreationDate);
+			string encodedNewPassword = PasswordEncryptor.EncodePassword(newPassword, userByLogin.Name, userByLogin.CreationDate);
 			return userByLogin.Password == encodedNewPassword;
 		}
 
@@ -413,7 +395,7 @@
 			user.EMail = newEmail;
 			user.Name = newEmail;
 			user.FullName = newEmail;
-			user.Password = EncodePassword(newPassword, user.Name, user.CreationDate);
+			user.Password = PasswordEncryptor.EncodePassword(newPassword, user.Name, user.CreationDate);
 			user.PassSetTime = DateTime.UtcNow;
 			usersRepository.SaveOrUpdate(user);
 
