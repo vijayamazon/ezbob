@@ -1,17 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-	<UsingTask AssemblyFile="Scorto.BuildTasks.dll" TaskName="Scorto.BuildTasks.AppCopy" /> 
 	<UsingTask AssemblyFile="Scorto.BuildTasks.dll" TaskName="Scorto.BuildTasks.WebCopy" /> 
 	<UsingTask AssemblyFile="Scorto.BuildTasks.dll" TaskName="Scorto.BuildTasks.MultiCopy" /> 
-	<UsingTask AssemblyFile="Scorto.BuildTasks.dll" TaskName="Scorto.BuildTasks.AsyncExec" /> 
-	<UsingTask AssemblyFile="Scorto.BuildTasks.dll" TaskName="Scorto.BuildTasks.TemplateTask" /> 
-	<UsingTask AssemblyFile="Scorto.BuildTasks.dll" TaskName="Scorto.BuildTasks.AssemblyInfoUpdate" /> 
-	<UsingTask AssemblyFile="Scorto.BuildTasks.dll" TaskName="Scorto.BuildTasks.ZipCreator" /> 
-	<UsingTask AssemblyFile="Scorto.BuildTasks.dll" TaskName="Scorto.BuildTasks.ScortoNunit" /> 
-	<UsingTask AssemblyFile="Scorto.BuildTasks.dll" TaskName="Scorto.BuildTasks.XmlUpdate" /> 
-	<UsingTask AssemblyFile="Scorto.BuildTasks.dll" TaskName="Scorto.BuildTasks.UpdateWIs" /> 
-	<UsingTask AssemblyFile="Scorto.BuildTasks.dll" TaskName="Scorto.BuildTasks.LoadReport.LoadReportTask" /> 
-	<UsingTask AssemblyFile="Scorto.BuildTasks.dll" TaskName="Scorto.BuildTasks.ScortoMail" /> 
-	<UsingTask AssemblyFile="Scorto.BuildTasks.dll" TaskName="Scorto.BuildTasks.ServiceRestarter" /> 
-	<UsingTask AssemblyFile="XLSBuildLibrary.dll" TaskName="ExcelWriter.BuildTasks.XLSUpdate" /> 	
+	<UsingTask AssemblyFile="Scorto.BuildTasks.dll" TaskName="Scorto.BuildTasks.TemplateTask" />
+	<UsingTask AssemblyFile="Scorto.BuildTasks.dll" TaskName="Scorto.BuildTasks.XmlUpdate" /> 	
 </Project>
