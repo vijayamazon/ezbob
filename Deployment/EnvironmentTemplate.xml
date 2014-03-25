@@ -365,7 +365,6 @@ T6C7Spa3i/ltRwpQYWeYRRvJGkNUa12VLyTMdYRAAAAAvBLTqmDnMOt2M1IbVhi98uhE0pS2YC+WwInF
         <property name="CertificateThumb" value="9F63413AE1EE1756270B4D4FEE276249ADB8BB83" />
         <property name="InteractiveService" value="https://scems.uat.uk.experian.com/experian/wbsv/v100/interactive.asmx" />
         <property name="AuthTokenService" value="https://secure.wasp.uat.uk.experian.com/WASPAuthenticator/tokenService.asmx" />
-        <property name="UpdateConsumerDataPeriodDays" value="90" />
 		<!-- by default: INTERACTIVE -->
 		<property name="InteractiveMode" value="Oneshot" />
         <!-- IDhub -->

@@ -6,6 +6,7 @@
 	using System.Text.RegularExpressions;
 	using System.Xml.Serialization;
 	using ApplicationMng.Repository;
+	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Experian;
@@ -69,6 +70,7 @@
 			_config = ConfigurationRootBob.GetConfiguration().Experian;
 			_repo = ObjectFactory.GetInstance<ExperianDataCacheRepository>();
 			m_oRetryer = new SqlRetryer(oLog: new SafeILog(Log));
+			configurationVariablesRepository = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
 		} // constructor
 
 		#endregion constructor
@@ -352,7 +354,8 @@
 		#region method CacheNotExpired
 
 		private bool CacheNotExpired(MP_ExperianDataCache person) {
-			return (DateTime.Now - person.LastUpdateDate).TotalDays <= _config.UpdateConsumerDataPeriodDays;
+			int cacheIsValidForDays = configurationVariablesRepository.GetByNameAsInt("UpdateConsumerDataPeriodDays");
+			return (DateTime.UtcNow - person.LastUpdateDate).TotalDays <= cacheIsValidForDays;
 		} // CacheNotExpired
 
 		#endregion method CacheNotExpired
@@ -412,6 +415,7 @@
 		private readonly ExperianIntegrationParams _config;
 		private readonly ExperianDataCacheRepository _repo;
 		private readonly SqlRetryer m_oRetryer;
+		private readonly ConfigurationVariablesRepository configurationVariablesRepository;
 
 		#endregion properties
 
