@@ -19,23 +19,17 @@
         private readonly CustomerRepository _customers;
 		private readonly ServiceClient m_oServiceClient;
         private readonly IUsersRepository _users;
-        private readonly IApplicationRepository _applications;
-        private readonly IEzBobConfiguration _config;
         private readonly CreditBureauModelBuilder _creditBureauModelBuilder;
         private readonly ConcentAgreementHelper _concentAgreementHelper;
 
         public CreditBureauController(
 			CustomerRepository customers,
 			IUsersRepository users,
-			IApplicationRepository applications,
-			IEzBobConfiguration config,
 			CreditBureauModelBuilder creditBureauModelBuilder
 		) {
             _customers = customers;
 	        m_oServiceClient = new ServiceClient();
             _users = users;
-            _applications = applications;
-            _config = config;
             _creditBureauModelBuilder = creditBureauModelBuilder;
             _concentAgreementHelper = new ConcentAgreementHelper();
         }
