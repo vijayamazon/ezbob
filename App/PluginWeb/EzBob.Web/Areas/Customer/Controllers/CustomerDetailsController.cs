@@ -29,6 +29,40 @@
 	public class CustomerDetailsController : Controller {
 		#region public
 
+		#region method AddDirectorToCustomer
+
+		public static object AddDirectorToCustomer(DirectorModel director, Customer customer, ISession session) {
+			if (customer.Company == null)
+				return new { error = "Customer doesn't have a company" };
+
+			Director dbDirector = director.FromModel();
+			dbDirector.Customer = customer;
+			dbDirector.Company = customer.Company;
+
+			var nAddressType = customer.Company.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited
+				? CustomerAddressType.LimitedDirectorHomeAddress
+				: CustomerAddressType.NonLimitedDirectorHomeAddress;
+			
+			foreach (var address in dbDirector.DirectorAddressInfo.AllAddresses) {
+				address.Director = dbDirector;
+				address.AddressType = nAddressType;
+			} // for each
+
+			if (customer.Company.Directors.Any()) {
+				foreach (var dir in customer.Company.Directors) {
+					if (dir.Name == director.Name && dir.Surname == director.Surname)
+						return new { error = "This director already added" };
+				} // for each existing director
+			} // if customer has director(s)
+
+			customer.Company.Directors.Add(dbDirector);
+
+			session.Flush();
+			return new { success = true };
+		} // AddDirectorToCustomer
+
+		#endregion method AddDirectorToCustomer
+
 		#region constructor
 
 		public CustomerDetailsController(
@@ -296,47 +330,19 @@
 		#endregion method Save
 
 		#region method AddDirector
+
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
-		public JsonResult AddDirector(DirectorModel director)
-		{
+		public JsonResult AddDirector(DirectorModel director) {
 			var customer = _context.Customer;
+
 			if (customer == null)
-			{
-				return Json(new {error = "Customer not found"});
-			}
-			var dbDirector = director.FromModel();
-			dbDirector.Customer = customer;
-			dbDirector.Company = customer.Company;
-			
-			foreach (var address in dbDirector.DirectorAddressInfo.AllAddresses)
-			{
-				address.Director = dbDirector;
-				address.AddressType = customer.Company.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited ?
-					CustomerAddressType.LimitedDirectorHomeAddress : CustomerAddressType.NonLimitedDirectorHomeAddress;
-			}
+				return Json(new { error = "Customer not found" });
 
-			if (customer.Company == null)
-			{
-				return Json(new { error = "Customer don't have a company" });
-			}
+			return Json(AddDirectorToCustomer(director, customer, _session));
+		} // AddDirector
 
-			if (customer.Company.Directors.Any())
-			{
-				foreach (var dir in customer.Company.Directors)
-				{
-					if (dir.Name == director.Name && dir.Surname == director.Surname)
-					{
-						return Json(new { error = "This director already added" });
-					}
-				}
-			}
-			customer.Company.Directors.Add(dbDirector);
-
-			_session.Flush();
-			return Json(new {success = true});
-		}
 		#endregion method AddDirector
 
 		#region method Edit

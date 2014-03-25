@@ -278,6 +278,16 @@
 		[OperationContract]
 		BoolActionResult SaveLoanOfferMultiplier(List<LoanOfferMultiplier> loanOfferMultipliers);
 
+		[OperationContract]
+		ActionMetaData PostcodeSaveLog(
+			string sRequestType,
+			string sUrl,
+			string sStatus,
+			string sResponseData,
+			string sErrorMessage,
+			int nUserID
+		);
+
 		#endregion other strategies
 
 		#region Quick offer

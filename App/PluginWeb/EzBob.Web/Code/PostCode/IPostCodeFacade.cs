@@ -1,10 +1,6 @@
-﻿using EZBob.DatabaseLib.Model.Database;
-
-namespace EzBob.Web.Code.PostCode
-{
-    public interface IPostCodeFacade
-    {
-        IPostCodeResponse GetAddressFromPostCode(Customer customer, string postCode);
-        IPostCodeResponse GetFullAddressFromPostCode(Customer customer, string id);
-    }
-}
+﻿namespace EzBob.Web.Code.PostCode {
+	public interface IPostCodeFacade {
+		IPostCodeResponse GetAddressFromPostCode(string postCode, int nUserID);
+		IPostCodeResponse GetFullAddressFromPostCode(string id, int nUserID);
+	} // interface IPostCodeFacade
+} // namespace

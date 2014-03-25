@@ -1,5 +1,4 @@
-﻿namespace EzBob.Web.Controllers
-{
+﻿namespace EzBob.Web.Controllers {
 	using System.Data;
 	using System.Web.Mvc;
 	using Code.PostCode;
@@ -7,29 +6,41 @@
 	using Scorto.Web;
 
 	[Authorize]
-    public class PostcodeController : Controller
-    {
-        private readonly IEzbobWorkplaceContext _context;
+	public class PostcodeController : Controller {
+		#region constructor
 
-        private readonly IPostCodeFacade _facade;
-        public PostcodeController(IEzbobWorkplaceContext context, IPostCodeFacade facade)
-        {
-            _context = context;
-            _facade = facade;
-        }
+		public PostcodeController(IEzbobWorkplaceContext context, IPostCodeFacade facade) {
+			m_oContext = context;
+			m_oFacade = facade;
+		} // constructor
 
-        [OutputCache(VaryByParam = "postCode", Duration = 3600 * 24 * 7)]
+		#endregion constructor
+
+		#region action GetAddressFromPostCode
+
+		[OutputCache(VaryByParam = "postCode", Duration = 3600 * 24 * 7)]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-        public JsonNetResult GetAddressFromPostCode(string postCode)
-        {
-            return this.JsonNet(_facade.GetAddressFromPostCode(_context.Customer, postCode));
-        }
+		public JsonResult GetAddressFromPostCode(string postCode) {
+			return Json(m_oFacade.GetAddressFromPostCode(postCode, m_oContext.User.Id), JsonRequestBehavior.AllowGet);
+		} // GetAddressFromPostCode
 
-        [OutputCache(VaryByParam = "id", Duration = 3600 * 24 * 7)]
+		#endregion action GetAddressFromPostCode
+
+		#region action GetFullAddressFromPostCode
+
+		[OutputCache(VaryByParam = "id", Duration = 3600 * 24 * 7)]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-        public JsonNetResult GetFullAddressFromPostCode(string id)
-        {
-            return this.JsonNet(_facade.GetFullAddressFromPostCode(_context.Customer, id));
-        }
-    }
-}
+		public JsonResult GetFullAddressFromPostCode(string id) {
+			return Json(m_oFacade.GetFullAddressFromPostCode(id, m_oContext.User.Id), JsonRequestBehavior.AllowGet);
+		} // GetFullAddressFromPostCode
+
+		#endregion action GetFullAddressFromPostCode
+
+		#region private
+
+		private readonly IEzbobWorkplaceContext m_oContext;
+		private readonly IPostCodeFacade m_oFacade;
+
+		#endregion private
+	} // class PostcodeController
+} // namespace

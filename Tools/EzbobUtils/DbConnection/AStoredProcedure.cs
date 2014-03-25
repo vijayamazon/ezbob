@@ -309,6 +309,7 @@
 
 		/// <summary>
 		/// Returns the name of the stored procedure.
+		/// Stored procedure name is current class name.
 		/// </summary>
 		/// <returns>SP name.</returns>
 		protected virtual string GetName() {
@@ -327,4 +328,44 @@
 	} // class AStoredProcedure
 
 	#endregion class AStoredProcedure
+
+	#region class AStoredProc
+
+	public abstract class AStoredProc : AStoredProcedure {
+		#region constructor
+
+		protected AStoredProc(ASafeLog oLog, CommandSpecies nSpecies = CommandSpecies.StoredProcedure) : this(null, oLog, nSpecies) {
+		} // constructor
+
+		protected AStoredProc(AConnection oDB, ASafeLog oLog = null, CommandSpecies nSpecies = CommandSpecies.StoredProcedure) : base(oDB, oLog, nSpecies) {
+		} // constructor
+
+		#endregion constructor
+
+		#region method GetName
+
+		/// <summary>
+		/// Returns the name of the stored procedure.
+		/// Stored procedure name is current class name.
+		/// If current class name starts with SP (case insensitive) these two letters are dropped
+		/// (i.e. SpDoSomething -> DoSomething).
+		/// If current class name is 'SP' (case insensitive) it is used as a stored procedure name.
+		/// </summary>
+		/// <returns>SP name.</returns>
+		protected override string GetName() {
+			string sName = this.GetType().Name;
+
+			if (sName.Equals("sp", StringComparison.InvariantCultureIgnoreCase))
+				return sName;
+
+			if (sName.StartsWith("sp", StringComparison.InvariantCultureIgnoreCase))
+				sName = sName.Substring(2);
+
+			return sName;
+		} // GetName
+
+		#endregion method GetName
+	} // class AStoredProc
+
+	#endregion class AStoredProc
 } // namespace Ezbob.Database

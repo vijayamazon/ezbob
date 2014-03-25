@@ -3490,6 +3490,12 @@ namespace StrategiesActivator.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SaveLoanOfferMultiplier", ReplyAction="http://tempuri.org/IEzService/SaveLoanOfferMultiplierResponse")]
         System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BoolActionResult> SaveLoanOfferMultiplierAsync(StrategiesActivator.EzServiceReference.LoanOfferMultiplier[] loanOfferMultipliers);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PostcodeSaveLog", ReplyAction="http://tempuri.org/IEzService/PostcodeSaveLogResponse")]
+        StrategiesActivator.EzServiceReference.ActionMetaData PostcodeSaveLog(string sRequestType, string sUrl, string sStatus, string sResponseData, string sErrorMessage, int nUserID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PostcodeSaveLog", ReplyAction="http://tempuri.org/IEzService/PostcodeSaveLogResponse")]
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> PostcodeSaveLogAsync(string sRequestType, string sUrl, string sStatus, string sResponseData, string sErrorMessage, int nUserID);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/QuickOffer", ReplyAction="http://tempuri.org/IEzService/QuickOfferResponse")]
         StrategiesActivator.EzServiceReference.QuickOfferActionResult QuickOffer(int customerId, bool saveOfferToDB);
         
@@ -4134,6 +4140,14 @@ namespace StrategiesActivator.EzServiceReference {
         
         public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BoolActionResult> SaveLoanOfferMultiplierAsync(StrategiesActivator.EzServiceReference.LoanOfferMultiplier[] loanOfferMultipliers) {
             return base.Channel.SaveLoanOfferMultiplierAsync(loanOfferMultipliers);
+        }
+        
+        public StrategiesActivator.EzServiceReference.ActionMetaData PostcodeSaveLog(string sRequestType, string sUrl, string sStatus, string sResponseData, string sErrorMessage, int nUserID) {
+            return base.Channel.PostcodeSaveLog(sRequestType, sUrl, sStatus, sResponseData, sErrorMessage, nUserID);
+        }
+        
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> PostcodeSaveLogAsync(string sRequestType, string sUrl, string sStatus, string sResponseData, string sErrorMessage, int nUserID) {
+            return base.Channel.PostcodeSaveLogAsync(sRequestType, sUrl, sStatus, sResponseData, sErrorMessage, nUserID);
         }
         
         public StrategiesActivator.EzServiceReference.QuickOfferActionResult QuickOffer(int customerId, bool saveOfferToDB) {

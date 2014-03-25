@@ -1184,6 +1184,25 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="PostcodeSaveLog">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="sRequestType" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="sUrl" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="sStatus" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="sResponseData" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="sErrorMessage" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="nUserID" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="PostcodeSaveLogResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q86="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="PostcodeSaveLogResult" nillable="true" type="q86:ActionMetaData" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="QuickOffer">
     <xs:complexType>
       <xs:sequence>
@@ -1195,7 +1214,7 @@
   <xs:element name="QuickOfferResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q86="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="QuickOfferResult" nillable="true" type="q86:QuickOfferActionResult" />
+        <xs:element xmlns:q87="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="QuickOfferResult" nillable="true" type="q87:QuickOfferActionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1210,7 +1229,7 @@
   <xs:element name="QuickOfferWithPrerequisitesResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q87="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="QuickOfferWithPrerequisitesResult" nillable="true" type="q87:QuickOfferActionResult" />
+        <xs:element xmlns:q88="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="QuickOfferWithPrerequisitesResult" nillable="true" type="q88:QuickOfferActionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1222,7 +1241,7 @@
   <xs:element name="GetWizardConfigsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q88="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="GetWizardConfigsResult" nillable="true" type="q88:WizardConfigsActionResult" />
+        <xs:element xmlns:q89="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="GetWizardConfigsResult" nillable="true" type="q89:WizardConfigsActionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1237,7 +1256,7 @@
   <xs:element name="FinishWizardResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q89="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="FinishWizardResult" nillable="true" type="q89:ActionMetaData" />
+        <xs:element xmlns:q90="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="FinishWizardResult" nillable="true" type="q90:ActionMetaData" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1251,7 +1270,7 @@
   <xs:element name="GetCustomerStateResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q90="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="GetCustomerStateResult" nillable="true" type="q90:StringActionResult" />
+        <xs:element xmlns:q91="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="GetCustomerStateResult" nillable="true" type="q91:StringActionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1263,7 +1282,7 @@
   <xs:element name="GetCustomerStatusRefreshIntervalResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q91="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="GetCustomerStatusRefreshIntervalResult" nillable="true" type="q91:IntActionResult" />
+        <xs:element xmlns:q92="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="GetCustomerStatusRefreshIntervalResult" nillable="true" type="q92:IntActionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

@@ -937,7 +937,9 @@
       <DependentUpon>ezbob.jqmodal.coffee</DependentUpon>
     </Content>
     <Content Include="Content\js\controls\ezbob.whatsnew.js" />
+    <Content Include="Content\js\ezbob.addDirectorInfoView.js" />
     <Content Include="Content\js\EzBob.DataTables.Helper.js" />
+    <Content Include="Content\js\ezbob.models.js" />
     <Content Include="Content\js\ezbob.uiaction.js" />
     <Content Include="Content\js\lib\Backbone.EzBob.js" />
     <Content Include="Content\js\contactUs\ezbo.contactUs.js" />
@@ -1703,6 +1705,7 @@
     <None Include="Service References\EzServiceReference\service1.xsd">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="App_Code\AddDirectorInfoTemplate.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

@@ -544,6 +544,12 @@
   <wsdl:message name="IEzService_SaveLoanOfferMultiplier_OutputMessage">
     <wsdl:part name="parameters" element="tns:SaveLoanOfferMultiplierResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_PostcodeSaveLog_InputMessage">
+    <wsdl:part name="parameters" element="tns:PostcodeSaveLog" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_PostcodeSaveLog_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PostcodeSaveLogResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_QuickOffer_InputMessage">
     <wsdl:part name="parameters" element="tns:QuickOffer" />
   </wsdl:message>
@@ -896,6 +902,10 @@
     <wsdl:operation name="SaveLoanOfferMultiplier">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SaveLoanOfferMultiplier" message="tns:IEzService_SaveLoanOfferMultiplier_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SaveLoanOfferMultiplierResponse" message="tns:IEzService_SaveLoanOfferMultiplier_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PostcodeSaveLog">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/PostcodeSaveLog" message="tns:IEzService_PostcodeSaveLog_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/PostcodeSaveLogResponse" message="tns:IEzService_PostcodeSaveLog_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="QuickOffer">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/QuickOffer" message="tns:IEzService_QuickOffer_InputMessage" />
@@ -1621,6 +1631,15 @@
     </wsdl:operation>
     <wsdl:operation name="SaveLoanOfferMultiplier">
       <soap12:operation soapAction="http://tempuri.org/IEzService/SaveLoanOfferMultiplier" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PostcodeSaveLog">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/PostcodeSaveLog" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

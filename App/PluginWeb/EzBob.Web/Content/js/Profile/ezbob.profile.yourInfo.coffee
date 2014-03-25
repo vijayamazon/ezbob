@@ -269,7 +269,7 @@ class EzBob.Profile.LimitedInfoView extends Backbone.Marionette.Layout
         EzBob.App.trigger 'add-director'
         directorEl = $('.add-director-container')
         if(!@addDirector)
-            @addDirector = new EzBob.Profile.AddDirectorInfoView({ model: director, el: directorEl })
+            @addDirector = new EzBob.AddDirectorInfoView({ model: director, el: directorEl })
             @addDirector.render()
             directorEl.show()
         else
@@ -304,88 +304,3 @@ class EzBob.Profile.DirectorCompositeView extends Backbone.Marionette.CompositeV
     itemViewContainer:'div'
 
 
-class EzBob.Profile.AddDirectorInfoView extends Backbone.Marionette.ItemView
-    template: '#add-director-info-template'
-
-    region:
-        directorAddress : '.director_address'
-    ui:
-        form: ".addDirectorInfoForm"
-        addButton: ".addDirector"
-
-    events:
-        "click .directorBack": "directorBack"
-        "click .addDirector": "directorAdd"
-        
-        'change   input': 'inputChanged'
-        'click    input': 'inputChanged'
-        'focusout input': 'inputChanged'
-        'keyup    input': 'inputChanged'
-
-        'change   select': 'inputChanged'
-        'click    select': 'inputChanged'
-        'focusout select': 'inputChanged'
-        'keyup    select': 'inputChanged'
-
-
-    addressModelChange: ->
-        EzBob.App.trigger 'dash-director-address-change', @model
-
-    onRender: ->
-        EzBob.UiAction.registerView(@)
-        @$el.find('.ezDateTime').splittedDateTime()
-        @$el.find('.alphaOnly').alphaOnly()
-        @$el.find('.phonenumber').numericOnly(11)
-        @$el.find('.addressCaption').hide()
-        
-        @validator = EzBob.validateAddDirectorForm(@ui.form)
-        
-        that = @
-        
-        oAddressContainer = that.$el.find('#DirectorAddress')
-        name = 'DirectorAddress'
-        @addressView = new EzBob.AddressView({
-            model: that.model.get('DirectorAddress')
-            name: name
-            max: 1
-            uiEventControlIdPrefix: oAddressContainer.attr('data-ui-event-control-id-prefix')
-        })
-
-        that.model.get('DirectorAddress').on('all', ->
-            that.trigger('director:addressChanged')
-        )
-
-        @addressView.render().$el.appendTo(oAddressContainer)
-        EzBob.Validation.addressErrorPlacement(@addressView.$el, @addressView.model)
-        
-        oFieldStatusIcons = @$el.find('IMG.field_status')
-        oFieldStatusIcons.filter('.required').field_status({ required: true })
-        oFieldStatusIcons.not('.required').field_status({ required: false })
-        @
-
-    directorBack: ->
-        EzBob.App.trigger 'add-director-back'
-
-    directorAdd: ->
-        enabled = @validator.checkForm() && @addressView.model.length > 0
-        @ui.addButton.toggleClass('disabled', !enabled)
-        return false if not enabled
-
-        data = @ui.form.serializeArray()
-        BlockUi('on')
-        request = $.post(@ui.form.attr('action'), data);
-        request.done (res) ->
-            if(res.success)
-                EzBob.App.trigger 'director-added'
-            else
-                if(res.error)
-                    EzBob.App.trigger('error', res.error);
-                else
-                    EzBob.App.trigger('error', 'Error occurred, try again');
-        request.always ->
-            BlockUi('off')
-        false
-
-    inputChanged: ->
-        enabled = @validator.checkForm() && @addressView.model.length > 0
-        @ui.addButton.toggleClass('disabled', !enabled)

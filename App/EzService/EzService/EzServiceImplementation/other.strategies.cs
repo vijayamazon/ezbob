@@ -1,5 +1,6 @@
 ﻿namespace EzService.EzServiceImplementation {
 	using EzBob.Backend.Strategies;
+	using EzBob.Backend.Strategies.Postcode;
 	using FraudChecker;
 
 	partial class EzServiceImplementation {
@@ -51,9 +52,26 @@
 			return Execute(null, null, typeof(UpdateCurrencyRates));
 		} // UpdateCurrencyRates
 
-		public ActionMetaData FinishWizard(int customerId, int underwriterId)
-		{
-			return Execute(customerId, underwriterId, typeof(FinishWizard), customerId);
-		} // FinishWizard
+		#region method PostcodeSaveLog
+
+		public ActionMetaData PostcodeSaveLog(
+			string sRequestType,
+			string sUrl,
+			string sStatus,
+			string sResponseData,
+			string sErrorMessage,
+			int nUserID
+		) {
+			return Execute<PostcodeSaveLog>(null, nUserID,
+				sRequestType,
+				sUrl,
+				sStatus,
+				sResponseData,
+				sErrorMessage,
+				nUserID
+			);
+		} // PostcodeSaveLog
+
+		#endregion method PostcodeSaveLog
 	} // class EzServiceImplementation
 } // namespace EzService

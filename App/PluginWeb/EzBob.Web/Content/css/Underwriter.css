@@ -922,3 +922,9 @@ div#logbook-new-entry-form textarea#logbook-new-entry {
     height: 36px !important;
     width: 100%;
 }
+
+label.control-label { display: block; }
+
+div.form_buttons_container { position: relative; height: 38px;width: 96%;}
+div.form_buttons_container input, 
+div.form_buttons_container a, div.form_buttons_container button { float: right; }

@@ -3,10 +3,13 @@
 	using System.Web.Mvc;
 	using Code;
 	using CommonLib;
+	using Customer.Controllers;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
+	using Infrastructure.csrf;
 	using LandRegistryLib;
 	using Models;
+	using NHibernate;
 	using Scorto.Web;
 	using System.Linq;
 	using EzBob.Models;
@@ -22,12 +25,14 @@
 		public CrossCheckController(
 			CustomerRepository customerRepository,
 			CreditBureauModelBuilder creditBureauModelBuilder,
-			CustomerAddressRepository customerAddressRepository
+			CustomerAddressRepository customerAddressRepository,
+			ISession oSession
 		) {
 			m_oServiceClient = new ServiceClient();
 			_customerRepository = customerRepository;
 			_creditBureauModelBuilder = creditBureauModelBuilder;
 			_customerAddressRepository = customerAddressRepository;
+			m_oSession = oSession;
 		} // constructor
 
 		#endregion constructor
@@ -167,6 +172,22 @@
 
 		#endregion action SaveTargetingData
 
+		#region action AddDirector
+
+		[Ajax]
+		[HttpPost]
+		[ValidateJsonAntiForgeryToken]
+		public JsonResult AddDirector(int nCustomerID, DirectorModel director) {
+			var customer = _customerRepository.Get(nCustomerID);
+
+			if (customer == null)
+				return Json(new { error = "Customer not found" });
+
+			return Json(CustomerDetailsController.AddDirectorToCustomer(director, customer, m_oSession));
+		} // AddDirector
+
+		#endregion method AddDirector
+
 		#endregion public
 
 		#region private
@@ -175,6 +196,7 @@
 		private readonly CustomerRepository _customerRepository;
 		private readonly CustomerAddressRepository _customerAddressRepository;
 		private readonly CreditBureauModelBuilder _creditBureauModelBuilder;
+		private readonly ISession m_oSession;
 
 		private static readonly ILog ms_oLog = LogManager.GetLogger(typeof (CrossCheckController));
 

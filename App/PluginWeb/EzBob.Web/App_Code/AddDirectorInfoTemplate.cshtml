@@ -1,0 +1,44 @@
+﻿@using System.Web.Mvc
+@using System.Web.Mvc.Html
+
+@helper Render(string sUrl, int nCustomerID = 0) {
+	<script id="add-director-info-template" type="text/template">
+		<div class="director">
+			<form method="post" action="@sUrl" class="addDirectorInfoForm" novalidate="novalidate">
+				<input type="hidden" name="nCustomerID" id="nCustomerID" value="@nCustomerID" />
+
+				<div class="add-director-container">
+					<h2 class="form_start">Add director</h2>
+				</div>
+
+				@EzForm.InputText("Name", "First name", cls: "form_field alphaOnly", isRequired: true, statusIcon: true, uiEventControlID: "dashboard:director_first_name")
+				@EzForm.InputText("Middle", "Middle initial", cls: "form_field alphaOnly", isRequired: false, statusIcon: true, uiEventControlID: "dashboard:director_middle_name")
+				@EzForm.InputText("Surname", "Surname", cls: "form_field alphaOnly", isRequired: true, statusIcon: true, uiEventControlID: "dashboard:director_surname")
+
+				<div class="control-group form_field_container FormRadioCtrl">
+					<span>
+						<input class="male-director-gender-margin" type="radio" name="Gender" value="M" id="DirectorFormRadioCtrl_M" ui-event-control-id="dashboard:director_gender"><label class="fs16" for="DirectorGenderCtrl_M">Male</label>
+						<input class="gender-margin" type="radio" name="Gender" value="F" id="DirectorFormRadioCtrl_F" ui-event-control-id="dashboard:director_gender"><label class="fs16" for="DirectorGenderCtrl_F">Female</label>
+					</span>
+					<img id="GenderImage" class="field_status required director_gender_image" />
+				</div>
+
+				<div class="director_address">
+					@EzForm.AddressInput("DirectorAddress", "Address", "director")
+				</div>
+
+				@EzForm.DateInput("DateOfBirth", "Date of Birth", css: "director_date", required: true, statusIcon: true, uiEventControlID: "dashboard:director_birth_date", hiddenFieldAuxClass: "director_birth_date")
+
+				@EzForm.InputText("Email", "Email", type: "email", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "dashboard:director_email")
+				@EzForm.InputText("Phone", "Best contact number", cls: "form_field phonenumber", isRequired: true, statusIcon: true, uiEventControlID: "dashboard:director_phone")
+			</form>
+
+			<div class="form_buttons_container">
+				<div class="attardi-button">
+					<a href="#" class="rc-button green addDirector disabled" ui-event-control-id="dashboard:add_director">Add director</a>
+					<button class="rc-button grey directorBack" ui-event-control-id="dashboard:add_director_back">Back</button>
+				</div>
+			</div>
+		</div>
+	</script>
+}

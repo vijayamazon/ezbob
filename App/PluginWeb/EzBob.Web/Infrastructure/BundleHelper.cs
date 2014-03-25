@@ -106,6 +106,7 @@ namespace EzBob.Web.Infrastructure
 				.Add("~/Content/css/editLoan.less")
 				.Add("~/Content/css/captcha.css")
 				.Add("~/Content/css/common.css")
+				.Add("~/Content/css/postcode.css")
 				.Add("~/Content/css/popover.css")
 				.Add("~/Content/css/shops.css")
 				.Add("~/Content/css/app.css")
@@ -250,6 +251,11 @@ namespace EzBob.Web.Infrastructure
 				.Add("~/Content/js/controls/ezbob.simpleValueEditDlg.js")
 				.Add("~/Content/js/controls/ezbob.notifications.js")
 
+				.Add("~/Content/js/controls/ezbob.address.js")
+				.Add("~/Content/js/ezbob.models.js")
+				.Add("~/Content/js/ezbob.addDirectorInfoView.js")
+				.Add("~/Content/js/Wizard/yourInfo/ezbob.yourInfo.directors.js")
+
 				.MvcRender("~/Content/js/min/underwriter_#.js");
 		}
 
@@ -350,6 +356,9 @@ namespace EzBob.Web.Infrastructure
 				.Add("~/Content/js/Wizard/yourInfo/ezbob.yourinfo.notLimitedInformation.js")
 				.Add("~/Content/js/Wizard/yourInfo/ezbob.yourinfo.personalInfo.js")
 				.Add("~/Content/js/Wizard/yourInfo/ezbob.steps.companydetails.js")
+
+				.Add("~/Content/js/ezbob.models.js")
+				.Add("~/Content/js/ezbob.addDirectorInfoView.js")
 				.Add("~/Content/js/Wizard/yourInfo/ezbob.yourInfo.directors.js")
 				.Add("~/Content/js/Wizard/yourInfo/ezbob.yourInfo.employeeCount.js")
 				.Add("~/Content/js/Wizard/yourInfo/ezbob.yourinfo.companyTarget.js")
@@ -398,6 +407,9 @@ namespace EzBob.Web.Infrastructure
 				.Add("~/Content/js/Wizard/ezbob.wizardStepsModel.js")
 				.Add("~/Content/js/Wizard/ezbob.wizard.shops.coffee")
 				.Add("~/Content/js/Wizard/accounts/ezbob.accounts.paypal.js")
+				.Add("~/Content/js/ezbob.models.js")
+				.Add("~/Content/js/ezbob.addDirectorInfoView.js")
+				.Add("~/Content/js/Wizard/yourInfo/ezbob.yourInfo.directors.js")
 				
 				//Profile
 				.Add("~/Content/js/Profile/ezbob.profile.smallNotification.js")

@@ -114,6 +114,7 @@
     <Compile Include="MailStrategies\Broker\BrokerPasswordRestored.cs" />
     <Compile Include="MailStrategies\Broker\BrokerLeadSendInvitation.cs" />
     <Compile Include="MailStrategies\MailRecipientData\BrokerLeadData.cs" />
+    <Compile Include="Postcode\PostcodeSaveLog.cs" />
     <Compile Include="QuickOffer\QuickOffer.cs" />
     <Compile Include="QuickOffer\QuickOfferData.cs" />
     <Compile Include="UpdateCurrencyRates.cs" />

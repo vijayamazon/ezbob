@@ -1,104 +1,121 @@
-﻿using System;
-using System.IO;
-using System.Net;
-using ApplicationMng.Repository;
-using EZBob.DatabaseLib.Model.Database;
-using EzBob.Web.Infrastructure;
-using NHibernate;
-using Newtonsoft.Json;
-using log4net;
+﻿namespace EzBob.Web.Code.PostCode {
+	using System;
+	using System.IO;
+	using System.Net;
+	using EzBob.Web.Infrastructure;
+	using Ezbob.Logger;
+	using Newtonsoft.Json;
+	using log4net;
 
-namespace EzBob.Web.Code.PostCode
-{
-    public class SimplyPostCodeFacade : IPostCodeFacade
-    {
-        private static readonly ILog _log = LogManager.GetLogger(typeof(SimplyPostCodeFacade));
-        private readonly string _datakey;
-        private readonly NHibernateRepositoryBase<PostcodeServiceLog> _postcodeServiseRepository;
+	public class SimplyPostCodeFacade : IPostCodeFacade {
+		public SimplyPostCodeFacade(IEzBobConfiguration config) {
+			m_oCfg = config;
+		} // constructor
 
-        public SimplyPostCodeFacade(ISession session, IEzBobConfiguration config)
-        {
-            _postcodeServiseRepository = new NHibernateRepositoryBase<PostcodeServiceLog>(session);
-            _datakey = config.PostcodeConnectionKey;
-        }
+		public IPostCodeResponse GetAddressFromPostCode(string postCode, int nUserID) {
+			return PostToPostcodeService(typeof(PostCodeResponseSearchListModel), postCode, nUserID);
+		} // GetAddressFromPostCode
 
+		public IPostCodeResponse GetFullAddressFromPostCode(string id, int nUserID) {
+			return PostToPostcodeService(typeof(PostCodeResponseFullAddressModel), id, nUserID);
+		} // GetFullAddressFromPostCode
 
-        public IPostCodeResponse GetAddressFromPostCode(Customer customer, string postCode)
-        {
-            var url = "http://www.simplylookupadmin.co.uk/JSONservice/JSONSearchForAddress.aspx?datakey=" + _datakey + "&postcode=" + postCode;
-            return PostToPostcodeService(customer, url, 0);
-        }
+		private IPostCodeResponse PostToPostcodeService(Type oPostCodeResponseType, string sSearchKey, int nUserID) {
+			var oLog = new SafeILog(LogManager.GetLogger(typeof(SimplyPostCodeFacade)));
 
-        public IPostCodeResponse GetFullAddressFromPostCode(Customer customer, string id)
-        {
-            var url = "http://www.simplylookupadmin.co.uk/JSONservice/JSONGetAddressRecord.aspx?datakey=" + _datakey + "&id=" + id;
-            return PostToPostcodeService(customer, url, 1);
-        }
+			string sRequestType;
+			string sRequestAction;
+			string sKeyName;
 
-        private IPostCodeResponse PostToPostcodeService(Customer customer, string url, byte typePost)
-        {
-            var postcodeServiceLog = new PostcodeServiceLog
-                                         {
-                                             Customer = customer,
-                                             InsertDate = DateTime.Now,
-                                             RequestType = typePost == 0 ? "Get list of address by postcode" : "Get address details by postcode id",
-                                             RequestData = url
-                                         };
-            try
-            {
-                var request = (HttpWebRequest)WebRequest.Create(url);
+			oLog.Debug("Postcode service request for user {0}: {1} of type {2}...", nUserID, sSearchKey, oPostCodeResponseType);
 
-                request.Method = "GET";
-                request.Accept = "application/json";
+			if (oPostCodeResponseType == typeof (PostCodeResponseSearchListModel)) {
+				sRequestType = "Get list of address by postcode";
+				sRequestAction = "JSONSearchForAddress";
+				sKeyName = "postcode";
+			}
+			else if (oPostCodeResponseType == typeof (PostCodeResponseFullAddressModel)) {
+				sRequestType = "Get address details by postcode id";
+				sRequestAction = "JSONGetAddressRecord";
+				sKeyName = "id";
+			}
+			else {
+				oLog.Warn("Unsupported response type requested: " + oPostCodeResponseType);
+				return new PostCodeResponseSearchListModel {Success = false, Message = "Internal error"};
+			} // if
 
-                using (var response = (HttpWebResponse)request.GetResponse())
-                {
-                    var stream = response.GetResponseStream();
+			string sUrl = string.Format(
+				"http://www.simplylookupadmin.co.uk/JSONservice/{0}.aspx?datakey={1}&{2}={3}",
+				sRequestAction, m_oCfg.PostcodeConnectionKey, sKeyName, sSearchKey
+			);
 
-                    using (var reader = new StreamReader(stream))
-                    {
-                        var responseData = reader.ReadToEnd();
-                        var model = typePost == 0 ? (IPostCodeResponse)JsonConvert.DeserializeObject<PostCodeResponseSearchListModel>(responseData) :
-                                        JsonConvert.DeserializeObject<PostCodeResponseFullAddressModel>(responseData);
+			oLog.Debug("Postcode service request for user {0}: {1} of type {2} - URL is {3}", nUserID, sSearchKey, oPostCodeResponseType, sUrl);
 
-                        if (!string.IsNullOrEmpty(model.Errormessage))
-                        {
-                            _log.ErrorFormat("Postcode service return error: {0}", (model).Errormessage);
-                        }
-                        _log.DebugFormat("Postcode service credit text: {0}", (model).Credits_display_text);
+			string sStatus = string.Empty;
+			string sResponseData = string.Empty;
+			string sErrorMessage = string.Empty;
 
-                        response.Close();
+			IPostCodeResponse model = null;
 
-                        postcodeServiceLog.Status = "Successful";
-                        postcodeServiceLog.ResponseData = responseData;
+			try {
+				var request = (HttpWebRequest)WebRequest.Create(sUrl);
 
-                        _postcodeServiseRepository.Save(postcodeServiceLog);
+				request.Method = "GET";
+				request.Accept = "application/json";
 
-                        if (model.Found == 0)
-                        {
-                            model.Success = false;
-                            model.Message = "Not found";
-                        }
-                        else
-                        {
-                            model.Success = true;
-                            model.Message = "";
-                        }
+				using (var response = (HttpWebResponse)request.GetResponse()) {
+					var stream = response.GetResponseStream();
 
-                        return model;
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                postcodeServiceLog.Status = "Failed";
-                postcodeServiceLog.ErrorMessage = e.ToString();
-                return new PostCodeResponseSearchListModel {Success = false, Message = "Not found" };
-            }
-            finally
-            {
-                _postcodeServiseRepository.Save(postcodeServiceLog);
-            }
-        }
-    }
-}
+					if (stream == null)
+						oLog.Debug("Postcode service request for user {0}: {1} of type {2} - cannot read Postcode response stream.", nUserID, sSearchKey, oPostCodeResponseType);
+					else {
+						using (var reader = new StreamReader(stream)) {
+							var responseData = reader.ReadToEnd();
+
+							model = (IPostCodeResponse)JsonConvert.DeserializeObject(responseData, oPostCodeResponseType);
+
+							if (!string.IsNullOrEmpty(model.Errormessage))
+								oLog.Alert("Postcode service return error: {0}", model.Errormessage);
+
+							oLog.Debug("Postcode service credit text: {0}", model.Credits_display_text);
+
+							response.Close();
+
+							sStatus = "Successful";
+							sResponseData = responseData;
+
+							if (model.Found == 0) {
+								model.Success = false;
+								model.Message = "Not found";
+							}
+							else {
+								model.Success = true;
+								model.Message = "";
+							} // if
+						} // using reader
+					} // if stream is not null
+				} // using response
+			}
+			catch (Exception e) {
+				oLog.Alert(e, "Postcode service request for user {0}: {1} of type {2} - something went terribly not so well.", nUserID, sSearchKey, oPostCodeResponseType);
+				sStatus = "Failed";
+				sErrorMessage = e.ToString();
+			} // try
+
+			oLog.Debug("Postcode service request for user {0}: {1} of type {2} done.", nUserID, sSearchKey, oPostCodeResponseType);
+
+			try {
+				new ServiceClient().Instance.PostcodeSaveLog(sRequestType, sUrl, sStatus, sResponseData, sErrorMessage, nUserID);
+			}
+			catch (Exception e) {
+				oLog.Alert(e, "Postcode service request for user {0}: {1} of type {2} - failed to save log to DB.", nUserID, sSearchKey, oPostCodeResponseType);
+			} // try
+
+			oLog.Debug("Postcode service request for user {0}: {1} of type {2} complete.", nUserID, sSearchKey, oPostCodeResponseType);
+
+			return model ?? new PostCodeResponseSearchListModel { Success = false, Message = "Not found" };
+		} // PostToPostcodeService
+
+		private readonly IEzBobConfiguration m_oCfg;
+	} // class SimplyPostCodeFacade
+} // namespace

@@ -329,7 +329,7 @@
 				return;
 			}
 
-			serviceClient.SendEmailVerification(customerId,"", args[2]);
+			serviceClient.SendEmailVerification(customerId, "", args[2]);
 		}
 
 		[Activation]
@@ -394,7 +394,7 @@
 
 			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !FraudMode.TryParse(args[2], true, out mode)) {
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> FraudChecker <CustomerId> <Fraud mode>");
-				Console.WriteLine("Fraud mode values: {0}", string.Join(", ", Enum.GetValues(typeof (FraudMode))));
+				Console.WriteLine("Fraud mode values: {0}", string.Join(", ", Enum.GetValues(typeof(FraudMode))));
 				return;
 			}
 
@@ -478,7 +478,7 @@
 				}
 				break;
 
-			case  6:
+			case 6:
 				bool isUnderwriterForced;
 				if (int.TryParse(args[1], out underwriterId) && int.TryParse(args[2], out customerId) && Enum.TryParse(args[3], out newCreditLineOption) && int.TryParse(args[4], out avoidAutoDescison) && bool.TryParse(args[5], out isUnderwriterForced)) {
 					serviceClient.MainStrategy2(underwriterId, customerId, newCreditLineOption, avoidAutoDescison, isUnderwriterForced);
@@ -503,13 +503,11 @@
 		}
 
 		[Activation]
-		private void MainStrategySync()
-		{
+		private void MainStrategySync() {
 			int underwriterId;
 			int customerId, avoidAutoDescison;
 			NewCreditLineOption newCreditLineOption;
-			if (args.Length == 5 && int.TryParse(args[1], out underwriterId) && int.TryParse(args[2], out customerId) && Enum.TryParse(args[3], out newCreditLineOption) && int.TryParse(args[4], out avoidAutoDescison))
-			{
+			if (args.Length == 5 && int.TryParse(args[1], out underwriterId) && int.TryParse(args[2], out customerId) && Enum.TryParse(args[3], out newCreditLineOption) && int.TryParse(args[4], out avoidAutoDescison)) {
 				serviceClient.MainStrategySync1(underwriterId, customerId, newCreditLineOption, avoidAutoDescison);
 				return;
 			}
@@ -518,10 +516,8 @@
 		}
 
 		[Activation]
-		private void UpdateCurrencyRates()
-		{
-			if (args.Length != 1)
-			{
+		private void UpdateCurrencyRates() {
+			if (args.Length != 1) {
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> UpdateCurrencyRates");
 				return;
 			}
@@ -530,11 +526,9 @@
 		}
 
 		[Activation]
-		private void CheckExperianCompany()
-		{
+		private void CheckExperianCompany() {
 			int customerId;
-			if (args.Length != 2 || !int.TryParse(args[1], out customerId))
-			{
+			if (args.Length != 2 || !int.TryParse(args[1], out customerId)) {
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> CheckExperianCompany <CustomerId>");
 				return;
 			}
@@ -543,12 +537,10 @@
 		}
 
 		[Activation]
-		private void CheckExperianConsumer()
-		{
+		private void CheckExperianConsumer() {
 			int customerId, directorId;
 
-			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !int.TryParse(args[2], out directorId))
-			{
+			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !int.TryParse(args[2], out directorId)) {
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> CheckExperianConsumer <CustomerId> <DirectorId>");
 				return;
 			}
@@ -557,18 +549,15 @@
 		}
 
 		[Activation]
-		private void AmlChecker()
-		{
+		private void AmlChecker() {
 			int customerId;
 
-			if (args.Length == 2  && int.TryParse(args[1], out customerId))
-			{
+			if (args.Length == 2 && int.TryParse(args[1], out customerId)) {
 				serviceClient.CheckAml(customerId);
 				return;
 			}
 
-			if (args.Length == 9 && int.TryParse(args[1], out customerId))
-			{
+			if (args.Length == 9 && int.TryParse(args[1], out customerId)) {
 				serviceClient.CheckAmlCustom(customerId, args[2], args[3], args[4], args[5], args[6], args[7], args[8]);
 				return;
 			}
@@ -580,18 +569,15 @@
 		}
 
 		[Activation]
-		private void BwaChecker()
-		{
+		private void BwaChecker() {
 			int customerId;
 
-			if (args.Length == 2 && int.TryParse(args[1], out customerId))
-			{
+			if (args.Length == 2 && int.TryParse(args[1], out customerId)) {
 				serviceClient.CheckBwa(customerId);
 				return;
 			}
 
-			if (args.Length == 11 && int.TryParse(args[1], out customerId))
-			{
+			if (args.Length == 11 && int.TryParse(args[1], out customerId)) {
 				serviceClient.CheckBwaCustom(customerId, args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10]);
 				return;
 			}
@@ -602,11 +588,9 @@
 		}
 
 		[Activation]
-		private void FinishWizard()
-		{
+		private void FinishWizard() {
 			int customerId, underwriterId;
-			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !int.TryParse(args[2], out underwriterId))
-			{
+			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !int.TryParse(args[2], out underwriterId)) {
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> FinishWizard <CustomerId> <UnderwriterId>");
 				return;
 			}
@@ -615,18 +599,25 @@
 		}
 
 		[Activation]
-		private void GetSpResultTable()
-		{
-			if (args.Length < 2 || args.Length % 2 != 0)
-			{
+		private void GenerateMobileCode() {
+			if (args.Length != 2) {
+				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> GenerateMobileCode <phone number>");
+				return;
+			}
+
+			serviceClient.GenerateMobileCode(args[1]);
+		}
+
+		[Activation]
+		private void GetSpResultTable() {
+			if (args.Length < 2 || args.Length % 2 != 0) {
 				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> GetSpResultTable <spName> <parameters - should come in couples>");
 				return;
 			}
 
 			string spName = args[1];
 			var parameterList = new List<string>();
-			for (int i = 2; i < args.Length; i++)
-			{
+			for (int i = 2; i < args.Length; i++) {
 				parameterList.Add(args[i]);
 			}
 			string[] parameterArgs = parameterList.ToArray();

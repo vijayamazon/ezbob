@@ -133,6 +133,21 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
         "click #EscalateBtn": "EscalateBtnClick"
         "click #SuspendBtn": "SuspendBtnClick"
         "click #ReturnBtn": "ReturnBtnClick"
+        'click .add-director': 'addDirectorClicked'
+
+    addDirectorClicked: ->
+        director = new EzBob.DirectorModel()
+
+        directorEl = @$el.find '.add-director-container'
+
+        unless @addDirector
+            @addDirector = new EzBob.AddDirectorInfoView({ model: director, el: directorEl })
+            @addDirector.render()
+
+        directorEl.show()
+
+        false
+    # end of addDirectorClicked
 
     recordRecentCustomers: (id) ->
         xhr = $.post "#{gRootPath}Underwriter/Customers/SetRecentCustomer", { id: id }

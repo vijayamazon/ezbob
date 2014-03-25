@@ -986,6 +986,9 @@ namespace EzBob.Web.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SaveLoanOfferMultiplier", ReplyAction="http://tempuri.org/IEzService/SaveLoanOfferMultiplierResponse")]
         EzBob.Web.EzServiceReference.BoolActionResult SaveLoanOfferMultiplier(EzBob.Web.Areas.Underwriter.Models.LoanOfferMultiplier[] loanOfferMultipliers);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PostcodeSaveLog", ReplyAction="http://tempuri.org/IEzService/PostcodeSaveLogResponse")]
+        EzBob.Web.EzServiceReference.ActionMetaData PostcodeSaveLog(string sRequestType, string sUrl, string sStatus, string sResponseData, string sErrorMessage, int nUserID);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/QuickOffer", ReplyAction="http://tempuri.org/IEzService/QuickOfferResponse")]
         EzBob.Web.EzServiceReference.QuickOfferActionResult QuickOffer(int customerId, bool saveOfferToDB);
         
@@ -1321,6 +1324,10 @@ namespace EzBob.Web.EzServiceReference {
         
         public EzBob.Web.EzServiceReference.BoolActionResult SaveLoanOfferMultiplier(EzBob.Web.Areas.Underwriter.Models.LoanOfferMultiplier[] loanOfferMultipliers) {
             return base.Channel.SaveLoanOfferMultiplier(loanOfferMultipliers);
+        }
+        
+        public EzBob.Web.EzServiceReference.ActionMetaData PostcodeSaveLog(string sRequestType, string sUrl, string sStatus, string sResponseData, string sErrorMessage, int nUserID) {
+            return base.Channel.PostcodeSaveLog(sRequestType, sUrl, sStatus, sResponseData, sErrorMessage, nUserID);
         }
         
         public EzBob.Web.EzServiceReference.QuickOfferActionResult QuickOffer(int customerId, bool saveOfferToDB) {

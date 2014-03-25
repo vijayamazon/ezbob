@@ -362,7 +362,7 @@
       EzBob.App.trigger('add-director');
       directorEl = $('.add-director-container');
       if (!this.addDirector) {
-        this.addDirector = new EzBob.Profile.AddDirectorInfoView({
+        this.addDirector = new EzBob.AddDirectorInfoView({
           model: director,
           el: directorEl
         });
@@ -432,114 +432,5 @@
     return DirectorCompositeView;
 
   })(Backbone.Marionette.CompositeView);
-
-  EzBob.Profile.AddDirectorInfoView = (function(_super) {
-
-    __extends(AddDirectorInfoView, _super);
-
-    function AddDirectorInfoView() {
-      return AddDirectorInfoView.__super__.constructor.apply(this, arguments);
-    }
-
-    AddDirectorInfoView.prototype.template = '#add-director-info-template';
-
-    AddDirectorInfoView.prototype.region = {
-      directorAddress: '.director_address'
-    };
-
-    AddDirectorInfoView.prototype.ui = {
-      form: ".addDirectorInfoForm",
-      addButton: ".addDirector"
-    };
-
-    AddDirectorInfoView.prototype.events = {
-      "click .directorBack": "directorBack",
-      "click .addDirector": "directorAdd",
-      'change   input': 'inputChanged',
-      'click    input': 'inputChanged',
-      'focusout input': 'inputChanged',
-      'keyup    input': 'inputChanged',
-      'change   select': 'inputChanged',
-      'click    select': 'inputChanged',
-      'focusout select': 'inputChanged',
-      'keyup    select': 'inputChanged'
-    };
-
-    AddDirectorInfoView.prototype.addressModelChange = function() {
-      return EzBob.App.trigger('dash-director-address-change', this.model);
-    };
-
-    AddDirectorInfoView.prototype.onRender = function() {
-      var name, oAddressContainer, oFieldStatusIcons, that;
-      EzBob.UiAction.registerView(this);
-      this.$el.find('.ezDateTime').splittedDateTime();
-      this.$el.find('.alphaOnly').alphaOnly();
-      this.$el.find('.phonenumber').numericOnly(11);
-      this.$el.find('.addressCaption').hide();
-      this.validator = EzBob.validateAddDirectorForm(this.ui.form);
-      that = this;
-      oAddressContainer = that.$el.find('#DirectorAddress');
-      name = 'DirectorAddress';
-      this.addressView = new EzBob.AddressView({
-        model: that.model.get('DirectorAddress'),
-        name: name,
-        max: 1,
-        uiEventControlIdPrefix: oAddressContainer.attr('data-ui-event-control-id-prefix')
-      });
-      that.model.get('DirectorAddress').on('all', function() {
-        return that.trigger('director:addressChanged');
-      });
-      this.addressView.render().$el.appendTo(oAddressContainer);
-      EzBob.Validation.addressErrorPlacement(this.addressView.$el, this.addressView.model);
-      oFieldStatusIcons = this.$el.find('IMG.field_status');
-      oFieldStatusIcons.filter('.required').field_status({
-        required: true
-      });
-      oFieldStatusIcons.not('.required').field_status({
-        required: false
-      });
-      return this;
-    };
-
-    AddDirectorInfoView.prototype.directorBack = function() {
-      return EzBob.App.trigger('add-director-back');
-    };
-
-    AddDirectorInfoView.prototype.directorAdd = function() {
-      var data, enabled, request;
-      enabled = this.validator.checkForm() && this.addressView.model.length > 0;
-      this.ui.addButton.toggleClass('disabled', !enabled);
-      if (!enabled) {
-        return false;
-      }
-      data = this.ui.form.serializeArray();
-      BlockUi('on');
-      request = $.post(this.ui.form.attr('action'), data);
-      request.done(function(res) {
-        if (res.success) {
-          return EzBob.App.trigger('director-added');
-        } else {
-          if (res.error) {
-            return EzBob.App.trigger('error', res.error);
-          } else {
-            return EzBob.App.trigger('error', 'Error occurred, try again');
-          }
-        }
-      });
-      request.always(function() {
-        return BlockUi('off');
-      });
-      return false;
-    };
-
-    AddDirectorInfoView.prototype.inputChanged = function() {
-      var enabled;
-      enabled = this.validator.checkForm() && this.addressView.model.length > 0;
-      return this.ui.addButton.toggleClass('disabled', !enabled);
-    };
-
-    return AddDirectorInfoView;
-
-  })(Backbone.Marionette.ItemView);
 
 }).call(this);

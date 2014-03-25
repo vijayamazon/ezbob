@@ -531,7 +531,10 @@
     </tbody>
 </table>
 
-<h3 id="cross-check-directors-section">Directors</h3>
+<h3 id="cross-check-directors-section">Directors <button class="btn btn-mini btn-primary add-director">Add director</button></h3>
+
+<div class="add-director-container"></div>
+
 <fieldset id="cross-check-experian-only-directors">
     <legend>Directors received from Experian and not specified by the customer</legend>
     <ul></ul>
@@ -539,7 +542,7 @@
 
 @if (Model.Directors.Count == 0)
 {
-    <fieldset><legend>Customer did not specify any additional directors.</legend></fieldset>
+    <text>Customer did not specify any additional directors.</text>
 }
 
 @for (int i = 0; i < Model.Directors.Count; i++)
@@ -689,3 +692,14 @@
     <span>(@Model.ExperianMortgageCount)</span>
     } 
 }
+
+@AddDirectorInfoTemplate.Render(Url.Action("AddDirector", "CrossCheck", new { Area = "Underwriter" }), Model.Customer.Id)
+
+<script id="address-popup-template" type="text/template">
+	@{Html.RenderPartial("~/Areas/Customer/Views/Shared/_AddressPopupTemplate.cshtml");}
+</script>
+
+<script id="address-template" type="text/template">
+	@{Html.RenderPartial("~/Areas/Customer/Views/Shared/_AddressTemplate.cshtml");}
+</script>
+
