@@ -439,6 +439,7 @@
     <Content Include="Content\css\common.css" />
     <Content Include="Content\css\customer.css" />
     <Content Include="Content\css\dropzone.css" />
+    <Content Include="Content\css\dropzone.customer.css" />
     <Content Include="Content\css\flaty\bootstrap-responsive.min.css" />
     <Content Include="Content\css\flaty\bootstrap.min.css" />
     <Content Include="Content\css\flaty\bootstrap3-modal-patch.css" />
@@ -1322,12 +1323,7 @@
     <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.StrategySettings.settings.js">
       <DependentUpon>ezbob.underwriter.StrategySettings.settings.coffee</DependentUpon>
     </Content>
-    <Content Include="Content\js\Wizard\shops\ezbob.shops.companyFiles.js">
-      <DependentUpon>ezbob.shops.companyFiles.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Wizard\shops\ezbob.shops.companyFiles.min.js">
-      <DependentUpon>ezbob.shops.companyFiles.coffee</DependentUpon>
-    </Content>
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.companyFiles.js" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.freeagent.js">
       <DependentUpon>ezbob.shops.freeagent.coffee</DependentUpon>
     </Content>
@@ -1371,7 +1367,6 @@
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1.psd" />
     <None Include="Content\img\customer-sidebar\icons-source\Preview Image Set_v1.0.psd" />
     <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.uploadHmrc.coffee" />
-    <Content Include="Content\js\Wizard\shops\ezbob.shops.companyFiles.coffee" />
     <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.BasicInterestRate.coffee" />
     <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.LoanOfferMultiplier.coffee" />
     <None Include="Service References\EzServiceReference\configuration91.svcinfo" />

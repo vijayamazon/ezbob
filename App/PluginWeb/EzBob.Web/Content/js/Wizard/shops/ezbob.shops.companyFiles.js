@@ -1,156 +1,119 @@
-(function() {
-  var root,
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+var EzBob = EzBob || {};
 
-  root = typeof exports !== "undefined" && exports !== null ? exports : this;
+EzBob.CompanyFilesAccountModel = Backbone.Model.extend({
+	urlRoot: '' + window.gRootPath + 'Customer/CompanyFilesMarketPlaces/Accounts',
+}); // EzBob.CompanyFilesAccountModel
 
-  root.EzBob = root.EzBob || {};
+EzBob.CompanyFilesAccounts = Backbone.Collection.extend({
+	model: EzBob.CompanyFilesAccountModel,
+	url: '' + window.gRootPath + 'Customer/CompanyFilesMarketPlaces/Accounts',
+}); // EzBob.CompanyFilesAccounts
 
-  EzBob.CompanyFilesAccountModel = (function(_super) {
+EzBob.CompanyFilesAccountInfoView = Backbone.Marionette.ItemView.extend({
+	initialize: function() {
+		this.accountType = 'CompanyFiles';
+		this.template = '#' + this.accountType + 'AccountInfoTemplate';
+		this.Dropzone = null;
+	}, // initialize
 
-    __extends(CompanyFilesAccountModel, _super);
+	events: {
+		'click a.back': 'back',
+		'click a.connect-account': 'connect'
+	}, // events
 
-    function CompanyFilesAccountModel() {
-      return CompanyFilesAccountModel.__super__.constructor.apply(this, arguments);
-    }
+	ui: {
+		companyFilesUploadZone: '#companyFilesUploadZone',
+		uploadButton: '.connect-account'
+	}, // ui
 
-    CompanyFilesAccountModel.prototype.urlRoot = "" + window.gRootPath + "Customer/CompanyFilesMarketPlaces/Accounts";
+	render: function() {
+		EzBob.CompanyFilesAccountInfoView.__super__.render.call(this);
 
-    return CompanyFilesAccountModel;
+		this.initDropzone();
 
-  })(Backbone.Model);
+		return this;
+	}, // render
 
-  EzBob.CompanyFilesAccounts = (function(_super) {
+	back: function() {
+		this.trigger('back');
+		return false;
+	}, // back
 
-    __extends(CompanyFilesAccounts, _super);
+	getDocumentTitle: function() {
+		EzBob.App.trigger('clear');
+		return 'Upload Company Files';
+	}, // getDocumentTitle
 
-    function CompanyFilesAccounts() {
-      return CompanyFilesAccounts.__super__.constructor.apply(this, arguments);
-    }
+	initDropzone: function() {
+		this.clearDropzone();
 
-    CompanyFilesAccounts.prototype.model = EzBob.CompanyFilesAccountModel;
+		Dropzone.options.customerFilesUploader = false;
 
-    CompanyFilesAccounts.prototype.url = "" + window.gRootPath + "Customer/CompanyFilesMarketPlaces/Accounts";
+		var self = this;
 
-    return CompanyFilesAccounts;
+		this.Dropzone = new Dropzone(this.ui.companyFilesUploadZone[0], {
+			maxFilesize: 10,
 
-  })(Backbone.Collection);
+			maxFiles: 10,
 
-  EzBob.CompanyFilesAccountInfoView = (function(_super) {
+			dictFileTooBig: 'File is too big, max file size is 10MB',
 
-    __extends(CompanyFilesAccountInfoView, _super);
+			success: function(oFile, oResponse) {
+				var enabled;
 
-    function CompanyFilesAccountInfoView() {
-      return CompanyFilesAccountInfoView.__super__.constructor.apply(this, arguments);
-    }
+				if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
+					enabled = this.getAcceptedFiles() !== 0;
+					self.ui.uploadButton.toggleClass('disabled', !enabled);
+				} // if
 
-    CompanyFilesAccountInfoView.prototype.events = {
-      'click a.hmrcBack': 'back',
-      'click a.connect-account': 'connect'
-    };
+				if (oResponse.success)
+					EzBob.App.trigger('info', 'Upload successful: ' + oFile.name);
+				else if (oResponse.error)
+					EzBob.App.trigger('error', oResponse.error);
+			}, // on success
 
-    CompanyFilesAccountInfoView.prototype.initialize = function(options) {
-      this.accountType = 'CompanyFiles';
-      this.template = '#' + this.accountType + 'AccountInfoTemplate';
-      this.isOldInternetExplorer = 'Microsoft Internet Explorer' === navigator.appName && navigator.appVersion.indexOf("MSIE 1") === -1;
-      return this.Dropzone = null;
-    };
+			error: function(oFile, sErrorMsg, oXhr) {
+				EzBob.App.trigger('error', 'Error uploading ' + oFile.name);
+				this.removeFile(oFile); // TODO: should it be 'this'?
+			}, // on error
 
-    CompanyFilesAccountInfoView.prototype.ui = {
-      companyFilesUploadZone: "#companyFilesUploadZone",
-      uploadButton: ".connect-account"
-    };
+			maxfilesexceeded: function(o) {
+				EzBob.App.trigger('error', 'You can upload up to 10 files');
+			}, // on maxfilesexceeded
+		}); // new Dropzone
+	}, // initDropzone
 
-    CompanyFilesAccountInfoView.prototype.render = function() {
-      var that;
-      CompanyFilesAccountInfoView.__super__.render.call(this);
-      that = this;
-      this.initDropzone();
-      return this;
-    };
+	clearDropzone: function() {
+		if (this.Dropzone) {
+			this.Dropzone.destroy();
+			this.Dropzone = null;
+		} // if
+	}, // clearDropzone
 
-    CompanyFilesAccountInfoView.prototype.back = function() {
-      this.trigger('back');
-      return false;
-    };
+	connect: function() {
+		if (this.ui.uploadButton.hasClass('disabled'))
+			return false;
 
-    CompanyFilesAccountInfoView.prototype.getDocumentTitle = function() {
-      EzBob.App.trigger('clear');
-      return 'Upload Company Files';
-    };
+		BlockUi('on');
 
-    CompanyFilesAccountInfoView.prototype.initDropzone = function() {
-      var self;
-      this.clearDropzone();
-      Dropzone.options.customerFilesUploader = false;
-      self = this;
-      return this.Dropzone = new Dropzone(self.ui.companyFilesUploadZone[0], {
-        init: function() {
-          var oDropzone;
-          oDropzone = this;
-          ({
-            maxFilesize: 10,
-            maxFiles: 10,
-            dictFileTooBig: "File is too big, max file size is 10MB"
-          });
-          oDropzone.on("success", function(oFile, oResponse) {
-            var enabled;
-            if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
-              enabled = this.getAcceptedFiles() !== 0;
-              self.ui.uploadButton.toggleClass('disabled', !enabled);
-            }
-            if (oResponse.success) {
-              EzBob.App.trigger("info", "Upload successful: " + oFile.name);
-            } else if (oResponse.error) {
-              EzBob.App.trigger("error", oResponse.error);
-            }
-          });
-          oDropzone.on("error", function(oFile, sErrorMsg, oXhr) {
-            EzBob.App.trigger("error", "Error uploading " + oFile.name);
-            oDropzone.removeFile(oFile);
-          });
-          return oDropzone.on("maxfilesexceeded", function(o) {
-            EzBob.App.trigger("error", "You can upload up to 10 files");
-          });
-        }
-      });
-    };
+		var xhr = $.post(window.gRootPath + 'CompanyFilesMarketPlaces/Connect', {
+			customerId: this.customerId
+		});
 
-    CompanyFilesAccountInfoView.prototype.clearDropzone = function() {
-      if (this.Dropzone) {
-        this.Dropzone.destroy();
-        return this.Dropzone = null;
-      }
-    };
+		xhr.done(function(res) {
+			if (res.error !== void 0)
+				return EzBob.App.trigger('error', 'Failed to upload company files');
+			else
+				return EzBob.App.trigger('info', 'Company files uploaded successfully');
+		});
 
-    CompanyFilesAccountInfoView.prototype.connect = function() {
-      var that, xhr;
-      if (this.ui.uploadButton.hasClass('disabled')) {
-        return false;
-      }
-      that = this;
-      BlockUi('on');
-      xhr = $.post(window.gRootPath + "CompanyFilesMarketPlaces/Connect", {
-        customerId: this.customerId
-      });
-      xhr.done(function(res) {
-        if (res.error !== void 0) {
-          return EzBob.App.trigger('error', 'Failed to upload company files');
-        } else {
-          return EzBob.App.trigger('info', 'Company files uploaded successfully');
-        }
-      });
-      xhr.always(function() {
-        return BlockUi('off');
-      });
-      this.trigger('completed');
-      this.trigger('back');
-      return false;
-    };
+		xhr.always(function() {
+			return BlockUi('off');
+		});
 
-    return CompanyFilesAccountInfoView;
+		this.trigger('completed');
+		this.trigger('back');
 
-  })(Backbone.Marionette.ItemView);
-
-}).call(this);
+		return false;
+	}, // connect
+}); // EzBob.CompanyFilesAccountInfoView

@@ -326,6 +326,7 @@
 				.Add("~/Content/css/loan-type-selector.css")
 				.Add("~/Content/css/amount-period-sliders.css")
 				.Add("~/Content/css/dropzone.css")
+				.Add("~/Content/css/dropzone.customer.css")
 				.Add("~/Content/css/flaty/font-awesome.min.css")
 				.MvcRender("~/Content/css/min/customer_#.css");
 		} // CustomerCss
@@ -380,7 +381,7 @@
 				.Add("~/Content/js/Wizard/shops/ezbob.shops.cg.coffee")
 				.Add("~/Content/js/Wizard/shops/ezbob.shops.hmrc.coffee")
 				.Add("~/Content/js/Wizard/shops/ezbob.shops.paypoint.coffee")
-				.Add("~/Content/js/Wizard/shops/ezbob.shops.companyFiles.coffee")
+				.Add("~/Content/js/Wizard/shops/ezbob.shops.companyFiles.js")
 				.Add("~/Content/js/Wizard/ezbob.wizard.shops.coffee")
 				.Add("~/Content/js/Wizard/accounts/ezbob.accounts.paypal.js")
 				.Add("~/Content/js/Wizard/ezbob.wizard.signupstep.js")
@@ -434,7 +435,7 @@
 				.Add("~/Content/js/Wizard/shops/ezbob.shops.cg.coffee")
 				.Add("~/Content/js/Wizard/shops/ezbob.shops.hmrc.coffee")
 				.Add("~/Content/js/Wizard/shops/ezbob.shops.paypoint.coffee")
-				.Add("~/Content/js/Wizard/shops/ezbob.shops.companyFiles.coffee")
+				.Add("~/Content/js/Wizard/shops/ezbob.shops.companyFiles.js")
 				.Add("~/Content/js/Wizard/shops/ezbob.shops.coffee")
 				.Add("~/Content/js/Wizard/ezbob.wizardStepsModel.js")
 				.Add("~/Content/js/Wizard/ezbob.wizard.shops.coffee")

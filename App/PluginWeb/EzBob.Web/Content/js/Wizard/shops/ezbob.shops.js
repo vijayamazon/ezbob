@@ -468,7 +468,7 @@
     StoreInfoView.prototype.extractBtnClass = function(jqTarget) {
       var sClass;
       sClass = 'pull-left';
-      if ($('.marketplace-button-less', jqTarget).length < 2) {
+      if ($('.marketplace-button-less', jqTarget).length < 3) {
         sClass += ' marketplace-button-less';
       } else {
         sClass += ' marketplace-button-more';
@@ -526,7 +526,7 @@
       var title;
       title = view.getDocumentTitle();
       if (title) {
-        return $(document).attr("title", "Step 2: " + title + " | EZBOB");
+        return $(document).attr("title", "Step 4: " + title + " | EZBOB");
       }
     };
 
@@ -540,6 +540,7 @@
     };
 
     StoreInfoView.prototype.back = function() {
+      console.log('back triggered');
       this.$el.find(">div").hide();
       this.storeList.show();
       $(document).attr("title", this.oldTitle);
@@ -557,7 +558,7 @@
       xhr = $.post(window.gRootPath + 'CustomerDetails/LinkAccountsComplete');
       xhr.done(function() {
         EzBob.App.trigger("clear");
-        return EzBob.App.GA.trackEventReditect(window.gRootPath + 'Customer/Profile', 'Wizard Complete', 'Go To account', 'Awaiting Approval');
+        return EzBob.App.GA.trackEventReditect(window.gRootPath + 'CustomerDetails/Dashboard', 'Wizard Complete', 'Go To account', 'Awaiting Approval');
       });
       xhr.error(function() {
         return setTimeout((function() {
