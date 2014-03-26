@@ -19,20 +19,17 @@ namespace ExperianLib.IdIdentityHub
         readonly ExperianIntegrationParams _config;
         private static readonly ILog Log = LogManager.GetLogger(typeof(IdHubService));
         private readonly ExperianBankCacheRepository _bankCacheRepository;
-		private readonly ConfigurationVariablesRepository configurationVariablesRepository;
 
         public IdHubService()
         {
             _config = ConfigurationRootBob.GetConfiguration().Experian;
             _bankCacheRepository = ObjectFactory.GetInstance<ExperianBankCacheRepository>();
-			configurationVariablesRepository = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
         }
 
         public IdHubService(ExperianIntegrationParams config, ExperianBankCacheRepository bankCacheRepository)
         {
             _config = config;
 			_bankCacheRepository = bankCacheRepository;
-			configurationVariablesRepository = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
         }
 
         //-----------------------------------------------------------------------------------
@@ -41,9 +38,8 @@ namespace ExperianLib.IdIdentityHub
             var result = new AuthenticationResults();
 
             var key = String.Format("{0}_{1}_{2}_{3}", foreName, middleName, surname, postCode);
-			int amlCacheValidForSeconds = configurationVariablesRepository.GetByNameAsInt("AmlCacheValidForSeconds");
-            Log.DebugFormat("Checking key '{0}' in cache. Cache is valid for:{1} seconds", key, amlCacheValidForSeconds);
-			var cachedValue = _bankCacheRepository.Get<ProcessConfigResponseType>(key, amlCacheValidForSeconds);
+            Log.DebugFormat("Checking key '{0}' in cache...", key);
+			var cachedValue = _bankCacheRepository.Get<ProcessConfigResponseType>(key, null);
             if (cachedValue != null && string.IsNullOrEmpty(xmlForDebug))
             {
                 Log.DebugFormat("Will use cache value for key '{0}'", key);
@@ -302,9 +298,8 @@ namespace ExperianLib.IdIdentityHub
             var result = new AccountVerificationResults();
 
 			var key = String.Format("{0}_{1}", branchCode, accountNumber);
-			int bwaCacheValidForSeconds = configurationVariablesRepository.GetByNameAsInt("BwaCacheValidForSeconds");
-			Log.DebugFormat("Checking key '{0}' in cache. Cache is valid for:{1} seconds", key, bwaCacheValidForSeconds);
-			var cachedValue = _bankCacheRepository.Get<ProcessConfigResponseType>(key, bwaCacheValidForSeconds);
+			Log.DebugFormat("Checking key '{0}' in cache...", key);
+			var cachedValue = _bankCacheRepository.Get<ProcessConfigResponseType>(key, null);
             if (cachedValue != null && string.IsNullOrEmpty(xmlForDebug))
             {
                 Log.DebugFormat("Will use cache value for key '{0}'", key);

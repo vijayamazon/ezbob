@@ -7,6 +7,7 @@
 	using ApplicationMng.Repository;
 	using ExperianLib.IdIdentityHub;
 	using EZBob.DatabaseLib.Model.Database.Repository;
+	using EzServiceReference;
 	using Models;
 	using Code;
 	using Scorto.Web;
@@ -36,13 +37,16 @@
         [HttpPost]
         [Transactional]
         public JsonNetResult RunCheck(int id)
-        {
+		{
+			var customer = _customers.Get(id);
 			var anyApps = StrategyChecker.IsStrategyRunning(id, true);
             if (anyApps)
                 return this.JsonNet(new { Message = "The evaluation strategy is already running. Please wait..." });
-			
-			m_oServiceClient.Instance.CheckAml(id);
-			m_oServiceClient.Instance.CheckBwa(id);
+
+			var underwriter = _users.GetUserByLogin(User.Identity.Name);
+
+			// Shouldn't call main strategy
+			m_oServiceClient.Instance.MainStrategy2(underwriter.Id, _users.Get(id).Id, NewCreditLineOption.UpdateEverythingExceptMp, Convert.ToInt32(customer.IsAvoid), true);
 
             return this.JsonNet(new { Message = "The evaluation has been started. Please refresh this application after a while..." });
         }
