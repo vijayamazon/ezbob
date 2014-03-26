@@ -9,9 +9,7 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Models;
 	using Code;
-	using Infrastructure;
 	using Scorto.Web;
-	using EzServiceReference;
 	using ActionResult = System.Web.Mvc.ActionResult;
 
 	public class CreditBureauController : Controller
@@ -39,14 +37,12 @@
         [Transactional]
         public JsonNetResult RunCheck(int id)
         {
-            var customer = _customers.Get(id);
 			var anyApps = StrategyChecker.IsStrategyRunning(id, true);
             if (anyApps)
                 return this.JsonNet(new { Message = "The evaluation strategy is already running. Please wait..." });
-
-	        var underwriter = _users.GetUserByLogin(User.Identity.Name);
-
-			m_oServiceClient.Instance.MainStrategy2(underwriter.Id, _users.Get(id).Id, NewCreditLineOption.UpdateEverythingExceptMp, Convert.ToInt32(customer.IsAvoid), true);
+			
+			m_oServiceClient.Instance.CheckAml(id);
+			m_oServiceClient.Instance.CheckBwa(id);
 
             return this.JsonNet(new { Message = "The evaluation has been started. Please refresh this application after a while..." });
         }
