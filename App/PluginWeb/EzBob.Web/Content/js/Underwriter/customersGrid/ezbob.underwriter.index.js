@@ -156,7 +156,7 @@
 						oRouter.views.support.view.model.fetch().done(function() {
 							el.removeClass('disabled');
 
-							if (response.status == 'Done')
+							if (response.status === 'Done')
 								EzBob.ShowMessage('The MP ' + umi + ' rechecked successfully', '', null, 'OK');
 
 							oRouter.views.support.view.model.trigger('change');

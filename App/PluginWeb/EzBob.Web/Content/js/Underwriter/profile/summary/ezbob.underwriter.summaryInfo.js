@@ -1,5 +1,5 @@
 (function() {
-  var root, _ref, _ref1,
+  var root,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -10,11 +10,11 @@
   EzBob.Underwriter = EzBob.Underwriter || {};
 
   EzBob.Underwriter.SummaryInfoView = (function(_super) {
+
     __extends(SummaryInfoView, _super);
 
     function SummaryInfoView() {
-      _ref = SummaryInfoView.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return SummaryInfoView.__super__.constructor.apply(this, arguments);
     }
 
     SummaryInfoView.prototype.template = "#profile-summary-template";
@@ -35,7 +35,6 @@
 
     SummaryInfoView.prototype.saveComment = function() {
       var that;
-
       that = this;
       $.post(window.gRootPath + "Underwriter/Profile/SaveComment", {
         Id: this.model.get("Id"),
@@ -58,7 +57,6 @@
 
     SummaryInfoView.prototype.onRender = function() {
       var isNew;
-
       this.CommentSave = this.$el.find("#commentSave");
       this.CommentArea = this.$el.find("#CommentArea");
       this.$el.find('a[data-bug-type]').tooltip({
@@ -76,11 +74,11 @@
   })(Backbone.Marionette.ItemView);
 
   EzBob.Underwriter.SummaryInfoModel = (function(_super) {
+
     __extends(SummaryInfoModel, _super);
 
     function SummaryInfoModel() {
-      _ref1 = SummaryInfoModel.__super__.constructor.apply(this, arguments);
-      return _ref1;
+      return SummaryInfoModel.__super__.constructor.apply(this, arguments);
     }
 
     SummaryInfoModel.prototype.idAttribute = "Id";

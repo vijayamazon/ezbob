@@ -941,6 +941,7 @@
     <Content Include="Content\js\EzBob.DataTables.Helper.js" />
     <Content Include="Content\js\ezbob.models.js" />
     <Content Include="Content\js\ezbob.uiaction.js" />
+    <Content Include="Content\js\ezbob.view.js" />
     <Content Include="Content\js\lib\Backbone.EzBob.js" />
     <Content Include="Content\js\contactUs\ezbo.contactUs.js" />
     <Content Include="Content\js\controls\Captcha.js" />

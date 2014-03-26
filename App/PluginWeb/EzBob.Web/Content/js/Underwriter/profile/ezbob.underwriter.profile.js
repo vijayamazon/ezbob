@@ -136,7 +136,7 @@
       });
       EzBob.handleUserLayoutSetting();
       this.$el.find('.profile-tabs a[data-toggle="tab"]').on('shown.bs.tab', (function(e) {
-        return _this.lastShownProfileSection = $(e.target).attr('href').substr(1);
+        return _this.setLastShownProfileSection($(e.target).attr('href').substr(1));
       }));
       return this;
     };
@@ -144,16 +144,26 @@
     ProfileView.prototype.setState = function(nCustomerID, sSection) {
       this.lastShownCustomerID = nCustomerID;
       if (!sSection) {
-        sSection = this.$el.find('.profile-tabs a[data-toggle="tab"]:first').attr('href').substr(1);
+        return this.getLastShownProfileSection(this.$el.find('.profile-tabs a[data-toggle="tab"]:first').attr('href').substr(1));
       }
-      return this.lastShownProfileSection = sSection;
     };
 
     ProfileView.prototype.restoreState = function() {
-      if (!this.lastShownProfileSection) {
-        this.lastShownProfileSection = this.$el.find('.profile-tabs a[data-toggle="tab"]:first').attr('href').substr(1);
+      return this.$el.find('.profile-tabs a[data-toggle="tab"]').filter('[href="#' + this.getLastShownProfileSection(this.$el.find('.profile-tabs a[data-toggle="tab"]:first').attr('href').substr(1)) + '"]').tab('show');
+    };
+
+    ProfileView.prototype.setLastShownProfileSection = function(sSection) {
+      return localStorage['underwriter.profile.lastShownProfileSection'] = sSection;
+    };
+
+    ProfileView.prototype.getLastShownProfileSection = function(sDefault) {
+      var sSection;
+      sSection = localStorage['underwriter.profile.lastShownProfileSection'];
+      if (!sSection) {
+        sSection = sDefault;
+        this.setLastShownProfileSection(sSection);
       }
-      return this.$el.find('.profile-tabs a[data-toggle="tab"]').filter('[href="#' + this.lastShownProfileSection + '"]').tab('show');
+      return sSection;
     };
 
     ProfileView.prototype.events = {
@@ -166,24 +176,38 @@
     };
 
     ProfileView.prototype.addDirectorClicked = function(event) {
-      var director, directorEl,
+      var addDirectorView, director, directorEl,
         _this = this;
       event.stopPropagation();
       event.preventDefault();
+      this.$el.find('.add-director').hide();
       director = new EzBob.DirectorModel();
       directorEl = this.$el.find('.add-director-container');
-      if (!this.addDirector) {
-        this.addDirector = new EzBob.AddDirectorInfoView({
-          model: director,
-          el: directorEl
-        });
-        this.addDirector.setBackHandler((function() {
-          return _this.$el.find('.add-director-container').hide();
-        }));
-        this.addDirector.render();
-      }
+      addDirectorView = new EzBob.AddDirectorInfoView({
+        model: director,
+        el: directorEl,
+        backButtonCaption: 'Cancel'
+      });
+      addDirectorView.setBackHandler((function() {
+        return _this.onDirectorAddCanceled();
+      }));
+      addDirectorView.setSuccessHandler((function() {
+        return _this.onDirectorAdded();
+      }));
+      addDirectorView.render();
+      addDirectorView.setCustomerID(this.customerId);
       directorEl.show();
       return false;
+    };
+
+    ProfileView.prototype.onDirectorAddCanceled = function() {
+      this.$el.find('.add-director-container').hide().empty();
+      return this.$el.find('.add-director').show();
+    };
+
+    ProfileView.prototype.onDirectorAdded = function() {
+      this.onDirectorAddCanceled();
+      return this.show(this.customerId);
     };
 
     ProfileView.prototype.recordRecentCustomers = function(id) {
@@ -208,7 +232,7 @@
         if (this.showed) {
           this.$el.show();
         }
-        return $(".tabbable a[href=\"#profile-summary\"]").tab("show");
+        return this.restoreState();
       }
     };
 
@@ -581,6 +605,6 @@
 
     return ProfileView;
 
-  })(Backbone.View);
+  })(EzBob.View);
 
 }).call(this);

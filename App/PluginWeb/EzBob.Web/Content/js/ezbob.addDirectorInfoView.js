@@ -1,7 +1,11 @@
 ﻿var EzBob = EzBob || {};
 
-EzBob.AddDirectorInfoView = Backbone.Marionette.ItemView.extend({
+EzBob.AddDirectorInfoView = EzBob.ItemView.extend({
 	template: '#add-director-info-template',
+
+	initialize: function(options) {
+		this.backButtonCaption = options.backButtonCaption || 'Back';
+	}, // initialize
 
 	region: {
 		directorAddress: '.director_address'
@@ -15,21 +19,28 @@ EzBob.AddDirectorInfoView = Backbone.Marionette.ItemView.extend({
 	events: {
 		'click .directorBack': 'directorBack',
 		'click .addDirector': 'directorAdd',
-		'change   input': 'inputChanged',
-		'click    input': 'inputChanged',
-		'focusout input': 'inputChanged',
-		'keyup    input': 'inputChanged',
-		'change   select': 'inputChanged',
-		'click    select': 'inputChanged',
-		'focusout select': 'inputChanged',
-		'keyup    select': 'inputChanged'
+
+		'change   input': 'canSubmit',
+		'click    input': 'canSubmit',
+		'focusout input': 'canSubmit',
+		'keyup    input': 'canSubmit',
+
+		'change   select': 'canSubmit',
+		'click    select': 'canSubmit',
+		'focusout select': 'canSubmit',
+		'keyup    select': 'canSubmit',
 	}, // events
 
 	addressModelChange: function() {
 		return EzBob.App.trigger('dash-director-address-change', this.model);
 	}, // addressModelChange
 
+	setCustomerID: function(nCustomerID) {
+		this.$el.find('#nCustomerID').val(nCustomerID);
+	}, // setCustomerID
+
 	onRender: function() {
+		this.$el.find('.directorBack').text(this.backButtonCaption);
 		this.$el.find('.ezDateTime').splittedDateTime();
 		this.$el.find('.alphaOnly').alphaOnly();
 		this.$el.find('.phonenumber').numericOnly(11);
@@ -62,6 +73,8 @@ EzBob.AddDirectorInfoView = Backbone.Marionette.ItemView.extend({
 		oFieldStatusIcons.filter('.required').field_status({ required: true });
 		oFieldStatusIcons.not('.required').field_status({ required: false });
 
+		this.canSubmit();
+
 		return this;
 	}, // onRender
 
@@ -70,11 +83,7 @@ EzBob.AddDirectorInfoView = Backbone.Marionette.ItemView.extend({
 	}, // directorBack
 
 	directorAdd: function() {
-		var enabled = this.validator.checkForm() && this.addressView.model.length > 0;
-
-		this.ui.addButton.toggleClass('disabled', !enabled);
-
-		if (!enabled)
+		if (!this.canSubmit())
 			return false;
 
 		var data = this.ui.form.serializeArray();
@@ -109,10 +118,11 @@ EzBob.AddDirectorInfoView = Backbone.Marionette.ItemView.extend({
 		return false;
 	}, // directorAdd
 
-	inputChanged: function() {
-		var enabled = this.validator.checkForm() && this.addressView.model.length > 0;
-		return this.ui.addButton.toggleClass('disabled', !enabled);
-	}, // inputChanged
+	canSubmit: function() {
+		var bEnabled = this.validator.checkForm() && (this.addressView.model.length > 0);
+		this.setSomethingEnabled(this.ui.addButton, bEnabled);
+		return bEnabled;
+	}, // canSubmit
 
 	backEvtName: function() { return 'go-back'; }, // backEvtName
 	successEvtName: function() { return 'success'; }, // successEvtName

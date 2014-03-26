@@ -1,19 +1,17 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using EzBob.Web.Models.Repository;
-using Newtonsoft.Json;
-using SquishIt.Framework;
-using SquishIt.Mvc;
-using StructureMap;
+﻿namespace EzBob.Web.Infrastructure {
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Web.Mvc;
+	using EzBob.Web.Models.Repository;
+	using Newtonsoft.Json;
+	using SquishIt.Framework;
+	using SquishIt.Mvc;
+	using StructureMap;
 
-namespace EzBob.Web.Infrastructure
-{
-	public class BundleHelper
-	{
-		#region Common
-		public static MvcHtmlString RenderJs()
-		{
+	public class BundleHelper {
+		#region common
+
+		public static MvcHtmlString RenderJs() {
 			return Bundle.JavaScript()
 				.Add("~/Content/js/lib/jquery-1.8.3.js")
 				.Add("~/Content/js/lib/jquery.browser.min.js")
@@ -37,6 +35,7 @@ namespace EzBob.Web.Infrastructure
 				.Add("~/Content/js/lib/Backbone.ModelBinder.js")
 				.Add("~/Content/js/lib/handlebars.js")
 				.Add("~/Content/js/lib/backbone.marionette.js")
+				.Add("~/Content/js/ezbob.view.js")
 				.Add("~/Content/js/lib/moment.js")
 				.Add("~/Content/js/lib/jquery.numeric.js")
 				.Add("~/Content/js/lib/recaptcha_ajax.js")
@@ -71,14 +70,51 @@ namespace EzBob.Web.Infrastructure
 				.AddString(GetDbStrings())
 				//.ForceRelease()
 				.MvcRender("~/Content/js/min/jslib_#.js");
-		}
-		#endregion
+		} // RenderJs
+
+		public static MvcHtmlString RenderPrintCss() {
+			return Bundle.Css()
+				.Add("~/Content/css/print.css")
+				.WithAttribute("media", "print")
+				.MvcRender("~/Content/css/min/print_combined_#.css");
+		} // RenderPrintCss
+
+		public static MvcHtmlString RenderPaypointTemplateJs() {
+			return Bundle.JavaScript()
+				.AddString(GetDbStrings())
+				.Add("~/Content/js/lib/jquery-1.8.3.js")
+				.Add("~/Content/js/lib/jquery.browser.min.js")
+				.Add("~/Content/js/lib/jquery.scrollTo.js")
+				.Add("~/Content/js/lib/jquery.blockUI.js")
+				.Add("~/Content/js/lib/jquery.mask.min.js")
+				.Add("~/Content/js/lib/jquery.validate.js")
+				.Add("~/Content/js/lib/moment.js")
+				.Add("~/Content/js/lib/jsuri-1.1.1.js")
+				.Add("~/Content/js/lib/bootstrap.js")
+				.Add("~/Content/js/lib/cookies.js")
+				.Add("~/Content/js/lib/underscore.js")
+				.Add("~/Content/js/lib/backbone.js")
+				.Add("~/Content/js/contactUs/ezbo.contactUs.js")
+				.Add("~/Content/js/App/ezbob.validation.js")
+				.Add("~/Content/js/lib/jquery.field_status.js")
+				.Add("~/Content/js/lib/attardi.labels.js")
+				.MvcRender("~/Content/js/min/jsPaypojntTemplate_#.js");
+		} // RenderPaypointTemplateJs
+
+		public static string GetDbStrings() {
+			var strings = ObjectFactory.GetInstance<IDbStringRepository>();
+			Dictionary<string, string> dict = strings.GetAllStrings().ToDictionary(s => s.Key, s => s.Value);
+			string json = JsonConvert.SerializeObject(dict);
+			return "var EzBob = EzBob || {};" + "EzBob.dbStrings = " + json + ";";
+		} // GetDbStrings
+
+		#endregion common
 
 		#region Underwriter
 
-		#region Css
-		public static MvcHtmlString RenderUnderwriterCss()
-		{
+		#region underwriter css
+
+		public static MvcHtmlString RenderUnderwriterCss() {
 			return Bundle.Css()
 				.Add("~/Content/css/datepicker.css")
 				.Add("~/Content/css/jquery-ui-1.8.16.custom.css")
@@ -115,13 +151,13 @@ namespace EzBob.Web.Infrastructure
 				.Add("~/Content/css/amount-period-sliders.css")
 				.Add("~/Content/css/dropzone.css")
 				.MvcRender("~/Content/css/min/combined_#.css");
-		}
-		#endregion
+		} // RenderUnderwriterCss
 
-		#region JS
+		#endregion underwriter css
 
-		public static MvcHtmlString RenderUnderwriterJs()
-		{
+		#region underwriter js
+
+		public static MvcHtmlString RenderUnderwriterJs() {
 			return Bundle.JavaScript()
 				//3rd party libs
 				.Add("~/Content/js/lib/alertify.js")
@@ -257,18 +293,17 @@ namespace EzBob.Web.Infrastructure
 				.Add("~/Content/js/Wizard/yourInfo/ezbob.yourInfo.directors.js")
 
 				.MvcRender("~/Content/js/min/underwriter_#.js");
-		}
+		} // RenderUnderwriterJs
 
-		#endregion
+		#endregion underwriter js
 
-		#endregion
+		#endregion underwriter
 
 		#region Customer
 
-		#region Css
+		#region customer css
 
-		public static MvcHtmlString CustomerCss()
-		{
+		public static MvcHtmlString CustomerCss() {
 			return Bundle.Css()
 				.Add("~/Content/css/jquery-ui-1.8.16.custom.css")
 				.Add("~/Content/css/jquery.ui.1.8.16.ie.css")
@@ -293,10 +328,9 @@ namespace EzBob.Web.Infrastructure
 				.Add("~/Content/css/dropzone.css")
 				.Add("~/Content/css/flaty/font-awesome.min.css")
 				.MvcRender("~/Content/css/min/customer_#.css");
-		}
+		} // CustomerCss
 
-		public static MvcHtmlString RenderProfileCss()
-		{
+		public static MvcHtmlString RenderProfileCss() {
 			return Bundle.Css()
 				.Add("~/Content/css/bootstrap.css")
 				.Add("~/Content/css/jquery-ui-1.8.16.custom.css")
@@ -321,14 +355,13 @@ namespace EzBob.Web.Infrastructure
 				.Add("~/Content/css/amount-period-sliders.css")
 				.Add("~/Content/css/dropzone.css")
 				.MvcRender("~/Content/css/min/profile_combined_#.css");
-		}
+		} // RenderProfileCss
 
-		#endregion
+		#endregion customer css
 
-		#region JS
+		#region customer js
 
-		public static MvcHtmlString RenderWizardJs()
-		{
+		public static MvcHtmlString RenderWizardJs() {
 			return Bundle.JavaScript()
 				.Add("~/Content/js/controls/ezbob.notifications.js")
 				.Add("~/Content/js/ezbob.customerModel.js")
@@ -365,10 +398,9 @@ namespace EzBob.Web.Infrastructure
 				.Add("~/Content/js/controls/ezbob.address.js")
 				.Add("~/Content/js/Wizard/yourInfo/ezbob.yourIno.consent.agreement.coffee")
 				.MvcRender("~/Content/js/min/wizard_#.js");
-		}
+		} // RenderWizardJs
 
-		public static MvcHtmlString RenderProfileJs()
-		{
+		public static MvcHtmlString RenderProfileJs() {
 			return Bundle.JavaScript()
 				//3rd party
 				.Add("~/Content/js/lib/bootstrap.js")
@@ -379,7 +411,7 @@ namespace EzBob.Web.Infrastructure
 
 				//Customer Model
 				.Add("~/Content/js/ezbob.customerModel.js")
-				
+
 				//Controls
 				.Add("~/Content/js/controls/ezbob.address.js")
 				.Add("~/Content/js/controls/ezbob.notifications.js")
@@ -410,7 +442,7 @@ namespace EzBob.Web.Infrastructure
 				.Add("~/Content/js/ezbob.models.js")
 				.Add("~/Content/js/ezbob.addDirectorInfoView.js")
 				.Add("~/Content/js/Wizard/yourInfo/ezbob.yourInfo.directors.js")
-				
+
 				//Profile
 				.Add("~/Content/js/Profile/ezbob.profile.smallNotification.js")
 				.Add("~/Content/js/Profile/ApplyForLoan/ezbob.profile.PayPointCardSelectView.coffee")
@@ -435,69 +467,25 @@ namespace EzBob.Web.Infrastructure
 				.Add("~/Content/js/Profile/Settings/ezbob.profile.settingsPassword.js")
 				.Add("~/Content/js/Profile/Settings/ezbob.profile.settingsQuestion.js")
 				.Add("~/Content/js/Profile/ezbob.profile.Agreements.coffee")
-				
-				.MvcRender("~/Content/js/min/profile_#.js");
-		}
 
-		public static MvcHtmlString RenderLoginJs()
-		{
+				.MvcRender("~/Content/js/min/profile_#.js");
+		} // RenderProfileJs
+
+		public static MvcHtmlString RenderLoginJs() {
 			return Bundle.JavaScript()
 				.Add("~/Content/js/login/ezbob.login.view.coffee")
 				.MvcRender("~/Content/js/min/profile_#.js");
-		}
+		} // RenderLoginJs
 
-		#endregion
+		#endregion customer js
 
-		#endregion
-
-		
-		public static MvcHtmlString RenderPrintCss()
-		{
-			return Bundle.Css()
-				.Add("~/Content/css/print.css")
-				.WithAttribute("media", "print")
-				.MvcRender("~/Content/css/min/print_combined_#.css");
-		}
-
-		public static MvcHtmlString RenderOverviewCss()
-		{
+		public static MvcHtmlString RenderOverviewCss() {
 			return Bundle.Css()
 				.Add("~/Content/css/overview.css")
 				.Add("~/Content/css/addition.css")
 				.MvcRender("~/Content/css/min/combined_ov_#.css");
-		}
+		} // RenderOverviewCss
 
-
-
-		public static MvcHtmlString RenderPaypointTemplateJs()
-		{
-			return Bundle.JavaScript()
-				.AddString(GetDbStrings())
-				.Add("~/Content/js/lib/jquery-1.8.3.js")
-				.Add("~/Content/js/lib/jquery.browser.min.js")
-				.Add("~/Content/js/lib/jquery.scrollTo.js")
-				.Add("~/Content/js/lib/jquery.blockUI.js")
-				.Add("~/Content/js/lib/jquery.mask.min.js")
-				.Add("~/Content/js/lib/jquery.validate.js")
-				.Add("~/Content/js/lib/moment.js")
-				.Add("~/Content/js/lib/jsuri-1.1.1.js")
-				.Add("~/Content/js/lib/bootstrap.js")
-				.Add("~/Content/js/lib/cookies.js")
-				.Add("~/Content/js/lib/underscore.js")
-				.Add("~/Content/js/lib/backbone.js")
-				.Add("~/Content/js/contactUs/ezbo.contactUs.js")
-				.Add("~/Content/js/App/ezbob.validation.js")
-				.Add("~/Content/js/lib/jquery.field_status.js")
-				.Add("~/Content/js/lib/attardi.labels.js")
-				.MvcRender("~/Content/js/min/jsPaypojntTemplate_#.js");
-		}
-		
-		public static string GetDbStrings()
-		{
-			var strings = ObjectFactory.GetInstance<IDbStringRepository>();
-			Dictionary<string, string> dict = strings.GetAllStrings().ToDictionary(s => s.Key, s => s.Value);
-			string json = JsonConvert.SerializeObject(dict);
-			return "var EzBob = EzBob || {};" + "EzBob.dbStrings = " + json + ";";
-		}
-	}
-}
+		#endregion customer
+	} // class BundleHelper
+} // namespace

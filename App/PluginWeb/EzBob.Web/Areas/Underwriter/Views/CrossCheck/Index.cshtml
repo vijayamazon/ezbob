@@ -531,7 +531,11 @@
     </tbody>
 </table>
 
-<h3 id="cross-check-directors-section">Directors <button class="btn btn-mini btn-primary add-director">Add director</button></h3>
+<h3 id="cross-check-directors-section">Directors
+	@if (Model.Customer.PersonalInfo.TypeOfBusiness != TypeOfBusiness.Entrepreneur) {
+		<button class="btn btn-mini btn-primary add-director">Add director</button>
+	}
+</h3>
 
 <div class="add-director-container"></div>
 
@@ -693,7 +697,7 @@
     } 
 }
 
-@AddDirectorInfoTemplate.Render(Url.Action("AddDirector", "CrossCheck", new { Area = "Underwriter" }), Model.Customer.Id)
+@AddDirectorInfoTemplate.Render(Url.Action("AddDirector", "CrossCheck", new { Area = "Underwriter" }))
 
 <script id="address-popup-template" type="text/template">
 	@{Html.RenderPartial("~/Areas/Customer/Views/Shared/_AddressPopupTemplate.cshtml");}

@@ -1,11 +1,8 @@
-﻿@using System.Web.Mvc
-@using System.Web.Mvc.Html
-
-@helper Render(string sUrl, int nCustomerID = 0) {
+﻿@helper Render(string sUrl) {
 	<script id="add-director-info-template" type="text/template">
 		<div class="director">
 			<form method="post" action="@sUrl" class="addDirectorInfoForm" novalidate="novalidate">
-				<input type="hidden" name="nCustomerID" id="nCustomerID" value="@nCustomerID" />
+				<input type="hidden" name="nCustomerID" id="nCustomerID" />
 
 				<div class="add-director-container">
 					<h2 class="form_start">Add director</h2>
@@ -35,8 +32,8 @@
 
 			<div class="form_buttons_container">
 				<div class="attardi-button">
-					<a href="#" class="rc-button green addDirector disabled" ui-event-control-id="dashboard:add_director">Add director</a>
-					<button class="rc-button grey directorBack" ui-event-control-id="dashboard:add_director_back">Back</button>
+					<button type="button" class="btn rc-button green addDirector disabled" ui-event-control-id="dashboard:add_director">Add director</button>
+					<button type="button" class="rc-button grey directorBack" ui-event-control-id="dashboard:add_director_back">Back</button>
 				</div>
 			</div>
 		</div>

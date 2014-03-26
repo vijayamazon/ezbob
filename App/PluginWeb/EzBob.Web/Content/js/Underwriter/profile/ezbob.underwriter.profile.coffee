@@ -1,12 +1,13 @@
 ﻿root = exports ? this
 root.EzBob = root.EzBob or {}
 
-class EzBob.Underwriter.ProfileView extends Backbone.View
+class EzBob.Underwriter.ProfileView extends EzBob.View
     initialize: ->
         @template = _.template($("#profile-template-main").html())
 
     render: ->
         @$el.html @template()
+
         profileInfo = @$el.find(".profile-person-info")
         loanInfo = @$el.find(".profile-loan-info")
         summaryInfo = @$el.find("#profile-summary")
@@ -127,7 +128,7 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
         EzBob.handleUserLayoutSetting()
 
         @$el.find('.profile-tabs a[data-toggle="tab"]').on('shown.bs.tab', ((e) =>
-            @lastShownProfileSection = $(e.target).attr('href').substr(1)
+            @setLastShownProfileSection $(e.target).attr('href').substr(1)
         ))
 
         this
@@ -137,17 +138,30 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
         @lastShownCustomerID = nCustomerID
 
         unless sSection
-            sSection = @$el.find('.profile-tabs a[data-toggle="tab"]:first').attr('href').substr(1)
-
-        @lastShownProfileSection = sSection
+            @getLastShownProfileSection @$el.find('.profile-tabs a[data-toggle="tab"]:first').attr('href').substr(1)
     # end of setState
 
     restoreState: ->
-        unless @lastShownProfileSection
-            @lastShownProfileSection = @$el.find('.profile-tabs a[data-toggle="tab"]:first').attr('href').substr(1)
-
-        @$el.find('.profile-tabs a[data-toggle="tab"]').filter('[href="#' + @lastShownProfileSection + '"]').tab('show')
+        @$el.find(
+            '.profile-tabs a[data-toggle="tab"]').filter('[href="#' +
+            @getLastShownProfileSection(@$el.find('.profile-tabs a[data-toggle="tab"]:first').attr('href').substr(1)) +
+            '"]'
+        ).tab('show')
     # end of restoreState
+
+    setLastShownProfileSection: (sSection) ->
+        localStorage['underwriter.profile.lastShownProfileSection'] = sSection
+    # end of setLastShownProfileSection
+
+    getLastShownProfileSection: (sDefault) ->
+        sSection = localStorage['underwriter.profile.lastShownProfileSection']
+
+        unless sSection
+            sSection = sDefault
+            @setLastShownProfileSection sSection
+
+        sSection
+    # end of getLastShownProfileSection
 
     events:
         "click #RejectBtn": "RejectBtnClick"
@@ -161,19 +175,36 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
         event.stopPropagation()
         event.preventDefault()
 
+        @$el.find('.add-director').hide()
+
         director = new EzBob.DirectorModel()
 
         directorEl = @$el.find '.add-director-container'
 
-        unless @addDirector
-            @addDirector = new EzBob.AddDirectorInfoView({ model: director, el: directorEl })
-            @addDirector.setBackHandler ( => @$el.find('.add-director-container').hide() )
-            @addDirector.render()
+        addDirectorView = new EzBob.AddDirectorInfoView
+            model: director
+            el: directorEl
+            backButtonCaption: 'Cancel'
+
+        addDirectorView.setBackHandler ( => @onDirectorAddCanceled() )
+        addDirectorView.setSuccessHandler ( => @onDirectorAdded() )
+        addDirectorView.render()
+        addDirectorView.setCustomerID @customerId
 
         directorEl.show()
 
         false
     # end of addDirectorClicked
+
+    onDirectorAddCanceled: ->
+        @$el.find('.add-director-container').hide().empty()
+        @$el.find('.add-director').show()
+    # end of onDirectorAddCanceled
+
+    onDirectorAdded: ->
+        @onDirectorAddCanceled()
+        @show @customerId
+    # end of onDirectorAdded
 
     recordRecentCustomers: (id) ->
         xhr = $.post "#{gRootPath}Underwriter/Customers/SetRecentCustomer", { id: id }
@@ -182,6 +213,7 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
 
     checkCustomerAvailability: (model) ->
         data = model.toJSON()
+
         if data.success is false
             EzBob.ShowMessage data.error, "Error", (->
                 Redirect "#"
@@ -189,7 +221,8 @@ class EzBob.Underwriter.ProfileView extends Backbone.View
             false
         else
             @$el.show() if @showed 
-            $(".tabbable a[href=\"#profile-summary\"]").tab "show"
+            @restoreState()
+    # end of checkCustomerAvailability
 
     mpRechecked: (parameter) ->
         model = this
