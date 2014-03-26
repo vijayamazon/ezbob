@@ -125,13 +125,17 @@
       EzBob.App.vent.on('ct:marketplaces.history', function() {
         if (that.uploadHmrcView) {
           that.uploadHmrcView.close();
-          return that.uploadHmrcView = null;
+          that.uploadHmrcView = null;
+          return that.$el.find('#hmrc-upload-container').empty();
         }
       });
       EzBob.App.vent.on('ct:marketplaces.uploadHmrc', function() {
+        var oUploader;
         if (!that.uploadHmrcView) {
+          oUploader = $('<div></div>');
+          that.$el.find('#hmrc-upload-container').append(oUploader);
           that.uploadHmrcView = new EzBob.Underwriter.UploadHmrcView({
-            el: that.$el.find("#hmrc-upload"),
+            el: oUploader,
             customerId: _this.model.customerId
           });
           that.uploadHmrcView.render();
@@ -144,7 +148,8 @@
       EzBob.App.vent.on('ct:marketplaces.uploadHmrcBack', function() {
         $(".mps-tables").show();
         that.uploadHmrcView.close();
-        return that.uploadHmrcView = null;
+        that.uploadHmrcView = null;
+        return that.$el.find('#hmrc-upload-container').empty();
       });
       return this;
     };

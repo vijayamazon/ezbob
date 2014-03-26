@@ -70,24 +70,33 @@ class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
             if(that.uploadHmrcView) 
                 that.uploadHmrcView.close()
                 that.uploadHmrcView = null
+                that.$el.find('#hmrc-upload-container').empty()
 
         EzBob.App.vent.on 'ct:marketplaces.uploadHmrc', () =>
-            if(!that.uploadHmrcView) 
+            if(!that.uploadHmrcView)
+                oUploader = $('<div></div>')
+
+                that.$el.find('#hmrc-upload-container').append(oUploader)
+
                 that.uploadHmrcView = new EzBob.Underwriter.UploadHmrcView(
-                    el: that.$el.find("#hmrc-upload")
+                    el: oUploader
                     customerId: @model.customerId
                 )
                 that.uploadHmrcView.render()
             else
                 that.uploadHmrcView.render()
                 that.uploadHmrcView.$el.show()
+
             $(".mps-tables").hide()
             
         EzBob.App.vent.on 'ct:marketplaces.uploadHmrcBack', () =>
             $(".mps-tables").show()
             that.uploadHmrcView.close()
             that.uploadHmrcView = null
+            that.$el.find('#hmrc-upload-container').empty()
+
         return this
+    # end of onRender
 
     events:
         "click .tryRecheckYodlee": "tryRecheckYodlee"

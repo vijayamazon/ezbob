@@ -15,6 +15,7 @@ class EzBob.Underwriter.UploadHmrcView extends Backbone.Marionette.ItemView
     events:
         "click .uploadHmrc": "uploadHmrcClicked"
         "click .back": "backClicked"
+
     serializeData: ->
         data = {
             customerId : @customerId
