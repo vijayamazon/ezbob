@@ -33,7 +33,14 @@
 				int customerId = sr["CustomerId"];
 				string response = sr["ResponseData"];
 
-				HandleResponse(response, serviceLogId, customerId);
+				try
+				{
+					HandleResponse(response, serviceLogId, customerId);
+				}
+				catch (Exception e)
+				{
+					log.Error("Exception while processing response. ServiceLogId:{0} CustomerId:{1}. The exception:{2}", serviceLogId, customerId, e);
+				}
 			}
 		}
 
@@ -58,7 +65,7 @@
 				{
 					try
 					{
-						FinancialAccount financialAccount = HandleOneCaisDetailsBlock(currentCaisDetails, serviceLogId, customerId);
+						FinancialAccount financialAccount = HandleOneCaisDetailsBlock(currentCaisDetails);
 						financialAccounts.Add(financialAccount);
 					}
 					catch (Exception ex)
@@ -75,7 +82,7 @@
 			}
 		}
 
-		private void UpdateFinancialAccounts(List<FinancialAccount> financialAccounts, int serviceLogId, int customerId)
+		private void UpdateFinancialAccounts(IEnumerable<FinancialAccount> financialAccounts, int serviceLogId, int customerId)
 		{
 			db.ExecuteNonQuery("DeletePreviousFinancialAccounts", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
 
@@ -84,7 +91,7 @@
 				db.ExecuteNonQuery("InsertFinancialAccount", CommandSpecies.StoredProcedure,
 					new QueryParameter("CustomerId", customerId),
 					new QueryParameter("ServiceLogId", serviceLogId),
-					new QueryParameter("StartDate", financialAccount.StartDate), //qqq - consider null for all dates
+					new QueryParameter("StartDate", financialAccount.StartDate),
 					new QueryParameter("AccountStatus", financialAccount.AccountStatus),
 					new QueryParameter("DateType", financialAccount.DateType),
 					new QueryParameter("SettlementOrDefaultDate", financialAccount.SettlementOrDefaultDate),
@@ -162,18 +169,19 @@
 			return null;
 		}
 
-		private FinancialAccount HandleOneCaisDetailsBlock(XmlElement currentCaisDetails, int serviceLogId, int customerId)
+		private FinancialAccount HandleOneCaisDetailsBlock(XmlElement currentCaisDetails)
 		{
 			var result = new FinancialAccount();
 
-			result.StartDate = ReadDateFromNode(currentCaisDetails.SelectSingleNode("CAISAccStartDate"));
-			
 			XmlNode accountStatusCodeNode = currentCaisDetails.SelectSingleNode("AccountStatus");
 			string accountStatusCode = null;
 			if (accountStatusCodeNode != null)
 			{
 				accountStatusCode = accountStatusCodeNode.InnerText;
 			}
+
+			result.StartDate = ReadDateFromNode(currentCaisDetails.SelectSingleNode("CAISAccStartDate"));
+			
 			string dateType;
 			result.AccountStatus = GetAccountStatusString(accountStatusCode, out dateType);
 			result.DateType = dateType;

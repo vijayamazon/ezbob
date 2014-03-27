@@ -11,6 +11,6 @@ BEGIN
 	IF @MaxServiceLogId IS NULL
 		SET @MaxServiceLogId = 0
 
-	SELECT Id, CustomerId, ResponseData FROM MP_ServiceLog WHERE Id > @MaxServiceLogId AND ServiceType = 'Consumer Request' AND DirectorId IS NULL ORDER BY Id ASC
+	SELECT Id, CustomerId, ResponseData FROM MP_ServiceLog WHERE Id > @MaxServiceLogId AND ServiceType = 'Consumer Request' AND ResponseData LIKE '%CAISDetails%' AND DirectorId IS NULL ORDER BY Id ASC
 END
 GO
