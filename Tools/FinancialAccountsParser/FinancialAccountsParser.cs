@@ -18,6 +18,7 @@
 
 		public FinancialAccountsParser()
 		{
+			log4net.Config.XmlConfigurator.Configure();
 			log = new SafeILog(LogManager.GetLogger(typeof (FinancialAccountsParser)));
 			db = new SqlConnection(new Ezbob.Context.Environment(Name.Production), log);
 		}
