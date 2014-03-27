@@ -54,9 +54,13 @@ EzBob.Underwriter.MarketPlaceDetailsView = Backbone.Marionette.View.extend({
         data.hideMarketplaces = data.marketplaces == 0;
 
         this.$el.html(this.template(data));
-        this.$el.find('a[data-bug-type]').tooltip({ title: 'Report bug' });
-        this.$el.find('i[data-yodlee-calculated]').tooltip({ title: 'Calculated Field' });
-        this.$el.find('.clear-filter').tooltip({ title: 'Clear all filters', placement: 'bottom' });
+
+    	// TODO: story EZ-1971 fix it. The issue: when this tooltip is enabled moving mouse over (or out) the
+    	// element with the tooltip causes entire dialog window content to shake a bit.
+
+        // this.$el.find('a[data-bug-type]').tooltip({ title: 'Report bug' });
+        // this.$el.find('i[data-yodlee-calculated]').tooltip({ title: 'Calculated Field' });
+        // this.$el.find('.clear-filter').tooltip({ title: 'Clear all filters', placement: 'bottom' });
 
         if (this.shop.get('Name') == 'Yodlee') {
 
