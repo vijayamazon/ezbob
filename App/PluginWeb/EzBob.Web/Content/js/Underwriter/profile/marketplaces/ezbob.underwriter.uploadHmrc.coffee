@@ -31,9 +31,12 @@ class EzBob.Underwriter.UploadHmrcView extends Backbone.Marionette.ItemView
         @ui.hmrcUploadZone.dropzone()
         @
 
-    uploadHmrcClicked: ->
+    uploadHmrcClicked: (event) ->
+        event.preventDefault()
+        event.stopPropagation()
+
         return false if @ui.uploadHmrcButton.hasClass('disabled')
-        
+
         that = this
         BlockUi 'on'
         xhr = $.post(window.gRootPath + "UploadHmrc/UploadFiles", { customerId : @customerId })
@@ -45,6 +48,8 @@ class EzBob.Underwriter.UploadHmrcView extends Backbone.Marionette.ItemView
         xhr.always ->
             BlockUi 'off'
 
-    backClicked: ->
+    backClicked: (event) ->
+        event.preventDefault()
+        event.stopPropagation()
+
         EzBob.App.vent.trigger 'ct:marketplaces.uploadHmrcBack'
-        

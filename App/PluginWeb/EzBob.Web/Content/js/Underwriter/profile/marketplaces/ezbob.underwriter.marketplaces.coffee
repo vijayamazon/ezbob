@@ -37,63 +37,64 @@ class EzBob.Underwriter.MarketPlacesView extends Backbone.Marionette.ItemView
     initialize: ->
         @model.on "reset change sync", @render, this
         @rendered = false
+
         window.YodleeTryRecheck = (result) ->
             if (result.error)
                 EzBob.ShowMessage result.error, "Yodlee Recheck Error", "OK"
             else
                 EzBob.ShowMessage 'Yodlee recheked successfully, refresh the page', null, "OK"
+        # end of YodleeTryRecheck
+
+        EzBob.App.vent.on 'ct:marketplaces.history', () =>
+            @$el.find('#hmrc-upload-container').hide().empty()
+        # end of on history
+
+        EzBob.App.vent.on 'ct:marketplaces.uploadHmrc', () =>
+            oUploader = $('<div></div>')
+
+            @$el.find('#hmrc-upload-container').empty().append(oUploader)
+
+            uploadHmrcView = new EzBob.Underwriter.UploadHmrcView
+                el: oUploader
+                customerId: @model.customerId
+
+            uploadHmrcView.render()
+
+            @$el.find('#hmrc-upload-container').show()
+
+            $(".mps-tables").hide()
+        # end of on uploadHmrc
+
+        EzBob.App.vent.on 'ct:marketplaces.uploadHmrcBack', () =>
+            $(".mps-tables").show()
+            @$el.find('#hmrc-upload-container').hide().empty()
+        # end of on uploadHmrcBack
+
         @
+    # end of initialize
 
     onRender: ->
         @$el.find('.mp-error-description').tooltip(({placement: "bottom"}));
+
         @$el.find('a[data-bug-type]').tooltip({title: 'Report bug'});
+
         _.each(@$el.find('[data-original-title]'), (elem) ->
             $(elem).tooltip({title: elem.getAttribute('data-original-title')});
         )
 
-        if @detailView!= undefined
+        if @detailView
             @detailView.render()
 
         marketplacesHistoryDiv = @$el.find("#marketplaces-history")
         @marketPlacesHistory = new EzBob.Underwriter.MarketPlacesHistory()
         @marketPlacesHistory.customerId = @model.customerId
         @marketPlacesHistory.silent = true
+
         @marketPlaceHistoryView = new EzBob.Underwriter.MarketPlacesHistoryView(
             model: @marketPlacesHistory
             el: marketplacesHistoryDiv
             customerId: @model.customerId
         )
-
-        that = @
-        
-        EzBob.App.vent.on 'ct:marketplaces.history', () =>
-            if(that.uploadHmrcView) 
-                that.uploadHmrcView.close()
-                that.uploadHmrcView = null
-                that.$el.find('#hmrc-upload-container').empty()
-
-        EzBob.App.vent.on 'ct:marketplaces.uploadHmrc', () =>
-            if(!that.uploadHmrcView)
-                oUploader = $('<div></div>')
-
-                that.$el.find('#hmrc-upload-container').append(oUploader)
-
-                that.uploadHmrcView = new EzBob.Underwriter.UploadHmrcView(
-                    el: oUploader
-                    customerId: @model.customerId
-                )
-                that.uploadHmrcView.render()
-            else
-                that.uploadHmrcView.render()
-                that.uploadHmrcView.$el.show()
-
-            $(".mps-tables").hide()
-            
-        EzBob.App.vent.on 'ct:marketplaces.uploadHmrcBack', () =>
-            $(".mps-tables").show()
-            that.uploadHmrcView.close()
-            that.uploadHmrcView = null
-            that.$el.find('#hmrc-upload-container').empty()
 
         return this
     # end of onRender

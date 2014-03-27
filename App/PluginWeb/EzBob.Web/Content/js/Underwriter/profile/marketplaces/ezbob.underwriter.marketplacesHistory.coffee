@@ -37,5 +37,8 @@ class EzBob.Underwriter.MarketPlacesHistoryView extends Backbone.Marionette.Item
     showCurrentMarketPlacesClicked: ->
         EzBob.App.vent.trigger 'ct:marketplaces.history', null
         
-    uploadHmrcClicked: ->
+    uploadHmrcClicked: (event) ->
+        event.preventDefault()
+        event.stopPropagation()
+
         EzBob.App.vent.trigger 'ct:marketplaces.uploadHmrc'

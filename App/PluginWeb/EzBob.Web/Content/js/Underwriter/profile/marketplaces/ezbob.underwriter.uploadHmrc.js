@@ -58,8 +58,10 @@
       return this;
     };
 
-    UploadHmrcView.prototype.uploadHmrcClicked = function() {
+    UploadHmrcView.prototype.uploadHmrcClicked = function(event) {
       var that, xhr;
+      event.preventDefault();
+      event.stopPropagation();
       if (this.ui.uploadHmrcButton.hasClass('disabled')) {
         return false;
       }
@@ -80,7 +82,9 @@
       });
     };
 
-    UploadHmrcView.prototype.backClicked = function() {
+    UploadHmrcView.prototype.backClicked = function(event) {
+      event.preventDefault();
+      event.stopPropagation();
       return EzBob.App.vent.trigger('ct:marketplaces.uploadHmrcBack');
     };
 

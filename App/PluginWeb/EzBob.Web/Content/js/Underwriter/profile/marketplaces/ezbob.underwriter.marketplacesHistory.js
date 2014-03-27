@@ -89,7 +89,9 @@
       return EzBob.App.vent.trigger('ct:marketplaces.history', null);
     };
 
-    MarketPlacesHistoryView.prototype.uploadHmrcClicked = function() {
+    MarketPlacesHistoryView.prototype.uploadHmrcClicked = function(event) {
+      event.preventDefault();
+      event.stopPropagation();
       return EzBob.App.vent.trigger('ct:marketplaces.uploadHmrc');
     };
 

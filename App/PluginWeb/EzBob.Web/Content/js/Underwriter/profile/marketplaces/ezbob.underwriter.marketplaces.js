@@ -83,6 +83,7 @@
     MarketPlacesView.prototype.template = "#marketplace-template";
 
     MarketPlacesView.prototype.initialize = function() {
+      var _this = this;
       this.model.on("reset change sync", this.render, this);
       this.rendered = false;
       window.YodleeTryRecheck = function(result) {
@@ -92,12 +93,30 @@
           return EzBob.ShowMessage('Yodlee recheked successfully, refresh the page', null, "OK");
         }
       };
+      EzBob.App.vent.on('ct:marketplaces.history', function() {
+        return _this.$el.find('#hmrc-upload-container').hide().empty();
+      });
+      EzBob.App.vent.on('ct:marketplaces.uploadHmrc', function() {
+        var oUploader, uploadHmrcView;
+        oUploader = $('<div></div>');
+        _this.$el.find('#hmrc-upload-container').empty().append(oUploader);
+        uploadHmrcView = new EzBob.Underwriter.UploadHmrcView({
+          el: oUploader,
+          customerId: _this.model.customerId
+        });
+        uploadHmrcView.render();
+        _this.$el.find('#hmrc-upload-container').show();
+        return $(".mps-tables").hide();
+      });
+      EzBob.App.vent.on('ct:marketplaces.uploadHmrcBack', function() {
+        $(".mps-tables").show();
+        return _this.$el.find('#hmrc-upload-container').hide().empty();
+      });
       return this;
     };
 
     MarketPlacesView.prototype.onRender = function() {
-      var marketplacesHistoryDiv, that,
-        _this = this;
+      var marketplacesHistoryDiv;
       this.$el.find('.mp-error-description').tooltip({
         placement: "bottom"
       });
@@ -109,7 +128,7 @@
           title: elem.getAttribute('data-original-title')
         });
       });
-      if (this.detailView !== void 0) {
+      if (this.detailView) {
         this.detailView.render();
       }
       marketplacesHistoryDiv = this.$el.find("#marketplaces-history");
@@ -120,36 +139,6 @@
         model: this.marketPlacesHistory,
         el: marketplacesHistoryDiv,
         customerId: this.model.customerId
-      });
-      that = this;
-      EzBob.App.vent.on('ct:marketplaces.history', function() {
-        if (that.uploadHmrcView) {
-          that.uploadHmrcView.close();
-          that.uploadHmrcView = null;
-          return that.$el.find('#hmrc-upload-container').empty();
-        }
-      });
-      EzBob.App.vent.on('ct:marketplaces.uploadHmrc', function() {
-        var oUploader;
-        if (!that.uploadHmrcView) {
-          oUploader = $('<div></div>');
-          that.$el.find('#hmrc-upload-container').append(oUploader);
-          that.uploadHmrcView = new EzBob.Underwriter.UploadHmrcView({
-            el: oUploader,
-            customerId: _this.model.customerId
-          });
-          that.uploadHmrcView.render();
-        } else {
-          that.uploadHmrcView.render();
-          that.uploadHmrcView.$el.show();
-        }
-        return $(".mps-tables").hide();
-      });
-      EzBob.App.vent.on('ct:marketplaces.uploadHmrcBack', function() {
-        $(".mps-tables").show();
-        that.uploadHmrcView.close();
-        that.uploadHmrcView = null;
-        return that.$el.find('#hmrc-upload-container').empty();
       });
       return this;
     };
