@@ -6,9 +6,12 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
 	using ApplicationMng.Repository;
 	using DatabaseWrapper;
 	using EzBob.CommonLib.MarketplaceSpecificTypes.TeraPeakOrdersData;
-	using NHibernate;
+    using Ezbob.Database;
+    using Ezbob.Logger;
+    using NHibernate;
+    using log4net;
 
-    public interface ICustomerMarketPlaceRepository : IRepository<MP_CustomerMarketPlace>
+	public interface ICustomerMarketPlaceRepository : IRepository<MP_CustomerMarketPlace>
     {
         bool Exists(Customer customer, MP_MarketplaceType marketplaceType);
         IEnumerable<MP_CustomerMarketPlace> Get(Customer customer, MP_MarketplaceType marketplaceType);
@@ -26,10 +29,17 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
 
     public class CustomerMarketPlaceRepository : NHibernateRepositoryBase<MP_CustomerMarketPlace>, ICustomerMarketPlaceRepository
     {
-        public CustomerMarketPlaceRepository(ISession session)
-            : base(session)
-        {
-        }
+		public CustomerMarketPlaceRepository(ISession session) : base(session) {
+			m_oRetryer = new SqlRetryer(
+				3,
+				500,
+				new SafeILog(LogManager.GetLogger(typeof(CustomerMarketPlaceRepository)))
+			);
+		}
+
+		public override void Update(MP_CustomerMarketPlace val) {
+			m_oRetryer.Retry(() => base.Update(val));
+		}
 
         public bool Exists(Customer customer, MP_MarketplaceType marketplaceType)
         {
@@ -167,5 +177,7 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
             mp.UpdatingEnd = null;
             Update(mp);
         }
+
+	    private SqlRetryer m_oRetryer;
     }
 }
