@@ -62,6 +62,18 @@
 				m_oLog.Info("Broker page sent to browser with authentication result: {0}", sAuthenticationResult);
 			} // if
 
+			try {
+				BrokerSmsCountActionResult bsc = m_oServiceClient.Instance.BrokerLoadSmsCount();
+
+				ViewData[Constant.Broker.MaxPerNumber] = bsc.MaxPerNumber;
+				ViewData[Constant.Broker.MaxPerPage] = bsc.MaxPerPage;
+			}
+			catch (Exception e) {
+				m_oLog.Warn(e, "Failed to load broker SMS count configuration, using defaults.");
+				ViewData[Constant.Broker.MaxPerNumber] = 3;
+				ViewData[Constant.Broker.MaxPerPage] = 10;
+			} // try
+
 			return View();
 		} // Index
 
@@ -133,7 +145,7 @@
 			}
 			catch (Exception e) {
 				m_oLog.Alert(e, "Failed to signup as a broker.");
-				return new BrokerForJsonResult("Failed to signup.");
+				return new BrokerForJsonResult("Registration failed.");
 			} // try
 
 			FormsAuthentication.SetAuthCookie(ContactEmail, true);

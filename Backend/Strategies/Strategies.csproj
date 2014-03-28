@@ -89,6 +89,7 @@
     <Compile Include="Broker\BrokerAddCustomerLead.cs" />
     <Compile Include="Broker\BrokerLeadCanFillWizard.cs" />
     <Compile Include="Broker\BrokerLeadAcquireCustomer.cs" />
+    <Compile Include="Broker\BrokerLoadSmsCount.cs" />
     <Compile Include="CompanyFiles.cs" />
     <Compile Include="Broker\BrokerDownloadCustomerFile.cs" />
     <Compile Include="Broker\BrokerSaveUploadedCustomerFile.cs" />

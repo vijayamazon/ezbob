@@ -184,6 +184,7 @@ namespace EzBob.Web.EzServiceReference {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="ActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
     [System.SerializableAttribute()]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.BrokerSmsCountActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.BoolActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.BrokerCustomersActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.BrokerCustomerDetailsActionResult))]
@@ -234,6 +235,45 @@ namespace EzBob.Web.EzServiceReference {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
                 propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="BrokerSmsCountActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class BrokerSmsCountActionResult : EzBob.Web.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int MaxPerNumberField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int MaxPerPageField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int MaxPerNumber {
+            get {
+                return this.MaxPerNumberField;
+            }
+            set {
+                if ((this.MaxPerNumberField.Equals(value) != true)) {
+                    this.MaxPerNumberField = value;
+                    this.RaisePropertyChanged("MaxPerNumber");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int MaxPerPage {
+            get {
+                return this.MaxPerPageField;
+            }
+            set {
+                if ((this.MaxPerPageField.Equals(value) != true)) {
+                    this.MaxPerPageField = value;
+                    this.RaisePropertyChanged("MaxPerPage");
+                }
             }
         }
     }
@@ -785,6 +825,9 @@ namespace EzBob.Web.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckBwaCustom", ReplyAction="http://tempuri.org/IEzService/CheckBwaCustomResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData CheckBwaCustom(int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet, string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode, string idhubBranchCode, string idhubAccountNumber);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLoadSmsCount", ReplyAction="http://tempuri.org/IEzService/BrokerLoadSmsCountResponse")]
+        EzBob.Web.EzServiceReference.BrokerSmsCountActionResult BrokerLoadSmsCount();
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/IsBroker", ReplyAction="http://tempuri.org/IEzService/IsBrokerResponse")]
         EzBob.Web.EzServiceReference.BoolActionResult IsBroker(string sContactEmail);
         
@@ -1056,6 +1099,10 @@ namespace EzBob.Web.EzServiceReference {
         
         public EzBob.Web.EzServiceReference.ActionMetaData CheckBwaCustom(int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet, string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode, string idhubBranchCode, string idhubAccountNumber) {
             return base.Channel.CheckBwaCustom(customerId, idhubHouseNumber, idhubHouseName, idhubStreet, idhubDistrict, idhubTown, idhubCounty, idhubPostCode, idhubBranchCode, idhubAccountNumber);
+        }
+        
+        public EzBob.Web.EzServiceReference.BrokerSmsCountActionResult BrokerLoadSmsCount() {
+            return base.Channel.BrokerLoadSmsCount();
         }
         
         public EzBob.Web.EzServiceReference.BoolActionResult IsBroker(string sContactEmail) {

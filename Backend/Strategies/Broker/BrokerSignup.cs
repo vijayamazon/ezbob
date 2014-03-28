@@ -153,61 +153,54 @@
 
 			#region properties
 
-			[Traversable]
 			public string FirmName { get; set; }
 
-			[Traversable]
 			public string FirmRegNum { get; set; }
 
-			[Traversable]
 			public string ContactName { get; set; }
 
-			[Traversable]
 			public string ContactEmail { get; set; }
 
-			[Traversable]
 			public string ContactMobile { get; set; }
 
+			[NonTraversable]
 			public string MobileCode { get; set; }
 
-			[Traversable]
 			public string ContactOtherPhone { get; set; }
 
-			[Traversable]
 			public decimal EstimatedMonthlyClientAmount { get; set; }
 
-			[Traversable]
+			#region property Password
+
 			public string Password {
-				get { return SecurityUtils.HashPassword(m_sPassword); } // get
+				get { return SecurityUtils.HashPassword(ContactEmail + m_sPassword); } // get
 				set { m_sPassword = value; } // set
 			} // Password
 
 			private string m_sPassword;
 
-			[Traversable]
+			#endregion property Password
+
 			public string TempSourceRef {
 				get { return Guid.NewGuid().ToString("N"); }
 				set { }
 			} // TempSourceRef
 
-			[Traversable]
 			public string FirmWebSiteUrl { get; set; }
 
-			[Traversable]
 			public int EstimatedMonthlyApplicationCount { get; set; }
 
-			[Traversable]
 			public DateTime AgreedToTermsDate {
 				get { return DateTime.UtcNow; }
 				set { }
 			} // AgreedToTermsDate
 
-			[Traversable]
 			public DateTime AgreedToPrivacyPolicyDate {
 				get { return DateTime.UtcNow; }
 				set { }
 			} // AgreedToPrivacyPolicyDate
 
+			[NonTraversable]
 			public string Password2 { get; set; }
 
 			#endregion properties

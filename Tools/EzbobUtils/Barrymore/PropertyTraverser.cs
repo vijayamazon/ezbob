@@ -11,6 +11,13 @@
 
 	#endregion class TraversableAttribute
 
+	#region class NonTraversableAttribute
+
+	[System.AttributeUsage(System.AttributeTargets.Property, AllowMultiple = false)]
+	public class NonTraversableAttribute : Attribute { } // NonTraversableAttribute
+
+	#endregion class NonTraversableAttribute
+
 	#region interface ITraversable
 
 	public interface ITraversable {
@@ -73,8 +80,12 @@
 			if (oSelected.Count == 0)
 				oSelected.AddRange(oPropertyList);
 
-			foreach (PropertyInfo pi in oSelected)
-				oCallback(oInstance, pi);
+			foreach (PropertyInfo pi in oSelected) {
+				object[] oAttrList = pi.GetCustomAttributes(typeof(NonTraversableAttribute), false);
+
+				if (oAttrList.Length == 0)
+					oCallback(oInstance, pi);
+			} // foreach
 		} // Traverse
 
 		#endregion private

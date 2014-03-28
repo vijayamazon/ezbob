@@ -11,4 +11,6 @@ EzBob.Broker.BaseView = EzBob.View.extend({
 	onFocus: function() {}, // onFocus
 
 	adjustValidatorCfg: function(oCfg) {}, // adjustValidatorCfg
+
+	onBlur: function() { EzBob.App.trigger('clear'); }, // onBlur
 }); // EzBob.Broker.BaseView

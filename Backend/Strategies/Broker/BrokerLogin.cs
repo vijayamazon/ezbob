@@ -34,7 +34,7 @@
 				"BrokerLogin",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("@Email", m_sEmail),
-				new QueryParameter("@Password", SecurityUtils.HashPassword(m_sPassword))
+				new QueryParameter("@Password", SecurityUtils.HashPassword(m_sEmail + m_sPassword))
 			);
 
 			if (!string.IsNullOrWhiteSpace(sErrMsg))

@@ -4,6 +4,16 @@ EzBob.Broker = EzBob.Broker || {};
 EzBob.Broker.MobilePhoneView = EzBob.Broker.SubmitView.extend({
 	initialize: function() {
 		EzBob.Broker.MobilePhoneView.__super__.initialize.apply(this, arguments);
+
+		this.hasCodeEverBeenSent = false;
+
+		this.sendToCurrentCount = 0;
+		this.sendAttemptsCount = 0;
+
+		var oCfg = $('#broker-sms-count');
+
+		this.maxSendToCurrentCount = oCfg.attr('data-max-per-number') || 3;
+		this.maxSendAttemptsCount = oCfg.attr('data-max-per-page') || 10;
 	}, // initialize
 
 	initMobilePhoneFields: function(opts) {
@@ -36,12 +46,28 @@ EzBob.Broker.MobilePhoneView = EzBob.Broker.SubmitView.extend({
 			'#' + this.GenerateCodeBtnID, this.validator.check(this.$el.find('#' + this.PhoneFieldID))
 		).val('Send activation code');
 
+		this.sendToCurrentCount = 0;
 		this.$el.find('#' + this.MobileCodeFieldID).val('').blur();
 		this.$el.find('#' + this.MobileCodeSectionID).hide();
 		this.$el.find('#' + this.CodeSentLabelID).animate({ opacity: 0 }).hide();
 
+		this.handleToManyAttempts();
+
 		return false;
 	}, // mobilePhoneChanged
+
+	handleToManyAttempts: function() {
+		if ((this.sendToCurrentCount >= this.maxSendToCurrentCount) || (this.sendAttemptsCount >= this.maxSendAttemptsCount)) {
+			this.setSomethingEnabled('#' + this.GenerateCodeBtnID, false);
+
+			EzBob.App.trigger('clear');
+
+			if (this.sendToCurrentCount >= this.maxSendToCurrentCount)
+				EzBob.App.trigger('warning', 'Too many attempts to send verification code to number ' + this.$el.find('#' + this.PhoneFieldID).val() + '.');
+			else
+				EzBob.App.trigger('error', 'Too many attempts to send verification code.');
+		} // if
+	}, // handleToManyAttempts
 
 	generateMobileCode: function() {
 		if (!this.isSomethingEnabled('#' + this.GenerateCodeBtnID))
@@ -49,26 +75,45 @@ EzBob.Broker.MobilePhoneView = EzBob.Broker.SubmitView.extend({
 
 		EzBob.App.trigger('clear');
 
-		var self = this;
+		this.sendToCurrentCount++;
+		this.sendAttemptsCount++;
 
-		var xhr = $.post(window.gRootPath + 'Account/GenerateMobileCode', { mobilePhone: this.$el.find('#' + this.PhoneFieldID).val() });
+		this.handleToManyAttempts();
 
-		xhr.done(function(isError) {
-			if (isError !== 'False' && (!isError.success || isError.error === 'True'))
+		if ((this.sendToCurrentCount <= this.maxSendToCurrentCount) && (this.sendAttemptsCount <= this.maxSendAttemptsCount)) {
+			var self = this;
+
+			var xhr = $.post(window.gRootPath + 'Account/GenerateMobileCode', { mobilePhone: this.$el.find('#' + this.PhoneFieldID).val() });
+
+			xhr.done(function(isError) {
+				if (isError !== 'False' && (!isError.success || isError.error === 'True'))
+					EzBob.App.trigger('error', 'Error sending code.');
+				else {
+					self.$el.find('#' + self.CodeSentLabelID).removeClass('hide').show().animate({ opacity: 1 });
+					this.hasCodeEverBeenSent = true;
+				} // if
+
+				return false;
+			}); // on success
+
+			xhr.fail(function() {
 				EzBob.App.trigger('error', 'Error sending code.');
-			else
-				self.$el.find('#' + self.CodeSentLabelID).removeClass('hide').show().animate({ opacity: 1 });
+			}); // on failure
 
-			return false;
-		});
+			xhr.always(function() {
+				if (this.hasCodeEverBeenSent) {
+					self.$el.find('#' + self.MobileCodeSectionID).removeClass('hide').show();
+					self.$el.find('#' + self.GenerateCodeBtnID).val('Resend activation code');
 
-		xhr.always(function() {
-			self.$el.find('#' + self.MobileCodeSectionID).removeClass('hide').show();
-			self.$el.find('#' + self.GenerateCodeBtnID).val('Resend activation code');
-
-			if (document.activeElement && ($(document.activeElement).attr('id') === self.GenerateCodeBtnID))
-				self.$el.find('#' + self.MobileCodeFieldID).focus();
-		});
+					if (document.activeElement && ($(document.activeElement).attr('id') === self.GenerateCodeBtnID))
+						self.$el.find('#' + self.MobileCodeFieldID).focus();
+				}
+				else {
+					this.$el.find('#' + this.MobileCodeFieldID).val('').blur();
+					this.$el.find('#' + this.MobileCodeSectionID).hide();
+				} // if
+			}); // always
+		} // if
 
 		return false;
 	}, // generateMobileCode

@@ -79,6 +79,7 @@ EzBob.Broker.Router = Backbone.Router.extend({
 		else {
 			this.createView('signup', EzBob.Broker.SignupView);
 			this.show('signup', 'log-in', 'signup');
+			this.navigate('signup');
 		} // if
 	}, // signup
 
@@ -219,13 +220,19 @@ EzBob.Broker.Router = Backbone.Router.extend({
 			oSection.fadeIn(400, function() {
 				if (oView)
 					oView.onFocus();
+
+				self.currentView = oView;
 			});
 		}; // oShowPage
 
 		var oActive = $('.page-section:visible');
 
-		if (oActive.length)
+		if (oActive.length) {
+			if (this.currentView)
+				this.currentView.onBlur();
+
 			oActive.fadeOut(400, oShowPage);
+		}
 		else
 			oShowPage();
 

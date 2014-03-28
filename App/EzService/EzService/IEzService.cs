@@ -35,6 +35,9 @@
 		#region Broker
 
 		[OperationContract]
+		BrokerSmsCountActionResult BrokerLoadSmsCount();
+
+		[OperationContract]
 		BoolActionResult IsBroker(string sContactEmail);
 
 		[OperationContract]

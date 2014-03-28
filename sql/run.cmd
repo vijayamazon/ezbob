@@ -4,26 +4,34 @@ set MY_PATH=%~dp0
 
 set BASH=%MY_PATH%Bash\bash.exe
 
+set RUN_ONE_DIR=%MY_PATH%run-one-dir.cmd
+
 set SCRIPT=%MY_PATH%incremental.sh
 
-set TYPES_PATH=%MY_PATH%types
+for %%d in (
+	%MY_PATH%types
 
-set QUERIES_PATH=%MY_PATH%current
-set SPS_PATH=%MY_PATH%SPs
-set VIEWS_PATH=%MY_PATH%Views
-set VIEWS_2_PATH=%MY_PATH%Views_2
-set TRIGGERS_PATH=%MY_PATH%Triggers
-set FUNCTIONS_PATH=%MY_PATH%Functions
-set FUNCTIONS_2_PATH=%MY_PATH%Functions_2
+	%MY_PATH%current
+	%MY_PATH%Triggers
+	%MY_PATH%Functions
+	%MY_PATH%Views
+	%MY_PATH%SPs
 
-%BASH% %SCRIPT% %TYPES_PATH%
+	%MY_PATH%Functions_2
+	%MY_PATH%Views_2
+) do @( call %RUN_ONE_DIR% %RUN_ONE_DIR% %BASH% %SCRIPT% %%d )
 
-%BASH% %SCRIPT% %QUERIES_PATH%
-%BASH% %SCRIPT% %TRIGGERS_PATH%
-%BASH% %SCRIPT% %FUNCTIONS_PATH%
-%BASH% %SCRIPT% %VIEWS_PATH%
-%BASH% %SCRIPT% %SPS_PATH%
+echo.
+echo.
+echo.
 
-%BASH% %SCRIPT% %FUNCTIONS_2_PATH%
-%BASH% %SCRIPT% %VIEWS_2_PATH%
+echo.
+echo Output files:
+echo.
+
+dir /A-H-S-D /S /B output*.*
+
+echo.
+echo Output files - end of list.
+echo.
 

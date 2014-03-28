@@ -12,6 +12,8 @@
 			public const string LeadFirstName = "BrokerLeadFirstName";
 			public const string LeadID = "BrokerLeadID";
 			public const string LeadLastName = "BrokerLeadLastName";
+			public const string MaxPerNumber = "BrokerMaxPerNumber";
+			public const string MaxPerPage = "BrokerMaxPerPage";
 			public const string MessageOnStart = "BrokerMessageOnStart";
 			public const string MessageOnStartSeverity = "BrokerMessageOnStartSeverity";
 		} // class Broker

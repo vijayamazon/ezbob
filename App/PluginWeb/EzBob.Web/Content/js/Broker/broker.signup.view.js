@@ -72,7 +72,7 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 			} // if
 
 			if (res.error)
-				EzBob.App.trigger('error', res.error);
+				EzBob.App.trigger('error', res.error + ' Please contact customer care.');
 
 			self.setSubmitEnabled(true);
 		}); // on success

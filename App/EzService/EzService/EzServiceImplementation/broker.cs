@@ -25,6 +25,22 @@
 
 		#region sync
 
+		#region method BrokerLoadSmsCount
+
+		public BrokerSmsCountActionResult BrokerLoadSmsCount() {
+			BrokerLoadSmsCount oInstance;
+
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null);
+
+			return new BrokerSmsCountActionResult {
+				MetaData = oMetaData,
+				MaxPerNumber = oInstance.MaxPerNumber,
+				MaxPerPage = oInstance.MaxPerPage,
+			};
+		} // BrokerLoadSmsCount
+
+		#endregion method BrokerLoadSmsCount
+
 		#region method IsBroker
 
 		public BoolActionResult IsBroker(string sContactEmail) {

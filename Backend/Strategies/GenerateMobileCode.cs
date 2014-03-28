@@ -1,29 +1,31 @@
 ﻿namespace EzBob.Backend.Strategies {
 	using System;
-	using System.Data;
 	using System.Globalization;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Twilio;
 
-	public class GenerateMobileCode : AStrategy
-	{
-		private readonly string mobilePhone;
-		private string accountSid;
-		private string authToken;
-		private string fromNumber;
-		private int maxPerDay;
-		private int maxPerNumber;
-		private const string UkMobilePrefix = "+44";
-		private string skipCodeGenerationNumber;
+	public class GenerateMobileCode : AStrategy {
+		#region public
 
 		#region constructor
 
-		public GenerateMobileCode(string mobilePhone, AConnection oDb, ASafeLog oLog)
-			: base(oDb, oLog)
-		{
-			this.mobilePhone = mobilePhone;
-			ReadConfigurations();
+		public GenerateMobileCode(string sMobilePhone, AConnection oDb, ASafeLog oLog) : base(oDb, oLog) {
+			m_sMobilePhone = sMobilePhone;
+
+			DB.ForEachRowSafe(
+				(sr, bRowsetStart) => {
+					m_sAccountSid = sr["TwilioAccountSid"];
+					m_sAuthToken = sr["TwilioAuthToken"];
+					m_sFromNumber = sr["TwilioSendingNumber"];
+					m_nMaxPerDay = sr["MaxPerDay"];
+					m_nMaxPerNumber = sr["MaxPerNumber"];
+					m_sSkipCodeGenerationNumber = sr["SkipCodeGenerationNumber"];
+					return ActionResult.SkipAll;
+				},
+				"GetTwilioConfigs",
+				CommandSpecies.StoredProcedure
+			);
 		} // constructor
 
 		#endregion constructor
@@ -36,77 +38,98 @@
 
 		#endregion property Name
 
-		#region property Execute
+		#region property IsError
 
-		public override void Execute()
-		{
-			if (skipCodeGenerationNumber == mobilePhone)
-			{
-				Log.Info("Mobile phone {0} detected. Code won't be generated.", mobilePhone);
+		public bool IsError { get; private set; }
+
+		#endregion property IsError
+
+		#region method Execute
+
+		public override void Execute() {
+			if (m_sSkipCodeGenerationNumber == m_sMobilePhone) {
+				Log.Info("'Skip code generation' number {0} detected. Code won't be generated.", m_sMobilePhone);
 				return;
-			}
+			} // if
 
-			DataTable dt = DB.ExecuteReader("GetCurrentMobileCodeCount", CommandSpecies.StoredProcedure, new QueryParameter("Phone", mobilePhone));
-			var results = new SafeReader(dt.Rows[0]);
-			
-			int sentToday = results["SentToday"];
-			int sentNumber = results["SentToNumber"];
-			if (maxPerDay <= sentToday)
-			{
+			int sentToday = 0;
+			int sentNumber = 0;
+
+			DB.ForEachRowSafe(
+				(sr, bRowsetStart) => {
+					sentToday = sr["SentToday"];
+					sentNumber = sr["SentToNumber"];
+					return ActionResult.SkipAll;
+				},
+				"GetCurrentMobileCodeCount",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("Phone", m_sMobilePhone)
+			);
+
+			if (m_nMaxPerDay <= sentToday) {
 				IsError = true;
-				Log.Warn("Reached max number of daily SMS messages ({0}). SMS not sent", maxPerDay);
+				Log.Warn("Reached max number of daily SMS messages ({0}). SMS not sent", m_nMaxPerDay);
 				return;
-			}
+			} // if
 
-			if (maxPerNumber <= sentNumber)
-			{
+			if (m_nMaxPerNumber <= sentNumber) {
 				IsError = true;
-				Log.Warn("Reached max number of SMS messages ({0}) to number:{1}. SMS not sent", maxPerNumber, mobilePhone);
+				Log.Warn("Reached max number of SMS messages ({0}) to number:{1}. SMS not sent", m_nMaxPerNumber, m_sMobilePhone);
 				return;
-			}
+			} // if
 
 			GenerateCodeAndSend();
 		} // Execute
 
-		private void GenerateCodeAndSend()
-		{
+		#endregion method Execute
+
+		#endregion public
+
+		#region private
+
+		#region method GenerateCodeAndSend
+
+		private void GenerateCodeAndSend() {
 			var random = new Random();
 			string code = (100000 + random.Next(899999)).ToString(CultureInfo.InvariantCulture);
 
-			DB.ExecuteNonQuery("StoreMobileCode", CommandSpecies.StoredProcedure,
-				new QueryParameter("Phone", mobilePhone),
-				new QueryParameter("Code", code));
+			DB.ExecuteNonQuery(
+				"StoreMobileCode",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("Phone", m_sMobilePhone),
+				new QueryParameter("Code", code)
+			);
 
-			var twilio = new TwilioRestClient(accountSid, authToken);
+			var twilio = new TwilioRestClient(m_sAccountSid, m_sAuthToken);
 
-			string content = string.Format("Your authentication code is:{0}", code);
-			string sendMobilePhone = string.Format("{0}{1}", UkMobilePrefix, mobilePhone.Substring(1));
-			var message = twilio.SendSmsMessage(fromNumber, sendMobilePhone, content, "");
-			if (message.Status == null)
-			{
+			string content = string.Format("Your authentication code is: {0}", code);
+
+			string sendMobilePhone = string.Format("{0}{1}", UkMobilePrefix, m_sMobilePhone.Substring(1));
+
+			var message = twilio.SendSmsMessage(m_sFromNumber, sendMobilePhone, content, "");
+
+			if (message.Status == null) {
 				IsError = true;
 				Log.Warn(string.Format("Failed sending SMS to number:{0}", sendMobilePhone));
 				return;
-			}
+			} // if
 
 			Log.Info("Sms message sent to '{0}'. Sid:'{1}'", sendMobilePhone, message.Sid);
-		}
+		} // GenerateCodeAndSend
 
-		private void ReadConfigurations()
-		{
-			DataTable dt = DB.ExecuteReader("GetTwilioConfigs", CommandSpecies.StoredProcedure);
-			DataRow results = dt.Rows[0];
-			var sr = new SafeReader(results);
-			accountSid = sr["TwilioAccountSid"];
-			authToken = sr["TwilioAuthToken"];
-			fromNumber = sr["TwilioSendingNumber"];
-			maxPerDay = sr["MaxPerDay"];
-			maxPerNumber = sr["MaxPerNumber"];
-			skipCodeGenerationNumber = sr["SkipCodeGenerationNumber"];
-		}
+		#endregion method GenerateCodeAndSend
 
-		public bool IsError { get; private set; }
+		private readonly string m_sMobilePhone;
 
-		#endregion property Execute
+		private const string UkMobilePrefix = "+44";
+
+		private string m_sAccountSid;
+		private string m_sAuthToken;
+		private string m_sFromNumber;
+		private int m_nMaxPerDay;
+		private int m_nMaxPerNumber;
+		private string m_sSkipCodeGenerationNumber;
+
+		#endregion private
 	} // class GenerateMobileCode
 } // namespace

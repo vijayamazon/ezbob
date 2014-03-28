@@ -1,24 +1,26 @@
 ﻿namespace EzBob.Backend.Strategies {
-	using System.Data;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
-	public class ValidateMobileCode : AStrategy
-	{
-		private readonly string mobilePhone;
-		private readonly string mobileCode;
-		private bool isValidatedSuccessfully;
-		private string skipCodeGenerationNumber;
-		private string skipCodeGenerationNumberCode;
+	public class ValidateMobileCode : AStrategy {
+		#region public
 
 		#region constructor
 
-		public ValidateMobileCode(string mobilePhone, string mobileCode, AConnection oDb, ASafeLog oLog)
-			: base(oDb, oLog)
-		{
-			this.mobilePhone = mobilePhone;
-			this.mobileCode = mobileCode;
-			ReadConfigurations();
+		public ValidateMobileCode(string sMobilePhone, string sMobileCode, AConnection oDb, ASafeLog oLog) : base(oDb, oLog) {
+			m_sMobilePhone = sMobilePhone;
+			m_sMobileCode = sMobileCode;
+
+			DB.ForEachRowSafe(
+				(sr, bRowsetStart) => {
+					m_sSkipCodeGenerationNumber = sr["SkipCodeGenerationNumber"];
+					m_sSkipCodeGenerationNumberCode = sr["SkipCodeGenerationNumberCode"];
+
+					return ActionResult.SkipAll;
+				},
+				"GetTwilioConfigs",
+				CommandSpecies.StoredProcedure
+			);
 		} // constructor
 
 		#endregion constructor
@@ -31,39 +33,55 @@
 
 		#endregion property Name
 
-		#region property Execute
+		#region method Execute
 
-		public override void Execute() 
-		{
-			if (skipCodeGenerationNumber == mobilePhone && skipCodeGenerationNumberCode == mobileCode)
-			{
-				Log.Info("Mobile phone {0} detected. Validation of code won't be done.", mobilePhone);
-				isValidatedSuccessfully = true;
+		public override void Execute() {
+			if (m_sSkipCodeGenerationNumber == m_sMobilePhone) {
+				m_bIsValidatedSuccessfully = (m_sSkipCodeGenerationNumberCode == m_sMobileCode);
+				Log.Info(
+					"'Skip code generation' number detected ({0}), code {1} is {2}.",
+					m_sMobilePhone,
+					m_sMobileCode,
+					IsValidatedSuccessfully() ? "valid" : "invalid"
+				);
 				return;
-			}
+			} // if
 
-			DataTable dt = DB.ExecuteReader("ValidateMobileCode", CommandSpecies.StoredProcedure,
-				new QueryParameter("Phone", mobilePhone),
-				new QueryParameter("Code", mobileCode));
+			m_bIsValidatedSuccessfully = DB.ExecuteScalar<bool>(
+				"ValidateMobileCode",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("Phone", m_sMobilePhone),
+				new QueryParameter("Code", m_sMobileCode)
+			);
 
-			var sr = new SafeReader(dt.Rows[0]);
-			isValidatedSuccessfully = sr["Success"];
+			Log.Info(
+				"For number {0} the code {1} is {2}.",
+				m_sMobilePhone,
+				m_sMobileCode,
+				IsValidatedSuccessfully() ? "valid" : "invalid"
+			);
 		} // Execute
 
-		#endregion property Execute
+		#endregion method Execute
 
-		private void ReadConfigurations()
-		{
-			DataTable dt = DB.ExecuteReader("GetTwilioConfigs", CommandSpecies.StoredProcedure);
-			DataRow results = dt.Rows[0];
-			var sr = new SafeReader(results);
-			skipCodeGenerationNumber = sr["SkipCodeGenerationNumber"];
-			skipCodeGenerationNumberCode = sr["SkipCodeGenerationNumberCode"];
-		}
+		#region method IsValidatedSuccessfully
 
-		public bool IsValidatedSuccessfully()
-		{
-			return isValidatedSuccessfully;
-		}
+		public bool IsValidatedSuccessfully() {
+			return m_bIsValidatedSuccessfully;
+		} // IsValidatedSuccessfully
+
+		#endregion method IsValidatedSuccessfully
+
+		#endregion public
+
+		#region private
+
+		private readonly string m_sMobilePhone;
+		private readonly string m_sMobileCode;
+		private bool m_bIsValidatedSuccessfully;
+		private string m_sSkipCodeGenerationNumber;
+		private string m_sSkipCodeGenerationNumberCode;
+
+		#endregion private
 	} // class ValidateMobileCode
 } // namespace

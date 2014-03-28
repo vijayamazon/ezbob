@@ -1,0 +1,3 @@
+IF OBJECT_ID('UC_Broker_Phone') IS NOT NULL
+	ALTER TABLE Broker DROP CONSTRAINT UC_Broker_Phone
+GO

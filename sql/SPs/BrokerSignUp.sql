@@ -26,7 +26,7 @@ BEGIN
 
 	IF @ErrMsg = ''
 	BEGIN
-		SET @ErrMsg = dbo.udfCheckContactInfoUniqueness(@ContactEmail, @ContactMobile, DEFAULT, DEFAULT, DEFAULT)
+		SET @ErrMsg = dbo.udfCheckContactInfoUniqueness(@ContactEmail, @ContactMobile, DEFAULT, DEFAULT, DEFAULT, DEFAULT)
 	END
 
 	IF @ErrMsg = ''

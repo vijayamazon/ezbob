@@ -167,6 +167,9 @@
     <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.BrokerLeadDetailsActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.BrokerSmsCountActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.CrmLookupsActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>

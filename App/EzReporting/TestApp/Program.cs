@@ -9,6 +9,7 @@ namespace TestApp {
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils;
+	using Ezbob.Utils.Security;
 	using Ezbob.ValueIntervals;
 	using Html;
 	using Reports;
@@ -26,11 +27,13 @@ namespace TestApp {
 
 			var oDB = new SqlConnection(log);
 
+			UpdateBrokerPasswords(oDB, log);
+
 			// TestTableSpArgument(oDB, log);
 
 			// TestVectorSpArgument(oDB, log);
 
-			TestRetryerWithArguments(oDB, log);
+			// TestRetryerWithArguments(oDB, log);
 
 			// TestEarnedInterestForAudit(oDB, log);
 
@@ -60,6 +63,29 @@ namespace TestApp {
 		} // Main
 
 		#endregion method Main
+
+		#region method UpdateBrokerPasswords
+
+		private static void UpdateBrokerPasswords(AConnection oDB, ASafeLog oLog) {
+			var oQueries = new List<string>();
+
+			oDB.ForEachRowSafe(
+				(sr, bRowsetStart) => {
+					oQueries.Add(string.Format(
+						"UPDATE Broker SET Password = '{0}' WHERE BrokerID = {1}",
+						SecurityUtils.HashPassword((string)sr["ContactEmail"] + "123456"),
+						(int)sr["BrokerID"]
+					));
+					return ActionResult.Continue;
+				},
+				"SELECT BrokerID, ContactEmail FROM Broker",
+				CommandSpecies.Text
+			);
+
+			oQueries.ForEach(sQuery => oDB.ExecuteNonQuery(sQuery, CommandSpecies.Text));
+		} // UpdateBrokerPasswords
+
+		#endregion method UpdateBrokerPasswords
 
 		#region method TestTableSpArgument
 
