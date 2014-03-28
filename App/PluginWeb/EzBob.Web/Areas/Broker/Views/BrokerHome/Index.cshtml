@@ -97,7 +97,7 @@
 
 						<div class="form_field_container">
 							<label class="attardi-input">
-								<span>Firm name</span>
+								<span>Broker name</span>
 								<input type="text" name="FirmName" id="FirmName" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" ui-event-control-id="broker:signup-firm-name" />
 								<img id="FirmNameImage" class="field_status required" />
 							</label>
@@ -105,7 +105,7 @@
 
 						<div class="form_field_container">
 							<label class="attardi-input">
-								<span>Firm registration number</span>
+								<span>Broker registration number</span>
 								<input type="text" name="FirmRegNum" id="FirmRegNum" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" ui-event-control-id="broker:signup-firm-regnum" />
 								<img id="FirmRegNumImage" class="field_status" />
 							</label>
@@ -113,7 +113,15 @@
 
 						<div class="form_field_container">
 							<label class="attardi-input">
-								<span>Contact person name</span>
+								<span>Broker web site</span>
+								<input type="text" name="FirmWebSite" id="FirmWebSite" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" ui-event-control-id="broker:signup-firm-web-site" />
+								<img id="FirmWebSiteImage" class="field_status" />
+							</label>
+						</div>
+
+						<div class="form_field_container">
+							<label class="attardi-input">
+								<span>Contact person full name</span>
 								<input type="text" name="ContactName" id="ContactName" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" ui-event-control-id="broker:signup-contact-name" />
 								<img id="ContactNameImage" class="field_status required" />
 							</label>
@@ -155,7 +163,15 @@
 
 						<div class="form_field_container">
 							<label class="attardi-input">
-								<span>Estimated monthly client amount</span>
+								<span>Estimated number of applications per month</span>
+								<input type="text" name="EstimatedMonthlyAppCount" id="EstimatedMonthlyAppCount" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" max-length="6" ui-event-control-id="broker:signup-esitmated-monthly-application-count" />
+								<img id="EstimatedMonthlyAppCountImage" class="field_status required" />
+							</label>
+						</div>
+
+						<div class="form_field_container">
+							<label class="attardi-input">
+								<span>Estimated value of credit per month (&pound;)</span>
 								<input type="text" name="EstimatedMonthlyClientAmount" id="EstimatedMonthlyClientAmount" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" ui-event-control-id="broker:signup-estimated-monthly-client-amount" />
 								<img id="EstimatedMonthlyClientAmountImage" class="field_status required" />
 							</label>
@@ -176,6 +192,18 @@
 								<input type="password" name="Password2" id="Password2" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" ui-event-control-id="broker:signup-confirm-password" />
 								<img id="Password2Image" class="field_status required" />
 							</label>
+						</div>
+						
+						<div class="form_field_container form-read-and-accept">
+							<div>
+								<input id="AgreeToTerms" name="AgreeToTerms" type="checkbox" value="false" ui-event-control-id="broker:signup-agree-to-terms" />
+								<label for="AgreeToTerms">I have read and accept the ezbob <a>terms and conditions</a></label>
+							</div>
+
+							<div>
+								<input id="AgreeToPrivacyPolicy" name="AgreeToPrivacyPolicy" type="checkbox" value="false" ui-event-control-id="broker:signup-agree-to-privacy-policy" />
+								<label for="AgreeToPrivacyPolicy">I have read and accept the ezbob <a>privacy policy</a></label>
+							</div>
 						</div>
 
 						<div class="form_buttons_container">

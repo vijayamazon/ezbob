@@ -16,6 +16,10 @@ h2 {
 	vertical-align: baseline;
 }
 
+.form-read-and-accept input[type="checkbox"] {
+	margin: 0 5px 5px 0;
+}
+
 .broker-form {
 	float: left;
 	width: 62%;

@@ -82,7 +82,9 @@
 			string ContactOtherPhone,
 			decimal EstimatedMonthlyClientAmount,
 			string Password,
-			string Password2
+			string Password2,
+			string FirmWebSite,
+			int EstimatedMonthlyAppCount
 		) {
 			m_oLog.Debug(
 				"Broker signup request:" +
@@ -94,6 +96,8 @@
 				"\n\tMobile code: {5}" +
 				"\n\tContact person other phone: {6}" +
 				"\n\tEstimated monthly amount: {7}",
+				"\n\tFirm web site URL: {8}",
+				"\n\tEstimated monthly application count: {9}",
 				FirmName,
 				FirmRegNum,
 				ContactName,
@@ -101,7 +105,9 @@
 				ContactMobile,
 				MobileCode,
 				ContactOtherPhone,
-				EstimatedMonthlyClientAmount
+				EstimatedMonthlyClientAmount,
+				FirmWebSite,
+				EstimatedMonthlyAppCount
 			);
 
 			if (User.Identity.IsAuthenticated) {
@@ -120,7 +126,9 @@
 					ContactOtherPhone,
 					EstimatedMonthlyClientAmount,
 					Password,
-					Password2
+					Password2,
+					FirmWebSite,
+					EstimatedMonthlyAppCount
 				);
 			}
 			catch (Exception e) {

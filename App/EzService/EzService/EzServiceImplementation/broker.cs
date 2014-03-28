@@ -52,7 +52,9 @@
 			string ContactOtherPhone,
 			decimal EstimatedMonthlyClientAmount,
 			string Password,
-			string Password2
+			string Password2,
+			string sFirmWebSiteUrl,
+			int nEstimatedMonthlyApplicationCount
 		) {
 			return ExecuteSync<BrokerSignup>(null, null,
 				FirmName,
@@ -64,7 +66,9 @@
 				ContactOtherPhone,
 				EstimatedMonthlyClientAmount,
 				Password,
-				Password2
+				Password2,
+				sFirmWebSiteUrl,
+				nEstimatedMonthlyApplicationCount
 			);
 		} // BrokerSignup
 

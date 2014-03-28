@@ -48,7 +48,9 @@
 			string ContactOtherPhone,
 			decimal EstimatedMonthlyClientAmount,
 			string Password,
-			string Password2
+			string Password2,
+			string sFirmWebSiteUrl,
+			int nEstimatedMonthlyApplicationCount
 		);
 
 		[OperationContract]

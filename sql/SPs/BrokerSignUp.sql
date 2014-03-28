@@ -9,9 +9,13 @@ ALTER PROCEDURE BrokerSignUp
 @ContactEmail NVARCHAR(255),
 @ContactMobile NVARCHAR(255),
 @ContactOtherPhone NVARCHAR(255),
-@SourceRef NVARCHAR(255),
+@TempSourceRef NVARCHAR(255),
 @EstimatedMonthlyClientAmount DECIMAL(18, 4),
-@Password NVARCHAR(255)
+@Password NVARCHAR(255),
+@FirmWebSiteUrl NVARCHAR(255),
+@EstimatedMonthlyApplicationCount INT,
+@AgreedToTermsDate DATETIME,
+@AgreedToPrivacyPolicyDate DATETIME
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -19,7 +23,6 @@ BEGIN
 	DECLARE @ErrMsg NVARCHAR(255) = ''
 	DECLARE @BrokerID INT
 	DECLARE @UserID INT
-	DECLARE @sBrokerID NVARCHAR(255)
 
 	IF @ErrMsg = ''
 	BEGIN
@@ -42,8 +45,15 @@ BEGIN
 		SET @UserID = SCOPE_IDENTITY()
 
 		BEGIN TRY
-			INSERT INTO Broker(FirmName, FirmRegNum, ContactName, ContactEmail, ContactMobile, ContactOtherPhone, SourceRef, EstimatedMonthlyClientAmount, Password, UserID)
-				VALUES (@FirmName, @FirmRegNum, @ContactName, @ContactEmail, @ContactMobile, @ContactOtherPhone, CAST(NEWID() AS NVARCHAR(255)), @EstimatedMonthlyClientAmount, @Password, @UserID)
+			INSERT INTO Broker(
+				FirmName, FirmRegNum, ContactName, ContactEmail, ContactMobile,
+				ContactOtherPhone, SourceRef, EstimatedMonthlyClientAmount, Password, UserID,
+				FirmWebSiteUrl, EstimatedMonthlyApplicationCount, AgreedToTermsDate, AgreedToPrivacyPolicyDate
+			) VALUES (
+				@FirmName, @FirmRegNum, @ContactName, @ContactEmail, @ContactMobile,
+				@ContactOtherPhone, @TempSourceRef, @EstimatedMonthlyClientAmount, @Password, @UserID,
+				@FirmWebSiteUrl, @EstimatedMonthlyApplicationCount, @AgreedToTermsDate, @AgreedToPrivacyPolicyDate
+			)
 		END TRY
 		BEGIN CATCH
 			SET @ErrMsg = 'Failed to create a broker entry: ' + dbo.udfGetErrorMsg()
@@ -55,14 +65,8 @@ BEGIN
 	IF @ErrMsg = ''
 	BEGIN
 		SET @BrokerID = SCOPE_IDENTITY()
-		SET @sBrokerID = CAST(@BrokerID AS NVARCHAR(255))
-
-		UPDATE Broker SET
-			SourceRef = SUBSTRING(@SourceRef, 1, 10 - LEN(@sBrokerID)) + @sBrokerID
-		WHERE
-			BrokerID = @BrokerID
 	END
 
-	SELECT @ErrMsg AS ErrorMsg
+	SELECT @ErrMsg AS ErrorMsg, @BrokerID AS BrokerID
 END
 GO

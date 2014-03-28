@@ -227,6 +227,25 @@ $.validator.addMethod("defaultInvalidPounds", function(value, element) {
     return !(element.value == '£ ');
 });
 
+$.validator.addMethod('optionalUrl', function(oValue, oElement) {
+	if (this.optional(oElement))
+		return true;
+
+	if (/[ "']/.test(oValue))
+		return false;
+
+	if (/^[\?\\\.\,\-\*\&\!\@\#\$\%\^\(\)\{\}\[\}\+=;:<>\|`]/.test(oValue))
+		return false;
+
+	if ((oValue.indexOf('://') > -1) && !/^https?:\/\//.test(oValue))
+		return false;
+
+	if (oValue.indexOf('.') === -1)
+		return false;
+
+	return true;
+}, 'Please enter a valid URL.');
+
 $.validator.methods.number = function (value, element) {
     return this.optional(element) || /^-?(?:\d+|\d{1,3}(?:[\s\.,]\d{3})+)(?:[\.,]\d+)?$/.test(value);
 };

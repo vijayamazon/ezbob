@@ -3,6 +3,7 @@
 	using System.Text;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using Ezbob.Utils;
 	using Ezbob.Utils.Security;
 
 	#region class BrokerSignup
@@ -23,19 +24,27 @@
 			decimal nEstimatedMonthlyClientAmount,
 			string sPassword,
 			string sPassword2,
+			string sFirmWebSiteUrl,
+			int nEstimatedMonthlyApplicationCount,
 			AConnection oDB,
 			ASafeLog oLog
 		) : base(oDB, oLog) {
-			m_sFirmName = sFirmName;
-			m_sFirmRegNum = sFirmRegNum;
-			m_sContactName = sContactName;
-			m_sContactEmail = sContactEmail;
-			m_sContactMobile = sContactMobile;
-			m_sMobileCode = sMobileCode;
-			m_sContactOtherPhone = sContactOtherPhone;
-			m_nEstimatedMonthlyClientAmount = nEstimatedMonthlyClientAmount;
-			m_sPassword = sPassword;
-			m_sPassword2 = sPassword2;
+			m_oCreateSp = new SpBrokerSignUp(DB, Log) {
+				FirmName = sFirmName,
+				FirmRegNum = sFirmRegNum,
+				ContactName = sContactName,
+				ContactEmail = sContactEmail,
+				ContactMobile = sContactMobile,
+				MobileCode = sMobileCode,
+				ContactOtherPhone = sContactOtherPhone,
+				EstimatedMonthlyClientAmount = nEstimatedMonthlyClientAmount,
+				Password = sPassword,
+				Password2 = sPassword2,
+				FirmWebSiteUrl = sFirmWebSiteUrl,
+				EstimatedMonthlyApplicationCount = nEstimatedMonthlyApplicationCount,
+			};
+
+			m_oSetSp = new SpBrokerSetSourceRef(DB, Log);
 		} // constructor
 
 		#endregion constructor
@@ -49,51 +58,48 @@
 		#region method Execute
 
 		public override void Execute() {
-			m_sFirmName = Validate(m_sFirmName, "Firm name");
-			m_sFirmRegNum = Validate(m_sFirmRegNum, "Firm registration number", false);
-			m_sContactName = Validate(m_sContactName, "Contact person name");
-			m_sContactEmail = Validate(m_sContactEmail, "Contact person email");
+			string sErrMsg = null;
+			int nBrokerID = 0;
 
-			var oValidator = new ValidateMobileCode(m_sContactMobile, m_sMobileCode, DB, Log);
-			oValidator.Execute();
-			if (!oValidator.IsValidatedSuccessfully())
-				throw new Exception("Failed to validate mobile code.");
+			m_oCreateSp.ForEachRowSafe((sr, bRowsetStart) => {
+				sr.Read
+					.To(out sErrMsg)
+					.To(out nBrokerID);
 
-			m_sContactOtherPhone = Validate(m_sContactOtherPhone, "Contact person other phone", false);
+				return ActionResult.SkipAll;
+			});
 
-			if (m_nEstimatedMonthlyClientAmount <= 0)
-				throw new Exception("Estimated monthly amount is out of range.");
+			if (!string.IsNullOrWhiteSpace(sErrMsg)) {
+				Log.Alert("Failed to create a broker: {0}", sErrMsg);
+				throw new Exception(sErrMsg);
+			} // if
 
-			m_sPassword = Validate(m_sPassword, "Password");
+			if (nBrokerID < 1) {
+				Log.Alert("Failed to create a broker: no error message from DB but broker id is 0.");
+				throw new Exception("Failed to create a broker.");
+			} // if
 
-			if (m_sPassword != m_sPassword2)
-				throw new Exception("Passwords do not match.");
+			string sBrokerID = BaseConverter.Execute(nBrokerID, BaseConverter.LowerCaseLetters);
 
 			var oSrcRef = new StringBuilder("brk-");
 
-			const int cMin = 'a';
-			const int cMax = 1 + (int)'z';
+			const int nMaxSrcRefLen = 6;
 
-			var rnd = new Random();
-			for (int i = 0; i < 6; i++)
-				oSrcRef.Append((char)rnd.Next(cMin, cMax));
+			if (sBrokerID.Length < nMaxSrcRefLen) {
+				const int cMin = 'a';
+				const int cMax = 1 + (int)'z';
+				int nLen = nMaxSrcRefLen - sBrokerID.Length;
 
-			string sErrMsg = DB.ExecuteScalar<string>(
-				"BrokerSignUp",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("@FirmName", m_sFirmName),
-				new QueryParameter("@FirmRegNum", m_sFirmRegNum),
-				new QueryParameter("@ContactName", m_sContactName),
-				new QueryParameter("@ContactEmail", m_sContactEmail),
-				new QueryParameter("@ContactMobile", m_sContactMobile),
-				new QueryParameter("@ContactOtherPhone", m_sContactOtherPhone),
-				new QueryParameter("@SourceRef", oSrcRef.ToString()),
-				new QueryParameter("@EstimatedMonthlyClientAmount", m_nEstimatedMonthlyClientAmount),
-				new QueryParameter("@Password", SecurityUtils.HashPassword(m_sPassword))
-			);
+				var rnd = new Random();
+				for (int i = 0; i < nLen; i++)
+					oSrcRef.Append((char)rnd.Next(cMin, cMax));
+			} // if
 
-			if (!string.IsNullOrWhiteSpace(sErrMsg))
-				throw new Exception(sErrMsg);
+			oSrcRef.Append(sBrokerID);
+
+			m_oSetSp.BrokerID = nBrokerID;
+			m_oSetSp.SourceRef = oSrcRef.ToString();
+			m_oSetSp.ExecuteNonQuery();
 		} // Execute
 
 		#endregion method Execute
@@ -102,40 +108,173 @@
 
 		#region private
 
-		#region method Validate
+		private readonly SpBrokerSignUp m_oCreateSp;
 
-		private string Validate(string sValue, string sArgName, bool bThrow = true) {
-			sValue = (sValue ?? string.Empty).Trim();
+		private readonly SpBrokerSetSourceRef m_oSetSp;
 
-			if (sValue.Length == 0) {
-				if (bThrow)
-					throw new ArgumentNullException(sArgName, sArgName + " not specified.");
+		#region class SpBrokerSignUp
+
+		private class SpBrokerSignUp : AStoredProc {
+			#region constructor
+
+			public SpBrokerSignUp(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor
+
+			#endregion constructor
+
+			#region method HasValidParameters
+
+			public override bool HasValidParameters() {
+				FirmName = Validate(FirmName, "Broker name");
+				FirmRegNum = Validate(FirmRegNum, "Broker registration number", false);
+				ContactName = Validate(ContactName, "Contact person full name");
+				ContactEmail = Validate(ContactEmail, "Contact person email");
+
+				var oValidator = new ValidateMobileCode(ContactMobile, MobileCode, DB, Log);
+				oValidator.Execute();
+				if (!oValidator.IsValidatedSuccessfully())
+					throw new Exception("Failed to validate mobile code.");
+
+				ContactOtherPhone = Validate(ContactOtherPhone, "Contact person other phone", false);
+
+				if (EstimatedMonthlyClientAmount <= 0)
+					throw new Exception("Estimated monthly amount is out of range.");
+
+				Password = Validate(m_sPassword, "Password");
+
+				if (m_sPassword != Password2)
+					throw new Exception("Passwords do not match.");
+
+				FirmWebSiteUrl = (FirmWebSiteUrl ?? string.Empty).Trim();
+
+				return true;
+			} // HasValidParameters
+
+			#endregion method HasValidParameters
+
+			#region properties
+
+			[Traversable]
+			public string FirmName { get; set; }
+
+			[Traversable]
+			public string FirmRegNum { get; set; }
+
+			[Traversable]
+			public string ContactName { get; set; }
+
+			[Traversable]
+			public string ContactEmail { get; set; }
+
+			[Traversable]
+			public string ContactMobile { get; set; }
+
+			public string MobileCode { get; set; }
+
+			[Traversable]
+			public string ContactOtherPhone { get; set; }
+
+			[Traversable]
+			public decimal EstimatedMonthlyClientAmount { get; set; }
+
+			[Traversable]
+			public string Password {
+				get { return SecurityUtils.HashPassword(m_sPassword); } // get
+				set { m_sPassword = value; } // set
+			} // Password
+
+			private string m_sPassword;
+
+			[Traversable]
+			public string TempSourceRef {
+				get { return Guid.NewGuid().ToString("N"); }
+				set { }
+			} // TempSourceRef
+
+			[Traversable]
+			public string FirmWebSiteUrl { get; set; }
+
+			[Traversable]
+			public int EstimatedMonthlyApplicationCount { get; set; }
+
+			[Traversable]
+			public DateTime AgreedToTermsDate {
+				get { return DateTime.UtcNow; }
+				set { }
+			} // AgreedToTermsDate
+
+			[Traversable]
+			public DateTime AgreedToPrivacyPolicyDate {
+				get { return DateTime.UtcNow; }
+				set { }
+			} // AgreedToPrivacyPolicyDate
+
+			public string Password2 { get; set; }
+
+			#endregion properties
+
+			#region method Validate
+
+			private string Validate(string sValue, string sArgName, bool bThrow = true) {
+				sValue = (sValue ?? string.Empty).Trim();
+
+				if (sValue.Length == 0) {
+					if (bThrow)
+						throw new ArgumentNullException(sArgName, sArgName + " not specified.");
+
+					return sValue;
+				} // if
+
+				if (sValue.Length > 255) {
+					if (bThrow)
+						throw new Exception(sArgName + " is too long.");
+
+					return sValue.Substring(0, 255);
+				} // if
 
 				return sValue;
-			} // if
+			} // Validate
 
-			if (sValue.Length > 255) {
-				if (bThrow)
-					throw new Exception(sArgName + " is too long.");
+			#endregion method Validate
+		} // SpBrokerSignUp
 
-				return sValue.Substring(0, 255);
-			} // if
+		#endregion class SpBrokerSignUp
 
-			return sValue;
-		} // Validate
+		#region class SpBrokerSetSourceRef
 
-		#endregion method Validate
+		private class SpBrokerSetSourceRef : AStoredProc {
+			#region constructor
 
-		private string m_sFirmName;
-		private string m_sFirmRegNum;
-		private string m_sContactName;
-		private string m_sContactEmail;
-		private string m_sContactMobile;
-		private string m_sMobileCode;
-		private string m_sContactOtherPhone;
-		private decimal m_nEstimatedMonthlyClientAmount;
-		private string m_sPassword;
-		private string m_sPassword2;
+			public SpBrokerSetSourceRef(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor
+
+			#endregion constructor
+
+			#region method HasValidParameters
+
+			public override bool HasValidParameters() {
+				return (BrokerID > 0) && !string.IsNullOrWhiteSpace(SourceRef);
+			} // HasValidParameters
+
+			#endregion method HasValidParameters
+
+			#region properties
+
+			public int BrokerID { get; set; }
+
+			public string SourceRef {
+				get { return m_sSourceRef; } // get
+				set { m_sSourceRef = (value ?? string.Empty).Trim();
+
+					if (m_sSourceRef.Length > 10)
+						m_sSourceRef = m_sSourceRef.Substring(0, 10);
+				} // set
+			} // SourceRef
+
+			private string m_sSourceRef;
+
+			#endregion properties
+		} // SpBrokerSetSourceRef
+
+		#endregion class SpBrokerSetSourceRef
 
 		#endregion private
 	} // class BrokerSignup

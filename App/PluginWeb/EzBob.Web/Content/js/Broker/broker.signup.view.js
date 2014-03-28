@@ -30,13 +30,22 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 		EzBob.Broker.SignupView.__super__.clear.apply(this, arguments);
 
 		this.$el.find(
-			'#FirmName, #FirmRegNum, ' +
-			'#ContactName, #ContactEmail, #ContactOtherPhone, ' +
-			'#EstimatedMonthlyClientAmount, #Password, #Password2'
+			'#FirmName, #FirmRegNum, #FirmWebSite, ' +
+			'#ContactName, #ContactEmail, #ContactOtherPhone, #EstimatedMonthlyAppCount, ' +
+			'#EstimatedMonthlyClientAmount, #Password, #Password2, ' +
+			'#AgreeToTerms, #AgreeToPrivacyPolicy'
 		).val('').blur();
 
 		this.inputChanged();
 	}, // clear
+
+	inputChanged: function() {
+		EzBob.Broker.SignupView.__super__.inputChanged.apply(this, arguments);
+
+		var sUrl = this.$el.find('#FirmWebSite').val();
+
+		console.log('url', sUrl, 'matches', /^(https?:\/\/)?[^ \'"]+/.test(sUrl));
+	}, // inputChanged
 
 	onSubmit: function(event) {
 		var sEmail = this.$el.find('#ContactEmail').val();
@@ -79,7 +88,7 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 		this.$el.find('#EstimatedMonthlyClientAmount').moneyFormat();
 
 		this.$el.find('.phonenumber').numericOnly(11);
-		this.$el.find('.phonenumbercode').numericOnly(6);
+		this.$el.find('.phonenumbercode, #EstimatedMonthlyAppCount').numericOnly(6);
 
 		this.passwordStrengthView.render();
 	}, // onRender
@@ -106,18 +115,22 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 			rules: {
 				FirmName: { required: true, maxlength: 255, },
 				FirmRegNum: { required: false, maxlength: 255, regex: '^[a-zA-Z0-9]+$', },
+				FirmWebSite: { required: false, maxlength: 255, optionalUrl: true, },
 				ContactName: { required: true, maxlength: 255, },
 				ContactEmail: { required: true, email: true, maxlength: 255, },
 				ContactOtherPhone: { required: false, regex: '^0[0-9]{10}$', },
 				EstimatedMonthlyClientAmount: { required: true, defaultInvalidPounds: true, regex: '^(?!£ 0.00$)', },
 				Password: $.extend({}, passPolicy),
 				Password2: passPolicy2,
+				EstimatedMonthlyAppCount: { required: true, maxlength: 6, regex: '^[1-9]\d*', },
+				AgreeToTerms: { required: true, },
+				AgreeToPrivacyPolicy: { required: true, },
 			},
 
 			messages: {
-				FirmName: { required: 'Please enter your firm name.', },
+				FirmName: { required: 'Please enter your broker name.', },
 				FirmRegNum: { regex: 'Please enter a valid company number.', },
-				ContactName: { required: 'Please enter contact person name.', },
+				ContactName: { required: 'Please enter contact person full name.', },
 				ContactEmail: { required: 'Please enter contact person email.', email: 'Please enter contact person email.', },
 				Password: { required: passPolicyText, regex: passPolicyText },
 				Password2: { equalTo: EzBob.dbStrings.PasswordDoesNotMatch },
