@@ -3,14 +3,14 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Data;
+	using System.Globalization;
 	using System.Linq;
 	using System.Web.Mvc;
-	using ApplicationMng.Repository;
+	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Mapping;
 	using ExperianLib.IdIdentityHub;
 	using EZBob.DatabaseLib.Model.Database.Repository;
-	using EzServiceReference;
 	using Models;
 	using Code;
 	using Scorto.Web;
@@ -20,36 +20,35 @@
     {
         private readonly CustomerRepository _customers;
 		private readonly ServiceClient m_oServiceClient;
-        private readonly IUsersRepository _users;
         private readonly CreditBureauModelBuilder _creditBureauModelBuilder;
         private readonly ConcentAgreementHelper _concentAgreementHelper;
 		private readonly DirectorRepository directorRepository;
+		private readonly ConfigurationVariablesRepository configurationVariablesRepository;
 
         public CreditBureauController(
 			CustomerRepository customers,
-			IUsersRepository users,
 			CreditBureauModelBuilder creditBureauModelBuilder,
-			DirectorRepository directorRepository
+			DirectorRepository directorRepository,
+			ConfigurationVariablesRepository configurationVariablesRepository
 		) 
 		{
             _customers = customers;
 	        m_oServiceClient = new ServiceClient();
-            _users = users;
             _creditBureauModelBuilder = creditBureauModelBuilder;
             _concentAgreementHelper = new ConcentAgreementHelper();
 	        this.directorRepository = directorRepository;
+	        this.configurationVariablesRepository = configurationVariablesRepository;
 		}
 
 		[HttpPost]
 		[Transactional]
-		public JsonNetResult RunConsumerCheck(int id)
+		public JsonNetResult RunConsumerCheck(int customerId)
 		{
-			m_oServiceClient.Instance.CheckExperianConsumer(id, 0);
-			// TODO: is this ok??? in terms of cache too?
-			List<Director> directors = directorRepository.GetAll().Where(x => x.Customer.Id == id).ToList();
+			m_oServiceClient.Instance.CheckExperianConsumer(customerId, 0);
+			List<Director> directors = directorRepository.GetAll().Where(x => x.Customer.Id == customerId).ToList();
 			foreach (Director director in directors)
 			{
-				m_oServiceClient.Instance.CheckExperianConsumer(id, director.Id);
+				m_oServiceClient.Instance.CheckExperianConsumer(customerId, director.Id);
 			}
 			return this.JsonNet(new { Message = "The evaluation has been started. Please refresh this application after a while..." });
 		}
@@ -71,7 +70,6 @@
             var model = _creditBureauModelBuilder.Create(customer, getFromLog, logId);
             return this.JsonNet(model);
         }
-
 
         [Ajax]
         [HttpGet]
@@ -164,5 +162,16 @@
             return File(pdf, "application/pdf", fileName);
         }
 
+		[HttpPost]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		public JsonNetResult IsConsumerCacheRelevant(int customerId)
+		{
+			// build key - will be passed as parameter (should have key and key for each director)
+			// Get earliest date in cache (customer and director) - server side
+			DateTime cacheDate = DateTime.UtcNow;
+			int cacheValidForDays = configurationVariablesRepository.GetByNameAsInt("UpdateConsumerDataPeriodDays");
+			string isRelevant = (DateTime.UtcNow - cacheDate).TotalDays > cacheValidForDays ? "False" : "True";
+			return this.JsonNet(new { IsRelevant = isRelevant, LastCheckDate = cacheDate.ToString("dd/MM/yyyy"), CacheValidForDays = cacheValidForDays.ToString(CultureInfo.InvariantCulture) });
+		}
     }
 }

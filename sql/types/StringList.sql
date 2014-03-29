@@ -1,0 +1,7 @@
+IF TYPE_ID('StringList') IS NULL
+	CREATE TYPE StringList AS TABLE (
+		Value NVARCHAR(500) NULL
+	)
+GO
+
+

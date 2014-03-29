@@ -215,4 +215,14 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="IntActionResult" nillable="true" type="tns:IntActionResult" />
+  <xs:complexType name="DateTimeActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ActionResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Value" type="xs:dateTime" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="DateTimeActionResult" nillable="true" type="tns:DateTimeActionResult" />
 </xs:schema>

@@ -323,6 +323,9 @@
 
 		[OperationContract]
 		ActionMetaData CreateUnderwriter(string name, string password, string role);
+
+		[OperationContract]
+		DateTimeActionResult GetExperianCacheDate(List<string> keys);
 	} // interface IEzService
 } // namespace EzService
 
