@@ -3,7 +3,7 @@ IF OBJECT_ID('BrokerDeleteCustomerFiles') IS NULL
 GO
 
 ALTER PROCEDURE BrokerDeleteCustomerFiles
-@CustomerID INT,
+@RefNum NVARCHAR(8),
 @ContactEmail NVARCHAR(255),
 @FileIDs IntList READONLY
 AS
@@ -32,7 +32,7 @@ BEGIN
 		AND
 		d.CustomerId = c.Id
 		AND
-		c.Id = @CustomerId
+		c.RefNumber = @RefNum
 		AND
 		c.BrokerId = @BrokerID
 		AND

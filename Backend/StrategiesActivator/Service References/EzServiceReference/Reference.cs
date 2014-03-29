@@ -310,9 +310,6 @@ namespace StrategiesActivator.EzServiceReference {
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private StrategiesActivator.EzServiceReference.BrokerCustomerEntry[] CustomersField;
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private StrategiesActivator.EzServiceReference.BrokerLeadEntry[] LeadsField;
-        
         [System.Runtime.Serialization.DataMemberAttribute()]
         public StrategiesActivator.EzServiceReference.BrokerCustomerEntry[] Customers {
             get {
@@ -322,19 +319,6 @@ namespace StrategiesActivator.EzServiceReference {
                 if ((object.ReferenceEquals(this.CustomersField, value) != true)) {
                     this.CustomersField = value;
                     this.RaisePropertyChanged("Customers");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public StrategiesActivator.EzServiceReference.BrokerLeadEntry[] Leads {
-            get {
-                return this.LeadsField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.LeadsField, value) != true)) {
-                    this.LeadsField = value;
-                    this.RaisePropertyChanged("Leads");
                 }
             }
         }
@@ -743,7 +727,16 @@ namespace StrategiesActivator.EzServiceReference {
         private string FirstNameField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool IsLeadDeletedField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.DateTime LastInvitationSentField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string LastNameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int LeadIDField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private decimal LoanAmountField;
@@ -753,6 +746,9 @@ namespace StrategiesActivator.EzServiceReference {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string MarketplacesField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string RefNumberField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string StatusField;
@@ -823,6 +819,32 @@ namespace StrategiesActivator.EzServiceReference {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool IsLeadDeleted {
+            get {
+                return this.IsLeadDeletedField;
+            }
+            set {
+                if ((this.IsLeadDeletedField.Equals(value) != true)) {
+                    this.IsLeadDeletedField = value;
+                    this.RaisePropertyChanged("IsLeadDeleted");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime LastInvitationSent {
+            get {
+                return this.LastInvitationSentField;
+            }
+            set {
+                if ((this.LastInvitationSentField.Equals(value) != true)) {
+                    this.LastInvitationSentField = value;
+                    this.RaisePropertyChanged("LastInvitationSent");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
         public string LastName {
             get {
                 return this.LastNameField;
@@ -831,6 +853,19 @@ namespace StrategiesActivator.EzServiceReference {
                 if ((object.ReferenceEquals(this.LastNameField, value) != true)) {
                     this.LastNameField = value;
                     this.RaisePropertyChanged("LastName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int LeadID {
+            get {
+                return this.LeadIDField;
+            }
+            set {
+                if ((this.LeadIDField.Equals(value) != true)) {
+                    this.LeadIDField = value;
+                    this.RaisePropertyChanged("LeadID");
                 }
             }
         }
@@ -875,6 +910,19 @@ namespace StrategiesActivator.EzServiceReference {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
+        public string RefNumber {
+            get {
+                return this.RefNumberField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.RefNumberField, value) != true)) {
+                    this.RefNumberField = value;
+                    this.RaisePropertyChanged("RefNumber");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
         public string Status {
             get {
                 return this.StatusField;
@@ -896,147 +944,6 @@ namespace StrategiesActivator.EzServiceReference {
                 if ((object.ReferenceEquals(this.WizardStepField, value) != true)) {
                     this.WizardStepField = value;
                     this.RaisePropertyChanged("WizardStep");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="BrokerLeadEntry", Namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models")]
-    [System.SerializableAttribute()]
-    public partial class BrokerLeadEntry : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string AddModeField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.DateTime DateCreatedField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.DateTime DateLastInvitationSentField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string EmailField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string FirstNameField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string LastNameField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int LeadIDField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string AddMode {
-            get {
-                return this.AddModeField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.AddModeField, value) != true)) {
-                    this.AddModeField = value;
-                    this.RaisePropertyChanged("AddMode");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.DateTime DateCreated {
-            get {
-                return this.DateCreatedField;
-            }
-            set {
-                if ((this.DateCreatedField.Equals(value) != true)) {
-                    this.DateCreatedField = value;
-                    this.RaisePropertyChanged("DateCreated");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.DateTime DateLastInvitationSent {
-            get {
-                return this.DateLastInvitationSentField;
-            }
-            set {
-                if ((this.DateLastInvitationSentField.Equals(value) != true)) {
-                    this.DateLastInvitationSentField = value;
-                    this.RaisePropertyChanged("DateLastInvitationSent");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Email {
-            get {
-                return this.EmailField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.EmailField, value) != true)) {
-                    this.EmailField = value;
-                    this.RaisePropertyChanged("Email");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string FirstName {
-            get {
-                return this.FirstNameField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.FirstNameField, value) != true)) {
-                    this.FirstNameField = value;
-                    this.RaisePropertyChanged("FirstName");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string LastName {
-            get {
-                return this.LastNameField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.LastNameField, value) != true)) {
-                    this.LastNameField = value;
-                    this.RaisePropertyChanged("LastName");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int LeadID {
-            get {
-                return this.LeadIDField;
-            }
-            set {
-                if ((this.LeadIDField.Equals(value) != true)) {
-                    this.LeadIDField = value;
-                    this.RaisePropertyChanged("LeadID");
                 }
             }
         }
@@ -1131,6 +1038,9 @@ namespace StrategiesActivator.EzServiceReference {
         private string daytimephoneField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string emailField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string genderField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -1190,6 +1100,19 @@ namespace StrategiesActivator.EzServiceReference {
                 if ((object.ReferenceEquals(this.daytimephoneField, value) != true)) {
                     this.daytimephoneField = value;
                     this.RaisePropertyChanged("daytimephone");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string email {
+            get {
+                return this.emailField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.emailField, value) != true)) {
+                    this.emailField = value;
+                    this.RaisePropertyChanged("email");
                 }
             }
         }
@@ -3165,40 +3088,40 @@ namespace StrategiesActivator.EzServiceReference {
         System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BrokerCustomersActionResult> BrokerLoadCustomerListAsync(string sContactEmail);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLoadCustomerDetails", ReplyAction="http://tempuri.org/IEzService/BrokerLoadCustomerDetailsResponse")]
-        StrategiesActivator.EzServiceReference.BrokerCustomerDetailsActionResult BrokerLoadCustomerDetails(int nCustomerID, string sContactEmail);
+        StrategiesActivator.EzServiceReference.BrokerCustomerDetailsActionResult BrokerLoadCustomerDetails(string sCustomerRefNum, string sContactEmail);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLoadCustomerDetails", ReplyAction="http://tempuri.org/IEzService/BrokerLoadCustomerDetailsResponse")]
-        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BrokerCustomerDetailsActionResult> BrokerLoadCustomerDetailsAsync(int nCustomerID, string sContactEmail);
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BrokerCustomerDetailsActionResult> BrokerLoadCustomerDetailsAsync(string sCustomerRefNum, string sContactEmail);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerSaveCrmEntry", ReplyAction="http://tempuri.org/IEzService/BrokerSaveCrmEntryResponse")]
-        StrategiesActivator.EzServiceReference.StringActionResult BrokerSaveCrmEntry(bool bIsIncoming, int nActionID, int nStatusID, string sComment, int nCustomerID, string sContactEmail);
+        StrategiesActivator.EzServiceReference.StringActionResult BrokerSaveCrmEntry(bool bIsIncoming, int nActionID, int nStatusID, string sComment, string sCustomerRefNum, string sContactEmail);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerSaveCrmEntry", ReplyAction="http://tempuri.org/IEzService/BrokerSaveCrmEntryResponse")]
-        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.StringActionResult> BrokerSaveCrmEntryAsync(bool bIsIncoming, int nActionID, int nStatusID, string sComment, int nCustomerID, string sContactEmail);
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.StringActionResult> BrokerSaveCrmEntryAsync(bool bIsIncoming, int nActionID, int nStatusID, string sComment, string sCustomerRefNum, string sContactEmail);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLoadCustomerFiles", ReplyAction="http://tempuri.org/IEzService/BrokerLoadCustomerFilesResponse")]
-        StrategiesActivator.EzServiceReference.BrokerCustomerFilesActionResult BrokerLoadCustomerFiles(int nCustomerID, string sContactEmail);
+        StrategiesActivator.EzServiceReference.BrokerCustomerFilesActionResult BrokerLoadCustomerFiles(string sCustomerRefNum, string sContactEmail);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLoadCustomerFiles", ReplyAction="http://tempuri.org/IEzService/BrokerLoadCustomerFilesResponse")]
-        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BrokerCustomerFilesActionResult> BrokerLoadCustomerFilesAsync(int nCustomerID, string sContactEmail);
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BrokerCustomerFilesActionResult> BrokerLoadCustomerFilesAsync(string sCustomerRefNum, string sContactEmail);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerDownloadCustomerFile", ReplyAction="http://tempuri.org/IEzService/BrokerDownloadCustomerFileResponse")]
-        StrategiesActivator.EzServiceReference.BrokerCustomerFileContentsActionResult BrokerDownloadCustomerFile(int nCustomerID, string sContactEmail, int nFileID);
+        StrategiesActivator.EzServiceReference.BrokerCustomerFileContentsActionResult BrokerDownloadCustomerFile(string sCustomerRefNum, string sContactEmail, int nFileID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerDownloadCustomerFile", ReplyAction="http://tempuri.org/IEzService/BrokerDownloadCustomerFileResponse")]
-        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BrokerCustomerFileContentsActionResult> BrokerDownloadCustomerFileAsync(int nCustomerID, string sContactEmail, int nFileID);
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BrokerCustomerFileContentsActionResult> BrokerDownloadCustomerFileAsync(string sCustomerRefNum, string sContactEmail, int nFileID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerSaveUploadedCustomerFile", ReplyAction="http://tempuri.org/IEzService/BrokerSaveUploadedCustomerFileResponse")]
-        StrategiesActivator.EzServiceReference.ActionMetaData BrokerSaveUploadedCustomerFile(int nCustomerID, string sContactEmail, byte[] oFileContents, string sFileName);
+        StrategiesActivator.EzServiceReference.ActionMetaData BrokerSaveUploadedCustomerFile(string sCustomerRefNum, string sContactEmail, byte[] oFileContents, string sFileName);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerSaveUploadedCustomerFile", ReplyAction="http://tempuri.org/IEzService/BrokerSaveUploadedCustomerFileResponse")]
-        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> BrokerSaveUploadedCustomerFileAsync(int nCustomerID, string sContactEmail, byte[] oFileContents, string sFileName);
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> BrokerSaveUploadedCustomerFileAsync(string sCustomerRefNum, string sContactEmail, byte[] oFileContents, string sFileName);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerDeleteCustomerFiles", ReplyAction="http://tempuri.org/IEzService/BrokerDeleteCustomerFilesResponse")]
-        StrategiesActivator.EzServiceReference.ActionMetaData BrokerDeleteCustomerFiles(int nCustomerID, string sContactEmail, int[] aryFileIDs);
+        StrategiesActivator.EzServiceReference.ActionMetaData BrokerDeleteCustomerFiles(string sCustomerRefNum, string sContactEmail, int[] aryFileIDs);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerDeleteCustomerFiles", ReplyAction="http://tempuri.org/IEzService/BrokerDeleteCustomerFilesResponse")]
-        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> BrokerDeleteCustomerFilesAsync(int nCustomerID, string sContactEmail, int[] aryFileIDs);
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> BrokerDeleteCustomerFilesAsync(string sCustomerRefNum, string sContactEmail, int[] aryFileIDs);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerAddCustomerLead", ReplyAction="http://tempuri.org/IEzService/BrokerAddCustomerLeadResponse")]
         StrategiesActivator.EzServiceReference.ActionMetaData BrokerAddCustomerLead(string sLeadFirstName, string sLeadLastName, string sLeadEmail, string sLeadAddMode, string sContactEmail);
@@ -3700,52 +3623,52 @@ namespace StrategiesActivator.EzServiceReference {
             return base.Channel.BrokerLoadCustomerListAsync(sContactEmail);
         }
         
-        public StrategiesActivator.EzServiceReference.BrokerCustomerDetailsActionResult BrokerLoadCustomerDetails(int nCustomerID, string sContactEmail) {
-            return base.Channel.BrokerLoadCustomerDetails(nCustomerID, sContactEmail);
+        public StrategiesActivator.EzServiceReference.BrokerCustomerDetailsActionResult BrokerLoadCustomerDetails(string sCustomerRefNum, string sContactEmail) {
+            return base.Channel.BrokerLoadCustomerDetails(sCustomerRefNum, sContactEmail);
         }
         
-        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BrokerCustomerDetailsActionResult> BrokerLoadCustomerDetailsAsync(int nCustomerID, string sContactEmail) {
-            return base.Channel.BrokerLoadCustomerDetailsAsync(nCustomerID, sContactEmail);
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BrokerCustomerDetailsActionResult> BrokerLoadCustomerDetailsAsync(string sCustomerRefNum, string sContactEmail) {
+            return base.Channel.BrokerLoadCustomerDetailsAsync(sCustomerRefNum, sContactEmail);
         }
         
-        public StrategiesActivator.EzServiceReference.StringActionResult BrokerSaveCrmEntry(bool bIsIncoming, int nActionID, int nStatusID, string sComment, int nCustomerID, string sContactEmail) {
-            return base.Channel.BrokerSaveCrmEntry(bIsIncoming, nActionID, nStatusID, sComment, nCustomerID, sContactEmail);
+        public StrategiesActivator.EzServiceReference.StringActionResult BrokerSaveCrmEntry(bool bIsIncoming, int nActionID, int nStatusID, string sComment, string sCustomerRefNum, string sContactEmail) {
+            return base.Channel.BrokerSaveCrmEntry(bIsIncoming, nActionID, nStatusID, sComment, sCustomerRefNum, sContactEmail);
         }
         
-        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.StringActionResult> BrokerSaveCrmEntryAsync(bool bIsIncoming, int nActionID, int nStatusID, string sComment, int nCustomerID, string sContactEmail) {
-            return base.Channel.BrokerSaveCrmEntryAsync(bIsIncoming, nActionID, nStatusID, sComment, nCustomerID, sContactEmail);
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.StringActionResult> BrokerSaveCrmEntryAsync(bool bIsIncoming, int nActionID, int nStatusID, string sComment, string sCustomerRefNum, string sContactEmail) {
+            return base.Channel.BrokerSaveCrmEntryAsync(bIsIncoming, nActionID, nStatusID, sComment, sCustomerRefNum, sContactEmail);
         }
         
-        public StrategiesActivator.EzServiceReference.BrokerCustomerFilesActionResult BrokerLoadCustomerFiles(int nCustomerID, string sContactEmail) {
-            return base.Channel.BrokerLoadCustomerFiles(nCustomerID, sContactEmail);
+        public StrategiesActivator.EzServiceReference.BrokerCustomerFilesActionResult BrokerLoadCustomerFiles(string sCustomerRefNum, string sContactEmail) {
+            return base.Channel.BrokerLoadCustomerFiles(sCustomerRefNum, sContactEmail);
         }
         
-        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BrokerCustomerFilesActionResult> BrokerLoadCustomerFilesAsync(int nCustomerID, string sContactEmail) {
-            return base.Channel.BrokerLoadCustomerFilesAsync(nCustomerID, sContactEmail);
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BrokerCustomerFilesActionResult> BrokerLoadCustomerFilesAsync(string sCustomerRefNum, string sContactEmail) {
+            return base.Channel.BrokerLoadCustomerFilesAsync(sCustomerRefNum, sContactEmail);
         }
         
-        public StrategiesActivator.EzServiceReference.BrokerCustomerFileContentsActionResult BrokerDownloadCustomerFile(int nCustomerID, string sContactEmail, int nFileID) {
-            return base.Channel.BrokerDownloadCustomerFile(nCustomerID, sContactEmail, nFileID);
+        public StrategiesActivator.EzServiceReference.BrokerCustomerFileContentsActionResult BrokerDownloadCustomerFile(string sCustomerRefNum, string sContactEmail, int nFileID) {
+            return base.Channel.BrokerDownloadCustomerFile(sCustomerRefNum, sContactEmail, nFileID);
         }
         
-        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BrokerCustomerFileContentsActionResult> BrokerDownloadCustomerFileAsync(int nCustomerID, string sContactEmail, int nFileID) {
-            return base.Channel.BrokerDownloadCustomerFileAsync(nCustomerID, sContactEmail, nFileID);
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BrokerCustomerFileContentsActionResult> BrokerDownloadCustomerFileAsync(string sCustomerRefNum, string sContactEmail, int nFileID) {
+            return base.Channel.BrokerDownloadCustomerFileAsync(sCustomerRefNum, sContactEmail, nFileID);
         }
         
-        public StrategiesActivator.EzServiceReference.ActionMetaData BrokerSaveUploadedCustomerFile(int nCustomerID, string sContactEmail, byte[] oFileContents, string sFileName) {
-            return base.Channel.BrokerSaveUploadedCustomerFile(nCustomerID, sContactEmail, oFileContents, sFileName);
+        public StrategiesActivator.EzServiceReference.ActionMetaData BrokerSaveUploadedCustomerFile(string sCustomerRefNum, string sContactEmail, byte[] oFileContents, string sFileName) {
+            return base.Channel.BrokerSaveUploadedCustomerFile(sCustomerRefNum, sContactEmail, oFileContents, sFileName);
         }
         
-        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> BrokerSaveUploadedCustomerFileAsync(int nCustomerID, string sContactEmail, byte[] oFileContents, string sFileName) {
-            return base.Channel.BrokerSaveUploadedCustomerFileAsync(nCustomerID, sContactEmail, oFileContents, sFileName);
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> BrokerSaveUploadedCustomerFileAsync(string sCustomerRefNum, string sContactEmail, byte[] oFileContents, string sFileName) {
+            return base.Channel.BrokerSaveUploadedCustomerFileAsync(sCustomerRefNum, sContactEmail, oFileContents, sFileName);
         }
         
-        public StrategiesActivator.EzServiceReference.ActionMetaData BrokerDeleteCustomerFiles(int nCustomerID, string sContactEmail, int[] aryFileIDs) {
-            return base.Channel.BrokerDeleteCustomerFiles(nCustomerID, sContactEmail, aryFileIDs);
+        public StrategiesActivator.EzServiceReference.ActionMetaData BrokerDeleteCustomerFiles(string sCustomerRefNum, string sContactEmail, int[] aryFileIDs) {
+            return base.Channel.BrokerDeleteCustomerFiles(sCustomerRefNum, sContactEmail, aryFileIDs);
         }
         
-        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> BrokerDeleteCustomerFilesAsync(int nCustomerID, string sContactEmail, int[] aryFileIDs) {
-            return base.Channel.BrokerDeleteCustomerFilesAsync(nCustomerID, sContactEmail, aryFileIDs);
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> BrokerDeleteCustomerFilesAsync(string sCustomerRefNum, string sContactEmail, int[] aryFileIDs) {
+            return base.Channel.BrokerDeleteCustomerFilesAsync(sCustomerRefNum, sContactEmail, aryFileIDs);
         }
         
         public StrategiesActivator.EzServiceReference.ActionMetaData BrokerAddCustomerLead(string sLeadFirstName, string sLeadLastName, string sLeadEmail, string sLeadAddMode, string sContactEmail) {

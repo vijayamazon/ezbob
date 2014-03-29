@@ -3,7 +3,7 @@ IF OBJECT_ID('BrokerLoadCustomerFiles') IS NULL
 GO
 
 ALTER PROCEDURE BrokerLoadCustomerFiles
-@CustomerID INT,
+@RefNum NVARCHAR(8),
 @ContactEmail NVARCHAR(255)
 AS
 BEGIN
@@ -29,7 +29,7 @@ BEGIN
 		MP_AlertDocument d
 		INNER JOIN Customer c
 			ON d.CustomerId = c.Id
-			AND c.Id = @CustomerID
+			AND c.RefNumber = @RefNum
 			AND c.BrokerID = @BrokerID
 	WHERE
 		d.UserId = @UserID

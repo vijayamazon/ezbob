@@ -9,8 +9,8 @@
 
 		#region constructor
 
-		public BrokerDownloadCustomerFile(int nCustomerID, string sContactEmail, int nFileID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
-			m_nCustomerID = nCustomerID;
+		public BrokerDownloadCustomerFile(string sCustomerRefNum, string sContactEmail, int nFileID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+			m_sCustomerRefNum = sCustomerRefNum;
 			m_sContactEmail = sContactEmail;
 			m_nFileID = nFileID;
 
@@ -43,7 +43,7 @@
 		#region method Execute
 
 		public override void Execute() {
-			if (string.IsNullOrWhiteSpace(m_sContactEmail) || (m_nCustomerID < 1) || (m_nFileID < 1))
+			if (string.IsNullOrWhiteSpace(m_sContactEmail) || string.IsNullOrWhiteSpace(m_sCustomerRefNum) || (m_nFileID < 1))
 				return;
 
 			DB.ForEachRow(
@@ -55,7 +55,7 @@
 				},
 				"BrokerDownloadCustomerFile",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("@CustomerID", m_nCustomerID),
+				new QueryParameter("@RefNum", m_sCustomerRefNum),
 				new QueryParameter("@ContactEmail", m_sContactEmail),
 				new QueryParameter("@FileID", m_nFileID)
 			);
@@ -67,7 +67,7 @@
 
 		#region private
 
-		private readonly int m_nCustomerID;
+		private readonly string m_sCustomerRefNum;
 		private readonly string m_sContactEmail;
 		private readonly int m_nFileID;
 

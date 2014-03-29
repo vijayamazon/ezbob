@@ -19,6 +19,9 @@
 		public string gender { get; set; }
 
 		[DataMember]
+		public string email { get; set; }
+
+		[DataMember]
 		public string maritalstatus { get; set; }
 
 		[DataMember]

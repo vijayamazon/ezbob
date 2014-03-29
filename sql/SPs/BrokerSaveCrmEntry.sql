@@ -7,7 +7,7 @@ ALTER PROCEDURE BrokerSaveCrmEntry
 @ActionID INT,
 @StatusID INT,
 @Comment VARCHAR(1000),
-@CustomerID INT,
+@RefNum NVARCHAR(8),
 @ContactEmail NVARCHAR(255),
 @EntryTime DATETIME
 AS
@@ -17,6 +17,7 @@ BEGIN
 	DECLARE @ErrorMsg AS NVARCHAR(1024) = ''
 	DECLARE @BrokerID INT
 	DECLARE @BrokerName NVARCHAR(255)
+	DECLARE @CustomerID INT
 
 	IF @ErrorMsg = ''
 	BEGIN
@@ -34,7 +35,9 @@ BEGIN
 
 	IF @ErrorMsg = ''
 	BEGIN
-		IF NOT EXISTS (SELECT Id FROM Customer WHERE Id = @CustomerID AND BrokerID = @BrokerID)
+		SELECT @CustomerID = Id FROM Customer WHERE RefNumber = @RefNum AND BrokerID = @BrokerID
+
+		IF @CustomerID IS NULL
 			SET @ErrorMsg = 'The broker is not authorised to access this customer data.'
 	END
 

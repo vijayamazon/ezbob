@@ -112,7 +112,6 @@
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
           <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Customers" nillable="true" type="q2:ArrayOfBrokerCustomerEntry" />
-          <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Leads" nillable="true" type="q3:ArrayOfBrokerLeadEntry" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -122,7 +121,7 @@
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
-          <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Data" nillable="true" type="q4:BrokerCustomerDetails" />
+          <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Data" nillable="true" type="q3:BrokerCustomerDetails" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -142,7 +141,7 @@
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
-          <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Files" nillable="true" type="q5:ArrayOfBrokerCustomerFile" />
+          <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Files" nillable="true" type="q4:ArrayOfBrokerCustomerFile" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -177,8 +176,8 @@
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
-          <xs:element xmlns:q6="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Actions" nillable="true" type="q6:ArrayOfKeyValueOfintstring" />
-          <xs:element xmlns:q7="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Statuses" nillable="true" type="q7:ArrayOfKeyValueOfintstring" />
+          <xs:element xmlns:q5="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Actions" nillable="true" type="q5:ArrayOfKeyValueOfintstring" />
+          <xs:element xmlns:q6="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Statuses" nillable="true" type="q6:ArrayOfKeyValueOfintstring" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -189,7 +188,7 @@
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
           <xs:element minOccurs="0" name="HasValue" type="xs:boolean" />
-          <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/EzBob.Backend.Models" minOccurs="0" name="Value" nillable="true" type="q8:QuickOfferModel" />
+          <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/EzBob.Backend.Models" minOccurs="0" name="Value" nillable="true" type="q7:QuickOfferModel" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>

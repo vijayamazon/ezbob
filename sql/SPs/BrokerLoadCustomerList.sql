@@ -17,6 +17,7 @@ BEGIN
 		c.FirstName AS FirstName,
 		c.Surname AS LastName,
 		c.Name AS Email,
+		c.RefNumber,
 		w.WizardStepTypeDescription AS WizardStep,
 		ISNULL(c.CreditResult, 'In process') AS Status,
 		c.GreetingMailSentDate AS ApplyDate,

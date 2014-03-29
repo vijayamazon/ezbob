@@ -80,7 +80,7 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 
 		$.getJSON(
 			window.gRootPath + 'Broker/BrokerHome/LoadCustomerDetails',
-			{ nCustomerID: this.CustomerID, sContactEmail: this.router.getAuth(), },
+			{ sCustomerID: this.CustomerID, sContactEmail: this.router.getAuth(), },
 			function(oResponse) {
 				if (!oResponse.success) {
 					if (oResponse.error)
@@ -127,7 +127,7 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 
 		$.getJSON(
 			window.gRootPath + 'Broker/BrokerHome/LoadCustomerFiles',
-			{ nCustomerID: this.CustomerID, sContactEmail: this.router.getAuth(), },
+			{ sCustomerID: this.CustomerID, sContactEmail: this.router.getAuth(), },
 			function(oResponse) {
 				if (!oResponse.success) {
 					if (oResponse.error)
@@ -217,7 +217,7 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 			url: window.gRootPath + 'Broker/BrokerHome/DeleteCustomerFiles',
 			traditional: true,
 			data: {
-				nCustomerID: this.CustomerID,
+				sCustomerID: this.CustomerID,
 				sContactEmail: this.router.getAuth(),
 				aryFileIDs: arySelected,
 			}, // data
@@ -365,7 +365,7 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 
 		window.open(
 			window.gRootPath + 'Broker/BrokerHome/DownloadCustomerFile' +
-			'?nCustomerID=' + this.CustomerID +
+			'?sCustomerID=' + this.CustomerID +
 			'&sContactEmail=' + encodeURIComponent(this.router.getAuth()) +
 			'&nFileID=' + encodeURIComponent($(event.currentTarget).attr('data-file-id'))
 		);

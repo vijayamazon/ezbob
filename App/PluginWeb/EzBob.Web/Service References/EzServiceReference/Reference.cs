@@ -310,9 +310,6 @@ namespace EzBob.Web.EzServiceReference {
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private Ezbob.Backend.Models.BrokerCustomerEntry[] CustomersField;
         
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private Ezbob.Backend.Models.BrokerLeadEntry[] LeadsField;
-        
         [System.Runtime.Serialization.DataMemberAttribute()]
         public Ezbob.Backend.Models.BrokerCustomerEntry[] Customers {
             get {
@@ -322,19 +319,6 @@ namespace EzBob.Web.EzServiceReference {
                 if ((object.ReferenceEquals(this.CustomersField, value) != true)) {
                     this.CustomersField = value;
                     this.RaisePropertyChanged("Customers");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public Ezbob.Backend.Models.BrokerLeadEntry[] Leads {
-            get {
-                return this.LeadsField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.LeadsField, value) != true)) {
-                    this.LeadsField = value;
-                    this.RaisePropertyChanged("Leads");
                 }
             }
         }
@@ -844,22 +828,22 @@ namespace EzBob.Web.EzServiceReference {
         EzBob.Web.EzServiceReference.BrokerCustomersActionResult BrokerLoadCustomerList(string sContactEmail);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLoadCustomerDetails", ReplyAction="http://tempuri.org/IEzService/BrokerLoadCustomerDetailsResponse")]
-        EzBob.Web.EzServiceReference.BrokerCustomerDetailsActionResult BrokerLoadCustomerDetails(int nCustomerID, string sContactEmail);
+        EzBob.Web.EzServiceReference.BrokerCustomerDetailsActionResult BrokerLoadCustomerDetails(string sCustomerRefNum, string sContactEmail);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerSaveCrmEntry", ReplyAction="http://tempuri.org/IEzService/BrokerSaveCrmEntryResponse")]
-        EzBob.Web.EzServiceReference.StringActionResult BrokerSaveCrmEntry(bool bIsIncoming, int nActionID, int nStatusID, string sComment, int nCustomerID, string sContactEmail);
+        EzBob.Web.EzServiceReference.StringActionResult BrokerSaveCrmEntry(bool bIsIncoming, int nActionID, int nStatusID, string sComment, string sCustomerRefNum, string sContactEmail);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLoadCustomerFiles", ReplyAction="http://tempuri.org/IEzService/BrokerLoadCustomerFilesResponse")]
-        EzBob.Web.EzServiceReference.BrokerCustomerFilesActionResult BrokerLoadCustomerFiles(int nCustomerID, string sContactEmail);
+        EzBob.Web.EzServiceReference.BrokerCustomerFilesActionResult BrokerLoadCustomerFiles(string sCustomerRefNum, string sContactEmail);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerDownloadCustomerFile", ReplyAction="http://tempuri.org/IEzService/BrokerDownloadCustomerFileResponse")]
-        EzBob.Web.EzServiceReference.BrokerCustomerFileContentsActionResult BrokerDownloadCustomerFile(int nCustomerID, string sContactEmail, int nFileID);
+        EzBob.Web.EzServiceReference.BrokerCustomerFileContentsActionResult BrokerDownloadCustomerFile(string sCustomerRefNum, string sContactEmail, int nFileID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerSaveUploadedCustomerFile", ReplyAction="http://tempuri.org/IEzService/BrokerSaveUploadedCustomerFileResponse")]
-        EzBob.Web.EzServiceReference.ActionMetaData BrokerSaveUploadedCustomerFile(int nCustomerID, string sContactEmail, byte[] oFileContents, string sFileName);
+        EzBob.Web.EzServiceReference.ActionMetaData BrokerSaveUploadedCustomerFile(string sCustomerRefNum, string sContactEmail, byte[] oFileContents, string sFileName);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerDeleteCustomerFiles", ReplyAction="http://tempuri.org/IEzService/BrokerDeleteCustomerFilesResponse")]
-        EzBob.Web.EzServiceReference.ActionMetaData BrokerDeleteCustomerFiles(int nCustomerID, string sContactEmail, int[] aryFileIDs);
+        EzBob.Web.EzServiceReference.ActionMetaData BrokerDeleteCustomerFiles(string sCustomerRefNum, string sContactEmail, int[] aryFileIDs);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerAddCustomerLead", ReplyAction="http://tempuri.org/IEzService/BrokerAddCustomerLeadResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData BrokerAddCustomerLead(string sLeadFirstName, string sLeadLastName, string sLeadEmail, string sLeadAddMode, string sContactEmail);
@@ -1125,28 +1109,28 @@ namespace EzBob.Web.EzServiceReference {
             return base.Channel.BrokerLoadCustomerList(sContactEmail);
         }
         
-        public EzBob.Web.EzServiceReference.BrokerCustomerDetailsActionResult BrokerLoadCustomerDetails(int nCustomerID, string sContactEmail) {
-            return base.Channel.BrokerLoadCustomerDetails(nCustomerID, sContactEmail);
+        public EzBob.Web.EzServiceReference.BrokerCustomerDetailsActionResult BrokerLoadCustomerDetails(string sCustomerRefNum, string sContactEmail) {
+            return base.Channel.BrokerLoadCustomerDetails(sCustomerRefNum, sContactEmail);
         }
         
-        public EzBob.Web.EzServiceReference.StringActionResult BrokerSaveCrmEntry(bool bIsIncoming, int nActionID, int nStatusID, string sComment, int nCustomerID, string sContactEmail) {
-            return base.Channel.BrokerSaveCrmEntry(bIsIncoming, nActionID, nStatusID, sComment, nCustomerID, sContactEmail);
+        public EzBob.Web.EzServiceReference.StringActionResult BrokerSaveCrmEntry(bool bIsIncoming, int nActionID, int nStatusID, string sComment, string sCustomerRefNum, string sContactEmail) {
+            return base.Channel.BrokerSaveCrmEntry(bIsIncoming, nActionID, nStatusID, sComment, sCustomerRefNum, sContactEmail);
         }
         
-        public EzBob.Web.EzServiceReference.BrokerCustomerFilesActionResult BrokerLoadCustomerFiles(int nCustomerID, string sContactEmail) {
-            return base.Channel.BrokerLoadCustomerFiles(nCustomerID, sContactEmail);
+        public EzBob.Web.EzServiceReference.BrokerCustomerFilesActionResult BrokerLoadCustomerFiles(string sCustomerRefNum, string sContactEmail) {
+            return base.Channel.BrokerLoadCustomerFiles(sCustomerRefNum, sContactEmail);
         }
         
-        public EzBob.Web.EzServiceReference.BrokerCustomerFileContentsActionResult BrokerDownloadCustomerFile(int nCustomerID, string sContactEmail, int nFileID) {
-            return base.Channel.BrokerDownloadCustomerFile(nCustomerID, sContactEmail, nFileID);
+        public EzBob.Web.EzServiceReference.BrokerCustomerFileContentsActionResult BrokerDownloadCustomerFile(string sCustomerRefNum, string sContactEmail, int nFileID) {
+            return base.Channel.BrokerDownloadCustomerFile(sCustomerRefNum, sContactEmail, nFileID);
         }
         
-        public EzBob.Web.EzServiceReference.ActionMetaData BrokerSaveUploadedCustomerFile(int nCustomerID, string sContactEmail, byte[] oFileContents, string sFileName) {
-            return base.Channel.BrokerSaveUploadedCustomerFile(nCustomerID, sContactEmail, oFileContents, sFileName);
+        public EzBob.Web.EzServiceReference.ActionMetaData BrokerSaveUploadedCustomerFile(string sCustomerRefNum, string sContactEmail, byte[] oFileContents, string sFileName) {
+            return base.Channel.BrokerSaveUploadedCustomerFile(sCustomerRefNum, sContactEmail, oFileContents, sFileName);
         }
         
-        public EzBob.Web.EzServiceReference.ActionMetaData BrokerDeleteCustomerFiles(int nCustomerID, string sContactEmail, int[] aryFileIDs) {
-            return base.Channel.BrokerDeleteCustomerFiles(nCustomerID, sContactEmail, aryFileIDs);
+        public EzBob.Web.EzServiceReference.ActionMetaData BrokerDeleteCustomerFiles(string sCustomerRefNum, string sContactEmail, int[] aryFileIDs) {
+            return base.Channel.BrokerDeleteCustomerFiles(sCustomerRefNum, sContactEmail, aryFileIDs);
         }
         
         public EzBob.Web.EzServiceReference.ActionMetaData BrokerAddCustomerLead(string sLeadFirstName, string sLeadLastName, string sLeadEmail, string sLeadAddMode, string sContactEmail) {

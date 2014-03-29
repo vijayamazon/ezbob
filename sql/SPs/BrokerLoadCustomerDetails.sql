@@ -3,7 +3,7 @@ IF OBJECT_ID('BrokerLoadCustomerDetails') IS NULL
 GO
 
 ALTER PROCEDURE BrokerLoadCustomerDetails
-@CustomerID INT,
+@RefNum NVARCHAR(8),
 @ContactEmail NVARCHAR(255)
 AS
 BEGIN
@@ -24,6 +24,7 @@ BEGIN
 		c.Surname,
 		c.DateOfBirth,
 		c.Gender,
+		c.Name AS Email,
 		c.MaritalStatus,
 		c.MobilePhone,
 		c.DaytimePhone,
@@ -40,7 +41,7 @@ BEGIN
 		Customer c
 		LEFT JOIN CustomerAddress a ON c.Id = a.CustomerId AND a.addressType = 1
 	WHERE
-		c.Id = @CustomerID
+		c.RefNumber = @RefNum
 		AND
 		c.BrokerID = @BrokerID
 END

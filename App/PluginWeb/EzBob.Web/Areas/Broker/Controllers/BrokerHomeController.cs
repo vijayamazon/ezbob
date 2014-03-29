@@ -254,7 +254,7 @@
 
 			m_oLog.Debug("Broker load customers request for contact email {0} complete.", sContactEmail);
 
-			return new CustomerListBrokerForJsonResult(oCustomers: oResult.Customers, oLeads: oResult.Leads);
+			return new CustomerListBrokerForJsonResult(oCustomers: oResult.Customers);
 		} // LoadCustomers
 
 		#endregion action LoadCustomers
@@ -264,24 +264,24 @@
 		[HttpGet]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
-		public JsonResult LoadCustomerDetails(int nCustomerID, string sContactEmail) {
-			m_oLog.Debug("Broker load customer details request for customer {1} and contact email {0}", sContactEmail, nCustomerID);
+		public JsonResult LoadCustomerDetails(string sCustomerID, string sContactEmail) {
+			m_oLog.Debug("Broker load customer details request for customer {1} and contact email {0}", sContactEmail, sCustomerID);
 
-			var oIsAuthResult = IsAuth<CustomerDetailsBrokerForJsonResult>("Load customer details for customer " + nCustomerID, sContactEmail);
+			var oIsAuthResult = IsAuth<CustomerDetailsBrokerForJsonResult>("Load customer details for customer " + sCustomerID, sContactEmail);
 			if (oIsAuthResult != null)
 				return oIsAuthResult;
 
 			BrokerCustomerDetailsActionResult oDetails;
 
 			try {
-				oDetails = m_oServiceClient.Instance.BrokerLoadCustomerDetails(nCustomerID, sContactEmail);
+				oDetails = m_oServiceClient.Instance.BrokerLoadCustomerDetails(sCustomerID, sContactEmail);
 			}
 			catch (Exception e) {
-				m_oLog.Alert(e, "Failed to load customer details request for customer {1} and contact email {0}", sContactEmail, nCustomerID);
+				m_oLog.Alert(e, "Failed to load customer details request for customer {1} and contact email {0}", sContactEmail, sCustomerID);
 				return new CustomerDetailsBrokerForJsonResult("Failed to load customer details.");
 			} // try
 
-			m_oLog.Debug("Broker load customer details request for customer {1} and contact email {0} complete.", sContactEmail, nCustomerID);
+			m_oLog.Debug("Broker load customer details request for customer {1} and contact email {0} complete.", sContactEmail, sCustomerID);
 
 			return new CustomerDetailsBrokerForJsonResult(oDetails: oDetails.Data);
 		} // LoadCustomerDetails
@@ -318,7 +318,7 @@
 		[HttpPost]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
-		public JsonResult SaveCrmEntry(bool isIncoming, int action, int status, string comment, int customerId, string sContactEmail) {
+		public JsonResult SaveCrmEntry(bool isIncoming, int action, int status, string comment, string customerId, string sContactEmail) {
 			m_oLog.Debug(
 				"\nBroker saving CRM entry started:" +
 				"\n\tis incoming: {0}" +
@@ -376,24 +376,24 @@
 		[HttpGet]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
-		public JsonResult LoadCustomerFiles(int nCustomerID, string sContactEmail) {
-			m_oLog.Debug("Broker load customer files request for customer {1} and contact email {0}", sContactEmail, nCustomerID);
+		public JsonResult LoadCustomerFiles(string sCustomerID, string sContactEmail) {
+			m_oLog.Debug("Broker load customer files request for customer {1} and contact email {0}", sContactEmail, sCustomerID);
 
-			var oIsAuthResult = IsAuth<FileListBrokerForJsonResult>("Load customer files for customer " + nCustomerID, sContactEmail);
+			var oIsAuthResult = IsAuth<FileListBrokerForJsonResult>("Load customer files for customer " + sCustomerID, sContactEmail);
 			if (oIsAuthResult != null)
 				return oIsAuthResult;
 
 			BrokerCustomerFilesActionResult oFiles = null;
 
 			try {
-				oFiles = m_oServiceClient.Instance.BrokerLoadCustomerFiles(nCustomerID, sContactEmail);
+				oFiles = m_oServiceClient.Instance.BrokerLoadCustomerFiles(sCustomerID, sContactEmail);
 			}
 			catch (Exception e) {
-				m_oLog.Alert(e, "Failed to load customer files request for customer {1} and contact email {0}", sContactEmail, nCustomerID);
+				m_oLog.Alert(e, "Failed to load customer files request for customer {1} and contact email {0}", sContactEmail, sCustomerID);
 				return new FileListBrokerForJsonResult("Failed to load customer files.");
 			} // try
 
-			m_oLog.Debug("Broker load customer files request for customer {1} and contact email {0} complete.", sContactEmail, nCustomerID);
+			m_oLog.Debug("Broker load customer files request for customer {1} and contact email {0} complete.", sContactEmail, sCustomerID);
 
 			return new FileListBrokerForJsonResult(oFileList: oFiles.Files);
 		} // LoadCustomerFiles
@@ -406,12 +406,11 @@
 		public JsonResult HandleUploadFile() {
 			string sContactEmail = Request.Headers["ezbob-broker-contact-email"];
 
-			int nCustomerID = 0;
-			int.TryParse(Request.Headers["ezbob-broker-customer-id"], out nCustomerID);
+			string sCustomerID = Request.Headers["ezbob-broker-customer-id"];
 
-			m_oLog.Debug("Broker upload customer file request for customer {1} and contact email {0}", sContactEmail, nCustomerID);
+			m_oLog.Debug("Broker upload customer file request for customer {1} and contact email {0}", sContactEmail, sCustomerID);
 
-			BrokerForJsonResult oIsAuthResult = IsAuth("Upload customer file for customer " + nCustomerID, sContactEmail);
+			BrokerForJsonResult oIsAuthResult = IsAuth("Upload customer file for customer " + sCustomerID, sContactEmail);
 			if (oIsAuthResult != null)
 				return oIsAuthResult;
 
@@ -447,7 +446,7 @@
 				);
 
 				try {
-					m_oServiceClient.Instance.BrokerSaveUploadedCustomerFile(nCustomerID, sContactEmail, oFileContents, oFile.FileName);
+					m_oServiceClient.Instance.BrokerSaveUploadedCustomerFile(sCustomerID, sContactEmail, oFileContents, oFile.FileName);
 				}
 				catch (Exception e) {
 					m_oLog.Alert(e, "Failed to save file #{0}: {2} out of {1}.", (i + 1), nFileCount, oFile.FileName);
@@ -455,7 +454,7 @@
 				} // try
 			} // for each file
 
-			m_oLog.Debug("Broker upload customer file request for customer {1} and contact email {0} complete.", sContactEmail, nCustomerID);
+			m_oLog.Debug("Broker upload customer file request for customer {1} and contact email {0} complete.", sContactEmail, sCustomerID);
 
 			return new BrokerForJsonResult(oErrorList.Count == 0 ? string.Empty : string.Join(" ", oErrorList));
 		} // HandleUploadFile
@@ -465,29 +464,29 @@
 		#region action DownloadCustomerFile
 
 		[HttpGet]
-		public FileResult DownloadCustomerFile(int nCustomerID, string sContactEmail, int nFileID) {
-			m_oLog.Debug("Broker download customer file request for customer {1} and contact email {0} with file id {2}", sContactEmail, nCustomerID, nFileID);
+		public FileResult DownloadCustomerFile(string sCustomerID, string sContactEmail, int nFileID) {
+			m_oLog.Debug("Broker download customer file request for customer {1} and contact email {0} with file id {2}", sContactEmail, sCustomerID, nFileID);
 
-			BrokerForJsonResult oIsAuthResult = IsAuth("Download customer file for customer " + nCustomerID, sContactEmail);
+			BrokerForJsonResult oIsAuthResult = IsAuth("Download customer file for customer " + sCustomerID, sContactEmail);
 			if (oIsAuthResult != null)
 				throw new Exception(oIsAuthResult.error);
 
 			BrokerCustomerFileContentsActionResult oFile = null;
 
 			try {
-				oFile = m_oServiceClient.Instance.BrokerDownloadCustomerFile(nCustomerID, sContactEmail, nFileID);
+				oFile = m_oServiceClient.Instance.BrokerDownloadCustomerFile(sCustomerID, sContactEmail, nFileID);
 			}
 			catch (Exception e) {
-				m_oLog.Alert(e, "Failed to download customer file for customer {1} and contact email {0} with file id {2}", sContactEmail, nCustomerID, nFileID);
+				m_oLog.Alert(e, "Failed to download customer file for customer {1} and contact email {0} with file id {2}", sContactEmail, sCustomerID, nFileID);
 				throw new Exception("Failed to download requested file.");
 			} // try
 
 			if (string.IsNullOrWhiteSpace(oFile.Name)) {
-				m_oLog.Alert("Could not download customer file for customer {1} and contact email {0} with file id {2}", sContactEmail, nCustomerID, nFileID);
+				m_oLog.Alert("Could not download customer file for customer {1} and contact email {0} with file id {2}", sContactEmail, sCustomerID, nFileID);
 				throw new Exception("Failed to download requested file.");
 			} // if
 
-			m_oLog.Debug("Broker download customer file request for customer {1} and contact email {0} with file id {2} complete.", sContactEmail, nCustomerID, nFileID);
+			m_oLog.Debug("Broker download customer file request for customer {1} and contact email {0} with file id {2} complete.", sContactEmail, sCustomerID, nFileID);
 
 			string sFileExt = string.Empty;
 
@@ -508,7 +507,7 @@
 		[HttpPost]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
-		public JsonResult DeleteCustomerFiles(int nCustomerID, string sContactEmail, int[] aryFileIDs) {
+		public JsonResult DeleteCustomerFiles(string sCustomerID, string sContactEmail, int[] aryFileIDs) {
 			string sErrorMsg = null;
 
 			if (aryFileIDs == null)
@@ -517,25 +516,25 @@
 				sErrorMsg = "list of file ids is empty after parsing";
 
 			if (!string.IsNullOrWhiteSpace(sErrorMsg)) {
-				m_oLog.Alert("Failed to delete customer files request for customer {1} and contact email {0}: {2}.", sContactEmail, nCustomerID, sErrorMsg);
+				m_oLog.Alert("Failed to delete customer files request for customer {1} and contact email {0}: {2}.", sContactEmail, sCustomerID, sErrorMsg);
 				return new BrokerForJsonResult("Failed to delete customer files.");
 			} // if
 
-			m_oLog.Debug("Broker delete customer files request for customer {1} and contact email {0}; file ids: {2}", sContactEmail, nCustomerID, string.Join(", ", aryFileIDs));
+			m_oLog.Debug("Broker delete customer files request for customer {1} and contact email {0}; file ids: {2}", sContactEmail, sCustomerID, string.Join(", ", aryFileIDs));
 
-			var oIsAuthResult = IsAuth<BrokerForJsonResult>("Delete customer files for customer " + nCustomerID, sContactEmail);
+			var oIsAuthResult = IsAuth<BrokerForJsonResult>("Delete customer files for customer " + sCustomerID, sContactEmail);
 			if (oIsAuthResult != null)
 				return oIsAuthResult;
 
 			try {
-				m_oServiceClient.Instance.BrokerDeleteCustomerFiles(nCustomerID, sContactEmail, aryFileIDs);
+				m_oServiceClient.Instance.BrokerDeleteCustomerFiles(sCustomerID, sContactEmail, aryFileIDs);
 			}
 			catch (Exception e) {
-				m_oLog.Alert(e, "Failed to delete customer files request for customer {1} and contact email {0}; file ids: {2}", sContactEmail, nCustomerID, string.Join(", ", aryFileIDs));
+				m_oLog.Alert(e, "Failed to delete customer files request for customer {1} and contact email {0}; file ids: {2}", sContactEmail, sCustomerID, string.Join(", ", aryFileIDs));
 				return new BrokerForJsonResult("Failed to delete customer files.");
 			} // try
 
-			m_oLog.Debug("Broker delete customer files request for customer {1} and contact email {0}; file ids: {2} complete.", sContactEmail, nCustomerID, string.Join(", ", aryFileIDs));
+			m_oLog.Debug("Broker delete customer files request for customer {1} and contact email {0}; file ids: {2} complete.", sContactEmail, sCustomerID, string.Join(", ", aryFileIDs));
 
 			return new BrokerForJsonResult();
 		} // DeleteCustomerFiles
@@ -794,15 +793,12 @@
 			public CustomerListBrokerForJsonResult(
 				string sErrorMsg = "",
 				bool? bExplicitSuccess = null,
-				BrokerCustomerEntry[] oCustomers = null,
-				BrokerLeadEntry[] oLeads = null
+				BrokerCustomerEntry[] oCustomers = null
 			) : base(sErrorMsg, bExplicitSuccess) {
 				customers = oCustomers ?? new BrokerCustomerEntry[0];
-				leads = oLeads ?? new BrokerLeadEntry[0];
 			} // constructor
 
 			public virtual BrokerCustomerEntry[] customers { get; private set; } // customers
-			public virtual BrokerLeadEntry[] leads { get; private set; } // leads
 		} // CustomerListBrokerForJsonResult
 
 		#endregion class CustomerListBrokerForJsonResult

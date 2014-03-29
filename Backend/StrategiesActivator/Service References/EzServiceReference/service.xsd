@@ -265,7 +265,7 @@
   <xs:element name="BrokerLoadCustomerDetails">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="nCustomerID" type="xs:int" />
+        <xs:element minOccurs="0" name="sCustomerRefNum" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="sContactEmail" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
@@ -284,7 +284,7 @@
         <xs:element minOccurs="0" name="nActionID" type="xs:int" />
         <xs:element minOccurs="0" name="nStatusID" type="xs:int" />
         <xs:element minOccurs="0" name="sComment" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="nCustomerID" type="xs:int" />
+        <xs:element minOccurs="0" name="sCustomerRefNum" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="sContactEmail" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
@@ -299,7 +299,7 @@
   <xs:element name="BrokerLoadCustomerFiles">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="nCustomerID" type="xs:int" />
+        <xs:element minOccurs="0" name="sCustomerRefNum" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="sContactEmail" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
@@ -314,7 +314,7 @@
   <xs:element name="BrokerDownloadCustomerFile">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="nCustomerID" type="xs:int" />
+        <xs:element minOccurs="0" name="sCustomerRefNum" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="sContactEmail" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="nFileID" type="xs:int" />
       </xs:sequence>
@@ -330,7 +330,7 @@
   <xs:element name="BrokerSaveUploadedCustomerFile">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="nCustomerID" type="xs:int" />
+        <xs:element minOccurs="0" name="sCustomerRefNum" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="sContactEmail" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="oFileContents" nillable="true" type="xs:base64Binary" />
         <xs:element minOccurs="0" name="sFileName" nillable="true" type="xs:string" />
@@ -347,7 +347,7 @@
   <xs:element name="BrokerDeleteCustomerFiles">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="nCustomerID" type="xs:int" />
+        <xs:element minOccurs="0" name="sCustomerRefNum" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="sContactEmail" nillable="true" type="xs:string" />
         <xs:element xmlns:q25="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="aryFileIDs" nillable="true" type="q25:ArrayOfint" />
       </xs:sequence>

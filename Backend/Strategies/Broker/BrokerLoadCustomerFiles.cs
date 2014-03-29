@@ -11,8 +11,8 @@
 
 		#region constructor
 
-		public BrokerLoadCustomerFiles(int nCustomerID, string sContactEmail, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
-			m_nCustomerID = nCustomerID;
+		public BrokerLoadCustomerFiles(string sCustomerRefNum, string sContactEmail, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+			m_sCustomerRefNum = sCustomerRefNum;
 			m_sContactEmail = sContactEmail;
 			Files = new List<BrokerCustomerFile>();
 		} // constructor
@@ -36,13 +36,13 @@
 		#region method Execute
 
 		public override void Execute() {
-			if (string.IsNullOrWhiteSpace(m_sContactEmail) || (m_nCustomerID < 1))
+			if (string.IsNullOrWhiteSpace(m_sContactEmail) || string.IsNullOrWhiteSpace(m_sCustomerRefNum))
 				return;
 
 			Files = DB.Fill<BrokerCustomerFile>(
 				"BrokerLoadCustomerFiles",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("@CustomerID", m_nCustomerID),
+				new QueryParameter("@RefNum", m_sCustomerRefNum),
 				new QueryParameter("@ContactEmail", m_sContactEmail)
 			);
 		} // Execute
@@ -53,7 +53,7 @@
 
 		#region private
 
-		private readonly int m_nCustomerID;
+		private readonly string m_sCustomerRefNum;
 		private readonly string m_sContactEmail;
 
 		#endregion private

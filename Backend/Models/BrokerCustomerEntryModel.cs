@@ -25,6 +25,9 @@
 		public int CustomerID { get; set; }
 
 		[DataMember]
+		public string RefNumber { get; set; }
+
+		[DataMember]
 		public string FirstName { get; set; }
 
 		[DataMember]
@@ -50,6 +53,15 @@
 
 		[DataMember]
 		public DateTime LoanDate { get; set; }
+
+		[DataMember]
+		public int LeadID { get; set; }
+
+		[DataMember]
+		public bool IsLeadDeleted { get; set; }
+
+		[DataMember]
+		public DateTime LastInvitationSent { get; set; }
 
 		#endregion properties
 
@@ -78,6 +90,24 @@
 		} // AddMpLoan
 
 		#endregion method AddMpLoan
+
+		#region method SetLead
+
+		public BrokerCustomerEntry SetLead(int nLeadID, bool bIsLeadDeleted, DateTime oLastInvitationSent, string sFirstName, string sLastName) {
+			LeadID = nLeadID;
+			IsLeadDeleted = bIsLeadDeleted;
+			LastInvitationSent = oLastInvitationSent;
+
+			if (string.IsNullOrWhiteSpace(FirstName))
+				FirstName = sFirstName;
+
+			if (string.IsNullOrWhiteSpace(LastName))
+				LastName = sLastName;
+
+			return this;
+		} // SetLead
+
+		#endregion method SetLead
 
 		#endregion public
 

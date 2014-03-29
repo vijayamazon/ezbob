@@ -10,24 +10,34 @@ BEGIN
 
 	DECLARE @BrokerID INT
 
-	SELECT @BrokerID = BrokerID FROM Broker WHERE ContactEmail = @ContactEmail
+	------------------------------------------------------------------------------
+
+	SELECT
+		@BrokerID = BrokerID
+	FROM
+		Broker
+	WHERE
+		ContactEmail = @ContactEmail
+
+	------------------------------------------------------------------------------
 
 	SELECT
 		bl.BrokerLeadID AS LeadID,
+		bl.CustomerID,
 		bl.FirstName,
 		bl.LastName,
 		bl.Email,
 		m.BrokerLeadAddMode AS AddMode,
 		bl.DateCreated,
-		bl.DateLastInvitationSent
+		bl.DateLastInvitationSent,
+		CONVERT(BIT, (CASE
+			WHEN bl.DateDeleted IS NULL THEN 0
+			ELSE 1
+		END)) AS IsDeleted
 	FROM
 		BrokerLeads bl
 		INNER JOIN BrokerLeadAddModes m ON bl.BrokerLeadAddModeID = m.BrokerLeadAddModeID
 	WHERE
-		bl.DateDeleted IS NULL
-		AND
-		bl.BrokerLeadDeletedReasonID IS NULL
-		AND
 		bl.BrokerID = @BrokerID
 	ORDER BY
 		bl.BrokerLeadID

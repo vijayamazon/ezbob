@@ -57,55 +57,116 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 			{ sContactEmail: this.router.getAuth(), },
 			function(oResponse) {
 				var theTableOpts = self.initDataTablesOptions(
-					'#CustomerID,FirstName,LastName,Email,WizardStep,Status,Marketplaces,^ApplyDate,$LoanAmount,LoanDate',
+					'FirstName,LastName,WizardStep,Status,Marketplaces,^ApplyDate,$LoanAmount,^LoanDate,@LastInvitationSent',
 					'brk-grid-state-' + self.router.getAuth() + '-customer-list'
 				);
 
 				theTableOpts.aaData = oResponse.customers;
 
-				var oStdMoneyRender = theTableOpts.aoColumns[8].mRender;
+				theTableOpts.aaSorting = [ [5, 'desc'] ];
 
-				theTableOpts.aoColumns[8].mRender = function(oData, sAction, oFullSource) {
-					var oResult = oStdMoneyRender(oData, sAction, oFullSource);
+				self.adjustAoColumn(theTableOpts, 'LoanAmount', function(oCol) {
+					var oStdMoneyRender = oCol.mRender;
 
-					if (oData > 0)
-						return oResult;
+					oCol.mRender = function(oData, sAction, oFullSource) {
+						if (oData > 0)
+							return oStdMoneyRender(oData, sAction, oFullSource);
 
-					switch (sAction) {
-						case 'display':
-						case 'filter':
-							return '';
+						switch (sAction) {
+							case 'display':
+							case 'filter':
+								return '';
 
-						case 'type':
-						case 'sort':
-						default:
-							return 0;
-					} // switch
-				}; // mRender for LoanAmount
+							case 'type':
+							case 'sort':
+							default:
+								return 0;
+						} // switch
+					}; // mRender for LoanAmount
+				});
 
 				var oSomeTimeAgo = moment([2012, 7]).utc();
 
-				theTableOpts.aoColumns[9].mRender = function(oData, sAction, oFullSource) {
-					switch (sAction) {
-						case 'display':
-							return (oSomeTimeAgo.diff(moment(oData)) > 0) ? '' : EzBob.formatDate(oData);
+				self.adjustAoColumn(theTableOpts, [ 'ApplyDate', 'LoanDate' ], function(oCol) {
+					oCol.mRender = function(oData, sAction, oFullSource) {
+						switch (sAction) {
+							case 'display':
+								return (oSomeTimeAgo.diff(moment(oData)) > 0) ? '' : EzBob.formatDate(oData);
 
-						case 'filter':
-							return (oSomeTimeAgo.diff(moment(oData)) > 0) ? '' : oData + ' ' + EzBob.formatDate(oData);
+							case 'filter':
+								return (oSomeTimeAgo.diff(moment(oData)) > 0) ? '' : oData + ' ' + EzBob.formatDate(oData);
 
-						case 'type':
-						case 'sort':
-						default:
-							return oData;
-					} // switch
-				}; // mRender for LoanDate
+							case 'type':
+							case 'sort':
+							default:
+								return oData;
+						} // switch
+					}; // mRender
+				});
+
+				self.adjustAoColumn(theTableOpts, 'LastInvitationSent', function(oCol) {
+					oCol.mRender = function(oData, sAction, oFullSource) {
+						switch (sAction) {
+							case 'display':
+								return (oSomeTimeAgo.diff(moment(oData)) > 0) ? '' : EzBob.formatDateTime(oData);
+
+							case 'filter':
+								return (oSomeTimeAgo.diff(moment(oData)) > 0) ? '' : oData + ' ' + EzBob.formatDateTime(oData);
+
+							case 'type':
+							case 'sort':
+							default:
+								return oData;
+						} // switch
+					}; // mRender
+				});
+
+				theTableOpts.aoColumns.push({
+					mData: null,
+					sClass: 'center',
+					mRender: function(oData, sAction, oFullSource) {
+						if (sAction !== 'display')
+							return '';
+
+						if ((oFullSource.LeadID <= 0) || oFullSource.IsLeadDeleted || (oFullSource.WizardStep === 'Wizard complete'))
+							return '';
+
+						var sTitle = '';
+						var sCaption = '';
+
+						if (moment([1976, 7]).utc().diff(moment(oFullSource.DateLastInvitationSent)) > 0) {
+							sTitle = 'Send invitation to this lead.';
+							sCaption = 'Send';
+						}
+						else {
+							sTitle = 'Send another invitation to this lead.';
+							sCaption = 'Resend';
+						} // if
+
+						return '<button class=lead-send-invitation data-lead-id=' + oFullSource.LeadID + ' title="' + sTitle + '">' + sCaption + '</button>';
+					}, // mRender
+				});
+
+				theTableOpts.aoColumns.push({
+					mData: null,
+					sClass: 'center',
+					mRender: function(oData, sAction, oFullSource) {
+						if ((oFullSource.LeadID <= 0) || oFullSource.IsLeadDeleted || (oFullSource.WizardStep === 'Wizard complete'))
+							return '';
+
+						if (sAction === 'display')
+							return '<button class=lead-fill-wizard data-lead-id=' + oFullSource.LeadID + ' title="Fill all the data for this lead.">Fill</button>';
+
+						return '';
+					}, // mRender
+				});
 
 				theTableOpts.fnRowCallback = function(oTR, oData, iDisplayIndex, iDisplayIndexFull) {
 					if (oData.hasOwnProperty('Marketplaces'))
 						$('.grid-item-Marketplaces', oTR).empty().html(EzBob.DataTables.Helper.showMPsIcon(oData.Marketplaces));
 
 					if (oData.hasOwnProperty('CustomerID')) {
-						var sLinkBase = '<a class=profileLink title="Show customer details" href="#customer/' + oData.CustomerID + '">';
+						var sLinkBase = '<a class=profileLink title="Show customer details" href="#customer/' + oData.RefNumber + '">';
 
 						$('.grid-item-CustomerID', oTR).empty().html(EzBob.DataTables.Helper.withScrollbar(
 							sLinkBase + oData.CustomerID + '</a>'
@@ -122,84 +183,60 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 								sLinkBase + oData.LastName + '</a>'
 							));
 						} // if has last name
-
-						$(oTR).dblclick(function() {
-							EzBob.App.trigger('clear');
-							location.assign($(oTR).find('.profileLink').first().attr('href'));
-						});
 					} // if has id
 				}; // fnRowCallback
+
+				theTableOpts.fnFooterCallback = function(oTR, aryData, nVisibleStart, nVisibleEnd, aryVisual) {
+					console.log('footer callback', aryData, nVisibleStart, nVisibleEnd, aryVisual);
+					var nSum = 0;
+					var nCount = 0;
+
+					_.each(aryData, function(oRowData) {
+						if (oRowData.LoanAmount) {
+							nCount++;
+							nSum += oRowData.LoanAmount;
+						} // if
+					});
+
+					$('.grid-item-FirstName', oTR).empty().text('Total');
+
+					if (nCount > 0) {
+						$('.grid-item-LoanAmount', oTR).empty().text(EzBob.formatPoundsNoDecimals(nSum));
+						$('.grid-item-LoanDate', oTR).empty().text(EzBob.formatIntWithCommas(nCount) + ' loan' + (nCount === 1 ? '' : 's'));
+					} // if
+				}; // fnFooterCallback
 
 				self.theTable = self.$el.find('.customer-list').dataTable(theTableOpts);
 
 				self.$el.find('.dataTables_top_right').prepend(
 					$('<button type=button class="reload-customer-list" title="Reload customer and lead lists">Reload</button>')
 				);
-
-				var leadTableOpts = self.initDataTablesOptions(
-					'#LeadID,FirstName,LastName,Email,AddMode,^DateCreated,@DateLastInvitationSent',
-					'brk-grid-state-' + self.router.getAuth() + '-lead-list'
-				);
-
-				var oSomeTimeAgo = moment([2012, 7]).utc();
-
-				leadTableOpts.aoColumns[leadTableOpts.aoColumns.length - 1].mRender = function(oData, sAction, oFullSource) {
-					switch (sAction) {
-						case 'display':
-							return (oSomeTimeAgo.diff(moment(oData)) > 0) ? '' : EzBob.formatDateTime(oData);
-
-						case 'filter':
-							return (oSomeTimeAgo.diff(moment(oData)) > 0) ? '' : oData + ' ' + EzBob.formatDateTime(oData);
-
-						case 'type':
-						case 'sort':
-						default:
-							return oData;
-					} // switch
-				}; // mRender for LoanDate
-
-				leadTableOpts.aoColumns.push({
-					mData: null,
-					sClass: 'center',
-					mRender: function(oData, sAction, oFullSource) {
-						if (sAction !== 'display')
-							return '';
-
-						var sTitle = '';
-						var sCaption = '';
-
-						if (moment([1976, 7]).utc().diff(moment(oFullSource.DateLastInvitationSent)) > 0) {
-							sTitle = 'Send invitation to this lead.';
-							sCaption = 'Send';
-						}
-						else {
-							sTitle = 'Send another invitation to this lead.';
-							sCaption = 'Resend';
-						} // if
-
-						console.log('full src', oFullSource);
-
-						return '<button class=lead-send-invitation data-lead-id=' + oFullSource.LeadID + ' title="' + sTitle + '">' + sCaption + '</button>';
-					}, // mRender
-				});
-
-				leadTableOpts.aoColumns.push({
-					mData: null,
-					sClass: 'center',
-					mRender: function(oData, sAction, oFullSource) {
-						if (sAction === 'display')
-							return '<button class=lead-fill-wizard data-lead-id=' + oFullSource.LeadID + ' title="Fill all the data for this lead.">Fill</button>';
-
-						return '';
-					}, // mRender
-				});
-
-				leadTableOpts.aaData = oResponse.leads;
-
-				self.leadTable = self.$el.find('.lead-list').dataTable(leadTableOpts);
 			} // on success
 		); // get json
 	}, // reloadCustomerList
+
+	adjustAoColumn: function(oTableOpts, oColumnName, oAdjustFunc) {
+		var aryNames = {};
+
+		if (oColumnName === undefined)
+			return;
+
+		if (oColumnName === null)
+			return;
+
+		if ('boolean' === typeof oColumnName)
+			return;
+
+		if ('object' === typeof oColumnName)
+			_.each(oColumnName, function(sName) { aryNames[sName] = 1; });
+		else if (('string' === typeof oColumnName) || ('number' === typeof oColumnName))
+			aryNames[oColumnName] = 1;
+
+		_.each(oTableOpts.aoColumns, function(oCol) {
+			if (aryNames[oCol.mData])
+				oAdjustFunc(oCol);
+		});
+	}, // adjustAoColumn
 
 	addNewCustomer: function() {
 		EzBob.App.trigger('clear');
@@ -212,15 +249,11 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 			bProcessing: true,
 			aoColumns: EzBob.DataTables.Helper.extractColumns(sColumns),
 
-			bDeferRender: true,
-
 			aLengthMenu: [[-1, 10, 25, 50, 100], ['all', 10, 25, 50, 100]],
 			iDisplayLength: 10,
 
 			sPaginationType: 'bootstrap',
 			bJQueryUI: false,
-
-			aaSorting: [[0, 'desc']],
 
 			bAutoWidth: true,
 			sDom: '<"top"<"box"<"box-title"<"dataTables_top_right"f><"dataTables_top_left"i>>>>tr<"bottom"<"col-md-6"l><"col-md-6 dataTables_bottom_right"p>><"clear">',

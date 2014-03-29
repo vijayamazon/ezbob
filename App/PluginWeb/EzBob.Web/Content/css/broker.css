@@ -76,6 +76,17 @@ table.customer-list {
 	white-space: nowrap;
 }
 
+.section-dashboard tbody .grid-item-LoanAmount,
+.section-dashboard tfoot .grid-item-LoanAmount,
+.section-dashboard tfoot .grid-item-LoanDate {
+	text-align: right;
+}
+
+.section-dashboard tfoot td {
+	font-weight: bold;
+	background-color: #b6d1f2;
+}
+
 .section-customer-details .back-to-list-container {
 	margin: 2em 0 1em 0;
 	text-align: right;

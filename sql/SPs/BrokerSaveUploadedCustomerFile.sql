@@ -4,7 +4,7 @@ GO
 
 ALTER PROCEDURE BrokerSaveUploadedCustomerFile
 @FileName NVARCHAR(500),
-@CustomerID INT,
+@RefNum NVARCHAR(8),
 @ContactEmail NVARCHAR(255),
 @FileContents VARBINARY(MAX),
 @UploadedTime DATETIME
@@ -15,6 +15,7 @@ BEGIN
 	DECLARE @ErrorMsg NVARCHAR(1024) = ''
 	DECLARE @UserID INT
 	DECLARE @BrokerID INT
+	DECLARE @CustomerID INT
 
 	IF @ErrorMsg = ''
 	BEGIN
@@ -32,8 +33,10 @@ BEGIN
 
 	IF @ErrorMsg = ''
 	BEGIN
-		IF NOT EXISTS (SELECT Id FROM Customer WHERE Id = @CustomerID AND BrokerID = @BrokerID)
-			SET @ErrorMsg = 'Customer ' + CONVERT(NVARCHAR, @CustomerID) + ' data is not accessible to broker ' + CONVERT(NVARCHAR, @BrokerID)
+		SELECT @CustomerID = Id FROM Customer WHERE RefNumber = @RefNum AND BrokerID = @BrokerID
+
+		IF @CustomerID IS NULL
+			SET @ErrorMsg = 'Customer ' + @RefNum + ' data is not accessible to broker ' + CONVERT(NVARCHAR, @BrokerID)
 	END
 
 	INSERT INTO MP_AlertDocument (DocName, UploadDate, UserId, CustomerId, Description, BinaryBody)

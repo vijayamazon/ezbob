@@ -3,7 +3,7 @@ IF OBJECT_ID('BrokerLoadCustomerCRM') IS NULL
 GO
 
 ALTER PROCEDURE BrokerLoadCustomerCRM
-@CustomerID INT,
+@RefNum NVARCHAR(8),
 @ContactEmail NVARCHAR(255)
 AS
 BEGIN
@@ -25,7 +25,7 @@ BEGIN
 		INNER JOIN CRMStatuses s ON cr.StatusId = s.Id
 		INNER JOIN Customer c ON cr.CustomerId = c.Id
 	WHERE
-		cr.CustomerId = @CustomerID
+		c.RefNumber = @RefNum
 		ANd
 		c.BrokerID = @BrokerID
 	ORDER BY

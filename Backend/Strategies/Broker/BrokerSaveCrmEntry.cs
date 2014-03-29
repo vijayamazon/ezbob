@@ -15,7 +15,7 @@
 			int nActionID,
 			int nStatusID,
 			string sComment,
-			int nCustomerID,
+			string sCustomerRefNum,
 			string sContactEmail,
 			AConnection oDB,
 			ASafeLog oLog
@@ -24,7 +24,7 @@
 			m_nActionID = nActionID;
 			m_nStatusID = nStatusID;
 			m_sComment = (sComment ?? string.Empty).Trim();
-			m_nCustomerID = nCustomerID;
+			m_sCustomerRefNum = sCustomerRefNum;
 			m_sContactEmail = (sContactEmail ?? string.Empty).Trim();
 			ErrorMsg = null;
 
@@ -69,7 +69,7 @@
 					new QueryParameter("@ActionID", m_nActionID),
 					new QueryParameter("@StatusID", m_nStatusID),
 					new QueryParameter("@Comment", m_sComment),
-					new QueryParameter("@CustomerID", m_nCustomerID),
+					new QueryParameter("@RefNum", m_sCustomerRefNum),
 					new QueryParameter("@ContactEmail", m_sContactEmail),
 					new QueryParameter("@EntryTime", DateTime.UtcNow)
 				);
@@ -86,12 +86,12 @@
 
 		#region private
 
-		private bool m_bIsIncoming;
-		private int m_nActionID;
-		private int m_nStatusID;
-		private string m_sComment;
-		private int m_nCustomerID;
-		private string m_sContactEmail;
+		private readonly bool m_bIsIncoming;
+		private readonly int m_nActionID;
+		private readonly int m_nStatusID;
+		private readonly string m_sComment;
+		private readonly string m_sCustomerRefNum;
+		private readonly string m_sContactEmail;
 
 		#endregion private
 	} // class BrokerSaveCrmEntry

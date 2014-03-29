@@ -123,8 +123,7 @@
 
 			return new BrokerCustomersActionResult {
 				MetaData = oResult,
-				Customers = oIntstance.Customers.Values.ToList(),
-				Leads = oIntstance.Leads,
+				Customers = oIntstance.Customers,
 			};
 		} // BrokerRestorePassword
 
@@ -132,10 +131,10 @@
 
 		#region method BrokerLoadCustomerDetails
 
-		public BrokerCustomerDetailsActionResult BrokerLoadCustomerDetails(int nCustomerID, string sContactEmail) {
+		public BrokerCustomerDetailsActionResult BrokerLoadCustomerDetails(string sCustomerRefNum, string sContactEmail) {
 			BrokerLoadCustomerDetails oIntstance;
 
-			ActionMetaData oResult = ExecuteSync(out oIntstance, nCustomerID, null, nCustomerID, sContactEmail);
+			ActionMetaData oResult = ExecuteSync(out oIntstance, null, null, sCustomerRefNum, sContactEmail);
 
 			return new BrokerCustomerDetailsActionResult {
 				MetaData = oResult,
@@ -147,18 +146,18 @@
 
 		#region method BrokerSaveCrmEntry
 
-		public StringActionResult BrokerSaveCrmEntry(bool bIsIncoming, int nActionID, int nStatusID, string sComment, int nCustomerID, string sContactEmail) {
+		public StringActionResult BrokerSaveCrmEntry(bool bIsIncoming, int nActionID, int nStatusID, string sComment, string sCustomerRefNum, string sContactEmail) {
 			BrokerSaveCrmEntry oInstance;
 
 			ActionMetaData oResult = ExecuteSync(
 				out oInstance,
-				nCustomerID,
+				null,
 				null,
 				bIsIncoming,
 				nActionID,
 				nStatusID,
 				sComment,
-				nCustomerID,
+				sCustomerRefNum,
 				sContactEmail
 			);
 
@@ -172,14 +171,14 @@
 
 		#region method BrokerLoadCustomerFiles
 
-		public BrokerCustomerFilesActionResult BrokerLoadCustomerFiles(int nCustomerID, string sContactEmail) {
+		public BrokerCustomerFilesActionResult BrokerLoadCustomerFiles(string sCustomerRefNum, string sContactEmail) {
 			BrokerLoadCustomerFiles oInstance;
 
 			ActionMetaData oResult = ExecuteSync(
 				out oInstance,
-				nCustomerID,
 				null,
-				nCustomerID,
+				null,
+				sCustomerRefNum,
 				sContactEmail
 			);
 
@@ -193,14 +192,14 @@
 
 		#region method BrokerDownloadCustomerFile
 
-		public BrokerCustomerFileContentsActionResult BrokerDownloadCustomerFile(int nCustomerID, string sContactEmail, int nFileID) {
+		public BrokerCustomerFileContentsActionResult BrokerDownloadCustomerFile(string sCustomerRefNum, string sContactEmail, int nFileID) {
 			BrokerDownloadCustomerFile oInstance;
 
 			ActionMetaData oResult = ExecuteSync(
 				out oInstance,
-				nCustomerID,
 				null,
-				nCustomerID,
+				null,
+				sCustomerRefNum,
 				sContactEmail,
 				nFileID
 			);
@@ -216,16 +215,16 @@
 
 		#region method BrokerSaveUploadedCustomerFile
 
-		public ActionMetaData BrokerSaveUploadedCustomerFile(int nCustomerID, string sContactEmail, byte[] oFileContents, string sFileName) {
-			return ExecuteSync<BrokerSaveUploadedCustomerFile>(nCustomerID, null, nCustomerID, sContactEmail, oFileContents, sFileName);
+		public ActionMetaData BrokerSaveUploadedCustomerFile(string sCustomerRefNum, string sContactEmail, byte[] oFileContents, string sFileName) {
+			return ExecuteSync<BrokerSaveUploadedCustomerFile>(null, null, sCustomerRefNum, sContactEmail, oFileContents, sFileName);
 		} // BrokerSaveUploadedCustomerFile
 
 		#endregion method BrokerSaveUploadedCustomerFile
 
 		#region method BrokerDeleteCustomerFiles
 
-		public ActionMetaData BrokerDeleteCustomerFiles(int nCustomerID, string sContactEmail, int[] aryFileIDs) {
-			return ExecuteSync<BrokerDeleteCustomerFiles>(nCustomerID, null, nCustomerID, sContactEmail, aryFileIDs);
+		public ActionMetaData BrokerDeleteCustomerFiles(string sCustomerRefNum, string sContactEmail, int[] aryFileIDs) {
+			return ExecuteSync<BrokerDeleteCustomerFiles>(null, null, sCustomerRefNum, sContactEmail, aryFileIDs);
 		} // BrokerDeleteCustomerFiles
 
 		#endregion method BrokerDeleteCustomerFiles

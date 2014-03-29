@@ -1,6 +1,5 @@
 ﻿namespace EzBob.Backend.Strategies.Broker {
 	using System;
-	using System.Collections.Generic;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -13,8 +12,8 @@
 
 		#region constructor
 
-		public BrokerLoadCustomerDetails(int nCustomerID, string sContactEmail, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
-			m_nCustomerID = nCustomerID;
+		public BrokerLoadCustomerDetails(string sCustomerRefNum, string sContactEmail, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+			m_sCustomerRefNum = sCustomerRefNum;
 			m_sContactEmail = sContactEmail;
 			Result = new BrokerCustomerDetails();
 		} // constructor
@@ -39,6 +38,7 @@
 			public string Surname { get; set; }
 			public DateTime DateOfBirth { get; set; }
 			public string Gender { get; set; }
+			public string Email { get; set; }
 			public string MaritalStatus { get; set; }
 			public string MobilePhone { get; set; }
 			public string DaytimePhone { get; set; }
@@ -61,6 +61,7 @@
 				oModel.name = string.Join(" ", FirstName, Surname);
 				oModel.birthdate = DateOfBirth;
 				oModel.gender = Gender;
+				oModel.email = Email;
 				oModel.maritalstatus = MaritalStatus;
 				oModel.mobilephone = MobilePhone;
 				oModel.daytimephone = DaytimePhone;
@@ -80,12 +81,12 @@
 		public override void Execute() {
 			BrokerLoadCustomerDetailsRawData raw = DB.FillFirst<BrokerLoadCustomerDetailsRawData>(
 				"BrokerLoadCustomerDetails",
-				new QueryParameter("@CustomerID", m_nCustomerID),
+				new QueryParameter("@RefNum", m_sCustomerRefNum),
 				new QueryParameter("@ContactEmail", m_sContactEmail)
 			);
 
 			if (raw == null) {
-				Log.Warn("{0}: personal details not found for customer {1} (broker {2}).", Name, m_nCustomerID, m_sContactEmail);
+				Log.Warn("{0}: personal details not found for customer {1} (broker {2}).", Name, m_sCustomerRefNum, m_sContactEmail);
 				return;
 			} // if
 
@@ -93,7 +94,7 @@
 
 			Result.CrmData = DB.Fill<BrokerCustomerCrmEntry>(
 				"BrokerLoadCustomerCRM",
-				new QueryParameter("@CustomerID", m_nCustomerID),
+				new QueryParameter("@RefNum", m_sCustomerRefNum),
 				new QueryParameter("@ContactEmail", m_sContactEmail)
 			);
 		} // Execute
@@ -110,7 +111,7 @@
 
 		#region private
 
-		private int m_nCustomerID;
+		private readonly string m_sCustomerRefNum;
 		private readonly string m_sContactEmail;
 
 		#endregion private
