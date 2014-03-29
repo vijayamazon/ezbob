@@ -15,15 +15,14 @@ EzBob.Underwriter.ExperianInfoView = Backbone.View.extend({
     },
     render: function() {
         this.$el.html(this.template({ experianInfo: this.model.toJSON() }));
-        this.RunCheckBtn = this.$el.find("#RunCheckBtn");
         this.$el.find('a[data-bug-type]').tooltip({ title: 'Report bug' });
         this.$el.find('.check-history tr:not(:eq(0),:eq(1))').css("cursor", "pointer");
     },
     events: {
-        "click #RunCheckBtn, #RunReCheckBtn": "RunCheckBtnClick",
-        "click #RunAMLCheckBtn, #RunAMLReCheckBtn": "RunAMLCheckBtn",
-        "click #RunAMLBWACheckBtn": "RunAMLBWACheckBtn",
-        "click #RunBWACheckBtn, #RunBWAReCheckBtn": "RunBWACheckBtn",
+        "click #RunConsumerCheckBtn" : "RunConsumerCheckBtnClick",
+        "click #RunCompanyCheckBtn": "RunCompanyCheckBtnClick",
+        "click #RunAmlCheckBtn": "RunAmlCheckBtnClick",
+        "click #RunBwaCheckBtn": "RunBwaCheckBtnClick",
         "click .btn-download": "downloadConsent",
         "click .check-history tr:not(:eq(0),:eq(1))": "CheckHistoryClicked",
     },
@@ -47,27 +46,27 @@ EzBob.Underwriter.ExperianInfoView = Backbone.View.extend({
         var $el = $(e.currentTarget);
         $el.attr("href", window.gRootPath + "Underwriter/CreditBureau/DownloadConsentAgreement/"+this.model.get("Id") );
     },
-    
-    RunCheckBtnClick: function (e) {
+    RunConsumerCheckBtnClick: function (e) {
         if ($(e.currentTarget).hasClass("disabled")) return false;
 
         var that = this;
+        // TODO: Test the cache period...
         EzBob.ShowMessage("Are you sure?", "Confirmation",
             function () {
-                that.RunCustomerCheck();
+                that.RunConsumerCheck();
                 return true;
             },
             "Yes", null, "No");
 
         return false;
     },
-    RunCustomerCheck: function () {
+    RunConsumerCheck: function () {
         BlockUi("on");
-        $.post(window.gRootPath + "Underwriter/CreditBureau/RunCheck", { Id: this.model.get("Id") })
+        $.post(window.gRootPath + "Underwriter/CreditBureau/RunConsumerCheck", { id: this.model.get("Id") })
             .done(function (response) {
                 EzBob.ShowMessage(response.Message, "Information");
-            }).
-            fail(function (data) {
+            })
+            .fail(function (data) {
                 console.error(data.responseText);
             })
             .complete(function() {
@@ -75,7 +74,35 @@ EzBob.Underwriter.ExperianInfoView = Backbone.View.extend({
             });
         return false;
     },
-    RunAMLCheckBtn: function () {
+    RunCompanyCheckBtnClick: function (e) {
+        if ($(e.currentTarget).hasClass("disabled")) return false;
+
+        var that = this;
+        // TODO: Test the cache period...
+        EzBob.ShowMessage("Are you sure?", "Confirmation",
+            function () {
+                that.RunCompanyCheck();
+                return true;
+            },
+            "Yes", null, "No");
+
+        return false;
+    },
+    RunCompanyCheck: function () {
+        BlockUi("on");
+        $.post(window.gRootPath + "Underwriter/CreditBureau/RunCompanyCheck", { id: this.model.get("Id") })
+            .done(function (response) {
+                EzBob.ShowMessage(response.Message, "Information");
+            })
+            .fail(function (data) {
+                console.error(data.responseText);
+            })
+            .complete(function () {
+                BlockUi("off");
+            });
+        return false;
+    },
+    RunAmlCheckBtnClick: function () {
         var id = this.model.get("Id");
 
         var customAddressView = new EzBob.Underwriter.IdHubCustomAddressView({
@@ -94,26 +121,7 @@ EzBob.Underwriter.ExperianInfoView = Backbone.View.extend({
 
         return false;
     },
-    RunAMLBWACheckBtn: function () {
-        var id = this.model.get("Id");
-
-        var customAddressView = new EzBob.Underwriter.IdHubCustomAddressView({
-            el: this.$el.find('#idhub-custom-address'),
-            model: new EzBob.Underwriter.IdHubCustomAddressModel({ Id: id }),
-            checkType: 3,
-            dialogTitle: 'AML and BWA'
-        });
-
-        BlockUi("On");
-        customAddressView.model.fetch()
-            .done(function () {
-                BlockUi("Off");
-                customAddressView.render();
-            });
-
-        return false;
-    },
-    RunBWACheckBtn: function () {
+    RunBwaCheckBtnClick: function () {
     var id = this.model.get("Id");
 
     var customAddressView = new EzBob.Underwriter.IdHubCustomAddressView({

@@ -485,21 +485,11 @@
 					return;
 				}
 				break;
-
-			case 15:
-				int checkType;
-				if (int.TryParse(args[1], out underwriterId) && int.TryParse(args[2], out customerId) && int.TryParse(args[3], out checkType) && int.TryParse(args[13], out avoidAutoDescison)) {
-					serviceClient.MainStrategy3(underwriterId, customerId, checkType, args[3], args[4], args[5], args[6], args[7], args[8], args[9], args[10], args[11], avoidAutoDescison);
-					return;
-				}
-				break;
 			} // switch
 
 			Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> MainStrategy <Underwriter ID> <customerId> <newCreditLineOption> <avoidAutoDescison>");
 			Console.WriteLine("OR");
 			Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> MainStrategy <Underwriter ID> <customerId> <newCreditLineOption> <avoidAutoDescison> <isUnderwriterForced(should always be true)>");
-			Console.WriteLine("OR");
-			Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> MainStrategy <Underwriter ID> <customerId> <checkType> <houseNumber> <houseName> <street> <district> <town> <county> <postcode> <bankAccount> <sortCode> <avoidAutoDescison>");
 		}
 
 		[Activation]

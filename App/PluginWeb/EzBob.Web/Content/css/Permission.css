@@ -18,7 +18,10 @@
 #EscalateBtn,
 .reCheck-amazon,
 .checkeBankAccount,
-#RunCheckBtn,
+#RunConsumerCheckBtn,
+#RunCompanyCheckBtn,
+#RunAmlCheckBtn,
+#RunBwaCheckBtn,
 #btnAMLInformation,
 #btnAMLandBWAInformation,
 #btnBWAInformation,
@@ -31,12 +34,6 @@ a[data-bug-type],
 .rollover,
 .make-payment,
 #btn-options,
-#RunBWAReCheckBtn,
-#RunAMLReCheckBtn,
-#RunReCheckBtn,
-#RunAMLCheckBtn,
-#RunAMLBWACheckBtn,
-#RunBWACheckBtn,
 .recheck-mp,
 .reCheckMP,
 [name="discountPlan"],
@@ -165,16 +162,11 @@ a[data-bug-type],
     visibility: visible;
 }
 
-/*Run credit bureau checks - Consumer+AML+BWA*/
-
-.permission-RunCreditBureauChecks #RunBWAReCheckBtn,
-.permission-RunCreditBureauChecks #RunAMLReCheckBtn,
-.permission-RunCreditBureauChecks #RunReCheckBtn,
-.permission-RunCreditBureauChecks #RunReCheckBtn,
-.permission-RunCreditBureauChecks #RunAMLCheckBtn,
-.permission-RunCreditBureauChecks #RunAMLBWACheckBtn,
-.permission-RunCreditBureauChecks #RunBWACheckBtn,
-.permission-RunCreditBureauChecks #RunCheckBtn {
+/*Run credit bureau checks - Consumer+Company+AML+BWA*/
+.permission-RunCreditBureauChecks #RunConsumerCheckBtn,
+.permission-RunCreditBureauChecks #RunCompanyCheckBtn,
+.permission-RunCreditBureauChecks #RunAmlCheckBtn,
+.permission-RunCreditBureauChecks #RunBwaCheckBtn {
     display: inline-block;
     visibility: visible;
 }

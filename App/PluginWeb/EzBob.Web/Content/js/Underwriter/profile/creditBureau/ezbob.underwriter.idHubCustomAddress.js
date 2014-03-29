@@ -71,9 +71,7 @@ EzBob.Underwriter.IdHubCustomAddressView = Backbone.View.extend({
         this.content.parent('.ui-dialog').find('.ui-dialog-buttonset button').addClass('btn btn-primary');
     },
     onRunCheck: function () {
-
-
-        $.post(window.gRootPath + "Underwriter/CreditBureau/RunAMLBWACheck",
+        $.post(window.gRootPath + "Underwriter/CreditBureau/RunAmlBwaCheck",
             {
                 id: this.model.get("Id"),
                 checkType: this.checkType,

@@ -84,33 +84,14 @@
     </div>
 }
 
-@helper RunCheckButton()
+@helper RunCheckButtons()
 {
     <div class="row-fluid">
-        <div class="pull-right">
-            <a class="btn btn-primary" href="#" id="RunCheckBtn">Run check</a>
-        </div>
-    </div>
-}
-
-@helper RunReCheckButton()
-{
-    <div class="row-fluid">
-        <div class="form-group pull-right">
-            <a class="btn btn-primary" href="#" id="RunBWAReCheckBtn">Recheck BWA</a>
-            <a class="btn btn-primary" href="#" id="RunAMLReCheckBtn">Recheck AML</a>
-            <a class="btn btn-primary" href="#" id="RunReCheckBtn">Recheck credit</a>
-        </div>
-    </div>
-}
-
-@helper RunIdHubChecksButtons()
-{
-    <div class="row-fluid">
-        <div class="form-group pull-right">
-            <a class="btn btn-primary" href="#" id="RunAMLCheckBtn">Check AML</a>
-            <a class="btn btn-primary" href="#" id="RunAMLBWACheckBtn">Check AML&amp;BWA</a>
-            <a class="btn btn-primary" href="#" id="RunBWACheckBtn">Check BWA</a>
+        <div class="pull-left">
+            <a class="btn btn-primary" href="#" id="RunConsumerCheckBtn">Run Consumer check</a>
+            <a class="btn btn-primary" href="#" id="RunCompanyCheckBtn">Run Company check</a>
+            <a class="btn btn-primary" href="#" id="RunAmlCheckBtn">Run AML check</a>
+            <a class="btn btn-primary" href="#" id="RunBwaCheckBtn">Run BWA check</a>
         </div>
     </div>
 }
@@ -150,9 +131,6 @@
                         </table>
                     </div>
                 </div>
-                <% if(experianInfo.ModelType == "Consumer") { %>
-                @RunCheckButton()
-                <% } %>
             </div>
         </div>
 
@@ -254,7 +232,6 @@
                     </div>
                 </div>
                 <% } %>
-                @RunIdHubChecksButtons()
             </div>
         </div>
 
@@ -460,9 +437,6 @@
                     </table>
                 </div>
             </div>
-            <% if(experianInfo.ModelType == "Limited") { %>
-            @RunCheckButton()
-            <% } %>
         </div>
     </div>
     
@@ -500,9 +474,6 @@
                                 </table>
                             </div>
                         </div>
-                        <% if(experianInfo.ModelType == "NonLimited") { %>
-                        @RunCheckButton()
-                        <% } %>
                     </div>
                 </div>
             </div>
@@ -798,12 +769,12 @@
     experianInfo.ConsumerSummaryCharacteristics = experianInfo.ConsumerSummaryCharacteristics || {};
     experianInfo.ConsumerAccountsOverview = experianInfo.ConsumerAccountsOverview || {};
     %>
+    @RunCheckButtons()
     <% if (experianInfo.IsExperianError) { %>
          @DisplayExperianError()
     <% } else { %>
         <% if (experianInfo.CheckFailed || experianInfo.CheckStatus=='Error') { %>
             @DisplayFailedExperianCheck()
-            @RunReCheckButton()
         <% } else { %>
             @BureauSummaryForCustomer()
             @DisplayConsumerData()

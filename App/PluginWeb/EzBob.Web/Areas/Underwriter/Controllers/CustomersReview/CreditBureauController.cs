@@ -1,10 +1,13 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Data;
 	using System.Linq;
 	using System.Web.Mvc;
 	using ApplicationMng.Repository;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Mapping;
 	using ExperianLib.IdIdentityHub;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EzServiceReference;
@@ -20,36 +23,44 @@
         private readonly IUsersRepository _users;
         private readonly CreditBureauModelBuilder _creditBureauModelBuilder;
         private readonly ConcentAgreementHelper _concentAgreementHelper;
+		private readonly DirectorRepository directorRepository;
 
         public CreditBureauController(
 			CustomerRepository customers,
 			IUsersRepository users,
-			CreditBureauModelBuilder creditBureauModelBuilder
-		) {
+			CreditBureauModelBuilder creditBureauModelBuilder,
+			DirectorRepository directorRepository
+		) 
+		{
             _customers = customers;
 	        m_oServiceClient = new ServiceClient();
             _users = users;
             _creditBureauModelBuilder = creditBureauModelBuilder;
             _concentAgreementHelper = new ConcentAgreementHelper();
-        }
+	        this.directorRepository = directorRepository;
+		}
 
-
-        [HttpPost]
-        [Transactional]
-        public JsonNetResult RunCheck(int id)
+		[HttpPost]
+		[Transactional]
+		public JsonNetResult RunConsumerCheck(int id)
 		{
-			var customer = _customers.Get(id);
-			var anyApps = StrategyChecker.IsStrategyRunning(id, true);
-            if (anyApps)
-                return this.JsonNet(new { Message = "The evaluation strategy is already running. Please wait..." });
+			m_oServiceClient.Instance.CheckExperianConsumer(id, 0);
+			// TODO: is this ok??? in terms of cache too?
+			List<Director> directors = directorRepository.GetAll().Where(x => x.Customer.Id == id).ToList();
+			foreach (Director director in directors)
+			{
+				m_oServiceClient.Instance.CheckExperianConsumer(id, director.Id);
+			}
+			return this.JsonNet(new { Message = "The evaluation has been started. Please refresh this application after a while..." });
+		}
 
-			var underwriter = _users.GetUserByLogin(User.Identity.Name);
-
-			// Shouldn't call main strategy
-			m_oServiceClient.Instance.MainStrategy2(underwriter.Id, _users.Get(id).Id, NewCreditLineOption.UpdateEverythingExceptMp, Convert.ToInt32(customer.IsAvoid), true);
-
-            return this.JsonNet(new { Message = "The evaluation has been started. Please refresh this application after a while..." });
-        }
+		[HttpPost]
+		[Transactional]
+		public JsonNetResult RunCompanyCheck(int id)
+		{
+			m_oServiceClient.Instance.CheckExperianCompany(id);
+			return this.JsonNet(new { Message = "The evaluation has been started. Please refresh this application after a while..." });
+		}
 
         [Ajax]
         [HttpGet]
@@ -133,16 +144,15 @@
         public JsonNetResult RunAmlbwaCheck(int id, int checkType, string houseNumber, string houseName, string street,
                                             string district, string town, string county, string postcode, string bankAccount, string sortCode)
         {
-            var customer = _customers.Get(id);
-            var isRunning = StrategyChecker.IsStrategyRunning(id, true);
-
-            if (isRunning)
-                return this.JsonNet(new { Message = "The evaluation strategy is already running. Please wait..." });
-
-	        var underwriter = _users.GetUserByLogin(User.Identity.Name);
-
-			m_oServiceClient.Instance.MainStrategy3(underwriter.Id, _users.Get(id).Id, checkType, houseNumber, houseName, street, district, town, county, postcode, bankAccount, sortCode, Convert.ToInt32(customer.IsAvoid));
-
+			if (checkType == 1)
+			{
+				m_oServiceClient.Instance.CheckAmlCustom(id, houseNumber, houseName, street, district, town, county, postcode);
+			}
+			else
+			{
+				m_oServiceClient.Instance.CheckBwaCustom(id, houseNumber, houseName, street, district, town, county, postcode, bankAccount, sortCode);
+			}
+			
             return this.JsonNet(new { Message = "The evaluation has been started. Please refresh this application after a while..." });
         }
 
