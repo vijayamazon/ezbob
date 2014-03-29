@@ -452,8 +452,8 @@ namespace EzBob.Web.Controllers {
 				if (blm.IsSet)
 					m_oServiceClient.Instance.BrokerLeadAcquireCustomer(customer.Id, blm.LeadID, blm.BrokerFillsForCustomer ? string.Empty : link);
 				else
-					m_oServiceClient.Instance.GreetingMailStrategy(user.Id, link);
-			} // if user created successfully
+					m_oServiceClient.Instance.BrokerCheckCustomerRelevance(customer.Id, customer.Name, customer.ReferenceSource, link);
+			} // if user created successfully 
 
 			if (status == MembershipCreateStatus.DuplicateEmail)
 				throw new Exception("This email is already registered");

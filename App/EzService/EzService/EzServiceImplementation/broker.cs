@@ -21,6 +21,14 @@
 
 		#endregion method BrokerCustomerWizardComplete
 
+		#region method BrokerCheckCustomerRelevance
+
+		public ActionMetaData BrokerCheckCustomerRelevance(int nCustomerID, string sCustomerEmail, string sSourceRef, string sConfirmEmailLink) {
+			return Execute<BrokerCheckCustomerRelevance>(nCustomerID, nCustomerID, nCustomerID, sCustomerEmail, sSourceRef, sConfirmEmailLink);
+		} // BrokerCheckCustomerRelevance
+
+		#endregion method BrokerCheckCustomerRelevance
+
 		#endregion async
 
 		#region sync

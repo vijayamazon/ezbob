@@ -101,6 +101,9 @@
 		[OperationContract]
 		BrokerLeadDetailsActionResult BrokerLeadCheckToken(string sToken);
 
+		[OperationContract]
+		ActionMetaData BrokerCheckCustomerRelevance(int nCustomerID, string sCustomerEmail, string sSourceRef, string sConfirmEmailLink);
+
 		#endregion Broker
 
 		#region CAIS

@@ -78,6 +78,7 @@
     <Compile Include="AutoDecisions\ReApproval.cs" />
     <Compile Include="AutoDecisions\ReRejection.cs" />
     <Compile Include="Broker\BrokerBackFromCustomerWizard.cs" />
+    <Compile Include="Broker\BrokerCheckCustomerRelevance.cs" />
     <Compile Include="Broker\BrokerCustomerWizardComplete.cs" />
     <Compile Include="Broker\BrokerDeleteCustomerFiles.cs" />
     <Compile Include="Broker\BrokerDeleteCustomerLead.cs" />
