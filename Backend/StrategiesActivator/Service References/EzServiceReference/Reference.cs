@@ -3531,11 +3531,17 @@ namespace StrategiesActivator.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CreateUnderwriter", ReplyAction="http://tempuri.org/IEzService/CreateUnderwriterResponse")]
         System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> CreateUnderwriterAsync(string name, string password, string role);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetExperianCacheDate", ReplyAction="http://tempuri.org/IEzService/GetExperianCacheDateResponse")]
-        StrategiesActivator.EzServiceReference.DateTimeActionResult GetExperianCacheDate(int[] ids);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetExperianConsumerCacheDate", ReplyAction="http://tempuri.org/IEzService/GetExperianConsumerCacheDateResponse")]
+        StrategiesActivator.EzServiceReference.DateTimeActionResult GetExperianConsumerCacheDate(int[] ids);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetExperianCacheDate", ReplyAction="http://tempuri.org/IEzService/GetExperianCacheDateResponse")]
-        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.DateTimeActionResult> GetExperianCacheDateAsync(int[] ids);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetExperianConsumerCacheDate", ReplyAction="http://tempuri.org/IEzService/GetExperianConsumerCacheDateResponse")]
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.DateTimeActionResult> GetExperianConsumerCacheDateAsync(int[] ids);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetExperianCompanyCacheDate", ReplyAction="http://tempuri.org/IEzService/GetExperianCompanyCacheDateResponse")]
+        StrategiesActivator.EzServiceReference.DateTimeActionResult GetExperianCompanyCacheDate(int customerId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetExperianCompanyCacheDate", ReplyAction="http://tempuri.org/IEzService/GetExperianCompanyCacheDateResponse")]
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.DateTimeActionResult> GetExperianCompanyCacheDateAsync(int customerId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -4213,12 +4219,20 @@ namespace StrategiesActivator.EzServiceReference {
             return base.Channel.CreateUnderwriterAsync(name, password, role);
         }
         
-        public StrategiesActivator.EzServiceReference.DateTimeActionResult GetExperianCacheDate(int[] ids) {
-            return base.Channel.GetExperianCacheDate(ids);
+        public StrategiesActivator.EzServiceReference.DateTimeActionResult GetExperianConsumerCacheDate(int[] ids) {
+            return base.Channel.GetExperianConsumerCacheDate(ids);
         }
         
-        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.DateTimeActionResult> GetExperianCacheDateAsync(int[] ids) {
-            return base.Channel.GetExperianCacheDateAsync(ids);
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.DateTimeActionResult> GetExperianConsumerCacheDateAsync(int[] ids) {
+            return base.Channel.GetExperianConsumerCacheDateAsync(ids);
+        }
+        
+        public StrategiesActivator.EzServiceReference.DateTimeActionResult GetExperianCompanyCacheDate(int customerId) {
+            return base.Channel.GetExperianCompanyCacheDate(customerId);
+        }
+        
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.DateTimeActionResult> GetExperianCompanyCacheDateAsync(int customerId) {
+            return base.Channel.GetExperianCompanyCacheDateAsync(customerId);
         }
     }
 }

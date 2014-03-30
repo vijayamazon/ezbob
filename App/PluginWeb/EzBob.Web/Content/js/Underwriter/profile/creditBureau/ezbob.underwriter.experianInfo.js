@@ -88,13 +88,23 @@ EzBob.Underwriter.ExperianInfoView = Backbone.View.extend({
         if ($(e.currentTarget).hasClass("disabled")) return false;
 
         var that = this;
-        // TODO: Test the cache period...
-        EzBob.ShowMessage("Are you sure?", "Confirmation",
-            function () {
-                that.RunCompanyCheck();
-                return true;
-            },
-            "Yes", null, "No");
+        BlockUi("on");
+        $.post(window.gRootPath + "Underwriter/CreditBureau/IsCompanyCacheRelevant", { customerId: this.model.get("Id") })
+            .done(function (response) {
+                if (response.IsRelevant == "True") {
+                    EzBob.ShowMessage("Last check was done at " + response.LastCheckDate + " and cache is valid for " + response.CacheValidForDays + " days. Run check anyway?", "No need for check warning",
+                        function () {
+                            that.RunCompanyCheck();
+                            return true;
+                        },
+                        "Yes", null, "No");
+                } else {
+                    that.RunCompanyCheck();
+                }
+            })
+            .complete(function () {
+                BlockUi("off");
+            });
 
         return false;
     },

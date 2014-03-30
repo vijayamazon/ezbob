@@ -598,11 +598,17 @@
   <wsdl:message name="IEzService_CreateUnderwriter_OutputMessage">
     <wsdl:part name="parameters" element="tns:CreateUnderwriterResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_GetExperianCacheDate_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetExperianCacheDate" />
+  <wsdl:message name="IEzService_GetExperianConsumerCacheDate_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetExperianConsumerCacheDate" />
   </wsdl:message>
-  <wsdl:message name="IEzService_GetExperianCacheDate_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetExperianCacheDateResponse" />
+  <wsdl:message name="IEzService_GetExperianConsumerCacheDate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetExperianConsumerCacheDateResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetExperianCompanyCacheDate_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetExperianCompanyCacheDate" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetExperianCompanyCacheDate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetExperianCompanyCacheDateResponse" />
   </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
@@ -951,9 +957,13 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CreateUnderwriter" message="tns:IEzService_CreateUnderwriter_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CreateUnderwriterResponse" message="tns:IEzService_CreateUnderwriter_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="GetExperianCacheDate">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetExperianCacheDate" message="tns:IEzService_GetExperianCacheDate_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetExperianCacheDateResponse" message="tns:IEzService_GetExperianCacheDate_OutputMessage" />
+    <wsdl:operation name="GetExperianConsumerCacheDate">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetExperianConsumerCacheDate" message="tns:IEzService_GetExperianConsumerCacheDate_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetExperianConsumerCacheDateResponse" message="tns:IEzService_GetExperianConsumerCacheDate_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetExperianCompanyCacheDate">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetExperianCompanyCacheDate" message="tns:IEzService_GetExperianCompanyCacheDate_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetExperianCompanyCacheDateResponse" message="tns:IEzService_GetExperianCompanyCacheDate_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
@@ -1739,8 +1749,17 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="GetExperianCacheDate">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/GetExperianCacheDate" style="document" />
+    <wsdl:operation name="GetExperianConsumerCacheDate">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/GetExperianConsumerCacheDate" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetExperianCompanyCacheDate">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/GetExperianCompanyCacheDate" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

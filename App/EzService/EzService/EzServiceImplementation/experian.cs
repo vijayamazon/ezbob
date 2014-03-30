@@ -14,7 +14,7 @@
 			return Execute(customerId, null, typeof(ExperianConsumerCheck), customerId, directorId);
 		} // CheckExperianConsumer
 		
-		public DateTimeActionResult GetExperianCacheDate(List<int> ids)
+		public DateTimeActionResult GetExperianConsumerCacheDate(List<int> ids)
 		{
 			DateTime cacheDate = DateTime.UtcNow;
 			try
@@ -37,7 +37,7 @@
 					}
 
 					DataTable dt = DB.ExecuteReader(
-						"GetExperianCacheDate",
+						"GetExperianConsumerCacheDate",
 						CommandSpecies.StoredProcedure,
 						new QueryParameter("CustomerId", customerId),
 						new QueryParameter("DirectorId", directorId)
@@ -63,6 +63,11 @@
 			{
 				Value = cacheDate
 			};
+		}
+
+		public DateTimeActionResult GetExperianCompanyCacheDate(int customerId)
+		{
+			return null;
 		}
 	} // class EzServiceImplementation
 } // namespace EzService

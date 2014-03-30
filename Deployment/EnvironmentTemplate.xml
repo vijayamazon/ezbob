@@ -379,7 +379,6 @@ T6C7Spa3i/ltRwpQYWeYRRvJGkNUa12VLyTMdYRAAAAAvBLTqmDnMOt2M1IbVhi98uhE0pS2YC+WwInF
         <property name="ESeriesUrl" value="http://vm-demo1:8080/e-series/Controller" />
         <!-- Production -->
         <!-- <property name="ESeriesUrl" value="http://31.24.36.26:8888/e-series/Controller"/> -->
-        <property name="UpdateBusinessDataPeriodDays" value="365" />
 		<property name="SecureFtpHostName" value="https://secureftp.experian.co.uk/Upload"/>
 		<property name="SecureFtpUserName" value="PIF1160_AyCpjxzt25"/>
 		<property name="SecureFtpUserPassword" value="AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAA5vQ8u3hwpEC19ATsYz992QAAAAACAAAAAAADZgAAwAAAABAAAACz6xwbkwPFNF2Kq3uXIuLxAAAAAASAAACgAAAAEAAAAFXerRgxiK+UA3qzgYtbg5EYAAAA0G+HLjFYHhbb+7AQw/XRSz2fK8pVIS9SFAAAAAl6gtklbAaMzzfCl62zmzMKo4eC"/>

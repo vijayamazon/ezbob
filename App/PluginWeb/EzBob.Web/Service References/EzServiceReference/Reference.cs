@@ -1061,8 +1061,11 @@ namespace EzBob.Web.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CreateUnderwriter", ReplyAction="http://tempuri.org/IEzService/CreateUnderwriterResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData CreateUnderwriter(string name, string password, string role);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetExperianCacheDate", ReplyAction="http://tempuri.org/IEzService/GetExperianCacheDateResponse")]
-        EzBob.Web.EzServiceReference.DateTimeActionResult GetExperianCacheDate(int[] ids);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetExperianConsumerCacheDate", ReplyAction="http://tempuri.org/IEzService/GetExperianConsumerCacheDateResponse")]
+        EzBob.Web.EzServiceReference.DateTimeActionResult GetExperianConsumerCacheDate(int[] ids);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetExperianCompanyCacheDate", ReplyAction="http://tempuri.org/IEzService/GetExperianCompanyCacheDateResponse")]
+        EzBob.Web.EzServiceReference.DateTimeActionResult GetExperianCompanyCacheDate(int customerId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -1416,8 +1419,12 @@ namespace EzBob.Web.EzServiceReference {
             return base.Channel.CreateUnderwriter(name, password, role);
         }
         
-        public EzBob.Web.EzServiceReference.DateTimeActionResult GetExperianCacheDate(int[] ids) {
-            return base.Channel.GetExperianCacheDate(ids);
+        public EzBob.Web.EzServiceReference.DateTimeActionResult GetExperianConsumerCacheDate(int[] ids) {
+            return base.Channel.GetExperianConsumerCacheDate(ids);
+        }
+        
+        public EzBob.Web.EzServiceReference.DateTimeActionResult GetExperianCompanyCacheDate(int customerId) {
+            return base.Channel.GetExperianCompanyCacheDate(customerId);
         }
     }
 }

@@ -167,12 +167,23 @@
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonNetResult IsConsumerCacheRelevant(int customerId)
 		{
-			var ids = new List<int> {customerId};
+			var ids = new List<int> { customerId };
 			IQueryable<Director> directors = directorRepository.GetAll().Where(x => x.Customer.Id == customerId);
 			ids.AddRange(directors.Select(d => d.Id));
-			DateTimeActionResult result = m_oServiceClient.Instance.GetExperianCacheDate(ids.ToArray());
+			DateTimeActionResult result = m_oServiceClient.Instance.GetExperianConsumerCacheDate(ids.ToArray());
 			DateTime cacheDate = result.Value;
 			int cacheValidForDays = configurationVariablesRepository.GetByNameAsInt("UpdateConsumerDataPeriodDays");
+			string isRelevant = (DateTime.UtcNow - cacheDate).TotalDays > cacheValidForDays ? "False" : "True";
+			return this.JsonNet(new { IsRelevant = isRelevant, LastCheckDate = cacheDate.ToString("dd/MM/yyyy"), CacheValidForDays = cacheValidForDays.ToString(CultureInfo.InvariantCulture) });
+		}
+
+		[HttpPost]
+		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
+		public JsonNetResult IsCompanyCacheRelevant(int customerId)
+		{
+			DateTimeActionResult result = m_oServiceClient.Instance.GetExperianCompanyCacheDate(customerId);
+			DateTime cacheDate = result.Value;
+			int cacheValidForDays = configurationVariablesRepository.GetByNameAsInt("UpdateCompanyDataPeriodDays");
 			string isRelevant = (DateTime.UtcNow - cacheDate).TotalDays > cacheValidForDays ? "False" : "True";
 			return this.JsonNet(new { IsRelevant = isRelevant, LastCheckDate = cacheDate.ToString("dd/MM/yyyy"), CacheValidForDays = cacheValidForDays.ToString(CultureInfo.InvariantCulture) });
 		}

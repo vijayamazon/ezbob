@@ -1307,17 +1307,31 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetExperianCacheDate">
+  <xs:element name="GetExperianConsumerCacheDate">
     <xs:complexType>
       <xs:sequence>
         <xs:element xmlns:q95="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ids" nillable="true" type="q95:ArrayOfint" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="GetExperianCacheDateResponse">
+  <xs:element name="GetExperianConsumerCacheDateResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q96="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="GetExperianCacheDateResult" nillable="true" type="q96:DateTimeActionResult" />
+        <xs:element xmlns:q96="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="GetExperianConsumerCacheDateResult" nillable="true" type="q96:DateTimeActionResult" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetExperianCompanyCacheDate">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="customerId" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetExperianCompanyCacheDateResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q97="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="GetExperianCompanyCacheDateResult" nillable="true" type="q97:DateTimeActionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

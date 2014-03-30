@@ -39,11 +39,6 @@ namespace EzBob.Configuration
             get { return GetValue<string>("ESeriesUrl"); }
         }
 
-        public int UpdateBusinessDataPeriodDays
-        {
-            get { return GetValue<int>("UpdateBusinessDataPeriodDays"); }
-        }
-
         public string SecureFtpHostName
         {
             get { return GetValue<string>("SecureFtpHostName"); }

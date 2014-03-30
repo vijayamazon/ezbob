@@ -1,11 +1,11 @@
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GetExperianCacheDate]') AND TYPE IN (N'P', N'PC'))
-DROP PROCEDURE [dbo].[GetExperianCacheDate]
+IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GetExperianConsumerCacheDate]') AND TYPE IN (N'P', N'PC'))
+DROP PROCEDURE [dbo].[GetExperianConsumerCacheDate]
 GO
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[GetExperianCacheDate]
+CREATE PROCEDURE [dbo].[GetExperianConsumerCacheDate]
 	(@CustomerId INT,
 	 @DirectorId INT)
 AS
