@@ -694,6 +694,8 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual QuickOffer QuickOffer { get; set; }
 
 		public virtual EZBob.DatabaseLib.Model.Database.Broker.Broker Broker { get; set; }
+
+		public virtual bool FilledByBroker { get; set; }
 	} // class Customer
 
 	#endregion class Customer

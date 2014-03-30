@@ -165,12 +165,8 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 					if (oData.hasOwnProperty('Marketplaces'))
 						$('.grid-item-Marketplaces', oTR).empty().html(EzBob.DataTables.Helper.showMPsIcon(oData.Marketplaces));
 
-					if (oData.hasOwnProperty('CustomerID')) {
+					if (oData.RefNumber) {
 						var sLinkBase = '<a class=profileLink title="Show customer details" href="#customer/' + oData.RefNumber + '">';
-
-						$('.grid-item-CustomerID', oTR).empty().html(EzBob.DataTables.Helper.withScrollbar(
-							sLinkBase + oData.CustomerID + '</a>'
-						));
 
 						if (oData.hasOwnProperty('FirstName') && oData.FirstName) {
 							$('.grid-item-FirstName', oTR).empty().html(EzBob.DataTables.Helper.withScrollbar(

@@ -4,7 +4,8 @@ GO
 
 ALTER PROCEDURE BrokerLeadAcquireCustomer
 @CustomerID INT,
-@LeadID INT
+@LeadID INT,
+@BrokerFillsForCustomer BIT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -28,8 +29,16 @@ BEGIN
 	BEGIN
 		BEGIN TRANSACTION
 		
-		UPDATE Customer SET BrokerID = @BrokerID WHERE Id = @CustomerID
-		UPDATE BrokerLeads SET CustomerID = @CustomerID WHERE BrokerLeadID = @LeadID
+		UPDATE Customer SET
+			BrokerID = @BrokerID,
+			FilledByBroker = @BrokerFillsForCustomer
+		WHERE
+			Id = @CustomerID
+
+		UPDATE BrokerLeads SET
+			CustomerID = @CustomerID
+		WHERE
+			BrokerLeadID = @LeadID
 
 		COMMIT TRANSACTION
 	END
