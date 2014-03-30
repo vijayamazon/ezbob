@@ -299,6 +299,21 @@
 
 		#endregion method BrokerLeadCheckToken
 
+		#region method BrokerLoadOwnProperties
+
+		public BrokerPropertiesActionResult BrokerLoadOwnProperties(string sContactEmail) {
+			BrokerLoadOwnProperties oInstance;
+
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, sContactEmail);
+
+			return new BrokerPropertiesActionResult {
+				MetaData = oMetaData,
+				Properties = oInstance.Properties,
+			};
+		} // BrokerLoadOwnProperties
+
+		#endregion method BrokerLoadOwnProperties
+
 		#endregion sync
 	} // class EzServiceImplementation
 } // namespace EzService

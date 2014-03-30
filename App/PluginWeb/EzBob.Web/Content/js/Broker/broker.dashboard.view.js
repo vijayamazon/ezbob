@@ -42,6 +42,8 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 			return this;
 		} // if
 
+		this.$el.tabs();
+
 		this.reloadCustomerList();
 
 		return this;
@@ -57,7 +59,7 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 			{ sContactEmail: this.router.getAuth(), },
 			function(oResponse) {
 				var theTableOpts = self.initDataTablesOptions(
-					'FirstName,LastName,WizardStep,Status,Marketplaces,^ApplyDate,$LoanAmount,^LoanDate,@LastInvitationSent',
+					'FirstName,LastName,WizardStep,Status,Marketplaces,^ApplyDate,$LoanAmount,$SetupFee,^LoanDate,@LastInvitationSent',
 					'brk-grid-state-' + self.router.getAuth() + '-customer-list'
 				);
 
@@ -65,7 +67,7 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 
 				theTableOpts.aaSorting = [ [5, 'desc'] ];
 
-				self.adjustAoColumn(theTableOpts, 'LoanAmount', function(oCol) {
+				self.adjustAoColumn(theTableOpts, [ 'LoanAmount', 'SetupFee' ], function(oCol) {
 					var oStdMoneyRender = oCol.mRender;
 
 					oCol.mRender = function(oData, sAction, oFullSource) {
@@ -132,18 +134,15 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 							return '';
 
 						var sTitle = '';
-						var sCaption = '';
 
-						if (moment([1976, 7]).utc().diff(moment(oFullSource.DateLastInvitationSent)) > 0) {
+						if (moment([1976, 7]).utc().diff(moment(oFullSource.DateLastInvitationSent)) > 0)
 							sTitle = 'Send invitation to this lead.';
-							sCaption = 'Send';
-						}
-						else {
+						else
 							sTitle = 'Send another invitation to this lead.';
-							sCaption = 'Resend';
-						} // if
 
-						return '<button class=lead-send-invitation data-lead-id=' + oFullSource.LeadID + ' title="' + sTitle + '">' + sCaption + '</button>';
+						return '<button class=lead-send-invitation data-lead-id=' + oFullSource.LeadID + ' title="' + sTitle + '">' +
+							'<i class="fa fa-envelope-o"></i>' +
+							'</button>';
 					}, // mRender
 				});
 
@@ -155,7 +154,9 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 							return '';
 
 						if (sAction === 'display')
-							return '<button class=lead-fill-wizard data-lead-id=' + oFullSource.LeadID + ' title="Fill all the data for this lead.">Fill</button>';
+							return '<button class=lead-fill-wizard data-lead-id=' + oFullSource.LeadID + ' title="Fill all the data for this lead.">' +
+								'<i class="fa fa-desktop"></i>' +
+								'</button>';
 
 						return '';
 					}, // mRender
@@ -184,20 +185,23 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 
 				theTableOpts.fnFooterCallback = function(oTR, aryData, nVisibleStart, nVisibleEnd, aryVisual) {
 					console.log('footer callback', aryData, nVisibleStart, nVisibleEnd, aryVisual);
-					var nSum = 0;
+					var nLoanSum = 0;
+					var nSetupFeeSum = 0;
 					var nCount = 0;
 
 					_.each(aryData, function(oRowData) {
 						if (oRowData.LoanAmount) {
 							nCount++;
-							nSum += oRowData.LoanAmount;
+							nLoanSum += oRowData.LoanAmount;
+							nSetupFeeSum += oRowData.SetupFee;
 						} // if
 					});
 
 					$('.grid-item-FirstName', oTR).empty().text('Total');
 
 					if (nCount > 0) {
-						$('.grid-item-LoanAmount', oTR).empty().text(EzBob.formatPoundsNoDecimals(nSum));
+						$('.grid-item-LoanAmount', oTR).empty().text(EzBob.formatPoundsNoDecimals(nLoanSum));
+						$('.grid-item-SetupFee', oTR).empty().text(EzBob.formatPoundsNoDecimals(nSetupFeeSum));
 						$('.grid-item-LoanDate', oTR).empty().text(EzBob.formatIntWithCommas(nCount) + ' loan' + (nCount === 1 ? '' : 's'));
 					} // if
 				}; // fnFooterCallback

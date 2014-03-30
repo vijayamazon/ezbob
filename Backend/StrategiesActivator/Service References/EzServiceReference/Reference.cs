@@ -775,6 +775,9 @@ namespace StrategiesActivator.EzServiceReference {
         private string RefNumberField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal SetupFeeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string StatusField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -942,6 +945,19 @@ namespace StrategiesActivator.EzServiceReference {
                 if ((object.ReferenceEquals(this.RefNumberField, value) != true)) {
                     this.RefNumberField = value;
                     this.RaisePropertyChanged("RefNumber");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal SetupFee {
+            get {
+                return this.SetupFeeField;
+            }
+            set {
+                if ((this.SetupFeeField.Equals(value) != true)) {
+                    this.SetupFeeField = value;
+                    this.RaisePropertyChanged("SetupFee");
                 }
             }
         }

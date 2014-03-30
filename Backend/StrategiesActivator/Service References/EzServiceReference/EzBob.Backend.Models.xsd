@@ -20,6 +20,7 @@
       <xs:element minOccurs="0" name="LoanDate" type="xs:dateTime" />
       <xs:element minOccurs="0" name="Marketplaces" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="RefNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SetupFee" type="xs:decimal" />
       <xs:element minOccurs="0" name="Status" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="WizardStep" nillable="true" type="xs:string" />
     </xs:sequence>

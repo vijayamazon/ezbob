@@ -55,7 +55,7 @@
 				LoanType = loanType,
 				RepaymentPeriod = loanSource.DefaultRepaymentPeriod ?? loanType.RepaymentPeriod,
 				UseSetupFee = configurationVariables.GetByNameAsBool("SetupFeeEnabled"),
-				UseBrokerSetupFee = configurationVariables.GetByNameAsBool("BrokerCommissionEnabled"),
+				UseBrokerSetupFee = (customer.Broker != null) || configurationVariables.GetByNameAsBool("BrokerCommissionEnabled"),
 				DiscountPlan = _discounts.GetDefault(),
 				IsLoanTypeSelectionAllowed = 1,
 				OfferValidUntil = DateTime.UtcNow.AddDays(1),

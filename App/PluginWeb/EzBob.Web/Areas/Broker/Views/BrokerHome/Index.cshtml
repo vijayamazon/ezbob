@@ -291,60 +291,86 @@
 				<!-- section-forgotten -->
 
 				<div class="page-section hide section-dashboard">
-					<h2 class="form-start">Customer list
-						<button type="button" id="AddNewCustomer" class="rc-button green pull-right">Add customer lead</button>
-					</h2>
-					
-					<div class="table-responsive table-big">
-						<table class="customer-list table">
-							<thead><tr>
-								<th>First name</th>
-								<th>Last name</th>
-								<th>Wizard step</th>
-								<th>Status</th>
-								<th>Accounts</th>
-								<th>Applied date</th>
-								<th>Loan amount</th>
-								<th>Loan date</th>
-								<th>Last invitation sent</th>
-								<th>Send</th>
-								<th>Fill</th>
-							</tr></thead>
-							<tbody><tr>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-							</tr></tbody>
-							<tfoot><tr>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-								<td></td>
-							</tr></tfoot>
-						</table>
-					</div>
+						<ul>
+							<li><a href="#section-dashboard-customers">Customers</a></li>
+							<li><a href="#section-dashboard-marketing">Marketing</a></li>
+							<li><a href="#section-dashboard-payments">Payments</a></li>
+							<li><a href="#section-dashboard-quick-offer">Quick offer</a></li>
+						</ul>
+						
+						<div id="section-dashboard-customers">
+								<button type="button" id="AddNewCustomer" class="rc-button green pull-right">Add customer lead</button>
+							<h2 class="form-start">Customer list
+							</h2>
+							
+							<div class="table-responsive table-big">
+								<table class="customer-list table">
+									<thead><tr>
+										<th>First name</th>
+										<th>Last name</th>
+										<th>Wizard step</th>
+										<th>Status</th>
+										<th>Accounts</th>
+										<th>Applied date</th>
+										<th>Loan amount</th>
+										<th>Commission</th>
+										<th>Loan date</th>
+										<th>Last invitation sent</th>
+										<th>Send</th>
+										<th>Fill</th>
+									</tr></thead>
+									<tbody><tr>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+									</tr></tbody>
+									<tfoot><tr>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+									</tr></tfoot>
+								</table>
+							</div>
+						</div>
+
+						<div id="section-dashboard-marketing">
+							<h2 class=form_start>Marketing</h2>
+							Lorem ipsum
+						</div>
+
+						<div id="section-dashboard-payments">
+							<h2 class=form_start>Payments</h2>
+							Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+						</div>
+
+						<div id="section-dashboard-quick-offer">
+							<h2 class=form_start>Quick offer</h2>
+							Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+						</div>
 				</div>
 				<!-- section-customer-list -->
 
 				<div class="page-section hide section-add-customer">
-					<h2 class="form-start">Add customer lead
-						<button type="button" class="back-to-list rc-button green pull-right">Back to customer list</button>
-					</h2>
+					<button type="button" class="back-to-list rc-button green pull-right">Back to customer list</button>
+					<h2 class="form-start">Add customer lead</h2>
 
 					<form class="new-lead-form broker-form" novalidate="novalidate">
 						@{ int nLeadTabIdx = 1; }

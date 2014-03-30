@@ -105,6 +105,9 @@
 		[OperationContract]
 		ActionMetaData BrokerCheckCustomerRelevance(int nCustomerID, string sCustomerEmail, string sSourceRef, string sConfirmEmailLink);
 
+		[OperationContract]
+		BrokerPropertiesActionResult BrokerLoadOwnProperties(string sContactEmail);
+
 		#endregion Broker
 
 		#region CAIS

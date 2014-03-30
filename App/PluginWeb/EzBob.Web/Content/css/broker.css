@@ -37,10 +37,16 @@ footer {
 	clear: both;
 }
 
-#AddNewCustomer { margin-top: 1em; }
+#AddNewCustomer {
+	font-size: 16px;
+}
 
-.section-dashboard h2 {
-	margin-bottom: 1.5em;
+.section-dashboard {
+	margin-top: 20px;
+}
+
+.section-dashboard .ui-tabs-panel {
+	padding: 0;
 }
 
 table.customer-list {
@@ -71,13 +77,16 @@ table.customer-list {
 	border: 1px solid white;
 }
 
-.section-dashboard .grid-item-Email,
-.section-dashboard .grid-item-AddMode {
-	white-space: nowrap;
+.section-dashboard tbody .grid-item-FirstName a,
+.section-dashboard tbody .grid-item-LastName a {
+	text-decoration: underline;
+	color: #428bca;
 }
 
 .section-dashboard tbody .grid-item-LoanAmount,
+.section-dashboard tbody .grid-item-SetupFee,
 .section-dashboard tfoot .grid-item-LoanAmount,
+.section-dashboard tfoot .grid-item-SetupFee,
 .section-dashboard tfoot .grid-item-LoanDate {
 	text-align: right;
 }

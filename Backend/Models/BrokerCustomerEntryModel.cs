@@ -55,6 +55,9 @@
 		public DateTime LoanDate { get; set; }
 
 		[DataMember]
+		public decimal SetupFee { get; set; }
+
+		[DataMember]
 		public int LeadID { get; set; }
 
 		[DataMember]
@@ -67,15 +70,17 @@
 
 		#region method AddMpLoan
 
-		public void AddMpLoan(string sMpTypeName, decimal nLoanAmount, DateTime? oLoanDate) {
+		public void AddMpLoan(string sMpTypeName, decimal nLoanAmount, DateTime? oLoanDate, decimal nSetupFee) {
 			if (nLoanAmount > 0) {
 				if (LoanDate == ms_oLongTimeAgo) {
 					LoanDate = oLoanDate.Value;
 					LoanAmount = nLoanAmount;
+					SetupFee = nSetupFee;
 				}
 				else if (LoanDate > oLoanDate.Value) {
 					LoanDate = oLoanDate.Value;
 					LoanAmount = nLoanAmount;
+					SetupFee = nSetupFee;
 				} // if
 			} // if
 

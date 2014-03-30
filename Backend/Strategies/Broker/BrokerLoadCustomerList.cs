@@ -53,7 +53,7 @@
 					};
 				} // if
 
-				m_oCustomers[row.CustomerID].AddMpLoan(row.MpTypeName, row.LoanAmount, row.LoanDate);
+				m_oCustomers[row.CustomerID].AddMpLoan(row.MpTypeName, row.LoanAmount, row.LoanDate, row.SetupFee);
 
 				return ActionResult.Continue;
 			});
@@ -140,6 +140,7 @@
 				public string MpTypeName { get; set; }
 				public decimal LoanAmount { get; set; }
 				public DateTime LoanDate { get; set; }
+				public decimal SetupFee { get; set; }
 			} // class ResultRow
 
 			#endregion class ResultRow

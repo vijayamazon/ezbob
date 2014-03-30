@@ -86,6 +86,7 @@
     <Compile Include="Broker\BrokerLeadCheckToken.cs" />
     <Compile Include="Broker\BrokerLoadCustomerDetails.cs" />
     <Compile Include="Broker\BrokerLoadCustomerFiles.cs" />
+    <Compile Include="Broker\BrokerLoadOwnProperties.cs" />
     <Compile Include="Broker\BrokerSaveCrmEntry.cs" />
     <Compile Include="Broker\BrokerAddCustomerLead.cs" />
     <Compile Include="Broker\BrokerLeadCanFillWizard.cs" />

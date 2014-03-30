@@ -23,7 +23,8 @@ BEGIN
 		c.GreetingMailSentDate AS ApplyDate,
 		ISNULL(t.Name, '') AS MpTypeName,
 		ISNULL(l.LoanAmount, 0) AS LoanAmount,
-		l.Date AS LoanDate
+		l.Date AS LoanDate,
+		l.SetupFee
 	FROM
 		Customer c
 		INNER JOIN WizardStepTypes w ON c.WizardStep = w.WizardStepTypeID
