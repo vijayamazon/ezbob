@@ -56,7 +56,7 @@
 			}
 			catch (Exception e)
 			{
-				Log.Error("Exception occurred during execution of GetExperianCacheDate. The exception:{0}", e);
+				Log.Error("Exception occurred during execution of GetExperianConsumerCacheDate. The exception:{0}", e);
 			}
 
 			return new DateTimeActionResult
@@ -67,7 +67,30 @@
 
 		public DateTimeActionResult GetExperianCompanyCacheDate(int customerId)
 		{
-			return null;
+			DateTime cacheDate = DateTime.UtcNow;
+			try
+			{
+				DataTable dt = DB.ExecuteReader(
+					"GetExperianCompanyCacheDate",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("CustomerId", customerId)
+				);
+
+				if (dt.Rows.Count > 0)
+				{
+					var sr = new SafeReader(dt.Rows[0]);
+					cacheDate = sr["LastUpdateDate"];
+				}
+			}
+			catch (Exception e)
+			{
+				Log.Error("Exception occurred during execution of GetExperianCompanyCacheDate. The exception:{0}", e);
+			}
+
+			return new DateTimeActionResult
+			{
+				Value = cacheDate
+			};
 		}
 	} // class EzServiceImplementation
 } // namespace EzService

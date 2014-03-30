@@ -649,11 +649,12 @@ namespace EzBob.Web.Areas.Underwriter.Models
 			var srv = new EBusinessService();
 			var company = customer.Company;
 			if(company == null) return;
+			int updateCompanyDataPeriodDays;
 			switch (company.TypeOfBusiness.Reduce())
 			{
 				case TypeOfBusinessReduced.Limited:
 					var limitedBusinessData = srv.GetLimitedBusinessData(company.ExperianRefNum, customer.Id, true);
-					int updateCompanyDataPeriodDays = _variablesRepository.GetByNameAsInt("UpdateCompanyDataPeriodDays");
+					updateCompanyDataPeriodDays = _variablesRepository.GetByNameAsInt("UpdateCompanyDataPeriodDays");
 					if (limitedBusinessData.LastCheckDate.HasValue &&
 						(DateTime.UtcNow - limitedBusinessData.LastCheckDate.Value).TotalDays >= updateCompanyDataPeriodDays) 
 					{
@@ -667,7 +668,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 				case TypeOfBusinessReduced.NonLimited:
 
 					var notLimitedBusinessData = srv.GetNotLimitedBusinessData(company.ExperianRefNum, customer.Id, true);
-					int updateCompanyDataPeriodDays = _variablesRepository.GetByNameAsInt("UpdateCompanyDataPeriodDays");
+					updateCompanyDataPeriodDays = _variablesRepository.GetByNameAsInt("UpdateCompanyDataPeriodDays");
 					if (notLimitedBusinessData.LastCheckDate.HasValue &&
 						(DateTime.UtcNow - notLimitedBusinessData.LastCheckDate.Value).TotalDays >= updateCompanyDataPeriodDays)
 					{
