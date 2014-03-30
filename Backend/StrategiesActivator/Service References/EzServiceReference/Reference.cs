@@ -3532,10 +3532,10 @@ namespace StrategiesActivator.EzServiceReference {
         System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> CreateUnderwriterAsync(string name, string password, string role);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetExperianCacheDate", ReplyAction="http://tempuri.org/IEzService/GetExperianCacheDateResponse")]
-        StrategiesActivator.EzServiceReference.DateTimeActionResult GetExperianCacheDate(string[] keys);
+        StrategiesActivator.EzServiceReference.DateTimeActionResult GetExperianCacheDate(int[] ids);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetExperianCacheDate", ReplyAction="http://tempuri.org/IEzService/GetExperianCacheDateResponse")]
-        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.DateTimeActionResult> GetExperianCacheDateAsync(string[] keys);
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.DateTimeActionResult> GetExperianCacheDateAsync(int[] ids);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -4213,12 +4213,12 @@ namespace StrategiesActivator.EzServiceReference {
             return base.Channel.CreateUnderwriterAsync(name, password, role);
         }
         
-        public StrategiesActivator.EzServiceReference.DateTimeActionResult GetExperianCacheDate(string[] keys) {
-            return base.Channel.GetExperianCacheDate(keys);
+        public StrategiesActivator.EzServiceReference.DateTimeActionResult GetExperianCacheDate(int[] ids) {
+            return base.Channel.GetExperianCacheDate(ids);
         }
         
-        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.DateTimeActionResult> GetExperianCacheDateAsync(string[] keys) {
-            return base.Channel.GetExperianCacheDateAsync(keys);
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.DateTimeActionResult> GetExperianCacheDateAsync(int[] ids) {
+            return base.Channel.GetExperianCacheDateAsync(ids);
         }
     }
 }

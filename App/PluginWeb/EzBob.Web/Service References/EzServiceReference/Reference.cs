@@ -1062,7 +1062,7 @@ namespace EzBob.Web.EzServiceReference {
         EzBob.Web.EzServiceReference.ActionMetaData CreateUnderwriter(string name, string password, string role);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetExperianCacheDate", ReplyAction="http://tempuri.org/IEzService/GetExperianCacheDateResponse")]
-        EzBob.Web.EzServiceReference.DateTimeActionResult GetExperianCacheDate(string[] keys);
+        EzBob.Web.EzServiceReference.DateTimeActionResult GetExperianCacheDate(int[] ids);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -1416,8 +1416,8 @@ namespace EzBob.Web.EzServiceReference {
             return base.Channel.CreateUnderwriter(name, password, role);
         }
         
-        public EzBob.Web.EzServiceReference.DateTimeActionResult GetExperianCacheDate(string[] keys) {
-            return base.Channel.GetExperianCacheDate(keys);
+        public EzBob.Web.EzServiceReference.DateTimeActionResult GetExperianCacheDate(int[] ids) {
+            return base.Channel.GetExperianCacheDate(ids);
         }
     }
 }

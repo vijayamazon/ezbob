@@ -51,7 +51,7 @@ EzBob.Underwriter.ExperianInfoView = Backbone.View.extend({
 
         var that = this;
         BlockUi("on");
-        $.post(window.gRootPath + "Underwriter/CreditBureau/IsConsumerCacheRelevant", { id: this.model.get("Id") })
+        $.post(window.gRootPath + "Underwriter/CreditBureau/IsConsumerCacheRelevant", { customerId: this.model.get("Id") })
             .done(function (response) {
                 if (response.IsRelevant == "True") {
                     EzBob.ShowMessage("Last check was done at " + response.LastCheckDate +" and cache is valid for " + response.CacheValidForDays + " days. Run check anyway?", "No need for check warning",
@@ -72,7 +72,7 @@ EzBob.Underwriter.ExperianInfoView = Backbone.View.extend({
     },
     RunConsumerCheck: function () {
         BlockUi("on");
-        $.post(window.gRootPath + "Underwriter/CreditBureau/RunConsumerCheck", { id: this.model.get("Id") })
+        $.post(window.gRootPath + "Underwriter/CreditBureau/RunConsumerCheck", { customerId: this.model.get("Id") })
             .done(function (response) {
                 EzBob.ShowMessage(response.Message, "Information");
             })

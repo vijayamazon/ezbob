@@ -6,15 +6,34 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 CREATE PROCEDURE [dbo].[GetExperianCacheDate]
-	@Keys StringList READONLY
+	(@CustomerId INT,
+	 @DirectorId INT)
 AS
-BEGIN
-	SELECT 
-		MIN(LastUpdateDate)
-	FROM 
-		MP_ExperianBankCache,
-		@Keys
-	WHERE
-		KeyData IN (SELECT Value FROM @Keys)
+BEGIN	
+	IF @DirectorId = 0
+	BEGIN
+		SELECT
+			MIN(LastUpdateDate) AS LastUpdateDate
+		FROM
+			MP_ExperianDataCache
+		WHERE
+			CustomerId = @CustomerId AND 
+			Name IS NOT NULL AND
+			(
+				DirectorId IS NULL OR 
+				DirectorId = 0
+			)
+	END
+	ELSE
+	BEGIN
+		SELECT
+			MIN(LastUpdateDate) AS LastUpdateDate
+		FROM
+			MP_ExperianDataCache
+		WHERE
+			CustomerId = @CustomerId AND 
+			Name IS NOT NULL AND
+			DirectorId = @DirectorId
+	END	
 END
 GO

@@ -2,10 +2,8 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Data;
-	using System.Linq;
 	using EzBob.Backend.Strategies;
 	using Ezbob.Database;
-	using Ezbob.Utils;
 
 	partial class EzServiceImplementation {
 		public ActionMetaData CheckExperianCompany(int customerId) {
@@ -15,33 +13,45 @@
 		public ActionMetaData CheckExperianConsumer(int customerId, int directorId) {
 			return Execute(customerId, null, typeof(ExperianConsumerCheck), customerId, directorId);
 		} // CheckExperianConsumer
-
-		// TODO: consult Alex - remove ITraversable limitation from CreateTableParameter<T>...
-		private class StringWrapper : ITraversable
+		
+		public DateTimeActionResult GetExperianCacheDate(List<int> ids)
 		{
-			public string Value { get; set; }
-		}
-
-		public DateTimeActionResult GetExperianCacheDate(List<string> keys)
-		{
-			var wrappedKeys = keys.Select(key => new StringWrapper {Value = key}).ToList();
-
-			DateTime cacheDate = DateTime.MinValue;
+			DateTime cacheDate = DateTime.UtcNow;
 			try
 			{
-				DataTable dt = DB.ExecuteReader(
-					"GetExperianCacheDate",
-					CommandSpecies.StoredProcedure,
-					DB.CreateTableParameter<StringWrapper>("@Keys", wrappedKeys, stringWrapper =>
-					{
-						return new object[] { ((StringWrapper)stringWrapper).Value };
-					})
-				);
-
-				if (dt.Rows.Count > 0)
+				bool doneCustomer = false;
+				foreach (int id in ids)
 				{
-					var sr = new SafeReader(dt.Rows[0]);
-					cacheDate = sr["LastUpdateDate"];
+					int customerId, directorId;
+
+					if (!doneCustomer)
+					{
+						customerId = id;
+						directorId = 0;
+						doneCustomer = true;
+					}
+					else
+					{
+						customerId = ids[0];
+						directorId = id;
+					}
+
+					DataTable dt = DB.ExecuteReader(
+						"GetExperianCacheDate",
+						CommandSpecies.StoredProcedure,
+						new QueryParameter("CustomerId", customerId),
+						new QueryParameter("DirectorId", directorId)
+					);
+
+					if (dt.Rows.Count > 0)
+					{
+						var sr = new SafeReader(dt.Rows[0]);
+						DateTime tmpCacheDate = sr["LastUpdateDate"];
+						if (cacheDate > tmpCacheDate)
+						{
+							cacheDate = tmpCacheDate;
+						}
+					}
 				}
 			}
 			catch (Exception e)

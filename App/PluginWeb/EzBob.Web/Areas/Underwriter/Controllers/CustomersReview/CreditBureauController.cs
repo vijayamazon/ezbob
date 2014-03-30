@@ -11,6 +11,7 @@
 	using EZBob.DatabaseLib.Model.Database.Mapping;
 	using ExperianLib.IdIdentityHub;
 	using EZBob.DatabaseLib.Model.Database.Repository;
+	using EzServiceReference;
 	using Models;
 	using Code;
 	using Scorto.Web;
@@ -166,9 +167,11 @@
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		public JsonNetResult IsConsumerCacheRelevant(int customerId)
 		{
-			// build key - will be passed as parameter (should have key and key for each director)
-			// Get earliest date in cache (customer and director) - server side
-			DateTime cacheDate = DateTime.UtcNow;
+			var ids = new List<int> {customerId};
+			IQueryable<Director> directors = directorRepository.GetAll().Where(x => x.Customer.Id == customerId);
+			ids.AddRange(directors.Select(d => d.Id));
+			DateTimeActionResult result = m_oServiceClient.Instance.GetExperianCacheDate(ids.ToArray());
+			DateTime cacheDate = result.Value;
 			int cacheValidForDays = configurationVariablesRepository.GetByNameAsInt("UpdateConsumerDataPeriodDays");
 			string isRelevant = (DateTime.UtcNow - cacheDate).TotalDays > cacheValidForDays ? "False" : "True";
 			return this.JsonNet(new { IsRelevant = isRelevant, LastCheckDate = cacheDate.ToString("dd/MM/yyyy"), CacheValidForDays = cacheValidForDays.ToString(CultureInfo.InvariantCulture) });
