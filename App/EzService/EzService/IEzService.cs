@@ -53,7 +53,8 @@
 			string Password,
 			string Password2,
 			string sFirmWebSiteUrl,
-			int nEstimatedMonthlyApplicationCount
+			int nEstimatedMonthlyApplicationCount,
+			bool bIsCaptchEnabled
 		);
 
 		[OperationContract]

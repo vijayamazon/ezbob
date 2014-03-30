@@ -15,6 +15,7 @@ EzBob.Broker.ForgottenView = EzBob.Broker.MobilePhoneView.extend({
 			GenerateCodeBtnID: 'forgottenGenerateMobileCode',
 			MobileCodeSectionID: 'forgottenMobileCodeDiv',
 			CodeSentLabelID: 'forgottenSentLabel',
+			CaptchaEnabledFieldID: '',
 		});
 
 		this.initValidatorCfg();
@@ -56,6 +57,8 @@ EzBob.Broker.ForgottenView = EzBob.Broker.MobilePhoneView.extend({
 	}, // onSubmit
 
 	onRender: function() {
+		EzBob.Broker.ForgottenView.__super__.onRender.apply(this, arguments);
+
 		this.$el.find('.phonenumber').numericOnly(11);
 		this.$el.find('.phonenumbercode').numericOnly(6);
 	}, // onRender
@@ -73,6 +76,7 @@ EzBob.Broker.ForgottenView = EzBob.Broker.MobilePhoneView.extend({
 			errorPlacement: EzBob.Validation.errorPlacement,
 			unhighlight: EzBob.Validation.unhighlightFS,
 			highlight: EzBob.Validation.highlightFS,
+			ignore: ':not(:visible)',
 		};
 
 		this.validator = this.$el.find('form').validate(

@@ -12,8 +12,9 @@ EzBob.SimpleCaptcha = Backbone.View.extend({
 	render: function (callback) {
 		var that = this;
 
-		$.ajax({ url: this.captchaUrl, cache: false })
-		.done(function(response) {
+		var oXhr = $.ajax({ url: this.captchaUrl, cache: false });
+
+		oXhr.done(function(response) {
 			that.$el.html('<div class=simpleCaptcha>' + response + '</div>');
 			that.$el.find('br').remove();
 			that.$el.find('a').html('Refresh');
@@ -34,6 +35,7 @@ EzBob.SimpleCaptcha = Backbone.View.extend({
 									name: 'CaptchaInputText',
 									type: 'text',
 									'ui-event-control-id': 'signup:captcha',
+									maxlength: 6,
 								}) // attr
 								.addClass('form_field')
 						) // append to label
@@ -41,7 +43,7 @@ EzBob.SimpleCaptcha = Backbone.View.extend({
 							$('<img />').addClass('field_status required').attr('id', 'CaptchaInputTextImage')
 						)// append img
 				) // append to div
-				.append('<span>&nbsp;</span>')
+					.append('<span>&nbsp;</span>')
 			); // replaceWith
 
 			that.$el.find('img.field_status').field_status({ required: true });
@@ -53,11 +55,13 @@ EzBob.SimpleCaptcha = Backbone.View.extend({
 				evt.preventDefault();
 				return false;
 			});
-		}) // done
-		.fail(function() {
+		}); // done
+
+		oXhr.fail(function() {
 			EzBob.App.trigger('error', 'Captcha connection failed. Please try again later.');
-		}) // fail
-		.always(function() {
+		}); // fail
+
+		oXhr.always(function() {
 			if (callback)
 				callback.apply();
 		}); // always
@@ -95,6 +99,7 @@ EzBob.EmptyCaptcha = Backbone.View.extend({
 	}, // initialize
 
 	render: function () {
+		console.log('empty captcha')
 		this.element.parents('.captcha').css('display', 'none');
 		return this;
 	}, // render

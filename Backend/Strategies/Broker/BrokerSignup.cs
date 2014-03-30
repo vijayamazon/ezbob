@@ -26,16 +26,19 @@
 			string sPassword2,
 			string sFirmWebSiteUrl,
 			int nEstimatedMonthlyApplicationCount,
+			bool bIsCaptchaEnabled,
 			AConnection oDB,
 			ASafeLog oLog
 		) : base(oDB, oLog) {
+			m_bIsCaptchaEnabled = bIsCaptchaEnabled;
+			m_sMobileCode = sMobileCode;
+
 			m_oCreateSp = new SpBrokerSignUp(DB, Log) {
 				FirmName = sFirmName,
 				FirmRegNum = sFirmRegNum,
 				ContactName = sContactName,
 				ContactEmail = sContactEmail,
 				ContactMobile = sContactMobile,
-				MobileCode = sMobileCode,
 				ContactOtherPhone = sContactOtherPhone,
 				EstimatedMonthlyClientAmount = nEstimatedMonthlyClientAmount,
 				Password = sPassword,
@@ -60,6 +63,13 @@
 		public override void Execute() {
 			string sErrMsg = null;
 			int nBrokerID = 0;
+
+			if (!m_bIsCaptchaEnabled) {
+				var oValidator = new ValidateMobileCode(m_oCreateSp.ContactMobile, m_sMobileCode, DB, Log);
+				oValidator.Execute();
+				if (!oValidator.IsValidatedSuccessfully())
+					throw new Exception("Failed to validate mobile code.");
+			} // if
 
 			m_oCreateSp.ForEachRowSafe((sr, bRowsetStart) => {
 				sr.Read
@@ -108,8 +118,10 @@
 
 		#region private
 
-		private readonly SpBrokerSignUp m_oCreateSp;
+		private readonly bool m_bIsCaptchaEnabled;
+		private readonly string m_sMobileCode;
 
+		private readonly SpBrokerSignUp m_oCreateSp;
 		private readonly SpBrokerSetSourceRef m_oSetSp;
 
 		#region class SpBrokerSignUp
@@ -128,11 +140,6 @@
 				FirmRegNum = Validate(FirmRegNum, "Broker registration number", false);
 				ContactName = Validate(ContactName, "Contact person full name");
 				ContactEmail = Validate(ContactEmail, "Contact person email");
-
-				var oValidator = new ValidateMobileCode(ContactMobile, MobileCode, DB, Log);
-				oValidator.Execute();
-				if (!oValidator.IsValidatedSuccessfully())
-					throw new Exception("Failed to validate mobile code.");
 
 				ContactOtherPhone = Validate(ContactOtherPhone, "Contact person other phone", false);
 
@@ -162,9 +169,6 @@
 			public string ContactEmail { get; set; }
 
 			public string ContactMobile { get; set; }
-
-			[NonTraversable]
-			public string MobileCode { get; set; }
 
 			public string ContactOtherPhone { get; set; }
 

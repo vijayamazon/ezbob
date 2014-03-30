@@ -208,6 +208,7 @@
         <xs:element minOccurs="0" name="Password2" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="sFirmWebSiteUrl" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="nEstimatedMonthlyApplicationCount" type="xs:int" />
+        <xs:element minOccurs="0" name="bIsCaptchEnabled" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

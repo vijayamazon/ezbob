@@ -193,7 +193,12 @@
 								<img id="Password2Image" class="field_status required" />
 							</label>
 						</div>
-						
+
+						<div class="form_field_container captchaDiv hide" data-tab-index="@{ WriteLiteral(nSignupTabIdx++); }">
+							<input type="hidden" name="IsCaptchaEnabled" id="SignupIsCaptchaEnabled" value="0"/>
+							@EzForm.Captcha(config.CaptchaMode, sId: "broker-captcha")
+						</div>
+
 						<div class="form_field_container form-read-and-accept">
 							<div>
 								<input id="AgreeToTerms" name="AgreeToTerms" type="checkbox" value="false" ui-event-control-id="broker:signup-agree-to-terms" />
@@ -603,9 +608,10 @@
 			.MvcRender("~/Content/js/min/jslib_#.js"));
 	}
 	<script>
-		EzBob = EzBob || {};
+		var EzBob = EzBob || {};
 		EzBob.LoadedConfig = EzBob.LoadedConfig || {};
 		EzBob.LoadedConfig.PasswordPolicyType = '@config.PasswordPolicyType.ToLower()';
+		EzBob.LoadedConfig.CaptchaMode = '@config.CaptchaMode';
 	</script>
 	<!-- scripts - end -->
 </body>

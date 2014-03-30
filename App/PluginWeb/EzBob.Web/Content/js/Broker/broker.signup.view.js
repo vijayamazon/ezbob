@@ -1,4 +1,4 @@
-﻿EzBob = EzBob || {};
+﻿var EzBob = EzBob || {};
 EzBob.Broker = EzBob.Broker || {};
 
 EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
@@ -15,6 +15,7 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 			GenerateCodeBtnID: 'generateMobileCode',
 			MobileCodeSectionID: 'mobileCodeDiv',
 			CodeSentLabelID: 'codeSentLabel',
+			CaptchaEnabledFieldID: 'SignupIsCaptchaEnabled',
 		});
 
 		this.initValidatorCfg();
@@ -38,14 +39,6 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 
 		this.inputChanged();
 	}, // clear
-
-	inputChanged: function() {
-		EzBob.Broker.SignupView.__super__.inputChanged.apply(this, arguments);
-
-		var sUrl = this.$el.find('#FirmWebSite').val();
-
-		console.log('url', sUrl, 'matches', /^(https?:\/\/)?[^ \'"]+/.test(sUrl));
-	}, // inputChanged
 
 	onSubmit: function(event) {
 		var sEmail = this.$el.find('#ContactEmail').val();
@@ -71,8 +64,10 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 				return;
 			} // if
 
+			self.reloadCaptcha();
+
 			if (res.error)
-				EzBob.App.trigger('error', res.error + ' Please contact customer care.');
+				EzBob.App.trigger('error', res.error);
 
 			self.setSubmitEnabled(true);
 		}); // on success
@@ -85,6 +80,8 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 	}, // onSubmit
 
 	onRender: function() {
+		EzBob.Broker.SignupView.__super__.onRender.apply(this, arguments);
+
 		this.$el.find('#EstimatedMonthlyClientAmount').moneyFormat();
 
 		this.$el.find('.phonenumber').numericOnly(11);
@@ -139,6 +136,7 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 			errorPlacement: EzBob.Validation.errorPlacement,
 			unhighlight: EzBob.Validation.unhighlightFS,
 			highlight: EzBob.Validation.highlightFS,
+			ignore: ':not(:visible)',
 		};
 
 		this.validator = this.$el.find('form').validate(

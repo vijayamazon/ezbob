@@ -78,7 +78,8 @@
 			string Password,
 			string Password2,
 			string sFirmWebSiteUrl,
-			int nEstimatedMonthlyApplicationCount
+			int nEstimatedMonthlyApplicationCount,
+			bool bIsCaptchEnabled
 		) {
 			return ExecuteSync<BrokerSignup>(null, null,
 				FirmName,
@@ -92,7 +93,8 @@
 				Password,
 				Password2,
 				sFirmWebSiteUrl,
-				nEstimatedMonthlyApplicationCount
+				nEstimatedMonthlyApplicationCount,
+				bIsCaptchEnabled
 			);
 		} // BrokerSignup
 

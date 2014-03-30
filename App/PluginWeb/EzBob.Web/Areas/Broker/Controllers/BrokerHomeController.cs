@@ -16,6 +16,7 @@
 	using Ezbob.Logger;
 
 	using Ezbob.Utils;
+	using Infrastructure.Filters;
 	using log4net;
 
 	using Scorto.Web;
@@ -84,6 +85,7 @@
 		[HttpPost]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
+		[CaptchaValidationFilter(Order = 999999)]
 		public JsonResult Signup(
 			string FirmName,
 			string FirmRegNum,
@@ -96,7 +98,8 @@
 			string Password,
 			string Password2,
 			string FirmWebSite,
-			int EstimatedMonthlyAppCount
+			int EstimatedMonthlyAppCount,
+			int IsCaptchaEnabled
 		) {
 			m_oLog.Debug(
 				"Broker signup request:" +
@@ -110,6 +113,7 @@
 				"\n\tEstimated monthly amount: {7}",
 				"\n\tFirm web site URL: {8}",
 				"\n\tEstimated monthly application count: {9}",
+				"\n\tCaptcha enabled: {10}",
 				FirmName,
 				FirmRegNum,
 				ContactName,
@@ -119,8 +123,15 @@
 				ContactOtherPhone,
 				EstimatedMonthlyClientAmount,
 				FirmWebSite,
-				EstimatedMonthlyAppCount
+				EstimatedMonthlyAppCount,
+				IsCaptchaEnabled == 0 ? "no" : "yes"
 			);
+
+			if (!ModelState.IsValid) {
+				return new BrokerForJsonResult(string.Join("; ",
+					ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage)
+				));
+			} // if
 
 			if (User.Identity.IsAuthenticated) {
 				m_oLog.Warn("Signup request with contact email {0}: already authorised as {1}.", ContactEmail, User.Identity.Name);
@@ -140,12 +151,13 @@
 					Password,
 					Password2,
 					FirmWebSite,
-					EstimatedMonthlyAppCount
+					EstimatedMonthlyAppCount,
+					IsCaptchaEnabled != 0
 				);
 			}
 			catch (Exception e) {
 				m_oLog.Alert(e, "Failed to signup as a broker.");
-				return new BrokerForJsonResult("Registration failed.");
+				return new BrokerForJsonResult("Registration failed. Please contact customer care.");
 			} // try
 
 			FormsAuthentication.SetAuthCookie(ContactEmail, true);

@@ -495,11 +495,11 @@
     </select>
 }
 
-@helper Captcha(string captchaType, string cls = "")
+@helper Captcha(string captchaType, string cls = "", string sId = "captcha")
 {	 
     <div class="control-group">
         <div class="captcha">
-            <div id="captcha">
+            <div id="@sId">
             </div>
         </div>
     </div>

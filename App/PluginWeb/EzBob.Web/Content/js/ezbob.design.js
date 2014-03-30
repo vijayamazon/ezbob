@@ -540,6 +540,7 @@ String.prototype.format = String.prototype.f = function () {
 
 SetCaptchaMode = function () {
     //EzBob.Config.CaptchaMode = "off";
+
     switch (EzBob.Config.CaptchaMode) {
         default:
         case 'off':
@@ -551,7 +552,7 @@ SetCaptchaMode = function () {
         case 'reCaptcha':
             EzBob.Captcha = EzBob.ReCaptcha;
             break;
-    }
+    } // switch
 };
 
 //-----------  EZBob functions  -----------  
