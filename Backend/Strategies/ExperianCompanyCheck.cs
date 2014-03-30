@@ -5,10 +5,11 @@
 	using Ezbob.Logger;
 
 	public class ExperianCompanyCheck : AStrategy {
-		public ExperianCompanyCheck(int customerId, AConnection oDb, ASafeLog oLog)
+		public ExperianCompanyCheck(int customerId, bool forceCheck, AConnection oDb, ASafeLog oLog)
 			: base(oDb, oLog)
 		{
 			this.customerId = customerId;
+			this.forceCheck = forceCheck;
 
 			DataTable dt = DB.ExecuteReader("GetCompanyData", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
 
@@ -54,11 +55,11 @@
 				BusinessReturnData experianData;
 				if (isLimited)
 				{
-					experianData = service.GetLimitedBusinessData(experianRefNum, customerId);
+					experianData = service.GetLimitedBusinessData(experianRefNum, customerId, false, forceCheck);
 				}
 				else
 				{
-					experianData = service.GetNotLimitedBusinessData(experianRefNum, customerId);
+					experianData = service.GetNotLimitedBusinessData(experianRefNum, customerId, false, forceCheck);
 				}
 
 				if (!experianData.IsError)
@@ -83,6 +84,7 @@
 
 		private readonly int customerId;
 		private readonly bool foundCompany;
+		private readonly bool forceCheck;
 		private readonly bool isLimited;
 		private readonly string experianRefNum;
 	} // class ExperianCompanyCheck

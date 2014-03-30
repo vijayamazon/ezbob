@@ -29,7 +29,7 @@ namespace ExperianStandAlone
 					var refNum = args[1];
 					if (args[0] == "limited")
 					{
-						var result = service.GetLimitedBusinessData(refNum, 1, false);
+						var result = service.GetLimitedBusinessData(refNum, 1, false, false);
 						Console.WriteLine("Output XML:");
 						Console.WriteLine();
 						Console.WriteLine(result.OutputXml);
@@ -40,7 +40,7 @@ namespace ExperianStandAlone
 
 					else if (args[0] == "nonlimited")
 					{
-						var result = service.GetNotLimitedBusinessData(refNum, 1, false);
+						var result = service.GetNotLimitedBusinessData(refNum, 1, false, false);
 						Console.WriteLine("Output XML:");
 						Console.WriteLine();
 						Console.WriteLine(result.OutputXml);

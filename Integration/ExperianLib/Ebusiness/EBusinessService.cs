@@ -61,12 +61,13 @@
 
 		#region method GetLimitedBusinessData
 
-		public LimitedResults GetLimitedBusinessData(string regNumber, int customerId, bool checkInCacheOnly = false) {
-			Log.DebugFormat("Begin GetLimitedBusinessData {0} {1} {2}", regNumber, customerId, checkInCacheOnly);
-			var oRes = GetOneLimitedBusinessData(regNumber, customerId, checkInCacheOnly);
+		public LimitedResults GetLimitedBusinessData(string regNumber, int customerId, bool checkInCacheOnly, bool forceCheck)
+		{
+			Log.DebugFormat("Begin GetLimitedBusinessData {0} {1} {2} {3}", regNumber, customerId, checkInCacheOnly, forceCheck);
+			var oRes = GetOneLimitedBusinessData(regNumber, customerId, checkInCacheOnly, forceCheck);
 
 			foreach (string sOwnerRegNum in oRes.Owners)
-				GetOneLimitedBusinessData(sOwnerRegNum, customerId, checkInCacheOnly);
+				GetOneLimitedBusinessData(sOwnerRegNum, customerId, checkInCacheOnly, forceCheck);
 
 			return oRes;
 		} // GetLimitedBusinessData
@@ -75,11 +76,11 @@
 
 		#region method GetNotLimitedBusinessData
 
-		public NonLimitedResults GetNotLimitedBusinessData(string regNumber, int customerId, bool checkInCacheOnly = false) {
-			var oRes = GetOneNotLimitedBusinessData(regNumber, customerId, checkInCacheOnly);
+		public NonLimitedResults GetNotLimitedBusinessData(string regNumber, int customerId, bool checkInCacheOnly, bool forceCheck) {
+			var oRes = GetOneNotLimitedBusinessData(regNumber, customerId, checkInCacheOnly, forceCheck);
 
 			foreach (string sOwnerRegNum in oRes.Owners)
-				GetOneNotLimitedBusinessData(sOwnerRegNum, customerId, checkInCacheOnly);
+				GetOneNotLimitedBusinessData(sOwnerRegNum, customerId, checkInCacheOnly, forceCheck);
 
 			return oRes;
 		} // GetNotLimitedBusinessData
@@ -120,13 +121,14 @@
 		} // CacheNotExpired
 
 		#region method GetOneLimitedBusinessData
-		
-		private LimitedResults GetOneLimitedBusinessData(string regNumber, int customerId, bool checkInCacheOnly) {
+
+		private LimitedResults GetOneLimitedBusinessData(string regNumber, int customerId, bool checkInCacheOnly, bool forceCheck)
+		{
 			try 
 			{
 				var response = CheckCache(regNumber);
 
-				if (!checkInCacheOnly && (response == null || CacheExpired(response)))
+				if (forceCheck || (!checkInCacheOnly && (response == null || CacheExpired(response))))
 				{
 					string requestXml = GetResource("ExperianLib.Ebusiness.LimitedBusinessRequest.xml", regNumber);
 
@@ -151,12 +153,13 @@
 
 		#region method GetOneNotLimitedBusinessData
 
-		private NonLimitedResults GetOneNotLimitedBusinessData(string regNumber, int customerId, bool checkInCacheOnly) {
+		private NonLimitedResults GetOneNotLimitedBusinessData(string regNumber, int customerId, bool checkInCacheOnly, bool forceCheck)
+		{
 			try 
 			{
 				var response = CheckCache(regNumber);
 
-				if (!checkInCacheOnly && (response == null || CacheExpired(response)))
+				if (forceCheck || (!checkInCacheOnly && (response == null || CacheExpired(response))))
 				{
 					string requestXml = GetResource("ExperianLib.Ebusiness.NonLimitedBusinessRequest.xml", regNumber);
 

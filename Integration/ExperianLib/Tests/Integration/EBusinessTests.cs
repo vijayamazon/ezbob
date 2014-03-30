@@ -21,7 +21,7 @@ namespace ExperianLib.Tests.Integration {
 				if (refNum == "")
 					continue;
 
-				var result = service.GetLimitedBusinessData(refNum, 1, false);
+				var result = service.GetLimitedBusinessData(refNum, 1, false, false);
 				Debug.WriteLine("Limited business with ref number = {0} results: {1}", refNum,
 					JsonConvert.SerializeObject(result));
 			}
@@ -32,7 +32,7 @@ namespace ExperianLib.Tests.Integration {
 		public void GetNonLimitedCompanyTest() {
 			var service = new EBusinessService();
 			const string refNum = "02406500";
-			var result = service.GetNotLimitedBusinessData(refNum, 1, false);
+			var result = service.GetNotLimitedBusinessData(refNum, 1, false, false);
 			Debug.WriteLine("NonLimited business with ref number = {0} results: {1}", refNum,
 				JsonConvert.SerializeObject(result));
 		}

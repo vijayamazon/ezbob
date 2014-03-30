@@ -6,8 +6,8 @@
 	using Ezbob.Database;
 
 	partial class EzServiceImplementation {
-		public ActionMetaData CheckExperianCompany(int customerId) {
-			return Execute(customerId, null, typeof(ExperianCompanyCheck), customerId);
+		public ActionMetaData CheckExperianCompany(int customerId, bool forceCheck) {
+			return Execute(customerId, null, typeof(ExperianCompanyCheck), customerId, forceCheck);
 		} // CheckExperianCompany
 
 		public ActionMetaData CheckExperianConsumer(int customerId, int directorId) {

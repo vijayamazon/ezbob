@@ -972,7 +972,7 @@ namespace EzBob.Web.EzServiceReference {
         EzBob.Web.EzServiceReference.ActionMetaData BrokerLeadSendInvitation(int nLeadID, string sBrokerContactEmail);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckExperianCompany", ReplyAction="http://tempuri.org/IEzService/CheckExperianCompanyResponse")]
-        EzBob.Web.EzServiceReference.ActionMetaData CheckExperianCompany(int customerId);
+        EzBob.Web.EzServiceReference.ActionMetaData CheckExperianCompany(int customerId, bool forceCheck);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckExperianConsumer", ReplyAction="http://tempuri.org/IEzService/CheckExperianConsumerResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData CheckExperianConsumer(int customerId, int directorId);
@@ -1299,8 +1299,8 @@ namespace EzBob.Web.EzServiceReference {
             return base.Channel.BrokerLeadSendInvitation(nLeadID, sBrokerContactEmail);
         }
         
-        public EzBob.Web.EzServiceReference.ActionMetaData CheckExperianCompany(int customerId) {
-            return base.Channel.CheckExperianCompany(customerId);
+        public EzBob.Web.EzServiceReference.ActionMetaData CheckExperianCompany(int customerId, bool forceCheck) {
+            return base.Channel.CheckExperianCompany(customerId, forceCheck);
         }
         
         public EzBob.Web.EzServiceReference.ActionMetaData CheckExperianConsumer(int customerId, int directorId) {

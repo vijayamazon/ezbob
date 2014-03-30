@@ -32,12 +32,12 @@
 					return new QuickOfferActionResult {
 						HasValue = false,
 						Value = null,
-						MetaData = CheckExperianCompany(customerId),
+						MetaData = CheckExperianCompany(customerId, false)
 					};
 				} // if
 
 				Log.Debug("QuickOfferWithPrerequisites: performing company check for customer {0}...", customerId);
-				new ExperianCompanyCheck(customerId, DB, Log).Execute();
+				new ExperianCompanyCheck(customerId, false, DB, Log).Execute();
 
 				Log.Debug("QuickOfferWithPrerequisites: performing fraud check for customer {0}...", customerId);
 				new FraudChecker(customerId, FraudMode.CompanyDetailsCheck, DB, Log).Execute();

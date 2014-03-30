@@ -56,9 +56,9 @@
 
 		[HttpPost]
 		[Transactional]
-		public JsonNetResult RunCompanyCheck(int id)
+		public JsonNetResult RunCompanyCheck(int id, bool forceCheck)
 		{
-			m_oServiceClient.Instance.CheckExperianCompany(id);
+			m_oServiceClient.Instance.CheckExperianCompany(id, forceCheck);
 			return this.JsonNet(new { Message = "The evaluation has been started. Please refresh this application after a while..." });
 		}
 

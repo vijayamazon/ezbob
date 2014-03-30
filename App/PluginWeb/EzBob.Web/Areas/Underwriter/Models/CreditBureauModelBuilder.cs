@@ -653,7 +653,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 			switch (company.TypeOfBusiness.Reduce())
 			{
 				case TypeOfBusinessReduced.Limited:
-					var limitedBusinessData = srv.GetLimitedBusinessData(company.ExperianRefNum, customer.Id, true);
+					var limitedBusinessData = srv.GetLimitedBusinessData(company.ExperianRefNum, customer.Id, true, false);
 					updateCompanyDataPeriodDays = _variablesRepository.GetByNameAsInt("UpdateCompanyDataPeriodDays");
 					if (limitedBusinessData.LastCheckDate.HasValue &&
 						(DateTime.UtcNow - limitedBusinessData.LastCheckDate.Value).TotalDays >= updateCompanyDataPeriodDays) 
@@ -666,8 +666,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 					model.directorsModels = GenerateDirectorsModels(customer, company.Directors, getFromLog, logId);
 					break;
 				case TypeOfBusinessReduced.NonLimited:
-
-					var notLimitedBusinessData = srv.GetNotLimitedBusinessData(company.ExperianRefNum, customer.Id, true);
+					var notLimitedBusinessData = srv.GetNotLimitedBusinessData(company.ExperianRefNum, customer.Id, true, false);
 					updateCompanyDataPeriodDays = _variablesRepository.GetByNameAsInt("UpdateCompanyDataPeriodDays");
 					if (notLimitedBusinessData.LastCheckDate.HasValue &&
 						(DateTime.UtcNow - notLimitedBusinessData.LastCheckDate.Value).TotalDays >= updateCompanyDataPeriodDays)

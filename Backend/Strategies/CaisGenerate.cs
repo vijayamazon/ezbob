@@ -178,7 +178,7 @@
 							case "Limited":
 								{
 									companyTypeCode = "L";
-									var res = service.GetLimitedBusinessData(experianRefNum, customerId, true);
+									var res = service.GetLimitedBusinessData(experianRefNum, customerId, true, false);
 									if (!string.IsNullOrEmpty(res.CompanyName)) fullName = res.CompanyName;
 									if (!string.IsNullOrEmpty(res.PostCode))
 									{
@@ -195,7 +195,7 @@
 							case "PShip3P":
 								{
 									companyTypeCode = "N";
-									var res = service.GetNotLimitedBusinessData(experianRefNum, customerId, true);
+									var res = service.GetNotLimitedBusinessData(experianRefNum, customerId, true, false);
 									if (!string.IsNullOrEmpty(res.CompanyName))
 									{
 										fullName = res.CompanyName;

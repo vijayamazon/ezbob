@@ -631,7 +631,7 @@
 			if (wasMainStrategyExecutedBefore)
 			{
 				Log.Info("Performing experian company check");
-				var experianCompanyChecker = new ExperianCompanyCheck(customerId, DB, Log);
+				var experianCompanyChecker = new ExperianCompanyCheck(customerId, false, DB, Log);
 				experianCompanyChecker.Execute();
 			}
 			else if (!WaitForExperianCompanyCheckToFinishUpdates())
