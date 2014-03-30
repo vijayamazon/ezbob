@@ -18,7 +18,6 @@ namespace NHibernateWrapper.Email.Accounts
 			base.Map((AccountBase x) => x.SignedDocument).CustomType("StringClob");
 			base.Map((AccountBase x) => x.SignedDocumentDelete).CustomType("StringClob");
 			base.Map((AccountBase x) => (object)x.TerminationDate);
-			base.HasManyToMany<Strategy>((AccountBase x) => x.Strategies).AsSet().Table("StrategyAccountRel").ParentKeyColumn("AccountId").ChildKeyColumn("StrategyId").Cascade.None().Inverse();
 			this.DiscriminateSubClassesOnColumn<string>("Type");
 		}
 	}

@@ -40,11 +40,6 @@ namespace NHibernateWrapper.Email.Accounts
 		{
 			get;
 		}
-		public virtual ISet<Strategy> Strategies
-		{
-			get;
-			set;
-		}
 		public virtual System.DateTime? StartDate
 		{
 			get;
@@ -67,7 +62,6 @@ namespace NHibernateWrapper.Email.Accounts
 		}
 		protected AccountBase()
 		{
-			this.Strategies = new HashedSet<Strategy>();
 		}
 		public virtual string DisplayNameWithTermDate()
 		{

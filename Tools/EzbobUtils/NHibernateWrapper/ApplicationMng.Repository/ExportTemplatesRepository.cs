@@ -56,14 +56,6 @@ namespace ApplicationMng.Repository
 			}
 			return result;
 		}
-		public System.Linq.IQueryable<Strategy> GetActiveStrategies(int templateId)
-		{
-			ExportTemplate template = this._session.Load<ExportTemplate>(templateId);
-			return 
-				from s in this._session.Query<Strategy>()
-				where s.ExportTemplates.Contains(template) && (s.IsDeleted == (int?)0 || s.IsDeleted == null)
-				select s;
-		}
 		public System.Collections.Generic.List<ExportTemplate> GetByFileNames(params string[] filenames)
 		{
 			System.Collections.Generic.List<ExportTemplate> list = (

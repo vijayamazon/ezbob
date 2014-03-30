@@ -11,7 +11,6 @@ namespace ApplicationMng.Model.Mappings
 			this.Id((Application x) => (object)x.Id).Column("ApplicationId");
 			base.Map((Application x) => (object)x.Version);
 			base.Map((Application x) => (object)x.State).CustomType(typeof(ApplicationStrategyState));
-			base.References<Strategy>((Application x) => x.Strategy).Column("StrategyId");
 			base.References<User>((Application x) => x.Locker).Column("LockedByUserId").Cascade.All();
 			base.References<User>((Application x) => x.Creator).Column("CreatorUserId").Cascade.All();
 			base.Map((Application x) => (object)x.CreationDate);

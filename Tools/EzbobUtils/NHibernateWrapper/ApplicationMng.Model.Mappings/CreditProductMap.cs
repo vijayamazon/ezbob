@@ -15,7 +15,6 @@ namespace ApplicationMng.Model.Mappings
 			base.References<User>((CreditProduct x) => x.User).Column("UserId");
 			base.Map((CreditProduct x) => (object)x.IsDeleted);
 			base.HasMany<CreditProductParam>((CreditProduct x) => x.Params).KeyColumn("CreditProductId").Cascade.All().Inverse().Cache.ReadWrite().Region("LongTerm");
-			base.HasManyToMany<Strategy>((CreditProduct x) => x.Strategies).AsSet().Table("Creditproduct_StrategyRel").ChildKeyColumn("StrategyId").ParentKeyColumn("CreditProductId").Cascade.All();
 		}
 	}
 }

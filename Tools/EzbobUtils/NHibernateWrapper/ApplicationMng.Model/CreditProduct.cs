@@ -39,11 +39,6 @@ namespace ApplicationMng.Model
 			get;
 			set;
 		}
-		public virtual ISet<Strategy> Strategies
-		{
-			get;
-			set;
-		}
 		public CreditProduct()
 		{
 			this.Params = new HashedSet<CreditProductParam>();

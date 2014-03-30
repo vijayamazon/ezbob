@@ -21,7 +21,6 @@ namespace ApplicationMng.Model.Mappings
 			base.Map((ExportTemplate x) => x.SignedDocumentDelete, "DELSIGNEDDOCUMENT").CustomType("StringClob").LazyLoad();
 			base.References<User>((ExportTemplate x) => x.Creator, "USERID");
 			base.References<User>((ExportTemplate x) => x.Deleter, "DELETERUSERID");
-			base.HasManyToMany<Strategy>((ExportTemplate x) => x.Strategies).AsSet().Table("EXPORT_TEMPLATESTRATREL").ParentKeyColumn("TEMPLATEID").ChildKeyColumn("STRATEGYID").Cascade.None().Inverse().Cache.Region("LongTerm").ReadWrite();
 		}
 	}
 }

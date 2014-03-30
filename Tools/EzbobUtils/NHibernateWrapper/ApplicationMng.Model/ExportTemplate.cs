@@ -5,7 +5,6 @@ namespace ApplicationMng.Model
 {
 	public class ExportTemplate : ISignable, IDeleteSupported
 	{
-		private ISet<Strategy> _strategies = new HashedSet<Strategy>();
 		public virtual int Id
 		{
 			get;
@@ -75,17 +74,6 @@ namespace ApplicationMng.Model
 		{
 			get;
 			set;
-		}
-		public virtual ISet<Strategy> Strategies
-		{
-			get
-			{
-				return this._strategies;
-			}
-			set
-			{
-				this._strategies = value;
-			}
 		}
 		public virtual string DisplayNameWithTermDate()
 		{

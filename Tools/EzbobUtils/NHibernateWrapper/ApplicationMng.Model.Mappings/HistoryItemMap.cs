@@ -10,7 +10,6 @@ namespace ApplicationMng.Model.Mappings
 			this.Id((HistoryItem x) => (object)x.Id, "HISROTYID").GeneratedBy.Native("SEQ_CONTROL_HYISTORY");
 			base.References<Application>((HistoryItem x) => x.App, "APPLICATIONID");
 			base.References<SecurityApplication>((HistoryItem x) => x.SecApp, "SECURITYAPPID");
-			base.References<Strategy>((HistoryItem x) => x.Strategy, "STRATEGYID");
 			base.References<User>((HistoryItem x) => x.User, "USERID");
 			base.References<Node>((HistoryItem x) => x.Node, "NODEID");
 			base.Map((HistoryItem x) => (object)x.ChangeTime, "CHANGESTIME");

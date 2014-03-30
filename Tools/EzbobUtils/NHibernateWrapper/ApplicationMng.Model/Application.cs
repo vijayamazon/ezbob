@@ -10,11 +10,6 @@ namespace ApplicationMng.Model
 			get;
 			set;
 		}
-		public virtual Strategy Strategy
-		{
-			get;
-			set;
-		}
 		public virtual int Version
 		{
 			get;
