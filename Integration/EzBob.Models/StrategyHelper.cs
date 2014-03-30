@@ -70,7 +70,20 @@
 
 		private double Get3MTurnoverFromValues(List<IAnalysisDataParameterInfo> av, string mpName)
 		{
-			string annualizedParameterName = mpName == "Pay Pal" ? "Total Net In Payments" : "Total Sum of Orders";
+			string annualizedParameterName;
+			switch (mpName)
+			{
+				case "Pay Pal":
+					annualizedParameterName = "Total Net In Payments";
+					break;
+				case "Yodlee":
+					annualizedParameterName = "Total Income";
+					break;
+				default:
+					annualizedParameterName = "Total Sum of Orders";
+					break;
+			}
+
 			IAnalysisDataParameterInfo relevantTurnover = av.LastOrDefault(x => x.ParameterName == annualizedParameterName && x.TimePeriod.TimePeriodType == TimePeriodEnum.Month3) ??
 														  av.LastOrDefault(x => x.ParameterName == annualizedParameterName && x.TimePeriod.TimePeriodType == TimePeriodEnum.Month);
 
@@ -80,7 +93,20 @@
 
 		private double GetAnnualizedTurnoverFromValues(List<IAnalysisDataParameterInfo> av, string mpName)
 		{
-			string annualizedParameterName = mpName == "Pay Pal" ? "Total Net In Payments Annualized" : "Total Sum of Orders Annualized";
+			string annualizedParameterName;
+			switch (mpName)
+			{
+				case "Pay Pal":
+					annualizedParameterName = "Total Net In Payments Annualized";
+					break;
+				case "Yodlee":
+					annualizedParameterName = "Total Income Annualized";
+					break;
+				default:
+					annualizedParameterName = "Total Sum of Orders Annualized";
+					break;
+			}
+
 			IAnalysisDataParameterInfo relevantTurnover = ((av.LastOrDefault(x => x.ParameterName == annualizedParameterName && x.TimePeriod.TimePeriodType == TimePeriodEnum.Year) ??
 															av.LastOrDefault(x => x.ParameterName == annualizedParameterName && x.TimePeriod.TimePeriodType == TimePeriodEnum.Month6)) ??
 														   av.LastOrDefault(x => x.ParameterName == annualizedParameterName && x.TimePeriod.TimePeriodType == TimePeriodEnum.Month3)) ??
