@@ -87,8 +87,9 @@
 			string applicationType,
 			int customerId,
 			int directorId,
-			bool checkInCacheOnly = false,
-			bool isDirector = false
+			bool checkInCacheOnly,
+			bool isDirector,
+			bool forceCheck
 		) {
 			try
 			{
@@ -115,12 +116,16 @@
 				
 				MP_ExperianDataCache cachedResponse = isDirector ? _repo.GetDirectorFromCache(directorId, firstName, surname, birthDate, postcode) : _repo.GetCustomerFromCache(customerId, firstName, surname, birthDate, postcode);
 
-				if (cachedResponse != null) {
-					if (CacheNotExpired(cachedResponse) || checkInCacheOnly)
-						return ParseCache(cachedResponse);
+				if (!forceCheck)
+				{
+					if (cachedResponse != null)
+					{
+						if (CacheNotExpired(cachedResponse) || checkInCacheOnly)
+							return ParseCache(cachedResponse);
+					}
+					else if (checkInCacheOnly)
+						return null;
 				}
-				else if (checkInCacheOnly)
-					return null;
 
 				cachedResponse = cachedResponse ?? new MP_ExperianDataCache {
 					Name = firstName,

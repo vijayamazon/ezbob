@@ -896,6 +896,7 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="customerId" type="xs:int" />
         <xs:element minOccurs="0" name="directorId" type="xs:int" />
+        <xs:element minOccurs="0" name="forceCheck" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

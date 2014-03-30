@@ -43,13 +43,13 @@
 
 		[HttpPost]
 		[Transactional]
-		public JsonNetResult RunConsumerCheck(int customerId)
+		public JsonNetResult RunConsumerCheck(int customerId, bool forceCheck)
 		{
-			m_oServiceClient.Instance.CheckExperianConsumer(customerId, 0);
+			m_oServiceClient.Instance.CheckExperianConsumer(customerId, 0, forceCheck);
 			List<Director> directors = directorRepository.GetAll().Where(x => x.Customer.Id == customerId).ToList();
 			foreach (Director director in directors)
 			{
-				m_oServiceClient.Instance.CheckExperianConsumer(customerId, director.Id);
+				m_oServiceClient.Instance.CheckExperianConsumer(customerId, director.Id, forceCheck);
 			}
 			return this.JsonNet(new { Message = "The evaluation has been started. Please refresh this application after a while..." });
 		}

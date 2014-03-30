@@ -31,7 +31,7 @@
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
 		public JsonNetResult PerformConsumerCheck() {
-			m_oServiceClient.Instance.CheckExperianConsumer(context.Customer.Id, 0);
+			m_oServiceClient.Instance.CheckExperianConsumer(context.Customer.Id, 0, false);
 
 			return this.JsonNet(new { });
 		} // PerformConsumerCheck
@@ -50,7 +50,7 @@
 			IQueryable<Director> directors = directorRepository.GetAll().Where(x => x.Customer.Id == customerId);
 
 			foreach (Director director in directors)
-				m_oServiceClient.Instance.CheckExperianConsumer(customerId, director.Id);
+				m_oServiceClient.Instance.CheckExperianConsumer(customerId, director.Id, false);
 
 			return this.JsonNet(new { });
 		} // PerformConsumerCheckForDirectors

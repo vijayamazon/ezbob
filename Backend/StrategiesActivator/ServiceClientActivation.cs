@@ -518,24 +518,28 @@
 		[Activation]
 		private void CheckExperianCompany() {
 			int customerId;
-			if (args.Length != 2 || !int.TryParse(args[1], out customerId)) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> CheckExperianCompany <CustomerId>");
+			bool forceCheck;
+			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !bool.TryParse(args[2], out forceCheck))
+			{
+				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> CheckExperianCompany <CustomerId> <ForceCheck>");
 				return;
 			}
 
-			serviceClient.CheckExperianCompany(customerId);
+			serviceClient.CheckExperianCompany(customerId, forceCheck);
 		}
 
 		[Activation]
 		private void CheckExperianConsumer() {
 			int customerId, directorId;
+			bool forceCheck;
 
-			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !int.TryParse(args[2], out directorId)) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> CheckExperianConsumer <CustomerId> <DirectorId>");
+			if (args.Length != 4 || !int.TryParse(args[1], out customerId) || !int.TryParse(args[2], out directorId) || !bool.TryParse(args[2], out forceCheck))
+			{
+				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> CheckExperianConsumer <CustomerId> <DirectorId> <ForceCheck>");
 				return;
 			}
 
-			serviceClient.CheckExperianConsumer(customerId, directorId);
+			serviceClient.CheckExperianConsumer(customerId, directorId, forceCheck);
 		}
 
 		[Activation]

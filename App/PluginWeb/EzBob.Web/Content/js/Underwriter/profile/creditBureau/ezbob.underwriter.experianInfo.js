@@ -56,12 +56,12 @@ EzBob.Underwriter.ExperianInfoView = Backbone.View.extend({
                 if (response.IsRelevant == "True") {
                     EzBob.ShowMessage("Last check was done at " + response.LastCheckDate +" and cache is valid for " + response.CacheValidForDays + " days. Run check anyway?", "No need for check warning",
                         function () {
-                            that.RunConsumerCheck();
+                            that.RunConsumerCheck(true);
                             return true;
                         },
                         "Yes", null, "No");
                 } else {
-                    that.RunConsumerCheck();
+                    that.RunConsumerCheck(false);
                 }
             })
             .complete(function () {
@@ -70,9 +70,9 @@ EzBob.Underwriter.ExperianInfoView = Backbone.View.extend({
 
         return false;
     },
-    RunConsumerCheck: function () {
+    RunConsumerCheck: function (forceCheck) {
         BlockUi("on");
-        $.post(window.gRootPath + "Underwriter/CreditBureau/RunConsumerCheck", { customerId: this.model.get("Id") })
+        $.post(window.gRootPath + "Underwriter/CreditBureau/RunConsumerCheck", { customerId: this.model.get("Id"), forceCheck: forceCheck })
             .done(function (response) {
                 EzBob.ShowMessage(response.Message, "Information");
             })

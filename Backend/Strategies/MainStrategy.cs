@@ -610,7 +610,7 @@
 			if (wasMainStrategyExecutedBefore)
 			{
 				Log.Info("Performing experian consumer check");
-				var strat = new ExperianConsumerCheck(customerId, directorId, DB, Log);
+				var strat = new ExperianConsumerCheck(customerId, directorId, false, DB, Log);
 				strat.Execute();
 				experianConsumerScore = strat.Score;
 			}

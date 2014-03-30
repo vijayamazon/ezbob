@@ -106,7 +106,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 				var consumerSrv = new ConsumerService();
 				result = consumerSrv.GetConsumerInfo(customer.PersonalInfo.FirstName, customer.PersonalInfo.Surname,
 					customer.PersonalInfo.Gender.ToString(), // should be Gender
-					customer.PersonalInfo.DateOfBirth, null, loc, "PL", customer.Id, 0, true);
+					customer.PersonalInfo.DateOfBirth, null, loc, "PL", customer.Id, 0, true, false, false);
 			}
 		}
 
@@ -841,7 +841,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 					}
 					result = consumerSrv.GetConsumerInfo(director.Name, director.Surname,
 												director.Gender.ToString(),
-												director.DateOfBirth, null, dirLoc, "PL", customer.Id, director.Id, true, true);
+												director.DateOfBirth, null, dirLoc, "PL", customer.Id, director.Id, true, true, false);
 				}
 
 				var dirModel = GenerateConsumerModel(-1, result);

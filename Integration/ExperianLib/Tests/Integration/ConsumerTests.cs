@@ -22,7 +22,7 @@ namespace ExperianLib.Tests.Integration
                 LocationLine6 = "CT18 8BJ".ToUpper(),
             };
             var dob = new DateTime(1990, 08, 17);
-            var result = service.GetConsumerInfo("ABUL", "TestSurnameDebugMode", "1170", dob, null, loc, "PL", 39, 1);
+			var result = service.GetConsumerInfo("ABUL", "TestSurnameDebugMode", "1170", dob, null, loc, "PL", 39, 1, false, false, false);
             if(result.IsError)
             {
                 Log.Error("Error from consumer service: " + result.Error);
@@ -46,7 +46,7 @@ namespace ExperianLib.Tests.Integration
                 LocationLine6 = "HR1 4DF".ToUpper(),
             };
             var dob = new DateTime(1968, 10, 15);
-            var result = service.GetConsumerInfo("Matt", "Lunt", "M", dob, null, loc, "PL", 1, 0);
+            var result = service.GetConsumerInfo("Matt", "Lunt", "M", dob, null, loc, "PL", 1, 0, false, false, false);
             if (result.IsError)
             {
                 Log.Error("Error from consumer service: " + result.Error);

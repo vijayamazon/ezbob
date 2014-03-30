@@ -3358,10 +3358,10 @@ namespace StrategiesActivator.EzServiceReference {
         System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> CheckExperianCompanyAsync(int customerId, bool forceCheck);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckExperianConsumer", ReplyAction="http://tempuri.org/IEzService/CheckExperianConsumerResponse")]
-        StrategiesActivator.EzServiceReference.ActionMetaData CheckExperianConsumer(int customerId, int directorId);
+        StrategiesActivator.EzServiceReference.ActionMetaData CheckExperianConsumer(int customerId, int directorId, bool forceCheck);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckExperianConsumer", ReplyAction="http://tempuri.org/IEzService/CheckExperianConsumerResponse")]
-        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> CheckExperianConsumerAsync(int customerId, int directorId);
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> CheckExperianConsumerAsync(int customerId, int directorId, bool forceCheck);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LandRegistryEnquiry", ReplyAction="http://tempuri.org/IEzService/LandRegistryEnquiryResponse")]
         string LandRegistryEnquiry(int customerId, string buildingNumber, string streetName, string cityName, string postCode);
@@ -3987,12 +3987,12 @@ namespace StrategiesActivator.EzServiceReference {
             return base.Channel.CheckExperianCompanyAsync(customerId, forceCheck);
         }
         
-        public StrategiesActivator.EzServiceReference.ActionMetaData CheckExperianConsumer(int customerId, int directorId) {
-            return base.Channel.CheckExperianConsumer(customerId, directorId);
+        public StrategiesActivator.EzServiceReference.ActionMetaData CheckExperianConsumer(int customerId, int directorId, bool forceCheck) {
+            return base.Channel.CheckExperianConsumer(customerId, directorId, forceCheck);
         }
         
-        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> CheckExperianConsumerAsync(int customerId, int directorId) {
-            return base.Channel.CheckExperianConsumerAsync(customerId, directorId);
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> CheckExperianConsumerAsync(int customerId, int directorId, bool forceCheck) {
+            return base.Channel.CheckExperianConsumerAsync(customerId, directorId, forceCheck);
         }
         
         public string LandRegistryEnquiry(int customerId, string buildingNumber, string streetName, string cityName, string postCode) {

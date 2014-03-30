@@ -975,7 +975,7 @@ namespace EzBob.Web.EzServiceReference {
         EzBob.Web.EzServiceReference.ActionMetaData CheckExperianCompany(int customerId, bool forceCheck);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckExperianConsumer", ReplyAction="http://tempuri.org/IEzService/CheckExperianConsumerResponse")]
-        EzBob.Web.EzServiceReference.ActionMetaData CheckExperianConsumer(int customerId, int directorId);
+        EzBob.Web.EzServiceReference.ActionMetaData CheckExperianConsumer(int customerId, int directorId, bool forceCheck);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LandRegistryEnquiry", ReplyAction="http://tempuri.org/IEzService/LandRegistryEnquiryResponse")]
         string LandRegistryEnquiry(int customerId, string buildingNumber, string streetName, string cityName, string postCode);
@@ -1303,8 +1303,8 @@ namespace EzBob.Web.EzServiceReference {
             return base.Channel.CheckExperianCompany(customerId, forceCheck);
         }
         
-        public EzBob.Web.EzServiceReference.ActionMetaData CheckExperianConsumer(int customerId, int directorId) {
-            return base.Channel.CheckExperianConsumer(customerId, directorId);
+        public EzBob.Web.EzServiceReference.ActionMetaData CheckExperianConsumer(int customerId, int directorId, bool forceCheck) {
+            return base.Channel.CheckExperianConsumer(customerId, directorId, forceCheck);
         }
         
         public string LandRegistryEnquiry(int customerId, string buildingNumber, string streetName, string cityName, string postCode) {

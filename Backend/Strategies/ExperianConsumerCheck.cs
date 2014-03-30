@@ -9,11 +9,12 @@
 
 	public class ExperianConsumerCheck : AStrategy
 	{
-		public ExperianConsumerCheck(int customerId, int directorId, AConnection oDb, ASafeLog oLog)
+		public ExperianConsumerCheck(int customerId, int directorId, bool forceCheck, AConnection oDb, ASafeLog oLog)
 			: base(oDb, oLog)
 		{
 			this.customerId = customerId;
 			this.directorId = directorId;
+			this.forceCheck = forceCheck;
 
 			GetAddresses();
 			DataTable dt = DB.ExecuteReader("GetPersonalInfoForConsumerCheck", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId), new QueryParameter("DirectorId", directorId));
@@ -81,7 +82,7 @@
 				};
 
 			var isDirector = directorId != 0;
-			ConsumerServiceResult result = consumerService.GetConsumerInfo(firstName, surname, gender, birthDate, null, location, "PL", customerId, directorId, isDirector: isDirector);
+			ConsumerServiceResult result = consumerService.GetConsumerInfo(firstName, surname, gender, birthDate, null, location, "PL", customerId, directorId, false, isDirector, forceCheck);
 
 			if (result.IsError)
 			{
@@ -127,5 +128,6 @@
 		private string prevAddressLine5;
 		private string prevAddressLine6;
 		private readonly int timeAtAddress;
+		private readonly bool forceCheck;
 	} // class ExperianConsumerCheck
 } // namespace

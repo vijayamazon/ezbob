@@ -10,8 +10,9 @@
 			return Execute(customerId, null, typeof(ExperianCompanyCheck), customerId, forceCheck);
 		} // CheckExperianCompany
 
-		public ActionMetaData CheckExperianConsumer(int customerId, int directorId) {
-			return Execute(customerId, null, typeof(ExperianConsumerCheck), customerId, directorId);
+		public ActionMetaData CheckExperianConsumer(int customerId, int directorId, bool forceCheck)
+		{
+			return Execute(customerId, null, typeof(ExperianConsumerCheck), customerId, directorId, forceCheck);
 		} // CheckExperianConsumer
 		
 		public DateTimeActionResult GetExperianConsumerCacheDate(List<int> ids)
