@@ -91,7 +91,7 @@
 
 		public double GetTurnoverForRejection(int customerId, Func<List<IAnalysisDataParameterInfo>, string, double> func)
 		{
-			var analysisVals = GetAnalysisValsForCustomer(customerId);
+			var analysisVals = GetAllAnalysisValsForCustomer(customerId);
 
 			double bankSum = 0;
 			double vatSum = 0;
@@ -149,6 +149,23 @@
 			var mpAnalysis = new Dictionary<MP_CustomerMarketPlace, List<IAnalysisDataParameterInfo>>();
 			foreach (var mp in mps.Where(
 						mp => !mp.Disabled && (!mp.Marketplace.IsPaymentAccount || mp.Marketplace.Name == "Pay Pal")))
+			{
+				var analisysFunction = RetrieveDataHelper.GetAnalysisValuesByCustomerMarketPlace(mp.Id);
+				var av = analisysFunction.Data.FirstOrDefault(x => x.Key == analisysFunction.Data.Max(y => y.Key)).Value;
+				if (av != null)
+				{
+					mpAnalysis.Add(mp, av);
+				}
+			}
+
+			return mpAnalysis;
+		}
+
+		public Dictionary<MP_CustomerMarketPlace, List<IAnalysisDataParameterInfo>> GetAllAnalysisValsForCustomer(int customerId)
+		{
+			var mps = _marketPlaceRepository.GetAllByCustomer(customerId);
+			var mpAnalysis = new Dictionary<MP_CustomerMarketPlace, List<IAnalysisDataParameterInfo>>();
+			foreach (var mp in mps.Where(mp => !mp.Disabled))
 			{
 				var analisysFunction = RetrieveDataHelper.GetAnalysisValuesByCustomerMarketPlace(mp.Id);
 				var av = analisysFunction.Data.FirstOrDefault(x => x.Key == analisysFunction.Data.Max(y => y.Key)).Value;
