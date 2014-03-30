@@ -7,6 +7,7 @@
 	using System.Text;
 	using System.Web;
 	using ApplicationMng.Repository;
+	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using EzBob.Configuration;
 	using Ezbob.Database;
@@ -22,6 +23,7 @@
 		public EBusinessService() {
 			_config = ConfigurationRootBob.GetConfiguration().Experian;
 			m_oRetryer = new SqlRetryer(oLog: new SafeILog(Log));
+			configurationVariablesRepository = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
 		} // constructor
 
 		#endregion constructor
@@ -111,13 +113,21 @@
 
 		#region private
 
-		#region method GetOneLimitedBusinessData
+		private bool CacheExpired(MP_ExperianDataCache cacheEntry)
+		{
+			int cacheIsValidForDays = configurationVariablesRepository.GetByNameAsInt("UpdateCompanyDataPeriodDays");
+			return (DateTime.UtcNow - cacheEntry.LastUpdateDate).TotalDays > cacheIsValidForDays;
+		} // CacheNotExpired
 
+		#region method GetOneLimitedBusinessData
+		
 		private LimitedResults GetOneLimitedBusinessData(string regNumber, int customerId, bool checkInCacheOnly) {
-			try {
+			try 
+			{
 				var response = CheckCache(regNumber);
 
-				if (response == null && !checkInCacheOnly) {
+				if (!checkInCacheOnly && (response == null || CacheExpired(response)))
+				{
 					string requestXml = GetResource("ExperianLib.Ebusiness.LimitedBusinessRequest.xml", regNumber);
 
 					var newResponse = MakeRequest("POST", "application/xml", requestXml);
@@ -142,10 +152,12 @@
 		#region method GetOneNotLimitedBusinessData
 
 		private NonLimitedResults GetOneNotLimitedBusinessData(string regNumber, int customerId, bool checkInCacheOnly) {
-			try {
+			try 
+			{
 				var response = CheckCache(regNumber);
 
-				if (response == null && !checkInCacheOnly) {
+				if (!checkInCacheOnly && (response == null || CacheExpired(response)))
+				{
 					string requestXml = GetResource("ExperianLib.Ebusiness.NonLimitedBusinessRequest.xml", regNumber);
 
 					var newResponse = MakeRequest("POST", "application/xml", requestXml);
@@ -260,6 +272,7 @@
 		private static readonly ILog Log = LogManager.GetLogger(typeof(EBusinessService));
 		private readonly ExperianIntegrationParams _config;
 		private readonly SqlRetryer m_oRetryer;
+		private readonly ConfigurationVariablesRepository configurationVariablesRepository;
 
 		#endregion properties
 

@@ -353,9 +353,9 @@
 
 		#region method CacheNotExpired
 
-		private bool CacheNotExpired(MP_ExperianDataCache person) {
+		private bool CacheNotExpired(MP_ExperianDataCache cacheEntry) {
 			int cacheIsValidForDays = configurationVariablesRepository.GetByNameAsInt("UpdateConsumerDataPeriodDays");
-			return (DateTime.UtcNow - person.LastUpdateDate).TotalDays <= cacheIsValidForDays;
+			return (DateTime.UtcNow - cacheEntry.LastUpdateDate).TotalDays <= cacheIsValidForDays;
 		} // CacheNotExpired
 
 		#endregion method CacheNotExpired
