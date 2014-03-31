@@ -10,7 +10,7 @@ CREATE PROCEDURE [dbo].[GetLastOfferForAutomatedDecision]
 AS
 BEGIN
 	DECLARE
-		@ManualDecisionDate DATETIME,
+		@LastApprovalDate DATETIME,
 		@count INT,
 		@ReApprovalFullAmountNew FLOAT,
 		@ReApprovalRemainingAmountNew FLOAT,
@@ -20,7 +20,10 @@ BEGIN
 		@InterestRate DECIMAL(18,7),
 		@LoanId INT,
 		@MinInterestRateToReuse DECIMAL(18,7),
-		@TempInterestRate DECIMAL(18,7)
+		@TempInterestRate DECIMAL(18,7),
+		@PreviousFilledCashRequest INT,
+		@NumOfLates INT,
+		@LastCreatedMp DATETIME
 	
 	SET @InterestRate = -1	
 		
@@ -109,264 +112,105 @@ BEGIN
 	END	
 
 	SELECT 
-		@ManualDecisionDate = max(cr.UnderwriterDecisionDate)
+		@LastApprovalDate = max(cr.UnderwriterDecisionDate)
 	FROM 
 		CashRequests cr 
 	WHERE 
 		cr.IdCustomer = @CustomerId AND 
 		cr.UnderwriterDecision = 'Approved'
 
+	SELECT @PreviousFilledCashRequest = MAX(Id) FROM CashRequests WHERE IdCustomer = @CustomerId AND MedalType IS NOT NULL	
+	
 	SELECT 
-		@count=COUNT(1) 
+		@LastCreatedMp = MAX(created) 
+	FROM 
+		MP_CustomerMarketPlace 
+	WHERE 
+		CustomerId = @CustomerId
+	
+	SELECT 
+		@NumOfLates = COUNT(1) 
 	FROM 
 		LoanSchedule
 	WHERE 
 		Status='Late' AND
-		LoanId IN
-		(
-			SELECT 
-				Id 
-			FROM 
-				Loan 
-			WHERE 
-				RequestCashId =
-				(
-					SELECT 
-						Id 
-					FROM
-					(
-						SELECT 
-							ROW_NUMBER() OVER (ORDER BY Id DESC) AS row, 
-							cr.Id
-						FROM 
-							CashRequests cr
-						WHERE 
-							cr.IdCustomer = @CustomerId
-					) p
-				    WHERE 
-						p.row = 1
-				)
-		) 
+		LoanId = @PreviousFilledCashRequest
 
-	IF @count = 0
+	IF @NumOfLates = 0 AND -- No lates...		
+		DATEADD(DD, 30, @LastApprovalDate) >= @Now AND -- Last approval was in last 30 days
+		@LastApprovalDate >= @LastCreatedMp -- No New MPs
 	BEGIN
 		SELECT 
-			@ReApprovalFullAmountNew = 
+			@ReApprovalFullAmountNew = ManagerApprovedSum
+		FROM
+			CashRequests
+			LEFT JOIN Loan ON CustomerId = IdCustomer
+		WHERE 
+			IdCustomer = @CustomerId AND
+			Loan.Id IS NULL AND 
+			CashRequests.Id = @PreviousFilledCashRequest AND
+			UnderwriterDecision = 'Approved'
+			
+		SELECT 
+			@ReApprovalRemainingAmountNew = ManagerApprovedSum - SUM(LoanAmount) 
+		FROM 
+			CashRequests
+			LEFT JOIN Loan ON CustomerId = IdCustomer
+		WHERE 
+			IdCustomer = @CustomerId AND 
+			CashRequests.Id = @PreviousFilledCashRequest AND
+			UnderwriterDecision = 'Approved' AND 
+			HasLoans = 1 AND 
+			CashRequests.CreationDate <= 
 			(
-				SELECT DISTINCT 
-					ReApprovalFullAmountNew 
-				FROM
-					(
-						SELECT
-							cr.ManagerApprovedSum as ReApprovalFullAmountNew
-						FROM 
-							CashRequests cr 
-							LEFT JOIN Loan l ON l.CustomerId = cr.IdCustomer
-						WHERE 
-							cr.IdCustomer = @CustomerId AND
-							l.Id IS NULL AND 
-							cr.id = 
-							(
-								SELECT
-									Id 
-								FROM
-									(
-										SELECT 
-											ROW_NUMBER() OVER (ORDER BY Id DESC) AS row, 
-											cr.Id 
-										FROM 
-											CashRequests cr
-										WHERE 
-											cr.IdCustomer = @CustomerId
-									) p
-								WHERE p.row = 1
-							) AND
-							cr.UnderwriterDecision= 'Approved' AND
-							l.Id IS NULL AND
-							DATEADD(DD, 30, @ManualDecisionDate) >= @Now AND
-							@ManualDecisionDate >= 
-							(
-								SELECT 
-									max(created) 
-								FROM 
-									MP_CustomerMarketPlace 
-								WHERE 
-									CustomerId = @CustomerId
-							)
-					) AS ReApprovalFullAmountNew
-			)
+				SELECT 
+					MIN(l1.date) 
+				FROM 
+					Loan l1
+			) AND 							
+			Loan.Status != 'Late' 
+		GROUP BY
+			ManagerApprovedSum	
+		
+		SELECT 
+			@ReApprovalFullAmountOld = ManagerApprovedSum
+		FROM
+			CashRequests
+			LEFT JOIN Loan ON CustomerId = IdCustomer
+		WHERE 
+			IdCustomer = @CustomerId AND 
+			CashRequests.Id = @PreviousFilledCashRequest AND 
+			UnderwriterDecision = 'Approved' AND
+			HasLoans = 0 AND 
+			Loan.Id IS NOT NULL
+			
+		SELECT 
+			@ReApprovalRemainingAmountOld = ManagerApprovedSum - SUM(Loan.LoanAmount)
+		FROM
+			CashRequests
+			LEFT JOIN Loan ON CustomerId = IdCustomer
+		WHERE 
+			IdCustomer = @CustomerId AND 
+			CashRequests.Id = @PreviousFilledCashRequest AND
+			UnderwriterDecision = 'Approved' AND
+			Loan.Id IS NOT NULL AND 
+			CashRequests.CreationDate >= 
+			(
+				SELECT 
+					MIN(l1.date) 
+				FROM 
+					Loan l1
+			) AND 
+			Loan.Status != 'Late' 
+		GROUP BY
+			ManagerApprovedSum
 	END
 	ELSE
 	BEGIN
 		SELECT @ReApprovalFullAmountNew = NULL
-	END
-	
-	IF @count = 0
-	BEGIN
-		SELECT 
-			@ReApprovalRemainingAmountNew =
-			(
-				(
-					SELECT DISTINCT 
-						ReApprovalRemainingAmountNew 
-					FROM 
-					(
-						SELECT 
-							cr.ManagerApprovedSum - sum(l.LoanAmount) AS ReApprovalRemainingAmountNew
-						FROM 
-							CashRequests cr
-							LEFT JOIN Loan l ON l.CustomerId = cr.IdCustomer
-						WHERE 
-							cr.IdCustomer = @CustomerId AND 
-							cr.id = 
-							(
-								SELECT 
-									Id 
-								FROM
-								(
-									SELECT 
-										ROW_NUMBER() OVER (ORDER BY Id DESC) AS row, 
-										cr.Id 
-									FROM 
-										CashRequests cr
-									WHERE 
-										cr.IdCustomer = @CustomerId
-								) p
-								WHERE 
-									p.row = 1
-							) AND 
-							cr.UnderwriterDecision = 'Approved' AND 
-							cr.HasLoans = 1 AND 
-							cr.CreationDate <= 
-							(
-								SELECT 
-									Min(l1.date) 
-								FROM 
-									Loan l1
-							) AND 
-							DATEADD(DD, 30, @ManualDecisionDate) >= @Now AND 
-							@ManualDecisionDate >= 
-							(
-								SELECT 
-									max(created) 
-								FROM 
-									MP_CustomerMarketPlace 
-								WHERE 
-									CustomerId = @CustomerId
-							) AND 
-							l.Status != 'Late' 
-						GROUP BY
-							ManagerApprovedSum
-					) AS ReApprovalRemainingAmountNew
-				)
-			)
-	END
-	ELSE 
-	BEGIN
 		SELECT @ReApprovalRemainingAmountNew = NULL
-	END
-	
-	IF @count = 0
-	BEGIN
-		SELECT 
-			@ReApprovalFullAmountOld = 
-			(
-				SELECT DISTINCT 
-					ReApprovalFullAmount 
-				FROM
-				(
-					SELECT
-						cr.ManagerApprovedSum AS ReApprovalFullAmount
-					FROM 
-						CashRequests cr 
-						LEFT JOIN Loan l ON l.CustomerId = cr.IdCustomer
-					WHERE 
-						cr.IdCustomer = @CustomerId AND 
-						cr.id = 
-						(
-							SELECT 
-								Id 
-							FROM
-								(
-									SELECT 
-										ROW_NUMBER() OVER (ORDER BY Id DESC) AS row, 
-										cr.Id
-									FROM 
-										CashRequests cr
-									WHERE 
-										cr.IdCustomer = @CustomerId
-								) p
-							WHERE 
-								p.row = 1
-						) AND 
-						cr.UnderwriterDecision= 'Approved' AND 
-						@ManualDecisionDate >= 
-						(
-							SELECT 
-								max(created) 
-							FROM 
-								MP_CustomerMarketPlace 
-							WHERE 
-								CustomerId = @CustomerId
-						) AND 
-						cr.HasLoans = 0 AND 
-						l.Id IS NOT NULL AND 
-						DATEADD(DD, 28, @ManualDecisionDate) >= @Now) AS ReApprovalFullAmount
-			)
-	END
-	ELSE 
-	BEGIN
 		SELECT @ReApprovalFullAmountOld = NULL
-	END
-
-	IF @count=0
-	BEGIN
-		SELECT 
-			@ReApprovalRemainingAmountOld=
-			(
-				(
-					SELECT DISTINCT 
-						ReApprovalRemainingAmountOld 
-					FROM 
-					(
-						SELECT 
-							cr.ManagerApprovedSum - sum(l.LoanAmount) AS ReApprovalRemainingAmountOld
-						FROM 
-							CashRequests cr 
-							LEFT JOIN Loan l ON l.RequestCashId = cr.id
-						WHERE 
-							cr.IdCustomer = @CustomerId AND 
-							cr.id = 
-							(
-								SELECT 
-									Id 
-								FROM
-									(
-										SELECT 
-											ROW_NUMBER() OVER (ORDER BY Id DESC) AS row, 
-											cr.Id 
-										FROM 
-											CashRequests cr
-										WHERE 
-											cr.IdCustomer = @CustomerId
-									) p
-								WHERE 
-									p.row = 1
-							) AND 
-							cr.UnderwriterDecision = 'Approved' AND 
-							@ManualDecisionDate >= (SELECT max(created) FROM MP_CustomerMarketPlace WHERE CustomerId=@CustomerId) AND 
-							l.Id IS NOT NULL AND 
-							cr.CreationDate >= (SELECT Min(l1.date) FROM Loan l1) AND 
-							DATEADD(DD, 28, @ManualDecisionDate) >= @Now AND l.Status != 'Late' 
-						GROUP BY
-							ManagerApprovedSum
-					) AS ReApprovalRemainingAmountOld
-				)
-			)
-	END
-	ELSE 
-	BEGIN
-		SELECT @ReApprovalRemainingAmountOld = null
+		SELECT @ReApprovalRemainingAmountOld = NULL
 	END
 		
 	SELECT
@@ -380,32 +224,16 @@ BEGIN
 		(CASE @InterestRate WHEN -1 THEN InterestRate ELSE @InterestRate END) AS InterestRate,
 		UseSetupFee,
 		LoanTypeId,
-		IsLoanTypeSELECTionAllowed,
+		IsLoanTypeSelectionAllowed,
 		DiscountPlanId,
 		LoanSourceID,
-		Convert(INT,IsCustomerRepaymentPeriodSELECTionAllowed) AS IsCustomerRepaymentPeriodSelectionAllowed,
+		Convert(INT, IsCustomerRepaymentPeriodSelectionAllowed) AS IsCustomerRepaymentPeriodSelectionAllowed,
 		UseBrokerSetupFee,
 		ManualSetupFeeAmount,
 		ManualSetupFeePercent
 	FROM 
-		CashRequests cr
+		CashRequests
 	WHERE 
-		Id =
-		(
-			SELECT 
-				Id 
-			FROM
-			(
-				SELECT 
-					ROW_NUMBER() OVER (ORDER BY Id DESC) AS row, 
-					cr.Id 
-				FROM 
-					CashRequests cr
-				WHERE 
-					cr.IdCustomer = @CustomerId
-			) p
-			WHERE 
-				p.row = 1
-		)
+		Id = @PreviousFilledCashRequest
 END
 GO
