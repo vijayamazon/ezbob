@@ -34,6 +34,13 @@
 			m_oLog = new SafeILog(LogManager.GetLogger(typeof(BrokerHomeController)));
 			m_oServiceClient = new ServiceClient();
 			m_oHelper = new BrokerHelper(m_oServiceClient, m_oLog);
+
+			m_oFiles = new SortedDictionary<string, FileDescription>();
+
+			m_oFiles["customer-consent"] = new FileDescription {
+				FileName = "credit.file.release.and.consent.doc",
+				ContentType = "application/msword",
+			};
 		} // constructor
 
 		#endregion constructor
@@ -744,6 +751,35 @@
 
 		#endregion action FinishWizardLater
 
+		#region action DownloadFile
+
+		public System.Web.Mvc.ActionResult DownloadFile(string fid) {
+			if (string.IsNullOrWhiteSpace(fid)) {
+				m_oLog.Warn("Broker download file request: file with no id.");
+				return HttpNotFound();
+			} // if
+
+			string sFileName = fid.Trim();
+
+			m_oLog.Debug("Broker download file request: file with id {0}.", sFileName);
+
+			if (m_oFiles.ContainsKey(sFileName)) {
+				FileDescription fd = m_oFiles[sFileName];
+
+				string sPath = System.Web.HttpContext.Current.Server.MapPath("~/Areas/Broker/Files/" + fd.FileName);
+
+				m_oLog.Debug("Broker download file request: found file with id {0} of type {1} as {2}.", sFileName, fd.ContentType, sPath);
+
+				return File(sPath, fd.ContentType, fd.FileName);
+			} // if
+
+			m_oLog.Debug("Broker download file request: file with id {0} was not found.", sFileName);
+
+			return HttpNotFound();
+		} // DownloadFile
+
+		#endregion action DownloadFile
+
 		#endregion public
 
 		#region private
@@ -912,6 +948,17 @@
 
 // ReSharper restore InconsistentNaming
 		#endregion result classes
+
+		#region downloadable file descriptor
+
+		private class FileDescription {
+			public string FileName;
+			public string ContentType;
+		} // class FileDescription
+
+		private readonly SortedDictionary<string, FileDescription> m_oFiles;
+
+		#endregion downloadable file descriptor
 
 		#endregion private
 	} // class BrokerHomeController

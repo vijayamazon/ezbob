@@ -601,6 +601,8 @@
     <Content Include="Areas\Underwriter\Views\Shared\MarketPlaceDetails\CompanyFiles.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\AutomationSettings\_BasicInterestRateSettings.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\AutomationSettings\_LoanOfferMultiplierSettings.cshtml" />
+    <Content Include="Areas\Broker\Files\credit.file.release.and.consent.2014-03-25.doc" />
+    <Content Include="Areas\Broker\Files\credit.file.release.and.consent.doc" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />
