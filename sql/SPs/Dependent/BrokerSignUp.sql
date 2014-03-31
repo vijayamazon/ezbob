@@ -67,6 +67,9 @@ BEGIN
 		SET @BrokerID = SCOPE_IDENTITY()
 	END
 
-	SELECT @ErrMsg AS ErrorMsg, @BrokerID AS BrokerID
+	IF @ErrMsg = ''
+		EXECUTE BrokerLoadOwnProperties @ContactEmail
+	ELSE
+		SELECT @ErrMsg AS ErrorMsg, @BrokerID AS BrokerID
 END
 GO

@@ -53,7 +53,7 @@ EzBob.Broker.LoginView = EzBob.Broker.SubmitView.extend({
 			if (res.success) {
 				EzBob.App.trigger('clear');
 				self.clear();
-				self.router.setAuth(sEmail);
+				self.router.setAuth(sEmail, res.properties);
 				self.router.followReturnUrl();
 				return;
 			} // if

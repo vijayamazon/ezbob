@@ -66,44 +66,57 @@
 
 		#region method BrokerSignup
 
-		public ActionMetaData BrokerSignup(
-			string FirmName,
-			string FirmRegNum,
-			string ContactName,
-			string ContactEmail,
-			string ContactMobile,
-			string MobileCode,
-			string ContactOtherPhone,
-			decimal EstimatedMonthlyClientAmount,
-			string Password,
-			string Password2,
+		public BrokerPropertiesActionResult BrokerSignup(
+			string sFirmName,
+			string sFirmRegNum,
+			string sContactName,
+			string sContactEmail,
+			string sContactMobile,
+			string sMobileCode,
+			string sContactOtherPhone,
+			decimal nEstimatedMonthlyClientAmount,
+			string sPassword,
+			string sPassword2,
 			string sFirmWebSiteUrl,
 			int nEstimatedMonthlyApplicationCount,
 			bool bIsCaptchEnabled
 		) {
-			return ExecuteSync<BrokerSignup>(null, null,
-				FirmName,
-				FirmRegNum,
-				ContactName,
-				ContactEmail,
-				ContactMobile,
-				MobileCode,
-				ContactOtherPhone,
-				EstimatedMonthlyClientAmount,
-				Password,
-				Password2,
+			BrokerSignup oInstance;
+
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null,
+				sFirmName,
+				sFirmRegNum,
+				sContactName,
+				sContactEmail,
+				sContactMobile,
+				sMobileCode,
+				sContactOtherPhone,
+				nEstimatedMonthlyClientAmount,
+				sPassword,
+				sPassword2,
 				sFirmWebSiteUrl,
 				nEstimatedMonthlyApplicationCount,
 				bIsCaptchEnabled
 			);
+
+			return new BrokerPropertiesActionResult {
+				MetaData = oMetaData,
+				Properties = oInstance.Properties,
+			};
 		} // BrokerSignup
 
 		#endregion method BrokerSignup
 
 		#region method BrokerLogin
 
-		public ActionMetaData BrokerLogin(string Email, string Password) {
-			return ExecuteSync<BrokerLogin>(null, null, Email, Password);
+		public BrokerPropertiesActionResult BrokerLogin(string sEmail, string sPassword) {
+			BrokerLogin oInstance;
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, sEmail, sPassword);
+
+			return new BrokerPropertiesActionResult {
+				MetaData = oMetaData,
+				Properties = oInstance.Properties,
+			};
 		} // BrokerLogin
 
 		#endregion method BrokerLogin

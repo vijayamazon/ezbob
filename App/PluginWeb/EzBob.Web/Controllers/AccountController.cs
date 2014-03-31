@@ -19,6 +19,7 @@ namespace EzBob.Web.Controllers {
 	using Code;
 	using Code.Email;
 	using EzServiceReference;
+	using Ezbob.Backend.Models;
 	using Infrastructure;
 	using Infrastructure.Filters;
 	using Infrastructure.Membership;
@@ -170,8 +171,8 @@ namespace EzBob.Web.Controllers {
 			if (ModelState.IsValid) {
 				try {
 					if (m_oBrokerHelper.IsBroker(model.UserName)) {
-						m_oBrokerHelper.TryLogin(model.UserName, model.Password);
-						return this.JsonNet(new {success = true, broker = true});
+						BrokerProperties bp = m_oBrokerHelper.TryLogin(model.UserName, model.Password);
+						return this.JsonNet(new {success = (bp != null), broker = true});
 					} // if is broker
 				}
 				catch (Exception e) {

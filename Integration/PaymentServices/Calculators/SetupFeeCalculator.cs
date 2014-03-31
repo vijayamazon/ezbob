@@ -62,10 +62,12 @@
 			return 0M;
 		}
 
-		private decimal CalculateBroker(decimal amount)
-		{
-			var brokerFeeRepository = ObjectFactory.GetInstance<BrokerSetupFeeMapRepository>();
-			return brokerFeeRepository.GetFee((int)amount);
+		private decimal CalculateBroker(decimal amount) {
+			// March 31 2014: current decision is to set a setup fee 4% of loan amount.
+			return amount * 0.04m;
+
+			// var brokerFeeRepository = ObjectFactory.GetInstance<BrokerSetupFeeMapRepository>();
+			// return brokerFeeRepository.GetFee((int)amount);
 		}
 
 

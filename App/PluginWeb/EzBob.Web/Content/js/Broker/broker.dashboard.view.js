@@ -9,6 +9,8 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 		this.leadTable = null;
 
 		this.$el = $('.section-dashboard');
+
+		this.router.on('broker-properties-updated', this.displayBrokerProperties, this);
 	}, // initialize
 
 	events: function() {
@@ -46,8 +48,37 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 
 		this.reloadCustomerList();
 
+		this.displayBrokerProperties();
+
 		return this;
 	}, // render
+
+	displayBrokerProperties: function() {
+		var oProps = this.router.getBrokerProperties();
+
+		if (!this.router.isMyBroker(oProps)) // e.g. not yet loaded
+			return;
+
+		this.$el.find('#section-dashboard-marketing .value').load_display_value({
+			data_source: oProps,
+
+			callback: function(sFieldName, oFieldValue) {
+				switch (sFieldName) {
+				case 'BrokerWebSiteUrl':
+					return '<a target=_blank href="' + oFieldValue + '">' + oFieldValue + '</a>';
+
+				case 'ContactEmail':
+					return '<a href="mailto:' + oFieldValue + '">' + oFieldValue + '</a>';
+
+				case 'SourceRef':
+					return '<a target=_blank href="http://www.ezbob.com?sourceref=' + oFieldValue + '">http://www.ezbob.com?sourceref=' + oFieldValue + '</a>';
+
+				default:
+					return oFieldValue;
+				} // switch
+			} // callback
+		});
+	}, // displayBrokerProperties
 
 	reloadCustomerList: function() {
 		this.clear();
@@ -184,7 +215,7 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 				}; // fnRowCallback
 
 				theTableOpts.fnFooterCallback = function(oTR, aryData, nVisibleStart, nVisibleEnd, aryVisual) {
-					console.log('footer callback', aryData, nVisibleStart, nVisibleEnd, aryVisual);
+					// console.log('footer callback', aryData, nVisibleStart, nVisibleEnd, aryVisual);
 					var nLoanSum = 0;
 					var nSetupFeeSum = 0;
 					var nCount = 0;

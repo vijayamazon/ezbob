@@ -17,7 +17,8 @@ BEGIN
 		b.ContactMobile,
 		b.ContactOtherPhone,
 		b.SourceRef,
-		b.FirmWebSiteUrl AS BrokerWebSiteUrl
+		b.FirmWebSiteUrl AS BrokerWebSiteUrl,
+		'' AS ErrorMsg
 	FROM
 		Broker b
 	WHERE

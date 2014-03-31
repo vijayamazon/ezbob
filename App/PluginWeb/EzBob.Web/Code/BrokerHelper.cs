@@ -2,6 +2,7 @@
 	using System;
 	using System.Web.Security;
 	using EzServiceReference;
+	using Ezbob.Backend.Models;
 	using Ezbob.Logger;
 	using log4net;
 
@@ -42,22 +43,27 @@
 
 		#region method TryLogin
 
-		public bool TryLogin(string sLoginEmail, string sPassword) {
+		public BrokerProperties TryLogin(string sLoginEmail, string sPassword) {
 			m_oLog.Debug("Trying to login as broker '{0}'...", sLoginEmail);
 
+			BrokerPropertiesActionResult bp = null;
+
 			try {
-				m_oServiceClient.Instance.BrokerLogin(sLoginEmail, sPassword);
+				bp = m_oServiceClient.Instance.BrokerLogin(sLoginEmail, sPassword);
 			}
 			catch (Exception e) {
 				m_oLog.Alert(e, "Failed to login as a broker '{0}'.", sLoginEmail);
-				return false;
+				return null;
 			} // try
 
-			FormsAuthentication.SetAuthCookie(sLoginEmail, true);
+			if ((bp != null) && (bp.Properties != null) && (bp.Properties.BrokerID > 0)) {
+				FormsAuthentication.SetAuthCookie(sLoginEmail, true);
+				m_oLog.Debug("Succeeded to login as broker '{0}'.", sLoginEmail);
+				return bp.Properties;
+			} // if
 
-			m_oLog.Debug("Succeeded to login as broker '{0}'.", sLoginEmail);
-
-			return true;
+			m_oLog.Alert("Failed to login as a broker '{0}'.", sLoginEmail);
+			return null;
 		} // TryLogin
 
 		#endregion method TryLogin

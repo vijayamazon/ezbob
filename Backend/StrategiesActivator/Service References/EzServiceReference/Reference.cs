@@ -186,6 +186,7 @@ namespace StrategiesActivator.EzServiceReference {
     [System.SerializableAttribute()]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.BrokerSmsCountActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.BoolActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.BrokerPropertiesActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.BrokerCustomersActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.BrokerCustomerDetailsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(StrategiesActivator.EzServiceReference.StringActionResult))]
@@ -297,6 +298,29 @@ namespace StrategiesActivator.EzServiceReference {
                 if ((this.ValueField.Equals(value) != true)) {
                     this.ValueField = value;
                     this.RaisePropertyChanged("Value");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="BrokerPropertiesActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class BrokerPropertiesActionResult : StrategiesActivator.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private StrategiesActivator.EzServiceReference.BrokerProperties PropertiesField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public StrategiesActivator.EzServiceReference.BrokerProperties Properties {
+            get {
+                return this.PropertiesField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.PropertiesField, value) != true)) {
+                    this.PropertiesField = value;
+                    this.RaisePropertyChanged("Properties");
                 }
             }
         }
@@ -725,6 +749,195 @@ namespace StrategiesActivator.EzServiceReference {
                     this.RecordsField = value;
                     this.RaisePropertyChanged("Records");
                 }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="BrokerProperties", Namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models")]
+    [System.SerializableAttribute()]
+    public partial class BrokerProperties : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int BrokerIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string BrokerNameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string BrokerRegNumField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string BrokerWebSiteUrlField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ContactEmailField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ContactMobileField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ContactNameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ContactOtherPhoneField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ErrorMsgField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string SourceRefField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int BrokerID {
+            get {
+                return this.BrokerIDField;
+            }
+            set {
+                if ((this.BrokerIDField.Equals(value) != true)) {
+                    this.BrokerIDField = value;
+                    this.RaisePropertyChanged("BrokerID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string BrokerName {
+            get {
+                return this.BrokerNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.BrokerNameField, value) != true)) {
+                    this.BrokerNameField = value;
+                    this.RaisePropertyChanged("BrokerName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string BrokerRegNum {
+            get {
+                return this.BrokerRegNumField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.BrokerRegNumField, value) != true)) {
+                    this.BrokerRegNumField = value;
+                    this.RaisePropertyChanged("BrokerRegNum");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string BrokerWebSiteUrl {
+            get {
+                return this.BrokerWebSiteUrlField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.BrokerWebSiteUrlField, value) != true)) {
+                    this.BrokerWebSiteUrlField = value;
+                    this.RaisePropertyChanged("BrokerWebSiteUrl");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string ContactEmail {
+            get {
+                return this.ContactEmailField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ContactEmailField, value) != true)) {
+                    this.ContactEmailField = value;
+                    this.RaisePropertyChanged("ContactEmail");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string ContactMobile {
+            get {
+                return this.ContactMobileField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ContactMobileField, value) != true)) {
+                    this.ContactMobileField = value;
+                    this.RaisePropertyChanged("ContactMobile");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string ContactName {
+            get {
+                return this.ContactNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ContactNameField, value) != true)) {
+                    this.ContactNameField = value;
+                    this.RaisePropertyChanged("ContactName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string ContactOtherPhone {
+            get {
+                return this.ContactOtherPhoneField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ContactOtherPhoneField, value) != true)) {
+                    this.ContactOtherPhoneField = value;
+                    this.RaisePropertyChanged("ContactOtherPhone");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string ErrorMsg {
+            get {
+                return this.ErrorMsgField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ErrorMsgField, value) != true)) {
+                    this.ErrorMsgField = value;
+                    this.RaisePropertyChanged("ErrorMsg");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string SourceRef {
+            get {
+                return this.SourceRefField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.SourceRefField, value) != true)) {
+                    this.SourceRefField = value;
+                    this.RaisePropertyChanged("SourceRef");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
     }
@@ -3104,16 +3317,16 @@ namespace StrategiesActivator.EzServiceReference {
         System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BoolActionResult> IsBrokerAsync(string sContactEmail);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerSignup", ReplyAction="http://tempuri.org/IEzService/BrokerSignupResponse")]
-        StrategiesActivator.EzServiceReference.ActionMetaData BrokerSignup(string FirmName, string FirmRegNum, string ContactName, string ContactEmail, string ContactMobile, string MobileCode, string ContactOtherPhone, decimal EstimatedMonthlyClientAmount, string Password, string Password2, string sFirmWebSiteUrl, int nEstimatedMonthlyApplicationCount, bool bIsCaptchEnabled);
+        StrategiesActivator.EzServiceReference.BrokerPropertiesActionResult BrokerSignup(string sFirmName, string sFirmRegNum, string sContactName, string sContactEmail, string sContactMobile, string sMobileCode, string sContactOtherPhone, decimal nEstimatedMonthlyClientAmount, string sPassword, string sPassword2, string sFirmWebSiteUrl, int nEstimatedMonthlyApplicationCount, bool bIsCaptchEnabled);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerSignup", ReplyAction="http://tempuri.org/IEzService/BrokerSignupResponse")]
-        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> BrokerSignupAsync(string FirmName, string FirmRegNum, string ContactName, string ContactEmail, string ContactMobile, string MobileCode, string ContactOtherPhone, decimal EstimatedMonthlyClientAmount, string Password, string Password2, string sFirmWebSiteUrl, int nEstimatedMonthlyApplicationCount, bool bIsCaptchEnabled);
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BrokerPropertiesActionResult> BrokerSignupAsync(string sFirmName, string sFirmRegNum, string sContactName, string sContactEmail, string sContactMobile, string sMobileCode, string sContactOtherPhone, decimal nEstimatedMonthlyClientAmount, string sPassword, string sPassword2, string sFirmWebSiteUrl, int nEstimatedMonthlyApplicationCount, bool bIsCaptchEnabled);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLogin", ReplyAction="http://tempuri.org/IEzService/BrokerLoginResponse")]
-        StrategiesActivator.EzServiceReference.ActionMetaData BrokerLogin(string Email, string Password);
+        StrategiesActivator.EzServiceReference.BrokerPropertiesActionResult BrokerLogin(string sEmail, string sPassword);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLogin", ReplyAction="http://tempuri.org/IEzService/BrokerLoginResponse")]
-        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> BrokerLoginAsync(string Email, string Password);
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BrokerPropertiesActionResult> BrokerLoginAsync(string sEmail, string sPassword);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerRestorePassword", ReplyAction="http://tempuri.org/IEzService/BrokerRestorePasswordResponse")]
         StrategiesActivator.EzServiceReference.ActionMetaData BrokerRestorePassword(string sMobile, string sCode);
@@ -3204,6 +3417,12 @@ namespace StrategiesActivator.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerCheckCustomerRelevance", ReplyAction="http://tempuri.org/IEzService/BrokerCheckCustomerRelevanceResponse")]
         System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> BrokerCheckCustomerRelevanceAsync(int nCustomerID, string sCustomerEmail, string sSourceRef, string sConfirmEmailLink);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLoadOwnProperties", ReplyAction="http://tempuri.org/IEzService/BrokerLoadOwnPropertiesResponse")]
+        StrategiesActivator.EzServiceReference.BrokerPropertiesActionResult BrokerLoadOwnProperties(string sContactEmail);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLoadOwnProperties", ReplyAction="http://tempuri.org/IEzService/BrokerLoadOwnPropertiesResponse")]
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BrokerPropertiesActionResult> BrokerLoadOwnPropertiesAsync(string sContactEmail);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CaisGenerate", ReplyAction="http://tempuri.org/IEzService/CaisGenerateResponse")]
         StrategiesActivator.EzServiceReference.ActionMetaData CaisGenerate(int underwriterId);
@@ -3643,20 +3862,20 @@ namespace StrategiesActivator.EzServiceReference {
             return base.Channel.IsBrokerAsync(sContactEmail);
         }
         
-        public StrategiesActivator.EzServiceReference.ActionMetaData BrokerSignup(string FirmName, string FirmRegNum, string ContactName, string ContactEmail, string ContactMobile, string MobileCode, string ContactOtherPhone, decimal EstimatedMonthlyClientAmount, string Password, string Password2, string sFirmWebSiteUrl, int nEstimatedMonthlyApplicationCount, bool bIsCaptchEnabled) {
-            return base.Channel.BrokerSignup(FirmName, FirmRegNum, ContactName, ContactEmail, ContactMobile, MobileCode, ContactOtherPhone, EstimatedMonthlyClientAmount, Password, Password2, sFirmWebSiteUrl, nEstimatedMonthlyApplicationCount, bIsCaptchEnabled);
+        public StrategiesActivator.EzServiceReference.BrokerPropertiesActionResult BrokerSignup(string sFirmName, string sFirmRegNum, string sContactName, string sContactEmail, string sContactMobile, string sMobileCode, string sContactOtherPhone, decimal nEstimatedMonthlyClientAmount, string sPassword, string sPassword2, string sFirmWebSiteUrl, int nEstimatedMonthlyApplicationCount, bool bIsCaptchEnabled) {
+            return base.Channel.BrokerSignup(sFirmName, sFirmRegNum, sContactName, sContactEmail, sContactMobile, sMobileCode, sContactOtherPhone, nEstimatedMonthlyClientAmount, sPassword, sPassword2, sFirmWebSiteUrl, nEstimatedMonthlyApplicationCount, bIsCaptchEnabled);
         }
         
-        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> BrokerSignupAsync(string FirmName, string FirmRegNum, string ContactName, string ContactEmail, string ContactMobile, string MobileCode, string ContactOtherPhone, decimal EstimatedMonthlyClientAmount, string Password, string Password2, string sFirmWebSiteUrl, int nEstimatedMonthlyApplicationCount, bool bIsCaptchEnabled) {
-            return base.Channel.BrokerSignupAsync(FirmName, FirmRegNum, ContactName, ContactEmail, ContactMobile, MobileCode, ContactOtherPhone, EstimatedMonthlyClientAmount, Password, Password2, sFirmWebSiteUrl, nEstimatedMonthlyApplicationCount, bIsCaptchEnabled);
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BrokerPropertiesActionResult> BrokerSignupAsync(string sFirmName, string sFirmRegNum, string sContactName, string sContactEmail, string sContactMobile, string sMobileCode, string sContactOtherPhone, decimal nEstimatedMonthlyClientAmount, string sPassword, string sPassword2, string sFirmWebSiteUrl, int nEstimatedMonthlyApplicationCount, bool bIsCaptchEnabled) {
+            return base.Channel.BrokerSignupAsync(sFirmName, sFirmRegNum, sContactName, sContactEmail, sContactMobile, sMobileCode, sContactOtherPhone, nEstimatedMonthlyClientAmount, sPassword, sPassword2, sFirmWebSiteUrl, nEstimatedMonthlyApplicationCount, bIsCaptchEnabled);
         }
         
-        public StrategiesActivator.EzServiceReference.ActionMetaData BrokerLogin(string Email, string Password) {
-            return base.Channel.BrokerLogin(Email, Password);
+        public StrategiesActivator.EzServiceReference.BrokerPropertiesActionResult BrokerLogin(string sEmail, string sPassword) {
+            return base.Channel.BrokerLogin(sEmail, sPassword);
         }
         
-        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> BrokerLoginAsync(string Email, string Password) {
-            return base.Channel.BrokerLoginAsync(Email, Password);
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BrokerPropertiesActionResult> BrokerLoginAsync(string sEmail, string sPassword) {
+            return base.Channel.BrokerLoginAsync(sEmail, sPassword);
         }
         
         public StrategiesActivator.EzServiceReference.ActionMetaData BrokerRestorePassword(string sMobile, string sCode) {
@@ -3777,6 +3996,14 @@ namespace StrategiesActivator.EzServiceReference {
         
         public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> BrokerCheckCustomerRelevanceAsync(int nCustomerID, string sCustomerEmail, string sSourceRef, string sConfirmEmailLink) {
             return base.Channel.BrokerCheckCustomerRelevanceAsync(nCustomerID, sCustomerEmail, sSourceRef, sConfirmEmailLink);
+        }
+        
+        public StrategiesActivator.EzServiceReference.BrokerPropertiesActionResult BrokerLoadOwnProperties(string sContactEmail) {
+            return base.Channel.BrokerLoadOwnProperties(sContactEmail);
+        }
+        
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BrokerPropertiesActionResult> BrokerLoadOwnPropertiesAsync(string sContactEmail) {
+            return base.Channel.BrokerLoadOwnPropertiesAsync(sContactEmail);
         }
         
         public StrategiesActivator.EzServiceReference.ActionMetaData CaisGenerate(int underwriterId) {

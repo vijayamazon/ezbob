@@ -138,8 +138,10 @@
 				return new BrokerForJsonResult("You are already logged in.");
 			} // if
 
+			BrokerPropertiesActionResult bp = null;
+
 			try {
-				m_oServiceClient.Instance.BrokerSignup(
+				bp = m_oServiceClient.Instance.BrokerSignup(
 					FirmName,
 					FirmRegNum,
 					ContactName,
@@ -164,7 +166,7 @@
 
 			m_oLog.Debug("Broker signup succeded for: {0}", ContactEmail);
 
-			return new BrokerForJsonResult();
+			return new PropertiesBrokerForJsonResult(oProperties: bp.Properties);
 		} // Signup
 
 		#endregion action Signup
@@ -204,12 +206,14 @@
 				return new BrokerForJsonResult("You are already logged in.");
 			} // if
 
-			if (!m_oHelper.TryLogin(LoginEmail, LoginPassword))
+			BrokerProperties bp = m_oHelper.TryLogin(LoginEmail, LoginPassword);
+
+			if (bp == null)
 				return new BrokerForJsonResult("Failed to log in.");
 
 			m_oLog.Debug("Broker login succeded for: {0}", LoginEmail);
 
-			return new BrokerForJsonResult();
+			return new PropertiesBrokerForJsonResult(oProperties: bp);
 		} // Login
 
 		#endregion action Login
@@ -241,6 +245,35 @@
 		} // RestorePassword
 
 		#endregion action RestorePassword
+
+		#region action LoadProperties
+
+		[HttpGet]
+		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		public JsonResult LoadProperties(string sContactEmail) {
+			m_oLog.Debug("Broker load properties request for contact email {0}", sContactEmail);
+
+			var oIsAuthResult = IsAuth<PropertiesBrokerForJsonResult>("Load properties", sContactEmail);
+			if (oIsAuthResult != null)
+				return oIsAuthResult;
+
+			BrokerPropertiesActionResult oResult;
+
+			try {
+				oResult = m_oServiceClient.Instance.BrokerLoadOwnProperties(sContactEmail);
+			}
+			catch (Exception e) {
+				m_oLog.Alert(e, "Failed to load properties request for contact email {0}", sContactEmail);
+				return new PropertiesBrokerForJsonResult("Failed to load broker properties.");
+			} // try
+
+			m_oLog.Debug("Broker load customers properties for contact email {0} complete.", sContactEmail);
+
+			return new PropertiesBrokerForJsonResult(oProperties: oResult.Properties);
+		} // LoadProperties
+
+		#endregion action LoadProperties
 
 		#region action LoadCustomers
 
@@ -798,6 +831,22 @@
 		} // BrokerForJsonResult
 
 		#endregion class BrokerForJsonResult
+
+		#region class PropertiesBrokerForJsonResult
+
+		public class PropertiesBrokerForJsonResult : BrokerForJsonResult {
+			public PropertiesBrokerForJsonResult(
+				string sErrorMsg = "",
+				bool? bExplicitSuccess = null,
+				BrokerProperties oProperties = null
+			) : base(sErrorMsg, bExplicitSuccess) {
+				properties = oProperties ?? new BrokerProperties();
+			} // constructor
+
+			public virtual BrokerProperties properties { get; private set; } // customers
+		} // PropertiesBrokerForJsonResult
+
+		#endregion class PropertiesBrokerForJsonResult
 
 		#region class CustomerListBrokerForJsonResult
 

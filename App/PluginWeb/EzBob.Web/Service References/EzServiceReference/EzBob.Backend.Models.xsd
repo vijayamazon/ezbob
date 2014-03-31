@@ -1,5 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="BrokerProperties">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="BrokerID" type="xs:int" />
+      <xs:element minOccurs="0" name="BrokerName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="BrokerRegNum" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="BrokerWebSiteUrl" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ContactEmail" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ContactMobile" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ContactName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ContactOtherPhone" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ErrorMsg" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SourceRef" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="BrokerProperties" nillable="true" type="tns:BrokerProperties" />
   <xs:complexType name="ArrayOfBrokerCustomerEntry">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="BrokerCustomerEntry" nillable="true" type="tns:BrokerCustomerEntry" />

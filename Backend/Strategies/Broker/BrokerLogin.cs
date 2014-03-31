@@ -1,7 +1,9 @@
 ﻿namespace EzBob.Backend.Strategies.Broker {
 	using System;
+	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using Ezbob.Utils;
 	using Ezbob.Utils.Security;
 
 	#region class BrokerLogin
@@ -12,8 +14,12 @@
 		#region constructor
 
 		public BrokerLogin(string sEmail, string sPassword, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
-			m_sEmail = sEmail;
-			m_sPassword = sPassword;
+			m_oSp = new SpBrokerLogin(DB, Log) {
+				Email = sEmail,
+				Password = sPassword,
+			};
+
+			Properties = new BrokerProperties();
 		} // constructor
 
 		#endregion constructor
@@ -24,21 +30,19 @@
 
 		#endregion property Name
 
+		#region property Properties
+
+		public BrokerProperties Properties { get; private set; }
+
+		#endregion property Properties
+
 		#region method Execute
 
 		public override void Execute() {
-			m_sEmail = Validate(m_sEmail, "Email");
-			m_sPassword = Validate(m_sPassword, "Password");
+			m_oSp.FillFirst(Properties);
 
-			string sErrMsg = DB.ExecuteScalar<string>(
-				"BrokerLogin",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("@Email", m_sEmail),
-				new QueryParameter("@Password", SecurityUtils.HashPassword(m_sEmail + m_sPassword))
-			);
-
-			if (!string.IsNullOrWhiteSpace(sErrMsg))
-				throw new Exception(sErrMsg);
+			if (!string.IsNullOrWhiteSpace(Properties.ErrorMsg))
+				throw new Exception(Properties.ErrorMsg);
 		} // Execute
 
 		#endregion method Execute
@@ -47,32 +51,47 @@
 
 		#region private
 
-		#region method Validate
+		private readonly SpBrokerLogin m_oSp;
 
-		private string Validate(string sValue, string sArgName, bool bThrow = true) {
-			sValue = (sValue ?? string.Empty).Trim();
+		#region class SpBrokerLogin
 
-			if (sValue.Length == 0) {
-				if (bThrow)
-					throw new ArgumentNullException(sArgName, sArgName + " not specified.");
+		private class SpBrokerLogin : AStoredProc {
+			#region constructor
 
-				return sValue;
-			} // if
+			public SpBrokerLogin(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor
 
-			if (sValue.Length > 255) {
-				if (bThrow)
-					throw new Exception(sArgName + " is too long.");
+			#endregion constructor
 
-				return sValue.Substring(0, 255);
-			} // if
+			#region method HasValidParameters
 
-			return sValue;
-		} // Validate
+			public override bool HasValidParameters() {
+				Email = MiscUtils.ValidateStringArg(Email, "Email");
+				Password = MiscUtils.ValidateStringArg(m_sPassword, "Password");
 
-		#endregion method Validate
+				return true;
+			} // HasValidParameters
 
-		private string m_sEmail;
-		private string m_sPassword;
+			#endregion method HasValidParameters
+
+			#region property Email
+
+			public string Email { get; set; }
+
+			#endregion property Email
+
+			#region property Password
+
+			public string Password {
+				get { return SecurityUtils.HashPassword(Email + m_sPassword); }
+				set { m_sPassword = value; }
+			} // Password
+
+			private string m_sPassword;
+
+			#endregion property Password
+		} // class SpBrokerLogin
+
+		#endregion class SpBrokerLogin
 
 		#endregion private
 	} // class BrokerLogin

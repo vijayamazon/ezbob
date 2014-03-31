@@ -186,6 +186,7 @@ namespace EzBob.Web.EzServiceReference {
     [System.SerializableAttribute()]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.BrokerSmsCountActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.BoolActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.BrokerPropertiesActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.BrokerCustomersActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.BrokerCustomerDetailsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.StringActionResult))]
@@ -297,6 +298,29 @@ namespace EzBob.Web.EzServiceReference {
                 if ((this.ValueField.Equals(value) != true)) {
                     this.ValueField = value;
                     this.RaisePropertyChanged("Value");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="BrokerPropertiesActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class BrokerPropertiesActionResult : EzBob.Web.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private Ezbob.Backend.Models.BrokerProperties PropertiesField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public Ezbob.Backend.Models.BrokerProperties Properties {
+            get {
+                return this.PropertiesField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.PropertiesField, value) != true)) {
+                    this.PropertiesField = value;
+                    this.RaisePropertyChanged("Properties");
                 }
             }
         }
@@ -840,10 +864,10 @@ namespace EzBob.Web.EzServiceReference {
         EzBob.Web.EzServiceReference.BoolActionResult IsBroker(string sContactEmail);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerSignup", ReplyAction="http://tempuri.org/IEzService/BrokerSignupResponse")]
-        EzBob.Web.EzServiceReference.ActionMetaData BrokerSignup(string FirmName, string FirmRegNum, string ContactName, string ContactEmail, string ContactMobile, string MobileCode, string ContactOtherPhone, decimal EstimatedMonthlyClientAmount, string Password, string Password2, string sFirmWebSiteUrl, int nEstimatedMonthlyApplicationCount, bool bIsCaptchEnabled);
+        EzBob.Web.EzServiceReference.BrokerPropertiesActionResult BrokerSignup(string sFirmName, string sFirmRegNum, string sContactName, string sContactEmail, string sContactMobile, string sMobileCode, string sContactOtherPhone, decimal nEstimatedMonthlyClientAmount, string sPassword, string sPassword2, string sFirmWebSiteUrl, int nEstimatedMonthlyApplicationCount, bool bIsCaptchEnabled);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLogin", ReplyAction="http://tempuri.org/IEzService/BrokerLoginResponse")]
-        EzBob.Web.EzServiceReference.ActionMetaData BrokerLogin(string Email, string Password);
+        EzBob.Web.EzServiceReference.BrokerPropertiesActionResult BrokerLogin(string sEmail, string sPassword);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerRestorePassword", ReplyAction="http://tempuri.org/IEzService/BrokerRestorePasswordResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData BrokerRestorePassword(string sMobile, string sCode);
@@ -889,6 +913,9 @@ namespace EzBob.Web.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerCheckCustomerRelevance", ReplyAction="http://tempuri.org/IEzService/BrokerCheckCustomerRelevanceResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData BrokerCheckCustomerRelevance(int nCustomerID, string sCustomerEmail, string sSourceRef, string sConfirmEmailLink);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLoadOwnProperties", ReplyAction="http://tempuri.org/IEzService/BrokerLoadOwnPropertiesResponse")]
+        EzBob.Web.EzServiceReference.BrokerPropertiesActionResult BrokerLoadOwnProperties(string sContactEmail);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CaisGenerate", ReplyAction="http://tempuri.org/IEzService/CaisGenerateResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData CaisGenerate(int underwriterId);
@@ -1123,12 +1150,12 @@ namespace EzBob.Web.EzServiceReference {
             return base.Channel.IsBroker(sContactEmail);
         }
         
-        public EzBob.Web.EzServiceReference.ActionMetaData BrokerSignup(string FirmName, string FirmRegNum, string ContactName, string ContactEmail, string ContactMobile, string MobileCode, string ContactOtherPhone, decimal EstimatedMonthlyClientAmount, string Password, string Password2, string sFirmWebSiteUrl, int nEstimatedMonthlyApplicationCount, bool bIsCaptchEnabled) {
-            return base.Channel.BrokerSignup(FirmName, FirmRegNum, ContactName, ContactEmail, ContactMobile, MobileCode, ContactOtherPhone, EstimatedMonthlyClientAmount, Password, Password2, sFirmWebSiteUrl, nEstimatedMonthlyApplicationCount, bIsCaptchEnabled);
+        public EzBob.Web.EzServiceReference.BrokerPropertiesActionResult BrokerSignup(string sFirmName, string sFirmRegNum, string sContactName, string sContactEmail, string sContactMobile, string sMobileCode, string sContactOtherPhone, decimal nEstimatedMonthlyClientAmount, string sPassword, string sPassword2, string sFirmWebSiteUrl, int nEstimatedMonthlyApplicationCount, bool bIsCaptchEnabled) {
+            return base.Channel.BrokerSignup(sFirmName, sFirmRegNum, sContactName, sContactEmail, sContactMobile, sMobileCode, sContactOtherPhone, nEstimatedMonthlyClientAmount, sPassword, sPassword2, sFirmWebSiteUrl, nEstimatedMonthlyApplicationCount, bIsCaptchEnabled);
         }
         
-        public EzBob.Web.EzServiceReference.ActionMetaData BrokerLogin(string Email, string Password) {
-            return base.Channel.BrokerLogin(Email, Password);
+        public EzBob.Web.EzServiceReference.BrokerPropertiesActionResult BrokerLogin(string sEmail, string sPassword) {
+            return base.Channel.BrokerLogin(sEmail, sPassword);
         }
         
         public EzBob.Web.EzServiceReference.ActionMetaData BrokerRestorePassword(string sMobile, string sCode) {
@@ -1189,6 +1216,10 @@ namespace EzBob.Web.EzServiceReference {
         
         public EzBob.Web.EzServiceReference.ActionMetaData BrokerCheckCustomerRelevance(int nCustomerID, string sCustomerEmail, string sSourceRef, string sConfirmEmailLink) {
             return base.Channel.BrokerCheckCustomerRelevance(nCustomerID, sCustomerEmail, sSourceRef, sConfirmEmailLink);
+        }
+        
+        public EzBob.Web.EzServiceReference.BrokerPropertiesActionResult BrokerLoadOwnProperties(string sContactEmail) {
+            return base.Channel.BrokerLoadOwnProperties(sContactEmail);
         }
         
         public EzBob.Web.EzServiceReference.ActionMetaData CaisGenerate(int underwriterId) {

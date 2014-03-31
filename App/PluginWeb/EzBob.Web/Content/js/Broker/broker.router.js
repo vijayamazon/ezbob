@@ -49,15 +49,88 @@ EzBob.Broker.Router = Backbone.Router.extend({
 	}, // setReturnUrl
 
 	getAuth: function() {
-		return this.authData;
+		return this.authEmail;
 	}, // getAuth
 
-	setAuth: function(sAuth) {
-		this.authData = sAuth || '';
+	setAuth: function(sAuth, oBrokerProperties) {
+		this.brokerProperties = null;
+
+		this.authEmail = sAuth || '';
 		var oElm = $('#user-menu .log-off');
 		oElm.tooltip('destroy');
-		oElm.tooltip({ placement: 'bottom', title: this.authData }).tooltip('fixTitle').tooltip('enable');
+		oElm.tooltip({ placement: 'bottom', title: this.authEmail }).tooltip('fixTitle').tooltip('enable');
+
+		if (oBrokerProperties)
+			this.setBrokerProperties(oBrokerProperties);
+		else
+			this.loadBrokerProperties();
 	}, // setAuth
+
+	getBrokerProperties: function() {
+		return this.brokerProperties;
+	}, // getBrokerProperties
+
+	setBrokerProperties: function(oBrokerProperties) {
+		this.brokerProperties = null;
+
+		if (!oBrokerProperties)
+			return;
+
+		if ('object' !== typeof oBrokerProperties)
+			return;
+
+		if (oBrokerProperties.ContactEmail !== this.authEmail)
+			return;
+
+		this.brokerProperties = oBrokerProperties;
+		this.trigger('broker-properties-updated');
+
+		console.log('prop set to', this.getBrokerProperties());
+	}, // setBrokerProperties
+
+	isMyBroker: function(oBrokerProperties) {
+		if (!oBrokerProperties)
+			return false;
+
+		if ('object' !== typeof oBrokerProperties)
+			return false;
+
+		if (oBrokerProperties.ContactEmail !== this.authEmail)
+			return false;
+
+		return true;
+	}, // isMyBroker
+
+	loadBrokerProperties: function() {
+		if (this.isForbidden())
+			return;
+
+		if (!this.getAuth())
+			return;
+
+		var oRequest = $.getJSON(
+			'' + window.gRootPath + 'Broker/BrokerHome/LoadProperties',
+			{ sContactEmail: this.getAuth(), }
+		);
+
+		var self = this;
+
+		oRequest.success(function(res) {
+			if (res.success) {
+				self.setBrokerProperties(res.properties);
+				return;
+			} // if
+
+			if (res.error)
+				console.error('Failed to load broker properties:', res.error);
+			else
+				console.error('Failed to load broker properties.');
+		}); // on success
+
+		oRequest.fail(function() {
+			console.error('Failed to load broker properties.');
+		});
+	}, // loadBrokerProperties
 
 	logoff: function() {
 		if (this.views.dashboard)

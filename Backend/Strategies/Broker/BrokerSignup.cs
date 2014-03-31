@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Backend.Strategies.Broker {
 	using System;
 	using System.Text;
+	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils;
@@ -48,6 +49,8 @@
 			};
 
 			m_oSetSp = new SpBrokerSetSourceRef(DB, Log);
+
+			Properties = new BrokerProperties();
 		} // constructor
 
 		#endregion constructor
@@ -58,12 +61,15 @@
 
 		#endregion property Name
 
+		#region property Properties
+
+		public BrokerProperties Properties { get; private set; }
+
+		#endregion property Properties
+
 		#region method Execute
 
 		public override void Execute() {
-			string sErrMsg = null;
-			int nBrokerID = 0;
-
 			if (!m_bIsCaptchaEnabled) {
 				var oValidator = new ValidateMobileCode(m_oCreateSp.ContactMobile, m_sMobileCode, DB, Log);
 				oValidator.Execute();
@@ -71,25 +77,19 @@
 					throw new Exception("Failed to validate mobile code.");
 			} // if
 
-			m_oCreateSp.ForEachRowSafe((sr, bRowsetStart) => {
-				sr.Read
-					.To(out sErrMsg)
-					.To(out nBrokerID);
+			m_oCreateSp.FillFirst(Properties);
 
-				return ActionResult.SkipAll;
-			});
-
-			if (!string.IsNullOrWhiteSpace(sErrMsg)) {
-				Log.Alert("Failed to create a broker: {0}", sErrMsg);
-				throw new Exception(sErrMsg);
+			if (!string.IsNullOrWhiteSpace(Properties.ErrorMsg)) {
+				Log.Alert("Failed to create a broker: {0}", Properties.ErrorMsg);
+				throw new Exception(Properties.ErrorMsg);
 			} // if
 
-			if (nBrokerID < 1) {
+			if (Properties.BrokerID < 1) {
 				Log.Alert("Failed to create a broker: no error message from DB but broker id is 0.");
 				throw new Exception("Failed to create a broker.");
 			} // if
 
-			string sBrokerID = BaseConverter.Execute(nBrokerID, BaseConverter.LowerCaseLetters);
+			string sBrokerID = BaseConverter.Execute(Properties.BrokerID, BaseConverter.LowerCaseLetters);
 
 			var oSrcRef = new StringBuilder("brk-");
 
@@ -107,7 +107,7 @@
 
 			oSrcRef.Append(sBrokerID);
 
-			m_oSetSp.BrokerID = nBrokerID;
+			m_oSetSp.BrokerID = Properties.BrokerID;
 			m_oSetSp.SourceRef = oSrcRef.ToString();
 			m_oSetSp.ExecuteNonQuery();
 		} // Execute

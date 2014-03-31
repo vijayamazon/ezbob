@@ -8,6 +8,9 @@
 	[DataContract]
 	public class BrokerProperties : ITraversable {
 		[DataMember]
+		public string ErrorMsg { get; set; }
+
+		[DataMember]
 		public int BrokerID { get; set; }
 
 		[DataMember]

@@ -41,24 +41,24 @@
 		BoolActionResult IsBroker(string sContactEmail);
 
 		[OperationContract]
-		ActionMetaData BrokerSignup(
-			string FirmName,
-			string FirmRegNum,
-			string ContactName,
-			string ContactEmail,
-			string ContactMobile,
-			string MobileCode,
-			string ContactOtherPhone,
-			decimal EstimatedMonthlyClientAmount,
-			string Password,
-			string Password2,
+		BrokerPropertiesActionResult BrokerSignup(
+			string sFirmName,
+			string sFirmRegNum,
+			string sContactName,
+			string sContactEmail,
+			string sContactMobile,
+			string sMobileCode,
+			string sContactOtherPhone,
+			decimal nEstimatedMonthlyClientAmount,
+			string sPassword,
+			string sPassword2,
 			string sFirmWebSiteUrl,
 			int nEstimatedMonthlyApplicationCount,
 			bool bIsCaptchEnabled
 		);
 
 		[OperationContract]
-		ActionMetaData BrokerLogin(string Email, string Password);
+		BrokerPropertiesActionResult BrokerLogin(string sEmail, string sPassword);
 
 		[OperationContract]
 		ActionMetaData BrokerRestorePassword(string sMobile, string sCode);

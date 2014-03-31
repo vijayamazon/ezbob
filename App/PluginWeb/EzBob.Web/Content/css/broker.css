@@ -77,10 +77,11 @@ table.customer-list {
 	border: 1px solid white;
 }
 
+.broker a,
 .section-dashboard tbody .grid-item-FirstName a,
 .section-dashboard tbody .grid-item-LastName a {
 	text-decoration: underline;
-	color: #428bca;
+	color: #428bca !important;
 }
 
 .section-dashboard tbody .grid-item-LoanAmount,
@@ -96,44 +97,50 @@ table.customer-list {
 	background-color: #b6d1f2;
 }
 
+.source-ref-link {
+	text-align: center;
+	font-size: 1.5em;
+	margin-bottom: 0.7em;
+}
+
 .section-customer-details .back-to-list-container {
 	margin: 2em 0 1em 0;
 	text-align: right;
 }
 
-.section-customer-details .value-group {
+.value-group {
 	font-size: 15px;
 	margin-bottom: 1em;
 	padding: 5px;
 }
 
-.section-customer-details .aka-table {
+.aka-table {
 	display: table;
 	width: 100%;
 }
 
-.section-customer-details .aka-caption {
+.aka-caption {
 	display: table-caption;
 	font-weight: bold;
 }
 
-.section-customer-details .aka-caption .dataTables_filter {
+.aka-caption .dataTables_filter {
 	float: right;
 }
 
-.section-customer-details .aka-caption .dataTables_filter input {
+.aka-caption .dataTables_filter input {
 	margin: 0 !important;
 }
 
-.section-customer-details .aka-row {
+.aka-row {
 	display: table-row;
 }
 
-.section-customer-details .aka-column {
+.aka-column {
 	display: table-cell;
 }
 
-.section-customer-details .value-title {
+.value-title {
 	font-weight: bold;
 	padding-right: 1em;
 	padding-bottom: 0.5em;
@@ -141,8 +148,8 @@ table.customer-list {
 	white-space: nowrap !important;
 }
 
-.section-customer-details .aka-row > .value-title,
-.section-customer-details .aka-row > .value {
+.aka-row > .value-title,
+.aka-row > .value {
 	display: table-cell;
 }
 

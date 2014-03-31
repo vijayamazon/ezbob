@@ -59,7 +59,7 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 			if (res.success) {
 				EzBob.App.trigger('clear');
 				self.clear();
-				self.router.setAuth(sEmail);
+				self.router.setAuth(sEmail, res.properties);
 				self.router.dashboard();
 				return;
 			} // if
@@ -119,7 +119,7 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 				EstimatedMonthlyClientAmount: { required: true, defaultInvalidPounds: true, regex: '^(?!£ 0.00$)', },
 				Password: $.extend({}, passPolicy),
 				Password2: passPolicy2,
-				EstimatedMonthlyAppCount: { required: true, maxlength: 6, regex: '^[1-9]\d*', },
+				EstimatedMonthlyAppCount: { required: true, maxlength: 6, regex: '^[1-9]\\d*', },
 				AgreeToTerms: { required: true, },
 				AgreeToPrivacyPolicy: { required: true, },
 			},
