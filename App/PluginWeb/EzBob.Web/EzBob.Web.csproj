@@ -1146,9 +1146,6 @@
     <Content Include="Content\js\Underwriter\profile\alerts\ezbob.underwriter.AlertDocsView.js">
       <DependentUpon>ezbob.underwriter.AlertDocsView.coffee</DependentUpon>
     </Content>
-    <Content Include="Content\js\Underwriter\profile\alerts\ezbob.underwriter.AlertDocsView.min.js">
-      <DependentUpon>ezbob.underwriter.AlertDocsView.coffee</DependentUpon>
-    </Content>
     <Content Include="Content\js\Underwriter\profile\companyScore\ezbob.underwriter.companyScore.js" />
     <Content Include="Content\js\Underwriter\profile\customerInfo\ezbob.underwriter.landregistry.js" />
     <Content Include="Content\js\Underwriter\profile\customerInfo\ezbob.underwriter.zoopla.js" />

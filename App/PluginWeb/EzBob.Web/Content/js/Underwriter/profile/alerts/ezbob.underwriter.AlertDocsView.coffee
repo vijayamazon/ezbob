@@ -69,7 +69,7 @@ class EzBob.Underwriter.AlertDocsView extends Backbone.Marionette.ItemView
         @customerId = customerId
         @dialogId = "#uploadAlertDocDialog" + customerId
         @model.customerId = customerId
-        $('.messages-tab').html('Messages (' + @model.length + ')')
+        $('.messages-tab').html('Messages / Files (' + @model.length + ')')
 
     serializeData: ->
         docs: @model.toJSON()

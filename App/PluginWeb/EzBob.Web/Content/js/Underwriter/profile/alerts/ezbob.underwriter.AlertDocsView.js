@@ -1,5 +1,5 @@
 (function() {
-  var root,
+  var root, _ref, _ref1, _ref2, _ref3,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -8,11 +8,11 @@
   root.EzBob = root.EzBob || {};
 
   EzBob.Underwriter.DocModel = (function(_super) {
-
     __extends(DocModel, _super);
 
     function DocModel() {
-      return DocModel.__super__.constructor.apply(this, arguments);
+      _ref = DocModel.__super__.constructor.apply(this, arguments);
+      return _ref;
     }
 
     return DocModel;
@@ -20,11 +20,11 @@
   })(Backbone.Model);
 
   EzBob.Underwriter.Docs = (function(_super) {
-
     __extends(Docs, _super);
 
     function Docs() {
-      return Docs.__super__.constructor.apply(this, arguments);
+      _ref1 = Docs.__super__.constructor.apply(this, arguments);
+      return _ref1;
     }
 
     Docs.prototype.model = EzBob.Underwriter.DocModel;
@@ -38,11 +38,11 @@
   })(Backbone.Collection);
 
   EzBob.Underwriter.UploadDocView = (function(_super) {
-
     __extends(UploadDocView, _super);
 
     function UploadDocView() {
-      return UploadDocView.__super__.constructor.apply(this, arguments);
+      _ref2 = UploadDocView.__super__.constructor.apply(this, arguments);
+      return _ref2;
     }
 
     UploadDocView.prototype.template = '#uploadAlertDocDialog';
@@ -70,6 +70,7 @@
     UploadDocView.prototype.upload = function(e) {
       var f,
         _this = this;
+
       if ($(e.currentTarget).hasClass("disabled")) {
         return;
       }
@@ -99,11 +100,11 @@
   })(Backbone.Marionette.ItemView);
 
   EzBob.Underwriter.AlertDocsView = (function(_super) {
-
     __extends(AlertDocsView, _super);
 
     function AlertDocsView() {
-      return AlertDocsView.__super__.constructor.apply(this, arguments);
+      _ref3 = AlertDocsView.__super__.constructor.apply(this, arguments);
+      return _ref3;
     }
 
     AlertDocsView.prototype.root = window.gRootPath + "Underwriter/AlertDocs/";
@@ -127,7 +128,7 @@
       this.customerId = customerId;
       this.dialogId = "#uploadAlertDocDialog" + customerId;
       this.model.customerId = customerId;
-      return console.log('@alertDocs', this.model);
+      return $('.messages-tab').html('Messages / Files (' + this.model.length + ')');
     };
 
     AlertDocsView.prototype.serializeData = function() {
@@ -138,6 +139,7 @@
 
     AlertDocsView.prototype.addClick = function() {
       var cb, view;
+
       view = new EzBob.Underwriter.UploadDocView({
         customerId: this.customerId
       });
@@ -152,12 +154,14 @@
     AlertDocsView.prototype.deleteClick = function() {
       var e, ids,
         _this = this;
+
       ids = (function() {
-        var _i, _len, _ref, _results;
-        _ref = this.$el.find('input[type="checkbox"]:checked');
+        var _i, _len, _ref4, _results;
+
+        _ref4 = this.$el.find('input[type="checkbox"]:checked');
         _results = [];
-        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-          e = _ref[_i];
+        for (_i = 0, _len = _ref4.length; _i < _len; _i++) {
+          e = _ref4[_i];
           _results.push($(e).data('id'));
         }
         return _results;
@@ -168,6 +172,7 @@
       }
       EzBob.ShowMessage("Are you sure you want to delete selected docs?", "", function() {
         var xhr;
+
         xhr = $.ajax({
           type: "POST",
           traditional: true,
