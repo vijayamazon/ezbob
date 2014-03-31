@@ -159,7 +159,7 @@
 				}
 			}
 
-			return Math.Max(shopsSum + Math.Max(payPalSum, ebaySum), Math.Max(accountingSum, Math.Max(bankSum, vatSum)));
+			return Math.Max(shopsSum + Math.Max(payPalSum, ebaySum), Math.Max(accountingSum, /*Math.Max(*/bankSum/*, vatSum)*/)); // The vat is commented out until the hmrc aggregated values will be populated properly
 		}
 
 		public double GetTotalSumOfOrders3M(int customerId)
