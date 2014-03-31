@@ -299,63 +299,16 @@ namespace EZBob.DatabaseLib {
 			}
 		}
 
-		private void UpdateCustomerMarketPlaceDataStart(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, out MP_CustomerMarketplaceUpdatingHistory historyItem)
-		{
-			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
-			WriteToLog(string.Format("Start Update Data for Customer Market Place: id: {0}, name: {1} ", customerMarketPlace.Id, customerMarketPlace.DisplayName));
-
-			customerMarketPlace.UpdatingStart = DateTime.UtcNow;
-			customerMarketPlace.UpdatingEnd = null;
-
-			historyItem = new MP_CustomerMarketplaceUpdatingHistory
-			{
-				CustomerMarketPlace = customerMarketPlace,
-				UpdatingStart = customerMarketPlace.UpdatingStart,
-				UpdatingEnd = null,
-			};
-
-			customerMarketPlace.UpdatingHistory.Add(historyItem);
-
-			_CustomerMarketplaceRepository.Update(customerMarketPlace);
-		}
-
-		private void UpdateCustomerMarketPlaceDataEnd(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, MP_CustomerMarketplaceUpdatingHistory updatingHistoryRecord, Exception exception)
-		{
-			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace);
-
-			customerMarketPlace.UpdatingEnd = DateTime.UtcNow;
-
-			var statusText = "Successfully";
-
-			if (exception != null)
-			{
-				updatingHistoryRecord.Error = exception.Message;
-				statusText = "With error!";
-			}
-
-			WriteToLog(string.Format("End update data for umi: id: {0}, name: {1}. {2}", customerMarketPlace.Id, customerMarketPlace.DisplayName, statusText));
-			updatingHistoryRecord.UpdatingEnd = customerMarketPlace.UpdatingEnd;
-			_CustomerMarketplaceRepository.Update(customerMarketPlace);
-		}
-
 		internal void UpdateCustomerMarketplaceData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, Action<MP_CustomerMarketplaceUpdatingHistory> a)
 		{
-			Exception ex = null;
 			MP_CustomerMarketplaceUpdatingHistory historyItem = null;
 			try
 			{
-				UpdateCustomerMarketPlaceDataStart(databaseCustomerMarketPlace, out historyItem);
-
 				a(historyItem);
 			}
 			catch (Exception e)
 			{
-				ex = e;
-				throw new MarketplaceException(databaseCustomerMarketPlace, ex);
-			}
-			finally
-			{
-				UpdateCustomerMarketPlaceDataEnd(databaseCustomerMarketPlace, historyItem, ex);
+				throw new MarketplaceException(databaseCustomerMarketPlace, e);
 			}
 		}
 

@@ -89,16 +89,6 @@ namespace EzBob.RequestsQueueCore
 			return CreateRequest( requestinfo );
 		}
 
-		private IRequestData UpdateCustomerMarketPlaceData( IMarketplaceType mp, int customerMarketPlaceId )
-		{
-			return RequestInfoFactory.CreateSingleRequest( mp, () =>
-			{
-				var databaseDataHelper = Helper;
-				var retrieveDataHelper = mp.GetRetrieveDataHelper( databaseDataHelper );
-				retrieveDataHelper.UpdateCustomerMarketplaceFirst( customerMarketPlaceId );
-			} );
-		}
-
 		public override IAnalysisDataInfo GetAnalysisValuesByCustomerMarketPlace(int customerMarketPlaceId)
 		{
 			IMarketplaceRetrieveDataHelper retrieveDataHelper = GetMarketplaceRetrieveDataHelper( customerMarketPlaceId );

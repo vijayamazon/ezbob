@@ -12,7 +12,8 @@ BEGIN
 	DECLARE @notUpdatedCount INT
 	SELECT 
 		MP_MarketplaceType.Name,
-		MP_CustomerMarketPlace.Disabled
+		MP_CustomerMarketPlace.Disabled,
+		MP_CustomerMarketPlace.DisplayName
 	FROM 
 		MP_MarketplaceType, 
 		MP_CustomerMarketPlace				
