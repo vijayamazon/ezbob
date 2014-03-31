@@ -16,25 +16,27 @@
 			bool isValid = false;
 
 			bool bSignupSkipCaptcha =
-				filterContext.ActionDescriptor.ActionName == "SignUp" && (
+				(filterContext.ActionDescriptor.ActionName == "SignUp") &&
+				(filterContext.ActionDescriptor.ControllerDescriptor.ControllerName == "Account") && (
 					!filterContext.ActionParameters.ContainsKey("isInCaptchaMode") ||
-					(string)filterContext.ActionParameters["isInCaptchaMode"] != "True"
+					(filterContext.ActionParameters["isInCaptchaMode"].ToString() != "True")
 				);
 
-			log.DebugFormat("sign up skip captcha: {0}", bSignupSkipCaptcha ? "yes" : "ho");
+			log.DebugFormat("sign up skip captcha: {0}", bSignupSkipCaptcha ? "yes" : "no");
 
 			bool bBrokerSignupSkipCaptcha = false;
 
 			if (!bSignupSkipCaptcha) {
-				log.DebugFormat("sign up skip captcha: {0}", bSignupSkipCaptcha ? "yes" : "ho");
+				log.DebugFormat("sign up skip captcha: {0}", bSignupSkipCaptcha ? "yes" : "no");
 
 				bBrokerSignupSkipCaptcha =
-					filterContext.ActionDescriptor.ActionName == "Signup" && (
+					(filterContext.ActionDescriptor.ActionName == "Signup") &&
+					(filterContext.ActionDescriptor.ControllerDescriptor.ControllerName == "BrokerHome") && (
 						!filterContext.ActionParameters.ContainsKey("IsCaptchaEnabled") ||
-						(string)filterContext.ActionParameters["IsCaptchaEnabled"] != "1"
+						(filterContext.ActionParameters["IsCaptchaEnabled"].ToString() != "1")
 					);
 
-				log.DebugFormat("broker sign up skip captcha: {0}", bBrokerSignupSkipCaptcha ? "yes" : "ho");
+				log.DebugFormat("broker sign up skip captcha: {0}", bBrokerSignupSkipCaptcha ? "yes" : "no");
 			} // if
 
 			if (bSignupSkipCaptcha || bBrokerSignupSkipCaptcha)
