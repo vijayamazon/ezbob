@@ -15,7 +15,6 @@ namespace FraudChecker
 	using System.Text.RegularExpressions;
 	using NHibernate.Criterion;
 
-
 	public class InternalChecker
 	{
 		private static readonly ILog Log = LogManager.GetLogger(typeof(InternalChecker));
@@ -322,7 +321,10 @@ namespace FraudChecker
 		private void InternalAddressCheck(Customer customer, List<FraudDetection> fraudDetections, IEnumerable<Customer> customers)
 		{
 			//Address (any of home, business, directors, previous addresses)
-			var customerAddresses = customer.AddressInfo.AllAddresses;
+			var customerAddresses = customer.AddressInfo.AllAddresses.Where(
+					a => a.County != null || a.Director != null || 
+						 a.Line1 != null || a.Line2 != null || a.Line3 != null ||
+						 a.Postcode != null || a.Town != null);
 			var postcodes = customerAddresses.Select(a => a.Postcode).ToList();
 			var addresses = customers.SelectMany(c => c.AddressInfo.AllAddresses).Where(address => postcodes.Contains(address.Postcode));
 
