@@ -220,7 +220,6 @@ BEGIN
 		@ReApprovalRemainingAmountOld AS 'ReApprovalRemainingAmountOld',
 		APR,
 		RepaymentPeriod,
-		ExpirianRating,
 		(CASE @InterestRate WHEN -1 THEN InterestRate ELSE @InterestRate END) AS InterestRate,
 		UseSetupFee,
 		LoanTypeId,

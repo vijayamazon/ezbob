@@ -145,6 +145,13 @@
 				GetAml();
 				GetBwa();
 			} // if
+			else
+			{
+				experianConsumerScore = GetCurrentExperianScore();
+				minExperianScore = experianConsumerScore;
+				maxExperianScore = experianConsumerScore;
+				initialExperianConsumerScore = experianConsumerScore;
+			}
 
 			ScoreMedalOffer scoringResult = CalculateScoreAndMedal();
 
@@ -452,8 +459,7 @@
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId),
 				new QueryParameter("AutoApproveAmount", autoDecisionResponse.BankBasedAutoApproveAmount),
-				new QueryParameter("RepaymentPeriod", autoDecisionResponse.RepaymentPeriod)
-				);
+				new QueryParameter("RepaymentPeriod", autoDecisionResponse.RepaymentPeriod));
 		}
 
 		private void SetEndTimestamp()
@@ -470,8 +476,7 @@
 				"GetLastOfferForAutomatedDecision",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId),
-				new QueryParameter("Now", DateTime.UtcNow)
-				);
+				new QueryParameter("Now", DateTime.UtcNow));
 
 			if (lastOfferDataTable.Rows.Count == 1)
 			{
@@ -482,7 +487,6 @@
 				loanOfferReApprovalRemainingAmountOld = lastOfferResults["ReApprovalRemainingAmountOld"];
 				loanOfferApr = lastOfferResults["APR"];
 				loanOfferRepaymentPeriod = lastOfferResults["RepaymentPeriod"];
-				loanOfferExpirianRating = lastOfferResults["ExpirianRating"];
 				loanOfferInterestRate = lastOfferResults["InterestRate"];
 				loanOfferUseSetupFee = lastOfferResults["UseSetupFee"];
 				loanOfferLoanTypeId = lastOfferResults["LoanTypeId"];
@@ -503,8 +507,7 @@
 				"GetScoreCardData",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId),
-				new QueryParameter("Today", DateTime.Today)
-			);
+				new QueryParameter("Today", DateTime.Today));
 
 			var scoreCardResults = new SafeReader(scoreCardDataTable.Rows[0]);
 			string maritalStatusStr = scoreCardResults["MaritalStatus"];
@@ -533,7 +536,6 @@
 			Log.Info("Getting turnovers and seniority");
 			MpsTotals totals = strategyHelper.GetMpsTotals(customerId);
 			totalSumOfOrders1YTotal = totals.TotalSumOfOrders1YTotal;
-			totalSumOfOrders3MTotal = totals.TotalSumOfOrders3MTotal;
 			totalSumOfOrders1YTotalForRejection = totals.TotalSumOfOrders1YTotalForRejection;
 			totalSumOfOrders3MTotalForRejection = totals.TotalSumOfOrders3MTotalForRejection;
 			marketplaceSeniorityDays = totals.MarketplaceSeniorityDays;
@@ -612,18 +614,26 @@
 				Log.Info("Performing experian consumer check");
 				var strat = new ExperianConsumerCheck(customerId, directorId, false, DB, Log);
 				strat.Execute();
-				experianConsumerScore = strat.Score;
+				if (directorId == 0)
+				{
+					experianConsumerScore = strat.Score;
+				}
 			}
 			else if (!WaitForExperianConsumerCheckToFinishUpdates(directorId))
 			{
 				Log.Info("No data exist from experian consumer check for {0}:{1}.", directorId == 0 ? "customer" : "director", customerId);
 			}
-			else
+			else if (directorId == 0)
 			{
-				DataTable dt = DB.ExecuteReader("GetExperianScore", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
-				var sr = new SafeReader(dt.Rows[0]);
-				experianConsumerScore = sr["ExperianScore"];
+				experianConsumerScore = GetCurrentExperianScore();
 			}
+		}
+
+		private int GetCurrentExperianScore()
+		{
+			DataTable dt = DB.ExecuteReader("GetExperianScore", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
+			var sr = new SafeReader(dt.Rows[0]);
+			return sr["ExperianScore"];
 		}
 
 		private void PerformCompanyExperianCheck()
@@ -760,7 +770,6 @@
 		private MedalMultiplier medalType;
 		private decimal loanOfferApr;
 		private int loanOfferRepaymentPeriod;
-		private int loanOfferExpirianRating;
 		private decimal loanOfferInterestRate;
 		private int loanOfferUseSetupFee;
 		private int loanOfferLoanTypeId;
@@ -779,7 +788,6 @@
 		private int offeredCreditLine;
 		private double initialExperianConsumerScore;
 		private double marketplaceSeniorityDays;
-		private double totalSumOfOrders3MTotal;
 		private int modelLoanOffer;
 		private double totalSumOfOrders1YTotal;
 		private double totalSumOfOrders1YTotalForRejection;
@@ -1013,11 +1021,9 @@
 
 		private bool GetIsAmlUpdated()
 		{
-			DataTable dt = DB.ExecuteReader(
-				"GetIsAmlUpdated",
+			DataTable dt = DB.ExecuteReader("GetIsAmlUpdated",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId)
-			);
+				new QueryParameter("CustomerId", customerId));
 
 			var sr = new SafeReader(dt.Rows[0]);
 			return sr["IsUpdated"];
@@ -1052,8 +1058,8 @@
 					"GetLastMarketplaceStatus",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("CustomerId", customerId),
-					new QueryParameter("MarketplaceId", marketplaceId)
-				);
+					new QueryParameter("MarketplaceId", marketplaceId));
+
 				var lastStatusSafeReader = new SafeReader(lastStatusDataTable.Rows[0]);
 				string lastStatus = lastStatusSafeReader["CurrentStatus"];
 				if (lastStatus != "Done" && lastStatus != "Never Started" && lastStatus != "Finished" && lastStatus != "Failed" && lastStatus != "Terminated")
