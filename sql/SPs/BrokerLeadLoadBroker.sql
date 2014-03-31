@@ -8,24 +8,17 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	DECLARE @BrokerID INT
-	DECLARE @CustomerID INT
-	
-	SELECT
-		@BrokerID = BrokerID,
-		@CustomerID = CustomerID
-	FROM
-		BrokerLeads
-	WHERE
-		BrokerLeadID = @LeadID
-
 	SELECT
 		b.BrokerID,
 		b.ContactEmail AS BrokerContactEmail,
-		@CustomerID AS CustomerID
+		c.Id AS CustomerID,
+		w.TheLastOne AS IsAtLastWizardStep
 	FROM
-		Broker b
+		BrokerLeads bl
+		INNER JOIN Broker b ON bl.BrokerID = b.BrokerID
+		INNER JOIN Customer c ON bl.CustomerID = c.Id
+		INNER JOIN WizardStepTypes w ON c.WizardStep = w.WizardStepTypeID
 	WHERE
-		b.BrokerID = @BrokerID
+		bl.BrokerLeadID = @LeadID
 END
 GO

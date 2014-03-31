@@ -43,7 +43,7 @@
 			if (m_oResultRow == null)
 				return;
 
-			if ((m_oResultRow.BrokerID > 0) && (m_oResultRow.CustomerID > 0))
+			if ((m_oResultRow.BrokerID > 0) && (m_oResultRow.CustomerID > 0) && m_oResultRow.IsAtLastWizardStep)
 				new BrokerFillForCustomerComplete(m_oResultRow.BrokerID, m_oResultRow.CustomerID, DB, Log).Execute();
 		} // Execute
 
@@ -71,6 +71,7 @@
 				public int BrokerID { get; set; } // BrokerID
 				public string BrokerContactEmail { get; set; } // BrokerContactEmail
 				public int CustomerID { get; set; } // CustomerID
+				public bool IsAtLastWizardStep { get; set; } // IsAtLastWizardStep
 			} // class ResultRow
 		} // BrokerLeadLoadBroker
 

@@ -52,7 +52,7 @@ function HeartOfActivity() {
 	} // set
 } // HeartOfActivity
 
-EzBob.WizardView = Backbone.View.extend({
+EzBob.WizardView = EzBob.View.extend({
 	initialize: function(options) {
 		this.customer = options.customer;
 
@@ -120,6 +120,7 @@ EzBob.WizardView = Backbone.View.extend({
 	}, // events
 
 	brokerFinishWizardLater: function(event) {
+		this.setSomethingEnabled($(event.currentTarget), false);
 		location.assign(window.gRootPath + 'Broker/BrokerHome/FinishWizardLater');
 	}, // brokerFinishWizardLater
 
