@@ -124,7 +124,7 @@
 			customer.OfferValidUntil = cashRequest.OfferValidUntil;
 			customer.IsLoanTypeSelectionAllowed = 0;
 
-			// _appCreator.ApprovedUser(user, customer, customer.QuickOffer.Amount); // TODO: enable? disable?
+			m_oServiceClient.Instance.ApprovedUser(user.Id, customer.Id, customer.QuickOffer.Amount);
 
 			_historyRepository.LogAction(DecisionActions.Approve, sReason, user, customer);
 

@@ -92,6 +92,10 @@
 			return Execute(customerId, null, typeof(TransferCashFailed), customerId);
 		} // TransferCashFailed
 
+		public ActionMetaData BrokerForceResetCustomerPassword(int nUserID, int nCustomerID, string sNewPassword) {
+			return Execute<BrokerForceResetCustomerPassword>(nCustomerID, nUserID, nCustomerID, sNewPassword);
+		} // BrokerForceResetCustomerPassword
+
 		#endregion async
 
 		#region sync

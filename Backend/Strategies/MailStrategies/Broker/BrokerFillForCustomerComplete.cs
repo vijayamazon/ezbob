@@ -71,7 +71,7 @@
 					{ "ContactName", BrokerData.FullName },
 					{ "ContactEmail", BrokerData.Email },
 					{ "CustomerSiteLink", CustomerSite },
-					{ "BrokerSiteLink", BrokerSite + "#customer/" + CustomerData.Id },
+					{ "BrokerSiteLink", BrokerSite + "#customer/" + CustomerData.RefNum },
 				};
 			} // if first pass
 		} // SetTemplateAndVariables

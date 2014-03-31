@@ -1,4 +1,5 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers {
+	using System.Web.Security;
 	using Infrastructure;
 	using System;
 	using System.Collections.Generic;
@@ -33,7 +34,8 @@
 			IWorkplaceContext context,
 			LoanLimit limit,
 			MarketPlaceRepository mpType,
-			UnderwriterRecentCustomersRepository underwriterRecentCustomersRepository
+			UnderwriterRecentCustomersRepository underwriterRecentCustomersRepository,
+			MembershipProvider membershipProvider
 		) {
 			m_oLog = new SafeILog(LogManager.GetLogger(typeof(CustomersController)));
 			m_oDB = DbConnectionGenerator.Get();
@@ -50,6 +52,8 @@
 			_customerStatusesRepository = customerStatusesRepository;
 
 			this.underwriterRecentCustomersRepository = underwriterRecentCustomersRepository;
+
+			_membershipProvider = membershipProvider;
 		} // constructor
 
 		#endregion constructor
@@ -385,6 +389,19 @@
 
 				_historyRepository.LogAction(DecisionActions.Approve, reason, user, customer);
 
+				if (customer.FilledByBroker) {
+					try {
+						m_oServiceClient.Instance.BrokerForceResetCustomerPassword(
+							user.Id,
+							customer.Id,
+							_membershipProvider.ResetPassword(customer.Name, "")
+						);
+					}
+					catch (Exception e) {
+						m_oLog.Alert(e, "Something went horribly not so cool while resetting customer password.");
+					} // try
+				} // if
+
 				if (!request.EmailSendingBanned) {
 					try {
 						m_oServiceClient.Instance.ApprovedUser(user.Id, customer.Id, sum);
@@ -595,6 +612,7 @@
 		private readonly IWorkplaceContext _context;
 		private readonly MarketPlaceRepository _mpType;
 		private readonly IEzBobConfiguration _config;
+		private readonly MembershipProvider _membershipProvider;
 
 		private readonly CustomerStatusesRepository _customerStatusesRepository;
 		private readonly IUnderwriterRecentCustomersRepository underwriterRecentCustomersRepository;

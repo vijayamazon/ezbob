@@ -201,6 +201,9 @@
 		[OperationContract]
 		ActionMetaData BrokerLeadSendInvitation(int nLeadID, string sBrokerContactEmail);
 
+		[OperationContract]
+		ActionMetaData BrokerForceResetCustomerPassword(int nUserID, int nCustomerID, string sNewPassword);
+
 		#endregion email strategies
 
 		#region Experian

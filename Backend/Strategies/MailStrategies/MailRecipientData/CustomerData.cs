@@ -26,6 +26,7 @@
 			Mail = sr["Mail"];
 			IsOffline = sr["IsOffline"];
 			NumOfLoans = sr["NumOfLoans"];
+			RefNum = sr["RefNum"];
 		} // Load
 
 		#endregion method Load
@@ -56,6 +57,7 @@
 		public virtual string Mail { get; protected set; }
 		public virtual bool IsOffline { get; protected set; }
 		public virtual int NumOfLoans { get; protected set; }
+		public virtual string RefNum { get; protected set; }
 
 		#endregion properties
 	} // class CustomerData

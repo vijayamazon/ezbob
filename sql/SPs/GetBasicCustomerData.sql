@@ -25,7 +25,8 @@ BEGIN
 		Fullname,
 		Name AS Mail,
 		IsOffline,
-		@NumOfLoans AS NumOfLoans
+		@NumOfLoans AS NumOfLoans,
+		RefNumber
 	FROM
 		Customer
 	WHERE

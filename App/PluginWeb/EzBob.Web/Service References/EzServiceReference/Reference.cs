@@ -998,6 +998,9 @@ namespace EzBob.Web.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLeadSendInvitation", ReplyAction="http://tempuri.org/IEzService/BrokerLeadSendInvitationResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData BrokerLeadSendInvitation(int nLeadID, string sBrokerContactEmail);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerForceResetCustomerPassword", ReplyAction="http://tempuri.org/IEzService/BrokerForceResetCustomerPasswordResponse")]
+        EzBob.Web.EzServiceReference.ActionMetaData BrokerForceResetCustomerPassword(int nUserID, int nCustomerID, string sNewPassword);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckExperianCompany", ReplyAction="http://tempuri.org/IEzService/CheckExperianCompanyResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData CheckExperianCompany(int customerId, bool forceCheck);
         
@@ -1328,6 +1331,10 @@ namespace EzBob.Web.EzServiceReference {
         
         public EzBob.Web.EzServiceReference.ActionMetaData BrokerLeadSendInvitation(int nLeadID, string sBrokerContactEmail) {
             return base.Channel.BrokerLeadSendInvitation(nLeadID, sBrokerContactEmail);
+        }
+        
+        public EzBob.Web.EzServiceReference.ActionMetaData BrokerForceResetCustomerPassword(int nUserID, int nCustomerID, string sNewPassword) {
+            return base.Channel.BrokerForceResetCustomerPassword(nUserID, nCustomerID, sNewPassword);
         }
         
         public EzBob.Web.EzServiceReference.ActionMetaData CheckExperianCompany(int customerId, bool forceCheck) {

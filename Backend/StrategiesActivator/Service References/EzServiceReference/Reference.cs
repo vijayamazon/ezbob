@@ -3586,6 +3586,12 @@ namespace StrategiesActivator.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLeadSendInvitation", ReplyAction="http://tempuri.org/IEzService/BrokerLeadSendInvitationResponse")]
         System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> BrokerLeadSendInvitationAsync(int nLeadID, string sBrokerContactEmail);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerForceResetCustomerPassword", ReplyAction="http://tempuri.org/IEzService/BrokerForceResetCustomerPasswordResponse")]
+        StrategiesActivator.EzServiceReference.ActionMetaData BrokerForceResetCustomerPassword(int nUserID, int nCustomerID, string sNewPassword);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerForceResetCustomerPassword", ReplyAction="http://tempuri.org/IEzService/BrokerForceResetCustomerPasswordResponse")]
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> BrokerForceResetCustomerPasswordAsync(int nUserID, int nCustomerID, string sNewPassword);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CheckExperianCompany", ReplyAction="http://tempuri.org/IEzService/CheckExperianCompanyResponse")]
         StrategiesActivator.EzServiceReference.ActionMetaData CheckExperianCompany(int customerId, bool forceCheck);
         
@@ -4220,6 +4226,14 @@ namespace StrategiesActivator.EzServiceReference {
         
         public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> BrokerLeadSendInvitationAsync(int nLeadID, string sBrokerContactEmail) {
             return base.Channel.BrokerLeadSendInvitationAsync(nLeadID, sBrokerContactEmail);
+        }
+        
+        public StrategiesActivator.EzServiceReference.ActionMetaData BrokerForceResetCustomerPassword(int nUserID, int nCustomerID, string sNewPassword) {
+            return base.Channel.BrokerForceResetCustomerPassword(nUserID, nCustomerID, sNewPassword);
+        }
+        
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> BrokerForceResetCustomerPasswordAsync(int nUserID, int nCustomerID, string sNewPassword) {
+            return base.Channel.BrokerForceResetCustomerPasswordAsync(nUserID, nCustomerID, sNewPassword);
         }
         
         public StrategiesActivator.EzServiceReference.ActionMetaData CheckExperianCompany(int customerId, bool forceCheck) {
