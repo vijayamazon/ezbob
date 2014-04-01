@@ -18,7 +18,7 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
 
 		public IQueryable<MP_CustomerMarketplaceUpdatingHistory> GetByMarketplaceId(int marketplaceId)
 		{
-			return GetAll().Where(x => x.CustomerMarketPlace.Id == marketplaceId).OrderBy(x => x.UpdatingStart);
+			return GetAll().Where(x => x.CustomerMarketPlace.Id == marketplaceId).OrderByDescending(x => x.UpdatingStart);
 		}
 	}
 }

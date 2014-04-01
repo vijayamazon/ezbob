@@ -292,7 +292,7 @@ namespace EZBob.DatabaseLib {
 
 		internal void UpdateCustomerMarketplaceData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, Action<MP_CustomerMarketplaceUpdatingHistory> a)
 		{
-			MP_CustomerMarketplaceUpdatingHistory historyItem = customerMarketPlaceUpdatingHistoryRepository.GetByMarketplaceId(databaseCustomerMarketPlace.Id).LastOrDefault();
+			MP_CustomerMarketplaceUpdatingHistory historyItem = customerMarketPlaceUpdatingHistoryRepository.GetByMarketplaceId(databaseCustomerMarketPlace.Id).FirstOrDefault();
 
 			try
 			{
