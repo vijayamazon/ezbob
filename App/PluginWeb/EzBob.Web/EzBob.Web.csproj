@@ -1371,6 +1371,7 @@
     <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.LoanOfferMultiplier.coffee" />
     <None Include="Service References\EzServiceReference\configuration91.svcinfo" />
     <None Include="Service References\EzServiceReference\configuration.svcinfo" />
+    <Content Include="Content\js\Wizard\yourInfo\ezbob.yourIno.consent.agreement.js" />
     <Content Include="Service References\EzServiceReference\EzBob.Web.EzServiceReference.ActionMetaData.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Content>
@@ -1519,9 +1520,6 @@
     </Content>
     <Content Include="Content\js\Wizard\shops\ezbob.shops.paypoint.js">
       <DependentUpon>ezbob.shops.paypoint.coffee</DependentUpon>
-    </Content>
-    <Content Include="Content\js\Wizard\yourInfo\ezbob.yourIno.consent.agreement.js">
-      <DependentUpon>ezbob.yourIno.consent.agreement.coffee</DependentUpon>
     </Content>
     <Content Include="favicon.ico" />
     <Content Include="Content\img\header-gradient.png" />
@@ -2058,7 +2056,6 @@
     <Content Include="Content\js\Wizard\shops\ezbob.shopbutton.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.ekm.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.coffee" />
-    <Content Include="Content\js\Wizard\yourInfo\ezbob.yourIno.consent.agreement.coffee" />
     <Content Include="Content\js\Wizard\ezbob.wizard.shops.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.paypoint.coffee" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.amazon.coffee" />

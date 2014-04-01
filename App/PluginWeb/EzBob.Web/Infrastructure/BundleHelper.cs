@@ -397,7 +397,7 @@
 				.Add("~/Content/js/Wizard/yourInfo/ezbob.yourInfo.employeeCount.js")
 				.Add("~/Content/js/Wizard/yourInfo/ezbob.yourinfo.companyTarget.js")
 				.Add("~/Content/js/controls/ezbob.address.js")
-				.Add("~/Content/js/Wizard/yourInfo/ezbob.yourIno.consent.agreement.coffee")
+				.Add("~/Content/js/Wizard/yourInfo/ezbob.yourIno.consent.agreement.js")
 				.MvcRender("~/Content/js/min/wizard_#.js");
 		} // RenderWizardJs
 

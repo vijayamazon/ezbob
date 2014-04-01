@@ -27,6 +27,14 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 		});
 	}, // initialize
 
+	events: function() {
+		var evt = EzBob.Broker.SignupView.__super__.events.apply(this, arguments);
+
+		evt['click .show-terms-and-conditions'] = 'showConsent';
+
+		return evt;
+	}, // events
+
 	clear: function() {
 		EzBob.Broker.SignupView.__super__.clear.apply(this, arguments);
 
@@ -48,6 +56,10 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 		var amt = _.find(oData, function(d) { return d.name === 'EstimatedMonthlyClientAmount'; });
 		if (amt)
 			amt.value = this.$el.find('#EstimatedMonthlyClientAmount').autoNumericGet();
+
+		var fws = _.find(oData, function(d) { return d.name === 'FirmWebSite'; });
+		if (fws && !/^https?:\/\//.test(fws.value))
+			fws.value = 'http://' + fws.value;
 
 		var oRequest = $.post('' + window.gRootPath + 'Broker/BrokerHome/Signup', oData);
 
@@ -93,6 +105,22 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 	onFocus: function() {
 		this.$el.find('#FirmName').focus();
 	}, // onFocus
+
+	showConsent: function (event) {
+		event.preventDefault();
+		event.stopPropagation();
+
+		var consentAgreementModel = new EzBob.ConsentAgreementModel({
+			id: 0,
+			firstName: '',
+			middleInitial: '',
+			surname: '',
+		});
+
+		var consentAgreement = new EzBob.ConsentAgreement({ model: consentAgreementModel });
+		EzBob.App.modal.show(consentAgreement);
+		return false;
+	}, // showConsent
 
 	initValidatorCfg: function() {
 		var passPolicy = { required: true, minlength: 6, maxlength: 255 };

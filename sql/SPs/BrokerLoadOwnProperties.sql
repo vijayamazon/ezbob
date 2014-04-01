@@ -3,10 +3,13 @@ IF OBJECT_ID('BrokerLoadOwnProperties') IS NULL
 GO
 
 ALTER PROCEDURE BrokerLoadOwnProperties
-@ContactEmail NVARCHAR(255)
+@ContactEmail NVARCHAR(255),
+@BrokerID INT
 AS
 BEGIN
 	SET NOCOUNT ON;
+
+	SET @ContactEmail = ISNULL(LTRIM(RTRIM(ISNULL(@ContactEmail, ''))), '')
 
 	SELECT
 		b.BrokerID,
@@ -22,6 +25,8 @@ BEGIN
 	FROM
 		Broker b
 	WHERE
-		ContactEmail = @ContactEmail
+		(@ContactEmail != '' AND b.ContactEmail = @ContactEmail)
+		OR
+		(@BrokerID > 0 AND b.BrokerID = @BrokerID)
 END
 GO

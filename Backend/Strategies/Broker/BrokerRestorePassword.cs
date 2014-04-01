@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Backend.Strategies.Broker {
 	using System;
 	using System.Text;
+	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Security;
@@ -33,6 +34,9 @@
 			oValidator.Execute();
 			if (!oValidator.IsValidatedSuccessfully())
 				throw new Exception("Failed to validate mobile code.");
+
+			var sp = new SpBrokerLoadOwnProperties(DB, Log);
+			BrokerProperties oProperties = sp.FillFirst<BrokerProperties>();
 
 			var osPassword = new StringBuilder();
 
@@ -68,7 +72,7 @@
 				"BrokerResetPassword",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("@ContactMobile", m_sMobile),
-				new QueryParameter("@Password", SecurityUtils.HashPassword(osPassword.ToString()))
+				new QueryParameter("@Password", SecurityUtils.HashPassword(oProperties.ContactEmail + osPassword.ToString()))
 			);
 
 			if (!string.IsNullOrWhiteSpace(sErrMsg))

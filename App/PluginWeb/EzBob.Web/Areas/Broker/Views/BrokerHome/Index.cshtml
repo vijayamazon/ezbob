@@ -202,7 +202,7 @@
 						<div class="form_field_container form-read-and-accept">
 							<div>
 								<input id="AgreeToTerms" name="AgreeToTerms" type="checkbox" value="false" ui-event-control-id="broker:signup-agree-to-terms" />
-								<label for="AgreeToTerms">I have read and accept the ezbob <a>terms and conditions</a></label>
+								<label for="AgreeToTerms">I have read and accept the ezbob <a href="#" class="show-terms-and-conditions">terms and conditions</a></label>
 							</div>
 
 							<div>
@@ -576,6 +576,19 @@
 		@{ Html.RenderPartial("_Copyright"); }
 	</footer>
 
+	<script id="consent-agreement-temlate" type="text/template">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true" ui-event-control-id="wizard:dismiss_consent">×</button>
+			<h3 id="myModalLabel">Consent</h3>
+		</div>
+		<div id="consent-conent" class="modal-body consent-dialog">
+			@{Html.RenderPartial("~/Areas/Customer/Views/Consent/Commercial.cshtml");}
+		</div>
+		<div class="modal-footer">
+			<a href="#" class="pull-right print print-link" ui-event-control-id="wizard:print_consent">Print</a>
+		</div>
+	</script>
+
 	<div id="hidden-container" class="hide" style="display: none !important;">
 		<div class="common-customer-sidebar">
 			@{Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_Sidebar.cshtml");}
@@ -666,6 +679,7 @@
 			.Add("~/Content/js/EzBob.DataTables.Helper.js")
 			.Add("~/Content/js/controls/ezbob.BoundItemView.coffee")
 			.Add("~/Content/js/underwriter/profile/CustomerRelations/ezbob.underwriter.AddCustomerRelationsEntry.coffee")
+			.Add("~/Content/js/Wizard/yourInfo/ezbob.yourIno.consent.agreement.js")
 			.AddString(BundleHelper.GetDbStrings())
 			.Add("~/Content/js/ezbob.view.js")
 			.Add("~/Content/js/Broker/broker.base.view.js")

@@ -46,20 +46,6 @@
 
 		private readonly SpBrokerLoadOwnProperties m_oSp;
 
-		#region class SpBrokerLoadOwnProperties
-
-		private class SpBrokerLoadOwnProperties : AStoredProc {
-			public SpBrokerLoadOwnProperties(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor
-
-			public override bool HasValidParameters() {
-				return !string.IsNullOrWhiteSpace(ContactEmail);
-			} // HasValidParameters
-
-			public string ContactEmail { get; set; }
-		} // SpBrokerLoadOwnProperties
-
-		#endregion class SpBrokerLoadOwnProperties
-
 		#endregion private
 	} // class BrokerLoadOwnProperties
 } // namespace EzBob.Backend.Strategies.Broker

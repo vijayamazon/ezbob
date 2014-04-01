@@ -102,13 +102,12 @@ EzBob.Broker.AddCustomerView = EzBob.Broker.SubmitView.extend({
 	initValidatorCfg: function() {
 		this.validator = this.$el.find('form').validate({
 			rules: {
-				LeadFirstName: { required: true, maxlength: 255, },
+				LeadFirstName: EzBob.Validation.NameValidationObject,
 				LeadLastName: { required: true, maxlength: 255, },
 				LeadEmail: { required: true, email: true, maxlength: 255, },
 			},
 
 			messages: {
-				LedFirstName: { required: 'Please enter person first name.', },
 				LedLastName: { required: 'Please enter person last name.', },
 				LeadEmail: { required: 'This field is required.', email: 'Please enter lead email.', },
 			},
