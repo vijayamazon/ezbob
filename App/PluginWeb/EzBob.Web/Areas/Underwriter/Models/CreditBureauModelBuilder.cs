@@ -655,7 +655,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 				case TypeOfBusinessReduced.Limited:
 					var limitedBusinessData = srv.GetLimitedBusinessData(company.ExperianRefNum, customer.Id, true, false);
 					updateCompanyDataPeriodDays = _variablesRepository.GetByNameAsInt("UpdateCompanyDataPeriodDays");
-					if (limitedBusinessData.LastCheckDate.HasValue &&
+					if (limitedBusinessData != null && limitedBusinessData.LastCheckDate.HasValue &&
 						(DateTime.UtcNow - limitedBusinessData.LastCheckDate.Value).TotalDays >= updateCompanyDataPeriodDays) 
 					{
 						limitedBusinessData.IsDataExpired = true;
@@ -668,7 +668,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 				case TypeOfBusinessReduced.NonLimited:
 					var notLimitedBusinessData = srv.GetNotLimitedBusinessData(company.ExperianRefNum, customer.Id, true, false);
 					updateCompanyDataPeriodDays = _variablesRepository.GetByNameAsInt("UpdateCompanyDataPeriodDays");
-					if (notLimitedBusinessData.LastCheckDate.HasValue &&
+					if (notLimitedBusinessData != null && notLimitedBusinessData.LastCheckDate.HasValue &&
 						(DateTime.UtcNow - notLimitedBusinessData.LastCheckDate.Value).TotalDays >= updateCompanyDataPeriodDays)
 					{
 						notLimitedBusinessData.IsDataExpired = true;

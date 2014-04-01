@@ -141,6 +141,11 @@
 					return new LimitedResults(newResponse, DateTime.UtcNow);
 				} // if
 
+				if (response == null)
+				{
+					return null;
+				}
+
 				return new LimitedResults(response.JsonPacket, response.LastUpdateDate);
 			}
 			catch (Exception e) {
@@ -171,6 +176,11 @@
 
 					return new NonLimitedResults(newResponse, DateTime.UtcNow);
 				} // if
+
+				if (response == null)
+				{
+					return null;
+				}
 
 				return new NonLimitedResults(response.JsonPacket, response.LastUpdateDate);
 			}

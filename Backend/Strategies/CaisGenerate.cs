@@ -179,14 +179,20 @@
 								{
 									companyTypeCode = "L";
 									var res = service.GetLimitedBusinessData(experianRefNum, customerId, true, false);
-									if (!string.IsNullOrEmpty(res.CompanyName)) fullName = res.CompanyName;
-									if (!string.IsNullOrEmpty(res.PostCode))
+									if (res != null)
 									{
-										line1 = res.AddressLine1;
-										line23 = res.AddressLine2;
-										town = res.AddressLine3;
-										county = res.AddressLine4;
-										postcode = res.PostCode;
+										if (!string.IsNullOrEmpty(res.CompanyName))
+										{
+											fullName = res.CompanyName;
+										}
+										if (!string.IsNullOrEmpty(res.PostCode))
+										{
+											line1 = res.AddressLine1;
+											line23 = res.AddressLine2;
+											town = res.AddressLine3;
+											county = res.AddressLine4;
+											postcode = res.PostCode;
+										}
 									}
 								}
 								break;
@@ -196,17 +202,20 @@
 								{
 									companyTypeCode = "N";
 									var res = service.GetNotLimitedBusinessData(experianRefNum, customerId, true, false);
-									if (!string.IsNullOrEmpty(res.CompanyName))
+									if (res != null)
 									{
-										fullName = res.CompanyName;
-									}
-									if (!string.IsNullOrEmpty(res.PostCode))
-									{
-										line1 = res.AddressLine1;
-										line23 = res.AddressLine2 + res.AddressLine3 == null ? "" : " " + res.AddressLine3;
-										town = res.AddressLine4;
-										county = res.AddressLine5;
-										postcode = res.PostCode;
+										if (!string.IsNullOrEmpty(res.CompanyName))
+										{
+											fullName = res.CompanyName;
+										}
+										if (!string.IsNullOrEmpty(res.PostCode))
+										{
+											line1 = res.AddressLine1;
+											line23 = res.AddressLine2 + res.AddressLine3 == null ? "" : " " + res.AddressLine3;
+											town = res.AddressLine4;
+											county = res.AddressLine5;
+											postcode = res.PostCode;
+										}
 									}
 								}
 								break;
