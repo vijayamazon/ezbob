@@ -30,7 +30,6 @@ namespace ezmanage
         {
             return Fluently.Configure()
 				.Database(MsSqlConfiguration.MsSql2005.ConnectionString(c => c.FromAppSetting("DBConnection"))) //DBConnectionLocal
-                .Mappings(m => m.FluentMappings.AddFromAssemblyOf<Application>())
                 .Mappings(m => m.FluentMappings.AddFromAssemblyOf<Customer>())
                 .ExposeConfiguration(BuildSchema)
                 .BuildSessionFactory();

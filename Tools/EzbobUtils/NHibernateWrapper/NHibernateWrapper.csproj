@@ -99,8 +99,6 @@
     <Compile Include="ApplicationMng.Model\AppStatusMap.cs" />
     <Compile Include="ApplicationMng.Model\AttachDocType.cs" />
     <Compile Include="ApplicationMng.Model\AttachDocTypeMap.cs" />
-    <Compile Include="ApplicationMng.Model\ExclusiveApplication.cs" />
-    <Compile Include="ApplicationMng.Model\ExclusiveApplicationMap.cs" />
     <Compile Include="ApplicationMng.Model\ExecutionState.cs" />
     <Compile Include="ApplicationMng.Model\ExecutionStateMap.cs" />
     <Compile Include="ApplicationMng.Model\MenuItem.cs" />

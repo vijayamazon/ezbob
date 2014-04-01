@@ -30,8 +30,6 @@
         {
 			EnvironmentConfigurationLoader.AppPathDummy = @"c:\ezbob\app\pluginweb\EzBob.Web\";
 
-			NHibernateManager.FluentAssemblies.Add(typeof(ApplicationMng.Model.Application).Assembly);
-
 			Scanner.Register();
 
 			ObjectFactory.Configure(x =>
