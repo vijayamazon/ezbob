@@ -35,6 +35,10 @@
 			if (!oValidator.IsValidatedSuccessfully())
 				throw new Exception("Failed to validate mobile code.");
 
+
+			// Alex - Consider using this code (generic SP code - no input validation, but doesn't require its own class)
+			// new GetSpResultTable(DB, Log, "SpBrokerLoadOwnProperties2", "Mobile", m_sMobile).Execute();
+
 			var sp = new SpBrokerLoadOwnProperties2(DB, Log, m_sMobile);
 			BrokerProperties oProperties = sp.FillFirst<BrokerProperties>();
 
