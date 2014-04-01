@@ -24,6 +24,7 @@ BEGIN
 		INNER JOIN CRMActions a ON cr.ActionId = a.Id
 		INNER JOIN CRMStatuses s ON cr.StatusId = s.Id
 		INNER JOIN Customer c ON cr.CustomerId = c.Id
+		INNER JOIN Broker b ON cr.UserName = b.FirmName
 	WHERE
 		c.RefNumber = @RefNum
 		ANd

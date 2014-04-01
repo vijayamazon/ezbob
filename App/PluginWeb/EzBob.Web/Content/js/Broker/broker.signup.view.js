@@ -111,10 +111,10 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 		event.stopPropagation();
 
 		var consentAgreementModel = new EzBob.ConsentAgreementModel({
-			id: 0,
-			firstName: '',
+			id: 1,
+			firstName: 'Jane',
 			middleInitial: '',
-			surname: '',
+			surname: 'Doe',
 		});
 
 		var consentAgreement = new EzBob.ConsentAgreement({ model: consentAgreementModel });
