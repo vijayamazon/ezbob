@@ -35,7 +35,7 @@
 			if (!oValidator.IsValidatedSuccessfully())
 				throw new Exception("Failed to validate mobile code.");
 
-			var sp = new SpBrokerLoadOwnProperties(DB, Log);
+			var sp = new SpBrokerLoadOwnProperties2(DB, Log, m_sMobile);
 			BrokerProperties oProperties = sp.FillFirst<BrokerProperties>();
 
 			var osPassword = new StringBuilder();
