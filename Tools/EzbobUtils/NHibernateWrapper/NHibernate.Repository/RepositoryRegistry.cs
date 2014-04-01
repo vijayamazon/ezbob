@@ -9,7 +9,6 @@ namespace NHibernateWrapper.NHibernate.Repository
 		{
 			base.For(typeof(IRepository<>)).Use(typeof(NHibernateRepositoryBase<>));
 			base.For<IAttachDocTypeRepository>().Use<AttachDocTypeRepository>();
-			base.For<IControlHistoryRepository>().Use<ControlHistoryRepository>();
 			base.For<ISessionFactory>().Use(() => NHibernateManager.SessionFactory);
 			base.For<IUsersRepository>().Use<UsersRepository>();
 			base.For<IRolesRepository>().Use<RolesRepository>();
