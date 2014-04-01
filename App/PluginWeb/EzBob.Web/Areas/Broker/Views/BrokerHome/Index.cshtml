@@ -207,7 +207,7 @@
 
 							<div>
 								<input id="AgreeToPrivacyPolicy" name="AgreeToPrivacyPolicy" type="checkbox" value="false" ui-event-control-id="broker:signup-agree-to-privacy-policy" />
-								<label for="AgreeToPrivacyPolicy">I have read and accept the ezbob <a>privacy policy</a></label>
+								<label for="AgreeToPrivacyPolicy">I have read and accept the ezbob <a target="_blank" href="http://www.ezbob.com/privacy-and-cookies">privacy policy</a></label>
 							</div>
 						</div>
 
@@ -404,12 +404,11 @@
 
 						<div class="value-group aka-table table-big box">
 							<div class="box-title aka-caption">Useful links</div>
-								<div class="aka-row">
-									<div class="aka-column">
-										<ul>
-											<li>@Html.ActionLink("Credit file release and consent", "DownloadFile", "BrokerHome", new { Area = "Broker", fid = "customer-consent", }, new { })</li>
-										</ul>
-									</div>
+							<div class="aka-row">
+								<div class="aka-column">
+									<ul>
+										<li>@Html.ActionLink("Credit file release and consent", "DownloadFile", "BrokerHome", new { Area = "Broker", fid = "customer-consent", }, new { })</li>
+									</ul>
 								</div>
 							</div>
 						</div>
