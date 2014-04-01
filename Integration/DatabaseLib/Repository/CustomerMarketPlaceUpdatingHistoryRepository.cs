@@ -1,11 +1,9 @@
-using System.Collections.Generic;
-using System.Linq;
-using ApplicationMng.Repository;
-using NHibernate;
-using NHibernate.Linq;
-
 namespace EZBob.DatabaseLib.Model.Database.Repository
 {
+	using System.Linq;
+	using ApplicationMng.Repository;
+	using NHibernate;
+
 	public class CustomerMarketPlaceUpdatingHistoryRepository :NHibernateRepositoryBase<MP_CustomerMarketplaceUpdatingHistory>
 	{
 		public CustomerMarketPlaceUpdatingHistoryRepository(ISession session) 
@@ -13,9 +11,14 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
 		{
 		}
 
-	    public IQueryable<MP_CustomerMarketplaceUpdatingHistory> GetByCustomer(Customer customer)
-	    {
-	        return GetAll().Where(x => x.CustomerMarketPlace.Customer.Id == customer.Id).OrderBy(x => x.UpdatingStart);
-	    }
+		public IQueryable<MP_CustomerMarketplaceUpdatingHistory> GetByCustomer(Customer customer)
+		{
+			return GetAll().Where(x => x.CustomerMarketPlace.Customer.Id == customer.Id).OrderBy(x => x.UpdatingStart);
+		}
+
+		public IQueryable<MP_CustomerMarketplaceUpdatingHistory> GetByMarketplaceId(int marketplaceId)
+		{
+			return GetAll().Where(x => x.CustomerMarketPlace.Id == marketplaceId).OrderBy(x => x.UpdatingStart);
+		}
 	}
 }

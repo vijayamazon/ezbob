@@ -2,29 +2,20 @@ namespace EZBob.DatabaseLib {
 	#region using
 
 	using System;
-	using System.Collections.Concurrent;
 	using System.Collections.Generic;
 	using System.Diagnostics;
 	using System.Linq;
 	using System.Net;
-	using System.Text.RegularExpressions;
 	using Newtonsoft.Json;
 	using Common;
-	using Ezbob.ExperianParser;
 	using Model.Database.Broker;
 	using Model.Database.Loans;
 	using DatabaseWrapper;
 	using DatabaseWrapper.AccountInfo;
-	using DatabaseWrapper.AmazonFeedbackData;
-	using DatabaseWrapper.EbayFeedbackData;
 	using DatabaseWrapper.FunctionValues;
 	using DatabaseWrapper.Functions;
-	using DatabaseWrapper.Inventory;
 	using DatabaseWrapper.Order;
-	using DatabaseWrapper.Products;
 	using DatabaseWrapper.Transactions;
-	using DatabaseWrapper.UsersData;
-	using Exceptions;
 	using Model;
 	using Model.Database;
 	using Model.Database.Repository;
@@ -33,9 +24,7 @@ namespace EZBob.DatabaseLib {
 	using EzBob.CommonLib.MarketplaceSpecificTypes.TeraPeakOrdersData;
 	using EzBob.CommonLib.ReceivedDataListLogic;
 	using EzBob.CommonLib.TimePeriodLogic;
-	using Model.Marketplaces.Amazon;
 	using NHibernate;
-	using NHibernate.Criterion;
 	using NHibernate.Linq;
 	using Repository;
 	using StructureMap;
@@ -100,7 +89,8 @@ namespace EZBob.DatabaseLib {
 
 		private readonly WizardStepRepository _wizardStepRepository;
 		private readonly TrustPilotStatusRepository _trustPilotStatusRepository;
-		private readonly BrokerRepository _brokerRepository; 
+		private readonly BrokerRepository _brokerRepository;
+		private readonly CustomerMarketPlaceUpdatingHistoryRepository customerMarketPlaceUpdatingHistoryRepository;
 
 		#endregion repositories
 
@@ -146,6 +136,7 @@ namespace EZBob.DatabaseLib {
 			_wizardStepRepository = new WizardStepRepository(session);
 			_trustPilotStatusRepository = new TrustPilotStatusRepository(session);
 			_brokerRepository = new BrokerRepository(session);
+			customerMarketPlaceUpdatingHistoryRepository = new CustomerMarketPlaceUpdatingHistoryRepository(session);
 		} // constructor
 
 		#endregion constructor
@@ -301,7 +292,8 @@ namespace EZBob.DatabaseLib {
 
 		internal void UpdateCustomerMarketplaceData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, Action<MP_CustomerMarketplaceUpdatingHistory> a)
 		{
-			MP_CustomerMarketplaceUpdatingHistory historyItem = null;
+			MP_CustomerMarketplaceUpdatingHistory historyItem = customerMarketPlaceUpdatingHistoryRepository.GetByMarketplaceId(databaseCustomerMarketPlace.Id).LastOrDefault();
+
 			try
 			{
 				a(historyItem);

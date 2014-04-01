@@ -102,8 +102,7 @@
 							break;
 
 						case "FreeAgent":
-							new FreeAgentRetrieveDataHelper(Helper, new FreeAgentDatabaseMarketPlace()).UpdateCustomerMarketplaceFirst(
-								marketplaceId);
+							new FreeAgentRetrieveDataHelper(Helper, new FreeAgentDatabaseMarketPlace()).UpdateCustomerMarketplaceFirst(marketplaceId);
 							break;
 
 						case "Sage":
@@ -111,8 +110,7 @@
 							break;
 
 						case "PayPoint":
-							new PayPointRetrieveDataHelper(Helper, new PayPointDatabaseMarketPlace()).UpdateCustomerMarketplaceFirst(
-								marketplaceId);
+							new PayPointRetrieveDataHelper(Helper, new PayPointDatabaseMarketPlace()).UpdateCustomerMarketplaceFirst(marketplaceId);
 							break;
 
 						case "Yodlee":
