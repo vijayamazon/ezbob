@@ -242,7 +242,6 @@ EzBob.Profile.ProfileRouter = Backbone.Router.extend({
     },
 
     routes: {
-        //"AccountSummary": "accountSummary",
         "": "decide",
         "AccountActivity": "accountActivity",
         "YourDetails": "YourDetails",
@@ -256,10 +255,14 @@ EzBob.Profile.ProfileRouter = Backbone.Router.extend({
         "InviteFriend": "inviteFriend",
         "Perks":"perks"
     },
-    //    accountSummary: function () {
-    //        this.activate("AccountSummary");
-    //    },
-    decide: function() {
+    decide: function () {
+        // Workaround for non-standard navigation
+        var isInHmrcUpload = $("#uploadFilesDiv").attr('style') == "display: block;";
+        var isInHmrcLink = $("#linkAccountDiv").attr('style') == "display: block;";
+        if (isInHmrcUpload || isInHmrcLink) {
+            return false;
+        }
+
         if (this.model.get('hasLoans')) {
             this.activate("AccountActivity");
         } else {
