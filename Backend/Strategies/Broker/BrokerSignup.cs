@@ -1,6 +1,5 @@
 ﻿namespace EzBob.Backend.Strategies.Broker {
 	using System;
-	using System.Text;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -50,8 +49,6 @@
 				BrokerTermsID = nBrokerTermsID,
 			};
 
-			m_oSetSp = new SpBrokerSetSourceRef(DB, Log);
-
 			Properties = new BrokerProperties();
 		} // constructor
 
@@ -90,28 +87,6 @@
 				Log.Alert("Failed to create a broker: no error message from DB but broker id is 0.");
 				throw new Exception("Failed to create a broker.");
 			} // if
-
-			string sBrokerID = BaseConverter.Execute(Properties.BrokerID, BaseConverter.LowerCaseLetters);
-
-			var oSrcRef = new StringBuilder("brk-");
-
-			const int nMaxSrcRefLen = 6;
-
-			if (sBrokerID.Length < nMaxSrcRefLen) {
-				const int cMin = 'a';
-				const int cMax = 1 + (int)'z';
-				int nLen = nMaxSrcRefLen - sBrokerID.Length;
-
-				var rnd = new Random();
-				for (int i = 0; i < nLen; i++)
-					oSrcRef.Append((char)rnd.Next(cMin, cMax));
-			} // if
-
-			oSrcRef.Append(sBrokerID);
-
-			m_oSetSp.BrokerID = Properties.BrokerID;
-			m_oSetSp.SourceRef = oSrcRef.ToString();
-			m_oSetSp.ExecuteNonQuery();
 		} // Execute
 
 		#endregion method Execute
@@ -124,7 +99,6 @@
 		private readonly string m_sMobileCode;
 
 		private readonly SpBrokerSignUp m_oCreateSp;
-		private readonly SpBrokerSetSourceRef m_oSetSp;
 
 		#region class SpBrokerSignUp
 
@@ -239,43 +213,6 @@
 		} // SpBrokerSignUp
 
 		#endregion class SpBrokerSignUp
-
-		#region class SpBrokerSetSourceRef
-
-		private class SpBrokerSetSourceRef : AStoredProc {
-			#region constructor
-
-			public SpBrokerSetSourceRef(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor
-
-			#endregion constructor
-
-			#region method HasValidParameters
-
-			public override bool HasValidParameters() {
-				return (BrokerID > 0) && !string.IsNullOrWhiteSpace(SourceRef);
-			} // HasValidParameters
-
-			#endregion method HasValidParameters
-
-			#region properties
-
-			public int BrokerID { get; set; }
-
-			public string SourceRef {
-				get { return m_sSourceRef; } // get
-				set { m_sSourceRef = (value ?? string.Empty).Trim();
-
-					if (m_sSourceRef.Length > 10)
-						m_sSourceRef = m_sSourceRef.Substring(0, 10);
-				} // set
-			} // SourceRef
-
-			private string m_sSourceRef;
-
-			#endregion properties
-		} // SpBrokerSetSourceRef
-
-		#endregion class SpBrokerSetSourceRef
 
 		#endregion private
 	} // class BrokerSignup

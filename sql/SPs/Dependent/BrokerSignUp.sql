@@ -24,6 +24,7 @@ BEGIN
 	DECLARE @ErrMsg NVARCHAR(255) = ''
 	DECLARE @BrokerID INT
 	DECLARE @UserID INT
+	DECLARE @SourceRef NVARCHAR(255)
 
 	IF @BrokerTermsID = 0
 		SET @BrokerTermsID = NULL
@@ -71,6 +72,21 @@ BEGIN
 	IF @ErrMsg = ''
 	BEGIN
 		SET @BrokerID = SCOPE_IDENTITY()
+
+		BEGIN TRY
+			EXECUTE BrokerGenerateSourceRef @BrokerID, @SourceRef OUT
+	
+			UPDATE Broker SET
+				SourceRef = @SourceRef
+			WHERE
+				BrokerID = @BrokerID
+		END TRY
+		BEGIN CATCH
+			SET @ErrMsg = 'Failed to create a broker entry: ' + dbo.udfGetErrorMsg()
+
+			DELETE FROM Broker WHERE BrokerID = @BrokerID
+			DELETE FROM Security_User WHERE UserId = @UserID
+		END CATCH
 	END
 
 	IF @ErrMsg = ''

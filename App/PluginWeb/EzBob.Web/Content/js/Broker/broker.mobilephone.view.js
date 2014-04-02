@@ -85,9 +85,7 @@ EzBob.Broker.MobilePhoneView = EzBob.Broker.SubmitView.extend({
 		this.mobilePhoneChanged();
 	}, // clear
 
-	mobilePhoneAccessed: function() {
-		console.log(event.keyCode, event);
-
+	mobilePhoneAccessed: function(event) {
 		var bIsPhoneNumberValid = this.validator.check(this.$el.find('#' + this.PhoneFieldID));
 
 		if (bIsPhoneNumberValid) {
@@ -100,7 +98,7 @@ EzBob.Broker.MobilePhoneView = EzBob.Broker.SubmitView.extend({
 
 				this.setSomethingEnabled('#' + this.GenerateCodeBtnID, bEnabled).val('Resend activation code');
 
-				if (this.specialKeys[event.keyCode])
+				if (event && event.keyCode && this.specialKeys[event.keyCode])
 					this.$el.find('#' + this.MobileCodeFieldID).val('');
 				else
 					this.$el.find('#' + this.MobileCodeFieldID).val('').focus();
