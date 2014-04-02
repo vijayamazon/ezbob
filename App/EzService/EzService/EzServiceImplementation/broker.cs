@@ -79,7 +79,8 @@
 			string sPassword2,
 			string sFirmWebSiteUrl,
 			int nEstimatedMonthlyApplicationCount,
-			bool bIsCaptchEnabled
+			bool bIsCaptchEnabled,
+			int nBrokerTermsID
 		) {
 			BrokerSignup oInstance;
 
@@ -96,7 +97,8 @@
 				sPassword2,
 				sFirmWebSiteUrl,
 				nEstimatedMonthlyApplicationCount,
-				bIsCaptchEnabled
+				bIsCaptchEnabled,
+				nBrokerTermsID
 			);
 
 			return new BrokerPropertiesActionResult {
@@ -326,6 +328,22 @@
 		} // BrokerLoadOwnProperties
 
 		#endregion method BrokerLoadOwnProperties
+
+		#region method BrokerLoadCurrentTerms
+
+		public BrokerTermsActionResult BrokerLoadCurrentTerms() {
+			BrokerLoadCurrentTerms oInstance;
+
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null);
+
+			return new BrokerTermsActionResult {
+				MetaData = oMetaData,
+				Terms = oInstance.Terms,
+				TermsID = oInstance.ID,
+			};
+		} // BrokerLoadCurrentTerms
+
+		#endregion method BrokerLoadCurrentTerms
 
 		#endregion sync
 	} // class EzServiceImplementation

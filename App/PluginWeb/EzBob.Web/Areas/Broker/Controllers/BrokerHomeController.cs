@@ -4,6 +4,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Security.Principal;
 	using System.Web;
 	using System.Web.Mvc;
 	using System.Web.Security;
@@ -67,7 +68,7 @@
 
 				ViewData[Constant.Broker.Auth] = sAuthenticationResult;
 
-				m_oLog.Info("Broker page sent to browser with authentication result: {0}", sAuthenticationResult);
+				m_oLog.Info("Broker page sent to browser with authentication result '{0}' for identified name '{1}'.", sAuthenticationResult, User.Identity.Name);
 			} // if
 
 			try {
@@ -106,7 +107,8 @@
 			string Password2,
 			string FirmWebSite,
 			int EstimatedMonthlyAppCount,
-			int IsCaptchaEnabled
+			int IsCaptchaEnabled,
+			int TermsID
 		) {
 			m_oLog.Debug(
 				"Broker signup request:" +
@@ -121,6 +123,7 @@
 				"\n\tFirm web site URL: {8}",
 				"\n\tEstimated monthly application count: {9}",
 				"\n\tCaptcha enabled: {10}",
+				"\n\tTerms ID: {11}",
 				FirmName,
 				FirmRegNum,
 				ContactName,
@@ -131,7 +134,8 @@
 				EstimatedMonthlyClientAmount,
 				FirmWebSite,
 				EstimatedMonthlyAppCount,
-				IsCaptchaEnabled == 0 ? "no" : "yes"
+				IsCaptchaEnabled == 0 ? "no" : "yes",
+				TermsID
 			);
 
 			if (!ModelState.IsValid) {
@@ -161,7 +165,8 @@
 					Password2,
 					FirmWebSite,
 					EstimatedMonthlyAppCount,
-					IsCaptchaEnabled != 0
+					IsCaptchaEnabled != 0,
+					TermsID
 				);
 			}
 			catch (Exception e) {
@@ -185,7 +190,7 @@
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult Logoff(string sContactEmail) {
 			if (User.Identity.IsAuthenticated && (User.Identity.Name == sContactEmail)) {
-				m_oHelper.Logoff(User.Identity.Name);
+				m_oHelper.Logoff(User.Identity.Name, HttpContext);
 				return new BrokerForJsonResult();
 			} // if
 
@@ -340,12 +345,12 @@
 
 		#endregion action LoadCustomerDetails
 
-		#region action CrmLoadLookups
+		#region action LoadStaticData
 
 		[HttpGet]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
-		public JsonResult CrmLoadLookups() {
+		public JsonResult LoadStaticData() {
 			m_oLog.Debug("Broker loading CRM details started...");
 
 			CrmLookupsActionResult oLookups = null;
@@ -358,12 +363,22 @@
 				oLookups = new CrmLookupsActionResult();
 			} // try
 
+			BrokerTermsActionResult oTerms = null;
+
+			try {
+				oTerms = m_oServiceClient.Instance.BrokerLoadCurrentTerms();
+			}
+			catch (Exception e) {
+				m_oLog.Alert(e, "Broker loading CRM details failed.");
+				oTerms = new BrokerTermsActionResult();
+			} // try
+
 			m_oLog.Debug("Broker loading CRM details complete.");
 
-			return new CrmLookupsBrokerForJsonResult(oLookups);
-		} // CrmLoadLookups
+			return new StaticDataBrokerForJsonResult(oLookups, oTerms);
+		} // LoadStaticData
 
-		#endregion action CrmLoadLookups
+		#endregion action LoadStaticData
 
 		#region action SaveCrmEntry
 
@@ -695,7 +710,7 @@
 				return RedirectToAction("Index", "BrokerHome", new { Area = "Broker", });
 			} // if
 
-			m_oHelper.Logoff(User.Identity.Name);
+			m_oHelper.Logoff(User.Identity.Name, HttpContext);
 			if (bld.CustomerID > 0)
 				FormsAuthentication.SetAuthCookie(bld.LeadEmail, false);
 
@@ -720,9 +735,9 @@
 
 		[HttpGet]
 		public System.Web.Mvc.ActionResult FinishWizardLater() {
-			m_oLog.Debug("Broker fill wizard later request.");
-
 			var blm = new WizardBrokerLeadModel(Session);
+
+			m_oLog.Debug("Broker fill wizard later request: {0}", blm);
 
 			if (blm.BrokerFillsForCustomer) {
 				StringActionResult sar = null;
@@ -734,8 +749,13 @@
 					m_oLog.Warn("Failed to retrieve broker details, falling back to customer's dashboard.", e);
 				} // try
 
-				if (sar != null) {
+				if (sar == null)
+					m_oLog.Debug("Failed to retrieve broker details.");
+				else {
 					FormsAuthentication.SignOut();
+					HttpContext.User = new GenericPrincipal(new GenericIdentity(string.Empty), null);
+
+					m_oLog.Debug("Restoring broker identity after filling customer wizard: '{0}'.", sar.Value);
 					FormsAuthentication.SetAuthCookie(sar.Value, true);
 
 					blm.Unset();
@@ -915,24 +935,33 @@
 
 		#endregion class CustomerDetailsBrokerForJsonResult
 
-		#region class CrmLookupsBrokerForJsonResult
+		#region class StaticDataBrokerForJsonResult
 
-		public class CrmLookupsBrokerForJsonResult : BrokerForJsonResult {
-			public CrmLookupsBrokerForJsonResult(
+		public class StaticDataBrokerForJsonResult : BrokerForJsonResult {
+			public StaticDataBrokerForJsonResult(
 				CrmLookupsActionResult oLookups,
+				BrokerTermsActionResult oTerms,
 				string sErrorMsg = "",
 				bool? bExplicitSuccess = null
 			) : base(sErrorMsg, bExplicitSuccess) {
 				actions = oLookups.Actions.ToDictionary(pair => pair.Key.ToString(), pair => pair.Value);
+
 				statuses = oLookups.Statuses.ToDictionary(pair => pair.Key.ToString(), pair => pair.Value);
+
+				broker_terms = new Dictionary<string, string>() {
+					{ "id", oTerms.TermsID.ToString() },
+					{ "text", oTerms.Terms },
+				};
 			} // constructor
 
 			public virtual Dictionary<string, string> actions { get; private set; } // actions
 
 			public virtual Dictionary<string, string> statuses { get; private set; } // statuses
-		} // CrmLookupsBrokerForJsonResult
 
-		#endregion class CrmLookupsBrokerForJsonResult
+			public virtual Dictionary<string, string> broker_terms { get; private set; } // broker_terms
+		} // StaticDataBrokerForJsonResult
+
+		#endregion class StaticDataBrokerForJsonResult
 
 		#region class FileListBrokerForJsonResult
 

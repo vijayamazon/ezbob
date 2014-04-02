@@ -54,7 +54,8 @@
 			string sPassword2,
 			string sFirmWebSiteUrl,
 			int nEstimatedMonthlyApplicationCount,
-			bool bIsCaptchEnabled
+			bool bIsCaptchEnabled,
+			int nBrokerTermsID
 		);
 
 		[OperationContract]
@@ -107,6 +108,9 @@
 
 		[OperationContract]
 		BrokerPropertiesActionResult BrokerLoadOwnProperties(string sContactEmail);
+
+		[OperationContract]
+		BrokerTermsActionResult BrokerLoadCurrentTerms();
 
 		#endregion Broker
 

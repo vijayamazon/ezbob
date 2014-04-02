@@ -5,6 +5,7 @@
 	using System.Data;
 	using System.Globalization;
 	using System.Linq;
+	using System.Security.Principal;
 	using System.Web.Mvc;
 	using System.Web.Security;
 	using DbConstants;
@@ -102,6 +103,7 @@
 
 				if (sar != null) {
 					FormsAuthentication.SignOut();
+					HttpContext.User = new GenericPrincipal(new GenericIdentity(string.Empty), null);
 					FormsAuthentication.SetAuthCookie(sar.Value, true);
 
 					Session[Constant.Broker.MessageOnStart] = string.Format(

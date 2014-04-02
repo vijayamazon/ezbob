@@ -61,6 +61,11 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 		if (fws && !/^https?:\/\//.test(fws.value))
 			fws.value = 'http://' + fws.value;
 
+		oData.push({
+			name: 'TermsID',
+			value: $('#broker-terms-and-conditions').attr('data-terms-version'),
+		});
+
 		var oRequest = $.post('' + window.gRootPath + 'Broker/BrokerHome/Signup', oData);
 
 		var self = this;

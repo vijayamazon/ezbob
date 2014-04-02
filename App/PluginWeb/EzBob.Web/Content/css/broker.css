@@ -78,6 +78,7 @@ table.customer-list {
 }
 
 .broker a,
+#broker-terms-and-conditions a,
 .section-dashboard tbody .grid-item-FirstName a,
 .section-dashboard tbody .grid-item-LastName a {
 	text-decoration: underline;

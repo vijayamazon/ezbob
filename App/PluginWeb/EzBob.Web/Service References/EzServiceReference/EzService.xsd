@@ -86,6 +86,16 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ActionResult" nillable="true" type="tns:ActionResult" />
+  <xs:complexType name="DateTimeActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ActionResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Value" type="xs:dateTime" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="DateTimeActionResult" nillable="true" type="tns:DateTimeActionResult" />
   <xs:complexType name="BrokerSmsCountActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
@@ -182,6 +192,17 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="BrokerLeadDetailsActionResult" nillable="true" type="tns:BrokerLeadDetailsActionResult" />
+  <xs:complexType name="BrokerTermsActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ActionResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Terms" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="TermsID" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="BrokerTermsActionResult" nillable="true" type="tns:BrokerTermsActionResult" />
   <xs:complexType name="CrmLookupsActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
@@ -225,14 +246,4 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="IntActionResult" nillable="true" type="tns:IntActionResult" />
-  <xs:complexType name="DateTimeActionResult">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:ActionResult">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="Value" type="xs:dateTime" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="DateTimeActionResult" nillable="true" type="tns:DateTimeActionResult" />
 </xs:schema>

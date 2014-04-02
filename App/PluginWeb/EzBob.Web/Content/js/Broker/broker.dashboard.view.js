@@ -1,4 +1,4 @@
-﻿EzBob = EzBob || {};
+﻿var EzBob = EzBob || {};
 EzBob.Broker = EzBob.Broker || {};
 
 EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
@@ -124,6 +124,10 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 
 				theTableOpts.aaSorting = [ [5, 'desc'] ];
 
+				self.adjustAoColumn(theTableOpts, 'Marketplaces', function(oCol) {
+					oCol.asSorting = [];
+				});
+
 				self.adjustAoColumn(theTableOpts, [ 'LoanAmount', 'SetupFee' ], function(oCol) {
 					var oStdMoneyRender = oCol.mRender;
 
@@ -183,6 +187,7 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 				theTableOpts.aoColumns.push({
 					mData: null,
 					sClass: 'center',
+					asSorting: [],
 					mRender: function(oData, sAction, oFullSource) {
 						if (sAction !== 'display')
 							return '';
@@ -206,6 +211,7 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 				theTableOpts.aoColumns.push({
 					mData: null,
 					sClass: 'center',
+					asSorting: [],
 					mRender: function(oData, sAction, oFullSource) {
 						if ((oFullSource.LeadID <= 0) || oFullSource.IsLeadDeleted || (oFullSource.WizardStep === 'Wizard complete'))
 							return '';

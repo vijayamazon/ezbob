@@ -28,6 +28,7 @@
 			string sFirmWebSiteUrl,
 			int nEstimatedMonthlyApplicationCount,
 			bool bIsCaptchaEnabled,
+			int nBrokerTermsID,
 			AConnection oDB,
 			ASafeLog oLog
 		) : base(oDB, oLog) {
@@ -46,6 +47,7 @@
 				Password2 = sPassword2,
 				FirmWebSiteUrl = sFirmWebSiteUrl,
 				EstimatedMonthlyApplicationCount = nEstimatedMonthlyApplicationCount,
+				BrokerTermsID = nBrokerTermsID,
 			};
 
 			m_oSetSp = new SpBrokerSetSourceRef(DB, Log);
@@ -206,6 +208,8 @@
 
 			[NonTraversable]
 			public string Password2 { get; set; }
+
+			public int BrokerTermsID { get; set; }
 
 			#endregion properties
 

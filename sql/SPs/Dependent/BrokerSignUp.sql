@@ -15,7 +15,8 @@ ALTER PROCEDURE BrokerSignUp
 @FirmWebSiteUrl NVARCHAR(255),
 @EstimatedMonthlyApplicationCount INT,
 @AgreedToTermsDate DATETIME,
-@AgreedToPrivacyPolicyDate DATETIME
+@AgreedToPrivacyPolicyDate DATETIME,
+@BrokerTermsID INT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -23,6 +24,9 @@ BEGIN
 	DECLARE @ErrMsg NVARCHAR(255) = ''
 	DECLARE @BrokerID INT
 	DECLARE @UserID INT
+
+	IF @BrokerTermsID = 0
+		SET @BrokerTermsID = NULL
 
 	IF @ErrMsg = ''
 	BEGIN
@@ -48,11 +52,13 @@ BEGIN
 			INSERT INTO Broker(
 				FirmName, FirmRegNum, ContactName, ContactEmail, ContactMobile,
 				ContactOtherPhone, SourceRef, EstimatedMonthlyClientAmount, Password, UserID,
-				FirmWebSiteUrl, EstimatedMonthlyApplicationCount, AgreedToTermsDate, AgreedToPrivacyPolicyDate
+				FirmWebSiteUrl, EstimatedMonthlyApplicationCount, AgreedToTermsDate, AgreedToPrivacyPolicyDate,
+				BrokerTermsID
 			) VALUES (
 				@FirmName, @FirmRegNum, @ContactName, @ContactEmail, @ContactMobile,
 				@ContactOtherPhone, @TempSourceRef, @EstimatedMonthlyClientAmount, @Password, @UserID,
-				@FirmWebSiteUrl, @EstimatedMonthlyApplicationCount, @AgreedToTermsDate, @AgreedToPrivacyPolicyDate
+				@FirmWebSiteUrl, @EstimatedMonthlyApplicationCount, @AgreedToTermsDate, @AgreedToPrivacyPolicyDate,
+				@BrokerTermsID
 			)
 		END TRY
 		BEGIN CATCH

@@ -33,7 +33,7 @@ $(document).ready(function() {
 	oFieldStatusIcons.filter('.required').field_status({ required: true });
 	oFieldStatusIcons.not('.required').field_status({ required: false });
 
-	$.getJSON(window.gRootPath + 'Broker/BrokerHome/CrmLoadLookups', {}, function(oResponse) {
+	$.getJSON(window.gRootPath + 'Broker/BrokerHome/LoadStaticData', {}, function(oResponse) {
 		if (!oResponse.success)
 			return;
 
@@ -42,6 +42,10 @@ $(document).ready(function() {
 			set_text: true,
 			callback: function(sName, oValue) { return JSON.stringify(oValue); },
 		});
+
+		var oTerms = $('#broker-terms-and-conditions');
+		oTerms.html(oResponse.broker_terms.text);
+		oTerms.attr('data-terms-version', oResponse.broker_terms.id);
 	});
 
 	var sMsgOnStart = $('body').attr('data-msg-on-start');

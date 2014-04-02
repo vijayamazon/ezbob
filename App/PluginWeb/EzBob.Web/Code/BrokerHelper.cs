@@ -1,5 +1,7 @@
 ﻿namespace EzBob.Web.Code {
 	using System;
+	using System.Security.Principal;
+	using System.Web;
 	using System.Web.Security;
 	using EzServiceReference;
 	using Ezbob.Backend.Models;
@@ -23,14 +25,16 @@
 		public bool IsBroker(string sContactEmail) {
 			BoolActionResult bar = null;
 
-			try {
-				m_oLog.Debug("Checking whether '{0}' is a broker email.", sContactEmail);
+			if (!string.IsNullOrWhiteSpace(sContactEmail)) {
+				try {
+					m_oLog.Debug("Checking whether '{0}' is a broker email.", sContactEmail);
 
-				bar = m_oServiceClient.Instance.IsBroker(sContactEmail);
-			}
-			catch (Exception e) {
-				m_oLog.Warn(e, "Failed to determine whether '{0}' is a broker email.", sContactEmail);
-			} // try
+					bar = m_oServiceClient.Instance.IsBroker(sContactEmail);
+				}
+				catch (Exception e) {
+					m_oLog.Warn(e, "Failed to determine whether '{0}' is a broker email.", sContactEmail);
+				} // try
+			} // if
 
 			var bIsBroker = (bar != null) && bar.Value;
 
@@ -70,9 +74,10 @@
 
 		#region method Logoff
 
-		public void Logoff(string sCurrentLogin) {
+		public void Logoff(string sCurrentLogin, HttpContextBase oContext) {
 			m_oLog.Debug("Broker {0} signed out.", sCurrentLogin);
 			FormsAuthentication.SignOut();
+			oContext.User = new GenericPrincipal(new GenericIdentity(string.Empty), null);
 		} // Logoff
 
 		#endregion method Logoff

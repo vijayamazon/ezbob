@@ -9,15 +9,15 @@ BEGIN
 	SET NOCOUNT ON;
 
 	SELECT
-		b.BrokerID,
-		b.ContactEmail AS BrokerContactEmail,
-		c.Id AS CustomerID,
-		w.TheLastOne AS IsAtLastWizardStep
+		ISNULL(b.BrokerID, 0) AS BrokerID,
+		ISNULL(b.ContactEmail, '') AS BrokerContactEmail,
+		ISNULL(c.Id, 0) AS CustomerID,
+		ISNULL(w.TheLastOne, 0) AS IsAtLastWizardStep
 	FROM
 		BrokerLeads bl
 		INNER JOIN Broker b ON bl.BrokerID = b.BrokerID
-		INNER JOIN Customer c ON bl.CustomerID = c.Id
-		INNER JOIN WizardStepTypes w ON c.WizardStep = w.WizardStepTypeID
+		LEFT JOIN Customer c ON bl.CustomerID = c.Id
+		LEFT JOIN WizardStepTypes w ON c.WizardStep = w.WizardStepTypeID
 	WHERE
 		bl.BrokerLeadID = @LeadID
 END

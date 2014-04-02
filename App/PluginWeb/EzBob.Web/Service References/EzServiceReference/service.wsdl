@@ -112,6 +112,12 @@
   <wsdl:message name="IEzServiceAdmin_WriteToLog_OutputMessage">
     <wsdl:part name="parameters" element="tns:WriteToLogResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_GetExperianCompanyCacheDate_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetExperianCompanyCacheDate" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetExperianCompanyCacheDate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetExperianCompanyCacheDateResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_SaveAgreement_InputMessage">
     <wsdl:part name="parameters" element="tns:SaveAgreement" />
   </wsdl:message>
@@ -261,6 +267,12 @@
   </wsdl:message>
   <wsdl:message name="IEzService_BrokerLoadOwnProperties_OutputMessage">
     <wsdl:part name="parameters" element="tns:BrokerLoadOwnPropertiesResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerLoadCurrentTerms_InputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerLoadCurrentTerms" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerLoadCurrentTerms_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerLoadCurrentTermsResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_CaisGenerate_InputMessage">
     <wsdl:part name="parameters" element="tns:CaisGenerate" />
@@ -616,12 +628,6 @@
   <wsdl:message name="IEzService_GetExperianConsumerCacheDate_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetExperianConsumerCacheDateResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_GetExperianCompanyCacheDate_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetExperianCompanyCacheDate" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_GetExperianCompanyCacheDate_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetExperianCompanyCacheDateResponse" />
-  </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/Shutdown" message="tns:IEzServiceAdmin_Shutdown_InputMessage" />
@@ -645,6 +651,10 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IEzService">
+    <wsdl:operation name="GetExperianCompanyCacheDate">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetExperianCompanyCacheDate" message="tns:IEzService_GetExperianCompanyCacheDate_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetExperianCompanyCacheDateResponse" message="tns:IEzService_GetExperianCompanyCacheDate_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="SaveAgreement">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SaveAgreement" message="tns:IEzService_SaveAgreement_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SaveAgreementResponse" message="tns:IEzService_SaveAgreement_OutputMessage" />
@@ -744,6 +754,10 @@
     <wsdl:operation name="BrokerLoadOwnProperties">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerLoadOwnProperties" message="tns:IEzService_BrokerLoadOwnProperties_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerLoadOwnPropertiesResponse" message="tns:IEzService_BrokerLoadOwnProperties_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BrokerLoadCurrentTerms">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerLoadCurrentTerms" message="tns:IEzService_BrokerLoadCurrentTerms_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerLoadCurrentTermsResponse" message="tns:IEzService_BrokerLoadCurrentTerms_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="CaisGenerate">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CaisGenerate" message="tns:IEzService_CaisGenerate_InputMessage" />
@@ -981,10 +995,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetExperianConsumerCacheDate" message="tns:IEzService_GetExperianConsumerCacheDate_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetExperianConsumerCacheDateResponse" message="tns:IEzService_GetExperianConsumerCacheDate_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="GetExperianCompanyCacheDate">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetExperianCompanyCacheDate" message="tns:IEzService_GetExperianCompanyCacheDate_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetExperianCompanyCacheDateResponse" message="tns:IEzService_GetExperianCompanyCacheDate_OutputMessage" />
-    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
     <wsp:PolicyReference URI="#NetTcpBinding_IEzServiceAdmin_policy">
@@ -1040,6 +1050,15 @@
     <wsp:PolicyReference URI="#NetTcpBinding_IEzService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="GetExperianCompanyCacheDate">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/GetExperianCompanyCacheDate" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="SaveAgreement">
       <soap12:operation soapAction="http://tempuri.org/IEzService/SaveAgreement" style="document" />
       <wsdl:input>
@@ -1258,6 +1277,15 @@
     </wsdl:operation>
     <wsdl:operation name="BrokerLoadOwnProperties">
       <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerLoadOwnProperties" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BrokerLoadCurrentTerms">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerLoadCurrentTerms" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -1789,15 +1817,6 @@
     </wsdl:operation>
     <wsdl:operation name="GetExperianConsumerCacheDate">
       <soap12:operation soapAction="http://tempuri.org/IEzService/GetExperianConsumerCacheDate" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetExperianCompanyCacheDate">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/GetExperianCompanyCacheDate" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

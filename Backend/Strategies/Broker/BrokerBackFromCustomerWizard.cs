@@ -37,8 +37,7 @@
 		#region method Execute
 
 		public override void Execute() {
-			if (m_oSp.HasValidParameters())
-				m_oResultRow = m_oSp.FillFirst<BrokerLeadLoadBroker.ResultRow>();
+			m_oResultRow = m_oSp.FillFirst<BrokerLeadLoadBroker.ResultRow>();
 
 			if (m_oResultRow == null)
 				return;

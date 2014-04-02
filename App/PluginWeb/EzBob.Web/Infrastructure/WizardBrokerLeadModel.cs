@@ -97,6 +97,22 @@
 
 		#endregion property BrokerFillsForCustomer
 
+		#region method ToString
+
+		public override string ToString() {
+			return string.Format(
+				"[ WizardBrokerLeadModel: is set = {0}, id = {1}, details: {3} {4} - {2}, broker fills: {5} ]",
+				IsSet ? "yes" : "no",
+				LeadID,
+				LeadEmail,
+				FirstName,
+				LastName,
+				BrokerFillsForCustomer ? "yes" : "no"
+			);
+		} // ToString
+
+		#endregion method ToString
+
 		#endregion public
 
 		#region private
