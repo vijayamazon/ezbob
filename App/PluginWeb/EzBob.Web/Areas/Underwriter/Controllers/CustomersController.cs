@@ -389,17 +389,24 @@
 
 				_historyRepository.LogAction(DecisionActions.Approve, reason, user, customer);
 
-				if (customer.FilledByBroker) {
-					try {
-						m_oServiceClient.Instance.BrokerForceResetCustomerPassword(
-							user.Id,
-							customer.Id,
-							_membershipProvider.ResetPassword(customer.Name, "")
-						);
+				if (customer.FilledByBroker)
+				{
+					int numOfPreviousApprovals = customer.DecisionHistory.Count(x => x.Action == DecisionActions.Approve);
+					if (numOfPreviousApprovals == 0)
+					{
+						try
+						{
+							m_oServiceClient.Instance.BrokerForceResetCustomerPassword(
+								user.Id,
+								customer.Id,
+								_membershipProvider.ResetPassword(customer.Name, "")
+								);
+						}
+						catch (Exception e)
+						{
+							m_oLog.Alert(e, "Something went horribly not so cool while resetting customer password.");
+						} // try
 					}
-					catch (Exception e) {
-						m_oLog.Alert(e, "Something went horribly not so cool while resetting customer password.");
-					} // try
 				} // if
 
 				if (!request.EmailSendingBanned) {
