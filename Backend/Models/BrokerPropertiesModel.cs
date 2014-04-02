@@ -36,6 +36,32 @@
 
 		[DataMember]
 		public string BrokerWebSiteUrl { get; set; }
+
+		public override string ToString() {
+			return string.Format(
+@"
+	BrokerID: {0}
+	BrokerName: {1}
+	BrokerRegNum: {2}
+	ContactName: {3}
+	ContactEmail: {4}
+	ContactMobile: {5}
+	ContactOtherPhone: {6}
+	SourceRef: {7}
+	BrokerWebSiteUrl: {8}
+	ErrorMsg: {9}",
+				BrokerID,
+				BrokerName,
+				BrokerRegNum,
+				ContactName,
+				ContactEmail,
+				ContactMobile,
+				ContactOtherPhone,
+				SourceRef,
+				BrokerWebSiteUrl,
+				ErrorMsg
+			);
+		} // ToString
 	} // class BrokerProperties
 
 	#endregion class BrokerProperties

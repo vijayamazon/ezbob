@@ -110,15 +110,19 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 		event.preventDefault();
 		event.stopPropagation();
 
-		var consentAgreementModel = new EzBob.ConsentAgreementModel({
-			id: 1,
-			firstName: 'Jane',
-			middleInitial: '',
-			surname: 'Doe',
+		$('#broker-terms-and-conditions').dialog({
+			modal: true,
+
+			width: 800,
+			height: 600,
+
+			buttons: {
+				Close: function() {
+					$(this).dialog("close");
+				}, // close button
+			}, // buttons
 		});
 
-		var consentAgreement = new EzBob.ConsentAgreement({ model: consentAgreementModel });
-		EzBob.App.modal.show(consentAgreement);
 		return false;
 	}, // showConsent
 

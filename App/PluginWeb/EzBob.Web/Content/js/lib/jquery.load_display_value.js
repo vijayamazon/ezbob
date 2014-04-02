@@ -28,7 +28,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 			data_source: null,
 			data_field_attr: null,
 			callback: null,
+			realFieldName: null,
 			set_text: false,
+			fieldNameSetText: null,
 		};
 
 		var oArgs = $.extend({}, oDefaults, options);
@@ -43,11 +45,20 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 			var oElm = $(this);
 
 			var sFieldName = oElm.attr(oArgs.data_field_attr);
+			var sRealFieldName = sFieldName;
+
+			if (oArgs.realFieldName)
+				sRealFieldName = oArgs.realFieldName(sFieldName);
+
+			var bSetText = oArgs.set_text;
+
+			if (oArgs.fieldNameSetText)
+				bSetText = oArgs.fieldNameSetText(sFieldName);
 
 			if (oArgs.callback)
-				oElm.set_display_value(oArgs.callback(sFieldName, oArgs.data_source[sFieldName]), oArgs.set_text);
+				oElm.set_display_value(oArgs.callback(sFieldName, oArgs.data_source[sRealFieldName]), bSetText);
 			else
-				oElm.set_display_value(oArgs.data_source[sFieldName] || '', oArgs.set_text);
+				oElm.set_display_value(oArgs.data_source[sRealFieldName] || '', bSetText);
 		});
 	}; // main plugin function
 })(jQuery);

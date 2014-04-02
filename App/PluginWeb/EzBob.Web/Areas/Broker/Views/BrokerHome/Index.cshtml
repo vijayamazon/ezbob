@@ -39,7 +39,6 @@
 			.Add("~/Content/css/flaty/dataTables.bootstrap.css")
 			.Add("~/Content/css/flaty/DT_bootstrap.css")
 			.Add("~/Content/css/flaty/flaty-responsive.css")
-			.Add("~/Content/css/flaty/bootstrap-responsive.min.css")
 			.Add("~/Content/css/flaty/flaty.css")
 			.Add("~/Content/css/flaty/font-awesome.min.css")
 			.Add("~/Content/css/flaty/bootstrap3-modal-patch.css")
@@ -313,8 +312,8 @@
 									<th>Commission</th>
 									<th>Loan date</th>
 									<th>Last invitation sent</th>
-									<th>Send</th>
-									<th>Fill</th>
+									<th></th>
+									<th></th>
 								</tr></thead>
 								<tbody><tr>
 									<td></td>
@@ -398,6 +397,20 @@
 											<span class="value" data-field-name="ContactEmail"></span>
 										</div>
 									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="value-group aka-table table-big box">
+							<div class="box-title aka-caption">Sample code</div>
+
+							<div class="aka-row">
+								<div class="aka-column">
+									<div class="value source-ref-sample" data-field-name="SourceRefToLink"></div>						
+								</div>
+
+								<div class="aka-column-top">
+									<div class="value source-ref-sample-text" data-field-name="SourceRefToText"></div>						
 								</div>
 							</div>
 						</div>
@@ -576,19 +589,6 @@
 		@{ Html.RenderPartial("_Copyright"); }
 	</footer>
 
-	<script id="consent-agreement-temlate" type="text/template">
-		<div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-hidden="true" ui-event-control-id="wizard:dismiss_consent">×</button>
-			<h3 id="myModalLabel">Consent</h3>
-		</div>
-		<div id="consent-conent" class="modal-body consent-dialog">
-			@{Html.RenderPartial("~/Areas/Customer/Views/Consent/Commercial.cshtml");}
-		</div>
-		<div class="modal-footer">
-			<a href="#" class="pull-right print print-link" ui-event-control-id="wizard:print_consent">Print</a>
-		</div>
-	</script>
-
 	<div id="hidden-container" class="hide" style="display: none !important;">
 		<div class="common-customer-sidebar">
 			@{Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_Sidebar.cshtml");}
@@ -605,7 +605,12 @@
 			data-max-per-number="@ViewData[Constant.Broker.MaxPerNumber]"
 			data-max-per-page="@ViewData[Constant.Broker.MaxPerPage]"
 		></div>
+
+		<div id="broker-terms-and-conditions" title="Terms and Conditions">
+			@{Html.RenderPartial("~/Areas/Customer/Views/Consent/Commercial.cshtml");}
+		</div>
 	</div>
+
 	<!-- scripts - begin -->
 <!--[if lt IE 9]>
 <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -640,7 +645,6 @@
 			.Add("~/Content/js/lib/backbone.js")
 			.Add("~/Content/js/lib/backbone.marionette.js")
 			.Add("~/Content/js/lib/Backbone.ModelBinder.js")
-			.Add("~/Content/js/lib/flaty/bootstrap3.js")
 			.Add("~/Content/js/lib/moment.js")
 			.Add("~/Content/js/lib/jquery.numeric.js")
 			.Add("~/Content/js/lib/recaptcha_ajax.js")
@@ -679,7 +683,6 @@
 			.Add("~/Content/js/EzBob.DataTables.Helper.js")
 			.Add("~/Content/js/controls/ezbob.BoundItemView.coffee")
 			.Add("~/Content/js/underwriter/profile/CustomerRelations/ezbob.underwriter.AddCustomerRelationsEntry.coffee")
-			.Add("~/Content/js/Wizard/yourInfo/ezbob.yourIno.consent.agreement.js")
 			.AddString(BundleHelper.GetDbStrings())
 			.Add("~/Content/js/ezbob.view.js")
 			.Add("~/Content/js/Broker/broker.base.view.js")
@@ -693,7 +696,9 @@
 			.Add("~/Content/js/Broker/broker.customerdetails.view.js")
 			.Add("~/Content/js/Broker/broker.router.js")
 			.Add("~/Content/js/Broker/broker.main.js")
-			.MvcRender("~/Content/js/min/jslib_#.js"));
+			.MvcRender("~/Content/js/min/jslib_#.js")
+		);
+
 	}
 	<script>
 		var EzBob = EzBob || {};

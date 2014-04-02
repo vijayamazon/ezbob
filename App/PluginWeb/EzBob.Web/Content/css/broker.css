@@ -219,6 +219,20 @@ table.customer-list {
 	right: 0;
 }
 
+.aka-column-top {
+	display: table-cell;
+	vertical-align: top;
+}
+
+.source-ref-sample {
+	padding: 10px;
+}
+
+.source-ref-sample-text {
+	white-space: pre;
+	padding: 10px;
+}
+
 @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
 	.broker-form {
 		float: left;

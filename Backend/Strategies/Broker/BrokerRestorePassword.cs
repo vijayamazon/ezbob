@@ -35,12 +35,13 @@
 			if (!oValidator.IsValidatedSuccessfully())
 				throw new Exception("Failed to validate mobile code.");
 
+			var sp = new SpBrokerLoadOwnProperties(DB, Log) {
+				ContactMobile = m_sMobile,
+			};
 
-			// Alex - Consider using this code (generic SP code - no input validation, but doesn't require its own class)
-			// new GetSpResultTable(DB, Log, "SpBrokerLoadOwnProperties2", "Mobile", m_sMobile).Execute();
-
-			var sp = new SpBrokerLoadOwnProperties2(DB, Log, m_sMobile);
 			BrokerProperties oProperties = sp.FillFirst<BrokerProperties>();
+
+			Log.Debug("Broker properties search result for mobile phone {0}:\n{1}", m_sMobile, oProperties);
 
 			var osPassword = new StringBuilder();
 
@@ -64,25 +65,14 @@
 					osPassword.Append((char)rnd.Next(cLowerMin, cLowerMax));
 			} // for
 
-			string sErrMsg = "Failed to reset broker password.";
-			int nBrokerID = 0;
-
-			DB.ForEachRowSafe(
-				(sr, bRowsetStart) => {
-					sErrMsg = sr["ErrorMsg"];
-					nBrokerID = sr["BrokerID"];
-					return ActionResult.SkipAll;
-				},
+			DB.ExecuteNonQuery(
 				"BrokerResetPassword",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("@ContactMobile", m_sMobile),
+				new QueryParameter("@BrokerID", oProperties.BrokerID),
 				new QueryParameter("@Password", SecurityUtils.HashPassword(oProperties.ContactEmail + osPassword.ToString()))
 			);
 
-			if (!string.IsNullOrWhiteSpace(sErrMsg))
-				throw new Exception(sErrMsg);
-
-			new BrokerPasswordRestored(nBrokerID, osPassword.ToString(), DB, Log).Execute();
+			new BrokerPasswordRestored(oProperties.BrokerID, osPassword.ToString(), DB, Log).Execute();
 		} // Execute
 
 		#endregion method Execute

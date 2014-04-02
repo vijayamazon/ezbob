@@ -59,8 +59,24 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 		if (!this.router.isMyBroker(oProps)) // e.g. not yet loaded
 			return;
 
+		var oSampleLink = function(sSourceRef, sNL) {
+			return '<a target=_blank href="http://www.ezbob.com?sourceref=' + sSourceRef + '">' + sNL +
+				'\t<img src="http://www.ezbob.com/wp-content/themes/ezbob-new/images/new-ezbob-logo.png" alt="business loans">' + sNL +
+				'</a>';
+		};
+
 		this.$el.find('#section-dashboard-marketing .value').load_display_value({
 			data_source: oProps,
+
+			realFieldName: function(sFieldName) {
+				switch (sFieldName) {
+				case 'SourceRefToLink':
+				case 'SourceRefToText':
+					return 'SourceRef';
+				} // switch
+
+				return sFieldName;
+			}, // realFieldName
 
 			callback: function(sFieldName, oFieldValue) {
 				switch (sFieldName) {
@@ -73,10 +89,20 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 				case 'SourceRef':
 					return '<a target=_blank href="http://www.ezbob.com?sourceref=' + oFieldValue + '">http://www.ezbob.com?sourceref=' + oFieldValue + '</a>';
 
+				case 'SourceRefToLink':
+					return oSampleLink(oFieldValue, '');
+
+				case 'SourceRefToText':
+					return oSampleLink(oFieldValue, '\n');
+
 				default:
 					return oFieldValue;
 				} // switch
-			} // callback
+			}, // callback
+
+			fieldNameSetText: function(sFieldName) {
+				return sFieldName === 'SourceRefToText';
+			}, // fieldNameSetText
 		});
 	}, // displayBrokerProperties
 

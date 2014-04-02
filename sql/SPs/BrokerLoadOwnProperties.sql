@@ -3,15 +3,35 @@ IF OBJECT_ID('BrokerLoadOwnProperties') IS NULL
 GO
 
 ALTER PROCEDURE BrokerLoadOwnProperties
-@ContactEmail NVARCHAR(255),
-@BrokerID INT
+@ContactEmail NVARCHAR(255) = '',
+@BrokerID INT = 0,
+@ContactMobile NVARCHAR(255) = ''
 AS
 BEGIN
 	SET NOCOUNT ON;
 
 	SET @ContactEmail = ISNULL(LTRIM(RTRIM(ISNULL(@ContactEmail, ''))), '')
 
-	SELECT
+	SET @ContactMobile = ISNULL(LTRIM(RTRIM(ISNULL(@ContactMobile, ''))), '')
+
+	IF @ContactEmail != ''
+	BEGIN
+		IF @ContactMobile != '' OR @BrokerID > 0
+			RAISERROR('Invalid arguments: broker id or contact mobile is set when contact email is set.', 11, 1)
+	END
+	ELSE BEGIN
+		IF @BrokerID > 0
+		BEGIN
+			IF @ContactMobile != ''
+				RAISERROR('Invalid arguments: contact mobile is set when broker id is set.', 11, 2)
+		END
+		ELSE BEGIN
+			IF @ContactMobile = ''
+				RAISERROR('Invalid arguments: no broker identifier set.', 11, 3)
+		END
+	END
+
+	SELECT TOP 1
 		b.BrokerID,
 		b.FirmName AS BrokerName,
 		b.FirmRegNum AS BrokerRegNum,
@@ -25,9 +45,13 @@ BEGIN
 	FROM
 		Broker b
 	WHERE
-		(@ContactEmail != '' AND b.ContactEmail = @ContactEmail)
+		b.ContactEmail = @ContactEmail
 		OR
-		(@BrokerID > 0 AND b.BrokerID = @BrokerID)
+		b.BrokerID = @BrokerID
+		OR
+		b.ContactMobile = @ContactMobile
+	ORDER BY
+		b.BrokerID DESC
 END
 GO
 
