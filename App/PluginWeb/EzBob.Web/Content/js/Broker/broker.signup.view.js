@@ -108,6 +108,8 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 	}, // onRender
 
 	onFocus: function() {
+		EzBob.Broker.SignupView.__super__.onFocus.apply(this, arguments);
+
 		this.$el.find('#FirmName').focus();
 	}, // onFocus
 
@@ -146,6 +148,7 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 		passPolicy2.equalTo = '#Password';
 
 		var oCfg = {
+			debug: true,
 			rules: {
 				FirmName: { required: true, maxlength: 255, },
 				FirmRegNum: { required: false, maxlength: 255, regex: '^[a-zA-Z0-9]+$', },

@@ -23,6 +23,9 @@ EzBob.Broker.SubmitView = EzBob.Broker.BaseView.extend({
 			evt['click ' + idx] = 'doSubmit';
 		});
 
+		evt['cut input'] = 'inputChanged';
+		evt['paste input'] = 'inputChanged';
+
 		evt['change input'] = 'inputChanged';
 		evt['keyup  input'] = 'inputChanged';
 		evt['change select'] = 'inputChanged'; 
@@ -67,8 +70,12 @@ EzBob.Broker.SubmitView = EzBob.Broker.BaseView.extend({
 	}, // setSubmitEnabled
 
 	inputChanged: function(evt) {
-		this.setSubmitEnabled(EzBob.Validation.checkForm(this.validator));
+		this.setSubmitEnabled(EzBob.Validation.checkForm(this.validator) && this.customValidationResult());
 	}, // inputChanged
+
+	customValidationResult: function() {
+		return true;
+	}, // customerValidationResult
 
 	setSidebar: function(oSidebar) {
 		this.$el.find('.customer-sidebar').append(oSidebar);
@@ -87,12 +94,14 @@ EzBob.Broker.SubmitView = EzBob.Broker.BaseView.extend({
 
 		this.onRender();
 
-		this.inputChanged();
-
 		EzBob.UiAction.registerView(this);
 
 		return this;
 	}, // render
+
+	onFocus: function() {
+		this.inputChanged();
+	}, // onFocus
 
 	setAuthOnRender: function() {
 		return true;

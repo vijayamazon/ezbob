@@ -64,6 +64,8 @@ EzBob.Broker.ForgottenView = EzBob.Broker.MobilePhoneView.extend({
 	}, // onRender
 
 	onFocus: function() {
+		EzBob.Broker.ForgottenView.__super__.onFocus.apply(this, arguments);
+
 		this.$el.find('#ForgottenMobile').focus();
 	}, // onFocus
 
@@ -76,7 +78,6 @@ EzBob.Broker.ForgottenView = EzBob.Broker.MobilePhoneView.extend({
 			errorPlacement: EzBob.Validation.errorPlacement,
 			unhighlight: EzBob.Validation.unhighlightFS,
 			highlight: EzBob.Validation.highlightFS,
-			ignore: ':not(:visible)',
 		};
 
 		this.validator = this.$el.find('form').validate(

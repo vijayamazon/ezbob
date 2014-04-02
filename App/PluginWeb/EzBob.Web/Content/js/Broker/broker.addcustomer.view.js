@@ -33,6 +33,8 @@ EzBob.Broker.AddCustomerView = EzBob.Broker.SubmitView.extend({
 	}, // setAuthOnRender
 
 	onFocus: function() {
+		EzBob.Broker.AddCustomerView.__super__.onFocus.apply(this, arguments);
+
 		this.$el.find('#LeadFirstName').focus();
 	}, // onFocus
 

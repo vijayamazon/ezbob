@@ -7,7 +7,8 @@ EzBob.Broker.MobilePhoneView = EzBob.Broker.SubmitView.extend({
 
 		this.hasCodeEverBeenSent = false;
 
-		this.sendToCurrentCount = 0;
+		this.aryCurrentCount = {};
+
 		this.sendAttemptsCount = 0;
 
 		var oCfg = $('#broker-sms-count');
@@ -32,9 +33,10 @@ EzBob.Broker.MobilePhoneView = EzBob.Broker.SubmitView.extend({
 
 		evt['click #' + this.GenerateCodeBtnID] = 'generateMobileCode';
 
-		evt['keyup #' + this.PhoneFieldID] = 'mobilePhoneChanged';
-		evt['paste #' + this.PhoneFieldID] = 'mobilePhoneChanged';
-		evt['cut #' + this.PhoneFieldID] = 'mobilePhoneChanged';
+		evt['change #' + this.PhoneFieldID] = 'mobilePhoneAccessed';
+		evt['keyup #' + this.PhoneFieldID] = 'mobilePhoneAccessed';
+		evt['paste #' + this.PhoneFieldID] = 'mobilePhoneAccessed';
+		evt['cut #' + this.PhoneFieldID] = 'mobilePhoneAccessed';
 
 		return evt;
 	}, // events
@@ -44,19 +46,46 @@ EzBob.Broker.MobilePhoneView = EzBob.Broker.SubmitView.extend({
 		this.mobilePhoneChanged();
 	}, // clear
 
+	mobilePhoneAccessed: function() {
+		console.log(event.keyCode, event);
+
+		var bIsPhoneNumberValid = this.validator.check(this.$el.find('#' + this.PhoneFieldID));
+
+		if (bIsPhoneNumberValid) {
+			var sPhoneNumber = this.$el.find('#' + this.PhoneFieldID).val();
+
+			if ((sPhoneNumber === this.getLastCodeTarget()) || this.currentCount(sPhoneNumber)) {
+				var bEnabled =
+					(this.currentCount(sPhoneNumber) < this.maxSendToCurrentCount) &&
+					(this.sendAttemptsCount < this.maxSendAttemptsCount);
+
+				this.setSomethingEnabled('#' + this.GenerateCodeBtnID, bEnabled).val('Resend activation code');
+
+				if ((event.keyCode === 9) || (event.keyCode === 16)) // Tab and Shift respectively
+					this.$el.find('#' + this.MobileCodeFieldID).val('');
+				else
+					this.$el.find('#' + this.MobileCodeFieldID).val('').focus();
+
+				this.$el.find('#' + this.MobileCodeSectionID).removeClass('hide').show();
+				this.setSentLabelVisible(true);
+			}
+			else
+				this.mobilePhoneChanged();
+		}
+		else
+			this.mobilePhoneChanged();
+
+		return false;
+	}, // mobilePhoneAccessed
+
 	mobilePhoneChanged: function() {
 		this.setSomethingEnabled(
 			'#' + this.GenerateCodeBtnID, this.validator.check(this.$el.find('#' + this.PhoneFieldID))
 		).val('Send activation code');
 
-		this.sendToCurrentCount = 0;
 		this.$el.find('#' + this.MobileCodeFieldID).val('').blur();
 		this.$el.find('#' + this.MobileCodeSectionID).hide();
 		this.setSentLabelVisible(false);
-
-		this.handleTooManyAttempts();
-
-		return false;
 	}, // mobilePhoneChanged
 
 	onRender: function() {
@@ -81,14 +110,12 @@ EzBob.Broker.MobilePhoneView = EzBob.Broker.SubmitView.extend({
 	}, // setSentLabelVisible
 
 	handleTooManyAttempts: function() {
-		if ((this.sendToCurrentCount >= this.maxSendToCurrentCount) || (this.sendAttemptsCount >= this.maxSendAttemptsCount)) {
+		if ((this.currentCount() >= this.maxSendToCurrentCount) || (this.sendAttemptsCount >= this.maxSendAttemptsCount)) {
 			this.setSomethingEnabled('#' + this.GenerateCodeBtnID, false);
 
 			EzBob.App.trigger('clear');
 
-			if (this.sendToCurrentCount >= this.maxSendToCurrentCount)
-				EzBob.App.trigger('warning', 'Too many attempts to send verification code to number ' + this.$el.find('#' + this.PhoneFieldID).val() + '.');
-			else {
+			if (this.sendAttemptsCount >= this.maxSendAttemptsCount) {
 				EzBob.App.trigger('error', 'Too many attempts to send verification code.');
 
 				if (this.CaptchaEnabledFieldID) {
@@ -102,8 +129,39 @@ EzBob.Broker.MobilePhoneView = EzBob.Broker.SubmitView.extend({
 					this.inputChanged();
 				} // if
 			} // if
+			else
+				EzBob.App.trigger('warning', 'Too many attempts to send verification code to number ' + this.$el.find('#' + this.PhoneFieldID).val() + '.');
 		} // if
 	}, // handleTooManyAttempts
+
+	setLastCodeTarget: function(sPhoneNumber) {
+		this.$el.find('#' + this.CodeSentLabelID).attr('data-sent-to', sPhoneNumber);
+	}, // setLastCodeTarget
+
+	getLastCodeTarget: function() {
+		return this.$el.find('#' + this.CodeSentLabelID).attr('data-sent-to');
+	}, // getLastCodeTarget
+
+	incCurrentCount: function() {
+		var sPhoneNumber = this.getLastCodeTarget();
+
+		if (!sPhoneNumber)
+			return;
+
+		if (this.aryCurrentCount[sPhoneNumber])
+			this.aryCurrentCount[sPhoneNumber]++;
+		else
+			this.aryCurrentCount[sPhoneNumber] = 1;
+	}, // incCurrentCount
+
+	currentCount: function(sPhoneNumber) {
+		sPhoneNumber = sPhoneNumber || this.getLastCodeTarget();
+
+		if (!sPhoneNumber)
+			return 0;
+
+		return this.aryCurrentCount[sPhoneNumber] || 0;
+	}, // currentCount
 
 	generateMobileCode: function() {
 		if (!this.isSomethingEnabled('#' + this.GenerateCodeBtnID))
@@ -111,24 +169,25 @@ EzBob.Broker.MobilePhoneView = EzBob.Broker.SubmitView.extend({
 
 		EzBob.App.trigger('clear');
 
-		this.sendToCurrentCount++;
+		var sPhoneNumber = this.$el.find('#' + this.PhoneFieldID).val();
+
+		this.setLastCodeTarget(sPhoneNumber);
+
+		this.incCurrentCount();
 		this.sendAttemptsCount++;
 
 		this.handleTooManyAttempts();
 
-		if ((this.sendToCurrentCount <= this.maxSendToCurrentCount) && (this.sendAttemptsCount <= this.maxSendAttemptsCount)) {
+		if ((this.currentCount() <= this.maxSendToCurrentCount) && (this.sendAttemptsCount <= this.maxSendAttemptsCount)) {
 			var self = this;
 
-			var xhr = $.post(window.gRootPath + 'Account/GenerateMobileCode', { mobilePhone: this.$el.find('#' + this.PhoneFieldID).val() });
+			var xhr = $.post(window.gRootPath + 'Account/GenerateMobileCode', { mobilePhone: sPhoneNumber, });
 
 			xhr.done(function(isError) {
 				if (isError !== 'False' && (!isError.success || isError.error === 'True'))
 					EzBob.App.trigger('error', 'Error sending code.');
 				else {
-
-					if (!self.CaptchaEnabledFieldID)
-						self.setSentLabelVisible(true);
-
+					self.setSentLabelVisible(true);
 					self.hasCodeEverBeenSent = true;
 				} // if
 
@@ -170,7 +229,7 @@ EzBob.Broker.MobilePhoneView = EzBob.Broker.SubmitView.extend({
 		oCfg.messages[this.MobileCodeFieldID] = { regex: 'Please enter the code you received.' };
 
 		if (this.CaptchaEnabledFieldID)
-			oCfg.rules['CaptchaInputText'] = { required: true, minlength: 6, maxlength: 6, };
+			oCfg.rules.CaptchaInputText = { required: true, minlength: 6, maxlength: 6, };
 
 		return oCfg;
 	}, // setMobilePhoneValidatorCfg

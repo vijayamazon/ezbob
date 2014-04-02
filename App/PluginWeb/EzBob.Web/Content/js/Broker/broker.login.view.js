@@ -72,6 +72,8 @@ EzBob.Broker.LoginView = EzBob.Broker.SubmitView.extend({
 	}, // onSubmit
 
 	onFocus: function() {
+		EzBob.Broker.LoginView.__super__.onFocus.apply(this, arguments);
+
 		this.$el.find('#LoginEmail').focus();
 	}, // onFocus
 
