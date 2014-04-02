@@ -9,18 +9,23 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	DECLARE @ErrMsg NVARCHAR(255),
-		@BrokerId INT
+	DECLARE @BrokerId INT
 
-	IF NOT EXISTS (SELECT BrokerID FROM Broker WHERE ContactEmail = @Email AND Password = @Password)
+	SELECT
+		@BrokerID = BrokerID
+	FROM
+		Broker
+	WHERE
+		ContactEmail = @Email
+		AND
+		Password = @Password
+
+	IF @BrokerID IS NULL
 	BEGIN
-		SET @ErrMsg = 'Invalid contact person email or password.'
-		SELECT @ErrMsg AS ErrorMsg
+		SELECT 'Invalid contact person email or password.' AS ErrorMsg
 	END
-	ELSE
-	BEGIN
-		SELECT @BrokerId = BrokerID FROM Broker WHERE ContactEmail = @Email AND Password = @Password
-		EXECUTE BrokerLoadOwnProperties @Email, @BrokerId
-	END		
+	ELSE BEGIN
+		EXECUTE BrokerLoadOwnProperties @BrokerID = @BrokerId
+	END
 END
 GO

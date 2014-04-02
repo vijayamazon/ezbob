@@ -68,7 +68,7 @@ BEGIN
 	END
 
 	IF @ErrMsg = ''
-		EXECUTE BrokerLoadOwnProperties @ContactEmail, @BrokerID
+		EXECUTE BrokerLoadOwnProperties @BrokerID = @BrokerID
 	ELSE
 		SELECT @ErrMsg AS ErrorMsg, @BrokerID AS BrokerID
 END
