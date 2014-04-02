@@ -1,6 +1,8 @@
 ﻿namespace EzService.EzServiceImplementation {
 	using System.Linq;
 	using EzBob.Backend.Strategies.Broker;
+	using EzBob.Backend.Strategies.MailStrategies;
+	using Ezbob.Backend.Models;
 
 	partial class EzServiceImplementation {
 		#region async
@@ -101,9 +103,19 @@
 				nBrokerTermsID
 			);
 
+			if (oInstance != null) {
+				if (oInstance.Properties.BrokerID > 0)
+					Execute<BrokerGreeting>(null, oInstance.Properties.BrokerID, oInstance.Properties.BrokerID);
+
+				return new BrokerPropertiesActionResult {
+					MetaData = oMetaData,
+					Properties = oInstance.Properties,
+				};
+			} // if
+
 			return new BrokerPropertiesActionResult {
 				MetaData = oMetaData,
-				Properties = oInstance.Properties,
+				Properties = new BrokerProperties(),
 			};
 		} // BrokerSignup
 

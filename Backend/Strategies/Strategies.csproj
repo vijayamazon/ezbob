@@ -110,6 +110,7 @@
     <Compile Include="MailStrategies\API\Addressee.cs" />
     <Compile Include="MailStrategies\API\MailMetaData.cs" />
     <Compile Include="MailStrategies\Broker\BrokerFillForCustomerComplete.cs" />
+    <Compile Include="MailStrategies\Broker\BrokerGreeting.cs" />
     <Compile Include="MailStrategies\MailRecipientData\BrokerData.cs" />
     <Compile Include="CaisUpdate.cs" />
     <Compile Include="BwaChecker.cs" />
