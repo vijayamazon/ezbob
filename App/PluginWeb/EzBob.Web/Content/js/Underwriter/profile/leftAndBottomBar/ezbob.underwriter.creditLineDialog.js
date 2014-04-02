@@ -117,8 +117,7 @@
         allowSendingEmail: m.AllowSendingEmail,
         isLoanTypeSelectionAllowed: m.IsLoanTypeSelectionAllowed
       };
-      console.log("m,data", m, data);
-      debugger;
+      
       return data;
     };
 
