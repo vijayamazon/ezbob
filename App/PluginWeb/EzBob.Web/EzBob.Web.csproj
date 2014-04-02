@@ -439,7 +439,6 @@
     <Content Include="Content\css\common.css" />
     <Content Include="Content\css\customer.css" />
     <Content Include="Content\css\dropzone.css" />
-    <Content Include="Content\css\dropzone.customer.css" />
     <Content Include="Content\css\flaty\bootstrap-responsive.min.css" />
     <Content Include="Content\css\flaty\bootstrap.min.css" />
     <Content Include="Content\css\flaty\bootstrap3-modal-patch.css" />
