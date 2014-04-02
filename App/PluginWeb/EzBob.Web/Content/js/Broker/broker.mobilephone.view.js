@@ -16,6 +16,45 @@ EzBob.Broker.MobilePhoneView = EzBob.Broker.SubmitView.extend({
 		this.maxSendToCurrentCount = oCfg.attr('data-max-per-number') || 3;
 		this.maxSendAttemptsCount = oCfg.attr('data-max-per-page') || 10;
 
+		this.specialKeys = {
+			8: 'Backspace',
+			9: 'Tab',
+			12: 'Num 5 without num lock',
+			16: 'Shift',
+			17: 'Ctrl',
+			18: 'Alt',
+			19: 'Pause/Break',
+			20: 'Caps Lock',
+			27: 'Escape',
+			33: 'Page Up',
+			34: 'Page Down',
+			35: 'End',
+			36: 'Home',
+			37: 'Left',
+			38: 'Up',
+			39: 'Right',
+			40: 'Down',
+			45: 'Insert',
+			46: 'Delete',
+			91: 'Left Win',
+			92: 'Right Win',
+			93: 'Menu',
+			112: 'F1',
+			113: 'F2',
+			114: 'F3',
+			115: 'F4',
+			116: 'F5',
+			117: 'F6',
+			118: 'F7',
+			119: 'F8',
+			120: 'F9',
+			121: 'F10',
+			122: 'F11',
+			123: 'F12',
+			144: 'Num Lock',
+			145: 'Scroll Lock',
+		};
+
 		SetCaptchaMode();
 	}, // initialize
 
@@ -61,7 +100,7 @@ EzBob.Broker.MobilePhoneView = EzBob.Broker.SubmitView.extend({
 
 				this.setSomethingEnabled('#' + this.GenerateCodeBtnID, bEnabled).val('Resend activation code');
 
-				if ((event.keyCode === 9) || (event.keyCode === 16)) // Tab and Shift respectively
+				if (this.specialKeys[event.keyCode])
 					this.$el.find('#' + this.MobileCodeFieldID).val('');
 				else
 					this.$el.find('#' + this.MobileCodeFieldID).val('').focus();
