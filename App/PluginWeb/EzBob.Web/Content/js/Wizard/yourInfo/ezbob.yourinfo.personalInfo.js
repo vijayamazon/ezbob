@@ -171,7 +171,12 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
             EzBob.Validation.element(this.validator, $(mobileObj));
         }
 
-	    this.$el.find('#FirstName, #Surname').change().attardi_labels('toggle');
+        var firstNameObj = this.$el.find('#FirstName');
+        firstNameObj.change().attardi_labels('toggle');
+        EzBob.Validation.element(this.validator, $(firstNameObj));
+        var surNameObj = this.$el.find('#Surname');
+        surNameObj.change().attardi_labels('toggle');
+        EzBob.Validation.element(this.validator, $(surNameObj));
 
         this.readyToProceed = true;
         return this;

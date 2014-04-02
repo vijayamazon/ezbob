@@ -103,9 +103,12 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         this.inputChanged();
 
 		if (this.$el.find('.broker-for-customer').length)
-			this.switchToCaptcha();
+		    this.switchToCaptcha();
 
-        this.$el.find('#Email').focus();
+		var emailObj = this.$el.find('#Email');
+		emailObj.change().attardi_labels('toggle');
+		EzBob.Validation.element(this.validator, $(emailObj));
+		emailObj.focus();
 
         this.readyToProceed = true;
         return this;
