@@ -69,7 +69,9 @@
         <h2>HMRC upload<div id="uploadInfoButton" class="hmrc-info-button hmrc-info-button-right-margin-upload" ui-event-control-id="hmrc:upload_info_button"></div></h2>
         <h5>Upload your last five  VAT returns. Upload files titled “<strong>Printed Copy of Submitted VAT return for your records</strong>”.</h5>
         
-        <form id="hmrcAccountUpload" class="dropzone newVatFilesUpload" action="@Url.Action("UploadedFiles", "Hmrc", new { Area = "Customer" })" ui-event-control-id="hmrc:dropzone"></form>
+        <form id="hmrcAccountUpload" class="dropzone newVatFilesUpload" action="@Url.Action("UploadedFiles", "Hmrc", new { Area = "Customer" })" ui-event-control-id="hmrc:dropzone">
+            <div class="dz-message dz-with-text">Drag or Click to upload the last five VAT files</div>
+        </form>
 
         <form id="hmrcuploadFiles" class="cg-link-account-form">
             <div class="clearfix">

@@ -878,8 +878,6 @@
     <Content Include="Content\img\silver-btn.png" />
     <Content Include="Content\img\silver.png" />
     <Content Include="Content\img\slider_handle.png" />
-    <Content Include="Content\img\spritemap%402x.png" />
-    <Content Include="Content\img\spritemap.png" />
     <Content Include="Content\img\start-main-bg.jpg" />
     <Content Include="Content\img\store-logos.png" />
     <Content Include="Content\img\store-sprites.png" />

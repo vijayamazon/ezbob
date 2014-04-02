@@ -17,7 +17,8 @@
 
 <script id="hmrc-upload-template" type="text/template">
     <h2>Upload HMRC</h2>
-    <form id="hmrcUploadZone" class="dropzone dz-clickable" action="/Underwriter/UploadHmrc/UploadHmrc?customerId=<%-customerId%>">
+    <form id="hmrcUploadZone" class="dropzone" action="/Underwriter/UploadHmrc/UploadHmrc?customerId=<%-customerId%>">
+        <div class="dz-message dz-with-text">Drag or Click to upload the last five VAT files</div>
     </form>
 
     <div class="pull-right">
