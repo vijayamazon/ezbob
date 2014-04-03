@@ -33,6 +33,13 @@ namespace EzBob.Web.Controllers {
 	using ActionResult = System.Web.Mvc.ActionResult;
 
 	public class AccountController : Controller {
+		private enum LogOffMode
+		{
+			WebProd = 0,
+			LogOnOfEnv = 1,
+			SignUpOfEnv = 2
+		}
+
 		private static readonly ILog _log = LogManager.GetLogger(typeof(AccountController));
 		private readonly MembershipProvider _membershipProvider;
 		private readonly IUsersRepository _users;
@@ -48,6 +55,7 @@ namespace EzBob.Web.Controllers {
 		private readonly DatabaseDataHelper _helper;
 		private readonly BrokerHelper m_oBrokerHelper;
 		private readonly SessionRepository sessionRepository;
+		private readonly LogOffMode logOffMode;
 
 		public AccountController(
 			DatabaseDataHelper helper,
@@ -76,6 +84,7 @@ namespace EzBob.Web.Controllers {
 			_customerStatusesRepository = customerStatusesRepository;
 			m_oBrokerHelper = new BrokerHelper();
 			sessionRepository = ObjectFactory.GetInstance<SessionRepository>();
+			logOffMode = (LogOffMode) _configurationVariables.GetByNameAsInt("LogOffMode");
 		}
 
 		//------------------------------------------------------------------------
@@ -253,12 +262,12 @@ namespace EzBob.Web.Controllers {
 			// If we got this far, something failed, redisplay form
 			return this.JsonNet(new { success = false, errorMessage });
 		}
-		//------------------------------------------------------------------------
+
 		private void SetCookie(LogOnModel model)
 		{
 			FormsAuthentication.SetAuthCookie(model.UserName, model.RememberMe);
 		}
-		//------------------------------------------------------------------------
+
 		private ActionResult SetCookieAndRedirect(LogOnModel model)
 		{
 			FormsAuthentication.SetAuthCookie(model.UserName, model.RememberMe);
@@ -272,7 +281,7 @@ namespace EzBob.Web.Controllers {
 				return RedirectToAction("Index", "Profile", new { Area = "Customer" });
 			}
 		}
-		//------------------------------------------------------------------------
+
 		private ActionResult SetCookieAndRedirectAdmin(LogOnModel model)
 		{
 			FormsAuthentication.SetAuthCookie(model.UserName, model.RememberMe);
@@ -286,7 +295,7 @@ namespace EzBob.Web.Controllers {
 				return RedirectToAction("Index", "Customers", new { Area = "Underwriter" });
 			}
 		}
-		//------------------------------------------------------------------------
+
 		public ActionResult LogOff(bool isUnderwriterPage = false)
 		{
 			SecuritySession securitySession = sessionRepository.Get(_context.SessionId);
@@ -299,10 +308,22 @@ namespace EzBob.Web.Controllers {
 			_context.SessionId = null;
 			FormsAuthentication.SignOut();
 
-			return !isUnderwriterPage ? (ActionResult)Redirect(@"http://www.ezbob.com") :
-				RedirectToAction("Index", "Customers", new { Area = "Underwriter" });
+			if (isUnderwriterPage)
+			{
+				return RedirectToAction("Index", "Customers", new { Area = "Underwriter" });
+			}
+
+			switch (logOffMode)
+			{
+				case LogOffMode.SignUpOfEnv:
+					return RedirectToAction("Index", "Wizard", new {Area = "Customer"});
+				case LogOffMode.LogOnOfEnv:
+					return RedirectToAction("LogOn", "Account", new {Area = ""});
+				default:
+					return Redirect(@"http://www.ezbob.com");
+			}
 		}
-		//------------------------------------------------------------------------
+
 		[HttpPost]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[Ajax]
