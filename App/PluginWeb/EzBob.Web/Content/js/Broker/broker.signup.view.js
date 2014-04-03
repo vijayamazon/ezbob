@@ -16,6 +16,7 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 			MobileCodeSectionID: 'mobileCodeDiv',
 			CodeSentLabelID: 'codeSentLabel',
 			CaptchaEnabledFieldID: 'SignupIsCaptchaEnabled',
+			CaptchaSectionID: 'CaptchaSection',
 		});
 
 		this.initValidatorCfg();
@@ -26,23 +27,6 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 			passwordSelector: '#Password',
 		});
 	}, // initialize
-
-	inputChanged: function(evt) {
-		var enabled = EzBob.Validation.checkForm(this.validator) && this.customValidationResult();
-
-		if (enabled) {
-			var isMobileCodeVisible = !this.$el.find('#mobileCodeDiv').hasClass('hide');
-			var isCaptchaVisible = !this.$el.find('#captchaDiv').hasClass('hide');
-			var codeIsFilled = false;
-
-			if (isMobileCodeVisible)
-				codeIsFilled = this.$el.find('#MobileCode').val().length === 6;
-
-			enabled = isCaptchaVisible || (isMobileCodeVisible && codeIsFilled);
-		} // if
-
-		this.setSubmitEnabled(enabled);
-	}, // inputChanged
 
 	events: function() {
 		var evt = EzBob.Broker.SignupView.__super__.events.apply(this, arguments);

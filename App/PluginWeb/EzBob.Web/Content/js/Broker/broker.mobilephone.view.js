@@ -65,7 +65,20 @@ EzBob.Broker.MobilePhoneView = EzBob.Broker.SubmitView.extend({
 		this.MobileCodeSectionID = opts.MobileCodeSectionID;
 		this.CodeSentLabelID = opts.CodeSentLabelID;
 		this.CaptchaEnabledFieldID = opts.CaptchaEnabledFieldID;
+		this.CaptchaSectionID = opts.CaptchaSectionID;
 	}, // initMobilePhoneFields
+
+	customValidationResult: function(evt) {
+		var isMobileCodeVisible = !this.$el.find('#' + this.MobileCodeSectionID).hasClass('hide');
+
+		if (isMobileCodeVisible && (this.$el.find('#' + this.MobileCodeFieldID).val().length === 6))
+			return true; // mobile code is visible and entered
+
+		if (!this.CaptchaEnabledFieldID)
+			return false; // there is no captcha in this view, so cannot continue
+
+		return this.$el.find('#' + this.CaptchaEnabledFieldID).val() === '1';
+	}, // customValidationResult
 
 	events: function() {
 		var evt = EzBob.Broker.MobilePhoneView.__super__.events.apply(this, arguments);
@@ -121,7 +134,7 @@ EzBob.Broker.MobilePhoneView = EzBob.Broker.SubmitView.extend({
 		).val('Send activation code');
 
 		this.$el.find('#' + this.MobileCodeFieldID).val('').blur();
-		this.$el.find('#' + this.MobileCodeSectionID).hide();
+		this.$el.find('#' + this.MobileCodeSectionID).addClass('hide').hide();
 		this.setSentLabelVisible(false);
 	}, // mobilePhoneChanged
 
@@ -129,7 +142,10 @@ EzBob.Broker.MobilePhoneView = EzBob.Broker.SubmitView.extend({
 		EzBob.Broker.MobilePhoneView.__super__.onRender.apply(this, arguments);
 
 		if (this.CaptchaEnabledFieldID) {
-			this.captchaView = new EzBob.Captcha({ elementId: 'broker-captcha', tabindex: this.$el.find('.captchaDiv').attr('data-tab-index'), });
+			this.captchaView = new EzBob.Captcha({
+				elementId: 'broker-captcha',
+				tabindex: this.$el.find('#' + this.CaptchaSectionID).attr('data-tab-index'),
+			});
 			this.captchaView.render();
 		} // if
 	}, // onRender
@@ -157,11 +173,11 @@ EzBob.Broker.MobilePhoneView = EzBob.Broker.SubmitView.extend({
 
 				if (this.CaptchaEnabledFieldID) {
 					this.$el.find('#' + this.MobileCodeFieldID).val('').blur();
-					this.$el.find('#' + this.MobileCodeSectionID).hide();
+					this.$el.find('#' + this.MobileCodeSectionID).addClass('hide').hide();
 					this.setSentLabelVisible(false);
 
-					this.$el.find('#' + this.CaptchaEnabledFieldID).val(1);
-					this.$el.find('.captchaDiv').removeClass('hide').show();
+					this.$el.find('#' + this.CaptchaEnabledFieldID).val('1');
+					this.$el.find('#' + this.CaptchaSectionID).removeClass('hide').show();
 
 					this.inputChanged();
 				} // if
@@ -250,7 +266,7 @@ EzBob.Broker.MobilePhoneView = EzBob.Broker.SubmitView.extend({
 				}
 				else {
 					self.$el.find('#' + self.MobileCodeFieldID).val('').blur();
-					self.$el.find('#' + self.MobileCodeSectionID).hide();
+					self.$el.find('#' + self.MobileCodeSectionID).addClass('hide').hide();
 				} // if
 			}); // always
 		} // if
