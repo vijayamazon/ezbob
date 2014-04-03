@@ -4,6 +4,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Reflection;
 	using System.Security.Principal;
 	using System.Web;
 	using System.Web.Mvc;
@@ -26,13 +27,20 @@
 	#endregion using
 
 	public class BrokerHomeController : Controller {
+		#region static constructor
+
+		static BrokerHomeController() {
+			m_oLog = new SafeILog(LogManager.GetLogger(typeof(BrokerHomeController)));
+		} // static constructor
+
+		#endregion static constructor
+
 		#region public
 
 		#region constructor
 
 		public BrokerHomeController() {
 			m_oConfig = ObjectFactory.GetInstance<IEzBobConfiguration>();
-			m_oLog = new SafeILog(LogManager.GetLogger(typeof(BrokerHomeController)));
 			m_oServiceClient = new ServiceClient();
 			m_oHelper = new BrokerHelper(m_oServiceClient, m_oLog);
 
@@ -189,7 +197,11 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult Logoff(string sContactEmail) {
-			if (User.Identity.IsAuthenticated && (User.Identity.Name == sContactEmail)) {
+			bool bGoodToLogOff =
+				string.IsNullOrWhiteSpace(sContactEmail) ||
+				(User.Identity.IsAuthenticated && (User.Identity.Name == sContactEmail));
+
+			if (bGoodToLogOff) {
 				m_oHelper.Logoff(User.Identity.Name, HttpContext);
 				return new BrokerForJsonResult();
 			} // if
@@ -800,6 +812,55 @@
 
 		#endregion action DownloadFile
 
+		#region action UpdatePassword
+
+		[HttpPost]
+		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		public JsonResult UpdatePassword(string ContactEmail, string OldPassword, string NewPassword, string NewPassword2) {
+			m_oLog.Debug("Broker update password request for contact email {0}", ContactEmail);
+
+			var oIsAuthResult = IsAuth<BrokerForJsonResult>("Update password", ContactEmail);
+			if (oIsAuthResult != null)
+				return oIsAuthResult;
+
+			if (ReferenceEquals(OldPassword, null) || ReferenceEquals(NewPassword, null) || ReferenceEquals(NewPassword2, null)) {
+				m_oLog.Warn("Cannot update password for contact email {0}: one of passwords not specified.", ContactEmail);
+				return new BrokerForJsonResult("Cannot update password: some required fields are missing.");
+			} // if
+
+			if (NewPassword != NewPassword2) {
+				m_oLog.Warn("Cannot update password: passwords do not match.");
+				return new BrokerForJsonResult("Cannot update password: passwords do not match.");
+			} // if
+
+			if (NewPassword == OldPassword) {
+				m_oLog.Warn("Cannot update password: new password is equal to the old one.");
+				return new BrokerForJsonResult("Cannot update password: new password is equal to the old one.");
+			} // if
+
+			ActionMetaData oResult = null;
+
+			try {
+				oResult = m_oServiceClient.Instance.BrokerUpdatePassword(ContactEmail, OldPassword, NewPassword, NewPassword2);
+			}
+			catch (Exception e) {
+				m_oLog.Alert(e, "Failed to update password for contact email {0}", ContactEmail);
+				return new BrokerForJsonResult("Failed to update password.");
+			} // try
+
+			if (oResult == null) {
+				m_oLog.Warn("Failed to update password for contact email {0}", ContactEmail);
+				return new BrokerForJsonResult("Failed to update password.");
+			} // if
+
+			m_oLog.Debug("Broker update password request for contact email {0} complete.", ContactEmail);
+
+			return new BrokerForJsonResult();
+		} // UpdatePassword
+
+		#endregion action UpdatePassword
+
 		#endregion public
 
 		#region private
@@ -819,7 +880,21 @@
 					User.Identity.IsAuthenticated ? "authorised as " + User.Identity.Name : "not authenticated"
 				);
 
-				return (T)typeof(T).GetConstructors().FirstOrDefault().Invoke(new object[] { "Not authorised." });
+				ConstructorInfo ci = typeof (T).GetConstructors().FirstOrDefault();
+
+				int nParamCount = ci.GetParameters().Length;
+
+				var oConstructorArgs = new object[nParamCount];
+
+				for (int i = 0; i < nParamCount; i++)
+					oConstructorArgs[i] = null;
+
+				T oResult = (T)ci.Invoke(oConstructorArgs);
+
+				oResult.error = "Not authorised.";
+				oResult.is_auth = false;
+
+				return oResult;
 			} // if
 
 			return null;
@@ -830,9 +905,10 @@
 		#region fields
 
 		private readonly IEzBobConfiguration m_oConfig;
-		private readonly ASafeLog m_oLog;
 		private readonly ServiceClient m_oServiceClient;
 		private readonly BrokerHelper m_oHelper;
+
+		private static readonly ASafeLog m_oLog;
 
 		#endregion fields
 
@@ -845,6 +921,11 @@
 			#region operator cast to JsonResult
 
 			public static implicit operator JsonResult(BrokerForJsonResult oResult) {
+				BrokerHomeController.m_oLog.Debug(
+					"Controller output:\n\ttype: {0}\n\terror msg: {1}",
+					oResult.GetType(), oResult.error
+				);
+
 				return new JsonResult {
 					Data = oResult, 
 					ContentType = null,
@@ -858,6 +939,7 @@
 			#region constructor
 
 			public BrokerForJsonResult(string sErrorMsg = "", bool? bExplicitSuccess = null) {
+				is_auth = true;
 				error = sErrorMsg;
 				m_bSuccess = bExplicitSuccess;
 			} // constructor
@@ -878,12 +960,18 @@
 
 			public virtual string error {
 				get { return m_sError; }
-				private set { m_sError = (value ?? string.Empty).Trim(); }
+				set { m_sError = (value ?? string.Empty).Trim(); }
 			} // error
 
 			private string m_sError;
 
 			#endregion proprety error
+
+			#region proprety is_auth
+
+			public virtual bool is_auth { get; set; } // is_auth
+
+			#endregion proprety is_auth
 		} // BrokerForJsonResult
 
 		#endregion class BrokerForJsonResult

@@ -85,7 +85,8 @@ EzBob.Broker.Router = Backbone.Router.extend({
 		this.brokerProperties = oBrokerProperties;
 		this.trigger('broker-properties-updated');
 
-		console.log('prop set to', this.getBrokerProperties());
+		// console.log('prop set to', this.getBrokerProperties());
+		// console.log('auth email is', this.authEmail);
 	}, // setBrokerProperties
 
 	isMyBroker: function(oBrokerProperties) {
@@ -331,6 +332,12 @@ EzBob.Broker.Router = Backbone.Router.extend({
 		if (!this.views[sViewName]) {
 			var oArgs = $.extend({}, oViewTypeArgs || {}, { router: this, });
 			this.views[sViewName] = new oViewType(oArgs);
+
+			if (!this.views[sViewName].router.timeStamp) {
+				var d = new Date();
+				this.views[sViewName].router.timeStamp = d;
+				// console.log('Router timestamp set to', d);
+			} // if
 		} // if
 	}, // createView
 }); // EzBob.Broker.Router

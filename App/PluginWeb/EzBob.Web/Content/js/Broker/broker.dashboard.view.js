@@ -1,7 +1,7 @@
 ﻿var EzBob = EzBob || {};
 EzBob.Broker = EzBob.Broker || {};
 
-EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
+EzBob.Broker.DashboardView = EzBob.Broker.SubmitView.extend({
 	initialize: function() {
 		EzBob.Broker.DashboardView.__super__.initialize.apply(this, arguments);
 
@@ -10,11 +10,21 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 
 		this.$el = $('.section-dashboard');
 
+		this.initSubmitBtn('#UpdatePassword');
+
 		this.router.on('broker-properties-updated', this.displayBrokerProperties, this);
+
+		this.initValidatorCfg();
+
+		this.passwordStrengthView = new EzBob.StrengthPasswordView({
+			model: new EzBob.StrengthPassword(),
+			el: $('#strength-update-password-view'),
+			passwordSelector: '#NewPassword',
+		});
 	}, // initialize
 
 	events: function() {
-		var evt = {};
+		var evt = EzBob.Broker.DashboardView.__super__.events.apply(this, arguments);
 
 		evt['click #AddNewCustomer'] = 'addNewCustomer';
 		evt['click .reload-customer-list'] = 'reloadCustomerList';
@@ -27,6 +37,8 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 	clear: function() {
 		EzBob.Broker.DashboardView.__super__.clear.apply(this, arguments);
 
+		this.$el.find('form').find('.form_field').val('');
+
 		if (this.theTable) {
 			this.theTable.fnClearTable();
 			this.theTable = null;
@@ -36,22 +48,17 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 			this.leadTable.fnClearTable();
 			this.leadTable = null;
 		} // if
+
+		this.inputChanged();
 	}, // clear
 
-	render: function() {
-		if (this.router.isForbidden()) {
-			this.clear();
-			return this;
-		} // if
-
+	onRender: function() {
 		this.$el.tabs();
 
 		this.reloadCustomerList();
 
 		this.displayBrokerProperties();
-
-		return this;
-	}, // render
+	}, // onRender
 
 	displayBrokerProperties: function() {
 		var oProps = this.router.getBrokerProperties();
@@ -59,21 +66,20 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 		if (!this.router.isMyBroker(oProps)) // e.g. not yet loaded
 			return;
 
-		var oSampleLink = function(sSourceRef, sNL) {
-			return '<a target=_blank href="http://www.ezbob.com?sourceref=' + sSourceRef + '">' + sNL +
-				'\t<img src="http://www.ezbob.com/wp-content/themes/ezbob-new/images/new-ezbob-logo.png" alt="business loans">' + sNL +
+		var oSampleLink = function(sSourceRef, sNewLine, nWidth, nHeight) {
+			return '<a target=_blank href="http://www.ezbob.com?sourceref=' + sSourceRef + '">' + sNewLine +
+				'\t<img src="http://www.ezbob.com/wp-content/themes/ezbob-new/images/new-ezbob-logo.png" ' +
+				'width=' + nWidth + ' height=' + nHeight +
+				' alt="business loans">' + sNewLine +
 				'</a>';
 		};
 
-		this.$el.find('#section-dashboard-marketing .value').load_display_value({
+		this.$el.find('#section-dashboard-account-info .value, #section-dashboard-marketing .value').load_display_value({
 			data_source: oProps,
 
 			realFieldName: function(sFieldName) {
-				switch (sFieldName) {
-				case 'SourceRefToLink':
-				case 'SourceRefToText':
+				if (sFieldName.indexOf('SourceRef') === 0)
 					return 'SourceRef';
-				} // switch
 
 				return sFieldName;
 			}, // realFieldName
@@ -88,20 +94,18 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 
 				case 'SourceRef':
 					return '<a target=_blank href="http://www.ezbob.com?sourceref=' + oFieldValue + '">http://www.ezbob.com?sourceref=' + oFieldValue + '</a>';
-
-				case 'SourceRefToLink':
-					return oSampleLink(oFieldValue, '');
-
-				case 'SourceRefToText':
-					return oSampleLink(oFieldValue, '\n');
-
-				default:
-					return oFieldValue;
 				} // switch
+
+				if (sFieldName.indexOf('SourceRef') !== 0)
+					return oFieldValue;
+
+				var aryMatch = /^SourceRefTo(.{4})_(\d+)x(\d+)$/.exec(sFieldName);
+
+				return oSampleLink(oFieldValue, (aryMatch[1] === 'Text' ? '\n' : ''), parseInt(aryMatch[2], 10), parseInt(aryMatch[3], 10));
 			}, // callback
 
 			fieldNameSetText: function(sFieldName) {
-				return sFieldName === 'SourceRefToText';
+				return sFieldName.indexOf('SourceRefToText') === 0;
 			}, // fieldNameSetText
 		});
 	}, // displayBrokerProperties
@@ -111,171 +115,177 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 
 		var self = this;
 
-		$.getJSON(
+		var oXhr = $.getJSON(
 			'' + window.gRootPath + 'Broker/BrokerHome/LoadCustomers',
-			{ sContactEmail: this.router.getAuth(), },
-			function(oResponse) {
-				var theTableOpts = self.initDataTablesOptions(
-					'FirstName,LastName,WizardStep,Status,Marketplaces,^ApplyDate,$LoanAmount,$SetupFee,^LoanDate,@LastInvitationSent',
-					'brk-grid-state-' + self.router.getAuth() + '-customer-list'
-				);
+			{ sContactEmail: this.router.getAuth(), }
+		);
 
-				theTableOpts.aaData = oResponse.customers;
+		oXhr.done(function(oResponse) {
+			if (!oResponse.is_auth) {
+				self.router.logoff();
+				return;
+			} // if
 
-				theTableOpts.aaSorting = [ [5, 'desc'] ];
+			var theTableOpts = self.initDataTablesOptions(
+				'FirstName,LastName,WizardStep,Status,Marketplaces,^ApplyDate,$LoanAmount,$SetupFee,^LoanDate,@LastInvitationSent',
+				'brk-grid-state-' + self.router.getAuth() + '-customer-list'
+			);
 
-				self.adjustAoColumn(theTableOpts, 'Marketplaces', function(oCol) {
-					oCol.asSorting = [];
-				});
+			theTableOpts.aaData = oResponse.customers;
 
-				self.adjustAoColumn(theTableOpts, [ 'LoanAmount', 'SetupFee' ], function(oCol) {
-					var oStdMoneyRender = oCol.mRender;
+			theTableOpts.aaSorting = [ [5, 'desc'] ];
 
-					oCol.mRender = function(oData, sAction, oFullSource) {
-						if (oData > 0)
-							return oStdMoneyRender(oData, sAction, oFullSource);
+			self.adjustAoColumn(theTableOpts, 'Marketplaces', function(oCol) {
+				oCol.asSorting = [];
+			});
 
-						switch (sAction) {
-							case 'display':
-							case 'filter':
-								return '';
+			self.adjustAoColumn(theTableOpts, [ 'LoanAmount', 'SetupFee' ], function(oCol) {
+				var oStdMoneyRender = oCol.mRender;
 
-							case 'type':
-							case 'sort':
-							default:
-								return 0;
-						} // switch
-					}; // mRender for LoanAmount
-				});
+				oCol.mRender = function(oData, sAction, oFullSource) {
+					if (oData > 0)
+						return oStdMoneyRender(oData, sAction, oFullSource);
 
-				var oSomeTimeAgo = moment([2012, 7]).utc();
-
-				self.adjustAoColumn(theTableOpts, [ 'ApplyDate', 'LoanDate' ], function(oCol) {
-					oCol.mRender = function(oData, sAction, oFullSource) {
-						switch (sAction) {
-							case 'display':
-								return (oSomeTimeAgo.diff(moment(oData)) > 0) ? '' : EzBob.formatDate(oData);
-
-							case 'filter':
-								return (oSomeTimeAgo.diff(moment(oData)) > 0) ? '' : oData + ' ' + EzBob.formatDate(oData);
-
-							case 'type':
-							case 'sort':
-							default:
-								return oData;
-						} // switch
-					}; // mRender
-				});
-
-				self.adjustAoColumn(theTableOpts, 'LastInvitationSent', function(oCol) {
-					oCol.mRender = function(oData, sAction, oFullSource) {
-						switch (sAction) {
-							case 'display':
-								return (oSomeTimeAgo.diff(moment(oData)) > 0) ? '' : EzBob.formatDateTime(oData);
-
-							case 'filter':
-								return (oSomeTimeAgo.diff(moment(oData)) > 0) ? '' : oData + ' ' + EzBob.formatDateTime(oData);
-
-							case 'type':
-							case 'sort':
-							default:
-								return oData;
-						} // switch
-					}; // mRender
-				});
-
-				theTableOpts.aoColumns.push({
-					mData: null,
-					sClass: 'center',
-					asSorting: [],
-					mRender: function(oData, sAction, oFullSource) {
-						if (sAction !== 'display')
+					switch (sAction) {
+						case 'display':
+						case 'filter':
 							return '';
 
-						if ((oFullSource.LeadID <= 0) || oFullSource.IsLeadDeleted || (oFullSource.WizardStep === 'Wizard complete'))
-							return '';
+						case 'type':
+						case 'sort':
+						default:
+							return 0;
+					} // switch
+				}; // mRender for LoanAmount
+			});
 
-						var sTitle = '';
+			var oSomeTimeAgo = moment([2012, 7]).utc();
 
-						if (moment([1976, 7]).utc().diff(moment(oFullSource.DateLastInvitationSent)) > 0)
-							sTitle = 'Send invitation to this lead.';
-						else
-							sTitle = 'Send another invitation to this lead.';
+			self.adjustAoColumn(theTableOpts, [ 'ApplyDate', 'LoanDate' ], function(oCol) {
+				oCol.mRender = function(oData, sAction, oFullSource) {
+					switch (sAction) {
+						case 'display':
+							return (oSomeTimeAgo.diff(moment(oData)) > 0) ? '' : EzBob.formatDate(oData);
 
-						return '<button class=lead-send-invitation data-lead-id=' + oFullSource.LeadID + ' title="' + sTitle + '">' +
-							'<i class="fa fa-envelope-o"></i>' +
-							'</button>';
-					}, // mRender
-				});
+						case 'filter':
+							return (oSomeTimeAgo.diff(moment(oData)) > 0) ? '' : oData + ' ' + EzBob.formatDate(oData);
 
-				theTableOpts.aoColumns.push({
-					mData: null,
-					sClass: 'center',
-					asSorting: [],
-					mRender: function(oData, sAction, oFullSource) {
-						if ((oFullSource.LeadID <= 0) || oFullSource.IsLeadDeleted || (oFullSource.WizardStep === 'Wizard complete'))
-							return '';
+						case 'type':
+						case 'sort':
+						default:
+							return oData;
+					} // switch
+				}; // mRender
+			});
 
-						if (sAction === 'display')
-							return '<button class=lead-fill-wizard data-lead-id=' + oFullSource.LeadID + ' title="Fill all the data for this lead.">' +
-								'<i class="fa fa-desktop"></i>' +
-								'</button>';
+			self.adjustAoColumn(theTableOpts, 'LastInvitationSent', function(oCol) {
+				oCol.mRender = function(oData, sAction, oFullSource) {
+					switch (sAction) {
+						case 'display':
+							return (oSomeTimeAgo.diff(moment(oData)) > 0) ? '' : EzBob.formatDateTime(oData);
 
+						case 'filter':
+							return (oSomeTimeAgo.diff(moment(oData)) > 0) ? '' : oData + ' ' + EzBob.formatDateTime(oData);
+
+						case 'type':
+						case 'sort':
+						default:
+							return oData;
+					} // switch
+				}; // mRender
+			});
+
+			theTableOpts.aoColumns.push({
+				mData: null,
+				sClass: 'center',
+				asSorting: [],
+				mRender: function(oData, sAction, oFullSource) {
+					if (sAction !== 'display')
 						return '';
-					}, // mRender
+
+					if ((oFullSource.LeadID <= 0) || oFullSource.IsLeadDeleted || (oFullSource.WizardStep === 'Wizard complete'))
+						return '';
+
+					var sTitle = '';
+
+					if (moment([1976, 7]).utc().diff(moment(oFullSource.DateLastInvitationSent)) > 0)
+						sTitle = 'Send invitation to this lead.';
+					else
+						sTitle = 'Send another invitation to this lead.';
+
+					return '<button class=lead-send-invitation data-lead-id=' + oFullSource.LeadID + ' title="' + sTitle + '">' +
+						'<i class="fa fa-envelope-o"></i>' +
+						'</button>';
+				}, // mRender
+			});
+
+			theTableOpts.aoColumns.push({
+				mData: null,
+				sClass: 'center',
+				asSorting: [],
+				mRender: function(oData, sAction, oFullSource) {
+					if ((oFullSource.LeadID <= 0) || oFullSource.IsLeadDeleted || (oFullSource.WizardStep === 'Wizard complete'))
+						return '';
+
+					if (sAction === 'display')
+						return '<button class=lead-fill-wizard data-lead-id=' + oFullSource.LeadID + ' title="Fill all the data for this lead.">' +
+							'<i class="fa fa-desktop"></i>' +
+							'</button>';
+
+					return '';
+				}, // mRender
+			});
+
+			theTableOpts.fnRowCallback = function(oTR, oData, iDisplayIndex, iDisplayIndexFull) {
+				if (oData.hasOwnProperty('Marketplaces'))
+					$('.grid-item-Marketplaces', oTR).empty().html(EzBob.DataTables.Helper.showMPsIcon(oData.Marketplaces));
+
+				if (oData.RefNumber) {
+					var sLinkBase = '<a class=profileLink title="Show customer details" href="#customer/' + oData.RefNumber + '">';
+
+					if (oData.hasOwnProperty('FirstName') && oData.FirstName) {
+						$('.grid-item-FirstName', oTR).empty().html(EzBob.DataTables.Helper.withScrollbar(
+							sLinkBase + oData.FirstName + '</a>'
+						));
+					} // if has first name
+
+					if (oData.hasOwnProperty('LastName') && oData.LastName) {
+						$('.grid-item-LastName', oTR).empty().html(EzBob.DataTables.Helper.withScrollbar(
+							sLinkBase + oData.LastName + '</a>'
+						));
+					} // if has last name
+				} // if has id
+			}; // fnRowCallback
+
+			theTableOpts.fnFooterCallback = function(oTR, aryData, nVisibleStart, nVisibleEnd, aryVisual) {
+				// console.log('footer callback', aryData, nVisibleStart, nVisibleEnd, aryVisual);
+				var nLoanSum = 0;
+				var nSetupFeeSum = 0;
+				var nCount = 0;
+
+				_.each(aryData, function(oRowData) {
+					if (oRowData.LoanAmount) {
+						nCount++;
+						nLoanSum += oRowData.LoanAmount;
+						nSetupFeeSum += oRowData.SetupFee;
+					} // if
 				});
 
-				theTableOpts.fnRowCallback = function(oTR, oData, iDisplayIndex, iDisplayIndexFull) {
-					if (oData.hasOwnProperty('Marketplaces'))
-						$('.grid-item-Marketplaces', oTR).empty().html(EzBob.DataTables.Helper.showMPsIcon(oData.Marketplaces));
+				$('.grid-item-FirstName', oTR).empty().text('Total');
 
-					if (oData.RefNumber) {
-						var sLinkBase = '<a class=profileLink title="Show customer details" href="#customer/' + oData.RefNumber + '">';
+				if (nCount > 0) {
+					$('.grid-item-LoanAmount', oTR).empty().text(EzBob.formatPoundsNoDecimals(nLoanSum));
+					$('.grid-item-SetupFee', oTR).empty().text(EzBob.formatPoundsNoDecimals(nSetupFeeSum));
+					$('.grid-item-LoanDate', oTR).empty().text(EzBob.formatIntWithCommas(nCount) + ' loan' + (nCount === 1 ? '' : 's'));
+				} // if
+			}; // fnFooterCallback
 
-						if (oData.hasOwnProperty('FirstName') && oData.FirstName) {
-							$('.grid-item-FirstName', oTR).empty().html(EzBob.DataTables.Helper.withScrollbar(
-								sLinkBase + oData.FirstName + '</a>'
-							));
-						} // if has first name
+			self.theTable = self.$el.find('.customer-list').dataTable(theTableOpts);
 
-						if (oData.hasOwnProperty('LastName') && oData.LastName) {
-							$('.grid-item-LastName', oTR).empty().html(EzBob.DataTables.Helper.withScrollbar(
-								sLinkBase + oData.LastName + '</a>'
-							));
-						} // if has last name
-					} // if has id
-				}; // fnRowCallback
-
-				theTableOpts.fnFooterCallback = function(oTR, aryData, nVisibleStart, nVisibleEnd, aryVisual) {
-					// console.log('footer callback', aryData, nVisibleStart, nVisibleEnd, aryVisual);
-					var nLoanSum = 0;
-					var nSetupFeeSum = 0;
-					var nCount = 0;
-
-					_.each(aryData, function(oRowData) {
-						if (oRowData.LoanAmount) {
-							nCount++;
-							nLoanSum += oRowData.LoanAmount;
-							nSetupFeeSum += oRowData.SetupFee;
-						} // if
-					});
-
-					$('.grid-item-FirstName', oTR).empty().text('Total');
-
-					if (nCount > 0) {
-						$('.grid-item-LoanAmount', oTR).empty().text(EzBob.formatPoundsNoDecimals(nLoanSum));
-						$('.grid-item-SetupFee', oTR).empty().text(EzBob.formatPoundsNoDecimals(nSetupFeeSum));
-						$('.grid-item-LoanDate', oTR).empty().text(EzBob.formatIntWithCommas(nCount) + ' loan' + (nCount === 1 ? '' : 's'));
-					} // if
-				}; // fnFooterCallback
-
-				self.theTable = self.$el.find('.customer-list').dataTable(theTableOpts);
-
-				self.$el.find('.dataTables_top_right').prepend(
-					$('<button type=button class="reload-customer-list" title="Reload customer and lead lists">Reload</button>')
-				);
-			} // on success
-		); // get json
+			self.$el.find('.dataTables_top_right').prepend(
+				$('<button type=button class="reload-customer-list" title="Reload customer and lead lists">Reload</button>')
+			);
+		}); // on success
 	}, // reloadCustomerList
 
 	adjustAoColumn: function(oTableOpts, oColumnName, oAdjustFunc) {
@@ -383,4 +393,83 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 			'&sContactEmail=' + encodeURIComponent(this.router.getAuth())
 		);
 	}, // fillWizard
+
+	setAuthOnRender: function() {
+		return false;
+	}, // setAuthOnRender
+
+	onSubmit: function() {
+		var oData = this.$el.find('form').serializeArray();
+
+		oData.push({
+			name: "ContactEmail",
+			value: this.router.getAuth(),
+		});
+
+		var oRequest = $.post('' + window.gRootPath + 'Broker/BrokerHome/UpdatePassword', oData);
+
+		var self = this;
+
+		oRequest.success(function(res) {
+			UnBlockUi();
+
+			if (res.success) {
+				EzBob.App.trigger('clear');
+				self.$el.find('form').find('.form_field').val('');
+				self.passwordStrengthView.show();
+				self.setSubmitEnabled(false);
+
+				EzBob.App.trigger('info', 'Your password has been updated.');
+				return;
+			} // if
+
+			if (res.error)
+				EzBob.App.trigger('error', res.error);
+			else
+				EzBob.App.trigger('error', 'Failed to update your password. Please retry.');
+
+			self.setSubmitEnabled(true);
+		}); // on success
+
+		oRequest.fail(function() {
+			UnBlockUi();
+			self.setSubmitEnabled(true);
+			EzBob.App.trigger('error', 'Failed to update your password. Please retry.');
+		});
+	}, // onSubmit
+
+	initValidatorCfg: function() {
+		var passPolicy = { required: true, minlength: 6, maxlength: 255 };
+
+		var passPolicyText = EzBob.dbStrings.PasswordPolicyCheck;
+
+		if (EzBob.Config.PasswordPolicyType !== 'simple') {
+			passPolicy.regex = '^.*([a-z]+.*[A-Z]+) |([a-z]+.*[^A-Za-z0-9]+)|([a-z]+.*[0-9]+)|([A-Z]+.*[a-z]+)|([A-Z]+.*[^A-Za-z0-9]+)|([A-Z]+.*[0-9]+)|([^A-Za-z0-9]+.*[a-z]+.)|([^A-Za-z0-9]+.*[A-Z]+)|([^A-Za-z0-9]+.*[0-9]+.)|([0-9]+.*[a-z]+)|([0-9]+.*[A-Z]+)|([0-9]+.*[^A-Za-z0-9]+).*$';
+			passPolicy.minlength = 7;
+			passPolicyText = 'Password has to have 2 types of characters out of 4 (letters, caps, digits, special chars).';
+		} // if
+
+		var passPolicy2 = $.extend({}, passPolicy);
+		passPolicy2.equalTo = '#NewPassword';
+
+		var oCfg = {
+			rules: {
+				OldPassword: $.extend({}, passPolicy),
+				NewPassword: $.extend({}, passPolicy),
+				NewPassword2: passPolicy2,
+			},
+
+			messages: {
+				OldPassword: { required: passPolicyText, regex: passPolicyText },
+				NewPassword: { required: passPolicyText, regex: passPolicyText },
+				NewPassword2: { equalTo: EzBob.dbStrings.PasswordDoesNotMatch },
+			},
+
+			errorPlacement: EzBob.Validation.errorPlacement,
+			unhighlight: EzBob.Validation.unhighlightFS,
+			highlight: EzBob.Validation.highlightFS,
+		};
+
+		this.validator = this.$el.find('form').validate(oCfg);
+	}, // initValidatorCfg
 }); // EzBob.Broker.SubmitView

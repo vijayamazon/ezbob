@@ -3314,6 +3314,12 @@ namespace StrategiesActivator.EzServiceReference {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="EzServiceReference.IEzService")]
     public interface IEzService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetExperianConsumerCacheDate", ReplyAction="http://tempuri.org/IEzService/GetExperianConsumerCacheDateResponse")]
+        StrategiesActivator.EzServiceReference.DateTimeActionResult GetExperianConsumerCacheDate(int[] ids);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetExperianConsumerCacheDate", ReplyAction="http://tempuri.org/IEzService/GetExperianConsumerCacheDateResponse")]
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.DateTimeActionResult> GetExperianConsumerCacheDateAsync(int[] ids);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetExperianCompanyCacheDate", ReplyAction="http://tempuri.org/IEzService/GetExperianCompanyCacheDateResponse")]
         StrategiesActivator.EzServiceReference.DateTimeActionResult GetExperianCompanyCacheDate(int customerId);
         
@@ -3475,6 +3481,12 @@ namespace StrategiesActivator.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLoadCurrentTerms", ReplyAction="http://tempuri.org/IEzService/BrokerLoadCurrentTermsResponse")]
         System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BrokerTermsActionResult> BrokerLoadCurrentTermsAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerUpdatePassword", ReplyAction="http://tempuri.org/IEzService/BrokerUpdatePasswordResponse")]
+        StrategiesActivator.EzServiceReference.ActionMetaData BrokerUpdatePassword(string sContactEmail, string sOldPassword, string sNewPassword, string sNewPassword2);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerUpdatePassword", ReplyAction="http://tempuri.org/IEzService/BrokerUpdatePasswordResponse")]
+        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> BrokerUpdatePasswordAsync(string sContactEmail, string sOldPassword, string sNewPassword, string sNewPassword2);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CaisGenerate", ReplyAction="http://tempuri.org/IEzService/CaisGenerateResponse")]
         StrategiesActivator.EzServiceReference.ActionMetaData CaisGenerate(int underwriterId);
@@ -3823,12 +3835,6 @@ namespace StrategiesActivator.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CreateUnderwriter", ReplyAction="http://tempuri.org/IEzService/CreateUnderwriterResponse")]
         System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> CreateUnderwriterAsync(string name, string password, string role);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetExperianConsumerCacheDate", ReplyAction="http://tempuri.org/IEzService/GetExperianConsumerCacheDateResponse")]
-        StrategiesActivator.EzServiceReference.DateTimeActionResult GetExperianConsumerCacheDate(int[] ids);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetExperianConsumerCacheDate", ReplyAction="http://tempuri.org/IEzService/GetExperianConsumerCacheDateResponse")]
-        System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.DateTimeActionResult> GetExperianConsumerCacheDateAsync(int[] ids);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -3856,6 +3862,14 @@ namespace StrategiesActivator.EzServiceReference {
         
         public EzServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
+        }
+        
+        public StrategiesActivator.EzServiceReference.DateTimeActionResult GetExperianConsumerCacheDate(int[] ids) {
+            return base.Channel.GetExperianConsumerCacheDate(ids);
+        }
+        
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.DateTimeActionResult> GetExperianConsumerCacheDateAsync(int[] ids) {
+            return base.Channel.GetExperianConsumerCacheDateAsync(ids);
         }
         
         public StrategiesActivator.EzServiceReference.DateTimeActionResult GetExperianCompanyCacheDate(int customerId) {
@@ -4072,6 +4086,14 @@ namespace StrategiesActivator.EzServiceReference {
         
         public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.BrokerTermsActionResult> BrokerLoadCurrentTermsAsync() {
             return base.Channel.BrokerLoadCurrentTermsAsync();
+        }
+        
+        public StrategiesActivator.EzServiceReference.ActionMetaData BrokerUpdatePassword(string sContactEmail, string sOldPassword, string sNewPassword, string sNewPassword2) {
+            return base.Channel.BrokerUpdatePassword(sContactEmail, sOldPassword, sNewPassword, sNewPassword2);
+        }
+        
+        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> BrokerUpdatePasswordAsync(string sContactEmail, string sOldPassword, string sNewPassword, string sNewPassword2) {
+            return base.Channel.BrokerUpdatePasswordAsync(sContactEmail, sOldPassword, sNewPassword, sNewPassword2);
         }
         
         public StrategiesActivator.EzServiceReference.ActionMetaData CaisGenerate(int underwriterId) {
@@ -4536,14 +4558,6 @@ namespace StrategiesActivator.EzServiceReference {
         
         public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.ActionMetaData> CreateUnderwriterAsync(string name, string password, string role) {
             return base.Channel.CreateUnderwriterAsync(name, password, role);
-        }
-        
-        public StrategiesActivator.EzServiceReference.DateTimeActionResult GetExperianConsumerCacheDate(int[] ids) {
-            return base.Channel.GetExperianConsumerCacheDate(ids);
-        }
-        
-        public System.Threading.Tasks.Task<StrategiesActivator.EzServiceReference.DateTimeActionResult> GetExperianConsumerCacheDateAsync(int[] ids) {
-            return base.Channel.GetExperianConsumerCacheDateAsync(ids);
         }
     }
 }

@@ -882,6 +882,9 @@ namespace EzBob.Web.EzServiceReference {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="EzServiceReference.IEzService")]
     public interface IEzService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetExperianConsumerCacheDate", ReplyAction="http://tempuri.org/IEzService/GetExperianConsumerCacheDateResponse")]
+        EzBob.Web.EzServiceReference.DateTimeActionResult GetExperianConsumerCacheDate(int[] ids);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetExperianCompanyCacheDate", ReplyAction="http://tempuri.org/IEzService/GetExperianCompanyCacheDateResponse")]
         EzBob.Web.EzServiceReference.DateTimeActionResult GetExperianCompanyCacheDate(int customerId);
         
@@ -962,6 +965,9 @@ namespace EzBob.Web.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLoadCurrentTerms", ReplyAction="http://tempuri.org/IEzService/BrokerLoadCurrentTermsResponse")]
         EzBob.Web.EzServiceReference.BrokerTermsActionResult BrokerLoadCurrentTerms();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerUpdatePassword", ReplyAction="http://tempuri.org/IEzService/BrokerUpdatePasswordResponse")]
+        EzBob.Web.EzServiceReference.ActionMetaData BrokerUpdatePassword(string sContactEmail, string sOldPassword, string sNewPassword, string sNewPassword2);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CaisGenerate", ReplyAction="http://tempuri.org/IEzService/CaisGenerateResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData CaisGenerate(int underwriterId);
@@ -1136,9 +1142,6 @@ namespace EzBob.Web.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CreateUnderwriter", ReplyAction="http://tempuri.org/IEzService/CreateUnderwriterResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData CreateUnderwriter(string name, string password, string role);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetExperianConsumerCacheDate", ReplyAction="http://tempuri.org/IEzService/GetExperianConsumerCacheDateResponse")]
-        EzBob.Web.EzServiceReference.DateTimeActionResult GetExperianConsumerCacheDate(int[] ids);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -1166,6 +1169,10 @@ namespace EzBob.Web.EzServiceReference {
         
         public EzServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
+        }
+        
+        public EzBob.Web.EzServiceReference.DateTimeActionResult GetExperianConsumerCacheDate(int[] ids) {
+            return base.Channel.GetExperianConsumerCacheDate(ids);
         }
         
         public EzBob.Web.EzServiceReference.DateTimeActionResult GetExperianCompanyCacheDate(int customerId) {
@@ -1274,6 +1281,10 @@ namespace EzBob.Web.EzServiceReference {
         
         public EzBob.Web.EzServiceReference.BrokerTermsActionResult BrokerLoadCurrentTerms() {
             return base.Channel.BrokerLoadCurrentTerms();
+        }
+        
+        public EzBob.Web.EzServiceReference.ActionMetaData BrokerUpdatePassword(string sContactEmail, string sOldPassword, string sNewPassword, string sNewPassword2) {
+            return base.Channel.BrokerUpdatePassword(sContactEmail, sOldPassword, sNewPassword, sNewPassword2);
         }
         
         public EzBob.Web.EzServiceReference.ActionMetaData CaisGenerate(int underwriterId) {
@@ -1506,10 +1517,6 @@ namespace EzBob.Web.EzServiceReference {
         
         public EzBob.Web.EzServiceReference.ActionMetaData CreateUnderwriter(string name, string password, string role) {
             return base.Channel.CreateUnderwriter(name, password, role);
-        }
-        
-        public EzBob.Web.EzServiceReference.DateTimeActionResult GetExperianConsumerCacheDate(int[] ids) {
-            return base.Channel.GetExperianConsumerCacheDate(ids);
         }
     }
 }

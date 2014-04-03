@@ -112,6 +112,9 @@
 		[OperationContract]
 		BrokerTermsActionResult BrokerLoadCurrentTerms();
 
+		[OperationContract]
+		ActionMetaData BrokerUpdatePassword(string sContactEmail, string sOldPassword, string sNewPassword, string sNewPassword2);
+
 		#endregion Broker
 
 		#region CAIS

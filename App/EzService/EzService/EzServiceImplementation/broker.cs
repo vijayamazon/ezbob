@@ -357,6 +357,21 @@
 
 		#endregion method BrokerLoadCurrentTerms
 
+		#region method BrokerUpdatePassword
+
+		public ActionMetaData BrokerUpdatePassword(string sContactEmail, string sOldPassword, string sNewPassword, string sNewPassword2) {
+			BrokerUpdatePassword oInstance;
+
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, sContactEmail, sOldPassword, sNewPassword, sNewPassword2);
+
+			if ((oInstance != null) && (oInstance.BrokerID > 0))
+				Execute<BrokerPasswordRestored>(null, oInstance.BrokerID, oInstance.BrokerID, sNewPassword);
+
+			return oMetaData;
+		} // BrokerUpdatePassword
+
+		#endregion method BrokerUpdatePassword
+
 		#endregion sync
 	} // class EzServiceImplementation
 } // namespace EzService

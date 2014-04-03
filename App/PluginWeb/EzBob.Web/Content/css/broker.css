@@ -98,12 +98,6 @@ table.customer-list {
 	background-color: #b6d1f2;
 }
 
-.source-ref-link {
-	text-align: center;
-	font-size: 1.5em;
-	margin-bottom: 0.7em;
-}
-
 .section-customer-details .back-to-list-container {
 	margin: 2em 0 1em 0;
 	text-align: right;
@@ -225,6 +219,20 @@ table.customer-list {
 	vertical-align: top;
 }
 
+.logo-example > div > div { margin-top: 20px; }
+
+.source-ref-container {
+	position: relative;
+	width: 220px;
+}
+
+.source-ref-container .image-size {
+	position: absolute;
+	top: -15px;
+	left: 0;
+	color: #aaaaaa;
+}
+
 .source-ref-sample {
 	padding: 10px;
 }
@@ -232,6 +240,28 @@ table.customer-list {
 .source-ref-sample-text {
 	white-space: pre;
 	padding: 10px;
+	border: 1px solid #b6d1f2;
+}
+
+.source-ref-container .direct-link {
+	position: absolute;
+	top: -35px;
+	left: 0;
+	color: #aaaaaa;
+}
+
+.source-ref-link {
+	border: 1px solid #b6d1f2;
+	padding: 1.5em;
+	text-align: left;
+}
+
+.send-via-email {
+	padding-left: 20px;
+}
+
+.update-password-form {
+	margin-top: 20px;
 }
 
 @media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
