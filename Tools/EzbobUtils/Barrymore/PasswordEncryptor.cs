@@ -16,7 +16,7 @@
 		public static string EncodePassword(string password, string userName, DateTime creationDate)
 		{
 			var hMacsha = new HMACSHA1 { Key = hmacsha1Key };
-			string combined = userName.ToUpperInvariant() + password + creationDate.ToString("dd-MM-yyyy hh:mm:ss");
+			string combined = userName.ToUpperInvariant() + password + creationDate.ToString("dd-MM-yyyy HH:mm:ss");
 			return Convert.ToBase64String(hMacsha.ComputeHash(Encoding.Unicode.GetBytes(combined)));
 		}
 

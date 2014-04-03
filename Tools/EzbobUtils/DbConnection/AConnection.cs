@@ -374,7 +374,9 @@
 				if (command != null) {
 					command.Dispose();
 					command = null;
-					Debug("Command has been disposed.");
+
+					if (nLogVerbosityLevel == LogVerbosityLevel.Verbose)
+						Debug("Command has been disposed.");
 				} // if
 			} // try
 		} // Run

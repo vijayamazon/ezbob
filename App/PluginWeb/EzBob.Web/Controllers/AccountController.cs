@@ -178,6 +178,8 @@ namespace EzBob.Web.Controllers {
 			string errorMessage = null;
 
 			if (ModelState.IsValid) {
+				_log.DebugFormat("Model state is valid, model.UserName = '{0}'", model.UserName);
+
 				try {
 					if (m_oBrokerHelper.IsBroker(model.UserName)) {
 						BrokerProperties bp = m_oBrokerHelper.TryLogin(model.UserName, model.Password);
@@ -190,10 +192,14 @@ namespace EzBob.Web.Controllers {
 
 				var user = _users.GetUserByLogin(model.UserName);
 
-				if (user == null)
+				if (user == null) {
 					errorMessage = @"User not found or incorrect password.";
+					_log.WarnFormat("Could not find a user entry with login '{0}'.", model.UserName);
+				}
 				else {
 					var isUnderwriter = user.Roles.Any(r => r.Id == 31 || r.Id == 32 || r.Id == 33);
+
+					_log.DebugFormat("{1} log on attempt with login '{0}'.", model.UserName, isUnderwriter ? "Underwriter" : "Customer");
 
 					if (!isUnderwriter) {
 						var customer = _customers.Get(user.Id);
@@ -208,7 +214,9 @@ namespace EzBob.Web.Controllers {
 								ErrorMessage = errorMessage
 							});
 
-							return this.JsonNet(new { success = false, errorMessage });
+							_log.WarnFormat("The customer is disabled: '{0}'.", model.UserName);
+
+							return this.JsonNet(new {success = false, errorMessage});
 						} // if user is disabled
 					} // if not underwriter
 
@@ -222,8 +230,13 @@ namespace EzBob.Web.Controllers {
 
 						user.LoginFailedCount = 0;
 						SetCookie(model);
-						return this.JsonNet(new { success = true, model });
+
+						_log.DebugFormat("Customer logon attempt succeeded for login: '{0}'.", model.UserName);
+
+						return this.JsonNet(new {success = true, model});
 					} // if logged in successfully
+
+					_log.DebugFormat("Customer logon attempt failed (ValidateUser returned false) for login: '{0}'.", model.UserName);
 
 					if (user.LoginFailedCount < 3) {
 						_sessionIpLog.AddSessionIpLog(new CustomerSession {
@@ -257,6 +270,9 @@ namespace EzBob.Web.Controllers {
 					else
 						errorMessage = @"User not found or incorrect password.";
 				} // if user was found by email
+			}
+			else {
+				_log.Debug("Model state is invalid.");
 			} // if model is valid
 
 			// If we got this far, something failed, redisplay form
