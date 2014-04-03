@@ -193,7 +193,7 @@
 							</label>
 						</div>
 
-						<div class="form_field_container captchaDiv hide" data-tab-index="@{ WriteLiteral(nSignupTabIdx++); }">
+						<div id="captchaDiv" class="form_field_container captchaDiv hide" data-tab-index="@{ WriteLiteral(nSignupTabIdx++); }">
 							<input type="hidden" name="IsCaptchaEnabled" id="SignupIsCaptchaEnabled" value="0"/>
 							@EzForm.Captcha(config.CaptchaMode, sId: "broker-captcha")
 						</div>
