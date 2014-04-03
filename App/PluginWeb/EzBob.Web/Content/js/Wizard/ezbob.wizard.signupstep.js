@@ -17,7 +17,8 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
         this.activatedCode = false;
         this.mobileCodesSent = 0;
         this.twilioEnabled = false;
-	    this.switchedToCaptcha = false;
+        this.switchedToCaptcha = false;
+        this.alreadyRendered = false;
 
 		var that = this;
 
@@ -106,12 +107,20 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 		    this.switchToCaptcha();
 
 		var emailObj = this.$el.find('#Email');
-		emailObj.change().attardi_labels('toggle');
-		EzBob.Validation.element(this.validator, $(emailObj));
-		emailObj.focus();
-
+		if (this.alreadyRendered) {
+            EzBob.Validation.element(this.validator, emailObj);
+        } else {
+            this.alreadyRendered = true;
+        }
+        emailObj.change().attardi_labels('toggle');
+        setTimeout(this.focusOnEmail, 50);
+        
         this.readyToProceed = true;
         return this;
+    },
+    
+    focusOnEmail: function () {
+        document.getElementById('Email').focus();
     },
 
     inputChanged: function (evt) {
