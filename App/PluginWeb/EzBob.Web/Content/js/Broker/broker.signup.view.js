@@ -27,18 +27,21 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 		});
 	}, // initialize
 
-	inputChanged: function (evt) {
-	    var enabled = EzBob.Validation.checkForm(this.validator) && this.customValidationResult();
+	inputChanged: function(evt) {
+		var enabled = EzBob.Validation.checkForm(this.validator) && this.customValidationResult();
 
-	    var isMobileCodeVisible = !this.$el.find('#mobileCodeDiv').hasClass('hide');
-	    var isCaptchaVisible = !this.$el.find('#captchaDiv').hasClass('hide');
-	    var codeIsFilled = false;
-	    if (isMobileCodeVisible) {
-	        codeIsFilled = $('#MobileCode').val().length == 6;
-	    }
-	    enabled = enabled && (isCaptchaVisible || (isMobileCodeVisible && codeIsFilled));
+		if (enabled) {
+			var isMobileCodeVisible = !this.$el.find('#mobileCodeDiv').hasClass('hide');
+			var isCaptchaVisible = !this.$el.find('#captchaDiv').hasClass('hide');
+			var codeIsFilled = false;
 
-	    this.setSubmitEnabled(enabled);
+			if (isMobileCodeVisible)
+				codeIsFilled = this.$el.find('#MobileCode').val().length === 6;
+
+			enabled = isCaptchaVisible || (isMobileCodeVisible && codeIsFilled);
+		} // if
+
+		this.setSubmitEnabled(enabled);
 	}, // inputChanged
 
 	events: function() {
@@ -127,7 +130,7 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 		this.$el.find('#FirmName').focus();
 	}, // onFocus
 
-	showConsent: function (event) {
+	showConsent: function(event) {
 		event.preventDefault();
 		event.stopPropagation();
 
