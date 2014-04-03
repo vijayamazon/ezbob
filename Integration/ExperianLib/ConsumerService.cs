@@ -98,15 +98,21 @@
 				//debug mode
 				if (surname.StartsWith("TestSurnameDebugMode") || surname == "TestSurnameOne" || surname == "TestSurnameFile")
 				{
-					var newExperianDataCacheEntry = new MP_ExperianDataCache
+					MP_ExperianDataCache experianDataCacheEntry = _repo.GetAll().FirstOrDefault(x => x.CustomerId == customerId && x.DirectorId == directorId && x.CompanyRefNumber == null);
+					if (experianDataCacheEntry == null)
 					{
-						Name = firstName,
-						Surname = surname,
-						BirthDate = birthDate,
-						PostCode = postcode,
-						LastUpdateDate = DateTime.UtcNow
-					};
-					_repo.SaveOrUpdate(newExperianDataCacheEntry);
+						var newExperianDataCacheEntry = new MP_ExperianDataCache
+							{
+								Name = firstName,
+								Surname = surname,
+								BirthDate = birthDate,
+								PostCode = postcode,
+								LastUpdateDate = DateTime.UtcNow,
+								CustomerId = customerId,
+								DirectorId = directorId
+							};
+						_repo.SaveOrUpdate(newExperianDataCacheEntry);
+					}
 					return ConsumerDebugResult(surname, birthDate, customerId, checkInCacheOnly);
 				}
 
