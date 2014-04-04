@@ -107,20 +107,32 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 		    this.switchToCaptcha();
 
 		var emailObj = this.$el.find('#Email');
-		if (this.alreadyRendered) {
+        if (this.alreadyRendered) {
             EzBob.Validation.element(this.validator, emailObj);
         } else {
+            if (emailObj.val() != '') {
+                EzBob.Validation.element(this.validator, emailObj);
+            }
             this.alreadyRendered = true;
-        }
+		}
+
         emailObj.change().attardi_labels('toggle');
-        setTimeout(this.focusOnEmail, 50);
+        if (emailObj.val() == '') {
+            setTimeout(this.focusOnEmail, 50);
+        } else {
+            setTimeout(this.focusOnPassword, 50);
+        }
         
         this.readyToProceed = true;
         return this;
     },
-    
+
     focusOnEmail: function () {
         document.getElementById('Email').focus();
+    },
+
+    focusOnPassword: function () {
+        document.getElementById('signupPass1').focus();
     },
 
     inputChanged: function (evt) {
