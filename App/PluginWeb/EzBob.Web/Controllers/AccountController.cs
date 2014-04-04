@@ -57,31 +57,20 @@ namespace EzBob.Web.Controllers {
 		private readonly SessionRepository sessionRepository;
 		private readonly LogOffMode logOffMode;
 
-		public AccountController(
-			DatabaseDataHelper helper,
-			MembershipProvider membershipProvider,
-			IUsersRepository users,
-			CustomerRepository customers,
-			IEzBobConfiguration config,
-			IEzbobWorkplaceContext context,
-			IEmailConfirmation confirmation,
-			ICustomerSessionsRepository sessionIpLog,
-			ITestCustomerRepository testCustomers,
-			IConfigurationVariablesRepository configurationVariables,
-			ICustomerStatusesRepository customerStatusesRepository
-		) {
-			_helper = helper;
-			_membershipProvider = membershipProvider;
-			_users = users;
-			_customers = customers;
+		public AccountController() 
+		{
+			_helper = ObjectFactory.GetInstance<DatabaseDataHelper>();
+			_membershipProvider = ObjectFactory.GetInstance<MembershipProvider>();
+			_users = ObjectFactory.GetInstance<IUsersRepository>();
+			_customers = ObjectFactory.GetInstance<CustomerRepository>();
 			m_oServiceClient = new ServiceClient();
-			_config = config;
-			_context = context;
-			_confirmation = confirmation;
-			_sessionIpLog = sessionIpLog;
-			_testCustomers = testCustomers;
-			_configurationVariables = configurationVariables;
-			_customerStatusesRepository = customerStatusesRepository;
+			_config = ObjectFactory.GetInstance<IEzBobConfiguration>();
+			_context = ObjectFactory.GetInstance<IEzbobWorkplaceContext>();
+			_confirmation = ObjectFactory.GetInstance<IEmailConfirmation>();
+			_sessionIpLog = ObjectFactory.GetInstance<ICustomerSessionsRepository>();
+			_testCustomers = ObjectFactory.GetInstance<ITestCustomerRepository>();
+			_configurationVariables = ObjectFactory.GetInstance<IConfigurationVariablesRepository>();
+			_customerStatusesRepository = ObjectFactory.GetInstance<ICustomerStatusesRepository>();
 			m_oBrokerHelper = new BrokerHelper();
 			sessionRepository = ObjectFactory.GetInstance<SessionRepository>();
 			logOffMode = (LogOffMode) _configurationVariables.GetByNameAsInt("LogOffMode");

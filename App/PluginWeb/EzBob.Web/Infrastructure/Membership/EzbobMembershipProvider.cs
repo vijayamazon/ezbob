@@ -1,8 +1,6 @@
 ﻿namespace EzBob.Web.Infrastructure.Membership
 {
 	using System.Collections.Generic;
-	using System.Security.Cryptography;
-	using System.Text;
 	using ApplicationMng.Model;
 	using Areas.Customer.Controllers.Exceptions;
 	using Code;
@@ -69,9 +67,16 @@
 
 		private void ReadConfiguration()
 		{
-			var basicInterestRatesList = serviceClient.Instance.GetSpResultTable("GetUserManagementConfigs", null);
-			var deserializedArray = JsonConvert.DeserializeObject<EzbobMembershipProviderConfigs[]>(basicInterestRatesList.SerializedDataTable);
-			configs = deserializedArray[0];
+			try
+			{
+				var basicInterestRatesList = serviceClient.Instance.GetSpResultTable("GetUserManagementConfigs", null);
+				var deserializedArray = JsonConvert.DeserializeObject<EzbobMembershipProviderConfigs[]>(basicInterestRatesList.SerializedDataTable);
+				configs = deserializedArray[0];
+			}
+			catch (Exception e)
+			{
+				log.ErrorFormat("Error reading EzbobMembershipProvider configs:{0}", e);
+			}
 		}
 
 		public override MembershipUser CreateUser(string userName, string password, string email, string passwordQuestion, string passwordAnswer, bool isApproved, object providerUserKey, out MembershipCreateStatus status)
