@@ -1117,9 +1117,7 @@ namespace Reports {
 			public string LoanStatus;
 			public decimal EarnedInterest;
 			public decimal EarnedFees;
-			public decimal PaidFees;
 			public decimal CashPaid;
-			public decimal NonCashPaid;
 
 			#endregion fields
 
@@ -1144,9 +1142,7 @@ namespace Reports {
 				LoanStatus = raw.LoanStatus;
 
 				EarnedInterest = nEarnedInterest;
-				PaidFees = 0;
 				CashPaid = 0;
-				NonCashPaid = 0;
 
 				if (SetupFee > 0)
 					IssuedAmount -= SetupFee;
@@ -1169,22 +1165,16 @@ namespace Reports {
 			private void Update(int nTransactionID, string sMethod, decimal nAmount, decimal nRolloverRepaid, int nFeesEarnedID, decimal nFeesRepaid) {
 				if (!LoanCharges.Contains(nFeesEarnedID)) {
 					LoanCharges.Add(nFeesEarnedID);
-
-					PaidFees += nFeesRepaid;
 				} // if
 
 				if (!Transactions.Contains(nTransactionID)) {
 					Transactions.Add(nTransactionID);
 
 					sMethod = sMethod ?? string.Empty;
-					if (sMethod.ToLower().StartsWith("non-cash"))
-						NonCashPaid += nAmount;
-					else
+					if (!sMethod.ToLower().StartsWith("non-cash"))
 						CashPaid += nAmount;
 
 					EarnedFees += nRolloverRepaid;
-
-					PaidFees += nRolloverRepaid;
 				} // if
 			} // Update
 
@@ -1196,7 +1186,7 @@ namespace Reports {
 				tbl.Rows.Add(
 					IssueDate, ClientID, LoanID, ClientName, ClientEmail, LoanStatus,
 					IssuedAmount, SetupFee, EarnedInterest, EarnedFees,
-					PaidFees, CashPaid, NonCashPaid, Balance
+					CashPaid, Balance
 				);
 			} // ToRow
 
@@ -1217,9 +1207,7 @@ namespace Reports {
 				oOutput.Columns.Add("SetupFee", typeof(decimal));
 				oOutput.Columns.Add("EarnedInterest", typeof(decimal));
 				oOutput.Columns.Add("EarnedFees", typeof(decimal));
-				oOutput.Columns.Add("PaidFees", typeof(decimal));
 				oOutput.Columns.Add("CashPaid", typeof(decimal));
-				oOutput.Columns.Add("NonCashPaid", typeof(decimal));
 				oOutput.Columns.Add("Balance", typeof(decimal));
 
 				return oOutput;
@@ -1234,7 +1222,7 @@ namespace Reports {
 			#region property Balance
 
 			private decimal Balance {
-				get { return IssuedAmount + EarnedInterest + EarnedFees - CashPaid - NonCashPaid; } // get
+				get { return IssuedAmount + SetupFee + EarnedInterest + EarnedFees - CashPaid; } // get
 			} // Balance
 
 			#endregion property Balance
@@ -1252,9 +1240,9 @@ namespace Reports {
 			#endregion property LoanCharges
 
 			#endregion private
-		} // class EarnedInterestRow
+		} // class AccountingLoanBalanceRow
 
-		#endregion class EarnedInterestRow
+		#endregion class AccountingLoanBalanceRow
 
 		#region method CreateAccountingLoanBalanceReport
 
@@ -1274,13 +1262,12 @@ namespace Reports {
 			foreach (DataRow row in oData.Rows) {
 				int nLoanID = Convert.ToInt32(row["LoanID"]);
 
-				if (!earned.ContainsKey(nLoanID))
-					continue;
+				decimal nEarnedInterest = earned.ContainsKey(nLoanID) ? earned[nLoanID] : 0;
 
 				if (oRows.ContainsKey(nLoanID))
 					oRows[nLoanID].Update(row);
 				else
-					oRows[nLoanID] = new AccountingLoanBalanceRow(row, earned[nLoanID]);
+					oRows[nLoanID] = new AccountingLoanBalanceRow(row, nEarnedInterest);
 			} // for each earned interest
 
 			DataTable oOutput = AccountingLoanBalanceRow.ToTable();
