@@ -9,9 +9,9 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using Infrastructure.Attributes;
 	using NHibernate;
 	using NHibernate.Linq;
-	using Scorto.Web;
 	using StructureMap;
 	using Models;
 	using Code;
@@ -478,7 +478,7 @@
 
 		[HttpGet]
 		[Ajax]
-		public JsonNetResult CheckCustomer(int customerId) {
+		public JsonResult CheckCustomer(int customerId) {
 			var customer = _customers.TryGet(customerId);
 
 			var nState = (customer == null)
@@ -489,7 +489,7 @@
 					: CustomerState.NotSuccesfullyRegistred
 				);
 
-			return this.JsonNet(new { State = nState.ToString() });
+			return Json(new { State = nState.ToString() }, JsonRequestBehavior.AllowGet);
 		} // CheckCustomer
 
 		#endregion method CheckCustomer
@@ -498,7 +498,7 @@
 
 		[HttpPost]
 		[Ajax]
-		public JsonNetResult SetRecentCustomer(int id) {
+		public JsonResult SetRecentCustomer(int id) {
 			underwriterRecentCustomersRepository.Add(id, User.Identity.Name);
 			return GetRecentCustomers();
 		} // SetRecentCustomer
@@ -509,7 +509,7 @@
 
 		[HttpGet]
 		[Ajax]
-		public JsonNetResult GetRecentCustomers() {
+		public JsonResult GetRecentCustomers() {
 			string underwriter = User.Identity.Name;
 			var recentCustomersMap = new List<System.Tuple<int, string>>();
 
@@ -523,7 +523,7 @@
 					recentCustomersMap.Add(new System.Tuple<int, string>(recentCustomer.CustomerId, string.Format("{0}, {1}, {2}", recentCustomer.CustomerId, customer.PersonalInfo == null ? null : customer.PersonalInfo.Fullname, customer.Name)));
 			} // for each
 
-			return this.JsonNet(new { RecentCustomers = recentCustomersMap });
+			return Json(new { RecentCustomers = recentCustomersMap }, JsonRequestBehavior.AllowGet);
 		} // GetRecentCustomers
 
 		#endregion method GetRecentCustomers
@@ -572,7 +572,7 @@
 
 		[HttpGet]
 		[Ajax]
-		public JsonNetResult FindCustomer(string term) {
+		public JsonResult FindCustomer(string term) {
 			term = term.Trim();
 			int id;
 			int.TryParse(term, out id);
@@ -587,7 +587,7 @@
 
 			var retVal = new HashSet<string>(findResult);
 
-			return this.JsonNet(retVal.Take(15));
+			return Json(retVal.Take(15), JsonRequestBehavior.AllowGet);
 		} // FindCustomer
 
 		#endregion method FindCustomer

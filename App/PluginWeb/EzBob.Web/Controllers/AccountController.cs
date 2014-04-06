@@ -21,20 +21,19 @@ namespace EzBob.Web.Controllers {
 	using EzServiceReference;
 	using Ezbob.Backend.Models;
 	using Infrastructure;
+	using Infrastructure.Attributes;
 	using Infrastructure.Filters;
 	using Infrastructure.Membership;
 	using Infrastructure.csrf;
 	using Models;
 	using Models.Strings;
-	using Scorto.Web;
 	using StructureMap;
 	using log4net;
 	using EZBob.DatabaseLib;
 	using ActionResult = System.Web.Mvc.ActionResult;
 
 	public class AccountController : Controller {
-		private enum LogOffMode
-		{
+		private enum LogOffMode {
 			WebProd = 0,
 			LogOnOfEnv = 1,
 			SignUpOfEnv = 2
@@ -57,8 +56,7 @@ namespace EzBob.Web.Controllers {
 		private readonly SessionRepository sessionRepository;
 		private readonly LogOffMode logOffMode;
 
-		public AccountController() 
-		{
+		public AccountController() {
 			_helper = ObjectFactory.GetInstance<DatabaseDataHelper>();
 			_membershipProvider = ObjectFactory.GetInstance<MembershipProvider>();
 			_users = ObjectFactory.GetInstance<IUsersRepository>();
@@ -73,32 +71,27 @@ namespace EzBob.Web.Controllers {
 			_customerStatusesRepository = ObjectFactory.GetInstance<ICustomerStatusesRepository>();
 			m_oBrokerHelper = new BrokerHelper();
 			sessionRepository = ObjectFactory.GetInstance<SessionRepository>();
-			logOffMode = (LogOffMode) _configurationVariables.GetByNameAsInt("LogOffMode");
+			logOffMode = (LogOffMode)_configurationVariables.GetByNameAsInt("LogOffMode");
 		}
 
 		//------------------------------------------------------------------------
 		[IsSuccessfullyRegisteredFilter]
-		public ActionResult LogOn(string returnUrl)
-		{
+		public ActionResult LogOn(string returnUrl) {
 			return View(new LogOnModel { ReturnUrl = returnUrl });
 		}
 		//------------------------------------------------------------------------
-		public ActionResult AdminLogOn(string returnUrl)
-		{
+		public ActionResult AdminLogOn(string returnUrl) {
 			ViewData["returnUrl"] = returnUrl;
 			return View(new LogOnModel { ReturnUrl = returnUrl });
 		}
 		//------------------------------------------------------------------------
 
 		[HttpPost]
-		public ActionResult AdminLogOn(LogOnModel model)
-		{
-			if (ModelState.IsValid)
-			{
+		public ActionResult AdminLogOn(LogOnModel model) {
+			if (ModelState.IsValid) {
 				var user = _users.GetUserByLogin(model.UserName);
 
-				if (_membershipProvider.ValidateUser(model.UserName, model.Password))
-				{
+				if (_membershipProvider.ValidateUser(model.UserName, model.Password)) {
 					user.LoginFailedCount = 0;
 					return SetCookieAndRedirectAdmin(model);
 				}
@@ -109,39 +102,31 @@ namespace EzBob.Web.Controllers {
 
 
 		[HttpPost]
-		public ActionResult LogOn(LogOnModel model)
-		{
-			if (ModelState.IsValid)
-			{
+		public ActionResult LogOn(LogOnModel model) {
+			if (ModelState.IsValid) {
 				var user = _users.GetUserByLogin(model.UserName);
 
-				if (user == null)
-				{
+				if (user == null) {
 					ModelState.AddModelError("", "User not found or incorrect password.");
 
 				}
-				else
-				{
+				else {
 
 					var isUnderwriter = user.Roles.Any(r => r.Id == 31 || r.Id == 32 || r.Id == 33);
-					if (!isUnderwriter)
-					{
+					if (!isUnderwriter) {
 						var customer = _customers.Get(user.Id);
-						if (customer.CollectionStatus.CurrentStatus.Name == "Disabled")
-						{
+						if (customer.CollectionStatus.CurrentStatus.Name == "Disabled") {
 							ModelState.AddModelError("",
 													 "This account is closed, please contact <span class='bold'>ezbob</span> customer care<br/>customercare@ezbob.com");
 							return View(model);
 						}
 					}
 
-					if (_membershipProvider.ValidateUser(model.UserName, model.Password))
-					{
+					if (_membershipProvider.ValidateUser(model.UserName, model.Password)) {
 						user.LoginFailedCount = 0;
 						return SetCookieAndRedirect(model);
 					}
-					if (user.LoginFailedCount >= 3)
-					{
+					if (user.LoginFailedCount >= 3) {
 						_log.InfoFormat("More than 3 unsuccessful login attempts have been made. Resetting user password");
 						//RestorePassword(user.EMail, user.SecurityAnswer);
 
@@ -161,7 +146,7 @@ namespace EzBob.Web.Controllers {
 		}
 
 		[HttpPost]
-		public JsonNetResult CustomerLogOn(LogOnModel model) {
+		public JsonResult CustomerLogOn(LogOnModel model) {
 			var customerIp = Request.ServerVariables["REMOTE_ADDR"];
 
 			string errorMessage = null;
@@ -172,7 +157,7 @@ namespace EzBob.Web.Controllers {
 				try {
 					if (m_oBrokerHelper.IsBroker(model.UserName)) {
 						BrokerProperties bp = m_oBrokerHelper.TryLogin(model.UserName, model.Password);
-						return this.JsonNet(new {success = (bp != null), broker = true});
+						return Json(new { success = (bp != null), broker = true });
 					} // if is broker
 				}
 				catch (Exception e) {
@@ -205,7 +190,7 @@ namespace EzBob.Web.Controllers {
 
 							_log.WarnFormat("The customer is disabled: '{0}'.", model.UserName);
 
-							return this.JsonNet(new {success = false, errorMessage});
+							return Json(new { success = false, errorMessage }, JsonRequestBehavior.AllowGet);
 						} // if user is disabled
 					} // if not underwriter
 
@@ -222,7 +207,7 @@ namespace EzBob.Web.Controllers {
 
 						_log.DebugFormat("Customer logon attempt succeeded for login: '{0}'.", model.UserName);
 
-						return this.JsonNet(new {success = true, model});
+						return Json(new { success = true, model }, JsonRequestBehavior.AllowGet);
 					} // if logged in successfully
 
 					_log.DebugFormat("Customer logon attempt failed (ValidateUser returned false) for login: '{0}'.", model.UserName);
@@ -265,47 +250,38 @@ namespace EzBob.Web.Controllers {
 			} // if model is valid
 
 			// If we got this far, something failed, redisplay form
-			return this.JsonNet(new { success = false, errorMessage });
+			return Json(new { success = false, errorMessage }, JsonRequestBehavior.AllowGet);
 		}
 
-		private void SetCookie(LogOnModel model)
-		{
+		private void SetCookie(LogOnModel model) {
 			FormsAuthentication.SetAuthCookie(model.UserName, model.RememberMe);
 		}
 
-		private ActionResult SetCookieAndRedirect(LogOnModel model)
-		{
+		private ActionResult SetCookieAndRedirect(LogOnModel model) {
 			FormsAuthentication.SetAuthCookie(model.UserName, model.RememberMe);
 			if (Url.IsLocalUrl(model.ReturnUrl) && model.ReturnUrl.Length > 1 && model.ReturnUrl.StartsWith("/")
-				&& !model.ReturnUrl.StartsWith("//") && !model.ReturnUrl.StartsWith("/\\"))
-			{
+				&& !model.ReturnUrl.StartsWith("//") && !model.ReturnUrl.StartsWith("/\\")) {
 				return Redirect(model.ReturnUrl);
 			}
-			else
-			{
+			else {
 				return RedirectToAction("Index", "Profile", new { Area = "Customer" });
 			}
 		}
 
-		private ActionResult SetCookieAndRedirectAdmin(LogOnModel model)
-		{
+		private ActionResult SetCookieAndRedirectAdmin(LogOnModel model) {
 			FormsAuthentication.SetAuthCookie(model.UserName, model.RememberMe);
 			if (Url.IsLocalUrl(model.ReturnUrl) && model.ReturnUrl.Length > 1 && model.ReturnUrl.StartsWith("/")
-				&& !model.ReturnUrl.StartsWith("//") && !model.ReturnUrl.StartsWith("/\\"))
-			{
+				&& !model.ReturnUrl.StartsWith("//") && !model.ReturnUrl.StartsWith("/\\")) {
 				return Redirect(model.ReturnUrl);
 			}
-			else
-			{
+			else {
 				return RedirectToAction("Index", "Customers", new { Area = "Underwriter" });
 			}
 		}
 
-		public ActionResult LogOff(bool isUnderwriterPage = false)
-		{
+		public ActionResult LogOff(bool isUnderwriterPage = false) {
 			SecuritySession securitySession = sessionRepository.Get(_context.SessionId);
-			if (securitySession != null)
-			{
+			if (securitySession != null) {
 				securitySession.State = 0;
 				sessionRepository.SaveOrUpdate(securitySession);
 			}
@@ -313,19 +289,17 @@ namespace EzBob.Web.Controllers {
 			_context.SessionId = null;
 			FormsAuthentication.SignOut();
 
-			if (isUnderwriterPage)
-			{
+			if (isUnderwriterPage) {
 				return RedirectToAction("Index", "Customers", new { Area = "Underwriter" });
 			}
 
-			switch (logOffMode)
-			{
-				case LogOffMode.SignUpOfEnv:
-					return RedirectToAction("Index", "Wizard", new {Area = "Customer"});
-				case LogOffMode.LogOnOfEnv:
-					return RedirectToAction("LogOn", "Account", new {Area = ""});
-				default:
-					return Redirect(@"http://www.ezbob.com");
+			switch (logOffMode) {
+			case LogOffMode.SignUpOfEnv:
+				return RedirectToAction("Index", "Wizard", new { Area = "Customer" });
+			case LogOffMode.LogOnOfEnv:
+				return RedirectToAction("LogOn", "Account", new { Area = "" });
+			default:
+				return Redirect(@"http://www.ezbob.com");
 			}
 		}
 
@@ -335,7 +309,7 @@ namespace EzBob.Web.Controllers {
 		[ActionName("SignUp")]
 		[ValidateJsonAntiForgeryToken]
 		[CaptchaValidationFilter(Order = 999999)]
-		public JsonNetResult SignUpAjax(
+		public JsonResult SignUpAjax(
 			User model,
 			string signupPass1,
 			string signupPass2,
@@ -358,23 +332,20 @@ namespace EzBob.Web.Controllers {
 				FormsAuthentication.SetAuthCookie(model.EMail, false);
 
 				var user = _users.GetUserByLogin(model.EMail);
-				_sessionIpLog.AddSessionIpLog(new CustomerSession()
-							{
-								CustomerId = user.Id,
-								StartSession = DateTime.Now,
-								Ip = customerIp,
-								IsPasswdOk = true,
-								ErrorMessage = "Registration"
-							});
-				return this.JsonNet(new { success = true });
+				_sessionIpLog.AddSessionIpLog(new CustomerSession() {
+					CustomerId = user.Id,
+					StartSession = DateTime.Now,
+					Ip = customerIp,
+					IsPasswdOk = true,
+					ErrorMessage = "Registration"
+				});
+				return Json(new { success = true }, JsonRequestBehavior.AllowGet);
 			}
-			catch (Exception e)
-			{
-				if (e.Message == MembershipCreateStatus.DuplicateEmail.ToString())
-				{
-					return this.JsonNet(new { success = false, errorMessage = DbStrings.EmailAddressAlreadyExists });
+			catch (Exception e) {
+				if (e.Message == MembershipCreateStatus.DuplicateEmail.ToString()) {
+					return Json(new { success = false, errorMessage = DbStrings.EmailAddressAlreadyExists }, JsonRequestBehavior.AllowGet);
 				}
-				return this.JsonNet(new { success = false, errorMessage = e.Message });
+				return Json(new { success = false, errorMessage = e.Message }, JsonRequestBehavior.AllowGet);
 			}
 		}
 
@@ -402,8 +373,7 @@ namespace EzBob.Web.Controllers {
 			if (signupPass1.Length < maxPassLength)
 				throw new Exception(DbStrings.NotValidEmailAddress);
 
-			if (!isInCaptchaMode)
-			{
+			if (!isInCaptchaMode) {
 				bool isCorrect = m_oServiceClient.Instance.ValidateMobileCode(mobilePhone, mobileCode).Value;
 				if (!isCorrect)
 					throw new Exception("Invalid code");
@@ -461,7 +431,7 @@ namespace EzBob.Web.Controllers {
 					Response.Cookies.Add(cookie);
 					customer.ABTesting = ezbobab.Value;
 				} // if
-				
+
 				if (Request.Cookies["istest"] != null)
 					customer.IsTest = true;
 
@@ -486,15 +456,12 @@ namespace EzBob.Web.Controllers {
 				throw new Exception("This email is already registered");
 		} // SignupInternal
 
-		private bool IsAutomaticTest(string email)
-		{
+		private bool IsAutomaticTest(string email) {
 			bool isAutomaticTest = false;
 			var isAutomaticTestCustomerMark = _configurationVariables.GetByName("AutomaticTestCustomerMark");
-			if (isAutomaticTestCustomerMark.Value == "1")
-			{
+			if (isAutomaticTestCustomerMark.Value == "1") {
 				var patterns = _testCustomers.GetAllPatterns();
-				if (patterns.Any(email.Contains))
-				{
+				if (patterns.Any(email.Contains)) {
 					isAutomaticTest = true;
 				}
 			}
@@ -503,8 +470,7 @@ namespace EzBob.Web.Controllers {
 		}
 
 		//------------------------------------------------------------------------        
-		public ActionResult ForgotPassword()
-		{
+		public ActionResult ForgotPassword() {
 			ViewData["CaptchaMode"] = _config.CaptchaMode;
 			return View("ForgotPassword");
 		}
@@ -512,13 +478,13 @@ namespace EzBob.Web.Controllers {
 		//------------------------------------------------------------------------        
 		[CaptchaValidationFilter(Order = 999999)]
 		[Ajax]
-		public JsonNetResult QuestionForEmail(string email) {
+		public JsonResult QuestionForEmail(string email) {
 			if (!ModelState.IsValid)
 				return GetModelStateErrors(ModelState);
 
 			try {
 				if (m_oBrokerHelper.IsBroker(email))
-					return this.JsonNet(new {broker = true});
+					return Json(new { broker = true }, JsonRequestBehavior.AllowGet);
 			}
 			catch (Exception e) {
 				_log.Warn("Failed to check whether the email '" + email + "' is a broker email, continuing as a customer.", e);
@@ -527,32 +493,29 @@ namespace EzBob.Web.Controllers {
 			var user = _users.GetAll().FirstOrDefault(x => x.EMail == email || x.Name == email);
 
 			return user == null ?
-				this.JsonNet(new { error = "User : '" + email + "' was not found" }) :
-				this.JsonNet(new { question = user.SecurityQuestion != null ? user.SecurityQuestion.Name : "" });
+				Json(new { error = "User : '" + email + "' was not found" }, JsonRequestBehavior.AllowGet) :
+				Json(new { question = user.SecurityQuestion != null ? user.SecurityQuestion.Name : "" }, JsonRequestBehavior.AllowGet);
 		} // QuestionForEmail
 
 		//------------------------------------------------------------------------        
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonNetResult RestorePassword(string email = "", string answer = "")
-		{
-			if (!ModelState.IsValid)
-			{
+		public JsonResult RestorePassword(string email = "", string answer = "") {
+			if (!ModelState.IsValid) {
 				return GetModelStateErrors(ModelState);
 			}
 
-			if (_users.GetAll().FirstOrDefault(x => x.EMail == email || x.Name == email) == null || string.IsNullOrEmpty(email))
-			{
+			if (_users.GetAll().FirstOrDefault(x => x.EMail == email || x.Name == email) == null || string.IsNullOrEmpty(email)) {
 				throw new UserNotFoundException(string.Format("User {0} not found", email));
 			}
 
-			if (string.IsNullOrEmpty(answer))
-			{
+			if (string.IsNullOrEmpty(answer)) {
 				throw new EmptyAnswerExeption("Answer is empty");
 			}
 
 			var user = _users.GetAll().FirstOrDefault(x => (x.EMail == email || x.Name == email) && (x.SecurityAnswer == answer));
 
-			if (user == null) return this.JsonNet(new { error = "Wrong answer to secret questions" });
+			if (user == null)
+				return Json(new { error = "Wrong answer to secret questions" }, JsonRequestBehavior.AllowGet);
 
 			var password = _membershipProvider.ResetPassword(email, "");
 
@@ -560,15 +523,13 @@ namespace EzBob.Web.Controllers {
 			m_oServiceClient.Instance.PasswordRestored(user.Id, password);
 			user.IsPasswordRestored = true;
 
-			return this.JsonNet(new { result = true });
+			return Json(new { result = true }, JsonRequestBehavior.AllowGet);
 		}
 
-		public ActionResult SimpleCaptcha()
-		{
+		public ActionResult SimpleCaptcha() {
 			return View("SimpleCaptcha");
 		}
-		public ActionResult Recaptcha()
-		{
+		public ActionResult Recaptcha() {
 			return View("Recaptcha");
 		}
 
@@ -576,78 +537,66 @@ namespace EzBob.Web.Controllers {
 		[Ajax]
 		[HttpGet]
 		[Authorize(Roles = "Underwriter, Web")]
-		public JsonNetResult CheckingCompany(string postcode, string companyName, string filter, string refNum)
-		{
+		public JsonResult CheckingCompany(string postcode, string companyName, string filter, string refNum) {
 			var nFilter = TargetResults.LegalStatus.DontCare;
 
-			switch (filter.ToUpper())
-			{
-				case "L":
-					nFilter = TargetResults.LegalStatus.Limited;
-					break;
+			switch (filter.ToUpper()) {
+			case "L":
+				nFilter = TargetResults.LegalStatus.Limited;
+				break;
 
-				case "N":
-					nFilter = TargetResults.LegalStatus.NonLimited;
-					break;
+			case "N":
+				nFilter = TargetResults.LegalStatus.NonLimited;
+				break;
 			} // switch
 
 			var result = new TargetResults(null);
-			try
-			{
+			try {
 				var service = new EBusinessService();
 				result = service.TargetBusiness(companyName, postcode, _context.UserId, nFilter, refNum);
-				if (result.Targets.Any())
-				{
-					foreach (var t in result.Targets)
-					{
+				if (result.Targets.Any()) {
+					foreach (var t in result.Targets) {
 						t.BusName = string.IsNullOrEmpty(t.BusName)
-							            ? string.Empty
-							            : System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(t.BusName.ToLower());
+										? string.Empty
+										: System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(t.BusName.ToLower());
 						t.AddrLine1 = string.IsNullOrEmpty(t.AddrLine1)
-							              ? string.Empty
-							              : System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(t.AddrLine1.ToLower());
+										  ? string.Empty
+										  : System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(t.AddrLine1.ToLower());
 						t.AddrLine2 = string.IsNullOrEmpty(t.AddrLine2)
-							              ? string.Empty
-							              : System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(t.AddrLine2.ToLower());
+										  ? string.Empty
+										  : System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(t.AddrLine2.ToLower());
 						t.AddrLine3 = string.IsNullOrEmpty(t.AddrLine3)
-							              ? string.Empty
-							              : System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(t.AddrLine3.ToLower());
+										  ? string.Empty
+										  : System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(t.AddrLine3.ToLower());
 						t.AddrLine4 = string.IsNullOrEmpty(t.AddrLine4)
-							              ? string.Empty
-							              : System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(t.AddrLine4.ToLower());
+										  ? string.Empty
+										  : System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(t.AddrLine4.ToLower());
 					}
-					if (result.Targets.Count > 1)
-					{
-						result.Targets.Add(new CompanyInfo {BusName = "Company not found", BusRefNum = "skip"});
+					if (result.Targets.Count > 1) {
+						result.Targets.Add(new CompanyInfo { BusName = "Company not found", BusRefNum = "skip" });
 					}
 				}
 
-				return this.JsonNet(result.Targets);
+				return Json(result.Targets, JsonRequestBehavior.AllowGet);
 			}
-			catch (WebException we)
-			{
-				result.Targets.Add(new CompanyInfo { BusName = "", BusRefNum = "exception"});
-				return this.JsonNet(result.Targets);
+			catch (WebException we) {
+				result.Targets.Add(new CompanyInfo { BusName = "", BusRefNum = "exception" });
+				return Json(result.Targets, JsonRequestBehavior.AllowGet);
 			}
-			catch (Exception e)
-			{
-				if (companyName.ToLower() == "asd" && postcode.ToLower() == "ab10 1ba")
-				{
-					return this.JsonNet(GenerateFakeTargetingData(companyName, postcode));
+			catch (Exception e) {
+				if (companyName.ToLower() == "asd" && postcode.ToLower() == "ab10 1ba") {
+					return Json(GenerateFakeTargetingData(companyName, postcode), JsonRequestBehavior.AllowGet);
 				}
 				_log.Error("Target Bussiness failed", e);
 				throw;
 			}
 		}
 
-		private static List<CompanyInfo> GenerateFakeTargetingData(string companyName, string postcode)
-		{
+		private static List<CompanyInfo> GenerateFakeTargetingData(string companyName, string postcode) {
 			var data = new List<CompanyInfo>();
 
-			for (var i = 0; i < 10; i++)
-			{
-				data.Add(new CompanyInfo
-				{
+			for (var i = 0; i < 10; i++) {
+				data.Add(new CompanyInfo {
 					AddrLine1 = "AddrLine1" + " for company " + i,
 					AddrLine2 = "AddrLine2" + " for company " + i,
 					AddrLine3 = "AddrLine3" + " for company " + i,
@@ -669,43 +618,39 @@ namespace EzBob.Web.Controllers {
 			return data;
 		}
 		//-----------------------------------------------------------------------------
-		private JsonNetResult GetModelStateErrors(ModelStateDictionary modelStateDictionary)
-		{
-			return this.JsonNet(
-				new
-					{
-						result = false,
-						errorMessage = string.Join("; ", modelStateDictionary.Values
-													  .SelectMany(x => x.Errors)
-													  .Select(x => x.ErrorMessage))
-					});
+		private JsonResult GetModelStateErrors(ModelStateDictionary modelStateDictionary) {
+			return Json(
+				new {
+					result = false,
+					errorMessage = string.Join("; ",
+						modelStateDictionary.Values
+							.SelectMany(x => x.Errors)
+							.Select(x => x.ErrorMessage)
+					)
+				}, JsonRequestBehavior.AllowGet);
 		}
 
 		[Ajax]
 		[HttpPost]
-		public bool GenerateMobileCode(string mobilePhone)
-		{
+		public bool GenerateMobileCode(string mobilePhone) {
 			return m_oServiceClient.Instance.GenerateMobileCode(mobilePhone).Value;
 		}
-		
+
 		[HttpPost]
-		public JsonNetResult GetTwilioConfig()
-		{
+		public JsonResult GetTwilioConfig() {
 
 			WizardConfigsActionResult wizardConfigsActionResult = m_oServiceClient.Instance.GetWizardConfigs();
-			
+
 			_log.InfoFormat("Mobile code visibility related values are: IsSmsValidationActive:{0} NumberOfMobileCodeAttempts:{1}",
 				wizardConfigsActionResult.IsSmsValidationActive, wizardConfigsActionResult.NumberOfMobileCodeAttempts);
-			return this.JsonNet(new
-			{
+			return Json(new {
 				isSmsValidationActive = wizardConfigsActionResult.IsSmsValidationActive,
 				numberOfMobileCodeAttempts = wizardConfigsActionResult.NumberOfMobileCodeAttempts
-			});
+			}, JsonRequestBehavior.AllowGet);
 		}
 
 		[HttpPost]
-		public void DebugLog_Message(string message)
-		{
+		public void DebugLog_Message(string message) {
 			_log.InfoFormat(message);
 		}
 	}

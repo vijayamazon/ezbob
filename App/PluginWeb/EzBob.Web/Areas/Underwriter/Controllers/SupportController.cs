@@ -5,7 +5,6 @@ using EZBob.DatabaseLib.Model.Database;
 using EzBob.Web.Areas.Underwriter.Models;
 using NHibernate;
 using NHibernate.Linq;
-using Scorto.Web;
 
 namespace EzBob.Web.Areas.Underwriter.Controllers
 {
@@ -29,7 +28,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             _session = session;
         }
 
-        public JsonNetResult Index(SortField sortField, string sortType)
+        public JsonResult Index(SortField sortField, string sortType)
         {
             List<SupportModel> models =
                 (from mp in _session.Query<MP_CustomerMarketPlace>()
@@ -85,7 +84,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
                         : models.OrderByDescending(x => x.UpdateStartDate).ToList();
                     break;
             }
-            return this.JsonNet(new {models});
+            return Json(new {models}, JsonRequestBehavior.AllowGet);
         }
     }
 }

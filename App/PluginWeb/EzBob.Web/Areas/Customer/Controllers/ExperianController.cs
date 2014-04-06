@@ -5,8 +5,8 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Mapping;
 	using Infrastructure;
+	using Infrastructure.Attributes;
 	using Infrastructure.csrf;
-	using Scorto.Web;
 	using System.Linq;
 
 	#region class ExperianController
@@ -30,10 +30,10 @@
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
-		public JsonNetResult PerformConsumerCheck() {
+		public JsonResult PerformConsumerCheck() {
 			m_oServiceClient.Instance.CheckExperianConsumer(context.Customer.Id, 0, false);
 
-			return this.JsonNet(new { });
+			return Json(new { });
 		} // PerformConsumerCheck
 
 		#endregion method PerformConsumerCheck
@@ -44,7 +44,7 @@
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
-		public JsonNetResult PerformConsumerCheckForDirectors() {
+		public JsonResult PerformConsumerCheckForDirectors() {
 			int customerId = context.Customer.Id;
 
 			IQueryable<Director> directors = directorRepository.GetAll().Where(x => x.Customer.Id == customerId);
@@ -52,7 +52,7 @@
 			foreach (Director director in directors)
 				m_oServiceClient.Instance.CheckExperianConsumer(customerId, director.Id, false);
 
-			return this.JsonNet(new { });
+			return Json(new { });
 		} // PerformConsumerCheckForDirectors
 
 		#endregion method PerformConsumerCheckForDirectors

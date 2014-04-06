@@ -8,6 +8,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Marketplaces;
 	using EzServiceReference;
+	using Infrastructure.Attributes;
 	using Models;
 	using Code;
 	using Infrastructure;
@@ -17,7 +18,6 @@
 	using Web.Models;
 	using NHibernate;
 	using NHibernate.Linq;
-	using Scorto.Web;
 	using System.Linq;
 	using EZBob.DatabaseLib.Model;
 
@@ -75,21 +75,21 @@
 		[Ajax]
 		[HttpGet]
 		[ValidateJsonAntiForgeryToken]
-		public JsonNetResult Details()
+		public JsonResult Details()
 		{
 			var details = _customerModelBuilder.BuildWizardModel(_context.Customer);
-			return this.JsonNet(details);
+			return Json(details, JsonRequestBehavior.AllowGet);
 		}
 
 		[Transactional]
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
-		public JsonNetResult ClaimsTrustPilotReview() {
+		public JsonResult ClaimsTrustPilotReview() {
 			var customer = _context.Customer;
 
 			if (customer == null)
-				return this.JsonNet(new { status = "error", error = "Customer not found." });
+				return Json(new { status = "error", error = "Customer not found." });
 
 			if (ReferenceEquals(customer.TrustPilotStatus, null) || customer.TrustPilotStatus.IsMe(TrustPilotStauses.Nether)) {
 				var oHelper = ObjectFactory.GetInstance<DatabaseDataHelper>();
@@ -99,39 +99,39 @@
 				_session.Flush();
 			} // if
 
-			return this.JsonNet(new { status = "ok", error = "" });
+			return Json(new { status = "ok", error = "" });
 		} // ClaimsTrustPilotReview
 
 		[Transactional]
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
-		public JsonNetResult GetRefreshInterval()
+		public JsonResult GetRefreshInterval()
 		{
 			int refreshInterval = new ServiceClient().Instance.GetCustomerStatusRefreshInterval().Value;
-			return this.JsonNet(new { Interval = refreshInterval });
+			return Json(new { Interval = refreshInterval });
 		}
 
 		[Transactional]
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
-		public JsonNetResult GetCustomerStatus(int customerId)
+		public JsonResult GetCustomerStatus(int customerId)
 		{
 			string state = new ServiceClient().Instance.GetCustomerState(customerId).Value;
-			return this.JsonNet(new { State = state });
+			return Json(new { State = state });
 		}
 
 		[Transactional]
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
-		public JsonNetResult ApplyForALoan()
+		public JsonResult ApplyForALoan()
 		{
 			var customer = _context.Customer;
 			if (customer == null)
 			{
-				return this.JsonNet(new { });
+				return Json(new { });
 			}
 			var ekmType = new EkmDatabaseMarketPlace();
 			var ekms = customer.CustomerMarketPlaces.Where(m => m.Marketplace.InternalId == ekmType.InternalId).ToList();
@@ -146,7 +146,7 @@
 					var isValid = validator.Validate(name, password, out error);
 					if (!isValid)
 					{
-						return this.JsonNet(new {hasBadEkm = true, error = error, ekm = ekm.DisplayName});
+						return Json(new {hasBadEkm = true, error = error, ekm = ekm.DisplayName});
 					}
 				}
 
@@ -171,9 +171,9 @@
 			var config = ObjectFactory.GetInstance<IEzBobConfiguration>();
 			bool refreshYodleeEnabled = config.RefreshYodleeEnabled;
 			if (yodlees.Any() && refreshYodleeEnabled)
-				return this.JsonNet(new { hasYodlee = true });
+				return Json(new { hasYodlee = true });
 
-			return this.JsonNet(new { });
+			return Json(new { });
 		}
 
 

@@ -4,10 +4,10 @@
 	using ApplicationMng.Repository;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Marketplaces;
+	using Infrastructure.Attributes;
 	using Models;
 	using Infrastructure;
 	using Infrastructure.Filters;
-	using Scorto.Web;
 	using NHibernate;
 	using NHibernate.Linq;
 	using EZBob.DatabaseLib.Model.Database.Repository;
@@ -72,7 +72,7 @@
 		//[HttpGet]
 		//[ValidateJsonAntiForgeryToken]
 		//[Transactional]
-		//public JsonNetResult EarnedPointsStr() {
+		//public JsonResult EarnedPointsStr() {
 		//	var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
 		//	Customer oCustomer = oDBHelper == null ? null : oDBHelper.FindCustomerByEmail(User.Identity.Name.Trim());
 		//	string sPoints = "";
@@ -80,7 +80,7 @@
 		//	if (oCustomer != null)
 		//		sPoints = string.Format("{0:N0}", oCustomer.LoyaltyPoints());
 
-		//	return this.JsonNet(new { EarnedPointsStr = sPoints });
+		//	return Json(new { EarnedPointsStr = sPoints }, JsonResultBehavior.AllowGet);
 		//} // EarnedPointsStr
 
 		#endregion action EarnedPointsStr

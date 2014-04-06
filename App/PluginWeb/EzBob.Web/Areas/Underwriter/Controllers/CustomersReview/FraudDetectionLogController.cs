@@ -4,10 +4,10 @@
 	using Code;
 	using EZBob.DatabaseLib.Repository;
 	using EzBob.Web.Areas.Underwriter.Models;
-	using Scorto.Web;
 	using System;
 	using ApplicationMng.Repository;
 	using FraudChecker;
+	using Infrastructure.Attributes;
 
 	public class FraudDetectionLogController : Controller {
 		private readonly FraudDetectionRepository _fraudDetectionLog;
@@ -23,7 +23,7 @@
 
 		[Ajax]
 		[HttpGet]
-		public JsonNetResult Index(int id)
+		public JsonResult Index(int id)
 		{
 			DateTime? lastCheckDate = null;
 			var rows = _fraudDetectionLog.GetLastDetections(id, out lastCheckDate).Select(x => new FraudDetectionLogRowModel(x)).OrderByDescending(x => x.Id).ToList();
@@ -32,16 +32,16 @@
 					FraudDetectionLogRows = rows,
 					LastCheckDate = lastCheckDate
 				};
-			return this.JsonNet(model);
+			return Json(model, JsonRequestBehavior.AllowGet);
 		}
 
 		[Ajax]
 		[HttpPost]
-		public JsonNetResult Recheck(int customerId)
+		public JsonResult Recheck(int customerId)
 		{
 			var user = _usersRepository.Get(customerId);
 			m_oServiceClient.Instance.FraudChecker(user.Id, FraudMode.FullCheck);
-			return this.JsonNet(new { success = true });
+			return Json(new { success = true });
 		}
 	}
 }

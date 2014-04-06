@@ -2,8 +2,8 @@
 {
 	using System.Data;
 	using Code;
-	using Scorto.Web;
 	using System.Web.Mvc;
+	using Infrastructure.Attributes;
 	using Models;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 
@@ -23,7 +23,7 @@
         {
             var customer = _customerRepository.Get(id);
             var medalCalculator = new MedalCalculators(customer);
-            return this.JsonNet(medalCalculator);
+            return Json(medalCalculator, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]

@@ -8,8 +8,8 @@
 	using EzBob.Models;
 	using Code;
 	using Code.ReportGenerator;
+	using Infrastructure.Attributes;
 	using PaymentServices.Calculators;
-	using Scorto.Web;
 
 	public class ScheduleController : Controller
     {
@@ -31,10 +31,10 @@
         [HttpGet]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         [Ajax]
-        public JsonNetResult Calculate(long id)
+        public JsonResult Calculate(long id)
         {
             var loanOffer = GetLoanOffer(id);
-            return this.JsonNet(loanOffer);
+            return Json(loanOffer, JsonRequestBehavior.AllowGet);
         }
 
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]

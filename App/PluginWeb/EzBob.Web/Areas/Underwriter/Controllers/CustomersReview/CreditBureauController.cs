@@ -12,9 +12,9 @@
 	using ExperianLib.IdIdentityHub;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EzServiceReference;
+	using Infrastructure.Attributes;
 	using Models;
 	using Code;
-	using Scorto.Web;
 	using ActionResult = System.Web.Mvc.ActionResult;
 
 	public class CreditBureauController : Controller
@@ -43,7 +43,7 @@
 
 		[HttpPost]
 		[Transactional]
-		public JsonNetResult RunConsumerCheck(int customerId, bool forceCheck)
+		public JsonResult RunConsumerCheck(int customerId, bool forceCheck)
 		{
 			m_oServiceClient.Instance.CheckExperianConsumer(customerId, 0, forceCheck);
 			List<Director> directors = directorRepository.GetAll().Where(x => x.Customer.Id == customerId).ToList();
@@ -51,30 +51,30 @@
 			{
 				m_oServiceClient.Instance.CheckExperianConsumer(customerId, director.Id, forceCheck);
 			}
-			return this.JsonNet(new { Message = "The evaluation has been started. Please refresh this application after a while..." });
+			return Json(new { Message = "The evaluation has been started. Please refresh this application after a while..." });
 		}
 
 		[HttpPost]
 		[Transactional]
-		public JsonNetResult RunCompanyCheck(int id, bool forceCheck)
+		public JsonResult RunCompanyCheck(int id, bool forceCheck)
 		{
 			m_oServiceClient.Instance.CheckExperianCompany(id, forceCheck);
-			return this.JsonNet(new { Message = "The evaluation has been started. Please refresh this application after a while..." });
+			return Json(new { Message = "The evaluation has been started. Please refresh this application after a while..." });
 		}
 
         [Ajax]
         [HttpGet]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-        public JsonNetResult Index(int id, bool getFromLog = false, long? logId = null)
+        public JsonResult Index(int id, bool getFromLog = false, long? logId = null)
         {
             var customer = _customers.Get(id);
             var model = _creditBureauModelBuilder.Create(customer, getFromLog, logId);
-            return this.JsonNet(model);
+            return Json(model, JsonRequestBehavior.AllowGet);
         }
 
         [Ajax]
         [HttpGet]
-        public JsonNetResult IdHubCustomAddress(int id)
+        public JsonResult IdHubCustomAddress(int id)
         {
             var customer = _customers.Get(id);
 
@@ -135,12 +135,12 @@
                 model.IdHubAddressPostcode = parsedAddress.AddressDetail.PostCode ?? string.Empty;
                 model.IdHubAddressCountry = parsedAddress.AddressDetail.Country ?? string.Empty;
             }
-            return this.JsonNet(model);
+            return Json(model, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-        public JsonNetResult RunAmlbwaCheck(int id, int checkType, string houseNumber, string houseName, string street,
+        public JsonResult RunAmlbwaCheck(int id, int checkType, string houseNumber, string houseName, string street,
                                             string district, string town, string county, string postcode, string bankAccount, string sortCode)
         {
 			if (checkType == 1)
@@ -152,7 +152,7 @@
 				m_oServiceClient.Instance.CheckBwaCustom(id, houseNumber, houseName, street, district, town, county, postcode, bankAccount, sortCode);
 			}
 			
-            return this.JsonNet(new { Message = "The evaluation has been started. Please refresh this application after a while..." });
+            return Json(new { Message = "The evaluation has been started. Please refresh this application after a while..." });
         }
 
         public ActionResult DownloadConsentAgreement(int id)
@@ -165,7 +165,7 @@
 
 		[HttpPost]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonNetResult IsConsumerCacheRelevant(int customerId)
+		public JsonResult IsConsumerCacheRelevant(int customerId)
 		{
 			var ids = new List<int> { customerId };
 			IQueryable<Director> directors = directorRepository.GetAll().Where(x => x.Customer.Id == customerId);
@@ -174,18 +174,18 @@
 			DateTime cacheDate = result.Value;
 			int cacheValidForDays = configurationVariablesRepository.GetByNameAsInt("UpdateConsumerDataPeriodDays");
 			string isRelevant = (DateTime.UtcNow - cacheDate).TotalDays > cacheValidForDays ? "False" : "True";
-			return this.JsonNet(new { IsRelevant = isRelevant, LastCheckDate = cacheDate.ToString("dd/MM/yyyy"), CacheValidForDays = cacheValidForDays.ToString(CultureInfo.InvariantCulture) });
+			return Json(new { IsRelevant = isRelevant, LastCheckDate = cacheDate.ToString("dd/MM/yyyy"), CacheValidForDays = cacheValidForDays.ToString(CultureInfo.InvariantCulture) });
 		}
 
 		[HttpPost]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonNetResult IsCompanyCacheRelevant(int customerId)
+		public JsonResult IsCompanyCacheRelevant(int customerId)
 		{
 			DateTimeActionResult result = m_oServiceClient.Instance.GetExperianCompanyCacheDate(customerId);
 			DateTime cacheDate = result.Value;
 			int cacheValidForDays = configurationVariablesRepository.GetByNameAsInt("UpdateCompanyDataPeriodDays");
 			string isRelevant = (DateTime.UtcNow - cacheDate).TotalDays > cacheValidForDays ? "False" : "True";
-			return this.JsonNet(new { IsRelevant = isRelevant, LastCheckDate = cacheDate.ToString("dd/MM/yyyy"), CacheValidForDays = cacheValidForDays.ToString(CultureInfo.InvariantCulture) });
+			return Json(new { IsRelevant = isRelevant, LastCheckDate = cacheDate.ToString("dd/MM/yyyy"), CacheValidForDays = cacheValidForDays.ToString(CultureInfo.InvariantCulture) });
 		}
     }
 }

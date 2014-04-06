@@ -3,7 +3,7 @@
 	using System.Web.Mvc;
 	using Code;
 	using EZBob.DatabaseLib.Model.Database.Repository;
-	using Scorto.Web;
+	using Infrastructure.Attributes;
 
 	public class YodleeRecheckController : Controller {
 		private readonly CustomerMarketPlaceRepository _customerMarketplaces;

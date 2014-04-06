@@ -4,7 +4,7 @@
 	using System.Web.Mvc;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EzBob.Models;
-	using Scorto.Web;
+	using Infrastructure.Attributes;
 	using ActionResult = System.Web.Mvc.ActionResult;
 
 	public class ProfileController : Controller
@@ -24,17 +24,17 @@
         {
             var customer = CustomerRepository.Get(id);
             var model = _summaryModelBuilder.CreateProfile(customer);
-            return this.JsonNet(model);
+            return Json(model, JsonRequestBehavior.AllowGet);
         }
 
         [Ajax]
         [HttpPost]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-        public JsonNetResult SaveComment(string comment, int id)
+        public JsonResult SaveComment(string comment, int id)
         {
             var customer = CustomerRepository.Get(id);
             customer.Comment = comment;
-            return this.JsonNet(new {Saved = "true"});
+            return Json(new {Saved = "true"});
         }
     }
 }

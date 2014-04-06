@@ -18,10 +18,10 @@
 	using Ezbob.Logger;
 
 	using Ezbob.Utils;
+	using Infrastructure.Attributes;
 	using Infrastructure.Filters;
 	using log4net;
 
-	using Scorto.Web;
 	using StructureMap;
 
 	#endregion using

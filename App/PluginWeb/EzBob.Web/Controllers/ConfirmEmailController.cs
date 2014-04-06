@@ -4,7 +4,7 @@
 	using System;
 	using System.Web.Mvc;
 	using Code.Email;
-	using Scorto.Web;
+	using Infrastructure.Attributes;
 
 	public class ConfirmEmailController : Controller
     {

@@ -1,8 +1,8 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers {
 	using System.Web.Mvc;
 	using Infrastructure;
+	using Infrastructure.Attributes;
 	using log4net;
-	using Scorto.Web;
 	using Models;
 
 	public class MarketPlacesController : Controller {
@@ -19,9 +19,9 @@
 		#region method Accounts (account list by type)
 
 		[Transactional, HttpGet, Ajax]
-		public JsonNetResult Accounts() {
+		public JsonResult Accounts() {
 
-			return this.JsonNet(new { mpAccounts = _context.Customer.GetMarketPlaces() });
+			return Json(new { mpAccounts = _context.Customer.GetMarketPlaces() }, JsonRequestBehavior.AllowGet);
 		} // Accounts
 
 		#endregion method Accounts (account list by type)

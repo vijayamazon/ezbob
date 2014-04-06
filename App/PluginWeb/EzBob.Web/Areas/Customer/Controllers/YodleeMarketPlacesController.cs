@@ -8,15 +8,14 @@
 	using EZBob.DatabaseLib.DatabaseWrapper;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Marketplaces.Yodlee;
+	using Infrastructure.Attributes;
 	using Web.Models.Strings;
 	using YodleeLib;
 	using YodleeLib.connector;
 	using System.Linq;
 	using System.Web.Mvc;
-	using ApplicationMng.Repository;
 	using EZBob.DatabaseLib.Model.Database;
 	using Infrastructure;
-	using Scorto.Web;
 	using Code.MpUniq;
 	using log4net;
 	using NHibernate;
@@ -50,7 +49,7 @@
 		}
 
 		[Transactional]
-		public JsonNetResult Accounts()
+		public JsonResult Accounts()
 		{
 			var oEsi = new YodleeServiceInfo();
 			var yodlees = new List<YodleeAccountModel>();
@@ -59,7 +58,7 @@
 			{
 				yodlees.Add(YodleeAccountModel.ToModel(marketplace, new YodleeBanksRepository(_session)));
 			}
-			return this.JsonNet(yodlees);
+			return Json(yodlees, JsonRequestBehavior.AllowGet);
 		}
 
 		[Transactional]

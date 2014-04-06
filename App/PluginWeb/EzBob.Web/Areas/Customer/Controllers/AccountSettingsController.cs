@@ -4,11 +4,11 @@
 	using System.Web.Mvc;
 	using Code;
 	using Ezbob.Utils;
+	using Infrastructure.Attributes;
 	using Infrastructure.Membership;
 	using Models;
 	using Infrastructure.csrf;
 	using NHibernateWrapper.NHibernate.Model;
-	using Scorto.Web;
 	using NHibernateWrapper.Web;
 
 	public class AccountSettingsController : Controller
@@ -28,14 +28,14 @@
         [Ajax]
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
-        public JsonNetResult UpdateSecurityQuestion(SecurityQuestionModel model, string password)
+        public JsonResult UpdateSecurityQuestion(SecurityQuestionModel model, string password)
         {
             var user = context.User;
 
 			var passwordHash = PasswordEncryptor.EncodePassword(password, user.Name, user.CreationDate);
             if (user.Password != passwordHash)
             {
-                return this.JsonNet(new { error = "Incorrect password" });
+                return Json(new { error = "Incorrect password" });
             }
 
             user.SecurityAnswer = model.Answer;
@@ -44,14 +44,14 @@
                 Id = model.Question
             };
 
-            return this.JsonNet(new {});
+            return Json(new {});
         }
 
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         [Ajax]
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
-        public JsonNetResult ChangePassword(string oldPassword, string newPassword)
+        public JsonResult ChangePassword(string oldPassword, string newPassword)
         {
 			bool success = provider.ChangePassword(context.User.Name, oldPassword, newPassword);
 			if (success)
@@ -60,7 +60,7 @@
 				m_oServiceClient.Instance.PasswordChanged(context.User.Id, newPassword);
             }
 
-			return this.JsonNet(new { status = success ? "ChangeOk" : "SomeError" }); 
+			return Json(new { status = success ? "ChangeOk" : "SomeError" }); 
         }
 
         [ValidateJsonAntiForgeryToken]

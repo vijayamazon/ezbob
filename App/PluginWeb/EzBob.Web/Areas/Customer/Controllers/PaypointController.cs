@@ -9,13 +9,13 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EzServiceReference;
+	using Infrastructure.Attributes;
 	using Models;
 	using Infrastructure;
 	using Infrastructure.csrf;
 	using Web.Models;
 	using PaymentServices.Calculators;
 	using PaymentServices.PayPoint;
-	using Scorto.Web;
 	using log4net;
 	using ActionResult = System.Web.Mvc.ActionResult;
 
@@ -203,7 +203,7 @@
 		[HttpPost]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
-		public JsonNetResult PayFast(string amount, string type, string paymentType, int loanId, int cardId)
+		public JsonResult PayFast(string amount, string type, string paymentType, int loanId, int cardId)
 		{
 			try
 			{
@@ -217,7 +217,7 @@
 
 				if (realAmount < 0)
 				{
-					return this.JsonNet(new { error = "amount is too small" });
+					return Json(new { error = "amount is too small" });
 				}
 
 				var card = customer.PayPointCards.FirstOrDefault(c => c.Id == cardId);
@@ -232,17 +232,17 @@
 				SendEmails(loanId, realAmount, customer);
 				_logRepository.Log(_context.UserId, DateTime.Now, "Paypoint Pay Early Fast Callback", "Successful", "");
 
-				return this.JsonNet(payFastModel);
+				return Json(payFastModel);
 			}
 			catch (PayPointException e)
 			{
 				_logRepository.Log(_context.UserId, DateTime.Now, "Paypoint Pay Early Fast Callback", "Failed", e.ToString());
-				return this.JsonNet(new { error = "Error occurred while making payment" });
+				return Json(new { error = "Error occurred while making payment" });
 			}
 			catch (Exception e)
 			{
 				_logRepository.Log(_context.UserId, DateTime.Now, "Paypoint Pay Early Fast Callback", "Failed", e.ToString());
-				return this.JsonNet(new { error = e.Message });
+				return Json(new { error = e.Message });
 			}
 		}
 

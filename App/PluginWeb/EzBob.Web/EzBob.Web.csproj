@@ -125,9 +125,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Lib\Scorto.Core\Scorto.RegistryScanner.dll</HintPath>
     </Reference>
-    <Reference Include="Scorto.Web">
-      <HintPath>..\..\..\Lib\Scorto.Core\Scorto.Web.dll</HintPath>
-    </Reference>
     <Reference Include="SquishIt.CoffeeScript">
       <HintPath>..\..\..\Lib\3rdparty\SquishIt\SquishIt.CoffeeScript.dll</HintPath>
     </Reference>
@@ -194,6 +191,11 @@
     <Compile Include="Code\StrategyChecker.cs" />
     <Compile Include="Code\UiEvents\UiActionEventModel.cs" />
     <Compile Include="Code\UiEvents\UiCachePkgModel.cs" />
+    <Compile Include="Infrastructure\Attributes\AjaxAttribute.cs" />
+    <Compile Include="Infrastructure\Attributes\JsonpFilterAttribute.cs" />
+    <Compile Include="Infrastructure\Attributes\JsonpResult.cs" />
+    <Compile Include="Infrastructure\Attributes\NoCacheAttribute.cs" />
+    <Compile Include="Infrastructure\Attributes\TransactionalAttribute.cs" />
     <Compile Include="Infrastructure\Constant.cs" />
     <Compile Include="Infrastructure\Html\EzbobHtmlExtensions.cs" />
     <Compile Include="Areas\Customer\Controllers\AccountSettingsController.cs" />
@@ -406,6 +408,8 @@
     <Compile Include="Infrastructure\PostcodeAnywhereConfig.cs" />
     <Compile Include="Infrastructure\RenderAgreementHandlerConfig.cs" />
     <Compile Include="Infrastructure\RestfullErrorHandlingAttribute.cs" />
+    <Compile Include="Infrastructure\StructureMapControllerFactory.cs" />
+    <Compile Include="Infrastructure\TempDataExtensions.cs" />
     <Compile Include="Infrastructure\TransactionHelper.cs" />
     <Compile Include="Infrastructure\WizardBrokerLeadModel.cs" />
     <Compile Include="Infrastructure\XFrameOptionsModule.cs" />

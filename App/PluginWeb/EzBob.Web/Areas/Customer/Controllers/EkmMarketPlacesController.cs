@@ -2,14 +2,13 @@
 	using System;
 	using System.Linq;
 	using System.Web.Mvc;
-	using ApplicationMng.Repository;
 	using Code;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Infrastructure;
-	using Scorto.Web;
 	using EKM;
 	using Code.MpUniq;
+	using Infrastructure.Attributes;
 	using Web.Models.Strings;
 	using log4net;
 	using NHibernate;
@@ -47,7 +46,7 @@
 		}
 
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonNetResult Accounts()
+		public JsonResult Accounts()
 		{
 			var oEsi = new EkmServiceInfo();
 
@@ -56,19 +55,19 @@
 				.Where(mp => mp.Marketplace.InternalId == oEsi.InternalId)
 				.Select(EkmAccountModel.ToModel)
 				.ToList();
-			return this.JsonNet(ekms);
+			return Json(ekms, JsonRequestBehavior.AllowGet);
 		}
 
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[Ajax]
 		[HttpPost]
-		public JsonNetResult Accounts(EkmAccountModel model)
+		public JsonResult Accounts(EkmAccountModel model)
 		{
 			string errorMsg;
 			if (!_validator.Validate(model.login, model.password, out errorMsg))
 			{
 				var errorObject = new { error = errorMsg };
-				return this.JsonNet(errorObject);
+				return Json(errorObject);
 			}
 			try
 			{
@@ -90,32 +89,32 @@
 
 				m_oServiceClient.Instance.UpdateMarketplace(customer.Id, mp.Id, true);
 
-				return this.JsonNet(EkmAccountModel.ToModel(mp));
+				return Json(EkmAccountModel.ToModel(mp), JsonRequestBehavior.AllowGet);
 			}
 			catch (MarketPlaceAddedByThisCustomerException e) {
 				Log.Debug(e);
-				return this.JsonNet(new { error = DbStrings.StoreAddedByYou });
+				return Json(new { error = DbStrings.StoreAddedByYou }, JsonRequestBehavior.AllowGet);
 			}
 			catch (MarketPlaceIsAlreadyAddedException e) {
 				Log.Debug(e);
-				return this.JsonNet(new { error = DbStrings.StoreAlreadyExistsInDb });
+				return Json(new { error = DbStrings.StoreAlreadyExistsInDb }, JsonRequestBehavior.AllowGet);
 			}
 			catch (Exception e) {
 				Log.Error(e);
-				return this.JsonNet(new { error = e.Message });
+				return Json(new { error = e.Message }, JsonRequestBehavior.AllowGet);
 			}
 		}
 
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[Ajax]
 		[HttpPost]
-		public JsonNetResult Update(string name, string password)
+		public JsonResult Update(string name, string password)
 		{
 			string errorMsg;
 			if (!_validator.Validate(name, password, out errorMsg))
 			{
 				var errorObject = new { error = errorMsg };
-				return this.JsonNet(errorObject);
+				return Json(errorObject);
 			}
 			try
 			{
@@ -123,12 +122,12 @@
 				var ekm = new EkmDatabaseMarketPlace();
 				_helper.SaveOrUpdateCustomerMarketplace(name, ekm, password, customer);
 				_session.Flush();
-				return this.JsonNet(new { success = true });
+				return Json(new { success = true }, JsonRequestBehavior.AllowGet);
 			}
 			catch (Exception e)
 			{
 				Log.Error(e);
-				return this.JsonNet(new { error = e.Message });
+				return Json(new { error = e.Message }, JsonRequestBehavior.AllowGet);
 			}
 		}
 	}

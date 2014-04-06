@@ -6,12 +6,12 @@
 	using System.Web.Mvc;
 	using EZBob.DatabaseLib.Repository;
 	using EzBob.Models;
+	using Infrastructure.Attributes;
 	using Models;
 	using Code;
 	using Infrastructure;
 	using Infrastructure.csrf;
 	using PaymentServices.Calculators;
-	using Scorto.Web;
 
 	public class LoanController : Controller
     {
@@ -27,7 +27,7 @@
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         [ValidateJsonAntiForgeryToken]
         [HttpGet]
-        public JsonNetResult Details(int id)
+        public JsonResult Details(int id)
         {
             var customer = _context.Customer;
 
@@ -35,16 +35,16 @@
             
             if (loan == null)
             {
-                return this.JsonNet(new { error = "loan does not exists" });
+                return Json(new { error = "loan does not exists" }, JsonRequestBehavior.AllowGet);
             }
 
             var loansDetailsBuilder= new LoansDetailsBuilder();
             var details = loansDetailsBuilder.Build(loan, _rolloverRepository.GetByLoanId(loan.Id));
 
-            return this.JsonNet(details);
+            return Json(details, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonNetResult Get(int id)
+        public JsonResult Get(int id)
         {
             var customer = _context.Customer;
             var loan = customer.Loans.SingleOrDefault(l => l.Id == id);
@@ -53,7 +53,7 @@
 
             var loanModel = LoanModel.FromLoan(loan, calculator);
 
-            return this.JsonNet(loanModel);
+            return Json(loanModel, JsonRequestBehavior.AllowGet);
             
         }
     }

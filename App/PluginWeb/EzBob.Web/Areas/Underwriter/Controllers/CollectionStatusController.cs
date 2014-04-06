@@ -6,8 +6,8 @@
 	using EZBob.DatabaseLib.Repository;
 	using EzBob.Models;
 	using Infrastructure;
+	using Infrastructure.Attributes;
 	using PaymentServices.Calculators;
-	using Scorto.Web;
 	using System.Web.Mvc;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
@@ -29,12 +29,12 @@
         }
 
 		[Ajax]
-		public JsonNetResult GetStatuses()
+		public JsonResult GetStatuses()
 		{
-			return this.JsonNet(_customerStatusesRepository.GetAll().ToList());
+			return Json(_customerStatusesRepository.GetAll().ToList(), JsonRequestBehavior.AllowGet);
 		}
 
-        public JsonNetResult Index(int id, int currentStatus)
+        public JsonResult Index(int id, int currentStatus)
         {
             var customer = _customerRepository.Get(id);
 
@@ -55,7 +55,7 @@
                                }).ToList()
                            };
 
-            return this.JsonNet(data);
+            return Json(data, JsonRequestBehavior.AllowGet);
         }
 
         private CollectionStatus CreateDefaultCollectionStatusParameter(Customer customer, int currentStatus)
@@ -68,7 +68,7 @@
         [Transactional]
         [Ajax]
         [Permission(Name = "CustomerStatus")]
-        public JsonNetResult Save(int customerId, int currentStatus, CollectionStatusModel collectionStatus)
+        public JsonResult Save(int customerId, int currentStatus, CollectionStatusModel collectionStatus)
         {
 			int minDectForDefault = configurationVariablesRepository.GetByNameAsInt("MinDectForDefault");
 
@@ -99,7 +99,7 @@
 					loanOptionsRepository.SaveOrUpdate(options);
 				}
 	        }
-	        return this.JsonNet(new { });
+	        return Json(new { });
         }
     }
 }

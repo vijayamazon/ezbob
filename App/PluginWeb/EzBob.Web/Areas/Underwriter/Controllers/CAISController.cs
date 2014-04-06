@@ -7,9 +7,9 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Repository;
 	using ExperianLib.CaisFile;
+	using Infrastructure.Attributes;
 	using Models.CAIS;
 	using Code;
-	using Scorto.Web;
 	using NHibernateWrapper.Web;
 	using ActionResult = System.Web.Mvc.ActionResult;
 
@@ -30,12 +30,12 @@
 
         [Ajax]
         [HttpPost]
-        public JsonNetResult Generate() {
+        public JsonResult Generate() {
             try {
                 m_oServiceClient.Instance.CaisGenerate(_context.User.Id);
             }
             catch (Exception e) {
-                return this.JsonNet(new {error = e});
+                return Json(new {error = e});
             }
 
             return null;
@@ -51,9 +51,9 @@
 
         [Ajax]
         [HttpGet]
-        public JsonNetResult ListOfFiles() {
+        public JsonResult ListOfFiles() {
             var cais = CaisModel.FromModel(_caisReportsHistoryRepository.GetAll());
-            return this.JsonNet(new {cais});
+            return Json(new {cais}, JsonRequestBehavior.AllowGet);
         }
 
         [Ajax]
@@ -84,7 +84,7 @@
         [Ajax]
         [HttpPost]
         [Transactional]
-        public JsonNetResult SendFiles(IEnumerable<CaisSendModel> model) {
+        public JsonResult SendFiles(IEnumerable<CaisSendModel> model) {
             var error = new HashSet<string>();
             foreach (var el in model) {
                 try {
@@ -95,7 +95,7 @@
                 }
             }
 
-            return error.Count > 0 ? this.JsonNet(string.Join(Environment.NewLine, error)) : null;
+            return error.Count > 0 ? Json(string.Join(Environment.NewLine, error), JsonRequestBehavior.AllowGet) : null;
         }
 
         private void SendCAISFile(int id) {

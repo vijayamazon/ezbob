@@ -8,8 +8,8 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Code;
 	using Code.Agreements;
+	using Infrastructure.Attributes;
 	using Newtonsoft.Json;
-	using Scorto.Web;
 
 	public class GenerateAgreementsController : Controller
     {

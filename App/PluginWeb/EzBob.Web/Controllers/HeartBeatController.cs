@@ -1,15 +1,9 @@
-﻿namespace EzBob.Web.Controllers
-{
-	using System.Data;
+﻿namespace EzBob.Web.Controllers {
 	using System.Web.Mvc;
-	using Scorto.Web;
 
-	[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-    public class HeartBeatController: Controller
-    {
-         public JsonNetResult Index()
-         {
-             return new JsonNetResult();
-         }
-    }
+	public class HeartBeatController : Controller {
+		public JsonResult Index() {
+			return Json(new { }, JsonRequestBehavior.AllowGet);
+		}
+	}
 }

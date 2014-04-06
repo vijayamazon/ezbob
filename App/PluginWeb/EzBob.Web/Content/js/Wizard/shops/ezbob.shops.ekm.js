@@ -1,4 +1,4 @@
-﻿(function() {
+(function() {
   var root,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
@@ -6,30 +6,6 @@
   root = typeof exports !== "undefined" && exports !== null ? exports : this;
 
   root.EzBob = root.EzBob || {};
-
-  EzBob.EKMAccountButtonView = (function(_super) {
-
-    __extends(EKMAccountButtonView, _super);
-
-    function EKMAccountButtonView() {
-      return EKMAccountButtonView.__super__.constructor.apply(this, arguments);
-    }
-
-    EKMAccountButtonView.prototype.initialize = function() {
-      return EKMAccountButtonView.__super__.initialize.call(this, {
-        name: 'EKM',
-        logoText: '',
-        shops: this.model
-      });
-    };
-
-    EKMAccountButtonView.prototype.update = function() {
-      return this.model.fetch();
-    };
-
-    return EKMAccountButtonView;
-
-  })(EzBob.StoreButtonView);
 
   EzBob.EKMAccountInfoView = (function(_super) {
 
@@ -108,6 +84,7 @@
     EKMAccountInfoView.prototype.render = function() {
       EKMAccountInfoView.__super__.render.call(this);
       this.validator = EzBob.validateEkmShopForm(this.ui.form);
+      EzBob.UiAction.registerView(this);
       return this;
     };
 

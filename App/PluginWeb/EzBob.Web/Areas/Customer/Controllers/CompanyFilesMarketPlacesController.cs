@@ -8,7 +8,7 @@
 	using CompanyFiles;
 	using EZBob.DatabaseLib.Model.Database;
 	using Infrastructure;
-	using Scorto.Web;
+	using Infrastructure.Attributes;
 	using log4net;
 	using NHibernate;
 	using System.Data;
@@ -36,7 +36,7 @@
 		}
 
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonNetResult Accounts()
+		public JsonResult Accounts()
 		{
 			var oEsi = new CompanyFilesServiceInfo();
 
@@ -45,7 +45,8 @@
 				.Where(mp => mp.Marketplace.InternalId == oEsi.InternalId)
 				.Select(x => x.DisplayName)
 				.ToList();
-			return this.JsonNet(companyFiles);
+
+			return Json(companyFiles, JsonRequestBehavior.AllowGet);
 		}
 
 		[HttpPost]

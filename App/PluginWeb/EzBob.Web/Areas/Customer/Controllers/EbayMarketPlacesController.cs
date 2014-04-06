@@ -7,6 +7,7 @@
 	using Code;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database.Repository;
+	using Infrastructure.Attributes;
 	using Models;
 	using Code.MpUniq;
 	using Infrastructure;
@@ -15,7 +16,6 @@
 	using eBayLib;
 	using eBayServiceLib;
 	using NHibernate;
-	using Scorto.Web;
 	using log4net;
 
 	public class EbayMarketPlacesController : Controller
@@ -49,13 +49,13 @@
 		[Ajax]
 		[HttpGet]
 		[ValidateJsonAntiForgeryToken]
-		public JsonNetResult Index()
+		public JsonResult Index()
 		{
 			var ebay = new eBayDatabaseMarketPlace();
 			var marketplaces = _context.Customer.CustomerMarketPlaces
 											.Where(m => m.Marketplace.InternalId == ebay.InternalId)
 											.Select(m => new SimpleMarketPlaceModel { displayName = m.DisplayName, MpId = m.Marketplace.Id, MpName = m.Marketplace.Name });
-			return this.JsonNet(marketplaces);
+			return Json(marketplaces, JsonRequestBehavior.AllowGet);
 		}
 
 		public JsonResult CreateSessionId()

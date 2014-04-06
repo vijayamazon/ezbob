@@ -3,9 +3,9 @@
 	using System.Web.Mvc;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Repository;
+	using Infrastructure.Attributes;
 	using Infrastructure.csrf;
 	using Web.Models;
-	using Scorto.Web;
 	using StructureMap;
 	using log4net;
 
@@ -24,10 +24,10 @@
 		[HttpGet]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[ValidateJsonAntiForgeryToken]
-		public JsonNetResult Index(int id) {
+		public JsonResult Index(int id) {
 			var customer = m_oCustomerRepository.Get(id);
 			var builder = new CompanyScoreModelBuilder();
-			return this.JsonNet(builder.Create(customer));
+			return Json(builder.Create(customer), JsonRequestBehavior.AllowGet);
 		} // Index
 	} // CompanyScoreController
 } // namespace

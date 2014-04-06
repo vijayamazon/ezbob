@@ -7,9 +7,8 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EzBob.Web.Areas.Underwriter.Models;
 	using EzBob.Web.Infrastructure.csrf;
-
+	using Infrastructure.Attributes;
 	using log4net;
-	using Scorto.Web;
 
 	public class CustomerRelationsController : Controller {
 		#region public

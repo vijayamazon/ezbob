@@ -7,9 +7,9 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Repository;
+	using Infrastructure.Attributes;
 	using Models;
 	using Infrastructure.csrf;
-	using Scorto.Web;
 	using StructureMap;
 
     public class LoanOptionsController : Controller
@@ -34,13 +34,13 @@
         [Ajax]
         [HttpGet]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-        public JsonNetResult Index(int loanId)
+        public JsonResult Index(int loanId)
         {
             var options = _loanOptionsRepository.GetByLoanId(loanId) ?? SetDefaultStatus(loanId);
             var loan = _loanRepository.Get(loanId);
             var flags = _caisFlagRepository.GetForStatusType();
             var model = new LoanOptionsViewModel(options, loan, flags);
-            return this.JsonNet(model);
+            return Json(model, JsonRequestBehavior.AllowGet);
         }
 
         private LoanOptions SetDefaultStatus(int loanid)
@@ -61,7 +61,7 @@
         [Ajax]
         [HttpPost]
         [ValidateJsonAntiForgeryToken]
-        public JsonNetResult Save(LoanOptions options)
+        public JsonResult Save(LoanOptions options)
          {
              if (options.ManulCaisFlag == "T")
                  options.ManulCaisFlag = "Calculated value";
@@ -123,7 +123,7 @@
 				customerStatusHistoryRepository.SaveOrUpdate(newEntry);
 			}
 
-             return this.JsonNet(new { });
+             return Json(new { });
          }
     }
 }

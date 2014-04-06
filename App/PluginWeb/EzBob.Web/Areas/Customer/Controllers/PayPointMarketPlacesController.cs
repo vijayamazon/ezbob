@@ -8,7 +8,7 @@
     using EZBob.DatabaseLib.Model.Database;
     using EZBob.DatabaseLib.Model.Database.Repository;
     using Infrastructure;
-    using Scorto.Web;
+    using Infrastructure.Attributes;
     using PayPoint;
     using Code.MpUniq;
     using Web.Models.Strings;
@@ -45,23 +45,23 @@
         }
 
         [Transactional]
-        public JsonNetResult Accounts()
+        public JsonResult Accounts()
         {
             var payPoints = _customer.CustomerMarketPlaces.Where(mp => mp.Marketplace.Id == _payPointMarketTypeId).Select(PayPointAccountModel.ToModel).ToList();
-            return this.JsonNet(payPoints);
+            return Json(payPoints, JsonRequestBehavior.AllowGet);
         }
 
         [Transactional]
         [Ajax]
         [HttpPost]
-        public JsonNetResult Accounts(PayPointAccountModel model)
+        public JsonResult Accounts(PayPointAccountModel model)
         {
             string errorMsg;
             if (!PayPointConnector.Validate(model.mid, model.vpnPassword, model.remotePassword, out errorMsg))
             {
 				var errorObject = new { error = errorMsg };
 				Log.ErrorFormat("PayPoint validation failed: {0}", errorObject);
-                return this.JsonNet(errorObject);
+                return Json(errorObject);
             }
             try
             {
@@ -75,22 +75,22 @@
 
                 var payPoint = _helper.SaveOrUpdateCustomerMarketplace(username, payPointDatabaseMarketPlace, payPointSecurityInfo, customer);
                 m_oServiceClient.Instance.UpdateMarketplace(customer.Id, payPoint.Id, true);
-                return this.JsonNet(PayPointAccountModel.ToModel(_helper.GetExistsCustomerMarketPlace(username, payPointDatabaseMarketPlace, customer)));
+                return Json(PayPointAccountModel.ToModel(_helper.GetExistsCustomerMarketPlace(username, payPointDatabaseMarketPlace, customer)));
             }
             catch (MarketPlaceAddedByThisCustomerException e)
 			{
 				Log.Error(e);
-				return this.JsonNet(new { error = DbStrings.AccountAddedByYou });
+				return Json(new { error = DbStrings.AccountAddedByYou });
             }
             catch (MarketPlaceIsAlreadyAddedException e)
 			{
 				Log.Error(e);
-                return this.JsonNet(new { error = DbStrings.StoreAlreadyExistsInDb });
+                return Json(new { error = DbStrings.StoreAlreadyExistsInDb });
             }
             catch (Exception e)
             {
                 Log.Error(e);
-                return this.JsonNet(new { error = e.Message });
+                return Json(new { error = e.Message });
             }
         }
     }

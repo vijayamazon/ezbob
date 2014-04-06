@@ -9,8 +9,8 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Infrastructure;
-    using Sage;
-    using Scorto.Web;
+	using Infrastructure.Attributes;
+	using Sage;
 	using log4net;
 	using ActionResult = System.Web.Mvc.ActionResult;
 
@@ -34,7 +34,7 @@
 		}
 
         [Transactional]
-        public JsonNetResult Accounts()
+        public JsonResult Accounts()
         {
 			var oEsi = new SageServiceInfo();
 
@@ -43,7 +43,7 @@
                 .Where(mp => mp.Marketplace.InternalId == oEsi.InternalId)
                 .Select(SageAccountModel.ToModel)
                 .ToList();
-			return this.JsonNet(sageAccounts);
+			return Json(sageAccounts, JsonRequestBehavior.AllowGet);
         }
 
 		[Transactional]

@@ -4,12 +4,13 @@ using ApplicationMng.Repository;
 using EZBob.DatabaseLib.Model.Database;
 using EZBob.DatabaseLib.Model.Database.Repository;
 using EzBob.Web.Infrastructure;
-using Scorto.Web;
 using System.Linq;
 
 namespace EzBob.Web.Areas.Underwriter.Controllers
 {
-    public class BugsController : Controller
+	using Infrastructure.Attributes;
+
+	public class BugsController : Controller
     {
         private readonly IBugRepository _bugs;
         private readonly IEzbobWorkplaceContext _context;
@@ -27,66 +28,66 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
         [Ajax]
         [HttpPost]
         [Transactional]
-        public JsonNetResult CreateBug(BugModel bug)
+        public JsonResult CreateBug(BugModel bug)
         {
             var b = bug.FromModel(_customers, _users);
             b.UnderwriterOpened = _context.User;
             _bugs.Save(b);
-            return this.JsonNet(new {});
+            return Json(new {});
         }
         
         [Ajax]
         [Transactional]
-        public JsonNetResult UpdateBug(BugModel bug)
+        public JsonResult UpdateBug(BugModel bug)
         {
             var b = bug.FromModel(_customers, _users);
             b.UnderwriterOpened = _context.User;
             _bugs.Update(b);
-            return this.JsonNet(new { });
+            return Json(new { }, JsonRequestBehavior.AllowGet);
         }
 
         [Ajax]
         [HttpGet]
         [Transactional]
-        public JsonNetResult TryGet(int customerid, string bugtype, int? mp, int? director)
+        public JsonResult TryGet(int customerid, string bugtype, int? mp, int? director)
         {
             var bug = _bugs.Search(customerid, bugtype, mp, director);
-            return this.JsonNet(BugModel.ToModel(bug));
+            return Json(BugModel.ToModel(bug), JsonRequestBehavior.AllowGet);
         }
 
         [Ajax]
         [HttpPost]
         [Transactional]
-        public JsonNetResult Close(BugModel bugm)
+        public JsonResult Close(BugModel bugm)
         {
             var bug = _bugs.Get(bugm.Id);
             bug.State = BugState.Closed;
             bug.DateClosed = DateTime.UtcNow;
             bug.UnderwriterClosed = _context.User;
             bug.TextClosed = bugm.TextClosed;
-            return this.JsonNet(BugModel.ToModel(bug));
+            return Json(BugModel.ToModel(bug));
         }
 
         [Ajax]
         [HttpPost]
         [Transactional]
-        public JsonNetResult Reopen(BugModel bugModel)
+        public JsonResult Reopen(BugModel bugModel)
         {
             var bug = _bugs.Get(bugModel.Id);
             bug.State = BugState.Reopened;
             bug.DateOpened = DateTime.UtcNow;
             bug.UnderwriterOpened = _context.User;
-            return this.JsonNet(BugModel.ToModel(bug));
+            return Json(BugModel.ToModel(bug));
         }
 
         [Ajax]
         [HttpGet]
-        public JsonNetResult GetAllForCustomer(int customerId)
+        public JsonResult GetAllForCustomer(int customerId)
         {
             var bugs = _bugs.GetAll()
                 .Where(x => x.Customer.Id == customerId)
                 .Select(x=> BugModel.ToModel(x));
-            return this.JsonNet(bugs);
+            return Json(bugs, JsonRequestBehavior.AllowGet);
         }
     }
 

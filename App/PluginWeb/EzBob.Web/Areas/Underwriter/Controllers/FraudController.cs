@@ -6,8 +6,8 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Fraud;
 	using EZBob.DatabaseLib.Repository;
+	using Infrastructure.Attributes;
 	using Models.Fraud;
-	using Scorto.Web;
 
 	public class FraudController : Controller
     {
@@ -21,10 +21,10 @@
         }
 
         [HttpGet]
-        public JsonNetResult GetAll()
+        public JsonResult GetAll()
         {
             var model = FraudModel.FromFraudModel(_fraudUserRepository.GetAll().OrderByDescending(x=>x.Id).ToList());
-            return this.JsonNet(model);
+            return Json(model, JsonRequestBehavior.AllowGet);
         }
 
         [HttpPost]

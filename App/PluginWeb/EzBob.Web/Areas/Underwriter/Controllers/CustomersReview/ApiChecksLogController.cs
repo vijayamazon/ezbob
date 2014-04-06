@@ -3,9 +3,9 @@
 	using System.Data;
 	using System.Web.Mvc;
 	using EZBob.DatabaseLib.Model.Database.Repository;
+	using Infrastructure.Attributes;
 	using Models;
 	using Infrastructure.csrf;
-	using Scorto.Web;
 
 	public class ApiChecksLogController : Controller
     {
@@ -22,13 +22,13 @@
         [HttpGet]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         [ValidateJsonAntiForgeryToken]
-        public JsonNetResult Index(int id)
+        public JsonResult Index(int id)
         {
             var customer = _customerRepository.Get(id);
 
             var models = _builder.Create(customer);
 
-            return this.JsonNet(models);
+            return Json(models, JsonRequestBehavior.AllowGet);
         }
 
     }

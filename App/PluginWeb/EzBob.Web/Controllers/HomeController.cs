@@ -10,7 +10,7 @@
 	using EzServiceReference;
 	using Ezbob.Logger;
 	using Infrastructure;
-	using Scorto.Web;
+	using Infrastructure.Attributes;
 	using log4net;
 	using ActionResult = System.Web.Mvc.ActionResult;
 

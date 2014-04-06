@@ -3,16 +3,22 @@ using FluentNHibernate.Mapping;
 
 namespace EZBob.DatabaseLib.Model.Database
 {
+	using System.Web.Script.Serialization;
 	using Iesi.Collections.Generic;
 
 	[Serializable]
 	public class CustomerAddress
 	{
 		[Newtonsoft.Json.JsonIgnore]
+		[ScriptIgnore]
 		public virtual Customer Customer { get; set; }
+
 		[Newtonsoft.Json.JsonIgnore]
+		[ScriptIgnore]
 		public virtual Director Director { get; set; }
+
 		[Newtonsoft.Json.JsonIgnore]
+		[ScriptIgnore]
 		public virtual Company Company { get; set; }
 
 		public virtual int AddressId { get; set; }
@@ -35,6 +41,7 @@ namespace EZBob.DatabaseLib.Model.Database
 		public virtual string Udprn { get; set; }
 
 		[Newtonsoft.Json.JsonIgnore]
+		[ScriptIgnore]
 		public virtual ISet<Zoopla> Zoopla { get; set; }
 		public virtual string ZooplaEstimate { get; set; }
 		public virtual string ZooplaAverage { get; set; }

@@ -8,9 +8,9 @@
 	using EzBob.Models;
 	using Code;
 	using Infrastructure;
+	using Infrastructure.Attributes;
 	using Infrastructure.csrf;
 	using PaymentServices.Calculators;
-	using Scorto.Web;
 	using StructureMap;
 
 	public class ScheduleController : Controller {
@@ -33,7 +33,7 @@
 		[HttpGet]
 		[ValidateJsonAntiForgeryToken]
 		[Transactional]
-		public JsonNetResult CalculateAll(int amount) {
+		public JsonResult CalculateAll(int amount) {
 			var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
 
 			var dic = new Dictionary<string, LoanOffer>();
@@ -51,20 +51,20 @@
 				} // for each period
 			} // if helper is not null
 
-			return this.JsonNet(dic);
+			return Json(dic, JsonRequestBehavior.AllowGet);
 		} // CalculateAll
 
 		[Ajax]
 		[HttpGet]
 		[ValidateJsonAntiForgeryToken]
 		[Transactional]
-		public JsonNetResult Calculate(int amount, int loanType, int repaymentPeriod) {
+		public JsonResult Calculate(int amount, int loanType, int repaymentPeriod) {
 			LoanOffer loanOffer = CalculateLoan(amount, loanType, repaymentPeriod);
 
 			if (loanOffer == null)
-				return this.JsonNet(new { error = "Invalid customer state" });
+				return Json(new { error = "Invalid customer state" }, JsonRequestBehavior.AllowGet);
 
-			return this.JsonNet(loanOffer);
+			return Json(loanOffer, JsonRequestBehavior.AllowGet);
 		} // Calculate
 
 		private LoanOffer CalculateLoan(int amount, int loanType, int repaymentPeriod) {

@@ -5,8 +5,8 @@
 	using System.Web.Mvc;
 	using EZBob.DatabaseLib.Model.Database;
 	using Infrastructure;
+	using Infrastructure.Attributes;
 	using Infrastructure.csrf;
-	using Scorto.Web;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 
 	public class WhatsNewController : Controller
@@ -32,7 +32,7 @@
 		[HttpGet]
 		[ValidateJsonAntiForgeryToken]
 		[Transactional]
-		public JsonNetResult Index()
+		public JsonResult Index()
 		{
 			var sawWhatsNew =
 				_whatsNewCustomerMapRepository
@@ -53,7 +53,7 @@
 
 				if (whatsNew != null)
 				{
-					return this.JsonNet(new { success = true, whatsNew = whatsNew.WhatsNewHtml, whatsNewId = whatsNew.Id });
+					return Json(new { success = true, whatsNew = whatsNew.WhatsNewHtml, whatsNewId = whatsNew.Id }, JsonRequestBehavior.AllowGet);
 				}
 
 			}
@@ -66,11 +66,11 @@
 											 x.ValidUntil.Date >= DateTime.Today);
 				if (whatsNew != null)
 				{
-					return this.JsonNet(new { success = true, whatsNew = whatsNew.WhatsNewHtml, whatsNewId = whatsNew.Id });
+					return Json(new { success = true, whatsNew = whatsNew.WhatsNewHtml, whatsNewId = whatsNew.Id }, JsonRequestBehavior.AllowGet);
 				}
 			}
 
-			return this.JsonNet(new { success = true, noWhatsNew = true });
+			return Json(new { success = true, noWhatsNew = true }, JsonRequestBehavior.AllowGet);
 		}
 
 		[Ajax]

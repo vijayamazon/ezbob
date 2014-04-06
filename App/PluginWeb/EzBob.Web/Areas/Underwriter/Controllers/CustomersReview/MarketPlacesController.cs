@@ -10,10 +10,10 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Repository;
 	using EzBob.Models.Marketplaces.Builders;
+	using Infrastructure.Attributes;
 	using Models;
 	using EzBob.Models.Marketplaces;
 	using NHibernate;
-	using Scorto.Web;
 	using CommonLib;
 	using CommonLib.Security;
 	using EZBob.DatabaseLib.Model.Marketplaces.Yodlee;
@@ -70,20 +70,20 @@
 		[Ajax]
 		[HttpGet]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonNetResult Index(int id, DateTime? history = null)
+		public JsonResult Index(int id, DateTime? history = null)
 		{
 			var customer = _customers.Get(id);
 			var models = GetCustomerMarketplaces(customer, history);
-			return this.JsonNet(models);
+			return Json(models, JsonRequestBehavior.AllowGet);
 		}
 
 		[Ajax]
 		[HttpGet]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonNetResult GetTeraPeakOrderItems(int customerMarketPlaceId)
+		public JsonResult GetTeraPeakOrderItems(int customerMarketPlaceId)
 		{
 			var data = _teraPeakOrderItems.GetTeraPeakOrderItems(customerMarketPlaceId);
-			return this.JsonNet(data.Select(item => new Double?[2] { (ToUnixTimestamp(item.StartDate) + ToUnixTimestamp(item.EndDate)) / 2, item.Revenue }).Cast<object>().ToArray());
+			return Json(data.Select(item => new Double?[2] { (ToUnixTimestamp(item.StartDate) + ToUnixTimestamp(item.EndDate)) / 2, item.Revenue }).Cast<object>().ToArray(), JsonRequestBehavior.AllowGet);
 
 		}
 
@@ -100,32 +100,32 @@
 		}
 
 		[HttpGet]
-		public JsonNetResult GetCustomerMarketplacesHistory(int customerId)
+		public JsonResult GetCustomerMarketplacesHistory(int customerId)
 		{
 			var customer = _customers.Get(customerId);
 			var models = _marketPlaces.GetMarketPlaceHistoryModel(customer);
-			return this.JsonNet(models);
+			return Json(models, JsonRequestBehavior.AllowGet);
 		}
 
 
 		[Ajax]
 		[HttpGet]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonNetResult Details(int id)
+		public JsonResult Details(int id)
 		{
 			var cm = _customerMarketplaces.Get(id);
 			var values = _functions.GetAllValuesFor(cm);
-			return this.JsonNet(values.Select(v => new FunctionValueModel(v)));
+			return Json(values.Select(v => new FunctionValueModel(v)), JsonRequestBehavior.AllowGet);
 		}
 
 		[Ajax]
 		[HttpGet]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonNetResult YodleeDetails(int id)
+		public JsonResult YodleeDetails(int id)
 		{
 			var mp = _customerMarketplaces.Get(id);
 			var b = new YodleeMarketplaceModelBuilder(_session);
-			return this.JsonNet(b.BuildYodlee(mp, null));
+			return Json(b.BuildYodlee(mp, null), JsonRequestBehavior.AllowGet);
 		}
 
 		[Ajax]
@@ -210,14 +210,12 @@
 			}
 		} // TryRecheckYodlee
 
-
-
 		[Ajax]
 		[HttpGet]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonNetResult CheckForUpdatedStatus(int mpId)
+		public JsonResult CheckForUpdatedStatus(int mpId)
 		{
-			return this.JsonNet(new { status = _customerMarketplaces.Get(mpId).GetUpdatingStatus() });
+			return Json(new { status = _customerMarketplaces.Get(mpId).GetUpdatingStatus() }, JsonRequestBehavior.AllowGet);
 		}
 
 		[Ajax]
@@ -237,21 +235,21 @@
 		[Ajax]
 		[HttpPost]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonNetResult Disable(int umi)
+		public JsonResult Disable(int umi)
 		{
 			var mp = _customerMarketplaces.Get(umi);
 			mp.Disabled = true;
-			return this.JsonNet(new { });
+			return Json(new { });
 		}
 
 		[Ajax]
 		[HttpPost]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonNetResult Enable(int umi)
+		public JsonResult Enable(int umi)
 		{
 			var mp = _customerMarketplaces.Get(umi);
 			mp.Disabled = false;
-			return this.JsonNet(new { });
+			return Json(new { });
 		}
 
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]

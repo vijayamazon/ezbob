@@ -2,8 +2,8 @@
 {
 	using System.Data;
 	using CommonLib;
+	using Infrastructure.Attributes;
 	using Models.Fraud;
-	using Scorto.Web;
 	using System.Web.Mvc;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
@@ -18,7 +18,7 @@
 		}
 
 
-		public JsonNetResult Index(int id)
+		public JsonResult Index(int id)
 		{
 			var customer = _customerRepository.Get(id);
 
@@ -27,17 +27,17 @@
 					CurrentStatusId = (int)customer.FraudStatus,
 					CurrentStatus = customer.FraudStatus.Description()
 				};
-			return this.JsonNet(data);
+			return Json(data, JsonRequestBehavior.AllowGet);
 		}
 
 		[HttpPost]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[Ajax]
-		public JsonNetResult Save(int customerId, int currentStatus)
+		public JsonResult Save(int customerId, int currentStatus)
 		{
 			var customer = _customerRepository.Get(customerId);
 			customer.FraudStatus = (FraudStatus)currentStatus;
-			return this.JsonNet(new { });
+			return Json(new { });
 		}
 	}
 }

@@ -11,6 +11,7 @@
 	using EZBob.DatabaseLib.DatabaseWrapper.AccountInfo;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
+	using Infrastructure.Attributes;
 	using PayPal;
 	using PayPalDbLib.Models;
 	using PayPalServiceLib;
@@ -20,7 +21,6 @@
 	using Web.Models.Strings;
 	using NHibernate;
 	using PostcodeAnywhere;
-	using Scorto.Web;
 	using StructureMap;
 	using log4net;
 	using ActionResult = System.Web.Mvc.ActionResult;
@@ -144,70 +144,72 @@
 		[HttpGet]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
-		public JsonNetResult PayPalList()
+		public JsonResult PayPalList()
 		{
 			var customer = _context.Customer;
 			var paypal = new PayPalDatabaseMarketPlace();
-			return this.JsonNet(customer.CustomerMarketPlaces
-										.Where(m => m.Marketplace.InternalId == paypal.InternalId)
-										.Select(m => new { displayName = m.DisplayName }).ToArray()
-										);
+
+			return Json(customer.CustomerMarketPlaces
+				.Where(m => m.Marketplace.InternalId == paypal.InternalId)
+				.Select(m => new { displayName = m.DisplayName }).ToArray(),
+				JsonRequestBehavior.AllowGet
+			);
 		}
 
 		[Transactional]
 		[HttpGet]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
-		public JsonNetResult BankAccountsList()
+		public JsonResult BankAccountsList()
 		{
 			var customer = _context.Customer;
 
 			if (!customer.HasBankAccount)
 			{
-				return this.JsonNet(new[] { new { } });
+				return Json(new[] { new { } }, JsonRequestBehavior.AllowGet);
 			}
 
-			return this.JsonNet(new[] { new { displayName = customer.BankAccount.AccountNumber } });
+			return Json(new[] { new { displayName = customer.BankAccount.AccountNumber } }, JsonRequestBehavior.AllowGet);
 		}
 
 		[Transactional]
 		[HttpGet]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
-		public JsonNetResult BankAccountsListFormatted()
+		public JsonResult BankAccountsListFormatted()
 		{
 			var customer = _context.Customer;
 
 			if (!customer.HasBankAccount)
 			{
-				return this.JsonNet(new[] { new { } });
+				return Json(new[] { new { } }, JsonRequestBehavior.AllowGet);
 			}
 
-			return this.JsonNet(new[] { new { displayName = "XXXX" + customer.BankAccount.AccountNumber.Substring(4) } });
+			return Json(new[] { new { displayName = "XXXX" + customer.BankAccount.AccountNumber.Substring(4) } }, JsonRequestBehavior.AllowGet);
 		}
 
 		[Transactional]
 		[HttpPost]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
-		public JsonNetResult AddBankAccount(string accountNumber, string sortCode, string BankAccountType)
+		public JsonResult AddBankAccount(string accountNumber, string sortCode, string BankAccountType)
 		{
 			try
 			{
 				var customer = _context.Customer;
 				if (customer == null)
 				{
-					return this.JsonNet(new { error = "Unknown customer" });
+					return Json(new { error = "Unknown customer" });
 				}
 
 				if (string.IsNullOrEmpty(accountNumber) || !Regex.IsMatch(accountNumber, @"^\d{8}$"))
 				{
-					return this.JsonNet(new { error = "Invalid account number" });
+					return Json(new { error = "Invalid account number" });
 				}
 
 				if (string.IsNullOrEmpty(sortCode) || !Regex.IsMatch(sortCode, @"^\d{6}$"))
 				{
-					return this.JsonNet(new { error = "Invalid sort code" });
+					return Json(new { error = "Invalid sort code" });
 				}
 
 				var card = _sortCodeChecker.Check(customer, accountNumber, sortCode, BankAccountType);
@@ -224,28 +226,28 @@
 				customer.CurrentCard = card;
 				_customers.Update(customer);
 
-				return this.JsonNet(new { msg = "Well done! You've added your bank account!" });
+				return Json(new { msg = "Well done! You've added your bank account!" });
 			}
 			catch (SortCodeNotFoundException)
 			{
-				return this.JsonNet(new { error = "Sort code was not found" });
+				return Json(new { error = "Sort code was not found" });
 			}
 			catch (UnknownSortCodeException)
 			{
-				return this.JsonNet(new { error = "Sort code was not found" });
+				return Json(new { error = "Sort code was not found" });
 			}
 			catch (InvalidAccountNumberException)
 			{
-				return this.JsonNet(new { error = "Account number is not valid" });
+				return Json(new { error = "Account number is not valid" });
 			}
 			catch (NotValidSortCodeException)
 			{
-				return this.JsonNet(new { error = "Sort code is not valid" });
+				return Json(new { error = "Sort code is not valid" });
 			}
 			catch (YodleeAccountNotFoundException)
 			{
 				return
-					this.JsonNet(new { error = "Account number doesn't match your linked bank account. Please use the same bank account number you linked before or go back and link a bank account that match the account number you have entered." });
+					Json(new { error = "Account number doesn't match your linked bank account. Please use the same bank account number you linked before or go back and link a bank account that match the account number you have entered." });
 			}
 		}
 	}

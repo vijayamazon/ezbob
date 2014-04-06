@@ -12,10 +12,10 @@
 	using EZBob.DatabaseLib.Repository;
 	using EzBob.Models;
 	using EzBob.Models.Marketplaces;
+	using Infrastructure.Attributes;
 	using Models;
 	using Web.Models;
 	using NHibernate;
-	using Scorto.Web;
 	using System;
 
 	public class FullCustomerController : Controller
@@ -68,7 +68,7 @@
 		//[Ajax]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[HttpGet]
-		public JsonNetResult Index(int id, string history = null)
+		public JsonResult Index(int id, string history = null)
 		{
 			var model = new FullCustomerModel();
 
@@ -77,7 +77,7 @@
 			if (customer == null)
 			{
 				model.State = "NotFound";
-				return this.JsonNet(model);
+				return Json(model, JsonRequestBehavior.AllowGet);
 			}
 
 			var cr = customer.LastCashRequest;
@@ -137,7 +137,7 @@
 			model.State = "Ok";
 
 			model.MarketplacesHistory = _marketPlaces.GetMarketPlaceHistoryModel(customer).ToList();
-			return this.JsonNet(model);
+			return Json(model, JsonRequestBehavior.AllowGet);
 		}
 
 

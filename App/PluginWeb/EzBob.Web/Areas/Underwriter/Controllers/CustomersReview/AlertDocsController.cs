@@ -8,7 +8,6 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Models;
 	using Infrastructure;
-	using Scorto.Web;
 	using StructureMap;
 
     public class AlertDocsController : Controller
@@ -26,7 +25,7 @@
         public ActionResult List(int id)
         {
             var model = (from d in _docRepo.GetAll() where d.Customer.Id == id select AlertDoc.FromDoc(d)).ToArray();
-            return this.JsonNet(model);
+            return Json(model, JsonRequestBehavior.AllowGet);
         }
 
         //-----------------------------------------------------------------------------------

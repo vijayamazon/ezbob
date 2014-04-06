@@ -18,7 +18,6 @@
 	using Infrastructure;
 	using Infrastructure.Filters;
 	using Models;
-	using Scorto.Web;
 	using SquishIt.Less;
 	using SquishIt.MsIeCoffeeScript;
 	using SquishIt.Framework;

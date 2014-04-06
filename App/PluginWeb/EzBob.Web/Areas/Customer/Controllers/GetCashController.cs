@@ -9,12 +9,12 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using CommonLib;
+	using Infrastructure.Attributes;
 	using Models;
 	using Code;
 	using Infrastructure;
 	using PaymentServices.Calculators;
 	using PaymentServices.PacNet;
-	using Scorto.Web;
 	using StructureMap;
 	using log4net;
 
@@ -231,7 +231,7 @@
 
 		[Transactional]
 		[HttpPost]
-		public JsonNetResult Now(int cardId, decimal amount)
+		public JsonResult Now(int cardId, decimal amount)
 		{
 			var cus = _context.Customer;
 			var card = cus.PayPointCards.First(c => c.Id == cardId);
@@ -240,7 +240,7 @@
 
 			var url = Url.Action("Index", "PacnetStatus", new { Area = "Customer" }, "https");
 
-			return this.JsonNet(new { url = url });
+			return Json(new { url = url });
 		}
 
 		private void ValidateCustomerName(string customer, Customer cus)
@@ -264,7 +264,7 @@
 
 		[Transactional]
 		[HttpPost]
-		public JsonNetResult LoanLegalSigned(bool preAgreementTermsRead = false, bool agreementTermsRead = false, bool euAgreementTermsRead = false)
+		public JsonResult LoanLegalSigned(bool preAgreementTermsRead = false, bool agreementTermsRead = false, bool euAgreementTermsRead = false)
 		{
 			_log.DebugFormat("LoanLegalModel agreementTermsRead: {0} preAgreementTermsRead: {1} euAgreementTermsRead: {2}", agreementTermsRead, preAgreementTermsRead, euAgreementTermsRead);
 
@@ -274,7 +274,7 @@
 			if (!preAgreementTermsRead || !agreementTermsRead ||
 				(cashRequest.LoanSource.Name == "EU" && !euAgreementTermsRead))
 			{
-				return this.JsonNet(new { error = "You must agree to all agreements." });
+				return Json(new { error = "You must agree to all agreements." });
 			}
 
 			_context.Customer.LastCashRequest.LoanLegals.Add(new LoanLegal
@@ -288,7 +288,7 @@
 					GuarantyAgreementAgreed = typeOfBusiness == TypeOfBusinessReduced.Limited,
 				});
 
-			return this.JsonNet(new { });
+			return Json(new { });
 		}
 	}
 }

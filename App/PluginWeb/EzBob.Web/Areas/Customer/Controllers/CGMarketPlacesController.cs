@@ -2,14 +2,13 @@
 	using System.Data;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EzBob.Web.Code;
+	using Infrastructure.Attributes;
 	using NHibernate;
 	using System;
 	using System.Linq;
 	using System.Web.Mvc;
-	using ApplicationMng.Repository;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.DatabaseWrapper;
-	using EZBob.DatabaseLib.Model.Database;
 	using Infrastructure;
 	using Code.MpUniq;
 	using Web.Models.Strings;
@@ -17,7 +16,6 @@
 	using Integration.ChannelGrabberFrontend;
 	using Newtonsoft.Json;
 	using log4net;
-	using Scorto.Web;
 	using ActionResult = System.Web.Mvc.ActionResult;
 
 	public class CGMarketPlacesController : Controller {
@@ -144,14 +142,15 @@
 		#region method Accounts (account list by type)
 
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonNetResult Accounts(string atn) {
+		public JsonResult Accounts(string atn) {
 			var oVsi = Configuration.Instance.GetVendorInfo(atn);
 
-			return this.JsonNet(_context.Customer
+			return Json(_context.Customer
 				.CustomerMarketPlaces
 				.Where(mp => mp.Marketplace.InternalId == oVsi.Guid())
 				.Select(AccountModel.ToModel)
-				.ToList()
+				.ToList(),
+				JsonRequestBehavior.AllowGet
 			);
 		} // Accounts
 
@@ -162,7 +161,7 @@
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
 		[Ajax]
 		[HttpPost]
-		public JsonNetResult Accounts(AccountModel model) {
+		public JsonResult Accounts(AccountModel model) {
 			AddAccountState oState = ValidateModel(model);
 
 			if (oState.Error != null)
@@ -193,8 +192,8 @@
 			public VendorInfo VendorInfo;
 			public AccountData AccountData;
 			public IMarketplaceType Marketplace;
-			public JsonNetResult Error;
-			public JsonNetResult Model;
+			public JsonResult Error;
+			public JsonResult Model;
 			public IDatabaseCustomerMarketPlace CustomerMarketPlace;
 
 			public AddAccountState() {
@@ -300,7 +299,7 @@
 				if (shouldUpdateInServer)
 					m_oServiceClient.Instance.UpdateMarketplace(_context.Customer.Id, mp.Id, true);
 
-				oState.Model = this.JsonNet(AccountModel.ToModel(mp));
+				oState.Model = Json(AccountModel.ToModel(mp), JsonRequestBehavior.AllowGet);
 				oState.CustomerMarketPlace = mp;
 			}
 			catch (Exception e) {
@@ -313,19 +312,19 @@
 		
 		#region method CreateError
 
-		private JsonNetResult CreateError(Exception ex) {
+		private JsonResult CreateError(Exception ex) {
 			return CreateError(ex.Message);
 		} // CreateError
 
-		private JsonNetResult CreateError(string sErrorMsg) {
-			return this.JsonNet(new { error = sErrorMsg });
+		private JsonResult CreateError(string sErrorMsg) {
+			return Json(new { error = sErrorMsg }, JsonRequestBehavior.AllowGet);
 		} // CreateError
 
 		#endregion method CreateError
 
 		#region property ViewError
 
-		private JsonNetResult ViewError { set {
+		private JsonResult ViewError { set {
 			ViewData["error"] = JsonConvert.SerializeObject(value);
 		} } // ViewError
 

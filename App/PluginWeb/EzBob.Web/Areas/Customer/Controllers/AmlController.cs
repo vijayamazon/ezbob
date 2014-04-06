@@ -3,8 +3,8 @@
 	using System.Web.Mvc;
 	using Code;
 	using Infrastructure;
+	using Infrastructure.Attributes;
 	using Infrastructure.csrf;
-	using Scorto.Web;
 	
 	public class AmlController : Controller {
 		public AmlController(IEzbobWorkplaceContext context) {
@@ -16,9 +16,9 @@
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
-		public JsonNetResult PerformAmlCheck() {
+		public JsonResult PerformAmlCheck() {
 			m_oServiceClient.Instance.CheckAml(context.Customer.Id);
-			return this.JsonNet(new { });
+			return Json(new { });
 		} // PerformAmlCheck
 
 		private readonly ServiceClient m_oServiceClient;

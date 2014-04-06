@@ -12,7 +12,7 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using FreeAgent;
 	using Infrastructure;
-	using Scorto.Web;
+	using Infrastructure.Attributes;
 	using log4net;
 	using ActionResult = System.Web.Mvc.ActionResult;
 
@@ -37,7 +37,7 @@
         }
 
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-        public JsonNetResult Accounts()
+        public JsonResult Accounts()
         {
 			var oEsi = new FreeAgentServiceInfo();
 
@@ -46,7 +46,7 @@
                 .Where(mp => mp.Marketplace.InternalId == oEsi.InternalId)
                 .Select(FreeAgentAccountModel.ToModel)
                 .ToList();
-            return this.JsonNet(freeagents);
+            return Json(freeagents, JsonRequestBehavior.AllowGet);
         }
 
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]

@@ -11,13 +11,13 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Loans;
 	using EZBob.DatabaseLib.Repository;
+	using Infrastructure.Attributes;
 	using Models;
 	using Code;
 	using Code.ReportGenerator;
 	using Infrastructure;
 	using PaymentServices.Calculators;
 	using PaymentServices.PayPoint;
-	using Scorto.Web;
 	using log4net;
 	using ActionResult = System.Web.Mvc.ActionResult;
 
@@ -61,23 +61,23 @@
 		[Ajax]
 		[HttpGet]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonNetResult Index(int id)
+		public JsonResult Index(int id)
 		{
 			Customer customer = _customerRepository.Get(id);
-			return this.JsonNet(new LoansAndOffers(customer));
+			return Json(new LoansAndOffers(customer), JsonRequestBehavior.AllowGet);
 		}
 
 		[Ajax]
 		[HttpGet]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonNetResult Details(int customerid, int loanid)
+		public JsonResult Details(int customerid, int loanid)
 		{
 			var customer = _customerRepository.Get(customerid);
 			var loan = customer.Loans.SingleOrDefault(l => l.Id == loanid);
 
 			if (loan == null)
 			{
-				return this.JsonNet(new { error = "loan does not exists" });
+				return Json(new { error = "loan does not exists" }, JsonRequestBehavior.AllowGet);
 			}
 
 			var loansDetailsBuilder = new LoansDetailsBuilder();
@@ -98,7 +98,7 @@
 
 			var model = new { details, configValues = new { rolloverCharge }, notExperiedRollover, rolloverCount };
 
-			return this.JsonNet(model);
+			return Json(model, JsonRequestBehavior.AllowGet);
 		}
 
 		[HttpGet]
@@ -164,9 +164,9 @@
 
 		[Ajax]
 		[HttpGet]
-		public JsonNetResult GetRollover(int scheduleId)
+		public JsonResult GetRollover(int scheduleId)
 		{
-			return this.JsonNet(new { roolover = _rolloverRepository.GetByCheduleId(scheduleId) });
+			return Json(new { roolover = _rolloverRepository.GetByCheduleId(scheduleId) }, JsonRequestBehavior.AllowGet);
 		}
 
 		[Ajax]
@@ -230,7 +230,7 @@
 
 		[Ajax]
 		[HttpGet]
-		public JsonNetResult GetPaymentInfo(string date, decimal money, int loanId)
+		public JsonResult GetPaymentInfo(string date, decimal money, int loanId)
 		{
 			DateTime paymentDate = FormattingUtils.ParseDateWithoutTime(date);
 			Loan loan = _loanRepository.Get(loanId);
@@ -260,12 +260,12 @@
 
 			model.Principal = money;
 
-			return this.JsonNet(model);
+			return Json(model, JsonRequestBehavior.AllowGet);
 		}
 
 		[Ajax]
 		[HttpGet]
-		public JsonNetResult GetRolloverInfo(int loanId, bool isEdit)
+		public JsonResult GetRolloverInfo(int loanId, bool isEdit)
 		{
 			var loan = _loanRepository.Get(loanId);
 			var rollover = _rolloverRepository.GetByLoanId(loanId).FirstOrDefault(x => x.Status == RolloverStatus.New);
@@ -282,7 +282,7 @@
 								mounthAmount = rollover != null ? rollover.MounthCount : 1
 							};
 
-			return this.JsonNet(model);
+			return Json(model, JsonRequestBehavior.AllowGet);
 		}
 
 		[HttpGet]
@@ -293,7 +293,7 @@
 
 			if (loan == null)
 			{
-				return this.JsonNet(new { error = "loan does not exists" });
+				return Json(new { error = "loan does not exists" }, JsonRequestBehavior.AllowGet);
 			}
 			return new LoanScheduleReportResult(_rolloverRepository, loan, isExcel, wError, customer);
 		}

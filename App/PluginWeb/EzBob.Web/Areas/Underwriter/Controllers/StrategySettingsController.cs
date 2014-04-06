@@ -7,10 +7,10 @@
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using EzServiceReference;
+	using Infrastructure.Attributes;
 	using Infrastructure.csrf;
 	using Models;
 	using Newtonsoft.Json;
-	using Scorto.Web;
 	using System;
 	using System.Linq;
 	using EZBob.DatabaseLib.Model.Database.Repository;
@@ -38,16 +38,16 @@
 		[ValidateJsonAntiForgeryToken]
 		[HttpGet]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonNetResult Index()
+		public JsonResult Index()
 		{
-			return this.JsonNet(string.Empty);
+			return Json(string.Empty, JsonRequestBehavior.AllowGet);
 		}
 
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpGet]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonNetResult SettingsGeneral()
+		public JsonResult SettingsGeneral()
 		{
 			var bwaBusinessCheck = _configurationVariablesRepository.GetByName("BWABusinessCheck");
 			//var displayEarnedPoints = _configurationVariablesRepository.GetByName("DisplayEarnedPoints");
@@ -59,14 +59,14 @@
 					//DisplayEarnedPoints = displayEarnedPoints.Value,
 					//DisplayEarnedPointsDesc = displayEarnedPoints.Description
 				};
-			return this.JsonNet(st);
+			return Json(st, JsonRequestBehavior.AllowGet);
 		}
 
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpPost]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonNetResult SettingsGeneral(string BWABusinessCheck/*, string DisplayEarnedPoints*/)
+		public JsonResult SettingsGeneral(string BWABusinessCheck/*, string DisplayEarnedPoints*/)
 		{
 			_configurationVariablesRepository.SetByName("BWABusinessCheck", BWABusinessCheck);
 			//_configurationVariablesRepository.SetByName("DisplayEarnedPoints", DisplayEarnedPoints);
@@ -77,7 +77,7 @@
 		[ValidateJsonAntiForgeryToken]
 		[HttpGet]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonNetResult SettingsCharges()
+		public JsonResult SettingsCharges()
 		{
 			var latePaymentCharge = _configurationVariablesRepository.GetByName("LatePaymentCharge");
 			var rolloverCharge = _configurationVariablesRepository.GetByName("RolloverCharge");
@@ -101,14 +101,14 @@
 					AmountToChargeFrom = amountToChargeFrom.Value,
 					AmountToChargeFromDesc = amountToChargeFrom.Description
 				};
-			return this.JsonNet(sc);
+			return Json(sc, JsonRequestBehavior.AllowGet);
 		}
 
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpPost]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonNetResult SettingsCharges(string administrationCharge,
+		public JsonResult SettingsCharges(string administrationCharge,
 			string latePaymentCharge,
 			string otherCharge,
 			string partialPaymentCharge,
@@ -129,25 +129,25 @@
 		[ValidateJsonAntiForgeryToken]
 		[HttpGet]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonNetResult AutomationGeneral()
+		public JsonResult AutomationGeneral()
 		{
-			return this.JsonNet(string.Empty);
+			return Json(string.Empty, JsonRequestBehavior.AllowGet);
 		}
 
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpPost]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonNetResult AutomationGeneral(string[] newSettings)
+		public JsonResult AutomationGeneral(string[] newSettings)
 		{
-			return this.JsonNet(string.Empty);
+			return Json(string.Empty, JsonRequestBehavior.AllowGet);
 		}
 
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpGet]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonNetResult AutomationApproval()
+		public JsonResult AutomationApproval()
 		{
 			var enableAutomaticApproval = _configurationVariablesRepository.GetByName("EnableAutomaticApproval");
 			var enableAutomaticReApproval = _configurationVariablesRepository.GetByName("EnableAutomaticReApproval");
@@ -165,14 +165,14 @@
 					MaxCapNotHomeOwner = maxCapNotHomeOwner.Value,
 					MaxCapNotHomeOwnerDesc = maxCapNotHomeOwner.Description
 				};
-			return this.JsonNet(sa);
+			return Json(sa, JsonRequestBehavior.AllowGet);
 		}
 
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpPost]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonNetResult AutomationApproval(
+		public JsonResult AutomationApproval(
 												string EnableAutomaticApproval,
 												string EnableAutomaticReApproval,
 												string MaxCapHomeOwner,
@@ -190,7 +190,7 @@
 		[ValidateJsonAntiForgeryToken]
 		[HttpGet]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonNetResult AutomationRejection()
+		public JsonResult AutomationRejection()
 		{
 			var enableAutomaticRejection = _configurationVariablesRepository.GetByName("EnableAutomaticRejection");
 			var lowCreditScore = _configurationVariablesRepository.GetByName("LowCreditScore");
@@ -235,14 +235,14 @@
 					AutoRejectionException_AnualTurnover = autoRejectionExceptionAnualTurnover.Value,
 					AutoRejectionException_AnualTurnoverDesc = autoRejectionExceptionAnualTurnover.Description
 				};
-			return this.JsonNet(sr);
+			return Json(sr, JsonRequestBehavior.AllowGet);
 		}
 
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpPost]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonNetResult AutomationRejection(string EnableAutomaticRejection,
+		public JsonResult AutomationRejection(string EnableAutomaticRejection,
 												 string LowCreditScore,
 												 string Reject_Defaults_AccountsNum,
 												 string Reject_Defaults_Amount,
@@ -273,7 +273,7 @@
 
 		[Ajax]
 		[HttpGet]
-		public JsonNetResult SettingsExperian()
+		public JsonResult SettingsExperian()
 		{
 			var mainApplicant = _configurationVariablesRepository.GetByName("FinancialAccounts_MainApplicant").Value;
 			var aliasOfMainApplicant = _configurationVariablesRepository.GetByName("FinancialAccounts_AliasOfMainApplicant").Value;
@@ -293,14 +293,14 @@
 				FinancialAccounts_AssociationOfJointApplicant = associationOfJointApplicant,
 				FinancialAccounts_No_Match = noMatch
 			};
-			return this.JsonNet(model);
+			return Json(model, JsonRequestBehavior.AllowGet);
 		}
 
 		// ReSharper disable  InconsistentNaming
 		[Ajax]
 		[HttpPost]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonNetResult SettingsExperian(
+		public JsonResult SettingsExperian(
 
 			string FinancialAccounts_MainApplicant,
 			string FinancialAccounts_AliasOfMainApplicant,
@@ -323,7 +323,7 @@
 		[Ajax]
 		[HttpGet]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonNetResult SettingsCampaign()
+		public JsonResult SettingsCampaign()
 		{
 			var campaignsList = _campaignRepository
 				.GetAll().ToList();
@@ -358,13 +358,13 @@
 					})
 				.ToList();
 			
-			return this.JsonNet(new { campaigns, campaignTypes });
+			return Json(new { campaigns, campaignTypes }, JsonRequestBehavior.AllowGet);
 		}
 
 		[Ajax]
 		[HttpGet]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonNetResult SettingsBasicInterestRate()
+		public JsonResult SettingsBasicInterestRate()
 		{
 			var basicInterestRatesList = serviceClient.Instance.GetSpResultTable("GetBasicInterestRates", null);
 			var deserializedArray = JsonConvert.DeserializeObject<BasicInterestRate[]>(basicInterestRatesList.SerializedDataTable);
@@ -377,13 +377,13 @@
 				}
 			}
 
-			return this.JsonNet(new { basicInterestRates });
+			return Json(new { basicInterestRates }, JsonRequestBehavior.AllowGet);
 		}
 
 		[Ajax]
 		[HttpPost]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonNetResult SaveBasicInterestRate(string serializedModels)
+		public JsonResult SaveBasicInterestRate(string serializedModels)
 		{
 			var deserializedModels = JsonConvert.DeserializeObject<List<BasicInterestRate>>(serializedModels);
 			var sortedModels = new SortedDictionary<int, BasicInterestRate>();
@@ -394,7 +394,7 @@
 				{
 					string errorMessage = string.Format("FromScore must be unique:{0}", model.FromScore);
 					Log.WarnFormat(errorMessage);
-					return this.JsonNet(new { error = errorMessage });
+					return Json(new { error = errorMessage }, JsonRequestBehavior.AllowGet);
 				}
 				sortedModels.Add(model.FromScore, model);
 			}
@@ -412,7 +412,7 @@
 					{
 						const string errorMessage = "FromScore must start at 0";
 						Log.WarnFormat(errorMessage);
-						return this.JsonNet(new { error = errorMessage });
+						return Json(new { error = errorMessage }, JsonRequestBehavior.AllowGet);
 					}
 					isFirst = false;
 				}
@@ -422,13 +422,13 @@
 					{
 						string errorMessage = string.Format("No range covers the numbers {0}-{1}", highestSoFar + 1, model.FromScore - 1);
 						Log.WarnFormat(errorMessage);
-						return this.JsonNet(new { error = errorMessage });
+						return Json(new { error = errorMessage }, JsonRequestBehavior.AllowGet);
 					}
 					if (highestSoFar + 1 > model.FromScore)
 					{
 						string errorMessage = string.Format("The numbers {0}-{1} are coverered by more than one range", model.FromScore, highestSoFar);
 						Log.WarnFormat(errorMessage);
-						return this.JsonNet(new { error = errorMessage });
+						return Json(new { error = errorMessage }, JsonRequestBehavior.AllowGet);
 					}
 				}
 				highestSoFar = model.ToScore;
@@ -438,23 +438,23 @@
 			{
 				string errorMessage = string.Format("No range covers the numbers {0}-100000000", highestSoFar);
 				Log.WarnFormat(errorMessage);
-				return this.JsonNet(new { error = errorMessage });
+				return Json(new { error = errorMessage }, JsonRequestBehavior.AllowGet);
 			}
 			
 			if (highestSoFar > 100000000)
 			{
 				const string errorMessage = "Maximum allowed number is 100000000";
 				Log.WarnFormat(errorMessage);
-				return this.JsonNet(new { error = errorMessage });
+				return Json(new { error = errorMessage }, JsonRequestBehavior.AllowGet);
 			}
 
 			BoolActionResult result = serviceClient.Instance.SaveBasicInterestRate(sortedList.ToArray());
-			return this.JsonNet(new { error = result.Value ? "Error occurred during save" : null });
+			return Json(new { error = result.Value ? "Error occurred during save" : null }, JsonRequestBehavior.AllowGet);
 		}
 		[Ajax]
 		[HttpGet]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonNetResult SettingsLoanOfferMultiplier()
+		public JsonResult SettingsLoanOfferMultiplier()
 		{
 			var loanOfferMultipliersList = serviceClient.Instance.GetSpResultTable("GetLoanOfferMultipliers", null);
 			var deserializedArray = JsonConvert.DeserializeObject<LoanOfferMultiplier[]>(loanOfferMultipliersList.SerializedDataTable);
@@ -467,13 +467,13 @@
 				}
 			}
 
-			return this.JsonNet(new { loanOfferMultipliers });
+			return Json(new { loanOfferMultipliers }, JsonRequestBehavior.AllowGet);
 		}
 
 		[Ajax]
 		[HttpPost]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonNetResult SaveLoanOfferMultiplier(string serializedModels)
+		public JsonResult SaveLoanOfferMultiplier(string serializedModels)
 		{
 			var deserializedModels = JsonConvert.DeserializeObject<List<LoanOfferMultiplier>>(serializedModels);
 			var sortedModels = new SortedDictionary<int, LoanOfferMultiplier>();
@@ -484,7 +484,7 @@
 				{
 					string errorMessage = string.Format("StartScore must be unique:{0}", model.StartScore);
 					Log.WarnFormat(errorMessage);
-					return this.JsonNet(new { error = errorMessage });
+					return Json(new { error = errorMessage }, JsonRequestBehavior.AllowGet);
 				}
 				sortedModels.Add(model.StartScore, model);
 			}
@@ -502,7 +502,7 @@
 					{
 						const string errorMessage = "StartScore must start at 0";
 						Log.WarnFormat(errorMessage);
-						return this.JsonNet(new { error = errorMessage });
+						return Json(new { error = errorMessage }, JsonRequestBehavior.AllowGet);
 					}
 					isFirst = false;
 				}
@@ -512,13 +512,13 @@
 					{
 						string errorMessage = string.Format("No range covers the numbers {0}-{1}", highestSoFar + 1, model.StartScore - 1);
 						Log.WarnFormat(errorMessage);
-						return this.JsonNet(new { error = errorMessage });
+						return Json(new { error = errorMessage }, JsonRequestBehavior.AllowGet);
 					}
 					if (highestSoFar + 1 > model.StartScore)
 					{
 						string errorMessage = string.Format("The numbers {0}-{1} are coverered by more than one range", model.StartScore, highestSoFar);
 						Log.WarnFormat(errorMessage);
-						return this.JsonNet(new { error = errorMessage });
+						return Json(new { error = errorMessage }, JsonRequestBehavior.AllowGet);
 					}
 				}
 				highestSoFar = model.EndScore;
@@ -528,24 +528,24 @@
 			{
 				string errorMessage = string.Format("No range covers the numbers {0}-100000000", highestSoFar);
 				Log.WarnFormat(errorMessage);
-				return this.JsonNet(new { error = errorMessage });
+				return Json(new { error = errorMessage }, JsonRequestBehavior.AllowGet);
 			}
 
 			if (highestSoFar > 100000000)
 			{
 				const string errorMessage = "Maximum allowed number is 100000000";
 				Log.WarnFormat(errorMessage);
-				return this.JsonNet(new { error = errorMessage });
+				return Json(new { error = errorMessage }, JsonRequestBehavior.AllowGet);
 			}
 
 			BoolActionResult result = serviceClient.Instance.SaveLoanOfferMultiplier(sortedList.ToArray());
-			return this.JsonNet(new { error = result.Value ? "Error occurred during save" : null });
+			return Json(new { error = result.Value ? "Error occurred during save" : null }, JsonRequestBehavior.AllowGet);
 		}
 
 		[Ajax]
 		[HttpPost]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-		public JsonNetResult AddCampaign(
+		public JsonResult AddCampaign(
 
 			string campaignName,
 			string campaignDescription,
@@ -559,7 +559,7 @@
 			if (string.IsNullOrEmpty(campaignName) || string.IsNullOrEmpty(campaignStartDate) ||
 				string.IsNullOrEmpty(campaignEndDate) || !campaignType.HasValue)
 			{
-				return this.JsonNet(new { success = false, errorText = "One or more parameters missing" });
+				return Json(new { success = false, errorText = "One or more parameters missing" }, JsonRequestBehavior.AllowGet);
 			}
 
 
@@ -568,7 +568,7 @@
 
 			if (endDate < startDate)
 			{
-				return this.JsonNet(new { success = false, errorText = "End date prior to start date" });
+				return Json(new { success = false, errorText = "End date prior to start date" }, JsonRequestBehavior.AllowGet);
 			}
 
 			Campaign campaign = campaignId.HasValue ? _campaignRepository.Get(campaignId) : new Campaign();
@@ -590,7 +590,7 @@
 
 			if (string.IsNullOrEmpty(campaignCustomers))
 			{
-				return this.JsonNet(new { success = true, errorText = "" });
+				return Json(new { success = true, errorText = "" }, JsonRequestBehavior.AllowGet);
 			}
 			string error = "";
 			var clients = campaignCustomers.Trim().Split(' ');
@@ -624,7 +624,7 @@
 				}
 			}
 			Log.DebugFormat("{0}, {1}, {2}, {3}, {4}, {5}. ", campaignName, campaignDescription, campaignType, startDate, endDate, campaignCustomers);
-			return this.JsonNet(new { success = true, errorText = error });
+			return Json(new { success = true, errorText = error }, JsonRequestBehavior.AllowGet);
 		}
 	}
 }

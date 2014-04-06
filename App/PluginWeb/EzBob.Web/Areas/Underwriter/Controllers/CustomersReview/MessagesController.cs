@@ -8,9 +8,9 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Repository;
+	using Infrastructure.Attributes;
 	using Models;
 	using Code;
-	using Scorto.Web;
 	using StructureMap;
 	using NHibernateWrapper.Web;
 
@@ -42,11 +42,11 @@
 		}
 
 		[HttpGet]
-		public JsonNetResult Index(int id)
+		public JsonResult Index(int id)
 		{
 			var customer = _customersRepository.Get(id);
 			var model = _builder.Create(customer);
-			return this.JsonNet(model);
+			return Json(model, JsonRequestBehavior.AllowGet);
 		}
 
 		public FileResult DownloadMessagesDocument(string id)

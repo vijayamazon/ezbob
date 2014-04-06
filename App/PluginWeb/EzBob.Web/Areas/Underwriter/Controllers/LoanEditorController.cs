@@ -10,8 +10,8 @@
 	using EzBob.Models;
 	using Code;
 	using Infrastructure;
+	using Infrastructure.Attributes;
 	using PaymentServices.Calculators;
-	using Scorto.Web;
 	using NHibernateWrapper.Web;
 
 	[RestfullErrorHandlingAttribute]
@@ -39,7 +39,7 @@
         [Ajax]
         [HttpGet]
         [Transactional]
-        public JsonNetResult Loan(int id)
+        public JsonResult Loan(int id)
         {
             var loan = _loans.Get(id);
 
@@ -47,31 +47,31 @@
             calc.GetState();
 
             var model = _builder.BuildModel(loan);
-            return this.JsonNet(model);
+            return Json(model, JsonRequestBehavior.AllowGet);
         }
 
         [Ajax]
         [HttpPost]
         [Transactional]
-        public JsonNetResult RecalculateCR(EditLoanDetailsModel model)
+        public JsonResult RecalculateCR(EditLoanDetailsModel model)
         {
             var cr = _cashRequests.Get(model.CashRequestId);
-            return this.JsonNet(RecalculateModel(model, cr, model.Date));
+            return Json(RecalculateModel(model, cr, model.Date));
         }
 
         [Ajax]
         [HttpPost]
         [Transactional]
-        public JsonNetResult Recalculate(int id, EditLoanDetailsModel model)
+        public JsonResult Recalculate(int id, EditLoanDetailsModel model)
         {
             var cr = _loans.Get(id).CashRequest;
-            return this.JsonNet(RecalculateModel(model, cr, DateTime.UtcNow));
+            return Json(RecalculateModel(model, cr, DateTime.UtcNow));
         }
 
 		[Ajax]
 		[HttpPost]
 		[Transactional]
-		public JsonNetResult AddFreezeInterval(int id, string startdate, string enddate, decimal rate) {
+		public JsonResult AddFreezeInterval(int id, string startdate, string enddate, decimal rate) {
 			Loan oLoan = _loans.Get(id);
 
 			oLoan.InterestFreeze.Add(new LoanInterestFreeze {
@@ -90,13 +90,13 @@
 
 			EditLoanDetailsModel model = _builder.BuildModel(oLoan);
 
-			return this.JsonNet(model);
+			return Json(model);
 		} // AddFreezeInterval
 
 		[Ajax]
 		[HttpPost]
 		[Transactional]
-		public JsonNetResult RemoveFreezeInterval(int id, int intervalid) {
+		public JsonResult RemoveFreezeInterval(int id, int intervalid) {
 			Loan oLoan = _loans.Get(id);
 
 			LoanInterestFreeze lif = oLoan.InterestFreeze.FirstOrDefault(v => v.Id == intervalid);
@@ -111,25 +111,25 @@
 
 			EditLoanDetailsModel model = _builder.BuildModel(oLoan);
 
-			return this.JsonNet(model);
+			return Json(model);
 		} // RemoveFreezeInterval
 
         [Ajax]
         [HttpGet]
         [Transactional]
-        public JsonNetResult LoanCR(long id)
+        public JsonResult LoanCR(long id)
         {
             var cr = _cashRequests.Get(id);
             var amount = cr.ApprovedSum();
             var loan = _loanBuilder.CreateLoan(cr, amount, DateTime.UtcNow);
             var model = _builder.BuildModel(loan);
-            return this.JsonNet(model);
+            return Json(model, JsonRequestBehavior.AllowGet);
         }
 
         [Ajax]
         [HttpPost]
         [Transactional]
-        public JsonNetResult LoanCR(EditLoanDetailsModel model)
+        public JsonResult LoanCR(EditLoanDetailsModel model)
         {
             var cr = _cashRequests.Get(model.CashRequestId);
 
@@ -137,13 +137,13 @@
 
             cr.LoanTemplate = model.ToJSON();
 
-            return this.JsonNet(model);
+            return Json(model);
         }
 
         [Ajax]
         [HttpPost]
         [Transactional]
-        public JsonNetResult Loan(EditLoanDetailsModel model)
+        public JsonResult Loan(EditLoanDetailsModel model)
         {
             var loan = _loans.Get(model.Id);
 
@@ -161,7 +161,7 @@
             var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow);
             calc.GetState();
 
-            return this.JsonNet(_loanModelBuilder.BuildModel(loan));
+            return Json(_loanModelBuilder.BuildModel(loan));
         }
 
         private EditLoanDetailsModel RecalculateModel(EditLoanDetailsModel model, CashRequest cr, DateTime now)

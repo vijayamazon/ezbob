@@ -1,10 +1,10 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview {
 	using System.Data;
 	using Code;
+	using Infrastructure.Attributes;
 	using NHibernate;
 	using System;
 	using EZBob.DatabaseLib.Model.Database;
-	using Scorto.Web;
 	using PostcodeAnywhere;
 	using System.Linq;
 	using System.Web.Mvc;
@@ -43,26 +43,26 @@
         [Ajax]
         [HttpGet]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-        public JsonNetResult Index(int id)
+        public JsonResult Index(int id)
         {
             var customer = _customers.Get(id);
             var model = new PaymentsAccountModel(customer);
-            return this.JsonNet(model);
+            return Json(model, JsonRequestBehavior.AllowGet);
         }
 
         [Ajax]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-        public JsonNetResult SetDefaultCard(int customerId, int cardId)
+        public JsonResult SetDefaultCard(int customerId, int cardId)
         {
             var customer = _customers.Get(customerId);
             var card = customer.BankAccounts.SingleOrDefault(c => c.Id == cardId);
             customer.SetDefaultCard(card);
-            return this.JsonNet(new {});
+            return Json(new {}, JsonRequestBehavior.AllowGet);
         }
 
         [Ajax]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-        public JsonNetResult PerformCheckBankAccount(int id, int cardid)
+        public JsonResult PerformCheckBankAccount(int id, int cardid)
         {
             var customer = _customers.Get(id);
             var card = customer.BankAccounts.Single(b => b.Id == cardid);
@@ -71,13 +71,13 @@
 
         [Ajax]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-        public JsonNetResult CheckBankAccount(string bankAccount, string sortCode)
+        public JsonResult CheckBankAccount(string bankAccount, string sortCode)
         {
             var card = new CardInfo(bankAccount, sortCode);
             return CheckBankAccount(card);
         }
 
-        private JsonNetResult CheckBankAccount(CardInfo card)
+        private JsonResult CheckBankAccount(CardInfo card)
         {
             string error = null;
             try
@@ -100,21 +100,21 @@
             if (!string.IsNullOrEmpty(error))
             {
                 card.StatusInformation = error;
-                return this.JsonNet(new { error = error });
+                return Json(new { error = error }, JsonRequestBehavior.AllowGet);
             }
 
-            return this.JsonNet(BankAccountModel.FromCard(card));
+            return Json(BankAccountModel.FromCard(card), JsonRequestBehavior.AllowGet);
         }
 
         [Ajax]
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
-        public JsonNetResult TryAddBankAccount(int customerId, string bankAccount, string sortCode, BankAccountType accountType)
+        public JsonResult TryAddBankAccount(int customerId, string bankAccount, string sortCode, BankAccountType accountType)
         {
             var customer = _customers.Get(customerId);
 
             if (customer.BankAccounts.Any(a => a.BankAccount == bankAccount && a.SortCode == sortCode))
             {
-                return this.JsonNet(new {error = "This bank account is already added."});
+                return Json(new {error = "This bank account is already added."}, JsonRequestBehavior.AllowGet);
             }
 
             var card = new CardInfo() { BankAccount = bankAccount, SortCode = sortCode, Customer = customer, Type = accountType };
@@ -128,14 +128,14 @@
             customer.BankAccounts.Add(card);
             customer.SetDefaultCard(card);
 
-            return this.JsonNet(new {r = card.Id});
+            return Json(new {r = card.Id}, JsonRequestBehavior.AllowGet);
         }
 
         [Ajax]
         [HttpGet]
-        public JsonNetResult CheckForUpdatedStatus(int mpId)
+        public JsonResult CheckForUpdatedStatus(int mpId)
         {
-            return this.JsonNet(new { status = _customerMarketplaces.Get(mpId).GetUpdatingStatus() });
+            return Json(new { status = _customerMarketplaces.Get(mpId).GetUpdatingStatus() }, JsonRequestBehavior.AllowGet);
         }
 
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
@@ -185,14 +185,14 @@
 
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         [HttpPost]
-        public JsonNetResult AddPayPointCard(int customerId, string transactionid, string cardno, DateTime expiredate)
+        public JsonResult AddPayPointCard(int customerId, string transactionid, string cardno, DateTime expiredate)
         {
             var customer = _customers.GetChecked(customerId);
             var expiry = expiredate.ToString("MMyy");
 
             AddPayPointCardToCustomer(transactionid, cardno, customer, expiry);
 
-            return this.JsonNet(new {});
+            return Json(new {});
         }
 
         private void AddPayPointCardToCustomer(string transactionid, string cardno, EZBob.DatabaseLib.Model.Database.Customer customer, string expiry)

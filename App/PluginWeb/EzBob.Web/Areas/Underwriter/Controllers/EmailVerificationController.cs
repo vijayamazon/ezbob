@@ -7,8 +7,8 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Code.Email;
 	using Infrastructure;
+	using Infrastructure.Attributes;
 	using Infrastructure.Membership;
-	using Scorto.Web;
 
 	public class EmailVerificationController : Controller
     {
@@ -30,30 +30,30 @@
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         [HttpPost]
         [Permission(Name = "EmailConfirmationButton")]
-        public JsonNetResult ManuallyConfirm(int id)
+        public JsonResult ManuallyConfirm(int id)
         {
             var customer = _customers.Get(id);
             _confirmation.ConfirmEmail(customer);
-            return this.JsonNet(new {});
+            return Json(new {});
         }
 
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         [Permission(Name = "EmailConfirmationButton")]
         [HttpPost]
-        public JsonNetResult Resend(int id)
+        public JsonResult Resend(int id)
         {
             var customer = _customers.Get(id);
             var user = _users.Get(id);
 
             var address = _confirmation.GenerateLink(customer);
             m_oServiceClient.Instance.SendEmailVerification(user.Id, customer.Name, address);
-            return this.JsonNet(new {});
+            return Json(new {});
         }
 
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
         [HttpPost]
         [Permission(Name = "EmailConfirmationButton")]
-        public JsonNetResult ChangeEmail(int id, string email)
+        public JsonResult ChangeEmail(int id, string email)
         {
             var customer = _customers.Get(id);
             var user = _users.Get(id);
@@ -65,7 +65,7 @@
             var address = _confirmation.GenerateLink(customer);
             m_oServiceClient.Instance.SendEmailVerification(user.Id, customer.Name, address);
 
-            return this.JsonNet(new {});
+            return Json(new {});
         }
     }
 }

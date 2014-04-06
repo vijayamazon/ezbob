@@ -4,8 +4,8 @@
 	using System.Web.Mvc;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.Repository;
+	using Infrastructure.Attributes;
 	using PaymentServices.Calculators;
-	using Scorto.Web;
 	using log4net;
 
     public class AdminController : Controller
