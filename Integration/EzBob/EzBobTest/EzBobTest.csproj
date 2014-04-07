@@ -75,7 +75,6 @@
   <ItemGroup>
     <Compile Include="TestStrategies.cs" />
     <Compile Include="TestCurrencyUpdateController.cs" />
-    <Compile Include="TestFirstOfMonthStatusStrategyHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\..\..\Common\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
