@@ -22,10 +22,9 @@ namespace MailApi
             var config = new Mock<IMandrillConfig>();
             config.SetupGet(x => x.Key).Returns("nNAb_KZhxEqLCyzEGOWvlg");
             config.SetupGet(x => x.Enable).Returns(true);
-            config.SetupGet(x => x.From).Returns("yulys@ezbob.com");
+            config.SetupGet(x => x.From).Returns("dev@ezbob.com");
             _mail = new Mail(config.Object);
-            _to = "yulys@ezbob.com";
-	        _to = "stasd+test@ezbob.com";
+	        _to = "dev@ezbob.com";
             _subject = "Thank you for registering with EZBOB!";
         }
 
