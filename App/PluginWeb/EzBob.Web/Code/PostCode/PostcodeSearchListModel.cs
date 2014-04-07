@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 
 namespace EzBob.Web.Code.PostCode
 {
+    using System.Web.Script.Serialization;
     public interface IPostCodeResponse
     {
         string Credits_display_text { get; set; }
@@ -23,8 +24,10 @@ namespace EzBob.Web.Code.PostCode
     {
         public int                   Found { get; set; }
         [JsonIgnore]
+        [ScriptIgnore]
         public string                Credits_display_text { get; set; }
         [JsonIgnore]
+        [ScriptIgnore]
         public string                Accountadminpage { get; set; }
         public string                Errormessage { get; set; }
         public bool Success { get; set; }

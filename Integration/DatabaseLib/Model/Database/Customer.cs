@@ -1,4 +1,5 @@
 namespace EZBob.DatabaseLib.Model.Database {
+	using System.Web.Script.Serialization;
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
@@ -298,6 +299,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 	[Serializable]
 	public class CollectionStatus {
 		[Newtonsoft.Json.JsonIgnore]
+		[ScriptIgnore]
 		public virtual CustomerStatuses CurrentStatus { get; set; }
 		public virtual string CollectionDescription { get; set; }
 	} // class CollectionStatus
