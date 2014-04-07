@@ -40,9 +40,6 @@
     <Reference Include="Scorto.Configuration">
       <HintPath>..\..\..\Lib\Scorto.Core\Scorto.Configuration.dll</HintPath>
     </Reference>
-    <Reference Include="Scorto.SystemCalendar.Model">
-      <HintPath>..\..\..\Lib\Scorto.Core\Scorto.SystemCalendar.Model.dll</HintPath>
-    </Reference>
     <Reference Include="StructureMap">
       <HintPath>..\..\..\Lib\3rdparty\StructureMap\StructureMap.dll</HintPath>
     </Reference>
