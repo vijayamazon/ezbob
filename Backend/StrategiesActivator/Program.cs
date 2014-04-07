@@ -1,7 +1,6 @@
 ﻿namespace StrategiesActivator {
 	using System;
 	using NHibernate;
-	using Scorto.Configuration.Loader;
 	using NHibernateWrapper.NHibernate;
 	using Scorto.RegistryScanner;
 	using StructureMap;
@@ -28,7 +27,6 @@
 		} // Main
 
 		private static void LoadConfigurations() {
-			EnvironmentConfigurationLoader.AppPathDummy = @"c:\ezbob\app\pluginweb\EzBob.Web\";
 
 			Scanner.Register();
 
