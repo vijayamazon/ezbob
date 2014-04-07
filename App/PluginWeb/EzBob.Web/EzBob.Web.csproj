@@ -77,9 +77,6 @@
     <Reference Include="FluentNHibernate">
       <HintPath>..\..\..\Lib\3rdparty\Nhibernate\FluentNHibernate.dll</HintPath>
     </Reference>
-    <Reference Include="GenericCache">
-      <HintPath>..\..\..\Lib\Scorto.Core\GenericCache.dll</HintPath>
-    </Reference>
     <Reference Include="HibernatingRhinos.Profiler.Appender.v4.0, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0774796e73ebf640, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Lib\3rdparty\Nhibernate\HibernatingRhinos.Profiler.Appender.v4.0.dll</HintPath>
@@ -396,7 +393,7 @@
     <Compile Include="Infrastructure\Membership\EmptyAnswerExeption.cs" />
     <Compile Include="Infrastructure\Membership\RoleNotFoundException.cs" />
     <Compile Include="Infrastructure\Membership\EzbobMembershipProvider.cs" />
-    <Compile Include="Infrastructure\Membership\ScortoRoleProvider.cs" />
+    <Compile Include="Infrastructure\Membership\EzbobRoleProvider.cs" />
     <Compile Include="Infrastructure\Membership\SimpleMembershipProvider.cs" />
     <Compile Include="Infrastructure\NoIISHeaderModule.cs" />
     <Compile Include="Infrastructure\csrf\ValidateJsonAntiForgeryTokenAttribute.cs" />

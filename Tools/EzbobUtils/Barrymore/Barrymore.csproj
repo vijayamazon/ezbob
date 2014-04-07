@@ -47,6 +47,8 @@
     </Compile>
     <Compile Include="ARetryer.cs" />
     <Compile Include="BaseConverter.cs" />
+    <Compile Include="Cache.cs" />
+    <Compile Include="NullSeldenException.cs" />
     <Compile Include="PasswordEncryptor.cs" />
     <Compile Include="Extensions\IntExt.cs" />
     <Compile Include="Extensions\DecimalExt.cs" />
