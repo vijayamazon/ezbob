@@ -170,9 +170,6 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
-    <Reference Include="WorkflowLibrary">
-      <HintPath>..\..\..\Lib\Scorto.Core\WorkflowLibrary.dll</HintPath>
-    </Reference>
     <Reference Include="Yahoo.Yui.Compressor">
       <HintPath>..\..\..\Lib\3rdparty\SquishIt\Yahoo.Yui.Compressor.dll</HintPath>
     </Reference>
@@ -238,7 +235,6 @@
     <Compile Include="Areas\Underwriter\Models\CreditBureauModelBuilder.cs" />
     <Compile Include="Areas\Underwriter\Models\Fraud\FraudStatusModel.cs" />
     <Compile Include="Areas\Underwriter\Controllers\GenerateAgreementsController.cs" />
-    <Compile Include="Areas\Underwriter\Controllers\LoanAmountPerDay.cs" />
     <Compile Include="Areas\Underwriter\Controllers\LoanEditorController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\Reports\CaisReportsHistoryController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\Reports\ReportsController.cs" />
