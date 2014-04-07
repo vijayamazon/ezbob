@@ -1,12 +1,77 @@
-﻿namespace PaymentServices.Calculators
-{
+﻿namespace PaymentServices.Calculators {
 	using System;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Loans;
 	using StructureMap;
 
-	public class SetupFeeCalculator
-	{
+	public class SetupFeeCalculator {
+		#region public
+
+		#region constructor
+
+		public SetupFeeCalculator(bool setupFee, bool brokerFee, int? manualAmount, decimal? manualPercent) {
+			m_oCfg = ObjectFactory.TryGetInstance<IConfigurationVariablesRepository>();
+
+			_setupFeeFixed = m_oCfg.GetByNameAsInt("SetupFeeFixed");
+			_setupFeePercent = m_oCfg.GetByNameAsDecimal("SetupFeePercent");
+			_useMax = m_oCfg.GetByNameAsBool("SetupFeeMaxFixedPercent");
+
+			_setupFee = setupFee;
+			_brokerFee = brokerFee;
+			_manualAmount = manualAmount;
+			_manualPercent = manualPercent;
+		} // constructor
+
+		#endregion constructor
+
+		#region method Calculate
+
+		public decimal Calculate(decimal amount) {
+			//use manual fee
+			if (_setupFee || _brokerFee) {
+				if ((_manualAmount.HasValue && _manualAmount.Value > 0) || (_manualPercent.HasValue && _manualPercent.Value > 0)) {
+					return Math.Max(Math.Floor(amount * (_manualPercent.HasValue ? _manualPercent.Value : 0M)),
+						_manualAmount.HasValue ? _manualAmount.Value : 0);
+				}
+			} // if
+
+			//use broker fee
+			if (_brokerFee)
+				return CalculateBroker(amount);
+
+			//use default fee
+			if (_setupFee) {
+				if (_useMax)
+					return Math.Max(Math.Floor(amount * _setupFeePercent * 0.01m), _setupFeeFixed);
+
+				return Math.Min(Math.Floor(amount * _setupFeePercent * 0.01m), _setupFeeFixed);
+			} // if
+
+			//don't use fee
+			return 0M;
+		} // Calculate
+
+		#endregion method Calculate
+
+		#endregion public
+
+		#region private
+
+		#region method CalculateBroker
+
+		private decimal CalculateBroker(decimal amount) {
+			ConfigurationVariable oVar = m_oCfg[ConfigurationVariables.BrokerSetupFeeRate];
+
+			if (oVar.Value.ToUpper() == "TABLE") {
+				var brokerFeeRepository = ObjectFactory.GetInstance<BrokerSetupFeeMapRepository>();
+				return brokerFeeRepository.GetFee((int)amount);
+			} // if
+
+			return amount * (decimal)oVar;
+		} // CalculateBroker
+
+		#endregion method CalculateBroker
+
 		private readonly int _setupFeeFixed;
 		private readonly decimal _setupFeePercent;
 		private readonly bool _useMax;
@@ -15,61 +80,9 @@
 		private readonly bool _brokerFee;
 		private readonly int? _manualAmount;
 		private readonly decimal? _manualPercent;
-		public SetupFeeCalculator(bool setupFee, bool brokerFee, int? manualAmount, decimal? manualPercent)
-		{
-			var configVariables = ObjectFactory.TryGetInstance<IConfigurationVariablesRepository>();
 
-			_setupFeeFixed = configVariables.GetByNameAsInt("SetupFeeFixed");
-			_setupFeePercent = configVariables.GetByNameAsDecimal("SetupFeePercent");
-			_useMax = configVariables.GetByNameAsBool("SetupFeeMaxFixedPercent");
-			_setupFee = setupFee;
-			_brokerFee = brokerFee;
-			_manualAmount = manualAmount;
-			_manualPercent = manualPercent;
-		}
+		private readonly IConfigurationVariablesRepository m_oCfg;
 
-		public decimal Calculate(decimal amount)
-		{
-			//use manual fee
-			if (_setupFee || _brokerFee)
-			{
-				if ((_manualAmount.HasValue && _manualAmount.Value > 0) || (_manualPercent.HasValue && _manualPercent.Value > 0))
-				{
-					return Math.Max(Math.Floor(amount * (_manualPercent.HasValue ? _manualPercent.Value : 0M)),
-									_manualAmount.HasValue ? _manualAmount.Value : 0);
-				}
-			}
-
-			//use broker fee
-			if (_brokerFee)
-			{
-				return CalculateBroker(amount);
-			}
-
-
-			//use default fee
-			if (_setupFee)
-			{
-				if (_useMax)
-				{
-					return Math.Max(Math.Floor(amount * _setupFeePercent * 0.01m), _setupFeeFixed);
-				}
-
-				return Math.Min(Math.Floor(amount * _setupFeePercent * 0.01m), _setupFeeFixed);
-			}
-
-			//don't use fee
-			return 0M;
-		}
-
-		private decimal CalculateBroker(decimal amount) {
-			// March 31 2014: current decision is to set a setup fee 4% of loan amount.
-			return amount * 0.04m;
-
-			// var brokerFeeRepository = ObjectFactory.GetInstance<BrokerSetupFeeMapRepository>();
-			// return brokerFeeRepository.GetFee((int)amount);
-		}
-
-
-	}
-}
+		#endregion private
+	} // class SetupFeeCalculator
+} // namespace
