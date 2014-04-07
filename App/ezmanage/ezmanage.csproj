@@ -89,7 +89,7 @@
     <Compile Include="DBConfig.cs" />
     <Compile Include="EzAgreementsTemplateProvider.cs" />
     <Compile Include="EzContext.cs" />
-    <Compile Include="LoanCreator.cs" />
+    <Compile Include="LoanCreatorNoChecks.cs" />
     <Compile Include="LoanRefresher.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

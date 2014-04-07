@@ -188,6 +188,7 @@
     <Compile Include="Areas\Customer\Controllers\hmrc_file_processor.cs" />
     <Compile Include="Areas\Underwriter\Controllers\UploadHmrcController.cs" />
     <Compile Include="Code\BrokerHelper.cs" />
+    <Compile Include="Code\LoanCreatorNoChecks.cs" />
     <Compile Include="Code\StrategyChecker.cs" />
     <Compile Include="Code\UiEvents\UiActionEventModel.cs" />
     <Compile Include="Code\UiEvents\UiCachePkgModel.cs" />

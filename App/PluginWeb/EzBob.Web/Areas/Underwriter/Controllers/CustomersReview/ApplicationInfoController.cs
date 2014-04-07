@@ -1,5 +1,7 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview {
 	using System.Data;
+	using System.Globalization;
+	using Code.Agreements;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using System;
 	using System.Web.Mvc;
@@ -15,6 +17,8 @@
 	using Code;
 	using Infrastructure;
 	using Infrastructure.csrf;
+	using NHibernate;
+	using PaymentServices.PacNet;
 	using StructureMap;
 	using log4net;
 
@@ -566,6 +570,33 @@
 			new ServiceClient().Instance.FinishWizard(customerId, underwriterId);
 
 			return Json(true);
+		}
+
+		[HttpPost, Ajax, ValidateJsonAntiForgeryToken]
+		public JsonResult CreateLoanHidden(int nCustomerID, decimal nAmount, string sDate) {
+			try {
+				var lc = new LoanCreatorNoChecks(
+					ObjectFactory.GetInstance<ILoanHistoryRepository>(),
+					ObjectFactory.GetInstance<IPacnetService>(),
+					ObjectFactory.GetInstance<IAgreementsGenerator>(),
+					ObjectFactory.GetInstance<IEzbobWorkplaceContext>(),
+					ObjectFactory.GetInstance<LoanBuilder>(),
+					ObjectFactory.GetInstance<AvailableFundsValidator>(),
+					ObjectFactory.GetInstance<ISession>()
+				);
+
+				Customer oCustomer = _customerRepository.Get(nCustomerID);
+
+				DateTime oDate = DateTime.ParseExact(sDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+				lc.CreateLoan(oCustomer, nAmount, null, oDate);
+
+				return Json(new { success = true, error = false, });
+			}
+			catch (Exception e) {
+				Log.Warn("Could not create a hidden loan.", e);
+				return Json(new { success = false, error = e.Message, });
+			} // try
 		}
 	}
 }

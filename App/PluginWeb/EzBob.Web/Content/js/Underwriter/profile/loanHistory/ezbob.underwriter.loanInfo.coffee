@@ -34,6 +34,48 @@ class EzBob.Underwriter.LoanInfoView extends Backbone.Marionette.ItemView
         'click [name="isLoanTypeSelectionAllowed"]'         : 'isLoanTypeSelectionAllowed'
         'click [name="discountPlan"]'                       : 'discountPlan'
         'click [name="loanSource"]'                         : 'loanSource'
+        'click .create-loan-hidden-toggle'                  : 'toggleCreateLoanHidden'
+        'click #create-loan-hidden-btn'                     : 'createLoanHidden'
+
+    toggleCreateLoanHidden: (event) ->
+        return unless event.ctrlKey
+        @$el.find('#create-loan-hidden').toggleClass 'hide'
+
+    createLoanHidden: ->
+        nCustomerID = @model.get 'CustomerId'
+        nAmount = parseInt(@$el.find('#create-loan-hidden-amount').val(), 10) || 0
+        sDate = @$el.find('#create-loan-hidden-date').val()
+
+        if nAmount <= 0
+            EzBob.ShowMessageTimeout 'Amount not specified.', 'Cannot create loan', 2
+            return
+
+        unless /^\d\d\d\d-\d\d-\d\d$/.test sDate
+            EzBob.ShowMessageTimeout 'Date not specified.', 'Cannot create loan', 2
+            return
+
+        oXhr = $.post(
+            window.gRootPath + 'Underwriter/ApplicationInfo/CreateLoanHidden',
+            { nCustomerID: nCustomerID, nAmount: nAmount, sDate: sDate }
+        )
+
+        oXhr.done( (res) =>
+            if res.success 
+                @$el.find('#create-loan-hidden-amount').val('')
+                @$el.find('#create-loan-hidden-date').val('')
+                @$el.find('#create-loan-hidden').addClass 'hide'
+                EzBob.ShowMessageTimeout 'A loan has been created.', 'Loan created', 2
+
+            if res.error
+                EzBob.ShowMessage res.error, 'Cannot create loan'
+            else
+                EzBob.ShowMessage 'Failed to create loan.', 'Cannot create loan'
+        )
+
+        oXhr.fail( =>
+            EzBob.ShowMessage 'Failed to create loan.', 'Cannot create loan'
+        )
+    # end of createLoanHidden
 
     editOfferValidUntilDate: ->
         d = new EzBob.Dialogs.DateEdit(

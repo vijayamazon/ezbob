@@ -50,7 +50,53 @@
       'click [name="loanType"]': 'loanType',
       'click [name="isLoanTypeSelectionAllowed"]': 'isLoanTypeSelectionAllowed',
       'click [name="discountPlan"]': 'discountPlan',
-      'click [name="loanSource"]': 'loanSource'
+      'click [name="loanSource"]': 'loanSource',
+      'click .create-loan-hidden-toggle': 'toggleCreateLoanHidden',
+      'click #create-loan-hidden-btn': 'createLoanHidden'
+    };
+
+    LoanInfoView.prototype.toggleCreateLoanHidden = function(event) {
+      if (!event.ctrlKey) {
+        return;
+      }
+      return this.$el.find('#create-loan-hidden').toggleClass('hide');
+    };
+
+    LoanInfoView.prototype.createLoanHidden = function() {
+      var nAmount, nCustomerID, oXhr, sDate,
+        _this = this;
+      nCustomerID = this.model.get('CustomerId');
+      nAmount = parseInt(this.$el.find('#create-loan-hidden-amount').val(), 10) || 0;
+      sDate = this.$el.find('#create-loan-hidden-date').val();
+      if (nAmount <= 0) {
+        EzBob.ShowMessageTimeout('Amount not specified.', 'Cannot create loan', 2);
+        return;
+      }
+      if (!/^\d\d\d\d-\d\d-\d\d$/.test(sDate)) {
+        EzBob.ShowMessageTimeout('Date not specified.', 'Cannot create loan', 2);
+        return;
+      }
+      oXhr = $.post(window.gRootPath + 'Underwriter/ApplicationInfo/CreateLoanHidden', {
+        nCustomerID: nCustomerID,
+        nAmount: nAmount,
+        sDate: sDate
+      });
+      oXhr.done(function(res) {
+        if (res.success) {
+          _this.$el.find('#create-loan-hidden-amount').val('');
+          _this.$el.find('#create-loan-hidden-date').val('');
+          _this.$el.find('#create-loan-hidden').addClass('hide');
+          EzBob.ShowMessageTimeout('A loan has been created.', 'Loan created', 2);
+        }
+        if (res.error) {
+          return EzBob.ShowMessage(res.error, 'Cannot create loan');
+        } else {
+          return EzBob.ShowMessage('Failed to create loan.', 'Cannot create loan');
+        }
+      });
+      return oXhr.fail(function() {
+        return EzBob.ShowMessage('Failed to create loan.', 'Cannot create loan');
+      });
     };
 
     LoanInfoView.prototype.editOfferValidUntilDate = function() {

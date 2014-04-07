@@ -158,10 +158,28 @@
             @RawCell("System calculated amount", "<%- EzBob.formatPounds(m.SystemCalculatedAmount) %>")
 
             <%if(m.Editable){%>
-				@RawCellWithButtonNear("Offered credit line", "<%if(m.OfferedCreditLine < EzBob.Config.MinLoan){%><i class='icon-exclamation-sign'></i><%}%> <%- EzBob.formatPounds(m.OfferedCreditLine) %>", "openCreditLineChangeButton")
+				@RawCellWithButtonNear("<span class=create-loan-hidden-toggle>Offered credit line</span>", "<%if(m.OfferedCreditLine < EzBob.Config.MinLoan){%><i class='icon-exclamation-sign'></i><%}%> <%- EzBob.formatPounds(m.OfferedCreditLine) %>", "openCreditLineChangeButton")
             <%} else{%>
-				@RawCell("Offered credit line", "<%if(m.OfferedCreditLine < EzBob.Config.MinLoan){%><i class='icon-exclamation-sign'></i><%}%> <%- EzBob.formatPounds(m.OfferedCreditLine) %>")
+				@RawCell("<span class=create-loan-hidden-toggle>Offered credit line</span>", "<%if(m.OfferedCreditLine < EzBob.Config.MinLoan){%><i class='icon-exclamation-sign'></i><%}%> <%- EzBob.formatPounds(m.OfferedCreditLine) %>")
             <%}%>
+			
+			<tr class="hide" id="create-loan-hidden">
+				<td colspan="2">
+					<table>
+						<tr>
+							<td>Loan amount:</td>
+							<td><input type="number" id="create-loan-hidden-amount" style="height: 36px;" /></td>
+						</tr>
+						<tr>
+							<td>Loan date:</td>
+							<td><input type="date" id="create-loan-hidden-date" /></td>
+						</tr>
+						<tr>
+							<td colspan="2"><button type="button" id="create-loan-hidden-btn">Create loan</button></td>
+						</tr>
+					</table>
+				</td>
+			</tr>
 	
 			@RawCell("Borrowed amount", "<%- EzBob.formatPounds(m.BorrowedAmount) %>")
             @RawCell("Avaliable amount", "<%- m.OfferExpired ? '-' : EzBob.formatPounds(m.AvaliableAmount) %>")
