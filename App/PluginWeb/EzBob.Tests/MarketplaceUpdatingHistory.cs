@@ -4,7 +4,6 @@ using ApplicationMng.Model;
 using EZBob.DatabaseLib.Model.Database;
 using NHibernate;
 using NUnit.Framework;
-using UnitTests.Utils;
 
 namespace EzBob.Tests
 {

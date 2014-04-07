@@ -3,7 +3,6 @@ using ApplicationMng.Model;
 using EZBob.DatabaseLib.Model.Database;
 using NHibernate;
 using NUnit.Framework;
-using UnitTests.Utils;
 using EZBob.DatabaseLib.Repository;
 
 namespace EzBob.Tests

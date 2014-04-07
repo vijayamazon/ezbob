@@ -5,7 +5,6 @@ using EZBob.DatabaseLib.Model.Database.Loans;
 using EZBob.DatabaseLib.Model.Loans;
 using NHibernate;
 using NUnit.Framework;
-using UnitTests.Utils;
 
 namespace EzBob.Tests
 {

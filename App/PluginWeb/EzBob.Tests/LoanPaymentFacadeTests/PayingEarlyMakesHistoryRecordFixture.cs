@@ -5,7 +5,6 @@ using EZBob.DatabaseLib.Model.Loans;
 using Moq;
 using NUnit.Framework;
 using PaymentServices.Calculators;
-using UnitTests.Utils;
 
 namespace EzBob.Tests.LoanPaymentFacadeTests
 {

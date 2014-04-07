@@ -111,9 +111,6 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Xml" />
-    <Reference Include="UnitTestUtils">
-      <HintPath>..\..\..\Lib\Scorto.Core\UnitTestUtils.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AmazonRateInfoFixture.cs" />
@@ -129,6 +126,7 @@
     <Compile Include="DiscountPlanFixture.cs" />
     <Compile Include="EKM\ConvertOrderToOrderItemFixture.cs" />
     <Compile Include="EncryptorFxiture.cs" />
+    <Compile Include="InMemoryDbTestFixtureBase.cs" />
     <Compile Include="IntegrationTestBase.cs" />
     <Compile Include="LoanCreatorTests\CustomerStateValidationFixture.cs" />
     <Compile Include="LoanCreatorTests\LoanCreatorFixture.cs" />
