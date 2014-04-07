@@ -93,7 +93,7 @@ EzBob.Broker.DashboardView = EzBob.Broker.SubmitView.extend({
 					return '<a href="mailto:' + oFieldValue + '">' + oFieldValue + '</a>';
 
 				case 'SourceRef':
-					return '<a target=_blank href="http://www.ezbob.com?sourceref=' + oFieldValue + '">http://www.ezbob.com?sourceref=' + oFieldValue + '</a>';
+				    return '<a target=_blank href="http://www.ezbob.com?sourceref=' + oFieldValue + '" rel="nofollow">http://www.ezbob.com?sourceref=' + oFieldValue + '</a>';
 				} // switch
 
 				if (sFieldName.indexOf('SourceRef') !== 0)
