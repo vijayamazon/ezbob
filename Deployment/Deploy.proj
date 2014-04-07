@@ -1,5 +1,5 @@
 <Project ToolsVersion="4.0" DefaultTargets="StartBuild" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">	
-	<Import Project="libs\Scorto.BuildTasks.tasks"/>
+	<Import Project="BuildTasks.tasks"/>
 	<Import Project="libs\MSBuild.ExtensionPack.tasks"/>
 	
 	<Target Name="LogOffSessions">
@@ -26,7 +26,7 @@
 		</DynamicExecute>
 		
 		<Copy SourceFiles="$(Src)\Common\CommonAssemblyInfo.cs" DestinationFiles="$(Src)\Common\CommonAssemblyInfo.cs.bak" />
-		<File  TaskAction="Replace" RegexPattern="[\d]+\.[\d]+\.[\d]+\.[\d]+" Files="$(Src)\Common\CommonAssemblyInfo.cs" Replacement="$(ClearedCCNetLabel)" />
+		<File TaskAction="Replace" RegexPattern="[\d]+\.[\d]+\.[\d]+\.[\d]+" Files="$(Src)\Common\CommonAssemblyInfo.cs" Replacement="$(ClearedCCNetLabel)" />
 		
 		<Message Text="Build started" />
 		<Message Text="$(Src)" />

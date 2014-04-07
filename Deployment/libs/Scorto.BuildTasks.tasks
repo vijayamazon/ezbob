@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-	<UsingTask AssemblyFile="Scorto.BuildTasks.dll" TaskName="Scorto.BuildTasks.WebCopy" /> 
-	<UsingTask AssemblyFile="Scorto.BuildTasks.dll" TaskName="Scorto.BuildTasks.MultiCopy" /> 
-	<UsingTask AssemblyFile="Scorto.BuildTasks.dll" TaskName="Scorto.BuildTasks.TemplateTask" />
-	<UsingTask AssemblyFile="Scorto.BuildTasks.dll" TaskName="Scorto.BuildTasks.XmlUpdate" /> 	
-</Project>
