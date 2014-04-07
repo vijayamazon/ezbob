@@ -23,7 +23,7 @@
 				isExecuting = true;
 			} // lock
 
-			CurrencyUpdateController.Run();  
+			CurrencyUpdateController.Run();
 
 			lock (updateCurrencyRatesLock)
 			{

@@ -88,10 +88,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Lib\Scorto.Core\Scorto.RegistryScanner.dll</HintPath>
     </Reference>
-    <Reference Include="Scorto.Service.Scheduler, Version=22.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Lib\Scorto.Core\Scorto.Service.Scheduler.dll</HintPath>
-    </Reference>
     <Reference Include="StructureMap, Version=2.6.3.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Lib\3rdparty\StructureMap\StructureMap.dll</HintPath>
