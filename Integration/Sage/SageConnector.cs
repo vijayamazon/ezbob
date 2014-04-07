@@ -3,15 +3,13 @@
     using System;
     using System.Collections.Generic;
     using System.Web.Script.Serialization;
-    using Config;
     using EZBob.DatabaseLib.DatabaseWrapper.Order;
     using RestSharp;
 	using log4net;
-	using StructureMap;
 	
 	public class SageConnector
 	{
-		private static readonly ISageConfig config = ObjectFactory.GetInstance<ISageConfig>();
+		private static readonly SageConfig config = new SageConfig();
 		private static readonly ILog log = LogManager.GetLogger(typeof(SageConnector));
 
 		public static List<SagePaymentStatus> GetPaymentStatuses(string accessToken)

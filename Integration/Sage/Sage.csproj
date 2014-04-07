@@ -61,10 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccessTokenContainer.cs" />
-    <Compile Include="Config\SageConfig.cs" />
-    <Compile Include="Config\SageConfigRoot.cs" />
-    <Compile Include="Config\SageEnvConnectionConfig.cs" />
-    <Compile Include="Config\ISageConfig.cs" />
+    <Compile Include="SageConfig.cs" />
     <Compile Include="SageExpenditureAggregator.cs" />
     <Compile Include="SagePurchaseInvoiceAggregator.cs" />
     <Compile Include="SageIncomeAggregator.cs" />
@@ -85,6 +82,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\NHibernateWrapper\NHibernateWrapper.csproj">
+      <Project>{dc706b41-2b3e-4082-b390-51aabac065d3}</Project>
+      <Name>NHibernateWrapper</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CommonLib\CommonLib.csproj">
       <Project>{aedbfbbd-ba7d-4582-afca-6ecf8af33c98}</Project>
       <Name>CommonLib</Name>

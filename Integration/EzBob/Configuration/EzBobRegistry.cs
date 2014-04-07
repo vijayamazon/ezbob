@@ -14,7 +14,6 @@
 	using Scorto.Configuration;
 	using StructureMap.Configuration.DSL;
 	using FreeAgent.Config;
-	using Sage.Config;
 
     public class EzBobRegistry : Registry
 	{
@@ -31,7 +30,6 @@
 				For<IAmazonMarketPlaceTypeConnection>().Use( ezBobConfigRoot.AmazonConfig);
 				For<IAmazonMarketplaceSettings>().Use(ezBobConfigRoot.AmazonSetings);
 				For<IFreeAgentConfig>().Singleton().Use(ezBobConfigRoot.FreeAgentConfig);
-				For<ISageConfig>().Singleton().Use(ezBobConfigRoot.SageConfig);
 			}
 			var teraPeakConfigRoot = EnvironmentConfiguration.Configuration.GetCurrentConfiguration<TeraPeakConfigRoot>();
 			if ( ezBobConfigRoot != null )
