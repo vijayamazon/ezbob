@@ -40,7 +40,7 @@ namespace MailApi
 
 
 			var attachments = new List<attachment>();
-			byte[] pdfdata = System.IO.File.ReadAllBytes(@"c:\dev\test.pdf");
+			byte[] pdfdata = System.IO.File.ReadAllBytes(@"c:\ezbob\test-data\vat-return\a0213.pdf");
 			string content = Convert.ToBase64String(pdfdata);
 			attachments.Add(new attachment
 			{
@@ -54,17 +54,16 @@ namespace MailApi
         }
 
         [Test]
-        [Ignore]
         public void SendMultiplyMessage()
         {
             var vars = new Dictionary<string, string>
                 {
-                    {"email", "yulys@ezbob.com"}, 
+                    {"email", "dev@ezbob.com"}, 
                     {"EmailSubject", _subject}, 
                     {"ConfirmEmailAddress", "https://app.ezbob.com/confirm/90a9cd47-f84e-420e-820c-a1fc010fce11"}, 
                 };
 
-            var result = _mail.Send(vars, "yulys@ezbob.com;yulys+01@ezbob.com", "Greeting", "Thank you for registering with EZBOB!");
+            var result = _mail.Send(vars, "dev@ezbob.com;dev+01@ezbob.com", "Greeting", "Thank you for registering with EZBOB!");
             Assert.That(result == "OK");
         }
 
