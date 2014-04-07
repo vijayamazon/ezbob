@@ -1,4 +1,4 @@
-IF NOT EXISTS (SELECT 1 FROM ReportScheduler WHERE Type = 'RPT_REFERENCE_SOURCES')
+IF NOT EXISTS (SELECT 1 FROM ReportScheduler WHERE Type = 'RPT_NEW_LOANS')
 BEGIN
 	INSERT INTO dbo.ReportScheduler
 		(
@@ -15,9 +15,9 @@ BEGIN
 		)
 	VALUES
 		(
-		'RPT_REFERENCE_SOURCES'
-		, 'Reference sources'
-		, 'RptReferenceSources'
+		'RPT_NEW_LOANS'
+		, 'New Loans'
+		, 'RptNewLoans'
 		, 0
 		, 0
 		, 0
@@ -34,11 +34,11 @@ BEGIN
 	FROM
 		ReportScheduler
 	WHERE 
-		Type = 'RPT_REFERENCE_SOURCES'
+		Type = 'RPT_NEW_LOANS'
 		
 	DECLARE @UserId INT, @ReportId INT
 	SELECT @UserId = Id FROM ReportUsers WHERE UserName = 'nimrodk'
-	SELECT @ReportId = Id FROM ReportScheduler WHERE Type = 'RPT_REFERENCE_SOURCES'
+	SELECT @ReportId = Id FROM ReportScheduler WHERE Type = 'RPT_NEW_LOANS'
 
 	IF @UserId IS NOT NULL 
 		INSERT INTO ReportsUsersMap (UserID, ReportID) VALUES (@UserId, @ReportId)
@@ -47,5 +47,9 @@ BEGIN
 	IF @UserId IS NOT NULL 
 		INSERT INTO ReportsUsersMap (UserID, ReportID) VALUES (@UserId, @ReportId)
 END
+GO
+
+IF OBJECT_ID('RptReferenceSources') IS NULL
+	EXECUTE('CREATE PROCEDURE RptReferenceSources AS SELECT 1')
 GO
 	

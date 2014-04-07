@@ -1,8 +1,8 @@
-IF OBJECT_ID('RptReferenceSources') IS NULL
-	EXECUTE('CREATE PROCEDURE RptReferenceSources AS SELECT 1')
+IF OBJECT_ID('RptNewLoans') IS NULL
+	EXECUTE('CREATE PROCEDURE RptNewLoans AS SELECT 1')
 GO
 
-ALTER PROCEDURE RptReferenceSources
+ALTER PROCEDURE RptNewLoans
 	(@DateStart DATETIME,
 	 @DateEnd DATETIME)
 AS
