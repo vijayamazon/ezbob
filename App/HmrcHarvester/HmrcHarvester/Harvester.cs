@@ -870,10 +870,15 @@ namespace Ezbob.HmrcHarvester {
 					throw new HarvesterException(string.Format("Failed to fetch RTI tax years: no cells in row {0}", nRowNum));
 
 				if (bFirst) {
+					bFirst = false;
+
 					HtmlNode oCell = oCells[0];
 
 					if (!oCell.Attributes.Contains("colspan") || (oCell.Attributes["colspan"].Value != "3"))
 						throw new HarvesterException(string.Format("Failed to fetch RTI tax years: incorrect format in row {0}", nRowNum));
+
+					if (oCell.InnerText.Trim() == "Previous tax years")
+						break;
 
 					MatchCollection match = Regex.Matches(oCell.InnerText.Trim(), @"^Current tax year (\d\d)(\d\d)-(\d\d)$");
 
@@ -889,7 +894,6 @@ namespace Ezbob.HmrcHarvester {
 
 					Info("Current tax year: {0} - {1}", nFirstYear, nLastYear);
 
-					bFirst = false;
 					continue;
 				} // if first row
 
