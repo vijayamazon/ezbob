@@ -146,6 +146,7 @@ namespace EzBob.Web.Controllers {
 		}
 
 		[HttpPost]
+		[NoCache]
 		public JsonResult CustomerLogOn(LogOnModel model) {
 			var customerIp = Request.ServerVariables["REMOTE_ADDR"];
 
@@ -157,7 +158,11 @@ namespace EzBob.Web.Controllers {
 				try {
 					if (m_oBrokerHelper.IsBroker(model.UserName)) {
 						BrokerProperties bp = m_oBrokerHelper.TryLogin(model.UserName, model.Password);
-						return Json(new { success = (bp != null), broker = true });
+						return Json(new {
+							success = (bp != null),
+							errorMessage = (bp == null) ? "User not found or incorrect password." : "",
+							broker = true,
+						});
 					} // if is broker
 				}
 				catch (Exception e) {
