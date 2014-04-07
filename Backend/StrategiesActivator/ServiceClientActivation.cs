@@ -16,18 +16,39 @@
 		private readonly EzServiceAdminClient adminClient;
 
 		public ServiceClientActivation(string[] args) {
-			this.args = new string[args.Length - 1];
-			Array.Copy(args, 1, this.args, 0, args.Length - 1);
+			m_oLog = new ConsoleLog(new SafeILog(LogManager.GetLogger(typeof(ServiceClientActivation))));
+			m_oLog.NotifyStart();
+
+			InitMethods();
 
 			string sInstanceName = args[0];
 
-			ASafeLog log = new SafeILog(LogManager.GetLogger(typeof(ServiceClientActivation)));
+			if (sInstanceName.ToLower() == "list") {
+				ListSupported();
+				m_oLog.NotifyStop();
+				throw new ExitException();
+			} // if
 
-			var env = new Ezbob.Context.Environment(log);
-			AConnection db = new SqlConnection(env, log);
+			var env = new Ezbob.Context.Environment(m_oLog);
+			AConnection db = new SqlConnection(env, m_oLog);
 
-			var cfg = new Configuration(sInstanceName, db, log);
+			Configuration cfg = null;
+
+			if (m_oMethods.ContainsKey(sInstanceName)) {
+				cfg = new DefaultConfiguration(System.Environment.MachineName, db, m_oLog);
+				this.args = args;
+			}
+			else {
+				this.args = new string[args.Length - 1];
+				Array.Copy(args, 1, this.args, 0, args.Length - 1);
+
+				cfg = new Configuration(sInstanceName, db, m_oLog);
+			} // if
+
 			cfg.Init();
+
+			m_oLog.Info("Running against instance {0} - {1}.", cfg.InstanceID, cfg.InstanceName);
+			m_oLog.Info("Arguments:\n\t{0}", string.Join("\n\t", this.args));
 
 			var oTcpBinding = new NetTcpBinding();
 
@@ -40,33 +61,43 @@
 				oTcpBinding,
 				new EndpointAddress(cfg.AdminEndpointAddress)
 			);
-		}
+		} // constructor
 
 		public void Execute() {
 			string strategyName = args[0];
 
+			string sKey = strategyName.ToLower();
+
+			if (m_oMethods.ContainsKey(sKey))
+				m_oMethods[sKey].Invoke(this, new object[] { });
+			else {
+				m_oLog.Msg("Strategy {0} is not supported", strategyName);
+				ListSupported();
+			} // if
+
+			m_oLog.NotifyStop();
+		} // Execute
+
+		private void ListSupported() {
+			m_oLog.Msg("Supported strategies are (case insensitive):\n\t{0}", string.Join("\n\t", m_oMethods.Keys));
+		} // ListSupported
+
+		private void InitMethods() {
 			MethodInfo[] aryMethods = GetType().GetMethods(BindingFlags.NonPublic | BindingFlags.Instance);
 
-			var oMethods = new SortedDictionary<string, MethodInfo>();
+			m_oMethods = new SortedDictionary<string, MethodInfo>();
 
 			foreach (MethodInfo mi in aryMethods) {
 				IEnumerable<ActivationAttribute> oAttrList = mi.GetCustomAttributes<ActivationAttribute>();
 
-				if (oAttrList.Any()) {
-					oMethods[mi.Name.ToLower()] = mi;
-				}
+				if (oAttrList.Any())
+					m_oMethods[mi.Name.ToLower()] = mi;
 			} // foreach
 
-			string sKey = strategyName.ToLower();
+		} // InitMethods
 
-			if (oMethods.ContainsKey(sKey)) {
-				oMethods[sKey].Invoke(this, new object[] { });
-			}
-			else {
-				Console.WriteLine("Strategy {0} is not supported", strategyName);
-				Console.WriteLine("Supported strategies are (case insensitive):\n\t{0}", string.Join("\n\t", oMethods.Keys));
-			}
-		} // Execute
+		private SortedDictionary<string, MethodInfo> m_oMethods;
+		private readonly ASafeLog m_oLog;
 
 		#region strategy activators
 		// ReSharper disable UnusedMember.Local
@@ -75,7 +106,7 @@
 		private void Greeting() {
 			int customerId;
 			if (args.Length != 3 || !int.TryParse(args[1], out customerId)) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> Greeting <CustomerId> <ConfirmEmailAddress>");
+				m_oLog.Msg("Usage: Greeting <CustomerId> <ConfirmEmailAddress>");
 				return;
 			}
 
@@ -93,7 +124,7 @@
 			bool bSaveOfferToDB;
 
 			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !bool.TryParse(args[2], out bSaveOfferToDB)) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> QuickOffer <CustomerId> <Save offer to DB>");
+				m_oLog.Msg("Usage: QuickOffer <CustomerId> <Save offer to DB>");
 				return;
 			}
 
@@ -106,7 +137,7 @@
 			bool bSaveOfferToDB;
 
 			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !bool.TryParse(args[2], out bSaveOfferToDB)) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> QuickOfferWithPrerequisites <CustomerId> <Save offer to DB>");
+				m_oLog.Msg("Usage: QuickOfferWithPrerequisites <CustomerId> <Save offer to DB>");
 				return;
 			}
 
@@ -120,7 +151,7 @@
 			decimal loanAmount;
 
 			if (args.Length != 4 || !int.TryParse(args[1], out underwriterId) || !int.TryParse(args[2], out customerId) || !decimal.TryParse(args[3], out loanAmount)) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> ApprovedUser <Underwriter ID> <CustomerId> <loanAmount>");
+				m_oLog.Msg("Usage: ApprovedUser <Underwriter ID> <CustomerId> <loanAmount>");
 				return;
 			}
 
@@ -132,7 +163,7 @@
 			int customerId;
 			decimal amount;
 			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !decimal.TryParse(args[2], out amount)) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> CashTransferred <CustomerId> <amount>");
+				m_oLog.Msg("Usage: CashTransferred <CustomerId> <amount>");
 				return;
 			}
 
@@ -144,7 +175,7 @@
 			int customerId;
 			decimal amount;
 			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !decimal.TryParse(args[2], out amount)) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> EmailRolloverAdded <CustomerId> <amount>");
+				m_oLog.Msg("Usage: EmailRolloverAdded <CustomerId> <amount>");
 				return;
 			}
 
@@ -155,7 +186,7 @@
 		private void EmailUnderReview() {
 			int customerId;
 			if (args.Length != 2 || !int.TryParse(args[1], out customerId)) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> EmailUnderReview <CustomerId>");
+				m_oLog.Msg("Usage: EmailUnderReview <CustomerId>");
 				return;
 			}
 
@@ -166,7 +197,7 @@
 		private void Escalated() {
 			int customerId;
 			if (args.Length != 2 || !int.TryParse(args[1], out customerId)) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> Escalated <CustomerId>");
+				m_oLog.Msg("Usage: Escalated <CustomerId>");
 				return;
 			}
 
@@ -177,7 +208,7 @@
 		private void GetCashFailed() {
 			int customerId;
 			if (args.Length != 2 || !int.TryParse(args[1], out customerId)) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> GetCashFailed <CustomerId>");
+				m_oLog.Msg("Usage: GetCashFailed <CustomerId>");
 				return;
 			}
 
@@ -188,7 +219,7 @@
 		private void LoanFullyPaid() {
 			int customerId;
 			if (args.Length != 3 || !int.TryParse(args[1], out customerId)) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> LoanFullyPaid <CustomerId> <loanRefNum>");
+				m_oLog.Msg("Usage: LoanFullyPaid <CustomerId> <loanRefNum>");
 				return;
 			}
 
@@ -200,7 +231,7 @@
 			int underwriterId;
 			int customerId;
 			if (args.Length != 3 || !int.TryParse(args[1], out underwriterId) || !int.TryParse(args[2], out customerId)) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> MoreAmlAndBwaInformation <Underwriter ID> <CustomerId>");
+				m_oLog.Msg("Usage: MoreAmlAndBwaInformation <Underwriter ID> <CustomerId>");
 				return;
 			}
 
@@ -212,7 +243,7 @@
 			int underwriterId;
 			int customerId;
 			if (args.Length != 3 || !int.TryParse(args[1], out underwriterId) || !int.TryParse(args[2], out customerId)) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> MoreAmlInformation <Underwriter ID> <CustomerId>");
+				m_oLog.Msg("Usage: MoreAmlInformation <Underwriter ID> <CustomerId>");
 				return;
 			}
 			serviceClient.MoreAmlInformation(underwriterId, customerId);
@@ -223,7 +254,7 @@
 			int underwriterId;
 			int customerId;
 			if (args.Length != 3 || !int.TryParse(args[1], out underwriterId) || !int.TryParse(args[2], out customerId)) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> MoreBwaInformation <Underwriter ID> <CustomerId>");
+				m_oLog.Msg("Usage: MoreBwaInformation <Underwriter ID> <CustomerId>");
 				return;
 			}
 
@@ -234,7 +265,7 @@
 		private void PasswordChanged() {
 			int customerId;
 			if (args.Length != 3 || !int.TryParse(args[1], out customerId)) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> PasswordChanged <CustomerId> <password>");
+				m_oLog.Msg("Usage: PasswordChanged <CustomerId> <password>");
 				return;
 			}
 
@@ -245,7 +276,7 @@
 		private void PasswordRestored() {
 			int customerId;
 			if (args.Length != 3 || !int.TryParse(args[1], out customerId)) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> PasswordRestored <CustomerId> <password>");
+				m_oLog.Msg("Usage: PasswordRestored <CustomerId> <password>");
 				return;
 			}
 
@@ -257,7 +288,7 @@
 			int customerId;
 			decimal amount;
 			if (args.Length != 4 || !int.TryParse(args[1], out customerId) || !decimal.TryParse(args[2], out amount)) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> PayEarly <CustomerId> <amount> <loanRefNumber>");
+				m_oLog.Msg("Usage: PayEarly <CustomerId> <amount> <loanRefNumber>");
 				return;
 			}
 
@@ -268,7 +299,7 @@
 		private void PayPointAddedByUnderwriter() {
 			int customerId, underwriterId;
 			if (args.Length != 5 || !int.TryParse(args[1], out customerId) || !int.TryParse(args[4], out underwriterId)) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> PayPointAddedByUnderwriter <CustomerId> <cardno> <underwriterName> <underwriterId>");
+				m_oLog.Msg("Usage: PayPointAddedByUnderwriter <CustomerId> <cardno> <underwriterName> <underwriterId>");
 				return;
 			}
 
@@ -280,7 +311,7 @@
 			int underwriterId;
 			int customerId;
 			if (args.Length != 4 || !int.TryParse(args[1], out underwriterId) || !int.TryParse(args[2], out customerId)) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> PayPointNameValidationFailed <Underwriter ID> <CustomerId> <cardHodlerName>");
+				m_oLog.Msg("Usage: PayPointNameValidationFailed <Underwriter ID> <CustomerId> <cardHodlerName>");
 				return;
 			}
 
@@ -292,7 +323,7 @@
 			int underwriterId;
 			int customerId;
 			if (args.Length != 3 || !int.TryParse(args[1], out underwriterId) || !int.TryParse(args[2], out customerId)) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> RejectUser <Underwriter ID> <CustomerId>");
+				m_oLog.Msg("Usage: RejectUser <Underwriter ID> <CustomerId>");
 				return;
 			}
 
@@ -303,7 +334,7 @@
 		private void RenewEbayToken() {
 			int customerId;
 			if (args.Length != 4 || !int.TryParse(args[1], out customerId)) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> RenewEbayToken <CustomerId> <marketplaceName> <eBayAddress>");
+				m_oLog.Msg("Usage: RenewEbayToken <CustomerId> <marketplaceName> <eBayAddress>");
 				return;
 			}
 
@@ -314,7 +345,7 @@
 		private void RequestCashWithoutTakenLoan() {
 			int customerId;
 			if (args.Length != 2 || !int.TryParse(args[1], out customerId)) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> RequestCashWithoutTakenLoan <CustomerId>");
+				m_oLog.Msg("Usage: RequestCashWithoutTakenLoan <CustomerId>");
 				return;
 			}
 
@@ -325,7 +356,7 @@
 		private void SendEmailVerification() {
 			int customerId;
 			if (args.Length != 3 || !int.TryParse(args[1], out customerId)) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> SendEmailVerification <CustomerId> <address>");
+				m_oLog.Msg("Usage: SendEmailVerification <CustomerId> <address>");
 				return;
 			}
 
@@ -336,7 +367,7 @@
 		private void ThreeInvalidAttempts() {
 			int customerId;
 			if (args.Length != 3 || !int.TryParse(args[1], out customerId)) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> ThreeInvalidAttempts <CustomerId> <password>");
+				m_oLog.Msg("Usage: ThreeInvalidAttempts <CustomerId> <password>");
 				return;
 			}
 
@@ -347,7 +378,7 @@
 		private void TransferCashFailed() {
 			int customerId;
 			if (args.Length != 2 || !int.TryParse(args[1], out customerId)) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> TransferCashFailed <CustomerId>");
+				m_oLog.Msg("Usage: TransferCashFailed <CustomerId>");
 				return;
 			}
 
@@ -358,7 +389,7 @@
 		private void CaisGenerate() {
 			int underwriterId;
 			if (args.Length != 2 || !int.TryParse(args[1], out underwriterId)) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> CaisGenerate <underwriterId>");
+				m_oLog.Msg("Usage: CaisGenerate <underwriterId>");
 				return;
 			}
 
@@ -370,7 +401,7 @@
 			int underwriterId;
 			int caisId;
 			if (args.Length != 3 || !int.TryParse(args[1], out underwriterId) || !int.TryParse(args[2], out caisId)) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> CaisUpdate <Underwriter ID> <caisId>");
+				m_oLog.Msg("Usage: CaisUpdate <Underwriter ID> <caisId>");
 				return;
 			}
 
@@ -380,7 +411,7 @@
 		[Activation]
 		private void FirstOfMonthStatusNotifier() {
 			if (args.Length != 1) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> FirstOfMonthStatusNotifier");
+				m_oLog.Msg("Usage: FirstOfMonthStatusNotifier");
 				return;
 			}
 
@@ -393,8 +424,8 @@
 			FraudMode mode;
 
 			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !FraudMode.TryParse(args[2], true, out mode)) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> FraudChecker <CustomerId> <Fraud mode>");
-				Console.WriteLine("Fraud mode values: {0}", string.Join(", ", Enum.GetValues(typeof(FraudMode))));
+				m_oLog.Msg("Usage: FraudChecker <CustomerId> <Fraud mode>");
+				m_oLog.Msg("Fraud mode values: {0}", string.Join(", ", Enum.GetValues(typeof(FraudMode))));
 				return;
 			}
 
@@ -404,7 +435,7 @@
 		[Activation]
 		private void LateBy14Days() {
 			if (args.Length != 1) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> LateBy14Days");
+				m_oLog.Msg("Usage: LateBy14Days");
 				return;
 			}
 
@@ -414,7 +445,7 @@
 		[Activation]
 		private void PayPointCharger() {
 			if (args.Length != 1) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> PayPointCharger");
+				m_oLog.Msg("Usage: PayPointCharger");
 				return;
 			}
 
@@ -424,7 +455,7 @@
 		[Activation]
 		private void SetLateLoanStatus() {
 			if (args.Length != 1) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> SetLateLoanStatus");
+				m_oLog.Msg("Usage: SetLateLoanStatus");
 				return;
 			}
 
@@ -436,8 +467,8 @@
 			int customerId, marketplaceId;
 			bool bUpdateWizardStep;
 			if (args.Length != 4 || !int.TryParse(args[1], out customerId) || !int.TryParse(args[2], out marketplaceId) || !bool.TryParse(args[3], out bUpdateWizardStep)) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> CustomerMarketPlaceAdded <CustomerId> <CustomerMarketplaceId> <Update customer wizard step>");
-				Console.WriteLine("<Update customer wizard step>: is boolean and means whether to set customer wizard step to Marketplace or not. If wizard step is 'TheLastOne' it is never changed.");
+				m_oLog.Msg("Usage: CustomerMarketPlaceAdded <CustomerId> <CustomerMarketplaceId> <Update customer wizard step>");
+				m_oLog.Msg("<Update customer wizard step>: is boolean and means whether to set customer wizard step to Marketplace or not. If wizard step is 'TheLastOne' it is never changed.");
 				return;
 			}
 
@@ -447,7 +478,7 @@
 		[Activation]
 		private void UpdateTransactionStatus() {
 			if (args.Length != 1) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> UpdateTransactionStatus");
+				m_oLog.Msg("Usage: UpdateTransactionStatus");
 				return;
 			}
 
@@ -457,7 +488,7 @@
 		[Activation]
 		private void XDaysDue() {
 			if (args.Length != 1) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> XDaysDue");
+				m_oLog.Msg("Usage: XDaysDue");
 				return;
 			}
 
@@ -487,9 +518,9 @@
 				break;
 			} // switch
 
-			Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> MainStrategy <Underwriter ID> <customerId> <newCreditLineOption> <avoidAutoDescison>");
-			Console.WriteLine("OR");
-			Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> MainStrategy <Underwriter ID> <customerId> <newCreditLineOption> <avoidAutoDescison> <isUnderwriterForced(should always be true)>");
+			m_oLog.Msg("Usage: MainStrategy <Underwriter ID> <customerId> <newCreditLineOption> <avoidAutoDescison>");
+			m_oLog.Msg("OR");
+			m_oLog.Msg("Usage: MainStrategy <Underwriter ID> <customerId> <newCreditLineOption> <avoidAutoDescison> <isUnderwriterForced(should always be true)>");
 		}
 
 		[Activation]
@@ -502,13 +533,13 @@
 				return;
 			}
 
-			Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> MainStrategySync <Underwriter ID> <customerId> <newCreditLineOption> <avoidAutoDescison>");
+			m_oLog.Msg("Usage: MainStrategySync <Underwriter ID> <customerId> <newCreditLineOption> <avoidAutoDescison>");
 		}
 
 		[Activation]
 		private void UpdateCurrencyRates() {
 			if (args.Length != 1) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> UpdateCurrencyRates");
+				m_oLog.Msg("Usage: UpdateCurrencyRates");
 				return;
 			}
 
@@ -521,7 +552,7 @@
 			bool forceCheck;
 			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !bool.TryParse(args[2], out forceCheck))
 			{
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> CheckExperianCompany <CustomerId> <ForceCheck>");
+				m_oLog.Msg("Usage: CheckExperianCompany <CustomerId> <ForceCheck>");
 				return;
 			}
 
@@ -535,7 +566,7 @@
 
 			if (args.Length != 4 || !int.TryParse(args[1], out customerId) || !int.TryParse(args[2], out directorId) || !bool.TryParse(args[2], out forceCheck))
 			{
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> CheckExperianConsumer <CustomerId> <DirectorId> <ForceCheck>");
+				m_oLog.Msg("Usage: CheckExperianConsumer <CustomerId> <DirectorId> <ForceCheck>");
 				return;
 			}
 
@@ -556,9 +587,9 @@
 				return;
 			}
 
-			Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> AmlChecker <CustomerId>");
-			Console.WriteLine("OR");
-			Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> AmlChecker <CustomerId> <idhubHouseNumber> <idhubHouseName> <idhubStreet> <idhubDistrict> <idhubTown> <idhubCounty> <idhubPostCode>");
+			m_oLog.Msg("Usage: AmlChecker <CustomerId>");
+			m_oLog.Msg("OR");
+			m_oLog.Msg("Usage: AmlChecker <CustomerId> <idhubHouseNumber> <idhubHouseName> <idhubStreet> <idhubDistrict> <idhubTown> <idhubCounty> <idhubPostCode>");
 
 		}
 
@@ -576,16 +607,16 @@
 				return;
 			}
 
-			Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> BwaChecker <CustomerId>");
-			Console.WriteLine("OR");
-			Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> BwaChecker <CustomerId> <idhubHouseNumber> <idhubHouseName> <idhubStreet> <idhubDistrict> <idhubTown> <idhubCounty> <idhubPostCode> <idhubBranchCode> <idhubAccountNumber>");
+			m_oLog.Msg("Usage: BwaChecker <CustomerId>");
+			m_oLog.Msg("OR");
+			m_oLog.Msg("Usage: BwaChecker <CustomerId> <idhubHouseNumber> <idhubHouseName> <idhubStreet> <idhubDistrict> <idhubTown> <idhubCounty> <idhubPostCode> <idhubBranchCode> <idhubAccountNumber>");
 		}
 
 		[Activation]
 		private void FinishWizard() {
 			int customerId, underwriterId;
 			if (args.Length != 3 || !int.TryParse(args[1], out customerId) || !int.TryParse(args[2], out underwriterId)) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> FinishWizard <CustomerId> <UnderwriterId>");
+				m_oLog.Msg("Usage: FinishWizard <CustomerId> <UnderwriterId>");
 				return;
 			}
 
@@ -595,7 +626,7 @@
 		[Activation]
 		private void GenerateMobileCode() {
 			if (args.Length != 2) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> GenerateMobileCode <phone number>");
+				m_oLog.Msg("Usage: GenerateMobileCode <phone number>");
 				return;
 			}
 
@@ -605,7 +636,7 @@
 		[Activation]
 		private void GetSpResultTable() {
 			if (args.Length < 2 || args.Length % 2 != 0) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> GetSpResultTable <spName> <parameters - should come in couples>");
+				m_oLog.Msg("Usage: GetSpResultTable <spName> <parameters - should come in couples>");
 				return;
 			}
 
@@ -624,7 +655,22 @@
 		{
 			if (args.Length != 4)
 			{
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> CreateUnderwriter <Name> <Password> <RoleName>");
+				m_oLog.Msg("Usage: CreateUnderwriter <Name> <Password> <RoleName>");
+				m_oLog.Msg(@"Available roles (underwriter is usually one of the last three):
+Admin:         Administrator - Manage users
+SuperUser:     SuperUser - Have rights to all applications
+Nova:          Nova
+Inspector:     Inspector - Web working place
+CreditAnalyst: Credit Analyst - Manage strategies and workflow, uses Maven and Patron
+Maven:         Maven - Creates workflow for strategies
+Patron:        Patron - Manage nodes and strategies
+Auditor:       Auditor - Monitoring system
+FormsDesigner: FormsDesigner - Develop node interface
+Web:           Web
+Underwriter:   Underwriter
+manager:       Manager
+crm:           CRM");
+
 				return;
 			}
 
@@ -634,21 +680,21 @@
 		[Activation]
 		private void BrokerLoadCustomerList() {
 			if (args.Length != 2) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> BrokerLoadCustomerList <Contact person email>");
+				m_oLog.Msg("Usage: BrokerLoadCustomerList <Contact person email>");
 				return;
 			} // if
 
 			BrokerCustomersActionResult res = serviceClient.BrokerLoadCustomerList(args[1]);
 
 			foreach (var oEntry in res.Customers)
-				Console.WriteLine("Customer ID: {0} Name: {1} {2}", oEntry.CustomerID, oEntry.FirstName, oEntry.LastName);
+				m_oLog.Msg("Customer ID: {0} Name: {1} {2}", oEntry.CustomerID, oEntry.FirstName, oEntry.LastName);
 		} // BrokerLoadCustomerList
 
 		[Activation]
 		private void ListActiveActions() {
 			StringListActionResult res = adminClient.ListActiveActions();
 
-			Console.WriteLine(
+			m_oLog.Msg(
 				"\nRetriever (i.e. this action):\n\t{{ {0}: {4} [{1}sync] {2}: {3} }}",
 				res.MetaData.ActionID,
 				res.MetaData.IsSynchronous ? "" : "a",
@@ -659,21 +705,21 @@
 
 			string sKey = "{ " + res.MetaData.ActionID;
 
-			Console.WriteLine("\nList of active actions - begin:\n");
+			m_oLog.Msg("\nList of active actions - begin:\n");
 
 			foreach (string s in res.Records)
 				if (!s.StartsWith(sKey))
-					Console.WriteLine("\t{0}\n", s);
+					m_oLog.Msg("\t{0}\n", s);
 
-			Console.WriteLine("\nList of active actions - end.");
+			m_oLog.Msg("\nList of active actions - end.");
 		} // ListActiveActions
 
 		[Activation]
 		private void TerminateAction() {
 			if (args.Length != 2) {
-				Console.WriteLine("Usage: StrategiesActivator.exe <Service Instance Name> TerminateAction <action guid>");
+				m_oLog.Msg("Usage: TerminateAction <action guid>");
 
-				Console.WriteLine(@"
+				m_oLog.Msg(@"
 A string that contains a GUID in one of the following formats ('d' represents a hexadecimal digit whose case is ignored):
 32 contiguous digits:
 dddddddddddddddddddddddddddddddd
@@ -699,5 +745,5 @@ The digits shown in a group are the maximum number of meaningful digits that can
 		// ReSharper restore UnusedMember.Local
 
 		#endregion strategy activators
-	}
-}
+	} // class ServiceClientActivation
+} // namespace

@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActivationAttribute.cs" />
+    <Compile Include="ExitException.cs" />
     <Compile Include="Service References\EzServiceReference\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
