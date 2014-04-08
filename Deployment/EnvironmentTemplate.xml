@@ -52,28 +52,6 @@
     <property name="PayPalSettings" value ="PayPalSettingsData"/>
     <property name="AmazonSetings" value ="AmazonSetingsData"/>
 	<property name="YodleeConfig" value ="YodleeTrunk"/>
-	<property name="MandrillConfig" value="${MandrillConfig}"/>
-
-    <module id="MandrillTrunk">
-        <property name="Key" value="nNAb_KZhxEqLCyzEGOWvlg" />
-        <property name="Enable" value="True" />
-        <!-- Used in sending messages without a template -->
-        <property name="From" value="ezbob@ezbob.com" />
-    </module>
-	
-	<module id="MandrillUATConfig">
-        <property name="Key" value="J3SGjITr1NZL-hWzUKqZJw" />
-        <property name="Enable" value="True" />
-        <!-- Used in sending messages without a template -->
-        <property name="From" value="ezbob@ezbob.com" />
-    </module>
-	
-    <module id="MandrillProduction">
-        <property name="Key" value="ZpZX8rtjJMJYOCGFCA1uGg" />
-        <property name="Enable" value="True" />
-        <!-- Used in sending messages without a template -->
-        <property name="From" value="ezbob@ezbob.com" />
-    </module>
 
     <module id="EbaySettingsData">
 	<property name="DownloadCategories" value="False"/>

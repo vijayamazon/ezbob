@@ -1,43 +1,52 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Text.RegularExpressions;
-using EzBob.Configuration;
-using MailApi.Model;
-using Newtonsoft.Json;
-using RestSharp;
-using RestSharp.Deserializers;
-using log4net;
-
-namespace MailApi
+﻿namespace MailApi
 {
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Net;
+	using System.Text.RegularExpressions;
+	using Model;
+	using Newtonsoft.Json;
+	using RestSharp;
+	using RestSharp.Deserializers;
+	using StructureMap;
+	using log4net;
+	using EZBob.DatabaseLib.Model;
+
 	public class Mail: IMail
     {
         private readonly RestClient _client;
         private static readonly ILog Log = LogManager.GetLogger(typeof(Mail));
-        private readonly IMandrillConfig _config;
+		private string key;
+		private readonly ConfigurationVariablesRepository configurationVariablesRepository;
 
         //Api pathes
         private const string BaseSecureUrl = "https://mandrillapp.com/api/1.0/";
         private const string SendTemplatePath = "/messages/send-template.json";
         private const string RenderTemplatePath = "/templates/render.json";
-        private const string SendPath = "/messages/send.json";
 
-        public Mail(IMandrillConfig config = null)
+        public Mail(string key = null)
         {
-	        _config = config ?? ConfigurationRootBob.GetConfiguration().MandrillConfig;
+			if (key == null)
+			{
+				configurationVariablesRepository = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
+				this.key = configurationVariablesRepository.GetByName("MandrillKey");
+			}
+			else
+			{
+				this.key = key;
+			}
+
             _client = new RestClient(BaseSecureUrl);
             _client.AddHandler("application/json", new JsonDeserializer());
         }
 
         private EmailModel PrepareEmail(string templateName, string to, Dictionary<string, string> variables, string subject, string cc = "", List<attachment> attachments = null)
         {
-            
             var toList = PrepareRecipients(to);
 
             var message = new EmailModel
             {
-                key = _config.Key,
+                key = key,
                 template_name = templateName,
                 message = new EmailMessageModel
                 {
@@ -64,37 +73,13 @@ namespace MailApi
             var spaces = new Regex(@"\s+", RegexOptions.Compiled);
             return spaces.Replace(to,string.Empty).Split(';').Select(x => new EmailAddressModel { email = x });
         }
-
-        private EmailModel PrepareEmail(string text, string subject, string to)
-        {
-            var toList = PrepareRecipients(to);
-            return new EmailModel
-            {
-                key = _config.Key,
-                message = new EmailMessageModel
-                {
-                    from_email = _config.From,
-                    to = toList,
-                    subject = subject,
-                    html = text,
-					track_clicks = true,
-					track_opens = true
-                },
-            };
-        }
-
+		
         private string SendRequest(string path, object model)
         {
-            if (!_config.Enable)
-            {
-                Log.Warn("Mandrrill is disabled");
-                return null;
-            }
             var request = new RestRequest(path, Method.POST) { RequestFormat = DataFormat.Json };
             request.AddBody(model);
             var response = _client.Post(request);
-			//Log.DebugFormat("Request: \n {0}", request.Parameters[0]);//to long because of attachments.
-            Log.InfoFormat("Mandrill service call.\n Response length: \n {0}", response.Content.Length);
+			Log.InfoFormat("Mandrill service call.\n Response length: \n {0}", response.Content.Length);
 
             if (response.StatusCode == HttpStatusCode.InternalServerError)
             {
@@ -132,7 +117,7 @@ namespace MailApi
         {
             var templateModel = new RenderTemplateModel
                 {
-                    key = _config.Key,
+                    key = key,
                     template_name = templateName,
                     template_content = new template_content[] {},
                     merge_vars = Utils.AddMergeVars(parameters)
@@ -145,8 +130,8 @@ namespace MailApi
             var retVal = JsonConvert.DeserializeObject<Dictionary<string, string>>(response); //response is { "html": "response text" }
             return retVal["html"];
         }
-        //----------------------------------------------------------------------------------
-        public string Send(Dictionary<string, string> parameters, string to, string templateName, string subject = "", string cc = "", List<attachment> attachments = null)
+        
+		public string Send(Dictionary<string, string> parameters, string to, string templateName, string subject = "", string cc = "", List<attachment> attachments = null)
         {
             var message = PrepareEmail(templateName, to, parameters, subject, cc, attachments);
             return Send(message, SendTemplatePath);
@@ -156,13 +141,5 @@ namespace MailApi
         {
             return RenderTemplate(parameters, templateName);
         }
-
-        public string Send(string to, string text, string subject)
-        {
-            var message = PrepareEmail(text, subject, to);
-            return Send(message, SendPath);
-        }
     }
-
-	
 }

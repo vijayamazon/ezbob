@@ -46,8 +46,6 @@
 			For<ICustomerStatusesRepository>().Use<CustomerStatusesRepository>();
 			For<IApprovalsWithoutAMLRepository>().Use<ApprovalsWithoutAMLRepository>();
 			For<IMail>().Use<Mail>();
-			var bobconfig = EnvironmentConfiguration.Configuration.GetCurrentConfiguration<ConfigurationRootBob>();
-			For<IMandrillConfig>().Use(bobconfig.MandrillConfig);
 			For<ILoanRepository>().Use<LoanRepository>();
 			For<ILoanScheduleRepository>().Use<LoanScheduleRepository>();
 			For<ILoanHistoryRepository>().Use<LoanHistoryRepository>();

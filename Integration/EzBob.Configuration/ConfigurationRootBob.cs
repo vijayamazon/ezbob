@@ -22,11 +22,6 @@ namespace EzBob.Configuration
             get { return GetConfiguration<ExperianIntegrationParams>("Experian"); }
         }
 
-        public virtual IMandrillConfig MandrillConfig
-        {
-            get { return GetConfiguration<MandrillConfig>("MandrillConfig"); }
-        }
-
 		public virtual YodleeEnvConnectionConfig YodleeConfig
 		{
 			get { return GetConfiguration<YodleeEnvConnectionConfig>("YodleeConfig"); }

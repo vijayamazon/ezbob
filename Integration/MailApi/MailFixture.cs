@@ -1,12 +1,9 @@
-﻿using System.Collections.Generic;
-using EzBob.Configuration;
-using Moq;
-using NUnit.Framework;
-
-namespace MailApi
+﻿namespace MailApi
 {
 	using System;
 	using Model;
+	using System.Collections.Generic;
+	using NUnit.Framework;
 
 	[TestFixture]
     public class MailFixture
@@ -15,15 +12,10 @@ namespace MailApi
         private string _to;
         private string _subject;
 
-
         [SetUp]
         public void StartUp()
         {
-            var config = new Mock<IMandrillConfig>();
-            config.SetupGet(x => x.Key).Returns("nNAb_KZhxEqLCyzEGOWvlg");
-            config.SetupGet(x => x.Enable).Returns(true);
-            config.SetupGet(x => x.From).Returns("dev@ezbob.com");
-            _mail = new Mail(config.Object);
+			_mail = new Mail("nNAb_KZhxEqLCyzEGOWvlg");
 	        _to = "dev@ezbob.com";
             _subject = "Thank you for registering with EZBOB!";
         }
@@ -37,7 +29,6 @@ namespace MailApi
                     {"EmailSubject", _subject}, 
                     {"ConfirmEmailAddress", "https://app.ezbob.com/confirm/90a9cd47-f84e-420e-820c-a1fc010fce11"}, 
                 };
-
 
 			var attachments = new List<attachment>();
 			byte[] pdfdata = System.IO.File.ReadAllBytes(@"c:\ezbob\test-data\vat-return\a0213.pdf");
@@ -78,17 +69,7 @@ namespace MailApi
                 };
             var result = _mail.GetRenderedTemplate(vars, "Greeting");
             Assert.That(result != null);
-            System.Console.Out.Write(result);
-        }
-
-        [Test]
-        public void SendMessageWithoutTemplate()
-        {
-            var text = string
-                .Format("There is simple row message for {0}. \n <h1><u>And a bit html</u></h1>",typeof(MailFixture));
-
-            var result = _mail.Send(_to, text, "There is not enough funds!");
-            Assert.That(result == "OK");
+            Console.Out.Write(result);
         }
     }
 }

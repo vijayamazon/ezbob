@@ -61,7 +61,6 @@
   <ItemGroup>
     <Compile Include="ConfigurationRootBob.cs" />
     <Compile Include="ExperianIntegrationParams.cs" />
-    <Compile Include="MandrillConfig.cs" />
     <Compile Include="PacNetConfiguration.cs" />
     <Compile Include="PayPointConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
