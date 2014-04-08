@@ -2,6 +2,7 @@
 	using System;
 	using System.Diagnostics;
 	using System.IO;
+	using System.Net;
 	using System.Reflection;
 	using System.Text;
 	using System.Threading;
@@ -32,6 +33,7 @@
 	using EzBob.Configuration;
 	using EzServiceConfigurationLoader;
 	using ActionResult = Ezbob.Database.ActionResult;
+	using Environment = System.Environment;
 
 	public class Program : IHost {
 		#region public
@@ -134,7 +136,21 @@
 
 			sErrorMailRecipient += "@ezbob.com";
 
-			log4net.GlobalContext.Properties["ErrorEmailRecipient"] = sErrorMailRecipient;
+
+			string ipStr = string.Empty;
+			foreach (var address in Dns.GetHostEntry(Dns.GetHostName()).AddressList)
+			{
+				string addressStr = address.ToString();
+				if (addressStr.StartsWith("192"))
+				{
+					ipStr = addressStr;
+					break;
+				}
+			}
+
+			string mailSubject = Environment.MachineName + " (" + ipStr + "): EzBob log";
+			GlobalContext.Properties["MailSubject"] = mailSubject;
+			GlobalContext.Properties["ErrorEmailRecipient"] = sErrorMailRecipient;
 
 			log4net.Config.XmlConfigurator.Configure();
 
