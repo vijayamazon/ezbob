@@ -120,6 +120,9 @@
 			{
 				StrategyError = string.Format("Error occured in main strategy, its status is:{0}", LastMainStrategyStatus);
 			}
+
+			BrokerID = customer.Broker == null ? 0 : customer.Broker.ID;
+			BrokerName = customer.Broker == null ? "" : customer.Broker.FirmName;
 		} // InitFromCustomer
 
 		public bool IsTest { get; set; }
@@ -130,6 +133,9 @@
 		public string TrustPilotStatusDescription { get; set; }
 		public string TrustPilotStatusName { get; set; }
 		public string LastMainStrategyStatus { get; set; }
+
+		public int BrokerID { get; set; }
+		public string BrokerName { get; set; }
 
 		public List<object> TrustPilotStatusList {
 			get {

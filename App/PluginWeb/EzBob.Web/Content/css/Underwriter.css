@@ -928,3 +928,8 @@ label.control-label { display: block; }
 div.form_buttons_container { position: relative; height: 38px;width: 96%;}
 div.form_buttons_container input, 
 div.form_buttons_container a, div.form_buttons_container button { float: right; }
+
+.with-broker {
+	font-weight: bold;
+	color: #58B8FC;
+}

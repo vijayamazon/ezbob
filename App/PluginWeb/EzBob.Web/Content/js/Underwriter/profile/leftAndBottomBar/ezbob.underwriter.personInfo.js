@@ -1,5 +1,5 @@
 (function() {
-  var root, _ref, _ref1,
+  var root,
     __hasProp = {}.hasOwnProperty,
     __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
 
@@ -10,11 +10,11 @@
   EzBob.Underwriter = EzBob.Underwriter || {};
 
   EzBob.Underwriter.PersonInfoView = (function(_super) {
+
     __extends(PersonInfoView, _super);
 
     function PersonInfoView() {
-      _ref = PersonInfoView.__super__.constructor.apply(this, arguments);
-      return _ref;
+      return PersonInfoView.__super__.constructor.apply(this, arguments);
     }
 
     PersonInfoView.prototype.template = "#profile-person-info-template";
@@ -24,6 +24,9 @@
     };
 
     PersonInfoView.prototype.onRender = function() {
+      if (this.model.get('BrokerID')) {
+        this.$el.find('#with-broker').addClass('with-broker');
+      }
       this.setCciMark();
       this.$el.find(".tltp").tooltip();
       return this.$el.find(".tltp-left").tooltip({
@@ -33,7 +36,6 @@
 
     PersonInfoView.prototype.setCciMark = function() {
       var oSpan;
-
       oSpan = this.$el.find('.cci-mark');
       if (this.model.get('CciMark')) {
         return oSpan.text('on').closest('td').addClass('red_cell');
@@ -45,7 +47,6 @@
     PersonInfoView.prototype.toggleCciMark = function() {
       var id,
         _this = this;
-
       id = this.model.get('Id');
       BlockUi();
       return $.post(window.gRootPath + 'Underwriter/ApplicationInfo/ToggleCciMark', {
@@ -76,7 +77,6 @@
 
     PersonInfoView.prototype.activateMainStratgey = function() {
       var xhr;
-
       return xhr = $.post("" + window.gRootPath + "Underwriter/ApplicationInfo/ActivateMainStrategy", {
         customerId: this.model.get('Id')
       });
@@ -84,7 +84,6 @@
 
     PersonInfoView.prototype.activateFinishWizard = function() {
       var xhr;
-
       return xhr = $.post("" + window.gRootPath + "Underwriter/ApplicationInfo/ActivateFinishWizard", {
         customerId: this.model.get('Id')
       });
@@ -93,7 +92,6 @@
     PersonInfoView.prototype.updateTrustPilotStatus = function() {
       var d,
         _this = this;
-
       d = new EzBob.Dialogs.ComboEdit({
         model: this.model,
         propertyName: 'TrustPilotStatusName',
@@ -115,7 +113,6 @@
     PersonInfoView.prototype.changeFraudStatusManualyClicked = function() {
       var fraudStatusModel, xhr,
         _this = this;
-
       fraudStatusModel = new EzBob.Underwriter.FraudStatusModel({
         customerId: this.model.get('Id'),
         currentStatus: this.model.get('FraudCheckStatusId')
@@ -124,7 +121,6 @@
       xhr = fraudStatusModel.fetch();
       return xhr.done(function() {
         var fraudStatusLayout;
-
         fraudStatusLayout = new EzBob.Underwriter.FraudStatusLayout({
           model: fraudStatusModel
         });
@@ -150,7 +146,6 @@
     PersonInfoView.prototype.changeDisabledState = function() {
       var collectionStatusModel, customerId, prevStatus, xhr,
         _this = this;
-
       collectionStatusModel = new EzBob.Underwriter.CollectionStatusModel({
         customerId: this.model.get('Id'),
         currentStatus: this.model.get('Disabled')
@@ -161,7 +156,6 @@
       xhr = collectionStatusModel.fetch();
       return xhr.done(function() {
         var collectionStatusLayout;
-
         collectionStatusLayout = new EzBob.Underwriter.CollectionStatusLayout({
           model: collectionStatusModel
         });
@@ -170,7 +164,6 @@
         BlockUi("off");
         return collectionStatusLayout.on('saved', function() {
           var newStatus, that;
-
           newStatus = collectionStatusModel.get('currentStatus');
           that = _this;
           xhr = $.post("" + window.gRootPath + "Underwriter/ApplicationInfo/GetIsStatusWarning", {
@@ -178,7 +171,6 @@
           });
           return xhr.done(function(result) {
             var isWarning, xhr2;
-
             BlockUi("on");
             isWarning = result;
             that.model.set('Disabled', newStatus);
@@ -198,7 +190,6 @@
 
     PersonInfoView.prototype.isTestEditButton = function() {
       var d;
-
       d = new EzBob.Dialogs.CheckBoxEdit({
         model: this.model,
         propertyName: "IsTest",
@@ -216,7 +207,6 @@
 
     PersonInfoView.prototype.avoidAutomaticDecisionButton = function() {
       var d;
-
       d = new EzBob.Dialogs.CheckBoxEdit({
         model: this.model,
         propertyName: "IsAvoid",
@@ -234,7 +224,6 @@
 
     PersonInfoView.prototype.disablingChanged = function() {
       var disabled, id, that;
-
       disabled = this.$el.find("select[name=\"disabling\"] option:selected").val();
       id = this.model.get("Id");
       that = this;
@@ -249,7 +238,6 @@
 
     PersonInfoView.prototype.editEmail = function() {
       var view;
-
       view = new EzBob.EmailEditView({
         model: this.model
       });
@@ -265,11 +253,11 @@
   })(Backbone.Marionette.ItemView);
 
   EzBob.Underwriter.PersonalInfoModel = (function(_super) {
+
     __extends(PersonalInfoModel, _super);
 
     function PersonalInfoModel() {
-      _ref1 = PersonalInfoModel.__super__.constructor.apply(this, arguments);
-      return _ref1;
+      return PersonalInfoModel.__super__.constructor.apply(this, arguments);
     }
 
     PersonalInfoModel.prototype.idAttribute = "Id";
@@ -277,8 +265,7 @@
     PersonalInfoModel.prototype.urlRoot = window.gRootPath + "Underwriter/CustomerInfo/Index";
 
     PersonalInfoModel.prototype.initialize = function() {
-      var status, _i, _len, _ref2, _results;
-
+      var status, _i, _len, _ref, _results;
       this.on("change:Disabled", this.changeDisabled, this);
       this.on("change:FraudCheckStatusId", this.changeFraudCheckStatus, this);
       this.changeDisabled();
@@ -287,10 +274,10 @@
         this.statuses = EzBob.Underwriter.StaticData.CollectionStatuses;
       }
       this.StatusesArr = {};
-      _ref2 = this.statuses.models;
+      _ref = this.statuses.models;
       _results = [];
-      for (_i = 0, _len = _ref2.length; _i < _len; _i++) {
-        status = _ref2[_i];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        status = _ref[_i];
         _results.push(this.StatusesArr[status.get('Id')] = status.get('Name'));
       }
       return _results;
@@ -298,7 +285,6 @@
 
     PersonalInfoModel.prototype.changeDisabled = function(silent) {
       var disabled, disabledText;
-
       if (silent == null) {
         silent = false;
       }
@@ -320,7 +306,6 @@
 
     PersonalInfoModel.prototype.changeFraudCheckStatus = function() {
       var fraud, fraudCss;
-
       fraud = this.get("FraudCheckStatusId");
       fraudCss = "";
       switch (fraud) {
