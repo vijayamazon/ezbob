@@ -16,7 +16,7 @@
 
 	public class CompanyFilesMarketPlacesController : Controller
 	{
-		private static readonly ILog Log = LogManager.GetLogger(typeof(EkmMarketPlacesController));
+		private static readonly ILog Log = LogManager.GetLogger(typeof(CompanyFilesMarketPlacesController));
 		private readonly IEzbobWorkplaceContext _context;
 		private readonly Customer _customer;
 		private readonly ISession _session;
@@ -82,7 +82,7 @@
 				var serviceInfo = new CompanyFilesServiceInfo();
 				var name = serviceInfo.DisplayName;
 				var cf = new CompanyFilesDatabaseMarketPlace();
-				var mp = _helper.SaveOrUpdateCustomerMarketplace(name, cf, null, _context.Customer);
+				var mp = _helper.SaveOrUpdateCustomerMarketplace(_context.Customer.Name + "_" + name, cf, null, _context.Customer);
 
 				_session.Flush();
 				m_oServiceClient.Instance.UpdateMarketplace(_context.Customer.Id, mp.Id, true);
