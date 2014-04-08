@@ -179,6 +179,9 @@
     <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.DateTimeActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.FileListActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\EzServiceReference\StrategiesActivator.EzServiceReference.IntActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>

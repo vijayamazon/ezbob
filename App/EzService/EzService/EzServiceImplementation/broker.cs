@@ -1,5 +1,4 @@
 ﻿namespace EzService.EzServiceImplementation {
-	using System.Linq;
 	using EzBob.Backend.Strategies.Broker;
 	using EzBob.Backend.Strategies.MailStrategies;
 	using Ezbob.Backend.Models;
@@ -371,6 +370,21 @@
 		} // BrokerUpdatePassword
 
 		#endregion method BrokerUpdatePassword
+
+		#region method BrokerLoadMarketingFiles
+
+		public FileListActionResult BrokerLoadMarketingFiles() {
+			BrokerLoadMarketingFiles oInstance;
+
+			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null);
+
+			return new FileListActionResult {
+				MetaData = oMetaData,
+				Files = oInstance.Files.ToArray(),
+			};
+		} // BrokerLoadMarketingFiles
+
+		#endregion method BrokerLoadMarketingFiles
 
 		#endregion sync
 	} // class EzServiceImplementation

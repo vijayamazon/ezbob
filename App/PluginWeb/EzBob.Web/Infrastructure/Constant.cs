@@ -12,6 +12,7 @@
 			public const string LeadFirstName = "BrokerLeadFirstName";
 			public const string LeadID = "BrokerLeadID";
 			public const string LeadLastName = "BrokerLeadLastName";
+			public const string MarketingFiles = "BrokerMarketingFiles";
 			public const string MaxPerNumber = "BrokerMaxPerNumber";
 			public const string MaxPerPage = "BrokerMaxPerPage";
 			public const string MessageOnStart = "BrokerMessageOnStart";

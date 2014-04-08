@@ -45,11 +45,9 @@
 			m_oHelper = new BrokerHelper(m_oServiceClient, m_oLog);
 
 			m_oFiles = new SortedDictionary<string, FileDescription>();
+			m_oFileList = new FileDescription[0];
 
-			m_oFiles["customer-consent"] = new FileDescription {
-				FileName = "credit.file.release.and.consent.doc",
-				ContentType = "application/msword",
-			};
+			LoadMarketingFiles();
 		} // constructor
 
 		#endregion constructor
@@ -58,6 +56,8 @@
 
 		// GET: /Broker/BrokerHome/
 		public System.Web.Mvc.ViewResult Index() {
+			ViewData[Constant.Broker.MarketingFiles] = m_oFileList;
+
 			ViewData[Constant.Config] = m_oConfig;
 			ViewData[Constant.Broker.Auth] = string.Empty;
 
@@ -800,9 +800,9 @@
 
 				string sPath = System.Web.HttpContext.Current.Server.MapPath("~/Areas/Broker/Files/" + fd.FileName);
 
-				m_oLog.Debug("Broker download file request: found file with id {0} of type {1} as {2}.", sFileName, fd.ContentType, sPath);
+				m_oLog.Debug("Broker download file request: found file with id {0} of type {1} as {2}.", sFileName, fd.MimeType, sPath);
 
-				return File(sPath, fd.ContentType, fd.FileName);
+				return File(sPath, fd.MimeType, fd.FileName);
 			} // if
 
 			m_oLog.Debug("Broker download file request: file with id {0} was not found.", sFileName);
@@ -864,6 +864,34 @@
 		#endregion public
 
 		#region private
+
+		#region method LoadMarketingFiles
+
+		private void LoadMarketingFiles() {
+			m_oLog.Debug("Loading broker marketing files...");
+
+			FileListActionResult flar = null;
+
+			try {
+				flar = m_oServiceClient.Instance.BrokerLoadMarketingFiles();
+			}
+			catch (Exception e) {
+				m_oLog.Alert(e, "Failed to load broker marketing files.");
+			} // try
+
+			if (flar != null) {
+				m_oFileList = flar.Files ?? new FileDescription[0];
+
+				m_oFiles.Clear();
+
+				foreach (FileDescription fd in m_oFileList)
+					m_oFiles[fd.FileID] = fd;
+			} // flar
+
+			m_oLog.Debug("Loading broker marketing files complete.");
+		} // LoadMarketingFiles
+
+		#endregion method LoadMarketingFiles
 
 		#region method IsAuth
 
@@ -1068,12 +1096,8 @@
 
 		#region downloadable file descriptor
 
-		private class FileDescription {
-			public string FileName;
-			public string ContentType;
-		} // class FileDescription
-
-		private readonly SortedDictionary<string, FileDescription> m_oFiles;
+		private SortedDictionary<string, FileDescription> m_oFiles;
+		private FileDescription[] m_oFileList;
 
 		#endregion downloadable file descriptor
 
