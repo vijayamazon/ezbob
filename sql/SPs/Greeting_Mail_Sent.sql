@@ -1,25 +1,19 @@
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Greeting_Mail_Sent]') AND TYPE IN (N'P', N'PC'))
-DROP PROCEDURE [dbo].[Greeting_Mail_Sent]
+IF OBJECT_ID('Greeting_Mail_Sent') IS NULL
+	EXECUTE('CREATE PROCEDURE Greeting_Mail_Sent AS SELECT 1')
 GO
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
-CREATE PROCEDURE [dbo].[Greeting_Mail_Sent] 
-	(@UserId int,
-@GreetingMailSent int, 
-@Now DATETIME)
+
+ALTER PROCEDURE Greeting_Mail_Sent
+@UserId INT,
+@GreetingMailSent INT,
+@Now DATETIME
 AS
 BEGIN
-	declare @GreetingMailSentDate datetime  
+	SET NOCOUNT ON;
 
-set @GreetingMailSentDate = @Now
-
-UPDATE [dbo].[Customer]
-   SET [GreetingMailSent] = @GreetingMailSent, [GreetingMailSentDate] = @GreetingMailSentDate
- WHERE Id = @UserId
-
-SET NOCOUNT ON;
-SELECT @@IDENTITY
+	UPDATE Customer SET
+		GreetingMailSent = @GreetingMailSent,
+		GreetingMailSentDate = ISNULL(GreetingMailSentDate, @Now)
+	WHERE
+		Id = @UserId
 END
 GO
