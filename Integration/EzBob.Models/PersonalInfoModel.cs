@@ -2,7 +2,6 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using ApplicationMng.Model;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
 	using NHibernate;
@@ -93,26 +92,13 @@
 
 			ReferenceSource = customer.ReferenceSource;
 			ABTesting = customer.ABTesting;
-			var app = customer.LastStartedMainStrategy;
-
-			IsMainStratFinished = app != null && (
-				app.State == ApplicationStrategyState.SecurityViolation ||
-				app.State == ApplicationStrategyState.StrategyFinishedWithoutErrors ||
-				app.State == ApplicationStrategyState.StrategyFinishedWithErrors ||
-				app.State == ApplicationStrategyState.Error
-			) || app == null;
-
-			if (app != null) {
-				var sql = string.Format("SELECT top 1 ErrorMsg FROM Application_Application where ApplicationId = {0}", app.Id);
-				StrategyError = session.CreateSQLQuery(sql).UniqueResult<string>();
-			} // if
 
 			CompanyEmployeeCountInfo = new CompanyEmployeeCountInfo(customer.Company);
 
 			ActiveCampaign = "";
 			var activeCampaigns = customer.ActiveCampaigns
 				.Where(cc => 
-					cc.Campaign.EndDate >= DateTime.Today && 
+					cc.Campaign.EndDate >= DateTime.Today &&
 					cc.Campaign.StartDate <= DateTime.Today
 				)
 				.Select(cc => cc.Campaign.Name)
@@ -127,6 +113,13 @@
 			TrustPilotStatusName = customer.TrustPilotStatus.Name;
 
 			LastMainStrategyStatus = (string)session.CreateSQLQuery("EXEC GetLastMainStrategyStatus " + customer.Id).UniqueResult();
+
+			IsMainStratFinished = LastMainStrategyStatus != "BG launch" && LastMainStrategyStatus != "In progress";
+			if (LastMainStrategyStatus == "Finished" || LastMainStrategyStatus == "Failed" ||
+			    LastMainStrategyStatus == "Terminated")
+			{
+				StrategyError = string.Format("Error occured in main strategy, its status is:{0}", LastMainStrategyStatus);
+			}
 		} // InitFromCustomer
 
 		public bool IsTest { get; set; }

@@ -336,7 +336,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 			} // get
 		} // PaymentDemenaor
 
-		public virtual Application LastStartedMainStrategy { get; set; }
 		public virtual DateTime? LastStartedMainStrategyEndTime { get; set; }
 
 		/// <summary>
@@ -352,7 +351,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 
 		public virtual bool Fraud { get; set; }
 		public virtual FraudStatus FraudStatus { get; set; }
-		public virtual bool Eliminated { get; set; }
 		public virtual int FinancialAccounts { get; set; }
 
 		//public virtual LimitedInfo LimitedInfo { get; set; }

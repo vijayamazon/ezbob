@@ -23,7 +23,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 			References(x => x.CurrentCard, "CurrentDebitCard").Cascade.All();
 			Map(x => x.IsWasLate);
 			Map(x => x.PayPointTransactionId, "PayPointTransactionId").Length(250);
-			References(x => x.LastStartedMainStrategy, "LastStartedMainStrategyId");
 			Map(x => x.LastStartedMainStrategyEndTime).CustomType<UtcDateTimeType>();
 			Map(x => x.CreditResult).CustomType<CreditResultStatusType>();
 			Map(x => x.CreditSum);
@@ -156,7 +155,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 			Map(x => x.Fraud);
 			Map(x => x.FraudStatus).CustomType<FraudStatus>();
 			Map(x => x.FinancialAccounts);
-			Map(x => x.Eliminated);
 			Map(x => x.Comment, "Comments").CustomType("StringClob").LazyLoad();
 			Map(x => x.SetupFee);
 			Map(x => x.ReferenceSource).Length(200);
