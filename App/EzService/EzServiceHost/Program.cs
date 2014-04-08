@@ -23,7 +23,7 @@
 	using NHibernateWrapper.NHibernate;
 	using PayPoint;
 	using Sage;
-	using Scorto.RegistryScanner;
+	// using Scorto.RegistryScanner;
 	using StructureMap;
 	using StructureMap.Pipeline;
 	using YodleeLib.connector;
@@ -176,7 +176,7 @@
 			NHibernateManager.FluentAssemblies.Add(typeof(SageDatabaseMarketPlace).Assembly);
 			NHibernateManager.FluentAssemblies.Add(typeof(CompanyFilesDatabaseMarketPlace).Assembly);
 
-			Scanner.Register();
+			// Scanner.Register();
 
 			ObjectFactory.Configure(x => {
 				x.For<ISession>().LifecycleIs(new ThreadLocalStorageLifecycle()).Use(ctx => NHibernateManager.SessionFactory.OpenSession());

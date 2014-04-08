@@ -25,7 +25,6 @@
 	using NHibernate;
 	using Scorto.Configuration;
 	using NHibernateWrapper.NHibernate;
-	using Scorto.RegistryScanner;
 	using log4net;
 	using log4net.Config;
 	using NHibernateWrapper.Web;
@@ -97,7 +96,10 @@
 						HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
 					}
 
-					Scanner.Register();
+					Scorto.RegistryScanner.Scanner.Register();
+
+					DumpScanner();
+
 					ConfigureStructureMap(ObjectFactory.Container);
 				}
 				catch (Exception ex)
@@ -110,6 +112,21 @@
 			}
 		}
 
+		private void DumpScanner() {
+			FieldInfo[] aryFields = typeof (Scorto.RegistryScanner.Scanner).GetFields(BindingFlags.Static | BindingFlags.NonPublic);
+
+			_log.Debug("Scanner internals - begin");
+
+			foreach (FieldInfo fi in aryFields) {
+				string sValue = fi.FieldType.ToString().StartsWith("System.String")
+					? "\"" + string.Join("\", \"", (string[])fi.GetValue(null)) + "\""
+					: fi.GetValue(null).ToString();
+
+				_log.DebugFormat("Scanner static field:\n\tname: {0}\n\ttype: {1}\n\tvalue: {2}", fi.Name, fi.FieldType, sValue);
+			} // for each
+
+			_log.Debug("Scanner internals - end");
+		} // DumpScanner
 
 		public static void RegisterGlobalFilters(GlobalFilterCollection filters)
 		{
