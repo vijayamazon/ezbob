@@ -1,18 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Net;
-using System.Threading;
-using System.Xml;
-using Ezbob.Logger;
-using Integration.ChannelGrabberConfig;
-using Newtonsoft.Json;
-using DBCustomer = EZBob.DatabaseLib.Model.Database.Customer;
-using RestSharp;
-using log4net;
-using Scorto.Configuration;
+﻿namespace Integration.ChannelGrabberAPI {
+	using System;
+	using System.Collections.Generic;
+	using System.Globalization;
+	using System.Net;
+	using System.Threading;
+	using System.Xml;
+	using Ezbob.Logger;
+	using ChannelGrabberConfig;
+	using Newtonsoft.Json;
+	using DBCustomer = EZBob.DatabaseLib.Model.Database.Customer;
+	using RestSharp;
+	using log4net;
+	using EZBob.DatabaseLib.Model;
+	using StructureMap;
 
-namespace Integration.ChannelGrabberAPI {
 	#region class Harvester
 
 	public class Harvester : SafeILog, IHarvester {
@@ -27,6 +28,8 @@ namespace Integration.ChannelGrabberAPI {
 				throw new ApiException("Customer information not specified.");
 
 			m_oCustomer = oCustomer;
+
+			configurationVariablesRepository = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
 		} // constructor
 
 		#endregion constructor
@@ -38,13 +41,9 @@ namespace Integration.ChannelGrabberAPI {
 
 			Debug("Creating a ChannelGrabber API Harvester class...");
 
-			m_oCfgRoot = EnvironmentConfiguration.Configuration.GetCurrentConfiguration<ConfigurationRoot>();
-
-			string sServiceUrl = LoadCfg<string>(ServiceUrlCfg, "service URL");
-
-			m_nSleepTime = 1000 * LoadCfg<int>(SleepTimeCfg, "sleep time");
-
-			m_nWaitCycleCount = LoadCfg<ulong>(CycleCountCfg, "wait cycle count");
+			string sServiceUrl = configurationVariablesRepository.GetByName("ChannelGrabberServiceUrl");
+			m_nSleepTime = 1000 * configurationVariablesRepository.GetByNameAsInt("ChannelGrabberSleepTime");
+			m_nWaitCycleCount = (ulong)configurationVariablesRepository.GetByNameAsInt("ChannelGrabberCycleCount");
 
 			Debug("Validating ChannelGrabber Service URL {0}", sServiceUrl);
 
@@ -524,41 +523,14 @@ Data: {3}
 		} // BuildOrdExpGeneratedRq
 
 		#endregion method BuildOrdExpGeneratedRq
-
-		#region method LoadCfg
-
-		private T LoadCfg<T>(string sParamName, string sDisplayName) {
-			if ((typeof (T) == typeof (int)) || (typeof (T) == typeof (ulong))) {
-				dynamic x = m_oCfgRoot.GetValue<T>(sParamName);
-
-				if (x < 1)
-					throw new ApiException("Bad configuration: failed to load " + sDisplayName);
-
-				return x;
-			} // if int
-
-			if (typeof (T) == typeof (string)) {
-				var s = m_oCfgRoot.GetValueWithDefault<T>(sParamName, string.Empty);
-
-				if (s.ToString() == string.Empty)
-					throw new ApiException("Bad configuration: failed to load " + sDisplayName);
-
-				return s;
-			} // if string
-
-			throw new ApiException("Unsupported configuration type.");
-		} // LoadCfg
-
-		#endregion method LoadCfg
-
+		
 		#region private fields
 
 		private readonly DBCustomer m_oCustomer;
 		private readonly AccountData m_oAccountData;
+		private ConfigurationVariablesRepository configurationVariablesRepository;
 
 		private RestClient m_oRestClient;
-
-		private ConfigurationRoot m_oCfgRoot;
 
 		private int m_nSleepTime;
 		private ulong m_nWaitCycleCount;

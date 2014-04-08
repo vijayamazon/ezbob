@@ -42,14 +42,6 @@
     <Reference Include="RestSharp">
       <HintPath>..\..\Lib\3rdparty\RestSharp\RestSharp.dll</HintPath>
     </Reference>
-    <Reference Include="Scorto.Configuration, Version=22.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Lib\Scorto.Core\Scorto.Configuration.dll</HintPath>
-    </Reference>
-    <Reference Include="Scorto.Configuration.Loader, Version=22.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Lib\Scorto.Core\Scorto.Configuration.Loader.dll</HintPath>
-    </Reference>
     <Reference Include="StructureMap">
       <HintPath>..\..\Lib\3rdparty\StructureMap\StructureMap.dll</HintPath>
     </Reference>
@@ -76,6 +68,10 @@
     <ProjectReference Include="..\..\Tools\EzbobUtils\Logger\Logger.csproj">
       <Project>{f92ca169-9532-4c4d-8d84-6f48ace5719c}</Project>
       <Name>Logger</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\NHibernateWrapper\NHibernateWrapper.csproj">
+      <Project>{dc706b41-2b3e-4082-b390-51aabac065d3}</Project>
+      <Name>NHibernateWrapper</Name>
     </ProjectReference>
     <ProjectReference Include="..\ChannelGrabberConfig\ChannelGrabberConfig.csproj">
       <Project>{8AD07DAA-3F09-4279-A390-17ACDE79B44F}</Project>
