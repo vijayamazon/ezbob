@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Repository;
-using EZBob.DatabaseLib.Model.Fraud;
-using EzBob.Web.Code;
-using log4net;
-using NHibernate;
-using NHibernate.Linq;
-using StructureMap;
-
-namespace FraudChecker
+﻿namespace FraudChecker
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Repository;
+	using EZBob.DatabaseLib.Model.Fraud;
+	using EzBob.Web.Code;
+	using log4net;
+	using NHibernate;
+	using NHibernate.Linq;
+	using StructureMap;
 	using System.Text.RegularExpressions;
 	using NHibernate.Criterion;
 
@@ -101,7 +100,7 @@ namespace FraudChecker
 		private void InternalLastNameRawPostcodeCheck(List<FraudDetection> fraudDetections, Customer customer, IEnumerable<Customer> customers)
 		{
 			var customerAddresses = customer.AddressInfo.AllAddresses.ToList();
-			var postcodes = customerAddresses.Select(a => a.Rawpostcode).ToList();
+			var postcodes = customerAddresses.Select(a => a.Rawpostcode).Where(rpc => rpc != null).ToList();
 
 			fraudDetections.AddRange(
 				from ca in customers.SelectMany(c => c.AddressInfo.AllAddresses).Where(address => postcodes.Contains(address.Rawpostcode))
@@ -111,9 +110,8 @@ namespace FraudChecker
 				select
 					Helper.CreateDetection("Customer Last Name, Raw Postcode", customer, ca.Customer,
 									"Customer Last Name, Raw Postcode",
-									null, string.Format("{0}: {1}", ca.Postcode, customer.PersonalInfo.Surname)));
+									null, string.Format("{0}: {1}", ca.Rawpostcode, customer.PersonalInfo.Surname)));
 		}
-
 
 		private void InternalPhoneFromMpCheck(ICollection<FraudDetection> fraudDetections, IEnumerable<Customer> customerPortion, Customer customer)
 		{
@@ -147,7 +145,6 @@ namespace FraudChecker
 						break;
 				}
 			}
-			var phonesArray = customerPhones.Values.Distinct().ToArray();
 
 			var mpPhoneDetections = new Dictionary<Customer, List<MpPhone>>();
 			foreach (var cd in customerPortion)
