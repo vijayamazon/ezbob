@@ -33,7 +33,6 @@ namespace EzBob.Web.Infrastructure
 	using Scorto.Configuration;
 	using NHibernateWrapper.Web;
 	using StructureMap.Configuration.DSL;
-	using FreeAgent.Config;
 
 	public class PluginWebRegistry : Registry
 	{
@@ -63,7 +62,6 @@ namespace EzBob.Web.Infrastructure
 			For<IEbayMarketplaceTypeConnection>().Use(localRoot.eBayConfig);
 			For<IEbayMarketplaceSettings>().Use(localRoot.eBaySettings);
 			For<IAmazonMarketPlaceTypeConnection>().Use(localRoot.AmazonConfig);
-			For<IFreeAgentConfig>().Singleton().Use(localRoot.FreeAgentConfig);
 			For<IServiceEndPointFactory>().Use(new ServiceEndPointFactory());
 			For<IDbStringRepository>().Use<DbStringRepository>();
 			For<EzBobConfigRoot>().Use(c => localRoot);

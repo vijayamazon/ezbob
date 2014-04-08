@@ -5,15 +5,13 @@
     using System.IO;
     using System.Net;
     using System.Web.Script.Serialization;
-    using Config;
     using EZBob.DatabaseLib.DatabaseWrapper.Order;
     using RestSharp;
 	using log4net;
-	using StructureMap;
 
 	public class FreeAgentConnector
 	{
-		private static readonly IFreeAgentConfig config = ObjectFactory.GetInstance<IFreeAgentConfig>();
+		private static readonly FreeAgentConfig config = new FreeAgentConfig();
 		private static readonly ILog log = LogManager.GetLogger(typeof(FreeAgentConnector));
 
 		private static bool TryToDeserialize<T>(out T deserializedResult, string responseContent) where T : class

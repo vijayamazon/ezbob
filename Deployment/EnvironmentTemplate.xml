@@ -5,19 +5,6 @@
 	<property name="TaboolaPixelEnabled" value="False" />	
 	<property name="TradeTrackerPixelEnabled" value="False" />
 	<property name="RefreshYodleeEnabled" value="False" />	
-    <property name="FreeAgentConfig" value ="FreeAgent"/>		
-	<module id="FreeAgent">
-		<property name="OAuthIdentifier" value="1BQ5Np7Wjmiq0YEl3Gn-tw" />
-		<property name="OAuthSecret" value="k84-Inqfs408L8JoHIvfYw" />
-		<property name="OAuthAuthorizationEndpoint" value="https://api.freeagent.com/v2/approve_app" />
-		<property name="OAuthTokenEndpoint" value="https://api.freeagent.com/v2/token_endpoint" />
-		<property name="InvoicesRequest" value="https://api.freeagent.com/v2/invoices?nested_invoice_items=true" />
-		<property name="InvoicesRequestMonthPart" value="&amp;view=last_{0}_months" />
-		<property name="CompanyRequest" value="https://api.freeagent.com/v2/company" />
-		<property name="UsersRequest" value="https://api.freeagent.com/v2/users" />
-		<property name="ExpensesRequest" value="https://api.freeagent.com/v2/expenses" />
-		<property name="ExpensesRequestDatePart" value="?from_date={0}-{1}-{2}" />
-	</module>
 
     <property name="DBPasswordKey" value="D9C52449F5AA345610C4BEC59EDE3C6CD42DEAE81BA9A50D0CF21ECB0AE5512AC9231FC2709FA14D2C7D04196D5CD3275075E6AD6A5769C33EAB59BDE6273C94" />
     <property name="AppCulture" value="${culture}" />

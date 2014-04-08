@@ -37,10 +37,6 @@
     <Reference Include="RestSharp">
       <HintPath>..\..\Lib\3rdparty\RestSharp\RestSharp.dll</HintPath>
     </Reference>
-    <Reference Include="Scorto.Configuration, Version=22.0.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Lib\Scorto.Core\Scorto.Configuration.dll</HintPath>
-    </Reference>
     <Reference Include="StructureMap">
       <HintPath>..\..\Lib\3rdparty\StructureMap\StructureMap.dll</HintPath>
     </Reference>
@@ -55,10 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccessTokenContainer.cs" />
-    <Compile Include="Config\IFreeAgentConfig.cs" />
-    <Compile Include="Config\FreeAgentConfig.cs" />
-    <Compile Include="Config\FreeAgentEnvConnectionConfig.cs" />
-    <Compile Include="Config\FreeAgentConfigRoot.cs" />
+    <Compile Include="FreeAgentConfig.cs" />
     <Compile Include="FreeAgentExpenseAggregator.cs" />
     <Compile Include="FreeAgentUsers.cs" />
     <Compile Include="FreeAgentCompany.cs" />
@@ -77,6 +70,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\NHibernateWrapper\NHibernateWrapper.csproj">
+      <Project>{DC706B41-2B3E-4082-B390-51AABAC065D3}</Project>
+      <Name>NHibernateWrapper</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CommonLib\CommonLib.csproj">
       <Project>{aedbfbbd-ba7d-4582-afca-6ecf8af33c98}</Project>
       <Name>CommonLib</Name>

@@ -13,7 +13,6 @@
 	using eBayLib.Config;
 	using Scorto.Configuration;
 	using StructureMap.Configuration.DSL;
-	using FreeAgent.Config;
 
     public class EzBobRegistry : Registry
 	{
@@ -29,7 +28,6 @@
 				For<IEbayMarketplaceSettings>().Use( ezBobConfigRoot.eBaySettings );
 				For<IAmazonMarketPlaceTypeConnection>().Use( ezBobConfigRoot.AmazonConfig);
 				For<IAmazonMarketplaceSettings>().Use(ezBobConfigRoot.AmazonSetings);
-				For<IFreeAgentConfig>().Singleton().Use(ezBobConfigRoot.FreeAgentConfig);
 			}
 			var teraPeakConfigRoot = EnvironmentConfiguration.Configuration.GetCurrentConfiguration<TeraPeakConfigRoot>();
 			if ( ezBobConfigRoot != null )

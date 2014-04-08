@@ -1,6 +1,5 @@
 namespace EzBob.Configuration
 {
-	using FreeAgent.Config;
 	using AmazonServiceLib.Config;
 	using PayPalServiceLib;
 	using eBayLib.Config;
@@ -38,10 +37,5 @@ namespace EzBob.Configuration
         {
             get { return GetConfiguration<AmazonEvnSettings>("AmazonSetings"); }
         }
-
-		public IFreeAgentConfig FreeAgentConfig
-		{
-			get { return GetConfiguration<FreeAgentEnvConnectionConfig>("FreeAgentConfig"); }
-		}
     }
 }
