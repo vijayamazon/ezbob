@@ -439,6 +439,7 @@ namespace EzBob.Web.Controllers {
 					CustomerInviteFriend = new List<CustomerInviteFriend>(),
 					PersonalInfo = new PersonalInfo { MobilePhone = mobilePhone, },
 					TrustPilotStatus = _helper.TrustPilotStatusRepository.Find(TrustPilotStauses.Nether),
+					GreetingMailSentDate = DateTime.UtcNow,
 				};
 
 				_log.DebugFormat("Customer ({0}): wizard step has been updated to: {1}", customer.Id, (int)WizardStepType.SignUp);
