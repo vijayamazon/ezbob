@@ -1,5 +1,6 @@
 ﻿@using EzBob.Web.Infrastructure
 @using EzBob.Web.Infrastructure.csrf
+@using Ezbob.Backend.Models
 @using Newtonsoft.Json
 @using SquishIt.Framework
 @using SquishIt.Mvc
@@ -399,7 +400,12 @@
 							<div class="aka-row">
 								<div class="aka-column">
 									<ul>
-										<li>@Html.ActionLink("Credit file release and consent", "DownloadFile", "BrokerHome", new { Area = "Broker", fid = "customer-consent", }, new { })</li>
+										@{
+											var aryFiles = ViewData[Constant.Broker.MarketingFiles] as FileDescription[];
+											foreach (FileDescription fd in aryFiles) {
+												<li>@Html.ActionLink(fd.DisplayName, "DownloadFile", "BrokerHome", new { Area = "Broker", fid = fd.FileID, }, new {})</li>
+											}
+										}
 									</ul>
 								</div>
 							</div>

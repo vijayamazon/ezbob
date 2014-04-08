@@ -195,6 +195,7 @@ namespace EzBob.Web.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.BrokerCustomerFileContentsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.BrokerLeadDetailsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.BrokerTermsActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.FileListActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.CrmLookupsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.QuickOfferActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(EzBob.Web.EzServiceReference.WizardConfigsActionResult))]
@@ -609,6 +610,29 @@ namespace EzBob.Web.EzServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="FileListActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class FileListActionResult : EzBob.Web.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private Ezbob.Backend.Models.FileDescription[] FilesField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public Ezbob.Backend.Models.FileDescription[] Files {
+            get {
+                return this.FilesField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.FilesField, value) != true)) {
+                    this.FilesField = value;
+                    this.RaisePropertyChanged("Files");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="CrmLookupsActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
     [System.SerializableAttribute()]
     public partial class CrmLookupsActionResult : EzBob.Web.EzServiceReference.ActionResult {
@@ -882,6 +906,9 @@ namespace EzBob.Web.EzServiceReference {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="EzServiceReference.IEzService")]
     public interface IEzService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CreateUnderwriter", ReplyAction="http://tempuri.org/IEzService/CreateUnderwriterResponse")]
+        EzBob.Web.EzServiceReference.ActionMetaData CreateUnderwriter(string name, string password, string role);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetExperianConsumerCacheDate", ReplyAction="http://tempuri.org/IEzService/GetExperianConsumerCacheDateResponse")]
         EzBob.Web.EzServiceReference.DateTimeActionResult GetExperianConsumerCacheDate(int[] ids);
         
@@ -968,6 +995,9 @@ namespace EzBob.Web.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerUpdatePassword", ReplyAction="http://tempuri.org/IEzService/BrokerUpdatePasswordResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData BrokerUpdatePassword(string sContactEmail, string sOldPassword, string sNewPassword, string sNewPassword2);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLoadMarketingFiles", ReplyAction="http://tempuri.org/IEzService/BrokerLoadMarketingFilesResponse")]
+        EzBob.Web.EzServiceReference.FileListActionResult BrokerLoadMarketingFiles();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CaisGenerate", ReplyAction="http://tempuri.org/IEzService/CaisGenerateResponse")]
         EzBob.Web.EzServiceReference.ActionMetaData CaisGenerate(int underwriterId);
@@ -1139,9 +1169,6 @@ namespace EzBob.Web.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCustomerStatusRefreshInterval", ReplyAction="http://tempuri.org/IEzService/GetCustomerStatusRefreshIntervalResponse")]
         EzBob.Web.EzServiceReference.IntActionResult GetCustomerStatusRefreshInterval();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CreateUnderwriter", ReplyAction="http://tempuri.org/IEzService/CreateUnderwriterResponse")]
-        EzBob.Web.EzServiceReference.ActionMetaData CreateUnderwriter(string name, string password, string role);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -1169,6 +1196,10 @@ namespace EzBob.Web.EzServiceReference {
         
         public EzServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
+        }
+        
+        public EzBob.Web.EzServiceReference.ActionMetaData CreateUnderwriter(string name, string password, string role) {
+            return base.Channel.CreateUnderwriter(name, password, role);
         }
         
         public EzBob.Web.EzServiceReference.DateTimeActionResult GetExperianConsumerCacheDate(int[] ids) {
@@ -1285,6 +1316,10 @@ namespace EzBob.Web.EzServiceReference {
         
         public EzBob.Web.EzServiceReference.ActionMetaData BrokerUpdatePassword(string sContactEmail, string sOldPassword, string sNewPassword, string sNewPassword2) {
             return base.Channel.BrokerUpdatePassword(sContactEmail, sOldPassword, sNewPassword, sNewPassword2);
+        }
+        
+        public EzBob.Web.EzServiceReference.FileListActionResult BrokerLoadMarketingFiles() {
+            return base.Channel.BrokerLoadMarketingFiles();
         }
         
         public EzBob.Web.EzServiceReference.ActionMetaData CaisGenerate(int underwriterId) {
@@ -1513,10 +1548,6 @@ namespace EzBob.Web.EzServiceReference {
         
         public EzBob.Web.EzServiceReference.IntActionResult GetCustomerStatusRefreshInterval() {
             return base.Channel.GetCustomerStatusRefreshInterval();
-        }
-        
-        public EzBob.Web.EzServiceReference.ActionMetaData CreateUnderwriter(string name, string password, string role) {
-            return base.Channel.CreateUnderwriter(name, password, role);
         }
     }
 }

@@ -115,6 +115,9 @@
 		[OperationContract]
 		ActionMetaData BrokerUpdatePassword(string sContactEmail, string sOldPassword, string sNewPassword, string sNewPassword2);
 
+		[OperationContract]
+		FileListActionResult BrokerLoadMarketingFiles();
+
 		#endregion Broker
 
 		#region CAIS

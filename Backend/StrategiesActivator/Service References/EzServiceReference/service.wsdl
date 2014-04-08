@@ -112,6 +112,12 @@
   <wsdl:message name="IEzServiceAdmin_WriteToLog_OutputMessage">
     <wsdl:part name="parameters" element="tns:WriteToLogResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_CreateUnderwriter_InputMessage">
+    <wsdl:part name="parameters" element="tns:CreateUnderwriter" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CreateUnderwriter_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CreateUnderwriterResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_GetExperianConsumerCacheDate_InputMessage">
     <wsdl:part name="parameters" element="tns:GetExperianConsumerCacheDate" />
   </wsdl:message>
@@ -285,6 +291,12 @@
   </wsdl:message>
   <wsdl:message name="IEzService_BrokerUpdatePassword_OutputMessage">
     <wsdl:part name="parameters" element="tns:BrokerUpdatePasswordResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerLoadMarketingFiles_InputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerLoadMarketingFiles" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerLoadMarketingFiles_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerLoadMarketingFilesResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_CaisGenerate_InputMessage">
     <wsdl:part name="parameters" element="tns:CaisGenerate" />
@@ -628,12 +640,6 @@
   <wsdl:message name="IEzService_GetCustomerStatusRefreshInterval_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetCustomerStatusRefreshIntervalResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_CreateUnderwriter_InputMessage">
-    <wsdl:part name="parameters" element="tns:CreateUnderwriter" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_CreateUnderwriter_OutputMessage">
-    <wsdl:part name="parameters" element="tns:CreateUnderwriterResponse" />
-  </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/Shutdown" message="tns:IEzServiceAdmin_Shutdown_InputMessage" />
@@ -657,6 +663,10 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IEzService">
+    <wsdl:operation name="CreateUnderwriter">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CreateUnderwriter" message="tns:IEzService_CreateUnderwriter_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CreateUnderwriterResponse" message="tns:IEzService_CreateUnderwriter_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="GetExperianConsumerCacheDate">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetExperianConsumerCacheDate" message="tns:IEzService_GetExperianConsumerCacheDate_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetExperianConsumerCacheDateResponse" message="tns:IEzService_GetExperianConsumerCacheDate_OutputMessage" />
@@ -772,6 +782,10 @@
     <wsdl:operation name="BrokerUpdatePassword">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerUpdatePassword" message="tns:IEzService_BrokerUpdatePassword_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerUpdatePasswordResponse" message="tns:IEzService_BrokerUpdatePassword_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BrokerLoadMarketingFiles">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerLoadMarketingFiles" message="tns:IEzService_BrokerLoadMarketingFiles_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerLoadMarketingFilesResponse" message="tns:IEzService_BrokerLoadMarketingFiles_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="CaisGenerate">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CaisGenerate" message="tns:IEzService_CaisGenerate_InputMessage" />
@@ -1001,10 +1015,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCustomerStatusRefreshInterval" message="tns:IEzService_GetCustomerStatusRefreshInterval_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetCustomerStatusRefreshIntervalResponse" message="tns:IEzService_GetCustomerStatusRefreshInterval_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="CreateUnderwriter">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CreateUnderwriter" message="tns:IEzService_CreateUnderwriter_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CreateUnderwriterResponse" message="tns:IEzService_CreateUnderwriter_OutputMessage" />
-    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
     <wsp:PolicyReference URI="#NetTcpBinding_IEzServiceAdmin_policy">
@@ -1060,6 +1070,15 @@
     <wsp:PolicyReference URI="#NetTcpBinding_IEzService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="CreateUnderwriter">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/CreateUnderwriter" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="GetExperianConsumerCacheDate">
       <soap12:operation soapAction="http://tempuri.org/IEzService/GetExperianConsumerCacheDate" style="document" />
       <wsdl:input>
@@ -1314,6 +1333,15 @@
     </wsdl:operation>
     <wsdl:operation name="BrokerUpdatePassword">
       <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerUpdatePassword" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BrokerLoadMarketingFiles">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerLoadMarketingFiles" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -1827,15 +1855,6 @@
     </wsdl:operation>
     <wsdl:operation name="GetCustomerStatusRefreshInterval">
       <soap12:operation soapAction="http://tempuri.org/IEzService/GetCustomerStatusRefreshInterval" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="CreateUnderwriter">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/CreateUnderwriter" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

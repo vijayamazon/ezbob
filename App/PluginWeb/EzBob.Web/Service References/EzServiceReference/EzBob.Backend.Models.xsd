@@ -92,4 +92,21 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="BrokerCustomerFile" nillable="true" type="tns:BrokerCustomerFile" />
+  <xs:complexType name="ArrayOfFileDescription">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="FileDescription" nillable="true" type="tns:FileDescription" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfFileDescription" nillable="true" type="tns:ArrayOfFileDescription" />
+  <xs:complexType name="FileDescription">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="DisplayName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="FileID" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="FileName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ID" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MimeType" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SortPosition" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="FileDescription" nillable="true" type="tns:FileDescription" />
 </xs:schema>
