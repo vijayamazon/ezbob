@@ -3,7 +3,6 @@
 	using System;
 	using System.Net;
 	using System.Net.Mail;
-	using Scorto.Configuration;
 	using log4net.Appender;
 
     public class MailAppenderWithSSL : SmtpAppender
@@ -17,7 +16,7 @@
                     Host = SmtpHost,
                     Port = Port,
                     DeliveryMethod = SmtpDeliveryMethod.Network,
-                    Credentials = new NetworkCredential(Username, Password.Decrypt()),
+                    Credentials = new NetworkCredential(Username, Password),
                     EnableSsl = true
                 };
 
