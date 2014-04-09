@@ -32,7 +32,7 @@ EzBob.AddressModel = Backbone.Model.extend({
 			rootPath = '/';
 		} // if
 
-		return rootPath + 'Postcode/GetFullAddressFromPostCode?id=' + this.get('id');
+		return rootPath + 'Postcode/GetFullAddressFromId?id=' + this.get('id');
 	}, // url
 
 	initialize: function() {

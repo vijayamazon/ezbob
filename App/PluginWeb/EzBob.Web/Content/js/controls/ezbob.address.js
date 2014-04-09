@@ -6,7 +6,7 @@ EzBob.Popup = Backbone.View.extend({
 		this.defaultPostcode = options.postcode;
 		this.uiEventControlIdPrefix = options.uiEventControlIdPrefix;
 
-		if (window.gRootPath == undefined) {
+		if (!window.gRootPath) {
 			this.rootPath = '/';
 			console.warn('window.gRootPath is not initialized!');
 		}
@@ -31,8 +31,6 @@ EzBob.Popup = Backbone.View.extend({
 			});
 		} // if
 
-		EzBob.UiAction.registerView(this);
-
 		this.$el.dialog({
 			autoOpen: true,
 			title: 'Select address',
@@ -44,6 +42,8 @@ EzBob.Popup = Backbone.View.extend({
 			minHeight: 580,
 			closeOnEscape: true,
 		});
+
+		this.setDialogueButtons('init');
 
 		$('body, .ui-widget-overlay').addClass('address-dialog-no-overflow');
 
@@ -59,15 +59,25 @@ EzBob.Popup = Backbone.View.extend({
 		return this;
 	}, // render
 
-	setDialogButtons: function(sMode) {
+	setDialogueButtons: function(sMode) {
 		var self = this;
 
 		var oButtons = [];
 
 		switch (sMode) {
+		case 'init':
+			oButtons.push({
+				text: 'Cancel',
+				'class': 'addr-button green',
+				click: function() { self.PostCodeBtnCancel(); },
+				'ui-event-control-id': this.uiEventControlIdPrefix + '-address-form:address-cancelled-early',
+			});
+
+			break;
+
 		case 'base':
 		case 'selector':
-			if (sMode == 'selector') {
+			if (sMode === 'selector') {
 				oButtons.push({
 					text: 'Not found',
 					'class': 'addr-button green',
@@ -93,7 +103,7 @@ EzBob.Popup = Backbone.View.extend({
 
 			break;
 
-		case 'notfound':
+		case 'manual-input':
 			oButtons.push({
 				text: 'Cancel',
 				'class': 'addr-button green',
@@ -119,7 +129,7 @@ EzBob.Popup = Backbone.View.extend({
 		oWidget.find('.ui-dialog-buttonpane').addClass('address-dialog-buttonpane');
 
 		EzBob.UiAction.registerView(this);
-	}, // setDialogButtons
+	}, // setDialogueButtons
 
 	events: {
 		'change .postCode': 'SearchByPostcode',
@@ -259,7 +269,7 @@ EzBob.Popup = Backbone.View.extend({
 	PostCodeBtnOk: function () {
 		var id = this.addressList.attr('data');
 
-		if (!id || id == 0) {
+		if (!id || (id === '0')) {
 			this.addressList.css('border', '1px solid red');
 			return;
 		} // if
@@ -269,7 +279,7 @@ EzBob.Popup = Backbone.View.extend({
 			return;
 		} // if
 
-		var addressModel = null;
+		var addressModel;
 
 		var oDummyResults = $('.dummy_address_search_result');
 
@@ -337,9 +347,17 @@ EzBob.Popup = Backbone.View.extend({
 		this.$el.find('.address-selector-block').fadeOut('slow', function() { self.initManualInputForm(); });
 	}, // PostCodeBtnNotFound
 
+	showAddressSelector: function() {
+		var self = this;
+
+		this.$el.find('.address-list-loading-block').fadeOut('slow', function() {
+			self.$el.find('.address-selector-block').fadeIn('slow').removeClass('hide');
+		});
+	}, // showAddressSelector
+
 	initManualInputForm: function() {
 		this.$el.find('.address-input-block').fadeIn('slow').removeClass('hide');
-		this.setDialogButtons('notfound');
+		this.setDialogueButtons('manual-input');
 		this.$el.dialog('option', 'title', 'Enter address manually');
 
 		this.$el.find('.zipcode').val(this.$el.find('.postCode').val().toUpperCase()).change();
@@ -365,6 +383,8 @@ EzBob.Popup = Backbone.View.extend({
 		this.$el.find('.postCodeBtn').attr('disabled', 'disabled');
 
 		var oDoAlways = function () {
+			that.showAddressSelector();
+
 			that.addressList.trigger('liszt:updated');
 			that.$el.find('.postCodeBtn').removeAttr('disabled');
 
@@ -378,8 +398,8 @@ EzBob.Popup = Backbone.View.extend({
 		if (this.uiEventControlIdPrefix)
 			sAddressEntryUiEventControlID = this.uiEventControlIdPrefix + '-' + sAddressEntryUiEventControlID;
 
-		var oOnSuccess = function (oRecords) {
-			$.each(oRecords, function (i, val) {
+		var oOnSuccess = function (oRecordList) {
+			$.each(oRecordList, function (i, val) {
 				that.addressList.append(
 					$('<li></li>')
 						.addClass(val.Id === 'NOTFOUND' ? 'not-found-item' : '')
@@ -403,12 +423,12 @@ EzBob.Popup = Backbone.View.extend({
 			return;
 		} // if dummy
 
-		var request = $.getJSON(this.rootPath + 'Postcode/GetAddressFromPostCode', { postCode: postCode });
+		var request = $.getJSON(this.rootPath + 'Postcode/GetAddressListFromPostCode', { postCode: postCode });
 
 		request.done(function (data) {
-			if (data.Success != undefined && (!data.Success || data.Recordcount == 0)) {
+			if (!data.Success || (data.Recordcount === 0)) {
 				that.addressList.append($('<li></li>').val(0).html('Not found'));
-				that.setDialogButtons('base');
+				that.setDialogueButtons('base');
 
 				return;
 			} // if
@@ -418,14 +438,14 @@ EzBob.Popup = Backbone.View.extend({
 				L: 'Address is not listed',
 			});
 
-			that.setDialogButtons('selector');
+			that.setDialogueButtons('selector');
 
 			oOnSuccess(data.Records);
 		}); // on success
 
 		request.fail(function () {
 			that.addressList.append($('<li></li>').val(0).html('Not found'));
-			that.setDialogButtons('base');
+			that.setDialogueButtons('base');
 
 			that.addressList.attr('disabled', 'disabled');
 			that.$el.find('.postCodeBtnOk').attr('disabled', 'disabled').addClass('disabled');
@@ -466,7 +486,7 @@ EzBob.AddressView = Backbone.View.extend({
 		this.$el.find('.btn').toggle(this.max > this.model.length);
 		this.$el.find('.addAddressContainer').toggle(this.max > this.model.length);
 		this.postcodeInput = this.$el.find('.addAddressInput');
-		this.showClear(this.isShowClear);
+		this.showClear();
 
 		var sInitialStatus = (this.model && this.model.length) ? 'ok' : '';
 
@@ -494,8 +514,8 @@ EzBob.AddressView = Backbone.View.extend({
 		'change .addAddressInput': 'addAddressInputChanged'
 	},
 
-	showClear: function (isShow) {
-		if (isShow || isShow == undefined) {
+	showClear: function () {
+		if (this.isShowClear || (this.isShowClear === undefined)) {
 			this.$el.find('.removeAddress').show();
 		} else {
 			this.$el.find('.removeAddress').hide();

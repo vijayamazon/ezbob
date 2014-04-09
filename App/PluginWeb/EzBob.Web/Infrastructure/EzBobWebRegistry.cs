@@ -124,7 +124,6 @@ namespace EzBob.Web.Infrastructure
 			For<ILoanChangesHistoryRepository>().Use<LoanChangesHistoryRepository>();
 			For<IPacNetBalanceRepository>().Use<PacNetBalanceRepository>();
 			For<IPacNetManualBalanceRepository>().Use<PacNetManualBalanceRepository>();
-			For<IPostCodeFacade>().Use<SimplyPostCodeFacade>();
 			For<IDiscountPlanRepository>().Use<DiscountPlanRepository>();
 			For<ICurrencyConvertor>().Use<CurrencyConvertor>();
 			For<IMail>().Use<Mail>();
