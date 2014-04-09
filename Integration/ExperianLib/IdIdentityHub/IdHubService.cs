@@ -1,36 +1,44 @@
-﻿using System;
-using System.Security.Authentication;
-using System.Text.RegularExpressions;
-using System.Xml;
-using EZBob.DatabaseLib.Repository;
-using ExperianLib.Web_References.IDHubService;
-using EzBob.Configuration;
-using StructureMap;
-using log4net;
-using AddressType = ExperianLib.Web_References.IDHubService.AddressType;
-using GenderType = ExperianLib.Web_References.IDHubService.GenderType;
-
-namespace ExperianLib.IdIdentityHub
+﻿namespace ExperianLib.IdIdentityHub
 {
+	using System;
+	using System.Security.Authentication;
+	using System.Text.RegularExpressions;
+	using System.Xml;
 	using EZBob.DatabaseLib.Model;
+	using EZBob.DatabaseLib.Repository;
+	using Web_References.IDHubService;
+	using StructureMap;
+	using log4net;
+	using AddressType = Web_References.IDHubService.AddressType;
+	using GenderType = Web_References.IDHubService.GenderType;
 
 	public class IdHubService
     {
-        readonly ExperianIntegrationParams _config;
         private static readonly ILog Log = LogManager.GetLogger(typeof(IdHubService));
-        private readonly ExperianBankCacheRepository _bankCacheRepository;
+		private readonly ExperianBankCacheRepository _bankCacheRepository;
+		private string uIdCertificateThumb;
+		private string authTokenServiceIdHub;
+		private string idHubService;
 
         public IdHubService()
         {
-            _config = ConfigurationRootBob.GetConfiguration().Experian;
             _bankCacheRepository = ObjectFactory.GetInstance<ExperianBankCacheRepository>();
+	        GetConfigs();
         }
 
-        public IdHubService(ExperianIntegrationParams config, ExperianBankCacheRepository bankCacheRepository)
+		public IdHubService(ExperianBankCacheRepository bankCacheRepository)
         {
-            _config = config;
 			_bankCacheRepository = bankCacheRepository;
+			GetConfigs();
         }
+
+		private void GetConfigs()
+		{
+			var configurationVariablesRepository = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
+			uIdCertificateThumb = configurationVariablesRepository.GetByName("ExperianUIdCertificateThumb");
+			authTokenServiceIdHub = configurationVariablesRepository.GetByName("ExperianAuthTokenServiceIdHub");
+			idHubService = configurationVariablesRepository.GetByName("ExperianIdHubService");
+		}
 
         //-----------------------------------------------------------------------------------
         public AuthenticationResults Authenticate(string foreName, string middleName, string surname, string gender, DateTime birth, string addressLine1, string addressLine2, string addressLine3, string town, string county, string postCode, int customerId, bool checkInCacheOnly = false, string xmlForDebug = "")
@@ -502,8 +510,8 @@ namespace ExperianLib.IdIdentityHub
         private EndpointService InitService()
         {
             Log.InfoFormat("Getting auth token...");
-            Log.InfoFormat("Will use certificate: {0} and URL: {1}", _config.UIdCertificateThumb, _config.AuthTokenServiceIdHub);
-            var service = new AuthToken(_config.UIdCertificateThumb, "CertificateAuthentication", _config.AuthTokenServiceIdHub);
+            Log.InfoFormat("Will use certificate: {0} and URL: {1}", uIdCertificateThumb, authTokenServiceIdHub);
+            var service = new AuthToken(uIdCertificateThumb, "CertificateAuthentication", authTokenServiceIdHub);
             var token = service.GetAuthToken();
             if (token == null)
             {
@@ -515,8 +523,8 @@ namespace ExperianLib.IdIdentityHub
             var ctx = ws.RequestSoapContext;
             ctx.Security.Tokens.Add(token);
             ctx.Security.MustUnderstand = false;
-            ws.ClientCertificates.Add(service.GetCertificate(_config.UIdCertificateThumb));
-            ws.Url = _config.IdHubService;
+            ws.ClientCertificates.Add(service.GetCertificate(uIdCertificateThumb));
+            ws.Url = idHubService;
             return ws;
         }
     }

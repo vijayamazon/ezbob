@@ -11,7 +11,6 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Experian;
 	using Dictionaries;
-	using EzBob.Configuration;
 	using EzBobIntegration.Web_References.Consumer;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -67,10 +66,11 @@
 		#region constructor
 
 		public ConsumerService() {
-			_config = ConfigurationRootBob.GetConfiguration().Experian;
 			_repo = ObjectFactory.GetInstance<ExperianDataCacheRepository>();
 			m_oRetryer = new SqlRetryer(oLog: new SafeILog(Log));
 			configurationVariablesRepository = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
+
+			interactiveMode = configurationVariablesRepository.GetByName("ExperianInteractiveMode");
 		} // constructor
 
 		#endregion constructor
@@ -270,7 +270,7 @@
 					AuthPlusRequired = "Y",
 					FullFBLRequired = "Y",
 					DetectRequired = "N",
-					InteractiveMode = _config.InteractiveMode
+					InteractiveMode = interactiveMode
 				}
 			};
 
@@ -423,10 +423,11 @@
 
 		#region properties
 
-		private readonly ExperianIntegrationParams _config;
 		private readonly ExperianDataCacheRepository _repo;
 		private readonly SqlRetryer m_oRetryer;
 		private readonly ConfigurationVariablesRepository configurationVariablesRepository;
+		private static readonly ILog Log = LogManager.GetLogger(typeof(ConsumerService));
+		private readonly string interactiveMode;
 
 		#endregion properties
 
@@ -480,9 +481,7 @@
 		} // TryRead
 
 		#endregion method TryRead
-
-		private static readonly ILog Log = LogManager.GetLogger(typeof(ConsumerService));
-
+		
 		#endregion static
 
 		#endregion private

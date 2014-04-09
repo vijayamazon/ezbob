@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
-using EzBob.Configuration;
-using EzBobIntegration.Web_References.ExpAuth;
-
-namespace ExperianLib
+﻿namespace ExperianLib
 {
-    public class AuthToken
+	using System;
+	using System.Collections.Generic;
+	using System.Security.Cryptography.X509Certificates;
+	using EzBobIntegration.Web_References.ExpAuth;
+	using EZBob.DatabaseLib.Model;
+	using StructureMap;
+
+	public class AuthToken
     {
-        private readonly ExperianIntegrationParams _config;
         private readonly Dictionary<string, X509Certificate2> _certificateCache;
         private readonly string _certificateToUse;
         private string _url;
@@ -16,10 +16,18 @@ namespace ExperianLib
 
         public AuthToken(string certificateToUse, string authLevels, string url = null)
         {
-            _config = ConfigurationRootBob.GetConfiguration().Experian;
             _certificateCache = new Dictionary<string, X509Certificate2>();
             _certificateToUse = certificateToUse;
-            _url = url ?? _config.AuthTokenService;
+			if (url != null)
+			{
+				_url = url;
+			}
+			else
+			{
+				var configurationVariablesRepository = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
+				_url = configurationVariablesRepository.GetByName("ExperianAuthTokenService");
+			}
+
             _autLevels = authLevels;
         }
 

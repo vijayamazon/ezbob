@@ -17,11 +17,6 @@ namespace EzBob.Configuration
             get { return GetConfiguration<PayPointConfiguration>("PayPoint"); }
         }
 
-        public virtual ExperianIntegrationParams Experian
-        {
-            get { return GetConfiguration<ExperianIntegrationParams>("Experian"); }
-        }
-
 		public virtual YodleeEnvConnectionConfig YodleeConfig
 		{
 			get { return GetConfiguration<YodleeEnvConnectionConfig>("YodleeConfig"); }

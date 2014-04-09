@@ -1,28 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Xml.Linq;
-using System.Xml.Serialization;
-using System.Xml.XPath;
-using ExperianLib;
-using ExperianLib.Dictionaries;
-using ExperianLib.Ebusiness;
-using ExperianLib.IdIdentityHub;
-using EZBob.DatabaseLib.Model;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Repository;
-using EzBob.Web.Code;
-using EzBobIntegration.Web_References.Consumer;
-using NHibernate;
-using NHibernate.Linq;
-
-namespace EzBob.Web.Areas.Underwriter.Models
+﻿namespace EzBob.Web.Areas.Underwriter.Models
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Drawing;
+	using System.Globalization;
+	using System.IO;
+	using System.Linq;
+	using System.Xml.Linq;
+	using System.Xml.Serialization;
+	using System.Xml.XPath;
+	using ExperianLib;
+	using ExperianLib.Dictionaries;
+	using ExperianLib.Ebusiness;
+	using ExperianLib.IdIdentityHub;
+	using EZBob.DatabaseLib.Model;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Repository;
+	using Code;
+	using EzBobIntegration.Web_References.Consumer;
+	using NHibernate;
+	using NHibernate.Linq;
 	using System.Text;
-	using Configuration;
 	using log4net;
 
 	public class CreditBureauModelBuilder
@@ -30,7 +28,6 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		private readonly ISession _session;
 		private readonly ICustomerRepository _customers;
 		private readonly ConfigurationVariablesRepository _variablesRepository;
-		private readonly ExperianIntegrationParams _config;
 		private static readonly ILog Log = LogManager.GetLogger(typeof(CreditBureauModelBuilder));
 
 		public CreditBureauModelBuilder(ISession session, ICustomerRepository customers, ConfigurationVariablesRepository variablesRepository)
@@ -38,7 +35,6 @@ namespace EzBob.Web.Areas.Underwriter.Models
 			_session = session;
 			_customers = customers;
 			_variablesRepository = variablesRepository;
-			_config = ConfigurationRootBob.GetConfiguration().Experian;
 		}
 
 		public CreditBureauModel Create(EZBob.DatabaseLib.Model.Database.Customer customer, bool getFromLog = false, long? logId = null)

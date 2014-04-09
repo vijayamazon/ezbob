@@ -17,7 +17,7 @@ namespace ExperianLib.Tests
         [SetUp]
         public void SetUp()
         {
-            _service = new IdHubService(null, new ExperianBankCacheRepositoryFake());
+            _service = new IdHubService(new ExperianBankCacheRepositoryFake());
         }
 
         [Test]

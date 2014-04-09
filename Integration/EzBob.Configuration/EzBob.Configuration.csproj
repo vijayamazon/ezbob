@@ -60,7 +60,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ConfigurationRootBob.cs" />
-    <Compile Include="ExperianIntegrationParams.cs" />
     <Compile Include="PacNetConfiguration.cs" />
     <Compile Include="PayPointConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

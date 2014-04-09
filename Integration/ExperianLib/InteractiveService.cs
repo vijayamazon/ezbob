@@ -1,21 +1,26 @@
-﻿using System;
-using EzBob.Configuration;
-using EzBobIntegration.Web_References.Consumer;
-
-namespace ExperianLib
+﻿namespace ExperianLib
 {
-    public class InteractiveService
+	using System;
+	using EzBobIntegration.Web_References.Consumer;
+	using EZBob.DatabaseLib.Model;
+	using StructureMap;
+
+	public class InteractiveService
     {
-        readonly ExperianIntegrationParams _config;
+	    private readonly string certificateThumb;
+	    private readonly string interactiveService;
 
         public InteractiveService()
-        {
-            _config = ConfigurationRootBob.GetConfiguration().Experian;
-        }
+		{
+			var configurationVariablesRepository = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
+
+			certificateThumb = configurationVariablesRepository.GetByName("ExperianCertificateThumb");
+			interactiveService = configurationVariablesRepository.GetByName("ExperianInteractiveService");
+		}
 
         public OutputRoot GetOutput(Input inputData)
         {
-            var service = new AuthToken(_config.CertificateThumb, "CertificateAuthentication,IPAuthentication");
+            var service = new AuthToken(certificateThumb, "CertificateAuthentication,IPAuthentication");
             var token = service.GetAuthToken();
             if (token == null) return null;
 
@@ -23,8 +28,8 @@ namespace ExperianLib
             var ctx = ws.RequestSoapContext;
             ctx.Security.Tokens.Add(token);
             ctx.Security.MustUnderstand = false;
-            ws.ClientCertificates.Add(service.GetCertificate(_config.CertificateThumb));
-            ws.Url = _config.InteractiveService;
+            ws.ClientCertificates.Add(service.GetCertificate(certificateThumb));
+            ws.Url = interactiveService;
             try
             {
                 var callResult = ws.Interactive(new Root { Input = inputData });

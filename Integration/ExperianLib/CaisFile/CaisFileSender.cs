@@ -1,20 +1,19 @@
-﻿using System;
-using System.IO;
-using System.Net;
-using System.Net.Security;
-using System.Security.Cryptography.X509Certificates;
-using System.Web;
-using EZBob.DatabaseLib.Repository;
-using EzBob.Configuration;
-using StructureMap;
-using log4net;
-
-namespace ExperianLib.CaisFile
+﻿namespace ExperianLib.CaisFile
 {
-    public class CaisFileSender
+	using System;
+	using System.IO;
+	using System.Net;
+	using System.Net.Security;
+	using System.Security.Cryptography.X509Certificates;
+	using System.Web;
+	using EZBob.DatabaseLib.Repository;
+	using StructureMap;
+	using log4net;
+	using EZBob.DatabaseLib.Model;
+
+	public class CaisFileSender
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(CaisFileSender));
-        private readonly ExperianIntegrationParams _config;
         private readonly WebClient _client = new WebClient();
 
         public string Hostname { get; set; }
@@ -23,10 +22,11 @@ namespace ExperianLib.CaisFile
 
         public CaisFileSender()
         {
-            _config = ConfigurationRootBob.GetConfiguration().Experian;
-            Hostname = _config.SecureFtpHostName;
-            UserName = _config.SecureFtpUserName;
-            Password = _config.SecureFtpUserPassword;
+			var configurationVariablesRepository = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
+			Hostname = configurationVariablesRepository.GetByName("ExperianSecureFtpHostName");
+			UserName = configurationVariablesRepository.GetByName("ExperianSecureFtpUserName");
+			Password = configurationVariablesRepository.GetByName("ExperianSecureFtpUserPassword");
+
             ObjectFactory.GetInstance<CaisReportsHistoryRepository>();
         }
 

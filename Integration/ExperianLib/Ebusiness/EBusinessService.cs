@@ -9,7 +9,6 @@
 	using ApplicationMng.Repository;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
-	using EzBob.Configuration;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using StructureMap;
@@ -21,9 +20,9 @@
 		#region constructor
 
 		public EBusinessService() {
-			_config = ConfigurationRootBob.GetConfiguration().Experian;
 			m_oRetryer = new SqlRetryer(oLog: new SafeILog(Log));
 			configurationVariablesRepository = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
+			eSeriesUrl = configurationVariablesRepository.GetByName("ExperianESeriesUrl");
 		} // constructor
 
 		#endregion constructor
@@ -237,9 +236,9 @@
 		#region method MakeRequest
 
 		private string MakeRequest(string method, string contentType, string post) {
-			Log.DebugFormat("Request URL: {0} with data: {1}", _config.ESeriesUrl, post);
+			Log.DebugFormat("Request URL: {0} with data: {1}", eSeriesUrl, post);
 
-			var request = (HttpWebRequest)WebRequest.Create(_config.ESeriesUrl);
+			var request = (HttpWebRequest)WebRequest.Create(eSeriesUrl);
 			request.Method = method;
 			request.AllowAutoRedirect = false;
 
@@ -283,9 +282,9 @@
 		#region properties
 
 		private static readonly ILog Log = LogManager.GetLogger(typeof(EBusinessService));
-		private readonly ExperianIntegrationParams _config;
 		private readonly SqlRetryer m_oRetryer;
 		private readonly ConfigurationVariablesRepository configurationVariablesRepository;
+		private readonly string eSeriesUrl;
 
 		#endregion properties
 
