@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Scorto.RegistryScanner">
+      <HintPath>..\..\Scorto.Core\Scorto.RegistryScanner.dll</HintPath>
+    </Reference>
     <Reference Include="StructureMap">
       <HintPath>..\..\3rdparty\StructureMap\StructureMap.dll</HintPath>
     </Reference>

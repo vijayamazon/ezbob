@@ -1,8 +1,10 @@
-﻿namespace Scorto.RegistryScanner {
+﻿/*
+namespace Scorto.RegistryScanner {
 	public interface IRequiresConfigurationOnStartup {
 		void Configure();
 	} // interface
 } // namespace
+*/
 
 namespace Ezbob.RegistryScanner {
 	using System.Reflection;
@@ -16,7 +18,7 @@ namespace Ezbob.RegistryScanner {
 		public static void Register() {
 			ObjectFactory.Initialize((IInitializationExpression oInitExp) => oInitExp.Scan((IAssemblyScanner oScanner) => { 
 				oScanner.AssembliesFromApplicationBaseDirectory((Assembly oAssembly) => {
-					if (oAssembly.FullName.EndsWith("global::.(-1452036459)"))
+					if (oAssembly.FullName.EndsWith("Tests"))
 						return false;
 
 					foreach (string sPrefix in ms_aryTypes)
@@ -26,9 +28,7 @@ namespace Ezbob.RegistryScanner {
 					return true;
 				});
 
-				oScanner.Exclude((System.Type oType) =>
-					oType.Name.StartsWith("global::.(-1452036439)") || oType.Name.EndsWith("global::.(-1452036439)")
-				);
+				oScanner.Exclude((System.Type oType) => oType.Name.StartsWith("Fake") || oType.Name.EndsWith("Fake"));
 
 				oScanner.LookForRegistries();
 
