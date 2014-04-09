@@ -12,11 +12,6 @@ namespace EzBob.Configuration
             get { return GetConfiguration<PacNetConfiguration>("PacNet"); }
         }
 
-        public virtual PayPointConfiguration PayPoint
-        {
-            get { return GetConfiguration<PayPointConfiguration>("PayPoint"); }
-        }
-
 		public virtual YodleeEnvConnectionConfig YodleeConfig
 		{
 			get { return GetConfiguration<YodleeEnvConnectionConfig>("YodleeConfig"); }

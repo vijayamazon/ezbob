@@ -5,7 +5,12 @@ using StructureMap.Configuration.DSL;
 
 namespace PaymentServices.PacNet
 {
-    public class PacnetRegistry : Registry
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using NHibernate;
+	using NHibernateWrapper.NHibernate;
+	using StructureMap.Pipeline;
+
+	public class PacnetRegistry : Registry
     {
         public PacnetRegistry()
         {

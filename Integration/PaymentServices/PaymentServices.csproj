@@ -43,6 +43,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\3rdparty\Nhibernate\NHibernate.dll</HintPath>
     </Reference>
+    <Reference Include="NHibernate.Caches.SysCache2">
+      <HintPath>..\..\Lib\3rdparty\Nhibernate\NHibernate.Caches.SysCache2.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\Lib\3rdparty\NUnit\nunit.framework.dll</HintPath>
     </Reference>
@@ -51,6 +54,10 @@
     </Reference>
     <Reference Include="Scorto.Configuration.Loader">
       <HintPath>..\..\Lib\Scorto.Core\Scorto.Configuration.Loader.dll</HintPath>
+    </Reference>
+    <Reference Include="Scorto.RegistryScanner, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\App\PluginWeb\EzBob.Web\bin\Scorto.RegistryScanner.dll</HintPath>
     </Reference>
     <Reference Include="StructureMap">
       <HintPath>..\..\Lib\3rdparty\StructureMap\StructureMap.dll</HintPath>

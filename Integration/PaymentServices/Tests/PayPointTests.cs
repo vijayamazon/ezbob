@@ -1,28 +1,39 @@
-﻿using System;
-using EzBob.Configuration;
-using NUnit.Framework;
-using PaymentServices.PayPoint;
-using Scorto.Configuration;
-using Scorto.Configuration.Loader;
-
-namespace PaymentServices.Tests
+﻿namespace PaymentServices.Tests
 {
+	using System;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using NHibernate;
+	using NHibernateWrapper.NHibernate;
+	using NUnit.Framework;
+	using PayPoint;
+	using Scorto.RegistryScanner;
+	using StructureMap;
+	using StructureMap.Pipeline;
+	using global::PayPoint;
+
 	// return money
 	class PayPointTests : BaseTest
 	{
-		private ConfigurationRootBob _bobconfig;
-		
 		[SetUp]
-		public void SetUp()
+		public void Setup()
 		{
-			EnvironmentConfigurationLoader.AppPathDummy = @"c:\EzBob\App\clients\Maven\maven.exe";
-			_bobconfig = EnvironmentConfiguration.Configuration.GetCurrentConfiguration<ConfigurationRootBob>();
+			NHibernateManager.FluentAssemblies.Add(typeof(ApplicationMng.Model.Application).Assembly);
+			NHibernateManager.FluentAssemblies.Add(typeof(Customer).Assembly);
+			NHibernateManager.FluentAssemblies.Add(typeof(PayPointDatabaseMarketPlace).Assembly);
+			Scanner.Register();
+			ObjectFactory.Configure(x =>
+			{
+				x.For<ISession>().LifecycleIs(new ThreadLocalStorageLifecycle()).Use(ctx => NHibernateManager.SessionFactory.OpenSession());
+				x.For<ISessionFactory>().Use(() => NHibernateManager.SessionFactory);
+				x.For<ILoanRepository>().Use<LoanRepository>();
+			});
 		}
 
 		[Test]
 		public void Test1()
 		{
-			PayPointApi papi = new PayPointApi(null, null, _bobconfig);
+			PayPointApi papi = new PayPointApi();
 			papi.RefundCard("Mr Cardholder", "4444333322221111", 50.99M, new DateTime(2015, 1, 1), "1", new DateTime(2009, 1, 1), "product=ezbob", "123", true);
 
 			string repo = papi.GetReport("CSV", "Date", DateTime.Now.ToString("yyyyMMdd"), "GBP");
@@ -40,7 +51,7 @@ namespace PaymentServices.Tests
 		[Test]
 		public void RepeatTransaction()
 		{
-			PayPointApi papi = new PayPointApi(null, null, _bobconfig);
+			PayPointApi papi = new PayPointApi();
 			papi.RepeatTransaction("edf7951a-225b-4fd3-bd28-cde7c03f7df7", 100.99M);
 			string repo = papi.GetReport("CSV", "Date", DateTime.Now.ToString("yyyyMMdd"), "GBP");
 		}
@@ -50,11 +61,10 @@ namespace PaymentServices.Tests
 		[Test]
 		public void PayPointPayPal()
 		{
-			var papi = new PayPointApi(null, null, _bobconfig);
+			var papi = new PayPointApi();
 			papi.PayPointPayPal("www.google.com", "www.google.com", "www.google.com", 5.0M, "GBP", true);
 		}
 
 		#endregion End PayPointPayPal
-
 	}
 }

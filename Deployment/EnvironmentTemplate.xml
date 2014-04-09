@@ -26,8 +26,6 @@
     <property name="AmazonConfig" value="AmazonDev" />
     <property name="EbayConfig" value="EbayTrunkServer" />
     <property name="PacNet" value="PacNet" />
-    <property name="PayPoint" value="PayPoint" />
-    <property name="Experian" value="Experian" />
     <property name="TeraPeakConfig" value="TeraPeak" />
     <property name="EbaySettings" value ="EbaySettingsData"/>
     <property name="PayPalSettings" value ="PayPalSettingsData"/>
@@ -254,44 +252,6 @@ T6C7Spa3i/ltRwpQYWeYRRvJGkNUa12VLyTMdYRAAAAAvBLTqmDnMOt2M1IbVhi98uhE0pS2YC+WwInF
         <property name="RAVEN_GATEWAY" value="https://raven.pacnetservices.com/realtime" />
         <property name="RAVEN_DEBUG_OUTPUT" value="off" />
         <property name="RAVEN_PREFIX" value="EzBob" />
-    </module>
-    <module id="PayPoint">
-        <property name="ServiceUrl" value="https://www.secpay.com/java-bin/services/SECCardService" />
-        <property name="Mid" value="secpay" />
-        <property name="VpnPassword" value="secpay" />
-        <property name="RemotePassword" value="secpay" />
-        <property name="TemplateUrl" value="https://www.secpay.com/users/orange06/ezbob-template-test.html" />
-        <property name="Options" value="test_status=true" />
-        <property name="ValidateName" value="True" />
-		<!-- debug -->
-		<property name="DebugMode" value="False" />
-		<property name="IsValidCard" value="True" />
-		<property name="EnableCardLimit" value="False" />
-		<property name="CardLimitAmount" value="False" />
-        <property name="EnableDebugErrorCodeN" value="True" />
-    </module>
-    <module id="Experian">
-        <!--consumer-->
-        <property name="CertificateThumb" value="9F63413AE1EE1756270B4D4FEE276249ADB8BB83" />
-        <property name="InteractiveService" value="https://scems.uat.uk.experian.com/experian/wbsv/v100/interactive.asmx" />
-        <property name="AuthTokenService" value="https://secure.wasp.uat.uk.experian.com/WASPAuthenticator/tokenService.asmx" />
-		<!-- by default: INTERACTIVE -->
-		<property name="InteractiveMode" value="Oneshot" />
-        <!-- IDhub -->
-        <property name="AuthTokenServiceIdHub" value="https://secure.wasp.uat.uk.experian.com/WASPAuthenticator/tokenService.asmx" />
-        <property name="IdHubService" value="https://ukid.uat.uk.experian.com/EIHEndpoint" />
-        <property name="UIdCertificateThumb" value="F6D0B8CBB6F77B390C368B7B481352FBFAC31D34" />
-		<!-- IDhub PRODUCTION-->
-        <!-- <property name="AuthTokenServiceIdHub" value="https://secure.authenticator.uk.experian.com/WASPAuthenticator/TokenService.asmx" />
-        <property name="IdHubService" value="https://ukid.uk.experian.com/EIHEndpoint" />
-        <property name="UIdCertificateThumb" value="e9634d253c482d58d1a59318a4df8cf66c1a79bc" /> -->
-        <!-- Testing -->
-        <property name="ESeriesUrl" value="http://vm-demo1:8080/e-series/Controller" />
-        <!-- Production -->
-        <!-- <property name="ESeriesUrl" value="http://31.24.36.26:8888/e-series/Controller"/> -->
-		<property name="SecureFtpHostName" value="https://secureftp.experian.co.uk/Upload"/>
-		<property name="SecureFtpUserName" value="PIF1160_AyCpjxzt25"/>
-		<property name="SecureFtpUserPassword" value="AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAA5vQ8u3hwpEC19ATsYz992QAAAAACAAAAAAADZgAAwAAAABAAAACz6xwbkwPFNF2Kq3uXIuLxAAAAAASAAACgAAAAEAAAAFXerRgxiK+UA3qzgYtbg5EYAAAA0G+HLjFYHhbb+7AQw/XRSz2fK8pVIS9SFAAAAAl6gtklbAaMzzfCl62zmzMKo4eC"/>
     </module>
     <module id="WorkflowCacheParameters">
         <property name="CachePath" value="${tempDBPath}\Workflows" />

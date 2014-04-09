@@ -263,7 +263,7 @@
 
 		#endregion method IsNotEnoughMoney
 
-		private int amountToChargeFrom;
+		private readonly int amountToChargeFrom;
 		private readonly StrategiesMailer mailer;
 		private readonly PayPointApi payPointApi = new PayPointApi();
 
