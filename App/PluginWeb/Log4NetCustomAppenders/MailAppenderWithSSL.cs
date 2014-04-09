@@ -1,15 +1,13 @@
-﻿using System;
-using System.Net;
-using System.Net.Mail;
-using Scorto.Configuration;
-using log4net.Appender;
-
-namespace Log4NetCustomAppenders
+﻿namespace Log4NetCustomAppenders
 {
+	using System;
+	using System.Net;
+	using System.Net.Mail;
+	using Scorto.Configuration;
+	using log4net.Appender;
+
     public class MailAppenderWithSSL : SmtpAppender
     {
-        
-
         protected override void SendEmail(string messageBody)
         {
             try
@@ -43,7 +41,6 @@ namespace Log4NetCustomAppenders
             {
                 ErrorHandler.Error(e.ToString());
             }
-            
         }
     }
 }
