@@ -3,11 +3,12 @@ using EZBob.DatabaseLib;
 using EZBob.DatabaseLib.Model.Database;
 using EzBob.AmazonServiceLib;
 using NUnit.Framework;
-using Scorto.RegistryScanner;
 using StructureMap;
 
 namespace EzBob.AmazonLib
 {
+	using Ezbob.RegistryScanner;
+
 	public class AmazonTest
 	{
 

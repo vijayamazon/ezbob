@@ -1,11 +1,11 @@
 ﻿using System;
-using Scorto.RegistryScanner;
 using log4net.Config;
 using System.Windows.Forms;
 
 [assembly: XmlConfigurator(ConfigFileExtension = "log4net", Watch = true)]
 namespace TestApplication
 {
+	using Ezbob.RegistryScanner;
 
 	static class Program
 	{

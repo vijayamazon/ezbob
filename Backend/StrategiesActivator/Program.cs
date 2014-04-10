@@ -2,7 +2,7 @@
 	using System;
 	using NHibernate;
 	using NHibernateWrapper.NHibernate;
-	using Scorto.RegistryScanner;
+	using Ezbob.RegistryScanner;
 	using StructureMap;
 	using StructureMap.Pipeline;
 

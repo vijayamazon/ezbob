@@ -17,7 +17,7 @@ namespace EzBobTest
 	using Scorto.Configuration;
 	using Scorto.Configuration.Loader;
 	using NHibernateWrapper.NHibernate;
-	using Scorto.RegistryScanner;
+	using Ezbob.RegistryScanner;
 	using StructureMap;
 	using StructureMap.Pipeline;
 	using YodleeLib.connector;

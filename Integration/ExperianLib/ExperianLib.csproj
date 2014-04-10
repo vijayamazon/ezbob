@@ -54,9 +54,6 @@
     <Reference Include="nunit.framework">
       <HintPath>..\..\Lib\3rdparty\NUnit\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="Scorto.RegistryScanner">
-      <HintPath>..\..\Lib\Scorto.Core\Scorto.RegistryScanner.dll</HintPath>
-    </Reference>
     <Reference Include="StructureMap">
       <HintPath>..\..\Lib\3rdparty\StructureMap\StructureMap.dll</HintPath>
     </Reference>
@@ -188,6 +185,10 @@
     <Content Include="Web References\ExpAuth\expauth.disco" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Lib\Ezbob\RegistryScanner\RegistryScanner.csproj">
+      <Project>{4ee658d4-f8bc-4c45-b729-470d6b601441}</Project>
+      <Name>RegistryScanner</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Tools\EzbobUtils\Barrymore\Barrymore.csproj">
       <Project>{6e34c540-073a-44b1-9bbc-31dac15a6f5e}</Project>
       <Name>Barrymore</Name>

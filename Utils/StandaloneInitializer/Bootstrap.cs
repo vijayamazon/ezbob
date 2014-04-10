@@ -3,10 +3,10 @@
 	using System;
 	using System.Xml;
 	using EZBob.DatabaseLib.Model.Database;
+	using Ezbob.RegistryScanner;
 	using NHibernate;
 	using Scorto.Configuration;
 	using Scorto.Configuration.Loader;
-	using Scorto.RegistryScanner;
 	using StructureMap;
 	using StructureMap.Attributes;
 	using StructureMap.Pipeline;

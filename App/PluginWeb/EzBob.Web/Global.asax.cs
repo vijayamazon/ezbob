@@ -96,7 +96,6 @@
 						HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
 					}
 
-					// Scorto.RegistryScanner.Scanner.Register();
 					Ezbob.RegistryScanner.Scanner.Register();
 
 					ConfigureStructureMap(ObjectFactory.Container);

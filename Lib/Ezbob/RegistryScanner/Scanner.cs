@@ -1,10 +1,8 @@
-﻿/*
-namespace Scorto.RegistryScanner {
+﻿namespace Scorto.RegistryScanner {
 	public interface IRequiresConfigurationOnStartup {
 		void Configure();
 	} // interface
 } // namespace
-*/
 
 namespace Ezbob.RegistryScanner {
 	using System.Reflection;
@@ -13,9 +11,12 @@ namespace Ezbob.RegistryScanner {
 	using StructureMap.Graph;
 
 	using Scorto.RegistryScanner;
+	using log4net;
 
 	public class Scanner {
 		public static void Register() {
+			ILog oLog = LogManager.GetLogger(typeof (Scanner));
+
 			ObjectFactory.Initialize((IInitializationExpression oInitExp) => oInitExp.Scan((IAssemblyScanner oScanner) => { 
 				oScanner.AssembliesFromApplicationBaseDirectory((Assembly oAssembly) => {
 					if (oAssembly.FullName.EndsWith("Tests"))
@@ -35,8 +36,17 @@ namespace Ezbob.RegistryScanner {
 				oScanner.AddAllTypesOf(typeof(IRequiresConfigurationOnStartup));
 			}));
 
-			foreach (IRequiresConfigurationOnStartup current in ObjectFactory.GetAllInstances<IRequiresConfigurationOnStartup>())
+			oLog.Debug("Ezbob.RegistryScanner.Scanner.Register - configure list - begin");
+
+			foreach (IRequiresConfigurationOnStartup current in ObjectFactory.GetAllInstances<IRequiresConfigurationOnStartup>()) {
+				// This loop should never be enetered but just in case...
+				// It should be debug, but Error was chosen in order to receive an email.
+				oLog.ErrorFormat("Ezbob.RegistryScanner.Scanner.Register - configure {0}.", current.GetType());
+
 				current.Configure();
+			} // for each
+
+			oLog.Debug("Ezbob.RegistryScanner.Scanner.Register - configure list - end");
 		} // Register
 
 		private static readonly string[] ms_aryTypes = new [] {

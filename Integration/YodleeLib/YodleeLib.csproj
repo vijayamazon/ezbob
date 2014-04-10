@@ -45,9 +45,6 @@
     <Reference Include="Scorto.Configuration.Loader">
       <HintPath>..\..\Lib\Scorto.Core\Scorto.Configuration.Loader.dll</HintPath>
     </Reference>
-    <Reference Include="Scorto.RegistryScanner">
-      <HintPath>..\..\Lib\Scorto.Core\Scorto.RegistryScanner.dll</HintPath>
-    </Reference>
     <Reference Include="StructureMap">
       <HintPath>..\..\Lib\3rdparty\StructureMap\StructureMap.dll</HintPath>
     </Reference>
@@ -105,6 +102,10 @@
     <Compile Include="YodleeTestFixure.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Lib\Ezbob\RegistryScanner\RegistryScanner.csproj">
+      <Project>{4ee658d4-f8bc-4c45-b729-470d6b601441}</Project>
+      <Name>RegistryScanner</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Tools\EzbobUtils\NHibernateWrapper\NHibernateWrapper.csproj">
       <Project>{DC706B41-2B3E-4082-B390-51AABAC065D3}</Project>
       <Name>NHibernateWrapper</Name>

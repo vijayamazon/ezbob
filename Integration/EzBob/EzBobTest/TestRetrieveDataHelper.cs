@@ -8,6 +8,7 @@ namespace EzBobTest
 	using CompanyFiles;
 	using EKM;
 	using EzBob.Models;
+	using Ezbob.RegistryScanner;
 	using FreeAgent;
 	using Sage;
 	using EZBob.DatabaseLib;
@@ -27,7 +28,6 @@ namespace EzBobTest
 	using Scorto.Configuration;
 	using Scorto.Configuration.Loader;
 	using NHibernateWrapper.NHibernate;
-	using Scorto.RegistryScanner;
 	using StructureMap;
 	using StructureMap.Pipeline;
 	using log4net;

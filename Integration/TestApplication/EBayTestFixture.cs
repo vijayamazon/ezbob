@@ -1,6 +1,6 @@
 using EzBob.eBayServiceLib;
 using NUnit.Framework;
-using Scorto.RegistryScanner;
+using Ezbob.RegistryScanner;
 
 namespace EzBob.eBayLib
 {

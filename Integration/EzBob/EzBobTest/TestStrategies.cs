@@ -8,6 +8,7 @@ namespace EzBobTest
 	using EKM;
 	using EzBob.Backend.Strategies;
 	using EzBob.Backend.Strategies.MailStrategies;
+	using Ezbob.RegistryScanner;
 	using FreeAgent;
 	using Sage;
 	using EZBob.DatabaseLib.Model.Database;
@@ -19,7 +20,6 @@ namespace EzBobTest
 	using Scorto.Configuration;
 	using Scorto.Configuration.Loader;
 	using NHibernateWrapper.NHibernate;
-	using Scorto.RegistryScanner;
 	using StructureMap;
 	using StructureMap.Pipeline;
 	using log4net.Config;

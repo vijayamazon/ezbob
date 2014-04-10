@@ -58,9 +58,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Lib\Scorto.Core\Scorto.Configuration.Loader.dll</HintPath>
     </Reference>
-    <Reference Include="Scorto.RegistryScanner">
-      <HintPath>..\..\..\Lib\Scorto.Core\Scorto.RegistryScanner.dll</HintPath>
-    </Reference>
     <Reference Include="StructureMap">
       <HintPath>..\..\..\Lib\3rdparty\StructureMap\StructureMap.dll</HintPath>
     </Reference>
@@ -309,6 +306,10 @@
     <Compile Include="UserInfo\FeedbackType.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Lib\Ezbob\RegistryScanner\RegistryScanner.csproj">
+      <Project>{4ee658d4-f8bc-4c45-b729-470d6b601441}</Project>
+      <Name>RegistryScanner</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\CommonLib\CommonLib.csproj">
       <Project>{AEDBFBBD-BA7D-4582-AFCA-6ECF8AF33C98}</Project>
       <Name>CommonLib</Name>

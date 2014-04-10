@@ -7,7 +7,7 @@
 	using NHibernateWrapper.NHibernate;
 	using NUnit.Framework;
 	using PayPoint;
-	using Scorto.RegistryScanner;
+	using Ezbob.RegistryScanner;
 	using StructureMap;
 	using StructureMap.Pipeline;
 	using global::PayPoint;

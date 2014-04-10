@@ -7,10 +7,10 @@
 	using System.Text.RegularExpressions;
 	using System.Xml;
 	using EzBob.CommonLib.Security;
+	using Ezbob.RegistryScanner;
 	using NUnit.Framework;
 	using Scorto.Configuration;
 	using Scorto.Configuration.Loader;
-	using Scorto.RegistryScanner;
 	using log4net.Config;
 
 	[TestFixture]

@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using Scorto.Configuration;
 using Scorto.Configuration.Loader;
-using Scorto.RegistryScanner;
+using Ezbob.RegistryScanner;
 using log4net.Config;
 
 namespace ExperianLib.Tests
