@@ -8,13 +8,16 @@
 			ms_oLock = new object();
 		} // static constructor
 
-		public static AConnection Get() {
+		public static AConnection Get(ASafeLog oLog = null) {
 			if (!ReferenceEquals(null, ms_oDB))
 				return ms_oDB;
 
+			if (oLog == null)
+				oLog = new SafeILog(LogManager.GetLogger(typeof (DbConnectionGenerator)));
+
+			var env = new Ezbob.Context.Environment(oLog);
+
 			lock (ms_oLock) {
-				var oLog = new SafeILog(LogManager.GetLogger(typeof (DbConnectionGenerator)));
-				var env = new Ezbob.Context.Environment(oLog);
 				ms_oDB = new Ezbob.Database.SqlConnection(env, oLog);
 			} // lock
 

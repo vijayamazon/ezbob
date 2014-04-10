@@ -80,7 +80,7 @@ namespace EzBob.Web.Infrastructure
 			For<IAgreementsGenerator>().Use<AgreementsGenerator>();
 			For<ILoanOptionsRepository>().Use<LoanOptionsRepository>();
 			
-			bool payPointValidateName = ConfigManager.GetByNameAsBool("PayPointValidateName");
+			bool payPointValidateName = CurrentValues.Instance.PayPointValidateName;
 			if (payPointValidateName)
 			{
 				For<ICustomerNameValidator>().Use<CustomerNameValidator>();

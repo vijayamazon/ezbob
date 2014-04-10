@@ -38,11 +38,11 @@
          */
         public RavenSecureAPI()
 		{
-			rapiVersion = ConfigManager.GetByName("PacnetRAVEN_RAPIVERSION");
-			site = ConfigManager.GetByName("PacnetRAVEN_GATEWAY");
-			userName = ConfigManager.GetByName("PacnetRAVEN_USERNAME");
-			secret = ConfigManager.GetByName("PacnetRAVEN_SECRET");
-			prefix = ConfigManager.GetByName("PacnetRAVEN_PREFIX");
+			rapiVersion = CurrentValues.Instance.PacnetRAVEN_RAPIVERSION;
+	        site = CurrentValues.Instance.PacnetRAVEN_GATEWAY;
+			userName = CurrentValues.Instance.PacnetRAVEN_USERNAME;
+			secret = CurrentValues.Instance.PacnetRAVEN_SECRET;
+			prefix = CurrentValues.Instance.PacnetRAVEN_PREFIX;
 
             try
             {
