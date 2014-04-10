@@ -118,10 +118,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Lib\Scorto.Core\Scorto.Configuration.dll</HintPath>
     </Reference>
-    <Reference Include="Scorto.RegistryScanner, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Lib\Scorto.Core\Scorto.RegistryScanner.dll</HintPath>
-    </Reference>
     <Reference Include="SquishIt.CoffeeScript">
       <HintPath>..\..\..\Lib\3rdparty\SquishIt\SquishIt.CoffeeScript.dll</HintPath>
     </Reference>
