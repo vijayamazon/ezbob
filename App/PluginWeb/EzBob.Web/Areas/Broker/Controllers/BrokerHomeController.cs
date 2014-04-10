@@ -55,7 +55,12 @@
 		#region action Index (default)
 
 		// GET: /Broker/BrokerHome/
-		public System.Web.Mvc.ViewResult Index() {
+		public System.Web.Mvc.ViewResult Index(string sourceref = "") {
+			if (!string.IsNullOrWhiteSpace(sourceref)) {
+				var cookie = new HttpCookie(Constant.SourceRef, sourceref) { Expires = DateTime.Now.AddMonths(3), HttpOnly = true, Secure = true };
+				Response.Cookies.Add(cookie);
+			} // if
+
 			ViewData[Constant.Broker.MarketingFiles] = m_oFileList;
 
 			ViewData[Constant.Config] = m_oConfig;
@@ -118,6 +123,8 @@
 			int IsCaptchaEnabled,
 			int TermsID
 		) {
+			string sReferredBy = Request.Cookies.AllKeys.Contains(Constant.SourceRef) ? Request.Cookies[Constant.SourceRef].Value : "";
+
 			m_oLog.Debug(
 				"Broker signup request:" +
 				"\n\tFirm name: {0}" +
@@ -127,11 +134,12 @@
 				"\n\tContact person mobile: {4}" +
 				"\n\tMobile code: {5}" +
 				"\n\tContact person other phone: {6}" +
-				"\n\tEstimated monthly amount: {7}",
-				"\n\tFirm web site URL: {8}",
-				"\n\tEstimated monthly application count: {9}",
-				"\n\tCaptcha enabled: {10}",
-				"\n\tTerms ID: {11}",
+				"\n\tEstimated monthly amount: {7}" +
+				"\n\tFirm web site URL: {8}" +
+				"\n\tEstimated monthly application count: {9}" +
+				"\n\tCaptcha enabled: {10}" +
+				"\n\tTerms ID: {11}" +
+				"\n\tReferred by (sourceref): {12}",
 				FirmName,
 				FirmRegNum,
 				ContactName,
@@ -143,7 +151,8 @@
 				FirmWebSite,
 				EstimatedMonthlyAppCount,
 				IsCaptchaEnabled == 0 ? "no" : "yes",
-				TermsID
+				TermsID,
+				sReferredBy
 			);
 
 			if (!ModelState.IsValid) {
@@ -174,7 +183,8 @@
 					FirmWebSite,
 					EstimatedMonthlyAppCount,
 					IsCaptchaEnabled != 0,
-					TermsID
+					TermsID,
+					sReferredBy
 				);
 			}
 			catch (Exception e) {

@@ -11,6 +11,7 @@ BEGIN
 	SET NOCOUNT ON;
 
 	DECLARE @BrokerID INT
+	DECLARE @IsTest BIT
 
 	SELECT
 		@BrokerID = BrokerID
@@ -27,11 +28,19 @@ BEGIN
 
 	IF @BrokerID IS NOT NULL AND NOT EXISTS (SELECT * FROM Customer WHERE Id = @CustomerID AND BrokerID IS NOT NULL)
 	BEGIN
+		SELECT
+			@IsTest = IsTest
+		FROM
+			Broker
+		WHERE
+			BrokerID = @BrokerID
+
 		BEGIN TRANSACTION
 		
 		UPDATE Customer SET
 			BrokerID = @BrokerID,
-			FilledByBroker = @BrokerFillsForCustomer
+			FilledByBroker = @BrokerFillsForCustomer,
+			IsTest = CASE @IsTest WHEN 1 THEN 1 ELSE IsTest END
 		WHERE
 			Id = @CustomerID
 

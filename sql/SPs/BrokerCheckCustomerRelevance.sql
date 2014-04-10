@@ -14,6 +14,7 @@ BEGIN
 
 	DECLARE @BrokerID INT
 	DECLARE @BrokerLeadID INT
+	DECLARE @IsTest BIT
 
 	------------------------------------------------------------------------------
 
@@ -29,13 +30,23 @@ BEGIN
 
 	IF @BrokerID IS NOT NULL
 	BEGIN
-		UPDATE Customer SET
+		SELECT
+			@IsTest = IsTest
+		FROM
+			Broker
+		WHERE
 			BrokerID = @BrokerID
+
+		--------------------------------------------------------------------------
+
+		UPDATE Customer SET
+			BrokerID = @BrokerID,
+			IsTest = CASE @IsTest WHEN 1 THEN 1 ELSE IsTest END
 		WHERE
 			Id = @CustomerID
 
 		--------------------------------------------------------------------------
-		
+
 		UPDATE BrokerLeads SET
 			CustomerID = @CustomerID
 		WHERE
@@ -44,14 +55,15 @@ BEGIN
 			CustomerID IS NULL
 
 		--------------------------------------------------------------------------
-		
+
 		RETURN
 	END
 
 	------------------------------------------------------------------------------
 
 	SELECT
-		@BrokerID = BrokerID
+		@BrokerID = BrokerID,
+		@IsTest = IsTest
 	FROM
 		Broker
 	WHERE
@@ -62,7 +74,8 @@ BEGIN
 	IF @BrokerID IS NOT NULL
 	BEGIN
 		UPDATE Customer SET
-			BrokerID = @BrokerID
+			BrokerID = @BrokerID,
+			IsTest = CASE @IsTest WHEN 1 THEN 1 ELSE IsTest END
 		WHERE
 			Id = @CustomerID
 	END

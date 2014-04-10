@@ -28,6 +28,7 @@
 			int nEstimatedMonthlyApplicationCount,
 			bool bIsCaptchaEnabled,
 			int nBrokerTermsID,
+			string sReferredBy,
 			AConnection oDB,
 			ASafeLog oLog
 		) : base(oDB, oLog) {
@@ -47,6 +48,7 @@
 				FirmWebSiteUrl = sFirmWebSiteUrl,
 				EstimatedMonthlyApplicationCount = nEstimatedMonthlyApplicationCount,
 				BrokerTermsID = nBrokerTermsID,
+				ReferredBy = sReferredBy,
 			};
 
 			Properties = new BrokerProperties();
@@ -184,6 +186,8 @@
 			public string Password2 { get; set; }
 
 			public int BrokerTermsID { get; set; }
+
+			public string ReferredBy { get; set; }
 
 			#endregion properties
 

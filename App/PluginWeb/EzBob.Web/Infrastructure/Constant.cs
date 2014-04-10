@@ -4,6 +4,8 @@
 		public const string No = "NO";
 		public const string Yes = "YES";
 
+		public const string SourceRef = "sourceref";
+
 		public class Broker {
 			public const string Auth = "auth";
 			public const string FillsForCustomer = "BrokerFillsForCustomer";

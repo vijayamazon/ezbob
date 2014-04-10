@@ -16,7 +16,8 @@ ALTER PROCEDURE BrokerSignUp
 @EstimatedMonthlyApplicationCount INT,
 @AgreedToTermsDate DATETIME,
 @AgreedToPrivacyPolicyDate DATETIME,
-@BrokerTermsID INT
+@BrokerTermsID INT,
+@ReferredBy NVARCHAR(255)
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -25,6 +26,8 @@ BEGIN
 	DECLARE @BrokerID INT
 	DECLARE @UserID INT
 	DECLARE @SourceRef NVARCHAR(255)
+	DECLARE @IsTest BIT = 0
+	DECLARE @IsAutoTest BIT = 0
 
 	IF @BrokerTermsID = 0
 		SET @BrokerTermsID = NULL
@@ -49,17 +52,32 @@ BEGIN
 	BEGIN
 		SET @UserID = SCOPE_IDENTITY()
 
+		SET @IsAutoTest = CASE (SELECT LOWER(ISNULL(LTRIM(RTRIM(Value)), '')) FROM ConfigurationVariables WHERE Name = 'AutomaticTestBrokerMark')
+			WHEN '1' THEN 1
+			WHEN 'true' THEN 1
+			WHEN 'yes' THEN 1
+			ELSE 0
+		END
+
+		IF @IsAutoTest = 1
+		BEGIN
+			IF EXISTS (SELECT * FROM TestCustomer WHERE LOWER(@ContactEmail) LIKE '%' + LOWER(ISNULL(LTRIM(RTRIM(Pattern)), '')))
+				SET @IsTest = 1
+			ELSE
+				SET @IsTest = 0
+		END
+
 		BEGIN TRY
 			INSERT INTO Broker(
 				FirmName, FirmRegNum, ContactName, ContactEmail, ContactMobile,
 				ContactOtherPhone, SourceRef, EstimatedMonthlyClientAmount, Password, UserID,
 				FirmWebSiteUrl, EstimatedMonthlyApplicationCount, AgreedToTermsDate, AgreedToPrivacyPolicyDate,
-				BrokerTermsID
+				BrokerTermsID, IsTest, ReferredBy
 			) VALUES (
 				@FirmName, @FirmRegNum, @ContactName, @ContactEmail, @ContactMobile,
 				@ContactOtherPhone, @TempSourceRef, @EstimatedMonthlyClientAmount, @Password, @UserID,
 				@FirmWebSiteUrl, @EstimatedMonthlyApplicationCount, @AgreedToTermsDate, @AgreedToPrivacyPolicyDate,
-				@BrokerTermsID
+				@BrokerTermsID, @IsTest, @ReferredBy
 			)
 		END TRY
 		BEGIN CATCH
