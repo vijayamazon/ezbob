@@ -13,7 +13,7 @@
 	using global::PayPoint;
 
 	// return money
-	class PayPointTests : BaseTest
+	class PayPointTests
 	{
 		[SetUp]
 		public void Setup()

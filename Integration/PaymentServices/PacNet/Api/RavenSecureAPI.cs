@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Raven.API.Support;
-
-namespace Raven.API
+﻿namespace Raven.API
 {
+	using System;
+	using Support;
+	using ConfigManager;
+
     /**
      * <p>An API to Raven functionality that is primarily driven through the
      * use of key-value parameter pairs, but whose values cannot be set directly,
@@ -39,12 +37,12 @@ namespace Raven.API
          * exist or cannot be found or if any mandatory parameters are missing
          */
         public RavenSecureAPI()
-        {
-            this.rapiVersion = ConfigureParamAsValue("RAPIVersion", "RAVEN_RAPIVERSION", "2", true);
-            this.site = ConfigureParam("RAVEN_GATEWAY", "RAVEN_GATEWAY", null, true);
-            this.userName = ConfigureParamAsValue("UserName", "RAVEN_USERNAME", null, true);
-            this.secret = ConfigureParam("RAVEN_SECRET", "RAVEN_SECRET", null, true);
-            this.prefix = ConfigureParam("RAVEN_PREFIX", "RAVEN_PREFIX", null, true);
+		{
+			rapiVersion = ConfigManager.GetByName("PacnetRAVEN_RAPIVERSION");
+			site = ConfigManager.GetByName("PacnetRAVEN_GATEWAY");
+			userName = ConfigManager.GetByName("PacnetRAVEN_USERNAME");
+			secret = ConfigManager.GetByName("PacnetRAVEN_SECRET");
+			prefix = ConfigManager.GetByName("PacnetRAVEN_PREFIX");
 
             try
             {

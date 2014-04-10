@@ -1,14 +1,12 @@
-﻿using NUnit.Framework;
-using PaymentServices.PacNet;
-
-namespace PaymentServices.Tests
+﻿namespace PaymentServices.Tests
 {
 	using System;
-	using System.Diagnostics;
+	using NUnit.Framework;
+	using PacNet;
 
 	//send money
 	[TestFixture]
-    class PacnetTests:BaseTest
+    class PacnetTests
     {
         [Test]
         public void SendMoney()

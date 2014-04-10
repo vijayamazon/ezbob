@@ -1,24 +1,17 @@
-﻿using System;
-using EzBob.Configuration;
-using Scorto.Configuration;
-using StructureMap.Configuration.DSL;
-
-namespace PaymentServices.PacNet
+﻿namespace PaymentServices.PacNet
 {
-	using EZBob.DatabaseLib.Model.Database.Loans;
-	using NHibernate;
-	using NHibernateWrapper.NHibernate;
-	using StructureMap.Pipeline;
+	using System;
+	using StructureMap.Configuration.DSL;
+	using ConfigManager;
 
 	public class PacnetRegistry : Registry
     {
         public PacnetRegistry()
         {
             try
-            {
-                ConfigurationRoot configuration = ConfigurationRoot.GetConfiguration();
-                if (configuration != null &&
-                    ConfigurationRootBob.GetConfiguration().PacNet.GetValue<string>("SERVICE_TYPE") == "Testing")
+			{
+				string serviceType = ConfigManager.GetByName("PacnetSERVICE_TYPE");
+				if (serviceType == "Testing")
                 {
                     For<IPacnetService>().Use<LogPacnet<FakePacnetService>>();
                 }

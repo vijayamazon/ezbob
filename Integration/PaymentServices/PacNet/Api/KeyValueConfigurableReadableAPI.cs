@@ -1,13 +1,10 @@
-﻿using System;
-using System.Configuration;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Xml;
-using System.Reflection;
-
-namespace Raven.API.Support
+﻿namespace Raven.API.Support
 {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Text;
+
     /**
      * <p>An API to Raven functionality that is primarily driven through the use
      * of key-value parameter pairs, but whose values cannot be set directly,
@@ -18,79 +15,9 @@ namespace Raven.API.Support
      */
     public abstract class KeyValueConfigurableReadableAPI : KeyValueReadableAPI
     {
-        /** source for configuration values, such as the Raven server URL and the
-         * user/secret password required to access it */
-        protected XMLConfiguration Config;
-
         /** the receiver's parameter values, mapped by their associated keys */
         protected Dictionary<String, String> paramValuesByKey = new Dictionary<String, String>();
-
-        /**
-         * <p>Constructs a default instance of the receiver.</p>
-         */
-        public KeyValueConfigurableReadableAPI()
-        {
-            if (Config == null)
-            {
-                try
-                {
-                    Config = new XMLConfiguration("ravenconfig.xml", "RAVEN");
-                }
-                catch (ConfigurationException ce)
-                {
-                    throw new RavenConfigurationException(ce);
-                }
-            }
-        }
-
-        /**
-         * <p>Configures a named parameter with a value.</p>
-         *
-         * @param paramName the name of the parameter
-         * @param paramConfigName the name of the parameter within the application's default settings
-         * @param defaultValue the default value to use if no value exists within
-         * the application's default settings
-         * @param valueRequired <code>true</code> if the parameter is mandatory
-         * 
-         * @return the value of the named parameter
-         * 
-         * @throws RavenConfigurationException if the value is required and no value
-         * exists within the application's default settings
-         */
-        protected String ConfigureParam(String paramName, String paramConfigName, String defaultValue, bool valueRequired) 
-        {
-            String paramValue = Config.GetString(paramConfigName);
-
-            if (paramValue == null) {
-                if (defaultValue != null) {
-                    paramValue = defaultValue;
-                } else if (valueRequired) {
-                    throw new RavenConfigurationException(paramConfigName);
-                }
-            }
-            return paramValue;
-        }
-
-        /**
-         * <p>Configures a named parameter with a value.</p>
-         *
-         * @param paramName the name of the parameter
-         * @param paramConfigName the name of the parameter within the config file
-         * @param defaultValue the default value to use if no value exists within
-         * the config file
-         * @param valueRequired <code>true</code> if the parameter is mandatory
-         * @return the configured value of the named parameter
-         * @throws RavenConfigurationException if the value is required and no value
-         * exists within the config file
-         */
-        protected String ConfigureParamAsValue(String paramName, String paramConfigName, String defaultValue, bool valueRequired)
-        {
-
-            String paramValue = this.ConfigureParam(paramName, paramConfigName, defaultValue, valueRequired);
-            this.paramValuesByKey[paramName] = (paramValue != null ? paramValue : "");
-            return paramValue;
-        }
-
+		
         /**
          * <p>Answers the value associated with the receiver's specified parameter key, or 
          * null if no such parameter is set.</p>

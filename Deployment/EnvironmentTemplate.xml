@@ -25,7 +25,6 @@
     <property name="PayPalConfig" value="PayPalDevProduction" />
     <property name="AmazonConfig" value="AmazonDev" />
     <property name="EbayConfig" value="EbayTrunkServer" />
-    <property name="PacNet" value="PacNet" />
     <property name="TeraPeakConfig" value="TeraPeak" />
     <property name="EbaySettings" value ="EbaySettingsData"/>
     <property name="PayPalSettings" value ="PayPalSettingsData"/>
@@ -243,15 +242,6 @@ T6C7Spa3i/ltRwpQYWeYRRvJGkNUa12VLyTMdYRAAAAAvBLTqmDnMOt2M1IbVhi98uhE0pS2YC+WwInF
 		<property name="AddAccountURL" value="https://lawint.yodlee.com/apps/ezbob/addAccounts.pfmlaw.action" />
 		<property name="EditAccountURL" value="https://lawint.yodlee.com/apps/ezbob/editSiteCredentials.pfmlaw.action" />
 		<property name="AccountPoolSize" value="30" />
-    </module>
-    <module id="PacNet">
-        <property name="SERVICE_TYPE" value="Testing" />
-        <!-- Production , Testing-->
-        <property name="RAVEN_USERNAME" value="orangemoney.wf" />
-        <property name="RAVEN_SECRET" value="oranges are a good source of vitamin c" />
-        <property name="RAVEN_GATEWAY" value="https://raven.pacnetservices.com/realtime" />
-        <property name="RAVEN_DEBUG_OUTPUT" value="off" />
-        <property name="RAVEN_PREFIX" value="EzBob" />
     </module>
     <module id="WorkflowCacheParameters">
         <property name="CachePath" value="${tempDBPath}\Workflows" />

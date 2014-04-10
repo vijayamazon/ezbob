@@ -49,12 +49,6 @@
     <Reference Include="nunit.framework">
       <HintPath>..\..\Lib\3rdparty\NUnit\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="Scorto.Configuration">
-      <HintPath>..\..\Lib\Scorto.Core\Scorto.Configuration.dll</HintPath>
-    </Reference>
-    <Reference Include="Scorto.Configuration.Loader">
-      <HintPath>..\..\Lib\Scorto.Core\Scorto.Configuration.Loader.dll</HintPath>
-    </Reference>
     <Reference Include="Scorto.RegistryScanner, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\App\PluginWeb\EzBob.Web\bin\Scorto.RegistryScanner.dll</HintPath>
@@ -94,16 +88,12 @@
     <Compile Include="PayPoint\PayPointException.cs" />
     <Compile Include="PayPoint\PayPointReturnData.cs" />
     <Compile Include="PayPoint\PayPointStatusTranslator.cs" />
-    <Compile Include="Tests\BaseTest.cs" />
     <Compile Include="PacNet\Api\HexConvertor.cs" />
     <Compile Include="PacNet\Api\KeyValueConfigurableReadableAPI.cs" />
     <Compile Include="PacNet\Api\KeyValueReadableAPI.cs" />
     <Compile Include="PacNet\Api\KeyValueWritableAPI.cs" />
     <Compile Include="PacNet\Api\Raven.cs" />
     <Compile Include="PacNet\Api\RavenAuthenticationException.cs" />
-    <Compile Include="PacNet\Api\RavenBDPAuthorization.cs" />
-    <Compile Include="PacNet\Api\RavenBDPRequest.cs" />
-    <Compile Include="PacNet\Api\RavenBDPResponse.cs" />
     <Compile Include="PacNet\Api\RavenConfigurationException.cs" />
     <Compile Include="PacNet\Api\RavenException.cs" />
     <Compile Include="PacNet\Api\RavenIncompleteSignatureException.cs" />
@@ -114,7 +104,6 @@
     <Compile Include="PacNet\Api\RavenSecureAPI.cs" />
     <Compile Include="PacNet\Api\SignatureProvider.cs" />
     <Compile Include="PacNet\Api\TimestampProvider.cs" />
-    <Compile Include="PacNet\Api\XMLConfiguration.cs" />
     <Compile Include="Tests\PacnetTests.cs" />
     <Compile Include="PayPoint\PayPointApi.cs" />
     <Compile Include="Tests\PayPointTests.cs" />
@@ -124,6 +113,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\ConfigManager\ConfigManager.csproj">
+      <Project>{7a4121bc-bbde-4ddc-9b6e-29d2b0055f2f}</Project>
+      <Name>ConfigManager</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Tools\EzbobUtils\NHibernateWrapper\NHibernateWrapper.csproj">
       <Project>{dc706b41-2b3e-4082-b390-51aabac065d3}</Project>
       <Name>NHibernateWrapper</Name>

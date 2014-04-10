@@ -5,7 +5,6 @@
 	using System.Security.Cryptography;
 	using System.Text;
 	using System.Web;
-	using Configuration;
 	using EZBob.DatabaseLib.Model;
 	using StructureMap;
 

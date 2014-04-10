@@ -175,7 +175,7 @@
 			NHibernateManager.FluentAssemblies.Add(typeof(SageDatabaseMarketPlace).Assembly);
 			NHibernateManager.FluentAssemblies.Add(typeof(CompanyFilesDatabaseMarketPlace).Assembly);
 
-			// Ezbob.RegistryScanner.Scanner.Register();
+			Ezbob.RegistryScanner.Scanner.Register();
 
 			ObjectFactory.Configure(x => {
 				x.For<ISession>().LifecycleIs(new ThreadLocalStorageLifecycle()).Use(ctx => NHibernateManager.SessionFactory.OpenSession());
