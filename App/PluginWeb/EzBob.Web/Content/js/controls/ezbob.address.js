@@ -344,19 +344,19 @@ EzBob.Popup = Backbone.View.extend({
 	PostCodeBtnNotFound: function() {
 		var self = this;
 
-		this.$el.find('.address-selector-block').fadeOut('slow', function() { self.initManualInputForm(); });
+		this.$el.find('.address-selector-block').fadeOut('fast', function() { self.initManualInputForm(); });
 	}, // PostCodeBtnNotFound
 
 	showAddressSelector: function() {
 		var self = this;
 
-		this.$el.find('.address-list-loading-block').fadeOut('slow', function() {
-			self.$el.find('.address-selector-block').fadeIn('slow').removeClass('hide');
+		this.$el.find('.address-list-loading-block').fadeOut('fast', function() {
+			self.$el.find('.address-selector-block').fadeIn('fast').removeClass('hide');
 		});
 	}, // showAddressSelector
 
 	initManualInputForm: function() {
-		this.$el.find('.address-input-block').fadeIn('slow').removeClass('hide');
+		this.$el.find('.address-input-block').fadeIn('fast').removeClass('hide');
 		this.setDialogueButtons('manual-input');
 		this.$el.dialog('option', 'title', 'Enter address manually');
 
