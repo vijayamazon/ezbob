@@ -20,7 +20,8 @@ BEGIN
 		C.GreetingMailSentDate,
 		B.ContactName,
 		B.ContactMobile,
-		B.FirmName
+		B.FirmName,
+		CASE B.IsTest WHEN 1 THEN 'test' ELSE '' END AS TestBroker
 	FROM
 		Customer C
 		INNER JOIN Broker B ON B.BrokerID = C.BrokerID

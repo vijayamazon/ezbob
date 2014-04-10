@@ -15,7 +15,8 @@ BEGIN
 		B.ContactMobile Mobile,
 		B.ContactOtherPhone Phone,
 		B.ContactEmail Email,
-		B.AgreedToTermsDate SignUpDate
+		B.AgreedToTermsDate SignUpDate,
+		CASE B.IsTest WHEN 1 THEN 'test' ELSE '' END AS TestBroker
 	FROM 
 		Broker B
 	WHERE
