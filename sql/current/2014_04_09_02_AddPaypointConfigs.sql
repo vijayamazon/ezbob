@@ -14,14 +14,25 @@ BEGIN
 	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='PayPointRemotePassword')
 	BEGIN
 		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('PayPointRemotePassword', 'secpay', 'PayPoint remote password')
-	END
-	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='PayPointTemplateUrl')
-	BEGIN
-		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('PayPointTemplateUrl', 'https://www.secpay.com/users/orange06/ezbob-template-test.html', 'PayPoint template url')
-	END
+	END	
 	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='PayPointOptions')
 	BEGIN
 		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('PayPointOptions', 'test_status=true', 'PayPoint options')
+	END
+	
+	IF @Environment = 'QA' OR @Environment = 'UAT'
+	BEGIN
+		IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='PayPointTemplateUrl')
+		BEGIN
+			INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('PayPointTemplateUrl', 'https://www.secpay.com/users/orange06/ezbob-template-test.html', 'PayPoint template url')
+		END
+	END
+	ELSE
+	BEGIN
+		IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='PayPointTemplateUrl')
+		BEGIN
+			INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('PayPointTemplateUrl', 'https://www.secpay.com/users/orange06/ezbob-template.html', 'PayPoint template url')
+		END
 	END
 END
 
