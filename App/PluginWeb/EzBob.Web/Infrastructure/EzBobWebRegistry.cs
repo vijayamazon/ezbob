@@ -25,7 +25,6 @@ namespace EzBob.Web.Infrastructure
 	using Code.Agreements;
 	using Code.Email;
 	using Code.MpUniq;
-	using Code.PostCode;
 	using Models.Repository;
 	using eBayLib.Config;
 	using MailApi;
@@ -33,6 +32,7 @@ namespace EzBob.Web.Infrastructure
 	using Scorto.Configuration;
 	using NHibernateWrapper.Web;
 	using StructureMap.Configuration.DSL;
+	using ConfigManager;
 
 	public class PluginWebRegistry : Registry
 	{
@@ -79,8 +79,9 @@ namespace EzBob.Web.Infrastructure
 			For<ILoanRepository>().Use<LoanRepository>();
 			For<IAgreementsGenerator>().Use<AgreementsGenerator>();
 			For<ILoanOptionsRepository>().Use<LoanOptionsRepository>();
-
-			if (bobconfig.PayPoint.ValidateName)
+			
+			bool payPointValidateName = ConfigManager.GetByNameAsBool("PayPointValidateName");
+			if (payPointValidateName)
 			{
 				For<ICustomerNameValidator>().Use<CustomerNameValidator>();
 			}

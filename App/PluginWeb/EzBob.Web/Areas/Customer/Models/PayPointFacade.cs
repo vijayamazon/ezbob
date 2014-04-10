@@ -1,31 +1,40 @@
-﻿using System;
-using System.Globalization;
-using System.Security.Cryptography;
-using System.Text;
-using System.Web;
-using EzBob.Configuration;
-
-namespace EzBob.Web.Areas.Customer.Models
+﻿namespace EzBob.Web.Areas.Customer.Models
 {
-    public interface IPayPointFacade
+	using System;
+	using System.Globalization;
+	using System.Security.Cryptography;
+	using System.Text;
+	using System.Web;
+	using Configuration;
+	using EZBob.DatabaseLib.Model;
+	using StructureMap;
+
+	public interface IPayPointFacade
     {
         bool CheckHash(string hash, Uri url);
         string GeneratePaymentUrl(bool bIsOffline, decimal amount, string callback, bool deferred = false);
     }
 
     public class PayPointFacade : IPayPointFacade
-    {
-        private readonly ConfigurationRootBob _config;
+	{
+		private readonly string remotePassword;
+		private readonly string mid;
+		private readonly string templateUrl;
+		private readonly string paypointOptions;
 
-        public PayPointFacade(ConfigurationRootBob config)
-        {
-            _config = config;
+        public PayPointFacade()
+		{
+			var configurationVariablesRepository = ObjectFactory.GetInstance<ConfigurationVariablesRepository>();
+			remotePassword = configurationVariablesRepository.GetByName("PayPointRemotePassword");
+			mid = configurationVariablesRepository.GetByName("PayPointMid");
+			templateUrl = configurationVariablesRepository.GetByName("PayPointTemplateUrl");
+			paypointOptions = configurationVariablesRepository.GetByName("PayPointOptions");
         }
 
         public virtual bool CheckHash(string hash, Uri url)
         {
             var request = url.PathAndQuery;
-            request = request.Replace("hash=" + hash, _config.PayPoint.RemotePassword);
+            request = request.Replace("hash=" + hash, remotePassword);
             var digest = CalculateMD5Hash(request);
             return digest == hash;
         }
@@ -49,10 +58,10 @@ namespace EzBob.Web.Areas.Customer.Models
         public string GeneratePaymentUrl(bool bIsOffline, decimal amount, string callback, bool deferred = false)
         {
             var transactionId = Guid.NewGuid().ToString();
-            var merchantId = _config.PayPoint.Mid;
+            var merchantId = mid;
             string amountStr = amount.ToString(CultureInfo.InvariantCulture);
-            var digest = CalculateMD5Hash(transactionId + amountStr + _config.PayPoint.RemotePassword);
-            var options = _config.PayPoint.Options;
+            var digest = CalculateMD5Hash(transactionId + amountStr + remotePassword);
+			var options = paypointOptions;
             if (deferred)
             {
                 if (!string.IsNullOrEmpty(options) && options[options.Length-1] != ';')
@@ -67,7 +76,7 @@ namespace EzBob.Web.Areas.Customer.Models
                 transactionId,
                 HttpUtility.UrlEncode(callback),
                 digest,
-                HttpUtility.UrlEncode(_config.PayPoint.TemplateUrl),
+                HttpUtility.UrlEncode(templateUrl),
                 HttpUtility.UrlEncode(options),
 				bIsOffline ? "offline" : "online"
 			);

@@ -86,4 +86,10 @@ BEGIN
 END
 GO
 
+IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='PayPointValidateName')
+BEGIN
+	INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('PayPointValidateName', 'True', 'PayPoint validate name')
+END
+GO
+
 
