@@ -47,12 +47,6 @@
     <Reference Include="NHibernate.Caches.SysCache2">
       <HintPath>..\..\..\Lib\3rdparty\Nhibernate\NHibernate.Caches.SysCache2.dll</HintPath>
     </Reference>
-    <Reference Include="Scorto.Configuration">
-      <HintPath>..\..\..\Lib\Scorto.Core\Scorto.Configuration.dll</HintPath>
-    </Reference>
-    <Reference Include="Scorto.Configuration.Loader">
-      <HintPath>..\..\..\Lib\Scorto.Core\Scorto.Configuration.Loader.dll</HintPath>
-    </Reference>
     <Reference Include="StructureMap">
       <HintPath>..\..\..\Lib\3rdparty\StructureMap\StructureMap.dll</HintPath>
     </Reference>
