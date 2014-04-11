@@ -45,12 +45,6 @@
     <Reference Include="nunit.framework, Version=2.5.3.9345, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <HintPath>..\..\..\Lib\3rdparty\NUnit\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="Scorto.Configuration">
-      <HintPath>..\..\..\Lib\Scorto.Core\Scorto.Configuration.dll</HintPath>
-    </Reference>
-    <Reference Include="Scorto.Configuration.Loader">
-      <HintPath>..\..\..\Lib\Scorto.Core\Scorto.Configuration.Loader.dll</HintPath>
-    </Reference>
     <Reference Include="StructureMap, Version=2.6.3.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Lib\3rdparty\StructureMap\StructureMap.dll</HintPath>
@@ -62,8 +56,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Config\EbayEvnConnection.cs" />
-    <Compile Include="Config\EbayEvnSettings.cs" />
     <Compile Include="Config\EbayMarketPlaceTypeSettings.cs" />
     <Compile Include="Config\EbayMarketPlaceTypeSettingsBase.cs" />
     <Compile Include="eBayDatabaseMarketPlace.cs" />
@@ -78,7 +70,9 @@
     <Compile Include="MixedOrdersAggregator.cs" />
     <Compile Include="PluginRegistry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-<Compile Include="..\..\..\Common\CommonAssemblyInfo.cs"><Link>Properties\CommonAssemblyInfo.cs</Link></Compile>
+    <Compile Include="..\..\..\Common\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="TopCategoriesAggregator.cs" />
   </ItemGroup>
   <ItemGroup>

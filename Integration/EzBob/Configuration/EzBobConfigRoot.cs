@@ -2,7 +2,6 @@ namespace EzBob.Configuration
 {
 	using AmazonServiceLib.Config;
 	using PayPalServiceLib;
-	using eBayLib.Config;
 	using Scorto.Configuration;
     using AmazonEnvConnectionConfig = AmazonServiceLib.Config.AmazonEnvConnectionConfig;
 
@@ -11,16 +10,6 @@ namespace EzBob.Configuration
         public IPayPalConfig PayPalConfig
         {
             get { return GetConfiguration<PayPalEnvConfig>("PayPalConfig"); }
-        }
-
-        public IEbayMarketplaceTypeConnection eBayConfig
-        {
-            get { return GetConfiguration<EbayEvnConnection>("EbayConfig"); }
-        }
-
-        public IEbayMarketplaceSettings eBaySettings
-        {
-            get { return GetConfiguration<EbayEvnSettings>("EbaySettings"); }
         }
 
         public IAmazonMarketPlaceTypeConnection AmazonConfig

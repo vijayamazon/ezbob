@@ -10,7 +10,6 @@
 	using PayPalServiceLib;
 	using PayPalServiceLib.Common;
 	using TeraPeakServiceLib;
-	using eBayLib.Config;
 	using Scorto.Configuration;
 	using StructureMap.Configuration.DSL;
 
@@ -23,9 +22,6 @@
 			{
 				For<IPayPalConfig>().Singleton().Use(ezBobConfigRoot.PayPalConfig);
 				For<IPayPalMarketplaceSettings>().Singleton().Use( ezBobConfigRoot.PayPalSettings );
-				For<IEbayMarketplaceTypeConnection>().Use( ezBobConfigRoot.eBayConfig);
-
-				For<IEbayMarketplaceSettings>().Use( ezBobConfigRoot.eBaySettings );
 				For<IAmazonMarketPlaceTypeConnection>().Use( ezBobConfigRoot.AmazonConfig);
 				For<IAmazonMarketplaceSettings>().Use(ezBobConfigRoot.AmazonSetings);
 			}
@@ -36,7 +32,6 @@
 				For<ITeraPeakConnectionProvider>().Singleton().Use( teraPeakConfigRoot.TeraPeakCredentionProvider );
 			}
 
-			
 			For<IServiceEndPointFactory>().Use( new ServiceEndPointFactory() );
 
 			For<IDatabaseDataHelper>().Use<DatabaseDataHelper>();
