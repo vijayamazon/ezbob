@@ -21,6 +21,7 @@
 	using NHibernate;
 	using log4net;
 	using System.Data;
+	using ConfigManager;
 
 	public class AmazonMarketPlacesController : Controller
     {
@@ -45,7 +46,6 @@
             CustomerMarketPlaceRepository customerMarketPlaceRepository, 
             AskvilleRepository askvilleRepository,
             IMPUniqChecker mpChecker,
-            AmazonServiceAskville askvilleService,
             CustomerRepository customerRepository)
         {
             _context = context;
@@ -56,8 +56,9 @@
             _customerMarketPlaceRepository = customerMarketPlaceRepository;
             _askvilleRepository = askvilleRepository;
             _mpChecker = mpChecker;
-            _askvilleService = askvilleService;
-            _customerRepository = customerRepository;
+	        _askvilleService = new AmazonServiceAskville(CurrentValues.Instance.AmazonAskvilleLogin,
+	                                                     CurrentValues.Instance.AmazonAskvillePassword);
+	        _customerRepository = customerRepository;
         }
         //--------------------------------------------------------
         [Ajax]

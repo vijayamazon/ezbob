@@ -13,7 +13,6 @@ namespace EzBob.Web.Infrastructure
 	using EZBob.DatabaseLib.Model.Email;
 	using EZBob.DatabaseLib.Model.Loans;
 	using EZBob.DatabaseLib.Repository;
-	using AmazonServiceLib.Config;
 	using Configuration;
 	using EzBob.Models.Agreements;
 	using Membership;
@@ -58,7 +57,6 @@ namespace EzBob.Web.Infrastructure
 			For<IEzBobConfiguration>().Singleton().Use(ezBobConfiguration);
 			For<IPayPalConfig>().Singleton().Use(localRoot.PayPalConfig);
 			For<BaseAPIProfile>().Use(() => ProfileProvider.CreateProfile(localRoot.PayPalConfig));
-			For<IAmazonMarketPlaceTypeConnection>().Use(localRoot.AmazonConfig);
 			For<IServiceEndPointFactory>().Use(new ServiceEndPointFactory());
 			For<IDbStringRepository>().Use<DbStringRepository>();
 			For<EzBobConfigRoot>().Use(c => localRoot);

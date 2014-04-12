@@ -6,7 +6,6 @@ using System.Net;
 using System.Text;
 using System.Web;
 using EZBob.DatabaseLib.Model.Database;
-using EzBob.AmazonServiceLib.Config;
 using Fizzler.Systems.HtmlAgilityPack;
 using HtmlAgilityPack;
 using log4net;
@@ -17,16 +16,18 @@ namespace EzBob.AmazonServiceLib.ServiceCalls
     public class AmazonServiceAskville
     {
         private static readonly ILog Log = LogManager.GetLogger(typeof(AmazonServiceAskville));
-        private readonly IAmazonMarketPlaceTypeConnection _config;
+		private readonly string askvilleAmazonLogin;
+		private readonly string askvilleAmazonPass;
         private const string ContactUrl = "https://www.amazon.co.uk/gp/help/contact/contact.html?assistanceType=order&rg2=on&subject=38&writeMessageButton=Continue&step=submitEntry&asin=&orderId=&recipientId={0}&noJS=false";
 
         private const string SendUrl = "https://www.amazon.co.uk/gp/help/contact/contact.html?qsfp_sellerID={0}&qsfp_marketplaceID={1}";
 
 
-        public AmazonServiceAskville(IAmazonMarketPlaceTypeConnection config)
-        {
-            _config = config;
-        }
+		public AmazonServiceAskville(string askvilleAmazonLogin, string askvilleAmazonPass)
+		{
+			this.askvilleAmazonLogin = askvilleAmazonLogin;
+			this.askvilleAmazonPass = askvilleAmazonPass;
+		}
 
         public AskvilleSendStatus AskQuestion(string sellerId, string marketplaceId, int subject, string message)
         {
@@ -59,8 +60,8 @@ namespace EzBob.AmazonServiceLib.ServiceCalls
                     Log.Error("Sending askville message failed, login protocol has been changed or invalid user name/password");
                     return AskvilleSendStatus.InvalidAmazonLogin;
                 }
-                reqParams.Add("email=" + GetEncoded(_config.AskvilleAmazonLogin));
-                reqParams.Add("password=" + GetEncoded(_config.AskvilleAmazonPass));
+                reqParams.Add("email=" + GetEncoded(askvilleAmazonLogin));
+                reqParams.Add("password=" + GetEncoded(askvilleAmazonPass));
                 reqParams.Add("create=0");
                 reqParams.Add("x=152");
                 reqParams.Add("y=5");

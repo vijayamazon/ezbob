@@ -2,7 +2,6 @@
 {
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
-	using AmazonServiceLib.Config;
 	using CommonLib;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
@@ -22,7 +21,6 @@
 			{
 				For<IPayPalConfig>().Singleton().Use(ezBobConfigRoot.PayPalConfig);
 				For<IPayPalMarketplaceSettings>().Singleton().Use( ezBobConfigRoot.PayPalSettings );
-				For<IAmazonMarketPlaceTypeConnection>().Use( ezBobConfigRoot.AmazonConfig);
 			}
 			var teraPeakConfigRoot = EnvironmentConfiguration.Configuration.GetCurrentConfiguration<TeraPeakConfigRoot>();
 			if ( ezBobConfigRoot != null )

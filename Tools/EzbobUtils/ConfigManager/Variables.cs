@@ -214,6 +214,8 @@
 		AmazonIterationSettings1TimeOutAfterRetryingExpiredInMinutes,
 		AmazonIterationSettings2Index,
 		AmazonIterationSettings2CountRequestsExpectError,
-		AmazonIterationSettings2TimeOutAfterRetryingExpiredInMinutes
+		AmazonIterationSettings2TimeOutAfterRetryingExpiredInMinutes,
+		AmazonAskvilleLogin,
+		AmazonAskvillePassword
 	} // enum Variables
 } // namespace ConfigManager

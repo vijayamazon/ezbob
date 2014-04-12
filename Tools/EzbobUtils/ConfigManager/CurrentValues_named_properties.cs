@@ -1692,5 +1692,15 @@
 		{
 			get { return this[Variables.AmazonIterationSettings2TimeOutAfterRetryingExpiredInMinutes]; }
 		}
+
+		public virtual VariableValue AmazonAskvilleLogin
+		{
+			get { return this[Variables.AmazonAskvilleLogin]; }
+		}
+
+		public virtual VariableValue AmazonAskvillePassword
+		{
+			get { return this[Variables.AmazonAskvillePassword]; }
+		}
 	} // class CurrentValues
 } // namespace ConfigManager
