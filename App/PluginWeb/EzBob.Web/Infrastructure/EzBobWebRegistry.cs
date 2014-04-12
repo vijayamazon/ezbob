@@ -26,7 +26,6 @@ namespace EzBob.Web.Infrastructure
 	using Code.MpUniq;
 	using Models.Repository;
 	using MailApi;
-	using PostcodeAnywhere;
 	using Scorto.Configuration;
 	using NHibernateWrapper.Web;
 	using StructureMap.Configuration.DSL;
@@ -97,17 +96,7 @@ namespace EzBob.Web.Infrastructure
 			For<IEmailConfirmationRequestRepository>().Use<EmailConfirmationRequestRepository>();
 			For<IEmailConfirmation>().Use<EmailConfirmation>();
 			For<IDecisionHistoryRepository>().Use<DecisionHistoryRepository>();
-			For<IPostcodeAnywhereConfig>().Use(ezBobConfiguration.PostcodeAnywhereConfig);
-
-			if (ezBobConfiguration.PostcodeAnywhereConfig.Enabled)
-			{
-				For<ISortCodeChecker>().Use<SortCodeChecker>();
-			}
-			else
-			{
-				For<ISortCodeChecker>().Use<FakeSortCodeChecker>();
-			}
-
+			
 			For<IYodleeAccountChecker>().Use<YodleeAccountChecker>();
 
 			For<ILoanCreator>().Use<LoanCreator>();

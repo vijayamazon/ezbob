@@ -14,7 +14,7 @@ namespace EzBob.Tests.PostcodeAnywhereTests
         [SetUp]
         public void SetUp()
         {
-            _checker = new SortCodeChecker(new PostcodeAnywhereConfigTest());
+            _checker = new SortCodeChecker(3);
         }
 
         [Test]

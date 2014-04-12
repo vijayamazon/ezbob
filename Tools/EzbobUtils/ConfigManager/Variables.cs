@@ -216,6 +216,9 @@
 		AmazonIterationSettings2CountRequestsExpectError,
 		AmazonIterationSettings2TimeOutAfterRetryingExpiredInMinutes,
 		AmazonAskvilleLogin,
-		AmazonAskvillePassword
+		AmazonAskvillePassword,
+		PostcodeAnywhereMaxBankAccountValidationAttempts,
+		PostcodeAnywhereKey,
+		PostcodeAnywhereEnabled
 	} // enum Variables
 } // namespace ConfigManager

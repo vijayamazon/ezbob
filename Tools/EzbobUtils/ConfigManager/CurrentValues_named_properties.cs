@@ -1702,5 +1702,20 @@
 		{
 			get { return this[Variables.AmazonAskvillePassword]; }
 		}
+
+		public virtual VariableValue PostcodeAnywhereMaxBankAccountValidationAttempts
+		{
+			get { return this[Variables.PostcodeAnywhereMaxBankAccountValidationAttempts]; }
+		}
+
+		public virtual VariableValue PostcodeAnywhereKey
+		{
+			get { return this[Variables.PostcodeAnywhereKey]; }
+		}
+
+		public virtual VariableValue PostcodeAnywhereEnabled
+		{
+			get { return this[Variables.PostcodeAnywhereEnabled]; }
+		}
 	} // class CurrentValues
 } // namespace ConfigManager

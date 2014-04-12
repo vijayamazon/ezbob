@@ -1,8 +1,7 @@
-﻿using PostcodeAnywhere;
-using Scorto.Configuration;
-
-namespace EzBob.Web.Infrastructure
+﻿namespace EzBob.Web.Infrastructure
 {
+	using Scorto.Configuration;
+
 	public interface IEzBobConfiguration
 	{
 		bool CheckStoreUniqueness { get; }
@@ -21,7 +20,6 @@ namespace EzBob.Web.Infrastructure
 		bool TargetsEnabledEntrepreneur { get; }
 		bool ManagementPartEnabled { get; }
 		int UpdateOnReapplyLastDays { get; }
-		IPostcodeAnywhereConfig PostcodeAnywhereConfig { get; }
 		bool GetSatisfactionEnabled { get; }
 		bool EbayPixelEnabled { get; }
 		bool TaboolaPixelEnabled { get; }
@@ -138,11 +136,6 @@ namespace EzBob.Web.Infrastructure
 		public bool TargetsEnabledEntrepreneur
 		{
 			get { return GetValueWithDefault<bool>("TargetsEnabledEntrepreneur", "false"); }
-		}
-
-		public virtual IPostcodeAnywhereConfig PostcodeAnywhereConfig
-		{
-			get { return GetConfiguration<PostcodeAnywhereConfig>("PostcodeAnywhereConfig"); }
 		}
 
 		public bool GetSatisfactionEnabled

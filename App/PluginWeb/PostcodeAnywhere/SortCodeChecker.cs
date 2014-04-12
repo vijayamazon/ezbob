@@ -1,27 +1,27 @@
-﻿using System;
-using System.Linq;
-using System.ServiceModel;
-using EZBob.DatabaseLib.Model.Database;
-using PostcodeAnywhere.pca2;
-using log4net;
-
-namespace PostcodeAnywhere
+﻿namespace PostcodeAnywhere
 {
+	using System;
+	using System.Linq;
+	using System.ServiceModel;
+	using EZBob.DatabaseLib.Model.Database;
+	using pca2;
+	using log4net;
+	using ConfigManager;
+
     public class SortCodeChecker : ISortCodeChecker
     {
-        private readonly IPostcodeAnywhereConfig _config;
         private readonly ILog log = LogManager.GetLogger("PostcodeAnywhere.SortCodeChecker");
+	    private readonly int maxBankAccountValidationAttempts;
 
-        public SortCodeChecker(IPostcodeAnywhereConfig config)
-        {
-            _config = config;
-        }
-
+		public SortCodeChecker(int maxBankAccountValidationAttempts)
+		{
+			this.maxBankAccountValidationAttempts = maxBankAccountValidationAttempts;
+		}
         public CardInfo Check(Customer customer, string accountNumber, string sortcode, string bankAccountType)
         {
-            var card = new CardInfo() { BankAccount = accountNumber, SortCode = sortcode, Customer = customer, Type = (BankAccountType)Enum.Parse(typeof(BankAccountType), bankAccountType) };
+            var card = new CardInfo { BankAccount = accountNumber, SortCode = sortcode, Customer = customer, Type = (BankAccountType)Enum.Parse(typeof(BankAccountType), bankAccountType) };
 
-            if (customer.BankAccountValidationInvalidAttempts < Math.Max(_config.MaxBankAccountValidationAttempts , 1))
+			if (customer.BankAccountValidationInvalidAttempts < Math.Max(maxBankAccountValidationAttempts, 1))
             {
                 try
                 {
@@ -59,7 +59,7 @@ namespace PostcodeAnywhere
 
                 var c = new PostcodeAnywhere_SoapClient(myBinding, myEndpoint);
 
-                result = c.BankAccountValidation_Interactive_Validate_v2_00(_config.Key, card.BankAccount, card.SortCode);
+                result = c.BankAccountValidation_Interactive_Validate_v2_00(CurrentValues.Instance.PostcodeAnywhereKey, card.BankAccount, card.SortCode);
             }
             catch (Exception e)
             {

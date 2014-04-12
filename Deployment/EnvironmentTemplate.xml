@@ -23,7 +23,6 @@
     <property name="ApplicationService" value="scortoSrv" />
     <!--property name="PayPalConfig" value="PayPalDevSandbox"/-->
     <property name="PayPalConfig" value="PayPalDevProduction" />
-    <property name="AmazonConfig" value="AmazonDev" />
     <property name="EbayConfig" value="EbayTrunkServer" />
     <property name="TeraPeakConfig" value="TeraPeak" />
     <property name="EbaySettings" value ="EbaySettingsData"/>
@@ -146,14 +145,6 @@
 		<property name="CertId" value="37ba3c68-c0ce-4d51-83c0-e0c754999654" />
 		<property name="RuName" value="Ezbob-Ezbob342e-6544--arxujwkun" />
 	</module>
-    <module id="AmazonDev">
-        <property name="KeyId" value="AKIAJXUDX6A3XIMZLWFA" />
-        <property name="SecretKeyId" value="4yQzxltFZjlytmkKmlHhkAAcZTTZUbHpJekTOFj2" />
-        <property name="ServiceType" value="Live" />
-        <property name="MarketCountry" value="UK" />
-        <property name="AskvilleAmazonLogin" value="nimrodk@ezbob.com" />
-        <property name="AskvilleAmazonPass" value="1qazxsw2" />
-    </module>
     <module id="PayPalDevSandbox">
         <property name="ApiAuthenticationMode" value="ThreeToken" />
         <property name="PPApplicationId" value="APP-80W284485P519543T" />
@@ -337,20 +328,12 @@ T6C7Spa3i/ltRwpQYWeYRRvJGkNUa12VLyTMdYRAAAAAvBLTqmDnMOt2M1IbVhi98uhE0pS2YC+WwInF
         <property name="AskvilleEnabled" value="False" />
         <property name="TargetsEnabled" value="False" />
         <property name="TargetsEnabledEntrepreneur" value="False" />
-        <property name="PostcodeAnywhereConfig" value="PostcodeAnywhereConfigEzBob"/>
 		<property name="GetSatisfactionEnabled" value="True" />	
 		<!-- simple, hard -->
 		<property name="PasswordPolicyType" value="simple" />
         <!-- web session timeout in minutes -->
         <property name="SessionTimeoutWeb" value="45"/>
     </application>
-
-    <module id="PostcodeAnywhereConfigEzBob">
-      <property name="Key" value="UW24-ZZ45-DF74-XP85"/>
-      <property name="Enabled" value="True"/>
-      <property name="MaxBankAccountValidationAttempts" value="1"/>
-    </module>
-
 
     <application id="authentication-server" path="${webDeployFolder}authenticationserver\">
         <property name="LogFile" value="Authentication_Srv.log" />

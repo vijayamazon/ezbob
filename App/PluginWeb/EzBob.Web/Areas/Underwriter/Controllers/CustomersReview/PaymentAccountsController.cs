@@ -1,6 +1,7 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview {
 	using System.Data;
 	using Code;
+	using ConfigManager;
 	using Infrastructure.Attributes;
 	using NHibernate;
 	using System;
@@ -26,16 +27,22 @@
         public PaymentAccountsController(
 			CustomerRepository customers,
 			ICustomerMarketPlaceRepository customerMarketplaces,
-			ISortCodeChecker sortCodeChecker,
 			IPayPointFacade payPointFacade,
 			IWorkplaceContext context, 
 			ISession session
 		) {
             _customers = customers;
 	        m_oServiceClient = new ServiceClient();
-            _customerMarketplaces = customerMarketplaces;
-            _sortCodeChecker = sortCodeChecker;
-            _payPointFacade = payPointFacade;
+			_customerMarketplaces = customerMarketplaces;
+			if (CurrentValues.Instance.PostcodeAnywhereEnabled)
+			{
+				_sortCodeChecker = new SortCodeChecker(CurrentValues.Instance.PostcodeAnywhereMaxBankAccountValidationAttempts);
+			}
+			else
+			{
+				_sortCodeChecker = new FakeSortCodeChecker();
+			}
+			_payPointFacade = payPointFacade;
 			_context = context;
 			this.session = session;
         }

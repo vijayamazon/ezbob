@@ -7,6 +7,7 @@
 	using System.Web.Mvc;
 	using Code;
 	using Code.Bank;
+	using ConfigManager;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.DatabaseWrapper.AccountInfo;
 	using EZBob.DatabaseLib.Model.Database;
@@ -44,7 +45,6 @@
 			IEzbobWorkplaceContext context,
 			ISession session,
 			IMPUniqChecker mpChecker,
-			ISortCodeChecker sortCodeChecker,
 			IYodleeAccountChecker yodleeAccountChecker
 		) {
 			_helper = helper;
@@ -53,9 +53,16 @@
 			m_oServiceClient = new ServiceClient();
 			_session = session;
 			_mpChecker = mpChecker;
-			_sortCodeChecker = sortCodeChecker;
 			_yodleeAccountChecker = yodleeAccountChecker;
 			_payPalConfig = ObjectFactory.GetInstance<IPayPalConfig>();
+			if (CurrentValues.Instance.PostcodeAnywhereEnabled)
+			{
+				_sortCodeChecker = new SortCodeChecker(CurrentValues.Instance.PostcodeAnywhereMaxBankAccountValidationAttempts);
+			}
+			else
+			{
+				_sortCodeChecker = new FakeSortCodeChecker();
+			}
 		}
 
 		[Transactional(IsolationLevel = IsolationLevel.ReadUncommitted)]
