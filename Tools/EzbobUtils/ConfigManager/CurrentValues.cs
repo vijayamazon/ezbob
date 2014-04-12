@@ -1,15 +1,26 @@
 ﻿namespace ConfigManager {
 	using System;
 	using System.Collections.Generic;
+	using Ezbob.Context;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using log4net;
 
-	public partial class CurrentValues {
+	public partial class CurrentValues
+	{
+		private static readonly AConnection db;
+		private static readonly SafeILog log;
+
 		#region static constructor
 
 		static CurrentValues() {
 			ms_oInstance = null;
 			ms_oInstanceLock = new object();
+
+			log4net.Config.XmlConfigurator.Configure();
+			log = new SafeILog(LogManager.GetLogger(typeof(CurrentValues)));
+			db = new SqlConnection(new Ezbob.Context.Environment(), log);
+			Init(db, log);
 		} // static constructor
 
 		#endregion static constructor
