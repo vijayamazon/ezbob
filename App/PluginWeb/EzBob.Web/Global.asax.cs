@@ -14,6 +14,7 @@
 	using ApplicationMng.Repository;
 	using Aspose.Cells;
 	using Code;
+	using ConfigManager;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
 	using Areas.Underwriter.Models.Reports;
@@ -26,10 +27,8 @@
 	using SquishIt.Framework;
 	using StructureMap;
 	using NHibernate;
-	using Scorto.Configuration;
 	using NHibernateWrapper.NHibernate;
 	using log4net;
-	using log4net.Config;
 	using NHibernateWrapper.Web;
 
 	#endregion using
@@ -87,15 +86,12 @@
 					return;
 
 				try {
-					var configuration = ConfigurationRoot.GetConfiguration();
-					XmlConfigurator.Configure(configuration.XmlElementLog);
-
 					Log.NotifyStart();
 
-					if (configuration.NHProfEnabled)
+					if (CurrentValues.Instance.NHibernateEnableProfiler)
 						HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
 
-					ConfigManager.CurrentValues.Init(DbConnectionGenerator.Get(Log), Log);
+					CurrentValues.Init(DbConnectionGenerator.Get(Log), Log);
 
 					Ezbob.RegistryScanner.Scanner.Register();
 

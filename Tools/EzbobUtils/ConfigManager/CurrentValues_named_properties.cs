@@ -1737,5 +1737,12 @@
 		{
 			get { return this[Variables.AgreementPdfConsentPath2]; }
 		}
+
+		public virtual VariableValue NHibernateEnableProfiler
+		{
+			get { return this[Variables.NHibernateEnableProfiler]; }
+		}
+
+		
 	} // class CurrentValues
 } // namespace ConfigManager

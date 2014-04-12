@@ -8,7 +8,6 @@
 
     <property name="DBPasswordKey" value="D9C52449F5AA345610C4BEC59EDE3C6CD42DEAE81BA9A50D0CF21ECB0AE5512AC9231FC2709FA14D2C7D04196D5CD3275075E6AD6A5769C33EAB59BDE6273C94" />
     <property name="AppCulture" value="${culture}" />
-    <property name="NHProfEnabled" value="False" />
     <property name="DbLib" value="MainConnection" />
     <property name="SecurityPolicy" value="SecurityPolicyConfig" />
     <property name="Log4Net" value="scortoSrvLog" />

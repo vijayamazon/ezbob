@@ -1,7 +1,6 @@
 ﻿namespace EzBob.Web.Code
 {
 	using ConfigManager;
-	using Scorto.Configuration;
 	using System;
 	using System.Globalization;
 	using System.IO;

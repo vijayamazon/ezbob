@@ -223,6 +223,7 @@
 		AgreementPdfLoanPath1,
 		AgreementPdfLoanPath2,
 		AgreementPdfConsentPath1,
-		AgreementPdfConsentPath2
+		AgreementPdfConsentPath2,
+		NHibernateEnableProfiler
 	} // enum Variables
 } // namespace ConfigManager
