@@ -21,10 +21,5 @@ namespace EzBob.Configuration
         {
             get { return GetConfiguration<PayPalEvnSettings>("PayPalSettings"); }
         }
-
-        public IAmazonMarketplaceSettings AmazonSetings
-        {
-            get { return GetConfiguration<AmazonEvnSettings>("AmazonSetings"); }
-        }
     }
 }

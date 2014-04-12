@@ -77,10 +77,8 @@
     <Compile Include="Common\AmazonRequestInfoBase.cs" />
     <Compile Include="Common\AmazonWaitBeforeRetryController.cs" />
     <Compile Include="Config\AmazonEnvConnectionConfig.cs" />
-    <Compile Include="Config\AmazonEvnSettings.cs" />
     <Compile Include="Config\AmazonMarketPlaceTypeConnection.cs" />
     <Compile Include="Config\AmazonMarketPlaceTypeConnectionBase.cs" />
-    <Compile Include="Config\IAmazonMarketplaceSettings.cs" />
     <Compile Include="Config\IAmazonMarketPlaceTypeConnection.cs" />
     <Compile Include="Inventory\AmazonServiceUrlFactoryInventory.cs" />
     <Compile Include="Inventory\Configurator\AmazonServiceInventoryConfiguratorMock.cs" />

@@ -206,5 +206,14 @@
 		UseNewUpdateCustomerMpsStrategy,
 		UseNewUpdateMpStrategy,
 		YodleeAccountPrefix,
+		AmazonEnableRetrying,
+		AmazonMinorTimeoutInSeconds,
+		AmazonUseLastTimeOut,
+		AmazonIterationSettings1Index,
+		AmazonIterationSettings1CountRequestsExpectError,
+		AmazonIterationSettings1TimeOutAfterRetryingExpiredInMinutes,
+		AmazonIterationSettings2Index,
+		AmazonIterationSettings2CountRequestsExpectError,
+		AmazonIterationSettings2TimeOutAfterRetryingExpiredInMinutes
 	} // enum Variables
 } // namespace ConfigManager

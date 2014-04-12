@@ -27,20 +27,25 @@
 	using StructureMap;
 	using EZBob.DatabaseLib.Model.Database;
 	using log4net;
+	using ConfigManager;
 
 	public class AmazonRetriveDataHelper : MarketplaceRetrieveDataHelperBase<AmazonDatabaseFunctionType>
 	{
 		private static readonly ILog log = LogManager.GetLogger(typeof(AmazonRetriveDataHelper));
         private readonly AmazonServiceConnectionInfo _ConnectionInfo;
-		private readonly IAmazonMarketplaceSettings _AmazonSettings;
+		private readonly ErrorRetryingInfo _AmazonSettings;
         public AmazonRetriveDataHelper(DatabaseDataHelper helper, DatabaseMarketplaceBase<AmazonDatabaseFunctionType> marketplace)
             : base(helper, marketplace)
         {
             var connectionInfo = ObjectFactory.GetInstance<IAmazonMarketPlaceTypeConnection>();
 
             _ConnectionInfo = AmazonServiceConnectionFactory.CreateConnection(connectionInfo);
-			_AmazonSettings = ObjectFactory.GetInstance<IAmazonMarketplaceSettings>();
-        }
+			_AmazonSettings = new ErrorRetryingInfo((bool)CurrentValues.Instance.AmazonEnableRetrying, CurrentValues.Instance.AmazonMinorTimeoutInSeconds, CurrentValues.Instance.AmazonUseLastTimeOut);
+			
+			_AmazonSettings.Info = new ErrorRetryingItemInfo[2];
+			_AmazonSettings.Info[0] = new ErrorRetryingItemInfo(CurrentValues.Instance.AmazonIterationSettings1Index, CurrentValues.Instance.AmazonIterationSettings1CountRequestsExpectError, CurrentValues.Instance.AmazonIterationSettings1TimeOutAfterRetryingExpiredInMinutes);
+			_AmazonSettings.Info[1] = new ErrorRetryingItemInfo(CurrentValues.Instance.AmazonIterationSettings2Index, CurrentValues.Instance.AmazonIterationSettings2CountRequestsExpectError, CurrentValues.Instance.AmazonIterationSettings2TimeOutAfterRetryingExpiredInMinutes);
+		}
 
 		protected override void InternalUpdateInfoFirst( IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, MP_CustomerMarketplaceUpdatingHistory historyRecord )
         {
@@ -150,7 +155,7 @@
 				                                            MerchantId = securityInfo.MerchantId,
 				                                            StartDate = fromDate,
 															EndDate = toDate,
-															ErrorRetryingInfo = _AmazonSettings.ErrorRetryingInfo
+															ErrorRetryingInfo = _AmazonSettings
 			                                            };
 
 					var inventories = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds( elapsedTimeInfo,
@@ -198,7 +203,7 @@
 													EndDate = toDate,
 													MarketplaceId = securityInfo.MarketplaceId,
 													MerchantId = securityInfo.MerchantId,
-													ErrorRetryingInfo = _AmazonSettings.ErrorRetryingInfo,
+													ErrorRetryingInfo = _AmazonSettings,
 													CustomerId = databaseCustomerMarketPlace.Customer.Id
 												};
 
@@ -278,7 +283,7 @@
                     MarketplaceId = securityInfo.MarketplaceId,
                     MerchantId = securityInfo.MerchantId,
                     OrderId = orderItem2.AmazonOrderId,
-                    ErrorRetryingInfo = _AmazonSettings.ErrorRetryingInfo
+                    ErrorRetryingInfo = _AmazonSettings
                 };
 
             AmazonOrderItemDetailsList orderItems =
@@ -369,7 +374,7 @@
 					MarketplaceId = securityInfo.MarketplaceId,
 					MerchantId = securityInfo.MerchantId,
 					SellerSku = sellerSku,
-					ErrorRetryingInfo = _AmazonSettings.ErrorRetryingInfo
+					ErrorRetryingInfo = _AmazonSettings
 				};
 				categories = GetAndSaveAmazonProcuctCategory( databaseCustomerMarketPlace, requestInfo, access, requestCounter, elapsedTimeInfo );
 			}

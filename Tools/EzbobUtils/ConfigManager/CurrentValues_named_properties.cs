@@ -1647,5 +1647,50 @@
 		} // YodleeAccountPrefix
 
 		#endregion property YodleeAccountPrefix
+
+		public virtual VariableValue AmazonEnableRetrying
+		{
+			get { return this[Variables.AmazonEnableRetrying]; }
+		}
+
+		public virtual VariableValue AmazonMinorTimeoutInSeconds
+		{
+			get { return this[Variables.AmazonMinorTimeoutInSeconds]; }
+		}
+
+		public virtual VariableValue AmazonUseLastTimeOut
+		{
+			get { return this[Variables.AmazonUseLastTimeOut]; }
+		}
+
+		public virtual VariableValue AmazonIterationSettings1Index
+		{
+			get { return this[Variables.AmazonIterationSettings1Index]; }
+		}
+
+		public virtual VariableValue AmazonIterationSettings1CountRequestsExpectError
+		{
+			get { return this[Variables.AmazonIterationSettings1CountRequestsExpectError]; }
+		}
+
+		public virtual VariableValue AmazonIterationSettings1TimeOutAfterRetryingExpiredInMinutes
+		{
+			get { return this[Variables.AmazonIterationSettings1TimeOutAfterRetryingExpiredInMinutes]; }
+		}
+		
+		public virtual VariableValue AmazonIterationSettings2Index
+		{
+			get { return this[Variables.AmazonIterationSettings2Index]; }
+		}
+
+		public virtual VariableValue AmazonIterationSettings2CountRequestsExpectError
+		{
+			get { return this[Variables.AmazonIterationSettings2CountRequestsExpectError]; }
+		}
+
+		public virtual VariableValue AmazonIterationSettings2TimeOutAfterRetryingExpiredInMinutes
+		{
+			get { return this[Variables.AmazonIterationSettings2TimeOutAfterRetryingExpiredInMinutes]; }
+		}
 	} // class CurrentValues
 } // namespace ConfigManager

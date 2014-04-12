@@ -12,6 +12,7 @@ using EzBob.CommonLib;
 using NHibernate;
 using StandaloneInitializer;
 using StructureMap;
+using ConfigManager;
 
 namespace AmazonStandaloneApp
 {
@@ -38,23 +39,21 @@ namespace AmazonStandaloneApp
 
                 var connectionInfo = ObjectFactory.GetInstance<IAmazonMarketPlaceTypeConnection>();
                 var connection = AmazonServiceConnectionFactory.CreateConnection(connectionInfo);
-                var amazonSettings = ObjectFactory.GetInstance<IAmazonMarketplaceSettings>();
-
+                
                 int umi = int.Parse(args[0]);
                 int days = int.Parse(args[1]);
                 bool isReporting = int.Parse(args[2]) == 1;
 
                 var elapsedTimeInfo = new ElapsedTimeInfo();
 
-                var orders = GetOrders(umi, amazonSettings, elapsedTimeInfo, connection, days, isReporting);
+                var orders = GetOrders(umi, elapsedTimeInfo, connection, days, isReporting);
 
                 DisplayOrders(elapsedTimeInfo, orders);
             }
         }
 
 
-        private static List<OrderItemTwo> GetOrders(int umi, IAmazonMarketplaceSettings amazonSettings,
-                                                   ElapsedTimeInfo elapsedTimeInfo, AmazonServiceConnectionInfo _ConnectionInfo, int days, bool useReporting)
+        private static List<OrderItemTwo> GetOrders(int umi, ElapsedTimeInfo elapsedTimeInfo, AmazonServiceConnectionInfo _ConnectionInfo, int days, bool useReporting)
         {
             var session = ObjectFactory.GetInstance<ISession>();
 
@@ -65,13 +64,19 @@ namespace AmazonStandaloneApp
             var endDate = DateTime.UtcNow;
             var startDate = endDate.AddDays(-days);
 
+			var errorRetryingInfo = new ErrorRetryingInfo((bool)CurrentValues.Instance.AmazonEnableRetrying, CurrentValues.Instance.AmazonMinorTimeoutInSeconds, CurrentValues.Instance.AmazonUseLastTimeOut);
+
+			errorRetryingInfo.Info = new ErrorRetryingItemInfo[2];
+			errorRetryingInfo.Info[0] = new ErrorRetryingItemInfo(CurrentValues.Instance.AmazonIterationSettings1Index, CurrentValues.Instance.AmazonIterationSettings1CountRequestsExpectError, CurrentValues.Instance.AmazonIterationSettings1TimeOutAfterRetryingExpiredInMinutes);
+			errorRetryingInfo.Info[1] = new ErrorRetryingItemInfo(CurrentValues.Instance.AmazonIterationSettings2Index, CurrentValues.Instance.AmazonIterationSettings2CountRequestsExpectError, CurrentValues.Instance.AmazonIterationSettings2TimeOutAfterRetryingExpiredInMinutes);
+		
             var amazonOrdersRequestInfo = new AmazonOrdersRequestInfo
                 {
                     StartDate = startDate,
                     EndDate = endDate,
                     MarketplaceId = securityInfo.MarketplaceId,
                     MerchantId = securityInfo.MerchantId,
-                    ErrorRetryingInfo = amazonSettings.ErrorRetryingInfo
+					ErrorRetryingInfo = errorRetryingInfo
                 };
 
 

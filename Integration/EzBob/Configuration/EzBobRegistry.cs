@@ -23,7 +23,6 @@
 				For<IPayPalConfig>().Singleton().Use(ezBobConfigRoot.PayPalConfig);
 				For<IPayPalMarketplaceSettings>().Singleton().Use( ezBobConfigRoot.PayPalSettings );
 				For<IAmazonMarketPlaceTypeConnection>().Use( ezBobConfigRoot.AmazonConfig);
-				For<IAmazonMarketplaceSettings>().Use(ezBobConfigRoot.AmazonSetings);
 			}
 			var teraPeakConfigRoot = EnvironmentConfiguration.Configuration.GetCurrentConfiguration<TeraPeakConfigRoot>();
 			if ( ezBobConfigRoot != null )
