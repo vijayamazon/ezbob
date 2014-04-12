@@ -219,6 +219,10 @@
 		AmazonAskvillePassword,
 		PostcodeAnywhereMaxBankAccountValidationAttempts,
 		PostcodeAnywhereKey,
-		PostcodeAnywhereEnabled
+		PostcodeAnywhereEnabled,
+		AgreementPdfLoanPath1,
+		AgreementPdfLoanPath2,
+		AgreementPdfConsentPath1,
+		AgreementPdfConsentPath2
 	} // enum Variables
 } // namespace ConfigManager

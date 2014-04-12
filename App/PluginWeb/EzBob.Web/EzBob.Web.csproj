@@ -393,8 +393,6 @@
     <Compile Include="Infrastructure\csrf\ValidateJsonAntiForgeryTokenAttribute.cs" />
     <Compile Include="Infrastructure\Filters\WhiteListFilter.cs" />
     <Compile Include="Infrastructure\PermissionAttribute.cs" />
-    <Compile Include="Infrastructure\PostcodeAnywhereConfig.cs" />
-    <Compile Include="Infrastructure\RenderAgreementHandlerConfig.cs" />
     <Compile Include="Infrastructure\RestfullErrorHandlingAttribute.cs" />
     <Compile Include="Infrastructure\StructureMapControllerFactory.cs" />
     <Compile Include="Infrastructure\TempDataExtensions.cs" />

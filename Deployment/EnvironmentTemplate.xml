@@ -400,15 +400,7 @@ T6C7Spa3i/ltRwpQYWeYRRvJGkNUa12VLyTMdYRAAAAAvBLTqmDnMOt2M1IbVhi98uhE0pS2YC+WwInF
         <item name="ScortoFlowSignalFinishStrategy" value="ScortoFlowSignalFinishStrategy" />
         <item name="ScortoFlowSignalCreateOlapCube" value="ScortoFlowSignalCreateOlapCube" />
         <item name="ExternalNodeExecutionResetSignalHandler" value="ExternalNodeExecutionResetSignalHandler" />
-        <item name="RenderAgreementsHandler" value="RenderAgreementsHandler" />
     </module>
-		
-    <module id="RenderAgreementsHandler" path="EzBob.Signals.dll">
-      <property name="PdfLoanAgreement" value="${tempDBPath}\pdf1" />
-      <property name="PdfLoanAgreement2" value="${tempDBPath}\pdf2" />
-	  <property name="PdfConsentAgreement" value="${tempDBPath}\consent01" />
-      <property name="PdfConsentAgreement2" value="${tempDBPath}\consent02" />
-    </module>    
 	
     <module id="ScheduledRunHandlers" path="${serviceDeployFolder}Scorto.ApplicationRunHandlers.dll" />
     <module id="ScortoFlowSignalFinishStrategy" path="${serviceDeployFolder}Scorto.Flow.Signal.FinishStrategy.dll" />

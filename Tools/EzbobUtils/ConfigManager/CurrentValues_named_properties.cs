@@ -1717,5 +1717,25 @@
 		{
 			get { return this[Variables.PostcodeAnywhereEnabled]; }
 		}
+
+		public virtual VariableValue AgreementPdfLoanPath1
+		{
+			get { return this[Variables.AgreementPdfLoanPath1]; }
+		}
+
+		public virtual VariableValue AgreementPdfLoanPath2
+		{
+			get { return this[Variables.AgreementPdfLoanPath2]; }
+		}
+
+		public virtual VariableValue AgreementPdfConsentPath1
+		{
+			get { return this[Variables.AgreementPdfConsentPath1]; }
+		}
+
+		public virtual VariableValue AgreementPdfConsentPath2
+		{
+			get { return this[Variables.AgreementPdfConsentPath2]; }
+		}
 	} // class CurrentValues
 } // namespace ConfigManager

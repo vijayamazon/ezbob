@@ -51,7 +51,6 @@
   <ItemGroup>
     <Compile Include="FakeSortCodeChecker.cs" />
     <Compile Include="InvalidAccountNumberException.cs" />
-    <Compile Include="IPostcodeAnywhereConfig.cs" />
     <Compile Include="ISortCodeChecker.cs" />
     <Compile Include="NotValidSortCodeException.cs" />
     <Compile Include="Service References\pca2\Reference.cs">

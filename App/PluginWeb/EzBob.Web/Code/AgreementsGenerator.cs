@@ -1,16 +1,13 @@
-﻿using EZBob.DatabaseLib;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Database.Loans;
-using EZBob.DatabaseLib.Model.Loans;
-using EzBob.Models.Agreements;
-using Newtonsoft.Json;
-
-namespace EzBob.Web.Code.Agreements
+﻿namespace EzBob.Web.Code.Agreements
 {
+	using ConfigManager;
+	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EZBob.DatabaseLib.Model.Loans;
+	using EzBob.Models.Agreements;
+	using Newtonsoft.Json;
 	using System.IO;
-	using Infrastructure;
-	using Scorto.Configuration;
-
 
 	public interface IAgreementsGenerator
 	{
@@ -22,7 +19,6 @@ namespace EzBob.Web.Code.Agreements
 		private readonly AgreementsModelBuilder _builder;
 		private readonly IAgreementsTemplatesProvider _templates;
 		private readonly DatabaseDataHelper _helper;
-		protected RenderAgreementHandlerConfig Config { get; set; }
 		private readonly ServiceClient m_oServiceClient;
 
 		public AgreementsGenerator(AgreementsModelBuilder builder, IAgreementsTemplatesProvider templates, DatabaseDataHelper helper)
@@ -30,9 +26,7 @@ namespace EzBob.Web.Code.Agreements
 			_builder = builder;
 			_templates = templates;
 			_helper = helper;
-			Config = EnvironmentConfiguration.Configuration.GetConfiguration<RenderAgreementHandlerConfig>("RenderAgreementsHandler");
 			m_oServiceClient = new ServiceClient();
-
 		}
 
 		public void RenderAgreements(Loan loan, bool isRebuld)
@@ -51,8 +45,8 @@ namespace EzBob.Web.Code.Agreements
 				var preContractAgreement = new LoanAgreement("precontract", loan, _helper.GetOrCreateLoanAgreementTemplate(preContract, 2));
 				loan.Agreements.Add(preContractAgreement);
 
-				path1 = Path.Combine(Config.PdfLoanAgreement, preContractAgreement.FilePath);
-				path2 = Path.Combine(Config.PdfLoanAgreement2, preContractAgreement.FilePath);
+				path1 = Path.Combine(CurrentValues.Instance.AgreementPdfLoanPath1, preContractAgreement.FilePath);
+				path2 = Path.Combine(CurrentValues.Instance.AgreementPdfLoanPath2, preContractAgreement.FilePath);
 				template = new TemplateModel {Template = preContract};
 				m_oServiceClient.Instance.SaveAgreement(loan.Customer.Id, model, loan.RefNumber, "precontract", template, path1, path2);
 
@@ -60,8 +54,8 @@ namespace EzBob.Web.Code.Agreements
 				var contractAgreement = new LoanAgreement("Contract", loan, _helper.GetOrCreateLoanAgreementTemplate(contract, 3));
 				loan.Agreements.Add(contractAgreement);
 
-				path1 = Path.Combine(Config.PdfLoanAgreement, contractAgreement.FilePath);
-				path2 = Path.Combine(Config.PdfLoanAgreement2, contractAgreement.FilePath);
+				path1 = Path.Combine(CurrentValues.Instance.AgreementPdfLoanPath1, contractAgreement.FilePath);
+				path2 = Path.Combine(CurrentValues.Instance.AgreementPdfLoanPath2, contractAgreement.FilePath);
 				template = new TemplateModel { Template = contract };
 				m_oServiceClient.Instance.SaveAgreement(loan.Customer.Id, model, loan.RefNumber, "Contract", template, path1, path2);
 			}
@@ -71,8 +65,8 @@ namespace EzBob.Web.Code.Agreements
 				var guaranteeAgreement = new LoanAgreement("guarantee", loan, _helper.GetOrCreateLoanAgreementTemplate(guarantee, 1));
 				loan.Agreements.Add(guaranteeAgreement);
 
-				path1 = Path.Combine(Config.PdfLoanAgreement, guaranteeAgreement.FilePath);
-				path2 = Path.Combine(Config.PdfLoanAgreement2, guaranteeAgreement.FilePath);
+				path1 = Path.Combine(CurrentValues.Instance.AgreementPdfLoanPath1, guaranteeAgreement.FilePath);
+				path2 = Path.Combine(CurrentValues.Instance.AgreementPdfLoanPath2, guaranteeAgreement.FilePath);
 				template = new TemplateModel { Template = guarantee };
 				m_oServiceClient.Instance.SaveAgreement(loan.Customer.Id, model, loan.RefNumber, "guarantee", template, path1, path2);
 
@@ -80,8 +74,8 @@ namespace EzBob.Web.Code.Agreements
 				var agreementAgreement = new LoanAgreement("agreement", loan, _helper.GetOrCreateLoanAgreementTemplate(agreement, 4));
 				loan.Agreements.Add(agreementAgreement);
 
-				path1 = Path.Combine(Config.PdfLoanAgreement, agreementAgreement.FilePath);
-				path2 = Path.Combine(Config.PdfLoanAgreement2, agreementAgreement.FilePath);
+				path1 = Path.Combine(CurrentValues.Instance.AgreementPdfLoanPath1, agreementAgreement.FilePath);
+				path2 = Path.Combine(CurrentValues.Instance.AgreementPdfLoanPath2, agreementAgreement.FilePath);
 				template = new TemplateModel { Template = agreement };
 				m_oServiceClient.Instance.SaveAgreement(loan.Customer.Id, model, loan.RefNumber, "agreement", template, path1, path2);
 			}
