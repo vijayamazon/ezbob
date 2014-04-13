@@ -121,6 +121,12 @@
 			return model;
 		}
 
+		/// <summary>
+		/// MessageID : minLength="5" maxLength="50" pattern="[a-zA-Z0-9][a-zA-Z0-9\-]*"
+		/// </summary>
+		/// <param name="titleNumber">Title Number</param>
+		/// <param name="customerId">Customer Id</param>
+		/// <returns>LR parsed data model</returns>
 		public LandRegistryDataModel Res(string titleNumber, int customerId = 1)
 		{
 			var model = new LandRegistryDataModel { RequestType = LandRegistryRequestType.Res };
