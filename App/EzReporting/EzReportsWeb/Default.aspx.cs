@@ -10,6 +10,7 @@
 	using System.Web.UI.WebControls;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using Ezbob.Utils;
 	using Html;
 	using Reports;
 	using System.Web.Script.Serialization;
@@ -188,8 +189,27 @@
 				tDate = tDate.AddDays(-1);
 				break;
 
+			case "Todasterday":
+				fDate = fDate.AddDays(-1);
+				break;
+
+			case "ThisWeek":
+				fDate = MiscUtils.FirstDayOfWeek();
+				tDate = fDate.AddDays(CultureInfo.CurrentCulture.DateTimeFormat.DayNames.Length);
+				break;
+
+			case "LastWeek":
+				fDate = MiscUtils.FirstDayOfWeek().AddDays(-CultureInfo.CurrentCulture.DateTimeFormat.DayNames.Length);
+				tDate = fDate.AddDays(CultureInfo.CurrentCulture.DateTimeFormat.DayNames.Length);
+				break;
+
+			case "LastMonth":
+				fDate = new DateTime(fDate.Year, fDate.Month, 1).AddMonths(-1);
+				tDate = fDate.AddMonths(1);
+				break;
+
 			case "Weekly":
-				fDate = fDate.AddDays(-7);
+				fDate = fDate.AddDays(-CultureInfo.CurrentCulture.DateTimeFormat.DayNames.Length);
 				break;
 
 			case "Monthly":

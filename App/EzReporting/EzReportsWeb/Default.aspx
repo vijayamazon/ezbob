@@ -47,16 +47,19 @@
 				</div>
 
 				<div id="divDateFilter" runat="server">
-					<asp:RadioButtonList ID="rblFilter" runat="server" OnSelectedIndexChanged="rblFilter_SelectedIndexChanged"
-						CssClass="rbppcol" RepeatDirection="Horizontal" RepeatLayout="Flow" AutoPostBack="True">
+					<asp:DropDownList AutoPostBack="True" ID="rblFilter" OnSelectedIndexChanged="rblFilter_SelectedIndexChanged" runat="server">
 						<asp:ListItem Value="Today" Text="Today" Selected="True"></asp:ListItem>
 						<asp:ListItem Value="Yesterday" Text="Yesterday"></asp:ListItem>
-						<asp:ListItem Value="Weekly" Text="Weekly"></asp:ListItem>
-						<asp:ListItem Value="Monthly" Text="Monthly"></asp:ListItem>
+						<asp:ListItem Value="Todasterday" Text="Today and yesterday"></asp:ListItem>
+						<asp:ListItem Value="Weekly" Text="Weekly (last 7 days)"></asp:ListItem>
+						<asp:ListItem Value="ThisWeek" Text="This week (Sun to Sat)"></asp:ListItem>
+						<asp:ListItem Value="LastWeek" Text="Last week (Sun to Sat)"></asp:ListItem>
+						<asp:ListItem Value="Monthly" Text="Monthly (last 30 days)"></asp:ListItem>
 						<asp:ListItem Value="MonthToDate" Text="Month to Date"></asp:ListItem>
+						<asp:ListItem Value="LastMonth" Text="Last calendar month"></asp:ListItem>
 						<asp:ListItem Value="Lifetime" Text="Lifetime"></asp:ListItem>
 						<asp:ListItem Value="Custom" Text="Custom"></asp:ListItem>
-					</asp:RadioButtonList>
+					</asp:DropDownList>
 
 					<div id="divCustomFilter" runat="server" visible="false">
 						<label for="fromDate">From Date:</label>

@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Utils {
 	using System;
+	using System.Globalization;
 
 	#region class Utils
 
@@ -35,6 +36,30 @@
 		} // Validate
 
 		#endregion method Validate
+
+		#region method WeekStart
+
+		public static DateTime WeekStart(DateTime oDate, CultureInfo oCulture = null) {
+			if (oCulture == null)
+				oCulture = CultureInfo.CurrentCulture;
+
+			int nDiff = oDate.DayOfWeek - oCulture.DateTimeFormat.FirstDayOfWeek;
+
+			if (nDiff < 0)
+				nDiff += oCulture.DateTimeFormat.DayNames.Length;
+
+			return oDate.AddDays(-1 * nDiff).Date;
+		} // WeekStart
+
+		public static DateTime FirstDayOfWeek(this DateTime oDate, CultureInfo oCulture = null) {
+			return WeekStart(oDate, oCulture);
+		} // FirstDayOfWeek
+
+		public static DateTime FirstDayOfWeek(CultureInfo oCulture = null) {
+			return WeekStart(DateTime.UtcNow, oCulture);
+		} // FirstDayOfWeek
+
+		#endregion method WeekStart
 	} // class MiscUtils
 
 	#endregion class MiscUtils

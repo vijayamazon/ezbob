@@ -136,9 +136,10 @@ body header + .inner, .main-page {
 
 .logo_ezbob {
     background: url(../images/ezbob_logo.png) 0 0 no-repeat;
+	background-size: 168px 47px;
     display: block;
     width: 168px;
-    height: 57px;
+    height: 47px;
     float: right;
     vertical-align: middle;
     margin-top: 25px;
